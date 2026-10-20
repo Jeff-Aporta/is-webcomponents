@@ -1,0 +1,89 @@
+{
+  "$schema": "iswc-preview/v1",
+  "tag": "iswc-login",
+  "category": "layout",
+  "title": "&lt;iswc-login&gt;",
+  "titleHtml": false,
+  "description": "Puerta de acceso single o multi-cuenta con cambio de contraseña, cierre global y auditoría de sesiones; emite eventos y deja la validación al servidor.",
+  "storageKey": "docs-iswc-login",
+  "hasBehavior": false,
+  "sections": [
+    {
+      "id": "intro",
+      "title": "Uso",
+      "lede": "Puerta de acceso reutilizable con modo single y multi-cuenta, cambio de contraseña, cierre global de sesiones y auditoría visible.",
+      "blocks": [
+        {
+          "kind": "table",
+          "columns": [
+            "Key",
+            "Value"
+          ],
+          "rows": [
+            [
+              "<code>Modos</code>",
+              "single (un proveedor) y multi (varias cuentas simultáneas)."
+            ],
+            [
+              "<code>Seguridad</code>",
+              "No valida credenciales: emite eventos para que el host llame a la API."
+            ],
+            [
+              "<code>Auditoría</code>",
+              "Lista IP, dispositivo, SO, navegador y último acceso por sesión."
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "single",
+      "title": "Modo single",
+      "lede": "Un solo proveedor. Emite iswc-login-submit con usuario, contraseña, recordar y proveedor.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<iswc-login id=\"loginSingle\" heading=\"Iniciar sesión\" subtitle=\"Accede a tu panel\" provider=\"ContaPyme\" show-password allow-logout-all></iswc-login>",
+          "controls": [
+            {
+              "control": "boolean",
+              "prop": "attr:remember",
+              "label": "remember"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:busy",
+              "label": "busy"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:disabled",
+              "label": "disabled"
+            },
+            {
+              "control": "text",
+              "prop": "attr:error",
+              "label": "error"
+            },
+            {
+              "control": "text",
+              "prop": "attr:notice",
+              "label": "notice"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "multi",
+      "title": "Modo multi-cuenta",
+      "lede": "Selector de cuentas con avatar, añadir y quitar. La cuenta activa se marca con selected.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<iswc-login id=\"loginMulti\" mode=\"multi\" heading=\"Tus cuentas\" subtitle=\"Elige una cuenta o añade otra\" providers=\"[{&quot;id&quot;:&quot;contapyme&quot;,&quot;name&quot;:&quot;ContaPyme&quot;},{&quot;id&quot;:&quot;agrowin&quot;,&quot;name&quot;:&quot;Agrowin&quot;}]\" selected=\"ana\" show-password allow-logout-all></iswc-login>"
+        }
+      ]
+    }
+  ]
+}

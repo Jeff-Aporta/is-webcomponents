@@ -14,10 +14,12 @@ import { RefObj } from '../../src/vendor-distributions/shared/lib/ref-obj.ts';
 import { computeFlowchartLayout, resolveFlowchartSpec } from '../../src/components/diagrams/utils/flowchart-spec.ts';
 import { pathPoints } from '../../src/components/diagrams/utils/diagram-arrow.ts';
 import type { FlowLayout, FlowResolvedSpec } from '../../src/components/diagrams/schemas/flowchart-spec.schemas.ts';
-import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+import { TIMEOUT_RUTAS_REALES } from '../_shared/rutas-reales.ts';
 import { denoTestCon } from '../_shared/deno-test.ts';
 
-const { test, lista } = coleccionPruebas({ categoria: 'what' });
+// Rutas reales: layout memoizado y timeout medido (ver tests/_shared/rutas-reales.ts).
+const { test, lista } = coleccionPruebas({ categoria: 'what', timeoutMs: TIMEOUT_RUTAS_REALES });
 
 const denoTest = denoTestCon(test);
 

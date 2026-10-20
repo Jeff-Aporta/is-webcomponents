@@ -23,7 +23,12 @@ test('gobernanza/dist-cdn-layout', async () => {
   }
   
   const allowedRootFiles = new Set(['.gitignore', 'gallery-app.min.js']);
-  const allowedRootDirs = new Set(['cdn', 'assets']);
+  // cdn/ (build.mjs) + assets/ (iconos) + lo que emite `deno task bundle`
+  // (scripts/bundle-scripts.mjs): previews/ (catalog.ts los carga de
+  // ../../dist/previews/), pages/, scripts/ y skills/ (hermanos de cdn-panel).
+  // Cualquier otra carpeta (p. ej. temporales de render como .render-tmp/)
+  // sigue siendo un huérfano.
+  const allowedRootDirs = new Set(['cdn', 'assets', 'previews', 'pages', 'scripts', 'skills']);
   
   if (existsSync(dist)) {
     for (const name of readdirSync(dist)) {
@@ -55,7 +60,7 @@ test('gobernanza/dist-cdn-layout', async () => {
     { const salida = 1; if (salida) throw new Error(`salida ${salida}`); return; }
   }
   
-  console.log('dist-cdn-layout.test.ts: PASS — dist/ solo cdn/ + assets/ (+ .gitignore)');
+  console.log('dist-cdn-layout.test.ts: PASS — dist/ solo cdn/ + assets/ + salidas de bundle (+ .gitignore)');
 });
 
 export default lista();

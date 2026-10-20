@@ -857,5 +857,81 @@ export default {
   "iswc-preview-controls": {
     "json": "../../dist/previews/layout/preview-controls.json",
     "category": "preview"
+  },
+  "iswc-login": {
+    "json": "../../dist/previews/layout/login.json",
+    "category": "layout"
+  },
+  "iswc-login-gate": {
+    "json": "../../dist/previews/layout/login-gate.json",
+    "category": "layout"
+  },
+  "iswc-login-dropdown": {
+    "json": "../../dist/previews/layout/login-dropdown.json",
+    "category": "layout"
+  },
+  "iswc-session-menu": {
+    "json": "../../dist/previews/layout/session-menu.json",
+    "category": "layout"
+  },
+  "iswc-app-shell": {
+    "json": "../../dist/previews/layout/app-shell.json",
+    "category": "layout"
+  },
+  "iswc-app-nav": {
+    "json": "../../dist/previews/navigation/app-nav.json",
+    "category": "navigation"
+  },
+  "iswc-txt-view": {
+    "json": "../../dist/previews/files/txt-view.json",
+    "category": "files"
+  },
+  "iswc-txt-edit": {
+    "json": "../../dist/previews/files/txt-edit.json",
+    "category": "files"
+  },
+  "iswc-csv-view": {
+    "json": "../../dist/previews/files/csv-view.json",
+    "category": "files"
+  },
+  "iswc-csv-edit": {
+    "json": "../../dist/previews/files/csv-edit.json",
+    "category": "files"
+  },
+  "iswc-docx-view": {
+    "json": "../../dist/previews/files/docx-view.json",
+    "category": "files"
+  },
+  "iswc-pptx-view": {
+    "json": "../../dist/previews/files/pptx-view.json",
+    "category": "files"
+  },
+  "iswc-file-view": {
+    "json": "../../dist/previews/files/file-view.json",
+    "category": "files"
+  },
+  "iswc-file-edit": {
+    "json": "../../dist/previews/files/file-edit.json",
+    "category": "files"
+  },
+  "iswc-doc-demo": {
+    "json": "../../dist/previews/layout/doc-demo.json",
+    "category": "preview"
+  },
+  "iswc-playground": {
+    "json": "../../dist/previews/preview/playground.json",
+    "category": "preview"
+  },
+  "iswc-slots-pg": {
+    "json": "../../dist/previews/preview/slots-pg.json",
+    "category": "preview"
+  },
+  "iswc-examples-carousel": {
+    "json": "../../dist/previews/preview/examples-carousel.json",
+    "category": "preview"
+  },
+  "iswc-demo-section": {
+    "json": "../../dist/previews/preview/demo-section.json",
+    "category": "preview"
   }
 };

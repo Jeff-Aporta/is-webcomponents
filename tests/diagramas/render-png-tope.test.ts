@@ -18,14 +18,16 @@ import { fileURLToPath } from 'node:url';
 import { PNG_MAX_PX, pngCanvasSize, renderDiagramBatch } from '../../src/vendor-distributions/client/tools/render-diagram.ts';
 import type { RenderDiagramOptions } from '../../src/vendor-distributions/shared/schemas.ts';
 import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
-import { denoTestCon } from '../_shared/deno-test.ts';
+import { denoTestCon } from '../_shared/deno-test.ts';
+import { lanzarChromium } from '../_shared/navegador.ts';
 
 const { test, lista } = coleccionPruebas({ categoria: 'what' });
 
 const denoTest = denoTestCon(test);
 
 
-const RAIZ = fileURLToPath(new URL('./', import.meta.url));
+// Raíz del repo (antes './' = tests/diagramas/: no hallaba dist/ y el caso se saltaba en silencio).
+const RAIZ = fileURLToPath(new URL('../../', import.meta.url));
 const BUNDLE = 'dist/cdn/diagrams/flowchart.min.js';
 const CLASES_PNG = 'labs/iss-ayudascpia-clases/out/clases.png';
 const ESCALA = 2;
@@ -68,7 +70,9 @@ denoTest({
 
 let chromium: RenderDiagramOptions['chromium'] | null = null;
 try {
-  chromium = (createRequire(import.meta.url)('playwright') as { chromium: RenderDiagramOptions['chromium'] }).chromium;
+  // Chromium de Playwright o, si no está descargado, Chrome/Edge del sistema (tests/_shared/navegador.ts).
+  createRequire(import.meta.url)('playwright');
+  chromium = { launch: (o: Record<string, unknown>) => lanzarChromium(o) } as unknown as RenderDiagramOptions['chromium'];
 } catch { chromium = null; }
 
 denoTest({

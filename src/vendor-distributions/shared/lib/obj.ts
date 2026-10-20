@@ -31,7 +31,7 @@ import {
   nullable as zNullable, object as zObject, optional as zOptional, safeParse, ZodArray, ZodCatch, ZodDefault, ZodExactOptional, ZodLazy,
   ZodNonOptional, ZodNullable, ZodObject, ZodOptional, ZodPipe, ZodPrefault, ZodPromise, ZodReadonly, ZodRecord, ZodSuccess, ZodUnion, type z,
 } from "zod";
-import { ZConsulta, type TAccionObj, type TCodigoObj, type TConsulta } from "../schemas.ts";
+import { ZConsulta, type TAccionObj, type TCodigoObj, type TConsulta } from "../schemas.js";
 
 // `.ts` explícito: así el módulo se importa tal cual por URL (Deno remoto no adivina extensiones).
 

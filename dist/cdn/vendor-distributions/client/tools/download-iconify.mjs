@@ -17,7 +17,7 @@ var DEFAULTS = {
 var CARPETA_SVG = "iconify";
 var LOTE = 80;
 var RE_ID = /^[a-z0-9]+(?:-[a-z0-9]+)*:[a-z0-9]+(?:[-_][a-z0-9]+)*$/;
-var RE_LITERAL = /(['"`])([a-z0-9]+(?:-[a-z0-9]+)*:[a-z0-9]+(?:[-_][a-z0-9]+)*)\1/g;
+var RE_LITERAL = /(['"`])([a-z0-9]+(?:-[a-z0-9]+)*:[a-z0-9]+(?:[-_][a-z0-9]+)*)\\?\1/g;
 var esIdIcono = (s) => RE_ID.test(s);
 function extraerIconos(texto) {
   const out = /* @__PURE__ */ new Set();

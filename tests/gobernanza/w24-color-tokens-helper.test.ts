@@ -1,5 +1,5 @@
 /**
- * w24-color-tokens-helper.test.ts Ã¢â‚¬â€ Guardian del contrato W24.
+ * w24-color-tokens-helper.test.ts — Guardian del contrato W24.
  *
  * Estandar W24 (zod-migration): existe un helper canonico en
  * `src/styles/color-tokens.ts` que define las 5 variantes tonal (paler/
@@ -27,7 +27,7 @@
  *   4. Brand tiene 5 variantes en palettes.scss con la matematica HSL esperada.
  *   5. La salida del helper (`colorMixFamilyBlock`, `brandFamilyBlock`,
  *      `brandVariantRule`) coincide literalmente con lo escrito en los archivos
- *      CSS Ã¢â‚¬â€ si alguien edita a mano sin pasar por el helper, este test lo
+ *      CSS — si alguien edita a mano sin pasar por el helper, este test lo
  *      caza antes de que el cambio llegue a produccion.
  *   6. palette-build.ts (BRAND_DERIVE) reusa el helper (single source of truth).
  *
@@ -166,7 +166,7 @@ test('W24: las 6 familias usan EXACTAMENTE los ratios 12/28/82/62/45 del helper'
   for (const family of ISWC_COLOR_MIX_FAMILIES) {
     for (const variant of ISWC_COLOR_VARIANTS) {
       const expected = colorMixRule(family, variant);
-      // expected = "--iswc-color-X-Y: color-mix(...);" Ã¢â‚¬â€ extraemos el valor.
+      // expected = "--iswc-color-X-Y: color-mix(...);" — extraemos el valor.
       const m = expected.match(/^--iswc-color-[^:]+:\s*(.+);$/);
       assert.ok(m, `colorMixRule mal formado: ${expected}`);
       const expectedValue = m[1].trim();
@@ -182,7 +182,7 @@ test('W24: las 6 familias usan EXACTAMENTE los ratios 12/28/82/62/45 del helper'
 
 test('W24: las 6 familias usan los targets white/black del helper', () => {
   // Defensa adicional: aunque alguien cambie un ratio, no debe romper
-  // la convencion white/black (paler/pale Ã¢â€ â€™ white; los 3 strong Ã¢â€ â€™ black).
+  // la convencion white/black (paler/pale → white; los 3 strong → black).
   for (const family of ISWC_COLOR_MIX_FAMILIES) {
     for (const variant of ISWC_COLOR_VARIANTS) {
       const mix = ISWC_COLOR_MIX[variant];
@@ -310,7 +310,7 @@ test('W24: colorMixFamilyBlock del helper matchea is-base.scss para neutral', ()
   // Extraemos de is-base.scss las 6 lineas (base + 5 variantes) de neutral.
   const lines: string[] = [`  --iswc-color-neutral: #888;`];
   for (const v of ISWC_COLOR_VARIANTS) {
-    // colorMixRule devuelve `NAME: VALUE;` Ã¢â‚¬â€ necesitamos solo `VALUE;`.
+    // colorMixRule devuelve `NAME: VALUE;` — necesitamos solo `VALUE;`.
     const m = colorMixRule('neutral', v).match(/^--iswc-color-[^:]+:\s*(.+);$/);
     assert.ok(m, `colorMixRule mal formado: ${colorMixRule('neutral', v)}`);
     lines.push(`  ${iswcColorTokenName('neutral', v)}: ${m[1]};`);
@@ -405,11 +405,11 @@ test('W24: las 7 familias (6 color-mix + brand) tienen 5 variantes en CSS', () =
   }
 });
 
-test('W24: summary Ã¢â‚¬â€ 7 familias Ãƒâ€” 5 variantes = 35 tokens unificados', () => {
+test('W24: summary — 7 familias × 5 variantes = 35 tokens unificados', () => {
   // Recuento de cobertura final, util para reportar PASS con dato duro.
   const total = ISWC_COLOR_FAMILIES.length * ISWC_COLOR_VARIANTS.length;
   assert.equal(total, 7 * 5);
-  console.log(`  W24 cobertura: ${ISWC_COLOR_FAMILIES.length} familias Ãƒâ€” ${ISWC_COLOR_VARIANTS.length} variantes = ${total} tokens`);
+  console.log(`  W24 cobertura: ${ISWC_COLOR_FAMILIES.length} familias × ${ISWC_COLOR_VARIANTS.length} variantes = ${total} tokens`);
   console.log(`  ISWC_COLOR_VARIANTS = ${[...ISWC_COLOR_VARIANTS].join(', ')}`);
   console.log(`  ISWC_COLOR_MIX = 12/28/82/62/45 (white/black)`);
 });

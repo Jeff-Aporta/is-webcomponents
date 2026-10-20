@@ -572,7 +572,7 @@
           },
           {
             "name": "<code>--spacing</code>",
-            "default": "<code>var(--iswc-space-m)</code>",
+            "default": "<code>var(--iswc-space-m, 0.75rem)</code>",
             "desc": "Padding del header / contenido."
           },
           {

@@ -65,10 +65,13 @@ test('login: reutiliza los componentes obligatorios', () => {
   }
 });
 
-test('login: el preview carga el script compilado', () => {
-  const html = leer(join(RAIZ, 'previews', 'layout', 'iswc-login.html'));
-  assert.ok(html.includes('components/layout/login.js'), 'el preview no carga login.js');
-  assert.ok(html.includes('iswc-login'), 'el preview no instancia el componente');
+test('login: el preview instancia el componente y su bundle está publicado', () => {
+  // La galería monta el preview desde login.json (no hay HTML suelto por componente) y carga el bundle de dist/cdn.
+  const json = JSON.parse(leer(join(BASE, 'login.json')));
+  const html = (json.sections ?? []).flatMap((s) => s.blocks ?? []).filter((b) => b.kind === 'demo')
+    .map((b) => (Array.isArray(b.html) ? b.html.join(' ') : String(b.html ?? ''))).join(' ');
+  assert.ok(/<iswc-login[\s>]/.test(html), 'el demo instancia <iswc-login>');
+  assert.ok(existsSync(join(RAIZ, 'dist', 'cdn', 'layout', 'login.min.js')), 'falta dist/cdn/layout/login.min.js (corre deno task build)');
 });
 
 export default lista();

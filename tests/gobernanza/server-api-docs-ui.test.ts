@@ -20,14 +20,17 @@ import { createRequire } from 'node:module';
 import { extname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
-import { denoTestCon } from '../_shared/deno-test.ts';
+import { denoTestCon } from '../_shared/deno-test.ts';
+import { lanzarChromium } from '../_shared/navegador.ts';
 
 const { test, lista } = coleccionPruebas({ categoria: 'how' });
 
 const denoTest = denoTestCon(test);
 
 
-const RAIZ = fileURLToPath(new URL('./', import.meta.url));
+// Raíz del kit: este archivo vive en tests/gobernanza/ (con './' el guardián buscaba los bundles junto a sí
+// mismo, no los encontraba y quedaba SALTADO en silencio).
+const RAIZ = fileURLToPath(new URL('../../', import.meta.url));
 const BUNDLE = 'dist/cdn/layout/server-api-docs.min.js';
 
 /** El documento del demo de la ficha (`server-api-docs.json`). */
@@ -42,7 +45,7 @@ async function documentoDemo(): Promise<string> {
   return JSON.stringify(JSON.parse(json[1]!)).replace(/</g, '\\u003c');
 }
 
-const pagina = (cuerpo: string) => `<!doctype html><html lang="es" data-theme="light"><head><meta charset="utf-8">
+const pagina = (cuerpo: string) => `<!doctype html><html lang="es" data-theme="light"><head><meta charset="utf-8"><link rel="icon" href="data:,">
 <link rel="stylesheet" href="/dist/cdn/is-base.min.css"><link rel="stylesheet" href="/dist/cdn/palettes.min.css">
 <script type="module" src="/${BUNDLE}"></script>
 <style>html, body { margin: 0; height: 100%; } iswc-server-api-docs { display: block; height: 100vh; }</style>
@@ -62,6 +65,7 @@ let chromium: { launch: (o: Record<string, unknown>) => Promise<Navegador> } | n
 try {
   chromium = (createRequire(import.meta.url)('playwright') as { chromium: typeof chromium }).chromium;
 } catch { chromium = null; }
+// Sin el Chromium descargado por Playwright se usa el Chrome o Edge del sistema (tests/_shared/navegador.ts).
 
 /** Búsqueda profunda (atraviesa shadow roots) disponible en la página como `window.__q(sel)` / `__qa(sel)`. */
 const AYUDA = `(() => {
@@ -103,7 +107,7 @@ denoTest({
       }
     });
     const origen = `http://127.0.0.1:${(srv.addr as Deno.NetAddr).port}`;
-    const nav = await chromium!.launch({ headless: true });
+    const nav = await lanzarChromium() as unknown as Navegador;
     const errores: string[] = [];
     const vigilar = (pg: Pagina) => {
       pg.on('console', (m) => { if (m.type?.() === 'error') errores.push(m.text?.() ?? ''); });
@@ -117,12 +121,12 @@ denoTest({
       await page.goto(`${origen}/docs.html`, { waitUntil: 'load' });
       await page.evaluate(AYUDA);
       assert(await espera(page, `window.__h1() === 'API PatyIA'`), `U1 la portada no muestra el título (h1 = «${await page.evaluate<string>('window.__h1()')}»)`);
-      assert(await espera(page, `window.__qa('.ops a').length === 6`), `U1 la portada no lista las 6 operaciones (${await page.evaluate<number>("window.__qa('.ops a').length")})`);
+      assert(await espera(page, `window.__qa('table.endpoints tbody a.enlace').length === 6`), `U1 la portada no lista las 6 operaciones (${await page.evaluate<number>("window.__qa('table.endpoints tbody a.enlace').length")})`);
       assertEquals(await page.evaluate<number>("(window.__q('iswc-doc-index')?.items ?? []).length"), 7, 'U1 el índice trae portada + 6 operaciones');
 
       // U2
       await page.evaluate(`(window.__paginas = [], document.addEventListener('iswc-server-api-docs-page', (e) => window.__paginas.push(e.detail.id)), window.__marca = 1)`);
-      await page.evaluate(`window.__qa('.ops a').find((a) => a.textContent.includes('Detalle de una conversación')).click()`);
+      await page.evaluate(`window.__qa('table.endpoints tbody a.enlace').find((a) => a.closest('tr').textContent.includes('Detalle de una conversación')).click()`);
       assert(await espera(page, `window.__h1() === 'Detalle de una conversación'`), `U2 no abrió la operación (h1 = «${await page.evaluate<string>('window.__h1()')}»)`);
       const compartida = page.url();
       assert(new URL(compartida).searchParams.get('s'), `U2 la URL no guarda la operación en ?s= (${compartida})`);

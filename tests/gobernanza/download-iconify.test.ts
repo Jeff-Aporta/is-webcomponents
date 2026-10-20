@@ -7,6 +7,7 @@
 //   I5 poda los SVG que ya nadie usa.
 //   I6 un 429 se reintenta y no se confunde con «no existe»; un nombre que no existe se reporta.
 //   I7 sin red no rompe: conserva lo que hay en disco y avisa; `offline` no toca la red.
+//   I8 un id escapado dentro de un string JSON (demo de una ficha) cuenta como usado: ni falta ni se poda.
 import { assert, assertEquals } from 'jsr:@std/assert@1';
 import { existsSync, mkdirSync, readdirSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
@@ -124,6 +125,14 @@ denoTest('download-iconify: I7 sin red conserva lo que hay y avisa; offline no t
   const muda = apiFalsa();
   await descargarIconos({ ...opciones(raiz, muda.f), offline: true });
   assertEquals(muda.pedidos, [], 'I7 offline: cero pedidos');
+});
+
+denoTest('download-iconify: I8 un id escapado en un string JSON cuenta como usado (no se poda)', async () => {
+  const demo = JSON.stringify({ html: '<iswc-icon icon="mdi:star"></iswc-icon>' });
+  const raiz = app({ ...BASE, 'src/ficha.json': demo, 'assets/iconify/mdi/star.svg': '<svg/>' });
+  await descargarIconos(opciones(raiz, apiFalsa().f));
+  assert(demo.includes('\\"mdi:star\\"'), 'el fixture lleva el id escapado, como en los JSON de previews');
+  assert(enDisco(raiz).mdi?.includes('star'), 'I8 mdi:star (escapado en JSON) sigue en disco');
 });
 
 denoTest('download-iconify: el kit sirve sus íconos en assets/iconify (sin mapa)', () => {

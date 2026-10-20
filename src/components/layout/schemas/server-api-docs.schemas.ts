@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import type { SequenceActorSpec, SequenceFragmentSpec, SequenceMessageSpec } from '../../diagrams/schemas/sequence-spec.schemas.js';
 
 /**
  * Contratos de `<iswc-server-api-docs>` (W54: los tipos viven en *.schemas.ts).
@@ -303,3 +304,6 @@ export type ServerApiDocsLayout = HTMLElement & {
 export type ServerApiDocsIndice = HTMLElement & { items: unknown[]; current: string; textos: Partial<{ placeholder: string; sinResultados: string; resumen: string }>; focusSearch(): void };
 export type ServerApiDocsRender = HTMLElement & { value: string };
 export type ServerApiDocsCampo = HTMLElement & { value: string };
+
+/** Payload de `<iswc-sequence-diagram>` que arma `secuenciaDeOperacion` (el visor lo pinta con `diagram-style="insoft"`). */
+export type ServerApiDocsSecuencia = { sequence: { title: string; actors: SequenceActorSpec[]; messages: SequenceMessageSpec[]; fragments: SequenceFragmentSpec[] } };

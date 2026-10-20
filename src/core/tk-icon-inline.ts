@@ -13,7 +13,7 @@
 
 import { normalizeTkHue, tkHueToCss, tkHueToHex } from './tk-hue.js';
 import { resolveIconRaw } from './icon-loader.js';
-import type { ResolvedIconToken, SvgIconBadgeOpts, SvgIconGroupOpts, IconInlineOpts, IconHtmlRender, IconRun, LeadingIcon } from "./schemas/tk-icon-inline.schemas.js";
+import type { SvgIconConPromesa, ResolvedIconToken, SvgIconBadgeOpts, SvgIconGroupOpts, IconInlineOpts, IconHtmlRender, IconRun, LeadingIcon } from "./schemas/tk-icon-inline.schemas.js";
 
 /** Simple {{ … }} (sin objeto sugar) — compat tests / búsqueda rápida. */
 export const TK_ICON_TOKEN_RE = /\{\{([^}#][^}]*)\}\}/g;
@@ -225,7 +225,6 @@ const ICONO_FALLBACK = 'mdi:shape-outline';
  * WeakMap por copia no se vería desde la base de los diagramas.
  */
 const ICONO_LISTO = Symbol.for('iswc.svgIconReady');
-type ConPromesa = SVGGElement & { [ICONO_LISTO]?: Promise<void> };
 
 /** Tope de espera por icono: una red colgada nunca bloquea el render. */
 const ICONO_ESPERA_MS = 8000;
@@ -237,7 +236,7 @@ const ICONO_ESPERA_MS = 8000;
 export async function svgIconsReady(root: ParentNode | null | undefined, timeoutMs = ICONO_ESPERA_MS): Promise<void> {
   if (!root) return;
   const esperas: Promise<void>[] = [];
-  for (const g of root.querySelectorAll<ConPromesa>('g.tk-svg-icon')) {
+  for (const g of root.querySelectorAll<SvgIconConPromesa>('g.tk-svg-icon')) {
     const p = g[ICONO_LISTO];
     if (p) esperas.push(p);
   }
@@ -293,7 +292,7 @@ export function svgIconGroup(iconId: string, opts: SvgIconGroupOpts = {}): SVGGE
     }
     g.appendChild(inner);
   }).catch(() => { /* icono inexistente: el diagrama sigue legible sin el */ });
-  (g as ConPromesa)[ICONO_LISTO] = listo;
+  (g as SvgIconConPromesa)[ICONO_LISTO] = listo;
 
   return g;
 }

@@ -126,7 +126,7 @@ Skills: `npx skills add Jeff-Aporta/iswc-root -s is-cdn-install` · `-s iswc-roo
 
 | Caso | Resultado | Verificación |
 |---|---|---|
-| Solo `dist/cdn/` + `dist/assets/` | sin huérfanos sueltos en `dist/` | `tests/gobernanza/dist-cdn-layout.test.ts` |
+| Solo `dist/cdn/` + `dist/assets/` (+ salidas de `deno task bundle`: `dist/{previews,pages,scripts,skills}/`) | sin huérfanos sueltos en `dist/` | `tests/gobernanza/dist-cdn-layout.test.ts` |
 | Carpetas CDN | una carpeta por categoría manifest | `tests/gobernanza/cdn-folders.test.ts` |
 | Loader y plan | sin doble fetch categoría+tag | `tests/gobernanza/cdn-loader.test.ts`, `tests/componentes/load-plan.test.ts` |
 | Snippet match preview | paths coherentes con manifest | `tests/gobernanza/cdn-snippet-match.test.ts` |

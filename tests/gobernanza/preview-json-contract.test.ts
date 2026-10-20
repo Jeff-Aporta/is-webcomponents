@@ -21,10 +21,27 @@ test('gobernanza/preview-json-contract', async () => {
   // ("./home.json" → src/previews/home.json; "../components/x.json" → src/components/x.json;
   //  "../pages/x.json" → src/pages/x.json). Resolvemos contra src/ normalizando.
   const srcDir = join(root, 'src');
+  // Hoy catalog.ts apunta a lo PUBLICADO por `deno task bundle` (bundle-scripts.mjs):
+  //   ../../dist/previews/<cat>/<n>.json             ← src/components/<cat>/<n>.json
+  //   ../../dist/previews/<cat>/<n>.preview.min.js   ← src/components/<cat>/utils/<n>.preview.ts
+  //   ../../dist/pages/<n>.json | <n>.min.js         ← src/pages/<n>.json | <n>.ts
+  // El guardián valida la FUENTE (lo que el bundle copia/compila), así no depende
+  // de que dist/ esté recién construido. Rutas de fuente (../pages/x.json) se
+  // resuelven como antes, contra src/.
   function resolveCatalogPath(p) {
+    let m = p.match(/^(?:\.\.\/)+dist\/previews\/([^/]+)\/([^/]+)\.preview\.min\.js$/);
+    if (m) return join(srcDir, 'components', m[1], 'utils', `${m[2]}.preview.ts`);
+    m = p.match(/^(?:\.\.\/)+dist\/previews\/([^/]+)\/([^/]+\.json)$/);
+    if (m) return join(srcDir, 'components', m[1], m[2]);
+    m = p.match(/^(?:\.\.\/)+dist\/pages\/([^/]+)\.min\.js$/);
+    if (m) return join(srcDir, 'pages', `${m[1]}.ts`);
+    m = p.match(/^(?:\.\.\/)+dist\/pages\/([^/]+\.json)$/);
+    if (m) return join(srcDir, 'pages', m[1]);
     const clean = p.replace(/^\.\.\//, '');   // quita el primer ../ (paths que suben a src/)
     return join(srcDir, clean);
   }
+  /** Ruta de la fuente relativa a src/ (components/<cat>/<n>.json, pages/<n>.json). */
+  const srcRel = (p) => resolveCatalogPath(p).slice(srcDir.length + 1).replaceAll('\\', '/');
   const failures = [];
   
   const KINDS = new Set(['demo', 'callout', 'code', 'html', 'table', 'lede']);
@@ -57,7 +74,10 @@ test('gobernanza/preview-json-contract', async () => {
       }
     }
     if (entry.behavior || def.hasBehavior) {
-      const behRel = (entry.behavior || `./behaviors/${tag}.js`).replace(/\.js$/, '.ts');
+      // El catalog apunta hoy al bundle publicado (`../../dist/previews/<cat>/<x>.preview.min.js`):
+      // ese se comprueba tal cual. Solo un especificador de fuente (`./x.js`) se traduce a `.ts`.
+      const behRaw = entry.behavior || `./behaviors/${tag}.js`;
+      const behRel = /\.min\.js$/.test(behRaw) ? behRaw : behRaw.replace(/\.js$/, '.ts');
       const beh = resolveCatalogPath(behRel);
       if (!existsSync(beh)) failures.push(`${tag}: hasBehavior pero falta ${behRel} → ${beh}`);
     }
@@ -74,7 +94,7 @@ test('gobernanza/preview-json-contract', async () => {
       // manifest.page es relativo a catalog (antes ./<cat>/iswc-x.json). Normalizar ambos.
       const norm = (p) => p.replace(/^\.\//, '').replace(/^\.\.\//, '').replace(/^components\//, '').replace(/^previews\//, '').replace(/^pages\//, '');
       const pageNorm = norm(m.page);
-      const catNorm = norm(entry.json);
+      const catNorm = norm(srcRel(entry.json));
       const equivalent =
         pageNorm === catNorm ||
         `components/${pageNorm}` === catNorm ||

@@ -17,10 +17,12 @@ import path from 'node:path';
 const root = path.resolve('src/components');
 const FIX = process.argv.includes('--fix');
 
-/** intent.js — color semántico (kit: brand default + info/error). */
-const INTENT = ['brand', 'neutral', 'success', 'warning', 'danger', 'info', 'error'];
-/** tone.js — peso visual compartido (tag/badge/card…). Button usa otro set en docstring. */
-const TONE = ['accent', 'filled', 'outlined', 'filled-outlined', 'plain'];
+/** INTENT / TONE salen del kit (src/core/intent.ts, src/core/tone.ts): una sola fuente.
+ *  Antes iban copiados aquí y se quedaron atrás (faltaba `text` en INTENT), así que la
+ *  auditoría exigía a los demos un set de colores que el CE ya no tiene. */
+const { INTENT } = await import(new URL('../../src/core/intent.ts', import.meta.url).href);
+/** tone — peso visual compartido (tag/badge/card…). Button usa otro set en docstring. */
+const { TONE } = await import(new URL('../../src/core/tone.ts', import.meta.url).href);
 const TYPE_WORDS = new Set(['number', 'string', 'boolean', 'object', 'array', 'null', 'undefined', 'any']);
 
 /** Extrae arrays string literales: const VALID_X = ["a","b"] */

@@ -2,7 +2,8 @@
  * tree-view.test.ts — Tier A (15 aserciones) para `<iswc-tree-view>`.
  *
  * Componente complejo: árbol editable con drag, drawer, history, custom
- * adapters. Reexporta TreeAdapter, TreeRowAdapter, TreeCustomsBase.
+ * adapters. Las piezas de personalización se importan de su módulo de origen
+ * (sin re-exports, specs/typescript S-TS9).
  */
 
 import assert from 'node:assert/strict';
@@ -35,10 +36,22 @@ test('tree-view: 3. JSON existe y respeta iswc-preview/v1', async () => {
   assert.equal(json.$schema, 'iswc-preview/v1');
 });
 
-test('4. reexporta TreeRowViewAdapter / TreeAdapter / TreeCustomsBase', async () => {
-  const src = readFileSync(TS, 'utf8');
-  assert.ok(/export\s*\{[^}]*TreeRowViewAdapter[^}]*\}/.test(src));
-  assert.ok(/export\s*\{[^}]*TreeCustomsBase[^}]*\}/.test(src));
+test('4. las piezas de personalización se importan de su módulo de origen y tienen bundle (S-TS9)', async () => {
+  // Lo que promete tree-view.md: cada símbolo sale de su propio módulo publicado, no de tree-view.
+  const piezas: Array<[string, string[]]> = [
+    ['customs-base', ['TreeCustomsBase']],
+    ['adapter', ['TreeRowViewAdapter']],
+    ['row-adapter', ['TreeRowAdapter']],
+    ['tree-data', ['objRootsToNodes', 'groupedWithSeparators']],
+  ];
+  for (const [mod, nombres] of piezas) {
+    const m = await import('../../../src/components/isp/utils/tree-view/' + mod + '.ts');
+    for (const n of nombres) assert.equal(typeof m[n], 'function', mod + ' exporta ' + n);
+    assert.ok(existsSync(join(ROOT, 'dist', 'cdn', 'isp', mod + '.min.js')), 'falta el bundle dist/cdn/isp/' + mod + '.min.js');
+  }
+  const doc = readFileSync(join(ROOT, 'src', 'components', 'isp', 'tree-view.md'), 'utf8');
+  assert.ok(doc.includes('./isp/customs-base.min.js'), 'la doc enseña a importar TreeCustomsBase de su módulo');
+  assert.ok(!/export\s*\{[^}]*TreeCustomsBase/.test(readFileSync(TS, 'utf8')), 'tree-view no re-exporta (S-TS9)');
 });
 
 test('5. importa customs base compartido (utils/tree-view/customs-base)', async () => {

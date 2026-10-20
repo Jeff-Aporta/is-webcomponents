@@ -119,13 +119,11 @@ for (const rel of manifest.archivos) {
 }
 
 // 2) Tools del kit al MISMO SHA del pin: las baja el propio `scripts/vendor/vendor-iswc-tools.mjs` de la app
-//    (una sola lista de archivos). Desde un checkout local, `--local` con ISWC_LOCAL = este kit (cabecera +local).
-const etiqueta = remoto ? sha : `${sha}+local`;
+//    (una sola lista de archivos), siempre del CDN/raw fijado al SHA publicado: la app nace hermética.
 {
   const r = await new Deno.Command(Deno.execPath(), {
-    args: ['run', '-A', join('scripts', 'vendor', 'vendor-iswc-tools.mjs'), ...(remoto ? [] : ['--local'])],
+    args: ['run', '-A', join('scripts', 'vendor', 'vendor-iswc-tools.mjs')],
     cwd: destino,
-    env: remoto ? {} : { ISWC_LOCAL: fileURLToPath(KIT) },
     stdout: 'inherit',
     stderr: 'inherit',
   }).output();
@@ -134,7 +132,7 @@ const etiqueta = remoto ? sha : `${sha}+local`;
 
 console.log(`
 create-iswc-app: ${nombre} creada en ${destino}
-  prefijo   <${prefijo}-*>   ·   kit ${MARCAS.__REPO__}@${sha.slice(0, 12)}${etiqueta.endsWith('+local') ? ' (tools del checkout local)' : ''}
+  prefijo   <${prefijo}-*>   ·   kit ${MARCAS.__REPO__}@${sha.slice(0, 12)}
 
 Siguiente:
   cd ${carpeta}

@@ -1,5 +1,5 @@
 /**
- * w23-neutral-color-guardian.test.ts Ã¢â‚¬â€ Guardian del contrato W23.
+ * w23-neutral-color-guardian.test.ts — Guardian del contrato W23.
  *
  * Estandar W23 (zod-migration): el color `neutral` del sistema se define
  * siempre como `#888` (gris central del espacio RGB) en `is-base.scss`,
@@ -146,7 +146,7 @@ test('W23: contrast del neutral contra --iswc-text (dark y light)', () => {
   console.log(`  contrast #888 vs --iswc-text(dark=${darkText}) = ${cDark.toFixed(2)}:1`);
 
   // Texto del tema light: vive en el bloque [data-theme="light"].
-  // Tomamos la primera coincidencia despuÃƒÂ©s del primer :root.
+  // Tomamos la primera coincidencia después del primer :root.
   const lightIdx = css.indexOf('[data-theme="light"]');
   assert.ok(lightIdx > 0, 'is-base.scss debe contener un selector [data-theme="light"]');
   const lightBlock = css.slice(lightIdx);
@@ -199,10 +199,10 @@ test('W23: no hay overrides cromaticos del neutral en palettes.scss', () => {
 });
 
 test('W23: --iswc-color-neutral aparece en las fuentes canonicas de tokens', () => {
-  // El token vive en styles/is-base.scss (root + .theme-dark) Ã¢â‚¬â€ su unica
+  // El token vive en styles/is-base.scss (root + .theme-dark) — su unica
   // fuente canonica. La guia detallada de cada componente ya no requiere
   // listar el token (W42: "Tema visual" eliminado del button demo). Si
-  // alguien lo borra del root, el guardiÃƒÂ¡n lo detecta.
+  // alguien lo borra del root, el guardián lo detecta.
   const IS_BASE = join(root, 'src', 'styles', 'is-base.scss');
   const css = readFileSync(IS_BASE, 'utf8');
   assert.ok(

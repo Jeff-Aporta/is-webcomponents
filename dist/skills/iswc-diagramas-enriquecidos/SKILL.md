@@ -7,12 +7,12 @@ description: >-
   (ISS, ISW…), al agregar una ruta/EP a la documentación, al conectar un paso con una tabla, una
   clase o un sistema externo, o al revisar que un diagrama siga las convenciones homogéneas.
 ---
-<!-- @vendor 2026-10-13T21:35:57.062Z Jeff-Aporta/is-webcomponents@main skills/iswc-diagramas-enriquecidos/SKILL.md -->
+<!-- @vendor 2026-10-14T14:46:42.343Z Jeff-Aporta/is-webcomponents@main skills/iswc-diagramas-enriquecidos/SKILL.md -->
 
 # Diagramas enriquecidos — convenciones homogéneas
 
 > El formato es el **diagrama de flujo en vector** (`{ vectorFlow: { columns, edges } }`, doc
-> `src/components/diagrams/vector-flow.md`): cada columna es un contexto estricto y las aristas son
+> `src/components/diagrams/utils/vector-flow.md`): cada columna es un contexto estricto y las aristas son
 > los puentes. Las reglas de abajo dicen qué columnas usar y cómo conectarlas.
 
 Un diagrama enriquecido cuenta **qué pasa en una acción** (un endpoint, una tarea) con todas sus

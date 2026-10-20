@@ -77,3 +77,8 @@ export const LeadingIconSchema = z.object({
 });
 export type LeadingIcon = z.infer<typeof LeadingIconSchema>;
 
+/**
+ * `<g class="tk-svg-icon">` con la promesa de carga del icono colgada de `Symbol.for('iswc.svgIconReady')`
+ * (la lee `svgIconsReady`). Clave `Symbol.for` y no un WeakMap: cada bundle inlinea su copia del módulo.
+ */
+export type SvgIconConPromesa = SVGGElement & { [clave: symbol]: Promise<void> | undefined };

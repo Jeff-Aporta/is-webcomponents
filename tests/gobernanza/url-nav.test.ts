@@ -28,8 +28,10 @@ test('url-nav.ts solo toca ?s= (sin storage ni params sueltos)', async () => {
 });
 
 test('read/writeUrlNav mergean keys en ?s= y limpian params legado', async () => {
-  const href0 = 'https://example.test/gallery?s=eyJjb21wb25lbnQiOiJpcy1idXR0b24ifQ&docs=legacy';
-  // eyJjb21wb25lbnQiOiJpcy1idXR0b24ifQ = {"component":"iswc-button"}
+  // El fixture decía {"component":"is-button"} (prefijo legado) aunque el
+  // comentario y las aserciones esperan el tag canónico iswc-button.
+  const href0 = 'https://example.test/gallery?s=eyJjb21wb25lbnQiOiJpc3djLWJ1dHRvbiJ9&docs=legacy';
+  // eyJjb21wb25lbnQiOiJpc3djLWJ1dHRvbiJ9 = {"component":"iswc-button"}
   let href = href0;
   const history = {
     state: null,
@@ -84,7 +86,10 @@ test('iswc-cdn-snippet carga solo el tag, sin radio ni url-key', async () => {
   assert.doesNotMatch(src, /'url-key'/);
   assert.doesNotMatch(src, /name="cdn-scope"/);
   assert.doesNotMatch(src, /readUrlNav|writeUrlNav/);
-  assert.match(src, /return tag/);
+  // El argumento de L.load() es solo el atributo `tag` (normalizado is- → iswc-),
+  // nunca una categoría ni un alcance elegido en la UI.
+  assert.match(src, /#loadArg\(\)\s*\{\s*const tag = \(this\.getAttribute\('tag'\) \|\| ''\)\.trim\(\);\s*return normalizeIswcTag\(tag\);/);
+  assert.match(src, /if \(t\.startsWith\('iswc-'\)\) return t;/);
 });
 
 test('galería mergea nav keys al actualizar component en ?s=', async () => {
@@ -93,7 +98,9 @@ test('galería mergea nav keys al actualizar component en ?s=', async () => {
   // los marcadores — el guardián se actualiza al nuevo contrato).
   const gallery = await readFile(join(raiz, 'src/app/app.ts'), 'utf8');
   assert.match(gallery, /readStateParam\(\)\s*\|\|\s*\{\}/);
-  assert.match(gallery, /\.\.\.prev,\s*component:/);
+  // Mergea: parte de una copia de prev y solo pisa `component`.
+  assert.match(gallery, /const next(?::\s*\w+)?\s*=\s*\{\s*\.\.\.prev\s*\};/);
+  assert.match(gallery, /next\.component\s*=\s*component\.tag;/);
   assert.match(gallery, /delete next\.theme/);
 });
 

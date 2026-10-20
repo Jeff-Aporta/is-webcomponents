@@ -88,19 +88,20 @@ test('gobernanza/llm-contract', async () => {
     'specs-sdd.test.ts',
   ];
   
-  // Mapear cada guardián a su ubicación real post-TAREA 3:
-  // tests/ → src/utils/health/<sub>/. Los subdirs son meta/diagrams/domain/e2e.
+  // Ubicación real de cada guardián: las pruebas volvieron de
+  // src/utils/health/<sub>/ a tests/<carpeta>/ (gobernanza, componentes, …).
+  const TEST_DIRS = ['gobernanza', 'componentes', 'exhaustivo', 'navegador', 'diagramas', 'server', 'auditoria', 'e2e'];
   function locateGuardian(name) {
-    for (const sub of ['meta', 'diagrams', 'domain', 'e2e']) {
-      const p = join(root, 'src', 'utils', 'health', sub, name);
+    for (const sub of TEST_DIRS) {
+      const p = join(root, 'tests', sub, name);
       if (existsSync(p)) return p;
     }
     return null;
   }
-  
+
   for (const file of guardians) {
     const onDisk = locateGuardian(file);
-    if (!onDisk) failures.push(`guardián citado no existe en disco: src/utils/health/<sub>/${file}`);
+    if (!onDisk) failures.push(`guardián citado no existe en disco: tests/<carpeta>/${file}`);
   }
   
   const gitignore = readFileSync(join(root, '.gitignore'), 'utf8');

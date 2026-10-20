@@ -6,7 +6,7 @@
   "titleHtml": false,
   "description": "Armazón de app: barra fija (marca, pestañas, sesión) y vista con scroll propio. Layout completo con iswc-app-nav e iswc-session-menu.",
   "storageKey": "docs-iswc-app-shell",
-  "hasBehavior": true,
+  "hasBehavior": false,
   "sections": [
     {
       "id": "intro",

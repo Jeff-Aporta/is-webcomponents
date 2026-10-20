@@ -95,9 +95,12 @@
               "options": [
                 "brand",
                 "neutral",
+                "text",
                 "success",
                 "warning",
-                "danger"
+                "danger",
+                "info",
+                "error"
               ]
             },
             {

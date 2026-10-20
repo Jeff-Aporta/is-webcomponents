@@ -367,12 +367,10 @@ for (const rel of manifest.archivos) {
   mkdirSync(dirname(salida), { recursive: true });
   writeFileSync2(salida, marcar(texto));
 }
-var etiqueta = remoto ? sha : `${sha}+local`;
 {
   const r = await new Deno.Command(Deno.execPath(), {
-    args: ["run", "-A", join2("scripts", "vendor", "vendor-iswc-tools.mjs"), ...remoto ? [] : ["--local"]],
+    args: ["run", "-A", join2("scripts", "vendor", "vendor-iswc-tools.mjs")],
     cwd: destino,
-    env: remoto ? {} : { ISWC_LOCAL: fileURLToPath(KIT) },
     stdout: "inherit",
     stderr: "inherit"
   }).output();
@@ -380,7 +378,7 @@ var etiqueta = remoto ? sha : `${sha}+local`;
 }
 console.log(`
 create-iswc-app: ${nombre} creada en ${destino}
-  prefijo   <${prefijo}-*>   \xB7   kit ${MARCAS.__REPO__}@${sha.slice(0, 12)}${etiqueta.endsWith("+local") ? " (tools del checkout local)" : ""}
+  prefijo   <${prefijo}-*>   \xB7   kit ${MARCAS.__REPO__}@${sha.slice(0, 12)}
 
 Siguiente:
   cd ${carpeta}

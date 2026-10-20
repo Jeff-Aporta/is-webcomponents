@@ -20,14 +20,16 @@ import {
 } from '../../src/vendor-distributions/client/tools/render-lote.ts';
 import type { OpcionesLote, PlanLote, RenderDiagramOptions } from '../../src/vendor-distributions/shared/schemas.ts';
 import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
-import { denoTestCon } from '../_shared/deno-test.ts';
+import { denoTestCon } from '../_shared/deno-test.ts';
+import { lanzarChromium } from '../_shared/navegador.ts';
 
 const { test, lista } = coleccionPruebas({ categoria: 'what' });
 
 const denoTest = denoTestCon(test);
 
 
-const RAIZ = fileURLToPath(new URL('./', import.meta.url));
+// Raíz del repo (antes './' = tests/diagramas/: no hallaba dist/ y el caso se saltaba en silencio).
+const RAIZ = fileURLToPath(new URL('../../', import.meta.url));
 const BUNDLE = 'dist/cdn/diagrams/flowchart.min.js';
 
 const json = (f: string, v: unknown) => writeFileSync(f, JSON.stringify(v, null, 2));
@@ -132,7 +134,9 @@ denoTest('render-lote: L2 la huella ignora el orden de claves y cambia con modul
 
 let chromium: RenderDiagramOptions['chromium'] | null = null;
 try {
-  chromium = (createRequire(import.meta.url)('playwright') as { chromium: RenderDiagramOptions['chromium'] }).chromium;
+  // Chromium de Playwright o, si no está descargado, Chrome/Edge del sistema (tests/_shared/navegador.ts).
+  createRequire(import.meta.url)('playwright');
+  chromium = { launch: (o: Record<string, unknown>) => lanzarChromium(o) } as unknown as RenderDiagramOptions['chromium'];
 } catch { chromium = null; }
 
 denoTest({

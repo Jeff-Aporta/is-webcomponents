@@ -47,6 +47,9 @@ test('gobernanza/cdn-folders', async () => {
     'palettes.min.css',
     'loader.min.js',
     'asset-hashes.json',
+    // Pin del dev-reload: build.mjs lo escribe (`build:<sha>`) y watch.mjs lo
+    // sobreescribe; scripts/dev-reload.js lo sondea en dist/cdn/reload-pin.
+    'reload-pin',
   ]);
   
   const CORE_REQUIRED = [
@@ -58,7 +61,9 @@ test('gobernanza/cdn-folders', async () => {
   for (const name of rootEntries) {
     const full = join(dist, name);
     if (statSync(full).isDirectory()) {
-      if (name !== 'llm' && name !== 'skills' && name !== 'core' && name !== 'build') categories.push(name);
+      // `lib/` guarda los bundles compartidos (zod, obj, ref-obj) que importan
+      // los componentes como `../lib/zod.min.js`: infraestructura, no categoría.
+      if (name !== 'llm' && name !== 'skills' && name !== 'core' && name !== 'build' && name !== 'lib') categories.push(name);
       continue;
     }
     check(ROOT_ALLOWED.has(name),
@@ -97,6 +102,23 @@ test('gobernanza/cdn-folders', async () => {
     return bundleSourceByCat.get(cat);
   };
   
+  // ¿Algún fuente de src/ define este tag como custom element?
+  let srcTexts = null;
+  const definesTag = (tagName) => {
+    if (!srcTexts) {
+      srcTexts = [];
+      const walk = (dir) => {
+        for (const name of readdirSync(dir)) {
+          const full = join(dir, name);
+          if (statSync(full).isDirectory()) walk(full);
+          else if (/\.(ts|js)$/.test(name)) srcTexts.push(readFileSync(full, 'utf8'));
+        }
+      };
+      walk(join(root, 'src'));
+    }
+    const re = new RegExp(`(?:defineElement|customElements\\.define)\\(\\s*['"\`]${tagName}['"\`]`);
+    return srcTexts.some((t) => re.test(t));
+  };
   const manifestCategories = new Set();
   for (const c of manifest) {
     manifestCategories.add(c.category);
@@ -104,7 +126,20 @@ test('gobernanza/cdn-folders', async () => {
     const own = existsSync(join(dist, `${c.category}/${tag}.min.js`));
     const registered = sourcesOf(c.category).includes(`"${c.tag}"`)
       || sourcesOf(c.category).includes(`'${c.tag}'`);
-    check(own || registered,
+    // Meta-páginas del manifest (iswc-icon-explorer, iswc-diagram-*-app): no son
+    // custom elements, solo un item del nav con su JSON y un módulo de
+    // comportamiento. Para ellas basta con que ese módulo esté publicado y que
+    // ningún fuente defina el tag (si alguien lo convierte en CE, vuelve a
+    // exigirse el bundle propio o el registro en la categoría).
+    let metaPage = false;
+    if (!own && !registered) {
+      const base = basename(c.script).replace(/\.(ts|js)$/, '');
+      const moduleOut = c.script.endsWith('.preview.ts')
+        ? join(root, 'dist', 'previews', c.category, `${base}.min.js`)
+        : join(dist, c.category, `${base}.min.js`);
+      metaPage = existsSync(moduleOut) && !definesTag(c.tag);
+    }
+    check(own || registered || metaPage,
       `${c.tag}: ni dist/cdn/${c.category}/${tag}.min.js ni ningún módulo de esa categoría lo registra`);
   }
   
@@ -137,14 +172,36 @@ test('gobernanza/cdn-folders', async () => {
     for (const name of readdirSync(dir)) {
       const full = join(dir, name);
       if (statSync(full).isDirectory()) { if (name !== '_shared') walkSrc(full, out); }
-      else if (name.endsWith('.js') && name !== 'index.ts') out.push(full);
+      // Los fuentes son .ts (importan con especificador .js); antes eran .js.
+      else if (name.endsWith('.ts') && !name.endsWith('.d.ts') && name !== 'index.ts') out.push(full);
     }
     return out;
   };
   const catByTag = new Map(manifest.map((c) => [c.tag.replace(/^iswc-/, ''), c.category]));
+  // build.mjs publica cada fuente como <carpeta>/<basename>.min.js: dos fuentes
+  // con el mismo nombre (aunque una viva en utils/) se pisan en dist y el tag
+  // pierde su bundle (pasó con isp/utils/tree-view/flex-options.ts, que tapaba
+  // a <iswc-flex-options>).
+  const byBase = new Map();
+  const walkAll = (dir) => {
+    for (const name of readdirSync(dir)) {
+      const full = join(dir, name);
+      if (statSync(full).isDirectory()) walkAll(full);
+      else if (/\.(ts|js)$/.test(name) && !/^index\.(ts|js)$/.test(name) && !name.endsWith('.d.ts')
+        && !name.includes('.selfcheck.') && !name.includes('.preview.') && !name.endsWith('.schemas.ts')
+        && !/^doc-demo-(boot|host)\.(ts|js)$/.test(name)) {
+        const base = name.replace(/\.(ts|js)$/, '');
+        byBase.set(base, [...(byBase.get(base) || []), full.slice(root.length + 1)]);
+      }
+    }
+  };
+  walkAll(compRoot);
+  for (const [base, files] of byBase) {
+    if (files.length > 1) failures.push(`${base}.min.js: ${files.length} fuentes con el mismo nombre se pisan en dist (${files.join(', ')})`);
+  }
   let crossImportsChecked = 0;
   for (const src of walkSrc(compRoot)) {
-    const tag = basename(src).replace(/\.js$/, '');
+    const tag = basename(src).replace(/\.ts$/, '');
     const cat = catByTag.get(tag);
     if (!cat) continue;
     const outFile = join(dist, cat, `${tag}.min.js`);

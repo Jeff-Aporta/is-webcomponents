@@ -926,6 +926,17 @@ async function capturePng(ctx, sano, hrefs, id) {
     });
   }
 }
+async function lanzarNavegador(chromium) {
+  let ultimo;
+  for (const channel of [void 0, "chrome", "msedge"]) {
+    try {
+      return await chromium.launch({ headless: true, ...channel ? { channel } : {} });
+    } catch (e) {
+      ultimo = e;
+    }
+  }
+  throw ultimo;
+}
 async function runOnePage(browser, pageUrl, opts, id) {
   const timeoutMs = opts.timeoutMs ?? 9e4;
   const settleMs = opts.settleMs ?? 400;
@@ -989,7 +1000,7 @@ async function renderDiagramBatch(jobs, opts) {
       server = await startStaticServer(opts.serveRoot, opts.remoteBase);
       base = server.base;
     }
-    browser = await opts.chromium.launch({ headless: true });
+    browser = await lanzarNavegador(opts.chromium);
     for (const { id, job } of jobs) {
       try {
         let pageUrl;

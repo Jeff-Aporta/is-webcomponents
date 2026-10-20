@@ -6,7 +6,9 @@
   "titleHtml": false,
   "description": "Recuadro destacado para avisos dentro del contenido (marca, neutro, éxito, advertencia o peligro), con ícono, título y cuerpo.",
   "storageKey": "docs-iswc-callout",
-  "loads": ["iswc-slots-pg"],
+  "loads": [
+    "iswc-slots-pg"
+  ],
   "sections": [
     {
       "id": "intro",
@@ -35,7 +37,9 @@
                 "text",
                 "success",
                 "warning",
-                "danger"
+                "danger",
+                "info",
+                "error"
               ]
             },
             {

@@ -1,0 +1,30 @@
+{
+  "$schema": "iswc-preview/v1",
+  "tag": "iswc-app-nav",
+  "category": "navigation",
+  "title": "&lt;iswc-app-nav&gt;",
+  "titleHtml": false,
+  "description": "Filas de pestañas para la barra de una app: primaria + secundarias dependientes, APG y repintado sin recrear iconos.",
+  "storageKey": "docs-iswc-app-nav",
+  "hasBehavior": false,
+  "sections": [
+    {
+      "id": "intro",
+      "title": "Uso",
+      "lede": "La sub-fila visible depende de la pestaña primaria activa.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<iswc-app-nav rows=\"[{&quot;id&quot;: &quot;tool&quot;, &quot;label&quot;: &quot;Herramientas&quot;, &quot;value&quot;: &quot;chat&quot;, &quot;tabs&quot;: [{&quot;id&quot;: &quot;chat&quot;, &quot;label&quot;: &quot;Chat&quot;, &quot;icon&quot;: &quot;mdi:chat&quot;}, {&quot;id&quot;: &quot;config&quot;, &quot;label&quot;: &quot;Config&quot;, &quot;icon&quot;: &quot;mdi:cog&quot;}, {&quot;id&quot;: &quot;ayuda&quot;, &quot;label&quot;: &quot;Ayuda&quot;, &quot;icon&quot;: &quot;mdi:help-circle&quot;}]}, {&quot;id&quot;: &quot;chat-pane&quot;, &quot;parent&quot;: &quot;chat&quot;, &quot;value&quot;: &quot;conv&quot;, &quot;tabs&quot;: [{&quot;id&quot;: &quot;conv&quot;, &quot;label&quot;: &quot;Conversaciones&quot;}, {&quot;id&quot;: &quot;logs&quot;, &quot;label&quot;: &quot;Logs&quot;}]}, {&quot;id&quot;: &quot;config-pane&quot;, &quot;parent&quot;: &quot;config&quot;, &quot;value&quot;: &quot;prompts&quot;, &quot;tabs&quot;: [{&quot;id&quot;: &quot;prompts&quot;, &quot;label&quot;: &quot;Prompts&quot;}, {&quot;id&quot;: &quot;sistema&quot;, &quot;label&quot;: &quot;Sistema&quot;}]}]\"></iswc-app-nav>",
+          "controls": [
+            {
+              "control": "text",
+              "prop": "attr:rows",
+              "label": "rows (JSON)"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

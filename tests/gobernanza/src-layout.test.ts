@@ -1,7 +1,7 @@
 // tests/src-layout.test.ts
 //
-// GuardiÃ¡n del layout post-move: fuente bajo src/, dist/ y scripts/ en raÃ­z.
-// Si alguien vuelve a crear components/ o styles/ en la raÃ­z, o rompe la
+// Guardián del layout post-move: fuente bajo src/, dist/ y scripts/ en raíz.
+// Si alguien vuelve a crear components/ o styles/ en la raíz, o rompe la
 // profundidad de scripts/dist en previews, este test falla.
 //
 // Uso: node tests/src-layout.test.ts
@@ -22,12 +22,13 @@ test('gobernanza/src-layout', async () => {
     'src/components',
     'src/styles',
     'src/previews',
-    'src/utils/health/e2e',
+    // Las pruebas volvieron de src/utils/health/ a tests/ (e2e incluido).
+    'tests/e2e',
     // 'skills/' en la raíz es la fuente canónica (consolidada desde src/skills/).
     'skills',
-    // `src/assets/` se consolidÃ³ en `dist/assets/` (fuera de dist/cdn/).
+    // `src/assets/` se consolidó en `dist/assets/` (fuera de dist/cdn/).
     'dist/assets/icons',
-    // ConsolidaciÃ³n 2026-09-07: LLM.md (root + per-componente) eliminado;
+    // Consolidación 2026-09-07: LLM.md (root + per-componente) eliminado;
     // el contenido vive en specs/lessons.md + specs/constraints.md +
     // specs/componentes.md.
     'specs/lessons.md',
@@ -48,7 +49,7 @@ test('gobernanza/src-layout', async () => {
   const forbiddenAtRoot = ['components', 'styles', 'previews'];
   for (const name of forbiddenAtRoot) {
     if (existsSync(join(root, name))) {
-      failures.push(`NO debe existir ${name}/ en la raÃ­z â€” vive en src/${name}/`);
+      failures.push(`NO debe existir ${name}/ en la raíz — vive en src/${name}/`);
     }
   }
   
@@ -56,7 +57,7 @@ test('gobernanza/src-layout', async () => {
   if (existsSync(join(root, 'assets'))) {
     const icons = join(root, 'assets', 'icons');
     if (existsSync(icons)) {
-      failures.push('NO debe existir assets/icons/ en la raiz â€” usa dist/assets/icons/');
+      failures.push('NO debe existir assets/icons/ en la raiz — usa dist/assets/icons/');
     }
   }
   
@@ -76,9 +77,9 @@ test('gobernanza/src-layout', async () => {
   
   const previewRoot = join(root, 'src', 'previews');
   const shell = join(previewRoot, '_shell.html');
-  if (!existsSync(shell)) failures.push('falta src/previews/_shell.html (Ãºnico HTML permitido)');
+  if (!existsSync(shell)) failures.push('falta src/previews/_shell.html (único HTML permitido)');
   const shellBody = readFileSync(shell, 'utf8');
-  // _shell vive en src/previews/ (depth 1) â†’ ../../scripts y ../../dist
+  // _shell vive en src/previews/ (depth 1) → ../../scripts y ../../dist
   if (!/src=["']\.\.\/\.\.\/scripts\//.test(shellBody)) {
     failures.push('_shell.html: scripts debe ser ../../scripts/');
   }
@@ -90,13 +91,13 @@ test('gobernanza/src-layout', async () => {
   }
   
   if (failures.length) {
-    console.error(`src-layout.test.ts: FAIL â€” ${failures.length}\n`);
+    console.error(`src-layout.test.ts: FAIL — ${failures.length}\n`);
     for (const f of failures.slice(0, 40)) console.error(`  - ${f}`);
-    if (failures.length > 40) console.error(`  ... y ${failures.length - 40} mÃ¡s`);
+    if (failures.length > 40) console.error(`  ... y ${failures.length - 40} más`);
     { const salida = 1; if (salida) throw new Error(`salida ${salida}`); return; }
   }
   
-  console.log('src-layout.test.ts: PASS â€” layout src/ + profundidad de previews OK');
+  console.log('src-layout.test.ts: PASS — layout src/ + profundidad de previews OK');
 });
 
 export default lista();

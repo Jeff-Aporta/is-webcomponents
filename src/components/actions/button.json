@@ -61,11 +61,11 @@
               "label": "variant",
               "options": [
                 "filled",
-                "soft-filled",
-                "ghost",
                 "outlined",
                 "plain",
+                "ghost",
                 "soft",
+                "soft-filled",
                 "text"
               ],
               "default": "filled"

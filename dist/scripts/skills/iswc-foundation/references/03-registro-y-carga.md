@@ -1,4 +1,4 @@
-<!-- @vendor 2026-10-13T14:13:48.240Z Jeff-Aporta/is-webcomponents@main skills/iswc-foundation/references/03-registro-y-carga.md -->
+<!-- @vendor 2026-10-14T16:13:19.844Z Jeff-Aporta/is-webcomponents@main skills/iswc-foundation/references/03-registro-y-carga.md -->
 # 03 — Registro y carga de componentes
 
 ## Registro único: `src/js/kit-tags.ts`
@@ -26,7 +26,7 @@ export const tagsArranque = () => [...APP_TAGS, ...Object.values(VIEW_TAGS).flat
 <script type="module" src="https://cdn.jsdelivr.net/gh/Jeff-Aporta/iswc-root@<sha40>/dist/cdn/core/loader.min.js"></script>
 <script type="module" src="./dist/cdn/<p>Loader.min.js"></script>  <!-- registerApp: tag → URL?v= -->
 <script type="module">
-  const L = globalThis.ISWebComponentsLoader;
+  const L = globalThis.iswcLoader;
   const listo = () => document.documentElement.setAttribute('data-app-ready', '');
   const watchdog = setTimeout(listo, 6000);
   try {

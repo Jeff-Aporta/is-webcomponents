@@ -58,8 +58,13 @@ test('dist/cdn/core/loader.min.js y loader.md existen; banner con docs', () => {
   assert.match(code, /jsdelivr|Jeff-Aporta\/iswc-root/);
   assert.match(code, /"iswc-button"/);
   assert.match(code, /src\/cdn\/loader\.md|loader\.md/);
-  const sha = execSync('git rev-parse HEAD', { cwd: root, encoding: 'utf8' }).trim();
-  assert.match(code, new RegExp(sha), 'shaDefault del bundle es HEAD');
+  // El build incrusta el SHA del commit sobre el que se compiló; al commitear el propio build, HEAD
+  // avanza. Contrato: es un commit real del historial de HEAD (no un SHA inventado ni de otra rama).
+  const shas = [...code.matchAll(/[0-9a-f]{40}/g)].map((m) => m[0]);
+  const delHistorial = shas.filter((s) => {
+    try { execSync(`git merge-base --is-ancestor ${s} HEAD`, { cwd: root, stdio: 'ignore' }); return true; } catch { return false; }
+  });
+  assert.ok(delHistorial.length > 0, `shaDefault del bundle es un commit del historial de HEAD (SHAs en el bundle: ${shas.join(', ') || 'ninguno'})`);
   assert.match(code, /\{\{cdnUrl\}\}@\{\{sha\}\}\/dist\/cdn/);
 });
 
@@ -133,19 +138,16 @@ test('configure acepta host + local + v/query (cache-bust)', () => {
   assert.match(code, /resolveHostInput/);
 });
 
-test('fallback CDN: jsDelivr → githack → Pages + stickyBase', () => {
+test('fallback CDN: jsDelivr → githack → Pages + stickyBase', async () => {
   const code = readFileSync(src, 'utf8');
-  const ref = readFileSync(
-    join(root, 'src', 'core', 'cdn-ref.ts'),
-    'utf8',
-  );
-  // Orden canónico en MIRRORS
-  const jd = ref.indexOf("id: 'jsdelivr'");
-  const gh = ref.indexOf("id: 'githack'");
-  const pg = ref.indexOf("id: 'pages'");
-  assert.ok(jd >= 0 && gh > jd && pg > gh, 'MIRRORS: jsdelivr → githack → pages');
-  assert.match(ref, /raw\.githack\.com/);
-  assert.match(ref, /jeff-aporta\.github\.io/);
+  // Orden canónico en MIRRORS (WHAT: lo que devuelve el módulo; la URL de
+  // Pages ya no va literal en el fuente, se deriva de GH_REPO).
+  const { MIRRORS, fallbackBases } = await import('../../src/core/cdn-ref.ts');
+  assert.deepEqual(MIRRORS.map((m) => m.id), ['jsdelivr', 'githack', 'pages'], 'MIRRORS: jsdelivr → githack → pages');
+  const [jd, gh, pg] = fallbackBases('abc123');
+  assert.match(jd, /^https:\/\/cdn\.jsdelivr\.net\/gh\/Jeff-Aporta\/iswc-root@abc123\//);
+  assert.match(gh, /^https:\/\/raw\.githack\.com\/Jeff-Aporta\/iswc-root\/abc123\//);
+  assert.match(pg, /^https:\/\/jeff-aporta\.github\.io\/iswc-root\//);
   // Loader: cadena + sticky para no martillar espejo caído
   assert.match(code, /stickyBase/);
   assert.match(code, /rememberBase/);

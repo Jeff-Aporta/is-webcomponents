@@ -78,20 +78,26 @@ test('gobernanza/brand-casing', async () => {
   const insoft = catalog.find((p) => p.value === 'insoft');
   assert.equal(insoft?.accentLabel, 'Soft', 'palettes.json debe componer el wordmark con "Soft"');
 
-  // Verificación 2: app/app.ts pinta el accent del wordmark leyendo
-  // brandData.accent (lo que garantiza que las mayúsculas del data se
-  // trasladan al DOM en tiempo de ejecución, no inline en index.html).
+  // Verificación 2: el wordmark del shell ya no lo pinta app/app.ts a mano
+  // (brandAccent/brandLead desaparecieron): lo pinta <iswc-palette-selector>
+  // (#brandPalette) desde el data de la paleta. Se afirma que (a) el catálogo
+  // que consume el componente (PALETTES de palette-build) trae "Soft", y
+  // (b) el componente traslada lead/accentLabel del data al DOM en sus dos
+  // caminos (trigger propio vía wordmarkOf y wordmark del slot), sin
+  // grafías inline.
+  const { PALETTES } = await import('../../src/styles/palette-build.ts');
+  assert.equal(
+    PALETTES.find((p) => p.value === 'insoft')?.accentLabel,
+    'Soft',
+    'PALETTES (lo que consume el selector) debe componer el wordmark con "Soft"',
+  );
+  const selector = await readFile(join(root, 'src/components/feedback/palette-selector.ts'), 'utf8');
+  assert.match(selector, /accentLabel:\s*p\.accentLabel/, 'el selector toma accentLabel del catálogo');
+  assert.match(selector, /accent\.textContent\s*=\s*current\.accentLabel/, 'el slot pinta el accent desde el data');
+  assert.match(selector, /lead\.textContent\s*=\s*current\.lead/, 'el slot pinta el lead desde el data');
+  assert.match(selector, /const accent = p\.accentLabel/, 'wordmarkOf compone el accent desde el data');
   const galleryApp = await readFile(join(root, 'src/app/app.ts'), 'utf8');
-  assert.match(
-    galleryApp,
-    /brandAccent\.textContent\s*=\s*brandData\.accentLabel/,
-    'app/app.ts debe pintar el accent del wordmark desde brandData.accent (S mayúscula del data)',
-  );
-  assert.match(
-    galleryApp,
-    /brandLead\.textContent\s*=\s*brandData\.lead/,
-    'app/app.ts debe pintar el lead del wordmark desde brandData.lead',
-  );
+  assert.ok(!/['"`](?:in)?Soft['"`]/.test(galleryApp), 'app/app.ts no escribe la grafía del wordmark inline');
 
   // El identificador de paleta sigue en minúsculas: es API, no texto.
   const catalogIds = await readFile(join(root, 'src/styles/palettes.json'), 'utf8');

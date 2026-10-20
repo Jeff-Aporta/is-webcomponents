@@ -6,7 +6,7 @@
   "titleHtml": false,
   "description": "Puerta de acceso single o multi-cuenta con cambio de contraseña, cierre global y auditoría de sesiones; emite eventos y deja la validación al servidor.",
   "storageKey": "docs-iswc-login",
-  "hasBehavior": true,
+  "hasBehavior": false,
   "sections": [
     {
       "id": "intro",

@@ -325,13 +325,6 @@
             "              }",
             "            </script>",
             "          </iswc-sequence-diagram>"
-          ],
-          "controls": [
-            {
-              "control": "boolean",
-              "prop": "attr:open-on-click",
-              "label": "open-on-click"
-            }
           ]
         }
       ]

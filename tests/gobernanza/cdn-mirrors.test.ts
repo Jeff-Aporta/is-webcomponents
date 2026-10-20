@@ -14,13 +14,17 @@ const { test, lista } = coleccionPruebas({ categoria: 'how' });
 
 const raiz = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 
+// WHAT: la URL de Pages ya no está escrita literal en cdn-ref.ts (sale de
+// GH_REPO: el repo desde el que corre el módulo, o Jeff-Aporta/iswc-root por
+// defecto). Se afirma sobre lo que devuelven las funciones exportadas.
 test('cdn-ref declara jsDelivr + GitHub Pages', async () => {
-  const src = await readFile(join(raiz, 'src/core/cdn-ref.ts'), 'utf8');
-  assert.match(src, /export const MIRRORS/);
-  assert.match(src, /id:\s*['"]jsdelivr['"]/);
-  assert.match(src, /id:\s*['"]pages['"]/);
-  assert.match(src, /jeff-aporta\.github\.io\/iswc-root/);
-  assert.match(src, /fallbackBases/);
+  const ref = await import('../../src/core/cdn-ref.ts');
+  const ids = ref.MIRRORS.map((m) => m.id);
+  assert.ok(ids.includes('jsdelivr') && ids.includes('pages'), `MIRRORS: ${ids}`);
+  assert.equal(ref.pagesBase(), 'https://jeff-aporta.github.io/iswc-root/dist/cdn');
+  const bases = ref.fallbackBases('abc123');
+  assert.equal(bases[0], 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/iswc-root@abc123/dist/cdn');
+  assert.equal(bases.at(-1), 'https://jeff-aporta.github.io/iswc-root/dist/cdn');
 });
 
 test('cdn-snippet: loader copy-paste; L.load del tag (sin radio de alcance, sin mirrors ni all.min)', async () => {

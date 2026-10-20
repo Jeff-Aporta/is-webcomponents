@@ -1,0 +1,51 @@
+{
+  "$schema": "iswc-preview/v1",
+  "tag": "iswc-app-shell",
+  "category": "layout",
+  "title": "&lt;iswc-app-shell&gt;",
+  "titleHtml": false,
+  "description": "Armazón de app: barra fija (marca, pestañas, sesión) y vista con scroll propio. Layout completo con iswc-app-nav e iswc-session-menu.",
+  "storageKey": "docs-iswc-app-shell",
+  "hasBehavior": false,
+  "sections": [
+    {
+      "id": "intro",
+      "title": "Layout completo",
+      "lede": "Shell + nav con filas secundarias + session-menu. La vista hace scroll; la barra queda arriba.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<iswc-app-shell brand=\"Mi App\" logo=\"mdi:rocket\" toast=\"top-end\" style=\"--iswc-shell-height: 420px\"><iswc-app-nav slot=\"nav\" rows=\"[{&quot;id&quot;: &quot;tool&quot;, &quot;label&quot;: &quot;Herramientas&quot;, &quot;value&quot;: &quot;chat&quot;, &quot;tabs&quot;: [{&quot;id&quot;: &quot;chat&quot;, &quot;label&quot;: &quot;Chat&quot;, &quot;icon&quot;: &quot;mdi:chat&quot;}, {&quot;id&quot;: &quot;config&quot;, &quot;label&quot;: &quot;Config&quot;, &quot;icon&quot;: &quot;mdi:cog&quot;}, {&quot;id&quot;: &quot;ayuda&quot;, &quot;label&quot;: &quot;Ayuda&quot;, &quot;icon&quot;: &quot;mdi:help-circle&quot;}]}, {&quot;id&quot;: &quot;chat-pane&quot;, &quot;parent&quot;: &quot;chat&quot;, &quot;value&quot;: &quot;conv&quot;, &quot;tabs&quot;: [{&quot;id&quot;: &quot;conv&quot;, &quot;label&quot;: &quot;Conversaciones&quot;}, {&quot;id&quot;: &quot;logs&quot;, &quot;label&quot;: &quot;Logs&quot;}]}, {&quot;id&quot;: &quot;config-pane&quot;, &quot;parent&quot;: &quot;config&quot;, &quot;value&quot;: &quot;prompts&quot;, &quot;tabs&quot;: [{&quot;id&quot;: &quot;prompts&quot;, &quot;label&quot;: &quot;Prompts&quot;}, {&quot;id&quot;: &quot;sistema&quot;, &quot;label&quot;: &quot;Sistema&quot;}]}]\"></iswc-app-nav><iswc-session-menu slot=\"actions\" modes=\"password token\" name=\"Ana María Pérez\" subtitle=\"Administradora\"><iswc-dropdown-item value=\"perfil\">Mi perfil</iswc-dropdown-item></iswc-session-menu><section style=\"padding:1rem\"><p>La vista hace scroll; la barra queda fija.</p><div style=\"height:900px\"></div><p>Fin de la vista</p></section><div slot=\"footer\" style=\"padding:0.5rem 1rem;opacity:.7\">Pie de la app</div></iswc-app-shell>",
+          "controls": [
+            {
+              "control": "text",
+              "prop": "attr:brand",
+              "label": "brand"
+            },
+            {
+              "control": "text",
+              "prop": "attr:logo",
+              "label": "logo"
+            },
+            {
+              "control": "text",
+              "prop": "attr:brand-href",
+              "label": "brand-href"
+            },
+            {
+              "control": "select",
+              "prop": "attr:toast",
+              "label": "toast",
+              "options": [
+                "top-end",
+                "top-start",
+                "bottom-end",
+                "bottom-start"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

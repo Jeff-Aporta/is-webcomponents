@@ -78,6 +78,10 @@ test('gobernanza/manifest-paths', async () => {
       const base = rel.startsWith('./') ? srcRoot : baseDir;
       const candidatos = [resolvePath(base, rel)];
       if (rel.endsWith('.js')) candidatos.push(resolvePath(base, rel.replace(/\.js$/, '.ts')));
+      // Igual con `style`: el manifiesto nombra el `.css` que se sirve, pero en
+      // src/ solo vive la fuente `.scss` (el `.css` lo emite build:scss a
+      // .tmp-scss/src/ y está en .gitignore). Se exige la fuente.
+      if (rel.endsWith('.css')) candidatos.push(resolvePath(base, rel.replace(/\.css$/, '.scss')));
       for (const ruta of candidatos) {
         try {
           await stat(ruta);

@@ -102,7 +102,8 @@ async function kitCon(archivos: Record<string, string>): Promise<string> {
 }
 const VD = 'dist/cdn/vendor-distributions';
 
-denoTest('vendor: V6 el perfil filtra: server baja shared/server, nunca client ni rutas sin perfil', async () => {
+// Barrido real sobre disco: bajo la carga del gate completo supera los 30 s por defecto (medido ~35-60 s).
+test('vendor: V6 el perfil filtra: server baja shared/server, nunca client ni rutas sin perfil', { timeout: 180_000 }, async () => {
   const kit = await kitCon({
     [`${VD}/shared/lib/a.ts`]: 'export const a = 1;\n',
     [`${VD}/server/tools/s.ts`]: 'export const s = 1;\n',
@@ -205,7 +206,10 @@ function modulosDelKit(): { modulo: string; archivos: string[] }[] {
   });
 }
 
-denoTest('vendor: V10 calibración de la poda: cada módulo compila con su schemas.ts podado y el resultado dice las secciones', async () => {
+// V10 vendoriza cada módulo y corre UN `deno check` sobre todas las copias podadas: con la suite en paralelo
+// supera de sobra los 30 s por defecto del runner (cayó por timeout, no por la poda). Medido: 2m41s en el
+// gate completo y >3 min bajo más carga (2026-10-20) → timeout propio de 10 min.
+test('vendor: V10 calibración de la poda: cada módulo compila con su schemas.ts podado y el resultado dice las secciones', { timeout: 600_000 }, async () => {
   const kit = Deno.cwd();
   const app = await Deno.makeTempDir({ prefix: 'poda-' });
   const modulos = modulosDelKit();
@@ -277,7 +281,8 @@ denoTest('vendor: V11 el mismo schemas.ts en dos carpetas se poda a lo que cada 
 
 const F = 'nadie/no-existe-iswc-test';
 
-denoTest('vendor: V12 el barrido lee cabeceras en las 8 extensiones y no toca lo que no tiene', async () => {
+// Barrido real sobre disco: bajo la carga del gate completo supera los 30 s por defecto (medido ~35-60 s).
+test('vendor: V12 el barrido lee cabeceras en las 8 extensiones y no toca lo que no tiene', { timeout: 180_000 }, async () => {
   const app = await Deno.makeTempDir({ prefix: 'barrido-' });
   const viejo = '2020-01-01T00:00:00.000Z';
   const archivos: Record<string, string> = {

@@ -566,7 +566,7 @@
           "```html",
           "<!-- Página que sirve el server en GET /api/docs: solo el kit por CDN, pin por SHA. -->",
           "<script type=\"module\">",
-          "  const { ISWebComponentsLoader: L } = await import('https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@<sha40>/dist/cdn/core/loader.min.js');",
+          "  const { iswcLoader: L } = await import('https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@<sha40>/dist/cdn/core/loader.min.js');",
           "  await L.loadPageStyles(['iswc-palettes-default']);",
           "  await L.ensure('iswc-server-api-docs');",
           "</script>",

@@ -7,7 +7,7 @@ import '../actions/dropdown.js';
 import '../actions/dropdown-item.js';
 import '../layout/divider.js';
 import '../media/icon.js';
-import { paintFlexOptions } from './utils/tree-view/flex-options.js';
+import { paintFlexOptions } from './utils/tree-view/paint-flex-options.js';
 import { type FlexActionEntry } from './schemas/tree-view-flex-options.schemas.js';
 
 /**

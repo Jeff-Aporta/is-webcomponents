@@ -1,4 +1,4 @@
-<!-- @vendor 2026-10-13T14:13:48.240Z Jeff-Aporta/is-webcomponents@main skills/build-component/references/accessibility.md -->
+<!-- @vendor 2026-10-14T14:46:42.343Z Jeff-Aporta/is-webcomponents@main skills/build-component/references/accessibility.md -->
 # Accesibilidad
 
 Cómo hacer que un componente del kit sea accesible: semántica,
@@ -220,7 +220,7 @@ Reglas:
    - Devuelve el foco a `#lastFocus`.
    - Quita `inert` / `aria-hidden` del documento.
 
-El kit tiene [`ModalBase`](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/_shared/modal-base.ts)
+El kit tiene [`ModalBase`](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/layout/utils/modal-base.ts)
 que ya gestiona todo esto. **Úsalo** en vez de reimplementar.
 
 ```ts

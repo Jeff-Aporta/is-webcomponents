@@ -17,14 +17,17 @@ import { createRequire } from 'node:module';
 import { extname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
-import { denoTestCon } from '../_shared/deno-test.ts';
+import { denoTestCon } from '../_shared/deno-test.ts';
+import { lanzarChromium } from '../_shared/navegador.ts';
 
 const { test, lista } = coleccionPruebas({ categoria: 'how' });
 
 const denoTest = denoTestCon(test);
 
 
-const RAIZ = fileURLToPath(new URL('./', import.meta.url));
+// Raíz del kit: este archivo vive en tests/gobernanza/ (con './' el guardián buscaba los bundles junto a sí
+// mismo, no los encontraba y quedaba SALTADO en silencio).
+const RAIZ = fileURLToPath(new URL('../../', import.meta.url));
 const BUNDLES = [
   'layout/md-docs-vault', 'layout/doc-layout', 'navigation/doc-index', 'helpers/md-render', 'navigation/pager',
   'media/figure', 'data/meta-list', 'layout/dialog', 'actions/copy-button', 'actions/button',
@@ -38,7 +41,7 @@ async function paginaDemo(): Promise<string> {
   };
   const demo = ficha.sections.flatMap((s) => s.blocks).find((b) => b.kind === 'demo' && b.html?.some((l) => l.includes('<iswc-md-docs-vault')));
   assert(demo?.html, 'el demo de md-docs-vault no tiene libro embebido');
-  return `<!doctype html><html lang="es" data-theme="light"><head><meta charset="utf-8">
+  return `<!doctype html><html lang="es" data-theme="light"><head><meta charset="utf-8"><link rel="icon" href="data:,">
 <link rel="stylesheet" href="/dist/cdn/is-base.min.css"><link rel="stylesheet" href="/dist/cdn/palettes.min.css">
 ${BUNDLES.map((b) => `<script type="module" src="/${b}"></script>`).join('\n')}
 </head><body>${demo.html.join('\n')}</body></html>`;
@@ -61,6 +64,7 @@ let chromium: { launch: (o: Record<string, unknown>) => Promise<Navegador> } | n
 try {
   chromium = (createRequire(import.meta.url)('playwright') as { chromium: typeof chromium }).chromium;
 } catch { chromium = null; }
+// Sin el Chromium descargado por Playwright se usa el Chrome o Edge del sistema (tests/_shared/navegador.ts).
 
 /** Título (h1) de la hoja visible: el lector lo pinta dentro de shadow roots anidados. */
 const H1 = `(() => {
@@ -86,7 +90,7 @@ denoTest({
       }
     });
     const base = `http://127.0.0.1:${(srv.addr as Deno.NetAddr).port}/vault.html`;
-    const nav = await chromium!.launch({ headless: true });
+    const nav = await lanzarChromium() as unknown as Navegador;
     const errores: string[] = [];
     try {
       const page = await nav.newPage();

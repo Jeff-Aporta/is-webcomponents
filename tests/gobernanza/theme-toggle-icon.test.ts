@@ -39,25 +39,28 @@ const themeToggleSrc = readFileSync(
   'utf8',
 );
 
-test('theme-toggle elimina la re-asignacion redundante de `dark` en #onChange', () => {
-  // Debe haber al menos un `this.#render()` al final de #onChange para
-  // forzar la sincronizacion del icono.
-  const m = /#onChange\s*=\s*\(e\)\s*=>\s*\{[\s\S]*?this\.#render\(\)/.exec(themeToggleSrc);
-  assert.ok(m, '#onChange debe llamar a this.#render() al final');
-
-  // NO debe re-asignar `this.dark = next === 'dark'` (eso era el bug).
-  const onChangeMatch = /#onChange\s*=\s*\(e\)\s*=>\s*\{[\s\S]*?\n\s*\};/m.exec(themeToggleSrc);
+// Estado actual (TS): #render() pinta desde `this.dark` y SIEMPRE fuerza el
+// flujo de `checked` (caso siguiente). Por eso #onChange ahora sí fija
+// `this.dark` — sin eso #render pintaría el estado viejo — pero debe hacerlo
+// ANTES del #render final; lo que rompía el icono era un #render que quedaba
+// en no-op, y eso lo impide el forzado de #render().
+test('theme-toggle #onChange fija el tema antes del #render() final (sin render no-op)', () => {
+  const onChangeMatch = /#onChange\s*=\s*\(e(?::\s*[\w.]+)?\)(?::\s*\w+)?\s*=>\s*\{[\s\S]*?\n\s*\};/m.exec(themeToggleSrc);
   assert.ok(onChangeMatch, '#onChange definido');
-  assert.ok(
-    !/this\.dark\s*=\s*next\s*===\s*['"]dark['"]/.test(onChangeMatch[0]),
-    '#onChange no debe re-asignar `this.dark = next === "dark"` (eso era redundante y rompia la propagacion del check-icon-button)',
-  );
+  const body = onChangeMatch[0];
+  const render = body.lastIndexOf('this.#render()');
+  assert.ok(render > -1, '#onChange debe llamar a this.#render() al final');
+  const aplica = body.indexOf('applyTheme(container, next)');
+  assert.ok(aplica > -1 && aplica < render, '#onChange aplica el tema al contenedor antes de pintar');
+  const asigna = body.search(/this\.dark\s*=/);
+  assert.ok(asigna < render, 'si #onChange fija `dark`, lo hace antes del #render() final (si no, pinta el estado viejo)');
+  assert.match(themeToggleSrc, /#render\(\):\s*void\s*\{\s*const want = this\.dark;/, '#render() pinta desde this.dark');
 });
 
 test('theme-toggle.#render() fuerza el flujo attributeChangedCallback', () => {
   // Debe detectar el caso "mismo estado" y forzar la re-asignacion.
   // Buscar el método privado `#render() {` (NO 'attributeChangedCallback' ni 'disconnectedCallback').
-  const re = /(^|\n)\s*#render\s*\(\s*\)\s*\{/m;
+  const re = /(^|\n)\s*#render\s*\(\s*\)(?::\s*\w+)?\s*\{/m;
   const m = re.exec(themeToggleSrc);
   assert.ok(m, '#render() existe');
   const start = themeToggleSrc.indexOf('{', m.index);
@@ -88,13 +91,13 @@ test('theme-toggle.#render() fuerza el flujo attributeChangedCallback', () => {
 
 test('theme-toggle expone forceSync() publico para re-sincronizar desde fuera', () => {
   assert.ok(
-    /forceSync\s*\(\s*\)\s*\{[\s\S]*?this\.#render\(\)/.test(themeToggleSrc),
+    /forceSync\s*\(\s*\)(?::\s*\w+)?\s*\{[\s\S]*?this\.#render\(\)/.test(themeToggleSrc),
     'debe existir un metodo publico forceSync() que llame a #render()',
   );
   // Ademas forceSync debe leer el tema del container (no del atributo
   // dark) porque en sincronizaciones externas `dark` puede no haber
   // cambiado formalmente.
-  const fs = /forceSync\s*\(\s*\)\s*\{[\s\S]*?\n\s*\}/m.exec(themeToggleSrc);
+  const fs = /forceSync\s*\(\s*\)(?::\s*\w+)?\s*\{[\s\S]*?\n\s*\}/m.exec(themeToggleSrc);
   assert.ok(fs && /readTheme\(/.test(fs[0]),
     'forceSync() debe releer el tema del container via readTheme()');
 });
@@ -104,7 +107,8 @@ test('theme-toggle expone forceSync() publico para re-sincronizar desde fuera', 
 // igual a los listeners globales. Disparar los dos los invocaba dos veces.
 test('theme-toggle resuelve el contenedor atravesando Shadow DOM', () => {
   assert.ok(
-    /from '\.\.\/_shared\/theme-scope\.js'/.test(themeToggleSrc),
+    // theme-scope pasó de components/_shared/ a src/core/.
+    /from '\.\.\/\.\.\/core\/theme-scope\.js'/.test(themeToggleSrc),
     'debe importar findThemeContainer de theme-scope (closest se corta en el shadow)',
   );
   assert.ok(

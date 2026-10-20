@@ -24,10 +24,11 @@
                 "brand",
                 "neutral",
                 "text",
-                "info",
                 "success",
                 "warning",
-                "danger"
+                "danger",
+                "info",
+                "error"
               ]
             },
             {

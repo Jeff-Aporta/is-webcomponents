@@ -6,7 +6,7 @@
   "titleHtml": false,
   "description": "Acceso compacto en un desplegable: usuario/contraseña o token y elección entre opciones. Emite iswc-login-submit; no hace fetch.",
   "storageKey": "docs-iswc-login-dropdown",
-  "hasBehavior": true,
+  "hasBehavior": false,
   "sections": [
     {
       "id": "intro",

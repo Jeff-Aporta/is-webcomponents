@@ -1,13 +1,13 @@
 /**
  * gallery-sources-meta.test.ts
  *
- * Caza regresiones del chrome de galerÃ­a (ago/2026):
+ * Caza regresiones del chrome de galería (ago/2026):
  *  - barra = `.file-meta*` (sin hints / `.vs-page-bar` montado)
  *  - modal fuentes full-page + `#vsPath` como `<a>` con URL absoluta
- *  - tag canÃ³nico `iswc-code` (no `iswc-code-editor`)
- *  - pesos vÃ­a `resolveCdnMinPaths` + `iswc-format-bytes`
+ *  - tag canónico `iswc-code` (no `iswc-code-editor`)
+ *  - pesos vía `resolveCdnMinPaths` + `iswc-format-bytes`
  *
- * ExtensiÃ³n: *.test.mjs (no .ts). La carpeta tests/ se commitea;
+ * Extensión: *.test.mjs (no .ts). La carpeta tests/ se commitea;
  * solo se ignoran *.tmp / coverage / .cache.
  */
 import assert from 'node:assert/strict';
@@ -39,7 +39,7 @@ test('manifest usa iswc-code (no iswc-code-editor)', () => {
 test('component-sources: localSourceUrl es absoluta (.href)', async () => {
   const mod = await import(pathToFileURL(join(root, 'src/utils/source-paths.ts')).href);
   const url = mod.localSourceUrl('src/components/actions/button.ts');
-  // En Node es file://â€¦; en browser Live Server es http(s)://host/â€¦
+  // En Node es file://…; en browser Live Server es http(s)://host/…
   assert.match(url, /^[a-z][a-z0-9+.-]*:\/\//i, `esperado URL absoluta, got: ${url}`);
   assert.match(url, /\/src\/components\/actions\/button\.ts$/);
   assert.ok(typeof mod.resolveCdnMinPaths === 'function');
@@ -64,12 +64,12 @@ test('view-sources: path absoluto, full-page, sin vs-page-bar con hints', () => 
 
   // mountPageButton solo limpia legacy; no recrea hints en UI.
   assert.match(src, /querySelectorAll(?:<[^>]+>)?\(['"]\.vs-page-bar['"]\)/);
-  assert.doesNotMatch(code, /sin minificar|auditorÃ­a\s*\/\s*GH Pages|Pesos CDN y fuentes: cargando/);
+  assert.doesNotMatch(code, /sin minificar|auditoría\s*\/\s*GH Pages|Pesos CDN y fuentes: cargando/);
   assert.doesNotMatch(code, /className\s*=\s*['"]vs-page-bar['"]/);
   assert.doesNotMatch(code, /['"]vs-page-hint['"]/);
 });
 
-test('view-sources: chrome de galerÃ­a incluye iswc-tab-group', () => {
+test('view-sources: chrome de galería incluye iswc-tab-group', () => {
   const src = read('src/cdn/collect-iswc-tags.ts');
   assert.match(src, /GALLERY_CHROME_TAGS/);
   assert.match(src, /iswc-tab-group/);
@@ -77,8 +77,9 @@ test('view-sources: chrome de galerÃ­a incluye iswc-tab-group', () => {
 
 test('highlight-code: paintOne asigna value siempre (no fiarse del getter)', () => {
   const src = read('src/core/highlight-code.ts');
-  assert.match(src, /el\.value = text/);
-  assert.doesNotMatch(src, /if \(el\.value !== text\) el\.value = text/);
+  // La variable del editor pasó de `el` a `ed`; el contrato es el mismo.
+  assert.match(src, /\b(?:el|ed)\.value = text;/);
+  assert.doesNotMatch(src, /if \((?:el|ed)\.value !== text\) (?:el|ed)\.value = text/);
 });
 
 test('demo-file-meta: ya no monta barra; solo limpia restos', () => {
@@ -96,8 +97,8 @@ test('demo-file-meta: ya no monta barra; solo limpia restos', () => {
 
 test('iswc-code preserva scroll del iswc-main (evita F5 al final)', () => {
   const src = read('src/components/code/code.ts');
-  // Motor nativo: ningÃºn path llama scrollIntoView (el que movÃ­a el iswc-main al
-  // final en F5) y el scroll de ediciÃ³n queda local (textarea .ic-input con
+  // Motor nativo: ningún path llama scrollIntoView (el que movía el iswc-main al
+  // final en F5) y el scroll de edición queda local (textarea .ic-input con
   // translate del <pre>), nunca sobre el ancestro iswc-main/.main.
   assert.match(src, /#onEditScroll/);
   assert.match(src, /translate\(\$?\{?-ta\.scrollLeft/);
@@ -125,22 +126,37 @@ test('presentation.scss: full-page view-sources + file-meta oculto', () => {
 });
 
 test('index + shell cargan view-sources y demo-file-meta', () => {
-  for (const rel of ['index.html', 'src/previews/_shell.html']) {
-    const html = read(rel);
-    assert.match(html, /view-sources\.js/, rel);
-    assert.match(html, /demo-file-meta\.js/, rel);
-    assert.match(html, /presentation\.css/, rel);
-  }
+  // El shell de previews los enlaza a mano.
+  const shell = read('src/previews/_shell.html');
+  assert.match(shell, /view-sources\.js/, '_shell.html');
+  assert.match(shell, /demo-file-meta\.js/, '_shell.html');
+  assert.match(shell, /presentation\.css/, '_shell.html');
+  // index.html ya no los enlaza: monta <iswc-doc-demo>, que los pide al loader
+  // por defecto (DEFAULT_PAGE_MODULES / DEFAULT_PAGE_STYLES). Se exige que el
+  // index no pise esos defaults y que el loader resuelva cada id a su bundle.
+  const index = read('index.html');
+  assert.match(index, /<iswc-doc-demo[\s>]/, 'index.html monta iswc-doc-demo');
+  assert.doesNotMatch(index, /<iswc-doc-demo[^>]*\spage-(modules|styles)=/, 'index.html no pisa los módulos por defecto');
+  const docDemo = read('src/components/layout/doc-demo.ts');
+  const mods = docDemo.match(/const DEFAULT_PAGE_MODULES = \[([\s\S]*?)\]/)?.[1] ?? '';
+  const styles = docDemo.match(/const DEFAULT_PAGE_STYLES = \[([\s\S]*?)\]/)?.[1] ?? '';
+  assert.match(mods, /'view-sources'/);
+  assert.match(mods, /'demo-file-meta'/);
+  assert.match(styles, /'iswc-doc-presentation'/);
+  const loaderSrc = read('src/cdn/loader.ts');
+  assert.match(loaderSrc, /\['view-sources',\s*\{\s*href:\s*'dist\/scripts\/view-sources\.min\.js'/);
+  assert.match(loaderSrc, /\['demo-file-meta',\s*\{\s*href:\s*'dist\/scripts\/demo-file-meta\.min\.js'/);
+  assert.match(loaderSrc, /\['iswc-doc-presentation',\s*'[^']*doc-presentation\.min\.css'\]/);
 });
 
 test('specs/lessons.md + code.md documentan contrato y errores de fuentes/meta', () => {
   // Antes: src/components/code/LLM.md documentaba el contrato del componente
-  // code y errores conocidos. ConsolidaciÃ³n 2026-09-07: el contenido vive
+  // code y errores conocidos. Consolidación 2026-09-07: el contenido vive
   // repartido entre:
-  //   - specs/lessons.md (catÃ¡logo de errores consolidado)
+  //   - specs/lessons.md (catálogo de errores consolidado)
   //   - src/components/code/code.md (spec per-componente)
-  // El guardiÃ¡n verifica que ambas piezas cubran el contrato: visor de
-  // fuentes, file-meta, gallery-sources-meta (guardiÃ¡n citado).
+  // El guardián verifica que ambas piezas cubran el contrato: visor de
+  // fuentes, file-meta, gallery-sources-meta (guardián citado).
   const lessons = read('specs/lessons.md');
   const codeMd = read('src/components/code/code.md');
   const ambos = lessons + '\n' + codeMd;

@@ -1,0 +1,60 @@
+{
+  "$schema": "iswc-preview/v1",
+  "tag": "iswc-session-menu",
+  "category": "layout",
+  "title": "&lt;iswc-session-menu&gt;",
+  "titleHtml": false,
+  "description": "Sesión en la barra: acceso sin sesión; con logged, avatar, perfil, items propios y Cerrar sesión (iswc-logout).",
+  "storageKey": "docs-iswc-session-menu",
+  "hasBehavior": false,
+  "sections": [
+    {
+      "id": "intro",
+      "title": "Uso",
+      "lede": "Activa logged para ver el menú de sesión.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<iswc-session-menu logged name=\"Ana María Pérez\" subtitle=\"Administradora\"><iswc-dropdown-item value=\"perfil\">Mi perfil</iswc-dropdown-item><iswc-dropdown-item value=\"ajustes\">Ajustes</iswc-dropdown-item></iswc-session-menu>",
+          "controls": [
+            {
+              "control": "boolean",
+              "prop": "attr:logged",
+              "label": "logged"
+            },
+            {
+              "control": "text",
+              "prop": "attr:name",
+              "label": "name"
+            },
+            {
+              "control": "text",
+              "prop": "attr:subtitle",
+              "label": "subtitle"
+            },
+            {
+              "control": "text",
+              "prop": "attr:avatar",
+              "label": "avatar"
+            },
+            {
+              "control": "text",
+              "prop": "attr:logout-label",
+              "label": "logout-label"
+            },
+            {
+              "control": "select",
+              "prop": "attr:modes",
+              "label": "modes",
+              "options": [
+                "password",
+                "token",
+                "password token"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

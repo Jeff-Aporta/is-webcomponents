@@ -1,5 +1,9 @@
 /**
- * GuardiÃ¡n S-PG1â€¦S-PG3 â€” playground canonico + chrome sin clip.
+ * Guardián S-PG1…S-PG3 — playground canonico + chrome sin clip.
+ *
+ * La ficha del playground ya no vive en specs/playground/spec.md: es la doc
+ * del propio componente (src/components/preview/playground.md), enlazada desde
+ * specs/README.md y specs/galeria/spec.md. S-PG2 se afirma sobre esas dos.
  */
 import assert from 'node:assert/strict';
 import { readFileSync, statSync } from 'node:fs';
@@ -18,7 +22,7 @@ const pgTs = readFileSync(join(root, 'src/components/preview/playground.ts'), 'u
 const pgCss = readFileSync(join(root, 'src/components/preview/playground.scss'), 'utf8');
 const controlsTs = readFileSync(join(root, 'src/components/layout/preview-controls.ts'), 'utf8');
 const galeria = readFileSync(join(root, 'specs/galeria/spec.md'), 'utf8');
-const pgSpec = readFileSync(join(root, 'specs/playground/spec.md'), 'utf8');
+const pgDoc = readFileSync(join(root, 'src/components/preview/playground.md'), 'utf8');
 const intent = readFileSync(join(root, 'src/core/intent.ts'), 'utf8');
 const ui = readFileSync(join(root, 'src/components/helpers/ui.ts'), 'utf8');
 
@@ -55,8 +59,12 @@ test('S-PG1: preview-controls no clippea selects del panel', () => {
 });
 
 test('S-PG2: specs documentan playground-first', () => {
-  assert.ok(pgSpec.includes('S-PG2'));
-  assert.ok(galeria.includes('iswc-playground') || galeria.includes('playground'));
+  // La galería enlaza la doc del componente y fija que la sección playground va primera.
+  assert.ok(galeria.includes('(../../src/components/preview/playground.md)'), 'galeria enlaza playground.md');
+  assert.match(galeria, /playground[^\n]*\n?[^\n]*\*\*primera\*\*/i, 'galeria: playground va primera');
+  // La doc del componente declara su tag y el evento de los knobs.
+  assert.match(pgDoc, /^tag:\s*iswc-playground\s*$/m);
+  assert.ok(pgDoc.includes('iswc-controls-change'));
 });
 
 test('S-PG: intent default brand helper + CDN ui', () => {

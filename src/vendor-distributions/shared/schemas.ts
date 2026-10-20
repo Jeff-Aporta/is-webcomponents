@@ -1004,7 +1004,7 @@ export type RenderDiagramOptions = {
    * Deno/Node: `createRequire(import.meta.url)('playwright').chromium`
    */
   chromium: {
-    launch: (opts?: { headless?: boolean }) => Promise<RenderBrowser>;
+    launch: (opts?: { headless?: boolean; channel?: string }) => Promise<RenderBrowser>;
   };
   /** Raíz estática (repo iswc o vendor). Obligatorio si el job es sintético. */
   serveRoot?: string;
@@ -1213,3 +1213,41 @@ export type ResultadoLote = {
   cache: string;
 };
 // ===== @fin render-lote =====
+
+// ===== @seccion render-shell =====
+/** Metadatos del shell HTML que genera `server/render-shell.ts` (`renderShell(meta, …)`). */
+export interface RenderShellMeta {
+  /** Título de la pestaña y og:title. */
+  titulo: string;
+  /** Descripción (meta description + og:description). */
+  descripcion?: string;
+  /** Idioma (default "es"). */
+  lang?: string;
+  /** Tema inicial (default "dark"). */
+  theme?: "dark" | "light";
+  /** Paleta del kit (default "contapyme"). */
+  palette?: string;
+  /** Pin del kit: repo + SHA40 (sin @main). Si falta sha, se sirve el loader del propio origen. */
+  kit?: { repo?: string; sha?: string };
+  /** Prefijo de la app (ej. "erp"); da nombre al loader y al tag raíz. */
+  prefijo: string;
+  /** Ruta del script de tema pre-pintado (default "./dist/cdn/boot.js"). */
+  boot?: string;
+  /** Hoja de estilos de la app (default "./dist/cdn/styles/app.css"). */
+  appCss?: string;
+  /** Registrador de la app (default `./dist/cdn/<prefijo>Loader.min.js`). */
+  loaderApp?: string;
+  /** Módulo con KIT_TAGS y tagsArranque (default "./dist/cdn/js/kit-tags.js"). */
+  kitTags?: string;
+  /** URL canónica. */
+  canonical?: string;
+  /** Metadatos Open Graph / Twitter. */
+  og?: { imagen?: string; tipo?: string; sitio?: string };
+  /** Tag raíz del <body> (default `<prefijo>-app`). */
+  tagRaiz?: string;
+  /** Texto de <noscript> (default "JavaScript requerido."). */
+  noscript?: string;
+  /** HTML extra inyectado en <head> (peligroso: solo del propio servidor, ya escapado por el llamador). */
+  headExtra?: string;
+}
+// ===== @fin render-shell =====

@@ -1,0 +1,45 @@
+{
+  "$schema": "iswc-preview/v1",
+  "tag": "iswc-login-gate",
+  "category": "layout",
+  "title": "&lt;iswc-login-gate&gt;",
+  "titleHtml": false,
+  "description": "Cortina de acceso: contenido público + login antes de revelar la parte protegida. Reusa <iswc-login>.",
+  "storageKey": "docs-iswc-login-gate",
+  "hasBehavior": false,
+  "sections": [
+    {
+      "id": "intro",
+      "title": "Uso",
+      "lede": "Zona pública (o mockup) y zona protegida detrás de la cortina de login.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<iswc-login-gate id=\"gate\" heading=\"Iniciar sesión\" subtitle=\"Accede al panel\" provider=\"ERP\"><div slot=\"public\"><iswc-callout>Contenido público o mockup</iswc-callout></div><div slot=\"protected\">Contenido protegido</div></iswc-login-gate>",
+          "controls": [
+            {
+              "control": "boolean",
+              "prop": "attr:logged",
+              "label": "logged"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:busy",
+              "label": "busy"
+            },
+            {
+              "control": "text",
+              "prop": "attr:error",
+              "label": "error"
+            },
+            {
+              "control": "text",
+              "prop": "attr:heading",
+              "label": "heading"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -31,7 +31,7 @@ test('gobernanza/component-sources', async () => {
   check(noStyle.md?.repoPath === 'src/components/isp/heading.md', 'md inferido desde script');
   
   if (failures.length) {
-    console.error(`component-sources.test.ts: FAIL Ã¢â‚¬â€ ${failures.length}`);
+    console.error(`component-sources.test.ts: FAIL — ${failures.length}`);
     for (const f of failures) console.error(`  - ${f}`);
     { const salida = 1; if (salida) throw new Error(`salida ${salida}`); return; }
   }

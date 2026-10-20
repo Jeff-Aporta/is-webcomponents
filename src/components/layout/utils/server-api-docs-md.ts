@@ -23,6 +23,7 @@ import {
   type ServerApiDocsOperacion,
   type ServerApiDocsParametro,
   type ServerApiDocsRespuesta,
+  type ServerApiDocsSecuencia,
   type ServerApiDocsValidacion,
   type ServerApiDocsValores,
   type ServerApiDocsObjeto as Obj,
@@ -394,9 +395,6 @@ export function aOpenApi(m: ServerApiDocsModelo, base = ''): Obj {
 }
 
 // ── Diagrama de secuencia por endpoint ───────────────────────────────────────
-
-/** Payload de `<iswc-sequence-diagram>` (el visor lo pinta con `diagram-style="insoft"`). */
-export type ServerApiDocsSecuencia = { sequence: { title: string; actors: SequenceActorSpec[]; messages: SequenceMessageSpec[]; fragments: SequenceFragmentSpec[] } };
 
 /**
  * Secuencia del endpoint: cliente → server (con Bearer si exige sesión) → permiso → controller → respuesta;

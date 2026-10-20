@@ -127,6 +127,7 @@
               "options": [
                 "brand",
                 "neutral",
+                "text",
                 "info",
                 "success",
                 "warning",

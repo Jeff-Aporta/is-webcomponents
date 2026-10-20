@@ -53,7 +53,9 @@ export const CARPETA_SVG = 'iconify';
 const LOTE = 80;
 
 const RE_ID = /^[a-z0-9]+(?:-[a-z0-9]+)*:[a-z0-9]+(?:[-_][a-z0-9]+)*$/;
-const RE_LITERAL = /(['"`])([a-z0-9]+(?:-[a-z0-9]+)*:[a-z0-9]+(?:[-_][a-z0-9]+)*)\1/g;
+// `\\?` antes del cierre: también cuenta el id escapado dentro de un string JSON
+// (`"html": "<iswc-icon icon=\"mdi:x\">"`), que si no se podaría del disco.
+const RE_LITERAL = /(['"`])([a-z0-9]+(?:-[a-z0-9]+)*:[a-z0-9]+(?:[-_][a-z0-9]+)*)\\?\1/g;
 
 export const esIdIcono = (s: string): s is IconId => RE_ID.test(s);
 

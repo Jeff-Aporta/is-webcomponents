@@ -9,44 +9,11 @@
  * (SEO y redes sociales). Escapa todo lo que provenga de datos.
  *
  * Perfil: server. Vendor: `dist/cdn/vendor-distributions/server/render-shell.ts` → carpeta `ISU/` del
- * consumidor (perfil `server`). Sin imports relativos (autocontenido; solo `node:*` y texto).
+ * consumidor (perfil `server`). Autocontenido: solo el contrato de tipos de `../shared/schemas.ts`
+ * (W54; se borra al compilar) y texto.
  * Skill: skills/iswc-foundation/references/14-herramientas-de-test.md
  */
-
-export interface RenderShellMeta {
-  /** Título de la pestaña y og:title. */
-  titulo: string;
-  /** Descripción (meta description + og:description). */
-  descripcion?: string;
-  /** Idioma (default "es"). */
-  lang?: string;
-  /** Tema inicial (default "dark"). */
-  theme?: "dark" | "light";
-  /** Paleta del kit (default "contapyme"). */
-  palette?: string;
-  /** Pin del kit: repo + SHA40 (sin @main). Si falta sha, se sirve el loader del propio origen. */
-  kit?: { repo?: string; sha?: string };
-  /** Prefijo de la app (ej. "erp"); da nombre al loader y al tag raíz. */
-  prefijo: string;
-  /** Ruta del script de tema pre-pintado (default "./dist/cdn/boot.js"). */
-  boot?: string;
-  /** Hoja de estilos de la app (default "./dist/cdn/styles/app.css"). */
-  appCss?: string;
-  /** Registrador de la app (default `./dist/cdn/<prefijo>Loader.min.js`). */
-  loaderApp?: string;
-  /** Módulo con KIT_TAGS y tagsArranque (default "./dist/cdn/js/kit-tags.js"). */
-  kitTags?: string;
-  /** URL canónica. */
-  canonical?: string;
-  /** Metadatos Open Graph / Twitter. */
-  og?: { imagen?: string; tipo?: string; sitio?: string };
-  /** Tag raíz del <body> (default `<prefijo>-app`). */
-  tagRaiz?: string;
-  /** Texto de <noscript> (default "JavaScript requerido."). */
-  noscript?: string;
-  /** HTML extra inyectado en <head> (peligroso: solo del propio servidor, ya escapado por el llamador). */
-  headExtra?: string;
-}
+import type { RenderShellMeta } from "../shared/schemas.ts";
 
 function esc(s: string): string {
   return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");

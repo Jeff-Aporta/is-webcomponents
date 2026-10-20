@@ -36,7 +36,8 @@ test('iswc-toast behavior crea #toaster si falta (no create-on-null)', () => {
 
 test('IswcComponentPreview.on no crashea con target null', () => {
   const src = read('src/previews/_kit/component-preview.ts');
-  assert.match(src, /on\(target/);
+  // Firma TS multilínea: on(target: HTMLElement, …) — el guard es lo que importa.
+  assert.match(src, /\bon\(\s*target\b/);
   assert.match(src, /!target|target\s*==\s*null|typeof target\.addEventListener/);
 });
 
@@ -65,7 +66,9 @@ test('galería mergea keys de ?s= al cambiar component', () => {
   // los marcadores — el guardián se actualiza al nuevo contrato).
   const gallery = read('src/app/app.ts');
   assert.match(gallery, /readStateParam\(\)\s*\|\|\s*\{\}/);
-  assert.match(gallery, /\.\.\.prev,\s*component:/);
+  // Mergea: parte de una copia de prev y solo pisa `component`.
+  assert.match(gallery, /const next(?::\s*\w+)?\s*=\s*\{\s*\.\.\.prev\s*\};/);
+  assert.match(gallery, /next\.component\s*=\s*component\.tag;/);
 });
 
 test('ux-audit harness existe y no se confunde con .test.ts', () => {
@@ -77,8 +80,9 @@ test('ux-audit harness existe y no se confunde con .test.ts', () => {
 
 test('iswc-btn-ref / iswc-catalogo-gen behaviors asignan controller', () => {
   for (const tag of ['iswc-btn-ref', 'iswc-catalogo-gen']) {
-    assert.ok(existsSync(join(root, `src/components/isp/${tag.replace(/^iswc-/, '')}.preview.ts`)), `${tag} behavior`);
-    const src = read(`src/components/isp/${tag.replace(/^iswc-/, '')}.preview.ts`);
+    // Los *.preview.ts viven en <categoria>/utils/ (bundle-scripts.mjs los publica en dist/previews/).
+    assert.ok(existsSync(join(root, `src/components/isp/utils/${tag.replace(/^iswc-/, '')}.preview.ts`)), `${tag} behavior`);
+    const src = read(`src/components/isp/utils/${tag.replace(/^iswc-/, '')}.preview.ts`);
     assert.match(src, /\.controller\s*=/);
     // El `Lista` puede venir inline o del factory compartido
     // `controller-from-config.ts`, que ya lo implementa una sola vez.
@@ -88,13 +92,15 @@ test('iswc-btn-ref / iswc-catalogo-gen behaviors asignan controller', () => {
     );
   }
   const catalog = read('src/previews/catalog.ts');
-  assert.match(catalog, /iswc-btn-ref[\s\S]*?\.\.\/components\/isp\/btn-ref\.preview\.js/);
-  assert.match(catalog, /iswc-catalogo-gen[\s\S]*?\.\.\/components\/isp\/catalogo-gen\.preview\.js/);
+  // El catalog apunta al bundle publicado de ese behavior.
+  assert.match(catalog, /"iswc-btn-ref":\s*\{[^}]*"behavior":\s*"\.\.\/\.\.\/dist\/previews\/isp\/btn-ref\.preview\.min\.js"/);
+  assert.match(catalog, /"iswc-catalogo-gen":\s*\{[^}]*"behavior":\s*"\.\.\/\.\.\/dist\/previews\/isp\/catalogo-gen\.preview\.min\.js"/);
 });
 
 test('iswc-ag-grid api facade no asume #api listo (getState/setRows)', () => {
   const src = read('src/components/data/ag-grid.ts');
-  assert.match(src, /getState:\s*\(\)\s*=>\s*self\.#api\?\.getState/);
+  // Con anotación de retorno TS: `getState: (): GridState | null => self.#api?.getState() ?? null`.
+  assert.match(src, /getState:\s*\(\)(?::\s*[^=]+?)?\s*=>\s*self\.#api\?\.getState/);
   assert.match(src, /#externalData/);
   assert.match(src, /if\s*\(!self\.#api\)\s*return/);
 });

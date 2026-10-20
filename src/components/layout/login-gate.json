@@ -6,7 +6,7 @@
   "titleHtml": false,
   "description": "Cortina de acceso: contenido público + login antes de revelar la parte protegida. Reusa <iswc-login>.",
   "storageKey": "docs-iswc-login-gate",
-  "hasBehavior": true,
+  "hasBehavior": false,
   "sections": [
     {
       "id": "intro",

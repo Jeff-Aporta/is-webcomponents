@@ -6,10 +6,12 @@
  */
 import { assert, assertEquals } from 'https://deno.land/std@0.224.0/assert/mod.ts';
 import { computeFlowchartLayout, resolveFlowchartSpec } from '../../src/components/diagrams/utils/flowchart-spec.ts';
-import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+import { layoutRuta, TIMEOUT_RUTAS_REALES } from '../_shared/rutas-reales.ts';
 import { denoTestCon } from '../_shared/deno-test.ts';
 
-const { test, lista } = coleccionPruebas({ categoria: 'what' });
+// Rutas reales: layout memoizado y timeout medido (ver tests/_shared/rutas-reales.ts).
+const { test, lista } = coleccionPruebas({ categoria: 'what', timeoutMs: TIMEOUT_RUTAS_REALES });
 
 const denoTest = denoTestCon(test);
 
@@ -39,7 +41,7 @@ denoTest('vars: V4 en las rutas reales la tabla queda dentro de su nodo (tambié
     if (!f.name.startsWith('ruta-')) continue;
     const ruta = new URL(f.name, dir);
     const j = await RefObj.resolver(JSON.parse(await Deno.readTextFile(ruta)), { base: ruta.pathname.replace(/^\/(\w:)/, '$1'), cargar: async (u: string) => JSON.parse(await Deno.readTextFile(u)) }) as { payload: unknown };
-    const L = computeFlowchartLayout(resolveFlowchartSpec(j.payload)!, null, { style: 'insoft' });
+    const L = layoutRuta(f.name, j.payload);
     for (const n of L.nodes.filter((x) => x.varsBox)) {
       const b = n.varsBox!;
       assert(b.x >= n.x && b.y >= n.y && b.x + b.w <= n.x + n.w && b.y + b.h <= n.y + n.h, `${f.name}: ${n.id} tabla fuera del nodo`);

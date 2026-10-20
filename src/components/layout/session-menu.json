@@ -6,7 +6,7 @@
   "titleHtml": false,
   "description": "Sesión en la barra: acceso sin sesión; con logged, avatar, perfil, items propios y Cerrar sesión (iswc-logout).",
   "storageKey": "docs-iswc-session-menu",
-  "hasBehavior": true,
+  "hasBehavior": false,
   "sections": [
     {
       "id": "intro",

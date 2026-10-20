@@ -125,54 +125,41 @@ test('override de light mode redefine --shadow-lift/pop con menos negro', () => 
     'shadows de light mode no deben tener rgb(0 0 0 / >=26%) — es demasiado negro sobre fondo claro');
 });
 
-// ─── Demo button (inyectado por JS) ────────────────────────────────
+// ─── Acceso al demo desde el home ──────────────────────────────────
+// Antes: un botón `.card-demo` inyectado por JS en cada card + whitelist
+// CON_DEMO. El home actual no lo tiene: el acceso al demo son las cintas del
+// collage (`<a class="collage-ribbon__item" href="./_shell.html?tag=…"
+// target="_blank">`) y los CTA del hero (postMessage iswc-select al shell).
+// Se protege lo mismo: que cada acceso existe, apunta a un tag real del
+// manifest y abre el demo sin depender de JS.
 
-test('CSS de .card-demo existe', () => {
-  const block = extractBlock('.card-demo');
-  assert.ok(block, '.card-demo debe existir en el CSS');
-  assert.match(block, /position:\s*absolute/, '.card-demo debe estar posicionado absolute');
-  assert.match(block, /top:\s*0\.5rem/, '.card-demo debe estar en top-right');
+test('CSS de las cintas existe y la animación se pausa al hover/focus', () => {
+  const block = extractBlock('.collage-ribbon');
+  assert.ok(block, '.collage-ribbon debe existir en el CSS');
+  assert.ok(extractBlock('.collage-ribbon__track'), '.collage-ribbon__track debe existir en el CSS');
+  assert.match(src, /animation-play-state:\s*paused/, 'la cinta se pausa al hover/focus (CSS)');
 });
 
-test('script inyecta botón card-demo con iswc-icon mdi:open-in-new', () => {
-  assert.match(
-    src,
-    /className\s*=\s*['"]card-demo['"]/,
-    'script debe crear elemento con className "card-demo"',
-  );
-  assert.match(
-    src,
-    /setAttribute\(\s*['"]icon['"],\s*['"]mdi:open-in-new['"]\s*\)/,
-    'script debe setear icon="mdi:open-in-new" en el iswc-icon',
-  );
+test('script: los CTA postean iswc-select al parent y las cintas se clonan sin perder enlaces', () => {
   assert.match(
     src,
     /parent\.postMessage\(\s*\{\s*type:\s*['"]iswc-select['"]/,
-    'click handler debe postear iswc-select al parent (mismo shape que los CTA del hero)',
+    'el CTA debe postear iswc-select al parent',
   );
+  assert.match(behSrc, /function cintasEnBucle/, 'el behavior rellena/clona las cintas');
+  assert.match(behSrc, /\.collage-ribbons'\)\?\.removeAttribute\('aria-hidden'\)/,
+    'las cintas quedan accesibles (son enlaces) aunque reduced-motion corte la animación');
 });
 
-test('whitelist de tags demoable cubre los componentes is-* usados en home', () => {
-  const whitelist = src.match(/CON_DEMO\s*=\s*new Set\(\[([^\]]+)\]\)/);
-  assert.ok(whitelist, 'debe existir una whitelist CON_DEMO');
-  for (const tag of [
-    'iswc-bar-chart',
-    'iswc-line-chart',
-    'iswc-doughnut-chart',
-    'iswc-pie-chart',
-    'iswc-radar-chart',
-    'iswc-polar-area-chart',
-    'iswc-scatter-chart',
-    'iswc-bubble-chart',
-    'iswc-sparkline',
-    'iswc-flowchart',
-    'iswc-timeline',
-  ]) {
-    assert.match(
-      whitelist[1],
-      new RegExp(`['"]${tag}['"]`),
-      `whitelist debe incluir ${tag}`,
-    );
+test('cada enlace al demo del home apunta a un tag del manifest (abre en pestaña nueva)', async () => {
+  const { default: manifest } = await import('../../src/manifest.ts');
+  const tags = new Set(manifest.map((c) => c.tag));
+  const links = [...markup.matchAll(/<a\b[^>]*href="\.\/_shell\.html\?tag=([a-z0-9-]+)"[^>]*>/g)];
+  assert.ok(links.length >= 11, `el home debe enlazar demos (hay ${links.length})`);
+  for (const [a, tag] of links) {
+    assert.ok(tags.has(tag), `${tag}: enlace del home a un tag que no está en el manifest`);
+    assert.match(a, /target="_blank"/, `${tag}: el demo abre en pestaña nueva`);
+    assert.match(a, /rel="noopener noreferrer"/, `${tag}: rel noopener`);
   }
 });
 

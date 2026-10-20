@@ -9,7 +9,10 @@
 import { assert, assertEquals } from 'jsr:@std/assert@1';
 import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync, statSync, writeFileSync } from 'node:fs';
 import { join, relative } from 'node:path';
-import { denoTest } from '../../src/vendor-distributions/shared/testing/deno-test.ts';
+// El runner estándar (caja negra de C3/C4) se importa como `correrDenoTest`: `denoTest` es el
+// registrador de casos de este archivo (denoTestCon). Con el mismo nombre, las corridas de C3/C4
+// caían en el registrador y fallaban con «"undefined" sin cuerpo».
+import { denoTest as correrDenoTest } from '../../src/vendor-distributions/shared/testing/deno-test.ts';
 import { createTestCooldown, testId } from '../../src/vendor-distributions/shared/testing/test-cooldown.ts';
 import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
 import { denoTestCon } from '../_shared/deno-test.ts';
@@ -24,7 +27,10 @@ const ESTE = relative(KIT, import.meta.filename!).replaceAll('\\', '/');
 /** Módulos del sistema de cooldown: importar cualquiera de ellos es "entrar al cooldown". */
 const COOLDOWN = /from\s+['"][^'"]*\/(?:deno-test|test-cooldown|pruebas)\.(?:ts|js|mjs)['"]/;
 /** Lanzar un runner de pruebas: `deno test …` en un string, `['test', …]` como argumentos de un spawn, `node --test`. */
-const LANZA_PRUEBAS = /['"`]deno test\b|\[\s*['"]test['"]\s*,|['"]--test['"]/;
+//  El arreglo `['test', …]` solo cuenta como argumentos de un spawn (`spawn(…, ['test', …])`,
+//  `new Deno.Command(…, { args: ['test', …] })`): una lista cualquiera que empiece por 'test'
+//  (p. ej. `const nombres = ['test', 'lista']` del codemod a-definir-pruebas) no lanza nada.
+const LANZA_PRUEBAS = /['"`]deno test\b|(?:spawn|spawnSync|execFile|execFileSync)\s*\([^;]*?\[\s*['"]test['"]\s*,|args\s*:\s*\[\s*['"]test['"]\s*,|['"]--test['"]/;
 const RAICES = ['src', 'scripts', 'skills', 'demos', 'labs'];
 const SALTAR = new Set(['node_modules', 'dist', 'vendor']);
 
@@ -65,6 +71,16 @@ denoTest('cooldown: C1 cada tarea test* de deno.json es composición o un runner
 });
 
 denoTest('cooldown: C2 ningún script lanza pruebas sin pasar por el cooldown', () => {
+  // Calibración del detector: caza los lanzadores reales y no las listas sueltas.
+  for (const lanza of [
+    `spawn('deno', ['test', '-A', f])`,
+    `new Deno.Command(Deno.execPath(), { args: ['test', '-A'] })`,
+    'const cmd = `deno test -A ${f}`',
+    `spawn('node', ['--test', f])`,
+  ]) assert(LANZA_PRUEBAS.test(lanza), `debe detectar: ${lanza}`);
+  for (const no of [`const nombres = ['test', 'lista'];`, `const x = { tasks: ['test', 'build'] };`]) {
+    assert(!LANZA_PRUEBAS.test(no), `no debe detectar: ${no}`);
+  }
   const malos: string[] = [];
   for (const r of RAICES) {
     for (const p of archivos(join(KIT, r))) {
@@ -96,7 +112,8 @@ for (const c of C3) {
         const contador = join(dir, 'corridas.txt');
         const escribir = (nombre: string, cuerpo: string) => {
           const f = join(dir, `${nombre}.test.ts`);
-          writeFileSync(f, `denoTest('${nombre}', async () => {\n  Deno.writeTextFileSync(${JSON.stringify(contador)}, '${nombre}\\n', { append: true });\n${cuerpo}\n});\n`);
+          // Fixture para `deno test`: usa Deno.test (no el registrador del kit, que no existe ahí).
+          writeFileSync(f, `Deno.test('${nombre}', async () => {\n  Deno.writeTextFileSync(${JSON.stringify(contador)}, '${nombre}\\n', { append: true });\n${cuerpo}\n});\n`);
           return f;
         };
         // El verde dura >= 50 ms: su cooldown (× 1440) supera de sobra la duración de esta prueba.
@@ -107,7 +124,7 @@ for (const c of C3) {
         for (let i = 0; i < 2; i++) {
           writeFileSync(contador, '');
           const cooldown = createTestCooldown({ dbPath: db, disabled: c.deshabilitado });
-          const codigo = await denoTest([verde, rojo], { args: ['-A', '--no-check'], cooldown, reintentos: 0 });
+          const codigo = await correrDenoTest([verde, rojo], { args: ['-A', '--no-check'], cooldown, reintentos: 0 });
           assert(codigo !== 0, 'el rojo hace fallar la corrida');
           const lineas = readFileSync(contador, 'utf8').split('\n');
           corridas.push({ verde: lineas.includes('verde'), rojo: lineas.includes('rojo-a-proposito') });
@@ -148,7 +165,7 @@ for (const c of C4) {
         writeFileSync(contador, '');
         const f = join(dir, 'intermitente.test.ts');
         writeFileSync(f, [
-          "denoTest('intermitente', async () => {",
+          "Deno.test('intermitente', async () => {",
           `  const previas = Deno.readTextFileSync(${JSON.stringify(contador)}).split('\\n').filter(Boolean).length;`,
           `  Deno.writeTextFileSync(${JSON.stringify(contador)}, 'x\\n', { append: true });`,
           '  await new Promise((r) => setTimeout(r, 60));',
@@ -157,7 +174,7 @@ for (const c of C4) {
           '',
         ].join('\n'));
         const db = join(dir, 'cooldown.json');
-        const codigo = await denoTest([f], { args: ['-A', '--no-check'], cooldown: createTestCooldown({ dbPath: db }), reintentos: 1 });
+        const codigo = await correrDenoTest([f], { args: ['-A', '--no-check'], cooldown: createTestCooldown({ dbPath: db }), reintentos: 1 });
         assertEquals(codigo === 0, c.codigoVerde);
         assertEquals(readFileSync(contador, 'utf8').split('\n').filter(Boolean).length, c.corridas, 'una corrida + un reintento');
         const entrada = createTestCooldown({ dbPath: db }).entries()[testId(relative(Deno.cwd(), f).replaceAll('\\', '/'), '*')];

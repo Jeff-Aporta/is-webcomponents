@@ -87,7 +87,7 @@ si es contrato estricto, va como HOW fuerte en el spec y su guardián lo cita.
 exhaustivo usan `denoTest`; `test:demos` usa `runQueue` + `cooldown.run`; `test:foundation` registra la sonda completa
 con el id `skills/iswc-foundation/tools/probar-foundation.ts::*`.
 
-Guardián: [`src/utils/health/meta/cooldown-guardian.test.ts`](../src/utils/health/meta/cooldown-guardian.test.ts) (C1-C4).
+Guardián: [`tests/gobernanza/cooldown-guardian.test.ts`](../tests/gobernanza/cooldown-guardian.test.ts) (C1-C4).
 
 ### Lluvia de casos (2026-10-13)
 

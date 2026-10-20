@@ -156,8 +156,8 @@ const manifest: ComponentManifestItem[] = [
   { tag: 'iswc-er-diagram', title: 'Diagrama entidad-relación', category: 'diagrams', script: 'components/diagrams/er-diagram.js', style: 'components/diagrams/er-diagram.css', page: 'components/diagrams/er-diagram.json' },
   { tag: 'iswc-er-editor', title: 'Editor entidad-relación', category: 'diagrams', script: 'components/diagrams/er-editor.js', page: 'components/diagrams/er-editor.json' },
   // Apps HTML (demos/diagramas/app/*). No registran CE: el script es API compartida.
-  { tag: 'iswc-diagram-view-app', title: 'Visor de diagramas (API)', category: 'diagrams', script: 'components/diagrams/diagram-studio.js', page: 'components/diagrams/diagram-view-app.json', module: true },
-  { tag: 'iswc-diagram-edit-app', title: 'Editor de diagramas (API)', category: 'diagrams', script: 'components/diagrams/diagram-studio.js', page: 'components/diagrams/diagram-edit-app.json', module: true },
+  { tag: 'iswc-diagram-view-app', title: 'Visor de diagramas (API)', category: 'diagrams', script: 'components/diagrams/utils/diagram-studio.js', page: 'components/diagrams/diagram-view-app.json', module: true },
+  { tag: 'iswc-diagram-edit-app', title: 'Editor de diagramas (API)', category: 'diagrams', script: 'components/diagrams/utils/diagram-studio.js', page: 'components/diagrams/diagram-edit-app.json', module: true },
   { tag: 'iswc-block-diagram', title: 'Diagrama de bloques', category: 'diagrams', script: 'components/diagrams/block-diagram.js', style: 'components/diagrams/block-diagram.css', page: 'components/diagrams/block-diagram.json' },
   { tag: 'iswc-component-diagram', title: 'Diagrama de componentes', category: 'diagrams', script: 'components/diagrams/component-diagram.js', style: 'components/diagrams/component-diagram.css', page: 'components/diagrams/component-diagram.json' },
   { tag: 'iswc-treemap', title: 'Treemap', category: 'data-viz', script: 'components/charts/treemap.js', style: 'components/charts/treemap.css', page: 'components/charts/treemap.json' },
@@ -187,7 +187,7 @@ const manifest: ComponentManifestItem[] = [
   // es 100% UI declarada en el JSON + behavior de mount/unmount en el .preview.
   // Sin esta entrada en el manifest, el nav no muestra el item y
   // `selectComponent('iswc-icon-explorer')` cae a HOME.
-  { tag: 'iswc-icon-explorer', title: 'Explorador de iconos', category: 'media', script: 'components/media/icon-explorer.preview.ts', page: 'components/media/icon-explorer.json', module: true },
+  { tag: 'iswc-icon-explorer', title: 'Explorador de iconos', category: 'media', script: 'components/media/utils/icon-explorer.preview.ts', page: 'components/media/icon-explorer.json', module: true },
   { tag: 'iswc-qrcode', title: 'QR Code', category: 'media', script: 'components/media/qrcode.js', style: 'components/media/qrcode.css', page: 'components/media/qrcode.json' },
   { tag: 'iswc-palette-selector', title: 'Palette Selector', category: 'feedback', script: 'components/feedback/palette-selector.js', style: 'components/feedback/palette-selector.css', page: 'components/feedback/palette-selector.json' },
   { tag: 'iswc-dock', title: 'Dock', category: 'layout', script: 'components/layout/dock.js', style: 'components/layout/dock.css', page: 'components/layout/dock.json' },

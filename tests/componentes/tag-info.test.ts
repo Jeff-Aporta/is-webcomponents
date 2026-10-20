@@ -11,11 +11,14 @@ const { test, lista } = coleccionPruebas({ categoria: 'what' });
 const here = dirname(fileURLToPath(import.meta.url));
 const root = dirname(dirname(here));
 
-test('iswc-tag declara color="info" en VALID_COLOR', () => {
+test('iswc-tag acepta color="info" (VALID_COLOR = INTENT, que incluye info)', async () => {
+  // WHAT: el vocabulario común INTENT trae `info` y tag valida contra él (sin duplicarlo a mano).
+  const { INTENT } = await import('../../src/core/intent.ts');
+  assert.ok((INTENT as readonly string[]).includes('info'), 'INTENT incluye info');
   const src = readFileSync(join(root, 'src', 'components', 'feedback', 'tag.ts'), 'utf8');
   assert.ok(
-    /VALID_COLOR\s*=\s*\[[^\]]*'info'/.test(src),
-    'tag.ts debe listar "info" en VALID_COLOR',
+    /VALID_COLOR\s*=\s*\[\s*\.\.\.INTENT/.test(src) || /VALID_COLOR\s*=\s*\[[^\]]*'info'/.test(src),
+    'tag.ts valida color contra INTENT (o lista info explícitamente)',
   );
 });
 

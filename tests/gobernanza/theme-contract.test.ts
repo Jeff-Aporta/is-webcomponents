@@ -25,6 +25,11 @@ const isBase = await readFile(join(root, 'src', 'styles', 'is-base.scss'), 'utf8
 const palettes = await readFile(join(root, 'src', 'styles', 'palettes.scss'), 'utf8');
 const styles = `${isBase}\n${palettes}`;
 const component = await readFile(join(root, 'src', 'components', 'actions', 'button.ts'), 'utf8');
+// El chrome de la galería (iframe del preview, #themeToggle, #fullscreenBtn) ya no
+// va escrito en index.html: index monta <iswc-doc-demo> y ese componente lo pinta
+// desde su plantilla (src/components/layout/doc-demo.ts). El shell = ambos.
+const docDemo = await readFile(join(root, 'src', 'components', 'layout', 'doc-demo.ts'), 'utf8');
+const shell = `${html}\n${docDemo}`;
 
 const failures = [];
 const check = (cond, msg) => { if (!cond) failures.push(msg); };
@@ -53,7 +58,7 @@ check(!/--pg-/.test(styles), 'tokens legacy --pg- encontrados');
 check(styles.includes('--iswc-bg:'), 'missing --iswc-bg: token');
 
 // 8. Los tokens legacy de estado de campo (--iswc-b-required, --iswc-b-optional,
-//    --iswc-b-readonly, --iswc-bg-readonly) fueron eliminados en W48 Ã¢â‚¬â€
+//    --iswc-b-readonly, --iswc-bg-readonly) fueron eliminados en W48 —
 //    los consumidores en components/ usan sus fallbacks literales.
 //    Verificamos que NO esten en is-base.scss ni palettes.scss.
 const REMOVED_FIELD_TOKENS = ['--iswc-b-required', '--iswc-b-optional', '--iswc-b-readonly', '--iswc-bg-readonly'];
@@ -83,13 +88,15 @@ check(!/\bsize\s*=|["']size["']|pgSize|small\s*\|\s*medium\s*\|\s*large/.test(`$
 
 check(!/\b(?:height|padding(?:-inline)?|gap):\s*\d+(?:\.\d+)?px/.test(component), 'componente usa px en geometry (deberia ser em)');
 
-check(/<iframe\b/.test(html), '<iframe> del preview no encontrado en index.html');
-check(/id="themeToggle"/.test(html), '#themeToggle no encontrado');
-check(/id="fullscreenBtn"/.test(html), '#fullscreenBtn no encontrado');
-check(/<iswc-theme-toggle\b[^>]*id="themeToggle"/.test(html), '#themeToggle debe ser <iswc-theme-toggle>');
+check(/<iswc-doc-demo[\s>]/.test(html), 'index.html debe montar <iswc-doc-demo> (el chrome de la galería)');
+check(/<iframe\b[^>]*id="previewFrame"/.test(shell), '<iframe id="previewFrame"> del preview no encontrado en el shell');
+check(/id="themeToggle"/.test(shell), '#themeToggle no encontrado');
+check(/id="fullscreenBtn"/.test(shell), '#fullscreenBtn no encontrado');
+check(/<iswc-theme-toggle\b[^>]*id="themeToggle"/.test(shell), '#themeToggle debe ser <iswc-theme-toggle>');
+check(!/<(?:svg|symbol|use)\b/i.test(docDemo), 'doc-demo.ts (chrome) contiene <svg>/<use>/<symbol> inline');
 
 const WA_RE = /webawesome|Web Awesome|\bwa-[a-z]/i;
-check(!WA_RE.test(html), 'index.html contiene Web Awesome');
+check(!WA_RE.test(shell), 'el shell (index.html + doc-demo) contiene Web Awesome');
 
 // Verifica todos los previews contra Web Awesome.
 import { readdir } from 'node:fs/promises';
@@ -107,8 +114,12 @@ test('gobernanza/theme-contract', async () => {
     }
     return out;
   }
-  const previewsDir = join(root, 'src', 'previews');
-  const previews = await walk(previewsDir);
+  // Los previews JSON (iswc-preview/v1) viven junto a su componente en
+  // src/components/<cat>/<tag>.json; en src/previews/ solo queda el shell.
+  const previews = [
+    ...await walk(join(root, 'src', 'previews')),
+    ...await walk(join(root, 'src', 'components')),
+  ];
   let previewCount = 0;
   for (const f of previews) {
     previewCount++;
@@ -125,7 +136,7 @@ test('gobernanza/theme-contract', async () => {
     { const salida = 1; if (salida) throw new Error(`salida ${salida}`); return; }
   }
   
-  console.log(`theme-contract.test.ts: PASS Ã¢â‚¬â€ 2 temas, 3 paletas, tokens --iswc-*, sin Web Awesome`);
+  console.log(`theme-contract.test.ts: PASS — 2 temas, 3 paletas, tokens --iswc-*, sin Web Awesome`);
 });
 
 export default lista();

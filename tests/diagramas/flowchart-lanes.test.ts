@@ -162,9 +162,11 @@ import { embedDiagramOf, embedIsNatural, readNodeEmbed } from '../../src/compone
 import { computeClassLayout, resolveClassSpec } from '../../src/components/diagrams/utils/class-spec.ts';
 import { flowPaint } from '../../src/components/diagrams/utils/flowchart-spec.ts';
 import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+import { layoutRuta, TIMEOUT_RUTAS_REALES } from '../_shared/rutas-reales.ts';
 import { denoTestCon } from '../_shared/deno-test.ts';
 
-const { test, lista } = coleccionPruebas({ categoria: 'what' });
+// Rutas reales: layout memoizado y timeout medido (ver tests/_shared/rutas-reales.ts).
+const { test, lista } = coleccionPruebas({ categoria: 'what', timeoutMs: TIMEOUT_RUTAS_REALES });
 
 const denoTest = denoTestCon(test);
 
@@ -481,7 +483,7 @@ denoTest('combinado: H1 las acciones insoft tienen un ancho homogéneo (el de la
 
 denoTest('combinado: U4 abanico: los usos a un mismo destino comparten punta y corren por vías paralelas propias', async () => {
   const j = await editable(new URL('../../labs/iss-ayudascpia-flujos/payloads/ruta-conversacion-turno.json', import.meta.url));
-  const L = computeFlowchartLayout(resolveFlowchartSpec(j.payload)!, null, { style: 'insoft' });
+  const L = layoutRuta('ruta-conversacion-turno.json', j.payload);
   // El destino con más usos de la ruta (hoy Chat Completions: clasifica y título).
   const usos = L.edges.filter((e) => e.kind === 'dashed');
   const cuenta = new Map<string, number>();
@@ -505,7 +507,7 @@ denoTest('etiquetas: E2 en las rutas reales del ISS ningún texto de arista se m
   for await (const f of Deno.readDir(dir)) {
     if (!f.name.startsWith('ruta-')) continue;
     const j = await editable(new URL(f.name, dir));
-    const L = computeFlowchartLayout(resolveFlowchartSpec(j.payload)!, null, { style: 'insoft' });
+    const L = layoutRuta(f.name, j.payload);
     const cajas = L.edges.filter((e) => e.labelBox).map((e) => ({ e: e.label, b: e.labelBox! }));
     for (let i = 0; i < cajas.length; i++) {
       for (let k = i + 1; k < cajas.length; k++) {
@@ -522,7 +524,7 @@ denoTest('combinado: F1 la respuesta desde el fin sale por abajo (no por un cost
   for await (const f of Deno.readDir(dir)) {
     if (!f.name.startsWith('ruta-')) continue;
     const j = await editable(new URL(f.name, dir));
-    const L = computeFlowchartLayout(resolveFlowchartSpec(j.payload)!, null, { style: 'insoft' });
+    const L = layoutRuta(f.name, j.payload);
     for (const e of L.edges) {
       const fin = L.nodes.find((n) => n.id === e.from && n.shape === 'end');
       if (!fin) continue;
@@ -538,7 +540,7 @@ denoTest('etiquetas: E3 en las rutas reales ningún texto de arista queda bajo u
   for await (const f of Deno.readDir(dir)) {
     if (!f.name.startsWith('ruta-')) continue;
     const j = await editable(new URL(f.name, dir));
-    const L = computeFlowchartLayout(resolveFlowchartSpec(j.payload)!, null, { style: 'insoft' });
+    const L = layoutRuta(f.name, j.payload);
     for (const e of L.edges) {
       const b = e.labelBox;
       if (!b) continue;
@@ -556,7 +558,7 @@ denoTest('combinado: U5 en las rutas reales, los usos a un mismo destino y costa
   for await (const f of Deno.readDir(dir)) {
     if (!f.name.startsWith('ruta-')) continue;
     const j = await editable(new URL(f.name, dir));
-    const L = computeFlowchartLayout(resolveFlowchartSpec(j.payload)!, null, { style: 'insoft' });
+    const L = layoutRuta(f.name, j.payload);
     const puntas = new Map<string, Set<string>>();
     // La entrada a un puente `-(O=` tiene su propio puerto en la bola (no converge con las demás).
     for (const e of L.edges.filter((x) => x.kind === 'dashed' && x.puente !== 'entrada')) {
@@ -578,7 +580,7 @@ denoTest('combinado: D1 en las rutas reales, a un rombo se entra por arriba (sus
   for await (const f of Deno.readDir(dir)) {
     if (!f.name.startsWith('ruta-')) continue;
     const j = await editable(new URL(f.name, dir));
-    const L = computeFlowchartLayout(resolveFlowchartSpec(j.payload)!, null, { style: 'insoft' });
+    const L = layoutRuta(f.name, j.payload);
     for (const e of L.edges) {
       const d = L.nodes.find((n) => n.id === e.to && n.shape === 'diamond');
       if (!d || e.kind === 'dashed') continue;
@@ -630,7 +632,7 @@ denoTest('combinado: X1 en las rutas reales ninguna arista del flujo atraviesa u
   for await (const f of Deno.readDir(dir)) {
     if (!f.name.startsWith('ruta-')) continue;
     const j = await editable(new URL(f.name, dir));
-    const L = computeFlowchartLayout(resolveFlowchartSpec(j.payload)!, null, { style: 'insoft' });
+    const L = layoutRuta(f.name, j.payload);
     malos.push(...crucesDeFlujo(L).map((m) => `${f.name}: ${m}`));
   }
   assertEquals(malos, []);
@@ -654,7 +656,7 @@ denoTest('combinado: X2 en las rutas reales ningún recuadro de grupo abraza un 
   for await (const f of Deno.readDir(dir)) {
     if (!f.name.startsWith('ruta-')) continue;
     const j = await editable(new URL(f.name, dir));
-    const L = computeFlowchartLayout(resolveFlowchartSpec(j.payload)!, null, { style: 'insoft' });
+    const L = layoutRuta(f.name, j.payload);
     for (const c of L.contexts ?? []) {
       for (const n of L.nodes) {
         if (c.members?.includes(n.id) || n.shape === 'comment') continue;
@@ -671,7 +673,7 @@ denoTest('combinado: X3 en las rutas reales ningún riel pasa por encima del tí
   for await (const f of Deno.readDir(dir)) {
     if (!f.name.startsWith('ruta-')) continue;
     const j = await editable(new URL(f.name, dir));
-    const L = computeFlowchartLayout(resolveFlowchartSpec(j.payload)!, null, { style: 'insoft' });
+    const L = layoutRuta(f.name, j.payload);
     for (const c of L.contexts ?? []) {
       const t = { x: c.x, y: c.y, w: Math.ceil(c.label.length * 6.2) + 14, h: 18 };
       for (const e of L.edges) {
@@ -698,7 +700,7 @@ denoTest('combinado: X4 en las rutas reales ningún riel corre encima de otro (l
   for await (const f of Deno.readDir(dir)) {
     if (!f.name.startsWith('ruta-')) continue;
     const j = await editable(new URL(f.name, dir));
-    const L = computeFlowchartLayout(resolveFlowchartSpec(j.payload)!, null, { style: 'insoft' });
+    const L = layoutRuta(f.name, j.payload);
     const es = L.edges.map((e) => ({ e, p: pathPoints(e.path) }));
     for (let a = 0; a < es.length; a++) {
       for (let b = a + 1; b < es.length; b++) {

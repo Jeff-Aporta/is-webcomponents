@@ -35,8 +35,11 @@ test('Todos los componentes con color tienen default="brand" (no "neutral")', ()
     const fallback = new RegExp(
       `getAttribute\\(\\s*['"]color['"]\\s*\\)\\s*\\|\\|\\s*['"](${expected})['"]`,
     ).test(src);
+    // Forma actual: el helper compartido `ensureDefaultColor(this[, DEFAULT_INTENT])`
+    // de core/intent (su comportamiento se afirma en el caso «ensureDefaultColor…»).
+    const helper = /ensureDefaultColor\(\s*this\s*(?:,\s*(?:DEFAULT_INTENT|['"]brand['"])\s*)?\)/.test(src);
     assert.ok(
-      setAttr || fallback,
+      setAttr || fallback || helper,
       `${file} debe setear color='${expected}' cuando no se proporciona el atributo`,
     );
     // NO debe haber fallback 'neutral' en connectedCallback.
@@ -56,6 +59,23 @@ test('Todos los componentes con color tienen default="brand" (no "neutral")', ()
   }
 });
 
+test('ensureDefaultColor: sin atributo pone DEFAULT_INTENT (brand); con atributo válido no lo toca', async () => {
+  const { DEFAULT_INTENT, ensureDefaultColor } = await import('../../src/core/intent.ts');
+  assert.equal(DEFAULT_INTENT, 'brand');
+  const fake = (attrs: Record<string, string>) => ({
+    hasAttribute: (n: string) => n in attrs,
+    getAttribute: (n: string) => attrs[n] ?? null,
+    setAttribute: (n: string, v: string) => { attrs[n] = v; },
+    attrs,
+  });
+  const vacio = fake({});
+  assert.equal(ensureDefaultColor(vacio as unknown as Element), 'brand');
+  assert.equal(vacio.attrs.color, 'brand');
+  const danger = fake({ color: 'danger' });
+  ensureDefaultColor(danger as unknown as Element);
+  assert.equal(danger.attrs.color, 'danger');
+});
+
 test('iswc-badge sigue declarando default="brand"', () => {
   // Sanity check: el badge ya era brand antes de la migración, no debe
   // haberse "neutralizado" por error.
@@ -68,7 +88,7 @@ test('iswc-badge sigue declarando default="brand"', () => {
 
 test('Documentación (.md) refleja default brand en componentes migrados', () => {
   for (const { file } of VARIANT_DEFAULTS) {
-    const mdPath = file.replace(/\.js$/, '.md');
+    const mdPath = file.replace(/\.(ts|js)$/, '.md');
     const md = readFileSync(join(root, mdPath), 'utf8');
     // El doc-block del .md debe mencionar "default brand" o "(default: brand)"
     const ok = /default[\s:]*['"]?brand/.test(md) || /\(default: brand\)/.test(md);

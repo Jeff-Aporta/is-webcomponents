@@ -44,7 +44,7 @@ import { TONE } from '../../core/tone.js';
   `;
 
   const OBSERVED = ['color', 'variant', 'pill', 'with-remove', 'remove-label'];
-  const VALID_COLOR = [...INTENT, 'info'];
+  const VALID_COLOR = [...INTENT]; // 'info' ya es parte de INTENT
   const VALID_VARIANT = TONE.filter((t) => t !== 'plain');
 
   class IswcTag extends ElementBase {

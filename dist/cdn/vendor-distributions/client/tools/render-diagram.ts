@@ -193,6 +193,18 @@ async function capturePng(
   }
 }
 
+/**
+ * Chromium de Playwright; si su navegador no está descargado (la descarga no funciona en todas las
+ * máquinas), el Chrome o el Edge instalados en el sistema (canales `chrome` / `msedge`).
+ */
+async function lanzarNavegador(chromium: RenderDiagramOptions['chromium']): Promise<RenderBrowser> {
+  let ultimo: unknown;
+  for (const channel of [undefined, 'chrome', 'msedge']) {
+    try { return await chromium.launch({ headless: true, ...(channel ? { channel } : {}) }); } catch (e) { ultimo = e; }
+  }
+  throw ultimo;
+}
+
 async function runOnePage(
   browser: RenderBrowser,
   pageUrl: string,
@@ -300,7 +312,7 @@ export async function renderDiagram(
       pageUrl = server.base + written.rel;
     }
 
-    browser = await opts.chromium.launch({ headless: true });
+    browser = await lanzarNavegador(opts.chromium);
     return await runOnePage(browser, pageUrl, opts, 'one');
   } finally {
     if (browser) await browser.close().catch(() => {});
@@ -326,7 +338,7 @@ export async function renderDiagramBatch(
       base = server.base;
     }
 
-    browser = await opts.chromium.launch({ headless: true });
+    browser = await lanzarNavegador(opts.chromium);
 
     for (const { id, job } of jobs) {
       try {
