@@ -92,6 +92,8 @@ import './login.js';
 | `show-password` | boolean | Muestra "Cambiar contraseña". |
 | `allow-logout-all` | boolean | Muestra "Cerrar en todos los dispositivos". |
 | `allow-add-account` | boolean | Muestra "Añadir cuenta" en modo multi. |
+| `compact` | boolean | Sin cabecera, pie, "¿Olvidaste…?" ni marco: para incrustarlo en otro contenedor (lo usa `<iswc-login-dropdown>`). |
+| `password-toggle` | boolean | Botón para mostrar/ocultar la contraseña. |
 
 #### Propiedades públicas
 
@@ -112,12 +114,13 @@ import './login.js';
 | `openPassword()` / `closePassword()` | Abre o cierra el diálogo de cambio de contraseña. |
 | `toast(msg, color?)` | Usa el `<iswc-toast>` interno. |
 | `focus()` | Enfoca el campo de usuario. |
+| `reset()` | Vacía la contraseña y las marcas de error de los campos (conserva el usuario). |
 
 ### Eventos
 
 | Evento | `detail` | Cuándo |
 | --- | --- | --- |
-| `iswc-login-submit` | `{ username, password, remember, provider }` | Submit válido. |
+| `iswc-login-submit` | `{ username, password, remember, provider }` | Submit válido (botón Entrar o Enter en usuario/contraseña). |
 | `iswc-account-select` | `{ account }` | Se elige una cuenta en modo multi. |
 | `iswc-add-account` | `{}` | Clic en "Añadir cuenta". |
 | `iswc-remove-account` | `{ account }` | Clic en "Quitar". |

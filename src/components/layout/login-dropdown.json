@@ -1,0 +1,66 @@
+{
+  "$schema": "iswc-preview/v1",
+  "tag": "iswc-login-dropdown",
+  "category": "layout",
+  "title": "&lt;iswc-login-dropdown&gt;",
+  "titleHtml": false,
+  "description": "Acceso compacto en un desplegable: usuario/contraseña o token y elección entre opciones. Emite iswc-login-submit; no hace fetch.",
+  "storageKey": "docs-iswc-login-dropdown",
+  "hasBehavior": true,
+  "sections": [
+    {
+      "id": "intro",
+      "title": "Uso",
+      "lede": "Abre el panel con el botón. El tag solo emite el evento; la app autentica.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<iswc-login-dropdown modes=\"password token\" heading=\"Accede a tu cuenta\"></iswc-login-dropdown>",
+          "controls": [
+            {
+              "control": "text",
+              "prop": "attr:label",
+              "label": "label"
+            },
+            {
+              "control": "text",
+              "prop": "attr:heading",
+              "label": "heading"
+            },
+            {
+              "control": "select",
+              "prop": "attr:modes",
+              "label": "modes",
+              "options": [
+                "password",
+                "token",
+                "password token"
+              ]
+            },
+            {
+              "control": "select",
+              "prop": "attr:placement",
+              "label": "placement",
+              "options": [
+                "bottom-end",
+                "bottom-start",
+                "top-end",
+                "top-start"
+              ]
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:remember",
+              "label": "remember"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:open",
+              "label": "open"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

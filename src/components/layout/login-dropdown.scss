@@ -1,0 +1,160 @@
+/* iswc-login-dropdown — acceso compacto. Todo en em: escala con el font-size del contexto. */
+
+:host {
+  --iswc-login-dropdown-width: 20em;
+  --iswc-login-dropdown-surface: var(--iswc-surface, var(--iswc-bg-elev, var(--iswc-bg, #fff)));
+  --iswc-login-dropdown-border: var(--iswc-border, rgb(127 127 127 / 25%));
+  --iswc-login-dropdown-radius: var(--iswc-radius-l, 12px);
+  --iswc-login-dropdown-shadow: var(--iswc-popover-shadow, var(--iswc-shadow-m, 0 8px 24px rgb(0 0 0 / 30%)));
+
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  font-size: 1em;
+  color: inherit;
+}
+
+:host * { box-sizing: border-box; }
+
+[hidden] { display: none !important; }
+
+.dropdown::part(menu) {
+  inline-size: var(--iswc-login-dropdown-width);
+  max-inline-size: calc(100vw - 1rem);
+  padding: 0.85em;
+  background: var(--iswc-login-dropdown-surface);
+  border: 1px solid var(--iswc-login-dropdown-border);
+  border-radius: var(--iswc-login-dropdown-radius);
+  box-shadow: var(--iswc-login-dropdown-shadow);
+}
+
+.trigger {
+  font-size: 1em;
+
+  &::part(button) { gap: 0.35em; }
+}
+
+.trigger-text { font-weight: 600; }
+
+@media (max-width: 52rem) {
+  .trigger-text { display: none; }
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6em;
+}
+
+.heading {
+  font-weight: 650;
+  font-size: 1em;
+  line-height: 1.25;
+}
+
+.modes {
+  display: flex;
+  gap: 0.15em;
+  padding: 0.12em;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--iswc-text, currentColor) 7%, transparent);
+}
+
+.mode {
+  flex: 1;
+  margin: 0;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: color-mix(in srgb, var(--iswc-text, currentColor) 60%, transparent);
+  font: inherit;
+  font-size: 0.82em;
+  font-weight: 600;
+  line-height: 1.2;
+  padding: 0.3em 0.5em;
+  cursor: pointer;
+
+  &[aria-selected='true'] {
+    color: var(--iswc-text, inherit);
+    background: color-mix(in srgb, var(--iswc-text, currentColor) 12%, transparent);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--iswc-focus, currentColor);
+    outline-offset: 1px;
+  }
+}
+
+.login { font-size: 1em; }
+
+.token {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45em;
+}
+
+.token-label {
+  font-size: 0.82em;
+  font-weight: 600;
+  color: var(--iswc-text-dim, inherit);
+}
+
+.token-input {
+  inline-size: 100%;
+  min-block-size: 4.5em;
+  max-block-size: 9em;
+  resize: vertical;
+  margin: 0;
+  padding: 0.45em 0.55em;
+  border-radius: var(--iswc-radius-s, 8px);
+  border: 1px solid var(--iswc-control-border, var(--iswc-login-dropdown-border));
+  background: var(--iswc-control-bg, transparent);
+  color: inherit;
+  font-family: var(--iswc-mono, ui-monospace, monospace);
+  font-size: 0.82em;
+  line-height: 1.35;
+
+  &:focus-visible {
+    outline: 2px solid var(--iswc-focus, currentColor);
+    outline-offset: 1px;
+  }
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.choices {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+  max-block-size: min(60vh, 24em);
+}
+
+.choices-heading {
+  margin: 0;
+  font-size: 0.9em;
+  line-height: 1.4;
+  color: var(--iswc-text-dim, inherit);
+}
+
+.choices-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3em;
+  min-block-size: 0;
+  overflow-y: auto;
+  padding: 0.1em;
+}
+
+.choice {
+  inline-size: 100%;
+
+  &::part(button) {
+    justify-content: flex-start;
+    inline-size: 100%;
+  }
+}
+
+.back { align-self: flex-start; }

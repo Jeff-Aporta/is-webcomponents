@@ -11,6 +11,7 @@ import '../layout/dialog.js';
 import '../layout/callout.js';
 import '../feedback/toast.js';
 import '../feedback/tooltip.js';
+import type { LoginAccount, LoginSession } from './schemas/login.schemas.js';
 
 /**
  * <iswc-login> — Puerta de acceso reutilizable: single y multi-cuenta.
@@ -30,6 +31,9 @@ import '../feedback/tooltip.js';
  *   allow-logout-all  boolean
  *   show-sessions     boolean
  *   show-password     boolean
+ *   compact           boolean — sin cabecera, pie ni "¿Olvidaste…?" ni marco: para incrustarlo
+ *                     dentro de otro contenedor (p. ej. <iswc-login-dropdown>)
+ *   password-toggle   boolean — botón para mostrar/ocultar la contraseña
  *
  * Propiedades
  *   accounts   LoginAccount[]  { id, name?, email?, avatar?, provider?, lastUsed? }
@@ -43,6 +47,7 @@ import '../feedback/tooltip.js';
  *   openPassword() / closePassword()
  *   toast(msg, color?)
  *   focus()
+ *   reset()           vacía la contraseña y las marcas de error de los campos
  *
  * Eventos (bubbles, composed)
  *   iswc-login-submit      { username, password, remember, provider }
@@ -60,25 +65,6 @@ import '../feedback/tooltip.js';
  * Slots: footer
  * Parts: panel, header, avatar, heading, subtitle, accounts, form, footer, toast
  */
-
-export interface LoginAccount {
-  id: string;
-  name?: string;
-  email?: string;
-  avatar?: string;
-  provider?: string;
-  lastUsed?: string;
-}
-
-export interface LoginSession {
-  id: string;
-  ip?: string;
-  device?: string;
-  os?: string;
-  browser?: string;
-  lastAccess?: string;
-  current?: boolean;
-}
 
 const HTML_TEMPLATE: string[] = [
   '<div part="panel" class="panel">',
@@ -153,6 +139,7 @@ class IswcLogin extends ElementBase {
       'mode', 'provider', 'providers', 'heading', 'subtitle', 'selected',
       'remember', 'busy', 'disabled', 'error', 'notice',
       'allow-add-account', 'allow-logout-all', 'show-sessions', 'show-password',
+      'compact', 'password-toggle',
     ];
   }
 
@@ -288,11 +275,23 @@ class IswcLogin extends ElementBase {
 
   focus(): void { this.#username?.focus?.(); }
 
+  /** Vacía la contraseña y quita las marcas de error de los campos (el usuario se conserva). */
+  reset(): void {
+    if (this.#password) this.#password.value = '';
+    this.#username?.removeAttribute('error');
+    this.#password?.removeAttribute('error');
+  }
+
   #wire(): void {
     this.#form?.addEventListener('submit', (event: Event) => {
       event.preventDefault();
       this.#submit();
     });
+
+    // Enter en usuario o contraseña envía: el <input> real vive en el shadow de
+    // <iswc-input>, así que el <form> de aquí no recibe el submit implícito.
+    this.#username?.addEventListener('iswc-enter', () => this.#submit());
+    this.#password?.addEventListener('iswc-enter', () => this.#submit());
 
     this.#rememberCk?.addEventListener('iswc-change', () => {
       this.remember = !!this.#rememberCk.checked;
@@ -411,6 +410,7 @@ class IswcLogin extends ElementBase {
     this.#btnSubmit.toggleAttribute('disabled', disabled || busy);
     this.#btnSubmit.textContent = busy ? 'Entrando…' : 'Entrar';
 
+    this.#password.toggleAttribute('password-toggle', this.hasAttribute('password-toggle'));
     this.#btnPassword.hidden = !this.hasAttribute('show-password');
     this.#btnLogoutAll.hidden = !this.hasAttribute('allow-logout-all');
     this.setAttribute('data-mode', multi ? 'multi' : 'single');

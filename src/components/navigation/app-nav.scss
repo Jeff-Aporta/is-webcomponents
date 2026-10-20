@@ -1,0 +1,103 @@
+/* iswc-app-nav — filas de pestañas de la barra de una app. */
+
+:host {
+  --iswc-app-nav-tab-color: var(--iswc-text-dim, inherit);
+  --iswc-app-nav-tab-hover: var(--iswc-text, inherit);
+  --iswc-app-nav-active: var(--iswc-accent, currentColor);
+  --iswc-app-nav-focus: var(--iswc-focus, currentColor);
+  --iswc-app-nav-secondary-bg: color-mix(in srgb, var(--iswc-bg-soft, transparent) 55%, var(--iswc-bg, transparent));
+  --iswc-app-nav-secondary-border: var(--iswc-border-soft, var(--iswc-border, transparent));
+  --iswc-app-nav-tab-height: 2.1rem;
+
+  display: block;
+  min-width: 0;
+  font-size: 1em;
+  color: inherit;
+}
+
+:host * { box-sizing: border-box; }
+
+[hidden] { display: none !important; }
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  height: 100%;
+}
+
+.row {
+  display: flex;
+  align-items: stretch;
+  gap: 0.15rem;
+  min-width: 0;
+  overflow-x: auto;
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--iswc-text, currentColor) 16%, transparent) transparent;
+}
+
+.row--primary {
+  flex: 1 1 auto;
+}
+
+.row--secondary {
+  font-size: 0.92em;
+  border-top: 1px solid var(--iswc-app-nav-secondary-border);
+  background: var(--iswc-app-nav-secondary-bg);
+}
+
+.tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  flex: none;
+  min-height: var(--iswc-app-nav-tab-height);
+  padding-inline: 0.6rem;
+  border-bottom: 2px solid transparent;
+  color: var(--iswc-app-nav-tab-color);
+  font: inherit;
+  font-size: 0.85em;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: color 0.15s ease, border-color 0.15s ease;
+
+  &:hover { color: var(--iswc-app-nav-tab-hover); }
+
+  &:focus-visible {
+    outline: 2px solid var(--iswc-app-nav-focus);
+    outline-offset: -2px;
+  }
+
+  &[aria-disabled='true'] {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  & iswc-icon { font-size: 1.1em; }
+}
+
+.row--secondary .tab {
+  min-height: calc(var(--iswc-app-nav-tab-height) * 0.85);
+}
+
+.tab--active {
+  color: var(--iswc-app-nav-active);
+  border-bottom-color: var(--iswc-app-nav-active);
+}
+
+/* Pantalla estrecha: la fila primaria queda en iconos (el nombre sigue en title/aria). */
+@media (max-width: 40rem) {
+  .row--primary .tab--icon .label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tab { transition: none; }
+}

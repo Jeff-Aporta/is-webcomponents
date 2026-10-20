@@ -24,6 +24,7 @@ Planes fechados de una sesión viven en `docs/superpowers/` (si existen). Al cer
 | Spec | [playground/spec.md](playground/spec.md) | ¿Cómo es el playground único (stage+knobs CDN)? |
 | Spec | [diagramas/spec.md](diagramas/spec.md) | ¿Qué gramática comparten los diagramas (rieles, flujo, curvas, general vs restringidos)? |
 | Spec | [herramientas/spec.md](herramientas/spec.md) | ¿Cómo corren las herramientas online (render-lote sin checkout) y qué vigila el inventario de pines (cabeceras `@vendor`)? |
+| Spec | [app-shell/spec.md](app-shell/spec.md) | ¿Qué garantizan el armazón de app, sus pestañas y el acceso/sesión de la barra? |
 | Plan | [iswc-refactor-plan.md](iswc-refactor-plan.md) | Refactor ISWC 2026-09-08 (H1-H10 + S-PUERTO) |
 | Reporte | [iswc-refactor-f6.md](iswc-refactor-f6.md) | F6 del refactor ISWC 2026-09-08 (gates verdes) |
 | Plantillas | [plantillas/](plantillas) | `spec.template.md`, `tasks.template.md` |

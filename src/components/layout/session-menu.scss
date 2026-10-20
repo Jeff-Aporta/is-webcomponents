@@ -1,0 +1,67 @@
+/* iswc-session-menu — chip de sesión de la barra. Todo en em: escala con el contexto. */
+
+:host {
+  --iswc-session-menu-surface: var(--iswc-surface, var(--iswc-bg-elev, var(--iswc-bg, #fff)));
+  --iswc-session-menu-border: var(--iswc-border, rgb(127 127 127 / 25%));
+  --iswc-session-menu-radius: var(--iswc-radius-l, 12px);
+  --iswc-session-menu-shadow: var(--iswc-popover-shadow, var(--iswc-shadow-m, 0 8px 24px rgb(0 0 0 / 30%)));
+
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  font-size: 1em;
+  color: inherit;
+}
+
+:host * { box-sizing: border-box; }
+
+[hidden] { display: none !important; }
+
+.menu::part(menu) {
+  min-inline-size: 13em;
+  padding: 0.35em;
+  background: var(--iswc-session-menu-surface);
+  border: 1px solid var(--iswc-session-menu-border);
+  border-radius: var(--iswc-session-menu-radius);
+  box-shadow: var(--iswc-session-menu-shadow);
+}
+
+.trigger {
+  font-size: 1em;
+
+  &::part(button) { gap: 0.4em; }
+}
+
+.avatar { font-size: 1.5em; }
+
+.name {
+  max-inline-size: 10em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 600;
+}
+
+@media (max-width: 52rem) {
+  .name { display: none; }
+}
+
+.profile {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15em;
+  padding: 0.45em 0.7em 0.55em;
+}
+
+.profile-name {
+  font-size: 0.95em;
+  font-weight: 650;
+  line-height: 1.2;
+}
+
+.profile-subtitle {
+  font-size: 0.8em;
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--iswc-text-dim, inherit);
+}

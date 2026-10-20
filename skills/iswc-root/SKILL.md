@@ -382,6 +382,11 @@ Cada `.min.js` enlaza la guía de su fila y esta skill.
 | `<iswc-details>` | layout/details.md | [layout/details.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/layout/details.md) |
 | `<iswc-dialog>` | layout/dialog.md | [layout/dialog.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/layout/dialog.md) |
 | `<iswc-drawer>` | layout/drawer.md | [layout/drawer.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/layout/drawer.md) |
+| `<iswc-login>` | layout/login.md | [layout/login.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/layout/login.md) |
+| `<iswc-login-gate>` | layout/login-gate.md | [layout/login-gate.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/layout/login-gate.md) |
+| `<iswc-login-dropdown>` | layout/login-dropdown.md | [layout/login-dropdown.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/layout/login-dropdown.md) |
+| `<iswc-session-menu>` | layout/session-menu.md | [layout/session-menu.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/layout/session-menu.md) |
+| `<iswc-app-shell>` | layout/app-shell.md | [layout/app-shell.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/layout/app-shell.md) |
 | `<iswc-divider>` | layout/divider.md | [layout/divider.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/layout/divider.md) |
 | `<iswc-scrollspy>` | layout/scrollspy.md | [layout/scrollspy.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/layout/scrollspy.md) |
 | `<iswc-demo>` | Caja de demostración de la galería. | [layout/demo.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/layout/demo.md) |
@@ -422,6 +427,7 @@ Cada `.min.js` enlaza la guía de su fila y esta skill.
 | `<iswc-doc-index>` | Índice documental con búsqueda: lista páginas agrupadas (grupo → subgrupo → ítem) y, al escribir, busca en títulos, palabras clave y todo el texto, con los resultados por relevancia y el fragmento resaltado. | [navigation/doc-index.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/navigation/doc-index.md) |
 | `<iswc-breadcrumb-item>` | navigation/breadcrumb-item.md | [navigation/breadcrumb-item.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/navigation/breadcrumb-item.md) |
 | `<iswc-tab-group>` | navigation/tab-group.md | [navigation/tab-group.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/navigation/tab-group.md) |
+| `<iswc-app-nav>` | navigation/app-nav.md | [navigation/app-nav.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/navigation/app-nav.md) |
 | `<iswc-tab>` | navigation/tab-group.md | [navigation/tab-group.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/navigation/tab-group.md) |
 | `<iswc-tab-panel>` | navigation/tab-group.md | [navigation/tab-group.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/navigation/tab-group.md) |
 | `<iswc-scroller>` | navigation/scroller.md | [navigation/scroller.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/navigation/scroller.md) |

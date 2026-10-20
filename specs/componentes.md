@@ -153,6 +153,7 @@ Cada tag es un Custom Element con Shadow DOM. El inventario y rutas de build sal
 - **No** `iswc-split-panel` con % alto como sidebar fijo (deja hueco enorme): grid CSS con ancho fijo (`14.5rem`) o `position-in-pixels`.
 - **ModalBase** centraliza ciclo de vida de `iswc-dialog`/`iswc-drawer` (focus trap, Escape, light-dismiss, `iswc-show`/`iswc-hide`/`iswc-after-show`/`iswc-after-hide`). Subclase define `__TEMPLATE`, `modalClass`, `closeAttr`, `animateOpen/Close`, hooks; refs vía `$modal`/`$backdrop`.
 - **No** dejar un dialog "casi fullscreen" cuando el requisito es full page (padding del host + `max-height` del panel lo dejan a medias).
+- **Armazón de app** (barra + vista con scroll propio, pestañas, acceso y sesión): `<iswc-app-shell>` + `<iswc-app-nav>` + `<iswc-session-menu>`/`<iswc-login-dropdown>`. Su WHAT vive en [`app-shell/spec.md`](app-shell/spec.md). **No** reescribir ese armazón por app ni meter fetch/tokens dentro de los tags: emiten eventos y la app resuelve.
 
 ### S-K17 media
 

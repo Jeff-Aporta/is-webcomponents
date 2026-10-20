@@ -268,3 +268,23 @@
   :host { inline-size: 100%; }
   .footer { justify-content: flex-start; }
 }
+
+/* `hidden` manda sobre el display de .accounts (en modo single no hay panel de cuentas). */
+.accounts[hidden] { display: none; }
+
+/* compact: incrustado en otro contenedor (dropdown, card). Sin marco ni cabecera ni pie. */
+:host([compact]) {
+  inline-size: 100%;
+}
+:host([compact]) .panel {
+  padding: 0;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+:host([compact]) .header,
+:host([compact]) .footer,
+:host([compact]) #btnForgot {
+  display: none;
+}
