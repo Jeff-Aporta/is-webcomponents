@@ -14,7 +14,7 @@ agrupadores `#7ACFF4/#FFFFC1/#BCFFBB/#EAB6B0/#81FF81/#01C000`, O/C `#7ACFF4`.
 
 | Fase | Artefacto | Estado |
 | --- | --- | --- |
-| 1 | Recrear layout de la imagen histórica (MSSQL / 8 HTTP fn) | `payload-v1-legacy.json` |
+| 1 | Recrear layout de la imagen histórica (MSSQL / 8 HTTP fn) | retirado |
 | 2 | Actualizar a PG + endpoints actuales + ISW + OpenAI + DSCLIENTES + R2 | `payload.json` |
 | 3 | Export SVG (`deno task` / `render.mjs`) → copiar a ISS docs | `out/*.svg` listos · publish ISS pendiente |
 
@@ -32,7 +32,7 @@ agrupadores `#7ACFF4/#FFFFC1/#BCFFBB/#EAB6B0/#81FF81/#01C000`, O/C `#7ACFF4`.
 - `layout.allowDiagonal: false` — solo ortogonales.
 - Sin O/C huérfanos: solo interfaces cableadas.
 - Themes: `themes/insoft.json` (ER genérico) · `themes/insoft-cd.json` (componentes).
-- SVG regenerados 2026-10-05: `out/v1-legacy.svg`, `out/componentes.svg`.
+- SVG regenerados 2026-10-05: `out/componentes.svg`.
 
 ## Ajustes de kit tocados en este lab
 
@@ -66,7 +66,6 @@ await writeDiagramOutputs(r, 'out/componentes.svg');
 
 ## Salidas
 
-- `out/v1-legacy.svg` — fidelidad a la imagen original
 - `out/componentes.svg` — estado actual (canónico del lab)
 
 ## Siguiente (fuera de este lab)

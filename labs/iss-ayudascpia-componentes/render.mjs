@@ -8,7 +8,6 @@ import { labDir, renderLab } from '../../src/vendor-distributions/client/tools/r
 const LAB = labDir(import.meta.url);
 const arg = (process.argv[2] || 'all').toLowerCase();
 const VERSIONES = [
-  { id: 'v1-legacy', file: 'payload-v1-legacy.json', solo: 'v1' },
   { id: 'componentes', file: 'payload.json', solo: 'v2' },
 ];
 const jobs = [];

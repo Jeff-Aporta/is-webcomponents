@@ -24,8 +24,6 @@
   <header>
     <h1>Lab · iss-ayudascpia-componentes</h1>
     <p>theme=insoft · no es demo de galería</p>
-    <button type="button" id="btn-v2" aria-pressed="true">v2 actual</button>
-    <button type="button" id="btn-v1" aria-pressed="false">v1 legacy</button>
   </header>
   <main>
     <iswc-component-diagram id="diag" theme="insoft" min-gap="72"></iswc-component-diagram>
@@ -41,19 +39,6 @@
       const r = await fetch(new URL(file, import.meta.url));
       diag.payload = await r.json();
     };
-
-    const btnV1 = document.getElementById('btn-v1');
-    const btnV2 = document.getElementById('btn-v2');
-    btnV2.addEventListener('click', async () => {
-      btnV2.setAttribute('aria-pressed', 'true');
-      btnV1.setAttribute('aria-pressed', 'false');
-      await load('./payload.json');
-    });
-    btnV1.addEventListener('click', async () => {
-      btnV1.setAttribute('aria-pressed', 'true');
-      btnV2.setAttribute('aria-pressed', 'false');
-      await load('./payload-v1-legacy.json');
-    });
 
     await load('./payload.json');
   </script>
