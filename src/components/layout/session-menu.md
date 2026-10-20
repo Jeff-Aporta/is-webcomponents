@@ -32,6 +32,10 @@ Contrato WHAT: [`specs/app-shell/spec.md`](../../../specs/app-shell/spec.md) (S-
 await L.load('iswc-session-menu');
 ```
 
+Dentro de `<iswc-app-shell>` la paleta de marca se carga sola. Usado sin shell, pide la paleta
+(`await L.loadPageStyles(['iswc-palettes-default'])`) o los botones quedan en la base neutra.
+Iconos locales (sin api.iconify.design): ver `app-shell.md` → «Iconos sin depender de api.iconify.design».
+
 ## Ejemplo mínimo
 
 ```html

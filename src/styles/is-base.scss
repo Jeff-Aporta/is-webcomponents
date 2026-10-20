@@ -35,6 +35,18 @@
   --iswc-shadow: 0 1px 0 rgb(255 255 255 / 3%), 0 8px 24px rgb(0 0 0 / 25%);
   --iswc-radius: 0.625em;
   --iswc-radius-sm: 0.375em;
+  /* Escala de espaciado (rem: no crece con el font-size del contenedor). La
+     usan card, dialog, drawer, callout (l), details y login (m); cada
+     componente trae además el mismo valor como fallback, así que una app que
+     no cargue esta hoja tampoco queda sin padding. Para densificar toda la UI
+     basta redefinir estos tokens en :root. */
+  --iswc-space-2xs: 0.125rem;
+  --iswc-space-xs: 0.25rem;
+  --iswc-space-s: 0.5rem;
+  --iswc-space-m: 0.75rem;
+  --iswc-space-l: 1rem;
+  --iswc-space-xl: 1.5rem;
+  --iswc-space-2xl: 2rem;
   --iswc-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
   --iswc-sans: ui-sans-serif, system-ui, sans-serif;
   --iswc-control-bg: #21262d;

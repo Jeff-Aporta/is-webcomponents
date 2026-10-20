@@ -1,4 +1,4 @@
-// app-shell.test.ts — Guardián WHAT de specs/app-shell/spec.md (S-AP1…S-AP19).
+// app-shell.test.ts — Guardián WHAT de specs/app-shell/spec.md (S-AP1…S-AP22).
 //
 // Caja negra: la página carga los bundles publicados (dist/cdn) como lo haría una app
 // por CDN, y cada caso afirma sobre lo observable — geometría, accesibilidad, eventos,
@@ -69,6 +69,51 @@ const FILAS = [
   ] },
 ];
 
+/**
+ * Páginas de adopción (S-AP20…S-AP22): como una app real por CDN. Los atributos van en el HTML
+ * ANTES de importar el loader; la app NO enlaza is-base ni paletas ni define tokens: todo lo
+ * que necesite lo trae el kit.
+ */
+type Adopcion = { html?: string; head?: string; shell?: string };
+const ADOPCION: Record<string, Adopcion> = {
+  base: {},
+  'marca-propia': { head: '<style>:root{--iswc-color-brand: rgb(225, 29, 72); --iswc-color-brand-strong: rgb(225, 29, 72)}</style>' },
+  'data-palette': { html: ' data-palette="insoft"' },
+  neutra: { shell: ' no-default-palette' },
+};
+
+const FILAS_ATTR = JSON.stringify([{ id: 'tool', value: 'b', tabs: [{ id: 'a', label: 'Alfa' }, { id: 'b', label: 'Beta' }] }])
+  .replace(/"/g, '&quot;');
+
+function paginaAdopcion(o: Adopcion): string {
+  return `<!doctype html>
+<html lang="es"${o.html ?? ''}><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+${o.head ?? ''}
+<style>html,body{margin:0}</style>
+</head><body>
+<iswc-app-shell id="shell" brand="Consola" brand-href="/inicio" sidebar-label="Secciones" toast="bottom-end"${o.shell ?? ''}>
+  <iswc-app-nav id="nav" slot="nav" rows="${FILAS_ATTR}"></iswc-app-nav>
+  <iswc-session-menu id="sm-out" slot="actions" label="Acceder" heading="Acceso rápido" modes="password token"></iswc-session-menu>
+  <iswc-session-menu id="sm-in" slot="actions" logged name="Ana María Pérez" subtitle="Administradora"></iswc-session-menu>
+  <section>
+    <iswc-login id="lg" heading="Hola equipo" subtitle="Usa tu cuenta" error="Clave incorrecta" password-toggle busy></iswc-login>
+    <iswc-login id="lg-compact" compact heading="Oculto"></iswc-login>
+    <iswc-login-dropdown id="ld" label="Ingresar" heading="Bienvenido" modes="password token" remember></iswc-login-dropdown>
+    <iswc-card id="card">Contenido de la tarjeta</iswc-card>
+  </section>
+</iswc-app-shell>
+<script type="module">
+  import { iswcLoader as L } from '/dist/cdn/core/loader.min.js';
+  L.configure({ local: true, host: location.origin + '/dist/cdn/' });
+  const tags = ['iswc-app-shell', 'iswc-app-nav', 'iswc-session-menu', 'iswc-login-dropdown', 'iswc-login', 'iswc-card'];
+  await L.load(...tags);
+  for (const t of tags) await customElements.whenDefined(t);
+  document.documentElement.dataset.listo = '1';
+</script>
+</body></html>`;
+}
+
 let server: Server;
 let base = '';
 let browser: Browser;
@@ -77,6 +122,8 @@ const peticiones: { url: string; method: string; postData: string | null }[] = [
 async function servir(url: string): Promise<{ tipo: string; cuerpo: Buffer | string } | null> {
   const ruta = decodeURIComponent(url.split('?')[0]!);
   if (ruta === '/__app__.html') return { tipo: TIPOS['.html']!, cuerpo: PAGINA };
+  const adop = /^\/__adopcion-([a-z-]+)__\.html$/.exec(ruta);
+  if (adop && ADOPCION[adop[1]!]) return { tipo: TIPOS['.html']!, cuerpo: paginaAdopcion(ADOPCION[adop[1]!]!) };
   const rel = normalize(ruta).replace(/^[/\\]+/, '');
   if (rel.split(sep).includes('..')) return null;
   const archivo = join(RAIZ, rel);
@@ -497,6 +544,154 @@ test('S-AP19: "Cerrar sesión" emite iswc-logout y un item propio emite iswc-sel
     assert.equal(ev.filter((e) => e.type === 'iswc-logout').length, 1);
     assert.equal(ev.filter((e) => e.type === 'iswc-select' && e.detail.item !== '#perfil').length, 0, 'la salida no se filtra como iswc-select');
   } finally { await page.close(); }
+});
+
+/* ── Adopción por loader (S-AP20…S-AP22) ─────────────────────────── */
+
+/** Abre una página de adopción y junta TODO error de consola o excepción no capturada. */
+async function abrirAdopcion(nombre: string): Promise<{ page: Page; errores: string[]; urls: string[] }> {
+  const page = await browser.newPage({ viewport: { width: 1280, height: 800 } });
+  const errores: string[] = [];
+  const urls: string[] = [];
+  page.on('pageerror', (e) => errores.push('pageerror: ' + e.message));
+  page.on('console', (m) => { if (m.type() === 'error') errores.push('console: ' + m.text()); });
+  page.on('request', (r) => urls.push(r.url()));
+  page.on('response', (r) => { if (r.status() >= 400) errores.push(`http ${r.status()}: ${r.url()}`); });
+  // Aislado de la red: todo sale del servidor local. Lo externo (p. ej. la consulta del SHA de
+  // `main` que hace el loader servido sin pin) se contesta vacío para no medir la red ajena.
+  await page.route((u) => !u.href.startsWith(base), (r) => r.fulfill({ status: 200, body: '' }));
+  await page.goto(`${base}/__adopcion-${nombre}__.html`);
+  await page.waitForFunction(() => document.documentElement.dataset.listo === '1', null, { timeout: 30_000 });
+  // Deja asentar las hojas que inyecta el kit (is-base, paleta) y los renders diferidos.
+  await page.waitForFunction(
+    () => getComputedStyle(document.documentElement).getPropertyValue('--iswc-space-l').trim() !== '',
+    null,
+    { timeout: 10_000 },
+  ).catch(() => {});
+  await page.waitForTimeout(500);
+  return { page, errores, urls };
+}
+
+/** Fondo del botón de acento (trigger "Ingresar" del login-dropdown) como [r, g, b]. */
+const fondoAcento = (page: Page) => page.evaluate(() => {
+  const ld = document.getElementById('ld')!;
+  const btn = ld.shadowRoot!.querySelector('.trigger') as HTMLElement;
+  const real = (btn.shadowRoot?.querySelector('button') as HTMLElement | null) ?? btn;
+  const bg = getComputedStyle(real).backgroundColor;
+  const m = (bg.match(/[\d.]+/g) ?? []).slice(0, 3).map(Number);
+  // `color(srgb r g b)` (0…1) cuando el valor sale de hsl(from …); `rgb()` (0…255) si no.
+  return m.map((x) => Math.round(bg.startsWith('color(') ? x * 255 : x));
+});
+
+const pidioPaleta = (urls: string[]) => urls.some((u) => /palettes\.min\.css/.test(u));
+
+test('S-AP20: los atributos declarados antes de cargar el kit no dan errores y se aplican', async () => {
+  const { page, errores } = await abrirAdopcion('base');
+  try {
+    assert.deepEqual(errores, [], 'ningún error de consola al registrar los tags');
+    const r = await page.evaluate(() => {
+      const lg = document.getElementById('lg')!.shadowRoot!;
+      const lc = document.getElementById('lg-compact')!;
+      const ld = document.getElementById('ld')!.shadowRoot!;
+      const smOut = document.getElementById('sm-out')!.shadowRoot!;
+      const smIn = document.getElementById('sm-in')!.shadowRoot!;
+      const shell = document.getElementById('shell')!.shadowRoot!;
+      const nav = document.getElementById('nav')!.shadowRoot!;
+      const visible = (el: Element | null) => !!el && (el as HTMLElement).getBoundingClientRect().height > 0;
+      const loginOut = smOut.querySelector('iswc-login-dropdown')!.shadowRoot!;
+      return {
+        heading: lg.getElementById('heading')?.textContent,
+        subtitle: lg.getElementById('subtitle')?.textContent,
+        error: lg.getElementById('error')?.textContent,
+        errorVisible: !(lg.getElementById('errorBox') as HTMLElement).hidden,
+        busy: lg.getElementById('btnSubmit')?.textContent,
+        toggle: lg.getElementById('password')?.hasAttribute('password-toggle'),
+        compactHeader: visible(lc.shadowRoot!.querySelector('[part="header"]')),
+        ldLabel: ld.querySelector('.trigger-text')?.textContent,
+        ldHeading: ld.querySelector('.heading')?.textContent,
+        ldModes: !(ld.querySelector('.modes') as HTMLElement).hidden,
+        smOutLabel: loginOut.querySelector('.trigger-text')?.textContent,
+        smOutHeading: loginOut.querySelector('.heading')?.textContent,
+        smInLogin: visible(smIn.querySelector('iswc-login-dropdown')),
+        smInName: smIn.querySelector('[part="name"]')?.textContent,
+        marca: shell.querySelector('[part="brand-text"]')?.textContent,
+        marcaHref: shell.querySelector('[part="brand"]')?.getAttribute('href'),
+        toast: !!shell.querySelector('iswc-toast'),
+        tabs: [...nav.querySelectorAll('[role="tab"]')].map((t) => t.textContent!.trim() + ':' + t.getAttribute('aria-selected')),
+      };
+    });
+    assert.equal(r.heading, 'Hola equipo');
+    assert.equal(r.subtitle, 'Usa tu cuenta');
+    assert.equal(r.error, 'Clave incorrecta');
+    assert.equal(r.errorVisible, true, 'el error declarado se ve');
+    assert.equal(r.busy, 'Entrando…', 'busy declarado bloquea el envío');
+    assert.equal(r.toggle, true, 'password-toggle declarado llega al campo');
+    assert.equal(r.compactHeader, false, 'compact declarado oculta la cabecera');
+    assert.equal(r.ldLabel, 'Ingresar');
+    assert.equal(r.ldHeading, 'Bienvenido');
+    assert.equal(r.ldModes, true, 'modes declarado muestra el selector');
+    assert.equal(r.smOutLabel, 'Acceder', 'el session-menu reenvía label al acceso');
+    assert.equal(r.smOutHeading, 'Acceso rápido');
+    assert.equal(r.smInLogin, false, 'logged declarado oculta el acceso');
+    assert.equal(r.smInName, 'Ana', 'logged declarado muestra el primer nombre');
+    assert.equal(r.marca, 'Consola');
+    assert.equal(r.marcaHref, '/inicio');
+    assert.equal(r.toast, true, 'toast declarado crea el contenedor de avisos');
+    assert.deepEqual(r.tabs, ['Alfa:false', 'Beta:true'], 'rows declarado pinta las pestañas con su value');
+  } finally { await page.close(); }
+});
+
+test('S-AP21: card y login tienen espacio interior sin que la app defina tokens', async () => {
+  const { page } = await abrirAdopcion('base');
+  try {
+    const r = await page.evaluate(() => {
+      const pad = (el: Element | null) => {
+        if (!el) return -1;
+        const cs = getComputedStyle(el);
+        return Math.min(...[cs.paddingTop, cs.paddingRight, cs.paddingBottom, cs.paddingLeft].map(parseFloat));
+      };
+      const card = document.getElementById('card')!.shadowRoot!;
+      const login = document.getElementById('lg')!.shadowRoot!;
+      return { card: pad(card.querySelector('[part="body"]')), login: pad(login.querySelector('[part="panel"]')) };
+    });
+    assert.ok(r.card >= 8, `el cuerpo de la card tiene padding (${r.card}px)`);
+    assert.ok(r.login >= 8, `el panel del login tiene padding (${r.login}px)`);
+  } finally { await page.close(); }
+});
+
+test('S-AP22: sin paleta elegida el acento tiene color de marca; una paleta elegida no se pisa', async () => {
+  const colorido = ([r, g, b]: number[]) => Math.max(r!, g!, b!) - Math.min(r!, g!, b!) > 80;
+  {
+    const { page } = await abrirAdopcion('base');
+    try {
+      const rgb = await fondoAcento(page);
+      assert.ok(colorido(rgb), `sin paleta, el botón de acento no es gris (${rgb})`);
+      assert.ok(rgb[2]! > rgb[0]!, `la marca por defecto es la azul (${rgb})`);
+    } finally { await page.close(); }
+  }
+  {
+    const { page } = await abrirAdopcion('data-palette');
+    try {
+      const rgb = await fondoAcento(page);
+      assert.ok(colorido(rgb) && rgb[0]! > rgb[2]!, `data-palette="insoft" se respeta (rojo, ${rgb})`);
+    } finally { await page.close(); }
+  }
+  {
+    const { page, urls } = await abrirAdopcion('marca-propia');
+    try {
+      const rgb = await fondoAcento(page);
+      assert.deepEqual(rgb, [225, 29, 72], 'el color de marca propio de la app no se pisa');
+      assert.equal(pidioPaleta(urls), false, 'con marca propia no se carga la paleta por defecto');
+    } finally { await page.close(); }
+  }
+  {
+    const { page, urls } = await abrirAdopcion('neutra');
+    try {
+      assert.equal(pidioPaleta(urls), false, 'no-default-palette no carga la paleta');
+      const h = await page.evaluate(() => getComputedStyle(document.documentElement).getPropertyValue('--iswc-brand-h').trim());
+      assert.equal(h, '', 'sin paleta, la base queda neutra');
+    } finally { await page.close(); }
+  }
 });
 
 export default lista();

@@ -122,6 +122,27 @@ completo (`name`), el subtítulo (`subtitle`, p. ej. el rol) y los items propios
 "Cerrar sesión" emite `iswc-logout {}`. Un item propio emite `iswc-select { item }` (el de
 `<iswc-dropdown>`); el item de salida no se filtra como `iswc-select`.
 
+### S-AP20 Atributos declarados antes de cargar el kit
+
+Una app puede escribir los atributos en el HTML (`heading`, `error`, `compact`, `logged`, `name`,
+`rows`, `brand`, `toast`…) antes de cargar el kit con el loader. Al registrarse los tags no aparece
+ningún error en la consola y el estado que piden esos atributos es el que se ve (título, error,
+sesión, pestañas, marca), sin que la app tenga que esperar a que el tag esté definido para
+ponerlos.
+
+### S-AP21 Espaciado sin tokens de la app
+
+Con solo el kit (sin que la app defina ninguna variable de espaciado), las superficies del kit
+tienen espacio interior: el cuerpo de `<iswc-card>` y el panel de `<iswc-login>` no quedan pegados
+al borde.
+
+### S-AP22 Color de marca por defecto
+
+Una página con el shell que no eligió paleta muestra los controles de acento (p. ej. el botón
+"Entrar") con el color de marca por defecto, no en gris neutro. Si la página ya eligió paleta
+(`data-palette` en `<html>`) o define su propio color de marca, el shell no la cambia; con
+`no-default-palette` el shell deja la base neutra.
+
 > El WHAT no nombra archivos ni funciones internas: los guardianes entran por los tags publicados.
 
 ## HOW — solo si es contrato
@@ -145,3 +166,4 @@ publicado (`dist/cdn`), así que requieren `deno task build` previo.
 | S-AP6…S-AP11 | roles, teclado, eventos y nodos de `<iswc-app-nav>` | `tests/componentes/app-shell.test.ts` |
 | S-AP12…S-AP16 | eventos, red y storage de `<iswc-login-dropdown>` | `tests/componentes/app-shell.test.ts` |
 | S-AP17…S-AP19 | estados y eventos de `<iswc-session-menu>` | `tests/componentes/app-shell.test.ts` |
+| S-AP20…S-AP22 | consola, estado aplicado, padding y color de marca al adoptar el kit por loader | `tests/componentes/app-shell.test.ts` |

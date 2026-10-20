@@ -36,6 +36,31 @@ import { iswcLoader as L } from 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webc
 await L.load('iswc-app-shell', 'iswc-app-nav', 'iswc-session-menu');
 ```
 
+### Qué trae el kit sin que la app haga nada
+
+| Necesidad | Lo resuelve | Cuándo actúa la app |
+| --- | --- | --- |
+| Tokens base (superficies, texto, `--iswc-space-*`) | `is-base.min.css`, que el loader inyecta al importarse | Nunca; para densificar, redefine `--iswc-space-*` en `:root` |
+| Color de marca en botones y foco | El shell carga la paleta por defecto (`iswc-palettes-default`) si `<html>` no tiene tokens de marca | Para otra marca: `data-palette="insoft"` / `"agrowin"` en `<html>`, o tus propios `--iswc-brand-h/s/b` en `:root`; `no-default-palette` en el shell para dejar la base neutra |
+| Atributos en el HTML | Los tags aplican los atributos que ya estén puestos al registrarse | Nunca: no hace falta esperar `whenDefined` para ponerlos |
+
+Llamar además `L.loadPageStyles(['iswc-palettes-default'])` es inocuo (no duplica la hoja).
+
+### Iconos sin depender de api.iconify.design
+
+Los iconos internos del shell, el nav y el session-menu (`mdi:menu`, `mdi:login`, `mdi:logout`,
+`mdi:close`, `mdi:eye-outline`…) están en la carpeta local del kit, `assets/iconify/<set>/<nombre>.svg`.
+Fuera del origen del kit, `<iswc-icon>` los pide a la API de Iconify (que puede responder 429). Para
+forzar la carpeta local declara la base UNA vez en `<html>`:
+
+```html
+<html data-icons="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@<SHA>/assets/iconify/">
+```
+
+Un icono que no esté en esa carpeta (p. ej. los de tus pestañas) cae a la API con el aviso
+`[iswc-icon] falta en local: set:nombre`; si la app publica su propia carpeta (`deno task icons`),
+apunta `data-icons` a ella. Cada SVG resuelto queda en `localStorage` 15 días.
+
 ## Ejemplo mínimo
 
 ```html
@@ -60,6 +85,9 @@ await L.load('iswc-app-shell', 'iswc-app-nav', 'iswc-session-menu');
 | `home-label` | string | Nombre accesible de la marca (default "Ir al inicio"). |
 | `sidebar-label` | string | Título del cajón móvil y del botón de menú (default "Menú"). |
 | `toast` | placement | `top-end`, `bottom-end`… Crea un `<iswc-toast>` interno. Sin él no hay avisos. |
+
+Atributo leído al conectar (no observado): `no-default-palette` (boolean) — el shell no carga la
+paleta por defecto aunque la página no tenga ninguna.
 
 #### Propiedades públicas
 
@@ -156,6 +184,9 @@ Ninguna además de los atributos.
 ```
 
 ## Errores comunes
+
+- Botones grises en una página SIN shell (p. ej. solo `<iswc-login>`): la paleta por defecto la
+  asegura el shell; ahí carga tú `L.loadPageStyles(['iswc-palettes-default'])`.
 
 - Poner el shell dentro de un contenedor con scroll: la página tendrá dos barras de scroll.
 - Esperar `IswcToast.host()` global: el toast del shell vive en su shadow; usa `shell.toast()`.

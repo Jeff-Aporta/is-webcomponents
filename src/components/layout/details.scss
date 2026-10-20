@@ -1,7 +1,7 @@
 /* <iswc-details> — disclosure colapsable. */
 
 :host {
-  --iswc-details-spacing: var(--iswc-space-m);
+  --iswc-details-spacing: var(--iswc-space-m, 0.75rem);
   --iswc-details-show-duration: 180ms;
   --iswc-details-hide-duration: 160ms;
 

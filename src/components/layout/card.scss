@@ -1,7 +1,7 @@
 /* <iswc-card> — superficies con secciones (media, header, body, footer, actions). */
 
 :host {
-  --iswc-card-spacing: var(--iswc-space-l);
+  --iswc-card-spacing: var(--iswc-space-l, 1rem);
 
   display: block;
   position: relative;

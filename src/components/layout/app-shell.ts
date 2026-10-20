@@ -19,6 +19,14 @@ import '../feedback/toast.js';
  *   home-label      nombre accesible de la marca (default "Ir al inicio")
  *   sidebar-label   título del cajón móvil de la barra lateral (default "Menú")
  *   toast           placement del <iswc-toast> interno (top-end, bottom-end…); sin él no hay toast
+ *   no-default-palette  boolean — no cargar la paleta por defecto (ver abajo)
+ *
+ * Paleta por defecto
+ *   Al conectarse, si la página no tiene paleta (ni `--iswc-brand-h` ni `--iswc-color-brand`
+ *   definidos en <html>), el shell carga `palettes.min.css` del kit — lo mismo que
+ *   `L.loadPageStyles(['iswc-palettes-default'])`, idempotente — para que los controles tengan
+ *   el color de marca. `data-palette` en <html> se respeta (la hoja lo implementa); una app con
+ *   paleta propia ya define esos tokens y no se toca. `no-default-palette` lo desactiva.
  *
  * Slots
  *   brand     reemplaza logo + texto de la marca
@@ -40,6 +48,43 @@ import '../feedback/toast.js';
  */
 
 const ICON_RE = /^[a-z0-9-]+:[a-z0-9-]+$/i;
+const PALETTE_ALIAS = 'iswc-palettes-default';
+
+/** `true` si <html> ya resuelve tokens de marca (paleta del kit o propia de la app). */
+function hasPalette(): boolean {
+  const cs = getComputedStyle(document.documentElement);
+  return cs.getPropertyValue('--iswc-brand-h').trim() !== ''
+    || cs.getPropertyValue('--iswc-color-brand').trim() !== '';
+}
+
+/**
+ * Carga la paleta por defecto una sola vez por página. Con el loader del kit pasa por
+ * `loadPageStyles` (pin, espejos y anti-redundancia: si la app la pide también, no se duplica);
+ * sin loader (bundle importado a mano) enlaza el `palettes.min.css` hermano del bundle.
+ */
+function ensureDefaultPalette(): void {
+  if (typeof document === 'undefined' || hasPalette()) return;
+  const G = globalThis as typeof globalThis & {
+    __iswcDefaultPalette?: boolean;
+    iswcLoader?: { loadPageStyles?: (hrefs: string[]) => Promise<void> };
+  };
+  if (G.__iswcDefaultPalette) return;
+  G.__iswcDefaultPalette = true;
+  const loader = G.iswcLoader;
+  if (typeof loader?.loadPageStyles === 'function') {
+    void loader.loadPageStyles([PALETTE_ALIAS]).catch(() => { /* sin red: queda la base neutra */ });
+    return;
+  }
+  const url = import.meta.url;
+  if (!url.includes('/dist/cdn/')) return;
+  const href = new URL('../core/palettes.min.css', url).href;
+  if (document.querySelector(`link[rel="stylesheet"][href="${href}"]`)) return;
+  const link = document.createElement('link');
+  link.rel = 'stylesheet';
+  link.href = href;
+  link.setAttribute('data-iswc-default-palette', '');
+  document.head.append(link);
+}
 const MOBILE_QUERY = '(max-width: 40rem)';
 
 const HTML_TEMPLATE = `
@@ -114,6 +159,7 @@ class IswcAppShell extends ElementBase {
   }
 
   override onConnected(): void {
+    if (!this.hasAttribute('no-default-palette')) ensureDefaultPalette();
     if (typeof matchMedia === 'function' && !this.#media) {
       this.#media = matchMedia(MOBILE_QUERY);
       this.#media.addEventListener('change', this.#onMedia);

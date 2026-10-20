@@ -1,4 +1,4 @@
-import { adoptCss, defineElement } from '../../core/element.js';
+import { adoptCss, defineElement, upgradeProperties } from '../../core/element.js';
 import { ElementBase } from '../../core/element-base.js';
 
 import '../forms/input.js';
@@ -180,12 +180,13 @@ class IswcLogin extends ElementBase {
     const shadow = this.attachShadow({ mode: 'open' });
     adoptCss(shadow, import.meta.url);
     shadow.appendChild(TEMPLATE.content.cloneNode(true));
-  }
 
-  connectedCallback(): void {
-    super.connectedCallback?.();
-    const $ = (id: string) => this.shadowRoot!.getElementById(id) as any;
-
+    // Referencias y listeners en el constructor, no en connectedCallback: en el
+    // upgrade (atributos ya puestos en el HTML antes de registrar el tag, o el
+    // <iswc-login compact> de <iswc-login-dropdown>) attributeChangedCallback
+    // corre ANTES de la primera conexión, y además una reconexión no debe
+    // duplicar listeners.
+    const $ = (id: string) => shadow.getElementById(id) as any;
     this.#headAvatar = $('headAvatar');
     this.#heading = $('heading');
     this.#subtitle = $('subtitle');
@@ -216,12 +217,15 @@ class IswcLogin extends ElementBase {
     this.#toast = $('toast');
 
     this.#wire();
+  }
+
+  /** Los atributos que el parser trae puestos se aplican aquí (ElementBase silencia el ACC previo). */
+  override onConnected(): void {
+    upgradeProperties(this, ['accounts', 'sessions']);
     this.#render();
   }
 
-  attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null): void {
-    if (oldValue === newValue) return;
-    if (!this.isConnected) return;
+  override onAttributeChanged(name: string): void {
     this.#render();
     if (name === 'remember') this.#emit('iswc-remember-change', { remember: this.remember });
   }
@@ -363,7 +367,7 @@ class IswcLogin extends ElementBase {
   }
 
   #render(): void {
-    if (!this.shadowRoot) return;
+    if (!this.#heading) return;
     const multi = this.mode === 'multi';
     const busy = this.busy;
     const disabled = this.hasAttribute('disabled');

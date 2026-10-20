@@ -4,7 +4,7 @@
 
 :host {
   --iswc-drawer-size: 380px;
-  --iswc-drawer-spacing: var(--iswc-space-l);
+  --iswc-drawer-spacing: var(--iswc-space-l, 1rem);
   /* modal-chrome.css lee --spacing; sin alias el chrome interno queda sin padding. */
   --spacing: var(--iswc-drawer-spacing);
   --iswc-drawer-backdrop-color: rgba(0, 0, 0, 0.45);

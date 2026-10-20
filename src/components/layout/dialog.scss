@@ -4,7 +4,7 @@
 
 :host {
   --iswc-dialog-width: 500px;
-  --iswc-dialog-spacing: var(--iswc-space-l);
+  --iswc-dialog-spacing: var(--iswc-space-l, 1rem);
   /* modal-chrome.css lee --spacing; sin este alias header/body/footer quedan sin padding. */
   --spacing: var(--iswc-dialog-spacing);
   /* Default backdrop-variant=none: sin oscuridad. basic pisa el color. */

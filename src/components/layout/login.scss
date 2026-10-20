@@ -3,8 +3,8 @@
   --iswc-login-border: var(--iswc-border, var(--iswc-control-border, #d0d5dd));
   --iswc-login-muted: var(--iswc-text-muted, #667085);
   --iswc-login-radius: var(--iswc-radius-l, 14px);
-  --iswc-login-gap: var(--iswc-space-m, 0.85rem);
-  --iswc-login-pad: var(--iswc-space-l, 1.35rem);
+  --iswc-login-gap: var(--iswc-space-m, 0.75rem);
+  --iswc-login-pad: calc(var(--iswc-space-l, 1rem) * 1.35);
   --iswc-login-accent: var(--iswc-accent, var(--iswc-color-brand, #2f6fed));
 
   display: block;
