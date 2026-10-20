@@ -81,24 +81,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-login id=\"loginMulti\" mode=\"multi\" heading=\"Tus cuentas\" subtitle=\"Elige una cuenta o añade otra\" providers=\"[{&quot;id&quot;:&quot;contapyme&quot;,&quot;name&quot;:&quot;ContaPyme&quot;},{&quot;id&quot;:&quot;agrowin&quot;,&quot;name&quot;:&quot;Agrowin&quot;}]\" selected=\"ana\" show-password allow-logout-all></iswc-login>",
-          "controls": [
-            {
-              "control": "boolean",
-              "prop": "attr:busy",
-              "label": "busy"
-            },
-            {
-              "control": "boolean",
-              "prop": "attr:show-sessions",
-              "label": "show-sessions"
-            },
-            {
-              "control": "text",
-              "prop": "attr:error",
-              "label": "error"
-            }
-          ]
+          "html": "<iswc-login id=\"loginMulti\" mode=\"multi\" heading=\"Tus cuentas\" subtitle=\"Elige una cuenta o añade otra\" providers=\"[{&quot;id&quot;:&quot;contapyme&quot;,&quot;name&quot;:&quot;ContaPyme&quot;},{&quot;id&quot;:&quot;agrowin&quot;,&quot;name&quot;:&quot;Agrowin&quot;}]\" selected=\"ana\" show-password allow-logout-all></iswc-login>"
         }
       ]
     }

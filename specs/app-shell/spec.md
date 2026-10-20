@@ -122,6 +122,14 @@ completo (`name`), el subtítulo (`subtitle`, p. ej. el rol) y los items propios
 "Cerrar sesión" emite `iswc-logout {}`. Un item propio emite `iswc-select { item }` (el de
 `<iswc-dropdown>`); el item de salida no se filtra como `iswc-select`.
 
+### S-AP23 Abrir el acceso desde la app
+
+La app abre y cierra la sesión solo con la API pública de `<iswc-session-menu>`, sin entrar en su
+`shadowRoot`: `show()` abre lo que la sesión ofrece en ese momento — sin `logged`, el panel de
+acceso (con el formulario a la vista); con `logged`, el menú de sesión — y `hide()` cierra el que
+esté abierto. El acceso abierto así envía `iswc-login-submit` igual que si lo hubiera abierto el
+usuario.
+
 ### S-AP20 Atributos declarados antes de cargar el kit
 
 Una app puede escribir los atributos en el HTML (`heading`, `error`, `compact`, `logged`, `name`,
@@ -155,6 +163,7 @@ publicado (`dist/cdn`), así que requieren `deno task build` previo.
 
 | Pieza | Contrato congelado | Por qué es contrato |
 |---|---|---|
+| Métodos públicos de `<iswc-session-menu>` | `show()`, `hide()`, `reset()`; propiedades `logged`, `error`, `loading`, `choices` | Las apps abren el acceso sin tocar el `shadowRoot` |
 | Nombres de tag y eventos | `iswc-app-shell`, `iswc-app-nav`, `iswc-login-dropdown`, `iswc-session-menu`; `iswc-brand-home`, `iswc-nav-select`, `iswc-login-submit`, `iswc-logout` | Las apps los consumen por CDN fijado a SHA |
 | Forma de `rows` y `choices` | `{ id, label?, value?, parent?, tabs: [{ id, label, icon?, href?, hidden?, disabled? }] }`, `[{ id, label, icon? }]` | Lo serializan las apps |
 
@@ -166,4 +175,5 @@ publicado (`dist/cdn`), así que requieren `deno task build` previo.
 | S-AP6…S-AP11 | roles, teclado, eventos y nodos de `<iswc-app-nav>` | `tests/componentes/app-shell.test.ts` |
 | S-AP12…S-AP16 | eventos, red y storage de `<iswc-login-dropdown>` | `tests/componentes/app-shell.test.ts` |
 | S-AP17…S-AP19 | estados y eventos de `<iswc-session-menu>` | `tests/componentes/app-shell.test.ts` |
+| S-AP23 | `show()`/`hide()` de `<iswc-session-menu>` abren y cierran el acceso o el menú | `tests/componentes/app-shell.test.ts` |
 | S-AP20…S-AP22 | consola, estado aplicado, padding y color de marca al adoptar el kit por loader | `tests/componentes/app-shell.test.ts` |

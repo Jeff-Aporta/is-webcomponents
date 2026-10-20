@@ -99,7 +99,8 @@ Iconos locales (sin api.iconify.design): ver `app-shell.md` → «Iconos sin dep
 | Método | Qué hace |
 | --- | --- |
 | `reset()` | `reset()` del acceso. |
-| `show()` / `hide()` | Abre/cierra el menú de sesión (con `logged`). |
+| `show()` | Abre lo que la sesión ofrece: sin `logged`, el panel de acceso; con `logged`, el menú de sesión. |
+| `hide()` | Cierra el acceso o el menú, el que esté abierto. |
 
 ### CSS parts
 

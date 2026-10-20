@@ -66,7 +66,7 @@ import type { LoginAccount, LoginSession } from './schemas/login.schemas.js';
  * Parts: panel, header, avatar, heading, subtitle, accounts, form, footer, toast
  */
 
-const HTML_TEMPLATE: string[] = [
+const HTML_TEMPLATE: string = [
   '<div part="panel" class="panel">',
   '  <header part="header" class="header">',
   '    <iswc-avatar part="avatar" class="avatar" id="headAvatar" hidden></iswc-avatar>',

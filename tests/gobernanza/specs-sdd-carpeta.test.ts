@@ -16,16 +16,20 @@ const { test, lista } = coleccionPruebas({ categoria: 'how' });
 test('gobernanza/specs-sdd-carpeta', async () => {
   const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
   const SPECS = join(root, 'specs');
-  const HEALTH = join(root, 'src', 'utils', 'health');
+  const TESTS = join(root, 'tests');
   const failures = [];
   
-  // post-TAREA 3: tests/ → src/utils/health/<sub>/. Buscar el archivo por basename.
+  // Los guardianes viven en tests/<carpeta>/ (antes src/utils/health/<sub>/). Buscar por basename.
   function locateTest(name) {
-    for (const sub of ['meta', 'diagrams', 'domain', 'e2e']) {
-      const p = join(HEALTH, sub, name);
-      if (existsSync(p)) return p;
-    }
-    return null;
+    const buscar = (dir) => {
+      for (const e of readdirSync(dir)) {
+        const p = join(dir, e);
+        if (statSync(p).isDirectory()) { const r = buscar(p); if (r) return r; }
+        else if (e === name) return p;
+      }
+      return null;
+    };
+    return buscar(TESTS);
   }
   
   const OBLIGATORIOS = [
@@ -97,15 +101,15 @@ test('gobernanza/specs-sdd-carpeta', async () => {
     if (!readme.includes(d)) failures.push(`README no enlaza ${d}`);
     const spec = readFileSync(join(SPECS, ...d.split('/')), 'utf8');
     const citados = [
-      ...spec.matchAll(/`tests\/([a-z0-9-]+\.test\.[a-z]+)`/gi),
+      ...spec.matchAll(/`tests\/(?:[a-z0-9-]+\/)*([a-z0-9-]+\.test\.[a-z]+)`/gi),
       ...spec.matchAll(/`src\/utils\/health\/(?:meta|diagrams|domain|e2e)\/([a-z0-9-]+\.test\.[a-z]+)`/gi),
     ].map((m) => m[1]);
     if (citados.length === 0) {
-      failures.push(`${d} no cita ningún src/utils/health/<sub>/*.test.ts`);
+      failures.push(`${d} no cita ningún tests/**/*.test.ts`);
       continue;
     }
     for (const file of citados) {
-      if (!locateTest(file)) failures.push(`${d} cita src/utils/health/<sub>/${file} inexistente`);
+      if (!locateTest(file)) failures.push(`${d} cita ${file} inexistente en tests/`);
     }
   }
   

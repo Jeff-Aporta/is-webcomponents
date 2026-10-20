@@ -29,7 +29,10 @@ test('login: preview JSON declara demo con controls', () => {
   const bloques = (json.sections ?? []).flatMap((s) => s.blocks ?? []);
   const demos = bloques.filter((b) => b.kind === 'demo');
   assert.ok(demos.length >= 1, 'debe haber al menos un bloque demo');
-  assert.ok(demos.every((d) => Array.isArray(d.controls) && d.controls.length > 0), 'cada demo necesita controls');
+  // W22 (galería): un solo playground por página y de primero — el primer demo trae los controls.
+  const conControls = demos.filter((d) => Array.isArray(d.controls) && d.controls.length > 0);
+  assert.equal(conControls.length, 1, 'un solo demo con controls (W22)');
+  assert.equal(conControls[0], demos[0], 'el demo con controls va de primero (W22)');
 });
 
 test('login: la doc tiene las 6 secciones', () => {

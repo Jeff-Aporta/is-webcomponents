@@ -192,9 +192,9 @@ Cada tag es un Custom Element con Shadow DOM. El inventario y rutas de build sal
 
 | Caso | Resultado | Verificación |
 |---|---|---|
-| Manifest coherente | page/script/style existen | `src/utils/testing/meta/manifest-paths.test.ts` |
-| Enums en previews | solo valores válidos | `src/utils/testing/domain/attr-enums.test.ts` |
-| Tokens `--iswc-color-*` | vocabulario estable | `src/utils/testing/domain/token-vocabulary.test.ts` |
-| Botones eventos/color | contrato UI | `src/utils/testing/domain/button-events.test.ts`, `src/utils/testing/domain/button-color-appearance.test.ts` |
-| Escala em en controles | herencia font-size | `src/utils/testing/domain/em-scale-font-inherit.test.ts` |
-| Helpers homogéneos | tab + json + md | `src/utils/testing/meta/helpers-homogeneity.test.ts` |
+| Manifest coherente | page/script/style existen | `tests/gobernanza/manifest-paths.test.ts` |
+| Enums en previews | solo valores válidos | `tests/componentes/attr-enums.test.ts` |
+| Tokens `--iswc-color-*` | vocabulario estable | `tests/componentes/token-vocabulary.test.ts` |
+| Botones eventos/color | contrato UI | `tests/componentes/button-events.test.ts`, `tests/componentes/button-color-appearance.test.ts` |
+| Escala em en controles | herencia font-size | `tests/componentes/em-scale-font-inherit.test.ts` |
+| Helpers homogéneos | tab + json + md | `tests/gobernanza/helpers-homogeneity.test.ts` |

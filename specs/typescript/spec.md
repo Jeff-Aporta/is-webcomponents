@@ -4,9 +4,9 @@ Todo el fuente del kit es TypeScript en modo estricto. Esta spec fija las
 decisiones que se repiten en cada fichero, para que no haya que volver a
 tomarlas componente a componente.
 
-Guardianes: [`src/utils/testing/meta/src-layout.test.ts`](../../src/utils/testing/meta/src-layout.test.ts) ·
-[`src/utils/testing/domain/attr-enums.test.ts`](../../src/utils/testing/domain/attr-enums.test.ts) ·
-[`src/utils/testing/meta/helpers-homogeneity.test.ts`](../../src/utils/testing/meta/helpers-homogeneity.test.ts)
+Guardianes: [`tests/gobernanza/src-layout.test.ts`](../../tests/gobernanza/src-layout.test.ts) ·
+[`tests/componentes/attr-enums.test.ts`](../../tests/componentes/attr-enums.test.ts) ·
+[`tests/gobernanza/helpers-homogeneity.test.ts`](../../tests/gobernanza/helpers-homogeneity.test.ts)
 
 ## Contexto
 
@@ -181,7 +181,7 @@ la plantilla de apps—. Una excepción cuyo archivo ya no existe es un error.
 prohibidas; al publicar, `scripts/build.mjs` reescribe en los `.ts` de `dist/cdn/core/` la ruta
 `../cdn/build/` a `../build/` (el layout publicado).
 
-Guardián: [`src/utils/health/meta/no-reexports.test.ts`](../../src/utils/health/meta/no-reexports.test.ts) (X1-X7).
+Guardián: [`tests/gobernanza/no-reexports.test.ts`](../../tests/gobernanza/no-reexports.test.ts) (X1-X7).
 
 ### Lluvia de casos (2026-10-13)
 

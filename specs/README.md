@@ -20,8 +20,7 @@ Planes fechados de una sesión viven en `docs/superpowers/` (si existen). Al cer
 | Spec | [documentacion.md](documentacion.md) | ¿Cómo se documenta para agentes? |
 | Spec | [testing.md](testing.md) | ¿Qué hace verde el gate? |
 | Spec | [typescript/spec.md](typescript/spec.md) | ¿Cómo se tipa el kit? |
-| Spec | [file-preview/spec.md](file-preview/spec.md) | ¿Cómo se ven/editan archivos por MIME? |
-| Spec | [playground/spec.md](playground/spec.md) | ¿Cómo es el playground único (stage+knobs CDN)? |
+| Spec | [playground.md](../src/components/preview/playground.md) (doc del componente) | ¿Cómo es el playground único (stage+knobs CDN)? |
 | Spec | [diagramas/spec.md](diagramas/spec.md) | ¿Qué gramática comparten los diagramas (rieles, flujo, curvas, general vs restringidos)? |
 | Spec | [herramientas/spec.md](herramientas/spec.md) | ¿Cómo corren las herramientas online (render-lote sin checkout) y qué vigila el inventario de pines (cabeceras `@vendor`)? |
 | Spec | [app-shell/spec.md](app-shell/spec.md) | ¿Qué garantizan el armazón de app, sus pestañas y el acceso/sesión de la barra? |

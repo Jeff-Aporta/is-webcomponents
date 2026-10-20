@@ -73,7 +73,8 @@ denoTest('vendor-perfiles: P1 shared/ y server/ sin dependencias ni globales de 
   for (const f of sinNavegador) {
     const deps = dependenciasDeNavegador(texto(f));
     if (deps.length) malos.push(`${f}: importa ${deps.join(', ')}`);
-    const g = sinComentarios(texto(f)).match(GLOBALES);
+    // El texto de los template literals (p. ej. el <script> que emite render-shell) no es uso del módulo.
+    const g = sinComentarios(texto(f)).replace(/`(?:\\[\s\S]|[^`\\])*`/g, '``').match(GLOBALES);
     if (g) malos.push(`${f}: usa ${g[0]} (global de navegador)`);
   }
   assertEquals(malos, [], `mueve a client/ o quita la dependencia:\n${malos.join('\n')}`);

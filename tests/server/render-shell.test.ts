@@ -1,5 +1,8 @@
 import { assertEquals } from "jsr:@std/assert@1";
 import { renderShell } from "../../src/vendor-distributions/server/render-shell.ts";
+import { coleccionPruebas } from "../../src/vendor-distributions/shared/testing/pruebas.ts";
+
+const { test, lista } = coleccionPruebas({ categoria: "what" });
 
 const SHA = "a".repeat(40);
 const BASE = {
@@ -9,7 +12,7 @@ const BASE = {
   kit: { repo: "Jeff-Aporta/is-webcomponents", sha: SHA },
 };
 
-Deno.test("renderShell: shell básico con loader pineado y tag raíz", async () => {
+test("renderShell: shell básico con loader pineado y tag raíz", async () => {
   const html = await renderShell(BASE);
   assertEquals(html.includes("<title>ERP SQLite</title>"), true);
   assertEquals(html.includes('<meta name="description" content="Administración de bases SQLite">'), true);
@@ -18,13 +21,13 @@ Deno.test("renderShell: shell básico con loader pineado y tag raíz", async () 
   assertEquals(html.includes('data-theme="dark"'), true);
 });
 
-Deno.test("renderShell: escapa título (XSS)", async () => {
+test("renderShell: escapa título (XSS)", async () => {
   const html = await renderShell({ ...BASE, titulo: "<script>alert(1)</script>" });
   assertEquals(html.includes("<script>alert(1)</script>"), false);
   assertEquals(html.includes("&lt;script&gt;"), true);
 });
 
-Deno.test("renderShell: ?s= con resolverMeta ajusta título/og", async () => {
+test("renderShell: ?s= con resolverMeta ajusta título/og", async () => {
   const html = await renderShell(BASE, {
     s: "cliente-42",
     resolverMeta: async (s) => ({ titulo: "Cliente " + s, og: { imagen: "https://x/img.png" } }),
@@ -33,8 +36,10 @@ Deno.test("renderShell: ?s= con resolverMeta ajusta título/og", async () => {
   assertEquals(html.includes('content="https://x/img.png"'), true);
 });
 
-Deno.test("renderShell: sin sha sirve loader del propio origen", async () => {
+test("renderShell: sin sha sirve loader del propio origen", async () => {
   const html = await renderShell({ titulo: "x", prefijo: "erp" });
   assertEquals(html.includes("./dist/cdn/core/loader.min.js"), true);
   assertEquals(html.includes("cdn.jsdelivr.net"), false);
 });
+
+export default lista();

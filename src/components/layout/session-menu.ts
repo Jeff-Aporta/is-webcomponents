@@ -28,7 +28,8 @@ import type { LoginChoice } from './schemas/login-dropdown.schemas.js';
  *   label, heading, modes, remember → se pasan al <iswc-login-dropdown>
  *
  * Propiedades: error, loading, choices → al <iswc-login-dropdown>
- * Métodos: reset() (del login), show() / hide() (menú de sesión)
+ * Métodos: reset() (del login); show() abre lo que la sesión ofrece (sin `logged`, el acceso;
+ *          con `logged`, el menú); hide() cierra cualquiera de los dos
  *
  * Slots
  *   (default)  <iswc-dropdown-item> propios, entre el perfil y "Cerrar sesión"
@@ -80,7 +81,7 @@ class IswcSessionMenu extends ElementBase {
   }
 
   #internals: ElementInternals | null = null;
-  #login!: HTMLElement & { error: string; loading: boolean; choices: LoginChoice[]; reset(): void };
+  #login!: HTMLElement & { error: string; loading: boolean; choices: LoginChoice[]; reset(): void; show(): void; hide(): void };
   #menu!: HTMLElement & { show(): void; hide(): void };
   #logout!: HTMLElement;
   #root!: ShadowRoot;
@@ -91,7 +92,7 @@ class IswcSessionMenu extends ElementBase {
     adoptCss(this.#root, import.meta.url);
     this.#root.appendChild(TEMPLATE.content.cloneNode(true));
     try { this.#internals = this.attachInternals(); } catch { this.#internals = null; }
-    this.#login = this.#root.querySelector('.login') as HTMLElement & { error: string; loading: boolean; choices: LoginChoice[]; reset(): void };
+    this.#login = this.#root.querySelector('.login') as HTMLElement & { error: string; loading: boolean; choices: LoginChoice[]; reset(): void; show(): void; hide(): void };
     this.#menu = this.#root.querySelector('.menu') as HTMLElement & { show(): void; hide(): void };
     this.#logout = this.#root.querySelector('.logout') as HTMLElement;
 
@@ -125,8 +126,16 @@ class IswcSessionMenu extends ElementBase {
   /** Restablece el login (error, carga, opciones, contraseña) y lo cierra. */
   reset(): void { this.#login.reset(); }
 
-  show(): void { if (this.logged) this.#menu.show(); }
-  hide(): void { this.#menu.hide(); }
+  /** Abre lo que la sesión ofrece: sin `logged`, el acceso; con `logged`, el menú. */
+  show(): void {
+    if (this.logged) this.#menu.show();
+    else this.#login.show();
+  }
+  /** Cierra el acceso o el menú, el que esté abierto. */
+  hide(): void {
+    this.#login.hide();
+    this.#menu.hide();
+  }
 
   #render(): void {
     if (!this.#root) return;

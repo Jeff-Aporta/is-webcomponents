@@ -1,4 +1,4 @@
-// app-shell.test.ts — Guardián WHAT de specs/app-shell/spec.md (S-AP1…S-AP22).
+// app-shell.test.ts — Guardián WHAT de specs/app-shell/spec.md (S-AP1…S-AP23).
 //
 // Caja negra: la página carga los bundles publicados (dist/cdn) como lo haría una app
 // por CDN, y cada caso afirma sobre lo observable — geometría, accesibilidad, eventos,
@@ -543,6 +543,34 @@ test('S-AP19: "Cerrar sesión" emite iswc-logout y un item propio emite iswc-sel
     assert.deepEqual(ev.filter((e) => e.type === 'iswc-select').map((e) => e.detail.item), ['#perfil']);
     assert.equal(ev.filter((e) => e.type === 'iswc-logout').length, 1);
     assert.equal(ev.filter((e) => e.type === 'iswc-select' && e.detail.item !== '#perfil').length, 0, 'la salida no se filtra como iswc-select');
+  } finally { await page.close(); }
+});
+
+test('S-AP23: show()/hide() abren y cierran el acceso o el menú sin entrar al shadowRoot', async () => {
+  const page = await abrir();
+  try {
+    const sm = page.locator('#sesion');
+    const usuario = sm.locator('iswc-login #username input');
+    // Sin sesión: show() abre el acceso con el formulario a la vista.
+    await page.evaluate(() => (document.getElementById('sesion') as any).show());
+    await usuario.waitFor({ state: 'visible' });
+    await escribirCredenciales(page, 'ana', 'x');
+    await page.keyboard.press('Enter');
+    const envios = (await eventos(page)).filter((e) => e.type === 'iswc-login-submit');
+    assert.equal(envios.length, 1, 'el acceso abierto por show() envía igual que abierto por el usuario');
+    // hide() lo cierra.
+    await page.evaluate(() => (document.getElementById('sesion') as any).show());
+    await usuario.waitFor({ state: 'visible' });
+    await page.evaluate(() => (document.getElementById('sesion') as any).hide());
+    await usuario.waitFor({ state: 'hidden' });
+    // Con sesión: show() abre el menú; hide() lo cierra.
+    await page.evaluate(() => document.getElementById('sesion')!.setAttribute('logged', ''));
+    const perfil = page.getByText('Mi perfil');
+    assert.equal(await perfil.isVisible(), false, 'el menú arranca cerrado');
+    await page.evaluate(() => (document.getElementById('sesion') as any).show());
+    await perfil.waitFor({ state: 'visible' });
+    await page.evaluate(() => (document.getElementById('sesion') as any).hide());
+    await perfil.waitFor({ state: 'hidden' });
   } finally { await page.close(); }
 });
 

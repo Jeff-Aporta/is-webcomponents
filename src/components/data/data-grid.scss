@@ -558,7 +558,7 @@
   /* El JS pinta el actual con `iswc-current` y/o `aria-current="page"`. */
   &:is(.iswc-current, [aria-current="page"]) {
     background: var(--iswc-grid-accent);
-    color: var(--iswc-color-on-accent);
+    color: var(--iswc-on-brand);
     border-color: var(--iswc-grid-accent);
   }
 

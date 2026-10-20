@@ -53,4 +53,4 @@ test('login-gate: conmuta cortina/protegido por logged', () => {
   assert.ok(ts.includes('this.#protected.hidden = !logged'), 'protegido revelado con logged');
 });
 
-export default lista;
+export default lista();

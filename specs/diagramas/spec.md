@@ -103,14 +103,14 @@ para agentes es el skill `skills/iswc-diagramas-enriquecidos/SKILL.md`.
 
 | Caso | Resultado | Verificación |
 |---|---|---|
-| Sentido del flujo por diagrama | S-D1 | `src/utils/health/diagrams/flow-anim-sentido.test.ts` |
-| Flujo activo por defecto | S-D1 | `src/utils/health/diagrams/flowchart-lanes.test.ts` (A1) |
-| Estilos sobre el mismo recorrido | S-D2 | `src/utils/health/diagrams/rieles-curvos.test.ts` |
-| Miembros como lista, nada fuera | S-D3 | `src/utils/health/diagrams/class-miembros.test.ts` |
-| Refs con null fallan | S-D4 | `src/utils/health/meta/obj.test.ts` |
+| Sentido del flujo por diagrama | S-D1 | `tests/diagramas/flow-anim-sentido.test.ts` |
+| Flujo activo por defecto | S-D1 | `tests/diagramas/flowchart-lanes.test.ts` (A1) |
+| Estilos sobre el mismo recorrido | S-D2 | `tests/diagramas/rieles-curvos.test.ts` |
+| Miembros como lista, nada fuera | S-D3 | `tests/diagramas/class-miembros.test.ts` |
+| Refs con null fallan | S-D4 | `tests/gobernanza/obj.test.ts` |
 | Lab visual de estilos | S-D2 | `labs/rieles-curvos/` (`render.mjs` + `index.html`) |
-| `-(O-` a componentes con interfaz | S-D6 | `src/utils/health/diagrams/flowchart-lanes.test.ts` (K1) |
-| Ningún riel sobre una caja ajena | S-D6 | `src/utils/health/diagrams/flowchart-lanes.test.ts` (X1) |
-| Vector estricto por columnas | S-D5b | `src/utils/health/diagrams/vector-flow.test.ts` |
-| Índices jerárquicos automáticos | S-D6 | `src/utils/health/diagrams/flowchart-indices.test.ts` |
-| Clases resumidas (N más) | S-D6 | `src/utils/health/diagrams/class-miembros.test.ts` (M5) |
+| `-(O-` a componentes con interfaz | S-D6 | `tests/diagramas/flowchart-lanes.test.ts` (K1) |
+| Ningún riel sobre una caja ajena | S-D6 | `tests/diagramas/flowchart-lanes.test.ts` (X1) |
+| Vector estricto por columnas | S-D5b | `tests/diagramas/vector-flow.test.ts` |
+| Índices jerárquicos automáticos | S-D6 | `tests/diagramas/flowchart-indices.test.ts` |
+| Clases resumidas (N más) | S-D6 | `tests/diagramas/class-miembros.test.ts` (M5) |

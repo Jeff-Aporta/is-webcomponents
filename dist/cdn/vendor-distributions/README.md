@@ -15,7 +15,7 @@ vive en exactamente una:
 | Raíz | Qué va | Puede importar | Lo baja |
 | --- | --- | --- | --- |
 | `shared/` | Neutro: sin navegador ni dependencias de UI (`node:*`, `fetch`, `zod`) | solo `shared/` | todos |
-| `server/` | Exclusivo de proyectos server (hoy no existe: todo lo neutro lo usan ambos) | `shared/`, `server/` | perfil `server` |
+| `server/` | Exclusivo de proyectos server (hoy: `render-shell.ts`) | `shared/`, `server/` | perfil `server` |
 | `client/` | Navegador: Playwright/Stagehand, DOM, render visual, íconos de UI | `shared/`, `client/` | perfil `client` |
 
 El consumidor declara `"perfil": "server"` o `"perfil": "client"` en su `vendor.json`; `vendor.ts` BLOQUEA lo
@@ -99,8 +99,12 @@ Bundles para el navegador (no vendor): `dist/cdn/lib/obj.min.js` y `dist/cdn/lib
 
 ## `server/` — exclusivo de proyectos server
 
-Hoy no existe la carpeta (no hay nada exclusivo de server): lo que usa ISS (pruebas, jueces, sync, vendor, obj) también lo usa ISW, así
-que es `shared/`. Aquí va lo que solo un server necesite (BD, colas, Azure Functions…), sin navegador.
+Lo que usa ISS (pruebas, jueces, sync, vendor, obj) también lo usa ISW, así que es `shared/`. Aquí va lo que solo un server
+necesite (BD, colas, Azure Functions…), sin navegador.
+
+| Archivo | Qué hace | Skill |
+|---|---|---|
+| `render-shell.ts` | `renderShell(meta, { s, resolverMeta })`: HTML del SPA de una API (servido en `/`) con el loader del kit pineado, tema antes del primer pintado y SEO/OG por `?s=`; escapa los datos. El `<script>` que emite corre en el navegador del cliente, no en el server | [14-herramientas-de-test.md](https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/skills/iswc-foundation/references/14-herramientas-de-test.md) |
 
 ## `client/` — navegador, e2e y render visual
 

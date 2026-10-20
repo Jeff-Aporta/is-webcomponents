@@ -46,7 +46,7 @@ verdad cargan algo mutable.
 - Si el commit o el push fallan, el sync **falla** con la causa y avisa que el entregable YA quedó copiado.
 - El entregable nunca recibe commits ni push automáticos.
 
-Guardián: [`src/utils/health/meta/sync-entregable.test.ts`](../../src/utils/health/meta/sync-entregable.test.ts) (S7, S8).
+Guardián: [`tests/gobernanza/sync-entregable.test.ts`](../../tests/gobernanza/sync-entregable.test.ts) (S7, S8).
 
 ## HOW
 
@@ -66,9 +66,9 @@ si la base termina en un SHA, en `<root>/.iswc-remoto/`; `render-lote.ts` calcul
 
 | Caso | Resultado | Verificación |
 |---|---|---|
-| Inventario P1-P9 (SHA único, mutables, cabeceras por estilo, exención solo de cabecera) | verde | [`src/utils/health/meta/pin-update.test.ts`](../../src/utils/health/meta/pin-update.test.ts) |
-| Servidor con respaldo remoto R1-R8 | verde | [`src/utils/health/meta/static-server-remoto.test.ts`](../../src/utils/health/meta/static-server-remoto.test.ts) |
-| Lote con caché por hash y render real (L1-L3) | verde | [`src/utils/health/diagrams/render-lote.test.ts`](../../src/utils/health/diagrams/render-lote.test.ts) |
+| Inventario P1-P9 (SHA único, mutables, cabeceras por estilo, exención solo de cabecera) | verde | [`tests/gobernanza/pin-update.test.ts`](../../tests/gobernanza/pin-update.test.ts) |
+| Servidor con respaldo remoto R1-R8 | verde | [`tests/gobernanza/static-server-remoto.test.ts`](../../tests/gobernanza/static-server-remoto.test.ts) |
+| Lote con caché por hash y render real (L1-L3) | verde | [`tests/diagramas/render-lote.test.ts`](../../tests/diagramas/render-lote.test.ts) |
 
 ## Lluvia de casos (2026-10-13)
 

@@ -1,5 +1,5 @@
 {
-  "iswc": { "host": "https://jeff-aporta.github.io/is-webcomponents/", "typecheckBaseline": 4263 },
+  "iswc": { "host": "https://jeff-aporta.github.io/is-webcomponents/", "typecheckBaseline": 2985 },
   "nodeModulesDir": "auto",
   "compilerOptions": { "strict": true },
   "unstable": ["sloppy-imports"],
