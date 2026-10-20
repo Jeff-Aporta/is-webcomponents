@@ -124,6 +124,11 @@ Skill general: [SKILL.md](SKILL.md) · Runtime sin tag: [tools/runtime.md](tools
 | `layout/details.md` | `<iswc-details>` |
 | `layout/dialog.md` | `<iswc-dialog>` |
 | `layout/drawer.md` | `<iswc-drawer>` |
+| `layout/login.md` | `<iswc-login>` |
+| `layout/login-gate.md` | `<iswc-login-gate>` |
+| `layout/login-dropdown.md` | `<iswc-login-dropdown>` |
+| `layout/session-menu.md` | `<iswc-session-menu>` |
+| `layout/app-shell.md` | `<iswc-app-shell>` |
 | `layout/divider.md` | `<iswc-divider>` |
 | `layout/scrollspy.md` | `<iswc-scrollspy>` |
 | `layout/demo.md` | `<iswc-demo>` |
@@ -164,6 +169,7 @@ Skill general: [SKILL.md](SKILL.md) · Runtime sin tag: [tools/runtime.md](tools
 | `navigation/doc-index.md` | `<iswc-doc-index>` |
 | `navigation/breadcrumb-item.md` | `<iswc-breadcrumb-item>` |
 | `navigation/tab-group.md` | `<iswc-tab-group>`, `<iswc-tab>`, `<iswc-tab-panel>` |
+| `navigation/app-nav.md` | `<iswc-app-nav>` |
 | `navigation/scroller.md` | `<iswc-scroller>` |
 | `navigation/carousel.md` | `<iswc-carousel>` |
 | `navigation/carousel-item.md` | `<iswc-carousel-item>` |
