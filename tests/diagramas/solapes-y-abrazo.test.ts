@@ -9,17 +9,15 @@ import { RefObj } from '../../src/vendor-distributions/shared/lib/ref-obj.ts';
 import { computeClassLayout, resolveClassSpec } from '../../src/components/diagrams/utils/class-spec.ts';
 import { computeErLayout, resolveErSpec } from '../../src/components/diagrams/utils/er-spec.ts';
 import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
-import { conFixtureIss } from '../_shared/iss-fixture.ts';
 import { denoTestCon } from '../_shared/deno-test.ts';
 
-const { test: registrar, lista } = coleccionPruebas({ categoria: 'what' });
-// Los casos que leen el fixture del ISS (D:\Dev, fuera del VPS) se saltan si no está.
-const test = conFixtureIss(registrar);
+const { test, lista } = coleccionPruebas({ categoria: 'what' });
 
 const denoTest = denoTestCon(test);
 
 
-const DIR = new URL('../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/', import.meta.url);
+// Datos versionados del kit (proyecto hermético): payloads del lab y fixture del ISS.
+const DIR = new URL('../fixtures/iss-ayudascpia/docs-experimental/diagramas/', import.meta.url);
 type Caja = { x: number; y: number; w: number; h: number };
 const MARGEN = 4;
 const solapan = (a: Caja, b: Caja): boolean => a.x < b.x + b.w - MARGEN && b.x < a.x + a.w - MARGEN && a.y < b.y + b.h - MARGEN && b.y < a.y + a.h - MARGEN;

@@ -22,7 +22,7 @@
               "label": "TProviderClient",
               "kind": "class",
               "class": {
-                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+                "path": "../../../tests/fixtures/iss-ayudascpia/docs-experimental/fuentes/codigo.json",
                 "query": {
                   "clases": {
                     "[name=TProviderClient]": {
@@ -52,7 +52,7 @@
             {
               "id": "api",
               "label": {
-                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
+                "path": "../../../tests/fixtures/iss-ayudascpia/docs-experimental/diagramas/componentes.json",
                 "query": {
                   "payload": {
                     "componentDiagram": {
@@ -67,7 +67,7 @@
               },
               "kind": "component",
               "component": {
-                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
+                "path": "../../../tests/fixtures/iss-ayudascpia/docs-experimental/diagramas/componentes.json",
                 "query": {
                   "payload": {
                     "componentDiagram": {
@@ -89,7 +89,7 @@
                     }
                   },
                   {
-                    "op": "push",
+                    "op": "insert",
                     "valor": {
                       "items": [
                         "GET|PUT /proveedor/{iproveedor}",
@@ -105,7 +105,7 @@
             {
               "id": "ai",
               "label": {
-                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
+                "path": "../../../tests/fixtures/iss-ayudascpia/docs-experimental/diagramas/componentes.json",
                 "query": {
                   "payload": {
                     "componentDiagram": {
@@ -120,7 +120,7 @@
               },
               "kind": "component",
               "component": {
-                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
+                "path": "../../../tests/fixtures/iss-ayudascpia/docs-experimental/diagramas/componentes.json",
                 "query": {
                   "payload": {
                     "componentDiagram": {
@@ -195,7 +195,7 @@
               "label": "TProviderController",
               "kind": "class",
               "class": {
-                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+                "path": "../../../tests/fixtures/iss-ayudascpia/docs-experimental/fuentes/codigo.json",
                 "query": {
                   "clases": {
                     "[name=TProviderController]": {
@@ -217,7 +217,7 @@
               "label": "TSysValueController",
               "kind": "class",
               "class": {
-                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+                "path": "../../../tests/fixtures/iss-ayudascpia/docs-experimental/fuentes/codigo.json",
                 "query": {
                   "clases": {
                     "[name=TSysValueController]": {
@@ -257,7 +257,7 @@
             {
               "id": "tprov",
               "label": {
-                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
+                "path": "../../../tests/fixtures/iss-ayudascpia/docs-experimental/diagramas/der.json",
                 "query": {
                   "payload": {
                     "erDiagram": {
@@ -272,7 +272,7 @@
               },
               "kind": "tableder",
               "table": {
-                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
+                "path": "../../../tests/fixtures/iss-ayudascpia/docs-experimental/diagramas/der.json",
                 "query": {
                   "payload": {
                     "erDiagram": {
@@ -297,7 +297,7 @@
             {
               "id": "tsys",
               "label": {
-                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
+                "path": "../../../tests/fixtures/iss-ayudascpia/docs-experimental/diagramas/der.json",
                 "query": {
                   "payload": {
                     "erDiagram": {
@@ -312,7 +312,7 @@
               },
               "kind": "tableder",
               "table": {
-                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
+                "path": "../../../tests/fixtures/iss-ayudascpia/docs-experimental/diagramas/der.json",
                 "query": {
                   "payload": {
                     "erDiagram": {

@@ -36,7 +36,7 @@
           "from": "C",
           "to": "E",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-bandeja-rutas.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-bandeja-rutas.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -58,7 +58,7 @@
           "from": "E",
           "to": "E",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-bandeja-rutas.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-bandeja-rutas.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -84,7 +84,7 @@
           "from": "E",
           "to": "E",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-bandeja-rutas.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-bandeja-rutas.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -110,7 +110,7 @@
           "from": "E",
           "to": "P",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-bandeja-rutas.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-bandeja-rutas.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -136,7 +136,7 @@
           "from": "E",
           "to": "P",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-bandeja-rutas.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-bandeja-rutas.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -162,7 +162,7 @@
           "from": "E",
           "to": "P",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-bandeja-rutas.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-bandeja-rutas.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -188,7 +188,7 @@
           "from": "E",
           "to": "C",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-bandeja-rutas.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-bandeja-rutas.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -220,7 +220,7 @@
             "m4"
           ],
           "condition": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-bandeja-rutas.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-bandeja-rutas.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -242,7 +242,7 @@
             "m5"
           ],
           "condition": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-bandeja-rutas.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-bandeja-rutas.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -264,7 +264,7 @@
             "m6"
           ],
           "condition": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-bandeja-rutas.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-bandeja-rutas.json",
             "query": {
               "payload": {
                 "vectorFlow": {

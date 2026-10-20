@@ -1,0 +1,413 @@
+{
+  "slug": "der-conversaciones",
+  "module": "020-Conversaciones",
+  "tag": "iswc-er-diagram",
+  "script": "diagrams/er-diagram.min.js",
+  "attrs": {
+    "diagram-style": "insoft"
+  },
+  "payload": {
+    "erDiagram": {
+      "title": "ISS PatyIA · DER del dominio Conversaciones",
+      "direction": "LR",
+      "ratio": 1.6,
+      "groups": [
+        {
+          "id": "g_conv",
+          "name": "Conversaciones",
+          "hue": 190,
+          "palette": "#FFFFBA"
+        },
+        {
+          "id": "g_op",
+          "name": "Operativa",
+          "hue": 190,
+          "parent": "g_conv",
+          "palette": "#7ACFF4"
+        },
+        {
+          "id": "g_log",
+          "name": "Historial",
+          "hue": 190,
+          "parent": "g_conv",
+          "palette": "#7ACFF4"
+        },
+        {
+          "id": "g_ctx",
+          "name": "Contexto",
+          "hue": 190,
+          "external": true,
+          "parent": "g_conv",
+          "palette": "#BFC0C1"
+        }
+      ],
+      "entities": [
+        {
+          "id": "patyia_conversaciones",
+          "name": "patyia_conversaciones",
+          "group": "g_op",
+          "attributes": {
+            "path": "./der.json",
+            "query": {
+              "payload": {
+                "erDiagram": {
+                  "entities": {
+                    "[id=patyia_conversaciones]": {
+                      "attributes": true
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": "patyia_conversacion_log",
+          "name": "patyia_conversacion_log",
+          "group": "g_log",
+          "attributes": {
+            "path": "./der.json",
+            "query": {
+              "payload": {
+                "erDiagram": {
+                  "entities": {
+                    "[id=patyia_conversacion_log]": {
+                      "attributes": true
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": "patyia_tiquetesconversacion",
+          "name": "patyia_tiquetesconversacion",
+          "group": "g_op",
+          "attributes": {
+            "path": "./der.json",
+            "query": {
+              "payload": {
+                "erDiagram": {
+                  "entities": {
+                    "[id=patyia_tiquetesconversacion]": {
+                      "attributes": true
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": "patyia_mensajescalificados",
+          "name": "patyia_mensajescalificados",
+          "group": "g_op",
+          "attributes": {
+            "path": "./der.json",
+            "query": {
+              "payload": {
+                "erDiagram": {
+                  "entities": {
+                    "[id=patyia_mensajescalificados]": {
+                      "attributes": true
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": "patyia_consultas",
+          "name": "patyia_consultas",
+          "group": "g_op",
+          "attributes": {
+            "path": "./der.json",
+            "query": {
+              "payload": {
+                "erDiagram": {
+                  "entities": {
+                    "[id=patyia_consultas]": {
+                      "attributes": true
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": "patyia_errores",
+          "name": "patyia_errores",
+          "group": "g_op",
+          "attributes": {
+            "path": "./der.json",
+            "query": {
+              "payload": {
+                "erDiagram": {
+                  "entities": {
+                    "[id=patyia_errores]": {
+                      "attributes": true
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": "patyia_mcp_sesiones",
+          "name": "patyia_mcp_sesiones",
+          "group": "g_op",
+          "attributes": {
+            "path": "./der.json",
+            "query": {
+              "payload": {
+                "erDiagram": {
+                  "entities": {
+                    "[id=patyia_mcp_sesiones]": {
+                      "attributes": true
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": "patyia_files_storage",
+          "name": "patyia_files_storage",
+          "group": "g_op",
+          "attributes": {
+            "path": "./der.json",
+            "query": {
+              "payload": {
+                "erDiagram": {
+                  "entities": {
+                    "[id=patyia_files_storage]": {
+                      "attributes": true
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": "terceros",
+          "name": "terceros",
+          "group": "g_ctx",
+          "attributes": [
+            {
+              "path": "./der.json",
+              "query": {
+                "payload": {
+                  "erDiagram": {
+                    "entities": {
+                      "[id=terceros]": {
+                        "attributes": {
+                          "[name=itercero]": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "path": "./der.json",
+              "query": {
+                "payload": {
+                  "erDiagram": {
+                    "entities": {
+                      "[id=terceros]": {
+                        "attributes": {
+                          "[name=ntercero]": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "path": "./der.json",
+              "query": {
+                "payload": {
+                  "erDiagram": {
+                    "entities": {
+                      "[id=terceros]": {
+                        "attributes": {
+                          "[name=bactivo]": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "seg_contactosterceros",
+          "name": "seg_contactosterceros",
+          "group": "g_ctx",
+          "attributes": [
+            {
+              "path": "./der.json",
+              "query": {
+                "payload": {
+                  "erDiagram": {
+                    "entities": {
+                      "[id=seg_contactosterceros]": {
+                        "attributes": {
+                          "[name=itercero]": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "path": "./der.json",
+              "query": {
+                "payload": {
+                  "erDiagram": {
+                    "entities": {
+                      "[id=seg_contactosterceros]": {
+                        "attributes": {
+                          "[name=icontacto]": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "path": "./der.json",
+              "query": {
+                "payload": {
+                  "erDiagram": {
+                    "entities": {
+                      "[id=seg_contactosterceros]": {
+                        "attributes": {
+                          "[name=cargo]": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "path": "./der.json",
+              "query": {
+                "payload": {
+                  "erDiagram": {
+                    "entities": {
+                      "[id=seg_contactosterceros]": {
+                        "attributes": {
+                          "[name=bvisible]": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "relations": [
+        {
+          "path": "./der.json",
+          "query": {
+            "payload": {
+              "erDiagram": {
+                "relations": {
+                  "[id=r_conv_log]": true
+                }
+              }
+            }
+          }
+        },
+        {
+          "path": "./der.json",
+          "query": {
+            "payload": {
+              "erDiagram": {
+                "relations": {
+                  "[id=r_conv_tiq]": true
+                }
+              }
+            }
+          }
+        },
+        {
+          "path": "./der.json",
+          "query": {
+            "payload": {
+              "erDiagram": {
+                "relations": {
+                  "[id=r_conv_msg]": true
+                }
+              }
+            }
+          }
+        },
+        {
+          "path": "./der.json",
+          "query": {
+            "payload": {
+              "erDiagram": {
+                "relations": {
+                  "[id=r_conv_qry]": true
+                }
+              }
+            }
+          }
+        },
+        {
+          "path": "./der.json",
+          "query": {
+            "payload": {
+              "erDiagram": {
+                "relations": {
+                  "[id=r_conv_fst]": true
+                }
+              }
+            }
+          }
+        },
+        {
+          "path": "./der.json",
+          "query": {
+            "payload": {
+              "erDiagram": {
+                "relations": {
+                  "[id=r_conv_ter]": true
+                }
+              }
+            }
+          }
+        },
+        {
+          "path": "./der.json",
+          "query": {
+            "payload": {
+              "erDiagram": {
+                "relations": {
+                  "[id=r_conv_cto]": true
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "_fuente": "Subconjunto del DER: columnas y relaciones por referencia a der.json (fuente única). Solo los grupos son propios."
+}

@@ -415,6 +415,6 @@ solo llaman `defineDateField({...})`.
 - [x] NO `Co-authored-by` (no commits).
 - [x] NO `git push`.
 
-**Reporte generado:** `C:\ContaPyme\Personal\apps\iswc-root\.audit\states-audit-iswc.md`
+**Reporte generado:** `<repo>/.audit/states-audit-iswc.md`
 **Componentes auditados:** 22 (17 con setCustomState real + 2 con JSDoc ficticio + 3 wrappers de factory)
 **Issues encontrados:** 7

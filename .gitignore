@@ -85,3 +85,9 @@ scripts/_tmp/
 # Deno es el gestor del kit (deno.json/deno.lock); pnpm quedó de una etapa anterior.
 pnpm-lock.yaml
 pnpm-workspace.yaml
+
+# Secretos locales del E2E (tests/.audit/e2e/env.ts)
+.secrets.json
+
+# HTML anfitrión temporal de api-iswc-diagrams/render-one (se borra al terminar).
+dist/.render-tmp/

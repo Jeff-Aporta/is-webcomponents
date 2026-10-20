@@ -67,7 +67,7 @@ Los dos devuelven `{ evaluado: true, respuestas, juez }` o `{ evaluado: false, m
 
 ## Archivo de llaves (fuera de todo repo)
 
-`C:/ContaPyme/Personal/stagehand-keys.json`:
+`<workspace>/Personal/stagehand-keys.json`:
 
 ```json
 {

@@ -98,7 +98,7 @@ proyecto (sección `vendor` de `shared/schemas.ts`) que es solo BOOTSTRAP:
 ```json
 {
   "repo": "Jeff-Aporta/is-webcomponents",
-  "local": "C:/ContaPyme/Personal/apps/is-webcomponents",
+  "local": "<repo>",
   "perfil": "server",
   "raices": ["src", "tests", "scripts", "skills"],
   "pin": { "raices": ["index.html", "src", "demo", "docs"] },

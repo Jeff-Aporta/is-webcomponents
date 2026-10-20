@@ -10,7 +10,7 @@ Los e2e NO usan `.env` ni `.env.example`. Los secretos se leen de archivos fijos
 
 | Secreto | Ruta fija | Clave |
 | --- | --- | --- |
-| MiniMax (Stagehand act/extract/observe) | `C:\ContaPyme\Personal\secrets.json` | `Values.MINIMAX_API_KEY_50USD` |
+| MiniMax (Stagehand act/extract/observe) | `$ISWC_SECRETS` (o `.secrets.json` en la raíz del repo, ignorado) | `Values.MINIMAX_API_KEY_50USD` |
 
 Base URL / modelo / URL de MiniMax no son secretos: quedan como constantes en
 `lib/env.ts` (modelo `MiniMax-M3`, endpoint `https://api.minimax.io/v1`).
@@ -38,7 +38,7 @@ E2E_TAGS=iswc-button,iswc-code deno test -A --no-check src/utils/testing/e2e/04-
 ```
 
 Requisitos: Deno, `@browserbasehq/stagehand` (import npm en `deno.json`), Chromium de Playwright,
-y `Personal/secrets.json` con `MINIMAX_API_KEY_50USD`.
+y el archivo de secretos (`$ISWC_SECRETS` o `.secrets.json`) con `MINIMAX_API_KEY_50USD`.
 
 ## Reglas al editar la suite
 

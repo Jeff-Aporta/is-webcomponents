@@ -36,7 +36,7 @@
           "from": "C",
           "to": "T",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-traza-turno.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-traza-turno.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -58,7 +58,7 @@
           "from": "T",
           "to": "T",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-traza-turno.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-traza-turno.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -84,7 +84,7 @@
           "from": "T",
           "to": "T",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-traza-turno.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-traza-turno.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -110,7 +110,7 @@
           "from": "T",
           "to": "H",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-traza-turno.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-traza-turno.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -136,7 +136,7 @@
           "from": "T",
           "to": "T",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-traza-turno.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-traza-turno.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -162,7 +162,7 @@
           "from": "T",
           "to": "C",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-traza-turno.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-traza-turno.json",
             "query": {
               "payload": {
                 "vectorFlow": {

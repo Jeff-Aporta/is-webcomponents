@@ -8,11 +8,14 @@
 // Pasos (aborta con exit != 0 si alguno falla tras reintentar):
 //   1. `deno task build` del kit (los labs y el ISS cargan dist/cdn).
 //   2. Sincroniza `labs/iss-ayudascpia-secuencias/payloads/` desde los
-//      editables del ISS (docs-experimental/diagramas), si el ISS existe.
+//      editables del ISS (docs-experimental/diagramas), solo si se pasa ISS_DIR.
 //   3. Corre `render.mjs` de CADA carpeta de `labs/` (descubiertas, no listadas
 //      a mano), con hasta 3 intentos (Chromium a veces no arranca). Un intento
 //      solo cuenta si TODOS los SVG de su `out/` quedaron reescritos.
-//   4. En el ISS: `npm run docs:diagramas` + `npm run docs:publicar`.
+//   4. En el ISS (solo con ISS_DIR): `npm run docs:diagramas` + `npm run docs:publicar`.
+//
+// Hermético: sin ISS_DIR no se toca ninguna carpeta fuera del kit; los labs leen sus payloads y el
+// fixture versionado (tests/fixtures/iss-ayudascpia).
 //
 // Uso:
 //   deno task labs:render            # todo
@@ -25,7 +28,9 @@ import { fileURLToPath } from 'node:url';
 
 const KIT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const LABS = join(KIT, 'labs');
-const ISS = resolve(process.env.ISS_DIR || join(KIT, '..', '..', '..', 'PatyIA', '_experimental', 'ISS-AyudasCPIA'));
+const ISS = process.env.ISS_DIR ? resolve(process.env.ISS_DIR) : null;
+const FIXTURE = join(KIT, 'tests', 'fixtures', 'iss-ayudascpia', 'docs-experimental', 'diagramas');
+const RUTAS_LAB = join(LABS, 'iss-ayudascpia-flujos', 'payloads');
 const sinIss = process.argv.includes('--sin-iss');
 const win = process.platform === 'win32';
 const resumen = [];
@@ -66,9 +71,9 @@ function imprimir() {
 correr('build del kit', 'deno', ['task', 'build'], KIT);
 
 // 2) payloads de secuencias desde el ISS
-const editables = join(ISS, 'docs-experimental', 'diagramas');
+const editables = ISS ? join(ISS, 'docs-experimental', 'diagramas') : null;
 const payloadsSec = join(LABS, 'iss-ayudascpia-secuencias', 'payloads');
-if (existsSync(editables) && existsSync(payloadsSec)) {
+if (editables && existsSync(editables) && existsSync(payloadsSec)) {
   let n = 0;
   // Todos los editables de secuencia del ISS (también los nuevos): el lab
   // renderiza el lote completo, no solo los que ya conocía.
@@ -77,9 +82,10 @@ if (existsSync(editables) && existsSync(payloadsSec)) {
     const spec = JSON.parse(texto);
     if (spec?.tag !== 'iswc-sequence-diagram') continue;
     // La Seq se deriva del vector: sus textos son referencias `./ruta-<slug>.json`, `./componentes.json`…
-    // relativas al editable del ISS. En el lab se reescriben para que resuelvan contra el ISS.
-    const haciaIss = relative(payloadsSec, editables).replaceAll('\\', '/');
-    writeFileSync(join(payloadsSec, f), texto.replaceAll('"path": "./', `"path": "${haciaIss}/`)); n++;
+    // relativas al editable del ISS. En el lab se reescriben hacia lo versionado en el kit: las rutas
+    // a los payloads del lab de flujos y el resto al fixture (nunca a la carpeta del ISS).
+    const hacia = (dir) => relative(payloadsSec, dir).replaceAll('\\', '/');
+    writeFileSync(join(payloadsSec, f), texto.replace(/"path": "\.\/([^"]+)"/g, (_, x) => `"path": "${hacia(x.startsWith('ruta-') ? RUTAS_LAB : FIXTURE)}/${x}"`)); n++;
   }
   resumen.push({ label: `payloads de secuencias sincronizados (${n})`, ok: true, ms: 0, intentos: 1 });
 }
@@ -93,14 +99,14 @@ for (const lab of labs) {
 }
 
 // 4) ISS
-if (!sinIss && existsSync(join(ISS, 'package.json'))) {
+if (!sinIss && ISS && existsSync(join(ISS, 'package.json'))) {
     // Un SVG por editable (docs-experimental/diagramas/*.json); otros archivos
   // de la carpeta de salida no son del lote.
   const slugs = existsSync(editables) ? readdirSync(editables).filter((f) => f.endsWith('.json')).map((f) => f.replace(/\.json$/, '.svg')) : null;
   correr('ISS docs:diagramas', 'npm', ['run', 'docs:diagramas'], ISS, 2, join(ISS, 'docs-experimental', 'gen', 'diagrams', 'iswc', 'svg'), slugs);
   correr('ISS docs:publicar', 'npm', ['run', 'docs:publicar'], ISS);
 } else if (!sinIss) {
-  resumen.push({ label: `ISS no encontrado en ${ISS} (omitido)`, ok: true, ms: 0, intentos: 1 });
+  resumen.push({ label: ISS ? `ISS no encontrado en ${ISS} (omitido)` : 'ISS omitido (sin ISS_DIR)', ok: true, ms: 0, intentos: 1 });
 }
 
 imprimir();

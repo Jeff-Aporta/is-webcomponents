@@ -38,7 +38,7 @@
 //            no se descargó.
 //
 //   Si quieres reproducir el bug original, lanza VS Code Live Server
-//   sobre `C:\ContaPyme\Personal` apuntando a
+//   sobre `<workspace>/Personal` apuntando a
 //   `apps/iswc-root/index.html` y corre este test — el request a
 //   `dist/cdn/preview/doc-demo.min.js` quedará 404 (Live Server no
 //   transpila TS) y el test fallará con un mensaje claro.
@@ -58,7 +58,7 @@ const { test, lista, before, after } = coleccionPruebas({ categoria: 'what' });
 const here = dirname(fileURLToPath(import.meta.url));
 const REPO = join(here, '..', '..');
 // Modo Live Server: la raíz servida es la carpeta padre del repo y la app vive
-// en /<carpeta-del-repo>/ (antes C:\ContaPyme\Personal\apps\iswc-root).
+// en /<carpeta-del-repo>/ (antes <repo>).
 const SERVE_ROOT = process.env.SERVE_ROOT || dirname(REPO);
 const APP_PATH = `/${basename(REPO)}`;
 

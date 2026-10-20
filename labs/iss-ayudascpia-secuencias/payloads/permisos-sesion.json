@@ -36,7 +36,7 @@
           "from": "C",
           "to": "P",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-permisos-sesion.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-permisos-sesion.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -58,7 +58,7 @@
           "from": "P",
           "to": "P",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-permisos-sesion.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-permisos-sesion.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -84,7 +84,7 @@
           "from": "P",
           "to": "P",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-permisos-sesion.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-permisos-sesion.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -110,7 +110,7 @@
           "from": "P",
           "to": "C",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-permisos-sesion.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-permisos-sesion.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -136,7 +136,7 @@
           "from": "P",
           "to": "D",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-permisos-sesion.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-permisos-sesion.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -162,7 +162,7 @@
           "from": "P",
           "to": "D",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-permisos-sesion.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-permisos-sesion.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -188,7 +188,7 @@
           "from": "P",
           "to": "P",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-permisos-sesion.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-permisos-sesion.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -214,7 +214,7 @@
           "from": "P",
           "to": "D",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-permisos-sesion.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-permisos-sesion.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -240,7 +240,7 @@
           "from": "P",
           "to": "D",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-permisos-sesion.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-permisos-sesion.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -266,7 +266,7 @@
           "from": "P",
           "to": "C",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-permisos-sesion.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-permisos-sesion.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -297,7 +297,7 @@
             "m4"
           ],
           "condition": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-permisos-sesion.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-permisos-sesion.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -324,7 +324,7 @@
             "m10"
           ],
           "condition": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-permisos-sesion.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-permisos-sesion.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -346,7 +346,7 @@
             "m8"
           ],
           "condition": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-permisos-sesion.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-permisos-sesion.json",
             "query": {
               "payload": {
                 "vectorFlow": {

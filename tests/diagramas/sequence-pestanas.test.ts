@@ -10,17 +10,15 @@ import { RefObj } from '../../src/vendor-distributions/shared/lib/ref-obj.ts';
 import { computeSequenceLayout, resolveSequenceSpec } from '../../src/components/diagrams/utils/sequence-spec.ts';
 import { pathPoints as parsePathPoints } from '../../src/components/diagrams/utils/diagram-arrow.ts';
 import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
-import { conFixtureIss } from '../_shared/iss-fixture.ts';
 import { denoTestCon } from '../_shared/deno-test.ts';
 
-const { test: registrar, lista } = coleccionPruebas({ categoria: 'what' });
-// Los casos que leen el fixture del ISS (D:\Dev, fuera del VPS) se saltan si no está.
-const test = conFixtureIss(registrar);
+const { test, lista } = coleccionPruebas({ categoria: 'what' });
 
 const denoTest = denoTestCon(test);
 
 
-const DIR = new URL('../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/', import.meta.url);
+// Datos versionados del kit (proyecto hermético): payloads del lab y fixture del ISS.
+const DIR = new URL('../../labs/iss-ayudascpia-secuencias/payloads/', import.meta.url);
 /** Alto de la pestaña y ancho mínimo que ocupa (título + condición); etiqueta de modo a la derecha. */
 const TAB_H = 18;
 const TAB_W_MIN = 60;

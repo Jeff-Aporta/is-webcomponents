@@ -36,7 +36,7 @@
           "from": "I",
           "to": "I",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-operacion-info.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-operacion-info.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -62,7 +62,7 @@
           "from": "I",
           "to": "P",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-operacion-info.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-operacion-info.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -88,7 +88,7 @@
           "from": "I",
           "to": "P",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-operacion-info.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-operacion-info.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -114,7 +114,7 @@
           "from": "I",
           "to": "I",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-operacion-info.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-operacion-info.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -140,7 +140,7 @@
           "from": "I",
           "to": "C",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-operacion-info.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-operacion-info.json",
             "query": {
               "payload": {
                 "vectorFlow": {

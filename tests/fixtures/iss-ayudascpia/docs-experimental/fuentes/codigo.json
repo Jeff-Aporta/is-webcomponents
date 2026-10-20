@@ -1,0 +1,4650 @@
+{
+  "origen": "generado desde src/ por docs-experimental/gen/tools/codigo-a-fuentes.mjs; no editar a mano",
+  "clases": [
+    {
+      "name": "TAuditoriaTercero",
+      "kind": "pojo",
+      "file": "src/sources/010 Objetos/conversationAudit.ts",
+      "extends": "TObject",
+      "doc": "",
+      "pk": [
+        "itercero",
+        "icontacto"
+      ],
+      "attributes": [
+        {
+          "name": "itercero",
+          "type": "string",
+          "doc": ""
+        },
+        {
+          "name": "icontacto",
+          "type": "string",
+          "doc": ""
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "doc": "Nombre visible si el par es el del JWT o el de la sesion; vacio si no se conoce."
+        },
+        {
+          "name": "total_conversaciones",
+          "type": "number",
+          "doc": ""
+        },
+        {
+          "name": "total_mensajes",
+          "type": "number",
+          "doc": ""
+        },
+        {
+          "name": "ultima_actividad",
+          "type": "Date",
+          "doc": "Ultima actividad del par (`null` si no hay)."
+        },
+        {
+          "name": "es_jwt",
+          "type": "boolean",
+          "doc": "El par coincide con el tercero/contacto del JWT de la consulta."
+        },
+        {
+          "name": "es_sesion",
+          "type": "boolean",
+          "doc": "El par coincide con la sesion del que consulta."
+        }
+      ],
+      "methods": [],
+      "uml": {
+        "name": "TAuditoriaTercero",
+        "stereotype": "",
+        "attributes": [
+          "+ itercero: string «PK»",
+          "+ icontacto: string «PK»",
+          "+ name: string",
+          "+ total_conversaciones: number",
+          "+ total_mensajes: number",
+          "+ ultima_actividad: Date",
+          "+ es_jwt: boolean",
+          "+ es_sesion: boolean"
+        ],
+        "methods": []
+      }
+    },
+    {
+      "name": "TBasePatyIAClient",
+      "kind": "client",
+      "file": "src/sources/020 Controllers/client/000 basePatyIA.controller.ts",
+      "extends": "TClienteSistemasClientes<T>",
+      "doc": "`TBasePatyIA<T extends TObject>` - Base comun para todos los controllers client del front-contract PatyIA.",
+      "klass": "TObject",
+      "attributes": [
+        {
+          "name": "primaryKeys",
+          "type": "Array<keyof T>",
+          "doc": "`primaryKeys` - **Implementacion del abstract del stack**."
+        },
+        {
+          "name": "nServer",
+          "type": "ServiciosInSoft",
+          "doc": "`nServer` - El stack valida `isBool(this.nServer)` antes de cualquier request."
+        },
+        {
+          "name": "nEndPoint",
+          "type": "string",
+          "doc": ""
+        },
+        {
+          "name": "nEndPointListado",
+          "type": "string",
+          "doc": ""
+        },
+        {
+          "name": "nEndPointSeleccion",
+          "type": "string",
+          "doc": ""
+        },
+        {
+          "name": "token",
+          "type": "string",
+          "doc": "Token de la instancia (`opts.token`, vacio = anonimo) o, si no se dio, el global de `init()`."
+        },
+        {
+          "name": "authorization",
+          "type": "string",
+          "doc": "`Bearer <token>` del stack; vacio si no hay token (anonimo)."
+        },
+        {
+          "name": "headers",
+          "type": "Record<string, string>",
+          "doc": "Las del stack (`authorization`); un anonimo no manda la cabecera."
+        }
+      ],
+      "methods": [
+        {
+          "name": "init",
+          "params": [
+            {
+              "name": "opts",
+              "type": "{ baseUrl: string; token?: string; timeoutMs?: number }",
+              "optional": false
+            }
+          ],
+          "returns": "void",
+          "static": true,
+          "async": false,
+          "doc": ""
+        },
+        {
+          "name": "pojo",
+          "params": [
+            {
+              "name": "v",
+              "type": "unknown",
+              "optional": true
+            }
+          ],
+          "returns": "T",
+          "static": false,
+          "async": false,
+          "doc": "Instancia del POJO del controller (`klass`) desde un JSON, pasando por sus setters."
+        },
+        {
+          "name": "conEventos",
+          "params": [
+            {
+              "name": "alEvento",
+              "type": "TAlEventoSse",
+              "optional": false
+            }
+          ],
+          "returns": "this",
+          "static": false,
+          "async": false,
+          "doc": "Recibe los eventos SSE de los verbos de este client (p."
+        },
+        {
+          "name": "get",
+          "params": [
+            {
+              "name": "obj",
+              "type": "T | TJSONObject",
+              "optional": false
+            },
+            {
+              "name": "timeOut",
+              "type": "",
+              "optional": true
+            }
+          ],
+          "returns": "Promise<T>",
+          "static": false,
+          "async": true,
+          "doc": ""
+        },
+        {
+          "name": "insert",
+          "params": [
+            {
+              "name": "obj",
+              "type": "T | TJSONObject",
+              "optional": false
+            },
+            {
+              "name": "timeOut",
+              "type": "",
+              "optional": true
+            }
+          ],
+          "returns": "Promise<T>",
+          "static": false,
+          "async": true,
+          "doc": ""
+        },
+        {
+          "name": "update",
+          "params": [
+            {
+              "name": "obj",
+              "type": "T | TJSONObject",
+              "optional": false
+            },
+            {
+              "name": "timeOut",
+              "type": "",
+              "optional": true
+            }
+          ],
+          "returns": "Promise<T>",
+          "static": false,
+          "async": true,
+          "doc": ""
+        },
+        {
+          "name": "delete",
+          "params": [
+            {
+              "name": "obj",
+              "type": "T | TJSONObject",
+              "optional": false
+            },
+            {
+              "name": "timeOut",
+              "type": "",
+              "optional": true
+            }
+          ],
+          "returns": "Promise<T>",
+          "static": false,
+          "async": true,
+          "doc": "El `delete` del stack sin su defecto (ispgen `TControllerClient.delete`: tras una respuesta exitosa carga la fila y lanza igual, sin retornar)."
+        },
+        {
+          "name": "insertBatch",
+          "params": [
+            {
+              "name": "objs",
+              "type": "Array<T | TJSONObject>",
+              "optional": false
+            },
+            {
+              "name": "timeOut",
+              "type": "",
+              "optional": true
+            }
+          ],
+          "returns": "Promise<TBatchResult>",
+          "static": false,
+          "async": true,
+          "doc": "`POST <nEndPointListado>` con `[fila, ...]`."
+        },
+        {
+          "name": "updateBatch",
+          "params": [
+            {
+              "name": "objs",
+              "type": "Array<T | TJSONObject>",
+              "optional": false
+            },
+            {
+              "name": "timeOut",
+              "type": "",
+              "optional": true
+            }
+          ],
+          "returns": "Promise<TBatchResult>",
+          "static": false,
+          "async": true,
+          "doc": "`PUT <nEndPointListado>` con `[fila, ...]`."
+        },
+        {
+          "name": "deleteBatch",
+          "params": [
+            {
+              "name": "objs",
+              "type": "Array<T | TJSONObject>",
+              "optional": false
+            },
+            {
+              "name": "timeOut",
+              "type": "",
+              "optional": true
+            }
+          ],
+          "returns": "Promise<TBatchResult>",
+          "static": false,
+          "async": true,
+          "doc": "`DELETE <nEndPointListado>` con `[{pk}, ...]`."
+        },
+        {
+          "name": "listSimple",
+          "params": [
+            {
+              "name": "timeOut",
+              "type": "",
+              "optional": true
+            }
+          ],
+          "returns": "Promise<TListaPaginacion<T>>",
+          "static": false,
+          "async": true,
+          "doc": "`GET <nEndPointListado>` sin filtro (el `listSimple()` del server): la pagina por defecto del recurso."
+        },
+        {
+          "name": "verify",
+          "params": [
+            {
+              "name": "Obj",
+              "type": "T",
+              "optional": true
+            },
+            {
+              "name": "timeOut",
+              "type": "number",
+              "optional": true
+            }
+          ],
+          "returns": "Promise<TMensajesVerificacion>",
+          "static": false,
+          "async": true,
+          "doc": "`verify()` del stack exige PKs declaradas; un recurso sin llave (info, catalogo de la consola) solo exige el servidor."
+        },
+        {
+          "name": "pathVariables",
+          "params": [
+            {
+              "name": "endPoint",
+              "type": "string",
+              "optional": false
+            },
+            {
+              "name": "Obj",
+              "type": "T",
+              "optional": false
+            },
+            {
+              "name": "bSoloPlaceholder",
+              "type": "",
+              "optional": true
+            }
+          ],
+          "returns": "string",
+          "static": false,
+          "async": false,
+          "doc": "Ruta del verbo: la del stack (placeholders `:pk` y PKs al final) sin la `/` final que el stack agrega cuando no quedan PKs por anexar (sin llave, o con todas en placeholders: `/api/conversacion/:iconversacion/logs`)."
+        },
+        {
+          "name": "parseResponse",
+          "params": [
+            {
+              "name": "args",
+              "type": "[method: \"GET\" | \"POST\" | \"PUT\" | \"DELETE\", path: string, body?: unknown, timeoutMs?: number]",
+              "optional": false
+            },
+            {
+              "name": "schema",
+              "type": "S",
+              "optional": false
+            }
+          ],
+          "returns": "Promise<z.output<S>>",
+          "static": false,
+          "async": true,
+          "doc": "`parseResponse(args, schema)` - peticion de un endpoint que no es un verbo, por el mismo `request` (el SSE del turno ya llega como sobre) y `verifyResponse` (fallo tipado)."
+        }
+      ],
+      "uml": {
+        "name": "TBasePatyIAClient",
+        "stereotype": "",
+        "attributes": [
+          "+ primaryKeys: Array<keyof T>",
+          "+ nServer: ServiciosInSoft",
+          "+ nEndPoint: string",
+          "+ nEndPointListado: string",
+          "+ nEndPointSeleccion: string",
+          "+ token: string",
+          "+ authorization: string",
+          "+ headers: Record<string, string>"
+        ],
+        "methods": [
+          "+ init(opts): void «static»",
+          "+ pojo(v?): T",
+          "+ conEventos(alEvento): this",
+          "+ get(obj, timeOut?): T",
+          "+ insert(obj, timeOut?): T",
+          "+ update(obj, timeOut?): T",
+          "+ delete(obj, timeOut?): T",
+          "+ insertBatch(objs, timeOut?): TBatchResult",
+          "+ updateBatch(objs, timeOut?): TBatchResult",
+          "+ deleteBatch(objs, timeOut?): TBatchResult",
+          "+ listSimple(timeOut?): TListaPaginacion<T>",
+          "+ verify(Obj?, timeOut?): TMensajesVerificacion",
+          "+ pathVariables(endPoint, Obj, bSoloPlaceholder?): string",
+          "+ parseResponse(args, schema): z.output<S>"
+        ]
+      }
+    },
+    {
+      "name": "TBasePatyIAServer",
+      "kind": "controller",
+      "file": "src/sources/020 Controllers/server/000 basePatyIA.controller.ts",
+      "extends": "TCatalogoClientesISController<T>",
+      "doc": "",
+      "methods": [
+        {
+          "name": "peticionSistema",
+          "params": [],
+          "returns": "TPeticionSistema",
+          "static": true,
+          "async": false,
+          "doc": "Argumentos de un controller sin peticion HTTP (timers, boot, capturas, patches, registro de rutas): `new TXController(...TBasePatyIA.peticionSistema())`."
+        },
+        {
+          "name": "sinSesion",
+          "params": [],
+          "returns": "this",
+          "static": false,
+          "async": false,
+          "doc": "Timers, boot y capturas internas: sin JWT ni SEG (equivale al `ignoreAuth = true` del ISP)."
+        },
+        {
+          "name": "pojo",
+          "params": [
+            {
+              "name": "v",
+              "type": "unknown",
+              "optional": true
+            }
+          ],
+          "returns": "T",
+          "static": false,
+          "async": false,
+          "doc": "Instancia del POJO del controller (`klass`) desde un JSON, pasando por sus setters."
+        },
+        {
+          "name": "verifyToken",
+          "params": [
+            {
+              "name": "token",
+              "type": "string",
+              "optional": true
+            }
+          ],
+          "returns": "string",
+          "static": false,
+          "async": false,
+          "doc": ""
+        },
+        {
+          "name": "verifyAuthorization",
+          "params": [
+            {
+              "name": "token",
+              "type": "string",
+              "optional": true
+            }
+          ],
+          "returns": "Promise<TJWTServer>",
+          "static": false,
+          "async": true,
+          "doc": "JWT de PatyIA (HS384, secreto quemado `JWT_SECRET`) -> sesion del stack."
+        },
+        {
+          "name": "entorno",
+          "params": [
+            {
+              "name": "env",
+              "type": "Record<string, string | undefined>",
+              "optional": true
+            }
+          ],
+          "returns": "TEntornoDespliegue",
+          "static": true,
+          "async": false,
+          "doc": "Entorno de despliegue: slot `staging` -> \"staging\"; otro slot con nombre -> \"prod\"; sin slot, BD en localhost/127.0.0.1 -> \"local\" y cualquier otra -> \"prod\"."
+        },
+        {
+          "name": "exigirUrlPublica",
+          "params": [
+            {
+              "name": "url",
+              "type": "string",
+              "optional": false
+            },
+            {
+              "name": "campo",
+              "type": "",
+              "optional": true
+            }
+          ],
+          "returns": "URL",
+          "static": true,
+          "async": false,
+          "doc": "URL http(s) publica o 400 (`<campo>` / `<campo> (host privado)`), ANTES de descargar."
+        },
+        {
+          "name": "accionRecurso",
+          "params": [
+            {
+              "name": "iaccion",
+              "type": "string",
+              "optional": false
+            }
+          ],
+          "returns": "Promise<TAccionRol>",
+          "static": false,
+          "async": true,
+          "doc": "`iaccion` es una accion del verbo (`Visualizar/Crear/Modificar/Eliminar/Listar`, o `Ruta` desde la puerta) o una capacidad (`METHOD:/ruta` que el codigo consulta por nombre)."
+        },
+        {
+          "name": "autorizarRuta",
+          "params": [],
+          "returns": "Promise<void>",
+          "static": false,
+          "async": true,
+          "doc": "Puerta SEG de la ruta en curso, antes del handler."
+        },
+        {
+          "name": "segDatosWhere",
+          "params": [
+            {
+              "name": "alias",
+              "type": "",
+              "optional": true
+            },
+            {
+              "name": "iaccion",
+              "type": "TDActionSegDatos",
+              "optional": true
+            }
+          ],
+          "returns": "Promise<string>",
+          "static": false,
+          "async": true,
+          "doc": ""
+        },
+        {
+          "name": "filtroListaWhere",
+          "params": [
+            {
+              "name": "alias",
+              "type": "string",
+              "optional": false
+            },
+            {
+              "name": "filtro",
+              "type": "Record<string, unknown>",
+              "optional": true
+            }
+          ],
+          "returns": "Promise<string>",
+          "static": false,
+          "async": true,
+          "doc": "`filtro.<columna> = valor` para columnas reales de la tabla; `idnfiltro`/`sql` los resuelve el stack o el controller."
+        },
+        {
+          "name": "filtroValido",
+          "params": [
+            {
+              "name": "crudo",
+              "type": "unknown",
+              "optional": false
+            }
+          ],
+          "returns": "TFiltroLista",
+          "static": false,
+          "async": false,
+          "doc": "`TFiltroLista` validado: una forma invalida es 400 nombrando las claves."
+        },
+        {
+          "name": "filtroLista",
+          "params": [
+            {
+              "name": "filtroB64",
+              "type": "string",
+              "optional": false
+            }
+          ],
+          "returns": "TFiltroLista",
+          "static": false,
+          "async": false,
+          "doc": "`TFiltroLista` desde el segmento base64url de una ruta de listado."
+        },
+        {
+          "name": "list",
+          "params": [
+            {
+              "name": "JBody",
+              "type": "Parameters<TCatalogoClientesISController<T>[\"list\"]>[0]",
+              "optional": false
+            }
+          ],
+          "returns": "ReturnType<TCatalogoClientesISController<T>[\"list\"]>",
+          "static": false,
+          "async": true,
+          "doc": "El `list` del stack, con el filtro validado antes (el registro del stack lo decodifica sin validar)."
+        },
+        {
+          "name": "listSimple",
+          "params": [],
+          "returns": "Promise<unknown>",
+          "static": false,
+          "async": true,
+          "doc": "`Visualizar` del plural (`GET <nrecursos>`, sin `/{filtro}`): la lista por defecto, el `list` del stack sin filtro."
+        },
+        {
+          "name": "visualizar",
+          "params": [
+            {
+              "name": "llave",
+              "type": "TObject",
+              "optional": false
+            }
+          ],
+          "returns": "Promise<unknown>",
+          "static": false,
+          "async": true,
+          "doc": "`Visualizar` del singular (`GET <nrecurso>/{pks}`): el `get` del controller (el del stack o el que lo redefine con el contrato del portal) sobre la llave de la ruta, recargada como POJO de esta entidad."
+        },
+        {
+          "name": "filaCrudaPorPk",
+          "params": [
+            {
+              "name": "llave",
+              "type": "TJSONObject",
+              "optional": false
+            }
+          ],
+          "returns": "Promise<TJSONObject | null>",
+          "static": false,
+          "async": true,
+          "doc": "Fila CRUDA por su PK completa (sin setters del POJO), o `null` si no existe."
+        },
+        {
+          "name": "filasCrudas",
+          "params": [],
+          "returns": "Promise<TJSONObject[]>",
+          "static": false,
+          "async": true,
+          "doc": "Todas las filas de la tabla tal como estan en la BD (sin pasar por los getters del POJO): para alinear datos que el schema vigente ya no admite."
+        },
+        {
+          "name": "contarFilas",
+          "params": [],
+          "returns": "Promise<number>",
+          "static": false,
+          "async": true,
+          "doc": "Cuantas filas tiene la tabla del controller, sin traerlas (solo lectura)."
+        },
+        {
+          "name": "upsert",
+          "params": [
+            {
+              "name": "pojo",
+              "type": "T",
+              "optional": false
+            }
+          ],
+          "returns": "Promise<T>",
+          "static": false,
+          "async": true,
+          "doc": ""
+        },
+        {
+          "name": "insertBatch",
+          "params": [
+            {
+              "name": "objs",
+              "type": "Array<T | TJSONObject>",
+              "optional": false
+            }
+          ],
+          "returns": "Promise<TBatchResult>",
+          "static": false,
+          "async": true,
+          "doc": ""
+        },
+        {
+          "name": "updateBatch",
+          "params": [
+            {
+              "name": "objs",
+              "type": "Array<T | TJSONObject>",
+              "optional": false
+            }
+          ],
+          "returns": "Promise<TBatchResult>",
+          "static": false,
+          "async": true,
+          "doc": ""
+        },
+        {
+          "name": "deleteBatch",
+          "params": [
+            {
+              "name": "objs",
+              "type": "Array<T | TJSONObject>",
+              "optional": false
+            }
+          ],
+          "returns": "Promise<TBatchResult>",
+          "static": false,
+          "async": true,
+          "doc": ""
+        },
+        {
+          "name": "rowsByCriteria",
+          "params": [
+            {
+              "name": "criterio",
+              "type": "TCriterioSql",
+              "optional": false
+            }
+          ],
+          "returns": "Promise<T[]>",
+          "static": false,
+          "async": true,
+          "doc": "Filas completas por criterio SQL (los POJOs coercionan: un lote necesita la fila entera)."
+        }
+      ],
+      "uml": {
+        "name": "TBasePatyIAServer",
+        "stereotype": "",
+        "attributes": [],
+        "methods": [
+          "+ peticionSistema(): TPeticionSistema «static»",
+          "+ sinSesion(): this",
+          "+ pojo(v?): T",
+          "+ verifyToken(token?): string",
+          "+ verifyAuthorization(token?): TJWTServer",
+          "+ entorno(env?): TEntornoDespliegue «static»",
+          "+ exigirUrlPublica(url, campo?): URL «static»",
+          "+ accionRecurso(iaccion): TAccionRol",
+          "+ autorizarRuta(): void",
+          "+ segDatosWhere(alias?, iaccion?): string",
+          "+ filtroListaWhere(alias, filtro?): string",
+          "+ filtroValido(crudo): TFiltroLista",
+          "+ filtroLista(filtroB64): TFiltroLista",
+          "+ list(JBody): ReturnType<TCatalogoClientesISController<T>[\"list\"]>",
+          "+ listSimple(): unknown",
+          "+ visualizar(llave): unknown",
+          "+ filaCrudaPorPk(llave): TJSONObject | null",
+          "+ filasCrudas(): TJSONObject[]",
+          "+ contarFilas(): number",
+          "+ upsert(pojo): T",
+          "+ insertBatch(objs): TBatchResult",
+          "+ updateBatch(objs): TBatchResult",
+          "+ deleteBatch(objs): TBatchResult",
+          "+ rowsByCriteria(criterio): T[]"
+        ]
+      }
+    },
+    {
+      "name": "TCdnController",
+      "kind": "controller",
+      "file": "src/sources/020 Controllers/server/cdn.controller.ts",
+      "extends": "TBasePatyIAServer<TCdnObject>",
+      "doc": "Controller del area `cdn` (endpoint `GET /cdn/{file}`).",
+      "nTbl": "",
+      "klass": "TCdnObject",
+      "methods": [
+        {
+          "name": "file",
+          "params": [
+            {
+              "name": "pathParams",
+              "type": "Record<string, unknown> | null | undefined",
+              "optional": false
+            }
+          ],
+          "returns": "Promise<{ status?: number; statuscode?: number; responsetype?: string; headers: Record<string, string>; body: string | { error: string; mensaje: string }; }>",
+          "static": false,
+          "async": true,
+          "doc": "Handler de `GET /api/cdn/{file}` (api.ts:365-369, exception:'cdn')."
+        },
+        {
+          "name": "conDocDelEntorno",
+          "params": [
+            {
+              "name": "frontTs",
+              "type": "string",
+              "optional": false
+            },
+            {
+              "name": "entorno",
+              "type": "TEntornoDespliegue",
+              "optional": true
+            }
+          ],
+          "returns": "string",
+          "static": true,
+          "async": false,
+          "doc": "`front.ts` con su linea 2 (`// Doc: ...`) apuntando al ISS del entorno; el resto queda intacto."
+        }
+      ],
+      "uml": {
+        "name": "TCdnController",
+        "stereotype": "",
+        "attributes": [],
+        "methods": [
+          "+ file(pathParams): {…}",
+          "+ conDocDelEntorno(frontTs, entorno?): string «static»"
+        ]
+      }
+    },
+    {
+      "name": "TCdnObject",
+      "kind": "pojo",
+      "file": "src/sources/010 Objetos/cdn.ts",
+      "extends": "TObject",
+      "doc": "`TCdnObject` - POJO minimal del area `cdn`.",
+      "attributes": [
+        {
+          "name": "file",
+          "type": "string",
+          "doc": ""
+        }
+      ],
+      "methods": [],
+      "uml": {
+        "name": "TCdnObject",
+        "stereotype": "",
+        "attributes": [
+          "+ file: string"
+        ],
+        "methods": []
+      }
+    },
+    {
+      "name": "TConsulta",
+      "kind": "pojo",
+      "file": "src/sources/010 Objetos/consulta.ts",
+      "extends": "TObject",
+      "doc": "Fila de `patyia_consultas`.",
+      "pk": [
+        "iconsulta"
+      ],
+      "attributes": [
+        {
+          "name": "iconsulta",
+          "type": "string",
+          "doc": ""
+        },
+        {
+          "name": "iconversacion",
+          "type": "string",
+          "doc": "La conversacion, como texto (la columna es varchar)."
+        },
+        {
+          "name": "consulta",
+          "type": "string",
+          "doc": ""
+        },
+        {
+          "name": "itdconsulta",
+          "type": "string",
+          "doc": ""
+        }
+      ],
+      "methods": [],
+      "uml": {
+        "name": "TConsulta",
+        "stereotype": "patyia_consultas",
+        "attributes": [
+          "+ iconsulta: string «PK»",
+          "+ iconversacion: string",
+          "+ consulta: string",
+          "+ itdconsulta: string"
+        ],
+        "methods": []
+      }
+    },
+    {
+      "name": "TConsultaController",
+      "kind": "controller",
+      "file": "src/sources/020 Controllers/server/consulta.controller.ts",
+      "extends": "TBasePatyIAServer<TConsulta>",
+      "doc": "",
+      "nTbl": "patyia_consultas",
+      "klass": "TConsulta",
+      "methods": [
+        {
+          "name": "nuevaLlave",
+          "params": [],
+          "returns": "string",
+          "static": true,
+          "async": false,
+          "doc": "Llave nueva: epoch en base 36 + sufijo aleatorio de 4 (cabe en varchar(32) y ordena cronologicamente)."
+        },
+        {
+          "name": "reemplazarDeConversacion",
+          "params": [
+            {
+              "name": "iconversacion",
+              "type": "number | string",
+              "optional": false
+            },
+            {
+              "name": "filas",
+              "type": "TConsultaFila[]",
+              "optional": false
+            }
+          ],
+          "returns": "Promise<{ borradas: number; registradas: number; descartadas: number }>",
+          "static": false,
+          "async": true,
+          "doc": "Las consultas de `iconversacion` pasan a ser `filas` (cada una de esa conversacion), en una sola transaccion: si algo falla, quedan las de antes."
+        },
+        {
+          "name": "purgar",
+          "params": [
+            {
+              "name": "simular",
+              "type": "boolean",
+              "optional": false
+            },
+            {
+              "name": "opts",
+              "type": "{ limite?: number; soloConversaciones?: readonly (string | number)[] }",
+              "optional": true
+            }
+          ],
+          "returns": "Promise<TResumenPurgaConsultas>",
+          "static": false,
+          "async": true,
+          "doc": "Purga (TK 1457955, decision de Jeff 2026-10-14) de lo que dejo el registro por turno: las consultas de una conversacion que ya no existe (huerfanas) y las repetidas dentro de una misma conversacion (misma consulta, mayus"
+        },
+        {
+          "name": "limpiezaAutomatica",
+          "params": [
+            {
+              "name": "origen",
+              "type": "\"arranque\" | \"timer\"",
+              "optional": false
+            },
+            {
+              "name": "soloConversaciones",
+              "type": "readonly (string | number)[]",
+              "optional": true
+            }
+          ],
+          "returns": "Promise<TResumenPurgaConsultas | null>",
+          "static": false,
+          "async": true,
+          "doc": "Limpieza automatica de consultas huerfanas y repetidas (Jeff 2026-10-14, W-DAT-16): la corren el arranque del host (en segundo plano, sin bloquearlo) y el timer de purgas."
+        }
+      ],
+      "uml": {
+        "name": "TConsultaController",
+        "stereotype": "",
+        "attributes": [
+          "- nTbl = patyia_consultas"
+        ],
+        "methods": [
+          "+ nuevaLlave(): string «static»",
+          "+ reemplazarDeConversacion(iconversacion, filas): {…}",
+          "+ purgar(simular, opts?): TResumenPurgaConsultas",
+          "+ limpiezaAutomatica(origen, soloConversaciones?): TResumenPurgaConsultas | null"
+        ]
+      }
+    },
+    {
+      "name": "TConversacion",
+      "kind": "pojo",
+      "file": "src/sources/010 Objetos/conversation.ts",
+      "extends": "TObject",
+      "doc": "POJO `TConversacion` para `patyia_conversaciones`.",
+      "pk": [
+        "iconversacion"
+      ],
+      "attributes": [
+        {
+          "name": "iconversacion",
+          "type": "string",
+          "doc": "PK bigint (spec 10:583)."
+        },
+        {
+          "name": "itercero",
+          "type": "string",
+          "doc": "Tenant varchar(50) (spec 10:584)."
+        },
+        {
+          "name": "icontacto",
+          "type": "string",
+          "doc": "Dueno bigint (spec 10:585)."
+        },
+        {
+          "name": "hilo",
+          "type": "string",
+          "doc": "Hilo varchar(100) (spec 10:586)."
+        },
+        {
+          "name": "titulo",
+          "type": "string",
+          "doc": "Titulo varchar(100) (spec 10:587)."
+        },
+        {
+          "name": "fhcre",
+          "type": "Date",
+          "doc": "fhcre timestamp sin tz (spec 10:588)."
+        },
+        {
+          "name": "imodulo",
+          "type": "string",
+          "doc": "Modulo clasificador varchar(100) (spec 10:589)."
+        },
+        {
+          "name": "qmensajes",
+          "type": "number",
+          "doc": "Contador de mensajes smallint (spec 10:590)."
+        },
+        {
+          "name": "qtokens",
+          "type": "number",
+          "doc": "Tokens acumulados integer (spec 10:591)."
+        },
+        {
+          "name": "prompt",
+          "type": "string",
+          "doc": "Prompt text (spec 10:592)."
+        },
+        {
+          "name": "itdestado",
+          "type": "number",
+          "doc": "Estado smallint (spec 10:593)."
+        },
+        {
+          "name": "fhultact",
+          "type": "Date",
+          "doc": "fhultact timestamp sin tz (spec 10:594)."
+        },
+        {
+          "name": "bautoriza_visualizacion",
+          "type": "boolean",
+          "doc": "Habilita lectura a terceros del mismo tercero (spec 10:595, R-CHAT-08)."
+        },
+        {
+          "name": "mensajescalificados",
+          "type": "TArray<TQualifiedMessage>",
+          "doc": "Mensajes calificados de la conversacion (`patyia_mensajescalificados`), cuando el JData los pide."
+        },
+        {
+          "name": "mensajesopenai",
+          "type": "TJSONObject[]",
+          "doc": "Proyeccion de la bitacora (`autor`, `mensaje`, `imensaje`, `fecha_hora`, `butil`; con `meta` solo en `/logs`): la compone el detalle."
+        },
+        {
+          "name": "tiquetes",
+          "type": "TArray<TConversationTicket>",
+          "doc": "Tiquetes de la conversacion (`patyia_tiquetesconversacion`), cuando el JData los pide."
+        }
+      ],
+      "methods": [],
+      "uml": {
+        "name": "TConversacion",
+        "stereotype": "patyia_conversaciones",
+        "attributes": [
+          "+ iconversacion: string «PK»",
+          "+ itercero: string",
+          "+ icontacto: string",
+          "+ hilo: string",
+          "+ titulo: string",
+          "+ fhcre: Date",
+          "+ imodulo: string",
+          "+ qmensajes: number",
+          "+ qtokens: number",
+          "+ prompt: string",
+          "+ itdestado: number",
+          "+ fhultact: Date",
+          "+ bautoriza_visualizacion: boolean",
+          "+ mensajescalificados: TArray<TQualifiedMessage>",
+          "+ mensajesopenai: TJSONObject[]",
+          "+ tiquetes: TArray<TConversationTicket>"
+        ],
+        "methods": []
+      }
+    },
+    {
+      "name": "TConversacionController",
+      "kind": "controller",
+      "file": "src/sources/020 Controllers/server/conversationChat.controller.ts",
+      "extends": "TBasePatyIAServer<TConversacion>",
+      "doc": "Controller de `patyia_conversaciones` (area `conversation`).",
+      "nTbl": "patyia_conversaciones",
+      "klass": "TConversacion",
+      "detalles": [
+        {
+          "controller": "TQualifiedMessageController",
+          "arreglo": "MENSAJESCALIFICADOS",
+          "clave": "iconversacion"
+        },
+        {
+          "controller": "TConversationTicketController",
+          "arreglo": "TIQUETES",
+          "clave": "iconversacion"
+        }
+      ],
+      "methods": [
+        {
+          "name": "insertPortal",
+          "params": [
+            {
+              "name": "body",
+              "type": "unknown",
+              "optional": false
+            },
+            {
+              "name": "emit",
+              "type": "(evento: \"begin\" | \"message\" | \"end\" | \"process\" | \"log\", payload: Record<string, unknown>) => void",
+              "optional": true
+            }
+          ],
+          "returns": "Promise<Record<string, unknown>>",
+          "static": false,
+          "async": true,
+          "doc": "Handler de `POST /conversacion` (SSE)."
+        },
+        {
+          "name": "extraerConsultasAlCierre",
+          "params": [
+            {
+              "name": "iconversacion",
+              "type": "number",
+              "optional": false
+            }
+          ],
+          "returns": "Promise<{ estado: \"registrada\" | \"ya-tomada\" | \"pendiente\"; registradas: number }>",
+          "static": false,
+          "async": true,
+          "doc": "Extrae, UNA sola vez, las consultas de una conversacion CERRADA con todo lo que escribio el usuario y las registra (`reemplazarDeConversacion`: si hubiera filas viejas del registro por turno, quedan reemplazadas)."
+        },
+        {
+          "name": "visualizar",
+          "params": [
+            {
+              "name": "llave",
+              "type": "TObject",
+              "optional": false
+            }
+          ],
+          "returns": "Promise<Record<string, unknown>>",
+          "static": false,
+          "async": true,
+          "doc": "Handler de `GET /conversacion/{iconversacion}` (R-CHAT-07/R-CHAT-08)."
+        },
+        {
+          "name": "leerCfg",
+          "params": [
+            {
+              "name": "_convo",
+              "type": "TConversacion",
+              "optional": false
+            }
+          ],
+          "returns": "Promise<unknown>",
+          "static": false,
+          "async": true,
+          "doc": "`CFG` de conversaciones: fila `conversacion` de sys_values."
+        },
+        {
+          "name": "escribirCfg",
+          "params": [
+            {
+              "name": "_convo",
+              "type": "TConversacion",
+              "optional": false
+            },
+            {
+              "name": "body",
+              "type": "unknown",
+              "optional": false
+            }
+          ],
+          "returns": "Promise<unknown>",
+          "static": false,
+          "async": true,
+          "doc": ""
+        },
+        {
+          "name": "delete",
+          "params": [
+            {
+              "name": "obj",
+              "type": "TConversacion | TJSONObject",
+              "optional": false
+            }
+          ],
+          "returns": "Promise<TConversacion>",
+          "static": false,
+          "async": true,
+          "doc": ""
+        },
+        {
+          "name": "getLogs",
+          "params": [
+            {
+              "name": "convo",
+              "type": "TConversacion",
+              "optional": false
+            }
+          ],
+          "returns": "Promise<Record<string, unknown>>",
+          "static": false,
+          "async": true,
+          "doc": "Handler de `GET /conversacion/{iconversacion}/logs`."
+        },
+        {
+          "name": "probeMcpAsw",
+          "params": [
+            {
+              "name": "convo",
+              "type": "TConversacion",
+              "optional": false
+            },
+            {
+              "name": "sessionIdHint",
+              "type": "string",
+              "optional": false
+            }
+          ],
+          "returns": "Promise<TMcpSessionStatus>",
+          "static": false,
+          "async": true,
+          "doc": "`GET /conversaciones/{iconversacion}/mcp/asw?sessionId=`: estado de la sesion ASW del usuario para el poll del front (spec mcp-front-poll)."
+        },
+        {
+          "name": "getResumen",
+          "params": [
+            {
+              "name": "convo",
+              "type": "TConversacion",
+              "optional": false
+            }
+          ],
+          "returns": "Promise<Record<string, unknown>>",
+          "static": false,
+          "async": true,
+          "doc": "Handler de `GET /resumen_conversacion/{iconversacion}`."
+        },
+        {
+          "name": "list",
+          "params": [
+            {
+              "name": "JBodyCrudo",
+              "type": "unknown",
+              "optional": false
+            }
+          ],
+          "returns": "Promise<TListaPaginacion>",
+          "static": false,
+          "async": true,
+          "doc": "Listado del stack (`TControllerClient.list` -> `GET /conversaciones/{filtro}`): traduce `TFiltroLista` al listado canonico del portal y responde `TListaPaginacion`."
+        },
+        {
+          "name": "listSimple",
+          "params": [],
+          "returns": "Promise<Record<string, unknown>>",
+          "static": false,
+          "async": true,
+          "doc": "`GET /conversaciones` (`Visualizar` del plural, sin filtro): las conversaciones propias."
+        },
+        {
+          "name": "listConversaciones",
+          "params": [
+            {
+              "name": "body",
+              "type": "unknown",
+              "optional": false
+            }
+          ],
+          "returns": "Promise<Record<string, unknown>>",
+          "static": false,
+          "async": true,
+          "doc": ""
+        },
+        {
+          "name": "timerCerrarConversaciones",
+          "params": [],
+          "returns": "Promise<Record<string, unknown>>",
+          "static": false,
+          "async": true,
+          "doc": "Timer periodico `timer_cerrarConversaciones` (V-10)."
+        }
+      ],
+      "uml": {
+        "name": "TConversacionController",
+        "stereotype": "",
+        "attributes": [
+          "- nTbl = patyia_conversaciones"
+        ],
+        "methods": [
+          "+ insertPortal(body, emit?): Record<string, unknown>",
+          "+ extraerConsultasAlCierre(iconversacion): {…}",
+          "+ visualizar(llave): Record<string, unknown>",
+          "+ leerCfg(_convo): unknown",
+          "+ escribirCfg(_convo, body): unknown",
+          "+ delete(obj): TConversacion",
+          "+ getLogs(convo): Record<string, unknown>",
+          "+ probeMcpAsw(convo, sessionIdHint): TMcpSessionStatus",
+          "+ getResumen(convo): Record<string, unknown>",
+          "+ list(JBodyCrudo): TListaPaginacion",
+          "+ listSimple(): Record<string, unknown>",
+          "+ listConversaciones(body): Record<string, unknown>",
+          "+ timerCerrarConversaciones(): Record<string, unknown>"
+        ]
+      }
+    },
+    {
+      "name": "TConversacionLogsClient",
+      "kind": "client",
+      "file": "src/sources/020 Controllers/client/conversation.controller.ts",
+      "extends": "TBasePatyIAClient<TLogsConversacion>",
+      "doc": "`TConversacionLogsClient` - bitacora: `get(logs)` -> GET /api/conversacion/{iconversacion}/logs.",
+      "klass": "TLogsConversacion",
+      "attributes": [
+        {
+          "name": "nEndPoint",
+          "type": "string",
+          "doc": ""
+        }
+      ],
+      "methods": [],
+      "uml": {
+        "name": "TConversacionLogsClient",
+        "stereotype": "",
+        "attributes": [
+          "+ nEndPoint: string"
+        ],
+        "methods": []
+      }
+    },
+    {
+      "name": "TConversationAuditClient",
+      "kind": "client",
+      "file": "src/sources/020 Controllers/client/conversation.controller.ts",
+      "extends": "TBasePatyIAClient<TAuditoriaTercero>",
+      "doc": "`TConversationAuditClient` - auditoria agrupada por tercero: la misma lista con filtro de conversaciones (`GET /api/conversaciones/{filtro}`, capacidad `auditoria`) con `filtro.agrupar = \"tercero\"`.",
+      "klass": "TAuditoriaTercero",
+      "attributes": [
+        {
+          "name": "nEndPoint",
+          "type": "string",
+          "doc": ""
+        },
+        {
+          "name": "nEndPointListado",
+          "type": "string",
+          "doc": ""
+        }
+      ],
+      "methods": [
+        {
+          "name": "list",
+          "params": [
+            {
+              "name": "JBody",
+              "type": "Parameters<TBasePatyIAClient<TAuditoriaTercero>[\"list\"]>[0]",
+              "optional": true
+            }
+          ],
+          "returns": "ReturnType<TBasePatyIAClient<TAuditoriaTercero>[\"list\"]>",
+          "static": false,
+          "async": true,
+          "doc": ""
+        }
+      ],
+      "uml": {
+        "name": "TConversationAuditClient",
+        "stereotype": "",
+        "attributes": [
+          "+ nEndPoint: string",
+          "+ nEndPointListado: string"
+        ],
+        "methods": [
+          "+ list(JBody?): ReturnType<TBasePatyIAClient<TAuditoriaTercero>[\"list\"]>"
+        ]
+      }
+    },
+    {
+      "name": "TConversationClient",
+      "kind": "client",
+      "file": "src/sources/020 Controllers/client/conversation.controller.ts",
+      "extends": "TBasePatyIAClient<TConversacion>",
+      "doc": "`TConversationClient` - la conversacion, con los verbos del stack: - `get(conv)` / `delete(conv)` -> GET/DELETE /api/conversacion/{iconversacion}.",
+      "klass": "TConversacion",
+      "attributes": [
+        {
+          "name": "nEndPoint",
+          "type": "string",
+          "doc": ""
+        },
+        {
+          "name": "nEndPointListado",
+          "type": "string",
+          "doc": ""
+        }
+      ],
+      "methods": [
+        {
+          "name": "listSimple",
+          "params": [
+            {
+              "name": "timeOut",
+              "type": "",
+              "optional": true
+            }
+          ],
+          "returns": "Promise<TListaPaginacion<TConversacion>>",
+          "static": false,
+          "async": true,
+          "doc": "`GET /api/conversaciones` responde la forma del portal (`conversaciones`, `total`, `limit`, `offset`, `page`, `pages`; contrato inmutable), no la lista del stack: se valida con `ZListaConversacionesPortal` y se entrega c"
+        },
+        {
+          "name": "probeMcpAsw",
+          "params": [
+            {
+              "name": "obj",
+              "type": "TConversacion | TJSONObject",
+              "optional": false
+            },
+            {
+              "name": "sessionId",
+              "type": "",
+              "optional": true
+            },
+            {
+              "name": "timeOut",
+              "type": "",
+              "optional": true
+            }
+          ],
+          "returns": "Promise<TMcpSessionStatus>",
+          "static": false,
+          "async": true,
+          "doc": "Sonda de la sesion MCP (`GET /api/conversaciones/{iconversacion}/mcp/asw?sessionId=`): `{ ready, kind, sessionId, pendingPrompt, loginUrl }`."
+        }
+      ],
+      "uml": {
+        "name": "TConversationClient",
+        "stereotype": "",
+        "attributes": [
+          "+ nEndPoint: string",
+          "+ nEndPointListado: string"
+        ],
+        "methods": [
+          "+ listSimple(timeOut?): TListaPaginacion<TConversacion>",
+          "+ probeMcpAsw(obj, sessionId?, timeOut?): TMcpSessionStatus"
+        ]
+      }
+    },
+    {
+      "name": "TConversationLog",
+      "kind": "pojo",
+      "file": "src/sources/010 Objetos/conversationLog.ts",
+      "extends": "TObject",
+      "doc": "POJO `TConversationLog` para `patyia_conversacion_log`.",
+      "pk": [
+        "iconversacion"
+      ],
+      "attributes": [
+        {
+          "name": "iconversacion",
+          "type": "number",
+          "doc": "FK logica bigint a `patyia_conversaciones` (spec 10:771)."
+        },
+        {
+          "name": "content",
+          "type": "string",
+          "doc": "Documento JSON del hilo (spec 10:772)."
+        },
+        {
+          "name": "fhultact",
+          "type": "Date",
+          "doc": "Ultima escritura del log (la pone quien hace el upsert)."
+        }
+      ],
+      "methods": [],
+      "uml": {
+        "name": "TConversationLog",
+        "stereotype": "patyia_conversacion_log",
+        "attributes": [
+          "+ iconversacion: number «PK»",
+          "+ content: string",
+          "+ fhultact: Date"
+        ],
+        "methods": []
+      }
+    },
+    {
+      "name": "TConversationLogController",
+      "kind": "controller",
+      "file": "src/sources/020 Controllers/server/conversationLog.controller.ts",
+      "extends": "TBasePatyIAServer<TConversationLog>",
+      "doc": "Controller para `patyia_conversacion_log` (area `conversationLog`).",
+      "nTbl": "patyia_conversacion_log",
+      "klass": "TConversationLog",
+      "methods": [
+        {
+          "name": "deleteAsQry",
+          "params": [
+            {
+              "name": "Obj",
+              "type": "TConversationLog",
+              "optional": false
+            }
+          ],
+          "returns": "Promise<TQueryOptions>",
+          "static": false,
+          "async": true,
+          "doc": "Borrado de un log por su conversacion."
+        },
+        {
+          "name": "leerLog",
+          "params": [
+            {
+              "name": "iconversacion",
+              "type": "number | string",
+              "optional": false
+            }
+          ],
+          "returns": "Promise<TConvLog | null>",
+          "static": false,
+          "async": true,
+          "doc": "Documento canonico del log (`TConvLog`) o `null` si no existe / no parsea."
+        },
+        {
+          "name": "appendTurnoConConteo",
+          "params": [
+            {
+              "name": "iconversacion",
+              "type": "number | string",
+              "optional": false
+            },
+            {
+              "name": "turn",
+              "type": "TTurnRecord",
+              "optional": false
+            },
+            {
+              "name": "mode",
+              "type": "string",
+              "optional": true
+            }
+          ],
+          "returns": "Promise<{ imensaje: number | undefined; qmensajesUsuario: number | undefined }>",
+          "static": false,
+          "async": false,
+          "doc": "Agrega un turno (user + operativas + assistant) al log de la conversacion, serializando por `iconversacion`."
+        },
+        {
+          "name": "purgeHabilitada",
+          "params": [
+            {
+              "name": "purga",
+              "type": "TRuntimePurga | undefined",
+              "optional": false
+            },
+            {
+              "name": "env",
+              "type": "Record<string, string | undefined>",
+              "optional": true
+            }
+          ],
+          "returns": "{ habilitada: boolean; motivo?: string }",
+          "static": true,
+          "async": false,
+          "doc": "Gate por entorno: la purga corre SOLO si `runtime.jvalue.purga.habilitarEn` matchea el entorno actual (`TBasePatyIA.entorno`): - ausente u `off`: la purga NO corre."
+        },
+        {
+          "name": "resolvePurgaConfig",
+          "params": [
+            {
+              "name": "runtime",
+              "type": "TRuntimeJValue",
+              "optional": false
+            },
+            {
+              "name": "env",
+              "type": "Record<string, string | undefined>",
+              "optional": true
+            }
+          ],
+          "returns": "{ habilitada: boolean; motivo?: string; entorno: TEntornoPurga; dias: number; lote: number; maxLotes: number; delayMs: number }",
+          "static": true,
+          "async": false,
+          "doc": "Configuracion efectiva de la purga a partir de `runtime.jvalue`: - gate `purga.habilitarEn` contra el entorno (env solo identifica el despliegue); - TTL = `purga.dias` o, si falta, `clean_convlog` (0 = no purgar); - `pur"
+        },
+        {
+          "name": "purgarLogConversaciones",
+          "params": [
+            {
+              "name": "opts",
+              "type": "{ dryRun?: boolean; env?: Record<string, string | undefined>; soloConversaciones?: readonly number[] }",
+              "optional": true
+            }
+          ],
+          "returns": "Promise<TPurgaResultado>",
+          "static": false,
+          "async": true,
+          "doc": "Purga filas de `patyia_conversacion_log` cuyo `fhultact` (ultima escritura del log) supere el TTL configurado (R-LOG-14, R-LOG-15; spec 10:189-220)."
+        }
+      ],
+      "uml": {
+        "name": "TConversationLogController",
+        "stereotype": "",
+        "attributes": [
+          "- nTbl = patyia_conversacion_log"
+        ],
+        "methods": [
+          "+ deleteAsQry(Obj): TQueryOptions",
+          "+ leerLog(iconversacion): TConvLog | null",
+          "+ appendTurnoConConteo(iconversacion, turn, mode?): {…}",
+          "+ purgeHabilitada(purga, env?): { habilitada: boolean; motivo?: string } «static»",
+          "+ resolvePurgaConfig(runtime, env?): {…} «static»",
+          "+ purgarLogConversaciones(opts?): TPurgaResultado"
+        ]
+      }
+    },
+    {
+      "name": "TConversationTicket",
+      "kind": "pojo",
+      "file": "src/sources/010 Objetos/conversationTicket.ts",
+      "extends": "TObject",
+      "doc": "POJO `TConversationTicket` para `patyia_tiquetesconversacion`.",
+      "pk": [
+        "itiquete",
+        "iconversacion"
+      ],
+      "attributes": [
+        {
+          "name": "itiquete",
+          "type": "number",
+          "doc": "PK 1/2 bigint (spec 10:1267)."
+        },
+        {
+          "name": "iconversacion",
+          "type": "number",
+          "doc": "PK 2/2 bigint (spec 10:1268)."
+        },
+        {
+          "name": "itema",
+          "type": "string",
+          "doc": "Tema varchar(50) (spec 10:1269)."
+        },
+        {
+          "name": "iclasificador",
+          "type": "string",
+          "doc": "Clasificador varchar(50) (spec 10:1270)."
+        }
+      ],
+      "methods": [],
+      "uml": {
+        "name": "TConversationTicket",
+        "stereotype": "patyia_tiquetesconversacion",
+        "attributes": [
+          "+ itiquete: number «PK»",
+          "+ iconversacion: number «PK»",
+          "+ itema: string",
+          "+ iclasificador: string"
+        ],
+        "methods": []
+      }
+    },
+    {
+      "name": "TConversationTicketClient",
+      "kind": "client",
+      "file": "src/sources/020 Controllers/client/conversationTicket.controller.ts",
+      "extends": "TBasePatyIAClient<TConversationTicket>",
+      "doc": "`TConversationTicketClient` - `insert(tiquete)` -> POST /api/tiquete (tiquete de soporte desde una conversacion).",
+      "klass": "TConversationTicket",
+      "attributes": [
+        {
+          "name": "nEndPoint",
+          "type": "string",
+          "doc": ""
+        }
+      ],
+      "methods": [],
+      "uml": {
+        "name": "TConversationTicketClient",
+        "stereotype": "",
+        "attributes": [
+          "+ nEndPoint: string"
+        ],
+        "methods": []
+      }
+    },
+    {
+      "name": "TConversationTicketController",
+      "kind": "controller",
+      "file": "src/sources/020 Controllers/server/conversationTicket.controller.ts",
+      "extends": "TBasePatyIAServer<TConversationTicket>",
+      "doc": "Controller para `patyia_tiquetesconversacion` (area `conversationTicket`).",
+      "nTbl": "patyia_tiquetesconversacion",
+      "klass": "TConversationTicket",
+      "methods": [
+        {
+          "name": "porConversacion",
+          "params": [
+            {
+              "name": "iconversacion",
+              "type": "number",
+              "optional": false
+            }
+          ],
+          "returns": "Promise<Array<Record<string, unknown>>>",
+          "static": false,
+          "async": true,
+          "doc": "Filas de la conversacion (detalle de `GET /conversacion/{ico}`)."
+        },
+        {
+          "name": "insertAsQry",
+          "params": [
+            {
+              "name": "Obj",
+              "type": "TConversationTicket",
+              "optional": false
+            }
+          ],
+          "returns": "Promise<TQueryOptions>",
+          "static": false,
+          "async": true,
+          "doc": "Alta del stack con `iclasificador` vacio como NULL (R-TIQ-05): el stack manda toda columna de texto como cadena y la tabla quedaba con `''` y NULL mezclados (auditoria 2026-10-14)."
+        },
+        {
+          "name": "insertPortal",
+          "params": [
+            {
+              "name": "obj",
+              "type": "unknown",
+              "optional": false
+            }
+          ],
+          "returns": "Promise<{ ticket: TTicketRow; sideEffects: TSideEffects }>",
+          "static": false,
+          "async": true,
+          "doc": "Handler de `POST /tiquete` (spec 10 E-TIQ-01): zod (400) -> `iconversacion` e `itiquete` utilizables (400) -> JWT + SEG \"Crear\" (401) -> POJO (`itiquete` de la secuencia si no viene) -> `insert` del stack (o relectura si"
+        }
+      ],
+      "uml": {
+        "name": "TConversationTicketController",
+        "stereotype": "",
+        "attributes": [
+          "- nTbl = patyia_tiquetesconversacion"
+        ],
+        "methods": [
+          "+ porConversacion(iconversacion): Array<Record<string, unknown>>",
+          "+ insertAsQry(Obj): TQueryOptions",
+          "+ insertPortal(obj): { ticket: TTicketRow; sideEffects: TSideEffects }"
+        ]
+      }
+    },
+    {
+      "name": "TError_",
+      "kind": "pojo",
+      "file": "src/sources/010 Objetos/error.ts",
+      "extends": "TObjetoJson",
+      "doc": "POJO `TError_` para `patyia_errores`.",
+      "pk": [
+        "ierror"
+      ],
+      "attributes": [
+        {
+          "name": "ierror",
+          "type": "string",
+          "doc": "PK bigint."
+        },
+        {
+          "name": "jerror",
+          "type": "TErrorJerror",
+          "doc": "jsonb detalle."
+        },
+        {
+          "name": "fhcre",
+          "type": "Date",
+          "doc": "timestamp sin tz."
+        },
+        {
+          "name": "idominio",
+          "type": "string",
+          "doc": "character(1)."
+        },
+        {
+          "name": "icontexto",
+          "type": "string",
+          "doc": "character(1)."
+        },
+        {
+          "name": "referencia",
+          "type": "string",
+          "doc": "varchar(200)."
+        },
+        {
+          "name": "resumen",
+          "type": "string",
+          "doc": "varchar(500)."
+        }
+      ],
+      "methods": [],
+      "uml": {
+        "name": "TError_",
+        "stereotype": "patyia_errores",
+        "attributes": [
+          "+ ierror: string «PK»",
+          "+ jerror: TErrorJerror",
+          "+ fhcre: Date",
+          "+ idominio: string",
+          "+ icontexto: string",
+          "+ referencia: string",
+          "+ resumen: string"
+        ],
+        "methods": []
+      }
+    },
+    {
+      "name": "TErrorController",
+      "kind": "controller",
+      "file": "src/sources/020 Controllers/server/error.controller.ts",
+      "extends": "TBasePatyIAServer<TError_>",
+      "doc": "",
+      "nTbl": "patyia_errores",
+      "klass": "TError_",
+      "methods": [
+        {
+          "name": "insert",
+          "params": [
+            {
+              "name": "obj",
+              "type": "TError_ | TJSONObject",
+              "optional": false
+            }
+          ],
+          "returns": "Promise<TError_>",
+          "static": false,
+          "async": true,
+          "doc": "Reporte del front o del server -> fila (o la abierta con la misma referencia)."
+        },
+        {
+          "name": "registrar",
+          "params": [
+            {
+              "name": "input",
+              "type": "TErrorInsertInput",
+              "optional": false
+            }
+          ],
+          "returns": "Promise<TError_>",
+          "static": false,
+          "async": true,
+          "doc": ""
+        },
+        {
+          "name": "listSimple",
+          "params": [],
+          "returns": "Promise<TErrorPendientes>",
+          "static": false,
+          "async": true,
+          "doc": "`GET /errores` (`Visualizar` del plural, sin filtro): las abiertas, mas antiguas primero, en la forma lista del stack y con el instructivo de la bandeja."
+        },
+        {
+          "name": "applyEndpointWithErrorCapture",
+          "params": [
+            {
+              "name": "handler",
+              "type": "(...args: A) => Promise<R>",
+              "optional": false
+            },
+            {
+              "name": "endpointId",
+              "type": "string",
+              "optional": false
+            }
+          ],
+          "returns": "(...args: A) => Promise<R>",
+          "static": true,
+          "async": false,
+          "doc": "Handler propio: un fallo lanzado de servidor (5xx salvo 503, o sin status) queda en la bandeja y se relanza."
+        },
+        {
+          "name": "capturarRespuesta",
+          "params": [
+            {
+              "name": "endpointId",
+              "type": "string",
+              "optional": false
+            },
+            {
+              "name": "res",
+              "type": "{ status?: number; body?: unknown }",
+              "optional": false
+            }
+          ],
+          "returns": "Promise<void>",
+          "static": true,
+          "async": true,
+          "doc": "Ruta del stack: el fallo ya viene convertido en sobre; una respuesta 5xx (salvo 503) queda en la bandeja."
+        }
+      ],
+      "uml": {
+        "name": "TErrorController",
+        "stereotype": "",
+        "attributes": [
+          "- nTbl = patyia_errores"
+        ],
+        "methods": [
+          "+ insert(obj): TError_",
+          "+ registrar(input): TError_",
+          "+ listSimple(): TErrorPendientes",
+          "+ applyEndpointWithErrorCapture(handler, endpointId): (...args: A) => Promise<R> «static»",
+          "+ capturarRespuesta(endpointId, res): void «static»"
+        ]
+      }
+    },
+    {
+      "name": "TErrorsClient",
+      "kind": "client",
+      "file": "src/sources/020 Controllers/client/errors.controller.ts",
+      "extends": "TBasePatyIAClient<TError_>",
+      "doc": "`TErrorsClient` - bandeja de errores, con los verbos del stack: - `insert(reporte)` -> POST /api/error.",
+      "klass": "TError_",
+      "attributes": [
+        {
+          "name": "nEndPoint",
+          "type": "string",
+          "doc": ""
+        },
+        {
+          "name": "nEndPointListado",
+          "type": "string",
+          "doc": ""
+        }
+      ],
+      "methods": [
+        {
+          "name": "delete",
+          "params": [
+            {
+              "name": "obj",
+              "type": "TError_ | TJSONObject",
+              "optional": false
+            },
+            {
+              "name": "timeOut",
+              "type": "number",
+              "optional": true
+            }
+          ],
+          "returns": "Promise<TError_>",
+          "static": false,
+          "async": true,
+          "doc": ""
+        }
+      ],
+      "uml": {
+        "name": "TErrorsClient",
+        "stereotype": "",
+        "attributes": [
+          "+ nEndPoint: string",
+          "+ nEndPointListado: string"
+        ],
+        "methods": [
+          "+ delete(obj, timeOut?): TError_"
+        ]
+      }
+    },
+    {
+      "name": "TFilesStorageClient",
+      "kind": "client",
+      "file": "src/sources/020 Controllers/client/filesStorage.controller.ts",
+      "extends": "TBasePatyIAClient<TFileStorage>",
+      "doc": "`TFilesStorageClient` - adjuntos del chat: `insert(archivo)` -> POST /api/archivo.",
+      "klass": "TFileStorage",
+      "attributes": [
+        {
+          "name": "nEndPoint",
+          "type": "string",
+          "doc": ""
+        }
+      ],
+      "methods": [],
+      "uml": {
+        "name": "TFilesStorageClient",
+        "stereotype": "",
+        "attributes": [
+          "+ nEndPoint: string"
+        ],
+        "methods": []
+      }
+    },
+    {
+      "name": "TFileStorage",
+      "kind": "pojo",
+      "file": "src/sources/010 Objetos/filesStorage.ts",
+      "extends": "TObjetoJson",
+      "doc": "POJO `TFileStorage` para `patyia_files_storage`.",
+      "pk": [
+        "ifile"
+      ],
+      "attributes": [
+        {
+          "name": "ifile",
+          "type": "string",
+          "doc": "PK varchar(32) (spec 13:1254)."
+        },
+        {
+          "name": "jfile",
+          "type": "TJFile",
+          "doc": "jsonb detalle."
+        },
+        {
+          "name": "fhcre",
+          "type": "Date",
+          "doc": "timestamptz default now() (spec 13:1256)."
+        }
+      ],
+      "methods": [],
+      "uml": {
+        "name": "TFileStorage",
+        "stereotype": "patyia_files_storage",
+        "attributes": [
+          "+ ifile: string «PK»",
+          "+ jfile: TJFile",
+          "+ fhcre: Date"
+        ],
+        "methods": []
+      }
+    },
+    {
+      "name": "TFileStorageController",
+      "kind": "controller",
+      "file": "src/sources/020 Controllers/server/filesStorage.controller.ts",
+      "extends": "TBasePatyIAServer<TFileStorage>",
+      "doc": "Controller para `patyia_files_storage` (area `filesStorage`).",
+      "nTbl": "patyia_files_storage",
+      "klass": "TFileStorage",
+      "methods": [
+        {
+          "name": "upload",
+          "params": [
+            {
+              "name": "body",
+              "type": "unknown",
+              "optional": false
+            }
+          ],
+          "returns": "Promise<{ ifile: string; jfile: object; fhcre: string }>",
+          "static": false,
+          "async": true,
+          "doc": "Handler de `POST /archivo` (spec 13 E1, filesStorage-spec)."
+        },
+        {
+          "name": "vincularConversacion",
+          "params": [
+            {
+              "name": "urls",
+              "type": "readonly string[]",
+              "optional": false
+            },
+            {
+              "name": "iconversacion",
+              "type": "number",
+              "optional": false
+            }
+          ],
+          "returns": "Promise<number>",
+          "static": false,
+          "async": true,
+          "doc": "Liga a su conversacion los archivos que llegan en un turno (TK-1474575): el front sube la imagen o la nota de voz por `POST /archivo` ANTES de que exista la conversacion (primer turno), asi que su `jfile.meta.iconversaci"
+        }
+      ],
+      "uml": {
+        "name": "TFileStorageController",
+        "stereotype": "",
+        "attributes": [
+          "- nTbl = patyia_files_storage"
+        ],
+        "methods": [
+          "+ upload(body): { ifile: string; jfile: object; fhcre: string }",
+          "+ vincularConversacion(urls, iconversacion): number"
+        ]
+      }
+    },
+    {
+      "name": "TGenAlmacenamientoController",
+      "kind": "controller",
+      "file": "src/sources/020 Controllers/server/genAlmacenamiento.controller.ts",
+      "extends": "TAlmacenamientoController",
+      "doc": "",
+      "methods": [
+        {
+          "name": "sistema",
+          "params": [],
+          "returns": "TGenAlmacenamientoController",
+          "static": true,
+          "async": false,
+          "doc": "Controller de sistema (sin sesion): lo usan el turno (adjuntos) y los patches."
+        },
+        {
+          "name": "accionRecurso",
+          "params": [
+            {
+              "name": "iaccion",
+              "type": "TDAction",
+              "optional": false
+            }
+          ],
+          "returns": "Promise<TAccionRol>",
+          "static": false,
+          "async": true,
+          "doc": "Sin sesion no hay rol que consultar: el sistema tiene la accion (las barreras de abajo acotan la fila)."
+        },
+        {
+          "name": "segDatosWhere",
+          "params": [
+            {
+              "name": "alias",
+              "type": "string",
+              "optional": false
+            },
+            {
+              "name": "iaccion",
+              "type": "TDActionSegDatos",
+              "optional": true
+            }
+          ],
+          "returns": "Promise<string>",
+          "static": false,
+          "async": true,
+          "doc": "Alcance de datos: PatyIA SOLO ve su fila (`icuenta = ICUENTA_PATYIA`), con o sin sesion y sea cual sea el rol SEG."
+        },
+        {
+          "name": "credenciales",
+          "params": [
+            {
+              "name": "crudo",
+              "type": "unknown",
+              "optional": false
+            }
+          ],
+          "returns": "TJSONObject & Record<(typeof TGenAlmacenamientoController.CLAVES_CREDENCIAL)[number], string>",
+          "static": true,
+          "async": false,
+          "doc": "`jsonkeys` normalizado a los nombres del stack (alias `accessKeyId`/`secretAccessKey` y snake_case)."
+        },
+        {
+          "name": "credencialesFaltantes",
+          "params": [
+            {
+              "name": "crudo",
+              "type": "unknown",
+              "optional": false
+            }
+          ],
+          "returns": "Array<(typeof TGenAlmacenamientoController.CLAVES_CREDENCIAL)[number]>",
+          "static": true,
+          "async": false,
+          "doc": "Claves del stack que faltan (o estan vacias) en un `jsonkeys`, con sus alias resueltos."
+        },
+        {
+          "name": "filaPatyIA",
+          "params": [],
+          "returns": "Promise<TAlmacenamiento | false>",
+          "static": true,
+          "async": true,
+          "doc": "La fila de PatyIA (`icuenta = ICUENTA_PATYIA`) por el CRUD del stack, o `false` si no existe."
+        }
+      ],
+      "uml": {
+        "name": "TGenAlmacenamientoController",
+        "stereotype": "",
+        "attributes": [],
+        "methods": [
+          "+ sistema(): TGenAlmacenamientoController «static»",
+          "+ accionRecurso(iaccion): TAccionRol",
+          "+ segDatosWhere(alias, iaccion?): string",
+          "+ credenciales(crudo): TJSONObject & Record<(typeof TGenAlmacenamientoControll… «static»",
+          "+ credencialesFaltantes(crudo): Array<(typeof TGenAlmacenamientoController.CLAVES_CREDE… «static»",
+          "+ filaPatyIA(): TAlmacenamiento | false «static»"
+        ]
+      }
+    },
+    {
+      "name": "TIdentityClient",
+      "kind": "client",
+      "file": "src/sources/020 Controllers/client/identity.controller.ts",
+      "extends": "TBasePatyIAClient<TIdentityObject>",
+      "doc": "`TIdentityClient` - `insert(credenciales)` -> POST /api/JWT (sesion del portal -> token; entrada `ZBootstrapJwtInput`).",
+      "klass": "TIdentityObject",
+      "attributes": [
+        {
+          "name": "nEndPoint",
+          "type": "string",
+          "doc": ""
+        }
+      ],
+      "methods": [],
+      "uml": {
+        "name": "TIdentityClient",
+        "stereotype": "",
+        "attributes": [
+          "+ nEndPoint: string"
+        ],
+        "methods": []
+      }
+    },
+    {
+      "name": "TIdentityController",
+      "kind": "controller",
+      "file": "src/sources/020 Controllers/server/identity.controller.ts",
+      "extends": "TBasePatyIAServer<TIdentityObject>",
+      "doc": "",
+      "nTbl": "",
+      "klass": "TIdentityObject",
+      "methods": [
+        {
+          "name": "bootstrapJwt",
+          "params": [
+            {
+              "name": "body",
+              "type": "Record<string, unknown> | null | undefined",
+              "optional": false
+            }
+          ],
+          "returns": "Promise<unknown>",
+          "static": false,
+          "async": true,
+          "doc": "Handler de `POST /api/JWT` (api.ts:25-41, exception:'jwt')."
+        },
+        {
+          "name": "portalLogin",
+          "params": [
+            {
+              "name": "body",
+              "type": "Record<string, unknown> | null | undefined",
+              "optional": false
+            }
+          ],
+          "returns": "Promise<unknown>",
+          "static": false,
+          "async": true,
+          "doc": "Handler de `POST /api/auth/portal-login` (api.ts:42-52, exception:'portal-login')."
+        }
+      ],
+      "uml": {
+        "name": "TIdentityController",
+        "stereotype": "",
+        "attributes": [],
+        "methods": [
+          "+ bootstrapJwt(body): unknown",
+          "+ portalLogin(body): unknown"
+        ]
+      }
+    },
+    {
+      "name": "TIdentityObject",
+      "kind": "pojo",
+      "file": "src/sources/010 Objetos/identity.ts",
+      "extends": "TObjetoJson",
+      "doc": "",
+      "attributes": [
+        {
+          "name": "token",
+          "type": "string",
+          "doc": "JWT de PatyIA (HS384)."
+        },
+        {
+          "name": "username",
+          "type": "string",
+          "doc": ""
+        },
+        {
+          "name": "displayName",
+          "type": "string",
+          "doc": ""
+        },
+        {
+          "name": "expiresAt",
+          "type": "string",
+          "doc": "Vencimiento del token (ISO)."
+        },
+        {
+          "name": "claims",
+          "type": "TIdentityClaims",
+          "doc": ""
+        }
+      ],
+      "methods": [],
+      "uml": {
+        "name": "TIdentityObject",
+        "stereotype": "",
+        "attributes": [
+          "+ token: string",
+          "+ username: string",
+          "+ displayName: string",
+          "+ expiresAt: string",
+          "+ claims: TIdentityClaims"
+        ],
+        "methods": []
+      }
+    },
+    {
+      "name": "TInfoClient",
+      "kind": "client",
+      "file": "src/sources/020 Controllers/client/info.controller.ts",
+      "extends": "TBasePatyIAClient<TInfoObject>",
+      "doc": "`TInfoClient` - estado del servidor: `get(new TInfoObject())` -> GET /api/info (recurso sin llave).",
+      "klass": "TInfoObject",
+      "attributes": [
+        {
+          "name": "nEndPoint",
+          "type": "string",
+          "doc": ""
+        }
+      ],
+      "methods": [],
+      "uml": {
+        "name": "TInfoClient",
+        "stereotype": "",
+        "attributes": [
+          "+ nEndPoint: string"
+        ],
+        "methods": []
+      }
+    },
+    {
+      "name": "TInfoController",
+      "kind": "controller",
+      "file": "src/sources/020 Controllers/server/info.controller.ts",
+      "extends": "TBasePatyIAServer<TInfoObject>",
+      "doc": "",
+      "nTbl": "",
+      "klass": "TInfoObject",
+      "methods": [
+        {
+          "name": "info",
+          "params": [],
+          "returns": "Promise<TJSONObject>",
+          "static": false,
+          "async": true,
+          "doc": "Handler de `GET /api/info`."
+        }
+      ],
+      "uml": {
+        "name": "TInfoController",
+        "stereotype": "",
+        "attributes": [],
+        "methods": [
+          "+ info(): TJSONObject"
+        ]
+      }
+    },
+    {
+      "name": "TInfoObject",
+      "kind": "pojo",
+      "file": "src/sources/010 Objetos/info.ts",
+      "extends": "TObjetoJson",
+      "doc": "",
+      "attributes": [
+        {
+          "name": "name",
+          "type": "string",
+          "doc": ""
+        },
+        {
+          "name": "version",
+          "type": "string",
+          "doc": ""
+        },
+        {
+          "name": "timezone",
+          "type": "string",
+          "doc": ""
+        },
+        {
+          "name": "nodeversion",
+          "type": "string",
+          "doc": ""
+        },
+        {
+          "name": "slot",
+          "type": "string",
+          "doc": ""
+        },
+        {
+          "name": "devby",
+          "type": "string",
+          "doc": ""
+        },
+        {
+          "name": "database",
+          "type": "TInfoDatabase",
+          "doc": "Metadata sanitizada de la BD (sin credenciales)."
+        },
+        {
+          "name": "getlocation",
+          "type": "TInfoObjetoJson",
+          "doc": ""
+        },
+        {
+          "name": "schema",
+          "type": "TInfoSchema | null",
+          "doc": "Objetos requeridos de la BD (secuencias, indices) que faltan en el host (`{ requeridos, faltantes }`); `null` si la BD no respondio."
+        },
+        {
+          "name": "erroresPorAtender",
+          "type": "boolean | null",
+          "doc": "Hay al menos un error abierto en la bandeja del host; `null` si la BD no respondio."
+        }
+      ],
+      "methods": [],
+      "uml": {
+        "name": "TInfoObject",
+        "stereotype": "",
+        "attributes": [
+          "+ name: string",
+          "+ version: string",
+          "+ timezone: string",
+          "+ nodeversion: string",
+          "+ slot: string",
+          "+ devby: string",
+          "+ database: TInfoDatabase",
+          "+ getlocation: TInfoObjetoJson",
+          "+ schema: TInfoSchema | null",
+          "+ erroresPorAtender: boolean | null"
+        ],
+        "methods": []
+      }
+    },
+    {
+      "name": "TLogsConversacion",
+      "kind": "pojo",
+      "file": "src/sources/010 Objetos/conversationTurn.ts",
+      "extends": "TObjetoJson",
+      "doc": "Bitacora de una conversacion (`GET /api/conversacion/{iconversacion}/logs`).",
+      "pk": [
+        "iconversacion"
+      ],
+      "attributes": [
+        {
+          "name": "iconversacion",
+          "type": "string",
+          "doc": ""
+        },
+        {
+          "name": "itercero",
+          "type": "string",
+          "doc": ""
+        },
+        {
+          "name": "icontacto",
+          "type": "string",
+          "doc": ""
+        },
+        {
+          "name": "titulo",
+          "type": "string",
+          "doc": ""
+        },
+        {
+          "name": "fhcre",
+          "type": "string",
+          "doc": ""
+        },
+        {
+          "name": "fhultact",
+          "type": "string",
+          "doc": ""
+        },
+        {
+          "name": "mensajesOpenAI",
+          "type": "TTurnoLista",
+          "doc": "Mensajes user/assistant (con la mascara de adjuntos)."
+        },
+        {
+          "name": "mensajesCalificados",
+          "type": "TTurnoLista",
+          "doc": ""
+        },
+        {
+          "name": "tiquete",
+          "type": "TTurnoLista",
+          "doc": "Tiquetes de la conversacion."
+        },
+        {
+          "name": "convLog",
+          "type": "TTurnoObjeto | null",
+          "doc": "Documento completo del log (o `null` si no hay mensajes)."
+        }
+      ],
+      "methods": [],
+      "uml": {
+        "name": "TLogsConversacion",
+        "stereotype": "",
+        "attributes": [
+          "+ iconversacion: string «PK»",
+          "+ itercero: string",
+          "+ icontacto: string",
+          "+ titulo: string",
+          "+ fhcre: string",
+          "+ fhultact: string",
+          "+ mensajesOpenAI: TTurnoLista",
+          "+ mensajesCalificados: TTurnoLista",
+          "+ tiquete: TTurnoLista",
+          "+ convLog: TTurnoObjeto | null"
+        ],
+        "methods": []
+      }
+    },
+    {
+      "name": "TMcpSession",
+      "kind": "pojo",
+      "file": "src/sources/010 Objetos/mcpSession.ts",
+      "extends": "TObject",
+      "doc": "POJO `TMcpSession` para `patyia_mcp_sesiones`.",
+      "pk": [
+        "iusuario"
+      ],
+      "attributes": [
+        {
+          "name": "iusuario",
+          "type": "string",
+          "doc": "PK varchar(101) (spec 13:873)."
+        },
+        {
+          "name": "jsession",
+          "type": "string",
+          "doc": "text con el record JSON serializado."
+        },
+        {
+          "name": "fhcre",
+          "type": "Date",
+          "doc": "timestamptz default now() (spec 13:875)."
+        },
+        {
+          "name": "bactivo",
+          "type": "boolean",
+          "doc": "boolean default true (spec 13:876)."
+        }
+      ],
+      "methods": [
+        {
+          "name": "sesion",
+          "params": [],
+          "returns": "TMcpSessionRecord",
+          "static": false,
+          "async": false,
+          "doc": "El `jsession` (columna text) interpretado y validado."
+        }
+      ],
+      "uml": {
+        "name": "TMcpSession",
+        "stereotype": "patyia_mcp_sesiones",
+        "attributes": [
+          "+ iusuario: string «PK»",
+          "+ jsession: string",
+          "+ fhcre: Date",
+          "+ bactivo: boolean"
+        ],
+        "methods": [
+          "+ sesion(): TMcpSessionRecord"
+        ]
+      }
+    },
+    {
+      "name": "TMcpSessionController",
+      "kind": "controller",
+      "file": "src/sources/020 Controllers/server/mcpSession.controller.ts",
+      "extends": "TBasePatyIAServer<TMcpSession>",
+      "doc": "Controller para `patyia_mcp_sesiones` (area `mcpSession`).",
+      "nTbl": "patyia_mcp_sesiones",
+      "klass": "TMcpSession",
+      "methods": [
+        {
+          "name": "paraUsuario",
+          "params": [
+            {
+              "name": "itercero",
+              "type": "unknown",
+              "optional": false
+            },
+            {
+              "name": "icontacto",
+              "type": "unknown",
+              "optional": false
+            }
+          ],
+          "returns": "this",
+          "static": false,
+          "async": false,
+          "doc": "Fija el dueno de la sesion cuando este controller se compone dentro de otra peticion (el turno del chat, la sonda): la identidad del JWT vive en el controller que paso la puerta, no en esta instancia."
+        },
+        {
+          "name": "UpdateOrInsert",
+          "params": [
+            {
+              "name": "body",
+              "type": "unknown",
+              "optional": false
+            }
+          ],
+          "returns": "Promise<boolean>",
+          "static": false,
+          "async": true,
+          "doc": "Upsert del record por `iusuario` (R-M-10..R-M-16)."
+        },
+        {
+          "name": "GetCurrent",
+          "params": [],
+          "returns": "Promise<TMcpSessionRecord | null>",
+          "static": false,
+          "async": true,
+          "doc": "Lee la fila vigente para `iusuario`, deserializa `jsession`, devuelve el record o `null` (R-M-09)."
+        }
+      ],
+      "uml": {
+        "name": "TMcpSessionController",
+        "stereotype": "",
+        "attributes": [
+          "- nTbl = patyia_mcp_sesiones"
+        ],
+        "methods": [
+          "+ paraUsuario(itercero, icontacto): this",
+          "+ UpdateOrInsert(body): boolean",
+          "+ GetCurrent(): TMcpSessionRecord | null"
+        ]
+      }
+    },
+    {
+      "name": "TPermissionsClient",
+      "kind": "client",
+      "file": "src/sources/020 Controllers/client/permissions.controller.ts",
+      "extends": "TBasePatyIAClient<TPermissionsObject>",
+      "doc": "`TPermissionsClient` - perfil de permisos del front: `get(obj)` -> GET /api/permisos/{filtro} (catalogo SEG `QUERY:/permisos`; publico: sin token devuelve `USR`).",
+      "klass": "TPermissionsObject",
+      "attributes": [
+        {
+          "name": "nEndPoint",
+          "type": "string",
+          "doc": ""
+        }
+      ],
+      "methods": [
+        {
+          "name": "pathVariables",
+          "params": [
+            {
+              "name": "endPoint",
+              "type": "string",
+              "optional": false
+            },
+            {
+              "name": "Obj",
+              "type": "TPermissionsObject",
+              "optional": false
+            },
+            {
+              "name": "bSoloPlaceholder",
+              "type": "",
+              "optional": true
+            }
+          ],
+          "returns": "string",
+          "static": false,
+          "async": false,
+          "doc": ""
+        }
+      ],
+      "uml": {
+        "name": "TPermissionsClient",
+        "stereotype": "",
+        "attributes": [
+          "+ nEndPoint: string"
+        ],
+        "methods": [
+          "+ pathVariables(endPoint, Obj, bSoloPlaceholder?): string"
+        ]
+      }
+    },
+    {
+      "name": "TPermissionsController",
+      "kind": "controller",
+      "file": "src/sources/020 Controllers/server/permissions.controller.ts",
+      "extends": "TBasePatyIAServer<TPermissionsObject>",
+      "doc": "",
+      "nTbl": "",
+      "klass": "TPermissionsObject",
+      "methods": [
+        {
+          "name": "segOwner",
+          "params": [],
+          "returns": "Promise<string>",
+          "static": true,
+          "async": false,
+          "doc": "Tercero dueno del grupo del tenant (`seg_grupos`)."
+        },
+        {
+          "name": "matriz",
+          "params": [],
+          "returns": "Promise<ReadonlyMap<string, ReadonlyMap<string, TValorSeg>>>",
+          "static": true,
+          "async": true,
+          "doc": "Matriz SEG del tenant (`seg_accionesxrol` de PatyIA): rol -> id -> valor."
+        },
+        {
+          "name": "filas",
+          "params": [
+            {
+              "name": "irol",
+              "type": "string",
+              "optional": false
+            }
+          ],
+          "returns": "Promise<ReadonlyMap<string, TValorSeg>>",
+          "static": true,
+          "async": true,
+          "doc": "Filas de un rol (`USR` = las definiciones por defecto de todos)."
+        },
+        {
+          "name": "decidir",
+          "params": [
+            {
+              "name": "irol",
+              "type": "string",
+              "optional": false
+            },
+            {
+              "name": "id",
+              "type": "string",
+              "optional": false
+            },
+            {
+              "name": "metodo",
+              "type": "string",
+              "optional": false
+            }
+          ],
+          "returns": "Promise<TDecisionSeg>",
+          "static": true,
+          "async": true,
+          "doc": "Decide un id para un rol; sin `irol` no hay JWT (solo pasa lo publico)."
+        },
+        {
+          "name": "rolPrincipal",
+          "params": [
+            {
+              "name": "icontacto",
+              "type": "number | string",
+              "optional": false
+            }
+          ],
+          "returns": "Promise<string | null>",
+          "static": true,
+          "async": true,
+          "doc": "Rol vigente del contacto en el grupo del tenant (`seg_rolescontacto`): `ffinal` nula o futura, `bprincipal` primero, luego `irol`."
+        },
+        {
+          "name": "rolExiste",
+          "params": [
+            {
+              "name": "irol",
+              "type": "string",
+              "optional": false
+            }
+          ],
+          "returns": "Promise<boolean>",
+          "static": true,
+          "async": true,
+          "doc": "`true` si `irol` existe en `seg_roles` del grupo del tenant."
+        },
+        {
+          "name": "me",
+          "params": [
+            {
+              "name": "body",
+              "type": "unknown",
+              "optional": false
+            },
+            {
+              "name": "_ctxUser",
+              "type": "unknown",
+              "optional": true
+            }
+          ],
+          "returns": "Promise<{ ok: boolean; version: number; irol: string; igrupo: \"PATYIA\"; roles: string[]; perms: {}; } | { ok: boolean; version: number; username: string; irol: string; igrupo: \"PATYIA\"; roles: string[]; perms: Record<string, boolean | Record<string, unknown>> | {}; roleSwitch: { allowed: boolean; current: string; }; }>",
+          "static": false,
+          "async": true,
+          "doc": "Handler de `POST /api/permisos` (alias `/permisos/query`, `QUERY`/`GET`)."
+        }
+      ],
+      "uml": {
+        "name": "TPermissionsController",
+        "stereotype": "",
+        "attributes": [],
+        "methods": [
+          "+ segOwner(): string «static»",
+          "+ matriz(): ReadonlyMap<string, ReadonlyMap<string, TValorSeg>> «static»",
+          "+ filas(irol): ReadonlyMap<string, TValorSeg> «static»",
+          "+ decidir(irol, id, metodo): TDecisionSeg «static»",
+          "+ rolPrincipal(icontacto): string | null «static»",
+          "+ rolExiste(irol): boolean «static»",
+          "+ me(body, _ctxUser?): {…} | {…}"
+        ]
+      }
+    },
+    {
+      "name": "TPermissionsObject",
+      "kind": "pojo",
+      "file": "src/sources/010 Objetos/permissions.ts",
+      "extends": "TObjetoJson",
+      "doc": "",
+      "pk": [
+        "itercero"
+      ],
+      "attributes": [
+        {
+          "name": "itercero",
+          "type": "string",
+          "doc": ""
+        },
+        {
+          "name": "igrupo",
+          "type": "string",
+          "doc": ""
+        },
+        {
+          "name": "irol",
+          "type": "string",
+          "doc": "Rol vigente (respuesta) o rol a simular (petición)."
+        },
+        {
+          "name": "ok",
+          "type": "boolean",
+          "doc": ""
+        },
+        {
+          "name": "perms",
+          "type": "TPermsMapa | undefined",
+          "doc": "Mapa `METHOD:/ruta` -> permitido (boolean) o config de la acción."
+        },
+        {
+          "name": "roles",
+          "type": "string[]",
+          "doc": ""
+        },
+        {
+          "name": "version",
+          "type": "number",
+          "doc": ""
+        },
+        {
+          "name": "username",
+          "type": "string",
+          "doc": ""
+        },
+        {
+          "name": "roleswitch",
+          "type": "TRoleSwitch | undefined",
+          "doc": "`{ allowed, current }` del cambio de rol (solo roles con SEG de auditoría); `{}` si no aplica."
+        }
+      ],
+      "methods": [],
+      "uml": {
+        "name": "TPermissionsObject",
+        "stereotype": "",
+        "attributes": [
+          "+ itercero: string «PK»",
+          "+ igrupo: string",
+          "+ irol: string",
+          "+ ok: boolean",
+          "+ perms: TPermsMapa | undefined",
+          "+ roles: string[]",
+          "+ version: number",
+          "+ username: string",
+          "+ roleswitch: TRoleSwitch | undefined"
+        ],
+        "methods": []
+      }
+    },
+    {
+      "name": "TPortalLoginClient",
+      "kind": "client",
+      "file": "src/sources/020 Controllers/client/identity.controller.ts",
+      "extends": "TIdentityClient",
+      "doc": "`TPortalLoginClient` - `insert(credenciales)` -> POST /api/auth/portal-login (correo + clave -> token; entrada `ZPortalLoginInput`).",
+      "attributes": [
+        {
+          "name": "nEndPoint",
+          "type": "string",
+          "doc": ""
+        }
+      ],
+      "methods": [],
+      "uml": {
+        "name": "TPortalLoginClient",
+        "stereotype": "",
+        "attributes": [
+          "+ nEndPoint: string"
+        ],
+        "methods": []
+      }
+    },
+    {
+      "name": "TProvider",
+      "kind": "pojo",
+      "file": "src/sources/010 Objetos/provider.ts",
+      "extends": "TObjetoJson",
+      "doc": "POJO `TProvider` para `patyia_providers`.",
+      "pk": [
+        "iproveedor"
+      ],
+      "attributes": [
+        {
+          "name": "iproveedor",
+          "type": "string",
+          "doc": "PK varchar(64), NOT NULL (spec 12:834)."
+        },
+        {
+          "name": "nproveedor",
+          "type": "string",
+          "doc": "varchar(160), NOT NULL (spec 12:835)."
+        },
+        {
+          "name": "descripcion",
+          "type": "string",
+          "doc": "text, NULL (spec 12:837)."
+        },
+        {
+          "name": "bactivo",
+          "type": "boolean",
+          "doc": "boolean NOT NULL default true (spec 12:838)."
+        },
+        {
+          "name": "jcuenta",
+          "type": "TCuenta",
+          "doc": "jsonb credenciales (spec 12:839)."
+        }
+      ],
+      "methods": [],
+      "uml": {
+        "name": "TProvider",
+        "stereotype": "patyia_providers",
+        "attributes": [
+          "+ iproveedor: string «PK»",
+          "+ nproveedor: string",
+          "+ descripcion: string",
+          "+ bactivo: boolean",
+          "+ jcuenta: TCuenta"
+        ],
+        "methods": []
+      }
+    },
+    {
+      "name": "TProviderClient",
+      "kind": "client",
+      "file": "src/sources/020 Controllers/client/provider.controller.ts",
+      "extends": "TBasePatyIAClient<TProvider>",
+      "doc": "`TProviderClient` - proveedor LLM por PK (`iproveedor`), con el CRUD del stack: - `get(prov)` -> GET /api/proveedor/{iproveedor} (secretos enmascarados).",
+      "klass": "TProvider",
+      "attributes": [
+        {
+          "name": "nEndPoint",
+          "type": "string",
+          "doc": ""
+        }
+      ],
+      "methods": [],
+      "uml": {
+        "name": "TProviderClient",
+        "stereotype": "",
+        "attributes": [
+          "+ nEndPoint: string"
+        ],
+        "methods": []
+      }
+    },
+    {
+      "name": "TProviderController",
+      "kind": "controller",
+      "file": "src/sources/020 Controllers/server/provider.controller.ts",
+      "extends": "TBasePatyIAServer<TProvider>",
+      "doc": "",
+      "nTbl": "patyia_providers",
+      "klass": "TProvider",
+      "methods": [
+        {
+          "name": "getCuenta",
+          "params": [
+            {
+              "name": "proveedor",
+              "type": "TProvider",
+              "optional": false
+            }
+          ],
+          "returns": "Promise<Record<string, unknown> | null>",
+          "static": false,
+          "async": true,
+          "doc": "`jcuenta` del proveedor (R-C-01..R-C-09)."
+        },
+        {
+          "name": "leerCfg",
+          "params": [
+            {
+              "name": "prov",
+              "type": "TProvider",
+              "optional": false
+            }
+          ],
+          "returns": "Promise<unknown>",
+          "static": false,
+          "async": true,
+          "doc": "`CFG`: configuracion del proveedor (fila `OPENAI` de sys_values) con los modelos verificados."
+        },
+        {
+          "name": "escribirCfg",
+          "params": [
+            {
+              "name": "prov",
+              "type": "TProvider",
+              "optional": false
+            },
+            {
+              "name": "body",
+              "type": "unknown",
+              "optional": false
+            }
+          ],
+          "returns": "Promise<unknown>",
+          "static": false,
+          "async": true,
+          "doc": ""
+        },
+        {
+          "name": "get",
+          "params": [
+            {
+              "name": "obj",
+              "type": "TProvider | TJSONObject",
+              "optional": false
+            }
+          ],
+          "returns": "Promise<TProvider>",
+          "static": false,
+          "async": true,
+          "doc": "`GET /proveedor/{iproveedor}` (PV-1): el `get` del stack (PK, JWT, SEG, 404 si no existe) y, encima, los secretos de `jcuenta` enmascarados (R-M-01..R-M-05)."
+        },
+        {
+          "name": "update",
+          "params": [
+            {
+              "name": "obj",
+              "type": "TProvider | TJSONObject",
+              "optional": false
+            }
+          ],
+          "returns": "Promise<TProvider>",
+          "static": false,
+          "async": true,
+          "doc": "`PUT /proveedor/{iproveedor}` (PV-2) por MERGE sobre la fila vigente: lo que no viene se conserva y un secreto enmascarado (`****`, `abcd...wxyz`) no pisa el real."
+        }
+      ],
+      "uml": {
+        "name": "TProviderController",
+        "stereotype": "",
+        "attributes": [
+          "- nTbl = patyia_providers"
+        ],
+        "methods": [
+          "+ getCuenta(proveedor): Record<string, unknown> | null",
+          "+ leerCfg(prov): unknown",
+          "+ escribirCfg(prov, body): unknown",
+          "+ get(obj): TProvider",
+          "+ update(obj): TProvider"
+        ]
+      }
+    },
+    {
+      "name": "TQualifiedMessage",
+      "kind": "pojo",
+      "file": "src/sources/010 Objetos/qualifiedMessage.ts",
+      "extends": "TObject",
+      "doc": "POJO `TQualifiedMessage` para `patyia_mensajescalificados`.",
+      "pk": [
+        "imensaje",
+        "iconversacion"
+      ],
+      "attributes": [
+        {
+          "name": "imensaje",
+          "type": "number",
+          "doc": "PK 1/2 bigint NOT NULL (spec 10:1010)."
+        },
+        {
+          "name": "iconversacion",
+          "type": "number",
+          "doc": "PK 2/2 integer NOT NULL (spec 10:1011)."
+        },
+        {
+          "name": "butil",
+          "type": "boolean",
+          "doc": "boolean nullable (spec 10:1012)."
+        },
+        {
+          "name": "contenido",
+          "type": "string",
+          "doc": "text nullable (spec 10:1013)."
+        },
+        {
+          "name": "comentario",
+          "type": "string",
+          "doc": "Motivo cuando `butil === false` (el server lo usa al persistir el contenido)."
+        },
+        {
+          "name": "bpermitecalificartarde",
+          "type": "boolean",
+          "doc": "Pide calificar fuera de la ventana normal (requiere permiso SEG en el server)."
+        }
+      ],
+      "methods": [],
+      "uml": {
+        "name": "TQualifiedMessage",
+        "stereotype": "patyia_mensajescalificados",
+        "attributes": [
+          "+ imensaje: number «PK»",
+          "+ iconversacion: number «PK»",
+          "+ butil: boolean",
+          "+ contenido: string",
+          "+ comentario: string",
+          "+ bpermitecalificartarde: boolean"
+        ],
+        "methods": []
+      }
+    },
+    {
+      "name": "TQualifiedMessageClient",
+      "kind": "client",
+      "file": "src/sources/020 Controllers/client/qualifiedMessage.controller.ts",
+      "extends": "TBasePatyIAClient<TQualifiedMessage>",
+      "doc": "`TQualifiedMessageClient` - calificaciones de las respuestas del asistente: - `insert(msg)` -> POST /api/mensaje, validado con `ZInsertMensajeInput`.",
+      "klass": "TQualifiedMessage",
+      "attributes": [
+        {
+          "name": "nEndPoint",
+          "type": "string",
+          "doc": ""
+        },
+        {
+          "name": "nEndPointListado",
+          "type": "string",
+          "doc": ""
+        }
+      ],
+      "methods": [
+        {
+          "name": "negativos",
+          "params": [
+            {
+              "name": "filtro",
+              "type": "TFiltroMensajesNegativos",
+              "optional": true
+            },
+            {
+              "name": "timeOut",
+              "type": "",
+              "optional": true
+            }
+          ],
+          "returns": "Promise<TListaMensajesNegativos>",
+          "static": false,
+          "async": true,
+          "doc": "Respuestas calificadas «No util» (consola QA): `pagina`/`qregistros` van en la `TFiltroLista`, lo demas en su `filtro`."
+        }
+      ],
+      "uml": {
+        "name": "TQualifiedMessageClient",
+        "stereotype": "",
+        "attributes": [
+          "+ nEndPoint: string",
+          "+ nEndPointListado: string"
+        ],
+        "methods": [
+          "+ negativos(filtro?, timeOut?): TListaMensajesNegativos"
+        ]
+      }
+    },
+    {
+      "name": "TQualifiedMessageController",
+      "kind": "controller",
+      "file": "src/sources/020 Controllers/server/qualifiedMessage.controller.ts",
+      "extends": "TBasePatyIAServer<TQualifiedMessage>",
+      "doc": "Controller para `patyia_mensajescalificados` (area `qualifiedMessage`).",
+      "nTbl": "patyia_mensajescalificados",
+      "klass": "TQualifiedMessage",
+      "methods": [
+        {
+          "name": "porConversacion",
+          "params": [
+            {
+              "name": "iconversacion",
+              "type": "number",
+              "optional": false
+            }
+          ],
+          "returns": "Promise<Array<Record<string, unknown>>>",
+          "static": false,
+          "async": true,
+          "doc": "Filas de la conversacion (detalle de `GET /conversacion/{ico}`)."
+        },
+        {
+          "name": "negativos",
+          "params": [
+            {
+              "name": "filtroB64",
+              "type": "string",
+              "optional": false
+            }
+          ],
+          "returns": "Promise<TListaMensajesNegativos>",
+          "static": false,
+          "async": true,
+          "doc": "`GET /mensajes/{filtro}` (`QUERY:/mensajes`, TK-1450247): las respuestas calificadas «No util» de todos los usuarios, para que la consola QA las ubique y las analice."
+        },
+        {
+          "name": "insert",
+          "params": [
+            {
+              "name": "obj",
+              "type": "unknown",
+              "optional": false
+            }
+          ],
+          "returns": "Promise<TQualifiedMessage>",
+          "static": false,
+          "async": true,
+          "doc": "Handler de `POST /mensaje` (spec 10 E-MEN-01): shape (zod .strict(), 400) -> JWT + SEG \"Crear\" (401, antes de leer la BD) -> POJO con `imensaje` resuelto y el `contenido` persistido (comentario si es negativa con texto, "
+        }
+      ],
+      "uml": {
+        "name": "TQualifiedMessageController",
+        "stereotype": "",
+        "attributes": [
+          "- nTbl = patyia_mensajescalificados"
+        ],
+        "methods": [
+          "+ porConversacion(iconversacion): Array<Record<string, unknown>>",
+          "+ negativos(filtroB64): TListaMensajesNegativos",
+          "+ insert(obj): TQualifiedMessage"
+        ]
+      }
+    },
+    {
+      "name": "TResumenConversacion",
+      "kind": "pojo",
+      "file": "src/sources/010 Objetos/conversationTurn.ts",
+      "extends": "TObjetoJson",
+      "doc": "Resumen de una conversacion (`GET /api/resumen_conversacion/{iconversacion}`).",
+      "pk": [
+        "iconversacion"
+      ],
+      "attributes": [
+        {
+          "name": "iconversacion",
+          "type": "string",
+          "doc": ""
+        },
+        {
+          "name": "resumen",
+          "type": "string",
+          "doc": "Texto del resumen (LLM + prompt operativo GENERAR_RESUMEN_TICKET)."
+        },
+        {
+          "name": "details",
+          "type": "TTurnoObjeto",
+          "doc": "Motor, modelo, mensajes, latencia y tokens del resumen."
+        }
+      ],
+      "methods": [],
+      "uml": {
+        "name": "TResumenConversacion",
+        "stereotype": "",
+        "attributes": [
+          "+ iconversacion: string «PK»",
+          "+ resumen: string",
+          "+ details: TTurnoObjeto"
+        ],
+        "methods": []
+      }
+    },
+    {
+      "name": "TResumenConversacionClient",
+      "kind": "client",
+      "file": "src/sources/020 Controllers/client/conversation.controller.ts",
+      "extends": "TBasePatyIAClient<TResumenConversacion>",
+      "doc": "`TResumenConversacionClient` - resumen: `get(resumen)` -> GET /api/resumen_conversacion/{iconversacion}.",
+      "klass": "TResumenConversacion",
+      "attributes": [
+        {
+          "name": "nEndPoint",
+          "type": "string",
+          "doc": ""
+        }
+      ],
+      "methods": [],
+      "uml": {
+        "name": "TResumenConversacionClient",
+        "stereotype": "",
+        "attributes": [
+          "+ nEndPoint: string"
+        ],
+        "methods": []
+      }
+    },
+    {
+      "name": "TSegAccionesController",
+      "kind": "controller",
+      "file": "src/sources/020 Controllers/server/segMatriz.controller.ts",
+      "extends": "TAccionesRolController",
+      "doc": "Matriz SEG del tenant (`seg_accionesxrol` de PatyIA), sin sesion.",
+      "methods": [
+        {
+          "name": "accionRecurso",
+          "params": [
+            {
+              "name": "iaccion",
+              "type": "TDAction",
+              "optional": false
+            }
+          ],
+          "returns": "Promise<TAccionRol>",
+          "static": false,
+          "async": true,
+          "doc": "Sin sesion no hay rol que consultar: el sistema tiene la accion (las barreras acotan las filas)."
+        },
+        {
+          "name": "segDatosWhere",
+          "params": [
+            {
+              "name": "_alias",
+              "type": "string",
+              "optional": false
+            },
+            {
+              "name": "_iaccion",
+              "type": "TDActionSegDatos",
+              "optional": true
+            }
+          ],
+          "returns": "Promise<string>",
+          "static": false,
+          "async": true,
+          "doc": "Sin sesion no hay alcance de datos por rol: la lectura la acota cada consulta al tenant."
+        },
+        {
+          "name": "matriz",
+          "params": [],
+          "returns": "Promise<Map<string, Map<string, TValorSeg>>>",
+          "static": false,
+          "async": true,
+          "doc": "Filas del tenant: rol -> id -> valor."
+        },
+        {
+          "name": "escribirFila",
+          "params": [
+            {
+              "name": "accion",
+              "type": "\"insert\" | \"update\"",
+              "optional": false
+            },
+            {
+              "name": "irol",
+              "type": "string",
+              "optional": false
+            },
+            {
+              "name": "iaccion",
+              "type": "string",
+              "optional": false
+            },
+            {
+              "name": "valor",
+              "type": "TValorSeg",
+              "optional": false
+            }
+          ],
+          "returns": "Promise<void>",
+          "static": false,
+          "async": true,
+          "doc": "Fila `(irol, iaccion)` del tenant: `insert` la siembra y falla si ya existe (nunca pisa); `update` ajusta el valor de una existente y falla si no existe (no inserta)."
+        }
+      ],
+      "uml": {
+        "name": "TSegAccionesController",
+        "stereotype": "",
+        "attributes": [],
+        "methods": [
+          "+ accionRecurso(iaccion): TAccionRol",
+          "+ segDatosWhere(_alias, _iaccion?): string",
+          "+ matriz(): Map<string, Map<string, TValorSeg>>",
+          "+ escribirFila(accion, irol, iaccion, valor): void"
+        ]
+      }
+    },
+    {
+      "name": "TSegCatalogoController",
+      "kind": "controller",
+      "file": "src/sources/020 Controllers/server/segMatriz.controller.ts",
+      "extends": "TAccionesRecursosController",
+      "doc": "Catalogo de ids SEG del tenant (`seg_accionesrecursos` de PatyIA), sin sesion.",
+      "methods": [
+        {
+          "name": "ids",
+          "params": [],
+          "returns": "Promise<Set<string>>",
+          "static": false,
+          "async": true,
+          "doc": "Ids del catalogo del tenant."
+        }
+      ],
+      "uml": {
+        "name": "TSegCatalogoController",
+        "stereotype": "",
+        "attributes": [],
+        "methods": [
+          "+ ids(): Set<string>"
+        ]
+      }
+    },
+    {
+      "name": "TSegRolContactoController",
+      "kind": "controller",
+      "file": "src/sources/020 Controllers/server/segMatriz.controller.ts",
+      "extends": "TRolContactoController",
+      "doc": "Roles por contacto del tenant (`seg_rolescontacto` de PatyIA), sin sesion.",
+      "methods": [
+        {
+          "name": "accionRecurso",
+          "params": [
+            {
+              "name": "iaccion",
+              "type": "TDAction",
+              "optional": false
+            }
+          ],
+          "returns": "Promise<TAccionRol>",
+          "static": false,
+          "async": true,
+          "doc": ""
+        },
+        {
+          "name": "segDatosWhere",
+          "params": [
+            {
+              "name": "_alias",
+              "type": "string",
+              "optional": false
+            },
+            {
+              "name": "_iaccion",
+              "type": "TDActionSegDatos",
+              "optional": true
+            }
+          ],
+          "returns": "Promise<string>",
+          "static": false,
+          "async": true,
+          "doc": ""
+        }
+      ],
+      "uml": {
+        "name": "TSegRolContactoController",
+        "stereotype": "",
+        "attributes": [],
+        "methods": [
+          "+ accionRecurso(iaccion): TAccionRol",
+          "+ segDatosWhere(_alias, _iaccion?): string"
+        ]
+      }
+    },
+    {
+      "name": "TSysValue",
+      "kind": "pojo",
+      "file": "src/sources/010 Objetos/sysValue.ts",
+      "extends": "TObjetoJson",
+      "doc": "POJO `TSysValue` para `patyia_sys_values`.",
+      "pk": [
+        "isystemkey"
+      ],
+      "attributes": [
+        {
+          "name": "isystemkey",
+          "type": "string",
+          "doc": "PK varchar (spec 12:329)."
+        },
+        {
+          "name": "jvalue",
+          "type": "TSysValueJValue",
+          "doc": "`jvalue` tipado y restringido por fila: con `isystemkey` conocida se valida contra SU schema (`ZSysValuesPorClave`), si no, contra la union."
+        },
+        {
+          "name": "models",
+          "type": "TModelosProveedor | null",
+          "doc": "Modelos del proveedor: solo en la respuesta de la cfg `OPENAI` (`GET /api/proveedor/OPENAI/cfg`); no es columna (el SQL usa las columnas de la tabla)."
+        },
+        {
+          "name": "fhultact",
+          "type": "Date",
+          "doc": "timestamptz default now() (R-TBL-04)."
+        }
+      ],
+      "methods": [],
+      "uml": {
+        "name": "TSysValue",
+        "stereotype": "patyia_sys_values",
+        "attributes": [
+          "+ isystemkey: string «PK»",
+          "+ jvalue: TSysValueJValue",
+          "+ models: TModelosProveedor | null",
+          "+ fhultact: Date"
+        ],
+        "methods": []
+      }
+    },
+    {
+      "name": "TSysValueClient",
+      "kind": "client",
+      "file": "src/sources/020 Controllers/client/sysValue.controller.ts",
+      "extends": "TBasePatyIAClient<TSysValue>",
+      "doc": "`TSysValueClient` - configuracion del sistema por clave (`patyia_sys_values`), con los verbos del stack sobre los paths del portal: - `runtime` -> GET/PUT /api/sistema/cfg - `conversacion` -> GET/PUT /api/conversaciones/",
+      "klass": "TSysValue",
+      "attributes": [
+        {
+          "name": "nEndPoint",
+          "type": "string",
+          "doc": ""
+        }
+      ],
+      "methods": [
+        {
+          "name": "pathVariables",
+          "params": [
+            {
+              "name": "_endPoint",
+              "type": "string",
+              "optional": false
+            },
+            {
+              "name": "Obj",
+              "type": "TSysValue",
+              "optional": false
+            }
+          ],
+          "returns": "string",
+          "static": false,
+          "async": false,
+          "doc": "Ruta del portal de cada clave (no es `nEndPoint/{isystemkey}`)."
+        }
+      ],
+      "uml": {
+        "name": "TSysValueClient",
+        "stereotype": "",
+        "attributes": [
+          "+ nEndPoint: string"
+        ],
+        "methods": [
+          "+ pathVariables(_endPoint, Obj): string"
+        ]
+      }
+    },
+    {
+      "name": "TSysValueController",
+      "kind": "controller",
+      "file": "src/sources/020 Controllers/server/sysValue.controller.ts",
+      "extends": "TBasePatyIAServer<TSysValue>",
+      "doc": "",
+      "nTbl": "patyia_sys_values",
+      "klass": "TSysValue",
+      "methods": [
+        {
+          "name": "valor",
+          "params": [
+            {
+              "name": "clave",
+              "type": "\"runtime\"",
+              "optional": false
+            }
+          ],
+          "returns": "Promise<TRuntimeJValue>",
+          "static": true,
+          "async": true,
+          "doc": "Valor vigente de una clave con default (lectura de sistema, sin sesion): fila ausente, ilegible o invalida -> defaults."
+        },
+        {
+          "name": "valor",
+          "params": [
+            {
+              "name": "clave",
+              "type": "\"conversacion\"",
+              "optional": false
+            }
+          ],
+          "returns": "Promise<TConfigConversacionJValue>",
+          "static": true,
+          "async": true,
+          "doc": ""
+        },
+        {
+          "name": "valor",
+          "params": [
+            {
+              "name": "clave",
+              "type": "\"OPENAI\"",
+              "optional": false
+            }
+          ],
+          "returns": "Promise<TConfigOpenaiJValue>",
+          "static": true,
+          "async": true,
+          "doc": ""
+        },
+        {
+          "name": "valor",
+          "params": [
+            {
+              "name": "clave",
+              "type": "\"runtime\" | \"conversacion\" | \"OPENAI\"",
+              "optional": false
+            }
+          ],
+          "returns": "Promise<TRuntimeJValue | TConfigConversacionJValue | TConfigOpenaiJValue>",
+          "static": true,
+          "async": true,
+          "doc": ""
+        },
+        {
+          "name": "get",
+          "params": [
+            {
+              "name": "obj",
+              "type": "TSysValue | TJSONObject",
+              "optional": false
+            }
+          ],
+          "returns": "Promise<TSysValue>",
+          "static": false,
+          "async": true,
+          "doc": "Fila o, si no existe, sus defaults (solo las claves con default; el resto 404 del stack)."
+        },
+        {
+          "name": "update",
+          "params": [
+            {
+              "name": "obj",
+              "type": "TSysValue | TJSONObject",
+              "optional": false
+            }
+          ],
+          "returns": "Promise<TSysValue>",
+          "static": false,
+          "async": true,
+          "doc": "PUT = push parcial del `jvalue` sobre el vigente (o los defaults); el schema de la clave valida rangos y claves."
+        },
+        {
+          "name": "accionFila",
+          "params": [
+            {
+              "name": "accion",
+              "type": "\"insert\"",
+              "optional": false
+            },
+            {
+              "name": "clave",
+              "type": "K",
+              "optional": false
+            },
+            {
+              "name": "jvalue",
+              "type": "TSysValuePorClave[K]",
+              "optional": false
+            }
+          ],
+          "returns": "Promise<TSysValue>",
+          "static": false,
+          "async": true,
+          "doc": "Unica puerta de escritura de una fila de `patyia_sys_values` por su clave, sobre el CRUD del controller (pasa por sus `verify*`): - `insert`: alta con el `jvalue` COMPLETO, validado con el schema de la clave."
+        },
+        {
+          "name": "accionFila",
+          "params": [
+            {
+              "name": "accion",
+              "type": "\"update\"",
+              "optional": false
+            },
+            {
+              "name": "clave",
+              "type": "K",
+              "optional": false
+            },
+            {
+              "name": "push",
+              "type": "TPushDe<TSysValuePorClave[K]>",
+              "optional": false
+            }
+          ],
+          "returns": "Promise<TSysValue>",
+          "static": false,
+          "async": true,
+          "doc": ""
+        },
+        {
+          "name": "accionFila",
+          "params": [
+            {
+              "name": "accion",
+              "type": "\"delete\"",
+              "optional": false
+            },
+            {
+              "name": "clave",
+              "type": "TSysKeyBorrable",
+              "optional": false
+            }
+          ],
+          "returns": "Promise<boolean>",
+          "static": false,
+          "async": true,
+          "doc": ""
+        },
+        {
+          "name": "accionFila",
+          "params": [
+            {
+              "name": "accion",
+              "type": "\"insert\" | \"update\" | \"delete\"",
+              "optional": false
+            },
+            {
+              "name": "clave",
+              "type": "string",
+              "optional": false
+            },
+            {
+              "name": "valor",
+              "type": "unknown",
+              "optional": true
+            }
+          ],
+          "returns": "Promise<TSysValue | boolean>",
+          "static": false,
+          "async": true,
+          "doc": ""
+        },
+        {
+          "name": "pushDe",
+          "params": [
+            {
+              "name": "clave",
+              "type": "K",
+              "optional": false
+            },
+            {
+              "name": "crudo",
+              "type": "unknown",
+              "optional": false
+            }
+          ],
+          "returns": "TPushDe<TSysValuePorClave[K]>",
+          "static": true,
+          "async": false,
+          "doc": "Fragmento de push de una clave, validado con el parcial raiz de su schema (`null` = quitar)."
+        },
+        {
+          "name": "leer",
+          "params": [
+            {
+              "name": "clave",
+              "type": "TSysKey",
+              "optional": false
+            }
+          ],
+          "returns": "Promise<TSysValueWire>",
+          "static": false,
+          "async": true,
+          "doc": ""
+        },
+        {
+          "name": "escribir",
+          "params": [
+            {
+              "name": "clave",
+              "type": "TSysKey",
+              "optional": false
+            },
+            {
+              "name": "body",
+              "type": "unknown",
+              "optional": false
+            }
+          ],
+          "returns": "Promise<TSysValueWire>",
+          "static": false,
+          "async": true,
+          "doc": ""
+        },
+        {
+          "name": "leerProveedor",
+          "params": [
+            {
+              "name": "iproveedor",
+              "type": "string",
+              "optional": false
+            }
+          ],
+          "returns": "Promise<TSysValueWire & { models: TModelosProveedor }>",
+          "static": false,
+          "async": true,
+          "doc": "Cuenta OPENAI con sus modelos verificados contra la cuenta del proveedor (cache 90 s; sin credencial o caida: `degraded`)."
+        },
+        {
+          "name": "escribirProveedor",
+          "params": [
+            {
+              "name": "iproveedor",
+              "type": "string",
+              "optional": false
+            },
+            {
+              "name": "body",
+              "type": "unknown",
+              "optional": false
+            }
+          ],
+          "returns": "Promise<TSysValueWire>",
+          "static": false,
+          "async": true,
+          "doc": ""
+        },
+        {
+          "name": "leerCfg",
+          "params": [
+            {
+              "name": "_pojo",
+              "type": "TSysValue",
+              "optional": false
+            }
+          ],
+          "returns": "Promise<TSysValueWire>",
+          "static": false,
+          "async": true,
+          "doc": "`CFG` (GET): la fila de la ruta, con su `jvalue` serializado."
+        },
+        {
+          "name": "escribirCfg",
+          "params": [
+            {
+              "name": "_pojo",
+              "type": "TSysValue",
+              "optional": false
+            },
+            {
+              "name": "body",
+              "type": "unknown",
+              "optional": false
+            }
+          ],
+          "returns": "Promise<TSysValueWire>",
+          "static": false,
+          "async": true,
+          "doc": "`CFG` (PUT): push parcial (`ObjectPush`) validado con el schema de la fila."
+        },
+        {
+          "name": "getOpenaiCfg",
+          "params": [],
+          "returns": "Promise<TProviderCfg>",
+          "static": true,
+          "async": true,
+          "doc": "Credenciales del proveedor OPENAI (`patyia_providers.jcuenta`); sin cuenta, defaults degradados."
+        }
+      ],
+      "uml": {
+        "name": "TSysValueController",
+        "stereotype": "",
+        "attributes": [
+          "- nTbl = patyia_sys_values"
+        ],
+        "methods": [
+          "+ valor(clave): TRuntimeJValue «static»",
+          "+ valor(clave): TConfigConversacionJValue «static»",
+          "+ valor(clave): TConfigOpenaiJValue «static»",
+          "+ valor(clave): TRuntimeJValue | TConfigConversacionJValue | TConfigOpe… «static»",
+          "+ get(obj): TSysValue",
+          "+ update(obj): TSysValue",
+          "+ accionFila(accion, clave, jvalue): TSysValue",
+          "+ accionFila(accion, clave, push): TSysValue",
+          "+ accionFila(accion, clave): boolean",
+          "+ accionFila(accion, clave, valor?): TSysValue | boolean",
+          "+ pushDe(clave, crudo): TPushDe<TSysValuePorClave[K]> «static»",
+          "+ leer(clave): TSysValueWire",
+          "+ escribir(clave, body): TSysValueWire",
+          "+ leerProveedor(iproveedor): TSysValueWire & { models: TModelosProveedor }",
+          "+ escribirProveedor(iproveedor, body): TSysValueWire",
+          "+ leerCfg(_pojo): TSysValueWire",
+          "+ escribirCfg(_pojo, body): TSysValueWire",
+          "+ getOpenaiCfg(): TProviderCfg «static»"
+        ]
+      }
+    },
+    {
+      "name": "TTdConsulta",
+      "kind": "pojo",
+      "file": "src/sources/010 Objetos/tdConsultation.ts",
+      "extends": "TObjetoJson",
+      "doc": "POJO `TTdConsulta` para `patyia_tdconsultas`.",
+      "pk": [
+        "itdconsulta"
+      ],
+      "attributes": [
+        {
+          "name": "itdconsulta",
+          "type": "string",
+          "doc": "PK varchar(64) NOT NULL."
+        },
+        {
+          "name": "ntdconsulta",
+          "type": "string",
+          "doc": "varchar(255) nullable."
+        },
+        {
+          "name": "instruccion",
+          "type": "string",
+          "doc": "text nullable."
+        },
+        {
+          "name": "descripcion",
+          "type": "string",
+          "doc": "text nullable."
+        },
+        {
+          "name": "bactivo",
+          "type": "boolean",
+          "doc": "boolean nullable."
+        },
+        {
+          "name": "jconfig",
+          "type": "TTdConsultaJconfig",
+          "doc": "jsonb nullable."
+        },
+        {
+          "name": "jpermisos",
+          "type": "TTdConsultaJpermisos",
+          "doc": "jsonb NO NULL."
+        },
+        {
+          "name": "fhult",
+          "type": "Date",
+          "doc": "timestamptz escrita por PUT en cada escritura (TD-R33)."
+        },
+        {
+          "name": "iterceroult",
+          "type": "string",
+          "doc": "varchar(30)."
+        },
+        {
+          "name": "igrupoult",
+          "type": "string",
+          "doc": "varchar(20)."
+        },
+        {
+          "name": "appcre",
+          "type": "string",
+          "doc": "varchar(20) aud."
+        },
+        {
+          "name": "ipcre",
+          "type": "string",
+          "doc": "varchar(20) aud."
+        },
+        {
+          "name": "fhcre",
+          "type": "Date",
+          "doc": "timestamptz aud."
+        },
+        {
+          "name": "itercerocre",
+          "type": "string",
+          "doc": "varchar(30) aud."
+        },
+        {
+          "name": "igrupocre",
+          "type": "string",
+          "doc": "varchar(20) aud."
+        },
+        {
+          "name": "irolcre",
+          "type": "string",
+          "doc": "varchar(20) aud."
+        },
+        {
+          "name": "icontactocre",
+          "type": "number | undefined",
+          "doc": "bigint aud."
+        },
+        {
+          "name": "appult",
+          "type": "string",
+          "doc": "varchar(20) aud."
+        },
+        {
+          "name": "ipult",
+          "type": "string",
+          "doc": "varchar(20) aud."
+        },
+        {
+          "name": "irolult",
+          "type": "string",
+          "doc": "varchar(20) aud."
+        },
+        {
+          "name": "icontactoult",
+          "type": "number | undefined",
+          "doc": "bigint aud."
+        }
+      ],
+      "methods": [],
+      "uml": {
+        "name": "TTdConsulta",
+        "stereotype": "patyia_tdconsultas",
+        "attributes": [
+          "+ itdconsulta: string «PK»",
+          "+ ntdconsulta: string",
+          "+ instruccion: string",
+          "+ descripcion: string",
+          "+ bactivo: boolean",
+          "+ jconfig: TTdConsultaJconfig",
+          "+ jpermisos: TTdConsultaJpermisos",
+          "+ fhult: Date",
+          "+ iterceroult: string",
+          "+ igrupoult: string",
+          "+ appcre: string",
+          "+ ipcre: string",
+          "+ fhcre: Date",
+          "+ itercerocre: string",
+          "+ igrupocre: string",
+          "+ irolcre: string",
+          "+ icontactocre: number | undefined",
+          "+ appult: string",
+          "+ ipult: string",
+          "+ irolult: string",
+          "+ icontactoult: number | undefined"
+        ],
+        "methods": []
+      }
+    },
+    {
+      "name": "TTdconsultaClient",
+      "kind": "client",
+      "file": "src/sources/020 Controllers/client/tdconsulta.controller.ts",
+      "extends": "TBasePatyIAClient<TTdconsultaObject>",
+      "doc": "`TTdconsultaClient` - consola del catalogo de prompts (`/api/tdconsulta`, sin llave): - `get(new TTdconsultaObject())` -> GET: catalogo (`rows`, `canEdit`).",
+      "klass": "TTdconsultaObject",
+      "attributes": [
+        {
+          "name": "nEndPoint",
+          "type": "string",
+          "doc": ""
+        }
+      ],
+      "methods": [],
+      "uml": {
+        "name": "TTdconsultaClient",
+        "stereotype": "",
+        "attributes": [
+          "+ nEndPoint: string"
+        ],
+        "methods": []
+      }
+    },
+    {
+      "name": "TTdconsultaObject",
+      "kind": "pojo",
+      "file": "src/sources/010 Objetos/tdconsulta.ts",
+      "extends": "TObjetoJson",
+      "doc": "",
+      "attributes": [
+        {
+          "name": "rows",
+          "type": "TGetTdConsultaFila[]",
+          "doc": "Filas del catalogo (`get`)."
+        },
+        {
+          "name": "rowCount",
+          "type": "number",
+          "doc": ""
+        },
+        {
+          "name": "canEdit",
+          "type": "boolean",
+          "doc": "La sesion puede editar el catalogo (`get`)."
+        },
+        {
+          "name": "key",
+          "type": "string",
+          "doc": ""
+        },
+        {
+          "name": "storage",
+          "type": "string",
+          "doc": ""
+        },
+        {
+          "name": "ok",
+          "type": "boolean",
+          "doc": "Eco de una escritura (`insert`/`update`)."
+        },
+        {
+          "name": "itdconsulta",
+          "type": "string",
+          "doc": ""
+        },
+        {
+          "name": "mode",
+          "type": "string",
+          "doc": ""
+        },
+        {
+          "name": "updatedBy",
+          "type": "string",
+          "doc": ""
+        }
+      ],
+      "methods": [],
+      "uml": {
+        "name": "TTdconsultaObject",
+        "stereotype": "",
+        "attributes": [
+          "+ rows: TGetTdConsultaFila[]",
+          "+ rowCount: number",
+          "+ canEdit: boolean",
+          "+ key: string",
+          "+ storage: string",
+          "+ ok: boolean",
+          "+ itdconsulta: string",
+          "+ mode: string",
+          "+ updatedBy: string"
+        ],
+        "methods": []
+      }
+    },
+    {
+      "name": "TTdConsultationController",
+      "kind": "controller",
+      "file": "src/sources/020 Controllers/server/tdConsultation.controller.ts",
+      "extends": "TBasePatyIAServer<TTdConsulta>",
+      "doc": "",
+      "nTbl": "patyia_tdconsultas",
+      "klass": "TTdConsulta",
+      "methods": [
+        {
+          "name": "crear",
+          "params": [
+            {
+              "name": "body",
+              "type": "unknown",
+              "optional": false
+            }
+          ],
+          "returns": "Promise<TPutTdConsultaResponse>",
+          "static": false,
+          "async": true,
+          "doc": ""
+        },
+        {
+          "name": "guardar",
+          "params": [
+            {
+              "name": "body",
+              "type": "unknown",
+              "optional": false
+            }
+          ],
+          "returns": "Promise<TPutTdConsultaResponse>",
+          "static": false,
+          "async": true,
+          "doc": "`PUT /tdconsulta`: actualiza o crea (la ruta nueva exige ancestros, como `crear`)."
+        },
+        {
+          "name": "listado",
+          "params": [],
+          "returns": "Promise<TGetTdConsultaResponse & { total: number; limit: number; offset: number; page: number; pages: number }>",
+          "static": false,
+          "async": true,
+          "doc": "`GET /tdconsulta`: todo el catalogo (activo o no) con la forma que consume la consola."
+        }
+      ],
+      "uml": {
+        "name": "TTdConsultationController",
+        "stereotype": "",
+        "attributes": [
+          "- nTbl = patyia_tdconsultas"
+        ],
+        "methods": [
+          "+ crear(body): TPutTdConsultaResponse",
+          "+ guardar(body): TPutTdConsultaResponse",
+          "+ listado(): TGetTdConsultaResponse & {…}"
+        ]
+      }
+    },
+    {
+      "name": "TTdConsultaXVectorStore",
+      "kind": "pojo",
+      "file": "src/sources/010 Objetos/vectorStore.ts",
+      "extends": "TObject",
+      "doc": "Fila de `patyia_tdconsultaxvector_store` (vector stores de un tipo de consulta, en orden).",
+      "pk": [
+        "itdconsulta",
+        "ivectorstore"
+      ],
+      "attributes": [
+        {
+          "name": "itdconsulta",
+          "type": "string",
+          "doc": ""
+        },
+        {
+          "name": "ivectorstore",
+          "type": "string",
+          "doc": ""
+        },
+        {
+          "name": "orden",
+          "type": "number",
+          "doc": ""
+        }
+      ],
+      "methods": [],
+      "uml": {
+        "name": "TTdConsultaXVectorStore",
+        "stereotype": "patyia_tdconsultaxvector_store",
+        "attributes": [
+          "+ itdconsulta: string «PK»",
+          "+ ivectorstore: string «PK»",
+          "+ orden: number"
+        ],
+        "methods": []
+      }
+    },
+    {
+      "name": "TTdConsultaXVectorStoreController",
+      "kind": "controller",
+      "file": "src/sources/020 Controllers/server/vectorStore.controller.ts",
+      "extends": "TBasePatyIAServer<TTdConsultaXVectorStore>",
+      "doc": "",
+      "nTbl": "patyia_tdconsultaxvector_store",
+      "klass": "TTdConsultaXVectorStore",
+      "methods": [],
+      "uml": {
+        "name": "TTdConsultaXVectorStoreController",
+        "stereotype": "",
+        "attributes": [
+          "- nTbl = patyia_tdconsultaxvector_store"
+        ],
+        "methods": []
+      }
+    },
+    {
+      "name": "TTurnoClient",
+      "kind": "client",
+      "file": "src/sources/020 Controllers/client/conversation.controller.ts",
+      "extends": "TBasePatyIAClient<TTurnoConversacion>",
+      "doc": "`TTurnoClient` - un turno del chat: `insert(entrada)` -> POST /api/conversacion (SSE).",
+      "klass": "TTurnoConversacion",
+      "attributes": [
+        {
+          "name": "nEndPoint",
+          "type": "string",
+          "doc": ""
+        }
+      ],
+      "methods": [],
+      "uml": {
+        "name": "TTurnoClient",
+        "stereotype": "",
+        "attributes": [
+          "+ nEndPoint: string"
+        ],
+        "methods": []
+      }
+    },
+    {
+      "name": "TTurnoConversacion",
+      "kind": "pojo",
+      "file": "src/sources/010 Objetos/conversationTurn.ts",
+      "extends": "TObjetoJson",
+      "doc": "Un turno del chat: lo que envia el evento `end` del SSE.",
+      "attributes": [
+        {
+          "name": "iconversacion",
+          "type": "string",
+          "doc": ""
+        },
+        {
+          "name": "prompt",
+          "type": "string",
+          "doc": ""
+        },
+        {
+          "name": "respuesta",
+          "type": "string",
+          "doc": "Respuesta completa del asistente."
+        },
+        {
+          "name": "hilo",
+          "type": "string",
+          "doc": ""
+        },
+        {
+          "name": "qmensajes",
+          "type": "number",
+          "doc": ""
+        },
+        {
+          "name": "qtokens",
+          "type": "number",
+          "doc": ""
+        },
+        {
+          "name": "modelo",
+          "type": "string",
+          "doc": ""
+        },
+        {
+          "name": "titulo",
+          "type": "string",
+          "doc": ""
+        },
+        {
+          "name": "itdconsulta",
+          "type": "string",
+          "doc": ""
+        },
+        {
+          "name": "meta",
+          "type": "TTurnoObjeto",
+          "doc": "Metadatos del turno (`stream_ok`, tokens, costo, operativas, `file_search`...)."
+        },
+        {
+          "name": "itercero",
+          "type": "string",
+          "doc": ""
+        },
+        {
+          "name": "icontacto",
+          "type": "string",
+          "doc": ""
+        },
+        {
+          "name": "fhcre",
+          "type": "string",
+          "doc": ""
+        },
+        {
+          "name": "fhultact",
+          "type": "string",
+          "doc": ""
+        },
+        {
+          "name": "itdestado",
+          "type": "string",
+          "doc": ""
+        }
+      ],
+      "methods": [],
+      "uml": {
+        "name": "TTurnoConversacion",
+        "stereotype": "",
+        "attributes": [
+          "+ iconversacion: string",
+          "+ prompt: string",
+          "+ respuesta: string",
+          "+ hilo: string",
+          "+ qmensajes: number",
+          "+ qtokens: number",
+          "+ modelo: string",
+          "+ titulo: string",
+          "+ itdconsulta: string",
+          "+ meta: TTurnoObjeto",
+          "+ itercero: string",
+          "+ icontacto: string",
+          "+ fhcre: string",
+          "+ fhultact: string",
+          "+ itdestado: string"
+        ],
+        "methods": []
+      }
+    },
+    {
+      "name": "TVectorStore",
+      "kind": "pojo",
+      "file": "src/sources/010 Objetos/vectorStore.ts",
+      "extends": "TObject",
+      "doc": "Fila de `patyia_vector_store`.",
+      "pk": [
+        "ivectorstore"
+      ],
+      "attributes": [
+        {
+          "name": "ivectorstore",
+          "type": "string",
+          "doc": ""
+        },
+        {
+          "name": "nvectorstore",
+          "type": "string",
+          "doc": ""
+        },
+        {
+          "name": "descripcion",
+          "type": "string",
+          "doc": ""
+        },
+        {
+          "name": "bactivo",
+          "type": "boolean",
+          "doc": ""
+        }
+      ],
+      "methods": [],
+      "uml": {
+        "name": "TVectorStore",
+        "stereotype": "patyia_vector_store",
+        "attributes": [
+          "+ ivectorstore: string «PK»",
+          "+ nvectorstore: string",
+          "+ descripcion: string",
+          "+ bactivo: boolean"
+        ],
+        "methods": []
+      }
+    },
+    {
+      "name": "TVectorStoreController",
+      "kind": "controller",
+      "file": "src/sources/020 Controllers/server/vectorStore.controller.ts",
+      "extends": "TBasePatyIAServer<TVectorStore>",
+      "doc": "",
+      "nTbl": "patyia_vector_store",
+      "klass": "TVectorStore",
+      "methods": [],
+      "uml": {
+        "name": "TVectorStoreController",
+        "stereotype": "",
+        "attributes": [
+          "- nTbl = patyia_vector_store"
+        ],
+        "methods": []
+      }
+    }
+  ],
+  "pares": [
+    {
+      "controller": "TCdnController",
+      "pojo": "TCdnObject",
+      "nTbl": ""
+    },
+    {
+      "controller": "TConsultaController",
+      "pojo": "TConsulta",
+      "nTbl": "patyia_consultas"
+    },
+    {
+      "controller": "TConversacionController",
+      "pojo": "TConversacion",
+      "nTbl": "patyia_conversaciones",
+      "detalles": [
+        {
+          "controller": "TQualifiedMessageController",
+          "arreglo": "MENSAJESCALIFICADOS",
+          "clave": "iconversacion",
+          "nTbl": "patyia_mensajescalificados"
+        },
+        {
+          "controller": "TConversationTicketController",
+          "arreglo": "TIQUETES",
+          "clave": "iconversacion",
+          "nTbl": "patyia_tiquetesconversacion"
+        }
+      ]
+    },
+    {
+      "controller": "TConversationLogController",
+      "pojo": "TConversationLog",
+      "nTbl": "patyia_conversacion_log"
+    },
+    {
+      "controller": "TConversationTicketController",
+      "pojo": "TConversationTicket",
+      "nTbl": "patyia_tiquetesconversacion"
+    },
+    {
+      "controller": "TErrorController",
+      "pojo": "TError_",
+      "nTbl": "patyia_errores"
+    },
+    {
+      "controller": "TFileStorageController",
+      "pojo": "TFileStorage",
+      "nTbl": "patyia_files_storage"
+    },
+    {
+      "controller": "TIdentityController",
+      "pojo": "TIdentityObject",
+      "nTbl": ""
+    },
+    {
+      "controller": "TInfoController",
+      "pojo": "TInfoObject",
+      "nTbl": ""
+    },
+    {
+      "controller": "TMcpSessionController",
+      "pojo": "TMcpSession",
+      "nTbl": "patyia_mcp_sesiones"
+    },
+    {
+      "controller": "TPermissionsController",
+      "pojo": "TPermissionsObject",
+      "nTbl": ""
+    },
+    {
+      "controller": "TProviderController",
+      "pojo": "TProvider",
+      "nTbl": "patyia_providers"
+    },
+    {
+      "controller": "TQualifiedMessageController",
+      "pojo": "TQualifiedMessage",
+      "nTbl": "patyia_mensajescalificados"
+    },
+    {
+      "controller": "TSysValueController",
+      "pojo": "TSysValue",
+      "nTbl": "patyia_sys_values"
+    },
+    {
+      "controller": "TTdConsultationController",
+      "pojo": "TTdConsulta",
+      "nTbl": "patyia_tdconsultas"
+    },
+    {
+      "controller": "TTdConsultaXVectorStoreController",
+      "pojo": "TTdConsultaXVectorStore",
+      "nTbl": "patyia_tdconsultaxvector_store"
+    },
+    {
+      "controller": "TVectorStoreController",
+      "pojo": "TVectorStore",
+      "nTbl": "patyia_vector_store"
+    }
+  ],
+  "clientes": [
+    {
+      "client": "TBasePatyIAClient",
+      "pojo": "TObject"
+    },
+    {
+      "client": "TConversacionLogsClient",
+      "pojo": "TLogsConversacion"
+    },
+    {
+      "client": "TConversationAuditClient",
+      "pojo": "TAuditoriaTercero"
+    },
+    {
+      "client": "TConversationClient",
+      "pojo": "TConversacion"
+    },
+    {
+      "client": "TConversationTicketClient",
+      "pojo": "TConversationTicket"
+    },
+    {
+      "client": "TErrorsClient",
+      "pojo": "TError_"
+    },
+    {
+      "client": "TFilesStorageClient",
+      "pojo": "TFileStorage"
+    },
+    {
+      "client": "TIdentityClient",
+      "pojo": "TIdentityObject"
+    },
+    {
+      "client": "TInfoClient",
+      "pojo": "TInfoObject"
+    },
+    {
+      "client": "TPermissionsClient",
+      "pojo": "TPermissionsObject"
+    },
+    {
+      "client": "TProviderClient",
+      "pojo": "TProvider"
+    },
+    {
+      "client": "TQualifiedMessageClient",
+      "pojo": "TQualifiedMessage"
+    },
+    {
+      "client": "TResumenConversacionClient",
+      "pojo": "TResumenConversacion"
+    },
+    {
+      "client": "TSysValueClient",
+      "pojo": "TSysValue"
+    },
+    {
+      "client": "TTdconsultaClient",
+      "pojo": "TTdconsultaObject"
+    },
+    {
+      "client": "TTurnoClient",
+      "pojo": "TTurnoConversacion"
+    }
+  ],
+  "estados": [
+    {
+      "id": "abierta",
+      "itdestado": 0,
+      "label": "Abierta · itdestado 0"
+    },
+    {
+      "id": "cerrada",
+      "itdestado": 1,
+      "label": "Cerrada · itdestado 1"
+    },
+    {
+      "id": "eliminada",
+      "itdestado": 2,
+      "label": "Eliminada · itdestado 2"
+    }
+  ]
+}

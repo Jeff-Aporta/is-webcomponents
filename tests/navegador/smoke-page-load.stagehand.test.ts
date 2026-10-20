@@ -29,7 +29,7 @@ const { test, lista, before, after } = coleccionPruebas({ categoria: 'what' });
 
 
 // Modo Live Server: la raíz servida es la carpeta padre del repo y la app vive
-// en /<carpeta-del-repo>/ (antes C:\ContaPyme\Personal\apps\iswc-root).
+// en /<carpeta-del-repo>/ (antes <repo>).
 const REPO = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const SERVE_ROOT = process.env.SERVE_ROOT || dirname(REPO);
 const APP_PATH = `/${basename(REPO)}`;

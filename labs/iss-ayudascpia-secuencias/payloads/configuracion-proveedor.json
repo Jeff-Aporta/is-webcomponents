@@ -32,7 +32,7 @@
         {
           "id": "X_ai",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
+            "path": "../../../tests/fixtures/iss-ayudascpia/docs-experimental/diagramas/componentes.json",
             "query": {
               "payload": {
                 "componentDiagram": {
@@ -55,7 +55,7 @@
           "from": "C",
           "to": "V",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-configuracion-proveedor.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-configuracion-proveedor.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -77,7 +77,7 @@
           "from": "V",
           "to": "V",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-configuracion-proveedor.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-configuracion-proveedor.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -103,7 +103,7 @@
           "from": "V",
           "to": "P",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-configuracion-proveedor.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-configuracion-proveedor.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -129,7 +129,7 @@
           "from": "V",
           "to": "P",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-configuracion-proveedor.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-configuracion-proveedor.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -155,7 +155,7 @@
           "from": "V",
           "to": "X_ai",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-configuracion-proveedor.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-configuracion-proveedor.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -181,7 +181,7 @@
           "from": "V",
           "to": "P",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-configuracion-proveedor.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-configuracion-proveedor.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -203,7 +203,7 @@
           "from": "V",
           "to": "P",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-configuracion-proveedor.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-configuracion-proveedor.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -225,7 +225,7 @@
           "from": "V",
           "to": "C",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-configuracion-proveedor.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-configuracion-proveedor.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -256,7 +256,7 @@
             "m3"
           ],
           "condition": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-configuracion-proveedor.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-configuracion-proveedor.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -278,7 +278,7 @@
             "m4"
           ],
           "condition": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-configuracion-proveedor.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-configuracion-proveedor.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -302,7 +302,7 @@
             "m7"
           ],
           "condition": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-configuracion-proveedor.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-configuracion-proveedor.json",
             "query": {
               "payload": {
                 "vectorFlow": {

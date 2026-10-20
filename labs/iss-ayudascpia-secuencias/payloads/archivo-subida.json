@@ -32,7 +32,7 @@
         {
           "id": "X_r2",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
+            "path": "../../../tests/fixtures/iss-ayudascpia/docs-experimental/diagramas/componentes.json",
             "query": {
               "payload": {
                 "componentDiagram": {
@@ -55,7 +55,7 @@
           "from": "C",
           "to": "F",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-archivo-subida.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-archivo-subida.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -77,7 +77,7 @@
           "from": "F",
           "to": "F",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-archivo-subida.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-archivo-subida.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -103,7 +103,7 @@
           "from": "F",
           "to": "F",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-archivo-subida.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-archivo-subida.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -129,7 +129,7 @@
           "from": "F",
           "to": "P",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-archivo-subida.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-archivo-subida.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -155,7 +155,7 @@
           "from": "F",
           "to": "F",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-archivo-subida.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-archivo-subida.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -181,7 +181,7 @@
           "from": "F",
           "to": "X_r2",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-archivo-subida.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-archivo-subida.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -207,7 +207,7 @@
           "from": "F",
           "to": "X_r2",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-archivo-subida.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-archivo-subida.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -233,7 +233,7 @@
           "from": "F",
           "to": "P",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-archivo-subida.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-archivo-subida.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -259,7 +259,7 @@
           "from": "F",
           "to": "C",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-archivo-subida.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-archivo-subida.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -290,7 +290,7 @@
             "m6"
           ],
           "condition": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-archivo-subida.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-archivo-subida.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -312,7 +312,7 @@
             "m7"
           ],
           "condition": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-archivo-subida.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-archivo-subida.json",
             "query": {
               "payload": {
                 "vectorFlow": {

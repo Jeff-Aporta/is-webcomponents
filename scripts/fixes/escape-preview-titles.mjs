@@ -10,8 +10,6 @@ const roots = [
   'src/components',
   'src/previews',
   'dist/previews',
-  'c:/ContaPyme/PatyIA/_experimental/ISW-TestPatyIA/view',
-  'c:/ContaPyme/PatyIA/_experimental/ISW-TestPatyIA/src/js/components/paty',
 ];
 
 const SAFE = /<\/?(?:code|span|strong|em|b|i|small|br|kbd|samp)\b/i;

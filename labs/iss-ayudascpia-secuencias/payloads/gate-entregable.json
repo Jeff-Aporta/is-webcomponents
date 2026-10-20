@@ -36,7 +36,7 @@
           "from": "S",
           "to": "S",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-gate-entregable.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-gate-entregable.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -62,7 +62,7 @@
           "from": "S",
           "to": "S",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-gate-entregable.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-gate-entregable.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -88,7 +88,7 @@
           "from": "S",
           "to": "S",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-gate-entregable.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-gate-entregable.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -114,7 +114,7 @@
           "from": "S",
           "to": "S",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-gate-entregable.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-gate-entregable.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -140,7 +140,7 @@
           "from": "S",
           "to": "S",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-gate-entregable.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-gate-entregable.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -166,7 +166,7 @@
           "from": "S",
           "to": "S",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-gate-entregable.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-gate-entregable.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -192,7 +192,7 @@
           "from": "S",
           "to": "S",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-gate-entregable.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-gate-entregable.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -218,7 +218,7 @@
           "from": "S",
           "to": "G",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-gate-entregable.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-gate-entregable.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -244,7 +244,7 @@
           "from": "G",
           "to": "G",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-gate-entregable.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-gate-entregable.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -270,7 +270,7 @@
           "from": "G",
           "to": "G",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-gate-entregable.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-gate-entregable.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -296,7 +296,7 @@
           "from": "G",
           "to": "G",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-gate-entregable.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-gate-entregable.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -322,7 +322,7 @@
           "from": "G",
           "to": "G",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-gate-entregable.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-gate-entregable.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -348,7 +348,7 @@
           "from": "G",
           "to": "G",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-gate-entregable.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-gate-entregable.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -374,7 +374,7 @@
           "from": "G",
           "to": "G",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-gate-entregable.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-gate-entregable.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -400,7 +400,7 @@
           "from": "G",
           "to": "E",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-gate-entregable.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-gate-entregable.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -426,7 +426,7 @@
           "from": "E",
           "to": "E",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-gate-entregable.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-gate-entregable.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -452,7 +452,7 @@
           "from": "E",
           "to": "E",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-gate-entregable.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-gate-entregable.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -478,7 +478,7 @@
           "from": "G",
           "to": "S",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-gate-entregable.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-gate-entregable.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -524,7 +524,7 @@
             "m18"
           ],
           "condition": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-gate-entregable.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-gate-entregable.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -555,7 +555,7 @@
             "m18"
           ],
           "condition": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-gate-entregable.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-gate-entregable.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -579,7 +579,7 @@
             "m17"
           ],
           "condition": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-gate-entregable.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-gate-entregable.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -601,7 +601,7 @@
             "m18"
           ],
           "condition": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-gate-entregable.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-gate-entregable.json",
             "query": {
               "payload": {
                 "vectorFlow": {

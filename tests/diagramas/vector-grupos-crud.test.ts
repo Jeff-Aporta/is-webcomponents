@@ -13,17 +13,15 @@ import { RefObj } from '../../src/vendor-distributions/shared/lib/ref-obj.ts';
 import { GRUPOS_CRUD, vectorAFlujo } from '../../src/components/diagrams/utils/vector-flow-spec.ts';
 import { computeFlowchartLayout, resolveFlowchartSpec } from '../../src/components/diagrams/utils/flowchart-spec.ts';
 import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
-import { conFixtureIss } from '../_shared/iss-fixture.ts';
 import { denoTestCon } from '../_shared/deno-test.ts';
 
-const { test: registrar, lista } = coleccionPruebas({ categoria: 'what' });
-// Los casos que leen el fixture del ISS (D:\Dev, fuera del VPS) se saltan si no está.
-const test = conFixtureIss(registrar);
+const { test, lista } = coleccionPruebas({ categoria: 'what' });
 
 const denoTest = denoTestCon(test);
 
 
-const DIR = new URL('../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/', import.meta.url);
+// Datos versionados del kit (proyecto hermético): payloads del lab y fixture del ISS.
+const DIR = new URL('../../labs/iss-ayudascpia-flujos/payloads/', import.meta.url);
 type Caja = { x: number; y: number; w: number; h: number };
 const dentro = (n: Caja, c: Caja): boolean => n.x >= c.x && n.y >= c.y && n.x + n.w <= c.x + c.w && n.y + n.h <= c.y + c.h;
 const toca = (n: Caja, c: Caja): boolean => n.x < c.x + c.w && c.x < n.x + n.w && n.y < c.y + c.h && c.y < n.y + n.h;

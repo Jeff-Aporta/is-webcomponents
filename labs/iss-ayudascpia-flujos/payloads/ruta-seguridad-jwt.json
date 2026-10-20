@@ -22,7 +22,7 @@
               "label": "TIdentityClient",
               "kind": "class",
               "class": {
-                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+                "path": "../../../tests/fixtures/iss-ayudascpia/docs-experimental/diagramas/../fuentes/codigo.json",
                 "query": {
                   "clases": {
                     "[name=TIdentityClient]": {
@@ -52,7 +52,7 @@
             {
               "id": "api",
               "label": {
-                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
+                "path": "../../../tests/fixtures/iss-ayudascpia/docs-experimental/diagramas/componentes.json",
                 "query": {
                   "payload": {
                     "componentDiagram": {
@@ -67,7 +67,7 @@
               },
               "kind": "component",
               "component": {
-                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
+                "path": "../../../tests/fixtures/iss-ayudascpia/docs-experimental/diagramas/componentes.json",
                 "query": {
                   "payload": {
                     "componentDiagram": {
@@ -96,7 +96,7 @@
             {
               "id": "ds",
               "label": {
-                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
+                "path": "../../../tests/fixtures/iss-ayudascpia/docs-experimental/diagramas/componentes.json",
                 "query": {
                   "payload": {
                     "componentDiagram": {
@@ -111,7 +111,7 @@
               },
               "kind": "component",
               "component": {
-                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
+                "path": "../../../tests/fixtures/iss-ayudascpia/docs-experimental/diagramas/componentes.json",
                 "query": {
                   "payload": {
                     "componentDiagram": {
@@ -201,7 +201,7 @@
               "label": "TIdentityController",
               "kind": "class",
               "class": {
-                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+                "path": "../../../tests/fixtures/iss-ayudascpia/docs-experimental/diagramas/../fuentes/codigo.json",
                 "query": {
                   "clases": {
                     "[name=TIdentityController]": {

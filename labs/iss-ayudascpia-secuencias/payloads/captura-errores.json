@@ -48,7 +48,7 @@
           "from": "C",
           "to": "W",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-captura-errores.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-captura-errores.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -70,7 +70,7 @@
           "from": "W",
           "to": "W",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-captura-errores.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-captura-errores.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -96,7 +96,7 @@
           "from": "W",
           "to": "E",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-captura-errores.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-captura-errores.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -122,7 +122,7 @@
           "from": "E",
           "to": "H",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-captura-errores.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-captura-errores.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -148,7 +148,7 @@
           "from": "H",
           "to": "H",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-captura-errores.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-captura-errores.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -174,7 +174,7 @@
           "from": "H",
           "to": "E",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-captura-errores.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-captura-errores.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -200,7 +200,7 @@
           "from": "E",
           "to": "E",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-captura-errores.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-captura-errores.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -226,7 +226,7 @@
           "from": "E",
           "to": "P",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-captura-errores.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-captura-errores.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -252,7 +252,7 @@
           "from": "E",
           "to": "E",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-captura-errores.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-captura-errores.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -278,7 +278,7 @@
           "from": "E",
           "to": "W",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-captura-errores.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-captura-errores.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -304,7 +304,7 @@
           "from": "W",
           "to": "C",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-captura-errores.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-captura-errores.json",
             "query": {
               "payload": {
                 "vectorFlow": {

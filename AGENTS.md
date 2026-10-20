@@ -24,7 +24,7 @@ Custom Elements + Shadow DOM, sin frameworks, empaquetado con esbuild.
 Las fuentes viven en `src/components/`. La carpeta `components/` en la raíz del repo está prohibida: el guardián de layout la rechaza.
 
 ```
-c:\ContaPyme\Personal\apps\AppWebcomponents\
+<repo>/
 ├── components/                 # fuentes por categoría
 │   ├── _shared/                # utilidades (adopt-css, iconify-loader, layout…)
 │   ├── actions/                # button, fab, dropdown, copy-button, …
@@ -91,7 +91,7 @@ deno task dev
 # levantar dev server en modo Live Server (puerto 5505, ruta /apps/<repo>/)
 # Necesario si el navegador apunta a `http://127.0.0.1:5505/apps/iswc-root/...`
 # y NO usas `deno task dev`.
-SERVE_ROOT=C:\ContaPyme\Personal deno run -A --no-check scripts/serve.mjs 5505
+SERVE_ROOT=<workspace>/Personal deno run -A --no-check scripts/serve.mjs 5505
 
 # build para CDN (genera dist/cdn/{tag}.min.js + .min.css + is-base.min.css + loader + gallery-app)
 deno task build

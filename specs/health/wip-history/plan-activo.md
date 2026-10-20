@@ -36,7 +36,7 @@
 
 ## Tareas nuevas en cola
 
-### Workstream paralelo: iswc-editors (handoff `C:\Users\JAGUDELOE\handoff-is-editors.md`)
+### Workstream paralelo: iswc-editors (handoff `<home>/handoff-is-editors.md`)
 
 **Estado**: plan consolidado pendiente de luz verde. Resumen en `specs/health/wip-history/editors-handoff-summary.md`.
 
@@ -57,7 +57,7 @@
 1. types-strong T10 cerrado (checkpoint-tanda10.md escrito)
 2. WT-ROOT de types-strong consolidado y limpio
 3. Capitán pregunta al humano: "¿Arranco iswc-editors o prefieres parar?"
-4. Si OK: `git worktree add C:\ContaPyme\Personal\apps\WT\iswc-wc-wt-root-editors-2026 -b wt-root-editors-2026 main`
+4. Si OK: `git worktree add <workspace>/Personal/apps/WT/iswc-wc-wt-root-editors-2026 -b wt-root-editors-2026 main`
 
 **Riesgo de colisión**: ambos workstreams tocan `src/components/diagrams/*`. Secuencial obligatorio.
 

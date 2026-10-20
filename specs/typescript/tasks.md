@@ -91,7 +91,7 @@ para este proyecto.
       cuatro errores reales que el `any` tapaba. Build verde y 202 tests en
       verde; le quedan 232 errores de `tsc`, todos en sus tests y casi todos
       fixtures contra el tipo declarado.
-      Detalle en `../../../isc-swagger/TAREAS-TS.md`.
+      Detalle en `TAREAS-TS.md` del repo isc-swagger.
 
 ## Otros pendientes
 

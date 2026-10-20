@@ -32,7 +32,7 @@
         {
           "id": "X_ai-voz",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
+            "path": "../../../tests/fixtures/iss-ayudascpia/docs-experimental/diagramas/componentes.json",
             "query": {
               "payload": {
                 "componentDiagram": {
@@ -51,7 +51,7 @@
         {
           "id": "X_ai-op",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
+            "path": "../../../tests/fixtures/iss-ayudascpia/docs-experimental/diagramas/componentes.json",
             "query": {
               "payload": {
                 "componentDiagram": {
@@ -70,7 +70,7 @@
         {
           "id": "X_ai-hilo",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
+            "path": "../../../tests/fixtures/iss-ayudascpia/docs-experimental/diagramas/componentes.json",
             "query": {
               "payload": {
                 "componentDiagram": {
@@ -89,7 +89,7 @@
         {
           "id": "X_ai-resp",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
+            "path": "../../../tests/fixtures/iss-ayudascpia/docs-experimental/diagramas/componentes.json",
             "query": {
               "payload": {
                 "componentDiagram": {
@@ -112,7 +112,7 @@
           "from": "C",
           "to": "T",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-conversacion-turno.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-conversacion-turno.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -134,7 +134,7 @@
           "from": "T",
           "to": "T",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-conversacion-turno.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-conversacion-turno.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -160,7 +160,7 @@
           "from": "T",
           "to": "T",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-conversacion-turno.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-conversacion-turno.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -186,7 +186,7 @@
           "from": "T",
           "to": "P",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-conversacion-turno.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-conversacion-turno.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -212,7 +212,7 @@
           "from": "T",
           "to": "P",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-conversacion-turno.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-conversacion-turno.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -238,7 +238,7 @@
           "from": "T",
           "to": "T",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-conversacion-turno.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-conversacion-turno.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -264,7 +264,7 @@
           "from": "T",
           "to": "P",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-conversacion-turno.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-conversacion-turno.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -290,7 +290,7 @@
           "from": "T",
           "to": "P",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-conversacion-turno.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-conversacion-turno.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -312,7 +312,7 @@
           "from": "T",
           "to": "T",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-conversacion-turno.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-conversacion-turno.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -338,7 +338,7 @@
           "from": "T",
           "to": "X_ai-voz",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-conversacion-turno.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-conversacion-turno.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -364,7 +364,7 @@
           "from": "T",
           "to": "T",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-conversacion-turno.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-conversacion-turno.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -390,7 +390,7 @@
           "from": "T",
           "to": "X_ai-op",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-conversacion-turno.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-conversacion-turno.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -416,7 +416,7 @@
           "from": "T",
           "to": "T",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-conversacion-turno.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-conversacion-turno.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -442,7 +442,7 @@
           "from": "T",
           "to": "X_ai-hilo",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-conversacion-turno.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-conversacion-turno.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -468,7 +468,7 @@
           "from": "T",
           "to": "P",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-conversacion-turno.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-conversacion-turno.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -490,7 +490,7 @@
           "from": "T",
           "to": "X_ai-resp",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-conversacion-turno.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-conversacion-turno.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -516,7 +516,7 @@
           "from": "T",
           "to": "T",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-conversacion-turno.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-conversacion-turno.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -542,7 +542,7 @@
           "from": "T",
           "to": "T",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-conversacion-turno.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-conversacion-turno.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -568,7 +568,7 @@
           "from": "T",
           "to": "P",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-conversacion-turno.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-conversacion-turno.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -594,7 +594,7 @@
           "from": "T",
           "to": "T",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-conversacion-turno.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-conversacion-turno.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -620,7 +620,7 @@
           "from": "T",
           "to": "X_ai-op",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-conversacion-turno.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-conversacion-turno.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -646,7 +646,7 @@
           "from": "T",
           "to": "X_ai-op",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-conversacion-turno.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-conversacion-turno.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -672,7 +672,7 @@
           "from": "T",
           "to": "P",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-conversacion-turno.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-conversacion-turno.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -694,7 +694,7 @@
           "from": "T",
           "to": "P",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-conversacion-turno.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-conversacion-turno.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -720,7 +720,7 @@
           "from": "T",
           "to": "P",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-conversacion-turno.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-conversacion-turno.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -746,7 +746,7 @@
           "from": "T",
           "to": "C",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-conversacion-turno.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-conversacion-turno.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -777,7 +777,7 @@
             "m4"
           ],
           "condition": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-conversacion-turno.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-conversacion-turno.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -799,7 +799,7 @@
             "m5"
           ],
           "condition": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-conversacion-turno.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-conversacion-turno.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -821,7 +821,7 @@
             "m10"
           ],
           "condition": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-conversacion-turno.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-conversacion-turno.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -843,7 +843,7 @@
             "m12"
           ],
           "condition": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-conversacion-turno.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-conversacion-turno.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -866,7 +866,7 @@
             "m15"
           ],
           "condition": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-conversacion-turno.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-conversacion-turno.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -892,7 +892,7 @@
             "m23"
           ],
           "condition": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-conversacion-turno.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-conversacion-turno.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -914,7 +914,7 @@
             "m21"
           ],
           "condition": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-conversacion-turno.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-conversacion-turno.json",
             "query": {
               "payload": {
                 "vectorFlow": {

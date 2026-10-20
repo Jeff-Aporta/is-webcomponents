@@ -22,7 +22,7 @@
               "label": "TConversationClient",
               "kind": "class",
               "class": {
-                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+                "path": "../../../tests/fixtures/iss-ayudascpia/docs-experimental/diagramas/../fuentes/codigo.json",
                 "query": {
                   "clases": {
                     "[name=TConversationClient]": {
@@ -48,7 +48,7 @@
             {
               "id": "api",
               "label": {
-                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
+                "path": "../../../tests/fixtures/iss-ayudascpia/docs-experimental/diagramas/componentes.json",
                 "query": {
                   "payload": {
                     "componentDiagram": {
@@ -63,7 +63,7 @@
               },
               "kind": "component",
               "component": {
-                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
+                "path": "../../../tests/fixtures/iss-ayudascpia/docs-experimental/diagramas/componentes.json",
                 "query": {
                   "payload": {
                     "componentDiagram": {
@@ -85,7 +85,7 @@
                     }
                   },
                   {
-                    "op": "push",
+                    "op": "insert",
                     "valor": {
                       "items": [
                         "GET|DELETE /conversacion/{iconversacion}"
@@ -176,7 +176,7 @@
               "label": "TConversacionController",
               "kind": "class",
               "class": {
-                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+                "path": "../../../tests/fixtures/iss-ayudascpia/docs-experimental/diagramas/../fuentes/codigo.json",
                 "query": {
                   "clases": {
                     "[name=TConversacionController]": {
@@ -209,7 +209,7 @@
             {
               "id": "tconv",
               "label": {
-                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
+                "path": "../../../tests/fixtures/iss-ayudascpia/docs-experimental/diagramas/der.json",
                 "query": {
                   "payload": {
                     "erDiagram": {
@@ -224,7 +224,7 @@
               },
               "kind": "tableder",
               "table": {
-                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
+                "path": "../../../tests/fixtures/iss-ayudascpia/docs-experimental/diagramas/der.json",
                 "query": {
                   "payload": {
                     "erDiagram": {

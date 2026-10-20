@@ -2,8 +2,8 @@
 
 > **Para:** próxima sesión / agente capitán que retome el trabajo.
 > **Desde:** sesión que se corrompió (contexto saturado). Este documento es autocontenido.
-> **Ancla:** `C:\ContaPyme\Personal\apps\iswc-root`
-> **WT-ROOT:** `C:\ContaPyme\Personal\apps\WT\iswc-webcomponents-wt-root-types-strong-2026`
+> **Ancla:** `<repo>`
+> **WT-ROOT:** `<workspace>/Personal/apps/WT/iswc-webcomponents-wt-root-types-strong-2026`
 > **Rama WT-ROOT:** `wt-root-types-strong-2026`
 > **Fecha del handoff:** sesión cerrada con STRICT_NOW=62
 
@@ -68,8 +68,8 @@ Estos son los requisitos que el humano expresó explícitamente durante la sesi�
 ### 3.1 Estructura de worktrees
 
 ```
-C:\ContaPyme\Personal\apps\iswc-root                                  [main] 371472559c
-C:\ContaPyme\Personal\apps\WT\iswc-webcomponents-wt-root-types-strong-2026     [wt-root-types-strong-2026] e682fde1fa
+<repo>                                  [main] 371472559c
+<workspace>/Personal/apps/WT/iswc-webcomponents-wt-root-types-strong-2026     [wt-root-types-strong-2026] e682fde1fa
 ```
 
 **Solo 2 worktrees.** Los sub-agentes trabajan **directamente en WT-ROOT** con **file partitioning** (NO se crean worktrees por agente).
@@ -105,7 +105,7 @@ npx tsc -p tsconfig.strict-audit.json --noEmit 2>&1 | `
   ForEach-Object { "{0,6}  {1}" -f $_.Count, $_.Name }
 
 # Gates
-cd C:\ContaPyme\Personal\apps\WT\iswc-webcomponents-wt-root-types-strong-2026
+cd <workspace>/Personal/apps/WT/iswc-webcomponents-wt-root-types-strong-2026
 deno task typecheck
 deno task test
 ```
@@ -146,7 +146,7 @@ Ejecutar el comando de "Top archivos con errores" (sección 3.3) para la lista v
 
 ### 6.1 Lo que existe
 
-**Infraestructura en `C:\ContaPyme\Personal\apps\iswc-root\.audit\`:**
+**Infraestructura en `<repo>/.audit/`:**
 
 | Archivo | Contenido |
 |---|---|
@@ -159,9 +159,9 @@ Ejecutar el comando de "Top archivos con errores" (sección 3.3) para la lista v
 
 **Prompts F0.3 generados con:**
 ```powershell
-node C:\Users\JAGUDELOE\.dsh\profiles\deep-test\bin\discover-testables.mjs --proj=<proyecto> --out=<...>/discovery-deep-audit.json
-node C:\Users\JAGUDELOE\.dsh\profiles\deep-test\bin\group-testables.mjs --in=<discovery> --out=<groups> --size=10 --max-groups=12
-node C:\Users\JAGUDELOE\.dsh\profiles\deep-test\bin\dispatch-proposers.mjs --in=<groups> --out=<prompts-dir> --proj=<proyecto>
+node <home>/.dsh/profiles/deep-test/bin/discover-testables.mjs --proj=<proyecto> --out=<...>/discovery-deep-audit.json
+node <home>/.dsh/profiles/deep-test/bin/group-testables.mjs --in=<discovery> --out=<groups> --size=10 --max-groups=12
+node <home>/.dsh/profiles/deep-test/bin/dispatch-proposers.mjs --in=<groups> --out=<prompts-dir> --proj=<proyecto>
 ```
 
 ### 6.2 Propuestas ENTREGADAS (9 de 12)
@@ -270,11 +270,11 @@ BR (business rules), SM (state machines), VL (validación), TR (transformaciones
 **Resumen condensado ya disponible en:**
 `specs/health/wip-history/editors-handoff-summary.md`
 
-**Fuente original:** `C:\Users\JAGUDELOE\handoff-is-editors.md` (59 KB, 1,341 líneas)
+**Fuente original:** `<home>/handoff-is-editors.md` (59 KB, 1,341 líneas)
 
 **Contenido:** 16 web components `<is-X-editor>`, 9 WTs, ~290 tests planificados.
 
-**Estrategia decidida:** workstream **secuencial** después de que `types-strong-2026` cierre (STRICT <100 ✅ + T10 cerrado). WT-ROOT nuevo: `iswc-wc-wt-root-editors-2026` en `C:\ContaPyme\Personal\apps\WT\`. **Preguntar al humano antes de arrancar.**
+**Estrategia decidida:** workstream **secuencial** después de que `types-strong-2026` cierre (STRICT <100 ✅ + T10 cerrado). WT-ROOT nuevo: `iswc-wc-wt-root-editors-2026` en `<workspace>/Personal/apps/WT/`. **Preguntar al humano antes de arrancar.**
 
 ---
 
@@ -346,7 +346,7 @@ Si `write` falla con "file no longer exists — re-read the file, then retry" pa
 
 ## 11. Archivos clave
 
-### 11.1 WT-ROOT (`C:\ContaPyme\Personal\apps\WT\iswc-webcomponents-wt-root-types-strong-2026\`)
+### 11.1 WT-ROOT (`<workspace>/Personal/apps/WT/iswc-webcomponents-wt-root-types-strong-2026/`)
 
 | Archivo | Propósito |
 |---|---|
@@ -359,7 +359,7 @@ Si `write` falla con "file no longer exists — re-read the file, then retry" pa
 | `tsconfig.json` | Typecheck relajado (`strict: false`, solo `src/manifest.ts`) |
 | `tsconfig.strict-audit.json` | **Audit estricto** (`strict: true`, exclude `**/*.test.ts`) |
 
-### 11.2 Proyecto (`C:\ContaPyme\Personal\apps\iswc-root\`)
+### 11.2 Proyecto (`<repo>/`)
 
 | Archivo/Path | Propósito |
 |---|---|
@@ -376,11 +376,11 @@ Si `write` falla con "file no longer exists — re-read the file, then retry" pa
 
 | Skill | Path | Uso |
 |---|---|---|
-| `deep-test-proposals` | `C:\Users\JAGUDELOE\.dsh\skills\` | F0 pipeline |
+| `deep-test-proposals` | `<home>/.dsh/skills/` | F0 pipeline |
 | `grill-me` | (disponible) | Preguntas de selección múltiple en la UI de DSH para contextualizar |
 
 **Scripts de deep-test:**
-`C:\Users\JAGUDELOE\.dsh\profiles\deep-test\bin\{discover-testables,group-testables,dispatch-proposers,gate-proposals,iterate-to-stable,run-f0}.mjs`
+`<home>/.dsh/profiles/deep-test/bin/{discover-testables,group-testables,dispatch-proposers,gate-proposals,iterate-to-stable,run-f0}.mjs`
 
 ---
 
@@ -389,7 +389,7 @@ Si `write` falla con "file no longer exists — re-read the file, then retry" pa
 ### PASO 1 — Verificar estado (5 min)
 
 ```powershell
-$root = "C:\ContaPyme\Personal\apps\WT\iswc-webcomponents-wt-root-types-strong-2026"
+$root = "<workspace>/Personal/apps/WT/iswc-webcomponents-wt-root-types-strong-2026"
 git -C $root log --oneline -5
 git -C $root status --porcelain
 git -C $root worktree list
@@ -425,13 +425,13 @@ Si la meta es 0 absoluto, revisar si los 62 son:
 ### PASO 5 — Completar proposals F0 faltantes (2-3 h)
 
 Despachar 3 sub-agentes (paralelo) para `g39.md`, `g43.md`, `g44.md`:
-> "Lee `C:\ContaPyme\Personal\apps\iswc-root\.audit\prompts-deep\g39.md` y EJECUTA el template. Escribe tu respuesta completa en `.audit\proposals-deep\g39.md`. NO escribas código de tests."
+> "Lee `<repo>/.audit/prompts-deep/g39.md` y EJECUTA el template. Escribe tu respuesta completa en `.audit\proposals-deep\g39.md`. NO escribas código de tests."
 
 ### PASO 6 — F0.4 GATE (2-3 h)
 
 Con las 12 propuestas:
 ```powershell
-node C:\Users\JAGUDELOE\.dsh\profiles\deep-test\bin\gate-proposals.mjs `
+node <home>/.dsh/profiles/deep-test/bin/gate-proposals.mjs `
   --proposals="<proyecto>\.audit\proposals-deep" `
   --proj="<proyecto>" `
   --out="<proyecto>\.audit\tests-to-implement.md"
@@ -479,7 +479,7 @@ Verificar que todo está verde. **Nada en rojo.**
 
 Al aprobar:
 ```powershell
-cd C:\ContaPyme\Personal\apps\iswc-root
+cd <repo>
 git merge --no-ff wt-root-types-strong-2026 -m "merge: types-strong-2026 (8,777 → 62 errores strict, 344 commits)"
 ```
 
@@ -515,7 +515,7 @@ Preguntar al humano antes de arrancar. Nuevo WT-ROOT `iswc-wc-wt-root-editors-20
 
 ```
 Retoma el trabajo de types-strong-2026. Lee el handoff completo en:
-C:\Users\JAGUDELOE\handoff-is-types-strong-continuation.md
+<home>/handoff-is-types-strong-continuation.md
 
 Estado: STRICT_NOW=62 (meta <100 cumplida), 344 commits en wt-root-types-strong-2026,
 typecheck verde, 21/21 tests, tree limpio.

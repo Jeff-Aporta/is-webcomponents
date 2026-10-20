@@ -22,7 +22,7 @@
               "label": "TPermissionsClient",
               "kind": "class",
               "class": {
-                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+                "path": "../../../tests/fixtures/iss-ayudascpia/docs-experimental/diagramas/../fuentes/codigo.json",
                 "query": {
                   "clases": {
                     "[name=TPermissionsClient]": {
@@ -48,7 +48,7 @@
             {
               "id": "api",
               "label": {
-                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
+                "path": "../../../tests/fixtures/iss-ayudascpia/docs-experimental/diagramas/componentes.json",
                 "query": {
                   "payload": {
                     "componentDiagram": {
@@ -63,7 +63,7 @@
               },
               "kind": "component",
               "component": {
-                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
+                "path": "../../../tests/fixtures/iss-ayudascpia/docs-experimental/diagramas/componentes.json",
                 "query": {
                   "payload": {
                     "componentDiagram": {
@@ -163,7 +163,7 @@
               "label": "TPermissionsController",
               "kind": "class",
               "class": {
-                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+                "path": "../../../tests/fixtures/iss-ayudascpia/docs-experimental/diagramas/../fuentes/codigo.json",
                 "query": {
                   "clases": {
                     "[name=TPermissionsController]": {
@@ -189,7 +189,7 @@
             {
               "id": "trec",
               "label": {
-                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
+                "path": "../../../tests/fixtures/iss-ayudascpia/docs-experimental/diagramas/der.json",
                 "query": {
                   "payload": {
                     "erDiagram": {
@@ -204,7 +204,7 @@
               },
               "kind": "tableder",
               "table": {
-                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
+                "path": "../../../tests/fixtures/iss-ayudascpia/docs-experimental/diagramas/der.json",
                 "query": {
                   "payload": {
                     "erDiagram": {
@@ -234,7 +234,7 @@
             {
               "id": "trol",
               "label": {
-                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
+                "path": "../../../tests/fixtures/iss-ayudascpia/docs-experimental/diagramas/der.json",
                 "query": {
                   "payload": {
                     "erDiagram": {
@@ -249,7 +249,7 @@
               },
               "kind": "tableder",
               "table": {
-                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
+                "path": "../../../tests/fixtures/iss-ayudascpia/docs-experimental/diagramas/der.json",
                 "query": {
                   "payload": {
                     "erDiagram": {
@@ -281,7 +281,7 @@
             {
               "id": "tacc",
               "label": {
-                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
+                "path": "../../../tests/fixtures/iss-ayudascpia/docs-experimental/diagramas/der.json",
                 "query": {
                   "payload": {
                     "erDiagram": {
@@ -296,7 +296,7 @@
               },
               "kind": "tableder",
               "table": {
-                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
+                "path": "../../../tests/fixtures/iss-ayudascpia/docs-experimental/diagramas/der.json",
                 "query": {
                   "payload": {
                     "erDiagram": {

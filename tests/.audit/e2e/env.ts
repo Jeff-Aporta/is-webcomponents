@@ -1,6 +1,6 @@
 // env.ts: configuración E2E de iswc-root SIN .env.
-// Los secretos se leen SIEMPRE de rutas fijas:
-//   - MiniMax:  C:\ContaPyme\Personal\secrets.json  -> Values.MINIMAX_API_KEY_50USD
+// Los secretos se leen de un archivo explícito (nunca de otra carpeta local por defecto):
+//   - MiniMax:  $ISWC_SECRETS (o <repo>/.secrets.json, ignorado por git) -> Values.MINIMAX_API_KEY_50USD
 // Base URL / modelo / host de MiniMax no son secretos y quedan quemados como
 // constantes (se pueden sobreescribir por entorno solo para infraestructura).
 import { readFileSync, existsSync } from 'node:fs';
@@ -21,18 +21,10 @@ function subirHastaRaiz(inicio: string): string {
   return inicio;
 }
 
-function subir(inicio: string, niveles: number): string {
-  let d = inicio;
-  for (let i = 0; i < niveles; i++) d = path.resolve(d, '..');
-  return d;
-}
-
 const repoDir: string = subirHastaRaiz(e2eDir);
-// Raíz del workspace: C:\ContaPyme (repo en ...\Personal\apps\iswc-root)
-const workspaceDir: string = subir(repoDir, 3);
 
-/** Ruta fija del archivo de secretos del workspace. */
-export const SECRETOS_PATH = path.join(workspaceDir, 'Personal', 'secrets.json');
+/** Archivo de secretos: ISWC_SECRETS o `.secrets.json` en la raíz del repo (proyecto hermético). */
+export const SECRETOS_PATH = process.env.ISWC_SECRETS ?? path.join(repoDir, '.secrets.json');
 
 function o(clave: string, defecto: string): string {
   const v = process.env[clave];

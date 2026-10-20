@@ -42,7 +42,7 @@
 ## Gate 1 — `deno task typecheck`
 
 ```bash
-cd C:\ContaPyme\Personal\apps\iswc-root
+cd <repo>
 deno task typecheck
 ```
 
@@ -117,7 +117,7 @@ python -B -m pytest tests/
 ## Gate 5 — `auditor.py audit iswc-root --sin-deep`
 
 ```bash
-python -B auditor.py audit C:\ContaPyme\Personal\apps\iswc-root \
+python -B auditor.py audit <repo> \
   --sin-deep --sin-preguntas --sin-documentar
 ```
 
@@ -140,7 +140,7 @@ python -B auditor.py audit C:\ContaPyme\Personal\apps\iswc-root \
 ## Gate 6 — `auditor.py fast iswc-root`
 
 ```bash
-python -B auditor.py fast C:\ContaPyme\Personal\apps\iswc-root
+python -B auditor.py fast <repo>
 ```
 
 **Resultado:**

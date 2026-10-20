@@ -292,7 +292,7 @@ JSON que el componente consume. Esta es la clave del determinismo:
 
 ### Fase E — Demos  ✅
 
-- Crear `C:\ContaPyme\Personal\apps\iswc-root\demos/`:
+- Crear `<repo>/demos/`:
   - `er-editor.html`: editor completo embebido.
   - `er-static.html`: solo lectura (vista "story" en html).
   - `index.html`: índice de demos.

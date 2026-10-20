@@ -11,14 +11,21 @@
 //
 // Escribe `payloads/ruta-<slug>.json` (formato de los editables del ISS) y, con `--iss`, también en
 // `docs-experimental/diagramas` del ISS (la fuente de los docs). Exporta `ruta()` para `eps-iss.mjs`.
-// Uso: deno run -A --no-check labs/iss-ayudascpia-flujos/rutas-ricas.mjs [--iss]
+// Uso: deno run -A --no-check labs/iss-ayudascpia-flujos/rutas-ricas.mjs
+//      ISS_DIR=<checkout del ISS> deno run -A --no-check labs/iss-ayudascpia-flujos/rutas-ricas.mjs [--iss]
+// Sin ISS_DIR, los datos salen del fixture versionado (tests/fixtures/iss-ayudascpia): el kit es
+// hermético y no lee otras carpetas locales por defecto.
 
 import { dirname, join, relative, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { readFile, writeFile } from 'node:fs/promises';
 
 const LAB = dirname(fileURLToPath(import.meta.url));
-export const ISS = join(LAB, '..', '..', '..', '..', '..', 'PatyIA', '_experimental', 'ISS-AyudasCPIA', 'docs-experimental', 'diagramas');
+/** Fixture versionado del ISS (datos fuente del lab): las refs de los payloads del lab apuntan aquí. */
+export const FIXTURE = join(LAB, '..', '..', 'tests', 'fixtures', 'iss-ayudascpia', 'docs-experimental', 'diagramas');
+/** Editables del ISS: un checkout explícito (ISS_DIR) o, por defecto, el fixture. */
+export const ISS = process.env.ISS_DIR ? join(process.env.ISS_DIR, 'docs-experimental', 'diagramas') : FIXTURE;
+if (process.argv.includes('--iss') && !process.env.ISS_DIR) throw new Error('rutas-ricas --iss: define ISS_DIR (checkout del ISS)');
 const leer = async (f) => JSON.parse(await readFile(join(ISS, f), 'utf8')).payload;
 
 const componentes = new Map((await leer('componentes.json')).componentDiagram.components.map((c) => [c.id, c]));
@@ -100,7 +107,7 @@ export function ruta(meta, componer) {
     componente(id, ref, lane, items) {
       if (!componentes.has(ref)) throw new Error(`componente ${ref} no está en componentes.json`);
       // Nombre, estereotipo e ítems desde componentes.json; los ítems propios de la ruta, si los hay, los pisan.
-      const component = { ...refComponente(ref), actions: [{ op: 'get', query: { name: true, stereotype: true, items: true, provides: true, icon: true } }, ...(items ? [{ op: 'push', valor: { items } }] : [])] };
+      const component = { ...refComponente(ref), actions: [{ op: 'get', query: { name: true, stereotype: true, items: true, provides: true, icon: true } }, ...(items ? [{ op: 'insert', valor: { items } }] : [])] };
       return n({ id, label: refComponente(ref, 'name'), kind: 'component', lane, component, ref });
     },
     clase(id, ref, lane, fill) {
@@ -272,7 +279,7 @@ export function ruta(meta, componer) {
     lanes.unshift({ id: 'cliente', label: 'Cliente', align: 'center' });
     nodes.unshift({ id: 'cliente', label: cliente, kind: 'class', lane: 'cliente', class: refClase(cliente) });
     // El llamado del cliente dice qué es: «HTTP POST /conversacion» (el primer ítem del componente).
-    const items = componenteInicial.component?.actions?.find((x) => x.op === 'push')?.valor?.items ?? [];
+    const items = componenteInicial.component?.actions?.find((x) => x.op === 'insert')?.valor?.items ?? [];
     const llamado = items[0] ? `HTTP ${String(items[0]).replace(/\|/g, ' · ')}` : 'HTTP';
     edges.unshift({ from: 'cliente', to: componenteInicial.id, label: llamado });
   }
@@ -819,7 +826,9 @@ const GENERICOS = new Set(['leer()', 'insertar()', 'actualizar()', 'borrar()']);
  */
 async function conservarFunciones(r) {
   let previo = null;
-  try { previo = JSON.parse(await readFile(join(ISS, `${r.slug}.json`), 'utf8')); } catch { /* ruta nueva */ }
+  for (const dir of [ISS, join(LAB, 'payloads')]) {
+    try { previo = JSON.parse(await readFile(join(dir, `${r.slug}.json`), 'utf8')); break; } catch { /* sigue */ }
+  }
   const curadas = new Map((previo?.payload?.vectorFlow?.columns ?? []).flatMap((c) => c.nodes).filter((x) => x.shape === 'bridge').map((x) => [x.id, x.label]));
   for (const c of r.payload?.vectorFlow?.columns ?? []) {
     for (const x of c.nodes) {
@@ -834,8 +843,8 @@ async function conservarFunciones(r) {
 /** Escribe cada editable en el lab y, con `--iss`, en los editables del ISS. */
 export async function escribir(editables) {
   const destinos = [join(LAB, 'payloads'), ...(process.argv.includes('--iss') ? [ISS] : [])];
-  // En el lab, las referencias apuntan a la carpeta del ISS (las fuentes de verdad viven allá).
-  const haciaIss = relative(join(LAB, 'payloads'), ISS).split(sep).join('/');
+  // En el lab, las referencias apuntan al fixture versionado (nunca a otra carpeta local).
+  const haciaIss = relative(join(LAB, 'payloads'), FIXTURE).split(sep).join('/');
   const paraLab = (v) => Array.isArray(v) ? v.map(paraLab)
     : v && typeof v === 'object'
       ? Object.fromEntries(Object.entries(v).map(([k, x]) => [k, k === 'path' && typeof x === 'string' && x.startsWith('.') ? `${haciaIss}/${x}`.replace(/\/\.\//g, '/') : paraLab(x)]))

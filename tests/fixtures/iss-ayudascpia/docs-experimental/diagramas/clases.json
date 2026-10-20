@@ -1,0 +1,817 @@
+{
+  "slug": "clases",
+  "module": "010-General",
+  "tag": "iswc-class-diagram",
+  "script": "diagrams/class-diagram.min.js",
+  "attrs": {
+    "diagram-style": "insoft"
+  },
+  "_fuente": "Diagrama curado (restaurado de b394afe8, 2026-10-07). Fuente oficial de clases.svg; se edita a mano. Nombres por referencia a fuentes/codigo.json; los métodos y atributos son los de esa versión que siguen existiendo en el código. La vista generada desde el código (tríos) es clases-trios.json (clases-trios.mjs, oficial: false).",
+  "payload": {
+    "classDiagram": {
+      "title": "ISS PatyIA · Clases del servidor",
+      "layout": {
+        "layerCols": 4,
+        "nestedCols": 2,
+        "colGutter": 112,
+        "nestedRowGap": 72,
+        "nestedPkgGap": 80,
+        "lanePitch": 28,
+        "laneNearFactor": 48,
+        "pkgBorderClearance": 40,
+        "pkgBorderNearFactor": 6,
+        "pkgCrossFactor": 2
+      },
+      "packages": [
+        {
+          "id": "pkg-stack",
+          "name": "Stack InSoft",
+          "stereotype": "npm @ingenieria_insoft",
+          "accent": "#4B5563",
+          "palette": "neutral",
+          "classFill": "external",
+          "icon": "mdi:package-variant"
+        },
+        {
+          "id": "pkg-base",
+          "name": "Base de controllers",
+          "stereotype": "020 Controllers/server",
+          "accent": "#166534",
+          "classFill": "service",
+          "icon": "mdi:shield-check"
+        },
+        {
+          "id": "pkg-ctrl",
+          "name": "Controllers por dominio",
+          "stereotype": "020 Controllers/server",
+          "cols": 4,
+          "icon": "mdi:api"
+        },
+        {
+          "id": "pkg-conv",
+          "name": "Conversación",
+          "parent": "pkg-ctrl",
+          "accent": "#7C3AED",
+          "cols": 3,
+          "classFill": "service",
+          "icon": "mdi:forum"
+        },
+        {
+          "id": "pkg-cfg",
+          "name": "Configuración",
+          "parent": "pkg-ctrl",
+          "accent": "#0E7490",
+          "cols": 3,
+          "classFill": "service",
+          "icon": "mdi:cog"
+        },
+        {
+          "id": "pkg-ident",
+          "name": "Identidad",
+          "parent": "pkg-ctrl",
+          "accent": "#B45309",
+          "cols": 2,
+          "classFill": "service",
+          "icon": "mdi:account-key"
+        },
+        {
+          "id": "pkg-ops",
+          "name": "Operación",
+          "parent": "pkg-ctrl",
+          "accent": "#BE123C",
+          "cols": 4,
+          "classFill": "service",
+          "icon": "mdi:wrench"
+        },
+        {
+          "id": "pkg-models",
+          "name": "models · extienden TObject (ispgen)",
+          "stereotype": "010 Objetos",
+          "accent": "#854D0E",
+          "cols": 2,
+          "icon": "mdi:database"
+        },
+        {
+          "id": "pkg-m-conv",
+          "name": "Conversación",
+          "parent": "pkg-models",
+          "accent": "#854D0E",
+          "cols": 3,
+          "classFill": "store",
+          "icon": "mdi:forum"
+        },
+        {
+          "id": "pkg-m-cfg",
+          "name": "Configuración y operación",
+          "parent": "pkg-models",
+          "accent": "#854D0E",
+          "cols": 3,
+          "classFill": "store",
+          "icon": "mdi:cog"
+        }
+      ],
+      "classes": [
+        {
+          "id": "catalogo",
+          "name": "TCatalogoClientesISController<T>",
+          "stereotype": "ispclientesisserver",
+          "package": "pkg-stack",
+          "methods": [
+            "+ get() · insert() · update() · delete()",
+            "+ lookUp(campos, pk)",
+            "+ ctxUser: TContextUser"
+          ]
+        },
+        {
+          "id": "base",
+          "name": {
+            "path": "../fuentes/codigo.json",
+            "query": {
+              "clases": {
+                "[name=TBasePatyIAServer]": {
+                  "uml": {
+                    "name": true
+                  }
+                }
+              }
+            }
+          },
+          "stereotype": "abstract",
+          "package": "pkg-base",
+          "methods": [
+            "+ verifyAuthorization(): Auth",
+            "+ accionRecurso(accion): fila SEG",
+            "+ upsert(pojo)"
+          ]
+        },
+        {
+          "id": "conv",
+          "name": {
+            "path": "../fuentes/codigo.json",
+            "query": {
+              "clases": {
+                "[name=TConversacionController]": {
+                  "uml": {
+                    "name": true
+                  }
+                }
+              }
+            }
+          },
+          "package": "pkg-conv",
+          "attributes": [
+            "- nTbl = patyia_conversaciones"
+          ],
+          "methods": [
+            "+ delete()",
+            "+ getLogs() · getResumen()",
+            "+ listConversaciones()",
+            "+ probeMcpAsw()",
+            "+ timerCerrarConversaciones()"
+          ]
+        },
+        {
+          "id": "log",
+          "name": {
+            "path": "../fuentes/codigo.json",
+            "query": {
+              "clases": {
+                "[name=TConversationLogController]": {
+                  "uml": {
+                    "name": true
+                  }
+                }
+              }
+            }
+          },
+          "package": "pkg-conv",
+          "attributes": [
+            "- nTbl = patyia_conversacion_log"
+          ],
+          "methods": [
+            "+ purgarLogConversaciones()"
+          ]
+        },
+        {
+          "id": "tiq",
+          "name": {
+            "path": "../fuentes/codigo.json",
+            "query": {
+              "clases": {
+                "[name=TConversationTicketController]": {
+                  "uml": {
+                    "name": true
+                  }
+                }
+              }
+            }
+          },
+          "package": "pkg-conv",
+          "attributes": [
+            "- nTbl = patyia_tiquetesconversacion"
+          ],
+          "methods": [
+            "+ porConversacion(iconversacion)"
+          ]
+        },
+        {
+          "id": "msg",
+          "name": {
+            "path": "../fuentes/codigo.json",
+            "query": {
+              "clases": {
+                "[name=TQualifiedMessageController]": {
+                  "uml": {
+                    "name": true
+                  }
+                }
+              }
+            }
+          },
+          "package": "pkg-conv",
+          "attributes": [
+            "- nTbl = patyia_mensajescalificados"
+          ],
+          "methods": [
+            "+ insert()",
+            "+ porConversacion(iconversacion)"
+          ]
+        },
+        {
+          "id": "mcp",
+          "name": {
+            "path": "../fuentes/codigo.json",
+            "query": {
+              "clases": {
+                "[name=TMcpSessionController]": {
+                  "uml": {
+                    "name": true
+                  }
+                }
+              }
+            }
+          },
+          "package": "pkg-conv",
+          "attributes": [
+            "- nTbl = patyia_mcp_sesiones"
+          ],
+          "methods": [
+            "+ GetCurrent(): sesión vigente",
+            "+ UpdateOrInsert(sesión)"
+          ]
+        },
+        {
+          "id": "sys",
+          "name": {
+            "path": "../fuentes/codigo.json",
+            "query": {
+              "clases": {
+                "[name=TSysValueController]": {
+                  "uml": {
+                    "name": true
+                  }
+                }
+              }
+            }
+          },
+          "package": "pkg-cfg",
+          "attributes": [
+            "- nTbl = patyia_sys_values"
+          ],
+          "methods": [
+            "+ getOpenaiCfg() «static»"
+          ]
+        },
+        {
+          "id": "prov",
+          "name": {
+            "path": "../fuentes/codigo.json",
+            "query": {
+              "clases": {
+                "[name=TProviderController]": {
+                  "uml": {
+                    "name": true
+                  }
+                }
+              }
+            }
+          },
+          "package": "pkg-cfg",
+          "attributes": [
+            "- nTbl = patyia_providers"
+          ],
+          "methods": [
+            "+ getCuenta(iproveedor)"
+          ]
+        },
+        {
+          "id": "td",
+          "name": {
+            "path": "../fuentes/codigo.json",
+            "query": {
+              "clases": {
+                "[name=TTdConsultationController]": {
+                  "uml": {
+                    "name": true
+                  }
+                }
+              }
+            }
+          },
+          "package": "pkg-cfg",
+          "attributes": [
+            "- nTbl = patyia_tdconsultas"
+          ]
+        },
+        {
+          "id": "ident",
+          "name": {
+            "path": "../fuentes/codigo.json",
+            "query": {
+              "clases": {
+                "[name=TIdentityController]": {
+                  "uml": {
+                    "name": true
+                  }
+                }
+              }
+            }
+          },
+          "package": "pkg-ident",
+          "methods": [
+            "+ bootstrapJwt(): token",
+            "+ portalLogin(): token | 409"
+          ]
+        },
+        {
+          "id": "perm",
+          "name": {
+            "path": "../fuentes/codigo.json",
+            "query": {
+              "clases": {
+                "[name=TPermissionsController]": {
+                  "uml": {
+                    "name": true
+                  }
+                }
+              }
+            }
+          },
+          "package": "pkg-ident",
+          "methods": [
+            "+ me(): perfil SEG",
+            "+ rolPrincipal(icontacto) «static»"
+          ]
+        },
+        {
+          "id": "err",
+          "name": {
+            "path": "../fuentes/codigo.json",
+            "query": {
+              "clases": {
+                "[name=TErrorController]": {
+                  "uml": {
+                    "name": true
+                  }
+                }
+              }
+            }
+          },
+          "package": "pkg-ops",
+          "attributes": [
+            "- nTbl = patyia_errores"
+          ],
+          "methods": [
+            "+ insert() · registrar()"
+          ]
+        },
+        {
+          "id": "file",
+          "name": {
+            "path": "../fuentes/codigo.json",
+            "query": {
+              "clases": {
+                "[name=TFileStorageController]": {
+                  "uml": {
+                    "name": true
+                  }
+                }
+              }
+            }
+          },
+          "package": "pkg-ops",
+          "attributes": [
+            "- nTbl = patyia_files_storage"
+          ],
+          "methods": [
+            "+ upload(): 503"
+          ]
+        },
+        {
+          "id": "info",
+          "name": {
+            "path": "../fuentes/codigo.json",
+            "query": {
+              "clases": {
+                "[name=TInfoController]": {
+                  "uml": {
+                    "name": true
+                  }
+                }
+              }
+            }
+          },
+          "package": "pkg-ops",
+          "methods": [
+            "+ info(): salud"
+          ]
+        },
+        {
+          "id": "cdn",
+          "name": {
+            "path": "../fuentes/codigo.json",
+            "query": {
+              "clases": {
+                "[name=TCdnController]": {
+                  "uml": {
+                    "name": true
+                  }
+                }
+              }
+            }
+          },
+          "package": "pkg-ops",
+          "methods": [
+            "+ file(): front.ts"
+          ]
+        },
+        {
+          "id": "m_conv",
+          "name": {
+            "path": "../fuentes/codigo.json",
+            "query": {
+              "clases": {
+                "[name=TConversacion]": {
+                  "uml": {
+                    "name": true
+                  }
+                }
+              }
+            }
+          },
+          "stereotype": "patyia_conversaciones",
+          "package": "pkg-m-conv",
+          "attributes": [
+            "+ iconversacion: bigint «PK»",
+            "+ itercero · icontacto",
+            "+ titulo · hilo",
+            "+ itdestado: 0 | 1 | 2",
+            "+ fhcre · fhultact"
+          ]
+        },
+        {
+          "id": "m_log",
+          "name": {
+            "path": "../fuentes/codigo.json",
+            "query": {
+              "clases": {
+                "[name=TConversationLog]": {
+                  "uml": {
+                    "name": true
+                  }
+                }
+              }
+            }
+          },
+          "stereotype": "patyia_conversacion_log",
+          "package": "pkg-m-conv",
+          "attributes": [
+            "+ iconversacion: bigint",
+            "+ content: jsonb",
+            "+ fhultact"
+          ]
+        },
+        {
+          "id": "m_tiq",
+          "name": {
+            "path": "../fuentes/codigo.json",
+            "query": {
+              "clases": {
+                "[name=TConversationTicket]": {
+                  "uml": {
+                    "name": true
+                  }
+                }
+              }
+            }
+          },
+          "stereotype": "patyia_tiquetesconversacion",
+          "package": "pkg-m-conv",
+          "attributes": [
+            "+ itiquete «PK»",
+            "+ iconversacion «PK»",
+            "+ itema · iclasificador"
+          ]
+        },
+        {
+          "id": "m_msg",
+          "name": {
+            "path": "../fuentes/codigo.json",
+            "query": {
+              "clases": {
+                "[name=TQualifiedMessage]": {
+                  "uml": {
+                    "name": true
+                  }
+                }
+              }
+            }
+          },
+          "stereotype": "patyia_mensajescalificados",
+          "package": "pkg-m-conv",
+          "attributes": [
+            "+ imensaje «PK»",
+            "+ iconversacion «PK»",
+            "+ butil · contenido"
+          ]
+        },
+        {
+          "id": "m_mcp",
+          "name": {
+            "path": "../fuentes/codigo.json",
+            "query": {
+              "clases": {
+                "[name=TMcpSession]": {
+                  "uml": {
+                    "name": true
+                  }
+                }
+              }
+            }
+          },
+          "stereotype": "patyia_mcp_sesiones",
+          "package": "pkg-m-conv",
+          "attributes": [
+            "+ iusuario «PK»",
+            "+ jsession · bactivo · fhcre"
+          ]
+        },
+        {
+          "id": "m_sys",
+          "name": {
+            "path": "../fuentes/codigo.json",
+            "query": {
+              "clases": {
+                "[name=TSysValue]": {
+                  "uml": {
+                    "name": true
+                  }
+                }
+              }
+            }
+          },
+          "stereotype": "patyia_sys_values",
+          "package": "pkg-m-cfg",
+          "attributes": [
+            "+ isystemkey «PK»",
+            "+ jvalue: jsonb"
+          ]
+        },
+        {
+          "id": "m_prov",
+          "name": {
+            "path": "../fuentes/codigo.json",
+            "query": {
+              "clases": {
+                "[name=TProvider]": {
+                  "uml": {
+                    "name": true
+                  }
+                }
+              }
+            }
+          },
+          "stereotype": "patyia_providers",
+          "package": "pkg-m-cfg",
+          "attributes": [
+            "+ iproveedor «PK»",
+            "+ jcuenta: jsonb",
+            "+ bactivo"
+          ]
+        },
+        {
+          "id": "m_td",
+          "name": {
+            "path": "../fuentes/codigo.json",
+            "query": {
+              "clases": {
+                "[name=TTdConsulta]": {
+                  "uml": {
+                    "name": true
+                  }
+                }
+              }
+            }
+          },
+          "stereotype": "patyia_tdconsultas",
+          "package": "pkg-m-cfg",
+          "attributes": [
+            "+ itdconsulta «PK»",
+            "+ instruccion · jconfig",
+            "+ jpermisos"
+          ]
+        },
+        {
+          "id": "m_err",
+          "name": {
+            "path": "../fuentes/codigo.json",
+            "query": {
+              "clases": {
+                "[name=TError_]": {
+                  "uml": {
+                    "name": true
+                  }
+                }
+              }
+            }
+          },
+          "stereotype": "patyia_errores",
+          "package": "pkg-m-cfg",
+          "attributes": [
+            "+ ierror «PK»",
+            "+ jerror: jsonb",
+            "+ referencia"
+          ]
+        },
+        {
+          "id": "m_file",
+          "name": {
+            "path": "../fuentes/codigo.json",
+            "query": {
+              "clases": {
+                "[name=TFileStorage]": {
+                  "uml": {
+                    "name": true
+                  }
+                }
+              }
+            }
+          },
+          "stereotype": "patyia_files_storage",
+          "package": "pkg-m-cfg",
+          "attributes": [
+            "+ ifile «PK»",
+            "+ jfile: jsonb"
+          ]
+        }
+      ],
+      "relations": [
+        {
+          "from": "base",
+          "to": "catalogo",
+          "kind": "inheritance"
+        },
+        {
+          "from": "conv",
+          "to": "base",
+          "kind": "inheritance"
+        },
+        {
+          "from": "log",
+          "to": "base",
+          "kind": "inheritance"
+        },
+        {
+          "from": "tiq",
+          "to": "base",
+          "kind": "inheritance"
+        },
+        {
+          "from": "msg",
+          "to": "base",
+          "kind": "inheritance"
+        },
+        {
+          "from": "mcp",
+          "to": "base",
+          "kind": "inheritance"
+        },
+        {
+          "from": "sys",
+          "to": "base",
+          "kind": "inheritance"
+        },
+        {
+          "from": "prov",
+          "to": "base",
+          "kind": "inheritance"
+        },
+        {
+          "from": "td",
+          "to": "base",
+          "kind": "inheritance"
+        },
+        {
+          "from": "ident",
+          "to": "base",
+          "kind": "inheritance"
+        },
+        {
+          "from": "perm",
+          "to": "base",
+          "kind": "inheritance"
+        },
+        {
+          "from": "err",
+          "to": "base",
+          "kind": "inheritance"
+        },
+        {
+          "from": "file",
+          "to": "base",
+          "kind": "inheritance"
+        },
+        {
+          "from": "info",
+          "to": "base",
+          "kind": "inheritance"
+        },
+        {
+          "from": "cdn",
+          "to": "base",
+          "kind": "inheritance"
+        },
+        {
+          "from": "conv",
+          "to": "log",
+          "kind": "dependency"
+        },
+        {
+          "from": "conv",
+          "to": "mcp",
+          "kind": "dependency"
+        },
+        {
+          "from": "conv",
+          "to": "sys",
+          "kind": "dependency"
+        },
+        {
+          "from": "sys",
+          "to": "prov",
+          "kind": "dependency"
+        },
+        {
+          "from": "conv",
+          "to": "m_conv",
+          "kind": "dependency"
+        },
+        {
+          "from": "log",
+          "to": "m_log",
+          "kind": "dependency"
+        },
+        {
+          "from": "tiq",
+          "to": "m_tiq",
+          "kind": "dependency"
+        },
+        {
+          "from": "msg",
+          "to": "m_msg",
+          "kind": "dependency"
+        },
+        {
+          "from": "mcp",
+          "to": "m_mcp",
+          "kind": "dependency"
+        },
+        {
+          "from": "sys",
+          "to": "m_sys",
+          "kind": "dependency"
+        },
+        {
+          "from": "prov",
+          "to": "m_prov",
+          "kind": "dependency"
+        },
+        {
+          "from": "td",
+          "to": "m_td",
+          "kind": "dependency"
+        },
+        {
+          "from": "err",
+          "to": "m_err",
+          "kind": "dependency"
+        },
+        {
+          "from": "file",
+          "to": "m_file",
+          "kind": "dependency"
+        }
+      ]
+    }
+  }
+}

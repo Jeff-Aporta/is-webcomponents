@@ -22,7 +22,7 @@
               "label": "TErrorsClient",
               "kind": "class",
               "class": {
-                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+                "path": "../../../tests/fixtures/iss-ayudascpia/docs-experimental/fuentes/codigo.json",
                 "query": {
                   "clases": {
                     "[name=TErrorsClient]": {
@@ -48,7 +48,7 @@
             {
               "id": "api",
               "label": {
-                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
+                "path": "../../../tests/fixtures/iss-ayudascpia/docs-experimental/diagramas/componentes.json",
                 "query": {
                   "payload": {
                     "componentDiagram": {
@@ -63,7 +63,7 @@
               },
               "kind": "component",
               "component": {
-                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
+                "path": "../../../tests/fixtures/iss-ayudascpia/docs-experimental/diagramas/componentes.json",
                 "query": {
                   "payload": {
                     "componentDiagram": {
@@ -85,7 +85,7 @@
                     }
                   },
                   {
-                    "op": "push",
+                    "op": "insert",
                     "valor": {
                       "items": [
                         "POST /error",
@@ -152,7 +152,7 @@
               "label": "TErrorController",
               "kind": "class",
               "class": {
-                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+                "path": "../../../tests/fixtures/iss-ayudascpia/docs-experimental/fuentes/codigo.json",
                 "query": {
                   "clases": {
                     "[name=TErrorController]": {
@@ -199,7 +199,7 @@
             {
               "id": "terr",
               "label": {
-                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
+                "path": "../../../tests/fixtures/iss-ayudascpia/docs-experimental/diagramas/der.json",
                 "query": {
                   "payload": {
                     "erDiagram": {
@@ -214,7 +214,7 @@
               },
               "kind": "tableder",
               "table": {
-                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
+                "path": "../../../tests/fixtures/iss-ayudascpia/docs-experimental/diagramas/der.json",
                 "query": {
                   "payload": {
                     "erDiagram": {

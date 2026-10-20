@@ -1,6 +1,6 @@
 # iswc-editors handoff — Resumen ejecutivo
 
-> **Origen**: `C:\Users\JAGUDELOE\handoff-is-editors.md` (59KB, 1341 líneas, versión 1.0 final).
+> **Origen**: `<home>/handoff-is-editors.md` (59KB, 1341 líneas, versión 1.0 final).
 > **Este doc**: resumen condensado en WT-ROOT para referencia rápida del capitán.
 > **Estado**: PLAN CONSOLIDADO — pendiente SOLO de luz verde humana.
 
@@ -93,11 +93,11 @@ Cada leaf corre F0 (DISCOVER → GROUP → PROPOSE → GATE → IMPLEMENT → IT
 ## §16 — Comandos de arranque
 
 ```powershell
-cd C:\ContaPyme\Personal\apps\iswc-root
+cd <repo>
 git status --short  # debe estar limpio
 deno task typecheck    # debe pasar
 deno task test:demos   # 42/42 PASS
-git worktree add C:\ContaPyme\Personal\apps\WT\iswc-wc-wt-root-editors-2026 -b wt-root-editors-2026 main
+git worktree add <workspace>/Personal/apps/WT/iswc-wc-wt-root-editors-2026 -b wt-root-editors-2026 main
 ```
 
 ## §15 — Lo que NO está en el plan

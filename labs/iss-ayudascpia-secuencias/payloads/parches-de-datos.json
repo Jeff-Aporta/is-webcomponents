@@ -26,7 +26,7 @@
         {
           "id": "X_pg",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
+            "path": "../../../tests/fixtures/iss-ayudascpia/docs-experimental/diagramas/componentes.json",
             "query": {
               "payload": {
                 "componentDiagram": {
@@ -49,7 +49,7 @@
           "from": "R",
           "to": "R",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-parches-de-datos.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-parches-de-datos.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -75,7 +75,7 @@
           "from": "R",
           "to": "R",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-parches-de-datos.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-parches-de-datos.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -101,7 +101,7 @@
           "from": "R",
           "to": "X_pg",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-parches-de-datos.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-parches-de-datos.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -127,7 +127,7 @@
           "from": "R",
           "to": "R",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-parches-de-datos.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-parches-de-datos.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -153,7 +153,7 @@
           "from": "R",
           "to": "X_pg",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-parches-de-datos.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-parches-de-datos.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -179,7 +179,7 @@
           "from": "R",
           "to": "X_pg",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-parches-de-datos.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-parches-de-datos.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -205,7 +205,7 @@
           "from": "R",
           "to": "P",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-parches-de-datos.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-parches-de-datos.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -240,7 +240,7 @@
             "m7"
           ],
           "condition": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-parches-de-datos.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-parches-de-datos.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -263,7 +263,7 @@
             "m6"
           ],
           "condition": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-parches-de-datos.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-parches-de-datos.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -285,7 +285,7 @@
             "m7"
           ],
           "condition": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-parches-de-datos.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-parches-de-datos.json",
             "query": {
               "payload": {
                 "vectorFlow": {

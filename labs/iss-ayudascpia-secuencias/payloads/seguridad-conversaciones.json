@@ -36,7 +36,7 @@
           "from": "P",
           "to": "T",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-seguridad-conversaciones.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-seguridad-conversaciones.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -58,7 +58,7 @@
           "from": "T",
           "to": "D",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-seguridad-conversaciones.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-seguridad-conversaciones.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -84,7 +84,7 @@
           "from": "T",
           "to": "T",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-seguridad-conversaciones.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-seguridad-conversaciones.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -110,7 +110,7 @@
           "from": "T",
           "to": "P",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-seguridad-conversaciones.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-seguridad-conversaciones.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -136,7 +136,7 @@
           "from": "T",
           "to": "T",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-seguridad-conversaciones.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-seguridad-conversaciones.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -162,7 +162,7 @@
           "from": "T",
           "to": "P",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-seguridad-conversaciones.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-seguridad-conversaciones.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -188,7 +188,7 @@
           "from": "T",
           "to": "T",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-seguridad-conversaciones.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-seguridad-conversaciones.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -214,7 +214,7 @@
           "from": "T",
           "to": "P",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-seguridad-conversaciones.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-seguridad-conversaciones.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -240,7 +240,7 @@
           "from": "T",
           "to": "T",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-seguridad-conversaciones.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-seguridad-conversaciones.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -266,7 +266,7 @@
           "from": "T",
           "to": "T",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-seguridad-conversaciones.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-seguridad-conversaciones.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -292,7 +292,7 @@
           "from": "T",
           "to": "P",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-seguridad-conversaciones.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-seguridad-conversaciones.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -318,7 +318,7 @@
           "from": "T",
           "to": "P",
           "label": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-seguridad-conversaciones.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-seguridad-conversaciones.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -349,7 +349,7 @@
             "m4"
           ],
           "condition": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-seguridad-conversaciones.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-seguridad-conversaciones.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -378,7 +378,7 @@
             "m12"
           ],
           "condition": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-seguridad-conversaciones.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-seguridad-conversaciones.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -400,7 +400,7 @@
             "m6"
           ],
           "condition": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-seguridad-conversaciones.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-seguridad-conversaciones.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -427,7 +427,7 @@
             "m12"
           ],
           "condition": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-seguridad-conversaciones.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-seguridad-conversaciones.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -449,7 +449,7 @@
             "m8"
           ],
           "condition": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-seguridad-conversaciones.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-seguridad-conversaciones.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -474,7 +474,7 @@
             "m12"
           ],
           "condition": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-seguridad-conversaciones.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-seguridad-conversaciones.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -498,7 +498,7 @@
             "m12"
           ],
           "condition": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-seguridad-conversaciones.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-seguridad-conversaciones.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -520,7 +520,7 @@
             "m11"
           ],
           "condition": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-seguridad-conversaciones.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-seguridad-conversaciones.json",
             "query": {
               "payload": {
                 "vectorFlow": {
@@ -542,7 +542,7 @@
             "m12"
           ],
           "condition": {
-            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-seguridad-conversaciones.json",
+            "path": "../../iss-ayudascpia-flujos/payloads/ruta-seguridad-conversaciones.json",
             "query": {
               "payload": {
                 "vectorFlow": {

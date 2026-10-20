@@ -22,7 +22,7 @@
  * Uso típico en el `antes` de `definirPruebas`:
  *
  *   const sh = unaVezPorProceso(() => prepararStagehand({
- *     proveedores: leerProveedoresDeArchivo('C:/ContaPyme/Personal/stagehand-keys.json'),
+ *     proveedores: leerProveedoresDeArchivo('<workspace>/Personal/stagehand-keys.json'),
  *     destinos: [{ id: 'staging', sondear: sondaStaging }, { id: 'local', sondear: sondaLocal }],
  *     preferido: destinoPreferido(process.env.E2E_DESTINO, ['staging', 'local'], 'staging'),
  *     rutaCache: '.tmp/stagehand-proveedor.json',

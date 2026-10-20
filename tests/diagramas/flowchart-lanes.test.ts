@@ -162,12 +162,9 @@ import { embedDiagramOf, embedIsNatural, readNodeEmbed } from '../../src/compone
 import { computeClassLayout, resolveClassSpec } from '../../src/components/diagrams/utils/class-spec.ts';
 import { flowPaint } from '../../src/components/diagrams/utils/flowchart-spec.ts';
 import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
-import { conFixtureIss } from '../_shared/iss-fixture.ts';
 import { denoTestCon } from '../_shared/deno-test.ts';
 
-const { test: registrar, lista } = coleccionPruebas({ categoria: 'what' });
-// Los casos que leen el fixture del ISS (D:\Dev, fuera del VPS) se saltan si no está.
-const test = conFixtureIss(registrar);
+const { test, lista } = coleccionPruebas({ categoria: 'what' });
 
 const denoTest = denoTestCon(test);
 

@@ -1,6 +1,6 @@
 # Auditoría de Testing — Categoría `media` (12 testables)
 
-**Proyecto:** `C:\ContaPyme\Personal\apps\iswc-root`
+**Proyecto:** `<repo>`
 **Alcance:** 12 componentes en `src/components/media/`
 **Modo:** PROPUESTAS (no se escribe código de tests)
 **Existentes analizados:**

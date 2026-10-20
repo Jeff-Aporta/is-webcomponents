@@ -9,8 +9,8 @@ import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const here = fileURLToPath(new URL('.', import.meta.url));
-// _testing/lib → _testing → media → demos → repo root (5 niveles)
-export const REPO_ROOT = join(here, '..', '..', '..', '..', '..');
+// _testing/lib → _testing → media → demos → raíz del repo (4 niveles)
+export const REPO_ROOT = join(here, '..', '..', '..', '..');
 export const ARTIFACTS_DIR = join(here, '..', '.artifacts');
 
 await mkdir(ARTIFACTS_DIR, { recursive: true });

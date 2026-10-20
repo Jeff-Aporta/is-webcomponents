@@ -146,7 +146,7 @@ que matcheen algún patrón.
 ## Comandos de verificación (T4)
 
 ```bash
-cd C:\ContaPyme\Personal\apps\iswc-root
+cd <repo>
 
 # Gate local
 deno task typecheck                                     # exit 0

@@ -1,4 +1,4 @@
-<!-- @vendor 2026-10-13T15:02:33.985Z Jeff-Aporta/is-webcomponents@main skills/iswc-foundation/references/06-pines-y-vendor.md -->
+<!-- @vendor 2026-10-14T15:03:31.623Z Jeff-Aporta/is-webcomponents@main skills/iswc-foundation/references/06-pines-y-vendor.md -->
 # 06 — Pines y vendor del kit
 
 ## Pin fijo
@@ -42,7 +42,7 @@ deno task build && deno task test:all
 | Carpeta | Archivos |
 | --- | --- |
 | `tools/` | `schemas.ts` (podado), `pruebas.ts` (con `--hijo`), `test-cooldown.ts` (con la cola), `sync-entregable.ts` (`vendor.ts` y `pin-update.mjs` van online, no aquí) |
-| `build/` | `index.ts`, `content-hash.ts`, `asset-url(.schemas).ts`, `stamp-hashes.ts`, `bundle-min(.schemas).ts`, `asset-store.ts` |
+| `build/` | `index.ts`, `hash.ts`, `asset-url(.schemas).ts`, `stamp-hashes.ts`, `bundle-min(.schemas).ts`, `asset-store.ts` |
 
 - Cabecera `// @vendor <ISO> <repo>@<sha|local> <desde>` (+ `// @doc <url>`) y «No editar». Se cambian en el kit y se re-vendorizan con
   `vendor.ts` (pin por fecha ISO: compiten el checkout `local` y el HEAD remoto); el protocolo de pines deja el SHA
@@ -98,7 +98,7 @@ proyecto (sección `vendor` de `shared/schemas.ts`) que es solo BOOTSTRAP:
 ```json
 {
   "repo": "Jeff-Aporta/is-webcomponents",
-  "local": "C:/ContaPyme/Personal/apps/is-webcomponents",
+  "local": "<repo>",
   "perfil": "server",
   "raices": ["src", "tests", "scripts", "skills"],
   "pin": { "raices": ["index.html", "src", "demo", "docs"] },
@@ -212,7 +212,7 @@ deno run -A --no-check --sloppy-imports <ISU>/render-lote.ts --carpeta=docs-expe
 ```
 
 - **Huella**: sha256 del spec RESUELTO (`module`, `tag`, `script`, `attrs`, payload con sus referencias
-  `{ path, query, actions }` ya resueltas por `Obj.resolver`, relativas al editable) + `pinKit` (`<kit>/PIN`) +
+  `{ path, query, actions }` ya resueltas por `RefObj.resolver`, relativas al editable) + `pinKit` (`<kit>/PIN`) +
   `version` del módulo. Un value de `../fuentes/codigo.json` que entra al diagrama cambia su huella; uno que no entra, no.
 - **Caché** `diagramas-iswc.cache.json` junto a los editables (o `--cache`):
   `{ version, diagramas: { [slug]: { huella, svg, png, fecha, ancho, alto } } }`; atómico tras cada diagrama OK.
