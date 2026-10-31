@@ -59,7 +59,7 @@ import { ElementBase } from '../../core/element-base.js';
   /** Letras/numeros previos a la query (LIFO). Solo memoria de la sesion. */
   type History = string[];
 
-  class IswcCommandPalette extends ElementBase {
+  class IswcCommandPalette extends ElementBase {
 
     static get observedAttributes(): string[] { return [...OBSERVED, 'radius', 'shadow', 'bar-gap']; }
     #commands: Command[] = [];
@@ -75,6 +75,8 @@ import { ElementBase } from '../../core/element-base.js';
     #draftSnapshot = '';
     /** Anuncios debounced (aria-live polite) — max 1 por ~120ms. */
     #announceTimer = 0;
+    #rankerTimer = 0;
+    #rankerTurno = 0;
     /** id para aria-activedescendant; null si no hay opcion activa. */
     #activeId(): string | null {
       const id = this.#optionIds[this.#active];
@@ -153,6 +155,9 @@ import { ElementBase } from '../../core/element-base.js';
 
     get commands(): Command[] { return this.#commands; }
     get results(): Command[] { return this.#results; }
+    /** Orden externo opcional (p. ej. por significado): recibe la consulta y los comandos, y sus resultados reemplazan
+     *  al orden léxico. `declare`: sin campo de clase, una asignación previa a la mejora del elemento no se pisa. */
+    declare ranker?: (query: string, commands: Command[]) => Command[] | Promise<Command[]>;
 
     open() {
       if (this.hasAttribute('disabled')) return;
@@ -336,11 +341,32 @@ import { ElementBase } from '../../core/element-base.js';
           .map((x) => x.c);
         if (!this.#results.length) this.#results = items.slice(0, 4).filter((c) => /^[a-z]/i.test((c.title?.[0] || '')) && c.id);
       }
+      this.#mostrar(q);
+      this.#ordenarConRanker(q, items);
+    }
+
+    #mostrar(q: string): void {
       this.#active = 0;
       this.#empty.hidden = this.#results.length !== 0;
       this.#empty.textContent = this.getAttribute('empty-text') || this.#empty.textContent;
       this.#renderResults();
       this.#announce(q);
+    }
+
+    /** El orden léxico se ve al instante; el del `ranker` lo reemplaza tras una pausa al escribir. Una respuesta de una
+     *  consulta ya superada se descarta, y un ranker vacío o caído deja el orden léxico. */
+    #ordenarConRanker(q: string, items: Command[]): void {
+      clearTimeout(this.#rankerTimer);
+      const turno = ++this.#rankerTurno;
+      if (!q || !this.ranker) return;
+      this.#rankerTimer = setTimeout(async () => {
+        try {
+          const orden = await this.ranker!(q, items);
+          if (turno !== this.#rankerTurno || !orden?.length) return;
+          this.#results = orden.slice(0, Number(this.getAttribute('max-results')) || 12);
+          this.#mostrar(q);
+        } catch { /* queda el orden léxico */ }
+      }, 200) as unknown as number;
     }
 
     /** Anuncia el resultado del filtro con debounce (max 1 cada ~120ms) para

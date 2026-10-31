@@ -51,6 +51,7 @@
 
 .icon {
   display: inline-flex;
+  flex: none; /* una etiqueta larga no lo aplasta en píldora */
   align-items: center;
   justify-content: center;
   inline-size: 2em;
@@ -87,6 +88,9 @@
   background: color-mix(in srgb, var(--fg) 8%, transparent);
   color: var(--muted);
 }
+
+/* Sin contenido no se pinta la caja (ni el cuadro del ícono ni la píldora de tendencia). */
+.icon[hidden], .trend[hidden], .helper[hidden], .foot[hidden] { display: none; }
 
 .helper {
   color: var(--muted);

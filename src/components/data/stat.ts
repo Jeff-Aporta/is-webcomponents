@@ -74,29 +74,43 @@ import { ElementBase } from '../../core/element-base.js';
       this.#root.dataset.color = variant;
       const direction = this.#detectTrendDirection(trend);
       this.#root.dataset.trend = direction;
-      // Auto-fill slots si están vacíos
+      // Los atributos llenan el contenido de reserva del slot: siguen vivos en cada cambio y lo proyectado manda.
+      const slotDe = (slotName: string): HTMLSlotElement => this.shadowRoot!.querySelector<HTMLSlotElement>(`slot[name="${slotName}"]`)!;
+      const proyectado = (slotName: string): boolean => slotDe(slotName).assignedNodes().length > 0;
       const setSlot = (slotName: string, attrVal: string | null): void => {
-        if (!attrVal) return;
-        const slot = this.shadowRoot!.querySelector<HTMLSlotElement>(`slot[name="${slotName}"]`);
-        if (slot && slot.assignedNodes().length === 0) {
-          slot.replaceWith(Object.assign(document.createElement('span'), { textContent: attrVal }));
-        }
+        const slot = slotDe(slotName);
+        if (!proyectado(slotName) && attrVal) slot.textContent = attrVal;
       };
       setSlot('label', label);
       setSlot('value', value);
       setSlot('helper', helper);
       setSlot('trend', trend);
+      // Sin contenido, su caja no se pinta.
+      const hayHelper = !!helper || proyectado('helper');
+      const hayTrend = !!trend || proyectado('trend');
+      if (!helper) slotDe('helper').textContent = '';
+      if (!trend) slotDe('trend').textContent = '';
+      this.#root.querySelector<HTMLElement>('.helper')!.hidden = !hayHelper;
+      this.#root.querySelector<HTMLElement>('.trend')!.hidden = !hayTrend;
+      this.#root.querySelector<HTMLElement>('.foot')!.hidden = !hayHelper && !hayTrend;
       // Icon
       const icon = this.getAttribute('icon');
-      if (icon) {
-        const slot = this.shadowRoot!.querySelector<HTMLSlotElement>('slot[name="icon"]');
-        if (slot && slot.assignedNodes().length === 0) {
-          const ic = document.createElement('iswc-icon');
-          ic.setAttribute('icon', icon);
-          ic.setAttribute('aria-hidden', 'true');
-          slot.replaceWith(ic);
-        }
+      const slotIcono = slotDe('icon');
+      this.#root.querySelector<HTMLElement>('.icon')!.hidden = !icon && !proyectado('icon');
+      if (proyectado('icon')) return;
+      if (!icon) {
+        slotIcono.replaceChildren();
+        return;
       }
+      const actual = slotIcono.querySelector('iswc-icon');
+      if (actual) {
+        actual.setAttribute('icon', icon);
+        return;
+      }
+      const ic = document.createElement('iswc-icon');
+      ic.setAttribute('icon', icon);
+      ic.setAttribute('aria-hidden', 'true');
+      slotIcono.replaceChildren(ic);
     }
 
     #detectTrendDirection(trend: string | null): 'up' | 'down' | 'flat' {

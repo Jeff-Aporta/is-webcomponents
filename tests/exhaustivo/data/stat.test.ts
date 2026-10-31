@@ -54,6 +54,16 @@ test('iswc-stat: CSS parts (base, head, label, value, foot, trend, helper, icon)
   }
 });
 
+test('iswc-stat: los atributos siguen vivos (no reemplaza sus slots al primer pintado)', () => {
+  assert.ok(!read(MOD).includes('slot.replaceWith'), 'un KPI refrescado debe cambiar de valor');
+});
+
+test('iswc-stat: el ícono no se aplasta y lo vacío no pinta caja', () => {
+  const css = read('src/components/data/stat.scss');
+  assert.ok(/\.icon \{[^}]*flex: none/.test(css), '.icon lleva flex: none');
+  assert.ok(css.includes('.trend[hidden]'), '.trend vacío se oculta');
+});
+
 test('iswc-stat: eventos (stat no emite eventos según docs)', () => {
   const evts = extraerEventos(read(MOD));
   // stat es display-only: docs no declaran eventos.

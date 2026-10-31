@@ -67,6 +67,7 @@ import './command-palette.js';
 | --- | --- | --- |
 | `commands` | solo lectura | Array cargado. |
 | `results` | solo lectura | Resultados actuales. |
+| `ranker` | escritura | Opcional: `(query, commands) => Command[] \| Promise<Command[]>`. Reemplaza el orden lexico tras 200 ms; vacio o con error deja el orden lexico. |
 
 ### Slots
 

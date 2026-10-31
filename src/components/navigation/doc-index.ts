@@ -119,7 +119,9 @@ class IswcDocIndex extends HTMLElement {
   }
 
   #htmlItem(i: ItemDocIndex, clase: string): string {
-    const lado = i.icon ? `<span class="lado ico" aria-hidden="true">${escapar(i.icon)}</span>` : `<span class="lado num">${escapar(i.number ?? '')}</span>`;
+    // `icon`: id de Iconify (`set:nombre`) o texto corto (un emoji, una letra).
+    const icono = i.icon?.includes(':') ? `<iswc-icon icon="${escapar(i.icon)}"></iswc-icon>` : escapar(i.icon ?? '');
+    const lado = i.icon ? `<span class="lado ico" aria-hidden="true">${icono}</span>` : `<span class="lado num">${escapar(i.number ?? '')}</span>`;
     return `<button class="${clase}" part="item" type="button" data-id="${escapar(i.id)}" title="${escapar(i.hint ?? i.id)}">${lado}<span class="txt">${escapar(i.title)}</span></button>`;
   }
 

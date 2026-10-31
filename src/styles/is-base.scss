@@ -152,6 +152,11 @@
   --iswc-color-neutral-strong: color-mix(in srgb, var(--iswc-color-neutral) 82%, black);
   --iswc-color-neutral-stronger: color-mix(in srgb, var(--iswc-color-neutral) 62%, black);
   --iswc-color-neutral-strongest: color-mix(in srgb, var(--iswc-color-neutral) 45%, black);
+  /* Alias cortos de los semánticos: los consumen los componentes con `var(--iswc-success)`. */
+  --iswc-success: var(--iswc-color-success);
+  --iswc-warning: var(--iswc-color-warning);
+  --iswc-danger: var(--iswc-color-danger);
+  --iswc-info: var(--iswc-color-info);
   /* outlined/plain: texto + soft hover adaptados a dark. `text` se aclara mezclando
      con blanco (mejor contraste sobre fondo oscuro que el tono base crudo); `soft`/
      `soft-active` transparentan ese mismo base en dos pasos, en vez de un rgb()
