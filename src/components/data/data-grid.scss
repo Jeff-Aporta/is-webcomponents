@@ -1,4 +1,6 @@
+@use '../../styles/mixins' as *;
 :host {
+  @include papel;
   --iswc-grid-border: var(--iswc-border);
   --iswc-grid-border-soft: var(--iswc-border-soft, var(--iswc-grid-border));
   --iswc-grid-bg: var(--iswc-bg-elev);

@@ -1,8 +1,10 @@
+@use '../../styles/mixins' as *;
 @use 'utils/surface-bar';
 @use '../../core/popover-panel';
 
 /* iswc-command-palette */
 :host {
+  @include papel;
   /* La paleta usa un radio mayor y una sombra más difusa que el popover base. */
   --iswc-popover-radius: var(--iswc-radius);
   --iswc-popover-shadow: 0 30px 80px rgba(0, 0, 0, .42);

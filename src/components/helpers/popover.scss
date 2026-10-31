@@ -1,4 +1,6 @@
+@use '../../styles/mixins' as *;
 :host {
+  @include papel;
   display: contents;
   --iswc-popover-max-width: 25rem;
   --iswc-popover-arrow-size: 8px;

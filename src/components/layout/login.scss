@@ -1,4 +1,6 @@
+@use '../../styles/mixins' as *;
 :host {
+  @include papel;
   --iswc-login-surface: var(--iswc-surface, var(--iswc-control-bg, #fff));
   --iswc-login-border: var(--iswc-border, var(--iswc-control-border, #d0d5dd));
   --iswc-login-muted: var(--iswc-text-muted, #667085);

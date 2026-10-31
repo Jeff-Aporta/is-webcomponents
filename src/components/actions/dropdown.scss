@@ -1,5 +1,7 @@
+@use '../../styles/mixins' as *;
 @use '../../core/popover-panel';
 :host {
+  @include papel;
   /* inline-flex + indent: participa en <iswc-button-group> joined como un
      iswc-button (el trigger hereda --_button-* / --iswc-button-border-radius). */
   display: inline-flex;

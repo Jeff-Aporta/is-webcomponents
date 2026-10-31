@@ -1,8 +1,10 @@
+@use '../../styles/mixins' as *;
 @use '../../core/modal-chrome';
 
 /* <iswc-drawer> — panel deslizante desde un borde del viewport. */
 
 :host {
+  @include papel;
   --iswc-drawer-size: 380px;
   --iswc-drawer-spacing: var(--iswc-space-l, 1rem);
   /* modal-chrome.css lee --spacing; sin alias el chrome interno queda sin padding. */

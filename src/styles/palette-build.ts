@@ -312,8 +312,8 @@ export const CONTRAST_PAIRS: [string, string, number][] = [
 ];
 
 /**
- * Contrato de contraste: 25 paletas × claro/oscuro. Panda solo cambia el fondo de
- * la página, así que superficies y textos se validan contra el juego del tema.
+ * Contrato de contraste: 25 paletas × claro/oscuro. Con panda la página usa el juego
+ * contrario y los papeles el real: los dos juegos quedan cubiertos por claro y oscuro.
  */
 export function checkPaletteContrast(list: PaletteConfig[] = PALETTES): { checked: number; failures: ContrastFailure[] } {
   const failures: ContrastFailure[] = [];
@@ -357,6 +357,11 @@ function applyBlock(selector: string, set: 'sl' | 'sd', scheme: 'light' | 'dark'
   return `${selector} {\n${lines.join('\n')}\n}`;
 }
 
+/** Contexto de papel: las superficies del tema real, las que restaura `@include papel`. */
+function paperBlock(selector: string, set: 'sl' | 'sd'): string {
+  return `${selector} {\n${APPLY_TOKENS.map((t) => `  --iswc-paper-${t}: var(--iswc-${set}-${t});`).join('\n')}\n}`;
+}
+
 /** palettes.scss completo, derivado de palettes.json. */
 export function palettesScss(list: PaletteConfig[] = PALETTES): string {
   const def = list.find((p) => p.value === DEFAULT_PALETTE) ?? list[0];
@@ -381,7 +386,7 @@ export function palettesScss(list: PaletteConfig[] = PALETTES): string {
  * --iswc-color-bright (hsl(h 100% 70%)), y DOS juegos de superficies:
  *   --iswc-sl-*  claras: bright mezclado hacia blanco (fondo 10%, papel 5%)
  *   --iswc-sd-*  oscuras: main mezclado hacia negro
- * El tema elige el juego; data-panda solo invierte --iswc-bg-page (el fondo de la página).
+ * El tema elige el juego; data-panda pone la página en el contrario y los papeles restauran el real.
  * Default palette = ${def.value}, en :root.
  *
  * Brand es la 7a familia del helper canonico (color-tokens.ts); sus lineas
@@ -416,14 +421,16 @@ export function palettesScss(list: PaletteConfig[] = PALETTES): string {
   }).join('\n\n');
 
   const apply = [
-    '/* ─── Tema → juego de superficies; data-panda solo invierte la página ── */',
+    '/* ─── Tema → juego de superficies; data-panda invierte la página ────── */',
     '/* Solo el nodo con data-theme (html o contenedor scoped); nunca :not([data-theme]) suelto. */',
-    applyBlock('[data-theme="light"]', 'sl', 'light'),
+    applyBlock('[data-theme="light"]:not([data-panda]),\n[data-theme="dark"][data-panda]', 'sl', 'light'),
     '',
-    applyBlock('[data-theme="dark"]', 'sd', 'dark'),
+    applyBlock('[data-theme="dark"]:not([data-panda]),\n[data-theme="light"][data-panda]', 'sd', 'dark'),
     '',
-    '[data-theme="light"][data-panda] { --iswc-bg-page: var(--iswc-sd-bg); --iswc-text-page: var(--iswc-sd-text); --iswc-text-page-soft: var(--iswc-sd-text-soft); --iswc-text-page-dim: var(--iswc-sd-text-dim); }',
-    '[data-theme="dark"][data-panda] { --iswc-bg-page: var(--iswc-sl-bg); --iswc-text-page: var(--iswc-sl-text); --iswc-text-page-soft: var(--iswc-sl-text-soft); --iswc-text-page-dim: var(--iswc-sl-text-dim); }',
+    paperBlock('[data-theme="light"]', 'sl'),
+    '',
+    paperBlock('[data-theme="dark"]', 'sd'),
+    '',
   ].join('\n');
 
   return `${header}\n\n/* ─── Capa comun: semillas → rampa, contraste, bright y superficies ─── */\n\n${common}\n\n/* ─── Semillas por paleta ───────────────────────────────────────────── */\n\n${seeds}\n\n${apply}\n`;

@@ -14,9 +14,8 @@
  * añadir nada más), pero basta con `data-palette="turquesa"` (o cualquier
  * otra) en el nodo con data-theme para cambiarla.
  *
- * Modificador Panda: `data-panda` junto a `data-theme` invierte SOLO el fondo de
- * la página (`--iswc-bg-page`) y el texto que hereda de ella (`--iswc-text-page*`): todo papel
- * o componente declara `color: var(--iswc-text)` y vuelve así al texto de su tema.
+ * Modificador Panda: `data-panda` junto a `data-theme` cambia el contexto de la página al tema
+ * contrario; los papeles restauran el contexto real con `--iswc-paper-*` (mixin `papel`).
  *
  * Esta hoja SOLO declara tokens (variables). No pinta el canvas de la página
  * (`html`/`body`): cada app define su `background`. Tampoco fuerza
@@ -186,15 +185,80 @@
   --iswc-scrollbar-thumb-hover: color-mix(in srgb, var(--iswc-accent) 45%, var(--iswc-control-border));
 }
 
-/* Panda: la página toma el fondo del tema contrario; nada más cambia. */
-[data-theme="dark"][data-panda] { --iswc-bg-page: #fff; --iswc-text-page: #1f2328; --iswc-text-page-soft: #57606a; --iswc-text-page-dim: #6e7781; }
-[data-theme="light"][data-panda] { --iswc-bg-page: #0b0d10; --iswc-text-page: #e6e8eb; --iswc-text-page-soft: #a8b0bb; --iswc-text-page-dim: #7a8390; }
+
+/* Contexto de papel: siempre los valores del tema real. Con data-panda la página toma el juego
+   contrario y cada papel (`@include papel`) restaura estos, así todo lo que contiene se ajusta solo. */
+[data-theme="dark"] {
+  --iswc-paper-scheme: dark;
+  --iswc-paper-bg: #0b0d10;
+  --iswc-paper-bg-soft: #14181d;
+  --iswc-paper-bg-elev: #1c2128;
+  --iswc-paper-border: #2a3038;
+  --iswc-paper-border-soft: #1f242b;
+  --iswc-paper-code-bg: #0f1318;
+  --iswc-paper-code-text: #d4d8de;
+  --iswc-paper-control-bg: #21262d;
+  --iswc-paper-control-bg-hover: #30363d;
+  --iswc-paper-control-bg-active: #3d444d;
+  --iswc-paper-control-border: #59636e;
+  --iswc-paper-control-text: #f0f3f6;
+  --iswc-paper-text: #e6e8eb;
+  --iswc-paper-text-soft: #a8b0bb;
+  --iswc-paper-text-dim: #7a8390;
+  --iswc-paper-shadow: 0 1px 0 rgb(255 255 255 / 3%), 0 8px 24px rgb(0 0 0 / 25%);
+  --iswc-paper-brand-text: hsl(from var(--iswc-color-brand) h s 76%);
+  --iswc-paper-brand-soft: rgb(from var(--iswc-accent) r g b / 18%);
+  --iswc-paper-brand-soft-active: rgb(from var(--iswc-accent) r g b / 28%);
+  --iswc-paper-success-text: color-mix(in srgb, var(--iswc-color-success) 70%, white);
+  --iswc-paper-success-soft: color-mix(in srgb, var(--iswc-color-success) 18%, transparent);
+  --iswc-paper-warning-text: color-mix(in srgb, var(--iswc-color-warning) 78%, white);
+  --iswc-paper-warning-soft: color-mix(in srgb, var(--iswc-color-warning) 18%, transparent);
+  --iswc-paper-danger-text: color-mix(in srgb, var(--iswc-color-danger) 68%, white);
+  --iswc-paper-danger-soft: color-mix(in srgb, var(--iswc-color-danger) 18%, transparent);
+  --iswc-paper-info-text: color-mix(in srgb, var(--iswc-color-info) 68%, white);
+  --iswc-paper-info-soft: color-mix(in srgb, var(--iswc-color-info) 18%, transparent);
+}
+
+[data-theme="light"] {
+  --iswc-paper-scheme: light;
+  --iswc-paper-bg: #fff;
+  --iswc-paper-bg-soft: #f6f8fa;
+  --iswc-paper-bg-elev: #fff;
+  --iswc-paper-border: #d0d7de;
+  --iswc-paper-border-soft: #e1e4e8;
+  --iswc-paper-code-bg: #f6f8fa;
+  --iswc-paper-code-text: #1f2328;
+  --iswc-paper-control-bg: #f1f3f5;
+  --iswc-paper-control-bg-hover: #e9ecef;
+  --iswc-paper-control-bg-active: #dee2e6;
+  --iswc-paper-control-border: #adb5bd;
+  --iswc-paper-control-text: #212529;
+  --iswc-paper-text: #1f2328;
+  --iswc-paper-text-soft: #57606a;
+  --iswc-paper-text-dim: #6e7781;
+  --iswc-paper-shadow: 0 1px 0 rgb(0 0 0 / 4%), 0 8px 24px rgb(0 0 0 / 6%);
+  --iswc-paper-brand-text: var(--iswc-color-brand-stronger);
+  --iswc-paper-brand-soft: var(--iswc-color-brand-paler);
+  --iswc-paper-brand-soft-active: var(--iswc-color-brand-pale);
+  --iswc-paper-success-text: var(--iswc-color-success-stronger);
+  --iswc-paper-success-soft: var(--iswc-color-success-paler);
+  --iswc-paper-warning-text: var(--iswc-color-warning-stronger);
+  --iswc-paper-warning-soft: var(--iswc-color-warning-paler);
+  --iswc-paper-danger-text: var(--iswc-color-danger-stronger);
+  --iswc-paper-danger-soft: var(--iswc-color-danger-paler);
+  --iswc-paper-info-text: var(--iswc-color-info-stronger);
+  --iswc-paper-info-soft: var(--iswc-color-info-paler);
+}
+
+/* Un card sin fondo propio necesita pintar su papel cuando la página va invertida. */
+[data-panda] { --iswc-paper-fill: var(--iswc-paper-bg-elev); }
 
 /* color-scheme solo con data-theme: no oscurece el canvas del browser
    al cargar is-base.min.css sin más. La app (o un wrapper con [data-theme])
    es quien activa el esquema. El bloque oscuro repite los valores de :root
    para que un contenedor dark dentro de un html light vuelva al juego oscuro. */
-[data-theme="dark"] {
+[data-theme="dark"]:not([data-panda]),
+[data-theme="light"][data-panda] {
   color-scheme: dark;
   --iswc-bg: #0b0d10;
   --iswc-bg-page: var(--iswc-bg);
@@ -241,7 +305,8 @@
 
 /* Light: tokens de superficie/control + brand-text pasteles. Un solo bloque
    porque los tres cambian a la vez. */
-[data-theme="light"] {
+[data-theme="light"]:not([data-panda]),
+[data-theme="dark"][data-panda] {
   color-scheme: light;
   --iswc-bg: #fff;
   --iswc-bg-page: var(--iswc-bg);

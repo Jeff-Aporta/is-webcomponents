@@ -1,6 +1,10 @@
 @use 'utils/tokens';
+@use '../../styles/mixins' as *;
 
-:host { display: block; }
+:host {
+  @include papel;
+  display: block;
+}
 
 .stat {
   /* Llena el alto del host: en una rejilla todas las tarjetas de la fila quedan iguales. */

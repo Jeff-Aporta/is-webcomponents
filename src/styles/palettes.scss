@@ -19,7 +19,7 @@
  * --iswc-color-bright (hsl(h 100% 70%)), y DOS juegos de superficies:
  *   --iswc-sl-*  claras: bright mezclado hacia blanco (fondo 10%, papel 5%)
  *   --iswc-sd-*  oscuras: main mezclado hacia negro
- * El tema elige el juego; data-panda solo invierte --iswc-bg-page (el fondo de la página).
+ * El tema elige el juego; data-panda pone la página en el contrario y los papeles restauran el real.
  * Default palette = delfin, en :root.
  *
  * Brand es la 7a familia del helper canonico (color-tokens.ts); sus lineas
@@ -401,9 +401,10 @@
   --iswc-font-tint: 1;
 }
 
-/* ─── Tema → juego de superficies; data-panda solo invierte la página ── */
+/* ─── Tema → juego de superficies; data-panda invierte la página ────── */
 /* Solo el nodo con data-theme (html o contenedor scoped); nunca :not([data-theme]) suelto. */
-[data-theme="light"] {
+[data-theme="light"]:not([data-panda]),
+[data-theme="dark"][data-panda] {
   color-scheme: light;
   --iswc-bg-page: var(--iswc-bg);
   --iswc-text-page: var(--iswc-text);
@@ -431,7 +432,8 @@
   --iswc-contrast-text: color-mix(in srgb, var(--iswc-color-contrast) 45%, black);
 }
 
-[data-theme="dark"] {
+[data-theme="dark"]:not([data-panda]),
+[data-theme="light"][data-panda] {
   color-scheme: dark;
   --iswc-bg-page: var(--iswc-bg);
   --iswc-text-page: var(--iswc-text);
@@ -459,5 +461,39 @@
   --iswc-contrast-text: hsl(from var(--iswc-color-contrast) h s 72%);
 }
 
-[data-theme="light"][data-panda] { --iswc-bg-page: var(--iswc-sd-bg); --iswc-text-page: var(--iswc-sd-text); --iswc-text-page-soft: var(--iswc-sd-text-soft); --iswc-text-page-dim: var(--iswc-sd-text-dim); }
-[data-theme="dark"][data-panda] { --iswc-bg-page: var(--iswc-sl-bg); --iswc-text-page: var(--iswc-sl-text); --iswc-text-page-soft: var(--iswc-sl-text-soft); --iswc-text-page-dim: var(--iswc-sl-text-dim); }
+[data-theme="light"] {
+  --iswc-paper-bg: var(--iswc-sl-bg);
+  --iswc-paper-bg-soft: var(--iswc-sl-bg-soft);
+  --iswc-paper-bg-elev: var(--iswc-sl-bg-elev);
+  --iswc-paper-border: var(--iswc-sl-border);
+  --iswc-paper-border-soft: var(--iswc-sl-border-soft);
+  --iswc-paper-code-bg: var(--iswc-sl-code-bg);
+  --iswc-paper-control-bg: var(--iswc-sl-control-bg);
+  --iswc-paper-control-bg-hover: var(--iswc-sl-control-bg-hover);
+  --iswc-paper-control-bg-active: var(--iswc-sl-control-bg-active);
+  --iswc-paper-control-border: var(--iswc-sl-control-border);
+  --iswc-paper-text: var(--iswc-sl-text);
+  --iswc-paper-text-soft: var(--iswc-sl-text-soft);
+  --iswc-paper-text-dim: var(--iswc-sl-text-dim);
+  --iswc-paper-control-text: var(--iswc-sl-control-text);
+  --iswc-paper-code-text: var(--iswc-sl-code-text);
+}
+
+[data-theme="dark"] {
+  --iswc-paper-bg: var(--iswc-sd-bg);
+  --iswc-paper-bg-soft: var(--iswc-sd-bg-soft);
+  --iswc-paper-bg-elev: var(--iswc-sd-bg-elev);
+  --iswc-paper-border: var(--iswc-sd-border);
+  --iswc-paper-border-soft: var(--iswc-sd-border-soft);
+  --iswc-paper-code-bg: var(--iswc-sd-code-bg);
+  --iswc-paper-control-bg: var(--iswc-sd-control-bg);
+  --iswc-paper-control-bg-hover: var(--iswc-sd-control-bg-hover);
+  --iswc-paper-control-bg-active: var(--iswc-sd-control-bg-active);
+  --iswc-paper-control-border: var(--iswc-sd-control-border);
+  --iswc-paper-text: var(--iswc-sd-text);
+  --iswc-paper-text-soft: var(--iswc-sd-text-soft);
+  --iswc-paper-text-dim: var(--iswc-sd-text-dim);
+  --iswc-paper-control-text: var(--iswc-sd-control-text);
+  --iswc-paper-code-text: var(--iswc-sd-code-text);
+}
+
