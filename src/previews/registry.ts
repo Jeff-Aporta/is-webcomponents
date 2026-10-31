@@ -53,7 +53,8 @@ export async function loadPreview(tag: string): Promise<IswcComponentPreviewLike
   if (!definition) {
     const jsonUrl = new URL(entry.json, previewsBase());
     const loaded = await loadDefinitionJson(jsonUrl) as PreviewDefinition;
-    definition = loaded;
+    // Anatomía: el `.scss` vive junto al `.json` del componente.
+    definition = { ...loaded, anatomy: loaded.anatomy ?? { scss: jsonUrl.href.replace(/\.json$/, '.scss') } };
     definitionCache.set(tag, loaded);
   }
   if (!definition) return null;

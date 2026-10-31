@@ -19,6 +19,7 @@
 import { IswcComponentPreview } from './component-preview.js';
 import { montarControles } from '../../utils/system/controles.js';
 import { loadFichaLikeDefinition } from './ficha-bridge.ts';
+import { montarAnatomia } from './anatomia.js';
 
 import type { PreviewDefinition, PreviewMountContext } from './schemas/preview.schemas.ts';
 import type { DefinicionPreview, CtxMontaje, ModuloBehavior, ConDefinicion } from "./schemas/JsonPreview.schemas.js";
@@ -69,6 +70,7 @@ export class JsonPreview extends IswcComponentPreview {
     } catch (e) {
       console.warn(`[preview] ${definition.tag}: controles no montados`, e);
     }
+    if (ctx.main) montarAnatomia(definition as Parameters<typeof montarAnatomia>[0], ctx.main as HTMLElement);
   }
 
   unmount(ctx: PreviewMountContext): void {

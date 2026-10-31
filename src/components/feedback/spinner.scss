@@ -19,11 +19,10 @@
     animation: spin var(--iswc-spinner-speed) linear infinite;
   }
 
+  /* Girar informa que algo sigue en curso: con movimiento reducido va más lento, nunca quieto. */
   @media (prefers-reduced-motion: reduce) {
     .spinner {
-      animation: none;
-      border-top-color: var(--iswc-spinner-color);
-      opacity: 0.85;
+      animation-duration: calc(var(--iswc-spinner-speed) * 3);
     }
   }
 }

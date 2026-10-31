@@ -317,6 +317,12 @@ iswc-main.main {
 
 /* --- Demo cards ----------------------------------------------------- */
 
+/* Bloques seguidos de una sección y avisos apilados: la misma separación breve que hay en horizontal. */
+iswc-demo-section > :not([slot]) + :not([slot]),
+iswc-callout + iswc-callout {
+  margin-block-start: 0.75rem;
+}
+
 .demo-block {
   display: flex;
   flex-direction: column;

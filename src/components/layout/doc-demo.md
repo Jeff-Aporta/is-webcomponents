@@ -71,6 +71,12 @@ await montarGaleria({ manifest: new URL('manifest.json', location.href), categor
 El nav se agrupa por `category`, la selección viaja en `?s=` (JSON en b64url, como la galería del kit) y un `props` en un bloque `demo` se asigna a
 `target.props`. Los `controls` admiten `attr:x`, `prop:x` y `props:x`.
 
+## Anatomía
+
+Todo demo, del kit o de una app, termina en la sección **Anatomía**: la estructura que construye el componente vivo, los
+componentes que consume y su SCSS, con el mismo `<iswc-code>` del snippet. Es parte de `iswc-preview/v1`: `anatomy.scss`
+indica la fuente y, si falta, se toma el `.scss` junto al `.json`.
+
 ## Atributos
 
 | Atributo | Default | Notas |

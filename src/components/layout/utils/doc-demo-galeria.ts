@@ -14,10 +14,12 @@
  * asigna a `target.props` al montar; sus `controls` los aplica `<iswc-playground>`. Lo que no cumple se avisa y no se lista.
  */
 import { collectIsTags, GALLERY_CHROME_TAGS } from '../../../cdn/collect-iswc-tags.js';
+import { montarAnatomia } from '../../../previews/_kit/anatomia.js';
+import type { Anatomia } from '../../../previews/_kit/schemas/anatomia.schemas.js';
 import { codificarEstado, leerEstado, readPanelsCompactPref, writePanelsCompactPref } from './doc-demo-estado.js';
 
 type Bloque = { kind?: string; target?: string; props?: Record<string, unknown>; controls?: unknown[] };
-type Definicion = { tag: string; navTitle?: string; title?: string; category?: string; sections: Array<{ id?: string; blocks?: Bloque[] }> };
+type Definicion = { tag: string; navTitle?: string; title?: string; category?: string; anatomy?: Anatomia | undefined; sections: Array<{ id?: string; blocks?: Bloque[] }> };
 type Montaje = { main?: ParentNode };
 type Previsualizable = { definition: Definicion; mount(ctx: Montaje): void; unmount(): void };
 type HostPreview = HTMLElement & { preview: Previsualizable | null };
@@ -32,7 +34,7 @@ export type OpcionesGaleria = {
   categorias?: Record<string, string>;
 };
 
-const TAGS_PLAYGROUND = ['iswc-playground', 'iswc-preview-controls', 'iswc-select', 'iswc-option', 'iswc-input', 'iswc-details'];
+const TAGS_PLAYGROUND = ['iswc-tab-group', 'iswc-playground', 'iswc-preview-controls', 'iswc-select', 'iswc-option', 'iswc-input', 'iswc-details'];
 
 /** Mismo `?s=` que la galería del kit: un enlace conserva el componente abierto. */
 function guardarEstado(cambio: EstadoGaleria): void {
@@ -49,7 +51,8 @@ async function leerDefiniciones(manifest: string | URL): Promise<Definicion[]> {
   const leidas = await Promise.all(indice.map(async (item) => {
     try {
       const def = await fetch(new URL(item.file, base)).then((r) => r.json()) as Definicion;
-      if (def.tag === item.tag && Array.isArray(def.sections)) return def;
+      // Anatomía: el `.scss` vive junto al `.json` del componente.
+      if (def.tag === item.tag && Array.isArray(def.sections)) return { ...def, anatomy: def.anatomy ?? { scss: new URL(item.file.replace(/\.json$/, '.scss'), base).href } };
       console.warn(`[galería] ${item.file}: no cumple iswc-preview/v1`);
     } catch (e) {
       console.warn(`[galería] ${item.file}: no se pudo leer`, e);
@@ -101,6 +104,7 @@ export async function montarGaleria({ manifest, categorias = {} }: OpcionesGaler
             if (destino) (destino as HTMLElement & { props: unknown }).props = { ...b.props };
           }
         }
+        if (main) montarAnatomia(def, main as HTMLElement);
       },
     };
     for (const n of nav.querySelectorAll<HTMLElement>('.shell-nav__item')) n.setAttribute('aria-current', String(n.dataset.tag === def.tag));

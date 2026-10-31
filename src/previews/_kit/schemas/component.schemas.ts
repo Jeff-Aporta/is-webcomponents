@@ -65,6 +65,7 @@
  */
 
 import { z } from "zod";
+import { ZAnatomia } from "./anatomia.schemas.js";
 
 /* ──────────────────────────────────────────────────────────────────────────
  * Primitives
@@ -301,6 +302,8 @@ export const ComponentJsonSchema = z
     styles: TextLikeSchema.optional(),
     /** Clave remember-scroll de iswc-main. */
     storageKey: z.string().optional(),
+    /** Sección «Anatomía»: lo demás sale del componente montado. */
+    anatomy: ZAnatomia.optional(),
     /** Clases extra del `iswc-main` del chrome. */
     mainClass: z.string().optional(),
     /** Clase del contenedor que envuelve todas las secciones. */

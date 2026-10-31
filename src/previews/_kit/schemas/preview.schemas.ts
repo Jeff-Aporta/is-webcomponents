@@ -168,6 +168,8 @@ export interface PreviewDefinition {
    * (p. ej. home a ancho completo). Una sola seccion hace lo mismo sola.
    */
   withoutToc?: boolean;
+  /** Sección «Anatomía»: `scss` es la fuente de estilos del componente. */
+  anatomy?: { scss?: string | undefined } | undefined;
   /**
    * Phase W21 (zod-migration): array tipado de ejemplos que alimenta a
    * cualquier `<iswc-examples-carousel>` declarado en los bloques `demo` /
