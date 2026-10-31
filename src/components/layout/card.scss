@@ -6,12 +6,18 @@
   display: block;
   position: relative;
   overflow: hidden;
-  background: var(--card-bg, transparent);
+  /* Un card es un papel: pinta su fondo y su texto del tema. Solo `plain` se funde con lo de atrás. */
+  background: var(--card-bg, var(--iswc-bg-elev, transparent));
   border: var(--card-border, 0 solid transparent);
   border-radius: var(--iswc-radius);
   color: var(--iswc-text, inherit);
   font-family: var(--iswc-sans, inherit);
   box-sizing: border-box;
+}
+
+:host([variant="plain"]) {
+  background: var(--card-bg, transparent);
+  color: inherit;
 }
 
 .layout {
