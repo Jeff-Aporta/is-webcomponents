@@ -2,7 +2,7 @@
 
 :host {
   --iswc-shell-height: 100dvh;
-  --iswc-shell-bg: var(--iswc-bg, #0c1118);
+  --iswc-shell-bg: var(--iswc-bg-page, var(--iswc-bg, #0c1118));
   --iswc-shell-text: var(--iswc-text, inherit);
   --iswc-shell-bar-bg: var(--iswc-bg, #0c1118);
   --iswc-shell-bar-border: var(--iswc-border, rgb(127 127 127 / 25%));

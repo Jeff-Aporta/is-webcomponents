@@ -19,8 +19,8 @@
  * --iswc-color-bright (hsl(h 100% 70%)), y DOS juegos de superficies:
  *   --iswc-sl-*  claras: bright mezclado hacia blanco (fondo 10%, papel 5%)
  *   --iswc-sd-*  oscuras: main mezclado hacia negro
- * El tema elige el juego; data-panda lo invierte (claro pinta sd, oscuro sl)
- * conservando main/contrast. Default palette = delfin, en :root.
+ * El tema elige el juego; data-panda solo invierte --iswc-bg-page (el fondo de la página).
+ * Default palette = delfin, en :root.
  *
  * Brand es la 7a familia del helper canonico (color-tokens.ts); sus lineas
  * DEBEN coincidir con brandFamilyBlock() (guardian w24-color-tokens-helper).
@@ -401,11 +401,11 @@
   --iswc-font-tint: 1;
 }
 
-/* ─── Tema → juego de superficies (data-panda lo invierte) ─────────── */
+/* ─── Tema → juego de superficies; data-panda solo invierte la página ── */
 /* Solo el nodo con data-theme (html o contenedor scoped); nunca :not([data-theme]) suelto. */
-[data-theme="light"]:not([data-panda]),
-[data-theme="dark"][data-panda] {
+[data-theme="light"] {
   color-scheme: light;
+  --iswc-bg-page: var(--iswc-bg);
   --iswc-bg: var(--iswc-sl-bg);
   --iswc-bg-soft: var(--iswc-sl-bg-soft);
   --iswc-bg-elev: var(--iswc-sl-bg-elev);
@@ -428,9 +428,9 @@
   --iswc-contrast-text: color-mix(in srgb, var(--iswc-color-contrast) 45%, black);
 }
 
-[data-theme="dark"]:not([data-panda]),
-[data-theme="light"][data-panda] {
+[data-theme="dark"] {
   color-scheme: dark;
+  --iswc-bg-page: var(--iswc-bg);
   --iswc-bg: var(--iswc-sd-bg);
   --iswc-bg-soft: var(--iswc-sd-bg-soft);
   --iswc-bg-elev: var(--iswc-sd-bg-elev);
@@ -452,3 +452,6 @@
   --iswc-brand-soft-active: rgb(from var(--iswc-accent) r g b / 28%);
   --iswc-contrast-text: hsl(from var(--iswc-color-contrast) h s 72%);
 }
+
+[data-theme="light"][data-panda] { --iswc-bg-page: var(--iswc-sd-bg); }
+[data-theme="dark"][data-panda] { --iswc-bg-page: var(--iswc-sl-bg); }

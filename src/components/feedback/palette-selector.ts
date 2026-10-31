@@ -79,7 +79,7 @@ import type { Palette, PaletteCruda } from "./schemas/palette-selector.schemas.j
       <div part="panel" class="panel" hidden>
         <div class="panel__head">
           <input part="search" class="search iswc-focus-ring" type="search" placeholder="Buscar paleta" aria-label="Buscar paleta" autocomplete="off" />
-          <button type="button" part="panda" class="panda iswc-focus-ring" role="switch" aria-checked="false" title="Panda: invierte las superficies">
+          <button type="button" part="panda" class="panda iswc-focus-ring" role="switch" aria-checked="false" title="Panda: invierte el fondo de la página">
             <span class="panda__track" aria-hidden="true"><span class="panda__thumb"></span></span>
             <span class="panda__label">Panda</span>
           </button>

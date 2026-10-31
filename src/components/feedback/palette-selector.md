@@ -17,8 +17,8 @@ el modificador **Panda**. Cada opción muestra la identidad de su paleta en el
 tema activo —fondo, papel, main, contraste y texto—, su nombre y su
 origen/ánimo; las opciones van agrupadas por familia de tono (rojos, naranjas
 y amarillos, verdes, azules y cianes, violetas y rosas, neutros) y se filtran
-con un buscador. El interruptor Panda invierte las superficies (en claro pinta
-las oscuras tintadas de la paleta y viceversa) conservando main y contraste.
+con un buscador. El interruptor Panda invierte solo el fondo de la página
+(`--iswc-bg-page`): papeles, componentes y textos siguen el tema.
 
 `scope="root"` escribe `data-palette` / `data-panda` en `<html>`;
 `scope="closest"` en el primer ancestro que ya tenga `data-palette`. Con el

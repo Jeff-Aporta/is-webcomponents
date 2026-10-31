@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-31T03:11:26.304Z",
+  "generatedAt": "2026-10-31T03:18:14.613Z",
   "count": 40,
   "modules": [
     {
@@ -477,7 +477,7 @@
       "id": "theme-scope",
       "path": "src/core/theme-scope.ts",
       "summary": "Contenedor de tema del kit — misma cascada que iswc-theme-toggle. — Atraviesa Shadow DOM (Element.closest se corta en el shadow root).",
-      "bytes": 2129,
+      "bytes": 1963,
       "exports": [
         "THEME_SCOPE",
         "findThemeContainer",

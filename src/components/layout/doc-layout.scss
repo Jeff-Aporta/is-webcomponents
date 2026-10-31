@@ -2,7 +2,7 @@
 :host {
   --doc-layout-bar-h: 52px;
   --doc-layout-fs: 15.5px;
-  --doc-layout-bg: var(--iswc-bg);
+  --doc-layout-bg: var(--iswc-bg-page, var(--iswc-bg));
   --doc-layout-side-bg: var(--iswc-bg-soft);
   --doc-layout-accent: var(--iswc-color-brand);
   display: grid;

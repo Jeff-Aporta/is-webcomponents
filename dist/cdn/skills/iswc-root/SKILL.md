@@ -160,8 +160,8 @@ violetas/rosas `orquidea` `amatista` `flamenco` `tanzanita`; neutro `luna`.
 Cada una tiene main (`--iswc-color-brand`), contraste (`--iswc-color-contrast`,
 `--iswc-contrast-text`, `--iswc-contrast-soft`), bright (`--iswc-color-bright`),
 superficies y textos tintados por su tono. `data-panda` en el mismo nodo que
-`data-theme` invierte las superficies (claro pinta el juego oscuro de la
-paleta y viceversa). El usuario elige ambas con `<iswc-palette-selector>`
+`data-theme` invierte solo el fondo de la página (`--iswc-bg-page`); papeles,
+componentes y textos siguen el tema. El usuario elige ambas con `<iswc-palette-selector>`
 (persisten en `iswc:app-cfg` → `palette`, `panda`); `initApp({ palette, panda })`
 fija los valores iniciales.
 

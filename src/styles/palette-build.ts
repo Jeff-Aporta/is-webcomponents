@@ -312,23 +312,19 @@ export const CONTRAST_PAIRS: [string, string, number][] = [
 ];
 
 /**
- * Contrato de contraste: 25 paletas × claro/oscuro × panda. Panda intercambia
- * las superficies (claro → juego oscuro, oscuro → juego claro), así que cada
- * combinación se valida contra el juego que realmente pinta.
+ * Contrato de contraste: 25 paletas × claro/oscuro. Panda solo cambia el fondo de
+ * la página, así que superficies y textos se validan contra el juego del tema.
  */
 export function checkPaletteContrast(list: PaletteConfig[] = PALETTES): { checked: number; failures: ContrastFailure[] } {
   const failures: ContrastFailure[] = [];
   let checked = 0;
   for (const p of list) {
     for (const theme of ['light', 'dark'] as const) {
-      for (const panda of [false, true]) {
-        const set = (theme === 'light') !== panda ? 'light' : 'dark';
-        const c = resolvePalette(p, set);
-        for (const [fg, bg, min] of CONTRAST_PAIRS) {
-          checked++;
-          const ratio = contrastRatio(c[fg], c[bg]);
-          if (ratio < min) failures.push({ palette: p.value, theme, panda, fg, bg, ratio: Math.round(ratio * 100) / 100, min });
-        }
+      const c = resolvePalette(p, theme);
+      for (const [fg, bg, min] of CONTRAST_PAIRS) {
+        checked++;
+        const ratio = contrastRatio(c[fg], c[bg]);
+        if (ratio < min) failures.push({ palette: p.value, theme, panda: false, fg, bg, ratio: Math.round(ratio * 100) / 100, min });
       }
     }
   }
@@ -340,7 +336,7 @@ export function checkPaletteContrast(list: PaletteConfig[] = PALETTES): { checke
 const APPLY_TOKENS = [...SURFACE_LIGHT.map((r) => r.token)];
 
 function applyBlock(selector: string, set: 'sl' | 'sd', scheme: 'light' | 'dark'): string {
-  const lines = [`  color-scheme: ${scheme};`, ...APPLY_TOKENS.map((t) => `  --iswc-${t}: var(--iswc-${set}-${t});`)];
+  const lines = [`  color-scheme: ${scheme};`, '  --iswc-bg-page: var(--iswc-bg);', ...APPLY_TOKENS.map((t) => `  --iswc-${t}: var(--iswc-${set}-${t});`)];
   if (scheme === 'light') {
     lines.push(
       '  --iswc-shadow: 0 1px 0 rgb(0 0 0 / 4%), 0 8px 24px color-mix(in srgb, var(--iswc-color-brand) calc(var(--iswc-tint) * 6%), rgb(0 0 0 / 6%));',
@@ -385,8 +381,8 @@ export function palettesScss(list: PaletteConfig[] = PALETTES): string {
  * --iswc-color-bright (hsl(h 100% 70%)), y DOS juegos de superficies:
  *   --iswc-sl-*  claras: bright mezclado hacia blanco (fondo 10%, papel 5%)
  *   --iswc-sd-*  oscuras: main mezclado hacia negro
- * El tema elige el juego; data-panda lo invierte (claro pinta sd, oscuro sl)
- * conservando main/contrast. Default palette = ${def.value}, en :root.
+ * El tema elige el juego; data-panda solo invierte --iswc-bg-page (el fondo de la página).
+ * Default palette = ${def.value}, en :root.
  *
  * Brand es la 7a familia del helper canonico (color-tokens.ts); sus lineas
  * DEBEN coincidir con brandFamilyBlock() (guardian w24-color-tokens-helper).
@@ -420,11 +416,14 @@ export function palettesScss(list: PaletteConfig[] = PALETTES): string {
   }).join('\n\n');
 
   const apply = [
-    '/* ─── Tema → juego de superficies (data-panda lo invierte) ─────────── */',
+    '/* ─── Tema → juego de superficies; data-panda solo invierte la página ── */',
     '/* Solo el nodo con data-theme (html o contenedor scoped); nunca :not([data-theme]) suelto. */',
-    applyBlock('[data-theme="light"]:not([data-panda]),\n[data-theme="dark"][data-panda]', 'sl', 'light'),
+    applyBlock('[data-theme="light"]', 'sl', 'light'),
     '',
-    applyBlock('[data-theme="dark"]:not([data-panda]),\n[data-theme="light"][data-panda]', 'sd', 'dark'),
+    applyBlock('[data-theme="dark"]', 'sd', 'dark'),
+    '',
+    '[data-theme="light"][data-panda] { --iswc-bg-page: var(--iswc-sd-bg); }',
+    '[data-theme="dark"][data-panda] { --iswc-bg-page: var(--iswc-sl-bg); }',
   ].join('\n');
 
   return `${header}\n\n/* ─── Capa comun: semillas → rampa, contraste, bright y superficies ─── */\n\n${common}\n\n/* ─── Semillas por paleta ───────────────────────────────────────────── */\n\n${seeds}\n\n${apply}\n`;

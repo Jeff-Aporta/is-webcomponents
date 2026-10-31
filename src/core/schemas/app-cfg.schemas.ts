@@ -15,7 +15,7 @@ export interface AppCfg {
   theme?: TemaApp;
   /** Nombre de la paleta (las del kit o las de un catálogo propio del selector). */
   palette?: string;
-  /** Modificador Panda (superficies invertidas): lo escribe el interruptor del selector. */
+  /** Modificador Panda (fondo de página invertido): lo escribe el interruptor del selector. */
   panda?: boolean;
   [clave: string]: ValorCfgApp | undefined;
 }
