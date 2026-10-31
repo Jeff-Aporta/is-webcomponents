@@ -82,7 +82,7 @@ export async function montarGaleria({ manifest, categorias = {} }: OpcionesGaler
   host.hidden = false;
   // Los componentes de una app son de página, no botones sueltos: el escenario les da todo el ancho.
   const estilo = document.createElement('style');
-  estilo.textContent = 'iswc-playground > [slot="stage"], iswc-demo.demo { inline-size: 100%; } iswc-demo.demo > * { box-sizing: border-box; inline-size: 100%; min-inline-size: 0; }';
+  estilo.textContent = 'iswc-playground::part(stage) { justify-self: stretch; inline-size: 100%; } iswc-playground > [slot="stage"], iswc-demo.demo { inline-size: 100%; } iswc-demo.demo > * { box-sizing: border-box; inline-size: 100%; min-inline-size: 0; }';
   document.head.append(estilo);
   document.getElementById('fullscreenBtn')?.toggleAttribute('hidden', true);
 
