@@ -1,3 +1,4 @@
+import { placementHaciaCentro } from '../../core/position.js';
 import { adoptCss, defineElement, emit } from '../../core/element.js';
 import './option.js';
 import '../media/icon.js';
@@ -723,7 +724,7 @@ import { setStringAttr } from '../../core/reflect.js';
     #positionList(): void {
       const rect = this.#base.getBoundingClientRect();
       const spaceBelow = window.innerHeight - rect.bottom - 8;
-      const openUp = spaceBelow < 160 && rect.top > spaceBelow;
+      const openUp = placementHaciaCentro(rect).startsWith('top');
       const maxH = Math.min(this.#heightCap(), Math.max(120, openUp ? rect.top - 8 : spaceBelow));
       const width = Math.max(rect.width, 10);
       const auto = this.autoWidth;

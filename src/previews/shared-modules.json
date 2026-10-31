@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-31T03:42:56.320Z",
+  "generatedAt": "2026-10-31T12:26:24.705Z",
   "count": 40,
   "modules": [
     {
@@ -380,9 +380,11 @@
       "id": "position",
       "path": "src/core/position.ts",
       "summary": "Motor de posicionamiento anclado (flip / shift / arrow). — Sin dependencias — usa getBoundingClientRect + flip/shift.",
-      "bytes": 14849,
+      "bytes": 15673,
       "exports": [
         "PLACEMENTS",
+        "PLACEMENTS_AUTO",
+        "placementHaciaCentro",
         "computePosition",
         "isVirtualElement"
       ]

@@ -392,7 +392,7 @@ export function definePickerInput({
         const result = computePosition({
           anchor: this.#base,
           popupEl: this.#panel,
-          placement: this.getAttribute('placement') || 'bottom-start',
+          placement: this.getAttribute('placement') || 'auto',
           distance: 6,
           flip: true,
           shift: true,

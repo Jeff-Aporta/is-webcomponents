@@ -359,7 +359,7 @@ import type { EyeDropperOpenResult, EyeDropperInterface, EyeDropperConstructor, 
       const result = computePosition({
         anchor: this.#trigger,
         popupEl: this.#panel,
-        placement: 'bottom-start',
+        placement: 'auto',
         distance: 6,
         flip: true,
         shift: true,

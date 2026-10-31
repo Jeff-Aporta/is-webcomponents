@@ -11,9 +11,22 @@ export const PLACEMENTS: Placement[] = [
   'right', 'right-start', 'right-end',
 ];
 
+/** Valores admitidos por los componentes: `auto` abre hacia el centro de la pantalla. */
+export const PLACEMENTS_AUTO: (Placement | 'auto')[] = [...PLACEMENTS, 'auto'];
+
 const OPPOSITE: Record<'top' | 'bottom' | 'left' | 'right', 'top' | 'bottom' | 'left' | 'right'> = {
   top: 'bottom', bottom: 'top', left: 'right', right: 'left',
 };
+
+/**
+ * Dirección de apertura: el vector que va del centro del ancla al centro de la pantalla. Abajo a la derecha abre
+ * arriba hacia la izquierda (`top-end`); arriba a la izquierda, abajo hacia la derecha (`bottom-start`).
+ */
+export function placementHaciaCentro(ancla: { top: number; left: number; width: number; height: number }): Placement {
+  const lado = ancla.top + ancla.height / 2 > window.innerHeight / 2 ? 'top' : 'bottom';
+  const alineado = ancla.left + ancla.width / 2 > window.innerWidth / 2 ? 'end' : 'start';
+  return `${lado}-${alineado}`;
+}
 
 /** Elemento (real o virtual) del que se puede medir un rectángulo. */
 
@@ -285,7 +298,7 @@ export function computePosition(opts: ComputePositionOpts): ComputePositionResul
   const {
     anchor: anchorRef,
     popupEl,
-    placement: preferred = 'top',
+    placement: pedido = 'top',
     distance = 0,
     skidding = 0,
     flip = false,
@@ -307,6 +320,7 @@ export function computePosition(opts: ComputePositionOpts): ComputePositionResul
   const anchor = getRect(anchorRef);
   if (!anchor || !popupEl) return null;
 
+  const preferred = pedido === 'auto' ? placementHaciaCentro(anchor) : pedido;
   const size = measurePopupSize(popupEl);
 
   const pad = Math.max(flipPadding, shiftPadding, autoSizePadding);

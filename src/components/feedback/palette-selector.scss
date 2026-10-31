@@ -105,14 +105,12 @@
 /* ----- Panel ------------------------------------------------------------ */
 
 .panel {
-  position: absolute;
-  inset-block-start: calc(100% + 0.4em);
-  inset-inline-start: 0;
+  position: fixed;
   z-index: 100;
   display: flex;
   flex-direction: column;
   width: min(24em, calc(100vw - 2em));
-  max-height: 30em;
+  max-height: min(30em, calc(100dvh - 1em));
   background: var(--iswc-bg-elev);
   border: 1px solid var(--iswc-border);
   border-radius: 0.6em;

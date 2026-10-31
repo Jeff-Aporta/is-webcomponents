@@ -1,3 +1,4 @@
+import { computePosition } from '../../core/position.js';
 import { guardarAppCfg, leerAppCfg } from '../../core/app-cfg.js';
 import { adoptCss, defineElement, emit } from '../../core/element.js';
 import '../media/icon.js';
@@ -527,14 +528,27 @@ import type { Palette, PaletteCruda } from "./schemas/palette-selector.schemas.j
       this.#trigger.setAttribute('aria-expanded', open ? 'true' : 'false');
       if (open) {
         this.#syncSet();
+        this.#ubicar();
+        addEventListener('resize', this.#ubicar);
+        addEventListener('scroll', this.#ubicar, true);
         this.#dismiss.attach();
         const sel = this.#menu.querySelector<HTMLElement>('[aria-selected="true"]');
         sel?.scrollIntoView?.({ block: 'nearest' });
         (this.#search.hidden ? sel : this.#search)?.focus?.({ preventScroll: true });
       } else {
+        removeEventListener('resize', this.#ubicar);
+        removeEventListener('scroll', this.#ubicar, true);
         this.#dismiss.detach();
       }
     }
+
+    /** Abre hacia el centro de la pantalla: nunca se sale de la página, esté donde esté el selector. */
+    #ubicar = (): void => {
+      const r = computePosition({ anchor: this.#trigger, popupEl: this.#panel, placement: 'auto', distance: 6, flip: true, shift: true, flipPadding: 8, shiftPadding: 8, strategy: 'fixed' });
+      if (!r) return;
+      Object.assign(this.#panel.style, { top: `${r.top}px`, left: `${r.left}px` });
+      this.#panel.dataset.currentPlacement = r.placement;
+    };
 
     #choose(value: string | null): void {
       this.#apply(value);

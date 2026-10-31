@@ -1,6 +1,6 @@
 import { adoptCss, defineElement, emit } from '../../core/element.js';
 import { attrBool, attrEnum, attrNum, atributosDeclarados, withStyleAttrs } from '../../core/attrs.js';
-import { computePosition, PLACEMENTS } from '../../core/position.js';
+import { computePosition, PLACEMENTS_AUTO } from '../../core/position.js';
 import './dropdown-item.js';
 import '../layout/divider.js';
 import { createPopupDismiss } from '../../core/popup-dismiss.js';
@@ -23,7 +23,7 @@ import type { Placement, DropdownItemEl } from "./schemas/dropdown.schemas.js";
  * headings/secciones/overflow de ancestros — mismo patrón que iswc-combobox.
  *
  * Slots: trigger | default (items / dividers / headings)
- * Attrs: open, placement (default bottom-start), distance, skidding
+ * Attrs: open, placement (default auto: hacia el centro de la pantalla), distance, skidding
  * Events: iswc-show, iswc-after-show, iswc-hide, iswc-after-hide, iswc-select { item }
  * Parts: ::part(dialog) ::part(menu)
  */
@@ -114,7 +114,7 @@ import type { Placement, DropdownItemEl } from "./schemas/dropdown.schemas.js";
     }
 
     @attrBool accessor open!: boolean;
-    @attrEnum(PLACEMENTS, 'bottom-start') accessor placement!: Placement;
+    @attrEnum(PLACEMENTS_AUTO, 'auto') accessor placement!: Placement | 'auto';
     @attrNum(0) accessor distance!: number;
     @attrNum(0) accessor skidding!: number;
 
