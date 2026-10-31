@@ -2,7 +2,7 @@
   display: block;
   width: 100%;
   box-sizing: border-box;
-  color: inherit;
+  color: var(--iswc-text, inherit);
   font-family: var(--iswc-sans);
 
   .root { display: flex; flex-direction: column; gap: 0.85em; }

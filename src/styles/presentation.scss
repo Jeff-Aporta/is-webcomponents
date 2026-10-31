@@ -167,7 +167,7 @@ iswc-main.main {
   scroll-behavior: auto;
   background:
     radial-gradient(900px 420px at 12% -8%, color-mix(in srgb, var(--iswc-accent) 11%, transparent), transparent 60%),
-    radial-gradient(700px 360px at 92% 8%, color-mix(in srgb, var(--iswc-bg-elev) 70%, transparent), transparent 55%),
+    radial-gradient(700px 360px at 92% 8%, color-mix(in srgb, var(--iswc-accent) 6%, transparent), transparent 55%),
     var(--iswc-bg-page);
   scrollbar-width: thin;
   scrollbar-color: var(--iswc-scrollbar-thumb) var(--iswc-scrollbar-track);
@@ -253,13 +253,12 @@ iswc-main.main {
   }
 
   h2 {
-    color: var(--iswc-text-page);
     font-size: clamp(1.2rem, 1.7vw, 1.45rem);
     font-weight: 700;
     margin: 0 0 8px;
     letter-spacing: -0.03em;
     line-height: 1.2;
-    color: var(--iswc-text);
+    color: var(--iswc-text-page);
   }
   &:first-of-type h2 {
     font-size: clamp(1.45rem, 2.4vw, 1.85rem);
@@ -298,7 +297,7 @@ iswc-main.main {
     font-weight: 700;
     margin: 32px 0 10px;
     letter-spacing: -0.02em;
-    color: var(--iswc-text);
+    color: var(--iswc-text-page);
   }
   h4 {
     font-size: 0.72rem;
