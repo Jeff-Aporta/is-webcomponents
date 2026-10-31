@@ -12,6 +12,7 @@
  * Prefijos de prop:
  *   attr:name     → setAttribute
  *   prop:name     → propiedad JS
+ *   props:clave   → mezcla { clave } en `.props` (componentes con props)
  *   content:      → textContent del host (label / “Hola mundo”)
  *   style: / attr:style → style.cssText
  */
@@ -329,6 +330,11 @@ import '../layout/details.js';
         return;
       }
 
+      if (prop.startsWith('props:')) {
+        (host as unknown as { props: Record<string, unknown> }).props = { [prop.slice(6)]: valorDeProps(def, valor) };
+        return;
+      }
+
       const key = prop.startsWith('prop:') ? prop.slice(5) : prop;
       try {
         (host as unknown as Record<string, unknown>)[key] = valor as never;
@@ -338,6 +344,17 @@ import '../layout/details.js';
         else if (valor == null || valor === '') host.removeAttribute(key);
         else host.setAttribute(key, String(valor));
       }
+    }
+  }
+
+  /** Valor tipado para `props:` (los paneles entregan texto en number/json). */
+  function valorDeProps(def: SpecItem, valor: unknown): unknown {
+    if (def.control === 'number') return Number(valor);
+    if (def.control !== 'json' || typeof valor !== 'string') return valor;
+    try {
+      return JSON.parse(valor);
+    } catch {
+      return valor;
     }
   }
 

@@ -143,7 +143,7 @@ async function walk(dir, out = []) {
                && !name.name.includes('.preview.')
                && !name.name.endsWith('.json')
                // Companions de iswc-doc-demo: boot ESM + host module (no CE).
-               && !/^doc-demo-(boot|host)\.(ts|js)$/.test(name.name)
+               && !/^doc-demo-(boot|host|galeria)\.(ts|js)$/.test(name.name)
                // Companions Zod (W54): esquemas declarativos; los importa el
                // `.ts` padre via `import {...} from './foo.schemas.js'`, asi
                // que esbuild los inlinea cuando procesa al padre. Procesarlos
@@ -405,6 +405,13 @@ await copyFile(palettesOut, join(dist, 'palettes.min.css'));
   await bundleMinJs({
     entry: hostIn,
     outfile: hostOut,
+    format: 'esm',
+    target: 'es2022',
+    banner: docsBanner([`md: ${GH_RAW}/src/components/layout/doc-demo.md`]),
+  });
+  await bundleMinJs({
+    entry: join(compRoot, 'layout', 'utils', 'doc-demo-galeria.ts'),
+    outfile: join(previewDist, 'doc-demo-galeria.min.js'),
     format: 'esm',
     target: 'es2022',
     banner: docsBanner([`md: ${GH_RAW}/src/components/layout/doc-demo.md`]),

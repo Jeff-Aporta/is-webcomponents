@@ -57,6 +57,20 @@ await document.querySelector('iswc-doc-demo').whenReady();
 IDs estables: `shellBar`, `shellBrand`, `shellNav`, `previewHost`, `previewFrame`,
 `mainSplit`, `navDrawer`, `themeToggle`, `brandPalette`, `fullscreenBtn`, …
 
+## Explorador de demos de una app
+
+Con `doc-demo-galeria.min.js` cualquier app usa este mismo shell sin escribir su SPA: basta un manifest
+`[{ tag, file }]` que apunte a los `.json` `iswc-preview/v1` de sus componentes. La app carga antes sus propios tags.
+
+```js
+await L.load(...tagsDeLaApp);
+const { montarGaleria } = await import(`${cdn}preview/doc-demo-galeria.min.js`);
+await montarGaleria({ manifest: new URL('manifest.json', location.href), categorias: { panel: 'Panel' } });
+```
+
+El nav se agrupa por `category`, la selección viaja en `#tag` y un `props` en un bloque `demo` se asigna a
+`target.props`. Los `controls` admiten `attr:x`, `prop:x` y `props:x`.
+
 ## Atributos
 
 | Atributo | Default | Notas |

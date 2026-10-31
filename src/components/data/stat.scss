@@ -3,6 +3,9 @@
 :host { display: block; }
 
 .stat {
+  /* Llena el alto del host: en una rejilla todas las tarjetas de la fila quedan iguales. */
+  box-sizing: border-box;
+  block-size: 100%;
   background: var(--bg);
   color: var(--fg);
   border: 1px solid var(--border);
