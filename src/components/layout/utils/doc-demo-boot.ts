@@ -58,8 +58,8 @@ export function applyDocDemoBoot(opts: DocDemoBootOpts = {}): void {
     const style = document.createElement('style');
     style.id = 'iswc-doc-demo-critical';
     style.textContent = [
-      'html[data-theme="dark"],html[data-theme="dark"] body{background:var(--iswc-bg-page,#0f1520);color:#e7eef8}',
-      'html[data-theme="light"],html[data-theme="light"] body{background:var(--iswc-bg-page,#f4f7fb);color:#142033}',
+      'html[data-theme="dark"],html[data-theme="dark"] body{background:var(--iswc-bg-page,#0f1520);color:var(--iswc-text-page,#e7eef8)}',
+      'html[data-theme="light"],html[data-theme="light"] body{background:var(--iswc-bg-page,#f4f7fb);color:var(--iswc-text-page,#142033)}',
       '.shell-bar iswc-button:not(:defined),.shell-bar iswc-icon:not(:defined),',
       '.shell-bar iswc-theme-toggle:not(:defined),.shell-bar iswc-palette-selector:not(:defined){visibility:hidden}',
       'html,body{height:100%;margin:0}',

@@ -15,8 +15,8 @@
  * otra) en el nodo con data-theme para cambiarla.
  *
  * Modificador Panda: `data-panda` junto a `data-theme` invierte SOLO el fondo de
- * la página (`--iswc-bg-page`). Papeles, componentes y textos siguen el tema; solo el texto
- * puesto directo sobre la página usa `--iswc-text-page*`, que contrasta con ese fondo.
+ * la página (`--iswc-bg-page`) y el texto que hereda de ella (`--iswc-text-page*`): todo papel
+ * o componente declara `color: var(--iswc-text)` y vuelve así al texto de su tema.
  *
  * Esta hoja SOLO declara tokens (variables). No pinta el canvas de la página
  * (`html`/`body`): cada app define su `background`. Tampoco fuerza

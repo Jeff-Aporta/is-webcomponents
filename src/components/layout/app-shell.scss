@@ -3,7 +3,7 @@
 :host {
   --iswc-shell-height: 100dvh;
   --iswc-shell-bg: var(--iswc-bg-page, var(--iswc-bg, #0c1118));
-  --iswc-shell-text: var(--iswc-text, inherit);
+  --iswc-shell-text: var(--iswc-text-page, var(--iswc-text, inherit));
   --iswc-shell-bar-bg: var(--iswc-bg, #0c1118);
   --iswc-shell-bar-border: var(--iswc-border, rgb(127 127 127 / 25%));
   --iswc-shell-bar-shadow: 0 6px 18px -12px rgb(0 0 0 / 45%);
@@ -37,6 +37,7 @@
   z-index: var(--iswc-shell-bar-z);
   flex: none;
   background: var(--iswc-shell-bar-bg);
+  color: var(--iswc-text, inherit);
   border-bottom: 1px solid var(--iswc-shell-bar-border);
   box-shadow: var(--iswc-shell-bar-shadow);
   padding-top: env(safe-area-inset-top, 0px);

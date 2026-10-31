@@ -16,7 +16,7 @@
   min-height: 0;
   overflow: hidden;
   background: var(--doc-layout-bg);
-  color: var(--iswc-text);
+  color: var(--iswc-text-page, var(--iswc-text));
   font-size: var(--doc-layout-fs);
   box-sizing: border-box;
 
@@ -37,6 +37,7 @@
   padding: 0 12px;
   border-bottom: 1px solid var(--iswc-border);
   background: var(--iswc-bg-elev, var(--doc-layout-side-bg));
+  color: var(--iswc-text);
   position: relative;
   z-index: 4;
 }
@@ -85,6 +86,7 @@ aside.start {
   min-height: 0;
   overflow: auto;
   background: var(--doc-layout-side-bg);
+  color: var(--iswc-text);
   scrollbar-gutter: stable;
 }
 main.content {

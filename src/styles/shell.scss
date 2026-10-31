@@ -16,7 +16,7 @@ body {
   min-height: 100%;
   overflow: hidden;
   background: var(--iswc-bg-page);
-  color: var(--iswc-text);
+  color: var(--iswc-text-page);
   font: 0.9375rem/1.4 var(--iswc-sans);
 }
 
@@ -49,6 +49,7 @@ iswc-doc-demo {
   min-block-size: 3.75em;
   padding-block: 0.625em;
   padding-inline: 0.875em;
+  color: var(--iswc-text);
   /* Cristal sobrio: elevación por profundidad, no por color. */
   background: color-mix(in srgb, var(--iswc-bg-elev) 88%, transparent);
   backdrop-filter: blur(14px) saturate(120%);
@@ -279,6 +280,7 @@ iswc-doc-demo {
   padding-inline: 0.55em;
   overflow-x: hidden;
   overflow-y: auto;
+  color: var(--iswc-text);
   /* Tinte de marca mínimo arriba: ubica la columna sin gritar. */
   background:
     linear-gradient(180deg, color-mix(in srgb, var(--iswc-accent) 5%, transparent) 0, transparent 7em),
