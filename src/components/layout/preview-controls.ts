@@ -68,6 +68,17 @@ const CSS = `
   align-items: start;
   margin-block-start: 0.55em;
 }
+.fila[data-completa] {
+  grid-column: 1 / -1;
+}
+
+.code-json {
+  display: block;
+  inline-size: 100%;
+  max-block-size: 22em;
+  overflow: auto;
+}
+
 .fila {
   display: flex;
   flex-direction: column;
@@ -641,6 +652,12 @@ class IswcPreviewControls extends HTMLElement {
       this.#emitir(c, valor);
       return;
     }
+    const codigo = row.querySelector<HTMLElement & { value: string }>('iswc-code');
+    if (codigo) {
+      codigo.value = typeof valor === 'string' ? valor : JSON.stringify(valor ?? '', null, 2);
+      this.#emitir(c, valor);
+      return;
+    }
     const native = row.querySelector<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>(
       'input, select, textarea',
     );
@@ -728,6 +745,8 @@ class IswcPreviewControls extends HTMLElement {
   #fila(c: ControlPanel): HTMLElement {
     const fila = document.createElement('div');
     fila.className = 'fila';
+    // Lo largo se lee y se edita mejor a fila completa.
+    if (c.control === 'json') fila.dataset['completa'] = '';
     fila.dataset.controlProp = c.prop;
     // Phase W36: cabecera con label + botón info (popover JSDoc).
     const head = document.createElement('div');
@@ -1081,17 +1100,20 @@ class IswcPreviewControls extends HTMLElement {
         return sel;
       }
       case 'json': {
-        const ta = document.createElement('textarea');
-        ta.placeholder = c.placeholder ?? '{ ... }';
-        ta.value = typeof v === 'string' ? v : JSON.stringify(v ?? '', null, 2);
-        conTitulo(ta, titulo);
-        ta.addEventListener('input', () => {
-          const txt = ta.value;
-          let val: unknown = txt;
-          try { val = JSON.parse(txt); } catch { /* edición libre */ }
+        // Editable y coloreado con iswc-code; un JSON a medio escribir viaja como texto hasta que vuelva a ser válido.
+        const code = document.createElement('iswc-code') as HTMLElement & { value: string };
+        code.className = 'code-json';
+        code.setAttribute('lang', 'json');
+        code.setAttribute('compact', '');
+        code.setAttribute('line-numbers', 'false');
+        code.setAttribute('value', typeof v === 'string' ? v : JSON.stringify(v ?? '', null, 2));
+        conTitulo(code, titulo);
+        code.addEventListener('iswc-input', () => {
+          let val: unknown = code.value;
+          try { val = JSON.parse(code.value); } catch { /* edición libre */ }
           this.#emitir(c, val);
         });
-        return ta;
+        return code;
       }
       case 'range': {
         const input = document.createElement('input');

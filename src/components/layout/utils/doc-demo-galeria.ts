@@ -59,7 +59,7 @@ async function leerDefiniciones(manifest: string | URL): Promise<Definicion[]> {
     }
     return null;
   }));
-  return leidas.filter((d): d is Definicion => d !== null);
+  return leidas.filter((d) => d !== null) as Definicion[];
 }
 
 /** Tags del kit que pinta el demo, sin los que el loader no resuelve (rechazarlos tumbaría toda la carga). */
