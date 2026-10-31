@@ -67,7 +67,7 @@
 
 .badge {
   background: color-mix(in srgb, var(--accent) 25%, transparent);
-  color: var(--accent);
+  color: var(--iswc-brand-text);
   padding: 0.125rem 0.5rem;
   border-radius: 999px;
   font-size: 0.75rem;
@@ -156,10 +156,10 @@
   color: var(--muted);
   /* Variantes semánticas: el `data-color` lo aplica el JS. Se mantienen
      como cuatro reglas planas porque tanto el color como el mix cambian. */
-  &[data-color="brand"]   { background: color-mix(in srgb, var(--brand) 25%, transparent);   color: var(--brand); }
-  &[data-color="success"] { background: color-mix(in srgb, var(--success) 25%, transparent); color: var(--success); }
-  &[data-color="warning"] { background: color-mix(in srgb, var(--warning) 25%, transparent); color: var(--warning); }
-  &[data-color="danger"]  { background: color-mix(in srgb, var(--danger) 25%, transparent);  color: var(--danger); }
+  &[data-color="brand"]   { background: color-mix(in srgb, var(--brand) 25%, transparent);   color: var(--iswc-brand-text); }
+  &[data-color="success"] { background: color-mix(in srgb, var(--success) 25%, transparent); color: var(--iswc-success-text); }
+  &[data-color="warning"] { background: color-mix(in srgb, var(--warning) 25%, transparent); color: var(--iswc-warning-text); }
+  &[data-color="danger"]  { background: color-mix(in srgb, var(--danger) 25%, transparent);  color: var(--iswc-danger-text); }
 }
 
 .meta {
