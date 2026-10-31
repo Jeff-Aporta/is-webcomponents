@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-10-31T13:16:18.140Z",
-  "count": 40,
+  "generatedAt": "2026-10-31T14:04:30.696Z",
+  "count": 41,
   "modules": [
     {
       "file": "app-cfg.ts",
@@ -183,13 +183,14 @@
       "id": "dom-utils",
       "path": "src/core/dom-utils.ts",
       "summary": "dom-utils — Sustituye copias dispersas en iswc-checkbox, iswc-switch, iswc-input,",
-      "bytes": 2979,
+      "bytes": 3795,
       "exports": [
         "hasSlotted",
         "assignedNodes",
         "assignedElements",
         "escapeHtml",
-        "copyText"
+        "copyText",
+        "crearNodo"
       ]
     },
     {
@@ -404,6 +405,16 @@
         "clearAllComponentPrefs",
         "getPrefsRootKey",
         "getLegacyPrefsRootKey"
+      ]
+    },
+    {
+      "file": "props-element.ts",
+      "id": "props-element",
+      "path": "src/core/props-element.ts",
+      "summary": "props-element — Cada clave de `props` que no sea una función es también un atributo en kebab-case (`textoCargando` →",
+      "bytes": 4489,
+      "exports": [
+        "atributosDe"
       ]
     },
     {

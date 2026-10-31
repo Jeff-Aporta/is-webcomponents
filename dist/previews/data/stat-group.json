@@ -1,0 +1,46 @@
+{
+  "$schema": "iswc-preview/v1",
+  "tag": "iswc-stat-group",
+  "category": "data",
+  "title": "&lt;iswc-stat-group&gt;",
+  "titleHtml": false,
+  "description": "Fila de indicadores que se acomoda al ancho, con esqueletos mientras carga.",
+  "storageKey": "docs-iswc-stat-group",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "Uso",
+      "lede": "Fila de indicadores: <code class=\"code\">iswc-stat</code> en una rejilla que se acomoda al ancho. Con <code class=\"code\">items: null</code> pinta esqueletos, y un refresco con los mismos <code class=\"code\">id</code> solo actualiza las cifras, sin parpadeo.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": [
+            "<iswc-stat-group id=\"k\"></iswc-stat-group>"
+          ],
+          "target": "#k",
+          "controls": [
+            {
+              "control": "json",
+              "prop": "props:items",
+              "label": "items",
+              "default": "[\n  {\n    \"id\": \"ing\",\n    \"label\": \"Ingresos\",\n    \"value\": \"$ 31.780.000\",\n    \"helper\": \"vs. mes anterior\",\n    \"icon\": \"mdi:trending-up\",\n    \"color\": \"success\",\n    \"trend\": \"+29,6 %\",\n    \"trendDirection\": \"up\"\n  },\n  {\n    \"id\": \"gas\",\n    \"label\": \"Gastos\",\n    \"value\": \"$ 17.347.000\",\n    \"helper\": \"vs. mes anterior\",\n    \"icon\": \"mdi:trending-down\",\n    \"color\": \"danger\",\n    \"trend\": \"-44,6 %\",\n    \"trendDirection\": \"down\"\n  },\n  {\n    \"id\": \"ben\",\n    \"label\": \"Beneficio neto\",\n    \"value\": \"$ 14.433.000\",\n    \"helper\": \"este mes\",\n    \"icon\": \"mdi:cash-check\",\n    \"color\": \"brand\"\n  }\n]"
+            },
+            {
+              "control": "number",
+              "prop": "props:esqueletos",
+              "label": "esqueletos",
+              "default": 4,
+              "min": 1,
+              "max": 8,
+              "step": 1
+            }
+          ]
+        },
+        {
+          "kind": "html",
+          "html": "<iswc-callout tone=\"info\"><strong slot=\"title\">Cuándo usarlo</strong>Arriba de una vista de negocio, bajo la cabecera.</iswc-callout><iswc-callout tone=\"warning\"><strong slot=\"title\">Cuándo no</strong>Tablas de cifras: <code class=\"code\">iswc-data-grid</code>.</iswc-callout>"
+        }
+      ]
+    }
+  ]
+}

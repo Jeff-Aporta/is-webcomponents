@@ -27,7 +27,7 @@ Definidos en `src/styles/is-base.css`. Cubre:
 - Estados: `--iswc-focus`, `--iswc-hover`, `--iswc-active`.
 - Acento (default brand): `--iswc-accent`, `--iswc-on-accent`.
 
-### Paleta (`data-palette="insoft|contapyme|agrowin"`)
+### Paleta (`data-palette="delfin|cardenal|turquesa|…"`, 25 en total, + `data-panda`)
 
 Definidos en `src/styles/palettes.css`. Cada paleta sobrescribe:
 
@@ -176,7 +176,7 @@ node tests/theme-contract.test.mjs
 Este test:
 
 - Verifica que los 2 temas (`light`, `dark`) están definidos.
-- Verifica que las 3 paletas (`insoft`, `contapyme`, `agrowin`)
+- Verifica que las 25 paletas (`deno run -A --no-check scripts/verify-theme-contract.cjs`)
   declaran las ramps `--iswc-color-brand-*`, `--iswc-color-success-*`,
   etc.
 - Busca hex literales en CSS de componentes que **no** estén dentro

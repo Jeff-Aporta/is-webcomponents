@@ -4,6 +4,7 @@
  * Sustituye copias dispersas en iswc-checkbox, iswc-switch, iswc-input,
  * iswc-textarea, iswc-slider, iswc-rating, iswc-split-panel, iswc-popover, etc.
  */
+import type { HijoNodo } from './schemas/dom-utils.schemas.js';
 
 /**
  * Devuelve true si el slot tiene nodos asignados (no sólo whitespace).
@@ -92,4 +93,20 @@ export async function copyText(text: string) {
   } catch {
     return false;
   }
+}
+
+/**
+ * Crea un elemento con atributos e hijos. Un atributo `true` se escribe vacío; `false`, `null` o `undefined` se omite.
+ * El texto siempre va como nodo de texto: es la forma segura de pintar datos dentro del shadow de un componente.
+ */
+export function crearNodo(tag: string, attrs: Record<string, string | number | boolean | null | undefined> = {}, ...hijos: HijoNodo[]): HTMLElement {
+  const nodo = document.createElement(tag);
+  for (const [nombre, valor] of Object.entries(attrs)) {
+    if (valor === false || valor == null) continue;
+    nodo.setAttribute(nombre, valor === true ? "" : String(valor));
+  }
+  for (const hijo of hijos) {
+    if (hijo !== null && hijo !== undefined && hijo !== false) nodo.append(hijo);
+  }
+  return nodo;
 }

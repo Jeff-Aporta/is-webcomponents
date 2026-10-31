@@ -1,0 +1,53 @@
+{
+  "$schema": "iswc-preview/v1",
+  "tag": "iswc-json-dialog",
+  "category": "overlays",
+  "title": "&lt;iswc-json-dialog&gt;",
+  "titleHtml": false,
+  "description": "Diálogo para ver o editar un documento JSON, con validación mientras se escribe.",
+  "storageKey": "docs-iswc-json-dialog",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "Uso",
+      "lede": "Ver o editar un documento como JSON en un diálogo. Valida mientras se escribe, para que los errores se vean junto al editor y «Aplicar» solo se encienda con un JSON válido.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": [
+            "<iswc-callout tone=\"info\">Enciende <code>open</code> en el panel para abrir el diálogo.</iswc-callout><iswc-json-dialog id=\"d\" valor=\"{&quot;modelo&quot;: &quot;base&quot;, &quot;temperatura&quot;: 0.2}\" titulo=\"Configuración\"></iswc-json-dialog>"
+          ],
+          "target": "#d",
+          "controls": [
+            {
+              "control": "boolean",
+              "prop": "attr:open",
+              "label": "open",
+              "default": false
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:readonly",
+              "label": "readonly",
+              "default": true
+            },
+            {
+              "control": "text",
+              "prop": "attr:titulo",
+              "label": "titulo"
+            },
+            {
+              "control": "text",
+              "prop": "attr:valor",
+              "label": "valor"
+            }
+          ]
+        },
+        {
+          "kind": "html",
+          "html": "<iswc-callout tone=\"info\"><strong slot=\"title\">Cuándo usarlo</strong>Editar una configuración avanzada.</iswc-callout><iswc-callout tone=\"warning\"><strong slot=\"title\">Cuándo no</strong>Editar código en una vista: <code class=\"code\">iswc-code</code>.</iswc-callout>"
+        }
+      ]
+    }
+  ]
+}

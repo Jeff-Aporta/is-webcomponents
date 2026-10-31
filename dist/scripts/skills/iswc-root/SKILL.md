@@ -134,7 +134,7 @@ Por defecto pin por **commit SHA** (sustituir `{{SHA}}` por la punta actual de
 Excepción: apps que declaran seguimiento continuo (por ejemplo `jagudeloe/frontend-webcomponents`) pueden usar `@main`.
 
 ```html
-<html lang="es" data-theme="dark" data-palette="contapyme">
+<html lang="es" data-theme="dark" data-palette="delfin">
 <head>
   <script type="module"
     src="https://cdn.jsdelivr.net/gh/Jeff-Aporta/iswc-root@{{SHA}}/dist/cdn/core/loader.min.js"></script>
@@ -150,6 +150,20 @@ Excepción: apps que declaran seguimiento continuo (por ejemplo `jagudeloe/front
 </body>
 </html>
 ```
+
+**Paletas (25) y Panda.** `data-palette` acepta una de las 25 paletas generales
+del kit (`src/styles/palettes.json`): rojos `cardenal` `rubi` `granate`;
+naranjas/amarillos `citrino` `marte` `jupiter` `cobre` `ambar`; verdes `iguana`
+`esmeralda` `peridoto` `jade` `menta` `olivino`; azules/cianes `delfin`
+(default) `zafiro` `turquesa` `neptuno` `aguamarina` `lapislazuli`;
+violetas/rosas `orquidea` `amatista` `flamenco` `tanzanita`; neutro `luna`.
+Cada una tiene main (`--iswc-color-brand`), contraste (`--iswc-color-contrast`,
+`--iswc-contrast-text`, `--iswc-contrast-soft`), bright (`--iswc-color-bright`),
+superficies y textos tintados por su tono. `data-panda` en el mismo nodo que
+`data-theme` invierte solo el fondo de la página (`--iswc-bg-page`); papeles,
+componentes y textos siguen el tema. El usuario elige ambas con `<iswc-palette-selector>`
+(persisten en `iswc:app-cfg` → `palette`, `panda`); `initApp({ palette, panda })`
+fija los valores iniciales.
 
 - CSS de documento: `loadCSSBase` + `loadCSSPalettesDefault`. El CSS de cada `is-*` lo carga el propio tag.
 - Cargar solo los tags de la vista. `load('actions')` expande a cada `.min.js` de la categoría (no hay bundle). `load('all')` pide todos los tags, no un archivo único.
@@ -315,7 +329,7 @@ Cada `.min.js` enlaza la guía de su fila y esta skill.
 | `<iswc-heading>` | isp/heading.md | [isp/heading.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/isp/heading.md) |
 | `<iswc-loading-overlay>` | isp/loading-overlay.md | [isp/loading-overlay.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/isp/loading-overlay.md) |
 | `<iswc-text>` | isp/text.md | [isp/text.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/isp/text.md) |
-| `<iswc-tree-view>` | isp/tree-view.md | [isp/tree-view.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/isp/tree-view.md) |
+| `<iswc-tree-view>` | Planes de estudio, catálogos anidados y cualquier lista plana con flatPath | [isp/tree-view.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/isp/tree-view.md) |
 
 ### actions
 
@@ -345,6 +359,7 @@ Cada `.min.js` enlaza la guía de su fila y esta skill.
 | `<iswc-speech>` | media/speech.md | [media/speech.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/media/speech.md) |
 | `<iswc-media-recorder>` | media/media-recorder.md | [media/media-recorder.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/media/media-recorder.md) |
 | `<iswc-video-playlist>` | media/video-playlist.md | [media/video-playlist.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/media/video-playlist.md) |
+| `<iswc-person>` | Una persona en línea: avatar con iniciales, nombre (o usuario) y un detalle. | [media/person.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/media/person.md) |
 | `<iswc-barcode>` | media/barcode.md | [media/barcode.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/media/barcode.md) |
 | `<iswc-barcode-scanner>` | media/barcode-scanner.md | [media/barcode-scanner.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/media/barcode-scanner.md) |
 | `<iswc-image-editor>` | media/image-editor.md | [media/image-editor.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/media/image-editor.md) |
@@ -369,7 +384,11 @@ Cada `.min.js` enlaza la guía de su fila y esta skill.
 | `<iswc-cdn-snippet>` | feedback/cdn-snippet.md | [feedback/cdn-snippet.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/feedback/cdn-snippet.md) |
 | `<iswc-popconfirm>` | feedback/popconfirm.md | [feedback/popconfirm.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/feedback/popconfirm.md) |
 | `<iswc-confirm-modal>` | feedback/confirm-modal.md | [feedback/confirm-modal.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/feedback/confirm-modal.md) |
-| `<iswc-palette-selector>` | feedback/palette-selector.md | [feedback/palette-selector.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/feedback/palette-selector.md) |
+| `<iswc-stream-bubble>` | Burbuja de una respuesta que llega por partes: estado, pasos previos, escritura letra a letra y markdown ligero. | [feedback/stream-bubble.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/feedback/stream-bubble.md) |
+| `<iswc-status-pill>` | Pastilla de una línea para un paso de un proceso: spinner o ícono, la frase y el rótulo del estado. | [feedback/status-pill.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/feedback/status-pill.md) |
+| `<iswc-loading>` | Indicador de carga en línea: spinner y texto opcional. | [feedback/loading.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/feedback/loading.md) |
+| `<iswc-empty-state>` | Lo que se ve cuando una lista o un panel no tiene datos, está cargando o falló: ícono, título, texto y una acción opcional. | [feedback/empty-state.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/feedback/empty-state.md) |
+| `<iswc-palette-selector>` | Dejar que el usuario elija la paleta (y Panda) de la app o de un contenedor. | [feedback/palette-selector.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/feedback/palette-selector.md) |
 
 ### layout
 
@@ -382,14 +401,15 @@ Cada `.min.js` enlaza la guía de su fila y esta skill.
 | `<iswc-details>` | layout/details.md | [layout/details.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/layout/details.md) |
 | `<iswc-dialog>` | layout/dialog.md | [layout/dialog.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/layout/dialog.md) |
 | `<iswc-drawer>` | layout/drawer.md | [layout/drawer.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/layout/drawer.md) |
-| `<iswc-login>` | layout/login.md | [layout/login.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/layout/login.md) |
-| `<iswc-login-gate>` | layout/login-gate.md | [layout/login-gate.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/layout/login-gate.md) |
-| `<iswc-login-dropdown>` | layout/login-dropdown.md | [layout/login-dropdown.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/layout/login-dropdown.md) |
-| `<iswc-session-menu>` | layout/session-menu.md | [layout/session-menu.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/layout/session-menu.md) |
-| `<iswc-app-shell>` | layout/app-shell.md | [layout/app-shell.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/layout/app-shell.md) |
+| `<iswc-login>` | - Login de una app iswc con uno o varios proveedores. | [layout/login.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/layout/login.md) |
+| `<iswc-login-gate>` | Cortina de acceso: muestra el contenido público (o un mockup) y pide iniciar sesión antes de revelar la parte protegida. | [layout/login-gate.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/layout/login-gate.md) |
+| `<iswc-login-dropdown>` | Acceso compacto para la barra: un botón "Entrar" que despliega usuario/contraseña (y opcionalmente pegar un token), con paso de elección entre opciones (p. | [layout/login-dropdown.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/layout/login-dropdown.md) |
+| `<iswc-session-menu>` | Sesión del usuario en la barra. | [layout/session-menu.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/layout/session-menu.md) |
+| `<iswc-app-shell>` | Armazón de una aplicación: barra superior fija (marca, navegación, acciones) y una vista que hace scroll propio debajo. | [layout/app-shell.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/layout/app-shell.md) |
 | `<iswc-divider>` | layout/divider.md | [layout/divider.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/layout/divider.md) |
 | `<iswc-scrollspy>` | layout/scrollspy.md | [layout/scrollspy.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/layout/scrollspy.md) |
 | `<iswc-demo>` | Caja de demostración de la galería. | [layout/demo.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/layout/demo.md) |
+| `<iswc-page-header>` | Fila de arriba de una vista: ícono, título, subtítulo y un slot para los botones. | [layout/page-header.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/layout/page-header.md) |
 | `<iswc-dock>` | layout/dock.md | [layout/dock.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/layout/dock.md) |
 | `<iswc-dock-item>` | Ítem de <iswc-dock>. | [layout/dock-item.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/layout/dock-item.md) |
 | `<iswc-doc-layout>` | Layout documental común: navegación a la izquierda, contenido al centro e índice de la página a la derecha, con scroll-spy entre ambos. | [layout/doc-layout.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/layout/doc-layout.md) |
@@ -426,8 +446,8 @@ Cada `.min.js` enlaza la guía de su fila y esta skill.
 | `<iswc-pager>` | Paso a la página anterior y a la siguiente, cada lado con un rótulo pequeño («← Anterior», «Siguiente →») y el título de la otra página. | [navigation/pager.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/navigation/pager.md) |
 | `<iswc-doc-index>` | Índice documental con búsqueda: lista páginas agrupadas (grupo → subgrupo → ítem) y, al escribir, busca en títulos, palabras clave y todo el texto, con los resultados por relevancia y el fragmento resaltado. | [navigation/doc-index.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/navigation/doc-index.md) |
 | `<iswc-breadcrumb-item>` | navigation/breadcrumb-item.md | [navigation/breadcrumb-item.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/navigation/breadcrumb-item.md) |
+| `<iswc-app-nav>` | Pestañas de la barra de una app: una fila primaria y filas secundarias que dependen de ella (p. | [navigation/app-nav.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/navigation/app-nav.md) |
 | `<iswc-tab-group>` | navigation/tab-group.md | [navigation/tab-group.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/navigation/tab-group.md) |
-| `<iswc-app-nav>` | navigation/app-nav.md | [navigation/app-nav.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/navigation/app-nav.md) |
 | `<iswc-tab>` | navigation/tab-group.md | [navigation/tab-group.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/navigation/tab-group.md) |
 | `<iswc-tab-panel>` | navigation/tab-group.md | [navigation/tab-group.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/navigation/tab-group.md) |
 | `<iswc-scroller>` | navigation/scroller.md | [navigation/scroller.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/navigation/scroller.md) |
@@ -437,6 +457,7 @@ Cada `.min.js` enlaza la guía de su fila y esta skill.
 | `<iswc-tree-item>` | Nodo de <iswc-tree>. | [navigation/tree-item.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/navigation/tree-item.md) |
 | `<iswc-stepper>` | navigation/stepper.md | [navigation/stepper.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/navigation/stepper.md) |
 | `<iswc-stepper-step>` | Paso de <iswc-stepper>. | [navigation/stepper-step.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/navigation/stepper-step.md) |
+| `<iswc-pagination>` | Paginación numérica: pista de números desplazable (flechas, Shift+rueda, arrastre táctil) y selector de tamaño opcional. | [navigation/pagination.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/navigation/pagination.md) |
 | `<iswc-mega-menu>` | navigation/mega-menu.md | [navigation/mega-menu.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/navigation/mega-menu.md) |
 
 ### forms
@@ -470,6 +491,7 @@ Cada `.min.js` enlaza la guía de su fila y esta skill.
 | `<iswc-date-time-input>` | forms/date-time-input.md | [forms/date-time-input.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/forms/date-time-input.md) |
 | `<iswc-date-range-input>` | forms/date-range-input.md | [forms/date-range-input.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/forms/date-range-input.md) |
 | `<iswc-pin-input>` | forms/pin-input.md | [forms/pin-input.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/forms/pin-input.md) |
+| `<iswc-tenant-selector>` | Selector del cliente activo (empresa, organización, espacio) para apps con varios clientes. | [forms/tenant-selector.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/forms/tenant-selector.md) |
 | `<iswc-masked-input>` | forms/masked-input.md | [forms/masked-input.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/forms/masked-input.md) |
 | `<iswc-inline-edit>` | forms/inline-edit.md | [forms/inline-edit.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/forms/inline-edit.md) |
 | `<iswc-mention>` | forms/mention.md | [forms/mention.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/forms/mention.md) |
@@ -492,6 +514,8 @@ Cada `.min.js` enlaza la guía de su fila y esta skill.
 | --- | --- | --- |
 | `<iswc-data-grid>` | data/data-grid.md | [data/data-grid.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/data/data-grid.md) |
 | `<iswc-stat>` | data/stat.md | [data/stat.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/data/stat.md) |
+| `<iswc-trace-log>` | Log de un proceso: cabecera plegable con el resumen y, desplegada, cada paso con su tiempo, nivel, etapa, mensaje, duración y datos. | [data/trace-log.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/data/trace-log.md) |
+| `<iswc-stat-group>` | Fila de indicadores: iswc-stat en una rejilla que se acomoda al ancho. | [data/stat-group.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/data/stat-group.md) |
 | `<iswc-meta-list>` | Lista de metadatos clave → valor, agrupada por secciones con título (ubicación, autor, estado, etiquetas, ruta…). | [data/meta-list.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/data/meta-list.md) |
 | `<iswc-transfer>` | data/transfer.md | [data/transfer.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/data/transfer.md) |
 | `<iswc-transfer-item>` | Ítem de <iswc-transfer>. | [data/transfer-item.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/data/transfer-item.md) |
@@ -554,6 +578,8 @@ Cada `.min.js` enlaza la guía de su fila y esta skill.
 
 | Tag | Resumen | Guía |
 | --- | --- | --- |
+| `<iswc-json-dialog>` | Ver o editar un documento como JSON en un diálogo. | [overlays/json-dialog.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/overlays/json-dialog.md) |
+| `<iswc-semantic-search>` | Búsqueda global: un botón que abre iswc-command-palette (Ctrl+K) con los comandos de la app. | [overlays/semantic-search.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/overlays/semantic-search.md) |
 | `<iswc-command-palette>` | overlays/command-palette.md | [overlays/command-palette.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/overlays/command-palette.md) |
 | `<iswc-pdf-viewer>` | overlays/pdf-viewer.md | [overlays/pdf-viewer.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/overlays/pdf-viewer.md) |
 | `<iswc-window>` | overlays/window.md | [overlays/window.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/overlays/window.md) |

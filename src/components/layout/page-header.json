@@ -1,0 +1,46 @@
+{
+  "$schema": "iswc-preview/v1",
+  "tag": "iswc-page-header",
+  "category": "layout",
+  "title": "&lt;iswc-page-header&gt;",
+  "titleHtml": false,
+  "description": "Cabecera de una vista: ícono, título, subtítulo y acciones.",
+  "storageKey": "docs-iswc-page-header",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "Uso",
+      "lede": "Fila de arriba de una vista: ícono, título, subtítulo y un slot para los botones. Con ella todas las vistas de una app empiezan igual.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": [
+            "<iswc-page-header id=\"c\" titulo=\"Proyectos\" subtitulo=\"Tableros de la empresa\" icono=\"mdi:view-column-outline\"><iswc-button slot=\"acciones\" color=\"brand\">Nuevo</iswc-button></iswc-page-header>"
+          ],
+          "target": "#c",
+          "controls": [
+            {
+              "control": "text",
+              "prop": "attr:titulo",
+              "label": "titulo"
+            },
+            {
+              "control": "text",
+              "prop": "attr:subtitulo",
+              "label": "subtitulo"
+            },
+            {
+              "control": "text",
+              "prop": "attr:icono",
+              "label": "icono"
+            }
+          ]
+        },
+        {
+          "kind": "html",
+          "html": "<iswc-callout tone=\"info\"><strong slot=\"title\">Cuándo usarlo</strong>Arriba de cualquier vista de una app.</iswc-callout><iswc-callout tone=\"warning\"><strong slot=\"title\">Cuándo no</strong>Título de una tarjeta: usa el slot <code class=\"code\">header</code> de <code class=\"code\">iswc-card</code>.</iswc-callout>"
+        }
+      ]
+    }
+  ]
+}

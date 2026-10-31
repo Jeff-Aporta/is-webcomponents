@@ -75,6 +75,7 @@ const CSS = `
 .code-json {
   display: block;
   inline-size: 100%;
+  min-block-size: 12em;
   max-block-size: 22em;
   overflow: auto;
 }

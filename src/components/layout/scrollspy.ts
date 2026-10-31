@@ -204,7 +204,9 @@ import {
 
     #findTarget(): HTMLElement | null {
       if (this.#targetSelector) {
-        const found = document.querySelector<HTMLElement>(this.#targetSelector);
+        // Dentro de un shadow root el target es hermano: `document` no lo alcanza.
+        const raiz = this.getRootNode() as ParentNode;
+        const found = raiz.querySelector<HTMLElement>(this.#targetSelector) ?? document.querySelector<HTMLElement>(this.#targetSelector);
         if (found) return found;
       }
       for (const sel of DEFAULT_TARGET_SELECTORS) {
@@ -401,6 +403,10 @@ import {
       if (!id) return;
       // Optimista: refleja el click inmediatamente. El IO lo confirmará.
       this.#setActive(id);
+      // El ancla nativa no entra en un shadow root.
+      if (!(this.getRootNode() instanceof ShadowRoot)) return;
+      e.preventDefault();
+      this.#target?.querySelector(`#${CSS.escape(id)}`)?.scrollIntoView({ block: 'start', behavior: 'smooth' });
     };
 
     // ---- Phase W10: persistencia del anchor activo ------------------------

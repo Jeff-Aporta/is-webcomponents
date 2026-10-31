@@ -1,0 +1,56 @@
+{
+  "$schema": "iswc-preview/v1",
+  "tag": "iswc-tenant-selector",
+  "category": "forms",
+  "title": "&lt;iswc-tenant-selector&gt;",
+  "titleHtml": false,
+  "description": "Selector del cliente activo en apps con varios clientes.",
+  "storageKey": "docs-iswc-tenant-selector",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "Uso",
+      "lede": "Selector del cliente activo (empresa, organización, espacio) para apps con varios clientes. Solo elige: la app guarda la elección y recarga lo que dependa de ella.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": [
+            "<iswc-tenant-selector id=\"s\"></iswc-tenant-selector>"
+          ],
+          "target": "#s",
+          "controls": [
+            {
+              "control": "json",
+              "prop": "props:opciones",
+              "label": "opciones",
+              "default": "[\n  {\n    \"id\": 1,\n    \"nombre\": \"Demo S.A.S.\"\n  },\n  {\n    \"id\": 2,\n    \"nombre\": \"Otra empresa\"\n  }\n]"
+            },
+            {
+              "control": "number",
+              "prop": "props:activa",
+              "label": "activa",
+              "default": 1,
+              "min": 1,
+              "max": 2,
+              "step": 1
+            },
+            {
+              "control": "text",
+              "prop": "attr:etiqueta",
+              "label": "etiqueta"
+            },
+            {
+              "control": "text",
+              "prop": "attr:icono",
+              "label": "icono"
+            }
+          ]
+        },
+        {
+          "kind": "html",
+          "html": "<iswc-callout tone=\"info\"><strong slot=\"title\">Cuándo usarlo</strong>En la barra de una app con sesión y varios clientes.</iswc-callout><iswc-callout tone=\"warning\"><strong slot=\"title\">Cuándo no</strong>Dentro de una vista: el cliente activo es uno para toda la app.</iswc-callout>"
+        }
+      ]
+    }
+  ]
+}

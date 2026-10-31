@@ -1,0 +1,49 @@
+{
+  "$schema": "iswc-preview/v1",
+  "tag": "iswc-parallax-collage",
+  "category": "media",
+  "navTitle": "Parallax collage",
+  "title": "&lt;iswc-parallax-collage&gt;",
+  "titleHtml": false,
+  "description": "Collage por capas con parallax opcional: desplazar, rotar o separar en profundidad.",
+  "styles": ".stage{inline-size:100%;max-inline-size:30em;margin-inline:auto}",
+  "storageKey": "docs-iswc-parallax-collage",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "Uso",
+      "lede": "Imágenes y formas teñidas con la paleta. Mueve el cursor por la página: cada capa responde según su profundidad.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"stage\"><iswc-parallax-collage id=\"c\" efecto=\"capas\" distancia=\"2\" proporcion=\"0.8\" etiqueta=\"Composición geométrica\"></iswc-parallax-collage></div>",
+          "target": "#c",
+          "controls": [
+            { "control": "select", "prop": "attr:efecto", "label": "efecto", "options": ["ninguno", "desplazar", "rotar", "capas"], "default": "capas" },
+            { "control": "select", "prop": "attr:direccion", "label": "direccion", "options": ["corriente", "pegajoso"], "default": "corriente" },
+            { "control": "number", "prop": "attr:distancia", "label": "distancia", "min": 0, "max": 6, "step": 0.2, "default": 2 },
+            { "control": "number", "prop": "attr:velocidad", "label": "velocidad", "min": 0.2, "max": 4, "step": 0.2, "default": 1 },
+            { "control": "number", "prop": "attr:proporcion", "label": "proporcion", "min": 0.4, "max": 1.6, "step": 0.05, "default": 0.8 },
+            { "control": "boolean", "prop": "attr:quieto", "label": "quieto", "default": false },
+            {
+              "control": "json",
+              "prop": "prop:capas",
+              "label": "capas",
+              "default": [
+                { "tipo": "forma", "forma": "puntos", "color": "suave", "x": 72, "y": 18, "ancho": 26, "z": 1 },
+                { "tipo": "forma", "forma": "circulo", "color": "acento", "x": 30, "y": 34, "ancho": 26, "z": 2, "anim": "flotar" },
+                { "tipo": "forma", "forma": "triangulo", "color": "contraste", "x": 68, "y": 52, "ancho": 24, "z": 3, "anim": "latir", "retraso": 0.6, "giro": 12 },
+                { "tipo": "forma", "forma": "anillo", "color": "marca", "x": 42, "y": 68, "ancho": 20, "z": 4, "anim": "mecer", "retraso": 1 },
+                { "tipo": "forma", "forma": "zigzag", "color": "acento", "x": 18, "y": 80, "ancho": 22, "z": 1 }
+              ]
+            }
+          ]
+        },
+        {
+          "kind": "html",
+          "html": "<iswc-callout tone=\"info\"><strong slot=\"title\">Cuándo usarlo</strong>Hero, acceso, cabeceras y estados vacíos. Sin <code>efecto</code> es una ilustración estática.</iswc-callout><iswc-callout tone=\"warning\"><strong slot=\"title\">Cuándo no</strong>Dentro de listas o tablas: es decorativo y cada capa es un elemento más.</iswc-callout>"
+        }
+      ]
+    }
+  ]
+}

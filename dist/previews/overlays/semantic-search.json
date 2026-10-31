@@ -1,0 +1,57 @@
+{
+  "$schema": "iswc-preview/v1",
+  "tag": "iswc-semantic-search",
+  "category": "overlays",
+  "title": "&lt;iswc-semantic-search&gt;",
+  "titleHtml": false,
+  "description": "Botón de búsqueda global que abre la paleta de comandos con orden por significado inyectado.",
+  "storageKey": "docs-iswc-semantic-search",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "Uso",
+      "lede": "Búsqueda global: un botón que abre <code class=\"code\">iswc-command-palette</code> (Ctrl+K) con los comandos de la app. El orden por significado y los resultados extra se inyectan por <code class=\"code\">props</code>: el componente no sabe de embeddings ni de ningún API.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": [
+            "<iswc-semantic-search id=\"b\"></iswc-semantic-search>"
+          ],
+          "target": "#b",
+          "controls": [
+            {
+              "control": "json",
+              "prop": "props:comandos",
+              "label": "comandos",
+              "default": "[\n  {\n    \"id\": \"clientes\",\n    \"title\": \"Ir a Clientes\",\n    \"group\": \"Módulos\",\n    \"icon\": \"mdi:account-group-outline\",\n    \"hint\": \"Lista de clientes\",\n    \"keywords\": [\n      \"crm\",\n      \"ventas\"\n    ]\n  },\n  {\n    \"id\": \"factura\",\n    \"title\": \"Emitir factura\",\n    \"group\": \"Acciones\",\n    \"icon\": \"mdi:file-document-plus-outline\",\n    \"hint\": \"Cobrar a un cliente\",\n    \"keywords\": [\n      \"cobrar\"\n    ]\n  }\n]"
+            },
+            {
+              "control": "text",
+              "prop": "attr:boton",
+              "label": "boton"
+            },
+            {
+              "control": "text",
+              "prop": "attr:atajo",
+              "label": "atajo"
+            },
+            {
+              "control": "text",
+              "prop": "attr:placeholder",
+              "label": "placeholder"
+            },
+            {
+              "control": "text",
+              "prop": "attr:etiqueta",
+              "label": "etiqueta"
+            }
+          ]
+        },
+        {
+          "kind": "html",
+          "html": "<iswc-callout tone=\"info\"><strong slot=\"title\">Cuándo usarlo</strong>En la barra de una app: ir a un módulo o lanzar una acción escribiendo lo que se quiere.</iswc-callout><iswc-callout tone=\"warning\"><strong slot=\"title\">Cuándo no</strong>Filtrar una lista: cada vista tiene su filtro.</iswc-callout>"
+        }
+      ]
+    }
+  ]
+}

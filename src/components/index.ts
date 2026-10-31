@@ -36,6 +36,7 @@ const CATALOG = {
   'iswc-icon':              'media/icon',
   'iswc-avatar':            'media/avatar',
   'iswc-theme-img':         'media/theme-img',
+  'iswc-parallax-collage':  'media/parallax-collage',
   'iswc-video':             'media/video',
   'iswc-video-playlist':    'media/video-playlist',
   'iswc-barcode':           'media/barcode',

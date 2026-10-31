@@ -65,7 +65,7 @@
  */
 
 import { z } from "zod";
-import { ZAnatomia } from "./anatomia.schemas.js";
+import { ZAnatomia } from "./anatomia.schemas.ts";
 
 /* ──────────────────────────────────────────────────────────────────────────
  * Primitives

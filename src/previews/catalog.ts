@@ -300,6 +300,54 @@ export default {
     "json": "../../dist/previews/media/figure.json",
     "category": "media"
   },
+  "iswc-stream-bubble": {
+    "json": "../../dist/previews/feedback/stream-bubble.json",
+    "category": "feedback"
+  },
+  "iswc-json-dialog": {
+    "json": "../../dist/previews/overlays/json-dialog.json",
+    "category": "overlays"
+  },
+  "iswc-pagination": {
+    "json": "../../dist/previews/navigation/pagination.json",
+    "category": "navigation"
+  },
+  "iswc-trace-log": {
+    "json": "../../dist/previews/data/trace-log.json",
+    "category": "data"
+  },
+  "iswc-status-pill": {
+    "json": "../../dist/previews/feedback/status-pill.json",
+    "category": "feedback"
+  },
+  "iswc-loading": {
+    "json": "../../dist/previews/feedback/loading.json",
+    "category": "feedback"
+  },
+  "iswc-semantic-search": {
+    "json": "../../dist/previews/overlays/semantic-search.json",
+    "category": "overlays"
+  },
+  "iswc-tenant-selector": {
+    "json": "../../dist/previews/forms/tenant-selector.json",
+    "category": "forms"
+  },
+  "iswc-stat-group": {
+    "json": "../../dist/previews/data/stat-group.json",
+    "category": "data"
+  },
+  "iswc-person": {
+    "json": "../../dist/previews/media/person.json",
+    "category": "media"
+  },
+  "iswc-empty-state": {
+    "json": "../../dist/previews/feedback/empty-state.json",
+    "category": "feedback"
+  },
+  "iswc-page-header": {
+    "json": "../../dist/previews/layout/page-header.json",
+    "category": "layout"
+  },
   "iswc-meta-list": {
     "json": "../../dist/previews/data/meta-list.json",
     "category": "data"

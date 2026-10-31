@@ -1,0 +1,48 @@
+/* <iswc-empty-state> — vacío, cargando o error, centrado. */
+@use '../../styles/mixins' as *;
+
+:host {
+  @include papel;
+  display: block;
+  min-width: 0;
+  font-family: var(--iswc-sans);
+}
+
+:host([hidden]) { display: none !important; }
+
+.caja {
+  display: grid;
+  justify-items: center;
+  gap: 0.5em;
+  padding: 2em 1em;
+  text-align: center;
+  color: var(--iswc-text);
+  background: var(--iswc-bg-soft);
+  border: 0.0625em dashed var(--iswc-border);
+  border-radius: var(--iswc-radius);
+
+  .icono {
+    font-size: 2.2em;
+    color: var(--iswc-brand-text);
+
+    &[hidden] { display: none; }
+  }
+
+  .titulo { color: var(--iswc-text); }
+
+  .texto {
+    margin: 0;
+    max-width: 36em;
+    color: var(--iswc-text-dim);
+
+    &[hidden] { display: none; }
+  }
+
+  &[data-variante="tarjeta"] {
+    border-style: solid;
+    background: var(--iswc-bg-elev);
+    box-shadow: var(--iswc-shadow);
+  }
+
+  &[data-estado="error"] .icono { color: var(--iswc-danger-text); }
+}

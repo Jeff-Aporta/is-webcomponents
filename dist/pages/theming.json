@@ -289,7 +289,7 @@
           "kind": "code",
           "code": [
             "/* cada paleta solo declara h, s, b. La rampa la calcula la capa comun. */",
-            "[data-palette=\"contapyme\"] {",
+            "[data-palette=\"delfin\"] {",
             "  --iswc-brand-h: 210;",
             "  --iswc-brand-s: 100%;",
             "  --iswc-brand-b: 56%;",
@@ -304,8 +304,8 @@
             "}",
             "",
             "/* superficies: dependen de la PAREJA (tema, paleta) */",
-            ".theme-dark[data-palette=\"contapyme\"]  { --iswc-bg: #0a0e14; --iswc-border: #273040; }",
-            ".theme-light[data-palette=\"contapyme\"] { --iswc-bg: #fff;    --iswc-border: #ccc; }"
+            ".theme-dark[data-palette=\"delfin\"]  { --iswc-bg: #0a0e14; --iswc-border: #273040; }",
+            ".theme-light[data-palette=\"delfin\"] { --iswc-bg: #fff;    --iswc-border: #ccc; }"
           ]
         },
         {
@@ -321,7 +321,7 @@
         {
           "kind": "code",
           "code": [
-            "<html class=\"theme-dark\" data-theme=\"dark\" data-palette=\"contapyme\">",
+            "<html class=\"theme-dark\" data-theme=\"dark\" data-palette=\"delfin\">",
             "",
             "<!-- o acotado a un trozo del DOM -->",
             "<div class=\"theme-light\" data-theme=\"light\" data-palette=\"mi-marca\"> … </div>"
@@ -589,7 +589,7 @@
             ],
             [
               "superficies",
-              "escalones de L sobre el fondo elegido, con un croma mínimo en el tono de la marca (mismo truco que <code>oklch(from … calc(c * 0.25) h)</code> de ContaPyme)"
+              "escalones de L sobre el fondo elegido, con un croma mínimo en el tono de la marca (mismo truco que <code>oklch(from … calc(c * 0.25) h)</code> de las superficies tintadas de las paletas)"
             ],
             [
               "<code>--iswc-text-soft</code> / <code>-dim</code>",

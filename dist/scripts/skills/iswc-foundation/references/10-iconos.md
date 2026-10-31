@@ -38,7 +38,7 @@ Va junto a tema y paleta, en la config inicial de la app (`core/app-init`):
 import { initApp } from '<kit>/dist/cdn/core/app-init.min.js';
 initApp({
   theme: 'light',
-  palette: 'contapyme',
+  palette: 'delfin',
   icons: { host: 'https://mi-app.azurestaticapps.net/' },   // folder por defecto: 'assets/iconify/'
 });
 // → <html data-icons="https://mi-app.azurestaticapps.net/assets/iconify/">
@@ -48,7 +48,7 @@ initApp({
   relativo lanza `TypeError`); `folder` relativo a `host`, default `ICONS_FOLDER_DEFAULT = 'assets/iconify/'`.
   `iconsBase(icons)` devuelve la URL resultante.
 - Sin `initApp`, el atributo va directo en el HTML, junto a los otros dos: `<html data-theme="dark"
-  data-palette="contapyme" data-icons="https://mi-app…/assets/iconify/">`.
+  data-palette="delfin" data-icons="https://mi-app…/assets/iconify/">`.
 - Apps de `create-iswc-app`: el registrador `<prefijo>Loader.min.js` que genera el build lo declara solo
   desde `deno.json` → `iswc.host` (si la página no trae otro `data-icons`). No hay nada que repetir. Si la
   página se sirve desde otro origen (dev en localhost, e2e), usa la carpeta `assets/iconify/` de ese mismo

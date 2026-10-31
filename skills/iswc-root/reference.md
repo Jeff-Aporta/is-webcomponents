@@ -17,6 +17,18 @@ Usar este mapa al elegir tag. API exacta: MD del módulo en el repo.
 | Select con búsqueda | `iswc-combobox` | select + filtro casero |
 | On/off | `iswc-switch` | checkbox fingiendo switch |
 | Varias opciones visibles | `iswc-checkbox` / `iswc-radio-group` | inputs nativos |
+| Cabecera de una vista | `iswc-page-header` | título + botones a mano |
+| Lista vacía, cargando o con error | `iswc-empty-state` | caja suelta con ícono y texto |
+| Persona: avatar, nombre, detalle | `iswc-person` | `iswc-avatar` + spans |
+| Fila de indicadores | `iswc-stat-group` | rejilla propia de `iswc-stat` |
+| Cliente activo (multi-tenant) | `iswc-tenant-selector` | `iswc-select` en cada app |
+| Búsqueda global con orden por significado | `iswc-semantic-search` | paleta + botón a mano |
+| Carga en línea con texto | `iswc-loading` | spinner + span |
+| Paso de un proceso (pendiente, hecho, error) | `iswc-status-pill` | etiqueta con spinner a mano |
+| Log de un proceso | `iswc-trace-log` | lista de líneas a mano |
+| Paginación numérica | `iswc-pagination` | botones numerados a mano |
+| Ver o editar JSON en un diálogo | `iswc-json-dialog` | `iswc-dialog` + `iswc-code` + validación a mano |
+| Respuesta que llega por partes | `iswc-stream-bubble` | burbuja propia con typewriter |
 | Fecha / hora / rango | `iswc-date-*` / `iswc-time-*` documentados | flatpickr / input date crudo |
 | Confirmar destrucutivo | `iswc-popconfirm` o `iswc-confirm-delete` (ISP) | `window.confirm` |
 | Modal genérico | `iswc-dialog` | modal div + overlay propio |

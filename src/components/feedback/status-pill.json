@@ -1,0 +1,71 @@
+{
+  "$schema": "iswc-preview/v1",
+  "tag": "iswc-status-pill",
+  "category": "feedback",
+  "title": "&lt;iswc-status-pill&gt;",
+  "titleHtml": false,
+  "description": "Pastilla de una línea para un paso de un proceso: pendiente, hecho o error.",
+  "storageKey": "docs-iswc-status-pill",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "Uso",
+      "lede": "Pastilla de una línea para un paso de un proceso: spinner o ícono, la frase y el rótulo del estado. Varias apiladas forman un feed de pasos en paralelo.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": [
+            "<iswc-status-pill id=\"e\" text=\"Consultando documentos\" status=\"pending\"></iswc-status-pill>"
+          ],
+          "target": "#e",
+          "controls": [
+            {
+              "control": "text",
+              "prop": "attr:text",
+              "label": "text"
+            },
+            {
+              "control": "select",
+              "prop": "attr:status",
+              "label": "status",
+              "options": [
+                "pending",
+                "done",
+                "error"
+              ]
+            },
+            {
+              "control": "text",
+              "prop": "attr:icon",
+              "label": "icon"
+            },
+            {
+              "control": "text",
+              "prop": "attr:ts",
+              "label": "ts"
+            },
+            {
+              "control": "text",
+              "prop": "attr:pending-label",
+              "label": "pending-label"
+            },
+            {
+              "control": "text",
+              "prop": "attr:done-label",
+              "label": "done-label"
+            },
+            {
+              "control": "text",
+              "prop": "attr:error-label",
+              "label": "error-label"
+            }
+          ]
+        },
+        {
+          "kind": "html",
+          "html": "<iswc-callout tone=\"info\"><strong slot=\"title\">Cuándo usarlo</strong>Feed de pasos de un proceso largo.</iswc-callout><iswc-callout tone=\"warning\"><strong slot=\"title\">Cuándo no</strong>Una etiqueta fija: <code class=\"code\">iswc-tag</code>.</iswc-callout>"
+        }
+      ]
+    }
+  ]
+}
