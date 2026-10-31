@@ -446,7 +446,8 @@
 }
 .prompt-var-chip--static { cursor: default; }
 
-:host-context([data-theme="light"]) .prompt-var-chip {
+:host-context([data-theme="light"]:not([data-panda])) .prompt-var-chip,
+:host-context([data-theme="dark"][data-panda]) .prompt-var-chip {
   background: hsl(var(--_h) 65% 88% / 90%);
   border-color: hsl(var(--_h) 55% 55%);
   color: hsl(var(--_h) 55% 30%);

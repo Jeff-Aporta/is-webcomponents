@@ -7,9 +7,10 @@
 // "inSoft". Dos grafias distintas para la misma marca en la misma pagina.
 //
 // OJO — lo que NO se toca:
-//   - El identificador de paleta `insoft` (data-palette, value, claves de
-//     objeto). Va en minuscula y es una API: renombrarlo rompe el theming.
+//   - Los identificadores en minuscula (`diagram-style="insoft"`, claves).
 //   - El dominio `insoft.com.co`.
+// Las paletas ya no llevan nombres de marca (son las 25 generales de
+// palettes.json): el selector no compone wordmarks.
 //
 // Uso:  node tests/brand-casing.test.ts
 
@@ -69,43 +70,11 @@ test('gobernanza/brand-casing', async () => {
       (offenders.length > 25 ? `\n  ...y ${offenders.length - 25} más` : ''),
   );
 
-  // El wordmark compuesto tiene que llevar la S mayúscula en las DOS
-  // implementaciones, que hasta ahora divergían.
-  //
-  // Verificación 1: la paleta 'insoft' declara `accentLabel: 'Soft'`
-  // (capitalizada) en el data del componente.
-  const catalog = JSON.parse(await readFile(join(root, 'src/styles/palettes.json'), 'utf8'));
-  const insoft = catalog.find((p) => p.value === 'insoft');
-  assert.equal(insoft?.accentLabel, 'Soft', 'palettes.json debe componer el wordmark con "Soft"');
-
-  // Verificación 2: el wordmark del shell ya no lo pinta app/app.ts a mano
-  // (brandAccent/brandLead desaparecieron): lo pinta <iswc-palette-selector>
-  // (#brandPalette) desde el data de la paleta. Se afirma que (a) el catálogo
-  // que consume el componente (PALETTES de palette-build) trae "Soft", y
-  // (b) el componente traslada lead/accentLabel del data al DOM en sus dos
-  // caminos (trigger propio vía wordmarkOf y wordmark del slot), sin
-  // grafías inline.
-  const { PALETTES } = await import('../../src/styles/palette-build.ts');
-  assert.equal(
-    PALETTES.find((p) => p.value === 'insoft')?.accentLabel,
-    'Soft',
-    'PALETTES (lo que consume el selector) debe componer el wordmark con "Soft"',
-  );
-  const selector = await readFile(join(root, 'src/components/feedback/palette-selector.ts'), 'utf8');
-  assert.match(selector, /accentLabel:\s*p\.accentLabel/, 'el selector toma accentLabel del catálogo');
-  assert.match(selector, /accent\.textContent\s*=\s*current\.accentLabel/, 'el slot pinta el accent desde el data');
-  assert.match(selector, /lead\.textContent\s*=\s*current\.lead/, 'el slot pinta el lead desde el data');
-  assert.match(selector, /const accent = p\.accentLabel/, 'wordmarkOf compone el accent desde el data');
+  // Las paletas son generales: ni el catálogo ni el selector escriben la marca.
+  const catalogIds = await readFile(join(root, 'src/styles/palettes.json'), 'utf8');
+  assert.ok(!/insoft|contapyme|agrowin/i.test(catalogIds), 'palettes.json no usa nombres de marca');
   const galleryApp = await readFile(join(root, 'src/app/app.ts'), 'utf8');
   assert.ok(!/['"`](?:in)?Soft['"`]/.test(galleryApp), 'app/app.ts no escribe la grafía del wordmark inline');
-
-  // El identificador de paleta sigue en minúsculas: es API, no texto.
-  const catalogIds = await readFile(join(root, 'src/styles/palettes.json'), 'utf8');
-  assert.match(
-    catalogIds,
-    /"value": "insoft"/,
-    'el identificador de paleta `insoft` debe seguir en minúsculas (data-palette / theming)',
-  );
 
   console.log(`OK brand-casing — ${files.length} archivos, marca "InSoft" consistente`);
 });

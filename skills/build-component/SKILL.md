@@ -256,8 +256,8 @@ Detalle: [`references/props-events.md`](references/props-events.md).
 - El prefijo **`--iswc-*`** es canónico. **`--pg-*` es legacy** y debe
   migrarse si aparece en código nuevo.
 - Si necesitas un color que no existe, **primero** añádelo a
-  `is-base.css` o a la paleta correspondiente (`insoft`, `contapyme`,
-  `agrowin`), y luego consúmelo vía `var(--iswc-...)` desde el
+  `is-base.css` o a la paleta correspondiente (una de las 25 de
+  `src/styles/palettes.json`, vía sus semillas), y luego consúmelo vía `var(--iswc-...)` desde el
   componente.
 - Variables locales del componente: prefijo `--iswc-<componente>-*`
   (`--iswc-button-border-radius`, `--iswc-button-transition-duration`).

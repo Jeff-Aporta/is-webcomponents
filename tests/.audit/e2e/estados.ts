@@ -13,9 +13,9 @@ export function estadoDe(tag: string): string {
   return b64urlDe({ component: tag });
 }
 
-/** Estado con tema/paleta forzados (p. ej. light + insoft). */
+/** Estado con tema/paleta forzados (p. ej. light + cardenal). */
 export function estadoTema(tag: string, cfg: { theme?: string; palette?: string } = {}): string {
-  const { theme = 'light', palette = 'insoft' } = cfg;
+  const { theme = 'light', palette = 'cardenal' } = cfg;
   return b64urlDe({ component: tag, theme, palette });
 }
 

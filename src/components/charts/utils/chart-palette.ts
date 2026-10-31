@@ -9,23 +9,31 @@
 /** Modo claro/oscuro del documento (atributo `theme-light`). */
 
 import type { PaletteKey, PaletteMode, Status } from "../schemas/chart-palette.schemas.js";
-const CATEGORICAL: Record<PaletteKey, Record<PaletteMode, string[]>> = {
-  insoft: {
+import { DEFAULT_PALETTE, PALETTES } from "../../../styles/palette-build.js";
+/** Tres órdenes validados; cada paleta usa el que arranca en su familia de tono. */
+const ORDERS: Record<'rojo' | 'azul' | 'verde', Record<PaletteMode, string[]>> = {
+  rojo: {
     dark: ['#e66767', '#3987e5', '#199e70', '#c98500', '#9085e9', '#008300'],
     light: ['#e34948', '#2a78d6', '#1baf7a', '#eda100', '#4a3aa7', '#008300'],
   },
-  contapyme: {
+  azul: {
     dark: ['#3987e5', '#e66767', '#199e70', '#c98500', '#9085e9', '#008300'],
     light: ['#2a78d6', '#e34948', '#1baf7a', '#eda100', '#4a3aa7', '#008300'],
   },
-  agrowin: {
+  verde: {
     dark: ['#008300', '#3987e5', '#e66767', '#9085e9', '#c98500', '#199e70'],
     light: ['#008300', '#2a78d6', '#e34948', '#eda100', '#4a3aa7', '#1baf7a'],
   },
 };
 
-export function resolvePaletteKey(attr: string | undefined): PaletteKey {
-  return (CATEGORICAL as Record<string, unknown>)[attr ?? ''] ? (attr as PaletteKey) : 'contapyme';
+const ORDER_OF_FAMILY: Record<string, keyof typeof ORDERS> = { rojos: 'rojo', calidos: 'rojo', verdes: 'verde' };
+
+const CATEGORICAL: Record<string, Record<PaletteMode, string[]>> = Object.fromEntries(
+  PALETTES.map((p) => [p.value, ORDERS[ORDER_OF_FAMILY[p.family] ?? 'azul']]),
+);
+
+export function resolvePaletteKey(attr: string | null | undefined): PaletteKey {
+  return CATEGORICAL[attr ?? ''] ? (attr as PaletteKey) : (DEFAULT_PALETTE as PaletteKey);
 }
 
 export function resolveMode(isLight: boolean): PaletteMode {

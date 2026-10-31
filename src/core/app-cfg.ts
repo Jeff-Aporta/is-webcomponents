@@ -3,7 +3,7 @@
  * Configuración persistente de una app iswc en UNA sola llave: `iswc:app-cfg` (core/iswc-storage;
  * la vieja `iswc-app-cfg` se migra sola).
  *
- *   leerAppCfg()                 // { theme: 'dark', palette: 'insoft', … } (vacío si nadie eligió)
+ *   leerAppCfg()                 // { theme: 'dark', palette: 'cardenal', panda: true, … } (vacío si nadie eligió)
  *   guardarAppCfg({ theme: 'dark' })
  *   borrarAppCfg()               // lo usa <iswc-prefs-clear>: la app vuelve a su config inicial
  *
@@ -20,7 +20,8 @@ const NOMBRE_CFG = 'app-cfg';
 export const APP_CFG_KEY = iswcKey(NOMBRE_CFG);
 const LEGADO = { theme: 'iswc-theme', palette: 'iswc-palette' } as const;
 const TEMAS: readonly TemaApp[] = ['light', 'dark'];
-const PALETAS: readonly PaletaApp[] = ['insoft', 'contapyme', 'agrowin'];
+/** Las 25 paletas del kit (mismo orden que src/styles/palettes.json; lo vigila palettes-contrast). */
+export const PALETAS: readonly PaletaApp[] = ['delfin', 'cardenal', 'iguana', 'rubi', 'esmeralda', 'zafiro', 'citrino', 'orquidea', 'turquesa', 'marte', 'granate', 'neptuno', 'peridoto', 'jade', 'aguamarina', 'amatista', 'menta', 'luna', 'jupiter', 'flamenco', 'lapislazuli', 'cobre', 'tanzanita', 'olivino', 'ambar'];
 
 export const esTema = (v: unknown): v is TemaApp => typeof v === 'string' && (TEMAS as readonly string[]).includes(v);
 export const esPaleta = (v: unknown): v is PaletaApp => typeof v === 'string' && (PALETAS as readonly string[]).includes(v);

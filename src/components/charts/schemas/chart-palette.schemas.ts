@@ -6,7 +6,8 @@
  */
 import { z } from "zod";
 
-export const PaletteKeySchema = z.union([z.literal('insoft'), z.literal('contapyme'), z.literal('agrowin')]);
+/** Nombre de una de las paletas del kit (src/styles/palettes.json). */
+export const PaletteKeySchema = z.string();
 export type PaletteKey = z.infer<typeof PaletteKeySchema>;
 
 

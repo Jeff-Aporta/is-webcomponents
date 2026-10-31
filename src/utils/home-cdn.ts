@@ -99,7 +99,7 @@ const buildDemoHtml = (variant: string): string => {
   ].join('\n');
 
   return `<!DOCTYPE html>
-<html lang="es" class="theme-dark" data-theme="dark" data-palette="contapyme">
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="delfin">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -178,9 +178,31 @@ ${moduleBoot}
         <label class="row" style="gap:0.35rem">
           <span>Paleta</span>
           <select id="palette" style="background:transparent;color:inherit;border:1px solid var(--iswc-border);border-radius:0.4rem;padding:0.25rem 0.5rem">
-            <option value="contapyme">ContaPyme</option>
-            <option value="insoft">InSoft</option>
-            <option value="agrowin">AgroWin</option>
+            <option value="delfin">Delfín</option>
+            <option value="cardenal">Cardenal</option>
+            <option value="iguana">Iguana</option>
+            <option value="rubi">Rubí</option>
+            <option value="esmeralda">Esmeralda</option>
+            <option value="zafiro">Zafiro</option>
+            <option value="citrino">Citrino</option>
+            <option value="orquidea">Orquídea</option>
+            <option value="turquesa">Turquesa</option>
+            <option value="marte">Marte</option>
+            <option value="granate">Granate</option>
+            <option value="neptuno">Neptuno</option>
+            <option value="peridoto">Peridoto</option>
+            <option value="jade">Jade</option>
+            <option value="aguamarina">Aguamarina</option>
+            <option value="amatista">Amatista</option>
+            <option value="menta">Menta</option>
+            <option value="luna">Luna</option>
+            <option value="jupiter">Júpiter</option>
+            <option value="flamenco">Flamenco</option>
+            <option value="lapislazuli">Lapislázuli</option>
+            <option value="cobre">Cobre</option>
+            <option value="tanzanita">Tanzanita</option>
+            <option value="olivino">Olivino</option>
+            <option value="ambar">Ámbar</option>
           </select>
         </label>
       </div>
@@ -288,7 +310,7 @@ ${chartTile('doughnut-chart', '{ "data": { "labels": ["Inventario","Cartera","Ba
       root.dataset.palette = palette.value;
       tag.textContent = 'Paleta activa: ' + palette.value;
     });
-    tag.textContent = 'Paleta activa: ' + (root.dataset.palette || 'contapyme');
+    tag.textContent = 'Paleta activa: ' + (root.dataset.palette || 'delfin');
 
     document.getElementById('openDiag').addEventListener('click', () => {
       const lb = document.getElementById('dlb');

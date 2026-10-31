@@ -16,16 +16,16 @@ with sync_playwright() as p:
     assert page.locator("#themeToggle").inner_text().strip() == ""
 
     page.locator("#brand").click()
-    page.locator('#brandMenu [data-palette="contapyme"]').click()
+    page.locator('#brandMenu [data-palette="delfin"]').click()
     page.wait_for_timeout(100)
-    assert frame.locator("html").get_attribute("data-palette") == "contapyme"
+    assert frame.locator("html").get_attribute("data-palette") == "delfin"
     conta = frame.locator("html").evaluate(
         "el => getComputedStyle(el).getPropertyValue('--is-color-brand-500').trim()"
     )
     assert conta == "dodgerblue", conta
 
     page.locator("#brand").click()
-    page.locator('#brandMenu [data-palette="agrowin"]').click()
+    page.locator('#brandMenu [data-palette="iguana"]').click()
     page.wait_for_timeout(100)
     agro = frame.locator("html").evaluate(
         "el => getComputedStyle(el).getPropertyValue('--is-color-brand-500').trim()"

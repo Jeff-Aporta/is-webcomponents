@@ -60,16 +60,14 @@ checks.push({
     await page.waitForTimeout(100);
     const colors = await page.evaluate(async () => {
       const sel = document.querySelector('iswc-palette-selector');
-      sel.value = 'insoft';
+      sel.value = 'cardenal';
       await new Promise((r) => setTimeout(r, 50));
-      // El trigger tiene .trigger__label (con accentLabel='Soft') y su color
-      // se setea al accentColor de la paleta (#e03131 para insoft).
-      const label = sel.shadowRoot.querySelector('.trigger__label');
-      const cs = getComputedStyle(label);
-      return cs.color;
+      // La muestra del trigger pinta el main de la paleta activa (cardenal = hsl(0 74% 54%)).
+      const chip = sel.shadowRoot.querySelector('.chip__main');
+      return { color: getComputedStyle(chip).backgroundColor, label: sel.shadowRoot.querySelector('.trigger__label').textContent };
     });
-    // insoft tiene accentColor #e03131 → rgb(224, 49, 49)
-    assert.match(colors, /rgb\(224,\s*49,\s*49\)/, `trigger label debe ser rojo insoft (vimos "${colors}")`);
+    assert.match(colors.color, /rgb\(225,\s*51,\s*51\)/, `la muestra del trigger debe ser el rojo de cardenal (vimos "${colors.color}")`);
+    assert.equal(colors.label, 'Cardenal');
   },
 });
 

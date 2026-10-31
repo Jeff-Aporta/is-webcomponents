@@ -111,7 +111,7 @@ import manifest from '../src/manifest.js';
     document.documentElement.dataset.theme === 'light' ? 'light' : 'dark'
   );
   const currentPalette = () => (
-    document.documentElement.dataset.palette || 'contapyme'
+    document.documentElement.dataset.palette || 'delfin'
   );
 
   /** Sella data-theme + data-palette en un nodo raíz del snippet para que,

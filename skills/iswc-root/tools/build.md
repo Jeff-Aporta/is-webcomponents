@@ -19,7 +19,7 @@ CDN (o por copia local si la app ya corrió [`/iswc-root:local`](local.md)).
 2. **Scaffold del HTML** con bootstrap CDN mínimo:
 
    ```html
-   <html lang="es" data-theme="dark" data-palette="contapyme">
+   <html lang="es" data-theme="dark" data-palette="delfin">
    <head>
      <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Jeff-Aporta/iswc-root@main/dist/cdn/core/is-base.min.css">
      <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Jeff-Aporta/iswc-root@main/dist/cdn/core/palettes.min.css">

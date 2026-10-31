@@ -20,7 +20,7 @@ for (const component of components) {
   }
 
   const html = `<!DOCTYPE html>
-<html lang="es" class="theme-dark" data-theme="dark" data-palette="insoft">
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="delfin">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -40,7 +40,7 @@ for (const component of components) {
   <script>
     const root = document.documentElement;
     const themes = new Set(['light', 'dark']);
-    const palettes = new Set(['insoft', 'contapyme', 'agrowin']);
+    const palettes = new Set(['delfin', 'cardenal', 'iguana', 'rubi', 'esmeralda', 'zafiro', 'citrino', 'orquidea', 'turquesa', 'marte', 'granate', 'neptuno', 'peridoto', 'jade', 'aguamarina', 'amatista', 'menta', 'luna', 'jupiter', 'flamenco', 'lapislazuli', 'cobre', 'tanzanita', 'olivino', 'ambar']);
     addEventListener('message', ({ data }) => {
       if (data?.type !== 'iswc-context') return;
       if (themes.has(data.theme)) {

@@ -1,7 +1,7 @@
 /** Contratos de `app-cfg.ts` (W54: los tipos viven en *.schemas.ts). */
 
 export type TemaApp = 'light' | 'dark';
-export type PaletaApp = 'insoft' | 'contapyme' | 'agrowin';
+export type PaletaApp = 'delfin' | 'cardenal' | 'iguana' | 'rubi' | 'esmeralda' | 'zafiro' | 'citrino' | 'orquidea' | 'turquesa' | 'marte' | 'granate' | 'neptuno' | 'peridoto' | 'jade' | 'aguamarina' | 'amatista' | 'menta' | 'luna' | 'jupiter' | 'flamenco' | 'lapislazuli' | 'cobre' | 'tanzanita' | 'olivino' | 'ambar';
 
 /** Valor simple de configuración (lo que cabe en el JSON de la llave). */
 export type ValorCfgApp = string | number | boolean;
@@ -15,5 +15,7 @@ export interface AppCfg {
   theme?: TemaApp;
   /** Nombre de la paleta (las del kit o las de un catálogo propio del selector). */
   palette?: string;
+  /** Modificador Panda (superficies invertidas): lo escribe el interruptor del selector. */
+  panda?: boolean;
   [clave: string]: ValorCfgApp | undefined;
 }

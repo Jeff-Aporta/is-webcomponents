@@ -6,9 +6,9 @@ import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/
 const { test, lista } = coleccionPruebas({ categoria: 'what' });
 
 test('componentes/chart-palette', async () => {
-  assert.strictEqual(resolvePaletteKey('contapyme'), 'contapyme');
-  assert.strictEqual(resolvePaletteKey('nonexistent'), 'contapyme');
-  assert.strictEqual(resolvePaletteKey(null), 'contapyme');
+  assert.strictEqual(resolvePaletteKey('turquesa'), 'turquesa');
+  assert.strictEqual(resolvePaletteKey('nonexistent'), 'delfin');
+  assert.strictEqual(resolvePaletteKey(null), 'delfin');
   assert.strictEqual(resolveMode(true), 'light');
   assert.strictEqual(resolveMode(false), 'dark');
 

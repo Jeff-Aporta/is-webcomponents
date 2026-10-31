@@ -18,7 +18,7 @@ Cada tag es un Custom Element con Shadow DOM. El inventario y rutas de build sal
 
 ## S-K2 Shadow DOM y estilos
 
-- Tokens `--iswc-*` desde light DOM (`is-base.css` / paletas). Default paleta: `contapyme`.
+- Tokens `--iswc-*` desde light DOM (`is-base.css` / paletas). Default paleta: `delfin`. 25 paletas generales (`src/styles/palettes.json` → `scripts/gen-palettes.mjs` escribe `palettes.scss`) con main, contraste, bright, superficies y textos tintados; `data-panda` junto a `data-theme` invierte las superficies. Contrato AA 25 × claro/oscuro × panda: `tests/gobernanza/palettes-contrast.test.ts`.
 - `adoptCss(shadowRoot, import.meta.url)` + CSS hermano `.css` cuando aplique. Tras `innerHTML=''` del shadow, volver a llamar `adoptCss` (los `<link>` se borran).
 - Scrollbars: `src/components/_shared/scrollbars.css` vía adopt (no reimportar en cada tag).
 - Escala: preferir `em` / `font-size` en controles; no `size=` legacy, no `size` colors. Las bases se derivan de `import.meta.url`, no de `location.pathname`.
@@ -116,7 +116,7 @@ Cada tag es un Custom Element con Shadow DOM. El inventario y rutas de build sal
 - **Snippets CDN (`iswc-cdn-snippet`) ≠ snippets de demo (`demo-code.js`).** El primero es **loader copy-paste** (`script src` + `load(tag|cat|all)`); el segundo serializa el ejemplo y **debe** incluir tema/paleta activos (`withSnippetContext`/`stampContext`).
 - **Galería `cdn-panel.js`:** importar `dist/cdn/feedback/cdn-snippet.min.js`, **no** `src/.../cdn-snippet.js` (arrastra `md-editor` y cuelga el boot). Ver error #43.
 - **Reusar:** `_shared/prefs.js`, `helpers/floating.js`. **No** duplicar overlays/position; no emitir señales redundantes.
-- Tema/paleta: default `contapyme`; snippet de demo sella `data-theme`+`data-palette`. **No** `color-scheme` en `:root`; **no** background de página en `is-base`/`palettes`.
+- Tema/paleta: default `delfin`; snippet de demo sella `data-theme`+`data-palette`. **No** `color-scheme` en `:root`; **no** background de página en `is-base`/`palettes`.
 - **`<iswc-tooltip>` `iswc-hide` no burbujea** (`bubbles:false`, `composed:true`): un tooltip en un `iswc-dialog` no debe cerrar al ancestro; escuchar en el propio tooltip, no en `document`.
 - El bloque "Consumo por CDN" lo pinta **solo** `<iswc-cdn-snippet>` (auto-inyectado por `preview-chrome.js`); nunca duplicar un callout CDN a mano.
 
@@ -141,7 +141,7 @@ Cada tag es un Custom Element con Shadow DOM. El inventario y rutas de build sal
 
 - **Ports de ISP-SvelteComponents (ContaPyme).** `block-layout.js` exporta `BreakpointHost` + helpers (`sizewFor`, `flagsFor`, `lerpFor`, `BREAKPOINTS`, `BREAKPOINT_W`). Los tres layouts heredan de ahí: reflejan `data-sizew`/`data-szw-*`, escriben `--clientw`/`--lerpw` y emiten `iswc-breakpoint`.
 - **Slot props de Svelte** (`sizew`, `boolszw`, `lerpw`) **no existen** en Web Components: su equivalente exacto está documentado en `block-layout.md`.
-- **Fallbacks de custom properties SIEMPRE a tokens del tema** (`--iswc-text`, `--iswc-accent`, …), **nunca** a un color literal. Verificar contra ISP con `data-palette="contapyme"`.
+- **Fallbacks de custom properties SIEMPRE a tokens del tema** (`--iswc-text`, `--iswc-accent`, …), **nunca** a un color literal. Verificar contra ISP con `data-palette="delfin"`.
 - **ISP no define tokens** (no tiene `app.css`/`:root`, ni tipografía, ni tema oscuro). Al portar, la fuente de verdad son los **fallbacks dentro de los `var()`** de cada `.svelte`, no un archivo de tema.
 - **No** `&[attr]` dentro de `:host`; **no** crear `size` colors ni un módulo por nivel de heading; **no** duplicar la maquinaria de breakpoints en cada layout.
 

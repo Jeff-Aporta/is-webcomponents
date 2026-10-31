@@ -3,7 +3,7 @@
  * Configuración inicial de una app iswc: tema y paleta POR DEFECTO, y dónde están sus íconos.
  *
  *   import { initApp } from '.../core/app-init.js';
- *   initApp({ theme: 'light', palette: 'contapyme', icons: { host: 'https://mi-app.azurestaticapps.net/' } });
+ *   initApp({ theme: 'light', palette: 'turquesa', panda: false, icons: { host: 'https://mi-app.azurestaticapps.net/' } });
  *
  * `icons` se declara UNA vez: host publicado (`deno.json` → `iswc.host`) + carpeta (default
  * `assets/iconify/`). Queda como URL absoluta en `<html data-icons>`; `<iswc-icon>` la lee desde ahí
@@ -17,7 +17,7 @@
  * `<iswc-prefs-clear>` borra esa config y la app vuelve a sus valores iniciales.
  *
  * Para evitar el parpadeo, el `<html>` del documento debería traer el mismo
- * default (`data-theme="light" data-palette="contapyme"`) y llamar a `initApp`
+ * default (`data-theme="light" data-palette="delfin"`) y llamar a `initApp`
  * lo antes posible.
  */
 import { esPaleta, leerAppCfg } from './app-cfg.js';
@@ -35,16 +35,19 @@ export function iconsBase(icons: IconosApp): string {
   return base.endsWith('/') ? base : `${base}/`;
 }
 
-/** Aplica tema, paleta (lo elegido por el usuario o, si no hay, la config inicial de la app) y la base de íconos. */
+/** Aplica tema, paleta, Panda (lo elegido por el usuario o, si no hay, la config inicial de la app) y la base de íconos. */
 export function initApp(opts: OpcionesInitApp = {}): EstadoInitApp {
   const root = opts.root ?? document.documentElement;
   const cfg = leerAppCfg();
   const theme: TemaApp = cfg.theme ?? opts.theme ?? 'light';
   const paletaUsuario = esPaleta(cfg.palette) ? cfg.palette : null;
-  const palette: PaletaApp = paletaUsuario ?? opts.palette ?? 'contapyme';
+  const palette: PaletaApp = paletaUsuario ?? opts.palette ?? 'delfin';
+  const panda = typeof cfg.panda === 'boolean' ? cfg.panda : (opts.panda ?? false);
   root.dataset.theme = theme;
   root.dataset.palette = palette;
+  if (panda) root.dataset.panda = '';
+  else delete root.dataset.panda;
   if (opts.icons) root.dataset.icons = iconsBase(opts.icons);
   const icons = root.dataset.icons ?? null;
-  return { theme, palette, icons, origen: { theme: cfg.theme ? 'usuario' : 'default', palette: paletaUsuario ? 'usuario' : 'default' } };
+  return { theme, palette, panda, icons, origen: { theme: cfg.theme ? 'usuario' : 'default', palette: paletaUsuario ? 'usuario' : 'default', panda: typeof cfg.panda === 'boolean' ? 'usuario' : 'default' } };
 }

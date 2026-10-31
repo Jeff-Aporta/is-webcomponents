@@ -10,15 +10,16 @@
 
 import type { DocDemoBootOpts } from "../schemas/doc-demo-boot.schemas.js";
 import { leerAppCfg } from "../../../core/app-cfg.js";
+import { DEFAULT_PALETTE, PALETTES as CATALOGO } from "../../../styles/palette-build.js";
 export function applyDocDemoBoot(opts: DocDemoBootOpts = {}): void {
   const defaultTheme = opts.defaultTheme || 'dark';
-  const defaultPalette = opts.defaultPalette || 'contapyme';
+  const defaultPalette = opts.defaultPalette || DEFAULT_PALETTE;
 
   const sys = (navigator.language || (navigator.languages && navigator.languages[0]) || '').trim();
   document.documentElement.lang = sys || 'es';
 
   const THEMES: Record<string, 1> = { light: 1, dark: 1 };
-  const PALETTES: Record<string, 1> = { insoft: 1, contapyme: 1, agrowin: 1 };
+  const PALETTES: Record<string, 1> = Object.fromEntries(CATALOGO.map((p) => [p.value, 1]));
   const params = new URLSearchParams(location.search);
   const root = document.documentElement;
 
@@ -49,6 +50,8 @@ export function applyDocDemoBoot(opts: DocDemoBootOpts = {}): void {
   if (!palette) palette = cfg.palette && PALETTES[cfg.palette] ? cfg.palette : (root.dataset.palette || defaultPalette);
   root.dataset.theme = theme;
   root.dataset.palette = palette;
+  if (cfg.panda === true) root.dataset.panda = '';
+  else if (cfg.panda === false) delete root.dataset.panda;
   if (embed) root.dataset.embed = '1';
 
   if (!document.getElementById('iswc-doc-demo-critical')) {

@@ -17,7 +17,7 @@ import '../src/components/media/icon.js';
 import '../src/components/actions/copy-button.js';
 
 const THEMES = new Set(['light', 'dark']);
-const PALETTES = new Set(['insoft', 'contapyme', 'agrowin']);
+const PALETTES = new Set(['delfin', 'cardenal', 'iguana', 'rubi', 'esmeralda', 'zafiro', 'citrino', 'orquidea', 'turquesa', 'marte', 'granate', 'neptuno', 'peridoto', 'jade', 'aguamarina', 'amatista', 'menta', 'luna', 'jupiter', 'flamenco', 'lapislazuli', 'cobre', 'tanzanita', 'olivino', 'ambar']);
 const root = document.documentElement;
 const embedded = root.dataset.embed === '1';
 
@@ -46,13 +46,13 @@ const applyPalette = (palette) => {
 const persist = () => {
   if (embedded) return;
   localStorage.setItem('iswc-theme', root.dataset.theme || 'dark');
-  localStorage.setItem('iswc-palette', root.dataset.palette || 'contapyme');
+  localStorage.setItem('iswc-palette', root.dataset.palette || 'delfin');
 };
 
 /** Escribe theme/palette en ?s= y devuelve la URL absoluta resultante. */
 const writeShareUrl = () => {
   const theme = root.dataset.theme || 'dark';
-  const palette = root.dataset.palette || 'contapyme';
+  const palette = root.dataset.palette || 'delfin';
   const encoded = b64urlEncode(JSON.stringify({ theme, palette }));
   const next = new URL(location.href);
   next.searchParams.set('s', encoded);
@@ -98,10 +98,32 @@ function mount() {
   bar.innerHTML = /* html */ `
     <label class="preview-chrome__palette">
       <span class="preview-chrome__label">Paleta</span>
-      <select id="previewPalette" aria-label="Paleta de marca">
-        <option value="contapyme">ContaPyme</option>
-        <option value="insoft">InSoft</option>
-        <option value="agrowin">AgroWin</option>
+      <select id="previewPalette" aria-label="Paleta">
+        <option value="delfin">Delfín</option>
+        <option value="cardenal">Cardenal</option>
+        <option value="iguana">Iguana</option>
+        <option value="rubi">Rubí</option>
+        <option value="esmeralda">Esmeralda</option>
+        <option value="zafiro">Zafiro</option>
+        <option value="citrino">Citrino</option>
+        <option value="orquidea">Orquídea</option>
+        <option value="turquesa">Turquesa</option>
+        <option value="marte">Marte</option>
+        <option value="granate">Granate</option>
+        <option value="neptuno">Neptuno</option>
+        <option value="peridoto">Peridoto</option>
+        <option value="jade">Jade</option>
+        <option value="aguamarina">Aguamarina</option>
+        <option value="amatista">Amatista</option>
+        <option value="menta">Menta</option>
+        <option value="luna">Luna</option>
+        <option value="jupiter">Júpiter</option>
+        <option value="flamenco">Flamenco</option>
+        <option value="lapislazuli">Lapislázuli</option>
+        <option value="cobre">Cobre</option>
+        <option value="tanzanita">Tanzanita</option>
+        <option value="olivino">Olivino</option>
+        <option value="ambar">Ámbar</option>
       </select>
     </label>
     <iswc-button-group class="preview-chrome__actions" pill aria-label="Acciones de la vista">
@@ -145,7 +167,7 @@ function mount() {
   }
 
   applyTheme(root.dataset.theme || 'dark');
-  applyPalette(root.dataset.palette || 'contapyme');
+  applyPalette(root.dataset.palette || 'delfin');
 
   document.getElementById('previewTheme')?.addEventListener('iswc-theme-change', (e) => {
     const theme = e.detail?.theme || (root.dataset.theme === 'dark' ? 'light' : 'dark');

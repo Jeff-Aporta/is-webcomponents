@@ -1,19 +1,16 @@
 @use '../../core/focus-ring';
-/* <iswc-palette-selector> — wrapper ligero + trigger slot-friendly.
+/* <iswc-palette-selector> — trigger + panel con buscador, interruptor Panda
+ * y opciones agrupadas por familia de tono.
  *
- * Convenciones:
- * - Selectores con atributos del host van a top-level (no anidados en :host).
- * - El slot `trigger` permite al consumidor usar SU HTML para el botón
- *   (logo, dos mitades, etc.). El trigger interno solo se muestra si el
- *   slot está VACÍO.
- * - Trigger interno: estilo logo (lead + accent) con bg rojo/blanco,
- *   tipo "insoft" header original.
- * - Slot content: SI el consumidor inyecta algo, el trigger interno se
- *   oculta pero el componente sigue escuchando los clicks en el slot
- *   (delegación al root) para abrir/cerrar el menú.
- * - Dropdown: theme-aware via tokens --iswc-*.
+ * Escala: TODO va en em. El componente entero crece o se encoge con el
+ * font-size del host o de un ancestro (solo 1px para hairlines).
+ *
+ * Muestras: cada opción (y el trigger) recibe las semillas de SU paleta como
+ * --sw-* (h/s/b, contraste, tintes) y aquí se derivan con las mismas recetas
+ * que palette-build.ts (SURFACE_LIGHT / SURFACE_DARK): fondo, papel, main,
+ * contraste y texto. `data-set="sl|sd"` (lo pone el componente según el tema
+ * y Panda del target) elige el juego claro u oscuro.
  */
-
 
 :host {
   display: inline-flex;
@@ -29,9 +26,6 @@
   position: relative;
 }
 
-/* Slot: si el consumidor tiene algo, ocupa el lugar del trigger interno.
- * Por defecto, el contenido del slot NO debe tener outline ni padding
- * (esos los controlamos nosotros). El consumidor puede estilar internamente. */
 ::slotted([slot="trigger"]) {
   cursor: pointer;
   user-select: none;
@@ -39,153 +33,262 @@
   align-items: center;
 }
 
-/* Slot "option": el <template> aquí NO se renderiza visiblemente (es un
- * template, no un nodo visible). El componente lo clona por cada paleta
- * y bindea data-palette / aria-selected. El consumidor estila el árbol
- * del template con clases/ids normales — esas reglas CSS se aplican a
- * través del shadow boundary porque el árbol clonado vive en el SHADOW,
- * no en el slot. Si el consumidor quiere reglas desde fuera del WC,
- * debe usar custom properties o ::slotted en el subtree (no es trivial
- * porque el contenido del slot no se renderiza). */
+/* ----- Derivadas de muestra (espejo de las recetas del kit) ------------ */
 
-/* ----- Trigger interno (sólo si el slot está vacío) -------------------- */
+.trigger,
+[role="option"] {
+  --sw-main: hsl(calc(var(--sw-h) * 1deg) var(--sw-s) var(--sw-b));
+  --sw-contrast-c: hsl(calc(var(--sw-ch) * 1deg) var(--sw-cs) var(--sw-cl));
+  --sw-bright: hsl(calc(var(--sw-h) * 1deg) min(100%, calc(var(--sw-s) * 1.6)) 70%);
+  --sw-bg: color-mix(in srgb, var(--sw-bright) calc(var(--sw-tint) * 10%), #ffffff);
+  --sw-paper: color-mix(in srgb, var(--sw-bright) calc(var(--sw-tint) * 5%), #ffffff);
+  --sw-font: color-mix(in srgb, var(--sw-main) calc(var(--sw-font-tint) * 14%), #1f2328);
+}
+
+[data-set="sd"] [role="option"],
+.trigger[data-set="sd"] {
+  --sw-bg: color-mix(in srgb, var(--sw-main) calc(var(--sw-tint) * 12%), #07090c);
+  --sw-paper: color-mix(in srgb, var(--sw-main) calc(var(--sw-tint) * 18%), #151a20);
+  --sw-font: color-mix(in srgb, var(--sw-bright) calc(var(--sw-font-tint) * 10%), #eceef1);
+}
+
+/* ----- Trigger interno (solo si el slot está vacío) -------------------- */
 
 .trigger {
   display: inline-flex;
   align-items: center;
-  justify-content: center;
-  gap: 0;
-  padding: 0.45em 0.8em;
+  gap: 0.5em;
+  padding: 0.35em 0.55em 0.35em 0.4em;
   margin: 0;
-  background: var(--iswc-logo-bg);
-  color: var(--iswc-logo-fg);
-  border: 0;
-  border-radius: 0.45em;
+  min-height: var(--iswc-control-height, 2.5em);
+  background: var(--iswc-control-bg);
+  color: var(--iswc-control-text, var(--iswc-text));
+  border: 1px solid var(--iswc-control-border, var(--iswc-border));
+  border-radius: var(--iswc-radius, 0.5em);
   font: inherit;
-  font-weight: 800;
-  letter-spacing: -0.045em;
+  font-weight: 600;
   cursor: pointer;
   user-select: none;
-  transition: filter 120ms ease, transform 120ms ease;
-  min-height: 0;
-  min-width: 6.8em;
+  transition: background-color 120ms ease;
 
-  /* el foco lo pone .iswc-focus-ring (core/focus-ring.scss) */
-  &:hover { filter: brightness(1.05); }
-  &:active { transform: translateY(1px); }
+  &:hover { background: var(--iswc-control-bg-hover); }
   &[hidden] { display: none !important; }
 }
 
-.trigger__mark {
+.trigger__chip {
   display: inline-flex;
   flex: none;
-  align-items: baseline;
-  white-space: nowrap;
-
-  iswc-text {
-    flex: none;
-    max-width: none;
-    min-width: max-content;
-  }
+  width: 1.6em;
+  height: 1.6em;
+  border-radius: 50%;
+  overflow: hidden;
+  box-shadow: 0 0 0 1px var(--iswc-border);
+  transform: rotate(-45deg);
 }
 
-/* ----- Dropdown menu ---------------------------------------------------- */
+.chip__main,
+.chip__contrast {
+  flex: 1 1 50%;
+}
 
-.menu {
+.chip__main { background: var(--sw-main, var(--iswc-swatch, var(--iswc-accent))); }
+.chip__contrast { background: var(--sw-contrast-c, var(--iswc-swatch, var(--iswc-accent))); }
+
+.trigger__label { white-space: nowrap; }
+
+.trigger__caret {
+  width: 1em;
+  height: 1em;
+  opacity: 0.7;
+}
+
+/* ----- Panel ------------------------------------------------------------ */
+
+.panel {
   position: absolute;
   inset-block-start: calc(100% + 0.4em);
   inset-inline-start: 0;
   z-index: 100;
-  margin: 0;
-  padding: 0.35em;
-  list-style: none;
-  min-width: 11em;
-  background: var(--iswc-bg-elev);
-  border: 1px solid var(--iswc-border);
-  border-radius: 0.55em;
-  box-shadow: var(--iswc-shadow, 0 6px 24px color-mix(in srgb, #000 18%, transparent));
-  color: var(--iswc-text);
   display: flex;
   flex-direction: column;
-  gap: 0;
-  max-height: 360px;
-  overflow-y: auto;
+  width: min(24em, calc(100vw - 2em));
+  max-height: 30em;
+  background: var(--iswc-bg-elev);
+  border: 1px solid var(--iswc-border);
+  border-radius: 0.6em;
+  box-shadow: var(--iswc-shadow, 0 0.4em 1.5em color-mix(in srgb, #000 18%, transparent));
+  color: var(--iswc-text);
+  overflow: hidden;
 
   &[hidden] { display: none !important; }
+}
 
-  [role="option"] {
-    position: relative;
-    display: flex;
-    align-items: center;
-    gap: 0.55em;
-    padding: 0.5em 0.7em;
-    margin: 0;
-    border-radius: 0.4em;
-    cursor: pointer;
-    font-size: 0.875rem;
-    font-weight: 600;
-    line-height: 1.2;
-    white-space: nowrap;
-    user-select: none;
-    color: var(--iswc-text);
-    opacity: 0.55;
-    transition: opacity 120ms ease, background-color 120ms ease, color 120ms ease;
-    --iswc-color-brand: hsl(var(--iswc-brand-h) var(--iswc-brand-s) var(--iswc-brand-b));
+.panel__head {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  padding: 0.5em;
+  border-block-end: 1px solid var(--iswc-border-soft, var(--iswc-border));
+}
 
-    &:hover,
-    &:focus-visible {
-      opacity: 1;
-      background: var(--iswc-control-bg-hover);
-      outline: none;
-    }
+.search {
+  flex: 1 1 auto;
+  min-width: 0;
+  height: 2.2em;
+  padding: 0 0.65em;
+  font: inherit;
+  font-size: 0.875em;
+  color: var(--iswc-control-text, var(--iswc-text));
+  background: var(--iswc-control-bg);
+  border: 1px solid var(--iswc-control-border, var(--iswc-border));
+  border-radius: 0.45em;
 
-    &[aria-selected="true"] {
-      opacity: 1;
-      background: var(--iswc-brand-soft, color-mix(in srgb, var(--iswc-color-brand) 14%, transparent));
-      color: var(--iswc-brand-text, var(--iswc-text));
+  &::placeholder { color: var(--iswc-text-dim); }
+  &[hidden] { display: none; }
+}
 
-      .menu__check { visibility: visible; }
-    }
+.panda {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  margin-inline-start: auto;
+  padding: 0.3em 0.45em;
+  font: inherit;
+  font-size: 0.8125em;
+  font-weight: 600;
+  color: var(--iswc-text-soft, var(--iswc-text));
+  background: transparent;
+  border: 0;
+  border-radius: 0.45em;
+  cursor: pointer;
+
+  &:hover { background: var(--iswc-control-bg-hover); }
+  &[hidden] { display: none; }
+}
+
+.panda__track {
+  position: relative;
+  width: 2.2em;
+  height: 1.25em;
+  border-radius: 1em;
+  background: var(--iswc-control-bg-active);
+  box-shadow: inset 0 0 0 1px var(--iswc-control-border, var(--iswc-border));
+  transition: background-color 120ms ease;
+}
+
+.panda__thumb {
+  position: absolute;
+  inset-block-start: 0.15em;
+  inset-inline-start: 0.15em;
+  width: 0.95em;
+  height: 0.95em;
+  border-radius: 50%;
+  background: var(--iswc-text);
+  transition: transform 140ms ease;
+}
+
+.panda[aria-checked="true"] {
+  .panda__track { background: var(--iswc-color-brand, var(--iswc-accent)); }
+  .panda__thumb { background: var(--iswc-on-brand, #fff); transform: translateX(0.95em); }
+}
+
+/* ----- Opciones ---------------------------------------------------------- */
+
+.menu {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  padding: 0.35em;
+}
+
+.group[hidden] { display: none; }
+
+.group__title {
+  padding: 0.6em 0.6em 0.3em;
+  font-size: 0.6875em;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--iswc-text-dim);
+}
+
+[role="option"] {
+  display: flex;
+  align-items: center;
+  gap: 0.65em;
+  padding: 0.45em 0.55em;
+  border-radius: 0.45em;
+  cursor: pointer;
+  user-select: none;
+  color: var(--iswc-text);
+  transition: background-color 120ms ease;
+
+  &[hidden] { display: none; }
+
+  &:hover,
+  &:focus-visible {
+    background: var(--iswc-control-bg-hover);
+    outline: none;
+  }
+
+  &:focus-visible { box-shadow: inset 0 0 0 0.125em var(--iswc-focus, var(--iswc-accent)); }
+
+  &[aria-selected="true"] {
+    background: var(--iswc-brand-soft, color-mix(in srgb, var(--iswc-accent) 14%, transparent));
+
+    .option__check { visibility: visible; }
   }
 }
 
-.menu__swatch {
-  display: inline-block;
-  background: var(--iswc-color-brand);
-  width: 0.85em;
-  height: 0.85em;
-  border-radius: 50%;
+.swatches {
+  display: inline-grid;
+  grid-template-columns: repeat(5, 0.85em);
+  flex: none;
+  height: 1.7em;
+  border-radius: 0.35em;
+  overflow: hidden;
   box-shadow: 0 0 0 1px var(--iswc-border);
-  flex: 0 0 auto;
 }
 
-.menu__label {
+.sw--bg { background: var(--sw-bg, var(--iswc-bg)); }
+.sw--paper { background: var(--sw-paper, var(--iswc-bg-elev)); }
+.sw--main { background: var(--sw-main, var(--iswc-swatch, var(--iswc-accent))); }
+.sw--contrast { background: var(--sw-contrast-c, var(--iswc-swatch, var(--iswc-accent))); }
+.sw--font { background: var(--sw-font, var(--iswc-text)); }
+
+.option__text {
+  display: flex;
   flex: 1 1 auto;
+  flex-direction: column;
+  min-width: 0;
+  line-height: 1.25;
 }
 
-.menu__lead {
-  font-weight: 800;
-  font-size: 0.95em;
-  /* color viene del inline style del theme de la paleta */
-}
-.menu__accent {
-  font-weight: 800;
-  font-size: 0.95em;
-  /* color viene del inline style del theme de la paleta */
+.option__name {
+  font-size: 0.875em;
+  font-weight: 600;
 }
 
-.menu__check {
+.option__meta {
+  overflow: hidden;
+  font-size: 0.75em;
+  color: var(--iswc-text-dim);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.option__check {
+  flex: none;
   width: 1em;
   height: 1em;
-  flex: 0 0 auto;
   visibility: hidden;
 }
 
-/* Modo oscuro: ajusta sombras y bordes para que el dropdown flote bien. */
-:host-context([data-theme="dark"]) {
-  .menu {
-    box-shadow: 0 6px 28px color-mix(in srgb, #000 50%, transparent);
-    border-color: var(--iswc-border);
-    background: var(--iswc-bg-elev);
-  }
+.empty {
+  margin: 0;
+  padding: 1em;
+  font-size: 0.875em;
+  text-align: center;
+  color: var(--iswc-text-dim);
+
+  &[hidden] { display: none; }
 }

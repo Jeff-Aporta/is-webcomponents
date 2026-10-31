@@ -49,7 +49,7 @@ Skill general del kit (reuso de tags, arquitectura, prompt, herramientas): [`isw
 ## Bootstrap mínimo (loader — preferido)
 
 ```html
-<html lang="es" data-theme="dark" data-palette="contapyme">
+<html lang="es" data-theme="dark" data-palette="delfin">
 <head>
   <script type="module"
     src="https://cdn.jsdelivr.net/gh/Jeff-Aporta/iswc-root@main/dist/cdn/core/loader.min.js"></script>
@@ -65,6 +65,20 @@ Skill general del kit (reuso de tags, arquitectura, prompt, herramientas): [`isw
 </body>
 </html>
 ```
+
+**Paletas (25) y Panda.** `data-palette` acepta una de las 25 paletas generales
+del kit (`src/styles/palettes.json`): rojos `cardenal` `rubi` `granate`;
+naranjas/amarillos `citrino` `marte` `jupiter` `cobre` `ambar`; verdes `iguana`
+`esmeralda` `peridoto` `jade` `menta` `olivino`; azules/cianes `delfin`
+(default) `zafiro` `turquesa` `neptuno` `aguamarina` `lapislazuli`;
+violetas/rosas `orquidea` `amatista` `flamenco` `tanzanita`; neutro `luna`.
+Cada una tiene main (`--iswc-color-brand`), contraste (`--iswc-color-contrast`,
+`--iswc-contrast-text`, `--iswc-contrast-soft`), bright (`--iswc-color-bright`),
+superficies y textos tintados por su tono. `data-panda` en el mismo nodo que
+`data-theme` invierte las superficies (claro pinta el juego oscuro de la
+paleta y viceversa). El usuario elige ambas con `<iswc-palette-selector>`
+(persisten en `iswc:app-cfg` → `palette`, `panda`); `initApp({ palette, panda })`
+fija los valores iniciales.
 
 Alcance de `load(…)`:
 

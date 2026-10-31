@@ -2,7 +2,7 @@
 //
 // 5-ago-2026: filled/outlined de info y error se veían rotos (fondo/borde
 // inexistentes) y brand filled salía azul mientras outlined/plain seguían la
-// paleta (roja en insoft). Causa: button.css hablaba escala numérica
+// paleta (roja en cardenal). Causa: button.css hablaba escala numérica
 // (-600/-500) que is-base ya no define, con matriz color×variant N×M.
 //
 // Contrato ortogonal que este test clava:

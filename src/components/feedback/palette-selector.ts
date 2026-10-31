@@ -1,109 +1,98 @@
 import { guardarAppCfg, leerAppCfg } from '../../core/app-cfg.js';
 import { adoptCss, defineElement, emit } from '../../core/element.js';
 import '../media/icon.js';
-import '../isp/text.js';
 import { ElementBase } from '../../core/element-base.js';
 import { createPopupDismiss } from '../../core/popup-dismiss.js';
-import { json2html } from '../../core/json-html.js';
-import { PALETTES } from '../../styles/palette-build.js';
+import { PALETTES, PALETTE_FAMILIES, paletteSeeds } from '../../styles/palette-build.js';
 import type { Palette, PaletteCruda } from "./schemas/palette-selector.schemas.js";
 
 /**
  * <iswc-palette-selector> — Web Component (vanilla).
  *
- * Selector visual de paletas de marca. Por defecto expone las 3 paletas
- * que viven en `styles/palettes.css` (contapyme, insoft, agrowin) pero
- * el consumidor puede pasar un array JSON propio en el atributo
- * `palettes` para exponer SU marca / sus paletas / su CSS.
- *
- * Cada paleta del array puede traer una propiedad `css` (URL) — el
- * componente la inyecta como <link rel="stylesheet"> al seleccionar la
- * paleta, de modo que el consumidor no tiene que precargar todas las
- * hojas: se cargan bajo demanda.
+ * Selector de las 25 paletas del kit (src/styles/palettes.json) + interruptor
+ * Panda. Cada opción muestra la identidad de la paleta (fondo, papel, main,
+ * contraste y texto en el tema activo), su nombre y su origen/ánimo; las
+ * opciones van agrupadas por familia de tono y se filtran con el buscador.
  *
  * Atributos
- *   palettes      JSON string con array de { value, label, h, s, b, css?,
- *                                              lead?, accentLabel?, leadColor?,
- *                                              accentColor?, bg?, fg?, accent? }.
- *                 h/s/b derivan el swatch. accent (hex) solo si no hay hsb.
- *                 Default = palettes.json (contapyme, insoft, agrowin).
- *   value         string — la paleta activa. La escribe en el target del scope.
- *   scope         root | closest. root escribe <html>. closest escribe el
- *                 primer ancestro con data-palette (si no hay, <html>).
- *   (persistencia) la paleta elegida para <html> se guarda en la config de la
- *                 app (`iswc:app-cfg`, ver core/app-cfg.ts); un scope=closest no persiste.
- *   aria-label    string — etiqueta del botón trigger (default "Elegir paleta")
+ *   palettes      JSON con un catálogo propio: [{ value, label, h, s, b,
+ *                 family?, origin?, mood?, contrastH?, contrastS?, contrastL?,
+ *                 tint?, fontTint?, accent?, css? }]. Default = palettes.json.
+ *   value         paleta activa. La escribe (data-palette) en el target del scope.
+ *   panda         booleano: modificador Panda activo (data-panda en el target).
+ *   hide-panda    oculta el interruptor Panda.
+ *   scope         root | closest. root escribe <html>; closest el primer
+ *                 ancestro con data-palette (si no hay, <html>).
+ *   aria-label    etiqueta del trigger (default "Elegir paleta").
+ *
+ * Persistencia: con scope=root la elección queda en la config de la app
+ * (`iswc:app-cfg` → `palette` y `panda`, ver core/app-cfg.ts). closest no persiste.
  *
  * Slots
- *   trigger    opcional — sustituye el botón trigger interno. El consumidor
- *              puede poner CUALQUIER HTML aquí (logo, row con dos <span>,
- *              icono + texto, etc.). El componente solo se preocupa de
- *              abrir/cerrar el menú y emitir el evento cuando el usuario
- *              selecciona una opción. Si el slot está VACÍO, se renderiza
- *              un trigger por defecto con el wordmark del JSON.
+ *   trigger       sustituye el botón interno por HTML del consumidor.
  *
- *   El menu no se personaliza con HTML. Cada item sale del JSON
- *   (palettes.json o el array `palettes` del consumidor): swatch, label y check.
+ * Eventos (bubbles, composed)
+ *   iswc-palette-change  detail: { value, palette, container }
+ *   iswc-panda-change    detail: { panda, container }
  *
- * Eventos
- *   iswc-palette-change  detail: { value, palette }   bubbles, composed
- *
- * Mutaciones que produce
- *   data-palette en el target del scope (html o el ancestro)
- *   iswc:app-cfg.palette     — solo si el target es <html>
- *   Dos selectores con el mismo target y la misma paleta en su lista
- *   se siguen: observan data-palette y adoptan el valor.
- *
- * API JS del consumer
- *   el.palettes = [...]      // setter que escribe el atributo JSON
- *   el.value    = 'contapyme' // activa paleta y notifica
+ * API JS
+ *   el.palettes = [...]; el.value = 'turquesa'; el.panda = true;
  *   el.open() / close() / toggle()
- *   el.addEventListener('iswc-palette-change', e => e.detail)
  */
 
-/** Entrada normalizada de paleta, lista para render. */
-
-/** Entrada cruda que puede llegar en el atributo `palettes`. */
-
 (() => {
-  // 3 paletas por defecto. Primera = default del kit (ContaPyme). El
-  // `lead`/`accent` permiten que el trigger represente la marca en dos
-  // colores. Como ESTOS CSS ya están enlazados en el <head>, no hace
-  // falta inyectar <link> extra: solo se respeta data-palette="X" en <html>.
-  const DEFAULT_PALETTES: Palette[] = PALETTES.map((p) => ({
-    value: p.value,
-    label: p.label,
-    accent: '',
-    css: '',
-    lead: p.lead,
-    accentLabel: p.accentLabel,
-    leadColor: p.leadColor || '#111',
-    accentColor: p.accentColor || '',
-    bg: '',
-    fg: '',
-    h: p.h,
-    s: p.s,
-    b: p.b,
-    content: null,
-  }));
+  const FAMILY_LABEL = new Map(PALETTE_FAMILIES.map((f) => [f.value as string, f.label]));
+  const FAMILY_ORDER = PALETTE_FAMILIES.map((f) => f.value as string);
+
+  const DEFAULT_PALETTES: Palette[] = PALETTES.map((p) => {
+    const s = paletteSeeds(p);
+    return {
+      value: p.value,
+      label: p.label,
+      family: p.family,
+      origin: p.origin,
+      mood: p.mood,
+      accent: '',
+      css: '',
+      h: s.h,
+      s: s.s,
+      b: s.b,
+      contrastH: s.contrastH,
+      contrastS: s.contrastS,
+      contrastL: s.contrastL,
+      tint: s.tint,
+      fontTint: s.fontTint,
+    };
+  });
+
+  const SEARCH_MIN = 8;
 
   const TEMPLATE = document.createElement('template');
   TEMPLATE.innerHTML = /* html */ `
     <div class="root">
       <slot name="trigger"></slot>
       <button type="button" part="trigger" class="trigger iswc-focus-ring" aria-haspopup="listbox" aria-expanded="false" aria-label="Elegir paleta" title="Elegir paleta">
-        <span part="mark" class="trigger__mark"></span>
+        <span class="trigger__chip" aria-hidden="true"><span class="chip__main"></span><span class="chip__contrast"></span></span>
+        <span part="label" class="trigger__label"></span>
+        <iswc-icon class="trigger__caret" icon="mdi:chevron-down" aria-hidden="true"></iswc-icon>
       </button>
-      <ul part="menu" class="menu" role="listbox" hidden aria-label="Paletas disponibles">
-        <!-- opciones se inyectan en #render() desde el JSON -->
-      </ul>
+      <div part="panel" class="panel" hidden>
+        <div class="panel__head">
+          <input part="search" class="search iswc-focus-ring" type="search" placeholder="Buscar paleta" aria-label="Buscar paleta" autocomplete="off" />
+          <button type="button" part="panda" class="panda iswc-focus-ring" role="switch" aria-checked="false" title="Panda: invierte las superficies">
+            <span class="panda__track" aria-hidden="true"><span class="panda__thumb"></span></span>
+            <span class="panda__label">Panda</span>
+          </button>
+        </div>
+        <div part="menu" class="menu" role="listbox" aria-label="Paletas disponibles"></div>
+        <p class="empty" hidden>Sin coincidencias</p>
+      </div>
     </div>
   `;
 
-  const OBSERVED = ['palettes', 'value', 'aria-label', 'scope'];
+  const OBSERVED = ['palettes', 'value', 'panda', 'hide-panda', 'aria-label', 'scope'];
 
-  // Primer ancestro con data-palette. No cuenta el host: el host lleva
-  // data-palette solo para pintar la pastilla con los tokens de ESA marca.
+  // Primer ancestro con data-palette. No cuenta el host.
   function findPaletteContainer(from: Element | null | undefined): HTMLElement {
     let node: Element | null = from && from.nodeType === 1 ? from : null;
     while (node) {
@@ -123,37 +112,44 @@ import type { Palette, PaletteCruda } from "./schemas/palette-selector.schemas.j
     return document.documentElement;
   }
 
-  /** Wordmark: `content` json2xml, o lead/accent del JSON si no viene content. */
-  function wordmarkOf(p: Palette): unknown[] {
-    if (p.content?.length) return p.content;
-    const nodes: unknown[] = [];
-    if (p.lead) nodes.push({ 'iswc-text': { color: p.leadColor || '#000', content: [p.lead] } });
-    const accent = p.accentLabel || (p.lead ? '' : p.label);
-    if (accent) {
-      const spec: Record<string, unknown> = { content: [accent] };
-      if (p.accentColor) spec.color = p.accentColor;
-      nodes.push({ 'iswc-text': spec });
+  const norm = (v: string): string => v.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+  const num = (v: unknown): number | null => (v == null || v === '' || Number.isNaN(Number(v)) ? null : Number(v));
+  const str = (v: unknown): string => (v == null ? '' : String(v).trim());
+
+  /** Semillas de la paleta como custom properties (las derivadas las calcula el CSS del componente). */
+  function paintSeeds(el: HTMLElement, p: Palette): void {
+    if (p.h == null || !p.s || !p.b) {
+      if (p.accent) el.style.setProperty('--iswc-swatch', p.accent);
+      return;
     }
-    return nodes;
+    el.style.setProperty('--sw-h', String(p.h));
+    el.style.setProperty('--sw-s', p.s);
+    el.style.setProperty('--sw-b', p.b);
+    el.style.setProperty('--sw-ch', String(p.contrastH ?? p.h));
+    el.style.setProperty('--sw-cs', p.contrastS || '80%');
+    el.style.setProperty('--sw-cl', p.contrastL || '50%');
+    el.style.setProperty('--sw-tint', String(p.tint ?? 1));
+    el.style.setProperty('--sw-font-tint', String(p.fontTint ?? (p.tint === 0 ? 0 : 1)));
   }
 
   class IswcPaletteSelector extends ElementBase {
     static get observedAttributes(): string[] { return OBSERVED; }
 
-    #root!: HTMLElement;
-    #trigger!: HTMLElement;
+    #trigger!: HTMLButtonElement;
+    #panel!: HTMLElement;
     #menu!: HTMLElement;
+    #search!: HTMLInputElement;
+    #pandaBtn!: HTMLButtonElement;
+    #empty!: HTMLElement;
     #slotTrigger!: HTMLSlotElement;
     #palettes: Palette[] = [];
     #value = '';
-    /** CSS cargado dinámicamente por paleta, para no recargar dos veces. */
     #loadedCSS = new Set<string>();
     #scopeObs: MutationObserver | null = null;
     #applying = false;
     #fromOutside = false;
     #hold = false;
 
-    /** Ciclo "menú abierto" compartido con iswc-dropdown / iswc-context-menu. */
     #dismiss = createPopupDismiss(this, {
       onEscape: () => { this.#setOpen(false); this.#trigger.focus(); },
       onOutside: () => this.#setOpen(false),
@@ -164,20 +160,21 @@ import type { Palette, PaletteCruda } from "./schemas/palette-selector.schemas.j
       const shadow = this.attachShadow({ mode: 'open' });
       adoptCss(shadow, import.meta.url);
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
-      this.#root = shadow.querySelector<HTMLElement>('.root')!;
-      this.#trigger = shadow.querySelector<HTMLElement>('.trigger')!;
+      this.#trigger = shadow.querySelector<HTMLButtonElement>('.trigger')!;
+      this.#panel = shadow.querySelector<HTMLElement>('.panel')!;
       this.#menu = shadow.querySelector<HTMLElement>('.menu')!;
+      this.#search = shadow.querySelector<HTMLInputElement>('.search')!;
+      this.#pandaBtn = shadow.querySelector<HTMLButtonElement>('.panda')!;
+      this.#empty = shadow.querySelector<HTMLElement>('.empty')!;
       this.#slotTrigger = shadow.querySelector<HTMLSlotElement>('slot[name="trigger"]')!;
 
-      // Eventos dentro del Shadow DOM NO se re-dirigen al host por defecto;
-      // los capturamos en el tree shadow directamente.
-      this.#menu.addEventListener('click', this.#onClick);
-      this.#trigger.addEventListener('click', this.#onClick);
-      // Los slots viven en el light DOM; escuchar cambios para ajustar
-      // el rendering del trigger y de los items del dropdown.
+      this.#menu.addEventListener('click', this.#onMenuClick);
+      this.#menu.addEventListener('keydown', this.#onMenuKey);
+      this.#trigger.addEventListener('click', this.#onTriggerClick);
+      this.#search.addEventListener('input', this.#onSearch);
+      this.#search.addEventListener('keydown', this.#onSearchKey);
+      this.#pandaBtn.addEventListener('click', this.#onPandaClick);
       this.#slotTrigger.addEventListener('slotchange', this.#onTriggerSlotChange);
-      // Si el consumidor puso su propio trigger en el slot, capturamos
-      // clicks en el root para delegación (slot content vive en light DOM).
       this.addEventListener('click', this.#onSlotClick);
     }
 
@@ -185,9 +182,6 @@ import type { Palette, PaletteCruda } from "./schemas/palette-selector.schemas.j
       this.#dismiss.detach();
       this.#scopeObs?.disconnect();
       this.#scopeObs = null;
-      this.#menu?.removeEventListener('click', this.#onClick);
-      this.#trigger?.removeEventListener('click', this.#onClick);
-      this.#slotTrigger?.removeEventListener('slotchange', this.#onTriggerSlotChange);
     }
 
     onConnected(): void {
@@ -195,8 +189,8 @@ import type { Palette, PaletteCruda } from "./schemas/palette-selector.schemas.j
       this.#watchScope();
       this.#loadInitial();
       this.#render();
-      // Ajustar visibilidad trigger interno vs slot.
       this.#syncTriggerVisibility();
+      this.#syncPandaVisibility();
     }
 
     onAttributeChanged(name: string, oldVal: string | null, newVal: string | null): void {
@@ -206,6 +200,11 @@ import type { Palette, PaletteCruda } from "./schemas/palette-selector.schemas.j
       } else if (name === 'value') {
         if (this.#applying || this.#hold) return;
         this.#apply(newVal);
+      } else if (name === 'panda') {
+        if (this.#applying) return;
+        this.#applyPanda(newVal !== null);
+      } else if (name === 'hide-panda') {
+        this.#syncPandaVisibility();
       } else if (name === 'aria-label') {
         this.#trigger.setAttribute('aria-label', newVal || 'Elegir paleta');
       } else if (name === 'scope' && oldVal !== newVal) {
@@ -227,10 +226,12 @@ import type { Palette, PaletteCruda } from "./schemas/palette-selector.schemas.j
       else this.removeAttribute('value');
     }
 
-    /** Lanza el dropdown programáticamente. */
+    get panda(): boolean { return this.hasAttribute('panda'); }
+    set panda(on: boolean) { this.toggleAttribute('panda', !!on); }
+
     open(): void { this.#setOpen(true); }
     close(): void { this.#setOpen(false); }
-    toggle(): void { this.#setOpen(this.#menu.hidden); }
+    toggle(): void { this.#setOpen(this.#panel.hidden); }
 
     // ---- privados ----
 
@@ -245,22 +246,22 @@ import type { Palette, PaletteCruda } from "./schemas/palette-selector.schemas.j
           console.warn('[iswc-palette-selector] palettes no es JSON válido:', err);
         }
       }
-      // Normaliza cada entrada.
       this.#palettes = list.map((p): Palette => ({
-        value: String(p.value || '').trim(),
-        label: String(p.label || p.value || '').trim(),
-        accent: p.accent ? String(p.accent) : '',
-        css: p.css ? String(p.css) : '',
-        lead: p.lead ? String(p.lead) : '',
-        accentLabel: p.accentLabel ? String(p.accentLabel) : '',
-        leadColor: p.leadColor ? String(p.leadColor) : '',
-        accentColor: p.accentColor ? String(p.accentColor) : '',
-        bg: p.bg ? String(p.bg) : '',
-        fg: p.fg ? String(p.fg) : '',
-        h: p.h == null || p.h === '' ? null : Number(p.h),
-        s: p.s ? String(p.s) : '',
-        b: p.b ? String(p.b) : '',
-        content: Array.isArray(p.content) ? p.content : null,
+        value: str(p.value),
+        label: str(p.label) || str(p.value),
+        family: str(p.family),
+        origin: str(p.origin),
+        mood: str(p.mood),
+        accent: str(p.accent),
+        css: str(p.css),
+        h: num(p.h),
+        s: str(p.s),
+        b: str(p.b),
+        contrastH: num(p.contrastH),
+        contrastS: str(p.contrastS),
+        contrastL: str(p.contrastL),
+        tint: num(p.tint),
+        fontTint: num(p.fontTint),
       })).filter((p) => p.value);
     }
 
@@ -270,6 +271,8 @@ import type { Palette, PaletteCruda } from "./schemas/palette-selector.schemas.j
       return document.documentElement;
     }
 
+    #onRoot(): boolean { return this.#scopeTarget() === document.documentElement; }
+
     #known(value: string): boolean {
       return !!value && this.#palettes.some((p) => p.value === value);
     }
@@ -277,8 +280,18 @@ import type { Palette, PaletteCruda } from "./schemas/palette-selector.schemas.j
     #watchScope(): void {
       this.#scopeObs?.disconnect();
       const target = this.#scopeTarget();
-      const obs = new MutationObserver(() => {
+      const obs = new MutationObserver((records) => {
         if (this.#applying) return;
+        if (records.some((r) => r.attributeName === 'data-panda' || r.attributeName === 'data-theme')) {
+          const on = target.hasAttribute('data-panda');
+          if (on !== this.panda) {
+            this.#applying = true;
+            this.toggleAttribute('panda', on);
+            this.#applying = false;
+          }
+          this.#syncPandaSwitch();
+          this.#syncSet();
+        }
         const next = target.dataset.palette || '';
         if (!next || next === this.#value || !this.#known(next)) return;
         this.#fromOutside = true;
@@ -287,21 +300,24 @@ import type { Palette, PaletteCruda } from "./schemas/palette-selector.schemas.j
         this.#fromOutside = false;
       });
       this.#scopeObs = obs;
-      obs.observe(target, { attributes: true, attributeFilter: ['data-palette'] });
+      obs.observe(target, { attributes: true, attributeFilter: ['data-palette', 'data-panda', 'data-theme'] });
     }
 
     #loadInitial(): void {
       const target = this.#scopeTarget();
       const onRoot = target === document.documentElement;
-      const stored = onRoot ? leerAppCfg().palette ?? '' : '';
+      const cfg = onRoot ? leerAppCfg() : {};
+      const stored = cfg.palette ?? '';
       const fromDom = target.dataset.palette || '';
+      // Panda: preferencia guardada > atributo del componente > el DOM del target.
+      const panda = typeof cfg.panda === 'boolean' ? cfg.panda : (this.hasAttribute('panda') || target.hasAttribute('data-panda'));
+      this.#applyPanda(panda, false);
       const initial = (onRoot && this.#known(stored))
         ? stored
         : this.#known(fromDom)
           ? fromDom
-          : this.#palettes[0]?.value || '';
+          : this.#known(this.getAttribute('value') || '') ? this.getAttribute('value')! : this.#palettes[0]?.value || '';
       if (!initial) return;
-      // Paleta ajena en el target: no la pises (otro catalogo de prueba).
       const foreign = !!fromDom && !this.#known(fromDom) && !(onRoot && this.#known(stored));
       if (foreign) {
         this.#hold = true;
@@ -315,66 +331,40 @@ import type { Palette, PaletteCruda } from "./schemas/palette-selector.schemas.j
       else this.#apply(initial);
     }
 
-    /** Devuelve la paleta activa o la primera. */
     #current(): Palette | undefined {
       return this.#palettes.find((p) => p.value === this.#value) || this.#palettes[0];
     }
 
-    /** ¿El slot trigger tiene contenido provisto por el consumidor? */
     #hasCustomTrigger(): boolean {
       const nodes = this.#slotTrigger?.assignedNodes({ flatten: true }) || [];
-      return nodes.some((n) => {
-        if (n.nodeType === 1) return true;
-        if (n.nodeType === 3) return (n.textContent || '').trim().length > 0;
-        return false;
-      });
+      return nodes.some((n) => (n.nodeType === 1) || (n.nodeType === 3 && (n.textContent || '').trim().length > 0));
     }
 
     #syncTriggerVisibility(): void {
       const hasCustom = this.#hasCustomTrigger();
       this.#trigger.hidden = hasCustom;
-      if (hasCustom) {
-        this.#trigger.setAttribute('aria-hidden', 'true');
-      } else {
-        this.#trigger.removeAttribute('aria-hidden');
-      }
+      if (hasCustom) this.#trigger.setAttribute('aria-hidden', 'true');
+      else this.#trigger.removeAttribute('aria-hidden');
     }
 
-    /** Wordmark del slot: mitades y bg salen del JSON de la paleta activa. */
-    #paintSlottedMark(current: Palette): void {
-      const btn = this.querySelector<HTMLElement>('[slot="trigger"]');
-      if (btn) {
-        if (current.bg) btn.style.background = current.bg;
-        else btn.style.background = '';
-        if (current.fg) btn.style.color = current.fg;
-      }
-      const lead = this.querySelector<HTMLElement>('[data-role="lead"]');
-      const accent = this.querySelector<HTMLElement>('[data-role="accent"]');
-      if (lead) {
-        if (current.lead) lead.textContent = current.lead;
-        lead.style.color = current.leadColor || '#000';
-      }
-      if (accent) {
-        if (current.accentLabel) accent.textContent = current.accentLabel;
-        if (current.accentColor) accent.style.color = current.accentColor;
-      }
+    #syncPandaVisibility(): void {
+      this.#pandaBtn.hidden = this.hasAttribute('hide-panda');
     }
 
-    /** Pinta el wordmark (json2xml) y el fondo dentro del trigger interno. */
-    #paintOwnMark(current: Palette): void {
-      const mark = this.#trigger.querySelector<HTMLElement>('.trigger__mark');
-      if (mark) {
-        mark.replaceChildren();
-        const nodes = wordmarkOf(current);
-        if (nodes.length) json2html(nodes, mark);
-      }
-      if (current.bg) this.#trigger.style.background = current.bg;
-      else this.#trigger.style.background = '';
-      if (current.fg) this.#trigger.style.color = current.fg;
-      else this.#trigger.style.color = '';
+    #syncPandaSwitch(): void {
+      this.#pandaBtn.setAttribute('aria-checked', this.panda ? 'true' : 'false');
     }
 
-    /** Handler del slot "trigger" — sólo afecta el trigger button. */
+    /** Juego de superficies que pinta el target: sl (claras) o sd (oscuras). */
+    #syncSet(): void {
+      const target = this.#scopeTarget();
+      const themed = target.closest('[data-theme]') as HTMLElement | null;
+      const dark = (themed?.dataset.theme || 'dark') === 'dark';
+      const set = dark !== this.panda ? 'sd' : 'sl';
+      this.#menu.dataset.set = set;
+      this.#trigger.dataset.set = set;
+    }
+
     #onTriggerSlotChange = (): void => {
       this.#syncTriggerVisibility();
       this.#paintTrigger();
@@ -383,68 +373,110 @@ import type { Palette, PaletteCruda } from "./schemas/palette-selector.schemas.j
     #paintTrigger(): void {
       const current = this.#current();
       if (!current) return;
-
-      if (this.#hasCustomTrigger()) this.#paintSlottedMark(current);
-      else this.#paintOwnMark(current);
-      // La pastilla hereda --iswc-logo-* del host: palettes.css pinta [data-palette].
+      const label = this.#trigger.querySelector<HTMLElement>('.trigger__label');
+      if (label) label.textContent = current.label;
+      paintSeeds(this.#trigger, current);
+      // El host lleva data-palette para que el slot del consumidor herede los tokens de ESA paleta.
       this.dataset.palette = current.value;
-      if (current.h != null && current.s && current.b) {
-        this.style.setProperty('--iswc-brand-h', String(current.h));
-        this.style.setProperty('--iswc-brand-s', current.s);
-        this.style.setProperty('--iswc-brand-b', current.b);
-      }
-      if (current.bg) this.style.setProperty('--iswc-logo-bg', current.bg);
-      else this.style.removeProperty('--iswc-logo-bg');
-      if (current.fg) this.style.setProperty('--iswc-logo-fg', current.fg);
-      else this.style.removeProperty('--iswc-logo-fg');
-      const name = current.label || current.value;
       if (!this.getAttribute('aria-label')) {
-        this.#trigger.setAttribute('aria-label', `${name} — elegir paleta`);
+        this.#trigger.setAttribute('aria-label', `Paleta ${current.label} — elegir paleta`);
       }
     }
 
     #render(): void {
       const current = this.#current();
       if (!current) return;
-
-      // Trigger (siempre se pinta, el helper decide si respeta el slot).
       this.#paintTrigger();
+      this.#syncSet();
+      this.#syncPandaSwitch();
+      this.#search.hidden = this.#palettes.length < SEARCH_MIN;
 
-      // Menu items
-      this.#menu.innerHTML = '';
+      const groups = new Map<string, Palette[]>();
       for (const p of this.#palettes) {
-        this.#menu.appendChild(this.#buildDefaultOption(p, current));
+        const key = p.family || '';
+        if (!groups.has(key)) groups.set(key, []);
+        groups.get(key)!.push(p);
       }
+      const keys = [...groups.keys()].sort((a, b) => {
+        const ia = FAMILY_ORDER.indexOf(a), ib = FAMILY_ORDER.indexOf(b);
+        return (ia < 0 ? 99 : ia) - (ib < 0 ? 99 : ib);
+      });
+      const frag = document.createDocumentFragment();
+      for (const key of keys) {
+        const group = document.createElement('div');
+        group.className = 'group';
+        group.setAttribute('role', 'group');
+        group.setAttribute('part', 'group');
+        const title = FAMILY_LABEL.get(key) || key;
+        if (title) {
+          const h = document.createElement('div');
+          h.className = 'group__title';
+          h.id = `g-${key}`;
+          h.textContent = title;
+          group.setAttribute('aria-labelledby', h.id);
+          group.appendChild(h);
+        }
+        for (const p of groups.get(key)!) group.appendChild(this.#buildOption(p, current));
+        frag.appendChild(group);
+      }
+      this.#menu.replaceChildren(frag);
+      this.#filter(this.#search.value);
     }
 
-    /** Item del menu: swatch + label + check, datos del JSON de paletas. */
-    #buildDefaultOption(p: Palette, current: Palette): HTMLElement {
-      const li = document.createElement('li');
-      li.setAttribute('role', 'option');
-      li.setAttribute('part', 'option');
-      li.tabIndex = -1;
-      li.dataset.palette = p.value;
-      li.setAttribute('aria-selected', p.value === current.value ? 'true' : 'false');
-      const swatch = document.createElement('span');
-      swatch.className = 'menu__swatch';
-      if (p.h != null && p.s && p.b) {
-        li.style.setProperty('--iswc-brand-h', String(p.h));
-        li.style.setProperty('--iswc-brand-s', p.s);
-        li.style.setProperty('--iswc-brand-b', p.b);
-      } else if (p.accent) {
-        li.style.setProperty('--iswc-swatch', p.accent);
+    /** Opción: muestras (fondo, papel, main, contraste, texto) + nombre + origen/ánimo + check. */
+    #buildOption(p: Palette, current: Palette): HTMLElement {
+      const opt = document.createElement('div');
+      opt.setAttribute('role', 'option');
+      opt.setAttribute('part', 'option');
+      opt.tabIndex = -1;
+      opt.dataset.palette = p.value;
+      opt.dataset.search = norm(`${p.label} ${p.value} ${p.origin} ${p.mood} ${FAMILY_LABEL.get(p.family) || p.family}`);
+      opt.setAttribute('aria-selected', p.value === current.value ? 'true' : 'false');
+      paintSeeds(opt, p);
+
+      const swatches = document.createElement('span');
+      swatches.className = 'swatches';
+      swatches.setAttribute('aria-hidden', 'true');
+      for (const k of ['bg', 'paper', 'main', 'contrast', 'font']) {
+        const s = document.createElement('span');
+        s.className = `sw sw--${k}`;
+        swatches.appendChild(s);
       }
-      li.appendChild(swatch);
-      const label = document.createElement('span');
-      label.className = 'menu__label';
-      label.textContent = p.label;
-      li.appendChild(label);
+      const text = document.createElement('span');
+      text.className = 'option__text';
+      const name = document.createElement('span');
+      name.className = 'option__name';
+      name.textContent = p.label;
+      text.appendChild(name);
+      const meta = [p.origin, p.mood].filter(Boolean).join(' · ');
+      if (meta) {
+        const m = document.createElement('span');
+        m.className = 'option__meta';
+        m.textContent = meta;
+        text.appendChild(m);
+      }
       const check = document.createElement('iswc-icon');
-      check.className = 'menu__check';
+      check.className = 'option__check';
       check.setAttribute('icon', 'mdi:check');
       check.setAttribute('aria-hidden', 'true');
-      li.appendChild(check);
-      return li;
+      opt.append(swatches, text, check);
+      return opt;
+    }
+
+    #filter(q: string): void {
+      const needle = norm(q.trim());
+      let visible = 0;
+      for (const group of this.#menu.querySelectorAll<HTMLElement>('.group')) {
+        let inGroup = 0;
+        for (const opt of group.querySelectorAll<HTMLElement>('[role="option"]')) {
+          const show = !needle || (opt.dataset.search || '').includes(needle);
+          opt.hidden = !show;
+          if (show) inGroup++;
+        }
+        group.hidden = inGroup === 0;
+        visible += inGroup;
+      }
+      this.#empty.hidden = visible > 0;
     }
 
     #apply(value: string | null): void {
@@ -461,7 +493,6 @@ import type { Palette, PaletteCruda } from "./schemas/palette-selector.schemas.j
       this.#applying = true;
       if (target.dataset.palette !== value) target.dataset.palette = value;
       this.#applying = false;
-      // Cargar CSS si la paleta lo trae y aún no está cargado.
       if (palette.css && !this.#loadedCSS.has(palette.css)) {
         const link = document.createElement('link');
         link.rel = 'stylesheet';
@@ -470,58 +501,101 @@ import type { Palette, PaletteCruda } from "./schemas/palette-selector.schemas.j
         document.head.appendChild(link);
         this.#loadedCSS.add(palette.css);
       }
-      const onRoot = target === document.documentElement;
       emit(this, 'iswc-palette-change', { value, palette, container: target });
       for (const opt of this.#menu.querySelectorAll<HTMLElement>('[role="option"]')) {
         opt.setAttribute('aria-selected', opt.dataset.palette === value ? 'true' : 'false');
       }
-      if (!this.#fromOutside && onRoot && window.parent !== window) {
+      if (!this.#fromOutside && target === document.documentElement && window.parent !== window) {
         window.parent.postMessage({ type: 'iswc-shell-sync', palette: value }, location.origin);
       }
-      // Repintar trigger (cambia colores si el consumidor tiene uno custom,
-      // ese se queda; si es el interno, lo repintamos).
       this.#paintTrigger();
     }
 
-    #setOpen(open: boolean): void {
-      this.#menu.hidden = !open;
-      this.#trigger.setAttribute('aria-expanded', open ? 'true' : 'false');
-      if (open) this.#dismiss.attach();
-      else this.#dismiss.detach();
+    #applyPanda(on: boolean, notify = true): void {
+      const target = this.#scopeTarget();
+      this.#applying = true;
+      this.toggleAttribute('panda', on);
+      if (target.hasAttribute('data-panda') !== on) target.toggleAttribute('data-panda', on);
+      this.#applying = false;
+      this.#syncPandaSwitch();
+      this.#syncSet();
+      if (notify) emit(this, 'iswc-panda-change', { panda: on, container: target });
     }
 
-    /** Click dentro del shadow tree: trigger o menu. */
-    #onClick = (e: PointerEvent): void => {
+    #setOpen(open: boolean): void {
+      this.#panel.hidden = !open;
+      this.#trigger.setAttribute('aria-expanded', open ? 'true' : 'false');
+      if (open) {
+        this.#syncSet();
+        this.#dismiss.attach();
+        const sel = this.#menu.querySelector<HTMLElement>('[aria-selected="true"]');
+        sel?.scrollIntoView?.({ block: 'nearest' });
+        (this.#search.hidden ? sel : this.#search)?.focus?.({ preventScroll: true });
+      } else {
+        this.#dismiss.detach();
+      }
+    }
+
+    #choose(value: string | null): void {
+      this.#apply(value);
+      // Elección del usuario sobre la página: queda en la config de la app.
+      if (value && this.#known(value) && this.#onRoot()) guardarAppCfg({ palette: value });
+      this.#setOpen(false);
+      this.#trigger.focus();
+    }
+
+    #visibleOptions(): HTMLElement[] {
+      return [...this.#menu.querySelectorAll<HTMLElement>('[role="option"]')].filter((o) => !o.hidden && !(o.parentElement as HTMLElement).hidden);
+    }
+
+    #onTriggerClick = (): void => { this.#setOpen(this.#panel.hidden); };
+
+    #onMenuClick = (e: Event): void => {
       const target = e.target;
       if (!(target instanceof Element)) return;
-      const opt = target.closest('[role="option"]');
-      if (opt && this.#menu.contains(opt)) {
-        const paletteValue = opt instanceof HTMLElement ? opt.dataset.palette ?? null : null;
-        this.#apply(paletteValue);
-        // Elección del usuario sobre la página: queda en la config de la app. La carga
-        // inicial, un scope=closest o un cambio que llega de fuera no se guardan.
-        if (paletteValue && this.#known(paletteValue) && this.#scopeTarget() === document.documentElement) guardarAppCfg({ palette: paletteValue });
-        this.#setOpen(false);
-        return;
-      }
-      if (target.closest('.trigger')) {
-        this.#setOpen(this.#menu.hidden);
+      const opt = target.closest<HTMLElement>('[role="option"]');
+      if (opt && this.#menu.contains(opt)) this.#choose(opt.dataset.palette ?? null);
+    };
+
+    #onMenuKey = (e: KeyboardEvent): void => {
+      const opts = this.#visibleOptions();
+      const i = opts.indexOf(e.target as HTMLElement);
+      if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+        e.preventDefault();
+        const next = opts[Math.max(0, Math.min(opts.length - 1, i + (e.key === 'ArrowDown' ? 1 : -1)))];
+        if (e.key === 'ArrowUp' && i <= 0 && !this.#search.hidden) this.#search.focus();
+        else next?.focus();
+      } else if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        this.#choose((e.target as HTMLElement).dataset.palette ?? null);
       }
     };
 
-    /** Click en el contenido del slot (light DOM). Cualquier click alli
-     *  abre/cierra el menú. Si el consumidor quiere comportamiento especial
-     *  (links, etc.) puede llamar `e.stopPropagation()` en su handler. */
-    #onSlotClick = (e: PointerEvent): void => {
-      // ¿El target está dentro del slot trigger (light DOM)?
+    #onSearch = (): void => { this.#filter(this.#search.value); };
+
+    #onSearchKey = (e: KeyboardEvent): void => {
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        this.#visibleOptions()[0]?.focus();
+      } else if (e.key === 'Enter') {
+        e.preventDefault();
+        const first = this.#visibleOptions()[0];
+        if (first) this.#choose(first.dataset.palette ?? null);
+      }
+    };
+
+    #onPandaClick = (): void => {
+      const on = !this.panda;
+      this.#applyPanda(on);
+      if (this.#onRoot()) guardarAppCfg({ panda: on });
+    };
+
+    #onSlotClick = (e: Event): void => {
       const target = e.target;
       if (!(target instanceof Node)) return;
       const trigger = this.querySelector<HTMLElement>('[slot="trigger"]');
-      if (trigger && trigger.contains(target)) {
-        this.#setOpen(this.#menu.hidden);
-      }
+      if (trigger && trigger.contains(target)) this.#setOpen(this.#panel.hidden);
     };
-
   }
 
   defineElement('iswc-palette-selector', IswcPaletteSelector, 'IswcPaletteSelector');

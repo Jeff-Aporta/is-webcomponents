@@ -44,7 +44,7 @@ Las fuentes viven en `src/components/`. La carpeta `components/` en la raíz del
 │   └── <category>/iswc-<name>.html   # demo por componente (un nivel más adentro)
 ├── styles/
 │   ├── is-base.css             # tokens + temas
-│   ├── palettes.css            # insoft / contapyme / agrowin
+│   ├── palettes.css            # 25 paletas (delfin default) + data-panda; GENERADO desde palettes.json
 │   ├── presentation.css        # chrome de los previews
 │   └── shell.css               # barra lateral, iframe split-panel
 ├── assets/
@@ -109,7 +109,7 @@ deno run -A --no-check scripts/download-icons.ts --no-skip
 deno task icons:download
 
 # verificaciones
-deno run -A --no-check scripts/verify-theme-contract.cjs     # falla con "missing insoft palette" hasta arreglar estilos
+deno run -A --no-check scripts/verify-theme-contract.cjs     # contrato de contraste: 25 paletas × claro/oscuro × panda
 python scripts/verify-page.py                # requiere servidor corriendo en :8765 + playwright instalado
 ```
 
@@ -156,7 +156,7 @@ que reescribe los paths en bloque.
 ### 4.3 Tema y paleta
 
 - `data-theme="light|dark"` en `<html>`.
-- `data-palette="insoft|contapyme|agrowin"` en `<html>`.
+- `data-palette="delfin|cardenal|turquesa|…"` (25 paletas, `src/styles/palettes.json`) y `data-panda` opcional en el nodo con `data-theme`. `palettes.scss` se GENERA: `deno run -A --no-check scripts/gen-palettes.mjs`. Tokens por paleta: `--iswc-color-brand` (main), `--iswc-color-contrast` / `--iswc-contrast-text` / `--iswc-contrast-soft`, `--iswc-color-bright`, `--iswc-on-brand`, superficies `--iswc-sl-*` (claras) y `--iswc-sd-*` (oscuras) que el tema (y Panda) asigna a `--iswc-bg*`/`--iswc-text*`/`--iswc-control-*`. Contrato AA: `scripts/verify-theme-contract.cjs`.
 - Tokens: `--iswc-bg`, `--iswc-text`, `--iswc-border`, `--iswc-color-brand-500`, etc.
   El prefijo `--iswc-*` es el canónico. **No uses `--pg-*`** (legacy).
 - API de tamaño en componentes: `size="sm|md|lg"` o por CSS — **nunca mezcles

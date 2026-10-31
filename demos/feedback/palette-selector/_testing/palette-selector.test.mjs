@@ -10,7 +10,7 @@ const URL = `${BASE_URL}/demos/feedback/palette-selector/palette-selector.html`;
 const tests = [];
 
 tests.push({
-  name: 'smoke: el componente monta con las 3 paletas por defecto',
+  name: 'smoke: el componente monta con las 25 paletas por defecto',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-palette-selector-ready');
@@ -26,8 +26,8 @@ tests.push({
       };
     });
     assert.equal(data.defined, true, 'iswc-palette-selector debe estar definido');
-    assert.equal(data.optionCount, 3, `esperaba 3 paletas por defecto, hay ${data.optionCount}`);
-    for (const v of ['contapyme', 'insoft', 'agrowin']) {
+    assert.equal(data.optionCount, 25, `esperaba 25 paletas por defecto, hay ${data.optionCount}`);
+    for (const v of ['delfin', 'cardenal', 'iguana', 'turquesa', 'luna']) {
       assert.ok(data.values.includes(v), `paleta por defecto "${v}" debe estar presente, vi ${JSON.stringify(data.values)}`);
     }
     await screenshot(page, 'palette-selector-smoke');
@@ -51,22 +51,22 @@ tests.push({
     await waitReady(page, 'data-palette-selector-ready');
     await page.waitForTimeout(100);
     // Limpia localStorage previo para empezar limpio.
-    await page.evaluate(() => localStorage.removeItem('iswc-palette'));
+    await page.evaluate(() => localStorage.removeItem('iswc:app-cfg'));
     const after = await page.evaluate(async () => {
       const sel = document.querySelector('iswc-palette-selector');
       let captured = null;
       sel.addEventListener('iswc-palette-change', (e) => { captured = e.detail; });
-      sel.value = 'insoft';
+      sel.shadowRoot.querySelector('[data-palette="cardenal"]').click();
       await new Promise((r) => setTimeout(r, 50));
       return {
         captured,
         htmlAttr: document.documentElement.dataset.palette,
-        stored: localStorage.getItem('iswc-palette'),
+        stored: JSON.parse(localStorage.getItem('iswc:app-cfg') || '{}').palette,
       };
     });
-    assert.equal(after.captured?.value, 'insoft', `evento debe llevar value=insoft (vimos "${after.captured?.value}")`);
-    assert.equal(after.htmlAttr, 'insoft', `<html> data-palette debe ser insoft (vimos "${after.htmlAttr}")`);
-    assert.equal(after.stored, 'insoft', `localStorage debe guardar insoft (vimos "${after.stored}")`);
+    assert.equal(after.captured?.value, 'cardenal', `evento debe llevar value=cardenal (vimos "${after.captured?.value}")`);
+    assert.equal(after.htmlAttr, 'cardenal', `<html> data-palette debe ser cardenal (vimos "${after.htmlAttr}")`);
+    assert.equal(after.stored, 'cardenal', `iswc:app-cfg debe guardar cardenal (vimos "${after.stored}")`);
   },
 });
 
@@ -118,7 +118,7 @@ tests.push({
       trigger.focus();
       trigger.click();
       await new Promise((r) => requestAnimationFrame(() => r()));
-      const open = !sel.shadowRoot.querySelector('.menu').hidden;
+      const open = !sel.shadowRoot.querySelector('.panel').hidden;
       // Disparar Escape
       document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true, composed: true }));
       await new Promise((r) => setTimeout(r, 50));
@@ -146,11 +146,11 @@ tests.push({
       const trigger = sel.shadowRoot.querySelector('.trigger');
       trigger.click();
       await new Promise((r) => requestAnimationFrame(() => r()));
-      const wasOpen = !sel.shadowRoot.querySelector('.menu').hidden;
+      const wasOpen = !sel.shadowRoot.querySelector('.panel').hidden;
       // Click fuera
       document.body.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true, composed: true }));
       await new Promise((r) => setTimeout(r, 50));
-      const closed = sel.shadowRoot.querySelector('.menu').hidden;
+      const closed = sel.shadowRoot.querySelector('.panel').hidden;
       return { wasOpen, closed };
     });
     assert.equal(result.wasOpen, true, 'menú debe abrirse al click');
@@ -163,7 +163,7 @@ tests.push({
   run: async (page) => {
     // El demo tiene 2 palette-selectors (default + custom). El segundo usa
     // storage-key="iswc-palette-custom" para no pisar al primero. Verificamos
-    // que el PRIMER selector (el que recibe 'agrowin') lo mantiene tras
+    // que el PRIMER selector (el que recibe 'iguana') lo mantiene tras
     // reload. El segundo selector (paleta custom) usa su propio storage-key
     // y no debe interferir.
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
@@ -171,7 +171,7 @@ tests.push({
     await page.waitForTimeout(100);
     await page.evaluate(() => {
       const sel = document.querySelector('iswc-palette-selector');
-      sel.value = 'agrowin';
+      sel.shadowRoot.querySelector('[data-palette="iguana"]').click();
     });
     await page.waitForTimeout(100);
     await page.reload({ waitUntil: 'domcontentloaded' });
@@ -181,11 +181,11 @@ tests.push({
       const sel = document.querySelector('iswc-palette-selector');
       return {
         selectorValue: sel.value,
-        stored: localStorage.getItem('iswc-palette'),
+        stored: JSON.parse(localStorage.getItem('iswc:app-cfg') || '{}').palette,
       };
     });
-    assert.equal(after.selectorValue, 'agrowin', `selector.value debe persistir agrowin (vimos "${after.selectorValue}")`);
-    assert.equal(after.stored, 'agrowin', `localStorage debe seguir en agrowin (vimos "${after.stored}")`);
+    assert.equal(after.selectorValue, 'iguana', `selector.value debe persistir iguana (vimos "${after.selectorValue}")`);
+    assert.equal(after.stored, 'iguana', `iswc:app-cfg debe seguir en iguana (vimos "${after.stored}")`);
   },
 });
 

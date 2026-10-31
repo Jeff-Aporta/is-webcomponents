@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-20T16:13:22.916Z",
+  "generatedAt": "2026-10-31T00:33:29.728Z",
   "count": 40,
   "modules": [
     {
@@ -7,9 +7,10 @@
       "id": "app-cfg",
       "path": "src/core/app-cfg.ts",
       "summary": "Módulo compartido `app-cfg.ts`.",
-      "bytes": 3693,
+      "bytes": 3971,
       "exports": [
         "APP_CFG_KEY",
+        "PALETAS",
         "esTema",
         "esPaleta",
         "leerAppCfg",
@@ -22,7 +23,7 @@
       "id": "app-init",
       "path": "src/core/app-init.ts",
       "summary": "Módulo compartido `app-init.ts`.",
-      "bytes": 3064,
+      "bytes": 3254,
       "exports": [
         "ICONS_FOLDER_DEFAULT",
         "iconsBase",
@@ -476,7 +477,7 @@
       "id": "theme-scope",
       "path": "src/core/theme-scope.ts",
       "summary": "Contenedor de tema del kit — misma cascada que iswc-theme-toggle. — Atraviesa Shadow DOM (Element.closest se corta en el shadow root).",
-      "bytes": 1963,
+      "bytes": 2129,
       "exports": [
         "THEME_SCOPE",
         "findThemeContainer",

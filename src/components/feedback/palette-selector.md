@@ -10,37 +10,80 @@ preview: ./palette-selector.json
 ---
 # `<iswc-palette-selector>`
 
-## PropÃ³sito
+## Propósito
 
-Selector visual de paletas de marca. Expone por defecto las tres paletas de
-`styles/palettes.css` (contapyme, insoft, agrowin) y admite un array JSON
-propio en el atributo `palettes`. `scope="root"` escribe `data-palette` en
-`<html>`. `scope="closest"` lo escribe en el primer ancestro que ya tenga
-`data-palette`. Si el target es `<html>`, persiste en `localStorage`. Si la
-paleta trae `css`, inyecta esa hoja bajo demanda. Dos selectores con el mismo
-target y la misma paleta en su lista quedan sincronizados.
+Selector de las 25 paletas generales del kit (`src/styles/palettes.json`) más
+el modificador **Panda**. Cada opción muestra la identidad de su paleta en el
+tema activo —fondo, papel, main, contraste y texto—, su nombre y su
+origen/ánimo; las opciones van agrupadas por familia de tono (rojos, naranjas
+y amarillos, verdes, azules y cianes, violetas y rosas, neutros) y se filtran
+con un buscador. El interruptor Panda invierte las superficies (en claro pinta
+las oscuras tintadas de la paleta y viceversa) conservando main y contraste.
 
-Este mÃ³dulo registra `<iswc-palette-selector>`.
+`scope="root"` escribe `data-palette` / `data-panda` en `<html>`;
+`scope="closest"` en el primer ancestro que ya tenga `data-palette`. Con el
+target en `<html>` la elección persiste en la config de la app
+(`localStorage["iswc:app-cfg"]` → `palette` y `panda`). Admite un catálogo
+propio en `palettes`; si una paleta trae `css`, inyecta esa hoja bajo demanda.
+Dos selectores con el mismo target quedan sincronizados.
 
-## CuÃ¡ndo usarlo
+Este módulo registra `<iswc-palette-selector>`.
 
-Comunicar estado, contexto o cambios de apariencia al usuario.
+## Cuándo usarlo
 
-## CuÃ¡ndo no usarlo
+Dejar que el usuario elija la paleta (y Panda) de la app o de un contenedor.
 
-No usar como decoraciÃ³n ni reemplazar enlaces semÃ¡nticos para navegaciÃ³n simple.
+## Cuándo no usarlo
 
-## ImportaciÃ³n
+No usar como decoración ni para elegir colores sueltos (usa `iswc-color-picker`).
+
+## Importación
 
 ```js
 import './palette-selector.js';
 ```
 
-## Ejemplo mÃ­nimo
+## Ejemplo mínimo
 
 ```html
-<iswc-palette-selector></iswc-palette-selector>
+<html data-theme="dark" data-palette="turquesa">
+  …
+  <iswc-palette-selector></iswc-palette-selector>
+</html>
 ```
+
+## Paletas
+
+| `value` | Nombre | Familia | Origen | Ánimo |
+| --- | --- | --- | --- | --- |
+| `delfin` | Delfín | Azules y cianes | dodgerblue | Azul franco y confiable; la paleta por defecto del kit. |
+| `cardenal` | Cardenal | Rojos | rojo de marca #e03131 | Rojo de marca sobre superficies neutras, sobrio y directo. |
+| `iguana` | Iguana | Verdes | yellowgreen | Verde lima de campo, superficies muy tintadas. |
+| `rubi` | Rubí | Rojos | red rgb(200,0,0) | Rojo intenso y apasionado. |
+| `esmeralda` | Esmeralda | Verdes | green rgb(0,200,0) | Verde vivo, fresco y natural. |
+| `zafiro` | Zafiro | Azules y cianes | blue rgb(0,0,200) | Azul profundo y elegante. |
+| `citrino` | Citrino | Naranjas y amarillos | yellow rgb(200,200,0) | Amarillo solar y optimista. |
+| `orquidea` | Orquídea | Violetas y rosas | magenta rgb(200,0,200) | Magenta floral, creativo y audaz. |
+| `turquesa` | Turquesa | Azules y cianes | cyan rgb(0,200,200) | Cian tropical y limpio; la de Avatar. |
+| `marte` | Marte | Naranjas y amarillos | tomato rgb(219,48,0) | Rojo anaranjado, enérgico como el planeta rojo. |
+| `granate` | Granate | Rojos | crimson rgb(200,40,80) | Carmesí profundo, serio y cálido. |
+| `neptuno` | Neptuno | Azules y cianes | skyGreen rgb(15,146,216) | Azul cielo marino, sereno. |
+| `peridoto` | Peridoto | Verdes | lemonGreen rgb(132,233,16) | Verde limón eléctrico y juvenil. |
+| `jade` | Jade | Verdes | militaryGreen rgb(26,128,0) | Verde bosque, firme y tranquilo. |
+| `aguamarina` | Aguamarina | Azules y cianes | aquaBlue rgb(30,168,202) | Azul agua cristalina. |
+| `amatista` | Amatista | Violetas y rosas | purple rgb(128,0,128) | Púrpura profundo y místico. |
+| `menta` | Menta | Verdes | springGreen rgb(19,200,132) | Verde menta, fresco y amable. |
+| `luna` | Luna | Neutros | gray rgb(128,128,128) | Gris lunar, neutro y silencioso. |
+| `jupiter` | Júpiter | Naranjas y amarillos | orange rgb(200,128,0) | Naranja terroso como las bandas de Júpiter. |
+| `flamenco` | Flamenco | Violetas y rosas | pink rgb(255,128,200) | Rosa vibrante y festivo. |
+| `lapislazuli` | Lapislázuli | Azules y cianes | navy rgb(0,52,163) | Azul marino noble. |
+| `cobre` | Cobre | Naranjas y amarillos | brown rgb(143,52,0) | Marrón cobrizo, artesanal. |
+| `tanzanita` | Tanzanita | Violetas y rosas | violet rgb(128,43,200) | Violeta azulado, sofisticado. |
+| `olivino` | Olivino | Verdes | olive rgb(128,150,0) | Verde oliva, mediterráneo y sereno. |
+| `ambar` | Ámbar | Naranjas y amarillos | amber rgb(255,191,0) | Ámbar dorado y cálido. |
+
+Default: `delfin` (en `:root`). Cada paleta declara solo semillas (`h/s/b`
+del main, tono del contraste, `tint`, `fontTint`); el CSS deriva todo lo demás.
 
 ## API
 
@@ -50,66 +93,54 @@ import './palette-selector.js';
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
-| `palettes` | string JSON | Array de `{ value, label, h, s, b, css?, lead?, accentLabel?, leadColor?, accentColor?, bg?, fg?, accent? }`. `h` `s` `b` arman el swatch; `accent` (hex) solo si no hay HSB. |
-| `value` | string/segÃºn contrato | Paleta activa; se refleja en `data-palette` de `<html>`. |
-| `aria-label` | string/segÃºn contrato | Etiqueta del trigger (default "Elegir paleta"). |
+| `palettes` | string JSON | Catálogo propio: `[{ value, label, h, s, b, family?, origin?, mood?, contrastH?, contrastS?, contrastL?, tint?, fontTint?, accent?, css? }]`. Default: las 25 del kit. `accent` (hex) solo si no hay `h/s/b`. |
+| `value` | string | Paleta activa; se refleja en `data-palette` del target. |
+| `panda` | booleano | Modificador Panda; se refleja en `data-panda` del target. |
+| `hide-panda` | booleano | Oculta el interruptor Panda. |
+| `scope` | `root` \| `closest` | Dónde escribe (default `root`). |
+| `aria-label` | string | Etiqueta del trigger (default «Paleta X — elegir paleta»). |
 
-#### Propiedades pÃºblicas
+#### Propiedades públicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
 | `palettes` | lectura/escritura | Getter devuelve copia; setter escribe el atributo JSON. |
-| `value` | lectura/escritura | Declarada por clase. |
+| `value` | lectura/escritura | Activa la paleta y notifica. |
+| `panda` | lectura/escritura | Activa/desactiva Panda. |
 
 ### Slots
 
 | Slot | Uso |
 | --- | --- |
-| `trigger` | Sustituye el botÃ³n trigger interno. |
-| `option` | `<template>` que sustituye el render de cada item del menÃº. |
+| `trigger` | Sustituye el botón interno; el componente sigue abriendo el panel y emitiendo eventos. |
 
 ### Eventos
 
-
-| Evento | DescripciÃ³n |
-| --- | --- |
-| `iswc-palette-change` | Evento personalizado del componente (palette change). |
-
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `iswc-palette-change` | sÃ­ | sÃ­ | sÃ­ | no |
+| `iswc-palette-change` | `{ value, palette, container }` | sí | sí | no |
+| `iswc-panda-change` | `{ panda, container }` | sí | sí | no |
 
+### Métodos
 
-<details>
-<summary>Ejemplo en vivo</summary>
-
-```js
-const el = document.querySelector('iswc-palette-selector');
-el.addEventListener('iswc-palette-change', (e) => {
-  console.log('iswc-palette-change', e.detail);
-});
-```
-
-</details>
-
-### MÃ©todos y propiedades pÃºblicas
-
-| MÃ©todo | Uso |
+| Método | Uso |
 | --- | --- |
-| `open()` | Abre el menÃº de paletas. |
-| `close()` | Cierra el menÃº. |
-| `toggle()` | Alterna el menÃº. |
-
-Propiedades pÃºblicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
+| `open()` | Abre el panel (enfoca el buscador). |
+| `close()` | Cierra el panel. |
+| `toggle()` | Alterna el panel. |
 
 ### CSS parts
 
 | Part | Uso |
 | --- | --- |
-| `trigger` | Personalizable con `::part(trigger)`. |
-| `menu` | Personalizable con `::part(menu)`. |
-| `option` | Personalizable con `::part(option)`. |
-| `mark` | Pastilla con el color de la paleta activa. |
+| `trigger` | Botón interno (muestra main + contraste y el nombre). |
+| `label` | Nombre de la paleta activa en el trigger. |
+| `panel` | Superficie flotante. |
+| `search` | Buscador. |
+| `panda` | Interruptor Panda (`role="switch"`). |
+| `menu` | Lista (`role="listbox"`). |
+| `group` | Grupo por familia de tono. |
+| `option` | Opción de paleta. |
 
 ### Custom states
 
@@ -117,104 +148,82 @@ No expone.
 
 ### CSS custom properties
 
-| Token | Uso |
-| --- | --- |
-| `--iswc-accent` | Token leÃ­do o definido por componente. |
-| `--iswc-bg-elev` | Token leÃ­do o definido por componente. |
-| `--iswc-border` | Token leÃ­do o definido por componente. |
-| `--iswc-text` | Token leÃ­do o definido por componente. |
-| `--iswc-control-bg-hover` | Token leÃ­do o definido por componente. |
-| `--iswc-font-family` | Token leÃ­do o definido por componente. |
-| `--iswc-logo-bg` | Token leÃ­do o definido por componente. |
-| `--iswc-logo-fg` | Token leÃ­do o definido por componente. |
+Lee los tokens del tema: `--iswc-bg-elev`, `--iswc-border`, `--iswc-border-soft`,
+`--iswc-text`, `--iswc-text-soft`, `--iswc-text-dim`, `--iswc-control-*`,
+`--iswc-brand-soft`, `--iswc-color-brand`, `--iswc-on-brand`, `--iswc-focus`,
+`--iswc-shadow`, `--iswc-radius`. Las muestras se derivan de las semillas de
+cada paleta (`--sw-*`, internas) con las mismas recetas que `palette-build.ts`.
 
-### IntegraciÃ³n con formularios
+## Estilo y escala
 
-No declara integraciÃ³n form-associated propia en este mÃ³dulo.
+Todas las medidas del componente van en `em` (radios, paddings, gaps,
+muestras, íconos, interruptor); solo los hairlines usan `1px`. Un
+`font-size` en el host o en un ancestro escala el selector completo:
+
+```html
+<iswc-palette-selector style="font-size: 0.875em"></iswc-palette-selector>
+```
 
 ## Comportamiento
 
-DocumentaciÃ³n de cabecera preservada desde fuente:
-
-> <iswc-palette-selector> â€” Web Component (vanilla).
-> Selector visual de paletas de marca. Por defecto expone las 3 paletas
-> que viven en `styles/palettes.css` (contapyme, insoft, agrowin) pero
-> el consumidor puede pasar un array JSON propio en el atributo
-> `palettes` para exponer SU marca / sus paletas / su CSS.
-> Cada paleta del array puede traer una propiedad `css` (URL) â€” el
-> componente la inyecta como <link rel="stylesheet"> al seleccionar la
-> paleta, de modo que el consumidor no tiene que precargar todas las
-> hojas: se cargan bajo demanda.
-> Atributos
->   palettes      JSON string con array de { value, label, accent, css?,
->                                              lead?, leadColor?,
->                                              accentColor?, bg?, fg? }.
->   value         string â€” la paleta activa. Reflect â†’ data-palette en <html>.
->   (persistencia) la elección del usuario sobre <html> queda en iswc:app-cfg.palette
->   aria-label    string â€” etiqueta del botÃ³n trigger (default "Elegir paleta")
-> Slots
->   trigger    opcional â€” sustituye el botÃ³n trigger interno.
->   El menu sale del JSON (palettes.json o el array palettes).
-> Eventos
->   iswc-palette-change  detail: { value, palette }   bubbles, composed
-> Mutaciones que produce
->   <html data-palette="X">   â€” activa la paleta visualmente
->   localStorage[storageKey]  â€” persiste la elecciÃ³n
-> API JS del consumer
->   el.palettes = [...]      // setter que escribe el atributo JSON
->   el.value    = 'contapyme' // activa paleta y notifica
->   el.open() / close() / toggle()
->   el.addEventListener('iswc-palette-change', e => e.detail)
-
-La paleta inicial se resuelve en este orden: `data-palette` del target,
-valor guardado en `localStorage` (solo si el target es `<html>`) y, si nada
-aplica, la primera del array. El menu pinta swatch, label y check desde ese JSON.
+- Paleta inicial: la guardada en `iswc:app-cfg` (solo target `<html>`), si no
+  el `data-palette` del target, si no `value`, si no la primera del catálogo.
+- Panda inicial: el guardado, si no el atributo `panda` o el `data-panda` del target.
+- Las muestras usan el juego claro u oscuro que realmente pinta el target
+  (tema + Panda).
+- Teclado: el buscador recibe el foco al abrir; ↓ pasa a la lista, ↑/↓
+  navegan, Enter/Espacio eligen, Escape cierra. Enter en el buscador elige la
+  primera coincidencia.
+- Una paleta ajena al catálogo en el target no se pisa.
 
 ## Dependencias y componentes relacionados
 
-- [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
-- [`../_shared/define.js`](../_shared/define.js)
-- [`../_shared/emit.js`](../_shared/emit.js)
-- [`../_shared/element-base.js`](../_shared/element-base.js) â€” la clase
-  extiende `ElementBase` (`onConnected`, `onDisconnected`, `onAttributeChanged`).
-- [`../_shared/popup-dismiss.js`](../../core/popup-dismiss.js)
-- [`../media/icon.js`](../media/icon.js)
+- [`../../core/element-base.ts`](../../core/element-base.ts)
+- [`../../core/popup-dismiss.ts`](../../core/popup-dismiss.ts)
+- [`../../core/app-cfg.ts`](../../core/app-cfg.ts)
+- [`../../styles/palette-build.ts`](../../styles/palette-build.ts)
+- [`../media/icon.ts`](../media/icon.ts)
+- `<iswc-theme-toggle>` (tema claro/oscuro).
 
-Tags del mÃ³dulo: `<iswc-palette-selector>`.
+Tags del módulo: `<iswc-palette-selector>`.
 
 ## Accesibilidad
 
-Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado:
-`aria-haspopup="listbox"`, `aria-expanded`, `aria-label`, `role="listbox"`,
-`role="option"`, `aria-selected` y `aria-hidden`.
+Trigger con `aria-haspopup="listbox"` y `aria-expanded`; lista
+`role="listbox"` con grupos `role="group"` etiquetados por su familia y
+opciones `role="option"` con `aria-selected`. El interruptor Panda es
+`role="switch"` con `aria-checked`. Las muestras son `aria-hidden`; el nombre,
+origen y ánimo van en texto. Todas las paletas cumplen AA de texto en
+claro/oscuro/Panda (contrato `palettes-contrast`).
 
 ## Ejemplo avanzado
 
 ```html
-<iswc-palette-selector
-  palettes='[{"value":"azul","label":"Azul","h":210,"s":"100%","b":"56%","css":"/css/azul.css"}]'>
-</iswc-palette-selector>
+<div data-theme="light" data-palette="acme">
+  <iswc-palette-selector scope="closest" hide-panda
+    palettes='[{"value":"acme","label":"Acme","h":262,"s":"70%","b":"52%","origin":"marca propia","css":"/css/acme.css"}]'>
+  </iswc-palette-selector>
+</div>
 ```
 
 ## Errores comunes
 
-- Usar tag sin importar mÃ³dulo primero.
-- Inventar API por similitud con otro componente.
-- Pasar objeto complejo por atributo cuando API exige propiedad/payload.
-- Copiar preview contra fuente actual; JS/CSS prevalecen.
-- Crear size color; usar font-size contextual y em.
+- Usar tag sin importar módulo primero.
+- Poner `data-panda` en un nodo sin `data-theme`: Panda va junto al tema.
+- Escribir colores fijos por paleta: una paleta = semillas en `palettes.json`.
+- Usar px/rem en estilos del selector: todo en `em`.
 
 ## Reglas para LLM
 
-- Reusar componente y dependencias antes de implementaciÃ³n paralela.
+- Reusar componente y dependencias antes de implementación paralela.
 - Mantener nombres exactos de tags y API.
-- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explÃ­cito.
-- Leer callers/shared antes de cambiar; corregir raÃ­z comÃºn.
-- No modificar API basÃ¡ndose solo en preview.
+- Booleano se activa por presencia; no usar `attr="false"`.
+- Paletas nuevas: editar `src/styles/palettes.json` y correr `scripts/gen-palettes.mjs`.
 
 ## Fuentes
 
 - [JavaScript](./palette-selector.ts)
 - [CSS](./palette-selector.css)
-- [Ãndice de categorÃ­a](../../specs/componentes.md)
+- [Paletas](../../styles/palettes.json)
+- [Índice de categoría](../../specs/componentes.md)
 - [Preview](./palette-selector.json)

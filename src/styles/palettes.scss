@@ -1,51 +1,42 @@
-/* palettes.css — Paletas de marca (ContaPyme, InSoft, AgroWin).
+/* palettes.css — las 25 paletas del kit + modificador Panda.
  *
- * Separado de is-base.css: sin esta hoja el tema dark/light sigue en gris.
+ * GENERADO por scripts/gen-palettes.mjs desde src/styles/palettes.json
+ * (palettesScss() en palette-build.ts). No lo edites a mano: cambia el JSON
+ * o las recetas y regenera; el guardian palettes-contrast lo compara.
  *
  *   <link rel="stylesheet" href=".../is-base.min.css">
  *   <link rel="stylesheet" href=".../palettes.min.css">
+ *   <html data-theme="dark" data-palette="turquesa" data-panda>
  *
- * Cada data-palette SOLO declara el tono, la saturacion y el brillo:
+ * Cada [data-palette] SOLO declara semillas:
+ *   --iswc-brand-h/s/b        main (botones, foco, acentos)
+ *   --iswc-contrast-h/s/l     acento secundario mas vivo (camaleon: hsl(h 80% 50%))
+ *   --iswc-tint               intensidad del tinte de superficies (0 = neutras)
+ *   --iswc-font-tint          intensidad del tinte de los textos
+ *   --iswc-on-brand           texto sobre el main (blanco o el tono muy oscuro)
  *
- *   --iswc-brand-h   0–360, numero pelado (para restar en calc)
- *   --iswc-brand-s   saturacion HSL
- *   --iswc-brand-b   brillo, como luminosidad HSL (css no tiene hsb())
+ * La capa comun deriva la rampa brand, --iswc-color-contrast (+pale/strong),
+ * --iswc-color-bright (hsl(h 100% 70%)), y DOS juegos de superficies:
+ *   --iswc-sl-*  claras: bright mezclado hacia blanco (fondo 10%, papel 5%)
+ *   --iswc-sd-*  oscuras: main mezclado hacia negro
+ * El tema elige el juego; data-panda lo invierte (claro pinta sd, oscuro sl)
+ * conservando main/contrast. Default palette = delfin, en :root.
  *
- * La rampa (--iswc-color-brand, strong, stronger, strongest, pale, paler),
- * el acento, los alpha y --iswc-hue-rotate los calcula la capa comun.
- * El logo pintado en --iswc-logo-h gira con:
- *
- *   filter: hue-rotate(var(--iswc-hue-rotate));
- *
- * Los seeds viven tambien en palettes.json. El brand-wrap se arma con
- * buildBrandMenu() (palette-build.ts). Default palette = contapyme, en :root.
- *
- * Phase W24: brand es la 7ª familia del helper canonico en
- * `src/styles/color-tokens.ts` (ISWC_COLOR_VARIANTS = paler/pale/strong/
- * stronger/strongest). Su derivada matematica es `hsl(from base ...)`
- * en vez de color-mix() porque el base es parametrizable (h/s/b cambian
- * por paleta), pero la interfaz publica (los 6 tokens por familia) es
- * IDENTICA a la de las 6 familias de color-mix que viven en is-base.css.
- * Las definiciones de aqui DEBEN coincidir con `brandFamilyBlock()` del
- * helper; el guardian w24-color-tokens-helper.test.ts lo verifica.
- *
- * Info tambien sigue el patron W24: 5 variantes con valores fijos por
- * paleta (no color-mix) porque la paleta override el fallback de
- * is-base.css con un azul de marca mas vivo.
+ * Brand es la 7a familia del helper canonico (color-tokens.ts); sus lineas
+ * DEBEN coincidir con brandFamilyBlock() (guardian w24-color-tokens-helper).
  */
 
-/* ─── Capa comun: cualquiera con h/s/b hereda la rampa ────────────── */
+/* ─── Capa comun: semillas → rampa, contraste, bright y superficies ─── */
 
 :root,
 [data-palette] {
   --iswc-color-brand: hsl(calc(var(--iswc-brand-h) * 1deg) var(--iswc-brand-s) var(--iswc-brand-b));
-  /* Alias heredado: hojas y consumidores que aún piden --iswc-brand. */
   --iswc-brand: var(--iswc-color-brand);
+  --iswc-color-brand-paler: hsl(from var(--iswc-color-brand) h s 97%);
+  --iswc-color-brand-pale: hsl(from var(--iswc-color-brand) h s 93%);
   --iswc-color-brand-strong: hsl(from var(--iswc-color-brand) h s calc(l * 0.88));
   --iswc-color-brand-stronger: hsl(from var(--iswc-color-brand) h s calc(l * 0.72));
   --iswc-color-brand-strongest: hsl(from var(--iswc-color-brand) h s calc(l * 0.56));
-  --iswc-color-brand-pale: hsl(from var(--iswc-color-brand) h s 93%);
-  --iswc-color-brand-paler: hsl(from var(--iswc-color-brand) h s 97%);
   --iswc-accent: var(--iswc-color-brand);
   --iswc-accent-bg: rgb(from var(--iswc-accent) r g b / 12%);
   --iswc-brand-soft: rgb(from var(--iswc-accent) r g b / 18%);
@@ -53,11 +44,47 @@
   --iswc-brand-text: hsl(from var(--iswc-color-brand) h s 76%);
   --iswc-focus: var(--iswc-color-brand);
   --iswc-logo-bg: var(--iswc-color-brand);
-  --iswc-logo-fg: #fff;
+  --iswc-logo-fg: var(--iswc-on-brand);
   --iswc-logo-accent: var(--iswc-color-brand);
+  --iswc-hue-rotate: calc((var(--iswc-brand-h) - var(--iswc-logo-h)) * 1deg);
+  --iswc-color-contrast: hsl(calc(var(--iswc-contrast-h) * 1deg) var(--iswc-contrast-s) var(--iswc-contrast-l));
+  --iswc-color-contrast-pale: hsl(from var(--iswc-color-contrast) h s 93%);
+  --iswc-color-contrast-strong: hsl(from var(--iswc-color-contrast) h s calc(l * 0.72));
+  --iswc-contrast-soft: rgb(from var(--iswc-color-contrast) r g b / 16%);
+  --iswc-contrast-text: hsl(from var(--iswc-color-contrast) h s 72%);
+  --iswc-color-bright: hsl(calc(var(--iswc-brand-h) * 1deg) min(100%, calc(var(--iswc-brand-s) * 1.6)) 70%);
   /* Tono en el que estan pintados los SVG. La paleta solo mueve --iswc-brand-h. */
   --iswc-logo-h: 210;
-  --iswc-hue-rotate: calc((var(--iswc-brand-h) - var(--iswc-logo-h)) * 1deg);
+  --iswc-sl-bg: color-mix(in srgb, var(--iswc-color-bright) calc(var(--iswc-tint) * 10%), #ffffff);
+  --iswc-sl-bg-soft: color-mix(in srgb, var(--iswc-color-bright) calc(var(--iswc-tint) * 16%), #f6f8fa);
+  --iswc-sl-bg-elev: color-mix(in srgb, var(--iswc-color-bright) calc(var(--iswc-tint) * 5%), #ffffff);
+  --iswc-sl-border: color-mix(in srgb, var(--iswc-color-brand) calc(var(--iswc-tint) * 16%), #d0d7de);
+  --iswc-sl-border-soft: color-mix(in srgb, var(--iswc-color-brand) calc(var(--iswc-tint) * 10%), #e1e4e8);
+  --iswc-sl-code-bg: color-mix(in srgb, var(--iswc-color-bright) calc(var(--iswc-tint) * 14%), #f6f8fa);
+  --iswc-sl-control-bg: color-mix(in srgb, var(--iswc-color-bright) calc(var(--iswc-tint) * 18%), #f1f3f5);
+  --iswc-sl-control-bg-hover: color-mix(in srgb, var(--iswc-color-bright) calc(var(--iswc-tint) * 24%), #e9ecef);
+  --iswc-sl-control-bg-active: color-mix(in srgb, var(--iswc-color-bright) calc(var(--iswc-tint) * 30%), #dee2e6);
+  --iswc-sl-control-border: color-mix(in srgb, var(--iswc-color-brand) calc(var(--iswc-tint) * 22%), #adb5bd);
+  --iswc-sl-text: color-mix(in srgb, var(--iswc-color-brand) calc(var(--iswc-font-tint) * 14%), #1f2328);
+  --iswc-sl-text-soft: color-mix(in srgb, var(--iswc-color-brand) calc(var(--iswc-font-tint) * 14%), #4a525c);
+  --iswc-sl-text-dim: color-mix(in srgb, var(--iswc-color-brand) calc(var(--iswc-font-tint) * 12%), #5a636e);
+  --iswc-sl-control-text: color-mix(in srgb, var(--iswc-color-brand) calc(var(--iswc-font-tint) * 12%), #212529);
+  --iswc-sl-code-text: color-mix(in srgb, var(--iswc-color-brand) calc(var(--iswc-font-tint) * 14%), #1f2328);
+  --iswc-sd-bg: color-mix(in srgb, var(--iswc-color-brand) calc(var(--iswc-tint) * 12%), #07090c);
+  --iswc-sd-bg-soft: color-mix(in srgb, var(--iswc-color-brand) calc(var(--iswc-tint) * 15%), #0e1116);
+  --iswc-sd-bg-elev: color-mix(in srgb, var(--iswc-color-brand) calc(var(--iswc-tint) * 18%), #151a20);
+  --iswc-sd-border: color-mix(in srgb, var(--iswc-color-brand) calc(var(--iswc-tint) * 24%), #262c34);
+  --iswc-sd-border-soft: color-mix(in srgb, var(--iswc-color-brand) calc(var(--iswc-tint) * 18%), #1b2027);
+  --iswc-sd-code-bg: color-mix(in srgb, var(--iswc-color-brand) calc(var(--iswc-tint) * 10%), #0a0c10);
+  --iswc-sd-control-bg: color-mix(in srgb, var(--iswc-color-brand) calc(var(--iswc-tint) * 16%), #1c2128);
+  --iswc-sd-control-bg-hover: color-mix(in srgb, var(--iswc-color-brand) calc(var(--iswc-tint) * 20%), #272d35);
+  --iswc-sd-control-bg-active: color-mix(in srgb, var(--iswc-color-brand) calc(var(--iswc-tint) * 24%), #323942);
+  --iswc-sd-control-border: color-mix(in srgb, var(--iswc-color-brand) calc(var(--iswc-tint) * 30%), #535b65);
+  --iswc-sd-text: color-mix(in srgb, var(--iswc-color-bright) calc(var(--iswc-font-tint) * 10%), #eceef1);
+  --iswc-sd-text-soft: color-mix(in srgb, var(--iswc-color-bright) calc(var(--iswc-font-tint) * 14%), #aeb5bf);
+  --iswc-sd-text-dim: color-mix(in srgb, var(--iswc-color-bright) calc(var(--iswc-font-tint) * 14%), #969fa9);
+  --iswc-sd-control-text: color-mix(in srgb, var(--iswc-color-bright) calc(var(--iswc-font-tint) * 8%), #f0f3f6);
+  --iswc-sd-code-text: color-mix(in srgb, var(--iswc-color-bright) calc(var(--iswc-font-tint) * 10%), #d4d8de);
 
   --iswc-color-info-paler: #e7f5ff;
   --iswc-color-info-pale: #d0ebff;
@@ -70,132 +97,382 @@
   --iswc-radius-sm: 0.25em;
 }
 
-/* ─── CONTAPYME (default). dodgerblue = hsl(210 100% 56%) ─────────── */
+/* ─── Semillas por paleta ───────────────────────────────────────────── */
 
+/* Delfín · dodgerblue — Azul franco y confiable; la paleta por defecto del kit. */
 :root,
-[data-palette="contapyme"] {
+[data-palette="delfin"] {
   --iswc-brand-h: 210;
   --iswc-brand-s: 100%;
   --iswc-brand-b: 56%;
+  --iswc-contrast-h: 210;
+  --iswc-contrast-s: 80%;
+  --iswc-contrast-l: 50%;
+  --iswc-tint: 0.8;
+  --iswc-font-tint: 1;
+  --iswc-on-brand: #fff;
 }
 
-/* Tema ContaPyme: SOLO el nodo con data-theme (html o contenedor scoped).
- * Nunca `:not([data-theme])` suelto: matchearía cada descendiente sin el
- * atributo y pintaría light encima del dark heredado del <html>. */
-[data-theme="dark"]:is(:not([data-palette]), [data-palette="contapyme"]) {
-  --iswc-contapyme-surface: oklch(from var(--iswc-color-brand) l calc(c * 0.25) h);
-  --iswc-bg: #10151c;
-  --iswc-bg-soft: color-mix(in srgb, var(--iswc-contapyme-surface) 5.5%, #121820);
-  --iswc-bg-elev: color-mix(in srgb, var(--iswc-contapyme-surface) 6.5%, #161c26);
-  --iswc-border: color-mix(in srgb, var(--iswc-contapyme-surface) 10%, #273040);
-  --iswc-border-soft: color-mix(in srgb, var(--iswc-contapyme-surface) 8%, #1c2430);
-  --iswc-code-bg: color-mix(in srgb, var(--iswc-contapyme-surface) 4.5%, #0d1218);
-  --iswc-control-bg: color-mix(in srgb, var(--iswc-contapyme-surface) 5.5%, #1c2430);
-  --iswc-control-bg-hover: color-mix(in srgb, var(--iswc-contapyme-surface) 7%, #283242);
-  --iswc-control-bg-active: color-mix(in srgb, var(--iswc-contapyme-surface) 8%, #344054);
-  --iswc-control-border: color-mix(in srgb, var(--iswc-contapyme-surface) 12%, #59636e);
-  --iswc-shadow: 0 1px 0 rgb(255 255 255 / 3%), 0 8px 24px color-mix(in srgb, var(--iswc-contapyme-surface) 14%, rgb(0 0 0 / 25%));
-}
-
-[data-theme="light"]:is(:not([data-palette]), [data-palette="contapyme"]) {
-  --iswc-contapyme-surface: oklch(from var(--iswc-color-brand) l calc(c * 0.25) h);
-  --iswc-bg: #fff;
-  --iswc-bg-soft: color-mix(in srgb, var(--iswc-contapyme-surface) 4%, #f6f8fa);
-  --iswc-bg-elev: #fff;
-  --iswc-border: #ccc;
-  --iswc-border-soft: rgb(229 231 235);
-  --iswc-code-bg: color-mix(in srgb, var(--iswc-contapyme-surface) 3%, #f6f8fa);
-  --iswc-control-bg: color-mix(in srgb, var(--iswc-contapyme-surface) 3%, #f1f3f5);
-  --iswc-control-bg-hover: color-mix(in srgb, var(--iswc-contapyme-surface) 5%, #e9ecef);
-  --iswc-control-bg-active: color-mix(in srgb, var(--iswc-contapyme-surface) 7%, #dee2e6);
-  --iswc-control-border: #80808050;
-  --iswc-text: #222;
-  --iswc-text-soft: #334155;
-  --iswc-text-dim: #64748b;
-  --iswc-shadow: 0 1px 0 rgb(0 0 0 / 4%), 0 8px 24px color-mix(in srgb, var(--iswc-contapyme-surface) 8%, rgb(0 0 0 / 6%));
-}
-
-/* ─── INSOFT. #e03131 = hsl(0 74% 54%) ────────────────────────────── */
-
-[data-palette="insoft"] {
+/* Cardenal · rojo de marca #e03131 — Rojo de marca sobre superficies neutras, sobrio y directo. */
+[data-palette="cardenal"] {
   --iswc-brand-h: 0;
   --iswc-brand-s: 74%;
   --iswc-brand-b: 54%;
-  --iswc-logo-bg: #fff;
-  --iswc-logo-fg: #111;
-  --iswc-logo-accent: var(--iswc-color-brand);
+  --iswc-contrast-h: 0;
+  --iswc-contrast-s: 80%;
+  --iswc-contrast-l: 50%;
+  --iswc-tint: 0;
+  --iswc-font-tint: 0;
+  --iswc-on-brand: #fff;
 }
 
-[data-theme="dark"][data-palette="insoft"] {
-  --iswc-bg: #0b0d10;
-  --iswc-bg-soft: #14181d;
-  --iswc-bg-elev: #1c2128;
-  --iswc-border: #2a3038;
-  --iswc-border-soft: #1f242b;
-  --iswc-code-bg: #0f1318;
-  --iswc-control-bg: #21262d;
-  --iswc-control-bg-hover: #30363d;
-  --iswc-control-bg-active: #3d444d;
-  --iswc-control-border: #59636e;
-  --iswc-shadow: 0 1px 0 rgb(255 255 255 / 3%), 0 8px 24px rgb(0 0 0 / 25%);
-}
-[data-theme="light"][data-palette="insoft"] {
-  --iswc-bg: #fff;
-  --iswc-bg-soft: #f6f8fa;
-  --iswc-bg-elev: #fff;
-  --iswc-border: #d0d7de;
-  --iswc-border-soft: #e1e4e8;
-  --iswc-code-bg: #f6f8fa;
-  --iswc-control-bg: #f1f3f5;
-  --iswc-control-bg-hover: #e9ecef;
-  --iswc-control-bg-active: #dee2e6;
-  --iswc-control-border: #adb5bd;
-  --iswc-shadow: 0 1px 0 rgb(0 0 0 / 4%), 0 8px 24px rgb(0 0 0 / 6%);
-}
-
-/* ─── AGROWIN. yellowgreen = hsl(80 61% 50%) ──────────────────────── */
-
-[data-palette="agrowin"] {
+/* Iguana · yellowgreen — Verde lima de campo, superficies muy tintadas. */
+[data-palette="iguana"] {
   --iswc-brand-h: 80;
   --iswc-brand-s: 61%;
   --iswc-brand-b: 50%;
-  --iswc-logo-fg: #17200a;
-  --iswc-logo-accent: #17200a;
+  --iswc-contrast-h: 80;
+  --iswc-contrast-s: 80%;
+  --iswc-contrast-l: 50%;
+  --iswc-tint: 1.2;
+  --iswc-font-tint: 1;
+  --iswc-on-brand: hsl(80 61% 12%);
 }
 
-[data-theme="dark"][data-palette="agrowin"] {
-  --iswc-agrowin-surface: oklch(from var(--iswc-color-brand) l calc(c * 0.3) h);
-  --iswc-bg: color-mix(in srgb, var(--iswc-agrowin-surface) 22%, #050505);
-  --iswc-bg-soft: color-mix(in srgb, var(--iswc-agrowin-surface) 18%, #0a0a0a);
-  --iswc-bg-elev: color-mix(in srgb, var(--iswc-agrowin-surface) 16%, #101010);
-  --iswc-border: color-mix(in srgb, var(--iswc-agrowin-surface) 14%, #1c1c1c);
-  --iswc-border-soft: color-mix(in srgb, var(--iswc-agrowin-surface) 12%, #141414);
-  --iswc-code-bg: color-mix(in srgb, var(--iswc-agrowin-surface) 18%, #080808);
-  --iswc-control-bg: color-mix(in srgb, var(--iswc-agrowin-surface) 14%, #141414);
-  --iswc-control-bg-hover: color-mix(in srgb, var(--iswc-agrowin-surface) 16%, #1c1c1c);
-  --iswc-control-bg-active: color-mix(in srgb, var(--iswc-agrowin-surface) 18%, #242424);
-  --iswc-control-border: color-mix(in srgb, var(--iswc-agrowin-surface) 20%, #3a3a3a);
-  --iswc-shadow: 0 1px 0 rgb(255 255 255 / 2%), 0 8px 24px color-mix(in srgb, var(--iswc-agrowin-surface) 35%, rgb(0 0 0 / 40%));
-}
-[data-theme="light"][data-palette="agrowin"] {
-  --iswc-agrowin-surface: oklch(from var(--iswc-color-brand) l calc(c * 0.3) h);
-  --iswc-bg: color-mix(in srgb, var(--iswc-agrowin-surface) 1%, #fefefe);
-  --iswc-bg-soft: color-mix(in srgb, var(--iswc-agrowin-surface) 2%, #fbfbfb);
-  --iswc-bg-elev: #fff;
-  --iswc-border: color-mix(in srgb, var(--iswc-agrowin-surface) 6%, #e0e0e0);
-  --iswc-border-soft: color-mix(in srgb, var(--iswc-agrowin-surface) 4%, #ececec);
-  --iswc-code-bg: color-mix(in srgb, var(--iswc-agrowin-surface) 1.5%, #fbfbfb);
-  --iswc-control-bg: color-mix(in srgb, var(--iswc-agrowin-surface) 2.5%, #f5f5f5);
-  --iswc-control-bg-hover: color-mix(in srgb, var(--iswc-agrowin-surface) 4%, #eeeeee);
-  --iswc-control-bg-active: color-mix(in srgb, var(--iswc-agrowin-surface) 5.5%, #e6e6e6);
-  --iswc-control-border: color-mix(in srgb, var(--iswc-agrowin-surface) 8%, #b8b8b8);
-  --iswc-shadow: 0 1px 0 rgb(0 0 0 / 3%), 0 8px 24px color-mix(in srgb, var(--iswc-agrowin-surface) 4%, rgb(0 0 0 / 5%));
+/* Rubí · red rgb(200,0,0) — Rojo intenso y apasionado. */
+[data-palette="rubi"] {
+  --iswc-brand-h: 0;
+  --iswc-brand-s: 100%;
+  --iswc-brand-b: 39%;
+  --iswc-contrast-h: 0;
+  --iswc-contrast-s: 80%;
+  --iswc-contrast-l: 50%;
+  --iswc-tint: 1;
+  --iswc-font-tint: 1;
+  --iswc-on-brand: #fff;
 }
 
-/* Light: el texto y el suave usan la rampa, no un hex de cada paleta. */
-:root[data-theme="light"],
-[data-theme="light"] {
-  --iswc-brand-text: var(--iswc-color-brand-stronger);
+/* Esmeralda · green rgb(0,200,0) — Verde vivo, fresco y natural. */
+[data-palette="esmeralda"] {
+  --iswc-brand-h: 120;
+  --iswc-brand-s: 100%;
+  --iswc-brand-b: 34%;
+  --iswc-contrast-h: 120;
+  --iswc-contrast-s: 80%;
+  --iswc-contrast-l: 50%;
+  --iswc-tint: 1;
+  --iswc-font-tint: 1;
+  --iswc-on-brand: hsl(120 100% 12%);
+}
+
+/* Zafiro · blue rgb(0,0,200) — Azul profundo y elegante. */
+[data-palette="zafiro"] {
+  --iswc-brand-h: 240;
+  --iswc-brand-s: 100%;
+  --iswc-brand-b: 45%;
+  --iswc-contrast-h: 240;
+  --iswc-contrast-s: 80%;
+  --iswc-contrast-l: 50%;
+  --iswc-tint: 1;
+  --iswc-font-tint: 1;
+  --iswc-on-brand: #fff;
+}
+
+/* Citrino · yellow rgb(200,200,0) — Amarillo solar y optimista. */
+[data-palette="citrino"] {
+  --iswc-brand-h: 60;
+  --iswc-brand-s: 100%;
+  --iswc-brand-b: 39%;
+  --iswc-contrast-h: 60;
+  --iswc-contrast-s: 80%;
+  --iswc-contrast-l: 50%;
+  --iswc-tint: 1;
+  --iswc-font-tint: 1;
+  --iswc-on-brand: hsl(60 100% 12%);
+}
+
+/* Orquídea · magenta rgb(200,0,200) — Magenta floral, creativo y audaz. */
+[data-palette="orquidea"] {
+  --iswc-brand-h: 300;
+  --iswc-brand-s: 100%;
+  --iswc-brand-b: 40%;
+  --iswc-contrast-h: 300;
+  --iswc-contrast-s: 80%;
+  --iswc-contrast-l: 50%;
+  --iswc-tint: 1;
+  --iswc-font-tint: 1;
+  --iswc-on-brand: #fff;
+}
+
+/* Turquesa · cyan rgb(0,200,200) — Cian tropical y limpio; la de Avatar. */
+[data-palette="turquesa"] {
+  --iswc-brand-h: 180;
+  --iswc-brand-s: 100%;
+  --iswc-brand-b: 34%;
+  --iswc-contrast-h: 180;
+  --iswc-contrast-s: 80%;
+  --iswc-contrast-l: 50%;
+  --iswc-tint: 1;
+  --iswc-font-tint: 1;
+  --iswc-on-brand: hsl(180 100% 12%);
+}
+
+/* Marte · tomato rgb(219,48,0) — Rojo anaranjado, enérgico como el planeta rojo. */
+[data-palette="marte"] {
+  --iswc-brand-h: 13;
+  --iswc-brand-s: 100%;
+  --iswc-brand-b: 43%;
+  --iswc-contrast-h: 13;
+  --iswc-contrast-s: 80%;
+  --iswc-contrast-l: 50%;
+  --iswc-tint: 1;
+  --iswc-font-tint: 1;
+  --iswc-on-brand: #fff;
+}
+
+/* Granate · crimson rgb(200,40,80) — Carmesí profundo, serio y cálido. */
+[data-palette="granate"] {
+  --iswc-brand-h: 345;
+  --iswc-brand-s: 67%;
+  --iswc-brand-b: 47%;
+  --iswc-contrast-h: 345;
+  --iswc-contrast-s: 80%;
+  --iswc-contrast-l: 50%;
+  --iswc-tint: 1;
+  --iswc-font-tint: 1;
+  --iswc-on-brand: #fff;
+}
+
+/* Neptuno · skyGreen rgb(15,146,216) — Azul cielo marino, sereno. */
+[data-palette="neptuno"] {
+  --iswc-brand-h: 201;
+  --iswc-brand-s: 87%;
+  --iswc-brand-b: 45%;
+  --iswc-contrast-h: 201;
+  --iswc-contrast-s: 80%;
+  --iswc-contrast-l: 50%;
+  --iswc-tint: 1;
+  --iswc-font-tint: 1;
+  --iswc-on-brand: #fff;
+}
+
+/* Peridoto · lemonGreen rgb(132,233,16) — Verde limón eléctrico y juvenil. */
+[data-palette="peridoto"] {
+  --iswc-brand-h: 88;
+  --iswc-brand-s: 87%;
+  --iswc-brand-b: 42%;
+  --iswc-contrast-h: 88;
+  --iswc-contrast-s: 80%;
+  --iswc-contrast-l: 50%;
+  --iswc-tint: 1;
+  --iswc-font-tint: 1;
+  --iswc-on-brand: hsl(88 87% 12%);
+}
+
+/* Jade · militaryGreen rgb(26,128,0) — Verde bosque, firme y tranquilo. */
+[data-palette="jade"] {
+  --iswc-brand-h: 108;
+  --iswc-brand-s: 100%;
+  --iswc-brand-b: 28%;
+  --iswc-contrast-h: 108;
+  --iswc-contrast-s: 80%;
+  --iswc-contrast-l: 50%;
+  --iswc-tint: 1;
+  --iswc-font-tint: 1;
+  --iswc-on-brand: #fff;
+}
+
+/* Aguamarina · aquaBlue rgb(30,168,202) — Azul agua cristalina. */
+[data-palette="aguamarina"] {
+  --iswc-brand-h: 192;
+  --iswc-brand-s: 74%;
+  --iswc-brand-b: 42%;
+  --iswc-contrast-h: 192;
+  --iswc-contrast-s: 80%;
+  --iswc-contrast-l: 50%;
+  --iswc-tint: 1;
+  --iswc-font-tint: 1;
+  --iswc-on-brand: #fff;
+}
+
+/* Amatista · purple rgb(128,0,128) — Púrpura profundo y místico. */
+[data-palette="amatista"] {
+  --iswc-brand-h: 300;
+  --iswc-brand-s: 100%;
+  --iswc-brand-b: 28%;
+  --iswc-contrast-h: 300;
+  --iswc-contrast-s: 80%;
+  --iswc-contrast-l: 50%;
+  --iswc-tint: 1;
+  --iswc-font-tint: 1;
+  --iswc-on-brand: #fff;
+}
+
+/* Menta · springGreen rgb(19,200,132) — Verde menta, fresco y amable. */
+[data-palette="menta"] {
+  --iswc-brand-h: 156;
+  --iswc-brand-s: 83%;
+  --iswc-brand-b: 35%;
+  --iswc-contrast-h: 156;
+  --iswc-contrast-s: 80%;
+  --iswc-contrast-l: 50%;
+  --iswc-tint: 1;
+  --iswc-font-tint: 1;
+  --iswc-on-brand: #fff;
+}
+
+/* Luna · gray rgb(128,128,128) — Gris lunar, neutro y silencioso. */
+[data-palette="luna"] {
+  --iswc-brand-h: 220;
+  --iswc-brand-s: 6%;
+  --iswc-brand-b: 46%;
+  --iswc-contrast-h: 220;
+  --iswc-contrast-s: 18%;
+  --iswc-contrast-l: 52%;
+  --iswc-tint: 0.6;
+  --iswc-font-tint: 1;
+  --iswc-on-brand: #fff;
+}
+
+/* Júpiter · orange rgb(200,128,0) — Naranja terroso como las bandas de Júpiter. */
+[data-palette="jupiter"] {
+  --iswc-brand-h: 38;
+  --iswc-brand-s: 100%;
+  --iswc-brand-b: 38%;
+  --iswc-contrast-h: 38;
+  --iswc-contrast-s: 80%;
+  --iswc-contrast-l: 50%;
+  --iswc-tint: 1;
+  --iswc-font-tint: 1;
+  --iswc-on-brand: #fff;
+}
+
+/* Flamenco · pink rgb(255,128,200) — Rosa vibrante y festivo. */
+[data-palette="flamenco"] {
+  --iswc-brand-h: 325;
+  --iswc-brand-s: 80%;
+  --iswc-brand-b: 46%;
+  --iswc-contrast-h: 325;
+  --iswc-contrast-s: 80%;
+  --iswc-contrast-l: 50%;
+  --iswc-tint: 1;
+  --iswc-font-tint: 1;
+  --iswc-on-brand: #fff;
+}
+
+/* Lapislázuli · navy rgb(0,52,163) — Azul marino noble. */
+[data-palette="lapislazuli"] {
+  --iswc-brand-h: 221;
+  --iswc-brand-s: 100%;
+  --iswc-brand-b: 36%;
+  --iswc-contrast-h: 221;
+  --iswc-contrast-s: 80%;
+  --iswc-contrast-l: 50%;
+  --iswc-tint: 1;
+  --iswc-font-tint: 1;
+  --iswc-on-brand: #fff;
+}
+
+/* Cobre · brown rgb(143,52,0) — Marrón cobrizo, artesanal. */
+[data-palette="cobre"] {
+  --iswc-brand-h: 22;
+  --iswc-brand-s: 100%;
+  --iswc-brand-b: 32%;
+  --iswc-contrast-h: 22;
+  --iswc-contrast-s: 80%;
+  --iswc-contrast-l: 50%;
+  --iswc-tint: 1;
+  --iswc-font-tint: 1;
+  --iswc-on-brand: #fff;
+}
+
+/* Tanzanita · violet rgb(128,43,200) — Violeta azulado, sofisticado. */
+[data-palette="tanzanita"] {
+  --iswc-brand-h: 272;
+  --iswc-brand-s: 65%;
+  --iswc-brand-b: 48%;
+  --iswc-contrast-h: 272;
+  --iswc-contrast-s: 80%;
+  --iswc-contrast-l: 50%;
+  --iswc-tint: 1;
+  --iswc-font-tint: 1;
+  --iswc-on-brand: #fff;
+}
+
+/* Olivino · olive rgb(128,150,0) — Verde oliva, mediterráneo y sereno. */
+[data-palette="olivino"] {
+  --iswc-brand-h: 68;
+  --iswc-brand-s: 100%;
+  --iswc-brand-b: 29%;
+  --iswc-contrast-h: 68;
+  --iswc-contrast-s: 80%;
+  --iswc-contrast-l: 50%;
+  --iswc-tint: 1;
+  --iswc-font-tint: 1;
+  --iswc-on-brand: #fff;
+}
+
+/* Ámbar · amber rgb(255,191,0) — Ámbar dorado y cálido. */
+[data-palette="ambar"] {
+  --iswc-brand-h: 45;
+  --iswc-brand-s: 100%;
+  --iswc-brand-b: 45%;
+  --iswc-contrast-h: 45;
+  --iswc-contrast-s: 80%;
+  --iswc-contrast-l: 50%;
+  --iswc-tint: 1;
+  --iswc-font-tint: 1;
+  --iswc-on-brand: hsl(45 100% 12%);
+}
+
+/* ─── Tema → juego de superficies (data-panda lo invierte) ─────────── */
+/* Solo el nodo con data-theme (html o contenedor scoped); nunca :not([data-theme]) suelto. */
+[data-theme="light"]:not([data-panda]),
+[data-theme="dark"][data-panda] {
+  color-scheme: light;
+  --iswc-bg: var(--iswc-sl-bg);
+  --iswc-bg-soft: var(--iswc-sl-bg-soft);
+  --iswc-bg-elev: var(--iswc-sl-bg-elev);
+  --iswc-border: var(--iswc-sl-border);
+  --iswc-border-soft: var(--iswc-sl-border-soft);
+  --iswc-code-bg: var(--iswc-sl-code-bg);
+  --iswc-control-bg: var(--iswc-sl-control-bg);
+  --iswc-control-bg-hover: var(--iswc-sl-control-bg-hover);
+  --iswc-control-bg-active: var(--iswc-sl-control-bg-active);
+  --iswc-control-border: var(--iswc-sl-control-border);
+  --iswc-text: var(--iswc-sl-text);
+  --iswc-text-soft: var(--iswc-sl-text-soft);
+  --iswc-text-dim: var(--iswc-sl-text-dim);
+  --iswc-control-text: var(--iswc-sl-control-text);
+  --iswc-code-text: var(--iswc-sl-code-text);
+  --iswc-shadow: 0 1px 0 rgb(0 0 0 / 4%), 0 8px 24px color-mix(in srgb, var(--iswc-color-brand) calc(var(--iswc-tint) * 6%), rgb(0 0 0 / 6%));
+  --iswc-brand-text: color-mix(in srgb, var(--iswc-color-brand) 45%, black);
   --iswc-brand-soft: var(--iswc-color-brand-paler);
   --iswc-brand-soft-active: var(--iswc-color-brand-pale);
+  --iswc-contrast-text: color-mix(in srgb, var(--iswc-color-contrast) 45%, black);
+}
+
+[data-theme="dark"]:not([data-panda]),
+[data-theme="light"][data-panda] {
+  color-scheme: dark;
+  --iswc-bg: var(--iswc-sd-bg);
+  --iswc-bg-soft: var(--iswc-sd-bg-soft);
+  --iswc-bg-elev: var(--iswc-sd-bg-elev);
+  --iswc-border: var(--iswc-sd-border);
+  --iswc-border-soft: var(--iswc-sd-border-soft);
+  --iswc-code-bg: var(--iswc-sd-code-bg);
+  --iswc-control-bg: var(--iswc-sd-control-bg);
+  --iswc-control-bg-hover: var(--iswc-sd-control-bg-hover);
+  --iswc-control-bg-active: var(--iswc-sd-control-bg-active);
+  --iswc-control-border: var(--iswc-sd-control-border);
+  --iswc-text: var(--iswc-sd-text);
+  --iswc-text-soft: var(--iswc-sd-text-soft);
+  --iswc-text-dim: var(--iswc-sd-text-dim);
+  --iswc-control-text: var(--iswc-sd-control-text);
+  --iswc-code-text: var(--iswc-sd-code-text);
+  --iswc-shadow: 0 1px 0 rgb(255 255 255 / 3%), 0 8px 24px color-mix(in srgb, var(--iswc-color-brand) calc(var(--iswc-tint) * 12%), rgb(0 0 0 / 30%));
+  --iswc-brand-text: hsl(from var(--iswc-color-brand) h s 76%);
+  --iswc-brand-soft: rgb(from var(--iswc-accent) r g b / 18%);
+  --iswc-brand-soft-active: rgb(from var(--iswc-accent) r g b / 28%);
+  --iswc-contrast-text: hsl(from var(--iswc-color-contrast) h s 72%);
 }

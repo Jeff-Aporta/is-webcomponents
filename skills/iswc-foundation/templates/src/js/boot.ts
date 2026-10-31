@@ -3,7 +3,7 @@
  * boot.ts — tema y paleta ANTES del primer pintado. Script plano (IIFE), síncrono en <head>.
  *
  * Orden: `?s=` (base64url JSON con `theme`/`palette`) > localStorage del kit (`iswc-theme`,
- * `iswc-palette`) > `dark` / `contapyme`. Sin esto, cada carga parpadea en claro.
+ * `iswc-palette`) > `dark` / `delfin`. Sin esto, cada carga parpadea en claro.
  */
 (function () {
   const raiz = document.documentElement;
@@ -29,5 +29,5 @@
   raiz.dataset.theme = tema;
   raiz.classList.toggle('theme-dark', tema === 'dark');
   raiz.classList.toggle('theme-light', tema === 'light');
-  raiz.dataset.palette = estado.palette || leer('iswc-palette') || 'contapyme';
+  raiz.dataset.palette = estado.palette || leer('iswc-palette') || 'delfin';
 })();

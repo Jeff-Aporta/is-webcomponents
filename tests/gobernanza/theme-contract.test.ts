@@ -5,7 +5,7 @@
 // Verifica que el contrato de tema/paleta se mantiene:
 //   1. <html> tiene data-theme y data-palette por defecto.
 //   2. is-base.scss + palettes.scss reaccionan a [data-theme=light|dark].
-//   3. is-base.scss + palettes.scss declaran las 3 paletas (insoft, contapyme, agrowin).
+//   3. palettes.scss declara las 25 paletas de palettes.json (delfin default) + data-panda.
 //   4. No hay tokens con prefijo --pg- legacy.
 //   5. Componentes no usan <svg>/<use>/<symbol> inline.
 //   6. Componentes no usan size= hardcodeado (usar tokens em).
@@ -46,10 +46,14 @@ check(
   !/:is\(\s*:not\(\[data-theme\]\)/.test(palettes),
   'palettes.scss: no usar :not([data-theme]) suelto (pisa dark en descendientes)',
 );
-for (const p of ['insoft', 'contapyme', 'agrowin']) {
-  check(styles.includes(`[data-palette="${p}"]`), `missing ${p} palette`);
+const catalog = JSON.parse(await readFile(join(root, 'src', 'styles', 'palettes.json'), 'utf8'));
+check(catalog.length === 25, `palettes.json debe tener 25 paletas (tiene ${catalog.length})`);
+for (const p of catalog) {
+  check(styles.includes(`[data-palette="${p.value}"]`), `missing ${p.value} palette`);
 }
-check(html.includes('data-palette="contapyme"'), 'missing root palette contapyme on <html>');
+check(html.includes('data-palette="delfin"'), 'missing root palette delfin on <html>');
+check(/\[data-theme="light"\]\[data-panda\]/.test(palettes) && /\[data-theme="dark"\]\[data-panda\]/.test(palettes), 'palettes.scss: data-panda invierte el juego de superficies');
+check(/\[data-theme="light"\]\[data-panda\]/.test(isBase), 'is-base.scss: data-panda invierte el tema neutro');
 
 check(!/<(?:svg|symbol|use)\b/i.test(html), 'index.html contiene <svg>/<use>/<symbol> inline');
 check(!/<(?:svg|symbol|use)\b/i.test(component), 'components/actions/button.ts contiene <svg>/<use>/<symbol> inline');
@@ -67,17 +71,17 @@ for (const t of REMOVED_FIELD_TOKENS) {
   check(!palettes.includes(`${t}:`), `palettes.scss ya no debe declarar ${t}`);
 }
 
-// 9. ContaPyme = hsl(210 100% 56%), que es dodgerblue. El brand no se escribe a mano.
-const cp = palettes.slice(palettes.indexOf('[data-palette="contapyme"]'), palettes.indexOf('[data-palette="insoft"]'));
-check(/--iswc-brand-h:\s*210/.test(cp), 'contapyme --iswc-brand-h debe ser 210 (dodgerblue)');
-check(/--iswc-brand-s:\s*100%/.test(cp), 'contapyme --iswc-brand-s debe ser 100%');
-check(/--iswc-brand-b:\s*56%/.test(cp), 'contapyme --iswc-brand-b debe ser 56%');
-check(!/--iswc-color-brand:\s*(?:dodgerblue|#[0-9a-f]{3,8})/i.test(cp), 'contapyme no debe fijar --iswc-color-brand a mano');
+// 9. Delfín = hsl(210 100% 56%), que es dodgerblue. El brand no se escribe a mano.
+const cp = palettes.slice(palettes.indexOf('[data-palette="delfin"]'), palettes.indexOf('[data-palette="cardenal"]'));
+check(/--iswc-brand-h:\s*210/.test(cp), 'delfin --iswc-brand-h debe ser 210 (dodgerblue)');
+check(/--iswc-brand-s:\s*100%/.test(cp), 'delfin --iswc-brand-s debe ser 100%');
+check(/--iswc-brand-b:\s*56%/.test(cp), 'delfin --iswc-brand-b debe ser 56%');
+check(!/--iswc-color-brand:\s*(?:dodgerblue|#[0-9a-f]{3,8})/i.test(cp), 'delfin no debe fijar --iswc-color-brand a mano');
 check(/--iswc-color-brand:\s*hsl\(calc\(var\(--iswc-brand-h\)/.test(palettes), 'el brand se deriva de h, s y b');
+check(/--iswc-color-contrast:\s*hsl\(calc\(var\(--iswc-contrast-h\)/.test(palettes), 'el contraste se deriva de su semilla');
 check(/rgb\(from var\(--iswc-accent\) r g b \/ 12%\)/.test(palettes), 'el alpha del acento sale de rgb(from var(--iswc-accent))');
 check(/--iswc-hue-rotate:\s*calc\(\(var\(--iswc-brand-h\) - var\(--iswc-logo-h\)\) \* 1deg\)/.test(palettes), 'falta --iswc-hue-rotate');
-check(/:root,\s*\[data-palette="contapyme"\]/.test(palettes), 'contapyme debe aplicarse en :root como default');
-const catalog = JSON.parse(await readFile(join(root, 'src', 'styles', 'palettes.json'), 'utf8'));
+check(/:root,\s*\[data-palette="delfin"\]/.test(palettes), 'delfin debe aplicarse en :root como default');
 for (const p of catalog) {
   check(palettes.includes(`--iswc-brand-h: ${p.h};`), `palettes.scss no tiene el h de ${p.value}`);
   check(palettes.includes(`--iswc-brand-s: ${p.s};`), `palettes.scss no tiene la s de ${p.value}`);
@@ -136,7 +140,7 @@ test('gobernanza/theme-contract', async () => {
     { const salida = 1; if (salida) throw new Error(`salida ${salida}`); return; }
   }
   
-  console.log(`theme-contract.test.ts: PASS — 2 temas, 3 paletas, tokens --iswc-*, sin Web Awesome`);
+  console.log(`theme-contract.test.ts: PASS — 2 temas, 25 paletas + panda, tokens --iswc-*, sin Web Awesome`);
 });
 
 export default lista();

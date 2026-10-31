@@ -8,7 +8,7 @@
  */
 (() => {
   const THEMES = new Set(['light', 'dark']);
-  const PALETTES = new Set(['insoft', 'contapyme', 'agrowin']);
+  const PALETTES = new Set(['delfin', 'cardenal', 'iguana', 'rubi', 'esmeralda', 'zafiro', 'citrino', 'orquidea', 'turquesa', 'marte', 'granate', 'neptuno', 'peridoto', 'jade', 'aguamarina', 'amatista', 'menta', 'luna', 'jupiter', 'flamenco', 'lapislazuli', 'cobre', 'tanzanita', 'olivino', 'ambar']);
   const params = new URLSearchParams(location.search);
   const root = document.documentElement;
 
@@ -40,7 +40,7 @@
   }
   if (!palette) {
     const ls = localStorage.getItem('iswc-palette');
-    palette = PALETTES.has(ls) ? ls : (root.dataset.palette || 'contapyme');
+    palette = PALETTES.has(ls) ? ls : (root.dataset.palette || 'delfin');
   }
 
   // Contrato W51: solo data-theme / data-palette (sin clases .theme-*).

@@ -79,7 +79,7 @@ type Adopcion = { html?: string; head?: string; shell?: string };
 const ADOPCION: Record<string, Adopcion> = {
   base: {},
   'marca-propia': { head: '<style>:root{--iswc-color-brand: rgb(225, 29, 72); --iswc-color-brand-strong: rgb(225, 29, 72)}</style>' },
-  'data-palette': { html: ' data-palette="insoft"' },
+  'data-palette': { html: ' data-palette="cardenal"' },
   neutra: { shell: ' no-default-palette' },
 };
 
@@ -696,7 +696,7 @@ test('S-AP22: sin paleta elegida el acento tiene color de marca; una paleta eleg
     const { page } = await abrirAdopcion('data-palette');
     try {
       const rgb = await fondoAcento(page);
-      assert.ok(colorido(rgb) && rgb[0]! > rgb[2]!, `data-palette="insoft" se respeta (rojo, ${rgb})`);
+      assert.ok(colorido(rgb) && rgb[0]! > rgb[2]!, `data-palette="cardenal" se respeta (rojo, ${rgb})`);
     } finally { await page.close(); }
   }
   {

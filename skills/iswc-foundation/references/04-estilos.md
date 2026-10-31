@@ -15,3 +15,17 @@
 - **`prefers-reduced-motion`**: toda hoja con `transition`/`animation` declara el bloque que las apaga.
 - Personalizar el kit solo con sus tokens y los `::part()` que expone (no inventar parts).
 - `app.scss` es solo light DOM (página); oculta el body hasta `data-app-ready`.
+
+**Paletas (25) y Panda.** `data-palette` acepta una de las 25 paletas generales
+del kit (`src/styles/palettes.json`): rojos `cardenal` `rubi` `granate`;
+naranjas/amarillos `citrino` `marte` `jupiter` `cobre` `ambar`; verdes `iguana`
+`esmeralda` `peridoto` `jade` `menta` `olivino`; azules/cianes `delfin`
+(default) `zafiro` `turquesa` `neptuno` `aguamarina` `lapislazuli`;
+violetas/rosas `orquidea` `amatista` `flamenco` `tanzanita`; neutro `luna`.
+Cada una tiene main (`--iswc-color-brand`), contraste (`--iswc-color-contrast`,
+`--iswc-contrast-text`, `--iswc-contrast-soft`), bright (`--iswc-color-bright`),
+superficies y textos tintados por su tono. `data-panda` en el mismo nodo que
+`data-theme` invierte las superficies (claro pinta el juego oscuro de la
+paleta y viceversa). El usuario elige ambas con `<iswc-palette-selector>`
+(persisten en `iswc:app-cfg` → `palette`, `panda`); `initApp({ palette, panda })`
+fija los valores iniciales.

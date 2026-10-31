@@ -41,7 +41,7 @@ await L.load('iswc-app-shell', 'iswc-app-nav', 'iswc-session-menu');
 | Necesidad | Lo resuelve | Cuándo actúa la app |
 | --- | --- | --- |
 | Tokens base (superficies, texto, `--iswc-space-*`) | `is-base.min.css`, que el loader inyecta al importarse | Nunca; para densificar, redefine `--iswc-space-*` en `:root` |
-| Color de marca en botones y foco | El shell carga la paleta por defecto (`iswc-palettes-default`) si `<html>` no tiene tokens de marca | Para otra marca: `data-palette="insoft"` / `"agrowin"` en `<html>`, o tus propios `--iswc-brand-h/s/b` en `:root`; `no-default-palette` en el shell para dejar la base neutra |
+| Color de marca en botones y foco | El shell carga la paleta por defecto (`iswc-palettes-default`) si `<html>` no tiene tokens de marca | Para otra marca: `data-palette="cardenal"` / `"agrowin"` en `<html>`, o tus propios `--iswc-brand-h/s/b` en `:root`; `no-default-palette` en el shell para dejar la base neutra |
 | Atributos en el HTML | Los tags aplican los atributos que ya estén puestos al registrarse | Nunca: no hace falta esperar `whenDefined` para ponerlos |
 
 Llamar además `L.loadPageStyles(['iswc-palettes-default'])` es inocuo (no duplica la hoja).

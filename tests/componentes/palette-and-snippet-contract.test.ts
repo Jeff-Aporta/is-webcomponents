@@ -1,9 +1,9 @@
 // tests/palette-and-snippet-contract.test.ts
 //
-// Contrato aprendido (paleta default ContaPyme + snippets con contexto +
+// Contrato aprendido (paleta default Delfín + snippets con contexto +
 // canvas de la app, no del kit):
 //
-//   1. Default palette = contapyme (CSS :root, HTML, fallbacks JS).
+//   1. Default palette = delfin (CSS :root, HTML, fallbacks JS).
 //   2. is-base NO pone color-scheme en :root (solo [data-theme]).
 //   3. is-base / palettes NO pintan html|body { background }.
 //   4. demo-code.js sella data-theme + data-palette y reacciona
@@ -26,7 +26,7 @@ test('componentes/palette-and-snippet-contract', async () => {
   const failures = [];
   const check = (cond, msg) => { if (!cond) failures.push(msg); };
   
-  // CSS compilado normalizado (Sass emite `[data-palette=contapyme]` sin comillas).
+  // CSS compilado normalizado (Sass emite `[data-palette=delfin]` sin comillas).
   const isBase = leerCssCompilado(root, 'src/styles/is-base.css');
   const palettes = leerCssCompilado(root, 'src/styles/palettes.css');
   const docDemo = await readFile(join(root, 'src', 'components', 'layout', 'doc-demo.ts'), 'utf8');
@@ -36,11 +36,11 @@ test('componentes/palette-and-snippet-contract', async () => {
   const demoCode = await readFile(join(root, 'scripts', 'demo-code.js'), 'utf8');
   const paletteSelector = await readFile(join(root, 'src', 'components', 'feedback', 'palette-selector.ts'), 'utf8');
   
-  // ─── 1. Default = contapyme ─────────────────────────────────────────────────
+  // ─── 1. Default = delfin ─────────────────────────────────────────────────
   
   check(
-    /<html\b[^>]*\bdata-palette="contapyme"/.test(indexHtml),
-    'index.html: <html> debe abrir con data-palette="contapyme"',
+    /<html\b[^>]*\bdata-palette="delfin"/.test(indexHtml),
+    'index.html: <html> debe abrir con data-palette="delfin"',
   );
   
   // El shell de la galería es <iswc-doc-demo> (index.html solo lo monta); el
@@ -52,25 +52,25 @@ test('componentes/palette-and-snippet-contract', async () => {
   );
   
   check(
-    /dataset\.palette\s*\|\|\s*['"]contapyme['"]/.test(previewBoot)
-      || /\|\|\s*['"]contapyme['"]/.test(previewBoot),
-    'preview-boot.js: fallback de paleta debe ser contapyme',
+    /dataset\.palette\s*\|\|\s*['"]delfin['"]/.test(previewBoot)
+      || /\|\|\s*['"]delfin['"]/.test(previewBoot),
+    'preview-boot.js: fallback de paleta debe ser delfin',
   );
-  check(!/\|\|\s*['"]insoft['"]/.test(previewBoot), 'preview-boot.js: no debe quedar fallback insoft');
+  check(!/\|\|\s*['"]cardenal['"]/.test(previewBoot), 'preview-boot.js: no debe quedar fallback cardenal');
   
   check(
-    (previewChrome.match(/\|\|\s*['"]contapyme['"]/g) || []).length >= 2,
-    'preview-chrome.js: fallbacks de paleta deben ser contapyme',
+    (previewChrome.match(/\|\|\s*['"]delfin['"]/g) || []).length >= 2,
+    'preview-chrome.js: fallbacks de paleta deben ser delfin',
   );
-  check(!/\|\|\s*['"]insoft['"]/.test(previewChrome), 'preview-chrome.js: no debe quedar fallback insoft');
+  check(!/\|\|\s*['"]cardenal['"]/.test(previewChrome), 'preview-chrome.js: no debe quedar fallback cardenal');
   
   // WHAT: se ejecuta el fallback real en vez de buscar su texto.
   const { resolvePaletteKey } = await import(new URL('../../src/components/charts/utils/chart-palette.ts', import.meta.url).href);
   check(
-    resolvePaletteKey(undefined) === 'contapyme' && resolvePaletteKey('no-existe') === 'contapyme',
-    'chart-palette.ts: resolvePaletteKey fallback = contapyme',
+    resolvePaletteKey(undefined) === 'delfin' && resolvePaletteKey('no-existe') === 'delfin',
+    'chart-palette.ts: resolvePaletteKey fallback = delfin',
   );
-  check(resolvePaletteKey('insoft') === 'insoft', 'chart-palette.ts: resolvePaletteKey respeta una paleta válida');
+  check(resolvePaletteKey('cardenal') === 'cardenal', 'chart-palette.ts: resolvePaletteKey respeta una paleta válida');
 
   // DEFAULT_PALETTES del selector = PALETTES de palette-build (mismo orden).
   check(
@@ -79,22 +79,22 @@ test('componentes/palette-and-snippet-contract', async () => {
   );
   const { PALETTES } = await import(new URL('../../src/styles/palette-build.ts', import.meta.url).href);
   const firstValue = PALETTES?.[0]?.value;
-  check(firstValue === 'contapyme', `palette-selector DEFAULT_PALETTES[0] = "${firstValue || '?'}", esperaba contapyme`);
+  check(firstValue === 'delfin', `palette-selector DEFAULT_PALETTES[0] = "${firstValue || '?'}", esperaba delfin`);
   
   check(
-    /:root,\s*\[data-palette="contapyme"\]/.test(palettes),
-    'palettes.css: contapyme debe aplicarse en :root como default',
+    /:root,\s*\[data-palette="delfin"\]/.test(palettes),
+    'palettes.css: delfin debe aplicarse en :root como default',
   );
   check(
-    /Default palette\s*=\s*contapyme/i.test(palettes),
-    'palettes.css: el comentario de cabecera debe decir Default = contapyme',
+    /Default palette\s*=\s*delfin/i.test(palettes),
+    'palettes.css: el comentario de cabecera debe decir Default = delfin',
   );
   
-  const cpIdx = palettes.indexOf('[data-palette="contapyme"]');
-  const insoftIdx = palettes.indexOf('[data-palette="insoft"]');
-  const agrowinIdx = palettes.indexOf('[data-palette="agrowin"]');
-  check(cpIdx >= 0 && insoftIdx > cpIdx, 'palettes.css: bloque contapyme debe ir antes que insoft');
-  check(agrowinIdx > insoftIdx, 'palettes.css: insoft antes que agrowin');
+  const cpIdx = palettes.indexOf('[data-palette="delfin"]');
+  const cardenalIdx = palettes.indexOf('[data-palette="cardenal"]');
+  const iguanaIdx = palettes.indexOf('[data-palette="iguana"]');
+  check(cpIdx >= 0 && cardenalIdx > cpIdx, 'palettes.css: bloque delfin debe ir antes que cardenal');
+  check(iguanaIdx > cardenalIdx, 'palettes.css: cardenal antes que iguana');
   
   // ─── 2. color-scheme no en :root ────────────────────────────────────────────
   
@@ -146,8 +146,8 @@ test('componentes/palette-and-snippet-contract', async () => {
     'demo-code.js: MutationObserver en <html> data-theme/data-palette',
   );
   check(
-    /currentPalette[\s\S]*contapyme|dataset\.palette\s*\|\|\s*['"]contapyme['"]/.test(demoCode),
-    'demo-code.js: fallback de paleta en snippet = contapyme',
+    /currentPalette[\s\S]*delfin|dataset\.palette\s*\|\|\s*['"]delfin['"]/.test(demoCode),
+    'demo-code.js: fallback de paleta en snippet = delfin',
   );
   check(
     !/buildDemoSnippetStyles/.test(demoCode),
@@ -163,7 +163,7 @@ test('componentes/palette-and-snippet-contract', async () => {
   }
   
   console.log(
-    'palette-and-snippet-contract.test.ts: PASS — default contapyme, sin color-scheme en :root, canvas libre, snippets con contexto reactivo',
+    'palette-and-snippet-contract.test.ts: PASS — default delfin, sin color-scheme en :root, canvas libre, snippets con contexto reactivo',
   );
   return;
 });

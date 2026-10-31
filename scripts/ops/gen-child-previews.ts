@@ -348,7 +348,7 @@ for (const [tag, cfg] of Object.entries(CHILDREN)) {
   const styles = cfg.styles ? `\n  <style>\n    ${cfg.styles}\n  </style>` : '';
 
   const html = `<!DOCTYPE html>
-<html lang="es" class="theme-dark" data-theme="dark" data-palette="insoft">
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="delfin">
 <head>
   <meta charset="UTF-8" />
   <script src="../../scripts/preview-boot.js"></script>

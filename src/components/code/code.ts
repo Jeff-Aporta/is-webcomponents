@@ -142,11 +142,13 @@ class IswcCode extends ElementBase {
     this.#syncAriaOnHost();
     if (this.#themeConfig) applyThemeConfig(this, this.#themeConfig, this.#pageTheme());
     document.addEventListener('iswc-theme-change', this.#onThemeChange);
+    document.addEventListener('iswc-panda-change', this.#onThemeChange);
     if (!this.#booting) void this.#bootstrap();
   }
 
   override onDisconnected(): void {
     document.removeEventListener('iswc-theme-change', this.#onThemeChange);
+    document.removeEventListener('iswc-panda-change', this.#onThemeChange);
     clearTimeout(this.#hideTipTimer);
     if (this.#tooltip) this.#tooltip.open = false;
     // Conservar instancia al mover en el DOM; destruir solo si el documento
@@ -381,7 +383,9 @@ class IswcCode extends ElementBase {
   // —— private ——
 
   #pageTheme(): 'light' | 'dark' {
-    return document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+    const html = document.documentElement;
+    // Superficie efectiva: data-panda invierte el tema.
+    return (html.getAttribute('data-theme') === 'light') !== html.hasAttribute('data-panda') ? 'light' : 'dark';
   }
 
   #syncThemeFromPage(): void {

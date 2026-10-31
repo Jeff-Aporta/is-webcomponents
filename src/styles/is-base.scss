@@ -2,16 +2,21 @@
  *
  * SEPARADO de palettes.css: este archivo no toca variables de marca.
  * Carga primero este CSS, luego (opcional) palettes.css si quieres que el
- * HTML pinte con marca InSoft / ContaPyme / AgroWin.
+ * HTML pinte con una de las 25 paletas del kit (delfin, cardenal, iguana,
+ * turquesa, ...; ver src/styles/palettes.json).
  *
  *   <link rel="stylesheet" href=".../is-base.min.css">
- *   <!-- solo si quieres paleta de marca: -->
+ *   <!-- solo si quieres paleta: -->
  *   <link rel="stylesheet" href=".../palettes.min.css">
  *
  * Sin palettes.css el sitio arranca con tema dark/light neutro (gris).
- * La paleta por defecto si se carga palettes.css es contapyme (no necesitas
- * añadir nada más), pero basta con `data-palette="insoft"` o
- * `data-palette="agrowin"` en cualquier ancestro para cambiarla.
+ * La paleta por defecto si se carga palettes.css es delfin (no necesitas
+ * añadir nada más), pero basta con `data-palette="turquesa"` (o cualquier
+ * otra) en el nodo con data-theme para cambiarla.
+ *
+ * Modificador Panda: `data-panda` junto a `data-theme` invierte el juego de
+ * superficies y textos (claro pinta el oscuro y viceversa). Aquí se invierte
+ * el neutro; palettes.css invierte las superficies tintadas de cada paleta.
  *
  * Esta hoja SOLO declara tokens (variables). No pinta el canvas de la página
  * (`html`/`body`): cada app define su `background`. Tampoco fuerza
@@ -174,17 +179,57 @@
   --iswc-scrollbar-thumb-hover: color-mix(in srgb, var(--iswc-accent) 45%, var(--iswc-control-border));
 }
 
-/* color-scheme solo con data-theme="dark": no oscurece el canvas del browser
+/* color-scheme solo con data-theme: no oscurece el canvas del browser
    al cargar is-base.min.css sin más. La app (o un wrapper con [data-theme])
-   es quien activa el esquema. */
-[data-theme="dark"] {
+   es quien activa el esquema. El bloque oscuro repite los valores de :root
+   para que un contenedor dark dentro de un html light (o un light con
+   data-panda) vuelva al juego oscuro. */
+[data-theme="dark"]:not([data-panda]),
+[data-theme="light"][data-panda] {
   color-scheme: dark;
+  --iswc-bg: #0b0d10;
+  --iswc-bg-soft: #14181d;
+  --iswc-bg-elev: #1c2128;
+  --iswc-border: #2a3038;
+  --iswc-border-soft: #1f242b;
+  --iswc-text: #e6e8eb;
+  --iswc-text-soft: #a8b0bb;
+  --iswc-text-dim: #7a8390;
+  --iswc-code-bg: #0f1318;
+  --iswc-code-text: #d4d8de;
+  --iswc-shadow: 0 1px 0 rgb(255 255 255 / 3%), 0 8px 24px rgb(0 0 0 / 25%);
+  --iswc-control-bg: #21262d;
+  --iswc-control-bg-hover: #30363d;
+  --iswc-control-bg-active: #3d444d;
+  --iswc-control-border: #59636e;
+  --iswc-control-text: #f0f3f6;
+  --iswc-success-text: color-mix(in srgb, var(--iswc-color-success) 70%, white);
+  --iswc-success-soft: color-mix(in srgb, var(--iswc-color-success) 18%, transparent);
+  --iswc-success-soft-active: color-mix(in srgb, var(--iswc-color-success) 28%, transparent);
+  --iswc-warning-text: color-mix(in srgb, var(--iswc-color-warning) 78%, white);
+  --iswc-warning-soft: color-mix(in srgb, var(--iswc-color-warning) 18%, transparent);
+  --iswc-warning-soft-active: color-mix(in srgb, var(--iswc-color-warning) 28%, transparent);
+  --iswc-danger-text: color-mix(in srgb, var(--iswc-color-danger) 68%, white);
+  --iswc-danger-soft: color-mix(in srgb, var(--iswc-color-danger) 18%, transparent);
+  --iswc-danger-soft-active: color-mix(in srgb, var(--iswc-color-danger) 28%, transparent);
+  --iswc-info-text: color-mix(in srgb, var(--iswc-color-info) 68%, white);
+  --iswc-info-soft: color-mix(in srgb, var(--iswc-color-info) 18%, transparent);
+  --iswc-info-soft-active: color-mix(in srgb, var(--iswc-color-info) 28%, transparent);
+  --iswc-error-text: color-mix(in srgb, var(--iswc-color-error) 70%, white);
+  --iswc-error-soft: color-mix(in srgb, var(--iswc-color-error) 18%, transparent);
+  --iswc-error-soft-active: color-mix(in srgb, var(--iswc-color-error) 28%, transparent);
+  --iswc-scrollbar-track: transparent;
+  --iswc-scrollbar-thumb: color-mix(in srgb, var(--iswc-control-border) 65%, transparent);
+  --iswc-scrollbar-thumb-hover: color-mix(in srgb, var(--iswc-accent) 45%, var(--iswc-control-border));
+  --iswc-brand-text: hsl(from var(--iswc-color-brand) h s 76%);
+  --iswc-brand-soft: rgb(from var(--iswc-accent) r g b / 18%);
+  --iswc-brand-soft-active: rgb(from var(--iswc-accent) r g b / 28%);
 }
 
 /* Light: tokens de superficie/control + brand-text pasteles. Un solo bloque
    porque los tres cambian a la vez. */
-:root[data-theme="light"],
-[data-theme="light"] {
+[data-theme="light"]:not([data-panda]),
+[data-theme="dark"][data-panda] {
   color-scheme: light;
   --iswc-bg: #fff;
   --iswc-bg-soft: #f6f8fa;
@@ -203,7 +248,6 @@
   --iswc-control-border: #adb5bd;
   --iswc-control-text: #212529;
   --iswc-control-height: 2.5em;
-  --iswc-on-brand: #fff;
   --iswc-success-text: var(--iswc-color-success-stronger);
   --iswc-success-soft: var(--iswc-color-success-paler);
   --iswc-success-soft-active: var(--iswc-color-success-pale);

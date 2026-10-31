@@ -34,7 +34,7 @@ Un solo CDN: el kit, pineado por SHA de 40 (nunca `@main`). Nada de `isc-swagger
 
 ```html
 <!doctype html>
-<html lang="es" data-theme="dark" data-palette="contapyme">
+<html lang="es" data-theme="dark" data-palette="delfin">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">

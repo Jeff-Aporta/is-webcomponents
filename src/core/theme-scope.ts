@@ -38,7 +38,9 @@ export function findThemeContainer(from: Element | null | undefined) {
 export function readTheme(el: Element | null | undefined) {
   if (!el) return 'dark';
   const dt = el.getAttribute?.('data-theme') || (el as HTMLElement).dataset?.theme;
-  return dt === 'light' ? 'light' : 'dark';
+  // Tema EFECTIVO de las superficies: `data-panda` (junto a data-theme) las invierte.
+  const panda = !!el.hasAttribute?.('data-panda');
+  return (dt === 'light') !== panda ? 'light' : 'dark';
 }
 
 /**
@@ -49,7 +51,7 @@ export function readTheme(el: Element | null | undefined) {
  */
 export function watchThemeContainer(container: Element, onChange: () => void) {
   const obs = new MutationObserver(onChange);
-  obs.observe(container, { attributes: true, attributeFilter: ['data-theme'] });
+  obs.observe(container, { attributes: true, attributeFilter: ['data-theme', 'data-panda'] });
   document.addEventListener('iswc-theme-change', onChange);
   return () => {
     obs.disconnect();

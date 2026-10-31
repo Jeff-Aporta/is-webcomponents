@@ -5,64 +5,93 @@
   "title": "&lt;iswc-palette-selector&gt;",
   "titleHtml": false,
   "styles": [
-    ".row { display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; }",
-    "    .event-log {",
-    "      margin-top: 12px;",
-    "      padding: 12px;",
-    "      border: 1px solid var(--iswc-border);",
-    "      border-radius: 8px;",
-    "      background: var(--iswc-bg-soft);",
-    "      font-family: var(--iswc-mono);",
-    "      font-size: 0.8rem;",
-    "      min-height: 2em;",
-    "      color: var(--iswc-text);",
-    "    }",
-    "    .event-log .hint { opacity: 0.6; }",
-    "",
-    "    /* --- Trigger tipo \"logo\" — el consumer pone SU HTML --- */",
-    "    .logo-trigger {",
-    "      display: inline-flex;",
-    "      align-items: baseline;",
-    "      gap: 0;",
-    "      padding: 0.45em 0.85em;",
-    "      background: var(--iswc-logo-bg, #fff);",
-    "      color: var(--iswc-logo-fg, #111);",
-    "      border-radius: 0.45em;",
-    "      font: inherit;",
-    "      font-weight: 800;",
-    "      letter-spacing: -0.045em;",
-    "      text-transform: lowercase;",
-    "      transition: filter 120ms ease, transform 120ms ease;",
-    "    }",
-    "    .logo-trigger:hover { filter: brightness(1.05); }",
-    "    .logo-trigger:active { transform: translateY(1px); }",
-    "    .logo-trigger__lead { color: #000; }",
-    "    .logo-trigger__accent { color: var(--iswc-accent, dodgerblue); }",
-    "    .logo-trigger__caret {",
-    "      margin-left: 0.5em;",
-    "      font-size: 0.95em;",
-    "      opacity: 0.7;",
-    "      color: var(--iswc-text, #111);",
-    "    }"
+    ".row { display: flex; flex-wrap: wrap; gap: 1em; align-items: center; }",
+    ".scoped { margin-top: 1em; padding: 1em; border-radius: 0.6em; border: 1px solid var(--iswc-border); background: var(--iswc-bg); color: var(--iswc-text); }",
+    ".scoped p { margin: 0.6em 0 0; color: var(--iswc-text-soft); }",
+    ".scoped .contrast { color: var(--iswc-contrast-text); font-weight: 600; }",
+    ".logo-trigger { display: inline-flex; align-items: center; gap: 0.5em; padding: 0.45em 0.85em; background: var(--iswc-color-brand); color: var(--iswc-on-brand); border: 0; border-radius: 0.45em; font: inherit; font-weight: 700; }",
+    ".event-log { margin-top: 0.75em; padding: 0.75em; border: 1px solid var(--iswc-border); border-radius: 0.5em; background: var(--iswc-bg-soft); font-family: var(--iswc-mono); font-size: 0.8em; min-height: 2em; color: var(--iswc-text); }"
   ],
   "storageKey": "docs-iswc-palette-selector",
   "sections": [
     {
       "id": "intro",
       "title": "Uso",
-      "lede": "Selector visual de paletas de marca. Por defecto expone las 3 paletas de <code class=\"code\">styles/palettes.css</code>; el consumidor puede pasar su propio array JSON para usar SU marca y SU CSS, y opcionalmente inyectar un trigger personalizado en el slot <code class=\"code\">trigger</code>.",
+      "lede": "Elige entre las 25 paletas generales del kit. Cada opción muestra su identidad (fondo, papel, main, contraste y texto), su origen y su ánimo; van agrupadas por familia de tono y se filtran con el buscador. El interruptor <strong>Panda</strong> invierte las superficies conservando main y contraste. Con <code class=\"code\">scope=\"root\"</code> escribe <code class=\"code\">data-palette</code>/<code class=\"code\">data-panda</code> en <code class=\"code\">&lt;html&gt;</code> y persiste en <code class=\"code\">iswc:app-cfg</code>.",
       "blocks": [
         {
           "kind": "demo",
           "html": [
             "<div class=\"row\">",
-            "            <iswc-palette-selector id=\"defaultPalette\" scope=\"root\"></iswc-palette-selector>",
-            "            <iswc-theme-toggle id=\"defaultTheme\" scope=\"root\"></iswc-theme-toggle>",
-            "          </div>",
-            "          <div data-palette=\"insoft\" data-theme=\"light\" class=\"theme-light\" style=\"margin-top:1rem;padding:1rem;border-radius:0.6em;background:var(--iswc-bg);color:var(--iswc-text)\">",
-            "            <iswc-palette-selector scope=\"closest\"></iswc-palette-selector>",
-            "            <iswc-theme-toggle scope=\"closest\"></iswc-theme-toggle>",
-            "          </div>"
+            "  <iswc-palette-selector id=\"defaultPalette\" scope=\"root\"></iswc-palette-selector>",
+            "  <iswc-theme-toggle id=\"defaultTheme\" scope=\"root\"></iswc-theme-toggle>",
+            "</div>",
+            "<div class=\"scoped\" data-palette=\"turquesa\" data-theme=\"light\">",
+            "  <iswc-palette-selector scope=\"closest\" value=\"turquesa\"></iswc-palette-selector>",
+            "  <p>Contenedor con su propia paleta y tema. <span class=\"contrast\">Texto en el color de contraste.</span></p>",
+            "</div>"
+          ],
+          "target": "#defaultPalette",
+          "controls": [
+            {
+              "control": "select",
+              "prop": "attr:value",
+              "label": "value",
+              "options": [
+                "delfin",
+                "cardenal",
+                "iguana",
+                "rubi",
+                "esmeralda",
+                "zafiro",
+                "citrino",
+                "orquidea",
+                "turquesa",
+                "marte",
+                "granate",
+                "neptuno",
+                "peridoto",
+                "jade",
+                "aguamarina",
+                "amatista",
+                "menta",
+                "luna",
+                "jupiter",
+                "flamenco",
+                "lapislazuli",
+                "cobre",
+                "tanzanita",
+                "olivino",
+                "ambar"
+              ]
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:panda",
+              "label": "panda"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:hide-panda",
+              "label": "hide-panda"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "scale",
+      "title": "Escala por font-size",
+      "lede": "Todas las medidas van en <code class=\"code\">em</code>: el <code class=\"code\">font-size</code> del host o de un ancestro escala el selector entero (trigger, panel, muestras, interruptor).",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": [
+            "<div class=\"row\">",
+            "  <iswc-palette-selector scope=\"closest\" style=\"font-size: 0.8em\"></iswc-palette-selector>",
+            "  <iswc-palette-selector scope=\"closest\"></iswc-palette-selector>",
+            "  <iswc-palette-selector scope=\"closest\" style=\"font-size: 1.3em\"></iswc-palette-selector>",
+            "</div>"
           ]
         }
       ]
@@ -70,51 +99,31 @@
     {
       "id": "custom-trigger",
       "title": "Botón personalizado",
-      "lede": "El <code class=\"code\">slot=\"trigger\"</code> del componente permite al consumidor inyectar SU HTML para el botón. Esto es ideal cuando el botón lleva el logo de marca (dos mitades con colores) o cualquier look que el trigger interno no represente bien.",
+      "lede": "El <code class=\"code\">slot=\"trigger\"</code> reemplaza el botón interno por tu HTML. El host lleva <code class=\"code\">data-palette</code> de la paleta activa, así que el slot hereda sus tokens (<code class=\"code\">--iswc-color-brand</code>, <code class=\"code\">--iswc-on-brand</code>…).",
       "blocks": [
         {
           "kind": "demo",
           "html": [
-            "<div class=\"row\">",
-            "            <iswc-palette-selector id=\"logoPalette\">",
-            "              <button type=\"button\" slot=\"trigger\" class=\"logo-trigger\" aria-label=\"Elegir paleta de marca\">",
-            "                <span class=\"logo-trigger__lead\" data-role=\"lead\">in</span><span class=\"logo-trigger__accent\" data-role=\"accent\">soft</span>",
-            "                <iswc-icon class=\"logo-trigger__caret\" icon=\"mdi:chevron-down\" aria-hidden=\"true\"></iswc-icon>",
-            "              </button>",
-            "            </iswc-palette-selector>",
-            "          </div>"
+            "<iswc-palette-selector id=\"logoPalette\" scope=\"closest\">",
+            "  <button type=\"button\" slot=\"trigger\" class=\"logo-trigger\" aria-label=\"Elegir paleta\">",
+            "    Mi app <iswc-icon icon=\"mdi:chevron-down\" aria-hidden=\"true\"></iswc-icon>",
+            "  </button>",
+            "</iswc-palette-selector>"
           ]
-        },
-        {
-          "kind": "html",
-          "html": "<p class=\"lede\">El sitio actualiza el contenido del trigger cuando cambia la paleta (lead/accent pueden cambiar con la marca). Mira el código demo para ver cómo se sincroniza.</p>"
         }
       ]
     },
     {
       "id": "custom",
-      "title": "Paletas personalizadas",
-      "lede": "Cada paleta trae bg y content. content es json2xml: un objeto { iswc-text: { color, content } } se vuelve el elemento iswc-text. Al cambiar value se repinta el botón.",
+      "title": "Catálogo propio",
+      "lede": "Pasa tu propio catálogo en <code class=\"code\">palettes</code>: cada entrada son semillas (<code class=\"code\">h/s/b</code> y, opcionales, <code class=\"code\">contrastH/S/L</code>, <code class=\"code\">tint</code>, <code class=\"code\">fontTint</code>, <code class=\"code\">family</code>, <code class=\"code\">origin</code>, <code class=\"code\">mood</code>, <code class=\"code\">css</code>).",
       "blocks": [
         {
           "kind": "demo",
           "html": [
             "<div class=\"row\" data-palette=\"acme\">",
-            "            <iswc-palette-selector id=\"customPalette\" scope=\"closest\" value=\"acme\" palettes='[{\"value\":\"acme\",\"label\":\"Acme Corp\",\"bg\":\"#fff\",\"fg\":\"#111\",\"content\":[{\"iswc-text\":{\"color\":\"#111\",\"content\":[\"ac\"]}},{\"iswc-text\":{\"color\":\"#e03131\",\"content\":[\"me\"]}}]},{\"value\":\"ocean\",\"label\":\"Ocean\",\"bg\":\"#fff\",\"fg\":\"#111\",\"content\":[{\"iswc-text\":{\"color\":\"#111\",\"content\":[\"o\"]}},{\"iswc-text\":{\"color\":\"#0ea5e9\",\"content\":[\"cean\"]}}]},{\"value\":\"forest\",\"label\":\"Forest\",\"bg\":\"#fff\",\"fg\":\"#111\",\"content\":[{\"iswc-text\":{\"color\":\"#111\",\"content\":[\"f\"]}},{\"iswc-text\":{\"color\":\"#22c55e\",\"content\":[\"orest\"]}}]},{\"value\":\"dusk\",\"label\":\"Dusk\",\"bg\":\"#fff\",\"fg\":\"#111\",\"content\":[{\"iswc-text\":{\"color\":\"#111\",\"content\":[\"d\"]}},{\"iswc-text\":{\"color\":\"#a855f7\",\"content\":[\"usk\"]}}]}]'></iswc-palette-selector>",
-            "          </div>"
-          ],
-          "controls": [
-            {
-              "control": "select",
-              "prop": "attr:value",
-              "label": "value",
-              "options": [
-                "acme",
-                "ocean",
-                "forest",
-                "dusk"
-              ]
-            }
+            "  <iswc-palette-selector id=\"customPalette\" scope=\"closest\" value=\"acme\" hide-panda palettes='[{\"value\": \"acme\", \"label\": \"Acme\", \"h\": 262, \"s\": \"70%\", \"b\": \"52%\", \"family\": \"violetas\", \"origin\": \"marca propia\", \"mood\": \"Violeta corporativo.\"}, {\"value\": \"oceano\", \"label\": \"Océano\", \"h\": 195, \"s\": \"85%\", \"b\": \"38%\", \"family\": \"azules\", \"origin\": \"marca propia\", \"mood\": \"Azul marino profundo.\"}, {\"value\": \"bosque\", \"label\": \"Bosque\", \"h\": 140, \"s\": \"55%\", \"b\": \"32%\", \"family\": \"verdes\", \"origin\": \"marca propia\", \"mood\": \"Verde sereno.\", \"tint\": 1.3}]'></iswc-palette-selector>",
+            "</div>"
           ]
         }
       ]
@@ -122,13 +131,19 @@
     {
       "id": "events",
       "title": "Eventos",
-      "lede": "El componente emite <code class=\"code\">iswc-palette-change</code> cuando el usuario selecciona una paleta. <code class=\"code\">detail.value</code> trae el identificador, <code class=\"code\">detail.palette</code> trae el objeto entero.",
+      "lede": "<code class=\"code\">iswc-palette-change</code> lleva <code class=\"code\">{ value, palette, container }</code>; <code class=\"code\">iswc-panda-change</code> lleva <code class=\"code\">{ panda, container }</code>. Ambos burbujean y son composed.",
       "blocks": [
         {
           "kind": "demo",
           "html": [
-            "<iswc-palette-selector id=\"evPalette\"></iswc-palette-selector>",
-            "          <div class=\"event-log\" id=\"evLog\"><div class=\"hint\">Selecciona una paleta para ver el evento.</div></div>"
+            "<iswc-palette-selector id=\"evPalette\" scope=\"closest\"></iswc-palette-selector>",
+            "<div class=\"event-log\" id=\"evLog\">Selecciona una paleta o activa Panda.</div>",
+            "<script>",
+            "  const log = document.getElementById('evLog');",
+            "  const sel = document.getElementById('evPalette');",
+            "  sel.addEventListener('iswc-palette-change', (e) => { log.textContent = 'iswc-palette-change → ' + e.detail.value; });",
+            "  sel.addEventListener('iswc-panda-change', (e) => { log.textContent = 'iswc-panda-change → ' + e.detail.panda; });",
+            "</script>"
           ]
         }
       ]
@@ -140,78 +155,198 @@
         {
           "kind": "table",
           "columns": [
-            "Atributo"
-          ],
-          "rows": [
-            [
-              "<code>palettes</code>"
-            ],
-            [
-              "<code>value</code>"
-            ],
-            [
-              "<code>storage-key</code> <span class=\"iswc-default-marker\" aria-hidden=\"true\">★</span>"
-            ],
-            [
-              "<code>aria-label</code> <span class=\"iswc-default-marker\" aria-hidden=\"true\">★</span>"
-            ]
-          ]
-        },
-        {
-          "kind": "html",
-          "html": "<h3>Slots</h3>"
-        },
-        {
-          "kind": "table",
-          "columns": [
-            "Slot",
-            "Descripción"
-          ],
-          "rows": [
-            [
-              "<code>trigger</code>",
-              "Sustituye el botón trigger interno. El consumidor pone SU HTML; el componente aún abre/cierra el menu y emite <code>iswc-palette-change</code>."
-            ]
-          ]
-        },
-        {
-          "kind": "html",
-          "html": "<h3>Campos del objeto <code>palette</code></h3>"
-        },
-        {
-          "kind": "table",
-          "columns": [
-            "Campo",
+            "Atributo",
             "Uso"
           ],
           "rows": [
             [
+              "<code>palettes</code>",
+              "catálogo propio (JSON); default: las 25 del kit"
+            ],
+            [
               "<code>value</code>",
-              "identificador (requerido)"
+              "paleta activa → <code>data-palette</code> del target"
             ],
             [
-              "<code>label</code>",
-              "texto en el menu y el trigger interno"
+              "<code>panda</code>",
+              "modificador Panda → <code>data-panda</code> del target"
             ],
             [
-              "<code>accent</code>",
-              "color del swatch en el menu"
+              "<code>hide-panda</code>",
+              "oculta el interruptor Panda"
             ],
             [
-              "<code>css</code>",
-              "URL de <code>&lt;link rel=\"stylesheet\"&gt;</code> cargado al seleccionar"
+              "<code>scope</code>",
+              "<code>root</code> (default) | <code>closest</code>"
             ],
             [
-              "<code>lead</code> + <code>accentLabel</code>",
-              "dos mitades para el trigger interno (estilo logo)"
+              "<code>aria-label</code>",
+              "etiqueta del trigger"
+            ]
+          ]
+        },
+        {
+          "kind": "html",
+          "html": "<h3>Paletas</h3>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "value",
+            "Nombre",
+            "Familia",
+            "Origen"
+          ],
+          "rows": [
+            [
+              "<code>delfin</code>",
+              "Delfín",
+              "Azules y cianes",
+              "dodgerblue"
             ],
             [
-              "<code>leadColor</code> + <code>accentColor</code>",
-              "colores de las dos mitades"
+              "<code>cardenal</code>",
+              "Cardenal",
+              "Rojos",
+              "rojo de marca #e03131"
             ],
             [
-              "<code>bg</code> + <code>fg</code>",
-              "background y color del trigger interno"
+              "<code>iguana</code>",
+              "Iguana",
+              "Verdes",
+              "yellowgreen"
+            ],
+            [
+              "<code>rubi</code>",
+              "Rubí",
+              "Rojos",
+              "red rgb(200,0,0)"
+            ],
+            [
+              "<code>esmeralda</code>",
+              "Esmeralda",
+              "Verdes",
+              "green rgb(0,200,0)"
+            ],
+            [
+              "<code>zafiro</code>",
+              "Zafiro",
+              "Azules y cianes",
+              "blue rgb(0,0,200)"
+            ],
+            [
+              "<code>citrino</code>",
+              "Citrino",
+              "Naranjas y amarillos",
+              "yellow rgb(200,200,0)"
+            ],
+            [
+              "<code>orquidea</code>",
+              "Orquídea",
+              "Violetas y rosas",
+              "magenta rgb(200,0,200)"
+            ],
+            [
+              "<code>turquesa</code>",
+              "Turquesa",
+              "Azules y cianes",
+              "cyan rgb(0,200,200)"
+            ],
+            [
+              "<code>marte</code>",
+              "Marte",
+              "Naranjas y amarillos",
+              "tomato rgb(219,48,0)"
+            ],
+            [
+              "<code>granate</code>",
+              "Granate",
+              "Rojos",
+              "crimson rgb(200,40,80)"
+            ],
+            [
+              "<code>neptuno</code>",
+              "Neptuno",
+              "Azules y cianes",
+              "skyGreen rgb(15,146,216)"
+            ],
+            [
+              "<code>peridoto</code>",
+              "Peridoto",
+              "Verdes",
+              "lemonGreen rgb(132,233,16)"
+            ],
+            [
+              "<code>jade</code>",
+              "Jade",
+              "Verdes",
+              "militaryGreen rgb(26,128,0)"
+            ],
+            [
+              "<code>aguamarina</code>",
+              "Aguamarina",
+              "Azules y cianes",
+              "aquaBlue rgb(30,168,202)"
+            ],
+            [
+              "<code>amatista</code>",
+              "Amatista",
+              "Violetas y rosas",
+              "purple rgb(128,0,128)"
+            ],
+            [
+              "<code>menta</code>",
+              "Menta",
+              "Verdes",
+              "springGreen rgb(19,200,132)"
+            ],
+            [
+              "<code>luna</code>",
+              "Luna",
+              "Neutros",
+              "gray rgb(128,128,128)"
+            ],
+            [
+              "<code>jupiter</code>",
+              "Júpiter",
+              "Naranjas y amarillos",
+              "orange rgb(200,128,0)"
+            ],
+            [
+              "<code>flamenco</code>",
+              "Flamenco",
+              "Violetas y rosas",
+              "pink rgb(255,128,200)"
+            ],
+            [
+              "<code>lapislazuli</code>",
+              "Lapislázuli",
+              "Azules y cianes",
+              "navy rgb(0,52,163)"
+            ],
+            [
+              "<code>cobre</code>",
+              "Cobre",
+              "Naranjas y amarillos",
+              "brown rgb(143,52,0)"
+            ],
+            [
+              "<code>tanzanita</code>",
+              "Tanzanita",
+              "Violetas y rosas",
+              "violet rgb(128,43,200)"
+            ],
+            [
+              "<code>olivino</code>",
+              "Olivino",
+              "Verdes",
+              "olive rgb(128,150,0)"
+            ],
+            [
+              "<code>ambar</code>",
+              "Ámbar",
+              "Naranjas y amarillos",
+              "amber rgb(255,191,0)"
             ]
           ]
         },
@@ -228,7 +363,11 @@
           "rows": [
             [
               "<code>iswc-palette-change</code>",
-              "<code>{ value, palette }</code>"
+              "<code>{ value, palette, container }</code>"
+            ],
+            [
+              "<code>iswc-panda-change</code>",
+              "<code>{ panda, container }</code>"
             ]
           ]
         },
@@ -238,12 +377,7 @@
         },
         {
           "kind": "html",
-          "html": [
-            "<ul>",
-            "          <li><code>&lt;html data-palette=\"X\"&gt;</code> — aplica la paleta activa</li>",
-            "          <li><code>localStorage[\"iswc:app-cfg\"].palette = X</code> — persiste la elección</li>",
-            "        </ul>"
-          ]
+          "html": "<ul><li><code>data-palette=\"X\"</code> y <code>data-panda</code> en el target del scope</li><li><code>localStorage[\"iswc:app-cfg\"]</code> → <code>palette</code> y <code>panda</code> (solo con target <code>&lt;html&gt;</code>)</li></ul>"
         }
       ]
     }
@@ -251,57 +385,39 @@
   "ficha": {
     "sections": {
       "anatomia": {
-        "content": "Selector visual de paletas de marca. Por defecto expone las 3 paletas de <code class=\"code\">styles/palettes.css</code>; el consumidor puede pasar su propio array JSON para usar SU marca y SU CSS, y opcionalmente inyectar un trigger personalizado en el slot <code class=\"code\">trigger</code>."
+        "content": "Trigger con la muestra (main + contraste) y el nombre de la paleta; panel con buscador, interruptor Panda y opciones agrupadas por familia de tono. Cada opción muestra fondo, papel, main, contraste y texto de su paleta en el tema activo."
       },
       "atributos": {
         "table": [
           {
             "name": "<code>palettes</code>",
             "type": "JSON string",
-            "default": "3 paletas InSoft / ContaPyme / AgroWin"
+            "default": "las 25 paletas del kit"
           },
           {
             "name": "<code>value</code>",
             "type": "string",
-            "default": "la primera del array"
+            "default": "la guardada, la del target o la primera"
           },
           {
-            "name": "<code>storage-key</code>",
-            "type": "string",
-            "default": "<code>iswc-palette</code>"
+            "name": "<code>panda</code>",
+            "type": "boolean",
+            "default": "false"
+          },
+          {
+            "name": "<code>hide-panda</code>",
+            "type": "boolean",
+            "default": "false"
+          },
+          {
+            "name": "<code>scope</code>",
+            "type": "root | closest",
+            "default": "root"
           },
           {
             "name": "<code>aria-label</code>",
             "type": "string",
-            "default": "Elegir paleta"
-          },
-          {
-            "name": "<code>value</code>",
-            "desc": "identificador (requerido)"
-          },
-          {
-            "name": "<code>label</code>",
-            "desc": "texto en el menu y el trigger interno"
-          },
-          {
-            "name": "<code>accent</code>",
-            "desc": "color del swatch en el menu"
-          },
-          {
-            "name": "<code>css</code>",
-            "desc": "URL de <code>&lt;link rel=\"stylesheet\"&gt;</code> cargado al seleccionar"
-          },
-          {
-            "name": "<code>lead</code> + <code>accentLabel</code>",
-            "desc": "dos mitades para el trigger interno (estilo logo)"
-          },
-          {
-            "name": "<code>leadColor</code> + <code>accentColor</code>",
-            "desc": "colores de las dos mitades"
-          },
-          {
-            "name": "<code>bg</code> + <code>fg</code>",
-            "desc": "background y color del trigger interno"
+            "default": "Paleta X — elegir paleta"
           }
         ]
       },
@@ -309,7 +425,11 @@
         "table": [
           {
             "evento": "<code>iswc-palette-change</code>",
-            "cuando": "<code>{ value, palette }</code>"
+            "cuando": "<code>{ value, palette, container }</code>"
+          },
+          {
+            "evento": "<code>iswc-panda-change</code>",
+            "cuando": "<code>{ panda, container }</code>"
           }
         ]
       },
@@ -317,7 +437,7 @@
         "table": [
           {
             "slot": "<code>trigger</code>",
-            "desc": "Sustituye el botón trigger interno. El consumidor pone SU HTML; el componente aún abre/cierra el menu y emite <code>iswc-palette-change</code>."
+            "desc": "Sustituye el botón interno; el componente sigue abriendo el panel y emitiendo eventos."
           }
         ]
       },
@@ -336,5 +456,5 @@
       "states"
     ]
   },
-  "description": "Selector de la paleta de colores de la aplicación (InSoft, ContaPyme, AgroWin) que recuerda la elección."
+  "description": "Selector de las 25 paletas del kit (agrupadas por familia, con buscador y muestras de identidad) y del modificador Panda; recuerda la elección."
 }

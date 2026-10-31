@@ -1,7 +1,6 @@
 import components from '../manifest.js';
 import { leerAppCfg } from '../core/app-cfg.js';
-import { PALETTES } from '../styles/palette-build.js';
-import { type PaletteConfig } from '../styles/schemas/palette-build.schemas.js';
+import { DEFAULT_PALETTE, PALETTES } from '../styles/palette-build.js';
 import type { ComponentManifestItem } from '../manifest.schemas.js';
 import { hasControlledPreview, hasCachedPreview, loadPreview } from '../previews/registry.js';
 import { collectIsTags, GALLERY_CHROME_TAGS } from '../cdn/collect-iswc-tags.js';
@@ -97,7 +96,6 @@ const shellBrand = el<HTMLAnchorElement>('shellBrand');
 const params = new URLSearchParams(location.search);
 const themes = new Set<ThemeName>(['light', 'dark']);
 const palettes = new Set<PaletteName>(PALETTES.map((p) => p.value as PaletteName));
-const brands: Record<string, PaletteConfig> = Object.fromEntries(PALETTES.map((p) => [p.value, p]));
 
 // --- b64url helpers (inline; pattern from isa-patyia-paws router.ts) ---
 const b64urlEncode = (input: string): string => {
@@ -284,7 +282,7 @@ const paletteFromUrl = typeof stateFromUrl?.palette === 'string' ? stateFromUrl.
 const paletteStored = appCfg.palette ?? null;
 let palette: PaletteName = palettes.has(paletteFromUrl as PaletteName)
   ? (paletteFromUrl as PaletteName)
-  : (palettes.has(paletteStored as PaletteName) ? (paletteStored as PaletteName) : 'contapyme');
+  : (palettes.has(paletteStored as PaletteName) ? (paletteStored as PaletteName) : (DEFAULT_PALETTE as PaletteName));
 
 const componentFromUrl = typeof stateFromUrl?.component === 'string' ? stateFromUrl.component : null;
 const hashWantsIcons = location.hash.replace(/^#/, '') === 'icons';
@@ -491,8 +489,7 @@ function renderContext({ navSmooth = false }: { navSmooth?: boolean } = {}): voi
     node.setAttribute('aria-current', ds.tag === component.tag ? 'true' : 'false');
   }
   scheduleScrollNavToCurrent({ smooth: navSmooth });
-  const brandData = brands[palette] ?? brands.contapyme;
-  document.title = `${component.title} | ${brandData.label}`;
+  document.title = `${component.title} | iswc`;
   updateUrl();
   sendContext();
 }

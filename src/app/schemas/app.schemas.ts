@@ -21,7 +21,7 @@ export const ThemeNameSchema = z.union([z.literal('light'), z.literal('dark')]);
 export type ThemeName = z.infer<typeof ThemeNameSchema>;
 
 
-export const PaletteNameSchema = z.union([z.literal('contapyme'), z.literal('insoft'), z.literal('agrowin')]);
+export const PaletteNameSchema = z.enum(['delfin', 'cardenal', 'iguana', 'rubi', 'esmeralda', 'zafiro', 'citrino', 'orquidea', 'turquesa', 'marte', 'granate', 'neptuno', 'peridoto', 'jade', 'aguamarina', 'amatista', 'menta', 'luna', 'jupiter', 'flamenco', 'lapislazuli', 'cobre', 'tanzanita', 'olivino', 'ambar']);
 export type PaletteName = z.infer<typeof PaletteNameSchema>;
 
 

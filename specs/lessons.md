@@ -19,8 +19,8 @@ Lecciones pagadas, agrupadas por tema. Cada fila: síntoma → regla/fix → gua
 | Lección | Regla | Guardián |
 |---|---|---|
 | `color-scheme: dark` en `:root` → el CDN oscurece apps claras | Solo en `.theme-dark`/`.theme-light`; sin `html,body { background }` en base/palettes | `theme-contract` |
-| Default de paleta `insoft` → marca incorrecta al pegar el CDN sin `data-palette` | Default `contapyme` en CSS/HTML/fallbacks/`DEFAULT_PALETTES[0]` | `palette-and-snippet-contract` |
-| Dos grafías de marca conviviendo (`inSoft` / `insoft`) | Unificar a `InSoft` en texto visible (identificador `insoft` en minúsculas intacto) | `brand-casing` |
+| Default de paleta equivocado → marca incorrecta al pegar el CDN sin `data-palette` | Default `delfin` en CSS/HTML/fallbacks/`DEFAULT_PALETTES[0]` | `palette-and-snippet-contract` |
+| Dos grafías de marca conviviendo (`inSoft` / `insoft`) | Unificar a `InSoft` en texto visible | `brand-casing` |
 | Shadows con `#fff`/`rgb(0 0 0 / X%)` hardcodeados sin override light | Override `[data-theme="light"]`: blanco a 75–92%, negro a 9–13% | — |
 | Halos/orbes con hues oscuros → manchas en light | `opacity` explícito (0.28–0.55) en light | — |
 

@@ -305,18 +305,14 @@ ${block(`.theme-light[data-palette="${safe}"]`, t.light)}
     const parts = name.split('-').filter(Boolean);
     const cap = (s: string) => (s ? s.charAt(0).toUpperCase() + s.slice(1) : '');
     const label = parts.map(cap).join(' ') || name;
-    const lead = parts.length >= 2 ? parts[0] : name.slice(0, Math.min(4, Math.max(1, name.length)));
-    const accentLabel = parts.length >= 2 ? parts.slice(1).map(cap).join('') : cap(name.slice(lead.length));
     return JSON.stringify([{
       value: name,
       label,
-      lead,
-      accentLabel,
+      origin: `marca propia · ${accentHex}`,
+      mood: 'Paleta generada en el taller.',
       h: hsb.h,
       s: hsb.s,
       b: hsb.b,
-      leadColor: '#111111',
-      accentColor: accentHex,
     }], null, 2);
   }
 

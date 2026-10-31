@@ -188,7 +188,7 @@ test('W23: contrast del neutral contra --iswc-bg (dark y light)', () => {
 
 test('W23: no hay overrides cromaticos del neutral en palettes.scss', () => {
   // El neutral es geometria, no identidad de marca. Ninguna paleta
-  // (insoft/contapyme/agrowin) debe pisar --iswc-color-neutral*; si lo
+  // (las 25 de palettes.json) debe pisar --iswc-color-neutral*; si lo
   // hiciera, la "centralidad" del gris se rompe por paleta.
   const PALETTES = join(root, 'src', 'styles', 'palettes.scss');
   const palettes = readFileSync(PALETTES, 'utf8');

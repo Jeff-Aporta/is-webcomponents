@@ -147,7 +147,7 @@ export class DiagramElementBase extends ElementBase {
     this.#jsonMo.observe(this, { childList: true, characterData: true, subtree: true });
     this.#themeObs = new MutationObserver(() => this.queueRender());
     this.#themeObs.observe(document.documentElement, {
-      attributes: true, attributeFilter: ['class', 'data-theme', 'data-palette'],
+      attributes: true, attributeFilter: ['class', 'data-theme', 'data-palette', 'data-panda'],
     });
     this.onDiagramConnected();
     this.queueRender();

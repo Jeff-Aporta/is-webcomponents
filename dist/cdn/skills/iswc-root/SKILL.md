@@ -134,7 +134,7 @@ Por defecto pin por **commit SHA** (sustituir `{{SHA}}` por la punta actual de
 Excepción: apps que declaran seguimiento continuo (por ejemplo `jagudeloe/frontend-webcomponents`) pueden usar `@main`.
 
 ```html
-<html lang="es" data-theme="dark" data-palette="contapyme">
+<html lang="es" data-theme="dark" data-palette="delfin">
 <head>
   <script type="module"
     src="https://cdn.jsdelivr.net/gh/Jeff-Aporta/iswc-root@{{SHA}}/dist/cdn/core/loader.min.js"></script>
@@ -150,6 +150,20 @@ Excepción: apps que declaran seguimiento continuo (por ejemplo `jagudeloe/front
 </body>
 </html>
 ```
+
+**Paletas (25) y Panda.** `data-palette` acepta una de las 25 paletas generales
+del kit (`src/styles/palettes.json`): rojos `cardenal` `rubi` `granate`;
+naranjas/amarillos `citrino` `marte` `jupiter` `cobre` `ambar`; verdes `iguana`
+`esmeralda` `peridoto` `jade` `menta` `olivino`; azules/cianes `delfin`
+(default) `zafiro` `turquesa` `neptuno` `aguamarina` `lapislazuli`;
+violetas/rosas `orquidea` `amatista` `flamenco` `tanzanita`; neutro `luna`.
+Cada una tiene main (`--iswc-color-brand`), contraste (`--iswc-color-contrast`,
+`--iswc-contrast-text`, `--iswc-contrast-soft`), bright (`--iswc-color-bright`),
+superficies y textos tintados por su tono. `data-panda` en el mismo nodo que
+`data-theme` invierte las superficies (claro pinta el juego oscuro de la
+paleta y viceversa). El usuario elige ambas con `<iswc-palette-selector>`
+(persisten en `iswc:app-cfg` → `palette`, `panda`); `initApp({ palette, panda })`
+fija los valores iniciales.
 
 - CSS de documento: `loadCSSBase` + `loadCSSPalettesDefault`. El CSS de cada `is-*` lo carga el propio tag.
 - Cargar solo los tags de la vista. `load('actions')` expande a cada `.min.js` de la categoría (no hay bundle). `load('all')` pide todos los tags, no un archivo único.

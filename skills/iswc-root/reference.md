@@ -96,7 +96,8 @@ Referencia real: wrappers de dominio tipo `tk-badges` → `iswc-tag`, `tk-chart`
 <script type="module" src="…/dist/cdn/all.min.js"></script>
 ```
 
-`data-theme="dark|light"` · `data-palette="contapyme|…"` en `<html>`.  
+`data-theme="dark|light"` · `data-palette="delfin|turquesa|…"` en `<html>`.  
+`data-panda` (junto a `data-theme`) invierte las superficies. 25 paletas: ver `src/styles/palettes.json`; tokens nuevos `--iswc-color-contrast`, `--iswc-contrast-text`, `--iswc-color-bright`.  
 CSS de app: preferir `var(--iswc-text)`, `var(--iswc-bg-soft)`, `var(--iswc-border-soft)`, `var(--iswc-accent)`.
 
 ## Cuando SÍ crear componente propio

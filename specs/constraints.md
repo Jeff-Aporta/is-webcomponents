@@ -43,7 +43,7 @@ Prohibiciones y reglas transversales ya pagadas. Detalle por dominio: [`componen
 - No query params sueltos (`?docs=`, `?theme=`, `?cdnTab=`). Estado en **solo** `?s=<b64url JSON>` (`url-key` = key dentro del JSON, no el nombre del param). La galería mergea al cambiar `component`. Módulo `_shared/url-nav.js`.
 - No `await load('all')` en boot de galería; deps on-demand (`GALLERY_CHROME_TAGS`).
 - No asignar `.preview` como own-property antes del upgrade del CE (ver boot: `setHostPreview` = `delete` + `whenDefined`).
-- No usar `prefers-color-scheme` como selector de tema; el tema es por `data-theme`/`data-palette` en `<html>` (default paleta `contapyme`).
+- No usar `prefers-color-scheme` como selector de tema; el tema es por `data-theme`/`data-palette` en `<html>` (default paleta `delfin`).
 
 ## Boot (galería)
 
@@ -66,7 +66,7 @@ Prohibiciones y reglas transversales ya pagadas. Detalle por dominio: [`componen
 ## Componentes
 
 - No inventar valores de enum no declarados en el `.js` / MD del tag (`VALID_*`); no inventar por analogía con otros DS. Un enum inválido no lanza error: el elemento se pinta con el default.
-- No hardcodear `color-scheme` en `:root` (solo `.theme-dark`/`.theme-light`); no `html,body { background }` en `is-base`/`palettes`; no default de paleta `insoft` (producto = `contapyme`).
+- No hardcodear `color-scheme` en `:root` (solo `.theme-dark`/`.theme-light`); no `html,body { background }` en `is-base`/`palettes`; default de paleta `delfin` (25 paletas generales, sin nombres de producto).
 - No presentar `marks-*`, engines internos ni `_shared/*` como custom elements públicos.
 - No crear `size` colors; usar `font-size` contextual y `em`. Controles nativos en shadow con `font: inherit`.
 - No CSS gigante en string dentro del `.ts`: archivo `.css` hermano + `adoptCss(shadow, import.meta.url)`. App/`tk-*` wrappers = datos → `is-*` + `.css` hermano + `IswcUi.adoptCss`.

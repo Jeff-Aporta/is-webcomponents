@@ -1,7 +1,7 @@
 // El dropdown de paleta del shell es <iswc-palette-selector scope="root">.
-// El look (pastilla + menu) vive en palette-selector.css:
-//   opacidad en los items no activos, check solo en el activo,
-//   swatch con --iswc-color-brand.
+// El look vive en palette-selector.css: panel con buscador + Panda, opciones
+// agrupadas con 5 muestras (bg, papel, main, contraste, texto), check solo en
+// el activo y todas las medidas en em.
 
 import { readFile } from 'node:fs/promises';
 import { join, dirname } from 'node:path';
@@ -39,17 +39,22 @@ test('componentes/palette-dropdown', async () => {
   check(/findPaletteContainer/.test(src),
     'palette-selector: closest no debe usar el propio host como target');
   
-  check(/\.menu \[role="option"\]\s*\{[^}]*opacity:\s*0\.55/.test(css),
-    'CSS: items no seleccionados con opacity 0.55');
-  check(/\.menu__check\s*\{[^}]*visibility:\s*hidden/.test(css),
-    'CSS: .menu__check oculto por defecto');
-  check(/\[aria-selected="true"\] \.menu__check\s*\{[^}]*visibility:\s*visible/.test(css),
+  check(/\.option__check\s*\{[^}]*visibility:\s*hidden/.test(css),
+    'CSS: .option__check oculto por defecto');
+  check(/\[aria-selected="true"\] \.option__check\s*\{[^}]*visibility:\s*visible/.test(css),
     'CSS: check visible solo con aria-selected=true');
-  check(/\.menu__swatch\s*\{[^}]*background:\s*var\(--iswc-color-brand\)/.test(css),
-    'CSS: swatch usa --iswc-color-brand');
-  check(/background:\s*var\(--iswc-logo-bg/.test(css),
-    'CSS: el trigger usa --iswc-logo-bg (pastilla del shell)');
-  
+  for (const k of ['bg', 'paper', 'main', 'contrast', 'font']) {
+    check(css.includes(`.sw--${k} {`) && new RegExp(`sw--${k} [{][^}]*background:`).test(css), `CSS: muestra .sw--${k}`);
+  }
+  check(/\[data-set="sd"\]/.test(css), 'CSS: las muestras cambian al juego oscuro (data-set="sd")');
+  check(/role="switch"/.test(src) && /iswc-panda-change/.test(src), 'palette-selector: interruptor Panda (role=switch + iswc-panda-change)');
+  check(/type="search"/.test(src), 'palette-selector: buscador');
+  check(/PALETTE_FAMILIES/.test(src) && /role', 'group'/.test(src), 'palette-selector: grupos por familia de tono');
+  // Escala: todo en em (solo 1px para hairlines), sin rem ni px.
+  const scss = await readFile(join(root, 'src', 'components', 'feedback', 'palette-selector.scss'), 'utf8');
+  const medidas = scss.replace(/\/\*[\s\S]*?\*\//g, '').match(/-?\d*\.?\d+(?:px|rem)\b/g) ?? [];
+  check(medidas.every((m) => m === '1px'), `palette-selector.scss: medidas en em (encontrado ${medidas.filter((m) => m !== '1px').join(', ')})`);
+
   if (failures.length) {
     console.log('FAIL:');
     for (const f of failures) console.log(`  - ${f}`);

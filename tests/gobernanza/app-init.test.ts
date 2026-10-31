@@ -36,22 +36,22 @@ function entorno(guardado: Record<string, string> = {}) {
 
 test('A1 config inicial la primera vez', () => {
   const e = entorno();
-  const r = initApp({ theme: 'light', palette: 'insoft', root: e.root });
-  assert.deepEqual([e.dataset.theme, e.dataset.palette], ['light', 'insoft']);
-  assert.deepEqual(r.origen, { theme: 'default', palette: 'default' });
+  const r = initApp({ theme: 'light', palette: 'cardenal', root: e.root });
+  assert.deepEqual([e.dataset.theme, e.dataset.palette], ['light', 'cardenal']);
+  assert.deepEqual(r.origen, { theme: 'default', palette: 'default', panda: 'default' });
 });
 
 test('A2 la elección del usuario gana', () => {
-  const e = entorno({ [APP_CFG_KEY]: JSON.stringify({ theme: 'dark', palette: 'agrowin' }) });
-  const r = initApp({ theme: 'light', palette: 'contapyme', root: e.root });
-  assert.deepEqual([e.dataset.theme, e.dataset.palette], ['dark', 'agrowin']);
-  assert.deepEqual(r.origen, { theme: 'usuario', palette: 'usuario' });
+  const e = entorno({ [APP_CFG_KEY]: JSON.stringify({ theme: 'dark', palette: 'iguana', panda: true }) });
+  const r = initApp({ theme: 'light', palette: 'delfin', root: e.root });
+  assert.deepEqual([e.dataset.theme, e.dataset.palette, e.dataset.panda], ['dark', 'iguana', '']);
+  assert.deepEqual(r.origen, { theme: 'usuario', palette: 'usuario', panda: 'usuario' });
 });
 
 test('A3 guardado inválido cae a la config inicial', () => {
   const e = entorno({ [APP_CFG_KEY]: JSON.stringify({ theme: 'sepia', palette: 3 }) });
-  initApp({ theme: 'light', palette: 'insoft', root: e.root });
-  assert.deepEqual([e.dataset.theme, e.dataset.palette], ['light', 'insoft']);
+  initApp({ theme: 'light', palette: 'cardenal', root: e.root });
+  assert.deepEqual([e.dataset.theme, e.dataset.palette], ['light', 'cardenal']);
 });
 
 test('A4 initApp no escribe', () => {
@@ -63,14 +63,14 @@ test('A4 initApp no escribe', () => {
 test('A5 todo en una sola llave', () => {
   const e = entorno();
   guardarAppCfg({ theme: 'dark' });
-  guardarAppCfg({ palette: 'insoft', densidad: 'compacta' });
+  guardarAppCfg({ palette: 'cardenal', densidad: 'compacta' });
   assert.deepEqual([...new Set(e.escritos)], [APP_CFG_KEY]);
-  assert.deepEqual(leerAppCfg(), { theme: 'dark', palette: 'insoft', densidad: 'compacta' });
+  assert.deepEqual(leerAppCfg(), { theme: 'dark', palette: 'cardenal', densidad: 'compacta' });
 });
 
 test('A6 migra las llaves sueltas viejas', () => {
-  const e = entorno({ 'iswc-theme': 'dark', 'iswc-palette': 'agrowin' });
-  assert.deepEqual(leerAppCfg(), { theme: 'dark', palette: 'agrowin' });
+  const e = entorno({ 'iswc-theme': 'dark', 'iswc-palette': 'iguana' });
+  assert.deepEqual(leerAppCfg(), { theme: 'dark', palette: 'iguana' });
   assert.equal(e.datos.has('iswc-theme') || e.datos.has('iswc-palette'), false);
   assert.ok(e.datos.has(APP_CFG_KEY));
 });

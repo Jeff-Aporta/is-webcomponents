@@ -114,7 +114,7 @@ test('callout.css NO anida selectores con atributos del host dentro de :host', (
 // `:root, [data-palette]` y la HEREDA cada [data-palette="…"]. Lo observable:
 // el conjunto de reglas que aplican al nodo de la paleta (genéricas
 // `[data-palette]` o específicas de esa paleta, sin tema) define los tokens.
-const PALETAS = ['insoft', 'contapyme', 'agrowin'];
+const PALETAS = JSON.parse(readFileSync(join(root, 'src', 'styles', 'palettes.json'), 'utf8')).map((p) => p.value);
 const palettesCss = () => leerCssCompilado(root, 'src/styles/palettes.css');
 /** Cuerpos de las reglas que aplican a un nodo con sólo `data-palette="pal"`. */
 const reglasDePaleta = (css, pal) => reglas(css)
@@ -124,7 +124,7 @@ const reglasDePaleta = (css, pal) => reglas(css)
   .map((r) => r.cuerpo)
   .join('\n');
 
-test('Las 3 paletas definen --iswc-color-info', () => {
+test('Las paletas definen --iswc-color-info', () => {
   const css = palettesCss();
   for (const pal of PALETAS) {
     const cuerpo = reglasDePaleta(css, pal);
@@ -133,7 +133,7 @@ test('Las 3 paletas definen --iswc-color-info', () => {
   }
 });
 
-test('Las 3 paletas definen la rampa relativa completa de info', () => {
+test('Las paletas definen la rampa relativa completa de info', () => {
   const css = palettesCss();
   for (const pal of PALETAS) {
     const block = reglasDePaleta(css, pal);
