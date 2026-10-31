@@ -420,7 +420,7 @@ iswc-doc-demo {
   inline-size: 100%;
   block-size: 100%;
   border: 0;
-  background: var(--iswc-bg);
+  background: var(--iswc-bg-page);
 
   &[hidden] { display: none !important; }
 }
@@ -431,7 +431,7 @@ iswc-doc-demo {
   block-size: 100%;
   min-block-size: 0;
   display: grid;
-  background: var(--iswc-bg);
+  background: var(--iswc-bg-page);
 
   > .preview-frame,
   > .preview-host {
@@ -445,7 +445,7 @@ iswc-doc-demo {
 
 .preview-host {
   overflow: auto;
-  background: var(--iswc-bg);
+  background: var(--iswc-bg-page);
 
   &[hidden] { display: none !important; }
 }

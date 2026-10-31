@@ -168,7 +168,7 @@ iswc-main.main {
   background:
     radial-gradient(900px 420px at 12% -8%, color-mix(in srgb, var(--iswc-accent) 11%, transparent), transparent 60%),
     radial-gradient(700px 360px at 92% 8%, color-mix(in srgb, var(--iswc-bg-elev) 70%, transparent), transparent 55%),
-    var(--iswc-bg);
+    var(--iswc-bg-page);
   scrollbar-width: thin;
   scrollbar-color: var(--iswc-scrollbar-thumb) var(--iswc-scrollbar-track);
 }
@@ -253,6 +253,7 @@ iswc-main.main {
   }
 
   h2 {
+    color: var(--iswc-text-page);
     font-size: clamp(1.2rem, 1.7vw, 1.45rem);
     font-weight: 700;
     margin: 0 0 8px;
@@ -284,7 +285,7 @@ iswc-main.main {
   }
 
   .lede {
-    color: var(--iswc-text-soft);
+    color: var(--iswc-text-page-soft);
     margin: 0 0 28px;
     max-inline-size: none; /* ancho completo de la columna de docs */
     font-size: 1.02rem;

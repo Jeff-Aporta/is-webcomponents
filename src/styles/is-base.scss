@@ -15,7 +15,8 @@
  * otra) en el nodo con data-theme para cambiarla.
  *
  * Modificador Panda: `data-panda` junto a `data-theme` invierte SOLO el fondo de
- * la página (`--iswc-bg-page`). Papeles, componentes y textos siguen el tema.
+ * la página (`--iswc-bg-page`). Papeles, componentes y textos siguen el tema; solo el texto
+ * puesto directo sobre la página usa `--iswc-text-page*`, que contrasta con ese fondo.
  *
  * Esta hoja SOLO declara tokens (variables). No pinta el canvas de la página
  * (`html`/`body`): cada app define su `background`. Tampoco fuerza
@@ -186,8 +187,8 @@
 }
 
 /* Panda: la página toma el fondo del tema contrario; nada más cambia. */
-[data-theme="dark"][data-panda] { --iswc-bg-page: #fff; }
-[data-theme="light"][data-panda] { --iswc-bg-page: #0b0d10; }
+[data-theme="dark"][data-panda] { --iswc-bg-page: #fff; --iswc-text-page: #1f2328; --iswc-text-page-soft: #57606a; --iswc-text-page-dim: #6e7781; }
+[data-theme="light"][data-panda] { --iswc-bg-page: #0b0d10; --iswc-text-page: #e6e8eb; --iswc-text-page-soft: #a8b0bb; --iswc-text-page-dim: #7a8390; }
 
 /* color-scheme solo con data-theme: no oscurece el canvas del browser
    al cargar is-base.min.css sin más. La app (o un wrapper con [data-theme])
@@ -197,6 +198,9 @@
   color-scheme: dark;
   --iswc-bg: #0b0d10;
   --iswc-bg-page: var(--iswc-bg);
+  --iswc-text-page: var(--iswc-text);
+  --iswc-text-page-soft: var(--iswc-text-soft);
+  --iswc-text-page-dim: var(--iswc-text-dim);
   --iswc-bg-soft: #14181d;
   --iswc-bg-elev: #1c2128;
   --iswc-border: #2a3038;
@@ -241,6 +245,9 @@
   color-scheme: light;
   --iswc-bg: #fff;
   --iswc-bg-page: var(--iswc-bg);
+  --iswc-text-page: var(--iswc-text);
+  --iswc-text-page-soft: var(--iswc-text-soft);
+  --iswc-text-page-dim: var(--iswc-text-dim);
   --iswc-bg-soft: #f6f8fa;
   --iswc-bg-elev: #fff;
   --iswc-border: #d0d7de;

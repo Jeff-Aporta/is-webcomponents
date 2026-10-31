@@ -336,7 +336,7 @@ export function checkPaletteContrast(list: PaletteConfig[] = PALETTES): { checke
 const APPLY_TOKENS = [...SURFACE_LIGHT.map((r) => r.token)];
 
 function applyBlock(selector: string, set: 'sl' | 'sd', scheme: 'light' | 'dark'): string {
-  const lines = [`  color-scheme: ${scheme};`, '  --iswc-bg-page: var(--iswc-bg);', ...APPLY_TOKENS.map((t) => `  --iswc-${t}: var(--iswc-${set}-${t});`)];
+  const lines = [`  color-scheme: ${scheme};`, '  --iswc-bg-page: var(--iswc-bg);', '  --iswc-text-page: var(--iswc-text);', '  --iswc-text-page-soft: var(--iswc-text-soft);', '  --iswc-text-page-dim: var(--iswc-text-dim);', ...APPLY_TOKENS.map((t) => `  --iswc-${t}: var(--iswc-${set}-${t});`)];
   if (scheme === 'light') {
     lines.push(
       '  --iswc-shadow: 0 1px 0 rgb(0 0 0 / 4%), 0 8px 24px color-mix(in srgb, var(--iswc-color-brand) calc(var(--iswc-tint) * 6%), rgb(0 0 0 / 6%));',
@@ -422,8 +422,8 @@ export function palettesScss(list: PaletteConfig[] = PALETTES): string {
     '',
     applyBlock('[data-theme="dark"]', 'sd', 'dark'),
     '',
-    '[data-theme="light"][data-panda] { --iswc-bg-page: var(--iswc-sd-bg); }',
-    '[data-theme="dark"][data-panda] { --iswc-bg-page: var(--iswc-sl-bg); }',
+    '[data-theme="light"][data-panda] { --iswc-bg-page: var(--iswc-sd-bg); --iswc-text-page: var(--iswc-sd-text); --iswc-text-page-soft: var(--iswc-sd-text-soft); --iswc-text-page-dim: var(--iswc-sd-text-dim); }',
+    '[data-theme="dark"][data-panda] { --iswc-bg-page: var(--iswc-sl-bg); --iswc-text-page: var(--iswc-sl-text); --iswc-text-page-soft: var(--iswc-sl-text-soft); --iswc-text-page-dim: var(--iswc-sl-text-dim); }',
   ].join('\n');
 
   return `${header}\n\n/* ─── Capa comun: semillas → rampa, contraste, bright y superficies ─── */\n\n${common}\n\n/* ─── Semillas por paleta ───────────────────────────────────────────── */\n\n${seeds}\n\n${apply}\n`;
