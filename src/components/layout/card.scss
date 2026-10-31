@@ -71,7 +71,7 @@
 /* Estados del host a top-level: `&[attr]` anidado en :host compila a
    `:host[attr]`, que nunca matchea un shadow host. Usar :host([attr]). */
 :host(:is([variant="outlined"], :not([variant]))) {
-  background: transparent;
+  background: var(--card-bg, var(--iswc-paper-fill, transparent));
   border: 1px solid var(--iswc-border);
 }
 
@@ -91,7 +91,7 @@
 }
 
 :host([variant="accent"]) {
-  background: var(--iswc-accent-bg, rgb(30 144 255 / 12%));
+  background: linear-gradient(var(--iswc-accent-bg, rgb(30 144 255 / 12%)) 0 0), var(--iswc-paper-fill, transparent);
   border: 0;
   box-shadow: inset 3px 0 0 var(--iswc-accent);
 }
