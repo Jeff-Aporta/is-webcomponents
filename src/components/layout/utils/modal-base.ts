@@ -7,6 +7,9 @@
  *   - focus management (last-focus, autofocus, focus trap, escape, tab cycling)
  *   - slot detection para header/footer/label
  *   - close-button (X) y backdrop (light-dismiss)
+ *   - top layer mientras está abierto: un ancestro con transform, filter o contain no recorta
+ *     el host ni deja el backdrop-filter sin nada que desenfocar. `--iswc-modal-capa: local`
+ *     lo mantiene dentro de su contenedor (md-editor con fullscreen-scope="local").
  *   - data-attribute de close declarativo en descendientes (data-dialog / data-drawer)
  *   - atributos observados: open, label, without-header, light-dismiss
  *   - eventos: iswc-show, iswc-after-show, iswc-hide (cancelable), iswc-after-hide
@@ -56,6 +59,8 @@ const FOCUSABLE_SELECTOR =
   ' button:not([disabled]), iframe, [tabindex]:not([tabindex="-1"])';
 
 /** Forma del constructor de subclase: expone __TEMPLATE y observedAttributes. */
+
+const SOPORTA_POPOVER = 'showPopover' in HTMLElement.prototype;
 
 // `withStyleAttrs` da la personalización por atributo (radio, colores,
 // duraciones) a dialog/drawer y a cualquier modal que herede de aquí, sin
@@ -135,6 +140,7 @@ export class ModalBase extends withStyleAttrs(HTMLElement) {
     if (this.open) {
       this.dataset.state = 'open';
       this.#modal.hidden = false;
+      this.#subirCapa();
       this.#attachKeydown();
     } else {
       this.#modal.hidden = false;
@@ -143,6 +149,7 @@ export class ModalBase extends withStyleAttrs(HTMLElement) {
 
   disconnectedCallback(): void {
     this.#detachKeydown();
+    this.#bajarCapa();
     this.onDisconnected?.();
   }
 
@@ -181,6 +188,23 @@ export class ModalBase extends withStyleAttrs(HTMLElement) {
   toggle(): Promise<void> { return this.#setOpen(!this.open); }
 
   // ── Privados compartidos ────────────────────────────────────────────
+
+  get #host(): HTMLElement { return this as unknown as HTMLElement; }
+
+  #subirCapa(): void {
+    const host = this.#host;
+    if (!SOPORTA_POPOVER || !host.isConnected) return;
+    if (getComputedStyle(host).getPropertyValue('--iswc-modal-capa').trim() === 'local') return;
+    if (!host.hasAttribute('popover')) host.setAttribute('popover', 'manual');
+    if (!host.matches(':popover-open')) host.showPopover();
+  }
+
+  #bajarCapa(): void {
+    const host = this.#host;
+    if (!host.hasAttribute('popover')) return;
+    if (host.matches(':popover-open')) host.hidePopover();
+    host.removeAttribute('popover');
+  }
 
   #onDelegatedClick = (e: PointerEvent): void => {
     const target = e.target as Element | null;
@@ -228,6 +252,7 @@ export class ModalBase extends withStyleAttrs(HTMLElement) {
       this.#lastFocus = document.activeElement as Element | null;
       this.dataset.state = 'opening';
       this.#modal.hidden = false;
+      this.#subirCapa();
       this.#attachKeydown();
       // eslint-disable-next-line no-unused-expressions
       this.#modal.offsetHeight; // forzar reflow antes de la animación
@@ -248,6 +273,7 @@ export class ModalBase extends withStyleAttrs(HTMLElement) {
     return this.animateClose().then(() => {
       this.#modal.hidden = false;
       delete this.dataset.state;
+      if (!this.open) this.#bajarCapa();
       this.#detachKeydown();
       const last = this.#lastFocus as HTMLElement | null;
       if (last && typeof last.focus === 'function') {

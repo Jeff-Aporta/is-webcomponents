@@ -23,7 +23,8 @@ import type { Placement, DropdownItemEl } from "./schemas/dropdown.schemas.js";
  * headings/secciones/overflow de ancestros — mismo patrón que iswc-combobox.
  *
  * Slots: trigger | default (items / dividers / headings)
- * Attrs: open, placement (default auto: hacia el centro de la pantalla), distance, skidding
+ * Attrs: open, placement (default auto: hacia el centro de la pantalla), distance, skidding,
+ *   backdrop-variant (none | basic: velo modal del kit detrás del menú; default none)
  * Events: iswc-show, iswc-after-show, iswc-hide, iswc-after-hide, iswc-select { item }
  * Parts: ::part(dialog) ::part(menu)
  */

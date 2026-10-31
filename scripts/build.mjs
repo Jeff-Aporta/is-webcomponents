@@ -583,6 +583,20 @@ console.log(`  ${'gallery-app'.padEnd(18)} js ${String(galleryStat.size).padStar
 
 // ── hashes: sellar imports y embeber el mapa en el loader ────────
 const hashes = await stampDirectory(dist);
+// Los bundles de galeria importan componentes del CDN (`componentes-externos` en
+// bundle-scripts.mjs): con el mismo ?v= que pide el loader, o el modulo se evalua dos veces.
+const IMPORT_CDN = /(["'])((?:\.\.\/)+cdn\/([^"'?]+\.min\.js))(?:\?v=[^"']*)?\1/g;
+for (const bucket of ['scripts', 'pages', 'previews']) {
+  const dir = join(root, 'dist', bucket);
+  const nombres = await readdir(dir, { recursive: true }).catch(() => []);
+  for (const nombre of nombres) {
+    if (!nombre.endsWith('.min.js')) continue;
+    const archivo = join(dir, nombre);
+    const previo = await readFile(archivo, 'utf8');
+    const sellado = previo.replace(IMPORT_CDN, (entero, q, ruta, clave) => (hashes[clave] ? `${q}${ruta}?v=${hashes[clave]}${q}` : entero));
+    if (sellado !== previo) await writeFile(archivo, sellado);
+  }
+}
 const addHash = async (key, abs) => {
   try { hashes[key] = await hashFile(abs, key); } catch { /* todavia no existe */ }
 };

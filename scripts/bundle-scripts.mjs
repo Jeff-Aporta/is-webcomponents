@@ -7,8 +7,9 @@
 import { build } from 'esbuild';
 import { mkdir, copyFile, readdir, writeFile, rm, cp } from 'node:fs/promises';
 import { existsSync, readdirSync } from 'node:fs';
-import { join, dirname } from 'node:path';
+import { join, dirname, resolve, relative, basename, sep } from 'node:path';
 import { readFileSync } from 'node:fs';
+import manifest from '../src/manifest.js';
 
 let ok = 0;
 let failed = 0;
@@ -31,6 +32,41 @@ const pages = [
 
 await mkdir('dist/scripts', { recursive: true });
 await mkdir('dist/pages', { recursive: true });
+
+// ── Componentes externos: un bundle de galeria NO puede llevar dentro un
+// componente. Sin hoja propia (`__IS_COMPONENT_CSS__` solo existe en su bundle de
+// dist/cdn), adoptCss pide `<anfitrion>.min.css`, el stub vacio, y como este bundle
+// suele registrar el tag primero, `customElements.define` deja la version sin
+// estilos y el CDN ya no puede pisarla: <dialog> del UA, menu sin panel, etc.
+// Mismo criterio que `external-components` en build.mjs.
+const componentesRoot = resolve('src/components');
+const cdnRoot = resolve('dist/cdn');
+const categoriaPorTag = new Map(manifest.map((m) => [m.tag.replace(/^iswc-/, ''), m.category]));
+const registraElemento = new Map();
+const esComponente = (ts) => {
+  if (!registraElemento.has(ts)) {
+    const fuente = existsSync(ts) ? readFileSync(ts, 'utf8') : '';
+    registraElemento.set(ts, /\b(?:defineElement|customElements\.define)\(/.test(fuente));
+  }
+  return registraElemento.get(ts);
+};
+const componentesExternos = (outfile) => ({
+  name: 'componentes-externos',
+  setup(pluginBuild) {
+    pluginBuild.onResolve({ filter: /\.(ts|js)$/ }, (args) => {
+      if (args.kind === 'entry-point') return null;
+      const abs = resolve(args.resolveDir, args.path);
+      if (abs.startsWith(cdnRoot + sep)) return { path: relative(dirname(outfile), abs).replaceAll(sep, '/'), external: true };
+      if (!abs.startsWith(componentesRoot + sep)) return null;
+      const ts = abs.replace(/\.js$/, '.ts');
+      if (!esComponente(ts)) return null;
+      const nombre = basename(ts, '.ts');
+      const carpeta = categoriaPorTag.get(nombre) ?? relative(componentesRoot, ts).split(sep)[0];
+      const destino = join('dist', 'cdn', carpeta, `${nombre}.min.js`);
+      return { path: relative(dirname(outfile), destino).replaceAll(sep, '/'), external: true };
+    });
+  },
+});
 
 // ── CSS sibling files: los bundles JS usan `import './foo.css'` para resolver
 // `host-base.css` y `scrollbars.css`. Si no existen en dist/scripts/,
@@ -96,6 +132,7 @@ for (const name of scripts) {
     await build({
       entryPoints: [`scripts/${name}.js`],
       outfile: `dist/scripts/${name}.min.js`,
+      plugins: [componentesExternos(`dist/scripts/${name}.min.js`)],
       bundle: true,
       minify: true,
       format: 'esm',
@@ -121,6 +158,7 @@ for (const name of pages) {
     await build({
       entryPoints: [`src/pages/${name}.ts`],
       outfile: `dist/pages/${name}.min.js`,
+      plugins: [componentesExternos(`dist/pages/${name}.min.js`)],
       bundle: true,
       minify: true,
       format: 'esm',
@@ -180,6 +218,7 @@ for (const { category, name } of allPreviews) {
     await build({
       entryPoints: [src],
       outfile: dstFile,
+      plugins: [componentesExternos(dstFile)],
       bundle: true,
       minify: true,
       format: 'esm',

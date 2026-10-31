@@ -39,8 +39,12 @@
   overflow: visible;
   outline: none;
 }
+/* Sin variante el fondo solo atrapa el clic fuera; `basic` es el velo modal del kit. */
 .popup::backdrop {
   background: transparent;
+}
+:host([backdrop-variant="basic"]) .popup::backdrop {
+  @include velo;
 }
 
 .menu {

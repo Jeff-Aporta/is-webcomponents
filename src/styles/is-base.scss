@@ -39,6 +39,9 @@
   --iswc-shadow: 0 1px 0 rgb(255 255 255 / 3%), 0 8px 24px rgb(0 0 0 / 25%);
   --iswc-radius: 0.625em;
   --iswc-radius-sm: 0.375em;
+  /* Velo de lo modal (dialog basic, drawer, confirm, paleta, json-dialog). */
+  --iswc-backdrop-color: rgb(0 0 0 / 55%);
+  --iswc-backdrop-blur: 0.5em;
   /* Escala de espaciado (rem: no crece con el font-size del contenedor). La
      usan card, dialog, drawer, callout (l), details y login (m); cada
      componente trae además el mismo valor como fallback, así que una app que
@@ -220,6 +223,7 @@
 }
 
 [data-theme="light"] {
+  --iswc-backdrop-color: rgb(15 23 42 / 40%);
   --iswc-paper-scheme: light;
   --iswc-paper-bg: #fff;
   --iswc-paper-bg-soft: #f6f8fa;

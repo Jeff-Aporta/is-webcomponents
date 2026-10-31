@@ -113,6 +113,7 @@
 /* fullscreen-scope="local": host absolute en el contenedor posicionado;
    panel y backdrop absolutos inset 0 (no 100vw). */
 :host([fullscreen-scope="local"]) .dlg {
+  --iswc-modal-capa: local;
   &::part(dialog) {
     position: absolute;
     inset: 0;

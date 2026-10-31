@@ -44,16 +44,14 @@
 
 /* Variante oficial: oscuridad + blur. Override fino vía --iswc-dialog-backdrop-*. */
 :host([backdrop-variant="basic"]) {
-  --iswc-dialog-backdrop-color: rgba(0, 0, 0, 0.55);
-  --iswc-dialog-backdrop-blur: 8px;
+  --iswc-dialog-backdrop-color: var(--iswc-backdrop-color, rgb(0 0 0 / 55%));
+  --iswc-dialog-backdrop-blur: var(--iswc-backdrop-blur, 0.5em);
 }
 
 .backdrop {
   position: fixed;
   inset: 0;
-  background: var(--iswc-dialog-backdrop-color);
-  backdrop-filter: blur(var(--iswc-dialog-backdrop-blur));
-  -webkit-backdrop-filter: blur(var(--iswc-dialog-backdrop-blur));
+  @include velo(var(--iswc-dialog-backdrop-color), var(--iswc-dialog-backdrop-blur));
   opacity: 0;
   pointer-events: auto;
 }

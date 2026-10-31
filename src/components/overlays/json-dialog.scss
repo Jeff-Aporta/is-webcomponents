@@ -5,13 +5,6 @@
   font-size: 1em;
 }
 
-.dialogo::part(backdrop) {
-  opacity: 1;
-  background: color-mix(in srgb, var(--iswc-text) 18%, transparent);
-  -webkit-backdrop-filter: blur(0.1875em);
-  backdrop-filter: blur(0.1875em);
-}
-
 .errores {
   &[hidden] { display: none; }
 

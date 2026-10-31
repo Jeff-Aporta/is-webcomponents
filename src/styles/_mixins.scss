@@ -61,6 +61,16 @@
   --iswc-info-soft: var(--iswc-paper-info-soft);
 }
 
+// ─── Velo modal ──────────────────────────────────────────────────────────
+//   Fondo de todo lo modal: oscuridad + blur con un solo par de tokens, para que
+//   dialog, drawer, confirm, paleta y json-dialog se vean iguales en cualquier tema.
+//   Pasa color y blur propios solo si el componente expone su perilla.
+@mixin velo($color: var(--iswc-backdrop-color, rgb(0 0 0 / 55%)), $blur: var(--iswc-backdrop-blur, 0.5em)) {
+  background: $color;
+  -webkit-backdrop-filter: blur($blur);
+  backdrop-filter: blur($blur);
+}
+
 // ─── Tono (botones + familia) ────────────────────────────────────────────
 //   Rampa canonica W24: tokens `--iswc-color-$family{-strong,-stronger,
 //   -paler,-pale}` + `--iswc-$family-text` (con fallback a stronger) +

@@ -93,6 +93,14 @@ import { normalizeIntent } from '../../core/intent.js';
   }
 
   class IswcToast extends ElementBase {
+
+    /** Reabre el popover para quedar encima del último modal abierto en el top layer. */
+    #alFrente(): void {
+      if (!this.isConnected || !('showPopover' in HTMLElement.prototype)) return;
+      if (!this.hasAttribute('popover')) this.setAttribute('popover', 'manual');
+      if (this.matches(':popover-open')) this.hidePopover();
+      this.showPopover();
+    }
     static get observedAttributes(): string[] { return OBSERVED; }
 
 
@@ -145,6 +153,7 @@ import { normalizeIntent } from '../../core/intent.js';
       }
 
       this.appendChild(item);
+      this.#alFrente();
       // Wait a frame so CSS/layout settle before show
       await new Promise<void>((r) => requestAnimationFrame(() => r()));
       item.show();

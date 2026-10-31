@@ -1,5 +1,12 @@
 :host {
   position: fixed;
+  /* Popover para quedar sobre los modales: anula su chrome del navegador. */
+  inset: auto;
+  margin: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  overflow: visible;
   z-index: 10000;
   display: block;
   pointer-events: none;

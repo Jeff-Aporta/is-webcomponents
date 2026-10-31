@@ -71,6 +71,7 @@ import '../actions/button.js';
       adoptCss(shadow, import.meta.url);
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
       this.#backdrop = shadow.querySelector<HTMLElement>('.backdrop')!;
+      this.#backdrop.popover = 'manual';
       this.#modal = shadow.querySelector<HTMLElement>('.modal')!;
       this.#heading = shadow.querySelector<HTMLElement>('.heading')!;
 
@@ -145,6 +146,7 @@ import '../actions/button.js';
       this.#dismiss.attach();
       this.#lastFocus = document.activeElement as HTMLElement | null;
       this.#backdrop.hidden = false;
+      if (this.isConnected) this.#backdrop.showPopover();
       requestAnimationFrame(() => {
         const btn = this.querySelector<HTMLElement>('[slot="confirm"]')
           || this.shadowRoot!.querySelector<HTMLElement>('.confirm');
@@ -154,6 +156,7 @@ import '../actions/button.js';
 
     #hideUI(): void {
       this.#dismiss.detach();
+      if (this.#backdrop.matches(':popover-open')) this.#backdrop.hidePopover();
       this.#backdrop.hidden = true;
       this.#lastFocus?.focus?.();
       this.#lastFocus = null;
