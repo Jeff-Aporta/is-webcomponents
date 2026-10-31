@@ -68,7 +68,7 @@ const { montarGaleria } = await import(`${cdn}preview/doc-demo-galeria.min.js`);
 await montarGaleria({ manifest: new URL('manifest.json', location.href), categorias: { panel: 'Panel' } });
 ```
 
-El nav se agrupa por `category`, la selección viaja en `#tag` y un `props` en un bloque `demo` se asigna a
+El nav se agrupa por `category`, la selección viaja en `?s=` (JSON en b64url, como la galería del kit) y un `props` en un bloque `demo` se asigna a
 `target.props`. Los `controls` admiten `attr:x`, `prop:x` y `props:x`.
 
 ## Atributos

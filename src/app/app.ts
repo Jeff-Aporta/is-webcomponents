@@ -4,11 +4,7 @@ import { DEFAULT_PALETTE, PALETTES } from '../styles/palette-build.js';
 import type { ComponentManifestItem } from '../manifest.schemas.js';
 import { hasControlledPreview, hasCachedPreview, loadPreview } from '../previews/registry.js';
 import { collectIsTags, GALLERY_CHROME_TAGS } from '../cdn/collect-iswc-tags.js';
-import {
-  getComponentPrefs,
-  removeComponentPrefs,
-  setComponentPrefs,
-} from '../core/prefs.js';
+import { codificarEstado, leerEstado, readPanelsCompactPref, writePanelsCompactPref } from '../components/layout/utils/doc-demo-estado.js';
 import type { GalleryState, ThemeName, PaletteName, CategoryMeta, CatalogItem, ThemeToggleElement, PaletteSelectorElement, PreviewLike, PreviewHostElement, SplitPanelElement, FrameElement, DrawerElement, LoaderLike } from "./schemas/app.schemas.js";
 
 /* ──────────────────────────── Tipos locales ───────────────────────────── */
@@ -93,31 +89,10 @@ const brandPalette = el<PaletteSelectorElement>('brandPalette');
 // Logo ISWC en top-left del header (Phase W7). Click -> home + URL limpia.
 const shellBrand = el<HTMLAnchorElement>('shellBrand');
 
-const params = new URLSearchParams(location.search);
 const themes = new Set<ThemeName>(['light', 'dark']);
 const palettes = new Set<PaletteName>(PALETTES.map((p) => p.value as PaletteName));
 
-// --- b64url helpers (inline; pattern from isa-patyia-paws router.ts) ---
-const b64urlEncode = (input: string): string => {
-  const bytes = new TextEncoder().encode(input);
-  let bin = '';
-  bytes.forEach((b) => { bin += String.fromCharCode(b); });
-  return btoa(bin).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
-};
-const b64urlDecode = (input: string): string => {
-  let pad = String(input).replace(/-/g, '+').replace(/_/g, '/');
-  while (pad.length % 4) pad += '=';
-  const bin = atob(pad);
-  const bytes = new Uint8Array(bin.length);
-  for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
-  return new TextDecoder().decode(bytes);
-};
-
-const readStateParam = (): GalleryState | null => {
-  const raw = params.get('s');
-  if (!raw) return null;
-  try { return JSON.parse(b64urlDecode(raw)) as GalleryState; } catch { return null; }
-};
+const readStateParam = (): GalleryState | null => leerEstado<GalleryState>();
 
 // --- home + catalog (home no está en manifest) ---
 const HOME = { tag: 'home', title: 'Home', page: 'home.json' };
@@ -292,37 +267,14 @@ let component: CatalogItem =
   ?? HOME;
 
 // panelsCompact vive en ?s= — hay que inicializarlo ANTES de renderContext/updateUrl.
-const PANELS_TTL_MS = 3_600_000;
-const SHELL_PREFS_TAG = 'iswc-gallery';
-const SHELL_PREFS_KEY = 'shell';
 const ICON_COMPACT = 'mdi:arrow-collapse-horizontal';
 const ICON_EXPAND = 'mdi:arrow-expand-horizontal';
 const panelsCompactBtn = document.getElementById('panelsCompactBtn') as HTMLElement | null;
 
-function readPanelsCompactPref(): boolean {
-  const saved = getComponentPrefs(SHELL_PREFS_TAG, SHELL_PREFS_KEY);
-  if (!saved) return false;
-  const savedAt = Number((saved as { savedAt?: unknown }).savedAt);
-  if (!Number.isFinite(savedAt) || savedAt <= 0 || Date.now() - savedAt > PANELS_TTL_MS) {
-    removeComponentPrefs(SHELL_PREFS_TAG, SHELL_PREFS_KEY);
-    return false;
-  }
-  return (saved as { panelsCompact?: unknown }).panelsCompact === true;
-}
-
-function writePanelsCompactPref(compact: boolean): void {
-  setComponentPrefs(SHELL_PREFS_TAG, SHELL_PREFS_KEY, {
-    panelsCompact: compact,
-    savedAt: Date.now(),
-  });
-}
-
 let panelsCompactUser =
   stateFromUrl?.panelsCompact === true || readPanelsCompactPref();
 
-function encodeState(obj: GalleryState): string {
-  return b64urlEncode(JSON.stringify(obj));
-}
+const encodeState = (obj: GalleryState): string => codificarEstado(obj);
 
 /** Preview URL legado (solo si faltara en catalog — no debería ocurrir). */
 function previewSrc(page: string): string {

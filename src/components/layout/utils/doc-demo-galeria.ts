@@ -14,6 +14,7 @@
  * asigna a `target.props` al montar; sus `controls` los aplica `<iswc-playground>`. Lo que no cumple se avisa y no se lista.
  */
 import { collectIsTags, GALLERY_CHROME_TAGS } from '../../../cdn/collect-iswc-tags.js';
+import { codificarEstado, leerEstado, readPanelsCompactPref, writePanelsCompactPref } from './doc-demo-estado.js';
 
 type Bloque = { kind?: string; target?: string; props?: Record<string, unknown>; controls?: unknown[] };
 type Definicion = { tag: string; navTitle?: string; title?: string; category?: string; sections: Array<{ id?: string; blocks?: Bloque[] }> };
@@ -22,6 +23,7 @@ type Previsualizable = { definition: Definicion; mount(ctx: Montaje): void; unmo
 type HostPreview = HTMLElement & { preview: Previsualizable | null };
 type Loader = { load(...tags: string[]): Promise<unknown>; catalog?: { tags?: Record<string, unknown>; categories?: Record<string, unknown>; aliases?: Record<string, string> } };
 type Cajon = HTMLElement & { show?(): void; hide?(): void };
+type EstadoGaleria = { component?: string; panelsCompact?: boolean };
 
 export type OpcionesGaleria = {
   /** URL de `[{ tag, file }]`. */
@@ -31,7 +33,15 @@ export type OpcionesGaleria = {
 };
 
 const TAGS_PLAYGROUND = ['iswc-playground', 'iswc-preview-controls', 'iswc-select', 'iswc-option', 'iswc-input', 'iswc-details'];
-const CLAVE_COMPACTO = 'iswc-doc-demo-compacto';
+
+/** Mismo `?s=` que la galería del kit: un enlace conserva el componente abierto. */
+function guardarEstado(cambio: EstadoGaleria): void {
+  const estado = { ...leerEstado<EstadoGaleria>(), ...cambio };
+  const dest = new URL(location.href);
+  dest.hash = '';
+  dest.search = `?s=${codificarEstado(estado)}`;
+  history.replaceState(null, '', dest);
+}
 
 async function leerDefiniciones(manifest: string | URL): Promise<Definicion[]> {
   const base = new URL(manifest, location.href);
@@ -56,7 +66,7 @@ function tagsDe(def: Definicion, L: Loader): string[] {
   return [...new Set<string>(tags)].filter((t) => L.catalog?.tags?.[t] || L.catalog?.categories?.[L.catalog?.aliases?.[t] ?? t]);
 }
 
-/** Vuelca el shell: nav por categorías, selección con `#tag`, tema, paleta y modo compacto los pone el propio shell. */
+/** Vuelca el shell como SPA: nav por categorías y selección en `?s=`; tema y paleta los pone el propio shell. */
 export async function montarGaleria({ manifest, categorias = {} }: OpcionesGaleria): Promise<void> {
   const L = (globalThis as unknown as { iswcLoader: Loader }).iswcLoader;
   await customElements.whenDefined('iswc-doc-demo');
@@ -96,8 +106,7 @@ export async function montarGaleria({ manifest, categorias = {} }: OpcionesGaler
     for (const n of nav.querySelectorAll<HTMLElement>('.shell-nav__item')) n.setAttribute('aria-current', String(n.dataset.tag === def.tag));
     nav.querySelector<HTMLElement>('[aria-current="true"]')?.scrollIntoView({ block: 'nearest' });
     document.title = `${def.navTitle ?? def.tag} | ${marca}`;
-    // Con la ruta completa: un `#tag` suelto se resolvería contra el `<base href>` de la página.
-    history.replaceState(null, '', `${location.pathname}${location.search}#${def.tag}`);
+    guardarEstado({ component: def.tag });
   };
 
   const grupos = new Map<string, Definicion[]>();
@@ -134,11 +143,8 @@ export async function montarGaleria({ manifest, categorias = {} }: OpcionesGaler
   }
 
   montarCompacto(nav);
-  addEventListener('hashchange', () => {
-    const def = defs.find((d) => `#${d.tag}` === location.hash);
-    if (def) void seleccionar(def);
-  });
-  const inicial = defs.find((d) => `#${d.tag}` === location.hash) ?? defs[0];
+  const pedido = leerEstado<EstadoGaleria>()?.component;
+  const inicial = defs.find((d) => d.tag === pedido) ?? defs[0];
   if (inicial) await seleccionar(inicial);
   document.documentElement.setAttribute('data-app-ready', '');
 }
@@ -151,10 +157,7 @@ function montarCompacto(nav: HTMLElement): void {
   const boton = document.getElementById('panelsCompactBtn');
   if (!division || !cajon || !abrir) return;
   const movil = matchMedia('(max-width: 640px)');
-  let compacto = false;
-  try {
-    compacto = localStorage.getItem(CLAVE_COMPACTO) === '1';
-  } catch { /* sin almacenamiento: sin preferencia */ }
+  let compacto = leerEstado<EstadoGaleria>()?.panelsCompact === true || readPanelsCompactPref();
   const aplicar = (): void => {
     const enCajon = movil.matches || compacto;
     abrir.hidden = !enCajon;
@@ -179,9 +182,8 @@ function montarCompacto(nav: HTMLElement): void {
   abrir.addEventListener('click', () => cajon.show?.());
   boton?.addEventListener('click', () => {
     compacto = !compacto;
-    try {
-      localStorage.setItem(CLAVE_COMPACTO, compacto ? '1' : '0');
-    } catch { /* sin almacenamiento: dura hasta recargar */ }
+    writePanelsCompactPref(compacto);
+    guardarEstado({ panelsCompact: compacto || undefined });
     aplicar();
   });
   aplicar();
