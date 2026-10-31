@@ -119,6 +119,7 @@ export const BRAND_DERIVE: Record<string, string> = {
   '--iswc-brand-text': 'hsl(from var(--iswc-color-brand) h s 76%)',
   '--iswc-focus': 'var(--iswc-color-brand)',
   '--iswc-logo-bg': 'var(--iswc-color-brand)',
+  '--iswc-on-brand': 'oklch(from var(--iswc-color-brand-strong) clamp(0, calc((var(--iswc-bg2font-umbral, 0.65) - l) * 1000), 1) 0 0)',
   '--iswc-logo-fg': 'var(--iswc-on-brand)',
   '--iswc-logo-accent': 'var(--iswc-color-brand)',
   '--iswc-hue-rotate': 'calc((var(--iswc-brand-h) - var(--iswc-logo-h)) * 1deg)',
@@ -152,7 +153,6 @@ export function seedCss(selector: string, p: PaletteSeedInput): string {
     `  --iswc-contrast-l: ${s.contrastL};`,
     `  --iswc-tint: ${s.tint};`,
     `  --iswc-font-tint: ${s.fontTint};`,
-    `  --iswc-on-brand: ${onBrandOf(p)};`,
   ];
   return `${selector} {\n${lines.join('\n')}\n}`;
 }
@@ -168,7 +168,6 @@ export function applyBrandVars(el: HTMLElement, p: PaletteSeedInput): void {
   el.style.setProperty('--iswc-contrast-l', s.contrastL);
   el.style.setProperty('--iswc-tint', String(s.tint));
   el.style.setProperty('--iswc-font-tint', String(s.fontTint));
-  el.style.setProperty('--iswc-on-brand', onBrandOf(p));
   for (const [k, v] of Object.entries(BRAND_DERIVE)) el.style.setProperty(k, v);
   for (const [k, v] of Object.entries(SURFACE_DERIVE)) el.style.setProperty(k, v);
 }
@@ -245,13 +244,25 @@ export function toHex(c: Rgb): string {
   return '#' + c.map((x) => Math.round(Math.min(255, Math.max(0, x))).toString(16).padStart(2, '0')).join('');
 }
 
-const DARK_ON_BRAND_L = 0.12;
+/** Corte de bg2font (espejo del default de `--iswc-bg2font-umbral`). */
+const BG2FONT_UMBRAL = 0.65;
 
-/** Texto sobre el main: blanco si llega a 3:1 (UI/negrita), si no el tono muy oscuro. */
+/** Luminosidad L de oklch (0-1). */
+function oklchL([r, g, b]: Rgb): number {
+  const lin = (c: number) => { const x = c / 255; return x <= 0.04045 ? x / 12.92 : ((x + 0.055) / 1.055) ** 2.4; };
+  const [R, G, B] = [lin(r), lin(g), lin(b)];
+  const l = Math.cbrt(0.4122214708 * R + 0.5363325363 * G + 0.0514459929 * B);
+  const m = Math.cbrt(0.2119034982 * R + 0.6806995451 * G + 0.1073969566 * B);
+  const s = Math.cbrt(0.0883024619 * R + 0.2817188376 * G + 0.6299787005 * B);
+  return 0.2104542553 * l + 0.793617785 * m - 0.0040720468 * s;
+}
+
+/** Tono de `--iswc-color-brand-strong`: el fondo de los controles filled. */
+const brandStrongOf = (h: number, s: string, b: string): Rgb => hslToRgb(h, pct(s), pct(b) * 0.88);
+
+/** Texto sobre brand-strong (espejo de bg2font): blanco por debajo del umbral, negro por encima. */
 export function onBrandOf(p: PaletteSeedInput): string {
-  const brand = hslToRgb(p.h, pct(p.s), pct(p.b));
-  if (contrastRatio(brand, [255, 255, 255]) >= 3) return '#fff';
-  return `hsl(${p.h} ${p.s} ${DARK_ON_BRAND_L * 100}%)`;
+  return oklchL(brandStrongOf(p.h, p.s, p.b)) < BG2FONT_UMBRAL ? '#fff' : '#000';
 }
 
 /** Colores resueltos de una paleta en un juego de superficies ('light' = sl, 'dark' = sd). */
@@ -277,7 +288,8 @@ export function resolvePalette(p: PaletteConfig, set: 'light' | 'dark'): Resolve
   }
   void bl;
   const ob = onBrandOf(p);
-  out['on-brand'] = ob === '#fff' ? [255, 255, 255] : hslToRgb(s.h, pct(s.s), DARK_ON_BRAND_L);
+  out['on-brand'] = ob === '#fff' ? [255, 255, 255] : [0, 0, 0];
+  out['brand-strong'] = brandStrongOf(s.h, s.s, s.b);
   return out;
 }
 
@@ -296,7 +308,7 @@ export const CONTRAST_PAIRS: [string, string, number][] = [
   ['code-text', 'code-bg', 4.5],
   ['brand-text', 'bg', 4.5],
   ['contrast-text', 'bg', 4.5],
-  ['on-brand', 'brand', 3],
+  ['on-brand', 'brand-strong', 3],
 ];
 
 /**
@@ -367,7 +379,7 @@ export function palettesScss(list: PaletteConfig[] = PALETTES): string {
  *   --iswc-contrast-h/s/l     acento secundario mas vivo (camaleon: hsl(h 80% 50%))
  *   --iswc-tint               intensidad del tinte de superficies (0 = neutras)
  *   --iswc-font-tint          intensidad del tinte de los textos
- *   --iswc-on-brand           texto sobre el main (blanco o el tono muy oscuro)
+ *   --iswc-on-brand           texto sobre el main: bg2font (blanco o negro según L de oklch)
  *
  * La capa comun deriva la rampa brand, --iswc-color-contrast (+pale/strong),
  * --iswc-color-bright (hsl(h 100% 70%)), y DOS juegos de superficies:

@@ -13,7 +13,7 @@
  *   --iswc-contrast-h/s/l     acento secundario mas vivo (camaleon: hsl(h 80% 50%))
  *   --iswc-tint               intensidad del tinte de superficies (0 = neutras)
  *   --iswc-font-tint          intensidad del tinte de los textos
- *   --iswc-on-brand           texto sobre el main (blanco o el tono muy oscuro)
+ *   --iswc-on-brand           texto sobre el main: bg2font (blanco o negro según L de oklch)
  *
  * La capa comun deriva la rampa brand, --iswc-color-contrast (+pale/strong),
  * --iswc-color-bright (hsl(h 100% 70%)), y DOS juegos de superficies:
@@ -44,6 +44,7 @@
   --iswc-brand-text: hsl(from var(--iswc-color-brand) h s 76%);
   --iswc-focus: var(--iswc-color-brand);
   --iswc-logo-bg: var(--iswc-color-brand);
+  --iswc-on-brand: oklch(from var(--iswc-color-brand-strong) clamp(0, calc((var(--iswc-bg2font-umbral, 0.65) - l) * 1000), 1) 0 0);
   --iswc-logo-fg: var(--iswc-on-brand);
   --iswc-logo-accent: var(--iswc-color-brand);
   --iswc-hue-rotate: calc((var(--iswc-brand-h) - var(--iswc-logo-h)) * 1deg);
@@ -110,7 +111,6 @@
   --iswc-contrast-l: 50%;
   --iswc-tint: 0.8;
   --iswc-font-tint: 1;
-  --iswc-on-brand: #fff;
 }
 
 /* Cardenal · rojo de marca #e03131 — Rojo de marca sobre superficies neutras, sobrio y directo. */
@@ -123,7 +123,6 @@
   --iswc-contrast-l: 50%;
   --iswc-tint: 0;
   --iswc-font-tint: 0;
-  --iswc-on-brand: #fff;
 }
 
 /* Iguana · yellowgreen — Verde lima de campo, superficies muy tintadas. */
@@ -136,7 +135,6 @@
   --iswc-contrast-l: 50%;
   --iswc-tint: 1.2;
   --iswc-font-tint: 1;
-  --iswc-on-brand: hsl(80 61% 12%);
 }
 
 /* Rubí · red rgb(200,0,0) — Rojo intenso y apasionado. */
@@ -149,7 +147,6 @@
   --iswc-contrast-l: 50%;
   --iswc-tint: 1;
   --iswc-font-tint: 1;
-  --iswc-on-brand: #fff;
 }
 
 /* Esmeralda · green rgb(0,200,0) — Verde vivo, fresco y natural. */
@@ -162,7 +159,6 @@
   --iswc-contrast-l: 50%;
   --iswc-tint: 1;
   --iswc-font-tint: 1;
-  --iswc-on-brand: hsl(120 100% 12%);
 }
 
 /* Zafiro · blue rgb(0,0,200) — Azul profundo y elegante. */
@@ -175,7 +171,6 @@
   --iswc-contrast-l: 50%;
   --iswc-tint: 1;
   --iswc-font-tint: 1;
-  --iswc-on-brand: #fff;
 }
 
 /* Citrino · yellow rgb(200,200,0) — Amarillo solar y optimista. */
@@ -188,7 +183,6 @@
   --iswc-contrast-l: 50%;
   --iswc-tint: 1;
   --iswc-font-tint: 1;
-  --iswc-on-brand: hsl(60 100% 12%);
 }
 
 /* Orquídea · magenta rgb(200,0,200) — Magenta floral, creativo y audaz. */
@@ -201,7 +195,6 @@
   --iswc-contrast-l: 50%;
   --iswc-tint: 1;
   --iswc-font-tint: 1;
-  --iswc-on-brand: #fff;
 }
 
 /* Turquesa · cyan rgb(0,200,200) — Cian tropical y limpio; la de Avatar. */
@@ -214,7 +207,6 @@
   --iswc-contrast-l: 50%;
   --iswc-tint: 1;
   --iswc-font-tint: 1;
-  --iswc-on-brand: hsl(180 100% 12%);
 }
 
 /* Marte · tomato rgb(219,48,0) — Rojo anaranjado, enérgico como el planeta rojo. */
@@ -227,7 +219,6 @@
   --iswc-contrast-l: 50%;
   --iswc-tint: 1;
   --iswc-font-tint: 1;
-  --iswc-on-brand: #fff;
 }
 
 /* Granate · crimson rgb(200,40,80) — Carmesí profundo, serio y cálido. */
@@ -240,7 +231,6 @@
   --iswc-contrast-l: 50%;
   --iswc-tint: 1;
   --iswc-font-tint: 1;
-  --iswc-on-brand: #fff;
 }
 
 /* Neptuno · skyGreen rgb(15,146,216) — Azul cielo marino, sereno. */
@@ -253,7 +243,6 @@
   --iswc-contrast-l: 50%;
   --iswc-tint: 1;
   --iswc-font-tint: 1;
-  --iswc-on-brand: #fff;
 }
 
 /* Peridoto · lemonGreen rgb(132,233,16) — Verde limón eléctrico y juvenil. */
@@ -266,7 +255,6 @@
   --iswc-contrast-l: 50%;
   --iswc-tint: 1;
   --iswc-font-tint: 1;
-  --iswc-on-brand: hsl(88 87% 12%);
 }
 
 /* Jade · militaryGreen rgb(26,128,0) — Verde bosque, firme y tranquilo. */
@@ -279,7 +267,6 @@
   --iswc-contrast-l: 50%;
   --iswc-tint: 1;
   --iswc-font-tint: 1;
-  --iswc-on-brand: #fff;
 }
 
 /* Aguamarina · aquaBlue rgb(30,168,202) — Azul agua cristalina. */
@@ -292,7 +279,6 @@
   --iswc-contrast-l: 50%;
   --iswc-tint: 1;
   --iswc-font-tint: 1;
-  --iswc-on-brand: #fff;
 }
 
 /* Amatista · purple rgb(128,0,128) — Púrpura profundo y místico. */
@@ -305,7 +291,6 @@
   --iswc-contrast-l: 50%;
   --iswc-tint: 1;
   --iswc-font-tint: 1;
-  --iswc-on-brand: #fff;
 }
 
 /* Menta · springGreen rgb(19,200,132) — Verde menta, fresco y amable. */
@@ -318,7 +303,6 @@
   --iswc-contrast-l: 50%;
   --iswc-tint: 1;
   --iswc-font-tint: 1;
-  --iswc-on-brand: #fff;
 }
 
 /* Luna · gray rgb(128,128,128) — Gris lunar, neutro y silencioso. */
@@ -331,7 +315,6 @@
   --iswc-contrast-l: 52%;
   --iswc-tint: 0.6;
   --iswc-font-tint: 1;
-  --iswc-on-brand: #fff;
 }
 
 /* Júpiter · orange rgb(200,128,0) — Naranja terroso como las bandas de Júpiter. */
@@ -344,7 +327,6 @@
   --iswc-contrast-l: 50%;
   --iswc-tint: 1;
   --iswc-font-tint: 1;
-  --iswc-on-brand: #fff;
 }
 
 /* Flamenco · pink rgb(255,128,200) — Rosa vibrante y festivo. */
@@ -357,7 +339,6 @@
   --iswc-contrast-l: 50%;
   --iswc-tint: 1;
   --iswc-font-tint: 1;
-  --iswc-on-brand: #fff;
 }
 
 /* Lapislázuli · navy rgb(0,52,163) — Azul marino noble. */
@@ -370,7 +351,6 @@
   --iswc-contrast-l: 50%;
   --iswc-tint: 1;
   --iswc-font-tint: 1;
-  --iswc-on-brand: #fff;
 }
 
 /* Cobre · brown rgb(143,52,0) — Marrón cobrizo, artesanal. */
@@ -383,7 +363,6 @@
   --iswc-contrast-l: 50%;
   --iswc-tint: 1;
   --iswc-font-tint: 1;
-  --iswc-on-brand: #fff;
 }
 
 /* Tanzanita · violet rgb(128,43,200) — Violeta azulado, sofisticado. */
@@ -396,7 +375,6 @@
   --iswc-contrast-l: 50%;
   --iswc-tint: 1;
   --iswc-font-tint: 1;
-  --iswc-on-brand: #fff;
 }
 
 /* Olivino · olive rgb(128,150,0) — Verde oliva, mediterráneo y sereno. */
@@ -409,7 +387,6 @@
   --iswc-contrast-l: 50%;
   --iswc-tint: 1;
   --iswc-font-tint: 1;
-  --iswc-on-brand: #fff;
 }
 
 /* Ámbar · amber rgb(255,191,0) — Ámbar dorado y cálido. */
@@ -422,7 +399,6 @@
   --iswc-contrast-l: 50%;
   --iswc-tint: 1;
   --iswc-font-tint: 1;
-  --iswc-on-brand: hsl(45 100% 12%);
 }
 
 /* ─── Tema → juego de superficies (data-panda lo invierte) ─────────── */

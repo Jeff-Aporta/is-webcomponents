@@ -62,6 +62,8 @@
   /* Alto único de controles (btn/input/select/switch). Escala con font-size. */
   --iswc-control-height: 2.5em;
   --iswc-on-brand: #fff;
+  /* bg2font: L de oklch bajo la cual el texto sobre un fondo de color va en blanco (encima, negro). */
+  --iswc-bg2font-umbral: 0.65;
   /* Cada familia semantica define UN SOLO tono base, sin sufijo; el resto son
      modificadores RELATIVOS a ese base, no una escala numerica:
 

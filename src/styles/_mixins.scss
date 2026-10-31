@@ -20,6 +20,13 @@
 // Familias con mixin dedicado por la variación:
 //   brand, info, neutral, text.
 
+// ─── bg2font ─────────────────────────────────────────────────────────────
+//   Texto legible sobre un fondo cualquiera: blanco o negro según la luminosidad
+//   oklch del fondo. `--iswc-bg2font-umbral` (is-base) es el corte: por debajo, blanco.
+@function bg2font($bg) {
+  @return #{'oklch(from #{$bg} clamp(0, calc((var(--iswc-bg2font-umbral, 0.65) - l) * 1000), 1) 0 0)'};
+}
+
 // ─── Tono (botones + familia) ────────────────────────────────────────────
 //   Rampa canonica W24: tokens `--iswc-color-$family{-strong,-stronger,
 //   -paler,-pale}` + `--iswc-$family-text` (con fallback a stronger) +
@@ -35,7 +42,7 @@
   --_tone-text: var(--iswc-#{$family}-text, var(--_tone-stronger));
   --_tone-soft: color-mix(in srgb, var(--_tone) 18%, transparent);
   --_tone-soft-active: color-mix(in srgb, var(--_tone) 28%, transparent);
-  --_tone-on: var(--iswc-on-brand);
+  --_tone-on: #{bg2font(var(--_tone-strong))};
 }
 
 // brand: `_tone-stronger` y `_tone-strongest` llevan fallback a dodgerblue
@@ -51,7 +58,7 @@
   --_tone-text: var(--iswc-brand-text, var(--_tone-stronger));
   --_tone-soft: color-mix(in srgb, var(--_tone) 18%, transparent);
   --_tone-soft-active: color-mix(in srgb, var(--_tone) 28%, transparent);
-  --_tone-on: var(--iswc-on-brand);
+  --_tone-on: #{bg2font(var(--_tone-strong))};
 }
 
 // info: `_tone-strongest` cae a `stronger` (la rampa info solo tiene 4
@@ -66,7 +73,7 @@
   --_tone-text: var(--iswc-info-text, var(--_tone-stronger));
   --_tone-soft: color-mix(in srgb, var(--_tone) 18%, transparent);
   --_tone-soft-active: color-mix(in srgb, var(--_tone) 28%, transparent);
-  --_tone-on: var(--iswc-on-brand);
+  --_tone-on: #{bg2font(var(--_tone-strong))};
 }
 
 // neutral: `_tone-text` es el propio tono (no control-text) para que el
@@ -81,7 +88,7 @@
   --_tone-text: var(--_tone);
   --_tone-soft: color-mix(in srgb, var(--_tone) 18%, transparent);
   --_tone-soft-active: color-mix(in srgb, var(--_tone) 28%, transparent);
-  --_tone-on: var(--iswc-on-brand);
+  --_tone-on: #{bg2font(var(--_tone-strong))};
 }
 
 // text: el "color" es el foreground del tema, sin rampa `--iswc-color-*`.
