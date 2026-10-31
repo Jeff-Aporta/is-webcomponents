@@ -3,7 +3,12 @@
      --iswc-heading-color   : color base (semántico / currentColor / CSS libre).
      --iswc-heading-mix     : % mezclado hacia --iswc-heading-mix-with (sube al bajar de nivel).
      --iswc-heading-mix-with: color destino del mix (default: texto del tema).
-     --iswc-heading-size    : tamaño en em del nivel actual. */
+     --iswc-heading-size    : tamaño en em del nivel actual.
+     --iswc-heading-font    : familia de todos los títulos; se fija una sola vez en `:root`.
+     --iswc-heading-weight  : peso de todos los títulos.
+     Variantes: --iswc-heading-from, --iswc-heading-to y --iswc-heading-angle (gradient),
+     --iswc-heading-glow (glow), --iswc-heading-stroke (outlined), --iswc-heading-fill (pattern),
+     --iswc-heading-shadow (shadow), --iswc-heading-mark (highlight). */
 
 /* Tipos registrados para que transitions/animations operen sobre estas vars. */
 @property --iswc-heading-color {
@@ -31,9 +36,9 @@
 
 .heading {
   margin: 0;
-  font-family: var(--iswc-sans, inherit);
+  font-family: var(--iswc-heading-font, var(--iswc-sans, inherit));
   font-size: var(--iswc-heading-size);
-  font-weight: 650;
+  font-weight: var(--iswc-heading-weight, 650);
   line-height: 1.2;
   letter-spacing: -0.01em;
   min-inline-size: 0;
@@ -62,3 +67,68 @@
 
 /* Hereda el color tipográfico del contexto. */
 :host([color="current"]) { --iswc-heading-color: currentColor; }
+
+/* Variantes: solid es el default. El tono sale de --iswc-heading-color, así `color` y `mix` siguen mandando. */
+:host {
+  --_tinta: color-mix(in srgb, var(--iswc-heading-color), var(--iswc-heading-mix-with) var(--iswc-heading-mix));
+}
+
+:host([variant="gradient"]) .heading,
+:host([variant="pattern"]) .heading {
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+:host([variant="gradient"]) .heading {
+  background-image: linear-gradient(
+    var(--iswc-heading-angle, 100deg),
+    var(--iswc-heading-from, var(--iswc-heading-color)),
+    var(--iswc-heading-to, var(--iswc-color-contrast, var(--iswc-heading-mix-with)))
+  );
+}
+
+/* Admite una imagen: --iswc-heading-fill: url(textura.webp). */
+:host([variant="pattern"]) .heading {
+  background-image: var(
+    --iswc-heading-fill,
+    repeating-linear-gradient(-45deg, var(--_tinta) 0 0.12em, color-mix(in srgb, var(--_tinta) 45%, transparent) 0.12em 0.24em)
+  );
+  background-size: cover;
+}
+
+:host([variant="glow"]) .heading {
+  color: var(--_tinta);
+  text-shadow: var(
+    --iswc-heading-glow,
+    0 0 0.12em color-mix(in srgb, var(--_tinta) 70%, transparent),
+    0 0 0.5em color-mix(in srgb, var(--_tinta) 45%, transparent)
+  );
+}
+
+:host([variant="outlined"]) .heading {
+  color: transparent;
+  -webkit-text-stroke: var(--iswc-heading-stroke, 0.03em) var(--_tinta);
+}
+
+:host([variant="shadow"]) .heading {
+  color: var(--_tinta);
+  text-shadow: var(--iswc-heading-shadow, 0.05em 0.05em 0 color-mix(in srgb, var(--_tinta) 28%, transparent));
+}
+
+:host([variant="highlight"]) .heading {
+  color: var(--iswc-text);
+  background-image: linear-gradient(transparent 62%, var(--iswc-heading-mark, color-mix(in srgb, var(--_tinta) 32%, transparent)) 62%);
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+/* Sin colores forzables el relleno recortado desaparecería. */
+@media (forced-colors: active) {
+  :host([variant]) .heading {
+    color: CanvasText;
+    background-image: none;
+    -webkit-text-stroke: 0;
+    text-shadow: none;
+  }
+}

@@ -1,41 +1,41 @@
-﻿---
+---
 tag: iswc-format-date
 tags:
   - iswc-format-date
 category: helpers
 status: public
 source: ./format-date.ts
-style: ./format-date.css
+style: ./format-date.scss
 preview: ./format-date.json
 ---
 # `<iswc-format-date>`
 
-## PropÃ³sito
+## Propósito
 
-Formatea fechas con Intl.DateTimeFormat. Cualquier locale BCP 47 vÃ­a locale (o lang del documento).
+Formatea fechas con Intl.DateTimeFormat. Cualquier locale BCP 47 vía locale (o lang del documento).
 
-Este mÃ³dulo registra `<iswc-format-date>`.
+Este módulo registra `<iswc-format-date>`.
 
-## CuÃ¡ndo usarlo
+## Cuándo usarlo
 
-Formato, observaciÃ³n y posicionamiento reutilizable sobre APIs nativas.
+Formato, observación y posicionamiento reutilizable sobre APIs nativas.
 
-## CuÃ¡ndo no usarlo
+## Cuándo no usarlo
 
 No crear wrapper nuevo si Intl/Observer/position existente cubre caso.
 
-## ImportaciÃ³n
+## Importación
 
 ```js
 import './format-date.js';
 ```
 
-## Ejemplo mÃ­nimo
+## Ejemplo mínimo
 
 ```html
 const asked = ['es','en','fr','de','ja','zh-CN','ar','pt-BR'];
 const ok = Intl.DateTimeFormat.supportedLocalesOf(asked);
-// â†’ p.ej. ["es","en","fr","de","ja","zh-CN","ar","pt-BR"]
+// → p.ej. ["es","en","fr","de","ja","zh-CN","ar","pt-BR"]
 <iswc-format-date locale="ja" date="2026-07-30" weekday="long" month="long" day="numeric" year="numeric"></iswc-format-date>
 ```
 
@@ -47,21 +47,21 @@ const ok = Intl.DateTimeFormat.supportedLocalesOf(asked);
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
-| `date` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `weekday` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `era` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `year` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `month` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `day` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `hour` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `minute` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `second` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `time-zone` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `time-zone-name` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `hour-format` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `locale` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `date` | fecha ISO \| `Date` | Fecha a mostrar; sin ella, ahora. |
+| `weekday` | `Intl.DateTimeFormat` | `long` \| `short` \| `narrow`. |
+| `era` | `Intl.DateTimeFormat` | `long` \| `short` \| `narrow`. |
+| `year` | `Intl.DateTimeFormat` | `numeric` \| `2-digit`. |
+| `month` | `Intl.DateTimeFormat` | `numeric` \| `2-digit` \| `long` \| `short` \| `narrow`. |
+| `day` | `Intl.DateTimeFormat` | `numeric` \| `2-digit`. |
+| `hour` | `Intl.DateTimeFormat` | `numeric` \| `2-digit`. |
+| `minute` | `Intl.DateTimeFormat` | `numeric` \| `2-digit`. |
+| `second` | `Intl.DateTimeFormat` | `numeric` \| `2-digit`. |
+| `time-zone` | string (IANA) | Zona horaria, por ejemplo `America/Bogota`. |
+| `time-zone-name` | `Intl.DateTimeFormat` | `short` \| `long`. |
+| `hour-format` | `auto` \| `12` \| `24` | Reloj de 12 o 24 horas. |
+| `locale` | string (BCP 47) | Configuración regional; sin ella, la del documento. |
 
-#### Propiedades pÃºblicas
+#### Propiedades públicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
@@ -75,7 +75,7 @@ No expone.
 ### Eventos
 
 
-| Evento | DescripciÃ³n |
+| Evento | Descripción |
 | --- | --- |
 
 No expone.
@@ -93,11 +93,11 @@ el.addEventListener('click', (e) => {
 
 </details>
 
-### MÃ©todos y propiedades pÃºblicas
+### Métodos y propiedades públicas
 
 No expone.
 
-Propiedades pÃºblicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
+Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
 
 ### CSS parts
 
@@ -113,15 +113,15 @@ No expone.
 
 No expone.
 
-### IntegraciÃ³n con formularios
+### Integración con formularios
 
-No declara integraciÃ³n form-associated propia en este mÃ³dulo.
+No declara integración form-associated propia en este módulo.
 
 ## Comportamiento
 
-DocumentaciÃ³n de cabecera preservada desde fuente:
+Documentación de cabecera preservada desde fuente:
 
-> <iswc-format-date> â€” Web Component (vanilla).
+> <iswc-format-date> — Web Component (vanilla).
 > Formatea fechas con Intl.DateTimeFormat.
 > Atributos: date, weekday, era, year, month, day, hour, minute, second,
 >            time-zone, time-zone-name, hour-format (auto|12|24),
@@ -131,11 +131,11 @@ DocumentaciÃ³n de cabecera preservada desde fuente:
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 
-Tags del mÃ³dulo: `<iswc-format-date>`.
+Tags del módulo: `<iswc-format-date>`.
 
 ## Accesibilidad
 
-Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: ninguno explÃ­cito en fuente.
+Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: ninguno explícito en fuente.
 
 ## Ejemplo avanzado
 
@@ -146,7 +146,7 @@ Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: ninguno ex
 
 ## Errores comunes
 
-- Usar tag sin importar mÃ³dulo primero.
+- Usar tag sin importar módulo primero.
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
@@ -154,15 +154,15 @@ Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: ninguno ex
 
 ## Reglas para LLM
 
-- Reusar componente y dependencias antes de implementaciÃ³n paralela.
+- Reusar componente y dependencias antes de implementación paralela.
 - Mantener nombres exactos de tags y API.
-- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explÃ­cito.
-- Leer callers/shared antes de cambiar; corregir raÃ­z comÃºn.
-- No modificar API basÃ¡ndose solo en preview.
+- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explícito.
+- Leer callers/shared antes de cambiar; corregir raíz común.
+- No modificar API basándose solo en preview.
 
 ## Fuentes
 
 - [JavaScript](./format-date.ts)
-- [CSS](./format-date.css)
-- [Ãndice de categorÃ­a](../../specs/componentes.md)
+- [CSS](./format-date.scss)
+- [Índice de categoría](../../../specs/componentes.md)
 - [Preview](./format-date.json)

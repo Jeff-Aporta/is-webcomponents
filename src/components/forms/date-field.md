@@ -5,7 +5,7 @@ tags:
 category: forms
 status: public
 source: ./date-field.ts
-style: ./date-field.css
+style: ./date-field.scss
 preview: ./date-field.json
 ---
 # `<iswc-date-field>`
@@ -161,6 +161,6 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: ninguno expl
 ## Fuentes
 
 - [JavaScript](./date-field.ts)
-- [CSS](./date-field.css)
-- [Índice de categoría](../../specs/componentes.md)
+- [CSS](./date-field.scss)
+- [Índice de categoría](../../../specs/componentes.md)
 - [Preview](./date-field.json)

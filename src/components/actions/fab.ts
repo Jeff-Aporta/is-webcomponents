@@ -28,6 +28,7 @@ import './button.js';
  *   extended    boolean — ancho extendido con label.
  *   without-shadow boolean
  *   label       string — texto accesible (y label extendido).
+ *   disabled    boolean — lo resuelve el iswc-button interno.
  *
  * Slots
  *   (default)    contenido / label (si extended).
@@ -58,7 +59,7 @@ import './button.js';
     </iswc-button>
   `;
 
-  const OBSERVED = ['icon', 'position', 'color', 'href', 'pulse', 'extended', 'without-shadow', 'label'];
+  const OBSERVED = ['icon', 'position', 'color', 'href', 'pulse', 'extended', 'without-shadow', 'label', 'disabled'];
   const VALID_COLOR = INTENT;
   const VALID_POSITION = ['bottom-end', 'bottom-start', 'top-end', 'top-start', 'inline'] as const;
   type Position = (typeof VALID_POSITION)[number];
@@ -74,20 +75,18 @@ import './button.js';
       adoptCss(shadow, import.meta.url);
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
       this.#root = shadow.querySelector<HTMLElement>('iswc-button')!;
-    }
-
-    onConnected() {
-      this.setAttribute('role', this.hasAttribute('href') ? 'link' : 'button');
-      this.#sync();
+      // En el constructor y no al conectar: reconectar el fab duplicaba el evento.
       this.#root.addEventListener('click', (e: Event) => {
+        if (this.hasAttribute('disabled')) return;
         emit(this, 'iswc-fab-click', { originalEvent: e });
       });
     }
 
+    onConnected() {
+      this.#sync();
+    }
+
     onAttributeChanged(name: string, oldVal: string | null, newVal: string | null): void {
-      if (name === 'href') {
-        this.setAttribute('role', this.hasAttribute('href') ? 'link' : 'button');
-      }
       this.#sync();
     }
 
@@ -119,6 +118,7 @@ import './button.js';
       this.#root.classList.toggle('pulse', this.hasAttribute('pulse'));
       this.#root.classList.toggle('extended', this.hasAttribute('extended'));
       this.#root.classList.toggle('no-shadow', this.hasAttribute('without-shadow'));
+      this.#root.toggleAttribute('disabled', this.hasAttribute('disabled'));
 
       // `href` convierte el iswc-button interno en <a> — el fab no reimplementa
       // nada de eso, solo propaga el atributo.

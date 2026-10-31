@@ -1,7 +1,7 @@
 :host {
   display: block;
   --iswc-stepper-accent: var(--iswc-color-brand);
-  --iswc-stepper-on-accent: var(--iswc-brand-fg);
+  --iswc-stepper-on-accent: var(--iswc-on-brand);
   --iswc-stepper-text: var(--iswc-text);
   --iswc-stepper-muted: color-mix(in srgb, var(--iswc-stepper-text) 65%, transparent);
   --iswc-stepper-border: var(--iswc-border);
@@ -13,51 +13,48 @@
 .stepper {
   display: flex;
   inline-size: 100%;
-  gap: 0.5rem;
+  gap: 0.5em;
 
   &[data-orientation="horizontal"] {
     flex-direction: row;
     align-items: flex-start;
-
-    .indicator {
-      flex-direction: column;
-      min-inline-size: 2rem;
-    }
-    .line {
-      flex: 1 1 auto;
-      block-size: 2px;
-      inline-size: auto;
-      min-block-size: 0;
-      margin: 0 0.25rem;
-    }
-    .step {
-      flex: 1 1 0;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-    }
-    .meta { margin-block-start: 0.5rem; }
   }
 
-  &[data-orientation="vertical"] {
-    flex-direction: column;
-
-    .step {
-      flex-direction: row;
-      inline-size: 100%;
-    }
-    .line {
-      inline-size: 2px;
-      min-block-size: 1.5rem;
-      margin: 0.25rem 0;
-    }
-    .indicator {
-      flex-direction: column;
-      align-items: center;
-      min-block-size: 100%;
-    }
-  }
+  &[data-orientation="vertical"] { flex-direction: column; }
 }
+
+/* La línea, el punto y la fila viven en el shadow de cada paso: el grupo no los alcanza con
+   un descendiente, así que la orientación se lee del host del paso. */
+:host(iswc-stepper-step[data-orientation="horizontal"]) {
+  .indicator { position: static; }
+  .line {
+    position: absolute;
+    inset-block-start: .9375em;
+    inset-inline-start: calc(50% + 1.25em);
+    inline-size: calc(100% - 2em);
+    block-size: .125em;
+    min-block-size: 0;
+  }
+  .step {
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    text-align: center;
+  }
+  .meta { margin-block-start: 0.5em; }
+}
+
+:host(iswc-stepper-step[data-orientation="vertical"]) {
+  .step { inline-size: 100%; }
+  .line {
+    inline-size: .125em;
+    min-block-size: 1.5em;
+    margin: 0.25em 0;
+  }
+  .indicator { min-block-size: 100%; }
+}
+
+:host(iswc-stepper-step:last-of-type) .line { display: none; }
 
 ::slotted(iswc-stepper-step) {
   flex: 1 1 0;
@@ -67,7 +64,7 @@
 .step {
   display: flex;
   align-items: flex-start;
-  gap: 0.75rem;
+  gap: 0.75em;
   position: relative;
 }
 
@@ -80,8 +77,8 @@
 }
 
 .dot {
-  inline-size: 2rem;
-  block-size: 2rem;
+  inline-size: 2em;
+  block-size: 2em;
   border-radius: 50%;
   display: inline-flex;
   align-items: center;
@@ -95,10 +92,12 @@
   z-index: 1;
 }
 
+.num { font-size: .875em; }
+
 .line {
   inline-size: 100%;
   flex: 1 1 auto;
-  min-block-size: 1.5rem;
+  min-block-size: 1.5em;
   background: var(--iswc-stepper-border);
   border: 0;
   transition: background 0.2s;
@@ -107,63 +106,44 @@
 .meta {
   display: flex;
   flex-direction: column;
-  gap: 0.125rem;
+  gap: 0.125em;
   min-inline-size: 0;
 }
 
 .label {
   font-weight: 500;
   color: var(--iswc-stepper-text);
-  font-size: 0.95rem;
+  font-size: 0.95em;
 }
 
 .description {
-  font-size: 0.85rem;
+  font-size: 0.85em;
   color: var(--iswc-stepper-muted);
 }
 
 /* Estados heredados del dataset.state en el host */
 :host([data-state="done"]) .dot {
   background: var(--iswc-stepper-success);
-  color: var(--iswc-stepper-accent-fg);
+  color: var(--iswc-stepper-on-accent);
   border-color: var(--iswc-stepper-success);
 }
 :host([data-state="active"]) .dot {
   background: var(--iswc-stepper-accent);
-  color: var(--iswc-stepper-accent-fg);
+  color: var(--iswc-stepper-on-accent);
   border-color: var(--iswc-stepper-accent);
-  box-shadow: 0 0 0 4px color-mix(in srgb, var(--iswc-stepper-accent) 20%, transparent);
+  box-shadow: 0 0 0 .25em color-mix(in srgb, var(--iswc-stepper-accent) 20%, transparent);
 }
 :host([data-state="error"]) .dot {
   background: var(--iswc-stepper-danger);
-  color: var(--iswc-stepper-accent-fg);
+  color: var(--iswc-stepper-on-accent);
   border-color: var(--iswc-stepper-danger);
 }
-:host([data-state="disabled"]) .dot { opacity: 0.5; }
+:host([data-state="disabled"]) .dot { opacity: 0.55; }
 
-:host([data-state="done"]) {
-  ~ :host {
-    .line { background: var(--iswc-stepper-success); }
-  }
-}
+:host([data-state="done"]) .line { background: var(--iswc-stepper-success); }
 
 /* Variants */
-.stepper {
-  &[data-color="simple"] .dot { border-width: 1px; }
-
-  &[data-color="numbered"] {
-    counter-reset: step 0;
-
-    .dot {
-      &::after {
-        counter-increment: step;
-        content: counter(step);
-      }
-      .num { display: none; }
-    }
-    ::slotted(iswc-stepper-step) { counter-increment: step; }
-  }
-}
+:host([data-color="simple"]) .dot { border-width: .0625em; }
 
 /* Hide line (atributo, no :state() — ver AGENTS.md §6.6). */
 :host([without-line]) .line { display: none; }

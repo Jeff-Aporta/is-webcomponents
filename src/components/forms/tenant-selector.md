@@ -5,7 +5,7 @@ tags:
 category: forms
 status: public
 source: ./tenant-selector.ts
-style: ./tenant-selector.css
+style: ./tenant-selector.scss
 preview: ./tenant-selector.json
 ---
 # `<iswc-tenant-selector>`

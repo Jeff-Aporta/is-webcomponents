@@ -37,8 +37,9 @@ function applyAgg(fn: string, values: unknown[]) {
   if (!nums.length) return null;
   if (fn === AggFunc.SUM) return nums.reduce((a, b) => a + b, 0);
   if (fn === AggFunc.AVG) return nums.reduce((a, b) => a + b, 0) / nums.length;
-  if (fn === AggFunc.MIN) return Math.min(...nums);
-  if (fn === AggFunc.MAX) return Math.max(...nums);
+  // Sin spread: Math.min(...nums) revienta la pila con 100.000 valores.
+  if (fn === AggFunc.MIN) return nums.reduce((a, b) => (b < a ? b : a));
+  if (fn === AggFunc.MAX) return nums.reduce((a, b) => (b > a ? b : a));
   return null;
 }
 
@@ -47,11 +48,11 @@ function applyAgg(fn: string, values: unknown[]) {
  * @param {Map<string, ColumnState>} colById
  * @returns {Record<string, unknown>}
  */
-function aggregateGroup(leaves: RowNode[], colById: Map<string, ColumnState>): Record<string, unknown> {
+export function aggregateGroup(leaves: RowNode[], colById: Map<string, ColumnState>): Record<string, unknown> {
   const agg: Record<string, unknown> = {};
   for (const col of colById.values()) {
     if (!col.aggFunc) continue;
-    agg[col.colId] = applyAgg(col.aggFunc, leaves.map((n) => getCellValue(col, n)));
+    agg[col.colId] = applyAgg(String(col.aggFunc), leaves.map((n) => getCellValue(col, n)));
   }
   return agg;
 }

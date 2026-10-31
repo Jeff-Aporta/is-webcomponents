@@ -1,40 +1,40 @@
-﻿---
+---
 tag: iswc-bubble-chart
 tags:
   - iswc-bubble-chart
-category: charts
+category: data-viz
 status: public
 source: ./bubble-chart.ts
-style: ./bubble-chart.css
+style: ./bubble-chart.scss
 preview: ./bubble-chart.json
 ---
 # `<iswc-bubble-chart>`
 
-## PropÃ³sito
+## Propósito
 
 Wrapper tipado de `<iswc-chart>` con `type` fijo en `bubble`. Misma API
-de configuraciÃ³n Chart.js (`config` / `<script type="application/json">`);
+de configuración Chart.js (`config` / `<script type="application/json">`);
 el atributo `type` no se cambia.
 
-Este mÃ³dulo registra `<iswc-bubble-chart>`.
+Este módulo registra `<iswc-bubble-chart>`.
 
-## CuÃ¡ndo usarlo
+## Cuándo usarlo
 
-Series, distribuciones, relaciones o jerarquÃ­as de datos â€” cuando el tipo
-de grÃ¡fica es siempre bubble chart.
+Series, distribuciones, relaciones o jerarquías de datos — cuando el tipo
+de gráfica es siempre bubble chart.
 
-## CuÃ¡ndo no usarlo
+## Cuándo no usarlo
 
 Si el tipo puede cambiar en runtime, usar `<iswc-chart type="bubble">`.
 No crear otro engine: hereda marks/engine de `chart.js`.
 
-## ImportaciÃ³n
+## Importación
 
 ```js
 import './bubble-chart.js';
 ```
 
-## Ejemplo mÃ­nimo
+## Ejemplo mínimo
 
 ```html
 <iswc-bubble-chart>
@@ -60,21 +60,21 @@ en `bubble` por la clase tipada.
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
-| `label` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `legend-position` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `index-axis` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `min` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `max` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `grid` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `stacked` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `without-animation` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `without-legend` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `without-tooltip` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `x-label` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `y-label` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `color` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `label` | string | Título accesible y encabezado de la gráfica. |
+| `legend-position` | `top` \| `bottom` \| `left` \| `right` | Lado de la leyenda. Por defecto `bottom`. |
+| `index-axis` | `x` \| `y` | `y` vuelve horizontales las barras. |
+| `min` | number | Mínimo fijo del eje de valores. |
+| `max` | number | Máximo fijo del eje de valores. |
+| `grid` | boolean | Fuerza la rejilla del eje. |
+| `stacked` | boolean | Apila las series. |
+| `without-animation` | boolean | Pinta sin animar la entrada. |
+| `without-legend` | boolean | Oculta la leyenda. |
+| `without-tooltip` | boolean | Quita el tooltip al pasar el puntero. |
+| `x-label` | string | Título del eje X. |
+| `y-label` | string | Título del eje Y. |
+| `color` | `viewer` \| color | `viewer` lo pinta como visor dentro del lightbox. |
 
-#### Propiedades pÃºblicas
+#### Propiedades públicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
@@ -94,17 +94,17 @@ en `bubble` por la clase tipada.
 ### Eventos
 
 
-| Evento | DescripciÃ³n |
+| Evento | Descripción |
 | --- | --- |
 | `iswc-render` | Emitido al renderizar o redibujar el componente. |
-| `iswc-turtle-state` | Emitido al actualizarse el estado del mÃ³dulo turtle (resize, datos, etc.). |
+| `iswc-turtle-state` | Emitido al actualizarse el estado del módulo turtle (resize, datos, etc.). |
 | `iswc-open-viewer` | Emitido al abrir el visor ampliado (cancelable). |
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `iswc-render` | sÃ­ | sÃ­ | sÃ­ | no |
-| `iswc-turtle-state` | sÃ­ | sÃ­ | sÃ­ | no |
-| `iswc-open-viewer` | sÃ­ | sÃ­ | sÃ­ | sÃ­ |
+| `iswc-render` | sí | sí | sí | no |
+| `iswc-turtle-state` | sí | sí | sí | no |
+| `iswc-open-viewer` | sí | sí | sí | sí |
 
 
 <details>
@@ -119,13 +119,13 @@ el.addEventListener('iswc-render', (e) => {
 
 </details>
 
-### MÃ©todos y propiedades pÃºblicas
+### Métodos y propiedades públicas
 
-| MÃ©todo | Uso |
+| Método | Uso |
 | --- | --- |
-| `updateComplete()` | MÃ©todo pÃºblico declarado. |
+| `updateComplete()` | Método público declarado. |
 
-Propiedades pÃºblicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
+Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
 
 ### CSS parts
 
@@ -144,15 +144,15 @@ No expone.
 
 Misma familia de tokens que `<iswc-chart>` (ver [chart.md](./chart.md)).
 
-### IntegraciÃ³n con formularios
+### Integración con formularios
 
-No declara integraciÃ³n form-associated propia en este mÃ³dulo.
+No declara integración form-associated propia en este módulo.
 
 ## Comportamiento
 
-DocumentaciÃ³n de cabecera preservada desde fuente:
+Documentación de cabecera preservada desde fuente:
 
-> `<iswc-bubble-chart>` â€” wrapper tipado vÃ­a `defineTypedChart('iswc-bubble-chart', 'bubble', â€¦)`.
+> `<iswc-bubble-chart>` — wrapper tipado vía `defineTypedChart('iswc-bubble-chart', 'bubble', …)`.
 > Importa `./chart.js` y registra marks del tipo fijo.
 > Consumo compatible con Chart.js: `config` o `<script type="application/json">`
 > hijo con forma `{ data: { labels, datasets }, options }` (`type` lo fija el tag).
@@ -165,11 +165,11 @@ DocumentaciÃ³n de cabecera preservada desde fuente:
 - [`../_shared/svg-chart-engine.js`](../../core/svg-chart-engine.js)
 - [`../_shared/chart-palette.js`](./utils/chart-palette.js)
 
-Tags del mÃ³dulo: `<iswc-bubble-chart>`.
+Tags del módulo: `<iswc-bubble-chart>`.
 
 ## Accesibilidad
 
-Preservar semÃ¡ntica, foco, teclado, labels y ARIA. Hereda contrato de `<iswc-chart>`.
+Preservar semántica, foco, teclado, labels y ARIA. Hereda contrato de `<iswc-chart>`.
 
 ## Ejemplo avanzado
 
@@ -188,7 +188,7 @@ Preservar semÃ¡ntica, foco, teclado, labels y ARIA. Hereda contrato de `<iswc-
 
 ## Errores comunes
 
-- Usar tag sin importar mÃ³dulo primero.
+- Usar tag sin importar módulo primero.
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
@@ -197,16 +197,16 @@ Preservar semÃ¡ntica, foco, teclado, labels y ARIA. Hereda contrato de `<iswc-
 
 ## Reglas para LLM
 
-- Reusar componente y dependencias antes de implementaciÃ³n paralela.
+- Reusar componente y dependencias antes de implementación paralela.
 - Mantener nombres exactos de tags y API.
-- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explÃ­cito.
-- Leer callers/shared antes de cambiar; corregir raÃ­z comÃºn.
-- No modificar API basÃ¡ndose solo en preview.
+- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explícito.
+- Leer callers/shared antes de cambiar; corregir raíz común.
+- No modificar API basándose solo en preview.
 - API completa del motor: [chart.md](./chart.md).
 
 ## Fuentes
 
 - [JavaScript](./bubble-chart.ts)
-- [CSS](./bubble-chart.css)
-- [Ãndice de categorÃ­a](../../specs/componentes.md)
+- [CSS](./bubble-chart.scss)
+- [Índice de categoría](../../../specs/componentes.md)
 - [Preview](./bubble-chart.json)

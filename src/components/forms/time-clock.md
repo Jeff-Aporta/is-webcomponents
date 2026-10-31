@@ -1,36 +1,36 @@
-﻿---
+---
 tag: iswc-time-clock
 tags:
   - iswc-time-clock
 category: forms
 status: public
 source: ./time-clock.ts
-style: ./time-clock.css
+style: ./time-clock.scss
 preview: ./time-clock.json
 ---
 # `<iswc-time-clock>`
 
-## PropÃ³sito
+## Propósito
 
-Reloj analÃ³gico (TimeClock de MUI X). Arrastra la manecilla, haz clic o usa el teclado. Al soltar avanza de horas a minutos.
+Reloj analógico (TimeClock de MUI X). Arrastra la manecilla, haz clic o usa el teclado. Al soltar avanza de horas a minutos.
 
-Este mÃ³dulo registra `<iswc-time-clock>`.
+Este módulo registra `<iswc-time-clock>`.
 
-## CuÃ¡ndo usarlo
+## Cuándo usarlo
 
-Captura, selecciÃ³n y validaciÃ³n de valores compatibles con formularios.
+Captura, selección y validación de valores compatibles con formularios.
 
-## CuÃ¡ndo no usarlo
+## Cuándo no usarlo
 
-No duplicar validaciÃ³n, form association ni pickers shared.
+No duplicar validación, form association ni pickers shared.
 
-## ImportaciÃ³n
+## Importación
 
 ```js
 import './time-clock.js';
 ```
 
-## Ejemplo mÃ­nimo
+## Ejemplo mínimo
 
 ```html
 <iswc-time-clock></iswc-time-clock>
@@ -44,19 +44,19 @@ import './time-clock.js';
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
-| `value` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `view` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `ampm` | boolean | Fuente define default/restricciÃ³n. |
-| `hour24` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `seconds` | boolean | Fuente define default/restricciÃ³n. |
-| `minutes-step` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `min-time` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `max-time` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `locale` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `disabled` | boolean | Fuente define default/restricciÃ³n. |
-| `readonly` | boolean | Fuente define default/restricciÃ³n. |
+| `value` | string/según contrato | Fuente define default/restricción. |
+| `view` | string/según contrato | Fuente define default/restricción. |
+| `ampm` | boolean | Fuente define default/restricción. |
+| `hour24` | string/según contrato | Fuente define default/restricción. |
+| `seconds` | boolean | Fuente define default/restricción. |
+| `minutes-step` | string/según contrato | Fuente define default/restricción. |
+| `min-time` | string/según contrato | Fuente define default/restricción. |
+| `max-time` | string/según contrato | Fuente define default/restricción. |
+| `locale` | string/según contrato | Fuente define default/restricción. |
+| `disabled` | boolean | Fuente define default/restricción. |
+| `readonly` | boolean | Fuente define default/restricción. |
 
-#### Propiedades pÃºblicas
+#### Propiedades públicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
@@ -77,15 +77,15 @@ No expone.
 ### Eventos
 
 
-| Evento | DescripciÃ³n |
+| Evento | Descripción |
 | --- | --- |
 | `iswc-view-change` | Evento personalizado del componente (view change). |
 | `iswc-change` | Emitido al confirmar el cambio de valor (escribe como `change` nativo). |
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `iswc-view-change` | sÃ­ | sÃ­ | sÃ­ | no |
-| `iswc-change` | sÃ­ | sÃ­ | sÃ­ | no |
+| `iswc-view-change` | sí | sí | sí | no |
+| `iswc-change` | sí | sí | sí | no |
 
 
 <details>
@@ -100,11 +100,11 @@ el.addEventListener('iswc-view-change', (e) => {
 
 </details>
 
-### MÃ©todos y propiedades pÃºblicas
+### Métodos y propiedades públicas
 
 No expone.
 
-Propiedades pÃºblicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
+Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
 
 ### CSS parts
 
@@ -117,7 +117,7 @@ Propiedades pÃºblicas aparecen en tabla anterior; APIs heredadas se verifican 
 | `seconds` | Personalizable con `::part(seconds)`. |
 | `clock` | Personalizable con `::part(clock)`. |
 | `hand` | Personalizable con `::part(hand)`. |
-| `number` | Cada dÃ­gito numÃ©rico mostrado en el reloj. |
+| `number` | Cada dígito numérico mostrado en el reloj. |
 
 ### Custom states
 
@@ -127,53 +127,53 @@ No expone.
 
 | Token | Uso |
 | --- | --- |
-| `--a` | Token leÃ­do o definido por componente. |
-| `--iswc-clock-size` | Token leÃ­do o definido por componente. |
-| `--iswc-clock-face` | Token leÃ­do o definido por componente. |
-| `--iswc-control-bg` | Token leÃ­do o definido por componente. |
-| `--iswc-sans` | Token leÃ­do o definido por componente. |
-| `--iswc-text` | Token leÃ­do o definido por componente. |
-| `--iswc-bg-elev` | Token leÃ­do o definido por componente. |
-| `--iswc-border` | Token leÃ­do o definido por componente. |
-| `--iswc-radius` | Token leÃ­do o definido por componente. |
-| `--iswc-shadow` | Token leÃ­do o definido por componente. |
-| `--iswc-text-dim` | Token leÃ­do o definido por componente. |
-| `--iswc-radius-sm` | Token leÃ­do o definido por componente. |
-| `--iswc-control-bg-hover` | Token leÃ­do o definido por componente. |
-| `--iswc-accent` | Token leÃ­do o definido por componente. |
-| `--iswc-accent-bg` | Token leÃ­do o definido por componente. |
-| `--iswc-focus` | Token leÃ­do o definido por componente. |
-| `--iswc-clock-inset` | Token leÃ­do o definido por componente. |
-| `--iswc-on-brand` | Token leÃ­do o definido por componente. |
-| `--iswc-hand-length` | Token leÃ­do o definido por componente. |
-| `--iswc-color-brand-600` | Token leÃ­do o definido por componente. |
+| `--a` | Token leído o definido por componente. |
+| `--iswc-clock-size` | Token leído o definido por componente. |
+| `--iswc-clock-face` | Token leído o definido por componente. |
+| `--iswc-control-bg` | Token leído o definido por componente. |
+| `--iswc-sans` | Token leído o definido por componente. |
+| `--iswc-text` | Token leído o definido por componente. |
+| `--iswc-bg-elev` | Token leído o definido por componente. |
+| `--iswc-border` | Token leído o definido por componente. |
+| `--iswc-radius` | Token leído o definido por componente. |
+| `--iswc-shadow` | Token leído o definido por componente. |
+| `--iswc-text-dim` | Token leído o definido por componente. |
+| `--iswc-radius-sm` | Token leído o definido por componente. |
+| `--iswc-control-bg-hover` | Token leído o definido por componente. |
+| `--iswc-accent` | Token leído o definido por componente. |
+| `--iswc-accent-bg` | Token leído o definido por componente. |
+| `--iswc-focus` | Token leído o definido por componente. |
+| `--iswc-clock-inset` | Token leído o definido por componente. |
+| `--iswc-on-brand` | Token leído o definido por componente. |
+| `--iswc-hand-length` | Token leído o definido por componente. |
+| `--iswc-color-brand-600` | Token leído o definido por componente. |
 
-### IntegraciÃ³n con formularios
+### Integración con formularios
 
-No declara integraciÃ³n form-associated propia en este mÃ³dulo.
+No declara integración form-associated propia en este módulo.
 
 ## Comportamiento
 
-DocumentaciÃ³n de cabecera preservada desde fuente:
+Documentación de cabecera preservada desde fuente:
 
-> <iswc-time-clock> â€” Reloj analÃ³gico para elegir hora (MUI TimeClock).
-> Vistas encadenadas: horas â†’ minutos â†’ segundos (si `seconds`). El disco es
+> <iswc-time-clock> — Reloj analógico para elegir hora (MUI TimeClock).
+> Vistas encadenadas: horas → minutos → segundos (si `seconds`). El disco es
 > un slider: se puede arrastrar, hacer clic o usar el teclado.
 > Atributos: value (HH:mm[:ss]), view (hours|minutes|seconds), ampm,
 >            hour24, seconds, minutes-step, min-time, max-time, locale,
 >            disabled, readonly
-> Events: iswc-change { value } Â· iswc-view-change { view }
+> Events: iswc-change { value } · iswc-view-change { view }
 
 ## Dependencias y componentes relacionados
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 - [`../_shared/date-utils.js`](./utils/date-utils.js)
 
-Tags del mÃ³dulo: `<iswc-time-clock>`.
+Tags del módulo: `<iswc-time-clock>`.
 
 ## Accesibilidad
 
-Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`, `aria-orientation`, `aria-valuemin`, `aria-valuemax`, `aria-valuenow`, `aria-valuetext`, `aria-disabled`.
+Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`, `aria-orientation`, `aria-valuemin`, `aria-valuemax`, `aria-valuenow`, `aria-valuetext`, `aria-disabled`.
 
 ## Ejemplo avanzado
 
@@ -183,7 +183,7 @@ Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: `aria-labe
 
 ## Errores comunes
 
-- Usar tag sin importar mÃ³dulo primero.
+- Usar tag sin importar módulo primero.
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
@@ -191,15 +191,15 @@ Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: `aria-labe
 
 ## Reglas para LLM
 
-- Reusar componente y dependencias antes de implementaciÃ³n paralela.
+- Reusar componente y dependencias antes de implementación paralela.
 - Mantener nombres exactos de tags y API.
-- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explÃ­cito.
-- Leer callers/shared antes de cambiar; corregir raÃ­z comÃºn.
-- No modificar API basÃ¡ndose solo en preview.
+- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explícito.
+- Leer callers/shared antes de cambiar; corregir raíz común.
+- No modificar API basándose solo en preview.
 
 ## Fuentes
 
 - [JavaScript](./time-clock.ts)
-- [CSS](./time-clock.css)
-- [Ãndice de categorÃ­a](../../specs/componentes.md)
+- [CSS](./time-clock.scss)
+- [Índice de categoría](../../../specs/componentes.md)
 - [Preview](./time-clock.json)

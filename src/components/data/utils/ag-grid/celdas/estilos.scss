@@ -1,0 +1,209 @@
+/* ag-grid/celdas — Contenido de celda, flash y tooltip. Lo incluye ag-grid.scss.
+   Todo en em: escala con el font-size de la grilla. Colores: tokens del kit. */
+
+:host {
+  --iswc-grid-up: color-mix(in srgb, var(--iswc-success) 82%, var(--iswc-text));
+  --iswc-grid-down: color-mix(in srgb, var(--iswc-danger) 82%, var(--iswc-text));
+  --iswc-grid-flat: color-mix(in srgb, var(--iswc-text) 55%, transparent);
+  --iswc-grid-muted: color-mix(in srgb, var(--iswc-text) 62%, transparent);
+  --iswc-grid-flash: color-mix(in srgb, var(--iswc-accent) 32%, transparent);
+  --iswc-grid-flash-up: color-mix(in srgb, var(--iswc-success) 32%, transparent);
+  --iswc-grid-flash-down: color-mix(in srgb, var(--iswc-danger) 32%, transparent);
+  --iswc-grid-column-hover: color-mix(in srgb, var(--iswc-accent) 7%, transparent);
+  --iswc-grid-spark: var(--iswc-accent);
+  --iswc-grid-tooltip-bg: var(--iswc-bg-elev);
+  --iswc-grid-tooltip-fg: var(--iswc-text);
+  --iswc-grid-tooltip-border: .0625em solid var(--iswc-border);
+  --iswc-ag-tono: var(--iswc-text);
+}
+
+/* Tonos: un solo token, reusado por pill, progreso y accion. */
+.iswc-ag-tono-success { --iswc-ag-tono: var(--iswc-grid-up); }
+.iswc-ag-tono-danger { --iswc-ag-tono: var(--iswc-grid-down); }
+.iswc-ag-tono-warning { --iswc-ag-tono: var(--iswc-warning); }
+.iswc-ag-tono-info { --iswc-ag-tono: var(--iswc-info, var(--iswc-accent)); }
+.iswc-ag-tono-brand { --iswc-ag-tono: var(--iswc-accent); }
+.iswc-ag-tono-neutral { --iswc-ag-tono: var(--iswc-grid-flat); }
+
+.iswc-ag-right { justify-content: flex-end; text-align: end; }
+.iswc-ag-wrap { white-space: normal; overflow-wrap: anywhere; line-height: 1.35; }
+.iswc-ag-auto-alto { align-items: flex-start; }
+.iswc-ag-row-sin-hover:hover { background: inherit; }
+
+.iswc-ag-num { font-variant-numeric: tabular-nums; }
+.iswc-ag-up { color: var(--iswc-grid-up); }
+.iswc-ag-down { color: var(--iswc-grid-down); }
+.iswc-ag-flat { color: var(--iswc-grid-flat); }
+
+/* Logo + texto */
+.iswc-ag-logotexto { display: inline-flex; align-items: center; gap: .6em; min-inline-size: 0; max-inline-size: 100%; }
+.iswc-ag-logotexto-txt { display: flex; flex-direction: column; min-inline-size: 0; line-height: 1.2; }
+.iswc-ag-logotexto-linea .iswc-ag-logotexto-txt { flex-direction: row; align-items: baseline; gap: .5em; }
+.iswc-ag-principal { font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.iswc-ag-sub { font-size: .82em; color: var(--iswc-grid-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.iswc-ag-logo {
+  position: relative;
+  flex: none;
+  display: inline-grid;
+  place-items: center;
+  inline-size: 1.7em;
+  block-size: 1.7em;
+  border-radius: 50%;
+  overflow: hidden;
+  font-size: .9em;
+  font-weight: 700;
+  letter-spacing: -.02em;
+  color: var(--iswc-on-brand, #fff);
+  background: var(--iswc-accent);
+
+  img { position: absolute; inset: 0; inline-size: 100%; block-size: 100%; object-fit: contain; background: #fff; }
+}
+.iswc-ag-logo-1 { background: color-mix(in srgb, var(--iswc-accent) 70%, #222); }
+.iswc-ag-logo-2 { background: color-mix(in srgb, var(--iswc-success) 70%, #222); }
+.iswc-ag-logo-3 { background: color-mix(in srgb, var(--iswc-danger) 70%, #222); }
+.iswc-ag-logo-4 { background: color-mix(in srgb, var(--iswc-warning) 60%, #222); }
+.iswc-ag-logo-5 { background: color-mix(in srgb, var(--iswc-text) 55%, var(--iswc-accent)); }
+.iswc-ag-logo-6 { background: color-mix(in srgb, var(--iswc-accent) 45%, var(--iswc-danger)); }
+
+/* Sparkline */
+.iswc-ag-spark { position: relative; display: block; inline-size: 100%; block-size: 1.9em; min-inline-size: 3em;
+  svg { display: block; inline-size: 100%; block-size: 100%; overflow: visible; }
+}
+.iswc-ag-spark-punto { position: absolute; inline-size: var(--t); block-size: var(--t); border-radius: 50%; transform: translate(-50%, -50%); }
+
+/* Delta */
+.iswc-ag-delta { display: inline-flex; align-items: center; gap: .3em; font-variant-numeric: tabular-nums; font-weight: 500; }
+.iswc-ag-flecha { flex: none; inline-size: .62em; block-size: .62em; fill: currentColor; }
+
+/* Pill */
+.iswc-ag-pills { display: inline-flex; gap: .3em; flex-wrap: nowrap; overflow: hidden; }
+.iswc-ag-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: .35em;
+  padding: .1em .6em;
+  border-radius: 1em;
+  font-size: .85em;
+  font-weight: 500;
+  line-height: 1.5;
+  white-space: nowrap;
+  color: var(--iswc-ag-tono);
+  background: color-mix(in srgb, var(--iswc-ag-tono) 14%, transparent);
+}
+.iswc-ag-pill-punto { inline-size: .45em; block-size: .45em; border-radius: 50%; background: currentColor; }
+
+/* Progreso */
+.iswc-ag-progreso { display: flex; align-items: center; gap: .55em; inline-size: 100%; }
+.iswc-ag-progreso-riel {
+  flex: 1;
+  min-inline-size: 2em;
+  block-size: .4em;
+  border-radius: 1em;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--iswc-text) 10%, transparent);
+
+  span { display: block; block-size: 100%; border-radius: inherit; background: var(--iswc-ag-tono); }
+}
+.iswc-ag-progreso-txt { flex: none; font-size: .9em; font-variant-numeric: tabular-nums; }
+
+/* Rating */
+.iswc-ag-rating { position: relative; display: inline-block; white-space: nowrap; letter-spacing: .05em; color: color-mix(in srgb, var(--iswc-text) 18%, transparent); }
+.iswc-ag-rating-lleno { position: absolute; inset-block-start: 0; inset-inline-start: 0; overflow: hidden; color: var(--iswc-warning); }
+
+/* Casilla */
+.iswc-ag-check {
+  display: inline-grid;
+  place-items: center;
+  inline-size: 1.15em;
+  block-size: 1.15em;
+  border: .0625em solid color-mix(in srgb, var(--iswc-text) 35%, transparent);
+  border-radius: .22em;
+
+  svg { inline-size: .9em; block-size: .9em; }
+}
+.iswc-ag-check-on { color: var(--iswc-on-brand, #fff); background: var(--iswc-accent); border-color: var(--iswc-accent); }
+.iswc-ag-check-editable { cursor: pointer; }
+
+/* Enlace */
+.iswc-ag-link { color: var(--iswc-accent); text-decoration: none;
+  &:hover { text-decoration: underline; }
+}
+
+/* Acciones */
+.iswc-ag-acciones { display: inline-flex; gap: .15em; }
+.iswc-ag-accion {
+  display: inline-grid;
+  place-items: center;
+  min-inline-size: 1.75em;
+  block-size: 1.75em;
+  padding: 0 .3em;
+  border: 0;
+  border-radius: .3em;
+  font: inherit;
+  cursor: pointer;
+  color: var(--iswc-grid-muted);
+  background: transparent;
+
+  svg { inline-size: 1.15em; block-size: 1.15em; fill: currentColor; }
+  &:hover { color: var(--iswc-text); background: color-mix(in srgb, var(--iswc-text) 9%, transparent); }
+  &:focus-visible { outline: .125em solid var(--iswc-accent); outline-offset: .0625em; }
+  &:disabled { opacity: .4; cursor: default; }
+}
+.iswc-ag-accion[class*='iswc-ag-tono-'] { color: var(--iswc-ag-tono); }
+
+/* Valor con cambio */
+.iswc-ag-cambio { display: inline-flex; align-items: center; gap: .6em; }
+.iswc-ag-cambio .iswc-ag-delta { font-size: .85em; animation: iswc-ag-apagar 3s ease-in forwards; }
+.iswc-ag-deslizar { position: relative; display: inline-block; }
+.iswc-ag-deslizar-viejo { position: absolute; inset-inline-end: 100%; padding-inline-end: .5em; white-space: nowrap; color: var(--iswc-grid-muted); animation: iswc-ag-deslizar 3s ease-out forwards; }
+
+/* Flash: animacion con retardo negativo, sobrevive al repintado. */
+.iswc-ag-flash {
+  --iswc-ag-flash-color: var(--iswc-grid-flash);
+  animation-name: iswc-ag-flash-sostener, iswc-ag-flash-apagar;
+  animation-duration: var(--iswc-ag-flash-ms, 500ms), var(--iswc-ag-fade-ms, 1000ms);
+  animation-delay: calc(0ms - var(--iswc-ag-flash-t, 0ms)), calc(var(--iswc-ag-flash-ms, 500ms) - var(--iswc-ag-flash-t, 0ms));
+  animation-timing-function: linear;
+}
+.iswc-ag-flash-up { --iswc-ag-flash-color: var(--iswc-grid-flash-up); }
+.iswc-ag-flash-down { --iswc-ag-flash-color: var(--iswc-grid-flash-down); }
+
+@keyframes iswc-ag-flash-sostener {
+  from, to { background-color: var(--iswc-ag-flash-color); }
+}
+
+@keyframes iswc-ag-flash-apagar {
+  from { background-color: var(--iswc-ag-flash-color); }
+  to { background-color: transparent; }
+}
+
+@keyframes iswc-ag-apagar {
+  0%, 60% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+@keyframes iswc-ag-deslizar {
+  0% { opacity: .8; transform: none; }
+  100% { opacity: 0; transform: translateX(-1.5em); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .iswc-ag-cambio .iswc-ag-delta, .iswc-ag-deslizar-viejo { animation-duration: 1ms; }
+}
+
+/* Tooltip: un flotante del host, mismo aspecto que iswc-tooltip. */
+.iswc-ag-tooltip {
+  max-inline-size: 24em;
+  padding: .4em .65em;
+  border: var(--iswc-grid-tooltip-border);
+  border-radius: .35em;
+  font-size: .9em;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+  color: var(--iswc-grid-tooltip-fg);
+  background: var(--iswc-grid-tooltip-bg);
+  box-shadow: 0 .25em .9em color-mix(in srgb, #000 22%, transparent);
+  pointer-events: none;
+}
+.iswc-ag-tooltip-interactivo { pointer-events: auto; user-select: text; }

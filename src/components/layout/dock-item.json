@@ -1,5 +1,8 @@
 {
   "$schema": "iswc-preview/v1",
+  "anatomy": {
+    "scss": "dock.scss"
+  },
   "tag": "iswc-dock-item",
   "category": "layout",
   "title": "&lt;iswc-dock-item&gt;",
@@ -21,11 +24,31 @@
           "html": [
             "<div class=\"dock-stage\">",
             "            <iswc-dock>",
-            "              <iswc-dock-item icon=\"mdi:home\" label=\"Inicio\" active></iswc-dock-item>",
+            "              <iswc-dock-item id=\"pg-dock-item\" icon=\"mdi:home\" label=\"Inicio\" active></iswc-dock-item>",
             "              <iswc-dock-item icon=\"mdi:chart-box\" label=\"Reportes\"></iswc-dock-item>",
             "              <iswc-dock-item icon=\"mdi:cog\" label=\"Ajustes\"></iswc-dock-item>",
             "            </iswc-dock>",
             "          </div>"
+          ],
+          "target": "#pg-dock-item",
+          "controls": [
+            {
+              "control": "text",
+              "prop": "attr:label",
+              "label": "label",
+              "default": "Inicio"
+            },
+            {
+              "control": "text",
+              "prop": "attr:icon",
+              "label": "icon",
+              "default": "mdi:home"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:active",
+              "label": "active"
+            }
           ]
         }
       ]

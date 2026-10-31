@@ -24,7 +24,7 @@
 
   &:hover {
     border-color: color-mix(in srgb, var(--brand) 40%, var(--border));
-    transform: translateY(-1px);
+    transform: translateY(-.0625em);
   }
 
   /* Variantes de color semántico: escritas en bloque para no repetir la
@@ -90,7 +90,7 @@
   align-items: center;
   gap: 0.25em;
   padding: 0.125em 0.5em;
-  border-radius: 999px;
+  border-radius: 999em;
   font-weight: 500;
   background: color-mix(in srgb, var(--fg) 8%, transparent);
   color: var(--muted);

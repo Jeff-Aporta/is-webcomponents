@@ -3,6 +3,7 @@ import { ElementBase } from '../../core/element-base.js';
 import { setOptionalAttr, setStringAttr } from '../../core/reflect.js';
 import { escapeHtml } from '../../core/dom-utils.js';
 import { loadArrayBuffer, resolveFileSource } from './utils/file-source.js';
+import { pintarEstado, sincronizarAlto } from './utils/file-estado.js';
 import { JSZIP_CDN, loadCdnScript, PPTX_PREVIEW_CDN } from './utils/load-cdn.js';
 import type { ZipLike } from "./schemas/pptx-view.schemas.js";
 
@@ -41,8 +42,8 @@ import type { ZipLike } from "./schemas/pptx-view.schemas.js";
       this.#stage = shadow.querySelector('.stage')!;
     }
 
-    onConnected() { this.#reload(); }
-    onAttributeChanged() { this.#reload(); }
+    onConnected() { sincronizarAlto(this); this.#reload(); }
+    onAttributeChanged() { sincronizarAlto(this); this.#reload(); }
 
     get src() { return this.getAttribute('src'); }
     set src(v) { setOptionalAttr(this, 'src', v); }
@@ -53,7 +54,7 @@ import type { ZipLike } from "./schemas/pptx-view.schemas.js";
       const gen = ++this.#gen;
       const source = resolveFileSource(this.getAttribute('src'), this.getAttribute('content'));
       if (source.kind === 'empty') {
-        this.#stage.innerHTML = '<p class="empty">Sin presentacion</p>';
+        pintarEstado(this.#stage, 'Sin presentación');
         return;
       }
       try {
@@ -65,7 +66,7 @@ import type { ZipLike } from "./schemas/pptx-view.schemas.js";
         const slides = await extractSlides(buf);
         if (gen !== this.#gen) return;
         if (!slides.length) {
-          this.#stage.innerHTML = '<p class="empty">Sin diapositivas legibles</p>';
+          pintarEstado(this.#stage, 'Sin diapositivas legibles');
         } else {
           this.#stage.innerHTML = slides
             .map(
@@ -77,7 +78,7 @@ import type { ZipLike } from "./schemas/pptx-view.schemas.js";
         emit(this, 'iswc-load', { slides: slides.length });
       } catch (e) {
         if (gen !== this.#gen) return;
-        this.#stage.innerHTML = '<p class="error">No se pudo previsualizar el PPTX</p>';
+        pintarEstado(this.#stage, 'No se pudo previsualizar el PPTX', 'error');
         emit(this, 'iswc-error', { reason: (e as { reason?: string })?.reason || 'fetch' });
       }
     }

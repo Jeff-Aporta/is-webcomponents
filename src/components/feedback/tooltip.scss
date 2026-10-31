@@ -1,15 +1,24 @@
-:host {
-  display: contents;
-  --iswc-tooltip-max-width: 16rem;
-  --iswc-tooltip-bg: #212529;
-  --iswc-tooltip-fg: #fff;
+@use '../../styles/mixins' as *;
 
-  &[hidden] { display: none !important; }
+:host {
+  @include papel;
+  display: contents;
+  --iswc-tooltip-max-width: 17.7778em;
+  /* Invertido respecto al tema: contrasta con cualquier superficie, en claro y en oscuro. */
+  --iswc-tooltip-bg: var(--iswc-text);
+  --iswc-tooltip-fg: var(--iswc-bg-elev);
 }
 
+:host([hidden]) { display: none !important; }
+
+/* La flecha es del floating: se pinta por su part para que siga al globo. */
 .popup {
-  --iswc-tooltip-arrow-color: var(--iswc-tooltip-bg);
-  --iswc-tooltip-arrow-size: var(--iswc-tooltip-arrow-size);
+  --iswc-floating-arrow-size: var(--iswc-tooltip-arrow-size, 0.375em);
+
+  &::part(arrow) {
+    border-color: var(--iswc-tooltip-bg);
+    background: var(--iswc-tooltip-bg);
+  }
 }
 
 .tooltip {
@@ -20,9 +29,9 @@
   background: var(--iswc-tooltip-bg);
   color: var(--iswc-tooltip-fg);
   font-family: var(--iswc-font-family);
-  font-size: var(--iswc-tooltip-font-size);
-  line-height: var(--iswc-tooltip-line-height);
-  box-shadow: var(--iswc-shadow, 0 4px 16px rgb(0 0 0 / 25%));
+  font-size: var(--iswc-tooltip-font-size, 0.85em);
+  line-height: var(--iswc-tooltip-line-height, 1.4);
+  box-shadow: var(--iswc-shadow);
   pointer-events: none;
 }
 

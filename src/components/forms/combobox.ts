@@ -12,7 +12,9 @@ import { setStringAttr } from '../../core/reflect.js';
  * El listbox vive en un <dialog modal> (top layer) para no perderse por
  * overflow/visibility de ancestros. Clic en el backdrop del dialog cierra.
  *
- * Atributos: label, hint, name, value, placeholder, disabled, required, open, clearable
+ * Atributos: label, hint, error, error-text, name, value, placeholder, disabled,
+ *            required, open, clearable, variant (outlined|filled|underlined),
+ *            no-results (texto de lista vacía, por defecto "Sin resultados")
  * Slots: default — <iswc-option> o <option>
  * Events: iswc-change, iswc-input, iswc-show, iswc-hide
  */
@@ -21,9 +23,9 @@ import { setStringAttr } from '../../core/reflect.js';
   const TEMPLATE = document.createElement('template');
   TEMPLATE.innerHTML = /* html */ `
     <div part="form-control" class="form-control">
-      <label part="label" class="label" hidden></label>
+      <label part="label" class="label" for="cb-input" hidden></label>
       <div part="base" class="base">
-        <input part="input" class="input" type="text" role="combobox"
+        <input part="input" class="input" id="cb-input" type="text" role="combobox"
           autocomplete="off" aria-autocomplete="list" aria-expanded="false"
           aria-haspopup="listbox" aria-controls="listbox" />
         <iswc-button
@@ -51,6 +53,7 @@ import { setStringAttr } from '../../core/reflect.js';
         </iswc-button>
       </div>
       <div part="hint" class="hint" id="cb-hint" hidden></div>
+      <div part="error-text" class="error-text" id="cb-error" hidden></div>
     </div>
     <dialog part="dialog" class="popup" tabindex="-1">
       <div part="listbox" class="listbox" id="listbox" role="listbox"></div>
@@ -60,7 +63,7 @@ import { setStringAttr } from '../../core/reflect.js';
 
   const OBSERVED = [
     'label', 'hint', 'name', 'value', 'placeholder',
-    'disabled', 'required', 'open', 'clearable'
+    'disabled', 'required', 'open', 'clearable', 'error', 'error-text'
   ];
 
   class IswcCombobox extends ElementBase {
@@ -75,6 +78,7 @@ import { setStringAttr } from '../../core/reflect.js';
     #base!: HTMLElement;
     #labelEl!: HTMLElement;
     #hintEl!: HTMLElement;
+    #errorEl!: HTMLElement;
     #clearBtn!: HTMLElement;
     #trigger!: HTMLElement;
     #slot!: HTMLSlotElement;
@@ -96,6 +100,7 @@ import { setStringAttr } from '../../core/reflect.js';
       this.#base = shadow.querySelector<HTMLElement>('.base')!;
       this.#labelEl = shadow.querySelector<HTMLElement>('.label')!;
       this.#hintEl = shadow.querySelector<HTMLElement>('.hint')!;
+      this.#errorEl = shadow.querySelector<HTMLElement>('.error-text')!;
       this.#clearBtn = shadow.querySelector<HTMLElement>('.clear')!;
       this.#trigger = shadow.querySelector<HTMLElement>('.trigger')!;
       this.#slot = shadow.querySelector<HTMLSlotElement>('slot')!;
@@ -195,8 +200,12 @@ import { setStringAttr } from '../../core/reflect.js';
       this.#labelEl.hidden = !label;
       this.#labelEl.textContent = label || '';
       const hint = this.getAttribute('hint');
-      this.#hintEl.hidden = !hint;
+      const errorText = this.hasAttribute('error') ? (this.getAttribute('error-text') || '') : '';
+      this.#errorEl.hidden = !errorText;
+      this.#errorEl.textContent = errorText;
+      this.#hintEl.hidden = !hint || !!errorText;
       this.#hintEl.textContent = hint || '';
+      this.#input.toggleAttribute('aria-invalid', this.hasAttribute('error'));
       this.#input.placeholder = this.getAttribute('placeholder') || '';
       this.#input.required = this.required;
       // aria-label: priorizar el atributo `label` del host para que los
@@ -204,7 +213,8 @@ import { setStringAttr } from '../../core/reflect.js';
       if (label) this.setAttribute('aria-label', label);
       else this.removeAttribute('aria-label');
       // aria-describedby: apunta al slot del hint cuando hay contenido.
-      if (hint) this.#input.setAttribute('aria-describedby', 'cb-hint');
+      if (errorText) this.#input.setAttribute('aria-describedby', 'cb-error');
+      else if (hint) this.#input.setAttribute('aria-describedby', 'cb-hint');
       else this.#input.removeAttribute('aria-describedby');
       // aria-required + aria-disabled reflejados en el input.
       if (this.required) this.#input.setAttribute('aria-required', 'true');
@@ -231,13 +241,14 @@ import { setStringAttr } from '../../core/reflect.js';
       const rect = this.#base.getBoundingClientRect();
       const spaceBelow = window.innerHeight - rect.bottom - 8;
       const openUp = placementHaciaCentro(rect).startsWith('top');
-      const maxH = Math.min(14 * 16, Math.max(120, openUp ? rect.top - 8 : spaceBelow));
+      const em = parseFloat(getComputedStyle(this).fontSize) || 16;
+      const maxH = Math.min(14 * em, Math.max(7.5 * em, openUp ? rect.top - 8 : spaceBelow));
       Object.assign(this.#listbox.style, {
         left: `${rect.left}px`,
         width: `${Math.max(rect.width, 10)}px`,
         maxHeight: `${maxH}px`,
-        top: openUp ? 'auto' : `${rect.bottom + 4}px`,
-        bottom: openUp ? `${window.innerHeight - rect.top + 4}px` : 'auto',
+        top: openUp ? 'auto' : `${rect.bottom + 0.25 * em}px`,
+        bottom: openUp ? `${window.innerHeight - rect.top + 0.25 * em}px` : 'auto',
       });
     }
 
@@ -247,7 +258,9 @@ import { setStringAttr } from '../../core/reflect.js';
       this.#setState('open', open);
 
       if (open) {
-        this.#filter = this.#input.value;
+        // Abrir sobre un valor ya elegido lista todas las opciones; solo filtra lo tecleado.
+        const elegido = this.#options.find((o) => o.value === this.value);
+        this.#filter = elegido && elegido.label === this.#input.value ? '' : this.#input.value;
         this.#renderList();
         this.#positionList();
         if (!this.#dialog.open) {
@@ -309,6 +322,12 @@ import { setStringAttr } from '../../core/reflect.js';
       const items = this.#filtered();
       const baseId = this.id || this.localName;
       this.#listbox.replaceChildren();
+      if (!items.length) {
+        const vacio = document.createElement('div');
+        vacio.className = 'empty';
+        vacio.textContent = this.getAttribute('no-results') || 'Sin resultados';
+        this.#listbox.appendChild(vacio);
+      }
       items.forEach((opt, i) => {
         const btn = document.createElement('div');
         btn.className = 'option';

@@ -1,5 +1,8 @@
 {
   "$schema": "iswc-preview/v1",
+  "anatomy": {
+    "scss": "kanban.scss"
+  },
   "tag": "iswc-kanban-column",
   "category": "data",
   "title": "&lt;iswc-kanban-column&gt;",
@@ -16,7 +19,7 @@
           "kind": "demo",
           "html": [
             "<iswc-kanban>",
-            "            <iswc-kanban-column title=\"Pendiente\" accent=\"#f59f00\">",
+            "            <iswc-kanban-column id=\"pg-kanban-column\" title=\"Pendiente\" accent=\"#f59f00\">",
             "              <iswc-kanban-card heading=\"Conciliar banco\"></iswc-kanban-card>",
             "            </iswc-kanban-column>",
             "            <iswc-kanban-column title=\"En curso\" accent=\"#228be6\">",
@@ -24,6 +27,21 @@
             "            </iswc-kanban-column>",
             "            <iswc-kanban-column title=\"Listo\" accent=\"#40c057\"></iswc-kanban-column>",
             "          </iswc-kanban>"
+          ],
+          "target": "#pg-kanban-column",
+          "controls": [
+            {
+              "control": "text",
+              "prop": "attr:title",
+              "label": "title",
+              "default": "Pendiente"
+            },
+            {
+              "control": "text",
+              "prop": "attr:badge",
+              "label": "badge",
+              "default": ""
+            }
           ]
         }
       ]

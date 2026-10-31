@@ -1,4 +1,4 @@
-﻿---
+---
 tag: iswc-kanban
 tags:
   - iswc-kanban
@@ -7,39 +7,39 @@ tags:
 category: data
 status: public
 source: ./kanban.ts
-style: ./kanban.css
+style: ./kanban.scss
 preview: ./kanban.json
 ---
 # `<iswc-kanban>` / `<iswc-kanban-column>` / `<iswc-kanban-card>`
 
-## PropÃ³sito
+## Propósito
 
 Tablero kanban con columnas y tarjetas. Cada columna tiene un accent
-color, badge automÃ¡tico con el conteo, slots de header-actions y
+color, badge automático con el conteo, slots de header-actions y
 cards con cover, heading, meta, tag y footer.
 
-Este mÃ³dulo registra `<iswc-kanban>`, `<iswc-kanban-column>`, `<iswc-kanban-card>`.
+Este módulo registra `<iswc-kanban>`, `<iswc-kanban-column>`, `<iswc-kanban-card>`.
 
-## CuÃ¡ndo usarlo
+## Cuándo usarlo
 
-PresentaciÃ³n, comparaciÃ³n, movimiento u organizaciÃ³n de datos estructurados.
+Presentación, comparación, movimiento u organización de datos estructurados.
 
-## CuÃ¡ndo no usarlo
+## Cuándo no usarlo
 
-No reemplazar HTML semÃ¡ntico cuando contenido es estÃ¡tico y simple.
+No reemplazar HTML semántico cuando contenido es estático y simple.
 
-## ImportaciÃ³n
+## Importación
 
 ```js
 import './kanban.js';
 ```
 
-## Ejemplo mÃ­nimo
+## Ejemplo mínimo
 
 ```html
 <iswc-kanban>
 <iswc-kanban-column title="Pending" accent="dodgerblue">
-<iswc-kanban-card heading="DiseÃ±ar landing" tag="Design">â€¦</iswc-kanban-card>
+<iswc-kanban-card heading="Diseñar landing" tag="Design">…</iswc-kanban-card>
 </iswc-kanban-column>
 </iswc-kanban>
 ```
@@ -52,18 +52,18 @@ import './kanban.js';
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
-| `columns` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `title` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `accent` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `badge` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `heading` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `meta` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `tag` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `tag-color` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `cover` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `without-shadow` | boolean | Fuente define default/restricciÃ³n. |
+| `columns` | number | Columnas visibles en modo compacto. |
+| `title` | string | Título de `<iswc-kanban-column>`. |
+| `accent` | color | Acento de la columna. |
+| `badge` | string | Contador opcional en la cabecera de la columna. |
+| `heading` | string | Título de `<iswc-kanban-card>`. |
+| `meta` | string | Línea bajo el título de la tarjeta. |
+| `tag` | string | Texto de la etiqueta de la tarjeta. |
+| `tag-color` | `brand` \| `neutral` \| `success` \| `warning` \| `danger` | Color de la etiqueta. |
+| `cover` | string (URL) | Imagen de cabecera de la tarjeta. |
+| `without-shadow` | boolean | Fuente define default/restricción. |
 
-#### Propiedades pÃºblicas
+#### Propiedades públicas
 
 No expone.
 
@@ -78,13 +78,13 @@ No expone.
 ### Eventos
 
 
-| Evento | DescripciÃ³n |
+| Evento | Descripción |
 | --- | --- |
 | `iswc-kanban-card-click` | Evento personalizado del componente (kanban card click). |
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `iswc-kanban-card-click` | sÃ­ | sÃ­ | sÃ­ | no |
+| `iswc-kanban-card-click` | sí | sí | sí | no |
 
 
 <details>
@@ -99,11 +99,11 @@ el.addEventListener('iswc-kanban-card-click', (e) => {
 
 </details>
 
-### MÃ©todos y propiedades pÃºblicas
+### Métodos y propiedades públicas
 
 No expone.
 
-Propiedades pÃºblicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
+Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
 
 ### CSS parts
 
@@ -133,57 +133,57 @@ No expone.
 
 | Token | Uso |
 | --- | --- |
-| `--accent` | Token leÃ­do o definido por componente. |
-| `--bg` | Token leÃ­do o definido por componente. |
-| `--iswc-bg-2` | Token leÃ­do o definido por componente. |
-| `--fg` | Token leÃ­do o definido por componente. |
-| `--iswc-text` | Token leÃ­do o definido por componente. |
-| `--muted` | Token leÃ­do o definido por componente. |
-| `--border` | Token leÃ­do o definido por componente. |
-| `--iswc-border` | Token leÃ­do o definido por componente. |
-| `--brand` | Token leÃ­do o definido por componente. |
-| `--iswc-brand` | Token leÃ­do o definido por componente. |
-| `--success` | Token leÃ­do o definido por componente. |
-| `--iswc-success` | Token leÃ­do o definido por componente. |
-| `--warning` | Token leÃ­do o definido por componente. |
-| `--iswc-warning` | Token leÃ­do o definido por componente. |
-| `--danger` | Token leÃ­do o definido por componente. |
-| `--iswc-danger` | Token leÃ­do o definido por componente. |
-| `--iswc-bg` | Token leÃ­do o definido por componente. |
+| `--accent` | Token leído o definido por componente. |
+| `--bg` | Token leído o definido por componente. |
+| `--iswc-bg-2` | Token leído o definido por componente. |
+| `--fg` | Token leído o definido por componente. |
+| `--iswc-text` | Token leído o definido por componente. |
+| `--muted` | Token leído o definido por componente. |
+| `--border` | Token leído o definido por componente. |
+| `--iswc-border` | Token leído o definido por componente. |
+| `--brand` | Token leído o definido por componente. |
+| `--iswc-brand` | Token leído o definido por componente. |
+| `--success` | Token leído o definido por componente. |
+| `--iswc-success` | Token leído o definido por componente. |
+| `--warning` | Token leído o definido por componente. |
+| `--iswc-warning` | Token leído o definido por componente. |
+| `--danger` | Token leído o definido por componente. |
+| `--iswc-danger` | Token leído o definido por componente. |
+| `--iswc-bg` | Token leído o definido por componente. |
 
-### IntegraciÃ³n con formularios
+### Integración con formularios
 
-No declara integraciÃ³n form-associated propia en este mÃ³dulo.
+No declara integración form-associated propia en este módulo.
 
 ## Comportamiento
 
-DocumentaciÃ³n de cabecera preservada desde fuente:
+Documentación de cabecera preservada desde fuente:
 
-> <iswc-kanban> + <iswc-kanban-column> + <iswc-kanban-card> â€” Tablero (vanilla, zero dependencies).
+> <iswc-kanban> + <iswc-kanban-column> + <iswc-kanban-card> — Tablero (vanilla, zero dependencies).
 >   <iswc-kanban>
 >     <iswc-kanban-column title="Pendiente">
->       <iswc-kanban-card heading="Tarea 1">DescripciÃ³n</iswc-kanban-card>
+>       <iswc-kanban-card heading="Tarea 1">Descripción</iswc-kanban-card>
 >     </iswc-kanban-column>
 >   </iswc-kanban>
 > Atributos <iswc-kanban>
->   columns        number â€” nÂº columnas visibles al estilo "compact".
+>   columns        number — nº columnas visibles al estilo "compact".
 > Atributos <iswc-kanban-column>
 >   title          string
 >   accent         string (color, e.g. dodgerblue, #0bb783)
->   badge          string â€” opcional en el header.
+>   badge          string — opcional en el header.
 > Atributos <iswc-kanban-card>
 >   heading        string
->   meta           string â€” bajo el heading.
->   tag            string â€” texto de la badge lateral.
+>   meta           string — bajo el heading.
+>   tag            string — texto de la badge lateral.
 >   tag-color    brand | neutral | success | warning | danger
->   cover          string â€” URL de imagen de cabecera.
+>   cover          string — URL de imagen de cabecera.
 >   without-shadow boolean
 > Slots
 >   <iswc-kanban-column>
 >     (default)       cards.
 >     header-actions  elementos en la cabecera.
 >   <iswc-kanban-card>
->     (default)        descripciÃ³n.
+>     (default)        descripción.
 >     footer           pie de la card.
 > Eventos
 >   iswc-kanban-card-click  detail: { card, column }
@@ -192,25 +192,25 @@ DocumentaciÃ³n de cabecera preservada desde fuente:
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 
-Tags del mÃ³dulo: `<iswc-kanban>`, `<iswc-kanban-column>`, `<iswc-kanban-card>`.
+Tags del módulo: `<iswc-kanban>`, `<iswc-kanban-column>`, `<iswc-kanban-card>`.
 
 ## Accesibilidad
 
-Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: ninguno explÃ­cito en fuente.
+Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: ninguno explícito en fuente.
 
 ## Ejemplo avanzado
 
 ```html
 <iswc-kanban>
 <iswc-kanban-column title="Pending" accent="dodgerblue">
-<iswc-kanban-card heading="DiseÃ±ar landing" tag="Design">â€¦</iswc-kanban-card>
+<iswc-kanban-card heading="Diseñar landing" tag="Design">…</iswc-kanban-card>
 </iswc-kanban-column>
 </iswc-kanban>
 ```
 
 ## Errores comunes
 
-- Usar tag sin importar mÃ³dulo primero.
+- Usar tag sin importar módulo primero.
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
@@ -218,15 +218,15 @@ Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: ninguno ex
 
 ## Reglas para LLM
 
-- Reusar componente y dependencias antes de implementaciÃ³n paralela.
+- Reusar componente y dependencias antes de implementación paralela.
 - Mantener nombres exactos de tags y API.
-- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explÃ­cito.
-- Leer callers/shared antes de cambiar; corregir raÃ­z comÃºn.
-- No modificar API basÃ¡ndose solo en preview.
+- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explícito.
+- Leer callers/shared antes de cambiar; corregir raíz común.
+- No modificar API basándose solo en preview.
 
 ## Fuentes
 
 - [JavaScript](./kanban.ts)
-- [CSS](./kanban.css)
-- [Ãndice de categorÃ­a](../../specs/componentes.md)
+- [CSS](./kanban.scss)
+- [Índice de categoría](../../../specs/componentes.md)
 - [Preview](./kanban.json)

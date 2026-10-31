@@ -7,9 +7,9 @@
   font: inherit;
   vertical-align: middle;
   line-height: 0;
-
-  &[hidden] { display: none !important; }
 }
+
+:host([hidden]) { display: none !important; }
 
 iswc-check-icon-button {
   width: 100%;

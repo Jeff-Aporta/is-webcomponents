@@ -2,81 +2,82 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
 import { ElementBase } from '../../core/element-base.js';
 import { computePosition } from '../../core/position.js';
 import { createPopupDismiss } from '../../core/popup-dismiss.js';
+import type { Placement } from '../../core/schemas/position.schemas.js';
 import '../actions/button.js';
 
 /**
  * <iswc-popconfirm> — Web Component (vanilla, zero dependencies).
  *
  * Cuadro de confirmación emergente anclado a un disparador. Sin modal de fondo.
+ * Vive en la capa superior (popover): se ve también sobre un diálogo abierto.
  *
  *   <iswc-button id="trigger">Borrar</iswc-button>
- *   <iswc-popconfirm for="trigger" message="¿Seguro?">
- *     <iswc-button slot="confirm" color="danger">Sí</iswc-button>
- *     <iswc-button slot="cancel">No</iswc-button>
- *   </iswc-popconfirm>
+ *   <iswc-popconfirm for="trigger" message="¿Seguro?" color="danger" confirm-label="Sí, borrar"></iswc-popconfirm>
  *
  * Atributos
- *   for          string — id del trigger element.
- *   message      string — texto principal.
- *   placement    top | bottom | start | end | top-start | top-end | bottom-start | bottom-end (default 'top')
- *   hide-arrow   boolean
- *   open         boolean — controlado.
- *   without-backdrop boolean
+ *   for           string — id del trigger element.
+ *   message       string — texto principal.
+ *   placement     top | bottom | start | end | top-start | top-end | bottom-start | bottom-end (default 'top')
+ *   hide-arrow    boolean
+ *   open          boolean — controlado.
+ *   color         brand | danger | … — color del botón de aceptar por defecto (default brand).
+ *   confirm-label texto del botón de aceptar por defecto (default "Aceptar").
+ *   cancel-label  texto del botón de cancelar por defecto (default "Cancelar").
  *
  * Slots
- *   confirm — slot del botón de confirmación.
- *   cancel  — slot del botón de cancelar.
+ *   message — contenido rico en vez del atributo message.
+ *   confirm — sustituye el botón de aceptar; su click confirma.
+ *   cancel  — sustituye el botón de cancelar; su click cancela.
  *
  * Eventos
- *   iswc-popconfirm-show  detail: { trigger }
- *   iswc-popconfirm-hide  detail: { trigger }
+ *   iswc-popconfirm-show    detail: { trigger }
+ *   iswc-popconfirm-hide    detail: { trigger }
  *   iswc-popconfirm-confirm detail: { trigger }
- *   iswc-popconfirm-cancel detail: { trigger }
+ *   iswc-popconfirm-cancel  detail: { trigger }
  */
 (() => {
   const TEMPLATE = document.createElement('template');
   TEMPLATE.innerHTML = /* html */ `
-    <div class="popconfirm" part="base" role="dialog" aria-modal="false">
+    <div class="popconfirm" part="base" role="dialog" aria-modal="false" aria-labelledby="mensaje" popover="manual">
       <div class="arrow" part="arrow"></div>
-      <div class="message" part="message"><slot name="message"></slot></div>
+      <div class="message" id="mensaje" part="message"><span class="message-text"></span><slot name="message"></slot></div>
       <div class="actions" part="actions">
-        <span class="cancel-wrap"><slot name="cancel"><iswc-button variant="text" color="text" class="cancel" data-popconfirm-cancel>Cancelar</iswc-button></slot></span>
-        <span class="confirm-wrap"><slot name="confirm"><iswc-button color="brand" class="confirm" data-popconfirm-confirm>Aceptar</iswc-button></slot></span>
+        <span class="cancel-wrap"><slot name="cancel"><iswc-button variant="text" color="text" class="cancel">Cancelar</iswc-button></slot></span>
+        <span class="confirm-wrap"><slot name="confirm"><iswc-button color="brand" class="confirm">Aceptar</iswc-button></slot></span>
       </div>
     </div>
   `;
 
-  const OBSERVED = ['for', 'message', 'placement', 'hide-arrow', 'open', 'without-backdrop'];
+  const OBSERVED = ['for', 'message', 'placement', 'hide-arrow', 'open', 'color', 'confirm-label', 'cancel-label'];
 
   const VALID_PLACEMENT = [
     'top', 'bottom', 'start', 'end',
     'top-start', 'top-end', 'bottom-start', 'bottom-end',
   ];
 
+  /** `start`/`end` del API público son los lados físicos de core/position. */
+  const LADO: Record<string, string> = { start: 'left', end: 'right' };
+  /** Separación con el disparador, y margen de la flecha a la esquina, en em del globo. */
+  const DISTANCIA_EM = 0.6;
+  const MARGEN_FLECHA_EM = 1;
+
   class IswcPopconfirm extends ElementBase {
 
-    static get observedAttributes(): string[] { return [...OBSERVED, 'bg', 'text-color', 'border-color', 'accent', 'danger-color']; }
+    static get observedAttributes(): string[] { return OBSERVED; }
 
     #pop!: HTMLElement;
+    #arrow!: HTMLElement;
+    #envolturaAceptar!: HTMLElement;
+    #envolturaCancelar!: HTMLElement;
     #trigger: HTMLElement | null = null;
-    #onTriggerClick: ((e: PointerEvent) => void) | null = null;
-    #onDocClick!: (e: PointerEvent) => void;
-    #popup!: HTMLDivElement;
-    /** g07 (Cat 24): elemento que tenía foco antes de abrir el popconfirm
-     *  para restaurarlo al cerrar (UX estándar de popovers). */
+    #abierto = false;
+    /** g07 (Cat 24): elemento que tenía foco antes de abrir, para devolverlo al cerrar. */
     #restoreFocus: HTMLElement | null = null;
 
-    /**
-     * Ciclo "abierto" compartido con iswc-dropdown / iswc-context-menu
-     * (_shared/popup-dismiss.js): Escape + reposicionado en scroll/resize.
-     * El cierre por click fuera sigue siendo propio (ver #onDocClick más
-     * abajo) porque hay que EXCLUIR el trigger externo — igual que
-     * iswc-dropdown no le pasa `onOutside` porque resuelve el suyo con el
-     * backdrop del <dialog>.
-     */
+    /** Ciclo "abierto" compartido con iswc-dropdown / iswc-context-menu. El click fuera es propio: excluye al trigger. */
     #dismiss = createPopupDismiss(this, {
-      onEscape: () => { if (this.hasAttribute('open')) this.hide(); },
-      onReposition: () => { if (this.hasAttribute('open')) this.#reposition(); },
+      onEscape: () => this.hide(),
+      onReposition: () => this.#reposition(),
     });
 
     constructor() {
@@ -85,51 +86,39 @@ import '../actions/button.js';
       adoptCss(shadow, import.meta.url);
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
       this.#pop = shadow.querySelector<HTMLElement>('.popconfirm')!;
+      this.#arrow = shadow.querySelector<HTMLElement>('.arrow')!;
+      // Cada envoltura cubre su slot: botón por defecto o el del consumidor, una sola vez.
+      this.#envolturaAceptar = shadow.querySelector<HTMLElement>('.confirm-wrap')!;
+      this.#envolturaCancelar = shadow.querySelector<HTMLElement>('.cancel-wrap')!;
+      this.#envolturaAceptar.addEventListener('click', () => this.#decidir('iswc-popconfirm-confirm'));
+      this.#envolturaCancelar.addEventListener('click', () => this.#decidir('iswc-popconfirm-cancel'));
+      shadow.querySelector('slot[name="message"]')!.addEventListener('slotchange', () => this.#syncMessage());
     }
 
-    onConnected() {
-      this.#popup = document.createElement('div');
-      this.#popup.style.position = 'fixed';
-      this.#popup.style.top = '0';
-      this.#popup.style.left = '0';
-      this.#popup.style.zIndex = '99999';
-      this.#popup.style.display = 'none';
-      // g07 (Cat 24): aria-hidden sincronizado al estado. Mientras está
-      // cerrado, el contenedor flotante debe ser ignorado por SR.
-      this.#popup.setAttribute('aria-hidden', 'true');
-      this.appendChild(this.#popup);
-      this.#popup.appendChild(this.#pop);
+    onConnected(): void {
       this.#bindTrigger();
-      this.#bindActions();
-      this.#onDocClick = (e: PointerEvent) => {
-        if (!this.hasAttribute('open')) return;
-        if (e.composedPath().includes(this)) return;
-        if (this.#trigger && e.composedPath().includes(this.#trigger)) return;
-        this.hide();
-      };
-      document.addEventListener('click', this.#onDocClick);
-      // Si el atributo message está presente y slot vacío, pintar text.
       this.#syncMessage();
+      this.#syncBotones();
+      this.#pop.dataset.placement = this.placement;
+      if (this.hasAttribute('open')) this.#abrir();
     }
 
-    onDisconnected() {
+    onDisconnected(): void {
       this.#unbindTrigger();
-      document.removeEventListener('click', this.#onDocClick);
-      this.#dismiss.detach();
+      this.#cerrar(false);
     }
 
-    onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
+    onAttributeChanged(name: string): void {
       if (name === 'for') {
         this.#unbindTrigger();
         this.#bindTrigger();
       }
-      if (name === 'placement') {
-        this.#pop.dataset.placement = this.placement;
-      }
+      if (name === 'placement') this.#pop.dataset.placement = this.placement;
       if (name === 'message') this.#syncMessage();
+      if (name === 'color' || name === 'confirm-label' || name === 'cancel-label') this.#syncBotones();
       if (name === 'open') {
-        if (this.hasAttribute('open')) this.#show();
-        else this.hide();
+        if (this.hasAttribute('open')) this.#abrir();
+        else this.#cerrar(true);
       }
     }
 
@@ -142,183 +131,114 @@ import '../actions/button.js';
       else if (VALID_PLACEMENT.includes(v)) this.setAttribute('placement', v);
     }
 
-    show() {
-      const trigger = this.#trigger;
-      // g07 (Cat 24): guarda el foco del disparador antes de moverlo al
-      // popconfirm, para devolverlo al cerrar.
-      const active = document.activeElement;
-      if (active instanceof HTMLElement) this.#restoreFocus = active;
-      this.setAttribute('open', '');
-      this.#show();
-      emit(this, 'iswc-popconfirm-show', { trigger });
-    }
+    show(): void { this.setAttribute('open', ''); }
+    hide(): void { this.removeAttribute('open'); }
 
-    hide() {
-      // g07 (Cat 24): devuelve el foco al elemento que lo tenía antes de
-      // abrir, o al trigger como fallback. Se hace antes de quitar
-      // aria-hidden y display para que el cambio de foco sea estable.
-      const restore = this.#restoreFocus;
-      this.#restoreFocus = null;
-      this.removeAttribute('open');
-      this.#popup.style.display = 'none';
-      this.#popup.setAttribute('aria-hidden', 'true');
-      if (restore && document.contains(restore)) {
-        try { restore.focus({ preventScroll: true }); } catch { restore.focus(); }
-      } else if (this.#trigger && document.contains(this.#trigger)) {
-        try { this.#trigger.focus({ preventScroll: true }); } catch { this.#trigger.focus(); }
-      }
-      emit(this, 'iswc-popconfirm-hide', { trigger: this.#trigger });
-    }
-
-    #show() {
-      this.#popup.style.display = 'block';
-      this.#popup.setAttribute('aria-hidden', 'false');
-      // g07 (Cat 24): al abrir, foco al primer focusable del popup. Se hace
-      // tras el layout (rAF) para que el popup esté pintado y los iswc-button
-      // hayan completado su upgrade.
+    #abrir(): void {
+      if (this.#abierto || !this.isConnected) return;
+      this.#abierto = true;
+      const activo = document.activeElement;
+      this.#restoreFocus = activo instanceof HTMLElement && activo !== document.body ? activo : this.#trigger;
+      this.#pop.showPopover();
+      this.#dismiss.attach();
+      document.addEventListener('click', this.#onDocClick);
+      this.#trigger?.setAttribute('aria-expanded', 'true');
+      emit(this, 'iswc-popconfirm-show', { trigger: this.#trigger });
+      // Tras el layout: el globo ya tiene tamaño y los iswc-button terminaron su upgrade.
       requestAnimationFrame(() => {
         this.#reposition();
-        this.#focusFirst();
+        if (this.#abierto) this.#botonCancelar()?.focus({ preventScroll: true });
       });
     }
 
-    /** g07 (Cat 24): foco al primer elemento focuseable del popup flotante.
-     *  Recorre el shadow del popconfirm y devuelve el primer descendiente
-     *  que sea focusable y no esté disabled. Si no encuentra ninguno, deja
-     *  el foco donde estaba (no es modal). */
-    #focusFirst() {
-      const root = this.#pop;
-      if (!root) return;
-      const sel = 'button, [href], input, select, textarea, iswc-button, iswc-input, [tabindex]:not([tabindex="-1"])';
-      const visit = (scope: ParentNode): HTMLElement | null => {
-        const direct = scope.querySelectorAll<HTMLElement>(sel);
-        for (const el of Array.from(direct)) {
-          if (el.hasAttribute('disabled') || el.getAttribute('aria-disabled') === 'true') continue;
-          return el;
-        }
-        for (const el of scope.querySelectorAll<HTMLElement>('*')) {
-          if (el.tabIndex >= 0 && !el.hasAttribute('disabled') && el.getAttribute('aria-disabled') !== 'true') {
-            return el;
-          }
-          if ((el as HTMLElement & { shadowRoot?: ShadowRoot | null }).shadowRoot) {
-            const found = visit((el as HTMLElement & { shadowRoot: ShadowRoot }).shadowRoot);
-            if (found) return found;
-          }
-        }
-        return null;
-      };
-      const target = visit(root);
-      if (!target) return;
-      // Para iswc-button / iswc-input, el foco debe ir al <button>/<input> interno.
-      const inner = (target as HTMLElement & { shadowRoot?: ShadowRoot | null }).shadowRoot
-        ?.querySelector<HTMLElement>('button, input, textarea, [tabindex]:not([tabindex="-1"])');
-      try {
-        if (inner) inner.focus({ preventScroll: true });
-        else target.focus({ preventScroll: true });
-      } catch {
-        try { (inner ?? target).focus(); } catch { /* no-op */ }
-      }
+    #cerrar(avisar: boolean): void {
+      if (!this.#abierto) return;
+      this.#abierto = false;
+      this.#dismiss.detach();
+      document.removeEventListener('click', this.#onDocClick);
+      if (this.#pop.matches(':popover-open')) this.#pop.hidePopover();
+      this.#trigger?.setAttribute('aria-expanded', 'false');
+      const restore = this.#restoreFocus;
+      this.#restoreFocus = null;
+      if (restore?.isConnected) restore.focus({ preventScroll: true });
+      if (avisar) emit(this, 'iswc-popconfirm-hide', { trigger: this.#trigger });
     }
 
-    #reposition = () => {
-      if (!this.hasAttribute('open')) return;
-      const trig = this.#trigger;
-      if (!trig) return;
-      const tRect = trig.getBoundingClientRect();
-      const pRect = this.#pop.getBoundingClientRect();
-      const placement = this.placement;
-      let top = 0;
-      let left = 0;
-      const centerX = tRect.left + tRect.width / 2 - pRect.width / 2;
-      const centerY = tRect.top + tRect.height / 2 - pRect.height / 2;
-      switch (placement) {
-        case 'top':
-          left = centerX;
-          top = tRect.top - pRect.height - 8;
-          break;
-        case 'top-start':
-          left = tRect.left;
-          top = tRect.top - pRect.height - 8;
-          break;
-        case 'top-end':
-          left = tRect.right - pRect.width;
-          top = tRect.top - pRect.height - 8;
-          break;
-        case 'bottom':
-          left = centerX;
-          top = tRect.bottom + 8;
-          break;
-        case 'bottom-start':
-          left = tRect.left;
-          top = tRect.bottom + 8;
-          break;
-        case 'bottom-end':
-          left = tRect.right - pRect.width;
-          top = tRect.bottom + 8;
-          break;
-        case 'start':
-          left = tRect.left - pRect.width - 8;
-          top = centerY;
-          break;
-        case 'end':
-          left = tRect.right + 8;
-          top = centerY;
-          break;
-      }
-      // evitar overflow
-      const margin = 8;
-      const docW = document.documentElement.clientWidth;
-      const docH = document.documentElement.clientHeight;
-      if (left < margin) left = margin;
-      if (left + pRect.width > docW - margin) left = docW - pRect.width - margin;
-      if (top < margin) top = margin;
-      if (top + pRect.height > docH - margin) top = docH - pRect.height - margin;
-      this.#popup.style.transform = `translate(${left}px, ${top}px)`;
+    #decidir(evento: string): void {
+      emit(this, evento, { trigger: this.#trigger });
+      this.hide();
+    }
+
+    #botonCancelar(): HTMLElement | null {
+      return this.querySelector<HTMLElement>('[slot="cancel"]') ?? this.shadowRoot!.querySelector<HTMLElement>('.cancel');
+    }
+
+    #onDocClick = (e: MouseEvent): void => {
+      const ruta = e.composedPath();
+      if (ruta.includes(this) || (this.#trigger && ruta.includes(this.#trigger))) return;
+      this.hide();
     };
 
-    #bindTrigger() {
-      const id = this.getAttribute('for');
-      if (!id) return;
-      this.#trigger = document.getElementById(id);
-      if (!this.#trigger) return;
-      this.#onTriggerClick = (e: PointerEvent) => {
-        e.preventDefault();
-        e.stopPropagation();
-        if (this.hasAttribute('open')) this.hide();
-        else this.show();
-      };
-      this.#trigger.addEventListener('click', this.#onTriggerClick);
+    #onTriggerClick = (e: Event): void => {
+      e.preventDefault();
+      this.toggleAttribute('open');
+    };
+
+    #reposition(): void {
+      if (!this.#abierto || !this.#trigger) return;
+      const em = parseFloat(getComputedStyle(this.#pop).fontSize) || 16;
+      const pedido = this.placement;
+      const r = computePosition({
+        anchor: this.#trigger,
+        popupEl: this.#pop,
+        placement: (LADO[pedido] ?? pedido) as Placement,
+        distance: DISTANCIA_EM * em,
+        flip: true,
+        shift: true,
+        flipPadding: em / 2,
+        shiftPadding: em / 2,
+        strategy: 'fixed',
+      });
+      if (!r) return;
+      Object.assign(this.#pop.style, { top: `${r.top}px`, left: `${r.left}px` });
+      const lado = r.placement.split('-')[0]!;
+      this.#pop.dataset.lado = lado;
+      // La flecha apunta al centro del disparador aunque el globo se haya desplazado para caber.
+      const vertical = lado === 'top' || lado === 'bottom';
+      const centro = vertical ? r.anchor.left + r.anchor.width / 2 - r.viewportLeft : r.anchor.top + r.anchor.height / 2 - r.viewportTop;
+      const largo = vertical ? r.popupSize.width : r.popupSize.height;
+      const margen = MARGEN_FLECHA_EM * em;
+      this.#arrow.style.setProperty('--_flecha', `${Math.min(largo - margen, Math.max(margen, centro))}px`);
     }
 
-    #unbindTrigger() {
-      if (this.#trigger && this.#onTriggerClick) {
-        this.#trigger.removeEventListener('click', this.#onTriggerClick);
-      }
+    #bindTrigger(): void {
+      const id = this.getAttribute('for');
+      if (!id) return;
+      const root = this.getRootNode() as Document | ShadowRoot;
+      this.#trigger = root.getElementById?.(id) ?? document.getElementById(id);
+      if (!this.#trigger) return;
+      this.#trigger.addEventListener('click', this.#onTriggerClick);
+      this.#trigger.setAttribute('aria-haspopup', 'dialog');
+      this.#trigger.setAttribute('aria-expanded', String(this.#abierto));
+    }
+
+    #unbindTrigger(): void {
+      this.#trigger?.removeEventListener('click', this.#onTriggerClick);
       this.#trigger = null;
     }
 
-    #bindActions() {
-      this.#pop.addEventListener('click', (e: Event) => {
-        const target = e.target as Element | null;
-        if (target?.closest('[data-popconfirm-confirm]')) {
-          emit(this, 'iswc-popconfirm-confirm', { trigger: this.#trigger });
-          this.hide();
-        }
-        if (target?.closest('[data-popconfirm-cancel]')) {
-          emit(this, 'iswc-popconfirm-cancel', { trigger: this.#trigger });
-          this.hide();
-        }
-      });
+    #syncMessage(): void {
+      const slot = this.shadowRoot!.querySelector<HTMLSlotElement>('slot[name="message"]')!;
+      const texto = this.shadowRoot!.querySelector<HTMLElement>('.message-text')!;
+      texto.textContent = slot.assignedNodes().length > 0 ? '' : (this.getAttribute('message') ?? '');
     }
 
-    #syncMessage() {
-      const msg = this.getAttribute('message');
-      if (msg) {
-        const slot = this.#pop.querySelector<HTMLSlotElement>('slot[name="message"]');
-        if (slot && slot.assignedNodes().length === 0) {
-          slot.replaceWith(Object.assign(document.createElement('span'), { textContent: msg }));
-        }
-      }
+    #syncBotones(): void {
+      const aceptar = this.shadowRoot!.querySelector<HTMLElement>('.confirm')!;
+      const cancelar = this.shadowRoot!.querySelector<HTMLElement>('.cancel')!;
+      aceptar.setAttribute('color', this.getAttribute('color') || 'brand');
+      aceptar.textContent = this.getAttribute('confirm-label') || 'Aceptar';
+      cancelar.textContent = this.getAttribute('cancel-label') || 'Cancelar';
     }
   }
 

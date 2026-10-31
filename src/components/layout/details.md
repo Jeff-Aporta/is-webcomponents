@@ -1,42 +1,42 @@
-﻿---
+---
 tag: iswc-details
 tags:
   - iswc-details
 category: layout
 status: public
 source: ./details.ts
-style: ./details.css
+style: ./details.scss
 preview: ./details.json
 ---
 # `<iswc-details>`
 
-## PropÃ³sito
+## Propósito
 
 Disclosure colapsable: muestra un resumen y, al expandir, el contenido. Equivalente
 accesible al <details> nativo, con apariencias,
 iconos, animaciones y comportamiento de accordion opcional.
 
-Este mÃ³dulo registra `<iswc-details>`.
+Este módulo registra `<iswc-details>`.
 
-## CuÃ¡ndo usarlo
+## Cuándo usarlo
 
-Estructura, superficies, overlays y navegaciÃ³n por regiones de contenido.
+Contenido secundario que se pliega: una sección suelta o un bloque de ayuda.
 
-## CuÃ¡ndo no usarlo
+## Cuándo no usarlo
 
-No crear size colors; escalar mediante font-size contextual y em.
+Varias secciones exclusivas: `iswc-accordion-group`. Vistas del mismo nivel: `iswc-tab-group`.
 
-## ImportaciÃ³n
+## Importación
 
 ```js
 import './details.js';
 ```
 
-## Ejemplo mÃ­nimo
+## Ejemplo mínimo
 
 ```html
-<iswc-details summary="Â¿QuÃ© es InSoft?">
-InSoft es un ERP modularâ€¦
+<iswc-details summary="¿Qué es InSoft?">
+InSoft es un ERP modular…
 </iswc-details>
 ```
 
@@ -48,14 +48,14 @@ InSoft es un ERP modularâ€¦
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
-| `open` | boolean | Fuente define default/restricciÃ³n. |
-| `summary` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `name` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `disabled` | boolean | Fuente define default/restricciÃ³n. |
-| `variant` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `icon-placement` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `open` | boolean | Fuente define default/restricción. |
+| `summary` | string/según contrato | Fuente define default/restricción. |
+| `name` | string/según contrato | Fuente define default/restricción. |
+| `disabled` | boolean | Fuente define default/restricción. |
+| `variant` | string/según contrato | Fuente define default/restricción. |
+| `icon-placement` | string/según contrato | Fuente define default/restricción. |
 
-#### Propiedades pÃºblicas
+#### Propiedades públicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
@@ -77,19 +77,19 @@ InSoft es un ERP modularâ€¦
 ### Eventos
 
 
-| Evento | DescripciÃ³n |
+| Evento | Descripción |
 | --- | --- |
 | `iswc-show` | Emitido justo antes de mostrarse (cancelable). |
-| `iswc-after-show` | Emitido tras finalizar la animaciÃ³n de apertura. |
+| `iswc-after-show` | Emitido tras finalizar la animación de apertura. |
 | `iswc-hide` | Emitido justo antes de ocultarse (cancelable). |
-| `iswc-after-hide` | Emitido tras finalizar la animaciÃ³n de cierre. |
+| `iswc-after-hide` | Emitido tras finalizar la animación de cierre. |
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `iswc-show` | segÃºn cabecera | segÃºn cabecera | segÃºn cabecera | segÃºn cabecera |
-| `iswc-after-show` | segÃºn cabecera | segÃºn cabecera | segÃºn cabecera | segÃºn cabecera |
-| `iswc-hide` | segÃºn cabecera | segÃºn cabecera | segÃºn cabecera | segÃºn cabecera |
-| `iswc-after-hide` | segÃºn cabecera | segÃºn cabecera | segÃºn cabecera | segÃºn cabecera |
+| `iswc-show` | según cabecera | según cabecera | según cabecera | según cabecera |
+| `iswc-after-show` | según cabecera | según cabecera | según cabecera | según cabecera |
+| `iswc-hide` | según cabecera | según cabecera | según cabecera | según cabecera |
+| `iswc-after-hide` | según cabecera | según cabecera | según cabecera | según cabecera |
 
 
 <details>
@@ -104,15 +104,15 @@ el.addEventListener('iswc-show', (e) => {
 
 </details>
 
-### MÃ©todos y propiedades pÃºblicas
+### Métodos y propiedades públicas
 
-| MÃ©todo | Uso |
+| Método | Uso |
 | --- | --- |
-| `show()` | MÃ©todo pÃºblico declarado. |
-| `hide()` | MÃ©todo pÃºblico declarado. |
-| `toggle()` | MÃ©todo pÃºblico declarado. |
+| `show()` | Método público declarado. |
+| `hide()` | Método público declarado. |
+| `toggle()` | Método público declarado. |
 
-Propiedades pÃºblicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
+Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
 
 ### CSS parts
 
@@ -132,38 +132,38 @@ No expone.
 
 | Token | Uso |
 | --- | --- |
-| `--spacing` | Token leÃ­do o definido por componente. |
-| `--show-duration` | Token leÃ­do o definido por componente. |
-| `--hide-duration` | Token leÃ­do o definido por componente. |
-| `--iswc-space-m` | Token leÃ­do o definido por componente. |
-| `--_bg` | Token leÃ­do o definido por componente. |
-| `--iswc-bg-elev` | Token leÃ­do o definido por componente. |
-| `--_border` | Token leÃ­do o definido por componente. |
-| `--iswc-border` | Token leÃ­do o definido por componente. |
-| `--_text` | Token leÃ­do o definido por componente. |
-| `--iswc-text` | Token leÃ­do o definido por componente. |
-| `--_header-bg` | Token leÃ­do o definido por componente. |
-| `--_header-bg-hover` | Token leÃ­do o definido por componente. |
-| `--iswc-font-family` | Token leÃ­do o definido por componente. |
-| `--iswc-radius` | Token leÃ­do o definido por componente. |
-| `--iswc-focus` | Token leÃ­do o definido por componente. |
-| `--iswc-text-muted` | Token leÃ­do o definido por componente. |
+| `--spacing` | Token leído o definido por componente. |
+| `--show-duration` | Token leído o definido por componente. |
+| `--hide-duration` | Token leído o definido por componente. |
+| `--iswc-space-m` | Token leído o definido por componente. |
+| `--_bg` | Token leído o definido por componente. |
+| `--iswc-bg-elev` | Token leído o definido por componente. |
+| `--_border` | Token leído o definido por componente. |
+| `--iswc-border` | Token leído o definido por componente. |
+| `--_text` | Token leído o definido por componente. |
+| `--iswc-text` | Token leído o definido por componente. |
+| `--_header-bg` | Token leído o definido por componente. |
+| `--_header-bg-hover` | Token leído o definido por componente. |
+| `--iswc-font-family` | Token leído o definido por componente. |
+| `--iswc-radius` | Token leído o definido por componente. |
+| `--iswc-focus` | Token leído o definido por componente. |
+| `--iswc-text-muted` | Token leído o definido por componente. |
 
-### IntegraciÃ³n con formularios
+### Integración con formularios
 
-No declara integraciÃ³n form-associated propia en este mÃ³dulo.
+No declara integración form-associated propia en este módulo.
 
 ## Comportamiento
 
-DocumentaciÃ³n de cabecera preservada desde fuente:
+Documentación de cabecera preservada desde fuente:
 
-> <iswc-details> â€” Web Component (vanilla, zero dependencies).
+> <iswc-details> — Web Component (vanilla, zero dependencies).
 > Disclosure colapsable: muestra un resumen y, al expandir, el contenido.
 > Equivalente a wa-details / <details>.
 > Atributos
->   open             boolean â€” si estÃ¡ expandido (reflected)
->   summary          string  â€” texto del summary si no se usa el slot
->   name             string  â€” grupo accordion: si dos <iswc-details> comparten
+>   open             boolean — si está expandido (reflected)
+>   summary          string  — texto del summary si no se usa el slot
+>   name             string  — grupo accordion: si dos <iswc-details> comparten
 >                             `name`, abrir uno cierra el resto
 >   disabled         boolean
 >   variant       filled | outlined | filled-outlined | plain
@@ -175,54 +175,54 @@ DocumentaciÃ³n de cabecera preservada desde fuente:
 >   summary           summary propio (gana sobre el atributo summary)
 >   expand-icon       icono de expandido
 >   collapse-icon     icono de colapsado
-> MÃ©todos
+> Métodos
 >   show() / hide() / toggle()
 > Eventos
->   iswc-show       detail: {} â€” antes de abrir (cancelable)
->   iswc-after-show detail: {} â€” tras la animaciÃ³n de apertura
->   iswc-hide       detail: {} â€” antes de cerrar (cancelable)
->   iswc-after-hide detail: {} â€” tras la animaciÃ³n de cierre
+>   iswc-show       detail: {} — antes de abrir (cancelable)
+>   iswc-after-show detail: {} — tras la animación de apertura
+>   iswc-hide       detail: {} — antes de cerrar (cancelable)
+>   iswc-after-hide detail: {} — tras la animación de cierre
 > CSS Parts: ::part(base) ::part(header) ::part(summary) ::part(icon) ::part(content)
 > CSS custom properties
 >   --spacing          espacio del header/contenido
->   --show-duration    duraciÃ³n de la animaciÃ³n de apertura
->   --hide-duration    duraciÃ³n de la animaciÃ³n de cierre
+>   --show-duration    duración de la animación de apertura
+>   --hide-duration    duración de la animación de cierre
 
 ## Dependencias y componentes relacionados
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 
-Tags del mÃ³dulo: `<iswc-details>`.
+Tags del módulo: `<iswc-details>`.
 
 ## Accesibilidad
 
-Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: `aria-expanded`, `aria-hidden`, `aria-disabled`.
+Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-expanded`, `aria-hidden`, `aria-disabled`.
 
 ## Ejemplo avanzado
 
 ```html
-<iswc-details variant="filled" summary="â€¦">â€¦</iswc-details>
+<iswc-details variant="filled" summary="…">…</iswc-details>
 ```
 
 ## Errores comunes
 
-- Usar tag sin importar mÃ³dulo primero.
+- Usar tag sin importar módulo primero.
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
-- Crear size color; usar font-size contextual y em.
+- Agregar un atributo `size`: el tamaño sale del `font-size` del contexto y de `em`.
 
 ## Reglas para LLM
 
-- Reusar componente y dependencias antes de implementaciÃ³n paralela.
+- Reusar componente y dependencias antes de implementación paralela.
 - Mantener nombres exactos de tags y API.
-- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explÃ­cito.
-- Leer callers/shared antes de cambiar; corregir raÃ­z comÃºn.
-- No modificar API basÃ¡ndose solo en preview.
+- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explícito.
+- Leer callers/shared antes de cambiar; corregir raíz común.
+- No modificar API basándose solo en preview.
 
 ## Fuentes
 
 - [JavaScript](./details.ts)
-- [CSS](./details.css)
-- [Ãndice de categorÃ­a](../../specs/componentes.md)
+- [CSS](./details.scss)
+- [Índice de categoría](../../../specs/componentes.md)
 - [Preview](./details.json)

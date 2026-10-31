@@ -1,36 +1,36 @@
-﻿---
+---
 tag: iswc-file-input
 tags:
   - iswc-file-input
 category: forms
 status: public
 source: ./file-input.ts
-style: ./file-input.css
+style: ./file-input.scss
 preview: ./file-input.json
 ---
 # `<iswc-file-input>`
 
-## PropÃ³sito
+## Propósito
 
 Dropzone con input nativo oculto, lista de archivos y estados blank / dragging.
 
-Este mÃ³dulo registra `<iswc-file-input>`.
+Este módulo registra `<iswc-file-input>`.
 
-## CuÃ¡ndo usarlo
+## Cuándo usarlo
 
-Captura, selecciÃ³n y validaciÃ³n de valores compatibles con formularios.
+Captura, selección y validación de valores compatibles con formularios.
 
-## CuÃ¡ndo no usarlo
+## Cuándo no usarlo
 
-No duplicar validaciÃ³n, form association ni pickers shared.
+No duplicar validación, form association ni pickers shared.
 
-## ImportaciÃ³n
+## Importación
 
 ```js
 import './file-input.js';
 ```
 
-## Ejemplo mÃ­nimo
+## Ejemplo mínimo
 
 ```html
 <iswc-file-input
@@ -49,16 +49,16 @@ name="attachments"
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
-| `label` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `hint` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `name` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `accept` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `capture` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `multiple` | boolean | Fuente define default/restricciÃ³n. |
-| `disabled` | boolean | Fuente define default/restricciÃ³n. |
-| `required` | boolean | Fuente define default/restricciÃ³n. |
+| `label` | string/según contrato | Fuente define default/restricción. |
+| `hint` | string/según contrato | Fuente define default/restricción. |
+| `name` | string/según contrato | Fuente define default/restricción. |
+| `accept` | string/según contrato | Fuente define default/restricción. |
+| `capture` | string/según contrato | Fuente define default/restricción. |
+| `multiple` | boolean | Fuente define default/restricción. |
+| `disabled` | boolean | Fuente define default/restricción. |
+| `required` | boolean | Fuente define default/restricción. |
 
-#### Propiedades pÃºblicas
+#### Propiedades públicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
@@ -79,7 +79,7 @@ name="attachments"
 ### Eventos
 
 
-| Evento | DescripciÃ³n |
+| Evento | Descripción |
 | --- | --- |
 | `iswc-change` | Emitido al confirmar el cambio de valor (escribe como `change` nativo). |
 | `input` | Evento nativo al cambiar el valor. |
@@ -87,9 +87,9 @@ name="attachments"
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `iswc-change` | sÃ­ | sÃ­ | sÃ­ | no |
-| `input` | sÃ­ | sÃ­ | sÃ­ | no |
-| `change` | sÃ­ | sÃ­ | sÃ­ | no |
+| `iswc-change` | sí | sí | sí | no |
+| `input` | sí | sí | sí | no |
+| `change` | sí | sí | sí | no |
 
 
 <details>
@@ -104,11 +104,11 @@ el.addEventListener('iswc-change', (e) => {
 
 </details>
 
-### MÃ©todos y propiedades pÃºblicas
+### Métodos y propiedades públicas
 
 No expone.
 
-Propiedades pÃºblicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
+Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
 
 ### CSS parts
 
@@ -121,45 +121,45 @@ Propiedades pÃºblicas aparecen en tabla anterior; APIs heredadas se verifican 
 | `input` | Personalizable con `::part(input)`. |
 | `file-list` | Personalizable con `::part(file-list)`. |
 | `file` | Cada fila de la lista de archivos. |
-| `remove-button` | BotÃ³n para quitar un archivo de la lista. |
+| `remove-button` | Botón para quitar un archivo de la lista. |
 
 ### Custom states
 
 | Estado | Uso |
 | --- | --- |
-| `:state(dragging)` | Estado usado por implementaciÃ³n/CSS. |
-| `:state(disabled)` | Estado usado por implementaciÃ³n/CSS. |
-| `:state(blank)` | Estado usado por implementaciÃ³n/CSS. |
+| `:state(dragging)` | Estado usado por implementación/CSS. |
+| `:state(disabled)` | Estado usado por implementación/CSS. |
+| `:state(blank)` | Estado usado por implementación/CSS. |
 
 ### CSS custom properties
 
 | Token | Uso |
 | --- | --- |
-| `--iswc-font-family` | Token leÃ­do o definido por componente. |
-| `--iswc-text` | Token leÃ­do o definido por componente. |
-| `--iswc-text-soft` | Token leÃ­do o definido por componente. |
-| `--iswc-control-border` | Token leÃ­do o definido por componente. |
-| `--iswc-control-bg` | Token leÃ­do o definido por componente. |
-| `--iswc-color-brand-500` | Token leÃ­do o definido por componente. |
-| `--iswc-focus` | Token leÃ­do o definido por componente. |
-| `--iswc-surface` | Token leÃ­do o definido por componente. |
-| `--iswc-color-danger-500` | Token leÃ­do o definido por componente. |
+| `--iswc-font-family` | Token leído o definido por componente. |
+| `--iswc-text` | Token leído o definido por componente. |
+| `--iswc-text-soft` | Token leído o definido por componente. |
+| `--iswc-control-border` | Token leído o definido por componente. |
+| `--iswc-control-bg` | Token leído o definido por componente. |
+| `--iswc-color-brand-500` | Token leído o definido por componente. |
+| `--iswc-focus` | Token leído o definido por componente. |
+| `--iswc-surface` | Token leído o definido por componente. |
+| `--iswc-color-danger-500` | Token leído o definido por componente. |
 
-### IntegraciÃ³n con formularios
+### Integración con formularios
 
-Participa mediante ElementInternals/helpers form-associated; respetar name, value, disabled, reset, restore y validaciÃ³n.
+Participa mediante ElementInternals/helpers form-associated; respetar name, value, disabled, reset, restore y validación.
 
 ## Comportamiento
 
-DocumentaciÃ³n de cabecera preservada desde fuente:
+Documentación de cabecera preservada desde fuente:
 
-> <iswc-file-input> â€” Web Component (vanilla).
+> <iswc-file-input> — Web Component (vanilla).
 > Dropzone + input file nativo oculto. Lista de archivos con quitar.
 > Atributos
 >   label, hint, name, accept, capture
 >   multiple, disabled, required  (boolean)
 > Propiedad
->   files  File[]  get/set â€” reasignar dispara update
+>   files  File[]  get/set — reasignar dispara update
 > Slots: label, hint, dropzone
 > Custom states: blank, dragging  (:state / data-state-*)
 > Eventos: change, input, iswc-change (bubbles, composed)
@@ -172,11 +172,11 @@ DocumentaciÃ³n de cabecera preservada desde fuente:
 - [`../media/icon.js`](../media/icon.js)
 - [`../helpers/format-bytes.js`](../helpers/format-bytes.js)
 
-Tags del mÃ³dulo: `<iswc-file-input>`.
+Tags del módulo: `<iswc-file-input>`.
 
 ## Accesibilidad
 
-Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: `aria-labelledby`, `aria-describedby`, `aria-hidden`, `aria-disabled`, `aria-label`.
+Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-labelledby`, `aria-describedby`, `aria-hidden`, `aria-disabled`, `aria-label`.
 
 ## Ejemplo avanzado
 
@@ -191,7 +191,7 @@ name="attachments"
 
 ## Errores comunes
 
-- Usar tag sin importar mÃ³dulo primero.
+- Usar tag sin importar módulo primero.
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
@@ -199,15 +199,15 @@ name="attachments"
 
 ## Reglas para LLM
 
-- Reusar componente y dependencias antes de implementaciÃ³n paralela.
+- Reusar componente y dependencias antes de implementación paralela.
 - Mantener nombres exactos de tags y API.
-- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explÃ­cito.
-- Leer callers/shared antes de cambiar; corregir raÃ­z comÃºn.
-- No modificar API basÃ¡ndose solo en preview.
+- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explícito.
+- Leer callers/shared antes de cambiar; corregir raíz común.
+- No modificar API basándose solo en preview.
 
 ## Fuentes
 
 - [JavaScript](./file-input.ts)
-- [CSS](./file-input.css)
-- [Ãndice de categorÃ­a](../../specs/componentes.md)
+- [CSS](./file-input.scss)
+- [Índice de categoría](../../../specs/componentes.md)
 - [Preview](./file-input.json)

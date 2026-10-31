@@ -1,46 +1,46 @@
-﻿---
+---
 tag: iswc-md-editor
 tags:
   - iswc-md-editor
 category: helpers
 status: public
 source: ./md-editor.ts
-style: ./md-editor.css
+style: ./md-editor.scss
 preview: ./md-editor.json
 ---
 # `<iswc-md-editor>`
 
-## PropÃ³sito
+## Propósito
 
-Vista previa de solo lectura (markdown + HTML hÃ­brido + chips `{{variable}}`) que al hacer clic, doble clic o Enter abre un `<iswc-dialog>` a pantalla completa para revisar (solo lectura) o editar (WYSIWYG + texto plano) el contenido. Port de la UX de `PromptBodyEditor` de PatyIA.
+Vista previa de solo lectura (markdown + HTML híbrido + chips `{{variable}}`) que al hacer clic, doble clic o Enter abre un `<iswc-dialog>` a pantalla completa para revisar (solo lectura) o editar (WYSIWYG + texto plano) el contenido. Port de la UX de `PromptBodyEditor` de PatyIA.
 
-Este mÃ³dulo registra `<iswc-md-editor>`.
+Este módulo registra `<iswc-md-editor>`.
 
-## CuÃ¡ndo usarlo
+## Cuándo usarlo
 
-- Instrucciones/prompts con `{{variables}}` que hay que revisar o editar en un diÃ¡logo grande.
-- Snippets generados (p. ej. `iswc-cdn-snippet`) que solo se revisan y copian, sin ediciÃ³n.
-- Cualquier bloque de texto MD/HTML donde una vista embebida (siempre visible) serÃ­a demasiado alta.
+- Instrucciones/prompts con `{{variables}}` que hay que revisar o editar en un diálogo grande.
+- Snippets generados (p. ej. `iswc-cdn-snippet`) que solo se revisan y copian, sin edición.
+- Cualquier bloque de texto MD/HTML donde una vista embebida (siempre visible) sería demasiado alta.
 
-## CuÃ¡ndo no usarlo
+## Cuándo no usarlo
 
 - Solo pintar MD embebido (sin modal/tools): usar `<iswc-md-render>`.
-- EdiciÃ³n ligera in-place: `<iswc-md-render can-edit>`.
+- Edición ligera in-place: `<iswc-md-render can-edit>`.
 - Formularios de texto corto: usar `<iswc-input>`/`<iswc-textarea>`.
-- Rich text WYSIWYG de propÃ³sito general sin variables ni preview: usar `<iswc-rte>`.
+- Rich text WYSIWYG de propósito general sin variables ni preview: usar `<iswc-rte>`.
 
-## ImportaciÃ³n
+## Importación
 
 ```js
 import './md-editor.js';
 ```
 
-## Ejemplo mÃ­nimo
+## Ejemplo mínimo
 
 ```html
 <iswc-md-editor
   label="Prompt del sistema"
-  value="# InstrucciÃ³n&#10;&#10;Eres un asistente que responde en **espaÃ±ol**."
+  value="# Instrucción&#10;&#10;Eres un asistente que responde en **español**."
 ></iswc-md-editor>
 ```
 
@@ -53,19 +53,19 @@ import './md-editor.js';
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
 | `value` | string | Markdown/HTML fuente con `{{variables}}`. |
-| `can-edit` | boolean | Habilita ediciÃ³n (toolbar, contenteditable, texto plano, botÃ³n Guardar). |
+| `can-edit` | boolean | Habilita edición (toolbar, contenteditable, texto plano, botón Guardar). |
 | `readonly` | boolean | Fuerza solo lectura aunque haya `can-edit`. |
-| `label` | string | TÃ­tulo del diÃ¡logo (o usar el atributo global `title`). |
-| `placeholder` | string | Texto cuando la vista previa estÃ¡ vacÃ­a. |
+| `label` | string | Título del diálogo (o usar el atributo global `title`). |
+| `placeholder` | string | Texto cuando la vista previa está vacía. |
 | `edit-block-reason` | string | Tooltip de la vista previa cuando no se puede editar. |
-| `open` | boolean | DiÃ¡logo abierto (reflejado); ver `open()`/`close()`. |
+| `open` | boolean | Diálogo abierto (reflejado); ver `open()`/`close()`. |
 | `api` | string (JSON) | Config `IswcMdEditorApiConfig` (endpoints HTTP). |
 | `src` | string | Atajo GET: equivale a `api.endpoints.get`. |
-| `filename` | string | Nombre de archivo en el header del diÃ¡logo. |
-| `fullscreen-scope` | `global` \| `local` | Ãmbito del diÃ¡logo fullscreen. |
+| `filename` | string | Nombre de archivo en el header del diálogo. |
+| `fullscreen-scope` | `global` \| `local` | Ámbito del diálogo fullscreen. |
 | `fill` | boolean | El preview estira al 100% del alto del padre (paneles flex / splits). |
 
-#### Propiedades pÃºblicas
+#### Propiedades públicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
@@ -75,9 +75,9 @@ import './md-editor.js';
 | `label` | lectura/escritura | Refleja `label`. |
 | `placeholder` | lectura/escritura | Refleja `placeholder`. |
 | `editBlockReason` | lectura/escritura | Refleja `edit-block-reason`. |
-| `api` | lectura/escritura | `IswcMdEditorApiConfig` â€” persistencia por fetch. |
-| `actions` | lectura/escritura | `IswcMdEditorActions` â€” callbacks custom (JS only; prioridad sobre `api`/`src`). |
-| `document` | lectura/escritura | Documento canÃ³nico (meta + content). |
+| `api` | lectura/escritura | `IswcMdEditorApiConfig` — persistencia por fetch. |
+| `actions` | lectura/escritura | `IswcMdEditorActions` — callbacks custom (JS only; prioridad sobre `api`/`src`). |
+| `document` | lectura/escritura | Documento canónico (meta + content). |
 | `src` / `filename` / `fullscreenScope` | lectura/escritura | Reflejan atributos. |
 
 ### Slots
@@ -87,7 +87,7 @@ No expone.
 ### Eventos
 
 
-| Evento | DescripciÃ³n |
+| Evento | Descripción |
 | --- | --- |
 | `iswc-change` | Emitido al confirmar el cambio de valor (escribe como `change` nativo). |
 | `iswc-persist` | Evento personalizado del componente (persist). |
@@ -97,15 +97,15 @@ No expone.
 | `iswc-open` | Evento personalizado del componente (open). |
 | `iswc-close` | Evento personalizado del componente (close). |
 
-| Evento | Detail | CuÃ¡ndo |
+| Evento | Detail | Cuándo |
 | --- | --- | --- |
-| `iswc-change` | `{ value, document? }` | Al cerrar confirmando borrador â€” solo si `can-edit`. |
-| `iswc-persist` | `{ value, document? }` | Al pulsar Â«GuardarÂ» (y tras `actions.persist` / PUT remoto). |
+| `iswc-change` | `{ value, document? }` | Al cerrar confirmando borrador — solo si `can-edit`. |
+| `iswc-persist` | `{ value, document? }` | Al pulsar «Guardar» (y tras `actions.persist` / PUT remoto). |
 | `iswc-load` | `{ document }` | Tras `load()` exitoso. |
 | `iswc-error` | `{ action, error }` | Fallo en load/persist/delete. |
 | `iswc-download` | `{ filename, bytes }` | Tras `download()`. |
-| `iswc-open` | `{}` | DiÃ¡logo abierto. |
-| `iswc-close` | `{}` | DiÃ¡logo cerrado. |
+| `iswc-open` | `{}` | Diálogo abierto. |
+| `iswc-close` | `{}` | Diálogo cerrado. |
 
 
 <details>
@@ -120,15 +120,15 @@ el.addEventListener('iswc-change', (e) => {
 
 </details>
 
-### MÃ©todos y propiedades pÃºblicas
+### Métodos y propiedades públicas
 
-| MÃ©todo | Notas |
+| Método | Notas |
 | --- | --- |
-| `open()` / `close()` | Abre / cierra el diÃ¡logo. |
-| `load()` | `actions.load` â†’ `src` / `api.endpoints.get`. |
-| `persistRemote()` | `actions.persist` â†’ PUT/POST de `api`. |
-| `removeRemote()` | `actions.delete` â†’ DELETE de `api`. |
-| `setDocument(doc)` | Aplica documento canÃ³nico. |
+| `open()` / `close()` | Abre / cierra el diálogo. |
+| `load()` | `actions.load` → `src` / `api.endpoints.get`. |
+| `persistRemote()` | `actions.persist` → PUT/POST de `api`. |
+| `removeRemote()` | `actions.delete` → DELETE de `api`. |
+| `setDocument(doc)` | Aplica documento canónico. |
 | `download()` | Descarga el markdown actual. |
 
 ### CSS parts
@@ -137,25 +137,25 @@ el.addEventListener('iswc-change', (e) => {
 | --- | --- |
 | `preview` | Contenedor de la vista previa (clic para abrir). |
 | `preview-body` | Contenido renderizado (markdown + HTML + chips). |
-| `preview-empty` | Texto de estado vacÃ­o. |
+| `preview-empty` | Texto de estado vacío. |
 | `copy` | `<iswc-copy-button>` de la vista previa. |
 | `dialog` | El `<iswc-dialog>` interno. |
-| `dialog-label` | TÃ­tulo del diÃ¡logo. |
+| `dialog-label` | Título del diálogo. |
 | `toolbar` | Barra de formato (solo si `can-edit`). |
-| `toolbar-button` | Cada botÃ³n de la toolbar. |
-| `plain-switch` | Switch Â«Texto planoÂ». |
+| `toolbar-button` | Cada botón de la toolbar. |
+| `plain-switch` | Switch «Texto plano». |
 | `vars` / `vars-label` / `vars-list` | Tira de chips `{{variable}}`. |
-| `surface` | Superficie editable/preview dentro del diÃ¡logo. |
+| `surface` | Superficie editable/preview dentro del diálogo. |
 | `plain` | `<textarea>` del modo texto plano. |
-| `footer` / `footer-close` / `footer-discard` / `footer-save` | Pie del diÃ¡logo. |
-| `dialog-filename` | SubtÃ­tulo del diÃ¡logo con el nombre del archivo. |
-| `footer` | Pie del diÃ¡logo. |
-| `footer-discard` | BotÃ³n Â«DescartarÂ» del pie. |
-| `footer-download` | BotÃ³n Â«DescargarÂ» del pie. |
-| `footer-meta` | Metadatos del archivo en el pie (tamaÃ±o, fecha, etc.). |
-| `footer-save` | BotÃ³n Â«GuardarÂ» del pie. |
-| `vars` | SecciÃ³n de variables detectadas en el markdown. |
-| `vars-label` | TÃ­tulo de la secciÃ³n de variables. |
+| `footer` / `footer-close` / `footer-discard` / `footer-save` | Pie del diálogo. |
+| `dialog-filename` | Subtítulo del diálogo con el nombre del archivo. |
+| `footer` | Pie del diálogo. |
+| `footer-discard` | Botón «Descartar» del pie. |
+| `footer-download` | Botón «Descargar» del pie. |
+| `footer-meta` | Metadatos del archivo en el pie (tamaño, fecha, etc.). |
+| `footer-save` | Botón «Guardar» del pie. |
+| `vars` | Sección de variables detectadas en el markdown. |
+| `vars-label` | Título de la sección de variables. |
 | `vars-list` | Lista de variables detectadas. |
 
 ### Custom states
@@ -166,55 +166,55 @@ No expone.
 
 | Propiedad | Notas |
 | --- | --- |
-| `--preview-max-height` | Alto mÃ¡ximo de la vista previa (default `16em`). |
+| `--preview-max-height` | Alto máximo de la vista previa (default `16em`). |
 | `--var-tone-h` | (por chip) tono hsl determinista derivado del nombre de la variable. |
 
-### IntegraciÃ³n con formularios
+### Integración con formularios
 
 No es form-associated: es un visor/editor de contenido, no un control de formulario.
 
 ## Comportamiento
 
-DocumentaciÃ³n de cabecera preservada desde fuente:
+Documentación de cabecera preservada desde fuente:
 
-> `<iswc-md-editor>` â€” Web Component (vanilla, zero dependencias).
-> Vista previa de solo lectura (markdown + HTML hÃ­brido + chips `{{var}}`) que
+> `<iswc-md-editor>` — Web Component (vanilla, zero dependencias).
+> Vista previa de solo lectura (markdown + HTML híbrido + chips `{{var}}`) que
 > al hacer clic/doble clic/Enter abre un `<iswc-dialog>` a pantalla completa
 > para revisar (modo solo lectura) o editar (modo WYSIWYG + texto plano).
 
-Con `can-edit=false` (default): abrir el diÃ¡logo es solo revisiÃ³n â€” sin toolbar, contenido no editable, Â«GuardarÂ» deshabilitado; Â«DescartarÂ»/Â«CerrarÂ» solo cierran. El botÃ³n de copiar de la vista previa funciona siempre, con o sin `can-edit`.
+Con `can-edit=false` (default): abrir el diálogo es solo revisión — sin toolbar, contenido no editable, «Guardar» deshabilitado; «Descartar»/«Cerrar» solo cierran. El botón de copiar de la vista previa funciona siempre, con o sin `can-edit`.
 
-Con `can-edit`: el contenido es editable en modo WYSIWYG (contenteditable) con toolbar (deshacer/rehacer, negrita, cursiva, H1/H2, lista) y un switch Â«Texto planoÂ» para editar el markdown fuente sin renderizar. Escribir `{{nombre}}` completo lo convierte automÃ¡ticamente en chip de color determinista por nombre.
+Con `can-edit`: el contenido es editable en modo WYSIWYG (contenteditable) con toolbar (deshacer/rehacer, negrita, cursiva, H1/H2, lista) y un switch «Texto plano» para editar el markdown fuente sin renderizar. Escribir `{{nombre}}` completo lo convierte automáticamente en chip de color determinista por nombre.
 
-El **preview** (y la superficie readonly del diÃ¡logo) usa el mismo hydrate que `<iswc-md-render>`: fences/`inline` â†’ `iswc-code`, ` ```iswc-* ` â†’ diagramas viewer, HTML `is-*` con `ensure` lazy. Clic en embeds no abre el diÃ¡logo.
+El **preview** (y la superficie readonly del diálogo) usa el mismo hydrate que `<iswc-md-render>`: fences/`inline` → `iswc-code`, ` ```iswc-* ` → diagramas viewer, HTML `is-*` con `ensure` lazy. Clic en embeds no abre el diálogo.
 
-**Persistencia:** elige una vÃ­a.
+**Persistencia:** elige una vía.
 
-1. **API HTTP** â€” `api` / `src` con `IswcMdEditorApiConfig.endpoints`.
-2. **Actions custom** â€” `el.actions = { load, persist, delete }` (prioridad sobre HTTP; Ãºtil sin app URL).
-3. **Solo local** â€” sin `api` ni `actions`: Guardar emite `iswc-persist` y el host decide.
+1. **API HTTP** — `api` / `src` con `IswcMdEditorApiConfig.endpoints`.
+2. **Actions custom** — `el.actions = { load, persist, delete }` (prioridad sobre HTTP; útil sin app URL).
+3. **Solo local** — sin `api` ni `actions`: Guardar emite `iswc-persist` y el host decide.
 
 ## Dependencias y componentes relacionados
 
-- [`./md-render.md`](./md-render.md) (`<iswc-md-render>`) â€” render inline sin tools
-- [`./md-hydrate.js`](./utils/md-hydrate.js) â€” lazy ensure + upgrade iswc-code / diagramas
-- [`./md-iswc-fences.js`](./utils/md-iswc-fences.js) â€” mapa `iswc-*` â†’ tag
+- [`./md-render.md`](./md-render.md) (`<iswc-md-render>`) — render inline sin tools
+- [`./md-hydrate.js`](./utils/md-hydrate.js) — lazy ensure + upgrade iswc-code / diagramas
+- [`./md-iswc-fences.js`](./utils/md-iswc-fences.js) — mapa `iswc-*` → tag
 - [`../layout/dialog.js`](../layout/dialog.js) (`<iswc-dialog>`)
 - [`../actions/button.js`](../actions/button.js) (`<iswc-button>`)
 - [`../actions/copy-button.js`](../actions/copy-button.js) (`<iswc-copy-button>`)
 - [`../forms/switch.js`](../forms/switch.js) (`<iswc-switch>`)
 - [`../media/icon.js`](../media/icon.js) (`<iswc-icon>`)
-- [`./md-lite.js`](./utils/md-lite.js) â€” `mdToHtml()`, markdown ligero sin dependencias npm.
+- [`./md-lite.js`](./utils/md-lite.js) — `mdToHtml()`, markdown ligero sin dependencias npm.
 - [`./md-editor-api.js`](./utils/md-editor-api.js) + [`./md-editor-api.d.ts`](./md-editor-api.d.ts)
-- [`../_shared/prompt-md.js`](./utils/prompt-md.js) â€” variables `{{nombre}}` + render MD/HTML hÃ­brido.
+- [`../_shared/prompt-md.js`](./utils/prompt-md.js) — variables `{{nombre}}` + render MD/HTML híbrido.
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 
-Tags del mÃ³dulo: `<iswc-md-editor>`.
+Tags del módulo: `<iswc-md-editor>`.
 
 ## Accesibilidad
 
-- La vista previa tiene `role="button"` y `tabindex="0"`; Enter/Espacio abren el diÃ¡logo.
-- El diÃ¡logo hereda el manejo de foco, Escape y `aria-modal` de `<iswc-dialog>`.
+- La vista previa tiene `role="button"` y `tabindex="0"`; Enter/Espacio abren el diálogo.
+- El diálogo hereda el manejo de foco, Escape y `aria-modal` de `<iswc-dialog>`.
 - El surface editable usa `role="textbox"` y `aria-multiline="true"`.
 
 ## Ejemplo avanzado
@@ -224,7 +224,7 @@ Tags del mÃ³dulo: `<iswc-md-editor>`.
 <script type="module">
   const el = document.getElementById('tpl');
 
-  // OpciÃ³n A â€” sin app URL: callbacks manuales
+  // Opción A — sin app URL: callbacks manuales
   el.actions = {
     async load() {
       return { content: localStorage.getItem('tpl') || 'Hola {{nombre}}', filename: 'tpl.md' };
@@ -236,7 +236,7 @@ Tags del mÃ³dulo: `<iswc-md-editor>`.
   };
   await el.load();
 
-  // OpciÃ³n B â€” API HTTP (alternativa)
+  // Opción B — API HTTP (alternativa)
   // el.api = { baseUrl: 'https://api.ejemplo.com', endpoints: { get: '/docs/1', put: '/docs/1' } };
   // await el.load();
 </script>
@@ -244,24 +244,24 @@ Tags del mÃ³dulo: `<iswc-md-editor>`.
 
 ## Errores comunes
 
-- Usar el tag sin importar el mÃ³dulo primero.
-- Esperar que `Descartar` emita algÃºn evento: no emite nada, solo cierra.
-- Esperar ediciÃ³n con `can-edit` ausente: por defecto es solo lectura.
-- Inventar una propiedad `open` de lectura/escritura: es un atributo reflejado + mÃ©todos `open()`/`close()`, no un accessor.
+- Usar el tag sin importar el módulo primero.
+- Esperar que `Descartar` emita algún evento: no emite nada, solo cierra.
+- Esperar edición con `can-edit` ausente: por defecto es solo lectura.
+- Inventar una propiedad `open` de lectura/escritura: es un atributo reflejado + métodos `open()`/`close()`, no un accessor.
 - Usar este tag solo para pintar MD embebido: preferir `<iswc-md-render>`.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
 
 ## Reglas para LLM
 
-- Reusar componente y dependencias antes de implementaciÃ³n paralela.
+- Reusar componente y dependencias antes de implementación paralela.
 - Mantener nombres exactos de tags y API.
-- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explÃ­cito.
-- Leer callers/shared antes de cambiar; corregir raÃ­z comÃºn.
-- No modificar API basÃ¡ndose solo en preview.
+- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explícito.
+- Leer callers/shared antes de cambiar; corregir raíz común.
+- No modificar API basándose solo en preview.
 
 ## Fuentes
 
 - [JavaScript](./md-editor.ts)
-- [CSS](./md-editor.css)
-- [Ãndice de categorÃ­a](../../specs/componentes.md)
+- [CSS](./md-editor.scss)
+- [Índice de categoría](../../../specs/componentes.md)
 - [Preview](./md-editor.json)

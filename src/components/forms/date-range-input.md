@@ -1,36 +1,36 @@
-﻿---
+---
 tag: iswc-date-range-input
 tags:
   - iswc-date-range-input
 category: forms
 status: public
 source: ./date-range-input.ts
-style: ./date-range-input.css
+style: ./date-range-input.scss
 preview: ./date-range-input.json
 ---
 # `<iswc-date-range-input>`
 
-## PropÃ³sito
+## Propósito
 
-Campo + calendario en un panel del top layer (DatePicker de MUI X). Edita por secciones o abre el calendario. Alt+â†“ abre el panel.
+Campo + calendario en un panel del top layer (DatePicker de MUI X). Edita por secciones o abre el calendario. Alt+↓ abre el panel.
 
-Este mÃ³dulo registra `<iswc-date-range-input>`.
+Este módulo registra `<iswc-date-range-input>`.
 
-## CuÃ¡ndo usarlo
+## Cuándo usarlo
 
-Captura, selecciÃ³n y validaciÃ³n de valores compatibles con formularios.
+Captura, selección y validación de valores compatibles con formularios.
 
-## CuÃ¡ndo no usarlo
+## Cuándo no usarlo
 
-No duplicar validaciÃ³n, form association ni pickers shared.
+No duplicar validación, form association ni pickers shared.
 
-## ImportaciÃ³n
+## Importación
 
 ```js
 import './date-range-input.js';
 ```
 
-## Ejemplo mÃ­nimo
+## Ejemplo mínimo
 
 ```html
 <iswc-date-range-input></iswc-date-range-input>
@@ -38,7 +38,7 @@ import './date-range-input.js';
 
 ## API
 
-Wrapper de factory: hereda contrato completo de [`definePickerInput`](./utils/picker-element.js) y compone field/paneles importados. Cabecera de fuente enumera atributos, eventos y mÃ©todos efectivos; tablas siguientes muestran solo declaraciones locales.
+Wrapper de factory: hereda contrato completo de [`definePickerInput`](./utils/picker-element.js) y compone field/paneles importados. Cabecera de fuente enumera atributos, eventos y métodos efectivos; tablas siguientes muestran solo declaraciones locales.
 
 ### Atributos y propiedades
 
@@ -46,7 +46,7 @@ Wrapper de factory: hereda contrato completo de [`definePickerInput`](./utils/pi
 
 No expone.
 
-#### Propiedades pÃºblicas
+#### Propiedades públicas
 
 No expone.
 
@@ -57,7 +57,7 @@ No expone.
 ### Eventos
 
 
-| Evento | DescripciÃ³n |
+| Evento | Descripción |
 | --- | --- |
 
 No expone.
@@ -75,11 +75,11 @@ el.addEventListener('click', (e) => {
 
 </details>
 
-### MÃ©todos y propiedades pÃºblicas
+### Métodos y propiedades públicas
 
 No expone.
 
-Propiedades pÃºblicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
+Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
 
 ### CSS parts
 
@@ -93,31 +93,31 @@ No expone.
 
 | Token | Uso |
 | --- | --- |
-| `--iswc-sans` | Token leÃ­do o definido por componente. |
-| `--iswc-text` | Token leÃ­do o definido por componente. |
-| `--iswc-text-dim` | Token leÃ­do o definido por componente. |
-| `--iswc-radius-sm` | Token leÃ­do o definido por componente. |
-| `--iswc-control-bg-hover` | Token leÃ­do o definido por componente. |
-| `--iswc-focus` | Token leÃ­do o definido por componente. |
-| `--iswc-accent` | Token leÃ­do o definido por componente. |
-| `--iswc-bg-elev` | Token leÃ­do o definido por componente. |
-| `--iswc-border` | Token leÃ­do o definido por componente. |
-| `--iswc-radius` | Token leÃ­do o definido por componente. |
-| `--iswc-shadow-lg` | Token leÃ­do o definido por componente. |
-| `--iswc-clock-height` | Token leÃ­do o definido por componente. |
-| `--iswc-color-brand-600` | Token leÃ­do o definido por componente. |
-| `--iswc-on-brand` | Token leÃ­do o definido por componente. |
-| `--iswc-color-brand-700` | Token leÃ­do o definido por componente. |
+| `--iswc-sans` | Token leído o definido por componente. |
+| `--iswc-text` | Token leído o definido por componente. |
+| `--iswc-text-dim` | Token leído o definido por componente. |
+| `--iswc-radius-sm` | Token leído o definido por componente. |
+| `--iswc-control-bg-hover` | Token leído o definido por componente. |
+| `--iswc-focus` | Token leído o definido por componente. |
+| `--iswc-accent` | Token leído o definido por componente. |
+| `--iswc-bg-elev` | Token leído o definido por componente. |
+| `--iswc-border` | Token leído o definido por componente. |
+| `--iswc-radius` | Token leído o definido por componente. |
+| `--iswc-shadow-lg` | Token leído o definido por componente. |
+| `--iswc-clock-height` | Token leído o definido por componente. |
+| `--iswc-color-brand-600` | Token leído o definido por componente. |
+| `--iswc-on-brand` | Token leído o definido por componente. |
+| `--iswc-color-brand-700` | Token leído o definido por componente. |
 
-### IntegraciÃ³n con formularios
+### Integración con formularios
 
-No declara integraciÃ³n form-associated propia en este mÃ³dulo.
+No declara integración form-associated propia en este módulo.
 
 ## Comportamiento
 
-DocumentaciÃ³n de cabecera preservada desde fuente:
+Documentación de cabecera preservada desde fuente:
 
-> <iswc-date-range-input> â€” Dos campos (inicio y fin) con el calendario de rango
+> <iswc-date-range-input> — Dos campos (inicio y fin) con el calendario de rango
 > en el panel (MUI DateRangePicker). El valor es `inicio/fin`.
 > Atributos: start-label, end-label, hint, name, value, min, max, required,
 >            disabled, readonly, clearable, locale, calendars, shortcuts,
@@ -131,11 +131,11 @@ DocumentaciÃ³n de cabecera preservada desde fuente:
 - [`./date-field.js`](./date-field.js)
 - [`./date-range-picker.js`](./date-range-picker.js)
 
-Tags del mÃ³dulo: `<iswc-date-range-input>`.
+Tags del módulo: `<iswc-date-range-input>`.
 
 ## Accesibilidad
 
-Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: ninguno explÃ­cito en fuente.
+Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: ninguno explícito en fuente.
 
 ## Ejemplo avanzado
 
@@ -145,7 +145,7 @@ Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: ninguno ex
 
 ## Errores comunes
 
-- Usar tag sin importar mÃ³dulo primero.
+- Usar tag sin importar módulo primero.
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
@@ -153,15 +153,15 @@ Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: ninguno ex
 
 ## Reglas para LLM
 
-- Reusar componente y dependencias antes de implementaciÃ³n paralela.
+- Reusar componente y dependencias antes de implementación paralela.
 - Mantener nombres exactos de tags y API.
-- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explÃ­cito.
-- Leer callers/shared antes de cambiar; corregir raÃ­z comÃºn.
-- No modificar API basÃ¡ndose solo en preview.
+- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explícito.
+- Leer callers/shared antes de cambiar; corregir raíz común.
+- No modificar API basándose solo en preview.
 
 ## Fuentes
 
 - [JavaScript](./date-range-input.ts)
-- [CSS](./date-range-input.css)
-- [Ãndice de categorÃ­a](../../specs/componentes.md)
+- [CSS](./date-range-input.scss)
+- [Índice de categoría](../../../specs/componentes.md)
 - [Preview](./date-range-input.json)

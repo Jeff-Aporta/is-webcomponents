@@ -1,36 +1,36 @@
-﻿---
+---
 tag: iswc-resize-observer
 tags:
   - iswc-resize-observer
 category: helpers
 status: public
 source: ./resize-observer.ts
-style: ./resize-observer.css
+style: ./resize-observer.scss
 preview: ./resize-observer.json
 ---
 # `<iswc-resize-observer>`
 
-## PropÃ³sito
+## Propósito
 
 Observa hijos directos y emite iswc-resize con entries.
 
-Este mÃ³dulo registra `<iswc-resize-observer>`.
+Este módulo registra `<iswc-resize-observer>`.
 
-## CuÃ¡ndo usarlo
+## Cuándo usarlo
 
-Formato, observaciÃ³n y posicionamiento reutilizable sobre APIs nativas.
+Formato, observación y posicionamiento reutilizable sobre APIs nativas.
 
-## CuÃ¡ndo no usarlo
+## Cuándo no usarlo
 
 No crear wrapper nuevo si Intl/Observer/position existente cubre caso.
 
-## ImportaciÃ³n
+## Importación
 
 ```js
 import './resize-observer.js';
 ```
 
-## Ejemplo mÃ­nimo
+## Ejemplo mínimo
 
 ```html
 <iswc-resize-observer></iswc-resize-observer>
@@ -44,9 +44,9 @@ import './resize-observer.js';
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
-| `disabled` | boolean | Fuente define default/restricciÃ³n. |
+| `disabled` | boolean | Fuente define default/restricción. |
 
-#### Propiedades pÃºblicas
+#### Propiedades públicas
 
 No expone.
 
@@ -59,13 +59,13 @@ No expone.
 ### Eventos
 
 
-| Evento | DescripciÃ³n |
+| Evento | Descripción |
 | --- | --- |
-| `iswc-resize` | Emitido al cambiar el tamaÃ±o del elemento observado. |
+| `iswc-resize` | Emitido al cambiar el tamaño del elemento observado. |
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `iswc-resize` | sÃ­ | sÃ­ | sÃ­ | no |
+| `iswc-resize` | sí | sí | sí | no |
 
 
 <details>
@@ -80,11 +80,11 @@ el.addEventListener('iswc-resize', (e) => {
 
 </details>
 
-### MÃ©todos y propiedades pÃºblicas
+### Métodos y propiedades públicas
 
 No expone.
 
-Propiedades pÃºblicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
+Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
 
 ### CSS parts
 
@@ -98,16 +98,16 @@ No expone.
 
 No expone.
 
-### IntegraciÃ³n con formularios
+### Integración con formularios
 
-No declara integraciÃ³n form-associated propia en este mÃ³dulo.
+No declara integración form-associated propia en este módulo.
 
 ## Comportamiento
 
-DocumentaciÃ³n de cabecera preservada desde fuente:
+Documentación de cabecera preservada desde fuente:
 
-> <iswc-resize-observer> â€” Web Component (vanilla).
-> display:contents â€” observa hijos directos con ResizeObserver.
+> <iswc-resize-observer> — Web Component (vanilla).
+> display:contents — observa hijos directos con ResizeObserver.
 > Atributos
 >   disabled  boolean
 > Eventos
@@ -117,11 +117,11 @@ DocumentaciÃ³n de cabecera preservada desde fuente:
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 
-Tags del mÃ³dulo: `<iswc-resize-observer>`.
+Tags del módulo: `<iswc-resize-observer>`.
 
 ## Accesibilidad
 
-Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: ninguno explÃ­cito en fuente.
+Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: ninguno explícito en fuente.
 
 ## Ejemplo avanzado
 
@@ -131,7 +131,7 @@ Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: ninguno ex
 
 ## Errores comunes
 
-- Usar tag sin importar mÃ³dulo primero.
+- Usar tag sin importar módulo primero.
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
@@ -139,15 +139,15 @@ Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: ninguno ex
 
 ## Reglas para LLM
 
-- Reusar componente y dependencias antes de implementaciÃ³n paralela.
+- Reusar componente y dependencias antes de implementación paralela.
 - Mantener nombres exactos de tags y API.
-- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explÃ­cito.
-- Leer callers/shared antes de cambiar; corregir raÃ­z comÃºn.
-- No modificar API basÃ¡ndose solo en preview.
+- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explícito.
+- Leer callers/shared antes de cambiar; corregir raíz común.
+- No modificar API basándose solo en preview.
 
 ## Fuentes
 
 - [JavaScript](./resize-observer.ts)
-- [CSS](./resize-observer.css)
-- [Ãndice de categorÃ­a](../../specs/componentes.md)
+- [CSS](./resize-observer.scss)
+- [Índice de categoría](../../../specs/componentes.md)
 - [Preview](./resize-observer.json)

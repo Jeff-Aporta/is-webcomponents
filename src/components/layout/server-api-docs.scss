@@ -21,7 +21,7 @@ iswc-doc-layout {
 .marca {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: .516em;
   min-width: 0;
 
   .marca-titulo {
@@ -39,11 +39,11 @@ iswc-doc-layout {
 
 // Página (portada u operación)
 .pagina {
-  padding: clamp(14px, 2vw, 28px) clamp(14px, 2.2vw, 32px) 56px;
+  padding: clamp(.903em, 2vw, 1.806em) clamp(.903em, 2.2vw, 2.064em) 3.612em;
 
   h1 {
     margin: 0.2em 0 0.3em;
-    font-size: clamp(1.5rem, 2.4vw, 2rem);
+    font-size: clamp(1.548em, 2.4vw, 2.064em);
     line-height: 1.2;
   }
 
@@ -51,15 +51,15 @@ iswc-doc-layout {
     margin: 2em 0 0.6em;
     padding-bottom: 0.3em;
     border-bottom: 1px solid var(--iswc-border);
-    font-size: 1.3rem;
+    font-size: 1.3416em;
   }
 
   h3 {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: .4762em;
     margin: 1.4em 0 0.5em;
-    font-size: 1.05rem;
+    font-size: 1.0836em;
   }
 
   code {
@@ -88,12 +88,12 @@ iswc-doc-layout {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 8px;
+    gap: .516em;
     margin: 0;
   }
 
   .ruta {
-    font-size: 1.05rem;
+    font-size: 1.05em;
     font-weight: 600;
     overflow-wrap: anywhere;
   }
@@ -119,17 +119,17 @@ iswc-doc-layout {
   display: flex;
   flex-wrap: wrap;
   align-items: flex-end;
-  gap: 8px 16px;
-  margin: 0 0 12px;
+  gap: .516em 1.032em;
+  margin: 0 0 .774em;
 
   .filtro {
-    flex: 1 1 18rem;
+    flex: 1 1 18.5759em;
     min-width: 0;
   }
 
   .conteo {
     color: var(--iswc-text-dim);
-    font-size: 0.9rem;
+    font-size: .9288em;
     white-space: nowrap;
   }
 }
@@ -138,7 +138,7 @@ iswc-doc-layout {
   max-width: 100%;
   overflow-x: auto;
   border: 1px solid var(--iswc-border);
-  border-radius: 10px;
+  border-radius: .645em;
 }
 
 .tabla.endpoints {
@@ -194,7 +194,7 @@ iswc-doc-layout {
     white-space: nowrap;
 
     .candado {
-      margin-right: 4px;
+      margin-right: .2941em;
       color: var(--iswc-text-dim);
       vertical-align: middle;
     }
@@ -211,7 +211,7 @@ iswc-doc-layout {
 
 // Detalle: ficha de acceso, bloques de schema/ejemplo y flujo
 .tabla.ficha {
-  max-width: 44rem;
+  max-width: 44em;
 
   th {
     width: 9em;
@@ -221,7 +221,7 @@ iswc-doc-layout {
 .etiqueta-bloque {
   margin: 0.6em 0 0;
   color: var(--iswc-text-dim);
-  font-size: 0.85rem;
+  font-size: 0.85em;
   font-weight: 600;
 }
 
@@ -229,17 +229,17 @@ iswc-doc-layout {
 // contenedor `data-theme="light"`.
 .lienzo-insoft {
   margin: 0.4em 0 1.2em;
-  padding: 8px;
+  padding: .5em;
   max-width: 100%;
   overflow-x: auto;
   border: 1px solid var(--iswc-border);
-  border-radius: 10px;
+  border-radius: .625em;
   background: #ffffff;
 }
 
 .secuencia {
   display: block;
-  min-width: 36rem;
+  min-width: 36em;
 }
 
 // La tabla se adapta al ancho REAL del contenido (con o sin paneles laterales): sin grupo por debajo de
@@ -248,7 +248,7 @@ iswc-doc-layout {
   container-type: inline-size;
 }
 
-@container (max-width: 900px) {
+@container (max-width: 56.25em) {
   .tabla.endpoints {
     .col-grupo,
     th:nth-child(4) {
@@ -257,7 +257,7 @@ iswc-doc-layout {
   }
 }
 
-@container (max-width: 640px) {
+@container (max-width: 40em) {
   .tabla-envoltura {
     overflow-x: visible;
   }
@@ -276,8 +276,8 @@ iswc-doc-layout {
       display: grid;
       grid-template-columns: auto minmax(0, 1fr);
       align-items: center;
-      gap: 2px 10px;
-      padding: 8px 10px;
+      gap: .1359em .6793em;
+      padding: .5435em .6793em;
       border-bottom: 1px solid var(--iswc-border);
     }
 
@@ -299,7 +299,7 @@ iswc-doc-layout {
     .col-auth {
       white-space: normal;
       overflow-wrap: anywhere;
-      font-size: 0.85rem;
+      font-size: .9239em;
     }
   }
 }
@@ -308,11 +308,11 @@ iswc-doc-layout {
 .tabla {
   width: 100%;
   border-collapse: collapse;
-  font-size: 0.92rem;
+  font-size: .9494em;
 
   th,
   td {
-    padding: 7px 10px;
+    padding: .4755em .6793em;
     border-bottom: 1px solid var(--iswc-border);
     text-align: left;
     vertical-align: top;
@@ -331,10 +331,10 @@ iswc-doc-layout {
 // «Probar»
 .probar {
   display: grid;
-  gap: 12px;
-  padding: 16px;
+  gap: .75em;
+  padding: 1em;
   border: 1px solid var(--iswc-border);
-  border-radius: 12px;
+  border-radius: .75em;
   background: var(--iswc-bg-soft);
 
   .servidores,
@@ -342,62 +342,62 @@ iswc-doc-layout {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 8px;
+    gap: .5em;
     margin: 0;
   }
 
   .etiqueta,
   .adjunto {
     display: grid;
-    gap: 6px;
-    font-size: 0.9rem;
+    gap: .4167em;
+    font-size: 0.9em;
     font-weight: 600;
   }
 
   .sesion-aviso {
     color: var(--iswc-text-dim);
-    font-size: 0.9rem;
+    font-size: 0.9em;
   }
 }
 
 .respuesta {
-  margin-top: 12px;
+  margin-top: .75em;
 
   .estado-linea {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: .625em;
     margin: 0;
   }
 
   .tiempo {
     color: var(--iswc-text-dim);
-    font-size: 0.9rem;
+    font-size: 0.9em;
   }
 }
 
 .pager {
-  margin-top: 56px;
-  padding-top: 22px;
+  margin-top: 4.5752em;
+  padding-top: 1.7974em;
   border-top: 1px solid var(--iswc-border);
 }
 
 .cargando {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: .625em;
   margin: 0;
-  padding: 32px 0;
+  padding: 2em 0;
   color: var(--iswc-text-dim);
 }
 
 // Diálogo de sesión
 iswc-dialog.login {
-  --width: min(460px, 92vw);
+  --width: min(28.75em, 92vw);
 
   .login-cuerpo {
     display: grid;
-    gap: 12px;
+    gap: .75em;
   }
 
   .login-estado {
@@ -408,13 +408,13 @@ iswc-dialog.login {
   .login-pie {
     display: flex;
     justify-content: flex-end;
-    gap: 8px;
+    gap: .5em;
   }
 }
 
 // Teléfono: a 390 px el texto de «Sesión» (~95 px) empujaba fuera de la barra el toggle del índice y
 // recortaba el tema de la app. Queda el ícono (el botón conserva aria-label y title).
-@media (max-width: 480px) {
+@media (max-width: 30em) {
   .sesion-texto {
     display: none;
   }

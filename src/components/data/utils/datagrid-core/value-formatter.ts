@@ -9,7 +9,7 @@
  */
 
 import { ColumnType } from './types.js';
-import type { ColumnState, RowNode } from "../../schemas/datagrid-types.schemas.js";
+import type { ColumnState, Lectora, RowNode } from "../../schemas/datagrid-types.schemas.js";
 
 /**
  * @param {ColumnState} col
@@ -17,7 +17,8 @@ import type { ColumnState, RowNode } from "../../schemas/datagrid-types.schemas.
  * @returns {unknown}
  */
 export function getCellValue(col: ColumnState, node: RowNode) {
-  const def = col.def;
+  const def = col.def as ColumnState['def'] & Lectora;
+  if (def.__leer) return def.__leer.valor(col, node);
   if (typeof def.valueGetter === 'function') return def.valueGetter(node.data);
   return node.data?.[col.field];
 }
@@ -50,6 +51,8 @@ export function formatCellValue(col: ColumnState, value: unknown, node: RowNode)
  * @returns {string}
  */
 export function cellText(col: ColumnState, node: RowNode) {
+  const lector = (col.def as Lectora).__leer;
+  if (lector) return lector.texto(col, node);
   return formatCellValue(col, getCellValue(col, node), node);
 }
 

@@ -108,15 +108,15 @@
   position: fixed;
   inset: auto;
   z-index: 2;
-  min-width: 10rem;
+  min-width: 10em;
   width: max-content;
-  max-width: min(20rem, 90vw);
+  max-width: min(20em, 90vw);
   margin: 0;
   padding: 0.35em;
   border-radius: var(--iswc-popover-radius, var(--iswc-radius));
   background: var(--iswc-bg-elev);
   border: 1px solid var(--iswc-border);
-  box-shadow: var(--iswc-popover-shadow, var(--iswc-shadow, 0 8px 24px rgba(0, 0, 0, 0.3)));
+  box-shadow: var(--iswc-popover-shadow, var(--iswc-shadow, 0 .5em 1.5em rgba(0, 0, 0, 0.3)));
 }
 .submenu[hidden] {
   display: none !important;

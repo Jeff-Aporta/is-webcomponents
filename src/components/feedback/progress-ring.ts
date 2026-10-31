@@ -86,7 +86,10 @@ import { setStringAttr } from '../../core/reflect.js';
         // el label interno vacío para no duplicar el porcentaje.
         this.#wrap.removeAttribute('aria-valuenow');
         this.#wrap.setAttribute('aria-busy', 'true');
-        this.#wrap.setAttribute('aria-valuetext', label || '');
+        this.#wrap.setAttribute('aria-valuetext', label || 'Cargando');
+        // Arco fijo que gira: el CSS lo anima, aquí solo se fija su largo.
+        this.#indicator.style.strokeDasharray = `${CIRC * 0.28} ${CIRC}`;
+        this.#indicator.style.strokeDashoffset = '0';
         this.#indicator.classList.add('iswc-indeterminate');
       } else {
         const offset = CIRC * (1 - val / 100);
@@ -94,7 +97,7 @@ import { setStringAttr } from '../../core/reflect.js';
         this.#indicator.style.strokeDashoffset = `${offset}`;
         this.#wrap.setAttribute('aria-valuenow', String(val));
         this.#wrap.setAttribute('aria-busy', 'false');
-        this.#wrap.setAttribute('aria-valuetext', label || `${val}%`);
+        this.#wrap.setAttribute('aria-valuetext', `${val}%`);
         this.#indicator.classList.remove('iswc-indeterminate');
       }
 

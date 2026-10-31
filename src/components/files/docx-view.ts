@@ -2,6 +2,7 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
 import { ElementBase } from '../../core/element-base.js';
 import { setOptionalAttr, setStringAttr } from '../../core/reflect.js';
 import { loadArrayBuffer, resolveFileSource } from './utils/file-source.js';
+import { pintarEstado, sincronizarAlto } from './utils/file-estado.js';
 import { loadCdnScript, MAMMOTH_CDN } from './utils/load-cdn.js';
 import type { MammothApi } from "./schemas/docx-view.schemas.js";
 
@@ -23,8 +24,8 @@ import type { MammothApi } from "./schemas/docx-view.schemas.js";
       this.#body = shadow.querySelector('.body')!;
     }
 
-    onConnected() { this.#reload(); }
-    onAttributeChanged() { this.#reload(); }
+    onConnected() { sincronizarAlto(this); this.#reload(); }
+    onAttributeChanged() { sincronizarAlto(this); this.#reload(); }
 
     get src() { return this.getAttribute('src'); }
     set src(v) { setOptionalAttr(this, 'src', v); }
@@ -35,7 +36,7 @@ import type { MammothApi } from "./schemas/docx-view.schemas.js";
       const gen = ++this.#gen;
       const source = resolveFileSource(this.getAttribute('src'), this.getAttribute('content'));
       if (source.kind === 'empty') {
-        this.#body.innerHTML = '<p class="empty">Sin documento</p>';
+        pintarEstado(this.#body, 'Sin documento');
         return;
       }
       try {
@@ -46,11 +47,12 @@ import type { MammothApi } from "./schemas/docx-view.schemas.js";
         if (gen !== this.#gen) return;
         const { value } = await mammoth.convertToHtml({ arrayBuffer: buf });
         if (gen !== this.#gen) return;
-        this.#body.innerHTML = value || '<p class="empty">Documento vacio</p>';
+        if (value) this.#body.innerHTML = value;
+        else pintarEstado(this.#body, 'Documento vacío');
         emit(this, 'iswc-load');
       } catch (e) {
         if (gen !== this.#gen) return;
-        this.#body.innerHTML = '<p class="error">No se pudo previsualizar el DOCX</p>';
+        pintarEstado(this.#body, 'No se pudo previsualizar el DOCX', 'error');
         emit(this, 'iswc-error', { reason: (e as { reason?: string })?.reason || 'fetch' });
       }
     }

@@ -1,5 +1,8 @@
 {
   "$schema": "iswc-preview/v1",
+  "anatomy": {
+    "scss": "tree.scss"
+  },
   "tag": "iswc-tree-item",
   "category": "navigation",
   "title": "&lt;iswc-tree-item&gt;",
@@ -16,12 +19,30 @@
           "kind": "demo",
           "html": [
             "<iswc-tree>",
-            "            <iswc-tree-item expanded><iswc-icon slot=\"icon\" icon=\"mdi:folder\"></iswc-icon>Contabilidad",
+            "            <iswc-tree-item id=\"pg-tree-item\" expanded><iswc-icon slot=\"icon\" icon=\"mdi:folder\"></iswc-icon>Contabilidad",
             "              <iswc-tree-item><iswc-icon slot=\"icon\" icon=\"mdi:file-document\"></iswc-icon>Balance</iswc-tree-item>",
             "              <iswc-tree-item><iswc-icon slot=\"icon\" icon=\"mdi:file-document\"></iswc-icon>Estado de resultados</iswc-tree-item>",
             "            </iswc-tree-item>",
             "            <iswc-tree-item><iswc-icon slot=\"icon\" icon=\"mdi:folder\"></iswc-icon>Inventario</iswc-tree-item>",
             "          </iswc-tree>"
+          ],
+          "target": "#pg-tree-item",
+          "controls": [
+            {
+              "control": "boolean",
+              "prop": "attr:expanded",
+              "label": "expanded"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:selected",
+              "label": "selected"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:disabled",
+              "label": "disabled"
+            }
           ]
         }
       ]

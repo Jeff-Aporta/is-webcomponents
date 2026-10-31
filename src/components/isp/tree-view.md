@@ -1,11 +1,11 @@
-﻿---
+---
 tag: iswc-tree-view
 tags:
   - iswc-tree-view
 category: isp
 status: public
 source: ./tree-view.ts
-style: ./tree-view.css
+style: ./tree-view.scss
 preview: ./tree-view.json
 ---
 # `<iswc-tree-view>`
@@ -186,7 +186,7 @@ Tags del módulo: `<iswc-tree-view>`.
 ## Accesibilidad
 
 El body es `role="tree"`; cada summary es `role="treeitem"` con teclado
-(↑/↓/â†/→/Home/End). El drawer y los modales atrapan foco.
+(↑/↓/←/→/Home/End). El drawer y los modales atrapan foco.
 
 ## Ejemplo avanzado
 
@@ -248,9 +248,9 @@ Ver también **[Roles 3D](./utils/tree-view-roles.md)** para cuándo usar `atom`
 ## Fuentes
 
 - [JavaScript](./tree-view.ts)
-- [CSS](./tree-view.css)
+- [CSS](./tree-view.scss)
 - [Roles 3D — guía ilustrativa](./utils/tree-view-roles.md)
-- [Índice de categoría](../../specs/componentes.md)
+- [Índice de categoría](../../../specs/componentes.md)
 - [Preview](./tree-view.json)
 
 ## Relación con ISP

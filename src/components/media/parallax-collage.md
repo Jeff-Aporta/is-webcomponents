@@ -5,15 +5,32 @@ tags:
 category: media
 status: public
 source: ./parallax-collage.ts
-style: ./parallax-collage.css
+style: ./parallax-collage.scss
 preview: ./parallax-collage.json
 ---
 # `<iswc-parallax-collage>`
 
+## Propósito
+
 Collage por capas, con imágenes y formas teñidas con la paleta activa. El parallax con el cursor es opcional: sin `efecto`
 es una composición estática.
 
-## Uso
+## Cuándo usarlo
+
+Para una ilustración decorativa o de marca en una portada, un estado vacío o una sección de presentación.
+
+## Cuándo no usarlo
+
+- Una sola imagen: `<iswc-figure>`, o `<iswc-theme-img>` si depende del tema.
+- Un diagrama o una gráfica con datos: los tags de `diagrams` y `charts`.
+
+## Importación
+
+```js
+import './parallax-collage.js';
+```
+
+## Ejemplo mínimo
 
 ```html
 <iswc-parallax-collage efecto="capas" direccion="pegajoso" distancia="2" proporcion="0.8"></iswc-parallax-collage>
@@ -26,7 +43,9 @@ collage.capas = [
 ];
 ```
 
-## Atributos
+## API
+
+### Atributos
 
 | Atributo | Default | Notas |
 | --- | --- | --- |
@@ -38,7 +57,7 @@ collage.capas = [
 | `quieto` | — | Apaga las animaciones `anim` de las capas |
 | `etiqueta` | — | La anuncia como imagen; sin ella es decorativa |
 
-## Propiedades
+### Propiedades
 
 `capas` es un arreglo de `Capa`, validable con `ZCapas` de `schemas/parallax-collage.schemas.ts`.
 
@@ -51,12 +70,24 @@ collage.capas = [
 | `anim`, `retraso` | `flotar`, `mecer`, `girar`, `latir` o `ninguna`; desfase en segundos |
 | `giro` | Giro de reposo, en grados |
 
-## CSS Parts
+### CSS parts
 
 `lienzo`, `capa`.
 
-## Movimiento
+## Comportamiento
 
 El parallax lo provoca el visitante y es un recorrido corto, así que no depende de `prefers-reduced-motion`. Las animaciones
 `anim` corren solas y se apagan con esa preferencia. En táctil no hay cursor que seguir. Todas las instancias comparten un
 oyente de `pointermove`, y cada una detiene su bucle al llegar al destino.
+
+## Accesibilidad
+
+Con `etiqueta`, el lienzo es una imagen (`role="img"` con ese `aria-label`). Sin ella es decorativo y lleva `aria-hidden="true"`.
+Las animaciones `anim` respetan `prefers-reduced-motion`.
+
+## Reglas para LLM
+
+- Las capas van por la propiedad `capas`, nunca como HTML hijo.
+- Valida los datos externos con `ZCapas`.
+- Los colores de las formas salen de la paleta: no pases hex.
+- Si la imagen comunica algo, pon `etiqueta`.

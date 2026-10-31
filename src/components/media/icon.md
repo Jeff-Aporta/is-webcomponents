@@ -5,7 +5,7 @@ tags:
 category: media
 status: public
 source: ./icon.ts
-style: ./icon.css
+style: ./icon.scss
 preview: ./icon.json
 ---
 # `<iswc-icon>`
@@ -48,12 +48,12 @@ import './icon.js';
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
-| `icon` | string/según contrato | Fuente define default/restricción. |
-| `name` | string/según contrato | Fuente define default/restricción. |
-| `library` | string/según contrato | Fuente define default/restricción. |
-| `label` | string/según contrato | Fuente define default/restricción. |
-| `src` | string/según contrato | Fuente define default/restricción. |
-| `fallback` | string/según contrato | Fuente define default/restricción. |
+| `icon` | string | `grupo:nombre` de Iconify, por ejemplo `mdi:home`. Preferido. |
+| `name` | string | Nombre dentro de `library`; alternativa a `icon`. |
+| `library` | string | Colección de `name`. Por defecto `mdi`. |
+| `label` | string | Nombre accesible; vacío, el ícono queda `aria-hidden`. |
+| `src` | string (URL) | SVG propio; gana sobre `icon`. |
+| `fallback` | string | Ícono si el pedido no carga. |
 
 #### Propiedades públicas
 
@@ -174,6 +174,6 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-hidden
 ## Fuentes
 
 - [JavaScript](./icon.ts)
-- [CSS](./icon.css)
-- [Índice de categoría](../../specs/componentes.md)
+- [CSS](./icon.scss)
+- [Índice de categoría](../../../specs/componentes.md)
 - [Preview](./icon.json)

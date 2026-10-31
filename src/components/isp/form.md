@@ -1,38 +1,38 @@
-﻿---
+---
 tag: iswc-form
 tags:
   - iswc-form
 category: isp
 status: public
 source: ./form.ts
-style: ./form.css
+style: ./form.scss
 preview: ./form.json
 ---
 # `<iswc-form>`
 
-## PropÃ³sito
+## Propósito
 
 Formulario de ficha: cabecera, cuerpo scrolleable y pie Aceptar / Cancelar.
 El **cuerpo se define en JSON compacto** (`json2html` / `html2json`), el mismo
 lenguaje que usa `<iswc-block-layout>` y el que se persiste en BD.
 
-## CuÃ¡ndo usarlo
+## Cuándo usarlo
 
-Fichas de catÃ¡logo y formularios cuyo cuerpo se declara en JSON y se persiste
-en base de datos, con la misma gramÃ¡tica de `<iswc-block-layout>`.
+Fichas de catálogo y formularios cuyo cuerpo se declara en JSON y se persiste
+en base de datos, con la misma gramática de `<iswc-block-layout>`.
 
-## CuÃ¡ndo no usarlo
+## Cuándo no usarlo
 
 Para un `<form>` HTML corriente escrito a mano no hace falta este componente.
 Para el listado que abre la ficha usar `<iswc-catalogo-gen>`.
 
-## ImportaciÃ³n
+## Importación
 
 ```js
 import './form.js';
 ```
 
-## Ejemplo (JSON â†’ DOM)
+## Ejemplo (JSON → DOM)
 
 ```js
 form.fromJSON({
@@ -40,7 +40,7 @@ form.fromJSON({
   body: [
     ['h3', { slot: 'header' }, 'Curso'],
     ['div', { slot: 'content' },
-      ['iswc-input', { name: 'icurso', label: 'CÃ³digo', required: true }],
+      ['iswc-input', { name: 'icurso', label: 'Código', required: true }],
       ['iswc-switch', { name: 'activo' }, 'Activo'],
     ],
   ],
@@ -48,28 +48,28 @@ form.fromJSON({
 });
 ```
 
-Formato hyperscript: `[tag, attrs?, ...hijos]` â€” attrs booleanos como `true`.
+Formato hyperscript: `[tag, attrs?, ...hijos]` — attrs booleanos como `true`.
 
 ## API JSON / HTML
 
-| MÃ©todo | Uso |
+| Método | Uso |
 | --- | --- |
 | `json2html(body)` | Monta light DOM desde JSON. |
 | `html2json()` | Serializa light DOM. |
 | `toJSON()` | `{ mode, submitLabel, cancelLabel, loading, body, values }`. |
 | `fromJSON(json)` | Aplica chrome + `body` + `values`. |
 | `getValues()` / `setValues(obj)` | Mapa de controles con `name`. |
-| `IswcForm.json2html` / `IswcForm.html2json` | EstÃ¡ticos (codec compartido). |
+| `IswcForm.json2html` / `IswcForm.html2json` | Estáticos (codec compartido). |
 
-TambiÃ©n: hijo `<script type="application/json">` con el mismo objeto.
+También: hijo `<script type="application/json">` con el mismo objeto.
 
-## Ejemplo mÃ­nimo
+## Ejemplo mínimo
 
 ```html
 <iswc-form id="ficha">
   <h3 slot="header">Curso</h3>
   <div slot="content">
-    <iswc-input name="icurso" label="CÃ³digo" required></iswc-input>
+    <iswc-input name="icurso" label="Código" required></iswc-input>
   </div>
 </iswc-form>
 ```
@@ -83,11 +83,11 @@ TambiÃ©n: hijo `<script type="application/json">` con el mismo objeto.
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
 | `mode` | `edit` \| `view` | Default `edit`. |
-| `submit-label` | string | Texto del botÃ³n de aceptar. |
-| `cancel-label` | string | Texto del botÃ³n de cancelar. |
-| `loading` | boolean | Estado de carga en el botÃ³n de aceptar. |
+| `submit-label` | string | Texto del botón de aceptar. |
+| `cancel-label` | string | Texto del botón de cancelar. |
+| `loading` | boolean | Estado de carga en el botón de aceptar. |
 
-#### Propiedades pÃºblicas
+#### Propiedades públicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
@@ -101,20 +101,20 @@ TambiÃ©n: hijo `<script type="application/json">` con el mismo objeto.
 | `header` | Cabecera de la ficha. |
 | `content` | Cuerpo scrolleable. |
 | `pre-buttons` | Contenido antes de los botones del pie. |
-| `post-buttons` | Contenido despuÃ©s de los botones del pie. |
+| `post-buttons` | Contenido después de los botones del pie. |
 
 ### Eventos
 
 
-| Evento | DescripciÃ³n |
+| Evento | Descripción |
 | --- | --- |
 | `iswc-submit` | Emitido al enviar el formulario. |
-| `iswc-cancel` | Emitido al cancelar la operaciÃ³n. |
+| `iswc-cancel` | Emitido al cancelar la operación. |
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `iswc-submit` | `{ form, values, json }` | sÃ­ | sÃ­ | no |
-| `iswc-cancel` | `{ form, values, json }` | sÃ­ | sÃ­ | no |
+| `iswc-submit` | `{ form, values, json }` | sí | sí | no |
+| `iswc-cancel` | `{ form, values, json }` | sí | sí | no |
 
 
 <details>
@@ -129,9 +129,9 @@ el.addEventListener('iswc-submit', (e) => {
 
 </details>
 
-### MÃ©todos y propiedades pÃºblicas
+### Métodos y propiedades públicas
 
-| MÃ©todo | Uso |
+| Método | Uso |
 | --- | --- |
 | `json2html(body)` | Monta el light DOM desde JSON. |
 | `html2json()` | Serializa el light DOM a JSON. |
@@ -139,9 +139,9 @@ el.addEventListener('iswc-submit', (e) => {
 | `fromJSON(json)` | Aplica chrome, `body` y `values`. |
 | `getValues()` | Mapa de controles con `name`. |
 | `setValues(obj)` | Asigna valores por `name`. |
-| `IswcForm.json2html` / `IswcForm.html2json` | EstÃ¡ticos del codec compartido. |
+| `IswcForm.json2html` / `IswcForm.html2json` | Estáticos del codec compartido. |
 
-TambiÃ©n se acepta un hijo `<script type="application/json">` con el mismo
+También se acepta un hijo `<script type="application/json">` con el mismo
 objeto que recibe `fromJSON()`.
 
 ### CSS parts
@@ -152,7 +152,7 @@ objeto que recibe `fromJSON()`.
 | `header` | Cabecera. |
 | `content` | Cuerpo. |
 | `footer` | Pie. |
-| `buttons` | Contenedor de los botones de acciÃ³n. |
+| `buttons` | Contenedor de los botones de acción. |
 
 ### Custom states
 
@@ -163,12 +163,12 @@ No expone custom states.
 | Token | Uso |
 | --- | --- |
 | `--iswc-text` | Color del texto. |
-| `--iswc-sans` | Familia tipogrÃ¡fica. |
+| `--iswc-sans` | Familia tipográfica. |
 
-### IntegraciÃ³n con formularios
+### Integración con formularios
 
-El `<form>` interno se declara `novalidate`: la validaciÃ³n la aportan los
-controles (`<iswc-input>`, `<iswc-switch>`, â€¦), que sÃ­ son form-associated.
+El `<form>` interno se declara `novalidate`: la validación la aportan los
+controles (`<iswc-input>`, `<iswc-switch>`, …), que sí son form-associated.
 `getValues()` recorre los controles con `name` del light DOM.
 
 ## Comportamiento
@@ -183,11 +183,11 @@ controles (`<iswc-input>`, `<iswc-switch>`, â€¦), que sÃ­ son form-associa
 
 ## Dependencias y componentes relacionados
 
-- [`../_shared/json-html.js`](../../core/json-html.js) â€” codec compartido.
-- [`block-layout.md`](block-layout.md) â€” misma gramÃ¡tica JSON.
-- [`catalogo-gen.md`](catalogo-gen.md) â€” consumidor habitual de la ficha.
+- [`../_shared/json-html.js`](../../core/json-html.js) — codec compartido.
+- [`block-layout.md`](block-layout.md) — misma gramática JSON.
+- [`catalogo-gen.md`](catalogo-gen.md) — consumidor habitual de la ficha.
 
-Tags del mÃ³dulo: `<iswc-form>`.
+Tags del módulo: `<iswc-form>`.
 
 ## Accesibilidad
 
@@ -205,7 +205,7 @@ form.fromJSON({
   body: [
     ['h3', { slot: 'header' }, 'Curso'],
     ['div', { slot: 'content' },
-      ['iswc-input', { name: 'icurso', label: 'CÃ³digo', required: true }],
+      ['iswc-input', { name: 'icurso', label: 'Código', required: true }],
       ['iswc-switch', { name: 'activo' }, 'Activo'],
     ],
   ],
@@ -223,23 +223,23 @@ console.log(form.html2json());
 ## Errores comunes
 
 - Poner el contenido sin `slot`: debe ir en `header`, `content` o el pie.
-- Esperar validaciÃ³n nativa del `<form>`: es `novalidate`, valida cada control.
+- Esperar validación nativa del `<form>`: es `novalidate`, valida cada control.
 - Aplicar `values` antes de montar el `body`: `fromJSON()` ya respeta ese orden.
 - Omitir `name` en un control y luego buscarlo en `getValues()`.
-- Usar tag sin importar mÃ³dulo primero.
+- Usar tag sin importar módulo primero.
 
 ## Reglas para LLM
 
 - Reusar el codec de `_shared/json-html.js` antes de escribir otro serializador.
 - Mantener nombres exactos de tags y API.
-- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explÃ­cito.
-- Leer callers/shared antes de cambiar; corregir raÃ­z comÃºn.
-- No modificar API basÃ¡ndose solo en preview.
+- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explícito.
+- Leer callers/shared antes de cambiar; corregir raíz común.
+- No modificar API basándose solo en preview.
 
 ## Fuentes
 
 - [JavaScript](./form.ts)
-- [CSS](./form.css)
+- [CSS](./form.scss)
 - [Codec](../../core/json-html.js)
-- [Ãndice de categorÃ­a](../../specs/componentes.md)
+- [Índice de categoría](../../../specs/componentes.md)
 - [Preview](./form.json)

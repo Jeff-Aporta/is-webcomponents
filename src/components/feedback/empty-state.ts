@@ -1,4 +1,5 @@
 import { adoptCss, defineElement } from '../../core/element.js';
+import { ocultarSlotsVacios } from '../../core/dom-utils.js';
 import { atributosDe, PropsElement } from '../../core/props-element.js';
 import { EmptyStatePropsSchema } from './schemas/empty-state.schemas.js';
 import type { EmptyStateProps } from './schemas/empty-state.schemas.js';
@@ -18,11 +19,11 @@ const ICONO_ERROR = 'mdi:alert-circle-outline';
 const TEMPLATE = document.createElement('template');
 TEMPLATE.innerHTML = /* html */ `
   <div class="caja" part="caja">
-    <iswc-spinner class="icono" hidden></iswc-spinner>
+    <iswc-spinner class="icono" aria-hidden="true" hidden></iswc-spinner>
     <iswc-icon class="icono" part="icono"></iswc-icon>
     <strong class="titulo" part="titulo"></strong>
     <p class="texto" part="texto" hidden></p>
-    <div class="accion"><slot></slot></div>
+    <div class="accion" hidden><slot></slot></div>
   </div>
 `;
 
@@ -40,6 +41,7 @@ class IswcEmptyState extends PropsElement<EmptyStateProps> {
     const shadow = this.attachShadow({ mode: 'open' });
     adoptCss(shadow, import.meta.url);
     shadow.appendChild(TEMPLATE.content.cloneNode(true));
+    ocultarSlotsVacios(shadow, '.accion > slot');
     this.#caja = shadow.querySelector<HTMLElement>('.caja')!;
     this.#spinner = shadow.querySelector<HTMLElement>('iswc-spinner')!;
     this.#icono = shadow.querySelector<HTMLElement>('iswc-icon')!;

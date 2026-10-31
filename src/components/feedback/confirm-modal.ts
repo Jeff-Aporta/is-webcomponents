@@ -20,6 +20,11 @@ import '../actions/button.js';
  *   heading   string  — título del modal (opcional).
  *   message   string  — texto principal.
  *   open      boolean — controlado.
+ *   color         brand | danger | … — color del botón de aceptar por defecto (default brand).
+ *   confirm-label texto del botón de aceptar por defecto (default "Aceptar").
+ *   cancel-label  texto del botón de cancelar por defecto (default "Cancelar").
+ *
+ * Foco: al abrir va a Cancelar (WAI-APG alertdialog) y Tab queda dentro del modal.
  *
  * Slots
  *   message — contenido rico en vez del atributo message.
@@ -34,18 +39,18 @@ import '../actions/button.js';
   const TEMPLATE = document.createElement('template');
   TEMPLATE.innerHTML = /* html */ `
     <div class="backdrop" part="backdrop" hidden>
-      <div class="modal" part="base" role="alertdialog" aria-modal="true">
-        <h2 class="heading" part="heading" hidden></h2>
-        <div class="message" part="message"><span class="message-text"></span><slot name="message"></slot></div>
+      <div class="modal" part="base" role="alertdialog" aria-modal="true" aria-labelledby="titulo" aria-describedby="mensaje">
+        <h2 class="heading" id="titulo" part="heading" hidden></h2>
+        <div class="message" id="mensaje" part="message"><span class="message-text"></span><slot name="message"></slot></div>
         <div class="actions" part="actions">
-          <span class="cancel-wrap"><slot name="cancel"><iswc-button variant="text" color="text" class="cancel" data-confirm-cancel>Cancelar</iswc-button></slot></span>
-          <span class="confirm-wrap"><slot name="confirm"><iswc-button color="brand" class="confirm" data-confirm-confirm>Aceptar</iswc-button></slot></span>
+          <span class="cancel-wrap"><slot name="cancel"><iswc-button variant="text" color="text" class="cancel">Cancelar</iswc-button></slot></span>
+          <span class="confirm-wrap"><slot name="confirm"><iswc-button color="brand" class="confirm">Aceptar</iswc-button></slot></span>
         </div>
       </div>
     </div>
   `;
 
-  const OBSERVED = ['for', 'heading', 'message', 'open'];
+  const OBSERVED = ['for', 'heading', 'message', 'open', 'color', 'confirm-label', 'cancel-label'];
 
   class IswcConfirmModal extends ElementBase {
 
@@ -57,6 +62,8 @@ import '../actions/button.js';
     #trigger: HTMLElement | null = null;
     #onTriggerClick: (() => void) | null = null;
     #lastFocus: HTMLElement | null = null;
+    #envolturaAceptar!: HTMLElement;
+    #envolturaCancelar!: HTMLElement;
 
     // El click fuera lo resuelve el propio backdrop (ver constructor), así que
     // aquí solo vive el Escape. scrollLock: el modal bloquea el fondo.
@@ -78,26 +85,44 @@ import '../actions/button.js';
       this.#backdrop.addEventListener('click', (e: Event) => {
         if (e.target === this.#backdrop) this.#cancel();
       });
-      shadow.addEventListener('click', (e: Event) => {
-        const path = e.composedPath();
-        if (path.some((n) => n instanceof HTMLElement && n.hasAttribute?.('data-confirm-confirm'))) this.#confirm();
-        else if (path.some((n) => n instanceof HTMLElement && n.hasAttribute?.('data-confirm-cancel'))) this.#cancel();
-      });
-      // Slots confirm/cancel: cualquier elemento slotted dispara su acción.
-      shadow.querySelector<HTMLElement>('.confirm-wrap')?.addEventListener('click', (e: Event) => {
-        const target = e.target as Element | null;
-        if (target?.closest('[slot="confirm"]')) this.#confirm();
-      });
-      shadow.querySelector<HTMLElement>('.cancel-wrap')?.addEventListener('click', (e: Event) => {
-        const target = e.target as Element | null;
-        if (target?.closest('[slot="cancel"]')) this.#cancel();
-      });
+      // Cada envoltura cubre su slot: botón por defecto o el del consumidor, una sola vez.
+      this.#envolturaAceptar = shadow.querySelector<HTMLElement>('.confirm-wrap')!;
+      this.#envolturaCancelar = shadow.querySelector<HTMLElement>('.cancel-wrap')!;
+      this.#envolturaAceptar.addEventListener('click', () => this.#confirm());
+      this.#envolturaCancelar.addEventListener('click', () => this.#cancel());
+      this.#modal.addEventListener('keydown', this.#onTab);
+      shadow.querySelector('slot[name="message"]')!.addEventListener('slotchange', () => this.#syncMessage());
+    }
+
+    /** Modal de verdad: Tab da la vuelta entre los dos botones, nunca sale a la página de atrás. */
+    #onTab = (e: KeyboardEvent): void => {
+      if (e.key !== 'Tab') return;
+      e.preventDefault();
+      const enCancelar = e.composedPath().includes(this.#envolturaCancelar);
+      (enCancelar ? this.#botonAceptar() : this.#botonCancelar())?.focus();
+    };
+
+    #botonAceptar(): HTMLElement | null {
+      return this.querySelector<HTMLElement>('[slot="confirm"]') ?? this.shadowRoot!.querySelector<HTMLElement>('.confirm');
+    }
+
+    #botonCancelar(): HTMLElement | null {
+      return this.querySelector<HTMLElement>('[slot="cancel"]') ?? this.shadowRoot!.querySelector<HTMLElement>('.cancel');
+    }
+
+    #syncBotones(): void {
+      const aceptar = this.shadowRoot!.querySelector<HTMLElement>('.confirm')!;
+      const cancelar = this.shadowRoot!.querySelector<HTMLElement>('.cancel')!;
+      aceptar.setAttribute('color', this.getAttribute('color') || 'brand');
+      aceptar.textContent = this.getAttribute('confirm-label') || 'Aceptar';
+      cancelar.textContent = this.getAttribute('cancel-label') || 'Cancelar';
     }
 
     onConnected() {
       this.#bindTrigger();
       this.#syncHeading();
       this.#syncMessage();
+      this.#syncBotones();
       if (this.hasAttribute('open')) this.#showUI();
     }
 
@@ -110,6 +135,7 @@ import '../actions/button.js';
       if (name === 'for') { this.#unbindTrigger(); this.#bindTrigger(); }
       if (name === 'heading') this.#syncHeading();
       if (name === 'message') this.#syncMessage();
+      if (name === 'color' || name === 'confirm-label' || name === 'cancel-label') this.#syncBotones();
       if (name === 'open') {
         if (this.hasAttribute('open')) this.#showUI();
         else this.#hideUI();
@@ -147,11 +173,8 @@ import '../actions/button.js';
       this.#lastFocus = document.activeElement as HTMLElement | null;
       this.#backdrop.hidden = false;
       if (this.isConnected) this.#backdrop.showPopover();
-      requestAnimationFrame(() => {
-        const btn = this.querySelector<HTMLElement>('[slot="confirm"]')
-          || this.shadowRoot!.querySelector<HTMLElement>('.confirm');
-        btn?.focus?.();
-      });
+      // WAI-APG alertdialog: el foco va a la opción menos destructiva.
+      requestAnimationFrame(() => { this.#botonCancelar()?.focus(); });
     }
 
     #hideUI(): void {
@@ -186,6 +209,8 @@ import '../actions/button.js';
       const text = this.getAttribute('heading') || '';
       this.#heading.textContent = text;
       this.#heading.hidden = !text;
+      if (text) this.#modal.setAttribute('aria-labelledby', 'titulo');
+      else this.#modal.removeAttribute('aria-labelledby');
     }
 
     #syncMessage(): void {

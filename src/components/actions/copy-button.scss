@@ -48,7 +48,7 @@
   background: var(--iswc-control-bg-hover);
 }
 :host .trigger iswc-button.button[disabled]::part(button) {
-  opacity: 0.5;
+  opacity: 0.55;
   cursor: not-allowed;
 }
 :host .trigger iswc-button.button[hidden] {
@@ -80,7 +80,7 @@
 }
 :host .tip {
   --iswc-tooltip-font-size: 0.75em;
-  --iswc-copy-button-max-width: 18rem;
+  --iswc-copy-button-max-width: 18em;
 }
 @media (prefers-reduced-motion: reduce) {
   :host .icon.show, :host .icon.hide {
@@ -89,10 +89,10 @@
 }
 :host .sr-only {
   position: absolute;
-  width: 1px;
-  height: 1px;
+  width: .0625em;
+  height: .0625em;
   padding: 0;
-  margin: -1px;
+  margin: -.0625em;
   overflow: hidden;
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;

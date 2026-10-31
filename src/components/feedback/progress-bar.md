@@ -1,36 +1,36 @@
-﻿---
+---
 tag: iswc-progress-bar
 tags:
   - iswc-progress-bar
 category: feedback
 status: public
 source: ./progress-bar.ts
-style: ./progress-bar.css
+style: ./progress-bar.scss
 preview: ./progress-bar.json
 ---
 # `<iswc-progress-bar>`
 
-## PropÃ³sito
+## Propósito
 
 <iswc-progress-bar>
 
-Este mÃ³dulo registra `<iswc-progress-bar>`.
+Este módulo registra `<iswc-progress-bar>`.
 
-## CuÃ¡ndo usarlo
+## Cuándo usarlo
 
-Estado, progreso, confirmaciÃ³n, carga o resultado de operaciones.
+Estado, progreso, confirmación, carga o resultado de operaciones.
 
-## CuÃ¡ndo no usarlo
+## Cuándo no usarlo
 
-No saturar interfaz con seÃ±ales redundantes o alertas sin acciÃ³n.
+No saturar interfaz con señales redundantes o alertas sin acción.
 
-## ImportaciÃ³n
+## Importación
 
 ```js
 import './progress-bar.js';
 ```
 
-## Ejemplo mÃ­nimo
+## Ejemplo mínimo
 
 ```html
 <iswc-progress-bar value="65" label="Carga"></iswc-progress-bar>
@@ -45,11 +45,12 @@ import './progress-bar.js';
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
-| `value` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `label` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `indeterminate` | boolean | Fuente define default/restricciÃ³n. |
+| `value` | string/según contrato | Fuente define default/restricción. |
+| `label` | string | Nombre accesible (`aria-label`). No se pinta: el texto visible va en el slot. |
+| `indeterminate` | boolean | Sin progreso real: una franja recorre la barra. |
+| `color` | `brand` / `info` / `success` / `warning` / `danger` | Color de la barra (default `brand`). |
 
-#### Propiedades pÃºblicas
+#### Propiedades públicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
@@ -66,7 +67,7 @@ import './progress-bar.js';
 ### Eventos
 
 
-| Evento | DescripciÃ³n |
+| Evento | Descripción |
 | --- | --- |
 
 No expone.
@@ -84,11 +85,11 @@ el.addEventListener('click', (e) => {
 
 </details>
 
-### MÃ©todos y propiedades pÃºblicas
+### Métodos y propiedades públicas
 
 No expone.
 
-Propiedades pÃºblicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
+Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
 
 ### CSS parts
 
@@ -106,28 +107,27 @@ No expone.
 
 | Token | Uso |
 | --- | --- |
-| `--track-height` | Token leÃ­do o definido por componente. |
-| `--track-color` | Token leÃ­do o definido por componente. |
-| `--iswc-control-bg` | Token leÃ­do o definido por componente. |
-| `--indicator-color` | Token leÃ­do o definido por componente. |
-| `--iswc-color-brand-500` | Token leÃ­do o definido por componente. |
-| `--iswc-font-family` | Token leÃ­do o definido por componente. |
-| `--iswc-text-soft` | Token leÃ­do o definido por componente. |
+| `--track-height` | Token leído o definido por componente. |
+| `--iswc-control-bg` | Token leído o definido por componente. |
+| `--iswc-font-family` | Token leído o definido por componente. |
+| `--iswc-text-soft` | Token leído o definido por componente. |
 
-### IntegraciÃ³n con formularios
+### Integración con formularios
 
-No declara integraciÃ³n form-associated propia en este mÃ³dulo.
+No declara integración form-associated propia en este módulo.
 
 ## Comportamiento
 
-DocumentaciÃ³n de cabecera preservada desde fuente:
+El slot por defecto es el texto bajo la barra («Subiendo 4 de 10»); sin contenido no reserva espacio. `aria-valuetext` da siempre el porcentaje y `aria-label` el nombre. Con movimiento reducido la franja indeterminada va más lenta, nunca quieta.
 
-> <iswc-progress-bar> â€” Web Component (vanilla).
+Documentación de cabecera preservada desde fuente:
+
+> <iswc-progress-bar> — Web Component (vanilla).
 > Atributos
->   value           number 0â€“100
->   label           string â€” aria-label
+>   value           number 0–100
+>   label           string — aria-label
 >   indeterminate   boolean
-> Slots: default â€” etiqueta interna
+> Slots: default — etiqueta interna
 > role=progressbar
 > CSS Parts: ::part(progress-bar) ::part(indicator) ::part(label)
 
@@ -135,11 +135,11 @@ DocumentaciÃ³n de cabecera preservada desde fuente:
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 
-Tags del mÃ³dulo: `<iswc-progress-bar>`.
+Tags del módulo: `<iswc-progress-bar>`.
 
 ## Accesibilidad
 
-Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`, `aria-valuemin`, `aria-valuemax`, `aria-valuenow`, `aria-valuetext`.
+Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`, `aria-valuemin`, `aria-valuemax`, `aria-valuenow`, `aria-valuetext`.
 
 ## Ejemplo avanzado
 
@@ -150,7 +150,7 @@ Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: `aria-labe
 
 ## Errores comunes
 
-- Usar tag sin importar mÃ³dulo primero.
+- Usar tag sin importar módulo primero.
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
@@ -158,15 +158,15 @@ Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: `aria-labe
 
 ## Reglas para LLM
 
-- Reusar componente y dependencias antes de implementaciÃ³n paralela.
+- Reusar componente y dependencias antes de implementación paralela.
 - Mantener nombres exactos de tags y API.
-- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explÃ­cito.
-- Leer callers/shared antes de cambiar; corregir raÃ­z comÃºn.
-- No modificar API basÃ¡ndose solo en preview.
+- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explícito.
+- Leer callers/shared antes de cambiar; corregir raíz común.
+- No modificar API basándose solo en preview.
 
 ## Fuentes
 
 - [JavaScript](./progress-bar.ts)
-- [CSS](./progress-bar.css)
-- [Ãndice de categorÃ­a](../../specs/componentes.md)
+- [CSS](./progress-bar.scss)
+- [Índice de categoría](../../../specs/componentes.md)
 - [Preview](./progress-bar.json)

@@ -5,7 +5,7 @@ tags:
 category: navigation
 status: public
 source: ./pager.ts
-style: ./pager.css
+style: ./pager.scss
 preview: ./pager.json
 ---
 # `<iswc-pager>`

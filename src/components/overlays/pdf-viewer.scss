@@ -19,12 +19,13 @@
 
 /* La fila flex, el padding y el separador vienen de `.iswc-surface-bar`. */
 .toolbar {
-  --iswc-surface-bar-gap: .45rem;
+  --iswc-surface-bar-gap: .45em;
+  flex-wrap: wrap;
 }
 
 .title {
   font-weight: 600;
-  font-size: .9rem;
+  font-size: .9em;
   display: inline-flex;
   align-items: center;
 }
@@ -32,22 +33,9 @@
 .spacer { flex: 1 1 auto; }
 
 .btn {
-  font: inherit;
-  display: inline-flex;
-  align-items: center;
-  gap: .35rem;
-  padding: .3rem .6rem;
-  border-radius: var(--iswc-radius);
-  border: 1px solid var(--iswc-border);
-  background: var(--iswc-bg-soft);
-  color: inherit;
-  cursor: pointer;
-  font-size: .82rem;
+  font-size: .82em;
 
-  &:hover {
-    background: color-mix(in srgb, var(--iswc-accent) 14%, var(--iswc-bg-soft));
-    border-color: var(--iswc-accent);
-  }
+  &[hidden] { display: none; }
 }
 
 .frame {
@@ -55,4 +43,12 @@
   inline-size: 100%;
   border: 0;
   background: white;
+
+  &[hidden] { display: none; }
+}
+
+.vacio {
+  margin: 1em;
+
+  &[hidden] { display: none; }
 }

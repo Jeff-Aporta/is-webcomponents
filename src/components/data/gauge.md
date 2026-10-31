@@ -1,40 +1,40 @@
-﻿---
+---
 tag: iswc-gauge
 tags:
   - iswc-gauge
-category: data
+category: data-viz
 status: public
 source: ./gauge.ts
-style: ./gauge.css
+style: ./gauge.scss
 preview: ./gauge.json
 ---
 # `<iswc-gauge>`
 
-## PropÃ³sito
+## Propósito
 
-Medidor circular SVG de porcentaje. Soporta colores, semicÃ­rculo,
-custom min/max, unidad, formato y tamaÃ±o.
+Medidor circular SVG de porcentaje. Soporta colores, semicírculo,
+custom min/max, unidad, formato y tamaño.
 
-Este mÃ³dulo registra `<iswc-gauge>`.
+Este módulo registra `<iswc-gauge>`.
 
-## CuÃ¡ndo usarlo
+## Cuándo usarlo
 
-PresentaciÃ³n, comparaciÃ³n, movimiento u organizaciÃ³n de datos estructurados.
+Presentación, comparación, movimiento u organización de datos estructurados.
 
-## CuÃ¡ndo no usarlo
+## Cuándo no usarlo
 
-No reemplazar HTML semÃ¡ntico cuando contenido es estÃ¡tico y simple.
+No reemplazar HTML semántico cuando contenido es estático y simple.
 
-## ImportaciÃ³n
+## Importación
 
 ```js
 import './gauge.js';
 ```
 
-## Ejemplo mÃ­nimo
+## Ejemplo mínimo
 
 ```html
-<iswc-gauge value="67" label="ConversiÃ³n" unit="%"></iswc-gauge>
+<iswc-gauge value="67" label="Conversión" unit="%"></iswc-gauge>
 ```
 
 ## API
@@ -45,18 +45,18 @@ import './gauge.js';
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
-| `value` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `min` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `max` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `label` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `unit` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `thickness` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `color` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `half` | boolean | Fuente define default/restricciÃ³n. |
-| `format` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `show-value` | boolean | Fuente define default/restricciÃ³n. |
+| `value` | number | Valor actual. Por defecto `0`. |
+| `min` | number | Inicio del rango. Por defecto `0`. |
+| `max` | number | Fin del rango. Por defecto `100`. |
+| `label` | string | Rótulo bajo el valor. |
+| `unit` | string | Unidad tras el número, por ejemplo `%`. |
+| `thickness` | number | Grosor del arco en unidades del SVG. |
+| `color` | `brand` \| `success` \| `warning` \| `danger` | Color del arco. Por defecto `brand`. |
+| `half` | boolean | Fuente define default/restricción. |
+| `format` | string | Máscara numérica, por ejemplo `0.0`. |
+| `show-value` | boolean | Fuente define default/restricción. |
 
-#### Propiedades pÃºblicas
+#### Propiedades públicas
 
 No expone.
 
@@ -67,13 +67,13 @@ No expone.
 ### Eventos
 
 
-| Evento | DescripciÃ³n |
+| Evento | Descripción |
 | --- | --- |
 | `iswc-gauge-change` | Evento personalizado del componente (gauge change). |
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `iswc-gauge-change` | segÃºn cabecera | segÃºn cabecera | segÃºn cabecera | segÃºn cabecera |
+| `iswc-gauge-change` | según cabecera | según cabecera | según cabecera | según cabecera |
 
 
 <details>
@@ -88,11 +88,11 @@ el.addEventListener('iswc-gauge-change', (e) => {
 
 </details>
 
-### MÃ©todos y propiedades pÃºblicas
+### Métodos y propiedades públicas
 
 No expone.
 
-Propiedades pÃºblicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
+Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
 
 ### CSS parts
 
@@ -114,31 +114,31 @@ No expone.
 
 | Token | Uso |
 | --- | --- |
-| `--brand` | Token leÃ­do o definido por componente. |
-| `--iswc-brand` | Token leÃ­do o definido por componente. |
-| `--success` | Token leÃ­do o definido por componente. |
-| `--iswc-success` | Token leÃ­do o definido por componente. |
-| `--warning` | Token leÃ­do o definido por componente. |
-| `--iswc-warning` | Token leÃ­do o definido por componente. |
-| `--danger` | Token leÃ­do o definido por componente. |
-| `--iswc-danger` | Token leÃ­do o definido por componente. |
-| `--bg-track` | Token leÃ­do o definido por componente. |
-| `--iswc-text` | Token leÃ­do o definido por componente. |
-| `--fg` | Token leÃ­do o definido por componente. |
-| `--muted` | Token leÃ­do o definido por componente. |
-| `--gauge-size` | Token leÃ­do o definido por componente. |
+| `--brand` | Token leído o definido por componente. |
+| `--iswc-brand` | Token leído o definido por componente. |
+| `--success` | Token leído o definido por componente. |
+| `--iswc-success` | Token leído o definido por componente. |
+| `--warning` | Token leído o definido por componente. |
+| `--iswc-warning` | Token leído o definido por componente. |
+| `--danger` | Token leído o definido por componente. |
+| `--iswc-danger` | Token leído o definido por componente. |
+| `--bg-track` | Token leído o definido por componente. |
+| `--iswc-text` | Token leído o definido por componente. |
+| `--fg` | Token leído o definido por componente. |
+| `--muted` | Token leído o definido por componente. |
+| `--gauge-size` | Token leído o definido por componente. |
 
-### IntegraciÃ³n con formularios
+### Integración con formularios
 
-No declara integraciÃ³n form-associated propia en este mÃ³dulo.
+No declara integración form-associated propia en este módulo.
 
 ## Comportamiento
 
-DocumentaciÃ³n de cabecera preservada desde fuente:
+Documentación de cabecera preservada desde fuente:
 
-> <iswc-gauge> â€” Medidor circular de porcentaje (vanilla, zero dependencies).
+> <iswc-gauge> — Medidor circular de porcentaje (vanilla, zero dependencies).
 > Medidor semicircular o completo de 0..100 (o arbitrary min/max).
->   <iswc-gauge value="67" label="ConversiÃ³n"></iswc-gauge>
+>   <iswc-gauge value="67" label="Conversión"></iswc-gauge>
 > Atributos
 >   value       number  (0..100)
 >   min         number
@@ -147,8 +147,8 @@ DocumentaciÃ³n de cabecera preservada desde fuente:
 >   unit        string  (e.g. "%")
 >   thickness   number  (px)
 >   color     brand | success | warning | danger (default 'brand')
->   half        boolean â€” semicÃ­rculo.
->   format      string  â€” Intl.NumberFormat format string. e.g. "0.0".
+>   half        boolean — semicírculo.
+>   format      string  — Intl.NumberFormat format string. e.g. "0.0".
 >   show-value  boolean (default true)
 > Eventos
 >   iswc-gauge-change  detail: { value, percent }
@@ -157,21 +157,21 @@ DocumentaciÃ³n de cabecera preservada desde fuente:
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 
-Tags del mÃ³dulo: `<iswc-gauge>`.
+Tags del módulo: `<iswc-gauge>`.
 
 ## Accesibilidad
 
-Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: ninguno explÃ­cito en fuente.
+Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: ninguno explícito en fuente.
 
 ## Ejemplo avanzado
 
 ```html
-<iswc-gauge value="67" label="ConversiÃ³n" unit="%"></iswc-gauge>
+<iswc-gauge value="67" label="Conversión" unit="%"></iswc-gauge>
 ```
 
 ## Errores comunes
 
-- Usar tag sin importar mÃ³dulo primero.
+- Usar tag sin importar módulo primero.
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
@@ -179,15 +179,15 @@ Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: ninguno ex
 
 ## Reglas para LLM
 
-- Reusar componente y dependencias antes de implementaciÃ³n paralela.
+- Reusar componente y dependencias antes de implementación paralela.
 - Mantener nombres exactos de tags y API.
-- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explÃ­cito.
-- Leer callers/shared antes de cambiar; corregir raÃ­z comÃºn.
-- No modificar API basÃ¡ndose solo en preview.
+- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explícito.
+- Leer callers/shared antes de cambiar; corregir raíz común.
+- No modificar API basándose solo en preview.
 
 ## Fuentes
 
 - [JavaScript](./gauge.ts)
-- [CSS](./gauge.css)
-- [Ãndice de categorÃ­a](../../specs/componentes.md)
+- [CSS](./gauge.scss)
+- [Índice de categoría](../../../specs/componentes.md)
 - [Preview](./gauge.json)

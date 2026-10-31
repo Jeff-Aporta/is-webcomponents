@@ -48,7 +48,7 @@ Variables propias del componente, con prefijo
 ## 3. Cómo se consumen en un componente
 
 ```css
-/* src/components/actions/foo.css */
+/* src/components/actions/foo.scss */
 :host {
   /* Defaults razonables; los consumidores pueden sobreescribirlos */
   --iswc-foo-border-radius: 6px;
@@ -184,7 +184,7 @@ Este test:
 
 Si tu componente introduce tokens nuevos, **primero** añádelos a
 `is-base.css` o a la paleta correspondiente, y **luego** consúmelos
-en el `.css` del componente.
+en el `.scss` del componente.
 
 ## 8. Checklist
 

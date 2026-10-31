@@ -251,7 +251,7 @@ class IswcChart extends withStyleAttrs(HTMLElement) {
       animate: !this.hasAttribute('without-animation') && o.animation !== false,
       tooltip: !this.hasAttribute('without-tooltip') && tooltipPlugin.enabled !== false,
       legendDisplay,
-      legendPosition: attr('legend-position') ?? (legendPlugin.position as string) ?? 'top',
+      legendPosition: attr('legend-position') ?? (legendPlugin.position as string) ?? 'bottom',
       title: attr('label') ?? (titlePlugin.display === false ? null : (titlePlugin.text as string) ?? null),
       xLabel: attr('x-label') ?? (scales.x?.title as { text?: string } | undefined)?.text ?? null,
       yLabel: attr('y-label') ?? (scales.y?.title as { text?: string } | undefined)?.text ?? null,
@@ -263,7 +263,7 @@ class IswcChart extends withStyleAttrs(HTMLElement) {
   #resolveColors(count: number): { colors: string[]; fills: string[] } {
     const cs = getComputedStyle(this);
     const base = getCategoricalColors(this, count);
-    const baseFills = getFillColors(this, count);
+    const baseFills = getFillColors(this, count, cs.getPropertyValue('--chart-fill-alpha').trim() || undefined);
     const colors: string[] = [];
     const fills: string[] = [];
     for (let i = 0; i < count; i++) {
@@ -339,7 +339,9 @@ class IswcChart extends withStyleAttrs(HTMLElement) {
     // para que el texto sea proporcional al tamano de presentacion.
     // Exponente < 1 para amortiguar: crecer lineal dispara el texto en el visor.
     const basis = Math.min(width, height);
-    const fontPx = Math.max(11, Math.min(26, 13 * (basis / 220) ** 0.55));
+    // La escala por font-size del host se suma a la de geometría: 16px es el tamaño base del kit.
+    const escalaHost = (parseFloat(getComputedStyle(this as unknown as Element).fontSize) || 16) / 16;
+    const fontPx = Math.max(11, Math.min(26, 13 * (basis / 220) ** 0.55)) * escalaHost;
     this.#svg.style.fontSize = `${fontPx.toFixed(2)}px`;
     // La leyenda es HTML fuera del SVG: sin esto se queda diminuta en el visor.
     // Se aplica el mismo 0.75 de `--chart-legend-size`, que este inline pisa.

@@ -7,7 +7,7 @@
   @include papel;
   /* La paleta usa un radio mayor y una sombra más difusa que el popover base. */
   --iswc-popover-radius: var(--iswc-radius);
-  --iswc-popover-shadow: 0 30px 80px rgba(0, 0, 0, .42);
+  --iswc-popover-shadow: 0 1.875em 5em rgba(0, 0, 0, .42);
   display: contents;
 }
 
@@ -34,7 +34,7 @@
   inset-block-start: 14%;
   inset-inline-start: 50%;
   transform: translateX(-50%);
-  inline-size: min(36rem, 92vw);
+  inline-size: min(36em, 92vw);
   max-block-size: 70vh;
   display: flex;
   flex-direction: column;
@@ -43,11 +43,11 @@
 
 /* La fila flex, el padding y el separador vienen de `.iswc-surface-bar`. */
 .bar {
-  --iswc-surface-bar-gap: .55rem;
-  --iswc-surface-bar-padding: .65rem .8rem;
+  --iswc-surface-bar-gap: .55em;
+  --iswc-surface-bar-padding: .65em .8em;
   background: transparent;
 
-  & .ico { color: var(--iswc-text-soft); font-size: 1.1rem; }
+  & .ico { color: var(--iswc-text-soft); font-size: 1.1em; }
 }
 
 .input {
@@ -56,34 +56,34 @@
   outline: 0;
   background: transparent;
   font: inherit;
-  font-size: 1rem;
+  font-size: 1em;
   color: inherit;
-  padding-block: .25rem;
+  padding-block: .25em;
 }
 
 .results {
   list-style: none;
   margin: 0;
-  padding: .35rem;
+  padding: .35em;
   overflow: auto;
   flex: 1 1 auto;
 }
 
 .group-head {
-  font-size: .68rem;
+  font-size: .68em;
   text-transform: uppercase;
   letter-spacing: .08em;
   color: var(--iswc-text-dim);
-  padding: .35rem .5rem .15rem;
+  padding: .5147em .7353em .2206em;
 }
 
 /* Solo para lectores de pantalla: anuncia cambios de filtro sin ensuciar la UI. */
 .sr-status {
   position: absolute;
-  inline-size: 1px;
-  block-size: 1px;
+  inline-size: .0625em;
+  block-size: .0625em;
   padding: 0;
-  margin: -1px;
+  margin: -.0625em;
   overflow: hidden;
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
@@ -94,9 +94,9 @@
   display: grid;
   grid-template-columns: auto 1fr auto;
   align-items: center;
-  gap: .65rem;
-  padding: .45rem .55rem;
-  border-radius: 8px;
+  gap: .65em;
+  padding: .45em .55em;
+  border-radius: .5em;
   cursor: pointer;
   user-select: none;
 
@@ -111,28 +111,28 @@
   & .ico {
     display: inline-grid;
     place-items: center;
-    inline-size: 1.65rem;
-    block-size: 1.65rem;
-    border-radius: 6px;
+    inline-size: 1.65em;
+    block-size: 1.65em;
+    border-radius: .375em;
     background: color-mix(in srgb, var(--iswc-accent) 12%, transparent);
     color: var(--iswc-accent);
-    font-size: 1rem;
+    font-size: 1em;
   }
 
   & .label {
     display: flex;
     flex-direction: column;
-    gap: 2px;
+    gap: .125em;
     min-inline-size: 0;
   }
 
-  & .t { font-weight: 600; font-size: .9rem; }
-  & .hint { color: var(--iswc-text-soft); font-size: .76rem; }
+  & .t { font-weight: 600; font-size: .9em; }
+  & .hint { color: var(--iswc-text-soft); font-size: .76em; }
 
   & .keys {
     display: inline-flex;
     align-items: center;
-    gap: .2rem;
+    gap: .2em;
     flex-shrink: 0;
     color: var(--iswc-text-dim);
 
@@ -143,38 +143,38 @@
 /* Chip <kbd>: compartido por `.opt` y `.footer`. */
 :is(.opt, .footer) kbd {
   font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  font-size: .68rem;
+  font-size: .9444em;
   font-weight: 500;
   line-height: 1.2;
-  padding: .12rem .35rem;
-  border-radius: 4px;
+  padding: .1765em .5147em;
+  border-radius: .3676em;
   border: 1px solid var(--iswc-border);
   background: color-mix(in srgb, var(--iswc-bg) 70%, var(--iswc-bg-elev));
   color: var(--iswc-text-soft);
-  box-shadow: 0 1px 0 color-mix(in srgb, var(--iswc-border) 80%, transparent);
+  box-shadow: 0 .0919em 0 color-mix(in srgb, var(--iswc-border) 80%, transparent);
 }
 
 .empty {
-  padding: 1.5rem;
+  padding: 1.7647em;
   text-align: center;
   color: var(--iswc-text-soft);
-  font-size: .85rem;
+  font-size: .85em;
 }
 
 .footer {
   border-block-start: 1px solid var(--iswc-border-soft);
-  padding: .45rem .8rem;
-  font-size: .72rem;
+  padding: .625em 1.1111em;
+  font-size: .72em;
   color: var(--iswc-text-soft);
   display: flex;
   align-items: center;
-  gap: .85rem;
+  gap: 1.1806em;
   flex-wrap: wrap;
 
   & .hint-item {
     display: inline-flex;
     align-items: center;
-    gap: .25rem;
+    gap: .3472em;
   }
 
   & .footer-extra { display: contents; }
@@ -183,7 +183,7 @@
   & ::slotted(*) {
     display: inline-flex;
     align-items: center;
-    gap: .85rem;
+    gap: 1.1806em;
     flex-wrap: wrap;
     color: inherit;
     font: inherit;

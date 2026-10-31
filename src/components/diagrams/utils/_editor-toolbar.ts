@@ -40,16 +40,16 @@ export const EDITOR_ACTION_EVENT = 'iswc-editor-action';
 const TB_CSS = `
 :host {
   position: absolute;
-  top: 12px;
-  right: 12px;
+  top: .75em;
+  right: .75em;
   display: flex;
-  gap: 4px;
+  gap: .25em;
   z-index: 5;
   background: var(--iswc-bg-elev, #131a24);
   border: 1px solid var(--iswc-border, rgba(255,255,255,0.12));
-  border-radius: 8px;
-  padding: 6px;
-  box-shadow: 0 6px 16px rgba(0,0,0,0.35);
+  border-radius: .5em;
+  padding: .375em;
+  box-shadow: 0 .375em 1em rgba(0,0,0,0.35);
   font-family: var(--iswc-ui, ui-sans-serif, system-ui, sans-serif);
 }
 button {
@@ -57,10 +57,10 @@ button {
   border: 1px solid var(--iswc-border, rgba(255,255,255,0.18));
   background: transparent;
   color: var(--iswc-text, #e2e8f0);
-  padding: 6px 10px;
-  border-radius: 6px;
+  padding: .5em .8333em;
+  border-radius: .5em;
   cursor: pointer;
-  font: 12px var(--iswc-ui, ui-sans-serif, system-ui, sans-serif);
+  font: .75em var(--iswc-ui, ui-sans-serif, system-ui, sans-serif);
   line-height: 1;
 }
 button:hover { background: rgba(255,255,255,0.06); }
@@ -71,10 +71,10 @@ button[aria-pressed="true"] {
   border-color: transparent;
 }
 .sep {
-  width: 1px;
+  width: .0625em;
   background: var(--iswc-border, rgba(255,255,255,0.12));
   align-self: stretch;
-  margin: 0 2px;
+  margin: 0 .125em;
 }
 `;
 

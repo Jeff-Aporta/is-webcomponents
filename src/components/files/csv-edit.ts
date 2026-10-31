@@ -3,7 +3,10 @@ import { ElementBase } from '../../core/element-base.js';
 import { setOptionalAttr, setStringAttr } from '../../core/reflect.js';
 import { escapeHtml } from '../../core/dom-utils.js';
 import { loadText, resolveFileSource } from './utils/file-source.js';
+import { pintarEstado, sincronizarAlto } from './utils/file-estado.js';
 import { parseCsv, toCsv } from './utils/csv-parse.js';
+import '../actions/button.js';
+import '../media/icon.js';
 
 (() => {
   const OBSERVED = ['src', 'content', 'height'];
@@ -19,19 +22,20 @@ import { parseCsv, toCsv } from './utils/csv-parse.js';
       shadow.innerHTML = `
         <div class="root" part="root">
           <div class="toolbar" part="toolbar">
-            <button type="button" part="export" id="exp">Exportar CSV</button>
-            <button type="button" part="add-row" id="add">+ fila</button>
+            <iswc-button part="add-row" data-accion="fila" variant="text" color="text"><iswc-icon slot="start" icon="mdi:table-row-plus-after" aria-hidden="true"></iswc-icon>Fila</iswc-button>
+            <iswc-button part="add-column" data-accion="columna" variant="text" color="text"><iswc-icon slot="start" icon="mdi:table-column-plus-after" aria-hidden="true"></iswc-icon>Columna</iswc-button>
+            <iswc-button part="remove-row" data-accion="quitar-fila" variant="text" color="text" aria-label="Quitar la última fila" title="Quitar la última fila"><iswc-icon slot="start" icon="mdi:table-row-remove" aria-hidden="true"></iswc-icon></iswc-button>
+            <iswc-button part="remove-column" data-accion="quitar-columna" variant="text" color="text" aria-label="Quitar la última columna" title="Quitar la última columna"><iswc-icon slot="start" icon="mdi:table-column-remove" aria-hidden="true"></iswc-icon></iswc-button>
+            <iswc-button class="exportar" part="export" data-accion="exportar" variant="outlined" color="text"><iswc-icon slot="start" icon="mdi:download" aria-hidden="true"></iswc-icon>Exportar CSV</iswc-button>
           </div>
           <div class="stage" part="stage"></div>
         </div>`;
       adoptCss(shadow, import.meta.url);
       this.#stage = shadow.querySelector('.stage')!;
-      shadow.getElementById('exp')!.addEventListener('click', () => this.#export());
-      shadow.getElementById('add')!.addEventListener('click', () => {
-        const cols = this.#rows[0]?.length || 1;
-        this.#rows.push(Array.from({ length: cols }, () => ''));
-        this.#paint();
-        this.#emitChange();
+      shadow.querySelector('.toolbar')!.addEventListener('click', (ev) => {
+        const accion = (ev.target as HTMLElement).closest<HTMLElement>('[data-accion]')?.dataset['accion'];
+        if (accion === 'exportar') this.#export();
+        else if (accion) this.#editar(accion);
       });
       this.#stage.addEventListener('input', (ev) => {
         const td = (ev.target as HTMLElement).closest('td');
@@ -44,8 +48,9 @@ import { parseCsv, toCsv } from './utils/csv-parse.js';
       });
     }
 
-    onConnected() { this.#reload(); }
+    onConnected() { sincronizarAlto(this); this.#reload(); }
     onAttributeChanged(name: string) {
+      if (name === 'height') { sincronizarAlto(this); return; }
       if (name === 'content' && this.content === (this.getAttribute('content') ?? '')) return;
       this.#reload();
     }
@@ -62,16 +67,28 @@ import { parseCsv, toCsv } from './utils/csv-parse.js';
       emit(this, 'iswc-change', { value: csv, rows: this.#rows });
     }
 
+    /** Agrega o quita la última fila o columna. */
+    #editar(accion: string): void {
+      const cols = this.#rows[0]?.length || 1;
+      if (accion === 'fila') this.#rows.push(Array.from({ length: cols }, () => ''));
+      else if (accion === 'columna') this.#rows.forEach((fila) => fila.push(''));
+      else if (accion === 'quitar-fila') this.#rows.pop();
+      else if (accion === 'quitar-columna' && cols > 1) this.#rows.forEach((fila) => fila.pop());
+      this.#paint();
+      this.#emitChange();
+    }
+
     #export() {
       const a = document.createElement('a');
       a.href = URL.createObjectURL(new Blob([toCsv(this.#rows)], { type: 'text/csv' }));
       a.download = 'data.csv';
       a.click();
+      URL.revokeObjectURL(a.href);
     }
 
     #paint() {
       if (!this.#rows.length) {
-        this.#stage.innerHTML = '<p class="empty">CSV vacio</p>';
+        pintarEstado(this.#stage, 'CSV vacío');
         return;
       }
       this.#stage.innerHTML = `<table class="csv" part="table"><tbody>${
@@ -100,7 +117,7 @@ import { parseCsv, toCsv } from './utils/csv-parse.js';
         emit(this, 'iswc-load', { rows: this.#rows.length });
       } catch (e) {
         if (gen !== this.#gen) return;
-        this.#stage.innerHTML = '<p class="error">No se pudo cargar el CSV</p>';
+        pintarEstado(this.#stage, 'No se pudo cargar el CSV', 'error');
         emit(this, 'iswc-error', { reason: (e as { reason?: string })?.reason || 'fetch' });
       }
     }

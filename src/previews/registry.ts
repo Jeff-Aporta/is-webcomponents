@@ -9,6 +9,7 @@
  */
 import catalog from './catalog.js';
 import { JsonPreview } from './_kit/JsonPreview.js';
+import { resolverAnatomia } from './_kit/anatomia.js';
 import { loadDefinitionJson } from './_kit/load-json.js';
 import type {
   IswcComponentPreviewLike,
@@ -54,8 +55,8 @@ export async function loadPreview(tag: string): Promise<IswcComponentPreviewLike
     const jsonUrl = new URL(entry.json, previewsBase());
     const loaded = await loadDefinitionJson(jsonUrl) as PreviewDefinition;
     // Anatomía: el `.scss` vive junto al `.json` del componente.
-    definition = { ...loaded, anatomy: loaded.anatomy ?? { scss: jsonUrl.href.replace(/\.json$/, '.scss') } };
-    definitionCache.set(tag, loaded);
+    definition = { ...loaded, anatomy: resolverAnatomia(loaded.anatomy, jsonUrl) };
+    definitionCache.set(tag, definition);
   }
   if (!definition) return null;
 

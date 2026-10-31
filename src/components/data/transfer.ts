@@ -1,5 +1,9 @@
 import { adoptCss, defineElement, emit } from '../../core/element.js';
 import { ElementBase } from '../../core/element-base.js';
+import '../actions/button.js';
+import '../feedback/empty-state.js';
+import '../forms/input.js';
+import '../media/icon.js';
 
 /**
  * <iswc-transfer> — Doble lista de selección (vanilla, zero dependencies).
@@ -40,17 +44,17 @@ import { ElementBase } from '../../core/element-base.js';
           <span class="count" part="count">0</span>
         </div>
         <div class="search" part="search">
-          <input type="text" placeholder="Buscar…" aria-label="Buscar" />
+          <iswc-input type="search" density="compact" placeholder="Buscar…" aria-label="Buscar" clearable></iswc-input>
         </div>
-        <div class="list" part="list" role="listbox" aria-multiselectable="true" tabindex="0"></div>
+        <div class="list" part="list" role="listbox" aria-multiselectable="true"></div>
       </div>
       <div class="controls" part="controls">
-        <button type="button" class="ctrl" data-action="to-target" aria-label="Mover a destino">
-          <iswc-icon icon="mdi:chevron-double-right" aria-hidden="true"></iswc-icon>
-        </button>
-        <button type="button" class="ctrl" data-action="to-source" aria-label="Mover a origen">
-          <iswc-icon icon="mdi:chevron-double-left" aria-hidden="true"></iswc-icon>
-        </button>
+        <iswc-button class="ctrl" data-action="to-target" variant="outlined" color="text" aria-label="Mover todos a destino" title="Mover todos a destino">
+          <iswc-icon slot="start" icon="mdi:chevron-double-right" aria-hidden="true"></iswc-icon>
+        </iswc-button>
+        <iswc-button class="ctrl" data-action="to-source" variant="outlined" color="text" aria-label="Mover todos a origen" title="Mover todos a origen">
+          <iswc-icon slot="start" icon="mdi:chevron-double-left" aria-hidden="true"></iswc-icon>
+        </iswc-button>
       </div>
       <div class="pane target" part="pane">
         <div class="pane-head" part="pane-head">
@@ -58,18 +62,11 @@ import { ElementBase } from '../../core/element-base.js';
           <span class="count" part="count">0</span>
         </div>
         <div class="search" part="search">
-          <input type="text" placeholder="Buscar…" aria-label="Buscar" />
+          <iswc-input type="search" density="compact" placeholder="Buscar…" aria-label="Buscar" clearable></iswc-input>
         </div>
-        <div class="list" part="list" role="listbox" aria-multiselectable="true" tabindex="0"></div>
+        <div class="list" part="list" role="listbox" aria-multiselectable="true"></div>
       </div>
       <div class="sr-status" part="sr-status" aria-live="polite" aria-atomic="true"></div>
-    </div>
-  `;
-
-  const TITEM_TEMPLATE = document.createElement('template');
-  TITEM_TEMPLATE.innerHTML = /* html */ `
-    <div class="item" part="item" role="option">
-      <slot></slot>
     </div>
   `;
 
@@ -80,8 +77,8 @@ import { ElementBase } from '../../core/element-base.js';
     static get observedAttributes(): string[] { return [...TRANSFER_OBSERVED]; }
     #panelSource!: HTMLElement;
     #panelTarget!: HTMLElement;
-    #searchSource!: HTMLInputElement;
-    #searchTarget!: HTMLInputElement;
+    #searchSource!: HTMLElement & { value?: string };
+    #searchTarget!: HTMLElement & { value?: string };
     #listSource!: HTMLElement;
     #listTarget!: HTMLElement;
     #countSource!: HTMLElement;
@@ -97,8 +94,8 @@ import { ElementBase } from '../../core/element-base.js';
       shadow.appendChild(TRANSFER_TEMPLATE.content.cloneNode(true));
       this.#panelSource = shadow.querySelector<HTMLElement>('.pane.source')!;
       this.#panelTarget = shadow.querySelector<HTMLElement>('.pane.target')!;
-      this.#searchSource = this.#panelSource.querySelector<HTMLInputElement>('.search input')!;
-      this.#searchTarget = this.#panelTarget.querySelector<HTMLInputElement>('.search input')!;
+      this.#searchSource = this.#panelSource.querySelector<HTMLElement>('.search iswc-input')!;
+      this.#searchTarget = this.#panelTarget.querySelector<HTMLElement>('.search iswc-input')!;
       this.#listSource = this.#panelSource.querySelector<HTMLElement>('.list')!;
       this.#listTarget = this.#panelTarget.querySelector<HTMLElement>('.list')!;
       this.#countSource = this.#panelSource.querySelector<HTMLElement>('.count')!;
@@ -106,13 +103,15 @@ import { ElementBase } from '../../core/element-base.js';
       this.#titleSource = this.#panelSource.querySelector<HTMLElement>('.title')!;
       this.#titleTarget = this.#panelTarget.querySelector<HTMLElement>('.title')!;
       this.#srStatus = shadow.querySelector<HTMLElement>('.sr-status')!;
+      shadow.querySelector('[data-action="to-target"]')!.addEventListener('click', () => this.#move(true));
+      shadow.querySelector('[data-action="to-source"]')!.addEventListener('click', () => this.#move(false));
+      this.#searchSource.addEventListener('iswc-input', () => this.#render());
+      this.#searchTarget.addEventListener('iswc-input', () => this.#render());
     }
 
     onConnected() {
       if (!this.hasAttribute('source-title')) this.setAttribute('source-title', 'Disponibles');
       if (!this.hasAttribute('target-title')) this.setAttribute('target-title', 'Asignados');
-      this.#bindControls();
-      this.#bindSearch();
       this.#render();
     }
 
@@ -123,18 +122,6 @@ import { ElementBase } from '../../core/element-base.js';
 
     get values() {
       return [...this.querySelectorAll<HTMLElement>(':scope > iswc-transfer-item[selected]')].map((it: HTMLElement) => it.getAttribute('value'));
-    }
-
-    #bindControls() {
-      const btnTarget = this.shadowRoot!.querySelector<HTMLElement>('[data-action="to-target"]');
-      if (btnTarget) btnTarget.addEventListener('click', () => this.#move(true));
-      const btnSource = this.shadowRoot!.querySelector<HTMLElement>('[data-action="to-source"]');
-      if (btnSource) btnSource.addEventListener('click', () => this.#move(false));
-    }
-
-    #bindSearch() {
-      this.#searchSource.addEventListener('input', () => this.#render());
-      this.#searchTarget.addEventListener('input', () => this.#render());
     }
 
     #sync() {
@@ -165,7 +152,7 @@ import { ElementBase } from '../../core/element-base.js';
     }
 
     #visibleItems(inTarget: boolean): HTMLElement[] {
-      const term = (inTarget ? this.#searchTarget : this.#searchSource).value.toLowerCase();
+      const term = (inTarget ? this.#searchTarget : this.#searchSource).value?.trim().toLowerCase() ?? '';
       return this.#items().filter((it: HTMLElement) => it.hasAttribute('selected') === inTarget)
         .filter((it) => !term || (it.textContent ?? '').toLowerCase().includes(term));
     }
@@ -176,45 +163,73 @@ import { ElementBase } from '../../core/element-base.js';
       const target = this.#visibleItems(true);
       this.#listSource.innerHTML = '';
       this.#listTarget.innerHTML = '';
-      source.forEach((it) => this.#listSource.appendChild(this.#renderItem(it)));
-      target.forEach((it) => this.#listTarget.appendChild(this.#renderItem(it)));
+      this.#pintarLista(this.#listSource, source, this.#searchSource.value ?? '');
+      this.#pintarLista(this.#listTarget, target, this.#searchTarget.value ?? '');
       this.#countSource.textContent = String(source.length);
       this.#countTarget.textContent = String(target.length);
-      // Bloquear botón hacia target si alcanzó max
-      const max = parseInt(this.getAttribute('max-target') || '0', 10);
-      const btn = this.shadowRoot!.querySelector<HTMLButtonElement>('[data-action="to-target"]');
-      if (btn) {
-        if (max > 0 && target.length >= max) btn.disabled = true;
-        else btn.disabled = false;
+      // Bloquear el paso a target al alcanzar el máximo.
+      this.shadowRoot!.querySelector('[data-action="to-target"]')?.toggleAttribute('disabled', this.#lleno());
+    }
+
+    #pintarLista(lista: HTMLElement, items: HTMLElement[], termino: string): void {
+      if (items.length) {
+        items.forEach((it) => lista.appendChild(this.#renderItem(it)));
+        return;
       }
+      const vacio = document.createElement('iswc-empty-state');
+      vacio.setAttribute('titulo', termino.trim() ? 'Sin resultados' : 'Sin elementos');
+      lista.appendChild(vacio);
+    }
+
+    /** Tope de `max-target` alcanzado. */
+    #lleno(): boolean {
+      const max = parseInt(this.getAttribute('max-target') || '0', 10);
+      return max > 0 && this.values.length >= max;
     }
 
     #renderItem(it: HTMLElement) {
       const div = document.createElement('div');
       div.className = 'item';
       div.setAttribute('role', 'option');
+      div.setAttribute('aria-selected', String(it.hasAttribute('selected')));
       div.dataset.value = it.getAttribute('value') || '';
       div.textContent = it.textContent;
       if (it.hasAttribute('disabled')) {
         div.classList.add('disabled');
         div.setAttribute('aria-disabled', 'true');
+        return div;
       }
-      div.addEventListener('click', () => {
-        it.toggleAttribute('selected');
-        this.#render();
-        this.#emitChange(it);
+      div.tabIndex = 0;
+      div.addEventListener('click', () => this.#alternar(it));
+      div.addEventListener('keydown', (ev) => {
+        if (ev.key !== 'Enter' && ev.key !== ' ') return;
+        ev.preventDefault();
+        this.#alternar(it);
       });
       return div;
     }
 
+    /** Pasa un elemento a la otra lista; el foco queda en él para seguir con el teclado. */
+    #alternar(it: HTMLElement): void {
+      if (!it.hasAttribute('selected') && this.#lleno()) {
+        this.#announce('Se alcanzó el máximo de elementos asignados');
+        return;
+      }
+      it.toggleAttribute('selected');
+      this.#render();
+      this.#emitChange(it);
+      const valor = it.getAttribute('value') || '';
+      const movido = [...this.shadowRoot!.querySelectorAll<HTMLElement>('.item')].find((d) => d.dataset.value === valor);
+      movido?.focus();
+    }
+
     #move(toTarget: boolean): void {
-      const max = parseInt(this.getAttribute('max-target') || '0', 10);
       const items = this.#items();
       const movedLabels: string[] = [];
       items.forEach((it: HTMLElement) => {
         if (it.hasAttribute('disabled')) return;
         if (toTarget) {
-          if (max > 0 && items.filter((x: HTMLElement) => x.hasAttribute('selected')).length >= max) return;
+          if (this.#lleno()) return;
           if (!it.hasAttribute('selected')) movedLabels.push((it.textContent || it.getAttribute('value') || '').trim());
           it.setAttribute('selected', '');
         } else {
@@ -228,7 +243,7 @@ import { ElementBase } from '../../core/element-base.js';
         const dest = toTarget ? 'destino' : 'origen';
         this.#announce(`Movidos ${movedLabels.length} elemento${movedLabels.length === 1 ? '' : 's'} a ${dest}: ${movedLabels.slice(0, 3).join(', ')}${movedLabels.length > 3 ? '…' : ''}`);
       }
-      emit(this, 'iswc-transfer-change', { source: this.values.length, target: this.values.length, values: this.values });
+      emit(this, 'iswc-transfer-change', { source: items.length - this.values.length, target: this.values.length, values: this.values });
     }
 
     #emitChange(item: HTMLElement): void {

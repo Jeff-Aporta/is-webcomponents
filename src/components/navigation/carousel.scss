@@ -14,7 +14,7 @@
   inline-size: 100%;
   aspect-ratio: var(--aspect-ratio, 16/9);
   overflow: hidden;
-  border-radius: 0.75rem;
+  border-radius: 0.75em;
   background: var(--iswc-bg-elev);
   border: 1px solid var(--iswc-carousel-control-border);
 }
@@ -52,21 +52,21 @@
 
 .indicators {
   position: absolute;
-  inset-block-end: 0.5rem;
+  inset-block-end: 0.5em;
   inset-inline-start: 50%;
   transform: translateX(-50%);
   display: flex;
-  gap: 0.5rem;
-  padding: 0.25rem 0.5rem;
+  gap: 0.5em;
+  padding: 0.25em 0.5em;
   background: rgb(0 0 0 / 30%);
-  border-radius: 999px;
+  border-radius: 999em;
   z-index: 2;
 
   &[hidden] { display: none; }
 
   button {
-    inline-size: 0.5rem;
-    block-size: 0.5rem;
+    inline-size: .6002em;
+    block-size: .6002em;
     border-radius: 50%;
     border: 0;
     padding: 0;
@@ -85,8 +85,8 @@
   position: absolute;
   inset-block-start: 50%;
   transform: translateY(-50%);
-  inline-size: 2.5rem;
-  block-size: 2.5rem;
+  inline-size: 3.0012em;
+  block-size: 3.0012em;
   border-radius: 50%;
   border: 1px solid var(--iswc-carousel-control-border);
   background: var(--iswc-carousel-control-bg);
@@ -105,8 +105,8 @@
   &[hidden] { display: none; }
 }
 
-.prev { inset-inline-start: 0.5rem; }
-.next { inset-inline-end: 0.5rem; }
+.prev { inset-inline-start: .6002em; }
+.next { inset-inline-end: .6002em; }
 
 /* Item internal */
 .citem {
@@ -115,6 +115,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 1rem;
+  padding: 1em;
   box-sizing: border-box;
 }

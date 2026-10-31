@@ -1,38 +1,38 @@
-﻿---
+---
 tag: iswc-mutation-observer
 tags:
   - iswc-mutation-observer
 category: helpers
 status: public
 source: ./mutation-observer.ts
-style: ./mutation-observer.css
+style: ./mutation-observer.scss
 preview: ./mutation-observer.json
 ---
 # `<iswc-mutation-observer>`
 
-## PropÃ³sito
+## Propósito
 
-Responde a: Â¿cambiÃ³ el HTML de este nodo?
-Cuando alguien aÃ±ade/quita hijos, cambia un atributo o el texto, emite
-iswc-mutate con el detalle de quÃ© pasÃ³.
+Responde a: ¿cambió el HTML de este nodo?
+Cuando alguien añade/quita hijos, cambia un atributo o el texto, emite
+iswc-mutate con el detalle de qué pasó.
 
-Este mÃ³dulo registra `<iswc-mutation-observer>`.
+Este módulo registra `<iswc-mutation-observer>`.
 
-## CuÃ¡ndo usarlo
+## Cuándo usarlo
 
-Formato, observaciÃ³n y posicionamiento reutilizable sobre APIs nativas.
+Formato, observación y posicionamiento reutilizable sobre APIs nativas.
 
-## CuÃ¡ndo no usarlo
+## Cuándo no usarlo
 
 No crear wrapper nuevo si Intl/Observer/position existente cubre caso.
 
-## ImportaciÃ³n
+## Importación
 
 ```js
 import './mutation-observer.js';
 ```
 
-## Ejemplo mÃ­nimo
+## Ejemplo mínimo
 
 ```html
 <iswc-mutation-observer></iswc-mutation-observer>
@@ -46,12 +46,12 @@ import './mutation-observer.js';
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
-| `disabled` | boolean | Fuente define default/restricciÃ³n. |
-| `attr` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `child-list` | boolean | Fuente define default/restricciÃ³n. |
-| `character-data` | boolean | Fuente define default/restricciÃ³n. |
+| `disabled` | boolean | Fuente define default/restricción. |
+| `attr` | boolean | Observa cambios de atributos. |
+| `child-list` | boolean | Fuente define default/restricción. |
+| `character-data` | boolean | Fuente define default/restricción. |
 
-#### Propiedades pÃºblicas
+#### Propiedades públicas
 
 No expone.
 
@@ -64,13 +64,13 @@ No expone.
 ### Eventos
 
 
-| Evento | DescripciÃ³n |
+| Evento | Descripción |
 | --- | --- |
-| `iswc-mutate` | Emitido al detectarse una mutaciÃ³n en el Ã¡rbol observado. |
+| `iswc-mutate` | Emitido al detectarse una mutación en el árbol observado. |
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `iswc-mutate` | sÃ­ | sÃ­ | sÃ­ | no |
+| `iswc-mutate` | sí | sí | sí | no |
 
 
 <details>
@@ -85,11 +85,11 @@ el.addEventListener('iswc-mutate', (e) => {
 
 </details>
 
-### MÃ©todos y propiedades pÃºblicas
+### Métodos y propiedades públicas
 
 No expone.
 
-Propiedades pÃºblicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
+Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
 
 ### CSS parts
 
@@ -103,19 +103,19 @@ No expone.
 
 No expone.
 
-### IntegraciÃ³n con formularios
+### Integración con formularios
 
-No declara integraciÃ³n form-associated propia en este mÃ³dulo.
+No declara integración form-associated propia en este módulo.
 
 ## Comportamiento
 
-DocumentaciÃ³n de cabecera preservada desde fuente:
+Documentación de cabecera preservada desde fuente:
 
-> <iswc-mutation-observer> â€” Web Component (vanilla).
-> display:contents â€” observa mutaciones en el host y sus hijos.
+> <iswc-mutation-observer> — Web Component (vanilla).
+> display:contents — observa mutaciones en el host y sus hijos.
 > Atributos (booleanos salvo attr)
 >   disabled         boolean
->   attr             string â€” filtro de atributos
+>   attr             string — filtro de atributos
 >   child-list       boolean (default true)
 >   character-data   boolean
 > Eventos
@@ -125,11 +125,11 @@ DocumentaciÃ³n de cabecera preservada desde fuente:
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 
-Tags del mÃ³dulo: `<iswc-mutation-observer>`.
+Tags del módulo: `<iswc-mutation-observer>`.
 
 ## Accesibilidad
 
-Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: ninguno explÃ­cito en fuente.
+Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: ninguno explícito en fuente.
 
 ## Ejemplo avanzado
 
@@ -139,7 +139,7 @@ Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: ninguno ex
 
 ## Errores comunes
 
-- Usar tag sin importar mÃ³dulo primero.
+- Usar tag sin importar módulo primero.
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
@@ -147,15 +147,15 @@ Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: ninguno ex
 
 ## Reglas para LLM
 
-- Reusar componente y dependencias antes de implementaciÃ³n paralela.
+- Reusar componente y dependencias antes de implementación paralela.
 - Mantener nombres exactos de tags y API.
-- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explÃ­cito.
-- Leer callers/shared antes de cambiar; corregir raÃ­z comÃºn.
-- No modificar API basÃ¡ndose solo en preview.
+- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explícito.
+- Leer callers/shared antes de cambiar; corregir raíz común.
+- No modificar API basándose solo en preview.
 
 ## Fuentes
 
 - [JavaScript](./mutation-observer.ts)
-- [CSS](./mutation-observer.css)
-- [Ãndice de categorÃ­a](../../specs/componentes.md)
+- [CSS](./mutation-observer.scss)
+- [Índice de categoría](../../../specs/componentes.md)
 - [Preview](./mutation-observer.json)

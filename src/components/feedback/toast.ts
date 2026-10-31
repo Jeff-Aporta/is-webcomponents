@@ -16,7 +16,7 @@ import { normalizeIntent } from '../../core/intent.js';
  * Métodos
  *   create(message, options?) → Promise<iswc-toast-item>
  *     options: { color, icon, duration, allowHtml, caption, log } — sin size
- *     color: brand | success | warning | danger | neutral
+ *     color: brand | info | success | warning | danger | error | neutral | text
  *     caption: texto menor bajo el título (slot caption)
  *     log: payload de consola; viaja en iswc-after-show, no se pinta
  *     duration default 5000; 0 = hasta dismiss
@@ -49,13 +49,15 @@ import { normalizeIntent } from '../../core/intent.js';
   ] as const;
   type Placement = (typeof VALID_PLACEMENT)[number];
 
-  type ToastColor = 'brand' | 'success' | 'warning' | 'danger' | 'neutral';
-  const DEFAULT_ICONS: Record<ToastColor, string> = {
+  const DEFAULT_ICONS: Record<string, string> = {
     brand: 'mdi:information',
+    info: 'mdi:information',
     success: 'mdi:check-circle',
     warning: 'mdi:alert',
     danger: 'mdi:alert-circle',
-    neutral: 'mdi:information-outline'
+    error: 'mdi:alert-circle',
+    neutral: 'mdi:information-outline',
+    text: 'mdi:information-outline',
   };
 
   interface ToastCreateOptions {
@@ -133,7 +135,7 @@ import { normalizeIntent } from '../../core/intent.js';
     async create(message: string, options: ToastCreateOptions = {}): Promise<IswcToastItemEl> {
       await customElements.whenDefined('iswc-toast-item');
       const item = document.createElement('iswc-toast-item') as IswcToastItemEl;
-      const color = normalizeIntent(options.color ?? options.variant, 'neutral') as ToastColor;
+      const color = normalizeIntent(options.color ?? options.variant, 'neutral');
       item.color = color;
 
       const duration = options.duration != null ? Number(options.duration) : 5000;
@@ -149,6 +151,8 @@ import { normalizeIntent } from '../../core/intent.js';
           ? iconOpt
           : DEFAULT_ICONS[color];
         iconEl.setAttribute('icon', iconName);
+        // data-loading no sirve: iswc-icon lo usa para su propia carga y lo quita al pintar el SVG.
+        iconEl.toggleAttribute('data-girando', iconName === 'mdi:loading');
         item.appendChild(iconEl);
       }
 
@@ -179,7 +183,6 @@ import { normalizeIntent } from '../../core/intent.js';
         duration: 0,
         ...loading.options,
       });
-      item.querySelector<HTMLElement>('iswc-icon[slot="icon"]')?.setAttribute('data-loading', '');
       try {
         const data = await p;
         const ok = this.#normalizePromiseMsg(callbacks.success, data, 'Listo');
@@ -224,15 +227,11 @@ import { normalizeIntent } from '../../core/intent.js';
     /** Actualiza un toast vivo: mensaje, color, icono y relanza el timer. */
     #update(item: IswcToastItemEl, message: string, options: ToastCreateOptions = {}): void {
       if (!item?.isConnected) return;
-      const color = normalizeIntent(
-        options.color ?? options.variant ?? item.color,
-        'neutral',
-      ) as ToastColor;
-      item.color = color;
+      item.color = normalizeIntent(options.color ?? options.variant ?? item.color, 'neutral');
       this.#writeCopy(item, message, options);
       const iconEl = item.querySelector<HTMLElement>('iswc-icon[slot="icon"]');
       if (iconEl) {
-        iconEl.removeAttribute('data-loading');
+        iconEl.removeAttribute('data-girando');
         if (options.icon) iconEl.setAttribute('icon', String(options.icon));
       }
       const duration = options.duration != null ? Number(options.duration) : 5000;

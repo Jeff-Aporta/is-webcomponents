@@ -5,7 +5,7 @@ tags:
 category: data
 status: public
 source: ./trace-log.ts
-style: ./trace-log.css
+style: ./trace-log.scss
 preview: ./trace-log.json
 ---
 # `<iswc-trace-log>`

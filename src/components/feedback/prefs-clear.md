@@ -1,41 +1,41 @@
-﻿---
+---
 tag: iswc-prefs-clear
 tags:
   - iswc-prefs-clear
 category: feedback
 status: public
 source: ./prefs-clear.ts
-style: ./prefs-clear.css
+style: ./prefs-clear.scss
 preview: ./prefs-clear.json
 ---
 # `<iswc-prefs-clear>`
 
-## PropÃ³sito
+## Propósito
 
 Deja la app como en su primera carga: `clearIswcStorage()` (core/iswc-storage) borra
 todas las llaves `iswc:` de localStorage y sessionStorage (config de la app `iswc:app-cfg`,
 `iswc:root` con splits/scrolls/grids, SVG de iconos `iswc:icon:*`, overrides de diagramas)
 y vacia las caches en memoria del kit. `listIswcKeys()` lista lo que hay.
-Ãštil para auditar la carga inicial sin prefs viejas que deformen el layout.
+Útil para auditar la carga inicial sin prefs viejas que deformen el layout.
 
-Este mÃ³dulo registra `<iswc-prefs-clear>`.
+Este módulo registra `<iswc-prefs-clear>`.
 
-## CuÃ¡ndo usarlo
+## Cuándo usarlo
 
-AuditorÃ­a UX/UI, demos, o un control de â€œrestablecer panelesâ€ en herramientas internas.
+Auditoría UX/UI, demos, o un control de “restablecer paneles” en herramientas internas.
 
-## CuÃ¡ndo no usarlo
+## Cuándo no usarlo
 
-No lo pongas como acciÃ³n cotidiana del usuario final si no entiende que perderÃ¡
-tamaÃ±os de panel y posiciones de scroll.
+No lo pongas como acción cotidiana del usuario final si no entiende que perderá
+tamaños de panel y posiciones de scroll.
 
-## ImportaciÃ³n
+## Importación
 
 ```js
 import './prefs-clear.js';
 ```
 
-## Ejemplo mÃ­nimo
+## Ejemplo mínimo
 
 ```html
 <iswc-prefs-clear></iswc-prefs-clear>
@@ -46,16 +46,16 @@ import './prefs-clear.js';
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
-| `confirm` | boolean | `false` = no pide confirmaciÃ³n (default true) |
+| `confirm` | boolean | `false` = no pide confirmación (default true). La pregunta es un `iswc-confirm-modal` que lista lo que se va a borrar. |
 | `reload` | boolean | `false` = no recarga tras limpiar (default true) |
 | `scope` | `prefs` \| `cache` \| `all` | `prefs` (default): todas las llaves `iswc:` (local y session) y las caches en memoria del kit (`clearIswcStorage()`). `cache`: ademas Cache Storage, IndexedDB y sessionStorage. `all`: ademas todo el localStorage del origen (preferencias y sesion). |
-| `variant` / `color` / `shape` | string | Se reenvÃ­an al `iswc-button` interno |
-| `title` / `aria-label` | string | Tooltip y nombre accesible (default â€œLimpiar memoria UIâ€) |
+| `variant` / `color` / `shape` | string | Se reenvían al `iswc-button` interno |
+| `title` / `aria-label` | string | Tooltip y nombre accesible (default “Limpiar memoria UI”) |
 
 ## Eventos
 
 
-| Evento | DescripciÃ³n |
+| Evento | Descripción |
 | --- | --- |
 | `iswc-prefs-clear` | Emitido al limpiar la memoria UI persistente. |
 
@@ -78,8 +78,8 @@ el.addEventListener('iswc-prefs-clear', (e) => {
 
 ## API
 
-- `clear()` â€” ejecuta la limpieza
-- `peek()` â€” lee el root de prefs sin borrar
+- `clear()` — ejecuta la limpieza
+- `peek()` — lee el root de prefs sin borrar
 
 
 ### CSS parts
@@ -87,3 +87,17 @@ el.addEventListener('iswc-prefs-clear', (e) => {
 | Part | Uso |
 | --- | --- |
 | `button` | Personalizable con `::part(button)`. |
+
+## Comportamiento
+
+Por defecto pide confirmación con `<iswc-confirm-modal>`; `confirm="false"` la quita. Después borra según `scope` y recarga salvo que `reload` diga lo contrario.
+
+## Accesibilidad
+
+Es un `<iswc-button>` con `aria-label`. Sin texto en el slot queda solo el ícono, y `aria-label` o `title` le dan el nombre.
+
+## Reglas para LLM
+
+- `scope="all"` borra además todo el localStorage del origen, sesión incluida: úsalo solo a propósito.
+- No uses `window.confirm`: el componente ya trae la confirmación del kit.
+- Para limpiar sin interfaz, llama a la API del módulo.

@@ -1,5 +1,6 @@
 {
   "$schema": "iswc-preview/v1",
+  "anatomy": {},
   "tag": "iswc-ui",
   "category": "helpers",
   "title": "IswcUi <span class=\"ui-chip-title\">(módulo · no es un tag)</span>",

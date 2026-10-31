@@ -16,11 +16,26 @@
           "kind": "demo",
           "html": [
             "<iswc-breadcrumb>",
-            "            <iswc-breadcrumb-item href=\"#\"><iswc-icon slot=\"start\" icon=\"mdi:home\"></iswc-icon>Inicio</iswc-breadcrumb-item>",
+            "            <iswc-breadcrumb-item id=\"pg-breadcrumb-item\" href=\"#\"><iswc-icon slot=\"start\" icon=\"mdi:home\"></iswc-icon>Inicio</iswc-breadcrumb-item>",
             "            <iswc-breadcrumb-item href=\"#\">Contabilidad</iswc-breadcrumb-item>",
             "            <iswc-breadcrumb-item href=\"#\">Comprobantes</iswc-breadcrumb-item>",
             "            <iswc-breadcrumb-item>Detalle</iswc-breadcrumb-item>",
             "          </iswc-breadcrumb>"
+          ],
+          "target": "#pg-breadcrumb-item",
+          "controls": [
+            {
+              "control": "text",
+              "prop": "attr:href",
+              "label": "href",
+              "default": "#"
+            },
+            {
+              "control": "text",
+              "prop": "attr:icon",
+              "label": "icon",
+              "default": "mdi:home"
+            }
           ]
         }
       ]

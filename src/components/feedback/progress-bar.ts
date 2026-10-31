@@ -9,8 +9,9 @@ import { setStringAttr } from '../../core/reflect.js';
  *   value           number 0–100
  *   label           string — aria-label
  *   indeterminate   boolean
+ *   color           brand | info | success | warning | danger (default brand)
  *
- * Slots: default — etiqueta interna
+ * Slots: default — texto bajo la barra
  *
  * role=progressbar
  * CSS Parts: ::part(progress-bar) ::part(indicator) ::part(label)
@@ -21,8 +22,8 @@ import { setStringAttr } from '../../core/reflect.js';
   TEMPLATE.innerHTML = /* html */ `
     <div part="progress-bar" class="track" role="progressbar">
       <div part="indicator" class="indicator"></div>
-      <span part="label" class="label"><slot></slot></span>
     </div>
+    <span part="label" class="label" hidden><slot></slot></span>
   `;
 
   const OBSERVED = ['value', 'label', 'indeterminate'];
@@ -33,6 +34,7 @@ import { setStringAttr } from '../../core/reflect.js';
 
     #track!: HTMLElement;
     #indicator!: HTMLElement;
+    #label!: HTMLElement;
     constructor() {
       super();
       const shadow = this.attachShadow({ mode: 'open' });
@@ -40,6 +42,11 @@ import { setStringAttr } from '../../core/reflect.js';
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
       this.#track = shadow.querySelector<HTMLElement>('.track')!;
       this.#indicator = shadow.querySelector<HTMLElement>('.indicator')!;
+      this.#label = shadow.querySelector<HTMLElement>('.label')!;
+      shadow.querySelector('slot')!.addEventListener('slotchange', (e) => {
+        const nodos = (e.target as HTMLSlotElement).assignedNodes();
+        this.#label.hidden = !nodos.some((n) => n.nodeType === Node.ELEMENT_NODE || n.textContent?.trim());
+      });
     }
 
     onConnected() {
@@ -79,13 +86,14 @@ import { setStringAttr } from '../../core/reflect.js';
         // siendo progressbar pero aria-busy=true avisa al SR de que ignore el
         // valuenow ausente y anuncie que el proceso sigue en curso.
         this.#track.removeAttribute('aria-valuenow');
-        this.#track.setAttribute('aria-valuetext', label || 'Loading');
+        this.#track.setAttribute('aria-valuetext', label || 'Cargando');
         this.#track.setAttribute('aria-busy', 'true');
         this.#indicator.style.width = '';
         this.#indicator.classList.add('iswc-indeterminate');
       } else {
         this.#track.setAttribute('aria-valuenow', String(val));
-        this.#track.setAttribute('aria-valuetext', label || `${val}%`);
+        // El nombre va en aria-label: valuetext dice cuánto lleva, no qué es.
+        this.#track.setAttribute('aria-valuetext', `${val}%`);
         this.#track.setAttribute('aria-busy', 'false');
         this.#indicator.style.width = `${val}%`;
         this.#indicator.classList.remove('iswc-indeterminate');

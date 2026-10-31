@@ -22,6 +22,7 @@ TEMPLATE.innerHTML = /* html */ `
 class IswcLoading extends PropsElement<LoadingProps> {
   static override get observedAttributes(): string[] { return atributosDe(INICIAL); }
 
+  #spinner: HTMLElement;
   #texto: HTMLElement;
 
   constructor() {
@@ -29,6 +30,7 @@ class IswcLoading extends PropsElement<LoadingProps> {
     const shadow = this.attachShadow({ mode: 'open' });
     adoptCss(shadow, import.meta.url);
     shadow.appendChild(TEMPLATE.content.cloneNode(true));
+    this.#spinner = shadow.querySelector<HTMLElement>('iswc-spinner')!;
     this.#texto = shadow.querySelector<HTMLElement>('.texto')!;
   }
 
@@ -42,6 +44,8 @@ class IswcLoading extends PropsElement<LoadingProps> {
     const { texto } = this.props;
     this.#texto.textContent = texto;
     this.#texto.hidden = !texto;
+    // Con texto, el estado lo anuncia el texto: el «Cargando» del spinner sobraría.
+    this.#spinner.setAttribute('aria-hidden', String(Boolean(texto)));
   }
 }
 

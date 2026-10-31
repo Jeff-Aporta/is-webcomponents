@@ -188,6 +188,17 @@
       ]
     },
     {
+      "id": "variantes",
+      "title": "Variantes",
+      "lede": "Efectos comunes de título. Todos parten de color y mix, y se ajustan con tokens.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<iswc-heading level=\"2\" variant=\"solid\">Título solid</iswc-heading><iswc-heading level=\"2\" variant=\"gradient\">Título gradient</iswc-heading><iswc-heading level=\"2\" variant=\"glow\">Título glow</iswc-heading><iswc-heading level=\"2\" variant=\"outlined\">Título outlined</iswc-heading><iswc-heading level=\"2\" variant=\"pattern\">Título pattern</iswc-heading><iswc-heading level=\"2\" variant=\"shadow\">Título shadow</iswc-heading><iswc-heading level=\"2\" variant=\"highlight\">Título highlight</iswc-heading>"
+        }
+      ]
+    },
+    {
       "id": "levels",
       "title": "Niveles",
       "lede": "Sin <code class=\"code\">mix</code> cada nivel usa su default (15 · 30 · 45 · 65 · 80 · 90 %).",

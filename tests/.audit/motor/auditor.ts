@@ -32,6 +32,7 @@ import {
   extraerMetaComponente,
   ejecutarValidacionConsistencia,
 } from './validators/consistency.js';
+import { leerManifest, validarFicha } from './validators/cuatro-archivos.js';
 import {
   crearSesion, urlPreview, inspeccionarSinBrowser,
 } from '../engine/stagehand.js';
@@ -131,6 +132,14 @@ export async function auditarComponente(estado: EstadoMotor, entrada: EntradaCat
   if (tieneModulo) {
     hallazgos.push(...auditarRuntimeComponente(entrada.rutaModuloAbsoluta!, tag, { esModulo: entrada.esModulo }));
     hallazgos.push(...auditarCssHermano(entrada.rutaModuloAbsoluta!, tag));
+  }
+
+  // 5b. Los cuatro archivos del tag: .ts, .scss, .md y .json.
+  const ficha = leerManifest(estado.raiz).find((f) => f.tag === tag);
+  if (ficha) {
+    for (const f of validarFicha(estado.raiz, ficha)) {
+      hallazgos.push({ categoria: 'runtime', severidad: 'error', tag, ruta: f.archivo, mensaje: `cuatro-archivos: ${f.mensaje}` });
+    }
   }
 
   // 6. E2E con Stagehand (si está habilitado).

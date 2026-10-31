@@ -1,4 +1,4 @@
-﻿---
+---
 tag: iswc-dock
 tags:
   - iswc-dock
@@ -6,35 +6,35 @@ tags:
 category: layout
 status: public
 source: ./dock.ts
-style: ./dock.css
+style: ./dock.scss
 preview: ./dock.json
 ---
 # `<iswc-dock>`
 
-## PropÃ³sito
+## Propósito
 
-Barra de accesos tipo Dock de macOS. Los Ã­tems se magnifican al acercar el
-puntero, con caÃ­da suave segÃºn la distancia al Ã­tem bajo el cursor.
+Barra de accesos tipo Dock de macOS. Los ítems se magnifican al acercar el
+puntero, con caída suave según la distancia al ítem bajo el cursor.
 
-Este mÃ³dulo registra `<iswc-dock>` y `<iswc-dock-item>`.
+Este módulo registra `<iswc-dock>` y `<iswc-dock-item>`.
 
-## CuÃ¡ndo usarlo
+## Cuándo usarlo
 
-Barra compacta de accesos frecuentes (navegaciÃ³n secundaria, launcher de
-acciones) donde la magnificaciÃ³n aporta seÃ±al de foco.
+Barra compacta de accesos frecuentes (navegación secundaria, launcher de
+acciones) donde la magnificación aporta señal de foco.
 
-## CuÃ¡ndo no usarlo
+## Cuándo no usarlo
 
-No sustituye navegaciÃ³n principal ni menÃºs jerÃ¡rquicos: para eso usar
+No sustituye navegación principal ni menús jerárquicos: para eso usar
 `<iswc-menu>` / `<iswc-mega-menu>` / `<iswc-breadcrumb>`.
 
-## ImportaciÃ³n
+## Importación
 
 ```js
 import './dock.js';
 ```
 
-## Ejemplo mÃ­nimo
+## Ejemplo mínimo
 
 ```html
 <iswc-dock>
@@ -47,45 +47,45 @@ import './dock.js';
 
 ### Atributos y propiedades
 
-#### Atributos observados â€” `<iswc-dock>`
+#### Atributos observados — `<iswc-dock>`
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
 | `position` | `bottom` \| `top` \| `left` \| `right` | Default `bottom`. |
-| `max-scale` | number | Factor mÃ¡ximo de magnificaciÃ³n, default `1.6`. |
-| `range` | number | PÃ­xeles hasta donde cae la magnificaciÃ³n, default `110`. |
+| `max-scale` | number | Factor máximo de magnificación, default `1.6`. |
+| `range` | number | Píxeles hasta donde cae la magnificación, default `110`. |
 
-#### Atributos observados â€” `<iswc-dock-item>`
+#### Atributos observados — `<iswc-dock-item>`
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
-| `icon` | string | Nombre de icono (colecciÃ³n Iconify del kit). |
-| `label` | string | Texto visible y accesible del Ã­tem. |
-| `href` | string | Si estÃ¡ presente, el Ã­tem navega como enlace. |
-| `active` | boolean | Marca el Ã­tem activo. |
+| `icon` | string | Nombre de icono (colección Iconify del kit). |
+| `label` | string | Texto visible y accesible del ítem. |
+| `href` | string | Si está presente, el ítem navega como enlace. |
+| `active` | boolean | Marca el ítem activo. |
 
-#### Propiedades pÃºblicas
+#### Propiedades públicas
 
-No expone propiedades pÃºblicas propias; el estado se lee de los atributos.
+No expone propiedades públicas propias; el estado se lee de los atributos.
 
 ### Slots
 
 | Slot | Uso |
 | --- | --- |
-| (default) de `<iswc-dock>` | Ãtems `<iswc-dock-item>`. |
+| (default) de `<iswc-dock>` | Ítems `<iswc-dock-item>`. |
 
 ### Eventos
 
 
-| Evento | DescripciÃ³n |
+| Evento | Descripción |
 | --- | --- |
 | `iswc-select` | Emitido al seleccionar un elemento. |
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `iswc-select` | `{ item }` | sÃ­ | sÃ­ | no |
+| `iswc-select` | `{ item }` | sí | sí | no |
 
-`iswc-select` se emite sobre el `<iswc-dock>` contenedor, no sobre el Ã­tem.
+`iswc-select` se emite sobre el `<iswc-dock>` contenedor, no sobre el ítem.
 
 
 <details>
@@ -100,17 +100,17 @@ el.addEventListener('iswc-select', (e) => {
 
 </details>
 
-### MÃ©todos y propiedades pÃºblicas
+### Métodos y propiedades públicas
 
-No expone mÃ©todos pÃºblicos; el componente es declarativo.
+No expone métodos públicos; el componente es declarativo.
 
 ### CSS parts
 
 | Part | Uso |
 | --- | --- |
 | `root` | Contenedor de la barra (`<iswc-dock>`). |
-| `item` | Ancla del Ã­tem (`<iswc-dock-item>`). |
-| `label` | Etiqueta del Ã­tem. |
+| `item` | Ancla del ítem (`<iswc-dock-item>`). |
+| `label` | Etiqueta del ítem. |
 
 ### Custom states
 
@@ -121,24 +121,24 @@ No expone custom states.
 | Token | Uso |
 | --- | --- |
 | `--iswc-bg-elev` | Fondo de la barra. |
-| `--iswc-bg-soft` | Fondo del Ã­tem en reposo. |
+| `--iswc-bg-soft` | Fondo del ítem en reposo. |
 | `--iswc-border` | Borde de la barra. |
 | `--iswc-text` | Color de icono y etiqueta. |
 | `--iswc-text-soft` | Etiqueta atenuada. |
-| `--iswc-accent` | Fondo del Ã­tem activo. |
-| `--iswc-on-accent` | Contenido sobre el Ã­tem activo. |
+| `--iswc-accent` | Fondo del ítem activo. |
+| `--iswc-on-accent` | Contenido sobre el ítem activo. |
 | `--iswc-focus` | Anillo de foco. |
 
-### IntegraciÃ³n con formularios
+### Integración con formularios
 
-No declara integraciÃ³n form-associated.
+No declara integración form-associated.
 
 ## Comportamiento
 
-- `pointermove` sobre la barra recalcula la escala de cada Ã­tem en funciÃ³n de
+- `pointermove` sobre la barra recalcula la escala de cada ítem en función de
   la distancia al cursor, aplicada por `--scale` y acotada por `max-scale`.
-  El cÃ¡lculo se agenda en `requestAnimationFrame`.
-- `pointerleave` limpia la magnificaciÃ³n.
+  El cálculo se agenda en `requestAnimationFrame`.
+- `pointerleave` limpia la magnificación.
 - `disconnectedCallback` cancela el frame pendiente.
 - `position` cambia el eje de la barra y el eje sobre el que se mide la
   distancia.
@@ -149,12 +149,12 @@ No declara integraciÃ³n form-associated.
 - [`../_shared/define.js`](../_shared/define.js)
 - [`../_shared/emit.js`](../_shared/emit.js)
 
-Tags del mÃ³dulo: `<iswc-dock>`, `<iswc-dock-item>`.
+Tags del módulo: `<iswc-dock>`, `<iswc-dock-item>`.
 
 ## Accesibilidad
 
-El Ã­tem se renderiza como `<a tabindex="0">`, alcanzable con teclado. `label`
-alimenta el texto accesible. La magnificaciÃ³n es puramente visual: no cambia
+El ítem se renderiza como `<a tabindex="0">`, alcanzable con teclado. `label`
+alimenta el texto accesible. La magnificación es puramente visual: no cambia
 orden de foco ni contenido anunciado.
 
 ## Ejemplo avanzado
@@ -174,21 +174,21 @@ orden de foco ni contenido anunciado.
 ## Errores comunes
 
 - Escuchar `iswc-select` en el `<iswc-dock-item>`: se emite en el contenedor.
-- Usar tag sin importar mÃ³dulo primero.
+- Usar tag sin importar módulo primero.
 - Poner elementos que no son `<iswc-dock-item>` en el slot: no reciben escala.
-- Subir `max-scale` sin subir `range`: la magnificaciÃ³n queda abrupta.
+- Subir `max-scale` sin subir `range`: la magnificación queda abrupta.
 
 ## Reglas para LLM
 
-- Reusar componente y dependencias antes de implementaciÃ³n paralela.
+- Reusar componente y dependencias antes de implementación paralela.
 - Mantener nombres exactos de tags y API.
-- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explÃ­cito.
-- Leer callers/shared antes de cambiar; corregir raÃ­z comÃºn.
-- No modificar API basÃ¡ndose solo en preview.
+- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explícito.
+- Leer callers/shared antes de cambiar; corregir raíz común.
+- No modificar API basándose solo en preview.
 
 ## Fuentes
 
 - [JavaScript](./dock.ts)
-- [CSS](./dock.css)
-- [Ãndice de categorÃ­a](../../specs/componentes.md)
+- [CSS](./dock.scss)
+- [Índice de categoría](../../../specs/componentes.md)
 - [Preview](./dock.json)

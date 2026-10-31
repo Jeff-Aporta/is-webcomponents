@@ -13,7 +13,45 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-floating placement=\"bottom\" active><button slot=\"anchor\" type=\"button\">Ancla</button><div>Contenido anclado. No usar este tag en apps.</div></iswc-floating>"
+          "html": "<iswc-floating id=\"pg-floating\" placement=\"bottom\" active><button slot=\"anchor\" type=\"button\">Ancla</button><div>Contenido anclado. No usar este tag en apps.</div></iswc-floating>",
+          "target": "#pg-floating",
+          "controls": [
+            {
+              "control": "select",
+              "prop": "attr:placement",
+              "label": "placement",
+              "options": [
+                "top",
+                "right",
+                "bottom",
+                "left"
+              ],
+              "default": "bottom"
+            },
+            {
+              "control": "range",
+              "prop": "attr:distance",
+              "label": "distance",
+              "min": 0,
+              "max": 32,
+              "step": 1,
+              "default": 0
+            },
+            {
+              "control": "range",
+              "prop": "attr:skidding",
+              "label": "skidding",
+              "min": -32,
+              "max": 32,
+              "step": 1,
+              "default": 0
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:arrow",
+              "label": "arrow"
+            }
+          ]
         }
       ]
     }

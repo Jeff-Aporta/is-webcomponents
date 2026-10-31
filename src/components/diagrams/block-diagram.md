@@ -1,39 +1,39 @@
-﻿---
+---
 tag: iswc-block-diagram
 tags:
   - iswc-block-diagram
 category: diagrams
 status: public
 source: ./block-diagram.ts
-style: ./block-diagram.css
+style: ./block-diagram.scss
 preview: ./block-diagram.json
 ---
 # `<iswc-block-diagram>`
 
-## PropÃ³sito
+## Propósito
 
 Diagrama de bloques en SVG, sin Mermaid. A diferencia de
 <iswc-flowchart>, los bloques no se organizan en capas: se
 ubican en una rejilla de columns columnas fijas, fluyendo de
 izquierda a derecha y bajando de fila cuando no caben.
 
-Este mÃ³dulo registra `<iswc-block-diagram>`.
+Este módulo registra `<iswc-block-diagram>`.
 
-## CuÃ¡ndo usarlo
+## Cuándo usarlo
 
 Relaciones, flujos, estados, estructura o tiempo desde payloads declarativos.
 
-## CuÃ¡ndo no usarlo
+## Cuándo no usarlo
 
 No inventar schemas ni usar specs/layout como custom elements.
 
-## ImportaciÃ³n
+## Importación
 
 ```js
 import './block-diagram.js';
 ```
 
-## Ejemplo mÃ­nimo
+## Ejemplo mínimo
 
 ```html
 <iswc-block-diagram></iswc-block-diagram>
@@ -47,9 +47,9 @@ import './block-diagram.js';
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
-| `color` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `color` | `viewer` \| color | `viewer` lo pinta como visor dentro del lightbox. |
 
-#### Propiedades pÃºblicas
+#### Propiedades públicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
@@ -69,19 +69,19 @@ import './block-diagram.js';
 ### Eventos
 
 
-| Evento | DescripciÃ³n |
+| Evento | Descripción |
 | --- | --- |
-| `iswc-turtle-state` | Emitido al actualizarse el estado del mÃ³dulo turtle (resize, datos, etc.). |
+| `iswc-turtle-state` | Emitido al actualizarse el estado del módulo turtle (resize, datos, etc.). |
 | `iswc-render` | Emitido al renderizar o redibujar el componente. |
 | `iswc-toggle-group` | Evento personalizado del componente (toggle group). |
 | `iswc-open-viewer` | Emitido al abrir el visor ampliado (cancelable). |
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `iswc-turtle-state` | sÃ­ | sÃ­ | sÃ­ | no |
-| `iswc-render` | sÃ­ | sÃ­ | sÃ­ | no |
-| `iswc-toggle-group` | sÃ­ | sÃ­ | sÃ­ | sÃ­ |
-| `iswc-open-viewer` | sÃ­ | sÃ­ | sÃ­ | sÃ­ |
+| `iswc-turtle-state` | sí | sí | sí | no |
+| `iswc-render` | sí | sí | sí | no |
+| `iswc-toggle-group` | sí | sí | sí | sí |
+| `iswc-open-viewer` | sí | sí | sí | sí |
 
 
 <details>
@@ -96,13 +96,13 @@ el.addEventListener('iswc-turtle-state', (e) => {
 
 </details>
 
-### MÃ©todos y propiedades pÃºblicas
+### Métodos y propiedades públicas
 
-| MÃ©todo | Uso |
+| Método | Uso |
 | --- | --- |
-| `updateComplete()` | MÃ©todo pÃºblico declarado. |
+| `updateComplete()` | Método público declarado. |
 
-Propiedades pÃºblicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
+Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
 
 ### CSS parts
 
@@ -120,26 +120,26 @@ No expone.
 
 | Token | Uso |
 | --- | --- |
-| `--iswc-sans` | Token leÃ­do o definido por componente. |
-| `--iswc-border` | Token leÃ­do o definido por componente. |
-| `--iswc-text-soft` | Token leÃ­do o definido por componente. |
+| `--iswc-sans` | Token leído o definido por componente. |
+| `--iswc-border` | Token leído o definido por componente. |
+| `--iswc-text-soft` | Token leído o definido por componente. |
 
-### IntegraciÃ³n con formularios
+### Integración con formularios
 
-No declara integraciÃ³n form-associated propia en este mÃ³dulo.
+No declara integración form-associated propia en este módulo.
 
 ## Comportamiento
 
-DocumentaciÃ³n de cabecera preservada desde fuente:
+Documentación de cabecera preservada desde fuente:
 
-> <iswc-block-diagram> â€” diagrama de bloques en SVG, sin Mermaid.
-> ConfiguraciÃ³n por JSON, igual que <iswc-flowchart>:
+> <iswc-block-diagram> — diagrama de bloques en SVG, sin Mermaid.
+> Configuración por JSON, igual que <iswc-flowchart>:
 >   <iswc-block-diagram>
 >     <script type="application/json">
 >       { "blockDiagram": { "columns": 3, "blocks": [...], "edges": [...] } }
 >     </script>
 >   </iswc-block-diagram>
-> A diferencia del flujo, aquÃ­ los bloques se ubican en una rejilla explÃ­cita
+> A diferencia del flujo, aquí los bloques se ubican en una rejilla explícita
 > (columnas fijas + `span`), no en capas node-link.
 > Atributos: color (inline | viewer), open-on-click
 > Propiedades: payload, spec, layout, turtle, hiddenGroups
@@ -156,11 +156,11 @@ DocumentaciÃ³n de cabecera preservada desde fuente:
 - [`../_shared/icon-loader.js`](../../core/icon-loader.js)
 - [`./diagram-kinds.js`](./utils/diagram-kinds.js)
 
-Tags del mÃ³dulo: `<iswc-block-diagram>`.
+Tags del módulo: `<iswc-block-diagram>`.
 
 ## Accesibilidad
 
-Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`.
+Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`.
 
 ## Ejemplo avanzado
 
@@ -170,7 +170,7 @@ Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: `aria-labe
 
 ## Errores comunes
 
-- Usar tag sin importar mÃ³dulo primero.
+- Usar tag sin importar módulo primero.
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
@@ -178,17 +178,17 @@ Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: `aria-labe
 
 ## Reglas para LLM
 
-- Reusar componente y dependencias antes de implementaciÃ³n paralela.
+- Reusar componente y dependencias antes de implementación paralela.
 - Mantener nombres exactos de tags y API.
-- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explÃ­cito.
-- Leer callers/shared antes de cambiar; corregir raÃ­z comÃºn.
-- No modificar API basÃ¡ndose solo en preview.
+- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explícito.
+- Leer callers/shared antes de cambiar; corregir raíz común.
+- No modificar API basándose solo en preview.
 
 ## Fuentes
 
 - [JavaScript](./block-diagram.ts)
-- [CSS](./block-diagram.css)
-- [Ãndice de categorÃ­a](../../specs/componentes.md)
+- [CSS](./block-diagram.scss)
+- [Índice de categoría](../../../specs/componentes.md)
 - [Preview](./block-diagram.json)
 
 ## App API
@@ -196,4 +196,4 @@ Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: `aria-labe
 Visor: `demos/diagramas/app/view.html?kind=block&json=<base64url>`.
 Editor: `demos/diagramas/app/edit.html?kind=block&json=<base64url>`.
 
-`json` es el documento completo en base64url. Editar no reescribe ese parÃ¡metro: Compartir arma un enlace nuevo con el JSON resultante.
+`json` es el documento completo en base64url. Editar no reescribe ese parámetro: Compartir arma un enlace nuevo con el JSON resultante.

@@ -144,7 +144,7 @@ import { ModalBase } from './utils/modal-base.js';
       const dur = this.#readDur('--iswc-dialog-show-duration', 200);
       this.$modal.animate(
         [
-          { opacity: 0, transform: 'translateY(8px) scale(0.98)' },
+          { opacity: 0, transform: 'translateY(0.5em) scale(0.98)' },
           { opacity: 1, transform: 'none' },
         ],
         { duration: dur, easing: 'cubic-bezier(0.2, 0.7, 0.2, 1)', fill: 'forwards' },
@@ -161,7 +161,7 @@ import { ModalBase } from './utils/modal-base.js';
       this.$modal.animate(
         [
           { opacity: 1, transform: 'none' },
-          { opacity: 0, transform: 'translateY(8px) scale(0.98)' },
+          { opacity: 0, transform: 'translateY(0.5em) scale(0.98)' },
         ],
         { duration: dur, easing: 'cubic-bezier(0.4, 0, 0.6, 1)', fill: 'forwards' },
       );

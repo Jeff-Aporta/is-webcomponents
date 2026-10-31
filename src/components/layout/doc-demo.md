@@ -5,13 +5,39 @@ tags:
 category: preview
 status: public
 source: ./doc-demo.ts
-style: ./doc-demo.css
+style: ./doc-demo.scss
 preview: ./doc-demo.json
 ---
 # `<iswc-doc-demo>`
 
 Shell homogéneo de documentación/demo (barra, nav, preview, drawer). Misma
 layout en todas las apps del kit; solo cambian attrs y la SPA consumidora.
+
+## Propósito
+
+Shell homogéneo de documentación y demos: barra, navegación, vista previa y drawer. El layout es igual en todas las apps del kit; solo cambian los atributos y la SPA que lo consume.
+
+## Cuándo usarlo
+
+Al montar la galería de componentes o el explorador de demos de una app.
+
+## Cuándo no usarlo
+
+No es el shell de una app de producto: para eso está `<iswc-app-shell>`.
+
+## Importación
+
+```html
+<script type="module" src="…/dist/cdn/preview/doc-demo-host.min.js"></script>
+```
+
+Ese host configura el loader y carga el componente. El detalle está en **Bootstrap**.
+
+## Ejemplo mínimo
+
+```html
+<iswc-doc-demo brand="MiApp" sheets-cache="mi-app-sheets"></iswc-doc-demo>
+```
 
 ## Bootstrap (cualquier app)
 
@@ -104,3 +130,17 @@ indica la fuente y, si falta, se toma el `.scss` junto al `.json`.
 
 `iswc-doc-demo-boot`, `iswc-doc-demo-host`, `iswc-palettes-default`,
 `iswc-doc-shell`, `iswc-doc-presentation`. Tag CE: `L.load('iswc-doc-demo')`.
+
+## Comportamiento
+
+Monta su estructura una vez, emite `iswc-doc-demo-ready` y avisa en `window` con `iswc-gallery-shell-ready`. En pantallas estrechas la navegación pasa al drawer.
+
+## Accesibilidad
+
+La barra es `role="toolbar"` y la navegación es un `<nav>` rotulado con `nav-label`. El botón del catálogo refleja `aria-expanded`.
+
+## Reglas para LLM
+
+- Es de demos, nunca de producto.
+- Espera `iswc-doc-demo-ready` antes de tocar sus nodos internos.
+- Los textos cambian por atributos: no edites su DOM.

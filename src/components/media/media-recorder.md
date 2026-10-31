@@ -1,36 +1,36 @@
-﻿---
+---
 tag: iswc-media-recorder
 tags:
   - iswc-media-recorder
 category: media
 status: public
 source: ./media-recorder.ts
-style: ./media-recorder.css
+style: ./media-recorder.scss
 preview: ./media-recorder.json
 ---
 # `<iswc-media-recorder>`
 
-## PropÃ³sito
+## Propósito
 
-Graba cÃ¡mara, micrÃ³fono o pantalla (`getDisplayMedia`) con `MediaRecorder` y entrega un Blob.
+Graba cámara, micrófono o pantalla (`getDisplayMedia`) con `MediaRecorder` y entrega un Blob.
 
-Este mÃ³dulo registra `<iswc-media-recorder>`.
+Este módulo registra `<iswc-media-recorder>`.
 
-## CuÃ¡ndo usarlo
+## Cuándo usarlo
 
 Notas de voz, captura de pantalla, clip de webcam.
 
-## CuÃ¡ndo no usarlo
+## Cuándo no usarlo
 
 Para solo reproducir usa `<iswc-video>`. Dictado a texto es `<iswc-speech>`.
 
-## ImportaciÃ³n
+## Importación
 
 ```js
 import './media-recorder.js';
 ```
 
-## Ejemplo mÃ­nimo
+## Ejemplo mínimo
 
 ```html
 <iswc-media-recorder source="camera"></iswc-media-recorder>
@@ -47,7 +47,7 @@ import './media-recorder.js';
 | `source` | camera \| mic \| display | Origen del stream |
 | `disabled` | boolean |  |
 
-#### Propiedades pÃºblicas
+#### Propiedades públicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
@@ -62,17 +62,17 @@ import './media-recorder.js';
 ### Eventos
 
 
-| Evento | DescripciÃ³n |
+| Evento | Descripción |
 | --- | --- |
-| `iswc-start` | Emitido al iniciar la operaciÃ³n. |
-| `iswc-stop` | Emitido al detener la operaciÃ³n. |
+| `iswc-start` | Emitido al iniciar la operación. |
+| `iswc-stop` | Emitido al detener la operación. |
 | `iswc-error` | Emitido cuando se produce un error. |
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `iswc-start` | sÃ­ `{ source }` | sÃ­ | sÃ­ | no |
-| `iswc-stop` | sÃ­ `{ blob, url, type }` | sÃ­ | sÃ­ | no |
-| `iswc-error` | sÃ­ `{ message }` | sÃ­ | sÃ­ | no |
+| `iswc-start` | sí `{ source }` | sí | sí | no |
+| `iswc-stop` | sí `{ blob, url, type }` | sí | sí | no |
+| `iswc-error` | sí `{ message }` | sí | sí | no |
 
 
 <details>
@@ -87,7 +87,7 @@ el.addEventListener('iswc-start', (e) => {
 
 </details>
 
-### MÃ©todos y propiedades pÃºblicas
+### Métodos y propiedades públicas
 
 `start()`, `stop()`.
 
@@ -95,8 +95,8 @@ el.addEventListener('iswc-start', (e) => {
 
 | Part | Uso |
 | --- | --- |
-| `download` | BotÃ³n/enlace de descarga. |
-| `preview` | PrevisualizaciÃ³n capturada. |
+| `download` | Botón/enlace de descarga. |
+| `preview` | Previsualización capturada. |
 | `status` | `<output>` con el estado del componente. |
 
 ### Custom states
@@ -107,7 +107,7 @@ No expone.
 
 No expone.
 
-### IntegraciÃ³n con formularios
+### Integración con formularios
 
 No es form-associated.
 
@@ -122,7 +122,7 @@ Al detener genera Object URL y enlace de descarga. Revoca al desmontar.
 
 ## Accesibilidad
 
-BotÃ³n grabar/detener.
+Botón grabar/detener.
 
 ## Ejemplo avanzado
 
@@ -141,5 +141,5 @@ BotÃ³n grabar/detener.
 
 ## Fuentes
 
-- `./media-recorder.js` Â· `./media-recorder.css`
+- `./media-recorder.js` · `./media-recorder.css`
 - Preview: `./media-recorder.json`

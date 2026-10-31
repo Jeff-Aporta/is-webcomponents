@@ -18,7 +18,7 @@
   border: 0;
   color: inherit;
   overflow: auto;
-  padding: 1rem;
+  padding: 1em;
   @include velo;
   animation: confirm-backdrop-in 0.14s ease-out;
 
@@ -29,41 +29,52 @@
   --iswc-confirm-modal-bg: var(--iswc-bg-elev);
   --iswc-confirm-modal-text: var(--iswc-text);
   --iswc-confirm-modal-border: var(--iswc-border);
-  --iswc-confirm-modal-accent: var(--iswc-color-brand);
-  --iswc-confirm-modal-on-accent: var(--iswc-brand-fg);
 
+  @include papel;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  max-block-size: calc(100dvh - 2em);
   background: var(--iswc-confirm-modal-bg);
   color: var(--iswc-confirm-modal-text);
   border: 1px solid var(--iswc-confirm-modal-border);
-  border-radius: 0.65rem;
-  padding: 1.1rem 1.2rem;
-  min-width: 280px;
-  max-width: min(420px, 92vw);
+  border-radius: .7065em;
+  padding: 1.1957em 1.3043em;
+  min-width: min(19.0217em, 100%);
+  max-width: min(28.5326em, 92vw);
   box-shadow:
-    0 14px 42px color-mix(in srgb, #000 32%, transparent),
-    0 3px 10px color-mix(in srgb, #000 18%, transparent);
-  font-size: 0.92rem;
+    0 .9511em 2.8533em color-mix(in srgb, #000 32%, transparent),
+    0 .2038em .6793em color-mix(in srgb, #000 18%, transparent);
+  font-size: 0.92em;
   animation: confirm-modal-in 0.16s ease-out;
 }
 
 .heading {
-  margin: 0 0 0.45rem;
-  font-size: 1rem;
+  margin: 0 0 0.45em;
+  font-size: 1.087em;
   font-weight: 700;
 
   &[hidden] { display: none; }
 }
 
 .message {
-  margin-bottom: 0.9rem;
+  margin-bottom: .9783em;
+  min-block-size: 0;
+  overflow-y: auto;
+  overflow-wrap: anywhere;
   line-height: 1.45;
   color: var(--iswc-text-soft, var(--iswc-confirm-modal-text));
 }
 
+/* Los saltos de línea del atributo message se respetan: listas cortas sin HTML. */
+.message-text { white-space: pre-line; }
+
 .actions {
   display: flex;
+  flex: none;
+  flex-wrap: wrap;
   justify-content: flex-end;
-  gap: 0.5rem;
+  gap: .5435em;
 }
 
 @keyframes confirm-backdrop-in {
@@ -72,7 +83,7 @@
 }
 
 @keyframes confirm-modal-in {
-  from { opacity: 0; transform: translateY(8px) scale(0.97); }
+  from { opacity: 0; transform: translateY(.5435em) scale(0.97); }
   to { opacity: 1; transform: none; }
 }
 

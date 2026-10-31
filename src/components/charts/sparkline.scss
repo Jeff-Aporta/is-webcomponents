@@ -58,10 +58,10 @@
 /* Screen-reader status (aria-live polite) — visible a SR, oculto visual. */
 .sr-status {
   position: absolute;
-  inline-size: 1px;
-  block-size: 1px;
+  inline-size: .0625em;
+  block-size: .0625em;
   padding: 0;
-  margin: -1px;
+  margin: -.0625em;
   overflow: hidden;
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;

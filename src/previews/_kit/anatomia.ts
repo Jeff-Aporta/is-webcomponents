@@ -2,7 +2,7 @@
  * anatomia.ts — sección «Anatomía» de todo demo: lo que el componente construye de verdad, para auditarlo.
  *   - Estructura: el shadow DOM vivo del `target`, sin `<style>`: los fragmentos de HTML que inyecta.
  *   - Consume: los componentes que usa esa estructura.
- *   - SCSS: la fuente de sus estilos, junto a su `.json` (`definition.anatomy.scss` la indica).
+ *   - SCSS: la fuente de sus estilos, junto a su `.json` (`resolverAnatomia`); `bundle-scripts.mjs` la publica en dist/previews.
  * Todo sale del componente montado: el JSON no repite nada, así que no se desactualiza. El presentador es el mismo
  * `<iswc-code>` del snippet «Ver código».
  */
@@ -17,6 +17,17 @@ export type DefinicionConAnatomia = {
 const MAX_LINEAS = 400;
 const IGNORADOS = new Set(['style', 'link', 'script']);
 const ESPERA_MS = 500;
+
+/**
+ * `scss` va relativo al `.json` que la declara (`kanban.scss` en un subcomponente). Sin `anatomy` es el `.scss` hermano;
+ * `"anatomy": {}` dice que no tiene estilos propios y la galería no los pide.
+ */
+export function resolverAnatomia(anatomia: Anatomia | undefined, json: string | URL): Anatomia {
+  if (anatomia && !anatomia.scss) return anatomia;
+  const url = new URL(json);
+  const hermano = (url.pathname.split('/').pop() ?? '').replace(/.json$/, '.scss');
+  return { scss: new URL(anatomia?.scss ?? hermano, url).href };
+}
 
 /** Serializa un nodo con sangría; no entra en la sombra de los hijos: cada uno tiene su anatomía. */
 function lineasDe(nodo: Node, nivel: number, out: string[]): void {

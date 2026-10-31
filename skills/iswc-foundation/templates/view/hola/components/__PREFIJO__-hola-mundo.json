@@ -14,7 +14,7 @@
       "lede": "El componente más simple: un título.",
       "blocks": [
         { "kind": "demo", "html": "<div class=\"stage\"><__PREFIJO__-hola-mundo id=\"titulo\"></__PREFIJO__-hola-mundo></div>", "target": "#titulo" },
-        { "kind": "html", "html": "<iswc-callout tone=\"info\"><strong slot=\"title\">Cuándo usarlo</strong>Como molde de un componente nuevo: copia sus cuatro archivos.</iswc-callout><iswc-callout tone=\"warning\"><strong slot=\"title\">Cuándo no</strong>No lo uses como título genérico de la app.</iswc-callout>" }
+        { "kind": "html", "html": "<iswc-callout color=\"brand\"><strong slot=\"title\">Cuándo usarlo</strong>Como molde de un componente nuevo: copia sus cuatro archivos.</iswc-callout><iswc-callout color=\"warning\"><strong slot=\"title\">Cuándo no</strong>No lo uses como título genérico de la app.</iswc-callout>" }
       ]
     }
   ]

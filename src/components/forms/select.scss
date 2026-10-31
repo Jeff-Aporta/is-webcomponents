@@ -7,6 +7,8 @@
   --iswc-select-danger: var(--iswc-color-danger);
   --iswc-select-danger-text: var(--iswc-danger-text, var(--iswc-color-danger-strong));
   display: block;
+  inline-size: var(--iswc-field-width);
+  max-inline-size: 100%;
   position: relative;
   font-family: var(--iswc-sans, inherit);
   color: var(--iswc-text, inherit);
@@ -166,7 +168,7 @@
     background: var(--iswc-bg-elev);
     border: 1px solid var(--iswc-border);
     border-radius: var(--iswc-radius);
-    box-shadow: var(--iswc-shadow, 0 8px 24px rgb(0 0 0 / 12%));
+    box-shadow: var(--iswc-shadow, 0 .5em 1.5em rgb(0 0 0 / 12%));
     color: var(--iswc-text, inherit);
   }
 
@@ -288,6 +290,7 @@
 
 :host([variant="filled"]) {
   .base {
+    background: var(--iswc-control-bg-hover);
     border-color: transparent;
     border-bottom-color: var(--iswc-select-border);
     border-radius: var(--iswc-select-border-radius) var(--iswc-select-border-radius) 0 0;

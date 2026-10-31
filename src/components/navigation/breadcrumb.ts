@@ -1,5 +1,6 @@
 import { adoptCss, defineElement } from '../../core/element.js';
 import { ElementBase } from '../../core/element-base.js';
+import './breadcrumb-item.js';
 
 /**
  * <iswc-breadcrumb> — contenedor de una ruta de migas de pan.

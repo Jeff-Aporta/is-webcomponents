@@ -29,15 +29,16 @@
   --_border-hover: var(--_border);
   --_focus: var(--iswc-focus, var(--iswc-color-brand));
   --_height: var(--iswc-control-height);
-  --_hpad: 1em;
+  /* Proporcional al alto: la densidad compacta también recorta el aire lateral. */
+  --_hpad: calc(var(--iswc-control-height) * 0.4);
   display: inline-flex;
   vertical-align: middle;
   isolation: isolate;
   font-family: var(--iswc-button-font-family);
   font-size: inherit;
   max-width: 100%;
-  margin-inline-start: var(--_button-horizontal-indent, 0px);
-  margin-block-start: var(--_button-vertical-indent, 0px);
+  margin-inline-start: var(--_button-horizontal-indent, 0em);
+  margin-block-start: var(--_button-vertical-indent, 0em);
 
   .btn {
     box-sizing: border-box;
@@ -55,7 +56,7 @@
     border: var(--iswc-button-border-width) solid var(--_border);
     border-start-start-radius: var(--_button-start-start-radius, var(--iswc-button-border-radius));
     border-start-end-radius: var(--_button-start-end-radius, var(--iswc-button-border-radius));
-    border-end-start-radius: var(--_button-end-end-radius, var(--iswc-button-border-radius));
+    border-end-start-radius: var(--_button-end-start-radius, var(--iswc-button-border-radius));
     border-end-end-radius: var(--_button-end-end-radius, var(--iswc-button-border-radius));
     font: inherit;
     font-family: var(--iswc-button-font-family);
@@ -96,7 +97,7 @@
     .btn__caret {
       display: none;
       color: currentColor;
-      margin-left: 0.15em;
+      margin-inline-start: 0.15em;
       line-height: 0;
       iswc-icon { width: 0.85em; height: 0.85em; }
     }
@@ -245,6 +246,68 @@
   --_text-hover: var(--_tone-strong);
 }
 
+/* glyph y row: sin caja en reposo; el hover tiñe suave. */
+:host([variant="glyph"]),
+:host([variant="row"]) {
+  --_bg: transparent;
+  --_bg-hover: var(--iswc-control-bg-hover);
+  --_bg-active: var(--iswc-control-bg-active);
+  --_border: transparent;
+  --_border-hover: transparent;
+  --_text: var(--iswc-control-text);
+  --_text-hover: var(--iswc-control-text);
+}
+:host([color][variant="glyph"]),
+:host([color][variant="row"]) {
+  --_bg-hover: var(--_tone-soft);
+  --_bg-active: var(--_tone-soft-active);
+  --_text: var(--_tone-text);
+  --_text-hover: var(--_tone-text);
+}
+
+/* glyph: un solo signo (emoji, letra o icono) en un cuadrado. Lado con
+ * --iswc-button-glyph-size; en una rejilla se le da `width: 100%` y el alto lo
+ * pone el aspect-ratio. */
+:host([variant="glyph"]) {
+  --_height: auto;
+  --_hpad: 0;
+  width: var(--iswc-button-glyph-size, 2em);
+  aspect-ratio: 1;
+
+  .btn {
+    min-height: 0;
+    gap: 0;
+    line-height: 1;
+  }
+  .btn__label { line-height: 1; }
+}
+
+/* row: fila a todo el ancho con contenido rico (avatar, dos líneas, fragmento).
+ * Alto libre, texto al inicio que envuelve; los hijos van en fila. */
+:host([variant="row"]) {
+  --_height: auto;
+  display: flex;
+  width: 100%;
+
+  .btn {
+    min-height: 0;
+    padding: var(--iswc-button-row-padding, 0.5em 0.75em);
+    justify-content: flex-start;
+    line-height: inherit;
+    text-align: start;
+    white-space: normal;
+    &:active { transform: none; }
+  }
+  .btn__label {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: var(--iswc-button-row-gap, 0.75em);
+    min-width: 0;
+    line-height: inherit;
+  }
+}
+
 /* ── shape: ortogonal a color y variant (corner-shape donde aplica) ────────
    Sin atributo = round (default del contrato). El group pill gana con
    --_button-*-radius en las esquinas, no con esta var. */
@@ -252,7 +315,7 @@
 :host([shape="round"]) { --iswc-button-border-radius: var(--iswc-radius-sm); }
 :host([shape="square"]),
 :host([shape="rect"]) { --iswc-button-border-radius: 0; }
-:host([shape="pill"]) { --iswc-button-border-radius: 999px; }
+:host([shape="pill"]) { --iswc-button-border-radius: 999em; }
 
 :host([shape="square"]) .btn { corner-shape: square; }
 
@@ -266,11 +329,11 @@
 }
 
 /* Alias legado: solo si no hay `shape` (shape gana siempre). */
-:host([pill]:not([shape])) { --iswc-button-border-radius: 999px; }
+:host([pill]:not([shape])) { --iswc-button-border-radius: 999em; }
 :host([variant="outlined"]),
 :host([variant="ghost"]) {
-  margin-inline-start: var(--_button-horizontal-indent-outlined, var(--_button-horizontal-indent, 0px));
-  margin-block-start: var(--_button-vertical-indent-outlined, var(--_button-vertical-indent, 0px));
+  margin-inline-start: var(--_button-horizontal-indent-outlined, var(--_button-horizontal-indent, 0em));
+  margin-block-start: var(--_button-vertical-indent-outlined, var(--_button-vertical-indent, 0em));
 }
 
 /* icon-only: el JS lo detecta vía setCustomState('icon-button') pero como
@@ -283,6 +346,17 @@
     aspect-ratio: 1 / 1;
     gap: 0;
   }
+}
+
+/* glyph y row ya definen su caja: un único hijo no los vuelve icon-button. */
+:host([variant="glyph"]:state(icon-button)) .btn,
+:host([variant="row"]:state(icon-button)) .btn {
+  width: 100%;
+  aspect-ratio: auto;
+}
+:host([variant="row"]:state(icon-button)) .btn {
+  padding: var(--iswc-button-row-padding, 0.5em 0.75em);
+  gap: 0.5em;
 }
 
 /* loading: el JS ya expone `data-state-loading`; usamos solo el fallback. */
@@ -304,7 +378,7 @@
 /* disabled: el host lleva `disabled` atributo (sincronizado por el JS),
    así que :host([disabled]) matchea lo mismo que :state(disabled). */
 :host([disabled]) {
-  opacity: 0.5;
+  opacity: 0.55;
   cursor: not-allowed;
   .btn { pointer-events: none; }
 }
@@ -324,10 +398,10 @@
    Patrón "sr-only": visualmente oculto pero accesible para AT. */
 .btn__sr-status {
   position: absolute;
-  width: 1px;
-  height: 1px;
+  width: .0625em;
+  height: .0625em;
   padding: 0;
-  margin: -1px;
+  margin: -.0625em;
   overflow: hidden;
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;

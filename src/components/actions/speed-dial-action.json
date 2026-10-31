@@ -1,5 +1,6 @@
 {
   "$schema": "iswc-preview/v1",
+  "anatomy": { "scss": "speed-dial.scss" },
   "tag": "iswc-speed-dial-action",
   "category": "actions",
   "title": "&lt;iswc-speed-dial-action&gt;",

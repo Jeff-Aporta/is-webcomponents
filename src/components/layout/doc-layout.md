@@ -5,7 +5,7 @@ tags:
 category: layout
 status: public
 source: ./doc-layout.ts
-style: ./doc-layout.css
+style: ./doc-layout.scss
 preview: ./doc-layout.json
 ---
 # `<iswc-doc-layout>`

@@ -10,7 +10,7 @@
   font-size: inherit;
   box-sizing: border-box;
   pointer-events: auto;
-  max-width: min(24rem, 100vw - 2rem);
+  max-width: min(24em, 100vw - 2em);
 }
 
 :host(:is([hidden], :not([open]))) {
@@ -20,7 +20,9 @@
 :host([color="brand"]) { @include toast-roles(brand); }
 :host([color="success"]) { @include toast-roles(success); }
 :host([color="warning"]) { @include toast-roles(warning); }
-:host([color="danger"]) { @include toast-roles(danger); }
+:host([color="danger"]),
+:host([color="error"]) { @include toast-roles(danger); }
+:host([color="info"]) { @include toast-roles(info); }
 :host([color="neutral"]) {
   --_bg: var(--iswc-control-bg);
   --_border: var(--iswc-control-border);
@@ -28,7 +30,8 @@
   --_accent: var(--iswc-muted);
 }
 :host([color="text"]) {
-  --_bg: color-mix(in srgb, var(--iswc-text) 10%, transparent);
+  /* Flota sobre la página: el fondo es sólido para que el texto se lea sobre cualquier contenido. */
+  --_bg: color-mix(in srgb, var(--iswc-text) 10%, var(--iswc-bg-elev));
   --_border: var(--iswc-text);
   --_text: var(--iswc-text);
   --_accent: var(--iswc-text);
@@ -36,14 +39,13 @@
 
 .base {
   position: relative;
-  display: grid;
-  grid-template-columns: auto 1fr auto;
-  align-items: start;
+  display: flex;
+  align-items: flex-start;
   gap: 0.65em;
   padding: 0.75em 0.85em;
   background: var(--_bg);
   border: 1px solid var(--_border);
-  border-inline-start-width: 3px;
+  border-inline-start-width: .1875em;
   border-inline-start-color: var(--_accent);
   border-radius: 0.5em;
   color: var(--_text);
@@ -51,44 +53,59 @@
   overflow: hidden;
 }
 
+/* El TS la oculta sin ícono asignado: la columna solo existe si hay ícono. */
 .icon {
   display: inline-flex;
+  flex: none;
   align-items: center;
   font-size: 1.25em;
   line-height: 0;
   margin-top: 0.1em;
   color: var(--_accent);
 
-  &:empty { display: none; }
+  &[hidden] { display: none; }
 }
 
 .message {
+  flex: 1;
   min-width: 0;
   line-height: 1.4;
-  word-break: break-word;
+  overflow-wrap: anywhere;
 }
 
+/* Un mensaje larguísimo no se come la pantalla; el detalle queda en iswc-after-show. */
 .title {
+  display: -webkit-box;
+  overflow: hidden;
   font-weight: 600;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: var(--iswc-toast-lineas, 6);
 }
 
 .caption {
-  display: none;
   margin-top: 0.25em;
   font-size: 0.8em;
   font-weight: 400;
   line-height: 1.35;
   opacity: 0.82;
+
+  &[hidden] { display: none; }
 }
 
 :host(:has([slot="caption"])) {
   .caption { display: block; }
 }
 
+/* Glifo a la altura de la primera línea: un aviso de una línea queda de una línea. */
 .close {
+  /* El glifo toma el texto del aviso: sobre un fondo pálido, el del tema no se vería. */
+  --iswc-text: var(--_text);
+  --iswc-button-glyph-size: 1.5em;
+  flex: none;
+  margin-block: -0.1em;
+  margin-inline-end: -0.25em;
   color: inherit;
   opacity: 0.65;
-  font-size: 1.1em;
   line-height: 0;
 
   &:hover { opacity: 1; }
@@ -112,11 +129,12 @@
 }
 
 /* Spinner del toast loading (toaster.promise): el iswc-icon marcado con
-   data-loading gira hasta que la promesa resuelve. */
-::slotted(iswc-icon[data-loading]) {
+   data-girando gira hasta que la promesa resuelve. */
+::slotted(iswc-icon[data-girando]) {
   animation: iswc-toast-spin 0.9s linear infinite;
 
-  @media (prefers-reduced-motion: reduce) { animation: none; }
+  /* Girar informa que sigue en curso: con movimiento reducido va más lento, nunca quieto. */
+  @media (prefers-reduced-motion: reduce) { animation-duration: 2.7s; }
 }
 
 @keyframes iswc-toast-spin {

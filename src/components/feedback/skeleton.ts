@@ -41,9 +41,9 @@ import { withStyleAttrs } from '../../core/attrs.js';
       // role=status + aria-busy=true + aria-live=polite avisa al SR de que
       // hay contenido pendiente. aria-label describe la acción esperada
       // para que el usuario sepa qué se está cargando.
-      this.setAttribute('role', 'status');
+      if (!this.hasAttribute('role')) this.setAttribute('role', 'status');
       this.setAttribute('aria-busy', 'true');
-      this.setAttribute('aria-live', 'polite');
+      if (!this.hasAttribute('aria-live')) this.setAttribute('aria-live', 'polite');
       if (!this.hasAttribute('aria-label')) {
         this.setAttribute('aria-label', 'Cargando contenido');
       }

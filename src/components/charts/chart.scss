@@ -59,14 +59,15 @@
   min-inline-size: 0;
   min-block-size: 0;
 }
-.wrap[data-legend=bottom] {
+/* La leyenda va después del lienzo en el DOM: `top` y `start` invierten el orden. */
+.wrap[data-legend=top] {
   flex-direction: column-reverse;
 }
 .wrap[data-legend=start] {
-  flex-direction: row;
+  flex-direction: row-reverse;
 }
 .wrap[data-legend=end] {
-  flex-direction: row-reverse;
+  flex-direction: row;
 }
 .wrap {
   /* `iswc-viewer` lo aplica el JS en el modo visor. */
@@ -179,7 +180,7 @@
 @keyframes iswc-chart-rise {
   from {
     opacity: 0;
-    transform: translateY(8px);
+    transform: translateY(.6729em);
   }
   to {
     opacity: 1;
@@ -307,9 +308,9 @@
   color: var(--chart-text);
   font-size: var(--chart-tooltip-size);
   line-height: 1.35;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.28);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
+  box-shadow: 0 .5em 1.5em rgba(0, 0, 0, 0.28);
+  backdrop-filter: blur(.5em);
+  -webkit-backdrop-filter: blur(.5em);
 }
 .tooltip[hidden] {
   display: none !important;
@@ -343,10 +344,10 @@
 /* Screen-reader status (aria-live polite) — visible a SR, oculto visual. */
 .sr-status {
   position: absolute;
-  inline-size: 1px;
-  block-size: 1px;
+  inline-size: .0625em;
+  block-size: .0625em;
   padding: 0;
-  margin: -1px;
+  margin: -.0625em;
   overflow: hidden;
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;

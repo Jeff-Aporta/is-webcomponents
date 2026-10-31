@@ -10,11 +10,11 @@
 .root {
   display: inline-flex;
   align-items: center;
-  gap: .15rem;
+  gap: .15em;
   background: var(--iswc-duration-picker-bg);
   border: 1px solid var(--iswc-duration-picker-border);
   border-radius: var(--iswc-radius);
-  padding: .25rem .45rem;
+  padding: .25em .45em;
 }
 
 /* Botones arriba/abajo de cada columna: comparten estilo base. */
@@ -25,20 +25,20 @@
   font: inherit;
   line-height: 1;
   padding: 0;
-  border-radius: 4px;
+  border-radius: .25em;
 }
 
 .col {
   display: grid;
   grid-template-rows: auto 1fr auto;
   align-items: stretch;
-  gap: 1px;
+  gap: .0625em;
 
   button {
     cursor: pointer;
     color: var(--iswc-text-soft);
-    font-size: .65rem;
-    height: 1rem;
+    font-size: .65em;
+    height: 1.5385em;
 
     &:hover {
       background: color-mix(in srgb, var(--iswc-accent) 18%, transparent);
@@ -48,12 +48,12 @@
 }
 
 .cell {
-  width: 2.4rem;
+  width: 2.4em;
   outline: 0;
-  font-size: 1rem;
+  font-size: 1em;
   text-align: center;
   font-variant-numeric: tabular-nums;
-  padding: .25rem 0;
+  padding: .25em 0;
 
   &:focus {
     background: color-mix(in srgb, var(--iswc-accent) 14%, transparent);
@@ -64,5 +64,5 @@
   font-weight: 600;
   color: var(--iswc-text-soft);
   align-self: center;
-  font-size: 1.05rem;
+  font-size: 1.05em;
 }

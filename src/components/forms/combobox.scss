@@ -5,6 +5,8 @@
   --iswc-combobox-text: var(--iswc-control-text);
   --iswc-combobox-focus: var(--iswc-focus, var(--iswc-color-brand));
   display: block;
+  inline-size: var(--iswc-field-width);
+  max-inline-size: 100%;
   font-family: var(--iswc-sans, inherit);
   color: var(--iswc-text, inherit);
   box-sizing: border-box;
@@ -24,6 +26,18 @@
 
   .hint {
     font-size: 0.8em;
+    color: var(--iswc-text-dim);
+    &[hidden] { display: none !important; }
+  }
+
+  .error-text {
+    font-size: 0.8em;
+    color: var(--iswc-danger-text, var(--iswc-color-danger-strong));
+    &[hidden] { display: none !important; }
+  }
+
+  .empty {
+    padding: 0.45em 0.75em;
     color: var(--iswc-text-dim);
   }
 
@@ -52,7 +66,7 @@
     background: transparent;
     color: inherit;
     font: inherit;
-    padding: 0.5em 0;
+    padding: 0;
     outline: none;
   }
 
@@ -97,7 +111,7 @@
     background: var(--iswc-bg-elev);
     border: 1px solid var(--iswc-border);
     border-radius: var(--iswc-radius);
-    box-shadow: var(--iswc-shadow, 0 8px 24px rgb(0 0 0 / 12%));
+    box-shadow: var(--iswc-shadow, 0 .5em 1.5em rgb(0 0 0 / 12%));
     color: var(--iswc-text, inherit);
   }
 
@@ -122,6 +136,32 @@
 :host([disabled]) {
   opacity: 0.55;
   pointer-events: none;
+}
+
+:host([variant="filled"]) {
+  .base {
+    background: var(--iswc-control-bg-hover);
+    border-color: transparent;
+    border-bottom-color: var(--iswc-combobox-border);
+    border-radius: var(--iswc-combobox-border-radius) var(--iswc-combobox-border-radius) 0 0;
+  }
+}
+
+:host([variant="underlined"]) {
+  .base {
+    background: transparent;
+    border-color: transparent;
+    border-bottom-color: var(--iswc-combobox-border);
+    border-radius: 0;
+    padding-inline-start: 0.15em;
+  }
+}
+
+:host([error]) {
+  --iswc-combobox-border: var(--iswc-color-danger);
+  --iswc-combobox-focus: var(--iswc-color-danger);
+
+  .label { color: var(--iswc-danger-text, var(--iswc-color-danger-strong)); }
 }
 
 :host([open]),

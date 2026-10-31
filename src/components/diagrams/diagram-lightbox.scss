@@ -8,7 +8,7 @@
 .lb-nav {
   display: inline-flex;
   align-items: center;
-  gap: 0.25rem;
+  gap: 0.25em;
 }
 
 /* Anillo de cuenta regresiva del auto-replay. */
@@ -17,9 +17,9 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 22px;
-  height: 22px;
-  margin-inline-start: 0.25rem;
+  width: 1.375em;
+  height: 1.375em;
+  margin-inline-start: 0.25em;
   svg {
     position: absolute;
     inset: 0;
@@ -42,12 +42,12 @@
 }
 
 .lb-ring__icon {
-  font-size: 11px;
+  font-size: .6875em;
   line-height: 1;
 }
 
 .lb-step {
-  font-size: 0.75rem;
+  font-size: 0.75em;
   font-variant-numeric: tabular-nums;
   color: var(--iswc-text-soft);
   min-width: 2.5em;
@@ -57,23 +57,23 @@
 .lb-code__head {
   display: flex;
   align-items: baseline;
-  gap: 0.5rem;
-  font-size: 0.8125rem;
+  gap: .615em;
+  font-size: 0.8125em;
 }
 
 .lb-code__hint {
   color: var(--iswc-text-soft);
-  font-size: 0.75rem;
+  font-size: .9225em;
 }
 
 .lb-code__area {
   width: 100%;
-  min-height: 14rem;
+  min-height: 17.2202em;
   resize: vertical;
   font-family: var(--iswc-mono);
-  font-size: 0.8125rem;
+  font-size: 0.8125em;
   line-height: 1.5;
-  padding: 0.625rem;
+  padding: .7688em;
   border-radius: var(--iswc-radius-sm);
   border: 1px solid var(--iswc-border);
   background: var(--iswc-code-bg);
@@ -88,39 +88,18 @@
 .lb-code__err {
   margin: 0;
   color: var(--iswc-danger-text);
-  font-size: 0.75rem;
+  font-size: 0.75em;
   &[hidden] { display: none; }
 }
 
 .lb-code__actions {
   display: flex;
   justify-content: flex-end;
-  gap: 0.5rem;
-}
-
-.lb-text-btn {
-  padding: 0.4em 0.9em;
-  border-radius: var(--iswc-radius-sm);
-  border: 1px solid var(--iswc-control-border);
-  background: var(--iswc-control-bg);
-  color: var(--iswc-control-text);
-  font: inherit;
-  font-size: 0.8125rem;
-  cursor: pointer;
-  &:hover { background: var(--iswc-control-bg-hover); }
-  &.iswc-primary {
-    background: var(--iswc-accent);
-    border-color: transparent;
-    color: var(--iswc-on-brand);
-  }
-  &:focus-visible {
-    outline: 2px solid var(--iswc-focus);
-    outline-offset: 1px;
-  }
+  gap: 0.5em;
 }
 
 .lb-unsupported {
   color: var(--iswc-text-soft);
-  font-size: 0.875rem;
+  font-size: 0.875em;
   text-align: center;
 }

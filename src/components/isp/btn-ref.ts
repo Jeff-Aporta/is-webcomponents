@@ -59,9 +59,9 @@ const FILTER_SVG = `<svg fill="currentColor" width="20" height="20" viewBox="0 0
     <div part="base" class="base">
       <iswc-input class="field" label-placement="float"></iswc-input>
       <span part="label-text" class="value-label"></span>
-      <button type="button" part="open" class="open" aria-label="Open BtnRef">${FILTER_SVG}</button>
+      <button type="button" part="open" class="open" aria-label="Abrir selector">${FILTER_SVG}</button>
     </div>
-    <iswc-dialog class="dlg" label="Seleccionar" light-dismiss style="--width: min(90vw, 48rem);">
+    <iswc-dialog class="dlg" label="Seleccionar" light-dismiss style="--width: min(90vw, 48em);">
       <iswc-catalogo-gen class="cat" select-mode show-header="false" q-rows-header="1"></iswc-catalogo-gen>
       <div slot="footer" class="dlg-footer">
         <iswc-button class="cancel" color="neutral" variant="outlined">Cancelar</iswc-button>
@@ -219,7 +219,7 @@ const FILTER_SVG = `<svg fill="currentColor" width="20" height="20" viewBox="0 0
       this.#field.required = this.required;
       this.#field.readonly = this.readonly;
       this.#field.setAttribute('maxlength', String(this.maxlength));
-      this.#field.style.setProperty('padding-right', '2rem');
+      this.#field.style.setProperty('padding-right', '2em');
       (this.#openBtn as unknown as { disabled?: boolean }).disabled = this.readonly;
       this.#openBtn.classList.toggle('focus-required', false);
       this.#openBtn.classList.toggle('focus-optional', false);

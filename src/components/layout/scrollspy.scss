@@ -9,15 +9,15 @@
 :host {
   display: flex;
   flex-direction: column;
-  gap: 3px;
+  gap: .1875em;
 }
 
 /* La clase `iswc-scrollspy-active` la pone/quita el scrollspy.ts
    (`classList.add/remove`). NO renombrar — rompería el JS. */
 ::slotted(a) {
   display: block;
-  padding: 8px 12px;
-  font-size: 0.8125rem;
+  padding: .615em .9225em;
+  font-size: 0.8125em;
   font-weight: 500;
   color: var(--iswc-text-soft);
   text-decoration: none;
@@ -33,6 +33,6 @@
     background: var(--iswc-accent-bg);
     color: var(--iswc-brand-text);
     font-weight: 650;
-    box-shadow: inset 2.5px 0 0 var(--iswc-accent);
+    box-shadow: inset .1922em 0 0 var(--iswc-accent);
   }
 }

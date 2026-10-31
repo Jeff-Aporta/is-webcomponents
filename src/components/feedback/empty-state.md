@@ -5,7 +5,7 @@ tags:
 category: feedback
 status: public
 source: ./empty-state.ts
-style: ./empty-state.css
+style: ./empty-state.scss
 preview: ./empty-state.json
 ---
 # `<iswc-empty-state>`
@@ -97,6 +97,8 @@ No participa en formularios.
 ```
 
 ## Comportamiento
+
+El título se limita a 2 líneas y el texto a `--iswc-empty-state-lineas` (default 3). Sin contenido en el slot, la fila de la acción no reserva espacio.
 
 - `estado="error"` usa `role="alert"`; los demás, `role="status"`.
 - El atributo `hidden` lo oculta.

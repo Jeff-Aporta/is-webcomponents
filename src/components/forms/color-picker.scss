@@ -65,8 +65,8 @@
     flex: none;
     inline-size: 1.5em;
     block-size: 1.5em;
-    border-radius: calc(var(--iswc-picker-radius) - 1px);
-    box-shadow: inset 0 0 0 1px rgb(0 0 0 / 22%);
+    border-radius: calc(var(--iswc-picker-radius) - .0625em);
+    box-shadow: inset 0 0 0 .0625em rgb(0 0 0 / 22%);
   }
 
   .hex-text {
@@ -118,12 +118,12 @@
     border: 1px solid var(--iswc-border);
     border-radius: var(--iswc-radius);
     box-shadow:
-      0 0 0 1px color-mix(in srgb, var(--iswc-text) 4%, transparent) inset,
-      var(--iswc-shadow, 0 10px 28px rgb(0 0 0 / 18%));
+      0 0 0 .0625em color-mix(in srgb, var(--iswc-text) 4%, transparent) inset,
+      var(--iswc-shadow, 0 .625em 1.75em rgb(0 0 0 / 18%));
     color: var(--iswc-text, inherit);
     /* El JS fija width al del trigger; esto evita saltos antes del layout. */
-    min-inline-size: 13rem;
-    max-inline-size: min(18rem, calc(100vw - 1rem));
+    min-inline-size: 13em;
+    max-inline-size: min(18em, calc(100vw - 1em));
   }
 
   .row {
@@ -170,13 +170,14 @@
   }
 
   .swatch-btn {
+    font-size: 0.8333em;
     aspect-ratio: 1;
     inline-size: 100%;
     min-inline-size: 0;
     padding: 0;
     border: 0;
     border-radius: var(--iswc-picker-radius);
-    box-shadow: inset 0 0 0 1px rgb(0 0 0 / 22%);
+    box-shadow: inset 0 0 0 .075em rgb(0 0 0 / 22%);
     cursor: pointer;
     transition: transform 100ms ease;
     &:hover { transform: scale(1.06); }
@@ -187,9 +188,9 @@
 
     &[data-selected] {
       box-shadow:
-        inset 0 0 0 1px rgb(0 0 0 / 22%),
-        0 0 0 2px var(--iswc-bg-elev),
-        0 0 0 4px var(--iswc-accent);
+        inset 0 0 0 .075em rgb(0 0 0 / 22%),
+        0 0 0 .1501em var(--iswc-bg-elev),
+        0 0 0 .3001em var(--iswc-accent);
     }
   }
 }

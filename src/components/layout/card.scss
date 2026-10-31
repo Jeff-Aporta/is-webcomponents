@@ -2,7 +2,7 @@
 @use '../../styles/mixins' as *;
 
 :host {
-  --iswc-card-spacing: var(--iswc-space-l, 1rem);
+  --iswc-card-spacing: var(--iswc-space-l, 1em);
 
   display: block;
   position: relative;
@@ -93,7 +93,7 @@
 :host([variant="accent"]) {
   background: linear-gradient(var(--iswc-accent-bg, rgb(30 144 255 / 12%)) 0 0), var(--iswc-paper-fill, transparent);
   border: 0;
-  box-shadow: inset 3px 0 0 var(--iswc-accent);
+  box-shadow: inset .1875em 0 0 var(--iswc-accent);
 }
 
 :host(:not([orientation="horizontal"])) {

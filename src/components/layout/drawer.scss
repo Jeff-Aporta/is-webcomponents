@@ -5,8 +5,8 @@
 
 :host {
   @include papel;
-  --iswc-drawer-size: 380px;
-  --iswc-drawer-spacing: var(--iswc-space-l, 1rem);
+  --iswc-drawer-size: 23.75em;
+  --iswc-drawer-spacing: var(--iswc-space-l, 1em);
   /* modal-chrome.css lee --spacing; sin alias el chrome interno queda sin padding. */
   --spacing: var(--iswc-drawer-spacing);
   --iswc-drawer-backdrop-color: var(--iswc-backdrop-color, rgb(0 0 0 / 55%));
@@ -15,7 +15,7 @@
   --iswc-drawer-hide-duration: 180ms;
 
   --_radius: calc(var(--iswc-radius));
-  --_shadow: 0 -8px 24px rgba(0, 0, 0, 0.18), 8px 0 24px rgba(0, 0, 0, 0.18);
+  --_shadow: 0 -.5em 1.5em rgba(0, 0, 0, 0.18), .5em 0 1.5em rgba(0, 0, 0, 0.18);
 
   position: fixed;
   inset: 0;
@@ -61,7 +61,7 @@
 }
 
 :host([placement="start"]) {
-  --_shadow: 8px 0 24px rgba(0, 0, 0, 0.18);
+  --_shadow: .5em 0 1.5em rgba(0, 0, 0, 0.18);
 
   .drawer {
     inset-inline-start: 0;
@@ -72,7 +72,7 @@
 }
 
 :host([placement="end"]) {
-  --_shadow: -8px 0 24px rgba(0, 0, 0, 0.18);
+  --_shadow: -.5em 0 1.5em rgba(0, 0, 0, 0.18);
 
   .drawer {
     inset-inline-end: 0;
@@ -89,7 +89,7 @@
 }
 
 :host([placement="top"]) {
-  --_shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+  --_shadow: 0 .5em 1.5em rgba(0, 0, 0, 0.18);
 
   .drawer {
     inset-block-start: 0;
@@ -100,7 +100,7 @@
 }
 
 :host([placement="bottom"]) {
-  --_shadow: 0 -8px 24px rgba(0, 0, 0, 0.18);
+  --_shadow: 0 -.5em 1.5em rgba(0, 0, 0, 0.18);
 
   .drawer {
     inset-block-end: 0;
@@ -123,7 +123,7 @@
 
 .close-btn {
   flex: 0 0 auto;
-  font-size: 1rem;
+  font-size: 1em;
   line-height: 0;
   color: var(--iswc-text-muted);
 

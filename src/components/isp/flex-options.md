@@ -1,41 +1,41 @@
-﻿---
+---
 tag: iswc-flex-options
 tags:
   - iswc-flex-options
 category: isp
 status: public
 source: ./flex-options.ts
-style: ./flex-options.css
+style: ./flex-options.scss
 preview: ./flex-options.json
 ---
 # `<iswc-flex-options>`
 
-## PropÃ³sito
+## Propósito
 
 Toolbar de acciones a partir de un array tipo ISP `FlexOptionsInput[]`.
 Port de `FlexOptions.svelte` (ClientesIS). Pinta `<iswc-button>`,
-`<iswc-check-icon-button>`, `<iswc-button-group>` y `<iswc-dropdown>` â€” no
+`<iswc-check-icon-button>`, `<iswc-button-group>` y `<iswc-dropdown>` — no
 reimplementa botones.
 
-Este mÃ³dulo registra `<iswc-flex-options>`.
+Este módulo registra `<iswc-flex-options>`.
 
-## CuÃ¡ndo usarlo
+## Cuándo usarlo
 
-Fila de acciones (toolbar de Ã¡rbol, tools de hover, menÃº compacto) cuyo
+Fila de acciones (toolbar de árbol, tools de hover, menú compacto) cuyo
 contrato ya es `{ icon, title, onClick, disabled, separator }` o grupos.
 
-## CuÃ¡ndo no usarlo
+## Cuándo no usarlo
 
-Un solo botÃ³n â†’ `<iswc-button>`. MenÃº anclado con clic y Escape â†’
+Un solo botón → `<iswc-button>`. Menú anclado con clic y Escape →
 `<iswc-dropdown>` directo. No crear otra toolbar con `<button>` nativos.
 
-## ImportaciÃ³n
+## Importación
 
 ```js
 import './flex-options.js';
 ```
 
-## Ejemplo mÃ­nimo
+## Ejemplo mínimo
 
 ```html
 <iswc-flex-options id="opts"></iswc-flex-options>
@@ -56,14 +56,14 @@ import './flex-options.js';
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
 | `compact` | boolean | Sin label; solo icono. |
-| `more-disabled` | boolean | Deshabilita el menÃº "mÃ¡s". |
+| `more-disabled` | boolean | Deshabilita el menú "más". |
 
-#### Propiedades pÃºblicas
+#### Propiedades públicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
 | `actions` | lectura/escritura | `FlexOptionsInput[]`. |
-| `more` | lectura/escritura | Acciones del dropdown "mÃ¡s". |
+| `more` | lectura/escritura | Acciones del dropdown "más". |
 | `compact` | lectura/escritura | Refleja el atributo. |
 | `moreDisabled` | lectura/escritura | Refleja `more-disabled`. |
 
@@ -75,18 +75,18 @@ grupos se inserta separador.
 
 | Slot | Uso |
 | --- | --- |
-| â€” | No proyecta. Las acciones se pintan en shadow. |
+| — | No proyecta. Las acciones se pintan en shadow. |
 
 ### Eventos
 
 
-| Evento | DescripciÃ³n |
+| Evento | Descripción |
 | --- | --- |
-| `â€”` | Evento `â€”`. |
+| `—` | Evento `—`. |
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| â€” | â€” | â€” | â€” | â€” |
+| — | — | — | — | — |
 
 Los clics corren `onClick` de cada spec. No hay evento propio.
 
@@ -96,18 +96,18 @@ Los clics corren `onClick` de cada spec. No hay evento propio.
 
 ```js
 const el = document.querySelector('iswc-flex-options');
-el.addEventListener('â€”', (e) => {
-  console.log('â€”', e.detail);
+el.addEventListener('—', (e) => {
+  console.log('—', e.detail);
 });
 ```
 
 </details>
 
-### MÃ©todos y propiedades pÃºblicas
+### Métodos y propiedades públicas
 
-| MÃ©todo | Uso |
+| Método | Uso |
 | --- | --- |
-| â€” | No declara mÃ©todos extra. |
+| — | No declara métodos extra. |
 
 ### CSS parts
 
@@ -123,14 +123,14 @@ No expone.
 
 No declara tokens propios; usa los de `<iswc-button>` / `<iswc-dropdown>`.
 
-### IntegraciÃ³n con formularios
+### Integración con formularios
 
-No declara integraciÃ³n form-associated.
+No declara integración form-associated.
 
 ## Comportamiento
 
 Si la firma de `actions`+`more` no cambia, no reconstruye el DOM (evita
-flicker de upgrade de custom elements). `compact` omite el texto del botÃ³n.
+flicker de upgrade de custom elements). `compact` omite el texto del botón.
 
 ## Dependencias y componentes relacionados
 
@@ -140,11 +140,11 @@ flicker de upgrade de custom elements). `compact` omite el texto del botÃ³n.
 - [`../actions/check-icon-button.md`](../actions/check-icon-button.md)
 - [`float-card.md`](./float-card.md)
 
-Tags del mÃ³dulo: `<iswc-flex-options>`.
+Tags del módulo: `<iswc-flex-options>`.
 
 ## Accesibilidad
 
-`role="toolbar"` en el part `toolbar`. Cada acciÃ³n hereda el `title` del spec.
+`role="toolbar"` en el part `toolbar`. Cada acción hereda el `title` del spec.
 
 ## Ejemplo avanzado
 
@@ -169,13 +169,13 @@ Tags del mÃ³dulo: `<iswc-flex-options>`.
 
 ## Reglas para LLM
 
-- Reusar componente y dependencias antes de implementaciÃ³n paralela.
+- Reusar componente y dependencias antes de implementación paralela.
 - Mantener nombres exactos de tags y API.
 - Booleano se activa por presencia; no usar `attr="false"`.
-- No reinventar botÃ³n/dropdown: este tag ya los usa.
+- No reinventar botón/dropdown: este tag ya los usa.
 
 ## Fuentes
 
 - [JavaScript](./flex-options.ts)
-- [CSS](./flex-options.css)
+- [CSS](./flex-options.scss)
 - [Preview](./flex-options.json)

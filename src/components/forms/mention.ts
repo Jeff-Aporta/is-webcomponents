@@ -1,10 +1,16 @@
 import { adoptCss, defineElement, emit } from '../../core/element.js';
+import { attachFormInternals, setFormValue } from '../../core/form-associated.js';
+import './input.js';
 
 /**
  * <iswc-mention> — Input con autocompletado al tipear @usuario o #etiqueta.
  *
+ * Está construido SOBRE <iswc-input>: etiqueta, ayuda, error, variantes, foco y
+ * densidad viven allí. Lo que añade es el popup de sugerencias.
+ *
  * Atributos
- *   value, name, placeholder, disabled, readonly
+ *   value, name, placeholder, disabled, readonly, required, label, hint,
+ *   error, error-text, variant, label-placement, full-width
  *   trigger       caracteres que abren el popup (default "@#")
  *   max-items     tope del popup (default 8)
  *
@@ -24,14 +30,22 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
  *   iswc-select  detail: { trigger, item, range: [start, end] }
  */
 (() => {
-  const OBSERVED: string[] = ['value', 'name', 'placeholder', 'disabled', 'readonly', 'trigger', 'max-items'];
+  /** Atributos que <iswc-input> ya sabe resolver: se le pasan tal cual. */
+  const REENVIADOS: string[] = [
+    'placeholder', 'disabled', 'readonly', 'required', 'label', 'hint',
+    'error', 'error-text', 'variant', 'label-placement', 'full-width',
+  ];
+  const OBSERVED: string[] = [...REENVIADOS, 'value', 'name', 'trigger', 'max-items'];
 
   type SuggestionsMap = Record<string, string[]>;
 
   class IswcMention extends HTMLElement {
+    static formAssociated = true;
     static get observedAttributes(): string[] { return OBSERVED; }
 
-    #input!: HTMLInputElement;
+    #internals: ElementInternals | null;
+    #field: HTMLElement & { value: string };
+    #input: HTMLInputElement;
     #onDocPointerDown!: (e: PointerEvent) => void;
     #suggestions: SuggestionsMap = {};
     #popup!: HTMLElement;
@@ -39,20 +53,32 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
     #lastTriggerRange: [number, number] | null = null;
     #lastTriggerChar = '';
     #mounted = false;
+    #defaultValue = '';
 
     constructor() {
       super();
-      this.attachShadow({ mode: 'open' });
+      this.attachShadow({ mode: 'open', delegatesFocus: true });
       this.shadowRoot!.innerHTML = /* html */ `
         <div part="root" class="root">
-          <input part="input" class="input" id="input" type="text" />
           <div part="popup" class="popup" role="listbox" hidden></div>
         </div>
       `;
       adoptCss(this.shadowRoot!, import.meta.url);
-      this.#input = this.shadowRoot!.getElementById('input') as HTMLInputElement;
+      this.#field = document.createElement('iswc-input') as HTMLElement & { value: string };
+      this.#field.setAttribute('part', 'field');
+      this.#field.setAttribute('exportparts', 'form-control, label, base, input, hint, error-text');
       this.#popup = this.shadowRoot!.querySelector<HTMLElement>('.popup')!;
-      this.#input.addEventListener('input', () => this.#onInput());
+      this.#popup.before(this.#field);
+      this.#input = this.#field.shadowRoot!.getElementById('input') as HTMLInputElement;
+      this.#input.setAttribute('aria-autocomplete', 'list');
+      this.#input.setAttribute('aria-expanded', 'false');
+      this.#internals = attachFormInternals(this);
+      // Los eventos del campo interno se reemiten aquí con el contrato de la mención.
+      this.#field.addEventListener('iswc-input', (e: Event) => { e.stopPropagation(); this.#onInput(); });
+      this.#field.addEventListener('iswc-change', (e: Event) => {
+        e.stopPropagation();
+        emit(this, 'iswc-change', { value: this.value });
+      });
       this.#input.addEventListener('keydown', (e: KeyboardEvent) => this.#onKey(e));
       this.#input.addEventListener('blur', () => this.#hidePopup());
       this.#onDocPointerDown = (e: PointerEvent): void => {
@@ -77,30 +103,41 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
     attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
       if (!this.#mounted || oldVal === newVal) return;
       if (name === 'value') {
-        if (this.#input.value !== newVal) this.#input.value = newVal ?? '';
+        if (this.#field.value !== newVal) this.#field.value = newVal ?? '';
+        setFormValue(this.#internals, this.value);
       }
-      if (name === 'disabled' || name === 'readonly') this.#syncDisabled();
+      if (REENVIADOS.includes(name)) this.#forward(name);
     }
 
-    get value(): string { return this.#input?.value ?? ''; }
+    get value(): string { return this.#field.value; }
     set value(v: string | null | undefined) {
       const next = v ?? '';
-      if (this.#input) this.#input.value = next;
+      this.#field.value = next;
       this.setAttribute('value', next);
     }
+
+    formResetCallback(): void {
+      this.value = this.defaultValue;
+    }
+
+    /** Valor inicial del marcado: el que restaura el reset del formulario. */
+    get defaultValue(): string { return this.#defaultValue; }
     get suggestions(): SuggestionsMap { return this.#suggestions; }
     set suggestions(obj: SuggestionsMap | null | undefined) { this.#suggestions = obj || {}; }
 
     get isOpen(): boolean { return !this.#popup.hidden; }
 
     #sync(): void {
-      if (this.hasAttribute('value')) this.#input.value = this.getAttribute('value') ?? '';
-      this.#syncDisabled();
+      this.#defaultValue = this.getAttribute('value') ?? '';
+      if (this.hasAttribute('value')) this.#field.value = this.#defaultValue;
+      for (const name of REENVIADOS) this.#forward(name);
+      setFormValue(this.#internals, this.value);
     }
 
-    #syncDisabled(): void {
-      this.#input.disabled = this.hasAttribute('disabled');
-      this.#input.readOnly = this.hasAttribute('readonly');
+    #forward(name: string): void {
+      const v = this.getAttribute(name);
+      if (v == null) this.#field.removeAttribute(name);
+      else this.#field.setAttribute(name, v);
     }
 
     #readSlot(): void {
@@ -158,18 +195,23 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
         this.#popup.appendChild(opt);
       });
       this.#popup.hidden = false;
+      this.#input.setAttribute('aria-expanded', 'true');
+      this.#popup.querySelector('.iswc-active')?.scrollIntoView({ block: 'nearest' });
     }
 
     #positionPopup(): void {
-      // posición debajo del caret, aproximado
-      const inputRect = this.#input.getBoundingClientRect();
+      // Debajo de la caja del campo, no del host: la etiqueta y la ayuda también miden.
+      const box = this.#input.parentElement!.getBoundingClientRect();
+      const root = this.#popup.parentElement!.getBoundingClientRect();
+      const em = parseFloat(getComputedStyle(this).fontSize) || 16;
       this.#popup.style.left = '0px';
-      this.#popup.style.top = `${inputRect.height + 4}px`;
+      this.#popup.style.top = `${box.bottom - root.top + 0.25 * em}px`;
     }
 
     #hidePopup(): void {
       this.#popup.hidden = true;
       this.#popup.innerHTML = '';
+      this.#input.setAttribute('aria-expanded', 'false');
     }
 
     #onKey(e: KeyboardEvent): void {
@@ -199,7 +241,7 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
       const cur = this.#input.value;
       const replacement = `${this.#lastTriggerChar}${item} `;
       const next = cur.slice(0, start) + replacement + cur.slice(end);
-      this.#input.value = next;
+      this.#field.value = next;
       const caret = (start + replacement.length);
       try { this.#input.setSelectionRange(caret, caret); } catch { /* noop */ }
       this.setAttribute('value', next);

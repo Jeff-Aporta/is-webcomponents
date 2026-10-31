@@ -277,7 +277,7 @@ import type { IswcMdEditorDocument, IswcMdEditorApiConfig, IswcMdEditorActions, 
       this.#previewEmpty = shadow.querySelector<HTMLElement>('.preview-empty')!;
       this.#copyBtn = shadow.querySelector<HTMLElement>('.copy') as CopyButtonElement;
       this.#dlg = shadow.querySelector<HTMLElement>('.dlg') as DialogElement;
-      this.#dlg.style.setProperty('--width', 'min(96vw, 56rem)');
+      this.#dlg.style.setProperty('--width', 'min(96vw, 56em)');
       this.#dlgLabel = shadow.querySelector<HTMLElement>('.dlg-label')!;
       this.#dlgFilename = shadow.querySelector<HTMLElement>('.dlg-filename')!;
       this.#toolbar = shadow.querySelector<HTMLElement>('.toolbar')!;

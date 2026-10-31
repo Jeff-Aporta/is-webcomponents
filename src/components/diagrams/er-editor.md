@@ -6,12 +6,19 @@ category: diagrams
 status: public
 source: ./er-editor.ts
 preview: ./er-editor.json
+style: ./er-editor.scss
 ---
 # `<iswc-er-editor>`
 
 ## Propósito
 
 Editor visual del diagrama entidad-relación. Monta `<iswc-er-diagram>` y añade selección, arrastre, conexión, deshacer y exportación. El visor de solo lectura sigue siendo `<iswc-er-diagram>`.
+
+## Importación
+
+```js
+import './er-editor.js';
+```
 
 ## Cuándo usarlo
 
@@ -76,3 +83,17 @@ el.addEventListener('iswc-state-change', (e) => {
   </script>
 </iswc-er-editor>
 ```
+
+## Comportamiento
+
+Edita un diagrama entidad-relación en un canvas con barra de herramientas, panel de propiedades, historial, zoom y arrastre. `Supr` borra la selección; `Ctrl+Z` y `Ctrl+Y` deshacen y rehacen.
+
+## Accesibilidad
+
+La barra es un `role="toolbar"` con grupos rotulados, y cada botón tiene `aria-label`. El modo activo se marca con `aria-pressed`.
+
+## Reglas para LLM
+
+- Para mostrar un diagrama sin editarlo, usa `<iswc-er-diagram>`.
+- En una app completa, enlaza a la página `diagram-edit-app`.
+- Lee el resultado por la API de la ficha: no parsees el SVG.

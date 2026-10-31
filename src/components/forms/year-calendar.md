@@ -1,36 +1,36 @@
-﻿---
+---
 tag: iswc-year-calendar
 tags:
   - iswc-year-calendar
 category: forms
 status: public
 source: ./year-calendar.ts
-style: ./year-calendar.css
+style: ./year-calendar.scss
 preview: ./year-calendar.json
 ---
 # `<iswc-year-calendar>`
 
-## PropÃ³sito
+## Propósito
 
-Calendario inline (DateCalendar de MUI X). Tres vistas (dÃ­a, mes, aÃ±o), teclado, nÃºmeros de semana y reglas de deshabilitado. El mes y el aÃ±o del encabezado abren un iswc-dropdown.
+Calendario inline (DateCalendar de MUI X). Tres vistas (día, mes, año), teclado, números de semana y reglas de deshabilitado. El mes y el año del encabezado abren un iswc-dropdown.
 
-Este mÃ³dulo registra `<iswc-year-calendar>`.
+Este módulo registra `<iswc-year-calendar>`.
 
-## CuÃ¡ndo usarlo
+## Cuándo usarlo
 
-Captura, selecciÃ³n y validaciÃ³n de valores compatibles con formularios.
+Captura, selección y validación de valores compatibles con formularios.
 
-## CuÃ¡ndo no usarlo
+## Cuándo no usarlo
 
-No duplicar validaciÃ³n, form association ni pickers shared.
+No duplicar validación, form association ni pickers shared.
 
-## ImportaciÃ³n
+## Importación
 
 ```js
 import './year-calendar.js';
 ```
 
-## Ejemplo mÃ­nimo
+## Ejemplo mínimo
 
 ```html
 <iswc-year-calendar></iswc-year-calendar>
@@ -44,14 +44,14 @@ import './year-calendar.js';
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
-| `value` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `min` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `max` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `columns` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `disabled` | boolean | Fuente define default/restricciÃ³n. |
-| `readonly` | boolean | Fuente define default/restricciÃ³n. |
+| `value` | string/según contrato | Fuente define default/restricción. |
+| `min` | string/según contrato | Fuente define default/restricción. |
+| `max` | string/según contrato | Fuente define default/restricción. |
+| `columns` | string/según contrato | Fuente define default/restricción. |
+| `disabled` | boolean | Fuente define default/restricción. |
+| `readonly` | boolean | Fuente define default/restricción. |
 
-#### Propiedades pÃºblicas
+#### Propiedades públicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
@@ -69,13 +69,13 @@ No expone.
 ### Eventos
 
 
-| Evento | DescripciÃ³n |
+| Evento | Descripción |
 | --- | --- |
 | `iswc-change` | Emitido al confirmar el cambio de valor (escribe como `change` nativo). |
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `iswc-change` | sÃ­ | sÃ­ | sÃ­ | no |
+| `iswc-change` | sí | sí | sí | no |
 
 
 <details>
@@ -90,21 +90,21 @@ el.addEventListener('iswc-change', (e) => {
 
 </details>
 
-### MÃ©todos y propiedades pÃºblicas
+### Métodos y propiedades públicas
 
-| MÃ©todo | Uso |
+| Método | Uso |
 | --- | --- |
-| `focus()` | MÃ©todo pÃºblico declarado. |
-| `scrollToSelection()` | MÃ©todo pÃºblico declarado. |
+| `focus()` | Método público declarado. |
+| `scrollToSelection()` | Método público declarado. |
 
-Propiedades pÃºblicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
+Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
 
 ### CSS parts
 
 | Part | Uso |
 | --- | --- |
 | `base` | Personalizable con `::part(base)`. |
-| `year` | Cada celda de aÃ±o en la grilla multi-anual. |
+| `year` | Cada celda de año en la grilla multi-anual. |
 
 ### Custom states
 
@@ -114,27 +114,27 @@ No expone.
 
 | Token | Uso |
 | --- | --- |
-| `--iswc-year-columns` | Token leÃ­do o definido por componente. |
-| `--iswc-sans` | Token leÃ­do o definido por componente. |
-| `--iswc-text` | Token leÃ­do o definido por componente. |
-| `--iswc-year-height` | Token leÃ­do o definido por componente. |
-| `--iswc-radius-sm` | Token leÃ­do o definido por componente. |
-| `--iswc-control-bg-hover` | Token leÃ­do o definido por componente. |
-| `--iswc-focus` | Token leÃ­do o definido por componente. |
-| `--iswc-accent` | Token leÃ­do o definido por componente. |
-| `--iswc-color-brand-500` | Token leÃ­do o definido por componente. |
-| `--iswc-color-brand-600` | Token leÃ­do o definido por componente. |
-| `--iswc-on-brand` | Token leÃ­do o definido por componente. |
+| `--iswc-year-columns` | Token leído o definido por componente. |
+| `--iswc-sans` | Token leído o definido por componente. |
+| `--iswc-text` | Token leído o definido por componente. |
+| `--iswc-year-height` | Token leído o definido por componente. |
+| `--iswc-radius-sm` | Token leído o definido por componente. |
+| `--iswc-control-bg-hover` | Token leído o definido por componente. |
+| `--iswc-focus` | Token leído o definido por componente. |
+| `--iswc-accent` | Token leído o definido por componente. |
+| `--iswc-color-brand-500` | Token leído o definido por componente. |
+| `--iswc-color-brand-600` | Token leído o definido por componente. |
+| `--iswc-on-brand` | Token leído o definido por componente. |
 
-### IntegraciÃ³n con formularios
+### Integración con formularios
 
-No declara integraciÃ³n form-associated propia en este mÃ³dulo.
+No declara integración form-associated propia en este módulo.
 
 ## Comportamiento
 
-DocumentaciÃ³n de cabecera preservada desde fuente:
+Documentación de cabecera preservada desde fuente:
 
-> <iswc-year-calendar> â€” Rejilla de aÃ±os desplazable (MUI YearCalendar).
+> <iswc-year-calendar> — Rejilla de años desplazable (MUI YearCalendar).
 > Atributos: value (yyyy), min, max (ISO o yyyy), columns, disabled, readonly
 > Events: iswc-change  detail { value, year }
 
@@ -142,11 +142,11 @@ DocumentaciÃ³n de cabecera preservada desde fuente:
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 
-Tags del mÃ³dulo: `<iswc-year-calendar>`.
+Tags del módulo: `<iswc-year-calendar>`.
 
 ## Accesibilidad
 
-Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: `aria-checked`.
+Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-checked`.
 
 ## Ejemplo avanzado
 
@@ -156,7 +156,7 @@ Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: `aria-chec
 
 ## Errores comunes
 
-- Usar tag sin importar mÃ³dulo primero.
+- Usar tag sin importar módulo primero.
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
@@ -164,15 +164,15 @@ Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: `aria-chec
 
 ## Reglas para LLM
 
-- Reusar componente y dependencias antes de implementaciÃ³n paralela.
+- Reusar componente y dependencias antes de implementación paralela.
 - Mantener nombres exactos de tags y API.
-- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explÃ­cito.
-- Leer callers/shared antes de cambiar; corregir raÃ­z comÃºn.
-- No modificar API basÃ¡ndose solo en preview.
+- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explícito.
+- Leer callers/shared antes de cambiar; corregir raíz común.
+- No modificar API basándose solo en preview.
 
 ## Fuentes
 
 - [JavaScript](./year-calendar.ts)
-- [CSS](./year-calendar.css)
-- [Ãndice de categorÃ­a](../../specs/componentes.md)
+- [CSS](./year-calendar.scss)
+- [Índice de categoría](../../../specs/componentes.md)
 - [Preview](./year-calendar.json)

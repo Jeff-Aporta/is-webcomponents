@@ -32,8 +32,16 @@ import { withStyleAttrs } from '../../core/attrs.js';
     constructor() {
       super();
       const shadow = this.attachShadow({ mode: 'open' });
-      shadow.innerHTML = '<span part="divider" class="divider" aria-hidden="true"></span>';
+      shadow.innerHTML = '<span part="divider" class="divider" aria-hidden="true"></span>'
+        + '<span part="label" class="rotulo" hidden><slot></slot></span>'
+        + '<span part="divider" class="divider fin" aria-hidden="true" hidden></span>';
       adoptCss(shadow, import.meta.url);
+      const slot = shadow.querySelector('slot')!;
+      slot.addEventListener('slotchange', () => {
+        const conTexto = slot.assignedNodes().some((n) => (n.textContent ?? '').trim());
+        shadow.querySelector<HTMLElement>('.rotulo')!.hidden = !conTexto;
+        shadow.querySelector<HTMLElement>('.fin')!.hidden = !conTexto;
+      });
     }
 
     connectedCallback(): void {

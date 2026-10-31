@@ -12,10 +12,10 @@
   border-radius: var(--iswc-popover-radius, var(--iswc-radius));
   background: var(--iswc-bg-elev);
   color: var(--iswc-text);
-  padding: 0.35rem;
-  min-width: 12rem;
-  max-width: 22rem;
-  box-shadow: var(--iswc-popover-shadow, var(--iswc-shadow, 0 18px 44px rgba(0, 0, 0, 0.26))), 0 0 0 1px color-mix(in srgb, var(--iswc-text) 4%, transparent) inset;
+  padding: 0.35em;
+  min-width: 12em;
+  max-width: 22em;
+  box-shadow: var(--iswc-popover-shadow, var(--iswc-shadow, 0 1.125em 2.75em rgba(0, 0, 0, 0.26))), 0 0 0 .0625em color-mix(in srgb, var(--iswc-text) 4%, transparent) inset;
   /* El UA aplica a <dialog>: position:absolute, inset-inline 0, width:fit-content
      y margin:auto. Con solo `left`/`top` desde JS, el `right:0` heredado y el
      margin auto RE-CENTRAN el panel y nunca aparece en el cursor. Hay que
@@ -26,7 +26,7 @@
   bottom: auto;
   margin: 0;
   width: max-content;
-  max-height: min(70vh, 32rem);
+  max-height: min(70vh, 32em);
   overflow-y: auto;
   z-index: 1000;
 }
@@ -34,35 +34,36 @@
 .items {
   display: flex;
   flex-direction: column;
-  gap: 1px;
+  gap: .0625em;
 }
 
 ::slotted(:is(.item, button, a, [role=menuitem])) {
   display: flex;
   align-items: center;
-  gap: 0.55rem;
-  padding: 0.45rem 0.6rem;
-  border-radius: calc(var(--iswc-radius) - 3px);
+  gap: 0.55em;
+  padding: 0.45em 0.6em;
+  border-radius: calc(var(--iswc-radius) - .1875em);
   background: transparent;
   border: 0;
   color: inherit;
-  text-align: left;
+  text-align: start;
   width: 100%;
   font: inherit;
   cursor: pointer;
 }
-::slotted(:is(.item, button, a, [role=menuitem])):hover {
+::slotted(:is(.item, button, a, [role=menuitem]):is(:hover, :focus-visible)) {
   background: color-mix(in srgb, var(--iswc-accent) 18%, transparent);
   color: var(--iswc-accent);
+  outline: 0;
 }
 
 ::slotted(:is(.item, button)[disabled]) {
-  opacity: 0.5;
+  opacity: 0.55;
   pointer-events: none;
 }
 
 ::slotted(hr) {
   border: 0;
   border-top: 1px solid var(--iswc-border);
-  margin: 0.25rem 0.2rem;
+  margin: 0.25em 0.2em;
 }

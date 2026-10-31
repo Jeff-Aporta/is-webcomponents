@@ -1,34 +1,34 @@
-﻿---
+---
 tag: iswc-rte
 tags:
   - iswc-rte
 category: forms
 status: public
 source: ./rte.ts
-style: ./rte.css
+style: ./rte.scss
 preview: ./rte.json
 ---
 # `<iswc-rte>`
 
-## PropÃ³sito
+## Propósito
 
 Editor de texto enriquecido sobre `contentEditable`, con toolbar configurable,
-modo cÃ³digo fuente HTML y registro de comandos aportados por otros
+modo código fuente HTML y registro de comandos aportados por otros
 componentes.
 
-Este mÃ³dulo registra `<iswc-rte>` y exporta `registerRteCommand()`.
+Este módulo registra `<iswc-rte>` y exporta `registerRteCommand()`.
 
-## CuÃ¡ndo usarlo
+## Cuándo usarlo
 
 Capturar contenido con formato (notas, descripciones, plantillas de correo)
 cuando el destino es HTML.
 
-## CuÃ¡ndo no usarlo
+## Cuándo no usarlo
 
 Para texto plano usar `<iswc-textarea>`; para Markdown usar `<iswc-md-editor>`;
 para menciones sobre texto plano usar `<iswc-mention>`.
 
-## ImportaciÃ³n
+## Importación
 
 ```js
 import './rte.js';
@@ -36,10 +36,10 @@ import './rte.js';
 import { registerRteCommand } from './rte.js';
 ```
 
-## Ejemplo mÃ­nimo
+## Ejemplo mínimo
 
 ```html
-<iswc-rte placeholder="Escribe aquÃ­"></iswc-rte>
+<iswc-rte placeholder="Escribe aquí"></iswc-rte>
 ```
 
 ## API
@@ -51,18 +51,18 @@ import { registerRteCommand } from './rte.js';
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
 | `value` | string | HTML inicial y actual. |
-| `placeholder` | string | Visible mientras el contenido estÃ¡ vacÃ­o. |
+| `placeholder` | string | Visible mientras el contenido está vacío. |
 | `toolbar` | string | Lista separada por comas; `\|` inserta separador. Default: `bold,italic,underline,strike,\|,h1,h2,h3,\|,ul,ol,\|,link,blockquote,code,\|,undo,redo,clear`. |
 | `autofocus` | boolean | Enfoca al conectar. |
-| `readonly` | boolean | Desactiva la ediciÃ³n. |
+| `readonly` | boolean | Desactiva la edición. |
 | `source-mode` | boolean | Muestra el HTML crudo en un `textarea`. |
 
-#### Propiedades pÃºblicas
+#### Propiedades públicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
 | `value` | lectura/escritura | HTML; en modo fuente devuelve el contenido del `textarea`. |
-| `text` | lectura | Texto plano (`textContent`) del Ã¡rea WYSIWYG. |
+| `text` | lectura | Texto plano (`textContent`) del área WYSIWYG. |
 | `sourceMode` | lectura/escritura | Refleja `source-mode`. |
 
 ### Slots
@@ -72,7 +72,7 @@ No expone.
 ### Eventos
 
 
-| Evento | DescripciÃ³n |
+| Evento | Descripción |
 | --- | --- |
 | `iswc-input` | Emitido en cada cambio del valor (escribe como `input` nativo). |
 | `iswc-change` | Emitido al confirmar el cambio de valor (escribe como `change` nativo). |
@@ -81,10 +81,10 @@ No expone.
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `iswc-input` | sin detail | sÃ­ | sÃ­ | no |
-| `iswc-change` | `{ value, text }` | sÃ­ | sÃ­ | no |
-| `iswc-blur` | sin detail | sÃ­ | sÃ­ | no |
-| `iswc-source-change` | `{ source }` | sÃ­ | sÃ­ | no |
+| `iswc-input` | sin detail | sí | sí | no |
+| `iswc-change` | `{ value, text }` | sí | sí | no |
+| `iswc-blur` | sin detail | sí | sí | no |
+| `iswc-source-change` | `{ source }` | sí | sí | no |
 
 
 <details>
@@ -99,23 +99,23 @@ el.addEventListener('iswc-input', (e) => {
 
 </details>
 
-### MÃ©todos y propiedades pÃºblicas
+### Métodos y propiedades públicas
 
-| MÃ©todo | Uso |
+| Método | Uso |
 | --- | --- |
-| `focus()` / `blur()` | Sobre el Ã¡rea activa (WYSIWYG o fuente). |
-| `exec(cmd, value?)` | Ejecuta un comando de ediciÃ³n. |
-| `format(tag)` | `formatBlock` con el tag indicado (`h1`, `blockquote`, `pre`â€¦). |
+| `focus()` / `blur()` | Sobre el área activa (WYSIWYG o fuente). |
+| `exec(cmd, value?)` | Ejecuta un comando de edición. |
+| `format(tag)` | `formatBlock` con el tag indicado (`h1`, `blockquote`, `pre`…). |
 | `insertHtml(html)` | Inserta HTML en el cursor; respeta el modo fuente. |
-| `link()` | Pide una URL y aplica enlace a la selecciÃ³n. |
+| `link()` | Pide una URL y aplica enlace a la selección. |
 | `clear()` | Quita formato y devuelve el bloque a `p`. |
 | `undo()` / `redo()` | Deshacer / rehacer. |
 
-FunciÃ³n exportada del mÃ³dulo:
+Función exportada del módulo:
 
-| FunciÃ³n | Uso |
+| Función | Uso |
 | --- | --- |
-| `registerRteCommand(name, { icon, title, run })` | Registra un botÃ³n extra invocable desde el atributo `toolbar`. `run` recibe la instancia de `<iswc-rte>`. |
+| `registerRteCommand(name, { icon, title, run })` | Registra un botón extra invocable desde el atributo `toolbar`. `run` recibe la instancia de `<iswc-rte>`. |
 
 ### CSS parts
 
@@ -123,8 +123,8 @@ FunciÃ³n exportada del mÃ³dulo:
 | --- | --- |
 | `root` | Contenedor. |
 | `toolbar` | Barra de botones. |
-| `content` | Ãrea editable WYSIWYG. |
-| `source` | `textarea` del modo cÃ³digo fuente. |
+| `content` | Área editable WYSIWYG. |
+| `source` | `textarea` del modo código fuente. |
 | `placeholder` | Texto de ayuda. |
 
 ### Custom states
@@ -136,7 +136,7 @@ No expone custom states.
 | Token | Uso |
 | --- | --- |
 | `--iswc-rte-toolbar-bg` | Fondo de la toolbar. |
-| `--iswc-rte-content-min-h` | Altura mÃ­nima del Ã¡rea editable. |
+| `--iswc-rte-content-min-h` | Altura mínima del área editable. |
 | `--iswc-rte-button-radius` | Radio de los botones de la toolbar. |
 | `--iswc-rte-token-bg` | Fondo de los tokens insertados por comandos externos. |
 | `--iswc-rte-token-color` | Color de esos tokens. |
@@ -149,26 +149,26 @@ No expone custom states.
 | `--iswc-control-radius` | Radio de bordes. |
 | `--iswc-text` | Color del contenido. |
 | `--iswc-text-soft` | Color del placeholder. |
-| `--iswc-accent` | BotÃ³n activo. |
+| `--iswc-accent` | Botón activo. |
 | `--iswc-focus` | Anillo de foco. |
 
-### IntegraciÃ³n con formularios
+### Integración con formularios
 
 No es form-associated: reflejar `value` en un campo oculto desde `iswc-change`
-si se envÃ­a por formulario nativo.
+si se envía por formulario nativo.
 
 ## Comportamiento
 
 - La toolbar se reconstruye al cambiar el atributo `toolbar`. Los botones
-  hacen `preventDefault` en `mousedown` para no perder la selecciÃ³n.
-- Comandos base vÃ­a `document.execCommand`: negrita/cursiva/subrayado/tachado,
-  `formatBlock` para encabezados, cita, cÃ³digo y `pre`, e `insertUnorderedList`
+  hacen `preventDefault` en `mousedown` para no perder la selección.
+- Comandos base vía `document.execCommand`: negrita/cursiva/subrayado/tachado,
+  `formatBlock` para encabezados, cita, código y `pre`, e `insertUnorderedList`
   / `insertOrderedList` para listas.
 - `link()` abre un `prompt` del navegador para pedir la URL.
-- `source-mode` alterna entre el Ã¡rea editable y el `textarea` de HTML crudo;
+- `source-mode` alterna entre el área editable y el `textarea` de HTML crudo;
   al alternar se emite `iswc-source-change` y `value` cambia de origen.
 - Los comandos registrados con `registerRteCommand()` se resuelven por nombre
-  al construir la toolbar, sin que este mÃ³dulo conozca al componente que los
+  al construir la toolbar, sin que este módulo conozca al componente que los
   aporta.
 
 ## Dependencias y componentes relacionados
@@ -178,13 +178,13 @@ si se envÃ­a por formulario nativo.
 - [`../_shared/emit.js`](../_shared/emit.js)
 - [`../_shared/element-base.js`](../_shared/element-base.js)
 
-Tags del mÃ³dulo: `<iswc-rte>`.
+Tags del módulo: `<iswc-rte>`.
 
 ## Accesibilidad
 
-La toolbar declara `role="toolbar"` y cada botÃ³n lleva `title` y `aria-label`.
-El Ã¡rea editable es `contenteditable` y participa del orden de foco natural.
-`link()` usa un `prompt` del navegador: en flujos que requieran un diÃ¡logo
+La toolbar declara `role="toolbar"` y cada botón lleva `title` y `aria-label`.
+El área editable es `contenteditable` y participa del orden de foco natural.
+`link()` usa un `prompt` del navegador: en flujos que requieran un diálogo
 accesible propio, registrar un comando personalizado que abra `<iswc-dialog>`.
 
 ## Ejemplo avanzado
@@ -198,7 +198,7 @@ accesible propio, registrar un comando personalizado que abra `<iswc-dialog>`.
   import { registerRteCommand } from './rte.js';
 
   registerRteCommand('firma', {
-    icon: 'âœ’ï¸',
+    icon: '✒️',
     title: 'Insertar firma',
     run: (rte) => rte.insertHtml('<p>Atentamente,<br>ContaPyme</p>'),
   });
@@ -211,26 +211,26 @@ accesible propio, registrar un comando personalizado que abra `<iswc-dialog>`.
 
 ## Errores comunes
 
-- Registrar el comando despuÃ©s de que la toolbar ya se construyÃ³: registrarlo
-  antes de conectar el componente, o forzar la reconstrucciÃ³n reasignando
+- Registrar el comando después de que la toolbar ya se construyó: registrarlo
+  antes de conectar el componente, o forzar la reconstrucción reasignando
   `toolbar`.
 - Leer `value` en modo fuente esperando el HTML del WYSIWYG: en ese modo el
   valor sale del `textarea`.
 - Insertar HTML sin sanear proveniente del usuario: `insertHtml()` no sanea.
 - Enviarlo en un `<form>` sin campo espejo.
-- Usar tag sin importar mÃ³dulo primero.
+- Usar tag sin importar módulo primero.
 
 ## Reglas para LLM
 
-- Reusar componente y dependencias antes de implementaciÃ³n paralela.
+- Reusar componente y dependencias antes de implementación paralela.
 - Mantener nombres exactos de tags y API.
-- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explÃ­cito.
-- Leer callers/shared antes de cambiar; corregir raÃ­z comÃºn.
-- No modificar API basÃ¡ndose solo en preview.
+- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explícito.
+- Leer callers/shared antes de cambiar; corregir raíz común.
+- No modificar API basándose solo en preview.
 
 ## Fuentes
 
 - [JavaScript](./rte.ts)
-- [CSS](./rte.css)
-- [Ãndice de categorÃ­a](../../specs/componentes.md)
+- [CSS](./rte.scss)
+- [Índice de categoría](../../../specs/componentes.md)
 - [Preview](./rte.json)

@@ -1,6 +1,9 @@
 import { adoptCss, defineElement, emit } from '../../core/element.js';
 import { ElementBase } from '../../core/element-base.js';
 import { setOptionalAttr, setStringAttr } from '../../core/reflect.js';
+import '../actions/button.js';
+import '../media/icon.js';
+import '../feedback/empty-state.js';
 import {
   blobUrlFromBuffer,
   loadArrayBuffer,
@@ -45,32 +48,32 @@ import {
           <div part="toolbar" class="toolbar iswc-surface-bar" role="toolbar" aria-label="Controles del visor">
             <span class="title" id="pdf-title"><slot name="title">Documento PDF</slot></span>
             <span class="spacer"></span>
-            <button part="download" class="btn" id="dl" hidden
-              aria-label="Descargar PDF">
-              <span aria-hidden="true">⤓</span> Descargar
-            </button>
-            <button part="print" class="btn" id="print" hidden
-              aria-label="Imprimir PDF">
-              <span aria-hidden="true">⎙</span> Imprimir
-            </button>
+            <iswc-button part="download" class="btn" id="dl" variant="soft" color="text" aria-label="Descargar PDF" hidden>
+              <iswc-icon slot="start" icon="mdi:download" aria-hidden="true"></iswc-icon>Descargar
+            </iswc-button>
+            <iswc-button part="print" class="btn" id="print" variant="soft" color="text" aria-label="Imprimir PDF" hidden>
+              <iswc-icon slot="start" icon="mdi:printer-outline" aria-hidden="true"></iswc-icon>Imprimir
+            </iswc-button>
             <slot name="toolbar"></slot>
           </div>
           <iframe part="frame" class="frame" id="frame"
             title="Visor PDF" role="document"></iframe>
+          <iswc-empty-state part="empty" class="vacio" icono="mdi:file-pdf-box" titulo="Sin documento" texto="Indica un PDF con src o content." hidden></iswc-empty-state>
         </div>
       `;
       adoptCss(this.shadowRoot!, import.meta.url);
       this.#iframe = this.shadowRoot!.getElementById('frame') as HTMLIFrameElement;
       this.#dl = this.shadowRoot!.getElementById('dl')!;
       this.#print = this.shadowRoot!.getElementById('print')!;
+      this.#vacio = this.shadowRoot!.querySelector<HTMLElement>('.vacio')!;
       this.#dl.addEventListener('click', () => this.#download());
       this.#print.addEventListener('click', () => this.#printIt());
+      this.#iframe.addEventListener('load', () => { if (this.#iframe.hasAttribute('src')) emit(this, 'iswc-load'); });
+      this.#iframe.addEventListener('error', () => emit(this, 'iswc-error'));
     }
 
     onConnected() {
       this.#sync();
-      this.#iframe.addEventListener('load', () => emit(this, 'iswc-load'));
-      this.#iframe.addEventListener('error', () => emit(this, 'iswc-error'));
       // Vincular el iframe con la cabecera (#pdf-title) para que el lector
       // de pantalla tenga un nombre accesible sincronizado con el titulo.
       this.#iframe.setAttribute('aria-labelledby', 'pdf-title');
@@ -107,6 +110,9 @@ import {
       this.#iframe.style.height = this.getAttribute('height') || '80vh';
 
       const source = resolveFileSource(this.getAttribute('src'), this.getAttribute('content'));
+      // Sin documento, un aviso en vez de un rectángulo en blanco.
+      this.#vacio.hidden = source.kind !== 'empty';
+      this.#iframe.hidden = source.kind === 'empty';
       if (source.kind === 'empty') {
         this.#revokeBlob();
         this.#iframe.removeAttribute('src');
@@ -148,6 +154,7 @@ import {
     #iframe!: HTMLIFrameElement;
     #dl!: HTMLElement;
     #print!: HTMLElement;
+    #vacio!: HTMLElement;
     #blobUrl: string | null = null;
     #syncGen = 0;
 

@@ -1,20 +1,36 @@
-﻿---
+---
 tag: iswc-playground
 tags:
   - iswc-playground
 category: preview
 status: public
 source: ./playground.ts
-style: ./playground.css
+style: ./playground.scss
 preview: ./playground.json
 ---
 # `<iswc-playground>`
 
-## Proposito
+## Propósito
 
 Playground homogeneo (stage + knobs) para galeria y apps. CDN.
 
-## Importacion
+## Cuándo usarlo
+
+Cuando una app o una ficha necesita un escenario con controles fuera de la galería.
+
+## Cuándo no usarlo
+
+Dentro de un `.json` `iswc-preview/v1` no hace falta: el bloque `demo` con `controls` ya trae el playground.
+
+## Ejemplo mínimo
+
+```html
+<iswc-playground title="Playground" target="iswc-button">
+  <iswc-button slot="stage">Hola</iswc-button>
+</iswc-playground>
+```
+
+## Importación
 
 ```js
 import './playground.js';
@@ -37,7 +53,7 @@ Evento: `iswc-controls-change` `{ def, valor }`.
 
 ## Eventos
 
-| Evento | DescripciÃ³n |
+| Evento | Descripción |
 | --- | --- |
 | `iswc-controls-change` | Emitido al cambiar el valor de un control del playground. |
 
@@ -59,11 +75,24 @@ el.addEventListener('iswc-controls-change', (e) => {
 | Part | Uso |
 | --- | --- |
 | `body` | Cuerpo del componente. |
-| `config` | Panel de configuraciÃ³n. |
+| `config` | Panel de configuración. |
 | `controls` | Fila de controles. |
 | `head` | Cabecera. |
-| `lede` | PÃ¡rrafo introductorio bajo el tÃ­tulo. |
+| `lede` | Párrafo introductorio bajo el título. |
 | `root` | Personalizable con `::part(root)`. |
 | `stage` | Escenario donde se renderiza el contenido. |
 | `stage-wrap` | Contenedor del escenario. |
-| `title` | TÃ­tulo del playground. |
+| `title` | Título del playground. |
+
+## Comportamiento
+
+Monta el escenario y sus controles, aplica cada cambio al `target` y emite `iswc-controls-change`.
+
+## Accesibilidad
+
+Los controles son `iswc-*` con su rótulo. El editor de CSS tiene `aria-label`.
+
+## Reglas para LLM
+
+- `target` apunta a un host dentro de `slot="stage"`.
+- La lista de controles va por `spec`.

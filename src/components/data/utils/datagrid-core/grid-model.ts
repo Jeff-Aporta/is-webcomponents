@@ -27,9 +27,10 @@
 import { resolveColumns, setColumnWidth, setColumnPinned, setColumnHidden, moveColumn, autosizeColumn } from './column-state.js';
 import { filterRows } from './pipeline-filtering.js';
 import { sortRows, cycleSort } from './pipeline-sorting.js';
-import { buildDisplayRows, collectGroupIds } from './pipeline-grouping.js';
+import { aggregateGroup, buildDisplayRows, collectGroupIds } from './pipeline-grouping.js';
 import { Density, SelectionMode, DEFAULT_PAGE_SIZE } from './types.js';
-import type { ColumnDef, ColumnFilter, ColumnState, DensityName, FilterModel, GridApi, GridListener, GridOptions, GridState, PinSideName, RowData, RowNode, SortModel } from "../../schemas/datagrid-types.schemas.js";
+import type { ColumnDef, ColumnFilter, ColumnState, DensityName, DisplayRow, FilterModel, GridApi, GridListener, GridOptions, GridState, PinSideName, RowData, RowNode, RowTransaction, SortModel, TransactionResult, TransformadorModelo } from "../../schemas/datagrid-types.schemas.js";
+import type { EvaluadoresFiltro, FiltroExterno } from './pipeline-filtering.js';
 
 
 /**
@@ -64,21 +65,67 @@ export function createGridModel(options: GridOptions) {
 
   const groupDefaultExpanded = options.groupDefaultExpanded ?? 0;
 
+  /**
+   * Pipeline memoizado: cada etapa se repite solo si quedo sucia. Asi la
+   * seleccion, la paginacion o un resize no vuelven a filtrar 100.000 filas.
+   */
+  const sucio = { filtrar: true, ordenar: true, agrupar: true };
+  let filtradas: RowNode[] = [];
+  let ordenadas: RowNode[] = [];
+  let display: DisplayRow[] = [];
+  let transformadores: TransformadorModelo[] = [];
+  let evaluadores: EvaluadoresFiltro = new Map();
+  let externo: FiltroExterno | null = null;
+  let porId = new Map<string, RowNode>();
+  let secuencia = 0;
+
+  function ensuciar(desde: 'filtrar' | 'ordenar' | 'agrupar') {
+    if (desde === 'filtrar') sucio.filtrar = true;
+    if (desde !== 'agrupar') sucio.ordenar = true;
+    sucio.agrupar = true;
+  }
+
   function rebuildNodes() {
     s.nodes = s.rawRows.map((data, index) => ({ id: s.getRowId(data, index), index, data }));
+    porId = new Map(s.nodes.map((n) => [n.id, n]));
+    secuencia = s.nodes.length;
+    ensuciar('filtrar');
   }
 
   function colById() {
     return new Map(s.columns.map((c) => [c.colId, c]));
   }
 
-  function compute(): GridState {
+  function transformar<T>(etapa: string, filas: T[]): T[] {
+    let salida: unknown[] = filas;
+    for (const t of transformadores) if (t.etapa === etapa) salida = t.aplicar(salida);
+    return salida as T[];
+  }
+
+  function correrPipeline() {
     const byId = colById();
-    const filtered = filterRows(s.nodes, s.filterModel, s.quickFilter, s.columns, byId);
-    const sorted = sortRows(filtered, s.sortModel, byId);
+    if (sucio.filtrar) {
+      filtradas = transformar('filtrar', filterRows(s.nodes, s.filterModel, s.quickFilter, s.columns, byId, evaluadores, externo));
+      sucio.filtrar = false;
+    }
+    if (sucio.ordenar) {
+      ordenadas = transformar('ordenar', sortRows(filtradas, s.sortModel, byId));
+      sucio.ordenar = false;
+    }
+    if (sucio.agrupar) {
+      const grouped = s.rowGroupCols.filter((c) => byId.has(c));
+      display = transformar('aplanar', transformar('agrupar', buildDisplayRows(ordenadas, transformadores.some((t) => t.etapa === 'aplanar') ? [] : grouped, byId, s.expandedGroups)));
+      sucio.agrupar = false;
+    }
+    return byId;
+  }
+
+  function compute(): GridState {
+    const byId = correrPipeline();
+    const sorted = ordenadas;
     const totalRows = sorted.length;
     const grouped = s.rowGroupCols.filter((c) => byId.has(c));
-    const displayRows = buildDisplayRows(sorted, grouped, byId, s.expandedGroups);
+    const displayRows = display;
 
     let page = s.page;
     let pageRows = sorted;
@@ -111,13 +158,9 @@ export function createGridModel(options: GridOptions) {
 
   function reseedExpansion() {
     if (groupDefaultExpanded === -1 && s.rowGroupCols.length) {
-      const byId = colById();
-      const sorted = sortRows(
-        filterRows(s.nodes, s.filterModel, s.quickFilter, s.columns, byId),
-        s.sortModel,
-        byId,
-      );
-      s.expandedGroups = new Set(collectGroupIds(sorted, s.rowGroupCols, byId));
+      correrPipeline();
+      s.expandedGroups = new Set(collectGroupIds(ordenadas, s.rowGroupCols, colById()));
+      ensuciar('agrupar');
     }
   }
 
@@ -147,15 +190,18 @@ export function createGridModel(options: GridOptions) {
     },
     setColumnDefs(defs: ColumnDef[] | null | undefined) {
       s.columns = resolveColumns(defs ?? [], options.defaultColWidth);
+      ensuciar('filtrar');
       notify();
     },
     setSortModel(model: SortModel) {
       s.sortModel = model;
-      notify();
+      ensuciar('ordenar');
+      notify('sort');
     },
     toggleSort(colId: string, additive = false) {
       s.sortModel = cycleSort(s.sortModel, colId, additive);
-      notify();
+      ensuciar('ordenar');
+      notify('sort');
     },
     setFilter(colId: string, filter: ColumnFilter | null) {
       const next = { ...s.filterModel };
@@ -163,12 +209,14 @@ export function createGridModel(options: GridOptions) {
       else next[colId] = filter;
       s.filterModel = next;
       s.page = 0;
-      notify();
+      ensuciar('filtrar');
+      notify('filter');
     },
     setQuickFilter(text: string) {
       s.quickFilter = text ?? '';
       s.page = 0;
-      notify();
+      ensuciar('filtrar');
+      notify('filter');
     },
     setSelection(ids: Iterable<string>) {
       // Se copia en vez de guardar la referencia: el estado interno es dueno
@@ -178,40 +226,42 @@ export function createGridModel(options: GridOptions) {
     },
     setDensity(d: DensityName) {
       s.density = d;
-      notify();
+      notify('columns');
     },
     setPage(page: number) {
       s.page = Math.max(0, page);
-      notify();
+      notify('page');
     },
     setPageSize(size: number) {
       s.pageSize = Math.max(1, size);
       s.page = 0;
-      notify();
+      notify('page');
     },
     resizeColumn(colId: string, width: number) {
       s.columns = setColumnWidth(s.columns, colId, width);
-      notify();
+      notify('columns');
     },
     pinColumn(colId: string, side: PinSideName | null) {
-      s.columns = setColumnPinned(s.columns, colId, side);
-      notify();
+      s.columns = setColumnPinned(s.columns, colId, side as 'left' | 'right' | null);
+      notify('columns');
     },
     hideColumn(colId: string, hide: boolean) {
       s.columns = setColumnHidden(s.columns, colId, hide);
-      notify();
+      if (s.quickFilter) ensuciar('filtrar');
+      notify('columns');
     },
     reorderColumn(colId: string, toIndex: number) {
       s.columns = moveColumn(s.columns, colId, toIndex);
-      notify();
+      notify('columns');
     },
     autosizeColumn(colId: string) {
       s.columns = autosizeColumn(s.columns, colId, s.nodes);
-      notify();
+      notify('columns');
     },
     setRowGroupCols(colIds: string[]) {
       s.rowGroupCols = [...colIds];
       s.page = 0;
+      ensuciar('agrupar');
       reseedExpansion();
       notify();
     },
@@ -225,12 +275,14 @@ export function createGridModel(options: GridOptions) {
       );
       s.rowGroupCols = next;
       s.page = 0;
+      ensuciar('agrupar');
       reseedExpansion();
       notify();
     },
     removeRowGroupCol(colId: string) {
       s.rowGroupCols = s.rowGroupCols.filter((c) => c !== colId);
       s.page = 0;
+      ensuciar('agrupar');
       reseedExpansion();
       notify();
     },
@@ -238,28 +290,109 @@ export function createGridModel(options: GridOptions) {
       const next = new Set(s.expandedGroups);
       if (next.has(groupId)) next.delete(groupId); else next.add(groupId);
       s.expandedGroups = next;
-      notify();
+      ensuciar('agrupar');
+      notify('expand');
     },
     expandAllGroups() {
-      const byId = colById();
-      const sorted = sortRows(
-        filterRows(s.nodes, s.filterModel, s.quickFilter, s.columns, byId),
-        s.sortModel,
-        byId,
-      );
-      s.expandedGroups = new Set(collectGroupIds(sorted, s.rowGroupCols, byId));
-      notify();
+      correrPipeline();
+      s.expandedGroups = new Set(collectGroupIds(ordenadas, s.rowGroupCols, colById()));
+      ensuciar('agrupar');
+      notify('expand');
     },
     collapseAllGroups() {
       s.expandedGroups = new Set();
-      notify();
+      ensuciar('agrupar');
+      notify('expand');
     },
     getColumns() { return s.columns; },
     getDisplayedRows() { return api.getState().displayedRows; },
     getAllRows() { return s.nodes; },
+    getRowNode(id: string) { return porId.get(id) ?? null; },
+    /** Actualiza, agrega y quita por id. Sin orden, filtro ni grupos no repite el pipeline. */
+    applyTransaction(tx: RowTransaction): TransactionResult {
+      const res: TransactionResult = { add: [], update: [], remove: [] };
+      for (const data of tx.update ?? []) {
+        const node = porId.get(s.getRowId(data, 0));
+        if (!node) continue;
+        node.data = data;
+        s.rawRows[node.index] = data;
+        res.update.push(node);
+      }
+      for (const { node, data } of tx.nodos ?? []) {
+        node.data = data;
+        s.rawRows[node.index] = data;
+        res.update.push(node);
+      }
+      for (const data of tx.remove ?? []) {
+        const node = porId.get(s.getRowId(data, 0));
+        if (!node) continue;
+        porId.delete(node.id);
+        s.selection.delete(node.id);
+        res.remove.push(node);
+      }
+      if (res.remove.length) {
+        const fuera = new Set(res.remove);
+        s.nodes = s.nodes.filter((n) => !fuera.has(n));
+      }
+      const nuevos = (tx.add ?? []).map((data) => {
+        const node = { id: s.getRowId(data, secuencia), index: secuencia, data };
+        secuencia += 1;
+        porId.set(node.id, node);
+        return node;
+      });
+      res.add = nuevos;
+      if (nuevos.length) {
+        const donde = tx.addIndex == null ? s.nodes.length : Math.max(0, Math.min(tx.addIndex, s.nodes.length));
+        s.nodes = [...s.nodes.slice(0, donde), ...nuevos, ...s.nodes.slice(donde)];
+      }
+      if (res.remove.length || res.add.length) {
+        s.nodes.forEach((n, i) => { n.index = i; });
+        s.rawRows = s.nodes.map((n) => n.data);
+      }
+      const estructura = res.add.length > 0 || res.remove.length > 0;
+      const dinamico = Object.keys(s.filterModel).length > 0 || s.quickFilter !== '' || s.sortModel.length > 0 || s.rowGroupCols.length > 0 || transformadores.some((t) => t.activo?.() !== false) || externo != null;
+      if (estructura || (res.update.length && dinamico)) ensuciar('filtrar');
+      notify('transaction');
+      return res;
+    },
+    /** Reubica un nodo en el orden base (arrastre de filas gestionado). */
+    moveRow(id: string, toIndex: number) {
+      const from = s.nodes.findIndex((n) => n.id === id);
+      if (from < 0) return;
+      const [node] = s.nodes.splice(from, 1);
+      if (!node) return;
+      s.nodes.splice(Math.max(0, Math.min(toIndex, s.nodes.length)), 0, node);
+      s.nodes.forEach((n, i) => { n.index = i; });
+      s.rawRows = s.nodes.map((n) => n.data);
+      ensuciar('filtrar');
+      notify('sort');
+    },
+    setTransforms(lista: TransformadorModelo[]) {
+      transformadores = lista;
+      ensuciar('filtrar');
+      notify();
+    },
+    setFilterEvaluators(mapa: EvaluadoresFiltro) {
+      evaluadores = mapa;
+      ensuciar('filtrar');
+    },
+    setExternalFilter(fn: FiltroExterno | null) {
+      externo = fn;
+      ensuciar('filtrar');
+      notify('filter');
+    },
+    invalidate(desde: 'filtrar' | 'ordenar' | 'agrupar' = 'filtrar') {
+      ensuciar(desde);
+      notify();
+    },
+    setPagination(activa: boolean) {
+      s.pagination = activa;
+      notify('page');
+    },
+    aggregate(nodos: RowNode[]) { return aggregateGroup(nodos, colById()); },
     serializeState() {
       return JSON.stringify({
-        columns: s.columns,
+        columns: s.columns.map(({ def: _def, ...resto }) => resto),
         sortModel: s.sortModel,
         filterModel: s.filterModel,
         quickFilter: s.quickFilter,
@@ -272,7 +405,18 @@ export function createGridModel(options: GridOptions) {
     loadState(json: string) {
       try {
         const parsed = typeof json === 'string' ? JSON.parse(json) : json;
-        if (Array.isArray(parsed.columns)) s.columns = parsed.columns;
+        if (Array.isArray(parsed.columns)) {
+          // `def` lleva funciones que JSON no conserva: se mezcla sobre la columna viva.
+          const vivas = colById();
+          const orden: ColumnState[] = [];
+          for (const c of parsed.columns) {
+            const viva = vivas.get(c.colId);
+            if (!viva) continue;
+            orden.push({ ...viva, width: c.width ?? viva.width, flex: c.flex, hide: c.hide === true, pinned: c.pinned ?? null });
+            vivas.delete(c.colId);
+          }
+          s.columns = [...orden, ...vivas.values()];
+        }
         if (Array.isArray(parsed.sortModel)) s.sortModel = parsed.sortModel;
         if (parsed.filterModel && typeof parsed.filterModel === 'object') s.filterModel = parsed.filterModel;
         if (typeof parsed.quickFilter === 'string') s.quickFilter = parsed.quickFilter;
@@ -280,6 +424,7 @@ export function createGridModel(options: GridOptions) {
         if (typeof parsed.pageSize === 'number') s.pageSize = parsed.pageSize;
         if (Array.isArray(parsed.rowGroupCols)) s.rowGroupCols = parsed.rowGroupCols;
         if (Array.isArray(parsed.expandedGroups)) s.expandedGroups = new Set(parsed.expandedGroups);
+        ensuciar('filtrar');
         notify();
       } catch { /* ignore malformed state */ }
     },

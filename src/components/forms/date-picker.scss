@@ -126,7 +126,7 @@
   .day {
     aspect-ratio: 1;
     border: 0;
-    border-radius: 999px;
+    border-radius: 999em;
     background: transparent;
     color: inherit;
     font: inherit;
@@ -154,7 +154,7 @@
     }
 
     &[data-today] {
-      box-shadow: inset 0 0 0 1px var(--iswc-color-brand);
+      box-shadow: inset 0 0 0 .0625em var(--iswc-color-brand);
     }
 
     /* Rango confirmado y rango tentativo (mientras se mueve el cursor o el foco)
@@ -167,23 +167,23 @@
     }
 
     &[data-preview-edge] {
-      box-shadow: inset 0 0 0 1px var(--iswc-accent);
+      box-shadow: inset 0 0 0 .0625em var(--iswc-accent);
     }
 
     &[data-preview-edge="end"] {
-      border-start-end-radius: 999px;
-      border-end-end-radius: 999px;
+      border-start-end-radius: 999em;
+      border-end-end-radius: 999em;
     }
 
     &[data-preview-edge="start"] {
-      border-start-start-radius: 999px;
-      border-end-start-radius: 999px;
+      border-start-start-radius: 999em;
+      border-end-start-radius: 999em;
     }
 
     &[data-selected] {
       background: var(--iswc-color-brand-strong);
       color: var(--iswc-on-brand);
-      border-radius: 999px;
+      border-radius: 999em;
     }
 
     &:disabled,
@@ -206,7 +206,7 @@
 :host([mode="range"]) {
   .day {
     &[data-selected][data-in-range] {
-      border-radius: 999px;
+      border-radius: 999em;
     }
   }
 }

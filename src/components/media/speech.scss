@@ -28,5 +28,5 @@
 }
 
 /* F0.3 g12 [a11y/focus]: foco visible solo con teclado */
-:host(:focus-visible) { outline: 2px solid var(--iswc-accent); outline-offset: 3px; }
+:host(:focus-visible) { outline: 2px solid var(--iswc-accent); outline-offset: .1875em; }
 :host(:focus) { outline: none; }

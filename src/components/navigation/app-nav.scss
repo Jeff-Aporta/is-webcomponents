@@ -7,7 +7,7 @@
   --iswc-app-nav-focus: var(--iswc-focus, currentColor);
   --iswc-app-nav-secondary-bg: color-mix(in srgb, var(--iswc-bg-soft, transparent) 55%, var(--iswc-bg, transparent));
   --iswc-app-nav-secondary-border: var(--iswc-border-soft, var(--iswc-border, transparent));
-  --iswc-app-nav-tab-height: 2.1rem;
+  --iswc-app-nav-tab-height: 2.4706em;
 
   display: block;
   min-width: 0;
@@ -29,7 +29,7 @@
 .row {
   display: flex;
   align-items: stretch;
-  gap: 0.15rem;
+  gap: .15em;
   min-width: 0;
   overflow-x: auto;
   scrollbar-width: thin;
@@ -49,10 +49,10 @@
 .tab {
   display: inline-flex;
   align-items: center;
-  gap: 0.3rem;
+  gap: .3529em;
   flex: none;
   min-height: var(--iswc-app-nav-tab-height);
-  padding-inline: 0.6rem;
+  padding-inline: .7059em;
   border-bottom: 2px solid transparent;
   color: var(--iswc-app-nav-tab-color);
   font: inherit;
@@ -70,7 +70,7 @@
   }
 
   &[aria-disabled='true'] {
-    opacity: 0.5;
+    opacity: 0.55;
     cursor: not-allowed;
   }
 
@@ -90,8 +90,8 @@
 @media (max-width: 40rem) {
   .row--primary .tab--icon .label {
     position: absolute;
-    width: 1px;
-    height: 1px;
+    width: .0735em;
+    height: .0735em;
     overflow: hidden;
     clip-path: inset(50%);
     white-space: nowrap;

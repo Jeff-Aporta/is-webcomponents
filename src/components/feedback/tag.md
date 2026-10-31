@@ -1,36 +1,36 @@
-﻿---
+---
 tag: iswc-tag
 tags:
   - iswc-tag
 category: feedback
 status: public
 source: ./tag.ts
-style: ./tag.css
+style: ./tag.scss
 preview: ./tag.json
 ---
 # `<iswc-tag>`
 
-## PropÃ³sito
+## Propósito
 
-Etiqueta interactiva con colores y botÃ³n de quitar opcional. Escala con font-size del contexto.
+Etiqueta interactiva con colores y botón de quitar opcional. Escala con font-size del contexto.
 
-Este mÃ³dulo registra `<iswc-tag>`.
+Este módulo registra `<iswc-tag>`.
 
-## CuÃ¡ndo usarlo
+## Cuándo usarlo
 
-Estado, progreso, confirmaciÃ³n, carga o resultado de operaciones.
+Estado, progreso, confirmación, carga o resultado de operaciones.
 
-## CuÃ¡ndo no usarlo
+## Cuándo no usarlo
 
-No saturar interfaz con seÃ±ales redundantes o alertas sin acciÃ³n.
+No saturar interfaz con señales redundantes o alertas sin acción.
 
-## ImportaciÃ³n
+## Importación
 
 ```js
 import './tag.js';
 ```
 
-## Ejemplo mÃ­nimo
+## Ejemplo mínimo
 
 ```html
 <span style="font-size:1.25rem">
@@ -46,13 +46,13 @@ import './tag.js';
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
-| `color` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `variant` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `pill` | boolean | Fuente define default/restricciÃ³n. |
-| `with-remove` | boolean | Fuente define default/restricciÃ³n. |
-| `remove-label` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `color` | string/según contrato | Fuente define default/restricción. |
+| `variant` | string/según contrato | Fuente define default/restricción. |
+| `pill` | boolean | Fuente define default/restricción. |
+| `with-remove` | boolean | Fuente define default/restricción. |
+| `remove-label` | string/según contrato | Fuente define default/restricción. |
 
-#### Propiedades pÃºblicas
+#### Propiedades públicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
@@ -69,13 +69,13 @@ import './tag.js';
 ### Eventos
 
 
-| Evento | DescripciÃ³n |
+| Evento | Descripción |
 | --- | --- |
 | `iswc-remove` | Emitido al eliminar un elemento. |
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `iswc-remove` | no | sÃ­ | sÃ­ | no |
+| `iswc-remove` | no | sí | sí | no |
 
 
 <details>
@@ -90,11 +90,11 @@ el.addEventListener('iswc-remove', (e) => {
 
 </details>
 
-### MÃ©todos y propiedades pÃºblicas
+### Métodos y propiedades públicas
 
 No expone.
 
-Propiedades pÃºblicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
+Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
 
 ### CSS parts
 
@@ -114,58 +114,60 @@ No expone.
 
 | Token | Uso |
 | --- | --- |
-| `--_bg` | Token leÃ­do o definido por componente. |
-| `--iswc-control-bg` | Token leÃ­do o definido por componente. |
-| `--_border` | Token leÃ­do o definido por componente. |
-| `--iswc-control-border` | Token leÃ­do o definido por componente. |
-| `--_text` | Token leÃ­do o definido por componente. |
-| `--iswc-control-text` | Token leÃ­do o definido por componente. |
-| `--iswc-font-family` | Token leÃ­do o definido por componente. |
-| `--iswc-focus` | Token leÃ­do o definido por componente. |
-| `--iswc-color-brand-100` | Token leÃ­do o definido por componente. |
-| `--iswc-color-brand-500` | Token leÃ­do o definido por componente. |
-| `--iswc-color-brand-700` | Token leÃ­do o definido por componente. |
-| `--iswc-color-success-100` | Token leÃ­do o definido por componente. |
-| `--iswc-color-success-500` | Token leÃ­do o definido por componente. |
-| `--iswc-color-success-700` | Token leÃ­do o definido por componente. |
-| `--iswc-color-warning-100` | Token leÃ­do o definido por componente. |
-| `--iswc-color-warning-500` | Token leÃ­do o definido por componente. |
-| `--iswc-color-warning-700` | Token leÃ­do o definido por componente. |
-| `--iswc-color-danger-100` | Token leÃ­do o definido por componente. |
-| `--iswc-color-danger-500` | Token leÃ­do o definido por componente. |
-| `--iswc-color-danger-700` | Token leÃ­do o definido por componente. |
-| `--iswc-on-brand` | Token leÃ­do o definido por componente. |
+| `--_bg` | Token leído o definido por componente. |
+| `--iswc-control-bg` | Token leído o definido por componente. |
+| `--_border` | Token leído o definido por componente. |
+| `--iswc-control-border` | Token leído o definido por componente. |
+| `--_text` | Token leído o definido por componente. |
+| `--iswc-control-text` | Token leído o definido por componente. |
+| `--iswc-font-family` | Token leído o definido por componente. |
+| `--iswc-focus` | Token leído o definido por componente. |
+| `--iswc-color-brand-100` | Token leído o definido por componente. |
+| `--iswc-color-brand-500` | Token leído o definido por componente. |
+| `--iswc-color-brand-700` | Token leído o definido por componente. |
+| `--iswc-color-success-100` | Token leído o definido por componente. |
+| `--iswc-color-success-500` | Token leído o definido por componente. |
+| `--iswc-color-success-700` | Token leído o definido por componente. |
+| `--iswc-color-warning-100` | Token leído o definido por componente. |
+| `--iswc-color-warning-500` | Token leído o definido por componente. |
+| `--iswc-color-warning-700` | Token leído o definido por componente. |
+| `--iswc-color-danger-100` | Token leído o definido por componente. |
+| `--iswc-color-danger-500` | Token leído o definido por componente. |
+| `--iswc-color-danger-700` | Token leído o definido por componente. |
+| `--iswc-on-brand` | Token leído o definido por componente. |
 
-### IntegraciÃ³n con formularios
+### Integración con formularios
 
-No declara integraciÃ³n form-associated propia en este mÃ³dulo.
+No declara integración form-associated propia en este módulo.
 
 ## Comportamiento
 
-DocumentaciÃ³n de cabecera preservada desde fuente:
+Los huecos de los slots `start` y `end` solo existen si tienen contenido, y un texto que no cabe se corta con puntos suspensivos. `error` es alias de `danger`. El texto de `filled` se elige solo (blanco o negro) según el fondo.
 
-> <iswc-tag> â€” Web Component (vanilla).
+Documentación de cabecera preservada desde fuente:
+
+> <iswc-tag> — Web Component (vanilla).
 > Similar a iswc-badge; default variant filled-outlined, color brand.
-> Escala con font-size del contexto (mÃ©tricas en em).
+> Escala con font-size del contexto (métricas en em).
 > Atributos
 >   color       brand | neutral | info | success | warning | danger (default brand)
 >   variant    accent | filled | outlined | filled-outlined (default filled-outlined)
 >   pill          boolean
->   with-remove   boolean â€” muestra botÃ³n de quitar
->   remove-label  string â€” aria-label del botÃ³n (default Quitar)
+>   with-remove   boolean — muestra botón de quitar
+>   remove-label  string — aria-label del botón (default Quitar)
 > Eventos
->   iswc-remove  â€” click en botÃ³n quitar (bubbles, composed)
+>   iswc-remove  — click en botón quitar (bubbles, composed)
 
 ## Dependencias y componentes relacionados
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 - [`../media/icon.js`](../media/icon.js)
 
-Tags del mÃ³dulo: `<iswc-tag>`.
+Tags del módulo: `<iswc-tag>`.
 
 ## Accesibilidad
 
-Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`, `aria-hidden`.
+Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`, `aria-hidden`.
 
 ## Ejemplo avanzado
 
@@ -177,7 +179,7 @@ Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: `aria-labe
 
 ## Errores comunes
 
-- Usar tag sin importar mÃ³dulo primero.
+- Usar tag sin importar módulo primero.
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
@@ -185,15 +187,15 @@ Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: `aria-labe
 
 ## Reglas para LLM
 
-- Reusar componente y dependencias antes de implementaciÃ³n paralela.
+- Reusar componente y dependencias antes de implementación paralela.
 - Mantener nombres exactos de tags y API.
-- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explÃ­cito.
-- Leer callers/shared antes de cambiar; corregir raÃ­z comÃºn.
-- No modificar API basÃ¡ndose solo en preview.
+- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explícito.
+- Leer callers/shared antes de cambiar; corregir raíz común.
+- No modificar API basándose solo en preview.
 
 ## Fuentes
 
 - [JavaScript](./tag.ts)
-- [CSS](./tag.css)
-- [Ãndice de categorÃ­a](../../specs/componentes.md)
+- [CSS](./tag.scss)
+- [Índice de categoría](../../../specs/componentes.md)
 - [Preview](./tag.json)

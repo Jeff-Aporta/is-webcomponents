@@ -16,7 +16,7 @@ tags:
 category: <carpeta>
 status: public
 source: ./foo.js
-style: ./foo.css
+style: ./foo.scss
 preview: ./foo.json
 ---
 

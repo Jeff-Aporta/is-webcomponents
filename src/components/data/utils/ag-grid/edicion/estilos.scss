@@ -1,0 +1,171 @@
+// ag-grid/edicion — Estilos de edicion, rangos, relleno, arrastre y accesibilidad.
+// Solo em y tokens. Lo incluye ag-grid.scss.
+
+.iswc-ag-editor {
+  position: absolute;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  padding-inline: 0.25em;
+  pointer-events: auto;
+  background: var(--iswc-grid-editor-bg, var(--iswc-bg));
+  box-shadow: inset 0 0 0 0.125em var(--iswc-grid-editor-borde, var(--iswc-color-brand));
+}
+
+.iswc-ag-editor > * {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.iswc-ag-editor--popup {
+  position: static;
+  display: block;
+  padding: 0.5em;
+  box-shadow: none;
+}
+
+.iswc-ag-editor--error {
+  box-shadow: inset 0 0 0 0.125em var(--iswc-grid-editor-error, var(--iswc-danger, crimson));
+}
+
+.iswc-ag-editor-numero {
+  display: flex;
+  align-items: center;
+  gap: 0.125em;
+}
+
+.iswc-ag-editor-numero > iswc-input {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.iswc-ag-editor-paso {
+  flex: 0 0 1.5em;
+  height: 1.5em;
+  padding: 0;
+  border: none;
+  border-radius: 0.25em;
+  color: inherit;
+  background: var(--iswc-bg-2, transparent);
+  cursor: pointer;
+}
+
+.iswc-ag-rico {
+  display: flex;
+  flex-direction: column;
+  min-width: 14em;
+}
+
+.iswc-ag-rico-lista {
+  max-height: 16em;
+  margin-top: 0.25em;
+  overflow-y: auto;
+  padding-block: var(--iswc-ag-rico-antes, 0) var(--iswc-ag-rico-despues, 0);
+}
+
+.iswc-ag-rico-opcion {
+  box-sizing: border-box;
+  height: 2em;
+  padding-inline: 0.5em;
+  overflow: hidden;
+  line-height: 2em;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  cursor: pointer;
+}
+
+.iswc-ag-rico-opcion[data-activa] {
+  background: var(--iswc-grid-row-hover, var(--iswc-bg-2));
+}
+
+.iswc-ag-rico-opcion[aria-selected='true'] {
+  font-weight: 600;
+  color: var(--iswc-color-brand);
+}
+
+.iswc-ag-cell-batch-edit {
+  background: var(--iswc-grid-batch-bg, color-mix(in srgb, var(--iswc-color-brand) 14%, transparent));
+}
+
+/* Rangos: por clase de celda, para que cruce columnas y filas fijadas. */
+.iswc-ag-rango {
+  position: relative;
+  background-image: linear-gradient(var(--iswc-grid-rango-bg, color-mix(in srgb, var(--iswc-color-brand) 16%, transparent)) 0 0);
+  user-select: none;
+}
+
+.iswc-ag-rango-arriba { box-shadow: inset 0 0.0625em 0 var(--iswc-grid-rango-borde, var(--iswc-color-brand)); }
+.iswc-ag-rango-abajo { box-shadow: inset 0 -0.0625em 0 var(--iswc-grid-rango-borde, var(--iswc-color-brand)); }
+.iswc-ag-rango-izquierda { box-shadow: inset 0.0625em 0 0 var(--iswc-grid-rango-borde, var(--iswc-color-brand)); }
+.iswc-ag-rango-derecha { box-shadow: inset -0.0625em 0 0 var(--iswc-grid-rango-borde, var(--iswc-color-brand)); }
+.iswc-ag-rango-arriba.iswc-ag-rango-izquierda { box-shadow: inset 0 0.0625em 0 var(--iswc-grid-rango-borde, var(--iswc-color-brand)), inset 0.0625em 0 0 var(--iswc-grid-rango-borde, var(--iswc-color-brand)); }
+.iswc-ag-rango-arriba.iswc-ag-rango-derecha { box-shadow: inset 0 0.0625em 0 var(--iswc-grid-rango-borde, var(--iswc-color-brand)), inset -0.0625em 0 0 var(--iswc-grid-rango-borde, var(--iswc-color-brand)); }
+.iswc-ag-rango-abajo.iswc-ag-rango-izquierda { box-shadow: inset 0 -0.0625em 0 var(--iswc-grid-rango-borde, var(--iswc-color-brand)), inset 0.0625em 0 0 var(--iswc-grid-rango-borde, var(--iswc-color-brand)); }
+.iswc-ag-rango-abajo.iswc-ag-rango-derecha { box-shadow: inset 0 -0.0625em 0 var(--iswc-grid-rango-borde, var(--iswc-color-brand)), inset -0.0625em 0 0 var(--iswc-grid-rango-borde, var(--iswc-color-brand)); }
+
+.iswc-ag-relleno-previo {
+  outline: 0.0625em dashed var(--iswc-grid-rango-borde, var(--iswc-color-brand));
+  outline-offset: -0.0625em;
+}
+
+.iswc-ag-encabezado-rango {
+  background-image: linear-gradient(var(--iswc-grid-rango-bg, color-mix(in srgb, var(--iswc-color-brand) 16%, transparent)) 0 0);
+}
+
+.iswc-ag-asa {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+  width: 0.5em;
+  height: 0.5em;
+  background: var(--iswc-grid-rango-borde, var(--iswc-color-brand));
+  cursor: crosshair;
+  touch-action: none;
+}
+
+/* Row dragging */
+.iswc-ag-arrastre {
+  display: inline-block;
+  width: 0.75em;
+  height: 1em;
+  margin-inline-end: 0.375em;
+  vertical-align: middle;
+  background-image: radial-gradient(currentColor 0.0625em, transparent 0.07em);
+  background-size: 0.3125em 0.3125em;
+  opacity: 0.6;
+  cursor: grab;
+  touch-action: none;
+}
+
+.iswc-ag-arrastre-fantasma {
+  position: absolute;
+  z-index: 20;
+  padding: 0.25em 0.625em;
+  border-radius: 0.25em;
+  color: var(--iswc-text);
+  background: var(--iswc-bg);
+  box-shadow: 0 0.125em 0.5em color-mix(in srgb, currentColor 30%, transparent);
+  pointer-events: none;
+  transform: translate(0.75em, 0.75em);
+}
+
+.iswc-ag-arrastre-linea {
+  position: absolute;
+  inset-inline: 0;
+  z-index: 19;
+  height: 0.125em;
+  background: var(--iswc-color-brand);
+  pointer-events: none;
+}
+
+/* Fuera de pantalla, pero disponible para lectores. */
+.iswc-ag-solo-lector {
+  position: absolute;
+  width: 0.0625em;
+  height: 0.0625em;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}

@@ -5,7 +5,7 @@ tags:
 category: feedback
 status: public
 source: ./loading.ts
-style: ./loading.css
+style: ./loading.scss
 preview: ./loading.json
 ---
 # `<iswc-loading>`

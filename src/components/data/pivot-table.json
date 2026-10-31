@@ -28,7 +28,7 @@
         {
           "kind": "demo",
           "html": [
-            "<iswc-pivot-table rows=\"region\" cols=\"trimestre\" measure=\"ventas\" agg=\"sum\">",
+            "<iswc-pivot-table id=\"pg-pivot-table\" rows=\"region\" cols=\"trimestre\" measure=\"ventas\" agg=\"sum\">",
             "            <script type=\"application/json\">",
             "              [",
             "                { \"region\": \"Norte\", \"trimestre\": \"Q1\", \"ventas\": 320 },",
@@ -50,6 +50,42 @@
             "              ]",
             "            </script>",
             "          </iswc-pivot-table>"
+          ],
+          "target": "#pg-pivot-table",
+          "controls": [
+            {
+              "control": "select",
+              "prop": "attr:agg",
+              "label": "agg",
+              "options": [
+                "sum",
+                "avg",
+                "min",
+                "max",
+                "count"
+              ],
+              "default": "sum"
+            },
+            {
+              "control": "select",
+              "prop": "attr:format",
+              "label": "format",
+              "options": [
+                "es-CO",
+                "en-US",
+                "de-DE"
+              ],
+              "default": "es-CO"
+            },
+            {
+              "control": "range",
+              "prop": "attr:decimals",
+              "label": "decimals",
+              "min": 0,
+              "max": 4,
+              "step": 1,
+              "default": 0
+            }
           ]
         }
       ]

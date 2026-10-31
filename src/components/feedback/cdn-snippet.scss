@@ -3,7 +3,7 @@
 :host {
   --iswc-focus-fallback: currentColor;
   display: block;
-  margin: clamp(1.5rem, 3vw, 2.5rem) 0 0;
+  margin: clamp(1.5em, 3vw, 2.5em) 0 0;
   font-family: var(--iswc-sans);
 }
 
@@ -19,7 +19,7 @@
      acento, borde izquierdo de 3px y radios solo a la derecha. */
   display: grid;
   gap: 1em;
-  padding: 12px 16px;
+  padding: .75em 1em;
   background: color-mix(in srgb, var(--iswc-accent) 7%, var(--iswc-bg-soft, var(--iswc-bg)));
   border: 1px solid color-mix(in srgb, var(--iswc-accent) 32%, var(--iswc-cdn-snippet-border));
   border-radius: var(--iswc-radius-sm);
@@ -29,7 +29,7 @@
 
 .cdn__title {
   margin: 0;
-  font-size: 0.78rem;
+  font-size: 0.78em;
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -69,7 +69,7 @@
   flex-wrap: wrap;
   align-items: baseline;
   gap: 0.35em 0.55em;
-  font-size: 0.82rem;
+  font-size: 0.82em;
   font-weight: 600;
   color: var(--iswc-text);
   letter-spacing: 0.01em;
@@ -89,11 +89,11 @@
   gap: 0.3em;
   padding: 0.32em 0.75em;
   border: 1px solid var(--iswc-cdn-snippet-border);
-  border-radius: 999px;
+  border-radius: 999em;
   background: var(--iswc-control-bg);
   color: var(--iswc-control-text, var(--iswc-text));
   font: inherit;
-  font-size: 0.78rem;
+  font-size: 0.78em;
   font-weight: 600;
   line-height: 1;
   cursor: pointer;
@@ -104,7 +104,7 @@
   &:hover {
     background: color-mix(in srgb, var(--iswc-accent) 14%, var(--iswc-bg));
     border-color: color-mix(in srgb, var(--iswc-accent) 38%, transparent);
-    transform: translateY(-1px);
+    transform: translateY(-.0801em);
   }
 
   &.iswc-copied {
@@ -131,11 +131,11 @@
 
 .cdn__md-prompt {
   display: block;
-  margin-top: 0.35rem;
-  --preview-max-height: 18rem;
+  margin-top: 0.35em;
+  --preview-max-height: 18em;
 }
 
-@media (max-width: 540px) {
+@media (max-width: 33.75em) {
   .cdn__row-head { gap: 0.4em; }
   .cdn__copy { width: 100%; justify-content: center; }
 }
@@ -155,7 +155,7 @@
 
 .cdn__dep-note {
   margin: 0.4em 0 0;
-  font-size: 0.78rem;
+  font-size: 0.78em;
   line-height: 1.45;
   color: var(--iswc-cdn-snippet-text-dim);
 }
@@ -171,7 +171,7 @@
 
 .cdn__docs-title {
   margin: 0;
-  font-size: 0.72rem;
+  font-size: 0.72em;
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -188,7 +188,7 @@
   border: 1px solid var(--iswc-cdn-snippet-border, var(--iswc-border));
   border-radius: 0.6em;
   background: color-mix(in srgb, var(--iswc-bg-elev, var(--iswc-bg)) 88%, transparent);
-  font-size: 0.88rem;
+  font-size: 0.88em;
 
   &[hidden] { display: none; }
 }
@@ -217,7 +217,7 @@
 
 .cdn__skill iswc-button[data-ver-md] {
   flex: none;
-  font-size: 1.05rem;
-  --_height: 2rem;
-  min-width: 2rem;
+  font-size: 1.1932em;
+  --_height: 2em;
+  min-width: 1.9048em;
 }

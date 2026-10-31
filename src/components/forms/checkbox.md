@@ -1,40 +1,40 @@
-﻿---
+---
 tag: iswc-checkbox
 tags:
   - iswc-checkbox
 category: forms
 status: public
 source: ./checkbox.ts
-style: ./checkbox.css
+style: ./checkbox.scss
 preview: ./checkbox.json
 ---
 # `<iswc-checkbox>`
 
-## PropÃ³sito
+## Propósito
 
 Casilla form-associated con paridad funcional con el
 Checkbox de MUI:
-entra en FormData y en la validaciÃ³n nativa del <form>
-sin input oculto, con color por color, posiciÃ³n de etiqueta, iconos propios y
+entra en FormData y en la validación nativa del <form>
+sin input oculto, con color por color, posición de etiqueta, iconos propios y
 estado de error.
 
-Este mÃ³dulo registra `<iswc-checkbox>`.
+Este módulo registra `<iswc-checkbox>`.
 
-## CuÃ¡ndo usarlo
+## Cuándo usarlo
 
-Captura, selecciÃ³n y validaciÃ³n de valores compatibles con formularios.
+Captura, selección y validación de valores compatibles con formularios.
 
-## CuÃ¡ndo no usarlo
+## Cuándo no usarlo
 
-No duplicar validaciÃ³n, form association ni pickers shared.
+No duplicar validación, form association ni pickers shared.
 
-## ImportaciÃ³n
+## Importación
 
 ```js
 import './checkbox.js';
 ```
 
-## Ejemplo mÃ­nimo
+## Ejemplo mínimo
 
 ```html
 <iswc-checkbox color="success" checked>success</iswc-checkbox>
@@ -48,22 +48,22 @@ import './checkbox.js';
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
-| `name` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `value` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `checked` | boolean | Fuente define default/restricciÃ³n. |
-| `disabled` | boolean | Fuente define default/restricciÃ³n. |
-| `readonly` | boolean | Fuente define default/restricciÃ³n. |
-| `required` | boolean | Fuente define default/restricciÃ³n. |
-| `indeterminate` | boolean | Fuente define default/restricciÃ³n. |
-| `error` | boolean | Fuente define default/restricciÃ³n. |
-| `hint` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `color` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `label-placement` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `icon` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `checked-icon` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `indeterminate-icon` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `name` | string/según contrato | Fuente define default/restricción. |
+| `value` | string/según contrato | Fuente define default/restricción. |
+| `checked` | boolean | Fuente define default/restricción. |
+| `disabled` | boolean | Fuente define default/restricción. |
+| `readonly` | boolean | Fuente define default/restricción. |
+| `required` | boolean | Fuente define default/restricción. |
+| `indeterminate` | boolean | Fuente define default/restricción. |
+| `error` | boolean | Fuente define default/restricción. |
+| `hint` | string/según contrato | Fuente define default/restricción. |
+| `color` | string/según contrato | Fuente define default/restricción. |
+| `label-placement` | string/según contrato | Fuente define default/restricción. |
+| `icon` | string/según contrato | Fuente define default/restricción. |
+| `checked-icon` | string/según contrato | Fuente define default/restricción. |
+| `indeterminate-icon` | string/según contrato | Fuente define default/restricción. |
 
-#### Propiedades pÃºblicas
+#### Propiedades públicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
@@ -95,13 +95,13 @@ import './checkbox.js';
 ### Eventos
 
 
-| Evento | DescripciÃ³n |
+| Evento | Descripción |
 | --- | --- |
 | `iswc-change` | Emitido al confirmar el cambio de valor (escribe como `change` nativo). |
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `iswc-change` | sÃ­ | sÃ­ | sÃ­ | no |
+| `iswc-change` | sí | sí | sí | no |
 
 
 <details>
@@ -116,15 +116,15 @@ el.addEventListener('iswc-change', (e) => {
 
 </details>
 
-### MÃ©todos y propiedades pÃºblicas
+### Métodos y propiedades públicas
 
-| MÃ©todo | Uso |
+| Método | Uso |
 | --- | --- |
-| `checkValidity()` | MÃ©todo pÃºblico declarado. |
-| `reportValidity()` | MÃ©todo pÃºblico declarado. |
-| `setCustomValidity()` | MÃ©todo pÃºblico declarado. |
+| `checkValidity()` | Método público declarado. |
+| `reportValidity()` | Método público declarado. |
+| `setCustomValidity()` | Método público declarado. |
 
-Propiedades pÃºblicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
+Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
 
 ### CSS parts
 
@@ -141,54 +141,54 @@ Propiedades pÃºblicas aparecen en tabla anterior; APIs heredadas se verifican 
 
 | Estado | Uso |
 | --- | --- |
-| `:state(checked)` | Estado usado por implementaciÃ³n/CSS. |
-| `:state(indeterminate)` | Estado usado por implementaciÃ³n/CSS. |
-| `:state(disabled)` | Estado usado por implementaciÃ³n/CSS. |
-| `:state(readonly)` | Estado usado por implementaciÃ³n/CSS. |
-| `:state(error)` | Estado usado por implementaciÃ³n/CSS. |
+| `:state(checked)` | Estado usado por implementación/CSS. |
+| `:state(indeterminate)` | Estado usado por implementación/CSS. |
+| `:state(disabled)` | Estado usado por implementación/CSS. |
+| `:state(readonly)` | Estado usado por implementación/CSS. |
+| `:state(error)` | Estado usado por implementación/CSS. |
 
 ### CSS custom properties
 
 | Token | Uso |
 | --- | --- |
-| `--iswc-checkbox-size` | Token leÃ­do o definido por componente. |
-| `--iswc-checkbox-radius` | Token leÃ­do o definido por componente. |
-| `--iswc-radius-sm` | Token leÃ­do o definido por componente. |
-| `--iswc-checkbox-bg` | Token leÃ­do o definido por componente. |
-| `--iswc-control-bg` | Token leÃ­do o definido por componente. |
-| `--iswc-checkbox-bg-hover` | Token leÃ­do o definido por componente. |
-| `--iswc-control-bg-hover` | Token leÃ­do o definido por componente. |
-| `--iswc-checkbox-border` | Token leÃ­do o definido por componente. |
-| `--iswc-control-border` | Token leÃ­do o definido por componente. |
-| `--iswc-checkbox-accent` | Token leÃ­do o definido por componente. |
-| `--iswc-accent` | Token leÃ­do o definido por componente. |
-| `--iswc-color-brand-500` | Token leÃ­do o definido por componente. |
-| `--iswc-checkbox-on-accent` | Token leÃ­do o definido por componente. |
-| `--iswc-on-brand` | Token leÃ­do o definido por componente. |
-| `--iswc-checkbox-focus` | Token leÃ­do o definido por componente. |
-| `--iswc-focus` | Token leÃ­do o definido por componente. |
-| `--iswc-checkbox-fill` | Token leÃ­do o definido por componente. |
-| `--iswc-checkbox-mark` | Token leÃ­do o definido por componente. |
-| `--iswc-checkbox-halo` | Token leÃ­do o definido por componente. |
-| `--iswc-sans` | Token leÃ­do o definido por componente. |
-| `--iswc-text` | Token leÃ­do o definido por componente. |
-| `--iswc-control-text` | Token leÃ­do o definido por componente. |
-| `--iswc-text-dim` | Token leÃ­do o definido por componente. |
-| `--iswc-color-success-500` | Token leÃ­do o definido por componente. |
-| `--iswc-color-warning-500` | Token leÃ­do o definido por componente. |
-| `--iswc-color-danger-500` | Token leÃ­do o definido por componente. |
-| `--iswc-danger-text` | Token leÃ­do o definido por componente. |
-| `--iswc-color-danger-600` | Token leÃ­do o definido por componente. |
+| `--iswc-checkbox-size` | Token leído o definido por componente. |
+| `--iswc-checkbox-radius` | Token leído o definido por componente. |
+| `--iswc-radius-sm` | Token leído o definido por componente. |
+| `--iswc-checkbox-bg` | Token leído o definido por componente. |
+| `--iswc-control-bg` | Token leído o definido por componente. |
+| `--iswc-checkbox-bg-hover` | Token leído o definido por componente. |
+| `--iswc-control-bg-hover` | Token leído o definido por componente. |
+| `--iswc-checkbox-border` | Token leído o definido por componente. |
+| `--iswc-control-border` | Token leído o definido por componente. |
+| `--iswc-checkbox-accent` | Token leído o definido por componente. |
+| `--iswc-accent` | Token leído o definido por componente. |
+| `--iswc-color-brand-500` | Token leído o definido por componente. |
+| `--iswc-checkbox-on-accent` | Token leído o definido por componente. |
+| `--iswc-on-brand` | Token leído o definido por componente. |
+| `--iswc-checkbox-focus` | Token leído o definido por componente. |
+| `--iswc-focus` | Token leído o definido por componente. |
+| `--iswc-checkbox-fill` | Token leído o definido por componente. |
+| `--iswc-checkbox-mark` | Token leído o definido por componente. |
+| `--iswc-checkbox-halo` | Token leído o definido por componente. |
+| `--iswc-sans` | Token leído o definido por componente. |
+| `--iswc-text` | Token leído o definido por componente. |
+| `--iswc-control-text` | Token leído o definido por componente. |
+| `--iswc-text-dim` | Token leído o definido por componente. |
+| `--iswc-color-success-500` | Token leído o definido por componente. |
+| `--iswc-color-warning-500` | Token leído o definido por componente. |
+| `--iswc-color-danger-500` | Token leído o definido por componente. |
+| `--iswc-danger-text` | Token leído o definido por componente. |
+| `--iswc-color-danger-600` | Token leído o definido por componente. |
 
-### IntegraciÃ³n con formularios
+### Integración con formularios
 
-Participa mediante ElementInternals/helpers form-associated; respetar name, value, disabled, reset, restore y validaciÃ³n.
+Participa mediante ElementInternals/helpers form-associated; respetar name, value, disabled, reset, restore y validación.
 
 ## Comportamiento
 
-DocumentaciÃ³n de cabecera preservada desde fuente:
+Documentación de cabecera preservada desde fuente:
 
-> <iswc-checkbox> â€” Casilla form-associated: entra en FormData y en la validaciÃ³n del <form>.
+> <iswc-checkbox> — Casilla form-associated: entra en FormData y en la validación del <form>.
 > Atributos
 >   name, value (default "on"), hint
 >   color             brand (default) | neutral | success | warning | danger
@@ -209,11 +209,11 @@ DocumentaciÃ³n de cabecera preservada desde fuente:
 - [`../media/icon.js`](../media/icon.js)
 - [`../_shared/form-associated.js`](../../core/form-associated.js)
 
-Tags del mÃ³dulo: `<iswc-checkbox>`.
+Tags del módulo: `<iswc-checkbox>`.
 
 ## Accesibilidad
 
-Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: `aria-checked`, `aria-disabled`, `aria-readonly`, `aria-invalid`, `aria-required`.
+Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-checked`, `aria-disabled`, `aria-readonly`, `aria-invalid`, `aria-required`.
 
 ## Ejemplo avanzado
 
@@ -224,7 +224,7 @@ Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: `aria-chec
 
 ## Errores comunes
 
-- Usar tag sin importar mÃ³dulo primero.
+- Usar tag sin importar módulo primero.
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
@@ -232,15 +232,15 @@ Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: `aria-chec
 
 ## Reglas para LLM
 
-- Reusar componente y dependencias antes de implementaciÃ³n paralela.
+- Reusar componente y dependencias antes de implementación paralela.
 - Mantener nombres exactos de tags y API.
-- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explÃ­cito.
-- Leer callers/shared antes de cambiar; corregir raÃ­z comÃºn.
-- No modificar API basÃ¡ndose solo en preview.
+- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explícito.
+- Leer callers/shared antes de cambiar; corregir raíz común.
+- No modificar API basándose solo en preview.
 
 ## Fuentes
 
 - [JavaScript](./checkbox.ts)
-- [CSS](./checkbox.css)
-- [Ãndice de categorÃ­a](../../specs/componentes.md)
+- [CSS](./checkbox.scss)
+- [Índice de categoría](../../../specs/componentes.md)
 - [Preview](./checkbox.json)

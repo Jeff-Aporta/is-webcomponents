@@ -5,7 +5,7 @@ tags:
 category: overlays
 status: public
 source: ./semantic-search.ts
-style: ./semantic-search.css
+style: ./semantic-search.scss
 preview: ./semantic-search.json
 ---
 # `<iswc-semantic-search>`

@@ -2,7 +2,6 @@
 /* Shadow DOM: :host[attr] NO matchea (el host es "featureless").
  * Usar siempre :host([attr]) como reglas hermanas, nunca &[attr] anidado. */
 :host {
-  --iswc-button-border-width: var(--iswc-control-border-width);
   --iswc-button-group-radius: var(--iswc-button-border-radius);
   --iswc-button-group-gap: 0.3em;
   --iswc-button-group-pad: 0.25em;
@@ -11,7 +10,7 @@
   vertical-align: middle;
   max-width: 100%;
 }
-:host[hidden] {
+:host([hidden]) {
   display: none !important;
 }
 
@@ -48,7 +47,7 @@
 /* ---- appearance: joined (default) ------------------------------------- */
 /* Bordes fusionados: el grupo se lee como una sola pieza. */
 :host([variant=joined]) .button-group {
-  box-shadow: 0 1px 2px color-mix(in srgb, #000 10%, transparent);
+  box-shadow: 0 .0625em .125em color-mix(in srgb, #000 10%, transparent);
 }
 
 :host([variant=joined][orientation=horizontal]) {
@@ -135,7 +134,7 @@
   padding: var(--iswc-button-group-pad);
   background: var(--iswc-bg-soft);
   border: var(--iswc-button-border-width) solid var(--iswc-border-soft);
-  box-shadow: inset 0 1px 2px color-mix(in srgb, #000 12%, transparent);
+  box-shadow: inset 0 .0625em .125em color-mix(in srgb, #000 12%, transparent);
 }
 :host([variant=segmented]) ::slotted(*) {
   --iswc-control-bg: transparent;
@@ -152,7 +151,7 @@
   --iswc-control-border: color-mix(in srgb, var(--_sel) 45%, transparent);
   --iswc-control-text: var(--_sel);
   border-radius: var(--iswc-button-border-radius);
-  box-shadow: 0 1px 3px color-mix(in srgb, #000 22%, transparent);
+  box-shadow: 0 .0625em .1875em color-mix(in srgb, #000 22%, transparent);
 }
 
 /* ---- appearance: separated ------------------------------------------- */
@@ -174,48 +173,48 @@
 
 /* ---- modificadores --------------------------------------------------- */
 :host([pill]) {
-  --iswc-button-group-radius: 999px;
+  --iswc-button-group-radius: 999em;
   --iswc-button-group-pad: 0.3em;
 }
 :host([pill]) ::slotted(*) {
-  --iswc-button-border-radius: 999px;
+  --iswc-button-border-radius: 999em;
 }
 
 :host([pill][variant=segmented]) ::slotted([selected]) {
-  border-radius: 999px;
+  border-radius: 999em;
 }
 
 /* Pill + joined: forzar radios exteriores en --_button-* (iswc-button las
  * consume sin redefinirlas). Así el extremo es pastilla aunque el hijo sea
  * iswc-dropdown u otro wrapper, no solo iswc-button directo. */
 :host([pill][variant=joined][orientation=horizontal]) ::slotted(:first-child:not(:last-child)) {
-  --_button-start-start-radius: 999px;
-  --_button-end-start-radius: 999px;
+  --_button-start-start-radius: 999em;
+  --_button-end-start-radius: 999em;
 }
 :host([pill][variant=joined][orientation=horizontal]) ::slotted(:last-child:not(:first-child)) {
-  --_button-start-end-radius: 999px;
-  --_button-end-end-radius: 999px;
+  --_button-start-end-radius: 999em;
+  --_button-end-end-radius: 999em;
 }
 :host([pill][variant=joined][orientation=horizontal]) ::slotted(:only-child) {
-  --_button-start-start-radius: 999px;
-  --_button-start-end-radius: 999px;
-  --_button-end-start-radius: 999px;
-  --_button-end-end-radius: 999px;
+  --_button-start-start-radius: 999em;
+  --_button-start-end-radius: 999em;
+  --_button-end-start-radius: 999em;
+  --_button-end-end-radius: 999em;
 }
 
 :host([pill][variant=joined][orientation=vertical]) ::slotted(:only-child) {
-  --_button-start-start-radius: 999px;
-  --_button-start-end-radius: 999px;
-  --_button-end-start-radius: 999px;
-  --_button-end-end-radius: 999px;
+  --_button-start-start-radius: 999em;
+  --_button-start-end-radius: 999em;
+  --_button-end-start-radius: 999em;
+  --_button-end-end-radius: 999em;
 }
 :host([pill][variant=joined][orientation=vertical]) ::slotted(:first-child:not(:last-child)) {
-  --_button-start-start-radius: 999px;
-  --_button-start-end-radius: 999px;
+  --_button-start-start-radius: 999em;
+  --_button-start-end-radius: 999em;
 }
 :host([pill][variant=joined][orientation=vertical]) ::slotted(:last-child:not(:first-child)) {
-  --_button-end-start-radius: 999px;
-  --_button-end-end-radius: 999px;
+  --_button-end-start-radius: 999em;
+  --_button-end-end-radius: 999em;
 }
 
 :host([stretch]) {

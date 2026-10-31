@@ -40,9 +40,9 @@
 
 /* Gap por defecto según el ancho propio — misma escalera que ISP.
    Si el consumidor pasa `gap`, el JS escribe --gap inline y gana sobre esto. */
-:host { --gap: 0.5rem; }
-:host([data-sizew="xs"]) { --gap: 0.2rem; }
-:host([data-sizew="sm"]) { --gap: 0.35rem; }
+:host { --gap: 0.5em; }
+:host([data-sizew="xs"]) { --gap: 0.2em; }
+:host([data-sizew="sm"]) { --gap: 0.35em; }
 
 :host([inline]) {
   display: inline-flex;

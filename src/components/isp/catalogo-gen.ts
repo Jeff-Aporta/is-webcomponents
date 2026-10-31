@@ -120,7 +120,7 @@ const OBSERVED = [
         <iswc-input class="search" label="Buscar..." label-placement="float" data-typing-delay="400"></iswc-input>
       </section>
       <div part="grid-wrap" class="grid-wrap">
-        <iswc-ag-grid class="grid" selectable toolbar="false" style="height: 100%; min-height: 16rem;"></iswc-ag-grid>
+        <iswc-ag-grid class="grid" selectable toolbar="false" style="height: 100%; min-height: 16em;"></iswc-ag-grid>
       </div>
       <iswc-drawer part="drawer" class="drawer" light-dismiss label="Ficha">
         <div class="drawer-body">

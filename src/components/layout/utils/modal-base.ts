@@ -235,8 +235,8 @@ export class ModalBase extends withStyleAttrs(HTMLElement) {
       this.#modal.animate(
         [
           { transform: 'translateX(0)' },
-          { transform: 'translateX(-3px)' },
-          { transform: 'translateX(3px)' },
+          { transform: 'translateX(-0.1875em)' },
+          { transform: 'translateX(0.1875em)' },
           { transform: 'translateX(0)' },
         ],
         { duration: 220, easing: 'ease-in-out' },

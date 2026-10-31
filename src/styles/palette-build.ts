@@ -339,7 +339,7 @@ function applyBlock(selector: string, set: 'sl' | 'sd', scheme: 'light' | 'dark'
   const lines = [`  color-scheme: ${scheme};`, '  --iswc-bg-page: var(--iswc-bg);', '  --iswc-text-page: var(--iswc-text);', '  --iswc-text-page-soft: var(--iswc-text-soft);', '  --iswc-text-page-dim: var(--iswc-text-dim);', ...APPLY_TOKENS.map((t) => `  --iswc-${t}: var(--iswc-${set}-${t});`)];
   if (scheme === 'light') {
     lines.push(
-      '  --iswc-shadow: 0 1px 0 rgb(0 0 0 / 4%), 0 8px 24px color-mix(in srgb, var(--iswc-color-brand) calc(var(--iswc-tint) * 6%), rgb(0 0 0 / 6%));',
+      '  --iswc-shadow: 0 0.0625em 0 rgb(0 0 0 / 4%), 0 0.5em 1.5em color-mix(in srgb, var(--iswc-color-brand) calc(var(--iswc-tint) * 6%), rgb(0 0 0 / 6%));',
       '  --iswc-brand-text: color-mix(in srgb, var(--iswc-color-brand) 45%, black);',
       '  --iswc-brand-soft: var(--iswc-color-brand-paler);',
       '  --iswc-brand-soft-active: var(--iswc-color-brand-pale);',
@@ -347,7 +347,7 @@ function applyBlock(selector: string, set: 'sl' | 'sd', scheme: 'light' | 'dark'
     );
   } else {
     lines.push(
-      '  --iswc-shadow: 0 1px 0 rgb(255 255 255 / 3%), 0 8px 24px color-mix(in srgb, var(--iswc-color-brand) calc(var(--iswc-tint) * 12%), rgb(0 0 0 / 30%));',
+      '  --iswc-shadow: 0 0.0625em 0 rgb(255 255 255 / 3%), 0 0.5em 1.5em color-mix(in srgb, var(--iswc-color-brand) calc(var(--iswc-tint) * 12%), rgb(0 0 0 / 30%));',
       '  --iswc-brand-text: hsl(from var(--iswc-color-brand) h s 76%);',
       '  --iswc-brand-soft: rgb(from var(--iswc-accent) r g b / 18%);',
       '  --iswc-brand-soft-active: rgb(from var(--iswc-accent) r g b / 28%);',

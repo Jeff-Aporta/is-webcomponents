@@ -68,7 +68,7 @@ import { TONE } from '../../core/tone.js';
   const VALID_VARIANT = TONE;
   const VALID_ORIENTATION = ['horizontal', 'vertical'];
 
-  class IswcCard extends withStyleAttrs(HTMLElement) {
+  class IswcCard extends withStyleAttrs(HTMLElement) {
 
     static get observedAttributes(): string[] { return [...OBSERVED, 'spacing']; }
 
@@ -153,7 +153,7 @@ import { TONE } from '../../core/tone.js';
           if ((slot as HTMLSlotElement).assignedElements({ flatten: true }).length > 0) { empty = false; break; }
         }
         // body (default slot) cuenta también nodos de texto no vacíos
-        const onlyDefault = slots.length === 1 && slots[0].getAttribute('name') === '';
+        const onlyDefault = slots.length === 1 && !slots[0].hasAttribute('name');
         if (onlyDefault && empty) {
           const text = (slots[0] as HTMLSlotElement).assignedNodes({ flatten: true })
             .filter((n: Node) => n.nodeType === 3 && (n.textContent ?? '').trim());

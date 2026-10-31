@@ -60,7 +60,9 @@ import { TONE } from '../../core/tone.js';
         </button>
       </div>
       <div class="content" part="content" hidden>
-        <slot></slot>
+        <div class="content-inner">
+          <slot></slot>
+        </div>
       </div>
     </div>
   `;
@@ -70,7 +72,7 @@ import { TONE } from '../../core/tone.js';
   const VALID_VARIANT = TONE.filter((t) => t !== 'accent');
   const VALID_ICON_PLACEMENT = ['start', 'end'];
 
-  class IswcDetails extends ElementBase {
+  class IswcDetails extends ElementBase {
 
     static get observedAttributes(): string[] { return [...OBSERVED, 'spacing', 'show-duration', 'hide-duration']; }
 

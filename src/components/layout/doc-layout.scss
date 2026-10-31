@@ -1,7 +1,7 @@
 /* <iswc-doc-layout> — barra + navegación | contenido | índice con scroll-spy. */
 :host {
-  --doc-layout-bar-h: 52px;
-  --doc-layout-fs: 15.5px;
+  --doc-layout-bar-h: 3.3548em;
+  --doc-layout-fs: 0.96875em;
   --doc-layout-bg: var(--iswc-bg-page, var(--iswc-bg));
   --doc-layout-side-bg: var(--iswc-bg-soft);
   --doc-layout-accent: var(--iswc-color-brand);
@@ -23,8 +23,8 @@
   &[hidden] { display: none !important; }
 }
 /* TV y monitores grandes: todo escala sin romper la proporción de lectura. */
-@media (min-width: 1700px) { :host { --doc-layout-fs: 17px; --doc-layout-bar-h: 58px; } }
-@media (min-width: 2400px) { :host { --doc-layout-fs: 20px; --doc-layout-bar-h: 68px; } }
+@media (min-width: 106.25em) { :host { --doc-layout-fs: 1.0625em; --doc-layout-bar-h: 3.4118em; } }
+@media (min-width: 150em) { :host { --doc-layout-fs: 1.25em; --doc-layout-bar-h: 3.4em; } }
 
 *, *::before, *::after { box-sizing: border-box; }
 
@@ -32,9 +32,9 @@
 .bar {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: .6452em;
   min-height: var(--doc-layout-bar-h);
-  padding: 0 12px;
+  padding: 0 .7742em;
   border-bottom: 1px solid var(--iswc-border);
   background: var(--iswc-bg-elev, var(--doc-layout-side-bg));
   color: var(--iswc-text);
@@ -42,33 +42,34 @@
   z-index: 4;
 }
 :host([no-bar]) .bar { display: none; }
-.brand { display: flex; align-items: center; gap: 10px; min-width: 0; margin-right: auto; overflow: hidden; }
-.actions { display: flex; align-items: center; gap: 8px; flex: none; }
+.brand { display: flex; align-items: center; gap: .6452em; min-width: 0; margin-right: auto; overflow: hidden; }
+.actions { display: flex; align-items: center; gap: .5161em; flex: none; }
 /* Celular: barra más compacta para que quepan los toggles y las acciones. */
-:host([data-movil]) .bar { gap: 6px; padding: 0 8px; }
-:host([data-movil]) .actions { gap: 4px; }
+:host([data-movil]) .bar { gap: .3871em; padding: 0 .5161em; }
+:host([data-movil]) .actions { gap: .2581em; }
 /* Teléfono: a 390 px las acciones ocupaban ~270 px y la marca quedaba en ~14 px.
    Las acciones se compactan (escalan por em, lo slotted hereda) y la marca
    conserva un mínimo legible; lo que no quepa lo recorta con elipsis el consumidor. */
-@media (max-width: 480px) {
-  .actions { font-size: 0.85em; gap: 3px; }
+@media (max-width: 30em) {
+  .actions { font-size: 0.85em; gap: .1935em; }
   .brand { min-width: min(4.5em, 20vw); }
 }
 .toggle {
+  font-size: 0.8602em;
   display: inline-grid;
   place-items: center;
   flex: none;
-  width: 36px;
-  height: 36px;
+  width: 2.7007em;
+  height: 2.7007em;
   padding: 0;
   border: 1px solid transparent;
-  border-radius: 10px;
+  border-radius: .7502em;
   background: transparent;
   color: var(--iswc-text-soft, var(--iswc-text));
   cursor: pointer;
   transition: background-color .15s, color .15s, border-color .15s;
 
-  svg { width: 20px; height: 20px; }
+  svg { width: 1.5004em; height: 1.5004em; }
   &:hover { background: var(--iswc-control-bg-hover, var(--iswc-bg-soft)); color: var(--iswc-text); }
   &:focus-visible { outline: 2px solid var(--doc-layout-accent); outline-offset: 2px; }
   &[aria-pressed="true"] { color: var(--doc-layout-accent); background: color-mix(in srgb, var(--doc-layout-accent) 12%, transparent); }
@@ -106,9 +107,9 @@ aside.end {
 }
 
 /* Índice de la página con scroll-spy */
-nav.toc { padding: 28px 16px 32px 18px; font-size: .84em; }
+nav.toc { padding: 2.1505em 1.2289em 2.4578em 1.3825em; font-size: .84em; }
 .toc-title {
-  margin: 0 0 12px;
+  margin: 0 0 1.2135em;
   font-size: .76em;
   font-weight: 700;
   letter-spacing: .1em;
@@ -118,18 +119,18 @@ nav.toc { padding: 28px 16px 32px 18px; font-size: .84em; }
 .toc-links { display: flex; flex-direction: column; }
 .toc-link {
   display: block;
-  padding: 5px 8px 5px 12px;
+  padding: .384em .6144em .384em .9217em;
   border-left: 2px solid var(--iswc-border-soft, var(--iswc-border));
   color: var(--iswc-text-soft, var(--iswc-text));
   text-decoration: none;
   line-height: 1.4;
-  border-radius: 0 6px 6px 0;
+  border-radius: 0 .4608em .4608em 0;
   transition: color .12s, border-color .12s, background-color .12s;
 
   &:hover { color: var(--iswc-text); border-left-color: var(--iswc-text-dim); background: var(--iswc-control-bg-hover, var(--iswc-bg-soft)); }
   &:focus-visible { outline: 2px solid var(--doc-layout-accent); outline-offset: -2px; }
-  &.nivel-3 { padding-left: 24px; font-size: .95em; }
-  &.nivel-4 { padding-left: 36px; font-size: .9em; }
+  &.nivel-3 { padding-left: 1.9403em; font-size: .95em; }
+  &.nivel-4 { padding-left: 3.0722em; font-size: .9em; }
   &.activo {
     color: var(--doc-layout-accent);
     border-left-color: var(--doc-layout-accent);
@@ -156,10 +157,10 @@ nav.toc { padding: 28px 16px 32px 18px; font-size: .84em; }
     position: absolute;
     top: var(--doc-layout-bar-h);
     bottom: 0;
-    width: min(340px, 88vw);
+    width: min(21.9355em, 88vw);
     overflow: auto;
     background: var(--doc-layout-side-bg);
-    box-shadow: 0 16px 48px rgb(0 0 0 / .35);
+    box-shadow: 0 1.0323em 3.0968em rgb(0 0 0 / .35);
     z-index: 9;
     transition: transform .22s ease;
   }

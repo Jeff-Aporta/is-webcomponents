@@ -52,7 +52,7 @@ import '../layout/details.js';
         <aside class="config" part="config">
           <iswc-preview-controls part="controls" id="panel" label="Atributos"></iswc-preview-controls>
           <iswc-details class="style-editor" part="style-editor" summary="style"
-                        variant="plain" icon-placement="end" aria-label="style">
+                        variant="outlined" icon-placement="end" aria-label="style">
             <header class="style-editor__bar">
               <span class="style-editor__hint">CSS del ejemplar (style attribute)</span>
               <iswc-button id="styleFormatBtn" type="button" color="text" variant="plain" shape="pill"
@@ -63,7 +63,7 @@ import '../layout/details.js';
             <div class="style-editor__body">
               <iswc-code id="styleCode" lang="css" wrap line-numbers="false"
                          placeholder="/* CSS del ejemplar (style attribute) */"
-                         min-height="6rem"></iswc-code>
+                         min-height="6em"></iswc-code>
             </div>
           </iswc-details>
         </aside>

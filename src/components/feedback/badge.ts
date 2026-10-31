@@ -1,5 +1,6 @@
 import { adoptCss, defineElement } from '../../core/element.js';
 import { withStyleAttrs } from '../../core/attrs.js';
+import { ocultarSlotsVacios } from '../../core/dom-utils.js';
 
 import { INTENT } from '../../core/intent.js';
 import { TONE } from '../../core/tone.js';
@@ -10,7 +11,7 @@ import { TONE } from '../../core/tone.js';
  * Etiqueta compacta con colores semánticas.
  *
  * Atributos
- *   color      brand | neutral | text | success | warning | danger (default brand)
+ *   color      brand | neutral | text | info | success | warning | danger | error (default brand)
  *   variant   accent | filled | outlined | filled-outlined (default accent)
  *   pill         boolean
  *   attention    none | pulse | bounce (default none)
@@ -22,9 +23,9 @@ import { TONE } from '../../core/tone.js';
   const TEMPLATE = document.createElement('template');
   TEMPLATE.innerHTML = /* html */ `
     <span part="badge" class="badge">
-      <span part="start" class="prefix"><slot name="start"></slot></span>
+      <span part="start" class="prefix" hidden><slot name="start"></slot></span>
       <span part="label" class="label"><slot></slot></span>
-      <span part="end" class="suffix"><slot name="end"></slot></span>
+      <span part="end" class="suffix" hidden><slot name="end"></slot></span>
     </span>
   `;
 
@@ -38,12 +39,15 @@ import { TONE } from '../../core/tone.js';
     static get observedAttributes(): string[] { return [...OBSERVED, 'pulse-color']; }
 
     #mo: MutationObserver | null = null;
+    /** Etiqueta que puso #syncAria: se retira en cuanto llega texto, sin tocar la del consumidor. */
+    #labelAuto = '';
 
     constructor() {
       super();
       const shadow = this.attachShadow({ mode: 'open' });
       adoptCss(shadow, import.meta.url);
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
+      ocultarSlotsVacios(shadow, '.prefix slot, .suffix slot');
     }
 
     connectedCallback(): void {
@@ -81,14 +85,12 @@ import { TONE } from '../../core/tone.js';
      *  está vacío (ej: badge con sólo icono). Solo se aplica si el consumer
      *  no fijó su propio aria-label. */
     #syncAria() {
-      if (this.hasAttribute('aria-label')) return;
-      const slotDefault = this.querySelector('[slot]:not([slot="start"]):not([slot="end"])');
-      const text = this.textContent?.trim() ?? '';
-      if (text) return; // hay texto visible, no necesita label
-      if (!slotDefault) {
-        const color = this.getAttribute('color') || 'brand';
-        this.setAttribute('aria-label', `Insignia ${color}`);
-      }
+      const actual = this.getAttribute('aria-label');
+      if (actual !== null && actual !== this.#labelAuto) return; // la puso el consumidor
+      const vacio = !this.textContent?.trim() && !this.querySelector('[slot]:not([slot="start"]):not([slot="end"])');
+      this.#labelAuto = vacio ? `Insignia ${this.getAttribute('color') || 'brand'}` : '';
+      if (vacio) this.setAttribute('aria-label', this.#labelAuto);
+      else this.removeAttribute('aria-label');
     }
 
     #watchA11y() {

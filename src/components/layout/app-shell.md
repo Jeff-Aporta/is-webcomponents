@@ -5,7 +5,7 @@ tags:
 category: layout
 status: public
 source: ./app-shell.ts
-style: ./app-shell.css
+style: ./app-shell.scss
 preview: ./app-shell.json
 ---
 # `<iswc-app-shell>`

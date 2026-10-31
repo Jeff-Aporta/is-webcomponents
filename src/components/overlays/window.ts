@@ -1,4 +1,5 @@
 import '../actions/button.js';
+import '../media/icon.js';
 import { adoptCss, defineElement, emit } from '../../core/element.js';
 import { ElementBase } from '../../core/element-base.js';
 import { createPopupDismiss } from '../../core/popup-dismiss.js';
@@ -50,7 +51,7 @@ import { createPopupDismiss } from '../../core/popup-dismiss.js';
   interface DragState { x: number; y: number; rect: Rect; }
   interface ResizeState { x: number; y: number; rect: Rect; }
 
-  class IswcWindow extends ElementBase {
+  class IswcWindow extends ElementBase {
 
     static get observedAttributes(): string[] { return [...OBSERVED, 'shadow', 'bar-gap', 'bar-padding']; }
     #onWinMove!: (e: PointerEvent) => void;
@@ -75,9 +76,9 @@ import { createPopupDismiss } from '../../core/popup-dismiss.js';
           <header part="header" class="header iswc-surface-bar">
             <span class="title-wrap"><slot name="title"></slot><span class="title" id="ttl"></span></span>
             <span class="controls">
-              <iswc-button variant="plain" class="ctrl" data-act="min" title="Minimizar" aria-label="Minimizar" hidden><span aria-hidden="true">▁</span></iswc-button>
-              <iswc-button variant="plain" class="ctrl" data-act="max" title="Maximizar" aria-label="Maximizar" hidden><span aria-hidden="true">▢</span></iswc-button>
-              <iswc-button variant="plain" color="danger" class="ctrl" data-act="close" title="Cerrar" aria-label="Cerrar" hidden><span aria-hidden="true">✕</span></iswc-button>
+              <iswc-button variant="plain" class="ctrl" data-act="min" title="Minimizar" aria-label="Minimizar" hidden><iswc-icon icon="mdi:window-minimize" aria-hidden="true"></iswc-icon></iswc-button>
+              <iswc-button variant="plain" class="ctrl" data-act="max" title="Maximizar" aria-label="Maximizar" hidden><iswc-icon icon="mdi:window-maximize" aria-hidden="true"></iswc-icon></iswc-button>
+              <iswc-button variant="plain" color="danger" class="ctrl" data-act="close" title="Cerrar" aria-label="Cerrar" hidden><iswc-icon icon="mdi:close" aria-hidden="true"></iswc-icon></iswc-button>
             </span>
           </header>
           <div part="body" class="body" tabindex="0">
@@ -373,10 +374,10 @@ import { createPopupDismiss } from '../../core/popup-dismiss.js';
       }
       for (const list of groups.values()) {
         list.forEach((w, i) => {
-          w.style.left = `${8 + i * 106}px`;
+          w.style.left = `${0.5 + i * 6.625}em`;
           w.style.top = 'auto';
           w.style.right = 'auto';
-          w.style.bottom = '8px';
+          w.style.bottom = '0.5em';
           w.style.transform = 'none';
           w.style.width = '';
           w.style.height = '';

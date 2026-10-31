@@ -1,39 +1,39 @@
-﻿---
+---
 tag: iswc-class-diagram
 tags:
   - iswc-class-diagram
 category: diagrams
 status: public
 source: ./class-diagram.ts
-style: ./class-diagram.css
+style: ./class-diagram.scss
 preview: ./class-diagram.json
 ---
 # `<iswc-class-diagram>`
 
-## PropÃ³sito
+## Propósito
 
-Diagrama de clases UML en SVG, sin Mermaid. TÃº declaras clases y
+Diagrama de clases UML en SVG, sin Mermaid. Tú declaras clases y
 relaciones; el componente decide las capas, dibuja los tres
-compartimentos clÃ¡sicos (nombre, atributos, mÃ©todos) y rutea las
+compartimentos clásicos (nombre, atributos, métodos) y rutea las
 relaciones rodeando las cajas.
 
-Este mÃ³dulo registra `<iswc-class-diagram>`.
+Este módulo registra `<iswc-class-diagram>`.
 
-## CuÃ¡ndo usarlo
+## Cuándo usarlo
 
 Relaciones, flujos, estados, estructura o tiempo desde payloads declarativos.
 
-## CuÃ¡ndo no usarlo
+## Cuándo no usarlo
 
 No inventar schemas ni usar specs/layout como custom elements.
 
-## ImportaciÃ³n
+## Importación
 
 ```js
 import './class-diagram.js';
 ```
 
-## Ejemplo mÃ­nimo
+## Ejemplo mínimo
 
 ```html
 <iswc-class-diagram></iswc-class-diagram>
@@ -47,9 +47,9 @@ import './class-diagram.js';
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
-| `color` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `color` | `viewer` \| color | `viewer` lo pinta como visor dentro del lightbox. |
 
-#### Propiedades pÃºblicas
+#### Propiedades públicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
@@ -69,19 +69,19 @@ import './class-diagram.js';
 ### Eventos
 
 
-| Evento | DescripciÃ³n |
+| Evento | Descripción |
 | --- | --- |
-| `iswc-turtle-state` | Emitido al actualizarse el estado del mÃ³dulo turtle (resize, datos, etc.). |
+| `iswc-turtle-state` | Emitido al actualizarse el estado del módulo turtle (resize, datos, etc.). |
 | `iswc-render` | Emitido al renderizar o redibujar el componente. |
 | `iswc-toggle-group` | Evento personalizado del componente (toggle group). |
 | `iswc-open-viewer` | Emitido al abrir el visor ampliado (cancelable). |
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `iswc-turtle-state` | sÃ­ | sÃ­ | sÃ­ | no |
-| `iswc-render` | sÃ­ | sÃ­ | sÃ­ | no |
-| `iswc-toggle-group` | sÃ­ | sÃ­ | sÃ­ | sÃ­ |
-| `iswc-open-viewer` | sÃ­ | sÃ­ | sÃ­ | sÃ­ |
+| `iswc-turtle-state` | sí | sí | sí | no |
+| `iswc-render` | sí | sí | sí | no |
+| `iswc-toggle-group` | sí | sí | sí | sí |
+| `iswc-open-viewer` | sí | sí | sí | sí |
 
 
 <details>
@@ -96,13 +96,13 @@ el.addEventListener('iswc-turtle-state', (e) => {
 
 </details>
 
-### MÃ©todos y propiedades pÃºblicas
+### Métodos y propiedades públicas
 
-| MÃ©todo | Uso |
+| Método | Uso |
 | --- | --- |
-| `updateComplete()` | MÃ©todo pÃºblico declarado. |
+| `updateComplete()` | Método público declarado. |
 
-Propiedades pÃºblicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
+Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
 
 ### CSS parts
 
@@ -120,20 +120,20 @@ No expone.
 
 | Token | Uso |
 | --- | --- |
-| `--iswc-sans` | Token leÃ­do o definido por componente. |
-| `--iswc-border` | Token leÃ­do o definido por componente. |
-| `--iswc-text-soft` | Token leÃ­do o definido por componente. |
+| `--iswc-sans` | Token leído o definido por componente. |
+| `--iswc-border` | Token leído o definido por componente. |
+| `--iswc-text-soft` | Token leído o definido por componente. |
 
-### IntegraciÃ³n con formularios
+### Integración con formularios
 
-No declara integraciÃ³n form-associated propia en este mÃ³dulo.
+No declara integración form-associated propia en este módulo.
 
 ## Comportamiento
 
-DocumentaciÃ³n de cabecera preservada desde fuente:
+Documentación de cabecera preservada desde fuente:
 
-> <iswc-class-diagram> â€” diagrama de clases UML en SVG, sin Mermaid.
-> ConfiguraciÃ³n por JSON, igual que <iswc-flowchart>:
+> <iswc-class-diagram> — diagrama de clases UML en SVG, sin Mermaid.
+> Configuración por JSON, igual que <iswc-flowchart>:
 >   <iswc-class-diagram>
 >     <script type="application/json">
 >       { "classDiagram": { "direction": "TB", "classes": [...], "relations": [...] } }
@@ -182,11 +182,11 @@ Con `classDiagram.packages` las clases se agrupan como en el diagrama de compone
 - [`../_shared/tk-inline-md.js`](../../core/tk-inline-md.js)
 - [`./diagram-kinds.js`](./utils/diagram-kinds.js)
 
-Tags del mÃ³dulo: `<iswc-class-diagram>`.
+Tags del módulo: `<iswc-class-diagram>`.
 
 ## Accesibilidad
 
-Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`.
+Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`.
 
 ## Ejemplo avanzado
 
@@ -196,7 +196,7 @@ Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: `aria-labe
 
 ## Errores comunes
 
-- Usar tag sin importar mÃ³dulo primero.
+- Usar tag sin importar módulo primero.
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
@@ -204,17 +204,17 @@ Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: `aria-labe
 
 ## Reglas para LLM
 
-- Reusar componente y dependencias antes de implementaciÃ³n paralela.
+- Reusar componente y dependencias antes de implementación paralela.
 - Mantener nombres exactos de tags y API.
-- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explÃ­cito.
-- Leer callers/shared antes de cambiar; corregir raÃ­z comÃºn.
-- No modificar API basÃ¡ndose solo en preview.
+- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explícito.
+- Leer callers/shared antes de cambiar; corregir raíz común.
+- No modificar API basándose solo en preview.
 
 ## Fuentes
 
 - [JavaScript](./class-diagram.ts)
-- [CSS](./class-diagram.css)
-- [Ãndice de categorÃ­a](../../specs/componentes.md)
+- [CSS](./class-diagram.scss)
+- [Índice de categoría](../../../specs/componentes.md)
 - [Preview](./class-diagram.json)
 
 ## App API
@@ -222,4 +222,4 @@ Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: `aria-labe
 Visor: `demos/diagramas/app/view.html?kind=class&json=<base64url>`.
 Editor: `demos/diagramas/app/edit.html?kind=class&json=<base64url>`.
 
-`json` es el documento completo en base64url. Editar no reescribe ese parÃ¡metro: Compartir arma un enlace nuevo con el JSON resultante.
+`json` es el documento completo en base64url. Editar no reescribe ese parámetro: Compartir arma un enlace nuevo con el JSON resultante.

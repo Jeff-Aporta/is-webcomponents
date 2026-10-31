@@ -1,38 +1,38 @@
-﻿---
+---
 tag: iswc-barcode
 tags:
   - iswc-barcode
 category: media
 status: public
 source: ./barcode.ts
-style: ./barcode.css
+style: ./barcode.scss
 preview: ./barcode.json
 ---
 # `<iswc-barcode>`
 
-## PropÃ³sito
+## Propósito
 
-Generador de cÃ³digos de barras en SVG, sin dependencias externas.
+Generador de códigos de barras en SVG, sin dependencias externas.
 
-Este mÃ³dulo registra `<iswc-barcode>`.
+Este módulo registra `<iswc-barcode>`.
 
-## CuÃ¡ndo usarlo
+## Cuándo usarlo
 
 Etiquetas de producto, tiquetes, remisiones: cualquier caso que necesite un
-cÃ³digo lineal legible por lector lÃ¡ser.
+código lineal legible por lector láser.
 
-## CuÃ¡ndo no usarlo
+## Cuándo no usarlo
 
-Para cÃ³digos bidimensionales usar `<iswc-qrcode>`. Para una imagen ya generada
+Para códigos bidimensionales usar `<iswc-qrcode>`. Para una imagen ya generada
 en servidor basta un `<img>`.
 
-## ImportaciÃ³n
+## Importación
 
 ```js
 import './barcode.js';
 ```
 
-## Ejemplo mÃ­nimo
+## Ejemplo mínimo
 
 ```html
 <iswc-barcode value="7701234567890" type="ean13"></iswc-barcode>
@@ -48,34 +48,34 @@ import './barcode.js';
 | --- | --- | --- |
 | `value` | string | Texto a codificar. Requerido. |
 | `type` | string | `ean13` \| `code128`. Default `code128`. |
-| `height` | number | Alto del mÃ³dulo en px. Default `60`. |
+| `height` | number | Alto del módulo en px. Default `60`. |
 | `fg` | string | Color de las barras. Default `var(--iswc-text)`. |
 | `bg` | string | Color de fondo. Default `transparent`. |
 | `show-text` | boolean | Imprime el texto debajo. `true` por defecto en `ean13`. |
-| `quiet` | number | Zonas de silencio en mÃ³dulos, solo EAN13. Default `9`. |
+| `quiet` | number | Zonas de silencio en módulos, solo EAN13. Default `9`. |
 
-#### Propiedades pÃºblicas
+#### Propiedades públicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
-| â€” | â€” | No expone propiedades adicionales documentadas. |
+| — | — | No expone propiedades adicionales documentadas. |
 
 ### Slots
 
 | Slot | Uso |
 | --- | --- |
-| â€” | No expone slots: el contenido se genera desde `value`. |
+| — | No expone slots: el contenido se genera desde `value`. |
 
 ### Eventos
 
 
-| Evento | DescripciÃ³n |
+| Evento | Descripción |
 | --- | --- |
 | `iswc-render` | Emitido al renderizar o redibujar el componente. |
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `iswc-render` | sÃ­ | sÃ­ | sÃ­ | no |
+| `iswc-render` | sí | sí | sí | no |
 
 
 <details>
@@ -90,11 +90,11 @@ el.addEventListener('iswc-render', (e) => {
 
 </details>
 
-### MÃ©todos y propiedades pÃºblicas
+### Métodos y propiedades públicas
 
-| MÃ©todo | Uso |
+| Método | Uso |
 | --- | --- |
-| â€” | No expone mÃ©todos pÃºblicos propios. |
+| — | No expone métodos públicos propios. |
 
 ### CSS parts
 
@@ -102,7 +102,7 @@ el.addEventListener('iswc-render', (e) => {
 | --- | --- |
 | `root` | Personalizable con `::part(root)`. |
 | `canvas` | El `<svg>` generado. |
-| `text` | LÃ­nea de texto bajo el cÃ³digo. |
+| `text` | Línea de texto bajo el código. |
 
 ### Custom states
 
@@ -110,20 +110,20 @@ No expone.
 
 ### CSS custom properties
 
-Tokens del tema (`--iswc-*`) segÃºn CSS del mÃ³dulo.
+Tokens del tema (`--iswc-*`) según CSS del módulo.
 
-### IntegraciÃ³n con formularios
+### Integración con formularios
 
-No declara integraciÃ³n form-associated propia en este mÃ³dulo.
+No declara integración form-associated propia en este módulo.
 
 ## Comportamiento
 
-DocumentaciÃ³n de cabecera preservada desde fuente:
+Documentación de cabecera preservada desde fuente:
 
-> `<iswc-barcode>` â€” Generador de cÃ³digos de barras en SVG. `type` elige entre
+> `<iswc-barcode>` — Generador de códigos de barras en SVG. `type` elige entre
 > EAN13 y Code128; el SVG se rehace en cada cambio de atributo observado.
 
-En `ean13` el `value` debe tener 12 o 13 dÃ­gitos; el dÃ­gito de control se
+En `ean13` el `value` debe tener 12 o 13 dígitos; el dígito de control se
 calcula si falta.
 
 ## Dependencias y componentes relacionados
@@ -131,11 +131,11 @@ calcula si falta.
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 - [`../_shared/svg-chart-engine.js`](../../core/svg-chart-engine.js)
 
-Tags del mÃ³dulo: `<iswc-barcode>`.
+Tags del módulo: `<iswc-barcode>`.
 
 ## Accesibilidad
 
-El `<svg>` lleva `role="img"` y `aria-label`. Preservar semÃ¡ntica, foco,
+El `<svg>` lleva `role="img"` y `aria-label`. Preservar semántica, foco,
 teclado, labels y ARIA.
 
 ## Ejemplo avanzado
@@ -151,7 +151,7 @@ teclado, labels y ARIA.
 
 ## Errores comunes
 
-- Usar tag sin importar mÃ³dulo primero.
+- Usar tag sin importar módulo primero.
 - Pasar a `ean13` un valor con letras o con longitud distinta de 12/13.
 - Inventar API por similitud con otro componente.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
@@ -159,14 +159,14 @@ teclado, labels y ARIA.
 
 ## Reglas para LLM
 
-- Reusar componente y dependencias antes de implementaciÃ³n paralela.
+- Reusar componente y dependencias antes de implementación paralela.
 - Mantener nombres exactos de tags y API.
-- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explÃ­cito.
-- Leer callers/shared antes de cambiar; corregir raÃ­z comÃºn.
-- No modificar API basÃ¡ndose solo en preview.
+- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explícito.
+- Leer callers/shared antes de cambiar; corregir raíz común.
+- No modificar API basándose solo en preview.
 
 ## Fuentes
 
 - [JavaScript](./barcode.ts)
-- [CSS](./barcode.css)
-- [Ãndice de categorÃ­a](../../specs/componentes.md)
+- [CSS](./barcode.scss)
+- [Índice de categoría](../../../specs/componentes.md)

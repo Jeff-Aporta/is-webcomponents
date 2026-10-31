@@ -1,40 +1,40 @@
-﻿---
+---
 tag: iswc-grid-layout
 tags:
   - iswc-grid-layout
 category: isp
 status: public
 source: ./grid-layout.ts
-style: ./grid-layout.css
+style: ./grid-layout.scss
 preview: ./grid-layout.json
 ---
 # `<iswc-grid-layout>`
 
-## PropÃ³sito
+## Propósito
 
-Rejilla CSS declarativa: nÃºmero de celdas (o track list cruda), gap,
-justificaciÃ³n y alineaciÃ³n por atributos. Port de
+Rejilla CSS declarativa: número de celdas (o track list cruda), gap,
+justificación y alineación por atributos. Port de
 `src/lib/layout/GridLayout.svelte` de ISP.
 
-Este mÃ³dulo registra `<iswc-grid-layout>`.
+Este módulo registra `<iswc-grid-layout>`.
 
-## CuÃ¡ndo usarlo
+## Cuándo usarlo
 
 Para rejillas de tarjetas, formularios etiqueta/campo y cualquier estructura
 bidimensional que quiera declararse en el markup.
 
-## CuÃ¡ndo no usarlo
+## Cuándo no usarlo
 
 No usar para una sola fila o columna (usa `<iswc-flex-layout>`) ni para tablas de
 datos (usa `<iswc-data-grid>` / `<iswc-ag-grid>`).
 
-## ImportaciÃ³n
+## Importación
 
 ```js
 import './grid-layout.js';
 ```
 
-## Ejemplo mÃ­nimo
+## Ejemplo mínimo
 
 ```html
 <iswc-grid-layout cells="3" gap="0.5rem">
@@ -44,10 +44,10 @@ import './grid-layout.js';
 </iswc-grid-layout>
 ```
 
-## Mapeo Svelte â†’ Web Component
+## Mapeo Svelte → Web Component
 
-- `cellsFit` â†’ atributo `cells-fit` (propiedad JS `cellsFit`).
-- `cells` mantiene la doble semÃ¡ntica de ISP: nÃºmero â†’ `repeat(n, minmax(0, 1fr))`
+- `cellsFit` → atributo `cells-fit` (propiedad JS `cellsFit`).
+- `cells` mantiene la doble semántica de ISP: número → `repeat(n, minmax(0, 1fr))`
   (o `repeat(n, max-content)` con `cells-fit`); cualquier otra cosa se usa tal
   cual como track list. El JS lo resuelve a la custom property `--cells`.
 - `direction` decide, como en ISP, si `--cells` alimenta
@@ -73,9 +73,9 @@ import './grid-layout.js';
 | `inline` | boolean | `display: inline-grid`. |
 | `cscroll` | boolean | `overflow: auto`. |
 
-TambiÃ©n refleja `data-sizew` y `data-szw-*`.
+También refleja `data-sizew` y `data-szw-*`.
 
-#### Propiedades pÃºblicas
+#### Propiedades públicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
@@ -94,13 +94,13 @@ TambiÃ©n refleja `data-sizew` y `data-szw-*`.
 ### Eventos
 
 
-| Evento | DescripciÃ³n |
+| Evento | Descripción |
 | --- | --- |
 | `iswc-breakpoint` | Evento personalizado del componente (breakpoint). |
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `iswc-breakpoint` | `{ width, sizew, boolszw, lerpw }` | sÃ­ | sÃ­ | no |
+| `iswc-breakpoint` | `{ width, sizew, boolszw, lerpw }` | sí | sí | no |
 
 
 <details>
@@ -115,9 +115,9 @@ el.addEventListener('iswc-breakpoint', (e) => {
 
 </details>
 
-### MÃ©todos y propiedades pÃºblicas
+### Métodos y propiedades públicas
 
-| MÃ©todo | Uso |
+| Método | Uso |
 | --- | --- |
 | `lerpw(b0, b1)` | Heredado de `BreakpointHost`. |
 
@@ -139,24 +139,24 @@ No expone custom states.
 | `--gap` | Gap efectivo. |
 
 
-### IntegraciÃ³n con formularios
+### Integración con formularios
 
-No declara integraciÃ³n form-associated.
+No declara integración form-associated.
 ## Comportamiento
 
 Sin `cells`, la rejilla queda en `grid-template-columns: none` y las celdas
-fluyen en una sola columna implÃ­cita.
+fluyen en una sola columna implícita.
 
 ## Dependencias y componentes relacionados
 
 - [`block-layout.js`](block-layout.js) (`BreakpointHost`)
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 
-Tags del mÃ³dulo: `<iswc-grid-layout>`.
+Tags del módulo: `<iswc-grid-layout>`.
 
 ## Accesibilidad
 
-Contenedor sin semÃ¡ntica propia; no usar como sustituto de `<table>` para datos
+Contenedor sin semántica propia; no usar como sustituto de `<table>` para datos
 tabulares.
 
 ## Ejemplo avanzado
@@ -172,20 +172,20 @@ tabulares.
 
 ## Errores comunes
 
-- Pasar `cells="repeat(3, 1fr)"` esperando que ademÃ¡s aplique `cells-fit`: con
+- Pasar `cells="repeat(3, 1fr)"` esperando que además aplique `cells-fit`: con
   track list cruda el flag se ignora (igual que en ISP).
 - Usar `cellsFit` como atributo; el atributo es `cells-fit`.
-- Crear size colors; usar font-size contextual y em.
+- Agregar un atributo `size`: el tamaño sale del `font-size` del contexto y de `em`.
 
 ## Reglas para LLM
 
 - Reusar `<iswc-flex-layout>` si el caso es unidimensional.
 - Booleano se activa por presencia; no usar `attr="false"`.
-- No modificar API basÃ¡ndose solo en el preview.
+- No modificar API basándose solo en el preview.
 
 ## Fuentes
 
 - [JavaScript](./grid-layout.ts)
-- [CSS](./grid-layout.css)
-- [Ãndice de categorÃ­a](../../specs/componentes.md)
+- [CSS](./grid-layout.scss)
+- [Índice de categoría](../../../specs/componentes.md)
 - [Preview](./grid-layout.json)

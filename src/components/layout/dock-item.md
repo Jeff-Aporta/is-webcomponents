@@ -4,12 +4,23 @@ tags:
   - iswc-dock-item
 category: layout
 status: public
+source: ./dock.ts
+style: ./dock.scss
+preview: ./dock-item.json
 ---
 # `<iswc-dock-item>`
 
 ## Propósito
 
 Ítem de `<iswc-dock>`. Un acceso del dock, con icono y acción.
+
+## Importación
+
+```js
+import './dock.js';
+```
+
+Ese módulo registra este tag junto con `<iswc-dock>`.
 
 ## Cuándo usarlo
 
@@ -22,25 +33,43 @@ No lo reimplementes ni lo uses para sustituir al padre. La guía del padre docum
 ## Ejemplo mínimo
 
 ```html
-<iswc-dock-item></iswc-dock-item>
+<iswc-dock-item icon="mdi:home" label="Inicio" href="/" active></iswc-dock-item>
 ```
 
+## Atributos
+
+| Atributo | Notas |
+| --- | --- |
+| `icon` | Ícono Iconify. |
+| `label` | Rótulo que aparece al acercar el puntero. |
+| `href` | Destino; sin él actúa como botón. |
+| `active` | Marca el ítem actual. |
+
+## Slots
+
+| Slot | Uso |
+| --- | --- |
+| `icon` | Ícono propio; gana sobre `icon`. |
+
+## CSS parts
+
+`item`, `label`.
 
 ## Eventos
 
 | Evento | Descripción |
 | --- | --- |
-| _(ninguno)_ | Este sub-componente no emite eventos propios; los eventos del componente padre (<iswc-dock>) se documentan en la ficha del padre. |
+| — | Al activarse, el `<iswc-dock>` padre emite `iswc-select` con `{ item }`. |
 
-<details>
-<summary>Ejemplo en vivo</summary>
+## Comportamiento
 
-```js
-// Los eventos se escuchan sobre el componente padre.
-const parent = document.querySelector('iswc-dock');
-parent.addEventListener('iswc-event', (e) => {
-  console.log('evento del padre', e.detail);
-});
-```
+Al pulsarlo, o con `Enter` y `Espacio`, el dock emite `iswc-select` con `{ item }`. El dock lo amplía según la cercanía del cursor.
 
-</details>
+## Accesibilidad
+
+Pinta un enlace enfocable y usa `label` como `aria-label`.
+
+## Reglas para LLM
+
+- Va dentro de `<iswc-dock>`.
+- Siempre lleva `label`.

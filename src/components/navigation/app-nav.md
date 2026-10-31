@@ -5,7 +5,7 @@ tags:
 category: navigation
 status: public
 source: ./app-nav.ts
-style: ./app-nav.css
+style: ./app-nav.scss
 preview: ./app-nav.json
 ---
 # `<iswc-app-nav>`

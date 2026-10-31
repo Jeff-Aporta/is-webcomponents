@@ -2,8 +2,8 @@
 :host {
   @include papel;
   display: contents;
-  --iswc-popover-max-width: 25rem;
-  --iswc-popover-arrow-size: 8px;
+  --iswc-popover-max-width: 27.027em;
+  --iswc-popover-arrow-size: .5em;
   --iswc-popover-show-duration: 120ms;
   --iswc-popover-hide-duration: 100ms;
 
@@ -27,7 +27,7 @@
     background: var(--iswc-bg-elev);
     color: var(--iswc-text);
     border: 1px solid var(--iswc-border);
-    box-shadow: var(--iswc-shadow, 0 8px 24px rgb(0 0 0 / 30%));
+    box-shadow: var(--iswc-shadow, 0 .5405em 1.6216em rgb(0 0 0 / 30%));
     font-family: var(--iswc-font-family);
     font-size: 0.925em;
     line-height: 1.45;

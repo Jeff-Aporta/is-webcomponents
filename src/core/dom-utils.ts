@@ -110,3 +110,19 @@ export function crearNodo(tag: string, attrs: Record<string, string | number | b
   }
   return nodo;
 }
+
+/**
+ * Oculta la caja de cada slot mientras no tenga contenido asignado, para que su hueco no cuente en el layout. Hace falta
+ * en JS: un elemento con <slot> dentro nunca está `:empty`, y Chromium no resuelve `:host(:has(...))`.
+ */
+export function ocultarSlotsVacios(raiz: ShadowRoot, selector: string): void {
+  for (const slot of raiz.querySelectorAll<HTMLSlotElement>(selector)) {
+    const caja = slot.parentElement;
+    if (!caja) continue;
+    const sincronizar = (): void => {
+      caja.hidden = !slot.assignedNodes({ flatten: true }).some((n) => n.nodeType === Node.ELEMENT_NODE || n.textContent?.trim());
+    };
+    slot.addEventListener('slotchange', sincronizar);
+    sincronizar();
+  }
+}

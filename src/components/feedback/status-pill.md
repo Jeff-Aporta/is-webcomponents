@@ -5,7 +5,7 @@ tags:
 category: feedback
 status: public
 source: ./status-pill.ts
-style: ./status-pill.css
+style: ./status-pill.scss
 preview: ./status-pill.json
 ---
 # `<iswc-status-pill>`

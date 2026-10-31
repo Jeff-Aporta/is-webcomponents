@@ -1,36 +1,36 @@
-﻿---
+---
 tag: iswc-color-picker
 tags:
   - iswc-color-picker
 category: forms
 status: public
 source: ./color-picker.ts
-style: ./color-picker.css
+style: ./color-picker.scss
 preview: ./color-picker.json
 ---
 # `<iswc-color-picker>`
 
-## PropÃ³sito
+## Propósito
 
 Trigger con muestra + hex. El panel (input type="color", campo hex y paleta) vive en un <dialog> en el top layer.
 
-Este mÃ³dulo registra `<iswc-color-picker>`.
+Este módulo registra `<iswc-color-picker>`.
 
-## CuÃ¡ndo usarlo
+## Cuándo usarlo
 
-Captura, selecciÃ³n y validaciÃ³n de valores compatibles con formularios.
+Captura, selección y validación de valores compatibles con formularios.
 
-## CuÃ¡ndo no usarlo
+## Cuándo no usarlo
 
-No duplicar validaciÃ³n, form association ni pickers shared.
+No duplicar validación, form association ni pickers shared.
 
-## ImportaciÃ³n
+## Importación
 
 ```js
 import './color-picker.js';
 ```
 
-## Ejemplo mÃ­nimo
+## Ejemplo mínimo
 
 ```html
 <iswc-color-picker
@@ -49,15 +49,15 @@ swatches="#e03131,#f59f00,#2f9e44"
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
-| `name` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `value` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `label` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `hint` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `disabled` | boolean | Fuente define default/restricciÃ³n. |
-| `required` | boolean | Fuente define default/restricciÃ³n. |
-| `swatches` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `name` | string/según contrato | Fuente define default/restricción. |
+| `value` | string/según contrato | Fuente define default/restricción. |
+| `label` | string/según contrato | Fuente define default/restricción. |
+| `hint` | string/según contrato | Fuente define default/restricción. |
+| `disabled` | boolean | Fuente define default/restricción. |
+| `required` | boolean | Fuente define default/restricción. |
+| `swatches` | string/según contrato | Fuente define default/restricción. |
 
-#### Propiedades pÃºblicas
+#### Propiedades públicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
@@ -81,15 +81,15 @@ swatches="#e03131,#f59f00,#2f9e44"
 ### Eventos
 
 
-| Evento | DescripciÃ³n |
+| Evento | Descripción |
 | --- | --- |
 | `iswc-input` | Emitido en cada cambio del valor (escribe como `input` nativo). |
 | `iswc-change` | Emitido al confirmar el cambio de valor (escribe como `change` nativo). |
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `iswc-input` | sÃ­ | sÃ­ | sÃ­ | no |
-| `iswc-change` | sÃ­ | sÃ­ | sÃ­ | no |
+| `iswc-input` | sí | sí | sí | no |
+| `iswc-change` | sí | sí | sí | no |
 
 
 <details>
@@ -104,17 +104,17 @@ el.addEventListener('iswc-input', (e) => {
 
 </details>
 
-### MÃ©todos y propiedades pÃºblicas
+### Métodos y propiedades públicas
 
-| MÃ©todo | Uso |
+| Método | Uso |
 | --- | --- |
-| `show()` | MÃ©todo pÃºblico declarado. |
-| `hide()` | MÃ©todo pÃºblico declarado. |
-| `checkValidity()` | MÃ©todo pÃºblico declarado. |
-| `reportValidity()` | MÃ©todo pÃºblico declarado. |
-| `setCustomValidity()` | MÃ©todo pÃºblico declarado. |
+| `show()` | Método público declarado. |
+| `hide()` | Método público declarado. |
+| `checkValidity()` | Método público declarado. |
+| `reportValidity()` | Método público declarado. |
+| `setCustomValidity()` | Método público declarado. |
 
-Propiedades pÃºblicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
+Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
 
 ### CSS parts
 
@@ -129,50 +129,50 @@ Propiedades pÃºblicas aparecen en tabla anterior; APIs heredadas se verifican 
 | `panel` | Personalizable con `::part(panel)`. |
 | `input` | Personalizable con `::part(input)`. |
 | `hex-input` | Personalizable con `::part(hex-input)`. |
-| `eyedropper` | BotÃ³n EyeDropper (oculto si la API no existe). |
+| `eyedropper` | Botón EyeDropper (oculto si la API no existe). |
 
 ### Custom states
 
 | Estado | Uso |
 | --- | --- |
-| `:state(open)` | Estado usado por implementaciÃ³n/CSS. |
-| `:state(disabled)` | Estado usado por implementaciÃ³n/CSS. |
+| `:state(open)` | Estado usado por implementación/CSS. |
+| `:state(disabled)` | Estado usado por implementación/CSS. |
 
 ### CSS custom properties
 
 | Token | Uso |
 | --- | --- |
-| `--iswc-picker-radius` | Token leÃ­do o definido por componente. |
-| `--iswc-radius-sm` | Token leÃ­do o definido por componente. |
-| `--iswc-picker-border` | Token leÃ­do o definido por componente. |
-| `--iswc-control-border` | Token leÃ­do o definido por componente. |
-| `--iswc-picker-bg` | Token leÃ­do o definido por componente. |
-| `--iswc-control-bg` | Token leÃ­do o definido por componente. |
-| `--iswc-picker-text` | Token leÃ­do o definido por componente. |
-| `--iswc-control-text` | Token leÃ­do o definido por componente. |
-| `--iswc-picker-focus` | Token leÃ­do o definido por componente. |
-| `--iswc-focus` | Token leÃ­do o definido por componente. |
-| `--iswc-accent` | Token leÃ­do o definido por componente. |
-| `--iswc-sans` | Token leÃ­do o definido por componente. |
-| `--iswc-text` | Token leÃ­do o definido por componente. |
-| `--iswc-text-soft` | Token leÃ­do o definido por componente. |
-| `--iswc-text-dim` | Token leÃ­do o definido por componente. |
-| `--iswc-control-bg-hover` | Token leÃ­do o definido por componente. |
-| `--iswc-mono` | Token leÃ­do o definido por componente. |
-| `--iswc-bg-elev` | Token leÃ­do o definido por componente. |
-| `--iswc-border` | Token leÃ­do o definido por componente. |
-| `--iswc-radius` | Token leÃ­do o definido por componente. |
-| `--iswc-shadow` | Token leÃ­do o definido por componente. |
+| `--iswc-picker-radius` | Token leído o definido por componente. |
+| `--iswc-radius-sm` | Token leído o definido por componente. |
+| `--iswc-picker-border` | Token leído o definido por componente. |
+| `--iswc-control-border` | Token leído o definido por componente. |
+| `--iswc-picker-bg` | Token leído o definido por componente. |
+| `--iswc-control-bg` | Token leído o definido por componente. |
+| `--iswc-picker-text` | Token leído o definido por componente. |
+| `--iswc-control-text` | Token leído o definido por componente. |
+| `--iswc-picker-focus` | Token leído o definido por componente. |
+| `--iswc-focus` | Token leído o definido por componente. |
+| `--iswc-accent` | Token leído o definido por componente. |
+| `--iswc-sans` | Token leído o definido por componente. |
+| `--iswc-text` | Token leído o definido por componente. |
+| `--iswc-text-soft` | Token leído o definido por componente. |
+| `--iswc-text-dim` | Token leído o definido por componente. |
+| `--iswc-control-bg-hover` | Token leído o definido por componente. |
+| `--iswc-mono` | Token leído o definido por componente. |
+| `--iswc-bg-elev` | Token leído o definido por componente. |
+| `--iswc-border` | Token leído o definido por componente. |
+| `--iswc-radius` | Token leído o definido por componente. |
+| `--iswc-shadow` | Token leído o definido por componente. |
 
-### IntegraciÃ³n con formularios
+### Integración con formularios
 
-Participa mediante ElementInternals/helpers form-associated; respetar name, value, disabled, reset, restore y validaciÃ³n.
+Participa mediante ElementInternals/helpers form-associated; respetar name, value, disabled, reset, restore y validación.
 
 ## Comportamiento
 
-DocumentaciÃ³n de cabecera preservada desde fuente:
+Documentación de cabecera preservada desde fuente:
 
-> <iswc-color-picker> â€” Selector de color form-associated.
+> <iswc-color-picker> — Selector de color form-associated.
 > El panel (color nativo + hex + swatches) vive en un <dialog modal> (top layer)
 > para no perderse por overflow de ancestros.
 > Atributos: name, value (#rrggbb, default #808080), label, hint,
@@ -181,8 +181,8 @@ DocumentaciÃ³n de cabecera preservada desde fuente:
 > Parts: base, trigger, swatch, panel, input, hex-input, label, hint
 > Events: iswc-input { value }, iswc-change { value }
 >
-> EyeDropper: botÃ³n `::part(eyedropper)` llama `new EyeDropper().open()` y escribe `sRGBHex`.
-> Si `EyeDropper` no estÃ¡ en `window`, el botÃ³n queda `hidden`.
+> EyeDropper: botón `::part(eyedropper)` llama `new EyeDropper().open()` y escribe `sRGBHex`.
+> Si `EyeDropper` no está en `window`, el botón queda `hidden`.
 
 ## Dependencias y componentes relacionados
 
@@ -190,11 +190,11 @@ DocumentaciÃ³n de cabecera preservada desde fuente:
 - [`../media/icon.js`](../media/icon.js)
 - [`../_shared/form-associated.js`](../../core/form-associated.js)
 
-Tags del mÃ³dulo: `<iswc-color-picker>`.
+Tags del módulo: `<iswc-color-picker>`.
 
 ## Accesibilidad
 
-Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: `aria-haspopup`, `aria-expanded`, `aria-hidden`, `aria-label`, `aria-required`, `aria-pressed`.
+Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-haspopup`, `aria-expanded`, `aria-hidden`, `aria-label`, `aria-required`, `aria-pressed`.
 
 ## Ejemplo avanzado
 
@@ -209,7 +209,7 @@ swatches="#e03131,#f59f00,#2f9e44"
 
 ## Errores comunes
 
-- Usar tag sin importar mÃ³dulo primero.
+- Usar tag sin importar módulo primero.
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
@@ -217,15 +217,15 @@ swatches="#e03131,#f59f00,#2f9e44"
 
 ## Reglas para LLM
 
-- Reusar componente y dependencias antes de implementaciÃ³n paralela.
+- Reusar componente y dependencias antes de implementación paralela.
 - Mantener nombres exactos de tags y API.
-- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explÃ­cito.
-- Leer callers/shared antes de cambiar; corregir raÃ­z comÃºn.
-- No modificar API basÃ¡ndose solo en preview.
+- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explícito.
+- Leer callers/shared antes de cambiar; corregir raíz común.
+- No modificar API basándose solo en preview.
 
 ## Fuentes
 
 - [JavaScript](./color-picker.ts)
-- [CSS](./color-picker.css)
-- [Ãndice de categorÃ­a](../../specs/componentes.md)
+- [CSS](./color-picker.scss)
+- [Índice de categoría](../../../specs/componentes.md)
 - [Preview](./color-picker.json)

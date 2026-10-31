@@ -1,3 +1,5 @@
+import '../../layout/card.js';
+
 /**
  * Behavior migrado desde HTML inline de icon-explorer.
  * Se ejecuta en mount() tras pintar la definition JSON.
@@ -184,14 +186,14 @@ export async function mount(ctx: import('../../../previews/_kit/schemas/preview.
   function iconosDe(prefix: string): Promise<IconsJson> {
     const cached = familiaCache.get(prefix);
     if (cached) return cached;
-    const p = loadJson<IconsJson>(`${prefix}.json`).catch(async (): Promise<IconsJson> => {
+    const p = (async (): Promise<IconsJson> => {
       const r = await fetch(`${API_ICONOS}collection?prefix=${encodeURIComponent(prefix)}`);
       if (!r.ok) throw new Error(prefix);
       const d = await r.json() as { uncategorized?: string[]; categories?: Record<string, string[]> };
       const icons = [...new Set([...(d.uncategorized ?? []), ...Object.values(d.categories ?? {}).flat()])].sort();
       if (!icons.length) throw new Error(prefix);
       return { icons };
-    });
+    })();
     familiaCache.set(prefix, p);
     return p;
   }

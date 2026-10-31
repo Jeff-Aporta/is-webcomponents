@@ -72,7 +72,7 @@
   .mer {
     font-size: 0.7em;
     padding: 0.1em 0.35em;
-    border-radius: 999px;
+    border-radius: 999em;
     /* Fondo activo específico del meridiano (lo unit ya tienen el suyo vía :hover). */
     &[data-active] { background: var(--iswc-accent-bg, rgb(224 49 49 / 12%)); }
   }
@@ -151,7 +151,7 @@
     position: absolute;
     left: 50%;
     bottom: 50%;
-    width: 2px;
+    width: .125em;
     height: var(--iswc-hand-length);
     background: var(--iswc-color-brand-strong);
     transform-origin: bottom center;

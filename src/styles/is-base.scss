@@ -36,24 +36,24 @@
   --iswc-text-dim: #7a8390;
   --iswc-code-bg: #0f1318;
   --iswc-code-text: #d4d8de;
-  --iswc-shadow: 0 1px 0 rgb(255 255 255 / 3%), 0 8px 24px rgb(0 0 0 / 25%);
+  --iswc-shadow: 0 0.0625em 0 rgb(255 255 255 / 3%), 0 0.5em 1.5em rgb(0 0 0 / 25%);
   --iswc-radius: 0.625em;
   --iswc-radius-sm: 0.375em;
   /* Velo de lo modal (dialog basic, drawer, confirm, paleta, json-dialog). */
   --iswc-backdrop-color: rgb(0 0 0 / 55%);
   --iswc-backdrop-blur: 0.5em;
-  /* Escala de espaciado (rem: no crece con el font-size del contenedor). La
+  /* Escala de espaciado (em: crece con el font-size del contexto donde se usa). La
      usan card, dialog, drawer, callout (l), details y login (m); cada
      componente trae además el mismo valor como fallback, así que una app que
      no cargue esta hoja tampoco queda sin padding. Para densificar toda la UI
      basta redefinir estos tokens en :root. */
-  --iswc-space-2xs: 0.125rem;
-  --iswc-space-xs: 0.25rem;
-  --iswc-space-s: 0.5rem;
-  --iswc-space-m: 0.75rem;
-  --iswc-space-l: 1rem;
-  --iswc-space-xl: 1.5rem;
-  --iswc-space-2xl: 2rem;
+  --iswc-space-2xs: 0.125em;
+  --iswc-space-xs: 0.25em;
+  --iswc-space-s: 0.5em;
+  --iswc-space-m: 0.75em;
+  --iswc-space-l: 1em;
+  --iswc-space-xl: 1.5em;
+  --iswc-space-2xl: 2em;
   --iswc-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
   --iswc-sans: ui-sans-serif, system-ui, sans-serif;
   --iswc-control-bg: #21262d;
@@ -181,8 +181,8 @@
   --iswc-error-soft: color-mix(in srgb, var(--iswc-color-error) 18%, transparent);
   --iswc-error-soft-active: color-mix(in srgb, var(--iswc-color-error) 28%, transparent);
   /* scrollbars (Firefox + WebKit) */
-  --iswc-scrollbar-size: 0.5rem;
-  --iswc-scrollbar-radius: 999px;
+  --iswc-scrollbar-size: 0.5em;
+  --iswc-scrollbar-radius: 999em;
   --iswc-scrollbar-track: transparent;
   --iswc-scrollbar-thumb: color-mix(in srgb, var(--iswc-control-border) 65%, transparent);
   --iswc-scrollbar-thumb-hover: color-mix(in srgb, var(--iswc-accent) 45%, var(--iswc-control-border));
@@ -208,7 +208,7 @@
   --iswc-paper-text: #e6e8eb;
   --iswc-paper-text-soft: #a8b0bb;
   --iswc-paper-text-dim: #7a8390;
-  --iswc-paper-shadow: 0 1px 0 rgb(255 255 255 / 3%), 0 8px 24px rgb(0 0 0 / 25%);
+  --iswc-paper-shadow: 0 0.0625em 0 rgb(255 255 255 / 3%), 0 0.5em 1.5em rgb(0 0 0 / 25%);
   --iswc-paper-brand-text: hsl(from var(--iswc-color-brand) h s 76%);
   --iswc-paper-brand-soft: rgb(from var(--iswc-accent) r g b / 18%);
   --iswc-paper-brand-soft-active: rgb(from var(--iswc-accent) r g b / 28%);
@@ -240,7 +240,7 @@
   --iswc-paper-text: #1f2328;
   --iswc-paper-text-soft: #57606a;
   --iswc-paper-text-dim: #6e7781;
-  --iswc-paper-shadow: 0 1px 0 rgb(0 0 0 / 4%), 0 8px 24px rgb(0 0 0 / 6%);
+  --iswc-paper-shadow: 0 0.0625em 0 rgb(0 0 0 / 4%), 0 0.5em 1.5em rgb(0 0 0 / 6%);
   --iswc-paper-brand-text: var(--iswc-color-brand-stronger);
   --iswc-paper-brand-soft: var(--iswc-color-brand-paler);
   --iswc-paper-brand-soft-active: var(--iswc-color-brand-pale);
@@ -278,7 +278,7 @@
   --iswc-text-dim: #7a8390;
   --iswc-code-bg: #0f1318;
   --iswc-code-text: #d4d8de;
-  --iswc-shadow: 0 1px 0 rgb(255 255 255 / 3%), 0 8px 24px rgb(0 0 0 / 25%);
+  --iswc-shadow: 0 0.0625em 0 rgb(255 255 255 / 3%), 0 0.5em 1.5em rgb(0 0 0 / 25%);
   --iswc-control-bg: #21262d;
   --iswc-control-bg-hover: #30363d;
   --iswc-control-bg-active: #3d444d;
@@ -326,7 +326,7 @@
   --iswc-text-dim: #6e7781;
   --iswc-code-bg: #f6f8fa;
   --iswc-code-text: #1f2328;
-  --iswc-shadow: 0 1px 0 rgb(0 0 0 / 4%), 0 8px 24px rgb(0 0 0 / 6%);
+  --iswc-shadow: 0 0.0625em 0 rgb(0 0 0 / 4%), 0 0.5em 1.5em rgb(0 0 0 / 6%);
   --iswc-control-bg: #f1f3f5;
   --iswc-control-bg-hover: #e9ecef;
   --iswc-control-bg-active: #dee2e6;
@@ -389,4 +389,10 @@
   &::-webkit-scrollbar-corner {
     background: transparent;
   }
+}
+
+/* Densidad: en un control o en cualquier contenedor (formulario, barra, tabla). El alto es
+   un token heredable, así que basta redefinirlo; todo lo demás escala con él. */
+[density="compact"] {
+  --iswc-control-height: 2em;
 }

@@ -167,11 +167,13 @@ import type { IswcCheckIconButtonEvent, ThemeChangeDetail, ThemeName } from './s
       // es el patrón APG para un toggle de dos estados; aria-checked refleja
       // el valor actual y aria-label cambia según el destino del próximo
       // click (mismo texto que el <iswc-check-icon-button> interno).
+      const claro = this.getAttribute('checked-label') || 'Cambiar a tema claro';
+      const oscuro = this.getAttribute('label') || 'Cambiar a tema oscuro';
+      btn.setAttribute('label', oscuro);
+      btn.setAttribute('checked-label', claro);
       this.setAttribute('role', 'switch');
       this.setAttribute('aria-checked', want ? 'true' : 'false');
-      this.setAttribute('aria-label', want
-        ? (this.getAttribute('checked-label') || 'Cambiar a tema claro')
-        : (this.getAttribute('label') || 'Cambiar a tema oscuro'));
+      this.setAttribute('aria-label', want ? claro : oscuro);
     }
   }
 

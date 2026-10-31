@@ -1,8 +1,8 @@
 :host {
   display: block;
-  --iswc-tree-indent: 1rem;
-  --iswc-tree-row-padding-y: 0.25rem;
-  --iswc-tree-row-padding-x: 0.5rem;
+  --iswc-tree-indent: 1em;
+  --iswc-tree-row-padding-y: .25em;
+  --iswc-tree-row-padding-x: .5em;
   --iswc-tree-row-hover: color-mix(in srgb, var(--iswc-color-brand) 8%, transparent);
   --iswc-tree-row-selected-bg: color-mix(in srgb, var(--iswc-color-brand) 18%, transparent);
   --iswc-tree-row-selected-text: var(--iswc-text);
@@ -16,7 +16,7 @@
 .items {
   display: flex;
   flex-direction: column;
-  gap: 1px;
+  gap: .0625em;
 }
 
 /* Esta hoja la adoptan los shadow de <iswc-tree> Y <iswc-tree-item>. Un selector
@@ -35,25 +35,31 @@
 
 :host(iswc-tree-item:focus) { outline: none; }
 
+:host(iswc-tree-item:focus-visible) .row {
+  outline: 2px solid var(--iswc-focus);
+  outline-offset: 1px;
+}
+
+:host(iswc-tree-item[disabled]) .row {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
 .row {
   display: flex;
   align-items: center;
-  gap: 0.25rem;
+  gap: .25em;
   padding: var(--iswc-tree-row-padding-y) var(--iswc-tree-row-padding-x);
-  border-radius: 0.375rem;
+  border-radius: .375em;
   transition: background 0.1s;
 
   &:hover { background: var(--iswc-tree-row-hover); }
 }
 
-:host(:not([selection="none"])) ::slotted(iswc-tree-item[selected]) .row {
-  background: var(--iswc-tree-row-selected-bg);
-  color: var(--iswc-tree-row-selected-text);
-}
-
 .expand-toggle {
-  inline-size: 1.25rem;
-  block-size: 1.25rem;
+  font-size: 0.8333em;
+  inline-size: 1.5006em;
+  block-size: 1.5006em;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -61,31 +67,35 @@
   border: 0;
   cursor: pointer;
   color: inherit;
-  border-radius: 0.25rem;
+  border-radius: .3001em;
   transition: transform 0.15s;
 
-  &[hidden] { display: none; }
+  /* Sin hijos conserva su columna: las etiquetas de un mismo nivel quedan alineadas. */
+  &[hidden] { display: inline-flex; visibility: hidden; }
   &[aria-expanded="true"] { transform: rotate(90deg); }
   &:hover { background: var(--iswc-control-bg-hover, rgb(255 255 255 / 8%)); }
 }
 
+/* Casilla solo con selección múltiple; en single y leaf la fila resaltada ya lo dice. */
 .checkbox {
-  display: inline-flex;
+  display: none;
   align-items: center;
   justify-content: center;
-  inline-size: 1.25rem;
-  block-size: 1.25rem;
+  inline-size: 1.25em;
+  block-size: 1.25em;
 }
 
-:host([selection="none"]) .checkbox { display: none; }
+:host([data-selection="multiple"]) .checkbox { display: inline-flex; }
 
 .icon {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  inline-size: 1.25rem;
-  block-size: 1.25rem;
+  inline-size: .8929em;
+  block-size: .8929em;
   color: color-mix(in srgb, var(--iswc-text) 80%, transparent);
+
+  &[hidden] { display: none; }
 }
 
 .content {
@@ -99,11 +109,12 @@
   padding-inline-start: var(--iswc-tree-indent);
   display: flex;
   flex-direction: column;
-  gap: 1px;
+  gap: .0625em;
 
   &[hidden] { display: none; }
 }
 
 :host([selected]) .row {
   background: var(--iswc-tree-row-selected-bg);
+  color: var(--iswc-tree-row-selected-text);
 }

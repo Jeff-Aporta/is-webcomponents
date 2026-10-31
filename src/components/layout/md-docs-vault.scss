@@ -21,7 +21,7 @@
 
 // Modal de información de la hoja
 iswc-dialog.info-hoja {
-  --width: min(560px, 92vw);
+  --width: min(35em, 92vw);
 }
 
 // Lectura
@@ -32,7 +32,7 @@ iswc-doc-layout {
 .hoja {
   max-width: none;
   margin: 0;
-  padding: clamp(14px, 2vw, 28px) clamp(14px, 2.2vw, 32px) 56px;
+  padding: clamp(.903em, 2vw, 1.806em) clamp(.903em, 2.2vw, 2.064em) 3.612em;
 }
 
 iswc-md-render {
@@ -40,16 +40,16 @@ iswc-md-render {
 }
 
 .pager {
-  margin-top: 56px;
-  padding-top: 22px;
+  margin-top: 3.612em;
+  padding-top: 1.419em;
   border-top: 1px solid var(--iswc-border);
 }
 
 .cargando {
   color: var(--iswc-text-dim);
-  padding: 32px 0;
+  padding: 2em 0;
   display: flex;
-  gap: 10px;
+  gap: .625em;
   align-items: center;
   margin: 0;
 }

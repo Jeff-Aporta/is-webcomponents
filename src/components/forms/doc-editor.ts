@@ -219,7 +219,7 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
       const rect = el.getBoundingClientRect();
       const root = this.getBoundingClientRect();
       this.#menu.style.left = `${rect.left - root.left}px`;
-      this.#menu.style.top = `${rect.bottom - root.top + 4}px`;
+      this.#menu.style.top = `${rect.bottom - root.top + 0.25 * (parseFloat(getComputedStyle(this).fontSize) || 16)}px`;
       this.#menu.innerHTML = '';
       for (const type of Object.keys(TYPES) as BlockType[]) {
         const opt = document.createElement('button');

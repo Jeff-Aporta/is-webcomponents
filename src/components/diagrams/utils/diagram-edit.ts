@@ -198,13 +198,13 @@ export function openInlineEditor({ anchor, initial = {}, onSave, onCancel }: Ope
     background: var(--iswc-bg-elev, #1f2937);
     color: var(--iswc-text, #e2e8f0);
     border: 1px solid var(--iswc-border, rgba(255,255,255,0.2));
-    border-radius: 6px;
-    padding: 8px;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.35);
+    border-radius: .5em;
+    padding: .6667em;
+    box-shadow: 0 .6667em 2em rgba(0,0,0,0.35);
     display: flex;
-    gap: 6px;
+    gap: .5em;
     align-items: center;
-    font: 12px system-ui, sans-serif;
+    font: .75em system-ui, sans-serif;
   `;
   const labelInput = document.createElement('input');
   labelInput.type = 'text';
@@ -212,23 +212,23 @@ export function openInlineEditor({ anchor, initial = {}, onSave, onCancel }: Ope
   labelInput.placeholder = 'Etiqueta';
   labelInput.style.cssText = `
     flex: 1;
-    min-width: 120px;
+    min-width: 10em;
     background: transparent;
     color: inherit;
     border: 1px solid var(--iswc-border, rgba(255,255,255,0.2));
-    border-radius: 4px;
-    padding: 4px 6px;
+    border-radius: .3333em;
+    padding: .3333em .5em;
     font: inherit;
   `;
   const colorInput = document.createElement('input');
   colorInput.type = 'color';
   colorInput.value = initial.hue != null ? hslToHex(initial.hue, 70, 50) : '#475569';
   colorInput.style.cssText = `
-    width: 32px;
-    height: 28px;
+    width: 2.6667em;
+    height: 2.3333em;
     padding: 0;
     border: 1px solid var(--iswc-border, rgba(255,255,255,0.2));
-    border-radius: 4px;
+    border-radius: .3333em;
     background: transparent;
     cursor: pointer;
   `;
@@ -278,14 +278,14 @@ export function closeInlineEditor(): void {
 
 function btnStyle(): string {
   return `
-    width: 28px;
-    height: 28px;
+    width: 2em;
+    height: 2em;
     border: 1px solid var(--iswc-border, rgba(255,255,255,0.2));
-    border-radius: 4px;
+    border-radius: .2857em;
     background: transparent;
     color: inherit;
     cursor: pointer;
-    font-size: 14px;
+    font-size: 1.1667em;
   `;
 }
 

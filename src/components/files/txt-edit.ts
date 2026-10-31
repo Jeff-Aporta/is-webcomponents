@@ -2,6 +2,7 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
 import { ElementBase } from '../../core/element-base.js';
 import { setOptionalAttr, setStringAttr } from '../../core/reflect.js';
 import { loadText, resolveFileSource } from './utils/file-source.js';
+import { sincronizarAlto } from './utils/file-estado.js';
 
 (() => {
   const OBSERVED = ['src', 'content', 'height', 'readonly'];
@@ -27,9 +28,10 @@ import { loadText, resolveFileSource } from './utils/file-source.js';
       });
     }
 
-    onConnected() { this.#reload(); this.#syncRo(); }
+    onConnected() { sincronizarAlto(this); this.#reload(); this.#syncRo(); }
     onAttributeChanged(name: string) {
-      if (name === 'readonly') this.#syncRo();
+      if (name === 'height') sincronizarAlto(this);
+      else if (name === 'readonly') this.#syncRo();
       else if (name === 'content' && this.#ta.value === (this.getAttribute('content') ?? '')) return;
       else this.#reload();
     }
@@ -41,11 +43,7 @@ import { loadText, resolveFileSource } from './utils/file-source.js';
     get value() { return this.content; }
     set value(v: string) { this.content = v; }
     get height() { return this.getAttribute('height') ?? ''; }
-    set height(v) {
-      setOptionalAttr(this, 'height', v);
-      if (v) this.style.setProperty('--iswc-file-height', String(v));
-      else this.style.removeProperty('--iswc-file-height');
-    }
+    set height(v) { setOptionalAttr(this, 'height', v); }
 
     #syncRo() { this.#ta.readOnly = this.hasAttribute('readonly'); }
 

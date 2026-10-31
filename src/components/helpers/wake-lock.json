@@ -14,7 +14,15 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-wake-lock><p>Pon el atributo <code>active</code> para pedir el lock.</p></iswc-wake-lock>"
+          "html": "<iswc-wake-lock id=\"pg-wake-lock\"><p>Pon el atributo <code>active</code> para pedir el lock.</p></iswc-wake-lock>",
+          "target": "#pg-wake-lock",
+          "controls": [
+            {
+              "control": "boolean",
+              "prop": "attr:active",
+              "label": "active"
+            }
+          ]
         },
         {
           "kind": "callout",

@@ -20,7 +20,9 @@ import { DEFAULT_INTENT, ensureDefaultColor } from '../../core/intent.js';
  *
  * Atributos
  *  color      brand | neutral | text | success | warning | danger | info | error   (default: brand)
- *  variant   filled | outlined | plain | ghost | soft | soft-filled | text  (default: filled)
+ *  variant   filled | outlined | plain | ghost | soft | soft-filled | text | glyph | row  (default: filled)
+ *             `glyph` = cuadrado sin borde para un solo signo (emoji o icono);
+ *             `row` = fila a todo el ancho con contenido rico.
  *  shape        none | round | square | rect | pill  (default: round)
  *                             `none` = sin conversión de forma; `round` = radio tema;
  *                             `square`/`rect` = esquinas vivas; `pill` = cápsula
@@ -102,12 +104,8 @@ import { DEFAULT_INTENT, ensureDefaultColor } from '../../core/intent.js';
       <span part="start"   class="btn__prefix"><slot name="start"></slot></span>
       <span part="label"   class="btn__label"><slot></slot></span>
       <span part="end"     class="btn__suffix"><slot name="end"></slot></span>
-      <span part="caret"   class="btn__caret" aria-hidden="true">
-        <iswc-icon icon="mdi:chevron-down"></iswc-icon>
-      </span>
-      <span part="spinner" class="btn__spinner" aria-hidden="true">
-        <iswc-icon icon="mdi:loading"></iswc-icon>
-      </span>
+      <span part="caret"   class="btn__caret" aria-hidden="true"></span>
+      <span part="spinner" class="btn__spinner" aria-hidden="true"></span>
     </button>
     <span class="btn__sr-status" part="sr-status" aria-live="polite" aria-atomic="true"></span>
   `;
@@ -207,6 +205,7 @@ import { DEFAULT_INTENT, ensureDefaultColor } from '../../core/intent.js';
       this.#syncToneColor();
       this.#syncTag();       // <button> o <a> según href
       this.#syncAttrs();     // propaga atributos al inner
+      this.#syncCaret();
       this.#syncDisabled();
       this.#updateIconOnly();
       this.#updateLinkState();
@@ -222,6 +221,8 @@ import { DEFAULT_INTENT, ensureDefaultColor } from '../../core/intent.js';
         this.#updateLinkState();
       } else if (name === "disabled") {
         this.#syncDisabled();
+      } else if (name === "with-caret") {
+        this.#syncCaret();
       } else if (name === "loading") {
         this.#updateLoadingState();
       } else if (name === "hue") {
@@ -431,6 +432,23 @@ import { DEFAULT_INTENT, ensureDefaultColor } from '../../core/intent.js';
       }
     }
 
+    /**
+     * Caret y spinner se crean al primer uso: casi ningún botón los enseña y en
+     * una rejilla de cientos de botones esos dos `iswc-icon` eran un tercio del
+     * costo de crear cada instancia.
+     */
+    #iconoPerezoso(part: string, icon: string): void {
+      const caja = this.shadowRoot?.querySelector<HTMLElement>(`[part="${part}"]`);
+      if (!caja || caja.firstElementChild) return;
+      const i = document.createElement("iswc-icon");
+      i.setAttribute("icon", icon);
+      caja.append(i);
+    }
+
+    #syncCaret() {
+      if (this.hasAttribute("with-caret")) this.#iconoPerezoso("caret", "mdi:chevron-down");
+    }
+
     #updateIconOnly() {
       const slots = this.shadowRoot!.querySelectorAll<HTMLSlotElement>("slot");
       let elems = 0, hasText = false;
@@ -450,6 +468,7 @@ import { DEFAULT_INTENT, ensureDefaultColor } from '../../core/intent.js';
 
     #updateLoadingState() {
       const loading = this.hasAttribute("loading");
+      if (loading) this.#iconoPerezoso("spinner", "mdi:loading");
       setCustomState(this.#internals, "loading", loading);
       this.toggleAttribute("data-state-loading", loading);
       this.#btn.setAttribute("aria-busy", String(loading));

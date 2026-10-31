@@ -6,9 +6,9 @@
 :host {
   --iswc-code-radius: var(--iswc-radius);
   --iswc-code-border: var(--iswc-border);
-  --iswc-code-min-height: 12rem;
+  --iswc-code-min-height: 13.7143em;
   --iswc-code-font: var(--iswc-mono);
-  --iswc-code-font-size: 0.875rem;
+  --iswc-code-font-size: 0.875em;
   --iswc-code-line-height: 1.55;
   /* Defaults (dark); applyThemeConfig los sobrescribe. Material Darker + contraste HTML. */
   --iswc-code-bg: #1e1e1e;
@@ -78,7 +78,7 @@
 
 :host([compact]) {
   --iswc-code-min-height: 0;
-  --iswc-code-font-size: 0.8125rem;
+  --iswc-code-font-size: 0.8125em;
   --iswc-code-line-height: 1.6;
   border-radius: var(--iswc-radius);
 }
@@ -143,10 +143,10 @@
 
 .seed {
   position: absolute;
-  inline-size: 1px;
-  block-size: 1px;
+  inline-size: .0609em;
+  block-size: .0609em;
   padding: 0;
-  margin: -1px;
+  margin: -.0609em;
   overflow: hidden;
   clip: rect(0, 0, 0, 0);
   border: 0;
@@ -178,7 +178,7 @@
 .editor-host .ic-native {
   flex: 1 1 auto;
   margin: 0;
-  padding: 0.7rem 0.95rem;
+  padding: 0.8em 1.0857em;
   font: inherit;
   color: inherit;
   background: transparent;
@@ -191,7 +191,7 @@
   position: sticky;
   inset-inline-start: 0;
   z-index: 1;
-  padding: 0.7rem 0;
+  padding: 0.8em 0;
   text-align: end;
   color: var(--iswc-code-gutter-fg);
   background: var(--iswc-code-gutter-bg);
@@ -201,7 +201,7 @@
 }
 .editor-host .ic-ln {
   display: block;
-  padding: 0 8px 0 12px;
+  padding: 0 .5714em 0 .8571em;
 }
 .editor-host .ic-line {
   line-height: inherit;
@@ -232,7 +232,7 @@
   flex: 1 1 auto;
   align-self: stretch;
   min-inline-size: 0;
-  min-block-size: calc(var(--iswc-code-line-height) * 1em + 1.4rem);
+  min-block-size: calc(var(--iswc-code-line-height) * 1em + 1.6em);
   overflow: hidden;
 }
 .editor-host .ic-edit .ic-native {
@@ -241,7 +241,7 @@
   inset-inline-start: 0;
   min-inline-size: max-content;
   margin: 0;
-  padding: 0.7rem 0.95rem;
+  padding: 0.8em 1.0857em;
   font: inherit;
   color: inherit;
   background: transparent;
@@ -256,7 +256,7 @@
   inline-size: 100%;
   block-size: 100%;
   margin: 0;
-  padding: 0.7rem 0.95rem;
+  padding: 0.8em 1.0857em;
   font: inherit;
   color: inherit;
   line-height: inherit;
@@ -294,7 +294,7 @@
 
 /* —— External marks (errors / warnings / tooltips) —— */
 .iswc-code-mark {
-  border-radius: 2px;
+  border-radius: .125em;
 }
 
 .iswc-code-mark--highlight.iswc-code-mark--error,
@@ -329,9 +329,9 @@
 }
 
 .doc-tip {
-  --iswc-tooltip-max-width: 22rem;
+  --iswc-tooltip-max-width: 25.1429em;
   font-family: var(--iswc-sans);
-  font-size: 0.8rem;
+  font-size: 0.8em;
 }
 
 /* Tokens nativos → mismas variables de paleta --iswc-code-* */

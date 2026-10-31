@@ -9,8 +9,8 @@
   align-items: center;
   font-family: var(--iswc-font-family);
   font-size: inherit;
-  margin-inline-start: var(--_button-horizontal-indent, 0px);
-  margin-block-start: var(--_button-vertical-indent, 0px);
+  margin-inline-start: var(--_button-horizontal-indent, 0em);
+  margin-block-start: var(--_button-vertical-indent, 0em);
   --iswc-dropdown-show-duration: 120ms;
   --iswc-dropdown-hide-duration: 100ms;
 }
@@ -50,8 +50,8 @@
 .menu {
   position: fixed;
   z-index: 1;
-  min-width: 11rem;
-  max-width: min(20rem, 90vw);
+  min-width: 11em;
+  max-width: min(20em, 90vw);
   max-height: min(70vh, var(--auto-size-available-height, 70vh));
   overflow: auto;
   padding: 0.35em;
@@ -59,7 +59,7 @@
   background: var(--iswc-bg-elev);
   color: var(--iswc-text);
   border: 1px solid var(--iswc-border);
-  box-shadow: var(--iswc-popover-shadow, var(--iswc-shadow, 0 8px 24px rgba(0, 0, 0, 0.3)));
+  box-shadow: var(--iswc-popover-shadow, var(--iswc-shadow, 0 .5em 1.5em rgba(0, 0, 0, 0.3)));
   box-sizing: border-box;
 }
 .menu ::slotted(:is(h1, h2, h3, h4, h5, h6)) {

@@ -67,8 +67,7 @@ export function renderMenu(el: HTMLElement, items: readonly MenuItem[]): void {
       frag.appendChild(hr);
       continue;
     }
-    const btn = document.createElement('iswc-button') as HTMLElement & { variant?: string };
-    btn.variant = 'plain';
+    const btn = document.createElement('iswc-dropdown-item') as HTMLElement;
     btn.className = 'pop-item';
     btn.dataset.action = item.action ?? '';
     if (item.value != null) btn.dataset.value = String(item.value);
@@ -76,6 +75,7 @@ export function renderMenu(el: HTMLElement, items: readonly MenuItem[]): void {
     if (item.checked) btn.setAttribute('data-checked', '');
     const icon = document.createElement('span');
     icon.className = 'pop-icon';
+    icon.slot = 'icon';
     icon.setAttribute('aria-hidden', 'true');
     if (item.icon) icon.innerHTML = item.icon;
     const label = document.createElement('span');
@@ -173,13 +173,13 @@ export function renderFilterPanel(el: HTMLElement, { columns, model }: RenderFil
     row.appendChild(logic);
 
     const del = document.createElement('iswc-button') as HTMLElement & { variant?: string; pill?: boolean };
-    del.variant = 'plain';
+    del.setAttribute('variant', 'plain');
+    del.setAttribute('color', 'text');
     del.pill = true;
     del.className = 'filter-del';
     del.dataset.action = 'remove-filter';
     del.setAttribute('aria-label', 'Quitar filtro');
     del.textContent = '×';
-    row.appendChild(del);
 
     const colSel = document.createElement('iswc-select') as HTMLElement & { className: string };
     colSel.className = 'filter-col';
@@ -206,6 +206,7 @@ export function renderFilterPanel(el: HTMLElement, { columns, model }: RenderFil
     row.appendChild(opSel);
 
     row.appendChild(filterValueInput(col, op, item));
+    row.appendChild(del);
     list.appendChild(row);
   });
 
@@ -221,12 +222,14 @@ export function renderFilterPanel(el: HTMLElement, { columns, model }: RenderFil
   const foot = document.createElement('div');
   foot.className = 'pop-foot';
   const addFilter = document.createElement('iswc-button') as HTMLElement & { variant?: string };
-  addFilter.variant = 'plain';
+  addFilter.setAttribute('variant', 'plain');
+  addFilter.setAttribute('color', 'text');
   addFilter.className = 'pop-btn';
   addFilter.dataset.action = 'add-filter';
   addFilter.textContent = '+ Añadir filtro';
   const clearFilters = document.createElement('iswc-button') as HTMLElement & { variant?: string };
-  clearFilters.variant = 'plain';
+  clearFilters.setAttribute('variant', 'plain');
+  clearFilters.setAttribute('color', 'text');
   clearFilters.className = 'pop-btn';
   clearFilters.dataset.action = 'clear-filters';
   clearFilters.textContent = 'Limpiar';

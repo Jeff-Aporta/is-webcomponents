@@ -5,7 +5,7 @@ tags:
 category: layout
 status: public
 source: ./md-docs-vault.ts
-style: ./md-docs-vault.css
+style: ./md-docs-vault.scss
 preview: ./md-docs-vault.json
 ---
 # `<iswc-md-docs-vault>`

@@ -5,7 +5,7 @@ tags:
 category: helpers
 status: public
 source: ./popover.ts
-style: ./popover.css
+style: ./popover.scss
 preview: ./popover.json
 ---
 # `<iswc-popover>`
@@ -50,7 +50,7 @@ import './popover.js';
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
-| `for` | string/según contrato | Fuente define default/restricción. |
+| `for` | string (id) | Elemento ancla del panel. |
 | `open` | boolean | Fuente define default/restricción. |
 
 #### Propiedades públicas
@@ -227,6 +227,6 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-haspop
 ## Fuentes
 
 - [JavaScript](./popover.ts)
-- [CSS](./popover.css)
-- [Índice de categoría](../../specs/componentes.md)
+- [CSS](./popover.scss)
+- [Índice de categoría](../../../specs/componentes.md)
 - [Preview](./popover.json)

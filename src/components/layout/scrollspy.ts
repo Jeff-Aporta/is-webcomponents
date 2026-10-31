@@ -151,6 +151,9 @@ import {
     connectedCallback(): void {
       this.#mounted = true;
       this.#connectedAt = Date.now();
+      // Los atributos puestos antes de conectar no pasan por `attributeChangedCallback` con efecto.
+      this.#targetSelector = this.getAttribute('target');
+      this.#triggerSelector = this.getAttribute('trigger');
       this.#refreshLinks();
       this.#setup();
       this.#bootRestoreActiveAnchor();
@@ -406,7 +409,11 @@ import {
       // El ancla nativa no entra en un shadow root.
       if (!(this.getRootNode() instanceof ShadowRoot)) return;
       e.preventDefault();
-      this.#target?.querySelector(`#${CSS.escape(id)}`)?.scrollIntoView({ block: 'start', behavior: 'smooth' });
+      // Solo el contenedor: `scrollIntoView` también movería los ancestros.
+      const destino = this.#target?.querySelector(`#${CSS.escape(id)}`);
+      if (!destino || !this.#target) return;
+      const top = this.#target.scrollTop + destino.getBoundingClientRect().top - this.#target.getBoundingClientRect().top;
+      this.#target.scrollTo({ top, behavior: 'smooth' });
     };
 
     // ---- Phase W10: persistencia del anchor activo ------------------------

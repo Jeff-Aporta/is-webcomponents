@@ -1,4 +1,5 @@
 import { adoptCss, defineElement, emit } from '../../core/element.js';
+import { ocultarSlotsVacios } from '../../core/dom-utils.js';
 import '../media/icon.js';
 import { INTENT, normalizeIntent } from '../../core/intent.js';
 import '../actions/button.js';
@@ -9,7 +10,7 @@ import '../actions/button.js';
  * Ítem individual de toast con countdown y cierre.
  *
  * Atributos
- *   color   brand | success | warning | danger | neutral (default brand)
+ *   color   brand | info | success | warning | danger | error | neutral | text (default brand)
  *   duration  number ms (default 5000; 0 = hasta dismiss). Reflect.
  *   open      boolean — visible
  *
@@ -31,16 +32,16 @@ import '../actions/button.js';
   const TEMPLATE = document.createElement('template');
   TEMPLATE.innerHTML = /* html */ `
     <div part="base" class="base" data-toast-base role="status" aria-live="polite" aria-atomic="true">
-      <span part="icon" class="icon">
+      <span part="icon" class="icon" hidden>
         <slot name="icon"><slot name="start"></slot></slot>
       </span>
       <div part="message" class="message">
         <div part="title" class="title"><slot></slot></div>
-        <div part="caption" class="caption"><slot name="caption"></slot></div>
+        <div part="caption" class="caption" hidden><slot name="caption"></slot></div>
       </div>
       <iswc-button
         class="close"
-        variant="text"
+        variant="glyph"
         color="text"
         label="Cerrar"
         exportparts="button: close-button"
@@ -78,6 +79,7 @@ import '../actions/button.js';
       const shadow = this.attachShadow({ mode: 'open' });
       adoptCss(shadow, import.meta.url);
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
+      ocultarSlotsVacios(shadow, '.icon > slot, .caption > slot');
       this.#base = shadow.querySelector<HTMLElement>('.base')!;
       this.#progress = shadow.querySelector<HTMLElement>('.progress')!;
       this.#progressBar = shadow.querySelector<HTMLElement>('.progress-bar')!;
@@ -249,7 +251,7 @@ import '../actions/button.js';
      * anuncien inmediatamente.
      */
     #syncAria() {
-      const isDanger = this.color === 'danger';
+      const isDanger = this.color === 'danger' || this.color === 'error';
       const role = isDanger ? 'alert' : 'status';
       const live = isDanger ? 'assertive' : 'polite';
       this.#base.setAttribute('role', role);

@@ -4,6 +4,9 @@ tags:
   - iswc-preview-controls
 category: preview
 status: public
+source: ./preview-controls.ts
+style: ./preview-controls.scss
+preview: ./preview-controls.json
 ---
 # `<iswc-preview-controls>`
 
@@ -12,6 +15,12 @@ status: public
 Panel de knobs del playground de la galería. Misma disposición que PatyISW:
 **una card** con **grid responsive** (`auto-fit`, mínimo ~300px), etiqueta
 arriba y widgets `iswc-switch` / `iswc-select` / `iswc-input`.
+
+## Importación
+
+```js
+import './preview-controls.js';
+```
 
 ## Cuándo usarlo
 
@@ -39,6 +48,13 @@ los tags `iswc-*` directamente.
   p.addEventListener('iswc-controls-change', (e) => console.log(e.detail));
 </script>
 ```
+
+## API
+
+| Atributo o propiedad | Notas |
+| --- | --- |
+| `label` | Rótulo del panel. |
+| `tag` | Componente que documenta. |
 
 ## Layout
 
@@ -95,3 +111,17 @@ el.addEventListener('click', (e) => {
 ```
 
 </details>
+
+## Comportamiento
+
+Pinta un control por cada entrada de `controls` y aplica los cambios al `target`. La documentación de cada control abre un popover que se cierra con `Escape` o al pulsar fuera.
+
+## Accesibilidad
+
+Cada acción tiene `title` y `aria-label`. El botón de información usa `aria-haspopup="dialog"` y `aria-expanded`, y el popover tiene `role="dialog"`.
+
+## Reglas para LLM
+
+- Se declara en el `.json` del demo, no a mano.
+- `prop` lleva prefijo: `attr:`, `prop:` o el que acepte el schema de controles.
+- Para un playground aislado, usa `<iswc-playground>`.

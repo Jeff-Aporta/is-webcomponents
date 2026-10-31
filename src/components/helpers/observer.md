@@ -1,46 +1,46 @@
-﻿---
+---
 tag: iswc-observer
 tags:
   - iswc-observer
 category: helpers
 status: public
 source: ./observer.ts
-style: ./observer.css
+style: ./observer.scss
 preview: ./observer.json
 ---
 # `<iswc-observer>`
 
-## PropÃ³sito
+## Propósito
 
-Web Component genÃ©rico que envuelve `IntersectionObserver`, `MutationObserver` y `ResizeObserver` vÃ­a `type`. Los nombres histÃ³ricos (`iswc-intersection-observer`, `iswc-mutation-observer`, `iswc-resize-observer`) son alias con `type` prefijado.
+Web Component genérico que envuelve `IntersectionObserver`, `MutationObserver` y `ResizeObserver` vía `type`. Los nombres históricos (`iswc-intersection-observer`, `iswc-mutation-observer`, `iswc-resize-observer`) son alias con `type` prefijado.
 
-## CuÃ¡ndo usarlo
+## Cuándo usarlo
 
-Observar visibilidad, mutaciones del subÃ¡rbol o tamaÃ±o de hijos sin cablear observers a mano.
+Observar visibilidad, mutaciones del subárbol o tamaño de hijos sin cablear observers a mano.
 
-## CuÃ¡ndo no usarlo
+## Cuándo no usarlo
 
-No crear otro wrapper Observer si este mÃ³dulo (o sus alias) cubre el caso.
+No crear otro wrapper Observer si este módulo (o sus alias) cubre el caso.
 
-## ImportaciÃ³n
+## Importación
 
 ```js
 import './observer.js';
 ```
 
-## Ejemplo mÃ­nimo
+## Ejemplo mínimo
 
 ```html
 <iswc-observer type="intersection" intersect-class="visible">
-  <div>â€¦</div>
+  <div>…</div>
 </iswc-observer>
 
 <iswc-observer type="mutation" attr="class open" child-list>
-  <div>â€¦</div>
+  <div>…</div>
 </iswc-observer>
 
 <iswc-observer type="resize">
-  <div style="resize:both;overflow:auto">â€¦</div>
+  <div style="resize:both;overflow:auto">…</div>
 </iswc-observer>
 ```
 
@@ -58,12 +58,12 @@ import './observer.js';
 | `once` | boolean | Deja de observar tras la primera |
 | `root` | string | Selector root (default viewport) |
 | `root-margin` | string | p. ej. `10px 20px` |
-| `threshold` | number | 0â€“1 |
+| `threshold` | number | 0–1 |
 | `attr` | string | Filtro de atributos (mutation) |
 | `child-list` | boolean | Default true |
 | `character-data` | boolean | Mutation |
 
-#### Propiedades pÃºblicas
+#### Propiedades públicas
 
 No expone propiedades de negocio adicionales.
 
@@ -71,16 +71,16 @@ No expone propiedades de negocio adicionales.
 
 | Slot | Uso |
 | --- | --- |
-| default | Elementos a observar / subÃ¡rbol a vigilar |
+| default | Elementos a observar / subárbol a vigilar |
 
 ### Eventos
 
 
-| Evento | DescripciÃ³n |
+| Evento | Descripción |
 | --- | --- |
 | `iswc-intersect` | Emitido al entrar/salir de la zona observada. |
-| `iswc-mutate` | Emitido al detectarse una mutaciÃ³n en el Ã¡rbol observado. |
-| `iswc-resize` | Emitido al cambiar el tamaÃ±o del elemento observado. |
+| `iswc-mutate` | Emitido al detectarse una mutación en el árbol observado. |
+| `iswc-resize` | Emitido al cambiar el tamaño del elemento observado. |
 
 | Evento | `type` | detail |
 | --- | --- | --- |
@@ -101,7 +101,7 @@ el.addEventListener('iswc-intersect', (e) => {
 
 </details>
 
-### MÃ©todos y propiedades pÃºblicas
+### Métodos y propiedades públicas
 
 No expone.
 
@@ -119,13 +119,13 @@ No expone.
 
 No expone.
 
-### IntegraciÃ³n con formularios
+### Integración con formularios
 
 No es form-associated.
 
 ## Comportamiento
 
-Una instancia de observer por elemento; `disconnect()` en `disconnectedCallback`. Alias histÃ³ricos reutilizan esta clase.
+Una instancia de observer por elemento; `disconnect()` en `disconnectedCallback`. Alias históricos reutilizan esta clase.
 
 ## Dependencias y componentes relacionados
 
@@ -134,7 +134,7 @@ Una instancia de observer por elemento; `disconnect()` en `disconnectedCallback`
 
 ## Accesibilidad
 
-No altera el Ã¡rbol accesible (`display: contents`); el contenido observado sigue siendo el del light DOM.
+No altera el árbol accesible (`display: contents`); el contenido observado sigue siendo el del light DOM.
 
 ## Ejemplo avanzado
 
@@ -156,5 +156,5 @@ No altera el Ã¡rbol accesible (`display: contents`); el contenido observado si
 
 ## Fuentes
 
-- `./observer.js` Â· `./observer.css`
+- `./observer.js` · `./observer.css`
 - Preview: `./observer.json`

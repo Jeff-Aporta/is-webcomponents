@@ -1,39 +1,39 @@
-﻿---
+---
 tag: iswc-switch
 tags:
   - iswc-switch
 category: forms
 status: public
 source: ./switch.ts
-style: ./switch.css
+style: ./switch.scss
 preview: ./switch.json
 ---
 # `<iswc-switch>`
 
-## PropÃ³sito
+## Propósito
 
 Interruptor form-associated con paridad funcional con el
 Switch de MUI:
 mismo contrato de formulario que iswc-checkbox, con carril y perilla deslizante,
-color por color, iconos en la perilla y rÃ³tulos dentro del carril.
+color por color, iconos en la perilla y rótulos dentro del carril.
 
-Este mÃ³dulo registra `<iswc-switch>`.
+Este módulo registra `<iswc-switch>`.
 
-## CuÃ¡ndo usarlo
+## Cuándo usarlo
 
-Captura, selecciÃ³n y validaciÃ³n de valores compatibles con formularios.
+Captura, selección y validación de valores compatibles con formularios.
 
-## CuÃ¡ndo no usarlo
+## Cuándo no usarlo
 
-No duplicar validaciÃ³n, form association ni pickers shared.
+No duplicar validación, form association ni pickers shared.
 
-## ImportaciÃ³n
+## Importación
 
 ```js
 import './switch.js';
 ```
 
-## Ejemplo mÃ­nimo
+## Ejemplo mínimo
 
 ```html
 <iswc-switch color="success" checked>success</iswc-switch>
@@ -47,22 +47,22 @@ import './switch.js';
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
-| `name` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `value` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `checked` | boolean | Fuente define default/restricciÃ³n. |
-| `disabled` | boolean | Fuente define default/restricciÃ³n. |
-| `readonly` | boolean | Fuente define default/restricciÃ³n. |
-| `required` | boolean | Fuente define default/restricciÃ³n. |
-| `error` | boolean | Fuente define default/restricciÃ³n. |
-| `hint` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `color` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `label-placement` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `icon` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `checked-icon` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `on-label` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `off-label` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `name` | string/según contrato | Fuente define default/restricción. |
+| `value` | string/según contrato | Fuente define default/restricción. |
+| `checked` | boolean | Fuente define default/restricción. |
+| `disabled` | boolean | Fuente define default/restricción. |
+| `readonly` | boolean | Fuente define default/restricción. |
+| `required` | boolean | Fuente define default/restricción. |
+| `error` | boolean | Fuente define default/restricción. |
+| `hint` | string/según contrato | Fuente define default/restricción. |
+| `color` | string/según contrato | Fuente define default/restricción. |
+| `label-placement` | string/según contrato | Fuente define default/restricción. |
+| `icon` | string/según contrato | Fuente define default/restricción. |
+| `checked-icon` | string/según contrato | Fuente define default/restricción. |
+| `on-label` | string/según contrato | Fuente define default/restricción. |
+| `off-label` | string/según contrato | Fuente define default/restricción. |
 
-#### Propiedades pÃºblicas
+#### Propiedades públicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
@@ -94,13 +94,13 @@ import './switch.js';
 ### Eventos
 
 
-| Evento | DescripciÃ³n |
+| Evento | Descripción |
 | --- | --- |
 | `iswc-change` | Emitido al confirmar el cambio de valor (escribe como `change` nativo). |
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `iswc-change` | sÃ­ | sÃ­ | sÃ­ | no |
+| `iswc-change` | sí | sí | sí | no |
 
 
 <details>
@@ -115,15 +115,15 @@ el.addEventListener('iswc-change', (e) => {
 
 </details>
 
-### MÃ©todos y propiedades pÃºblicas
+### Métodos y propiedades públicas
 
-| MÃ©todo | Uso |
+| Método | Uso |
 | --- | --- |
-| `checkValidity()` | MÃ©todo pÃºblico declarado. |
-| `reportValidity()` | MÃ©todo pÃºblico declarado. |
-| `setCustomValidity()` | MÃ©todo pÃºblico declarado. |
+| `checkValidity()` | Método público declarado. |
+| `reportValidity()` | Método público declarado. |
+| `setCustomValidity()` | Método público declarado. |
 
-Propiedades pÃºblicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
+Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
 
 ### CSS parts
 
@@ -142,60 +142,60 @@ Propiedades pÃºblicas aparecen en tabla anterior; APIs heredadas se verifican 
 
 | Estado | Uso |
 | --- | --- |
-| `:state(checked)` | Estado usado por implementaciÃ³n/CSS. |
-| `:state(disabled)` | Estado usado por implementaciÃ³n/CSS. |
-| `:state(readonly)` | Estado usado por implementaciÃ³n/CSS. |
-| `:state(error)` | Estado usado por implementaciÃ³n/CSS. |
+| `:state(checked)` | Estado usado por implementación/CSS. |
+| `:state(disabled)` | Estado usado por implementación/CSS. |
+| `:state(readonly)` | Estado usado por implementación/CSS. |
+| `:state(error)` | Estado usado por implementación/CSS. |
 
 ### CSS custom properties
 
 | Token | Uso |
 | --- | --- |
-| `--iswc-switch-height` | Token leÃ­do o definido por componente. |
-| `--iswc-switch-width` | Token leÃ­do o definido por componente. |
-| `--iswc-switch-bg` | Token leÃ­do o definido por componente. |
-| `--iswc-control-bg` | Token leÃ­do o definido por componente. |
-| `--iswc-switch-bg-hover` | Token leÃ­do o definido por componente. |
-| `--iswc-control-bg-hover` | Token leÃ­do o definido por componente. |
-| `--iswc-switch-border` | Token leÃ­do o definido por componente. |
-| `--iswc-control-border` | Token leÃ­do o definido por componente. |
-| `--iswc-switch-accent` | Token leÃ­do o definido por componente. |
-| `--iswc-accent` | Token leÃ­do o definido por componente. |
-| `--iswc-color-brand-500` | Token leÃ­do o definido por componente. |
-| `--iswc-switch-thumb` | Token leÃ­do o definido por componente. |
-| `--iswc-on-brand` | Token leÃ­do o definido por componente. |
-| `--iswc-switch-focus` | Token leÃ­do o definido por componente. |
-| `--iswc-focus` | Token leÃ­do o definido por componente. |
-| `--iswc-switch-icon` | Token leÃ­do o definido por componente. |
-| `--iswc-control-text` | Token leÃ­do o definido por componente. |
-| `--iswc-switch-icon-checked` | Token leÃ­do o definido por componente. |
-| `--iswc-switch-halo` | Token leÃ­do o definido por componente. |
-| `--iswc-sans` | Token leÃ­do o definido por componente. |
-| `--iswc-text` | Token leÃ­do o definido por componente. |
-| `--iswc-text-dim` | Token leÃ­do o definido por componente. |
-| `--iswc-color-success-500` | Token leÃ­do o definido por componente. |
-| `--iswc-color-warning-500` | Token leÃ­do o definido por componente. |
-| `--iswc-color-danger-500` | Token leÃ­do o definido por componente. |
-| `--iswc-danger-text` | Token leÃ­do o definido por componente. |
-| `--iswc-color-danger-600` | Token leÃ­do o definido por componente. |
+| `--iswc-switch-height` | Token leído o definido por componente. |
+| `--iswc-switch-width` | Token leído o definido por componente. |
+| `--iswc-switch-bg` | Token leído o definido por componente. |
+| `--iswc-control-bg` | Token leído o definido por componente. |
+| `--iswc-switch-bg-hover` | Token leído o definido por componente. |
+| `--iswc-control-bg-hover` | Token leído o definido por componente. |
+| `--iswc-switch-border` | Token leído o definido por componente. |
+| `--iswc-control-border` | Token leído o definido por componente. |
+| `--iswc-switch-accent` | Token leído o definido por componente. |
+| `--iswc-accent` | Token leído o definido por componente. |
+| `--iswc-color-brand-500` | Token leído o definido por componente. |
+| `--iswc-switch-thumb` | Token leído o definido por componente. |
+| `--iswc-on-brand` | Token leído o definido por componente. |
+| `--iswc-switch-focus` | Token leído o definido por componente. |
+| `--iswc-focus` | Token leído o definido por componente. |
+| `--iswc-switch-icon` | Token leído o definido por componente. |
+| `--iswc-control-text` | Token leído o definido por componente. |
+| `--iswc-switch-icon-checked` | Token leído o definido por componente. |
+| `--iswc-switch-halo` | Token leído o definido por componente. |
+| `--iswc-sans` | Token leído o definido por componente. |
+| `--iswc-text` | Token leído o definido por componente. |
+| `--iswc-text-dim` | Token leído o definido por componente. |
+| `--iswc-color-success-500` | Token leído o definido por componente. |
+| `--iswc-color-warning-500` | Token leído o definido por componente. |
+| `--iswc-color-danger-500` | Token leído o definido por componente. |
+| `--iswc-danger-text` | Token leído o definido por componente. |
+| `--iswc-color-danger-600` | Token leído o definido por componente. |
 
-### IntegraciÃ³n con formularios
+### Integración con formularios
 
-Participa mediante ElementInternals/helpers form-associated; respetar name, value, disabled, reset, restore y validaciÃ³n.
+Participa mediante ElementInternals/helpers form-associated; respetar name, value, disabled, reset, restore y validación.
 
 ## Comportamiento
 
-DocumentaciÃ³n de cabecera preservada desde fuente:
+Documentación de cabecera preservada desde fuente:
 
-> <iswc-switch> â€” Interruptor form-associated (track + thumb).
+> <iswc-switch> — Interruptor form-associated (track + thumb).
 > Atributos
 >   name, value (default "on"), hint
 >   color          brand (default) | neutral | success | warning | danger | info | error
 >   label-placement  end (default) | start | top | bottom
 >   icon             nombre de <iswc-icon> dentro del thumb apagado
 >   checked-icon     nombre de <iswc-icon> dentro del thumb encendido
->   on-label         texto corto dentro del track cuando estÃ¡ encendido
->   off-label        texto corto dentro del track cuando estÃ¡ apagado
+>   on-label         texto corto dentro del track cuando está encendido
+>   off-label        texto corto dentro del track cuando está apagado
 >   checked, disabled, readonly, required, error   (boolean)
 > Slots: default (etiqueta), hint
 > Parts: form-control, base, control, track-label, thumb, mark, label, hint
@@ -209,11 +209,11 @@ DocumentaciÃ³n de cabecera preservada desde fuente:
 - [`../media/icon.js`](../media/icon.js)
 - [`../_shared/form-associated.js`](../../core/form-associated.js)
 
-Tags del mÃ³dulo: `<iswc-switch>`.
+Tags del módulo: `<iswc-switch>`.
 
 ## Accesibilidad
 
-Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: `aria-checked`, `aria-disabled`, `aria-readonly`, `aria-invalid`, `aria-required`.
+Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-checked`, `aria-disabled`, `aria-readonly`, `aria-invalid`, `aria-required`.
 
 ## Ejemplo avanzado
 
@@ -224,7 +224,7 @@ color="warning" checked>Tema claro</iswc-switch>
 
 ## Errores comunes
 
-- Usar tag sin importar mÃ³dulo primero.
+- Usar tag sin importar módulo primero.
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
@@ -232,15 +232,15 @@ color="warning" checked>Tema claro</iswc-switch>
 
 ## Reglas para LLM
 
-- Reusar componente y dependencias antes de implementaciÃ³n paralela.
+- Reusar componente y dependencias antes de implementación paralela.
 - Mantener nombres exactos de tags y API.
-- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explÃ­cito.
-- Leer callers/shared antes de cambiar; corregir raÃ­z comÃºn.
-- No modificar API basÃ¡ndose solo en preview.
+- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explícito.
+- Leer callers/shared antes de cambiar; corregir raíz común.
+- No modificar API basándose solo en preview.
 
 ## Fuentes
 
 - [JavaScript](./switch.ts)
-- [CSS](./switch.css)
-- [Ãndice de categorÃ­a](../../specs/componentes.md)
+- [CSS](./switch.scss)
+- [Índice de categoría](../../../specs/componentes.md)
 - [Preview](./switch.json)

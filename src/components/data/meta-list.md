@@ -5,7 +5,7 @@ tags:
 category: data
 status: public
 source: ./meta-list.ts
-style: ./meta-list.css
+style: ./meta-list.scss
 preview: ./meta-list.json
 ---
 # `<iswc-meta-list>`

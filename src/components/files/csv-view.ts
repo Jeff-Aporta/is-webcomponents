@@ -3,6 +3,7 @@ import { ElementBase } from '../../core/element-base.js';
 import { setOptionalAttr, setStringAttr } from '../../core/reflect.js';
 import { escapeHtml } from '../../core/dom-utils.js';
 import { loadText, resolveFileSource } from './utils/file-source.js';
+import { pintarEstado, sincronizarAlto } from './utils/file-estado.js';
 import { parseCsv } from './utils/csv-parse.js';
 
 (() => {
@@ -20,8 +21,8 @@ import { parseCsv } from './utils/csv-parse.js';
       this.#stage = shadow.querySelector('.stage')!;
     }
 
-    onConnected() { this.#reload(); }
-    onAttributeChanged() { this.#reload(); }
+    onConnected() { sincronizarAlto(this); this.#reload(); }
+    onAttributeChanged() { sincronizarAlto(this); this.#reload(); }
 
     get src() { return this.getAttribute('src'); }
     set src(v) { setOptionalAttr(this, 'src', v); }
@@ -32,7 +33,7 @@ import { parseCsv } from './utils/csv-parse.js';
       const gen = ++this.#gen;
       const source = resolveFileSource(this.getAttribute('src'), this.getAttribute('content'));
       if (source.kind === 'empty') {
-        this.#stage.innerHTML = '<p class="empty" part="empty">Sin CSV</p>';
+        pintarEstado(this.#stage, 'Sin CSV');
         return;
       }
       try {
@@ -40,7 +41,7 @@ import { parseCsv } from './utils/csv-parse.js';
         if (gen !== this.#gen) return;
         const rows = parseCsv(text);
         if (!rows.length) {
-          this.#stage.innerHTML = '<p class="empty">CSV vacio</p>';
+          pintarEstado(this.#stage, 'CSV vacío');
           emit(this, 'iswc-load', { rows: 0 });
           return;
         }
@@ -53,7 +54,7 @@ import { parseCsv } from './utils/csv-parse.js';
         emit(this, 'iswc-load', { rows: rows.length });
       } catch (e) {
         if (gen !== this.#gen) return;
-        this.#stage.innerHTML = '<p class="error">No se pudo cargar el CSV</p>';
+        pintarEstado(this.#stage, 'No se pudo cargar el CSV', 'error');
         emit(this, 'iswc-error', { reason: (e as { reason?: string })?.reason || 'fetch' });
       }
     }

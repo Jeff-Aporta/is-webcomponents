@@ -1,42 +1,42 @@
-﻿---
+---
 tag: iswc-context-menu
 tags:
   - iswc-context-menu
 category: actions
 status: public
 source: ./context-menu.ts
-style: ./context-menu.css
+style: ./context-menu.scss
 preview: ./context-menu.json
 ---
 # `<iswc-context-menu>`
 
-## PropÃ³sito
+## Propósito
 
-MenÃº emergente anclado al clic derecho del ratÃ³n sobre un elemento
+Menú emergente anclado al clic derecho del ratón sobre un elemento
 `target` externo (o sobre el propio host si no se define `for`). Coloca el
 panel en el punto del cursor, lo voltea si no cabe y lo pega al borde como
-Ãºltimo recurso.
+último recurso.
 
-Este mÃ³dulo registra `<iswc-context-menu>`.
+Este módulo registra `<iswc-context-menu>`.
 
-## CuÃ¡ndo usarlo
+## Cuándo usarlo
 
-Acciones, selecciÃ³n de comandos y menÃºs interactivos.
+Acciones, selección de comandos y menús interactivos.
 
-## CuÃ¡ndo no usarlo
+## Cuándo no usarlo
 
-No usar como decoraciÃ³n ni reemplazar enlaces semÃ¡nticos para navegaciÃ³n simple.
+No usar como decoración ni reemplazar enlaces semánticos para navegación simple.
 
-## ImportaciÃ³n
+## Importación
 
 ```js
 import './context-menu.js';
 ```
 
-## Ejemplo mÃ­nimo
+## Ejemplo mínimo
 
 ```html
-<div id="zona">Clic derecho aquÃ­</div>
+<div id="zona">Clic derecho aquí</div>
 <iswc-context-menu for="#zona">
   <button class="item" data-value="editar">Editar</button>
   <button class="item" data-value="borrar">Borrar</button>
@@ -51,13 +51,13 @@ import './context-menu.js';
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
-| `for` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `placement` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `distance` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `disabled` | boolean | Fuente define default/restricciÃ³n. |
-| `scroll-lock` | boolean | Fuente define default/restricciÃ³n. |
+| `for` | string/según contrato | Fuente define default/restricción. |
+| `placement` | string/según contrato | Fuente define default/restricción. |
+| `distance` | string/según contrato | Fuente define default/restricción. |
+| `disabled` | boolean | Fuente define default/restricción. |
+| `scroll-lock` | boolean | Bloquea el scroll del documento mientras está abierto. |
 
-#### Propiedades pÃºblicas
+#### Propiedades públicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
@@ -73,7 +73,7 @@ import './context-menu.js';
 ### Eventos
 
 
-| Evento | DescripciÃ³n |
+| Evento | Descripción |
 | --- | --- |
 | `iswc-open` | Evento personalizado del componente (open). |
 | `iswc-close` | Evento personalizado del componente (close). |
@@ -81,9 +81,9 @@ import './context-menu.js';
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `iswc-open` | sÃ­ | sÃ­ | sÃ­ | no |
-| `iswc-close` | no | sÃ­ | sÃ­ | no |
-| `iswc-select` | sÃ­ | sÃ­ | sÃ­ | no |
+| `iswc-open` | sí | sí | sí | no |
+| `iswc-close` | no | sí | sí | no |
+| `iswc-select` | sí | sí | sí | no |
 
 
 <details>
@@ -98,15 +98,15 @@ el.addEventListener('iswc-open', (e) => {
 
 </details>
 
-### MÃ©todos y propiedades pÃºblicas
+### Métodos y propiedades públicas
 
-| MÃ©todo | Uso |
+| Método | Uso |
 | --- | --- |
-| `openAt(x, y)` | Abre el menÃº anclado a un punto del viewport. |
-| `openAtElement(el)` | Abre el menÃº anclado a un elemento. |
-| `close()` | Cierra el menÃº. |
+| `openAt(x, y)` | Abre el menú anclado a un punto del viewport. |
+| `openAtElement(el)` | Abre el menú anclado a un elemento. |
+| `close()` | Cierra el menú. |
 
-Propiedades pÃºblicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
+Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
 
 ### CSS parts
 
@@ -123,46 +123,46 @@ No expone.
 
 | Token | Uso |
 | --- | --- |
-| `--iswc-bg-elev` | Token leÃ­do o definido por componente. |
-| `--iswc-text` | Token leÃ­do o definido por componente. |
-| `--iswc-border` | Token leÃ­do o definido por componente. |
-| `--iswc-accent` | Token leÃ­do o definido por componente. |
-| `--iswc-radius` | Token leÃ­do o definido por componente. |
-| `--iswc-shadow` | Token leÃ­do o definido por componente. |
-| `--iswc-popover-radius` | Token leÃ­do o definido por componente. |
-| `--iswc-popover-shadow` | Token leÃ­do o definido por componente. |
+| `--iswc-bg-elev` | Token leído o definido por componente. |
+| `--iswc-text` | Token leído o definido por componente. |
+| `--iswc-border` | Token leído o definido por componente. |
+| `--iswc-accent` | Token leído o definido por componente. |
+| `--iswc-radius` | Token leído o definido por componente. |
+| `--iswc-shadow` | Token leído o definido por componente. |
+| `--iswc-popover-radius` | Token leído o definido por componente. |
+| `--iswc-popover-shadow` | Token leído o definido por componente. |
 
-### IntegraciÃ³n con formularios
+### Integración con formularios
 
-No declara integraciÃ³n form-associated propia en este mÃ³dulo.
+No declara integración form-associated propia en este módulo.
 
 ## Comportamiento
 
-DocumentaciÃ³n de cabecera preservada desde fuente:
+Documentación de cabecera preservada desde fuente:
 
-> <iswc-context-menu> â€” MenÃº emergente anclado al clic derecho del ratÃ³n sobre
+> <iswc-context-menu> — Menú emergente anclado al clic derecho del ratón sobre
 > un `target` externo (o sobre el propio host si no se da `for`).
 > Atributos
->   for                CSS selector â€” selector del elemento que recibe el
+>   for                CSS selector — selector del elemento que recibe el
 >                      contextmenu. Si falta, el host mismo.
 >   placement          bottom-start (default) | bottom-end | top-start |
 >                      top-end  (alias CSS-ish del placement del popup)
->   distance           pÃ­xeles desde el cursor (default 2)
->   disabled           boolean â€” desactiva el menÃº
->   scroll-lock        boolean â€” si estÃ¡, bloquea el scroll del documento
->                      mientras el menÃº estÃ¡ abierto. Sin Ã©l (default),
->                      cualquier scroll fuera del panel cierra el menÃº
+>   distance           píxeles desde el cursor (default 2)
+>   disabled           boolean — desactiva el menú
+>   scroll-lock        boolean — si está, bloquea el scroll del documento
+>                      mientras el menú está abierto. Sin él (default),
+>                      cualquier scroll fuera del panel cierra el menú
 >                      (no "persigue" el scroll del viewport/contenedor).
 > Slots
->   default â€” hijos renderizados dentro del panel; usar <button class="item">
+>   default — hijos renderizados dentro del panel; usar <button class="item">
 >             o <a class="item"> para tener acciones. Cada item emite
->             `iswc-select` y se cierra el menÃº.
+>             `iswc-select` y se cierra el menú.
 > Eventos
->   iswc-select       detalle: { item, value }  â€” al elegir un item
+>   iswc-select       detalle: { item, value }  — al elegir un item
 >   iswc-open, iswc-close
 > Custom states: open, closed
 
-El atributo `open` se refleja en el host mientras el menÃº estÃ¡ abierto. El
+El atributo `open` se refleja en el host mientras el menú está abierto. El
 valor de `iswc-select` sale de `data-value` del item y, si falta, del texto del
 item.
 
@@ -171,14 +171,15 @@ item.
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 - [`../_shared/define.js`](../_shared/define.js)
 - [`../_shared/emit.js`](../_shared/emit.js)
-- [`../_shared/popup-dismiss.js`](../../core/popup-dismiss.js) â€” mismo ciclo
+- [`../_shared/popup-dismiss.js`](../../core/popup-dismiss.js) — mismo ciclo
   de cierre (Escape, click fuera, scroll) que usa `<iswc-dropdown>`.
 
-Tags del mÃ³dulo: `<iswc-context-menu>`.
+Tags del módulo: `<iswc-context-menu>`.
 
 ## Accesibilidad
 
-Preservar semÃ¡ntica, foco, teclado, labels y ARIA. El panel es un `<dialog>`
+Al abrir, el foco entra en el primer item habilitado; flechas, `Inicio` y `Fin` recorren
+los items; `Escape` y `Tab` cierran y devuelven el foco a donde estaba. El panel es un `<dialog>`
 mostrado con `show()`; los items se detectan por `[role="menuitem"]`, `.item`,
 `button` o `a`.
 
@@ -197,7 +198,7 @@ mostrado con `show()`; los items se detectan por `[role="menuitem"]`, `.item`,
 
 ## Errores comunes
 
-- Usar tag sin importar mÃ³dulo primero.
+- Usar tag sin importar módulo primero.
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
@@ -205,15 +206,15 @@ mostrado con `show()`; los items se detectan por `[role="menuitem"]`, `.item`,
 
 ## Reglas para LLM
 
-- Reusar componente y dependencias antes de implementaciÃ³n paralela.
+- Reusar componente y dependencias antes de implementación paralela.
 - Mantener nombres exactos de tags y API.
-- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explÃ­cito.
-- Leer callers/shared antes de cambiar; corregir raÃ­z comÃºn.
-- No modificar API basÃ¡ndose solo en preview.
+- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explícito.
+- Leer callers/shared antes de cambiar; corregir raíz común.
+- No modificar API basándose solo en preview.
 
 ## Fuentes
 
 - [JavaScript](./context-menu.ts)
-- [CSS](./context-menu.css)
-- [Ãndice de categorÃ­a](../../specs/componentes.md)
+- [CSS](./context-menu.scss)
+- [Índice de categoría](../../../specs/componentes.md)
 - [Preview](./context-menu.json)

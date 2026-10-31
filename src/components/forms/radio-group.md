@@ -1,41 +1,41 @@
-﻿---
+---
 tag: iswc-radio-group
 tags:
   - iswc-radio-group
 category: forms
 status: public
 source: ./radio-group.ts
-style: ./radio-group.css
+style: ./radio-group.scss
 preview: ./radio-group.json
 ---
 # `<iswc-radio-group>`
 
-## PropÃ³sito
+## Propósito
 
 Paridad funcional con el
 Radio Group de MUI:
-color por color, posiciÃ³n de etiqueta, estado de error, solo lectura y
-navegaciÃ³n por teclado segÃºn el patrÃ³n ARIA radiogroup.
+color por color, posición de etiqueta, estado de error, solo lectura y
+navegación por teclado según el patrón ARIA radiogroup.
 El grupo es el elemento form-associated: publica el valor, valida y gobierna el teclado.
 Los iswc-radio son las opciones y solo avisan al grupo cuando se eligen.
 
-Este mÃ³dulo registra `<iswc-radio-group>`.
+Este módulo registra `<iswc-radio-group>`.
 
-## CuÃ¡ndo usarlo
+## Cuándo usarlo
 
-Captura, selecciÃ³n y validaciÃ³n de valores compatibles con formularios.
+Captura, selección y validación de valores compatibles con formularios.
 
-## CuÃ¡ndo no usarlo
+## Cuándo no usarlo
 
-No duplicar validaciÃ³n, form association ni pickers shared.
+No duplicar validación, form association ni pickers shared.
 
-## ImportaciÃ³n
+## Importación
 
 ```js
 import './radio-group.js';
 ```
 
-## Ejemplo mÃ­nimo
+## Ejemplo mínimo
 
 ```html
 <iswc-radio-group name="plan" value="pro" label="Plan">
@@ -53,22 +53,22 @@ import './radio-group.js';
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
-| `name` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `value` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `disabled` | boolean | Fuente define default/restricciÃ³n. |
-| `required` | boolean | Fuente define default/restricciÃ³n. |
-| `readonly` | boolean | Fuente define default/restricciÃ³n. |
-| `label` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `hint` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `orientation` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `row` | boolean | Fuente define default/restricciÃ³n. |
-| `color` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `label-placement` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `error` | boolean | Fuente define default/restricciÃ³n. |
-| `error-text` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `iswc-radio` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `name` | string/según contrato | Fuente define default/restricción. |
+| `value` | string/según contrato | Fuente define default/restricción. |
+| `disabled` | boolean | Fuente define default/restricción. |
+| `required` | boolean | Fuente define default/restricción. |
+| `readonly` | boolean | Fuente define default/restricción. |
+| `label` | string/según contrato | Fuente define default/restricción. |
+| `hint` | string/según contrato | Fuente define default/restricción. |
+| `orientation` | string/según contrato | Fuente define default/restricción. |
+| `row` | boolean | Fuente define default/restricción. |
+| `color` | string/según contrato | Fuente define default/restricción. |
+| `label-placement` | string/según contrato | Fuente define default/restricción. |
+| `error` | boolean | Fuente define default/restricción. |
+| `error-text` | string/según contrato | Fuente define default/restricción. |
+| `iswc-radio` | string/según contrato | Fuente define default/restricción. |
 
-#### Propiedades pÃºblicas
+#### Propiedades públicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
@@ -102,13 +102,13 @@ import './radio-group.js';
 ### Eventos
 
 
-| Evento | DescripciÃ³n |
+| Evento | Descripción |
 | --- | --- |
 | `iswc-change` | Emitido al confirmar el cambio de valor (escribe como `change` nativo). |
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `iswc-change` | sÃ­ | sÃ­ | sÃ­ | no |
+| `iswc-change` | sí | sí | sí | no |
 
 
 <details>
@@ -123,16 +123,16 @@ el.addEventListener('iswc-change', (e) => {
 
 </details>
 
-### MÃ©todos y propiedades pÃºblicas
+### Métodos y propiedades públicas
 
-| MÃ©todo | Uso |
+| Método | Uso |
 | --- | --- |
-| `checkValidity()` | MÃ©todo pÃºblico declarado. |
-| `reportValidity()` | MÃ©todo pÃºblico declarado. |
-| `setCustomValidity()` | MÃ©todo pÃºblico declarado. |
-| `focus()` | MÃ©todo pÃºblico declarado. |
+| `checkValidity()` | Método público declarado. |
+| `reportValidity()` | Método público declarado. |
+| `setCustomValidity()` | Método público declarado. |
+| `focus()` | Método público declarado. |
 
-Propiedades pÃºblicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
+Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
 
 ### CSS parts
 
@@ -148,42 +148,42 @@ Propiedades pÃºblicas aparecen en tabla anterior; APIs heredadas se verifican 
 
 | Estado | Uso |
 | --- | --- |
-| `:state(error)` | Estado usado por implementaciÃ³n/CSS. |
-| `:state(disabled)` | Estado usado por implementaciÃ³n/CSS. |
-| `:state(readonly)` | Estado usado por implementaciÃ³n/CSS. |
-| `:state(blank)` | Estado usado por implementaciÃ³n/CSS. |
+| `:state(error)` | Estado usado por implementación/CSS. |
+| `:state(disabled)` | Estado usado por implementación/CSS. |
+| `:state(readonly)` | Estado usado por implementación/CSS. |
+| `:state(blank)` | Estado usado por implementación/CSS. |
 
 ### CSS custom properties
 
 | Token | Uso |
 | --- | --- |
-| `--iswc-sans` | Token leÃ­do o definido por componente. |
-| `--iswc-text` | Token leÃ­do o definido por componente. |
-| `--iswc-text-soft` | Token leÃ­do o definido por componente. |
-| `--iswc-text-dim` | Token leÃ­do o definido por componente. |
-| `--iswc-danger-text` | Token leÃ­do o definido por componente. |
-| `--iswc-color-danger-600` | Token leÃ­do o definido por componente. |
-| `--iswc-radio-accent` | Token leÃ­do o definido por componente. |
-| `--iswc-accent` | Token leÃ­do o definido por componente. |
-| `--iswc-color-brand-500` | Token leÃ­do o definido por componente. |
-| `--iswc-control-border` | Token leÃ­do o definido por componente. |
-| `--iswc-color-success-500` | Token leÃ­do o definido por componente. |
-| `--iswc-color-warning-500` | Token leÃ­do o definido por componente. |
-| `--iswc-color-danger-500` | Token leÃ­do o definido por componente. |
+| `--iswc-sans` | Token leído o definido por componente. |
+| `--iswc-text` | Token leído o definido por componente. |
+| `--iswc-text-soft` | Token leído o definido por componente. |
+| `--iswc-text-dim` | Token leído o definido por componente. |
+| `--iswc-danger-text` | Token leído o definido por componente. |
+| `--iswc-color-danger-600` | Token leído o definido por componente. |
+| `--iswc-radio-accent` | Token leído o definido por componente. |
+| `--iswc-accent` | Token leído o definido por componente. |
+| `--iswc-color-brand-500` | Token leído o definido por componente. |
+| `--iswc-control-border` | Token leído o definido por componente. |
+| `--iswc-color-success-500` | Token leído o definido por componente. |
+| `--iswc-color-warning-500` | Token leído o definido por componente. |
+| `--iswc-color-danger-500` | Token leído o definido por componente. |
 
-### IntegraciÃ³n con formularios
+### Integración con formularios
 
-Participa mediante ElementInternals/helpers form-associated; respetar name, value, disabled, reset, restore y validaciÃ³n.
+Participa mediante ElementInternals/helpers form-associated; respetar name, value, disabled, reset, restore y validación.
 
 ## Comportamiento
 
-DocumentaciÃ³n de cabecera preservada desde fuente:
+Documentación de cabecera preservada desde fuente:
 
-> <iswc-radio-group> â€” Grupo form-associated de <iswc-radio>. El grupo es el dueÃ±o
+> <iswc-radio-group> — Grupo form-associated de <iswc-radio>. El grupo es el dueño
 > del valor: los radios solo avisan con `iswc-radio-select`.
 > Atributos
 >   name, value, label, hint
->   orientation      vertical (default) | horizontal   Â·   row = alias booleano de horizontal
+>   orientation      vertical (default) | horizontal   ·   row = alias booleano de horizontal
 >   color          brand (default) | neutral | success | warning | danger
 >   label-placement  end (default) | start | top | bottom   (se aplica a los hijos)
 >   error-text       mensaje de error; sustituye al hint y activa el estado de error
@@ -199,11 +199,11 @@ DocumentaciÃ³n de cabecera preservada desde fuente:
 - [`./radio.js`](./radio.js)
 - [`../_shared/form-associated.js`](../../core/form-associated.js)
 
-Tags del mÃ³dulo: `<iswc-radio-group>`.
+Tags del módulo: `<iswc-radio-group>`.
 
 ## Accesibilidad
 
-Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`, `aria-describedby`, `aria-disabled`, `aria-orientation`, `aria-required`, `aria-readonly`, `aria-invalid`.
+Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`, `aria-describedby`, `aria-disabled`, `aria-orientation`, `aria-required`, `aria-readonly`, `aria-invalid`.
 
 ## Ejemplo avanzado
 
@@ -216,7 +216,7 @@ Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: `aria-labe
 
 ## Errores comunes
 
-- Usar tag sin importar mÃ³dulo primero.
+- Usar tag sin importar módulo primero.
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
@@ -224,15 +224,15 @@ Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: `aria-labe
 
 ## Reglas para LLM
 
-- Reusar componente y dependencias antes de implementaciÃ³n paralela.
+- Reusar componente y dependencias antes de implementación paralela.
 - Mantener nombres exactos de tags y API.
-- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explÃ­cito.
-- Leer callers/shared antes de cambiar; corregir raÃ­z comÃºn.
-- No modificar API basÃ¡ndose solo en preview.
+- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explícito.
+- Leer callers/shared antes de cambiar; corregir raíz común.
+- No modificar API basándose solo en preview.
 
 ## Fuentes
 
 - [JavaScript](./radio-group.ts)
-- [CSS](./radio-group.css)
-- [Ãndice de categorÃ­a](../../specs/componentes.md)
+- [CSS](./radio-group.scss)
+- [Índice de categoría](../../../specs/componentes.md)
 - [Preview](./radio-group.json)

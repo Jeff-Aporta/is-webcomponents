@@ -1,7 +1,7 @@
 :host {
   display: block;
   width: 100%;
-  min-height: 8rem;
+  min-height: 8em;
   box-sizing: border-box;
   color: var(--iswc-text, inherit);
   background: var(--iswc-surface);
@@ -13,28 +13,22 @@
 :host([height]) .root { height: var(--iswc-file-height); }
 pre, .body {
   margin: 0;
-  padding: 0.75rem 1rem;
-  font: 0.9rem/1.45 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  padding: 0.75em 1em;
+  font: 0.9em/1.45 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   white-space: pre-wrap;
   word-break: break-word;
   overflow: auto;
   flex: 1;
 }
-.empty, .error {
-  margin: 0;
-  padding: 1rem;
-  font: inherit;
-  color: var(--iswc-text-soft, color-mix(in srgb, currentColor 65%, transparent));
-}
-.error { color: var(--iswc-danger); }
+iswc-empty-state { margin: 0.75em; }
 
-.slides { display: grid; gap: 0.75rem; padding: 0.75rem; }
+.slides { display: grid; gap: 0.75em; padding: 0.75em; }
 .slide {
   border: 1px solid var(--iswc-border, color-mix(in srgb, currentColor 14%, transparent));
-  border-radius: 0.4rem;
-  padding: 0.75rem;
+  border-radius: .2em;
+  padding: .375em;
   background: var(--iswc-surface-2, color-mix(in srgb, currentColor 4%, transparent));
-  min-height: 8rem;
+  min-height: 4em;
 }
-.slide-num { font-size: 0.75rem; opacity: 0.7; margin-bottom: 0.35rem; }
+.slide-num { font-size: 0.75em; opacity: 0.7; margin-bottom: .4667em; }
 .stage { flex: 1; min-height: 0; overflow: auto; }

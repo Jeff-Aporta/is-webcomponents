@@ -1,40 +1,40 @@
-﻿---
+---
 tag: iswc-use-case-diagram
 tags:
   - iswc-use-case-diagram
 category: diagrams
 status: public
 source: ./use-case-diagram.ts
-style: ./use-case-diagram.css
+style: ./use-case-diagram.scss
 preview: ./use-case-diagram.json
 ---
 # `<iswc-use-case-diagram>`
 
-## PropÃ³sito
+## Propósito
 
 Diagrama de **casos de uso UML** en SVG, sin Mermaid: actores fuera del
-lÃ­mite del sistema, casos en elipses dentro, y relaciones con su estereotipo
-(`Â«includeÂ»`, `Â«extendÂ»`) o su punta hueca de generalizaciÃ³n.
+límite del sistema, casos en elipses dentro, y relaciones con su estereotipo
+(`«include»`, `«extend»`) o su punta hueca de generalización.
 
-Este mÃ³dulo registra `<iswc-use-case-diagram>`.
+Este módulo registra `<iswc-use-case-diagram>`.
 
-## CuÃ¡ndo usarlo
+## Cuándo usarlo
 
-Cuando la pregunta es de alcance: quÃ© puede hacer cada rol dentro de un
-sistema y quÃ© queda fuera de su alcance.
+Cuando la pregunta es de alcance: qué puede hacer cada rol dentro de un
+sistema y qué queda fuera de su alcance.
 
-## CuÃ¡ndo no usarlo
+## Cuándo no usarlo
 
-Si necesitas el orden temporal de las interacciones â†’ `<iswc-sequence-diagram>`.
-Si es la arquitectura interna â†’ `<iswc-component-diagram>`.
+Si necesitas el orden temporal de las interacciones → `<iswc-sequence-diagram>`.
+Si es la arquitectura interna → `<iswc-component-diagram>`.
 
-## ImportaciÃ³n
+## Importación
 
 ```js
 import './use-case-diagram.js';
 ```
 
-## Ejemplo mÃ­nimo
+## Ejemplo mínimo
 
 ```html
 <iswc-use-case-diagram>
@@ -52,9 +52,9 @@ import './use-case-diagram.js';
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
-| `color` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `color` | `viewer` \| color | `viewer` lo pinta como visor dentro del lightbox. |
 
-#### Propiedades pÃºblicas
+#### Propiedades públicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
@@ -73,7 +73,7 @@ import './use-case-diagram.js';
 ### Eventos
 
 
-| Evento | DescripciÃ³n |
+| Evento | Descripción |
 | --- | --- |
 | `iswc-render` | Emitido al renderizar o redibujar el componente. |
 | `iswc-open-viewer` | Emitido al abrir el visor ampliado (cancelable). |
@@ -81,9 +81,9 @@ import './use-case-diagram.js';
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `iswc-render` | sÃ­ | sÃ­ | sÃ­ | no |
-| `iswc-open-viewer` | sÃ­ | sÃ­ | sÃ­ | sÃ­ |
-| `iswc-toggle-group` | sÃ­ | sÃ­ | sÃ­ | no |
+| `iswc-render` | sí | sí | sí | no |
+| `iswc-open-viewer` | sí | sí | sí | sí |
+| `iswc-toggle-group` | sí | sí | sí | no |
 
 
 <details>
@@ -98,13 +98,13 @@ el.addEventListener('iswc-render', (e) => {
 
 </details>
 
-### MÃ©todos y propiedades pÃºblicas
+### Métodos y propiedades públicas
 
-| MÃ©todo | Uso |
+| Método | Uso |
 | --- | --- |
-| `updateComplete()` | MÃ©todo pÃºblico declarado. |
+| `updateComplete()` | Método público declarado. |
 
-Propiedades pÃºblicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
+Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
 
 ### CSS parts
 
@@ -122,21 +122,21 @@ No expone.
 
 | Token | Uso |
 | --- | --- |
-| `--iswc-sans` | Token leÃ­do o definido por componente. |
-| `--iswc-border` | Token leÃ­do o definido por componente. |
-| `--iswc-text-soft` | Token leÃ­do o definido por componente. |
+| `--iswc-sans` | Token leído o definido por componente. |
+| `--iswc-border` | Token leído o definido por componente. |
+| `--iswc-text-soft` | Token leído o definido por componente. |
 
-### IntegraciÃ³n con formularios
+### Integración con formularios
 
-No declara integraciÃ³n form-associated propia en este mÃ³dulo.
+No declara integración form-associated propia en este módulo.
 
 ## Comportamiento
 
-La asociaciÃ³n se dibuja sin punta, como manda UML; `include` y `extend` van punteadas con su estereotipo, y la generalizaciÃ³n lleva punta hueca. Los actores se reparten por el lado declarado y los casos se apilan en el orden en que vienen: el autor manda sobre el motor.
+La asociación se dibuja sin punta, como manda UML; `include` y `extend` van punteadas con su estereotipo, y la generalización lleva punta hueca. Los actores se reparten por el lado declarado y los casos se apilan en el orden en que vienen: el autor manda sobre el motor.
 
-DocumentaciÃ³n de cabecera preservada desde fuente:
+Documentación de cabecera preservada desde fuente:
 
-> <iswc-use-case-diagram> â€” diagrama de casos de uso UML en SVG, sin Mermaid.
+> <iswc-use-case-diagram> — diagrama de casos de uso UML en SVG, sin Mermaid.
 >   <iswc-use-case-diagram>
 >     <script type="application/json">
 >       { "useCase": { "system": { "name": "Portal" }, "actors": [...], "cases": [...], "links": [...] } }
@@ -162,20 +162,20 @@ DocumentaciÃ³n de cabecera preservada desde fuente:
 - [`../_shared/svg-chart-engine.js`](../../core/svg-chart-engine.js)
 - [`../_shared/diagram-arrow.js`](./utils/diagram-arrow.js)
 
-Tags del mÃ³dulo: `<iswc-use-case-diagram>`.
+Tags del módulo: `<iswc-use-case-diagram>`.
 
 ## Accesibilidad
 
-Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`.
+Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`.
 
 ## Ejemplo avanzado
 
-Ver el preview de la galerÃ­a, que trae el payload completo con grupos y estilos:
+Ver el preview de la galería, que trae el payload completo con grupos y estilos:
 [`./use-case-diagram.json`](./use-case-diagram.json).
 
 ## Errores comunes
 
-- Usar tag sin importar mÃ³dulo primero.
+- Usar tag sin importar módulo primero.
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
@@ -183,18 +183,18 @@ Ver el preview de la galerÃ­a, que trae el payload completo con grupos y estil
 
 ## Reglas para LLM
 
-- Reusar componente y dependencias antes de implementaciÃ³n paralela.
+- Reusar componente y dependencias antes de implementación paralela.
 - Mantener nombres exactos de tags y API.
-- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explÃ­cito.
-- Leer callers/shared antes de cambiar; corregir raÃ­z comÃºn.
-- No modificar API basÃ¡ndose solo en preview.
+- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explícito.
+- Leer callers/shared antes de cambiar; corregir raíz común.
+- No modificar API basándose solo en preview.
 
 ## Fuentes
 
 - [JavaScript](./use-case-diagram.ts)
-- [CSS](./use-case-diagram.css)
+- [CSS](./use-case-diagram.scss)
 - [Spec y layout](./utils/use-case-spec.js)
-- [Ãndice de categorÃ­a](../../specs/componentes.md)
+- [Índice de categoría](../../../specs/componentes.md)
 - [Preview](./use-case-diagram.json)
 
 ## App API
@@ -202,4 +202,4 @@ Ver el preview de la galerÃ­a, que trae el payload completo con grupos y estil
 Visor: `demos/diagramas/app/view.html?kind=usecase&json=<base64url>`.
 Editor: `demos/diagramas/app/edit.html?kind=usecase&json=<base64url>`.
 
-`json` es el documento completo en base64url. Editar no reescribe ese parÃ¡metro: Compartir arma un enlace nuevo con el JSON resultante.
+`json` es el documento completo en base64url. Editar no reescribe ese parámetro: Compartir arma un enlace nuevo con el JSON resultante.

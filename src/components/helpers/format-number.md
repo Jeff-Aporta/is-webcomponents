@@ -1,36 +1,36 @@
-﻿---
+---
 tag: iswc-format-number
 tags:
   - iswc-format-number
 category: helpers
 status: public
 source: ./format-number.ts
-style: ./format-number.css
+style: ./format-number.scss
 preview: ./format-number.json
 ---
 # `<iswc-format-number>`
 
-## PropÃ³sito
+## Propósito
 
-NÃºmeros con Intl.NumberFormat. Locale = lang del documento.
+Números con Intl.NumberFormat. Locale = lang del documento.
 
-Este mÃ³dulo registra `<iswc-format-number>`.
+Este módulo registra `<iswc-format-number>`.
 
-## CuÃ¡ndo usarlo
+## Cuándo usarlo
 
-Formato, observaciÃ³n y posicionamiento reutilizable sobre APIs nativas.
+Formato, observación y posicionamiento reutilizable sobre APIs nativas.
 
-## CuÃ¡ndo no usarlo
+## Cuándo no usarlo
 
 No crear wrapper nuevo si Intl/Observer/position existente cubre caso.
 
-## ImportaciÃ³n
+## Importación
 
 ```js
 import './format-number.js';
 ```
 
-## Ejemplo mÃ­nimo
+## Ejemplo mínimo
 
 ```html
 <iswc-format-number value="0.875" type="percent"></iswc-format-number>
@@ -45,13 +45,13 @@ import './format-number.js';
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
-| `value` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `type` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `currency` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `minimum-fraction-digits` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `maximum-fraction-digits` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `value` | number | Número a formatear. |
+| `type` | `decimal` \| `currency` \| `percent` | Estilo de `Intl.NumberFormat`. |
+| `currency` | string (ISO 4217) | Moneda, por ejemplo `COP`. |
+| `minimum-fraction-digits` | number | Decimales mínimos. |
+| `maximum-fraction-digits` | number | Decimales máximos. |
 
-#### Propiedades pÃºblicas
+#### Propiedades públicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
@@ -64,7 +64,7 @@ No expone.
 ### Eventos
 
 
-| Evento | DescripciÃ³n |
+| Evento | Descripción |
 | --- | --- |
 
 No expone.
@@ -82,11 +82,11 @@ el.addEventListener('click', (e) => {
 
 </details>
 
-### MÃ©todos y propiedades pÃºblicas
+### Métodos y propiedades públicas
 
 No expone.
 
-Propiedades pÃºblicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
+Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
 
 ### CSS parts
 
@@ -102,33 +102,33 @@ No expone.
 
 No expone.
 
-### IntegraciÃ³n con formularios
+### Integración con formularios
 
-No declara integraciÃ³n form-associated propia en este mÃ³dulo.
+No declara integración form-associated propia en este módulo.
 
 ## Comportamiento
 
-DocumentaciÃ³n de cabecera preservada desde fuente:
+Documentación de cabecera preservada desde fuente:
 
-> <iswc-format-number> â€” Web Component (vanilla).
-> Formatea nÃºmeros con Intl.NumberFormat.
+> <iswc-format-number> — Web Component (vanilla).
+> Formatea números con Intl.NumberFormat.
 > Atributos
 >   value                    number
 >   type                     decimal | currency | percent | unit (default decimal)
 >   currency                 ISO 4217 (p.ej. USD, COP)
 >   minimum-fraction-digits  number
 >   maximum-fraction-digits  number
-> Locale vÃ­a lang del documento.
+> Locale vía lang del documento.
 
 ## Dependencias y componentes relacionados
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 
-Tags del mÃ³dulo: `<iswc-format-number>`.
+Tags del módulo: `<iswc-format-number>`.
 
 ## Accesibilidad
 
-Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: ninguno explÃ­cito en fuente.
+Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: ninguno explícito en fuente.
 
 ## Ejemplo avanzado
 
@@ -139,7 +139,7 @@ Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: ninguno ex
 
 ## Errores comunes
 
-- Usar tag sin importar mÃ³dulo primero.
+- Usar tag sin importar módulo primero.
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
@@ -147,15 +147,15 @@ Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: ninguno ex
 
 ## Reglas para LLM
 
-- Reusar componente y dependencias antes de implementaciÃ³n paralela.
+- Reusar componente y dependencias antes de implementación paralela.
 - Mantener nombres exactos de tags y API.
-- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explÃ­cito.
-- Leer callers/shared antes de cambiar; corregir raÃ­z comÃºn.
-- No modificar API basÃ¡ndose solo en preview.
+- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explícito.
+- Leer callers/shared antes de cambiar; corregir raíz común.
+- No modificar API basándose solo en preview.
 
 ## Fuentes
 
 - [JavaScript](./format-number.ts)
-- [CSS](./format-number.css)
-- [Ãndice de categorÃ­a](../../specs/componentes.md)
+- [CSS](./format-number.scss)
+- [Índice de categoría](../../../specs/componentes.md)
 - [Preview](./format-number.json)

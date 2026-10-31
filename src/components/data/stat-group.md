@@ -5,7 +5,7 @@ tags:
 category: data
 status: public
 source: ./stat-group.ts
-style: ./stat-group.css
+style: ./stat-group.scss
 preview: ./stat-group.json
 ---
 # `<iswc-stat-group>`

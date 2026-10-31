@@ -12,7 +12,7 @@
     width: 100%;
     height: var(--iswc-progress-bar-track-height);
     background: var(--iswc-progress-bar-track-color);
-    border-radius: 999px;
+    border-radius: 999em;
     overflow: hidden;
 
     .indicator {
@@ -26,7 +26,8 @@
         width: 40% !important;
         animation: indeterminate 1.2s ease-in-out infinite;
 
-        @media (prefers-reduced-motion: reduce) { animation: none; }
+        /* Moverse informa que sigue en curso: con movimiento reducido va más lento, nunca quieto. */
+        @media (prefers-reduced-motion: reduce) { animation-duration: 3.6s; }
       }
     }
   }
@@ -37,9 +38,14 @@
     color: var(--iswc-text-soft);
     font-size: 0.85em;
 
-    &:empty { display: none; }
+    &[hidden] { display: none; }
   }
 }
+
+:host([color="info"]) { --iswc-progress-bar-color: var(--iswc-color-info); }
+:host([color="success"]) { --iswc-progress-bar-color: var(--iswc-color-success); }
+:host([color="warning"]) { --iswc-progress-bar-color: var(--iswc-color-warning); }
+:host([color="danger"]) { --iswc-progress-bar-color: var(--iswc-color-danger); }
 
 @keyframes indeterminate {
   0% { transform: translateX(-100%); }

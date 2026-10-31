@@ -1,6 +1,41 @@
+---
+tag: iswc-slots-pg
+tags:
+  - iswc-slots-pg
+category: preview
+status: internal
+source: ./slots-pg.ts
+style: ./slots-pg.scss
+preview: ./slots-pg.json
+---
 # `<iswc-slots-pg>` — Helper para playgrounds con slots
 
-Estandar W11: cualquier componente que tenga slots debe envolver su playground
+## Cuándo usarlo
+
+En el demo de un componente con slots, para mostrar la instancia simple y la versión con todos los slots.
+
+## Cuándo no usarlo
+
+En un componente sin slots: basta con un bloque `demo` con `controls`. No va en vistas de producto.
+
+## Importación
+
+```js
+import './slots-pg.js';
+```
+
+## Ejemplo mínimo
+
+```html
+<iswc-slots-pg tag="iswc-button">
+  <iswc-button>Texto</iswc-button>
+  <iswc-icon slot="start" icon="mdi:check"></iswc-icon>
+</iswc-slots-pg>
+```
+
+## Propósito
+
+Estándar W11: cualquier componente que tenga slots debe envolver su playground
 en `<iswc-slots-pg tag="<iswc-x>">` con dos tabs:
 
 1. **Tab "Simple"**: la instancia viva (1 instancia + controles).
@@ -30,3 +65,24 @@ Uso:
 Los hijos con `slot="X"` son el contenido inicial de cada slot. Los hijos sin
 `slot` van al default slot. El componente detecta automaticamente los slots
 reales del componente target introspectando su Shadow DOM.
+
+## API
+
+| Atributo | Notas |
+| --- | --- |
+| `tag` | Componente que se demuestra. |
+| `title` | Título. |
+| `default-tab` | Pestaña inicial: `simple` o `slots`. |
+
+## Comportamiento
+
+Reparte los hijos en dos pestañas, muestra el template del Shadow DOM y deja editar cada slot. `Restart` vuelve al estado inicial.
+
+## Accesibilidad
+
+Las pestañas usan `role="tablist"`, `role="tab"` y `role="tabpanel"`. Cada editor de slot tiene `aria-label`.
+
+## Reglas para LLM
+
+- Solo para demos.
+- `tag` es obligatorio.

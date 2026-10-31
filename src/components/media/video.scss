@@ -81,9 +81,9 @@ slot { display: none; }
   border-radius: 50%;
   background: rgb(0 0 0 / 45%);
   /* Anillo: sobre un fotograma negro el relleno no se ve, el borde sí. */
-  box-shadow: 0 0 0 1px rgb(255 255 255 / 22%), 0 6px 20px rgb(0 0 0 / 35%);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
+  box-shadow: 0 0 0 .0625em rgb(255 255 255 / 22%), 0 .375em 1.25em rgb(0 0 0 / 35%);
+  backdrop-filter: blur(.375em);
+  -webkit-backdrop-filter: blur(.375em);
   color: #fff;
   font-size: inherit;
   cursor: pointer;
@@ -94,10 +94,10 @@ slot { display: none; }
 
   &:hover {
     background: color-mix(in srgb, var(--iswc-video-accent) 82%, #000);
-    box-shadow: 0 0 0 1px rgb(255 255 255 / 30%), 0 8px 26px rgb(0 0 0 / 45%);
+    box-shadow: 0 0 0 .0625em rgb(255 255 255 / 30%), 0 .5em 1.625em rgb(0 0 0 / 45%);
   }
 
-  &:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
+  &:focus-visible { outline: 2px solid #fff; outline-offset: .1875em; }
 }
 
 :host(:is([data-playing], [data-no-controls])) .big-play {
@@ -143,7 +143,7 @@ slot { display: none; }
   /* Scrubber y tooltip reaccionan al pasar el ratón/foco sobre la barra. */
   &:hover,
   &:focus-within {
-    .bar { block-size: 5px; }
+    .bar { block-size: .3125em; }
     .thumb { transform: translate(-50%, -50%) scale(1); }
   }
 
@@ -153,8 +153,8 @@ slot { display: none; }
 .bar {
   position: relative;
   inline-size: 100%;
-  block-size: 3px;
-  border-radius: 2px;
+  block-size: .1875em;
+  border-radius: .125em;
   background: rgb(255 255 255 / 28%);
   transition: block-size 120ms ease;
   overflow: hidden;
@@ -204,12 +204,12 @@ slot { display: none; }
   cursor: pointer;
 
   &:focus { outline: none; }
-  &:focus-visible + .bar { outline: 2px solid #fff; outline-offset: 3px; }
+  &:focus-visible + .bar { outline: 2px solid #fff; outline-offset: .1875em; }
 
   &::-webkit-slider-runnable-track { background: transparent; block-size: 100%; }
-  &::-webkit-slider-thumb { -webkit-appearance: none; inline-size: 1px; block-size: 1px; opacity: 0; }
+  &::-webkit-slider-thumb { -webkit-appearance: none; inline-size: .075em; block-size: .075em; opacity: 0; }
   &::-moz-range-track { background: transparent; }
-  &::-moz-range-thumb { inline-size: 1px; block-size: 1px; border: 0; opacity: 0; }
+  &::-moz-range-thumb { inline-size: .075em; block-size: .075em; border: 0; opacity: 0; }
 }
 
 /* Tooltip de tiempo sobre la barra */
@@ -331,8 +331,8 @@ iswc-button:is(.big-play, .iconbtn)::part(button) {
 
   /* Pista blanca con relleno según nivel (misma lectura que YouTube) */
   &::-webkit-slider-runnable-track {
-    block-size: 3px;
-    border-radius: 2px;
+    block-size: .2251em;
+    border-radius: .1501em;
     background: linear-gradient(to right,
       #fff 0 var(--vol), rgb(255 255 255 / 30%) var(--vol) 100%);
   }
@@ -341,18 +341,18 @@ iswc-button:is(.big-play, .iconbtn)::part(button) {
     -webkit-appearance: none;
     inline-size: 0.75em;
     block-size: 0.75em;
-    margin-block-start: calc((3px - 0.75em) / 2);
+    margin-block-start: calc((.2251em - 0.75em) / 2);
     border-radius: 50%;
     background: #fff;
   }
 
   &::-moz-range-track {
-    block-size: 3px;
-    border-radius: 2px;
+    block-size: .2251em;
+    border-radius: .1501em;
     background: rgb(255 255 255 / 30%);
   }
 
-  &::-moz-range-progress { block-size: 3px; border-radius: 2px; background: #fff; }
+  &::-moz-range-progress { block-size: .2251em; border-radius: .1501em; background: #fff; }
 
   &::-moz-range-thumb {
     inline-size: 0.75em;
@@ -377,9 +377,9 @@ iswc-button:is(.big-play, .iconbtn)::part(button) {
   list-style: none;
   border-radius: 0.4em;
   background: rgb(28 28 28 / 96%);
-  box-shadow: 0 8px 24px rgb(0 0 0 / 45%);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 .5em 1.5em rgb(0 0 0 / 45%);
+  backdrop-filter: blur(.5em);
+  -webkit-backdrop-filter: blur(.5em);
 
   &[hidden] { display: none; }
 
@@ -405,7 +405,7 @@ iswc-button:is(.big-play, .iconbtn)::part(button) {
       inline-size: 0.9em;
       block-size: 0.9em;
       border-radius: 50%;
-      border: 1.5px solid currentColor;
+      border: .1172em solid currentColor;
       opacity: 0.45;
     }
 
@@ -415,7 +415,7 @@ iswc-button:is(.big-play, .iconbtn)::part(button) {
 
       &::before {
         background: currentColor;
-        box-shadow: inset 0 0 0 2px rgb(28 28 28);
+        box-shadow: inset 0 0 0 .1563em rgb(28 28 28);
         opacity: 1;
       }
     }
@@ -440,7 +440,7 @@ iswc-button:is(.big-play, .iconbtn)::part(button) {
    El resto del chrome ya lo gestiona :focus-visible por botón. */
 :host(:focus-visible) {
   outline: 2px solid #fff;
-  outline-offset: 3px;
+  outline-offset: .1875em;
 }
 
 /* ── F0.3 g12 [keyboard/help]: estado focus del host ─────────── */

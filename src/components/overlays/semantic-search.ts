@@ -37,6 +37,7 @@ class IswcSemanticSearch extends PropsElement<SemanticSearchProps> {
   static override get observedAttributes(): string[] { return atributosDe(INICIAL); }
 
   #root: ShadowRoot;
+  #abrir: HTMLElement | null = null;
   #paleta: SemanticPaletaEl | null = null;
 
   constructor() {
@@ -79,8 +80,12 @@ class IswcSemanticSearch extends PropsElement<SemanticSearchProps> {
       atajo ? crearNodo('kbd', { part: 'atajo' }, atajo) : null,
     );
     abrir.addEventListener('iswc-click', () => this.open());
+    // Solo se cambian estas dos piezas: vaciar el shadow se llevaría la hoja adoptada.
+    this.#abrir?.remove();
+    this.#paleta?.remove();
+    this.#abrir = abrir;
     this.#paleta = this.#crearPaleta();
-    this.#root.replaceChildren(abrir, this.#paleta);
+    this.#root.append(abrir, this.#paleta);
   }
 }
 

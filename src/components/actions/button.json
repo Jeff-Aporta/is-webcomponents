@@ -66,7 +66,9 @@
                 "ghost",
                 "soft",
                 "soft-filled",
-                "text"
+                "text",
+                "glyph",
+                "row"
               ],
               "default": "filled"
             },
@@ -338,6 +340,52 @@
       ]
     },
     {
+      "id": "glyph-row",
+      "title": "Glyph y row",
+      "lede": "glyph: un solo signo en un cuadrado sin borde. row: fila a todo el ancho con contenido rico.",
+      "blocks": [
+        {
+          "kind": "table",
+          "columns": [
+            "Variante",
+            "Uso"
+          ],
+          "rows": [
+            [
+              "<code>glyph</code>",
+              "Emoji, letra o icono. Lado con <code>--iswc-button-glyph-size</code> (default 2em); en una rejilla se le da <code>width: 100%</code>."
+            ],
+            [
+              "<code>row</code>",
+              "Listas de personas, resultados y citas. Relleno y separación con <code>--iswc-button-row-padding</code> y <code>--iswc-button-row-gap</code>."
+            ]
+          ]
+        },
+        {
+          "kind": "demo",
+          "html": [
+            "<div class=\"demo-row\">",
+            "            <iswc-button variant=\"glyph\" title=\"Sonrisa\" aria-label=\"Sonrisa\">😀</iswc-button>",
+            "            <iswc-button variant=\"glyph\" color=\"neutral\" title=\"Corazón\" aria-label=\"Corazón\">❤️</iswc-button>",
+            "            <iswc-button variant=\"glyph\" color=\"neutral\" title=\"Agregar\" aria-label=\"Agregar\"><iswc-icon icon=\"mdi:plus\"></iswc-icon></iswc-button>",
+            "          </div>",
+            "          <div style=\"display: grid; gap: 0.25em; max-width: 24em; margin-top: 1em;\">",
+            "            <iswc-button variant=\"row\" color=\"neutral\">",
+            "              <iswc-icon icon=\"mdi:account-circle\"></iswc-icon>",
+            "              <span>Ana López, con un nombre largo que envuelve en la fila sin salirse de ella</span>",
+            "            </iswc-button>",
+            "            <iswc-button variant=\"row\" color=\"neutral\" disabled>",
+            "              <iswc-icon icon=\"mdi:account-circle\"></iswc-icon>",
+            "              <span>Fila deshabilitada</span>",
+            "            </iswc-button>",
+            "          </div>"
+          ],
+          "equivNote": "Equivalente nativo generico de iswc-button: button type=button (o a si hay href).",
+          "equivHtml": "<button type=\"button\">…</button>"
+        }
+      ]
+    },
+    {
       "id": "sizes",
       "title": "Escala por contexto",
       "lede": "El componente usa unidades <code class=\"code\">em</code>. Cambia <code class=\"code\">font-size</code> en cualquier ancestro para escalarlo completo.",
@@ -357,6 +405,22 @@
           ],
           "equivNote": "Equivalente nativo generico de iswc-button: button type=button (o a si hay href).",
           "equivHtml": "<button type=\"button\">…</button>"
+        }
+      ]
+    },
+    {
+      "id": "density",
+      "title": "Densidad compacta",
+      "lede": "density=\"compact\" en un control o en cualquier contenedor baja a 2em el alto de todos los controles de adentro.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": [
+            "<div density=\"compact\" style=\"display:flex;gap:.5em;align-items:end;flex-wrap:wrap\">",
+            "  <iswc-button color=\"brand\">Guardar</iswc-button>",
+            "  <iswc-button variant=\"outlined\">Cancelar</iswc-button>",
+            "</div>"
+          ]
         }
       ]
     },

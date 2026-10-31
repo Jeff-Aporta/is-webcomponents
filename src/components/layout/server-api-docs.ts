@@ -424,7 +424,7 @@ class IswcServerApiDocs extends HTMLElement {
         ${servidores.length ? `<p class="servidores">${servidores.map((s) => `<iswc-button class="servidor" size="sm" variant="outlined" data-url="${escapar(s.url)}" title="${escapar(s.url)}">${escapar(s.descripcion || s.url)}</iswc-button>`).join('')}</p>` : ''}
         ${params('path').map((p) => campo('path', p)).join('')}
         ${params('query').map((p) => campo('query', p)).join('')}
-        ${op.cuerpo ? `<label class="etiqueta">Cuerpo (JSON)</label><iswc-code class="cuerpo-editor" lang="json" min-height="8rem" value="${escapar(op.cuerpo.ejemplo === undefined ? '' : json(op.cuerpo.ejemplo))}"></iswc-code>` : ''}
+        ${op.cuerpo ? `<label class="etiqueta">Cuerpo (JSON)</label><iswc-code class="cuerpo-editor" lang="json" min-height="8em" value="${escapar(op.cuerpo.ejemplo === undefined ? '' : json(op.cuerpo.ejemplo))}"></iswc-code>` : ''}
         ${op.adjuntos.map((a) => `<label class="adjunto">${a.tipo === 'images' ? 'Imágenes' : 'Audios'} → <code>${escapar(a.campo)}</code> (máx. ${a.max})<input type="file" multiple data-campo="${escapar(a.campo)}" data-max="${a.max}" accept="${a.tipo === 'images' ? 'image/*' : 'audio/*'}"></label>`).join('')}
         <p class="enviar-linea"><iswc-button class="enviar" color="${COLOR_METODO[op.metodo] ?? 'brand'}"><iswc-icon slot="start" icon="mdi:send"></iswc-icon>Enviar ${escapar(op.metodo.toUpperCase())}</iswc-button><span class="sesion-aviso"></span></p>
       </form>

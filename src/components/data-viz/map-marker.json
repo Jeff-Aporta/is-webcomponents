@@ -1,5 +1,6 @@
 {
   "$schema": "iswc-preview/v1",
+  "anatomy": { "scss": "maps.scss" },
   "tag": "iswc-map-marker",
   "category": "data-viz",
   "title": "&lt;iswc-map-marker&gt;",

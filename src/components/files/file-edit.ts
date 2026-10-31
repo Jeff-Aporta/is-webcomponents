@@ -1,6 +1,7 @@
 import { adoptCss, defineElement, emit } from '../../core/element.js';
 import { ElementBase } from '../../core/element-base.js';
 import { setOptionalAttr, setStringAttr } from '../../core/reflect.js';
+import { pintarEstado, sincronizarAlto } from './utils/file-estado.js';
 import { resolveDispatch } from './utils/mime-map.js';
 
 (() => {
@@ -30,8 +31,8 @@ import { resolveDispatch } from './utils/mime-map.js';
       this.#stage = shadow.querySelector('.stage')!;
     }
 
-    onConnected() { this.#mount(); }
-    onAttributeChanged() { this.#mount(); }
+    onConnected() { sincronizarAlto(this); this.#mount(); }
+    onAttributeChanged() { sincronizarAlto(this); this.#mount(); }
 
     get src() { return this.getAttribute('src'); }
     set src(v) { setOptionalAttr(this, 'src', v); }
@@ -52,11 +53,7 @@ import { resolveDispatch } from './utils/mime-map.js';
       });
       this.#stage.replaceChildren();
       if (d.unsupported || !d.tag) {
-        const p = document.createElement('p');
-        p.className = 'error';
-        p.setAttribute('part', 'error');
-        p.textContent = 'Este tipo de archivo no admite edicion en el kit';
-        this.#stage.append(p);
+        pintarEstado(this.#stage, 'Este tipo de archivo no admite edición en el kit', 'error');
         emit(this, 'iswc-error', { reason: 'unsupported', kind: d.kind });
         return;
       }

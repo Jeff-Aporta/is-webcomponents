@@ -16,20 +16,20 @@
   }
   .zoom-info {
     position: absolute;
-    inset-block-end: .5rem;
-    inset-inline-end: .5rem;
-    font-size: .65rem;
+    inset-block-end: .7692em;
+    inset-inline-end: .7692em;
+    font-size: .65em;
     color: var(--iswc-text-soft);
     background: color-mix(in srgb, var(--iswc-bg-elev) 80%, transparent);
-    padding: .15rem .5rem;
-    border-radius: 4px;
+    padding: .2308em .7692em;
+    border-radius: .3846em;
     pointer-events: none;
     z-index: 2;
   }
   .canvas {
     position: relative;
     inline-size: 100%;
-    block-size: 28rem;
+    block-size: 28em;
     cursor: grab;
     overflow: hidden;
   }
@@ -41,13 +41,13 @@
   }
   .attribution {
     position: absolute;
-    inset-block-end: 1.75rem;
-    inset-inline-end: .5rem;
-    font-size: .65rem;
+    inset-block-end: 2.6923em;
+    inset-inline-end: .7692em;
+    font-size: .65em;
     color: var(--iswc-text-soft);
     background: color-mix(in srgb, var(--iswc-bg-elev) 80%, transparent);
-    padding: .15rem .5rem;
-    border-radius: 4px;
+    padding: .2308em .7692em;
+    border-radius: .3846em;
     z-index: 2;
   }
   svg.map {
@@ -59,8 +59,8 @@
       transparent 70%);
     .grid     { stroke: var(--iswc-maps-grid-color); stroke-width: 0.5; stroke-dasharray: 2 3; }
     .meridian { stroke: var(--iswc-maps-meridian-color); stroke-width: 0.5; }
-    .tick     { fill: var(--iswc-text-soft); font-size: 8px; font-family: ui-monospace, Menlo, monospace; }
-    .vp-text  { fill: var(--iswc-text-soft); font-size: 9px; font-family: ui-monospace, Menlo, monospace; }
+    .tick     { fill: var(--iswc-text-soft); font-size: .5em; font-family: ui-monospace, Menlo, monospace; }
+    .vp-text  { fill: var(--iswc-text-soft); font-size: .5625em; font-family: ui-monospace, Menlo, monospace; }
     .marker {
       fill: var(--iswc-accent);
       stroke: var(--iswc-bg-elev);
@@ -69,7 +69,7 @@
     }
     .marker-label {
       fill: var(--iswc-text);
-      font-size: 10px;
+      font-size: .625em;
       pointer-events: none;
     }
   }

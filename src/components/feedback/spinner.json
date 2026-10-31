@@ -46,7 +46,21 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-spinner></iswc-spinner>"
+          "html": "<iswc-spinner id=\"pg-spinner\"></iswc-spinner>",
+          "target": "#pg-spinner",
+          "controls": [
+            {
+              "control": "select",
+              "prop": "style:",
+              "label": "tamaño",
+              "options": [
+                "font-size:1em",
+                "font-size:2em",
+                "font-size:3em"
+              ],
+              "default": "font-size:2em"
+            }
+          ]
         }
       ]
     },

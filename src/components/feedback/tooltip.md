@@ -1,36 +1,36 @@
-﻿---
+---
 tag: iswc-tooltip
 tags:
   - iswc-tooltip
 category: feedback
 status: public
 source: ./tooltip.ts
-style: ./tooltip.css
+style: ./tooltip.scss
 preview: ./tooltip.json
 ---
 # `<iswc-tooltip>`
 
-## PropÃ³sito
+## Propósito
 
 Tip breve anclado con for. Depende de iswc-popover.
 
-Este mÃ³dulo registra `<iswc-tooltip>`.
+Este módulo registra `<iswc-tooltip>`.
 
-## CuÃ¡ndo usarlo
+## Cuándo usarlo
 
-Estado, progreso, confirmaciÃ³n, carga o resultado de operaciones.
+Estado, progreso, confirmación, carga o resultado de operaciones.
 
-## CuÃ¡ndo no usarlo
+## Cuándo no usarlo
 
-No saturar interfaz con seÃ±ales redundantes o alertas sin acciÃ³n.
+No saturar interfaz con señales redundantes o alertas sin acción.
 
-## ImportaciÃ³n
+## Importación
 
 ```js
 import './tooltip.js';
 ```
 
-## Ejemplo mÃ­nimo
+## Ejemplo mínimo
 
 ```html
 <iswc-button id="tip-target">Hover Me</iswc-button>
@@ -45,18 +45,18 @@ import './tooltip.js';
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
-| `for` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `open` | boolean | Fuente define default/restricciÃ³n. |
-| `placement` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `trigger` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `distance` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `skidding` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `show-delay` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `hide-delay` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `disabled` | boolean | Fuente define default/restricciÃ³n. |
-| `without-arrow` | boolean | Fuente define default/restricciÃ³n. |
+| `for` | string/según contrato | Fuente define default/restricción. |
+| `open` | boolean | Fuente define default/restricción. |
+| `placement` | string/según contrato | Fuente define default/restricción. |
+| `trigger` | string/según contrato | Fuente define default/restricción. |
+| `distance` | string/según contrato | Fuente define default/restricción. |
+| `skidding` | string/según contrato | Fuente define default/restricción. |
+| `show-delay` | string/según contrato | Fuente define default/restricción. |
+| `hide-delay` | string/según contrato | Fuente define default/restricción. |
+| `disabled` | boolean | Fuente define default/restricción. |
+| `without-arrow` | boolean | Oculta la flecha. |
 
-#### Propiedades pÃºblicas
+#### Propiedades públicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
@@ -80,19 +80,19 @@ import './tooltip.js';
 ### Eventos
 
 
-| Evento | DescripciÃ³n |
+| Evento | Descripción |
 | --- | --- |
 | `iswc-show` | Emitido justo antes de mostrarse (cancelable). |
-| `iswc-after-show` | Emitido tras finalizar la animaciÃ³n de apertura. |
+| `iswc-after-show` | Emitido tras finalizar la animación de apertura. |
 | `iswc-hide` | Emitido justo antes de ocultarse (cancelable). |
-| `iswc-after-hide` | Emitido tras finalizar la animaciÃ³n de cierre. |
+| `iswc-after-hide` | Emitido tras finalizar la animación de cierre. |
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `iswc-show` | no | sÃ­ | sÃ­ | sÃ­ |
-| `iswc-after-show` | no | sÃ­ | sÃ­ | sÃ­ |
-| `iswc-hide` | no | sÃ­ | sÃ­ | sÃ­ |
-| `iswc-after-hide` | no | sÃ­ | sÃ­ | no |
+| `iswc-show` | no | sí | sí | sí |
+| `iswc-after-show` | no | sí | sí | sí |
+| `iswc-hide` | no | sí | sí | sí |
+| `iswc-after-hide` | no | sí | sí | no |
 
 
 <details>
@@ -107,14 +107,14 @@ el.addEventListener('iswc-show', (e) => {
 
 </details>
 
-### MÃ©todos y propiedades pÃºblicas
+### Métodos y propiedades públicas
 
-| MÃ©todo | Uso |
+| Método | Uso |
 | --- | --- |
-| `show()` | MÃ©todo pÃºblico declarado. |
-| `hide()` | MÃ©todo pÃºblico declarado. |
+| `show()` | Método público declarado. |
+| `hide()` | Método público declarado. |
 
-Propiedades pÃºblicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
+Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
 
 ### CSS parts
 
@@ -134,33 +134,32 @@ No expone.
 
 | Token | Uso |
 | --- | --- |
-| `--max-width` | Token leÃ­do o definido por componente. |
-| `--arrow-color` | Token leÃ­do o definido por componente. |
-| `--iswc-tooltip-bg` | Token leÃ­do o definido por componente. |
-| `--iswc-tooltip-fg` | Token leÃ­do o definido por componente. |
-| `--arrow-size` | Token leÃ­do o definido por componente. |
-| `--iswc-tooltip-arrow-size` | Token leÃ­do o definido por componente. |
-| `--iswc-radius-sm` | Token leÃ­do o definido por componente. |
-| `--iswc-font-family` | Token leÃ­do o definido por componente. |
-| `--iswc-tooltip-font-size` | Token leÃ­do o definido por componente. |
-| `--iswc-tooltip-line-height` | Token leÃ­do o definido por componente. |
-| `--iswc-shadow` | Token leÃ­do o definido por componente. |
-| `--iswc-mono` | Token leÃ­do o definido por componente. |
+| `--iswc-tooltip-bg` | Fondo del globo y de la flecha. Default `--iswc-text`: invertido respecto al tema. |
+| `--iswc-tooltip-fg` | Texto del globo. Default `--iswc-bg-elev`. |
+| `--iswc-tooltip-arrow-size` | Mitad del lado de la flecha. Default `0.375em`. |
+| `--iswc-radius-sm` | Token leído o definido por componente. |
+| `--iswc-font-family` | Token leído o definido por componente. |
+| `--iswc-tooltip-font-size` | Tamaño del texto. Default `0.85em`. |
+| `--iswc-tooltip-line-height` | Interlineado. Default `1.4`. |
+| `--iswc-shadow` | Token leído o definido por componente. |
+| `--iswc-mono` | Token leído o definido por componente. |
 
-### IntegraciÃ³n con formularios
+### Integración con formularios
 
-No declara integraciÃ³n form-associated propia en este mÃ³dulo.
+No declara integración form-associated propia en este módulo.
 
 ## Comportamiento
 
-DocumentaciÃ³n de cabecera preservada desde fuente:
+Escape cierra cualquier tooltip abierto sin mover puntero ni foco (WCAG 1.4.13), salvo con `trigger="none"`, que es del dueño. El id del tooltip se suma a `aria-describedby` del ancla sin pisar lo que ya tenga, y se retira al desvincular. Cambiar `for` o `trigger` vuelve a enlazar. `disabled` cierra si estaba abierto.
 
-> <iswc-tooltip> â€” tip contextual anclado vÃ­a `for`.
+Documentación de cabecera preservada desde fuente:
+
+> <iswc-tooltip> — tip contextual anclado vía `for`.
 > Attrs: for, open, placement, trigger, distance, skidding,
 >        show-delay, hide-delay, disabled, without-arrow
-> trigger (default "hover focus"): combina hover | focus | click. AdemÃ¡s
->   manual â†’ solo show()/hide(), y se cierra con click fuera o Escape
->   none   â†’ solo show()/hide(), sin cierre automÃ¡tico (lo controla el dueÃ±o)
+> trigger (default "hover focus"): combina hover | focus | click. Además
+>   manual → solo show()/hide(), y se cierra con click fuera o Escape
+>   none   → solo show()/hide(), sin cierre automático (lo controla el dueño)
 > Methods: show(), hide()
 > Events: iswc-show, iswc-after-show, iswc-hide, iswc-after-hide
 > Parts: ::part(tooltip) ::part(body) ::part(base__popup) ::part(base__arrow)
@@ -171,24 +170,24 @@ DocumentaciÃ³n de cabecera preservada desde fuente:
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 - [`../helpers/floating.js`](../helpers/floating.js)
 
-Tags del mÃ³dulo: `<iswc-tooltip>`.
+Tags del módulo: `<iswc-tooltip>`.
 
 ## Accesibilidad
 
-Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: `aria-describedby`.
+Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-describedby`.
 
 ## Ejemplo avanzado
 
 ```html
 <iswc-tooltip for="t-html" trigger="click" style="--max-width:22rem">
 <p><strong>Resumen</strong></p>
-<ul><li>â€¦</li></ul>
+<ul><li>…</li></ul>
 </iswc-tooltip>
 ```
 
 ## Errores comunes
 
-- Usar tag sin importar mÃ³dulo primero.
+- Usar tag sin importar módulo primero.
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
@@ -196,15 +195,15 @@ Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: `aria-desc
 
 ## Reglas para LLM
 
-- Reusar componente y dependencias antes de implementaciÃ³n paralela.
+- Reusar componente y dependencias antes de implementación paralela.
 - Mantener nombres exactos de tags y API.
-- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explÃ­cito.
-- Leer callers/shared antes de cambiar; corregir raÃ­z comÃºn.
-- No modificar API basÃ¡ndose solo en preview.
+- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explícito.
+- Leer callers/shared antes de cambiar; corregir raíz común.
+- No modificar API basándose solo en preview.
 
 ## Fuentes
 
 - [JavaScript](./tooltip.ts)
-- [CSS](./tooltip.css)
-- [Ãndice de categorÃ­a](../../specs/componentes.md)
+- [CSS](./tooltip.scss)
+- [Índice de categoría](../../../specs/componentes.md)
 - [Preview](./tooltip.json)

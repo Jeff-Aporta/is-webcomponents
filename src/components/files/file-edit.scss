@@ -1,7 +1,7 @@
 :host {
   display: block;
   width: 100%;
-  min-height: 8rem;
+  min-height: 8em;
   box-sizing: border-box;
   color: var(--iswc-text, inherit);
   background: var(--iswc-surface);
@@ -13,29 +13,23 @@
 :host([height]) .root { height: var(--iswc-file-height); }
 pre, .body {
   margin: 0;
-  padding: 0.75rem 1rem;
-  font: 0.9rem/1.45 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  padding: 0.75em 1em;
+  font: 0.9em/1.45 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   white-space: pre-wrap;
   word-break: break-word;
   overflow: auto;
   flex: 1;
 }
-.empty, .error {
-  margin: 0;
-  padding: 1rem;
-  font: inherit;
-  color: var(--iswc-text-soft, color-mix(in srgb, currentColor 65%, transparent));
-}
-.error { color: var(--iswc-danger); }
+iswc-empty-state { margin: 0.75em; }
 
 table.csv {
   width: 100%;
   border-collapse: collapse;
-  font: 0.85rem/1.35 system-ui, sans-serif;
+  font: 0.85em/1.35 system-ui, sans-serif;
 }
 table.csv th, table.csv td {
   border: 1px solid var(--iswc-border, color-mix(in srgb, currentColor 14%, transparent));
-  padding: 0.35rem 0.55rem;
+  padding: .4118em .6471em;
   text-align: left;
   vertical-align: top;
 }
@@ -46,15 +40,15 @@ table.csv td[contenteditable="true"]:focus {
 }
 .toolbar {
   display: flex;
-  gap: 0.5rem;
+  gap: 0.5em;
   align-items: center;
-  padding: 0.4rem 0.65rem;
+  padding: 0.4em 0.65em;
   border-bottom: 1px solid var(--iswc-border, color-mix(in srgb, currentColor 14%, transparent));
 }
 .toolbar button {
   font: inherit;
-  font-size: 0.8rem;
-  padding: 0.25rem 0.55rem;
+  font-size: 0.8em;
+  padding: .3001em .6603em;
   cursor: pointer;
 }
 .stage { flex: 1; min-height: 0; overflow: auto; }

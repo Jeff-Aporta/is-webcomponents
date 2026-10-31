@@ -1,38 +1,38 @@
-﻿---
+---
 tag: iswc-card
 tags:
   - iswc-card
 category: layout
 status: public
 source: ./card.ts
-style: ./card.css
+style: ./card.scss
 preview: ./card.json
 ---
 # `<iswc-card>`
 
-## PropÃ³sito
+## Propósito
 
 Contenedor flexible con slots para media, header,
 body, footer y actions.
 Cinco apariencias y dos orientaciones. JavaScript nativo, Shadow DOM, sin frameworks.
 
-Este mÃ³dulo registra `<iswc-card>`.
+Este módulo registra `<iswc-card>`.
 
-## CuÃ¡ndo usarlo
+## Cuándo usarlo
 
-Estructura, superficies, overlays y navegaciÃ³n por regiones de contenido.
+Agrupar información relacionada con encabezado, cuerpo, pie o imagen.
 
-## CuÃ¡ndo no usarlo
+## Cuándo no usarlo
 
-No crear size colors; escalar mediante font-size contextual y em.
+Un indicador: `iswc-stat`. Un título de vista: `iswc-page-header`.
 
-## ImportaciÃ³n
+## Importación
 
 ```js
 import './card.js';
 ```
 
-## Ejemplo mÃ­nimo
+## Ejemplo mínimo
 
 ```html
 <iswc-card>Hola mundo</iswc-card>
@@ -46,10 +46,10 @@ import './card.js';
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
-| `variant` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `orientation` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `variant` | string/según contrato | Fuente define default/restricción. |
+| `orientation` | string/según contrato | Fuente define default/restricción. |
 
-#### Propiedades pÃºblicas
+#### Propiedades públicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
@@ -71,7 +71,7 @@ import './card.js';
 ### Eventos
 
 
-| Evento | DescripciÃ³n |
+| Evento | Descripción |
 | --- | --- |
 
 No expone.
@@ -89,11 +89,11 @@ el.addEventListener('click', (e) => {
 
 </details>
 
-### MÃ©todos y propiedades pÃºblicas
+### Métodos y propiedades públicas
 
 No expone.
 
-Propiedades pÃºblicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
+Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
 
 ### CSS parts
 
@@ -113,28 +113,28 @@ No expone.
 
 | Token | Uso |
 | --- | --- |
-| `--spacing` | Token leÃ­do o definido por componente. |
-| `--iswc-space-l` | Token leÃ­do o definido por componente. |
-| `--card-bg` | Token leÃ­do o definido por componente. |
-| `--card-border` | Token leÃ­do o definido por componente. |
-| `--iswc-radius` | Token leÃ­do o definido por componente. |
-| `--iswc-text` | Token leÃ­do o definido por componente. |
-| `--iswc-sans` | Token leÃ­do o definido por componente. |
-| `--iswc-border` | Token leÃ­do o definido por componente. |
-| `--iswc-bg-elev` | Token leÃ­do o definido por componente. |
-| `--iswc-accent-bg` | Token leÃ­do o definido por componente. |
-| `--iswc-accent` | Token leÃ­do o definido por componente. |
+| `--spacing` | Token leído o definido por componente. |
+| `--iswc-space-l` | Token leído o definido por componente. |
+| `--card-bg` | Token leído o definido por componente. |
+| `--card-border` | Token leído o definido por componente. |
+| `--iswc-radius` | Token leído o definido por componente. |
+| `--iswc-text` | Token leído o definido por componente. |
+| `--iswc-sans` | Token leído o definido por componente. |
+| `--iswc-border` | Token leído o definido por componente. |
+| `--iswc-bg-elev` | Token leído o definido por componente. |
+| `--iswc-accent-bg` | Token leído o definido por componente. |
+| `--iswc-accent` | Token leído o definido por componente. |
 
-### IntegraciÃ³n con formularios
+### Integración con formularios
 
-No declara integraciÃ³n form-associated propia en este mÃ³dulo.
+No declara integración form-associated propia en este módulo.
 
 ## Comportamiento
 
-DocumentaciÃ³n de cabecera preservada desde fuente:
+Documentación de cabecera preservada desde fuente:
 
-> <iswc-card> â€” Web Component (vanilla, zero dependencies).
-> Define el custom element `iswc-card` automÃ¡ticamente al importarse.
+> <iswc-card> — Web Component (vanilla, zero dependencies).
+> Define el custom element `iswc-card` automáticamente al importarse.
 > Usa Shadow DOM con CSS propio, sin frameworks.
 > Atributos
 >   variant    accent | filled | outlined | filled-outlined | plain
@@ -143,7 +143,7 @@ DocumentaciÃ³n de cabecera preservada desde fuente:
 >                 (default 'vertical', reflected)
 > Slots
 >   (default)        cuerpo principal (body, requerido)
->   media            secciÃ³n de medios (vertical: top; horizontal: start)
+>   media            sección de medios (vertical: top; horizontal: start)
 >   header           encabezado (vertical only)
 >   footer           pie (vertical only)
 >   actions          acciones (horizontal: end)
@@ -153,18 +153,18 @@ DocumentaciÃ³n de cabecera preservada desde fuente:
 > CSS custom properties
 >   --spacing     padding/gap entre secciones (default var(--iswc-space-l, 1rem))
 > Layout:
->   vertical  â†’ media â†’ header â†’ body â†’ footer  (column)
->   horizontalâ†’ media | body | actions           (row, body grows)
+>   vertical  → media → header → body → footer  (column)
+>   horizontal→ media | body | actions           (row, body grows)
 
 ## Dependencias y componentes relacionados
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 
-Tags del mÃ³dulo: `<iswc-card>`.
+Tags del módulo: `<iswc-card>`.
 
 ## Accesibilidad
 
-Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: ninguno explÃ­cito en fuente.
+Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: ninguno explícito en fuente.
 
 ## Ejemplo avanzado
 
@@ -175,23 +175,23 @@ Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: ninguno ex
 
 ## Errores comunes
 
-- Usar tag sin importar mÃ³dulo primero.
+- Usar tag sin importar módulo primero.
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
-- Crear size color; usar font-size contextual y em.
+- Agregar un atributo `size`: el tamaño sale del `font-size` del contexto y de `em`.
 
 ## Reglas para LLM
 
-- Reusar componente y dependencias antes de implementaciÃ³n paralela.
+- Reusar componente y dependencias antes de implementación paralela.
 - Mantener nombres exactos de tags y API.
-- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explÃ­cito.
-- Leer callers/shared antes de cambiar; corregir raÃ­z comÃºn.
-- No modificar API basÃ¡ndose solo en preview.
+- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explícito.
+- Leer callers/shared antes de cambiar; corregir raíz común.
+- No modificar API basándose solo en preview.
 
 ## Fuentes
 
 - [JavaScript](./card.ts)
-- [CSS](./card.css)
-- [Ãndice de categorÃ­a](../../specs/componentes.md)
+- [CSS](./card.scss)
+- [Índice de categoría](../../../specs/componentes.md)
 - [Preview](./card.json)

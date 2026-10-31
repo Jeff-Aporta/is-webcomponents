@@ -9,7 +9,7 @@
   font-family: var(--iswc-font-family, inherit);
 }
 
-.tg { display: grid; gap: 0.5em; }
+.tg { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0.5em; }
 
 .nav {
   display: flex;
@@ -39,7 +39,7 @@
   border-block-start: var(--iswc-tab-group-track-width) solid var(--iswc-tab-group-track-color);
 }
 :host(:where([placement="start"], [placement="end"])) {
-  .tg { grid-template-columns: auto 1fr; }
+  .tg { grid-template-columns: auto minmax(0, 1fr); }
 }
 :host([placement="start"]) .nav {
   border-inline-end: var(--iswc-tab-group-track-width) solid var(--iswc-tab-group-track-color);
@@ -81,7 +81,8 @@
  * se alcanza con un descendiente `iswc-tab ...`, solo con `:host(iswc-tab)`.
  * Desde el shadow de <iswc-tab-group> tampoco valdría: los tabs van slotted. */
 :host(iswc-tab) {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
   cursor: pointer;
   user-select: none;
   position: relative;
@@ -92,7 +93,7 @@
     display: none;
     position: absolute;
     background: var(--iswc-tab-group-indicator-color);
-    border-radius: 2px;
+    border-radius: .125em;
   }
 
   .tab-start, .tab-end {
@@ -126,7 +127,7 @@
     padding: 0;
     background: transparent;
     border: 0;
-    border-radius: 999px;
+    border-radius: 999em;
     cursor: pointer;
     color: inherit;
     opacity: 0.6;
@@ -141,7 +142,7 @@
   color: var(--iswc-text, inherit);
   background: var(--iswc-bg-elev);
 }
-:host(iswc-tab[disabled]) { cursor: not-allowed; opacity: 0.5; }
+:host(iswc-tab[disabled]) { cursor: not-allowed; opacity: 0.55; }
 
 :host(iswc-tab[data-active]) {
   .tab { color: var(--iswc-text, inherit); }
@@ -152,7 +153,7 @@
    universal y el shadow del tab no ve el atributo del padre de otro modo. */
 :host(iswc-tab[data-placement="top"]),
 :host(iswc-tab[data-placement="bottom"]) {
-  .indicator { inset-inline: 0; block-size: 2px; }
+  .indicator { inset-inline: 0; block-size: .125em; }
 }
 /* Dentro del borde de la pestaña: la lista de pestañas hace scroll y recorta lo que se sale de su
    caja, así que un indicador montado sobre la pista (fuera de la pestaña) quedaba invisible. */
@@ -163,7 +164,7 @@
 :host(iswc-tab[data-placement="start"]),
 :host(iswc-tab[data-placement="end"]) {
   .tab { inline-size: 100%; justify-content: flex-start; }
-  .indicator { inset-block: 0; inline-size: 2px; }
+  .indicator { inset-block: 0; inline-size: .125em; }
 }
 :host(iswc-tab[data-placement="start"]) .indicator { right: 0; }
 :host(iswc-tab[data-placement="end"]) .indicator { left: 0; }

@@ -1,39 +1,39 @@
-﻿---
+---
 tag: iswc-speech
 tags:
   - iswc-speech
 category: media
 status: public
 source: ./speech.ts
-style: ./speech.css
+style: ./speech.scss
 preview: ./speech.json
 ---
 # `<iswc-speech>`
 
-## PropÃ³sito
+## Propósito
 
 Dictado (`SpeechRecognition`) y lectura (`SpeechSynthesis`) con `lang` del documento.
 
-Este mÃ³dulo registra `<iswc-speech>`.
+Este módulo registra `<iswc-speech>`.
 
-## CuÃ¡ndo usarlo
+## Cuándo usarlo
 
 Asistentes, dictado al campo, leer un resultado en voz alta.
 
-## CuÃ¡ndo no usarlo
+## Cuándo no usarlo
 
 No sustituye una nota de voz (`MediaRecorder`). Firefox no trae SpeechRecognition.
 
-## ImportaciÃ³n
+## Importación
 
 ```js
 import './speech.js';
 ```
 
-## Ejemplo mÃ­nimo
+## Ejemplo mínimo
 
 ```html
-<iswc-speech lang="es-ES" text="Proceso completado con Ã©xito"></iswc-speech>
+<iswc-speech lang="es-ES" text="Proceso completado con éxito"></iswc-speech>
 ```
 
 ## API
@@ -47,7 +47,7 @@ import './speech.js';
 | `lang` | string | Default `document.documentElement.lang` o `es-ES` |
 | `text` | string | Texto a leer |
 
-#### Propiedades pÃºblicas
+#### Propiedades públicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
@@ -63,7 +63,7 @@ import './speech.js';
 ### Eventos
 
 
-| Evento | DescripciÃ³n |
+| Evento | Descripción |
 | --- | --- |
 | `iswc-result` | Evento personalizado del componente (result). |
 | `iswc-speak-end` | Evento personalizado del componente (speak end). |
@@ -71,9 +71,9 @@ import './speech.js';
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `iswc-result` | sÃ­ `{ transcript, isFinal }` | sÃ­ | sÃ­ | no |
-| `iswc-speak-end` | no | sÃ­ | sÃ­ | no |
-| `iswc-error` | sÃ­ `{ message }` | sÃ­ | sÃ­ | no |
+| `iswc-result` | sí `{ transcript, isFinal }` | sí | sí | no |
+| `iswc-speak-end` | no | sí | sí | no |
+| `iswc-error` | sí `{ message }` | sí | sí | no |
 
 
 <details>
@@ -88,7 +88,7 @@ el.addEventListener('iswc-result', (e) => {
 
 </details>
 
-### MÃ©todos y propiedades pÃºblicas
+### Métodos y propiedades públicas
 
 `listen()`, `stop()`, `speak(text?)`, `cancel()`.
 
@@ -107,7 +107,7 @@ No expone.
 
 No expone.
 
-### IntegraciÃ³n con formularios
+### Integración con formularios
 
 No es form-associated.
 
@@ -133,7 +133,7 @@ Botones con `aria-pressed` en dictado; transcript `aria-live`.
 ## Errores comunes
 
 - Esperar STT en Firefox.
-- No pedir permiso de micrÃ³fono.
+- No pedir permiso de micrófono.
 
 ## Reglas para LLM
 
@@ -141,5 +141,5 @@ Botones con `aria-pressed` en dictado; transcript `aria-live`.
 
 ## Fuentes
 
-- `./speech.js` Â· `./speech.css`
+- `./speech.js` · `./speech.css`
 - Preview: `./speech.json`

@@ -4,12 +4,23 @@ tags:
   - iswc-tab
 category: navigation
 status: public
+source: ./tab-group.ts
+style: ./tab-group.scss
+preview: ./tab.json
 ---
 # `<iswc-tab>`
 
 ## Propósito
 
 Pestaña de `<iswc-tab-group>`. Elige el panel; no sustituye al grupo.
+
+## Importación
+
+```js
+import './tab-group.js';
+```
+
+Ese módulo registra este tag junto con `<iswc-tab-group>`.
 
 ## Cuándo usarlo
 
@@ -22,25 +33,47 @@ No lo reimplementes ni lo uses para sustituir al padre. La guía del padre docum
 ## Ejemplo mínimo
 
 ```html
-<iswc-tab></iswc-tab>
+<iswc-tab slot="nav" panel="datos" closable>Datos</iswc-tab>
 ```
 
+## Atributos
+
+| Atributo | Notas |
+| --- | --- |
+| `panel` | Nombre del `iswc-tab-panel` que abre. |
+| `active` | Lo pone el grupo. |
+| `disabled` | Bloquea la pestaña. |
+| `closable` | Muestra el botón de cerrar. |
+
+## Slots
+
+| Slot | Uso |
+| --- | --- |
+| `(default)` | Rótulo. |
+| `start` | Antes del rótulo. |
+| `end` | Después del rótulo. |
+| `close-button` | Botón de cerrar propio. |
+
+## CSS parts
+
+`base`, `start`, `end`, `close-button`, `active-indicator`.
 
 ## Eventos
 
 | Evento | Descripción |
 | --- | --- |
-| _(ninguno)_ | Este sub-componente no emite eventos propios; los eventos del componente padre (<iswc-tab-group>) se documentan en la ficha del padre. |
+| — | `iswc-tab-close` con `{ tab, name }` al pulsar cerrar. El grupo decide si la quita. |
 
-<details>
-<summary>Ejemplo en vivo</summary>
+## Comportamiento
 
-```js
-// Los eventos se escuchan sobre el componente padre.
-const parent = document.querySelector('iswc-tab-group');
-parent.addEventListener('iswc-event', (e) => {
-  console.log('evento del padre', e.detail);
-});
-```
+El grupo le pone `active`, `id` y `aria-controls`, y decide si la quita al recibir `iswc-tab-close`. Va siempre con `slot="nav"`.
 
-</details>
+## Accesibilidad
+
+El grupo le da `role="tab"`, `aria-selected` y `aria-controls`, y mueve el foco con flechas, `Home` y `End`.
+
+## Reglas para LLM
+
+- Va dentro de `<iswc-tab-group>`, con `slot="nav"` y un `panel` igual al `name` de su panel.
+- No se pone `active` a mano: se elige con `active` del grupo.
+- El cierre lo decide quien escucha `iswc-tab-close`.

@@ -38,6 +38,7 @@ import type { ResolvedColumn } from "./schemas/grid-data.schemas.js";
 import type { FilterModel, SortModelItem } from "./schemas/datagrid-types.schemas.js";
 import type { GridPopoverEl } from "./schemas/grid-ui.schemas.js";
 import '../actions/button.js';
+import '../actions/dropdown-item.js';
 import '../forms/input.js';
 import '../forms/select.js';
 import '../forms/option.js';
@@ -88,6 +89,11 @@ import '../forms/checkbox.js';
  * pinned-top, pinned-bottom, aggregation-row, detail-panel, overlay, footer,
  * pagination
  */
+
+/** Unidades logicas (1u = 1/16em) a em: un `font-size` escala la grilla entera. */
+function aEm(u: number): string {
+  return `${u / 16}em`;
+}
 
 (() => {
   const DENSITY: Record<string, { row: number; header: number }> = {
@@ -962,7 +968,7 @@ import '../forms/checkbox.js';
 
     scrollToIndex(index: number): void {
       const at = Math.max(0, Math.min(index, this.#nodes.length - 1));
-      this.#viewport.scrollTop = this.#offsets[at] || 0;
+      this.#viewport.scrollTop = (this.#offsets[at] || 0) * this.#pxU;
     }
 
     startEdit(id: CellValue, field: string): void { this.#startEdit(id, field); }
@@ -1231,8 +1237,8 @@ import '../forms/checkbox.js';
 
     #syncChrome(): void {
       this.#base.dataset.density = this.density;
-      this.#base.style.setProperty('--iswc-grid-row-h', `${this.rowHeight}px`);
-      this.#base.style.setProperty('--iswc-grid-head-h', `${this.headerHeight}px`);
+      this.#base.style.setProperty('--iswc-grid-row-h', aEm(this.rowHeight));
+      this.#base.style.setProperty('--iswc-grid-head-h', aEm(this.headerHeight));
       this.#base.toggleAttribute('data-list-view', this.listView);
       this.#base.toggleAttribute('data-auto-height', this.hasAttribute('auto-height'));
       this.#base.toggleAttribute('data-cell-selection', this.cellSelection);
@@ -1265,7 +1271,7 @@ import '../forms/checkbox.js';
     }
 
     #renderAll(totalRows: number): void {
-      this.#available = this.#viewport.clientWidth || this.#available;
+      this.#available = this.#viewport.clientWidth / this.#pxU || this.#available;
       const cols = this.#layoutCols();
       this.#widths = resolveWidths(cols, this.#available, this.#widthOverrides);
       this.#totalWidth = cols.reduce((sum: number, c: ColumnDef) => sum + (this.#widths[c.field ?? ''] ?? 0), 0);
@@ -1280,11 +1286,14 @@ import '../forms/checkbox.js';
       this.#renderFooter(totalRows);
       this.#renderOverlay();
       this.#syncFilterBadge();
-      this.#base.style.setProperty('--iswc-grid-head-total', `${this.#head.offsetHeight}px`);
+      this.#base.style.setProperty('--iswc-grid-head-total', aEm(this.#head.offsetHeight / this.#pxU));
     }
 
     /** Las filas llenan el viewport aunque las columnas no lleguen a cubrirlo. */
-    get #rowWidth(): string { return `max(${this.#totalWidth}px, 100%)`; }
+    get #rowWidth(): string { return `max(${aEm(this.#totalWidth)}, 100%)`; }
+
+    /** px reales por unidad logica (1u = 1/16em): anchos y alturas viven en u y al DOM llegan en em. */
+    get #pxU(): number { return (parseFloat(getComputedStyle(this.#base).fontSize) || 16) / 16; }
 
     #stickyOffsets(cols: ColumnDef[]): void {
       const left: Record<string, number> = {};
@@ -1314,14 +1323,14 @@ import '../forms/checkbox.js';
 
     #applyCellGeometry(el: HTMLElement, col: ColumnDef, width?: number): void {
       const w = width ?? this.#widths[col.field ?? ''] ?? 0;
-      el.style.width = `${w}px`;
-      el.style.minWidth = `${w}px`;
+      el.style.width = aEm(w);
+      el.style.minWidth = aEm(w);
       if (this.#stickyLeft[col.field ?? ''] != null) {
         el.dataset.pinned = 'left';
-        el.style.left = `${this.#stickyLeft[col.field ?? '']}px`;
+        el.style.left = aEm(this.#stickyLeft[col.field ?? ''] ?? 0);
       } else if (this.#stickyRight[col.field ?? ''] != null) {
         el.dataset.pinned = 'right';
-        el.style.right = `${this.#stickyRight[col.field ?? '']}px`;
+        el.style.right = aEm(this.#stickyRight[col.field ?? ''] ?? 0);
       }
       if (col.align && col.align !== 'left') el.dataset.align = col.align;
     }
@@ -1367,8 +1376,8 @@ import '../forms/checkbox.js';
           const width = cols.slice(i, i + span).reduce((sum: number, c: ColumnDef) => sum + (this.#widths[c.field ?? ''] ?? 0), 0);
           const cell = document.createElement('div');
           cell.className = 'gcell';
-          cell.style.width = `${width}px`;
-          cell.style.minWidth = `${width}px`;
+          cell.style.width = aEm(width);
+          cell.style.minWidth = aEm(width);
           if (group) {
             cell.setAttribute('role', 'columnheader');
             cell.setAttribute('aria-colspan', String(span));
@@ -1606,11 +1615,12 @@ import '../forms/checkbox.js';
 
     #renderBody(cols: ColumnDef[]): void {
       const total = this.#offsets[this.#nodes.length] || 0;
-      this.#rowsEl.style.height = `${total}px`;
+      this.#rowsEl.style.height = aEm(total);
       this.#rowsEl.style.width = this.#rowWidth;
 
-      const scrollTop = this.#viewport.scrollTop;
-      const height = this.#viewport.clientHeight || 400;
+      const pxU = this.#pxU;
+      const scrollTop = this.#viewport.scrollTop / pxU;
+      const height = (this.#viewport.clientHeight || 400) / pxU;
       let from = 0;
       let to = this.#nodes.length;
       if (this.virtualize && !this.hasAttribute('auto-height')) {
@@ -1651,7 +1661,7 @@ import '../forms/checkbox.js';
       wrap.setAttribute('aria-rowindex', String(index + 2));
       if (!flow) {
         wrap.style.position = 'absolute';
-        wrap.style.transform = `translateY(${top}px)`;
+        wrap.style.transform = `translateY(${aEm(top)})`;
       }
       wrap.style.width = this.#rowWidth;
       if (this.hasAttribute('row-reorder')) wrap.draggable = true;
@@ -1665,7 +1675,7 @@ import '../forms/checkbox.js';
       rowEl.setAttribute('part', 'row');
       // Contenedor visual: las celdas deben colgar del role="row" del wrap.
       rowEl.setAttribute('role', 'none');
-      rowEl.style.height = `${node.baseHeight || this.rowHeight}px`;
+      rowEl.style.height = aEm(node.baseHeight || this.rowHeight);
       if (index % 2) rowEl.dataset.odd = '';
       if (node.kind === 'group') rowEl.dataset.group = '';
       if (this.#selection.has(node.id)) {
@@ -1698,7 +1708,7 @@ import '../forms/checkbox.js';
         detail.setAttribute('part', 'detail-panel');
         detail.setAttribute('role', 'gridcell');
         detail.setAttribute('aria-colspan', String(cols.length));
-        detail.style.height = `${this.detailHeight}px`;
+        detail.style.height = aEm(this.detailHeight);
         const content = this.#hooks.getDetailPanelContent({ row: row as Row, id: node.id });
         appendContent(detail, content);
         wrap.appendChild(detail);
@@ -1763,7 +1773,7 @@ import '../forms/checkbox.js';
 
       if (col.field === '__group') {
         el.dataset.depth = String(node.depth || 0);
-        el.style.paddingLeft = `${8 + (node.depth || 0) * 16}px`;
+        el.style.paddingLeft = aEm(8 + (node.depth || 0) * 16);
         if (node.kind === 'group') {
           const open = this.#expanded.has(node.id);
           const btn = document.createElement('button');
@@ -1822,7 +1832,8 @@ import '../forms/checkbox.js';
         for (const action of actions.filter((a: RowAction) => !a.showInMenu)) {
           const btn = document.createElement('button');
           btn.type = 'button';
-          btn.className = 'act-btn';
+          // Sin icono el rotulo es el boton: debe leerse como tal, no como texto suelto.
+          btn.className = action.icon ? 'act-btn' : 'act-btn act-btn--texto';
           btn.dataset.action = 'row-action';
           btn.title = action.label || '';
           btn.setAttribute('aria-label', action.label || 'Acción');
@@ -2506,7 +2517,7 @@ import '../forms/checkbox.js';
     #onResizeMove = (e: PointerEvent): void => {
       const state = this.#resizeState;
       if (!state) return;
-      const width = Math.max(40, state.startWidth + (e.clientX - state.startX));
+      const width = Math.max(40, state.startWidth + (e.clientX - state.startX) / this.#pxU);
       this.#widthOverrides = { ...this.#widthOverrides, [state.field]: width };
       this.#compute();
     };
@@ -2529,10 +2540,11 @@ import '../forms/checkbox.js';
       probe.style.cssText = 'position:absolute;visibility:hidden;white-space:nowrap;font:inherit';
       this.#base.appendChild(probe);
       probe.textContent = col.headerName ?? '';
-      let max = probe.offsetWidth + 56;
+      const pxU = this.#pxU;
+      let max = probe.offsetWidth / pxU + 56;
       for (const row of this.#leafRows.slice(0, 200)) {
         probe.textContent = formattedValue(cellValue(row, col, ctx), row, col, ctx);
-        max = Math.max(max, probe.offsetWidth + 24);
+        max = Math.max(max, probe.offsetWidth / pxU + 24);
       }
       probe.remove();
       const minWidth = col.minWidth ?? 50;
@@ -2851,7 +2863,7 @@ import '../forms/checkbox.js';
       const node = this.#nodes[rowIndex];
       if (!node) return;
       const col = this.#activeCols.find((c: ColumnDef) => c.field === focus.field);
-      const pageStep = Math.max(1, Math.floor(this.#viewport.clientHeight / this.rowHeight) - 1);
+      const pageStep = Math.max(1, Math.floor(this.#viewport.clientHeight / (this.rowHeight * this.#pxU)) - 1);
       const move = (dr: number, dc: number): void => {
         const r = Math.max(0, Math.min(ids.length - 1, rowIndex + dr));
         const c = Math.max(0, Math.min(fields.length - 1, colIndex + dc));
@@ -2998,7 +3010,7 @@ import '../forms/checkbox.js';
     }
 
     #onResize(): void {
-      const width = this.#viewport.clientWidth;
+      const width = this.#viewport.clientWidth / this.#pxU;
       if (Math.abs(width - this.#available) < 1) return;
       this.#available = width;
       this.#refresh();

@@ -54,7 +54,7 @@
 .rail,
 .track {
   position: absolute;
-  border-radius: 999px;
+  border-radius: 999em;
   pointer-events: none;
 }
 
@@ -75,7 +75,7 @@
   position: absolute;
   inline-size: var(--iswc-slider-track-size);
   block-size: var(--iswc-slider-track-size);
-  border-radius: 999px;
+  border-radius: 999em;
   background: color-mix(in srgb, var(--iswc-text) 45%, transparent);
 
   &[data-active] {
@@ -95,22 +95,22 @@
   position: absolute;
   inline-size: var(--iswc-slider-thumb-size);
   block-size: var(--iswc-slider-thumb-size);
-  border-radius: 999px;
+  border-radius: 999em;
   background: var(--iswc-slider-thumb-bg);
-  box-shadow: 0 0 0 2px var(--iswc-bg-elev), 0 1px 3px rgb(0 0 0 / 25%);
+  box-shadow: 0 0 0 .125em var(--iswc-bg-elev), 0 .0625em .1875em rgb(0 0 0 / 25%);
   cursor: grab;
   outline: none;
   transition: box-shadow 120ms ease;
 
   &:hover {
     box-shadow:
-      0 0 0 2px var(--iswc-bg-elev),
+      0 0 0 .125em var(--iswc-bg-elev),
       0 0 0 0.45em color-mix(in srgb, var(--iswc-slider-fill) 22%, transparent);
   }
 
   &:focus-visible {
     box-shadow:
-      0 0 0 2px var(--iswc-bg-elev),
+      0 0 0 .125em var(--iswc-bg-elev),
       0 0 0 0.45em color-mix(in srgb, var(--iswc-slider-focus) 32%, transparent);
   }
 
@@ -192,7 +192,7 @@
     &::after {
       inset-block-start: 100%;
       inset-inline-start: 50%;
-      translate: -50% -1px;
+      translate: -50% -.0833em;
       border-block-start-color: var(--iswc-slider-fill);
     }
   }
@@ -255,7 +255,7 @@
     &::after {
       inset-inline-start: 100%;
       inset-block-start: 50%;
-      translate: -1px -50%;
+      translate: -.0833em -50%;
       border-inline-start-color: var(--iswc-slider-fill);
     }
   }

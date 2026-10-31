@@ -5,7 +5,7 @@ tags:
 category: media
 status: public
 source: ./person.ts
-style: ./person.css
+style: ./person.scss
 preview: ./person.json
 ---
 # `<iswc-person>`

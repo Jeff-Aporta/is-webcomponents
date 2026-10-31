@@ -19,11 +19,11 @@
 
 .wrap {
   position: relative;
-  border-radius: 0.5rem;
+  border-radius: 0.5em;
   overflow: hidden;
   background: transparent;
   border: 1px solid var(--iswc-border);
-  padding: 0.75rem;
+  padding: 0.75em;
   cursor: default;
   user-select: none;
   -webkit-user-select: none;
@@ -45,7 +45,7 @@
 .wrap[data-empty]::after {
   content: "Treemap no disponible (payload inválido).";
   display: block;
-  padding: 1rem;
+  padding: 1.1429em;
   font-size: 0.875em;
   color: var(--iswc-text-soft);
 }
@@ -104,7 +104,7 @@
   color: var(--iswc-text);
   font-size: 0.75em;
   line-height: 1.35;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.28);
+  box-shadow: 0 .5em 1.5em rgba(0, 0, 0, 0.28);
 }
 .tm-tooltip[hidden] {
   display: none !important;

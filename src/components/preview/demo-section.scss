@@ -26,7 +26,7 @@
 /* Flotante: full-width, sin borde ni fondo. Solo titulo + lede. */
 .head {
   display: block;
-  margin: 0 0 0.65rem;
+  margin: 0 0 0.65em;
   padding: 0;
 }
 
@@ -57,26 +57,26 @@
       color-mix(in srgb, var(--iswc-bg-elev) 88%, #fff) 0%,
       color-mix(in srgb, var(--iswc-bg-elev) 96%, transparent) 100%);
   border: 1px solid color-mix(in srgb, var(--iswc-accent) 22%, var(--iswc-border));
-  border-radius: calc(var(--iswc-radius) + 4px);
-  padding: clamp(1rem, 2.2vw, 1.4rem);
+  border-radius: calc(var(--iswc-radius) + .25em);
+  padding: clamp(1em, 2.2vw, 1.4em);
   margin: 0 0 1.75em;
   box-shadow:
-    inset 0 1px 0 color-mix(in srgb, #fff 8%, transparent),
-    0 0 0 1px color-mix(in srgb, var(--iswc-accent) 6%, transparent),
-    0 12px 36px color-mix(in srgb, var(--iswc-accent) 8%, transparent),
-    var(--iswc-shadow, 0 8px 24px rgb(0 0 0 / 18%));
+    inset 0 .0625em 0 color-mix(in srgb, #fff 8%, transparent),
+    0 0 0 .0625em color-mix(in srgb, var(--iswc-accent) 6%, transparent),
+    0 .75em 2.25em color-mix(in srgb, var(--iswc-accent) 8%, transparent),
+    var(--iswc-shadow, 0 .5em 1.5em rgb(0 0 0 / 18%));
   color: inherit;
   overflow: visible;
   isolation: isolate;
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(.875em);
+  -webkit-backdrop-filter: blur(.875em);
 }
 
 .card::before {
   content: "";
   position: absolute;
   inset: 0 0 auto;
-  height: 2px;
+  height: .125em;
   border-radius: inherit inherit 0 0;
   background: linear-gradient(90deg,
     var(--iswc-accent),

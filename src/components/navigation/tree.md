@@ -1,4 +1,4 @@
-﻿---
+---
 tag: iswc-tree
 tags:
   - iswc-tree
@@ -6,34 +6,34 @@ tags:
 category: navigation
 status: public
 source: ./tree.ts
-style: ./tree.css
+style: ./tree.scss
 preview: ./tree.json
 ---
 # `<iswc-tree>` / `<iswc-tree-item>`
 
-## PropÃ³sito
+## Propósito
 
-Ãrbol jerÃ¡rquico accesible: expansiÃ³n, selecciÃ³n, navegaciÃ³n por teclado
-(â†‘/â†“/â†/â†’/Home/End/Enter/Space), iconos por slot y selecciÃ³n
+Árbol jerárquico accesible: expansión, selección, navegación por teclado
+(↑/↓/←/→/Home/End/Enter/Space), iconos por slot y selección
 single | leaf | multiple | none.
 
-Este mÃ³dulo registra `<iswc-tree>`, `<iswc-tree-item>`.
+Este módulo registra `<iswc-tree>`, `<iswc-tree-item>`.
 
-## CuÃ¡ndo usarlo
+## Cuándo usarlo
 
-OrientaciÃ³n, movimiento entre vistas y navegaciÃ³n jerÃ¡rquica o secuencial.
+Orientación, movimiento entre vistas y navegación jerárquica o secuencial.
 
-## CuÃ¡ndo no usarlo
+## Cuándo no usarlo
 
 No separar children multi-tag ni romper teclado/ARIA.
 
-## ImportaciÃ³n
+## Importación
 
 ```js
 import './tree.js';
 ```
 
-## Ejemplo mÃ­nimo
+## Ejemplo mínimo
 
 ```html
 <iswc-tree selection="single" expanded>
@@ -53,14 +53,14 @@ Documentos
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
-| `selection` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `expanded` | boolean | Fuente define default/restricciÃ³n. |
-| `selected` | boolean | Fuente define default/restricciÃ³n. |
-| `disabled` | boolean | Fuente define default/restricciÃ³n. |
-| `has-children` | boolean | Fuente define default/restricciÃ³n. |
-| `lazy` | boolean | Fuente define default/restricciÃ³n. |
+| `selection` | string/según contrato | Fuente define default/restricción. |
+| `expanded` | boolean | Fuente define default/restricción. |
+| `selected` | boolean | Fuente define default/restricción. |
+| `disabled` | boolean | Fuente define default/restricción. |
+| `has-children` | boolean | Fuente define default/restricción. |
+| `lazy` | boolean | Fuente define default/restricción. |
 
-#### Propiedades pÃºblicas
+#### Propiedades públicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
@@ -78,7 +78,7 @@ Documentos
 ### Eventos
 
 
-| Evento | DescripciÃ³n |
+| Evento | Descripción |
 | --- | --- |
 | `iswc-tree-toggle` | Evento personalizado del componente (tree toggle). |
 | `iswc-tree-select` | Evento personalizado del componente (tree select). |
@@ -86,9 +86,9 @@ Documentos
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `iswc-tree-toggle` | sÃ­ | sÃ­ | sÃ­ | no |
-| `iswc-tree-select` | sÃ­ | sÃ­ | sÃ­ | no |
-| `iswc-tree-expand` | segÃºn cabecera | segÃºn cabecera | segÃºn cabecera | segÃºn cabecera |
+| `iswc-tree-toggle` | sí | sí | sí | no |
+| `iswc-tree-select` | sí | sí | sí | no |
+| `iswc-tree-expand` | según cabecera | según cabecera | según cabecera | según cabecera |
 
 
 <details>
@@ -103,13 +103,13 @@ el.addEventListener('iswc-tree-toggle', (e) => {
 
 </details>
 
-### MÃ©todos y propiedades pÃºblicas
+### Métodos y propiedades públicas
 
-| MÃ©todo | Uso |
+| Método | Uso |
 | --- | --- |
-| `focus()` | MÃ©todo pÃºblico declarado. |
+| `focus()` | Método público declarado. |
 
-Propiedades pÃºblicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
+Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
 
 ### CSS parts
 
@@ -132,43 +132,43 @@ No expone.
 
 | Token | Uso |
 | --- | --- |
-| `--indent` | Token leÃ­do o definido por componente. |
-| `--row-pad-y` | Token leÃ­do o definido por componente. |
-| `--row-pad-x` | Token leÃ­do o definido por componente. |
-| `--row-hover` | Token leÃ­do o definido por componente. |
-| `--iswc-brand` | Token leÃ­do o definido por componente. |
-| `--row-selected-bg` | Token leÃ­do o definido por componente. |
-| `--row-selected-fg` | Token leÃ­do o definido por componente. |
-| `--iswc-text` | Token leÃ­do o definido por componente. |
+| `--indent` | Token leído o definido por componente. |
+| `--row-pad-y` | Token leído o definido por componente. |
+| `--row-pad-x` | Token leído o definido por componente. |
+| `--row-hover` | Token leído o definido por componente. |
+| `--iswc-brand` | Token leído o definido por componente. |
+| `--row-selected-bg` | Token leído o definido por componente. |
+| `--row-selected-fg` | Token leído o definido por componente. |
+| `--iswc-text` | Token leído o definido por componente. |
 
-### IntegraciÃ³n con formularios
+### Integración con formularios
 
-No declara integraciÃ³n form-associated propia en este mÃ³dulo.
+No declara integración form-associated propia en este módulo.
 
 ## Comportamiento
 
-DocumentaciÃ³n de cabecera preservada desde fuente:
+Documentación de cabecera preservada desde fuente:
 
-> <iswc-tree> + <iswc-tree-item> â€” Web Components (vanilla, zero dependencies).
-> Ãrbol jerÃ¡rquico con expansiÃ³n, selecciÃ³n, checkboxes, navegaciÃ³n por teclado
+> <iswc-tree> + <iswc-tree-item> — Web Components (vanilla, zero dependencies).
+> Árbol jerárquico con expansión, selección, checkboxes, navegación por teclado
 > (Arrow, Home, End, Enter, Space) e iconos por slot.
 >   <iswc-tree selection="leaf">
 >     <iswc-tree-item expanded>
 >       <iswc-icon slot="icon" icon="mdi:folder"></iswc-icon>
 >       Documentos
->       <iswc-tree-item> â€¦ </iswc-tree-item>
->       <iswc-tree-item> â€¦ </iswc-tree-item>
+>       <iswc-tree-item> … </iswc-tree-item>
+>       <iswc-tree-item> … </iswc-tree-item>
 >     </iswc-tree-item>
 >   </iswc-tree>
 > Atributos <iswc-tree>
 >   selection  none | single | leaf | multiple (default 'single')
->   expanded   boolean â€” todos los nodos empiezan expandidos.
+>   expanded   boolean — todos los nodos empiezan expandidos.
 > Atributos <iswc-tree-item>
 >   expanded         boolean
 >   selected         boolean
 >   disabled         boolean
 >   has-children     boolean (si lo declaras, se ignoran los hijos declarados)
->   lazy             boolean â€” carga hijos bajo demanda.
+>   lazy             boolean — carga hijos bajo demanda.
 > Slots
 >   <iswc-tree-item>
 >     (default)   label.
@@ -187,11 +187,11 @@ DocumentaciÃ³n de cabecera preservada desde fuente:
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 
-Tags del mÃ³dulo: `<iswc-tree>`, `<iswc-tree-item>`.
+Tags del módulo: `<iswc-tree>`, `<iswc-tree-item>`.
 
 ## Accesibilidad
 
-Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: `aria-hidden`, `aria-expanded`.
+Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-hidden`, `aria-expanded`.
 
 ## Ejemplo avanzado
 
@@ -207,23 +207,23 @@ Documentos
 
 ## Errores comunes
 
-- Usar tag sin importar mÃ³dulo primero.
+- Usar tag sin importar módulo primero.
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
-- Crear size color; usar font-size contextual y em.
+- Agregar un atributo `size`: el tamaño sale del `font-size` del contexto y de `em`.
 
 ## Reglas para LLM
 
-- Reusar componente y dependencias antes de implementaciÃ³n paralela.
+- Reusar componente y dependencias antes de implementación paralela.
 - Mantener nombres exactos de tags y API.
-- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explÃ­cito.
-- Leer callers/shared antes de cambiar; corregir raÃ­z comÃºn.
-- No modificar API basÃ¡ndose solo en preview.
+- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explícito.
+- Leer callers/shared antes de cambiar; corregir raíz común.
+- No modificar API basándose solo en preview.
 
 ## Fuentes
 
 - [JavaScript](./tree.ts)
-- [CSS](./tree.css)
-- [Ãndice de categorÃ­a](../../specs/componentes.md)
+- [CSS](./tree.scss)
+- [Índice de categoría](../../../specs/componentes.md)
 - [Preview](./tree.json)

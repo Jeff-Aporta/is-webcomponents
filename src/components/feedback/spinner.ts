@@ -9,7 +9,7 @@ import { withStyleAttrs } from '../../core/attrs.js';
  * role=status en el host; respeta prefers-reduced-motion.
  *
  * CSS Parts: ::part(spinner)
- * CSS vars: --track-width, --track-color, --indicator-color, --speed
+ * CSS vars: --iswc-spinner-track-width, --iswc-spinner-track-color, --iswc-spinner-color, --iswc-spinner-speed
  */
 
 (() => {
@@ -31,8 +31,8 @@ import { withStyleAttrs } from '../../core/attrs.js';
 
     connectedCallback(): void {
       super.connectedCallback();
-      this.setAttribute('role', 'status');
-      this.setAttribute('aria-live', 'polite');
+      if (!this.hasAttribute('role')) this.setAttribute('role', 'status');
+      if (!this.hasAttribute('aria-live')) this.setAttribute('aria-live', 'polite');
       if (!this.hasAttribute('aria-label')) this.setAttribute('aria-label', 'Cargando');
     }
   }

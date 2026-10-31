@@ -18,7 +18,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-txt-edit content=\"editable\" height=\"12rem\"></iswc-txt-edit>",
+          "html": "<iswc-txt-edit content=\"editable\" height=\"12em\"></iswc-txt-edit>",
           "controls": [
             {
               "control": "text",

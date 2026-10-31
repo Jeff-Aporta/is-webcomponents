@@ -22,7 +22,7 @@ TEMPLATE.innerHTML = /* html */ `
     <div class="estado" part="estado"><span class="punto"></span><span class="rotulo"></span></div>
     <div class="nombre" part="nombre" hidden></div>
     <div class="progreso" part="progreso" hidden></div>
-    <div class="texto" part="texto"></div>
+    <div class="texto" part="texto" aria-live="polite"></div>
   </div>
 `;
 
@@ -179,6 +179,8 @@ class IswcStreamBubble extends PropsElement<StreamBubbleProps> {
     this.#nombre.textContent = name;
     this.#pintarProgreso();
     this.#pintarTexto();
+    // El lector espera al final de la respuesta: no deletrea cada letra que llega.
+    this.#texto.setAttribute('aria-busy', String(state === 'streaming'));
   }
 }
 

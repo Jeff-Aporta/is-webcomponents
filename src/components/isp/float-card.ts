@@ -196,7 +196,7 @@ class IswcFloatCard extends ElementBase {
     if (v.side === 'top' && v.offset > 0) { top = '0'; ty = `-${v.offset}%`; }
     else if (v.side === 'bottom' && v.offset > 0) { bottom = '0'; ty = `${v.offset}%`; }
     else if (v.side === 'top') top = '0';
-    else if (v.side === 'bottom') bottom = '-15px';
+    else if (v.side === 'bottom') bottom = '-0.9375em';
     else if (v.side === 'center') { top = '50%'; ty = '-50%'; }
     const extra: string[] = [];
     const lt = this.#lt;

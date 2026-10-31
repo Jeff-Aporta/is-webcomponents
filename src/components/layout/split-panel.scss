@@ -1,9 +1,9 @@
 /* <iswc-split-panel> — dos paneles con divisor arrastrable. */
 
 :host {
-  --_divider-width: var(--divider-width, 5px);
-  --_divider-hit-area: var(--divider-hit-area, 12px);
-  --iswc-split-panel-min: 0px;
+  --_divider-width: var(--divider-width, .3125em);
+  --_divider-hit-area: var(--divider-hit-area, .75em);
+  --iswc-split-panel-min: 0em;
   --iswc-split-panel-max: 100%;
 
   display: grid !important;

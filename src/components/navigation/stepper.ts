@@ -96,6 +96,9 @@ import { ElementBase } from '../../core/element-base.js';
     }
     goTo(idx: number) { this.#goTo(idx); }
 
+    /** Lo llama cada paso al conectarse: número y estado no dependen del orden de registro. */
+    actualizar(): void { this.#sync(); }
+
     #steps() {
       return [...this.querySelectorAll<HTMLElement>(':scope > iswc-stepper-step')];
     }
@@ -107,10 +110,12 @@ import { ElementBase } from '../../core/element-base.js';
       const base = this.shadowRoot!.querySelector<HTMLElement>('.stepper');
       if (!base) return;
       base.dataset.orientation = orientation;
-      base.dataset.color = variant;
       const active = this.active;
       steps.forEach((s: HTMLElement, i: number) => {
         const st = i < active ? 'done' : i === active ? 'active' : 'pending';
+        // El shadow del paso no ve el del grupo: el modo se le sella al host.
+        s.dataset.orientation = orientation;
+        s.dataset.color = variant;
         s.dataset.state = st;
         if (s.hasAttribute('disabled') && i !== active) s.dataset.state = 'disabled';
         if (s.hasAttribute('error')) s.dataset.state = 'error';
@@ -137,7 +142,6 @@ import { ElementBase } from '../../core/element-base.js';
     }
   }
 
-  defineElement('iswc-stepper', IswcStepper, 'IswcStepper');
 
   // ============ <iswc-stepper-step> ============
   const STEP_TEMPLATE = document.createElement('template');
@@ -170,6 +174,7 @@ import { ElementBase } from '../../core/element-base.js';
     onConnected() {
       this.setAttribute('role', 'listitem');
       this.#sync();
+      if (this.parentElement instanceof IswcStepper) this.parentElement.actualizar();
     }
 
     onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
@@ -212,4 +217,6 @@ import { ElementBase } from '../../core/element-base.js';
   }
 
   defineElement('iswc-stepper-step', IswcStepperStep, 'IswcStepperStep');
+  // Después del paso: al subir el grupo sus pasos ya tienen shadow.
+  defineElement('iswc-stepper', IswcStepper, 'IswcStepper');
 })();

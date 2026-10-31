@@ -826,14 +826,14 @@ class IswcErEditor extends HTMLElement {
       `top:${r.top - 2}px`,
       `width:${w}px`,
       `height:${h}px`,
-      'font:12px var(--iswc-ui, ui-sans-serif, system-ui, sans-serif)',
+      'font:.75em var(--iswc-ui, ui-sans-serif, system-ui, sans-serif)',
       'color:var(--iswc-text, #e2e8f0)',
       'background:var(--iswc-bg-elev, #131a24)',
       'border:1px solid var(--iswc-accent, #2563eb)',
-      'border-radius:4px',
+      'border-radius:.3333em',
       'z-index:10000',
-      'padding:0 6px',
-      'box-shadow:0 8px 24px rgba(0,0,0,0.35)',
+      'padding:0 .5em',
+      'box-shadow:0 .6667em 2em rgba(0,0,0,0.35)',
     ].join(';');
     document.body.appendChild(input);
     input.focus();

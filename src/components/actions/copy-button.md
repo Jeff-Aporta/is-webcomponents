@@ -1,36 +1,36 @@
-﻿---
+---
 tag: iswc-copy-button
 tags:
   - iswc-copy-button
 category: actions
 status: public
 source: ./copy-button.ts
-style: ./copy-button.css
+style: ./copy-button.scss
 preview: ./copy-button.json
 ---
 # `<iswc-copy-button>`
 
-## PropÃ³sito
+## Propósito
 
-Copia texto al portapapeles con feedback de Ã©xito/error.
+Copia texto al portapapeles con feedback de éxito/error.
 
-Este mÃ³dulo registra `<iswc-copy-button>`.
+Este módulo registra `<iswc-copy-button>`.
 
-## CuÃ¡ndo usarlo
+## Cuándo usarlo
 
-Acciones, selecciÃ³n de comandos y menÃºs interactivos.
+Acciones, selección de comandos y menús interactivos.
 
-## CuÃ¡ndo no usarlo
+## Cuándo no usarlo
 
-No usar como decoraciÃ³n ni reemplazar enlaces semÃ¡nticos para navegaciÃ³n simple.
+No usar como decoración ni reemplazar enlaces semánticos para navegación simple.
 
-## ImportaciÃ³n
+## Importación
 
 ```js
 import './copy-button.js';
 ```
 
-## Ejemplo mÃ­nimo
+## Ejemplo mínimo
 
 ```html
 <iswc-copy-button value="https://insoft.com.co"></iswc-copy-button>
@@ -44,17 +44,17 @@ import './copy-button.js';
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
-| `value` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `from` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `disabled` | boolean | Fuente define default/restricciÃ³n. |
-| `copy-label` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `success-label` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `error-label` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `feedback-duration` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `tooltip` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `tooltip-placement` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `value` | string/según contrato | Fuente define default/restricción. |
+| `from` | string/según contrato | Fuente define default/restricción. |
+| `disabled` | boolean | Fuente define default/restricción. |
+| `copy-label` | string/según contrato | Fuente define default/restricción. |
+| `success-label` | string/según contrato | Fuente define default/restricción. |
+| `error-label` | string/según contrato | Fuente define default/restricción. |
+| `feedback-duration` | string/según contrato | Fuente define default/restricción. |
+| `tooltip` | string/según contrato | Fuente define default/restricción. |
+| `tooltip-placement` | string/según contrato | Fuente define default/restricción. |
 
-#### Propiedades pÃºblicas
+#### Propiedades públicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
@@ -80,15 +80,15 @@ import './copy-button.js';
 ### Eventos
 
 
-| Evento | DescripciÃ³n |
+| Evento | Descripción |
 | --- | --- |
 | `iswc-error` | Emitido cuando se produce un error. |
 | `iswc-copy` | Evento personalizado del componente (copy). |
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `iswc-error` | no | sÃ­ | sÃ­ | no |
-| `iswc-copy` | sÃ­ | sÃ­ | sÃ­ | no |
+| `iswc-error` | no | sí | sí | no |
+| `iswc-copy` | sí | sí | sí | no |
 
 
 <details>
@@ -103,11 +103,11 @@ el.addEventListener('iswc-error', (e) => {
 
 </details>
 
-### MÃ©todos y propiedades pÃºblicas
+### Métodos y propiedades públicas
 
 No expone.
 
-Propiedades pÃºblicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
+Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
 
 ### CSS parts
 
@@ -124,41 +124,41 @@ Propiedades pÃºblicas aparecen en tabla anterior; APIs heredadas se verifican 
 
 | Estado | Uso |
 | --- | --- |
-| `:state(success)` | Estado usado por implementaciÃ³n/CSS. |
-| `:state(error)` | Estado usado por implementaciÃ³n/CSS. |
+| `:state(success)` | Estado usado por implementación/CSS. |
+| `:state(error)` | Estado usado por implementación/CSS. |
 | `:state(disabled)` | Atributo `disabled` presente; el botón interno y el feedback lo reflejan. |
 
 ### CSS custom properties
 
 | Token | Uso |
 | --- | --- |
-| `--iswc-text-muted` | Token leÃ­do o definido por componente. |
-| `--iswc-control-text` | Token leÃ­do o definido por componente. |
-| `--iswc-sans` | Token leÃ­do o definido por componente. |
-| `--iswc-radius` | Token leÃ­do o definido por componente. |
-| `--iswc-control-bg-hover` | Token leÃ­do o definido por componente. |
-| `--iswc-focus` | Token leÃ­do o definido por componente. |
-| `--iswc-color-brand-500` | Token leÃ­do o definido por componente. |
-| `--iswc-tooltip-bg` | Token leÃ­do o definido por componente. |
-| `--iswc-tooltip-font-size` | Token leÃ­do o definido por componente. |
-| `--max-width` | Token leÃ­do o definido por componente. |
-| `--iswc-color-success-600` | Token leÃ­do o definido por componente. |
-| `--iswc-color-danger-600` | Token leÃ­do o definido por componente. |
+| `--iswc-text-muted` | Token leído o definido por componente. |
+| `--iswc-control-text` | Token leído o definido por componente. |
+| `--iswc-sans` | Token leído o definido por componente. |
+| `--iswc-radius` | Token leído o definido por componente. |
+| `--iswc-control-bg-hover` | Token leído o definido por componente. |
+| `--iswc-focus` | Token leído o definido por componente. |
+| `--iswc-color-brand-500` | Token leído o definido por componente. |
+| `--iswc-tooltip-bg` | Token leído o definido por componente. |
+| `--iswc-tooltip-font-size` | Token leído o definido por componente. |
+| `--max-width` | Token leído o definido por componente. |
+| `--iswc-color-success-600` | Token leído o definido por componente. |
+| `--iswc-color-danger-600` | Token leído o definido por componente. |
 
-### IntegraciÃ³n con formularios
+### Integración con formularios
 
-Participa mediante ElementInternals/helpers form-associated; respetar name, value, disabled, reset, restore y validaciÃ³n.
+Participa mediante ElementInternals/helpers form-associated; respetar name, value, disabled, reset, restore y validación.
 
 ## Comportamiento
 
-DocumentaciÃ³n de cabecera preservada desde fuente:
+Documentación de cabecera preservada desde fuente:
 
-> <iswc-copy-button> â€” Web Component (vanilla).
-> Copia texto al portapapeles con feedback visual (Ã©xito / error).
+> <iswc-copy-button> — Web Component (vanilla).
+> Copia texto al portapapeles con feedback visual (éxito / error).
 > Requiere contexto seguro (HTTPS o localhost) para clipboard.writeText().
 > Compone <iswc-tooltip> (posicionamiento, flip, flecha) e <iswc-icon>. El tooltip
-> va en `trigger="none"`: quiÃ©n lo abre y con quÃ© texto lo decide el estado de
-> la copia (reposo / Ã©xito / error), no el hover del propio tooltip.
+> va en `trigger="none"`: quién lo abre y con qué texto lo decide el estado de
+> la copia (reposo / éxito / error), no el hover del propio tooltip.
 > Atributos
 >   value               string a copiar
 >   from                id | id[attr] | id.prop  (gana sobre value)
@@ -171,9 +171,9 @@ DocumentaciÃ³n de cabecera preservada desde fuente:
 >                       top-end | bottom* | left* | right*  (default top)
 >   disabled            boolean
 > Slots
->   (default)       trigger custom (opcional; si hay, oculta el botÃ³n interno)
+>   (default)       trigger custom (opcional; si hay, oculta el botón interno)
 >   copy-icon       icono en reposo
->   success-icon    icono de Ã©xito
+>   success-icon    icono de éxito
 >   error-icon      icono de error
 > Events (bubbles + composed): iswc-copy { value }, iswc-error
 > Custom states: :state(success) :state(error)
@@ -185,13 +185,13 @@ DocumentaciÃ³n de cabecera preservada desde fuente:
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 - [`../media/icon.js`](../media/icon.js)
 - [`../feedback/tooltip.js`](../feedback/tooltip.js)
-- [`./button.js`](./button.js) â€” la superficie clicable es un `<iswc-button variant="text">`.
+- [`./button.js`](./button.js) — la superficie clicable es un `<iswc-button variant="text">`.
 
-Tags del mÃ³dulo: `<iswc-copy-button>`.
+Tags del módulo: `<iswc-copy-button>`.
 
 ## Accesibilidad
 
-Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: `aria-live`, `aria-label`.
+Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-live`, `aria-label`.
 
 ## Ejemplo avanzado
 
@@ -204,7 +204,7 @@ Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: `aria-live
 
 ## Errores comunes
 
-- Usar tag sin importar mÃ³dulo primero.
+- Usar tag sin importar módulo primero.
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
@@ -212,15 +212,15 @@ Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: `aria-live
 
 ## Reglas para LLM
 
-- Reusar componente y dependencias antes de implementaciÃ³n paralela.
+- Reusar componente y dependencias antes de implementación paralela.
 - Mantener nombres exactos de tags y API.
-- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explÃ­cito.
-- Leer callers/shared antes de cambiar; corregir raÃ­z comÃºn.
-- No modificar API basÃ¡ndose solo en preview.
+- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explícito.
+- Leer callers/shared antes de cambiar; corregir raíz común.
+- No modificar API basándose solo en preview.
 
 ## Fuentes
 
 - [JavaScript](./copy-button.ts)
-- [CSS](./copy-button.css)
-- [Ãndice de categorÃ­a](../../specs/componentes.md)
+- [CSS](./copy-button.scss)
+- [Índice de categoría](../../../specs/componentes.md)
 - [Preview](./copy-button.json)

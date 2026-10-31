@@ -1,40 +1,40 @@
-﻿---
+---
 tag: iswc-drawer
 tags:
   - iswc-drawer
 category: layout
 status: public
 source: ./drawer.ts
-style: ./drawer.css
+style: ./drawer.scss
 preview: ./drawer.json
 ---
 # `<iswc-drawer>`
 
-## PropÃ³sito
+## Propósito
 
 Panel que se desliza desde un borde del viewport (derecha, izquierda, arriba o abajo).
-Ideal para menÃºs, filtros y contenido secundario.
+Ideal para menús, filtros y contenido secundario.
 
-Este mÃ³dulo registra `<iswc-drawer>`.
+Este módulo registra `<iswc-drawer>`.
 
-## CuÃ¡ndo usarlo
+## Cuándo usarlo
 
-Estructura, superficies, overlays y navegaciÃ³n por regiones de contenido.
+Menús, filtros o formularios secundarios que aparecen sin salir de la vista.
 
-## CuÃ¡ndo no usarlo
+## Cuándo no usarlo
 
-No crear size colors; escalar mediante font-size contextual y em.
+Una decisión que bloquea: `iswc-dialog`. Un panel anclado a un botón: `iswc-popover`.
 
-## ImportaciÃ³n
+## Importación
 
 ```js
 import './drawer.js';
 ```
 
-## Ejemplo mÃ­nimo
+## Ejemplo mínimo
 
 ```html
-<iswc-drawer label="Drawer estÃ¡ndar">
+<iswc-drawer label="Drawer estándar">
 Contenido.
 <div slot="footer">
 <iswc-button data-drawer="close">Cancelar</iswc-button>
@@ -50,13 +50,13 @@ Contenido.
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
-| `open` | boolean | Fuente define default/restricciÃ³n. |
-| `label` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `placement` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `without-header` | boolean | Fuente define default/restricciÃ³n. |
-| `light-dismiss` | boolean | Fuente define default/restricciÃ³n. |
+| `open` | boolean | Fuente define default/restricción. |
+| `label` | string/según contrato | Fuente define default/restricción. |
+| `placement` | string/según contrato | Fuente define default/restricción. |
+| `without-header` | boolean | Fuente define default/restricción. |
+| `light-dismiss` | boolean | Fuente define default/restricción. |
 
-#### Propiedades pÃºblicas
+#### Propiedades públicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
@@ -78,19 +78,19 @@ Contenido.
 ### Eventos
 
 
-| Evento | DescripciÃ³n |
+| Evento | Descripción |
 | --- | --- |
 | `iswc-hide` | Emitido justo antes de ocultarse (cancelable). |
 | `iswc-show` | Emitido justo antes de mostrarse (cancelable). |
-| `iswc-after-show` | Emitido tras finalizar la animaciÃ³n de apertura. |
-| `iswc-after-hide` | Emitido tras finalizar la animaciÃ³n de cierre. |
+| `iswc-after-show` | Emitido tras finalizar la animación de apertura. |
+| `iswc-after-hide` | Emitido tras finalizar la animación de cierre. |
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `iswc-hide` | sÃ­ | sÃ­ | sÃ­ | sÃ­ |
-| `iswc-show` | sÃ­ | sÃ­ | sÃ­ | no |
-| `iswc-after-show` | sÃ­ | sÃ­ | sÃ­ | no |
-| `iswc-after-hide` | sÃ­ | sÃ­ | sÃ­ | no |
+| `iswc-hide` | sí | sí | sí | sí |
+| `iswc-show` | sí | sí | sí | no |
+| `iswc-after-show` | sí | sí | sí | no |
+| `iswc-after-hide` | sí | sí | sí | no |
 
 
 <details>
@@ -105,15 +105,15 @@ el.addEventListener('iswc-hide', (e) => {
 
 </details>
 
-### MÃ©todos y propiedades pÃºblicas
+### Métodos y propiedades públicas
 
-| MÃ©todo | Uso |
+| Método | Uso |
 | --- | --- |
-| `show()` | MÃ©todo pÃºblico declarado. |
-| `hide()` | MÃ©todo pÃºblico declarado. |
-| `toggle()` | MÃ©todo pÃºblico declarado. |
+| `show()` | Método público declarado. |
+| `hide()` | Método público declarado. |
+| `toggle()` | Método público declarado. |
 
-Propiedades pÃºblicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
+Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
 
 ### CSS parts
 
@@ -136,53 +136,53 @@ No expone.
 
 | Token | Uso |
 | --- | --- |
-| `--size` | Token leÃ­do o definido por componente. |
-| `--width` | Token leÃ­do o definido por componente. |
-| `--spacing` | Token leÃ­do o definido por componente. |
-| `--show-duration` | Token leÃ­do o definido por componente. |
-| `--hide-duration` | Token leÃ­do o definido por componente. |
-| `--backdrop-color` | Token leÃ­do o definido por componente. |
-| `--iswc-space-l` | Token leÃ­do o definido por componente. |
-| `--_radius` | Token leÃ­do o definido por componente. |
-| `--iswc-radius` | Token leÃ­do o definido por componente. |
-| `--_shadow` | Token leÃ­do o definido por componente. |
-| `--iswc-bg` | Token leÃ­do o definido por componente. |
-| `--iswc-text` | Token leÃ­do o definido por componente. |
-| `--iswc-border` | Token leÃ­do o definido por componente. |
-| `--iswc-font-family` | Token leÃ­do o definido por componente. |
-| `--iswc-text-muted` | Token leÃ­do o definido por componente. |
-| `--iswc-bg-elev` | Token leÃ­do o definido por componente. |
-| `--iswc-focus` | Token leÃ­do o definido por componente. |
+| `--size` | Token leído o definido por componente. |
+| `--width` | Token leído o definido por componente. |
+| `--spacing` | Token leído o definido por componente. |
+| `--show-duration` | Token leído o definido por componente. |
+| `--hide-duration` | Token leído o definido por componente. |
+| `--backdrop-color` | Token leído o definido por componente. |
+| `--iswc-space-l` | Token leído o definido por componente. |
+| `--_radius` | Token leído o definido por componente. |
+| `--iswc-radius` | Token leído o definido por componente. |
+| `--_shadow` | Token leído o definido por componente. |
+| `--iswc-bg` | Token leído o definido por componente. |
+| `--iswc-text` | Token leído o definido por componente. |
+| `--iswc-border` | Token leído o definido por componente. |
+| `--iswc-font-family` | Token leído o definido por componente. |
+| `--iswc-text-muted` | Token leído o definido por componente. |
+| `--iswc-bg-elev` | Token leído o definido por componente. |
+| `--iswc-focus` | Token leído o definido por componente. |
 
-### IntegraciÃ³n con formularios
+### Integración con formularios
 
-No declara integraciÃ³n form-associated propia en este mÃ³dulo.
+No declara integración form-associated propia en este módulo.
 
 ## Comportamiento
 
-DocumentaciÃ³n de cabecera preservada desde fuente:
+Documentación de cabecera preservada desde fuente:
 
-> <iswc-drawer> â€” Web Component (vanilla, zero dependencies).
-> Panel que se desliza desde un borde del viewport. Ideal para menÃºs, filtros
+> <iswc-drawer> — Web Component (vanilla, zero dependencies).
+> Panel que se desliza desde un borde del viewport. Ideal para menús, filtros
 > y contenido secundario. Equivalente accesible a wa-drawer (Web Awesome).
 > Modelo: hereda conceptualmente de iswc-dialog (mismo shadow DOM) con la
 > diferencia de placement (start/end/top/bottom) y --size en lugar de --width.
 > Atributos
->   open              boolean â€” si estÃ¡ abierto (reflected).
->   label             string  â€” tÃ­tulo en el header (a11y).
+>   open              boolean — si está abierto (reflected).
+>   label             string  — título en el header (a11y).
 >   placement         start | end | top | bottom  (default 'end').
->   without-header    boolean â€” oculta el header y el botÃ³n de cerrar.
->   light-dismiss     boolean â€” cierra al hacer click fuera.
+>   without-header    boolean — oculta el header y el botón de cerrar.
+>   light-dismiss     boolean — cierra al hacer click fuera.
 > Slots
 >   (default)        contenido principal (body).
 >   label            header label propio.
 >   header-actions   acciones adicionales en el header.
 >   footer           pie del drawer.
-> MÃ©todos: show() / hide() / toggle()
+> Métodos: show() / hide() / toggle()
 > Eventos: iswc-show, iswc-after-show, iswc-hide (cancelable, detail.source), iswc-after-hide
 > CSS Parts: drawer, header, title, close-button, header-actions, body, footer
 > CSS custom properties
->   --size            tamaÃ±o preferido (ancho o alto segÃºn placement)
+>   --size            tamaño preferido (ancho o alto según placement)
 >   --spacing         padding interno
 >   --show-duration, --hide-duration
 >   --backdrop-color
@@ -190,43 +190,43 @@ DocumentaciÃ³n de cabecera preservada desde fuente:
 ## Dependencias y componentes relacionados
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
-- [`../_shared/modal-base.js`](./utils/modal-base.js) â€” clase base con el ciclo
+- [`../_shared/modal-base.js`](./utils/modal-base.js) — clase base con el ciclo
   completo del modal (focus-trap, `Escape`, backdrop light-dismiss, restore de foco,
-  `data-*="close"`, eventos). AquÃ­ sÃ³lo queda el chrome y las animaciones.
+  `data-*="close"`, eventos). Aquí sólo queda el chrome y las animaciones.
 
-Tags del mÃ³dulo: `<iswc-drawer>`.
+Tags del módulo: `<iswc-drawer>`.
 
 ## Accesibilidad
 
-Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: `aria-modal`, `aria-label`, `aria-hidden`.
+Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-modal`, `aria-label`, `aria-hidden`.
 
 ## Ejemplo avanzado
 
 ```html
-<iswc-drawer placement="start">â€¦</iswc-drawer>
-<iswc-drawer placement="top">â€¦</iswc-drawer>
-<iswc-drawer placement="bottom">â€¦</iswc-drawer>
+<iswc-drawer placement="start">…</iswc-drawer>
+<iswc-drawer placement="top">…</iswc-drawer>
+<iswc-drawer placement="bottom">…</iswc-drawer>
 ```
 
 ## Errores comunes
 
-- Usar tag sin importar mÃ³dulo primero.
+- Usar tag sin importar módulo primero.
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
-- Crear size color; usar font-size contextual y em.
+- Agregar un atributo `size`: el tamaño sale del `font-size` del contexto y de `em`.
 
 ## Reglas para LLM
 
-- Reusar componente y dependencias antes de implementaciÃ³n paralela.
+- Reusar componente y dependencias antes de implementación paralela.
 - Mantener nombres exactos de tags y API.
-- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explÃ­cito.
-- Leer callers/shared antes de cambiar; corregir raÃ­z comÃºn.
-- No modificar API basÃ¡ndose solo en preview.
+- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explícito.
+- Leer callers/shared antes de cambiar; corregir raíz común.
+- No modificar API basándose solo en preview.
 
 ## Fuentes
 
 - [JavaScript](./drawer.ts)
-- [CSS](./drawer.css)
-- [Ãndice de categorÃ­a](../../specs/componentes.md)
+- [CSS](./drawer.scss)
+- [Índice de categoría](../../../specs/componentes.md)
 - [Preview](./drawer.json)

@@ -14,7 +14,8 @@
  */
 
 import { cellText, getCellValue } from './value-formatter.js';
-import type { ColumnFilter, ColumnState, DateFilter, FilterModel, NumberFilter, RowNode, TextFilter } from "../../schemas/datagrid-types.schemas.js";
+export type { EvaluadoresFiltro, FiltroExterno } from "../../schemas/datagrid-types.schemas.js";
+import type { ColumnFilter, ColumnState, DateFilter, EvaluadoresFiltro, FiltroExterno, FilterModel, NumberFilter, RowNode, SetFilter, TextFilter } from "../../schemas/datagrid-types.schemas.js";
 
 function toNum(v: unknown): number | null {
   if (v == null || v === '') return null;
@@ -100,12 +101,39 @@ function matchDate(value: unknown, f: DateFilter) {
  * @param {ColumnFilter} f
  * @returns {boolean}
  */
-function matchOne(col: ColumnState, node: RowNode, f: ColumnFilter) {
-  if (f.type === 'set') return f.values.length === 0 || f.values.includes(cellText(col, node));
+function matchOne(col: ColumnState, node: RowNode, f: ColumnFilter, evaluadores?: EvaluadoresFiltro): boolean {
+  const propio = evaluadores?.get(f.type);
+  if (propio) return propio(f, getCellValue(col, node), cellText(col, node), node, col);
+  if (f.type === 'combined') {
+    const hijos = f.conditions.map((c) => matchOne(col, node, c, evaluadores));
+    return f.op === 'OR' ? hijos.some(Boolean) : hijos.every(Boolean);
+  }
+  if (f.type === 'set') return f.values.length === 0 || conjuntoDe(f).has(cellText(col, node));
   if (f.type === 'text') return matchText(cellText(col, node), f);
   if (f.type === 'number') return matchNumber(getCellValue(col, node), f);
   if (f.type === 'date') return matchDate(getCellValue(col, node), f);
   return true;
+}
+
+/** Texto de busqueda por fila, cacheado por objeto de datos: una transaccion lo invalida sola. */
+const cacheRapido = new WeakMap<object, { firma: string; texto: string }>();
+function textoRapido(node: RowNode, cols: ColumnState[], firma: string): string {
+  const previo = cacheRapido.get(node.data);
+  if (previo?.firma === firma) return previo.texto;
+  const texto = cols.map((c) => cellText(c, node)).join('\n').toLowerCase();
+  cacheRapido.set(node.data, { firma, texto });
+  return texto;
+}
+
+/** Cada `values` se indexa una sola vez: con 100.000 filas `includes` por fila no escala. */
+const conjuntos = new WeakMap<string[], Set<string>>();
+function conjuntoDe(f: SetFilter): Set<string> {
+  let c = conjuntos.get(f.values);
+  if (!c) {
+    c = new Set(f.values);
+    conjuntos.set(f.values, c);
+  }
+  return c;
 }
 
 /**
@@ -116,19 +144,20 @@ function matchOne(col: ColumnState, node: RowNode, f: ColumnFilter) {
  * @param {Map<string, ColumnState>} colById
  * @returns {RowNode[]}
  */
-export function filterRows(rows: RowNode[], filterModel: FilterModel, quickFilter: string, columns: ColumnState[], colById: Map<string, ColumnState>) {
+export function filterRows(rows: RowNode[], filterModel: FilterModel, quickFilter: string, columns: ColumnState[], colById: Map<string, ColumnState>, evaluadores?: EvaluadoresFiltro, externo?: FiltroExterno | null) {
   const entries = Object.entries(filterModel);
   const q = quickFilter.trim().toLowerCase();
-  if (!entries.length && !q) return rows;
+  if (!entries.length && !q && !externo) return rows;
   const visibleCols = columns.filter((c) => !c.hide);
+  const firma = visibleCols.map((c) => c.colId).join('|');
   return rows.filter((node) => {
     for (const [colId, f] of entries) {
       const col = colById.get(colId);
-      if (col && !matchOne(col, node, f)) return false;
+      if (col && !matchOne(col, node, f, evaluadores)) return false;
     }
+    if (externo && !externo(node)) return false;
     if (q) {
-      const hit = visibleCols.some((c) => cellText(c, node).toLowerCase().includes(q));
-      if (!hit) return false;
+      if (!textoRapido(node, visibleCols, firma).includes(q)) return false;
     }
     return true;
   });

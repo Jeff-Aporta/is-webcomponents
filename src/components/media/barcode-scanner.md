@@ -1,36 +1,36 @@
-﻿---
+---
 tag: iswc-barcode-scanner
 tags:
   - iswc-barcode-scanner
 category: media
 status: public
 source: ./barcode-scanner.ts
-style: ./barcode-scanner.css
+style: ./barcode-scanner.scss
 preview: ./barcode-scanner.json
 ---
 # `<iswc-barcode-scanner>`
 
-## PropÃ³sito
+## Propósito
 
-Decodifica QR/EAN con `BarcodeDetector` sobre la cÃ¡mara. No genera cÃ³digos: eso es `iswc-barcode` / `iswc-qrcode`.
+Decodifica QR/EAN con `BarcodeDetector` sobre la cámara. No genera códigos: eso es `iswc-barcode` / `iswc-qrcode`.
 
-Este mÃ³dulo registra `<iswc-barcode-scanner>`.
+Este módulo registra `<iswc-barcode-scanner>`.
 
-## CuÃ¡ndo usarlo
+## Cuándo usarlo
 
 Inventario, escanear un QR de producto.
 
-## CuÃ¡ndo no usarlo
+## Cuándo no usarlo
 
-Para dibujar un cÃ³digo usa `<iswc-barcode>` o `<iswc-qrcode>`.
+Para dibujar un código usa `<iswc-barcode>` o `<iswc-qrcode>`.
 
-## ImportaciÃ³n
+## Importación
 
 ```js
 import './barcode-scanner.js';
 ```
 
-## Ejemplo mÃ­nimo
+## Ejemplo mínimo
 
 ```html
 <iswc-barcode-scanner formats="qr_code,ean_13"></iswc-barcode-scanner>
@@ -47,7 +47,7 @@ import './barcode-scanner.js';
 | `formats` | string | CSV de formatos BarcodeDetector |
 | `disabled` | boolean |  |
 
-#### Propiedades pÃºblicas
+#### Propiedades públicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
@@ -57,20 +57,20 @@ import './barcode-scanner.js';
 
 | Slot | Uso |
 | --- | --- |
-| default | Ninguno Ãºtil.
+| default | Ninguno útil.
 
 ### Eventos
 
 
-| Evento | DescripciÃ³n |
+| Evento | Descripción |
 | --- | --- |
 | `iswc-detect` | Evento personalizado del componente (detect). |
 | `iswc-error` | Emitido cuando se produce un error. |
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `iswc-detect` | sÃ­ `{ rawValue, format, barcodes }` | sÃ­ | sÃ­ | no |
-| `iswc-error` | sÃ­ `{ message }` | sÃ­ | sÃ­ | no |
+| `iswc-detect` | sí `{ rawValue, format, barcodes }` | sí | sí | no |
+| `iswc-error` | sí `{ message }` | sí | sí | no |
 
 
 <details>
@@ -85,7 +85,7 @@ el.addEventListener('iswc-detect', (e) => {
 
 </details>
 
-### MÃ©todos y propiedades pÃºblicas
+### Métodos y propiedades públicas
 
 `start()`, `stop()`, `detect(source)`.
 
@@ -93,8 +93,8 @@ el.addEventListener('iswc-detect', (e) => {
 
 | Part | Uso |
 | --- | --- |
-| `hint` | Texto de ayuda o instrucciÃ³n. |
-| `preview` | PrevisualizaciÃ³n capturada. |
+| `hint` | Texto de ayuda o instrucción. |
+| `preview` | Previsualización capturada. |
 
 ### Custom states
 
@@ -104,7 +104,7 @@ No expone.
 
 No expone.
 
-### IntegraciÃ³n con formularios
+### Integración con formularios
 
 No es form-associated.
 
@@ -119,7 +119,7 @@ No es form-associated.
 
 ## Accesibilidad
 
-BotÃ³n escanear/detener.
+Botón escanear/detener.
 
 ## Ejemplo avanzado
 
@@ -138,5 +138,5 @@ BotÃ³n escanear/detener.
 
 ## Fuentes
 
-- `./barcode-scanner.js` Â· `./barcode-scanner.css`
+- `./barcode-scanner.js` · `./barcode-scanner.css`
 - Preview: `./barcode-scanner.json`

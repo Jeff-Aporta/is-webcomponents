@@ -1,40 +1,41 @@
-﻿---
+---
 tag: iswc-masked-input
 tags:
   - iswc-masked-input
 category: forms
 status: public
 source: ./masked-input.ts
-style: ./masked-input.css
+style: ./masked-input.scss
 preview: ./masked-input.json
 ---
 # `<iswc-masked-input>`
 
-## PropÃ³sito
+## Propósito
 
-Campo de texto con mÃ¡scara: tokeniza un `pattern` y reformatea el valor en
-cada pulsaciÃ³n (tarjeta, NIT, telÃ©fono, fecha, placa). El formateo lo resuelve
-`masks-tokens.js`.
+Campo de texto con máscara: tokeniza un `pattern` y reformatea el valor en
+cada pulsación (tarjeta, NIT, teléfono, fecha, placa). El formateo lo resuelve
+`masks-tokens.js`. Está construido sobre `<iswc-input>`: etiqueta, ayuda, error,
+variantes, foco y densidad vienen de ahí.
 
-Este mÃ³dulo registra `<iswc-masked-input>`.
+Este módulo registra `<iswc-masked-input>`.
 
-## CuÃ¡ndo usarlo
+## Cuándo usarlo
 
-Entrada de texto con formato fijo y verificable carÃ¡cter a carÃ¡cter.
+Entrada de texto con formato fijo y verificable carácter a carácter.
 
-## CuÃ¡ndo no usarlo
+## Cuándo no usarlo
 
 Para texto libre usar `<iswc-input>`; para OTP/PIN usar `<iswc-pin-input>`; para
 fecha con calendario usar `<iswc-date-input>`; para moneda con separadores de
 miles usar el formateo de `<iswc-input>` y `format.js`.
 
-## ImportaciÃ³n
+## Importación
 
 ```js
 import './masked-input.js';
 ```
 
-## Ejemplo mÃ­nimo
+## Ejemplo mínimo
 
 ```html
 <iswc-masked-input pattern="0000 0000 0000 0000"></iswc-masked-input>
@@ -48,62 +49,69 @@ import './masked-input.js';
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
-| `pattern` | string | Tokens y literales. TambiÃ©n se usa como `placeholder` del input interno. |
+| `pattern` | string | Tokens y literales. Es el `placeholder` si no se da otro. |
 | `value` | string | Valor formateado; se reformatea al cambiar `pattern`. |
 | `name` | string | Nombre form-associated. |
-| `placeholder` | string | Texto de ayuda. |
+| `label` | string | Etiqueta del campo. |
+| `hint` | string | Texto de ayuda bajo el campo. |
+| `error` | boolean | Estado de error fijado desde fuera; `invalid` lo marca el campo. |
+| `error-text` | string | Mensaje de error; se muestra con `error` o `invalid`. |
+| `placeholder` | string | Texto de ayuda; por defecto, el `pattern`. |
 | `autocomplete` | string | Se traslada al input interno. |
 | `maxlength` | number | Si se omite, se deriva de la longitud de `pattern`. |
 | `disabled` | boolean | Deshabilita y quita el foco. |
 | `readonly` | boolean | Solo lectura. |
-| `required` | boolean | Marca `invalid` al salir vacÃ­o. |
+| `required` | boolean | Marca `invalid` al salir vacío; lo quita al llenarse. |
 | `variant` | `outlined` \| `filled` \| `underlined` | Default `outlined`. |
+| `label-placement` | `top` \| `start` \| `float` | Default `top`. |
+| `clearable` | boolean | Botón para vaciar el campo. |
+| `full-width` | boolean | Ocupa todo el ancho del contenedor. |
 | `invalid` | boolean | Refleja y activa `:state(invalid)`. |
 
 Tokens de `pattern`:
 
 | Token | Acepta |
 | --- | --- |
-| `0` | DÃ­gito requerido. |
-| `9` | DÃ­gito opcional. |
-| `A` | Letra, forzada a mayÃºscula. |
-| `a` | Letra, forzada a minÃºscula. |
-| `*` | AlfanumÃ©rico. |
+| `0` | Dígito requerido. |
+| `9` | Dígito opcional. |
+| `A` | Letra, forzada a mayúscula. |
+| `a` | Letra, forzada a minúscula. |
+| `*` | Alfanumérico. |
 | otro | Literal, se imprime tal cual. |
 
-#### Propiedades pÃºblicas
+#### Propiedades públicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
 | `value` | lectura/escritura | Valor visible ya formateado. |
 | `pattern` | lectura/escritura | Refleja el atributo. |
-| `raw` | lectura | Valor sin literales de la mÃ¡scara. |
+| `raw` | lectura | Valor sin literales de la máscara. |
 | `formatted` | lectura | Igual que `value`. |
-| `complete` | lectura | `true` si todos los tokens requeridos estÃ¡n llenos. |
+| `complete` | lectura | `true` si todos los tokens requeridos están llenos. |
 
 ### Slots
 
 | Slot | Uso |
 | --- | --- |
 | `start` | Adorno inicial (icono, prefijo). |
-| `end` | Adorno final (icono, acciÃ³n). |
+| `end` | Adorno final (icono, acción). |
 
 ### Eventos
 
 
-| Evento | DescripciÃ³n |
+| Evento | Descripción |
 | --- | --- |
 | `iswc-input` | Emitido en cada cambio del valor (escribe como `input` nativo). |
 | `iswc-change` | Emitido al confirmar el cambio de valor (escribe como `change` nativo). |
-| `iswc-complete` | Emitido al completar la operaciÃ³n. |
+| `iswc-complete` | Emitido al completar la operación. |
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `iswc-input` | sin detail | sÃ­ | sÃ­ | no |
-| `iswc-change` | `{ value }` | sÃ­ | sÃ­ | no |
-| `iswc-complete` | sin detail | sÃ­ | sÃ­ | no |
+| `iswc-input` | sin detail | sí | sí | no |
+| `iswc-change` | `{ value }` | sí | sí | no |
+| `iswc-complete` | sin detail | sí | sí | no |
 
-`iswc-input` en cada pulsaciÃ³n; `iswc-change` al confirmar (`change` del input
+`iswc-input` en cada pulsación; `iswc-change` al confirmar (`change` del input
 interno, reemitido porque no cruza el shadow root); `iswc-complete` cada vez que
 el valor pasa a estar completo.
 
@@ -120,9 +128,9 @@ el.addEventListener('iswc-input', (e) => {
 
 </details>
 
-### MÃ©todos y propiedades pÃºblicas
+### Métodos y propiedades públicas
 
-| MÃ©todo | Uso |
+| Método | Uso |
 | --- | --- |
 | `focus()` | Enfoca el input interno. |
 | `blur()` | Quita el foco del input interno. |
@@ -131,15 +139,16 @@ el.addEventListener('iswc-input', (e) => {
 
 | Part | Uso |
 | --- | --- |
-| `field` | Contenedor del campo. |
-| `input` | Input interno. |
+| `field` | El `<iswc-input>` interno. |
+| `form-control`, `label`, `base`, `hint`, `error-text` | Reexportados de `<iswc-input>`. |
+| `input` | Input nativo interno. |
 
 ### Custom states
 
-| Estado | CuÃ¡ndo |
+| Estado | Cuándo |
 | --- | --- |
-| `:state(complete)` | Todos los tokens requeridos estÃ¡n llenos. |
-| `:state(invalid)` | El atributo `invalid` estÃ¡ presente. |
+| `:state(complete)` | Todos los tokens requeridos están llenos. |
+| `:state(invalid)` | El atributo `invalid` está presente. |
 
 ### CSS custom properties
 
@@ -155,11 +164,11 @@ el.addEventListener('iswc-input', (e) => {
 | `--iswc-text-soft` | Color del placeholder. |
 | `--iswc-accent` | Reserva del color de foco. |
 | `--iswc-focus` | Color del anillo de foco. |
-| `--iswc-danger` | Borde en estado invÃ¡lido. |
+| `--iswc-danger` | Borde en estado inválido. |
 
-### IntegraciÃ³n con formularios
+### Integración con formularios
 
-Form-associated vÃ­a `ElementInternals`: con `name` presente aporta el valor
+Form-associated vía `ElementInternals`: con `name` presente aporta el valor
 formateado a `FormData`. Para enviar el valor sin literales usar `raw` y un
 campo espejo.
 
@@ -168,28 +177,28 @@ campo espejo.
 - En cada `input` se aplica `apply(value, pattern)` y se reubica el caret al
   final del tramo reformateado.
 - `pattern` fija el `placeholder` del input interno y, si no hay `maxlength`
-  propio, su longitud mÃ¡xima.
+  propio, su longitud máxima.
 - Cambiar `pattern` reformatea el valor vigente.
-- Al perder el foco: con `required` y valor vacÃ­o se agrega `invalid`; si ya
+- Al perder el foco: con `required` y valor vacío se agrega `invalid`; si ya
   no es `required`, se retira.
 - `disabled` fuerza `blur`.
 
 ## Dependencias y componentes relacionados
 
-- [`./masks-tokens.js`](./utils/masks-tokens.js) â€” tokenizado y `apply()` / `isComplete()`.
+- [`./masks-tokens.js`](./utils/masks-tokens.js) — tokenizado y `apply()` / `isComplete()`.
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 - [`../_shared/define.js`](../_shared/define.js)
 - [`../_shared/emit.js`](../_shared/emit.js)
 - [`../_shared/form-associated.js`](../../core/form-associated.js)
 - [`../_shared/reflect.js`](../../core/reflect.js)
 
-Tags del mÃ³dulo: `<iswc-masked-input>`.
+Tags del módulo: `<iswc-masked-input>`.
 
 ## Accesibilidad
 
 El control es un `<input type="text">` nativo con `disabled` / `readOnly`
 sincronizados. El `pattern` como placeholder anticipa el formato esperado;
-para lectores de pantalla conviene aÃ±adir ademÃ¡s una etiqueta explÃ­cita
+para lectores de pantalla conviene añadir además una etiqueta explícita
 asociada al componente.
 
 ## Ejemplo avanzado
@@ -209,24 +218,24 @@ asociada al componente.
 
 ## Errores comunes
 
-- Enviar `value` cuando el backend espera dÃ­gitos: usar `raw`.
-- Usar `9` esperando dÃ­gito obligatorio: `9` es opcional, el requerido es `0`.
+- Enviar `value` cuando el backend espera dígitos: usar `raw`.
+- Usar `9` esperando dígito obligatorio: `9` es opcional, el requerido es `0`.
 - Poner literales que coinciden con tokens (`0`, `9`, `A`, `a`, `*`) sin
-  advertir que se interpretan como mÃ¡scara.
-- Fijar `maxlength` menor que la longitud del patrÃ³n: el valor nunca completa.
-- Usar tag sin importar mÃ³dulo primero.
+  advertir que se interpretan como máscara.
+- Fijar `maxlength` menor que la longitud del patrón: el valor nunca completa.
+- Usar tag sin importar módulo primero.
 
 ## Reglas para LLM
 
-- Reusar componente y dependencias antes de implementaciÃ³n paralela.
+- Reusar componente y dependencias antes de implementación paralela.
 - Mantener nombres exactos de tags y API.
-- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explÃ­cito.
-- Leer callers/shared antes de cambiar; corregir raÃ­z comÃºn.
-- No modificar API basÃ¡ndose solo en preview.
+- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explícito.
+- Leer callers/shared antes de cambiar; corregir raíz común.
+- No modificar API basándose solo en preview.
 
 ## Fuentes
 
 - [JavaScript](./masked-input.ts)
-- [CSS](./masked-input.css)
-- [Ãndice de categorÃ­a](../../specs/componentes.md)
+- [CSS](./masked-input.scss)
+- [Índice de categoría](../../../specs/componentes.md)
 - [Preview](./masked-input.json)

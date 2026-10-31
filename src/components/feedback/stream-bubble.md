@@ -5,7 +5,7 @@ tags:
 category: feedback
 status: public
 source: ./stream-bubble.ts
-style: ./stream-bubble.css
+style: ./stream-bubble.scss
 preview: ./stream-bubble.json
 ---
 # `<iswc-stream-bubble>`

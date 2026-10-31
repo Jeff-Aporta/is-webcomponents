@@ -298,8 +298,7 @@ import { readUrlNav, readUrlTabs, writeUrlNav, writeUrlTab } from './utils/url-n
         // (:host-context no es universal): se lo sellamos como atributo.
         t.setAttribute('data-placement', this.placement);
         t.toggleAttribute('active', on);
-        if (on) t.setAttribute('aria-selected', 'true');
-        else t.removeAttribute('aria-selected');
+        t.setAttribute('aria-selected', String(on));
         // aria-controls: cada tab apunta a su panel.
         const panelName = t.getAttribute('panel');
         if (panelName) {
@@ -422,13 +421,13 @@ import { readUrlNav, readUrlTabs, writeUrlNav, writeUrlTab } from './utils/url-n
       <span class="tab-start" part="start"><slot name="start"></slot></span>
       <slot></slot>
       <span class="tab-end" part="end"><slot name="end"></slot></span>
-      <slot name="close-button">
-        <button type="button" class="tab-close" part="close-button" tabindex="-1" data-tab-close aria-label="Cerrar">
-          <iswc-icon icon="mdi:close" aria-hidden="true"></iswc-icon>
-        </button>
-      </slot>
-      <span class="indicator" part="active-indicator" aria-hidden="true"></span>
     </button>
+    <slot name="close-button">
+      <button type="button" class="tab-close" part="close-button" tabindex="-1" data-tab-close aria-label="Cerrar">
+        <iswc-icon icon="mdi:close" aria-hidden="true"></iswc-icon>
+      </button>
+    </slot>
+    <span class="indicator" part="active-indicator" aria-hidden="true"></span>
   `;
 
   const TAB_OBSERVED = ['panel', 'disabled', 'closable', 'active'];
@@ -473,7 +472,7 @@ import { readUrlNav, readUrlTabs, writeUrlNav, writeUrlTab } from './utils/url-n
       const close = this.shadowRoot!.querySelector<HTMLElement>('[data-tab-close]');
       if (btn) btn.disabled = this.hasAttribute('disabled');
       if (close) close.hidden = !this.hasAttribute('closable');
-      this.toggleAttribute('aria-selected', this.hasAttribute('active'));
+      this.setAttribute('aria-selected', String(this.hasAttribute('active')));
       this.toggleAttribute('data-active', this.hasAttribute('active'));
     }
   }

@@ -1,10 +1,13 @@
+@use '../../styles/mixins' as *;
+
 :host {
   --iswc-badge-pulse-color: var(--iswc-accent);
   --_bg: var(--iswc-brand-soft, rgb(224 49 49 / 18%));
   --_border: var(--iswc-accent);
   --_text: var(--iswc-brand-text);
-  --_on: var(--iswc-on-brand);
+  --_on: #{bg2font(var(--_border))};
   display: inline-flex;
+  max-width: 100%;
   vertical-align: middle;
   font-family: var(--iswc-font-family);
   font-size: inherit;
@@ -22,20 +25,30 @@
   border: 1px solid var(--_border);
   color: var(--_text);
   box-sizing: border-box;
+  max-width: 100%;
   white-space: nowrap;
 
-  & :is(.prefix, .suffix):not(:empty) {
+  /* El TS las oculta sin contenido asignado: su hueco no cuenta en el gap. */
+  & :is(.prefix, .suffix) {
     display: inline-flex;
+    flex: none;
     align-items: center;
-  }
 
-  & :is(.prefix, .suffix):empty {
-    display: none;
+    &[hidden] { display: none; }
   }
 }
 
+/* Un texto largo se corta con puntos suspensivos; el relleno vertical evita recortar las descendentes. */
+.label {
+  min-width: 0;
+  margin-block: -0.1em;
+  padding-block: 0.1em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 :host([pill]) {
-  .badge { border-radius: 999px; }
+  .badge { border-radius: 999em; }
 }
 
 :host([color="brand"]) {
@@ -59,6 +72,13 @@
   --iswc-badge-pulse-color: var(--iswc-text);
 }
 
+:host([color="info"]) {
+  --_bg: var(--iswc-info-soft);
+  --_border: var(--iswc-color-info);
+  --_text: var(--iswc-info-text);
+  --iswc-badge-pulse-color: var(--iswc-color-info);
+}
+
 :host([color="success"]) {
   --_bg: var(--iswc-success-soft, rgb(64 192 87 / 18%));
   --_border: var(--iswc-color-success);
@@ -73,7 +93,8 @@
   --iswc-badge-pulse-color: var(--iswc-color-warning);
 }
 
-:host([color="danger"]) {
+:host([color="danger"]),
+:host([color="error"]) {
   --_bg: var(--iswc-danger-soft, rgb(250 82 82 / 28%));
   --_border: var(--iswc-color-danger);
   --_text: var(--iswc-danger-text);
@@ -86,7 +107,7 @@
 :host([variant="accent"]) {
   .badge {
     border-color: transparent;
-    border-left: 0.28em solid var(--_border);
+    border-inline-start: 0.28em solid var(--_border);
     padding-inline-start: 0.55em;
   }
 }

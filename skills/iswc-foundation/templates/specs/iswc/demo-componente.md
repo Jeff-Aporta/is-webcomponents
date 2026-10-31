@@ -31,7 +31,7 @@ y lo monta con `<iswc-preview-component>` del kit. Lo que no valida se avisa y n
         { "kind": "demo", "html": "<__PREFIJO__-x id=\"x\"></__PREFIJO__-x>", "target": "#x",
           "props": { },
           "controls": [ { "control": "text", "prop": "props:nombre", "label": "nombre", "default": "" } ] },
-        { "kind": "html", "html": "<iswc-callout tone=\"info\"><strong slot=\"title\">Cuándo usarlo</strong>…</iswc-callout><iswc-callout tone=\"warning\"><strong slot=\"title\">Cuándo no</strong>…</iswc-callout>" }
+        { "kind": "html", "html": "<iswc-callout color=\"brand\"><strong slot=\"title\">Cuándo usarlo</strong>…</iswc-callout><iswc-callout color=\"warning\"><strong slot=\"title\">Cuándo no</strong>…</iswc-callout>" }
       ]
     }
   ]

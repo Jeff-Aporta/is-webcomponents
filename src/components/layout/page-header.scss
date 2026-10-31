@@ -18,6 +18,11 @@
   border-bottom: 0.0625em solid var(--iswc-border-soft);
 }
 
+.texto {
+  flex: 1 1 20em;
+  min-inline-size: 0;
+}
+
 .titulo {
   display: flex;
   align-items: center;
@@ -29,14 +34,27 @@
   font-weight: 650;
   letter-spacing: -0.01em;
 
-  iswc-icon { color: var(--iswc-brand-text); }
+  iswc-icon { flex: none; color: var(--iswc-brand-text); }
   iswc-icon[hidden] { display: none; }
 }
 
+.rotulo {
+  display: -webkit-box;
+  min-inline-size: 0;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
 .subtitulo {
+  display: -webkit-box;
   margin: 0.25em 0 0;
+  overflow: hidden;
   color: color-mix(in srgb, currentColor 78%, transparent);
   font-size: 0.95em;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
 
   &[hidden] { display: none; }
 }

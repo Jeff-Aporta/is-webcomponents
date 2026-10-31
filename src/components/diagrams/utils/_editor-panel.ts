@@ -42,17 +42,17 @@ const PANEL_CSS = `
   display: block;
   background: var(--iswc-bg-elev, #131a24);
   border: 1px solid var(--iswc-border, rgba(255,255,255,0.12));
-  border-radius: 8px;
-  padding: 14px;
+  border-radius: .5em;
+  padding: .875em;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: .75em;
   overflow: auto;
   font-family: var(--iswc-ui, ui-sans-serif, system-ui, sans-serif);
   color: var(--iswc-text, #e2e8f0);
 }
 h3 {
-  font-size: 11px;
+  font-size: .6875em;
   text-transform: uppercase;
   letter-spacing: 0.08em;
   margin: 0;
@@ -61,26 +61,26 @@ h3 {
 }
 fieldset {
   border: 1px solid var(--iswc-border, rgba(255,255,255,0.08));
-  border-radius: 6px;
-  padding: 8px 10px;
+  border-radius: .375em;
+  padding: .5em .625em;
 }
 fieldset legend {
-  font-size: 10px;
+  font-size: .625em;
   text-transform: uppercase;
   color: var(--iswc-text-soft, #94a3b8);
-  padding: 0 4px;
+  padding: 0 .4em;
 }
 .node-list {
   list-style: none;
   margin: 0;
   padding: 0;
-  max-height: 240px;
+  max-height: 15em;
   overflow: auto;
 }
 .node-list li {
-  padding: 4px 8px;
-  font-size: 12px;
-  border-radius: 4px;
+  padding: .3333em .6667em;
+  font-size: .75em;
+  border-radius: .3333em;
   cursor: pointer;
   border: 1px solid transparent;
 }
@@ -90,36 +90,36 @@ fieldset legend {
   border-color: var(--iswc-accent, #2563eb);
 }
 .node-list li:focus-visible { outline: 2px solid var(--iswc-accent, #2563eb); outline-offset: 1px; }
-.empty { font-size: 11px; color: var(--iswc-text-soft, #94a3b8); font-style: italic; }
+.empty { font-size: .6875em; color: var(--iswc-text-soft, #94a3b8); font-style: italic; }
 .export-row {
   display: flex;
-  gap: 6px;
-  margin-top: 6px;
+  gap: .375em;
+  margin-top: .375em;
 }
 .export-row button {
   appearance: none;
   border: 1px solid var(--iswc-border, rgba(255,255,255,0.18));
   background: transparent;
   color: var(--iswc-text, #e2e8f0);
-  padding: 4px 8px;
-  border-radius: 4px;
+  padding: .3636em .7273em;
+  border-radius: .3636em;
   cursor: pointer;
-  font: 11px var(--iswc-ui, ui-sans-serif, system-ui, sans-serif);
+  font: .6875em var(--iswc-ui, ui-sans-serif, system-ui, sans-serif);
 }
 .export-row button:hover { background: rgba(255,255,255,0.06); }
 .export-row button:focus-visible { outline: 2px solid var(--iswc-accent, #2563eb); outline-offset: 1px; }
 textarea[data-json-readout] {
   width: 100%;
   box-sizing: border-box;
-  font: 11px ui-monospace, Menlo, Consolas, monospace;
+  font: .6875em ui-monospace, Menlo, Consolas, monospace;
   background: rgba(0,0,0,0.2);
   color: var(--iswc-text, #e2e8f0);
   border: 1px solid var(--iswc-border, rgba(255,255,255,0.08));
-  border-radius: 4px;
-  padding: 6px;
+  border-radius: .3636em;
+  padding: .5455em;
   resize: vertical;
-  min-height: 80px;
-  margin-top: 4px;
+  min-height: 7.2727em;
+  margin-top: .3636em;
 }
 `;
 

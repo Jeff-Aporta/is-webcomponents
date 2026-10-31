@@ -1,55 +1,55 @@
-﻿---
+---
 tag: iswc-text
 tags:
   - iswc-text
 category: isp
 status: public
 source: ./text.ts
-style: ./text.css
+style: ./text.scss
 preview: ./text.json
 ---
 # `<iswc-text>`
 
-## PropÃ³sito
+## Propósito
 
-Texto en lÃ­nea con color semÃ¡ntico y recorte por nÃºmero de lÃ­neas. Port de
+Texto en línea con color semántico y recorte por número de líneas. Port de
 `src/lib/typography/Text.svelte` de ISP.
 
-Este mÃ³dulo registra `<iswc-text>`.
+Este módulo registra `<iswc-text>`.
 
-## CuÃ¡ndo usarlo
+## Cuándo usarlo
 
-Para dar color semÃ¡ntico a un fragmento de texto, o para recortar contenido
-largo a N lÃ­neas con elipsis dentro de una tarjeta o celda.
+Para dar color semántico a un fragmento de texto, o para recortar contenido
+largo a N líneas con elipsis dentro de una tarjeta o celda.
 
-## CuÃ¡ndo no usarlo
+## Cuándo no usarlo
 
-No usar para tÃ­tulos (usa `<iswc-heading>`) ni para pÃ¡rrafos de contenido donde
+No usar para títulos (usa `<iswc-heading>`) ni para párrafos de contenido donde
 un `<p>` normal ya sirve.
 
-## ImportaciÃ³n
+## Importación
 
 ```js
 import './text.js';
 ```
 
-## Ejemplo mÃ­nimo
+## Ejemplo mínimo
 
 ```html
 <iswc-text color="success">Aprobado</iswc-text>
-<iswc-text lines="2">Texto largo que se recorta a dos lÃ­neasâ€¦</iswc-text>
+<iswc-text lines="2">Texto largo que se recorta a dos líneas…</iswc-text>
 ```
 
-## Mapeo Svelte â†’ Web Component
+## Mapeo Svelte → Web Component
 
-- `color` en ISP pasaba por `colorVar()` â†’ `var(--iswc-<color>)`. AquÃ­ el mapeo
-  vive en el CSS (`:host([color=â€¦])`) y cae siempre a tokens del tema
-  (`--iswc-brand-text`, `--iswc-color-success-500`, â€¦), nunca a un literal.
-- El clamp: ISP resolvÃ­a `--mx-lns` con `attr(data-clamp-lines type(<integer>))`,
-  soportado hoy solo en Chrome. AquÃ­ el JS escribe `--mx-lns` en el host desde
-  el atributo `lines`, con la misma normalizaciÃ³n (`max(0, floor(Number(lines)))`
+- `color` en ISP pasaba por `colorVar()` → `var(--iswc-<color>)`. Aquí el mapeo
+  vive en el CSS (`:host([color=…])`) y cae siempre a tokens del tema
+  (`--iswc-brand-text`, `--iswc-color-success-500`, …), nunca a un literal.
+- El clamp: ISP resolvía `--mx-lns` con `attr(data-clamp-lines type(<integer>))`,
+  soportado hoy solo en Chrome. Aquí el JS escribe `--mx-lns` en el host desde
+  el atributo `lines`, con la misma normalización (`max(0, floor(Number(lines)))`
   y clamp solo si es `>= 1`).
-- ISP marcaba `data-clamp-lines`; aquÃ­ el selector de estado es el propio
+- ISP marcaba `data-clamp-lines`; aquí el selector de estado es el propio
   atributo `lines` (`:host([lines])`).
 
 ## API
@@ -60,13 +60,13 @@ import './text.js';
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
-| `color` | semÃ¡ntico Â· `current` Â· color CSS | Sin attr: hereda. `current` â†’ `currentColor`. Otro string â†’ color CSS. |
-| `mix` | string (`0%`â€¦`100%`) | Mezcla hacia `mix-with` vÃ­a `color-mix`. |
-| `mix-with` | `text` Â· `transparent` Â· `white` Â· `black` Â· `current` Â· CSS | Destino del mix (default: texto del tema). |
-| `lines` | number | Recorte a N lÃ­neas. |
+| `color` | semántico · `current` · color CSS | Sin attr: hereda. `current` → `currentColor`. Otro string → color CSS. |
+| `mix` | string (`0%`…`100%`) | Mezcla hacia `mix-with` vía `color-mix`. |
+| `mix-with` | `text` · `transparent` · `white` · `black` · `current` · CSS | Destino del mix (default: texto del tema). |
+| `lines` | number | Recorte a N líneas. |
 | `lines` | number | `>= 1` activa el clamp; ausente o `0` lo desactiva. |
 
-#### Propiedades pÃºblicas
+#### Propiedades públicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
@@ -82,7 +82,7 @@ import './text.js';
 ### Eventos
 
 
-| Evento | DescripciÃ³n |
+| Evento | Descripción |
 | --- | --- |
 
 No emite eventos propios.
@@ -100,9 +100,9 @@ el.addEventListener('click', (e) => {
 
 </details>
 
-### MÃ©todos y propiedades pÃºblicas
+### Métodos y propiedades públicas
 
-No expone mÃ©todos pÃºblicos: el componente es declarativo y su estado se controla por atributos.
+No expone métodos públicos: el componente es declarativo y su estado se controla por atributos.
 
 ### CSS parts
 
@@ -119,20 +119,20 @@ No expone custom states.
 | Token | Uso |
 | --- | --- |
 | `--text-clr` | Color resuelto; se puede pisar directamente. |
-| `--mx-lns` | LÃ­neas del clamp (la escribe el JS). |
+| `--mx-lns` | Líneas del clamp (la escribe el JS). |
 
 
-### IntegraciÃ³n con formularios
+### Integración con formularios
 
-No declara integraciÃ³n form-associated.
+No declara integración form-associated.
 ## Comportamiento
 
 Con `lines` el host pasa a `display: -webkit-box` con `-webkit-box-orient:
 vertical` y `-webkit-line-clamp: var(--mx-lns)`, que recorta exactamente a N
-lÃ­neas con elipsis independientemente del `line-height` heredado. Antes se
-limitaba tambiÃ©n `max-height` a `calc(var(--mx-lns) * 1.3em)` (copia literal de
-ISP), pero con `line-height > 1.3` ese tope se cumplÃ­a antes que el clamp y
-cortaba la Ãºltima lÃ­nea visible: por eso se eliminÃ³.
+líneas con elipsis independientemente del `line-height` heredado. Antes se
+limitaba también `max-height` a `calc(var(--mx-lns) * 1.3em)` (copia literal de
+ISP), pero con `line-height > 1.3` ese tope se cumplía antes que el clamp y
+cortaba la última línea visible: por eso se eliminó.
 
 No hay atributo `size`: la escala sale del `font-size` heredado.
 
@@ -142,18 +142,18 @@ No hay atributo `size`: la escala sale del `font-size` heredado.
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 - [`heading.md`](heading.md)
 
-Tags del mÃ³dulo: `<iswc-text>`.
+Tags del módulo: `<iswc-text>`.
 
 ## Accesibilidad
 
 El texto recortado sigue completo en el DOM: los lectores de pantalla lo leen
-entero. Si el recorte debe ser tambiÃ©n semÃ¡ntico, acortar el contenido.
+entero. Si el recorte debe ser también semántico, acortar el contenido.
 
 ## Ejemplo avanzado
 
 ```html
 <div style="font-size: 1.25em; max-width: 20rem">
-  <iswc-text color="danger" lines="3">Mensaje de error largoâ€¦</iswc-text>
+  <iswc-text color="danger" lines="3">Mensaje de error largo…</iswc-text>
 </div>
 ```
 
@@ -161,17 +161,17 @@ entero. Si el recorte debe ser tambiÃ©n semÃ¡ntico, acortar el contenido.
 
 - Esperar que `lines="0"` recorte: `0` desactiva el clamp.
 - Meter el color en `variant`: `color` y `variant` son dimensiones distintas.
-- Crear size colors; usar font-size contextual y em.
+- Agregar un atributo `size`: el tamaño sale del `font-size` del contexto y de `em`.
 
 ## Reglas para LLM
 
-- Usar los seis colores semÃ¡nticos documentados; no inventar otros.
+- Usar los seis colores semánticos documentados; no inventar otros.
 - Booleano se activa por presencia; no usar `attr="false"`.
-- No modificar API basÃ¡ndose solo en el preview.
+- No modificar API basándose solo en el preview.
 
 ## Fuentes
 
 - [JavaScript](./text.ts)
-- [CSS](./text.css)
-- [Ãndice de categorÃ­a](../../specs/componentes.md)
+- [CSS](./text.scss)
+- [Índice de categoría](../../../specs/componentes.md)
 - [Preview](./text.json)

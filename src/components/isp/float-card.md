@@ -1,47 +1,47 @@
-﻿---
+---
 tag: iswc-float-card
 tags:
   - iswc-float-card
 category: isp
 status: public
 source: ./float-card.ts
-style: ./float-card.css
+style: ./float-card.scss
 preview: ./float-card.json
 ---
 # `<iswc-float-card>`
 
-## PropÃ³sito
+## Propósito
 
 Caja con un panel flotante anclado al contenido. Port de
 `FloatingComponent.svelte` (ClientesIS). El panel (slot `float`) se muestra
 con `open` o `lock()`; **no se desmonta**: opacity/visibility, para que
 `iswc-button` / `iswc-icon` no se re-upgraden en cada hover.
 
-Este mÃ³dulo registra `<iswc-float-card>`.
+Este módulo registra `<iswc-float-card>`.
 
-## CuÃ¡ndo usarlo
+## Cuándo usarlo
 
 Tools de hover sobre una fila, chip o ancla que deben aparecer al lado sin
-recrear el DOM. Toolbar flotante de un Ã¡rbol, acciones sobre un Ã­tem.
+recrear el DOM. Toolbar flotante de un árbol, acciones sobre un ítem.
 
-## CuÃ¡ndo no usarlo
+## Cuándo no usarlo
 
-Panel que se abre con clic y se cierra con Escape / clic fuera â†’
-`<iswc-popover>`. Tooltip breve â†’ `<iswc-tooltip>`. No usar `<iswc-floating>`
+Panel que se abre con clic y se cierra con Escape / clic fuera →
+`<iswc-popover>`. Tooltip breve → `<iswc-tooltip>`. No usar `<iswc-floating>`
 (building block interno).
 
-## ImportaciÃ³n
+## Importación
 
 ```js
 import './float-card.js';
 ```
 
-## Ejemplo mÃ­nimo
+## Ejemplo mínimo
 
 ```html
 <iswc-float-card open horizontal="right" vertical="center">
   <span>Fila</span>
-  <iswc-button slot="float" variant="plain">AcciÃ³n</iswc-button>
+  <iswc-button slot="float" variant="plain">Acción</iswc-button>
 </iswc-float-card>
 ```
 
@@ -54,11 +54,11 @@ import './float-card.js';
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
 | `open` | boolean | Muestra el panel. |
-| `horizontal` | string | `left` Â· `center` Â· `right` Â· `left+N` Â· `right+N`. Default `right`. |
-| `vertical` | string | `top` Â· `center` Â· `bottom` Â· `top+N` Â· `bottom+N`. Default `center`. |
+| `horizontal` | string | `left` · `center` · `right` · `left+N` · `right+N`. Default `right`. |
+| `vertical` | string | `top` · `center` · `bottom` · `top+N` · `bottom+N`. Default `center`. |
 | `locked` | boolean | Keep-alive: lo pone `lock()`, no el consumidor. |
 
-#### Propiedades pÃºblicas
+#### Propiedades públicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
@@ -78,13 +78,13 @@ import './float-card.js';
 ### Eventos
 
 
-| Evento | DescripciÃ³n |
+| Evento | Descripción |
 | --- | --- |
-| `â€”` | Evento `â€”`. |
+| `—` | Evento `—`. |
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| â€” | â€” | â€” | â€” | â€” |
+| — | — | — | — | — |
 
 No emite eventos propios. Escucha `iswc-show` / `iswc-hide` de hijos (p. ej.
 `<iswc-dropdown>`) para `lock()` / `unlock()`.
@@ -95,16 +95,16 @@ No emite eventos propios. Escucha `iswc-show` / `iswc-hide` de hijos (p. ej.
 
 ```js
 const el = document.querySelector('iswc-float-card');
-el.addEventListener('â€”', (e) => {
-  console.log('â€”', e.detail);
+el.addEventListener('—', (e) => {
+  console.log('—', e.detail);
 });
 ```
 
 </details>
 
-### MÃ©todos y propiedades pÃºblicas
+### Métodos y propiedades públicas
 
-| MÃ©todo | Uso |
+| Método | Uso |
 | --- | --- |
 | `lock()` | Mantiene el panel visible (keep-alive). |
 | `unlock()` | Suelta un lock. |
@@ -129,27 +129,27 @@ No expone.
 | `--iswc-radius-sm` | Radio. |
 | `--iswc-shadow` | Sombra. |
 
-### IntegraciÃ³n con formularios
+### Integración con formularios
 
-No declara integraciÃ³n form-associated.
+No declara integración form-associated.
 
 ## Comportamiento
 
 El panel vive siempre en el DOM. Sin `open` ni `locked`: `opacity: 0` +
 `visibility: hidden`. Un `<iswc-dropdown>` interno que emite `iswc-show` llama
-`lock()` para que el panel no se apague al salir el hover hacia el menÃº.
+`lock()` para que el panel no se apague al salir el hover hacia el menú.
 
 ## Dependencias y componentes relacionados
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
-- [`flex-options.md`](./flex-options.md) â€” toolbar tÃ­pica en `slot="float"`
-- [`../helpers/popover.md`](../helpers/popover.md) â€” overlay click, no hover
+- [`flex-options.md`](./flex-options.md) — toolbar típica en `slot="float"`
+- [`../helpers/popover.md`](../helpers/popover.md) — overlay click, no hover
 
-Tags del mÃ³dulo: `<iswc-float-card>`.
+Tags del módulo: `<iswc-float-card>`.
 
 ## Accesibilidad
 
-El panel no se desmonta: los controles siguen en el Ã¡rbol de accesibilidad.
+El panel no se desmonta: los controles siguen en el árbol de accesibilidad.
 Ocultar con `open` es visual; el consumidor no debe poner foco en tools
 ocultas.
 
@@ -157,7 +157,7 @@ ocultas.
 
 ```html
 <iswc-float-card id="fc" horizontal="right" vertical="top+50">
-  <span>LecciÃ³n</span>
+  <span>Lección</span>
   <iswc-flex-options slot="float" compact></iswc-flex-options>
 </iswc-float-card>
 <script type="module">
@@ -175,7 +175,7 @@ ocultas.
 
 ## Reglas para LLM
 
-- Reusar componente y dependencias antes de implementaciÃ³n paralela.
+- Reusar componente y dependencias antes de implementación paralela.
 - Mantener nombres exactos de tags y API.
 - Booleano se activa por presencia; no usar `attr="false"`.
 - Hover tools: montar una vez, togglear `open`. No recrear hijos.
@@ -183,5 +183,5 @@ ocultas.
 ## Fuentes
 
 - [JavaScript](./float-card.ts)
-- [CSS](./float-card.css)
+- [CSS](./float-card.scss)
 - [Preview](./float-card.json)

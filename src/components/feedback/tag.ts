@@ -1,4 +1,5 @@
 import { adoptCss, defineElement, emit } from '../../core/element.js';
+import { ocultarSlotsVacios } from '../../core/dom-utils.js';
 import '../media/icon.js';
 import '../actions/button.js';
 import { ElementBase } from '../../core/element-base.js';
@@ -26,14 +27,14 @@ import { TONE } from '../../core/tone.js';
   const TEMPLATE = document.createElement('template');
   TEMPLATE.innerHTML = /* html */ `
     <span part="tag" class="tag">
-      <span part="start" class="prefix"><slot name="start"></slot></span>
+      <span part="start" class="prefix" hidden><slot name="start"></slot></span>
       <span part="label" class="label"><slot></slot></span>
-      <span part="end" class="suffix"><slot name="end"></slot></span>
+      <span part="end" class="suffix" hidden><slot name="end"></slot></span>
       <iswc-button
         type="button"
         part="remove-button"
         class="remove"
-        variant="text"
+        variant="glyph"
         color="neutral"
         aria-label="Quitar"
         hidden
@@ -52,11 +53,15 @@ import { TONE } from '../../core/tone.js';
 
     #remove!: HTMLElement;
     #mo: MutationObserver | null = null;
+    /** Etiqueta que puso #syncAria: se retira en cuanto llega texto, sin tocar la del consumidor. */
+    #labelAuto = '';
+
     constructor() {
       super();
       const shadow = this.attachShadow({ mode: 'open' });
       adoptCss(shadow, import.meta.url);
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
+      ocultarSlotsVacios(shadow, '.prefix slot, .suffix slot');
       this.#remove = shadow.querySelector<HTMLElement>('.remove')!;
       this.#remove.addEventListener('click', this.#onRemove);
     }
@@ -98,15 +103,13 @@ import { TONE } from '../../core/tone.js';
     /** g07 (Cat 30): etiqueta accesible automática cuando el slot principal
      *  está vacío. Mismo criterio que badge.ts: "Etiqueta {color}". */
     #syncAria() {
-      if (this.hasAttribute('aria-label')) return;
-      const text = this.textContent?.trim() ?? '';
-      if (text) return;
-      // Si hay un slot distinto a start/end, el consumidor está pintando
-      // contenido propio en el slot por defecto → no inventar label.
-      const hasOtherSlot = this.querySelector('[slot]:not([slot="start"]):not([slot="end"])');
-      if (hasOtherSlot) return;
-      const color = this.getAttribute('color') || 'brand';
-      this.setAttribute('aria-label', `Etiqueta ${color}`);
+      const actual = this.getAttribute('aria-label');
+      if (actual !== null && actual !== this.#labelAuto) return; // la puso el consumidor
+      // Con texto, o con otro slot lleno, el contenido ya se nombra solo.
+      const vacio = !this.textContent?.trim() && !this.querySelector('[slot]:not([slot="start"]):not([slot="end"])');
+      this.#labelAuto = vacio ? `Etiqueta ${this.getAttribute('color') || 'brand'}` : '';
+      if (vacio) this.setAttribute('aria-label', this.#labelAuto);
+      else this.removeAttribute('aria-label');
     }
 
     #watchA11y() {

@@ -5,6 +5,7 @@
   --_border: var(--iswc-control-border);
   --_text: var(--iswc-control-text);
   display: inline-flex;
+  max-width: 100%;
   vertical-align: middle;
   font-family: var(--iswc-font-family);
   font-size: inherit;
@@ -21,14 +22,33 @@
     border: 1px solid var(--_border);
     color: var(--_text);
     box-sizing: border-box;
+    max-width: 100%;
     white-space: nowrap;
 
-    & :is(.prefix, .suffix):not(:empty) { display: inline-flex; align-items: center; }
-    & :is(.prefix, .suffix):empty { display: none; }
+    /* El TS las oculta sin contenido asignado: su hueco no cuenta en el gap. */
+    & :is(.prefix, .suffix) {
+      display: inline-flex;
+      flex: none;
+      align-items: center;
+
+      &[hidden] { display: none; }
+    }
+
+    /* Un texto largo se corta con puntos suspensivos; el relleno vertical evita recortar las descendentes. */
+    .label {
+      min-width: 0;
+      margin-block: -0.1em;
+      padding-block: 0.1em;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
 
     .remove {
-      margin-inline-start: 0.15em;
-      font-size: 1.1em;
+      /* Glifo del tamaño de la línea: el botón de quitar no le da más alto a la etiqueta. */
+      --iswc-button-glyph-size: 1.3em;
+      margin-block: -0.2em;
+      margin-inline: 0.05em -0.35em;
+      flex: none;
       line-height: 0;
       color: inherit;
       opacity: 0.7;
@@ -42,7 +62,7 @@
    `&[attr]` dentro de :host compila a `:host [attr]` en algunos parsers y
    el estado del host deja de aplicar. */
 :host([pill]) {
-  .tag { border-radius: 999px; }
+  .tag { border-radius: 999em; }
 }
 
 :host([color="brand"]) { @include tag-roles(brand); }
@@ -59,12 +79,13 @@
 :host([color="info"]) { @include tag-roles(info); }
 :host([color="success"]) { @include tag-roles(success); }
 :host([color="warning"]) { @include tag-roles(warning); }
-:host([color="danger"]) { @include tag-roles(danger); }
+:host([color="danger"]),
+:host([color="error"]) { @include tag-roles(danger); }
 
 :host([variant="filled"]) {
   .tag {
     background: var(--_border);
-    color: var(--iswc-on-brand);
+    color: #{bg2font(var(--_border))};
     border-color: var(--_border);
   }
 }
@@ -77,7 +98,7 @@
 }
 :host([variant="accent"]) {
   .tag {
-    border-inline-start-width: 3px;
+    border-inline-start-width: .1875em;
     border-inline-start-color: var(--_border);
   }
 }

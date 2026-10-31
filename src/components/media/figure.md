@@ -5,7 +5,7 @@ tags:
 category: media
 status: public
 source: ./figure.ts
-style: ./figure.css
+style: ./figure.scss
 preview: ./figure.json
 ---
 # `<iswc-figure>`

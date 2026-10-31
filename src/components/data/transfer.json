@@ -30,7 +30,46 @@
             "            <iswc-transfer-item value=\"h\">Theta</iswc-transfer-item>",
             "          </iswc-transfer>",
             "          <p id=\"tr1Log\">Seleccionados: <code class=\"code\">b</code></p>"
-          ]
+          ],
+          "controls": [
+            {
+              "control": "text",
+              "prop": "attr:source-title",
+              "label": "source-title"
+            },
+            {
+              "control": "text",
+              "prop": "attr:target-title",
+              "label": "target-title"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:searchable",
+              "label": "searchable"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:without-buttons",
+              "label": "without-buttons"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:without-headings",
+              "label": "without-headings"
+            },
+            {
+              "control": "select",
+              "prop": "attr:max-target",
+              "label": "max-target",
+              "options": [
+                "0",
+                "2",
+                "3",
+                "5"
+              ]
+            }
+          ],
+          "target": "#tr1"
         }
       ]
     },

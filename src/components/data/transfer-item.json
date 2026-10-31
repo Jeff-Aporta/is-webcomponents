@@ -1,5 +1,6 @@
 {
   "$schema": "iswc-preview/v1",
+  "anatomy": { "scss": "transfer.scss" },
   "tag": "iswc-transfer-item",
   "category": "data",
   "title": "&lt;iswc-transfer-item&gt;",

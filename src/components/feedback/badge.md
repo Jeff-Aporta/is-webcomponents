@@ -1,36 +1,36 @@
-﻿---
+---
 tag: iswc-badge
 tags:
   - iswc-badge
 category: feedback
 status: public
 source: ./badge.ts
-style: ./badge.css
+style: ./badge.scss
 preview: ./badge.json
 ---
 # `<iswc-badge>`
 
-## PropÃ³sito
+## Propósito
 
-Etiqueta compacta con colores semÃ¡nticas y apariencias.
+Etiqueta compacta con colores semánticas y apariencias.
 
-Este mÃ³dulo registra `<iswc-badge>`.
+Este módulo registra `<iswc-badge>`.
 
-## CuÃ¡ndo usarlo
+## Cuándo usarlo
 
-Estado, progreso, confirmaciÃ³n, carga o resultado de operaciones.
+Estado, progreso, confirmación, carga o resultado de operaciones.
 
-## CuÃ¡ndo no usarlo
+## Cuándo no usarlo
 
-No saturar interfaz con seÃ±ales redundantes o alertas sin acciÃ³n.
+No saturar interfaz con señales redundantes o alertas sin acción.
 
-## ImportaciÃ³n
+## Importación
 
 ```js
 import './badge.js';
 ```
 
-## Ejemplo mÃ­nimo
+## Ejemplo mínimo
 
 ```html
 <iswc-badge color="success" variant="filled">OK</iswc-badge>
@@ -45,12 +45,12 @@ import './badge.js';
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
-| `color` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `variant` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `pill` | boolean | Fuente define default/restricciÃ³n. |
-| `attention` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `color` | `brand` / `neutral` / `text` / `info` / `success` / `warning` / `danger` / `error` | Default `brand`; `error` es alias de `danger`. |
+| `variant` | string/según contrato | Fuente define default/restricción. |
+| `pill` | boolean | Fuente define default/restricción. |
+| `attention` | string/según contrato | Fuente define default/restricción. |
 
-#### Propiedades pÃºblicas
+#### Propiedades públicas
 
 No expone.
 
@@ -65,7 +65,7 @@ No expone.
 ### Eventos
 
 
-| Evento | DescripciÃ³n |
+| Evento | Descripción |
 | --- | --- |
 
 No expone.
@@ -83,11 +83,11 @@ el.addEventListener('click', (e) => {
 
 </details>
 
-### MÃ©todos y propiedades pÃºblicas
+### Métodos y propiedades públicas
 
 No expone.
 
-Propiedades pÃºblicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
+Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
 
 ### CSS parts
 
@@ -106,40 +106,42 @@ No expone.
 
 | Token | Uso |
 | --- | --- |
-| `--pulse-color` | Token leÃ­do o definido por componente. |
-| `--iswc-accent` | Token leÃ­do o definido por componente. |
-| `--_bg` | Token leÃ­do o definido por componente. |
-| `--iswc-brand-soft` | Token leÃ­do o definido por componente. |
-| `--_border` | Token leÃ­do o definido por componente. |
-| `--_text` | Token leÃ­do o definido por componente. |
-| `--iswc-brand-text` | Token leÃ­do o definido por componente. |
-| `--_on` | Token leÃ­do o definido por componente. |
-| `--iswc-on-brand` | Token leÃ­do o definido por componente. |
-| `--iswc-font-family` | Token leÃ­do o definido por componente. |
-| `--iswc-control-bg` | Token leÃ­do o definido por componente. |
-| `--iswc-control-border` | Token leÃ­do o definido por componente. |
-| `--iswc-text` | Token leÃ­do o definido por componente. |
-| `--iswc-text-dim` | Token leÃ­do o definido por componente. |
-| `--iswc-success-soft` | Token leÃ­do o definido por componente. |
-| `--iswc-color-success-500` | Token leÃ­do o definido por componente. |
-| `--iswc-success-text` | Token leÃ­do o definido por componente. |
-| `--iswc-warning-soft` | Token leÃ­do o definido por componente. |
-| `--iswc-color-warning-500` | Token leÃ­do o definido por componente. |
-| `--iswc-warning-text` | Token leÃ­do o definido por componente. |
-| `--iswc-danger-soft` | Token leÃ­do o definido por componente. |
-| `--iswc-color-danger-500` | Token leÃ­do o definido por componente. |
-| `--iswc-danger-text` | Token leÃ­do o definido por componente. |
+| `--pulse-color` | Token leído o definido por componente. |
+| `--iswc-accent` | Token leído o definido por componente. |
+| `--_bg` | Token leído o definido por componente. |
+| `--iswc-brand-soft` | Token leído o definido por componente. |
+| `--_border` | Token leído o definido por componente. |
+| `--_text` | Token leído o definido por componente. |
+| `--iswc-brand-text` | Token leído o definido por componente. |
+| `--_on` | Token leído o definido por componente. |
+| `--iswc-on-brand` | Token leído o definido por componente. |
+| `--iswc-font-family` | Token leído o definido por componente. |
+| `--iswc-control-bg` | Token leído o definido por componente. |
+| `--iswc-control-border` | Token leído o definido por componente. |
+| `--iswc-text` | Token leído o definido por componente. |
+| `--iswc-text-dim` | Token leído o definido por componente. |
+| `--iswc-success-soft` | Token leído o definido por componente. |
+| `--iswc-color-success-500` | Token leído o definido por componente. |
+| `--iswc-success-text` | Token leído o definido por componente. |
+| `--iswc-warning-soft` | Token leído o definido por componente. |
+| `--iswc-color-warning-500` | Token leído o definido por componente. |
+| `--iswc-warning-text` | Token leído o definido por componente. |
+| `--iswc-danger-soft` | Token leído o definido por componente. |
+| `--iswc-color-danger-500` | Token leído o definido por componente. |
+| `--iswc-danger-text` | Token leído o definido por componente. |
 
-### IntegraciÃ³n con formularios
+### Integración con formularios
 
-No declara integraciÃ³n form-associated propia en este mÃ³dulo.
+No declara integración form-associated propia en este módulo.
 
 ## Comportamiento
 
-DocumentaciÃ³n de cabecera preservada desde fuente:
+Los huecos de los slots `start` y `end` solo existen si tienen contenido. Un texto que no cabe en el contenedor se corta con puntos suspensivos. El texto de `filled` se elige solo (blanco o negro) según el fondo. Sin contenido lleva una etiqueta accesible automática, que se retira en cuanto llega texto.
 
-> <iswc-badge> â€” Web Component (vanilla).
-> Etiqueta compacta con colores semÃ¡nticas.
+Documentación de cabecera preservada desde fuente:
+
+> <iswc-badge> — Web Component (vanilla).
+> Etiqueta compacta con colores semánticas.
 > Atributos
 >   color      brand | neutral | success | warning | danger (default brand)
 >   variant   accent | filled | outlined | filled-outlined (default accent)
@@ -151,11 +153,11 @@ DocumentaciÃ³n de cabecera preservada desde fuente:
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 
-Tags del mÃ³dulo: `<iswc-badge>`.
+Tags del módulo: `<iswc-badge>`.
 
 ## Accesibilidad
 
-Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: ninguno explÃ­cito en fuente.
+Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: ninguno explícito en fuente.
 
 ## Ejemplo avanzado
 
@@ -166,7 +168,7 @@ Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: ninguno ex
 
 ## Errores comunes
 
-- Usar tag sin importar mÃ³dulo primero.
+- Usar tag sin importar módulo primero.
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
@@ -174,15 +176,15 @@ Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: ninguno ex
 
 ## Reglas para LLM
 
-- Reusar componente y dependencias antes de implementaciÃ³n paralela.
+- Reusar componente y dependencias antes de implementación paralela.
 - Mantener nombres exactos de tags y API.
-- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explÃ­cito.
-- Leer callers/shared antes de cambiar; corregir raÃ­z comÃºn.
-- No modificar API basÃ¡ndose solo en preview.
+- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explícito.
+- Leer callers/shared antes de cambiar; corregir raíz común.
+- No modificar API basándose solo en preview.
 
 ## Fuentes
 
 - [JavaScript](./badge.ts)
-- [CSS](./badge.css)
-- [Ãndice de categorÃ­a](../../specs/componentes.md)
+- [CSS](./badge.scss)
+- [Índice de categoría](../../../specs/componentes.md)
 - [Preview](./badge.json)

@@ -18,7 +18,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-pptx-view height=\"14rem\"></iswc-pptx-view>",
+          "html": "<iswc-pptx-view height=\"14em\"></iswc-pptx-view>",
           "controls": [
             {
               "control": "text",

@@ -18,30 +18,33 @@
   .form-control {
     display: flex;
     flex-direction: column;
-    gap: 0.3em;
+    gap: 0.35em;
   }
 
   .label {
-    font-size: 0.8em;
-    font-weight: 600;
-    color: var(--iswc-text-dim);
+    font-size: 0.875em;
+    font-weight: 500;
+    color: var(--iswc-text-soft, inherit);
   }
 
   .base {
     display: inline-flex;
     align-items: center;
     gap: 0.15em;
-    padding: 0.45em 0.6em;
+    box-sizing: border-box;
+    block-size: var(--iswc-control-height);
+    padding-block: 0;
+    padding-inline: 0.75em 0.35em;
     background: var(--iswc-control-bg);
-    border: 1px solid var(--iswc-border);
+    border: 1px solid var(--iswc-control-border);
     border-radius: var(--iswc-radius-sm);
     font-variant-numeric: tabular-nums;
     cursor: text;
 
     /* El anillo se pinta en el contenedor aunque el foco esté en una sección. */
     &:has(.sec:focus-visible) {
-      border-color: var(--iswc-accent);
-      box-shadow: 0 0 0 2px var(--iswc-accent-bg, rgb(224 49 49 / 12%));
+      outline: 2px solid var(--iswc-focus, var(--iswc-accent));
+      outline-offset: 1px;
     }
 
     &[data-invalid] {
@@ -49,7 +52,7 @@
     }
 
     &[data-disabled] {
-      opacity: 0.6;
+      opacity: 0.55;
       cursor: not-allowed;
     }
   }
@@ -92,7 +95,7 @@
   }
 
   .hint {
-    font-size: 0.75em;
+    font-size: 0.8em;
     color: var(--iswc-text-dim);
   }
 }

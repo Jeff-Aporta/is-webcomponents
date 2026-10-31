@@ -5,7 +5,7 @@ tags:
 category: navigation
 status: public
 source: ./doc-index.ts
-style: ./doc-index.css
+style: ./doc-index.scss
 preview: ./doc-index.json
 ---
 # `<iswc-doc-index>`

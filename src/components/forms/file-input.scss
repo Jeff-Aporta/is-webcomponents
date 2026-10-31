@@ -33,7 +33,7 @@
   justify-content: center;
   min-height: 6em;
   padding: 1.25em;
-  border: 1.5px dashed var(--iswc-control-border);
+  border: .0938em dashed var(--iswc-control-border);
   border-radius: 0.5em;
   background: var(--iswc-control-bg);
   cursor: pointer;
@@ -91,10 +91,10 @@
 
 .native {
   position: absolute;
-  width: 1px;
-  height: 1px;
+  width: .075em;
+  height: .075em;
   padding: 0;
-  margin: -1px;
+  margin: -.075em;
   overflow: hidden;
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
@@ -120,7 +120,7 @@
   padding: 0.45em 0.65em;
   border: 1px solid var(--iswc-control-border);
   border-radius: 0.4em;
-  background: var(--iswc-surface);
+  background: var(--iswc-bg-elev);
   font-size: 0.9em;
 }
 

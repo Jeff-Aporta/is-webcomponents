@@ -51,7 +51,20 @@ export const SetFilterSchema = z.object({
 export type SetFilter = z.infer<typeof SetFilterSchema>;
 
 
-export const ColumnFilterSchema = z.union([TextFilterSchema, NumberFilterSchema, DateFilterSchema, SetFilterSchema]);
+/** Condicion simple: los filtros combinados (A y/o B) anidan estas. */
+export const FilterCondSchema = z.union([TextFilterSchema, NumberFilterSchema, DateFilterSchema, SetFilterSchema]);
+export type FilterCond = z.infer<typeof FilterCondSchema>;
+
+
+export const CombinedFilterSchema = z.object({
+  type: z.literal('combined'),
+  op: z.union([z.literal('AND'), z.literal('OR')]),
+  conditions: z.array(FilterCondSchema),
+});
+export type CombinedFilter = z.infer<typeof CombinedFilterSchema>;
+
+
+export const ColumnFilterSchema = z.union([FilterCondSchema, CombinedFilterSchema]);
 export type ColumnFilter = z.infer<typeof ColumnFilterSchema>;
 
 
@@ -236,8 +249,35 @@ export const GridStateSchema = z.object({
 export type GridState = z.infer<typeof GridStateSchema>;
 
 
+export const RowTransactionSchema = z.object({
+  add: z.array(RowDataSchema).optional(),
+  update: z.array(RowDataSchema).optional(),
+  remove: z.array(RowDataSchema).optional(),
+  addIndex: z.number().optional(),
+  /** Actualiza por referencia de nodo: no depende de getRowId. */
+  nodos: z.array(z.object({ node: RowNodeSchema, data: RowDataSchema })).optional(),
+});
+export type RowTransaction = z.infer<typeof RowTransactionSchema>;
+
+
+export const TransactionResultSchema = z.object({
+  add: z.array(RowNodeSchema),
+  update: z.array(RowNodeSchema),
+  remove: z.array(RowNodeSchema),
+});
+export type TransactionResult = z.infer<typeof TransactionResultSchema>;
+
+
+export const TransformadorModeloSchema = z.object({
+  etapa: z.string(),
+  aplicar: z.function({ input: [z.array(z.unknown())], output: z.array(z.unknown()) }),
+  activo: z.function({ input: [], output: z.boolean() }).optional(),
+});
+export type TransformadorModelo = { etapa: string; aplicar: (filas: unknown[]) => unknown[]; activo?: () => boolean };
+
+
 export const GridListenerSchema = z.function({ input: [z.unknown() /* TODO: ref GridState */, z.string()], output: z.void() });
-export type GridListener = z.infer<typeof GridListenerSchema>;
+export type GridListener = (state: GridState, reason?: string) => void;
 
 
 export const GridApiSchema = z.object({
@@ -269,6 +309,23 @@ export const GridApiSchema = z.object({
   getAllRows: z.function({ input: [], output: z.array(z.unknown() /* TODO: ref RowNode */) }),
   serializeState: z.function({ input: [], output: z.string() }),
   loadState: z.function({ input: [z.string()], output: z.void() }),
+  getRowNode: z.function({ input: [z.string()], output: z.unknown() /* RowNode | null */ }),
+  applyTransaction: z.function({ input: [RowTransactionSchema], output: TransactionResultSchema }),
+  moveRow: z.function({ input: [z.string(), z.number()], output: z.void() }),
+  setTransforms: z.function({ input: [z.array(TransformadorModeloSchema)], output: z.void() }),
+  setFilterEvaluators: z.function({ input: [z.unknown()], output: z.void() }),
+  setExternalFilter: z.function({ input: [z.unknown()], output: z.void() }),
+  invalidate: z.function({ input: [z.string()], output: z.void() }),
+  setPagination: z.function({ input: [z.boolean()], output: z.void() }),
+  aggregate: z.function({ input: [z.array(RowNodeSchema)], output: z.record(z.string(), z.unknown()) }),
 });
-export type GridApi = z.infer<typeof GridApiSchema>;
+/** Los campos con referencias circulares quedan como `unknown` en el schema: aqui llevan su tipo real. */
+export type GridApi = Omit<z.infer<typeof GridApiSchema>, 'getState' | 'subscribe' | 'setRows' | 'setColumnDefs' | 'setSortModel' | 'toggleSort' | 'setFilter' | 'setSelection' | 'setDensity' | 'pinColumn' | 'addRowGroupCol' | 'getColumns' | 'getDisplayedRows' | 'getAllRows' | 'getRowNode' | 'setTransforms' | 'setFilterEvaluators' | 'setExternalFilter' | 'invalidate' | 'loadState'> & { getState(): GridState; subscribe(fn: (state: GridState, reason?: string) => void): () => void; setRows(rows: RowData[] | null | undefined): void; setColumnDefs(defs: ColumnDef[] | null | undefined): void; setSortModel(model: SortModel): void; toggleSort(colId: string, additive?: boolean): void; setFilter(colId: string, filter: ColumnFilter | null): void; setSelection(ids: Iterable<string>): void; setDensity(d: DensityName): void; pinColumn(colId: string, side: PinSideName | null): void; addRowGroupCol(colId: string, index?: number): void; getColumns(): ColumnState[]; getDisplayedRows(): RowNode[]; getAllRows(): RowNode[]; getRowNode(id: string): RowNode | null; setTransforms(lista: { etapa: string; aplicar: (filas: unknown[]) => unknown[]; activo?: () => boolean }[]): void; setFilterEvaluators(mapa: EvaluadoresFiltro): void; setExternalFilter(fn: FiltroExterno | null): void; invalidate(desde?: 'filtrar' | 'ordenar' | 'agrupar'): void; loadState(json: string): void; };
 
+
+
+/** Evaluadores por `type` de filtro que aportan los plugins; ganan al nativo. */
+export type EvaluadoresFiltro = Map<string, (f: unknown, valor: unknown, texto: string, node: RowNode, col: ColumnState) => boolean>;
+export type FiltroExterno = (node: RowNode) => boolean;
+/** Lectores que inyecta la capa de render para que motor y celda lean igual. */
+export type Lectora = { __leer?: { valor: (col: ColumnState, node: RowNode) => unknown; texto: (col: ColumnState, node: RowNode) => string } };

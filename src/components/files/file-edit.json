@@ -18,7 +18,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-file-edit name=\"notas.txt\" content=\"hola\" height=\"12rem\"></iswc-file-edit>",
+          "html": "<iswc-file-edit name=\"notas.txt\" content=\"hola\" height=\"12em\"></iswc-file-edit>",
           "controls": [
             {
               "control": "text",

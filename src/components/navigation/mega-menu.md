@@ -1,41 +1,41 @@
-﻿---
+---
 tag: iswc-mega-menu
 tags:
   - iswc-mega-menu
 category: navigation
 status: public
 source: ./mega-menu.ts
-style: ./mega-menu.css
+style: ./mega-menu.scss
 preview: ./mega-menu.json
 ---
 # `<iswc-mega-menu>`
 
-## PropÃ³sito
+## Propósito
 
-Mega-menÃº para portal o e-commerce: abre un panel ancho de varias columnas,
-cada una con encabezado y enlaces, mÃ¡s un bloque destacado opcional.
+Mega-menú para portal o e-commerce: abre un panel ancho de varias columnas,
+cada una con encabezado y enlaces, más un bloque destacado opcional.
 
-Este mÃ³dulo registra `<iswc-mega-menu>`.
+Este módulo registra `<iswc-mega-menu>`.
 
-## CuÃ¡ndo usarlo
+## Cuándo usarlo
 
 Cabeceras con muchas secciones que no caben en un dropdown de una columna.
 
-## CuÃ¡ndo no usarlo
+## Cuándo no usarlo
 
-Para un menÃº corto de acciones usar `<iswc-dropdown>`; para navegaciÃ³n
-jerÃ¡rquica en panel lateral, `<iswc-tree>`.
+Para un menú corto de acciones usar `<iswc-dropdown>`; para navegación
+jerárquica en panel lateral, `<iswc-tree>`.
 
-## ImportaciÃ³n
+## Importación
 
 ```js
 import './mega-menu.js';
 ```
 
-## Ejemplo mÃ­nimo
+## Ejemplo mínimo
 
 ```html
-<iswc-mega-menu label="CatÃ¡logo">
+<iswc-mega-menu label="Catálogo">
   <div slot="column" title="Muebles">
     <a href="/sillas">Sillas</a>
     <a href="/mesas">Mesas</a>
@@ -54,17 +54,17 @@ import './mega-menu.js';
 | `label` | string | Texto del trigger. |
 | `icon` | string | Id Iconify del icono del trigger. |
 | `placement` | string | `bottom-start` (default), `bottom`, `bottom-end`. Solo el sufijo `-end` cambia el anclaje. |
-| `width` | string/number | Ancho del panel. NÃºmero = px; tambiÃ©n acepta unidades CSS. Se topa en `min(960px, 100vw - 32px)`. |
-| `hover` | boolean | Abre y cierra al pasar el ratÃ³n, no al hacer clic. |
+| `width` | string/number | Ancho del panel. Número = px; también acepta unidades CSS. Se topa en `min(960px, 100vw - 32px)`. |
+| `hover` | boolean | Abre y cierra al pasar el ratón, no al hacer clic. |
 
-TambiÃ©n refleja `open` como atributo mientras el panel estÃ¡ abierto, para
+También refleja `open` como atributo mientras el panel está abierto, para
 enganchar CSS desde fuera.
 
-#### Propiedades pÃºblicas
+#### Propiedades públicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
-| â€” | â€” | No expone propiedades adicionales documentadas. |
+| — | — | No expone propiedades adicionales documentadas. |
 
 ### Slots
 
@@ -76,21 +76,21 @@ enganchar CSS desde fuera.
 ### Eventos
 
 
-| Evento | DescripciÃ³n |
+| Evento | Descripción |
 | --- | --- |
 | `iswc-show` | Emitido justo antes de mostrarse (cancelable). |
-| `iswc-after-show` | Emitido tras finalizar la animaciÃ³n de apertura. |
+| `iswc-after-show` | Emitido tras finalizar la animación de apertura. |
 | `iswc-hide` | Emitido justo antes de ocultarse (cancelable). |
-| `iswc-after-hide` | Emitido tras finalizar la animaciÃ³n de cierre. |
+| `iswc-after-hide` | Emitido tras finalizar la animación de cierre. |
 | `iswc-select` | Emitido al seleccionar un elemento. |
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `iswc-show` | no | sÃ­ | sÃ­ | no |
-| `iswc-after-show` | no | sÃ­ | sÃ­ | no |
-| `iswc-hide` | no | sÃ­ | sÃ­ | no |
-| `iswc-after-hide` | no | sÃ­ | sÃ­ | no |
-| `iswc-select` | `{ href, text }` | sÃ­ | sÃ­ | no |
+| `iswc-show` | no | sí | sí | no |
+| `iswc-after-show` | no | sí | sí | no |
+| `iswc-hide` | no | sí | sí | no |
+| `iswc-after-hide` | no | sí | sí | no |
+| `iswc-select` | `{ href, text }` | sí | sí | no |
 
 Vocabulario unificado con `ModalBase`. Los antiguos `iswc-open` / `iswc-close`
 ya no se emiten.
@@ -108,20 +108,20 @@ el.addEventListener('iswc-show', (e) => {
 
 </details>
 
-### MÃ©todos y propiedades pÃºblicas
+### Métodos y propiedades públicas
 
-| MÃ©todo | Uso |
+| Método | Uso |
 | --- | --- |
 | `open()` | Abre el panel. |
 | `close()` | Cierra el panel. |
-| `toggle()` | Alterna segÃºn el estado actual. |
+| `toggle()` | Alterna según el estado actual. |
 
 ### CSS parts
 
 | Part | Uso |
 | --- | --- |
 | `root` | Contenedor relativo del trigger y el panel. |
-| `trigger` | El `<iswc-button>` que abre el menÃº. |
+| `trigger` | El `<iswc-button>` que abre el menú. |
 | `panel` | El `<dialog>` con las columnas. |
 
 ### Custom states
@@ -130,21 +130,21 @@ No expone.
 
 ### CSS custom properties
 
-Tokens del tema (`--iswc-*`) segÃºn CSS del mÃ³dulo.
+Tokens del tema (`--iswc-*`) según CSS del módulo.
 
-### IntegraciÃ³n con formularios
+### Integración con formularios
 
-No declara integraciÃ³n form-associated propia en este mÃ³dulo.
+No declara integración form-associated propia en este módulo.
 
 ## Comportamiento
 
 El panel es un `<dialog>` nativo en modo `show()` (no modal): es un popover
-anclado al trigger, no un diÃ¡logo. Migrarlo a `<iswc-dialog>` cambiarÃ­a la
-semÃ¡ntica (focus-trap, backdrop, centrado) y el posicionamiento fijo que
-calcula el propio componente, asÃ­ que se mantiene el `<dialog>` nativo.
+anclado al trigger, no un diálogo. Migrarlo a `<iswc-dialog>` cambiaría la
+semántica (focus-trap, backdrop, centrado) y el posicionamiento fijo que
+calcula el propio componente, así que se mantiene el `<dialog>` nativo.
 
 Un clic sobre cualquier `<a href>` proyectado emite `iswc-select` y cierra el
-panel: la navegaciÃ³n la decide quien integra.
+panel: la navegación la decide quien integra.
 
 ## Dependencias y componentes relacionados
 
@@ -152,27 +152,27 @@ panel: la navegaciÃ³n la decide quien integra.
 - [`../actions/button.js`](../actions/button.js)
 - [`../media/icon.js`](../media/icon.js)
 
-Tags del mÃ³dulo: `<iswc-mega-menu>`.
+Tags del módulo: `<iswc-mega-menu>`.
 
 ## Accesibilidad
 
 El trigger es un `<iswc-button>` con `aria-haspopup="true"` y `aria-expanded`
-sincronizado. El panel lleva `aria-label`. Con `hover`, el menÃº sigue siendo
-operable por teclado a travÃ©s del trigger.
+sincronizado. El panel lleva `aria-label`. Con `hover`, el menú sigue siendo
+operable por teclado a través del trigger.
 
 ## Ejemplo avanzado
 
 ```html
-<iswc-mega-menu label="CatÃ¡logo" icon="mdi:view-grid" placement="bottom-end" width="52rem">
+<iswc-mega-menu label="Catálogo" icon="mdi:view-grid" placement="bottom-end" width="52rem">
   <div slot="column" title="Muebles">
     <a href="/sillas">Sillas</a>
     <a href="/mesas">Mesas</a>
   </div>
-  <div slot="column" title="IluminaciÃ³n">
-    <a href="/lamparas">LÃ¡mparas</a>
+  <div slot="column" title="Iluminación">
+    <a href="/lamparas">Lámparas</a>
   </div>
   <div slot="feature">
-    <strong>Nuevo catÃ¡logo 2026</strong>
+    <strong>Nuevo catálogo 2026</strong>
     <a href="/catalogo">Ver ahora</a>
   </div>
 </iswc-mega-menu>
@@ -180,22 +180,22 @@ operable por teclado a travÃ©s del trigger.
 
 ## Errores comunes
 
-- Usar tag sin importar mÃ³dulo primero.
-- Esperar navegaciÃ³n automÃ¡tica: `iswc-select` no cambia la URL.
+- Usar tag sin importar módulo primero.
+- Esperar navegación automática: `iswc-select` no cambia la URL.
 - Poner los enlaces fuera de un `slot="column"`: no se proyectan.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
-- Crear size color; usar font-size contextual y em.
+- Agregar un atributo `size`: el tamaño sale del `font-size` del contexto y de `em`.
 
 ## Reglas para LLM
 
-- Reusar componente y dependencias antes de implementaciÃ³n paralela.
+- Reusar componente y dependencias antes de implementación paralela.
 - Mantener nombres exactos de tags y API.
-- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explÃ­cito.
-- Leer callers/shared antes de cambiar; corregir raÃ­z comÃºn.
-- No modificar API basÃ¡ndose solo en preview.
+- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explícito.
+- Leer callers/shared antes de cambiar; corregir raíz común.
+- No modificar API basándose solo en preview.
 
 ## Fuentes
 
 - [JavaScript](./mega-menu.ts)
-- [CSS](./mega-menu.css)
-- [Ãndice de categorÃ­a](../../specs/componentes.md)
+- [CSS](./mega-menu.scss)
+- [Índice de categoría](../../../specs/componentes.md)

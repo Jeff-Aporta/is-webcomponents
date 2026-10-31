@@ -1,4 +1,4 @@
-﻿---
+---
 tag: iswc-tab-group
 tags:
   - iswc-tab-group
@@ -7,40 +7,40 @@ tags:
 category: navigation
 status: public
 source: ./tab-group.ts
-style: ./tab-group.css
+style: ./tab-group.scss
 preview: ./tab-group.json
 ---
 # `<iswc-tab-group>` / `<iswc-tab>` / `<iswc-tab-panel>`
 
-## PropÃ³sito
+## Propósito
 
-Tabs accesibles con navegaciÃ³n por teclado (â†/â†’), activaciÃ³n automÃ¡tica o
+Tabs accesibles con navegación por teclado (←/→), activación automática o
 manual, indicator animado, placements (top/bottom/start/end), scroll horizontal
-automÃ¡tico y soporte para tabs cerrables.
+automático y soporte para tabs cerrables.
 
-Este mÃ³dulo registra `<iswc-tab-group>`, `<iswc-tab>`, `<iswc-tab-panel>`.
+Este módulo registra `<iswc-tab-group>`, `<iswc-tab>`, `<iswc-tab-panel>`.
 
-## CuÃ¡ndo usarlo
+## Cuándo usarlo
 
-OrientaciÃ³n, movimiento entre vistas y navegaciÃ³n jerÃ¡rquica o secuencial.
+Orientación, movimiento entre vistas y navegación jerárquica o secuencial.
 
-## CuÃ¡ndo no usarlo
+## Cuándo no usarlo
 
 No separar children multi-tag ni romper teclado/ARIA.
 
-## ImportaciÃ³n
+## Importación
 
 ```js
 import './tab-group.js';
 ```
 
-## Ejemplo mÃ­nimo
+## Ejemplo mínimo
 
 ```html
 <iswc-tab-group active="general">
 <iswc-tab slot="nav" panel="general">General</iswc-tab>
 <iswc-tab-panel name="general">Contenido del panel.</iswc-tab-panel>
-â€¦
+…
 </iswc-tab-group>
 ```
 
@@ -52,25 +52,25 @@ import './tab-group.js';
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
-| `active` | boolean | Fuente define default/restricciÃ³n. |
-| `placement` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `activation` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `url-key` | string | Opt-in: tab activo en `?s=` como `{ [url-key]: panel }` (b64url). VacÃ­o = off. |
-| `without-scroll-controls` | boolean | Fuente define default/restricciÃ³n. |
-| `panel` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `disabled` | boolean | Fuente define default/restricciÃ³n. |
-| `closable` | boolean | Fuente define default/restricciÃ³n. |
-| `name` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `nav` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `active` | boolean | Fuente define default/restricción. |
+| `placement` | string/según contrato | Fuente define default/restricción. |
+| `activation` | string/según contrato | Fuente define default/restricción. |
+| `url-key` | string | Opt-in: tab activo en `?s=` como `{ [url-key]: panel }` (b64url). Vacío = off. |
+| `without-scroll-controls` | boolean | Fuente define default/restricción. |
+| `panel` | string/según contrato | Fuente define default/restricción. |
+| `disabled` | boolean | Fuente define default/restricción. |
+| `closable` | boolean | Fuente define default/restricción. |
+| `name` | string/según contrato | Fuente define default/restricción. |
+| `nav` | string/según contrato | Fuente define default/restricción. |
 
-#### Propiedades pÃºblicas
+#### Propiedades públicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
 | `active` | lectura/escritura | Declarada por clase. |
 | `placement` | lectura/escritura | Declarada por clase. |
 | `activation` | lectura/escritura | Declarada por clase. |
-| `urlKey` | lectura/escritura | Key dentro de `?s=`; vacÃ­o desactiva. |
+| `urlKey` | lectura/escritura | Key dentro de `?s=`; vacío desactiva. |
 
 ### Slots
 
@@ -85,7 +85,7 @@ import './tab-group.js';
 ### Eventos
 
 
-| Evento | DescripciÃ³n |
+| Evento | Descripción |
 | --- | --- |
 | `iswc-tab-show` | Evento personalizado del componente (tab show). |
 | `iswc-tab-close` | Evento personalizado del componente (tab close). |
@@ -93,9 +93,9 @@ import './tab-group.js';
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `iswc-tab-show` | sÃ­ | sÃ­ | sÃ­ | no |
-| `iswc-tab-close` | sÃ­ | sÃ­ | sÃ­ | no |
-| `iswc-tab-hide` | segÃºn cabecera | segÃºn cabecera | segÃºn cabecera | segÃºn cabecera |
+| `iswc-tab-show` | sí | sí | sí | no |
+| `iswc-tab-close` | sí | sí | sí | no |
+| `iswc-tab-hide` | según cabecera | según cabecera | según cabecera | según cabecera |
 
 
 <details>
@@ -110,13 +110,13 @@ el.addEventListener('iswc-tab-show', (e) => {
 
 </details>
 
-### MÃ©todos y propiedades pÃºblicas
+### Métodos y propiedades públicas
 
-| MÃ©todo | Uso |
+| Método | Uso |
 | --- | --- |
-| `show()` | MÃ©todo pÃºblico declarado. |
+| `show()` | Método público declarado. |
 
-Propiedades pÃºblicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
+Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
 
 ### CSS parts
 
@@ -143,60 +143,60 @@ No expone.
 
 | Token | Uso |
 | --- | --- |
-| `--track-color` | Token leÃ­do o definido por componente. |
-| `--iswc-border` | Token leÃ­do o definido por componente. |
-| `--indicator-color` | Token leÃ­do o definido por componente. |
-| `--iswc-brand` | Token leÃ­do o definido por componente. |
-| `--track-width` | Token leÃ­do o definido por componente. |
-| `--iswc-font-family` | Token leÃ­do o definido por componente. |
-| `--iswc-radius` | Token leÃ­do o definido por componente. |
-| `--iswc-text-muted` | Token leÃ­do o definido por componente. |
-| `--iswc-text` | Token leÃ­do o definido por componente. |
-| `--iswc-bg-elev` | Token leÃ­do o definido por componente. |
+| `--track-color` | Token leído o definido por componente. |
+| `--iswc-border` | Token leído o definido por componente. |
+| `--indicator-color` | Token leído o definido por componente. |
+| `--iswc-brand` | Token leído o definido por componente. |
+| `--track-width` | Token leído o definido por componente. |
+| `--iswc-font-family` | Token leído o definido por componente. |
+| `--iswc-radius` | Token leído o definido por componente. |
+| `--iswc-text-muted` | Token leído o definido por componente. |
+| `--iswc-text` | Token leído o definido por componente. |
+| `--iswc-bg-elev` | Token leído o definido por componente. |
 
-### IntegraciÃ³n con formularios
+### Integración con formularios
 
-No declara integraciÃ³n form-associated propia en este mÃ³dulo.
+No declara integración form-associated propia en este módulo.
 
 ## Comportamiento
 
-DocumentaciÃ³n de cabecera preservada desde fuente:
+Documentación de cabecera preservada desde fuente:
 
-> <iswc-tab-group>, <iswc-tab>, <iswc-tab-panel> â€” Web Components (vanilla, zero dependencies).
+> <iswc-tab-group>, <iswc-tab>, <iswc-tab-panel> — Web Components (vanilla, zero dependencies).
 > Tres componentes cohabitantes:
 >   <iswc-tab-group active="general" placement="top" activation="auto">
 >     <iswc-tab slot="nav" panel="general">General</iswc-tab>
 >     <iswc-tab slot="nav" panel="custom" disabled>Custom</iswc-tab>
->     <iswc-tab-panel name="general">â€¦</iswc-tab-panel>
->     <iswc-tab-panel name="custom">â€¦</iswc-tab-panel>
+>     <iswc-tab-panel name="general">…</iswc-tab-panel>
+>     <iswc-tab-panel name="custom">…</iswc-tab-panel>
 >   </iswc-tab-group>
 > Atributos <iswc-tab-group>
->   active        string   â€” nombre del panel activo.
+>   active        string   — nombre del panel activo.
 >   placement     top | bottom | start | end  (default 'top')
 >   activation    auto | manual (default 'auto')
 >   without-scroll-controls  boolean (default false)
->   url-key       string   â€” opt-in: tab activo en ?s= como { [url-key]: panel }
+>   url-key       string   — opt-in: tab activo en ?s= como { [url-key]: panel }
 > Atributos <iswc-tab>
->   panel         string   â€” nombre del panel al que apunta (required).
+>   panel         string   — nombre del panel al que apunta (required).
 >   disabled      boolean
->   closable      boolean  â€” muestra un botÃ³n de cerrar (slot close-button).
+>   closable      boolean  — muestra un botón de cerrar (slot close-button).
 > Atributos <iswc-tab-panel>
->   name          string   â€” id Ãºnico dentro del tab-group (required).
+>   name          string   — id único dentro del tab-group (required).
 > Slots
 >   <iswc-tab-group>
->     nav        â€” tabs (se proyectan automÃ¡ticamente).
->     (default)  â€” paneles.
+>     nav        — tabs (se proyectan automáticamente).
+>     (default)  — paneles.
 >   <iswc-tab>
 >     (default)   label del tab.
 >     start       icono al inicio.
 >     end         icono al final.
->     close-button  botÃ³n de cerrar (cuando closable).
+>     close-button  botón de cerrar (cuando closable).
 >   <iswc-tab-panel>
 >     (default)  contenido del panel.
 > Eventos
->   iswc-tab-show   detail: { name, panel, tab } â€” al activar un panel.
->   iswc-tab-hide   detail: { name, panel, tab } â€” al ocultar un panel.
->   iswc-tab-close  detail: { tab, name }  â€” cuando se hace click en el close-btn de un iswc-tab closable.
+>   iswc-tab-show   detail: { name, panel, tab } — al activar un panel.
+>   iswc-tab-hide   detail: { name, panel, tab } — al ocultar un panel.
+>   iswc-tab-close  detail: { tab, name }  — cuando se hace click en el close-btn de un iswc-tab closable.
 > CSS Parts
 >   iswc-tab-group: ::part(tab-group) ::part(nav) ::part(body) ::part(tabs)
 >   iswc-tab: ::part(base) ::part(active-indicator)
@@ -206,39 +206,39 @@ DocumentaciÃ³n de cabecera preservada desde fuente:
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 
-Tags del mÃ³dulo: `<iswc-tab-group>`, `<iswc-tab>`, `<iswc-tab-panel>`.
+Tags del módulo: `<iswc-tab-group>`, `<iswc-tab>`, `<iswc-tab-panel>`.
 
 ## Accesibilidad
 
-Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`, `aria-hidden`, `aria-selected`.
+Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`, `aria-hidden`, `aria-selected`.
 
 ## Ejemplo avanzado
 
 ```html
-<iswc-tab-group activation="manual">â€¦</iswc-tab-group>
+<iswc-tab-group activation="manual">…</iswc-tab-group>
 ```
 
 ## Errores comunes
 
-- Usar tag sin importar mÃ³dulo primero.
+- Usar tag sin importar módulo primero.
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
-- Crear size color; usar font-size contextual y em.
+- Agregar un atributo `size`: el tamaño sale del `font-size` del contexto y de `em`.
 
 ## Reglas para LLM
 
-- Reusar componente y dependencias antes de implementaciÃ³n paralela.
+- Reusar componente y dependencias antes de implementación paralela.
 - Mantener nombres exactos de tags y API.
-- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explÃ­cito.
-- Leer callers/shared antes de cambiar; corregir raÃ­z comÃºn.
-- No modificar API basÃ¡ndose solo en preview.
+- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explícito.
+- Leer callers/shared antes de cambiar; corregir raíz común.
+- No modificar API basándose solo en preview.
 
 ## Fuentes
 
 - [JavaScript](./tab-group.ts)
-- [CSS](./tab-group.css)
-- [Ãndice de categorÃ­a](../../specs/componentes.md)
+- [CSS](./tab-group.scss)
+- [Índice de categoría](../../../specs/componentes.md)
 - [Preview](./tab-group.json)
 
 ## Estado en la URL (`state`, `history`)

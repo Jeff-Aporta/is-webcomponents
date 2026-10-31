@@ -19,7 +19,7 @@
             "              {",
             "                \"data\": {",
             "                  \"labels\": [\"Excelente\", \"Bueno\", \"Regular\", \"Malo\"],",
-            "                  \"datasets\": [{ \"label\": \"Respuestas\", \"data\": [45, 30, 18, 7] }]",
+            "                  \"datasets\": [{ \"label\": \"Enero\", \"data\": [45, 30, 18, 7] }, { \"label\": \"Febrero\", \"data\": [38, 34, 20, 8] }]",
             "                }",
             "              }",
             "            </script>",
@@ -35,6 +35,56 @@
               "control": "boolean",
               "prop": "attr:stacked",
               "label": "stacked"
+            },
+            {
+              "control": "text",
+              "prop": "attr:label",
+              "label": "label"
+            },
+            {
+              "control": "select",
+              "prop": "attr:legend-position",
+              "label": "legend-position",
+              "options": [
+                "top",
+                "bottom",
+                "start",
+                "end"
+              ]
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:without-legend",
+              "label": "without-legend"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:without-tooltip",
+              "label": "without-tooltip"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:without-animation",
+              "label": "without-animation"
+            },
+            {
+              "control": "select",
+              "prop": "attr:index-axis",
+              "label": "index-axis",
+              "options": [
+                "x",
+                "y"
+              ]
+            },
+            {
+              "control": "text",
+              "prop": "attr:x-label",
+              "label": "x-label"
+            },
+            {
+              "control": "text",
+              "prop": "attr:y-label",
+              "label": "y-label"
             }
           ]
         }

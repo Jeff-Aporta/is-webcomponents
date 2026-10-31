@@ -1,40 +1,40 @@
-﻿---
+---
 tag: iswc-sankey-diagram
 tags:
   - iswc-sankey-diagram
 category: diagrams
 status: public
 source: ./sankey-diagram.ts
-style: ./sankey-diagram.css
+style: ./sankey-diagram.scss
 preview: ./sankey-diagram.json
 ---
 # `<iswc-sankey-diagram>`
 
-## PropÃ³sito
+## Propósito
 
 Diagrama de **Sankey** en SVG, sin Mermaid. Declaras nodos y enlaces con
 valor, y el componente reparte las capas, calcula la altura de cada nodo y
 dibuja cada flujo con un grosor proporcional a su valor.
 
-Este mÃ³dulo registra `<iswc-sankey-diagram>`.
+Este módulo registra `<iswc-sankey-diagram>`.
 
-## CuÃ¡ndo usarlo
+## Cuándo usarlo
 
-Cuando el mensaje es **cuÃ¡nto** se reparte entre caminos: esfuerzo por
-etapa, presupuesto por concepto, trÃ¡fico por destino. El grosor es el dato.
+Cuando el mensaje es **cuánto** se reparte entre caminos: esfuerzo por
+etapa, presupuesto por concepto, tráfico por destino. El grosor es el dato.
 
-## CuÃ¡ndo no usarlo
+## Cuándo no usarlo
 
-Si solo importa el orden o la estructura y no la magnitud â†’ `<iswc-flowchart>`.
-Si los valores son categorÃ­as comparadas contra un eje â†’ usa un grÃ¡fico de barras.
+Si solo importa el orden o la estructura y no la magnitud → `<iswc-flowchart>`.
+Si los valores son categorías comparadas contra un eje → usa un gráfico de barras.
 
-## ImportaciÃ³n
+## Importación
 
 ```js
 import './sankey-diagram.js';
 ```
 
-## Ejemplo mÃ­nimo
+## Ejemplo mínimo
 
 ```html
 <iswc-sankey-diagram>
@@ -52,10 +52,10 @@ import './sankey-diagram.js';
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
-| `color` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `height` | number | Alto del Ã¡rea de datos en px (default 320). |
+| `color` | `viewer` \| color | `viewer` lo pinta como visor dentro del lightbox. |
+| `height` | number | Alto del área de datos en px (default 320). |
 
-#### Propiedades pÃºblicas
+#### Propiedades públicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
@@ -74,7 +74,7 @@ import './sankey-diagram.js';
 ### Eventos
 
 
-| Evento | DescripciÃ³n |
+| Evento | Descripción |
 | --- | --- |
 | `iswc-render` | Emitido al renderizar o redibujar el componente. |
 | `iswc-open-viewer` | Emitido al abrir el visor ampliado (cancelable). |
@@ -82,9 +82,9 @@ import './sankey-diagram.js';
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `iswc-render` | sÃ­ | sÃ­ | sÃ­ | no |
-| `iswc-open-viewer` | sÃ­ | sÃ­ | sÃ­ | sÃ­ |
-| `iswc-toggle-group` | sÃ­ | sÃ­ | sÃ­ | no |
+| `iswc-render` | sí | sí | sí | no |
+| `iswc-open-viewer` | sí | sí | sí | sí |
+| `iswc-toggle-group` | sí | sí | sí | no |
 
 
 <details>
@@ -99,13 +99,13 @@ el.addEventListener('iswc-render', (e) => {
 
 </details>
 
-### MÃ©todos y propiedades pÃºblicas
+### Métodos y propiedades públicas
 
-| MÃ©todo | Uso |
+| Método | Uso |
 | --- | --- |
-| `updateComplete()` | MÃ©todo pÃºblico declarado. |
+| `updateComplete()` | Método público declarado. |
 
-Propiedades pÃºblicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
+Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
 
 ### CSS parts
 
@@ -123,21 +123,21 @@ No expone.
 
 | Token | Uso |
 | --- | --- |
-| `--iswc-sans` | Token leÃ­do o definido por componente. |
-| `--iswc-border` | Token leÃ­do o definido por componente. |
-| `--iswc-text-soft` | Token leÃ­do o definido por componente. |
+| `--iswc-sans` | Token leído o definido por componente. |
+| `--iswc-border` | Token leído o definido por componente. |
+| `--iswc-text-soft` | Token leído o definido por componente. |
 
-### IntegraciÃ³n con formularios
+### Integración con formularios
 
-No declara integraciÃ³n form-associated propia en este mÃ³dulo.
+No declara integración form-associated propia en este módulo.
 
 ## Comportamiento
 
-Las capas salen del camino mÃ¡s largo desde las fuentes; la altura de un nodo es el mayor entre lo que entra y lo que sale. Un enlace con valor cero o negativo no se dibuja: no tendrÃ­a grosor.
+Las capas salen del camino más largo desde las fuentes; la altura de un nodo es el mayor entre lo que entra y lo que sale. Un enlace con valor cero o negativo no se dibuja: no tendría grosor.
 
-DocumentaciÃ³n de cabecera preservada desde fuente:
+Documentación de cabecera preservada desde fuente:
 
-> <iswc-sankey-diagram> â€” diagrama de Sankey en SVG, sin Mermaid.
+> <iswc-sankey-diagram> — diagrama de Sankey en SVG, sin Mermaid.
 >   <iswc-sankey-diagram>
 >     <script type="application/json">
 >       { "sankey": { "nodes": [...], "links": [{ "from": "a", "to": "b", "value": 40 }] } }
@@ -162,20 +162,20 @@ DocumentaciÃ³n de cabecera preservada desde fuente:
 - [`../_shared/emit.js`](../_shared/emit.js)
 - [`../_shared/svg-chart-engine.js`](../../core/svg-chart-engine.js)
 
-Tags del mÃ³dulo: `<iswc-sankey-diagram>`.
+Tags del módulo: `<iswc-sankey-diagram>`.
 
 ## Accesibilidad
 
-Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`.
+Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`.
 
 ## Ejemplo avanzado
 
-Ver el preview de la galerÃ­a, que trae el payload completo con grupos y estilos:
+Ver el preview de la galería, que trae el payload completo con grupos y estilos:
 [`./sankey-diagram.json`](./sankey-diagram.json).
 
 ## Errores comunes
 
-- Usar tag sin importar mÃ³dulo primero.
+- Usar tag sin importar módulo primero.
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
@@ -183,18 +183,18 @@ Ver el preview de la galerÃ­a, que trae el payload completo con grupos y estil
 
 ## Reglas para LLM
 
-- Reusar componente y dependencias antes de implementaciÃ³n paralela.
+- Reusar componente y dependencias antes de implementación paralela.
 - Mantener nombres exactos de tags y API.
-- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explÃ­cito.
-- Leer callers/shared antes de cambiar; corregir raÃ­z comÃºn.
-- No modificar API basÃ¡ndose solo en preview.
+- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explícito.
+- Leer callers/shared antes de cambiar; corregir raíz común.
+- No modificar API basándose solo en preview.
 
 ## Fuentes
 
 - [JavaScript](./sankey-diagram.ts)
-- [CSS](./sankey-diagram.css)
+- [CSS](./sankey-diagram.scss)
 - [Spec y layout](./utils/sankey-spec.js)
-- [Ãndice de categorÃ­a](../../specs/componentes.md)
+- [Índice de categoría](../../../specs/componentes.md)
 - [Preview](./sankey-diagram.json)
 
 ## App API
@@ -202,4 +202,4 @@ Ver el preview de la galerÃ­a, que trae el payload completo con grupos y estil
 Visor: `demos/diagramas/app/view.html?kind=sankey&json=<base64url>`.
 Editor: `demos/diagramas/app/edit.html?kind=sankey&json=<base64url>`.
 
-`json` es el documento completo en base64url. Editar no reescribe ese parÃ¡metro: Compartir arma un enlace nuevo con el JSON resultante.
+`json` es el documento completo en base64url. Editar no reescribe ese parámetro: Compartir arma un enlace nuevo con el JSON resultante.

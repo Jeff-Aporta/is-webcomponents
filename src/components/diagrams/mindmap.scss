@@ -14,11 +14,11 @@
 
 .wrap {
   position: relative;
-  border-radius: 0.5rem;
+  border-radius: 0.5em;
   overflow: hidden;
   background: transparent;
   border: 1px solid var(--iswc-border);
-  padding: 0.75rem;
+  padding: 0.75em;
   cursor: default;
   user-select: none;
   -webkit-user-select: none;
@@ -41,7 +41,7 @@
   &[data-empty]::after {
     content: 'Mapa mental no disponible (payload inválido).';
     display: block;
-    padding: 1rem;
+    padding: 1.1429em;
     font-size: 0.875em;
     color: var(--iswc-text-soft);
   }

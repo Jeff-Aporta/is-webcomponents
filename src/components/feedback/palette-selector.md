@@ -1,11 +1,11 @@
-﻿---
+---
 tag: iswc-palette-selector
 tags:
   - iswc-palette-selector
 category: feedback
 status: public
 source: ./palette-selector.ts
-style: ./palette-selector.css
+style: ./palette-selector.scss
 preview: ./palette-selector.json
 ---
 # `<iswc-palette-selector>`
@@ -223,7 +223,7 @@ claro/oscuro/Panda (contrato `palettes-contrast`).
 ## Fuentes
 
 - [JavaScript](./palette-selector.ts)
-- [CSS](./palette-selector.css)
+- [CSS](./palette-selector.scss)
 - [Paletas](../../styles/palettes.json)
-- [Índice de categoría](../../specs/componentes.md)
+- [Índice de categoría](../../../specs/componentes.md)
 - [Preview](./palette-selector.json)

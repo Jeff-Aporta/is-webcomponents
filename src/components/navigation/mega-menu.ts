@@ -416,7 +416,8 @@ import '../media/icon.js';
     #positionPanel = () => {
       const placement = this.getAttribute('placement') || 'bottom-start';
       const rect = this.#trigger.getBoundingClientRect();
-      const maxW = Math.min(960, window.innerWidth - 32);
+      const em = parseFloat(getComputedStyle(this).fontSize) || 16;
+      const maxW = Math.min(60 * em, window.innerWidth - 32);
       const raw = (this.getAttribute('width') || '').trim();
       const parsed = Number.parseFloat(raw);
       const panelWidth = Number.isFinite(parsed) && parsed > 0
@@ -424,7 +425,7 @@ import '../media/icon.js';
         : maxW;
       this.#panel.style.width = raw && !Number.isFinite(parsed) ? raw : `${panelWidth}px`;
       this.#panel.style.maxWidth = `${maxW}px`;
-      const top = rect.bottom + 8;
+      const top = rect.bottom + 0.5 * em;
       this.#panel.style.top = `${top}px`;
       const left = placement.endsWith('-end')
         ? Math.max(rect.right - panelWidth, 8)

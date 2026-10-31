@@ -84,7 +84,7 @@
     &::part(base) {
       padding: 0.8em 1em 0.85em;
       border: 1px solid var(--iswc-callout-border);
-      border-inline-start-width: 4px;
+      border-inline-start-width: .25em;
       border-radius: 0.55em;
       background: var(--iswc-callout-bg);
       box-shadow: none;
@@ -100,12 +100,12 @@
     --iswc-divider-spacing: 0;
 
     &::part(divider) {
-      block-size: 1px;
+      block-size: .0625em;
       opacity: 1;
       background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--_brand) 35%, var(--iswc-border)), transparent);
     }
     &:not(:defined) {
-      block-size: 1px;
+      block-size: .0625em;
       background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--_brand) 35%, var(--iswc-border)), transparent);
     }
   }

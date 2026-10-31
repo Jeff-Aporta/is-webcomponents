@@ -10,14 +10,14 @@
   vertical-align: middle;
   line-height: 0;
   cursor: pointer;
-  border-radius: 999px;
+  border-radius: 999em;
   -webkit-tap-highlight-color: transparent;
 }
-:host[hidden] {
+:host([hidden]) {
   display: none !important;
 }
-:host[disabled] {
-  opacity: 0.5;
+:host([disabled]) {
+  opacity: 0.55;
   cursor: not-allowed;
   pointer-events: none;
 }

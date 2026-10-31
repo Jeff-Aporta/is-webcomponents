@@ -11,7 +11,7 @@
   display: block;
   pointer-events: none;
   box-sizing: border-box;
-  padding: 1rem;
+  padding: 1em;
   max-width: 100vw;
   font-family: var(--iswc-font-family);
   font-size: inherit;
@@ -55,10 +55,14 @@
 .stack {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0.5em;
   pointer-events: none;
   width: max-content;
-  max-width: min(24rem, calc(100vw - 2rem));
+  max-width: min(24em, calc(100vw - 2em));
+  /* Muchos avisos a la vez: la pila se desplaza en vez de salirse de la pantalla. */
+  max-height: calc(100dvh - 2em);
+  overflow-y: auto;
+  scrollbar-width: none;
 
   :host([placement^="bottom"]) & { flex-direction: column-reverse; }
   :host([placement$="center"]) & { margin-inline: auto; }

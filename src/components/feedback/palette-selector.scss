@@ -82,7 +82,7 @@
   height: 1.6em;
   border-radius: 50%;
   overflow: hidden;
-  box-shadow: 0 0 0 1px var(--iswc-border);
+  box-shadow: 0 0 0 .0625em var(--iswc-border);
   transform: rotate(-45deg);
 }
 
@@ -170,7 +170,7 @@
   height: 1.25em;
   border-radius: 1em;
   background: var(--iswc-control-bg-active);
-  box-shadow: inset 0 0 0 1px var(--iswc-control-border, var(--iswc-border));
+  box-shadow: inset 0 0 0 .0769em var(--iswc-control-border, var(--iswc-border));
   transition: background-color 120ms ease;
 }
 
@@ -244,7 +244,7 @@
   height: 1.7em;
   border-radius: 0.35em;
   overflow: hidden;
-  box-shadow: 0 0 0 1px var(--iswc-border);
+  box-shadow: 0 0 0 .0625em var(--iswc-border);
 }
 
 .sw--bg { background: var(--sw-bg, var(--iswc-bg)); }

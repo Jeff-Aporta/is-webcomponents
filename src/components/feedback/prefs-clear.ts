@@ -1,6 +1,7 @@
 import { adoptCss, defineElement, emit } from '../../core/element.js';
 import '../actions/button.js';
 import '../media/icon.js';
+import './confirm-modal.js';
 import { clearAllComponentPrefs, peekComponentPrefsRoot } from '../../core/prefs.js';
 import { leerAppCfg } from '../../core/app-cfg.js';
 import { clearIswcStorage, listIswcKeys } from '../../core/iswc-storage.js';
@@ -18,7 +19,7 @@ import type { PrefsClearDetail, PrefsClearScope } from './schemas/prefs-clear.sc
  * pedir: así lo usa el e2e para verificar la carga inicial limpia.
  *
  * Attributes
- *   confirm   boolean — pide window.confirm antes (default true)
+ *   confirm   boolean — pregunta con iswc-confirm-modal antes (default true)
  *   reload    boolean — recarga la página tras limpiar (default true)
  *   scope     prefs (default) — todo lo `iswc:` (local y session) + cachés en memoria del kit.
  *             cache — además Cache Storage (módulos del loader), las bases IndexedDB
@@ -134,6 +135,22 @@ import type { PrefsClearDetail, PrefsClearScope } from './schemas/prefs-clear.sc
       }
     }
 
+    /** La misma confirmación del kit, no el diálogo nativo: respeta tema y paleta, y no congela la página. */
+    #preguntar(heading: string, message: string): Promise<boolean> {
+      const modal = document.createElement('iswc-confirm-modal') as HTMLElement & { show(): void };
+      modal.setAttribute('heading', heading);
+      modal.setAttribute('message', message);
+      modal.setAttribute('color', 'danger');
+      modal.setAttribute('confirm-label', 'Borrar');
+      this.shadowRoot!.append(modal);
+      return new Promise((responder) => {
+        modal.addEventListener('iswc-confirm-confirm', () => responder(true), { once: true });
+        modal.addEventListener('iswc-confirm-cancel', () => responder(false), { once: true });
+        modal.addEventListener('iswc-confirm-hide', () => modal.remove(), { once: true });
+        modal.show();
+      });
+    }
+
     #onClick = (e: PointerEvent) => {
       e.stopPropagation();
       void this.#run();
@@ -153,10 +170,9 @@ import type { PrefsClearDetail, PrefsClearScope } from './schemas/prefs-clear.sc
           this.scope === 'all' ? '• Todo el localStorage del sitio' : '',
         ].filter(Boolean);
         const accion = this.reload ? ' y recargar' : '';
-        const ok = window.confirm(
-          partes.length
-            ? `¿Borrar lo guardado${accion}?\n\n${partes.join('\n')}`
-            : `No hay nada guardado: la app ya está con su configuración inicial.${this.reload ? ' ¿Recargar igual?' : ''}`,
+        const ok = await this.#preguntar(
+          partes.length ? `¿Borrar lo guardado${accion}?` : 'Nada que borrar',
+          partes.length ? partes.join('\n') : `La app ya está con su configuración inicial.${this.reload ? ' ¿Recargar igual?' : ''}`,
         );
         if (!ok) return null;
       }

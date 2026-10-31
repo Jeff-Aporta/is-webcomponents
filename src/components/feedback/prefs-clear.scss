@@ -4,6 +4,6 @@
   display: inline-flex;
   vertical-align: middle;
   font-size: inherit;
-
-  &[hidden] { display: none; }
 }
+
+:host([hidden]) { display: none !important; }

@@ -202,7 +202,7 @@ class TARowBase extends TARoles {
     const mergedStyle = [
       typeof iconStyle === "string" ? iconStyle : "",
       color ? `color: ${resolveColor(color)}` : "",
-      "font-size: 1.1rem",
+      "font-size: 1.1em",
     ]
       .filter(Boolean)
       .join("; ");

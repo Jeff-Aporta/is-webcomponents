@@ -48,6 +48,20 @@
               "control": "boolean",
               "prop": "attr:hide-arrow",
               "label": "hide-arrow"
+            },
+            {
+              "control": "select",
+              "prop": "attr:color",
+              "label": "color",
+              "options": [
+                "brand",
+                "danger"
+              ]
+            },
+            {
+              "control": "text",
+              "prop": "attr:confirm-label",
+              "label": "confirm-label"
             }
           ]
         }
@@ -242,6 +256,24 @@
             "type": "boolean",
             "default": "false",
             "desc": "Estado controlado."
+          },
+          {
+            "name": "<code>color</code>",
+            "type": "intent",
+            "default": "brand",
+            "desc": "Color del botón de aceptar por defecto."
+          },
+          {
+            "name": "<code>confirm-label</code>",
+            "type": "string",
+            "default": "Aceptar",
+            "desc": "Texto del botón de aceptar por defecto."
+          },
+          {
+            "name": "<code>cancel-label</code>",
+            "type": "string",
+            "default": "Cancelar",
+            "desc": "Texto del botón de cancelar por defecto."
           }
         ]
       },

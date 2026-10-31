@@ -18,7 +18,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-csv-view content=\"nombre,edad&#10;Ada,36&#10;Lin,41\" height=\"12rem\"></iswc-csv-view>",
+          "html": "<iswc-csv-view content=\"nombre,edad&#10;Ada,36&#10;Lin,41\" height=\"12em\"></iswc-csv-view>",
           "controls": [
             {
               "control": "text",

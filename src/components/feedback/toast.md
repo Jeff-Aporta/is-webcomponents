@@ -1,36 +1,36 @@
-﻿---
+---
 tag: iswc-toast
 tags:
   - iswc-toast
 category: feedback
 status: public
 source: ./toast.ts
-style: ./toast.css
+style: ./toast.scss
 preview: ./toast.json
 ---
 # `<iswc-toast>`
 
-## PropÃ³sito
+## Propósito
 
-Contenedor fijo de notificaciones. Crea Ã­tems con create() o declara <iswc-toast-item>.
+Contenedor fijo de notificaciones. Crea ítems con create() o declara <iswc-toast-item>.
 
-Este mÃ³dulo registra `<iswc-toast>`.
+Este módulo registra `<iswc-toast>`.
 
-## CuÃ¡ndo usarlo
+## Cuándo usarlo
 
-Estado, progreso, confirmaciÃ³n, carga o resultado de operaciones.
+Estado, progreso, confirmación, carga o resultado de operaciones.
 
-## CuÃ¡ndo no usarlo
+## Cuándo no usarlo
 
-No saturar interfaz con seÃ±ales redundantes o alertas sin acciÃ³n.
+No saturar interfaz con señales redundantes o alertas sin acción.
 
-## ImportaciÃ³n
+## Importación
 
 ```js
 import './toast.js';
 ```
 
-## Ejemplo mÃ­nimo
+## Ejemplo mínimo
 
 ```html
 <iswc-toast></iswc-toast>
@@ -44,9 +44,9 @@ import './toast.js';
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
-| `placement` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `placement` | string/según contrato | Fuente define default/restricción. |
 
-#### Propiedades pÃºblicas
+#### Propiedades públicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
@@ -61,7 +61,7 @@ import './toast.js';
 ### Eventos
 
 
-| Evento | DescripciÃ³n |
+| Evento | Descripción |
 | --- | --- |
 
 No expone.
@@ -79,20 +79,20 @@ el.addEventListener('click', (e) => {
 
 </details>
 
-### MÃ©todos y propiedades pÃºblicas
+### Métodos y propiedades públicas
 
-| MÃ©todo | Uso |
+| Método | Uso |
 | --- | --- |
 | `create(message, options?)` | Crea y muestra un `<iswc-toast-item>`. |
 | `promise(p, callbacks?)` | Reusa un solo toast para loading / success / error. |
-| `IswcToast.host()` | EstÃ¡tico: `<iswc-toast>` singleton del documento (lo crea si falta). |
-| `IswcToast.error(msg, duration?)` | EstÃ¡tico. Paridad con `toastError` de ISP. |
-| `IswcToast.success(msg, duration?)` | EstÃ¡tico. Paridad con `toastSuccess`. |
-| `IswcToast.loading(msg)` | EstÃ¡tico. Paridad con `toastLoading`. |
-| `IswcToast.remove(item)` | EstÃ¡tico. Paridad con `toastRemove`. |
-| `IswcToast.promise(p, callbacks?)` | EstÃ¡tico. Paridad con `toastPromise`. |
+| `IswcToast.host()` | Estático: `<iswc-toast>` singleton del documento (lo crea si falta). |
+| `IswcToast.error(msg, duration?)` | Estático. Paridad con `toastError` de ISP. |
+| `IswcToast.success(msg, duration?)` | Estático. Paridad con `toastSuccess`. |
+| `IswcToast.loading(msg)` | Estático. Paridad con `toastLoading`. |
+| `IswcToast.remove(item)` | Estático. Paridad con `toastRemove`. |
+| `IswcToast.promise(p, callbacks?)` | Estático. Paridad con `toastPromise`. |
 
-Propiedades pÃºblicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
+Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
 
 ### CSS parts
 
@@ -108,41 +108,43 @@ No expone.
 
 | Token | Uso |
 | --- | --- |
-| `--iswc-font-family` | Token leÃ­do o definido por componente. |
+| `--iswc-font-family` | Token leído o definido por componente. |
 
-### IntegraciÃ³n con formularios
+### Integración con formularios
 
-No declara integraciÃ³n form-associated propia en este mÃ³dulo.
+No declara integración form-associated propia en este módulo.
 
 ## Comportamiento
 
-DocumentaciÃ³n de cabecera preservada desde fuente:
+Cada color trae su ícono por defecto. El ícono `mdi:loading` gira solo (también en `IswcToast.loading()`), con `icon: false` no se reserva columna, y un mensaje larguísimo se limita a `--iswc-toast-lineas` líneas (default 6). Si hay más avisos que pantalla, la pila se desplaza.
 
-> <iswc-toast> â€” Web Component (vanilla).
-> Contenedor fijo de toasts. Los Ã­tems son <iswc-toast-item> en light DOM
-> (proyecciÃ³n al stack) o creados vÃ­a create().
+Documentación de cabecera preservada desde fuente:
+
+> <iswc-toast> — Web Component (vanilla).
+> Contenedor fijo de toasts. Los ítems son <iswc-toast-item> en light DOM
+> (proyección al stack) o creados vía create().
 > Atributos
 >   placement  top-start | top-center | top-end |
 >              bottom-start | bottom-center | bottom-end  (default bottom-end)
-> MÃ©todos
->   create(message, options?) â†’ Promise<iswc-toast-item>
->     options: { color, icon, duration, allowHtml, caption, log } â€” sin size
->     color: brand | success | warning | danger | neutral
+> Métodos
+>   create(message, options?) → Promise<iswc-toast-item>
+>     options: { color, icon, duration, allowHtml, caption, log } — sin size
+>     color: brand | info | success | warning | danger | error | neutral | text
 >     duration default 5000; 0 = hasta dismiss
->     caption: detalle bajo el tÃ­tulo; log: payload de iswc-after-show (consola)
+>     caption: detalle bajo el título; log: payload de iswc-after-show (consola)
 > CSS Parts: ::part(stack)
-> Escucha iswc-after-hide de los Ã­tems y los elimina del DOM.
+> Escucha iswc-after-hide de los ítems y los elimina del DOM.
 
 ## Dependencias y componentes relacionados
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 - [`./toast-item.js`](./toast-item.js)
 
-Tags del mÃ³dulo: `<iswc-toast>`.
+Tags del módulo: `<iswc-toast>`.
 
 ## Accesibilidad
 
-Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`, `aria-hidden`.
+Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`, `aria-hidden`.
 
 ## Ejemplo avanzado
 
@@ -152,7 +154,7 @@ Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: `aria-labe
 
 ## Errores comunes
 
-- Usar tag sin importar mÃ³dulo primero.
+- Usar tag sin importar módulo primero.
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
@@ -160,15 +162,15 @@ Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: `aria-labe
 
 ## Reglas para LLM
 
-- Reusar componente y dependencias antes de implementaciÃ³n paralela.
+- Reusar componente y dependencias antes de implementación paralela.
 - Mantener nombres exactos de tags y API.
-- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explÃ­cito.
-- Leer callers/shared antes de cambiar; corregir raÃ­z comÃºn.
-- No modificar API basÃ¡ndose solo en preview.
+- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explícito.
+- Leer callers/shared antes de cambiar; corregir raíz común.
+- No modificar API basándose solo en preview.
 
 ## Fuentes
 
 - [JavaScript](./toast.ts)
-- [CSS](./toast.css)
-- [Ãndice de categorÃ­a](../../specs/componentes.md)
+- [CSS](./toast.scss)
+- [Índice de categoría](../../../specs/componentes.md)
 - [Preview](./toast.json)

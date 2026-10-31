@@ -1,36 +1,36 @@
-﻿---
+---
 tag: iswc-digital-clock
 tags:
   - iswc-digital-clock
 category: forms
 status: public
 source: ./digital-clock.ts
-style: ./digital-clock.css
+style: ./digital-clock.scss
 preview: ./digital-clock.json
 ---
 # `<iswc-digital-clock>`
 
-## PropÃ³sito
+## Propósito
 
-Reloj analÃ³gico (TimeClock de MUI X). Arrastra la manecilla, haz clic o usa el teclado. Al soltar avanza de horas a minutos.
+Reloj analógico (TimeClock de MUI X). Arrastra la manecilla, haz clic o usa el teclado. Al soltar avanza de horas a minutos.
 
-Este mÃ³dulo registra `<iswc-digital-clock>`.
+Este módulo registra `<iswc-digital-clock>`.
 
-## CuÃ¡ndo usarlo
+## Cuándo usarlo
 
-Captura, selecciÃ³n y validaciÃ³n de valores compatibles con formularios.
+Captura, selección y validación de valores compatibles con formularios.
 
-## CuÃ¡ndo no usarlo
+## Cuándo no usarlo
 
-No duplicar validaciÃ³n, form association ni pickers shared.
+No duplicar validación, form association ni pickers shared.
 
-## ImportaciÃ³n
+## Importación
 
 ```js
 import './digital-clock.js';
 ```
 
-## Ejemplo mÃ­nimo
+## Ejemplo mínimo
 
 ```html
 <iswc-digital-clock></iswc-digital-clock>
@@ -44,21 +44,21 @@ import './digital-clock.js';
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
-| `value` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `layout` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `step` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `minutes-step` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `seconds` | boolean | Fuente define default/restricciÃ³n. |
-| `ampm` | boolean | Fuente define default/restricciÃ³n. |
-| `hour24` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `min-time` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `max-time` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `skip-disabled` | boolean | Fuente define default/restricciÃ³n. |
-| `locale` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `disabled` | boolean | Fuente define default/restricciÃ³n. |
-| `readonly` | boolean | Fuente define default/restricciÃ³n. |
+| `value` | string/según contrato | Fuente define default/restricción. |
+| `layout` | string/según contrato | Fuente define default/restricción. |
+| `step` | string/según contrato | Fuente define default/restricción. |
+| `minutes-step` | string/según contrato | Fuente define default/restricción. |
+| `seconds` | boolean | Fuente define default/restricción. |
+| `ampm` | boolean | Fuente define default/restricción. |
+| `hour24` | string/según contrato | Fuente define default/restricción. |
+| `min-time` | string/según contrato | Fuente define default/restricción. |
+| `max-time` | string/según contrato | Fuente define default/restricción. |
+| `skip-disabled` | boolean | Fuente define default/restricción. |
+| `locale` | string/según contrato | Fuente define default/restricción. |
+| `disabled` | boolean | Fuente define default/restricción. |
+| `readonly` | boolean | Fuente define default/restricción. |
 
-#### Propiedades pÃºblicas
+#### Propiedades públicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
@@ -81,13 +81,13 @@ No expone.
 ### Eventos
 
 
-| Evento | DescripciÃ³n |
+| Evento | Descripción |
 | --- | --- |
 | `iswc-change` | Emitido al confirmar el cambio de valor (escribe como `change` nativo). |
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `iswc-change` | sÃ­ | sÃ­ | sÃ­ | no |
+| `iswc-change` | sí | sí | sí | no |
 
 
 <details>
@@ -102,20 +102,20 @@ el.addEventListener('iswc-change', (e) => {
 
 </details>
 
-### MÃ©todos y propiedades pÃºblicas
+### Métodos y propiedades públicas
 
-| MÃ©todo | Uso |
+| Método | Uso |
 | --- | --- |
-| `scrollToSelection()` | MÃ©todo pÃºblico declarado. |
+| `scrollToSelection()` | Método público declarado. |
 
-Propiedades pÃºblicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
+Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
 
 ### CSS parts
 
 | Part | Uso |
 | --- | --- |
 | `base` | Personalizable con `::part(base)`. |
-| `option` | Cada opciÃ³n del listado. |
+| `option` | Cada opción del listado. |
 
 ### Custom states
 
@@ -125,29 +125,29 @@ No expone.
 
 | Token | Uso |
 | --- | --- |
-| `--iswc-clock-height` | Token leÃ­do o definido por componente. |
-| `--iswc-sans` | Token leÃ­do o definido por componente. |
-| `--iswc-text` | Token leÃ­do o definido por componente. |
-| `--iswc-bg-elev` | Token leÃ­do o definido por componente. |
-| `--iswc-border` | Token leÃ­do o definido por componente. |
-| `--iswc-radius` | Token leÃ­do o definido por componente. |
-| `--iswc-shadow` | Token leÃ­do o definido por componente. |
-| `--iswc-radius-sm` | Token leÃ­do o definido por componente. |
-| `--iswc-control-bg-hover` | Token leÃ­do o definido por componente. |
-| `--iswc-focus` | Token leÃ­do o definido por componente. |
-| `--iswc-accent` | Token leÃ­do o definido por componente. |
-| `--iswc-color-brand-600` | Token leÃ­do o definido por componente. |
-| `--iswc-on-brand` | Token leÃ­do o definido por componente. |
+| `--iswc-clock-height` | Token leído o definido por componente. |
+| `--iswc-sans` | Token leído o definido por componente. |
+| `--iswc-text` | Token leído o definido por componente. |
+| `--iswc-bg-elev` | Token leído o definido por componente. |
+| `--iswc-border` | Token leído o definido por componente. |
+| `--iswc-radius` | Token leído o definido por componente. |
+| `--iswc-shadow` | Token leído o definido por componente. |
+| `--iswc-radius-sm` | Token leído o definido por componente. |
+| `--iswc-control-bg-hover` | Token leído o definido por componente. |
+| `--iswc-focus` | Token leído o definido por componente. |
+| `--iswc-accent` | Token leído o definido por componente. |
+| `--iswc-color-brand-600` | Token leído o definido por componente. |
+| `--iswc-on-brand` | Token leído o definido por componente. |
 
-### IntegraciÃ³n con formularios
+### Integración con formularios
 
-No declara integraciÃ³n form-associated propia en este mÃ³dulo.
+No declara integración form-associated propia en este módulo.
 
 ## Comportamiento
 
-DocumentaciÃ³n de cabecera preservada desde fuente:
+Documentación de cabecera preservada desde fuente:
 
-> <iswc-digital-clock> â€” Selector de hora en lista (MUI DigitalClock) o en
+> <iswc-digital-clock> — Selector de hora en lista (MUI DigitalClock) o en
 > columnas de horas / minutos / segundos / AM-PM (MultiSectionDigitalClock).
 > Atributos: value (HH:mm[:ss]), layout (list|sections), step (minutos en
 >            lista), minutes-step, seconds, ampm, hour24, min-time, max-time,
@@ -159,11 +159,11 @@ DocumentaciÃ³n de cabecera preservada desde fuente:
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 - [`../_shared/date-utils.js`](./utils/date-utils.js)
 
-Tags del mÃ³dulo: `<iswc-digital-clock>`.
+Tags del módulo: `<iswc-digital-clock>`.
 
 ## Accesibilidad
 
-Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: `aria-selected`, `aria-label`.
+Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-selected`, `aria-label`.
 
 ## Ejemplo avanzado
 
@@ -173,7 +173,7 @@ Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: `aria-sele
 
 ## Errores comunes
 
-- Usar tag sin importar mÃ³dulo primero.
+- Usar tag sin importar módulo primero.
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
@@ -181,15 +181,15 @@ Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: `aria-sele
 
 ## Reglas para LLM
 
-- Reusar componente y dependencias antes de implementaciÃ³n paralela.
+- Reusar componente y dependencias antes de implementación paralela.
 - Mantener nombres exactos de tags y API.
-- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explÃ­cito.
-- Leer callers/shared antes de cambiar; corregir raÃ­z comÃºn.
-- No modificar API basÃ¡ndose solo en preview.
+- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explícito.
+- Leer callers/shared antes de cambiar; corregir raíz común.
+- No modificar API basándose solo en preview.
 
 ## Fuentes
 
 - [JavaScript](./digital-clock.ts)
-- [CSS](./digital-clock.css)
-- [Ãndice de categorÃ­a](../../specs/componentes.md)
+- [CSS](./digital-clock.scss)
+- [Índice de categoría](../../../specs/componentes.md)
 - [Preview](./digital-clock.json)

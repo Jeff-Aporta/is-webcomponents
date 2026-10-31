@@ -2,8 +2,8 @@
 :host {
   display: inline-block;
   font: inherit;
-  --_w: 320px;
-  --_h: 140px;
+  --_w: 20em;
+  --_h: 8.75em;
 }
 
 .root {
@@ -14,8 +14,8 @@
   border-radius: var(--iswc-radius);
   background:
     repeating-linear-gradient(0deg,
-      color-mix(in srgb, var(--iswc-text) 5%, transparent) 0 1px,
-      transparent 1px 24px),
+      color-mix(in srgb, var(--iswc-text) 5%, transparent) 0 .0625em,
+      transparent .0625em 1.5em),
     color-mix(in srgb, var(--iswc-bg-elev) 80%, transparent);
   touch-action: none;
   overflow: hidden;
@@ -32,7 +32,7 @@
   display: grid;
   place-items: center;
   color: var(--iswc-text-dim);
-  font-size: 0.85rem;
+  font-size: 0.85em;
   letter-spacing: 0.12em;
   pointer-events: none;
   text-transform: uppercase;

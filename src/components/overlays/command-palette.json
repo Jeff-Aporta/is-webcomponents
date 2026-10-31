@@ -74,6 +74,21 @@
             "              ]",
             "            </script>",
             "          </iswc-command-palette>"
+          ],
+          "target": "#cmd",
+          "controls": [
+            {
+              "control": "text",
+              "prop": "attr:placeholder",
+              "label": "placeholder",
+              "default": "Buscar comando…"
+            },
+            {
+              "control": "text",
+              "prop": "attr:empty-text",
+              "label": "empty-text",
+              "default": "Sin resultados"
+            }
           ]
         }
       ]

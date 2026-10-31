@@ -1,45 +1,45 @@
-﻿---
+---
 tag: iswc-confirm-modal
 tags:
   - iswc-confirm-modal
 category: feedback
 status: public
 source: ./confirm-modal.ts
-style: ./confirm-modal.css
+style: ./confirm-modal.scss
 preview: ./confirm-modal.json
 ---
 # `<iswc-confirm-modal>`
 
-## PropÃ³sito
+## Propósito
 
-ConfirmaciÃ³n en modal centrado con backdrop. Es el complemento de
+Confirmación en modal centrado con backdrop. Es el complemento de
 `<iswc-popconfirm>`: donde el popconfirm ancla un popover al disparador y no
-bloquea el fondo, este abre un diÃ¡logo centrado, oscurece la pÃ¡gina y exige
+bloquea el fondo, este abre un diálogo centrado, oscurece la página y exige
 una respuesta antes de seguir.
 
-Este mÃ³dulo registra `<iswc-confirm-modal>`.
+Este módulo registra `<iswc-confirm-modal>`.
 
-## CuÃ¡ndo usarlo
+## Cuándo usarlo
 
-Cuando la acciÃ³n es destructiva o irreversible y conviene detener al usuario:
-borrar un registro, descartar cambios sin guardar, cerrar sesiÃ³n.
+Cuando la acción es destructiva o irreversible y conviene detener al usuario:
+borrar un registro, descartar cambios sin guardar, cerrar sesión.
 
-## CuÃ¡ndo no usarlo
+## Cuándo no usarlo
 
-Para confirmaciones triviales o de bajo riesgo. AhÃ­ basta `<iswc-popconfirm>`,
-que no interrumpe el flujo de la pÃ¡gina.
+Para confirmaciones triviales o de bajo riesgo. Ahí basta `<iswc-popconfirm>`,
+que no interrumpe el flujo de la página.
 
-## ImportaciÃ³n
+## Importación
 
 ```js
 import './confirm-modal.js';
 ```
 
-## Ejemplo mÃ­nimo
+## Ejemplo mínimo
 
 ```html
 <iswc-button id="del">Borrar</iswc-button>
-<iswc-confirm-modal for="del" heading="Eliminar registro" message="Â¿Seguro?"></iswc-confirm-modal>
+<iswc-confirm-modal for="del" heading="Eliminar registro" message="¿Seguro?"></iswc-confirm-modal>
 ```
 
 ## API
@@ -51,26 +51,29 @@ import './confirm-modal.js';
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
 | `for` | string | Id del elemento disparador; al hacer click abre el modal. |
-| `heading` | string | TÃ­tulo del modal. Si falta, la cabecera se oculta. |
-| `message` | string | Texto principal. Lo pisa el slot `message` si tiene contenido. |
+| `heading` | string | Título del modal. Si falta, la cabecera se oculta. |
+| `message` | string | Texto principal; los saltos de línea se respetan. El slot `message` lo sustituye. |
 | `open` | boolean | Controlado: presencia = visible. |
+| `color` | intent | Color del botón de aceptar por defecto (default `brand`; `danger` para borrar). |
+| `confirm-label` | string | Texto del botón de aceptar por defecto (default `Aceptar`). |
+| `cancel-label` | string | Texto del botón de cancelar por defecto (default `Cancelar`). |
 
-#### Propiedades pÃºblicas
+#### Propiedades públicas
 
-No declara propiedades reflejadas propias; se opera por atributos y mÃ©todos.
+No declara propiedades reflejadas propias; se opera por atributos y métodos.
 
 ### Slots
 
 | Slot | Uso |
 | --- | --- |
 | `message` | Contenido rico en vez del atributo `message`. |
-| `confirm` | BotÃ³n de confirmaciÃ³n. Default: `<iswc-button color="brand">Aceptar</iswc-button>`. |
-| `cancel` | BotÃ³n de cancelar. Default: `<iswc-button variant="text" color="neutral">Cancelar</iswc-button>`. |
+| `confirm` | Botón de confirmación. Default: `<iswc-button color="brand">Aceptar</iswc-button>`. |
+| `cancel` | Botón de cancelar. Default: `<iswc-button variant="text" color="neutral">Cancelar</iswc-button>`. |
 
 ### Eventos
 
 
-| Evento | DescripciÃ³n |
+| Evento | Descripción |
 | --- | --- |
 | `iswc-confirm-show` | Evento personalizado del componente (confirm show). |
 | `iswc-confirm-hide` | Evento personalizado del componente (confirm hide). |
@@ -79,12 +82,12 @@ No declara propiedades reflejadas propias; se opera por atributos y mÃ©todos.
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `iswc-confirm-show` | sÃ­ | sÃ­ | sÃ­ | no |
-| `iswc-confirm-hide` | sÃ­ | sÃ­ | sÃ­ | no |
-| `iswc-confirm-confirm` | sÃ­ | sÃ­ | sÃ­ | no |
-| `iswc-confirm-cancel` | sÃ­ | sÃ­ | sÃ­ | no |
+| `iswc-confirm-show` | sí | sí | sí | no |
+| `iswc-confirm-hide` | sí | sí | sí | no |
+| `iswc-confirm-confirm` | sí | sí | sí | no |
+| `iswc-confirm-cancel` | sí | sí | sí | no |
 
-`detail` en los cuatro: `{ trigger }` â€” el elemento referenciado por `for`,
+`detail` en los cuatro: `{ trigger }` — el elemento referenciado por `for`,
 o `null` si no hay.
 
 
@@ -100,9 +103,9 @@ el.addEventListener('iswc-confirm-show', (e) => {
 
 </details>
 
-### MÃ©todos y propiedades pÃºblicas
+### Métodos y propiedades públicas
 
-| MÃ©todo | Uso |
+| Método | Uso |
 | --- | --- |
 | `show()` | Abre el modal y emite `iswc-confirm-show`. |
 | `hide()` | Cierra el modal y emite `iswc-confirm-hide`. |
@@ -113,7 +116,7 @@ el.addEventListener('iswc-confirm-show', (e) => {
 | --- | --- |
 | `backdrop` | El fondo oscurecido a pantalla completa. |
 | `base` | La caja del modal. |
-| `heading` | El tÃ­tulo. |
+| `heading` | El título. |
 | `message` | El bloque de texto. |
 | `actions` | La fila de botones. |
 
@@ -125,30 +128,32 @@ No expone.
 
 | Token | Uso |
 | --- | --- |
-| `--iswc-bg-elev` | Fondo del modal (vÃ­a `--bg`). |
-| `--iswc-text` | Color de texto (vÃ­a `--fg`). |
+| `--iswc-bg-elev` | Fondo del modal (vía `--bg`). |
+| `--iswc-text` | Color de texto (vía `--fg`). |
 | `--iswc-text-soft` | Color del mensaje. |
-| `--iswc-border` | Borde del modal (vÃ­a `--border`). |
-| `--iswc-brand` | Color de marca (vÃ­a `--brand`). |
-| `--iswc-brand-fg` | Texto sobre el color de marca (vÃ­a `--brand-fg`). |
+| `--iswc-border` | Borde del modal (vía `--border`). |
+| `--iswc-brand` | Color de marca (vía `--brand`). |
+| `--iswc-brand-fg` | Texto sobre el color de marca (vía `--brand-fg`). |
 
 Los botones por defecto de los slots `confirm` / `cancel` son `<iswc-button>`:
-su color y apariencia se controlan desde el propio botÃ³n, no desde aquÃ­.
+su color y apariencia se controlan desde el propio botón, no desde aquí.
 
-### IntegraciÃ³n con formularios
+### Integración con formularios
 
-No declara integraciÃ³n form-associated propia en este mÃ³dulo.
+No declara integración form-associated propia en este módulo.
 
 ## Comportamiento
+
+Al abrir, el foco va a Cancelar (WAI-APG alertdialog) y Tab da la vuelta entre los dos botones sin salir del modal. Escape y el click en el velo cancelan. Un mensaje largo se desplaza dentro del modal y el pie queda siempre visible.
 
 - El cierre por Escape y el bloqueo de scroll del fondo salen de
   `_shared/popup-dismiss.js` (`createPopupDismiss` con `scrollLock`), el mismo
   ciclo que usan `iswc-dropdown`, `iswc-context-menu` y `iswc-popconfirm`.
-- El click fuera lo resuelve el propio backdrop: sÃ³lo cancela si el click cae
+- El click fuera lo resuelve el propio backdrop: sólo cancela si el click cae
   en el backdrop, no en la caja del modal.
 - Escape y el click fuera equivalen a **cancelar**: emiten
   `iswc-confirm-cancel` y luego `iswc-confirm-hide`.
-- Al abrir se guarda el elemento enfocado y se enfoca el botÃ³n de confirmar;
+- Al abrir se guarda el elemento enfocado y se enfoca el botón de confirmar;
   al cerrar se devuelve el foco al elemento original.
 
 ## Dependencias y componentes relacionados
@@ -156,14 +161,14 @@ No declara integraciÃ³n form-associated propia en este mÃ³dulo.
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 - [`../_shared/popup-dismiss.js`](../../core/popup-dismiss.js)
 - [`../actions/button.js`](../actions/button.js)
-- [`./popconfirm.md`](./popconfirm.md) â€” la variante anclada, sin backdrop.
+- [`./popconfirm.md`](./popconfirm.md) — la variante anclada, sin backdrop.
 
-Tags del mÃ³dulo: `<iswc-confirm-modal>`.
+Tags del módulo: `<iswc-confirm-modal>`.
 
 ## Accesibilidad
 
 `role="alertdialog"` + `aria-modal="true"` en la caja. El disparador recibe
-`aria-haspopup="dialog"`. El foco entra al confirmar y vuelve al disparador al
+`aria-haspopup="dialog"`. El foco entra a Cancelar y vuelve al disparador al
 cerrar. Escape siempre cancela.
 
 ## Ejemplo avanzado
@@ -172,16 +177,16 @@ cerrar. Escape siempre cancela.
 <iswc-button id="btnDelete" color="danger">Borrar</iswc-button>
 <iswc-confirm-modal for="btnDelete" heading="Eliminar factura">
   <div slot="message">
-    Se borrarÃ¡ la factura y sus movimientos asociados. Esta acciÃ³n no se puede deshacer.
+    Se borrará la factura y sus movimientos asociados. Esta acción no se puede deshacer.
   </div>
-  <iswc-button slot="confirm" color="danger">SÃ­, eliminar</iswc-button>
+  <iswc-button slot="confirm" color="danger">Sí, eliminar</iswc-button>
   <iswc-button slot="cancel">Volver</iswc-button>
 </iswc-confirm-modal>
 ```
 
 ## Errores comunes
 
-- Usar tag sin importar mÃ³dulo primero.
+- Usar tag sin importar módulo primero.
 - Esperar que Escape confirme: siempre cancela.
 - Poner `message` y a la vez contenido en el slot `message`: gana el slot.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
@@ -189,15 +194,15 @@ cerrar. Escape siempre cancela.
 
 ## Reglas para LLM
 
-- Reusar componente y dependencias antes de implementaciÃ³n paralela.
+- Reusar componente y dependencias antes de implementación paralela.
 - Mantener nombres exactos de tags y API.
-- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explÃ­cito.
-- Leer callers/shared antes de cambiar; corregir raÃ­z comÃºn.
-- No modificar API basÃ¡ndose solo en preview.
+- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explícito.
+- Leer callers/shared antes de cambiar; corregir raíz común.
+- No modificar API basándose solo en preview.
 
 ## Fuentes
 
 - [JavaScript](./confirm-modal.ts)
-- [CSS](./confirm-modal.css)
-- [Ãndice de categorÃ­a](../../specs/componentes.md)
+- [CSS](./confirm-modal.scss)
+- [Índice de categoría](../../../specs/componentes.md)
 - [Preview](./confirm-modal.json)

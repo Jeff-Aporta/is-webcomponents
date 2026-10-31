@@ -15,7 +15,26 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-flex-options id=\"foDemo\"></iswc-flex-options>"
+          "html": "<iswc-flex-options id=\"foDemo\"></iswc-flex-options>",
+          "target": "#foDemo",
+          "controls": [
+            {
+              "control": "boolean",
+              "prop": "attr:compact",
+              "label": "compact"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:more-disabled",
+              "label": "more-disabled"
+            },
+            {
+              "control": "text",
+              "prop": "attr:label",
+              "label": "label",
+              "default": "Opciones"
+            }
+          ]
         }
       ]
     },

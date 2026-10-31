@@ -9,7 +9,7 @@
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  padding: .35rem .5rem;
+  padding: .35em .5em;
   border: 1px solid var(--iswc-border);
   border-radius: var(--iswc-radius);
   background: var(--iswc-bg-elev);
@@ -23,10 +23,10 @@
 }
 
 .text {
-  margin-block-start: .25rem;
+  margin-block-start: .2941em;
   text-align: center;
   font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  font-size: .85rem;
+  font-size: .85em;
   letter-spacing: .12em;
   color: var(--iswc-text);
 }

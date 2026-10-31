@@ -32,7 +32,53 @@
             "            <iswc-stat label=\"Tasa de conversión\" value=\"2.4%\" helper=\"vs objetivo\" trend=\"-0.3%\" icon=\"mdi:target\" color=\"danger\"></iswc-stat>",
             "            <iswc-stat label=\"Tickets abiertos\" value=\"47\" helper=\"12 críticos\" trend=\"flat\" icon=\"mdi:ticket-outline\" color=\"warning\"></iswc-stat>",
             "          </div>"
-          ]
+          ],
+          "controls": [
+            {
+              "control": "text",
+              "prop": "attr:label",
+              "label": "label"
+            },
+            {
+              "control": "text",
+              "prop": "attr:value",
+              "label": "value"
+            },
+            {
+              "control": "text",
+              "prop": "attr:helper",
+              "label": "helper"
+            },
+            {
+              "control": "text",
+              "prop": "attr:trend",
+              "label": "trend"
+            },
+            {
+              "control": "select",
+              "prop": "attr:trend-direction",
+              "label": "trend-direction",
+              "options": [
+                "up",
+                "down",
+                "flat"
+              ]
+            },
+            {
+              "control": "select",
+              "prop": "attr:color",
+              "label": "color",
+              "options": [
+                "brand",
+                "neutral",
+                "text",
+                "success",
+                "warning",
+                "danger"
+              ]
+            }
+          ],
+          "target": ".stats-grid iswc-stat"
         }
       ]
     },

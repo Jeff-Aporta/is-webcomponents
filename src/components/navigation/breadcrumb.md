@@ -1,41 +1,41 @@
-﻿---
+---
 tag: iswc-breadcrumb
 tags:
   - iswc-breadcrumb
 category: navigation
 status: public
 source: ./breadcrumb.ts
-style: ./breadcrumb.css
+style: ./breadcrumb.scss
 preview: ./breadcrumb.json
 ---
 # `<iswc-breadcrumb>`
 
-## PropÃ³sito
+## Propósito
 
 Migas de pan accesibles con marcado <nav>,
-ARIA roles y separador automÃ¡tico entre items.
+ARIA roles y separador automático entre items.
 
-Este mÃ³dulo registra `<iswc-breadcrumb>`.
+Este módulo registra `<iswc-breadcrumb>`.
 
-## CuÃ¡ndo usarlo
+## Cuándo usarlo
 
-OrientaciÃ³n, movimiento entre vistas y navegaciÃ³n jerÃ¡rquica o secuencial.
+Orientación, movimiento entre vistas y navegación jerárquica o secuencial.
 
-## CuÃ¡ndo no usarlo
+## Cuándo no usarlo
 
 No separar children multi-tag ni romper teclado/ARIA.
 
-## ImportaciÃ³n
+## Importación
 
 ```js
 import './breadcrumb.js';
 ```
 
-## Ejemplo mÃ­nimo
+## Ejemplo mínimo
 
 ```html
-<iswc-breadcrumb label="CatÃ¡logo">
-<iswc-breadcrumb-item href="/">CatÃ¡logo</iswc-breadcrumb-item>
+<iswc-breadcrumb label="Catálogo">
+<iswc-breadcrumb-item href="/">Catálogo</iswc-breadcrumb-item>
 <iswc-breadcrumb-item href="/ropa">Ropa</iswc-breadcrumb-item>
 <iswc-breadcrumb-item href="/ropa/mujer">Mujer</iswc-breadcrumb-item>
 <iswc-breadcrumb-item href="">Camisetas</iswc-breadcrumb-item>
@@ -50,9 +50,9 @@ import './breadcrumb.js';
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
-| `label` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `label` | string/según contrato | Fuente define default/restricción. |
 
-#### Propiedades pÃºblicas
+#### Propiedades públicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
@@ -67,7 +67,7 @@ import './breadcrumb.js';
 ### Eventos
 
 
-| Evento | DescripciÃ³n |
+| Evento | Descripción |
 | --- | --- |
 
 No expone.
@@ -85,11 +85,11 @@ el.addEventListener('click', (e) => {
 
 </details>
 
-### MÃ©todos y propiedades pÃºblicas
+### Métodos y propiedades públicas
 
 No expone.
 
-Propiedades pÃºblicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
+Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
 
 ### CSS parts
 
@@ -105,22 +105,22 @@ No expone.
 
 | Token | Uso |
 | --- | --- |
-| `--iswc-font-family` | Token leÃ­do o definido por componente. |
-| `--iswc-text-muted` | Token leÃ­do o definido por componente. |
+| `--iswc-font-family` | Token leído o definido por componente. |
+| `--iswc-text-muted` | Token leído o definido por componente. |
 
-### IntegraciÃ³n con formularios
+### Integración con formularios
 
-No declara integraciÃ³n form-associated propia en este mÃ³dulo.
+No declara integración form-associated propia en este módulo.
 
 ## Comportamiento
 
-DocumentaciÃ³n de cabecera preservada desde fuente:
+Documentación de cabecera preservada desde fuente:
 
-> <iswc-breadcrumb> â€” contenedor de una ruta de migas de pan.
+> <iswc-breadcrumb> — contenedor de una ruta de migas de pan.
 > Recibe N `<iswc-breadcrumb-item>` en el slot default y los muestra
 > separados por el slot `separator`.
 > Atributos
->   label    string  â€” aria-label del nav (anunciado por screen readers).
+>   label    string  — aria-label del nav (anunciado por screen readers).
 > Slots
 >   (default)  breadcrumb-items.
 >   separator  icono o texto entre items (default: chevron-right).
@@ -130,11 +130,11 @@ DocumentaciÃ³n de cabecera preservada desde fuente:
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 
-Tags del mÃ³dulo: `<iswc-breadcrumb>`.
+Tags del módulo: `<iswc-breadcrumb>`.
 
 ## Accesibilidad
 
-Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`.
+Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`.
 
 ## Ejemplo avanzado
 
@@ -148,23 +148,23 @@ Inicio
 
 ## Errores comunes
 
-- Usar tag sin importar mÃ³dulo primero.
+- Usar tag sin importar módulo primero.
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
-- Crear size color; usar font-size contextual y em.
+- Agregar un atributo `size`: el tamaño sale del `font-size` del contexto y de `em`.
 
 ## Reglas para LLM
 
-- Reusar componente y dependencias antes de implementaciÃ³n paralela.
+- Reusar componente y dependencias antes de implementación paralela.
 - Mantener nombres exactos de tags y API.
-- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explÃ­cito.
-- Leer callers/shared antes de cambiar; corregir raÃ­z comÃºn.
-- No modificar API basÃ¡ndose solo en preview.
+- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explícito.
+- Leer callers/shared antes de cambiar; corregir raíz común.
+- No modificar API basándose solo en preview.
 
 ## Fuentes
 
 - [JavaScript](./breadcrumb.ts)
-- [CSS](./breadcrumb.css)
-- [Ãndice de categorÃ­a](../../specs/componentes.md)
+- [CSS](./breadcrumb.scss)
+- [Índice de categoría](../../../specs/componentes.md)
 - [Preview](./breadcrumb.json)

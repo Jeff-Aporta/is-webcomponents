@@ -1,12 +1,16 @@
 import { adoptCss, defineElement, emit } from '../../core/element.js';
-import { attachFormInternals, setCustomState, setFormValue } from '../../core/form-associated.js';
+import { attachFormInternals, clearValidity, setCustomState, setFormValue, setValidity } from '../../core/form-associated.js';
 import { apply, isComplete } from './utils/masks-tokens.js';
 import { setStringAttr } from '../../core/reflect.js';
+import './input.js';
 
 /**
  * <iswc-masked-input> — Input con formato aplicado (tarjeta de crédito, fecha,
  * teléfono, etc.). Tokeniza un patrón y aplica `apply()` al valor crudo en cada
  * cambio del campo.
+ *
+ * Está construido SOBRE <iswc-input>: etiqueta, ayuda, error, variantes, foco,
+ * densidad y adornos viven allí. Lo que añade es solo la máscara.
  *
  * Atributos
  *   pattern         Cadena con tokens y literales.
@@ -18,8 +22,11 @@ import { setStringAttr } from '../../core/reflect.js';
  *                    cualquier otro char = literal (se imprime tal cual)
  *   value           Texto crudo (interno y público).
  *   name            form-associated
- *   placeholder, autocomplete, maxlength, disabled, readonly, required
- *   variant      outlined (default) | filled | underlined
+ *   label, hint, error, error-text, placeholder (por defecto, el patrón), autocomplete,
+ *   maxlength (por defecto, el largo del patrón), disabled, readonly, required,
+ *   clearable, full-width
+ *   variant         outlined (default) | filled | underlined
+ *   label-placement top (default) | start | float
  *   invalid         se setea automáticamente al perder focus si required+empty
  *
  * Slots
@@ -31,63 +38,64 @@ import { setStringAttr } from '../../core/reflect.js';
  * Token CSS: --iswc-field-width
  */
 (() => {
-  const OBSERVED: string[] = [
-    'pattern', 'value', 'name', 'placeholder', 'autocomplete',
-    'maxlength', 'disabled', 'readonly', 'required',
-    'variant', 'invalid',
+  /** Atributos que <iswc-input> ya sabe resolver: se le pasan tal cual. */
+  const REENVIADOS: string[] = [
+    'label', 'hint', 'error-text', 'autocomplete', 'disabled', 'readonly', 'required',
+    'variant', 'label-placement', 'full-width', 'clearable',
   ];
+  const OBSERVED: string[] = [...REENVIADOS, 'pattern', 'value', 'name', 'placeholder', 'maxlength', 'invalid', 'error'];
 
   class IswcMaskedInput extends HTMLElement {
+    static formAssociated = true;
     static get observedAttributes(): string[] { return OBSERVED; }
 
     #internals: ElementInternals | null;
     #mounted = false;
-    #suppress = false;
-    #input!: HTMLInputElement;
+    #field: HTMLElement & { value: string };
+    #input: HTMLInputElement;
 
     constructor() {
       super();
-      const shadow = this.attachShadow({ mode: 'open' });
-      shadow.innerHTML = /* html */ `
-        <div part="field" class="field">
-          <slot name="start"></slot>
-          <input part="input" class="input" id="input" type="text" />
-          <slot name="end"></slot>
-        </div>
-      `;
+      const shadow = this.attachShadow({ mode: 'open', delegatesFocus: true });
       adoptCss(shadow, import.meta.url);
+      this.#field = document.createElement('iswc-input') as HTMLElement & { value: string };
+      this.#field.className = 'field';
+      this.#field.setAttribute('part', 'field');
+      this.#field.setAttribute('exportparts', 'form-control, label, base, input, hint, error-text');
+      this.#field.innerHTML = /* html */ `
+        <slot name="start" slot="start"></slot>
+        <slot name="end" slot="end"></slot>
+      `;
+      shadow.appendChild(this.#field);
+      this.#input = this.#field.shadowRoot!.getElementById('input') as HTMLInputElement;
       this.#internals = attachFormInternals(this);
-      this.#input = shadow.getElementById('input') as HTMLInputElement;
-      this.#input.addEventListener('input', () => this.#onInput());
-      this.#input.addEventListener('blur', () => this.#syncValidity());
-      // El input interno vive en shadow: su `change` no cruza el límite, hay
-      // que reemitirlo con el vocabulario de la librería.
-      this.#input.addEventListener('change', () => emit(this, 'iswc-change', { value: this.value }));
-      this.addEventListener('slotchange', () => this.#syncSlots());
+      // Los eventos del campo interno se reemiten aquí con el valor enmascarado.
+      this.#field.addEventListener('iswc-input', (e: Event) => { e.stopPropagation(); this.#onInput(); });
+      this.#field.addEventListener('iswc-change', (e: Event) => {
+        e.stopPropagation();
+        emit(this, 'iswc-change', { value: this.value });
+      });
+      this.#field.addEventListener('focusout', () => this.#syncValidity());
     }
 
     connectedCallback(): void {
       this.#mounted = true;
+      for (const name of REENVIADOS) this.#forward(name);
       this.#syncPattern();
-      this.#syncSlots();
       // initial value (si el atributo vino pre-formateado, se reformatea igual)
       const attrValue = this.getAttribute('value');
       if (attrValue != null) this.value = attrValue;
+      this.#syncInvalid();
+      this.#syncFormState();
     }
 
     attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
       if (!this.#mounted || oldVal === newVal) return;
-      if (name === 'pattern') this.#syncPattern();
-      if (name === 'value') {
-        if (this.value !== newVal) this.value = newVal;
-      }
-      if (name === 'invalid') {
-        setCustomState(this.#internals, 'invalid', this.hasAttribute('invalid'));
-      }
-      if (name === 'disabled' || name === 'readonly' || name === 'required') {
-        this.#syncDisabled();
-        this.#syncValidity();
-      }
+      if (REENVIADOS.includes(name)) this.#forward(name);
+      if (name === 'pattern' || name === 'placeholder' || name === 'maxlength') this.#syncPattern();
+      if (name === 'value' && this.value !== newVal) this.value = newVal;
+      if (name === 'invalid' || name === 'error') this.#syncInvalid();
+      if (name === 'required') this.#syncFormState();
     }
 
     get pattern(): string { return this.getAttribute('pattern') || ''; }
@@ -95,74 +103,62 @@ import { setStringAttr } from '../../core/reflect.js';
       setStringAttr(this, 'pattern', v);
     }
 
-    get value(): string { return this.#input.value; }
+    get value(): string { return this.#field.value; }
     set value(v: string | null | undefined) {
       const next = apply(v, this.pattern);
-      if (this.#input.value === next) return;
-      this.#suppress = true;
-      this.#input.value = next;
-      this.#suppress = false;
+      if (this.#field.value === next) return;
+      this.#field.value = next;
       this.#syncComplete();
-      if (this.#mounted) {
-        emit(this, 'iswc-input');
-        setFormValue(this.#internals, next);
-      }
+      if (!this.#mounted) return;
+      emit(this, 'iswc-input');
+      this.#syncFormState();
     }
 
     /** Sólo caracteres limpios (sin literales). Útil para enviar al backend. */
     get raw(): string {
-      return String(this.#input.value || '').replace(/[^A-Za-z0-9]/g, '');
+      return String(this.value || '').replace(/[^A-Za-z0-9]/g, '');
     }
 
     /** Devuelve el texto formateado actual. */
-    get formatted(): string { return this.#input.value; }
+    get formatted(): string { return this.value; }
 
     /** ¿El usuario rellenó todos los slots requeridos? */
-    get complete(): boolean { return isComplete(this.#input.value, this.pattern); }
+    get complete(): boolean { return isComplete(this.value, this.pattern); }
+
+    formResetCallback(): void {
+      this.value = this.getAttribute('value') ?? '';
+    }
 
     focus(): void { this.#input.focus(); }
     blur(): void { this.#input.blur(); }
 
+    #forward(name: string): void {
+      const v = this.getAttribute(name);
+      if (v == null) this.#field.removeAttribute(name);
+      else this.#field.setAttribute(name, v);
+    }
+
     #onInput(): void {
-      if (this.#suppress) return;
       // aceptar lo que el usuario escribió, reformatearlo, restaurar caret razonable
       const before = this.#input.value;
-      const next = apply(this.#input.value, this.pattern);
+      const next = apply(before, this.pattern);
       const caret = this.#input.selectionStart ?? before.length;
-      // ajuste simple: deja el caret al final del valor formateado
-      this.#input.value = next;
+      this.#field.value = next;
       const newCaret = Math.min(next.length, caret + (next.length - before.length));
       try { this.#input.setSelectionRange(newCaret, newCaret); } catch { /* noop */ }
       this.#syncComplete();
       emit(this, 'iswc-input');
-      setFormValue(this.#internals, next);
+      this.#syncFormState();
     }
 
     #syncPattern(): void {
       const p = this.pattern;
-      this.#input.placeholder = p;
-      // maxlength opcional desde el usuario, sin pisarlo si ya estaba
-      if (!this.hasAttribute('maxlength')) {
-        try { this.#input.maxLength = p.length || -1; } catch { /* noop */ }
-      }
+      this.#field.setAttribute('placeholder', this.getAttribute('placeholder') ?? p);
+      const max = this.getAttribute('maxlength') ?? (p.length ? String(p.length) : null);
+      if (max == null) this.#field.removeAttribute('maxlength');
+      else this.#field.setAttribute('maxlength', max);
       // re-formatear valor actual con el nuevo patrón
       if (this.#mounted) this.value = this.value;
-    }
-
-    #syncSlots(): void {
-      const startSlot = this.shadowRoot!.querySelector<HTMLSlotElement>('slot[name="start"]');
-      const endSlot = this.shadowRoot!.querySelector<HTMLSlotElement>('slot[name="end"]');
-      // si los slots están vacíos, ocupa todo el ancho; si no, deja hueco
-      this.#input.classList.toggle('with-start', !!startSlot?.assignedNodes?.().length);
-      this.#input.classList.toggle('with-end', !!endSlot?.assignedNodes?.().length);
-    }
-
-    #syncDisabled(): void {
-      const dis = this.hasAttribute('disabled');
-      const ro = this.hasAttribute('readonly');
-      this.#input.disabled = dis;
-      this.#input.readOnly = ro;
-      if (this.#input.disabled) this.#input.blur();
     }
 
     #syncComplete(): void {
@@ -171,12 +167,23 @@ import { setStringAttr } from '../../core/reflect.js';
       if (complete) emit(this, 'iswc-complete');
     }
 
-    #syncValidity(): void {
+    #syncInvalid(): void {
+      const invalid = this.hasAttribute('invalid');
+      this.#field.toggleAttribute('error', invalid || this.hasAttribute('error'));
+      setCustomState(this.#internals, 'invalid', invalid);
+    }
+
+    #syncFormState(): void {
+      setFormValue(this.#internals, this.value);
       if (this.hasAttribute('required') && !this.value) {
-        this.setAttribute('invalid', '');
-      } else if (this.hasAttribute('invalid') && !this.hasAttribute('required')) {
-        this.removeAttribute('invalid');
+        setValidity(this.#internals, { valueMissing: true }, 'Completa este campo', this.#input);
+      } else {
+        clearValidity(this.#internals);
       }
+    }
+
+    #syncValidity(): void {
+      this.toggleAttribute('invalid', this.hasAttribute('required') && !this.value);
     }
   }
 

@@ -259,6 +259,21 @@ for (const cat of await readdir(componentsRoot, { withFileTypes: true })) {
 }
 ok += jsonCount;
 
+// ── SCSS de cada carpeta: la pestaña SCSS de la Anatomía los pide junto a su
+// .json. Sin copiarlos, cada demo daba 404 y la pestaña no aparecía.
+let scssCount = 0;
+for (const cat of await readdir(componentsRoot, { withFileTypes: true })) {
+  if (!cat.isDirectory() || cat.name.startsWith('_')) continue;
+  const catDir = join(componentsRoot, cat.name);
+  for (const entry of await readdir(catDir, { withFileTypes: true })) {
+    if (!entry.isFile() || !entry.name.endsWith('.scss')) continue;
+    await mkdir(join(previewsOut, cat.name), { recursive: true });
+    await copyFile(join(catDir, entry.name), join(previewsOut, cat.name, entry.name));
+    scssCount++;
+  }
+}
+ok += scssCount;
+
 // ── CSS siblings para los preview bundles: los bundles en dist/previews/<cat>/
 // resuelven `import './host-base.css'` y `import './scrollbars.css'` contra
 // su propia carpeta. Sin esos CSS en dist/previews/<cat>/ el browser hace 2×
@@ -315,4 +330,5 @@ console.log(`  - ${scripts.length} scripts → dist/scripts/`);
 console.log(`  - ${pages.length * 2} pages → dist/pages/`);
 console.log(`  - ${allPreviews.length} previews → dist/previews/`);
 console.log(`  - ${jsonCount} JSONs → dist/previews/`);
+console.log(`  - ${scssCount} SCSS → dist/previews/`);
 

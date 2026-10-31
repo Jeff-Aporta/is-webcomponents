@@ -8,7 +8,7 @@
 .root {
   display: flex; flex-direction: column;
   border: 1px solid var(--iswc-control-border, var(--iswc-border));
-  border-radius: var(--iswc-control-radius);
+  border-radius: var(--iswc-radius-sm);
   background: var(--iswc-bg-elev);
   overflow: hidden;
 }
@@ -16,8 +16,8 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 2px;
-  padding: .35rem .5rem;
+  gap: .125em;
+  padding: .35em .5em;
   background: color-mix(in srgb, var(--iswc-bg-elev) 92%, transparent);
   border-bottom: 1px solid var(--iswc-border-soft);
 }
@@ -26,11 +26,11 @@
   border: 1px solid transparent;
   background: transparent;
   color: var(--iswc-text);
-  padding: .2rem .55rem;
+  padding: .2353em .6471em;
   border-radius: var(--iswc-rte-button-radius);
   cursor: pointer;
-  font-size: .85rem;
-  min-width: 1.8rem;
+  font-size: .85em;
+  min-width: 2.1176em;
   text-align: center;
 
   &:hover {
@@ -47,17 +47,17 @@
 }
 .sep {
   display: inline-block;
-  width: 1px;
-  height: 18px;
+  width: .0625em;
+  height: 1.125em;
   background: var(--iswc-border-soft);
-  margin: 0 .15rem;
+  margin: 0 .15em;
 }
 
 .content {
-  padding: .85rem 1rem;
+  padding: .9239em 1.087em;
   min-height: var(--iswc-rte-content-min-h);
   outline: 0;
-  font-size: .92rem;
+  font-size: .92em;
   line-height: 1.6;
   color: inherit;
 
@@ -65,28 +65,28 @@
 
   /* Cabeceras: comparten peso y margen superior; el inferior + tamaño difieren. */
   :is(h1, h2, h3) {
-    margin: .8rem 0 .3rem;
+    margin: .8696em 0 .3261em;
     font-weight: 700;
   }
-  h1 { font-size: 1.4rem; }
-  h2 { font-size: 1.15rem; }
-  h3 { font-size: 1rem; }
-  p  { margin: 0 0 .65rem; }
+  h1 { font-size: 1.5217em; }
+  h2 { font-size: 1.25em; }
+  h3 { font-size: 1.087em; }
+  p  { margin: 0 0 .7065em; }
   a  { color: var(--iswc-accent); }
   blockquote {
-    margin: .5rem 0;
-    padding: .35rem .8rem;
-    border-left: 3px solid var(--iswc-accent);
+    margin: .5435em 0;
+    padding: .3804em .8696em;
+    border-left: .2038em solid var(--iswc-accent);
     background: color-mix(in srgb, var(--iswc-accent) 10%, transparent);
     color: var(--iswc-text-soft);
   }
   code, pre {
     font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
     background: color-mix(in srgb, var(--iswc-text) 8%, transparent);
-    padding: 1px 4px;
-    border-radius: 4px;
+    padding: .0679em .2717em;
+    border-radius: .2717em;
   }
-  ul, ol { padding-left: 1.4rem; margin: 0 0 .65rem; }
+  ul, ol { padding-left: 1.5217em; margin: 0 0 .7065em; }
 
   /* Tokens inline (chips no editables) insertados por otros componentes.
      Se marcan con [data-token] para no acoplar el editor a un tag concreto. */
@@ -111,10 +111,10 @@
 /* Modo código fuente: el textarea sustituye al área WYSIWYG. */
 .source {
   font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  font-size: .82rem;
+  font-size: .82em;
   line-height: 1.55;
   min-height: var(--iswc-rte-content-min-h);
-  padding: .85rem 1rem;
+  padding: 1.0366em 1.2195em;
   border: 0;
   outline: 0;
   resize: vertical;
@@ -126,9 +126,9 @@
 
 .placeholder {
   position: absolute;
-  top: 4.2rem;
-  left: 1rem;
+  top: 4.5652em;
+  left: 1.087em;
   color: var(--iswc-text-soft);
-  font-size: .92rem;
+  font-size: .92em;
   pointer-events: none;
 }

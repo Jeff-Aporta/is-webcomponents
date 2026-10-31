@@ -26,6 +26,9 @@ import { createPopupDismiss } from '../../core/popup-dismiss.js';
  *   iswc-select       detalle: { item, value }  — al elegir un item
  *   iswc-open, iswc-close
  *
+ * Teclado: al abrir el foco entra en el primer item; flechas, Inicio y Fin recorren los
+ * items (los deshabilitados se saltan); Escape y Tab cierran y devuelven el foco.
+ *
  * Estado abierto/cerrado: se refleja con el atributo `open` en el host
  * (consultable con `[open]` y `aria-expanded`); no expone `:state()`.
  */
@@ -40,6 +43,8 @@ import { createPopupDismiss } from '../../core/popup-dismiss.js';
     #listener: ((e: Event) => void) | null = null;
     #panel!: HTMLDialogElement;
     #onScroll;
+    /** Quien tenía el foco al abrir: lo recupera al cerrar. */
+    #returnFocus: HTMLElement | null = null;
     /** Ciclo de escucha mientras el menú está abierto (ver _shared/popup-dismiss.js). */
     #dismiss: ReturnType<typeof createPopupDismiss> | null = null;
 
@@ -48,7 +53,7 @@ import { createPopupDismiss } from '../../core/popup-dismiss.js';
       this.attachShadow({ mode: 'open' });
       this.shadowRoot!.innerHTML = /* html */ `
         <dialog part="panel" class="panel">
-          <div part="items" class="items">
+          <div part="items" class="items" role="menu">
             <slot></slot>
           </div>
         </dialog>
@@ -57,6 +62,7 @@ import { createPopupDismiss } from '../../core/popup-dismiss.js';
       this.#panel = this.shadowRoot!.querySelector<HTMLDialogElement>('dialog')!;
       this.#panel.addEventListener('click', (e: Event) => this.#onPanelClick(e));
       this.#panel.addEventListener('contextmenu', (e: Event) => e.preventDefault());
+      this.#panel.addEventListener('keydown', (e: KeyboardEvent) => this.#onPanelKey(e));
       this.#onScroll = (e: Event) => {
         if (!this.isOpen || this.scrollLock) return;
         // Scroll interno del panel (lista larga) no debe cerrar.
@@ -101,6 +107,7 @@ import { createPopupDismiss } from '../../core/popup-dismiss.js';
     openAt(x: number, y: number): void {
       if (this.hasAttribute('disabled')) return;
       const panel = this.#panel;
+      if (!panel.open) this.#returnFocus = this.#activeElement();
       // Medir fuera de vista para que no haya un frame en la esquina.
       panel.style.visibility = 'hidden';
       panel.style.left = '0px';
@@ -133,6 +140,7 @@ import { createPopupDismiss } from '../../core/popup-dismiss.js';
       this.setAttribute('open', '');
       this.#setupScrollBehavior();
       emit(this, 'iswc-open', { x, y });
+      this.#items()[0]?.focus({ preventScroll: true });
     }
 
     /** Abre el menú anclado a un elemento (esquina inferior izquierda). */
@@ -149,7 +157,41 @@ import { createPopupDismiss } from '../../core/popup-dismiss.js';
       if (this.#panel.open) this.#panel.close();
       this.removeAttribute('open');
       this.#teardownScrollBehavior();
+      this.#returnFocus?.focus({ preventScroll: true });
+      this.#returnFocus = null;
       emit(this, 'iswc-close');
+    }
+
+    #activeElement(): HTMLElement | null {
+      let el = document.activeElement;
+      while (el?.shadowRoot?.activeElement) el = el.shadowRoot.activeElement;
+      return el instanceof HTMLElement && el !== document.body ? el : null;
+    }
+
+    /** Items activables en orden, con tabindex para recibir foco aunque sean `.item` sin botón. */
+    #items(): HTMLElement[] {
+      const items = [...this.querySelectorAll<HTMLElement>('[role="menuitem"], .item, button, a')]
+        .filter((el) => !el.hasAttribute('disabled') && el.getAttribute('aria-disabled') !== 'true');
+      for (const el of items) {
+        if (el.tabIndex < 0) el.tabIndex = -1;
+      }
+      return items;
+    }
+
+    #onPanelKey(e: KeyboardEvent): void {
+      if (e.key === 'Tab') { this.close(); return; }
+      const items = this.#items();
+      if (!items.length) return;
+      const actual = items.indexOf(this.#activeElement() as HTMLElement);
+      const destino = ({
+        ArrowDown: (actual + 1) % items.length,
+        ArrowUp: (actual - 1 + items.length) % items.length,
+        Home: 0,
+        End: items.length - 1,
+      } as Record<string, number>)[e.key];
+      if (destino == null) return;
+      e.preventDefault();
+      items[destino].focus({ preventScroll: true });
     }
 
     #onPanelClick(e: Event): void {

@@ -1,3 +1,5 @@
+@use '../../styles/mixins' as *;
+
 :host {
   display: contents;
 }
@@ -6,66 +8,80 @@
   --iswc-popconfirm-bg: var(--iswc-bg-elev);
   --iswc-popconfirm-text: var(--iswc-text);
   --iswc-popconfirm-border: var(--iswc-border);
-  --iswc-popconfirm-accent: var(--iswc-color-brand);
-  --iswc-popconfirm-on-accent: var(--iswc-brand-fg);
-  --iswc-popconfirm-danger: var(--iswc-danger);
 
+  @include papel;
+  /* Popover en la capa superior: anula su chrome del navegador; top/left los fija el TS. */
+  position: fixed;
+  inset: auto;
+  top: 0;
+  left: 0;
+  margin: 0;
+  overflow: visible;
+  box-sizing: border-box;
   background: var(--iswc-popconfirm-bg);
   color: var(--iswc-popconfirm-text);
   border: 1px solid var(--iswc-popconfirm-border);
-  border-radius: 0.5rem;
-  padding: 0.75rem;
-  box-shadow: 0 8px 24px color-mix(in srgb, #000 18%, transparent);
-  font-size: 0.9rem;
-  min-width: 200px;
-  max-width: 320px;
-  position: relative;
+  border-radius: .5556em;
+  padding: .8333em;
+  box-shadow: 0 .5556em 1.6667em color-mix(in srgb, #000 18%, transparent);
+  font-family: var(--iswc-font-family);
+  font-size: 0.9em;
+  min-width: min(13.8889em, calc(100vw - 1.5em));
+  max-width: min(22.2222em, calc(100vw - 1.5em));
   animation: popconfirm-in 0.15s ease-out;
 
-  &[data-placement="top"],
-  &[data-placement="top-start"],
-  &[data-placement="top-end"] {
-    .arrow {
-      inset-block-end: -12px;
-      border-block-start-color: var(--iswc-popconfirm-bg);
-    }
+  @media (prefers-reduced-motion: reduce) { animation: none; }
+
+  /* `--_flecha` lo calcula el TS: apunta al centro del disparador. */
+  &[data-lado="top"] .arrow {
+    top: 100%;
+    left: var(--_flecha, 50%);
+    border-block-start-color: var(--iswc-popconfirm-bg);
+    transform: translateX(-50%);
   }
 
-  &[data-placement="bottom"],
-  &[data-placement="bottom-start"],
-  &[data-placement="bottom-end"] {
-    .arrow {
-      inset-block-start: -12px;
-      border-block-end-color: var(--iswc-popconfirm-bg);
-    }
+  &[data-lado="bottom"] .arrow {
+    bottom: 100%;
+    left: var(--_flecha, 50%);
+    border-block-end-color: var(--iswc-popconfirm-bg);
+    transform: translateX(-50%);
   }
 
-  &[data-placement="start"] .arrow {
-    inset-inline-end: -12px;
+  &[data-lado="left"] .arrow {
+    left: 100%;
+    top: var(--_flecha, 50%);
     border-inline-start-color: var(--iswc-popconfirm-bg);
+    transform: translateY(-50%);
   }
-  &[data-placement="end"] .arrow {
-    inset-inline-start: -12px;
+
+  &[data-lado="right"] .arrow {
+    right: 100%;
+    top: var(--_flecha, 50%);
     border-inline-end-color: var(--iswc-popconfirm-bg);
+    transform: translateY(-50%);
   }
 }
 
 .message {
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.5em;
+  max-block-size: 40vh;
+  overflow-y: auto;
+  overflow-wrap: anywhere;
   line-height: 1.4;
 }
 
 .actions {
   display: flex;
+  flex-wrap: wrap;
   justify-content: flex-end;
-  gap: 0.5rem;
+  gap: 0.5em;
 }
 
 .arrow {
   position: absolute;
   width: 0;
   height: 0;
-  border: 6px solid transparent;
+  border: .375em solid transparent;
 }
 
 :host([hide-arrow]) {

@@ -60,7 +60,7 @@ const __CLASE__Hola = crearComponente<__CLASE__HolaProps>(
         `)}
       </div>
       <iswc-dialog id="modal" label="Cómo está hecha" backdrop-variant="basic" light-dismiss ?open=${props.modal} oniswc-hide=${cerrar}>
-        <iswc-callout tone="info">
+        <iswc-callout color="brand">
           <strong slot="title">Un componente = 4 archivos</strong>
           <code>.ts</code> (lógica) · <code>.scss</code> (estilos) · <code>.md</code> (ficha) · <code>.json</code> (demo), registrados una vez en <code>kit-tags.ts</code>.
         </iswc-callout>

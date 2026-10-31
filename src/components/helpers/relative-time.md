@@ -1,36 +1,36 @@
-﻿---
+---
 tag: iswc-relative-time
 tags:
   - iswc-relative-time
 category: helpers
 status: public
 source: ./relative-time.ts
-style: ./relative-time.css
+style: ./relative-time.scss
 preview: ./relative-time.json
 ---
 # `<iswc-relative-time>`
 
-## PropÃ³sito
+## Propósito
 
 Fechas relativas con Intl.RelativeTimeFormat.
 
-Este mÃ³dulo registra `<iswc-relative-time>`.
+Este módulo registra `<iswc-relative-time>`.
 
-## CuÃ¡ndo usarlo
+## Cuándo usarlo
 
-Formato, observaciÃ³n y posicionamiento reutilizable sobre APIs nativas.
+Formato, observación y posicionamiento reutilizable sobre APIs nativas.
 
-## CuÃ¡ndo no usarlo
+## Cuándo no usarlo
 
 No crear wrapper nuevo si Intl/Observer/position existente cubre caso.
 
-## ImportaciÃ³n
+## Importación
 
 ```js
 import './relative-time.js';
 ```
 
-## Ejemplo mÃ­nimo
+## Ejemplo mínimo
 
 ```html
 <iswc-relative-time date="2026-07-30T10:00:00" sync></iswc-relative-time>
@@ -44,12 +44,12 @@ import './relative-time.js';
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
-| `date` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `format` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `numeric` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `sync` | boolean | Fuente define default/restricciÃ³n. |
+| `date` | fecha ISO \| `Date` | Fecha a mostrar; sin ella, ahora. |
+| `format` | `long` \| `short` \| `narrow` | Estilo de `Intl.RelativeTimeFormat`. |
+| `numeric` | `always` \| `auto` | `auto` admite «ayer» en vez de «hace 1 día». |
+| `sync` | boolean | Fuente define default/restricción. |
 
-#### Propiedades pÃºblicas
+#### Propiedades públicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
@@ -65,7 +65,7 @@ No expone.
 ### Eventos
 
 
-| Evento | DescripciÃ³n |
+| Evento | Descripción |
 | --- | --- |
 
 No expone.
@@ -83,11 +83,11 @@ el.addEventListener('click', (e) => {
 
 </details>
 
-### MÃ©todos y propiedades pÃºblicas
+### Métodos y propiedades públicas
 
 No expone.
 
-Propiedades pÃºblicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
+Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
 
 ### CSS parts
 
@@ -103,31 +103,31 @@ No expone.
 
 No expone.
 
-### IntegraciÃ³n con formularios
+### Integración con formularios
 
-No declara integraciÃ³n form-associated propia en este mÃ³dulo.
+No declara integración form-associated propia en este módulo.
 
 ## Comportamiento
 
-DocumentaciÃ³n de cabecera preservada desde fuente:
+Documentación de cabecera preservada desde fuente:
 
-> <iswc-relative-time> â€” Web Component (vanilla).
+> <iswc-relative-time> — Web Component (vanilla).
 > Formatea fechas relativas con Intl.RelativeTimeFormat.
 > Atributos
->   date      string | number â€” ISO o timestamp
+>   date      string | number — ISO o timestamp
 >   format    long | short | narrow (default long)
 >   numeric   always | auto (default auto)
->   sync      boolean â€” actualiza periÃ³dicamente
+>   sync      boolean — actualiza periódicamente
 
 ## Dependencias y componentes relacionados
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 
-Tags del mÃ³dulo: `<iswc-relative-time>`.
+Tags del módulo: `<iswc-relative-time>`.
 
 ## Accesibilidad
 
-Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: ninguno explÃ­cito en fuente.
+Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: ninguno explícito en fuente.
 
 ## Ejemplo avanzado
 
@@ -137,7 +137,7 @@ Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: ninguno ex
 
 ## Errores comunes
 
-- Usar tag sin importar mÃ³dulo primero.
+- Usar tag sin importar módulo primero.
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
@@ -145,15 +145,15 @@ Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: ninguno ex
 
 ## Reglas para LLM
 
-- Reusar componente y dependencias antes de implementaciÃ³n paralela.
+- Reusar componente y dependencias antes de implementación paralela.
 - Mantener nombres exactos de tags y API.
-- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explÃ­cito.
-- Leer callers/shared antes de cambiar; corregir raÃ­z comÃºn.
-- No modificar API basÃ¡ndose solo en preview.
+- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explícito.
+- Leer callers/shared antes de cambiar; corregir raíz común.
+- No modificar API basándose solo en preview.
 
 ## Fuentes
 
 - [JavaScript](./relative-time.ts)
-- [CSS](./relative-time.css)
-- [Ãndice de categorÃ­a](../../specs/componentes.md)
+- [CSS](./relative-time.scss)
+- [Índice de categoría](../../../specs/componentes.md)
 - [Preview](./relative-time.json)

@@ -336,6 +336,10 @@ export default {
     "json": "../../dist/previews/data/stat-group.json",
     "category": "data"
   },
+  "iswc-ai-tool": {
+    "json": "../../dist/previews/media/ai-tool.json",
+    "category": "media"
+  },
   "iswc-person": {
     "json": "../../dist/previews/media/person.json",
     "category": "media"
@@ -778,6 +782,10 @@ export default {
   },
   "iswc-qrcode": {
     "json": "../../dist/previews/media/qrcode.json",
+    "category": "media"
+  },
+  "iswc-parallax-collage": {
+    "json": "../../dist/previews/media/parallax-collage.json",
     "category": "media"
   },
   "iswc-video-playlist": {

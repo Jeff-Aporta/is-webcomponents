@@ -54,7 +54,7 @@
 }
 
 /* Bajo 600px el pie se apila: los botones a ancho completo, Aceptar arriba. */
-@container iswc-form (max-width: 600px) {
+@container iswc-form (max-width: 37.5em) {
   .footer {
     flex-direction: column;
     align-items: stretch;

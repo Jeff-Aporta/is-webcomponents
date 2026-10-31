@@ -4,12 +4,23 @@ tags:
   - iswc-kanban-card
 category: data
 status: public
+source: ./kanban.ts
+style: ./kanban.scss
+preview: ./kanban-card.json
 ---
 # `<iswc-kanban-card>`
 
 ## Propósito
 
 Tarjeta de `<iswc-kanban>`. Representa un ítem movible dentro de una columna.
+
+## Importación
+
+```js
+import './kanban.js';
+```
+
+Ese módulo registra este tag junto con `<iswc-kanban>`.
 
 ## Cuándo usarlo
 
@@ -25,6 +36,17 @@ No lo reimplementes ni lo uses para sustituir al padre. La guía del padre docum
 <iswc-kanban-card></iswc-kanban-card>
 ```
 
+
+## API
+
+| Atributo | Notas |
+| --- | --- |
+| `heading` | Título. |
+| `meta` | Línea secundaria. |
+| `tag` | Texto de la etiqueta. |
+| `tag-color` | Color de la etiqueta. |
+| `cover` | Imagen de portada. |
+| `without-shadow` | Quita la sombra. |
 
 ## Eventos
 
@@ -44,3 +66,16 @@ parent.addEventListener('iswc-event', (e) => {
 ```
 
 </details>
+
+## Comportamiento
+
+Se arrastra entre columnas y emite `iswc-kanban-card-click` con `{ card, column }` al pulsarla.
+
+## Accesibilidad
+
+Refleja el arrastre en `aria-grabbed`.
+
+## Reglas para LLM
+
+- Va dentro de `<iswc-kanban-column>`.
+- El movimiento se escucha con `iswc-kanban-move`, que emite la columna destino.

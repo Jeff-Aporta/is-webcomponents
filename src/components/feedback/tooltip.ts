@@ -96,7 +96,8 @@ import '../helpers/floating.js';
     attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null): void {
       super.attributeChangedCallback(name, oldValue, newValue);
       if (!this.#mounted) return;
-      if (name === 'for') this.#bindTarget();
+      if (name === 'for' || name === 'trigger') this.#bindTarget();
+      else if (name === 'disabled' && this.disabled) this.open = false;
       else if (name === 'open') {
         if (this.open) this.#doShow();
         else this.#doHide();
@@ -146,7 +147,6 @@ import '../helpers/floating.js';
       this.#popup.skidding = this.skidding;
       this.#popup.arrow = !this.withoutArrow;
       this.#popup.hoverBridge = true;
-      this.#popup.style.setProperty('--iswc-tooltip-arrow-color', 'var(--iswc-tooltip-bg, #212529)');
     }
 
     #bindTarget() {
@@ -160,13 +160,15 @@ import '../helpers/floating.js';
       }
       this.#target = el;
       this.#popup.anchor = el;
-      el.setAttribute('aria-describedby', this.id || this.#ensureId());
+      // Se suma a lo que ya describa al ancla (hint o error de un control), sin pisarlo.
+      const id = this.id || this.#ensureId();
+      const previos = (el.getAttribute('aria-describedby') ?? '').split(/\s+/).filter(Boolean);
+      if (!previos.includes(id)) el.setAttribute('aria-describedby', [...previos, id].join(' '));
 
       if (this.#hasTrigger('hover')) {
         el.addEventListener('pointerenter', this.#onEnter);
         el.addEventListener('pointerleave', this.#onLeave);
-        (this.#popup as HTMLElement).addEventListener('iswc-hover-bridge', (e) =>
-          this.#onBridge(e as CustomEvent<{ hovering: boolean }>));
+        (this.#popup as HTMLElement).addEventListener('iswc-hover-bridge', this.#onBridge);
       }
       if (this.#hasTrigger('focus')) {
         el.addEventListener('focus', this.#onFocus, true);
@@ -183,9 +185,12 @@ import '../helpers/floating.js';
     }
 
     #unbindTarget() {
-      (this.#popup as HTMLElement).removeEventListener('iswc-hover-bridge', this.#onBridge as EventListener);
+      (this.#popup as HTMLElement).removeEventListener('iswc-hover-bridge', this.#onBridge);
       const el = this.#target;
       if (!el) return;
+      const resto = (el.getAttribute('aria-describedby') ?? '').split(/\s+/).filter((t) => t && t !== this.id);
+      if (resto.length) el.setAttribute('aria-describedby', resto.join(' '));
+      else el.removeAttribute('aria-describedby');
       el.removeEventListener('pointerenter', this.#onEnter);
       el.removeEventListener('pointerleave', this.#onLeave);
       el.removeEventListener('focus', this.#onFocus, true);
@@ -213,9 +218,9 @@ import '../helpers/floating.js';
       }, this.hideDelay);
     };
 
-    #onBridge = (e: CustomEvent<{ hovering: boolean }>): void => {
+    #onBridge = (e: Event): void => {
       if (this.disabled || this.#hasTrigger('manual')) return;
-      if (e.detail?.hovering) {
+      if ((e as CustomEvent<{ hovering: boolean }>).detail?.hovering) {
         this.#hovering = true;
         clearTimeout(this.#hideTimer ?? undefined);
       } else {
@@ -277,10 +282,9 @@ import '../helpers/floating.js';
           if (this.open && this.#mounted) this.#popup.reposition();
         });
       });
-      if (this.#needsOutsideDismiss()) {
-        document.addEventListener('pointerdown', this.#onDocPointer, true);
-        document.addEventListener('keydown', this.#onDocKey, true);
-      }
+      if (this.#needsOutsideDismiss()) document.addEventListener('pointerdown', this.#onDocPointer, true);
+      // WCAG 1.4.13: Escape cierra todo tooltip sin mover el puntero ni el foco; `none` es del dueño.
+      if (!this.#hasTrigger('none')) document.addEventListener('keydown', this.#onDocKey, true);
       emit(this, 'iswc-after-show', undefined, { bubbles: false });
     }
 

@@ -1,40 +1,40 @@
-﻿---
+---
 tag: iswc-confirm-delete
 tags:
   - iswc-confirm-delete
 category: isp
 status: public
 source: ./confirm-delete.ts
-style: ./confirm-delete.css
+style: ./confirm-delete.scss
 preview: ./confirm-delete.json
 ---
 # `<iswc-confirm-delete>`
 
-## PropÃ³sito
+## Propósito
 
-ConfirmaciÃ³n destructiva de tipo "escribe para confirmar": el botÃ³n de eliminar
+Confirmación destructiva de tipo "escribe para confirmar": el botón de eliminar
 sigue deshabilitado hasta que el usuario RE-ESCRIBE la clave del registro.
-VersiÃ³n genÃ©rica de `src/lib/base/modal/ModalEliminar.svelte` (ISP).
+Versión genérica de `src/lib/base/modal/ModalEliminar.svelte` (ISP).
 
-Este mÃ³dulo registra `<iswc-confirm-delete>`.
+Este módulo registra `<iswc-confirm-delete>`.
 
-## CuÃ¡ndo usarlo
+## Cuándo usarlo
 
-Borrados irreversibles donde un clic de mÃ¡s cuesta caro.
+Borrados irreversibles donde un clic de más cuesta caro.
 
-## CuÃ¡ndo no usarlo
+## Cuándo no usarlo
 
-No usar para confirmaciones ordinarias: ahÃ­ van `<iswc-confirm-modal>` (modal) o
-`<iswc-popconfirm>` (anclado al botÃ³n). La fricciÃ³n de re-escribir solo se
+No usar para confirmaciones ordinarias: ahí van `<iswc-confirm-modal>` (modal) o
+`<iswc-popconfirm>` (anclado al botón). La fricción de re-escribir solo se
 justifica si el dato no se puede recuperar.
 
-## ImportaciÃ³n
+## Importación
 
 ```js
 import './confirm-delete.js';
 ```
 
-## Ejemplo mÃ­nimo
+## Ejemplo mínimo
 
 ```html
 <iswc-button id="del" color="danger">Eliminar</iswc-button>
@@ -50,22 +50,22 @@ import './confirm-delete.js';
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
-| `for` | string | Id del trigger que abre el diÃ¡logo. |
+| `for` | string | Id del trigger que abre el diálogo. |
 | `open` | boolean | Controlado. |
-| `heading` | string | TÃ­tulo; por defecto se deriva de `entity`. |
+| `heading` | string | Título; por defecto se deriva de `entity`. |
 | `entity` | string | Nombre de la entidad. |
 | `confirm-value` | string | Valor que hay que re-escribir. |
-| `confirm-label` | string | Etiqueta del campo de confirmaciÃ³n. |
-| `pk-label` | string | Nombre legible de la clave. Default `cÃ³digo`. |
+| `confirm-label` | string | Etiqueta del campo de confirmación. |
+| `pk-label` | string | Nombre legible de la clave. Default `código`. |
 | `message` | string | Texto principal. |
 | `delete-label` | string | Default `Eliminar`. |
 | `cancel-label` | string | Default `Cancelar`. |
-| `maxlength` | nÃºmero | LÃ­mite del campo de confirmaciÃ³n. |
-| `case-sensitive` | boolean | Por defecto compara sin distinguir mayÃºsculas. |
-| `loading` | boolean | Bloquea ambos botones mientras corre el borrado. AdemÃ¡s cancela el `iswc-hide`. |
+| `maxlength` | número | Límite del campo de confirmación. |
+| `case-sensitive` | boolean | Por defecto compara sin distinguir mayúsculas. |
+| `loading` | boolean | Bloquea ambos botones mientras corre el borrado. Además cancela el `iswc-hide`. |
 | `light-dismiss` | boolean | **Opt-in**: cerrar al hacer click en el backdrop. Antes cerraba siempre. |
 
-#### Propiedades pÃºblicas
+#### Propiedades públicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
@@ -87,29 +87,29 @@ import './confirm-delete.js';
 ### Eventos
 
 
-| Evento | DescripciÃ³n |
+| Evento | Descripción |
 | --- | --- |
 | `iswc-show` | Emitido justo antes de mostrarse (cancelable). |
-| `iswc-after-show` | Emitido tras finalizar la animaciÃ³n de apertura. |
+| `iswc-after-show` | Emitido tras finalizar la animación de apertura. |
 | `iswc-hide` | Emitido justo antes de ocultarse (cancelable). |
-| `iswc-after-hide` | Emitido tras finalizar la animaciÃ³n de cierre. |
+| `iswc-after-hide` | Emitido tras finalizar la animación de cierre. |
 | `iswc-confirm-delete` | Evento personalizado del componente (confirm delete). |
 | `iswc-cancel-delete` | Evento personalizado del componente (cancel delete). |
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `iswc-show` | `{}` | sÃ­ | sÃ­ | no |
-| `iswc-after-show` | `{}` | sÃ­ | sÃ­ | no |
-| `iswc-hide` | `{ source }` | sÃ­ | sÃ­ | **sÃ­** |
-| `iswc-after-hide` | `{}` | sÃ­ | sÃ­ | no |
-| `iswc-confirm-delete` | `{ value }` | sÃ­ | sÃ­ | no |
-| `iswc-cancel-delete` | `{}` | sÃ­ | sÃ­ | no |
+| `iswc-show` | `{}` | sí | sí | no |
+| `iswc-after-show` | `{}` | sí | sí | no |
+| `iswc-hide` | `{ source }` | sí | sí | **sí** |
+| `iswc-after-hide` | `{}` | sí | sí | no |
+| `iswc-confirm-delete` | `{ value }` | sí | sí | no |
+| `iswc-cancel-delete` | `{}` | sí | sí | no |
 
-El ciclo `iswc-show` / `iswc-hide` / â€¦ lo emite el `<iswc-dialog>` interno
+El ciclo `iswc-show` / `iswc-hide` / … lo emite el `<iswc-dialog>` interno
 (`_shared/modal-base.js`) y es el que hay que usar para controlar el cierre:
 `iswc-hide` es cancelable con `preventDefault()`. `iswc-cancel-delete` se conserva
-como evento semÃ¡ntico ADICIONAL y acompaÃ±a a `iswc-hide` cuando el cierre lo pide
-el usuario (Escape, backdrop, botÃ³n Cancelar); un `hide()` programÃ¡tico no
+como evento semántico ADICIONAL y acompaña a `iswc-hide` cuando el cierre lo pide
+el usuario (Escape, backdrop, botón Cancelar); un `hide()` programático no
 emite ninguno de los dos.
 
 
@@ -125,13 +125,13 @@ el.addEventListener('iswc-show', (e) => {
 
 </details>
 
-### MÃ©todos y propiedades pÃºblicas
+### Métodos y propiedades públicas
 
-| MÃ©todo | Uso |
+| Método | Uso |
 | --- | --- |
-| `show()` | Abre el diÃ¡logo. |
+| `show()` | Abre el diálogo. |
 | `hide()` | Lo cierra. |
-| `reset()` | VacÃ­a el campo y vuelve a bloquear el botÃ³n. |
+| `reset()` | Vacía el campo y vuelve a bloquear el botón. |
 
 ### CSS parts
 
@@ -152,22 +152,22 @@ No expone custom states.
 
 | Token | Uso |
 | --- | --- |
-| `--iswc-confirm-delete-accent` | Color del tÃ­tulo y del icono. |
+| `--iswc-confirm-delete-accent` | Color del título y del icono. |
 | `--iswc-z-modal` | Capa de apilado. |
 
 
-### IntegraciÃ³n con formularios
+### Integración con formularios
 
-No declara integraciÃ³n form-associated.
+No declara integración form-associated.
 ## Comportamiento
 
 `iswc-confirm-delete` SOLO se emite si la clave coincide (se vuelve a comprobar en
 el handler, por si alguien quita el `disabled` desde fuera). Al abrir, el campo
-se vacÃ­a siempre: reabrir nunca hereda una confirmaciÃ³n anterior.
+se vacía siempre: reabrir nunca hereda una confirmación anterior.
 
 El componente NO implementa su propio ciclo de modal: compone un `<iswc-dialog>`
-dentro de su shadow root y cuelga el contenido como light DOM suyo. De ahÃ­
-salen gratis el focus-trap (que antes no existÃ­a), el `Escape`, el restore de
+dentro de su shadow root y cuelga el contenido como light DOM suyo. De ahí
+salen gratis el focus-trap (que antes no existía), el `Escape`, el restore de
 foco y las animaciones.
 
 ## Dependencias y componentes relacionados
@@ -176,19 +176,19 @@ foco y las animaciones.
 - [`../actions/button.js`](../actions/button.js)
 - [`../forms/input.js`](../forms/input.js)
 - [`../media/icon.js`](../media/icon.js)
-- [`../layout/dialog.js`](../layout/dialog.js) â€” provee todo el ciclo del modal.
+- [`../layout/dialog.js`](../layout/dialog.js) — provee todo el ciclo del modal.
 
-Tags del mÃ³dulo: `<iswc-confirm-delete>`.
+Tags del módulo: `<iswc-confirm-delete>`.
 
 ## Accesibilidad
 
 `role="dialog"` + `aria-modal` (los pone el `<iswc-dialog>` interno); el foco
-entra en el campo de confirmaciÃ³n (`autofocus`) y vuelve al trigger al cerrar.
+entra en el campo de confirmación (`autofocus`) y vuelve al trigger al cerrar.
 Hay **focus-trap** con `Tab` / `Shift+Tab`, que antes faltaba.
 
-Los `<iswc-button>` / `<iswc-input>` del diÃ¡logo llevan `tabindex="0"` a propÃ³sito:
-usan `delegatesFocus`, asÃ­ que sin Ã©l no matchean el selector de focuseables
-del trap y `Tab` se quedarÃ­a muerto.
+Los `<iswc-button>` / `<iswc-input>` del diálogo llevan `tabindex="0"` a propósito:
+usan `delegatesFocus`, así que sin él no matchean el selector de focuseables
+del trap y `Tab` se quedaría muerto.
 
 ## Ejemplo avanzado
 
@@ -212,17 +212,17 @@ del trap y `Tab` se quedarÃ­a muerto.
 
 ## Errores comunes
 
-- Olvidar `confirm-value`: sin Ã©l el botÃ³n nunca se habilita (a propÃ³sito).
-- Confiar solo en el `disabled` del botÃ³n en vez de escuchar el evento.
+- Olvidar `confirm-value`: sin él el botón nunca se habilita (a propósito).
+- Confiar solo en el `disabled` del botón en vez de escuchar el evento.
 
 ## Reglas para LLM
 
-- Reusar componente y dependencias antes de implementaciÃ³n paralela.
+- Reusar componente y dependencias antes de implementación paralela.
 - Mantener nombres exactos de tags y API.
 - Booleano se activa por presencia; no usar `attr="false"`.
 
 ## Fuentes
 
 - [JavaScript](./confirm-delete.ts)
-- [CSS](./confirm-delete.css)
+- [CSS](./confirm-delete.scss)
 - [Preview](./confirm-delete.json)

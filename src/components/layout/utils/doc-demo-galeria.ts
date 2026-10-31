@@ -14,7 +14,7 @@
  * asigna a `target.props` al montar; sus `controls` los aplica `<iswc-playground>`. Lo que no cumple se avisa y no se lista.
  */
 import { collectIsTags, GALLERY_CHROME_TAGS } from '../../../cdn/collect-iswc-tags.js';
-import { montarAnatomia } from '../../../previews/_kit/anatomia.js';
+import { montarAnatomia, resolverAnatomia } from '../../../previews/_kit/anatomia.js';
 import type { Anatomia } from '../../../previews/_kit/schemas/anatomia.schemas.js';
 import { codificarEstado, leerEstado, readPanelsCompactPref, writePanelsCompactPref } from './doc-demo-estado.js';
 
@@ -51,8 +51,7 @@ async function leerDefiniciones(manifest: string | URL): Promise<Definicion[]> {
   const leidas = await Promise.all(indice.map(async (item) => {
     try {
       const def = await fetch(new URL(item.file, base)).then((r) => r.json()) as Definicion;
-      // Anatomía: el `.scss` vive junto al `.json` del componente.
-      if (def.tag === item.tag && Array.isArray(def.sections)) return { ...def, anatomy: def.anatomy ?? { scss: new URL(item.file.replace(/\.json$/, '.scss'), base).href } };
+      if (def.tag === item.tag && Array.isArray(def.sections)) return { ...def, anatomy: resolverAnatomia(def.anatomy, new URL(item.file, base)) };
       console.warn(`[galería] ${item.file}: no cumple iswc-preview/v1`);
     } catch (e) {
       console.warn(`[galería] ${item.file}: no se pudo leer`, e);

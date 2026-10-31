@@ -78,7 +78,7 @@
     background: var(--iswc-bg-elev);
     border: 1px solid var(--iswc-border);
     border-radius: var(--iswc-radius);
-    box-shadow: var(--iswc-shadow-lg, 0 12px 32px rgb(0 0 0 / 28%));
+    box-shadow: var(--iswc-shadow-lg, 0 .75em 2em rgb(0 0 0 / 28%));
 
     /* Móvil: centrado y con fondo atenuado, como los pickers móviles de MUI. */
     &[data-color="mobile"] {

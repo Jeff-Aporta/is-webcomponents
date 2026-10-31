@@ -1,36 +1,36 @@
-﻿---
+---
 tag: iswc-scrollspy
 tags:
   - iswc-scrollspy
 category: layout
 status: public
 source: ./scrollspy.ts
-style: ./scrollspy.css
+style: ./scrollspy.scss
 preview: ./scrollspy.json
 ---
 # `<iswc-scrollspy>`
 
-## PropÃ³sito
+## Propósito
 
-<iswc-scrollspy> â€” Web Component (vanilla, zero dependencies).
+<iswc-scrollspy> — Web Component (vanilla, zero dependencies).
 
-Este mÃ³dulo registra `<iswc-scrollspy>`.
+Este módulo registra `<iswc-scrollspy>`.
 
-## CuÃ¡ndo usarlo
+## Cuándo usarlo
 
-Estructura, superficies, overlays y navegaciÃ³n por regiones de contenido.
+Resaltar en un índice propio la sección visible al desplazarse.
 
-## CuÃ¡ndo no usarlo
+## Cuándo no usarlo
 
-No crear size colors; escalar mediante font-size contextual y em.
+Una página documental completa: `iswc-doc-layout` ya lo trae resuelto.
 
-## ImportaciÃ³n
+## Importación
 
 ```js
 import './scrollspy.js';
 ```
 
-## Ejemplo mÃ­nimo
+## Ejemplo mínimo
 
 ```html
 <iswc-scrollspy></iswc-scrollspy>
@@ -44,12 +44,12 @@ import './scrollspy.js';
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
-| `target` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `trigger` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `root-margin` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `threshold` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `target` | string/según contrato | Fuente define default/restricción. |
+| `trigger` | string/según contrato | Fuente define default/restricción. |
+| `root-margin` | string/según contrato | Fuente define default/restricción. |
+| `threshold` | string/según contrato | Fuente define default/restricción. |
 
-#### Propiedades pÃºblicas
+#### Propiedades públicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
@@ -65,15 +65,15 @@ import './scrollspy.js';
 ### Eventos
 
 
-| Evento | DescripciÃ³n |
+| Evento | Descripción |
 | --- | --- |
 | `iswc-deactivated` | Evento personalizado del componente (deactivated). |
 | `iswc-activated` | Evento personalizado del componente (activated). |
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `iswc-deactivated` | sÃ­ | sÃ­ | sÃ­ | no |
-| `iswc-activated` | sÃ­ | sÃ­ | sÃ­ | no |
+| `iswc-deactivated` | sí | sí | sí | no |
+| `iswc-activated` | sí | sí | sí | no |
 
 
 <details>
@@ -88,14 +88,14 @@ el.addEventListener('iswc-deactivated', (e) => {
 
 </details>
 
-### MÃ©todos y propiedades pÃºblicas
+### Métodos y propiedades públicas
 
-| MÃ©todo | Uso |
+| Método | Uso |
 | --- | --- |
-| `refresh()` | MÃ©todo pÃºblico declarado. |
-| `activate()` | MÃ©todo pÃºblico declarado. |
+| `refresh()` | Método público declarado. |
+| `activate()` | Método público declarado. |
 
-Propiedades pÃºblicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
+Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
 
 ### CSS parts
 
@@ -109,44 +109,44 @@ No expone.
 
 | Token | Uso |
 | --- | --- |
-| `--iswc-text-soft` | Token leÃ­do o definido por componente. |
-| `--iswc-bg-elev` | Token leÃ­do o definido por componente. |
-| `--iswc-text` | Token leÃ­do o definido por componente. |
-| `--iswc-accent-bg` | Token leÃ­do o definido por componente. |
-| `--iswc-brand-text` | Token leÃ­do o definido por componente. |
-| `--iswc-accent` | Token leÃ­do o definido por componente. |
+| `--iswc-text-soft` | Token leído o definido por componente. |
+| `--iswc-bg-elev` | Token leído o definido por componente. |
+| `--iswc-text` | Token leído o definido por componente. |
+| `--iswc-accent-bg` | Token leído o definido por componente. |
+| `--iswc-brand-text` | Token leído o definido por componente. |
+| `--iswc-accent` | Token leído o definido por componente. |
 
-### IntegraciÃ³n con formularios
+### Integración con formularios
 
-No declara integraciÃ³n form-associated propia en este mÃ³dulo.
+No declara integración form-associated propia en este módulo.
 
 ## Comportamiento
 
-DocumentaciÃ³n de cabecera preservada desde fuente:
+Documentación de cabecera preservada desde fuente:
 
-> <iswc-scrollspy> â€” Web Component (vanilla, zero dependencies).
-> Observa la intersecciÃ³n de un conjunto de "triggers" dentro de un contenedor
+> <iswc-scrollspy> — Web Component (vanilla, zero dependencies).
+> Observa la intersección de un conjunto de "triggers" dentro de un contenedor
 > scrollable y va marcando el enlace correspondiente del nav con
 >   aria-current="location"   y la clase CSS  iswc-scrollspy-active
 > a medida que el usuario hace scroll.
-> Pensado para la navegaciÃ³n lateral de los previews de docs:
+> Pensado para la navegación lateral de los previews de docs:
 >   <iswc-main slot="start">
->     <section id="intro">â€¦</section>
->     <section id="examples">â€¦</section>
->     <section id="reference">â€¦</section>
+>     <section id="intro">…</section>
+>     <section id="examples">…</section>
+>     <section id="reference">…</section>
 >   </iswc-main>
 >   <aside class="sidebar" slot="end">
 >     <iswc-scrollspy target="iswc-main">
->       <a href="#intro">IntroducciÃ³n</a>
+>       <a href="#intro">Introducción</a>
 >       <a href="#examples">Ejemplos</a>
 >       <a href="#reference">Referencia</a>
 >     </iswc-scrollspy>
 >   </aside>
 > Atributos
->   target        CSS selector â€” contenedor scrollable que se observa.
+>   target        CSS selector — contenedor scrollable que se observa.
 >                 Si no se da, se resuelve al ancestro: <iswc-main>, <main>,
 >                 [role="main"] o el propio <iswc-split-panel>.
->   trigger       CSS selector â€” quÃ© hijos del target actuan como secciones.
+>   trigger       CSS selector — qué hijos del target actuan como secciones.
 >                 Por defecto: section[id], article[id], iswc-demo-section[id].
 >   root-margin   string pasado a IntersectionObserver. Default "-30% 0px -55% 0px"
 >                 (en el centro del viewport, igual que el IO inline de los previews).
@@ -157,12 +157,12 @@ DocumentaciÃ³n de cabecera preservada desde fuente:
 >             recibe aria-current="location" e `iswc-scrollspy-active`.
 > API
 >   spy.activate(id)   fuerza la marca del enlace con ese id (sin scroll)
->   spy.refresh()       re-registra los triggers (si el target cambiÃ³)
+>   spy.refresh()       re-registra los triggers (si el target cambió)
 >   spy.triggers        array con los triggers observados
 >   spy.active          id del trigger activo (o null)
 > Eventos
->   iswc-activated  detail: { id, link }  â€” cada vez que un enlace se marca
->   iswc-deactivated detail: { id, link } â€” al perder la marca
+>   iswc-activated  detail: { id, link }  — cada vez que un enlace se marca
+>   iswc-deactivated detail: { id, link } — al perder la marca
 > CSS hooks
 >   El nav marcado: `iswc-scrollspy-nav.iswc-scrollspy-active` y el enlace
 >   `a.iswc-scrollspy-active` (mismo estilo que `.sidebar nav a.active`).
@@ -171,11 +171,11 @@ DocumentaciÃ³n de cabecera preservada desde fuente:
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 
-Tags del mÃ³dulo: `<iswc-scrollspy>`.
+Tags del módulo: `<iswc-scrollspy>`.
 
 ## Accesibilidad
 
-Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: `aria-current`.
+Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-current`.
 
 ## Ejemplo avanzado
 
@@ -185,22 +185,22 @@ Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: `aria-curr
 
 ## Errores comunes
 
-- Usar tag sin importar mÃ³dulo primero.
+- Usar tag sin importar módulo primero.
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
-- Crear size color; usar font-size contextual y em.
+- Agregar un atributo `size`: el tamaño sale del `font-size` del contexto y de `em`.
 
 ## Reglas para LLM
 
-- Reusar componente y dependencias antes de implementaciÃ³n paralela.
+- Reusar componente y dependencias antes de implementación paralela.
 - Mantener nombres exactos de tags y API.
-- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explÃ­cito.
-- Leer callers/shared antes de cambiar; corregir raÃ­z comÃºn.
-- No modificar API basÃ¡ndose solo en preview.
+- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explícito.
+- Leer callers/shared antes de cambiar; corregir raíz común.
+- No modificar API basándose solo en preview.
 
 ## Fuentes
 
 - [JavaScript](./scrollspy.ts)
-- [CSS](./scrollspy.css)
-- [Ãndice de categorÃ­a](../../specs/componentes.md)
+- [CSS](./scrollspy.scss)
+- [Índice de categoría](../../../specs/componentes.md)

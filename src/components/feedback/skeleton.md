@@ -1,36 +1,36 @@
-﻿---
+---
 tag: iswc-skeleton
 tags:
   - iswc-skeleton
 category: feedback
 status: public
 source: ./skeleton.ts
-style: ./skeleton.css
+style: ./skeleton.scss
 preview: ./skeleton.json
 ---
 # `<iswc-skeleton>`
 
-## PropÃ³sito
+## Propósito
 
 <iswc-skeleton>
 
-Este mÃ³dulo registra `<iswc-skeleton>`.
+Este módulo registra `<iswc-skeleton>`.
 
-## CuÃ¡ndo usarlo
+## Cuándo usarlo
 
-Estado, progreso, confirmaciÃ³n, carga o resultado de operaciones.
+Estado, progreso, confirmación, carga o resultado de operaciones.
 
-## CuÃ¡ndo no usarlo
+## Cuándo no usarlo
 
-No saturar interfaz con seÃ±ales redundantes o alertas sin acciÃ³n.
+No saturar interfaz con señales redundantes o alertas sin acción.
 
-## ImportaciÃ³n
+## Importación
 
 ```js
 import './skeleton.js';
 ```
 
-## Ejemplo mÃ­nimo
+## Ejemplo mínimo
 
 ```html
 <iswc-skeleton effect="sheen" style="height:1rem"></iswc-skeleton>
@@ -45,9 +45,9 @@ import './skeleton.js';
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
-| `effect` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `effect` | string/según contrato | Fuente define default/restricción. |
 
-#### Propiedades pÃºblicas
+#### Propiedades públicas
 
 No expone.
 
@@ -58,7 +58,7 @@ No expone.
 ### Eventos
 
 
-| Evento | DescripciÃ³n |
+| Evento | Descripción |
 | --- | --- |
 
 No expone.
@@ -76,11 +76,11 @@ el.addEventListener('click', (e) => {
 
 </details>
 
-### MÃ©todos y propiedades pÃºblicas
+### Métodos y propiedades públicas
 
 No expone.
 
-Propiedades pÃºblicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
+Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
 
 ### CSS parts
 
@@ -96,20 +96,20 @@ No expone.
 
 | Token | Uso |
 | --- | --- |
-| `--color` | Token leÃ­do o definido por componente. |
-| `--sheen-color` | Token leÃ­do o definido por componente. |
-| `--iswc-control-bg` | Token leÃ­do o definido por componente. |
-| `--iswc-text` | Token leÃ­do o definido por componente. |
+| `--color` | Token leído o definido por componente. |
+| `--sheen-color` | Token leído o definido por componente. |
+| `--iswc-control-bg` | Token leído o definido por componente. |
+| `--iswc-text` | Token leído o definido por componente. |
 
-### IntegraciÃ³n con formularios
+### Integración con formularios
 
-No declara integraciÃ³n form-associated propia en este mÃ³dulo.
+No declara integración form-associated propia en este módulo.
 
 ## Comportamiento
 
-DocumentaciÃ³n de cabecera preservada desde fuente:
+Documentación de cabecera preservada desde fuente:
 
-> <iswc-skeleton> â€” Web Component (vanilla).
+> <iswc-skeleton> — Web Component (vanilla).
 > Placeholder de carga.
 > Atributos
 >   effect  none | sheen | pulse (default sheen)
@@ -120,11 +120,11 @@ DocumentaciÃ³n de cabecera preservada desde fuente:
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 
-Tags del mÃ³dulo: `<iswc-skeleton>`.
+Tags del módulo: `<iswc-skeleton>`.
 
 ## Accesibilidad
 
-Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: `aria-hidden`.
+Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-hidden`.
 
 ## Ejemplo avanzado
 
@@ -135,7 +135,7 @@ Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: `aria-hidd
 
 ## Errores comunes
 
-- Usar tag sin importar mÃ³dulo primero.
+- Usar tag sin importar módulo primero.
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
@@ -143,15 +143,15 @@ Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: `aria-hidd
 
 ## Reglas para LLM
 
-- Reusar componente y dependencias antes de implementaciÃ³n paralela.
+- Reusar componente y dependencias antes de implementación paralela.
 - Mantener nombres exactos de tags y API.
-- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explÃ­cito.
-- Leer callers/shared antes de cambiar; corregir raÃ­z comÃºn.
-- No modificar API basÃ¡ndose solo en preview.
+- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explícito.
+- Leer callers/shared antes de cambiar; corregir raíz común.
+- No modificar API basándose solo en preview.
 
 ## Fuentes
 
 - [JavaScript](./skeleton.ts)
-- [CSS](./skeleton.css)
-- [Ãndice de categorÃ­a](../../specs/componentes.md)
+- [CSS](./skeleton.scss)
+- [Índice de categoría](../../../specs/componentes.md)
 - [Preview](./skeleton.json)

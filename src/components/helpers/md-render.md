@@ -1,39 +1,39 @@
-﻿---
+---
 tag: iswc-md-render
 tags:
   - iswc-md-render
 category: helpers
 status: public
 source: ./md-render.ts
-style: ./md-render.css
+style: ./md-render.scss
 preview: ./md-render.json
 ---
 # `<iswc-md-render>`
 
-## PropÃ³sito
+## Propósito
 
-Render inline de markdown/HTML hÃ­brido con chips `{{variable}}`. Sin toolbar, diÃ¡logo ni API. Con `can-edit` permite ediciÃ³n in-place (contenteditable).
+Render inline de markdown/HTML híbrido con chips `{{variable}}`. Sin toolbar, diálogo ni API. Con `can-edit` permite edición in-place (contenteditable).
 
-Este mÃ³dulo registra `<iswc-md-render>`.
+Este módulo registra `<iswc-md-render>`.
 
-## CuÃ¡ndo usarlo
+## Cuándo usarlo
 
-- Mostrar un bloque MD embebido en una pÃ¡gina o card.
-- EdiciÃ³n ligera inline sin herramientas de formato ni modal.
+- Mostrar un bloque MD embebido en una página o card.
+- Edición ligera inline sin herramientas de formato ni modal.
 - Cuando el shell/app aporta sus propios botones Guardar.
 
-## CuÃ¡ndo no usarlo
+## Cuándo no usarlo
 
 - Editor con toolbar, fullscreen, CRUD o descarga: usar `<iswc-md-editor>`.
 - Texto corto de formulario: `<iswc-input>` / `<iswc-textarea>`.
 
-## ImportaciÃ³n
+## Importación
 
 ```js
 import './md-render.js';
 ```
 
-## Ejemplo mÃ­nimo
+## Ejemplo mínimo
 
 ```html
 <iswc-md-render value="Hola **mundo** y {{nombre}}."></iswc-md-render>
@@ -48,11 +48,11 @@ import './md-render.js';
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
 | `value` | string | Markdown/HTML fuente con `{{variables}}`. |
-| `can-edit` | boolean | EdiciÃ³n in-place (contenteditable). |
+| `can-edit` | boolean | Edición in-place (contenteditable). |
 | `readonly` | boolean | Fuerza solo lectura aunque haya `can-edit`. |
-| `placeholder` | string | Texto cuando estÃ¡ vacÃ­o (solo lectura). |
+| `placeholder` | string | Texto cuando está vacío (solo lectura). |
 
-#### Propiedades pÃºblicas
+#### Propiedades públicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
@@ -68,17 +68,17 @@ No expone. Hidrata desde hijo `<script type="text/markdown">` o `<textarea hidde
 ### Eventos
 
 
-| Evento | DescripciÃ³n |
+| Evento | Descripción |
 | --- | --- |
 | `iswc-input` | Emitido en cada cambio del valor (escribe como `input` nativo). |
 | `iswc-change` | Emitido al confirmar el cambio de valor (escribe como `change` nativo). |
 | `iswc-persist` | Evento personalizado del componente (persist). |
 
-| Evento | Detail | CuÃ¡ndo |
+| Evento | Detail | Cuándo |
 | --- | --- | --- |
-| `iswc-input` | `{ value }` | Cada cambio en ediciÃ³n (borrador). |
-| `iswc-change` | `{ value }` | Al blur si el valor cambiÃ³ (o Ctrl/Cmd+S). |
-| `iswc-persist` | `{ value }` | Ctrl/Cmd+S â€” seÃ±al para que el host guarde. |
+| `iswc-input` | `{ value }` | Cada cambio en edición (borrador). |
+| `iswc-change` | `{ value }` | Al blur si el valor cambió (o Ctrl/Cmd+S). |
+| `iswc-persist` | `{ value }` | Ctrl/Cmd+S — señal para que el host guarde. |
 
 
 <details>
@@ -93,9 +93,9 @@ el.addEventListener('iswc-input', (e) => {
 
 </details>
 
-### MÃ©todos y propiedades pÃºblicas
+### Métodos y propiedades públicas
 
-| MÃ©todo | Notas |
+| Método | Notas |
 | --- | --- |
 | `refresh()` | Re-render desde `value` (descarta borrador sucio). |
 
@@ -104,17 +104,17 @@ el.addEventListener('iswc-input', (e) => {
 | Part | Uso |
 | --- | --- |
 | `body` | Contenedor renderizado / editable. |
-| `empty` | Placeholder vacÃ­o. |
+| `empty` | Placeholder vacío. |
 
 ### Custom states
 
-No expone. El host refleja `editable` cuando `can-edit` estÃ¡ activo y no hay `readonly`.
+No expone. El host refleja `editable` cuando `can-edit` está activo y no hay `readonly`.
 
 ### CSS custom properties
 
 Usa tokens `--iswc-text`, `--iswc-code-bg`, `--iswc-border`, `--iswc-focus`, etc. Por chip: `--var-tone-h`.
 
-### IntegraciÃ³n con formularios
+### Integración con formularios
 
 No es form-associated.
 
@@ -144,11 +144,11 @@ idempotente: un tag ya definido o en vuelo no se vuelve a pedir.
 
 ## Dependencias y componentes relacionados
 
-- [`./md-lite.js`](./utils/md-lite.js) â€” vÃ­a `prompt-md` (MD â†’ HTML + fences).
-- [`./md-hydrate.js`](./utils/md-hydrate.js) â€” carga perezosa de los componentes de la hoja.
-- [`./md-iswc-fences.js`](./utils/md-iswc-fences.js) â€” mapa `iswc-*` â†’ tag.
+- [`./md-lite.js`](./utils/md-lite.js) — vía `prompt-md` (MD → HTML + fences).
+- [`./md-hydrate.js`](./utils/md-hydrate.js) — carga perezosa de los componentes de la hoja.
+- [`./md-iswc-fences.js`](./utils/md-iswc-fences.js) — mapa `iswc-*` → tag.
 - [`../_shared/prompt-md.js`](./utils/prompt-md.js)
-- [`./md-editor.md`](./md-editor.md) â€” editor completo con herramientas y API.
+- [`./md-editor.md`](./md-editor.md) — editor completo con herramientas y API.
 
 ## Accesibilidad
 
@@ -158,7 +158,7 @@ idempotente: un tag ya definido o en vuelo no se vuelve a pedir.
 ## Ejemplo avanzado
 
 ```html
-<iswc-md-render id="note" can-edit placeholder="Escribeâ€¦">
+<iswc-md-render id="note" can-edit placeholder="Escribe…">
   <script type="text/markdown">
 Notas de **{{proyecto}}**.
   </script>
@@ -171,17 +171,17 @@ Notas de **{{proyecto}}**.
 
 ## Errores comunes
 
-- Esperar toolbar o diÃ¡logo: eso es `<iswc-md-editor>`.
-- Esperar CRUD/`src`/`api`: no existen aquÃ­; el host escucha `iswc-persist` / `iswc-change`.
+- Esperar toolbar o diálogo: eso es `<iswc-md-editor>`.
+- Esperar CRUD/`src`/`api`: no existen aquí; el host escucha `iswc-persist` / `iswc-change`.
 
 ## Reglas para LLM
 
-- Render/preview embebido â†’ `<iswc-md-render>`. Editor con tools/API â†’ `<iswc-md-editor>`.
+- Render/preview embebido → `<iswc-md-render>`. Editor con tools/API → `<iswc-md-editor>`.
 - No inventar props de API en este tag.
 
 ## Fuentes
 
 - [JavaScript](./md-render.ts)
-- [CSS](./md-render.css)
-- [Ãndice de categorÃ­a](../../specs/componentes.md)
+- [CSS](./md-render.scss)
+- [Índice de categoría](../../../specs/componentes.md)
 - [Preview](./md-render.json)

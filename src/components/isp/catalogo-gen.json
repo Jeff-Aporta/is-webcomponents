@@ -30,6 +30,34 @@
           "html": [
             "<iswc-catalogo-gen id=\"catDemo\" style=\"height: 30rem;\"></iswc-catalogo-gen>",
             "          <p id=\"catLog\">Última acción: <code class=\"code\">—</code></p>"
+          ],
+          "target": "#catDemo",
+          "controls": [
+            {
+              "control": "select",
+              "prop": "attr:show-header",
+              "label": "show-header",
+              "options": [
+                "true",
+                "false"
+              ],
+              "default": "true"
+            },
+            {
+              "control": "select",
+              "prop": "attr:show-search",
+              "label": "show-search",
+              "options": [
+                "true",
+                "false"
+              ],
+              "default": "true"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:multi-select",
+              "label": "multi-select"
+            }
           ]
         }
       ]

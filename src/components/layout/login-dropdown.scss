@@ -4,8 +4,8 @@
   --iswc-login-dropdown-width: 20em;
   --iswc-login-dropdown-surface: var(--iswc-surface, var(--iswc-bg-elev, var(--iswc-bg, #fff)));
   --iswc-login-dropdown-border: var(--iswc-border, rgb(127 127 127 / 25%));
-  --iswc-login-dropdown-radius: var(--iswc-radius-l, 12px);
-  --iswc-login-dropdown-shadow: var(--iswc-popover-shadow, var(--iswc-shadow-m, 0 8px 24px rgb(0 0 0 / 30%)));
+  --iswc-login-dropdown-radius: var(--iswc-radius-l, .75em);
+  --iswc-login-dropdown-shadow: var(--iswc-popover-shadow, var(--iswc-shadow-m, 0 .5em 1.5em rgb(0 0 0 / 30%)));
 
   display: inline-flex;
   flex: none;
@@ -20,7 +20,7 @@
 
 .dropdown::part(menu) {
   inline-size: var(--iswc-login-dropdown-width);
-  max-inline-size: calc(100vw - 1rem);
+  max-inline-size: calc(100vw - 1em);
   padding: 0.85em;
   background: var(--iswc-login-dropdown-surface);
   border: 1px solid var(--iswc-login-dropdown-border);
@@ -56,7 +56,7 @@
   display: flex;
   gap: 0.15em;
   padding: 0.12em;
-  border-radius: 999px;
+  border-radius: 999em;
   background: color-mix(in srgb, var(--iswc-text, currentColor) 7%, transparent);
 }
 
@@ -64,7 +64,7 @@
   flex: 1;
   margin: 0;
   border: 0;
-  border-radius: 999px;
+  border-radius: 999em;
   background: transparent;
   color: color-mix(in srgb, var(--iswc-text, currentColor) 60%, transparent);
   font: inherit;
@@ -106,7 +106,7 @@
   resize: vertical;
   margin: 0;
   padding: 0.45em 0.55em;
-  border-radius: var(--iswc-radius-s, 8px);
+  border-radius: var(--iswc-radius-s, .6098em);
   border: 1px solid var(--iswc-control-border, var(--iswc-login-dropdown-border));
   background: var(--iswc-control-bg, transparent);
   color: inherit;

@@ -5,7 +5,7 @@ tags:
 category: layout
 status: public
 source: ./server-api-docs.ts
-style: ./server-api-docs.css
+style: ./server-api-docs.scss
 preview: ./server-api-docs.json
 ---
 # `<iswc-server-api-docs>`

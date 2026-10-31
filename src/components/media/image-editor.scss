@@ -8,8 +8,8 @@
 .root {
   display: flex;
   flex-direction: column;
-  gap: .5rem;
-  padding: .5rem;
+  gap: .5em;
+  padding: .5em;
   border: 1px solid var(--iswc-border);
   border-radius: var(--iswc-radius);
   background: var(--iswc-bg-elev);
@@ -24,7 +24,7 @@
       color-mix(in srgb, var(--iswc-text) 8%, transparent) 0 25%,
       transparent 0 50%
     );
-  background-size: 16px 16px;
+  background-size: 1em 1em;
   border-radius: var(--iswc-radius);
   overflow: hidden;
 
@@ -41,23 +41,23 @@
 .selection {
   position: absolute;
   border: 1px solid var(--iswc-accent);
-  box-shadow: 0 0 0 9999px rgba(15, 23, 42, .55);
+  box-shadow: 0 0 0 9999em rgba(15, 23, 42, .55);
   pointer-events: none;
 }
 
 .handle {
   position: absolute;
-  inline-size: 12px;
-  block-size: 12px;
+  inline-size: .75em;
+  block-size: .75em;
   background: var(--iswc-accent);
   border: 2px solid var(--iswc-bg-elev);
-  border-radius: 2px;
+  border-radius: .125em;
   pointer-events: auto;
 
-  &.nw { inset-block-start: -6px;    inset-inline-start: -6px;  cursor: nwse-resize; }
-  &.ne { inset-block-start: -6px;    inset-inline-end:   -6px;  cursor: nesw-resize; }
-  &.sw { inset-block-end:   -6px;    inset-inline-start: -6px;  cursor: nesw-resize; }
-  &.se { inset-block-end:   -6px;    inset-inline-end:   -6px;  cursor: nwse-resize; }
+  &.nw { inset-block-start: -.375em;    inset-inline-start: -.375em;  cursor: nwse-resize; }
+  &.ne { inset-block-start: -.375em;    inset-inline-end:   -.375em;  cursor: nesw-resize; }
+  &.sw { inset-block-end:   -.375em;    inset-inline-start: -.375em;  cursor: nesw-resize; }
+  &.se { inset-block-end:   -.375em;    inset-inline-end:   -.375em;  cursor: nwse-resize; }
 
   /* F0.3 g12 [a11y/focus]: outline solo con teclado */
   &:focus-visible { outline: 2px solid var(--iswc-text); outline-offset: 2px; }
@@ -78,19 +78,19 @@
 .toolbar {
   display: flex;
   flex-wrap: wrap;
-  gap: .35rem;
-  padding-block-start: .25rem;
+  gap: .35em;
+  padding-block-start: .25em;
 }
 
 ::slotted(button) {
   font: inherit;
-  padding: .3rem .6rem;
+  padding: .3659em .7317em;
   border: 1px solid var(--iswc-border);
   border-radius: var(--iswc-radius);
   background: var(--iswc-bg-soft);
   color: inherit;
   cursor: pointer;
-  font-size: .82rem;
+  font-size: .82em;
 }
 
 ::slotted(button:hover) {
@@ -98,7 +98,7 @@
 }
 
 .status {
-  font-size: .72rem;
+  font-size: .72em;
   color: var(--iswc-text-soft);
   font-variant-numeric: tabular-nums;
   font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;

@@ -5,7 +5,7 @@ tags:
 category: diagrams
 status: public
 source: ./flowchart.ts
-style: ./flowchart.css
+style: ./flowchart.scss
 preview: ./flowchart.json
 ---
 # `<iswc-flowchart>`
@@ -281,8 +281,8 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`
 ## Fuentes
 
 - [JavaScript](./flowchart.ts)
-- [CSS](./flowchart.css)
-- [Índice de categoría](../../specs/componentes.md)
+- [CSS](./flowchart.scss)
+- [Índice de categoría](../../../specs/componentes.md)
 - [Preview](./flowchart.json)
 
 ## App API

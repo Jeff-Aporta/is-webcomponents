@@ -1,5 +1,6 @@
 {
   "$schema": "iswc-preview/v1",
+  "anatomy": {},
   "tag": "iswc-diagram-edit-app",
   "category": "diagrams",
   "title": "Editor de diagramas (API)",

@@ -1,49 +1,49 @@
-﻿---
+---
 tag: iswc-theme-toggle
 tags:
   - iswc-theme-toggle
 category: feedback
 status: public
 source: ./theme-toggle.ts
-style: ./theme-toggle.css
+style: ./theme-toggle.scss
 preview: ./theme-toggle.json
 ---
 # `<iswc-theme-toggle>`
 
-## PropÃ³sito
+## Propósito
 
 Alterna el tema del contenedor.
 `scope="root"` escribe en `<html>`.
-`scope="closest"` (default) usa el contenedor mÃ¡s cercano
+`scope="closest"` (default) usa el contenedor más cercano
 ([container-theme] / .container-theme
 / .theme-dark|.theme-light / [data-theme];
 si no hay, <html>).
-Compone iswc-check-icon-button (noche â†” sol).
+Compone iswc-check-icon-button (noche ↔ sol).
 Emite iswc-theme-change con detail.theme y
 detail.container.
 
-Este mÃ³dulo registra `<iswc-theme-toggle>`.
+Este módulo registra `<iswc-theme-toggle>`.
 
-## CuÃ¡ndo usarlo
+## Cuándo usarlo
 
-Estado, progreso, confirmaciÃ³n, carga o resultado de operaciones.
+Estado, progreso, confirmación, carga o resultado de operaciones.
 
-## CuÃ¡ndo no usarlo
+## Cuándo no usarlo
 
-No saturar interfaz con seÃ±ales redundantes o alertas sin acciÃ³n.
+No saturar interfaz con señales redundantes o alertas sin acción.
 
-## ImportaciÃ³n
+## Importación
 
 ```js
 import './theme-toggle.js';
 ```
 
-## Ejemplo mÃ­nimo
+## Ejemplo mínimo
 
 ```html
 <div class="container-theme theme-dark" data-theme="dark">
 <iswc-theme-toggle dark></iswc-theme-toggle>
-â€¦
+…
 </div>
 <div class="container-theme theme-light" data-theme="light">
 <iswc-theme-toggle></iswc-theme-toggle>
@@ -58,9 +58,9 @@ import './theme-toggle.js';
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
-| `dark` | boolean | Fuente define default/restricciÃ³n. |
+| `dark` | boolean | Fuente define default/restricción. |
 
-#### Propiedades pÃºblicas
+#### Propiedades públicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
@@ -74,16 +74,16 @@ No expone.
 ### Eventos
 
 
-| Evento | DescripciÃ³n |
+| Evento | Descripción |
 | --- | --- |
 | `iswc-theme-change` | Evento personalizado del componente (theme change). |
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `iswc-theme-change` | sÃ­ | sÃ­ | sÃ­ | no |
+| `iswc-theme-change` | sí | sí | sí | no |
 
 `detail`: `{ theme: 'light' \| 'dark', dark: boolean, container: Element }`.
-Al ser `composed` + `bubbles`, tambiÃ©n se puede escuchar en `document`.
+Al ser `composed` + `bubbles`, también se puede escuchar en `document`.
 
 
 <details>
@@ -98,11 +98,11 @@ el.addEventListener('iswc-theme-change', (e) => {
 
 </details>
 
-### MÃ©todos y propiedades pÃºblicas
+### Métodos y propiedades públicas
 
 No expone.
 
-Propiedades pÃºblicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
+Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
 
 ### CSS parts
 
@@ -118,44 +118,44 @@ No expone.
 
 | Token | Uso |
 | --- | --- |
-| `--iswc-control-text` | Token leÃ­do o definido por componente. |
+| `--iswc-control-text` | Token leído o definido por componente. |
 
-### IntegraciÃ³n con formularios
+### Integración con formularios
 
-No declara integraciÃ³n form-associated propia en este mÃ³dulo.
+No declara integración form-associated propia en este módulo.
 
 ## Comportamiento
 
-DocumentaciÃ³n de cabecera preservada desde fuente:
+Documentación de cabecera preservada desde fuente:
 
-> <iswc-theme-toggle> â€” Web Component (vanilla).
-> Compone <iswc-check-icon-button> (noche â†” sol). Al activarse:
->   1. Busca el contenedor de tema mÃ¡s cercano:
+> <iswc-theme-toggle> — Web Component (vanilla).
+> Compone <iswc-check-icon-button> (noche ↔ sol). Al activarse:
+>   1. Busca el contenedor de tema más cercano:
 >        [container-theme] | .container-theme | .theme-dark | .theme-light | [data-theme]
 >      (fallback: document.documentElement)
 >   2. Alterna theme-dark / theme-light + data-theme en ese contenedor
 >   3. Refleja `dark` en el host
 >   4. Emite `iswc-theme-change` { detail: { theme, dark, container } }
 > Attributes
->   dark  boolean (reflected) â€” tema actual (dark=true â†’ icono de sol / prÃ³ximo click a light)
+>   dark  boolean (reflected) — tema actual (dark=true → icono de sol / próximo click a light)
 
 ## Dependencias y componentes relacionados
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 - [`../actions/check-icon-button.js`](../actions/check-icon-button.js)
 
-Tags del mÃ³dulo: `<iswc-theme-toggle>`.
+Tags del módulo: `<iswc-theme-toggle>`.
 
 ## Accesibilidad
 
-Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: ninguno explÃ­cito en fuente.
+Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: ninguno explícito en fuente.
 
 ## Ejemplo avanzado
 
 ```html
 <div class="container-theme theme-dark" data-theme="dark">
 <iswc-theme-toggle dark></iswc-theme-toggle>
-â€¦
+…
 </div>
 <div class="container-theme theme-light" data-theme="light">
 <iswc-theme-toggle></iswc-theme-toggle>
@@ -164,7 +164,7 @@ Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: ninguno ex
 
 ## Errores comunes
 
-- Usar tag sin importar mÃ³dulo primero.
+- Usar tag sin importar módulo primero.
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
@@ -172,15 +172,15 @@ Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: ninguno ex
 
 ## Reglas para LLM
 
-- Reusar componente y dependencias antes de implementaciÃ³n paralela.
+- Reusar componente y dependencias antes de implementación paralela.
 - Mantener nombres exactos de tags y API.
-- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explÃ­cito.
-- Leer callers/shared antes de cambiar; corregir raÃ­z comÃºn.
-- No modificar API basÃ¡ndose solo en preview.
+- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explícito.
+- Leer callers/shared antes de cambiar; corregir raíz común.
+- No modificar API basándose solo en preview.
 
 ## Fuentes
 
 - [JavaScript](./theme-toggle.ts)
-- [CSS](./theme-toggle.css)
-- [Ãndice de categorÃ­a](../../specs/componentes.md)
+- [CSS](./theme-toggle.scss)
+- [Índice de categoría](../../../specs/componentes.md)
 - [Preview](./theme-toggle.json)

@@ -4,12 +4,23 @@ tags:
   - iswc-speed-dial-action
 category: actions
 status: public
+source: ./speed-dial.ts
+style: ./speed-dial.scss
+preview: ./speed-dial-action.json
 ---
 # `<iswc-speed-dial-action>`
 
 ## Propósito
 
 Acción hija de `<iswc-speed-dial>`. No se usa sola: vive dentro del speed dial y dispara su comando.
+
+## Importación
+
+```js
+import './speed-dial.js';
+```
+
+Ese módulo registra este tag junto con `<iswc-speed-dial>`.
 
 ## Cuándo usarlo
 
@@ -25,6 +36,16 @@ No lo reimplementes ni lo uses para sustituir al padre. La guía del padre docum
 <iswc-speed-dial-action></iswc-speed-dial-action>
 ```
 
+
+## API
+
+| Atributo | Notas |
+| --- | --- |
+| `icon` | Ícono de la acción. |
+| `label` | Rótulo y nombre accesible. |
+| `color` | Color de la acción. |
+| `href` | La convierte en enlace. |
+| `disabled` | Bloquea la acción. |
 
 ## Eventos
 
@@ -44,3 +65,16 @@ parent.addEventListener('iswc-event', (e) => {
 ```
 
 </details>
+
+## Comportamiento
+
+Aparece al abrir el speed dial. Al elegirla, el padre emite `iswc-select` con `{ action }`.
+
+## Accesibilidad
+
+Pinta un enlace con `role="menuitem"` y usa `label` como `aria-label`.
+
+## Reglas para LLM
+
+- Va dentro de `<iswc-speed-dial>`.
+- Siempre lleva `label`: sin él el botón de ícono no tiene nombre.

@@ -6,10 +6,10 @@
   display: block;
   inline-size: 100%;
   block-size: 100%;
-  min-block-size: 20rem;
+  min-block-size: 22.8571em;
   font-family: var(--iswc-sans, inherit);
-  font-size: 0.875rem;
-  line-height: 1.25rem;
+  font-size: .7655em;
+  line-height: 1.4286em;
   color: var(--iswc-text, inherit);
   background: transparent;
 
@@ -40,12 +40,12 @@
   .tool-btn {
     justify-content: left;
     border-radius: 0;
-    min-inline-size: 100px;
+    min-inline-size: 7.1429em;
   }
 
   .search {
-    min-inline-size: 12rem;
-    margin-inline: 0.25rem;
+    min-inline-size: 13.7143em;
+    margin-inline: .2857em;
   }
 
   .grid-wrap {
@@ -58,7 +58,7 @@
   .grid { flex: 1 1 auto; }
 
   .drawer-body {
-    padding: 0.75rem;
+    padding: .8571em;
     box-sizing: border-box;
   }
 

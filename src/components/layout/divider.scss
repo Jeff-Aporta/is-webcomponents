@@ -2,7 +2,7 @@
 :host {
   --iswc-divider-color: var(--iswc-text);
   --opacity: 0.2;
-  --iswc-divider-width: 1px;
+  --iswc-divider-width: .0625em;
   --iswc-divider-spacing: 0.75em;
 
   display: block;
@@ -12,6 +12,20 @@
   display: block;
   background: var(--iswc-divider-color);
   opacity: var(--opacity);
+
+  &[hidden] { display: none; }
+}
+
+.rotulo {
+  flex: 0 1 auto;
+  min-inline-size: 0;
+  color: var(--iswc-text-dim);
+  font-size: .875em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  &[hidden] { display: none; }
 }
 
 /* theme colors */
@@ -28,11 +42,14 @@
 :host([color="danger"])    { --iswc-divider-color: var(--iswc-color-danger); }
 
 :host([orientation="horizontal"]) {
+  display: flex;
+  align-items: center;
+  gap: .75em;
   inline-size: 100%;
   margin-block: var(--iswc-divider-spacing);
 
   .divider {
-    inline-size: 100%;
+    flex: 1 1 0;
     block-size: var(--iswc-divider-width);
   }
 }

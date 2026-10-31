@@ -1,7 +1,7 @@
 /* <iswc-details> — disclosure colapsable. */
 
 :host {
-  --iswc-details-spacing: var(--iswc-space-m, 0.75rem);
+  --iswc-details-spacing: var(--iswc-space-m, 0.75em);
   --iswc-details-show-duration: 180ms;
   --iswc-details-hide-duration: 160ms;
 
@@ -95,21 +95,12 @@
 
   ::slotted(*) { box-sizing: border-box; }
 
-  ::slotted(:first-child) {
-    margin-block-start: 0;
-    padding-block-start: 0;
-  }
-
-  ::slotted(:last-child) {
-    margin-block-end: 0;
-    padding-block-end: var(--iswc-details-spacing);
-  }
-
-  ::slotted(*:not(:last-child)) {
-    padding-inline: var(--iswc-details-spacing);
-    padding-block-end: calc(var(--iswc-details-spacing) * 0.6);
-  }
+  ::slotted(:first-child) { margin-block-start: 0; }
+  ::slotted(:last-child) { margin-block-end: 0; }
 }
+
+/* El aire vive en un envoltorio: vale igual para texto suelto, un solo hijo o varios. */
+.content-inner { padding: 0 var(--iswc-details-spacing) var(--iswc-details-spacing); }
 
 /* Estados del host a top-level: `&[attr]` anidado en :host compila a
    `:host[attr]`, que nunca matchea un shadow host. Usar :host([attr]). */

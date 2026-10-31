@@ -29,7 +29,7 @@
   inline-size: 100%;
   block-size: 100%;
   min-block-size: 0;
-  font-size: 0.875rem;
+  font-size: 0.875em;
   color: var(--iswc-text);
   --trvwr-hvr-dflt: color-mix(in srgb, var(--iswc-text) 8%, transparent);
   --trvwr-ctv-dflt: color-mix(in srgb, var(--iswc-text) 14%, transparent);
@@ -43,7 +43,7 @@
 }
 
 :host([disabled]) {
-  opacity: 0.6;
+  opacity: 0.55;
   pointer-events: none;
 }
 
@@ -63,8 +63,8 @@
   display: flex;
   flex-wrap: nowrap;
   align-items: center;
-  gap: 0.25rem;
-  margin-block-end: 0.25rem;
+  gap: .2857em;
+  margin-block-end: .2857em;
   align-self: flex-start;
   inline-size: max-content;
   max-inline-size: 100%;
@@ -111,9 +111,9 @@
   list-style: none;
 
   &.highlight {
-    border-radius: 0.25rem;
-    background: #8881;
-    box-shadow: inset 0 0 0 1px var(--trvwr-sel-brd);
+    border-radius: .2857em;
+    background: color-mix(in srgb, var(--iswc-text) 7%, transparent);
+    box-shadow: inset 0 0 0 .0714em var(--trvwr-sel-brd);
   }
 }
 
@@ -125,8 +125,8 @@
   min-inline-size: 0;
   list-style: none;
   border-radius: 0;
-  padding-block: 0.35rem;
-  padding-inline: 0.5rem;
+  padding-block: .4em;
+  padding-inline: .5714em;
   user-select: none;
   cursor: pointer;
 
@@ -152,7 +152,7 @@
 }
 .trvwr-itm-sum--disabled {
   cursor: not-allowed;
-  opacity: 0.5;
+  opacity: 0.55;
 }
 
 /* Estados visuales de la fila (mutuamente excluyentes; los pone el adapter). */
@@ -198,38 +198,38 @@
 .trvwr-itm-sum--drg-forbidden-aftr::after {
   content: "";
   position: absolute;
-  inset-inline: 0.35rem;
-  block-size: 2px;
+  inset-inline: 0.35em;
+  block-size: .125em;
   background: var(--iswc-accent, var(--iswc-primary));
   border: none;
-  border-radius: 1px;
+  border-radius: .0625em;
   pointer-events: none;
   z-index: 2;
-  box-shadow: -5px 0 0 3px var(--iswc-accent, var(--iswc-primary));
+  box-shadow: -.3125em 0 0 .1875em var(--iswc-accent, var(--iswc-primary));
 }
 
 .trvwr-itm-sum--drg-bf::before,
-.trvwr-itm-sum--drg-forbidden-bf::before { inset-block-start: -1px; }
+.trvwr-itm-sum--drg-forbidden-bf::before { inset-block-start: -.0625em; }
 
 .trvwr-itm-sum--drg-aftr::after,
-.trvwr-itm-sum--drg-forbidden-aftr::after { inset-block-end: -1px; }
+.trvwr-itm-sum--drg-forbidden-aftr::after { inset-block-end: -.0625em; }
 
 /* Variantes de peligro: cambian solo el color de la línea. */
 .trvwr-itm-sum--drg-forbidden-bf::before,
 .trvwr-itm-sum--drg-forbidden-aftr::after {
   background: var(--iswc-color-danger);
-  box-shadow: -5px 0 0 3px var(--iswc-color-danger);
+  box-shadow: -.3125em 0 0 .1875em var(--iswc-color-danger);
 }
 
 /* Indicadores "into" (contenedor receptor): outline dashed. */
 .trvwr-itm-sum--drg-into {
-  border-radius: 0.25rem;
+  border-radius: 0.25em;
   outline: 2px dashed var(--iswc-accent, var(--iswc-primary));
   outline-offset: -2px;
   background: var(--trvwr-drp-ndctr-bg);
 }
 .trvwr-itm-sum--drg-forbidden-into {
-  border-radius: 0.25rem;
+  border-radius: 0.25em;
   outline: 2px dashed var(--iswc-color-danger);
   outline-offset: -2px;
   background: color-mix(in srgb, var(--iswc-color-danger) 18%, transparent);
@@ -238,7 +238,7 @@
 .trvwr-sum-row {
   display: flex;
   align-items: center;
-  gap: 0.45rem;
+  gap: .5143em;
   inline-size: 100%;
   min-block-size: 2em;
   min-inline-size: 0;
@@ -269,7 +269,7 @@
   display: inline-flex;
   flex-shrink: 0;
   align-items: center;
-  gap: 0.45rem;
+  gap: .5143em;
   cursor: pointer;
   color: var(--iswc-text);
 }
@@ -302,7 +302,7 @@
 }
 .trvwr-itm-helper {
   flex: 0 0 auto;
-  margin-inline-start: 0.5rem;
+  margin-inline-start: .686em;
   color: var(--iswc-text-muted);
 }
 
@@ -315,12 +315,12 @@ iswc-float-card {
 .trvwr-kids {
   display: flex;
   flex-direction: column;
-  padding-inline-start: 1.6rem;
+  padding-inline-start: 1.8286em;
 }
 
 .protect-actions {
   display: flex;
-  gap: 0.5rem;
+  gap: .5714em;
   inline-size: 100%;
 
   > * { flex: 1 1 0; }

@@ -17,6 +17,9 @@ import {
  *   mix-with   text | transparent | white | black | current | <color CSS>
  *              (default: texto del tema)
  *   size       string CSS → `--iswc-heading-size`; ausente = default del nivel
+ *   variant    solid | gradient | glow | outlined | pattern | shadow | highlight  (default solid)
+ *
+ * La familia y el peso son de toda la app: `:root { --iswc-heading-font: …; --iswc-heading-weight: …; }`.
  *
  * `current` hereda el color tipográfico del contexto (`currentColor`).
  * Cualquier otro string no semántico se usa como color CSS tal cual.

@@ -2,6 +2,7 @@ import { defineElement, siblingCssHref } from '../../core/element.js';
 import { IswcLightbox } from './lightbox.js';
 import { getDiagramTag } from './utils/diagram-kinds.js';
 import { expandSequencePayloadForJson } from './utils/sequence-spec.js';
+import '../actions/button.js';
 import '../media/icon.js';
 import type { TurtleStateDetail, ToggleGroupDetail, TurtleApi, DiagramHost } from "./schemas/diagram-lightbox.schemas.js";
 
@@ -230,8 +231,8 @@ class IswcDiagramLightbox extends IswcLightbox {
         <textarea class="lb-code__area" spellcheck="false" aria-label="Código JSON del diagrama"></textarea>
         <p class="lb-code__err" hidden></p>
         <div class="lb-code__actions">
-          <button type="button" class="lb-text-btn" data-act="code-cancel">Descartar</button>
-          <button type="button" class="lb-text-btn iswc-primary" data-act="code-save">Guardar</button>
+          <iswc-button variant="text" color="text" data-act="code-cancel">Descartar</iswc-button>
+          <iswc-button variant="filled" color="brand" data-act="code-save">Guardar</iswc-button>
         </div>
       `;
     }

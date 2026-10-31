@@ -1,41 +1,41 @@
-﻿---
+---
 tag: iswc-breadcrumb-item
 tags:
   - iswc-breadcrumb-item
 category: navigation
 status: public
 source: ./breadcrumb-item.ts
-style: ./breadcrumb-item.css
+style: ./breadcrumb-item.scss
 preview: ./breadcrumb-item.json
 ---
 # `<iswc-breadcrumb-item>`
 
-## PropÃ³sito
+## Propósito
 
 Migas de pan accesibles con marcado <nav>,
-ARIA roles y separador automÃ¡tico entre items.
+ARIA roles y separador automático entre items.
 
-Este mÃ³dulo registra `<iswc-breadcrumb-item>`.
+Este módulo registra `<iswc-breadcrumb-item>`.
 
-## CuÃ¡ndo usarlo
+## Cuándo usarlo
 
-OrientaciÃ³n, movimiento entre vistas y navegaciÃ³n jerÃ¡rquica o secuencial.
+Orientación, movimiento entre vistas y navegación jerárquica o secuencial.
 
-## CuÃ¡ndo no usarlo
+## Cuándo no usarlo
 
 No separar children multi-tag ni romper teclado/ARIA.
 
-## ImportaciÃ³n
+## Importación
 
 ```js
 import './breadcrumb-item.js';
 ```
 
-## Ejemplo mÃ­nimo
+## Ejemplo mínimo
 
 ```html
-<iswc-breadcrumb label="CatÃ¡logo">
-<iswc-breadcrumb-item href="/">CatÃ¡logo</iswc-breadcrumb-item>
+<iswc-breadcrumb label="Catálogo">
+<iswc-breadcrumb-item href="/">Catálogo</iswc-breadcrumb-item>
 <iswc-breadcrumb-item href="/ropa">Ropa</iswc-breadcrumb-item>
 <iswc-breadcrumb-item href="/ropa/mujer">Mujer</iswc-breadcrumb-item>
 <iswc-breadcrumb-item href="">Camisetas</iswc-breadcrumb-item>
@@ -50,12 +50,12 @@ import './breadcrumb-item.js';
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
-| `href` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `icon` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `target` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `rel` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `href` | string/según contrato | Fuente define default/restricción. |
+| `icon` | string/según contrato | Fuente define default/restricción. |
+| `target` | string/según contrato | Fuente define default/restricción. |
+| `rel` | string/según contrato | Fuente define default/restricción. |
 
-#### Propiedades pÃºblicas
+#### Propiedades públicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
@@ -76,7 +76,7 @@ import './breadcrumb-item.js';
 ### Eventos
 
 
-| Evento | DescripciÃ³n |
+| Evento | Descripción |
 | --- | --- |
 
 No expone.
@@ -94,11 +94,11 @@ el.addEventListener('click', (e) => {
 
 </details>
 
-### MÃ©todos y propiedades pÃºblicas
+### Métodos y propiedades públicas
 
 No expone.
 
-Propiedades pÃºblicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
+Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
 
 ### CSS parts
 
@@ -117,31 +117,31 @@ No expone.
 
 | Token | Uso |
 | --- | --- |
-| `--_gap` | Token leÃ­do o definido por componente. |
-| `--iswc-text-muted` | Token leÃ­do o definido por componente. |
-| `--iswc-text` | Token leÃ­do o definido por componente. |
-| `--iswc-link` | Token leÃ­do o definido por componente. |
-| `--iswc-radius` | Token leÃ­do o definido por componente. |
-| `--iswc-link-hover` | Token leÃ­do o definido por componente. |
-| `--iswc-focus` | Token leÃ­do o definido por componente. |
+| `--_gap` | Token leído o definido por componente. |
+| `--iswc-text-muted` | Token leído o definido por componente. |
+| `--iswc-text` | Token leído o definido por componente. |
+| `--iswc-link` | Token leído o definido por componente. |
+| `--iswc-radius` | Token leído o definido por componente. |
+| `--iswc-link-hover` | Token leído o definido por componente. |
+| `--iswc-focus` | Token leído o definido por componente. |
 
-### IntegraciÃ³n con formularios
+### Integración con formularios
 
-No declara integraciÃ³n form-associated propia en este mÃ³dulo.
+No declara integración form-associated propia en este módulo.
 
 ## Comportamiento
 
-DocumentaciÃ³n de cabecera preservada desde fuente:
+Documentación de cabecera preservada desde fuente:
 
-> <iswc-breadcrumb-item> â€” un paso individual dentro de un <iswc-breadcrumb>.
+> <iswc-breadcrumb-item> — un paso individual dentro de un <iswc-breadcrumb>.
 > Si tiene `href` (incluido `href=""`), el item se renderiza como <a href>.
 > Con `href=""` se marca como current page (aria-current="page", CSS [current]).
 > Si no tiene href, se renderiza como <span> (SPAs: el desarrollador maneja eventos).
 > Atributos
->   href    string  â€” opcional: el item se vuelve enlace. "" = current page.
->   target  string  â€” opcional.
->   rel     string  â€” opcional.
->   icon    string  â€” opcional: Iconify id para icono al inicio si no se usa slot start.
+>   href    string  — opcional: el item se vuelve enlace. "" = current page.
+>   target  string  — opcional.
+>   rel     string  — opcional.
+>   icon    string  — opcional: Iconify id para icono al inicio si no se usa slot start.
 > Slots
 >   (default)  texto del item.
 >   start      icono propio al inicio (gana sobre icon).
@@ -153,11 +153,11 @@ DocumentaciÃ³n de cabecera preservada desde fuente:
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 
-Tags del mÃ³dulo: `<iswc-breadcrumb-item>`.
+Tags del módulo: `<iswc-breadcrumb-item>`.
 
 ## Accesibilidad
 
-Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: `aria-current`, `aria-hidden`.
+Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-current`, `aria-hidden`.
 
 ## Ejemplo avanzado
 
@@ -171,23 +171,23 @@ Inicio
 
 ## Errores comunes
 
-- Usar tag sin importar mÃ³dulo primero.
+- Usar tag sin importar módulo primero.
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
-- Crear size color; usar font-size contextual y em.
+- Agregar un atributo `size`: el tamaño sale del `font-size` del contexto y de `em`.
 
 ## Reglas para LLM
 
-- Reusar componente y dependencias antes de implementaciÃ³n paralela.
+- Reusar componente y dependencias antes de implementación paralela.
 - Mantener nombres exactos de tags y API.
-- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explÃ­cito.
-- Leer callers/shared antes de cambiar; corregir raÃ­z comÃºn.
-- No modificar API basÃ¡ndose solo en preview.
+- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explícito.
+- Leer callers/shared antes de cambiar; corregir raíz común.
+- No modificar API basándose solo en preview.
 
 ## Fuentes
 
 - [JavaScript](./breadcrumb-item.ts)
-- [CSS](./breadcrumb-item.css)
-- [Ãndice de categorÃ­a](../../specs/componentes.md)
+- [CSS](./breadcrumb-item.scss)
+- [Índice de categoría](../../../specs/componentes.md)
 - [Preview](./breadcrumb-item.json)

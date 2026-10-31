@@ -151,7 +151,7 @@
   background: var(--iswc-callout-bg);
   color: var(--iswc-callout-text);
   border: 0;
-  box-shadow: inset 3px 0 0 var(--iswc-callout-border);
+  box-shadow: inset .1875em 0 0 var(--iswc-callout-border);
 }
 
 /* Cuando no hay icono (text-only), saltamos la primera columna. La

@@ -128,6 +128,22 @@
       ]
     },
     {
+      "id": "campo",
+      "title": "Campo completo",
+      "lede": "Etiqueta, ayuda, error y variantes vienen de iswc-input.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": [
+            "<iswc-masked-input label=\"Tarjeta\" hint=\"16 dígitos\" pattern=\"0000 0000 0000 0000\"></iswc-masked-input>",
+            "<iswc-masked-input label=\"Teléfono\" variant=\"filled\" pattern=\"(000) 000-0000\"></iswc-masked-input>",
+            "<iswc-masked-input label=\"Placa\" variant=\"underlined\" pattern=\"AAA-000\"></iswc-masked-input>",
+            "<iswc-masked-input label=\"NIT\" invalid error-text=\"Falta el NIT\" pattern=\"000.000.000-0\"></iswc-masked-input>"
+          ]
+        }
+      ]
+    },
+    {
       "id": "valor",
       "title": "API",
       "blocks": [

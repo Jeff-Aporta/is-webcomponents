@@ -1,5 +1,6 @@
 import { adoptCss, defineElement, emit } from '../../core/element.js';
 import { ElementBase } from '../../core/element-base.js';
+import '../forms/checkbox.js';
 
 /**
  * <iswc-tree> + <iswc-tree-item> — Web Components (vanilla, zero dependencies).
@@ -55,7 +56,7 @@ import { ElementBase } from '../../core/element-base.js';
 
   const VALID_SELECTION = ['none', 'single', 'leaf', 'multiple'];
 
-  class IswcTree extends ElementBase {
+  class IswcTree extends ElementBase {
 
     static get observedAttributes(): string[] { return [...TREE_OBSERVED]; }
 
@@ -87,6 +88,7 @@ import { ElementBase } from '../../core/element-base.js';
     onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
       if (name === 'selection') {
         if (newVal && !VALID_SELECTION.includes(newVal)) this.setAttribute('selection', 'single');
+        this.#syncRoots();
       }
       if (name === 'expanded') {
         this.#syncExpansion();
@@ -121,6 +123,8 @@ import { ElementBase } from '../../core/element-base.js';
         it.setAttribute('aria-setsize', String(siblings.length));
         it.setAttribute('aria-posinset', String(siblings.indexOf(it) + 1));
         it.setAttribute('aria-level', String(this.#depthOf(it)));
+        // El shadow del ítem no ve el atributo del árbol: se lo sellamos.
+        it.setAttribute('data-selection', this.selection);
         // selected: aria-selected=true cuando selected (los checkbox ya lo hacen visible).
         if (it.hasAttribute('selected')) it.setAttribute('aria-selected', 'true');
         else it.removeAttribute('aria-selected');
@@ -171,9 +175,10 @@ import { ElementBase } from '../../core/element-base.js';
 
     #onClick = (e: PointerEvent) => {
       if (!(e.target instanceof Element)) return;
-      const toggle = e.target.closest('[data-tree-toggle]');
+      // El chevrón vive en el shadow del ítem: e.target ya viene reapuntado al host.
+      const toggle = e.composedPath().find((n) => n instanceof Element && n.getAttribute('data-tree-toggle') === '');
       if (toggle) {
-        const item = toggle.closest('iswc-tree-item');
+        const item = e.target.closest('iswc-tree-item');
         if (item instanceof HTMLElement) {
           item.toggleAttribute('expanded');
           emit(this, 'iswc-tree-toggle', { item, expanded: item.hasAttribute('expanded') });
@@ -271,16 +276,16 @@ import { ElementBase } from '../../core/element-base.js';
           <iswc-icon icon="mdi:chevron-right" aria-hidden="true"></iswc-icon>
         </slot>
       </button>
-      <span class="checkbox" part="checkbox" data-tree-toggle="select">
+      <span class="checkbox" part="checkbox">
         <slot name="checkbox">
           <iswc-checkbox aria-hidden="true"></iswc-checkbox>
         </slot>
       </span>
-      <span class="icon" part="icon"><slot name="icon"></slot></span>
+      <span class="icon" part="icon" hidden><slot name="icon"></slot></span>
       <span class="content" part="item-content"><slot></slot></span>
     </div>
     <div class="children" part="item-children" role="group">
-      <slot></slot>
+      <slot name="children"></slot>
     </div>
   `;
 
@@ -299,15 +304,16 @@ import { ElementBase } from '../../core/element-base.js';
     }
 
     onConnected() {
-      // ESCUCHAR eventos del iswc-checkbox interno para sincronizar.
-      const cb = this.shadowRoot!.querySelector<HTMLElement>('iswc-checkbox');
-      if (cb) {
-        cb.addEventListener('input', (e: Event) => {
-          const detail = (e as CustomEvent<{ checked: boolean }>).detail;
-          if (detail && detail.checked) this.setAttribute('selected', '');
-          else this.removeAttribute('selected');
-        });
+      const padre = this.parentElement;
+      // Los ítems anidados van al panel plegable; el slot por defecto es solo la etiqueta.
+      if (padre instanceof IswcTreeItem) {
+        this.slot = 'children';
+        padre.#sync();
       }
+      const icono = this.shadowRoot!.querySelector<HTMLSlotElement>('slot[name="icon"]')!;
+      const verIcono = () => { icono.parentElement!.hidden = icono.assignedNodes().length === 0; };
+      icono.addEventListener('slotchange', verIcono);
+      verIcono();
       this.#sync();
     }
 

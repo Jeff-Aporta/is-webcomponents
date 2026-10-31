@@ -5,7 +5,7 @@ class TreeRowViewAdapter extends TARowBase {
   buildEditDrawerStructure(ctx: any) {
     const itd = ctx.readonly ? "view" : ctx.itdForm;
     const viewBlocked = itd === "view" && !(ctx.bAllowed?.Visualizar ?? true);
-    const blockedMsg = { type: "FlexLayout", direction: "column", items: "center", justify: "center", style: "padding: 2rem; flex: 1;", children: [{ type: "Text", color: "neutral", slot: { default: "No tiene permisos para visualizar este registro." } }] };
+    const blockedMsg = { type: "FlexLayout", direction: "column", items: "center", justify: "center", style: "padding: 2em; flex: 1;", children: [{ type: "Text", color: "neutral", slot: { default: "No tiene permisos para visualizar este registro." } }] };
     const accionesGen = () => !ctx.record ? null : {
       type: "AccionesGenEmbedded",
       itdForm: ctx.itdForm,
@@ -22,7 +22,7 @@ class TreeRowViewAdapter extends TARowBase {
       bshow: ctx.bshow,
       onclose: ctx.onclose,
       notClose: ctx.notClose,
-      style: "width: 580px; max-width: 90vw;",
+      style: "width: 36.25em; max-width: 90vw;",
       children: [{
         type: "FlexLayout",
         direction: "column",
@@ -49,7 +49,7 @@ class TreeRowViewAdapter extends TARowBase {
       children: [{
         type: "FlexLayout",
         direction: "column",
-        style: "padding: 0.75rem; min-width: 350px;",
+        style: "padding: 0.75em; min-width: 21.875em;",
         children: [
           { type: "Text", slot: { default: "Confirme la eliminación digitando el código de seguridad del registro." } },
           { type: "Input", label: "Código esperado", value: ctx.codeExpected, readonly: true },
@@ -58,7 +58,7 @@ class TreeRowViewAdapter extends TARowBase {
             type: "GridLayout",
             cells: 2,
             items: "stretch",
-            style: "width: 100%; margin-top: 1rem;",
+            style: "width: 100%; margin-top: 1em;",
             children: [
               { type: "Button", color: "neutral", variant: "outlined", loading: ctx.loading, onClick: ctx.oncancel, slot: { default: "Cancelar" } },
               { type: "Button", color: "danger", disabled: ctx.loading || ctx.isBlocked, loading: ctx.loading, onClick: ctx.onconfirm, slot: { default: "Eliminar" } }
@@ -78,15 +78,15 @@ class TreeRowViewAdapter extends TARowBase {
       children: [{
         type: "FlexLayout",
         direction: "column",
-        style: "padding: 0.75rem; min-width: 360px;",
+        style: "padding: 0.75em; min-width: 22.5em;",
         children: [
           { type: "Text", slot: { default: "El árbol está protegido contra edición. ¿Cómo desea continuar?" } },
           {
             type: "FlexLayout",
             direction: "row",
             items: "stretch",
-            gap: "0.5rem",
-            style: "width: 100%; margin-top: 1rem;",
+            gap: "0.5em",
+            style: "width: 100%; margin-top: 1em;",
             children: [
               { type: "Button", color: "neutral", variant: "outlined", style: FLEX_BTN_STYLE, onClick: ctx.oncancel, slot: { default: "Cancelar" } },
               ...canRedo ? [{ type: "Button", color: "warning", variant: "ghost", title: "Rehace todo el historial pendiente y desprotege", style: FLEX_BTN_STYLE, onClick: ctx.onredoall, slot: { default: "Rehacer al actual" } }] : [],

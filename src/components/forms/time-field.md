@@ -5,7 +5,7 @@ tags:
 category: forms
 status: public
 source: ./time-field.ts
-style: ./time-field.css
+style: ./time-field.scss
 preview: ./time-field.json
 ---
 # `<iswc-time-field>`
@@ -159,6 +159,6 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: ninguno expl
 ## Fuentes
 
 - [JavaScript](./time-field.ts)
-- [CSS](./time-field.css)
-- [Índice de categoría](../../specs/componentes.md)
+- [CSS](./time-field.scss)
+- [Índice de categoría](../../../specs/componentes.md)
 - [Preview](./time-field.json)

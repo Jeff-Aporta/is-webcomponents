@@ -9,10 +9,10 @@
   --iswc-grid-selected: var(--iswc-accent-bg, rgb(224 49 49 / 12%));
   --iswc-grid-radius: var(--iswc-radius);
   --iswc-grid-accent: var(--iswc-color-brand-strong);
-  --iswc-grid-height: 26rem;
-  --iswc-grid-row-h: 52px;
-  --iswc-grid-head-h: 52px;
-  --iswc-grid-head-total: 52px;
+  --iswc-grid-height: 26em;
+  --iswc-grid-row-h: 3.71em;
+  --iswc-grid-head-h: 3.71em;
+  --iswc-grid-head-total: 3.71em;
   --iswc-grid-pad: 0.75em;
   display: block;
   box-sizing: border-box;
@@ -50,6 +50,7 @@
 
 .toolbar {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 0.35em;
   padding: 0.5em 0.6em;
@@ -58,39 +59,21 @@
 }
 
 .tool-gap { flex: 1; }
+.tool { white-space: nowrap; flex: 0 0 auto; font-size: 0.9em; --iswc-button-gap: 0.4em; }
+.tool > :first-child { margin-inline-end: 0.4em; }
 
 .tool-search {
   position: relative;
   display: flex;
   align-items: center;
-  min-inline-size: 12em;
-  flex: 0 1 18em;
+  min-inline-size: min(12em, 100%);
+  flex: 1 1 12em;
 }
 
-.tool-ico {
-  position: absolute;
-  inset-inline-start: 0.55em;
-  opacity: 0.6;
-  pointer-events: none;
-}
+.tool-ico { flex: 0 0 auto; margin-inline-end: 0.35em; opacity: 0.6; pointer-events: none; }
 
-.quick {
-  inline-size: 100%;
-  box-sizing: border-box;
-  min-block-size: 2.1em;
-  padding: 0.35em 0.6em 0.35em 1.9em;
-  border: 1px solid var(--iswc-control-border);
-  border-radius: var(--iswc-radius-sm);
-  background: var(--iswc-control-bg);
-  color: inherit;
-  font: inherit;
-  outline: none;
-
-  &:focus-visible {
-    outline: 2px solid var(--iswc-focus, var(--iswc-grid-accent));
-    outline-offset: 1px;
-  }
-}
+/* iswc-input ya trae su borde y relleno. */
+.quick { flex: 1 1 auto; min-inline-size: 0; }
 
 .tool {
   display: inline-flex;
@@ -107,7 +90,7 @@
   white-space: nowrap;
 
   &:hover { background: var(--iswc-grid-row-hover); }
-  &:focus-visible { outline: 2px solid var(--iswc-focus, var(--iswc-grid-accent)); outline-offset: 1px; }
+  &:focus-visible { outline: 0.143em solid var(--iswc-focus, var(--iswc-grid-accent)); outline-offset: 1px; }
   &[hidden] { display: none; }
 }
 
@@ -174,7 +157,6 @@
   border-inline-end: 1px solid var(--iswc-grid-border-soft);
   background: var(--iswc-grid-header-bg);
   font-weight: 600;
-  font-size: 0.9em;
   justify-content: center;
 
   &[data-empty] { border-inline-end-color: transparent; }
@@ -191,9 +173,9 @@
     cursor: pointer;
     &:hover { background: var(--iswc-grid-row-hover); }
   }
-  &:focus-visible { outline: 2px solid var(--iswc-focus, var(--iswc-grid-accent)); outline-offset: -2px; }
+  &:focus-visible { outline: 0.143em solid var(--iswc-focus, var(--iswc-grid-accent)); outline-offset: -.14em; }
   &[data-dragging]    { opacity: 0.4; }
-  &[data-drop-target] { box-shadow: inset 2px 0 0 var(--iswc-grid-accent); }
+  &[data-drop-target] { box-shadow: inset 0.143em 0 0 var(--iswc-grid-accent); }
   &[data-filtered] .hlabel { text-decoration: underline dotted; }
 
   /* El menú (botón de la derecha) solo aparece en hover o focus-within. */
@@ -231,7 +213,7 @@
 
   &:hover:not(:disabled) { background: var(--iswc-grid-row-hover); }
   &:disabled { opacity: 0.4; cursor: not-allowed; }
-  &:focus-visible { outline: 2px solid var(--iswc-focus, var(--iswc-grid-accent)); outline-offset: 1px; }
+  &:focus-visible { outline: 0.143em solid var(--iswc-focus, var(--iswc-grid-accent)); outline-offset: 1px; }
 }
 
 /* Absoluto: así el icono no roba ancho a la etiqueta en columnas estrechas. */
@@ -246,8 +228,8 @@
 .hgrip {
   position: absolute;
   inset-block: 0;
-  inset-inline-end: -3px;
-  inline-size: 7px;
+  inset-inline-end: -.2em;
+  inline-size: 0.5em;
   cursor: col-resize;
   touch-action: none;
 
@@ -255,11 +237,11 @@
     content: "";
     position: absolute;
     inset-block: 25%;
-    inset-inline-start: 3px;
+    inset-inline-start: 0.214em;
     inline-size: 1px;
     background: var(--iswc-grid-border);
   }
-  &:hover::after { inset-block: 0; background: var(--iswc-grid-accent); inline-size: 2px; }
+  &:hover::after { inset-block: 0; background: var(--iswc-grid-accent); inline-size: 0.143em; }
 }
 
 .filter-head {
@@ -323,10 +305,10 @@
   outline: none;
 
   /* `:is()` agrupa el outline para focus visible + focus programático. */
-  &:is(:focus, :focus-visible) { outline: 2px solid var(--iswc-focus, var(--iswc-grid-accent)); outline-offset: -2px; }
+  &:is(:focus, :focus-visible) { outline: 0.143em solid var(--iswc-focus, var(--iswc-grid-accent)); outline-offset: -.14em; }
   &[data-range]      { background: var(--iswc-grid-selected); }
   &[data-editing]    { padding: 0 0.25em; }
-  &[data-error]      { box-shadow: inset 0 0 0 2px var(--iswc-danger); }
+  &[data-error]      { box-shadow: inset 0 0 0 0.143em var(--iswc-danger); }
   &[data-aggregated] { font-weight: 600; opacity: 0.85; }
 }
 
@@ -425,7 +407,7 @@
 .ring {
   inline-size: 1.2em;
   block-size: 1.2em;
-  border: 2px solid var(--iswc-grid-border);
+  border: 0.143em solid var(--iswc-grid-border);
   border-top-color: var(--iswc-grid-accent);
   border-radius: 50%;
   animation: iswc-grid-spin 0.8s linear infinite;
@@ -433,7 +415,7 @@
 
 .linear {
   inline-size: 100%;
-  block-size: 3px;
+  block-size: 0.214em;
   background: var(--iswc-grid-border);
   overflow: hidden;
 
@@ -534,7 +516,7 @@
 
   &:hover:not(:disabled) { background: var(--iswc-grid-row-hover); }
   &:disabled { opacity: 0.4; cursor: not-allowed; }
-  &:focus-visible { outline: 2px solid var(--iswc-focus, var(--iswc-grid-accent)); outline-offset: 1px; }
+  &:focus-visible { outline: 0.143em solid var(--iswc-focus, var(--iswc-grid-accent)); outline-offset: 1px; }
 }
 
 .page-numbers {
@@ -565,7 +547,7 @@
   }
 
   &:hover:not(.iswc-current):not([aria-current="page"]) { background: var(--iswc-grid-row-hover); }
-  &:focus-visible { outline: 2px solid var(--iswc-focus, var(--iswc-grid-accent)); outline-offset: 1px; }
+  &:focus-visible { outline: 0.143em solid var(--iswc-focus, var(--iswc-grid-accent)); outline-offset: 1px; }
 }
 
 /* ── Popovers (menú de columna, paneles) ──────────────────────────────── */
@@ -580,44 +562,29 @@
   border-radius: var(--iswc-radius-sm);
   background: var(--iswc-grid-bg);
   color: var(--iswc-text, inherit);
-  box-shadow: var(--iswc-shadow-md, 0 8px 24px rgb(0 0 0 / 18%));
+  box-shadow: var(--iswc-shadow-md, 0 0.571em 1.71em rgb(0 0 0 / 18%));
   font-family: var(--iswc-sans, inherit);
   font-size: 0.85em;
   z-index: 40;
-  max-block-size: 22rem;
+  max-block-size: 22em;
   overflow: auto;
 
   &[hidden] { display: none; }
   &:popover-open { display: block; }
 }
 
-.menu         { min-inline-size: 13rem; }
-.panel        { min-inline-size: 17rem; }
-.filter-panel { min-inline-size: 30rem; max-inline-size: min(42rem, 90vw); }
+/* Nunca mas ancho que la pantalla: el popover vive en top layer, fuera del dialogo. */
+.menu         { min-inline-size: 11em; max-inline-size: calc(100vw - 1em); overflow-x: hidden; }
+.panel        { min-inline-size: min(17em, calc(100vw - 1em)); max-inline-size: calc(100vw - 1em); overflow-x: hidden; }
+.filter-panel { inline-size: min(36em, calc(100vw - 1em)); min-inline-size: 0; }
 
+/* Filas planas de iswc-dropdown-item: texto a la izquierda, icono con su espacio. */
 .pop-item {
-  display: flex;
-  align-items: center;
-  gap: 0.5em;
+  display: block;
   inline-size: 100%;
-  padding: 0.4em 0.5em;
-  border: 0;
-  border-radius: var(--iswc-radius-sm);
-  background: transparent;
-  color: inherit;
+  margin: 0;
   font: inherit;
   text-align: start;
-  cursor: pointer;
-
-  &:hover:not(:disabled) { background: var(--iswc-grid-row-hover); }
-  &:disabled { opacity: 0.4; cursor: not-allowed; }
-  &[data-checked] {
-    font-weight: 600;
-    color: var(--iswc-grid-accent);
-    /* El check se dibuja via pseudo-elemento — antes se añadía con ::after
-       inline; aquí queda más limpio como bloque anidado. */
-    &::after { content: "✓"; margin-inline-start: auto; }
-  }
 }
 
 .pop-icon { inline-size: 1.1em; text-align: center; opacity: 0.75; }
@@ -645,7 +612,7 @@
 .pop-list {
   display: flex;
   flex-direction: column;
-  max-block-size: 14rem;
+  max-block-size: 14em;
   overflow: auto;
   padding: 0.25em 0;
 }
@@ -670,17 +637,7 @@
   border-block-start: 1px solid var(--iswc-grid-border-soft);
 }
 
-.pop-btn {
-  padding: 0.35em 0.6em;
-  border: 0;
-  border-radius: var(--iswc-radius-sm);
-  background: transparent;
-  color: var(--iswc-grid-accent);
-  font: inherit;
-  cursor: pointer;
-
-  &:hover { background: var(--iswc-grid-row-hover); }
-}
+.pop-btn { font-size: 0.9em; }
 
 .pop-empty { padding: 0.75em 0.5em; color: var(--iswc-text-dim); }
 
@@ -688,14 +645,28 @@
 
 .filter-row-form {
   display: grid;
-  grid-template-columns: 4.5em 1.6em minmax(6em, 1fr) minmax(7em, 1fr) minmax(8em, 1.4fr);
+  grid-template-columns: 3.2em minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) 1.8em;
   align-items: center;
-  gap: 0.4em;
+  gap: 0.3em;
+}
+
+@media (max-width: 34em) {
+  .filter-row-form { grid-template-columns: minmax(0, 1fr) 1.8em; }
+  .filter-row-form > :is(.filter-col, .filter-op, .filter-value) { grid-column: 1 / -1; grid-row: auto; }
+  .filter-row-form > .filter-logic { grid-column: 1; grid-row: 1; }
+  .filter-row-form > .filter-del { grid-column: 2; grid-row: 1; }
+  .filter-list { gap: 0.6em; }
 }
 
 .filter-logic { font-size: 0.9em; opacity: 0.8; }
 
-:is(.filter-logic-select, .filter-col, .filter-op, .filter-input) {
+:is(.filter-col, .filter-op, .filter-value, .filter-input):not(select):not(input) {
+  min-inline-size: 0;
+  inline-size: 100%;
+  font-size: 0.92em;
+}
+
+.filter-logic-select {
   min-inline-size: 0;
   box-sizing: border-box;
   inline-size: 100%;
@@ -709,8 +680,10 @@
 }
 
 .filter-del {
-  inline-size: 1.6em;
-  block-size: 1.6em;
+  inline-size: 1.8em;
+  block-size: 1.8em;
+  padding: 0;
+  justify-self: end;
   border: 0;
   border-radius: 50%;
   background: transparent;
@@ -725,3 +698,16 @@
 .filter-value { min-inline-size: 0; }
 
 .filter-novalue { opacity: 0.5; }
+
+.act-btn--texto {
+  inline-size: auto;
+  padding-inline: 0.6em;
+  border: 1px solid var(--iswc-grid-border);
+  border-radius: var(--iswc-radius-sm);
+  background: var(--iswc-control-bg);
+  white-space: nowrap;
+
+  &:hover { background: var(--iswc-grid-row-hover); color: var(--iswc-grid-accent); }
+}
+
+.filter-panel { max-block-size: min(70vh, 34em); }

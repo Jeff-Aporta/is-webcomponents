@@ -59,12 +59,12 @@ const NESTING_CSS = `
 .iswc-nesting-backdrop[data-reduced] { transition: none; }
 .iswc-nesting-modal {
   position: relative;
-  width: min(90vw, 1100px);
-  height: min(85vh, 800px);
+  width: min(90vw, 68.75em);
+  height: min(85vh, 50em);
   background: var(--iswc-bg, #0c1118);
   border: 1px solid var(--iswc-border, rgba(255,255,255,0.18));
-  border-radius: 10px;
-  box-shadow: 0 16px 48px rgba(0,0,0,0.6);
+  border-radius: .625em;
+  box-shadow: 0 1em 3em rgba(0,0,0,0.6);
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -78,13 +78,13 @@ const NESTING_CSS = `
 .iswc-nesting-toolbar {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 8px 14px;
+  gap: .6667em;
+  padding: .6667em 1.1667em;
   background: var(--iswc-bg-elev, #131a24);
   border-bottom: 1px solid var(--iswc-border, rgba(255,255,255,0.12));
   font-family: var(--iswc-ui, ui-sans-serif, system-ui, sans-serif);
   color: var(--iswc-text, #e2e8f0);
-  font-size: 12px;
+  font-size: .75em;
 }
 .iswc-nesting-toolbar .crumbs {
   flex: 1;
@@ -95,14 +95,14 @@ const NESTING_CSS = `
   border: 1px solid var(--iswc-border, rgba(255,255,255,0.18));
   background: transparent;
   color: var(--iswc-text, #e2e8f0);
-  padding: 4px 10px;
-  border-radius: 4px;
+  padding: .3636em .9091em;
+  border-radius: .3636em;
   cursor: pointer;
-  font: 11px var(--iswc-ui, ui-sans-serif, system-ui, sans-serif);
+  font: .6875em var(--iswc-ui, ui-sans-serif, system-ui, sans-serif);
 }
 .iswc-nesting-toolbar button:hover { background: rgba(255,255,255,0.06); }
 .iswc-nesting-toolbar button:focus-visible { outline: 2px solid var(--iswc-accent, #2563eb); outline-offset: 1px; }
-.iswc-nesting-host { flex: 1; min-height: 0; padding: 8px; box-sizing: border-box; }
+.iswc-nesting-host { flex: 1; min-height: 0; padding: .5em; box-sizing: border-box; }
 `;
 
 /** Devuelve true si el editor puede anidar (depth actual + 1 ≤ max). */
@@ -192,7 +192,7 @@ export function openNestingModal(host: HTMLElement, childSpec: unknown, opts: Ne
   } catch (err) {
     // Si el componente aún no está definido, dejamos el host vacío con un mensaje.
     const errDiv = document.createElement('div');
-    errDiv.style.cssText = 'color: var(--iswc-text-soft); padding: 20px; font: 12px var(--iswc-ui);';
+    errDiv.style.cssText = 'color: var(--iswc-text-soft); padding: 1.6667em; font: .75em var(--iswc-ui);';
     errDiv.textContent = `Editor hijo "${childTag}" aún no está definido. (${String(err)})`;
     childHost.appendChild(errDiv);
   }

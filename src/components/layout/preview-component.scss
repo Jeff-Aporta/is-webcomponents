@@ -27,20 +27,20 @@ iswc-preview-component {
 
   > .toc-toggle {
     position: absolute;
-    inset-block-start: 10px;
-    inset-inline-end: 10px;
+    inset-block-start: .625em;
+    inset-inline-end: .625em;
     z-index: 30;
     /* El look lo trae iswc-button (plain + brand + pill); aquí solo anclaje. */
-    box-shadow: 0 6px 18px rgb(0 0 0 / 18%);
-    backdrop-filter: blur(10px) saturate(120%);
-    -webkit-backdrop-filter: blur(10px) saturate(120%);
+    box-shadow: 0 .375em 1.125em rgb(0 0 0 / 18%);
+    backdrop-filter: blur(.625em) saturate(120%);
+    -webkit-backdrop-filter: blur(.625em) saturate(120%);
 
     &[hidden] { display: none; }
   }
 
   > iswc-drawer.toc-drawer {
-    --iswc-preview-size: min(320px, 86vw);
-    --iswc-preview-spacing: 0.9rem;
+    --iswc-preview-size: min(20em, 86vw);
+    --iswc-preview-spacing: 0.9em;
   }
 
   /* El aside viaja tal cual al drawer: dentro ya no es una columna con borde
@@ -54,7 +54,7 @@ iswc-preview-component {
 
     h1 {
       position: static;
-      padding: 0 0 10px;
+      padding: 0 0 .625em;
       background: none;
     }
   }

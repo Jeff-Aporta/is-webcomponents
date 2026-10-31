@@ -77,7 +77,8 @@ import { setStringAttr } from '../../core/reflect.js';
   const TYPEAHEAD_MS = 500;
   const SELECTION_DISPLAY = ['tags', 'text', 'count'];
   const APPEARANCE = ['outlined', 'filled', 'underlined'];
-  const DEFAULT_MAX_HEIGHT = 16 * 16;
+  /** Tope del listbox en em del host. */
+  const DEFAULT_MAX_HEIGHT_EM = 16;
 
   type SelectOption = {
     value: string;
@@ -481,7 +482,8 @@ import { setStringAttr } from '../../core/reflect.js';
 
     #syncMeta(): void {
       const labelAttr = this.getAttribute('label') || '';
-      const labelSlotted = this.#labelSlot.assignedNodes({ flatten: true }).length > 0;
+      // Sin `flatten`: con él cuenta el fallback del slot y la etiqueta vacía deja su margen.
+      const labelSlotted = this.#labelSlot.assignedNodes().length > 0;
       const labelText = this.#labelEl.querySelector<HTMLElement>('.label-text');
       if (labelText) labelText.textContent = labelAttr;
       this.#labelEl.hidden = !labelAttr && !labelSlotted;
@@ -492,7 +494,7 @@ import { setStringAttr } from '../../core/reflect.js';
       this.#errorEl.hidden = !showError;
 
       const hintAttr = this.getAttribute('hint') || '';
-      const hintSlotted = this.#hintSlot.assignedNodes({ flatten: true }).length > 0;
+      const hintSlotted = this.#hintSlot.assignedNodes().length > 0;
       const hintText = this.#hintEl.querySelector<HTMLElement>('.hint-text');
       if (hintText) hintText.textContent = hintAttr;
       this.#hintEl.hidden = showError || (!hintAttr && !hintSlotted);
@@ -713,10 +715,11 @@ import { setStringAttr } from '../../core/reflect.js';
     /** Alto máximo del listbox: `max-visible` opciones o el tope por defecto. */
     #heightCap(): number {
       const n = this.maxVisible;
-      if (!n) return DEFAULT_MAX_HEIGHT;
+      const tope = DEFAULT_MAX_HEIGHT_EM * (parseFloat(getComputedStyle(this).fontSize) || 16);
+      if (!n) return tope;
       const row = this.#listbox.querySelector<HTMLElement>('.option');
       const rowH = row?.getBoundingClientRect().height;
-      if (!rowH) return DEFAULT_MAX_HEIGHT;
+      if (!rowH) return tope;
       const cs = getComputedStyle(this.#listbox);
       return Math.ceil(rowH * n + parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom));
     }
@@ -725,7 +728,8 @@ import { setStringAttr } from '../../core/reflect.js';
       const rect = this.#base.getBoundingClientRect();
       const spaceBelow = window.innerHeight - rect.bottom - 8;
       const openUp = placementHaciaCentro(rect).startsWith('top');
-      const maxH = Math.min(this.#heightCap(), Math.max(120, openUp ? rect.top - 8 : spaceBelow));
+      const em = parseFloat(getComputedStyle(this).fontSize) || 16;
+      const maxH = Math.min(this.#heightCap(), Math.max(7.5 * em, openUp ? rect.top - 8 : spaceBelow));
       const width = Math.max(rect.width, 10);
       const auto = this.autoWidth;
       Object.assign(this.#listbox.style, {
@@ -734,8 +738,8 @@ import { setStringAttr } from '../../core/reflect.js';
         minWidth: auto ? `${width}px` : '',
         maxWidth: auto ? `${Math.max(width, window.innerWidth - 16)}px` : '',
         maxHeight: `${maxH}px`,
-        top: openUp ? 'auto' : `${rect.bottom + 4}px`,
-        bottom: openUp ? `${window.innerHeight - rect.top + 4}px` : 'auto',
+        top: openUp ? 'auto' : `${rect.bottom + 0.25 * em}px`,
+        bottom: openUp ? `${window.innerHeight - rect.top + 0.25 * em}px` : 'auto',
       });
       if (!auto) return;
       const overflow = this.#listbox.getBoundingClientRect().right - (window.innerWidth - 8);

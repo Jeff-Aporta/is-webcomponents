@@ -350,8 +350,9 @@ import type { EyeDropperOpenResult, EyeDropperInterface, EyeDropperConstructor, 
       // Ancho del panel ≈ ancho del trigger (mín. cómodo, máx. viewport).
       const anchor = this.#trigger.getBoundingClientRect();
       const margin = 8;
-      const minW = 13 * 16;
-      const maxW = Math.min(18 * 16, window.innerWidth - margin * 2);
+      const em = parseFloat(getComputedStyle(this).fontSize) || 16;
+      const minW = 13 * em;
+      const maxW = Math.min(18 * em, window.innerWidth - margin * 2);
       const panelW = Math.min(maxW, Math.max(minW, Math.round(anchor.width)));
       this.#panel.style.width = `${panelW}px`;
       this.#panel.style.maxWidth = `${maxW}px`;
@@ -360,7 +361,7 @@ import type { EyeDropperOpenResult, EyeDropperInterface, EyeDropperConstructor, 
         anchor: this.#trigger,
         popupEl: this.#panel,
         placement: 'auto',
-        distance: 6,
+        distance: 0.375 * em,
         flip: true,
         shift: true,
         shiftPadding: margin,

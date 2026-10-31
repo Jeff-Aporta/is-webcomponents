@@ -1,36 +1,36 @@
-﻿---
+---
 tag: iswc-wake-lock
 tags:
   - iswc-wake-lock
 category: helpers
 status: public
 source: ./wake-lock.ts
-style: ./wake-lock.css
+style: ./wake-lock.scss
 preview: ./wake-lock.json
 ---
 # `<iswc-wake-lock>`
 
-## PropÃ³sito
+## Propósito
 
-Mantiene la pantalla encendida con Screen Wake Lock mientras `active` estÃ¡ puesto.
+Mantiene la pantalla encendida con Screen Wake Lock mientras `active` está puesto.
 
-Este mÃ³dulo registra `<iswc-wake-lock>`.
+Este módulo registra `<iswc-wake-lock>`.
 
-## CuÃ¡ndo usarlo
+## Cuándo usarlo
 
-Lectura, dashboard, receta paso a paso, vÃ­deo.
+Lectura, dashboard, receta paso a paso, vídeo.
 
-## CuÃ¡ndo no usarlo
+## Cuándo no usarlo
 
-No lo dejes `active` en pÃ¡ginas que el usuario no estÃ¡ mirando.
+No lo dejes `active` en páginas que el usuario no está mirando.
 
-## ImportaciÃ³n
+## Importación
 
 ```js
 import './wake-lock.js';
 ```
 
-## Ejemplo mÃ­nimo
+## Ejemplo mínimo
 
 ```html
 <iswc-wake-lock active>El documento no apaga la pantalla.</iswc-wake-lock>
@@ -46,7 +46,7 @@ import './wake-lock.js';
 | --- | --- | --- |
 | `active` | boolean | Pide o suelta el lock |
 
-#### Propiedades pÃºblicas
+#### Propiedades públicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
@@ -62,13 +62,13 @@ import './wake-lock.js';
 ### Eventos
 
 
-| Evento | DescripciÃ³n |
+| Evento | Descripción |
 | --- | --- |
 | `iswc-change` | Emitido al confirmar el cambio de valor (escribe como `change` nativo). |
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `iswc-change` | sÃ­ `{ held }` | sÃ­ | sÃ­ | no |
+| `iswc-change` | sí `{ held }` | sí | sí | no |
 
 
 <details>
@@ -83,7 +83,7 @@ el.addEventListener('iswc-change', (e) => {
 
 </details>
 
-### MÃ©todos y propiedades pÃºblicas
+### Métodos y propiedades públicas
 
 No expone.
 
@@ -99,7 +99,7 @@ No expone.
 
 No expone.
 
-### IntegraciÃ³n con formularios
+### Integración con formularios
 
 No es form-associated.
 
@@ -114,7 +114,7 @@ Re-adquiere al volver a visible. Suelta en `disconnectedCallback`.
 
 ## Accesibilidad
 
-No altera el Ã¡rbol.
+No altera el árbol.
 
 ## Ejemplo avanzado
 
@@ -133,5 +133,5 @@ No altera el Ã¡rbol.
 
 ## Fuentes
 
-- `./wake-lock.js` Â· `./wake-lock.css`
+- `./wake-lock.js` · `./wake-lock.css`
 - Preview: `./wake-lock.json`

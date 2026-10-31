@@ -1,32 +1,38 @@
-﻿---
+---
 tag: iswc-theme-img
 tags:
   - iswc-theme-img
 category: media
 status: public
 source: ./theme-img.ts
-style: ./theme-img.css
+style: ./theme-img.scss
 preview: ./theme-img.json
 ---
 # `<iswc-theme-img>`
 
-## PropÃ³sito
+## Propósito
 
-Una sola imagen que muestra la variante **dark** o **light** segÃºn el contenedor de tema del kit (misma cascada que `<iswc-theme-toggle>`). Escala con `font-size` (`1em Ã— 1em`), como `<iswc-avatar>` / `<iswc-icon>`.
+Una sola imagen que muestra la variante **dark** o **light** según el contenedor de tema del kit (misma cascada que `<iswc-theme-toggle>`). Escala con `font-size` (`1em × 1em`), como `<iswc-avatar>` / `<iswc-icon>`.
 
 Sirve para logos de marca, favicons en nav y cualquier asset dual-tema sin montar dos `<img>` a la vez.
 
-## CuÃ¡ndo usarlo
+## Importación
 
-- Logo / marca que cambia con dark â†” light.
-- Reusar el mismo asset en nav, hero, splash, etc. con tamaÃ±o homogÃ©neo vÃ­a `font-size`.
+```js
+import './theme-img.js';
+```
 
-## CuÃ¡ndo no usarlo
+## Cuándo usarlo
+
+- Logo / marca que cambia con dark ↔ light.
+- Reusar el mismo asset en nav, hero, splash, etc. con tamaño homogéneo vía `font-size`.
+
+## Cuándo no usarlo
 
 - Una sola imagen sin variante de tema: `<img>` o `<iswc-avatar image>`.
 - Iconos vectoriales del set: `<iswc-icon>`.
 
-## Ejemplo mÃ­nimo
+## Ejemplo mínimo
 
 ```html
 <span style="font-size: 2rem">
@@ -45,7 +51,7 @@ Sirve para logos de marca, favicons en nav y cualquier asset dual-tema sin monta
 | --- | --- | --- |
 | `src-dark` | URL | Variante para tema oscuro. |
 | `src-light` | URL | Variante para tema claro. |
-| `alt` | string | Accesible; vacÃ­o si decorativo. |
+| `alt` | string | Accesible; vacío si decorativo. |
 | `shape` | `circle` \| `rounded` \| `square` | Opcional. |
 | `fit` | `contain` \| `cover` | Default `contain`. |
 | `theme` | `dark` \| `light` | Fuerza variante; si falta, lee el contenedor. |
@@ -58,7 +64,7 @@ CSS part: `::part(image)`.
 
 ## Eventos
 
-| Evento | DescripciÃ³n |
+| Evento | Descripción |
 | --- | --- |
 | _(ninguno)_ | Este componente no emite eventos personalizados. |
 
@@ -82,3 +88,17 @@ el.addEventListener('click', (e) => {
 | Part | Uso |
 | --- | --- |
 | `image` | El `<img>` interno. |
+
+## Comportamiento
+
+Elige `src-dark` o `src-light` según `theme` o el tema del contexto, y cambia la imagen si el tema cambia. Marca `aria-busy="true"` mientras carga y emite `iswc-error` si falla.
+
+## Accesibilidad
+
+`alt` se pasa a la imagen interna. Sin texto alternativo útil, usa `alt=""` para que sea decorativa.
+
+## Reglas para LLM
+
+- Una imagen sin variantes de tema es `<img>` o `<iswc-figure>`, no este tag.
+- Pasa siempre `alt`.
+- Si `theme` está fijo, deja de seguir el tema del contexto.

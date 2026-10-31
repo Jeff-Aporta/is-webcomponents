@@ -49,7 +49,7 @@ import './callout.js';
 
 /** Estilos que el lector agrega dentro del shadow de cada iswc-md-render (código inline). */
 const CSS_RENDER = `
-code.vault-code { font: 0.86em/1.4 ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace; padding: .12em .45em; border-radius: 6px; background: color-mix(in srgb, var(--iswc-color-brand) 10%, transparent); color: var(--iswc-text); border: 1px solid color-mix(in srgb, var(--iswc-color-brand) 22%, transparent); white-space: break-spaces; overflow-wrap: anywhere; }
+code.vault-code { font: 0.86em/1.4 ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace; padding: .12em .45em; border-radius: .436em; background: color-mix(in srgb, var(--iswc-color-brand) 10%, transparent); color: var(--iswc-text); border: 1px solid color-mix(in srgb, var(--iswc-color-brand) 22%, transparent); white-space: break-spaces; overflow-wrap: anywhere; }
 `;
 
 const TEMPLATE = document.createElement('template');

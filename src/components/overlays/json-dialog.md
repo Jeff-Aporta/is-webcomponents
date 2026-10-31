@@ -5,7 +5,7 @@ tags:
 category: overlays
 status: public
 source: ./json-dialog.ts
-style: ./json-dialog.css
+style: ./json-dialog.scss
 preview: ./json-dialog.json
 ---
 # `<iswc-json-dialog>`

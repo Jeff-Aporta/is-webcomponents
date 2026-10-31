@@ -5,7 +5,7 @@ tags:
 category: navigation
 status: public
 source: ./pagination.ts
-style: ./pagination.css
+style: ./pagination.scss
 preview: ./pagination.json
 ---
 # `<iswc-pagination>`

@@ -4,7 +4,6 @@
   --_gap: 0.4em;
   display: inline-flex;
   align-items: center;
-  gap: var(--_gap);
   font-size: inherit;
   font-family: inherit;
   color: var(--iswc-text-muted);
@@ -48,6 +47,10 @@ a.label {
     outline-offset: 2px;
   }
 }
+
+/* El aire de los íconos va en lo proyectado: un .start o .end vacío no debe sumar hueco. */
+::slotted([slot="start"]) { margin-inline-end: var(--_gap); }
+::slotted([slot="end"]) { margin-inline-start: var(--_gap); }
 
 /* El separador va delante del label: solo el primero lo oculta. */
 :host(:first-of-type) .separator { display: none; }

@@ -1,38 +1,38 @@
-﻿---
+---
 tag: iswc-qrcode
 tags:
   - iswc-qrcode
 category: media
 status: public
 source: ./qrcode.ts
-style: ./qrcode.css
+style: ./qrcode.scss
 preview: ./qrcode.json
 ---
 # `<iswc-qrcode>`
 
-## PropÃ³sito
+## Propósito
 
-Generador de cÃ³digos QR en SVG.
+Generador de códigos QR en SVG.
 
-Este mÃ³dulo registra `<iswc-qrcode>`.
+Este módulo registra `<iswc-qrcode>`.
 
-## CuÃ¡ndo usarlo
+## Cuándo usarlo
 
 Enlaces cortos, datos de contacto, referencias de pago: cualquier carga que
-deba leerse con la cÃ¡mara de un telÃ©fono.
+deba leerse con la cámara de un teléfono.
 
-## CuÃ¡ndo no usarlo
+## Cuándo no usarlo
 
-Para cÃ³digos lineales de etiqueta usar `<iswc-barcode>`. En entornos sin salida
-a internet, ver la nota de dependencia externa mÃ¡s abajo.
+Para códigos lineales de etiqueta usar `<iswc-barcode>`. En entornos sin salida
+a internet, ver la nota de dependencia externa más abajo.
 
-## ImportaciÃ³n
+## Importación
 
 ```js
 import './qrcode.js';
 ```
 
-## Ejemplo mÃ­nimo
+## Ejemplo mínimo
 
 ```html
 <iswc-qrcode value="https://contapyme.com"></iswc-qrcode>
@@ -47,34 +47,34 @@ import './qrcode.js';
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
 | `value` | string | Texto a codificar. Requerido. |
-| `level` | string | `L` \| `M` \| `Q` \| `H`. CorrecciÃ³n de errores. Default `L`. |
-| `cell` | number | TamaÃ±o en px de cada mÃ³dulo. Default `4`. |
-| `margin` | number | MÃ³dulos de zona de silencio. Default `2`. |
-| `fg` | string | Color de los mÃ³dulos. Default `currentColor`. |
+| `level` | string | `L` \| `M` \| `Q` \| `H`. Corrección de errores. Default `L`. |
+| `cell` | number | Tamaño en px de cada módulo. Default `4`. |
+| `margin` | number | Módulos de zona de silencio. Default `2`. |
+| `fg` | string | Color de los módulos. Default `currentColor`. |
 | `bg` | string | Color de fondo. Default `transparent`. |
 
-#### Propiedades pÃºblicas
+#### Propiedades públicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
-| `svg` | lectura | Nodo `<svg>` generado, o `null` si aÃºn no hay render. |
+| `svg` | lectura | Nodo `<svg>` generado, o `null` si aún no hay render. |
 
 ### Slots
 
 | Slot | Uso |
 | --- | --- |
-| â€” | No expone slots: el contenido se genera desde `value`. |
+| — | No expone slots: el contenido se genera desde `value`. |
 
 ### Eventos
 
 
-| Evento | DescripciÃ³n |
+| Evento | Descripción |
 | --- | --- |
 | `iswc-render` | Emitido al renderizar o redibujar el componente. |
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `iswc-render` | `{ svg }` | sÃ­ | sÃ­ | no |
+| `iswc-render` | `{ svg }` | sí | sí | no |
 
 
 <details>
@@ -89,9 +89,9 @@ el.addEventListener('iswc-render', (e) => {
 
 </details>
 
-### MÃ©todos y propiedades pÃºblicas
+### Métodos y propiedades públicas
 
-| MÃ©todo | Uso |
+| Método | Uso |
 | --- | --- |
 | `dataURL(type = 'image/png')` | Promise con el dataURL del QR rasterizado. |
 
@@ -109,20 +109,20 @@ No expone.
 
 ### CSS custom properties
 
-Tokens del tema (`--iswc-*`) segÃºn CSS del mÃ³dulo.
+Tokens del tema (`--iswc-*`) según CSS del módulo.
 
-### IntegraciÃ³n con formularios
+### Integración con formularios
 
-No declara integraciÃ³n form-associated propia en este mÃ³dulo.
+No declara integración form-associated propia en este módulo.
 
 ## Comportamiento
 
-DocumentaciÃ³n de cabecera preservada desde fuente:
+Documentación de cabecera preservada desde fuente:
 
-> `<iswc-qrcode>` â€” Generador de QR en SVG. Usa la librerÃ­a externa
-> `qrcode-generator` (Kazuhiko Arase, MIT) cargada dinÃ¡micamente desde
-> `esm.sh`. Sin CDN no funciona: es la Ãºnica dependencia externa del kit, y
-> se mantiene asÃ­ a propÃ³sito para no engordar el bundle.
+> `<iswc-qrcode>` — Generador de QR en SVG. Usa la librería externa
+> `qrcode-generator` (Kazuhiko Arase, MIT) cargada dinámicamente desde
+> `esm.sh`. Sin CDN no funciona: es la única dependencia externa del kit, y
+> se mantiene así a propósito para no engordar el bundle.
 
 Cuando la carga del generador falla, el componente escribe el motivo en
 `::part(status)` en vez de quedarse en blanco.
@@ -132,7 +132,7 @@ Cuando la carga del generador falla, el componente escribe el motivo en
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 - Externa: `https://esm.sh/qrcode-generator@1.4.4`
 
-Tags del mÃ³dulo: `<iswc-qrcode>`.
+Tags del módulo: `<iswc-qrcode>`.
 
 ## Accesibilidad
 
@@ -152,22 +152,22 @@ una live region: el lector de pantalla anuncia el fallo de CDN.
 
 ## Errores comunes
 
-- Usar tag sin importar mÃ³dulo primero.
+- Usar tag sin importar módulo primero.
 - Asumir que funciona sin acceso a `esm.sh`.
-- Llamar `dataURL()` de forma sÃ­ncrona: devuelve una Promise.
+- Llamar `dataURL()` de forma síncrona: devuelve una Promise.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
 - Crear size color; usar font-size contextual y em.
 
 ## Reglas para LLM
 
-- Reusar componente y dependencias antes de implementaciÃ³n paralela.
+- Reusar componente y dependencias antes de implementación paralela.
 - Mantener nombres exactos de tags y API.
-- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explÃ­cito.
-- Leer callers/shared antes de cambiar; corregir raÃ­z comÃºn.
-- No modificar API basÃ¡ndose solo en preview.
+- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explícito.
+- Leer callers/shared antes de cambiar; corregir raíz común.
+- No modificar API basándose solo en preview.
 
 ## Fuentes
 
 - [JavaScript](./qrcode.ts)
-- [CSS](./qrcode.css)
-- [Ãndice de categorÃ­a](../../specs/componentes.md)
+- [CSS](./qrcode.scss)
+- [Índice de categoría](../../../specs/componentes.md)

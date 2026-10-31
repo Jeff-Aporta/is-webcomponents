@@ -4,12 +4,23 @@ tags:
   - iswc-carousel-item
 category: navigation
 status: public
+source: ./carousel.ts
+style: ./carousel.scss
+preview: ./carousel-item.json
 ---
 # `<iswc-carousel-item>`
 
 ## Propósito
 
 Lámina de `<iswc-carousel>`. Un paso del carrusel; el grupo controla el avance.
+
+## Importación
+
+```js
+import './carousel.js';
+```
+
+Ese módulo registra este tag junto con `<iswc-carousel>`.
 
 ## Cuándo usarlo
 
@@ -22,9 +33,24 @@ No lo reimplementes ni lo uses para sustituir al padre. La guía del padre docum
 ## Ejemplo mínimo
 
 ```html
-<iswc-carousel-item></iswc-carousel-item>
+<iswc-carousel-item label="Portada"><img src="a.jpg" alt="Portada"></iswc-carousel-item>
 ```
 
+## Atributos
+
+| Atributo | Notas |
+| --- | --- |
+| `label` | Nombre de la diapositiva para lectores de pantalla. |
+
+## Slots
+
+| Slot | Uso |
+| --- | --- |
+| `(default)` | Contenido de la diapositiva. |
+
+## CSS parts
+
+`base`.
 
 ## Eventos
 
@@ -44,3 +70,16 @@ parent.addEventListener('iswc-event', (e) => {
 ```
 
 </details>
+
+## Comportamiento
+
+Es una diapositiva: el carrusel la dimensiona, la numera y decide cuál se ve.
+
+## Accesibilidad
+
+El carrusel enlaza cada indicador con su diapositiva con `aria-controls` y anuncia el cambio con `aria-live="polite"` en el viewport.
+
+## Reglas para LLM
+
+- Va como hijo directo de `<iswc-carousel>`.
+- La posición activa se elige con `active` del carrusel, no aquí.

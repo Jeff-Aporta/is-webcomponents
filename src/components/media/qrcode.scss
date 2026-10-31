@@ -9,8 +9,8 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: .35rem;
-  padding: .65rem;
+  gap: .35em;
+  padding: .65em;
   border: 1px solid var(--iswc-border);
   border-radius: var(--iswc-radius);
   background: var(--iswc-bg-elev);
@@ -24,7 +24,7 @@
 }
 
 .status {
-  font-size: .75rem;
+  font-size: .75em;
   color: var(--iswc-text-soft);
 }
 

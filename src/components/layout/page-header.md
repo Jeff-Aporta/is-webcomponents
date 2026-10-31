@@ -5,7 +5,7 @@ tags:
 category: layout
 status: public
 source: ./page-header.ts
-style: ./page-header.css
+style: ./page-header.scss
 preview: ./page-header.json
 ---
 # `<iswc-page-header>`

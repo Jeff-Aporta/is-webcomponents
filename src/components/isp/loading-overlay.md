@@ -1,43 +1,43 @@
-﻿---
+---
 tag: iswc-loading-overlay
 tags:
   - iswc-loading-overlay
 category: isp
 status: public
 source: ./loading-overlay.ts
-style: ./loading-overlay.css
+style: ./loading-overlay.scss
 preview: ./loading-overlay.json
 ---
 # `<iswc-loading-overlay>`
 
-## PropÃ³sito
+## Propósito
 
 Capa de bloqueo a pantalla completa con spinner y mensaje. Port de
-`src/lib/overlays/Loading.svelte` (ISP-SvelteComponents), que abre su diÃ¡logo
+`src/lib/overlays/Loading.svelte` (ISP-SvelteComponents), que abre su diálogo
 con `notClose`.
 
-Este mÃ³dulo registra `<iswc-loading-overlay>`.
+Este módulo registra `<iswc-loading-overlay>`.
 
-## CuÃ¡ndo usarlo
+## Cuándo usarlo
 
 Operaciones que el usuario NO debe poder interrumpir ni esquivar: guardar,
 consolidar, cerrar periodo.
 
-## CuÃ¡ndo no usarlo
+## Cuándo no usarlo
 
-No usar para cargas parciales de una zona (ahÃ­ van `<iswc-skeleton>` o
-`<iswc-spinner>` en lÃ­nea) ni para nada cancelable â€” esta capa no se cierra sola.
+No usar para cargas parciales de una zona (ahí van `<iswc-skeleton>` o
+`<iswc-spinner>` en línea) ni para nada cancelable — esta capa no se cierra sola.
 
-## ImportaciÃ³n
+## Importación
 
 ```js
 import './loading-overlay.js';
 ```
 
-## Ejemplo mÃ­nimo
+## Ejemplo mínimo
 
 ```html
-<iswc-loading-overlay open message="Guardandoâ€¦"></iswc-loading-overlay>
+<iswc-loading-overlay open message="Guardando…"></iswc-loading-overlay>
 ```
 
 ## API
@@ -50,9 +50,9 @@ import './loading-overlay.js';
 | --- | --- | --- |
 | `open` | boolean | Visible. |
 | `message` | string | Texto bajo el indicador. |
-| `scroll-lock` | boolean | Bloquea el scroll del documento mientras estÃ¡ abierto. |
+| `scroll-lock` | boolean | Bloquea el scroll del documento mientras está abierto. |
 
-#### Propiedades pÃºblicas
+#### Propiedades públicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
@@ -70,15 +70,15 @@ import './loading-overlay.js';
 ### Eventos
 
 
-| Evento | DescripciÃ³n |
+| Evento | Descripción |
 | --- | --- |
 | `iswc-show` | Emitido justo antes de mostrarse (cancelable). |
 | `iswc-hide` | Emitido justo antes de ocultarse (cancelable). |
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `iswc-show` | `{}` | sÃ­ | sÃ­ | no |
-| `iswc-hide` | `{}` | sÃ­ | sÃ­ | no |
+| `iswc-show` | `{}` | sí | sí | no |
+| `iswc-hide` | `{}` | sí | sí | no |
 
 
 <details>
@@ -93,9 +93,9 @@ el.addEventListener('iswc-show', (e) => {
 
 </details>
 
-### MÃ©todos y propiedades pÃºblicas
+### Métodos y propiedades públicas
 
-| MÃ©todo | Uso |
+| Método | Uso |
 | --- | --- |
 | `show()` | Abre la capa. |
 | `hide()` | La cierra. |
@@ -123,21 +123,21 @@ No expone custom states.
 | `--iswc-z-overlay` | Capa de apilado. |
 
 
-### IntegraciÃ³n con formularios
+### Integración con formularios
 
-No declara integraciÃ³n form-associated.
+No declara integración form-associated.
 ## Comportamiento
 
-No es dismissable: no escucha Escape, ni clic en el velo, ni ofrece botÃ³n de
-cerrar. Por eso NO extiende `ModalBase` (que sÃ­ trae los tres). Solo el cÃ³digo
-que la abriÃ³ puede cerrarla.
+No es dismissable: no escucha Escape, ni clic en el velo, ni ofrece botón de
+cerrar. Por eso NO extiende `ModalBase` (que sí trae los tres). Solo el código
+que la abrió puede cerrarla.
 
 ## Dependencias y componentes relacionados
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 - [`../feedback/spinner.js`](../feedback/spinner.js)
 
-Tags del mÃ³dulo: `<iswc-loading-overlay>`.
+Tags del módulo: `<iswc-loading-overlay>`.
 
 ## Accesibilidad
 
@@ -148,7 +148,7 @@ Tags del mÃ³dulo: `<iswc-loading-overlay>`.
 
 ```html
 <iswc-block-layout style="position: relative">
-  <iswc-loading-overlay id="cargando" message="Consultando saldosâ€¦" scroll-lock>
+  <iswc-loading-overlay id="cargando" message="Consultando saldos…" scroll-lock>
   </iswc-loading-overlay>
   <iswc-data-grid></iswc-data-grid>
 </iswc-block-layout>
@@ -168,12 +168,12 @@ Tags del mÃ³dulo: `<iswc-loading-overlay>`.
 
 ## Reglas para LLM
 
-- Reusar componente y dependencias antes de implementaciÃ³n paralela.
+- Reusar componente y dependencias antes de implementación paralela.
 - Mantener nombres exactos de tags y API.
 - Booleano se activa por presencia; no usar `attr="false"`.
 
 ## Fuentes
 
 - [JavaScript](./loading-overlay.ts)
-- [CSS](./loading-overlay.css)
+- [CSS](./loading-overlay.scss)
 - [Preview](./loading-overlay.json)

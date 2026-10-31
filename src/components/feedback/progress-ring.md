@@ -1,36 +1,36 @@
-﻿---
+---
 tag: iswc-progress-ring
 tags:
   - iswc-progress-ring
 category: feedback
 status: public
 source: ./progress-ring.ts
-style: ./progress-ring.css
+style: ./progress-ring.scss
 preview: ./progress-ring.json
 ---
 # `<iswc-progress-ring>`
 
-## PropÃ³sito
+## Propósito
 
 <iswc-progress-ring>
 
-Este mÃ³dulo registra `<iswc-progress-ring>`.
+Este módulo registra `<iswc-progress-ring>`.
 
-## CuÃ¡ndo usarlo
+## Cuándo usarlo
 
-Estado, progreso, confirmaciÃ³n, carga o resultado de operaciones.
+Estado, progreso, confirmación, carga o resultado de operaciones.
 
-## CuÃ¡ndo no usarlo
+## Cuándo no usarlo
 
-No saturar interfaz con seÃ±ales redundantes o alertas sin acciÃ³n.
+No saturar interfaz con señales redundantes o alertas sin acción.
 
-## ImportaciÃ³n
+## Importación
 
 ```js
 import './progress-ring.js';
 ```
 
-## Ejemplo mÃ­nimo
+## Ejemplo mínimo
 
 ```html
 <span style="font-size:4rem">
@@ -46,10 +46,10 @@ import './progress-ring.js';
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
-| `value` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `label` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `value` | string/según contrato | Fuente define default/restricción. |
+| `label` | string/según contrato | Fuente define default/restricción. |
 
-#### Propiedades pÃºblicas
+#### Propiedades públicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
@@ -63,7 +63,7 @@ No expone.
 ### Eventos
 
 
-| Evento | DescripciÃ³n |
+| Evento | Descripción |
 | --- | --- |
 
 No expone.
@@ -81,11 +81,11 @@ el.addEventListener('click', (e) => {
 
 </details>
 
-### MÃ©todos y propiedades pÃºblicas
+### Métodos y propiedades públicas
 
 No expone.
 
-Propiedades pÃºblicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
+Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
 
 ### CSS parts
 
@@ -104,40 +104,42 @@ No expone.
 
 | Token | Uso |
 | --- | --- |
-| `--track-width` | Token leÃ­do o definido por componente. |
-| `--indicator-width` | Token leÃ­do o definido por componente. |
-| `--track-color` | Token leÃ­do o definido por componente. |
-| `--iswc-control-border` | Token leÃ­do o definido por componente. |
-| `--indicator-color` | Token leÃ­do o definido por componente. |
-| `--iswc-accent` | Token leÃ­do o definido por componente. |
-| `--iswc-color-brand-500` | Token leÃ­do o definido por componente. |
-| `--iswc-font-family` | Token leÃ­do o definido por componente. |
-| `--iswc-text` | Token leÃ­do o definido por componente. |
+| `--track-width` | Token leído o definido por componente. |
+| `--indicator-width` | Token leído o definido por componente. |
+| `--track-color` | Token leído o definido por componente. |
+| `--iswc-control-border` | Token leído o definido por componente. |
+| `--indicator-color` | Token leído o definido por componente. |
+| `--iswc-accent` | Token leído o definido por componente. |
+| `--iswc-color-brand-500` | Token leído o definido por componente. |
+| `--iswc-font-family` | Token leído o definido por componente. |
+| `--iswc-text` | Token leído o definido por componente. |
 
-### IntegraciÃ³n con formularios
+### Integración con formularios
 
-No declara integraciÃ³n form-associated propia en este mÃ³dulo.
+No declara integración form-associated propia en este módulo.
 
 ## Comportamiento
 
-DocumentaciÃ³n de cabecera preservada desde fuente:
+Con `indeterminate` un arco gira sin porcentaje; con movimiento reducido gira más lento, nunca se detiene. El anillo mide 1em: se escala con `font-size` (por debajo de ~3em el rótulo central deja de leerse).
 
-> <iswc-progress-ring> â€” Web Component (vanilla).
+Documentación de cabecera preservada desde fuente:
+
+> <iswc-progress-ring> — Web Component (vanilla).
 > Anillo de progreso SVG.
 > Atributos
->   value   number 0â€“100
->   label   string â€” aria-label / texto central
+>   value   number 0–100
+>   label   string — aria-label / texto central
 > CSS Parts: ::part(progress-ring) ::part(track) ::part(indicator) ::part(label)
 
 ## Dependencias y componentes relacionados
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 
-Tags del mÃ³dulo: `<iswc-progress-ring>`.
+Tags del módulo: `<iswc-progress-ring>`.
 
 ## Accesibilidad
 
-Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`, `aria-hidden`, `aria-valuemin`, `aria-valuemax`, `aria-valuenow`, `aria-valuetext`.
+Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`, `aria-hidden`, `aria-valuemin`, `aria-valuemax`, `aria-valuenow`, `aria-valuetext`.
 
 ## Ejemplo avanzado
 
@@ -149,7 +151,7 @@ Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: `aria-labe
 
 ## Errores comunes
 
-- Usar tag sin importar mÃ³dulo primero.
+- Usar tag sin importar módulo primero.
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
@@ -157,15 +159,15 @@ Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: `aria-labe
 
 ## Reglas para LLM
 
-- Reusar componente y dependencias antes de implementaciÃ³n paralela.
+- Reusar componente y dependencias antes de implementación paralela.
 - Mantener nombres exactos de tags y API.
-- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explÃ­cito.
-- Leer callers/shared antes de cambiar; corregir raÃ­z comÃºn.
-- No modificar API basÃ¡ndose solo en preview.
+- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explícito.
+- Leer callers/shared antes de cambiar; corregir raíz común.
+- No modificar API basándose solo en preview.
 
 ## Fuentes
 
 - [JavaScript](./progress-ring.ts)
-- [CSS](./progress-ring.css)
-- [Ãndice de categorÃ­a](../../specs/componentes.md)
+- [CSS](./progress-ring.scss)
+- [Índice de categoría](../../../specs/componentes.md)
 - [Preview](./progress-ring.json)

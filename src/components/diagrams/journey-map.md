@@ -1,39 +1,39 @@
-﻿---
+---
 tag: iswc-journey-map
 tags:
   - iswc-journey-map
 category: diagrams
 status: public
 source: ./journey-map.ts
-style: ./journey-map.css
+style: ./journey-map.scss
 preview: ./journey-map.json
 ---
 # `<iswc-journey-map>`
 
-## PropÃ³sito
+## Propósito
 
 Mapa de **recorrido de usuario** en SVG, sin Mermaid: fases arriba, pasos en
-orden y la curva de satisfacciÃ³n que los atraviesa.
+orden y la curva de satisfacción que los atraviesa.
 
-Este mÃ³dulo registra `<iswc-journey-map>`.
+Este módulo registra `<iswc-journey-map>`.
 
-## CuÃ¡ndo usarlo
+## Cuándo usarlo
 
-Cuando ademÃ¡s del orden hay una **medida** por paso: dÃ³nde se cae la
-experiencia, en quÃ© fase, y de quiÃ©n es ese paso.
+Cuando además del orden hay una **medida** por paso: dónde se cae la
+experiencia, en qué fase, y de quién es ese paso.
 
-## CuÃ¡ndo no usarlo
+## Cuándo no usarlo
 
-Si solo hay hitos en el tiempo â†’ `<iswc-timeline>`. Si hay decisiones y
-bifurcaciones â†’ `<iswc-flowchart>`.
+Si solo hay hitos en el tiempo → `<iswc-timeline>`. Si hay decisiones y
+bifurcaciones → `<iswc-flowchart>`.
 
-## ImportaciÃ³n
+## Importación
 
 ```js
 import './journey-map.js';
 ```
 
-## Ejemplo mÃ­nimo
+## Ejemplo mínimo
 
 ```html
 <iswc-journey-map>
@@ -51,9 +51,9 @@ import './journey-map.js';
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
-| `color` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `color` | `viewer` \| color | `viewer` lo pinta como visor dentro del lightbox. |
 
-#### Propiedades pÃºblicas
+#### Propiedades públicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
@@ -72,7 +72,7 @@ import './journey-map.js';
 ### Eventos
 
 
-| Evento | DescripciÃ³n |
+| Evento | Descripción |
 | --- | --- |
 | `iswc-render` | Emitido al renderizar o redibujar el componente. |
 | `iswc-open-viewer` | Emitido al abrir el visor ampliado (cancelable). |
@@ -80,9 +80,9 @@ import './journey-map.js';
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `iswc-render` | sÃ­ | sÃ­ | sÃ­ | no |
-| `iswc-open-viewer` | sÃ­ | sÃ­ | sÃ­ | sÃ­ |
-| `iswc-toggle-phase` | sÃ­ | sÃ­ | sÃ­ | no |
+| `iswc-render` | sí | sí | sí | no |
+| `iswc-open-viewer` | sí | sí | sí | sí |
+| `iswc-toggle-phase` | sí | sí | sí | no |
 
 
 <details>
@@ -97,13 +97,13 @@ el.addEventListener('iswc-render', (e) => {
 
 </details>
 
-### MÃ©todos y propiedades pÃºblicas
+### Métodos y propiedades públicas
 
-| MÃ©todo | Uso |
+| Método | Uso |
 | --- | --- |
-| `updateComplete()` | MÃ©todo pÃºblico declarado. |
+| `updateComplete()` | Método público declarado. |
 
-Propiedades pÃºblicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
+Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
 
 ### CSS parts
 
@@ -121,21 +121,21 @@ No expone.
 
 | Token | Uso |
 | --- | --- |
-| `--iswc-sans` | Token leÃ­do o definido por componente. |
-| `--iswc-border` | Token leÃ­do o definido por componente. |
-| `--iswc-text-soft` | Token leÃ­do o definido por componente. |
+| `--iswc-sans` | Token leído o definido por componente. |
+| `--iswc-border` | Token leído o definido por componente. |
+| `--iswc-text-soft` | Token leído o definido por componente. |
 
-### IntegraciÃ³n con formularios
+### Integración con formularios
 
-No declara integraciÃ³n form-associated propia en este mÃ³dulo.
+No declara integración form-associated propia en este módulo.
 
 ## Comportamiento
 
-La escala por defecto es 1..5 y se cambia con `scale`. Un paso sin `score` se dibuja como aro punteado y la curva no pasa por Ã©l: un dato que falta no es un cero.
+La escala por defecto es 1..5 y se cambia con `scale`. Un paso sin `score` se dibuja como aro punteado y la curva no pasa por él: un dato que falta no es un cero.
 
-DocumentaciÃ³n de cabecera preservada desde fuente:
+Documentación de cabecera preservada desde fuente:
 
-> <iswc-journey-map> â€” mapa de recorrido (user journey) en SVG, sin Mermaid.
+> <iswc-journey-map> — mapa de recorrido (user journey) en SVG, sin Mermaid.
 >   <iswc-journey-map>
 >     <script type="application/json">
 >       { "journey": { "phases": [...], "steps": [{ "label": "...", "score": 4 }] } }
@@ -160,20 +160,20 @@ DocumentaciÃ³n de cabecera preservada desde fuente:
 - [`../_shared/emit.js`](../_shared/emit.js)
 - [`../_shared/svg-chart-engine.js`](../../core/svg-chart-engine.js)
 
-Tags del mÃ³dulo: `<iswc-journey-map>`.
+Tags del módulo: `<iswc-journey-map>`.
 
 ## Accesibilidad
 
-Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`.
+Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`.
 
 ## Ejemplo avanzado
 
-Ver el preview de la galerÃ­a, que trae el payload completo con grupos y estilos:
+Ver el preview de la galería, que trae el payload completo con grupos y estilos:
 [`./journey-map.json`](./journey-map.json).
 
 ## Errores comunes
 
-- Usar tag sin importar mÃ³dulo primero.
+- Usar tag sin importar módulo primero.
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
@@ -181,18 +181,18 @@ Ver el preview de la galerÃ­a, que trae el payload completo con grupos y estil
 
 ## Reglas para LLM
 
-- Reusar componente y dependencias antes de implementaciÃ³n paralela.
+- Reusar componente y dependencias antes de implementación paralela.
 - Mantener nombres exactos de tags y API.
-- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explÃ­cito.
-- Leer callers/shared antes de cambiar; corregir raÃ­z comÃºn.
-- No modificar API basÃ¡ndose solo en preview.
+- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explícito.
+- Leer callers/shared antes de cambiar; corregir raíz común.
+- No modificar API basándose solo en preview.
 
 ## Fuentes
 
 - [JavaScript](./journey-map.ts)
-- [CSS](./journey-map.css)
+- [CSS](./journey-map.scss)
 - [Spec y layout](./utils/journey-spec.js)
-- [Ãndice de categorÃ­a](../../specs/componentes.md)
+- [Índice de categoría](../../../specs/componentes.md)
 - [Preview](./journey-map.json)
 
 ## App API
@@ -200,4 +200,4 @@ Ver el preview de la galerÃ­a, que trae el payload completo con grupos y estil
 Visor: `demos/diagramas/app/view.html?kind=journey&json=<base64url>`.
 Editor: `demos/diagramas/app/edit.html?kind=journey&json=<base64url>`.
 
-`json` es el documento completo en base64url. Editar no reescribe ese parÃ¡metro: Compartir arma un enlace nuevo con el JSON resultante.
+`json` es el documento completo en base64url. Editar no reescribe ese parámetro: Compartir arma un enlace nuevo con el JSON resultante.

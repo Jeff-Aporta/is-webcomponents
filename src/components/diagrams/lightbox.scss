@@ -10,7 +10,7 @@
      transparencia). El usuario prefiere un oscurecido opaco al abrir el
      lightbox para evitar el efecto "vidrio esmerilado" que distrae. */
   --iswc-lightbox-backdrop: rgb(0 0 0 / 70%);
-  --iswc-lightbox-backdrop-blur: 0px;
+  --iswc-lightbox-backdrop-blur: 0em;
 }
 
 /* Cerrado/abierto con selectores compuestos (NO nesting `&[open]` dentro
@@ -33,7 +33,7 @@
 /* solid: backdrop completamente opaco a pantalla completa. */
 :host([variant="solid"]) {
   --iswc-lightbox-backdrop: rgb(0 0 0 / 85%);
-  --iswc-lightbox-backdrop-blur: 0px;
+  --iswc-lightbox-backdrop-blur: 0em;
 
   .lb {
     background: var(--iswc-lightbox-bg);
@@ -73,23 +73,23 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 0.5rem;
-  padding: 0.6rem 0.85rem;
+  gap: 0.5em;
+  padding: 0.6em 0.85em;
   /* El degradado anterior iba de --lb-bg a transparente: sobre un lienzo
      claro quedaba blanco sobre blanco y la barra desaparecia. Se usa una
      superficie propia (--iswc-bg-soft) para que se lea como cromo del visor y
      no como parte del contenido, en los dos temas. */
   background: var(--lb-toolbar-bg,
     color-mix(in srgb, var(--iswc-bg-soft, var(--iswc-lightbox-bg)) 92%, transparent));
-  backdrop-filter: blur(8px);
+  backdrop-filter: blur(.5em);
   border-bottom: 1px solid var(--iswc-lightbox-border);
-  box-shadow: 0 1px 3px rgb(0 0 0 / 6%);
+  box-shadow: 0 .0625em .1875em rgb(0 0 0 / 6%);
 }
 
 .lb-bar__group {
   display: inline-flex;
   align-items: center;
-  gap: 0.35rem;
+  gap: 0.35em;
   min-width: 0;
 }
 
@@ -109,11 +109,12 @@
 }
 
 .lb-btn {
+  font-size: 0.8333em;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 2.4rem;
-  height: 2.4rem;
+  width: 2.8812em;
+  height: 2.8812em;
   padding: 0;
   border: 1px solid transparent;
   border-radius: var(--iswc-radius);
@@ -131,7 +132,7 @@
   }
   &[hidden] { display: none; }
   iswc-icon {
-    --iswc-icon-size: 1.3rem;
+    --iswc-icon-size: 1.3em;
     pointer-events: none;
   }
 }
@@ -140,11 +141,11 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 2.4rem;
-  height: 2.4rem;
-  --iswc-control-size: 2.4rem;
+  width: 2.4em;
+  height: 2.4em;
+  --iswc-control-size: 2.4em;
   &[hidden] { display: none; }
-  iswc-icon { --iswc-icon-size: 1.3rem; }
+  iswc-icon { --iswc-icon-size: 1.3em; }
 }
 
 .lb-stage {
@@ -153,7 +154,7 @@
      cortaba la ultima linea (la leyenda del chart perdia los descendentes).
      No sirve `padding` aqui: el hijo absoluto se posiciona contra la caja de
      padding, asi que el inset es lo unico que encoge el escenario. */
-  inset-block: 3.4rem 1rem;
+  inset-block: 3.4em 1em;
   inset-inline: 0;
   overflow: hidden;
   cursor: grab;
@@ -180,34 +181,34 @@
    añadiendo `data-code-open` o lo muestra con `this.shadowRoot.querySelector(...)`. */
 .lb-code {
   position: absolute;
-  inset-block: 3.4rem 0;
+  inset-block: 3.4em 0;
   inset-inline: 0;
   background: color-mix(in srgb, var(--iswc-lightbox-bg) 96%, transparent);
   border-top: 1px solid var(--iswc-lightbox-border);
-  padding: 1rem 1.25rem;
+  padding: 1em 1.25em;
   z-index: 4;
   display: grid;
-  gap: 0.75rem;
+  gap: 0.75em;
   grid-template-rows: auto 1fr auto;
   &[hidden] { display: none; }
 }
 
 .lb-toast {
   position: absolute;
-  bottom: 1rem;
+  bottom: 1.1765em;
   left: 50%;
   transform: translateX(-50%);
-  padding: 0.55rem 0.95rem;
+  padding: .6471em 1.1176em;
   background: color-mix(in srgb, var(--iswc-lightbox-text) 12%, var(--iswc-lightbox-bg));
   border: 1px solid var(--iswc-lightbox-border);
   border-radius: var(--iswc-radius);
   font-size: 0.85em;
   z-index: 5;
-  box-shadow: 0 6px 18px rgb(0 0 0 / 30%);
+  box-shadow: 0 .4412em 1.3235em rgb(0 0 0 / 30%);
   &[hidden] { display: none; }
 }
 
 @media (max-width: 38rem) {
-  .lb-bar { padding: 0.5rem; }
-  .lb-btn { width: 2rem; height: 2rem; }
+  .lb-bar { padding: 0.5em; }
+  .lb-btn { width: 2.401em; height: 2.401em; }
 }

@@ -145,6 +145,8 @@ import { ElementBase } from '../../core/element-base.js';
 
     onDisconnected() {
       document.removeEventListener('keydown', this.#hotkeyHandler);
+      clearTimeout(this.#rankerTimer);
+      clearTimeout(this.#announceTimer);
     }
 
     onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
@@ -213,7 +215,8 @@ import { ElementBase } from '../../core/element-base.js';
       if (!combos.length) return;
       this.#hotkeyCombos = combos;
       this.#hotkeyHandler = (e: KeyboardEvent): void => {
-        if (this.#isEditableTarget(e.target)) return; // no capturar dentro de inputs/textareas/selects
+        // composedPath: el input real puede vivir dentro del shadow de un iswc-input.
+        if (this.#isEditableTarget(e.composedPath()[0] ?? e.target)) return; // no capturar dentro de inputs/textareas/selects
         for (const combo of this.#hotkeyCombos) {
           if (this.#matchesCombo(e, combo)) {
             e.preventDefault();
@@ -339,7 +342,6 @@ import { ElementBase } from '../../core/element-base.js';
           .sort((a, b) => b.s - a.s)
           .slice(0, Number(this.getAttribute('max-results')) || 12)
           .map((x) => x.c);
-        if (!this.#results.length) this.#results = items.slice(0, 4).filter((c) => /^[a-z]/i.test((c.title?.[0] || '')) && c.id);
       }
       this.#mostrar(q);
       this.#ordenarConRanker(q, items);
@@ -396,18 +398,20 @@ import { ElementBase } from '../../core/element-base.js';
       this.#optionIds = [];
       const groups = new Map<string, Array<{ c: Command; i: number }>>();
       this.#results.forEach((c, i) => {
-        const g = c.group || '—';
+        const g = c.group || '';
         if (!groups.has(g)) groups.set(g, []);
         groups.get(g)!.push({ c, i });
       });
       const optId = (k: number): string => `${this.id || 'cmd'}-opt-${k}`;
       let flatIdx = 0;
       for (const [groupName, items] of groups) {
-        const gh = document.createElement('li');
-        gh.className = 'group-head';
-        gh.setAttribute('role', 'presentation');
-        gh.textContent = groupName;
-        this.#resultsEl.appendChild(gh);
+        if (groupName) {
+          const gh = document.createElement('li');
+          gh.className = 'group-head';
+          gh.setAttribute('role', 'presentation');
+          gh.textContent = groupName;
+          this.#resultsEl.appendChild(gh);
+        }
         for (const { c, i } of items) {
           const opt = document.createElement('li');
           const oid = optId(flatIdx);

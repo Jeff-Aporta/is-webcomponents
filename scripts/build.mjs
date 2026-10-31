@@ -10,6 +10,7 @@ import { bundleMinJs, bundleMinCss, docsBanner, bundleLoader } from '../src/cdn/
 import { barrerHashes } from '../src/cdn/build/sync-hashes.ts';
 import { hashesRepetidos } from '../src/cdn/build/hash.ts';
 import { stampDirectory, hashFile, rewriteHtmlTree, hashesJson, applyHashToHtml, ASSET_HASHES_NAME } from '../src/cdn/build/stamp-hashes.ts';
+import { aiExterno, construirAi } from './builds/ai.mjs';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const root = dirname(here);
@@ -227,6 +228,23 @@ const externalComponents = {
   },
 };
 
+// src/ai: lib/ai/*.min.js. Componentes y módulos los importan externos, así el estado (motores, cola) existe una vez.
+const aiExternoEnComponentes = aiExterno(join(root, 'src', 'ai'), '../lib/ai/');
+// Desde lib/ai/ los componentes están dos niveles arriba y Zod uno.
+const componentesDesdeAi = {
+  name: 'componentes-desde-ai',
+  setup(pluginBuild) {
+    pluginBuild.onResolve({ filter: /^zod$/ }, () => ({ path: '../zod.min.js', external: true }));
+    pluginBuild.onResolve({ filter: /\.(ts|js)$/ }, (args) => {
+      if (args.kind === 'entry-point') return null;
+      const abs = resolve(args.resolveDir, args.path);
+      const tag = basename(abs).replace(/\.(ts|js)$/, '');
+      if (!abs.startsWith(compRoot) || !tagToComponent.has(tag)) return null;
+      return { path: `../../${folderFor(abs)}/${tag}.min.js`, external: true };
+    });
+  },
+};
+
 // Los SCSS comunes (src/core/*.scss) y los parciales de grupo se incrustan con @use de Sass:
 // no quedan @import que el navegador tenga que resolver contra dist.
 
@@ -323,7 +341,7 @@ for (const inFile of entries) {
   await bundleJs(
     inFile,
     outJs,
-    [externalComponents],
+    [aiExternoEnComponentes, externalComponents],
     componentDocsBanner(srcFolder, tag),
     hasCss ? await defineCss(outCss) : undefined,
   );
@@ -561,6 +579,7 @@ await build({
   legalComments: 'none',
 });
 console.log(`  ${'lib/'.padEnd(18)} obj.min.js + ref-obj.min.js (navegador) + zod.min.js (compartido por los bundles)`);
+await construirAi({ root, dist, componentes: componentesDesdeAi, bundleMinJs });
 
 // ── gallery-app.min.js ───────────────────────────────────────────
 // Consumo de la SPA: Live Server / Pages no transpilan src/*.ts.
