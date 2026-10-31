@@ -70,6 +70,10 @@ export async function montarGaleria({ manifest, categorias = {} }: OpcionesGaler
   const marca = shell.getAttribute('brand') ?? '';
   if (marco) marco.hidden = true;
   host.hidden = false;
+  // Los componentes de una app son de página, no botones sueltos: el escenario les da todo el ancho.
+  const estilo = document.createElement('style');
+  estilo.textContent = 'iswc-playground > [slot="stage"], iswc-demo.demo { inline-size: 100%; } iswc-demo.demo > * { flex: 1 1 auto; min-inline-size: 0; }';
+  document.head.append(estilo);
   document.getElementById('fullscreenBtn')?.toggleAttribute('hidden', true);
 
   const defs = await leerDefiniciones(manifest);
@@ -92,7 +96,8 @@ export async function montarGaleria({ manifest, categorias = {} }: OpcionesGaler
     for (const n of nav.querySelectorAll<HTMLElement>('.shell-nav__item')) n.setAttribute('aria-current', String(n.dataset.tag === def.tag));
     nav.querySelector<HTMLElement>('[aria-current="true"]')?.scrollIntoView({ block: 'nearest' });
     document.title = `${def.navTitle ?? def.tag} | ${marca}`;
-    history.replaceState(null, '', `#${def.tag}`);
+    // Con la ruta completa: un `#tag` suelto se resolvería contra el `<base href>` de la página.
+    history.replaceState(null, '', `${location.pathname}${location.search}#${def.tag}`);
   };
 
   const grupos = new Map<string, Definicion[]>();

@@ -144,12 +144,12 @@ const state: LoaderState = {
   cdnUrl: null,
   query: {},
   pageModules: new Map<string, PageModuleSpec>([
-    ['highlight-pre',        { href: 'dist/scripts/highlight-pre.min.js', type: 'module' }],
-    ['demo-code',            { href: 'dist/scripts/demo-code.min.js', type: 'module' }],
-    ['docs-chrome',          { href: 'dist/scripts/docs-chrome.min.js', type: 'module' }],
-    ['cdn-panel',            { href: 'dist/scripts/cdn-panel.min.js', type: 'module' }],
-    ['view-sources',         { href: 'dist/scripts/view-sources.min.js', type: 'module' }],
-    ['demo-file-meta',       { href: 'dist/scripts/demo-file-meta.min.js', type: 'module' }],
+    ['highlight-pre',        { href: 'cdn:../scripts/highlight-pre.min.js', type: 'module' }],
+    ['demo-code',            { href: 'cdn:../scripts/demo-code.min.js', type: 'module' }],
+    ['docs-chrome',          { href: 'cdn:../scripts/docs-chrome.min.js', type: 'module' }],
+    ['cdn-panel',            { href: 'cdn:../scripts/cdn-panel.min.js', type: 'module' }],
+    ['view-sources',         { href: 'cdn:../scripts/view-sources.min.js', type: 'module' }],
+    ['demo-file-meta',       { href: 'cdn:../scripts/demo-file-meta.min.js', type: 'module' }],
     // IIFE sin export → classic (import() fallaría).
     ['dev-reload',           { href: 'scripts/dev-reload.js', type: 'classic' }],
     // Theme/palette del shell doc (ESM; lo importa el host vía loader).
