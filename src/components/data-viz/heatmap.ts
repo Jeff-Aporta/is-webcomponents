@@ -1,3 +1,4 @@
+import { fontOn } from '../charts/utils/chart-palette.js';
 import { adoptCss, defineElement, emit } from '../../core/element.js';
 import { withStyleAttrs } from '../../core/attrs.js';
 
@@ -30,17 +31,17 @@ import type { HeatmapCfg } from "./schemas/heatmap.schemas.js";
   const OBSERVED = ['x-label', 'y-label', 'color', 'cell-radius', 'show-values', 'legend-position'];
 
   const COLORS: Record<string, string[]> = {
-    brand:    ['#0f172a', ...intensitySteps('#5b9bff')],
-    neutral:  ['#0f172a', ...intensitySteps('#94a3b8')],
-    success:  ['#0f172a', ...intensitySteps('#22c55e')],
-    warning:  ['#0f172a', ...intensitySteps('#eab308')],
-    danger:   ['#0f172a', ...intensitySteps('#ef4444')],
-    'red-blue': [...intensitySteps('#3b82f6').reverse(), ...intensitySteps('#ef4444')],
+    brand:    ['var(--iswc-bg-soft)', ...intensitySteps('var(--iswc-chart-1)')],
+    neutral:  ['var(--iswc-bg-soft)', ...intensitySteps('var(--iswc-text-dim)')],
+    success:  ['var(--iswc-bg-soft)', ...intensitySteps('var(--iswc-success-text)')],
+    warning:  ['var(--iswc-bg-soft)', ...intensitySteps('var(--iswc-warning-text)')],
+    danger:   ['var(--iswc-bg-soft)', ...intensitySteps('var(--iswc-danger-text)')],
+    'red-blue': [...intensitySteps('var(--iswc-color-info)').reverse(), ...intensitySteps('var(--iswc-danger-text)')],
   };
 
-  function intensitySteps(hex: string): string[] {
+  function intensitySteps(color: string): string[] {
     // 5 pasos de opacidad (0.15, 0.3, 0.5, 0.7, 0.9)
-    return [0.18, 0.36, 0.55, 0.75, 0.95].map((a: number) => `color-mix(in srgb, ${hex} ${Math.round(a * 100)}%, var(--iswc-bg-elev))`);
+    return [0.18, 0.36, 0.55, 0.75, 0.95].map((a: number) => `color-mix(in srgb, ${color} ${Math.round(a * 100)}%, var(--iswc-bg-elev))`);
   }
 
   class IswcHeatmap extends withStyleAttrs(HTMLElement) {
@@ -135,9 +136,8 @@ import type { HeatmapCfg } from "./schemas/heatmap.schemas.js";
       this.#svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
       while (this.#svg.firstChild) this.#svg.firstChild.remove();
 
-      const cs = getComputedStyle(this);
-      const text = cs.getPropertyValue('--chart-text').trim() || cs.color;
-      const grid = cs.getPropertyValue('--grid-color').trim() || 'rgba(128,128,128,.18)';
+      const text = 'var(--chart-text, var(--iswc-heatmap-text))';
+      const grid = 'var(--grid-color, var(--iswc-heatmap-grid-color))';
 
       // calcular dominio
       const flat = matrix.flat().filter((v): v is number => v != null && Number.isFinite(v));
@@ -248,7 +248,7 @@ import type { HeatmapCfg } from "./schemas/heatmap.schemas.js";
               x: x0 + cellW / 2, y: y0 + cellH / 2 + 4, 'text-anchor': 'middle', class: 'cell-val',
             });
             t.textContent = formatVal(v);
-            t.style.fill = (v - domain[0]) / (domain[1] - domain[0] + 1e-9) > 0.5 ? 'var(--iswc-bg-elev)' : 'var(--iswc-text)';
+            t.style.fill = fontOn(colorFor(v, domain, palette));
             this.#svg.appendChild(t);
           }
         });
@@ -300,10 +300,10 @@ import type { HeatmapCfg } from "./schemas/heatmap.schemas.js";
   }
 
   function colorFor(v: number, [lo, hi]: [number, number], palette: string[]): string {
-    if (hi === lo) return palette[Math.floor(palette.length / 2)] ?? '#000';
+    if (hi === lo) return palette[Math.floor(palette.length / 2)] ?? '';
     const t = (v - lo) / (hi - lo);
     const idx = Math.min(palette.length - 1, Math.floor(t * palette.length));
-    return palette[idx] ?? '#000';
+    return palette[idx] ?? '';
   }
 
   function formatVal(v: number): string {

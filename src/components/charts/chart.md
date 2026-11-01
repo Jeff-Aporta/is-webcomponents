@@ -133,7 +133,9 @@ No expone.
 
 | Token | Uso |
 | --- | --- |
-| `--border-color-N` | Token leído o definido por componente. |
+| `--iswc-chart-1..8` | Serie N de la paleta activa. Fuente única del color. |
+| `--iswc-chart-on-1..8` | Texto legible sobre la serie N (bg2font). |
+| `--border-color-N` | Fuerza el color de la serie N. |
 | `--chart-text` | Token leído o definido por componente. |
 | `--grid-color` | Token leído o definido por componente. |
 | `--chart-surface` | Token leído o definido por componente. |
@@ -191,6 +193,26 @@ Documentación de cabecera preservada desde fuente:
 >            stacked, without-animation, without-legend, without-tooltip, x-label, y-label
 > Propiedades: config, svg, chart (alias de svg)
 > Evento: iswc-render
+
+## Color
+
+Toda gráfica toma el color de una sola fuente: los tokens `--iswc-chart-1` a `--iswc-chart-8`, derivados de `--iswc-accent` en `src/styles/chart-tokens.ts`.
+
+| Caso | Color |
+| --- | --- |
+| Una serie | `--iswc-chart-1`: el main de la paleta. Solo se ajusta su luminosidad si sin eso no se leería sobre la superficie. |
+| Varias series, o rebanadas | Rampa armónica: tono rotado en OKLCH, luminosidad alterna, croma y banda propios de claro y oscuro. |
+| Más de 8 | Se repite el ciclo más oscuro. |
+| `status` en el dataset (`success`, `warning`, `danger`) | Color semántico. Solo cuando la serie lo pide. |
+| `backgroundColor` / `borderColor` en el dataset, o `--border-color-N` | Lo que indique quien consume. Un arreglo en `backgroundColor` colorea cada categoría. |
+
+`--iswc-chart-on-N` es bg2font sobre la serie: las etiquetas dentro de una marca lo usan. Se resuelve en CSS con `light-dark()`, así que paleta, tema y panda (también los papeles) cambian sin repintar ni repetir la animación.
+
+Rejilla, ejes, leyenda y tooltip usan `--iswc-chart-grid-color`, `--chart-axis-color`, `--chart-text` y `--chart-muted`, compartidos con los diagramas en `core/diagram-kit.scss`. Sus tamaños van en `em`: al cambiar el `font-size` del contexto, leyenda y tooltip escalan y el lienzo se re-maqueta.
+
+Los diagramas leen los mismos tokens y los resuelven a literales, porque su SVG se exporta. Un `hue` explícito en el JSON se respeta; sin él, el tono automático es la serie de la paleta en sankey, cuadrante, recorrido, Gantt, línea de tiempo, Venn, carriles, bloques, mapa mental y treemap.
+
+El guardián `tests/gobernanza/chart-tokens.test.ts` rechaza hex, `rgb()` y `hsl()` fijos en gráficas.
 
 ## Dependencias y componentes relacionados
 

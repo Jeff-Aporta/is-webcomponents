@@ -1,5 +1,5 @@
 import { parseDate, timeScale, packLanes } from './lane-layout.js';
-import { resolveTkHue } from '../../../core/tk-hue.js';
+import { resolveTkHue, SERIE_HUES } from '../../../core/tk-hue.js';
 import type { TimelineOrientation, TimelineEventSpec, TimelineGroupSpec, TimelineResolvedSpec, TimelineLayoutEvent, TimelineTick, TimelineLayout, TimelineLayoutOptions, CompressedScale } from "../schemas/timeline-spec.schemas.js";
 
 /**
@@ -10,7 +10,7 @@ import type { TimelineOrientation, TimelineEventSpec, TimelineGroupSpec, Timelin
  * eventos que caen demasiado cerca en el tiempo (colisión de tarjetas).
  */
 
-const DEFAULT_HUES: number[] = [199, 239, 160, 38, 280, 210];
+const DEFAULT_HUES = SERIE_HUES;
 
 const MARGIN = { top: 16, right: 24, bottom: 20, left: 24 };
 const AXIS_MARGIN = 28;

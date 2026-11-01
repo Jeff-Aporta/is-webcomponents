@@ -2,9 +2,11 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
 import { svgEl } from '../../core/svg-chart-engine.js';
 import { resolveTreemapSpec, computeTreemapLayout } from './utils/treemap-spec.js';
 import type { TreemapSpec, TreemapLayout } from "./schemas/treemap-spec.schemas.js";
-import { sequenceThemeDark, sequenceThemeLight } from '../diagrams/utils/sequence-spec.js';
 import type { DiagramTheme } from "../diagrams/schemas/diagram-types.schemas.js";
 import { tkHueToCss } from '../../core/tk-hue.js';
+import { fontOn } from './utils/chart-palette.js';
+import { paletteTheme } from '../diagrams/utils/diagram-palette.js';
+import { findThemeContainer, readTheme } from '../../core/theme-scope.js';
 import { inlineMdWeb } from '../../core/tk-inline-md.js';
 import { registerDiagramKind } from '../diagrams/utils/diagram-kinds.js';
 
@@ -73,7 +75,7 @@ class IswcTreemap extends HTMLElement {
     const themeObs = new MutationObserver(() => this.#queueRender());
     this.#themeObs = themeObs;
     themeObs.observe(document.documentElement, {
-      attributes: true, attributeFilter: ['class', 'data-theme', 'data-palette'],
+      attributes: true, attributeFilter: ['data-theme', 'data-palette', 'data-panda'],
     });
     this.#wrap.addEventListener('mousemove', this.#onMouseMove as EventListener);
     this.#wrap.addEventListener('mouseleave', this.#onMouseLeave as EventListener);
@@ -145,16 +147,15 @@ class IswcTreemap extends HTMLElement {
     }
     delete this.#wrap.dataset.empty;
 
-    const dark = !document.documentElement.classList.contains('theme-light');
-    const theme: DiagramTheme & { surface?: string; headerTint?: string } = dark ? sequenceThemeDark() : sequenceThemeLight();
+    const dark = readTheme(findThemeContainer(this)) !== 'light';
+    const theme: DiagramTheme & { surface?: string; headerTint?: string } = paletteTheme(this as unknown as Element, dark);
     this.#wrap.dataset.theme = dark ? 'dark' : 'light';
     // El tema del secuencia no trae un color de superficie real (`panel` es
     // 'transparent'); lo leemos del sistema para usarlo como gap entre
     // tesela — igual que pie/doughnut usan `--chart-surface` como separador
     // en vez del propio color de cada porción.
-    const cs = getComputedStyle(this);
-    theme.surface = cs.getPropertyValue('--iswc-bg-elev').trim() || (dark ? '#1c2128' : '#ffffff');
-    theme.headerTint = dark ? 'rgba(0,0,0,.22)' : 'rgba(0,0,0,.10)';
+    theme.surface = 'var(--iswc-bg-elev)';
+    theme.headerTint = 'color-mix(in srgb, var(--iswc-text) 12%, transparent)';
 
     const availW = this.#wrap.clientWidth || 0;
     const layout = computeTreemapLayout(spec, {
@@ -231,7 +232,7 @@ class IswcTreemap extends HTMLElement {
       if (n.showLabel) {
         const t = svgEl('text', {
           x: n.x + 6, y: n.y + (n.hasChildren ? 10 : n.h / 2 + 4),
-          fill: theme.dotText ?? '#fff', 'font-size': n.hasChildren ? '10' : '11',
+          fill: fontOn(fill), 'font-size': n.hasChildren ? '10' : '11',
           'font-weight': n.hasChildren ? '700' : '600',
           'font-family': 'Tahoma,Arial,sans-serif',
         });

@@ -6,8 +6,6 @@ import {
   computeSequenceLayout,
   resolveSequenceSpec,
   sequenceMessageTooltipText,
-  sequenceThemeDark,
-  sequenceThemeLight,
 } from './utils/sequence-spec.js';
 import type { SequenceLayout, SequenceLayoutAltBox, SequenceLayoutMessage, SequenceResolvedSpec } from './schemas/sequence-spec.schemas.js';
 import type { SequenceLayoutFragment, SequenceNestedSpec } from './schemas/sequence-spec.schemas.js';
@@ -275,7 +273,7 @@ class IswcSequenceDiagram extends DiagramElementBase {
       : spec;
 
     const dark = this.isDarkTheme;
-    const base: DiagramTheme = dark ? sequenceThemeDark() : sequenceThemeLight();
+    const base: DiagramTheme = this.paletteTheme();
     // Estilo por atributo (`diagram-style`), o `theme` heredado / del payload.
     const styleRaw = styleThemeFor(hostStyleName(this), 'sequence')
       ?? (this.getAttribute('theme') ? resolveErTheme(this.getAttribute('theme')) : null)

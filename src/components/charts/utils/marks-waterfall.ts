@@ -57,8 +57,8 @@ export function drawWaterfallMarks(ctx: ChartCtx): void {
 
   const root = ctx.svg.getRootNode();
   const host: Element = (root as ShadowRoot).host ?? ctx.svg;
-  const successColor = getStatusColor(host, 'success') || '#22c55e';
-  const dangerColor = getStatusColor(host, 'danger') || '#ef4444';
+  const successColor = getStatusColor(host, 'success');
+  const dangerColor = getStatusColor(host, 'danger');
   const totalColor = colors[0] ?? '';
 
   const bars = waterfallBars(toWaterfallInput(ds.data), ds.totals || []);

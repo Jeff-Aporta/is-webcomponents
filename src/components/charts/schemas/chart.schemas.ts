@@ -110,6 +110,7 @@ export const ChartCtxSchema = z.object({
   text: z.string(),
   grid: z.string(),
   surface: z.string(),
+  unit: z.number().optional(),
   style: z.object({
   barRadius: z.number(),
   barGap: z.number(),

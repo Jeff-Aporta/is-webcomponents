@@ -58,6 +58,8 @@
 
 import { ElementBase } from '../../../core/element-base.js';
 import { findThemeContainer, readTheme } from '../../../core/theme-scope.js';
+import { paletteTheme } from './diagram-palette.js';
+import type { DiagramTheme } from '../schemas/diagram-types.schemas.js';
 import { hostStyleName, loadStylesDiagram } from './diagram-styles.js';
 import { svgIconsReady } from '../../../core/tk-icon-inline.js';
 
@@ -170,6 +172,11 @@ export class DiagramElementBase extends ElementBase {
   get isDarkTheme(): boolean {
     const container = findThemeContainer(this);
     return readTheme(container) !== 'light';
+  }
+
+  /** Tema con la paleta activa: mismos tokens que las gráficas. */
+  paletteTheme(): DiagramTheme {
+    return paletteTheme(this, this.isDarkTheme);
   }
 
   /** Aplica `data-theme` al wrapper del shadow, como hacen hoy todos los

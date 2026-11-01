@@ -1,5 +1,5 @@
 import { richTextPlain } from '../../../core/tk-rich-text.js';
-import { resolveTkHue } from '../../../core/tk-hue.js';
+import { resolveTkHue, SERIE_HUES } from '../../../core/tk-hue.js';
 import type { VennSet, VennRegion, VennSpec, VennJsonOut, VennLayoutCircle, VennLayoutRegion, VennLayout } from "../schemas/venn-spec.schemas.js";
 
 /**
@@ -11,7 +11,7 @@ import type { VennSet, VennRegion, VennSpec, VennJsonOut, VennLayoutCircle, Venn
  * poder dibujarse con círculos, así que el spec corta ahí.
  */
 
-const DEFAULT_HUES: number[] = [210, 38, 160];
+const DEFAULT_HUES = SERIE_HUES;
 const R = 82;
 const MARGIN: { top: number; right: number; bottom: number; left: number } = { top: 16, right: 24, bottom: 24, left: 24 };
 

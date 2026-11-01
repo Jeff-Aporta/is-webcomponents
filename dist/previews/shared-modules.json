@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-01T17:32:06.608Z",
+  "generatedAt": "2026-11-02T03:17:39.216Z",
   "count": 41,
   "modules": [
     {
@@ -7,7 +7,7 @@
       "id": "app-cfg",
       "path": "src/core/app-cfg.ts",
       "summary": "Módulo compartido `app-cfg.ts`.",
-      "bytes": 3971,
+      "bytes": 4057,
       "exports": [
         "APP_CFG_KEY",
         "PALETAS",
@@ -23,7 +23,7 @@
       "id": "app-init",
       "path": "src/core/app-init.ts",
       "summary": "Módulo compartido `app-init.ts`.",
-      "bytes": 3254,
+      "bytes": 3307,
       "exports": [
         "ICONS_FOLDER_DEFAULT",
         "iconsBase",
@@ -413,7 +413,7 @@
       "id": "props-element",
       "path": "src/core/props-element.ts",
       "summary": "props-element — Cada clave de `props` que no sea una función es también un atributo en kebab-case (`textoCargando` →",
-      "bytes": 4489,
+      "bytes": 4603,
       "exports": [
         "atributosDe"
       ]
@@ -518,9 +518,11 @@
       "id": "tk-hue",
       "path": "src/core/tk-hue.ts",
       "summary": "Tono HSL en BD (0–360) → CSS/hex solo al renderizar.",
-      "bytes": 1503,
+      "bytes": 2840,
       "exports": [
         "normalizeTkHue",
+        "SERIE_HUES",
+        "fijarSerieColores",
         "tkHueToCss",
         "tkHueToHex",
         "resolveTkHue"

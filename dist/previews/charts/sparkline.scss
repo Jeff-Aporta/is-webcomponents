@@ -7,9 +7,9 @@
   aspect-ratio: 4/1;
   box-sizing: border-box;
   /* Sin trend: sigue el acento de la marca activa. */
-  --line-color: var(--iswc-accent);
-  --fill-color-1: color-mix(in srgb, var(--iswc-accent) 28%, transparent);
-  --border-color-1: var(--iswc-accent);
+  --line-color: var(--iswc-chart-1);
+  --fill-color-1: color-mix(in srgb, var(--iswc-chart-1) 28%, transparent);
+  --border-color-1: var(--iswc-chart-1);
   --line-width: 1.5;
 }
 

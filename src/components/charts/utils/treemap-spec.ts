@@ -1,6 +1,6 @@
 import { buildTree, squarify } from '../../../core/tree-layout.js';
 import { richTextPlain } from '../../../core/tk-rich-text.js';
-import { resolveTkHue } from '../../../core/tk-hue.js';
+import { resolveTkHue, SERIE_HUES } from '../../../core/tk-hue.js';
 import type { TreeNode } from '../../../core/schemas/tree-layout.schemas.js';
 import type { Rect, RawSpecNode, SpecNode, TreemapSpec, TreemapLayout, TreemapLayoutNode, TreemapLayoutOpts } from "../schemas/treemap-spec.schemas.js";
 
@@ -12,7 +12,7 @@ import type { Rect, RawSpecNode, SpecNode, TreemapSpec, TreemapLayout, TreemapLa
  * nodo, ya anidado y con el hue resuelto.
  */
 
-const DEFAULT_HUES = [239, 199, 38, 280, 160, 210];
+const DEFAULT_HUES = SERIE_HUES;
 const LABEL_H = 14;
 
 /** Nodo crudo del payload (entrada de `readNode`). */
@@ -75,7 +75,7 @@ function annotateHue(
   let hue: number | undefined;
   const ownHue = (node as { hue?: unknown }).hue;
   if (ownHue != null) hue = Number(ownHue);
-  else if (isTopLevel) { hue = DEFAULT_HUES[topCounter.i % DEFAULT_HUES.length] ?? 210; topCounter.i += 1; }
+  else if (isTopLevel && !(node as { synthetic?: boolean }).synthetic) { hue = DEFAULT_HUES[topCounter.i % DEFAULT_HUES.length]; topCounter.i += 1; }
   else hue = inheritedHue;
   (node as Record<string, unknown>).resolvedHue = hue;
   (node as Record<string, unknown>).lightness = 50 + (siblingIndex % 4) * 5;

@@ -1,5 +1,5 @@
 import { richTextPlain } from '../../../core/tk-rich-text.js';
-import { resolveTkHue } from '../../../core/tk-hue.js';
+import { resolveTkHue, SERIE_HUES } from '../../../core/tk-hue.js';
 import type { JourneyPhase, JourneyStep, JourneyScale, JourneySpec, JourneyJsonOut, JourneyPlotRect, JourneyLayoutStep, JourneyLayoutPhase, JourneyLayoutGridLine, JourneyLayout } from "../schemas/journey-spec.schemas.js";
 
 /**
@@ -13,7 +13,7 @@ import type { JourneyPhase, JourneyStep, JourneyScale, JourneySpec, JourneyJsonO
  * cambiar con `scale: { min, max }`.
  */
 
-const DEFAULT_HUES: number[] = [210, 239, 160, 38, 280, 199];
+const DEFAULT_HUES = SERIE_HUES;
 
 const STEP_W = 132;
 const PLOT_H = 168;

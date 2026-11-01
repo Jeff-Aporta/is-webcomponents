@@ -5,7 +5,7 @@ import { assignEdgeHues } from './diagram-edge-style.js';
 import { routeOrthogonal, pixelToGrid, gridPathToSvg, buildOrthogonalPath } from './diagram-astar.js';
 import { countIconTokens, extractLeadingIconToken } from '../../../core/tk-icon-inline.js';
 import { richTextPlain } from '../../../core/tk-rich-text.js';
-import { resolveTkHue } from '../../../core/tk-hue.js';
+import { resolveTkHue, SERIE_HUES } from '../../../core/tk-hue.js';
 import type { BlockSpecGroup, BlockSpecBlock, BlockSpecEdge, BlockSpec, LeadingIcon, BlockPlacement, BlockLayoutBlock, BlockLayoutEdge, BlockLayout, BlockRect, Side } from "../schemas/block-spec.schemas.js";
 
 /**
@@ -21,7 +21,7 @@ const GAP = 24;
 const ROW_H = 72;
 const MIN_UNIT_W = 96;
 const MAX_UNIT_W = 200;
-const DEFAULT_HUES: number[] = [210, 239, 160, 38, 280, 199];
+const DEFAULT_HUES = SERIE_HUES;
 const SHAPES: Set<string> = new Set(['rect', 'round']);
 
 function asRecord(v: unknown): Record<string, unknown> {

@@ -1,7 +1,6 @@
 import { adoptCss, defineElement, emit, emitCancelable } from '../../core/element.js';
 import { DiagramElementBase } from './utils/diagram-element-base.js';
 import { resolveSankeySpec, computeSankeyLayout } from './utils/sankey-spec.js';
-import { sequenceThemeDark, sequenceThemeLight } from './utils/sequence-spec.js';
 import type { DiagramTheme } from './schemas/diagram-types.schemas.js';
 import { tkHueToHex } from '../../core/tk-hue.js';
 import { inlineMdWeb, applySvgTextContent } from '../../core/tk-inline-md.js';
@@ -90,7 +89,7 @@ class IswcSankeyDiagram extends DiagramElementBase {
       return;
     }
 
-    const theme = this.isDarkTheme ? sequenceThemeDark() : sequenceThemeLight();
+    const theme = this.paletteTheme();
     this.syncThemeAttr();
 
     const height = Number(this.getAttribute('height')) || DEFAULT_HEIGHT;

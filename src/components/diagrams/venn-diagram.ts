@@ -4,7 +4,6 @@ import { resolveVennSpec, computeVennLayout } from './utils/venn-spec.js';
 import type { VennLayout, VennSpec } from './schemas/venn-spec.schemas.js';
 // `VennLayoutCircle` y `VennLayoutRegion` están declarados pero no exportados
 // en venn-spec.ts. Tipamos localmente para no tocar la firma del spec.
-import { sequenceThemeDark, sequenceThemeLight } from './utils/sequence-spec.js';
 import { tkHueToHex } from '../../core/tk-hue.js';
 import type { DiagramTheme } from './schemas/diagram-types.schemas.js';
 import { inlineMdWeb, applySvgTextContent } from '../../core/tk-inline-md.js';
@@ -68,7 +67,7 @@ class IswcVennDiagram extends DiagramElementBase {
     }
     delete this.wrap.dataset.empty;
 
-    const theme: DiagramTheme = this.isDarkTheme ? sequenceThemeDark() : sequenceThemeLight();
+    const theme: DiagramTheme = this.paletteTheme();
     this.syncThemeAttr();
 
     const layout: VennLayout = computeVennLayout(spec);

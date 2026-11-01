@@ -54,6 +54,22 @@
   --iswc-contrast-soft: rgb(from var(--iswc-color-contrast) r g b / 16%);
   --iswc-contrast-text: hsl(from var(--iswc-color-contrast) h s 72%);
   --iswc-color-bright: hsl(calc(var(--iswc-brand-h) * 1deg) min(100%, calc(var(--iswc-brand-s) * 1.6)) 70%);
+  --iswc-chart-1: light-dark(oklch(from var(--iswc-accent) clamp(0.4, l, 0.68) c h), oklch(from var(--iswc-accent) clamp(0.6, l, 0.86) c h));
+  --iswc-chart-on-1: oklch(from var(--iswc-chart-1) clamp(0, calc((var(--iswc-bg2font-umbral, 0.65) - l) * 100000), 1) 0 0);
+  --iswc-chart-2: light-dark(oklch(from var(--iswc-accent) clamp(0.42, calc(clamp(0.42, l, 0.6) + -0.14), 0.6) clamp(0.09, c, 0.15) calc(h + 225)), oklch(from var(--iswc-accent) clamp(0.62, calc(clamp(0.62, l, 0.84) + -0.14), 0.84) clamp(0.09, c, 0.15) calc(h + 225)));
+  --iswc-chart-on-2: oklch(from var(--iswc-chart-2) clamp(0, calc((var(--iswc-bg2font-umbral, 0.65) - l) * 100000), 1) 0 0);
+  --iswc-chart-3: light-dark(oklch(from var(--iswc-accent) clamp(0.42, calc(clamp(0.42, l, 0.6) + 0.14), 0.6) clamp(0.09, c, 0.15) calc(h + 315)), oklch(from var(--iswc-accent) clamp(0.62, calc(clamp(0.62, l, 0.84) + 0.14), 0.84) clamp(0.09, c, 0.15) calc(h + 315)));
+  --iswc-chart-on-3: oklch(from var(--iswc-chart-3) clamp(0, calc((var(--iswc-bg2font-umbral, 0.65) - l) * 100000), 1) 0 0);
+  --iswc-chart-4: light-dark(oklch(from var(--iswc-accent) clamp(0.42, calc(clamp(0.42, l, 0.6) + -0.06), 0.6) clamp(0.09, c, 0.15) calc(h + 90)), oklch(from var(--iswc-accent) clamp(0.62, calc(clamp(0.62, l, 0.84) + -0.06), 0.84) clamp(0.09, c, 0.15) calc(h + 90)));
+  --iswc-chart-on-4: oklch(from var(--iswc-chart-4) clamp(0, calc((var(--iswc-bg2font-umbral, 0.65) - l) * 100000), 1) 0 0);
+  --iswc-chart-5: light-dark(oklch(from var(--iswc-accent) clamp(0.42, calc(clamp(0.42, l, 0.6) + 0.06), 0.6) clamp(0.09, c, 0.15) calc(h + 180)), oklch(from var(--iswc-accent) clamp(0.62, calc(clamp(0.62, l, 0.84) + 0.06), 0.84) clamp(0.09, c, 0.15) calc(h + 180)));
+  --iswc-chart-on-5: oklch(from var(--iswc-chart-5) clamp(0, calc((var(--iswc-bg2font-umbral, 0.65) - l) * 100000), 1) 0 0);
+  --iswc-chart-6: light-dark(oklch(from var(--iswc-accent) clamp(0.42, calc(clamp(0.42, l, 0.6) + -0.14), 0.6) clamp(0.09, c, 0.15) calc(h + 270)), oklch(from var(--iswc-accent) clamp(0.62, calc(clamp(0.62, l, 0.84) + -0.14), 0.84) clamp(0.09, c, 0.15) calc(h + 270)));
+  --iswc-chart-on-6: oklch(from var(--iswc-chart-6) clamp(0, calc((var(--iswc-bg2font-umbral, 0.65) - l) * 100000), 1) 0 0);
+  --iswc-chart-7: light-dark(oklch(from var(--iswc-accent) clamp(0.42, calc(clamp(0.42, l, 0.6) + 0.14), 0.6) clamp(0.09, c, 0.15) calc(h + 135)), oklch(from var(--iswc-accent) clamp(0.62, calc(clamp(0.62, l, 0.84) + 0.14), 0.84) clamp(0.09, c, 0.15) calc(h + 135)));
+  --iswc-chart-on-7: oklch(from var(--iswc-chart-7) clamp(0, calc((var(--iswc-bg2font-umbral, 0.65) - l) * 100000), 1) 0 0);
+  --iswc-chart-8: light-dark(oklch(from var(--iswc-accent) clamp(0.42, calc(clamp(0.42, l, 0.6) + 0), 0.6) clamp(0.09, c, 0.15) calc(h + 45)), oklch(from var(--iswc-accent) clamp(0.62, calc(clamp(0.62, l, 0.84) + 0), 0.84) clamp(0.09, c, 0.15) calc(h + 45)));
+  --iswc-chart-on-8: oklch(from var(--iswc-chart-8) clamp(0, calc((var(--iswc-bg2font-umbral, 0.65) - l) * 100000), 1) 0 0);
   /* Tono en el que estan pintados los SVG. La paleta solo mueve --iswc-brand-h. */
   --iswc-logo-h: 210;
   --iswc-sl-bg: color-mix(in srgb, var(--iswc-color-bright) calc(var(--iswc-tint) * 10%), #ffffff);

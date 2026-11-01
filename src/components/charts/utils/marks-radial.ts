@@ -1,4 +1,5 @@
 import { pathArc, polarToCartesian, svgEl } from '../../../core/svg-chart-engine.js';
+import { fontOn } from './chart-palette.js';
 import type { ChartCtx, ChartDataset } from '../schemas/chart.schemas.js';
 import type { RadialDataset, Slice } from "../schemas/marks-radial.schemas.js";
 
@@ -39,7 +40,7 @@ function visibleSlices(ctx: ChartCtx): { ds: RadialDataset | null; slices: Slice
 }
 
 function drawSliceChart(ctx: ChartCtx, innerRatio: number): void {
-  const { group, radial, colors, style, addHit, fmt } = ctx;
+  const { group, radial, colors, style, addHit, fmt, unit: u = 1 } = ctx;
   if (!radial) return;
   const { ds, slices } = visibleSlices(ctx);
   if (!ds || !slices.length) return;
@@ -81,12 +82,13 @@ function drawSliceChart(ctx: ChartCtx, innerRatio: number): void {
     });
 
     // Etiqueta dentro de la rebanada sólo si hay espacio de sobra.
-    if (pct >= 8 && rOuter - rInner > 26) {
+    if (pct >= 8 && rOuter - rInner > 26 * u) {
       const t = svgEl('text', {
         x: radial.cx + rMid * Math.cos(mid),
         y: radial.cy + rMid * Math.sin(mid),
         'text-anchor': 'middle',
         'dominant-baseline': 'middle',
+        fill: fontOn(color),
         class: 'slice-value',
       });
       t.textContent = `${Math.round(pct)}%`;
@@ -95,14 +97,14 @@ function drawSliceChart(ctx: ChartCtx, innerRatio: number): void {
   }
 
   // Total al centro del doughnut: aprovecha el hueco en vez de dejarlo vacío.
-  if (rInner > 28) {
+  if (rInner > 28 * u) {
     const value = svgEl('text', {
-      x: radial.cx, y: radial.cy - 2, 'text-anchor': 'middle', 'dominant-baseline': 'middle', class: 'center-value',
+      x: radial.cx, y: radial.cy - 2 * u, 'text-anchor': 'middle', 'dominant-baseline': 'middle', class: 'center-value',
     });
     value.textContent = fmt(total);
     group.appendChild(value);
     const caption = svgEl('text', {
-      x: radial.cx, y: radial.cy + 18, 'text-anchor': 'middle', 'dominant-baseline': 'middle', class: 'center-caption',
+      x: radial.cx, y: radial.cy + 18 * u, 'text-anchor': 'middle', 'dominant-baseline': 'middle', class: 'center-caption',
     });
     caption.textContent = ds.label || 'Total';
     group.appendChild(caption);
@@ -164,7 +166,7 @@ export function drawPolarAreaMarks(ctx: ChartCtx): void {
 }
 
 export function drawRadarMarks(ctx: ChartCtx): void {
-  const { group, data, radial, colors, fills, style, grid, addHit, fmt } = ctx;
+  const { group, data, radial, colors, fills, style, grid, addHit, fmt, unit: u = 1 } = ctx;
   if (!radial) return;
   const labels = data.labels;
   const axes = labels.length;
@@ -194,7 +196,7 @@ export function drawRadarMarks(ctx: ChartCtx): void {
       x1: radial.cx, y1: radial.cy, x2: end.x, y2: end.y, stroke: grid, class: 'grid-line',
     }));
 
-    const at = polarToCartesian(radial.cx, radial.cy, radial.rMax + 16, angle);
+    const at = polarToCartesian(radial.cx, radial.cy, radial.rMax + 16 * u, angle);
     const cos = Math.cos(angle);
     const anchor: 'middle' | 'start' | 'end' =
       Math.abs(cos) < 0.3 ? 'middle' : cos > 0 ? 'start' : 'end';

@@ -4,7 +4,6 @@ import { resolveBlockSpec, computeBlockLayout, blockShapePath } from './utils/bl
 import type { BlockLayout, BlockSpec } from './schemas/block-spec.schemas.js';
 // Tipos internos del spec (no exportados) que el renderer necesita; los
 // redefinimos localmente para no tocar la firma del spec.
-import { sequenceThemeDark, sequenceThemeLight } from './utils/sequence-spec.js';
 import { PathTurtle as SequenceTurtle } from '../../core/path-turtle.js';
 import type { PathTurtle } from '../../core/path-turtle.js';
 import { tkHueToHex } from '../../core/tk-hue.js';
@@ -108,7 +107,7 @@ class IswcBlockDiagram extends DiagramElementBase {
     }
 
     const dark = this.isDarkTheme;
-    const theme: DiagramTheme = dark ? sequenceThemeDark() : sequenceThemeLight();
+    const theme: DiagramTheme = this.paletteTheme();
     this.#theme = theme;
     this.syncThemeAttr();
 

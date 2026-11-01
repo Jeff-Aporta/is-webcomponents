@@ -11,7 +11,6 @@ import { tokenizeCode } from '../../core/code-highlight.js';
 import { captureEmbeddedDiagram, embedSvgElement, resolveEmbedDiagram } from './utils/diagram-embed.js';
 import type { EmbedCapture, EmbedSize } from './schemas/diagram-embed.schemas.js';
 import type { FlowLayout, FlowLayoutNode, FlowLayoutEdge, FlowLayoutOverrides, FlowResolvedSpec, FlowNodeSpec } from './schemas/flowchart-spec.schemas.js';
-import { sequenceThemeDark, sequenceThemeLight } from './utils/sequence-spec.js';
 import { PathTurtle as SequenceTurtle } from '../../core/path-turtle.js';
 import type { PathTurtle } from '../../core/path-turtle.js';
 import { tkHueToHex } from '../../core/tk-hue.js';
@@ -280,7 +279,7 @@ class IswcFlowchart extends DiagramElementBase {
     }
 
     const dark = this.isDarkTheme;
-    const base: DiagramTheme = dark ? sequenceThemeDark() : sequenceThemeLight();
+    const base: DiagramTheme = this.paletteTheme();
     const styleTheme = this.#resolveStyleTheme();
     this.#styleTheme = styleTheme;
     this.#paint = styleTheme?.flow ? flowPaint(styleTheme) : null;

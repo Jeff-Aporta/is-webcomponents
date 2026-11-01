@@ -3,7 +3,7 @@ import { aristasDeRetorno, claveArista } from './diagram-graph.js';
 import { diagramHeaderWidth } from './diagram-header.js';
 import { applyEdgeActorLayout } from './diagram-edge-actors.js';
 import { assignEdgeHues } from './diagram-edge-style.js';
-import { resolveTkHue } from '../../../core/tk-hue.js';
+import { resolveTkHue, SERIE_HUES } from '../../../core/tk-hue.js';
 import type { SwimlaneStepKind, SwimlaneLaneSpec, SwimlaneStepSpec, SwimlaneLinkSpec, SwimlaneResolvedSpec, SwimlaneLayoutLane, SwimlaneLayoutStep, SwimlaneLayoutLink, SwimlaneLayout } from "../schemas/swimlane-spec.schemas.js";
 
 /**
@@ -18,7 +18,7 @@ import type { SwimlaneStepKind, SwimlaneLaneSpec, SwimlaneStepSpec, SwimlaneLink
  * topológico: un paso va siempre a la derecha de todos los que lo alimentan.
  */
 
-const DEFAULT_HUES: number[] = [210, 239, 160, 38, 280, 199];
+const DEFAULT_HUES = SERIE_HUES;
 
 export const STEP_KINDS: Set<string> = new Set(['start', 'end', 'process', 'decision']);
 

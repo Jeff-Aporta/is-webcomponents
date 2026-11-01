@@ -1,7 +1,6 @@
 import { adoptCss, defineElement, emit } from '../../core/element.js';
 import { DiagramElementBase } from './utils/diagram-element-base.js';
 import { resolveMindmapSpec, computeMindmapLayout } from './utils/mindmap-spec.js';
-import { sequenceThemeDark, sequenceThemeLight } from './utils/sequence-spec.js';
 import type { DiagramTheme } from './schemas/diagram-types.schemas.js';
 import { tkHueToHex } from '../../core/tk-hue.js';
 import { inlineMdWeb } from '../../core/tk-inline-md.js';
@@ -68,7 +67,7 @@ class IswcMindmap extends DiagramElementBase {
     delete this.wrap.dataset.empty;
 
     const dark = this.isDarkTheme;
-    const theme = dark ? sequenceThemeDark() : sequenceThemeLight();
+    const theme = this.paletteTheme();
     this.syncThemeAttr();
 
     const layout = computeMindmapLayout(spec);
@@ -160,7 +159,7 @@ class IswcMindmap extends DiagramElementBase {
         }));
       }
 
-      const textFill = n.kind === 'root' ? (theme.dotText ?? '#fff') : theme.text;
+      const textFill = n.kind === 'root' ? theme.dotText : theme.text;
       if (n.label.includes('{{') || /[*`\[]/.test(n.label)) {
         const fo = svgEl('foreignObject', {
           x: textLeft, y: n.y, width: Math.max(textRight - textLeft, 8), height: n.h, overflow: 'visible',

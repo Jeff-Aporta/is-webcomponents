@@ -1,7 +1,6 @@
 import { adoptCss, defineElement, emit, emitCancelable } from '../../core/element.js';
 import { DiagramElementBase } from './utils/diagram-element-base.js';
 import { resolveTimelineSpec, computeTimelineLayout } from './utils/timeline-spec.js';
-import { sequenceThemeDark, sequenceThemeLight } from './utils/sequence-spec.js';
 import type { DiagramTheme } from './schemas/diagram-types.schemas.js';
 import { tkHueToHex } from '../../core/tk-hue.js';
 import { inlineMdWeb } from '../../core/tk-inline-md.js';
@@ -95,7 +94,7 @@ class IswcTimeline extends DiagramElementBase {
       return;
     }
 
-    const theme = this.isDarkTheme ? sequenceThemeDark() : sequenceThemeLight();
+    const theme = this.paletteTheme();
     this.syncThemeAttr();
 
     // `Date.now()` se llama solo aquí (en el componente), nunca dentro del

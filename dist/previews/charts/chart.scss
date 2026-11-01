@@ -12,12 +12,6 @@
   --chart-legend-size: 0.75em;
   --chart-title-size: 0.875em;
   --chart-tooltip-size: 0.75em;
-  /* Superficie y tinta */
-  --chart-text: var(--iswc-text);
-  --chart-muted: var(--iswc-text-dim);
-  --chart-surface: var(--iswc-bg-elev);
-  --iswc-chart-grid-color: color-mix(in srgb, var(--iswc-border) 85%, transparent);
-  --chart-axis-color: color-mix(in srgb, var(--iswc-border) 100%, transparent);
   /* Geometría de marks — unitless (px), legibles desde JS */
   --chart-bar-radius: 4;
   --chart-bar-gap: 2;
@@ -25,7 +19,7 @@
   --chart-point-radius: 3;
   --chart-slice-gap: 2;
   --chart-doughnut-ratio: 0.62;
-  /* Overrides opcionales por serie (vacíos = usa la paleta de marca).
+  /* Overrides opcionales por serie (vacíos = usa --iswc-chart-N).
      Definir --border-color-1..8 / --fill-color-1..8 fuerza el color de esa serie. */
   --border-color-1: ;
   --border-color-2: ;
@@ -83,6 +77,17 @@
   min-block-size: 0;
   inline-size: 100%;
   overflow: visible;
+  /* --chart-geo: proporción con el lienzo; lo fija el JS, el tamaño sigue en em. */
+  font-size: calc(1em * var(--chart-geo, 1));
+}
+
+/* Mide 1em: si cambia el font-size, el ResizeObserver re-maqueta. */
+.em-probe {
+  position: absolute;
+  inline-size: 1em;
+  block-size: 0;
+  visibility: hidden;
+  pointer-events: none;
 }
 
 .slot-hidden {
@@ -161,7 +166,6 @@
 .slice-value {
   font-size: var(--chart-tick-size);
   font-weight: 600;
-  fill: var(--chart-text);
   pointer-events: none;
 }
 
@@ -216,7 +220,7 @@
   gap: 0.375em 0.875em;
   justify-content: center;
   flex: 0 0 auto;
-  font-size: var(--chart-legend-size);
+  font-size: calc(var(--chart-legend-size) * var(--chart-geo, 1));
   line-height: 1.4;
   /* Las leyendas en columna viven en los laterales del wrap. */
 }
@@ -306,9 +310,9 @@
   border-radius: 0.4em;
   background: color-mix(in srgb, var(--chart-surface) 96%, transparent);
   color: var(--chart-text);
-  font-size: var(--chart-tooltip-size);
+  font-size: calc(var(--chart-tooltip-size) * var(--chart-geo, 1));
   line-height: 1.35;
-  box-shadow: 0 .5em 1.5em rgba(0, 0, 0, 0.28);
+  box-shadow: var(--iswc-shadow);
   backdrop-filter: blur(.5em);
   -webkit-backdrop-filter: blur(.5em);
 }

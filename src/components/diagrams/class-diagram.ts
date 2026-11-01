@@ -4,7 +4,6 @@ import { styledEdgePath } from './utils/diagram-curve.js';
 import { DiagramElementBase } from './utils/diagram-element-base.js';
 import { resolveClassSpec, computeClassLayout, sentidoFlujoClase } from './utils/class-spec.js';
 import { animarRielEn, flujoActivo } from './utils/diagram-flow.js';
-import { sequenceThemeDark, sequenceThemeLight } from './utils/sequence-spec.js';
 import { PathTurtle as SequenceTurtle } from '../../core/path-turtle.js';
 import { tkHueToHex } from '../../core/tk-hue.js';
 import { edgeStrokeHex, edgeChipFill, edgeChipText } from './utils/diagram-edge-style.js';
@@ -154,7 +153,7 @@ class IswcClassDiagram extends DiagramElementBase {
     }
 
     const dark = this.isDarkTheme;
-    const theme: DiagramTheme = dark ? sequenceThemeDark() : sequenceThemeLight();
+    const theme: DiagramTheme = this.paletteTheme();
     this.#theme = theme;
     this.syncThemeAttr();
 

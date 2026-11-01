@@ -1,5 +1,5 @@
 import { richTextPlain } from '../../../core/tk-rich-text.js';
-import { resolveTkHue } from '../../../core/tk-hue.js';
+import { resolveTkHue, SERIE_HUES } from '../../../core/tk-hue.js';
 import type { QuadrantPoint, QuadrantGroup, QuadrantAxes, QuadrantQuadrants, QuadrantSpec, QuadrantJsonOut, PlotRect, QuadrantLayoutPoint, QuadrantLayoutQuadrant, QuadrantLayoutAxisLabel, QuadrantLayoutAxes, QuadrantLayout } from "../schemas/quadrant-spec.schemas.js";
 
 /**
@@ -10,7 +10,7 @@ import type { QuadrantPoint, QuadrantGroup, QuadrantAxes, QuadrantQuadrants, Qua
  * ejes continuos, cuatro cuadrantes nombrados y puntos ubicados en 0..1.
  */
 
-const DEFAULT_HUES: number[] = [210, 239, 160, 38, 280, 199];
+const DEFAULT_HUES = SERIE_HUES;
 
 const PLOT = 320;                 // lado del área de datos (cuadrada)
 const MARGIN: { top: number; right: number; bottom: number; left: number } = { top: 16, right: 24, bottom: 44, left: 52 };

@@ -1,6 +1,7 @@
 import palettes from './palettes.json' with { type: 'json' };
 import { brandRampRules, brandFamilyBlock, ISWC_COLOR_VARIANTS } from './color-tokens.ts';
 import { type IswcColorVariant } from './schemas/color-tokens.schemas.ts';
+import { chartDerive } from './chart-tokens.ts';
 import type { ContrastFailure, PaletteConfig, PaletteFamily, PaletteSeedInput, ResolvedSurfaces, Rgb, SurfaceRecipe } from "./schemas/palette-build.schemas.js";
 
 /**
@@ -129,6 +130,7 @@ export const BRAND_DERIVE: Record<string, string> = {
   '--iswc-contrast-soft': 'rgb(from var(--iswc-color-contrast) r g b / 16%)',
   '--iswc-contrast-text': 'hsl(from var(--iswc-color-contrast) h s 72%)',
   '--iswc-color-bright': 'hsl(calc(var(--iswc-brand-h) * 1deg) min(100%, calc(var(--iswc-brand-s) * 1.6)) 70%)',
+  ...chartDerive(),
 };
 
 /** Superficies claras (--iswc-sl-*) y oscuras (--iswc-sd-*) de la paleta: las dos siempre calculadas. */

@@ -4,7 +4,6 @@ import { styledEdgePath } from './utils/diagram-curve.js';
 import { DiagramElementBase } from './utils/diagram-element-base.js';
 import { animarRielEn, flujoActivo } from './utils/diagram-flow.js';
 import { resolveErSpec, computeErLayout, entityBoxPath, ER_HEADER_H, ER_ROW_H, ER_KEY_ICON_IDS } from './utils/er-spec.js';
-import { sequenceThemeDark, sequenceThemeLight } from './utils/sequence-spec.js';
 import { tkHueToHex } from '../../core/tk-hue.js';
 import { edgeStrokeHex, edgeChipFromStroke } from './utils/diagram-edge-style.js';
 import { inlineMdWeb, applySvgTextContent } from '../../core/tk-inline-md.js';
@@ -135,8 +134,8 @@ class IswcErDiagram extends DiagramElementBase {
     const styleTheme = styleThemeRaw ? pickThemeMode(styleThemeRaw, dark) : null;
     this.#styleTheme = styleTheme;
     const theme: DiagramTheme = styleTheme
-      ? themeToDiagramTheme(styleTheme, dark ? sequenceThemeDark() : sequenceThemeLight())
-      : (dark ? sequenceThemeDark() : sequenceThemeLight());
+      ? themeToDiagramTheme(styleTheme, this.paletteTheme())
+      : (this.paletteTheme());
     this.#theme = theme;
     this.syncThemeAttr();
 

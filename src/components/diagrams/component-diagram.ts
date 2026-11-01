@@ -3,7 +3,6 @@ import { DiagramElementBase } from './utils/diagram-element-base.js';
 import { animarRielEn, flujoActivo, pulsoRadar } from './utils/diagram-flow.js';
 import { resolveComponentSpec, computeComponentLayout, packageShapePath, LOLLI_R, HTTP_METHOD_BADGE, CARD_TEXT_X, CARD_STEREO_DY } from './utils/component-spec.js';
 import type { ComponentLayout } from './schemas/component-spec.schemas.js';
-import { sequenceThemeDark, sequenceThemeLight } from './utils/sequence-spec.js';
 import { tkHueToHex } from '../../core/tk-hue.js';
 import {
   edgeStrokeHex, edgeChipFill, edgeChipText, hexMixWhite, RECEIVER_COLOR,
@@ -205,8 +204,8 @@ class IswcComponentDiagram extends DiagramElementBase {
     const styleTheme = styleThemeRaw ? pickThemeMode(styleThemeRaw, dark) : null;
     this.#styleTheme = styleTheme;
     this.#theme = styleTheme
-      ? themeToDiagramTheme(styleTheme, dark ? sequenceThemeDark() : sequenceThemeLight())
-      : (dark ? sequenceThemeDark() : sequenceThemeLight());
+      ? themeToDiagramTheme(styleTheme, this.paletteTheme())
+      : (this.paletteTheme());
     this.syncThemeAttr();
 
     const layout: ComponentLayout = computeComponentLayout(spec);

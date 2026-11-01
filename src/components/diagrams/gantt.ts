@@ -5,7 +5,6 @@ import type { GanttLayout, GanttSpec } from './schemas/gantt-spec.schemas.js';
 // Tipos internos del spec (no exportados) que el renderer necesita; los
 // redefinimos localmente para no tocar la firma del spec.
 import { shapePath } from './utils/flowchart-spec.js';
-import { sequenceThemeDark, sequenceThemeLight } from './utils/sequence-spec.js';
 import { PathTurtle } from '../../core/path-turtle.js';
 import { tkHueToHex } from '../../core/tk-hue.js';
 import type { DiagramTheme } from './schemas/diagram-types.schemas.js';
@@ -102,7 +101,7 @@ class IswcGantt extends DiagramElementBase {
     }
 
     const dark = this.isDarkTheme;
-    const theme: DiagramTheme = dark ? sequenceThemeDark() : sequenceThemeLight();
+    const theme: DiagramTheme = this.paletteTheme();
     this.syncThemeAttr();
 
     // `Date.now()` se llama solo aquí (en el componente), nunca dentro del

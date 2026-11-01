@@ -2,7 +2,6 @@ import { adoptCss, defineElement, emit, emitCancelable } from '../../core/elemen
 import { DiagramElementBase } from './utils/diagram-element-base.js';
 import { resolveUseCaseSpec, computeUseCaseLayout } from './utils/use-case-spec.js';
 import type { UseCaseLayout, UseCaseLayoutActor, UseCaseLayoutCase, UseCaseLayoutLink, UseCaseResolvedSpec } from './schemas/use-case-spec.schemas.js';
-import { sequenceThemeDark, sequenceThemeLight } from './utils/sequence-spec.js';
 import { tkHueToHex } from '../../core/tk-hue.js';
 import { edgeStrokeHex, edgeChipFill, edgeChipText } from './utils/diagram-edge-style.js';
 import type { DiagramTheme } from './schemas/diagram-types.schemas.js';
@@ -140,7 +139,7 @@ class IswcUseCaseDiagram extends DiagramElementBase {
       return;
     }
 
-    const theme: DiagramTheme = this.isDarkTheme ? sequenceThemeDark() : sequenceThemeLight();
+    const theme: DiagramTheme = this.paletteTheme();
     this.syncThemeAttr();
 
     const layout: UseCaseLayout = computeUseCaseLayout(visible);

@@ -126,6 +126,37 @@
       ]
     },
     {
+      "id": "color",
+      "title": "Color",
+      "lede": "Una serie usa el main de la paleta; varias, una rampa armónica. Cambia paleta o tema y las gráficas lo siguen sin repintar.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": [
+            "<iswc-bar-chart label=\"Una serie: main\" without-legend style=\"block-size: 16em\">",
+            "  <script type=\"application/json\">{ \"data\": { \"labels\": [\"Lead\", \"Contacto\", \"Propuesta\", \"Cierre\"], \"datasets\": [{ \"label\": \"Clientes\", \"data\": [42, 28, 14, 6] }] } }</script>",
+            "</iswc-bar-chart>"
+          ]
+        },
+        {
+          "kind": "demo",
+          "html": [
+            "<iswc-doughnut-chart label=\"Varias: rampa\" style=\"block-size: 18em\">",
+            "  <script type=\"application/json\">{ \"data\": { \"labels\": [\"Abierta\", \"En curso\", \"Revisión\", \"Hecha\", \"Bloqueada\", \"Archivada\"], \"datasets\": [{ \"label\": \"Tareas\", \"data\": [8, 6, 5, 4, 3, 2] }] } }</script>",
+            "</iswc-doughnut-chart>"
+          ]
+        },
+        {
+          "kind": "demo",
+          "html": [
+            "<iswc-bar-chart label=\"Semántico solo si la serie lo pide\" style=\"block-size: 16em\">",
+            "  <script type=\"application/json\">{ \"data\": { \"labels\": [\"Ene\", \"Feb\", \"Mar\"], \"datasets\": [{ \"label\": \"Ingresos\", \"data\": [12, 15, 19] }, { \"label\": \"Mora\", \"status\": \"danger\", \"data\": [3, 2, 4] }] } }</script>",
+            "</iswc-bar-chart>"
+          ]
+        }
+      ]
+    },
+    {
       "id": "comparacion",
       "title": "Comparar cantidades",
       "blocks": [

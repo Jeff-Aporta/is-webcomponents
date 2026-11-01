@@ -2,7 +2,8 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
 import { withStyleAttrs } from '../../core/attrs.js';
 
 import { scaleLinear, scaleBand, niceTicks, svgEl } from '../../core/svg-chart-engine.js';
-import { getCategoricalColors, getFillColors } from './utils/chart-palette.js';
+import { getCategoricalColors, getFillColors, getStatusColor, resolveColor, withAlpha } from './utils/chart-palette.js';
+import { findThemeContainer, readTheme } from '../../core/theme-scope.js';
 import { PathTurtle } from '../../core/path-turtle.js';
 import { registerDiagramKind } from '../diagrams/utils/diagram-kinds.js';
 import { setStringAttr } from '../../core/reflect.js';
@@ -122,6 +123,7 @@ class IswcChart extends withStyleAttrs(HTMLElement) {
         <div part="legend" class="legend" hidden></div>
         <div part="tooltip" class="tooltip dg-tooltip" hidden role="status"></div>
         <div part="sr-status" class="sr-status" aria-live="polite" aria-atomic="true"></div>
+        <span class="em-probe" aria-hidden="true"></span>
         <div class="slot-hidden"><slot></slot></div>
       </div>
     `;
@@ -144,6 +146,8 @@ class IswcChart extends withStyleAttrs(HTMLElement) {
     this.#mo.observe(this, { childList: true, characterData: true, subtree: true });
     this.#ro = new ResizeObserver(() => this.#queueRender());
     this.#ro.observe(this);
+    // Un cambio de font-size no siempre cambia el tamaño del host: esta sonda mide 1em.
+    this.#ro.observe(this.#wrap.querySelector('.em-probe') as HTMLElement);
     this.#watchTheme();
     this.#wrap.addEventListener('click', this.#onHostClick);
     this.#queueRender();
@@ -190,10 +194,16 @@ class IswcChart extends withStyleAttrs(HTMLElement) {
 
   async updateComplete(): Promise<void> { await this.#queueRender(); }
 
+  /**
+   * Las marcas pintan var(), así que paleta y tema cambian sin repintar ni repetir la animación.
+   * Solo la tortuga necesita el color literal.
+   */
   #watchTheme(): void {
     const root = document.documentElement;
-    this.#themeObs = new MutationObserver(() => this.#queueRender());
-    this.#themeObs.observe(root, { attributes: true, attributeFilter: ['class', 'data-theme', 'data-palette'] });
+    this.#themeObs = new MutationObserver(() => {
+      if (this.#turtle) void this.#queueRender();
+    });
+    this.#themeObs.observe(root, { attributes: true, attributeFilter: ['data-theme', 'data-palette', 'data-panda'] });
   }
 
   #readJsonSlot(): void {
@@ -260,17 +270,22 @@ class IswcChart extends withStyleAttrs(HTMLElement) {
   }
 
   /** Colores por índice ORIGINAL de dataset, honrando overrides --border-color-N. */
-  #resolveColors(count: number): { colors: string[]; fills: string[] } {
+  #resolveColors(count: number, datasets: readonly ChartDataset[]): { colors: string[]; fills: string[] } {
     const cs = getComputedStyle(this);
+    const alpha = cs.getPropertyValue('--chart-fill-alpha').trim() || undefined;
     const base = getCategoricalColors(this, count);
-    const baseFills = getFillColors(this, count, cs.getPropertyValue('--chart-fill-alpha').trim() || undefined);
+    const baseFills = getFillColors(this, count, alpha);
     const colors: string[] = [];
     const fills: string[] = [];
     for (let i = 0; i < count; i++) {
-      const borderOverride = cs.getPropertyValue(`--border-color-${i + 1}`).trim();
-      const fillOverride = cs.getPropertyValue(`--fill-color-${i + 1}`).trim();
-      colors.push(borderOverride || base[i % base.length] || '');
-      fills.push(fillOverride || (borderOverride ? borderOverride : baseFills[i % baseFills.length] || ''));
+      // El override se referencia, no se copia: si es un token debe seguir a la paleta.
+      const borderOverride = cs.getPropertyValue(`--border-color-${i + 1}`).trim() ? `var(--border-color-${i + 1})` : '';
+      const fillOverride = cs.getPropertyValue(`--fill-color-${i + 1}`).trim() ? `var(--fill-color-${i + 1})` : '';
+      // Semánticos solo si la serie los pide; una rebanada no es una serie.
+      const status = (datasets[i] as { status?: 'success' | 'warning' | 'danger' } | undefined)?.status;
+      const semantic = status ? getStatusColor(this as unknown as Element, status) : '';
+      colors.push(borderOverride || semantic || base[i % base.length] || '');
+      fills.push(fillOverride || borderOverride || (semantic ? withAlpha(semantic, alpha ?? '0.35') : baseFills[i % baseFills.length] || ''));
     }
     return { colors, fills };
   }
@@ -315,12 +330,12 @@ class IswcChart extends withStyleAttrs(HTMLElement) {
     const showLegend = opts.legendDisplay === null ? autoLegend : opts.legendDisplay;
 
     this.#wrap.dataset['legend'] = showLegend ? opts.legendPosition : 'none';
-    this.#wrap.dataset['theme'] = document.documentElement.classList.contains('theme-light') ? 'light' : 'dark';
+    this.#wrap.dataset['theme'] = readTheme(findThemeContainer(this as unknown as Element));
     this.#wrap.classList.toggle('animate', opts.animate);
     this.#wrap.classList.toggle('iswc-viewer', this.isViewer);
     this.#tooltipEnabled = opts.tooltip;
 
-    const { colors, fills } = this.#resolveColors(Math.max(isSlice ? labels.length : allDatasets.length, 1));
+    const { colors, fills } = this.#resolveColors(Math.max(isSlice ? labels.length : allDatasets.length, 1), isSlice ? [] : allDatasets);
 
     // La leyenda debe existir antes de medir el SVG: ocupa espacio en el flex.
     if (showLegend) this.#renderLegend(legendEntries, colors, isSlice);
@@ -342,18 +357,19 @@ class IswcChart extends withStyleAttrs(HTMLElement) {
     // La escala por font-size del host se suma a la de geometría: 16px es el tamaño base del kit.
     const escalaHost = (parseFloat(getComputedStyle(this as unknown as Element).fontSize) || 16) / 16;
     const fontPx = Math.max(11, Math.min(26, 13 * (basis / 220) ** 0.55)) * escalaHost;
-    this.#svg.style.fontSize = `${fontPx.toFixed(2)}px`;
-    // La leyenda es HTML fuera del SVG: sin esto se queda diminuta en el visor.
-    // Se aplica el mismo 0.75 de `--chart-legend-size`, que este inline pisa.
-    this.#legendEl.style.fontSize = `${(fontPx * 0.75).toFixed(2)}px`;
+    // Es un factor, no un tamaño: texto, leyenda y tooltip siguen en em y responden al font-size
+    // del contexto en cuanto cambia; la sonda de 1em dispara además el re-maquetado.
+    this.#wrap.style.setProperty('--chart-geo', ((fontPx / escalaHost) / 16).toFixed(4));
+    /** Unidad de maquetado del lienzo (px por paso): márgenes y marcas crecen con el texto. */
+    const u = fontPx / 13;
     while (this.#svg.firstChild) this.#svg.removeChild(this.#svg.firstChild);
     this.#hits = [];
     this.#activeHit = null;
 
     const cs = getComputedStyle(this);
-    const text = cs.getPropertyValue('--chart-text').trim() || cs.color;
-    const grid = cs.getPropertyValue('--grid-color').trim() || 'rgba(128,128,128,.25)';
-    const surface = cs.getPropertyValue('--chart-surface').trim() || 'transparent';
+    const text = 'var(--chart-text)';
+    const grid = 'var(--iswc-chart-grid-color)';
+    const surface = 'var(--chart-surface)';
 
     const visibleDatasets = allDatasets
       .map((ds: ChartDataset, i: number) => ({ ...ds, __i: i }))
@@ -373,24 +389,24 @@ class IswcChart extends withStyleAttrs(HTMLElement) {
       return;
     }
 
-    const titleH = opts.title ? 22 : 0;
+    const titleH = opts.title ? 22 * u : 0;
     const margin: { top: number; right: number; bottom: number; left: number } = isRadial
-      ? { top: titleH + 4, right: 8, bottom: 8, left: 8 }
+      ? { top: titleH + 4 * u, right: 8 * u, bottom: 8 * u, left: 8 * u }
       : {
-          top: titleH + 8,
-          right: 12,
-          bottom: 26 + (opts.xLabel ? 18 : 0),
-          left: 48 + (opts.yLabel ? 16 : 0),
+          top: titleH + 8 * u,
+          right: 12 * u,
+          bottom: (26 + (opts.xLabel ? 18 : 0)) * u,
+          left: (48 + (opts.yLabel ? 16 : 0)) * u,
         };
     if (isRadial && type === 'radar') {
       // Las etiquetas radiales necesitan aire alrededor del polígono.
-      margin.right = 56; margin.left = 56; margin.bottom = 28; margin.top = titleH + 24;
+      margin.right = 56 * u; margin.left = 56 * u; margin.bottom = 28 * u; margin.top = titleH + 24 * u;
     }
     if (!isRadial && opts.horizontal) {
       // Con barras horizontales el eje de categoría queda a la izquierda:
       // reserva ancho para la etiqueta más larga, sin comerse el plot.
       const longest = labels.reduce((max: number, lb: unknown) => Math.max(max, String(lb).length), 0);
-      margin.left = Math.min(Math.max(longest * 6.5 + 16, 48), width * 0.4) + (opts.yLabel ? 16 : 0);
+      margin.left = Math.min(Math.max(longest * 6.5 * u + 16 * u, 48 * u), width * 0.4) + (opts.yLabel ? 16 * u : 0);
     }
 
     const plot = {
@@ -401,7 +417,7 @@ class IswcChart extends withStyleAttrs(HTMLElement) {
     };
 
     if (opts.title) {
-      const t = svgEl('text', { x: width / 2, y: 15, 'text-anchor': 'middle', class: 'chart-title' });
+      const t = svgEl('text', { x: width / 2, y: 15 * u, 'text-anchor': 'middle', class: 'chart-title' });
       t.textContent = opts.title;
       this.#svg.appendChild(t);
     }
@@ -416,18 +432,18 @@ class IswcChart extends withStyleAttrs(HTMLElement) {
     this.#overlay = overlay;
 
     const style = {
-      barRadius: numOr(cs.getPropertyValue('--chart-bar-radius').trim(), 4),
-      barGap: numOr(cs.getPropertyValue('--chart-bar-gap').trim(), 2),
-      lineWidth: numOr(cs.getPropertyValue('--chart-line-width').trim(), 2),
-      pointRadius: numOr(cs.getPropertyValue('--chart-point-radius').trim(), 3),
-      sliceGap: numOr(cs.getPropertyValue('--chart-slice-gap').trim(), 2),
+      barRadius: numOr(cs.getPropertyValue('--chart-bar-radius').trim(), 4) * u,
+      barGap: numOr(cs.getPropertyValue('--chart-bar-gap').trim(), 2) * u,
+      lineWidth: numOr(cs.getPropertyValue('--chart-line-width').trim(), 2) * u,
+      pointRadius: numOr(cs.getPropertyValue('--chart-point-radius').trim(), 3) * u,
+      sliceGap: numOr(cs.getPropertyValue('--chart-slice-gap').trim(), 2) * u,
     };
 
     const ctx: ChartCtx = {
       svg: this.#svg, group, plot, width, height,
       data: { labels, datasets: visibleDatasets },
       sliceMask,
-      colors, fills, text, grid, surface, style,
+      colors, fills, text, grid, surface, style, unit: u,
       opts,
       fmt: formatValue,
       addHit: (hit: HitRecord) => {
@@ -461,7 +477,8 @@ class IswcChart extends withStyleAttrs(HTMLElement) {
         rMax: Math.max(Math.min(plot.width, plot.height) / 2 - pad, 4),
         innerRatio: opts.doughnutRatio ?? numOr(cs.getPropertyValue('--chart-doughnut-ratio').trim(), 0.62),
       };
-    } else {
+    } else if (type !== 'funnel') {
+      // El embudo no tiene ejes: sus etiquetas van junto a cada banda.
       this.#drawAxes(ctx, axesGroup, visibleDatasets);
     }
 
@@ -502,7 +519,7 @@ class IswcChart extends withStyleAttrs(HTMLElement) {
         path: d,
         step: i + 1,
         log: el.dataset['seriesLabel'] || '',
-        color: el.getAttribute('stroke') ?? undefined,
+        color: resolveColor(this as unknown as Element, el.getAttribute('stroke') ?? 'var(--iswc-chart-1)'),
       })),
       theme: { accent: text },
       viewW: width,
@@ -551,7 +568,7 @@ class IswcChart extends withStyleAttrs(HTMLElement) {
   }
 
   #drawAxes(ctx: ChartCtx, axesGroup: SVGGElement, datasets: ChartDataset[]): void {
-    const { plot, opts } = ctx;
+    const { plot, opts, unit: u = 1 } = ctx;
     const horizontal = opts.horizontal;
     const numeric = isNumericXY(datasets);
 
@@ -609,8 +626,8 @@ class IswcChart extends withStyleAttrs(HTMLElement) {
         axesGroup.appendChild(line);
       }
       const t = horizontal
-        ? svgEl('text', { x: p, y: plot.y + plot.height + 16, 'text-anchor': 'middle', class: 'tick-label' })
-        : svgEl('text', { x: plot.x - 10, y: p, 'text-anchor': 'end', 'dominant-baseline': 'middle', class: 'tick-label' });
+        ? svgEl('text', { x: p, y: plot.y + plot.height + 16 * u, 'text-anchor': 'middle', class: 'tick-label' })
+        : svgEl('text', { x: plot.x - 10 * u, y: p, 'text-anchor': 'end', 'dominant-baseline': 'middle', class: 'tick-label' });
       t.textContent = formatValue(tv);
       axesGroup.appendChild(t);
     }
@@ -630,7 +647,7 @@ class IswcChart extends withStyleAttrs(HTMLElement) {
         const x = xScale(tv);
         const line = svgEl('line', { x1: x, x2: x, y1: plot.y, y2: plot.y + plot.height, class: 'grid-line' });
         axesGroup.appendChild(line);
-        const t = svgEl('text', { x, y: plot.y + plot.height + 16, 'text-anchor': 'middle', class: 'tick-label' });
+        const t = svgEl('text', { x, y: plot.y + plot.height + 16 * u, 'text-anchor': 'middle', class: 'tick-label' });
         t.textContent = formatValue(tv);
         axesGroup.appendChild(t);
       }
@@ -643,7 +660,7 @@ class IswcChart extends withStyleAttrs(HTMLElement) {
         ? [plot.y + pad, plot.y + plot.height - pad]
         : [plot.x + pad, plot.x + plot.width - pad];
       const band = scaleBand(labels.length, catRange, 0.28);
-      const maxLabelChars = Math.max(6, Math.floor(band.step / 7));
+      const maxLabelChars = Math.max(6, Math.floor(band.step / (7 * u)));
       labels.forEach((lb: string, i: number) => {
         const c = band.start(i) + band.bandwidth / 2;
         if (catGrid) {
@@ -655,8 +672,8 @@ class IswcChart extends withStyleAttrs(HTMLElement) {
         const raw = String(lb);
         const shown = horizontal || raw.length <= maxLabelChars ? raw : `${raw.slice(0, maxLabelChars - 1)}…`;
         const t = horizontal
-          ? svgEl('text', { x: plot.x - 10, y: c, 'text-anchor': 'end', 'dominant-baseline': 'middle', class: 'tick-label' })
-          : svgEl('text', { x: c, y: plot.y + plot.height + 16, 'text-anchor': 'middle', class: 'tick-label' });
+          ? svgEl('text', { x: plot.x - 10 * u, y: c, 'text-anchor': 'end', 'dominant-baseline': 'middle', class: 'tick-label' })
+          : svgEl('text', { x: c, y: plot.y + plot.height + 16 * u, 'text-anchor': 'middle', class: 'tick-label' });
         t.textContent = shown;
         if (shown !== raw) {
           const title = document.createElementNS(SVG_NS, 'title');
@@ -678,15 +695,15 @@ class IswcChart extends withStyleAttrs(HTMLElement) {
 
     if (opts.xLabel) {
       const t = svgEl('text', {
-        x: plot.x + plot.width / 2, y: plot.y + plot.height + 38, 'text-anchor': 'middle', class: 'axis-title',
+        x: plot.x + plot.width / 2, y: plot.y + plot.height + 38 * u, 'text-anchor': 'middle', class: 'axis-title',
       });
       t.textContent = opts.xLabel;
       axesGroup.appendChild(t);
     }
     if (opts.yLabel) {
       const t = svgEl('text', {
-        x: 12, y: plot.y + plot.height / 2, 'text-anchor': 'middle', class: 'axis-title',
-        transform: `rotate(-90 12 ${plot.y + plot.height / 2})`,
+        x: 12 * u, y: plot.y + plot.height / 2, 'text-anchor': 'middle', class: 'axis-title',
+        transform: `rotate(-90 ${12 * u} ${plot.y + plot.height / 2})`,
       });
       t.textContent = opts.yLabel;
       axesGroup.appendChild(t);

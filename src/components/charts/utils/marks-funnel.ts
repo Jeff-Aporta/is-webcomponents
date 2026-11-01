@@ -24,7 +24,7 @@ export function funnelBands(values: readonly number[]): FunnelBand[] {
 }
 
 export function drawFunnelMarks(ctx: ChartCtx): void {
-  const { group, data, plot, colors, addHit, fmt, text } = ctx;
+  const { group, data, plot, colors, addHit, fmt, text, unit: u = 1 } = ctx;
   const ds = data.datasets[0];
   if (!ds) return;
   const values = ds.data.map(Number);
@@ -63,14 +63,14 @@ export function drawFunnelMarks(ctx: ChartCtx): void {
     const value = values[i] ?? 0;
 
     const labelEl = svgEl('text', {
-      x: cx - wTop - 10, y: midY, 'text-anchor': 'end', 'dominant-baseline': 'middle', fill: text,
+      x: cx - wTop - 10 * u, y: midY, 'text-anchor': 'end', 'dominant-baseline': 'middle', fill: text,
       class: 'funnel-label',
     });
     labelEl.textContent = label;
     group.appendChild(labelEl);
 
     const valueEl = svgEl('text', {
-      x: cx + wTop + 10, y: midY, 'text-anchor': 'start', 'dominant-baseline': 'middle', fill: text,
+      x: cx + wTop + 10 * u, y: midY, 'text-anchor': 'start', 'dominant-baseline': 'middle', fill: text,
       class: 'funnel-value',
     });
     valueEl.textContent = `${fmt(value)}${pctText}`;

@@ -1,6 +1,6 @@
 import { richTextPlain } from '../../../core/tk-rich-text.js';
 import { diagramHeaderWidth } from './diagram-header.js';
-import { resolveTkHue } from '../../../core/tk-hue.js';
+import { resolveTkHue, SERIE_HUES } from '../../../core/tk-hue.js';
 import type { SankeyNodeSpec, SankeyLinkSpec, SankeyGroupSpec, SankeyResolvedSpec, SankeyLayoutNode, SankeyLayoutLink, SankeyLayout, SankeyLayoutOptions } from "../schemas/sankey-spec.schemas.js";
 
 /**
@@ -14,7 +14,7 @@ import type { SankeyNodeSpec, SankeyLinkSpec, SankeyGroupSpec, SankeyResolvedSpe
  * suma de lo que entra o sale de él (la mayor de las dos).
  */
 
-const DEFAULT_HUES: number[] = [210, 239, 160, 38, 280, 199];
+const DEFAULT_HUES = SERIE_HUES;
 
 const NODE_W = 14;
 const NODE_GAP = 14;

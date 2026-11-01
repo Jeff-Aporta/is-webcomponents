@@ -2,7 +2,6 @@ import { adoptCss, defineElement, emit, emitCancelable } from '../../core/elemen
 import { DiagramElementBase } from './utils/diagram-element-base.js';
 import { resolveStateSpec, computeStateLayout } from './utils/state-spec.js';
 import type { StateLayout, StateLayoutNode, StateLayoutTransition, StateResolvedSpec, StateSpec } from './schemas/state-spec.schemas.js';
-import { sequenceThemeDark, sequenceThemeLight } from './utils/sequence-spec.js';
 import { PathTurtle as SequenceTurtle } from '../../core/path-turtle.js';
 import type { PathTurtle } from '../../core/path-turtle.js';
 import { tkHueToHex } from '../../core/tk-hue.js';
@@ -115,7 +114,7 @@ class IswcStateDiagram extends DiagramElementBase {
     }
 
     const dark = this.isDarkTheme;
-    const theme: DiagramTheme = dark ? sequenceThemeDark() : sequenceThemeLight();
+    const theme: DiagramTheme = this.paletteTheme();
     this.#theme = theme;
     this.syncThemeAttr();
 

@@ -117,8 +117,8 @@ function fmtNum(v: number): string {
       }
 
       const cs = getComputedStyle(this);
-      const border = cs.getPropertyValue('--line-color').trim() || '#339af0';
-      const fill = cs.getPropertyValue('--fill-color-1').trim() || 'rgba(51,154,240,.35)';
+      const border = 'var(--line-color, var(--iswc-chart-1))';
+      const fill = 'var(--fill-color-1, color-mix(in srgb, var(--iswc-chart-1) 28%, transparent))';
       const lineWidth = Number(cs.getPropertyValue('--line-width').trim()) || 1.5;
       const type: 'bar' | 'line' = this.getAttribute('type') === 'bar' ? 'bar' : 'line';
       const appearance = this.getAttribute('variant') || 'solid';

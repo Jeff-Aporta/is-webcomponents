@@ -1,7 +1,7 @@
 import { buildTree, layoutTree, layoutRadialTree } from '../../../core/tree-layout.js';
 import { countIconTokens, extractLeadingIconToken } from '../../../core/tk-icon-inline.js';
 import { richTextPlain } from '../../../core/tk-rich-text.js';
-import { resolveTkHue } from '../../../core/tk-hue.js';
+import { resolveTkHue, SERIE_HUES } from '../../../core/tk-hue.js';
 
 import {
   makeCostGrid,
@@ -25,7 +25,7 @@ import type { MindmapNode, MindmapSpec, LeadingIcon, TreeNode, MindmapLayoutNode
  */
 
 const ICON_INLINE_W = 16;
-const DEFAULT_HUES: number[] = [239, 199, 38, 280, 160, 210];
+const DEFAULT_HUES = SERIE_HUES;
 
 function asRecord(v: unknown): Record<string, unknown> {
   return v && typeof v === 'object' ? (v as Record<string, unknown>) : {};

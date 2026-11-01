@@ -98,7 +98,9 @@ export function drawBarMarks(ctx: ChartCtx): void {
         ? { x: vLo, y: catStart, w: vSpan, h: catSize }
         : { x: catStart, y: vLo, w: catSize, h: vSpan };
 
-      const color = ds.backgroundColor || colors[(ds.__i ?? di) % colors.length];
+      // Compatible con Chart.js: un arreglo colorea cada categoría.
+      const bg: unknown = ds.backgroundColor;
+      const color = Array.isArray(bg) ? String(bg[i % bg.length]) : (bg as string) || colors[(ds.__i ?? di) % colors.length];
       const el = svgEl('path', {
         d: roundedBarRect(rect.x, rect.y, rect.w, rect.h, radius, edge),
         fill: color,
@@ -240,7 +242,7 @@ export function drawBubbleMarks(ctx: ChartCtx): void {
         cx: x, cy: y, r,
         fill,
         stroke: border,
-        'stroke-width': 1.5,
+        'stroke-width': 1.5 * (ctx.unit ?? 1),
         class: 'mark mark-bubble',
       });
       group.appendChild(el);

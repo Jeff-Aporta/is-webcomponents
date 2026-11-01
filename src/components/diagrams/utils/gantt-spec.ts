@@ -2,7 +2,7 @@ import { parseDate, addDuration, timeScale, niceTimeTicks } from './lane-layout.
 import { makeCostGrid, blockRect, snapPointAwayFromSide, snapDiagramGrid } from '../../../core/diagram-grid.js';
 import { routeOrthogonal, pixelToGrid, gridPathToSvg, buildOrthogonalPath } from './diagram-astar.js';
 import { richTextPlain } from '../../../core/tk-rich-text.js';
-import { resolveTkHue } from '../../../core/tk-hue.js';
+import { resolveTkHue, SERIE_HUES } from '../../../core/tk-hue.js';
 import type { GridPoint } from '../schemas/diagram-types.schemas.js';
 import type { GanttGroup, GanttTask, GanttSpec, GanttRow, GanttArrow, GanttTick, GanttLayout, GanttOpts } from "../schemas/gantt-spec.schemas.js";
 
@@ -16,7 +16,7 @@ import type { GanttGroup, GanttTask, GanttSpec, GanttRow, GanttArrow, GanttTick,
  * rodeando las barras.
  */
 
-const DEFAULT_HUES: number[] = [239, 199, 160, 38, 280, 210];
+const DEFAULT_HUES = SERIE_HUES;
 
 const MARGIN: { top: number; right: number; bottom: number; left: number } = { top: 16, right: 20, bottom: 20, left: 16 };
 // Todas las métricas verticales caen en la rejilla de 8px del router: con
