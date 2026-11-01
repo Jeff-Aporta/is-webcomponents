@@ -8,6 +8,7 @@ export interface PanelesDocLayout {
 
 /** Preferencias guardadas por `storage-key`: lo que el usuario eligió por tamaño de pantalla. */
 export interface PrefsDocLayout {
+  rail?: boolean;
   start?: boolean;
   end?: boolean;
   endTableta?: boolean;

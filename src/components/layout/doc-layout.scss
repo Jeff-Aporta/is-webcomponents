@@ -175,3 +175,6 @@ nav.toc { padding: 2.1505em 1.2289em 2.4578em 1.3825em; font-size: .84em; }
 @media (prefers-reduced-motion: reduce) {
   .drawer, .scrim, .toggle, .toc-link { transition: none; }
 }
+
+/* Riel de íconos: sin divisor ni arrastre. */
+:host([data-rail]) .ext { --divider-width: 0px; }

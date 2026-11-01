@@ -43,6 +43,8 @@ import type { EntradaTocDocLayout, FuenteTocDocLayout, PanelesDocLayout, PrefsDo
  *   spy-offset     px desde el borde superior del contenido para marcar la sección activa. Default 96.
  *   start-width / end-width   ancho inicial (px) de los laterales. Default 300 / 250.
  *   no-bar         oculta la barra superior (la app pone la suya y usa los métodos).
+ *   start-rail     el botón del lateral lo compacta a un riel de íconos animado (en vez de ocultarlo); se recuerda. Emite
+ *                  `iswc-doc-layout-rail { rail }`; el contenido del lateral decide cómo compactarse. En celular sigue el cajón.
  *   hide-start / hide-end   oculta ese lateral y su botón (lo decide la app; gana a la preferencia del usuario).
  *   toc-min        mínimo de entradas para mostrar el índice generado (default 2): con menos,
  *                  el panel derecho y su botón se ocultan solos (una página de una sola sección).
@@ -64,6 +66,8 @@ import type { EntradaTocDocLayout, FuenteTocDocLayout, PanelesDocLayout, PrefsDo
  */
 
 const MOVIL = '(max-width: 760px)';
+/** Ancho del lateral compactado. */
+const RIEL = '3.5em';
 const TABLETA = '(max-width: 1100px)';
 
 const ICONO = {
@@ -119,7 +123,7 @@ function buscarProfundo(raiz: ParentNode, selector: string, out: HTMLElement[] =
 
 class IswcDocLayout extends HTMLElement {
   static get observedAttributes(): string[] {
-    return ['storage-key', 'toc', 'toc-title', 'start-width', 'end-width', 'hide-start', 'hide-end', 'toc-min', 'no-bar'];
+    return ['storage-key', 'toc', 'toc-title', 'start-width', 'end-width', 'start-rail', 'hide-start', 'hide-end', 'toc-min', 'no-bar'];
   }
 
   /** Fuente propia de encabezados; por defecto, búsqueda profunda de `toc-selector` en el contenido. */
@@ -133,6 +137,9 @@ class IswcDocLayout extends HTMLElement {
   #activo: string | null = null;
   #pendiente = 0;
   #prefs: PrefsDocLayout = {};
+  #riel = false;
+  #animarRiel = false;
+  #tween = 0;
   #consultas = [matchMedia(MOVIL), matchMedia(TABLETA)];
 
   constructor() {
@@ -180,7 +187,7 @@ class IswcDocLayout extends HTMLElement {
     if (nombre === 'toc-title') this.#syncTitulo();
     if (nombre === 'start-width' || nombre === 'end-width' || nombre === 'storage-key') this.#aplicarAnchos();
     if (nombre === 'toc' || nombre === 'toc-min') this.refreshToc();
-    if (nombre === 'hide-start' || nombre === 'hide-end') this.#aplicarPaneles();
+    if (nombre === 'hide-start' || nombre === 'hide-end' || nombre === 'start-rail') this.#aplicarPaneles();
   }
 
   /** Visibilidad efectiva de los laterales en el tamaño de pantalla actual. */
@@ -201,8 +208,20 @@ class IswcDocLayout extends HTMLElement {
   toggleStart(): void {
     if (this.#oculto('start')) return;
     if (matchMedia(MOVIL).matches) { this.#abrirCajon('start'); return; }
+    if (this.hasAttribute('start-rail')) {
+      this.#prefs.rail = !this.rail;
+      this.#prefs.start = true;
+      this.#animarRiel = true;
+      this.#guardarPrefs();
+      return;
+    }
     this.#prefs.start = !this.#visible('start');
     this.#guardarPrefs();
+  }
+
+  /** El lateral está compactado en riel de íconos. */
+  get rail(): boolean {
+    return this.hasAttribute('start-rail') && this.#prefs.rail === true && !matchMedia(MOVIL).matches && this.#visible('start');
   }
 
   toggleEnd(): void {
@@ -362,7 +381,42 @@ class IswcDocLayout extends HTMLElement {
     this.#aplicarPaneles();
   };
 
+  /** Lleva el lateral a su ancho con un tope animado: nunca toca el ancho guardado del split. */
+  #aplicarRiel(): void {
+    const rail = this.rail;
+    if (rail === this.#riel) return;
+    this.#riel = rail;
+    const animar = this.#animarRiel;
+    this.#animarRiel = false;
+    const fijo = RIEL;
+    const ext = this.#ext;
+    this.toggleAttribute('data-rail', rail);
+    ext.toggleAttribute('disabled', rail);
+    cancelAnimationFrame(this.#tween);
+    const fin = () => {
+      if (rail) ext.style.setProperty('--iswc-split-panel-max', fijo);
+      else ext.style.removeProperty('--iswc-split-panel-max');
+    };
+    emit(this, 'iswc-doc-layout-rail', { rail });
+    if (!animar) return fin();
+    const em = parseFloat(getComputedStyle(this).fontSize);
+    const angosto = parseFloat(fijo) * em;
+    const ancho = ext.positionInPixels;
+    const [desde, hasta] = rail ? [ancho, angosto] : [angosto, ancho];
+    const dura = matchMedia('(prefers-reduced-motion: reduce)').matches ? 60 : 220;
+    const inicio = performance.now();
+    const paso = (ahora: number) => {
+      const t = Math.min(1, (ahora - inicio) / dura);
+      const suave = 1 - (1 - t) ** 3;
+      ext.style.setProperty('--iswc-split-panel-max', `${desde + (hasta - desde) * suave}px`);
+      if (t < 1) this.#tween = requestAnimationFrame(paso);
+      else fin();
+    };
+    this.#tween = requestAnimationFrame(paso);
+  }
+
   #aplicarPaneles(): void {
+    this.#aplicarRiel();
     const { start, end } = this.panels;
     if (start) this.#ext.removeAttribute('collapse'); else this.#ext.setAttribute('collapse', 'start');
     if (end) this.#int.removeAttribute('collapse'); else this.#int.setAttribute('collapse', 'end');
@@ -412,7 +466,7 @@ class IswcDocLayout extends HTMLElement {
       const crudo: unknown = JSON.parse(readIswc(`${key}:paneles`) || '{}');
       if (typeof crudo !== 'object' || crudo === null) return {};
       const prefs: PrefsDocLayout = {};
-      for (const k of ['start', 'end', 'endTableta'] as const) {
+      for (const k of ['start', 'end', 'endTableta', 'rail'] as const) {
         const v: unknown = Reflect.get(crudo, k);
         if (typeof v === 'boolean') prefs[k] = v;
       }

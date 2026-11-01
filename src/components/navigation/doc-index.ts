@@ -36,7 +36,7 @@ const TEXTOS: TextosDocIndex = { placeholder: 'Buscar…', sinResultados: 'Sin r
 
 class IswcDocIndex extends HTMLElement {
   static get observedAttributes(): string[] {
-    return ['current', 'placeholder'];
+    return ['current', 'placeholder', 'compact'];
   }
 
   #shadow: ShadowRoot;
@@ -71,6 +71,10 @@ class IswcDocIndex extends HTMLElement {
   attributeChangedCallback(nombre: string): void {
     if (nombre === 'placeholder') this.#input.placeholder = this.getAttribute('placeholder') || this.#textos.placeholder;
     if (nombre === 'current') this.#marcar();
+    if (nombre === 'compact') {
+      this.search(this.#consulta);
+      for (const d of this.#shadow.querySelectorAll('details')) d.open = true;
+    }
   }
 
   get #input(): HTMLInputElement {
@@ -122,7 +126,7 @@ class IswcDocIndex extends HTMLElement {
     // `icon`: id de Iconify (`set:nombre`) o texto corto (un emoji, una letra).
     const icono = i.icon?.includes(':') ? `<iswc-icon icon="${escapar(i.icon)}"></iswc-icon>` : escapar(i.icon ?? '');
     const lado = i.icon ? `<span class="lado ico" aria-hidden="true">${icono}</span>` : `<span class="lado num">${escapar(i.number ?? '')}</span>`;
-    return `<button class="${clase}" part="item" type="button" data-id="${escapar(i.id)}" title="${escapar(i.hint ?? i.id)}">${lado}<span class="txt">${escapar(i.title)}</span></button>`;
+    return `<button class="${clase}" part="item" type="button" data-id="${escapar(i.id)}" aria-label="${escapar(i.title)}" title="${escapar(this.hasAttribute('compact') ? i.title : i.hint ?? i.id)}">${lado}<span class="txt">${escapar(i.title)}</span></button>`;
   }
 
   #htmlArbol(): string {

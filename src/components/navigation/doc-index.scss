@@ -109,3 +109,13 @@ mark { padding: 0 .125em; border-radius: .1875em; background: color-mix(in srgb,
 @media (prefers-reduced-motion: reduce) {
   .item, input, details.grupo > summary::before { transition: none; }
 }
+
+/* compact: solo íconos, con el nombre en el título y los grupos separados por una línea. */
+:host([compact]) {
+  .buscar, .resumen, .cuenta, .sub-titulo, .txt, details.grupo > summary { display: none; }
+  nav.lista { padding: .25em; }
+  details.grupo { margin-top: .375em; padding-top: .375em; border-top: 1px solid var(--iswc-border); }
+  details.grupo:first-of-type { border-top: 0; }
+  .item { justify-content: center; align-items: center; padding: .55em 0; }
+  .lado { width: auto; }
+}
