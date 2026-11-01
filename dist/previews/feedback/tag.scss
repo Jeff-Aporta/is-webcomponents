@@ -8,7 +8,7 @@
   max-width: 100%;
   vertical-align: middle;
   font-family: var(--iswc-font-family);
-  font-size: inherit;
+  font-size: var(--iswc-tag-size, inherit);
   font-weight: 500;
   line-height: 1;
 

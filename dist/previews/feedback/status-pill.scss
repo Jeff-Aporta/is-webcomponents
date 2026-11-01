@@ -6,7 +6,7 @@
   display: block;
   margin-block: 0.12em;
   color: var(--iswc-text);
-  font-size: 1em;
+  font-size: var(--iswc-status-pill-size, 1em);
 }
 
 :host([hidden]) { display: none !important; }

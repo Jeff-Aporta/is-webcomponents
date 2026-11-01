@@ -24,8 +24,10 @@
   color: inherit;
 }
 
+/* Llena el alto del host: en una rejilla todas las tarjetas de la fila quedan iguales y el pie se ancla abajo. */
 .layout {
   display: flex;
+  block-size: 100%;
   align-items: stretch;
   gap: 0;
 }
@@ -141,3 +143,6 @@
   .section-header,
   .section-footer { display: none; }
 }
+
+.section-body { flex: 1 1 auto; }
+.section-footer { margin-block-start: auto; }

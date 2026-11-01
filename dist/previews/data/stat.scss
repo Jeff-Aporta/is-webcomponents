@@ -4,6 +4,9 @@
 :host {
   @include papel;
   display: block;
+  min-width: 0;
+  /* El valor escala con el ancho de la tarjeta: nada se sale de su caja. */
+  container-type: inline-size;
 }
 
 .stat {
@@ -48,6 +51,8 @@
 }
 
 .label {
+  min-width: 0;
+  overflow-wrap: anywhere;
   font-size: 0.85em;
   color: var(--muted);
   text-transform: uppercase;
@@ -71,7 +76,10 @@
 
 
 .value {
-  font-size: 1.75em;
+  /* cqi: el valor mas largo cabe en la tarjeta; anywhere es la ultima red para un texto extremo. */
+  font-size: clamp(0.95em, 9cqi, 1.75em);
+  min-width: 0;
+  overflow-wrap: anywhere;
   font-weight: 700;
   line-height: 1.2;
   font-feature-settings: 'tnum' 1;

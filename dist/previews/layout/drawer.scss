@@ -10,7 +10,7 @@
   /* modal-chrome.css lee --spacing; sin alias el chrome interno queda sin padding. */
   --spacing: var(--iswc-drawer-spacing);
   --iswc-drawer-backdrop-color: var(--iswc-backdrop-color, rgb(0 0 0 / 55%));
-  --iswc-drawer-backdrop-blur: var(--iswc-backdrop-blur, 0.5em);
+  --iswc-drawer-backdrop-blur: var(--iswc-backdrop-blur, 0.25em);
   --iswc-drawer-show-duration: 220ms;
   --iswc-drawer-hide-duration: 180ms;
 
@@ -36,6 +36,10 @@
   @include velo(var(--iswc-drawer-backdrop-color), var(--iswc-drawer-backdrop-blur));
   opacity: 0;
   pointer-events: auto;
+}
+
+:host([open]) .backdrop {
+  opacity: 1;
 }
 
 .drawer {

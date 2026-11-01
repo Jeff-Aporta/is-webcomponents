@@ -45,7 +45,7 @@ async function conModal<T>({ nombre, mb, cargar }: Pedido<T>): Promise<T> {
     const barra = crearNodo('iswc-progress-bar', { label: 'Progreso de la descarga', indeterminate: true, hidden: true });
     const ahora = boton('Ahora no', 'outlined');
     const bajar = boton(`Descargar ahora (${ESPERA_S})`, 'filled');
-    const d = crearNodo('iswc-dialog', { label: `Descargar ${nombre}` }, nota, barra, ahora, bajar) as DialogoDescarga;
+    const d = crearNodo('iswc-dialog', { label: `Descargar ${nombre}`, 'backdrop-variant': 'basic' }, nota, barra, ahora, bajar) as DialogoDescarga;
     let bajando = false;
     let quedan = ESPERA_S;
     let reloj: ReturnType<typeof setInterval> | undefined;
