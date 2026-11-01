@@ -4,3 +4,8 @@
 labs/** export-ignore
 tests/** export-ignore
 demos/** export-ignore
+.audit/** export-ignore
+skills/** export-ignore
+specs/** export-ignore
+scripts/** export-ignore
+src/components/**/*.md export-ignore
