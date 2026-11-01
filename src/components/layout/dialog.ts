@@ -18,7 +18,7 @@ import { ModalBase } from './utils/modal-base.js';
  *   label             string  — título en el header (a11y).
  *   without-header    boolean — oculta el header y el botón de cerrar.
  *   light-dismiss     boolean — cierra al hacer click fuera del diálogo.
- *   backdrop-variant  none | basic — tratamiento del fondo (default: none).
+ *   backdrop-variant  none | basic | dim | blur — basic: oscuro + blur; dim: solo oscuro; blur: solo blur (default: none).
  *                     none  → sin oscuridad ni blur (sigue capturando clics si light-dismiss).
  *                     basic → oscuridad + blur. Otros looks: style/class del consumidor.
  *
@@ -83,7 +83,7 @@ import { ModalBase } from './utils/modal-base.js';
   `;
 
   /** Valores oficiales del componente. Cualquier otro → se trata como none. */
-  const BACKDROP_VARIANTS = new Set(['none', 'basic']);
+  const BACKDROP_VARIANTS = new Set(['none', 'basic', 'dim', 'blur']);
 
   class IswcDialog extends ModalBase {
 
@@ -129,7 +129,7 @@ import { ModalBase } from './utils/modal-base.js';
       label: string;
       withoutHeader: boolean;
       lightDismiss: boolean;
-      backdropVariant: 'none' | 'basic';
+      backdropVariant: 'none' | 'basic' | 'dim' | 'blur';
     }> | null | undefined): this {
       if (!json || typeof json !== 'object') return this;
       if (json.open != null) this.open = !!json.open;

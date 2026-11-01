@@ -8,8 +8,7 @@
  */
 
 import type { ModoColor, Tema } from './index.schemas.js';
-export type * from './index.schemas.js';
-import type { GridHost } from '../../contrato.js';
+import type { GridHost } from '../../contrato.schemas.js';
 import { aEm, limpiarCss } from '../html.js';
 import type { MedidasTema, ParamsTema } from '../schemas.js';
 

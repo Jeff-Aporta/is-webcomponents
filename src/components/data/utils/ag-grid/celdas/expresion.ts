@@ -1,5 +1,4 @@
 import type { Ambito, Nodo, Token } from './expresion.schemas.js';
-export type * from './expresion.schemas.js';
 /**
  * ag-grid/celdas/expresion — Expresiones de texto de los colDef ('x > 10', 'data.a + data.b').
  *

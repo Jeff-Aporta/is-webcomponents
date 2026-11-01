@@ -144,8 +144,8 @@ test('index + shell cargan view-sources y demo-file-meta', () => {
   assert.match(mods, /'demo-file-meta'/);
   assert.match(styles, /'iswc-doc-presentation'/);
   const loaderSrc = read('src/cdn/loader.ts');
-  assert.match(loaderSrc, /\['view-sources',\s*\{\s*href:\s*'dist\/scripts\/view-sources\.min\.js'/);
-  assert.match(loaderSrc, /\['demo-file-meta',\s*\{\s*href:\s*'dist\/scripts\/demo-file-meta\.min\.js'/);
+  assert.match(loaderSrc, /\['view-sources',\s*\{\s*href:\s*'cdn:\.\.\/scripts\/view-sources\.min\.js'/);
+  assert.match(loaderSrc, /\['demo-file-meta',\s*\{\s*href:\s*'cdn:\.\.\/scripts\/demo-file-meta\.min\.js'/);
   assert.match(loaderSrc, /\['iswc-doc-presentation',\s*'[^']*doc-presentation\.min\.css'\]/);
 });
 

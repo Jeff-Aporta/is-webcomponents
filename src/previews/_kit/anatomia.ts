@@ -7,12 +7,8 @@
  * `<iswc-code>` del snippet «Ver código».
  */
 import { ZAnatomia, type Anatomia } from './schemas/anatomia.schemas.js';
+import type { DefinicionConAnatomia } from './anatomia.schemas.js';
 
-export type DefinicionConAnatomia = {
-  tag: string;
-  anatomy?: Anatomia | undefined;
-  sections?: Array<{ blocks?: Array<{ target?: string | undefined }> | undefined }> | undefined;
-};
 
 const MAX_LINEAS = 400;
 const IGNORADOS = new Set(['style', 'link', 'script']);

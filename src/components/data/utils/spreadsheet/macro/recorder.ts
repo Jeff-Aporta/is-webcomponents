@@ -1,9 +1,8 @@
 // recorder.ts — grabadora: convierte acciones del usuario en líneas del lenguaje de macros.
 
-/** Argumento grabable. */
-export type RecordArg = string | number | boolean | null | Record<string, string | number | boolean>;
 
 /** Literal de macro. */
+import type { RecordArg } from './recorder.schemas.ts';
 function literal(v: RecordArg): string {
   if (v === null) return 'nulo';
   if (typeof v === 'boolean') return v ? 'verdadero' : 'falso';

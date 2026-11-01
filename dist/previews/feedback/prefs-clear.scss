@@ -1,0 +1,9 @@
+/* <iswc-prefs-clear> — botón de auditoría: limpia prefs persistentes del kit. */
+
+:host {
+  display: inline-flex;
+  vertical-align: middle;
+  font-size: inherit;
+}
+
+:host([hidden]) { display: none !important; }

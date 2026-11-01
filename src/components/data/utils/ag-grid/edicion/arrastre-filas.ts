@@ -3,7 +3,6 @@
  * con puntero para que funcione igual con raton y tactil.
  */
 import type { Gesto } from './arrastre-filas.schemas.js';
-export type * from './arrastre-filas.schemas.js';
 import { colsVisibles } from './apoyo.js';
 import { nodoDeFila } from './apoyo.js';
 import { paramsCelda } from './apoyo.js';
@@ -12,12 +11,12 @@ import { resolver } from './apoyo.js';
 import { filasAMover } from './filas-movidas.js';
 import { gestionadoDisponible } from './filas-movidas.js';
 import { reordenar } from './filas-movidas.js';
-import type { ContextoCelda } from '../contrato.js';
-import type { Desinstalar } from '../contrato.js';
-import type { EventoCelda } from '../contrato.js';
-import type { GridHost } from '../contrato.js';
-import type { RowData } from '../contrato.js';
-import type { RowNode } from '../contrato.js';
+import type { ContextoCelda } from '../contrato.schemas.js';
+import type { Desinstalar } from '../contrato.schemas.js';
+import type { EventoCelda } from '../contrato.schemas.js';
+import type { GridHost } from '../contrato.schemas.js';
+import type { RowData } from '../../../schemas/datagrid-types.schemas.js';
+import type { RowNode } from '../../../schemas/datagrid-types.schemas.js';
 import type { SeleccionFilas } from './seleccion-filas-ctl.js';
 
 

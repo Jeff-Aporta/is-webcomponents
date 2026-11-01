@@ -1,6 +1,6 @@
 /** Tipos de opciones.ts. */
 
-import type { ColDefAg } from '../contrato.js';
+import type { ColDefAg } from '../contrato.schemas.js';
 
 export type DefAplanada = ColDefAg & { __grupos?: GrupoCabecera[] };
 

@@ -26,10 +26,23 @@ catálogo.
   opcionales y en qué orden van.
 - Vas a regenerar o reorganizar el catálogo (`catalog.md`, `reference.md`).
 
+## Dos formatos, según dónde viva el componente
+
+La ficha es uno de los cuatro archivos de todo componente, con `.ts`, `.scss` y `.json`.
+Hay dos formatos y cada uno tiene su guardián:
+
+| | Kit (`iswc-*`) | App (`<prefijo>-*`) |
+| --- | --- | --- |
+| Frontmatter | `tag`, `tags`, `category`, `status`, `source`, `style`, `preview` | `name`, `description` |
+| H2 obligatorios | `Propósito`, `Cuándo usarlo`, `Cuándo no usarlo`, `Importación`, `Ejemplo mínimo`, `API` (o `Atributos`), `Comportamiento`, `Accesibilidad`, `Reglas para LLM` | `Anatomía`, `Atributos observados`, `Props`, `Eventos`, `Slots`, `Ejemplos` |
+| Guardián | `tests/gobernanza/contrato-cuatro-archivos.test.ts` y `deno task audit` | `tests/vistas/contrato-componentes.test.ts` |
+
+La ficha del kit se lee sin conocer la app, por eso dice cuándo usarlo y cómo importarlo.
+Lo que sigue describe el contenido común de ambas.
+
 ## Estructura de la ficha
 
-Orden obligatorio de secciones. Las obligatorias siempre van; las
-opcionales se omiten si el componente no las usa (y se dice por qué).
+Orden de las tablas de API. Las opcionales se omiten si el componente no las usa.
 
 ### 1. Anatomía (obligatoria)
 
@@ -37,7 +50,8 @@ Frontmatter + identidad del componente. Ver
 [`references/anatomy-section.md`](references/anatomy-section.md).
 
 - Frontmatter YAML (`tag`, `tags`, `category`, `status`, `source`, `style`,
-  `preview`).
+  `preview`). UTF-8 sin BOM: el `---` es el primer byte. `category` es la del manifest;
+  `style` apunta al `.scss`, y en un subcomponente al del padre.
 - `# <iswc-foo>` como título H1.
 - Primer párrafo: **una sola frase** que diga qué es el componente y que
   confirme que es Web Component vanilla con Shadow DOM.
@@ -93,8 +107,8 @@ luego opcionalmente uno avanzado. Ver
 - **Tono directo, sin ambigüedades.** Frases cortas. Sin "podría", "tal
   vez", "sirve para" cuando la realidad es "sirve para". Reservar la voz
   pasiva para casos donde el actor es irrelevante.
-- **Bloques de código con `html` o `css`标识.** Nunca ` ``` ` sin
- 标识. Ver [`references/code-blocks.md`](references/code-blocks.md).
+- **Bloques de código con lenguaje (`html`, `css`, `js`).** Nunca ` ``` ` sin
+  lenguaje. Ver [`references/code-blocks.md`](references/code-blocks.md).
 - **Tablas para listar props, eventos, slots, parts y states.** Listas
   solo cuando el ítem es único o la tabla no aporta (p.ej. una sola
   propiedad).
@@ -120,7 +134,7 @@ Los enlaces a guías hermanas deben usar la ruta **relativa** dentro de
 `src/components/`:
 
 ```md
-[`./button.css`](./button.css)
+[`./button.scss`](./button.scss)
 [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 [`../media/icon.md`](../media/icon.md)
 ```
@@ -135,13 +149,10 @@ Los enlaces a la skill del kit van con la ruta desde `skills/`:
 
 Antes de mergear cambios en la ficha de un componente:
 
-1. `node tests/icons.test.mjs` (cubre que la guía no rompe referencias a
-   iconos en ejemplos o tablas).
-2. `node tests/preview-paths.test.mjs` si la ficha cambia ejemplos que
+1. `tests/gobernanza/contrato-cuatro-archivos.test.ts`: frontmatter, rutas y secciones.
+2. `tests/gobernanza/preview-paths.test.ts` si la ficha cambia ejemplos que
    referencian archivos del preview.
-3. Si la ficha altera el frontmatter, `node tests/manifest-paths.test.mjs`
-   para asegurar que `source`/`style`/`preview` siguen apuntando a
-   archivos reales.
+3. `deno task audit`: incluye la misma regla por componente.
 
 Si cualquiera falla, **primero** justifica la rotura con un cambio en el
 componente y luego ajusta la guía — nunca al revés.
@@ -155,6 +166,9 @@ componente y luego ajusta la guía — nunca al revés.
   ninguno: mejor omitirla.
 - Olvidar el frontmatter o dejar `preview` apuntando a un archivo que
   no existe.
+- Escribir `style: ./x.css`: en `src/` solo hay `.scss`.
+- Rellenar "Accesibilidad" o "Reglas para LLM" con frases genéricas: di lo que este
+  componente hace.
 - Poner `iswc-popup` (eliminado) en cualquier ejemplo o enlace.
 - Mezclar `iswc-*` con tags nativos o de otros frameworks en un mismo
   ejemplo.

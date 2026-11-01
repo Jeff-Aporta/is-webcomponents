@@ -7,11 +7,12 @@
  */
 
 import type { PuertosInteraccion, Manejadores } from './interaccion.schemas.js';
-export type * from './interaccion.schemas.js';
 import { clearSelection, selectAll, toggleRowSelection } from '../../datagrid-core/selection.js';
-import type { Menus } from './menus.js';
-import type { Motor } from './motor.js';
-import type { EventoCelda, GridHost, ManejadorCelda, ManejadorTeclado, RefCelda, RowNode, SelectionModeLocal } from './tipos.js';
+import type { Menus } from './menus.schemas.js';
+import type { Motor } from './motor.schemas.js';
+import type { EventoCelda, ManejadorCelda, ManejadorTeclado, RefCelda } from '../contrato.schemas.js';
+import type { GridHost, SelectionModeLocal } from './tipos.schemas.js';
+import type { RowNode } from '../../../schemas/datagrid-types.schemas.js';
 
 
 function emitirDom(h: GridHost, tipo: string, detail: unknown): void {

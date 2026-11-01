@@ -1,9 +1,9 @@
 /** Tipos de sesion.ts. */
 
-import type { ColumnState } from '../contrato.js';
-import type { Flotante } from '../contrato.js';
-import type { RowNode } from '../contrato.js';
-import type { Editor } from './editores.js';
+import type { ColumnState } from '../../../schemas/datagrid-types.schemas.js';
+import type { Flotante } from '../contrato.schemas.js';
+import type { RowNode } from '../../../schemas/datagrid-types.schemas.js';
+import type { Editor } from './editores.schemas.js';
 
 export type Montado = { col: ColumnState; editor: Editor; caja: HTMLElement; flotante: Flotante | null; antes: unknown; };
 

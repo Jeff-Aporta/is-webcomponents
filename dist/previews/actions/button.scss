@@ -1,0 +1,427 @@
+@use '../../styles/mixins' as *;
+
+// button.scss — Color × appearance ortogonales
+//   1) `color` solo enlaza la familia a roles `--_tone-*` (tokens relativos
+//      de is-base: base / strong / stronger / paler / pale + soft/text).
+//   2) `variant` solo consume esos roles. Añadir un color = una regla de
+//      enlace; añadir una apariencia = una regla de variant. Sin matriz N×M.
+//   Las 8 familias (brand/info/success/warning/danger/error/neutral/text)
+//   se generan con `tones($family)` + los 4 mixins dedicados.
+//
+// Shadow DOM: :host:is([attr]) NO matchea. Usar :host([attr]) hermanas.
+
+/* ── 1. Host base + .btn ─────────────────────────────────────────────── */
+:host {
+  --iswc-button-font-family: var(--iswc-font-family);
+  --iswc-button-font-weight: 500;
+  /* Radio: no fijarlo siempre en :host (pisaría pill del button-group vía
+     ::slotted). Default = round vía :host(:not([shape])) más abajo. */
+  --iswc-button-border-width: 1px;
+  --iswc-button-transition-duration: 120ms;
+  --_bg: var(--iswc-control-bg);
+  --_bg-hover: var(--iswc-control-bg-hover);
+  --_bg-active: var(--iswc-control-bg-active);
+  --_border: var(--iswc-control-border);
+  --_text: var(--iswc-control-text);
+  /* Por defecto el hover no toca texto ni borde; `ghost` los usa para
+     pasar de outlined a filled sin dejar el label ilegible. */
+  --_text-hover: var(--_text);
+  --_border-hover: var(--_border);
+  --_focus: var(--iswc-focus, var(--iswc-color-brand));
+  --_height: var(--iswc-control-height);
+  /* Proporcional al alto: la densidad compacta también recorta el aire lateral. */
+  --_hpad: calc(var(--iswc-control-height) * 0.4);
+  display: inline-flex;
+  vertical-align: middle;
+  isolation: isolate;
+  font-family: var(--iswc-button-font-family);
+  font-size: inherit;
+  max-width: 100%;
+  margin-inline-start: var(--_button-horizontal-indent, 0em);
+  margin-block-start: var(--_button-vertical-indent, 0em);
+
+  .btn {
+    box-sizing: border-box;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5em;
+    width: 100%;
+    min-height: var(--_height);
+    height: var(--_height);
+    padding: 0 var(--_hpad);
+    margin: 0;
+    background: var(--_bg);
+    color: var(--_text);
+    border: var(--iswc-button-border-width) solid var(--_border);
+    border-start-start-radius: var(--_button-start-start-radius, var(--iswc-button-border-radius));
+    border-start-end-radius: var(--_button-start-end-radius, var(--iswc-button-border-radius));
+    border-end-start-radius: var(--_button-end-start-radius, var(--iswc-button-border-radius));
+    border-end-end-radius: var(--_button-end-end-radius, var(--iswc-button-border-radius));
+    font: inherit;
+    font-family: var(--iswc-button-font-family);
+    font-weight: var(--iswc-button-font-weight);
+    line-height: 1;
+    text-decoration: none;
+    white-space: nowrap;
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
+    position: relative;
+    transition:
+      background-color var(--iswc-button-transition-duration) ease,
+      border-color var(--iswc-button-transition-duration) ease,
+      color var(--iswc-button-transition-duration) ease,
+      transform 60ms ease,
+      box-shadow var(--iswc-button-transition-duration) ease;
+    &:hover {
+      background: var(--_bg-hover);
+      color: var(--_text-hover);
+      border-color: var(--_border-hover);
+    }
+    &:active { background: var(--_bg-active); transform: scale(0.98); }
+    &:focus-visible { outline: 2px solid var(--_focus); outline-offset: 2px; }
+    .btn__spinner {
+      display: none;
+      position: absolute;
+      inset: 0;
+      align-items: center;
+      justify-content: center;
+      color: currentColor;
+      iswc-icon {
+        width: 1.1em;
+        height: 1.1em;
+        animation: iswc-button-spin 720ms linear infinite;
+      }
+    }
+    .btn__caret {
+      display: none;
+      color: currentColor;
+      margin-inline-start: 0.15em;
+      line-height: 0;
+      iswc-icon { width: 0.85em; height: 0.85em; }
+    }
+    .btn__prefix, .btn__suffix {
+      display: inline-flex;
+      align-items: center;
+      line-height: 0;
+      font-size: 1.1em;
+      & ::slotted(*) {
+        display: inline-flex;
+        flex-shrink: 0;
+        font-size: 1em;
+        line-height: 0;
+      }
+    }
+    .btn__label {
+      display: inline-block;
+      line-height: 1.2;
+      &:empty { display: none; }
+    }
+  }
+}
+
+/* ── 2. Color → roles de tono (unica capa que conoce nombres) ─────────── */
+:host([color="brand"]) { @include brand-tones; }
+:host([color="success"]) { @include tones(success); }
+:host([color="warning"]) { @include tones(warning); }
+:host([color="danger"]) { @include tones(danger); }
+/* info: dato a notar sin implicar éxito ni fallo (p.ej. "Nueva versión"). */
+:host([color="info"]) { @include info-tones; }
+/* error: fallo ("Error al guardar"), distinto de danger (acción destructiva). */
+:host([color="error"]) { @include tones(error); }
+/* text: foreground del tema (--iswc-text). Plain/outlined legibles.
+ * Distinto de neutral (#888 muted). Rampa local con color-mix. */
+:host([color="text"]) { @include text-tones; }
+/* neutral: familia semantica con base #888 (canon geometrico). W40-W47. */
+:host([color="neutral"]) { @include neutral-tones; }
+
+/* ── 3. Appearance → consume roles (no conoce nombres de color) ─────────
+   filled = default (sin variant) o variant="filled". */
+:host(:is([color]:not([variant]), [color][variant=""], [color][variant="compact"], [color][variant~="filled"])) {
+  --_bg: var(--_tone-strong);
+  --_bg-hover: var(--_tone-stronger);
+  --_bg-active: var(--_tone-strongest, var(--_tone-stronger));
+  --_border: var(--_tone-strong);
+  --_text: var(--_tone-on);
+  --_text-hover: var(--_tone-on);
+  --_border-hover: var(--_tone-stronger);
+}
+
+:host([color][variant~="outlined"]) {
+  --_bg: transparent;
+  --_bg-hover: var(--_tone-soft);
+  --_bg-active: var(--_tone-soft-active);
+  --_border: var(--_tone);
+  --_text: var(--_tone-text);
+  --_text-hover: var(--_tone-text);
+  --_border-hover: var(--_tone);
+}
+
+:host([color][variant~="plain"]) {
+  --_bg: transparent;
+  --_bg-hover: var(--_tone-soft);
+  --_bg-active: var(--_tone-soft-active);
+  --_border: transparent;
+  --_text: var(--_tone-text);
+  --_text-hover: var(--_tone-text);
+  --_border-hover: transparent;
+}
+
+/* ghost: outlined en reposo, filled al hover (unico que cambia --_*-hover).
+ * W28: --_bg-hover / --_border-hover / --_text-hover = mismo aspecto que
+ * `:host([variant~="filled"]):not(:hover)`. Para cada color X:
+ *   --_bg-hover: var(--_tone-strong)        = filled rest bg
+ *   --_border-hover: var(--_tone-strong)    = filled rest border (cuando es X)
+ *   --_text-hover: var(--_tone-on)          = filled rest text
+ *   --_bg-active: var(--_tone-stronger)     = un escalón más fuerte
+ * Neutral hereda la regla generica (--_tone-strong = --iswc-color-neutral-strong,
+ * --_tone-on = --iswc-on-brand en :host([color="neutral"])).
+ * Sin color: usamos los tokens equivalentes del control base. */
+:host([color][variant~="ghost"]) {
+  --_bg: transparent;
+  --_border: var(--_tone);
+  --_text: var(--_tone-text);
+  --_bg-hover: var(--_tone-strong);
+  --_bg-active: var(--_tone-stronger);
+  --_border-hover: var(--_tone-strong);
+  --_text-hover: var(--_tone-on);
+}
+:host([variant~="ghost"]:not([color])) {
+  --_bg: transparent;
+  --_border: var(--iswc-control-border);
+  --_text: var(--iswc-control-text);
+  --_bg-hover: var(--iswc-control-bg);
+  --_bg-active: var(--iswc-control-bg-hover);
+  --_border-hover: var(--iswc-control-border);
+  --_text-hover: var(--iswc-control-text);
+}
+
+/* soft: ya nace teñido (plain no). */
+:host([variant~="soft"]) {
+  --_bg: var(--iswc-control-bg);
+  --_bg-hover: var(--iswc-control-bg-hover);
+  --_bg-active: var(--iswc-control-bg-active);
+  --_border: transparent;
+  --_text: var(--iswc-control-text);
+}
+:host([color][variant~="soft"]) {
+  --_bg: var(--_tone-soft);
+  --_bg-hover: var(--_tone-soft-active);
+  --_bg-active: var(--_tone-soft-active);
+  --_border: color-mix(in srgb, var(--_tone) 35%, transparent);
+  --_text: var(--_tone-text);
+}
+
+/* soft-filled: tiñe con alpha del color (no tinte blanco). Ideal para
+ * overlays sobre imagenes o fondos. Diferencia con `soft`: usa el color
+ * real translucido, no la mezcla con blanco. Asi neutral es gris
+ * translucido (no blanco-grisaceo) y brand es brand translucido. */
+:host([color][variant~="soft-filled"]) {
+  --_bg: color-mix(in srgb, var(--_tone) 18%, transparent);
+  --_bg-hover: color-mix(in srgb, var(--_tone) 28%, transparent);
+  --_bg-active: color-mix(in srgb, var(--_tone) 40%, transparent);
+  --_border: transparent;
+  --_text: var(--_tone-text);
+  --_text-hover: var(--_tone-text);
+}
+
+/* text: sin caja; plain sí tiñe fondo. */
+:host([variant~="text"]) {
+  --_hpad: 0.35em;
+  --_bg: transparent;
+  --_bg-hover: transparent;
+  --_bg-active: transparent;
+  --_border: transparent;
+  --_border-hover: transparent;
+  --_text: var(--iswc-control-text);
+  --_text-hover: var(--iswc-control-text);
+
+  .btn {
+    &:hover { text-decoration: underline; }
+  }
+}
+:host([color][variant~="text"]) {
+  --_text: var(--_tone-text);
+  --_text-hover: var(--_tone-strong);
+}
+
+/* glyph y row: sin caja en reposo; el hover tiñe suave. */
+:host([variant~="glyph"]),
+:host([variant~="row"]) {
+  --_bg: transparent;
+  --_bg-hover: var(--iswc-control-bg-hover);
+  --_bg-active: var(--iswc-control-bg-active);
+  --_border: transparent;
+  --_border-hover: transparent;
+  --_text: var(--iswc-control-text);
+  --_text-hover: var(--iswc-control-text);
+}
+:host([color][variant~="glyph"]),
+:host([color][variant~="row"]) {
+  --_bg-hover: var(--_tone-soft);
+  --_bg-active: var(--_tone-soft-active);
+  --_text: var(--_tone-text);
+  --_text-hover: var(--_tone-text);
+}
+
+/* glyph: un solo signo (emoji, letra o icono) en un cuadrado. Lado con
+ * --iswc-button-glyph-size; en una rejilla se le da `width: 100%` y el alto lo
+ * pone el aspect-ratio. */
+:host([variant~="glyph"]) {
+  --_height: auto;
+  --_hpad: 0;
+  width: var(--iswc-button-glyph-size, 2em);
+  aspect-ratio: 1;
+
+  .btn {
+    min-height: 0;
+    gap: 0;
+    line-height: 1;
+  }
+  .btn__label { line-height: 1; }
+}
+
+/* row: fila a todo el ancho con contenido rico (avatar, dos líneas, fragmento).
+ * Alto libre, texto al inicio que envuelve; los hijos van en fila. */
+:host([variant~="row"]) {
+  --_height: auto;
+  display: flex;
+  width: 100%;
+
+  .btn {
+    min-height: 0;
+    padding: var(--iswc-button-row-padding, 0.5em 0.75em);
+    justify-content: flex-start;
+    line-height: inherit;
+    text-align: start;
+    white-space: normal;
+    &:active { transform: none; }
+  }
+  .btn__label {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: var(--iswc-button-row-gap, 0.75em);
+    min-width: 0;
+    line-height: inherit;
+  }
+}
+
+/* ── shape: ortogonal a color y variant (corner-shape donde aplica) ────────
+   Sin atributo = round (default del contrato). El group pill gana con
+   --_button-*-radius en las esquinas, no con esta var. */
+:host(:not([shape])),
+:host([shape="round"]) { --iswc-button-border-radius: var(--iswc-radius-sm); }
+:host([shape="square"]),
+:host([shape="rect"]) { --iswc-button-border-radius: 0; }
+:host([shape="pill"]) { --iswc-button-border-radius: 999em; }
+
+:host([shape="square"]) .btn { corner-shape: square; }
+
+/* none: no fuerza radio ni corner-shape (deja CSS externo / inicial). */
+:host([shape="none"]) .btn {
+  border-start-start-radius: unset;
+  border-start-end-radius: unset;
+  border-end-start-radius: unset;
+  border-end-end-radius: unset;
+  corner-shape: unset;
+}
+
+/* Alias legado: solo si no hay `shape` (shape gana siempre). */
+:host([pill]:not([shape])) { --iswc-button-border-radius: 999em; }
+:host([variant~="outlined"]),
+:host([variant~="ghost"]) {
+  margin-inline-start: var(--_button-horizontal-indent-outlined, var(--_button-horizontal-indent, 0em));
+  margin-block-start: var(--_button-vertical-indent-outlined, var(--_button-vertical-indent, 0em));
+}
+
+/* icon-only: el JS lo detecta vía setCustomState('icon-button') pero como
+   no expone data-atributo de fallback, conservamos :state(). Para evitar
+   un selector dentro de nesting, lo dejamos al top-level (esbuild OK). */
+:host(:state(icon-button)) {
+  .btn {
+    padding: 0;
+    width: var(--_height);
+    aspect-ratio: 1 / 1;
+    gap: 0;
+  }
+}
+
+/* glyph y row ya definen su caja: un único hijo no los vuelve icon-button. */
+:host([variant~="glyph"]:state(icon-button)) .btn,
+:host([variant~="row"]:state(icon-button)) .btn {
+  width: 100%;
+  aspect-ratio: auto;
+}
+:host([variant~="row"]:state(icon-button)) .btn {
+  padding: var(--iswc-button-row-padding, 0.5em 0.75em);
+  gap: 0.5em;
+}
+
+/* loading: el JS ya expone `data-state-loading`; usamos solo el fallback. */
+:host([data-state-loading]) {
+  .btn {
+    cursor: progress;
+    pointer-events: none;
+  }
+  .btn__label,
+  .btn__prefix,
+  .btn__suffix,
+  .btn__caret {
+    visibility: hidden;
+    opacity: 0;
+  }
+  .btn__spinner { display: inline-flex; }
+}
+
+/* disabled: el host lleva `disabled` atributo (sincronizado por el JS),
+   así que :host([disabled]) matchea lo mismo que :state(disabled). */
+:host([disabled]) {
+  opacity: 0.55;
+  cursor: not-allowed;
+  .btn { pointer-events: none; }
+}
+
+:host([with-caret]) {
+  .btn__caret { display: inline-flex; align-items: center; }
+}
+
+/* link: el JS pone `:state(link)` cuando hay `href`. Como no expone
+   data-atributo y `:host([href])` matchea el mismo subconjunto, preferimos
+   ese selector CSS-puro. */
+:host([href]) {
+  .btn { text-decoration: none; }
+}
+
+/* Region aria-live para anunciar cambios de estado (loading → ready).
+   Patrón "sr-only": visualmente oculto pero accesible para AT. */
+.btn__sr-status {
+  position: absolute;
+  width: .0625em;
+  height: .0625em;
+  padding: 0;
+  margin: -.0625em;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@keyframes iswc-button-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* variant admite varios modos por espacio: "outlined compact". Compacto: el mínimo que respeta el contenido. */
+:host([variant~="compact"]) {
+  --_height: 1.6em;
+  --_hpad: 0.45em;
+}
+
+/* size="sm": control compacto; todo sigue en em. */
+:host([size="sm"]) {
+  --_height: 2em;
+  --_hpad: 0.75em;
+
+  font-size: 0.875em;
+}

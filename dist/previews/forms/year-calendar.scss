@@ -1,0 +1,56 @@
+/* hidden en un nodo interno debe ganar al display propio del componente. */
+[hidden] {
+  display: none !important;
+}
+
+/* Un `display` en :host gana al display:none del atributo hidden del UA. */
+:host([hidden]) {
+  display: none;
+}
+
+:host {
+  display: block;
+  font-family: var(--iswc-sans, inherit);
+  color: var(--iswc-text, inherit);
+  box-sizing: border-box;
+
+  .base {
+    display: grid;
+    grid-template-columns: repeat(var(--iswc-year-columns), 1fr);
+    gap: 0.25em;
+    max-height: var(--iswc-year-height);
+    overflow: auto;
+    scrollbar-width: thin;
+  }
+
+  .year {
+    padding: 0.6em 0.4em;
+    border: 0;
+    border-radius: var(--iswc-radius-sm);
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    font-variant-numeric: tabular-nums;
+    cursor: pointer;
+    &:hover:not(:disabled) { background: var(--iswc-control-bg-hover); }
+
+    &:focus-visible {
+      outline: 2px solid var(--iswc-focus, var(--iswc-accent));
+      outline-offset: 1px;
+    }
+
+    &[data-current] {
+      box-shadow: inset 0 0 0 .0625em var(--iswc-color-brand);
+    }
+
+    &[data-selected] {
+      background: var(--iswc-color-brand-strong);
+      color: var(--iswc-on-brand);
+    }
+
+    &:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+  }
+}

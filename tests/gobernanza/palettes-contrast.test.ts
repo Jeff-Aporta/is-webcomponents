@@ -2,7 +2,7 @@
 //
 // Contrato de las 25 paletas (src/styles/palettes.json):
 //   1. palettes.scss es exactamente palettesScss() (lo escribe scripts/gen-palettes.mjs).
-//   2. Contraste AA: 25 paletas × claro/oscuro × Panda, texto/fondo ≥ 4.5,
+//   2. Contraste AA: 25 paletas × claro/oscuro (con panda la página usa el juego contrario, ya cubierto), texto/fondo ≥ 4.5,
 //      on-brand/main ≥ 3 (UI y negrita). La matemática espeja las recetas CSS.
 //   3. Los nombres viejos de paleta (marcas) no vuelven al CSS ni al catálogo.
 import assert from 'node:assert/strict';
@@ -39,7 +39,7 @@ test('palettes: palettes.scss generado desde palettes.json', () => {
 
 test('palettes: contraste AA en 25 paletas × claro/oscuro × panda', () => {
   const { checked, failures } = checkPaletteContrast();
-  assert.equal(checked, 25 * 2 * 2 * 14);
+  assert.equal(checked, 25 * 2 * 14);
   assert.deepEqual(failures.map((f) => `${f.palette} ${f.theme}${f.panda ? '+panda' : ''} ${f.fg}/${f.bg} ${f.ratio}<${f.min}`), []);
 });
 

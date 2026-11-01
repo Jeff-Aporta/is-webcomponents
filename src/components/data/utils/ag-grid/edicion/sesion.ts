@@ -3,7 +3,6 @@
  * completa: arranque, montaje en la capa, teclas del editor, validacion y cierre.
  */
 import type { Montado, Sesion, Arranque, AlCerrar } from './sesion.schemas.js';
-export type * from './sesion.schemas.js';
 import { apiPublica } from './apoyo.js';
 import { enfocarGrilla } from './apoyo.js';
 import { colsVisibles } from './apoyo.js';
@@ -20,14 +19,14 @@ import { editorTexto } from './editores.js';
 import { moverFlecha } from './navegacion.js';
 import { tabular } from './navegacion.js';
 import { editorPorTipo } from './valores.js';
-import type { ColumnState } from '../contrato.js';
-import type { Flotante } from '../contrato.js';
-import type { GridHost } from '../contrato.js';
-import type { RefCelda } from '../contrato.js';
-import type { RowNode } from '../contrato.js';
-import type { Parametros } from './apoyo.js';
-import type { Editor } from './editores.js';
-import type { EntornoEditor } from './editores.js';
+import type { ColumnState } from '../../../schemas/datagrid-types.schemas.js';
+import type { Flotante } from '../contrato.schemas.js';
+import type { GridHost } from '../contrato.schemas.js';
+import type { RefCelda } from '../contrato.schemas.js';
+import type { RowNode } from '../../../schemas/datagrid-types.schemas.js';
+import type { Parametros } from './apoyo.schemas.js';
+import type { Editor } from './editores.schemas.js';
+import type { EntornoEditor } from './editores.schemas.js';
 import type { Escritor } from './escritor.js';
 
 

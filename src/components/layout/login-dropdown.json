@@ -15,7 +15,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-login-dropdown modes=\"password token\" heading=\"Accede a tu cuenta\"></iswc-login-dropdown>",
+          "html": "<iswc-login-dropdown modes=\"password token\" heading=\"Accede a tu cuenta\" extra-label=\"Otra forma\"><iswc-button slot=\"extra\" variant=\"outlined\" size=\"sm\" full-width>Entrar con el proveedor</iswc-button></iswc-login-dropdown>",
           "controls": [
             {
               "control": "text",

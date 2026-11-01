@@ -1,5 +1,8 @@
 {
   "$schema": "iswc-preview/v1",
+  "anatomy": {
+    "scss": "tab-group.scss"
+  },
   "tag": "iswc-tab",
   "category": "navigation",
   "title": "&lt;iswc-tab&gt;",
@@ -16,13 +19,26 @@
           "kind": "demo",
           "html": [
             "<iswc-tab-group>",
-            "            <iswc-tab slot=\"nav\" panel=\"a\"><iswc-icon slot=\"start\" icon=\"mdi:chart-line\"></iswc-icon>Resumen</iswc-tab>",
+            "            <iswc-tab id=\"pg-tab\" slot=\"nav\" panel=\"a\"><iswc-icon slot=\"start\" icon=\"mdi:chart-line\"></iswc-icon>Resumen</iswc-tab>",
             "            <iswc-tab slot=\"nav\" panel=\"b\">Movimientos</iswc-tab>",
             "            <iswc-tab slot=\"nav\" panel=\"c\" disabled>Cierre</iswc-tab>",
             "            <iswc-tab-panel name=\"a\">Panel de resumen.</iswc-tab-panel>",
             "            <iswc-tab-panel name=\"b\">Panel de movimientos.</iswc-tab-panel>",
             "            <iswc-tab-panel name=\"c\">Panel de cierre.</iswc-tab-panel>",
             "          </iswc-tab-group>"
+          ],
+          "target": "#pg-tab",
+          "controls": [
+            {
+              "control": "boolean",
+              "prop": "attr:disabled",
+              "label": "disabled"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:closable",
+              "label": "closable"
+            }
           ]
         }
       ]

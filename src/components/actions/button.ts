@@ -21,6 +21,7 @@ import { DEFAULT_INTENT, ensureDefaultColor } from '../../core/intent.js';
  * Atributos
  *  color      brand | neutral | text | success | warning | danger | info | error   (default: brand)
  *  variant   filled | outlined | plain | ghost | soft | soft-filled | text | glyph | row  (default: filled)
+ *            Admite modos por espacio: "outlined compact". `compact` deja el botón muy compacto; sin él no se compacta.
  *             `glyph` = cuadrado sin borde para un solo signo (emoji o icono);
  *             `row` = fila a todo el ancho con contenido rico.
  *  shape        none | round | square | rect | pill  (default: round)

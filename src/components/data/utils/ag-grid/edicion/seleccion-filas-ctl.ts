@@ -5,11 +5,12 @@
 import { apiPublica } from './apoyo.js';
 import { nodoDeFila } from './apoyo.js';
 import * as S from './seleccion-filas.js';
-import type { Desinstalar } from '../contrato.js';
-import type { EventoCelda } from '../contrato.js';
-import type { GridHost } from '../contrato.js';
-import type { RowData } from '../contrato.js';
-import type { RowNode } from '../contrato.js';
+import type { UniversoFilas } from './seleccion-filas.schemas.js';
+import type { Desinstalar } from '../contrato.schemas.js';
+import type { EventoCelda } from '../contrato.schemas.js';
+import type { GridHost } from '../contrato.schemas.js';
+import type { RowData } from '../../../schemas/datagrid-types.schemas.js';
+import type { RowNode } from '../../../schemas/datagrid-types.schemas.js';
 import type { AlcanceTodo } from './schemas/edicion.schemas.js';
 import type { GestoFila } from './schemas/edicion.schemas.js';
 import type { OpcionesFilas } from './schemas/edicion.schemas.js';
@@ -48,7 +49,7 @@ export class SeleccionFilas {
     return node ? fn({ node, data: node.data, api: apiPublica(this.#grid) }) === true : false;
   };
 
-  #universo(): S.UniversoFilas {
+  #universo(): UniversoFilas {
     const modelo = this.#grid.modelo();
     const estado = this.#grid.estado();
     const ids = (lista: RowNode[] | undefined): string[] => (lista ?? []).map((n) => n.id);

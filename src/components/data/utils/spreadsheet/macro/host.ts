@@ -1,17 +1,16 @@
 // host.ts — biblioteca de una macro: lo único que puede tocar. Opera sobre el documento y una
 // interfaz mínima de la vista. Cada función tiene nombre en español y alias en inglés.
 import { cellName, colIndex, colName, normalize, parseCell, parseRange, rangeName } from '../address.js';
-import type { Rect } from '../address.js';
+import type { Rect } from '../address.schemas.js';
 import type { SpreadsheetDoc } from '../document.js';
 import type { Sheet } from '../engine.js';
 import { CellError } from '../values.js';
-import type { Scalar } from '../values.js';
+import type { Scalar } from '../values.schemas.js';
 import { macroText, MacroDict, MacroInterpreter } from './interp.js';
-import type { Builtin, MacroLimits, MacroValue } from './interp.js';
+import type { Builtin, MacroLimits, MacroValue } from './interp.schemas.js';
 import type { BorderSide, CellStyle } from '../../../schemas/spreadsheet.schemas.js';
+import type { MacroView, MacroResult } from './host.schemas.js';
 
-/** Lo que la macro necesita de la vista. Todo opcional: sin vista corre sobre el documento. */
-export interface MacroView { getSelection?(): Rect; select?(r: Rect): void; message?(text: string): void; log?(text: string): void; refresh?(): void }
 
 /** Claves de `formato` → estilo. */
 const STYLE_KEYS: Record<string, keyof CellStyle> = {
@@ -196,8 +195,6 @@ export function macroBuiltins(doc: SpreadsheetDoc, view: MacroView = {}): Map<st
   return fns;
 }
 
-/** Resultado de ejecutar una macro. */
-export interface MacroResult { ok: boolean; value?: MacroValue; error?: string; line?: number }
 
 /** Ejecuta código de macro como un único paso de deshacer. */
 export function runMacro(doc: SpreadsheetDoc, code: string, label: string, view: MacroView = {}, limits?: MacroLimits): MacroResult {

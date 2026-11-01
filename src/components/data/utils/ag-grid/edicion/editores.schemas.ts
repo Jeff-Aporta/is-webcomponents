@@ -1,8 +1,8 @@
 /** Tipos de editores.ts. */
 
-import type { ColDefAg } from '../contrato.js';
-import type { GridHost } from '../contrato.js';
-import type { Parametros } from './apoyo.js';
+import type { ColDefAg } from '../contrato.schemas.js';
+import type { GridHost } from '../contrato.schemas.js';
+import type { Parametros } from './apoyo.schemas.js';
 import type { OpcionLista } from './schemas/edicion.schemas.js';
 
 /** Contrato interno de un editor montado en la capa de edicion. */

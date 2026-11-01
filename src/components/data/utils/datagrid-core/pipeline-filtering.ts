@@ -14,7 +14,6 @@
  */
 
 import { cellText, getCellValue } from './value-formatter.js';
-export type { EvaluadoresFiltro, FiltroExterno } from "../../schemas/datagrid-types.schemas.js";
 import type { ColumnFilter, ColumnState, DateFilter, EvaluadoresFiltro, FiltroExterno, FilterModel, NumberFilter, RowNode, SetFilter, TextFilter } from "../../schemas/datagrid-types.schemas.js";
 
 function toNum(v: unknown): number | null {

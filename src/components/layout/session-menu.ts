@@ -25,7 +25,7 @@ import type { LoginChoice } from './schemas/login-dropdown.schemas.js';
  *   avatar          URL de la imagen del avatar (sin ella, iniciales)
  *   placement       colocación del menú (default bottom-end)
  *   logout-label    texto del item de salida (default "Cerrar sesión")
- *   label, heading, modes, remember → se pasan al <iswc-login-dropdown>
+ *   label, heading, modes, remember, tab-label, extra-label → se pasan al <iswc-login-dropdown>
  *
  * Propiedades: error, loading, choices → al <iswc-login-dropdown>
  * Métodos: reset() (del login); show() abre lo que la sesión ofrece (sin `logged`, el acceso;
@@ -33,6 +33,7 @@ import type { LoginChoice } from './schemas/login-dropdown.schemas.js';
  *
  * Slots
  *   (default)  <iswc-dropdown-item> propios, entre el perfil y "Cerrar sesión"
+ *   extra      segunda pestaña del acceso (se reenvía a <iswc-login-dropdown>)
  *
  * Eventos
  *   iswc-logout        {}            — clic en "Cerrar sesión"
@@ -43,10 +44,10 @@ import type { LoginChoice } from './schemas/login-dropdown.schemas.js';
  * Custom states: logged
  */
 
-const LOGIN_ATTRS = ['label', 'heading', 'modes', 'remember'];
+const LOGIN_ATTRS = ['label', 'heading', 'modes', 'remember', 'tab-label', 'extra-label'];
 
 const HTML_TEMPLATE = `
-<iswc-login-dropdown class="login" part="login"></iswc-login-dropdown>
+<iswc-login-dropdown class="login" part="login"><slot name="extra" slot="extra"></slot></iswc-login-dropdown>
 <iswc-dropdown class="menu" placement="bottom-end" hidden>
   <iswc-button slot="trigger" class="trigger" part="trigger" variant="plain" color="neutral">
     <iswc-avatar slot="start" class="avatar" part="avatar"></iswc-avatar>

@@ -60,11 +60,11 @@ test('gobernanza/cdn-icons', async () => {
     return;
   }
   
-  // Cargar indices locales.
+  // Los iconos locales son SVG sueltos en dist/assets/icons/<prefijo>/: no hay índice <prefijo>.json.
   async function loadIndex(prefix) {
     try {
-      const txt = await readFile(join(root, 'dist', 'assets', 'icons', `${prefix}.json`), 'utf8');
-      return new Set(JSON.parse(txt).icons || []);
+      const nombres = await readdir(join(root, 'dist', 'assets', 'icons', prefix));
+      return new Set(nombres.map((n) => n.replace(/\.svg$/, '')));
     } catch {
       return null;
     }
@@ -77,7 +77,7 @@ test('gobernanza/cdn-icons', async () => {
   }
   
   // Recoger un preview que tenga varios iconos locales (no caer al CDN).
-  const previewsDir = join(root, 'src', 'previews');
+  const previewsDir = join(root, 'src', 'components');
   const previews = await walk(previewsDir);
   const candidates = [];
   for (const f of previews) {
@@ -103,7 +103,7 @@ test('gobernanza/cdn-icons', async () => {
   console.log(`preview elegido: ${chosen.f.replace(root + '\\', '').replace(/\\/g, '/')} (${chosen.count} iconos locales)`);
   
   // Cargar el preview HTML y parsear las primeras N referencias a iconos.
-  const body = await readFile(chosen.f, 'utf8');
+  const body = (await readFile(chosen.f, 'utf8')).replace(/\\"/g, '"');
   const refs = [];
   let m;
   ICON_RE.lastIndex = 0;

@@ -34,6 +34,11 @@ Skill general: [SKILL.md](SKILL.md) · Runtime sin tag: [tools/runtime.md](tools
 | `hydrateMdEmbeds` | `helpers/md-hydrate.min.js` | Carga perezosa de los iswc-* que pusieron los renders por defecto del markdown. | [docs](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/helpers/utils/md-hydrate.md) |
 | `md-editor-api` | `helpers/md-editor-api.min.js` | CRUD/normalizacion para iswc-md-editor (endpoints, fieldMap, token). | [docs](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/helpers/utils/md-editor-api.md) |
 | `IswcResponseCache` | `helpers/response-cache.min.js` | SWR IndexedDB: vivo/leer/guardar/invalidar; no bloquea el pintado. | [docs](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/helpers/utils/response-cache.md) |
+| `ai/motores` | `lib/ai/motores.min.js` | IA en el navegador sin UI: ejecutar(herramienta, entrada); 13 motores runonweb fuera de los barriles. | [docs](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/ai/ai.md) |
+| `ai/descarga` | `lib/ai/descarga.min.js` | conDescarga: regla única para bajar un modelo (hasta 20 MB toast; más, modal); pospuesta, medidor. | [docs](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/ai/ai.md) |
+| `ai/vector-local` | `lib/ai/vector-local.min.js` | vectorLocal, cargarCorpus, ordenarPorSentido: buscar por significado con el modelo multilingüe; null si no está. | [docs](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/ai/ai.md) |
+| `ai/orden` | `lib/ai/orden.min.js` | ordenarAplanado: exactas primero, luego embeddings y léxico tolerante. Puro. | [docs](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/ai/ai.md) |
+| `ai/aplanado` | `lib/ai/aplanado.min.js` | Reducción de vectores: aplanar, abrirCorpus, empacar; ajustar (PCA/LDA) en aplanado-ajuste para el build. | [docs](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/ai/ai.md) |
 | `sync-pins` | `scripts/sync-pins.mjs (repo)` | Tras commit del kit: propaga SHA a kit-pin / ISS / PIN (deno task sync:pins). | [docs](https://github.com/Jeff-Aporta/iswc-root/blob/main/scripts/sync-pins.mjs) |
 
 ## Tags por categoría
@@ -86,6 +91,8 @@ Skill general: [SKILL.md](SKILL.md) · Runtime sin tag: [tools/runtime.md](tools
 | `media/speech.md` | `<iswc-speech>` |
 | `media/media-recorder.md` | `<iswc-media-recorder>` |
 | `media/video-playlist.md` | `<iswc-video-playlist>` |
+| `media/parallax-collage.md` | `<iswc-parallax-collage>` |
+| `media/ai-tool.md` | `<iswc-ai-tool>` |
 | `media/person.md` | `<iswc-person>` |
 | `media/barcode.md` | `<iswc-barcode>` |
 | `media/barcode-scanner.md` | `<iswc-barcode-scanner>` |

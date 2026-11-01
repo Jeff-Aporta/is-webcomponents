@@ -1,5 +1,8 @@
 {
   "$schema": "iswc-preview/v1",
+  "anatomy": {
+    "scss": "stepper.scss"
+  },
   "tag": "iswc-stepper-step",
   "category": "navigation",
   "title": "&lt;iswc-stepper-step&gt;",
@@ -15,11 +18,42 @@
         {
           "kind": "demo",
           "html": [
-            "<iswc-stepper current=\"1\">",
-            "            <iswc-stepper-step title=\"Datos\" description=\"Identificación\"></iswc-stepper-step>",
-            "            <iswc-stepper-step title=\"Detalle\" description=\"Líneas del comprobante\"></iswc-stepper-step>",
-            "            <iswc-stepper-step title=\"Revisión\" description=\"Confirmar y guardar\"></iswc-stepper-step>",
+            "<iswc-stepper active=\"1\">",
+            "            <iswc-stepper-step id=\"pg-stepper-step\" label=\"Datos\" description=\"Identificación\"></iswc-stepper-step>",
+            "            <iswc-stepper-step label=\"Detalle\" description=\"Líneas del comprobante\"></iswc-stepper-step>",
+            "            <iswc-stepper-step label=\"Revisión\" description=\"Confirmar y guardar\"></iswc-stepper-step>",
             "          </iswc-stepper>"
+          ],
+          "target": "#pg-stepper-step",
+          "controls": [
+            {
+              "control": "text",
+              "prop": "attr:label",
+              "label": "label",
+              "default": "Datos"
+            },
+            {
+              "control": "text",
+              "prop": "attr:description",
+              "label": "description",
+              "default": "Identificación"
+            },
+            {
+              "control": "text",
+              "prop": "attr:icon",
+              "label": "icon",
+              "default": ""
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:disabled",
+              "label": "disabled"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:error",
+              "label": "error"
+            }
           ]
         }
       ]

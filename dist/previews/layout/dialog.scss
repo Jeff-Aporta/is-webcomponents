@@ -1,0 +1,98 @@
+@use '../../styles/mixins' as *;
+@use '../../core/modal-chrome';
+
+/* <iswc-dialog> — modal accesible. */
+
+:host {
+  @include papel;
+  --iswc-dialog-width: 31.25em;
+  --iswc-dialog-spacing: var(--iswc-space-l, 1em);
+  /* modal-chrome.css lee --spacing; sin este alias header/body/footer quedan sin padding. */
+  --spacing: var(--iswc-dialog-spacing);
+  /* Default backdrop-variant=none: sin oscuridad. basic pisa el color. */
+  --iswc-dialog-backdrop-color: transparent;
+  --iswc-dialog-backdrop-blur: 0em;
+  --iswc-dialog-show-duration: 200ms;
+  --iswc-dialog-hide-duration: 160ms;
+
+  --_radius: calc(var(--iswc-radius));
+  --_shadow: 0 1.5em 3.5em -1em rgba(0, 0, 0, 0.4), 0 .25em .875em rgba(0, 0, 0, 0.12);
+
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  pointer-events: none;
+
+  /* El centrado va aquí, NO con transform en .dialog: ModalBase anima el
+     modal con transforms propios (shake al cancelar el cierre) y un
+     translate(-50%,-50%) en CSS quedaría pisado. */
+  display: grid;
+  place-items: center;
+  padding: var(--iswc-dialog-spacing);
+  box-sizing: border-box;
+}
+
+/* Cerrado: el host no debe tapar el viewport (aunque sea transparente,
+   un fixed inset:0 con z-index alto interfiere con capas / demos). */
+:host(:not([data-state])) {
+  visibility: hidden;
+
+  /* Por defecto no se muestra ni el dialog ni el backdrop. */
+  .dialog,
+  .backdrop { visibility: hidden; }
+}
+
+/* Variante oficial: oscuridad + blur. Override fino vía --iswc-dialog-backdrop-*. */
+:host([backdrop-variant="basic"]) {
+  --iswc-dialog-backdrop-color: var(--iswc-backdrop-color, rgb(0 0 0 / 55%));
+  --iswc-dialog-backdrop-blur: var(--iswc-backdrop-blur, 0.5em);
+}
+
+.backdrop {
+  position: fixed;
+  inset: 0;
+  @include velo(var(--iswc-dialog-backdrop-color), var(--iswc-dialog-backdrop-blur));
+  opacity: 0;
+  pointer-events: auto;
+}
+
+.dialog {
+  position: relative;
+  inline-size: min(var(--width, var(--iswc-dialog-width)), 100%);
+  max-block-size: min(100%, calc(100dvh - 2 * var(--iswc-dialog-spacing)));
+  background: var(--iswc-bg);
+  color: var(--iswc-text, inherit);
+  border: 1px solid var(--iswc-border, color-mix(in srgb, currentColor 14%, transparent));
+  border-radius: var(--_radius);
+  box-shadow: var(--_shadow);
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  overflow: hidden;
+  pointer-events: auto;
+  outline: none;
+}
+
+/* .header / .title / .body / .footer → core/modal-chrome.scss */
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.25em;
+  flex: 0 0 auto;
+  margin-inline-start: auto;
+}
+
+.close-btn {
+  flex: 0 0 auto;
+  margin-inline-start: auto;
+  font-size: 1.15em;
+  line-height: 0;
+  opacity: 0.72;
+  color: var(--iswc-text);
+
+  &:hover { opacity: 1; }
+
+  iswc-icon { font-size: 1.25em; color: inherit; }
+}
+
+.body.iswc-only { padding: var(--iswc-dialog-spacing); }

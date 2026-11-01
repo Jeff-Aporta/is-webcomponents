@@ -32,6 +32,36 @@
             "              <iswc-flex-options id=\"fcOpts\" slot=\"float\" compact></iswc-flex-options>",
             "            </iswc-float-card>",
             "          </div>"
+          ],
+          "target": "#fcDemo",
+          "controls": [
+            {
+              "control": "select",
+              "prop": "attr:horizontal",
+              "label": "horizontal",
+              "options": [
+                "left",
+                "center",
+                "right"
+              ],
+              "default": "right"
+            },
+            {
+              "control": "select",
+              "prop": "attr:vertical",
+              "label": "vertical",
+              "options": [
+                "top",
+                "center",
+                "bottom"
+              ],
+              "default": "center"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:locked",
+              "label": "locked"
+            }
           ]
         }
       ]

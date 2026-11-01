@@ -80,6 +80,21 @@
       ]
     },
     {
+      "id": "campo",
+      "title": "Campo completo",
+      "lede": "Etiqueta, ayuda, error y variantes vienen de iswc-input.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": [
+            "<iswc-mention label=\"Comentario\" hint=\"Escribe @ para mencionar\" placeholder=\"Hola @\"></iswc-mention>",
+            "<iswc-mention label=\"Filled\" variant=\"filled\"></iswc-mention>",
+            "<iswc-mention label=\"Con error\" error error-text=\"Menciona a alguien\"></iswc-mention>"
+          ]
+        }
+      ]
+    },
+    {
       "id": "api",
       "title": "API",
       "blocks": [

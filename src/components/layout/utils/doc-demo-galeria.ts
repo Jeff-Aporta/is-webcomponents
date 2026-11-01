@@ -17,22 +17,9 @@ import { collectIsTags, GALLERY_CHROME_TAGS } from '../../../cdn/collect-iswc-ta
 import { montarAnatomia, resolverAnatomia } from '../../../previews/_kit/anatomia.js';
 import type { Anatomia } from '../../../previews/_kit/schemas/anatomia.schemas.js';
 import { codificarEstado, leerEstado, readPanelsCompactPref, writePanelsCompactPref } from './doc-demo-estado.js';
+import type { Bloque, Definicion, Montaje, Previsualizable, HostPreview, Loader, Cajon, EstadoGaleria, OpcionesGaleria } from './doc-demo-galeria.schemas.js';
 
-type Bloque = { kind?: string; target?: string; props?: Record<string, unknown>; controls?: unknown[] };
-type Definicion = { tag: string; navTitle?: string; title?: string; category?: string; anatomy?: Anatomia | undefined; sections: Array<{ id?: string; blocks?: Bloque[] }> };
-type Montaje = { main?: ParentNode };
-type Previsualizable = { definition: Definicion; mount(ctx: Montaje): void; unmount(): void };
-type HostPreview = HTMLElement & { preview: Previsualizable | null };
-type Loader = { load(...tags: string[]): Promise<unknown>; catalog?: { tags?: Record<string, unknown>; categories?: Record<string, unknown>; aliases?: Record<string, string> } };
-type Cajon = HTMLElement & { show?(): void; hide?(): void };
-type EstadoGaleria = { component?: string; panelsCompact?: boolean };
 
-export type OpcionesGaleria = {
-  /** URL de `[{ tag, file }]`. */
-  manifest: string | URL;
-  /** id de categoría → rótulo; el orden de las claves es el del nav. Las demás van después, por orden alfabético. */
-  categorias?: Record<string, string>;
-};
 
 const TAGS_PLAYGROUND = ['iswc-tab-group', 'iswc-playground', 'iswc-preview-controls', 'iswc-select', 'iswc-option', 'iswc-input', 'iswc-details'];
 

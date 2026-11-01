@@ -123,7 +123,7 @@
 .info-btn[aria-expanded="true"] {
   opacity: 1;
   background: color-mix(in srgb, currentColor 14%, transparent);
-  color: var(--iswc-color-brand-500, currentColor);
+  color: var(--iswc-color-brand, currentColor);
 }
 .info-btn iswc-icon,
 .info-btn .info-btn__icon {

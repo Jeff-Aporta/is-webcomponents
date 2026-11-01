@@ -7,7 +7,7 @@ import { instalar as instalarCeldas } from './celdas/index.js';
 import { instalar as instalarEdicion } from './edicion/index.js';
 import { instalar as instalarFilas } from './filas/index.js';
 import { instalar as instalarFiltros } from './filtros/index.js';
-import type { GridPlugin } from './contrato.js';
+import type { GridPlugin } from './contrato.schemas.js';
 
 export const PLUGINS: GridPlugin[] = [
   { nombre: 'celdas', instalar: instalarCeldas },

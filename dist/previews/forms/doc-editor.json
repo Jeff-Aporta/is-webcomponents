@@ -57,6 +57,15 @@
             "              ]",
             "            </script>",
             "          </iswc-doc-editor>"
+          ],
+          "target": "#doc",
+          "controls": [
+            {
+              "control": "text",
+              "prop": "attr:placeholder",
+              "label": "placeholder",
+              "default": "Escribe algo…"
+            }
           ]
         }
       ]

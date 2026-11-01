@@ -1,20 +1,19 @@
 // engine.ts — libro en memoria y recálculo: grafo de dependencias, orden topológico (Tarjan),
 // detección de ciclos, desbordes de matrices dinámicas y volátiles. Sin DOM.
 import { parseRange } from './address.js';
-import type { Rect } from './address.js';
+import type { Rect } from './address.schemas.js';
 import { evaluate } from './evaluator.js';
-import type { Ctx, EvalHost } from './evaluator.js';
+import type { Ctx, EvalHost } from './evaluator.schemas.js';
 import { lookupFn } from './functions/registry.js';
 import './functions/index.js';
-import type { Node } from './parser.js';
+import type { Node } from './parser.schemas.js';
 import { formulaBody, parseFormula } from './parser.js';
 import { adjustFormula, dropSheetInFormula, renameSheetInFormula } from './rewrite.js';
-import type { StructuralOp } from './rewrite.js';
+import type { StructuralOp } from './rewrite.schemas.js';
 import { ERR, LambdaValue, RefValue } from './values.js';
-import type { EvalValue, Matrix, Scalar } from './values.js';
+import type { EvalValue, Matrix, Scalar } from './values.schemas.js';
+import type { CellData, RangeDep, FormulaInfo } from './engine.schemas.js';
 
-/** Celda guardada. Inmutable: cada cambio reemplaza el objeto. */
-export interface CellData { v?: number | string | boolean; f?: string; s?: number; c?: string; l?: string }
 
 const COLS = 16384;
 const SHEET_FACTOR = 2 ** 34;
@@ -47,11 +46,7 @@ export class Sheet {
   constructor(readonly id: number, public name: string, public rows: number, public cols: number) {}
 }
 
-/** Dependencia sobre un rango. */
-interface RangeDep { sheet: number; rect: Rect; users: Set<number> }
 
-/** Fórmula registrada. */
-interface FormulaInfo { sheet: Sheet; r: number; c: number; ast: Node | null; volatile: boolean; refs: { sheet: number; rect: Rect }[] }
 
 /** Libro con cálculo incremental. */
 export class Engine implements EvalHost {

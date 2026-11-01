@@ -40,7 +40,7 @@ const TONE_ROLES = [
 // filled genérico: `:host([color][variant="filled"])`, `:host([color]:not([variant]))`
 // o la forma agrupada `:host(:is([color]:not([variant]), …, [color][variant="filled"]))`.
 const FILLED_GENERICO =
-  /:host\((?::is\([^{]*?)?\[color\](?:\[variant="filled"\]|:not\(\[variant\]\))/;
+  /:host\((?::is\([^{]*?)?\[color\](?:\[variant~="filled"\]|:not\(\[variant\]\))/;
 
 test('cada color semántico enlaza roles --_tone-*', () => {
   for (const c of COLORS) {
@@ -61,7 +61,7 @@ test('las apariencias consumen --_tone-* sin matriz por color', () => {
     const generic =
       v === 'filled'
         ? FILLED_GENERICO.test(css)
-        : new RegExp(`:host\\(\\[color\\]\\[variant="${v}"\\]\\)`).test(css);
+        : new RegExp(`:host\\(\\[color\\]\\[variant~="${v}"\\]\\)`).test(css);
     assert.ok(generic, `falta regla genérica de variant="${v}" sobre [color] + --_tone-*`);
   }
 
@@ -104,7 +104,7 @@ test('filled y outlined del mismo color comparten la misma familia de tono', () 
   // El bug brand: filled caía a hex azul hardcodeado y outlined a --iswc-brand-text.
   // Ambos deben pasar por --_tone-*.
   const filledIdx = css.search(FILLED_GENERICO);
-  const outlinedIdx = css.search(/:host\(\[color\]\[variant="outlined"\]\)/);
+  const outlinedIdx = css.search(/:host\(\[color\]\[variant~="outlined"\]\)/);
   assert.ok(filledIdx >= 0, 'no encuentro selector filled genérico');
   assert.ok(outlinedIdx >= 0, 'no encuentro selector outlined genérico');
   const afterFilled = css.slice(filledIdx, filledIdx + 500);

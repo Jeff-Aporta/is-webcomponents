@@ -84,6 +84,8 @@ test('componentes/icon-explorer', async () => {
     'la URL de la API se declara una sola vez (API_ICONOS): nada de fetch sueltos a api.iconify.design',
   );
   for (const uso of usosApi) {
+    // Los nombres de cada familia no viajan en el kit (dist/assets/icons solo trae catálogo y SVG): su fuente es la API.
+    if (html.startsWith('collection?prefix=', uso.index + 'fetch(`${API_ICONOS}'.length)) continue;
     const antes = html.slice(Math.max(0, uso.index - 260), uso.index);
     assert.ok(
       /\.catch\(\s*async\s*\(/.test(antes) || /r\.ok\s*\?\s*r\s*:\s*$/.test(antes),

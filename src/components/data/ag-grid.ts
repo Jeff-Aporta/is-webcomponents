@@ -104,11 +104,11 @@ import { selectAll as selectAllCore, clearSelection as clearSelectionCore } from
 import { rowsToCsv } from './utils/datagrid-core/csv-export.js';
 import { createGridModel } from './utils/datagrid-core/grid-model.js';
 import { PLUGINS } from './utils/ag-grid/index.js';
-import { lectores } from './utils/ag-grid/celdas/valores.js';
-import { crearNucleo } from './utils/ag-grid/nucleo/host.js';
-import type { Nucleo } from './utils/ag-grid/nucleo/host.js';
+import { lectores } from './utils/ag-grid/celdas/celdas-valores.js';
+import { crearNucleo } from './utils/ag-grid/nucleo/ag-host.js';
+import type { Nucleo } from './utils/ag-grid/nucleo/ag-host.schemas.js';
 import { ATRIBUTOS, aplanarDefs, autogenerarDefs, ordenInicial, valorAtributo } from './utils/ag-grid/nucleo/opciones.js';
-import type { ColDefAg, Capa, Desinstalar, OpcionesGrid, Zona } from './utils/ag-grid/contrato.js';
+import type { ColDefAg, Capa, Desinstalar, OpcionesGrid, Zona } from './utils/ag-grid/contrato.schemas.js';
 import type { ColumnDef, RowData, SortDirName, PinSideName, DensityName, GridState, GridApi, ColumnFilter, SelectionModeName, TextFilterOp } from './schemas/datagrid-types.schemas.js';
 import type { StateSavedDetail, PageChangeDetail } from "./schemas/ag-grid.schemas.js";
 
@@ -126,13 +126,13 @@ TEMPLATE.innerHTML = /* html */ `
         <iswc-input class="mim-dg__quick-input" type="search" placeholder="Buscar…" aria-label="Búsqueda rápida"></iswc-input>
       </label>
       <div class="mim-dg__density" role="group" aria-label="Densidad">
-        <iswc-button variant="plain" pill class="mim-dg__density-btn" data-density="compact" title="Compacta" aria-label="Compacta">
+        <iswc-button variant="plain compact" pill class="mim-dg__density-btn" data-density="compact" title="Compacta" aria-label="Compacta">
           <iswc-icon icon="mdi:view-headline"></iswc-icon>
         </iswc-button>
-        <iswc-button variant="plain" pill class="mim-dg__density-btn iswc-active" data-density="normal" title="Normal" aria-label="Normal">
+        <iswc-button variant="plain compact" pill class="mim-dg__density-btn iswc-active" data-density="normal" title="Normal" aria-label="Normal">
           <iswc-icon icon="mdi:view-sequential"></iswc-icon>
         </iswc-button>
-        <iswc-button variant="plain" pill class="mim-dg__density-btn" data-density="comfortable" title="Cómoda" aria-label="Cómoda">
+        <iswc-button variant="plain compact" pill class="mim-dg__density-btn" data-density="comfortable" title="Cómoda" aria-label="Cómoda">
           <iswc-icon icon="mdi:view-stream"></iswc-icon>
         </iswc-button>
       </div>

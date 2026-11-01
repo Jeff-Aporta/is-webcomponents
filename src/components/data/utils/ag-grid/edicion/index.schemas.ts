@@ -1,7 +1,7 @@
 /** Tipos de index.ts. */
 
-import type { ColumnState } from '../contrato.js';
-import type { RowNode } from '../contrato.js';
+import type { ColumnState } from '../../../schemas/datagrid-types.schemas.js';
+import type { RowNode } from '../../../schemas/datagrid-types.schemas.js';
 
 export type InicioEdicion = { rowIndex: number; colKey: string | ColumnState; key?: string; };
 

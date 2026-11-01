@@ -91,10 +91,35 @@ en el vendor de build del kit (Paty ya lo importa). El loader pega `?h=` con `L.
 
 ---
 
+## 7. IA en el navegador — `lib/ai/`
+
+Guía: [`src/ai/ai.md`](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/ai/ai.md). Tag con UI: `<iswc-ai-tool>`.
+
+| Módulo CDN | Exports |
+| --- | --- |
+| `lib/ai/motores.min.js` | `ejecutar(herramienta, entrada, opciones, parcial)`, `motor` |
+| `lib/ai/descarga.min.js` | `conDescarga`, `pospuesta`, `medidor`, `LIMITE_MB` |
+| `lib/ai/vector-local.min.js` | `vectorLocal`, `cargarCorpus`, `ordenarPorSentido` |
+| `lib/ai/orden.min.js` | `ordenarAplanado`, `ORDEN_DEFECTO`, `coseno`, `normalizar`, `lexicoTolerante` |
+| `lib/ai/aplanado.min.js` · `aplanado-ajuste.min.js` | `aplanar`, `abrirCorpus`, `empacar`; `ajustar` (build) |
+| `lib/ai/herramientas.min.js` | `HERRAMIENTAS`, `herramienta`, `mbDe`, `pesoDe`, `MODELO_LOCAL` |
+
+Se importan con la URL sellada del loader, para compartir estado con `<iswc-ai-tool>`:
+
+```js
+const L = globalThis.iswcLoader;
+const { ejecutar } = await import(L.assetUrl(new URL('../lib/ai/motores.min.js', L.selfBase).href));
+```
+
+Reglas: nada de `runonweb` directo en una app ni en un componente; toda descarga pasa por `conDescarga` (hasta 20 MB toast; más, modal); el modelo de embeddings es `MODELO_LOCAL`, multilingüe.
+
+---
+
 ## Checklist agente
 
 - [ ] Arranque solo con loader + `loadCSS*` + `load` (no reinventar espejos).
 - [ ] Wrappers de dominio usan `IswcUi.adoptCss`, no CSS embebido gigante.
 - [ ] MD embebido: `md-lite` → `hydrateMdEmbeds`, no un markdown npm paralelo.
 - [ ] Lecturas remotas repetidas: `response-cache`, no un IndexedDB ad hoc.
+- [ ] IA en el navegador: `lib/ai/`, no `runonweb` directo ni descargas propias.
 - [ ] Tras commit del kit: `deno task sync:pins` en monorepo ContaPyme.

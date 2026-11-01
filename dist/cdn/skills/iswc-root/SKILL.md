@@ -112,6 +112,35 @@ propios, muchos de dominio; los **generales** se marcan en su `.json` `iswc-prev
 `ReusoCandidatoSchema` en `src/previews/_kit/schemas/component.schemas.ts`) para evaluarlos
 periódicamente y subirlos al kit.
 
+## Contrato de componente y de control
+
+**Cuatro archivos por componente**, mismo nombre y misma carpeta: `.ts`, `.scss`, `.md` (ficha para
+agentes, UTF-8 sin BOM) y `.json` (`iswc-preview/v1`, demos). Un subcomponente definido en el `.ts` del
+padre lleva su propio `.md` y `.json`, y su `.json` declara de dónde salen los estilos:
+`"anatomy": { "scss": "padre.scss" }`; una página o utilidad sin estilos propios declara
+`"anatomy": {}`. **Es parte de la auditoría**: `tests/gobernanza/contrato-cuatro-archivos.test.ts` y
+`deno task audit` validan cada tag de `src/manifest.ts` con la misma regla
+(`tests/.audit/motor/validators/cuatro-archivos.ts`): los cuatro archivos, frontmatter con rutas reales,
+secciones de la ficha y demo con `controls`. Un tag registrado fuera del manifest también falla. En las
+apps lo hace `tests/vistas/contrato-componentes.test.ts`. Los contratos por carpeta añaden lo suyo:
+`contrato-controles`, `contrato-anatomia` y `contrato-estructura`.
+
+**Todo control interactivo cumple lo mismo:**
+
+| Aspecto | Contrato |
+| --- | --- |
+| Alto | `--iswc-control-height`; nunca un padding que lo fije a mano. |
+| Tamaño | Por `font-size` del contexto; todo en `em`. |
+| Densidad | `density="compact"` en el control o en cualquier contenedor del DOM claro (alto de `2em`). |
+| Radio | `--iswc-radius-sm`. No existe `--iswc-control-radius`. |
+| Foco | `outline: 2px solid var(--iswc-focus)` con `outline-offset: 1px` (2px en botones); sin halos de `box-shadow`. |
+| Deshabilitado | `opacity: 0.55`, sin eventos de puntero. |
+| Error | `error` + `error-text`, en `--iswc-color-danger`. |
+| Variantes de campo | `outlined`, `filled`, `underlined`. |
+
+**Un campo nuevo se compone sobre `<iswc-input>`** (así están `iswc-masked-input` e `iswc-mention`):
+reenvía `label`, `hint`, `error`, `variant`… y solo añade su comportamiento propio.
+
 ## Diagramas por enlace
 
 Cada diagrama tiene visor y editor como app, con el mismo parámetro.
@@ -274,6 +303,11 @@ Detalle operativo: [`tools/runtime.md`](tools/runtime.md).
 | `hydrateMdEmbeds` | `helpers/md-hydrate.min.js` | Carga perezosa de los iswc-* que pusieron los renders por defecto del markdown. | [docs](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/helpers/utils/md-hydrate.md) |
 | `md-editor-api` | `helpers/md-editor-api.min.js` | CRUD/normalizacion para iswc-md-editor (endpoints, fieldMap, token). | [docs](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/helpers/utils/md-editor-api.md) |
 | `IswcResponseCache` | `helpers/response-cache.min.js` | SWR IndexedDB: vivo/leer/guardar/invalidar; no bloquea el pintado. | [docs](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/helpers/utils/response-cache.md) |
+| `ai/motores` | `lib/ai/motores.min.js` | IA en el navegador sin UI: ejecutar(herramienta, entrada); 13 motores runonweb fuera de los barriles. | [docs](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/ai/ai.md) |
+| `ai/descarga` | `lib/ai/descarga.min.js` | conDescarga: regla única para bajar un modelo (hasta 20 MB toast; más, modal); pospuesta, medidor. | [docs](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/ai/ai.md) |
+| `ai/vector-local` | `lib/ai/vector-local.min.js` | vectorLocal, cargarCorpus, ordenarPorSentido: buscar por significado con el modelo multilingüe; null si no está. | [docs](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/ai/ai.md) |
+| `ai/orden` | `lib/ai/orden.min.js` | ordenarAplanado: exactas primero, luego embeddings y léxico tolerante. Puro. | [docs](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/ai/ai.md) |
+| `ai/aplanado` | `lib/ai/aplanado.min.js` | Reducción de vectores: aplanar, abrirCorpus, empacar; ajustar (PCA/LDA) en aplanado-ajuste para el build. | [docs](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/ai/ai.md) |
 | `sync-pins` | `scripts/sync-pins.mjs (repo)` | Tras commit del kit: propaga SHA a kit-pin / ISS / PIN (deno task sync:pins). | [docs](https://github.com/Jeff-Aporta/iswc-root/blob/main/scripts/sync-pins.mjs) |
 
 <!-- apis:fin -->
@@ -359,6 +393,8 @@ Cada `.min.js` enlaza la guía de su fila y esta skill.
 | `<iswc-speech>` | media/speech.md | [media/speech.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/media/speech.md) |
 | `<iswc-media-recorder>` | media/media-recorder.md | [media/media-recorder.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/media/media-recorder.md) |
 | `<iswc-video-playlist>` | media/video-playlist.md | [media/video-playlist.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/media/video-playlist.md) |
+| `<iswc-parallax-collage>` | Collage por capas con parallax opcional: desplazar, rotar o separar en profundidad. | [media/parallax-collage.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/media/parallax-collage.md) |
+| `<iswc-ai-tool>` | Una herramienta de IA en el navegador (OCR, voz a texto, traducción, quitar fondo y diez más), elegida por props; la lógica sin UI está en `lib/ai/`. | [media/ai-tool.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/media/ai-tool.md) |
 | `<iswc-person>` | Una persona en línea: avatar con iniciales, nombre (o usuario) y un detalle. | [media/person.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/media/person.md) |
 | `<iswc-barcode>` | media/barcode.md | [media/barcode.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/media/barcode.md) |
 | `<iswc-barcode-scanner>` | media/barcode-scanner.md | [media/barcode-scanner.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/media/barcode-scanner.md) |

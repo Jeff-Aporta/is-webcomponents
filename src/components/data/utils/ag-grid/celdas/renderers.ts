@@ -7,13 +7,12 @@
  */
 
 import type { Opciones } from './renderers.schemas.js';
-export type * from './renderers.schemas.js';
-import type { ContextoCelda, RendererCelda } from '../contrato.js';
+import type { ContextoCelda, RendererCelda } from '../contrato.schemas.js';
 import { fmtFecha, fmtMoneda, fmtNumero, fmtPorcentaje, fmtValor } from './formatos.js';
 import { aNumero, escaparHtml, limpiarCss, urlSegura } from './html.js';
 import { htmlSparkline, normalizarSerie, resumenSerie } from './spark.js';
 import type { AccionCelda, CambioCelda, FormatoFecha, FormatoMoneda, FormatoNumero, FormatoPorcentaje, FormatoValor, OpcionesSparkline, Umbral } from './schemas.js';
-import { paramsCelda } from './valores.js';
+import { paramsCelda } from './celdas-valores.js';
 
 
 const TONOS = new Set<string>(['success', 'danger', 'warning', 'info', 'neutral', 'brand']);

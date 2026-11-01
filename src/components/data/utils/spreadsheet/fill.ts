@@ -1,12 +1,9 @@
 // fill.ts — tirador de relleno: detecta series (números, fechas, días, meses, trimestres, texto
 // con número) y las prolonga. Sin patrón, repite. Puro: no toca el libro.
 import { daysInMonth, DAYS_EN, DAYS_ES, fromSerial, MONTHS_EN, MONTHS_ES, serial } from './dates.js';
+import type { FillSource, FillStep, Series } from './fill.schemas.js';
 
-/** Celda fuente de un relleno. */
-export interface FillSource { v?: number | string | boolean; f?: string; isDate?: boolean }
 
-/** Resultado por celda: índice de la fuente y valor generado (undefined copia la fuente). */
-export interface FillStep { from: number; v?: number | string }
 
 const cap = (s: string): string => s[0].toUpperCase() + s.slice(1);
 const short = (s: string): string => s.slice(0, 3);
@@ -23,8 +20,6 @@ const LISTS: string[][] = [
 /** Texto con número al final: `Item 3`. */
 const NUMBERED = /^(.*?)(\d+)$/;
 
-/** Generador de una serie: índice n (1 = primer valor nuevo) a valor. */
-type Series = (n: number) => number | string;
 
 /** Serie lineal por mínimos cuadrados, como Excel con dos o más números. */
 function linear(values: number[]): Series {

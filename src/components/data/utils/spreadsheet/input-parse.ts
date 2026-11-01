@@ -1,9 +1,8 @@
 // input-parse.ts — de lo que escribe el usuario a contenido de celda: número, fecha, porcentaje,
 // moneda, lógico, fórmula o texto.
 import { parseDateText } from './dates.js';
+import type { ParsedInput } from './input-parse.schemas.js';
 
-/** Contenido deducido de un texto escrito. */
-export interface ParsedInput { v?: number | string | boolean; f?: string; numFmt?: string }
 
 /** Cierra paréntesis y comillas que quedaron abiertos, como hace Excel al confirmar. */
 function balance(formula: string): string {

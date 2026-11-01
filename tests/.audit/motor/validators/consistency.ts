@@ -120,6 +120,11 @@ export async function extraerMetaComponente(rutaModulo: string | null): Promise<
     const aliasMatches = src.matchAll(new RegExp(`(?:const|let|var)\\s+${constName}(?:\\s*:\\s*[A-Za-z_$<>\\[\\]|, ]+)?\\s*=\\s*\\[([\\s\\S]*?)\\]`, 'g'));
     for (const cMatch of aliasMatches) {
       for (const m of cMatch[1].matchAll(/['"`]([a-zA-Z0-9-]+)['"`]/g)) atributosObservados.add(m[1]);
+      // Spread de otra constante del mismo archivo: `[...REENVIADOS, 'pattern']`.
+      for (const s of cMatch[1].matchAll(/\.\.\.([A-Z_$][\w$]*)/g)) {
+        const lista = src.match(new RegExp(`(?:const|let|var)\\s+${s[1]}(?:\\s*:\\s*[A-Za-z_$<>\\[\\]|, ]+)?\\s*=\\s*\\[([\\s\\S]*?)\\]`));
+        for (const m of lista?.[1].matchAll(/['"`]([a-zA-Z0-9-]+)['"`]/g) ?? []) atributosObservados.add(m[1]);
+      }
     }
   }
   // 1c. Variante: const OBSERVED = [...]; (sin static getter). Algunos

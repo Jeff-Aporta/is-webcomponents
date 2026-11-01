@@ -56,7 +56,19 @@
             "            </iswc-kanban-column>",
             "          </iswc-kanban>",
             "          <p id=\"kLog\">Click sobre una card: <code class=\"code\">—</code></p>"
-          ]
+          ],
+          "controls": [
+            {
+              "control": "select",
+              "prop": "attr:orientation",
+              "label": "orientation",
+              "options": [
+                "column",
+                "row"
+              ]
+            }
+          ],
+          "target": "#kb1"
         }
       ]
     },

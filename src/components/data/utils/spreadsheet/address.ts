@@ -1,9 +1,8 @@
 // address.ts — direcciones A1: letras de columna, celdas y rangos. Índices base 0.
 
-/** Rectángulo normalizado de celdas. */
-export interface Rect { r1: number; c1: number; r2: number; c2: number }
 
 /** Máximos admitidos por el motor (los de Excel). */
+import type { Rect } from './address.schemas.ts';
 export const MAX_ROWS = 1048576;
 export const MAX_COLS = 16384;
 

@@ -6,8 +6,8 @@ description: >-
   obligatoria de su .md, CSS custom states con StateMachine, CSS parts y slots
   semánticos, diferencia entre atributos observados y propiedades JS, uso
   exclusivo de tokens --iswc-*, accesibilidad (aria + teclado + foco), tests
-  con node:test + assert/strict, demo en demos/<cat>/<comp>/<comp>.html y
-  convenciones de .ts/.css/.md. Usar cuando se vaya a crear un iswc-* nuevo,
+  con node:test + assert/strict y los cuatro archivos obligatorios: .ts, .scss,
+  .md y .json iswc-preview/v1. Usar cuando se vaya a crear un iswc-* nuevo,
   refactorizar uno existente para que cumpla el contrato, o revisar un PR que
   añade/renombra un componente del kit.
 ---
@@ -30,12 +30,29 @@ Si lo que vas a hacer es **consumir** el kit (HTML con `<iswc-button>`,
 estilos con tokens `--iswc-*`, etc.), esta skill **no** aplica: usa
 [`../iswc-root/SKILL.md`](../iswc-root/SKILL.md).
 
-## 2. Anatomía obligatoria (sección en el `.md`)
+## 2. Los cuatro archivos y la anatomía del `.md`
 
-Todo componente del kit vive en `src/components/<category>/<name>.ts` y
-lleva **un `.md` hermano** con la anatomía estándar. Esa sección es la
-primera que un agente lee y la que mantiene `tests/llm-contract.test.ts`
-fiel a la fuente.
+Todo tag público se entrega con **cuatro archivos**, mismo nombre y misma carpeta. Es la
+misma arquitectura en el kit y en las apps; solo cambia dónde se registra.
+
+| Archivo | Contenido |
+| --- | --- |
+| `<name>.ts` | Clase, atributos, eventos. Sin CSS dentro. Tipos con Zod en `schemas/`. |
+| `<name>.scss` | Estilos con tokens `--iswc-*` y medidas en `em`. |
+| `<name>.md` | Ficha para agentes: UTF-8 sin BOM, frontmatter y las secciones de abajo. |
+| `<name>.json` | Demo `iswc-preview/v1` con un bloque `demo` con `target` y `controls`. |
+
+Casos especiales, declarados en el `.json`:
+
+- **Subcomponente** definido en el `.ts` del padre: lleva su `.md` y su `.json`, y declara
+  `"anatomy": { "scss": "padre.scss" }`.
+- **Página, módulo o light DOM** sin hoja: `"anatomy": {}` y entrada en `SIN_HOJA`.
+- **Sin playground posible** (API imperativa, chrome de la galería): entrada en
+  `SIN_PLAYGROUND`, con el motivo. Es la excepción, no un atajo.
+
+Lo verifica `tests/.audit/motor/validators/cuatro-archivos.ts`, tanto en
+`tests/gobernanza/contrato-cuatro-archivos.test.ts` como en `deno task audit`. Un tag
+registrado con `defineElement` y fuera de `src/manifest.ts` también falla.
 
 Estructura canónica del `.md` (mínimo):
 
@@ -77,10 +94,8 @@ Estructura canónica del `.md` (mínimo):
 
 Reglas duras:
 
-- El `.md` **no** se genera a mano sin对照 la fuente `.ts`; usa
-  `node tests/llm-contract.test.ts` (o el extractor de cabeceras del kit)
-  para que las tablas de Atributos observados / Custom states / CSS custom
-  properties **matcheen** con el código.
+- El `.md` se escribe leyendo la fuente `.ts`: las tablas de atributos, custom states
+  y CSS custom properties deben coincidir con el código.
 - **Frontmatter obligatorio** al inicio del `.md` (lo lee
   `src/manifest.ts` y el manifest del catálogo):
 
@@ -89,17 +104,18 @@ Reglas duras:
   tag: iswc-foo
   tags:
     - iswc-foo
-  category: <actions|feedback|forms|data|charts|diagrams|layout|navigation|helpers|media|isp|overlays|code|preview|files>
+  category: <la categoría del tag en src/manifest.ts>
   status: public | internal
   source: ./<name>.ts
-  style: ./<name>.css
+  style: ./<name>.scss
   preview: ./<name>.json
   ---
   ```
 
-  `category` debe estar en la lista canónica del repo (ver
-  `src/manifest.ts`); **`data-viz` no es categoría lógica** (los charts viven
-  en `charts/`, los sub-folders `data-viz/` de demos/previews son alias).
+  `category` es la del manifest, que puede diferir de la carpeta: los archivos de
+  `charts/` publican en `data-viz`. `source`, `style` y `preview` son rutas relativas
+  que existen: un subcomponente apunta al `.ts` y al `.scss` del padre, y `style` se
+  omite solo si no hay hoja. En `src/` no hay `.css`: se compila el `.scss`.
 
 Detalle: [`references/lifecycle.md`](references/lifecycle.md).
 
@@ -248,7 +264,7 @@ Detalle: [`references/props-events.md`](references/props-events.md).
 ## 6. Tokens `--iswc-*` (no hex literales)
 
 - **Prohibido** escribir colores hex (`#fff`, `#0c1118`, `rgba(...)`,
-  `hsl(...)`) dentro del `.css` del componente, salvo en el `:host` como
+  `hsl(...)`) dentro del `.scss` del componente, salvo en el `:host` como
   **fallback final** de una custom property (`var(--iswc-bg, #0c1118)`).
 - Todo color, espaciado, radio, fuente, sombra y transición debe salir
   de un **token `--iswc-*`** declarado en `src/styles/is-base.css` o
@@ -266,7 +282,7 @@ Detalle: [`references/props-events.md`](references/props-events.md).
 Patrón mínimo:
 
 ```css
-/* src/components/actions/foo.css */
+/* src/components/actions/foo.scss */
 :host {
   --_bg:        var(--iswc-control-bg,        #f1f3f5);
   --_bg-hover:  var(--iswc-control-bg-hover,  #e9ecef);
@@ -372,19 +388,21 @@ test('iswc-foo: define + upgrade + reflect', async () => {
 console.log('foo.test.ts: PASS — upgrade + reflect + state');
 ```
 
-## 9. Demo (`demos/<cat>/<comp>/<comp>.html`)
+## 9. Demo (`<name>.json` `iswc-preview/v1`)
 
-Estructura del repo:
+El demo del componente es su `.json`: lo pinta la galería y lo copia el bundle a
+`dist/previews/`. Lleva un bloque `demo` con `target`, que apunta a la instancia, y
+`controls`, y entra en `src/manifest.ts` y en `src/previews/catalog.ts`.
 
 ```text
 src/components/actions/foo.ts
-src/components/actions/foo.css
+src/components/actions/foo.scss
 src/components/actions/foo.md
-demos/actions/foo/foo.html         ← demo del kit (carpeta por categoría)
-demos/actions/foo/_testing/…       ← optativos: playgrounds y harnesses
+src/components/actions/foo.json    ← demo con playground
+demos/actions/foo/foo.html         ← solo si hace falta una página aparte
 ```
 
-Reglas del demo:
+Reglas de una página aparte en `demos/`:
 
 - **Una** demo por componente, ruta canónica
   `demos/<category>/<name>/<name>.html`. El árbol `demos/<category>/`
@@ -489,7 +507,8 @@ convención lleva:
 
 Antes de abrir PR con un componente nuevo, verifica:
 
-- [ ] §2 Anatomía en el `.md` con las 14 secciones en orden.
+- [ ] §2 Los cuatro archivos: `.ts`, `.scss`, `.md` y `.json`.
+- [ ] §2 Anatomía en el `.md` con las secciones en orden.
 - [ ] §3 Custom states declarados en `static states` y documentados.
 - [ ] §4 CSS parts y slots semánticos, documentados en "CSS parts" /
       "Slots" del `.md`.
@@ -500,14 +519,13 @@ Antes de abrir PR con un componente nuevo, verifica:
       `aria-*`, atajos de teclado documentados.
 - [ ] §8 `tests/<area>.test.ts` pasa y termina con
       `...: PASS — <resumen>`.
-- [ ] §9 `demos/<category>/<name>/<name>.html` con tokens `--iswc-*` y
-      anti-FOUC.
-- [ ] `.json` `iswc-preview/v1` con playground (`controls`) y entrada en `src/manifest.ts`.
+- [ ] §9 `.json` `iswc-preview/v1` con playground (`target` y `controls`), y entrada en
+      `src/manifest.ts` y `src/previews/catalog.ts`.
+- [ ] Fila en `skills/iswc-root/SKILL.md` y `skills/iswc-root/catalog.md`.
 - [ ] Ninguna estructura de UI del componente o de sus consumidores queda como HTML suelto
       fuera de un shadow (todo es componente).
-- [ ] §10 `.md` hermano con frontmatter, 14 secciones y "Reglas para
-      LLM".
-- [ ] `node tests/llm-contract.test.ts` y `node tests/run-all.mjs`
+- [ ] §10 `.md` hermano con frontmatter, secciones y "Reglas para LLM".
+- [ ] `tests/gobernanza/contrato-cuatro-archivos.test.ts` y `deno task test:all`
       pasan en verde.
 
 ## Referencias

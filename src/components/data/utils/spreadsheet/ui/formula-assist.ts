@@ -1,17 +1,16 @@
 // formula-assist.ts — ayudas del editor de fórmulas: autocompletado, firma de la función en curso,
 // referencias a colorear y modo apuntar. Puro: trabaja con texto y posiciones.
-import type { Rect } from '../address.js';
-import { aliasOf, canonicalName, lookupFn, suggest } from '../functions/index.js';
-import type { FnDef } from '../functions/index.js';
+import type { Rect } from '../address.schemas.js';
+import { aliasOf, canonicalName, lookupFn, suggest } from '../functions/registry.js';
+import type { FnDef } from '../functions/registry.schemas.js';
 import { tokenize } from '../tokenizer.js';
-import type { Token } from '../tokenizer.js';
+import type { Token } from '../tokenizer.schemas.js';
 import { colName } from '../address.js';
+import type { Suggestion } from './formula-assist.schemas.js';
 
 /** Paleta de referencias del editor (el mismo orden en celdas y barra). */
 export const REF_COLORS = ['#3b82f6', '#ef4444', '#a855f7', '#16a34a', '#f59e0b', '#06b6d4', '#ec4899', '#65a30d'];
 
-/** Sugerencia. */
-export interface Suggestion { label: string; hint: string; insert: string }
 
 /** Tokens de la fórmula con posiciones absolutas. */
 function tokensOf(text: string): Token[] {

@@ -1,0 +1,64 @@
+@use '../../styles/mixins' as *;
+
+:host {
+  @include papel;
+  display: contents;
+  --iswc-tooltip-max-width: 17.7778em;
+  /* Invertido respecto al tema: contrasta con cualquier superficie, en claro y en oscuro. */
+  --iswc-tooltip-bg: var(--iswc-text);
+  --iswc-tooltip-fg: var(--iswc-bg-elev);
+}
+
+:host([hidden]) { display: none !important; }
+
+/* La flecha es del floating: se pinta por su part para que siga al globo. */
+.popup {
+  --iswc-floating-arrow-size: var(--iswc-tooltip-arrow-size, 0.375em);
+
+  &::part(arrow) {
+    border-color: var(--iswc-tooltip-bg);
+    background: var(--iswc-tooltip-bg);
+  }
+}
+
+.tooltip {
+  display: block;
+  max-width: var(--iswc-tooltip-max-width);
+  padding: 0.4em 0.65em;
+  border-radius: var(--iswc-radius-sm);
+  background: var(--iswc-tooltip-bg);
+  color: var(--iswc-tooltip-fg);
+  font-family: var(--iswc-font-family);
+  font-size: var(--iswc-tooltip-font-size, 0.85em);
+  line-height: var(--iswc-tooltip-line-height, 1.4);
+  box-shadow: var(--iswc-shadow);
+  pointer-events: none;
+}
+
+:host([trigger~="click"]),
+:host([trigger="manual"]) {
+  .tooltip { pointer-events: auto; }
+}
+
+.body {
+  overflow-wrap: anywhere;
+
+  & ::slotted(p) { margin: 0 0 0.55em; }
+  & ::slotted(p:last-child) { margin-bottom: 0; }
+  & ::slotted(ul),
+  & ::slotted(ol) {
+    margin: 0.35em 0 0.55em;
+    padding-inline-start: 1.15em;
+  }
+  & ::slotted(strong) { font-weight: 700; }
+  & ::slotted(code) {
+    font-family: var(--iswc-mono);
+    font-size: 0.92em;
+    opacity: 0.92;
+  }
+  & ::slotted(a) {
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 0.12em;
+  }
+}

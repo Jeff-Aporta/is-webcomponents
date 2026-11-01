@@ -1,0 +1,138 @@
+/* <iswc-parallax-collage> — lienzo de proporción fija; las capas se ubican por su centro en % y escalan con el ancho. */
+
+:host {
+  display: block;
+  inline-size: 100%;
+  box-sizing: border-box;
+}
+
+:host([hidden]) { display: none !important; }
+
+.lienzo {
+  --px: 0;
+  --py: 0;
+  --angulo: calc(var(--distancia, 1.4) * var(--sentido, 1) * 6deg);
+  position: relative;
+  margin: 0;
+  inline-size: 100%;
+  aspect-ratio: 1 / var(--proporcion, 1);
+  isolation: isolate;
+}
+
+.capa {
+  --dx: 0em;
+  --dy: 0em;
+  position: absolute;
+  inset-inline-start: var(--x);
+  inset-block-start: var(--y);
+  inline-size: var(--ancho);
+  z-index: var(--z);
+  translate: calc(-50% + var(--dx)) calc(-50% + var(--dy));
+}
+
+/* desplazar: cada capa recorre según su profundidad. */
+.lienzo[data-efecto="desplazar"] .capa {
+  --dx: calc(var(--px) * var(--sentido, 1) * var(--prof) * var(--distancia, 1.4) * 1em);
+  --dy: calc(var(--py) * var(--sentido, 1) * var(--prof) * var(--distancia, 1.4) * 0.6em);
+}
+
+/* rotar: el lienzo entero gira como una lámina. */
+.lienzo[data-efecto="rotar"],
+.lienzo[data-efecto="capas"] {
+  transform: perspective(60em) rotateY(calc(var(--px) * var(--angulo))) rotateX(calc(var(--py) * var(--angulo) * -1));
+}
+
+/* capas: además, cada capa se separa en Z y se aprecia la profundidad real. */
+.lienzo[data-efecto="capas"] {
+  isolation: auto;
+  transform-style: preserve-3d;
+}
+
+.lienzo[data-efecto="capas"] .capa {
+  transform: translateZ(calc(var(--prof) * var(--distancia, 1.4) * 1.6em));
+}
+
+.cuerpo {
+  display: block;
+  inline-size: 100%;
+  rotate: var(--giro);
+  user-select: none;
+}
+
+img.cuerpo {
+  block-size: auto;
+}
+
+/* Formas en los colores de la paleta: siguen al tema sin tocar las imágenes. */
+[data-forma] {
+  --c: var(--iswc-accent);
+  aspect-ratio: 1;
+}
+
+[data-color="contraste"] {
+  --c: var(--iswc-color-contrast, var(--iswc-accent));
+}
+
+[data-color="marca"] {
+  --c: var(--iswc-color-brand-stronger, var(--iswc-accent));
+}
+
+[data-color="suave"] {
+  --c: color-mix(in srgb, var(--iswc-text) 30%, transparent);
+}
+
+[data-forma="circulo"] {
+  border-radius: 50%;
+  background: var(--c);
+}
+
+[data-forma="anillo"] {
+  box-sizing: border-box;
+  border: 0.45em solid var(--c);
+  border-radius: 50%;
+}
+
+[data-forma="triangulo"] {
+  background: var(--c);
+  clip-path: polygon(50% 6%, 96% 92%, 4% 92%);
+}
+
+[data-forma="zigzag"] {
+  aspect-ratio: 3;
+  background:
+    linear-gradient(135deg, var(--c) 25%, transparent 25%) -0.5em 0 / 1em 1em,
+    linear-gradient(225deg, var(--c) 25%, transparent 25%) -0.5em 0 / 1em 1em;
+}
+
+[data-forma="puntos"] {
+  aspect-ratio: 1.6;
+  background: radial-gradient(circle, var(--c) 22%, transparent 26%) 0 0 / 1.1em 1.1em;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .lienzo:not([data-quieto]) {
+    [data-anim="flotar"] { animation: flotar 6s ease-in-out var(--retraso) infinite; }
+    [data-anim="mecer"] { animation: mecer 7s ease-in-out var(--retraso) infinite; }
+    [data-anim="girar"] { animation: girar 18s linear var(--retraso) infinite; }
+    [data-anim="latir"] { animation: latir 4s ease-in-out var(--retraso) infinite; }
+  }
+}
+
+@keyframes flotar {
+  50% { translate: 0 -8%; }
+}
+
+@keyframes mecer {
+  50% {
+    rotate: calc(var(--giro) + 8deg);
+    translate: 4% -2%;
+  }
+}
+
+@keyframes girar {
+  to { rotate: calc(var(--giro) + 360deg); }
+}
+
+@keyframes latir {
+  50% { scale: 1.12; }
+}

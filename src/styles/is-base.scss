@@ -41,7 +41,7 @@
   --iswc-radius-sm: 0.375em;
   /* Velo de lo modal (dialog basic, drawer, confirm, paleta, json-dialog). */
   --iswc-backdrop-color: rgb(0 0 0 / 55%);
-  --iswc-backdrop-blur: 0.5em;
+  --iswc-backdrop-blur: 0.25em;
   /* Escala de espaciado (em: crece con el font-size del contexto donde se usa). La
      usan card, dialog, drawer, callout (l), details y login (m); cada
      componente trae además el mismo valor como fallback, así que una app que

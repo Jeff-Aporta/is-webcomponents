@@ -52,8 +52,8 @@ for (const p of catalog) {
   check(styles.includes(`[data-palette="${p.value}"]`), `missing ${p.value} palette`);
 }
 check(html.includes('data-palette="delfin"'), 'missing root palette delfin on <html>');
-check(/\[data-theme="light"\]\[data-panda\]/.test(palettes) && /\[data-theme="dark"\]\[data-panda\]/.test(palettes), 'palettes.scss: data-panda invierte el juego de superficies');
-check(/\[data-theme="light"\]\[data-panda\]/.test(isBase), 'is-base.scss: data-panda invierte el tema neutro');
+check(/\[data-theme="light"\]\[data-panda\]/.test(palettes) && /\[data-theme="dark"\]\[data-panda\]/.test(palettes), 'palettes.scss: data-panda invierte el fondo de página');
+check(/\[data-theme="light"\]\[data-panda\]/.test(isBase), 'is-base.scss: data-panda invierte el fondo de página neutro');
 
 check(!/<(?:svg|symbol|use)\b/i.test(html), 'index.html contiene <svg>/<use>/<symbol> inline');
 check(!/<(?:svg|symbol|use)\b/i.test(component), 'components/actions/button.ts contiene <svg>/<use>/<symbol> inline');

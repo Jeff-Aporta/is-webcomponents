@@ -7,15 +7,16 @@
  */
 import { ordenarFilas, esClicMulti, modeloTrasClic, ordenInicial } from './orden.js';
 import { resumenPagina } from './resumen.js';
-import { MotorFiltros } from './motor.js';
-import { proveedorMenu } from './menus.js';
+import { MotorFiltros } from './filtros-motor.js';
+import { proveedorMenu } from './filtros-menus.js';
 import { BarraAvanzada } from './ui/barra-avanzada.js';
 import { BarraLateral } from './ui/barra-lateral.js';
 import { FilaFlotante, PopupFiltro } from './ui/flotantes.js';
 import { BarraEstado, Overlays } from './ui/pie-y-capas.js';
 import { PanelColumnas } from './ui/panel-columnas.js';
 import type { ColumnaOrden, ItemOrden, ModeloAvanzado, ModeloColumna, ModeloFiltros } from './filtros.schemas.js';
-import type { ColumnState, Desinstalar, Flotante, GridHost, RowNode } from '../contrato.js';
+import type { ColumnState, RowNode } from '../../../schemas/datagrid-types.schemas.js';
+import type { Desinstalar, Flotante, GridHost } from '../contrato.schemas.js';
 
 function necesitaOrden(grid: GridHost, modelo: ItemOrden[]): boolean {
   if (grid.opcion('accentedSort') === true) return true;

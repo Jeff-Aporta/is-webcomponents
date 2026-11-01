@@ -1,8 +1,9 @@
 // rewrite.ts — reescritura de fórmulas a nivel de token: conserva mayúsculas, espacios y
 // alias tal como los escribió el usuario y solo cambia las referencias afectadas.
 import { colName, quoteSheet } from './address.js';
-import type { RefEnd, Token } from './tokenizer.js';
+import type { RefEnd, Token } from './tokenizer.schemas.js';
 import { tokenize } from './tokenizer.js';
+import type { StructuralOp } from './rewrite.schemas.js';
 
 const REF_ERROR = '#REF!';
 
@@ -53,8 +54,6 @@ export function shiftFormula(formula: string, dr: number, dc: number, maxRows = 
   });
 }
 
-/** Operación estructural sobre filas o columnas. */
-export interface StructuralOp { sheet: string; axis: 'row' | 'col'; at: number; count: number; insert: boolean }
 
 /** Ajusta un intervalo [lo, hi] a un borrado; null si desaparece. */
 function deleted(lo: number, hi: number, at: number, n: number): [number, number] | null {

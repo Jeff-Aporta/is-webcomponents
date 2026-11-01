@@ -1,3 +1,4 @@
+// S-G1: requisito de specs/galeria/spec.md (WHAT-first, ver specs/testing.md S-T6)
 // tests/preview-json-contract.test.ts
 //
 // Todos los previews son JSON homogéneos (iswc-preview/v1) listados en catalog.ts.

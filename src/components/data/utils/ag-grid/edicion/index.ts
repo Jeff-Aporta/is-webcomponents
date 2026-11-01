@@ -4,7 +4,6 @@
  * fill handle, portapapeles, teclado, accesibilidad, row dragging y row pinning.
  */
 import type { InicioEdicion, LecturaValor } from './index.schemas.js';
-export type * from './index.schemas.js';
 import { Accesibilidad } from './accesibilidad.js';
 import { posDeRef } from './apoyo.js';
 import { refDePos } from './apoyo.js';
@@ -17,11 +16,11 @@ import { SeleccionFilas } from './seleccion-filas-ctl.js';
 import { SeleccionRangos } from './seleccion-rangos.js';
 import { SesionEdicion } from './sesion.js';
 import { Teclado } from './teclado.js';
-import type { ColumnState } from '../contrato.js';
-import type { Desinstalar } from '../contrato.js';
-import type { GridHost } from '../contrato.js';
-import type { RefCelda } from '../contrato.js';
-import type { RowNode } from '../contrato.js';
+import type { ColumnState } from '../../../schemas/datagrid-types.schemas.js';
+import type { Desinstalar } from '../contrato.schemas.js';
+import type { GridHost } from '../contrato.schemas.js';
+import type { RefCelda } from '../contrato.schemas.js';
+import type { RowNode } from '../../../schemas/datagrid-types.schemas.js';
 import type { LadoFijado } from './schemas/edicion.schemas.js';
 
 

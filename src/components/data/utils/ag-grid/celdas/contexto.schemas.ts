@@ -1,6 +1,6 @@
 /** Tipos de contexto.ts. */
 
-import type { RendererCelda, RendererMontable } from '../contrato.js';
+import type { RendererCelda, RendererMontable } from '../contrato.schemas.js';
 
 export type RegistroRenderers = (nombre: string) => RendererCelda | RendererMontable | undefined;
 

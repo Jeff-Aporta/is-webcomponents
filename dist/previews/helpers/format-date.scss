@@ -1,0 +1,5 @@
+@use 'utils/inline-host';
+
+:host {
+  .date { display: inline; }
+}

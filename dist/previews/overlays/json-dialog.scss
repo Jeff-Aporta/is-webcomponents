@@ -1,0 +1,33 @@
+/* <iswc-json-dialog> — editor JSON en un diálogo. */
+:host {
+  display: contents;
+  color: inherit;
+  font-size: 1em;
+}
+
+.errores {
+  &[hidden] { display: none; }
+
+  ul {
+    margin: 0;
+    padding-left: 1.1em;
+    font-size: 0.8em;
+    line-height: 1.5;
+  }
+}
+
+.editor {
+  display: block;
+  min-height: 12em;
+  max-height: min(60vh, 30em);
+  overflow: auto;
+  scrollbar-color: color-mix(in srgb, var(--iswc-text) 16%, transparent) transparent;
+  scrollbar-width: thin;
+
+  /* Viewport bajo: el editor no roba el alto que necesita el pie. */
+  @media (max-height: 42em) {
+    min-height: 8em;
+  }
+}
+
+.aplicar[hidden] { display: none; }

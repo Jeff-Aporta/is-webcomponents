@@ -21,7 +21,7 @@
             { "control": "boolean", "prop": "props:modal", "label": "modal", "default": false }
           ]
         },
-        { "kind": "html", "html": "<iswc-callout tone=\"info\"><strong slot=\"title\">Cuándo usarlo</strong>Como referencia de un shell de vista hecho solo con piezas del kit.</iswc-callout><iswc-callout tone=\"warning\"><strong slot=\"title\">Cuándo no</strong>Reemplázala por la portada real de la app.</iswc-callout>" }
+        { "kind": "html", "html": "<iswc-callout color=\"brand\"><strong slot=\"title\">Cuándo usarlo</strong>Como referencia de un shell de vista hecho solo con piezas del kit.</iswc-callout><iswc-callout color=\"warning\"><strong slot=\"title\">Cuándo no</strong>Reemplázala por la portada real de la app.</iswc-callout>" }
       ]
     }
   ]

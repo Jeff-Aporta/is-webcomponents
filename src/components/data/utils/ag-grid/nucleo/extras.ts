@@ -5,12 +5,12 @@
  */
 
 import type { Colref } from './extras.schemas.js';
-export type * from './extras.schemas.js';
 import { getCellValue } from '../../datagrid-core/value-formatter.js';
-import type { ColumnState, Desinstalar, GridHost, RendererCelda } from '../contrato.js';
-import type { DefAplanada, GrupoCabecera } from './opciones.js';
-import type { Menus } from './menus.js';
-import type { Motor } from './motor.js';
+import type { ColumnState } from '../../../schemas/datagrid-types.schemas.js';
+import type { Desinstalar, GridHost, RendererCelda } from '../contrato.schemas.js';
+import type { DefAplanada, GrupoCabecera } from './opciones.schemas.js';
+import type { Menus } from './menus.schemas.js';
+import type { Motor } from './motor.schemas.js';
 
 const idDe = (c: Colref): string => (typeof c === 'string' ? c : c.colId);
 

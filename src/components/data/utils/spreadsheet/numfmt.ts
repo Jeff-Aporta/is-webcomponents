@@ -2,16 +2,11 @@
 // miles, escala, porcentaje, científico, fracciones, fechas y horas.
 import { DAYS_EN, DAYS_ES, fromSerial, MONTHS_EN, MONTHS_ES } from './dates.js';
 import { CellError, displayValue, formatGeneral } from './values.js';
-import type { Scalar } from './values.js';
+import type { Scalar } from './values.schemas.js';
+import type { Section, Compiled, Formatted, Part } from './numfmt.schemas.js';
 
-/** Sección de un formato. */
-interface Section { raw: string; body: string; color?: string; cond?: { op: string; v: number }; kind: 'general' | 'number' | 'date' | 'text' }
 
-/** Formato compilado. */
-interface Compiled { sections: Section[] }
 
-/** Resultado de formatear. */
-export interface Formatted { text: string; color?: string }
 
 const COLORS: Record<string, string> = {
   red: '#d32f2f', rojo: '#d32f2f', green: '#2e7d32', verde: '#2e7d32', blue: '#1565c0', azul: '#1565c0',
@@ -92,8 +87,6 @@ function pick(c: Compiled, n: number): { s: Section; abs: boolean } {
   return { s: list[0], abs: false };
 }
 
-/** Parte de una plantilla numérica. */
-type Part = { k: 'lit'; v: string } | { k: 'ph'; v: string } | { k: 'dot' } | { k: 'exp'; v: string } | { k: 'slash' };
 
 /** Separa literales y marcadores. */
 function partsOf(body: string): { parts: Part[]; percent: number; scale: number; grouped: boolean } {

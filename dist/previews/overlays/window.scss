@@ -1,0 +1,146 @@
+@use 'utils/surface-bar';
+@use '../../core/popover-panel';
+
+/* iswc-window */
+:host {
+  --_w: 23.75em;
+  --_h: 16.25em;
+  /* La sombra propia de la ventana: más profunda que la del popover base. */
+  --iswc-popover-shadow:
+    0 0 0 .0625em color-mix(in srgb, var(--iswc-text) 4%, transparent) inset,
+    0 1.625em 3.75em rgba(0, 0, 0, .36);
+  position: absolute;
+  inset-inline-start: 50%;
+  inset-block-start: 12%;
+  transform: translate(-50%, 0);
+  display: block;
+  inline-size: var(--_w);
+  block-size: var(--_h);
+  z-index: var(--z, 100);
+  font: inherit;
+  color: var(--iswc-text);
+}
+
+/* Global usa el viewport. position explícito gana sobre el default del scope. */
+:host([scope="global"]) { position: fixed; }
+:host([position="absolute"]) { position: absolute; }
+:host([position="fixed"]) { position: fixed; }
+
+/* Pastilla: max 100px, abajo del contexto. Global se pega al viewport. */
+:host([data-state="minimized"]) {
+  inline-size: max-content;
+  max-inline-size: 6.25em;
+  block-size: auto;
+  min-inline-size: 0;
+  cursor: pointer;
+
+  .root {
+    position: relative;
+    inset: auto;
+    inline-size: auto;
+    max-inline-size: 6.25em;
+    block-size: auto;
+    border-radius: 999em;
+  }
+
+  .header {
+    border-block-end: 0;
+    padding: .28em .65em;
+    cursor: pointer;
+  }
+
+  .title,
+  .title-wrap {
+    font-size: .78em;
+    max-inline-size: 8.0128em;
+  }
+
+  .body,
+  .resizer,
+  .controls { display: none; }
+}
+:host([data-state="minimized"][scope="global"]) { position: fixed; }
+
+/* Borde, radio, fondo y sombra vienen de `.iswc-popover-panel`. */
+.root {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* La fila flex, el padding y el separador vienen de `.iswc-surface-bar`. */
+.header {
+  --iswc-surface-bar-gap: .35em;
+  --iswc-surface-bar-padding: .45em .65em;
+  background:
+    linear-gradient(180deg,
+      color-mix(in srgb, var(--iswc-bg-elev) 96%, transparent),
+      color-mix(in srgb, var(--iswc-bg-elev) 86%, transparent));
+  cursor: grab;
+  user-select: none;
+
+  &:active { cursor: grabbing; }
+}
+
+.title-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: .35em;
+  flex: 1 1 auto;
+  min-inline-size: 0;
+}
+
+.title {
+  font-weight: 600;
+  font-size: .92em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.controls { display: inline-flex; gap: .125em; }
+
+/* La caja pintada es el <button> interno de <iswc-button>, alcanzable por
+   ::part(button). Las reglas propias de iswc-button son del tipo
+   `:host([variant=…]) .btn` (0,2,0), así que hace falta llegar a esa
+   especificidad: `iswc-button.ctrl::part(button)` es (0,2,1) y gana. */
+iswc-button.ctrl {
+  --iswc-button-border-radius: .375em;
+  font-size: .8em;
+
+  &::part(button) {
+    inline-size: 2.3125em;
+    min-inline-size: 2.3125em;
+    block-size: 2.0625em;
+    padding: 0;
+  }
+}
+
+
+.body {
+  flex: 1 1 auto;
+  padding: 1em;
+  overflow: auto;
+  outline: 0;
+}
+
+.resizer {
+  position: absolute;
+  inset-inline-end: 0;
+  inset-block-end: 0;
+  inline-size: .875em;
+  block-size: .875em;
+  cursor: nwse-resize;
+  background:
+    linear-gradient(135deg,
+      transparent 50%,
+      color-mix(in srgb, var(--iswc-text) 25%, transparent) 50%,
+      color-mix(in srgb, var(--iswc-text) 25%, transparent) 60%,
+      transparent 60%,
+      transparent 75%,
+      color-mix(in srgb, var(--iswc-text) 25%, transparent) 75%,
+      color-mix(in srgb, var(--iswc-text) 25%, transparent) 85%,
+      transparent 85%);
+}

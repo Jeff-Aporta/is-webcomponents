@@ -1,17 +1,12 @@
 // registry.ts — registro de funciones de hoja. La firma escrita es también la aridad y la
 // ayuda: `valor, [precision], ...` da mínimo 1, máximo infinito y el texto del autocompletado.
-import type { Node } from '../parser.js';
-import type { Ctx } from '../evaluator.js';
-import type { EvalValue } from '../values.js';
+import type { Node } from '../parser.schemas.js';
+import type { Ctx } from '../evaluator.schemas.js';
+import type { EvalValue } from '../values.schemas.js';
+import type { Fn, LazyFn, FnDef } from './registry.schemas.js';
 
-/** Función evaluada con argumentos ya calculados. undefined marca argumento omitido. */
-export type Fn = (args: EvalValue[], ctx: Ctx) => EvalValue;
 
-/** Función que decide qué argumentos evaluar. */
-export type LazyFn = (nodes: Node[], ctx: Ctx) => EvalValue;
 
-/** Definición de función. */
-export interface FnDef { name: string; sig: string; desc: string; cat: string; min: number; max: number; fn?: Fn; lazy?: LazyFn; volatile?: boolean }
 
 const TABLE = new Map<string, FnDef>();
 const ALIASES = new Map<string, string>();

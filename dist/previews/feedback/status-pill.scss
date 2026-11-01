@@ -1,0 +1,84 @@
+/* <iswc-status-pill> — una sola línea: spinner o ícono, frase y estado. */
+@use '../../styles/mixins' as *;
+
+:host {
+  @include papel;
+  display: block;
+  margin-block: 0.12em;
+  color: var(--iswc-text);
+  font-size: 1em;
+}
+
+:host([hidden]) { display: none !important; }
+
+.pill {
+  --_acento: var(--iswc-color-warning);
+  --_texto: var(--iswc-warning-text);
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: 0.45em;
+  width: 100%;
+  min-height: 1.65em;
+  padding-block: 0.12em;
+  padding-inline: 0.55em 0.4em;
+  overflow: hidden;
+  border: 0.0625em solid color-mix(in srgb, var(--_acento) 42%, transparent);
+  border-radius: 999em;
+  background: color-mix(in srgb, var(--_acento) 18%, var(--iswc-bg-elev));
+  font-size: 0.78em;
+  line-height: 1.2;
+
+  &[data-status="done"] {
+    --_acento: var(--iswc-color-success);
+    --_texto: var(--iswc-success-text);
+    background: color-mix(in srgb, var(--_acento) 12%, var(--iswc-bg-elev));
+  }
+
+  &[data-status="error"] {
+    --_acento: var(--iswc-color-danger);
+    --_texto: var(--iswc-danger-text);
+    background: color-mix(in srgb, var(--_acento) 12%, var(--iswc-bg-elev));
+  }
+}
+
+.marca {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 0.95em;
+  height: 0.95em;
+  color: var(--_texto);
+
+  iswc-spinner,
+  iswc-icon {
+    --iswc-icon-size: 1em;
+    --iswc-spinner-color: var(--_acento);
+    width: 100%;
+    height: 100%;
+    color: var(--_texto);
+  }
+
+  [hidden] { display: none; }
+}
+
+.texto {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  color: var(--iswc-text);
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.estado {
+  flex: none;
+  color: var(--_texto);
+  font-size: 0.86em;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: lowercase;
+}

@@ -1,0 +1,101 @@
+/* Hoja compartida por iswc-date-field, iswc-time-field e iswc-date-time-field: los
+ * tres usan el mismo motor de secciones y deben verse idénticos. */
+
+[hidden] {
+  display: none !important;
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+:host {
+  display: inline-block;
+  font-family: var(--iswc-sans, inherit);
+  color: var(--iswc-text, inherit);
+  box-sizing: border-box;
+
+  .form-control {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35em;
+  }
+
+  .label {
+    font-size: 0.875em;
+    font-weight: 500;
+    color: var(--iswc-text-soft, inherit);
+  }
+
+  .base {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.15em;
+    box-sizing: border-box;
+    block-size: var(--iswc-control-height);
+    padding-block: 0;
+    padding-inline: 0.75em 0.35em;
+    background: var(--iswc-control-bg);
+    border: 1px solid var(--iswc-control-border);
+    border-radius: var(--iswc-radius-sm);
+    font-variant-numeric: tabular-nums;
+    cursor: text;
+
+    /* El anillo se pinta en el contenedor aunque el foco esté en una sección. */
+    &:has(.sec:focus-visible) {
+      outline: 2px solid var(--iswc-focus, var(--iswc-accent));
+      outline-offset: 1px;
+    }
+
+    &[data-invalid] {
+      border-color: var(--iswc-color-danger);
+    }
+
+    &[data-disabled] {
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
+  }
+
+  .sections {
+    display: inline-flex;
+    align-items: center;
+    white-space: nowrap;
+  }
+
+  .sec {
+    padding-inline: 0.1em;
+    border-radius: 0.2em;
+    outline: 0;
+    cursor: text;
+
+    /* :focus cubre el caso programático (selection), :focus-visible el del teclado. */
+    &:is(:focus, :focus-visible) {
+      background: var(--iswc-accent-bg, rgb(224 49 49 / 12%));
+      color: var(--iswc-accent);
+    }
+
+    &[data-empty] {
+      color: var(--iswc-text-dim);
+    }
+  }
+
+  .sep {
+    opacity: 0.7;
+    padding-inline: 0.05em;
+  }
+
+  .clear {
+    flex: none;
+    margin-inline-start: 0.15em;
+    font-size: 0.95em;
+    line-height: 0;
+    color: var(--iswc-text-dim);
+    &[hidden] { display: none !important; }
+  }
+
+  .hint {
+    font-size: 0.8em;
+    color: var(--iswc-text-dim);
+  }
+}

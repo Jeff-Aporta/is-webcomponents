@@ -4,7 +4,7 @@ import { cellName, colName, parseRange } from './address.js';
 import type { SpreadsheetDoc } from './document.js';
 import { keyCol, keyRow } from './engine.js';
 import type { Sheet } from './engine.js';
-import { canonicalName } from './functions/index.js';
+import { canonicalName } from './functions/registry.js';
 import { mapTokens } from './rewrite.js';
 import { CellError } from './values.js';
 import type { CellStyle, CfRule, ValidationRule } from '../../schemas/spreadsheet.schemas.js';

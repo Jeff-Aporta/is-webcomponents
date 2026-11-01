@@ -290,3 +290,22 @@
 :host([compact]) #btnForgot {
   display: none;
 }
+
+/* compact: Recordar y Entrar comparten fila; los campos ocupan las dos columnas. */
+:host([compact]) {
+  --iswc-login-gap: 0.45em;
+}
+
+:host([compact]) .form {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+
+  iswc-input,
+  iswc-select {
+    grid-column: 1 / -1;
+    inline-size: 100%;
+  }
+}
+
+:host([compact]) .row-between { flex-wrap: nowrap; }

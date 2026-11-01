@@ -1,3 +1,4 @@
+// S-I1: requisito de specs/iconos.md (WHAT-first, ver specs/testing.md S-T6)
 // tests/icon-references.test.ts
 //
 // Verifica que cada <iswc-icon icon="X:Y"> en los previews apunta a un icono

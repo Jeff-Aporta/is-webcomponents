@@ -5,7 +5,7 @@
  * hojas (`exportMultipleSheetsAsExcel`): cada hoja se serializa a su XML por
  * `hojaAXml` con textos en linea (`inlineStr`), asi las hojas son independientes.
  */
-import { zipComprimido, zipGuardado } from './zip.js';
+import { zipComprimido, zipGuardado } from './ag-zip.js';
 import type { CeldaLibre, ColExport, EntradaZip, EstiloExcel, FilaExport, FilaLibre, HojaExcel, ParamsExport } from './filas.schemas.js';
 
 const MAX_TEXTO = 32767;

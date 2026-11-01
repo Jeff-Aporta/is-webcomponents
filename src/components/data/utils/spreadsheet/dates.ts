@@ -1,10 +1,9 @@
 // dates.ts — fechas seriales del sistema 1900, incluido el 29-feb-1900 ficticio de Excel.
 
+import type { DateParts } from './dates.schemas.ts';
 const BASE = Date.UTC(1899, 11, 30);
 const DAY = 86400000;
 
-/** Partes de una fecha serial. */
-export interface DateParts { y: number; m: number; d: number; hh: number; mm: number; ss: number; ms: number; wd: number }
 
 /** Serial de una fecha; acepta meses y días fuera de rango como DATE. */
 export function serial(y: number, m: number, d: number): number {

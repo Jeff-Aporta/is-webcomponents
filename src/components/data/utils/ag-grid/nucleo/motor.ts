@@ -11,11 +11,11 @@
  */
 
 import type { ColPos, Diseno, PiezasMotor, InternosMotor, RecCelda, RecFila, GrupoFila } from './motor.schemas.js';
-export type * from './motor.schemas.js';
 import { applyFlex, colWindow, columnLayout } from '../../datagrid-core/viewport.js';
 import { orderedForLayout } from '../../datagrid-core/column-state.js';
 import { crearAlturas } from './alturas.js';
-import type { ColumnState, ContextoCelda, Decoracion, Desinstalar, FilaDisplay, FilaExtra, GridHost, PresentacionCelda, PresentacionFila, Rect, RefCelda, RendererMontable, RowNode } from '../contrato.js';
+import type { ColumnState, RowNode } from '../../../schemas/datagrid-types.schemas.js';
+import type { ContextoCelda, Decoracion, Desinstalar, FilaDisplay, FilaExtra, GridHost, PresentacionCelda, PresentacionFila, Rect, RefCelda, RendererMontable } from '../contrato.schemas.js';
 
 
 

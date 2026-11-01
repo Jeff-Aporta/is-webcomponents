@@ -138,7 +138,7 @@
 
 /* ── 3. Appearance → consume roles (no conoce nombres de color) ─────────
    filled = default (sin variant) o variant="filled". */
-:host(:is([color]:not([variant]), [color][variant=""], [color][variant="filled"])) {
+:host(:is([color]:not([variant]), [color][variant=""], [color][variant="compact"], [color][variant~="filled"])) {
   --_bg: var(--_tone-strong);
   --_bg-hover: var(--_tone-stronger);
   --_bg-active: var(--_tone-strongest, var(--_tone-stronger));
@@ -148,7 +148,7 @@
   --_border-hover: var(--_tone-stronger);
 }
 
-:host([color][variant="outlined"]) {
+:host([color][variant~="outlined"]) {
   --_bg: transparent;
   --_bg-hover: var(--_tone-soft);
   --_bg-active: var(--_tone-soft-active);
@@ -158,7 +158,7 @@
   --_border-hover: var(--_tone);
 }
 
-:host([color][variant="plain"]) {
+:host([color][variant~="plain"]) {
   --_bg: transparent;
   --_bg-hover: var(--_tone-soft);
   --_bg-active: var(--_tone-soft-active);
@@ -170,7 +170,7 @@
 
 /* ghost: outlined en reposo, filled al hover (unico que cambia --_*-hover).
  * W28: --_bg-hover / --_border-hover / --_text-hover = mismo aspecto que
- * `:host([variant="filled"]):not(:hover)`. Para cada color X:
+ * `:host([variant~="filled"]):not(:hover)`. Para cada color X:
  *   --_bg-hover: var(--_tone-strong)        = filled rest bg
  *   --_border-hover: var(--_tone-strong)    = filled rest border (cuando es X)
  *   --_text-hover: var(--_tone-on)          = filled rest text
@@ -178,7 +178,7 @@
  * Neutral hereda la regla generica (--_tone-strong = --iswc-color-neutral-strong,
  * --_tone-on = --iswc-on-brand en :host([color="neutral"])).
  * Sin color: usamos los tokens equivalentes del control base. */
-:host([color][variant="ghost"]) {
+:host([color][variant~="ghost"]) {
   --_bg: transparent;
   --_border: var(--_tone);
   --_text: var(--_tone-text);
@@ -187,7 +187,7 @@
   --_border-hover: var(--_tone-strong);
   --_text-hover: var(--_tone-on);
 }
-:host([variant="ghost"]:not([color])) {
+:host([variant~="ghost"]:not([color])) {
   --_bg: transparent;
   --_border: var(--iswc-control-border);
   --_text: var(--iswc-control-text);
@@ -198,14 +198,14 @@
 }
 
 /* soft: ya nace teñido (plain no). */
-:host([variant="soft"]) {
+:host([variant~="soft"]) {
   --_bg: var(--iswc-control-bg);
   --_bg-hover: var(--iswc-control-bg-hover);
   --_bg-active: var(--iswc-control-bg-active);
   --_border: transparent;
   --_text: var(--iswc-control-text);
 }
-:host([color][variant="soft"]) {
+:host([color][variant~="soft"]) {
   --_bg: var(--_tone-soft);
   --_bg-hover: var(--_tone-soft-active);
   --_bg-active: var(--_tone-soft-active);
@@ -217,7 +217,7 @@
  * overlays sobre imagenes o fondos. Diferencia con `soft`: usa el color
  * real translucido, no la mezcla con blanco. Asi neutral es gris
  * translucido (no blanco-grisaceo) y brand es brand translucido. */
-:host([color][variant="soft-filled"]) {
+:host([color][variant~="soft-filled"]) {
   --_bg: color-mix(in srgb, var(--_tone) 18%, transparent);
   --_bg-hover: color-mix(in srgb, var(--_tone) 28%, transparent);
   --_bg-active: color-mix(in srgb, var(--_tone) 40%, transparent);
@@ -227,7 +227,7 @@
 }
 
 /* text: sin caja; plain sí tiñe fondo. */
-:host([variant="text"]) {
+:host([variant~="text"]) {
   --_hpad: 0.35em;
   --_bg: transparent;
   --_bg-hover: transparent;
@@ -241,14 +241,14 @@
     &:hover { text-decoration: underline; }
   }
 }
-:host([color][variant="text"]) {
+:host([color][variant~="text"]) {
   --_text: var(--_tone-text);
   --_text-hover: var(--_tone-strong);
 }
 
 /* glyph y row: sin caja en reposo; el hover tiñe suave. */
-:host([variant="glyph"]),
-:host([variant="row"]) {
+:host([variant~="glyph"]),
+:host([variant~="row"]) {
   --_bg: transparent;
   --_bg-hover: var(--iswc-control-bg-hover);
   --_bg-active: var(--iswc-control-bg-active);
@@ -257,8 +257,8 @@
   --_text: var(--iswc-control-text);
   --_text-hover: var(--iswc-control-text);
 }
-:host([color][variant="glyph"]),
-:host([color][variant="row"]) {
+:host([color][variant~="glyph"]),
+:host([color][variant~="row"]) {
   --_bg-hover: var(--_tone-soft);
   --_bg-active: var(--_tone-soft-active);
   --_text: var(--_tone-text);
@@ -268,7 +268,7 @@
 /* glyph: un solo signo (emoji, letra o icono) en un cuadrado. Lado con
  * --iswc-button-glyph-size; en una rejilla se le da `width: 100%` y el alto lo
  * pone el aspect-ratio. */
-:host([variant="glyph"]) {
+:host([variant~="glyph"]) {
   --_height: auto;
   --_hpad: 0;
   width: var(--iswc-button-glyph-size, 2em);
@@ -284,7 +284,7 @@
 
 /* row: fila a todo el ancho con contenido rico (avatar, dos líneas, fragmento).
  * Alto libre, texto al inicio que envuelve; los hijos van en fila. */
-:host([variant="row"]) {
+:host([variant~="row"]) {
   --_height: auto;
   display: flex;
   width: 100%;
@@ -330,8 +330,8 @@
 
 /* Alias legado: solo si no hay `shape` (shape gana siempre). */
 :host([pill]:not([shape])) { --iswc-button-border-radius: 999em; }
-:host([variant="outlined"]),
-:host([variant="ghost"]) {
+:host([variant~="outlined"]),
+:host([variant~="ghost"]) {
   margin-inline-start: var(--_button-horizontal-indent-outlined, var(--_button-horizontal-indent, 0em));
   margin-block-start: var(--_button-vertical-indent-outlined, var(--_button-vertical-indent, 0em));
 }
@@ -349,12 +349,12 @@
 }
 
 /* glyph y row ya definen su caja: un único hijo no los vuelve icon-button. */
-:host([variant="glyph"]:state(icon-button)) .btn,
-:host([variant="row"]:state(icon-button)) .btn {
+:host([variant~="glyph"]:state(icon-button)) .btn,
+:host([variant~="row"]:state(icon-button)) .btn {
   width: 100%;
   aspect-ratio: auto;
 }
-:host([variant="row"]:state(icon-button)) .btn {
+:host([variant~="row"]:state(icon-button)) .btn {
   padding: var(--iswc-button-row-padding, 0.5em 0.75em);
   gap: 0.5em;
 }
@@ -410,4 +410,18 @@
 
 @keyframes iswc-button-spin {
   to { transform: rotate(360deg); }
+}
+
+/* variant admite varios modos por espacio: "outlined compact". Compacto: el mínimo que respeta el contenido. */
+:host([variant~="compact"]) {
+  --_height: 1.6em;
+  --_hpad: 0.45em;
+}
+
+/* size="sm": control compacto; todo sigue en em. */
+:host([size="sm"]) {
+  --_height: 2em;
+  --_hpad: 0.75em;
+
+  font-size: 0.875em;
 }

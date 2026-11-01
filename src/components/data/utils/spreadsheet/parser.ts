@@ -1,24 +1,10 @@
 // parser.ts — descenso recursivo con precedencia: de tokens a árbol de fórmula.
-import type { RefEnd, Token } from './tokenizer.js';
+import type { RefEnd, Token } from './tokenizer.schemas.js';
 import { tokenize } from './tokenizer.js';
 import { errorFromCode, ERR } from './values.js';
 import type { CellError } from './values.js';
+import type { Node } from './parser.schemas.js';
 
-/** Nodo del árbol de una fórmula. */
-export type Node =
-  | { t: 'num'; v: number }
-  | { t: 'str'; v: string }
-  | { t: 'bool'; v: boolean }
-  | { t: 'err'; v: CellError }
-  | { t: 'ref'; sheet?: string; a: RefEnd; b?: RefEnd }
-  | { t: 'name'; name: string }
-  | { t: 'call'; name: string; args: Node[] }
-  | { t: 'un'; op: string; x: Node }
-  | { t: 'pct'; x: Node }
-  | { t: 'bin'; op: string; l: Node; r: Node }
-  | { t: 'arr'; rows: Node[][] }
-  | { t: 'spill'; x: Node }
-  | { t: 'miss' };
 
 /** Error de sintaxis. */
 export class FormulaSyntaxError extends Error {}

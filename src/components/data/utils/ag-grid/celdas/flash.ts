@@ -8,7 +8,6 @@
  */
 
 import type { Reloj, Programar, Cancelar, Alcance, Vencimiento, OpcionesDestello } from './flash.schemas.js';
-export type * from './flash.schemas.js';
 import { unirClases } from './html.js';
 import type { CambioCelda } from './schemas.js';
 

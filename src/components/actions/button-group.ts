@@ -92,8 +92,9 @@ import { withStyleAttrs } from '../../core/attrs.js';
         delete (this as unknown as Record<string, unknown>)['values'];
         if (v != null) this.values = v;
       }
-      if (!this.hasAttribute('orientation')) this.setAttribute('orientation', 'horizontal');
-      if (!this.hasAttribute('variant')) this.setAttribute('variant', 'joined');
+      const host: HTMLElement = this;
+      if (!host.hasAttribute('orientation')) host.setAttribute('orientation', 'horizontal');
+      if (!host.hasAttribute('variant')) host.setAttribute('variant', 'joined');
       this.#selected = this.#readSelection();
       this.#syncA11y();
       this.#syncSelection();

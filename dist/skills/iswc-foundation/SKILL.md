@@ -44,7 +44,7 @@ pin. Opciones: `--prefijo`, `--titulo`, `--puerto`, `--sha`, `--repo`. Detalle: 
 | 2 | **Kit por CDN pineado**: un único SHA de 40 hex en toda la app. Nunca `@main`, `@latest`, SHA corto, GitHub Pages ni ramas en raw |
 | 3 | **Protocolo de pines del kit** (`deno task pin` / `pin --nuevo=<sha40\|ultimo>` / `vendor:iswc`): vendor = pin |
 | 4 | **UI con `iswc-*`** y colores solo con tokens `--iswc-*`; no reinventar lo que el [catálogo](../iswc-root/catalog.md) trae |
-| 5 | **Componente = 4 archivos hermanos**: `.ts` + `.scss` + `.md` (6 secciones) + `.json` (`iswc-preview/v1`) |
+| 5 | **Componente = 4 archivos hermanos**: `.ts` + `.scss` + `.md` (6 secciones) + `.json` (`iswc-preview/v1`). Lo verifica `tests/vistas/contrato-componentes.test.ts`, que se apoya en `kit-tags.ts`; el kit aplica la misma regla en su auditoría |
 | 6 | **Registro único** en `src/js/kit-tags.ts` (`KIT_TAGS`, `APP_TAGS`, `VIEW_TAGS`) → registrador `L.registerApp` |
 | 7 | **Vista = `view/<v>/`** con `index.html` aislado, `README.md`, `demo/`, `components/`, `utils/`; un shell por vista |
 | 8 | **Zod** para todos los tipos; schemas en `src/js/consts/schemas/*.schemas.ts`; datos externos con `safeParse`, nunca `as` |

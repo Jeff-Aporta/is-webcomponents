@@ -1,5 +1,6 @@
 {
   "$schema": "iswc-preview/v1",
+  "anatomy": {},
   "tag": "iswc-demo",
   "category": "layout",
   "title": "&lt;iswc-demo&gt;",
@@ -13,7 +14,16 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-demo heading=\"Ejemplo\"><p>El contenido del ejemplo va en light DOM.</p></iswc-demo>"
+          "html": "<iswc-demo id=\"pg-demo\" heading=\"Ejemplo\"><p>El contenido del ejemplo va en light DOM.</p></iswc-demo>",
+          "target": "#pg-demo",
+          "controls": [
+            {
+              "control": "text",
+              "prop": "attr:heading",
+              "label": "heading",
+              "default": "Ejemplo"
+            }
+          ]
         }
       ]
     }

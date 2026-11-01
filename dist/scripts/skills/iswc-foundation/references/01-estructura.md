@@ -33,6 +33,12 @@
 └── dist/cdn/                     ← artefactos del build; se versionan (es lo que sirve el hosting)
 ```
 
+Todas las apps comparten este árbol. Avatar y Jeff-Aporta son la referencia. Cada componente, en `src/js/components/<p>/` o en `view/<vista>/components/`, son cuatro archivos con el nombre del tag:
+
+```
+<tag>.ts · <tag>.scss · <tag>.md · <tag>.json
+```
+
 ## Reglas de ubicación
 
 | Pieza | Va en | Nunca en |

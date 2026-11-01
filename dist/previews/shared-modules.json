@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-31T14:04:30.696Z",
+  "generatedAt": "2026-11-01T16:31:37.042Z",
   "count": 41,
   "modules": [
     {
@@ -183,14 +183,15 @@
       "id": "dom-utils",
       "path": "src/core/dom-utils.ts",
       "summary": "dom-utils — Sustituye copias dispersas en iswc-checkbox, iswc-switch, iswc-input,",
-      "bytes": 3795,
+      "bytes": 4533,
       "exports": [
         "hasSlotted",
         "assignedNodes",
         "assignedElements",
         "escapeHtml",
         "copyText",
-        "crearNodo"
+        "crearNodo",
+        "ocultarSlotsVacios"
       ]
     },
     {

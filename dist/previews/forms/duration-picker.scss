@@ -1,0 +1,68 @@
+/* iswc-duration-picker */
+:host {
+  display: inline-block;
+  font: inherit;
+  color: var(--iswc-text);
+  --iswc-duration-picker-bg: var(--iswc-control-bg, var(--iswc-bg-soft));
+  --iswc-duration-picker-border: var(--iswc-control-border, var(--iswc-border));
+}
+
+.root {
+  display: inline-flex;
+  align-items: center;
+  gap: .15em;
+  background: var(--iswc-duration-picker-bg);
+  border: 1px solid var(--iswc-duration-picker-border);
+  border-radius: var(--iswc-radius);
+  padding: .25em .45em;
+}
+
+/* Botones arriba/abajo de cada columna: comparten estilo base. */
+:is(.col button, .cell) {
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  line-height: 1;
+  padding: 0;
+  border-radius: .25em;
+}
+
+.col {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  align-items: stretch;
+  gap: .0625em;
+
+  button {
+    cursor: pointer;
+    color: var(--iswc-text-soft);
+    font-size: .65em;
+    height: 1.5385em;
+
+    &:hover {
+      background: color-mix(in srgb, var(--iswc-accent) 18%, transparent);
+      color: var(--iswc-accent);
+    }
+  }
+}
+
+.cell {
+  width: 2.4em;
+  outline: 0;
+  font-size: 1em;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+  padding: .25em 0;
+
+  &:focus {
+    background: color-mix(in srgb, var(--iswc-accent) 14%, transparent);
+  }
+}
+
+.sep {
+  font-weight: 600;
+  color: var(--iswc-text-soft);
+  align-self: center;
+  font-size: 1.05em;
+}

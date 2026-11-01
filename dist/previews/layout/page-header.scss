@@ -1,0 +1,67 @@
+/* <iswc-page-header> — fila de título y acciones de una vista. */
+:host {
+  display: block;
+  min-width: 0;
+  font-family: var(--iswc-sans);
+}
+
+:host([hidden]) { display: none !important; }
+
+.cabecera {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75em 1.25em;
+  padding-bottom: 1em;
+  margin-bottom: 1.25em;
+  border-bottom: 0.0625em solid var(--iswc-border-soft);
+}
+
+.texto {
+  flex: 1 1 20em;
+  min-inline-size: 0;
+}
+
+.titulo {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  margin: 0;
+  color: inherit;
+  font-family: var(--iswc-page-header-title-font, inherit);
+  font-size: 1.45em;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+
+  iswc-icon { flex: none; color: var(--iswc-brand-text); }
+  iswc-icon[hidden] { display: none; }
+}
+
+.rotulo {
+  display: -webkit-box;
+  min-inline-size: 0;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.subtitulo {
+  display: -webkit-box;
+  margin: 0.25em 0 0;
+  overflow: hidden;
+  color: color-mix(in srgb, currentColor 78%, transparent);
+  font-size: 0.95em;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+
+  &[hidden] { display: none; }
+}
+
+.acciones {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5em;
+}

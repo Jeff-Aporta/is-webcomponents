@@ -249,3 +249,7 @@ Con `state` (y un `id`), el grupo recuerda la pestaña activa en `?s=` como `{ t
 <iswc-tab-group id="detalle" state active="resumen">…</iswc-tab-group>
 <iswc-tab-group id="vista" state history active="lista">…</iswc-tab-group>
 ```
+
+## Tamaño
+
+`size="sm"` compacta las pestañas.

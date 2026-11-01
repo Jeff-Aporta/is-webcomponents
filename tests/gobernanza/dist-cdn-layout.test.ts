@@ -1,3 +1,4 @@
+// S-C1: requisito de specs/cdn.md (WHAT-first, ver specs/testing.md S-T6)
 // tests/dist-cdn-layout.test.ts
 //
 // Congela el error del `dist/ag-grid.ts` huérfano: el build publica SOLO bajo

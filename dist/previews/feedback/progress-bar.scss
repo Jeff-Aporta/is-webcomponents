@@ -1,0 +1,53 @@
+:host {
+  --iswc-progress-bar-track-height: 0.5em;
+  --iswc-progress-bar-track-color: var(--iswc-control-bg);
+  --iswc-progress-bar-color: var(--iswc-color-brand);
+  display: block;
+  width: 100%;
+  font-family: var(--iswc-font-family);
+  font-size: inherit;
+
+  .track {
+    position: relative;
+    width: 100%;
+    height: var(--iswc-progress-bar-track-height);
+    background: var(--iswc-progress-bar-track-color);
+    border-radius: 999em;
+    overflow: hidden;
+
+    .indicator {
+      height: 100%;
+      background: var(--iswc-progress-bar-color);
+      border-radius: inherit;
+      transition: width 200ms ease;
+      min-width: 0;
+
+      &.iswc-indeterminate {
+        width: 40% !important;
+        animation: indeterminate 1.2s ease-in-out infinite;
+
+        /* Moverse informa que sigue en curso: con movimiento reducido va más lento, nunca quieto. */
+        @media (prefers-reduced-motion: reduce) { animation-duration: 3.6s; }
+      }
+    }
+  }
+
+  .label {
+    display: block;
+    margin-top: 0.35em;
+    color: var(--iswc-text-soft);
+    font-size: 0.85em;
+
+    &[hidden] { display: none; }
+  }
+}
+
+:host([color="info"]) { --iswc-progress-bar-color: var(--iswc-color-info); }
+:host([color="success"]) { --iswc-progress-bar-color: var(--iswc-color-success); }
+:host([color="warning"]) { --iswc-progress-bar-color: var(--iswc-color-warning); }
+:host([color="danger"]) { --iswc-progress-bar-color: var(--iswc-color-danger); }
+
+@keyframes indeterminate {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(350%); }
+}

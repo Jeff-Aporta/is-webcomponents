@@ -55,7 +55,7 @@ ejemplo vivo en la galería.
 
 ## 6. Pruebas (WHAT / HOW WEAK)
 
-- [W-COMP-08] Cada componente registrado tiene sus 4 archivos, su `.md` declara las 6 secciones y su `.json` valida contra `iswc-preview/v1`.
+- [W-COMP-08] Cada componente registrado tiene sus 4 archivos, su `.md` declara las 6 secciones y su `.json` valida contra `iswc-preview/v1`, trae playground y está en la galería (`tests/vistas/contrato-componentes.test.ts`).
 - [W-COMP-09] El dominio de la bienvenida cumple [W-CAT-02] y [W-CAT-03] sin navegador (`tests/vistas/bienvenida`).
 - [W-ICO-04] Los íconos de la app están en `assets/iconify/` [W-ICO-01], `deno.json` declara `iswc.host` [W-ICO-02] y el registrador declara `<html data-icons>` (`tests/iconos`); en e2e, la bienvenida tiene `data-icons` absoluto, pinta sus íconos y los deja en localStorage `iswc:icon:*` (`tests/e2e/00.bienvenida`).
 - [W-COMP-10] E2E: la bienvenida arranca, muestra el título y las tarjetas, y el modal se abre y se cierra como lo haría un usuario (`tests/e2e/00.bienvenida`).

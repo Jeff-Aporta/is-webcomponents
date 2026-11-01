@@ -1,0 +1,81 @@
+:host {
+  display: inline-block;
+  font-size: inherit;
+  --iswc-pin-cell-size: var(--iswc-control-height);
+  --iswc-pin-gap: 0.5em;
+  --iswc-pin-bg: var(--iswc-control-bg);
+  --iswc-pin-text: var(--iswc-control-text, var(--iswc-text));
+  --iswc-pin-border: var(--iswc-control-border);
+  --iswc-pin-focus: var(--iswc-focus, var(--iswc-accent));
+  --iswc-pin-danger: var(--iswc-color-danger);
+}
+
+.pin {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--iswc-pin-gap);
+  position: relative;
+
+  &[data-state="invalid"] {
+    .cell {
+      border-color: var(--iswc-pin-danger);
+      animation: pin-shake 0.3s;
+    }
+  }
+}
+
+.hidden-input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+  inline-size: .075em;
+  block-size: .075em;
+}
+
+.cells {
+  display: flex;
+  gap: var(--iswc-pin-gap);
+}
+
+.cell {
+  /* Entre 1.25: la celda agranda su font-size y el token se resuelve contra él. */
+  inline-size: calc(var(--iswc-pin-cell-size) / 1.25);
+  block-size: calc(var(--iswc-pin-cell-size) / 1.25);
+  box-sizing: border-box;
+  padding: 0;
+  text-align: center;
+  /* <input> no hereda font del host (UA); sin inherit --iswc-pin-cell-size en em no escala. */
+  font: inherit;
+  font-size: 1.25em;
+  font-weight: 500;
+  background: var(--iswc-pin-bg);
+  color: var(--iswc-pin-text);
+  border: 1px solid var(--iswc-pin-border);
+  border-radius: var(--iswc-radius-sm);
+  outline: none;
+  transition: border-color 0.15s;
+  caret-color: transparent;
+
+  &:focus {
+    outline: 2px solid var(--iswc-pin-focus);
+    outline-offset: 1px;
+  }
+
+  &.mask {
+    -webkit-text-security: disc;
+    text-security: disc;
+  }
+}
+
+:host([disabled]) {
+  .cell {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+}
+
+@keyframes pin-shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-.2em); }
+  75% { transform: translateX(.2em); }
+}

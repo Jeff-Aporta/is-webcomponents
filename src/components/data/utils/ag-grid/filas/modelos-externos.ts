@@ -6,7 +6,8 @@
 import { CacheBloques } from './cache-bloques.js';
 import { aplicarTransaccion } from './transacciones.js';
 import type { ColServidor, DatasourceInfinito, DatasourceServidor, DatasourceViewport, ExitoServidor, IdFila, PeticionBloque, RefrescoServidor, ResultadoServidor, RutaServidor, TransaccionServidor } from './filas.schemas.js';
-import type { ColumnState, FilaDisplay, GridHost, ModeloFilas, RowData, RowNode } from '../contrato.js';
+import type { ColumnState, RowData, RowNode } from '../../../schemas/datagrid-types.schemas.js';
+import type { FilaDisplay, GridHost, ModeloFilas } from '../contrato.schemas.js';
 
 const TAM_BLOQUE = 100;
 

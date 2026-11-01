@@ -1,8 +1,8 @@
 // dynamic.ts — funciones de matrices dinámicas: devuelven matrices que desbordan.
-import type { Ctx } from '../evaluator.js';
+import type { Ctx } from '../evaluator.schemas.js';
 import { CellError, compare, ERR, toBool, toNumber } from '../values.js';
-import type { EvalValue, Matrix, Scalar } from '../values.js';
-import { flat, matrix, num, optBool, optNum } from './helpers.js';
+import type { EvalValue, Matrix, Scalar } from '../values.schemas.js';
+import { flat, matrix, num, optBool, optNum } from './fn-helpers.js';
 import { def } from './registry.js';
 
 const CAT = 'Matrices dinámicas';

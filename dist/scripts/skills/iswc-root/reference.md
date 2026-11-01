@@ -22,6 +22,9 @@ Usar este mapa al elegir tag. API exacta: MD del módulo en el repo.
 | Persona: avatar, nombre, detalle | `iswc-person` | `iswc-avatar` + spans |
 | Fila de indicadores | `iswc-stat-group` | rejilla propia de `iswc-stat` |
 | Cliente activo (multi-tenant) | `iswc-tenant-selector` | `iswc-select` en cada app |
+| OCR, voz a texto, traducción u otra IA con su pantalla | `iswc-ai-tool` | `runonweb` a mano |
+| IA dentro de otro componente, sin UI | `ejecutar` de `lib/ai/motores.min.js` | importar `runonweb` o bajar modelos a mano |
+| Buscar por significado en el navegador | `vectorLocal` + `ordenarPorSentido` de `lib/ai/vector-local.min.js` | modelo por defecto de `runonweb/embed` (inglés) |
 | Búsqueda global con orden por significado | `iswc-semantic-search` | paleta + botón a mano |
 | Carga en línea con texto | `iswc-loading` | spinner + span |
 | Paso de un proceso (pendiente, hecho, error) | `iswc-status-pill` | etiqueta con spinner a mano |

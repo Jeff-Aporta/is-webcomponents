@@ -1,10 +1,9 @@
 // criteria.ts — criterios de COUNTIF/SUMIF/filtros de base de datos: operadores y comodines.
 import { parseDateText } from './dates.js';
 import { CellError, compare, parseNumberText } from './values.js';
-import type { Scalar } from './values.js';
+import type { Scalar } from './values.schemas.js';
+import type { Predicate } from './criteria.schemas.js';
 
-/** Prueba de un valor. */
-export type Predicate = (v: Scalar) => boolean;
 
 /** Regex de un patrón con comodines `*`, `?` y escape `~`. */
 export function wildcardRegex(pattern: string): RegExp {

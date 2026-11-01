@@ -3,8 +3,8 @@
  * del contenedor que dependen de las opciones: rol y multiseleccion.
  */
 import { leerOpciones } from './seleccion-filas.js';
-import type { Desinstalar } from '../contrato.js';
-import type { GridHost } from '../contrato.js';
+import type { Desinstalar } from '../contrato.schemas.js';
+import type { GridHost } from '../contrato.schemas.js';
 
 const SELECTOR_GRILLA = '[role="grid"], [role="treegrid"]';
 

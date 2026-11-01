@@ -10,7 +10,6 @@
  */
 
 import type { Punto, Curva, Caja } from './spark.schemas.js';
-export type * from './spark.schemas.js';
 import { pathArea, pathLine } from '../../../../../core/svg-chart-engine.js';
 import { aEm, escaparHtml, limpiarCss } from './html.js';
 import type { EstiloPunto, OpcionesSparkline } from './schemas.js';

@@ -3,7 +3,7 @@
 import { parseCell, parseRange, rangeName } from './address.js';
 import { mapTokens, shiftFormula } from './rewrite.js';
 import { child, children, parseXml } from './xml.js';
-import type { XNode } from './xml.js';
+import type { XNode } from './xml.schemas.js';
 import { readZip } from './zip.js';
 import type { BorderSide, CellDoc, CellStyle, CfRule, SheetDoc, ValidationRule, WorkbookDoc } from '../../schemas/spreadsheet.schemas.js';
 

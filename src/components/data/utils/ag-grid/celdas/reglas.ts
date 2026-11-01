@@ -6,10 +6,10 @@
  * que ya no aplica desaparece solo, sin el "se acumulan" que AG documenta.
  */
 
-import type { ColDefAg } from '../contrato.js';
+import type { ColDefAg } from '../contrato.schemas.js';
 import { claseSegura, escaparHtml, limpiarCss, unirClases } from './html.js';
 import type { ParamsCelda } from './schemas.js';
-import { ambitoDe } from './valores.js';
+import { ambitoDe } from './celdas-valores.js';
 import { evaluarExpresion } from './expresion.js';
 
 const kebabs = new Map<string, string>();

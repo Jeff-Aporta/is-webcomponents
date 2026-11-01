@@ -152,6 +152,9 @@ Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en
 | Token | Uso |
 | --- | --- |
 | `--iswc-accent` | Token leído o definido por componente. |
+| `--iswc-button-glyph-size` | Lado de `variant="glyph"`. Default `2em`. |
+| `--iswc-button-row-padding` | Relleno de `variant="row"`. Default `0.5em 0.75em`. |
+| `--iswc-button-row-gap` | Separación entre hijos de `variant="row"`. Default `0.75em`. |
 | `--iswc-button-font-family` | Token leído o definido por componente. |
 | `--iswc-button-font-weight` | Token leído o definido por componente. |
 | `--iswc-button-border-radius` | Token leído o definido por componente. |
@@ -223,6 +226,18 @@ Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en
 ### Integración con formularios
 
 Participa mediante ElementInternals/helpers form-associated; respetar name, value, disabled, reset, restore y validación.
+
+## Modos de variant
+
+`variant` se compone por espacios: el estilo y el modo, como `variant="outlined compact"`. Con `compact` el botón queda muy compacto; sin él, conserva su tamaño normal. Solo `compact` equivale a `filled compact`.
+
+## Variantes para listas y rejillas
+
+`glyph` pinta un solo signo en un cuadrado sin borde, con hover suave. El texto no activa `:state(icon-button)`, por eso un emoji necesita esta variante.
+
+`row` es una fila a todo el ancho: alto libre, alineada al inicio, texto que envuelve y los hijos en fila. Sirve para listas de personas, resultados de búsqueda y citas.
+
+`size="sm"` compacta el botón; el tamaño sigue saliendo del `font-size`.
 
 ## Comportamiento
 

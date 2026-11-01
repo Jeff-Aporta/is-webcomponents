@@ -7,10 +7,9 @@
  */
 
 import type { MenuKit } from './menus.schemas.js';
-export type * from './menus.schemas.js';
 import '../../../../actions/context-menu.js';
 import '../../../../media/icon.js';
-import type { ContextoMenu, GridHost, ItemMenu, ProveedorMenu } from '../contrato.js';
+import type { ContextoMenu, GridHost, ItemMenu, ProveedorMenu } from '../contrato.schemas.js';
 
 
 function fusionarPorId(base: ItemMenu[], extra: ItemMenu[]): ItemMenu[] {

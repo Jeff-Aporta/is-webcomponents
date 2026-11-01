@@ -1,8 +1,8 @@
 // math.ts — matemáticas, trigonometría y matrices.
-import type { Ctx } from '../evaluator.js';
+import type { Ctx } from '../evaluator.schemas.js';
 import { CellError, ERR, RefValue, toNumber } from '../values.js';
-import type { EvalValue, Matrix, Scalar } from '../values.js';
-import { finite, flat, lifted, matrix, num, numbers, optNum } from './helpers.js';
+import type { EvalValue, Matrix, Scalar } from '../values.schemas.js';
+import { finite, flat, lifted, matrix, num, numbers, optNum } from './fn-helpers.js';
 import { def, lookupFn } from './registry.js';
 
 const CAT = 'Matemáticas';

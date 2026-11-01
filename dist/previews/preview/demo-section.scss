@@ -1,0 +1,112 @@
+/* <iswc-demo-section> — Phase W32 wrapper.
+   El header (title + lede) va arriba, fuera de la card. El contenido real
+   (bloques `demo`, `code`, `callout`, `html`, `table`) vive dentro de la
+   card. Las reglas de `.section h2`, `.section .lede`, etc. viven en
+   `presentation.css` y siguen aplicando al header porque el titulo y el
+   lede son light-DOM hijos del host con clase `section`. */
+
+/* `padding-inline` del .section de presentation.css: el wrapper es el
+   .section real, asi que mantiene el padding/border que ya tenia la seccion
+   legacy. */
+
+/* ─────────────────────────────── host ──────────────────────────────── */
+
+:host {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  color: inherit;
+  font-family: inherit;
+}
+
+:host([hidden]) { display: none; }
+
+/* ─────────────────────────────── head ──────────────────────────────── */
+
+/* Flotante: full-width, sin borde ni fondo. Solo titulo + lede. */
+.head {
+  display: block;
+  margin: 0 0 0.65em;
+  padding: 0;
+}
+
+.head[hidden] { display: none; }
+
+/* El slot[name="title"] y slot[name="lede"] no deben aportar altura cuando
+   estan vacios. `display: contents` evita que el slot sea un bloque anonimo
+   en el flow. */
+.head ::slotted([slot="title"]),
+.head ::slotted([slot="lede"]) {
+  display: block;
+}
+
+/* Por si el consumidor anade un slot vacio (no deberia): que no pinte padding. */
+.head:empty { display: none; }
+
+/* ─────────────────────────────── card ──────────────────────────────── */
+
+/* Neon-glass card; `:host(.section--plain)` = shell transparente (mapa icons). */
+.card {
+  position: relative;
+  display: block;
+  background:
+    linear-gradient(135deg,
+      color-mix(in srgb, var(--iswc-accent) 7%, transparent) 0%,
+      transparent 42%),
+    linear-gradient(180deg,
+      color-mix(in srgb, var(--iswc-bg-elev) 88%, #fff) 0%,
+      color-mix(in srgb, var(--iswc-bg-elev) 96%, transparent) 100%);
+  border: 1px solid color-mix(in srgb, var(--iswc-accent) 22%, var(--iswc-border));
+  border-radius: calc(var(--iswc-radius) + .25em);
+  padding: clamp(1em, 2.2vw, 1.4em);
+  margin: 0 0 1.75em;
+  box-shadow:
+    inset 0 .0625em 0 color-mix(in srgb, #fff 8%, transparent),
+    0 0 0 .0625em color-mix(in srgb, var(--iswc-accent) 6%, transparent),
+    0 .75em 2.25em color-mix(in srgb, var(--iswc-accent) 8%, transparent),
+    var(--iswc-shadow, 0 .5em 1.5em rgb(0 0 0 / 18%));
+  color: inherit;
+  overflow: visible;
+  isolation: isolate;
+  backdrop-filter: blur(.875em);
+  -webkit-backdrop-filter: blur(.875em);
+}
+
+.card::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: .125em;
+  border-radius: inherit inherit 0 0;
+  background: linear-gradient(90deg,
+    var(--iswc-accent),
+    color-mix(in srgb, var(--iswc-accent) 15%, transparent) 55%,
+    transparent);
+  pointer-events: none;
+  opacity: 0.85;
+}
+
+:host(.section--plain) .card {
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  padding: 0;
+  margin: 0;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+:host(.section--plain) .card::before { display: none; }
+
+/* El primer y ultimo hijo dentro de la card: margen 0 para que no dupliquen
+   el padding del contenedor. */
+.card ::slotted(*:first-child) { margin-block-start: 0; }
+.card ::slotted(*:last-child) { margin-block-end: 0; }
+
+/* ─────────────────────────── estado `data-empty` ───────────────────── */
+
+/* Si por algun motivo el host no recibio bloques (seccion vacia), no
+   mostramos una card sin nada. El atributo lo activa el consumidor si lo
+   necesita; no se gestiona aqui automaticamente. */
+:host([data-empty]) .card { display: none; }

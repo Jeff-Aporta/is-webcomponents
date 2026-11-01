@@ -4,7 +4,6 @@
  * columnas y filas fijadas sin desfases, y el reciclado se repara en `pintado`.
  */
 import type { OpcionesAsa, OpcionesCelda, Gesto } from './seleccion-rangos.schemas.js';
-export type * from './seleccion-rangos.schemas.js';
 import { colsVisibles } from './apoyo.js';
 import { esEditable } from './apoyo.js';
 import { nodoDeFila } from './apoyo.js';
@@ -15,11 +14,11 @@ import { valorBorrado } from './apoyo.js';
 import * as R from './rangos.js';
 import { planRelleno } from './relleno.js';
 import { valoresRelleno } from './relleno.js';
-import type { ColumnState } from '../contrato.js';
-import type { Desinstalar } from '../contrato.js';
-import type { EventoCelda } from '../contrato.js';
-import type { GridHost } from '../contrato.js';
-import type { RowNode } from '../contrato.js';
+import type { ColumnState } from '../../../schemas/datagrid-types.schemas.js';
+import type { Desinstalar } from '../contrato.schemas.js';
+import type { EventoCelda } from '../contrato.schemas.js';
+import type { GridHost } from '../contrato.schemas.js';
+import type { RowNode } from '../../../schemas/datagrid-types.schemas.js';
 import type { Escritor } from './escritor.js';
 import type { EjeRelleno } from './schemas/edicion.schemas.js';
 import type { PlanRelleno } from './schemas/edicion.schemas.js';

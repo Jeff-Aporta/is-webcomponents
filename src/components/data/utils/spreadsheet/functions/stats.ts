@@ -1,9 +1,9 @@
 // stats.ts — estadística, condicionales (*IF, *IFS) y distribuciones.
 import { criterion } from '../criteria.js';
-import type { Ctx } from '../evaluator.js';
+import type { Ctx } from '../evaluator.schemas.js';
 import { CellError, ERR, RefValue, toNumber } from '../values.js';
-import type { EvalValue, Matrix } from '../values.js';
-import { finite, flat, forEach, lifted, matrix, num, numbers, numbersA, optNum, scalar } from './helpers.js';
+import type { EvalValue, Matrix } from '../values.schemas.js';
+import { finite, flat, forEach, lifted, matrix, num, numbers, numbersA, optNum, scalar } from './fn-helpers.js';
 import { numericMatrix } from './math.js';
 import { def } from './registry.js';
 

@@ -1,5 +1,6 @@
 {
   "$schema": "iswc-preview/v1",
+  "anatomy": {},
   "tag": "iswc-preview-controls",
   "category": "preview",
   "title": "&lt;iswc-preview-controls&gt;",

@@ -1,3 +1,4 @@
+// S-D5: requisito de specs/diagramas/spec.md (WHAT-first, ver specs/testing.md S-T6)
 // 02-componentes.test.ts: visita representativa por categorias del catalogo.
 // Para cada tag: el preview controlado monta contenido real (no placeholder),
 // el componente esta definido y el docs usa instancias del kit. Las vistas

@@ -6,8 +6,9 @@ import { TEXTOS } from '../textos.js';
 import { botonIcono, crear, inputDe, retardo } from './controles.js';
 import { PanelFiltro } from './panel-filtro.js';
 import type { CeldaFlotante, Condicion, ConValor, ModeloColumna, ModeloMulti, ModeloSet, TipoCondicion } from '../filtros.schemas.js';
-import type { MotorFiltros } from '../motor.js';
-import type { ColumnState, Desinstalar, Flotante, GridHost } from '../../contrato.js';
+import type { MotorFiltros } from '../filtros-motor.js';
+import type { ColumnState } from '../../../../schemas/datagrid-types.schemas.js';
+import type { Desinstalar, Flotante, GridHost } from '../../contrato.schemas.js';
 
 
 /** Popup unico: abrir el de otra columna cierra el anterior. */

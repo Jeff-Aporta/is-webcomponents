@@ -20,10 +20,11 @@ import { agregarArbol, aplanarArbol, construirArbol, ordenarArbol, podarArbol, r
 import { ModeloServidor, ModeloViewport, crearModeloInfinito } from './modelos-externos.js';
 import { pivotar, resolverIdPivote } from './pivote.js';
 import { aplicarLote } from './transacciones.js';
-import { construirTree, filtrarTree } from './tree-data.js';
+import { construirTree, filtrarTree } from './ag-tree-data.js';
 import type { ArbolVigente, ColPivote, CriterioGrupo, DefPivote, DatasourceInfinito, DatasourceServidor, DatasourceViewport, DuenoExport, EstadoGrilla, FuncionAgg, IdFila, InfoSintetica, LecturaPipeline, NivelGrupo, NodoArbol, OpcionesAplanar, OpcionesPivote, ParamsExport, PosicionTotal, ResultadoNodos, ResultadoPivote, TicketAsincrono, Transaccion, ValorAgg } from './filas.schemas.js';
 import type { ColumnDef } from '../../../schemas/datagrid-types.schemas.js';
-import type { ColumnState, ContextoCelda, Decoracion, Desinstalar, FilaDisplay, GridApi, GridHost, GridState, ModeloFilas, RowData, RowNode } from '../contrato.js';
+import type { ColumnState, GridApi, GridState, RowData, RowNode } from '../../../schemas/datagrid-types.schemas.js';
+import type { ContextoCelda, Decoracion, Desinstalar, FilaDisplay, GridHost, ModeloFilas } from '../contrato.schemas.js';
 
 const ID_AUTO = 'ag-Grid-AutoColumn';
 const CLASE_TOGGLE = 'iswc-ag-arbol-toggle';

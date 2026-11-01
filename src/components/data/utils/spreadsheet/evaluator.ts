@@ -1,30 +1,13 @@
 // evaluator.ts — evalúa el árbol de una fórmula contra un `EvalHost`. No conoce el grafo ni el
 // DOM: el motor le entrega los valores y resuelve el orden.
-import type { Node } from './parser.js';
+import type { Node } from './parser.schemas.js';
 import { compare, CellError, ERR, LambdaValue, RefValue, toNumber, toText } from './values.js';
-import type { EvalValue, Matrix, Scalar } from './values.js';
+import type { EvalValue, Matrix, Scalar } from './values.schemas.js';
 import { lookupFn } from './functions/registry.js';
+import type { EvalHost, Env, Ctx } from './evaluator.schemas.js';
 
-/** Lo que el evaluador necesita del libro. */
-export interface EvalHost {
-  value(sheet: number, r: number, c: number): Scalar;
-  sheetId(name: string): number | null;
-  dims(sheet: number): { rows: number; cols: number };
-  used(sheet: number): { rows: number; cols: number };
-  name(name: string, sheet: number): Node | null;
-  spill(sheet: number, r: number, c: number): RefValue | null;
-  sheetName(sheet: number): string;
-  sheetCount(): number;
-  sheetIndex(sheet: number): number;
-  isFormula(sheet: number, r: number, c: number): boolean;
-  formulaText(sheet: number, r: number, c: number): string | null;
-}
 
-/** Variables de LET y LAMBDA. */
-export interface Env { vars: Map<string, EvalValue | undefined>; parent: Env | null }
 
-/** Contexto de evaluación. */
-export interface Ctx { host: EvalHost; sheet: number; r: number; c: number; env: Env | null; depth: number }
 
 const MAX_DEPTH = 256;
 

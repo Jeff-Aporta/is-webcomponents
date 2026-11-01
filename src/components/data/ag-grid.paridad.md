@@ -55,7 +55,7 @@ probo solo en las pruebas de cada parcela o no se probo en este pase.
 | Paginacion | core + `filtros` | hecho |
 | Arrastre de filas | gestionado en `edicion/filas-movidas` | parcial: sin zonas externas ni grilla a grilla |
 | Filas de ancho completo | `FilaExtra` del contrato | parcial |
-| Celdas: valores, formatos, tipos | `celdas/valores`, `celdas/formatos` | hecho |
+| Celdas: valores, formatos, tipos | `celdas/celdas-valores`, `celdas/formatos` | hecho |
 | Buscar en la grilla (Find) | `find*` | falta |
 | Notas | `notes*` | falta |
 | Resaltar cambios | `celdas/flash` | hecho |
@@ -79,7 +79,7 @@ probo solo en las pruebas de cada parcela o no se probo en este pase.
 | Agrupacion y agregacion | `filas/grupos` + pintado por columna | hecho |
 | Formulas | `formula*` | falta: `iswc-spreadsheet` cubre ese caso |
 | Pivote | `filas/pivote` | hecho |
-| Tree data | `filas/tree-data` | hecho |
+| Tree data | `filas/ag-tree-data` | hecho |
 | Master/detail | `filas` | hecho |
 | Side bar, menus, status bar | `filtros/ui`, `nucleo/menus` | hecho |
 | Toolbar de acceso rapido | toolbar propia | parcial |

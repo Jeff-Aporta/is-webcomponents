@@ -1,3 +1,4 @@
+// S-TS4: requisito de specs/typescript/spec.md (WHAT-first, ver specs/testing.md S-T6)
 // tests/shadow-css-scope.test.ts
 //
 // Detecta las dos formas de CSS MUERTO que ya se colaron en este repo. Las dos

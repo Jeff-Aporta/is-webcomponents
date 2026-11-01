@@ -3,7 +3,6 @@
  * adaptador de editores propios con la interfaz de AG Grid (init, getGui, ...).
  */
 import type { Editor, EntornoEditor, CrearEditor, ConValor, ConChecked, EstadoRico, EditorPropio } from './editores.schemas.js';
-export type * from './editores.schemas.js';
 import '../../../../forms/input.js';
 import '../../../../forms/textarea.js';
 import '../../../../forms/select.js';
@@ -20,9 +19,9 @@ import { normalizarOpciones } from './valores.js';
 import { pasoNumero } from './valores.js';
 import { redondear } from './valores.js';
 import { textoANumero } from './valores.js';
-import type { ColDefAg } from '../contrato.js';
-import type { GridHost } from '../contrato.js';
-import type { Parametros } from './apoyo.js';
+import type { ColDefAg } from '../contrato.schemas.js';
+import type { GridHost } from '../contrato.schemas.js';
+import type { Parametros } from './apoyo.schemas.js';
 import type { BusquedaLista } from './schemas/edicion.schemas.js';
 import type { OpcionLista } from './schemas/edicion.schemas.js';
 import type { ReglasValidacion } from './schemas/edicion.schemas.js';

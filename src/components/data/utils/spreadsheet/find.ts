@@ -2,12 +2,9 @@
 import type { SpreadsheetDoc } from './document.js';
 import { keyCol, keyRow } from './engine.js';
 import type { Sheet } from './engine.js';
+import type { FindOptions, FindHit } from './find.schemas.js';
 
-/** Opciones de búsqueda. */
-export interface FindOptions { matchCase?: boolean; wholeCell?: boolean; inFormulas?: boolean; allSheets?: boolean; regex?: boolean }
 
-/** Coincidencia. */
-export interface FindHit { sheet: Sheet; r: number; c: number; text: string }
 
 /** Regex de la consulta; null si no es válida. */
 function queryRegex(q: string, o: FindOptions, global: boolean): RegExp | null {

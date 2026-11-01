@@ -8,7 +8,7 @@
  */
 import { EstadoGrillaSchema } from './filas.schemas.js';
 import type { EstadoGrilla } from './filas.schemas.js';
-import type { ColumnState, GridState } from '../contrato.js';
+import type { ColumnState, GridState } from '../../../schemas/datagrid-types.schemas.js';
 
 export function leerEstado(s: GridState, extra: Partial<EstadoGrilla> = {}): EstadoGrilla {
   const columnas = s.columns;

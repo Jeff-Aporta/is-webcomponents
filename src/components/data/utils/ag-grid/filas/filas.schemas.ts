@@ -7,7 +7,7 @@
  */
 import { z } from 'zod';
 import type { FilterModel, RowData, RowNode, SortModel } from '../../../schemas/datagrid-types.schemas.js';
-import type { FilaDisplay } from '../contrato.js';
+import type { FilaDisplay } from '../contrato.schemas.js';
 
 /* ── Arbol de grupos ──────────────────────────────────────────────────── */
 

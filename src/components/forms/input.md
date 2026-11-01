@@ -298,3 +298,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-descri
 - [CSS](./input.scss)
 - [Índice de categoría](../../../specs/componentes.md)
 - [Preview](./input.json)
+
+## Tamaño
+
+`size="sm"` compacta el campo.

@@ -1,0 +1,120 @@
+:host {
+  display: block;
+  --iswc-tree-indent: 1em;
+  --iswc-tree-row-padding-y: .25em;
+  --iswc-tree-row-padding-x: .5em;
+  --iswc-tree-row-hover: color-mix(in srgb, var(--iswc-color-brand) 8%, transparent);
+  --iswc-tree-row-selected-bg: color-mix(in srgb, var(--iswc-color-brand) 18%, transparent);
+  --iswc-tree-row-selected-text: var(--iswc-text);
+}
+
+.tree {
+  display: block;
+  inline-size: 100%;
+}
+
+.items {
+  display: flex;
+  flex-direction: column;
+  gap: .0625em;
+}
+
+/* Esta hoja la adoptan los shadow de <iswc-tree> Y <iswc-tree-item>. Un selector
+   `iswc-tree-item …` no matchea en ninguno de los dos: desde el padre los items
+   entran slotted (el light DOM no lo alcanza un descendiente) y desde su propio
+   shadow el host queda fuera del árbol. Hay que nombrarlo con :host().
+   Lo vigila tests/shadow-css-scope.test.mjs. */
+:host(iswc-tree-item) {
+  display: block;
+
+  .row {
+    cursor: pointer;
+    user-select: none;
+  }
+}
+
+:host(iswc-tree-item:focus) { outline: none; }
+
+:host(iswc-tree-item:focus-visible) .row {
+  outline: 2px solid var(--iswc-focus);
+  outline-offset: 1px;
+}
+
+:host(iswc-tree-item[disabled]) .row {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: .25em;
+  padding: var(--iswc-tree-row-padding-y) var(--iswc-tree-row-padding-x);
+  border-radius: .375em;
+  transition: background 0.1s;
+
+  &:hover { background: var(--iswc-tree-row-hover); }
+}
+
+.expand-toggle {
+  font-size: 0.8333em;
+  inline-size: 1.5006em;
+  block-size: 1.5006em;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  color: inherit;
+  border-radius: .3001em;
+  transition: transform 0.15s;
+
+  /* Sin hijos conserva su columna: las etiquetas de un mismo nivel quedan alineadas. */
+  &[hidden] { display: inline-flex; visibility: hidden; }
+  &[aria-expanded="true"] { transform: rotate(90deg); }
+  &:hover { background: var(--iswc-control-bg-hover, rgb(255 255 255 / 8%)); }
+}
+
+/* Casilla solo con selección múltiple; en single y leaf la fila resaltada ya lo dice. */
+.checkbox {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  inline-size: 1.25em;
+  block-size: 1.25em;
+}
+
+:host([data-selection="multiple"]) .checkbox { display: inline-flex; }
+
+.icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: .8929em;
+  block-size: .8929em;
+  color: color-mix(in srgb, var(--iswc-text) 80%, transparent);
+
+  &[hidden] { display: none; }
+}
+
+.content {
+  flex: 1 1 auto;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.children {
+  padding-inline-start: var(--iswc-tree-indent);
+  display: flex;
+  flex-direction: column;
+  gap: .0625em;
+
+  &[hidden] { display: none; }
+}
+
+:host([selected]) .row {
+  background: var(--iswc-tree-row-selected-bg);
+  color: var(--iswc-tree-row-selected-text);
+}

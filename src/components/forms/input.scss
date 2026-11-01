@@ -287,3 +287,10 @@
     border-style: dashed;
   }
 }
+
+/* size="sm": control compacto; todo sigue en em. */
+:host([size="sm"]) {
+  --iswc-control-height: 2em;
+
+  font-size: 0.875em;
+}

@@ -10,10 +10,10 @@ import { createGridModel } from '../../src/components/data/utils/datagrid-core/g
 import { getCellValue, cellText } from '../../src/components/data/utils/datagrid-core/value-formatter.ts';
 import { agregarArbol, aplanarArbol, construirArbol, ordenarArbol, podarArbol } from '../../src/components/data/utils/ag-grid/filas/grupos.ts';
 import { pivotar, resolverIdPivote } from '../../src/components/data/utils/ag-grid/filas/pivote.ts';
-import { construirTree, filtrarTree } from '../../src/components/data/utils/ag-grid/filas/tree-data.ts';
+import { construirTree, filtrarTree } from '../../src/components/data/utils/ag-grid/filas/ag-tree-data.ts';
 import { aplicarLote, aplicarTransaccion } from '../../src/components/data/utils/ag-grid/filas/transacciones.ts';
 import { CacheBloques } from '../../src/components/data/utils/ag-grid/filas/cache-bloques.ts';
-import { crc32, zipComprimido, zipGuardado } from '../../src/components/data/utils/ag-grid/filas/zip.ts';
+import { crc32, zipComprimido, zipGuardado } from '../../src/components/data/utils/ag-grid/filas/ag-zip.ts';
 import { tablaACsv } from '../../src/components/data/utils/ag-grid/filas/exportar-csv.ts';
 import { crearEstilos, entradasLibro, hojaAXml, letraColumna, nombreHoja } from '../../src/components/data/utils/ag-grid/filas/exportar-excel.ts';
 import { fusionarEstado, leerEstado, omitirPropiedades, validarEstado } from '../../src/components/data/utils/ag-grid/filas/estado-grilla.ts';

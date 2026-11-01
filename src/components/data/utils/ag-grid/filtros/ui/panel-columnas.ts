@@ -6,7 +6,8 @@ import { arbolColumnas, filtrarArbolColumnas, hojasColumna } from '../resumen.js
 import { TEXTOS } from '../textos.js';
 import { boton, botonIcono, casilla, crear, fijarCasilla, icono, inputDe, selectDe } from './controles.js';
 import type { NodoColumna, SeccionColumnas } from '../filtros.schemas.js';
-import type { ColumnState, GridHost } from '../../contrato.js';
+import type { ColumnState } from '../../../../schemas/datagrid-types.schemas.js';
+import type { GridHost } from '../../contrato.schemas.js';
 
 const TIPO_ARRASTRE = 'application/x-is-col-id';
 const FUNCIONES_AGREGADO = ['sum', 'min', 'max', 'count', 'avg', 'first', 'last'];

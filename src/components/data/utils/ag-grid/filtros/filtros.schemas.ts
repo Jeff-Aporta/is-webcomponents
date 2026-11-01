@@ -6,7 +6,7 @@
  * opciones propias de filterOptions no son una lista cerrada.
  */
 import { z } from 'zod';
-import type { ColumnState, RowNode } from '../contrato.js';
+import type { ColumnState, RowNode } from '../../../schemas/datagrid-types.schemas.js';
 import type { PanelFiltro } from './ui/panel-filtro.js';
 
 export const OperadorUnionSchema = z.enum(['AND', 'OR']);

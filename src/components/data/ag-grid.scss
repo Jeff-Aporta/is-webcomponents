@@ -118,10 +118,12 @@
 
 .mim-dg__density {
   display: inline-flex;
-  gap: .143em;
+  align-items: center;
+  flex: none;
+  gap: 0;
+  overflow: hidden;
   border: 1px solid var(--iswc-grid-border);
-  border-radius: .429em;
-  padding: 1px;
+  border-radius: 999em;
   background: var(--iswc-bg-soft);
 }
 
@@ -139,8 +141,7 @@
 }
 
 .mim-dg__density-btn {
-  inline-size: 1.7em;
-  block-size: 1.7em;
+  margin: 0;
   /* Activo (lo pinta el JS con `iswc-active`) y hover comparten highlight. */
   &:is(.iswc-active, :hover) {
     background: color-mix(in srgb, var(--iswc-accent) 16%, transparent);

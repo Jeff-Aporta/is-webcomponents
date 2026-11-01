@@ -10,7 +10,8 @@ import { datosCsv } from './exportar.js';
 import { moverEn, crearPanelAgrupacion } from './panel-agrupacion.js';
 import type { DatasourceInfinito, EstadoGrilla, ExitoServidor, FuncionAgg, ParamsExport, RefrescoServidor, RutaServidor, Transaccion, TransaccionServidor, ResultadoNodos } from './filas.schemas.js';
 import type { ColumnDef } from '../../../schemas/datagrid-types.schemas.js';
-import type { ColumnState, ContextoMenu, Desinstalar, GridHost, ItemMenu } from '../contrato.js';
+import type { ColumnState } from '../../../schemas/datagrid-types.schemas.js';
+import type { ContextoMenu, Desinstalar, GridHost, ItemMenu } from '../contrato.schemas.js';
 
 export const nombre = 'filas';
 

@@ -1,0 +1,50 @@
+/* iswc-mention */
+:host {
+  display: inline-block;
+  font: inherit;
+  position: relative;
+}
+
+/* La caja, los estados y las variantes vienen de <iswc-input>. */
+:host([full-width]) { display: block; }
+
+.root { position: relative; display: block; }
+
+.popup {
+  position: absolute;
+  z-index: 30;
+  min-inline-size: 12em;
+  max-block-size: 14em;
+  overflow: auto;
+  border: 1px solid var(--iswc-border);
+  border-radius: var(--iswc-radius);
+  background: var(--iswc-bg-elev);
+  box-shadow: var(--iswc-shadow, 0 1.125em 2.75em rgba(0, 0, 0, 0.26));
+  padding: 0.25em;
+}
+
+.opt {
+  display: flex;
+  align-items: center;
+  gap: 0.35em;
+  inline-size: 100%;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  padding: 0.35em 0.5em;
+  font: inherit;
+  text-align: start;
+  border-radius: .375em;
+  cursor: pointer;
+
+  &.iswc-active,
+  &:hover {
+    background: color-mix(in srgb, var(--iswc-accent) 18%, transparent);
+    color: var(--iswc-accent);
+  }
+
+  .t {
+    color: var(--iswc-text-soft);
+    font-weight: 600;
+  }
+}

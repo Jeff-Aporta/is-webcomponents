@@ -6,8 +6,7 @@
  */
 
 import type { DefAplanada, GrupoCabecera } from './opciones.schemas.js';
-export type * from './opciones.schemas.js';
-import type { ColDefAg, OpcionesGrid } from '../contrato.js';
+import type { ColDefAg, OpcionesGrid } from '../contrato.schemas.js';
 
 /** Atributo del host → opcion. Los booleanos se activan por presencia. */
 export const ATRIBUTOS: Record<string, string> = {

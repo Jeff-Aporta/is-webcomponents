@@ -1,9 +1,8 @@
 // values.ts — valores del motor: errores, escalares, matrices, referencias y coerciones.
 
-/** Código de error de celda. */
-export type ErrorCode = '#REF!' | '#DIV/0!' | '#VALUE!' | '#NAME?' | '#N/A' | '#NUM!' | '#NULL!' | '#SPILL!' | '#CALC!' | '#CYCLE!';
 
 /** Error de celda. Se compara por identidad con las constantes de ERR. */
+import type { ErrorCode, Scalar, Matrix, EvalValue } from './values.schemas.ts';
 export class CellError {
   constructor(readonly code: ErrorCode) {}
   toString(): string { return this.code; }
@@ -23,11 +22,7 @@ export function errorFromCode(code: string): CellError | null {
   return BY_CODE.get(code.toUpperCase()) ?? null;
 }
 
-/** Valor de una celda. null es celda vacía. */
-export type Scalar = number | string | boolean | null | CellError;
 
-/** Matriz rectangular (fila, columna). */
-export type Matrix = Scalar[][];
 
 /** Referencia evaluada: rango de una hoja. */
 export class RefValue {
@@ -42,8 +37,6 @@ export class LambdaValue {
   constructor(readonly params: string[], readonly body: unknown, readonly env: unknown) {}
 }
 
-/** Resultado de evaluar una expresión. */
-export type EvalValue = Scalar | Matrix | RefValue | LambdaValue;
 
 /** Número desde texto, tal como lo coerciona una fórmula. NaN si no es número. */
 export function parseNumberText(t: string): number {

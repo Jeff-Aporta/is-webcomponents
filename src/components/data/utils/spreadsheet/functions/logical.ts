@@ -1,10 +1,10 @@
 // logical.ts — lógica, control de flujo perezoso, LET/LAMBDA e información de celdas.
 import { evalNode, callLambda } from '../evaluator.js';
-import type { Ctx, Env } from '../evaluator.js';
-import type { Node } from '../parser.js';
+import type { Ctx, Env } from '../evaluator.schemas.js';
+import type { Node } from '../parser.schemas.js';
 import { CellError, compare, ERR, LambdaValue, RefValue, toBool } from '../values.js';
-import type { EvalValue, Matrix, Scalar } from '../values.js';
-import { forEach, isArrayLike, lifted, matrix, scalar, str } from './helpers.js';
+import type { EvalValue, Matrix, Scalar } from '../values.schemas.js';
+import { forEach, isArrayLike, lifted, matrix, scalar, str } from './fn-helpers.js';
 import { def, defLazy } from './registry.js';
 
 const CAT = 'Lógica';

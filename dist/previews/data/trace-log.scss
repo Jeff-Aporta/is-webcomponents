@@ -1,0 +1,169 @@
+/* <iswc-trace-log> — log de un proceso: cabecera plegable y lista de eventos. */
+@use '../../styles/mixins' as *;
+
+:host {
+  @include papel;
+  display: block;
+  margin-block: 0.35em;
+  color: var(--iswc-text);
+  font-size: 0.82em;
+}
+
+:host([hidden]) { display: none !important; }
+
+.traza {
+  overflow: hidden;
+  border: 0.0625em solid var(--iswc-border);
+  border-radius: 0.5em;
+  background: var(--iswc-bg-elev);
+
+  &[data-estado="warn"] { border-color: color-mix(in srgb, var(--iswc-color-warning) 55%, var(--iswc-border)); }
+  &[data-estado="error"] { border-color: color-mix(in srgb, var(--iswc-color-danger) 65%, var(--iswc-border)); }
+}
+
+.cabecera {
+  display: flex;
+  align-items: center;
+  gap: 0.4em;
+  width: 100%;
+  padding: 0.35em 0.6em;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+
+  &:focus-visible {
+    outline: 0.125em solid var(--iswc-color-brand-strong);
+    outline-offset: -0.125em;
+  }
+}
+
+.titulo { font-weight: 600; }
+.resumen { opacity: 0.75; }
+.cuenta { font-size: 0.9em; }
+
+.vivo {
+  margin-inline-start: auto;
+  color: var(--iswc-success-text);
+  font-weight: 600;
+  animation: latido 1.2s ease-in-out infinite;
+}
+
+.barra {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.4em;
+  padding: 0.25em 0.6em;
+  border-block-start: 0.0625em solid var(--iswc-border);
+}
+
+.filtros {
+  display: flex;
+  gap: 0.25em;
+}
+
+.filtro,
+.copiar {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25em;
+  padding: 0.1em 0.55em;
+  border: 0.0625em solid var(--iswc-border);
+  border-radius: 999em;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+
+  &[aria-pressed="true"] {
+    border-color: var(--iswc-color-brand-strong);
+    background: var(--iswc-color-brand-strong);
+    color: var(--iswc-on-brand);
+  }
+}
+
+.eventos {
+  max-height: 22em;
+  margin: 0;
+  padding: 0.25em 0;
+  overflow: auto;
+  font-family: var(--iswc-mono);
+  list-style: none;
+}
+
+.evento {
+  display: grid;
+  grid-template-columns: 5.2em 1.2em 7.5em 1fr auto;
+  align-items: start;
+  gap: 0.4em;
+  padding: 0.12em 0.6em;
+
+  &[data-nivel="debug"] { opacity: 0.65; }
+  &[data-nivel="warn"] { color: var(--iswc-warning-text); }
+
+  &[data-nivel="error"] {
+    color: var(--iswc-danger-text);
+    font-weight: 600;
+  }
+
+  &[data-ultimo] { background: color-mix(in srgb, var(--iswc-color-success) 12%, transparent); }
+}
+
+.ms,
+.dur {
+  opacity: 0.7;
+  white-space: nowrap;
+}
+
+.etapa {
+  overflow: hidden;
+  opacity: 0.85;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mensaje { overflow-wrap: anywhere; }
+
+.datos {
+  grid-column: 3 / -1;
+
+  summary {
+    opacity: 0.7;
+    cursor: pointer;
+  }
+
+  pre {
+    max-height: 16em;
+    margin: 0.2em 0 0.3em;
+    padding: 0.4em 0.5em;
+    overflow: auto;
+    border-radius: 0.35em;
+    background: var(--iswc-code-bg);
+    color: var(--iswc-code-text);
+    overflow-wrap: anywhere;
+    white-space: pre-wrap;
+  }
+}
+
+.vacio {
+  padding: 0.3em 0.6em;
+  opacity: 0.7;
+}
+
+@media (max-width: 35em) {
+  .evento { grid-template-columns: 4.6em 1.2em 1fr auto; }
+  .etapa { display: none; }
+}
+
+@keyframes latido {
+  50% { opacity: 0.45; }
+}
+
+/* «En vivo» informa que el proceso sigue: con movimiento reducido late más lento, nunca quieto. */
+@media (prefers-reduced-motion: reduce) {
+  .vivo { animation-duration: 3.6s; }
+}

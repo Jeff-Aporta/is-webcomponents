@@ -2,11 +2,10 @@
 // valores viven en Map y arreglos propios, y solo alcanza lo que `builtins` le entrega. Presupuesto
 // de pasos, profundidad y tiempo para que una macro no cuelgue la página.
 import { MacroError } from './lexer.js';
-import { parseMacro } from './parser.js';
-import type { Expr, Stmt } from './parser.js';
+import { parseMacro } from './macro-parser.js';
+import type { Expr, Stmt } from './macro-parser.schemas.js';
+import type { MacroValue, Builtin, MacroLimits } from './interp.schemas.js';
 
-/** Valor de macro. */
-export type MacroValue = number | string | boolean | null | MacroValue[] | MacroDict | MacroFn;
 
 /** Diccionario de macro. */
 export class MacroDict {
@@ -18,11 +17,7 @@ export class MacroFn {
   constructor(readonly name: string, readonly params: string[], readonly body: Stmt[], readonly scope: Scope) {}
 }
 
-/** Función del anfitrión. */
-export type Builtin = (args: MacroValue[]) => MacroValue | void;
 
-/** Límites de ejecución. */
-export interface MacroLimits { steps?: number; depth?: number; ms?: number; listSize?: number }
 
 /** Ámbito léxico. */
 class Scope {

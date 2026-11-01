@@ -1,0 +1,92 @@
+/* iswc-dock — esta hoja la adoptan iswc-dock e iswc-dock-item; cada regla
+   de host debe ir tipada con :host(tag) para no filtrarse al otro. */
+
+:host(iswc-dock) {
+  display: block;
+  position: fixed;
+  inset-inline-start: 50%;
+  transform: translateX(-50%);
+  inset-block-end: 1em;
+  z-index: 50;
+}
+
+:host(iswc-dock[position="top"])    { inset-block-end: auto; inset-block-start: 1em; }
+:host(iswc-dock[position="left"])   { inset-block-end: 50%; inset-inline-start: 1em; inset-block-start: auto; transform: translateY(50%); }
+:host(iswc-dock[position="right"])  { inset-block-end: 50%; inset-inline-start: auto; inset-inline-end: 1em; inset-block-start: auto; transform: translateY(50%); }
+
+.root {
+  display: inline-flex;
+  align-items: end;
+  gap: .35em;
+  padding: .4em .55em;
+  border: 1px solid var(--iswc-border);
+  border-radius: 1.125em;
+  background:
+    linear-gradient(180deg,
+      color-mix(in srgb, var(--iswc-bg-elev) 96%, transparent),
+      color-mix(in srgb, var(--iswc-bg-elev) 80%, transparent));
+  backdrop-filter: blur(1em);
+  box-shadow: 0 1.125em 3.125em rgba(0,0,0,.32);
+}
+
+:host(iswc-dock[position="top"]) .root { align-items: start; }
+
+:host(iswc-dock-item) {
+  --scale: 1;
+  display: inline-flex;
+}
+
+.item {
+  --iswc-dock-scale-unit: var(--scale, 1);
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .25em;
+  padding: .3em;
+  border-radius: .75em;
+  text-decoration: none;
+  color: inherit;
+  transition: transform 120ms ease;
+  transform: scale(var(--iswc-dock-scale-unit));
+  transform-origin: center bottom;
+  cursor: pointer;
+
+  &:focus-visible { outline: 2px solid var(--iswc-focus); outline-offset: 2px; }
+
+  .ico {
+    inline-size: calc(2.1739em * var(--iswc-dock-scale-unit));
+    block-size: calc(2.1739em * var(--iswc-dock-scale-unit));
+    display: grid; place-items: center;
+    border-radius: .7609em;
+    background: color-mix(in srgb, var(--iswc-bg-soft) 80%, transparent);
+    border: 1px solid var(--iswc-border);
+    color: var(--iswc-text);
+    font-size: 1.15em;
+    box-shadow: 0 .2174em .7609em rgba(0,0,0,.18);
+    transition: background-color 120ms ease, color 120ms ease;
+  }
+
+  &:hover .ico {
+    background: color-mix(in srgb, var(--iswc-accent) 22%, var(--iswc-bg-soft));
+    color: var(--iswc-accent);
+  }
+
+  &.active .ico {
+    background: var(--iswc-accent);
+    color: var(--iswc-on-accent);
+    border-color: color-mix(in srgb, var(--iswc-accent) 60%, transparent);
+  }
+
+  .label {
+    font-size: .7em;
+    color: var(--iswc-text-soft);
+    max-inline-size: 8.5714em;
+    text-align: center;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    opacity: .85;
+  }
+
+  &:not([aria-label]) .label { display: none; }
+}

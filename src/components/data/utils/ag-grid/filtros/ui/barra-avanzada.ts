@@ -6,8 +6,8 @@ import { OPCIONES_DEFECTO } from '../condiciones.js';
 import { TEXTOS } from '../textos.js';
 import { boton, botonIcono, crear, inputDe, selectDe } from './controles.js';
 import type { ColumnaAvanzada, CondicionAvanzada, GrupoAvanzado, ModeloAvanzado } from '../filtros.schemas.js';
-import type { MotorFiltros } from '../motor.js';
-import type { Flotante, GridHost } from '../../contrato.js';
+import type { MotorFiltros } from '../filtros-motor.js';
+import type { Flotante, GridHost } from '../../contrato.schemas.js';
 
 function tipoDeColumna(tipo: unknown): string {
   if (tipo === 'number' || tipo === 'boolean') return tipo;

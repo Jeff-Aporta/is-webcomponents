@@ -37,6 +37,7 @@ Los jueces opcionales (semántica local, JEV, LLM): [12-jueces.md](12-jueces.md)
 | API / datos sin UI | controladores de cliente de la app (fachada tipada), nunca `fetch` a mano |
 | UI | Stagehand determinista: `scripts/gate/e2e/harness.ts` |
 | Estructura (anatomía, pines, tokens) | guardianes de fuente declarados como tales (`categoria: 'how'`) |
+| Los cuatro archivos de cada componente | `tests/vistas/contrato-componentes.test.ts`, que nace con la app y lee `kit-tags.ts` |
 
 ## E2E con Stagehand (`scripts/gate/e2e/`)
 

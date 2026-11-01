@@ -1,6 +1,7 @@
 /** Tipos de motor.ts. */
 
-import type { ColumnState, ContextoCelda, Decoracion, Desinstalar, FilaDisplay, PresentacionCelda, PresentacionFila, RendererMontable, RowNode } from '../contrato.js';
+import type { ColumnState, RowNode } from '../../../schemas/datagrid-types.schemas.js';
+import type { ContextoCelda, Decoracion, Desinstalar, FilaDisplay, PresentacionCelda, PresentacionFila, RendererMontable } from '../contrato.schemas.js';
 import type { crearMotor } from './motor.js';
 
 export type ColPos = { col: ColumnState; x: number; ancho: number; aria: number; };

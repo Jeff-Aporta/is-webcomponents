@@ -338,6 +338,36 @@ const API_MODULES = [
     resumen: 'SWR IndexedDB: vivo/leer/guardar/invalidar; no bloquea el pintado.',
   },
   {
+    id: 'ai/motores',
+    cdn: 'lib/ai/motores.min.js',
+    guia: 'https://github.com/Jeff-Aporta/iswc-root/blob/main/src/ai/ai.md',
+    resumen: 'IA en el navegador sin UI: ejecutar(herramienta, entrada); 13 motores runonweb fuera de los barriles.',
+  },
+  {
+    id: 'ai/descarga',
+    cdn: 'lib/ai/descarga.min.js',
+    guia: 'https://github.com/Jeff-Aporta/iswc-root/blob/main/src/ai/ai.md',
+    resumen: 'conDescarga: regla única para bajar un modelo (hasta 20 MB toast; más, modal); pospuesta, medidor.',
+  },
+  {
+    id: 'ai/vector-local',
+    cdn: 'lib/ai/vector-local.min.js',
+    guia: 'https://github.com/Jeff-Aporta/iswc-root/blob/main/src/ai/ai.md',
+    resumen: 'vectorLocal, cargarCorpus, ordenarPorSentido: buscar por significado con el modelo multilingüe; null si no está.',
+  },
+  {
+    id: 'ai/orden',
+    cdn: 'lib/ai/orden.min.js',
+    guia: 'https://github.com/Jeff-Aporta/iswc-root/blob/main/src/ai/ai.md',
+    resumen: 'ordenarAplanado: exactas primero, luego embeddings y léxico tolerante. Puro.',
+  },
+  {
+    id: 'ai/aplanado',
+    cdn: 'lib/ai/aplanado.min.js',
+    guia: 'https://github.com/Jeff-Aporta/iswc-root/blob/main/src/ai/ai.md',
+    resumen: 'Reducción de vectores: aplanar, abrirCorpus, empacar; ajustar (PCA/LDA) en aplanado-ajuste para el build.',
+  },
+  {
     id: 'sync-pins',
     cdn: 'scripts/sync-pins.mjs (repo)',
     guia: 'https://github.com/Jeff-Aporta/iswc-root/blob/main/scripts/sync-pins.mjs',

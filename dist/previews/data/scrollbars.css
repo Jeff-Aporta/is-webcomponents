@@ -14,7 +14,7 @@
  * pseudos en CADA nivel (host + descendientes) porque no hereda el color.
  */
 :host {
-  --iswc-scrollbar-size-fallback: 0.5rem;
+  --iswc-scrollbar-size-fallback: 0.5em;
   --iswc-scrollbar-thumb-fallback: color-mix(in srgb, #59636e 65%, transparent);
   --iswc-scrollbar-thumb-hover-fallback: color-mix(in srgb, #e03131 45%, #59636e);
   scrollbar-width: thin;

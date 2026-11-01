@@ -18,7 +18,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-docx-view height=\"14rem\"></iswc-docx-view>",
+          "html": "<iswc-docx-view height=\"14em\"></iswc-docx-view>",
           "controls": [
             {
               "control": "text",

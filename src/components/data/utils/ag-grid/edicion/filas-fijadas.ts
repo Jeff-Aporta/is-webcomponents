@@ -6,13 +6,13 @@
 import { apiPublica } from './apoyo.js';
 import { ladoPermitido } from './filas-movidas.js';
 import { partirFijadas } from './filas-movidas.js';
-import type { ContextoMenu } from '../contrato.js';
-import type { Desinstalar } from '../contrato.js';
-import type { FilaDisplay } from '../contrato.js';
-import type { GridHost } from '../contrato.js';
-import type { ItemMenu } from '../contrato.js';
-import type { RowData } from '../contrato.js';
-import type { RowNode } from '../contrato.js';
+import type { ContextoMenu } from '../contrato.schemas.js';
+import type { Desinstalar } from '../contrato.schemas.js';
+import type { FilaDisplay } from '../contrato.schemas.js';
+import type { GridHost } from '../contrato.schemas.js';
+import type { ItemMenu } from '../contrato.schemas.js';
+import type { RowData } from '../../../schemas/datagrid-types.schemas.js';
+import type { RowNode } from '../../../schemas/datagrid-types.schemas.js';
 import type { LadoFijado } from './schemas/edicion.schemas.js';
 import type { PermisoFijado } from './schemas/edicion.schemas.js';
 

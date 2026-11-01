@@ -18,7 +18,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-txt-view content=\"Hola desde content&#10;Linea 2\" height=\"12rem\"></iswc-txt-view>",
+          "html": "<iswc-txt-view content=\"Hola desde content&#10;Linea 2\" height=\"12em\"></iswc-txt-view>",
           "controls": [
             {
               "control": "text",

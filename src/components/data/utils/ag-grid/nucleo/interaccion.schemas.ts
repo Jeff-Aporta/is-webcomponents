@@ -1,6 +1,7 @@
 /** Tipos de interaccion.ts. */
 
-import type { ManejadorCelda, ManejadorTeclado, SelectionModeLocal } from './tipos.js';
+import type { ManejadorCelda, ManejadorTeclado } from '../contrato.schemas.js';
+import type { SelectionModeLocal } from './tipos.schemas.js';
 
 export type PuertosInteraccion = { modo: () => SelectionModeLocal; seleccionPropia: () => boolean; ordenar: (colId: string, ev: MouseEvent) => void; abrirFiltro: (colId: string, ancla: HTMLElement) => void; };
 

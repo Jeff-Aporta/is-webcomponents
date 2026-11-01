@@ -1,0 +1,65 @@
+/* <iswc-empty-state> — vacío, cargando o error, centrado. */
+@use '../../styles/mixins' as *;
+
+:host {
+  @include papel;
+  display: block;
+  min-width: 0;
+  font-family: var(--iswc-sans);
+}
+
+:host([hidden]) { display: none !important; }
+
+.caja {
+  display: grid;
+  justify-items: center;
+  gap: 0.5em;
+  padding: 2em 1em;
+  text-align: center;
+  color: var(--iswc-text);
+  background: var(--iswc-bg-soft);
+  border: 0.0625em dashed var(--iswc-border);
+  border-radius: var(--iswc-radius);
+
+  .icono {
+    font-size: 2.2em;
+    color: var(--iswc-brand-text);
+
+    &[hidden] { display: none; }
+  }
+
+  .titulo {
+    display: -webkit-box;
+    overflow: hidden;
+    color: var(--iswc-text);
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+
+  .texto {
+    display: -webkit-box;
+    margin: 0;
+    max-width: 36em;
+    overflow: hidden;
+    color: var(--iswc-text-dim);
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: var(--iswc-empty-state-lineas, 3);
+
+    &[hidden] { display: none; }
+  }
+
+  /* El TS la oculta sin acción: la fila no reserva su hueco y la caja queda centrada. */
+  .accion {
+    margin-block-start: 0.25em;
+
+    &[hidden] { display: none; }
+  }
+
+  &[data-variante="tarjeta"] {
+    border-style: solid;
+    background: var(--iswc-bg-elev);
+    box-shadow: var(--iswc-shadow);
+  }
+
+  &[data-estado="error"] .icono { color: var(--iswc-danger-text); }
+}

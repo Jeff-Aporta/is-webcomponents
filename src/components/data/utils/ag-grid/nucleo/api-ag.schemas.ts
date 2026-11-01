@@ -1,6 +1,6 @@
 /** Tipos de api-ag.ts. */
 
-import type { ColumnState, RowData } from '../contrato.js';
+import type { ColumnState, RowData } from '../../../schemas/datagrid-types.schemas.js';
 
 export type Colref = string | ColumnState;
 

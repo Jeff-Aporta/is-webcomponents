@@ -1,18 +1,15 @@
 // conditional.ts — evaluación de formato condicional por celda, con memoria por recálculo.
 import { parseRange } from './address.js';
-import type { Rect } from './address.js';
+import type { Rect } from './address.schemas.js';
 import type { SpreadsheetDoc } from './document.js';
 import type { Sheet } from './engine.js';
 import { shiftFormula } from './rewrite.js';
 import { CellError, compare, toBool } from './values.js';
-import type { Scalar } from './values.js';
+import type { Scalar } from './values.schemas.js';
 import type { CfRule, CfStyle } from '../../schemas/spreadsheet.schemas.js';
+import type { CfEffect, RangeStats } from './conditional.schemas.js';
 
-/** Efecto visual de las reglas sobre una celda. */
-export interface CfEffect extends CfStyle { bar?: { pct: number; color: string }; icon?: string; iconColor?: string }
 
-/** Estadísticas de un rango. */
-interface RangeStats { nums: number[]; min: number; max: number; avg: number; counts: Map<string, number> }
 
 const ICONS = {
   arrows: ['mdi:arrow-down-bold', 'mdi:arrow-right-bold', 'mdi:arrow-up-bold'],

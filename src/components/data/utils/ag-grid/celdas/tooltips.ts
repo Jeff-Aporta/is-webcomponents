@@ -7,12 +7,12 @@
  */
 
 import type { Funcion, Reloj, Fase } from './tooltips.schemas.js';
-export type * from './tooltips.schemas.js';
-import type { ColumnState, ColDefAg, Flotante, GridHost, Rect, RefCelda, RowNode } from '../contrato.js';
+import type { ColumnState, RowNode } from '../../../schemas/datagrid-types.schemas.js';
+import type { ColDefAg, Flotante, GridHost, Rect, RefCelda } from '../contrato.schemas.js';
 import { escaparHtml } from './html.js';
 import type { ParamsCelda } from './schemas.js';
 import { contextoCelda } from './contexto.js';
-import { leerRuta, paramsCelda } from './valores.js';
+import { leerRuta, paramsCelda } from './celdas-valores.js';
 
 
 export const SHOW_MS = 2000;

@@ -1,39 +1,21 @@
 // dialogs.ts — diálogos de la hoja, con controles del kit. Cada función arma su cuerpo y su acción;
 // el componente solo aporta el `iswc-dialog` y el contexto.
 import { cellName, colName, parseCell, parseRange, rangeName } from '../address.js';
-import type { Rect } from '../address.js';
-import type { SpreadsheetDoc, SortKey } from '../document.js';
+import type { Rect } from '../address.schemas.js';
+import type { SpreadsheetDoc } from '../document.js';
+import type { SortKey } from '../document.schemas.js';
 import type { Sheet } from '../engine.js';
 import { findAll, replaceAll } from '../find.js';
-import type { FindHit } from '../find.js';
-import { allFunctions, aliasOf } from '../functions/index.js';
+import type { FindHit } from '../find.schemas.js';
+import { allFunctions, aliasOf } from '../functions/registry.js';
 import { formatValue, NUMBER_FORMATS } from '../numfmt.js';
 import { signatureParts } from './formula-assist.js';
 import { esc } from './render.js';
 import type { BorderSide, CellStyle, CfRule, ValidationRule } from '../../../schemas/spreadsheet.schemas.js';
+import type { Fields, DialogSpec, DialogHost } from './dialogs.schemas.js';
 
-/** Lectura de campos de un diálogo. */
-export type Fields = { get(name: string): string; on(name: string): boolean; root: HTMLElement };
 
-/** Opciones de apertura de un diálogo. */
-export interface DialogSpec { title: string; body: string; okLabel?: string; wide?: boolean; hideOk?: boolean; onOk?: (f: Fields) => boolean | void; onOpen?: (f: Fields) => void }
 
-/** Lo que los diálogos usan del componente. */
-export interface DialogHost {
-  doc: SpreadsheetDoc;
-  sheet(): Sheet;
-  rects(): Rect[];
-  rect(): Rect;
-  active(): { r: number; c: number };
-  open(spec: DialogSpec): void;
-  close(): void;
-  toast(msg: string): void;
-  refresh(): void;
-  select(sheet: Sheet, r: number, c: number): void;
-  selectRect(x: Rect): void;
-  insertAtEditor(text: string): void;
-  record(fn: string, ...args: (string | number | boolean | null | Record<string, string | number | boolean>)[]): void;
-}
 
 /** Campo de texto. */
 export const input = (name: string, label: string, value = '', hint = ''): string => `<iswc-input data-f="${name}" label="${esc(label)}" value="${esc(value)}"${hint ? ` hint="${esc(hint)}"` : ''}></iswc-input>`;

@@ -1,8 +1,7 @@
 // xml.ts — lector XML mínimo para OOXML: etiquetas, atributos y texto, sin DOM.
 
-/** Nodo XML. El nombre conserva el prefijo solo si no es el espacio por defecto. */
-export interface XNode { name: string; attrs: Record<string, string>; children: XNode[]; text: string }
 
+import type { XNode } from './xml.schemas.ts';
 const ENTITIES: Record<string, string> = { amp: '&', lt: '<', gt: '>', quot: '"', apos: "'" };
 
 /** Decodifica entidades. */

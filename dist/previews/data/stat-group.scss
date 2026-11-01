@@ -1,0 +1,58 @@
+/* <iswc-stat-group> — rejilla de iswc-stat. Cada app le da su aire con las custom properties. */
+:host {
+  --_radius: var(--iswc-stat-group-radius, 0.75em);
+  display: block;
+  min-width: 0;
+  font-family: var(--iswc-sans);
+}
+
+:host([hidden]) { display: none !important; }
+
+.rejilla { gap: 0.75em; }
+
+.esqueleto {
+  height: 6.5em;
+  border-radius: var(--_radius);
+}
+
+.kpi {
+  position: relative;
+  border-radius: var(--_radius);
+  box-shadow: var(--iswc-stat-group-shadow, none);
+
+  &::part(base) {
+    box-sizing: border-box;
+    height: 100%;
+    border: 0.0625em solid var(--iswc-stat-group-border, var(--iswc-border));
+    border-radius: var(--_radius);
+    background: var(--iswc-stat-group-tint, none), var(--iswc-bg-elev);
+  }
+
+  &::part(label) {
+    font-size: 0.72em;
+    font-weight: 650;
+    letter-spacing: 0.07em;
+    opacity: 0.75;
+    text-transform: uppercase;
+  }
+
+  &::part(value) {
+    font-family: var(--iswc-stat-group-value-font, inherit);
+    font-size: 1.55em;
+    font-weight: 700;
+    letter-spacing: var(--iswc-stat-group-value-spacing, normal);
+    text-shadow: var(--iswc-stat-group-value-glow, none);
+  }
+
+  &::part(icon) { color: var(--iswc-brand-text); }
+}
+
+@media (max-width: 36em) {
+  .rejilla { gap: 0.5em; }
+
+  .kpi {
+    &::part(base) { padding: 0.75em; }
+    &::part(value) { font-size: 1.05em; }
+    &::part(helper) { font-size: 0.8em; }
+  }
+}

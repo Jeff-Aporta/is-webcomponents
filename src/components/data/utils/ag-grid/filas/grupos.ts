@@ -10,7 +10,7 @@
  */
 import type { Acumulado, CriterioGrupo, FuncionAgg, NivelGrupo, NodoArbol, OpcionesAgg, OpcionesAplanar, PosicionTotal, ValorAgg } from './filas.schemas.js';
 import type { RowNode } from '../../../schemas/datagrid-types.schemas.js';
-import type { FilaDisplay } from '../contrato.js';
+import type { FilaDisplay } from '../contrato.schemas.js';
 
 export const ID_RAIZ = 'ROOT_NODE_ID';
 export const PREFIJO_TOTAL = 'rowGroupFooter_';

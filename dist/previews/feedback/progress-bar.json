@@ -29,7 +29,7 @@
           "kind": "demo",
           "html": [
             "<div class=\"pb-demo\">",
-            "            <iswc-progress-bar id=\"pb-play\" value=\"65\" label=\"Subiendo archivo\"></iswc-progress-bar>",
+            "            <iswc-progress-bar id=\"pb-play\" value=\"65\" label=\"Subiendo archivo\">Subiendo 13 de 20</iswc-progress-bar>",
             "          </div>"
           ],
           "target": "#pb-play",
@@ -51,6 +51,18 @@
               "control": "boolean",
               "prop": "attr:indeterminate",
               "label": "Indeterminada"
+            },
+            {
+              "control": "select",
+              "prop": "attr:color",
+              "label": "Color",
+              "options": [
+                "brand",
+                "info",
+                "success",
+                "warning",
+                "danger"
+              ]
             }
           ]
         }
@@ -163,6 +175,12 @@
           {
             "name": "<code>--indicator-color</code>",
             "desc": "Color del fill"
+          },
+          {
+            "name": "<code>color</code>",
+            "type": "brand | info | success | warning | danger",
+            "default": "brand",
+            "desc": "Color de la barra."
           }
         ]
       },

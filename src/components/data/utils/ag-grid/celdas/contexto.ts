@@ -4,9 +4,9 @@
  */
 
 import type { RegistroRenderers, Seleccion, Funcion } from './contexto.schemas.js';
-export type * from './contexto.schemas.js';
-import type { ColDefAg, ColumnState, ContextoCelda, GridHost, RendererCelda, RendererMontable, RowNode } from '../contrato.js';
-import { paramsCelda } from './valores.js';
+import type { ColDefAg, ContextoCelda, GridHost, RendererCelda, RendererMontable } from '../contrato.schemas.js';
+import type { ColumnState, RowNode } from '../../../schemas/datagrid-types.schemas.js';
+import { paramsCelda } from './celdas-valores.js';
 
 
 export function contextoCelda(grid: GridHost, col: ColumnState, node: RowNode, rowIndex: number): ContextoCelda {

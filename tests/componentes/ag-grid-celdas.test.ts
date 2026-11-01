@@ -6,9 +6,9 @@
 import assert from 'node:assert/strict';
 
 import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
-import type { ContextoCelda, GridHost } from '../../src/components/data/utils/ag-grid/contrato.ts';
+import type { ContextoCelda, GridHost } from '../../src/components/data/utils/ag-grid/contrato.schemas.ts';
 import { compilarExpresion, evaluarExpresion } from '../../src/components/data/utils/ag-grid/celdas/expresion.ts';
-import { escribirValor, formatearValor, inferirTipo, lectores, leerRuta, leerValor, parsearValor, textoExportacion, tipoDe } from '../../src/components/data/utils/ag-grid/celdas/valores.ts';
+import { escribirValor, formatearValor, inferirTipo, lectores, leerRuta, leerValor, parsearValor, textoExportacion, tipoDe } from '../../src/components/data/utils/ag-grid/celdas/celdas-valores.ts';
 import { aFecha, fmtFecha, fmtMoneda, fmtNumero, fmtPorcentaje } from '../../src/components/data/utils/ag-grid/celdas/formatos.ts';
 import { htmlSparkline, normalizarSerie } from '../../src/components/data/utils/ag-grid/celdas/spark.ts';
 import { RENDERERS } from '../../src/components/data/utils/ag-grid/celdas/renderers.ts';

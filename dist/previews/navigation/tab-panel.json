@@ -1,5 +1,6 @@
 {
   "$schema": "iswc-preview/v1",
+  "anatomy": { "scss": "tab-group.scss" },
   "tag": "iswc-tab-panel",
   "category": "navigation",
   "title": "&lt;iswc-tab-panel&gt;",

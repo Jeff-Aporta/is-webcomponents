@@ -35,8 +35,38 @@
     {
       "id": "intro",
       "title": "Uso",
-      "lede": "Data grid estilo <strong>ag-grid.com</strong> pero vanilla web component: orden por columna, filtros, paginación, selección, edición y virtual scroll.",
+      "lede": "Data grid con el comportamiento de <strong>AG Grid</strong> como web component propio: renderers, tiempo real, filtros, rangos, edición, agrupación, pivote, árbol y modelos server-side.",
       "blocks": []
+    },
+    {
+      "id": "financiero",
+      "title": "Tabla financiera",
+      "lede": "Celdas ricas por <code>cellRenderer</code>: logo + ticker, sparkline de barras, delta con flecha, pills, moneda y rating. Cabeceras agrupadas, columna fijada, filtros flotantes, side bar y barra de estado.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": [
+            "<iswc-ag-grid id=\"grid-financiero\" selectable preset=\"financiero\" style=\"height: 34em\"></iswc-ag-grid>"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tiempo-real",
+      "title": "Tiempo real",
+      "lede": "<code>applyTransaction</code> con parpadeo de celda: las filas conservan su DOM, solo cambia lo que cambió. El orden y los filtros animan el movimiento.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": [
+            "<iswc-ag-grid id=\"grid-tiempo-real\" style=\"height: 26em\"></iswc-ag-grid>",
+            "<div class=\"grid-cta\" style=\"margin-top:.75rem\">",
+            "  <button id=\"btnTick\">Iniciar / detener</button>",
+            "  <button id=\"btn100k\">Cargar 100.000 filas</button>",
+            "</div>"
+          ]
+        }
+      ]
     },
     {
       "id": "basico",
@@ -286,7 +316,7 @@
             "  sortable, resizable, hide, filterType (text|number|date|set)",
             "  rowGroup, enableRowGroup, aggFunc (sum|avg|min|max|count|first|last)",
             "  cellStyle (objeto CSS)",
-            "  editable (true = prompt)",
+            "  editable (editor por tipo: cellEditor)",
             "  type, decimals, format, currency, dateFormat",
             "  enumColors (map valor → color CSS)",
             "  actions ([{ icon, label, value }, …])   type=actions",
@@ -304,7 +334,7 @@
   "ficha": {
     "sections": {
       "anatomia": {
-        "content": "Data grid estilo <strong>ag-grid.com</strong> pero vanilla web component: orden por columna, filtros, paginación, selección, edición y virtual scroll."
+        "content": "Un viewport con scroll nativo aloja la zona sticky de encabezados y el cuerpo virtualizado. Cada fila tiene tres secciones: izquierda y derecha fijas, centro con columnas virtualizadas. Alrededor van toolbar, panel de agrupación, side bar y barra de estado."
       }
     },
     "exclude": [

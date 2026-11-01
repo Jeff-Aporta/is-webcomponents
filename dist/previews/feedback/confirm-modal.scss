@@ -1,0 +1,92 @@
+@use '../../styles/mixins' as *;
+:host {
+  display: contents;
+}
+
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  display: grid;
+  place-items: center;
+  /* Top layer: anula el chrome de popover del navegador. */
+  width: auto;
+  height: auto;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  border: 0;
+  color: inherit;
+  overflow: auto;
+  padding: 1em;
+  @include velo;
+  animation: confirm-backdrop-in 0.14s ease-out;
+
+  &[hidden] { display: none; }
+}
+
+.modal {
+  --iswc-confirm-modal-bg: var(--iswc-bg-elev);
+  --iswc-confirm-modal-text: var(--iswc-text);
+  --iswc-confirm-modal-border: var(--iswc-border);
+
+  @include papel;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  max-block-size: calc(100dvh - 2em);
+  background: var(--iswc-confirm-modal-bg);
+  color: var(--iswc-confirm-modal-text);
+  border: 1px solid var(--iswc-confirm-modal-border);
+  border-radius: .7065em;
+  padding: 1.1957em 1.3043em;
+  min-width: min(19.0217em, 100%);
+  max-width: min(28.5326em, 92vw);
+  box-shadow:
+    0 .9511em 2.8533em color-mix(in srgb, #000 32%, transparent),
+    0 .2038em .6793em color-mix(in srgb, #000 18%, transparent);
+  font-size: 0.92em;
+  animation: confirm-modal-in 0.16s ease-out;
+}
+
+.heading {
+  margin: 0 0 0.45em;
+  font-size: 1.087em;
+  font-weight: 700;
+
+  &[hidden] { display: none; }
+}
+
+.message {
+  margin-bottom: .9783em;
+  min-block-size: 0;
+  overflow-y: auto;
+  overflow-wrap: anywhere;
+  line-height: 1.45;
+  color: var(--iswc-text-soft, var(--iswc-confirm-modal-text));
+}
+
+/* Los saltos de línea del atributo message se respetan: listas cortas sin HTML. */
+.message-text { white-space: pre-line; }
+
+.actions {
+  display: flex;
+  flex: none;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: .5435em;
+}
+
+@keyframes confirm-backdrop-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes confirm-modal-in {
+  from { opacity: 0; transform: translateY(.5435em) scale(0.97); }
+  to { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .backdrop, .modal { animation: none; }
+}

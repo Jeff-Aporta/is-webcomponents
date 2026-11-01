@@ -1,3 +1,4 @@
+// S-I3: requisito de specs/iconos.md (WHAT-first, ver specs/testing.md S-T6)
 // tests/icon-currentcolor.test.ts
 //
 // Verifica que <iswc-icon> inyecta el SVG **inline** en su Shadow DOM y que

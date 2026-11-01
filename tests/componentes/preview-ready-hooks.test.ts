@@ -81,8 +81,8 @@ test('componentes/preview-ready-hooks', async () => {
     const explicita = tagDocDemo.match(/\bpage-modules="([^"]*)"/)?.[1];
     const cargado = explicita != null ? explicita.split(/[,\s]+/).includes(mod) : defaults.includes(`'${mod}'`);
     if (!cargado) failures.push(`index.html: <iswc-doc-demo> no carga el módulo ${mod}`);
-    if (!new RegExp(`\\['${mod}',\\s*\\{\\s*href:\\s*'dist/scripts/${mod}\\.min\\.js'`).test(loaderSrc)) {
-      failures.push(`loader.ts: ${mod} debe resolverse a dist/scripts/${mod}.min.js`);
+    if (!new RegExp(`\\['${mod}',\\s*\\{\\s*href:\\s*'cdn:\.\./scripts/${mod}\\.min\\.js'`).test(loaderSrc)) {
+      failures.push(`loader.ts: ${mod} debe resolverse a cdn:../scripts/${mod}.min.js`);
     }
   }
   for (const [rel, ruta] of [

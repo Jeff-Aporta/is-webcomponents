@@ -1,0 +1,185 @@
+@use 'utils/tokens';
+
+/* ============ <iswc-kanban> ============ */
+:host {
+  display: block;
+  --accent: var(--brand);
+}
+
+.board {
+  display: flex;
+  gap: 0.75em;
+  overflow-x: auto;
+  padding: 0.5em;
+  min-block-size: 25em;
+}
+
+::slotted(iswc-kanban-column) {
+  flex: 0 0 17.5em;
+  min-block-size: 25em;
+}
+
+/* orientation="row": stacks apilados en filas, cada lane fluye horizontal. */
+:host([orientation="row"]) {
+  .board {
+    flex-direction: column;
+    min-block-size: 0;
+    overflow-x: visible;
+  }
+  ::slotted(iswc-kanban-column) {
+    flex: 0 0 auto;
+    min-block-size: 0;
+    inline-size: 100%;
+  }
+}
+
+/* Feedback de drag & drop */
+::slotted(iswc-kanban-card.iswc-dragging) { opacity: 0.45; }
+
+/* ============ <iswc-kanban-column> ============ */
+.column {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 0.75em;
+  display: flex;
+  flex-direction: column;
+  border-block-start: .1875em solid var(--accent);
+  max-block-size: 37.5em;
+  &.drop-target {
+    outline: 2px dashed var(--accent);
+    outline-offset: -2px;
+  }
+}
+
+.col-head {
+  display: flex;
+  align-items: center;
+  gap: .5263em;
+  padding: .7895em;
+  border-block-end: 1px solid var(--border);
+  font-size: 0.95em;
+  font-weight: 600;
+}
+
+.title {
+  flex: 1 1 auto;
+}
+
+.badge {
+  background: color-mix(in srgb, var(--accent) 25%, transparent);
+  color: var(--iswc-brand-text);
+  padding: 0.125em 0.5em;
+  border-radius: 999em;
+  font-size: 0.75em;
+  font-weight: 500;
+}
+
+.actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25em;
+}
+
+.lane {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  padding: 0.5em 0.75em;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+}
+
+/* Columna dentro de un board orientation="row": las cards fluyen en fila. */
+:host([data-orientation="row"]) {
+  .column { max-block-size: none; }
+  .lane {
+    flex-direction: row;
+    flex-wrap: wrap;
+    overflow-y: visible;
+    ::slotted(iswc-kanban-card) { flex: 0 0 16.25em; }
+  }
+  ::slotted(iswc-kanban-card) { flex: 0 0 16.25em; }
+}
+
+.col-foot {
+  padding: 0.5em 0.75em;
+  border-block-start: 1px solid var(--border);
+}
+
+/* ============ <iswc-kanban-card> ============ */
+.card {
+  background: var(--iswc-bg);
+  border: 1px solid var(--border);
+  border-radius: 0.5em;
+  padding: 0.75em;
+  cursor: pointer;
+  transition: border-color 0.15s, transform 0.15s, box-shadow 0.2s;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+
+  &:hover {
+    border-color: color-mix(in srgb, var(--accent) 50%, var(--border));
+    transform: translateY(-.0625em);
+    box-shadow: 0 .25em .5em rgb(0 0 0 / 18%);
+  }
+
+  &.no-shadow { box-shadow: none; }
+}
+
+.cover {
+  block-size: 5em;
+  background-size: cover;
+  background-position: center;
+  border-radius: 0.375em;
+  margin: -0.75em -0.75em 0;
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+}
+
+.heading {
+  font-weight: 600;
+  font-size: 0.95em;
+  flex: 1 1 auto;
+  line-height: 1.3;
+}
+
+.tag {
+  font-size: 0.7em;
+  padding: .1786em .7143em;
+  border-radius: 999em;
+  background: color-mix(in srgb, var(--fg) 8%, transparent);
+  color: var(--muted);
+  /* Variantes semánticas: el `data-color` lo aplica el JS. Se mantienen
+     como cuatro reglas planas porque tanto el color como el mix cambian. */
+  &[data-color="brand"]   { background: color-mix(in srgb, var(--brand) 25%, transparent);   color: var(--iswc-brand-text); }
+  &[data-color="success"] { background: color-mix(in srgb, var(--success) 25%, transparent); color: var(--iswc-success-text); }
+  &[data-color="warning"] { background: color-mix(in srgb, var(--warning) 25%, transparent); color: var(--iswc-warning-text); }
+  &[data-color="danger"]  { background: color-mix(in srgb, var(--danger) 25%, transparent);  color: var(--iswc-danger-text); }
+}
+
+.meta {
+  font-size: 0.8em;
+  color: var(--muted);
+}
+
+.content {
+  font-size: 0.85em;
+  color: color-mix(in srgb, var(--fg) 80%, transparent);
+  line-height: 1.4;
+}
+
+.footer {
+  font-size: 0.8em;
+  display: flex;
+  align-items: center;
+  gap: .625em;
+  color: var(--muted);
+  border-block-start: 1px solid var(--border);
+  padding-block-start: .625em;
+  margin-block-start: .3125em;
+}

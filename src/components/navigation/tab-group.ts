@@ -20,6 +20,7 @@ import { readUrlNav, readUrlTabs, writeUrlNav, writeUrlTab } from './utils/url-n
  *   placement     top | bottom | start | end  (default 'top')
  *   activation    auto | manual (default 'auto')
  *   without-scroll-controls  boolean (default false)
+ *   size          sm = pestañas compactas (sin el atributo, escalan con el font-size)
  *   url-key       string   — opt-in: persiste el tab activo en `?s=` como
  *                            `{ [url-key]: panel }` (b64url JSON). Vacío = off.
  *                            Nunca crea query params sueltos.

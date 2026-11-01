@@ -3,7 +3,6 @@
  * eventos nativos copy/cut/paste, que no piden permiso; la API usa navigator.clipboard.
  */
 import type { Procesador, ParametrosCopia } from './portapapeles-ctl.schemas.js';
-export type * from './portapapeles-ctl.schemas.js';
 import { colsVisibles } from './apoyo.js';
 import { esEditable } from './apoyo.js';
 import { nodoDeFila } from './apoyo.js';
@@ -16,10 +15,10 @@ import { desdeTexto } from './portapapeles.js';
 import { celda as rangoCelda } from './rangos.js';
 import { cuantasCeldas } from './rangos.js';
 import { textoAValor } from './valores.js';
-import type { ColumnState } from '../contrato.js';
-import type { Desinstalar } from '../contrato.js';
-import type { GridHost } from '../contrato.js';
-import type { RowNode } from '../contrato.js';
+import type { ColumnState } from '../../../schemas/datagrid-types.schemas.js';
+import type { Desinstalar } from '../contrato.schemas.js';
+import type { GridHost } from '../contrato.schemas.js';
+import type { RowNode } from '../../../schemas/datagrid-types.schemas.js';
 import type { Escritor } from './escritor.js';
 import type { Rango } from './schemas/edicion.schemas.js';
 import type { SeleccionRangos } from './seleccion-rangos.js';

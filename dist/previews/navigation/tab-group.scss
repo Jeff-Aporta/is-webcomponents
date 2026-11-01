@@ -1,0 +1,184 @@
+/* <iswc-tab-group>, <iswc-tab>, <iswc-tab-panel>. */
+
+:host {
+  --iswc-tab-group-track-color: var(--iswc-border, rgba(255, 255, 255, 0.2));
+  --iswc-tab-group-indicator-color: var(--iswc-color-brand);
+  --iswc-tab-group-track-width: 2px;
+
+  display: block;
+  font-family: var(--iswc-font-family, inherit);
+}
+
+.tg { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--iswc-tab-group-gap, 0.5em); }
+
+:host([size="sm"]) {
+  --iswc-tab-padding: 0.3em 0.6em;
+
+  font-size: 0.875em;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 0.25em;
+  position: relative;
+  border-color: var(--iswc-tab-group-track-color);
+}
+
+.tabs {
+  display: flex;
+  flex: 1 1 auto;
+  overflow-x: auto;
+  scrollbar-width: none;
+  gap: 0.25em;
+
+  &::-webkit-scrollbar { display: none; }
+}
+
+:host(:where([placement="top"], [placement="bottom"])) {
+  .tg { grid-template-rows: auto 1fr; }
+}
+:host([placement="top"]) .nav {
+  border-block-end: var(--iswc-tab-group-track-width) solid var(--iswc-tab-group-track-color);
+}
+:host([placement="bottom"]) .nav {
+  border-block-start: var(--iswc-tab-group-track-width) solid var(--iswc-tab-group-track-color);
+}
+:host(:where([placement="start"], [placement="end"])) {
+  .tg { grid-template-columns: auto minmax(0, 1fr); }
+}
+:host([placement="start"]) .nav {
+  border-inline-end: var(--iswc-tab-group-track-width) solid var(--iswc-tab-group-track-color);
+  flex-direction: column;
+}
+:host([placement="end"]) .nav {
+  border-inline-start: var(--iswc-tab-group-track-width) solid var(--iswc-tab-group-track-color);
+  flex-direction: column;
+}
+:host(:where([placement="start"], [placement="end"])) .tabs {
+  flex-direction: column;
+  overflow-x: hidden;
+  overflow-y: auto;
+  inline-size: 12em;
+}
+
+.scroll {
+  flex: 0 0 auto;
+  inline-size: 1.75em;
+  block-size: 1.75em;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  background: transparent;
+  border: 1px solid var(--iswc-border);
+  border-radius: calc(var(--iswc-radius));
+  cursor: pointer;
+  color: var(--iswc-text-muted);
+
+  &[hidden] { display: none; }
+}
+
+.body { min-block-size: 0; }
+
+/* <iswc-tab>
+ * Esta hoja la adopta cada shadow root por separado (adopt-css.js), así que
+ * las reglas del tab viven en el shadow del PROPIO <iswc-tab>: ahí el host no
+ * se alcanza con un descendiente `iswc-tab ...`, solo con `:host(iswc-tab)`.
+ * Desde el shadow de <iswc-tab-group> tampoco valdría: los tabs van slotted. */
+:host(iswc-tab) {
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+  position: relative;
+
+  /* El indicador es el <span class="indicator"> del template, no un ::after
+     sobre el host: el host queda fuera del alcance del selector aquí. */
+  .indicator {
+    display: none;
+    position: absolute;
+    background: var(--iswc-tab-group-indicator-color);
+    border-radius: .125em;
+  }
+
+  .tab-start, .tab-end {
+    display: inline-flex;
+    align-items: center;
+
+    &:empty { display: none; }
+  }
+
+  .tab {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4em;
+    padding: var(--iswc-tab-padding, 0.55em 0.9em);
+    background: transparent;
+    border: 0;
+    font: inherit;
+    color: var(--iswc-text-muted);
+    cursor: inherit;
+    border-radius: calc(var(--iswc-radius));
+    transition: color 120ms ease, background 120ms ease;
+    position: relative;
+  }
+
+  .tab-close {
+    inline-size: 1.2em;
+    block-size: 1.2em;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    background: transparent;
+    border: 0;
+    border-radius: 999em;
+    cursor: pointer;
+    color: inherit;
+    opacity: 0.6;
+    transition: opacity 120ms ease, background 120ms ease;
+
+    &:hover { opacity: 1; background: var(--iswc-bg-elev, rgba(255, 255, 255, 0.1)); }
+    &[hidden] { display: none; }
+  }
+}
+
+:host(iswc-tab:hover:not([disabled])) .tab {
+  color: var(--iswc-text, inherit);
+  background: var(--iswc-bg-elev);
+}
+:host(iswc-tab[disabled]) { cursor: not-allowed; opacity: 0.55; }
+
+:host(iswc-tab[data-active]) {
+  .tab { color: var(--iswc-text, inherit); }
+  .indicator { display: block; }
+}
+
+/* El placement lo sella el grupo como data-placement: :host-context() no es
+   universal y el shadow del tab no ve el atributo del padre de otro modo. */
+:host(iswc-tab[data-placement="top"]),
+:host(iswc-tab[data-placement="bottom"]) {
+  .indicator { inset-inline: 0; block-size: .125em; }
+}
+/* Dentro del borde de la pestaña: la lista de pestañas hace scroll y recorta lo que se sale de su
+   caja, así que un indicador montado sobre la pista (fuera de la pestaña) quedaba invisible. */
+:host(iswc-tab[data-placement="top"]) .indicator { bottom: 0; }
+:host(iswc-tab[data-placement="bottom"]) .indicator { top: 0; }
+
+/* En vertical el button se ve stretched, y el indicador va al costado. */
+:host(iswc-tab[data-placement="start"]),
+:host(iswc-tab[data-placement="end"]) {
+  .tab { inline-size: 100%; justify-content: flex-start; }
+  .indicator { inset-block: 0; inline-size: .125em; }
+}
+:host(iswc-tab[data-placement="start"]) .indicator { right: 0; }
+:host(iswc-tab[data-placement="end"]) .indicator { left: 0; }
+
+/* <iswc-tab-panel> */
+:host(iswc-tab-panel) {
+  display: block;
+
+  .panel { padding: 0.5em 0; }
+}
+:host(iswc-tab-panel[hidden]) { display: none; }

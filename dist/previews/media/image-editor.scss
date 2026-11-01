@@ -1,0 +1,105 @@
+/* iswc-image-editor */
+:host {
+  display: block;
+  font: inherit;
+  color: var(--iswc-text);
+}
+
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: .5em;
+  padding: .5em;
+  border: 1px solid var(--iswc-border);
+  border-radius: var(--iswc-radius);
+  background: var(--iswc-bg-elev);
+}
+
+.viewport {
+  position: relative;
+  inline-size: 100%;
+  aspect-ratio: 16 / 10;
+  background:
+    repeating-conic-gradient(
+      color-mix(in srgb, var(--iswc-text) 8%, transparent) 0 25%,
+      transparent 0 50%
+    );
+  background-size: 1em 1em;
+  border-radius: var(--iswc-radius);
+  overflow: hidden;
+
+  /* F0.3 g12 [a11y/focus]: viewport focuseable con outline visible */
+  &:focus { outline: none; }
+  &:focus-visible {
+    outline: 2px solid var(--iswc-accent);
+    outline-offset: -2px;
+  }
+}
+
+.canvas { position: absolute; inset: 0; cursor: crosshair; }
+
+.selection {
+  position: absolute;
+  border: 1px solid var(--iswc-accent);
+  box-shadow: 0 0 0 9999em rgba(15, 23, 42, .55);
+  pointer-events: none;
+}
+
+.handle {
+  position: absolute;
+  inline-size: .75em;
+  block-size: .75em;
+  background: var(--iswc-accent);
+  border: 2px solid var(--iswc-bg-elev);
+  border-radius: .125em;
+  pointer-events: auto;
+
+  &.nw { inset-block-start: -.375em;    inset-inline-start: -.375em;  cursor: nwse-resize; }
+  &.ne { inset-block-start: -.375em;    inset-inline-end:   -.375em;  cursor: nesw-resize; }
+  &.sw { inset-block-end:   -.375em;    inset-inline-start: -.375em;  cursor: nesw-resize; }
+  &.se { inset-block-end:   -.375em;    inset-inline-end:   -.375em;  cursor: nwse-resize; }
+
+  /* F0.3 g12 [a11y/focus]: outline solo con teclado */
+  &:focus-visible { outline: 2px solid var(--iswc-text); outline-offset: 2px; }
+}
+
+/* F0.3 g12 [media/loading]: overlay mientras aria-busy=true */
+:host([data-loading]) .viewport {
+  opacity: 0.5;
+  cursor: progress;
+}
+
+/* F0.3 g12 [media/error-state]: pista visual cuando la imagen falla */
+:host([data-error]) .viewport {
+  outline: 1px dashed var(--iswc-color-danger);
+  outline-offset: -1px;
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .35em;
+  padding-block-start: .25em;
+}
+
+::slotted(button) {
+  font: inherit;
+  padding: .3659em .7317em;
+  border: 1px solid var(--iswc-border);
+  border-radius: var(--iswc-radius);
+  background: var(--iswc-bg-soft);
+  color: inherit;
+  cursor: pointer;
+  font-size: .82em;
+}
+
+::slotted(button:hover) {
+  background: color-mix(in srgb, var(--iswc-accent) 14%, var(--iswc-bg-soft));
+}
+
+.status {
+  font-size: .72em;
+  color: var(--iswc-text-soft);
+  font-variant-numeric: tabular-nums;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}

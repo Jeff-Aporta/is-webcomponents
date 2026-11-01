@@ -5,6 +5,7 @@ import '../actions/dropdown.js';
 import '../actions/button.js';
 import '../media/icon.js';
 import '../layout/callout.js';
+import '../navigation/tab-group.js';
 import './login.js';
 import type { LoginChoice, LoginDropdownSubmit, LoginMode as Mode } from './schemas/login-dropdown.schemas.js';
 
@@ -28,6 +29,11 @@ import type { LoginChoice, LoginDropdownSubmit, LoginMode as Mode } from './sche
  *   token-placeholder
  *   choices-heading  texto sobre la lista de opciones (default "Elige con cuál entrar")
  *   back-label       botón para volver de la lista (default "Volver")
+ *   tab-label        pestaña del formulario, visible solo con slot extra (default "Entrar")
+ *   extra-label      pestaña del slot extra (default "Más opciones")
+ *
+ * Slots
+ *   extra            contenido de una segunda pestaña; sin él no hay pestañas
  *
  * Propiedades: error (string), loading (boolean), choices ({ id, label, icon? }[])
  * Métodos: show(), hide(), reset()
@@ -35,7 +41,8 @@ import type { LoginChoice, LoginDropdownSubmit, LoginMode as Mode } from './sche
  * Eventos
  *   iswc-login-submit { mode, username, password, remember, provider?, token?, choice? }
  *
- * Parts: trigger, panel, heading, modes, mode, login, token, token-input, error, choices, choice, back
+ * Parts: trigger, panel, heading, tabs, tab-main, tab-extra, modes, mode, login, token, token-input,
+ *        error, choices, choice, back, extra
  * Custom states: loading, choosing, open
  */
 
@@ -47,25 +54,36 @@ const HTML_TEMPLATE = `
   </iswc-button>
   <div class="panel" part="panel">
     <div class="heading" part="heading" hidden></div>
-    <div class="modes" part="modes" role="tablist" aria-label="Forma de ingreso" hidden>
-      <button type="button" class="mode" part="mode" role="tab" data-mode="password"></button>
-      <button type="button" class="mode" part="mode" role="tab" data-mode="token"></button>
-    </div>
-    <iswc-login class="login" part="login" compact password-toggle></iswc-login>
-    <div class="token" part="token" hidden>
-      <label class="token-label" for="token"></label>
-      <textarea id="token" class="token-input" part="token-input" rows="3" spellcheck="false" autocomplete="off"></textarea>
-      <iswc-callout class="error" part="error" color="danger" role="alert" hidden></iswc-callout>
-      <div class="actions">
-        <iswc-button class="token-submit" variant="filled" color="brand">Entrar</iswc-button>
-      </div>
-    </div>
-    <div class="choices" part="choices" hidden>
-      <p class="choices-heading"></p>
-      <iswc-callout class="choices-error" color="danger" role="alert" hidden></iswc-callout>
-      <div class="choices-list" role="list"></div>
-      <iswc-button class="back" part="back" variant="plain" color="neutral"></iswc-button>
-    </div>
+    <iswc-tab-group class="tabs solo" part="tabs" active="main" size="sm" without-scroll-controls>
+      <iswc-tab slot="nav" class="tab-main" part="tab-main" panel="main"></iswc-tab>
+      <iswc-tab slot="nav" class="tab-extra" part="tab-extra" panel="extra"></iswc-tab>
+      <iswc-tab-panel class="tab-body" name="main">
+        <div class="tab-stack">
+          <div class="modes" part="modes" role="tablist" aria-label="Forma de ingreso" hidden>
+            <button type="button" class="mode" part="mode" role="tab" data-mode="password"></button>
+            <button type="button" class="mode" part="mode" role="tab" data-mode="token"></button>
+          </div>
+          <iswc-login class="login" part="login" compact password-toggle></iswc-login>
+          <div class="token" part="token" hidden>
+            <label class="token-label" for="token"></label>
+            <textarea id="token" class="token-input" part="token-input" rows="3" spellcheck="false" autocomplete="off"></textarea>
+            <iswc-callout class="error" part="error" color="danger" role="alert" hidden></iswc-callout>
+            <div class="actions">
+              <iswc-button class="token-submit" variant="filled" color="brand" size="sm">Entrar</iswc-button>
+            </div>
+          </div>
+          <div class="choices" part="choices" hidden>
+            <p class="choices-heading"></p>
+            <iswc-callout class="choices-error" color="danger" role="alert" hidden></iswc-callout>
+            <div class="choices-list" role="list"></div>
+            <iswc-button class="back" part="back" variant="plain" color="neutral" size="sm"></iswc-button>
+          </div>
+        </div>
+      </iswc-tab-panel>
+      <iswc-tab-panel class="tab-body" name="extra">
+        <div class="extra" part="extra"><slot name="extra"></slot></div>
+      </iswc-tab-panel>
+    </iswc-tab-group>
   </div>
 </iswc-dropdown>`;
 
@@ -77,6 +95,7 @@ class IswcLoginDropdown extends ElementBase {
     return [
       'label', 'heading', 'placement', 'modes', 'remember', 'open',
       'password-label', 'token-label', 'token-placeholder', 'choices-heading', 'back-label',
+      'tab-label', 'extra-label',
     ];
   }
 
@@ -90,6 +109,7 @@ class IswcLoginDropdown extends ElementBase {
 
   #dropdown!: HTMLElement & { show(): void; hide(): void };
   #login!: HTMLElement & { reset?: () => void; remember?: boolean };
+  #tabs!: HTMLElement & { active: string };
   #root!: ShadowRoot;
 
   constructor() {
@@ -100,6 +120,7 @@ class IswcLoginDropdown extends ElementBase {
     try { this.#internals = this.attachInternals(); } catch { this.#internals = null; }
     this.#dropdown = this.#q<HTMLElement & { show(): void; hide(): void }>('.dropdown')!;
     this.#login = this.#q<HTMLElement & { reset?: () => void; remember?: boolean }>('.login')!;
+    this.#tabs = this.#q<HTMLElement & { active: string }>('.tabs')!;
     this.#wire();
   }
 
@@ -149,6 +170,7 @@ class IswcLoginDropdown extends ElementBase {
     this.#login.reset?.();
     const ta = this.#q<HTMLTextAreaElement>('.token-input');
     if (ta) ta.value = '';
+    this.#tabs.active = 'main';
     this.hide();
     this.#render();
   }
@@ -222,10 +244,13 @@ class IswcLoginDropdown extends ElementBase {
       this.#submit({ ...this.#pending, choice: id });
     });
 
+    this.#q('slot[name="extra"]')?.addEventListener('slotchange', () => this.#render());
+
     this.#dropdown.addEventListener('iswc-after-show', () => {
       this.toggleAttribute('open', true);
       setCustomState(this.#internals, 'open', true);
       requestAnimationFrame(() => {
+        if (this.#tabs.active === 'extra') return;
         if (this.#choices.length) this.#q<HTMLElement>('.choices-list iswc-button')?.focus();
         else if (this.#mode === 'token') this.#q<HTMLElement>('.token-input')?.focus();
         else this.#login.focus();
@@ -268,8 +293,19 @@ class IswcLoginDropdown extends ElementBase {
     emit(this, 'iswc-login-submit', out);
   }
 
+  /** El panel solo tiene pestañas si la app puso contenido en el slot `extra` (directo o reenviado). */
+  #renderTabs(): void {
+    const slot = this.#q<HTMLSlotElement>('slot[name="extra"]')!;
+    const hasExtra = slot.assignedNodes({ flatten: true }).length > 0;
+    this.#tabs.classList.toggle('solo', !hasExtra);
+    if (!hasExtra && this.#tabs.active !== 'main') this.#tabs.active = 'main';
+    this.#q<HTMLElement>('.tab-main')!.textContent = this.getAttribute('tab-label') || 'Entrar';
+    this.#q<HTMLElement>('.tab-extra')!.textContent = this.getAttribute('extra-label') || 'Más opciones';
+  }
+
   #render(): void {
     if (!this.#root) return;
+    this.#renderTabs();
     const label = this.getAttribute('label') || 'Entrar';
     const trigger = this.#q<HTMLElement>('.trigger')!;
     this.#q<HTMLElement>('.trigger-text')!.textContent = label;

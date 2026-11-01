@@ -7,8 +7,8 @@ import { arbolSet, filtrarMini, hojasDe, itemsSet, marcaDeTodo, modeloSet, selec
 import { TEXTOS } from '../textos.js';
 import { boton, casilla, crear, fijarCasilla, icono, inputDe, retardo, selectDe } from './controles.js';
 import type { Condicion, FilaSet, ItemSet, ModeloColumna, ModeloMulti, ModeloSet, NodoArbolSet, OpcionesPanelFiltro, OperadorUnion, ParamsFiltro, TipoCondicion, TipoFiltro } from '../filtros.schemas.js';
-import type { MotorFiltros } from '../motor.js';
-import type { ColumnState, RowNode } from '../../contrato.js';
+import type { MotorFiltros } from '../filtros-motor.js';
+import type { ColumnState, RowNode } from '../../../../schemas/datagrid-types.schemas.js';
 
 
 const ALTO_FILA_EM = 1.875;

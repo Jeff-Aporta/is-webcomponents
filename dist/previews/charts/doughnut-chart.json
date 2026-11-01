@@ -25,6 +25,37 @@
               "control": "boolean",
               "prop": "attr:open-on-click",
               "label": "open-on-click"
+            },
+            {
+              "control": "text",
+              "prop": "attr:label",
+              "label": "label"
+            },
+            {
+              "control": "select",
+              "prop": "attr:legend-position",
+              "label": "legend-position",
+              "options": [
+                "top",
+                "bottom",
+                "start",
+                "end"
+              ]
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:without-legend",
+              "label": "without-legend"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:without-tooltip",
+              "label": "without-tooltip"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:without-animation",
+              "label": "without-animation"
             }
           ]
         }

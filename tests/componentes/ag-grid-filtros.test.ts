@@ -11,10 +11,10 @@ import { coincideQuick, partesQuick } from '../../src/components/data/utils/ag-g
 import { avanzadoATexto, coincideAvanzado, parsearAvanzado } from '../../src/components/data/utils/ag-grid/filtros/avanzado.ts';
 import { compararValores, esClicMulti, modeloTrasClic, ordenarFilas, ordenInicial, siguienteDir } from '../../src/components/data/utils/ag-grid/filtros/orden.ts';
 import { agregados, arbolColumnas, filtrarArbolColumnas, funcionesAgregado, hojasColumna, normalizarSideBar, opcionesTam, resolverMenu, resumenPagina, tamAutomatico } from '../../src/components/data/utils/ag-grid/filtros/resumen.ts';
-import { MotorFiltros } from '../../src/components/data/utils/ag-grid/filtros/motor.ts';
+import { MotorFiltros } from '../../src/components/data/utils/ag-grid/filtros/filtros-motor.ts';
 import { createGridModel } from '../../src/components/data/utils/datagrid-core/grid-model.ts';
 import type { ContextoValor } from '../../src/components/data/utils/ag-grid/filtros/filtros.schemas.ts';
-import type { GridHost } from '../../src/components/data/utils/ag-grid/contrato.ts';
+import type { GridHost } from '../../src/components/data/utils/ag-grid/contrato.schemas.ts';
 
 const { test, lista } = coleccionPruebas({ categoria: 'what' });
 

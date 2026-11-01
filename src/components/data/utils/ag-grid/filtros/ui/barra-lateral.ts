@@ -7,8 +7,8 @@ import { crear, icono } from './controles.js';
 import { PanelColumnas } from './panel-columnas.js';
 import { PanelFiltros } from './panel-filtros.js';
 import type { InstanciaPanel, PanelLateralDef, PanelMontado, SideBarDef } from '../filtros.schemas.js';
-import type { MotorFiltros } from '../motor.js';
-import type { GridHost, PanelLateral } from '../../contrato.js';
+import type { MotorFiltros } from '../filtros-motor.js';
+import type { GridHost, PanelLateral } from '../../contrato.schemas.js';
 
 
 const ANCHO_DEFECTO = 200;

@@ -1,9 +1,9 @@
 // engineering.ts — ingeniería (bases, bits, conversión) y funciones de base de datos (D*).
 import { criterion } from '../criteria.js';
-import type { Ctx } from '../evaluator.js';
+import type { Ctx } from '../evaluator.schemas.js';
 import { compare, ERR, toNumber, toText } from '../values.js';
-import type { EvalValue, Matrix, Scalar } from '../values.js';
-import { lifted, matrix, scalar } from './helpers.js';
+import type { EvalValue, Matrix, Scalar } from '../values.schemas.js';
+import { lifted, matrix, scalar } from './fn-helpers.js';
 import { def, lookupFn } from './registry.js';
 import { erf } from './stats.js';
 

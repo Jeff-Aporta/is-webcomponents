@@ -3,7 +3,7 @@
  * igual si el plugin de celdas no esta instalado. Ese plugin los sobreescribe.
  */
 
-import type { GridHost, RendererCelda } from '../contrato.js';
+import type { GridHost, RendererCelda } from '../contrato.schemas.js';
 
 const numeros = new Map<string, Intl.NumberFormat>();
 const fechas = new Map<string, Intl.DateTimeFormat>();

@@ -1,5 +1,5 @@
 // clipboard.ts — intercambio con Excel y Sheets: TSV más tabla HTML con estilos, en ambos sentidos.
-import type { Rect } from '../address.js';
+import type { Rect } from '../address.schemas.js';
 import type { SpreadsheetDoc } from '../document.js';
 import type { Sheet } from '../engine.js';
 import { CellError } from '../values.js';

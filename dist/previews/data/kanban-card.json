@@ -1,5 +1,8 @@
 {
   "$schema": "iswc-preview/v1",
+  "anatomy": {
+    "scss": "kanban.scss"
+  },
   "tag": "iswc-kanban-card",
   "category": "data",
   "title": "&lt;iswc-kanban-card&gt;",
@@ -17,7 +20,7 @@
           "html": [
             "<iswc-kanban>",
             "            <iswc-kanban-column title=\"Tareas\">",
-            "              <iswc-kanban-card heading=\"Conciliar banco\" meta=\"Vence hoy\" tag=\"Urgente\" tag-color=\"danger\">",
+            "              <iswc-kanban-card id=\"pg-kanban-card\" heading=\"Conciliar banco\" meta=\"Vence hoy\" tag=\"Urgente\" tag-color=\"danger\">",
             "                Revisar extracto de agosto.",
             "              </iswc-kanban-card>",
             "              <iswc-kanban-card heading=\"Cierre de mes\" meta=\"3 días\" tag=\"Normal\">",
@@ -26,6 +29,45 @@
             "            </iswc-kanban-column>",
             "            <iswc-kanban-column title=\"Hechas\"></iswc-kanban-column>",
             "          </iswc-kanban>"
+          ],
+          "target": "#pg-kanban-card",
+          "controls": [
+            {
+              "control": "text",
+              "prop": "attr:heading",
+              "label": "heading",
+              "default": "Conciliar banco"
+            },
+            {
+              "control": "text",
+              "prop": "attr:meta",
+              "label": "meta",
+              "default": "Vence hoy"
+            },
+            {
+              "control": "text",
+              "prop": "attr:tag",
+              "label": "tag",
+              "default": "Urgente"
+            },
+            {
+              "control": "select",
+              "prop": "attr:tag-color",
+              "label": "tag-color",
+              "options": [
+                "brand",
+                "neutral",
+                "success",
+                "warning",
+                "danger"
+              ],
+              "default": "danger"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:without-shadow",
+              "label": "without-shadow"
+            }
           ]
         }
       ]

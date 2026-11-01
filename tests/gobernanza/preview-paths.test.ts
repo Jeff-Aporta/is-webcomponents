@@ -1,3 +1,4 @@
+// S-G1: requisito de specs/galeria/spec.md (WHAT-first, ver specs/testing.md S-T6)
 // tests/preview-paths.test.ts
 //
 // Tras la migración a JSON, el único HTML bajo previews/ es _shell.html.

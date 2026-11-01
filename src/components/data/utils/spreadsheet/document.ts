@@ -1,56 +1,28 @@
 // document.ts — el libro como documento editable: estilos, combinaciones, reglas, gráficos y
 // macros, con transacciones que dan deshacer/rehacer. Toda mutación pasa por aquí. Sin DOM.
 import { cellName, colName, intersects, normalize, parseCell, parseRange, rangeName } from './address.js';
-import type { Rect } from './address.js';
+import type { Rect } from './address.schemas.js';
 import { cellKey, Engine, keyCol, keyRow } from './engine.js';
-import type { CellData, Sheet } from './engine.js';
+import type { CellData } from './engine.schemas.js';
+import type { Sheet } from './engine.js';
 import { flashFill, planFill } from './fill.js';
-import type { FillSource } from './fill.js';
+import type { FillSource } from './fill.schemas.js';
 import { parseInput } from './input-parse.js';
 import { formatValue, isDateFormat } from './numfmt.js';
 import { isFormulaText } from './parser.js';
 import { shiftFormula } from './rewrite.js';
 import { CellError, compare, displayValue } from './values.js';
-import type { Scalar } from './values.js';
+import type { Scalar } from './values.schemas.js';
 import type { AutoFilter, BorderSide, CellDoc, CellStyle, CfRule, ChartDef, FilterColumn, MacroDef, SheetDoc, ValidationRule, WorkbookDoc } from '../../schemas/spreadsheet.schemas.js';
+import type { SheetExtras, SortKey, PasteOptions, ClipCell, ClipBlock, CellPatch, Snapshot, HistoryEntry } from './document.schemas.js';
 
-/** Datos de una hoja que no son celdas. */
-export interface SheetExtras {
-  colWidths: Map<number, number>; rowHeights: Map<number, number>;
-  hiddenRows: Set<number>; hiddenCols: Set<number>; filterHidden: Set<number>;
-  merges: Rect[]; freeze: { rows: number; cols: number };
-  cf: CfRule[]; validations: ValidationRule[]; filter: AutoFilter | null; charts: ChartDef[];
-  tabColor?: string; hidden: boolean; gridlines: boolean;
-}
 
-/** Clave de orden. */
-export interface SortKey { col: number; desc?: boolean }
 
-/** Partes pegables. */
-export interface PasteOptions { mode?: 'all' | 'values' | 'formulas' | 'formats'; transpose?: boolean; move?: boolean }
 
-/** Celda copiada. */
-export interface ClipCell { r: number; c: number; cell?: CellData; value: Scalar }
 
-/** Bloque copiado. */
-export interface ClipBlock { sheet: number; rect: Rect; cells: ClipCell[]; styles: Map<number, CellStyle> }
 
-/** Cambio de una celda dentro de una transacción. */
-interface CellPatch { sheet: Sheet; key: number; before?: CellData; after?: CellData }
 
-/** Foto del libro para operaciones estructurales. */
-interface Snapshot {
-  sheets: { sheet: Sheet; name: string; rows: number; cols: number; cells: Map<number, CellData>; extras: SheetExtras }[];
-  names: [string, string][];
-  macros: MacroDef[];
-}
 
-/** Paso del historial. */
-interface HistoryEntry {
-  label: string; cells: CellPatch[];
-  meta: Map<Sheet, { before: SheetExtras; after?: SheetExtras }>;
-  snapBefore?: Snapshot; snapAfter?: Snapshot;
-}
 
 const MAX_HISTORY = 200;
 const DEFAULT_COL = 6.5;

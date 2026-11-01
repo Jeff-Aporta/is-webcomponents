@@ -1,5 +1,4 @@
 import type { VentanaFilas } from './alturas.schemas.js';
-export type * from './alturas.schemas.js';
 /**
  * nucleo/alturas — Indice de alturas de fila para virtualizar.
  *

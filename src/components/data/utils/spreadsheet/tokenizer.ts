@@ -1,15 +1,10 @@
 // tokenizer.ts — convierte el texto de una fórmula en tokens con su posición, para que
 // parser, reescritura de referencias y coloreado del editor compartan una sola lectura.
 import { colIndex } from './address.js';
+import type { RefEnd, TokenType, Token } from './tokenizer.schemas.js';
 
-/** Extremo de una referencia. r o c valen -1 en filas o columnas completas. */
-export interface RefEnd { r: number; c: number; ra: boolean; ca: boolean }
 
-/** Tipos de token. */
-export type TokenType = 'num' | 'str' | 'bool' | 'err' | 'ref' | 'func' | 'name' | 'op' | 'lp' | 'rp' | 'lb' | 'rb' | 'sep' | 'hash' | 'bad';
 
-/** Token con su tramo en el texto. */
-export interface Token { type: TokenType; text: string; pos: number; end: number; sheet?: string; a?: RefEnd; b?: RefEnd }
 
 const ERRORS = ['#DIV/0!', '#VALUE!', '#CYCLE!', '#SPILL!', '#NAME?', '#CALC!', '#NULL!', '#REF!', '#NUM!', '#N/A'];
 const CELL = /^\$?([A-Za-z]{1,3})\$?(\d{1,7})$/;

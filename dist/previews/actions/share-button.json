@@ -14,7 +14,33 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-share-button share-title=\"ISWC\" text=\"Galería is-*\" url=\"https://jeff-aporta.github.io/iswc-root/\"></iswc-share-button>"
+          "html": "<iswc-share-button id=\"pg-share-button\" share-title=\"ISWC\" text=\"Galería is-*\" url=\"https://jeff-aporta.github.io/iswc-root/\"></iswc-share-button>",
+          "target": "#pg-share-button",
+          "controls": [
+            {
+              "control": "text",
+              "prop": "attr:share-title",
+              "label": "share-title",
+              "default": "ISWC"
+            },
+            {
+              "control": "text",
+              "prop": "attr:text",
+              "label": "text",
+              "default": "Galería is-*"
+            },
+            {
+              "control": "text",
+              "prop": "attr:url",
+              "label": "url",
+              "default": "https://jeff-aporta.github.io/iswc-root/"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:disabled",
+              "label": "disabled"
+            }
+          ]
         },
         {
           "kind": "callout",

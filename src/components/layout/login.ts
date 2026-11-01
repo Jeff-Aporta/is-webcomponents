@@ -31,8 +31,9 @@ import type { LoginAccount, LoginSession } from './schemas/login.schemas.js';
  *   allow-logout-all  boolean
  *   show-sessions     boolean
  *   show-password     boolean
- *   compact           boolean — sin cabecera, pie ni "¿Olvidaste…?" ni marco: para incrustarlo
- *                     dentro de otro contenedor (p. ej. <iswc-login-dropdown>)
+ *   compact           boolean — sin cabecera, pie ni "¿Olvidaste…?" ni marco, controles size="sm"
+ *                     y "Recordar" junto a "Entrar": para incrustarlo dentro de otro contenedor
+ *                     (p. ej. <iswc-login-dropdown>)
  *   password-toggle   boolean — botón para mostrar/ocultar la contraseña
  *
  * Propiedades
@@ -409,6 +410,10 @@ class IswcLogin extends ElementBase {
       this.#username.removeAttribute('readonly');
     }
     this.#rememberCk.checked = this.remember;
+    for (const control of [this.#username, this.#password, this.#rememberCk, this.#btnSubmit]) {
+      if (this.hasAttribute('compact')) control.setAttribute('size', 'sm');
+      else control.removeAttribute('size');
+    }
     this.#password.toggleAttribute('disabled', disabled || busy);
     this.#username.toggleAttribute('disabled', disabled || busy || (multi && !!account));
     this.#btnSubmit.toggleAttribute('disabled', disabled || busy);

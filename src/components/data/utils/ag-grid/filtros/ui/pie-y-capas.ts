@@ -6,8 +6,9 @@ import { TEXTOS } from '../textos.js';
 import { crear } from './controles.js';
 import '../../../../../feedback/empty-state.js';
 import type { DefPanelEstado, EstadoOverlay, FuncionAgregado, PanelEstadoVivo, RangoCeldas } from '../filtros.schemas.js';
-import type { MotorFiltros } from '../motor.js';
-import type { GridHost, PanelEstado, RowNode } from '../../contrato.js';
+import type { MotorFiltros } from '../filtros-motor.js';
+import type { GridHost, PanelEstado } from '../../contrato.schemas.js';
+import type { RowNode } from '../../../../schemas/datagrid-types.schemas.js';
 
 
 const DEFECTO: DefPanelEstado[] = [{ statusPanel: 'agTotalAndFilteredRowCountComponent', align: 'left' }, { statusPanel: 'agSelectedRowCountComponent', align: 'center' }, { statusPanel: 'agAggregationComponent', align: 'right' }];

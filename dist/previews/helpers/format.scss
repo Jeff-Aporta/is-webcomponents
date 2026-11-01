@@ -1,0 +1,8 @@
+@use 'utils/inline-host';
+
+:host {
+  .value { display: inline; }
+  &:where([data-type="number"], [data-type="bytes"]) .value {
+    font-variant-numeric: tabular-nums;
+  }
+}

@@ -1,0 +1,111 @@
+/* iswc-dropzone */
+:host {
+  display: block;
+  font: inherit;
+  color: var(--iswc-text);
+}
+.root { display: flex; flex-direction: column; gap: .85em; }
+
+.zone {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: .35em;
+  padding: 2em 1em;
+  border: 2px dashed var(--iswc-border);
+  border-radius: var(--iswc-radius);
+  background:
+    repeating-linear-gradient(135deg,
+      color-mix(in srgb, var(--iswc-text) 3%, transparent) 0 .375em,
+      transparent .375em .75em);
+  cursor: pointer;
+  outline: 0;
+  transition: border-color 150ms ease, background-color 150ms ease;
+
+  /* Estado "encima" se aplica desde JS con la clase .iswc-over (drag/drop),
+   * :focus-visible lo aplica el navegador. Misma pinta para los dos. */
+  &:focus-visible,
+  &.iswc-over {
+    border-color: var(--iswc-accent);
+    background: color-mix(in srgb, var(--iswc-accent) 10%, transparent);
+  }
+
+  .ico { font-size: 2em; color: var(--iswc-accent); }
+  .title { font-size: 1em; }
+  .sub { color: var(--iswc-text-soft); font-size: .85em; }
+}
+
+.queue {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: .35em;
+}
+.row {
+  display: grid;
+  grid-template-columns: 2.8889em 1fr 6.6667em auto auto;
+  align-items: center;
+  gap: .7222em;
+  padding: .5556em .7222em;
+  background: var(--iswc-bg-elev);
+  border: 1px solid var(--iswc-border);
+  border-radius: var(--iswc-radius);
+}
+.thumb {
+  width: 2.6em; height: 2.6em;
+  border-radius: .375em;
+  background: color-mix(in srgb, var(--iswc-bg-soft) 80%, transparent);
+  display: grid; place-items: center;
+  overflow: hidden;
+  color: var(--iswc-text-soft);
+  font-size: 1.25em;
+
+  & img { width: 100%; height: 100%; object-fit: cover; }
+}
+
+.meta { min-width: 0; }
+.name {
+  display: block;
+  font-weight: 600;
+  font-size: .82em;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.size { color: var(--iswc-text-soft); font-size: .7em; }
+
+progress {
+  appearance: none;
+  height: .375em;
+  border: 0;
+  width: 100%;
+  border-radius: 999em;
+  background: color-mix(in srgb, var(--iswc-text) 12%, transparent);
+  overflow: hidden;
+
+  &::-webkit-progress-bar { background: color-mix(in srgb, var(--iswc-text) 12%, transparent); }
+  &::-webkit-progress-value { background: var(--iswc-accent); transition: width 120ms ease; }
+  &::-moz-progress-bar { background: var(--iswc-accent); }
+}
+
+.status {
+  font-size: .7em;
+  color: var(--iswc-text-soft);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+/* Color del status según el estado del upload (JS pone la clase en la fila). */
+.status-done    .status { color: var(--iswc-success); }
+.status-uploading .status { color: var(--iswc-accent); }
+.status-error   .status { color: var(--iswc-danger); }
+
+.del {
+  flex: none;
+  line-height: 0;
+  color: var(--iswc-text-soft);
+
+  &:hover { color: var(--iswc-danger); }
+}

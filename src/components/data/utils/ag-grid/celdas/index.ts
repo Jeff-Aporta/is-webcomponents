@@ -8,8 +8,9 @@
  * de cada modulo y no exige un grid montado.
  */
 
-import type { ColDefAg, ContextoCelda, Desinstalar, EventoCelda, GridHost, RendererCelda, RendererMontable, RowNode } from '../contrato.js';
-import { AlturasFilas } from './alturas.js';
+import type { ColDefAg, ContextoCelda, Desinstalar, EventoCelda, GridHost, RendererCelda, RendererMontable } from '../contrato.schemas.js';
+import type { RowNode } from '../../../schemas/datagrid-types.schemas.js';
+import { AlturasFilas } from './celdas-alturas.js';
 import { contextoCelda, pintarCelda, resolverRenderer } from './contexto.js';
 import { Destello } from './flash.js';
 import { unirClases } from './html.js';
@@ -18,15 +19,8 @@ import { RENDERERS } from './renderers.js';
 import type { AccionCelda, ParamsCelda, ParamsFlash, PresentacionCelda, PresentacionFila } from './schemas.js';
 import { AplicadorTema } from './temas/index.js';
 import { TooltipsGrid, contenidoTooltip } from './tooltips.js';
-import { paramsCelda, textoDeContexto } from './valores.js';
+import { paramsCelda, textoDeContexto } from './celdas-valores.js';
 
-export { resolverRenderer } from './contexto.js';
-export { ambitoDe, escribirValor, formatearValor, inferirTipo, lectores, leerRuta, leerValor, parsearValor, textoBusqueda, textoExportacion, tipoDe } from './valores.js';
-export { clasesCabecera } from './reglas.js';
-export { contenidoCabecera, contenidoTooltip } from './tooltips.js';
-export { crearTema, PRESETS } from './temas/index.js';
-export { fmtFecha, fmtMoneda, fmtNumero, fmtPorcentaje } from './formatos.js';
-export { RENDERERS } from './renderers.js';
 
 /** Estos no leen el texto formateado: se ahorran formatear en cada repintado. */
 const SIN_TEXTO = new Set<RendererCelda>([RENDERERS['sparkline'] as RendererCelda, RENDERERS['rating'] as RendererCelda, RENDERERS['booleano'] as RendererCelda, RENDERERS['acciones'] as RendererCelda]);
@@ -291,4 +285,3 @@ export function instalar(grid: GridHost): Desinstalar {
   };
 }
 
-export type { RendererCelda, RendererMontable };

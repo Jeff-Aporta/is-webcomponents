@@ -1,3 +1,4 @@
+// S-K1: requisito de specs/componentes.md (WHAT-first, ver specs/testing.md S-T6)
 // tests/manifest-paths.test.ts
 //
 // Verifica que el manifest.js no apunta a archivos que no existen.

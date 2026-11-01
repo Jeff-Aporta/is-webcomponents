@@ -17,6 +17,8 @@ Referencia viva: `<__PREFIJO__-hola>` (`view/hola/components/`). Copia su forma.
 
 ## 2. Los cuatro archivos hermanos (mismo nombre base, misma carpeta)
 
+Los exige `tests/vistas/contrato-componentes.test.ts`: un tag de `kit-tags.ts` sin alguno de ellos deja el gate en rojo.
+
 | Archivo | Contenido |
 | --- | --- |
 | `__PREFIJO__-<x>.ts` | Lógica de pintado y eventos. Nada de CSS dentro. Lógica de dominio en `utils/` |

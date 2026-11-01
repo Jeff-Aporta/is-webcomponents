@@ -18,7 +18,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-file-view name=\"demo.csv\" content=\"a,b&#10;1,2\" height=\"12rem\"></iswc-file-view>",
+          "html": "<iswc-file-view name=\"demo.csv\" content=\"a,b&#10;1,2\" height=\"12em\"></iswc-file-view>",
           "controls": [
             {
               "control": "text",

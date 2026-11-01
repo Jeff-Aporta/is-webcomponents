@@ -1,0 +1,105 @@
+/* Estilos específicos del lightbox de diagramas, encima de lightbox.css. */
+@import url('./lightbox.css');
+
+.lb-bar__lead {
+  flex: 1 1 auto;
+}
+
+.lb-nav {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25em;
+}
+
+/* Anillo de cuenta regresiva del auto-replay. */
+.lb-ring {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.375em;
+  height: 1.375em;
+  margin-inline-start: 0.25em;
+  svg {
+    position: absolute;
+    inset: 0;
+    transform: rotate(-90deg);
+  }
+}
+
+.lb-ring__track {
+  fill: none;
+  stroke: color-mix(in srgb, currentColor 22%, transparent);
+  stroke-width: 2.5;
+}
+
+.lb-ring__fill {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 200ms linear;
+}
+
+.lb-ring__icon {
+  font-size: .6875em;
+  line-height: 1;
+}
+
+.lb-step {
+  font-size: 0.75em;
+  font-variant-numeric: tabular-nums;
+  color: var(--iswc-text-soft);
+  min-width: 2.5em;
+}
+
+/* Panel de código (el head, area, acciones). */
+.lb-code__head {
+  display: flex;
+  align-items: baseline;
+  gap: .615em;
+  font-size: 0.8125em;
+}
+
+.lb-code__hint {
+  color: var(--iswc-text-soft);
+  font-size: .9225em;
+}
+
+.lb-code__area {
+  width: 100%;
+  min-height: 17.2202em;
+  resize: vertical;
+  font-family: var(--iswc-mono);
+  font-size: 0.8125em;
+  line-height: 1.5;
+  padding: .7688em;
+  border-radius: var(--iswc-radius-sm);
+  border: 1px solid var(--iswc-border);
+  background: var(--iswc-code-bg);
+  color: var(--iswc-code-text);
+  tab-size: 2;
+  &:focus-visible {
+    outline: 2px solid var(--iswc-focus);
+    outline-offset: -1px;
+  }
+}
+
+.lb-code__err {
+  margin: 0;
+  color: var(--iswc-danger-text);
+  font-size: 0.75em;
+  &[hidden] { display: none; }
+}
+
+.lb-code__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5em;
+}
+
+.lb-unsupported {
+  color: var(--iswc-text-soft);
+  font-size: 0.875em;
+  text-align: center;
+}

@@ -13,7 +13,7 @@ import { detectDelimiter, parseDelimited, toDelimited } from '../../src/componen
 import { SpreadsheetDoc } from '../../src/components/data/utils/spreadsheet/document.ts';
 import { planFill } from '../../src/components/data/utils/spreadsheet/fill.ts';
 import { findAll, replaceAll } from '../../src/components/data/utils/spreadsheet/find.ts';
-import { allFunctions, lookupFn, suggest } from '../../src/components/data/utils/spreadsheet/functions/index.ts';
+import { allFunctions, lookupFn, suggest } from '../../src/components/data/utils/spreadsheet/functions/registry.ts';
 import { parseInput } from '../../src/components/data/utils/spreadsheet/input-parse.ts';
 import { runMacro } from '../../src/components/data/utils/spreadsheet/macro/host.ts';
 import { MacroRecorder } from '../../src/components/data/utils/spreadsheet/macro/recorder.ts';
@@ -521,7 +521,7 @@ test('macros: seguridad y límites', () => {
   bad('escribir("no es celda", 1)', /no válida/);
   bad('sea = 3', /nombre/);
   bad('si verdadero {', /Falta/);
-  const src = ['interp.ts', 'parser.ts', 'lexer.ts', 'host.ts', 'recorder.ts'].map((f) => readFileSync(join(raiz, 'src/components/data/utils/spreadsheet/macro', f), 'utf8')).join('\n');
+  const src = ['interp.ts', 'macro-parser.ts', 'lexer.ts', 'host.ts', 'recorder.ts'].map((f) => readFileSync(join(raiz, 'src/components/data/utils/spreadsheet/macro', f), 'utf8')).join('\n');
   const code = src.split('\n').filter((l) => !l.trim().startsWith('//')).join('\n');
   assert.doesNotMatch(code, /\beval\s*\(/);
   assert.doesNotMatch(code, /new\s+Function/);

@@ -244,3 +244,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-checke
 - [CSS](./checkbox.scss)
 - [Índice de categoría](../../../specs/componentes.md)
 - [Preview](./checkbox.json)
+
+## Tamaño
+
+`size="sm"` compacta el control.

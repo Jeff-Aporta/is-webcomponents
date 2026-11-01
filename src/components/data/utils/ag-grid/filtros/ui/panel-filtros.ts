@@ -6,8 +6,8 @@ import { TEXTOS } from '../textos.js';
 import { botonIcono, crear, icono, inputDe } from './controles.js';
 import { PanelFiltro } from './panel-filtro.js';
 import type { EntradaPanelFiltros, NodoColumna } from '../filtros.schemas.js';
-import type { MotorFiltros } from '../motor.js';
-import type { ColumnState } from '../../contrato.js';
+import type { MotorFiltros } from '../filtros-motor.js';
+import type { ColumnState } from '../../../../schemas/datagrid-types.schemas.js';
 
 
 export class PanelFiltros {

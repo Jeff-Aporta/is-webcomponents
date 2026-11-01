@@ -1,0 +1,223 @@
+@use '../../core/focus-ring';
+
+:host {
+  --iswc-focus-fallback: currentColor;
+  display: block;
+  margin: clamp(1.5em, 3vw, 2.5em) 0 0;
+  font-family: var(--iswc-sans);
+}
+
+.cdn {
+  --iswc-cdn-snippet-border: var(--iswc-border, color-mix(in srgb, currentColor 14%, transparent));
+  --iswc-cdn-snippet-radius: 0.85em;
+  --iswc-cdn-snippet-pre-bg: color-mix(in srgb, var(--iswc-bg-elev, var(--iswc-bg)) 88%, transparent);
+  --iswc-cdn-snippet-row-bg: color-mix(in srgb, var(--iswc-bg-elev, var(--iswc-bg)) 72%, transparent);
+  --iswc-cdn-snippet-text-dim: var(--iswc-text-soft, color-mix(in srgb, currentColor 60%, transparent));
+  --iswc-cdn-snippet-success: var(--iswc-color-success);
+
+  /* Mismo look del .callout--cdn de presentation.css: fondo tintado con el
+     acento, borde izquierdo de 3px y radios solo a la derecha. */
+  display: grid;
+  gap: 1em;
+  padding: .75em 1em;
+  background: color-mix(in srgb, var(--iswc-accent) 7%, var(--iswc-bg-soft, var(--iswc-bg)));
+  border: 1px solid color-mix(in srgb, var(--iswc-accent) 32%, var(--iswc-cdn-snippet-border));
+  border-radius: var(--iswc-radius-sm);
+}
+
+.cdn__head { display: grid; gap: 0.25em; }
+
+.cdn__title {
+  margin: 0;
+  font-size: 0.78em;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--iswc-accent) 50%, var(--iswc-text));
+}
+
+.cdn__list {
+  display: grid;
+  gap: 0.65em;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cdn__row {
+  display: grid;
+  gap: 0.4em;
+  padding: 0.7em 0.85em;
+  border: 1px solid var(--iswc-cdn-snippet-border);
+  border-radius: 0.6em;
+  background: var(--iswc-cdn-snippet-row-bg);
+  min-width: 0;
+
+  &[hidden] { display: none; }
+}
+
+.cdn__row-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5em;
+  flex-wrap: wrap;
+}
+
+.cdn__label {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.35em 0.55em;
+  font-size: 0.82em;
+  font-weight: 600;
+  color: var(--iswc-text);
+  letter-spacing: 0.01em;
+
+  code {
+    font-family: var(--iswc-mono);
+    font-size: 0.92em;
+    font-weight: 500;
+    color: color-mix(in srgb, var(--iswc-accent) 60%, var(--iswc-text));
+  }
+}
+
+.cdn__copy {
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3em;
+  padding: 0.32em 0.75em;
+  border: 1px solid var(--iswc-cdn-snippet-border);
+  border-radius: 999em;
+  background: var(--iswc-control-bg);
+  color: var(--iswc-control-text, var(--iswc-text));
+  font: inherit;
+  font-size: 0.78em;
+  font-weight: 600;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 160ms ease, border-color 160ms ease,
+              color 160ms ease, transform 120ms ease;
+
+  /* el foco lo pone .iswc-focus-ring (core/focus-ring.scss) */
+  &:hover {
+    background: color-mix(in srgb, var(--iswc-accent) 14%, var(--iswc-bg));
+    border-color: color-mix(in srgb, var(--iswc-accent) 38%, transparent);
+    transform: translateY(-.0801em);
+  }
+
+  &.iswc-copied {
+    background: color-mix(in srgb, var(--iswc-cdn-snippet-success) 18%, transparent);
+    border-color: color-mix(in srgb, var(--iswc-cdn-snippet-success) 55%, transparent);
+    color: var(--iswc-cdn-snippet-success);
+  }
+}
+
+.cdn__pre {
+  display: block;
+  width: 100%;
+  margin: 0;
+  --iswc-code-min-height: 0;
+  --iswc-code-radius: 0.45em;
+  --iswc-code-bg: var(--iswc-cdn-snippet-pre-bg);
+  border: 1px solid var(--iswc-cdn-snippet-border);
+  border-radius: 0.45em;
+  overflow: hidden;
+}
+
+/* El código dentro de .cdn__pre lo pinta <iswc-code> (motor nativo):
+   no hace falta CSS de tokens. */
+
+.cdn__md-prompt {
+  display: block;
+  margin-top: 0.35em;
+  --preview-max-height: 18em;
+}
+
+@media (max-width: 33.75em) {
+  .cdn__row-head { gap: 0.4em; }
+  .cdn__copy { width: 100%; justify-content: center; }
+}
+
+/* Filas de dependencias externas: REQUISITOS, no opciones del componente.
+   Accent warning + borde inline distinto para diferenciarlas de las filas
+   de bundles propios. */
+.cdn__row--dep {
+  border-inline-start: 1px solid color-mix(in srgb, var(--iswc-color-warning) 60%, transparent);
+  padding-inline-start: 0.75em;
+  background: color-mix(in srgb, var(--iswc-color-warning) 6%, transparent);
+}
+
+.cdn__dep-name {
+  code { color: var(--iswc-color-warning-stronger); }
+}
+
+.cdn__dep-note {
+  margin: 0.4em 0 0;
+  font-size: 0.78em;
+  line-height: 1.45;
+  color: var(--iswc-cdn-snippet-text-dim);
+}
+
+/* Skill simple (Paty): enlaces + ojo, sin visor MD. */
+.cdn__agents {
+  display: grid;
+  gap: 0.55em;
+  margin-top: 0.25em;
+  padding-top: 0.9em;
+  border-top: 1px solid var(--iswc-cdn-snippet-border, var(--iswc-border-soft));
+}
+
+.cdn__docs-title {
+  margin: 0;
+  font-size: 0.72em;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--iswc-accent) 55%, var(--iswc-text));
+}
+
+.cdn__skill {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4em 0.55em;
+  margin: 0;
+  padding: 0.7em 0.85em;
+  border: 1px solid var(--iswc-cdn-snippet-border, var(--iswc-border));
+  border-radius: 0.6em;
+  background: color-mix(in srgb, var(--iswc-bg-elev, var(--iswc-bg)) 88%, transparent);
+  font-size: 0.88em;
+
+  &[hidden] { display: none; }
+}
+
+.cdn__skill-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35em;
+}
+
+.cdn__skill-sep {
+  color: var(--iswc-cdn-snippet-text-dim, var(--iswc-text-dim));
+  user-select: none;
+}
+
+.cdn__skill-link {
+  color: var(--iswc-accent);
+  text-decoration: none;
+  font-weight: 550;
+
+  &:hover {
+    text-decoration: underline;
+    text-underline-offset: 0.15em;
+  }
+}
+
+.cdn__skill iswc-button[data-ver-md] {
+  flex: none;
+  font-size: 1.1932em;
+  --_height: 2em;
+  min-width: 1.9048em;
+}

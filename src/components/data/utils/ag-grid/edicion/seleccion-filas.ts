@@ -3,7 +3,6 @@
  * Conjuntos de ids; el controlador decide de donde salen y a quien avisa.
  */
 import type { Seleccionable, UniversoFilas } from './seleccion-filas.schemas.js';
-export type * from './seleccion-filas.schemas.js';
 import type { AlcanceTodo } from './schemas/edicion.schemas.js';
 import type { GestoFila } from './schemas/edicion.schemas.js';
 import type { OpcionesFilas } from './schemas/edicion.schemas.js';

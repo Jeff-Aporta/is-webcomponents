@@ -345,6 +345,19 @@
       ]
     },
     {
+      "id": "disabled",
+      "title": "Deshabilitado",
+      "lede": "Lo resuelve el iswc-button interno y deja de emitir iswc-fab-click.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": [
+            "<iswc-fab position=\"inline\" icon=\"mdi:plus\" label=\"Crear\" disabled></iswc-fab>"
+          ]
+        }
+      ]
+    },
+    {
       "id": "reference",
       "title": "Referencia",
       "blocks": [

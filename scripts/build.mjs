@@ -432,6 +432,7 @@ await copyFile(palettesOut, join(dist, 'palettes.min.css'));
     outfile: join(previewDist, 'doc-demo-galeria.min.js'),
     format: 'esm',
     target: 'es2022',
+    plugins: [zodExterno],
     banner: docsBanner([`md: ${GH_RAW}/src/components/layout/doc-demo.md`]),
   });
   await bundleCss(join(cssRoot, 'styles', 'shell.css'), shellOut);

@@ -2,11 +2,11 @@
 import { colName, parseRange, quoteSheet } from '../address.js';
 import { wildcardRegex } from '../criteria.js';
 import { evalNode, evaluate } from '../evaluator.js';
-import type { Ctx } from '../evaluator.js';
+import type { Ctx } from '../evaluator.schemas.js';
 import { parseFormula } from '../parser.js';
 import { CellError, compare, ERR, RefValue, toNumber } from '../values.js';
-import type { EvalValue, Matrix, Scalar } from '../values.js';
-import { flat, isArrayLike, lifted, matrix, num, optBool, optNum, scalar, str } from './helpers.js';
+import type { EvalValue, Matrix, Scalar } from '../values.schemas.js';
+import { flat, isArrayLike, lifted, matrix, num, optBool, optNum, scalar, str } from './fn-helpers.js';
 import { def, defLazy } from './registry.js';
 
 const CAT = 'Búsqueda';

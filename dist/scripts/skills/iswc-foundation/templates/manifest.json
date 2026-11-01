@@ -56,6 +56,7 @@
     "tests/e2e/01.bienvenida-llm.test.ts",
     "tests/iconos/iconos.test.ts",
     "tests/vistas/bienvenida.test.ts",
+    "tests/vistas/contrato-componentes.test.ts",
     "tsconfig.json",
     "view/demo/components/__PREFIJO__-galeria.ts",
     "view/demo/index.html",

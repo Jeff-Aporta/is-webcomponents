@@ -9,7 +9,13 @@
   font-family: var(--iswc-font-family, inherit);
 }
 
-.tg { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0.5em; }
+.tg { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--iswc-tab-group-gap, 0.5em); }
+
+:host([size="sm"]) {
+  --iswc-tab-padding: 0.3em 0.6em;
+
+  font-size: 0.875em;
+}
 
 .nav {
   display: flex;
@@ -107,7 +113,7 @@
     display: inline-flex;
     align-items: center;
     gap: 0.4em;
-    padding: 0.55em 0.9em;
+    padding: var(--iswc-tab-padding, 0.55em 0.9em);
     background: transparent;
     border: 0;
     font: inherit;

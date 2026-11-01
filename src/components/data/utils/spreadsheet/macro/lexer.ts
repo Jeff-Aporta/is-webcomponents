@@ -1,12 +1,9 @@
 // lexer.ts — tokens del lenguaje de macros. Palabras clave en español con alias en inglés.
 
-/** Tipo de token de macro. */
-export type MacroTokenType = 'num' | 'str' | 'id' | 'kw' | 'op' | 'nl' | 'eof';
 
-/** Token de macro. */
-export interface MacroToken { type: MacroTokenType; text: string; line: number; col: number }
 
 /** Error del lenguaje, con su línea. */
+import type { MacroTokenType, MacroToken } from './lexer.schemas.ts';
 export class MacroError extends Error {
   constructor(message: string, readonly line: number) {
     super(`Línea ${line}: ${message}`);

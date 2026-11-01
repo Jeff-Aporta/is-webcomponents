@@ -200,7 +200,7 @@ test('componentes/attr-enums', async () => {
   if (/variant\s+[^\n]*\bghost\b/.test(buttonJs)) {
     assert.match(
       buttonCss,
-      /\[variant="ghost"\]/,
+      /\[variant~="ghost"\]/,
       'button.ts documenta la variante `ghost` pero button.css no la implementa',
     );
     assert.match(

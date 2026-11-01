@@ -1,9 +1,9 @@
 // datetime.ts — fecha y hora sobre seriales.
 import { daysInMonth, fromSerial, nowSerial, parseDateText, serial } from '../dates.js';
-import type { Ctx } from '../evaluator.js';
+import type { Ctx } from '../evaluator.schemas.js';
 import { ERR, toNumber, toText } from '../values.js';
-import type { EvalValue, Scalar } from '../values.js';
-import { flat, lifted, matrix, num, scalar } from './helpers.js';
+import type { EvalValue, Scalar } from '../values.schemas.js';
+import { flat, lifted, matrix, num, scalar } from './fn-helpers.js';
 import { def } from './registry.js';
 
 const CAT = 'Fecha y hora';

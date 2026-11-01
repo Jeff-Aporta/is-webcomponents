@@ -1,28 +1,22 @@
 // render.ts — HTML de la rejilla visible. Función pura de (documento, ventana): el componente
 // decide cuándo pintar; aquí no se toca el DOM.
 import { cellName, colName } from '../address.js';
-import type { Rect } from '../address.js';
+import type { Rect } from '../address.schemas.js';
 import { Axis } from '../axis.js';
-import type { CfEffect, CfEvaluator } from '../conditional.js';
+import type { CfEffect } from '../conditional.schemas.js';
+import type { CfEvaluator } from '../conditional.js';
 import type { SpreadsheetDoc } from '../document.js';
 import { cellKey } from '../engine.js';
 import type { Sheet } from '../engine.js';
 import { CellError } from '../values.js';
 import type { BorderSide, CellStyle } from '../../../schemas/spreadsheet.schemas.js';
+import type { GridWindow, RenderOptions } from './render.schemas.js';
 
 /** Medidas fijas de la rejilla, en em. */
 export const HEAD_HEIGHT = 1.75;
 export const MIN_ROW_HEAD = 2.75;
 
-/** Ventana a pintar. Los gaps son espaciadores en em que dan el tamaño total. */
-export interface GridWindow {
-  rows: number[]; cols: number[];
-  topGapAt: number; topGap: number; bottomGap: number;
-  leftGapAt: number; leftGap: number; rightGap: number;
-}
 
-/** Opciones de presentación. */
-export interface RenderOptions { showFormulas: boolean; headings: boolean; activeCell: { r: number; c: number } | null; zoom: number }
 
 const SAFE_COLOR = /^(#[0-9a-fA-F]{3,8}|[a-zA-Z]{3,24}|rgba?\([\d\s,.%]+\))$/;
 const BORDER_WIDTH: Record<BorderSide['style'], string> = { thin: 'thin solid', medium: 'medium solid', thick: 'thick solid', dashed: 'thin dashed', dotted: 'thin dotted', double: 'medium double' };

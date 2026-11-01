@@ -3,30 +3,30 @@ import { ElementBase } from '../../core/element-base.js';
 import { parseWorkbookDoc } from './schemas/spreadsheet.schemas.js';
 import type { CellStyle, ChartDef, MacroDef, SpreadsheetChangeDetail, SpreadsheetSelectDetail, WorkbookDoc } from './schemas/spreadsheet.schemas.js';
 import { cellName, colName, inRect, normalize, parseCell, parseRange, quoteSheet, rangeName } from './utils/spreadsheet/address.js';
-import type { Rect } from './utils/spreadsheet/address.js';
+import type { Rect } from './utils/spreadsheet/address.schemas.js';
 import type { Axis } from './utils/spreadsheet/axis.js';
 import { CfEvaluator } from './utils/spreadsheet/conditional.js';
 import { detectDelimiter, parseDelimited, toDelimited } from './utils/spreadsheet/csv.js';
 import { SpreadsheetDoc } from './utils/spreadsheet/document.js';
-import type { ClipBlock } from './utils/spreadsheet/document.js';
+import type { ClipBlock } from './utils/spreadsheet/document.schemas.js';
 import type { Sheet } from './utils/spreadsheet/engine.js';
 import { runMacro } from './utils/spreadsheet/macro/host.js';
-import type { MacroView } from './utils/spreadsheet/macro/host.js';
+import type { MacroView } from './utils/spreadsheet/macro/host.schemas.js';
 import { MacroRecorder } from './utils/spreadsheet/macro/recorder.js';
-import type { RecordArg } from './utils/spreadsheet/macro/recorder.js';
+import type { RecordArg } from './utils/spreadsheet/macro/recorder.schemas.js';
 import { adjustDecimals, NUMBER_FORMATS } from './utils/spreadsheet/numfmt.js';
 import { parseClipboardHtml, toHtml, toTsv } from './utils/spreadsheet/ui/clipboard.js';
 import { cfDialog, cfManageDialog, commentDialog, dedupeDialog, findDialog, formatDialog, functionDialog, goalSeekDialog, gotoDialog, MACRO_HELP, namesDialog, pasteSpecialDialog, promptDialog, sortDialog, textColumnsDialog, validationDialog } from './utils/spreadsheet/ui/dialogs.js';
-import type { DialogHost, DialogSpec, Fields } from './utils/spreadsheet/ui/dialogs.js';
+import type { DialogHost, DialogSpec, Fields } from './utils/spreadsheet/ui/dialogs.schemas.js';
 import { canPoint, cycleAbsolute, formulaRefs, rectText, refAtCaret, signatureAt, signatureParts, suggestionsAt } from './utils/spreadsheet/ui/formula-assist.js';
-import type { Suggestion } from './utils/spreadsheet/ui/formula-assist.js';
+import type { Suggestion } from './utils/spreadsheet/ui/formula-assist.schemas.js';
 import { buildAxes, computeWindow, esc, HEAD_HEIGHT, renderGrid, rowHeadWidth } from './utils/spreadsheet/ui/render.js';
-import type { GridWindow } from './utils/spreadsheet/ui/render.js';
+import type { GridWindow } from './utils/spreadsheet/ui/render.schemas.js';
 import { CELL_MENU, COL_MENU, menuHtml, ribbonHtml, ribbonItem, ROW_MENU, SWATCHES, TAB_MENU } from './utils/spreadsheet/ui/ribbon.js';
-import type { MenuItem } from './utils/spreadsheet/ui/ribbon.js';
+import type { MenuItem } from './utils/spreadsheet/ui/ribbon.schemas.js';
 import { isValid, listItems } from './utils/spreadsheet/validation.js';
 import { displayValue } from './utils/spreadsheet/values.js';
-import type { Scalar } from './utils/spreadsheet/values.js';
+import type { Scalar } from './utils/spreadsheet/values.schemas.js';
 import { readXlsx } from './utils/spreadsheet/xlsx-read.js';
 import { writeXlsx } from './utils/spreadsheet/xlsx-write.js';
 import '../actions/button.js';
@@ -40,6 +40,7 @@ import '../forms/textarea.js';
 import '../layout/dialog.js';
 import '../media/icon.js';
 import '../navigation/tab-group.js';
+import type { Selection, Edit, Pointing, Drag, Clip, ValueEl } from './spreadsheet.schemas.js';
 
 /**
  * <iswc-spreadsheet> — Hoja de cálculo completa en un web component: varias hojas, más de 380
@@ -80,23 +81,11 @@ const CHART_MODULES: Record<ChartDef['type'], () => Promise<unknown>> = {
 /** Dirección de cada flecha. */
 const ARROWS: Record<string, readonly [number, number]> = { ArrowUp: [-1, 0], ArrowDown: [1, 0], ArrowLeft: [0, -1], ArrowRight: [0, 1] };
 
-/** Estado de la selección. */
-interface Selection { r: number; c: number; ranges: Rect[] }
 
-/** Edición en curso. */
-interface Edit { sheet: Sheet; r: number; c: number; input: HTMLInputElement; original: string; quick: boolean; source: 'cell' | 'bar' }
 
-/** Referencia que se está apuntando. */
-interface Pointing { start: number; end: number; anchor: { r: number; c: number } }
 
-/** Arrastre en curso. */
-interface Drag { kind: 'select' | 'fill' | 'point' | 'col' | 'row' | 'resize-col' | 'resize-row' | 'chart-move' | 'chart-size'; index?: number; start?: number; origin?: { x: number; y: number }; chart?: ChartDef; add?: boolean; target?: Rect; alternate?: boolean; pos?: { r: number; c: number } }
 
-/** Contenido del portapapeles propio. */
-interface Clip { block: ClipBlock; cut: boolean; text: string }
 
-/** Elemento con valor (controles del kit). */
-type ValueEl = HTMLElement & { value: string; checked?: boolean; swatches?: string[]; show?: () => void; hide?: () => void; config?: unknown };
 
 class IswcSpreadsheet extends ElementBase {
   static get observedAttributes(): string[] { return OBSERVED; }

@@ -164,13 +164,14 @@ test('galería: el catálogo se muda a un drawer izquierdo en móvil', () => {
 
 test('galería: header sticky con herramienta para compactar paneles (TTL 1h)', () => {
   const gallery = read('src', 'app', 'app.ts');
+  const estado = read('src', 'components', 'layout', 'utils', 'doc-demo-estado.ts');
   assert.ok(/id="panelsCompactBtn"/.test(shellHtml), 'falta el btn de compactar paneles');
   assert.ok(/class="shell-tools"/.test(shellHtml), 'falta el cluster shell-tools en el header');
   assert.ok(/position:\s*sticky/.test(shellCss), 'shell-bar debe ser sticky');
-  assert.ok(/PANELS_TTL_MS\s*=\s*3_600_000/.test(gallery), 'TTL de paneles debe ser 1h');
-  assert.ok(/panelsCompact/.test(gallery) && /savedAt/.test(gallery), 'prefs de paneles con savedAt');
+  assert.ok(/PANELS_TTL_MS\s*=\s*3_600_000/.test(estado), 'TTL de paneles debe ser 1h');
+  assert.ok(/panelsCompact/.test(estado) && /savedAt/.test(estado), 'prefs de paneles con savedAt');
   assert.ok(
-    /getComponentPrefs/.test(gallery) && /setComponentPrefs/.test(gallery),
+    /getComponentPrefs/.test(estado) && /setComponentPrefs/.test(estado),
     'galería debe persistir vía prefs compartidas (no setItem suelto)',
   );
   assert.ok(
