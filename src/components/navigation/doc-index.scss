@@ -119,3 +119,13 @@ mark { padding: 0 .125em; border-radius: .1875em; background: color-mix(in srgb,
   .item { justify-content: center; align-items: center; padding: .55em 0; }
   .lado { width: auto; }
 }
+
+/* flat: resaltado plano a todo el ancho, sin redondeo, línea activa ni guías de grupo; igual en hover y activo. */
+:host([flat]) {
+  nav.lista { padding-inline: 0; }
+  .item { border-radius: 0; }
+  .item[aria-current="page"]::before { display: none; }
+  .item:hover, .item[aria-current="page"] { background: color-mix(in srgb, var(--iswc-color-brand) 12%, transparent); }
+  .sub { border: 0; margin-inline-start: 0; padding-inline-start: 0; }
+  .sub::before { display: none; }
+}

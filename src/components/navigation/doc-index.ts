@@ -12,6 +12,7 @@ import type { ItemDocIndex, ResultadoDocIndex, TextosDocIndex } from './schemas/
  *   idx.current = '010-General/x.md';
  *   idx.addEventListener('iswc-doc-index-select', (e) => abrir(e.detail.id));
  *
+ * Atributos: `compact` (solo íconos), `flat` (resaltado plano a todo el ancho).
  * Propiedades: `items` (o un `<script type="application/json">` hijo), `current` (id activo),
  * `textos` (placeholder, sin resultados, resumen).
  * Atributos: `current`, `placeholder`.
@@ -36,7 +37,7 @@ const TEXTOS: TextosDocIndex = { placeholder: 'Buscar…', sinResultados: 'Sin r
 
 class IswcDocIndex extends HTMLElement {
   static get observedAttributes(): string[] {
-    return ['current', 'placeholder', 'compact'];
+    return ['current', 'placeholder', 'compact', 'flat'];
   }
 
   #shadow: ShadowRoot;
