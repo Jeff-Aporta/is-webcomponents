@@ -12,7 +12,7 @@ preview: ./page-header.json
 
 ## Propósito
 
-Fila de arriba de una vista: ícono, título, subtítulo y un slot para los botones. Con ella todas las vistas de una app empiezan igual.
+Fila de arriba de una vista: ícono, título, subtítulo, un slot para los botones y otro para una ilustración decorativa a la derecha. Con ella todas las vistas de una app empiezan igual.
 
 ## Cuándo usarlo
 
@@ -55,6 +55,7 @@ Los datos van por atributos o por `el.props = { … }` (se mezcla con lo anterio
 | Slot | Contenido |
 | --- | --- |
 | `acciones` | Botones o selectores a la derecha. |
+| `ilustracion` | Ilustración decorativa al extremo derecho (imagen, SVG o escena). Solo ocupa espacio si se proyecta algo y se oculta cuando la cabecera mide menos de 36em. |
 
 ### Eventos
 
@@ -72,6 +73,7 @@ No emite eventos propios.
 | `titulo` | El `<h1>`. |
 | `subtitulo` | La línea bajo el título. |
 | `acciones` | Caja de las acciones. |
+| `ilustracion` | Caja de la ilustración. |
 
 ### Custom states
 
@@ -82,6 +84,7 @@ No expone custom states.
 | Propiedad | Default | Uso |
 | --- | --- | --- |
 | `--iswc-page-header-title-font` | `inherit` | Fuente del título. |
+| `--iswc-page-header-ilustracion-size` | `10em` | Ancho de la ilustración. |
 
 ### Integración con formularios
 
@@ -93,6 +96,7 @@ No participa en formularios.
 <header part="cabecera">
   <h1 part="titulo"><iswc-icon></iswc-icon>…</h1><p part="subtitulo">…</p>
   <div part="acciones"><slot name="acciones"></slot></div>
+  <div part="ilustracion" aria-hidden="true"><slot name="ilustracion"></slot></div>
 </header>
 ```
 
@@ -100,6 +104,7 @@ No participa en formularios.
 
 - Sin `subtitulo` ni `icono`, esos nodos no ocupan espacio.
 - Las acciones bajan de línea cuando no caben.
+- La ilustración es decorativa (`aria-hidden`): va al extremo derecho, centrada en alto, y desaparece en contenedores de menos de 36em.
 
 ## Dependencias y componentes relacionados
 
@@ -114,6 +119,7 @@ El título es un `<h1>`: úsalo una sola vez por vista.
 ```html
 <iswc-page-header titulo="Proyectos" subtitulo="Tableros de la empresa" icono="mdi:view-column-outline">
   <iswc-button slot="acciones" color="brand">Nuevo</iswc-button>
+  <img slot="ilustracion" src="ilustracion-proyectos.svg" alt="">
 </iswc-page-header>
 ```
 
@@ -125,6 +131,7 @@ El título es un `<h1>`: úsalo una sola vez por vista.
 
 - Una vista, un `iswc-page-header`.
 - Las acciones van en el slot, no al lado.
+- La ilustración es adorno: nada de información que no esté también en el título.
 
 ## Fuentes
 

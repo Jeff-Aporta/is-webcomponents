@@ -4,13 +4,13 @@
   "category": "layout",
   "title": "&lt;iswc-page-header&gt;",
   "titleHtml": false,
-  "description": "Cabecera de una vista: ícono, título, subtítulo y acciones.",
+  "description": "Cabecera de una vista: ícono, título, subtítulo, acciones e ilustración opcional.",
   "storageKey": "docs-iswc-page-header",
   "sections": [
     {
       "id": "intro",
       "title": "Uso",
-      "lede": "Fila de arriba de una vista: ícono, título, subtítulo y un slot para los botones. Con ella todas las vistas de una app empiezan igual.",
+      "lede": "Fila de arriba de una vista: ícono, título, subtítulo, un slot para los botones y otro para una ilustración decorativa. Con ella todas las vistas de una app empiezan igual.",
       "blocks": [
         {
           "kind": "demo",
@@ -33,6 +33,26 @@
               "control": "text",
               "prop": "attr:icono",
               "label": "icono"
+            }
+          ]
+        },
+        {
+          "kind": "demo",
+          "html": [
+            "<iswc-page-header id=\"ci\" titulo=\"Finanzas\" subtitulo=\"Ingresos y gastos del mes\" icono=\"mdi:finance\"><iswc-button slot=\"acciones\" color=\"brand\">Exportar</iswc-button><svg slot=\"ilustracion\" viewBox=\"0 0 120 70\" style=\"color: var(--iswc-brand)\"><rect x=\"8\" y=\"38\" width=\"16\" height=\"26\" rx=\"3\" fill=\"currentColor\" opacity=\".45\"/><rect x=\"32\" y=\"26\" width=\"16\" height=\"38\" rx=\"3\" fill=\"currentColor\" opacity=\".7\"/><rect x=\"56\" y=\"12\" width=\"16\" height=\"52\" rx=\"3\" fill=\"currentColor\"/><circle cx=\"96\" cy=\"30\" r=\"18\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"8\" stroke-dasharray=\"70 120\"/></svg></iswc-page-header>"
+          ],
+          "target": "#ci",
+          "controls": [
+            {
+              "control": "select",
+              "prop": "style:",
+              "label": "ilustración",
+              "options": [
+                "--iswc-page-header-ilustracion-size:7em",
+                "--iswc-page-header-ilustracion-size:10em",
+                "--iswc-page-header-ilustracion-size:14em"
+              ],
+              "default": "--iswc-page-header-ilustracion-size:10em"
             }
           ]
         },

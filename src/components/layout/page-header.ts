@@ -5,11 +5,12 @@ import type { PageHeaderProps } from './schemas/page-header.schemas.js';
 import '../media/icon.js';
 
 /**
- * <iswc-page-header> — cabecera de una vista: ícono, título, subtítulo y acciones (slot `acciones`).
+ * <iswc-page-header> — cabecera de una vista: ícono, título, subtítulo, acciones (slot `acciones`) e ilustración
+ * opcional a la derecha (slot `ilustracion`; se oculta en contenedores angostos).
  * Datos por atributos (`titulo`, `subtitulo`, `icono`) o por `props`.
  *
- * CSS parts: cabecera, titulo, subtitulo, acciones.
- * CSS custom properties: --iswc-page-header-title-font.
+ * CSS parts: cabecera, titulo, subtitulo, acciones, ilustracion.
+ * CSS custom properties: --iswc-page-header-title-font, --iswc-page-header-ilustracion-size.
  */
 
 const INICIAL: PageHeaderProps = { titulo: '', subtitulo: '', icono: '' };
@@ -22,6 +23,7 @@ TEMPLATE.innerHTML = /* html */ `
       <p class="subtitulo" part="subtitulo" hidden></p>
     </div>
     <div class="acciones" part="acciones"><slot name="acciones"></slot></div>
+    <div class="ilustracion" part="ilustracion" aria-hidden="true" hidden><slot name="ilustracion"></slot></div>
   </header>
 `;
 
@@ -31,6 +33,7 @@ class IswcPageHeader extends PropsElement<PageHeaderProps> {
   #icono: HTMLElement;
   #rotulo: HTMLElement;
   #subtitulo: HTMLElement;
+  #ilustracion: HTMLElement;
 
   constructor() {
     super(INICIAL, PageHeaderPropsSchema.partial());
@@ -40,6 +43,14 @@ class IswcPageHeader extends PropsElement<PageHeaderProps> {
     this.#icono = shadow.querySelector<HTMLElement>('iswc-icon')!;
     this.#rotulo = shadow.querySelector<HTMLElement>('.rotulo')!;
     this.#subtitulo = shadow.querySelector<HTMLElement>('.subtitulo')!;
+    this.#ilustracion = shadow.querySelector<HTMLElement>('.ilustracion')!;
+    const ranura = shadow.querySelector<HTMLSlotElement>('slot[name="ilustracion"]')!;
+    ranura.addEventListener('slotchange', () => this.#verIlustracion(ranura));
+  }
+
+  /** La caja de la ilustración solo ocupa espacio si algo se proyecta en ella. */
+  #verIlustracion(ranura: HTMLSlotElement): void {
+    this.#ilustracion.hidden = ranura.assignedElements().length === 0;
   }
 
   protected override pintar(): void {
