@@ -21,14 +21,14 @@ test('iswc-dialog observa backdrop-variant', () => {
   assert.match(js, /toJSON/);
 });
 
-test('default none: backdrop transparente sin blur', () => {
+test('default: todo modal lleva velo con blur; none lo quita', () => {
+  assert.match(css, /--iswc-dialog-backdrop-blur:\s*var\(--iswc-backdrop-blur/);
+  assert.match(css, /backdrop-variant=["']?none["']?/);
   assert.match(css, /--iswc-dialog-backdrop-color:\s*transparent/);
-  assert.match(css, /--iswc-dialog-backdrop-blur:\s*0em/);
 });
 
 test('basic: oscuridad + blur', () => {
-  assert.match(css, /backdrop-variant=["']basic["']/);
-  assert.match(css, /backdrop-filter:\s*blur/);
+    assert.match(css, /backdrop-filter:\s*blur/);
   assert.match(css, /rgb\(0 0 0 \/ 55%\)/);
 });
 

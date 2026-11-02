@@ -9,9 +9,9 @@
   --iswc-dialog-spacing: var(--iswc-space-l, 1em);
   /* modal-chrome.css lee --spacing; sin este alias header/body/footer quedan sin padding. */
   --spacing: var(--iswc-dialog-spacing);
-  /* Default backdrop-variant=none: sin oscuridad. basic pisa el color. */
-  --iswc-dialog-backdrop-color: transparent;
-  --iswc-dialog-backdrop-blur: 0em;
+  /* Por defecto todo modal lleva velo: oscuro + blur (basic). */
+  --iswc-dialog-backdrop-color: var(--iswc-backdrop-color, rgb(0 0 0 / 55%));
+  --iswc-dialog-backdrop-blur: var(--iswc-backdrop-blur, 0.25em);
   --iswc-dialog-show-duration: 200ms;
   --iswc-dialog-hide-duration: 160ms;
 
@@ -42,13 +42,13 @@
   .backdrop { visibility: hidden; }
 }
 
-/* Variantes estándar: basic = oscuro + blur, dim = solo oscuro, blur = solo blur. Override fino vía --iswc-dialog-backdrop-*. */
-:host(:is([backdrop-variant="basic"], [backdrop-variant="dim"])) {
-  --iswc-dialog-backdrop-color: var(--iswc-backdrop-color, rgb(0 0 0 / 55%));
+/* Variantes estándar: basic (default) = oscuro + blur, dim = solo oscuro, blur = solo blur, none = sin velo. Override fino vía --iswc-dialog-backdrop-*. */
+:host(:is([backdrop-variant="none"], [backdrop-variant="blur"])) {
+  --iswc-dialog-backdrop-color: transparent;
 }
 
-:host(:is([backdrop-variant="basic"], [backdrop-variant="blur"])) {
-  --iswc-dialog-backdrop-blur: var(--iswc-backdrop-blur, 0.25em);
+:host(:is([backdrop-variant="none"], [backdrop-variant="dim"])) {
+  --iswc-dialog-backdrop-blur: 0em;
 }
 
 .backdrop {

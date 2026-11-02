@@ -18,7 +18,7 @@ import { ModalBase } from './utils/modal-base.js';
  *   label             string  — título en el header (a11y).
  *   without-header    boolean — oculta el header y el botón de cerrar.
  *   light-dismiss     boolean — cierra al hacer click fuera del diálogo.
- *   backdrop-variant  none | basic | dim | blur — basic: oscuro + blur; dim: solo oscuro; blur: solo blur (default: none).
+ *   backdrop-variant  none | basic | dim | blur — basic (default): oscuro + blur; dim: solo oscuro; blur: solo blur; none: sin velo.
  *                     none  → sin oscuridad ni blur (sigue capturando clics si light-dismiss).
  *                     basic → oscuridad + blur. Otros looks: style/class del consumidor.
  *
@@ -101,15 +101,15 @@ import { ModalBase } from './utils/modal-base.js';
       adoptCss(this.shadowRoot!, import.meta.url);
     }
 
-    /** none | basic. Ausente o inválido → none. */
+    /** basic | dim | blur | none. Ausente o inválido → basic. */
     get backdropVariant() {
-      const v = (this.getAttribute('backdrop-variant') || 'none').trim().toLowerCase();
-      return BACKDROP_VARIANTS.has(v) ? v : 'none';
+      const v = (this.getAttribute('backdrop-variant') || 'basic').trim().toLowerCase();
+      return BACKDROP_VARIANTS.has(v) ? v : 'basic';
     }
     set backdropVariant(v) {
-      const next = String(v ?? 'none').trim().toLowerCase();
-      if (!next || next === 'none') this.removeAttribute('backdrop-variant');
-      else this.setAttribute('backdrop-variant', BACKDROP_VARIANTS.has(next) ? next : 'none');
+      const next = String(v ?? 'basic').trim().toLowerCase();
+      if (!next || next === 'basic') this.removeAttribute('backdrop-variant');
+      else this.setAttribute('backdrop-variant', BACKDROP_VARIANTS.has(next) ? next : 'basic');
     }
 
     /** Serializa attrs públicos (útil en demos / JSON de preview). */

@@ -56,7 +56,7 @@ Contenido.
 | `label` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
 | `without-header` | boolean | Fuente define default/restricciÃ³n. |
 | `light-dismiss` | boolean | Fuente define default/restricciÃ³n. |
-| `backdrop-variant` | `none` | `basic` | `dim` | `blur` |\| `basic` | Default `none` (sin oscuridad ni blur). `basic` = oscuridad + blur. Otros looks vÃ­a style/class. |
+| `backdrop-variant` | `none` | `basic` | `dim` | `blur` |\| `basic` | Default `basic` (oscuro + blur); `dim` solo oscuro, `blur` solo blur, `none` sin velo. `basic` = oscuridad + blur. Otros looks vÃ­a style/class. |
 
 #### Propiedades pÃºblicas
 
