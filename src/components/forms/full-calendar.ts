@@ -1,7 +1,8 @@
-import '@jeff-aporta/iswc-base/components/actions/button.js';
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
 import { escapeHtml } from '@jeff-aporta/iswc-base/core/dom-utils.js';
 import type { CalEvent, View } from "./schemas/full-calendar.schemas.js";
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-full-calendar> — Vista día/semana/mes con eventos.
@@ -31,8 +32,11 @@ import type { CalEvent, View } from "./schemas/full-calendar.schemas.js";
 (() => {
   const OBSERVED = ['view', 'date', 'first-day', 'locale', 'hours-start', 'hours-end'];
 
-  class IswcFullCalendar extends HTMLElement {
-    static get observedAttributes(): string[] { return OBSERVED; }
+  class IswcFullCalendar extends IswcElement {
+    static tag = 'iswc-full-calendar';
+    static css = css;
+    static deps = ['iswc-button'];
+    static observed = OBSERVED;
     #mounted = false;
     #events: CalEvent[] = [];
     #cursor: Date = new Date();
@@ -41,7 +45,6 @@ import type { CalEvent, View } from "./schemas/full-calendar.schemas.js";
 
     constructor() {
       super();
-      this.attachShadow({ mode: 'open' });
       this.shadowRoot!.innerHTML = /* html */ `
         <div part="root" class="root">
           <header part="toolbar" class="toolbar">
@@ -57,7 +60,6 @@ import type { CalEvent, View } from "./schemas/full-calendar.schemas.js";
           <div part="grid" class="grid" id="grid"></div>
         </div>
       `;
-      adoptCss(this.shadowRoot!, import.meta.url);
       this.#title = this.shadowRoot!.getElementById('ttl')!;
       this.#grid = this.shadowRoot!.getElementById('grid')!;
       this.#grid.addEventListener('click', (e) => this.#onClick(e));
@@ -65,6 +67,7 @@ import type { CalEvent, View } from "./schemas/full-calendar.schemas.js";
     }
 
     connectedCallback(): void {
+      super.connectedCallback();
       this.#mounted = true;
       const d = this.getAttribute('date');
       if (d) this.#cursor = new Date(d);
@@ -262,5 +265,5 @@ import type { CalEvent, View } from "./schemas/full-calendar.schemas.js";
   function sameDay(a: Date, b: Date): boolean {
     return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
   }
-  defineElement('iswc-full-calendar', IswcFullCalendar);
+  define(IswcFullCalendar);
 })();

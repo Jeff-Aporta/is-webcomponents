@@ -1,14 +1,13 @@
-import { adoptCss, defineElement, emit, upgradeProperties } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit, upgradeProperties } from '@jeff-aporta/iswc-base/core/element.js';
 import {
   attachFormInternals, setCustomState, setFormValue, setValidity, clearValidity
 } from '@jeff-aporta/iswc-base/core/form-associated.js';
-import '@jeff-aporta/iswc-base/components/media/icon.js';
-import '@jeff-aporta/iswc-base/components/actions/button.js';
 import '@jeff-aporta/iswc-base/components/actions/check-icon-button.js';
 import { isOtpAutocomplete, listenWebOtp } from './utils/web-otp.js';
-import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
 import { setStringAttr, setOptionalAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
 import { hasSlotted } from '@jeff-aporta/iswc-base/core/dom-utils.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 /**
  * <iswc-input> — Campo de texto form-associated (vanilla + Shadow DOM).
  *
@@ -111,10 +110,14 @@ import { hasSlotted } from '@jeff-aporta/iswc-base/core/dom-utils.js';
   ];
 
 
-  class IswcInput extends ElementBase {
+  class IswcInput extends IswcElement {
+    static tag = 'iswc-input';
+    static css = css;
+    static shadowInit: ShadowRootInit | null = { mode: 'open', delegatesFocus: true };
+    static deps = ['iswc-icon', 'iswc-button'];
 
     static formAssociated = true;
-    static get observedAttributes(): string[] { return [...OBSERVED, 'radius', 'border-color', 'bg', 'text-color', 'focus-color', 'danger-color']; }
+    static observed = [...OBSERVED, 'radius', 'border-color', 'bg', 'text-color', 'focus-color', 'danger-color'];
 
     #internals: ElementInternals | null = null;
     #input!: HTMLInputElement;
@@ -142,8 +145,7 @@ import { hasSlotted } from '@jeff-aporta/iswc-base/core/dom-utils.js';
 
     constructor() {
       super();
-      const shadow = this.attachShadow({ mode: 'open', delegatesFocus: true });
-      adoptCss(shadow, import.meta.url);
+      const shadow = this.shadowRoot!;
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
 
       this.#input = shadow.getElementById('input') as HTMLInputElement;
@@ -568,5 +570,5 @@ import { hasSlotted } from '@jeff-aporta/iswc-base/core/dom-utils.js';
     };
   }
 
-  defineElement('iswc-input', IswcInput, 'IswcInput');
+  define(IswcInput, 'IswcInput');
 })();

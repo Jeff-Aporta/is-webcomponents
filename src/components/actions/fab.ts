@@ -1,7 +1,8 @@
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
-import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
 import { INTENT } from '@jeff-aporta/iswc-base/core/intent.js';
 import './button.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-fab> — Floating Action Button (vanilla, zero dependencies).
@@ -64,15 +65,16 @@ import './button.js';
   const VALID_POSITION = ['bottom-end', 'bottom-start', 'top-end', 'top-start', 'inline'] as const;
   type Position = (typeof VALID_POSITION)[number];
 
-  class IswcFab extends ElementBase {
+  class IswcFab extends IswcElement {
+    static tag = 'iswc-fab';
+    static css = css;
 
-    static get observedAttributes(): string[] { return [...OBSERVED]; }
+    static observed = [...OBSERVED];
 
     #root!: HTMLElement;
     constructor() {
       super();
-      const shadow = this.attachShadow({ mode: 'open' });
-      adoptCss(shadow, import.meta.url);
+      const shadow = this.shadowRoot!;
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
       this.#root = shadow.querySelector<HTMLElement>('iswc-button')!;
       // En el constructor y no al conectar: reconectar el fab duplicaba el evento.
@@ -152,5 +154,5 @@ import './button.js';
     }
   }
 
-  defineElement('iswc-fab', IswcFab, 'IswcFab');
+  define(IswcFab, 'IswcFab');
 })();

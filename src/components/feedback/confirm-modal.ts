@@ -1,7 +1,7 @@
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
-import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
 import { createPopupDismiss } from '@jeff-aporta/iswc-base/core/popup-dismiss.js';
-import '@jeff-aporta/iswc-base/components/actions/button.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-confirm-modal> — Web Component (vanilla, zero dependencies).
@@ -52,9 +52,12 @@ import '@jeff-aporta/iswc-base/components/actions/button.js';
 
   const OBSERVED = ['for', 'heading', 'message', 'open', 'color', 'confirm-label', 'cancel-label'];
 
-  class IswcConfirmModal extends ElementBase {
+  class IswcConfirmModal extends IswcElement {
+    static tag = 'iswc-confirm-modal';
+    static css = css;
+    static deps = ['iswc-button'];
 
-    static get observedAttributes(): string[] { return [...OBSERVED, 'bg', 'text-color', 'border-color', 'accent']; }
+    static observed = [...OBSERVED, 'bg', 'text-color', 'border-color', 'accent'];
 
     #backdrop!: HTMLElement;
     #modal!: HTMLElement;
@@ -74,8 +77,7 @@ import '@jeff-aporta/iswc-base/components/actions/button.js';
 
     constructor() {
       super();
-      const shadow = this.attachShadow({ mode: 'open' });
-      adoptCss(shadow, import.meta.url);
+      const shadow = this.shadowRoot!;
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
       this.#backdrop = shadow.querySelector<HTMLElement>('.backdrop')!;
       this.#backdrop.popover = 'manual';
@@ -221,5 +223,5 @@ import '@jeff-aporta/iswc-base/components/actions/button.js';
     }
   }
 
-  defineElement('iswc-confirm-modal', IswcConfirmModal, 'IswcConfirmModal');
+  define(IswcConfirmModal, 'IswcConfirmModal');
 })();

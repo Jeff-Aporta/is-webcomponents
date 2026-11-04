@@ -1,8 +1,8 @@
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
 import { ocultarSlotsVacios } from '@jeff-aporta/iswc-base/core/dom-utils.js';
-import '@jeff-aporta/iswc-base/components/media/icon.js';
 import { INTENT, normalizeIntent } from '@jeff-aporta/iswc-base/core/intent.js';
-import '@jeff-aporta/iswc-base/components/actions/button.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-toast-item> — Web Component (vanilla).
@@ -58,8 +58,11 @@ import '@jeff-aporta/iswc-base/components/actions/button.js';
   const VALID_COLOR = INTENT;
   const DEFAULT_DURATION = 5000;
 
-  class IswcToastItem extends HTMLElement {
-    static get observedAttributes(): string[] { return OBSERVED; }
+  class IswcToastItem extends IswcElement {
+    static tag = 'iswc-toast-item';
+    static css = css;
+    static deps = ['iswc-icon', 'iswc-button'];
+    static observed = OBSERVED;
 
     #base!: HTMLElement;
     #progress!: HTMLElement;
@@ -76,8 +79,7 @@ import '@jeff-aporta/iswc-base/components/actions/button.js';
 
     constructor() {
       super();
-      const shadow = this.attachShadow({ mode: 'open' });
-      adoptCss(shadow, import.meta.url);
+      const shadow = this.shadowRoot!;
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
       ocultarSlotsVacios(shadow, '.icon > slot, .caption > slot');
       this.#base = shadow.querySelector<HTMLElement>('.base')!;
@@ -96,6 +98,7 @@ import '@jeff-aporta/iswc-base/components/actions/button.js';
     }
 
     connectedCallback(): void {
+      super.connectedCallback();
       this.#mounted = true;
       if (!this.hasAttribute('color')) this.setAttribute('color', 'brand');
       if (!this.hasAttribute('duration')) this.setAttribute('duration', String(DEFAULT_DURATION));
@@ -271,5 +274,5 @@ import '@jeff-aporta/iswc-base/components/actions/button.js';
     };
   }
 
-  defineElement('iswc-toast-item', IswcToastItem, 'IswcToastItem');
+  define(IswcToastItem, 'IswcToastItem');
 })();

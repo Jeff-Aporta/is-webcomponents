@@ -1,5 +1,6 @@
-import { adoptCss, defineElement } from '@jeff-aporta/iswc-base/core/element.js';
 import { withStyleAttrs } from '@jeff-aporta/iswc-base/core/attrs.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 
 /**
@@ -18,14 +19,15 @@ import { withStyleAttrs } from '@jeff-aporta/iswc-base/core/attrs.js';
     <span part="spinner" class="spinner" aria-hidden="true"></span>
   `;
 
-  class IswcSpinner extends withStyleAttrs(HTMLElement) {
+  class IswcSpinner extends withStyleAttrs(IswcElement) {
+    static tag = 'iswc-spinner';
+    static css = css;
 
-    static get observedAttributes(): string[] { return []; }
+    static observed = [];
 
     constructor() {
       super();
-      const shadow = this.attachShadow({ mode: 'open' });
-      adoptCss(shadow, import.meta.url);
+      const shadow = this.shadowRoot!;
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
     }
 
@@ -37,5 +39,5 @@ import { withStyleAttrs } from '@jeff-aporta/iswc-base/core/attrs.js';
     }
   }
 
-  defineElement('iswc-spinner', IswcSpinner, 'IswcSpinner');
+  define(IswcSpinner, 'IswcSpinner');
 })();

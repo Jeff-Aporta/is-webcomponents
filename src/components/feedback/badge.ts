@@ -1,9 +1,10 @@
-import { adoptCss, defineElement } from '@jeff-aporta/iswc-base/core/element.js';
 import { withStyleAttrs } from '@jeff-aporta/iswc-base/core/attrs.js';
 import { ocultarSlotsVacios } from '@jeff-aporta/iswc-base/core/dom-utils.js';
 
 import { INTENT } from '@jeff-aporta/iswc-base/core/intent.js';
 import { TONE } from '@jeff-aporta/iswc-base/core/tone.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-badge> — Web Component (vanilla).
@@ -34,9 +35,11 @@ import { TONE } from '@jeff-aporta/iswc-base/core/tone.js';
   const VALID_VARIANT = TONE.filter((t) => t !== 'plain');
   const VALID_ATTENTION = ['none', 'pulse', 'bounce'];
 
-  class IswcBadge extends withStyleAttrs(HTMLElement) {
+  class IswcBadge extends withStyleAttrs(IswcElement) {
+    static tag = 'iswc-badge';
+    static css = css;
 
-    static get observedAttributes(): string[] { return [...OBSERVED, 'pulse-color']; }
+    static observed = [...OBSERVED, 'pulse-color'];
 
     #mo: MutationObserver | null = null;
     /** Etiqueta que puso #syncAria: se retira en cuanto llega texto, sin tocar la del consumidor. */
@@ -44,8 +47,7 @@ import { TONE } from '@jeff-aporta/iswc-base/core/tone.js';
 
     constructor() {
       super();
-      const shadow = this.attachShadow({ mode: 'open' });
-      adoptCss(shadow, import.meta.url);
+      const shadow = this.shadowRoot!;
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
       ocultarSlotsVacios(shadow, '.prefix slot, .suffix slot');
     }
@@ -100,5 +102,5 @@ import { TONE } from '@jeff-aporta/iswc-base/core/tone.js';
     }
   }
 
-  defineElement('iswc-badge', IswcBadge, 'IswcBadge');
+  define(IswcBadge, 'IswcBadge');
 })();

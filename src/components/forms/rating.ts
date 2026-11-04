@@ -1,12 +1,12 @@
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
 import {
   attachFormInternals, setCustomState, setFormValue, setValidity, clearValidity
 } from '@jeff-aporta/iswc-base/core/form-associated.js';
-import '@jeff-aporta/iswc-base/components/media/icon.js';
-import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
 import { setStringAttr, setOptionalAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
 import { hasSlotted } from '@jeff-aporta/iswc-base/core/dom-utils.js';
 import { clampTo, tidyToStep } from '@jeff-aporta/iswc-base/core/misc-utils.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 /**
  * <iswc-rating> — Valoración form-associated (vanilla + Shadow DOM).
  *
@@ -76,10 +76,14 @@ import { clampTo, tidyToStep } from '@jeff-aporta/iswc-base/core/misc-utils.js';
 
   type LabelFn = (value: number) => string;
 
-  class IswcRating extends ElementBase {
+  class IswcRating extends IswcElement {
+    static tag = 'iswc-rating';
+    static css = css;
+    static shadowInit: ShadowRootInit | null = { mode: 'open', delegatesFocus: true };
+    static deps = ['iswc-icon'];
 
     static formAssociated = true;
-    static get observedAttributes(): string[] { return [...OBSERVED, 'size', 'gap', 'color', 'empty-color', 'focus-color']; }
+    static observed = [...OBSERVED, 'size', 'gap', 'color', 'empty-color', 'focus-color'];
 
     #internals: ElementInternals | null = null;
     #base!: HTMLElement;
@@ -96,8 +100,7 @@ import { clampTo, tidyToStep } from '@jeff-aporta/iswc-base/core/misc-utils.js';
 
     constructor() {
       super();
-      const shadow = this.attachShadow({ mode: 'open', delegatesFocus: true });
-      adoptCss(shadow, import.meta.url);
+      const shadow = this.shadowRoot!;
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
 
       this.#base = shadow.getElementById('base')!;
@@ -443,5 +446,5 @@ import { clampTo, tidyToStep } from '@jeff-aporta/iswc-base/core/misc-utils.js';
     };
   }
 
-  defineElement('iswc-rating', IswcRating, 'IswcRating');
+  define(IswcRating, 'IswcRating');
 })();

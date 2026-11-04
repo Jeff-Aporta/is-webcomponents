@@ -1,7 +1,5 @@
 import { applyToneRamp, isCssColorValue } from '@jeff-aporta/iswc-base/core/attrs.js';
-import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
-import '@jeff-aporta/iswc-base/components/media/icon.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
 
 import {
   BUTTON_SHAPE,
@@ -10,6 +8,8 @@ import {
 } from '@jeff-aporta/iswc-base/core/button-shape.js';
 import { setCustomState } from '@jeff-aporta/iswc-base/core/form-associated.js';
 import { DEFAULT_INTENT, ensureDefaultColor } from '@jeff-aporta/iswc-base/core/intent.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-button> — Web Component (vanilla).
@@ -142,7 +142,11 @@ import { DEFAULT_INTENT, ensureDefaultColor } from '@jeff-aporta/iswc-base/core/
     "tabindex",
   ];
 
-  class IswcButton extends ElementBase {
+  class IswcButton extends IswcElement {
+    static tag = 'iswc-button';
+    static css = css;
+    static shadowInit: ShadowRootInit | null = { mode: "open", delegatesFocus: true };
+    static deps = ['iswc-icon'];
     static formAssociated = true;
 
     /**
@@ -155,9 +159,7 @@ import { DEFAULT_INTENT, ensureDefaultColor } from '@jeff-aporta/iswc-base/core/
      * estos tokens vía CSS class o inline style.
      */
 
-    static get observedAttributes(): string[] {
-      return [...OBSERVED, ...ARIA_FORWARD];
-    }
+    static observed = [...OBSERVED, ...ARIA_FORWARD];
 
     /** `color` es doble: familia semántica (la resuelve el CSS) o color CSS
      *  literal (la rampa la deriva aquí). */
@@ -175,8 +177,7 @@ import { DEFAULT_INTENT, ensureDefaultColor } from '@jeff-aporta/iswc-base/core/
     constructor() {
       super();
 
-      const shadow = this.attachShadow({ mode: "open", delegatesFocus: true });
-      adoptCss(shadow, import.meta.url);
+      const shadow = this.shadowRoot!;
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
 
       this.#btn = shadow.querySelector<HTMLElement>(".btn")!;
@@ -504,7 +505,7 @@ import { DEFAULT_INTENT, ensureDefaultColor } from '@jeff-aporta/iswc-base/core/
     }
   }
 
-  defineElement("iswc-button", IswcButton);
+  define(IswcButton);
 
   // Exponer para tests / dev
   if (typeof window !== "undefined") {

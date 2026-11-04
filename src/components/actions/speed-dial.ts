@@ -1,9 +1,11 @@
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
 import { withStyleAttrs } from '@jeff-aporta/iswc-base/core/attrs.js';
 
 import './check-icon-button.js';
 import { clampTo } from '@jeff-aporta/iswc-base/core/misc-utils.js';
 import { createPopupDismiss } from '@jeff-aporta/iswc-base/core/popup-dismiss.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-speed-dial> — FAB que despliega un abanico de acciones.
@@ -75,14 +77,11 @@ import { createPopupDismiss } from '@jeff-aporta/iswc-base/core/popup-dismiss.js
 
   /** Personalización por atributo (ver `core/attrs.ts`). */
 
-  class IswcSpeedDial extends withStyleAttrs(HTMLElement) {
+  class IswcSpeedDial extends withStyleAttrs(IswcElement) {
+    static tag = 'iswc-speed-dial';
+    static css = css;
 
-    static get observedAttributes(): string[] {
-      // Phase V5: STYLE_ATTRS removido. El consumer define los tokens vía class
-      // o inline style. Se conserva el nombre como observado por si llega del
-      // HTML antiguo.
-      return [...OBSERVED, 'radius'];
-    }
+    static observed = [...OBSERVED, 'radius'];
 
     #mo: MutationObserver | null = null;
     #ro: ResizeObserver | null = null;
@@ -90,7 +89,6 @@ import { createPopupDismiss } from '@jeff-aporta/iswc-base/core/popup-dismiss.js
 
     constructor() {
       super();
-      this.attachShadow({ mode: 'open' });
       this.shadowRoot!.innerHTML = /* html */ `
         <div part="root" class="root" data-direction="up" hidden>
           <div part="actions" class="actions">
@@ -102,7 +100,6 @@ import { createPopupDismiss } from '@jeff-aporta/iswc-base/core/popup-dismiss.js
           </iswc-check-icon-button>
         </div>
       `;
-      adoptCss(this.shadowRoot!, import.meta.url);
       this.#trigger = this.shadowRoot!.querySelector<HTMLElement>('.trigger')!;
       // iswc-check-icon-button ya gestiona el estado visual y emite iswc-change.
       this.#trigger?.addEventListener('iswc-change', (e: Event) => {
@@ -579,21 +576,21 @@ import { createPopupDismiss } from '@jeff-aporta/iswc-base/core/popup-dismiss.js
     });
   }
 
-  defineElement('iswc-speed-dial', IswcSpeedDial);
+  define(IswcSpeedDial);
 
   // Acción individual — patrón primario: <button> extendido.
-  class IswcSpeedDialAction extends HTMLElement {
-    static get observedAttributes(): string[] { return ['icon', 'label', 'color', 'href', 'disabled']; }
+  class IswcSpeedDialAction extends IswcElement {
+    static tag = 'iswc-speed-dial-action';
+    static css = css;
+    static observed = ['icon', 'label', 'color', 'href', 'disabled'];
     constructor() {
       super();
-      this.attachShadow({ mode: 'open' });
       this.shadowRoot!.innerHTML = /* html */ `
         <a part="action" class="action" role="menuitem" tabindex="-1">
           <span class="label"><slot></slot></span>
           <span class="ico"><slot name="icon"><iswc-icon icon="mdi:star-outline"></iswc-icon></slot></span>
         </a>
       `;
-      adoptCss(this.shadowRoot!, import.meta.url);
     }
     connectedCallback(): void {
       const link = this.shadowRoot?.querySelector<HTMLAnchorElement>('a');
@@ -622,5 +619,5 @@ import { createPopupDismiss } from '@jeff-aporta/iswc-base/core/popup-dismiss.js
       }
     }
   }
-  defineElement('iswc-speed-dial-action', IswcSpeedDialAction);
+  define(IswcSpeedDialAction);
 })();

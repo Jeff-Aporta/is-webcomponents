@@ -1,11 +1,11 @@
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
 import { crearNodo } from '@jeff-aporta/iswc-base/core/dom-utils.js';
 import { atributosDe, PropsElement } from '@jeff-aporta/iswc-base/core/props-element.js';
 import { TenantSelectorPropsSchema } from './schemas/tenant-selector.schemas.js';
 import type { TenantChangeDetail, TenantSelectEl, TenantSelectorProps } from './schemas/tenant-selector.schemas.js';
 import './select.js';
-import '@jeff-aporta/iswc-base/components/feedback/tag.js';
-import '@jeff-aporta/iswc-base/components/media/icon.js';
+import { define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-tenant-selector> — selector del cliente activo en apps con varios clientes (empresa, organización, espacio).
@@ -17,14 +17,16 @@ import '@jeff-aporta/iswc-base/components/media/icon.js';
 const INICIAL: TenantSelectorProps = { opciones: [], activa: null, icono: 'mdi:domain', etiqueta: 'Cliente activo', sinOpciones: 'Sin opciones' };
 
 class IswcTenantSelector extends PropsElement<TenantSelectorProps> {
-  static override get observedAttributes(): string[] { return atributosDe(INICIAL); }
+  static tag = 'iswc-tenant-selector';
+  static css = css;
+  static deps = ['iswc-tag', 'iswc-icon'];
+  static observed = atributosDe(INICIAL);
 
   #root: ShadowRoot;
 
   constructor() {
     super(INICIAL, TenantSelectorPropsSchema.partial());
-    this.#root = this.attachShadow({ mode: 'open' });
-    adoptCss(this.#root, import.meta.url);
+    this.#root = this.shadowRoot!;
   }
 
   #cambiar = (e: Event): void => {
@@ -53,4 +55,4 @@ class IswcTenantSelector extends PropsElement<TenantSelectorProps> {
   }
 }
 
-defineElement('iswc-tenant-selector', IswcTenantSelector, 'IswcTenantSelector');
+define(IswcTenantSelector, 'IswcTenantSelector');

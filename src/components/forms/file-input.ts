@@ -1,8 +1,7 @@
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
-import '@jeff-aporta/iswc-base/components/media/icon.js';
-import '@jeff-aporta/iswc-base/components/actions/button.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
 import '@jeff-aporta/iswc-base/components/helpers/format-bytes.js';
-import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-file-input> — Web Component (vanilla).
@@ -58,9 +57,12 @@ import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
 
   const OBSERVED = ['label', 'hint', 'name', 'accept', 'capture', 'multiple', 'disabled', 'required'];
 
-  class IswcFileInput extends ElementBase {
+  class IswcFileInput extends IswcElement {
+    static tag = 'iswc-file-input';
+    static css = css;
+    static deps = ['iswc-icon', 'iswc-button'];
     static formAssociated = true;
-    static get observedAttributes(): string[] { return OBSERVED; }
+    static observed = OBSERVED;
 
     #internals: ElementInternals | null = null;
     #dropzone!: HTMLElement;
@@ -74,8 +76,7 @@ import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
 
     constructor() {
       super();
-      const shadow = this.attachShadow({ mode: 'open' });
-      adoptCss(shadow, import.meta.url);
+      const shadow = this.shadowRoot!;
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
 
       this.#dropzone = shadow.querySelector<HTMLElement>('.dropzone')!;
@@ -341,5 +342,5 @@ import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
     }
   }
 
-  defineElement('iswc-file-input', IswcFileInput, 'IswcFileInput');
+  define(IswcFileInput, 'IswcFileInput');
 })();

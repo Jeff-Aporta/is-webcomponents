@@ -1,6 +1,6 @@
-import { adoptCss, defineElement } from '@jeff-aporta/iswc-base/core/element.js';
-import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
 import { setStringAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-progress-ring> — Web Component (vanilla).
@@ -30,17 +30,18 @@ import { setStringAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
   const OBSERVED = ['value', 'label', 'indeterminate'];
   const CIRC = 2 * Math.PI * 15.9155;
 
-  class IswcProgressRing extends ElementBase {
+  class IswcProgressRing extends IswcElement {
+    static tag = 'iswc-progress-ring';
+    static css = css;
 
-    static get observedAttributes(): string[] { return [...OBSERVED, 'track-width', 'width', 'track-color', 'color']; }
+    static observed = [...OBSERVED, 'track-width', 'width', 'track-color', 'color'];
 
     #wrap!: HTMLElement;
     #indicator!: HTMLElement;
     #labelEl!: HTMLElement;
     constructor() {
       super();
-      const shadow = this.attachShadow({ mode: 'open' });
-      adoptCss(shadow, import.meta.url);
+      const shadow = this.shadowRoot!;
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
       this.#wrap = shadow.querySelector<HTMLElement>('.ring-wrap')!;
       this.#indicator = shadow.querySelector<HTMLElement>('.indicator')!;
@@ -118,5 +119,5 @@ import { setStringAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
     }
   }
 
-  defineElement('iswc-progress-ring', IswcProgressRing, 'IswcProgressRing');
+  define(IswcProgressRing, 'IswcProgressRing');
 })();

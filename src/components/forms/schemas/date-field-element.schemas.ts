@@ -13,7 +13,8 @@ export type DateFieldKind = z.infer<typeof DateFieldKindSchema>;
 export const DefineDateFieldOptsSchema = z.object({
   tag: z.string(),
   kind: DateFieldKindSchema,
-  cssUrl: z.string(),
+  /** CSS del tag (`import css from 'iswc:css'` en el módulo que llama a la fábrica). */
+  css: z.string(),
 });
 export type DefineDateFieldOpts = z.infer<typeof DefineDateFieldOptsSchema>;
 

@@ -1,5 +1,6 @@
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
-import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-year-calendar> — Rejilla de años desplazable (MUI YearCalendar).
@@ -22,14 +23,15 @@ import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
     return Number.isFinite(n) && n > 0 ? n : fallback;
   }
 
-  class IswcYearCalendar extends ElementBase {
-    static get observedAttributes(): string[] { return OBSERVED; }
+  class IswcYearCalendar extends IswcElement {
+    static tag = 'iswc-year-calendar';
+    static css = css;
+    static observed = OBSERVED;
 
     #base!: HTMLElement;
     constructor() {
       super();
-      const shadow = this.attachShadow({ mode: 'open' });
-      adoptCss(shadow, import.meta.url);
+      const shadow = this.shadowRoot!;
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
       this.#base = shadow.querySelector<HTMLElement>('.base')!;
       this.#base.addEventListener('click', this.#onClick);
@@ -139,5 +141,5 @@ import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
     }
   }
 
-  defineElement('iswc-year-calendar', IswcYearCalendar, 'IswcYearCalendar');
+  define(IswcYearCalendar, 'IswcYearCalendar');
 })();

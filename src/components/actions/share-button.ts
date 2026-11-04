@@ -1,8 +1,9 @@
-import '@jeff-aporta/iswc-base/components/media/icon.js';
 import './button.js';
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
 import { setStringAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
 import { sharePayload } from './utils/web-share.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-share-button> — Web Share API; si el SO no tiene share, copia al portapapeles.
@@ -22,22 +23,25 @@ import { sharePayload } from './utils/web-share.js';
     </iswc-button>
   `;
 
-  class IswcShareButton extends HTMLElement {
-    static get observedAttributes(): string[] { return ['share-title', 'text', 'url', 'disabled']; }
+  class IswcShareButton extends IswcElement {
+    static tag = 'iswc-share-button';
+    static css = css;
+    static deps = ['iswc-icon'];
+    static observed = ['share-title', 'text', 'url', 'disabled'];
 
     #btn!: HTMLElement;
     #busy = false;
 
     constructor() {
       super();
-      const shadow = this.attachShadow({ mode: 'open' });
-      adoptCss(shadow, import.meta.url);
+      const shadow = this.shadowRoot!;
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
       this.#btn = shadow.querySelector<HTMLElement>('.btn')!;
       this.#btn.addEventListener('click', (e: Event) => { e.stopPropagation(); this.share(); });
     }
 
-    connectedCallback(): void { this.#sync(); }
+    connectedCallback(): void {
+    super.connectedCallback(); this.#sync(); }
     attributeChangedCallback() { this.#sync(); }
 
     get shareTitle() { return this.getAttribute('share-title') ?? ''; }
@@ -64,5 +68,5 @@ import { sharePayload } from './utils/web-share.js';
     }
   }
 
-  defineElement('iswc-share-button', IswcShareButton, 'IswcShareButton');
+  define(IswcShareButton, 'IswcShareButton');
 })();

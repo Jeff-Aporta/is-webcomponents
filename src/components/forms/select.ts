@@ -1,9 +1,6 @@
 import { placementHaciaCentro } from '@jeff-aporta/iswc-base/core/position.js';
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
 import './option.js';
-import '@jeff-aporta/iswc-base/components/media/icon.js';
-import '@jeff-aporta/iswc-base/components/actions/button.js';
-import '@jeff-aporta/iswc-base/components/feedback/tag.js';
 
 import {
   attachFormInternals,
@@ -12,8 +9,9 @@ import {
   setFormValue,
   setValidity,
 } from '@jeff-aporta/iswc-base/core/form-associated.js';
-import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
 import { setStringAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 /**
  * <iswc-select> — Select form-associated con listbox en <dialog modal> (top layer),
  * así el desplegable nunca se pierde por overflow/clipping de ancestros.
@@ -118,10 +116,14 @@ import { setStringAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
 
   let uidSeq = 0;
 
-  class IswcSelect extends ElementBase {
+  class IswcSelect extends IswcElement {
+    static tag = 'iswc-select';
+    static css = css;
+    static shadowInit: ShadowRootInit | null = { mode: 'open', delegatesFocus: true };
+    static deps = ['iswc-icon', 'iswc-button', 'iswc-tag'];
 
     static formAssociated = true;
-    static get observedAttributes(): string[] { return [...OBSERVED, 'radius', 'border-color', 'bg', 'text-color', 'focus-color', 'danger-color']; }
+    static observed = [...OBSERVED, 'radius', 'border-color', 'bg', 'text-color', 'focus-color', 'danger-color'];
 
     #internals: ElementInternals | null = null;
     #base!: HTMLElement;
@@ -151,8 +153,7 @@ import { setStringAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
 
     constructor() {
       super();
-      const shadow = this.attachShadow({ mode: 'open', delegatesFocus: true });
-      adoptCss(shadow, import.meta.url);
+      const shadow = this.shadowRoot!;
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
 
       this.#base = shadow.querySelector<HTMLElement>('.base')!;
@@ -921,5 +922,5 @@ import { setStringAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
     };
   }
 
-  defineElement('iswc-select', IswcSelect, 'IswcSelect');
+  define(IswcSelect, 'IswcSelect');
 })();

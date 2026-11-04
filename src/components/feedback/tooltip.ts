@@ -1,7 +1,9 @@
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
 import { withStyleAttrs } from '@jeff-aporta/iswc-base/core/attrs.js';
 
 import '@jeff-aporta/iswc-base/components/helpers/floating.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-tooltip> — tip contextual anclado vía `for`.
@@ -57,9 +59,11 @@ import '@jeff-aporta/iswc-base/components/helpers/floating.js';
     reposition(): void;
   };
 
-  class IswcTooltip extends withStyleAttrs(HTMLElement) {
+  class IswcTooltip extends withStyleAttrs(IswcElement) {
+    static tag = 'iswc-tooltip';
+    static css = css;
 
-    static get observedAttributes(): string[] { return [...OBSERVED, 'max-width', 'arrow-size', 'arrow-color']; }
+    static observed = [...OBSERVED, 'max-width', 'arrow-size', 'arrow-color'];
 
     #popup!: PopupRef;
     #target: HTMLElement | null = null;
@@ -70,8 +74,7 @@ import '@jeff-aporta/iswc-base/components/helpers/floating.js';
 
     constructor() {
       super();
-      const shadow = this.attachShadow({ mode: 'open' });
-      adoptCss(shadow, import.meta.url);
+      const shadow = this.shadowRoot!;
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
       this.#popup = shadow.querySelector<PopupRef>('iswc-floating')!;
     }
@@ -301,5 +304,5 @@ import '@jeff-aporta/iswc-base/components/helpers/floating.js';
     }
   }
 
-  defineElement('iswc-tooltip', IswcTooltip, 'IswcTooltip');
+  define(IswcTooltip, 'IswcTooltip');
 })();

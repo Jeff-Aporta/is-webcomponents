@@ -1,4 +1,3 @@
-import { adoptCss, defineElement } from '@jeff-aporta/iswc-base/core/element.js';
 import { withStyleAttrs } from '@jeff-aporta/iswc-base/core/attrs.js';
 
 import { copyText } from '@jeff-aporta/iswc-base/core/dom-utils.js';
@@ -10,9 +9,9 @@ import {
 import { paint } from '@jeff-aporta/iswc-base/core/highlight-code.js';
 import { SKILL_DOCS } from './utils/llm-agent-prompt.js';
 import type { SkillDoc } from "./schemas/llm-agent-prompt.schemas.js";
-import '@jeff-aporta/iswc-base/components/media/icon.js';
-import '@jeff-aporta/iswc-base/components/actions/button.js';
 import '@jeff-aporta/iswc-base/components/code/code.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-cdn-snippet> — panel copy-paste del snippet mínimo de uso.
@@ -76,12 +75,13 @@ const normalizeIswcTag = (tag: string): string => {
     </section>
   `;
 
-  class IswcCdnSnippet extends withStyleAttrs(HTMLElement) {
+  class IswcCdnSnippet extends withStyleAttrs(IswcElement) {
+    static tag = 'iswc-cdn-snippet';
+    static css = css;
+    static deps = ['iswc-icon', 'iswc-button'];
     
 
-    static get observedAttributes(): string[] {
-      return ['tag', 'category', 'base', 'title', 'dependencies', 'config'];
-    }
+    static observed = ['tag', 'category', 'base', 'title', 'dependencies', 'config'];
 
     #mounted = false;
     #urls: { loader: string; loadArg: string } = { loader: '', loadArg: '' };
@@ -92,8 +92,7 @@ const normalizeIswcTag = (tag: string): string => {
 
     constructor() {
       super();
-      const shadow = this.attachShadow({ mode: 'open' });
-      adoptCss(shadow, import.meta.url);
+      const shadow = this.shadowRoot!;
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
       shadow.addEventListener('click', this.#onClick);
       shadow.addEventListener('iswc-click', this.#onClick);
@@ -376,5 +375,5 @@ const normalizeIswcTag = (tag: string): string => {
     };
   }
 
-  defineElement('iswc-cdn-snippet', IswcCdnSnippet, 'IswcCdnSnippet');
+  define(IswcCdnSnippet, 'IswcCdnSnippet');
 })();

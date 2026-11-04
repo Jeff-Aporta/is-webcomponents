@@ -1,5 +1,4 @@
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
-import '@jeff-aporta/iswc-base/components/media/icon.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
 
 import {
   attachFormInternals,
@@ -8,10 +7,11 @@ import {
   setFormValue,
   setValidity,
 } from '@jeff-aporta/iswc-base/core/form-associated.js';
-import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
 import { setStringAttr, setOptionalAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
 import { hasSlotted } from '@jeff-aporta/iswc-base/core/dom-utils.js';
 import { DEFAULT_INTENT, ensureDefaultColor } from '@jeff-aporta/iswc-base/core/intent.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 /**
  * <iswc-switch> — Interruptor form-associated (track + thumb).
  *
@@ -65,10 +65,13 @@ import { DEFAULT_INTENT, ensureDefaultColor } from '@jeff-aporta/iswc-base/core/
 
   /** Sin flatten: el texto de fallback del slot no cuenta como contenido propio. */
 
-  class IswcSwitch extends ElementBase {
+  class IswcSwitch extends IswcElement {
+    static tag = 'iswc-switch';
+    static css = css;
+    static deps = ['iswc-icon'];
 
     static formAssociated = true;
-    static get observedAttributes(): string[] { return [...OBSERVED, 'height', 'width', 'bg', 'accent', 'thumb-color', 'focus-color', 'halo']; }
+    static observed = [...OBSERVED, 'height', 'width', 'bg', 'accent', 'thumb-color', 'focus-color', 'halo'];
 
     #internals: ElementInternals | null = null;
     #control!: HTMLElement;
@@ -85,8 +88,7 @@ import { DEFAULT_INTENT, ensureDefaultColor } from '@jeff-aporta/iswc-base/core/
 
     constructor() {
       super();
-      const shadow = this.attachShadow({ mode: 'open' });
-      adoptCss(shadow, import.meta.url);
+      const shadow = this.shadowRoot!;
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
 
       this.#control = shadow.querySelector<HTMLElement>('.control')!;
@@ -278,5 +280,5 @@ import { DEFAULT_INTENT, ensureDefaultColor } from '@jeff-aporta/iswc-base/core/
     };
   }
 
-  defineElement('iswc-switch', IswcSwitch, 'IswcSwitch');
+  define(IswcSwitch, 'IswcSwitch');
 })();

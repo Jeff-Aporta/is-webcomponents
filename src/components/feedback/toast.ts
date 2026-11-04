@@ -1,7 +1,7 @@
-import { adoptCss, defineElement } from '@jeff-aporta/iswc-base/core/element.js';
 import './toast-item.js';
-import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
 import { normalizeIntent } from '@jeff-aporta/iswc-base/core/intent.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-toast> — Web Component (vanilla).
@@ -94,7 +94,9 @@ import { normalizeIntent } from '@jeff-aporta/iswc-base/core/intent.js';
     restartTimer?(): void;
   }
 
-  class IswcToast extends ElementBase {
+  class IswcToast extends IswcElement {
+    static tag = 'iswc-toast';
+    static css = css;
 
     /** Reabre el popover para quedar encima del último modal abierto en el top layer. */
     #alFrente(): void {
@@ -103,13 +105,12 @@ import { normalizeIntent } from '@jeff-aporta/iswc-base/core/intent.js';
       if (this.matches(':popover-open')) this.hidePopover();
       this.showPopover();
     }
-    static get observedAttributes(): string[] { return OBSERVED; }
+    static observed = OBSERVED;
 
 
     constructor() {
       super();
-      const shadow = this.attachShadow({ mode: 'open' });
-      adoptCss(shadow, import.meta.url);
+      const shadow = this.shadowRoot!;
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
       this.addEventListener('iswc-after-hide', this.#onItemHide);
     }
@@ -293,5 +294,5 @@ import { normalizeIntent } from '@jeff-aporta/iswc-base/core/intent.js';
     };
   }
 
-  defineElement('iswc-toast', IswcToast, 'IswcToast');
+  define(IswcToast, 'IswcToast');
 })();

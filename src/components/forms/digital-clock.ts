@@ -1,6 +1,7 @@
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
 import { formatTime, from12Hour, pad, parseTime, to12Hour, toTime, uses12Hour } from './utils/date-utils.js';
-import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-digital-clock> — Selector de hora en lista (MUI DigitalClock) o en
@@ -26,15 +27,16 @@ import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
   interface TimeParts { h: number; m: number; s: number; }
   interface OptionInput { label: string; raw: string | number; selected: boolean; disabled: boolean; }
 
-  class IswcDigitalClock extends ElementBase {
+  class IswcDigitalClock extends IswcElement {
+    static tag = 'iswc-digital-clock';
+    static css = css;
 
-    static get observedAttributes(): string[] { return [...OBSERVED, 'clock-height']; }
+    static observed = [...OBSERVED, 'clock-height'];
 
     #base!: HTMLElement;
     constructor() {
       super();
-      const shadow = this.attachShadow({ mode: 'open' });
-      adoptCss(shadow, import.meta.url);
+      const shadow = this.shadowRoot!;
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
       this.#base = shadow.querySelector<HTMLElement>('.base')!;
       this.#base.addEventListener('click', this.#onClick);
@@ -296,5 +298,5 @@ import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
     };
   }
 
-  defineElement('iswc-digital-clock', IswcDigitalClock, 'IswcDigitalClock');
+  define(IswcDigitalClock, 'IswcDigitalClock');
 })();

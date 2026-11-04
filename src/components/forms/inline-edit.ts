@@ -1,7 +1,9 @@
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
 import { escapeHtml } from '@jeff-aporta/iswc-base/core/dom-utils.js';
 import { attachFormInternals, setCustomState, setFormValue } from '@jeff-aporta/iswc-base/core/form-associated.js';
 import { setOptionalAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-inline-edit> — "Inplace" / "Inline edit".
@@ -46,8 +48,10 @@ import { setOptionalAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
 
   type InlineState = 'idle' | 'editing' | 'saved' | 'cancelled';
 
-  class IswcInlineEdit extends HTMLElement {
-    static get observedAttributes(): string[] { return OBSERVED; }
+  class IswcInlineEdit extends IswcElement {
+    static tag = 'iswc-inline-edit';
+    static css = css;
+    static observed = OBSERVED;
 
     #internals: ElementInternals | null;
     #mounted = false;
@@ -57,10 +61,8 @@ import { setOptionalAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
 
     constructor() {
       super();
-      this.attachShadow({ mode: 'open' });
       this.#internals = attachFormInternals(this);
       this.#render();
-      adoptCss(this.shadowRoot!, import.meta.url);
       this.addEventListener('click', (e: MouseEvent) => this.#onClick(e));
       this.addEventListener('keydown', (e: KeyboardEvent) => this.#onKeyDown(e));
     }
@@ -243,5 +245,5 @@ import { setOptionalAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
 
   }
 
-  defineElement('iswc-inline-edit', IswcInlineEdit);
+  define(IswcInlineEdit);
 })();

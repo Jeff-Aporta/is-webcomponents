@@ -1,12 +1,13 @@
 import './button.js';
 import { withStyleAttrs } from '@jeff-aporta/iswc-base/core/attrs.js';
 
-import { adoptCss, defineElement, emit, upgradeProperties } from '@jeff-aporta/iswc-base/core/element.js';
-import '@jeff-aporta/iswc-base/components/media/icon.js';
+import { emit, upgradeProperties } from '@jeff-aporta/iswc-base/core/element.js';
 import '@jeff-aporta/iswc-base/components/feedback/tooltip.js';
 import { setStringAttr, setOptionalAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
 import { setCustomState } from '@jeff-aporta/iswc-base/core/form-associated.js';
 import { copyText } from '@jeff-aporta/iswc-base/core/dom-utils.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-copy-button> — Web Component (vanilla).
@@ -84,15 +85,16 @@ import { copyText } from '@jeff-aporta/iswc-base/core/dom-utils.js';
     'right', 'right-start', 'right-end',
   ];
 
-  class IswcCopyButton extends withStyleAttrs(HTMLElement) {
+  class IswcCopyButton extends withStyleAttrs(IswcElement) {
+    static tag = 'iswc-copy-button';
+    static css = css;
+    static deps = ['iswc-icon'];
 
-    static get observedAttributes(): string[] {
-      return [
+    static observed = [
         'value', 'from', 'disabled',
         'copy-label', 'success-label', 'error-label',
         'feedback-duration', 'tooltip', 'tooltip-placement',
       ];
-    }
 
     #btn!: HTMLElement;
     // `iswc-tooltip` es un custom element hermano: se declara la forma minima
@@ -111,8 +113,7 @@ import { copyText } from '@jeff-aporta/iswc-base/core/dom-utils.js';
 
     constructor() {
       super();
-      const shadow = this.attachShadow({ mode: 'open' });
-      adoptCss(shadow, import.meta.url);
+      const shadow = this.shadowRoot!;
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
       this.#btn = shadow.querySelector<HTMLElement>('iswc-button')!;
       this.#tip = shadow.querySelector<HTMLElement>('iswc-tooltip')!;
@@ -367,5 +368,5 @@ import { copyText } from '@jeff-aporta/iswc-base/core/dom-utils.js';
     }
   }
 
-  defineElement('iswc-copy-button', IswcCopyButton, 'IswcCopyButton');
+  define(IswcCopyButton, 'IswcCopyButton');
 })();

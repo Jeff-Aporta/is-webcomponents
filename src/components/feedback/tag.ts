@@ -1,10 +1,9 @@
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
 import { ocultarSlotsVacios } from '@jeff-aporta/iswc-base/core/dom-utils.js';
-import '@jeff-aporta/iswc-base/components/media/icon.js';
-import '@jeff-aporta/iswc-base/components/actions/button.js';
-import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
 import { INTENT } from '@jeff-aporta/iswc-base/core/intent.js';
 import { TONE } from '@jeff-aporta/iswc-base/core/tone.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-tag> — Web Component (vanilla).
@@ -48,8 +47,11 @@ import { TONE } from '@jeff-aporta/iswc-base/core/tone.js';
   const VALID_COLOR = [...INTENT]; // 'info' ya es parte de INTENT
   const VALID_VARIANT = TONE.filter((t) => t !== 'plain');
 
-  class IswcTag extends ElementBase {
-    static get observedAttributes(): string[] { return OBSERVED; }
+  class IswcTag extends IswcElement {
+    static tag = 'iswc-tag';
+    static css = css;
+    static deps = ['iswc-icon', 'iswc-button'];
+    static observed = OBSERVED;
 
     #remove!: HTMLElement;
     #mo: MutationObserver | null = null;
@@ -58,8 +60,7 @@ import { TONE } from '@jeff-aporta/iswc-base/core/tone.js';
 
     constructor() {
       super();
-      const shadow = this.attachShadow({ mode: 'open' });
-      adoptCss(shadow, import.meta.url);
+      const shadow = this.shadowRoot!;
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
       ocultarSlotsVacios(shadow, '.prefix slot, .suffix slot');
       this.#remove = shadow.querySelector<HTMLElement>('.remove')!;
@@ -124,5 +125,5 @@ import { TONE } from '@jeff-aporta/iswc-base/core/tone.js';
     };
   }
 
-  defineElement('iswc-tag', IswcTag, 'IswcTag');
+  define(IswcTag, 'IswcTag');
 })();

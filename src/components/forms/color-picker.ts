@@ -1,6 +1,4 @@
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
-import '@jeff-aporta/iswc-base/components/media/icon.js';
-import '@jeff-aporta/iswc-base/components/actions/button.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
 import '@jeff-aporta/iswc-base/components/forms/input.js';
 
 import {
@@ -10,10 +8,11 @@ import {
   setFormValue,
   setValidity,
 } from '@jeff-aporta/iswc-base/core/form-associated.js';
-import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
 import { setStringAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
 import { computePosition } from '@jeff-aporta/iswc-base/core/position.js';
 import type { EyeDropperOpenResult, EyeDropperInterface, EyeDropperConstructor, WindowWithEyeDropper } from "./schemas/color-picker.schemas.js";
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 /**
  * <iswc-color-picker> — Selector de color form-associated.
  *
@@ -76,10 +75,14 @@ import type { EyeDropperOpenResult, EyeDropperInterface, EyeDropperConstructor, 
     return /^[0-9a-f]{6}$/.test(s) ? `#${s}` : '';
   }
 
-  class IswcColorPicker extends ElementBase {
+  class IswcColorPicker extends IswcElement {
+    static tag = 'iswc-color-picker';
+    static css = css;
+    static shadowInit: ShadowRootInit | null = { mode: 'open', delegatesFocus: true };
+    static deps = ['iswc-icon', 'iswc-button'];
 
     static formAssociated = true;
-    static get observedAttributes(): string[] { return [...OBSERVED, 'radius', 'border-color', 'bg', 'text-color', 'focus-color']; }
+    static observed = [...OBSERVED, 'radius', 'border-color', 'bg', 'text-color', 'focus-color'];
 
     #internals: ElementInternals | null = null;
     #trigger!: HTMLButtonElement;
@@ -103,8 +106,7 @@ import type { EyeDropperOpenResult, EyeDropperInterface, EyeDropperConstructor, 
 
     constructor() {
       super();
-      const shadow = this.attachShadow({ mode: 'open', delegatesFocus: true });
-      adoptCss(shadow, import.meta.url);
+      const shadow = this.shadowRoot!;
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
 
       this.#trigger = shadow.querySelector<HTMLButtonElement>('.trigger')!;
@@ -448,5 +450,5 @@ import type { EyeDropperOpenResult, EyeDropperInterface, EyeDropperConstructor, 
     };
   }
 
-  defineElement('iswc-color-picker', IswcColorPicker, 'IswcColorPicker');
+  define(IswcColorPicker, 'IswcColorPicker');
 })();

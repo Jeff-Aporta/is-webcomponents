@@ -1,8 +1,10 @@
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
 import { attachFormInternals, clearValidity, setCustomState, setFormValue, setValidity } from '@jeff-aporta/iswc-base/core/form-associated.js';
 import { apply, isComplete } from './utils/masks-tokens.js';
 import { setStringAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
 import './input.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-masked-input> — Input con formato aplicado (tarjeta de crédito, fecha,
@@ -45,9 +47,12 @@ import './input.js';
   ];
   const OBSERVED: string[] = [...REENVIADOS, 'pattern', 'value', 'name', 'placeholder', 'maxlength', 'invalid', 'error'];
 
-  class IswcMaskedInput extends HTMLElement {
+  class IswcMaskedInput extends IswcElement {
+    static tag = 'iswc-masked-input';
+    static css = css;
+    static shadowInit: ShadowRootInit | null = { mode: 'open', delegatesFocus: true };
     static formAssociated = true;
-    static get observedAttributes(): string[] { return OBSERVED; }
+    static observed = OBSERVED;
 
     #internals: ElementInternals | null;
     #mounted = false;
@@ -56,8 +61,7 @@ import './input.js';
 
     constructor() {
       super();
-      const shadow = this.attachShadow({ mode: 'open', delegatesFocus: true });
-      adoptCss(shadow, import.meta.url);
+      const shadow = this.shadowRoot!;
       this.#field = document.createElement('iswc-input') as HTMLElement & { value: string };
       this.#field.className = 'field';
       this.#field.setAttribute('part', 'field');
@@ -187,5 +191,5 @@ import './input.js';
     }
   }
 
-  defineElement('iswc-masked-input', IswcMaskedInput);
+  define(IswcMaskedInput);
 })();

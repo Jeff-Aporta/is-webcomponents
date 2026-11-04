@@ -1,6 +1,6 @@
-import '@jeff-aporta/iswc-base/components/actions/button.js';
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
-import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-duration-picker> — Selector de duración HH:MM:SS.
@@ -29,14 +29,16 @@ import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
 
   const pad2 = (n: number | string): string => String(n).padStart(2, '0');
 
-  class IswcDurationPicker extends ElementBase {
+  class IswcDurationPicker extends IswcElement {
+    static tag = 'iswc-duration-picker';
+    static css = css;
+    static deps = ['iswc-button'];
 
-    static get observedAttributes(): string[] { return [...OBSERVED, 'bg', 'border-color']; }
+    static observed = [...OBSERVED, 'bg', 'border-color'];
     #active: HTMLInputElement | null = null;
 
     constructor() {
       super();
-      this.attachShadow({ mode: 'open' });
       this.shadowRoot!.innerHTML = /* html */ `
         <div part="root" class="root">
           <slot name="start"></slot>
@@ -60,7 +62,6 @@ import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
           <slot name="end"></slot>
         </div>
       `;
-      adoptCss(this.shadowRoot!, import.meta.url);
       this.#root = this.shadowRoot!.querySelector<HTMLElement>('.root')!;
       this.#h = this.shadowRoot!.getElementById('h') as HTMLInputElement;
       this.#m = this.shadowRoot!.getElementById('m') as HTMLInputElement;
@@ -175,5 +176,5 @@ import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
     #root!: HTMLElement;
   }
 
-  defineElement('iswc-duration-picker', IswcDurationPicker);
+  define(IswcDurationPicker);
 })();

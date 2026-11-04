@@ -1,12 +1,12 @@
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
-import '@jeff-aporta/iswc-base/components/actions/button.js';
-import '@jeff-aporta/iswc-base/components/media/icon.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
 import './confirm-modal.js';
 import { clearAllComponentPrefs, peekComponentPrefsRoot } from '@jeff-aporta/iswc-base/core/prefs.js';
 import { leerAppCfg } from '@jeff-aporta/iswc-base/core/app-cfg.js';
 import { clearIswcStorage, listIswcKeys } from '@jeff-aporta/iswc-base/core/iswc-storage.js';
 // Solo tipos: el schema Zod no entra al bundle del CDN (sumaría ~330 KB al componente).
 import type { PrefsClearDetail, PrefsClearScope } from './schemas/prefs-clear.schemas.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-prefs-clear> — deja la app como en su PRIMERA carga.
@@ -62,24 +62,25 @@ import type { PrefsClearDetail, PrefsClearScope } from './schemas/prefs-clear.sc
     return { caches: borradas, bases };
   }
 
-  class IswcPrefsClear extends HTMLElement {
-    static get observedAttributes(): string[] {
-      return ['confirm', 'reload', 'scope', 'variant', 'color', 'shape', 'disabled', 'title', 'aria-label'];
-    }
+  class IswcPrefsClear extends IswcElement {
+    static tag = 'iswc-prefs-clear';
+    static css = css;
+    static deps = ['iswc-button', 'iswc-icon'];
+    static observed = ['confirm', 'reload', 'scope', 'variant', 'color', 'shape', 'disabled', 'title', 'aria-label'];
 
     #btn!: HTMLElement;
     #busy = false;
 
     constructor() {
       super();
-      const shadow = this.attachShadow({ mode: 'open' });
-      adoptCss(shadow, import.meta.url);
+      const shadow = this.shadowRoot!;
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
       this.#btn = shadow.querySelector<HTMLElement>('iswc-button')!;
       this.#btn.addEventListener('iswc-click', this.#onClick as EventListener);
     }
 
     connectedCallback(): void {
+      super.connectedCallback();
       this.#syncAttrs();
       if (!this.hasAttribute('title')) {
         this.#btn.title = this.scope === 'prefs' ? 'Borra todo lo guardado por el kit (tema, paleta, paneles, íconos…) y recarga' : 'Borra la configuración guardada y la caché del navegador, y recarga';
@@ -195,5 +196,5 @@ import type { PrefsClearDetail, PrefsClearScope } from './schemas/prefs-clear.sc
     }
   }
 
-  defineElement('iswc-prefs-clear', IswcPrefsClear, 'IswcPrefsClear');
+  define(IswcPrefsClear, 'IswcPrefsClear');
 })();

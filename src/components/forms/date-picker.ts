@@ -1,5 +1,4 @@
-import '@jeff-aporta/iswc-base/components/actions/button.js';
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
 import {
   addMonths,
   clampISO,
@@ -19,7 +18,8 @@ import {
 import '@jeff-aporta/iswc-base/components/actions/dropdown.js';
 import './month-calendar.js';
 import './year-calendar.js';
-import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 /**
  * <iswc-date-picker> — Calendario inline (equivalente a DateCalendar de MUI X).
  *
@@ -83,9 +83,12 @@ import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
     return new Set(String(attr || '').split(/[\s,]+/).filter(Boolean));
   }
 
-  class IswcDatePicker extends ElementBase {
+  class IswcDatePicker extends IswcElement {
+    static tag = 'iswc-date-picker';
+    static css = css;
+    static deps = ['iswc-button'];
 
-    static get observedAttributes(): string[] { return [...OBSERVED, 'radius', 'border-color', 'bg']; }
+    static observed = [...OBSERVED, 'radius', 'border-color', 'bg'];
 
     #base!: HTMLElement;
     #nav!: HTMLElement;
@@ -107,8 +110,7 @@ import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
 
     constructor() {
       super();
-      const shadow = this.attachShadow({ mode: 'open' });
-      adoptCss(shadow, import.meta.url);
+      const shadow = this.shadowRoot!;
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
 
       this.#base = shadow.querySelector<HTMLElement>('.base')!;
@@ -802,5 +804,5 @@ import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
     };
   }
 
-  defineElement('iswc-date-picker', IswcDatePicker, 'IswcDatePicker');
+  define(IswcDatePicker, 'IswcDatePicker');
 })();

@@ -1,8 +1,8 @@
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
 import { addMonths, monthKey, parseISO, startOfMonth, toISO } from './utils/date-utils.js';
-import '@jeff-aporta/iswc-base/components/actions/button.js';
 import './date-picker.js';
-import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-date-range-picker> — Rango de fechas con varios meses a la vista
@@ -111,9 +111,12 @@ import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
     }
   }
 
-  class IswcDateRangePicker extends ElementBase {
+  class IswcDateRangePicker extends IswcElement {
+    static tag = 'iswc-date-range-picker';
+    static css = css;
+    static deps = ['iswc-button'];
 
-    static get observedAttributes(): string[] { return [...OBSERVED, 'bg', 'border-color']; }
+    static observed = [...OBSERVED, 'bg', 'border-color'];
 
     #shortcuts!: HTMLElement;
     #presets!: HTMLElement;
@@ -123,8 +126,7 @@ import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
 
     constructor() {
       super();
-      const shadow = this.attachShadow({ mode: 'open' });
-      adoptCss(shadow, import.meta.url);
+      const shadow = this.shadowRoot!;
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
       this.#shortcuts = shadow.querySelector<HTMLElement>('.shortcuts')!;
       this.#presets = shadow.querySelector<HTMLElement>('.presets')!;
@@ -341,5 +343,5 @@ import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
     };
   }
 
-  defineElement('iswc-date-range-picker', IswcDateRangePicker, 'IswcDateRangePicker');
+  define(IswcDateRangePicker, 'IswcDateRangePicker');
 })();

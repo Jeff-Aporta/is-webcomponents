@@ -1,10 +1,10 @@
-import { adoptCss, defineElement } from '@jeff-aporta/iswc-base/core/element.js';
 import { ocultarSlotsVacios } from '@jeff-aporta/iswc-base/core/dom-utils.js';
 import { atributosDe, PropsElement } from '@jeff-aporta/iswc-base/core/props-element.js';
 import { EmptyStatePropsSchema } from './schemas/empty-state.schemas.js';
 import type { EmptyStateProps } from './schemas/empty-state.schemas.js';
-import '@jeff-aporta/iswc-base/components/media/icon.js';
 import './spinner.js';
+import { define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-empty-state> — estado de una lista o un panel: vacío (ícono, título, texto y acción en el slot), cargando
@@ -28,7 +28,10 @@ TEMPLATE.innerHTML = /* html */ `
 `;
 
 class IswcEmptyState extends PropsElement<EmptyStateProps> {
-  static override get observedAttributes(): string[] { return atributosDe(INICIAL); }
+  static tag = 'iswc-empty-state';
+  static css = css;
+  static deps = ['iswc-icon'];
+  static observed = atributosDe(INICIAL);
 
   #caja: HTMLElement;
   #spinner: HTMLElement;
@@ -38,8 +41,7 @@ class IswcEmptyState extends PropsElement<EmptyStateProps> {
 
   constructor() {
     super(INICIAL, EmptyStatePropsSchema.partial());
-    const shadow = this.attachShadow({ mode: 'open' });
-    adoptCss(shadow, import.meta.url);
+    const shadow = this.shadowRoot!;
     shadow.appendChild(TEMPLATE.content.cloneNode(true));
     ocultarSlotsVacios(shadow, '.accion > slot');
     this.#caja = shadow.querySelector<HTMLElement>('.caja')!;
@@ -64,4 +66,4 @@ class IswcEmptyState extends PropsElement<EmptyStateProps> {
   }
 }
 
-defineElement('iswc-empty-state', IswcEmptyState, 'IswcEmptyState');
+define(IswcEmptyState, 'IswcEmptyState');

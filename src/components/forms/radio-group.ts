@@ -1,4 +1,4 @@
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
 import './radio.js';
 
 import {
@@ -8,9 +8,10 @@ import {
   setFormValue,
   setValidity,
 } from '@jeff-aporta/iswc-base/core/form-associated.js';
-import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
 import { setStringAttr, setOptionalAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
 import type { IswcRadioElement } from "./schemas/radio-group.schemas.js";
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 /**
  * <iswc-radio-group> — Grupo form-associated de <iswc-radio>. El grupo es el dueño
  * del valor: los radios solo avisan con `iswc-radio-select`.
@@ -52,10 +53,12 @@ import type { IswcRadioElement } from "./schemas/radio-group.schemas.js";
   const NEXT_KEYS = ['ArrowDown', 'ArrowRight'];
   const PREV_KEYS = ['ArrowUp', 'ArrowLeft'];
 
-  class IswcRadioGroup extends ElementBase {
+  class IswcRadioGroup extends IswcElement {
+    static tag = 'iswc-radio-group';
+    static css = css;
 
     static formAssociated = true;
-    static get observedAttributes(): string[] { return [...OBSERVED, 'accent']; }
+    static observed = [...OBSERVED, 'accent'];
 
     #internals: ElementInternals | null = null;
     #base!: HTMLElement;
@@ -71,8 +74,7 @@ import type { IswcRadioElement } from "./schemas/radio-group.schemas.js";
 
     constructor() {
       super();
-      const shadow = this.attachShadow({ mode: 'open' });
-      adoptCss(shadow, import.meta.url);
+      const shadow = this.shadowRoot!;
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
 
       this.#base = shadow.querySelector<HTMLElement>('.base')!;
@@ -328,5 +330,5 @@ import type { IswcRadioElement } from "./schemas/radio-group.schemas.js";
     };
   }
 
-  defineElement('iswc-radio-group', IswcRadioGroup, 'IswcRadioGroup');
+  define(IswcRadioGroup, 'IswcRadioGroup');
 })();

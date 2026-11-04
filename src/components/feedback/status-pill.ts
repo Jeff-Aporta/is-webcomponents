@@ -1,9 +1,9 @@
-import { adoptCss, defineElement } from '@jeff-aporta/iswc-base/core/element.js';
 import { atributosDe, PropsElement } from '@jeff-aporta/iswc-base/core/props-element.js';
 import { StatusPillPropsSchema } from './schemas/status-pill.schemas.js';
 import type { StatusPillProps, StatusPillStatus } from './schemas/status-pill.schemas.js';
-import '@jeff-aporta/iswc-base/components/media/icon.js';
 import './spinner.js';
+import { define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-status-pill> — pastilla de una línea para un paso de un proceso: spinner o ícono según `status`, la frase y el
@@ -25,7 +25,10 @@ TEMPLATE.innerHTML = /* html */ `
 `;
 
 class IswcStatusPill extends PropsElement<StatusPillProps> {
-  static override get observedAttributes(): string[] { return atributosDe(INICIAL); }
+  static tag = 'iswc-status-pill';
+  static css = css;
+  static deps = ['iswc-icon'];
+  static observed = atributosDe(INICIAL);
 
   #pill: HTMLElement;
   #spinner: HTMLElement;
@@ -35,8 +38,7 @@ class IswcStatusPill extends PropsElement<StatusPillProps> {
 
   constructor() {
     super(INICIAL, StatusPillPropsSchema.partial());
-    const shadow = this.attachShadow({ mode: 'open' });
-    adoptCss(shadow, import.meta.url);
+    const shadow = this.shadowRoot!;
     shadow.appendChild(TEMPLATE.content.cloneNode(true));
     this.#pill = shadow.querySelector<HTMLElement>('.pill')!;
     this.#spinner = shadow.querySelector<HTMLElement>('iswc-spinner')!;
@@ -58,4 +60,4 @@ class IswcStatusPill extends PropsElement<StatusPillProps> {
   }
 }
 
-defineElement('iswc-status-pill', IswcStatusPill, 'IswcStatusPill');
+define(IswcStatusPill, 'IswcStatusPill');

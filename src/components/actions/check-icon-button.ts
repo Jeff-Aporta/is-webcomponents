@@ -1,7 +1,8 @@
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
-import '@jeff-aporta/iswc-base/components/media/icon.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
 import './button.js';
 import { setStringAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-check-icon-button> — botón icon-only con dos estados (unchecked / checked).
@@ -51,8 +52,11 @@ import { setStringAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
 
   const OBSERVED = ['checked', 'icon', 'checked-icon', 'label', 'checked-label', 'variant', 'disabled'];
 
-  class IswcCheckIconButton extends HTMLElement {
-    static get observedAttributes(): string[] { return OBSERVED; }
+  class IswcCheckIconButton extends IswcElement {
+    static tag = 'iswc-check-icon-button';
+    static css = css;
+    static deps = ['iswc-icon'];
+    static observed = OBSERVED;
 
     #btn!: HTMLElement;
     #ico!: HTMLElement;
@@ -60,8 +64,7 @@ import { setStringAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
 
     constructor() {
       super();
-      const shadow = this.attachShadow({ mode: 'open' });
-      adoptCss(shadow, import.meta.url);
+      const shadow = this.shadowRoot!;
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
       this.#btn = shadow.querySelector<HTMLElement>('iswc-button')!;
       this.#ico = shadow.querySelector<HTMLElement>('.ico')!;
@@ -71,6 +74,7 @@ import { setStringAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
     }
 
     connectedCallback(): void {
+      super.connectedCallback();
       this.#mounted = true;
       if (!this.hasAttribute('role')) this.setAttribute('role', 'button');
       this.addEventListener('keydown', this.#onKeydown);
@@ -156,5 +160,5 @@ import { setStringAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
     }
   }
 
-  defineElement('iswc-check-icon-button', IswcCheckIconButton, 'IswcCheckIconButton');
+  define(IswcCheckIconButton, 'IswcCheckIconButton');
 })();

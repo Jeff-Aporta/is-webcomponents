@@ -1,6 +1,8 @@
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
 import { attachFormInternals, setFormValue } from '@jeff-aporta/iswc-base/core/form-associated.js';
 import './input.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-mention> — Input con autocompletado al tipear @usuario o #etiqueta.
@@ -39,9 +41,12 @@ import './input.js';
 
   type SuggestionsMap = Record<string, string[]>;
 
-  class IswcMention extends HTMLElement {
+  class IswcMention extends IswcElement {
+    static tag = 'iswc-mention';
+    static css = css;
+    static shadowInit: ShadowRootInit | null = { mode: 'open', delegatesFocus: true };
     static formAssociated = true;
-    static get observedAttributes(): string[] { return OBSERVED; }
+    static observed = OBSERVED;
 
     #internals: ElementInternals | null;
     #field: HTMLElement & { value: string };
@@ -57,13 +62,11 @@ import './input.js';
 
     constructor() {
       super();
-      this.attachShadow({ mode: 'open', delegatesFocus: true });
       this.shadowRoot!.innerHTML = /* html */ `
         <div part="root" class="root">
           <div part="popup" class="popup" role="listbox" hidden></div>
         </div>
       `;
-      adoptCss(this.shadowRoot!, import.meta.url);
       this.#field = document.createElement('iswc-input') as HTMLElement & { value: string };
       this.#field.setAttribute('part', 'field');
       this.#field.setAttribute('exportparts', 'form-control, label, base, input, hint, error-text');
@@ -251,5 +254,5 @@ import './input.js';
     }
   }
 
-  defineElement('iswc-mention', IswcMention);
+  define(IswcMention);
 })();

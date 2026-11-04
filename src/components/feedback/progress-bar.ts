@@ -1,6 +1,6 @@
-import { adoptCss, defineElement } from '@jeff-aporta/iswc-base/core/element.js';
-import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
 import { setStringAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-progress-bar> — Web Component (vanilla).
@@ -28,17 +28,18 @@ import { setStringAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
 
   const OBSERVED = ['value', 'label', 'indeterminate'];
 
-  class IswcProgressBar extends ElementBase {
+  class IswcProgressBar extends IswcElement {
+    static tag = 'iswc-progress-bar';
+    static css = css;
 
-    static get observedAttributes(): string[] { return [...OBSERVED, 'track-height', 'track-color', 'color']; }
+    static observed = [...OBSERVED, 'track-height', 'track-color', 'color'];
 
     #track!: HTMLElement;
     #indicator!: HTMLElement;
     #label!: HTMLElement;
     constructor() {
       super();
-      const shadow = this.attachShadow({ mode: 'open' });
-      adoptCss(shadow, import.meta.url);
+      const shadow = this.shadowRoot!;
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
       this.#track = shadow.querySelector<HTMLElement>('.track')!;
       this.#indicator = shadow.querySelector<HTMLElement>('.indicator')!;
@@ -104,5 +105,5 @@ import { setStringAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
     }
   }
 
-  defineElement('iswc-progress-bar', IswcProgressBar, 'IswcProgressBar');
+  define(IswcProgressBar, 'IswcProgressBar');
 })();

@@ -1,6 +1,7 @@
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
 import { daysInMonth, isoOf, monthLabels, pad } from './utils/date-utils.js';
-import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-month-calendar> — Rejilla de los 12 meses de un año (MUI MonthCalendar).
@@ -18,14 +19,15 @@ import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
 
   const OBSERVED: string[] = ['value', 'year', 'min', 'max', 'locale', 'columns', 'month-width', 'disabled', 'readonly'];
 
-  class IswcMonthCalendar extends ElementBase {
-    static get observedAttributes(): string[] { return OBSERVED; }
+  class IswcMonthCalendar extends IswcElement {
+    static tag = 'iswc-month-calendar';
+    static css = css;
+    static observed = OBSERVED;
 
     #base!: HTMLElement;
     constructor() {
       super();
-      const shadow = this.attachShadow({ mode: 'open' });
-      adoptCss(shadow, import.meta.url);
+      const shadow = this.shadowRoot!;
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
       this.#base = shadow.querySelector<HTMLElement>('.base')!;
       this.#base.addEventListener('click', this.#onClick);
@@ -167,5 +169,5 @@ import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
     }
   }
 
-  defineElement('iswc-month-calendar', IswcMonthCalendar, 'IswcMonthCalendar');
+  define(IswcMonthCalendar, 'IswcMonthCalendar');
 })();

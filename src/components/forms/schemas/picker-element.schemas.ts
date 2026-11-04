@@ -49,7 +49,8 @@ export type PanelsBuilder = z.infer<typeof PanelsBuilderSchema>;
 export const DefinePickerInputOptsSchema = z.object({
   tag: z.string(),
   kind: PickerKindSchema,
-  cssUrl: z.string(),
+  /** CSS del tag (`import css from 'iswc:css'` en el módulo que llama a la fábrica). */
+  css: z.string(),
   fieldTag: z.string(),
   panels: PanelsBuilderSchema,
   range: z.boolean().optional(),

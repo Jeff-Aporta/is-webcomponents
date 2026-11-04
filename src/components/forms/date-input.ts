@@ -1,6 +1,7 @@
 import { definePickerInput } from './utils/picker-element.js';
 import './date-field.js';
 import './date-picker.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-date-input> — Campo de fecha con calendario en un panel (MUI DatePicker).
@@ -21,7 +22,7 @@ import './date-picker.js';
 definePickerInput({
   tag: 'iswc-date-input',
   kind: 'date',
-  cssUrl: import.meta.url,
+  css,
   fieldTag: 'iswc-date-field',
   panels: () => {
     const calendar = document.createElement('iswc-date-picker');

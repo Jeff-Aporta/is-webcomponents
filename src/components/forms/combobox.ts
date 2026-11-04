@@ -1,10 +1,9 @@
 import { placementHaciaCentro } from '@jeff-aporta/iswc-base/core/position.js';
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
 import './option.js';
-import '@jeff-aporta/iswc-base/components/media/icon.js';
-import '@jeff-aporta/iswc-base/components/actions/button.js';
-import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
 import { setStringAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-combobox> — Input + listbox filtrable.
@@ -66,10 +65,14 @@ import { setStringAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
     'disabled', 'required', 'open', 'clearable', 'error', 'error-text'
   ];
 
-  class IswcCombobox extends ElementBase {
+  class IswcCombobox extends IswcElement {
+    static tag = 'iswc-combobox';
+    static css = css;
+    static shadowInit: ShadowRootInit | null = { mode: 'open', delegatesFocus: true };
+    static deps = ['iswc-icon', 'iswc-button'];
 
     static formAssociated = true;
-    static get observedAttributes(): string[] { return [...OBSERVED, 'radius', 'border-color', 'bg', 'text-color', 'focus-color']; }
+    static observed = [...OBSERVED, 'radius', 'border-color', 'bg', 'text-color', 'focus-color'];
 
     #internals: ElementInternals | null = null;
     #input!: HTMLInputElement;
@@ -90,8 +93,7 @@ import { setStringAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
 
     constructor() {
       super();
-      const shadow = this.attachShadow({ mode: 'open', delegatesFocus: true });
-      adoptCss(shadow, import.meta.url);
+      const shadow = this.shadowRoot!;
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
 
       this.#input = shadow.querySelector<HTMLInputElement>('.input')!;
@@ -541,5 +543,5 @@ import { setStringAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
     };
   }
 
-  defineElement('iswc-combobox', IswcCombobox, 'IswcCombobox');
+  define(IswcCombobox, 'IswcCombobox');
 })();

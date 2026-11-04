@@ -1,9 +1,10 @@
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
 import { withStyleAttrs } from '@jeff-aporta/iswc-base/core/attrs.js';
 
 import { computePosition } from '@jeff-aporta/iswc-base/core/position.js';
-import '@jeff-aporta/iswc-base/components/media/icon.js';
 import { setStringAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-dropdown-item> — ítem de menú para iswc-dropdown.
@@ -49,9 +50,12 @@ import { setStringAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
     'radius', 'padding', 'gap', 'text-color', 'bg-hover', 'danger-color',
   ];
 
-  class IswcDropdownItem extends withStyleAttrs(HTMLElement) {
+  class IswcDropdownItem extends withStyleAttrs(IswcElement) {
+    static tag = 'iswc-dropdown-item';
+    static css = css;
+    static deps = ['iswc-icon'];
 
-    static get observedAttributes(): string[] { return OBSERVED; }
+    static observed = OBSERVED;
 
     #row!: HTMLElement;
     #check!: HTMLElement;
@@ -63,8 +67,7 @@ import { setStringAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
 
     constructor() {
       super();
-      const shadow = this.attachShadow({ mode: 'open' });
-      adoptCss(shadow, import.meta.url);
+      const shadow = this.shadowRoot!;
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
       this.#row = shadow.querySelector<HTMLElement>('.item')!;
       this.#check = shadow.querySelector<HTMLElement>('.checkmark')!;
@@ -249,5 +252,5 @@ import { setStringAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
     };
   }
 
-  defineElement('iswc-dropdown-item', IswcDropdownItem, 'IswcDropdownItem');
+  define(IswcDropdownItem, 'IswcDropdownItem');
 })();

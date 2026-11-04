@@ -1,7 +1,8 @@
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
 import { formatTime, from12Hour, pad, parseTime, to12Hour, toTime, uses12Hour } from './utils/date-utils.js';
-import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
 import type { ParsedTime, RingItem, View, Meridiem, CommitOpts, PickOpts } from "./schemas/time-clock.schemas.js";
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-time-clock> — Reloj analógico para elegir hora (MUI TimeClock).
@@ -46,9 +47,11 @@ import type { ParsedTime, RingItem, View, Meridiem, CommitOpts, PickOpts } from 
 
   const VIEWS: readonly View[] = ['hours', 'minutes', 'seconds'];
 
-  class IswcTimeClock extends ElementBase {
+  class IswcTimeClock extends IswcElement {
+    static tag = 'iswc-time-clock';
+    static css = css;
 
-    static get observedAttributes(): string[] { return [...OBSERVED, 'size', 'face-color']; }
+    static observed = [...OBSERVED, 'size', 'face-color'];
 
     #base!: HTMLElement;
     #clock!: HTMLElement;
@@ -61,8 +64,7 @@ import type { ParsedTime, RingItem, View, Meridiem, CommitOpts, PickOpts } from 
 
     constructor() {
       super();
-      const shadow = this.attachShadow({ mode: 'open' });
-      adoptCss(shadow, import.meta.url);
+      const shadow = this.shadowRoot!;
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
       this.#base = shadow.querySelector<HTMLElement>('.base')!;
       this.#clock = shadow.querySelector<HTMLElement>('.clock')!;
@@ -397,5 +399,5 @@ import type { ParsedTime, RingItem, View, Meridiem, CommitOpts, PickOpts } from 
     };
   }
 
-  defineElement('iswc-time-clock', IswcTimeClock, 'IswcTimeClock');
+  define(IswcTimeClock, 'IswcTimeClock');
 })();

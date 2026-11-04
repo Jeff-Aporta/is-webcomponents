@@ -1,10 +1,11 @@
-import { adoptCss, defineElement, emit, upgradeProperties } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit, upgradeProperties } from '@jeff-aporta/iswc-base/core/element.js';
 import {
   attachFormInternals, setCustomState, setFormValue, setValidity, clearValidity
 } from '@jeff-aporta/iswc-base/core/form-associated.js';
-import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
 import { setStringAttr, setOptionalAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
 import { hasSlotted } from '@jeff-aporta/iswc-base/core/dom-utils.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 /**
  * <iswc-textarea> — Área de texto form-associated (vanilla + Shadow DOM).
  *
@@ -54,10 +55,13 @@ import { hasSlotted } from '@jeff-aporta/iswc-base/core/dom-utils.js';
 
   const EXTRA_UPGRADE_ATTRS = ['variant', 'label-placement', 'full-width'];
 
-  class IswcTextarea extends ElementBase {
+  class IswcTextarea extends IswcElement {
+    static tag = 'iswc-textarea';
+    static css = css;
+    static shadowInit: ShadowRootInit | null = { mode: 'open', delegatesFocus: true };
 
     static formAssociated = true;
-    static get observedAttributes(): string[] { return [...OBSERVED, 'radius', 'border-color', 'bg', 'text-color', 'focus-color', 'danger-color']; }
+    static observed = [...OBSERVED, 'radius', 'border-color', 'bg', 'text-color', 'focus-color', 'danger-color'];
 
     #internals: ElementInternals | null = null;
     #textarea!: HTMLTextAreaElement;
@@ -76,8 +80,7 @@ import { hasSlotted } from '@jeff-aporta/iswc-base/core/dom-utils.js';
 
     constructor() {
       super();
-      const shadow = this.attachShadow({ mode: 'open', delegatesFocus: true });
-      adoptCss(shadow, import.meta.url);
+      const shadow = this.shadowRoot!;
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
 
       this.#textarea = shadow.getElementById('textarea') as HTMLTextAreaElement;
@@ -402,5 +405,5 @@ import { hasSlotted } from '@jeff-aporta/iswc-base/core/dom-utils.js';
     };
   }
 
-  defineElement('iswc-textarea', IswcTextarea, 'IswcTextarea');
+  define(IswcTextarea, 'IswcTextarea');
 })();

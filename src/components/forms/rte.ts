@@ -1,6 +1,7 @@
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
-import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
 import type { RteCommandDef } from "./schemas/rte.schemas.js";
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-rte> — Editor de texto enriquecido basado en contentEditable.
@@ -82,12 +83,13 @@ export function registerRteCommand(name: string, def: RteCommandDef): void {
     html: '<svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>',
   };
 
-  class IswcRte extends ElementBase {
-    static get observedAttributes(): string[] { return OBSERVED; }
+  class IswcRte extends IswcElement {
+    static tag = 'iswc-rte';
+    static css = css;
+    static observed = OBSERVED;
 
     constructor() {
       super();
-      this.attachShadow({ mode: 'open' });
       this.shadowRoot!.innerHTML = /* html */ `
         <div part="root" class="root">
           <div part="toolbar" class="toolbar" role="toolbar"></div>
@@ -96,7 +98,6 @@ export function registerRteCommand(name: string, def: RteCommandDef): void {
           <div part="placeholder" class="placeholder"></div>
         </div>
       `;
-      adoptCss(this.shadowRoot!, import.meta.url);
       this.#toolbar = this.shadowRoot!.querySelector<HTMLElement>('.toolbar')!;
       this.#content = this.shadowRoot!.querySelector<HTMLElement>('.content')!;
       this.#source = this.shadowRoot!.querySelector<HTMLTextAreaElement>('.source')!;
@@ -279,5 +280,5 @@ export function registerRteCommand(name: string, def: RteCommandDef): void {
     #placeholder!: HTMLElement;
   }
 
-  defineElement('iswc-rte', IswcRte);
+  define(IswcRte);
 })();

@@ -1,6 +1,7 @@
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
 import { isOtpAutocomplete, listenWebOtp } from './utils/web-otp.js';
-import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-pin-input> — Web Component (vanilla, zero dependencies).
@@ -43,9 +44,11 @@ import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
 
   const OBSERVED: string[] = ['length', 'type', 'mask', 'disabled', 'invalid', 'placeholder', 'value', 'autocomplete'];
 
-  class IswcPinInput extends ElementBase {
+  class IswcPinInput extends IswcElement {
+    static tag = 'iswc-pin-input';
+    static css = css;
 
-    static get observedAttributes(): string[] { return [...OBSERVED, 'cell-size', 'gap', 'bg', 'text-color', 'border-color', 'focus-color', 'danger-color']; }
+    static observed = [...OBSERVED, 'cell-size', 'gap', 'bg', 'text-color', 'border-color', 'focus-color', 'danger-color'];
 
     #root!: HTMLElement;
     #cells!: HTMLElement;
@@ -58,8 +61,7 @@ import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
 
     constructor() {
       super();
-      const shadow = this.attachShadow({ mode: 'open' });
-      adoptCss(shadow, import.meta.url);
+      const shadow = this.shadowRoot!;
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
       this.#root = shadow.querySelector<HTMLElement>('.pin')!;
       this.#cells = shadow.querySelector<HTMLElement>('.cells')!;
@@ -265,5 +267,5 @@ import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
     }
   }
 
-  defineElement('iswc-pin-input', IswcPinInput, 'IswcPinInput');
+  define(IswcPinInput, 'IswcPinInput');
 })();

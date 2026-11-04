@@ -1,4 +1,5 @@
 import { defineDateField } from './utils/date-field-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-time-field> — Campo de hora editable por secciones (MUI TimeField).
@@ -13,5 +14,5 @@ import { defineDateField } from './utils/date-field-element.js';
 defineDateField({
   tag: 'iswc-time-field',
   kind: 'time',
-  cssUrl: import.meta.url,
+  css,
 });

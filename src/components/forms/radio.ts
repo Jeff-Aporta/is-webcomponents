@@ -1,7 +1,8 @@
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
 import { attachFormInternals, setCustomState } from '@jeff-aporta/iswc-base/core/form-associated.js';
-import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
 import { setOptionalAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-radio> — Opción de radio. NO es form-associated a propósito: el valor lo
@@ -37,9 +38,11 @@ import { setOptionalAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
   const VARIANTS: string[] = ['brand', 'neutral', 'text', 'success', 'warning', 'danger'];
   const PLACEMENTS: string[] = ['end', 'start', 'top', 'bottom'];
 
-  class IswcRadio extends ElementBase {
+  class IswcRadio extends IswcElement {
+    static tag = 'iswc-radio';
+    static css = css;
 
-    static get observedAttributes(): string[] { return [...OBSERVED, 'accent']; }
+    static observed = [...OBSERVED, 'accent'];
 
     #internals: ElementInternals | null = null;
     #descEl!: HTMLElement;
@@ -47,8 +50,7 @@ import { setOptionalAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
 
     constructor() {
       super();
-      const shadow = this.attachShadow({ mode: 'open' });
-      adoptCss(shadow, import.meta.url);
+      const shadow = this.shadowRoot!;
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
 
       this.#internals = attachFormInternals(this);
@@ -168,5 +170,5 @@ import { setOptionalAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
     };
   }
 
-  defineElement('iswc-radio', IswcRadio, 'IswcRadio');
+  define(IswcRadio, 'IswcRadio');
 })();

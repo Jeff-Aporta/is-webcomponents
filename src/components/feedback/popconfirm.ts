@@ -1,9 +1,9 @@
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
-import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
 import { computePosition } from '@jeff-aporta/iswc-base/core/position.js';
 import { createPopupDismiss } from '@jeff-aporta/iswc-base/core/popup-dismiss.js';
 import type { Placement } from '@jeff-aporta/iswc-base/core/schemas/position.schemas.js';
-import '@jeff-aporta/iswc-base/components/actions/button.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-popconfirm> — Web Component (vanilla, zero dependencies).
@@ -61,9 +61,12 @@ import '@jeff-aporta/iswc-base/components/actions/button.js';
   const DISTANCIA_EM = 0.6;
   const MARGEN_FLECHA_EM = 1;
 
-  class IswcPopconfirm extends ElementBase {
+  class IswcPopconfirm extends IswcElement {
+    static tag = 'iswc-popconfirm';
+    static css = css;
+    static deps = ['iswc-button'];
 
-    static get observedAttributes(): string[] { return OBSERVED; }
+    static observed = OBSERVED;
 
     #pop!: HTMLElement;
     #arrow!: HTMLElement;
@@ -82,8 +85,7 @@ import '@jeff-aporta/iswc-base/components/actions/button.js';
 
     constructor() {
       super();
-      const shadow = this.attachShadow({ mode: 'open' });
-      adoptCss(shadow, import.meta.url);
+      const shadow = this.shadowRoot!;
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
       this.#pop = shadow.querySelector<HTMLElement>('.popconfirm')!;
       this.#arrow = shadow.querySelector<HTMLElement>('.arrow')!;
@@ -242,5 +244,5 @@ import '@jeff-aporta/iswc-base/components/actions/button.js';
     }
   }
 
-  defineElement('iswc-popconfirm', IswcPopconfirm, 'IswcPopconfirm');
+  define(IswcPopconfirm, 'IswcPopconfirm');
 })();

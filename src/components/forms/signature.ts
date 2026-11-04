@@ -1,4 +1,6 @@
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-signature> — Pad de firma manuscrita (touch + mouse). Exporta a PNG/SVG.
@@ -31,8 +33,10 @@ import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/eleme
   }
   type Stroke = Point[];
 
-  class IswcSignature extends HTMLElement {
-    static get observedAttributes(): string[] { return OBSERVED; }
+  class IswcSignature extends IswcElement {
+    static tag = 'iswc-signature';
+    static css = css;
+    static observed = OBSERVED;
 
     #mounted = false;
     #strokes: Stroke[] = []; // cada trazo: [{x, y}, ...]
@@ -40,14 +44,12 @@ import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/eleme
 
     constructor() {
       super();
-      this.attachShadow({ mode: 'open' });
       this.shadowRoot!.innerHTML = /* html */ `
         <div part="root" class="root">
           <canvas part="canvas" class="canvas" aria-label="Pad de firma"></canvas>
           <div part="hint" class="hint">Firma aquí</div>
         </div>
       `;
-      adoptCss(this.shadowRoot!, import.meta.url);
       this.#canvas = this.shadowRoot!.querySelector<HTMLCanvasElement>('.canvas')!;
       this.#hint = this.shadowRoot!.querySelector<HTMLElement>('.hint')!;
       this.#ctx = this.#canvas.getContext('2d')!;
@@ -203,5 +205,5 @@ import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/eleme
     #hint!: HTMLElement;
   }
 
-  defineElement('iswc-signature', IswcSignature);
+  define(IswcSignature);
 })();

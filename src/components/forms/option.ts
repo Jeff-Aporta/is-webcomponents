@@ -1,6 +1,6 @@
-import { adoptCss, defineElement } from '@jeff-aporta/iswc-base/core/element.js';
-import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
 import { setStringAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-option> — Opción para iswc-combobox / iswc-select (listboxes).
@@ -24,14 +24,15 @@ import { setStringAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
 
   const OBSERVED: string[] = ['value', 'disabled', 'selected', 'group'];
 
-  class IswcOption extends ElementBase {
-    static get observedAttributes(): string[] { return OBSERVED; }
+  class IswcOption extends IswcElement {
+    static tag = 'iswc-option';
+    static css = css;
+    static observed = OBSERVED;
 
     #root!: HTMLElement;
     constructor() {
       super();
-      const shadow = this.attachShadow({ mode: 'open' });
-      adoptCss(shadow, import.meta.url);
+      const shadow = this.shadowRoot!;
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
       this.#root = shadow.querySelector<HTMLElement>('.option')!;
     }
@@ -84,5 +85,5 @@ import { setStringAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
     }
   }
 
-  defineElement('iswc-option', IswcOption, 'IswcOption');
+  define(IswcOption, 'IswcOption');
 })();

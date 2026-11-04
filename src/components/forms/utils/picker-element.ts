@@ -1,11 +1,10 @@
-import { adoptCss } from '@jeff-aporta/iswc-base/core/element.js';
 import { withStyleAttrs } from '@jeff-aporta/iswc-base/core/attrs.js';
 import { computePosition } from '@jeff-aporta/iswc-base/core/position.js';
 import { formatDate, formatTime, splitDateTime, todayISO, toTime } from './date-utils.js';
-import { defineElement } from '@jeff-aporta/iswc-base/core/element.js';
 import { emit } from '@jeff-aporta/iswc-base/core/element.js';
 import { resolveLocale } from '@jeff-aporta/iswc-base/core/resolve-locale.js';
 import type { PickerKind, PickerPanelDef, PickerField, PanelsBuilder, DefinePickerInputOpts } from "@jeff-aporta/iswc-base/components/forms/schemas/picker-element.schemas.js";
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 
 /**
  * Fábrica de los pickers "campo + panel": iswc-date-input, iswc-time-input,
@@ -44,19 +43,17 @@ const PANEL_ATTRS = [
 ];
 
 export function definePickerInput({
-  tag, kind, cssUrl, fieldTag, panels, range = false, styleAttrs = {},
+  tag, kind, css, fieldTag, panels, range = false, styleAttrs = {},
 }: DefinePickerInputOpts): typeof HTMLElement {
   // Todos los pickers (date/time/date-time y sus rangos) comparten la
   // personalización por atributo: se declara aquí una vez, no en cada tag.
 
-  class IswcPickerInput extends withStyleAttrs(HTMLElement) {
+  class IswcPickerInput extends withStyleAttrs(IswcElement) {
+    static tag = tag;
+    static css = css;
+    static shadowInit: ShadowRootInit | null = { mode: 'open', delegatesFocus: true };
 
-    static get observedAttributes(): string[] {
-      // Phase V5: STYLE_ATTRS removido. El consumer define los tokens vía class
-      // o inline style. Se conserva el nombre como observado por si llega del
-      // HTML antiguo.
-      return [...OBSERVED, 'panel-height'];
-    }
+    static observed = [...OBSERVED, 'panel-height'];
 
     #base!: HTMLElement;
     #dialog!: HTMLElement & { open: boolean; showModal(): void; close(): void };
@@ -74,8 +71,7 @@ export function definePickerInput({
 
     constructor() {
       super();
-      const shadow = this.attachShadow({ mode: 'open', delegatesFocus: true });
-      adoptCss(shadow, cssUrl);
+      const shadow = this.shadowRoot!;
       shadow.appendChild(this.#template());
 
       this.#base = shadow.querySelector<HTMLElement>('.base')!;
@@ -503,6 +499,6 @@ export function definePickerInput({
     };
   }
 
-  defineElement(tag, IswcPickerInput, true);
+  define(IswcPickerInput, true);
   return IswcPickerInput;
 }

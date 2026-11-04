@@ -1,8 +1,9 @@
-import { adoptCss, defineElement } from '@jeff-aporta/iswc-base/core/element.js';
 import { atributosDe, PropsElement } from '@jeff-aporta/iswc-base/core/props-element.js';
 import { LoadingPropsSchema } from './schemas/loading.schemas.js';
 import type { LoadingProps } from './schemas/loading.schemas.js';
 import './spinner.js';
+import { define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-loading> — indicador de carga en línea: spinner y texto opcional, anunciado como estado.
@@ -20,15 +21,16 @@ TEMPLATE.innerHTML = /* html */ `
 `;
 
 class IswcLoading extends PropsElement<LoadingProps> {
-  static override get observedAttributes(): string[] { return atributosDe(INICIAL); }
+  static tag = 'iswc-loading';
+  static css = css;
+  static observed = atributosDe(INICIAL);
 
   #spinner: HTMLElement;
   #texto: HTMLElement;
 
   constructor() {
     super(INICIAL, LoadingPropsSchema.partial());
-    const shadow = this.attachShadow({ mode: 'open' });
-    adoptCss(shadow, import.meta.url);
+    const shadow = this.shadowRoot!;
     shadow.appendChild(TEMPLATE.content.cloneNode(true));
     this.#spinner = shadow.querySelector<HTMLElement>('iswc-spinner')!;
     this.#texto = shadow.querySelector<HTMLElement>('.texto')!;
@@ -49,4 +51,4 @@ class IswcLoading extends PropsElement<LoadingProps> {
   }
 }
 
-defineElement('iswc-loading', IswcLoading, 'IswcLoading');
+define(IswcLoading, 'IswcLoading');

@@ -2,6 +2,7 @@ import { definePickerInput } from './utils/picker-element.js';
 import './time-field.js';
 import './time-clock.js';
 import './digital-clock.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-time-input> — Campo de hora con panel (MUI TimePicker).
@@ -20,7 +21,7 @@ import './digital-clock.js';
 definePickerInput({
   tag: 'iswc-time-input',
   kind: 'time',
-  cssUrl: import.meta.url,
+  css,
   fieldTag: 'iswc-time-field',
   panels: ({ host }: { host: HTMLElement }): HTMLElement[] => {
     const mode = host.getAttribute('panel') || 'sections';

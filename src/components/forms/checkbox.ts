@@ -1,5 +1,4 @@
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
-import '@jeff-aporta/iswc-base/components/media/icon.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
 
 import {
   attachFormInternals,
@@ -8,9 +7,10 @@ import {
   setFormValue,
   setValidity,
 } from '@jeff-aporta/iswc-base/core/form-associated.js';
-import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
 import { setStringAttr, setOptionalAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
 import { hasSlotted } from '@jeff-aporta/iswc-base/core/dom-utils.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 /**
  * <iswc-checkbox> — Casilla form-associated: entra en FormData y en la validación del <form>.
  *
@@ -56,10 +56,13 @@ import { hasSlotted } from '@jeff-aporta/iswc-base/core/dom-utils.js';
 
   /** Sin flatten: el texto de fallback del slot no cuenta como contenido propio. */
 
-  class IswcCheckbox extends ElementBase {
+  class IswcCheckbox extends IswcElement {
+    static tag = 'iswc-checkbox';
+    static css = css;
+    static deps = ['iswc-icon'];
 
     static formAssociated = true;
-    static get observedAttributes(): string[] { return [...OBSERVED, 'size', 'radius', 'bg', 'bg-hover', 'border-color', 'accent', 'focus-color', 'mark-color', 'halo']; }
+    static observed = [...OBSERVED, 'size', 'radius', 'bg', 'bg-hover', 'border-color', 'accent', 'focus-color', 'mark-color', 'halo'];
 
     #internals: ElementInternals | null = null;
     #control!: HTMLElement;
@@ -75,8 +78,7 @@ import { hasSlotted } from '@jeff-aporta/iswc-base/core/dom-utils.js';
 
     constructor() {
       super();
-      const shadow = this.attachShadow({ mode: 'open' });
-      adoptCss(shadow, import.meta.url);
+      const shadow = this.shadowRoot!;
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
 
       this.#control = shadow.querySelector<HTMLElement>('.control')!;
@@ -263,5 +265,5 @@ import { hasSlotted } from '@jeff-aporta/iswc-base/core/dom-utils.js';
     };
   }
 
-  defineElement('iswc-checkbox', IswcCheckbox, 'IswcCheckbox');
+  define(IswcCheckbox, 'IswcCheckbox');
 })();

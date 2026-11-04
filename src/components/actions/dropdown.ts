@@ -1,10 +1,11 @@
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
-import { attrBool, attrEnum, attrNum, atributosDeclarados, withStyleAttrs } from '@jeff-aporta/iswc-base/core/attrs.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { attrBool, attrEnum, attrNum, withStyleAttrs } from '@jeff-aporta/iswc-base/core/attrs.js';
 import { computePosition, PLACEMENTS_AUTO } from '@jeff-aporta/iswc-base/core/position.js';
 import './dropdown-item.js';
-import '@jeff-aporta/iswc-base/components/layout/divider.js';
 import { createPopupDismiss } from '@jeff-aporta/iswc-base/core/popup-dismiss.js';
 import type { Placement, DropdownItemEl } from "./schemas/dropdown.schemas.js";
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /** Colocacion del panel respecto al trigger. `position.js` es la fuente. */
 
@@ -43,17 +44,16 @@ import type { Placement, DropdownItemEl } from "./schemas/dropdown.schemas.js";
   `;
 
   // Los cuatro atributos ya no se listan aqui: los declara cada campo con su
-  // decorador y `atributosDeclarados` los recoge. Una sola fuente.
+  // decorador y el molde los suma a observedAttributes. Una sola fuente.
 
   /** Personalización por atributo (ver `core/attrs.ts`). */
 
-  class IswcDropdown extends withStyleAttrs(HTMLElement) {
+  class IswcDropdown extends withStyleAttrs(IswcElement) {
+    static tag = 'iswc-dropdown';
+    static css = css;
+    static deps = ['iswc-divider'];
 
-    static get observedAttributes(): string[] {
-      // Phase V5: STYLE_ATTRS removido. Se conservan los nombres como observados
-      // por si llegan del HTML antiguo.
-      return [...atributosDeclarados(this), 'show-duration', 'hide-duration'];
-    }
+    static observed = ['show-duration', 'hide-duration'];
 
     // El `!` en las cuatro referencias del shadow: el template es una constante
     // de este modulo, asi que los cuatro nodos existen siempre. Comprobarlos en
@@ -67,8 +67,7 @@ import type { Placement, DropdownItemEl } from "./schemas/dropdown.schemas.js";
 
     constructor() {
       super();
-      const shadow = this.attachShadow({ mode: 'open' });
-      adoptCss(shadow, import.meta.url);
+      const shadow = this.shadowRoot!;
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
       this.#dialog = shadow.querySelector<HTMLDialogElement>('dialog')!;
       this.#menu = shadow.querySelector<HTMLElement>('.menu')!;
@@ -345,5 +344,5 @@ import type { Placement, DropdownItemEl } from "./schemas/dropdown.schemas.js";
     }
   }
 
-  defineElement('iswc-dropdown', IswcDropdown, 'IswcDropdown');
+  define(IswcDropdown, 'IswcDropdown');
 })();

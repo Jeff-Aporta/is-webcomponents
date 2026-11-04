@@ -1,5 +1,7 @@
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
 import { createPopupDismiss } from '@jeff-aporta/iswc-base/core/popup-dismiss.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-context-menu> — Menú emergente anclado al clic derecho del ratón sobre
@@ -35,8 +37,10 @@ import { createPopupDismiss } from '@jeff-aporta/iswc-base/core/popup-dismiss.js
 (() => {
   const OBSERVED = ['for', 'placement', 'distance', 'disabled', 'scroll-lock'];
 
-  class IswcContextMenu extends HTMLElement {
-    static get observedAttributes(): string[] { return OBSERVED; }
+  class IswcContextMenu extends IswcElement {
+    static tag = 'iswc-context-menu';
+    static css = css;
+    static observed = OBSERVED;
 
     #host: HTMLElement = this;
     #target: HTMLElement | null = null;
@@ -50,7 +54,6 @@ import { createPopupDismiss } from '@jeff-aporta/iswc-base/core/popup-dismiss.js
 
     constructor() {
       super();
-      this.attachShadow({ mode: 'open' });
       this.shadowRoot!.innerHTML = /* html */ `
         <dialog part="panel" class="panel">
           <div part="items" class="items" role="menu">
@@ -58,7 +61,6 @@ import { createPopupDismiss } from '@jeff-aporta/iswc-base/core/popup-dismiss.js
           </div>
         </dialog>
       `;
-      adoptCss(this.shadowRoot!, import.meta.url);
       this.#panel = this.shadowRoot!.querySelector<HTMLDialogElement>('dialog')!;
       this.#panel.addEventListener('click', (e: Event) => this.#onPanelClick(e));
       this.#panel.addEventListener('contextmenu', (e: Event) => e.preventDefault());
@@ -258,5 +260,5 @@ import { createPopupDismiss } from '@jeff-aporta/iswc-base/core/popup-dismiss.js
     }
   }
 
-  defineElement('iswc-context-menu', IswcContextMenu);
+  define(IswcContextMenu);
 })();

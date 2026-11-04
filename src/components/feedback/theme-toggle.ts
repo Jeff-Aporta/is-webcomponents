@@ -1,8 +1,10 @@
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
 import '@jeff-aporta/iswc-base/components/actions/check-icon-button.js';
 import { findThemeContainer } from '@jeff-aporta/iswc-base/core/theme-scope.js';
 import { guardarAppCfg } from '@jeff-aporta/iswc-base/core/app-cfg.js';
 import type { IswcCheckIconButtonEvent, ThemeChangeDetail, ThemeName } from './schemas/theme-toggle.schemas.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-theme-toggle> — Web Component (vanilla).
@@ -54,8 +56,10 @@ import type { IswcCheckIconButtonEvent, ThemeChangeDetail, ThemeName } from './s
     else el.setAttribute('data-theme', theme);
   }
 
-  class IswcThemeToggle extends HTMLElement {
-    static get observedAttributes(): string[] { return ['dark', 'scope']; }
+  class IswcThemeToggle extends IswcElement {
+    static tag = 'iswc-theme-toggle';
+    static css = css;
+    static observed = ['dark', 'scope'];
 
     #btn!: HTMLElement;
     #mounted = false;
@@ -64,8 +68,7 @@ import type { IswcCheckIconButtonEvent, ThemeChangeDetail, ThemeName } from './s
 
     constructor() {
       super();
-      const shadow = this.attachShadow({ mode: 'open' });
-      adoptCss(shadow, import.meta.url);
+      const shadow = this.shadowRoot!;
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
       this.#btn = shadow.querySelector<HTMLElement>('#btn')!;
       this.#btn.addEventListener('iswc-change', this.#onChange as EventListener);
@@ -177,5 +180,5 @@ import type { IswcCheckIconButtonEvent, ThemeChangeDetail, ThemeName } from './s
     }
   }
 
-  defineElement('iswc-theme-toggle', IswcThemeToggle, 'IswcThemeToggle');
+  define(IswcThemeToggle, 'IswcThemeToggle');
 })();

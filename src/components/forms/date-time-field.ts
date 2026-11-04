@@ -1,4 +1,5 @@
 import { defineDateField } from './utils/date-field-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-date-time-field> — Campo de fecha y hora por secciones
@@ -13,5 +14,5 @@ import { defineDateField } from './utils/date-field-element.js';
 defineDateField({
   tag: 'iswc-date-time-field',
   kind: 'datetime',
-  cssUrl: import.meta.url,
+  css,
 });

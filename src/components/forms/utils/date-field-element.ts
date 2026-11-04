@@ -1,12 +1,9 @@
-import { adoptCss } from '@jeff-aporta/iswc-base/core/element.js';
 import { SectionField } from './date-field-core.js';
 import { splitDateTime, uses12Hour } from './date-utils.js';
-import { defineElement } from '@jeff-aporta/iswc-base/core/element.js';
 import { emit } from '@jeff-aporta/iswc-base/core/element.js';
 import { resolveLocale } from '@jeff-aporta/iswc-base/core/resolve-locale.js';
-import '@jeff-aporta/iswc-base/components/media/icon.js';
-import '@jeff-aporta/iswc-base/components/actions/button.js';
 import type { DateFieldKind, DefineDateFieldOpts } from "@jeff-aporta/iswc-base/components/forms/schemas/date-field-element.schemas.js";
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 
 /**
  * Fábrica de los campos por secciones: iswc-date-field, iswc-time-field e
@@ -48,10 +45,14 @@ const OBSERVED = [
 
 /** Opciones de `defineDateField`. */
 
-export function defineDateField({ tag, kind, cssUrl }: DefineDateFieldOpts): typeof HTMLElement {
-  class IswcDateFieldBase extends HTMLElement {
+export function defineDateField({ tag, kind, css }: DefineDateFieldOpts): typeof HTMLElement {
+  class IswcDateFieldBase extends IswcElement {
+    static tag = tag;
+    static css = css;
+    static deps = ['iswc-button', 'iswc-icon'];
+    static shadowInit: ShadowRootInit | null = { mode: 'open', delegatesFocus: true };
     static formAssociated = true;
-    static get observedAttributes(): string[] { return OBSERVED; }
+    static observed = OBSERVED;
 
     #internals: ElementInternals | null = null;
     #labelEl!: HTMLElement;
@@ -65,8 +66,7 @@ export function defineDateField({ tag, kind, cssUrl }: DefineDateFieldOpts): typ
 
     constructor() {
       super();
-      const shadow = this.attachShadow({ mode: 'open', delegatesFocus: true });
-      adoptCss(shadow, cssUrl);
+      const shadow = this.shadowRoot!;
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
 
       this.#labelEl = shadow.querySelector<HTMLElement>('.label')!;
@@ -310,6 +310,6 @@ export function defineDateField({ tag, kind, cssUrl }: DefineDateFieldOpts): typ
     }
   }
 
-  defineElement(tag, IswcDateFieldBase, true);
+  define(IswcDateFieldBase, true);
   return IswcDateFieldBase;
 }

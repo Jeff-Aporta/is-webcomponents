@@ -1,11 +1,11 @@
 import { computePosition } from '@jeff-aporta/iswc-base/core/position.js';
 import { guardarAppCfg, leerAppCfg } from '@jeff-aporta/iswc-base/core/app-cfg.js';
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
-import '@jeff-aporta/iswc-base/components/media/icon.js';
-import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
 import { createPopupDismiss } from '@jeff-aporta/iswc-base/core/popup-dismiss.js';
 import { PALETTES, PALETTE_FAMILIES, paletteSeeds } from '@jeff-aporta/iswc-base/styles/palette-build.js';
 import type { Palette, PaletteCruda } from "./schemas/palette-selector.schemas.js";
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-palette-selector> — Web Component (vanilla).
@@ -133,8 +133,11 @@ import type { Palette, PaletteCruda } from "./schemas/palette-selector.schemas.j
     el.style.setProperty('--sw-font-tint', String(p.fontTint ?? (p.tint === 0 ? 0 : 1)));
   }
 
-  class IswcPaletteSelector extends ElementBase {
-    static get observedAttributes(): string[] { return OBSERVED; }
+  class IswcPaletteSelector extends IswcElement {
+    static tag = 'iswc-palette-selector';
+    static css = css;
+    static deps = ['iswc-icon'];
+    static observed = OBSERVED;
 
     #trigger!: HTMLButtonElement;
     #panel!: HTMLElement;
@@ -158,8 +161,7 @@ import type { Palette, PaletteCruda } from "./schemas/palette-selector.schemas.j
 
     constructor() {
       super();
-      const shadow = this.attachShadow({ mode: 'open' });
-      adoptCss(shadow, import.meta.url);
+      const shadow = this.shadowRoot!;
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
       this.#trigger = shadow.querySelector<HTMLButtonElement>('.trigger')!;
       this.#panel = shadow.querySelector<HTMLElement>('.panel')!;
@@ -612,5 +614,5 @@ import type { Palette, PaletteCruda } from "./schemas/palette-selector.schemas.j
     };
   }
 
-  defineElement('iswc-palette-selector', IswcPaletteSelector, 'IswcPaletteSelector');
+  define(IswcPaletteSelector, 'IswcPaletteSelector');
 })();

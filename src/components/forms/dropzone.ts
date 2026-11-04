@@ -1,7 +1,7 @@
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
 import { escapeHtml } from '@jeff-aporta/iswc-base/core/dom-utils.js';
-import '@jeff-aporta/iswc-base/components/media/icon.js';
-import '@jeff-aporta/iswc-base/components/actions/button.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-dropzone> — Zona de drop con preview, cola y progreso por archivo.
@@ -50,8 +50,11 @@ import '@jeff-aporta/iswc-base/components/actions/button.js';
     error?: string;
   }
 
-  class IswcDropzone extends HTMLElement {
-    static get observedAttributes(): string[] { return OBSERVED; }
+  class IswcDropzone extends IswcElement {
+    static tag = 'iswc-dropzone';
+    static css = css;
+    static deps = ['iswc-icon', 'iswc-button'];
+    static observed = OBSERVED;
     #files: FileRecord[] = [];
     #counter = 0;
     #zone!: HTMLElement;
@@ -60,7 +63,6 @@ import '@jeff-aporta/iswc-base/components/actions/button.js';
 
     constructor() {
       super();
-      this.attachShadow({ mode: 'open' });
       this.shadowRoot!.innerHTML = /* html */ `
         <div part="root" class="root">
           <div part="zone" class="zone" tabindex="0">
@@ -72,7 +74,6 @@ import '@jeff-aporta/iswc-base/components/actions/button.js';
           <ol part="queue" class="queue" id="queue"></ol>
         </div>
       `;
-      adoptCss(this.shadowRoot!, import.meta.url);
       this.#zone = this.shadowRoot!.querySelector<HTMLElement>('.zone')!;
       this.#input = this.shadowRoot!.getElementById('fileInput') as HTMLInputElement;
       this.#queueEl = this.shadowRoot!.getElementById('queue')!;
@@ -94,7 +95,8 @@ import '@jeff-aporta/iswc-base/components/actions/button.js';
       });
     }
 
-    connectedCallback(): void { this.#sync(); this.#render(); }
+    connectedCallback(): void {
+    super.connectedCallback(); this.#sync(); this.#render(); }
 
     attributeChangedCallback(): void {
       if (this.hasAttribute('multiple')) this.#input.multiple = true;
@@ -235,5 +237,5 @@ import '@jeff-aporta/iswc-base/components/actions/button.js';
     return `${(n / 1024 / 1024).toFixed(1)} MB`;
   }
 
-  defineElement('iswc-dropzone', IswcDropzone);
+  define(IswcDropzone);
 })();

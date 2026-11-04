@@ -1,5 +1,6 @@
-import { adoptCss, defineElement } from '@jeff-aporta/iswc-base/core/element.js';
 import { withStyleAttrs } from '@jeff-aporta/iswc-base/core/attrs.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 
 /**
@@ -23,14 +24,15 @@ import { withStyleAttrs } from '@jeff-aporta/iswc-base/core/attrs.js';
   const OBSERVED = ['effect'];
   const VALID_EFFECT = ['none', 'sheen', 'pulse'];
 
-  class IswcSkeleton extends withStyleAttrs(HTMLElement) {
+  class IswcSkeleton extends withStyleAttrs(IswcElement) {
+    static tag = 'iswc-skeleton';
+    static css = css;
 
-    static get observedAttributes(): string[] { return [...OBSERVED, 'color', 'sheen-color']; }
+    static observed = [...OBSERVED, 'color', 'sheen-color'];
 
     constructor() {
       super();
-      const shadow = this.attachShadow({ mode: 'open' });
-      adoptCss(shadow, import.meta.url);
+      const shadow = this.shadowRoot!;
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
     }
 
@@ -61,5 +63,5 @@ import { withStyleAttrs } from '@jeff-aporta/iswc-base/core/attrs.js';
     }
   }
 
-  defineElement('iswc-skeleton', IswcSkeleton, 'IswcSkeleton');
+  define(IswcSkeleton, 'IswcSkeleton');
 })();

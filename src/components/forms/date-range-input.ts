@@ -1,6 +1,7 @@
 import { definePickerInput } from './utils/picker-element.js';
 import './date-field.js';
 import './date-range-picker.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-date-range-input> — Dos campos (inicio y fin) con el calendario de rango
@@ -16,7 +17,7 @@ import './date-range-picker.js';
 definePickerInput({
   tag: 'iswc-date-range-input',
   kind: 'date',
-  cssUrl: import.meta.url,
+  css,
   fieldTag: 'iswc-date-field',
   range: true,
   panels: () => {

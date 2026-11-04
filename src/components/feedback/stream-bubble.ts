@@ -1,8 +1,9 @@
-import { adoptCss, defineElement } from '@jeff-aporta/iswc-base/core/element.js';
 import { crearNodo, escapeHtml } from '@jeff-aporta/iswc-base/core/dom-utils.js';
 import { atributosDe, PropsElement } from '@jeff-aporta/iswc-base/core/props-element.js';
 import { StreamBubblePropsSchema } from './schemas/stream-bubble.schemas.js';
 import type { StreamBubblePaso, StreamBubbleProps, StreamBubbleTextos } from './schemas/stream-bubble.schemas.js';
+import { define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-stream-bubble> — burbuja de una respuesta que llega por partes: estado (`idle`, `streaming`, `end`, `error`), pasos
@@ -73,7 +74,9 @@ export function markdownLigero(texto: string): string {
 }
 
 class IswcStreamBubble extends PropsElement<StreamBubbleProps> {
-  static override get observedAttributes(): string[] { return atributosDe(INICIAL); }
+  static tag = 'iswc-stream-bubble';
+  static css = css;
+  static observed = atributosDe(INICIAL);
 
   #bubble: HTMLElement;
   #avatar: HTMLElement;
@@ -88,8 +91,7 @@ class IswcStreamBubble extends PropsElement<StreamBubbleProps> {
 
   constructor() {
     super(INICIAL, StreamBubblePropsSchema.partial());
-    const shadow = this.attachShadow({ mode: 'open' });
-    adoptCss(shadow, import.meta.url);
+    const shadow = this.shadowRoot!;
     shadow.appendChild(TEMPLATE.content.cloneNode(true));
     this.#bubble = shadow.querySelector<HTMLElement>('.bubble')!;
     this.#avatar = shadow.querySelector<HTMLElement>('.avatar')!;
@@ -184,4 +186,4 @@ class IswcStreamBubble extends PropsElement<StreamBubbleProps> {
   }
 }
 
-defineElement('iswc-stream-bubble', IswcStreamBubble, 'IswcStreamBubble');
+define(IswcStreamBubble, 'IswcStreamBubble');

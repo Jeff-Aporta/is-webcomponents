@@ -2,6 +2,7 @@ import { definePickerInput } from './utils/picker-element.js';
 import './date-time-field.js';
 import './date-picker.js';
 import './digital-clock.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-date-time-input> — Fecha y hora en un solo campo con calendario y reloj
@@ -15,7 +16,7 @@ import './digital-clock.js';
 definePickerInput({
   tag: 'iswc-date-time-input',
   kind: 'datetime',
-  cssUrl: import.meta.url,
+  css,
   fieldTag: 'iswc-date-time-field',
   panels: () => {
     const calendar = document.createElement('iswc-date-picker');

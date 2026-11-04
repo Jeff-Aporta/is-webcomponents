@@ -1,4 +1,6 @@
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-doc-editor> — Editor de documento basado en bloques (Notion-like).
@@ -56,21 +58,21 @@ import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/eleme
     'divider':     { tag: 'hr' },
   };
 
-  class IswcDocEditor extends HTMLElement {
-    static get observedAttributes(): string[] { return OBSERVED; }
+  class IswcDocEditor extends IswcElement {
+    static tag = 'iswc-doc-editor';
+    static css = css;
+    static observed = OBSERVED;
     #mounted = false;
     #blocks: Block[] = [];
 
     constructor() {
       super();
-      this.attachShadow({ mode: 'open' });
       this.shadowRoot!.innerHTML = /* html */ `
         <div part="root" class="root">
           <div part="blocks" class="blocks"></div>
           <div part="menu" class="menu" hidden></div>
         </div>
       `;
-      adoptCss(this.shadowRoot!, import.meta.url);
       this.#blocksEl = this.shadowRoot!.querySelector<HTMLElement>('.blocks')!;
       this.#menu = this.shadowRoot!.querySelector<HTMLElement>('.menu')!;
 
@@ -259,5 +261,5 @@ import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/eleme
     #onDocPointerDown!: (e: PointerEvent) => void;
   }
 
-  defineElement('iswc-doc-editor', IswcDocEditor);
+  define(IswcDocEditor);
 })();
