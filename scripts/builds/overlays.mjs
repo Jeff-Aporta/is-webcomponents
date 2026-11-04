@@ -6,9 +6,10 @@
 // declaración en la clase extendida), así que no podemos correr el build
 // completo. Este script SOLO procesa la carpeta overlays y respeta el mismo
 // protocolo de output del build principal (esbuild + plugin externalComponents
-// + defineCss para inline del CSS).
+// + cssVirtual para inline del CSS: `import css from 'iswc:css'`).
 import { build } from 'esbuild';
 import { aliasKit } from '@jeff-aporta/iswc-base/cdn/build/alias.ts';
+import { cssVirtual } from '@jeff-aporta/iswc-base/cdn/build/css-virtual.ts';
 import { mkdir, readFile, stat } from 'node:fs/promises';
 import { join, dirname, basename, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -58,19 +59,10 @@ const externalComponents = {
   },
 };
 
-const defineCss = async (cssFile) => {
-  try {
-    const texto = await readFile(cssFile, 'utf8');
-    return { __IS_COMPONENT_CSS__: JSON.stringify(texto) };
-  } catch {
-    return undefined;
-  }
-};
-
 const bundleCss = (entry, outfile) =>
   build({ entryPoints: [entry], outfile, minify: true, bundle: true });
 
-const bundleJs = (entry, outfile, plugins, banner, define) =>
+const bundleJs = (entry, outfile, plugins, banner) =>
   build({
     entryPoints: [entry],
     outfile,
@@ -79,8 +71,7 @@ const bundleJs = (entry, outfile, plugins, banner, define) =>
     format: 'esm',
     target: 'es2020',
     legalComments: 'none',
-    plugins: [aliasKit(), ...(plugins ?? [])],
-    ...(define ? { define } : {}),
+    plugins: [aliasKit(), cssVirtual(), ...(plugins ?? [])],
     ...(banner ? { banner: { js: banner } } : {}),
   });
 
@@ -123,11 +114,8 @@ for (const o of OVERLAYS) {
     console.warn(`  [warn] no se pudo bundlear CSS de ${o.tag}: ${e?.message ?? e}`);
   }
 
-  // bundle JS con CSS inline + dependencias externalizadas.
-  const cssText = await readFile(outCss, 'utf8').catch(() => '');
-  const define = cssText ? { __IS_COMPONENT_CSS__: JSON.stringify(cssText) } : undefined;
-
-  await bundleJs(o.src, outJs, [externalComponents], docsBanner(o.tag), define);
+  // bundle JS con CSS inline (iswc:css) + dependencias externalizadas.
+  await bundleJs(o.src, outJs, [externalComponents], docsBanner(o.tag));
   const [inStat, outStat] = await Promise.all([stat(o.src), stat(outJs)]);
   console.log(`  overlays/${o.tag.padEnd(18)} js  ${String(inStat.size).padStart(6)} → ${String(outStat.size).padStart(6)}`);
 }

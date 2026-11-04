@@ -12,7 +12,7 @@
 // que en el build publicado; así cada componente conserva su propio CSS.
 //
 // El archivo generado (`<destino>/<nombre>.js`) es ESM autocontenido: lleva su CSS
-// incrustado (igual que el build: `__IS_COMPONENT_CSS__`) y registra el mismo tag.
+// incrustado (igual que el build: `import css from 'iswc:css'`) y registra el mismo tag.
 // Cargarlo ANTES que el loader del kit hace que la página use la versión del lab.
 // No se edita el generado: se edita el fuente del kit y se regenera (`--watch`).
 import { existsSync, mkdirSync, readFileSync } from 'node:fs';
@@ -20,6 +20,7 @@ import { basename, dirname, join, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { context } from 'esbuild';
 import { aliasKit } from '@jeff-aporta/iswc-base/cdn/build/alias.ts';
+import { cssVirtual } from '@jeff-aporta/iswc-base/cdn/build/css-virtual.ts';
 import * as sass from 'sass';
 
 const raiz = resolve(dirname(fileURLToPath(import.meta.url)), '..');
@@ -52,7 +53,7 @@ const componentes = join(raiz, 'src', 'components');
 const baseSheets = join(raiz, 'src', 'core', 'base-sheets.ts');
 /** Otro componente del kit (registra un tag): se toma del CDN, no se empaqueta. */
 const norm = (p) => resolve(p).toLowerCase();
-const esOtroComponente = (ts) => norm(ts) !== norm(entradaAbs) && norm(ts).startsWith(norm(componentes)) && /defineElement\(|customElements\.define\(/.test(readFileSync(ts, 'utf8'));
+const esOtroComponente = (ts) => norm(ts) !== norm(entradaAbs) && norm(ts).startsWith(norm(componentes)) && /defineElement\(|customElements\.define\(|\bdefine\([A-Z]\w*[,)]/.test(readFileSync(ts, 'utf8'));
 
 /** Los fuentes importan `./x.js` y el archivo real es `./x.ts`; lo ajeno al componente va al CDN. */
 const jsATs = {
@@ -71,11 +72,16 @@ const jsATs = {
   },
 };
 
-/** El CSS del componente se recompila en cada build (cambios del .scss incluidos). */
+/**
+ * El CSS del componente se recompila en cada build (cambios del .scss incluidos): su `import css from 'iswc:css'`
+ * recibe el .scss compilado en vivo. Los demás `iswc:css` (módulos internos, hojas base) los resuelve `cssVirtual`
+ * desde el staging, igual que el build.
+ */
 const cssEnVivo = {
   name: 'css-en-vivo',
   setup(b) {
-    b.onStart(() => { b.initialOptions.define = { __IS_COMPONENT_CSS__: JSON.stringify(css()) }; });
+    b.onResolve({ filter: /^iswc:css$/ }, (args) => (norm(args.importer) === norm(entradaAbs) ? { path: entradaAbs, namespace: 'lab-css' } : undefined));
+    b.onLoad({ filter: /.*/, namespace: 'lab-css' }, () => ({ contents: `export default ${JSON.stringify(css())};`, loader: 'js' }));
     b.onEnd((r) => {
       if (r.errors.length) return;
       console.log(`[lab] ${relative(raiz, entradaAbs)} -> ${salida} (${new Date().toLocaleTimeString()})`);
@@ -92,8 +98,7 @@ const ctx = await context({
   minify: false,
   legalComments: 'none',
   banner: { js: `// LAB generado desde iswc-base/${relative(raiz, entradaAbs).replace(/\\/g, '/')}: no editar aqui, editar el fuente del kit y regenerar.` },
-  define: { __IS_COMPONENT_CSS__: JSON.stringify(css()) },
-  plugins: [aliasKit(), jsATs, cssEnVivo],
+  plugins: [aliasKit(), cssEnVivo, cssVirtual(), jsATs],
   logLevel: 'warning',
 });
 if (vigilar) {

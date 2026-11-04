@@ -17,8 +17,9 @@ export const StyleAttrMapSchema = z.record(z.string(), StyleAttrDefSchema);
 export type StyleAttrMap = z.infer<typeof StyleAttrMapSchema>;
 
 
-export const ConstructorSchema = z.unknown() /* TODO: cannot convert */;
-export type Constructor = z.infer<typeof ConstructorSchema>;
+/** Base que `withStyleAttrs` acepta: el molde `IswcElement` o cualquier constructor de `HTMLElement` (patrón mixin de TS: `any[]`). */
+// deno-lint-ignore no-explicit-any
+export type Constructor = new (...args: any[]) => HTMLElement;
 
 
 export const CtxSchema = z.unknown() /* TODO: ref ClassAccessorDecoratorContext<...> */;

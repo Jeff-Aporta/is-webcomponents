@@ -10,9 +10,15 @@
  *
  * Lo que NO entra aquí son los atributos: eso es `attrs.ts`. La frontera es
  * «el elemento» contra «sus atributos», y es la única que ha resultado estable.
+ *
+ * Los componentes del kit NO usan este módulo para ser elementos: extienden el
+ * molde `IswcElement` y se registran con `define()` (core/iswc-element.ts,
+ * plan D4). Aquí quedan las funciones sueltas que el molde reutiliza
+ * (`defineElement`, `emit`, `upgradeProperties`) y `adoptCss`, que sólo sirve a
+ * código externo que todavía enlaza su `.css` hermano por `import.meta.url`.
  */
 
-import { sheetsBase, soportaHojasAdoptadas } from './base-sheets.js';
+import { sheetsBase, textoHojasBase } from './base-sheets.js';
 import { materializarAtributos } from './attrs.js';
 import { routeThroughLoader } from '@jeff-aporta/iswc-base/cdn/build/asset-url.js';
 
@@ -73,12 +79,6 @@ export function siblingCssHref(moduleUrl: string): string {
   return sibling.href;
 }
 
-/** CSS propio del componente, incrustado por el build (`define` en `bundleJs`). */
-declare const __IS_COMPONENT_CSS__: string;
-
-/** Una `CSSStyleSheet` por texto CSS: todas las instancias adoptan la misma. */
-const cachePropias = new Map<string, CSSStyleSheet>();
-
 /**
  * Añade hojas al shadow sin duplicar las que ya tuviera.
  *
@@ -99,26 +99,16 @@ function adoptar(shadowRoot: ShadowRoot, nuevas: CSSStyleSheet[]): boolean {
   }
 }
 
-/** Inserta el CSS como `<style>`: sin `adoptedStyleSheets`, pero sin petición. */
-function estiloInline(shadowRoot: ShadowRoot, css: string): void {
-  const est = document.createElement('style');
-  est.textContent = css;
-  shadowRoot.prepend(est);
-}
-
 /**
- * Inyecta en el ShadowRoot la hoja base, los scrollbars tematizados y el `.css`
- * hermano del módulo.
+ * Compatibilidad para código EXTERNO al kit: hojas base + `<link>` al `.css`
+ * hermano de `moduleUrl`. Los componentes del kit no la usan: el molde
+ * `IswcElement` adopta su `static css` (import `iswc:css`) sin petición.
  *
  * **Llamar DESPUÉS de rellenar el shadow.** Un `innerHTML = …` posterior borra
- * los `<link>` que este método acaba de poner y el componente se queda sin
- * estilos, sin dar ningún error.
+ * el `<link>` que este método acaba de poner.
  *
- * `baseUrl` es dónde viven `host-base.css` y `scrollbars.css`. Por defecto, la
- * carpeta de este módulo — que es lo correcto mientras el core se inline en cada
- * bundle. Si algún día el core se publica externo, el llamador tiene que pasar
- * su propia URL o las dos hojas se buscarán junto al core y no junto al
- * componente.
+ * `baseUrl` es dónde viven `host-base.css` y `scrollbars.css`, para cuando las
+ * hojas base no vinieron incrustadas (consumo de `src/` sin empaquetar).
  */
 export function adoptCss(shadowRoot: ShadowRoot, moduleUrl: string, baseUrl: string = import.meta.url): void {
   const hoja = (href: string): HTMLLinkElement => {
@@ -127,39 +117,21 @@ export function adoptCss(shadowRoot: ShadowRoot, moduleUrl: string, baseUrl: str
     el.href = routeThroughLoader(href);
     return el;
   };
-
-  // El CSS propio lo incrusta el build, así que no hay petición que esperar y
-  // el shadow nunca se pinta sin estilo. `replaceSync` descarta `@import`, pero
-  // el build ya los aplana — ver `bundleCss` en `scripts/build.mjs`.
-  const propio = typeof __IS_COMPONENT_CSS__ === 'string' ? __IS_COMPONENT_CSS__ : '';
-
-  // Base y scrollbars primero: la hoja propia tiene que poder pisarlas por
-  // cascada. Son las mismas para toda la página, así que van por referencia.
+  shadowRoot.prepend(hoja(siblingCssHref(moduleUrl)));
+  // Base y scrollbars primero en la cascada: la hoja propia tiene que poder pisarlas.
   const base = sheetsBase();
-  const baseAdoptada = base !== null && adoptar(shadowRoot, base);
-
-  let propioResuelto = false;
-  if (propio && soportaHojasAdoptadas) {
-    let hojaPropia = cachePropias.get(propio);
-    if (!hojaPropia) {
-      hojaPropia = new CSSStyleSheet();
-      hojaPropia.replaceSync(propio);
-      cachePropias.set(propio, hojaPropia);
-    }
-    propioResuelto = adoptar(shadowRoot, [hojaPropia]);
+  if (base !== null && adoptar(shadowRoot, base)) return;
+  const texto = textoHojasBase();
+  if (texto) {
+    const est = document.createElement('style');
+    est.textContent = texto;
+    shadowRoot.prepend(est);
+    return;
   }
-
-  // Cada rama cae al escalón siguiente sólo si la anterior no pudo aplicarse:
-  // adoptar → <style> (cero peticiones) → <link> (comportamiento anterior).
-  if (propio && !propioResuelto) estiloInline(shadowRoot, propio);
-  if (!propio) shadowRoot.prepend(hoja(siblingCssHref(moduleUrl)));
-
-  if (!baseAdoptada) {
-    shadowRoot.prepend(
-      hoja(new URL('./host-base.css', baseUrl).href),
-      hoja(new URL('./scrollbars.css', baseUrl).href),
-    );
-  }
+  shadowRoot.prepend(
+    hoja(new URL('./host-base.css', baseUrl).href),
+    hoja(new URL('./scrollbars.css', baseUrl).href),
+  );
 }
 
 /* ──────────────────────────────── eventos ─────────────────────────────── */

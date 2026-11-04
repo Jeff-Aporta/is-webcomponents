@@ -2,6 +2,7 @@
 // (Skips video.js which has a pre-existing esbuild/private-field bug NOT in scope here.)
 import { build } from 'esbuild';
 import { aliasKit } from '@jeff-aporta/iswc-base/cdn/build/alias.ts';
+import { cssVirtual } from '@jeff-aporta/iswc-base/cdn/build/css-virtual.ts';
 import { access, mkdir, stat } from 'node:fs/promises';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -25,7 +26,7 @@ const NEW = [
 
 const bundleJs = (entry, out) => build({
   entryPoints: [entry], outfile: out, bundle: true, minify: true,
-  format: 'esm', target: 'es2020', legalComments: 'none', plugins: [aliasKit()],
+  format: 'esm', target: 'es2020', legalComments: 'none', plugins: [aliasKit(), cssVirtual()],
 });
 const bundleCss = (entry, out) => build({
   entryPoints: [entry], outfile: out, minify: true,

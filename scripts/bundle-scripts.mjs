@@ -6,6 +6,7 @@
 // del registry cargan rutas dist/... que sí están publicadas.
 import { build } from 'esbuild';
 import { aliasKit } from '@jeff-aporta/iswc-base/cdn/build/alias.ts';
+import { cssVirtual } from '@jeff-aporta/iswc-base/cdn/build/css-virtual.ts';
 import { mkdir, copyFile, readdir, writeFile, rm, cp } from 'node:fs/promises';
 import { existsSync, readdirSync } from 'node:fs';
 import { join, dirname, resolve, relative, basename, sep } from 'node:path';
@@ -35,10 +36,9 @@ await mkdir('dist/scripts', { recursive: true });
 await mkdir('dist/pages', { recursive: true });
 
 // ── Componentes externos: un bundle de galeria NO puede llevar dentro un
-// componente. Sin hoja propia (`__IS_COMPONENT_CSS__` solo existe en su bundle de
-// dist/cdn), adoptCss pide `<anfitrion>.min.css`, el stub vacio, y como este bundle
-// suele registrar el tag primero, `customElements.define` deja la version sin
-// estilos y el CDN ya no puede pisarla: <dialog> del UA, menu sin panel, etc.
+// componente: duplicaria su clase y, como este bundle suele registrar el tag
+// primero, `customElements.define` deja esa copia y el CDN ya no puede pisarla
+// (version vieja, estado partido entre dos clases: <dialog> del UA, menu sin panel).
 // Mismo criterio que `external-components` en build.mjs.
 const componentesRoot = resolve('src/components');
 const cdnRoot = resolve('dist/cdn');
@@ -47,7 +47,7 @@ const registraElemento = new Map();
 const esComponente = (ts) => {
   if (!registraElemento.has(ts)) {
     const fuente = existsSync(ts) ? readFileSync(ts, 'utf8') : '';
-    registraElemento.set(ts, /\b(?:defineElement|customElements\.define)\(/.test(fuente));
+    registraElemento.set(ts, /\b(?:defineElement|customElements\.define)\(|\bdefine\([A-Z]\w*[,)]/.test(fuente));
   }
   return registraElemento.get(ts);
 };
@@ -133,7 +133,7 @@ for (const name of scripts) {
     await build({
       entryPoints: [`scripts/${name}.js`],
       outfile: `dist/scripts/${name}.min.js`,
-      plugins: [aliasKit(), componentesExternos(`dist/scripts/${name}.min.js`)],
+      plugins: [aliasKit(), cssVirtual(), componentesExternos(`dist/scripts/${name}.min.js`)],
       bundle: true,
       minify: true,
       format: 'esm',
@@ -159,7 +159,7 @@ for (const name of pages) {
     await build({
       entryPoints: [`src/pages/${name}.ts`],
       outfile: `dist/pages/${name}.min.js`,
-      plugins: [aliasKit(), componentesExternos(`dist/pages/${name}.min.js`)],
+      plugins: [aliasKit(), cssVirtual(), componentesExternos(`dist/pages/${name}.min.js`)],
       bundle: true,
       minify: true,
       format: 'esm',
@@ -219,7 +219,7 @@ for (const { category, name } of allPreviews) {
     await build({
       entryPoints: [src],
       outfile: dstFile,
-      plugins: [aliasKit(), componentesExternos(dstFile)],
+      plugins: [aliasKit(), cssVirtual(), componentesExternos(dstFile)],
       bundle: true,
       minify: true,
       format: 'esm',
@@ -282,8 +282,8 @@ ok += scssCount;
 // Lo más simple: copiar los 2 CSS compartidos a cada carpeta de preview.
 // Además: cada bundle adopta CSS via `siblingCssHref(import.meta.url)` que
 // resuelve `<bundle>.preview.min.css` — si no existe, 404 adicional. Stubs
-// vacíos satisfacen al browser (los bundles ya tienen su CSS via
-// __IS_COMPONENT_CSS__ si el build lo inline, o vía el component import).
+// vacíos satisfacen al browser (los componentes traen su CSS dentro, por
+// `import css from 'iswc:css'`).
 const sharedCss = ['host-base.css', 'scrollbars.css'];
 for (const cat of await readdir(previewsOut, { withFileTypes: true })) {
   if (!cat.isDirectory()) continue;

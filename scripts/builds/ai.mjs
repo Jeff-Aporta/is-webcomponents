@@ -11,6 +11,7 @@ import { readdir } from 'node:fs/promises';
 import { basename, dirname, join, resolve } from 'node:path';
 import { build } from 'esbuild';
 import { aliasKit } from '@jeff-aporta/iswc-base/cdn/build/alias.ts';
+import { cssVirtual } from '@jeff-aporta/iswc-base/cdn/build/css-virtual.ts';
 
 const barras = (p) => p.replaceAll('\\', '/');
 
@@ -49,7 +50,7 @@ export async function construirAi({ root, dist, componentes, bundleMinJs }) {
     format: 'esm',
     target: 'es2022',
     legalComments: 'none',
-    plugins: [aliasKit(), aiExterno(aiRoot, '../')],
+    plugins: [aliasKit(), cssVirtual(), aiExterno(aiRoot, '../')],
   });
   console.log(`  ${'lib/ai/'.padEnd(18)} ${modulos.length} módulos + ${motores.length} motores (fuera de los barriles)`);
 }

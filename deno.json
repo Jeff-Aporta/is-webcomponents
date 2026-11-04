@@ -5,6 +5,9 @@
   "unstable": ["sloppy-imports"],
   "imports": {
     "@jeff-aporta/iswc-base/": "./src/",
+    "iswc:css": "./src/core/iswc-css-vacio.ts",
+    "iswc:css/host-base": "./src/core/iswc-css-vacio.ts",
+    "iswc:css/scrollbars": "./src/core/iswc-css-vacio.ts",
     "esbuild": "npm:esbuild@^0.25.0",
     "playwright": "npm:playwright@^1.62.1",
     "@browserbasehq/stagehand": "npm:@browserbasehq/stagehand@^4.0.2",

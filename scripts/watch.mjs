@@ -19,6 +19,7 @@ import { basename, dirname, join, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { build } from 'esbuild';
 import { aliasKit } from '@jeff-aporta/iswc-base/cdn/build/alias.ts';
+import { cssVirtual } from '@jeff-aporta/iswc-base/cdn/build/css-virtual.ts';
 import { bundleMinJs, bundleMinCss, docsBanner } from '@jeff-aporta/iswc-base/cdn/build/bundle-min.ts';
 
 const here = dirname(fileURLToPath(import.meta.url));
@@ -70,14 +71,7 @@ const externalComponents = {
   },
 };
 
-async function defineCss(cssFile) {
-  try {
-    return { __IS_COMPONENT_CSS__: JSON.stringify(await readFile(cssFile, 'utf8')) };
-  } catch {
-    return undefined;
-  }
-}
-
+// El CSS que viaja dentro del .min.js lo pone `iswc:css` (cssVirtual, dentro de bundleMinJs) desde el staging.
 async function rebuildComponent(inFile) {
   const tag = basename(inFile).replace(/\.(ts|js)$/, '');
   const folder = folderFor(inFile);
@@ -93,7 +87,6 @@ async function rebuildComponent(inFile) {
     outfile: outJs,
     plugins: [externalComponents],
     banner: docsBanner([`watch: ${tag}`]),
-    define: hasCss ? await defineCss(outCss) : undefined,
   });
   const sz = (await stat(outJs)).size;
   console.log(`  ✓ ${folder}/${tag}.min.js (${sz} B)`);
@@ -111,7 +104,7 @@ async function rebuildGallery() {
     legalComments: 'none',
     // load-json.ts: imports node:* solo en tests; en browser usa fetch.
     external: ['node:fs', 'node:url'],
-    plugins: [aliasKit()],
+    plugins: [aliasKit(), cssVirtual()],
   });
   console.log(`  ✓ dist/gallery-app.min.js (${(await stat(outfile)).size} B)`);
 }

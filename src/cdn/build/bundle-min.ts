@@ -6,8 +6,10 @@
 import { build, type Plugin } from 'esbuild';
 import type { BundleMinJsOptions, BundleLoaderOptions } from "./bundle-min.schemas.js";
 import { aliasKit } from './alias.js';
+import { cssVirtual } from './css-virtual.js';
 
 // El alias `@jeff-aporta/iswc-base/<ruta>` va siempre y PRIMERO: los plugins del llamador deciden por ruta absoluta (ver alias.ts).
+// Detrás va `iswc:css` (css-virtual.ts): cada módulo que lo importe recibe su .css compilado del staging.
 export function bundleMinJs(opts: BundleMinJsOptions) {
   return build({
     entryPoints: [opts.entry],
@@ -17,7 +19,7 @@ export function bundleMinJs(opts: BundleMinJsOptions) {
     format: opts.format || 'esm',
     target: opts.target || 'es2020',
     legalComments: 'none',
-    plugins: [aliasKit(), ...(opts.plugins ?? [])],
+    plugins: [aliasKit(), cssVirtual(), ...(opts.plugins ?? [])],
     ...(opts.external ? { external: opts.external } : {}),
     ...(opts.define ? { define: opts.define } : {}),
     ...(opts.banner ? { banner: { js: opts.banner } } : {}),

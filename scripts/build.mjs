@@ -7,6 +7,7 @@ import { join, dirname, basename, relative, resolve, sep, posix } from 'node:pat
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { build } from 'esbuild';
 import { aliasKit, ALIAS_KIT, reescribirAlias } from '@jeff-aporta/iswc-base/cdn/build/alias.ts';
+import { cssVirtual } from '@jeff-aporta/iswc-base/cdn/build/css-virtual.ts';
 import { bundleMinJs, bundleMinCss, docsBanner, bundleLoader } from '@jeff-aporta/iswc-base/cdn/build/bundle-min.ts';
 import { barrerHashes } from '@jeff-aporta/iswc-base/cdn/build/sync-hashes.ts';
 import { hashesRepetidos } from '@jeff-aporta/iswc-base/cdn/build/hash.ts';
@@ -94,25 +95,20 @@ for (const entry of await readdir(dist, { withFileTypes: true })) {
   await rm(join(dist, entry.name), { recursive: true, force: true });
 }
 
-const bundleJs = (entry, outfile, plugins = [], bannerJs = '', define = undefined) =>
-  bundleMinJs({ entry, outfile, plugins, banner: bannerJs, define });
+const bundleJs = (entry, outfile, plugins = [], bannerJs = '') =>
+  bundleMinJs({ entry, outfile, plugins, banner: bannerJs });
 
 // El CSS de cada componente viaja DENTRO de su .min.js, no como fetch aparte.
 // El href del .css hermano solo se conocia tras ejecutar el .js, asi que esas
 // peticiones eran cascada pura y no se paralelizaban con nada: para pintar un
-// <iswc-tree-view> eran 24 de 38. `define` sustituye el identificador por el
-// literal ya minificado; `adoptCss` lo adopta con replaceSync.
+// <iswc-tree-view> eran 24 de 38. Cada componente hace `import css from
+// 'iswc:css'` y el plugin `cssVirtual` (src/cdn/build/css-virtual.ts, ya dentro
+// de `bundleMinJs`) le pone su .css del staging aplanado y minificado; el molde
+// `IswcElement` lo adopta con replaceSync. Es por importador, no un `define`
+// global por build: vale también para el build único con splitting (F3).
 //
 // Se sigue emitiendo el .min.css hermano: lo consumen el sheet-cache del
-// loader, quien enlace la hoja a mano y el propio src/ sin empaquetar.
-const defineCss = async (cssFile) => {
-  try {
-    const texto = await readFile(cssFile, 'utf8');
-    return { __IS_COMPONENT_CSS__: JSON.stringify(texto) };
-  } catch {
-    return undefined;
-  }
-};
+// loader y quien enlace la hoja a mano.
 
 // Mismo valor que `REPO_GITHUB` (src/core/cdn-ref.ts): nombre real del repo en GitHub hasta que se renombre a iswc-base.
 const REPO_GITHUB = 'Jeff-Aporta/is-webcomponents';
@@ -274,17 +270,8 @@ const componentesDesdeAi = {
   const coreRoot = join(root, 'src', 'core');
   const outBase = join(dist, '_shared', 'base-sheets.min.js');
   await mkdir(join(dist, '_shared'), { recursive: true });
-  // Se minifican a un temporal para incrustar exactamente lo que se publicaria.
-  const tmpBase = join(dist, '_shared', '_tmp-host-base.css');
-  const tmpScroll = join(dist, '_shared', '_tmp-scrollbars.css');
-  await bundleCss(join(cssRoot, 'core', 'host-base.css'), tmpBase);
-  await bundleCss(join(cssRoot, 'core', 'scrollbars.css'), tmpScroll);
-  await bundleJs(join(coreRoot, 'base-sheets.ts'), outBase, [], kitDocsBanner(), {
-    __IS_HOST_BASE_CSS__: JSON.stringify(await readFile(tmpBase, 'utf8')),
-    __IS_SCROLLBARS_CSS__: JSON.stringify(await readFile(tmpScroll, 'utf8')),
-  });
-  await unlink(tmpBase).catch(() => {});
-  await unlink(tmpScroll).catch(() => {});
+  // El CSS llega por `iswc:css/host-base` e `iswc:css/scrollbars` (plugin cssVirtual dentro de bundleMinJs).
+  await bundleJs(join(coreRoot, 'base-sheets.ts'), outBase, [], kitDocsBanner());
   console.log(`  ${'_shared/base-sheets.min.js'.padEnd(28)} js  (hojas base compartidas)`);
 }
 
@@ -352,8 +339,8 @@ for (const inFile of entries) {
     await bundleCss(hostBaseIn, join(outDir, 'host-base.css'));
   }
 
-  // El CSS va primero: lo que se incrusta en el JS es el .min.css YA aplanado
-  // (sin @import, que replaceSync descartaria) y minificado, no la fuente.
+  // El .min.css hermano se sigue publicando (sheet-cache, enlace a mano). Lo que
+  // viaja DENTRO del JS lo pone `iswc:css` con el mismo aplanado y minificado.
   const hasCss = await access(cssIn).then(() => true, () => false);
   if (hasCss) await bundleCss(cssIn, outCss);
 
@@ -362,7 +349,6 @@ for (const inFile of entries) {
     outJs,
     [aiExternoEnComponentes, externalComponents],
     componentDocsBanner(srcFolder, tag),
-    hasCss ? await defineCss(outCss) : undefined,
   );
 
   const [jsIn, jsOut] = await Promise.all([stat(inFile), stat(outJs)]);
@@ -608,7 +594,7 @@ const galleryOut = join(root, 'dist', 'gallery-app.min.js');
 await build({
   entryPoints: [join(root, 'src', 'app', 'app.ts')],
   outfile: galleryOut,
-  plugins: [aliasKit()],
+  plugins: [aliasKit(), cssVirtual()],
   bundle: true,
   minify: true,
   format: 'esm',

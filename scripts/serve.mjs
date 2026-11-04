@@ -20,6 +20,7 @@ import { createReadStream, existsSync } from 'node:fs';
 import { stat, readFile } from 'node:fs/promises';
 import { extname, join, normalize, relative, sep } from 'node:path';
 import { reescribirAlias } from '@jeff-aporta/iswc-base/cdn/build/alias.ts';
+import { cssMinificado, rutaCssVirtual } from '@jeff-aporta/iswc-base/cdn/build/css-virtual.ts';
 
 const ROOT = process.env.SERVE_ROOT
   ? join(process.env.SERVE_ROOT)
@@ -38,6 +39,31 @@ const SRC_URL = (() => {
 
 /** `@jeff-aporta/iswc-base/<ruta>` → `<SRC_URL><ruta>`: el navegador no tiene import map al servir desde fuente. */
 const reescribirAliasKit = (code) => reescribirAlias(code, (ruta) => `${SRC_URL}${ruta}`);
+
+/** Prefijo URL del CSS de `import css from 'iswc:css'` servido como módulo (`export default "<css>"`). */
+const CSS_PREFIX = '/__css/';
+const STAGING = join(REPO, '.tmp-scss');
+
+/**
+ * `iswc:css` (plan D6) → `/__css/<ruta en el staging>.js`. Sin build no hay plugin que lo resuelva: el especificador
+ * se reescribe a un endpoint que sirve el `.css` compilado del staging (el mismo que incrusta el build) como módulo,
+ * así la galería desde fuente pinta con estilos sin cargar ningún `.css` hermano.
+ */
+const reescribirCss = (code, archivo) =>
+  code.replace(/(\bfrom\s*|\bimport\s*\(?\s*)(["'])(iswc:css(?:\/[\w-]+)?)\2/g, (m, pre, q, esp) => {
+    const css = rutaCssVirtual(esp, archivo);
+    const rel = css ? relative(STAGING, css).replaceAll('\\', '/') : 'sin-hoja.css';
+    return `${pre}${q}${CSS_PREFIX}${rel}.js${q}`;
+  });
+
+/** Módulo JS con el CSS del staging; `''` si la hoja no existe (componente sin `.scss`). */
+async function cssModulo(urlPath) {
+  const rel = normalize(decodeURIComponent(urlPath.slice(CSS_PREFIX.length).split('?')[0])).replace(/\.js$/, '');
+  const archivo = join(STAGING, rel);
+  const dentro = !relative(STAGING, archivo).startsWith('..');
+  const css = dentro ? await cssMinificado(archivo) : null;
+  return `export default ${JSON.stringify(css ?? '')};`;
+}
 
 /** El navegador no resuelve specifiers desnudos (`import { z } from "zod"`):
  *  se reescriben a `/__npm/<pkg>.js`, que sirve el paquete empaquetado con esbuild. */
@@ -109,6 +135,17 @@ async function resolveFile(urlPath) {
 
 createServer(async (req, res) => {
   const url = req.url || '/';
+  if (url.startsWith(CSS_PREFIX)) {
+    try {
+      const code = await cssModulo(url);
+      res.writeHead(200, { 'content-type': 'text/javascript; charset=utf-8', 'cache-control': 'no-store' });
+      res.end(code);
+    } catch (e) {
+      res.writeHead(500, { 'content-type': 'text/plain; charset=utf-8' });
+      res.end(`css ${url}: ${e?.message ?? e}`);
+    }
+    return;
+  }
   if (url.startsWith(NPM_PREFIX)) {
     const spec = decodeURIComponent(url.slice(NPM_PREFIX.length).split('?')[0]).replace(/\.js$/, '');
     try {
@@ -142,7 +179,7 @@ createServer(async (req, res) => {
         'content-type': 'text/javascript; charset=utf-8',
         'cache-control': 'no-store',
       });
-      res.end(reescribirBare(reescribirAliasKit(salida.code)));
+      res.end(reescribirBare(reescribirAliasKit(reescribirCss(salida.code, file))));
     } catch (e) {
       res.writeHead(500, { 'content-type': 'text/plain; charset=utf-8' });
       res.end(`error transpilando ${file}
