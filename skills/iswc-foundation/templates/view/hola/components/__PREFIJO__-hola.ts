@@ -11,28 +11,34 @@
  *   - Abrir y cerrar pasan por el estado: botón y «Entendido» cambian `modal`; Esc o clic fuera llegan
  *     como `iswc-hide` del kit y hacen lo mismo. Cada cambio se avisa una vez con
  *     `__PREFIJO__-hola-modal { abierto }`. (Cambiar `open` desde código no emite `iswc-hide`.)
+ *   - `static deps`: los tags del kit que pinta se piden al loader al conectar (si aún no están).
  */
-import { crearComponente, define, emitir, html } from '../../../src/js/base/componente.js';
+import { define } from '@jeff-aporta/iswc-base/core/iswc-element.min.mjs';
+import css from 'iswc:css';
+import { Componente, html } from '../../../src/js/base/componente.js';
 import type { __CLASE__HolaProps } from '../../../src/js/consts/schemas/componentes.schemas.js';
 import { caracteristicas, guionInicio } from '../utils/bienvenida.js';
 import './__PREFIJO__-hola-mundo.js';
 
-type Host = HTMLElement & { props: Partial<__CLASE__HolaProps> };
+class __CLASE__Hola extends Componente<__CLASE__HolaProps> {
+  static tag = '__PREFIJO__-hola';
+  static css = css;
+  static deps = ['iswc-button', 'iswc-icon', 'iswc-tag', 'iswc-card', 'iswc-dialog', 'iswc-callout', 'iswc-code'];
 
-const __CLASE__Hola = crearComponente<__CLASE__HolaProps>(
-  import.meta.url,
-  '__PREFIJO__-hola',
-  { modal: false },
-  (root, props, host) => {
-    // Abrir/cerrar pasan SIEMPRE por el estado (`props.modal`) y avisan una sola vez. Se lee el estado
-    // vivo del host: el `props` de este render queda viejo tras un repintado parcial.
-    const cambiar = (abierto: boolean) => {
-      if ((host as Host).props.modal === abierto) return;
-      (host as Host).props = { modal: abierto };
-      emitir(host, '__PREFIJO__-hola-modal', { abierto });
-    };
-    const abrir = () => cambiar(true);
-    const cerrar = () => cambiar(false);
+  protected override inicial(): __CLASE__HolaProps {
+    return { modal: false };
+  }
+
+  /** Abrir/cerrar pasan SIEMPRE por el estado (`props.modal`) y avisan una sola vez. */
+  #cambiar(abierto: boolean): void {
+    if (this.props.modal === abierto) return;
+    this.props = { modal: abierto };
+    this.emit('__PREFIJO__-hola-modal', { abierto });
+  }
+
+  protected override pintar(root: ShadowRoot, props: __CLASE__HolaProps): void {
+    const abrir = () => this.#cambiar(true);
+    const cerrar = () => this.#cambiar(false);
     root.append(html`
       <section class="hero" part="hero" aria-labelledby="titulo">
         <p class="kicker">__TITULO__ · iswc</p>
@@ -68,15 +74,16 @@ const __CLASE__Hola = crearComponente<__CLASE__HolaProps>(
         <iswc-button slot="footer" color="brand" id="cerrar-modal" oniswc-click=${cerrar}>Entendido</iswc-button>
       </iswc-dialog>
     `);
-  },
-  // Repintado parcial: si solo cambió `modal`, se toca `open` del diálogo y nada más.
-  (root, props, previos) => {
+  }
+
+  /** Repintado parcial: si solo cambió `modal`, se toca `open` del diálogo y nada más. */
+  protected override parcial(props: __CLASE__HolaProps, previos: __CLASE__HolaProps): boolean {
     if (props.modal === previos.modal) return false;
-    const dialogo = root.querySelector('#modal') as (HTMLElement & { open: boolean }) | null;
+    const dialogo = this.shadow?.querySelector('#modal') as (HTMLElement & { open: boolean }) | null | undefined;
     if (!dialogo) return false;
     dialogo.open = props.modal;
     return true;
-  },
-);
+  }
+}
 
-define('__PREFIJO__-hola', __CLASE__Hola);
+define(__CLASE__Hola);

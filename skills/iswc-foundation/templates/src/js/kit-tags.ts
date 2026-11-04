@@ -7,6 +7,7 @@
  * UNA vez, en la lista que le toca:
  *
  *   KIT_TAGS   → tags `iswc-*` del kit que la app pide al loader (solo padres registrables).
+ *   SHELL_CRITICO → los de KIT_TAGS del primer pintado: su cierre se precarga desde el HTML (modulepreload).
  *   APP_TAGS   → componentes transversales → `dist/cdn/js/components/__PREFIJO__/<tag>.js`.
  *   VIEW_TAGS  → componentes de cada vista → `dist/cdn/view/<vista>/components/<tag>.js`.
  *
@@ -24,6 +25,12 @@ export const KIT_TAGS = [
   'iswc-theme-toggle',
   'iswc-toast',
 ] as const;
+
+/**
+ * Shell crítico: tags del kit que se ven en el primer pintado (barra y toaster). El build lee su cierre de módulos en
+ * `src/vendor/iswc-base/deps.json` (`tags[tag]`) y emite un `<link rel="modulepreload">` por ruta en cada HTML.
+ */
+export const SHELL_CRITICO = ['iswc-theme-toggle', 'iswc-toast'] as const satisfies readonly (typeof KIT_TAGS)[number][];
 
 export const PREFIJO = '__PREFIJO__';
 

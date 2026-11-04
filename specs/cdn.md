@@ -104,6 +104,33 @@ el resto con `load` (progresivo).
   quita el pin y hay espejos). Nada de top-level await en los módulos que cargan las apps (WebView Android).
 - Componentes de app (`registerApp`): `.mjs` → `import()`, `.js` → script clásico; un módulo ES con extensión `.js`
   pasa `type: 'module'`. `deps` (`tag` → hrefs) precarga su cierre.
+- Implementación de referencia para apps: las plantillas de `skills/iswc-foundation/templates/` (`index.html`,
+  `view/**/index.html` y `src/utils/build.ts`, que escribe el bloque `<!-- iswc:precarga:inicio -->`…`fin` desde
+  `src/vendor/iswc-base/deps.json`). Ojo al orden: el `<script type="module">` del loader va **antes** del registrador
+  de la app (los módulos se ejecutan en orden de documento y el registrador necesita `globalThis.iswcLoader`).
+
+### Consumidores: re-pinear tras F3/F4
+
+Un consumidor con un pin anterior a F3 (módulos `.min.js`) o anterior a F4 (sin `deps.json` ni loader en capas) sube
+así (F5b, por app):
+
+1. **Nombre**: si la app aún cita el nombre histórico del kit (carpeta vendor, `candidato` de `reuso`, URLs), desde un
+   checkout del kit `deno run -A scripts/codemods/nomenclatura-iswc-base.mjs --raiz=<app> --dry-run` y luego sin
+   `--dry-run` (mueve `src/vendor/<histórico>/` → `src/vendor/iswc-base/` con `git mv`; lo vendorizado solo se mueve).
+   `ReusoCandidatoSchema` no acepta el nombre histórico.
+2. **Pin**: `pin-update.mjs --nuevo=<sha40|ultimo>` (online desde `@main` o el vendorizado). Fija todas las URL y el
+   alias `@jeff-aporta/iswc-base/` (deno.json e import maps) al SHA, pasa `<ruta>.min.js` → `.min.mjs` en las URL de
+   módulos del kit (`core/`, `lib/`, `<cat>/<tag>`; nunca terceros ni `*.classic.js`) y baja `dist/cdn/deps.json` del
+   SHA a `src/vendor/iswc-base/deps.json` (`--sin-deps` lo apaga). Un SHA anterior a F3 sale con exit 3 y lo dice.
+3. **Vendor**: re-vendorizar las tools del kit al mismo SHA (`vendor:iswc` / `vendor.ts`).
+4. **Bootstrap**: copiar el de las plantillas: import map con el alias, `modulepreload` del cierre del shell crítico
+   (de `deps.json`, sin `?v=`), `<link>` de `is-base.min.css` y `palettes.min.css`, loader `core/loader.min.mjs`,
+   registrador con `{ href, type: 'module' }` (componentes `.js` ES) o componentes `.mjs`.
+5. **Componentes**: al molde (`IswcElement`, `static tag/css/observed/deps`, `import css from 'iswc:css'` incrustado
+   por el build, `define()`); nada de `adoptCss` ni `<link>` a la hoja hermana.
+6. **Gate** de la app en verde (`test:all`); si queda rojo, se arregla o se vuelve al SHA anterior.
+
+La copia compat `core/loader.min.js` se retira cuando todos los consumidores hayan re-pineado (F5b).
 
 Skills: `npx skills add Jeff-Aporta/is-webcomponents -s is-cdn-install` · `-s iswc-base`.
 

@@ -55,6 +55,21 @@ for (const [rel, kit] of ARCHIVOS) {
   mkdirSync(dirname(destino), { recursive: true });
   writeFileSync(destino, `// @vendor is-webcomponents@${pin} dist/cdn/${kit}\n// No editar: se cambia en el kit y se descarga con \`deno task vendor:iswc\`.\n${texto}`);
 }
+// Grafo de módulos del kit al pin (`dist/cdn/deps.json`, F4): el build lee de aquí el cierre del shell crítico y emite
+// los `<link rel="modulepreload">` sin red. `deno task pin --nuevo=…` también lo refresca (pin-update, salvo `--sin-deps`).
+{
+  let deps;
+  for (const url of [`https://cdn.jsdelivr.net/gh/${REPO}@${pin}/dist/cdn/deps.json`, `https://raw.githubusercontent.com/${REPO}/${pin}/dist/cdn/deps.json`]) {
+    const r = await fetch(url);
+    if (r.ok) { deps = await r.text(); break; }
+    await r.body?.cancel();
+  }
+  if (deps === undefined) throw new Error(`vendor-iswc: deps.json no responde para ${pin.slice(0, 12)} (¿SHA anterior a F3?)`);
+  if (typeof JSON.parse(deps)?.tags !== 'object') throw new Error('vendor-iswc: deps.json sin `tags`');
+  const destino = join(ROOT, 'src', 'vendor', 'iswc-base', 'deps.json');
+  mkdirSync(dirname(destino), { recursive: true });
+  writeFileSync(destino, deps.endsWith('\n') ? deps : `${deps}\n`);
+}
 // Skill general del kit (índice de todos los componentes) en specs/iswc/kit/, fijada al pin.
 const SKILL_KIT = ['SKILL.md', 'catalog.md', 'reference.md', 'PROMPT.md', 'tools/build.md', 'tools/local.md', 'tools/migrate.md', 'tools/runtime.md'];
 const fijar = (md) => md
@@ -72,4 +87,4 @@ for (const rel of SKILL_KIT) {
   writeFileSync(destino, `<!-- Copia de skills/iswc-base/${rel} del kit ${REPO}@${pin}. No editar: se refresca con \`deno task vendor:iswc\`. -->\n${fijar(texto)}`);
 }
 
-console.log(`[vendor:iswc] ${ARCHIVOS.length} archivos <- is-webcomponents@${pin.slice(0, 12)}`);
+console.log(`[vendor:iswc] ${ARCHIVOS.length} archivos + deps.json <- is-webcomponents@${pin.slice(0, 12)}`);

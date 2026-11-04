@@ -1,6 +1,12 @@
 // nomenclatura-iswc-base.mjs — un solo nombre para el kit: `iswc-base`.
 //
-//   deno run -A scripts/codemods/nomenclatura-iswc-base.mjs [--dry-run]
+//   deno run -A scripts/codemods/nomenclatura-iswc-base.mjs [--dry-run] [--raiz=<ruta>]
+//
+// `--raiz=<ruta>`: barre OTRO proyecto (un consumidor del kit, p. ej. una app que aún cita el nombre histórico en su
+// `candidato` de `reuso`, en su carpeta vendor o en sus URLs) en vez del kit. Mismas reglas; los `git mv` corren con
+// `cwd` en esa raíz. En un consumidor no se reescribe el TEXTO de lo que está bajo una carpeta `vendor/` (son copias
+// del kit: se re-vendorizan), pero sí se mueven las rutas (`src/vendor/<nombre histórico>/` → `src/vendor/iswc-base/`).
+// Sin `--raiz`, la raíz es este repo.
 //
 // Regla (specs/plan-carga-modular.md §D11, fase F1b; specs/adr.md «ADR nomenclatura iswc-base, 2026-11-04»):
 //   - `iswc-root` (nombre de un repo que nunca existió en GitHub) desaparece:
@@ -109,24 +115,33 @@ function esTexto(buf) {
   return true;
 }
 
-/** Archivos de texto a barrer (rutas absolutas). */
-export function listar(dir = RAIZ, salida = []) {
+/** true si `rel` (desde la raíz de un CONSUMIDOR) está bajo una carpeta `vendor/`: copias del kit, no se reescriben. */
+export function esVendorDeConsumidor(rel) {
+  return /(?:^|\/)vendor\//.test(rel);
+}
+
+/**
+ * Archivos de texto a barrer (rutas absolutas). `raiz` es la raíz del proyecto barrido (default: el kit); en otra
+ * raíz (consumidor) se saltan los archivos bajo `vendor/`.
+ */
+export function listar(dir = RAIZ, salida = [], raiz = RAIZ) {
+  const consumidor = resolve(raiz) !== RAIZ;
   for (const nombre of readdirSync(dir)) {
     const ruta = join(dir, nombre);
-    const rel = barras(relative(RAIZ, ruta));
+    const rel = barras(relative(raiz, ruta));
     const st = statSync(ruta);
     if (st.isDirectory()) {
-      if (!saltarCarpeta(nombre) && !esExcepcion(`${rel}/`)) listar(ruta, salida);
-    } else if (!saltarArchivo(rel) && !esExcepcion(rel) && st.size < 8_000_000) {
+      if (!saltarCarpeta(nombre) && !esExcepcion(`${rel}/`)) listar(ruta, salida, raiz);
+    } else if (!saltarArchivo(rel) && !esExcepcion(rel) && !(consumidor && esVendorDeConsumidor(rel)) && st.size < 8_000_000) {
       salida.push(ruta);
     }
   }
   return salida;
 }
 
-function rastreado(ruta) {
+function rastreado(ruta, raiz) {
   try {
-    execFileSync('git', ['ls-files', '--error-unmatch', ruta], { cwd: RAIZ, stdio: 'ignore' });
+    execFileSync('git', ['ls-files', '--error-unmatch', ruta], { cwd: raiz, stdio: 'ignore' });
     return true;
   } catch {
     return false;
@@ -134,41 +149,52 @@ function rastreado(ruta) {
 }
 
 /** Mueve carpetas y archivos con `iswc-root` en el nombre (de arriba abajo: tras mover una carpeta se entra en el destino). */
-function renombrar(seco, dir = RAIZ, hechos = []) {
+function renombrar(seco, raiz = RAIZ, dir = raiz, hechos = []) {
   for (const nombre of readdirSync(dir)) {
     const ruta = join(dir, nombre);
-    const rel = barras(relative(RAIZ, ruta));
+    const rel = barras(relative(raiz, ruta));
     const st = statSync(ruta);
     if (st.isDirectory() && (saltarCarpeta(nombre) || esExcepcion(`${rel}/`))) continue;
     if (nombre.includes('iswc-root')) {
       const destino = join(dir, nombre.replaceAll('iswc-root', 'iswc-base'));
-      hechos.push(`${rel} → ${barras(relative(RAIZ, destino))}`);
+      hechos.push(`${rel} → ${barras(relative(raiz, destino))}`);
       if (!seco) {
         if (existsSync(destino)) throw new Error(`destino ya existe: ${destino}`);
-        if (rastreado(ruta)) execFileSync('git', ['mv', ruta, destino], { cwd: RAIZ, stdio: 'inherit' });
+        if (rastreado(ruta, raiz)) execFileSync('git', ['mv', ruta, destino], { cwd: raiz, stdio: 'inherit' });
         else renameSync(ruta, destino);
       }
-      if (st.isDirectory()) renombrar(seco, seco ? ruta : destino, hechos);
+      if (st.isDirectory()) renombrar(seco, raiz, seco ? ruta : destino, hechos);
       continue;
     }
-    if (st.isDirectory()) renombrar(seco, ruta, hechos);
+    if (st.isDirectory()) renombrar(seco, raiz, ruta, hechos);
   }
   return hechos;
 }
 
+/** `--raiz=<ruta>` de la línea de órdenes (absoluta o relativa al cwd); sin ella, el kit. */
+export function raizDeArgs(argv) {
+  const arg = argv.find((a) => a.startsWith('--raiz='));
+  if (!arg) return RAIZ;
+  const raiz = resolve(arg.slice('--raiz='.length));
+  if (!existsSync(raiz) || !statSync(raiz).isDirectory()) throw new Error(`--raiz: no es una carpeta: ${raiz}`);
+  return raiz;
+}
+
 function main() {
   const seco = process.argv.includes('--dry-run');
-  const movidos = renombrar(seco);
+  const raiz = raizDeArgs(process.argv);
+  if (raiz !== RAIZ) console.log(`raíz: ${raiz} (consumidor: lo que está bajo vendor/ solo se mueve, no se reescribe)`);
+  const movidos = renombrar(seco, raiz);
   const porCarpeta = {};
   let total = 0;
   let tocados = 0;
-  for (const archivo of listar()) {
+  for (const archivo of listar(raiz, [], raiz)) {
     const buf = readFileSync(archivo);
     if (!esTexto(buf)) continue;
     const previo = buf.toString('utf8');
     const [nuevo, n] = transformar(previo);
     if (!n) continue;
-    const rel = barras(relative(RAIZ, archivo));
+    const rel = barras(relative(raiz, archivo));
     const carpeta = rel.includes('/') ? rel.split('/')[0] : '(raíz)';
     porCarpeta[carpeta] = (porCarpeta[carpeta] ?? 0) + n;
     total += n;

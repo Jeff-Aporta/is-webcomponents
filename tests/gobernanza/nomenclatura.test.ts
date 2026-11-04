@@ -13,9 +13,12 @@
 //      las listas de alias.
 //   N5 `REPO_GITHUB` = `Jeff-Aporta/is-webcomponents` y `NOMBRE_KIT` = `iswc-base` en src/core/cdn-ref.ts; la skill
 //      general vive en `skills/iswc-base/`.
+//   N6 el codemod corre sobre un consumidor con `--raiz=<ruta>` (F5): reescribe su texto (el `candidato` de `reuso`
+//      queda en `iswc-base`, que es lo único que acepta el schema), mueve `src/vendor/iswc-root/` a
+//      `src/vendor/iswc-base/` y no reescribe el texto de lo vendorizado (copias del kit).
 import { assert, assertEquals } from 'jsr:@std/assert@1';
-import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
-import { join, relative } from 'node:path';
+import { existsSync, mkdirSync, readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
+import { dirname, join, relative } from 'node:path';
 import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
 import { denoTestCon } from '../_shared/deno-test.ts';
 import { listar } from '../../scripts/codemods/nomenclatura-iswc-base.mjs';
@@ -107,6 +110,32 @@ denoTest('nomenclatura: N5 constantes del repo y carpeta de la skill general', (
   assertEquals(NOMBRE_KIT, 'iswc-base');
   assert(existsSync(join(KIT, 'skills', 'iswc-base', 'SKILL.md')), 'falta skills/iswc-base/SKILL.md');
   assert(!existsSync(join(KIT, 'skills', 'iswc-root')), 'skills/iswc-root no debe existir');
+});
+
+denoTest('nomenclatura: N6 el codemod con --raiz barre un consumidor (texto propio sí, vendor solo se mueve)', () => {
+  const app = Deno.makeTempDirSync({ prefix: 'nomenclatura-app-' });
+  const escribir = (rel: string, texto: string) => {
+    mkdirSync(dirname(join(app, rel)), { recursive: true });
+    writeFileSync(join(app, rel), texto);
+  };
+  const reuso = '{ "reuso": { "candidato": "iswc-root", "motivo": "Paginador genérico sin dominio" } }\n';
+  const vendorizado = "const NOMBRES = ['iswc-root'];\n";
+  escribir('view/demo/x.json', reuso);
+  escribir('src/vendor/iswc-root/tools/x.mjs', vendorizado);
+  const r = new Deno.Command(Deno.execPath(), {
+    args: ['run', '-A', join(KIT, 'scripts', 'codemods', 'nomenclatura-iswc-base.mjs'), `--raiz=${app}`],
+    stdout: 'piped', stderr: 'piped',
+  }).outputSync();
+  const salida = new TextDecoder().decode(r.stdout) + new TextDecoder().decode(r.stderr);
+  assertEquals(r.code, 0, salida);
+  assertEquals(readFileSync(join(app, 'view/demo/x.json'), 'utf8'), reuso.replace('iswc-root', 'iswc-base'));
+  assert(!existsSync(join(app, 'src/vendor/iswc-root')), salida);
+  assertEquals(readFileSync(join(app, 'src/vendor/iswc-base/tools/x.mjs'), 'utf8'), vendorizado, 'lo vendorizado no se reescribe');
+  const otra = new Deno.Command(Deno.execPath(), {
+    args: ['run', '-A', join(KIT, 'scripts', 'codemods', 'nomenclatura-iswc-base.mjs'), `--raiz=${app}`, '--dry-run'],
+    stdout: 'piped',
+  }).outputSync();
+  assert(new TextDecoder().decode(otra.stdout).includes('0 menciones en 0 archivos; 0 rutas movidas'), 'idempotente');
 });
 
 export default lista();

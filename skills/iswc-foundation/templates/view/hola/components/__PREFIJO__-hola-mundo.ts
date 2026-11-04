@@ -4,12 +4,18 @@
  *
  * Es la referencia mínima del estándar: un componente = 4 archivos hermanos (este .ts, su .scss, su
  * .md y su .json), registrado UNA vez en `src/js/kit-tags.ts` (VIEW_TAGS.hola) y en la galería
- * (`view/demo/manifest.json`). Sin props, sin atributos, sin eventos.
+ * (`view/demo/manifest.json`). Sin props, sin atributos, sin eventos: extiende el molde del kit directamente.
  */
-import { crearComponente, define, html } from '../../../src/js/base/componente.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.min.mjs';
+import css from 'iswc:css';
 
-const __CLASE__HolaMundo = crearComponente(import.meta.url, '__PREFIJO__-hola-mundo', {}, (root) => {
-  root.append(html`<h1 class="titulo" part="titulo">Hola mundo</h1>`);
-});
+const PLANTILLA = document.createElement('template');
+PLANTILLA.innerHTML = '<h1 class="titulo" part="titulo">Hola mundo</h1>';
 
-define('__PREFIJO__-hola-mundo', __CLASE__HolaMundo);
+class __CLASE__HolaMundo extends IswcElement {
+  static tag = '__PREFIJO__-hola-mundo';
+  static css = css;
+  static template = PLANTILLA;
+}
+
+define(__CLASE__HolaMundo);

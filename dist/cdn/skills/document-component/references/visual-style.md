@@ -19,7 +19,7 @@ visuales para que todas las fichas se lean igual.
 | ❌ Antes | ✅ Ahora |
 | --- | --- |
 | "Podría ser útil para casos en los que…" | "Úsalo cuando hay un toggle binario con feedback visual." |
-| "Este componente es una solución para…" | "Toggle binario con feedback visual. Hereda de `ElementBase`." |
+| "Este componente es una solución para…" | "Toggle binario con feedback visual. Hereda del molde `IswcElement`." |
 | "Es interesante notar que…" | (omitir; si el dato importa, va en la columna "Notas" de la tabla) |
 
 ## Formato de tablas
@@ -102,7 +102,7 @@ luego tokens globales del kit (`--iswc-accent`, `--iswc-bg`, …).
 - **Una línea por ítem**, sin puntos finales si el ítem es corto.
 
 ```md
-- Hereda de `ElementBase`.
+- Hereda del molde `IswcElement`.
 - Form-associated (`ElementInternals.setFormValue`).
 - Acepta `<iswc-icon slot="start">` y `slot="end"`.
 ```

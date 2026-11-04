@@ -9,6 +9,8 @@
   "nodeModulesDir": "auto",
   "unstable": ["sloppy-imports"],
   "imports": {
+    "@jeff-aporta/iswc-base/": "https://cdn.jsdelivr.net/gh/__REPO__@__SHA__/dist/cdn/",
+    "iswc:css": "./src/utils/iswc-css-vacio.ts",
     "@browserbasehq/stagehand": "npm:@browserbasehq/stagehand@4.1.0",
     "@types/node": "npm:@types/node@^22.20.5",
     "esbuild": "npm:esbuild@0.28.1",

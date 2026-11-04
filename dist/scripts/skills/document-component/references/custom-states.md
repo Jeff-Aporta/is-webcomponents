@@ -54,6 +54,6 @@ Tabla obligatoria con dos columnas: `Estado | Uso`.
 - Inventar states que el JS no emite. Si dudas, abre `components/<cat>/<modulo>.js`
   y busca `host.states.add(...)` o el patrón equivalente.
 - Listar `:state(disabled)` aunque el componente no implemente
-  `ElementInternals.states` (algunos heredan de `ElementBase` y aún
+  `ElementInternals.states` (algunos heredan del molde `IswcElement` y aún
   así lo exponen vía `data-state-*`).
 - Olvidar la columna "Uso". Un state sin descripción es ruido.

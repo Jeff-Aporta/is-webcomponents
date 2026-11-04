@@ -11,7 +11,7 @@
 //
 // Transversal (Node y Deno): solo `node:fs`/`node:path`/`node:process`/`node:child_process` y fetch.
 // Exporta sus funciones (`inventario`, `ultimoSha`, `ultimoPublicado`, `publicado`, `verificarLocal`,
-// `actualizarPines`, `protocolo`) y solo corre la CLI cuando se ejecuta directamente: `vendor.ts` lo lanza
+// `actualizarPines`, `aMinMjs`, `vendorizarDeps`, `avisoVendorLegado`, `mensajeNoPublicado`, `protocolo`) y solo corre la CLI cuando se ejecuta directamente: `vendor.ts` lo lanza
 // al terminar de vendorizar (protocolo de pines del vendor/update).
 //
 // USO (desde la raíz del consumidor)
@@ -27,14 +27,24 @@
 //   --raices=a,b,c             rutas a barrer (default: front típico, ver RAICES)
 //   --saltar=a,b               carpetas a ignorar (default node_modules,vendor,dist,.tmp-scss,.git)
 //   --verificar=<ruta>         archivo que debe existir en el pin (default dist/cdn/core/loader.min.mjs)
+//   --sin-deps                 no vendoriza `dist/cdn/deps.json` del SHA nuevo en `src/vendor/iswc-base/deps.json`
 //   --dry-run                  muestra qué cambiaría, sin escribir
 //
 // Alias del kit: la entrada `"@jeff-aporta/iswc-base/": "…"` de `deno.json` y del `<script type="importmap">` de cada
 // HTML se fija a la forma canónica `https://cdn.jsdelivr.net/gh/<repo>@<sha>/dist/cdn/` (aunque viniera por rama, por
 // raw o con otro nombre del repo). Si apunta a otra cosa (una carpeta local), no se toca.
 //
-// Salida: 0 ok · 1 heterogéneo o refs mutables · 2 uso inválido · 3 pin no publicado (nada se tocó) ·
-//         4 sin red (no se pudo resolver `ultimo`; nada se tocó).
+// Extensión (plan D2, F3): al re-pinear, `<ruta>.min.js` → `<ruta>.min.mjs` dentro de las URL del kit (jsDelivr,
+// githack y Pages bajo `dist/cdn/`, y el alias `@jeff-aporta/iswc-base/`) solo para módulos del kit: `core/`, `lib/` y
+// `<categoría>/<tag>`. Nunca terceros, `*.classic.js`, `*.preview.min.js` ni `vendor-distributions/`, `skills/`, `build/`.
+//
+// deps.json (F4): con `--nuevo`, si el consumidor tiene `src/vendor/iswc-base/`, se baja `dist/cdn/deps.json` del SHA
+// nuevo ahí (su build emite los `<link rel="modulepreload">` sin red). `--sin-deps` lo apaga. La carpeta con el
+// nombre histórico (`src/vendor/iswc-root/`) se avisa y se propone renombrar; nunca se renombra sola.
+//
+// Salida: 0 ok · 1 heterogéneo o refs mutables (o deps.json no se pudo vendorizar) · 2 uso inválido ·
+//         3 pin no publicado (nada se tocó; si el SHA es anterior a F3 se dice) · 4 sin red (no se pudo resolver
+//         `ultimo`; nada se tocó).
 //
 // Perfil: shared. Vendor: NO se vendoriza: `vendor.ts` lo llama como función (inlineado en su bundle); a mano, el bundle `deno run -A --reload=https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/ https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/dist/cdn/vendor-distributions/shared/tools/pin-update.mjs`. Sin imports relativos.
 // Skill: skills/iswc-foundation/references/06-pines-y-vendor.md
@@ -59,6 +69,13 @@ const RAICES_DEFAULT = ['index.html', 'sw.js', 'staticwebapp.config.json', 'mani
 /** Clave del alias del kit en `deno.json` y en los import maps (con barra final). */
 export const ALIAS_KIT = '@jeff-aporta/iswc-base/';
 const SALTAR_DEFAULT = ['node_modules', 'vendor', 'dist', '.tmp-scss', '.git'];
+/** Carpeta vendor del kit en el consumidor (F1b) y la de nombre histórico que se avisa. */
+export const VENDOR_KIT = 'src/vendor/iswc-base';
+// El nombre histórico sale de la lista de alias (último de `NOMBRES_REPO`): así no viaja como literal suelto en los
+// bundles online que inlinean este módulo (guardián `nomenclatura` N4).
+export const VENDOR_LEGADO = `src/vendor/${NOMBRES_REPO[NOMBRES_REPO.length - 1]}`;
+/** Carpetas de `dist/cdn/` que no son módulos del kit (copias para vendorizar, skills, build). */
+const NO_MODULOS = '(?:vendor-distributions|skills|build)\\/';
 const EXT = /\.(html|ts|js|mjs|json|css|scss|md)$/;
 // Scripts ONLINE del kit (Jeff, 2026-10-13): CLI que los consumidores corren desde `@main` con `--reload` y que
 // nadie importa con tipos. Su URL por rama NO es una ref mutable prohibida (es la forma canónica).
@@ -90,6 +107,7 @@ export function opciones(o = {}) {
     saltar: new Set(lista(o.saltar, SALTAR_DEFAULT)),
     local: o.local ? String(o.local) : '',
     dryRun: !!o['dry-run'] || !!o.dryRun,
+    sinDeps: !!o['sin-deps'] || !!o.sinDeps,
   };
 }
 
@@ -123,7 +141,23 @@ function regexes(op) {
       // GitHub Pages DEL KIT (sirve siempre la última versión). El sitio propio de la app (`iswc.host`) no es un pin.
       `[a-z0-9-]+\\.github\\.io\\/${reNombres}(?![\\w-])`,
     ].join('|'), 'i'),
+    // Módulo del kit con la extensión anterior a F3: prefijo (URL del kit hasta `dist/cdn/`, o el alias) + ruta con
+    // carpeta (`core/`, `lib/`, `<cat>/`) + nombre sin puntos + `.min.js` final: `x.classic.js` y `x.preview.min.js`
+    // no casan (el nombre lleva punto).
+    reMinJs: new RegExp(
+      `((?:cdn\\.jsdelivr\\.net\\/gh\\/${esc(op.owner)}\\/${reNombres}@[0-9a-zA-Z._-]+|raw\\.githack\\.com\\/${esc(op.owner)}\\/${reNombres}\\/[0-9a-zA-Z._-]+|[a-z0-9-]+\\.github\\.io\\/${reNombres})\\/dist\\/cdn\\/|${esc(ALIAS_KIT)})` +
+        `((?!${NO_MODULOS})[a-z0-9_-]+\\/(?:[\\w-]+\\/)*[\\w-]+)\\.min\\.js(?![\\w.])`,
+      'gi',
+    ),
   };
+}
+
+/** Reescribe `.min.js` → `.min.mjs` en las URL de módulos del kit. Devuelve el texto y cuántos cambió. */
+export function aMinMjs(texto, op = opciones()) {
+  const { reMinJs } = regexes(op);
+  let n = 0;
+  const salida = texto.replace(reMinJs, (_m, pre, ruta) => { n += 1; return `${pre}${ruta}.min.mjs`; });
+  return { salida, n };
 }
 
 /** Pines por SHA (sha → archivos), refs mutables (`archivo:línea: texto`) y archivos con el nombre anterior del repo. */
@@ -149,12 +183,64 @@ export function inventario(op = opciones()) {
   return { pines, mutables, legados };
 }
 
-/** `true` si `verificar` responde en jsDelivr para ese SHA. */
-export async function publicado(sha, op = opciones()) {
-  const u = `https://cdn.jsdelivr.net/gh/${op.repo}@${sha}/${op.verificar}`;
+/** Estado HTTP de `ruta` en jsDelivr para ese SHA (0 sin red). */
+async function estado(sha, ruta, op) {
+  const u = `https://cdn.jsdelivr.net/gh/${op.repo}@${sha}/${ruta}`;
   const r = await fetch(u, { method: 'HEAD', signal: AbortSignal.timeout(20_000) }).catch(() => null);
   log(`verificación ${u} → ${r?.status ?? 'sin red'}`);
-  return !!r && r.status < 400;
+  return r?.status ?? 0;
+}
+
+/** `true` si `verificar` responde en jsDelivr para ese SHA. */
+export async function publicado(sha, op = opciones()) {
+  const s = await estado(sha, op.verificar, op);
+  return s > 0 && s < 400;
+}
+
+/**
+ * Mensaje de «no publicado». `anteriorF3`: el `.min.mjs` da 404 pero su `.min.js` sí responde, es decir, el SHA es
+ * anterior a F3 (los módulos del kit se publicaban como `.min.js`): ese pin no sirve al bootstrap nuevo.
+ */
+export function mensajeNoPublicado(sha, op = opciones(), anteriorF3 = false) {
+  if (anteriorF3) {
+    return `[pin] ${op.repo}@${sha} es anterior a F3: publica \`${op.verificar.replace(/\.min\.mjs$/, '.min.js')}\` pero no \`${op.verificar}\` (404). Pinea un SHA posterior (\`--nuevo=ultimo\`). Nada se tocó.`;
+  }
+  return `[pin] ${op.repo}@${sha} no responde en jsDelivr (${op.verificar}): publícalo antes de pinear. Nada se tocó.`;
+}
+
+/** `true` si el SHA publica la variante `.min.js` del archivo de verificación pero no el `.min.mjs` (pre-F3). */
+async function esAnteriorF3(sha, op) {
+  if (!/\.min\.mjs$/.test(op.verificar)) return false;
+  const s = await estado(sha, op.verificar.replace(/\.min\.mjs$/, '.min.js'), op);
+  return s > 0 && s < 400;
+}
+
+/** Aviso si el consumidor aún tiene la carpeta vendor con el nombre histórico (no se renombra sola). */
+export function avisoVendorLegado(op = opciones()) {
+  if (!existsSync(join(op.root, VENDOR_LEGADO))) return '';
+  const destino = existsSync(join(op.root, VENDOR_KIT)) ? ` (ya existe ${VENDOR_KIT}: fusiona a mano)` : '';
+  return `ALERTA: ${VENDOR_LEGADO}/ usa el nombre histórico del kit; renómbrala a ${VENDOR_KIT}/ con \`git mv ${VENDOR_LEGADO} ${VENDOR_KIT}\`${destino} y corre el codemod de nomenclatura del kit con --raiz=. (no se renombra sola)`;
+}
+
+/**
+ * Baja `dist/cdn/deps.json` del SHA a `src/vendor/iswc-base/deps.json` si el consumidor tiene esa carpeta.
+ * `{ estado: 'escrito' | 'sin-carpeta' | 'omitido' | 'error', ruta, motivo }`. `traer` es `fetch` (inyectable).
+ */
+export async function vendorizarDeps(sha, op = opciones(), traer = fetch) {
+  const ruta = `${VENDOR_KIT}/deps.json`;
+  if (op.sinDeps) return { estado: 'omitido', ruta, motivo: '--sin-deps' };
+  if (!existsSync(join(op.root, VENDOR_KIT))) return { estado: 'sin-carpeta', ruta, motivo: `sin ${VENDOR_KIT}/` };
+  const u = `https://cdn.jsdelivr.net/gh/${op.repo}@${sha}/dist/cdn/deps.json`;
+  const r = await traer(u, { signal: AbortSignal.timeout(20_000) }).catch(() => null);
+  if (!r?.ok) return { estado: 'error', ruta, motivo: `${u} → ${r?.status ?? 'sin red'}` };
+  const texto = await r.text();
+  let json = null;
+  try { json = JSON.parse(texto); } catch { /* abajo */ }
+  if (!json || typeof json !== 'object' || typeof json.tags !== 'object' || json.tags === null) {
+    return { estado: 'error', ruta, motivo: `${u} no es un deps.json (falta \`tags\`)` };
+  }
+  if (!op.dryRun) writeFileSync(join(op.root, ruta), texto.endsWith('\n') ? texto : `${texto}\n`);
+  return { estado: 'escrito', ruta, motivo: `${Object.keys(json.tags).length} tags ← ${op.repo}@${sha.slice(0, 12)}` };
 }
 
 /** SHA del HEAD de la rama en GitHub, o `''` sin red. */
@@ -246,8 +332,9 @@ export function actualizarPines(nuevo, op = opciones(), viejos = null) {
   for (const f of archivos(op)) {
     const t = readFileSync(f, 'utf8');
     const conAlias = fijarAlias(t, nuevo, op, reNombres);
-    n += conAlias.n;
-    const next = conAlias.salida
+    const conMjs = aMinMjs(conAlias.salida, op);
+    n += conAlias.n + conMjs.n;
+    const next = conMjs.salida
       .replace(reViejo, (m) => { const r = `${op.nombre}@${nuevo}`; if (m !== r) n += 1; return r; })
       .replace(reViejoRaw, (m, pre) => { const r = `${pre}${op.nombre}/${nuevo}/`; if (m !== r) n += 1; return r; });
     if (next === t) continue;
@@ -289,19 +376,26 @@ export async function protocolo(nuevoPedido, op = opciones(), viejo = '') {
     }
   }
   if (nuevoPedido !== 'ultimo' && !(await publicado(nuevo, op))) {
-    console.error(`[pin] ${op.repo}@${nuevo} no responde en jsDelivr: publícalo antes de pinear. Nada se tocó.`);
+    console.error(mensajeNoPublicado(nuevo, op, await esAnteriorF3(nuevo, op)));
     return 3;
   }
+  const legado = avisoVendorLegado(op);
+  if (legado) log(legado);
   const r = actualizarPines(nuevo, op, viejo ? [String(viejo)] : null);
   log(`${r.viejos.map((s) => s.slice(0, 12)).join(', ') || '(ya homogéneo)'} → ${nuevo.slice(0, 12)} · ${r.n} reemplazos en ${r.tocados.length} archivos${op.dryRun ? ' (dry-run)' : ''}`);
   for (const f of r.tocados) log(`  ${f}`);
+  let code = 0;
+  const deps = await vendorizarDeps(nuevo, op);
+  if (deps.estado === 'escrito') log(`${deps.ruta}: ${deps.motivo}${op.dryRun ? ' (dry-run)' : ''}`);
+  else if (deps.estado === 'error') { log(`ALERTA: ${deps.ruta} no se pudo vendorizar: ${deps.motivo}`); code = 1; }
+  else if (!legado) log(`deps.json no se vendoriza (${deps.motivo})`);
   const { mutables } = inventario(op);
   if (mutables.length) {
     log(`ALERTA: quedan refs mutables (corrígelas a mano):\n  ${mutables.join('\n  ')}`);
     return 1;
   }
-  log('siguiente: build + tests del consumidor');
-  return 0;
+  if (!code) log('siguiente: build + tests del consumidor');
+  return code;
 }
 
 /** Programa principal: `argv[1]` es la ruta (local) o la propia URL (online, `deno run -A https://…/pin-update.mjs`). */
@@ -330,7 +424,9 @@ if (esPrincipal()) {
     if (pines.size > 1) log('  ALERTA: pines heterogéneos → --nuevo=<sha40|ultimo>');
     if (mutables.length) log(`  ALERTA: refs mutables:\n    ${mutables.join('\n    ')}`);
     if (legados.size) log(`  ALERTA: nombre anterior del repo (→ ${op.nombre}; se corrige con --nuevo):\n    ${[...legados].join('\n    ')}`);
-    process.exit(pines.size > 1 || mutables.length || legados.size ? 1 : 0);
+    const vendorLegado = avisoVendorLegado(op);
+    if (vendorLegado) log(`  ${vendorLegado}`);
+    process.exit(pines.size > 1 || mutables.length || legados.size || vendorLegado ? 1 : 0);
   }
   process.exit(await protocolo(String(args.nuevo), op, args.viejo ? String(args.viejo) : ''));
 }

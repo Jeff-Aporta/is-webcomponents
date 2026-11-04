@@ -59,8 +59,10 @@ Frontmatter + identidad del componente. Ver
 ### 2. Atributos observados
 
 Tabla con `Atributo | Tipo | Notas`. Solo atributos que el componente
-`observedAttributes` declara. No listar atributos HTML globales a menos
-que el componente los reenvíe explícitamente.
+observa: en el molde (`IswcElement`), los de su `static observed` (más
+los `styleAttrs` y `@attr` que el molde une en `observedAttributes`;
+nunca un `static get observedAttributes` a mano). No listar atributos
+HTML globales a menos que el componente los reenvíe explícitamente.
 
 ### 3. Props (propiedades públicas)
 

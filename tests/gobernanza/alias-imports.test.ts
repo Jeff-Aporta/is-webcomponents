@@ -7,7 +7,8 @@
 //   L3 `deno.json` mapea el alias a `./src/` y `tsconfig.json` lo declara en `paths` (Deno, tsc y tests lo resuelven igual).
 //   L4 el árbol publicado `dist/cdn/` no importa por alias: va con rutas relativas y funciona sin import map. Se mira el
 //      especificador de `from`/`import`/`import()` en `.js`/`.mjs`/`.ts`; la clave del alias como DATO (importmap.json,
-//      docs, pin-update) es legítima.
+//      docs, pin-update) es legítima. Fuera: las plantillas de apps (`dist/cdn/skills/<skill>/templates/`, F5a), que
+//      son código de un CONSUMIDOR: importan el kit por alias y lo resuelve el import map de su HTML y su `deno.json`.
 //   L5 `dist/cdn/importmap.json` publica la entrada del alias a `dist/cdn/` en jsDelivr con un SHA de 40 hex.
 //   L6 `src/vendor-distributions/**` no usa el alias (viaja a otros repos: «Sin imports relativos» y sin alias).
 import { assert, assertEquals } from 'jsr:@std/assert@1';
@@ -83,6 +84,7 @@ denoTest('alias-imports: L4 dist/cdn no importa por alias (rutas relativas, sin 
   assert(existsSync(dist), 'falta dist/cdn: correr deno task build');
   const malos: string[] = [];
   for (const f of archivos(dist, /\.(js|mjs|ts)$/)) {
+    if (/^dist\/cdn\/skills\/[^/]+\/templates\//.test(barras(relative(KIT, f)))) continue;
     if (CON_ALIAS.test(readFileSync(f, 'utf8'))) malos.push(barras(relative(KIT, f)));
     CON_ALIAS.lastIndex = 0;
   }

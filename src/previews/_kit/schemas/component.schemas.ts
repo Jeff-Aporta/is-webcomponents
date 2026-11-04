@@ -265,7 +265,10 @@ export const SectionSchema = z
  */
 export const ReusoCandidatoSchema = z
   .object({
-    /** Destino del reuso: siempre el kit. */
+    /**
+     * Destino del reuso: siempre el kit, por su nombre canónico. El nombre histórico NO se acepta como legado (F5a):
+     * una app que aún lo tenga corre `scripts/codemods/nomenclatura-iswc-base.mjs --raiz=<app>`.
+     */
     candidato: z.literal("iswc-base"),
     /** Por qué es general (qué lo hace útil a otras apps). */
     motivo: z.string().trim().min(10),

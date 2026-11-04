@@ -18,64 +18,81 @@ export const tagsArranque = () => [...APP_TAGS, ...Object.values(VIEW_TAGS).flat
 - `APP_TAGS ∩ ⋃VIEW_TAGS = ∅`. Un tag en la lista equivocada pide un 404 y la vista sale vacía sin error.
 - `KIT_TAGS` lista solo padres; los hijos (`iswc-tab`, `iswc-tab-panel`, `iswc-tree-item`…) los registra su padre.
 
-## Arranque estándar (TODA página: raíz, vista aislada, demo, galería)
+## Arranque estándar (TODA página: raíz, vista aislada, demo, galería; kit F4+)
+
+Implementado en las plantillas (`index.html`, `view/<v>/index.html`, `view/<v>/demo/index.html`, `view/demo/index.html`):
+es la referencia que copian las apps existentes al re-pinear (F5b).
 
 ```html
+<script type="importmap">                                            <!-- 0) antes de cualquier módulo -->
+{ "imports": { "@jeff-aporta/iswc-base/": "https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@<sha40>/dist/cdn/" } }
+</script>
 <script src="./dist/cdn/boot.js"></script>                         <!-- tema antes de pintar -->
 <link rel="stylesheet" href="./dist/cdn/styles/app.css">
+<!-- iswc:precarga:inicio -->                                        <!-- 1) lo escribe `deno task build` -->
+<link rel="modulepreload" href="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@<sha40>/dist/cdn/core/loader.min.mjs">
+<link rel="modulepreload" href="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@<sha40>/dist/cdn/_chunks/chunk-….mjs">
+<!-- … un modulepreload por ruta de deps.json → tags[tag] de cada tag de SHELL_CRITICO … -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@<sha40>/dist/cdn/is-base.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@<sha40>/dist/cdn/palettes.min.css">
+<!-- iswc:precarga:fin -->
 <script type="module" src="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@<sha40>/dist/cdn/core/loader.min.mjs"></script>
-<script type="module" src="./dist/cdn/<p>Loader.min.js"></script>  <!-- registerApp: tag → URL?v= -->
+<script type="module" src="./dist/cdn/<p>Loader.min.js"></script>  <!-- registerApp: tag → { href: URL?v=, type: 'module' } -->
 <script type="module">
   const L = globalThis.iswcLoader;
   const listo = () => document.documentElement.setAttribute('data-app-ready', '');
   const watchdog = setTimeout(listo, 6000);
   try {
-    await L.loadPageStyles(['iswc-palettes-default']);
     const { KIT_TAGS, tagsArranque } = await import('./dist/cdn/js/kit-tags.js');
     await L.load(...KIT_TAGS, ...tagsArranque());       // vista aislada: ...VIEW_TAGS.<v>
   } finally { clearTimeout(watchdog); listo(); }
 </script>
 ```
 
+- **Import map**: el alias `@jeff-aporta/iswc-base/` al pin; lo usan los componentes de la app
+  (`import { define } from '@jeff-aporta/iswc-base/core/iswc-element.min.mjs'`), que el build deja con el especificador
+  tal cual. Es la misma entrada de `deno.json` (typecheck). `deno task pin` mueve las dos.
+- **Precarga**: `src/utils/build.ts` reescribe el bloque entre `<!-- iswc:precarga:inicio -->` y
+  `<!-- iswc:precarga:fin -->` de cada HTML con el loader, el cierre de `SHELL_CRITICO` (`src/js/kit-tags.ts`) sacado
+  de `src/vendor/iswc-base/deps.json` (lo vendorizan `deno task vendor:iswc` y `deno task pin --nuevo=…`) y las hojas
+  base. Sobre pin SHA todo es inmutable: sin `?v=`. Idempotente.
+- **Orden**: el `<script type="module">` del loader va ANTES del registrador (los módulos se ejecutan en orden de
+  documento y el registrador necesita `globalThis.iswcLoader`).
 - `data-app-ready` es la marca común de «arranque terminado» (las pruebas e2e la esperan; `app.scss`
   oculta el body hasta entonces). El watchdog revela la página a los 6 s aunque algo falle.
-
-### Arranque recomendado con el loader en dos capas (kit F4)
-
-Con un pin del kit posterior a F4: import map con el alias, `modulepreload` del cierre del shell crítico (de
-`dist/cdn/deps.json` del kit: `tags[tag]` de cada tag del shell, los `_chunks/` sin `?v=`), `<link>` de las hojas
-base, y revelar cuando el shell está **definido** (`ensure`), dejando lo demás en `load` progresivo.
-
-```html
-<script type="importmap">
-{ "imports": { "@jeff-aporta/iswc-base/": "https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@<sha40>/dist/cdn/" } }
-</script>
-<link rel="modulepreload" href="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@<sha40>/dist/cdn/core/loader.min.mjs">
-<!-- … un modulepreload por cada ruta del cierre del shell crítico … -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@<sha40>/dist/cdn/is-base.min.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@<sha40>/dist/cdn/palettes.min.css">
-<script type="module" src="./dist/cdn/<p>Loader.min.js"></script>  <!-- registerApp: tag → { href: URL?v=, type: 'module' } -->
-<script type="module">
-  import { iswcLoader as L } from '@jeff-aporta/iswc-base/core/loader.min.mjs';
-  const { KIT_TAGS, tagsArranque } = await import('./dist/cdn/js/kit-tags.js');
-  const shell = ['iswc-app-shell', ...tagsArranque()];             // lo que debe estar definido para revelar
-  await Promise.all(shell.map((t) => L.ensure(t)));
-  document.documentElement.setAttribute('data-app-ready', '');
-  void L.load(...KIT_TAGS);                                         // el resto se «upgradea» al llegar
-</script>
-```
-
+- Variante progresiva (apps grandes): revelar cuando el shell está **definido** (`await Promise.all(shell.map((t) =>
+  L.ensure(t)))`) y dejar el resto en `void L.load(...)`.
 - `load()` resuelve al importar (no espera `whenDefined`); `ensure()` resuelve al definirse.
 - El loader infiere el tipo por extensión (`.mjs` → módulo, `.js` → clásico): el registrador pasa `type: 'module'`
   para los componentes de la app (`.js` ES). `registerApp(…, { deps })` precarga el cierre de un tag de la app.
 - El arranque no usa IndexedDB, Cache Storage (salvo que la app instale `sheets`) ni la API de GitHub.
 - El registrador nunca carga el kit: si falta el loader, lanza un error claro.
-- Hosts externos que quieren un solo `<script>`: `dist/cdn/all.min.js` (el barril fija la raíz de hojas).
+- Hosts externos que quieren un solo `<script>`: `dist/cdn/all.min.js` (cada tag lleva su CSS dentro; el kit sigue
+  externo por el import map).
 
-## Componentes: base (`src/js/base/componente.ts`)
+## Componentes: el molde del kit (`IswcElement`) y la base `Componente`
 
-`crearComponente(import.meta.url, '<tag>', inicial, render, parcial?)` · `define` (idempotente) ·
-`emitir(host, nombre, detail)` (bubbles + composed) · `html\`…\`` (escape por defecto, `on<evento>=`,
-`raw()`) · `adoptCss`/`precargarCss` (hojas construidas, una descarga por href) ·
-`adoptarPropsTardias` · `avisar` (toast del kit). Detalle de uso:
-[nuevo-componente.md](../templates/specs/iswc/nuevo-componente.md).
+Forma canónica (la misma que los componentes del kit):
+
+```ts
+import { define } from '@jeff-aporta/iswc-base/core/iswc-element.min.mjs';
+import css from 'iswc:css';                                  // .css compilado hermano: el build lo incrusta
+import { Componente, html } from '../../base/componente.js';
+
+class MiaX extends Componente<MiaXProps> {
+  static tag = 'mia-x';                                      // = nombre del archivo
+  static css = css;                                          // el molde crea UNA CSSStyleSheet por clase
+  static observed = ['color'];                               // atributos observados
+  static deps = ['iswc-button'];                             // hijos del kit: el molde los pide al loader
+  protected override inicial(): MiaXProps { return { … }; }
+  protected override pintar(root: ShadowRoot, props: MiaXProps): void { root.append(html`…`); }
+  protected override parcial(props: MiaXProps, previos: MiaXProps): boolean { … }   // opcional
+}
+define(MiaX);
+```
+
+- Sin `props`: `class X extends IswcElement` (mismo import que `define`), con `static template` si es estático.
+- `Componente` (`src/js/base/componente.ts`) pone `props` (mezcla, `revisarProps`, repintado), `parcial`, el rescate
+  de props tardías, `html`/`raw`/`el` y `avisar`. Eventos: `this.emit(nombre, detail)` del molde (bubbles + composed).
+- Nada de `adoptCss`, `<link>` a la hoja hermana ni `static get observedAttributes` a mano. Los estáticos van sin
+  `override` (el molde llega como JS publicado). Detalle: [nuevo-componente.md](../templates/specs/iswc/nuevo-componente.md).

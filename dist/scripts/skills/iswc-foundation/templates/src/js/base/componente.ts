@@ -1,93 +1,33 @@
 // @vendor 2026-10-13T14:13:48.240Z Jeff-Aporta/is-webcomponents@main skills/iswc-foundation/templates/src/js/base/componente.ts
 /**
- * componente.ts — base común de los componentes `__PREFIJO__-*` (estándar iswc-foundation).
+ * componente.ts — base de los componentes `__PREFIJO__-*` con `props` (estándar iswc-foundation), sobre el molde
+ * del kit (`IswcElement`; forma canónica en la skill del kit y en `specs/iswc/nuevo-componente.md`).
  *
- * Cuatro cosas y nada más: adopción del CSS hermano (`adoptCss`), plantillas (`html`), registro
- * idempotente (`define`) y la fábrica `crearComponente`. Lo que sea dominio vive en `core/`,
- * `dominio/` o `view/<v>/utils/`; lo que sea estilo vive en el `.scss` hermano.
+ *   import { define } from '@jeff-aporta/iswc-base/core/iswc-element.min.mjs';
+ *   import css from 'iswc:css';                         // .css compilado hermano: el build lo incrusta
+ *   import { Componente, html } from '../../base/componente.js';
  *
- * Por qué hojas adoptadas y no `<link>`: un `<link>` dentro de un ShadowRoot no bloquea el pintado,
- * así que cada shadow que se recrea se ve un frame sin estilos. `adoptedStyleSheets` se aplica
- * síncrono y sobrevive a `replaceChildren()`. La hoja se descarga UNA vez por href y se comparte.
+ *   class __CLASE__X extends Componente<__CLASE__XProps> {
+ *     static tag = '__PREFIJO__-x';                      // = nombre del archivo
+ *     static css = css;                                  // el molde crea UNA CSSStyleSheet por clase y la adopta
+ *     static observed = ['color'];                       // atributos observados (el molde hace la unión)
+ *     static deps = ['iswc-button'];                     // hijos del kit que se piden al loader al conectar
+ *     protected override inicial(): __CLASE__XProps { return { … }; }
+ *     protected override pintar(root: ShadowRoot, props: __CLASE__XProps): void { root.append(html`…`); }
+ *   }
+ *   define(__CLASE__X);
+ *
+ * Un componente sin `props` extiende `IswcElement` directamente (mismo import que `define`). Los estáticos van sin
+ * `override`: el molde llega como JS publicado (`.min.mjs`) y TypeScript no los ve declarados.
+ *
+ * Qué pone esta base y nada más: `props` (mezcla lo nuevo con lo anterior, avisa claves desconocidas y repinta),
+ * repintado parcial opcional (`parcial`), rescate de las props asignadas antes de definir el tag, plantillas (`html`,
+ * `raw`, `el`) y el aviso por toast. El CSS no se busca junto al módulo: llega por `iswc:css`. Lo que sea dominio
+ * vive en `core/`, `dominio/` o `view/<v>/utils/`; lo que sea estilo, en el `.scss` hermano.
  */
+import { IswcElement } from '@jeff-aporta/iswc-base/core/iswc-element.min.mjs';
 import { revisarProps } from './props-registro.js';
-import { rutaComponente } from '../kit-tags.js';
 import type { Atributos, Hijos } from '../consts/schemas/componentes.schemas.js';
-
-/* ── CSS ────────────────────────────────────────────────────── */
-
-const HOJAS = new Map<string, CSSStyleSheet>();
-const CARGAS = new Map<string, Promise<CSSStyleSheet | null>>();
-const SOPORTA_HOJAS = (() => {
-  try {
-    return 'adoptedStyleSheets' in ShadowRoot.prototype && typeof new CSSStyleSheet().replaceSync === 'function';
-  } catch {
-    return false;
-  }
-})();
-
-/** Raíz `dist/cdn/` cuando el módulo vive dentro de un bundle (`all.min.js`); la fija el barril. */
-let CSS_BASE: string | null = null;
-export function setCssBase(url: string): void {
-  CSS_BASE = new URL(url, typeof location !== 'undefined' ? location.href : undefined).href;
-}
-
-/** `…/x.js` → `…/x.css`; en bundle, la carpeta del tag sale de `kit-tags` (registro único). */
-function hrefCss(moduleUrl: string, nombre: string): string {
-  if (CSS_BASE) return new URL(`${rutaComponente(nombre) ?? ''}${nombre}.css`, CSS_BASE).href;
-  const u = new URL(moduleUrl);
-  u.pathname = u.pathname.replace(/[^/]+$/, `${nombre}.css`);
-  u.search = '';
-  return u.href;
-}
-
-function descargarHoja(href: string): Promise<CSSStyleSheet | null> {
-  const enCurso = CARGAS.get(href);
-  if (enCurso) return enCurso;
-  const carga = fetch(href)
-    .then((r) => (r.ok ? r.text() : Promise.reject(new Error(`${r.status} ${href}`))))
-    .then((texto) => {
-      const hoja = new CSSStyleSheet();
-      hoja.replaceSync(texto);
-      HOJAS.set(href, hoja);
-      return hoja;
-    })
-    .catch(() => null); // el <link> de respaldo sigue puesto: solo se pierde la ruta rápida
-  CARGAS.set(href, carga);
-  return carga;
-}
-
-/** Empieza a bajar la hoja al importar el módulo (el primer pintado tampoco parpadea). */
-export function precargarCss(moduleUrl: string, nombre: string): void {
-  if (SOPORTA_HOJAS) void descargarHoja(hrefCss(moduleUrl, nombre));
-}
-
-/** Adopta la hoja hermana. Llamar DESPUÉS de rellenar el shadow (el <link> de respaldo es un hijo). */
-export function adoptCss(shadow: ShadowRoot, moduleUrl: string, nombre: string): void {
-  const href = hrefCss(moduleUrl, nombre);
-  const adoptar = (h: CSSStyleSheet) => {
-    if (!shadow.adoptedStyleSheets.includes(h)) shadow.adoptedStyleSheets = [...shadow.adoptedStyleSheets, h];
-  };
-  const enlazar = () => {
-    const link = document.createElement('link');
-    link.rel = 'stylesheet';
-    link.href = href;
-    shadow.prepend(link);
-    return link;
-  };
-  if (!SOPORTA_HOJAS) {
-    if (!shadow.querySelector('link[rel="stylesheet"]')) enlazar();
-    return;
-  }
-  const hoja = HOJAS.get(href);
-  if (hoja) return adoptar(hoja);
-  const link = enlazar();
-  void descargarHoja(href).then((h) => {
-    if (!h) return;
-    adoptar(h);
-    link.remove();
-  });
-}
 
 /* ── Plantillas ─────────────────────────────────────────────── */
 
@@ -159,70 +99,68 @@ export function el(tag: string, attrs: Atributos = {}, hijos: Hijos = []): HTMLE
   return nodo;
 }
 
-/* ── Registro y fábrica ─────────────────────────────────────── */
-
-/** Registro idempotente: el string del tag es exactamente el nombre del archivo. */
-export const define = (tag: string, clase: CustomElementConstructor): void => {
-  if (!customElements.get(tag)) customElements.define(tag, clase);
-};
-
-/** Emite un evento de dominio que cruza el Shadow DOM. Única forma de emitir. */
-export const emitir = (host: HTMLElement, nombre: string, detail?: unknown): void => {
-  host.dispatchEvent(new CustomEvent(nombre, { detail, bubbles: true, composed: true }));
-};
+/* ── Componente con props ───────────────────────────────────── */
 
 /**
- * Props asignadas ANTES de definir el tag (vistas perezosas) quedan como propiedad propia que
- * sombrea el setter. Se rescatan al conectar: se borran y se reasignan por el setter real.
+ * Molde + `props`. `pintar` rehace el contenido del shadow (las hojas adoptadas sobreviven; el `<style>`/`<link>` de
+ * respaldo del molde se conserva) y `parcial` evita el repintado completo cuando devuelve `true` (foco, scroll).
+ * Eventos: `this.emit(nombre, detail)` del molde (bubbles + composed), la única forma de emitir.
  */
-export function adoptarPropsTardias(host: HTMLElement & { props?: unknown }): void {
-  if (!Object.prototype.hasOwnProperty.call(host, 'props')) return;
-  const tardias = host.props;
-  delete (host as { props?: unknown }).props;
-  host.props = tardias;
-}
+export class Componente<P extends object = Record<string, never>> extends IswcElement {
+  #props: P | null = null;
 
-/**
- * Fábrica de componente: `props` mezcla lo nuevo con lo anterior (lo ausente se conserva) y
- * repinta. `nombre` = tag = nombre de la hoja (obligatorio: en un bundle `import.meta.url` es el
- * del bundle). `parcial` evita el repintado completo cuando devuelve `true` (foco, scroll).
- */
-export function crearComponente<P extends object>(
-  moduleUrl: string,
-  nombre: string,
-  inicial: P,
-  render: (root: ShadowRoot, props: P, host: HTMLElement) => void,
-  parcial?: (root: ShadowRoot, props: P, previos: P, host: HTMLElement) => boolean,
-): CustomElementConstructor {
-  precargarCss(moduleUrl, nombre);
-  return class extends HTMLElement {
-    #props: P = inicial;
-    #root = this.attachShadow({ mode: 'open' });
+  /** Props por defecto de la clase. */
+  protected inicial(): P {
+    return {} as P;
+  }
 
-    connectedCallback(): void {
-      adoptarPropsTardias(this);
-      this.#pintar();
+  /** Pinta el contenido completo en `root` (ya vacío). */
+  protected pintar(_root: ShadowRoot, _props: P): void {}
+
+  /** Repintado parcial: `true` si ya aplicó el cambio y no hace falta `pintar`. */
+  protected parcial(_props: P, _previos: P): boolean {
+    return false;
+  }
+
+  get props(): P {
+    this.#props ??= this.inicial();
+    return this.#props;
+  }
+
+  set props(v: Partial<P> | null | undefined) {
+    revisarProps(this.localName, v);
+    const previos = this.props;
+    this.#props = { ...previos, ...(v ?? {}) };
+    if (!this.mounted) return;
+    if (this.parcial(this.#props, previos)) return;
+    this.#repintar();
+  }
+
+  override onConnected(): void {
+    this.#rescatarPropsTardias();
+    this.#repintar();
+  }
+
+  /**
+   * Props asignadas ANTES de definir el tag (vistas perezosas) quedan como propiedad propia que sombrea el accesor.
+   * Se borran y se mezclan sin repintar (el repintado lo hace `onConnected`).
+   */
+  #rescatarPropsTardias(): void {
+    if (!Object.prototype.hasOwnProperty.call(this, 'props')) return;
+    const tardias = (this as { props?: Partial<P> }).props;
+    delete (this as { props?: unknown }).props;
+    revisarProps(this.localName, tardias);
+    this.#props = { ...this.props, ...(tardias ?? {}) };
+  }
+
+  #repintar(): void {
+    const root = this.shadow;
+    if (!root) return;
+    for (const n of [...root.childNodes]) {
+      if (!(n instanceof HTMLStyleElement) && !(n instanceof HTMLLinkElement)) n.remove();
     }
-
-    get props(): P {
-      return this.#props;
-    }
-
-    set props(v: Partial<P> | null | undefined) {
-      revisarProps(nombre, v);
-      const previos = this.#props;
-      this.#props = { ...previos, ...(v ?? {}) };
-      if (!this.isConnected) return;
-      if (parcial?.(this.#root, this.#props, previos, this)) return;
-      this.#pintar();
-    }
-
-    #pintar(): void {
-      this.#root.replaceChildren();
-      render(this.#root, this.#props, this);
-      adoptCss(this.#root, moduleUrl, nombre);
-    }
-  };
+    this.pintar(root, this.props);
+  }
 }
 
 /** Notificación con el toaster del kit (`<iswc-toast>`); si no está montado, no hace nada. */

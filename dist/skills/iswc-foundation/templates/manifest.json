@@ -52,6 +52,7 @@
     "src/styles/_tokens.scss",
     "src/styles/app.scss",
     "src/utils/build.ts",
+    "src/utils/iswc-css-vacio.ts",
     "tests/e2e/00.bienvenida.test.ts",
     "tests/e2e/01.bienvenida-llm.test.ts",
     "tests/iconos/iconos.test.ts",

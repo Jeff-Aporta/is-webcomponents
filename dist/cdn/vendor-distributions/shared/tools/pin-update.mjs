@@ -12,6 +12,9 @@ var ALIAS = Object.fromEntries(NOMBRES_REPO.map((n) => [n, NOMBRES_REPO.filter((
 var RAICES_DEFAULT = ["index.html", "sw.js", "staticwebapp.config.json", "manifest.json", "deno.json", "src", "view", "demo", "public"];
 var ALIAS_KIT = "@jeff-aporta/iswc-base/";
 var SALTAR_DEFAULT = ["node_modules", "vendor", "dist", ".tmp-scss", ".git"];
+var VENDOR_KIT = "src/vendor/iswc-base";
+var VENDOR_LEGADO = `src/vendor/${NOMBRES_REPO[NOMBRES_REPO.length - 1]}`;
+var NO_MODULOS = "(?:vendor-distributions|skills|build)\\/";
 var EXT = /\.(html|ts|js|mjs|json|css|scss|md)$/;
 var ONLINE = /raw\.githubusercontent\.com\/[^/\s]+\/[^/\s]+\/main\/(?:dist\/cdn\/)?(?:vendor-distributions\/(?:shared\/tools\/(?:vendor|pin-update)|client\/tools\/(?:download-iconify|render-lote))\.(?:ts|mjs)|skills\/[^/\s]+\/tools\/[^/\s]+\.(?:ts|mjs))\b|--reload=https:\/\/raw\.githubusercontent\.com\/[^/\s]+\/[^/\s]+\/(?![\w-])/;
 var CABECERA_VENDOR = /^\s*(?:(?:\/\/|<!--|#|\/?\*)\s*@vendor\s|"\$vendor"\s*:)/;
@@ -34,7 +37,8 @@ function opciones(o = {}) {
     raices: lista(o.raices, RAICES_DEFAULT),
     saltar: new Set(lista(o.saltar, SALTAR_DEFAULT)),
     local: o.local ? String(o.local) : "",
-    dryRun: !!o["dry-run"] || !!o.dryRun
+    dryRun: !!o["dry-run"] || !!o.dryRun,
+    sinDeps: !!o["sin-deps"] || !!o.sinDeps
   };
 }
 function archivos(op) {
@@ -70,8 +74,24 @@ function regexes(op) {
       // raw.githack / githubusercontent por rama
       // GitHub Pages DEL KIT (sirve siempre la última versión). El sitio propio de la app (`iswc.host`) no es un pin.
       `[a-z0-9-]+\\.github\\.io\\/${reNombres}(?![\\w-])`
-    ].join("|"), "i")
+    ].join("|"), "i"),
+    // Módulo del kit con la extensión anterior a F3: prefijo (URL del kit hasta `dist/cdn/`, o el alias) + ruta con
+    // carpeta (`core/`, `lib/`, `<cat>/`) + nombre sin puntos + `.min.js` final: `x.classic.js` y `x.preview.min.js`
+    // no casan (el nombre lleva punto).
+    reMinJs: new RegExp(
+      `((?:cdn\\.jsdelivr\\.net\\/gh\\/${esc(op.owner)}\\/${reNombres}@[0-9a-zA-Z._-]+|raw\\.githack\\.com\\/${esc(op.owner)}\\/${reNombres}\\/[0-9a-zA-Z._-]+|[a-z0-9-]+\\.github\\.io\\/${reNombres})\\/dist\\/cdn\\/|${esc(ALIAS_KIT)})((?!${NO_MODULOS})[a-z0-9_-]+\\/(?:[\\w-]+\\/)*[\\w-]+)\\.min\\.js(?![\\w.])`,
+      "gi"
+    )
   };
+}
+function aMinMjs(texto, op = opciones()) {
+  const { reMinJs } = regexes(op);
+  let n = 0;
+  const salida = texto.replace(reMinJs, (_m, pre, ruta) => {
+    n += 1;
+    return `${pre}${ruta}.min.mjs`;
+  });
+  return { salida, n };
 }
 function inventario(op = opciones()) {
   const { rePin, reRaw, reMutable } = regexes(op);
@@ -96,11 +116,51 @@ function inventario(op = opciones()) {
   }
   return { pines, mutables, legados };
 }
-async function publicado(sha, op = opciones()) {
-  const u = `https://cdn.jsdelivr.net/gh/${op.repo}@${sha}/${op.verificar}`;
+async function estado(sha, ruta, op) {
+  const u = `https://cdn.jsdelivr.net/gh/${op.repo}@${sha}/${ruta}`;
   const r = await fetch(u, { method: "HEAD", signal: AbortSignal.timeout(2e4) }).catch(() => null);
   log(`verificaci\xF3n ${u} \u2192 ${r?.status ?? "sin red"}`);
-  return !!r && r.status < 400;
+  return r?.status ?? 0;
+}
+async function publicado(sha, op = opciones()) {
+  const s = await estado(sha, op.verificar, op);
+  return s > 0 && s < 400;
+}
+function mensajeNoPublicado(sha, op = opciones(), anteriorF3 = false) {
+  if (anteriorF3) {
+    return `[pin] ${op.repo}@${sha} es anterior a F3: publica \`${op.verificar.replace(/\.min\.mjs$/, ".min.js")}\` pero no \`${op.verificar}\` (404). Pinea un SHA posterior (\`--nuevo=ultimo\`). Nada se toc\xF3.`;
+  }
+  return `[pin] ${op.repo}@${sha} no responde en jsDelivr (${op.verificar}): publ\xEDcalo antes de pinear. Nada se toc\xF3.`;
+}
+async function esAnteriorF3(sha, op) {
+  if (!/\.min\.mjs$/.test(op.verificar)) return false;
+  const s = await estado(sha, op.verificar.replace(/\.min\.mjs$/, ".min.js"), op);
+  return s > 0 && s < 400;
+}
+function avisoVendorLegado(op = opciones()) {
+  if (!existsSync(join(op.root, VENDOR_LEGADO))) return "";
+  const destino = existsSync(join(op.root, VENDOR_KIT)) ? ` (ya existe ${VENDOR_KIT}: fusiona a mano)` : "";
+  return `ALERTA: ${VENDOR_LEGADO}/ usa el nombre hist\xF3rico del kit; ren\xF3mbrala a ${VENDOR_KIT}/ con \`git mv ${VENDOR_LEGADO} ${VENDOR_KIT}\`${destino} y corre el codemod de nomenclatura del kit con --raiz=. (no se renombra sola)`;
+}
+async function vendorizarDeps(sha, op = opciones(), traer = fetch) {
+  const ruta = `${VENDOR_KIT}/deps.json`;
+  if (op.sinDeps) return { estado: "omitido", ruta, motivo: "--sin-deps" };
+  if (!existsSync(join(op.root, VENDOR_KIT))) return { estado: "sin-carpeta", ruta, motivo: `sin ${VENDOR_KIT}/` };
+  const u = `https://cdn.jsdelivr.net/gh/${op.repo}@${sha}/dist/cdn/deps.json`;
+  const r = await traer(u, { signal: AbortSignal.timeout(2e4) }).catch(() => null);
+  if (!r?.ok) return { estado: "error", ruta, motivo: `${u} \u2192 ${r?.status ?? "sin red"}` };
+  const texto = await r.text();
+  let json = null;
+  try {
+    json = JSON.parse(texto);
+  } catch {
+  }
+  if (!json || typeof json !== "object" || typeof json.tags !== "object" || json.tags === null) {
+    return { estado: "error", ruta, motivo: `${u} no es un deps.json (falta \`tags\`)` };
+  }
+  if (!op.dryRun) writeFileSync(join(op.root, ruta), texto.endsWith("\n") ? texto : `${texto}
+`);
+  return { estado: "escrito", ruta, motivo: `${Object.keys(json.tags).length} tags \u2190 ${op.repo}@${sha.slice(0, 12)}` };
 }
 async function ultimoSha(op = opciones()) {
   const u = `https://api.github.com/repos/${op.repo}/commits/${op.rama}`;
@@ -178,8 +238,9 @@ function actualizarPines(nuevo, op = opciones(), viejos = null) {
   for (const f of archivos(op)) {
     const t = readFileSync(f, "utf8");
     const conAlias = fijarAlias(t, nuevo, op, reNombres);
-    n += conAlias.n;
-    const next = conAlias.salida.replace(reViejo, (m) => {
+    const conMjs = aMinMjs(conAlias.salida, op);
+    n += conAlias.n + conMjs.n;
+    const next = conMjs.salida.replace(reViejo, (m) => {
       const r = `${op.nombre}@${nuevo}`;
       if (m !== r) n += 1;
       return r;
@@ -227,20 +288,29 @@ async function protocolo(nuevoPedido, op = opciones(), viejo = "") {
     }
   }
   if (nuevoPedido !== "ultimo" && !await publicado(nuevo, op)) {
-    console.error(`[pin] ${op.repo}@${nuevo} no responde en jsDelivr: publ\xEDcalo antes de pinear. Nada se toc\xF3.`);
+    console.error(mensajeNoPublicado(nuevo, op, await esAnteriorF3(nuevo, op)));
     return 3;
   }
+  const legado = avisoVendorLegado(op);
+  if (legado) log(legado);
   const r = actualizarPines(nuevo, op, viejo ? [String(viejo)] : null);
   log(`${r.viejos.map((s) => s.slice(0, 12)).join(", ") || "(ya homog\xE9neo)"} \u2192 ${nuevo.slice(0, 12)} \xB7 ${r.n} reemplazos en ${r.tocados.length} archivos${op.dryRun ? " (dry-run)" : ""}`);
   for (const f of r.tocados) log(`  ${f}`);
+  let code = 0;
+  const deps = await vendorizarDeps(nuevo, op);
+  if (deps.estado === "escrito") log(`${deps.ruta}: ${deps.motivo}${op.dryRun ? " (dry-run)" : ""}`);
+  else if (deps.estado === "error") {
+    log(`ALERTA: ${deps.ruta} no se pudo vendorizar: ${deps.motivo}`);
+    code = 1;
+  } else if (!legado) log(`deps.json no se vendoriza (${deps.motivo})`);
   const { mutables } = inventario(op);
   if (mutables.length) {
     log(`ALERTA: quedan refs mutables (corr\xEDgelas a mano):
   ${mutables.join("\n  ")}`);
     return 1;
   }
-  log("siguiente: build + tests del consumidor");
-  return 0;
+  if (!code) log("siguiente: build + tests del consumidor");
+  return code;
 }
 function esPrincipal() {
   if (!/\/pin-update\.m?[jt]s(?:[?#].*)?$/.test(import.meta.url)) return false;
@@ -270,7 +340,9 @@ if (esPrincipal()) {
     ${mutables.join("\n    ")}`);
     if (legados.size) log(`  ALERTA: nombre anterior del repo (\u2192 ${op.nombre}; se corrige con --nuevo):
     ${[...legados].join("\n    ")}`);
-    process.exit(pines.size > 1 || mutables.length || legados.size ? 1 : 0);
+    const vendorLegado = avisoVendorLegado(op);
+    if (vendorLegado) log(`  ${vendorLegado}`);
+    process.exit(pines.size > 1 || mutables.length || legados.size || vendorLegado ? 1 : 0);
   }
   process.exit(await protocolo(String(args.nuevo), op, args.viejo ? String(args.viejo) : ""));
 }
@@ -279,8 +351,13 @@ export {
   CABECERA_VENDOR,
   ONLINE,
   SHA,
+  VENDOR_KIT,
+  VENDOR_LEGADO,
+  aMinMjs,
   actualizarPines,
+  avisoVendorLegado,
   inventario,
+  mensajeNoPublicado,
   opciones,
   protocolo,
   publicado,
@@ -288,5 +365,6 @@ export {
   ultimoSha,
   ultimosShas,
   urlAlias,
+  vendorizarDeps,
   verificarLocal
 };

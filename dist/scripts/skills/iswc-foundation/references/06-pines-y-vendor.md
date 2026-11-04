@@ -32,8 +32,27 @@ deno task build && deno task test:all
 - Reconoce los otros nombres del kit en un pin (`iswc-base@…`, el canónico, y el histórico) y los reescribe al nombre
   real del repo en GitHub (`is-webcomponents@…` hasta que se renombre), en `@sha` y en raw.
 - Regla intacta: nunca `@main`/`@latest`/SHA corto (quedan como refs mutables → exit 1).
-- Códigos: 0 ok · 1 heterogéneo/mutable/legado · 2 uso inválido · 3 pin no publicado (nada se tocó) · 4 sin red
-  (nada se tocó). En `vendor.ts`: 4 es aviso (los pines se conservan); 1, 2 y 3 hacen salir con 1.
+- **Alias del kit**: la entrada `"@jeff-aporta/iswc-base/"` de `deno.json` y del `<script type="importmap">` de cada HTML
+  queda en `https://cdn.jsdelivr.net/gh/<repo>@<sha40>/dist/cdn/` (una ruta local se respeta).
+- **Extensión `.min.mjs` (kit F3)**: al re-pinear, `<ruta>.min.js` → `<ruta>.min.mjs` dentro de las URL del kit
+  (jsDelivr, githack y Pages bajo `dist/cdn/`, y el alias) solo para módulos del kit: `core/`, `lib/` y
+  `<categoría>/<tag>` (también subcarpetas). Nunca terceros (`/npm/`, otros repos), `*.classic.js`,
+  `*.preview.min.js`, `vendor-distributions/`, `skills/` ni `build/`. Un pin anterior a F3 no publica
+  `core/loader.min.mjs` (`--verificar`): exit 3 con el mensaje «es anterior a F3 … pinea un SHA posterior».
+- **`deps.json` vendorizado (kit F4)**: con `--nuevo`, si el consumidor tiene `src/vendor/iswc-base/`, se baja
+  `dist/cdn/deps.json` del SHA nuevo a `src/vendor/iswc-base/deps.json` (se valida que traiga `tags`; un error no pisa
+  el vigente y da exit 1). Su build emite con él los `<link rel="modulepreload">` del cierre del shell crítico sin red.
+  `--sin-deps` lo apaga (apps sin build de HTML).
+- **Carpeta vendor con el nombre histórico** (`src/vendor/` + el nombre que nunca existió en GitHub): el inventario y
+  `--nuevo` la avisan y proponen `git mv … src/vendor/iswc-base` y el codemod de abajo; nunca se renombra sola.
+- **Codemod de nomenclatura sobre un consumidor**: `deno run -A <kit>/scripts/codemods/nomenclatura-iswc-base.mjs
+  --raiz=<app> [--dry-run]` (desde un checkout del kit) aplica las reglas del kit a la app: el `candidato` de `reuso`
+  queda en `iswc-base` (el schema `ReusoCandidatoSchema` no acepta el nombre histórico como legado), las URL al nombre
+  real del repo y las rutas se mueven (`git mv` con `cwd` en la app). Lo que está bajo `vendor/` solo se mueve, su
+  texto no se reescribe: se re-vendoriza.
+- Códigos: 0 ok · 1 heterogéneo/mutable/legado (o `deps.json` no vendorizado) · 2 uso inválido · 3 pin no publicado
+  (nada se tocó) · 4 sin red (nada se tocó). En `vendor.ts`: 4 es aviso (los pines se conservan); 1, 2 y 3 hacen
+  salir con 1.
 - En `vendor.json`, `"pin": { "activo": true, "raices": [...], "saltar": [...], "verificar": "..." }` ajusta el
   barrido (por defecto las raíces de un front típico: `index.html`, `src`, `view`, `demo`, `public`…); `activo: false`
   lo apaga. Si falta `pin-update.mjs` junto a `vendor.ts`, el protocolo no corre y se avisa.
@@ -44,6 +63,7 @@ deno task build && deno task test:all
 | --- | --- |
 | `tools/` | `schemas.ts` (podado), `pruebas.ts` (con `--hijo`), `test-cooldown.ts` (con la cola), `sync-entregable.ts` (`vendor.ts` y `pin-update.mjs` van online, no aquí) |
 | `build/` | `index.ts`, `hash.ts`, `asset-url(.schemas).ts`, `stamp-hashes.ts`, `bundle-min(.schemas).ts`, `asset-store.ts` |
+| (raíz) | `deps.json`: `dist/cdn/deps.json` del kit al pin (cierre de módulos por tag); lo escriben `vendor:iswc` y `pin --nuevo` |
 
 - Cabecera `// @vendor <ISO> <repo>@<sha|local> <desde>` (+ `// @doc <url>`) y «No editar». Se cambian en el kit y se re-vendorizan con
   `vendor.ts` (pin por fecha ISO: compiten el checkout `local` y el HEAD remoto); el protocolo de pines deja el SHA
@@ -240,10 +260,12 @@ deno run -A --reload=https://raw.githubusercontent.com/Jeff-Aporta/is-webcompone
 ### `pin-update` (online, desde `@main`)
 
 ```bash
-deno run -A --reload=https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/ https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/dist/cdn/vendor-distributions/shared/tools/pin-update.mjs [--nuevo=<sha40|ultimo>] [--local=<ruta>] [--viejo=<sha40>] [--raices=a,b] [--saltar=a,b] [--verificar=<ruta>] [--dry-run]
+deno run -A --reload=https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/ https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/dist/cdn/vendor-distributions/shared/tools/pin-update.mjs [--nuevo=<sha40|ultimo>] [--local=<ruta>] [--viejo=<sha40>] [--raices=a,b] [--saltar=a,b] [--verificar=<ruta>] [--sin-deps] [--dry-run]
 ```
 
 - **Qué hace y cuándo**: inventario de pines y refs mutables; con `--nuevo` fija todos los pines al SHA dado o al último publicado.
 - **Entradas**: flags (`--repo`, `--rama`); raíces del consumidor; red; `--local` solo informativo.
-- **Escribe**: los archivos de las raíces (reemplazo de `@<sha>`); nada con `--dry-run`.
-- **Salida y errores típicos**: 0 · 1 heterogéneo/mutables · 2 uso · 3 no publicado · 4 sin red.
+- **Escribe**: los archivos de las raíces (reemplazo de `@<sha>`, alias del kit, `.min.js` → `.min.mjs` de módulos del
+  kit) y `src/vendor/iswc-base/deps.json` del SHA nuevo (salvo `--sin-deps`); nada con `--dry-run`.
+- **Salida y errores típicos**: 0 · 1 heterogéneo/mutables/vendor con el nombre histórico/deps.json no vendorizado ·
+  2 uso · 3 no publicado (o anterior a F3, con mensaje) · 4 sin red.

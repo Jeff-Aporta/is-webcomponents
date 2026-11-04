@@ -10,9 +10,15 @@
 //   P8 ida y vuelta: lo que el vendor escribe (`conCabecera`, cada estilo: ts, md, html, css, json) nunca alerta.
 //   P9 una ref @main del kit en una línea que NO es la cabecera (aunque lleve un comentario `@vendor` al final) → rojo.
 //   P10 la entrada del alias `@jeff-aporta/iswc-base/` (deno.json e importmap de los HTML) se fija a la URL canónica del SHA.
+//   P11 `vendorizarDeps` baja `dist/cdn/deps.json` del SHA a `src/vendor/iswc-base/deps.json` (solo si la carpeta existe;
+//       `--sin-deps` lo apaga; un cuerpo que no es deps.json es error y no se escribe).
+//   P12 al re-pinear, `.min.js` → `.min.mjs` solo en URL de módulos del kit (core/, lib/, <cat>/<tag>, jsDelivr, githack,
+//       Pages y el alias); terceros, `*.classic.js`, `*.preview.min.js`, `vendor-distributions/` y `skills/` no se tocan.
+//   P13 la carpeta vendor con el nombre histórico se avisa (inventario en rojo) y no se renombra.
+//   P14 un SHA anterior a F3 (sin `.min.mjs`) da un mensaje que lo dice.
 import { assert, assertEquals } from 'jsr:@std/assert@1';
 import { mkdirSync, writeFileSync } from 'node:fs';
-import { join } from 'node:path';
+import { dirname, join } from 'node:path';
 import { conCabecera } from '../../src/vendor-distributions/shared/tools/vendor.ts';
 import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
 import { denoTestCon } from '../_shared/deno-test.ts';
@@ -29,7 +35,10 @@ const B = 'b'.repeat(40);
 function inventario(archivos: Record<string, string>): { code: number; out: string } {
   const raiz = Deno.makeTempDirSync({ prefix: 'pin-' });
   mkdirSync(join(raiz, 'src'), { recursive: true });
-  for (const [rel, txt] of Object.entries(archivos)) writeFileSync(join(raiz, rel), txt);
+  for (const [rel, txt] of Object.entries(archivos)) {
+    mkdirSync(dirname(join(raiz, rel)), { recursive: true });
+    writeFileSync(join(raiz, rel), txt);
+  }
   const r = new Deno.Command(Deno.execPath(), {
     args: ['run', '-A', TOOL, '--repo=Jeff-Aporta/iswc-base', '--raices=src,deno.json'],
     cwd: raiz, stdout: 'piped', stderr: 'piped',
@@ -203,6 +212,102 @@ denoTest('pin-update: P10 un alias a una carpeta local no se toca; ya canónico 
   assertEquals(leerAlias(local), { deno: './vendor/iswc/', html: '/vendor/iswc/' });
   const alDia = appConAlias(ALIAS_URL(A), ALIAS_URL(A));
   assertEquals(actualizarPines(A, opciones({ root: alDia })).n, 0);
+});
+
+// P11 deps.json del SHA destino en el vendor del consumidor (su build emite los modulepreload sin red). Sin red: `traer`
+//     es un fetch falso que registra la URL pedida.
+const DEPS = JSON.stringify({ sha: A, tags: { 'iswc-button': ['_chunks/chunk-X.mjs', 'actions/button.min.mjs'] } });
+
+function traerFalso(cuerpo: string, status = 200) {
+  const pedidas: string[] = [];
+  const traer = (u: string) => {
+    pedidas.push(u);
+    return Promise.resolve(new Response(cuerpo, { status }));
+  };
+  return { traer, pedidas };
+}
+
+denoTest('pin-update: P11 deps.json del SHA nuevo en src/vendor/iswc-base/ (si la carpeta existe; --sin-deps lo apaga)', async () => {
+  const { vendorizarDeps, opciones } = await import('../../src/vendor-distributions/shared/tools/pin-update.mjs');
+  const raiz = Deno.makeTempDirSync({ prefix: 'pin-deps-' });
+  const sinCarpeta = traerFalso(DEPS);
+  assertEquals((await vendorizarDeps(A, opciones({ root: raiz }), sinCarpeta.traer)).estado, 'sin-carpeta');
+  assertEquals(sinCarpeta.pedidas, [], 'sin carpeta vendor no se pide nada');
+  mkdirSync(join(raiz, 'src', 'vendor', 'iswc-base'), { recursive: true });
+  const ok = traerFalso(DEPS);
+  const r = await vendorizarDeps(A, opciones({ root: raiz }), ok.traer);
+  assertEquals(r.estado, 'escrito', JSON.stringify(r));
+  assertEquals(ok.pedidas, [`https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@${A}/dist/cdn/deps.json`]);
+  assertEquals(JSON.parse(Deno.readTextFileSync(join(raiz, 'src/vendor/iswc-base/deps.json'))), JSON.parse(DEPS));
+  const apagado = traerFalso(DEPS);
+  assertEquals((await vendorizarDeps(B, opciones({ root: raiz, 'sin-deps': true }), apagado.traer)).estado, 'omitido');
+  assertEquals(apagado.pedidas, []);
+  const malo = await vendorizarDeps(B, opciones({ root: raiz }), traerFalso('<html>404</html>').traer);
+  assertEquals(malo.estado, 'error', JSON.stringify(malo));
+  const caido = await vendorizarDeps(B, opciones({ root: raiz }), traerFalso('', 404).traer);
+  assertEquals(caido.estado, 'error', JSON.stringify(caido));
+  assertEquals(JSON.parse(Deno.readTextFileSync(join(raiz, 'src/vendor/iswc-base/deps.json'))).sha, A, 'un error no pisa el deps.json vigente');
+});
+
+// P12 Extensión de los módulos del kit (plan D2, F3): al re-pinear, `.min.js` → `.min.mjs` solo en rutas del kit.
+const KIT = 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents';
+const P12 = [
+  { caso: 'loader por jsDelivr', antes: `${KIT}@${B}/dist/cdn/core/loader.min.js`, despues: `${KIT}@${A}/dist/cdn/core/loader.min.mjs` },
+  { caso: 'componente <cat>/<tag>', antes: `${KIT}@${B}/dist/cdn/actions/button.min.js`, despues: `${KIT}@${A}/dist/cdn/actions/button.min.mjs` },
+  { caso: 'lib/', antes: `${KIT}@${B}/dist/cdn/lib/obj.min.js`, despues: `${KIT}@${A}/dist/cdn/lib/obj.min.mjs` },
+  { caso: 'subcarpeta de categoría', antes: `${KIT}@${B}/dist/cdn/data/ag-grid/celda.min.js`, despues: `${KIT}@${A}/dist/cdn/data/ag-grid/celda.min.mjs` },
+  { caso: 'nombre canónico del repo', antes: `https://cdn.jsdelivr.net/gh/Jeff-Aporta/iswc-base@${B}/dist/cdn/forms/input.min.js`, despues: `${KIT}@${A}/dist/cdn/forms/input.min.mjs` },
+  { caso: 'githack', antes: `https://raw.githack.com/Jeff-Aporta/is-webcomponents/${B}/dist/cdn/core/loader.min.js`, despues: `https://raw.githack.com/Jeff-Aporta/is-webcomponents/${A}/dist/cdn/core/loader.min.mjs` },
+  { caso: 'alias del kit', antes: '@jeff-aporta/iswc-base/navigation/tabs.min.js', despues: '@jeff-aporta/iswc-base/navigation/tabs.min.mjs' },
+  { caso: 'tercero por jsDelivr npm', antes: 'https://cdn.jsdelivr.net/npm/marked@12.0.0/lib/marked.min.js', despues: 'https://cdn.jsdelivr.net/npm/marked@12.0.0/lib/marked.min.js' },
+  { caso: 'otro repo de GitHub', antes: `https://cdn.jsdelivr.net/gh/otro/repo@${B}/dist/cdn/core/x.min.js`, despues: `https://cdn.jsdelivr.net/gh/otro/repo@${B}/dist/cdn/core/x.min.js` },
+  { caso: 'artefacto clásico', antes: `${KIT}@${B}/dist/cdn/actions/button.classic.js`, despues: `${KIT}@${A}/dist/cdn/actions/button.classic.js` },
+  { caso: 'preview de la galería', antes: `${KIT}@${B}/dist/cdn/actions/button.preview.min.js`, despues: `${KIT}@${A}/dist/cdn/actions/button.preview.min.js` },
+  { caso: 'vendor-distributions', antes: `${KIT}@${B}/dist/cdn/vendor-distributions/shared/x.min.js`, despues: `${KIT}@${A}/dist/cdn/vendor-distributions/shared/x.min.js` },
+  { caso: 'skills', antes: `${KIT}@${B}/dist/cdn/skills/x/tools/y.min.js`, despues: `${KIT}@${A}/dist/cdn/skills/x/tools/y.min.js` },
+  { caso: 'CSS del kit', antes: `${KIT}@${B}/dist/cdn/is-base.min.css`, despues: `${KIT}@${A}/dist/cdn/is-base.min.css` },
+] as const;
+
+for (const c of P12) {
+  denoTest(`pin-update: P12 ${c.caso}: ${c.antes.endsWith('.min.js') && c.despues.endsWith('.min.mjs') ? '.min.js → .min.mjs' : 'sin cambio de extensión'}`, async () => {
+    const { actualizarPines, opciones } = await import('../../src/vendor-distributions/shared/tools/pin-update.mjs');
+    const raiz = Deno.makeTempDirSync({ prefix: 'pin-mjs-' });
+    mkdirSync(join(raiz, 'src'), { recursive: true });
+    writeFileSync(join(raiz, 'src', 'a.ts'), `import '${c.antes}';\n`);
+    actualizarPines(A, opciones({ root: raiz }));
+    assertEquals(Deno.readTextFileSync(join(raiz, 'src', 'a.ts')), `import '${c.despues}';\n`);
+  });
+}
+
+denoTest('pin-update: P12 aMinMjs es idempotente y cuenta los cambios', async () => {
+  const { aMinMjs } = await import('../../src/vendor-distributions/shared/tools/pin-update.mjs');
+  const texto = `<script type="module" src="${KIT}@${A}/dist/cdn/core/loader.min.js"></script>\n<link rel="modulepreload" href="${KIT}@${A}/dist/cdn/layout/app-shell.min.js">`;
+  const una = aMinMjs(texto);
+  assertEquals(una.n, 2);
+  assertEquals(aMinMjs(una.salida), { salida: una.salida, n: 0 });
+});
+
+// P13 Carpeta vendor con el nombre histórico (F1b la renombró a src/vendor/iswc-base/): se avisa, nunca se renombra sola.
+denoTest('pin-update: P13 src/vendor/iswc-root se avisa (inventario en rojo) y no se renombra', async () => {
+  const { avisoVendorLegado, opciones, VENDOR_LEGADO } = await import('../../src/vendor-distributions/shared/tools/pin-update.mjs');
+  const raiz = Deno.makeTempDirSync({ prefix: 'pin-legado-' });
+  assertEquals(avisoVendorLegado(opciones({ root: raiz })), '');
+  mkdirSync(join(raiz, VENDOR_LEGADO), { recursive: true });
+  const aviso = avisoVendorLegado(opciones({ root: raiz }));
+  assert(aviso.includes('git mv src/vendor/iswc-root src/vendor/iswc-base') && aviso.includes('--raiz'), aviso);
+  assert(Deno.statSync(join(raiz, VENDOR_LEGADO)).isDirectory, 'la carpeta sigue donde estaba');
+  const r = inventario({ ...SANO, 'src/vendor/iswc-root/x.ts': 'export {};' });
+  assertEquals(r.code, 1, r.out);
+  assert(r.out.includes('src/vendor/iswc-root'), r.out);
+});
+
+// P14 Un SHA anterior a F3 publica `core/loader.min.js` y no `core/loader.min.mjs`: el mensaje lo dice (sin red: función pura).
+denoTest('pin-update: P14 el mensaje de no publicado dice si el SHA es anterior a F3', async () => {
+  const { mensajeNoPublicado, opciones } = await import('../../src/vendor-distributions/shared/tools/pin-update.mjs');
+  const op = opciones();
+  assert(/anterior a F3/.test(mensajeNoPublicado(A, op, true)) && mensajeNoPublicado(A, op, true).includes('--nuevo=ultimo'));
+  assert(mensajeNoPublicado(A, op, true).includes('dist/cdn/core/loader.min.js'));
+  assert(!/anterior a F3/.test(mensajeNoPublicado(A, op, false)) && /publícalo/.test(mensajeNoPublicado(A, op, false)));
 });
 
 export default lista();

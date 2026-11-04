@@ -416,8 +416,8 @@
     "core/loader-ref.min.mjs": "cdie53",
     "core/loader-sheets.min.mjs": "uh3nyi",
     "core/loader-store.min.mjs": "tmjimd",
-    "core/loader.min.js": "tlai5n",
-    "core/loader.min.mjs": "bxg8xq",
+    "core/loader.min.js": "x2c8t8",
+    "core/loader.min.mjs": "04ta41",
     "core/media-shape.min.mjs": "4peatg",
     "core/misc-utils.min.mjs": "0wfw45",
     "core/palettes.min.css": "62ruuk",
@@ -716,7 +716,7 @@
     "diagrams/venn-diagram.min.mjs": "4rkohi",
     "diagrams/venn-spec.min.mjs": "l1876t",
     "dist/gallery-app.min.js": "2uwvw1",
-    "dist/pages/ecosystem.min.js": "le9zhw",
+    "dist/pages/ecosystem.min.js": "8dgrnt",
     "dist/pages/home.min.js": "rpc07e",
     "dist/pages/icons.min.js": "vk088c",
     "dist/pages/theming.min.js": "kt3nmu",
@@ -1124,7 +1124,7 @@
     "preview/demo-section.min.mjs": "9y4qjp",
     "preview/doc-demo-boot.min.mjs": "2nuena",
     "preview/doc-demo-galeria.min.mjs": "ts3gdg",
-    "preview/doc-demo-host.min.mjs": "j1tceo",
+    "preview/doc-demo-host.min.mjs": "ftvp3f",
     "preview/doc-demo.min.css": "dqx4y2",
     "preview/doc-demo.min.mjs": "ro5hgj",
     "preview/doc-presentation.min.css": "heipx7",
@@ -1146,6 +1146,6 @@
     "skills/iswc-foundation/templates/scripts/gate/sync-protocolo.mjs": "gppw76",
     "skills/iswc-foundation/templates/scripts/gate/sync-to-entregable.mjs": "tipvbm",
     "skills/iswc-foundation/templates/scripts/gate/test-health.mjs": "971549",
-    "skills/iswc-foundation/templates/scripts/vendor/vendor-iswc-tools.mjs": "vqgkzm"
+    "skills/iswc-foundation/templates/scripts/vendor/vendor-iswc-tools.mjs": "0mdfdd"
   }
 }
