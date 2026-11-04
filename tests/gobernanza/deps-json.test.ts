@@ -21,7 +21,7 @@ const { test, lista } = coleccionPruebas({ categoria: 'how' });
 const RAIZ = join(import.meta.dirname ?? '.', '..', '..');
 const DIST = join(RAIZ, 'dist', 'cdn');
 
-/** Copia de `SHELL_CRITICO` de D:\Dev\avatar\frontend-avatar\src\js\kit-tags.ts (4-nov-2026). */
+/** Copia de `SHELL_CRITICO` del arranque de frontend-avatar (`src/js/kit-tags.ts` de esa app, 4-nov-2026). */
 const SHELL_CRITICO = ['iswc-app-shell', 'iswc-doc-layout', 'iswc-doc-index', 'iswc-theme-toggle', 'iswc-icon', 'iswc-button', 'iswc-heading', 'iswc-spinner', 'iswc-skeleton', 'iswc-toast', 'iswc-avatar', 'iswc-tag', 'iswc-badge', 'iswc-card', 'iswc-dropdown', 'iswc-dropdown-item', 'iswc-session-menu'];
 
 const MAX_MODULOS_SHELL = 75;
