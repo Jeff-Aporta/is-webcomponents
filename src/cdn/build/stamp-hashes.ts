@@ -42,7 +42,7 @@ function stampText(from: string, text: string, hashes: Map<string, string>, know
 
 /**
  * Sella un conjunto ruta → texto. Las rutas son relativas a la raiz del CDN
- * (`actions/button.min.js`). No toca el disco.
+ * (`actions/button.min.mjs`). No toca el disco.
  */
 export function stampHashTexts(input: Record<string, string>): { texts: Record<string, string>; hashes: Record<string, string> } {
   const keys = Object.keys(input);

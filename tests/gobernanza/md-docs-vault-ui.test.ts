@@ -32,7 +32,7 @@ const BUNDLES = [
   'layout/md-docs-vault', 'layout/doc-layout', 'navigation/doc-index', 'helpers/md-render', 'navigation/pager',
   'media/figure', 'data/meta-list', 'layout/dialog', 'actions/copy-button', 'actions/button',
   'actions/button-group', 'media/icon', 'feedback/spinner', 'layout/callout',
-].map((b) => `dist/cdn/${b}.min.js`);
+].map((b) => `dist/cdn/${b}.min.mjs`);
 
 /** El libro del demo (`md-docs-vault.json`): portada, ficha y seguridad, en ese orden. */
 async function paginaDemo(): Promise<string> {
@@ -47,7 +47,7 @@ ${BUNDLES.map((b) => `<script type="module" src="/${b}"></script>`).join('\n')}
 </head><body>${demo.html.join('\n')}</body></html>`;
 }
 
-const TIPOS: Record<string, string> = { '.js': 'text/javascript', '.css': 'text/css', '.json': 'application/json', '.svg': 'image/svg+xml', '.woff2': 'font/woff2' };
+const TIPOS: Record<string, string> = { '.js': 'text/javascript', '.mjs': 'text/javascript', '.css': 'text/css', '.json': 'application/json', '.svg': 'image/svg+xml', '.woff2': 'font/woff2' };
 
 type Pagina = {
   goto: (u: string, o?: Record<string, unknown>) => Promise<unknown>;

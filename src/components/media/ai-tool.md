@@ -23,8 +23,8 @@ La UI es opcional: toda la lógica vive en `lib/ai/` y cualquier componente la u
 
 ## Cuándo no usarlo
 
-- Un componente que necesita el resultado sin mostrar esta UI: `ejecutar('ocr', imagen)` de `lib/ai/motores.min.js`.
-- Buscar por significado: `vectorLocal` y `ordenarPorSentido` de `lib/ai/vector-local.min.js`.
+- Un componente que necesita el resultado sin mostrar esta UI: `ejecutar('ocr', imagen)` de `lib/ai/motores.min.mjs`.
+- Buscar por significado: `vectorLocal` y `ordenarPorSentido` de `lib/ai/vector-local.min.mjs`.
 - Una búsqueda global con paleta: `iswc-semantic-search`, con el orden inyectado.
 
 ## Importación
@@ -128,7 +128,7 @@ El estado va en `role="status"` y el resultado en `aria-live="polite"`. El texto
 
 ## Errores comunes
 
-- Meter un motor en un bundle propio: se importa `lib/ai/motores.min.js`, nunca `runonweb`.
+- Meter un motor en un bundle propio: se importa `lib/ai/motores.min.mjs`, nunca `runonweb`.
 - Usar el modelo por defecto de `runonweb/embed`: en español devuelve ruido. El estándar es `MODELO_LOCAL`.
 
 ## Reglas para LLM

@@ -4762,7 +4762,7 @@ test('g09 mutation-observer y resize-observer: heredan role=region + aria-label'
   const page = await nuevoPage();
   activePage = page;
   try {
-    // Abrimos iswc-observer porque su bundle (observer.min.js) no carga los
+    // Abrimos iswc-observer porque su bundle (observer.min.mjs) no carga los
     // aliases; pero podemos importar los aliases dinámicamente desde el
     // CDN del repo y verificar que aplican el mismo contrato ARIA que su
     // clase padre.
@@ -4834,10 +4834,10 @@ test('g09 ui: helpers region() y dialog() aplican role + aria-* (proposal ui #15
     await esperarMs(800);
 
     const ok = await page.evaluate(async () => {
-      // El bundle `ui.min.js` se carga por el gallery-app o el bundle all.
+      // El bundle `ui.min.mjs` se carga por el gallery-app o el bundle all.
       // Lo importamos dinámicamente desde el CDN del propio repo.
       const baseUrl = (window as unknown as { __DSH_BASE__?: string }).__DSH_BASE__
-        || new URL('/dist/cdn/helpers/ui.min.js', document.baseURI).toString();
+        || new URL('/dist/cdn/helpers/ui.min.mjs', document.baseURI).toString();
       // Importar el módulo dinámicamente y exponer IswcUi en window.
       type Mod = { IswcUi?: { region: (l: string, c?: unknown) => HTMLElement; dialog: (l: string | object, c?: unknown) => HTMLElement } };
       const mod: Mod = await import(/* @vite-ignore */ baseUrl);

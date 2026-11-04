@@ -15,7 +15,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-treemap-spec-ready');
     const info = await page.evaluate(async () => {
-      const lib = await import('/dist/cdn/charts/treemap-spec.min.js');
+      const lib = await import('/dist/cdn/charts/treemap-spec.min.mjs');
       const exports = Object.keys(lib).sort();
       const types = {};
       for (const k of exports) types[k] = typeof lib[k];
@@ -58,7 +58,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-treemap-spec-ready');
     const spec = await page.evaluate(async () => {
-      const lib = await import('/dist/cdn/charts/treemap-spec.min.js');
+      const lib = await import('/dist/cdn/charts/treemap-spec.min.mjs');
       return lib.resolveTreemapSpec({
         treemap: {
           nodes: [
@@ -85,7 +85,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-treemap-spec-ready');
     const layout = await page.evaluate(async () => {
-      const lib = await import('/dist/cdn/charts/treemap-spec.min.js');
+      const lib = await import('/dist/cdn/charts/treemap-spec.min.mjs');
       const spec = lib.resolveTreemapSpec({
         treemap: {
           nodes: [
@@ -120,7 +120,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-treemap-spec-ready');
     const spec = await page.evaluate(async () => {
-      const lib = await import('/dist/cdn/charts/treemap-spec.min.js');
+      const lib = await import('/dist/cdn/charts/treemap-spec.min.mjs');
       return lib.resolveTreemapSpec({ treemap: { nodes: [] } });
     });
     assert.equal(spec, null, `resolveTreemapSpec de nodes=[] debe devolver null (got ${JSON.stringify(spec)})`);

@@ -15,7 +15,7 @@ tests.push({
     await waitReady(page, 'data-form-json-ready');
     const info = await page.evaluate(async () => {
       const form = document.getElementById('demo-form');
-      const mod = await import('../../../dist/cdn/isp/form-json.min.js');
+      const mod = await import('../../../dist/cdn/isp/form-json.min.mjs');
       const controls = mod.listControls(form);
       return {
         controlsCount: controls.length,
@@ -45,7 +45,7 @@ tests.push({
     await page.waitForTimeout(100);
     const values = await page.evaluate(async () => {
       const form = document.getElementById('demo-form');
-      const mod = await import('../../../dist/cdn/isp/form-json.min.js');
+      const mod = await import('../../../dist/cdn/isp/form-json.min.mjs');
       return mod.getValues(form);
     });
     assert.equal(values.cliente, 'CL-009', `cliente debe ser 'CL-009', es '${values.cliente}'`);
@@ -67,7 +67,7 @@ tests.push({
     await page.waitForTimeout(50);
     const values = await page.evaluate(async () => {
       const form = document.getElementById('demo-form');
-      const mod = await import('../../../dist/cdn/isp/form-json.min.js');
+      const mod = await import('../../../dist/cdn/isp/form-json.min.mjs');
       return mod.getValues(form);
     });
     assert.equal(values.cliente, '', `cliente debe estar vacío tras limpiar, es '${values.cliente}'`);
@@ -85,7 +85,7 @@ tests.push({
     await page.waitForTimeout(150);
     const round = await page.evaluate(async () => {
       const form = document.getElementById('demo-form');
-      const mod = await import('../../../dist/cdn/isp/form-json.min.js');
+      const mod = await import('../../../dist/cdn/isp/form-json.min.mjs');
       const original = {
         cliente: 'ABC',
         correo: 'x@y.z',
@@ -117,7 +117,7 @@ tests.push({
       // Añadir un control sin name (no debe listarse).
       const noName = document.createElement('iswc-input');
       form.appendChild(noName);
-      const mod = await import('../../../dist/cdn/isp/form-json.min.js');
+      const mod = await import('../../../dist/cdn/isp/form-json.min.mjs');
       const controls = mod.listControls(form);
       const names = controls.map((c) => c.getAttribute('name'));
       const hasNoName = names.some((n) => n === null || n === '');

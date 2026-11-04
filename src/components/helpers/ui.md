@@ -29,13 +29,13 @@ No sustituye componentes `is-*`. No reinventar botones, dialogs, tablas, toasts 
 ```
 
 ```js
-import { html, adoptCss, define } from '…/dist/cdn/helpers/ui.min.js';
+import { html, adoptCss, define } from '…/dist/cdn/helpers/ui.min.mjs';
 ```
 
 ## Ejemplo mínimo
 
 ```js
-import { html, adoptCss, define } from '…/helpers/ui.min.js';
+import { html, adoptCss, define } from '…/helpers/ui.min.mjs';
 
 class MiVista extends HTMLElement {
   #root = this.attachShadow({ mode: 'open' });
@@ -133,7 +133,7 @@ La accesibilidad la aportan los `is-*` montados; no ocultar foco ni reinventar c
 ## Ejemplo avanzado
 
 ```js
-import { adoptCss, define, html } from '…/helpers/ui.min.js';
+import { adoptCss, define, html } from '…/helpers/ui.min.mjs';
 
 class AppFiles extends HTMLElement {
   #root = this.attachShadow({ mode: 'open' });
@@ -155,7 +155,7 @@ define('app-files', AppFiles);
 ## Reglas para LLM
 
 - Leer este MD y el preview `helpers/iswc-ui.html` antes de inventar API.
-- Consumo CDN: `helpers/ui.min.js` o `all.min.js`.
+- Consumo CDN: `helpers/ui.min.mjs` o `all.min.js`.
 - Dominio = traducir datos → `is-*` + CSS hermano.
 
 ## Fuentes

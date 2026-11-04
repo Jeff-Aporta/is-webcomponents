@@ -287,7 +287,7 @@ export function ruta(meta, componer) {
     slug: `ruta-${meta.slug}`,
     module: meta.module,
     tag: 'iswc-flowchart',
-    script: 'diagrams/flowchart.min.js',
+    script: 'diagrams/flowchart.min.mjs',
     attrs: { 'diagram-style': 'insoft' },
     payload: { vectorFlow: aVector(meta.title, lanes, nodes, edges, llamador) },
   };

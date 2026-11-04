@@ -6,17 +6,17 @@
  * 3. `L.load('iswc-doc-demo')` (catálogo del loader)
  *
  * Local (self-test del kit):
- *   <script type="module" src="./dist/cdn/preview/doc-demo-host.min.js"></script>
+ *   <script type="module" src="./dist/cdn/preview/doc-demo-host.min.mjs"></script>
  *   <iswc-doc-demo brand="ISWC" local dev sheets-cache="…"></iswc-doc-demo>
  *
  * CDN (otra app):
- *   <script type="module" src="https://cdn.jsdelivr.net/gh/…/dist/cdn/preview/doc-demo-host.min.js"></script>
+ *   <script type="module" src="https://cdn.jsdelivr.net/gh/…/dist/cdn/preview/doc-demo-host.min.mjs"></script>
  *   <iswc-doc-demo brand="MiApp" sheets-cache="mi-app-sheets"></iswc-doc-demo>
  *
  * La SPA hermana debe esperar `iswc-doc-demo-ready` / `whenReady()` / `#shellNav`
  * (TLA del host no bloquea siblings module).
  */
-const loaderHref = new URL('../core/loader.min.js', import.meta.url).href;
+const loaderHref = new URL('../core/loader.min.mjs', import.meta.url).href;
 const { iswcLoader: L } = await import(/* @vite-ignore */ loaderHref) as {
   iswcLoader: {
     configure(opts: Record<string, unknown>): unknown;

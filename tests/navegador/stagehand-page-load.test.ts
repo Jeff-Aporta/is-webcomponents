@@ -6,12 +6,12 @@
 //   `http://127.0.0.1:5505/apps/iswc-base/index.html` la página se
 //   quedaba en blanco. El network tab mostraba:
 //
-//     - loader.min.js                          304 (14 ms)
-//     - doc-demo-boot.min.js?h=m7w5f1          304 (22.18 s)  <-- muy lento
-//     - doc-demo.min.js?h=6u4hsa (fetch)      (failed) net::ERR_*
-//     - doc-demo.min.js?h=6u4hsa (script)     (failed) net::ERR_*
+//     - loader.min.mjs                          304 (14 ms)
+//     - doc-demo-boot.min.mjs?h=m7w5f1          304 (22.18 s)  <-- muy lento
+//     - doc-demo.min.mjs?h=6u4hsa (fetch)      (failed) net::ERR_*
+//     - doc-demo.min.mjs?h=6u4hsa (script)     (failed) net::ERR_*
 //
-//   El primer fetch de `doc-demo.min.js` se colgaba 3+ minutos y el
+//   El primer fetch de `doc-demo.min.mjs` se colgaba 3+ minutos y el
 //   segundo intento (vía `<script type=module>`) fallaba rápido, así que
 //   `<iswc-doc-demo>` nunca quedaba definido y la página quedaba en
 //   loading eterno.
@@ -34,13 +34,13 @@
 //          - `<iswc-doc-demo>` no quedó definido.
 //          - Algún request devolvió status >= 400 o `net::ERR_*`.
 //          - El chrome shell (.shell-bar) no se pintó.
-//          - Algún asset crítico (`doc-demo.min.js`, `loader.min.js`)
+//          - Algún asset crítico (`doc-demo.min.mjs`, `loader.min.mjs`)
 //            no se descargó.
 //
 //   Si quieres reproducir el bug original, lanza VS Code Live Server
 //   sobre `<workspace>/Personal` apuntando a
 //   `apps/iswc-base/index.html` y corre este test — el request a
-//   `dist/cdn/preview/doc-demo.min.js` quedará 404 (Live Server no
+//   `dist/cdn/preview/doc-demo.min.mjs` quedará 404 (Live Server no
 //   transpila TS) y el test fallará con un mensaje claro.
 
 import assert from 'node:assert/strict';
@@ -265,7 +265,7 @@ test('stagehand: la página home carga sin colgar y sin errores de red', async (
 
   // 2) Errores capturados por los wrappers (fetch exceptions, script
   //    load errors, unhandledrejection). El bug original aparecía
-  //    aquí con `net::ERR_*` para doc-demo.min.js.
+  //    aquí con `net::ERR_*` para doc-demo.min.mjs.
   //
   //    Filtramos aborts intencionales: el iconify-loader usa
   //    AbortController para cancelar fetches obsoletos cuando un mismo
@@ -306,9 +306,10 @@ test('stagehand: la página home carga sin colgar y sin errores de red', async (
     .filter((e) => e.kind === 'resource')
     .map((e) => e.name);
   const criticals = [
-    /\/dist\/cdn\/(?:core\/)?loader\.min\.js(\?|$)/,
-    /\/dist\/cdn\/preview\/doc-demo-boot\.min\.js\?[vh]=/,
-    /\/dist\/cdn\/preview\/doc-demo\.min\.js\?[vh]=/,
+    // F3: el loader ya no pone `?v=` (mapa fuera del loader; F4 lo lee en diferido): se acepta con o sin query.
+    /\/dist\/cdn\/(?:core\/)?loader\.min\.mjs(\?|$)/,
+    /\/dist\/cdn\/preview\/doc-demo-boot\.min\.mjs(\?|$)/,
+    /\/dist\/cdn\/preview\/doc-demo\.min\.mjs(\?|$)/,
   ];
   for (const pat of criticals) {
     const hit = names.find((n) => pat.test(n));

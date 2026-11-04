@@ -161,7 +161,7 @@ visor.addEventListener('iswc-server-api-docs-page', (e) => { document.title = `$
 
 - Incrustar el JSON sin escapar `<` dentro del `<script>`: un `</script>` en un texto corta la página.
   Escape `<` como `<` al serializar.
-- Pinear otro CDN además del kit: el visor vive en el kit (`layout/server-api-docs.min.js`).
+- Pinear otro CDN además del kit: el visor vive en el kit (`layout/server-api-docs.min.mjs`).
 - Esperar que `api-base` cambie el login de `patyia-portal`: el login va contra la base activa salvo que
   el documento traiga `viewer.auth.loginUrl`.
 

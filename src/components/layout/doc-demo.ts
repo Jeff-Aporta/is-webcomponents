@@ -6,7 +6,7 @@
  * `connectedCallback`; CSS/chrome vía loader.
  *
  * Bootstrap (cualquier app):
- *   <script type="module" src="…/cdn/preview/doc-demo-host.min.js"></script>
+ *   <script type="module" src="…/cdn/preview/doc-demo-host.min.mjs"></script>
  *   <script type="module" src="./app.min.js"></script>
  *   <iswc-doc-demo brand="MiApp" sheets-cache="mi-app-sheets"></iswc-doc-demo>
  *

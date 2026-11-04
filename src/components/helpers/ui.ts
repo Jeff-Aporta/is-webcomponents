@@ -26,11 +26,11 @@ import type { ElChild, ElAttrs, Crudo, HandlerEntry } from "./schemas/ui.schemas
  * no venderlo en cada app.
  *
  * CDN
- *   …/dist/cdn/helpers/ui.min.js
+ *   …/dist/cdn/helpers/ui.min.mjs
  *   (también entra en all.min.js)
  *
  * Uso
- *   import { html, css, define } from '…/helpers/ui.min.js';
+ *   import { html, css, define } from '…/helpers/ui.min.mjs';
  *   // o, tras all.min.js:  IswcUi.html`…`  /  Ui.html`…`
  */
 

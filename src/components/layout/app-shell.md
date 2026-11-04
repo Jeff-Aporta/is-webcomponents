@@ -32,7 +32,7 @@ ningún backend. Contrato WHAT: [`specs/app-shell/spec.md`](../../../specs/app-s
 ## Importación
 
 ```js
-import { iswcLoader as L } from 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@<SHA>/dist/cdn/core/loader.min.js';
+import { iswcLoader as L } from 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@<SHA>/dist/cdn/core/loader.min.mjs';
 await L.load('iswc-app-shell', 'iswc-app-nav', 'iswc-session-menu');
 ```
 

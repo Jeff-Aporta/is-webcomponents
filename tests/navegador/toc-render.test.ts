@@ -85,10 +85,10 @@ test('navegador/toc-render', { timeout: 180_000 }, async () => {
       const ts = target.replace(/\.js$/, '.ts');
       if ((await stat(ts).catch(() => null))?.isFile()) return ts;
       // Fallback a dist/cdn/<rest> (assets visuales bundleados para producción).
-      // Mapeo: src/components/<cat>/<tag>.js → dist/cdn/<cat>/<tag>.min.js
+      // Mapeo: src/components/<cat>/<tag>.js → dist/cdn/<cat>/<tag>.min.mjs
       const relParts = rel.split(sep);
       const stripped = relParts.slice(2).join(sep);
-      const distAlt = join(root, 'dist', 'cdn', stripped).replace(/\.js$/, '.min.js');
+      const distAlt = join(root, 'dist', 'cdn', stripped).replace(/\.js$/, '.min.mjs');
       if ((await stat(distAlt).catch(() => null))?.isFile()) return distAlt;
     }
     if (/\.(css|svg|woff2?|ttf|ico|png|jpg|jpeg|webp|mp4|pdf)$/.test(target)) {

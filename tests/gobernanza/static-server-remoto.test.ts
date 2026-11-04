@@ -55,7 +55,7 @@ type Caso = { id: string; pedir: string; respuestas: Record<string, number[]>; e
 const CASOS: Caso[] = [
   { id: 'R1 en disco', pedir: 'dist/cdn/local.min.js', respuestas: {}, estado: 200, tipo: 'text/javascript', texto: 'local = 1', pedidos: 0 },
   { id: 'R1 index.html en disco', pedir: '', respuestas: {}, estado: 200, tipo: 'text/html', texto: 'local', pedidos: 0 },
-  { id: 'R2 js remoto con MIME por extensión', pedir: 'dist/cdn/diagrams/sequence-diagram.min.js', respuestas: { 'dist/cdn/diagrams/sequence-diagram.min.js': [200] }, estado: 200, tipo: 'text/javascript', texto: 'desdeRemoto', pedidos: 1 },
+  { id: 'R2 js remoto con MIME por extensión', pedir: 'dist/cdn/diagrams/sequence-diagram.min.mjs', respuestas: { 'dist/cdn/diagrams/sequence-diagram.min.mjs': [200] }, estado: 200, tipo: 'text/javascript', texto: 'desdeRemoto', pedidos: 1 },
   { id: 'R2 css remoto con MIME por extensión', pedir: 'dist/cdn/styles/x.min.css', respuestas: { 'dist/cdn/styles/x.min.css': [200] }, estado: 200, tipo: 'text/css', texto: 'desdeRemoto', pedidos: 1 },
   { id: 'R3 404 remoto sin reintentos', pedir: 'dist/cdn/no-existe.min.js', respuestas: {}, estado: 404, tipo: null, texto: null, pedidos: 1 },
   { id: 'R4 fuera de dist/cdn no consulta el remoto', pedir: 'src/core/loader.ts', respuestas: { 'src/core/loader.ts': [200] }, estado: 404, tipo: null, texto: null, pedidos: 0 },
@@ -98,7 +98,7 @@ for (const c of R7) {
     ...SIN_SANITIZAR,
     async fn() {
       const dir = raiz();
-      const ruta = 'dist/cdn/diagrams/flowchart.min.js';
+      const ruta = 'dist/cdn/diagrams/flowchart.min.mjs';
       const rem = remoto({ [ruta]: [200] });
       const primero = await startStaticServer(dir, rem.base(c.ref));
       try {

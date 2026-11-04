@@ -6,7 +6,7 @@ import { fileURLToPath } from 'node:url';
 import { chromium } from 'playwright';
 
 const root = join(fileURLToPath(new URL('.', import.meta.url)), '..', 'dist', 'cdn');
-const mime = { '.js': 'text/javascript', '.css': 'text/css', '.html': 'text/html', '.map': 'application/json' };
+const mime = { '.js': 'text/javascript', '.mjs': 'text/javascript', '.css': 'text/css', '.html': 'text/html', '.map': 'application/json' };
 
 const html = `<!doctype html>
 <html><body>
@@ -15,7 +15,7 @@ const html = `<!doctype html>
   <iswc-dropdown-item value="out">Cerrar sesión</iswc-dropdown-item>
 </iswc-dropdown>
 <script type="module">
-  await import('/actions/dropdown.min.js');
+  await import('/actions/dropdown.min.mjs');
   await customElements.whenDefined('iswc-dropdown');
   window.__ready = true;
 </script>

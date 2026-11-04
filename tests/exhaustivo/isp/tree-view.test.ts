@@ -47,10 +47,10 @@ test('4. las piezas de personalización se importan de su módulo de origen y ti
   for (const [mod, nombres] of piezas) {
     const m = await import('../../../src/components/isp/utils/tree-view/' + mod + '.ts');
     for (const n of nombres) assert.equal(typeof m[n], 'function', mod + ' exporta ' + n);
-    assert.ok(existsSync(join(ROOT, 'dist', 'cdn', 'isp', mod + '.min.js')), 'falta el bundle dist/cdn/isp/' + mod + '.min.js');
+    assert.ok(existsSync(join(ROOT, 'dist', 'cdn', 'isp', mod + '.min.mjs')), 'falta el bundle dist/cdn/isp/' + mod + '.min.mjs');
   }
   const doc = readFileSync(join(ROOT, 'src', 'components', 'isp', 'tree-view.md'), 'utf8');
-  assert.ok(doc.includes('./isp/customs-base.min.js'), 'la doc enseña a importar TreeCustomsBase de su módulo');
+  assert.ok(doc.includes('./isp/customs-base.min.mjs'), 'la doc enseña a importar TreeCustomsBase de su módulo');
   assert.ok(!/export\s*\{[^}]*TreeCustomsBase/.test(readFileSync(TS, 'utf8')), 'tree-view no re-exporta (S-TS9)');
 });
 

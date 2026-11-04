@@ -4,13 +4,13 @@ Utilidades del kit para correr modelos con `runonweb@0.1.0` sin servidor. No dep
 
 | Módulo CDN | Exporta | Para qué |
 | --- | --- | --- |
-| `lib/ai/motores.min.js` | `ejecutar`, `motor` | Correr una herramienta: `await ejecutar('ocr', imagen)`. |
-| `lib/ai/descarga.min.js` | `conDescarga`, `pospuesta`, `medidor`, `LIMITE_MB` | La regla de descarga, para cualquier modelo. |
-| `lib/ai/vector-local.min.js` | `vectorLocal`, `cargarCorpus`, `ordenarPorSentido` | Buscar por significado en el navegador. |
-| `lib/ai/orden.min.js` | `ordenarAplanado`, `ORDEN_DEFECTO`, `coseno`, `normalizar`, `lexicoTolerante`, `esExacta`, `combinar` | Ordenar: exactas primero, luego embeddings. Puro. |
-| `lib/ai/aplanado.min.js` | `aplanar`, `abrirCorpus`, `empacar`, `desempacar`… | Vectores chicos para el navegador. Puro. |
-| `lib/ai/aplanado-ajuste.min.js` | `ajustar` | Calcular la reducción (PCA, LDA…). Solo build. |
-| `lib/ai/herramientas.min.js` | `HERRAMIENTAS`, `herramienta`, `mbDe`, `pesoDe`, `MODELO_LOCAL` | El catálogo. |
+| `lib/ai/motores.min.mjs` | `ejecutar`, `motor` | Correr una herramienta: `await ejecutar('ocr', imagen)`. |
+| `lib/ai/descarga.min.mjs` | `conDescarga`, `pospuesta`, `medidor`, `LIMITE_MB` | La regla de descarga, para cualquier modelo. |
+| `lib/ai/vector-local.min.mjs` | `vectorLocal`, `cargarCorpus`, `ordenarPorSentido` | Buscar por significado en el navegador. |
+| `lib/ai/orden.min.mjs` | `ordenarAplanado`, `ORDEN_DEFECTO`, `coseno`, `normalizar`, `lexicoTolerante`, `esExacta`, `combinar` | Ordenar: exactas primero, luego embeddings. Puro. |
+| `lib/ai/aplanado.min.mjs` | `aplanar`, `abrirCorpus`, `empacar`, `desempacar`… | Vectores chicos para el navegador. Puro. |
+| `lib/ai/aplanado-ajuste.min.mjs` | `ajustar` | Calcular la reducción (PCA, LDA…). Solo build. |
+| `lib/ai/herramientas.min.mjs` | `HERRAMIENTAS`, `herramienta`, `mbDe`, `pesoDe`, `MODELO_LOCAL` | El catálogo. |
 
 Nada de esto entra en `load('all')` ni en un barril. Los motores (`lib/ai/motores/<id>.min.js`) se piden por URL y solo al usarlos; comparten chunks para no repetir `transformers.js`.
 
@@ -20,7 +20,7 @@ Con el loader, para recibir la misma URL sellada que usa `<iswc-ai-tool>` y no d
 
 ```js
 const L = globalThis.iswcLoader;
-const { ejecutar } = await import(L.assetUrl(new URL('../lib/ai/motores.min.js', L.selfBase).href));
+const { ejecutar } = await import(L.assetUrl(new URL('../lib/ai/motores.min.mjs', L.selfBase).href));
 ```
 
 ## Correr una herramienta

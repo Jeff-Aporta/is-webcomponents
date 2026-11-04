@@ -41,7 +41,7 @@ Este módulo registra `<iswc-code>`.
 
 ```js
 import './code.js';
-// o por CDN: dist/cdn/code/code.min.js
+// o por CDN: dist/cdn/code/code.min.mjs
 ```
 
 ## Ejemplo mínimo

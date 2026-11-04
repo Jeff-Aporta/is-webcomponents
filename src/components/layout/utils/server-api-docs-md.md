@@ -19,7 +19,7 @@ componente y las pruebas de caja negra del kit; un server lo vendoriza para vali
 
 ```js
 import { validarEstricto, validarDocumentoApi, normalizarDocumentoApi } from
-  'https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@SHA/dist/cdn/layout/server-api-docs-md.min.js';
+  'https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@SHA/dist/cdn/layout/server-api-docs-md.min.mjs';
 ```
 
 El schema estricto vive aparte, solo con `zod`, para que un server lo vendorice tal cual:

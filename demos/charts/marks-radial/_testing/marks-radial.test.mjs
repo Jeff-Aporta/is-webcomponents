@@ -16,7 +16,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-marks-radial-ready');
     const info = await page.evaluate(async () => {
-      const lib = await import('/dist/cdn/charts/marks-radial.min.js');
+      const lib = await import('/dist/cdn/charts/marks-radial.min.mjs');
       const exports = Object.keys(lib).sort();
       const types = {};
       for (const k of exports) types[k] = typeof lib[k];

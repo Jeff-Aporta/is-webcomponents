@@ -43,7 +43,7 @@ function secuencia(meta, actors, componer) {
     slug: meta.slug,
     module: meta.module,
     tag: 'iswc-sequence-diagram',
-    script: 'diagrams/sequence-diagram.min.js',
+    script: 'diagrams/sequence-diagram.min.mjs',
     attrs: { 'diagram-style': 'insoft' },
     payload: { sequence: { title: meta.title, actors: actors.map(([id, label]) => ({ id, label, kind: 'participant' })), messages, fragments } },
   };

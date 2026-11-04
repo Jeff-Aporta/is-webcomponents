@@ -2,7 +2,7 @@
 // regla en specs/typescript/spec.md, uso en specs/cdn.md §Alias).
 //   L1 en `src/**` (fuera de `vendor-distributions/`) ningún import relativo SUBE de carpeta (`'../`) hacia un archivo de
 //      `src/`: va por alias. Quedan relativos los de la misma carpeta (`./x.js`, `./schemas/…`) y los que salen de `src/`
-//      (p. ej. `../../dist/cdn/core/loader.min.js`), que el alias no cubre.
+//      (p. ej. `../../dist/cdn/core/loader.min.mjs`), que el alias no cubre.
 //   L2 todo especificador con alias en `src/` y `scripts/` apunta a un archivo que existe (`.js` nombra la fuente `.ts`).
 //   L3 `deno.json` mapea el alias a `./src/` y `tsconfig.json` lo declara en `paths` (Deno, tsc y tests lo resuelven igual).
 //   L4 el árbol publicado `dist/cdn/` no importa por alias: va con rutas relativas y funciona sin import map. Se mira el

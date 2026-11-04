@@ -17,7 +17,7 @@ export async function mount(ctx: PreviewMountContext, preview: IswcComponentPrev
   const getStarted = root.querySelector<HTMLElement>('#ecoGetStarted');
   if (getStarted) {
     const snip = `<script type="module">
-  import { iswcLoader } from 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn/core/loader.min.js';
+  import { iswcLoader } from 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn/core/loader.min.mjs';
 
   // Pin a un commit (inmutable) o unpin() / sin pin → tip de main
   // iswcLoader.pin('abcdef0123456789…');
@@ -61,12 +61,12 @@ async function mountPlayground(root: ParentNode, opts: AddEventListenerOptions |
 
   let catalog: LoaderCatalog = { categories: {}, tags: {} };
   try {
-    // El bundle del loader se genera con `deno task build` (dist/cdn/core/loader.min.js).
+    // El bundle del loader se genera con `deno task build` (dist/cdn/core/loader.min.mjs).
     // En dev / lint no existe: el catch muestra el mensaje y sale.
-    const mod = (await import('../../dist/cdn/core/loader.min.js')) as { iswcLoader: LoaderModule };
+    const mod = (await import('../../dist/cdn/core/loader.min.mjs')) as { iswcLoader: LoaderModule };
     catalog = mod.iswcLoader.catalog;
   } catch {
-    catsEl.innerHTML = '<p class="lede">Corré <code>deno task build</code> para generar <code>loader.min.js</code>.</p>';
+    catsEl.innerHTML = '<p class="lede">Corré <code>deno task build</code> para generar <code>loader.min.mjs</code>.</p>';
     return;
   }
 
@@ -99,7 +99,7 @@ async function mountPlayground(root: ParentNode, opts: AddEventListenerOptions |
       ? `await iswcLoader.load(${args});`
       : `await iswcLoader.load('iswc-button'); // elegí arriba`;
     const snip = `<script type="module">
-  import { iswcLoader } from '../previews/behaviors/dist/cdn/core/loader.min.js';
+  import { iswcLoader } from '../previews/behaviors/dist/cdn/core/loader.min.mjs';
   // is-base.min.css se auto-carga al inicializar el loader (W52).
   await iswcLoader.loadPageStyles(['iswc-palettes-default']);
   ${body}
@@ -120,7 +120,7 @@ async function mountPlayground(root: ParentNode, opts: AddEventListenerOptions |
     }
     try {
       // @ts-expect-error — generado en build, no presente en strict-audit.
-      const mod = (await import('../../dist/cdn/core/loader.min.js')) as { iswcLoader: LoaderModule };
+      const mod = (await import('../../dist/cdn/core/loader.min.mjs')) as { iswcLoader: LoaderModule };
       await mod.iswcLoader.load(...ids);
       if (liveEl) {
         liveEl.replaceChildren();

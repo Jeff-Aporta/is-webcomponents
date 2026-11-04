@@ -25,7 +25,7 @@ tests.push({
     });
     assert.equal(data.defined, true, 'iswc-cdn-snippet debe estar definido');
     assert.ok(data.hasLoader, 'debe haber un iswc-code[data-slot=loader]');
-    assert.ok(/loader\.min\.js/.test(data.loaderText), `snippet debe mencionar loader.min.js (vimos: "${data.loaderText.slice(0, 80)}…")`);
+    assert.ok(/loader\.min\.js/.test(data.loaderText), `snippet debe mencionar loader.min.mjs (vimos: "${data.loaderText.slice(0, 80)}…")`);
     assert.ok(/loadCSSBase|loadCSSPalettes|load\(/.test(data.loaderText), `snippet debe incluir líneas de loadCSS o load()`);
     await screenshot(page, 'cdn-snippet-smoke');
   },

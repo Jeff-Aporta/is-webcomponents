@@ -58,7 +58,7 @@ import { createRequire } from 'node:module';
 import { renderDiagram, writeDiagramOutputs } from './vendor/iswc-tools/index.ts';
 const { chromium } = createRequire(import.meta.url)('playwright');
 const r = await renderDiagram(
-  { scriptUrl: 'diagrams/component-diagram.min.js', payload, attrs: { theme: 'insoft-cd' } },
+  { scriptUrl: 'diagrams/component-diagram.min.mjs', payload, attrs: { theme: 'insoft-cd' } },
   { chromium, serveRoot: pathToDistCdnParentOrKitRoot, timeoutMs: 900_000 },
 );
 await writeDiagramOutputs(r, 'out/componentes.svg');

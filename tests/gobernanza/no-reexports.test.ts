@@ -8,7 +8,7 @@
 //   X6 la excepción declarada existe y publica su entrada CDN (una excepción huérfana es una puerta abierta).
 //   X7 el árbol publicado `dist/cdn/` no tiene imports relativos rotos (lo que un consumidor importa o vendoriza
 //      resuelve sin barriles). Fuera: `skills/` (las plantillas resuelven dentro de la app creada).
-// Excepciones (copia ÚNICA de Zod, no barriles): `vendor-distributions/shared/lib/zod.ts` publica `dist/cdn/lib/zod.min.js`,
+// Excepciones (copia ÚNICA de Zod, no barriles): `vendor-distributions/shared/lib/zod.ts` publica `dist/cdn/lib/zod.min.mjs`,
 // la que importan todos los bundles de componentes (scripts/build.mjs); y `base/zod.ts` de la plantilla de apps.
 import { assert, assertEquals } from 'jsr:@std/assert@1';
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
@@ -25,7 +25,7 @@ const KIT = join(import.meta.dirname!, '..', '..');
 const RAICES = ['src', 'skills', 'scripts'];
 /** Excepciones: módulos de copia ÚNICA de Zod (no barriles); `publicado` = entrada CDN que debe existir, o null. */
 const ENTRADAS_CDN: { fuente: string; publicado: string | null }[] = [
-  { fuente: 'src/vendor-distributions/shared/lib/zod.ts', publicado: 'dist/cdn/lib/zod.min.js' },
+  { fuente: 'src/vendor-distributions/shared/lib/zod.ts', publicado: 'dist/cdn/lib/zod.min.mjs' },
   // Plantilla de create-iswc-app: el único módulo de la app que importa `zod` (su build lo empaqueta una vez).
   { fuente: 'skills/iswc-foundation/templates/src/js/base/zod.ts', publicado: null },
 ];

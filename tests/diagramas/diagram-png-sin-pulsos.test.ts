@@ -24,7 +24,7 @@ const denoTest = denoTestCon(test);
 
 // Raíz del repo (antes './' = tests/diagramas/: no hallaba dist/ y el caso se saltaba en silencio).
 const RAIZ = fileURLToPath(new URL('../../', import.meta.url));
-const BUNDLE = 'dist/cdn/diagrams/flowchart.min.js';
+const BUNDLE = 'dist/cdn/diagrams/flowchart.min.mjs';
 
 /** Un fin ⦿, una reunión de ramas ⦿, un consumo `-(O-` de tabla y rieles continuos con puntos. */
 const PAYLOAD = {

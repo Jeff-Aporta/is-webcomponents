@@ -37,11 +37,11 @@ test('galería: CSS del kit vía loader aliases (sin <link> is-base/palettes)', 
 });
 
 test('index.html: loader module + iswc-doc-demo (boot vía aliases; sin index.js/mjs/css)', () => {
-  assert.doesNotMatch(indexHtml, /doc-demo-boot\.min\.js/);
-  assert.match(indexHtml, /iswcLoader|from ['"].*loader\.min\.js['"]/);
+  assert.doesNotMatch(indexHtml, /doc-demo-boot\.min\.m?js/);
+  assert.match(indexHtml, /iswcLoader|from ['"].*loader\.min\.mjs['"]/);
   assert.match(indexHtml, /loadPageModules\s*\(\s*\[[\s\S]*iswc-doc-demo-host/);
   assert.match(indexHtml, /loadPageModules\s*\(\s*\[[\s\S]*iswc-gallery-app/);
-  assert.doesNotMatch(indexHtml, /<script[^>]+src=["'][^"']*doc-demo-host\.min\.js/);
+  assert.doesNotMatch(indexHtml, /<script[^>]+src=["'][^"']*doc-demo-host\.min\.m?js/);
   assert.doesNotMatch(indexHtml, /<script[^>]+src=["'][^"']*gallery-app\.min\.js/);
   assert.match(indexHtml, /<iswc-doc-demo[\s\S]*\blocal\b/);
   assert.match(indexHtml, /<iswc-doc-demo[\s\S]*\bdev\b/);
@@ -127,7 +127,7 @@ test('gallery-app espera shell iswc-doc-demo antes de tocar #shellNav', () => {
 });
 
 test('cdn-panel importa cdn-snippet desde dist/cdn', () => {
-  assert.match(cdnPanel, /dist\/cdn\/feedback\/cdn-snippet\.min\.js/);
+  assert.match(cdnPanel, /dist\/cdn\/feedback\/cdn-snippet\.min\.mjs/);
 });
 
 test('manifest declara iswc-doc-demo', () => {

@@ -2,7 +2,7 @@
   "slug": "configuracion-tdconsulta",
   "module": "010-General",
   "tag": "iswc-sequence-diagram",
-  "script": "diagrams/sequence-diagram.min.js",
+  "script": "diagrams/sequence-diagram.min.mjs",
   "attrs": {
     "diagram-style": "insoft"
   },

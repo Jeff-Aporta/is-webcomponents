@@ -46,7 +46,7 @@ No hay publicación npm aún: el kit se consume por **CDN jsDelivr**. En cada pr
 
 ```
 Usa el kit ISWC solo por CDN (jsDelivr), sin npm ni npx.
-Bootstrap: `loader.min.js` + `L.load(tags de la vista)`. Sin `all.min.js` ni bundles de categoría.
+Bootstrap: `loader.min.mjs` + `L.load(tags de la vista)`. Sin `all.min.js` ni bundles de categoría.
 Reutiliza tags iswc-* existentes; no reinventes botones, dialogs, tablas, charts, toasts ni iconos.
 Antes de inventar API: lee [`specs/componentes.md`](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/specs/componentes.md) (índice global) y el `.md` del módulo.
 ```

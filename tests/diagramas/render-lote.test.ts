@@ -30,7 +30,7 @@ const denoTest = denoTestCon(test);
 
 // Raíz del repo (antes './' = tests/diagramas/: no hallaba dist/ y el caso se saltaba en silencio).
 const RAIZ = fileURLToPath(new URL('../../', import.meta.url));
-const BUNDLE = 'dist/cdn/diagrams/flowchart.min.js';
+const BUNDLE = 'dist/cdn/diagrams/flowchart.min.mjs';
 
 const json = (f: string, v: unknown) => writeFileSync(f, JSON.stringify(v, null, 2));
 const acciones = (p: PlanLote) => Object.fromEntries(p.diagramas.map((d) => [d.slug, d.accion]));
@@ -43,10 +43,10 @@ function fixtures(): { op: OpcionesLote; dir: string; fuentes: string; cache: st
   const fuentes = join(editables, '_fuentes.json');
   json(fuentes, { titulos: { a: 'Recibe', b: 'Responde' } });
   json(join(editables, 'a.json'), {
-    module: '010', tag: 'iswc-flowchart', script: 'diagrams/flowchart.min.js',
+    module: '010', tag: 'iswc-flowchart', script: 'diagrams/flowchart.min.mjs',
     payload: { nodes: [{ id: 'n', label: { path: './_fuentes.json', query: { titulos: { a: true } } } }], edges: [] },
   });
-  json(join(editables, 'b.json'), { module: '010', tag: 'iswc-flowchart', script: 'diagrams/flowchart.min.js', payload: { nodes: [{ id: 'n', label: 'Fijo' }], edges: [] } });
+  json(join(editables, 'b.json'), { module: '010', tag: 'iswc-flowchart', script: 'diagrams/flowchart.min.mjs', payload: { nodes: [{ id: 'n', label: 'Fijo' }], edges: [] } });
   const op: OpcionesLote = { carpeta: editables, salidaSvg: join(dir, 'svg'), salidaPng: join(dir, 'png'), kit: RAIZ, pinKit: 'pin-1' };
   return { op, dir, fuentes, cache: join(editables, CACHE_NOMBRE) };
 }
@@ -150,7 +150,7 @@ denoTest({
       const editables = join(dir, 'diagramas');
       mkdirSync(editables);
       json(join(editables, 'chico.json'), {
-        tag: 'iswc-flowchart', script: 'diagrams/flowchart.min.js', attrs: { 'flow-anim': 'off' },
+        tag: 'iswc-flowchart', script: 'diagrams/flowchart.min.mjs', attrs: { 'flow-anim': 'off' },
         payload: { nodes: [{ id: 'a', label: 'Recibe' }, { id: 'b', label: 'Responde' }], edges: [{ from: 'a', to: 'b' }] },
       });
       const lineas: string[] = [];

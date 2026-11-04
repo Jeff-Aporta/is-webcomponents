@@ -23,8 +23,8 @@ pedir el mismo tag N veces cuesta una carga.
 ## Importación
 
 ```js
-import { mdToHtml } from '…/dist/cdn/helpers/md-lite.min.js';
-import { hydrateMdEmbeds } from '…/dist/cdn/helpers/md-hydrate.min.js';
+import { mdToHtml } from '…/dist/cdn/helpers/md-lite.min.mjs';
+import { hydrateMdEmbeds } from '…/dist/cdn/helpers/md-hydrate.min.mjs';
 
 const tags = new Set();
 root.innerHTML = mdToHtml(markdown, { tags });

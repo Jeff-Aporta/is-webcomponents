@@ -73,7 +73,7 @@ persistible por `storage-key`. Preferir este tag cuando el consumidor pide UX ti
 
 ```js
 import './ag-grid.js';
-// o CDN: dist/cdn/data/ag-grid.min.js  /  dist/cdn/all.min.js
+// o CDN: dist/cdn/data/ag-grid.min.mjs  /  dist/cdn/all.min.js
 ```
 
 ## Ejemplo mínimo

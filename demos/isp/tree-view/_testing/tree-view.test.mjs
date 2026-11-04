@@ -78,7 +78,7 @@ tests.push({
     await waitReady(page, 'data-tree-view-ready');
     await page.waitForTimeout(100);
     const exports = await page.evaluate(async () => {
-      const mod = await import('../../../dist/cdn/isp/tree-view.min.js');
+      const mod = await import('../../../dist/cdn/isp/tree-view.min.mjs');
       return {
         hasTreeCustomsBase: typeof mod.TreeCustomsBase === 'function',
         hasTreeRowViewAdapter: typeof mod.TreeRowViewAdapter === 'function',

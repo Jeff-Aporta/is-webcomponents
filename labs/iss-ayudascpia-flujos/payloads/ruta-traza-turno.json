@@ -2,7 +2,7 @@
   "slug": "ruta-traza-turno",
   "module": "020-Conversaciones",
   "tag": "iswc-flowchart",
-  "script": "diagrams/flowchart.min.js",
+  "script": "diagrams/flowchart.min.mjs",
   "attrs": {
     "diagram-style": "insoft"
   },

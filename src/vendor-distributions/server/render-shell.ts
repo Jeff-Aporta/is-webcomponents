@@ -49,8 +49,8 @@ export async function renderShell(
 
   // Loader del kit: por CDN pineado si hay sha; si no, del propio origen.
   const loaderTag = m.kit?.sha
-    ? `https://cdn.jsdelivr.net/gh/${m.kit.repo ?? "Jeff-Aporta/is-webcomponents"}@${m.kit.sha}/dist/cdn/core/loader.min.js`
-    : "./dist/cdn/core/loader.min.js";
+    ? `https://cdn.jsdelivr.net/gh/${m.kit.repo ?? "Jeff-Aporta/is-webcomponents"}@${m.kit.sha}/dist/cdn/core/loader.min.mjs`
+    : "./dist/cdn/core/loader.min.mjs";
 
   const ogLines: string[] = [];
   ogLines.push(`<meta property="og:title" content="${attr(titulo)}">`);

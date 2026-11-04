@@ -17,7 +17,7 @@ import css from 'iswc:css';
  * <iswc-cdn-snippet> — panel copy-paste del snippet mínimo de uso.
  *
  * Un solo bloque:
- *   <script type="module" src="…/loader.min.js"></script>
+ *   <script type="module" src="…/loader.min.mjs"></script>
  *   <script type="module"> … loadCSS* + load(…) …</script>
  *
  * Más fila Skill simple (enlaces + ver): sin visor MD embebido.
@@ -127,7 +127,7 @@ const normalizeIswcTag = (tag: string): string => {
     }
 
     #loaderHref() {
-      return `${this.#cdnBase()}core/loader.min.js`;
+      return `${this.#cdnBase()}core/loader.min.mjs`;
     }
 
     #loadArg() {

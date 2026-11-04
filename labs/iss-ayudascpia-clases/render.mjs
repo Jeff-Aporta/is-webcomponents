@@ -9,5 +9,5 @@ const LAB = labDir(import.meta.url);
 const payload = JSON.parse(await readFile(join(LAB, 'payload.json'), 'utf8'));
 process.exit(await renderLab(LAB, [{
   id: 'clases',
-  job: { tag: 'iswc-class-diagram', scriptUrl: 'dist/cdn/diagrams/class-diagram.min.js', payload, attrs: { 'diagram-style': 'insoft' } },
+  job: { tag: 'iswc-class-diagram', scriptUrl: 'dist/cdn/diagrams/class-diagram.min.mjs', payload, attrs: { 'diagram-style': 'insoft' } },
 }], { settleMs: 500 }));

@@ -23,6 +23,7 @@ const RAIZ = fileURLToPath(new URL('../../', import.meta.url));
 const TIPOS: Record<string, string> = {
   '.html': 'text/html; charset=utf-8',
   '.js': 'text/javascript; charset=utf-8',
+  '.mjs': 'text/javascript; charset=utf-8',
   '.css': 'text/css; charset=utf-8',
   '.json': 'application/json; charset=utf-8',
   '.svg': 'image/svg+xml',
@@ -44,7 +45,7 @@ const PAGINA = `<!doctype html>
 </iswc-app-shell>
 <script type="module">
   const mods = ['layout/app-shell', 'navigation/app-nav', 'layout/login-dropdown', 'layout/session-menu', 'actions/dropdown-item'];
-  await Promise.all(mods.map((m) => import('/dist/cdn/' + m + '.min.js')));
+  await Promise.all(mods.map((m) => import('/dist/cdn/' + m + '.min.mjs')));
   for (const t of ['iswc-app-shell', 'iswc-app-nav', 'iswc-login-dropdown', 'iswc-session-menu']) await customElements.whenDefined(t);
   window.__eventos = [];
   for (const n of ['iswc-brand-home', 'iswc-nav-select', 'iswc-login-submit', 'iswc-logout', 'iswc-select']) {
@@ -105,7 +106,7 @@ ${o.head ?? ''}
   </section>
 </iswc-app-shell>
 <script type="module">
-  import { iswcLoader as L } from '/dist/cdn/core/loader.min.js';
+  import { iswcLoader as L } from '/dist/cdn/core/loader.min.mjs';
   L.configure({ local: true, host: location.origin + '/dist/cdn/' });
   const tags = ['iswc-app-shell', 'iswc-app-nav', 'iswc-session-menu', 'iswc-login-dropdown', 'iswc-login', 'iswc-card'];
   await L.load(...tags);

@@ -1,7 +1,7 @@
 {
   "module": "010-General",
   "tag": "iswc-flowchart",
-  "script": "diagrams/flowchart.min.js",
+  "script": "diagrams/flowchart.min.mjs",
   "attrs": {
     "diagram-style": "insoft"
   },

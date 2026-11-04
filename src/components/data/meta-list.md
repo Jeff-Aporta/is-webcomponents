@@ -31,7 +31,7 @@ lugar de armar `<dl><dt><dd>` a mano.
 ## Importación
 
 ```html
-<script type="module" src="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@<sha40>/dist/cdn/core/loader.min.js"></script>
+<script type="module" src="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@<sha40>/dist/cdn/core/loader.min.mjs"></script>
 <!-- o: await iswcLoader.ensure('iswc-meta-list') -->
 ```
 

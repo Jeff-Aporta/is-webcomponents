@@ -39,7 +39,7 @@ function inventario(archivos: Record<string, string>): { code: number; out: stri
 }
 
 const SANO = {
-  'src/a.ts': `import 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/iswc-base@${A}/dist/cdn/loader.min.js';`,
+  'src/a.ts': `import 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/iswc-base@${A}/dist/cdn/loader.min.mjs';`,
   'deno.json': JSON.stringify({
     iswc: { host: 'https://jeff-aporta.github.io/mi-app/' },
     imports: { '@iswc/x': `https://raw.githubusercontent.com/Jeff-Aporta/iswc-base/${A}/src/cdn/schemas/loader.schemas.ts` },
@@ -115,7 +115,7 @@ denoTest('pin-update: P7 la cabecera @vendor @main no alerta; el mismo repo@main
     'src/v.md': '<!-- @vendor 2026-10-13T19:09:09.250Z Jeff-Aporta/iswc-base@main dist/cdn/skills/x/SKILL.md -->\n# x',
   });
   assertEquals(r.code, 0, r.out);
-  const malo = inventario({ ...SANO, 'src/w.ts': "// @vendor 2026-10-13T19:09:09.250Z Jeff-Aporta/iswc-base@main x.ts\nimport 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/iswc-base@main/dist/cdn/core/loader.min.js';" });
+  const malo = inventario({ ...SANO, 'src/w.ts': "// @vendor 2026-10-13T19:09:09.250Z Jeff-Aporta/iswc-base@main x.ts\nimport 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/iswc-base@main/dist/cdn/core/loader.min.mjs';" });
   assertEquals(malo.code, 1, 'un import @main bajo la cabecera sigue siendo mutable');
 });
 

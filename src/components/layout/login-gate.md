@@ -31,7 +31,7 @@ otra protegida, y el front solo conmute el atributo `logged`.
 ## Importación
 
 ```html
-<script type="module" src="./dist/cdn/core/loader.min.js"></script>
+<script type="module" src="./dist/cdn/core/loader.min.mjs"></script>
 ```
 
 El registrador de la app (generado por el build) carga `iswc-login-gate` y sus dependencias

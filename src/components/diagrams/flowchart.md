@@ -233,7 +233,7 @@ Contrato común en `_shared/diagram-embed.schemas.ts` (reutilizable por otros di
 ```
 
 - `src` es relativo a la página (`document.baseURI`) y acepta el formato editable del ISS (`tag`, `script`, `attrs`, `payload`) o un payload suelto.
-- `script` (opcional) es relativo a la raíz del CDN (`diagrams/sequence-diagram.min.js`); sin él se deduce del tag junto al bundle del flowchart.
+- `script` (opcional) es relativo a la raíz del CDN (`diagrams/sequence-diagram.min.mjs`); sin él se deduce del tag junto al bundle del flowchart.
 - `diagram-style` se hereda del diagrama padre si el anidado no trae el suyo.
 - El diagrama se monta fuera de pantalla, se espera su render (`prepareRender`, incluido en `updateComplete`) y su SVG se copia vectorial (ids prefijados, estilos acotados): el SVG exportado lo incluye. Se escala por `viewBox` y se le quita `vector-effect: non-scaling-stroke`, así sus líneas y guiones se reducen con él. Sin bundle o sin `src` alcanzable se pinta un marco punteado con el rótulo.
 - `iswc-sequence-diagram`: el subproceso en la llegada de un mensaje está planificado con este mismo contrato (ver `labs/iss-ayudascpia-flujos/NOTES.md`), aún no implementado.

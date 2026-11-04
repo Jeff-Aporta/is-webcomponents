@@ -31,7 +31,7 @@ const denoTest = denoTestCon(test);
 // Raíz del kit: este archivo vive en tests/gobernanza/ (con './' el guardián buscaba los bundles junto a sí
 // mismo, no los encontraba y quedaba SALTADO en silencio).
 const RAIZ = fileURLToPath(new URL('../../', import.meta.url));
-const BUNDLE = 'dist/cdn/layout/server-api-docs.min.js';
+const BUNDLE = 'dist/cdn/layout/server-api-docs.min.mjs';
 
 /** El documento del demo de la ficha (`server-api-docs.json`). */
 async function documentoDemo(): Promise<string> {
@@ -51,7 +51,7 @@ const pagina = (cuerpo: string) => `<!doctype html><html lang="es" data-theme="l
 <style>html, body { margin: 0; height: 100%; } iswc-server-api-docs { display: block; height: 100vh; }</style>
 </head><body>${cuerpo}</body></html>`;
 
-const TIPOS: Record<string, string> = { '.js': 'text/javascript', '.css': 'text/css', '.json': 'application/json', '.svg': 'image/svg+xml', '.woff2': 'font/woff2' };
+const TIPOS: Record<string, string> = { '.js': 'text/javascript', '.mjs': 'text/javascript', '.css': 'text/css', '.json': 'application/json', '.svg': 'image/svg+xml', '.woff2': 'font/woff2' };
 
 type Pagina = {
   goto: (u: string, o?: Record<string, unknown>) => Promise<unknown>;

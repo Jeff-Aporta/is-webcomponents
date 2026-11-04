@@ -129,9 +129,9 @@ el.addEventListener('iswc-select', (e) => {
 | `runCustomsPreSubmit()` | Sanea + `commitFlatPaths` antes de persistir. |
 
 Las piezas para personalizar se importan de su módulo de origen (sin re-exports, S-TS9):
-`TreeCustomsBase` de `./isp/customs-base.min.js`, `TreeRowViewAdapter` de `./isp/adapter.min.js`,
-`TreeRowAdapter` de `./isp/row-adapter.min.js` y `objRootsToNodes` / `groupedWithSeparators` /
-`TreeNode` de `./isp/tree-data.min.js`.
+`TreeCustomsBase` de `./isp/customs-base.min.mjs`, `TreeRowViewAdapter` de `./isp/adapter.min.mjs`,
+`TreeRowAdapter` de `./isp/row-adapter.min.mjs` y `objRootsToNodes` / `groupedWithSeparators` /
+`TreeNode` de `./isp/tree-data.min.mjs`.
 
 ### CSS parts
 
@@ -200,8 +200,8 @@ Ver también **[Roles 3D](./utils/tree-view-roles.md)** para cuándo usar `atom`
   </form>
 </iswc-tree-view>
 <script type="module">
-  import './isp/tree-view.min.js';
-  import { TreeCustomsBase } from './isp/customs-base.min.js';
+  import './isp/tree-view.min.mjs';
+  import { TreeCustomsBase } from './isp/customs-base.min.mjs';
   class PlanCustoms extends TreeCustomsBase {
     entrie = 'contenido';
     entries = 'Plan de contenidos';

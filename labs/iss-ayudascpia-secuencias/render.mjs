@@ -9,6 +9,6 @@ import { jobsDeEditables, labDir, renderLab } from '../../src/vendor-distributio
 
 const LAB = labDir(import.meta.url);
 const jobs = await jobsDeEditables(join(LAB, 'payloads'), {
-  only: process.argv.slice(2), tag: 'iswc-sequence-diagram', script: 'diagrams/sequence-diagram.min.js',
+  only: process.argv.slice(2), tag: 'iswc-sequence-diagram', script: 'diagrams/sequence-diagram.min.mjs',
 });
 process.exit(await renderLab(LAB, jobs));

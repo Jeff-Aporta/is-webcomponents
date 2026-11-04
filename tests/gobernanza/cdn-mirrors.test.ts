@@ -34,10 +34,10 @@ test('esOrigenCdn: jsDelivr y githack sí; Pages, localhost, file: y otros no', 
   const { esOrigenCdn } = await import('../../src/core/cdn-ref.ts');
   assert.equal(esOrigenCdn('https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@abc1234/dist/cdn/core/loader.min.js'), true);
   assert.equal(esOrigenCdn('https://raw.githack.com/Jeff-Aporta/is-webcomponents/abc1234/dist/cdn/core/loader.min.js'), true);
-  assert.equal(esOrigenCdn('https://jeff-aporta.github.io/is-webcomponents/dist/cdn/core/loader.min.js'), false);
-  assert.equal(esOrigenCdn('http://localhost:4305/dist/cdn/core/loader.min.js'), false);
-  assert.equal(esOrigenCdn('file:///D:/app/vendor/iswc/core/loader.min.js'), false);
-  assert.equal(esOrigenCdn('https://mi-app.example/vendor/iswc/core/loader.min.js'), false);
+  assert.equal(esOrigenCdn('https://jeff-aporta.github.io/is-webcomponents/dist/cdn/core/loader.min.mjs'), false);
+  assert.equal(esOrigenCdn('http://localhost:4305/dist/cdn/core/loader.min.mjs'), false);
+  assert.equal(esOrigenCdn('file:///D:/app/vendor/iswc/core/loader.min.mjs'), false);
+  assert.equal(esOrigenCdn('https://mi-app.example/vendor/iswc/core/loader.min.mjs'), false);
   assert.equal(esOrigenCdn('no es url'), false);
 });
 
@@ -67,7 +67,7 @@ test('cdn-snippet: loader copy-paste; L.load del tag (sin radio de alcance, sin 
   assert.doesNotMatch(src, /#persistScopeToUrl|#restoreScopeFromUrl/);
   assert.match(src, /#loadArg\(\)/);
   assert.match(src, /#buildLoaderSnippet/);
-  assert.match(src, /loader\.min\.js/);
+  assert.match(src, /loader\.min\.mjs/);
   assert.match(src, /type="module" src=/);
   assert.match(src, /iswcLoader/);
   // W52: loadCSSBase se elimino; el loader auto-carga is-base.min.css.

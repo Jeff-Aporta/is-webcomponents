@@ -15,10 +15,10 @@
   iswc-waterfall-chart:not(:defined) { visibility: hidden; }
 </style>
 <script type="module">
-  import { iswcLoader as L } from '../../../dist/cdn/core/loader.min.js?v=ydbckt';
+  import { iswcLoader as L } from '../../../dist/cdn/core/loader.min.mjs?v=eqmcvj';
   L.configure({ local: true });
-  // Carga el bundle pre-compilado. waterfall-chart.min.js importa
-  // transitivamente chart.min.js + marks-waterfall.min.js.
+  // Carga el bundle pre-compilado. waterfall-chart.min.mjs importa
+  // transitivamente chart.min.mjs + marks-waterfall.min.mjs.
   await L.load('iswc-waterfall-chart');
   await customElements.whenDefined('iswc-waterfall-chart');
 

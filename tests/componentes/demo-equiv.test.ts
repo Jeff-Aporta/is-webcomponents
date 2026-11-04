@@ -80,7 +80,7 @@ test('demo-code NO inyecta bloque style en el snippet (Phase E: minimal)', async
   assert.doesNotMatch(src, /buildDemoSnippetStyles/);
   assert.doesNotMatch(src, /<style>/);
   assert.doesNotMatch(src, /preview\?\.definition\?\.styles/);
-  // El título del popover debe decir "snippet" (no "loader.min.js")
+  // El título del popover debe decir "snippet" (no "loader.min.mjs")
   assert.match(raw, /demo-code-pop__hint">snippet</);
 });
 

@@ -40,7 +40,7 @@ export async function mount(ctx: PreviewMountContext): Promise<void> {
         <iswc-icon slot="start" icon="mdi:check"></iswc-icon>
         Kit listo
       </iswc-button>
-      <iswc-tag color="info">${esc('helpers/ui.min.js')}</iswc-tag>
+      <iswc-tag color="info">${esc('helpers/ui.min.mjs')}</iswc-tag>
     `);
   };
 

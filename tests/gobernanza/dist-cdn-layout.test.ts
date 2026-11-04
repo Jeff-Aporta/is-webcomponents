@@ -49,10 +49,10 @@ test('gobernanza/dist-cdn-layout', async () => {
   
   // Smoke: ag-grid vive en CDN, no en raíz
   if (existsSync(join(dist, 'ag-grid.ts'))) {
-    failures.push('dist/ag-grid.ts huérfano — usar dist/cdn/data/ag-grid.min.js');
+    failures.push('dist/ag-grid.ts huérfano — usar dist/cdn/data/ag-grid.min.mjs');
   }
-  if (!existsSync(join(dist, 'cdn', 'data', 'ag-grid.min.js'))) {
-    failures.push('falta dist/cdn/data/ag-grid.min.js (rebuild si acabas de clonar)');
+  if (!existsSync(join(dist, 'cdn', 'data', 'ag-grid.min.mjs'))) {
+    failures.push('falta dist/cdn/data/ag-grid.min.mjs (rebuild si acabas de clonar)');
   }
   
   if (failures.length) {

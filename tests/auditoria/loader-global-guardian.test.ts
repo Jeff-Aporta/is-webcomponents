@@ -1,12 +1,12 @@
 // loader-global-guardian.test.ts — Guardian del bug de "loader bundled pisa globalThis".
 //
 // Síntoma: tras navegar a `ecosystem` (cuyo behavior bundlea el loader dentro
-// porque usa `await import('../../dist/cdn/core/loader.min.js')`), los nav-clicks
+// porque usa `await import('../../dist/cdn/core/loader.min.mjs')`), los nav-clicks
 // subsiguientes (`home`, `iswc-flex-options`, etc.) generaban 48× 404 contra
 // `dist/pages/{cat}/{tag}.min.js`. Causa: el loader bundled dentro de
 // `dist/pages/ecosystem.min.js` se asigna a `globalThis.iswcLoader`
 // con SELF_BASE = `dist/pages/`, pisando la instancia canónica que la galería
-// cargó desde `dist/cdn/core/loader.min.js` (SELF_BASE = `dist/cdn/`).
+// cargó desde `dist/cdn/core/loader.min.mjs` (SELF_BASE = `dist/cdn/`).
 //
 // Estos tests:
 //   1. (runtime) Verifican que el módulo loader es idempotente sobre globalThis:
@@ -35,7 +35,7 @@ test('loader.ts: el guardado `!globalThis.iswcLoader` sigue presente', () => {
     /!\s*\(globalThis\s+as\s+Record<string,\s*unknown>\)\s*\.iswcLoader/,
     'Falta la guarda idempotente. Sin ella, un page bundle que embebe el loader\n' +
       '(caso real: dist/pages/ecosystem.min.js bundlea el loader porque\n' +
-      'src/pages/ecosystem.ts usa `await import("../../dist/cdn/core/loader.min.js")`)\n' +
+      'src/pages/ecosystem.ts usa `await import("../../dist/cdn/core/loader.min.mjs")`)\n' +
       'pisa la instancia canónica con SELF_BASE=`dist/pages/`, y los\n' +
       'nav-clicks subsiguientes rompen con 48× 404 a `dist/pages/{cat}/{tag}.min.js`.',
   );

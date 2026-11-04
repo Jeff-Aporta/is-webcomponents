@@ -14,7 +14,7 @@ const jobs = [];
 for (const v of VERSIONES) {
   if (arg !== 'all' && arg !== v.solo) continue;
   const payload = JSON.parse(await readFile(join(LAB, v.file), 'utf8'));
-  jobs.push({ id: v.id, job: { tag: 'iswc-component-diagram', scriptUrl: 'dist/cdn/diagrams/component-diagram.min.js', payload, attrs: { theme: 'insoft-cd', 'min-gap': '72' } } });
+  jobs.push({ id: v.id, job: { tag: 'iswc-component-diagram', scriptUrl: 'dist/cdn/diagrams/component-diagram.min.mjs', payload, attrs: { theme: 'insoft-cd', 'min-gap': '72' } } });
 }
 // W57+: A* + wrap en este lab puede superar 360 s.
 process.exit(await renderLab(LAB, jobs, { timeoutMs: 900_000, settleMs: 500 }));

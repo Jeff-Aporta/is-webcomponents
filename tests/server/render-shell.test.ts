@@ -16,7 +16,7 @@ test("renderShell: shell básico con loader pineado y tag raíz", async () => {
   const html = await renderShell(BASE);
   assertEquals(html.includes("<title>ERP SQLite</title>"), true);
   assertEquals(html.includes('<meta name="description" content="Administración de bases SQLite">'), true);
-  assertEquals(html.includes("https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@" + SHA + "/dist/cdn/core/loader.min.js"), true);
+  assertEquals(html.includes("https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@" + SHA + "/dist/cdn/core/loader.min.mjs"), true);
   assertEquals(html.includes("<erp-app></erp-app>"), true);
   assertEquals(html.includes('data-theme="dark"'), true);
 });
@@ -38,7 +38,7 @@ test("renderShell: ?s= con resolverMeta ajusta título/og", async () => {
 
 test("renderShell: sin sha sirve loader del propio origen", async () => {
   const html = await renderShell({ titulo: "x", prefijo: "erp" });
-  assertEquals(html.includes("./dist/cdn/core/loader.min.js"), true);
+  assertEquals(html.includes("./dist/cdn/core/loader.min.mjs"), true);
   assertEquals(html.includes("cdn.jsdelivr.net"), false);
 });
 

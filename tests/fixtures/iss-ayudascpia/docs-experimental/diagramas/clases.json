@@ -2,7 +2,7 @@
   "slug": "clases",
   "module": "010-General",
   "tag": "iswc-class-diagram",
-  "script": "diagrams/class-diagram.min.js",
+  "script": "diagrams/class-diagram.min.mjs",
   "attrs": {
     "diagram-style": "insoft"
   },

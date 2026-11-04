@@ -120,7 +120,7 @@
       "title": "Get started",
       "role": "region",
       "ariaLabel": "Get started del loader JS",
-      "lede": "Un solo entry liviano (<code>loader.min.js</code>) carga CSS de documento y solo los módulos que pedís. Evitá <code>all.min.js</code> (~1.8&nbsp;MB resuelto) salvo demos locales.",
+      "lede": "Un solo entry liviano (<code>loader.min.mjs</code>) carga CSS de documento y solo los módulos que pedís. Evitá <code>all.min.js</code> (~1.8&nbsp;MB resuelto) salvo demos locales.",
       "blocks": [
         {
           "kind": "html",

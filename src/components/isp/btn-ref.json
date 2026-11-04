@@ -77,7 +77,7 @@
       "ejemplos": {
         "content": [
           "```js",
-          "import { createBtnRefController } from './isp/controller-from-config.min.js';",
+          "import { createBtnRefController } from './isp/controller-from-config.min.mjs';",
           "",
           "el.controller = createBtnRefController({",
           "  entrie: 'Aplicación',",

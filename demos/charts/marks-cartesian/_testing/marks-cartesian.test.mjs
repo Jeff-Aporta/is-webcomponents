@@ -12,7 +12,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-marks-cartesian-ready');
     const info = await page.evaluate(async () => {
-      const lib = await import('/dist/cdn/charts/marks-cartesian.min.js');
+      const lib = await import('/dist/cdn/charts/marks-cartesian.min.mjs');
       const bars = document.querySelectorAll('iswc-chart[type="bar"]');
       const lines = document.querySelectorAll('iswc-chart[type="line"]');
       return {

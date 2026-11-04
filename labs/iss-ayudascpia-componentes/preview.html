@@ -31,7 +31,7 @@
   <script type="module">
     // CDN local del kit (lab). Tras ajustar el diagramador: rebuild + reload.
     const KIT = new URL('../../dist/cdn/', import.meta.url).href;
-    await import(`${KIT}diagrams/component-diagram.min.js`);
+    await import(`${KIT}diagrams/component-diagram.min.mjs`);
     await customElements.whenDefined('iswc-component-diagram');
 
     const diag = document.getElementById('diag');

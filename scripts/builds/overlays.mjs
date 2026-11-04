@@ -46,7 +46,7 @@ const externalComponents = {
       if (!abs.startsWith(compRoot)) return null;
       // base-sheets va externo, mismo criterio que el build principal
       if (basename(abs).replace(/\.(ts|js)$/, '') === 'base-sheets') {
-        return { path: '../_shared/base-sheets.min.js', external: true };
+        return { path: '../core/base-sheets.min.mjs', external: true };
       }
       // _shared/* se inline (excepto base-sheets, ya cubierto arriba)
       if (abs.includes(`${sep}_shared${sep}`)) return null;

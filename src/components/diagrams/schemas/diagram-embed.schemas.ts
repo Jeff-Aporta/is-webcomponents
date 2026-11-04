@@ -31,7 +31,7 @@ export const EmbeddedDiagramSchema = z.object({
   /** Web component que lo pinta (`iswc-flowchart`, `iswc-sequence-diagram`, …). */
   tag: z.string().regex(/^iswc-[a-z0-9-]+$/),
   payload: z.unknown(),
-  /** Bundle relativo a la raíz del CDN (`diagrams/sequence-diagram.min.js`); por defecto se deduce del tag. */
+  /** Bundle relativo a la raíz del CDN (`diagrams/sequence-diagram.min.mjs`); por defecto se deduce del tag. */
   script: z.string().optional(),
   /** Atributos del host; `diagram-style` se hereda del diagrama padre si falta. */
   attrs: z.record(z.string(), z.string()).optional(),

@@ -26,7 +26,7 @@
         },
         {
           "kind": "html",
-          "html": "<iswc-callout color=\"brand\"><strong slot=\"title\">Cuándo usarlo</strong>Donde una tarea de IA evita subir datos a un servidor. El modelo se baja una sola vez: hasta 20 MB solo, y si pesa más, un modal lo anuncia.</iswc-callout><iswc-callout color=\"warning\"><strong slot=\"title\">Cuándo no</strong>En equipos con poca memoria, los modelos de más de 300 MB pueden fallar. Generar imágenes exige WebGPU. Si no hace falta UI, usa <code class=\"code\">ejecutar()</code> de <code class=\"code\">lib/ai/motores.min.js</code>.</iswc-callout>"
+          "html": "<iswc-callout color=\"brand\"><strong slot=\"title\">Cuándo usarlo</strong>Donde una tarea de IA evita subir datos a un servidor. El modelo se baja una sola vez: hasta 20 MB solo, y si pesa más, un modal lo anuncia.</iswc-callout><iswc-callout color=\"warning\"><strong slot=\"title\">Cuándo no</strong>En equipos con poca memoria, los modelos de más de 300 MB pueden fallar. Generar imágenes exige WebGPU. Si no hace falta UI, usa <code class=\"code\">ejecutar()</code> de <code class=\"code\">lib/ai/motores.min.mjs</code>.</iswc-callout>"
         }
       ]
     }

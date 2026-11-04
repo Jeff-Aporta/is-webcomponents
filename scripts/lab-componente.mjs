@@ -62,7 +62,7 @@ const jsATs = {
     b.onResolve({ filter: /^\.{1,2}\/.*\.js$/ }, (args) => {
       const ts = resolve(args.resolveDir, args.path.replace(/\.js$/, '.ts'));
       if (!existsSync(ts)) return undefined;
-      if (cdn && norm(ts) === norm(baseSheets)) return { path: `${cdn}/_shared/base-sheets.min.js`, external: true };
+      if (cdn && norm(ts) === norm(baseSheets)) return { path: `${cdn}/core/base-sheets.min.mjs`, external: true };
       if (cdn && esOtroComponente(ts)) {
         const rel = relative(componentes, ts).split(sep).join('/').replace(/\.ts$/, '.min.js');
         return { path: `${cdn}/${rel}`, external: true };

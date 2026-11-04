@@ -66,7 +66,7 @@ test('componentes/css-imports', async () => {
   
   // El kit compartido (src/core/diagram-kit.scss) va incrustado con @use: el bundle del
   // diagrama trae .dg-tooltip posicionado sin pedir otro archivo.
-  check(readFileSync(join(dist, 'diagrams', 'flowchart.min.js'), 'utf8').includes('dg-tooltip'),
+  check(readFileSync(join(dist, 'diagrams', 'flowchart.min.mjs'), 'utf8').includes('dg-tooltip'),
     'el bundle de flowchart no trae el kit compartido (.dg-tooltip) — charts y diagramas lo pierden');
   
   if (failures.length) {

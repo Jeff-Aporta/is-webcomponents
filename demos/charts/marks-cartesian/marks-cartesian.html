@@ -17,12 +17,12 @@
   svg { display: block; max-width: 100%; }
 </style>
 <script type="module">
-  import { iswcLoader as L } from '../../../dist/cdn/core/loader.min.js?v=ydbckt';
+  import { iswcLoader as L } from '../../../dist/cdn/core/loader.min.mjs?v=eqmcvj';
   L.configure({ local: true });
   // marks-cartesian exports drawBarMarks, drawLineMarks, drawScatterMarks, drawBubbleMarks.
   // No hay custom element: las funciones reciben un `ctx` con plot, scales, colors, etc.
   const [__base] = await L.listBases();
-  const lib = await import(L.assetUrl(new URL('charts/marks-cartesian.min.js', __base.endsWith('/') ? __base : __base + '/').href));
+  const lib = await import(L.assetUrl(new URL('charts/marks-cartesian.min.mjs', __base.endsWith('/') ? __base : __base + '/').href));
   const { drawBarMarks, drawLineMarks } = lib;
 
   // Construir un ctx mínimo: usamos <iswc-chart> como host para tener ejes/escala reales.

@@ -370,7 +370,7 @@ denoTest('vendor: V14 la web es el pin estático del proyecto (nunca el HEAD); l
   const kit = await kitCon({ [`${VD}/shared/lib/a.ts`]: 'export const a = "local";\n', 'skills/nueva/SKILL.md': '# nueva\n' });
   const app = await Deno.makeTempDir({ prefix: 'pin-' });
   await Deno.mkdir(join(app, 'src'), { recursive: true });
-  await Deno.writeTextFile(join(app, 'src/pin.ts'), `import 'https://cdn.jsdelivr.net/gh/${F}@${pin}/dist/cdn/loader.min.js';\n`);
+  await Deno.writeTextFile(join(app, 'src/pin.ts'), `import 'https://cdn.jsdelivr.net/gh/${F}@${pin}/dist/cdn/loader.min.mjs';\n`);
   const { fetchFn, pedidas } = webFalsa(pin, { [`${VD}/shared/lib/a.ts`]: `/** Doc: https://cdn.jsdelivr.net/gh/${F}@main/x.md */\nexport const a = "web";\n` });
   // Sin local: baja del pin (fecha del archivo en el pin = 2030, más nueva que cualquier copia).
   const res = await vendorizar({ repo: F, raiz: app, archivos: [{ desde: `${VD}/shared/lib/a.ts`, hacia: 'ISU/a.ts' }] }, { raiz: app, fetchFn });

@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Preview · ISWC</title>
   <script type="module">
-    import { iswcLoader as L } from '../../dist/cdn/core/loader.min.js';
+    import { iswcLoader as L } from '../../dist/cdn/core/loader.min.mjs';
     import { GALLERY_CHROME_TAGS } from '../../src/cdn/collect-iswc-tags.js';
     L.configure({ preferSelf: true, mirrors: ['jsdelivr', 'pages'] });
     await L.loadPageStyles([

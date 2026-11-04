@@ -2,7 +2,7 @@
   "slug": "componentes",
   "module": "010-General",
   "tag": "iswc-component-diagram",
-  "script": "diagrams/component-diagram.min.js",
+  "script": "diagrams/component-diagram.min.mjs",
   "attrs": {
     "diagram-style": "insoft"
   },

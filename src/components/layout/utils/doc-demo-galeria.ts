@@ -2,11 +2,11 @@
  * doc-demo-galeria.ts — explorador de demos para cualquier app: el mismo `<iswc-doc-demo>` del kit alimentado por un
  * manifest, con los playground `iswc-preview/v1` de la app.
  *
- *   <script type="module" src="…/dist/cdn/preview/doc-demo-host.min.js"></script>
+ *   <script type="module" src="…/dist/cdn/preview/doc-demo-host.min.mjs"></script>
  *   <iswc-doc-demo brand="MiApp" sheets-cache="mi-app-sheets"></iswc-doc-demo>
  *
  *   await L.load(...tagsDeLaApp);
- *   const { montarGaleria } = await import(`${cdn}preview/doc-demo-galeria.min.js`);
+ *   const { montarGaleria } = await import(`${cdn}preview/doc-demo-galeria.min.mjs`);
  *   await montarGaleria({ manifest: new URL('manifest.json', location.href), categorias: { panel: 'Panel' } });
  *
  * `manifest.json` es `[{ tag, file }]`, con `file` relativo al manifest. Cada `file` es la definición del componente:

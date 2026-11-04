@@ -10,7 +10,7 @@ Biblioteca común de iswc (sin dependencias de DOM), en dos objetos separados:
 
 | Cómo | Qué |
 | --- | --- |
-| Navegador (CDN) | `import { Obj } from 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@<sha40>/dist/cdn/lib/obj.min.js'` y `import { RefObj } from '.../dist/cdn/lib/ref-obj.min.js'` (Zod incluido) |
+| Navegador (CDN) | `import { Obj } from 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@<sha40>/dist/cdn/lib/obj.min.mjs'` y `import { RefObj } from '.../dist/cdn/lib/ref-obj.min.mjs'` (Zod incluido) |
 | Deno por URL (DER) | `https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/vendor-distributions/shared/lib/obj.ts` (y `ref-obj.ts`); importan `../schemas.ts` y el `zod` del import map del consumidor. Actualizar con `--reload=https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/` |
 | Vendor (ISS, ISW) | `dist/cdn/vendor-distributions/shared/lib/obj.ts` (+ `ref-obj.ts` si resuelve referencias) y la sección `obj` de `shared/schemas.ts` (usan el `zod` del consumidor), depositados en la carpeta `ISU/` del consumidor por `tools/vendor.ts` (pin por fecha ISO: gana el más reciente) |
 | Dentro del kit | `src/vendor-distributions/shared/lib/obj.ts` y `ref-obj.ts` |

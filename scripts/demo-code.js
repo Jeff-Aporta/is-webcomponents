@@ -214,12 +214,12 @@ import manifest from '../src/manifest.js';
     const cssTags = tags.filter((t) => COMPONENTS_WITH_CSS.has(t));
 
     const lines = [];
-    const urls = [`${CDN}/core/loader.min.js`, `${CDN}/core/is-base.min.css`, `${CDN}/core/palettes.min.css`];
+    const urls = [`${CDN}/core/loader.min.mjs`, `${CDN}/core/is-base.min.css`, `${CDN}/core/palettes.min.css`];
     for (const t of cssTags) urls.push(`${CDN}/${catOf(t)}/${t}.min.css`);
     for (const t of tags) urls.push(`${CDN}/${catOf(t)}/${t}.min.js`);
 
     const args = tags.map((t) => JSON.stringify(`is-${t}`)).join(', ');
-    lines.push(`<script type="module" src="${CDN}/core/loader.min.js"><\/script>`);
+    lines.push(`<script type="module" src="${CDN}/core/loader.min.mjs"><\/script>`);
     lines.push('<script type="module">');
     lines.push('  const L = globalThis.iswcLoader;');
     lines.push('  // is-base.min.css se auto-carga al inicializar el loader (W52).');

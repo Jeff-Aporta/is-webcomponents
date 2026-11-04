@@ -15,10 +15,10 @@
   iswc-pie-chart:not(:defined) { visibility: hidden; }
 </style>
 <script type="module">
-  import { iswcLoader as L } from '../../../dist/cdn/core/loader.min.js?v=ydbckt';
+  import { iswcLoader as L } from '../../../dist/cdn/core/loader.min.mjs?v=eqmcvj';
   L.configure({ local: true });
-  // Carga el bundle pre-compilado. pie-chart.min.js importa transitivamente
-  // chart.min.js + marks-radial.min.js.
+  // Carga el bundle pre-compilado. pie-chart.min.mjs importa transitivamente
+  // chart.min.mjs + marks-radial.min.mjs.
   await L.load('iswc-pie-chart');
   await customElements.whenDefined('iswc-pie-chart');
 

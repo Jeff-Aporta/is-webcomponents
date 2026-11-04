@@ -65,7 +65,7 @@ const PAGES_BUNDLES = ['home', 'icons', 'theming', 'ecosystem'];
 
 const CRITICAL_PATHS = [
   'index.html',
-  'dist/cdn/core/loader.min.js',
+  'dist/cdn/core/loader.min.mjs',
   'dist/gallery-app.min.js',
   'dist/cdn/is-base.min.css',
   'dist/cdn/palettes.min.css',

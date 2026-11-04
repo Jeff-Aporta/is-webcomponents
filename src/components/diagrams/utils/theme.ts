@@ -5,7 +5,7 @@
 //   { "erDiagram": { "theme": "insoft", "entities": […] } }
 //
 // Uso por CDN / Deno (vendor):
-//   import { json2css, resolveErTheme } from '…/diagrams/theme.min.js'
+//   import { json2css, resolveErTheme } from '…/diagrams/theme.min.mjs'
 //   fetch('…/diagrams/themes/insoft.json')  // fuente editable
 
 import type { DiagramTheme } from '@jeff-aporta/iswc-base/components/diagrams/schemas/diagram-types.schemas.js';

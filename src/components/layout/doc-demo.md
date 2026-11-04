@@ -28,7 +28,7 @@ No es el shell de una app de producto: para eso está `<iswc-app-shell>`.
 ## Importación
 
 ```html
-<script type="module" src="…/dist/cdn/preview/doc-demo-host.min.js"></script>
+<script type="module" src="…/dist/cdn/preview/doc-demo-host.min.mjs"></script>
 ```
 
 Ese host configura el loader y carga el componente. El detalle está en **Bootstrap**.
@@ -44,7 +44,7 @@ Ese host configura el loader y carga el componente. El detalle está en **Bootst
 Un solo script module: el **host** configura el loader, carga boot + CE.
 
 ```html
-<script type="module" src="…/dist/cdn/preview/doc-demo-host.min.js"></script>
+<script type="module" src="…/dist/cdn/preview/doc-demo-host.min.mjs"></script>
 <script type="module" src="./app.min.js"></script>
 <body>
   <iswc-doc-demo brand="MiApp" sheets-cache="mi-app-sheets"></iswc-doc-demo>
@@ -53,14 +53,14 @@ Un solo script module: el **host** configura el loader, carga boot + CE.
 
 | Artefacto | Rol |
 | --- | --- |
-| `doc-demo-host.min.js` | `configure` + `L.loadPageModules(['iswc-doc-demo-boot'])` + `L.load('iswc-doc-demo')` |
+| `doc-demo-host.min.mjs` | `configure` + `L.loadPageModules(['iswc-doc-demo-boot'])` + `L.load('iswc-doc-demo')` |
 | `iswc-doc-demo-boot` | alias module: theme/palette + CSS crítico |
 | `iswc-doc-demo` | CE del catálogo: shell light-DOM + page styles/modules |
 
 ### Local (self-test del kit)
 
 ```html
-<script type="module" src="./dist/cdn/preview/doc-demo-host.min.js"></script>
+<script type="module" src="./dist/cdn/preview/doc-demo-host.min.mjs"></script>
 <body>
   <iswc-doc-demo brand="ISWC" local dev sheets-cache="iswc-gallery-sheets"></iswc-doc-demo>
 </body>
@@ -85,12 +85,12 @@ IDs estables: `shellBar`, `shellBrand`, `shellNav`, `previewHost`, `previewFrame
 
 ## Explorador de demos de una app
 
-Con `doc-demo-galeria.min.js` cualquier app usa este mismo shell sin escribir su SPA: basta un manifest
+Con `doc-demo-galeria.min.mjs` cualquier app usa este mismo shell sin escribir su SPA: basta un manifest
 `[{ tag, file }]` que apunte a los `.json` `iswc-preview/v1` de sus componentes. La app carga antes sus propios tags.
 
 ```js
 await L.load(...tagsDeLaApp);
-const { montarGaleria } = await import(`${cdn}preview/doc-demo-galeria.min.js`);
+const { montarGaleria } = await import(`${cdn}preview/doc-demo-galeria.min.mjs`);
 await montarGaleria({ manifest: new URL('manifest.json', location.href), categorias: { panel: 'Panel' } });
 ```
 

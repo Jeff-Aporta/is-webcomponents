@@ -8,7 +8,7 @@
 import { paint } from '@jeff-aporta/iswc-base/core/highlight-code.js';
 
 const LOADER =
-  'https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn/core/loader.min.js';
+  'https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn/core/loader.min.mjs';
 
 const open = String.fromCharCode(60);
 const slash = String.fromCharCode(47);

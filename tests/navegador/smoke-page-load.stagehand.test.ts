@@ -3,7 +3,7 @@
 //
 // Por qué este test existe: en W54/W55/W56 hubo reportes de "carga eterna"
 // en `http://127.0.0.1:5505/apps/iswc-base/index.html`. El network
-// tab mostraba `doc-demo.min.js?h=...` fallando con `net::ERR_*` y el
+// tab mostraba `doc-demo.min.mjs?h=...` fallando con `net::ERR_*` y el
 // custom element nunca se registraba → la página quedaba en blanco.
 //
 // Este test:
@@ -146,26 +146,24 @@ test('smoke: la página home carga sin errores de red', async () => {
   }
 });
 
-test('smoke: doc-demo.min.js existe y es servible', async () => {
-  const url = `http://127.0.0.1:${server.port}${APP_PATH}/dist/cdn/preview/doc-demo.min.js`;
+test('smoke: doc-demo.min.mjs existe y es servible', async () => {
+  const url = `http://127.0.0.1:${server.port}${APP_PATH}/dist/cdn/preview/doc-demo.min.mjs`;
   const resp = await fetch(url);
-  assert.ok(resp.ok, `doc-demo.min.js no responde: ${resp.status}`);
+  assert.ok(resp.ok, `doc-demo.min.mjs no responde: ${resp.status}`);
   const text = await resp.text();
-  assert.ok(text.length > 1000, `doc-demo.min.js demasiado pequeño: ${text.length} B`);
-  // Esbuild inline-a `defineElement('iswc-doc-demo', ...)` como una llamada
-  // a un minified helper (`C("iswc-doc-demo", w, ...)`), pero la string
-  // "iswc-doc-demo" debe aparecer como argumento de una llamada a
-  // customElements.define en algún lugar del bundle.
-  assert.match(
-    text,
-    /["']iswc-doc-demo["']/,
-    'doc-demo.min.js debe contener el string "iswc-doc-demo"',
-  );
-  assert.match(
-    text,
-    /customElements\.define\s*\(/,
-    'doc-demo.min.js debe contener una llamada a customElements.define',
-  );
+  assert.ok(text.length > 1000, `doc-demo.min.mjs demasiado pequeño: ${text.length} B`);
+  // Build único con splitting (F3): el registro (`define` del molde → `customElements.define`) vive en un chunk
+  // compartido del cierre del módulo. Se pide cada archivo del cierre (deps.json) al mismo servidor.
+  const deps = await (await fetch(`http://127.0.0.1:${server.port}${APP_PATH}/dist/cdn/deps.json`)).json();
+  const cierre: string[] = deps.tags['iswc-doc-demo'] ?? [];
+  assert.ok(cierre.includes('preview/doc-demo.min.mjs'), 'deps.json: el cierre de iswc-doc-demo incluye su módulo');
+  const todo = (await Promise.all(cierre.map(async (r) => {
+    const res = await fetch(`http://127.0.0.1:${server.port}${APP_PATH}/dist/cdn/${r}`);
+    assert.ok(res.ok, `${r} no responde: ${res.status}`);
+    return res.text();
+  }))).join('\n');
+  assert.match(todo, /["']iswc-doc-demo["']/, 'el cierre de doc-demo.min.mjs debe contener el string "iswc-doc-demo"');
+  assert.match(todo, /customElements\.define\s*\(/, 'el cierre de doc-demo.min.mjs debe contener una llamada a customElements.define');
 });
 
 export default lista();

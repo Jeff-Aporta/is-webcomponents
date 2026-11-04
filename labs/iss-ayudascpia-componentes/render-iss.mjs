@@ -32,7 +32,7 @@ for (const f of files) {
     id: slug,
     job: {
       tag: spec.tag || 'iswc-component-diagram',
-      scriptUrl: `dist/cdn/${spec.script || 'diagrams/component-diagram.min.js'}`,
+      scriptUrl: `dist/cdn/${spec.script || 'diagrams/component-diagram.min.mjs'}`,
       payload: spec.payload,
       attrs: spec.attrs || { 'diagram-style': 'insoft' },
     },

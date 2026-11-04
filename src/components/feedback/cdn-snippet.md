@@ -12,11 +12,11 @@ preview: ./cdn-snippet.json
 
 ## Propósito
 
-Panel de **consumo por CDN** con una sola estrategia: `loader.min.js`.
+Panel de **consumo por CDN** con una sola estrategia: `loader.min.mjs`.
 
 Muestra **un solo** bloque copy-paste:
 
-1. `<script type="module" src="…/loader.min.js">` — loader del kit.
+1. `<script type="module" src="…/loader.min.mjs">` — loader del kit.
 2. (opcional) deps — p. ej. `patyLoader.min.js` — **en el mismo snippet**, justo después.
 3. `<script type="module">` — `loadPageStyles(['iswc-palettes-default'])` + `load(…)`.
 
@@ -59,7 +59,7 @@ import './cdn-snippet.js';
 ### Snippet generado (forma canónica)
 
 ```html
-<script type="module" src="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@REF/dist/cdn/core/loader.min.js"></script>
+<script type="module" src="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@REF/dist/cdn/core/loader.min.mjs"></script>
 <!-- si hay deps (p. ej. patyLoader), van aquí en el mismo bloque -->
 <script type="module">
   const L = globalThis.iswcLoader;
@@ -100,12 +100,12 @@ El código se muestra con `<iswc-code>`, que trae su botón de copiar con nombre
 
 ## Reglas para LLM
 
-- La única estrategia es `loader.min.js`.
+- La única estrategia es `loader.min.mjs`.
 - No agregues pestañas de mirrors ni filas de `all.min.js`.
 
 ## Qué hacer
 
-- Preferir siempre `loader.min.js` + `load(tag)`.
+- Preferir siempre `loader.min.mjs` + `load(tag)`.
 
 ## Qué no hacer
 
@@ -117,6 +117,6 @@ El código se muestra con `<iswc-code>`, que trae su botón de copiar con nombre
 
 | Trampa | Fix |
 | --- | --- |
-| Panel enseña `all.min.js` | Solo `loader.min.js` + `L.load(tag)` |
+| Panel enseña `all.min.js` | Solo `loader.min.mjs` + `L.load(tag)` |
 
 Guardián: `tests/cdn-mirrors.test.ts` (contrato loader copy-paste) · `tests/url-nav.test.ts`.

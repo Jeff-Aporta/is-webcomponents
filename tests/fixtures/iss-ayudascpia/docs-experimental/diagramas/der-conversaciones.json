@@ -2,7 +2,7 @@
   "slug": "der-conversaciones",
   "module": "020-Conversaciones",
   "tag": "iswc-er-diagram",
-  "script": "diagrams/er-diagram.min.js",
+  "script": "diagrams/er-diagram.min.mjs",
   "attrs": {
     "diagram-style": "insoft"
   },

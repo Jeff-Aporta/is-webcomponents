@@ -84,7 +84,7 @@ test('navegador/scrollspy-restore', { timeout: 180_000 }, async () => {
       if ((await stat(ts).catch(() => null))?.isFile()) return ts;
       const relParts = rel.split(sep);
       const stripped = relParts.slice(2).join(sep);
-      const distAlt = join(root, 'dist', 'cdn', stripped).replace(/\.js$/, '.min.js');
+      const distAlt = join(root, 'dist', 'cdn', stripped).replace(/\.js$/, '.min.mjs');
       if ((await stat(distAlt).catch(() => null))?.isFile()) return distAlt;
     }
     if (/\.(css|svg|woff2?|ttf|ico|png|jpg|jpeg|webp|mp4|pdf)$/.test(target)) {

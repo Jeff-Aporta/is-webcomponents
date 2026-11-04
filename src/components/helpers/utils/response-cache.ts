@@ -8,7 +8,7 @@
  *   - El caché JAMÁS bloquea el pintado (tope 1,5 s → memoria).
  *   - Solo tiene sentido para lecturas (GET / QUERY / HEAD).
  *
- * CDN: …/dist/cdn/helpers/response-cache.min.js
+ * CDN: …/dist/cdn/helpers/response-cache.min.mjs
  */
 
 import type { CreateResponseCacheOpts, ClaveDeInput, CachedRow, VivoAviso, VivoOpts, ResponseCache } from "@jeff-aporta/iswc-base/components/helpers/schemas/response-cache.schemas.js";

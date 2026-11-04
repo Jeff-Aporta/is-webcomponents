@@ -1,5 +1,5 @@
 // bundle-demos.mjs — rebuilds dist/cdn/diagrams/er-{diagram,editor}.min.js
-// + theme.min.js + themes/*.json. Necesario porque los HTML de los demos
+// + theme.min.mjs + themes/*.json. Necesario porque los HTML de los demos
 // cargan desde dist/cdn/ y el build principal puede fallar en otros tags.
 import { build } from 'esbuild';
 import { aliasKit } from '@jeff-aporta/iswc-base/cdn/build/alias.ts';
@@ -16,35 +16,35 @@ mkdirSync(join(OUT, 'themes'), { recursive: true });
 await build({
   entryPoints: [join(ROOT, 'src/components/diagrams/er-diagram.ts')],
   bundle: true, format: 'esm', target: 'es2020',
-  outfile: join(OUT, 'er-diagram.min.js'),
+  outfile: join(OUT, 'er-diagram.min.mjs'),
   minify: true, sourcemap: false, treeShaking: true,
   loader: { '.json': 'json' },
   plugins: [aliasKit(), cssVirtual()],
 });
-console.log('OK er-diagram.min.js');
+console.log('OK er-diagram.min.mjs');
 
 await build({
   entryPoints: [join(ROOT, 'src/components/diagrams/er-editor.ts')],
   bundle: true, format: 'esm', target: 'es2020',
-  outfile: join(OUT, 'er-editor.min.js'),
+  outfile: join(OUT, 'er-editor.min.mjs'),
   minify: true, sourcemap: false, treeShaking: true,
   loader: { '.json': 'json' },
   plugins: [aliasKit(), cssVirtual()],
 });
-console.log('OK er-editor.min.js');
+console.log('OK er-editor.min.mjs');
 
 // Utils puros (json2css, resolveErTheme, INSOFT_THEME) — Deno/vendor/CDN.
 await build({
   entryPoints: [join(ROOT, 'src/components/diagrams/utils/theme.ts')],
   bundle: true, format: 'esm', target: 'es2020',
-  outfile: join(OUT, 'theme.min.js'),
+  outfile: join(OUT, 'theme.min.mjs'),
   minify: true, sourcemap: false, treeShaking: true,
   loader: { '.json': 'json' },
   plugins: [aliasKit(), cssVirtual()],
 });
-console.log('OK theme.min.js');
+console.log('OK theme.min.mjs');
 
-// JSON editable (fuente de verdad también embebida en theme.min.js).
+// JSON editable (fuente de verdad también embebida en theme.min.mjs).
 const themesSrc = join(ROOT, 'src/components/diagrams/themes');
 for (const name of readdirSync(themesSrc)) {
   if (!name.endsWith('.json')) continue;

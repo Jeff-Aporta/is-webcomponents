@@ -26,7 +26,7 @@
 //   --local=<ruta>             checkout local del kit (solo informativo: nunca falla por él)
 //   --raices=a,b,c             rutas a barrer (default: front típico, ver RAICES)
 //   --saltar=a,b               carpetas a ignorar (default node_modules,vendor,dist,.tmp-scss,.git)
-//   --verificar=<ruta>         archivo que debe existir en el pin (default dist/cdn/core/loader.min.js)
+//   --verificar=<ruta>         archivo que debe existir en el pin (default dist/cdn/core/loader.min.mjs)
 //   --dry-run                  muestra qué cambiaría, sin escribir
 //
 // Alias del kit: la entrada `"@jeff-aporta/iswc-base/": "…"` de `deno.json` y del `<script type="importmap">` de cada
@@ -85,7 +85,7 @@ export function opciones(o = {}) {
     nombre,
     nombres: [nombre, ...lista(o.alias, ALIAS[nombre] ?? [])],
     rama: String(o.rama || 'main'),
-    verificar: String(o.verificar || 'dist/cdn/core/loader.min.js'),
+    verificar: String(o.verificar || 'dist/cdn/core/loader.min.mjs'),
     raices: lista(o.raices, RAICES_DEFAULT),
     saltar: new Set(lista(o.saltar, SALTAR_DEFAULT)),
     local: o.local ? String(o.local) : '',

@@ -16,7 +16,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-marks-waterfall-ready');
     const info = await page.evaluate(async () => {
-      const lib = await import('/dist/cdn/charts/marks-waterfall.min.js');
+      const lib = await import('/dist/cdn/charts/marks-waterfall.min.mjs');
       const exports = Object.keys(lib).sort();
       const types = {};
       for (const k of exports) types[k] = typeof lib[k];
@@ -57,7 +57,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-marks-waterfall-ready');
     const result = await page.evaluate(async () => {
-      const lib = await import('/dist/cdn/charts/marks-waterfall.min.js');
+      const lib = await import('/dist/cdn/charts/marks-waterfall.min.mjs');
       return lib.waterfallBars([1200, 850, -420, -180, null], [0, 4]);
     });
     assert.equal(result.length, 5, `esperaba 5 barras, hay ${result.length}`);
@@ -100,7 +100,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-marks-waterfall-ready');
     const result = await page.evaluate(async () => {
-      const lib = await import('/dist/cdn/charts/marks-waterfall.min.js');
+      const lib = await import('/dist/cdn/charts/marks-waterfall.min.mjs');
       return lib.waterfallBars([100, -30, 50, -20], []);
     });
     assert.equal(result.length, 4, 'debe haber 4 barras');

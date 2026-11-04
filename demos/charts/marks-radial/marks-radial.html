@@ -18,11 +18,11 @@
   iswc-pie-chart:not(:defined), iswc-doughnut-chart:not(:defined), iswc-polar-area-chart:not(:defined), iswc-radar-chart:not(:defined) { visibility: hidden; }
 </style>
 <script type="module">
-  import { iswcLoader as L } from '../../../dist/cdn/core/loader.min.js?v=ydbckt';
+  import { iswcLoader as L } from '../../../dist/cdn/core/loader.min.mjs?v=eqmcvj';
   L.configure({ local: true });
-  // El bundle marks-radial.min.js exporta las funciones puras.
+  // El bundle marks-radial.min.mjs exporta las funciones puras.
   const [__base] = await L.listBases();
-  const lib = await import(L.assetUrl(new URL('charts/marks-radial.min.js', __base.endsWith('/') ? __base : __base + '/').href));
+  const lib = await import(L.assetUrl(new URL('charts/marks-radial.min.mjs', __base.endsWith('/') ? __base : __base + '/').href));
   document.getElementById('exports').textContent = JSON.stringify(Object.keys(lib).sort(), null, 2);
 
   // Wrappers tipados vía loader (sin ?h= quemado).

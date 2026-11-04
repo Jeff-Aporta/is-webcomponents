@@ -28,7 +28,7 @@ const denoTest = denoTestCon(test);
 
 // Raíz del repo (antes './' = tests/diagramas/: no hallaba dist/ y el caso se saltaba en silencio).
 const RAIZ = fileURLToPath(new URL('../../', import.meta.url));
-const BUNDLE = 'dist/cdn/diagrams/flowchart.min.js';
+const BUNDLE = 'dist/cdn/diagrams/flowchart.min.mjs';
 const CLASES_PNG = 'labs/iss-ayudascpia-clases/out/clases.png';
 const ESCALA = 2;
 

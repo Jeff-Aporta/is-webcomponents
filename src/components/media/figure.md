@@ -31,7 +31,7 @@ pinta por cada imagen, en lugar de armar `<figure><a><img><figcaption>` a mano.
 ## Importación
 
 ```html
-<script type="module" src="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@<sha40>/dist/cdn/core/loader.min.js"></script>
+<script type="module" src="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@<sha40>/dist/cdn/core/loader.min.mjs"></script>
 <!-- o con el loader ya presente: await iswcLoader.ensure('iswc-figure') -->
 ```
 

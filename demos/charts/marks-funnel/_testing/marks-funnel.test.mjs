@@ -12,7 +12,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-marks-funnel-ready');
     const info = await page.evaluate(async () => {
-      const lib = await import('/dist/cdn/charts/marks-funnel.min.js');
+      const lib = await import('/dist/cdn/charts/marks-funnel.min.mjs');
       const fc = document.querySelector('iswc-funnel-chart');
       return {
         exports: Object.keys(lib).sort(),
@@ -42,7 +42,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-marks-funnel-ready');
     const bands = await page.evaluate(async () => {
-      const lib = await import('/dist/cdn/charts/marks-funnel.min.js');
+      const lib = await import('/dist/cdn/charts/marks-funnel.min.mjs');
       return lib.funnelBands([4200, 1800, 640, 210]);
     });
     for (let i = 1; i < bands.length; i++) {
