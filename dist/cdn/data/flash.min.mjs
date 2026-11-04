@@ -9,4 +9,4 @@
  * cdn-install: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/is-cdn-install/SKILL.md
  * blob: https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/data/flash.js
  */
-import{a,b,c,d}from"../_chunks/chunk-BITVOZYM.mjs?v=20zrpi";import"../_chunks/chunk-OGKWYO6I.mjs?v=ywnj7s";import"../_chunks/chunk-4PV5NT2U.mjs?v=58b9qn";export{c as CAMBIO_MS,d as Destello,b as FADE_MS,a as FLASH_MS};
+import{a,b,c,d}from"../_chunks/chunk-NZL6SAOD.mjs";import"../_chunks/chunk-47T6XX4W.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";export{c as CAMBIO_MS,d as Destello,b as FADE_MS,a as FLASH_MS};

@@ -9,4 +9,4 @@
  * cdn-install: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/is-cdn-install/SKILL.md
  * blob: https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/diagrams/diagram-header.js
  */
-import{a}from"../_chunks/chunk-Y7HIMJDD.mjs?v=tx4u9o";import"../_chunks/chunk-JUXAZSGN.mjs?v=tr38yi";import"../_chunks/chunk-QOB7RFMH.mjs?v=qimetc";import"../_chunks/chunk-ULE6IXA5.mjs?v=67tj6l";import"../_chunks/chunk-2SX4KFRW.mjs?v=6l2b2u";import"../_chunks/chunk-UCMASPOL.mjs?v=34t4kr";import"../_chunks/chunk-4PV5NT2U.mjs?v=58b9qn";export{a as diagramHeaderWidth};
+import{a}from"../_chunks/chunk-IMCDGH5S.mjs";import"../_chunks/chunk-4KFSCCWX.mjs";import"../_chunks/chunk-ZMMTQBED.mjs";import"../_chunks/chunk-U3VVVX2R.mjs";import"../_chunks/chunk-KYMZNJY4.mjs";import"../_chunks/chunk-7IBSWVMF.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";export{a as diagramHeaderWidth};

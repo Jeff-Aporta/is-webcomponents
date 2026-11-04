@@ -9,4 +9,4 @@
  * cdn-install: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/is-cdn-install/SKILL.md
  * blob: https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/data/registry.js
  */
-import{a,b,c,d,e,f,g,h}from"../_chunks/chunk-NAOUNGWT.mjs?v=qmk18a";import"../_chunks/chunk-4PV5NT2U.mjs?v=58b9qn";export{c as addAliases,g as aliasOf,f as allFunctions,d as canonicalName,a as def,b as defLazy,e as lookupFn,h as suggest};
+import{a,b,c,d,e,f,g,h}from"../_chunks/chunk-3LVLSK3S.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";export{c as addAliases,g as aliasOf,f as allFunctions,d as canonicalName,a as def,b as defLazy,e as lookupFn,h as suggest};

@@ -9,4 +9,4 @@
  * cdn-install: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/is-cdn-install/SKILL.md
  * blob: https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/data/base-celdas.js
  */
-import{a}from"../_chunks/chunk-KOJZ7NEJ.mjs?v=q6p5sk";import"../_chunks/chunk-4PV5NT2U.mjs?v=58b9qn";export{a as registrarBase};
+import{a}from"../_chunks/chunk-H5OXEEJZ.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";export{a as registrarBase};

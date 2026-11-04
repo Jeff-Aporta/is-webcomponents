@@ -110,6 +110,36 @@ build en `dist/cdn/importmap.json`; `pin-update.mjs` la mantiene al día (tambi�
 
 El import map va antes de cualquier `<script type="module">`. En Deno, la misma entrada en `imports` de `deno.json`.
 
+### Bootstrap recomendado para apps (loader en dos capas, F4)
+
+El arranque más rápido: import map con el alias al pin, `modulepreload` del cierre del shell crítico (sacado de
+`dist/cdn/deps.json` en el build de la app: `tags[tag]` de cada tag del shell; los `_chunks/` van tal cual, sin `?v=`),
+`<link>` de las hojas base y un módulo que importa el núcleo y pide el shell con `ensure` y el resto con `load`.
+
+```html
+<script type="importmap">
+{ "imports": { "@jeff-aporta/iswc-base/": "https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@<sha40>/dist/cdn/" } }
+</script>
+<link rel="modulepreload" href="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@<sha40>/dist/cdn/core/loader.min.mjs">
+<link rel="modulepreload" href="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@<sha40>/dist/cdn/layout/app-shell.min.mjs">
+<!-- … un modulepreload por cada ruta de deps.json → tags[tag] del shell crítico … -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@<sha40>/dist/cdn/is-base.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@<sha40>/dist/cdn/palettes.min.css">
+<script type="module">
+  import { iswcLoader as L } from '@jeff-aporta/iswc-base/core/loader.min.mjs';
+  await Promise.all(['iswc-app-shell', 'iswc-button'].map((t) => L.ensure(t)));   // shell definido → revelar
+  document.documentElement.setAttribute('data-app-ready', '');
+  void L.load('iswc-dialog', 'iswc-ag-grid');                                       // el resto, progresivo
+</script>
+```
+
+- `load()` resuelve al importar; `ensure()` al definirse. Sin precarga en el HTML, el primer `load()` pide
+  `deps.json` una vez y precarga el cierre del lote con `modulepreload` (una ráfaga).
+- `is-base.min.css` lo pone el loader por `<link>` si el HTML no lo trae (nunca lo duplica); el arranque no usa
+  IndexedDB ni Cache Storage ni la API de GitHub.
+- La extensión declara el tipo: `.mjs` → `import()`, `.js` → `<script src>` clásico. Componentes de app que son
+  módulos ES con extensión `.js`: `L.registerApp({ tag: { href, type: 'module' } })`.
+
 ## Boot con fallback (si un espejo cae)
 
 Probar bases **en orden**, siempre el mismo `base` para CSS y JS:

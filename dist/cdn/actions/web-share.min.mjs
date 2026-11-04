@@ -9,4 +9,4 @@
  * cdn-install: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/is-cdn-install/SKILL.md
  * blob: https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/actions/web-share.js
  */
-import{a}from"../_chunks/chunk-2VKRIFVN.mjs?v=vmeo06";import"../_chunks/chunk-4PV5NT2U.mjs?v=58b9qn";export{a as sharePayload};
+import{a}from"../_chunks/chunk-Z7DPWDA4.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";export{a as sharePayload};

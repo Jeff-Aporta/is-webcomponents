@@ -9,4 +9,4 @@
  * cdn-install: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/is-cdn-install/SKILL.md
  * blob: https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/data/seleccion-rangos.js
  */
-import{a}from"../_chunks/chunk-GUUO7UXP.mjs?v=njvg1e";import"../_chunks/chunk-WIZRSJ5D.mjs?v=xq7wh3";import"../_chunks/chunk-DAYNZKQ2.mjs?v=tqmvzp";import"../_chunks/chunk-ZV4HBNZF.mjs?v=kqc9uz";import"../_chunks/chunk-4PV5NT2U.mjs?v=58b9qn";export{a as SeleccionRangos};
+import{a}from"../_chunks/chunk-MJPEFBSB.mjs";import"../_chunks/chunk-F4O5I2YC.mjs";import"../_chunks/chunk-ELCBMFYU.mjs";import"../_chunks/chunk-E5FGRLEQ.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";export{a as SeleccionRangos};

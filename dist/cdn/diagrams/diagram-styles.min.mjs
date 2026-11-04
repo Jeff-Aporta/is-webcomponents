@@ -9,4 +9,4 @@
  * cdn-install: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/is-cdn-install/SKILL.md
  * blob: https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/diagrams/diagram-styles.js
  */
-import{a,b,c,d,e,f}from"../_chunks/chunk-FIZKHRRY.mjs?v=y9arxm";import"../_chunks/chunk-RHH33KCY.mjs?v=spqinr";import"../_chunks/chunk-4PV5NT2U.mjs?v=58b9qn";export{f as hostStyleName,c as isStyleDiagramLoaded,b as listStylesDiagram,d as loadStylesDiagram,a as registerStyleDiagram,e as styleThemeFor};
+import{a,b,c,d,e,f}from"../_chunks/chunk-ND4EN5RR.mjs";import"../_chunks/chunk-ZQGI76HF.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";export{f as hostStyleName,c as isStyleDiagramLoaded,b as listStylesDiagram,d as loadStylesDiagram,a as registerStyleDiagram,e as styleThemeFor};

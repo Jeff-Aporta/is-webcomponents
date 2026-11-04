@@ -9,4 +9,4 @@
  * cdn-install: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/is-cdn-install/SKILL.md
  * blob: https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/isp/00-context.js
  */
-import{a}from"../_chunks/chunk-WX44DD7P.mjs?v=vtizfb";import"../_chunks/chunk-4PV5NT2U.mjs?v=58b9qn";export{a as TTreeAdapterContext};
+import{a}from"../_chunks/chunk-PIA3KIYB.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";export{a as TTreeAdapterContext};

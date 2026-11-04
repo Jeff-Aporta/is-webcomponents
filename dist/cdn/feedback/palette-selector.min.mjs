@@ -9,4 +9,4 @@
  * cdn-install: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/is-cdn-install/SKILL.md
  * blob: https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/feedback/palette-selector.js
  */
-import"../_chunks/chunk-EIVYMCFT.mjs?v=gcmtq6";import"../_chunks/chunk-S5AOGS65.mjs?v=nbzru6";import"../_chunks/chunk-UCMASPOL.mjs?v=34t4kr";import"../_chunks/chunk-UQ3Q5H7I.mjs?v=v1shfa";import"../_chunks/chunk-KMS5XOZG.mjs?v=31a9r0";import"../_chunks/chunk-XP253YBZ.mjs?v=7txe1k";import"../_chunks/chunk-MNU2XQTU.mjs?v=khcy6g";import"../_chunks/chunk-HCLZRPU3.mjs?v=nylj0w";import"../_chunks/chunk-C7ON665Q.mjs?v=6f2qf1";import"../_chunks/chunk-SNHMDDOU.mjs?v=6lxkqf";import"../_chunks/chunk-4PV5NT2U.mjs?v=58b9qn";
+import"../_chunks/chunk-GZ6N237U.mjs";import"../_chunks/chunk-DQQE423Z.mjs";import"../_chunks/chunk-7IBSWVMF.mjs";import"../_chunks/chunk-ASVHDVTT.mjs";import"../_chunks/chunk-KGQPWGLU.mjs";import"../_chunks/chunk-T6VJWPWL.mjs";import"../_chunks/chunk-MGW4N46Z.mjs";import"../_chunks/chunk-FZCPQKWI.mjs";import"../_chunks/chunk-3COKNGLT.mjs";import"../_chunks/chunk-HK2DHHTQ.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";

@@ -9,4 +9,4 @@
  * cdn-install: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/is-cdn-install/SKILL.md
  * blob: https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/forms/date-field-core.js
  */
-import{a,b}from"../_chunks/chunk-MQEUOCAB.mjs?v=sjaes5";import"../_chunks/chunk-MJVZ52Q2.mjs?v=zyflbj";import"../_chunks/chunk-42VF4ILF.mjs?v=dti86w";import"../_chunks/chunk-4PV5NT2U.mjs?v=58b9qn";export{b as SectionField,a as sectionLayout};
+import{a,b}from"../_chunks/chunk-4JEXRJMN.mjs";import"../_chunks/chunk-QSOD2WJZ.mjs";import"../_chunks/chunk-KODVV7NI.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";export{b as SectionField,a as sectionLayout};

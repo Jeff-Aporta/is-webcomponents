@@ -9,4 +9,4 @@
  * cdn-install: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/is-cdn-install/SKILL.md
  * blob: https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/isp/controller-from-config.js
  */
-import{a,b,c,d}from"../_chunks/chunk-5BKRR5WZ.mjs?v=yrtuoh";import"../_chunks/chunk-4PV5NT2U.mjs?v=58b9qn";export{d as createBtnRefController,c as createCatalogController,b as createIspController,a as pluralizeEs};
+import{a,b,c,d}from"../_chunks/chunk-3LEW4GHI.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";export{d as createBtnRefController,c as createCatalogController,b as createIspController,a as pluralizeEs};

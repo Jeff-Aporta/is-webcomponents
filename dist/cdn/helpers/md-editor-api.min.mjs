@@ -9,4 +9,4 @@
  * cdn-install: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/is-cdn-install/SKILL.md
  * blob: https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/helpers/md-editor-api.js
  */
-import{a,b,c,d,e}from"../_chunks/chunk-MKBKDTIC.mjs?v=0tb40w";import"../_chunks/chunk-4PV5NT2U.mjs?v=58b9qn";export{d as apiRequest,b as byteLength,c as formatBytes,a as normalizeDocument,e as parseApiConfig};
+import{a,b,c,d,e}from"../_chunks/chunk-I6CMQTCD.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";export{d as apiRequest,b as byteLength,c as formatBytes,a as normalizeDocument,e as parseApiConfig};

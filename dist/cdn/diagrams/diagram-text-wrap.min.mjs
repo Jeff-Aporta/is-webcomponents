@@ -9,4 +9,4 @@
  * cdn-install: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/is-cdn-install/SKILL.md
  * blob: https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/diagrams/diagram-text-wrap.js
  */
-import{a,b,c,d,e,f,g}from"../_chunks/chunk-L5CV627I.mjs?v=fcp3lc";import"../_chunks/chunk-4PV5NT2U.mjs?v=58b9qn";export{f as buildTextWithTspans,g as buildTspans,d as cargarFuente,b as defaultMeasureTextWidth,a as estimateTextWidth,c as fuentesListas,e as wrapText};
+import{a,b,c,d,e,f,g}from"../_chunks/chunk-AZLPLQEF.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";export{f as buildTextWithTspans,g as buildTspans,d as cargarFuente,b as defaultMeasureTextWidth,a as estimateTextWidth,c as fuentesListas,e as wrapText};

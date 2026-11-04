@@ -9,4 +9,4 @@
  * cdn-install: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/is-cdn-install/SKILL.md
  * blob: https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/isp/helpers.js
  */
-import{a,b,c}from"../_chunks/chunk-UZSW4NRU.mjs?v=bornp7";import"../_chunks/chunk-4PV5NT2U.mjs?v=58b9qn";export{a as TObject,b as capitalizar,c as resolveColor};
+import{a,b,c}from"../_chunks/chunk-CX7GG75U.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";export{a as TObject,b as capitalizar,c as resolveColor};

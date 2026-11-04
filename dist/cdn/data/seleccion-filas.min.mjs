@@ -9,4 +9,4 @@
  * cdn-install: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/is-cdn-install/SKILL.md
  * blob: https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/data/seleccion-filas.js
  */
-import{a,b,c,d,e,f,g}from"../_chunks/chunk-QNVJGOGM.mjs?v=4cyh9k";import"../_chunks/chunk-4PV5NT2U.mjs?v=58b9qn";export{e as agregarTodas,c as alternarCheck,b as clicFila,g as estadoEncabezado,d as idsDeAlcance,a as leerOpciones,f as quitarTodas};
+import{a,b,c,d,e,f,g}from"../_chunks/chunk-CZW3UMW3.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";export{e as agregarTodas,c as alternarCheck,b as clicFila,g as estadoEncabezado,d as idsDeAlcance,a as leerOpciones,f as quitarTodas};

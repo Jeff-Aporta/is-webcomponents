@@ -39,6 +39,36 @@ export const tagsArranque = () => [...APP_TAGS, ...Object.values(VIEW_TAGS).flat
 
 - `data-app-ready` es la marca común de «arranque terminado» (las pruebas e2e la esperan; `app.scss`
   oculta el body hasta entonces). El watchdog revela la página a los 6 s aunque algo falle.
+
+### Arranque recomendado con el loader en dos capas (kit F4)
+
+Con un pin del kit posterior a F4: import map con el alias, `modulepreload` del cierre del shell crítico (de
+`dist/cdn/deps.json` del kit: `tags[tag]` de cada tag del shell, los `_chunks/` sin `?v=`), `<link>` de las hojas
+base, y revelar cuando el shell está **definido** (`ensure`), dejando lo demás en `load` progresivo.
+
+```html
+<script type="importmap">
+{ "imports": { "@jeff-aporta/iswc-base/": "https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@<sha40>/dist/cdn/" } }
+</script>
+<link rel="modulepreload" href="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@<sha40>/dist/cdn/core/loader.min.mjs">
+<!-- … un modulepreload por cada ruta del cierre del shell crítico … -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@<sha40>/dist/cdn/is-base.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@<sha40>/dist/cdn/palettes.min.css">
+<script type="module" src="./dist/cdn/<p>Loader.min.js"></script>  <!-- registerApp: tag → { href: URL?v=, type: 'module' } -->
+<script type="module">
+  import { iswcLoader as L } from '@jeff-aporta/iswc-base/core/loader.min.mjs';
+  const { KIT_TAGS, tagsArranque } = await import('./dist/cdn/js/kit-tags.js');
+  const shell = ['iswc-app-shell', ...tagsArranque()];             // lo que debe estar definido para revelar
+  await Promise.all(shell.map((t) => L.ensure(t)));
+  document.documentElement.setAttribute('data-app-ready', '');
+  void L.load(...KIT_TAGS);                                         // el resto se «upgradea» al llegar
+</script>
+```
+
+- `load()` resuelve al importar (no espera `whenDefined`); `ensure()` resuelve al definirse.
+- El loader infiere el tipo por extensión (`.mjs` → módulo, `.js` → clásico): el registrador pasa `type: 'module'`
+  para los componentes de la app (`.js` ES). `registerApp(…, { deps })` precarga el cierre de un tag de la app.
+- El arranque no usa IndexedDB, Cache Storage (salvo que la app instale `sheets`) ni la API de GitHub.
 - El registrador nunca carga el kit: si falta el loader, lanza un error claro.
 - Hosts externos que quieren un solo `<script>`: `dist/cdn/all.min.js` (el barril fija la raíz de hojas).
 

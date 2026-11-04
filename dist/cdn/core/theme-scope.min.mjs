@@ -4,4 +4,4 @@
  * cdn-install: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/is-cdn-install/SKILL.md
  * source: https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/core/theme-scope.ts
  */
-import{a,b,c,d}from"../_chunks/chunk-ILILPR6R.mjs?v=bztzw8";import"../_chunks/chunk-4PV5NT2U.mjs?v=58b9qn";export{a as THEME_SCOPE,b as findThemeContainer,c as readTheme,d as watchThemeContainer};
+import{a,b,c,d}from"../_chunks/chunk-EXQPFMZS.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";export{a as THEME_SCOPE,b as findThemeContainer,c as readTheme,d as watchThemeContainer};

@@ -50,6 +50,7 @@
 - **Sellado**: `stampDirectory(dist/cdn)` del kit reescribe cada import propio con `?v=<hash>` (FNV-1a,
   6 caracteres; ciclos con sello de grupo: una URL por módulo) → `asset-hashes.json`.
 - **Registrador** `dist/cdn/<p>Loader.min.js`: exige `iswcLoader` y llama
-  `L.registerApp({ tag: new URL('<ruta>?v=<hash>', raiz).href, … }, { installSheets: false })`.
+  `L.registerApp({ tag: { href: new URL('<ruta>?v=<hash>', raiz).href, type: 'module' }, … }, { installSheets: false })`
+  (`type: 'module'`: el loader del kit infiere el tipo por extensión y un `.js` sin él iría como script clásico).
 - `build-stamp.json`: `{ build, lastbuild, gitCommit, gitBranch }`.
 - El HTML versionado nunca lleva `?v=`: el hash solo vive en dist y en el registrador.

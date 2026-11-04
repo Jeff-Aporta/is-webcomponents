@@ -9,4 +9,4 @@
  * cdn-install: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/is-cdn-install/SKILL.md
  * blob: https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/data/portapapeles.js
  */
-import{a,b,c}from"../_chunks/chunk-UYS45ZNJ.mjs?v=h0qq3p";import"../_chunks/chunk-DAYNZKQ2.mjs?v=tqmvzp";import"../_chunks/chunk-4PV5NT2U.mjs?v=58b9qn";export{a as aTexto,c as ajustarAlRango,b as desdeTexto};
+import{a,b,c}from"../_chunks/chunk-JNPMO6SA.mjs";import"../_chunks/chunk-ELCBMFYU.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";export{a as aTexto,c as ajustarAlRango,b as desdeTexto};

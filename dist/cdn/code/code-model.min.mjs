@@ -9,4 +9,4 @@
  * cdn-install: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/is-cdn-install/SKILL.md
  * blob: https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/code/code-model.js
  */
-import{a,b,c,d,e,f}from"../_chunks/chunk-WI2LVM7Q.mjs?v=a3gk2t";import"../_chunks/chunk-4PV5NT2U.mjs?v=58b9qn";export{a as CODE_DOC_SCHEMA,c as code2json,d as json2code,b as normalizeMark,e as parseCodeDocument,f as rebaseMarks};
+import{a,b,c,d,e,f}from"../_chunks/chunk-FGNUFLQN.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";export{a as CODE_DOC_SCHEMA,c as code2json,d as json2code,b as normalizeMark,e as parseCodeDocument,f as rebaseMarks};

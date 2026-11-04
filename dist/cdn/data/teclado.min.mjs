@@ -9,4 +9,4 @@
  * cdn-install: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/is-cdn-install/SKILL.md
  * blob: https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/data/teclado.js
  */
-import{a}from"../_chunks/chunk-FT7GHOGZ.mjs?v=4voi2z";import"../_chunks/chunk-GZRE62YG.mjs?v=5qn48b";import"../_chunks/chunk-DAYNZKQ2.mjs?v=tqmvzp";import"../_chunks/chunk-VPFK46SX.mjs?v=qug1r1";import"../_chunks/chunk-ZV4HBNZF.mjs?v=kqc9uz";import"../_chunks/chunk-4PV5NT2U.mjs?v=58b9qn";export{a as Teclado};
+import{a}from"../_chunks/chunk-OQATGDA3.mjs";import"../_chunks/chunk-F2YR53GW.mjs";import"../_chunks/chunk-ELCBMFYU.mjs";import"../_chunks/chunk-LRYKNXBA.mjs";import"../_chunks/chunk-E5FGRLEQ.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";export{a as Teclado};

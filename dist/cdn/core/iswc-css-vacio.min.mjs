@@ -4,4 +4,4 @@
  * cdn-install: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/is-cdn-install/SKILL.md
  * source: https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/core/iswc-css-vacio.ts
  */
-import"../_chunks/chunk-4PV5NT2U.mjs?v=58b9qn";var a="";export{a as default};
+import"../_chunks/chunk-CMZVHIC2.mjs";var e="";export{e as default};

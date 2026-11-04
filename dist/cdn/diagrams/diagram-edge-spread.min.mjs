@@ -9,4 +9,4 @@
  * cdn-install: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/is-cdn-install/SKILL.md
  * blob: https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/diagrams/diagram-edge-spread.js
  */
-import{a}from"../_chunks/chunk-5WMJUQ6S.mjs?v=uz76yd";import"../_chunks/chunk-JAUV2RK2.mjs?v=6wmfgt";import"../_chunks/chunk-GEIAAPCJ.mjs?v=v9s562";import"../_chunks/chunk-4PV5NT2U.mjs?v=58b9qn";export{a as spreadOrthogonalPaths};
+import{a}from"../_chunks/chunk-GJKZP5EQ.mjs";import"../_chunks/chunk-6UQIVFOL.mjs";import"../_chunks/chunk-FKA7RWJD.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";export{a as spreadOrthogonalPaths};

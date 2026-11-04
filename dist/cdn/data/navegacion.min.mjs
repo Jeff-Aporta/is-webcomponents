@@ -9,4 +9,4 @@
  * cdn-install: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/is-cdn-install/SKILL.md
  * blob: https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/data/navegacion.js
  */
-import{a,b,c,d,e,f}from"../_chunks/chunk-GZRE62YG.mjs?v=5qn48b";import"../_chunks/chunk-4PV5NT2U.mjs?v=58b9qn";export{a as direccionDeTecla,c as extremo,f as filaExtrema,b as moverFlecha,e as porPagina,d as tabular};
+import{a,b,c,d,e,f}from"../_chunks/chunk-F2YR53GW.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";export{a as direccionDeTecla,c as extremo,f as filaExtrema,b as moverFlecha,e as porPagina,d as tabular};

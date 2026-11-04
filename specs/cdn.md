@@ -42,14 +42,15 @@ El kit se consume desde jsDelivr/GitHub Pages como módulos por tag. La galería
 | `core/is-base.min.css` | Themes + paletas de marca (`<link>` en la app host) |
 | `core/palettes.min.css` | Paletas de marca |
 | `is-base.min.css` / `palettes.min.css` | Alias estables (= `core/…`) pre-folderizado |
-| `core/loader.min.mjs` | `iswcLoader` (carga selectiva + pin/mirrors) |
+| `core/loader.min.mjs` | `iswcLoader`, núcleo (capa 1, ≤ 8 KB br): catálogo, host/pin, `load`/`ensure`, precarga del cierre |
+| `core/loader-<x>.min.mjs` | Capa 2 del loader (`sheets`, `store`, `mirrors`, `pages`, `ref`, `hashes`): `import()` al primer uso |
 | `core/loader.min.js` | Copia byte a byte de `core/loader.min.mjs` para pines viejos (compat): se retira cuando los consumidores re-pineen (F5) |
 | `core/loader.md` | Docs del loader (API) |
 | `core/<x>.min.mjs` · `lib/<x>.min.mjs` | Módulos del core y de lib (zod, obj, ref-obj) para ejecutar; `core/<x>.ts` para extender |
 | `<categoria>/<name>.min.mjs` | Componente individual (módulo ES; su CSS va dentro, por `iswc:css`) |
 | `<categoria>/<name>.min.css` | Estilos del componente (para `sheet-cache` y para enlazarlos a mano) |
 | `_chunks/chunk-<hash>.mjs` | Código compartido entre módulos (el core del molde vive en UNO) |
-| `deps.json` | Tag → cierre completo de módulos (`<cat>/<tag>.min.mjs` + `_chunks/…`); lo usará el loader (F4) para precargar |
+| `deps.json` | Tag → cierre completo de módulos (`<cat>/<tag>.min.mjs` + `_chunks/…`) y `v` (`?v=` de cada entrada); el loader lo pide una vez para precargar el lote con `modulepreload` (F4) |
 | `exports.json` | Mapa `exports` para el `package.json` de npm (F6) |
 | `<categoria>/<name>.classic.js` | Solo si se pide: artefacto clásico IIFE (`deno task build:classic`) |
 | `skills/<name>/SKILL.md` | Skills para agentes (copiado en build) |
@@ -65,25 +66,44 @@ Desde F3 (plan `specs/plan-carga-modular.md` D2/D5) `scripts/build.mjs` corre **
 - **Grafo:** del metafile salen `deps.json` (cierre por tag y por módulo del core, ordenado) y `exports.json` (`src/cdn/build/graph.ts`; guardián `gobernanza/deps-json`). El metafile entero queda en `.tmp/metafile-kit.json` para los guardianes.
 - **Extensiones (D2):** `.mjs` = módulo ES, `.js` = clásico. Los únicos `.js` de `dist/cdn` son la copia compat `core/loader.min.js` y los `*.classic.js` que se pidan (guardián `gobernanza/extension-modulos`). La galería (`dist/scripts`, `dist/pages`, `dist/previews`, `dist/gallery-app.min.js`) no es parte del CDN y conserva `.min.js`.
 - **Clásico opcional:** `deno task build:classic -- <tag> [<tag>…]` → `<categoria>/<tag>.classic.js`, IIFE autosuficiente (core, zod y estilos dentro) para `<script src>` sin módulos. No entra en `deno task build` ni en el catálogo.
-- **`?v=`:** el build sella los imports relativos dentro de `dist/cdn` y los HTML de `index.html`/`demos/**` (orígenes mutables: Pages y carpeta local) y escribe el mapa en `asset-hashes.json`. El loader ya no lo lleva embebido (`__IS_ASSET_HASHES__` = `{}`; F4 lo leerá en diferido) y, sobre un pin SHA de jsDelivr/githack, nunca añade `?v=` (`esUrlInmutable`, `src/cdn/build/asset-url.ts`): la URL ya es inmutable.
+- **`?v=`:** el build sella los imports relativos dentro de `dist/cdn` hacia entradas (los chunks no: su nombre ya es un hash, `esChunk` en `stamp-hashes.ts`) y los HTML de `index.html`/`demos/**` (orígenes mutables: Pages y carpeta local) y escribe el mapa en `asset-hashes.json`; `deps.json` lleva en `v` el de cada entrada. El loader no lo lleva embebido (`__IS_ASSET_HASHES__` = `{}`): en orígenes mutables sella sus `import()` con `deps.json` (`v`) y hojas/módulos de página con `asset-hashes.json` en diferido (`loader-hashes`); sobre un pin SHA de jsDelivr/githack nunca añade `?v=` (`esUrlInmutable`, `src/cdn/build/asset-url.ts`): la URL ya es inmutable. Los bundles de la galería (`dist/pages`, `dist/scripts`) importan las entradas del kit con el mismo `?v=` (una sola instancia por módulo).
+- **Catálogo del loader:** va dentro de `core/loader.min.mjs` (compacto: `aliases` + `categories`; el núcleo reconstruye `tags`), sustituido como texto solo en `src/cdn/loader.ts` (`catalogoEnLoader`). Con `define` de objeto esbuild lo inyectaba en el chunk de runtime que importa todo el kit (F3: 25 KB de catálogo en el cierre de cada componente).
 - **Compat `loader.min.js`:** se publica mientras haya consumidores con la URL vieja pineada; se retira cuando re-pineen (F5). La raíz `dist/cdn/loader.min.mjs` re-exporta `./core/loader.min.mjs` (no puede ser copia: el loader importa `../_chunks/…`).
 - **Tamaño publicado (D8):** `gobernanza/tamano-publicado` mide `git archive HEAD` (≤ 48 MB; jsDelivr rechaza > 50 MB) y `dist/cdn`.
 
 ### Bootstrap recomendado
 
+Desde F4 (loader en dos capas, plan D7). El HTML de la app trae el import map con el alias al pin, la precarga del
+cierre del shell crítico (sacada de `deps.json` en el build de la app: `tags[tag]` de cada tag del shell, chunks tal
+cual) y las hojas base; el módulo de arranque importa el núcleo y pide el shell con `ensure` (revela al definirse) y
+el resto con `load` (progresivo).
+
 ```html
+<script type="importmap">
+{ "imports": { "@jeff-aporta/iswc-base/": "https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@SHA/dist/cdn/" } }
+</script>
+<link rel="modulepreload" href="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@SHA/dist/cdn/core/loader.min.mjs">
+<link rel="modulepreload" href="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@SHA/dist/cdn/layout/app-shell.min.mjs">
+<!-- … un modulepreload por cada ruta de deps.json → tags[tag] del shell crítico (chunks sin ?v=) … -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@SHA/dist/cdn/is-base.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@SHA/dist/cdn/palettes.min.css">
 <script type="module">
-  import { iswcLoader } from '…/dist/cdn/core/loader.min.mjs';
-  // Pin opcional (SHA o branch). Sin pin → tip de main (API GitHub).
-  // iswcLoader.pin('abcdef0123…');
-  // Fallback canónico (si no configuras mirrors): jsDelivr → githack → Pages.
-  // iswcLoader.configure({ mirrors: ['jsdelivr', 'githack', 'pages'] });
-  await iswcLoader.loadCSSBase();
-  await iswcLoader.loadCSSPalettesDefault();
-  await iswcLoader.load('iswc-button', 'iswc-button-group');
-  // o: load('actions') expande a cada tag.min.mjs (sin bundle de categoría)
+  import { iswcLoader as L } from '@jeff-aporta/iswc-base/core/loader.min.mjs';
+  await Promise.all(['iswc-app-shell', 'iswc-button'].map((t) => L.ensure(t)));
+  document.documentElement.setAttribute('data-app-ready', '');
+  void L.load('iswc-dialog', 'iswc-ag-grid');
 </script>
 ```
+
+- `load()` resuelve al **importar** el lote (no espera `whenDefined`); `ensure(tag)` resuelve al **definirse**.
+- Sin precarga en el HTML, el primer `load()` pide `deps.json` una vez e inyecta `<link rel="modulepreload">` para todo
+  el cierre del lote (una ráfaga). Sobre pin SHA va en paralelo con el primer `import()` (`cache: 'force-cache'`); en
+  un origen mutable el loader lo espera (trae el `?v=` de las entradas).
+- `is-base.min.css` lo inyecta el loader por `<link>` (sin fetch ni IndexedDB) salvo que el HTML ya lo enlace.
+- Sin pin ni host el loader usa `self`; nunca consulta `api.github.com` en el arranque (solo `loader-ref`, si una app
+  quita el pin y hay espejos). Nada de top-level await en los módulos que cargan las apps (WebView Android).
+- Componentes de app (`registerApp`): `.mjs` → `import()`, `.js` → script clásico; un módulo ES con extensión `.js`
+  pasa `type: 'module'`. `deps` (`tag` → hrefs) precarga su cierre.
 
 Skills: `npx skills add Jeff-Aporta/is-webcomponents -s is-cdn-install` · `-s iswc-base`.
 

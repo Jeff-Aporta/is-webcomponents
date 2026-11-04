@@ -9,4 +9,4 @@
  * cdn-install: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/is-cdn-install/SKILL.md
  * blob: https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/data/spark.js
  */
-import{a,b,c}from"../_chunks/chunk-YBVNIL4X.mjs?v=fftzhu";import"../_chunks/chunk-OGKWYO6I.mjs?v=ywnj7s";import"../_chunks/chunk-GEIAAPCJ.mjs?v=v9s562";import"../_chunks/chunk-4PV5NT2U.mjs?v=58b9qn";export{c as htmlSparkline,a as normalizarSerie,b as resumenSerie};
+import{a,b,c}from"../_chunks/chunk-UNWNRKXL.mjs";import"../_chunks/chunk-47T6XX4W.mjs";import"../_chunks/chunk-FKA7RWJD.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";export{c as htmlSparkline,a as normalizarSerie,b as resumenSerie};

@@ -4,4 +4,4 @@
  * cdn-install: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/is-cdn-install/SKILL.md
  * source: https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/core/popup-dismiss.ts
  */
-import{a}from"../_chunks/chunk-UQ3Q5H7I.mjs?v=v1shfa";import"../_chunks/chunk-4PV5NT2U.mjs?v=58b9qn";export{a as createPopupDismiss};
+import{a}from"../_chunks/chunk-ASVHDVTT.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";export{a as createPopupDismiss};

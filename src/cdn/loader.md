@@ -6,10 +6,11 @@ Entry CDN liviano del kit. Carga solo lo pedido, con pin, mirrors y anti-redunda
 
 | Artefacto | Path |
 | --- | --- |
-| Fuente | `src/cdn/loader.ts` |
+| Fuente (núcleo, capa 1) | `src/cdn/loader.ts` |
+| Capa 2 (al primer uso) | `src/cdn/loader-{sheets,store,mirrors,pages,ref,hashes}.ts` |
 | Planificador | `src/cdn/load-plan.ts` |
 | Este doc | `src/cdn/loader.md` |
-| Publicado | `dist/cdn/core/loader.min.mjs` · `dist/cdn/core/loader.md` |
+| Publicado | `dist/cdn/core/loader.min.mjs` (núcleo) · `dist/cdn/core/loader-<x>.min.mjs` (capa 2) · `dist/cdn/core/loader.md` |
 | Raw | `https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/cdn/loader.md` |
 | CDN | `https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn/core/loader.min.mjs` |
 
@@ -17,7 +18,62 @@ Skill de instalación: [`skills/is-cdn-install/SKILL.md`](../../skills/is-cdn-in
 
 Nombre: el kit es **`iswc-base`**; en las URLs va el nombre real del repo en GitHub (`REPO_GITHUB` de `src/core/cdn-ref.ts`). El loader reconoce un pin con cualquiera de los nombres del repo.
 
-## Bootstrap
+## Dos capas (F4, plan D7)
+
+| Capa | Módulo | Qué hace | Cuándo se pide |
+| --- | --- | --- | --- |
+| 1 | `core/loader.min.mjs` (≤ 8 KB br) | catálogo, host/pin, `load`/`ensure`/`has`/`getLoaded`, anti-redundancia, `registerApp`, inferencia por extensión, precarga del cierre (`deps.json` → `modulepreload`), `is-base.min.css` por `<link>` | siempre |
+| 2 | `core/loader-sheets.min.mjs` | `sheets.*` (Cache Storage + adoptedStyleSheets), `loadPageStyles` | `sheets.install/warm*`, `registerApp` (instala la caché), `loadPageStyles` |
+| 2 | `core/loader-store.min.mjs` | `asset-store` (IndexedDB), `syncHashMemory` | en reposo y solo con mapa embebido (vendor); nunca en el arranque |
+| 2 | `core/loader-mirrors.min.mjs` | cadena jsDelivr → githack → Pages, sticky, reintentos | solo si la raíz primaria falla, o sin raíz (`preferSelf: false` sin host); `listBases`/`fallbackBases` |
+| 2 | `core/loader-pages.min.mjs` | `loadPageModules` | `loadPageModules` |
+| 2 | `core/loader-ref.min.mjs` | `resolveRef` (API de GitHub) | solo sin pin y con espejos que lo necesiten; con pin, `BOOT_HOST` o `self` nunca |
+| 2 | `core/loader-hashes.min.mjs` | `asset-hashes.json` en diferido (`?v=`) | solo en orígenes mutables (Pages/local), en `loadPageModules`/`loadPageStyles`/`assetUrl` |
+
+La API pública (`iswcLoaderShape`) no cambia de forma: cada método de capa 2 es un envoltorio `async` que hace
+`import()` del módulo y le pasa el contexto del núcleo. Cambios de comportamiento:
+
+- `load(...)` resuelve cuando los módulos del lote están **importados** (promesas de `import()`); no espera
+  `whenDefined` de todo. `ensure(tag)` sí lo espera. `LoadResult` sigue siendo `{ loaded, skipped }`. Una app revela
+  la página cuando su shell crítico está definido (`ensure`) y lo demás se «upgradea» al llegar.
+- `sheets.install()` devuelve una **promesa** de la API de la caché (antes la API); `sheets.get()` sigue síncrono.
+- Los hrefs sueltos de `load`, `ensure(tag, { href })`, `registerApp` y `loadPageModules` se cargan por extensión.
+
+## Bootstrap recomendado (apps)
+
+El arranque más rápido no espera a que el loader descubra nada: el HTML de la app ya trae el import map, la precarga
+del cierre del shell crítico (sacada de `deps.json` en el build de la app) y las hojas base.
+
+```html
+<script type="importmap">
+{ "imports": { "@jeff-aporta/iswc-base/": "https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@SHA/dist/cdn/" } }
+</script>
+<!-- Cierre del shell crítico: deps.json → tags[tag] de cada tag del shell (chunks tal cual, sin ?v=). -->
+<link rel="modulepreload" href="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@SHA/dist/cdn/core/loader.min.mjs">
+<link rel="modulepreload" href="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@SHA/dist/cdn/layout/app-shell.min.mjs">
+<link rel="modulepreload" href="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@SHA/dist/cdn/_chunks/chunk-XXXXXXXX.mjs">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@SHA/dist/cdn/is-base.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@SHA/dist/cdn/palettes.min.css">
+<script type="module">
+  import { iswcLoader as L } from '@jeff-aporta/iswc-base/core/loader.min.mjs';
+  await Promise.all(['iswc-app-shell', 'iswc-button'].map((t) => L.ensure(t)));   // shell crítico definido
+  document.documentElement.setAttribute('data-app-ready', '');
+  void L.load('iswc-dialog', 'iswc-ag-grid');                                       // el resto, progresivo
+</script>
+```
+
+- Sobre un pin SHA (jsDelivr/githack) las URLs no llevan `?v=` (son inmutables). En un origen mutable (Pages, carpeta
+  local) el build de la app sella las entradas con el `?v=` de `deps.json` (`v`) y deja los chunks tal cual.
+- Si el HTML ya enlaza `is-base.min.css` (con o sin `?v=`), el loader no lo duplica; los `modulepreload` del HTML
+  tampoco se repiten.
+- Aunque el HTML no precargue nada, el primer `load()` pide `deps.json` (una vez) e inyecta `<link rel="modulepreload">`
+  para todo el cierre del lote: el navegador lo baja en una ráfaga en vez de un nivel por `import()`. Sobre pin SHA
+  `deps.json` va con `cache: 'force-cache'` y en paralelo con el primer `import()`; en un origen mutable el loader lo
+  espera (trae el `?v=` de las entradas: sin él, una entrada cacheada pediría chunks que ya no existen).
+- Nada de top-level await en los módulos que cargan las apps (regla del WebView Android): el núcleo y la capa 2 no
+  lo usan.
+
+## Bootstrap mínimo
 
 ```js
 import { iswcLoader as L } from
@@ -107,11 +163,27 @@ Cadena fija al cargar JS/CSS del kit (si un espejo cae, el siguiente responde):
 
 ## Hash de contenido (`?v=`)
 
-Cada build deja un mapa de 6 caracteres en `dist/cdn/asset-hashes.json`. Desde F3 el loader **no** lo lleva embebido (`__IS_ASSET_HASHES__` queda en `{}`; F4 lo leerá en diferido), así que hoy `load` y `assetUrl` no agregan `?v=`; sobre un pin SHA de jsDelivr/githack no lo agregarán nunca (`esUrlInmutable`: la URL ya es inmutable). Si el archivo cambia, el hash cambia y el navegador pide esa URL: no hace falta un refresco forzado.
+Cada build deja un mapa de 6 caracteres en `dist/cdn/asset-hashes.json`. El loader **no** lo lleva embebido
+(`__IS_ASSET_HASHES__` queda en `{}`); desde F4 sella solo en orígenes mutables (Pages, `localhost`, carpeta local) y
+nunca sobre un pin SHA de jsDelivr/githack (`esUrlInmutable`: la URL ya es inmutable):
 
-**Extensiones y grafo (F3).** Los módulos ES del kit son `.min.mjs` (`<cat>/<tag>.min.mjs`, `core/<x>.min.mjs`, `_chunks/chunk-<hash>.mjs`); `.js` queda para lo clásico (`*.classic.js`, `<script src>`) y para la copia compat `core/loader.min.js` (se retira en F5). `dist/cdn/deps.json` da, por tag, el cierre completo de módulos que trae: F4 lo usará para precargar el lote con `modulepreload`.
+- **Entradas del kit** (`<cat>/<tag>.min.mjs`): su `?v=` viaja en `deps.json` (`v`), que el loader ya pide para la
+  precarga. No hace falta bajar `asset-hashes.json` para `load`/`ensure`.
+- **Hojas, módulos de página y `assetUrl()`**: `loader-hashes` lee `asset-hashes.json` en diferido (en
+  `loadPageModules`/`loadPageStyles`; `assetUrl` lo dispara y sella cuando llega).
+- **Chunks** (`_chunks/chunk-<hash>.mjs`): nunca llevan `?v=` (el nombre ya es el hash de su contenido). Su URL es una
+  sola para todos sus importadores y para el `modulepreload` del loader.
 
-Los `import` relativos entre `.min.mjs` llevan el mismo `?v=`, sellado en el build en orden de dependencias. Los módulos se cargan solo con `import()` (dedupe por URL); no pasan por Cache Storage: la caché HTTP (`immutable` en jsDelivr, `?v=` en orígenes mutables) cubre la revisita sin pedir cada `.min.js` dos veces. El CSS de documento que no usa `url()` relativo se guarda en IndexedDB con la clave ruta+hash; localStorage recuerda el mapa para tirar los cuerpos viejos.
+Si el archivo cambia, el hash cambia y el navegador pide esa URL: no hace falta un refresco forzado.
+
+**Extensiones y grafo.** Los módulos ES del kit son `.min.mjs` (`<cat>/<tag>.min.mjs`, `core/<x>.min.mjs`, `_chunks/chunk-<hash>.mjs`); `.js` queda para lo clásico (`*.classic.js`, `<script src>`) y para la copia compat `core/loader.min.js` (se retira en F5). `dist/cdn/deps.json` da, por tag, el cierre completo de módulos que trae (`tags`, `core`) y el `?v=` de cada entrada (`v`): el loader lo usa para precargar el lote con `modulepreload`.
+
+**La extensión declara el tipo (D2).** En `load(href)`, `ensure(tag, { href })`, `registerApp` y `loadPageModules`:
+`.mjs`, `.ts` o sin extensión → `import()`; `.js` → `<script src>` clásico (promesa en `load`/`error`); `.css` →
+`<link>`. Overrides: prefijo `classic:` / `module:` (page modules), `type: 'module' | 'classic'` (`registerApp`,
+`registerPageModule`). Un componente de app que es módulo ES con extensión `.js` necesita `type: 'module'`.
+
+Los `import` relativos entre entradas `.min.mjs` llevan el `?v=` de su destino, sellado en el build en orden de dependencias. Los módulos se cargan solo con `import()` (dedupe por URL); no pasan por Cache Storage: la caché HTTP (`immutable` en jsDelivr, `?v=` en orígenes mutables) cubre la revisita sin pedir cada módulo dos veces. El arranque no usa IndexedDB ni Cache Storage: `is-base.min.css` va por `<link rel=stylesheet>` (sin fetch previo). El `asset-store` (cuerpos por ruta+hash en IndexedDB) queda en la capa 2 para quien lo use a mano.
 
 Generadores para otros proyectos (CDN o vendor): `src/cdn/build/` (`bundleMinJs`, `bundleLoader`, `stampHashTexts`, `hashBase`/`hashJs`/`hashCss`/`hashHtml`). El build los publica en `dist/cdn/build/`.
 
@@ -135,7 +207,7 @@ deno run -A --no-check --sloppy-imports ISU/render-lote.ts --carpeta=<dir> --svg
 Evita flicker de CSS en ShadowRoot: Cache Storage + `adoptedStyleSheets`.
 
 ```js
-L.sheets.install({ cacheName: 'mi-app-sheets-v1' });
+await L.sheets.install({ cacheName: 'mi-app-sheets-v1' });   // capa 2: promesa de la API
 await L.sheets.warmFromCache();
 await L.sheets.warmFromManifest('./dist/cdn/hojas-manifest.json', {
   base: './dist/cdn/',
@@ -147,19 +219,19 @@ API: `install`, `get`, `warm(hrefs)`, `warmFromCache`, `warmFromManifest(url, { 
 
 ## App components (`registerApp`)
 
-Registra tags propios (fuera del catálogo del kit). `load` / `ensure` los tratan igual que los `is-*` y calientan el CSS hermano si sheet-cache está activo.
+Registra tags propios (fuera del catálogo del kit). `load` / `ensure` los tratan igual que los `is-*` y calientan el CSS hermano si sheet-cache está activo (en paralelo con el `import()`). El tipo sale de la extensión: `.mjs` → `import()`, `.js` → script clásico, salvo `type`. Con `deps` (`tag` → hrefs, en `registerApp` o en `configure`) el loader precarga ese cierre con `modulepreload` al pedir el tag; sin `deps`, solo la entrada.
 
 ```js
 L.registerApp(
   {
     // ⚠️ NO uses `./dist/cdn/all.min.js`: es una *lista de imports* (~250 B),
     // no un bundle importable. Para apps, registra cada tag o cada
-    // `<category>/<tag>.min.js` por separado. Ver `specs/cdn.md` §CDN y
+    // `<category>/<tag>.min.mjs` por separado. Ver `specs/cdn.md` §CDN y
     // §Anti-patrones.
-    'paty-shell': './dist/cdn/<category>/paty-shell.min.js',
-    'mi-widget': { href: './widgets/mi-widget.js', css: './widgets/mi-widget.css' },
+    'paty-shell': './dist/cdn/<category>/paty-shell.min.mjs',
+    'mi-widget': { href: './widgets/mi-widget.js', type: 'module', css: './widgets/mi-widget.css' },
   },
-  { cacheName: 'mi-app-sheets-v1' },
+  { cacheName: 'mi-app-sheets-v1', deps: { 'paty-shell': ['./dist/cdn/_chunks/paty-base.mjs'] } },
 );
 
 await L.load('iswc-button', 'paty-shell');
@@ -171,9 +243,11 @@ await L.ensure('iswc-code'); // lazy: load + whenDefined
 ```js
 await L.ensure('iswc-code');           // catálogo del kit
 await L.ensure('mi-widget');         // registerApp
-await L.ensure('iswc-code', { href }); // href explícito
+await L.ensure('iswc-code', { href }); // href explícito (por extensión: .mjs → import(), .js → clásico)
 L.isReady('iswc-code');                // sync
 ```
+
+`load()` resuelve al **importar**; `ensure()` resuelve al **definirse** (`whenDefined`).
 
 ## Componentes documentales
 
@@ -210,7 +284,7 @@ API:
 | `configure({ mirrors, preferSelf, ref, host, sha, cdnUrl, v, query })` | Espejos / self / host / bust |
 | `listBases()` / `fallbackBases()` | Bases que se probarán |
 
-Orden por defecto: `host` (si hay) → `self` (si `preferSelf` y no hay host) → **jsDelivr → githack → Pages**. Un fallo en un espejo prueba el siguiente; el que funciona queda sticky.
+Orden por defecto: `host` (si hay) → `self` (si `preferSelf` y no hay host) → **jsDelivr → githack → Pages**. Un fallo en un espejo prueba el siguiente; el que funciona queda sticky. El núcleo solo prueba la primera base (host o self); la cadena y el sticky viven en `loader-mirrors` (capa 2), que se pide únicamente si esa base falla. Sin pin la cadena consulta la API de GitHub (`loader-ref`); con pin, `BOOT_HOST`, `self` o `mirrors: []` (modo local) nunca.
 
 ## CSS
 

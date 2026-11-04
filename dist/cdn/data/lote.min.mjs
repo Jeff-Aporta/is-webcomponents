@@ -9,4 +9,4 @@
  * cdn-install: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/is-cdn-install/SKILL.md
  * blob: https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/data/lote.js
  */
-import{a}from"../_chunks/chunk-UMIT36GI.mjs?v=zf8jce";import"../_chunks/chunk-4PV5NT2U.mjs?v=58b9qn";export{a as Lote};
+import{a}from"../_chunks/chunk-EOVHC5BC.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";export{a as Lote};

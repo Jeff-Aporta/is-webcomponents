@@ -1,1 +1,0 @@
-var i=Object.freeze(["circle","square","rounded"]),n="circle",t=Object.freeze({circle:"mdi:circle-outline",square:"mdi:square-outline",rounded:"mdi:rounded-corner"});function c(e,r=n){return typeof e!="string"?r:i.includes(e)?e:r}function s(){return i.map(e=>({value:e,label:e,icon:t[e]}))}export{i as a,n as b,t as c,c as d,s as e};

@@ -9,4 +9,4 @@
  * cdn-install: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/is-cdn-install/SKILL.md
  * blob: https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/data/quick.js
  */
-import{a,b}from"../_chunks/chunk-64YFWP7W.mjs?v=ohxmi9";import"../_chunks/chunk-4PV5NT2U.mjs?v=58b9qn";export{b as coincideQuick,a as partesQuick};
+import{a,b}from"../_chunks/chunk-F77DXKYE.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";export{b as coincideQuick,a as partesQuick};

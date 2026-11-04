@@ -9,4 +9,4 @@
  * cdn-install: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/is-cdn-install/SKILL.md
  * blob: https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/data/relleno.js
  */
-import{a,b,c,d}from"../_chunks/chunk-WIZRSJ5D.mjs?v=xq7wh3";import"../_chunks/chunk-DAYNZKQ2.mjs?v=tqmvzp";import"../_chunks/chunk-4PV5NT2U.mjs?v=58b9qn";export{a as esNumero,d as planRelleno,b as regresion,c as valoresRelleno};
+import{a,b,c,d}from"../_chunks/chunk-F4O5I2YC.mjs";import"../_chunks/chunk-ELCBMFYU.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";export{a as esNumero,d as planRelleno,b as regresion,c as valoresRelleno};

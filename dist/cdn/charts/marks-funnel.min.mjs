@@ -9,4 +9,4 @@
  * cdn-install: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/is-cdn-install/SKILL.md
  * blob: https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/charts/marks-funnel.js
  */
-import{a,b}from"../_chunks/chunk-AKHUBTAZ.mjs?v=l1srq7";import"../_chunks/chunk-GEIAAPCJ.mjs?v=v9s562";import"../_chunks/chunk-4PV5NT2U.mjs?v=58b9qn";export{b as drawFunnelMarks,a as funnelBands};
+import{a,b}from"../_chunks/chunk-6OQ57NIP.mjs";import"../_chunks/chunk-FKA7RWJD.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";export{b as drawFunnelMarks,a as funnelBands};

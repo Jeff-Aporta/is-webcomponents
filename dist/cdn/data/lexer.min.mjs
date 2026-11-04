@@ -9,4 +9,4 @@
  * cdn-install: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/is-cdn-install/SKILL.md
  * blob: https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/data/lexer.js
  */
-import{a,b,c}from"../_chunks/chunk-UUNBQQFK.mjs?v=aa8mlq";import"../_chunks/chunk-4PV5NT2U.mjs?v=58b9qn";export{b as KEYWORDS,a as MacroError,c as lexMacro};
+import{a,b,c}from"../_chunks/chunk-62BF6X5E.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";export{b as KEYWORDS,a as MacroError,c as lexMacro};

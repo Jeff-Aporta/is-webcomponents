@@ -9,4 +9,4 @@
  * cdn-install: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/is-cdn-install/SKILL.md
  * blob: https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/data/estado-grilla.js
  */
-import{a,b,c,d}from"../_chunks/chunk-YEU5XY76.mjs?v=gh0bma";import"../_chunks/chunk-4PV5NT2U.mjs?v=58b9qn";export{d as fusionarEstado,a as leerEstado,c as omitirPropiedades,b as validarEstado};
+import{a,b,c,d}from"../_chunks/chunk-NPMRYJOP.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";export{d as fusionarEstado,a as leerEstado,c as omitirPropiedades,b as validarEstado};

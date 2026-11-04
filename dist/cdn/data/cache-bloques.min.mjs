@@ -9,4 +9,4 @@
  * cdn-install: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/is-cdn-install/SKILL.md
  * blob: https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/data/cache-bloques.js
  */
-import{a}from"../_chunks/chunk-FTNY4MN5.mjs?v=2r6qxr";import"../_chunks/chunk-4PV5NT2U.mjs?v=58b9qn";export{a as CacheBloques};
+import{a}from"../_chunks/chunk-SLHTUK5J.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";export{a as CacheBloques};

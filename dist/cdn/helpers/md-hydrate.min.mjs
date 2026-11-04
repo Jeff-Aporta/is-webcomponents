@@ -9,4 +9,4 @@
  * cdn-install: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/is-cdn-install/SKILL.md
  * blob: https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/helpers/md-hydrate.js
  */
-import{a,b,c,d}from"../_chunks/chunk-OCIJZ46C.mjs?v=fny14b";import"../_chunks/chunk-4PV5NT2U.mjs?v=58b9qn";export{c as hidratarMd,d as hydrateMdEmbeds,b as planHidratacion,a as tagsPresentes};
+import{a,b,c,d}from"../_chunks/chunk-RHWT5CF7.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";export{c as hidratarMd,d as hydrateMdEmbeds,b as planHidratacion,a as tagsPresentes};

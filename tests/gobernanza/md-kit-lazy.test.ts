@@ -183,7 +183,8 @@ test('K6 iswcLoader.ensure: N pedidos = 1 load()', async () => {
   g.__IS_ASSET_HASHES__ = {};
   g.__IS_BUILD_SHA__ = 'test';
   const dir = mkdtempSync(join(tmpdir(), 'iswc-k6-'));
-  const modulo = join(dir, 'x-k6.js');
+  // `.mjs`: la extensión declara el tipo (D2, F4); un `.js` de la app se cargaría como script clásico.
+  const modulo = join(dir, 'x-k6.mjs');
   writeFileSync(modulo, 'globalThis.__cargasK6 = (globalThis.__cargasK6 ?? 0) + 1; customElements.define("x-k6", class extends EventTarget {});\n');
   const { iswcLoader: L } = await import('../../src/cdn/loader.ts');
   L.registerApp({ 'x-k6': pathToFileURL(modulo).href }, { installSheets: false });

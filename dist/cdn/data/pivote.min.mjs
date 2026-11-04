@@ -9,4 +9,4 @@
  * cdn-install: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/is-cdn-install/SKILL.md
  * blob: https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/data/pivote.js
  */
-import{a,b,c}from"../_chunks/chunk-V65NH5FV.mjs?v=3tb4xp";import"../_chunks/chunk-4PV5NT2U.mjs?v=58b9qn";export{a as idPivote,b as pivotar,c as resolverIdPivote};
+import{a,b,c}from"../_chunks/chunk-VC4PQ7B3.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";export{a as idPivote,b as pivotar,c as resolverIdPivote};

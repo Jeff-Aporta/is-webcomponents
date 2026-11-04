@@ -1,0 +1,1 @@
+function r(n){return/one-time-code|\botp\b/i.test(String(n||""))}function s(n,o){!("OTPCredential"in window)||typeof navigator.credentials?.get!="function"||navigator.credentials.get({otp:{transport:["sms"]},signal:n}).then(t=>{let e=t&&t.code;e&&o(String(e))}).catch(()=>{})}export{r as a,s as b};

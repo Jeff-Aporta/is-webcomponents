@@ -9,4 +9,4 @@
  * cdn-install: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/is-cdn-install/SKILL.md
  * blob: https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/diagrams/diagram-graph.js
  */
-import{a,b,c}from"../_chunks/chunk-KLOOGRIW.mjs?v=gyjyby";import"../_chunks/chunk-4PV5NT2U.mjs?v=58b9qn";export{b as aristasDeRetorno,a as claveArista,c as grafoDirigido};
+import{a,b,c}from"../_chunks/chunk-QEC43KFB.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";export{b as aristasDeRetorno,a as claveArista,c as grafoDirigido};

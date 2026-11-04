@@ -9,4 +9,4 @@
  * cdn-install: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/is-cdn-install/SKILL.md
  * blob: https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/data/math.js
  */
-import{a,b,c,d}from"../_chunks/chunk-KYTWLBRR.mjs?v=jcudq3";import"../_chunks/chunk-2RM3TQ6O.mjs?v=ni0hh1";import"../_chunks/chunk-WER77GSC.mjs?v=08e6l5";import"../_chunks/chunk-NAOUNGWT.mjs?v=qmk18a";import"../_chunks/chunk-VSRTFCND.mjs?v=3008ye";import"../_chunks/chunk-4PV5NT2U.mjs?v=58b9qn";export{c as combin,b as factorial,d as numericMatrix,a as roundTo};
+import{a,b,c,d}from"../_chunks/chunk-KZ5GQDQT.mjs";import"../_chunks/chunk-SMIYHLAL.mjs";import"../_chunks/chunk-DETY3INS.mjs";import"../_chunks/chunk-3LVLSK3S.mjs";import"../_chunks/chunk-QWVO5FUO.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";export{c as combin,b as factorial,d as numericMatrix,a as roundTo};

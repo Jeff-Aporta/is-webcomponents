@@ -9,4 +9,4 @@
  * cdn-install: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/is-cdn-install/SKILL.md
  * blob: https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/data/exportar-excel.js
  */
-import{a,b,c,d,e,f,g}from"../_chunks/chunk-WMUPKHZR.mjs?v=du65i6";import"../_chunks/chunk-IWLOGPPB.mjs?v=yrhwnf";import"../_chunks/chunk-4PV5NT2U.mjs?v=58b9qn";export{e as crearEstilos,d as entradasLibro,c as hojaAXml,a as letraColumna,f as libroABlob,g as libroABlobComprimido,b as nombreHoja};
+import{a,b,c,d,e,f,g}from"../_chunks/chunk-2ZSTTSCP.mjs";import"../_chunks/chunk-3JBDJZYB.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";export{e as crearEstilos,d as entradasLibro,c as hojaAXml,a as letraColumna,f as libroABlob,g as libroABlobComprimido,b as nombreHoja};

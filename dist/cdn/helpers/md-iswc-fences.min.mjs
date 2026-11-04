@@ -9,4 +9,4 @@
  * cdn-install: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/is-cdn-install/SKILL.md
  * blob: https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/helpers/md-iswc-fences.js
  */
-import{a,b}from"../_chunks/chunk-KLOITAXG.mjs?v=zmkxq1";import"../_chunks/chunk-4PV5NT2U.mjs?v=58b9qn";export{b as escapeJsonForScript,a as resolveIswcFenceTag};
+import{a,b}from"../_chunks/chunk-IRRE3ZS2.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";export{b as escapeJsonForScript,a as resolveIswcFenceTag};

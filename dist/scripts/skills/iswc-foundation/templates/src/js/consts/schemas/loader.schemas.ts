@@ -9,7 +9,7 @@ import { z } from '../../base/zod.js';
 const fn = <T>() => z.custom<T>((v) => typeof v === 'function');
 
 export const LoaderAppSchema = z.object({
-  registerApp: fn<(mapa: Record<string, string>, opts?: { installSheets?: boolean }) => unknown>(),
+  registerApp: fn<(mapa: Record<string, string | { href: string; type?: 'module' | 'classic' }>, opts?: { installSheets?: boolean }) => unknown>(),
   load: fn<(...tags: string[]) => Promise<unknown>>(),
 }).passthrough();
 export type LoaderApp = z.infer<typeof LoaderAppSchema>;

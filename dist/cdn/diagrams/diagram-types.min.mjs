@@ -9,4 +9,3 @@
  * cdn-install: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/is-cdn-install/SKILL.md
  * blob: https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/diagrams/diagram-types.js
  */
-import"../_chunks/chunk-4PV5NT2U.mjs?v=58b9qn";

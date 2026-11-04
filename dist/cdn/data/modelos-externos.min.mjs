@@ -9,4 +9,4 @@
  * cdn-install: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/is-cdn-install/SKILL.md
  * blob: https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/data/modelos-externos.js
  */
-import{a,b,c}from"../_chunks/chunk-VHVCYUWA.mjs?v=641n7t";import"../_chunks/chunk-I7LWMXCS.mjs?v=9uxb2f";import"../_chunks/chunk-FTNY4MN5.mjs?v=2r6qxr";import"../_chunks/chunk-4PV5NT2U.mjs?v=58b9qn";export{b as ModeloServidor,c as ModeloViewport,a as crearModeloInfinito};
+import{a,b,c}from"../_chunks/chunk-DYSBSC5J.mjs";import"../_chunks/chunk-JQVH3F2X.mjs";import"../_chunks/chunk-SLHTUK5J.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";export{b as ModeloServidor,c as ModeloViewport,a as crearModeloInfinito};

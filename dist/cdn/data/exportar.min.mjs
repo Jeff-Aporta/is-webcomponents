@@ -9,4 +9,4 @@
  * cdn-install: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/is-cdn-install/SKILL.md
  * blob: https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/data/exportar.js
  */
-import{a,b,c,d,e}from"../_chunks/chunk-VGMDBWWA.mjs?v=98hdcr";import"../_chunks/chunk-WMUPKHZR.mjs?v=du65i6";import"../_chunks/chunk-IWLOGPPB.mjs?v=yrhwnf";import"../_chunks/chunk-L7PEOC4J.mjs?v=qg6hwr";import"../_chunks/chunk-4PV5NT2U.mjs?v=58b9qn";export{e as ExportadorExcel,c as datosCsv,b as descargar,d as exportarCsv,a as tablaDe};
+import{a,b,c,d,e}from"../_chunks/chunk-E7QZYAEU.mjs";import"../_chunks/chunk-2ZSTTSCP.mjs";import"../_chunks/chunk-3JBDJZYB.mjs";import"../_chunks/chunk-FIU5KZ2D.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";export{e as ExportadorExcel,c as datosCsv,b as descargar,d as exportarCsv,a as tablaDe};

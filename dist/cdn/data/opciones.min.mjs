@@ -9,4 +9,4 @@
  * cdn-install: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/is-cdn-install/SKILL.md
  * blob: https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/data/opciones.js
  */
-import{a,b,c,d,e,f}from"../_chunks/chunk-4JQHEJAP.mjs?v=obuswb";import"../_chunks/chunk-4PV5NT2U.mjs?v=58b9qn";export{a as ATRIBUTOS,f as aKebab,c as aplanarDefs,e as autogenerarDefs,d as ordenInicial,b as valorAtributo};
+import{a,b,c,d,e,f}from"../_chunks/chunk-2OFJYXOF.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";export{a as ATRIBUTOS,f as aKebab,c as aplanarDefs,e as autogenerarDefs,d as ordenInicial,b as valorAtributo};

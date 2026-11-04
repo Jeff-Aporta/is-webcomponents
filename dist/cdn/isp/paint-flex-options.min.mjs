@@ -9,4 +9,4 @@
  * cdn-install: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/is-cdn-install/SKILL.md
  * blob: https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/isp/paint-flex-options.js
  */
-import{a}from"../_chunks/chunk-V3ZCHPPI.mjs?v=gibu8m";import"../_chunks/chunk-4PV5NT2U.mjs?v=58b9qn";export{a as paintFlexOptions};
+import{a}from"../_chunks/chunk-PPP2VLH4.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";export{a as paintFlexOptions};

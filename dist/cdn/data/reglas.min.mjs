@@ -9,4 +9,4 @@
  * cdn-install: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/is-cdn-install/SKILL.md
  * blob: https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/data/reglas.js
  */
-import{a,b,c,d,e,f,g,h,i}from"../_chunks/chunk-UOJ4YVWI.mjs?v=amj7rt";import"../_chunks/chunk-BUE7D6SS.mjs?v=6jbryh";import"../_chunks/chunk-75GL3HFC.mjs?v=4445vr";import"../_chunks/chunk-BNTOJZOW.mjs?v=dftbin";import"../_chunks/chunk-OGKWYO6I.mjs?v=ywnj7s";import"../_chunks/chunk-4PV5NT2U.mjs?v=58b9qn";export{e as clasesCabecera,c as clasesCelda,i as clasesColumna,b as clasesPorReglas,h as clasesPosicionFila,a as estiloATexto,d as estiloCelda,f as opcionesAClasesFila,g as opcionesAEstiloFila};
+import{a,b,c,d,e,f,g,h,i}from"../_chunks/chunk-E2SUJ655.mjs";import"../_chunks/chunk-NIWNID2Z.mjs";import"../_chunks/chunk-R3ECVCJ6.mjs";import"../_chunks/chunk-XZ77UNQ7.mjs";import"../_chunks/chunk-47T6XX4W.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";export{e as clasesCabecera,c as clasesCelda,i as clasesColumna,b as clasesPorReglas,h as clasesPosicionFila,a as estiloATexto,d as estiloCelda,f as opcionesAClasesFila,g as opcionesAEstiloFila};

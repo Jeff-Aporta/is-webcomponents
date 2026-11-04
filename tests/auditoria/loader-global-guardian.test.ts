@@ -44,8 +44,9 @@ test('loader.ts: el guardado `!globalThis.iswcLoader` sigue presente', () => {
 test('loader.ts: explica el por qué del guardado en el comentario', () => {
   const src = readFileSync(LOADER_TS, 'utf8');
   // Busca cerca de la asignación el comentario con "idempotente" o "primera instancia".
-  const idx = src.indexOf('globalThis');
-  assert.ok(idx > 0, 'No se encontró globalThis en loader.ts');
+  // La guarda, no la primera mención de globalThis (el núcleo también lee la caché de hojas global).
+  const idx = src.indexOf('!(globalThis as Record<string, unknown>).iswcLoader');
+  assert.ok(idx > 0, 'No se encontró la guarda de globalThis.iswcLoader en loader.ts');
   const window = src.slice(Math.max(0, idx - 600), idx + 200);
   assert.match(window, /idempotente|primera instancia|guarda/i, 'Falta el comentario explicativo cerca del guardado.');
 });

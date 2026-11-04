@@ -9,4 +9,4 @@
  * cdn-install: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/is-cdn-install/SKILL.md
  * blob: https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/data/accesibilidad.js
  */
-import{a}from"../_chunks/chunk-XBZD6ECK.mjs?v=flgh87";import"../_chunks/chunk-QNVJGOGM.mjs?v=4cyh9k";import"../_chunks/chunk-4PV5NT2U.mjs?v=58b9qn";export{a as Accesibilidad};
+import{a}from"../_chunks/chunk-FEKRRDHT.mjs";import"../_chunks/chunk-CZW3UMW3.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";export{a as Accesibilidad};

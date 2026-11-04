@@ -9,4 +9,4 @@
  * cdn-install: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/is-cdn-install/SKILL.md
  * blob: https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/diagrams/diagram-vocab.js
  */
-import{a,b,c,d,e,f,g,h,i,j,k}from"../_chunks/chunk-4VOGXU4P.mjs?v=lr55f0";import"../_chunks/chunk-4PV5NT2U.mjs?v=58b9qn";export{i as applyDiagramPolicy,j as edgeStyleFor,c as getEdgeKind,d as getNodeStructure,e as listEdgeKinds,f as listNodeStructures,h as readDiagramPolicy,k as readEdgeStyle,g as recommendationFor,a as registerEdgeKind,b as registerNodeStructure};
+import{a,b,c,d,e,f,g,h,i,j,k}from"../_chunks/chunk-HLT3AWSU.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";export{i as applyDiagramPolicy,j as edgeStyleFor,c as getEdgeKind,d as getNodeStructure,e as listEdgeKinds,f as listNodeStructures,h as readDiagramPolicy,k as readEdgeStyle,g as recommendationFor,a as registerEdgeKind,b as registerNodeStructure};

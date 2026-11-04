@@ -9,4 +9,4 @@
  * cdn-install: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/is-cdn-install/SKILL.md
  * blob: https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/forms/digital-clock.js
  */
-import"../_chunks/chunk-HJD3KXG3.mjs?v=efse3d";import"../_chunks/chunk-MJVZ52Q2.mjs?v=zyflbj";import"../_chunks/chunk-42VF4ILF.mjs?v=dti86w";import"../_chunks/chunk-XP253YBZ.mjs?v=7txe1k";import"../_chunks/chunk-MNU2XQTU.mjs?v=khcy6g";import"../_chunks/chunk-HCLZRPU3.mjs?v=nylj0w";import"../_chunks/chunk-C7ON665Q.mjs?v=6f2qf1";import"../_chunks/chunk-SNHMDDOU.mjs?v=6lxkqf";import"../_chunks/chunk-4PV5NT2U.mjs?v=58b9qn";
+import"../_chunks/chunk-XW7PAIYN.mjs";import"../_chunks/chunk-QSOD2WJZ.mjs";import"../_chunks/chunk-KODVV7NI.mjs";import"../_chunks/chunk-T6VJWPWL.mjs";import"../_chunks/chunk-MGW4N46Z.mjs";import"../_chunks/chunk-FZCPQKWI.mjs";import"../_chunks/chunk-3COKNGLT.mjs";import"../_chunks/chunk-HK2DHHTQ.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";

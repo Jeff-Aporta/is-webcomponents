@@ -19,12 +19,19 @@ export function resolveRel(fromFile: string, spec: string): string {
   return posix.normalize(posix.join(dir, clean)).replace(/^(\.\/)+/, '');
 }
 
+/**
+ * Un chunk del build único (`_chunks/chunk-<hash>.mjs`) ya lleva en el nombre el hash de su contenido (y el de sus
+ * imports): no se sella. Así la URL de un chunk es UNA y la misma para sus importadores y para el
+ * `<link rel="modulepreload">` que el loader saca de `deps.json` (F4), sin depender de ningún mapa.
+ */
+export const esChunk = (ruta: string): boolean => /(?:^|\/)_chunks\//.test(ruta);
+
 function depsOf(from: string, text: string, known: Set<string>): string[] {
   REL_REF.lastIndex = 0;
   const found = new Set<string>();
   for (const m of text.matchAll(REL_REF)) {
     const target = resolveRel(from, m[2]);
-    if (target !== from && known.has(target)) found.add(target);
+    if (target !== from && known.has(target) && !esChunk(target)) found.add(target);
   }
   return [...found];
 }
@@ -33,6 +40,7 @@ function stampText(from: string, text: string, hashes: Map<string, string>, know
   return text.replace(REL_REF, (whole, quote: string, spec: string, query?: string) => {
     const target = resolveRel(from, spec);
     if (!known.has(target)) return whole;
+    if (esChunk(target)) return query ? `${quote}${spec}${quote}` : whole;
     const hash = hashes.get(target);
     if (!hash) return whole;
     const next = withAssetHash(`${spec}${query || ''}`, hash);

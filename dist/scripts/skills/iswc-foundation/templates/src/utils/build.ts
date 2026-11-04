@@ -100,7 +100,9 @@ async function sellar(): Promise<void> {
   const hashes = await stampDirectory(OUT);
   const pares = Object.entries(mapaRutas()).sort(([a], [b]) => a.localeCompare(b)).map(([tag, rel]) => {
     const href = hashes[rel] ? withAssetHash(rel, hashes[rel]!) : rel;
-    return `${JSON.stringify(tag)}:new URL(${JSON.stringify(href)},raiz).href`;
+    // `type:"module"`: los componentes de la app son módulos ES con extensión `.js`; el loader del kit infiere el tipo
+    // por extensión (D2: `.js` = clásico) y este override lo deja explícito. Un loader anterior lo ignora.
+    return `${JSON.stringify(tag)}:{href:new URL(${JSON.stringify(href)},raiz).href,type:"module"}`;
   });
   const fuente = [
     'const L=globalThis.iswcLoader;',

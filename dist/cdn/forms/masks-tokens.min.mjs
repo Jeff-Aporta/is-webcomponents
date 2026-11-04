@@ -9,4 +9,4 @@
  * cdn-install: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/is-cdn-install/SKILL.md
  * blob: https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/forms/masks-tokens.js
  */
-import{a,b,c,d}from"../_chunks/chunk-GMRYGMVA.mjs?v=2t77zc";import"../_chunks/chunk-4PV5NT2U.mjs?v=58b9qn";export{a as MASK_TOKENS,c as apply,d as isComplete,b as tokenize};
+import{a,b,c,d}from"../_chunks/chunk-THIWUE5J.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";export{a as MASK_TOKENS,c as apply,d as isComplete,b as tokenize};

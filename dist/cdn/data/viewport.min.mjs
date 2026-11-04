@@ -9,4 +9,4 @@
  * cdn-install: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/is-cdn-install/SKILL.md
  * blob: https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/data/viewport.js
  */
-import{a,b,c,d}from"../_chunks/chunk-5JTRIEO6.mjs?v=q4sfej";import"../_chunks/chunk-4PV5NT2U.mjs?v=58b9qn";export{d as applyFlex,c as colWindow,b as columnLayout,a as rowWindow};
+import{a,b,c,d}from"../_chunks/chunk-C2NOASK6.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";export{d as applyFlex,c as colWindow,b as columnLayout,a as rowWindow};

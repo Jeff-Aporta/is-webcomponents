@@ -1,9 +1,10 @@
 /**
  * tests/cdn-loader.test.ts — contrato del iswcLoader.
  */
-import { readFileSync, existsSync } from 'node:fs';
+import { readFileSync, existsSync, mkdtempSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
 import { join, dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 import assert from 'node:assert/strict';
 import { execSync } from 'node:child_process';
 import { fillHostTemplate } from '../../src/core/cdn-ref.ts';
@@ -45,14 +46,18 @@ test('src/cdn/loader.ts expone API pública + mirrors/pin + has/getLoaded', () =
   assert.match(code, /shaFromUrl|shaFromImportUrl|BOOT_HOST|hostFromSha/);
   assert.match(code, /cdnUrlDefault/);
   assert.match(code, /assetUrl/);
-  assert.match(code, /syncHashMemory/);
+  // F4: la memoria del asset-store (IndexedDB) sale del arranque: vive en la capa 2 (`loader-store`), que el núcleo
+  // solo pide con import() y en reposo.
+  assert.doesNotMatch(code, /from\s+['"][^'"]*asset-store/);
+  assert.match(code, /import\('@jeff-aporta\/iswc-base\/cdn\/loader-store\.js'\)/);
+  assert.match(readFileSync(join(root, 'src', 'cdn', 'loader-store.ts'), 'utf8'), /syncHashMemory/);
 });
 
 test('dist/cdn/core/loader.min.mjs y loader.md existen; banner con docs', () => {
   assert.ok(existsSync(dist), 'falta dist/cdn/core/loader.min.mjs — corre deno task build');
   assert.ok(existsSync(join(root, 'dist', 'cdn', 'core', 'loader.md')), 'falta dist/cdn/core/loader.md');
-  // Build único (F3): el loader importa chunks compartidos (cdn-ref, catálogo del `define`…). Se lee su cierre
-  // completo, el que sale de dist/cdn/deps.json (`core.loader`).
+  // Build único (F3): el loader importa chunks compartidos (cdn-ref, asset-url…). Se lee su cierre completo, el que
+  // sale de dist/cdn/deps.json (`core.loader`). El catálogo va DENTRO del loader (F4) y compacto: categorías.
   const cierre: string[] = JSON.parse(readFileSync(join(root, 'dist', 'cdn', 'deps.json'), 'utf8')).core.loader;
   assert.ok(cierre.includes('core/loader.min.mjs'), 'deps.json: core.loader incluye el loader');
   const code = cierre.map((r) => readFileSync(join(root, 'dist', 'cdn', r), 'utf8')).join('\n');
@@ -60,7 +65,7 @@ test('dist/cdn/core/loader.min.mjs y loader.md existen; banner con docs', () => 
   assert.match(code, /iswcLoader/);
   // W52: loadCSSBase se elimino; el loader auto-carga is-base.min.css.
   assert.match(code, /jsdelivr|Jeff-Aporta\/is-webcomponents/);
-  assert.match(code, /"iswc-button"/);
+  assert.match(code, /categories:\{[^}]*actions:\[[^\]]*"button"/);
   assert.match(code, /src\/cdn\/loader\.md|loader\.md/);
   // El build incrusta el SHA del commit sobre el que se compiló; al commitear el propio build, HEAD
   // avanza. Contrato: es un commit real del historial de HEAD (no un SHA inventado ni de otra rama).
@@ -165,12 +170,60 @@ test('fallback CDN: jsDelivr → githack → Pages + stickyBase', async () => {
   assert.match(jd, /^https:\/\/cdn\.jsdelivr\.net\/gh\/Jeff-Aporta\/is-webcomponents@abc123\//);
   assert.match(gh, /^https:\/\/raw\.githack\.com\/Jeff-Aporta\/is-webcomponents\/abc123\//);
   assert.match(pg, /^https:\/\/jeff-aporta\.github\.io\/is-webcomponents\//);
-  // Loader: cadena + sticky para no martillar espejo caído
-  assert.match(code, /stickyBase/);
-  assert.match(code, /rememberBase/);
-  assert.match(code, /orderBases/);
+  // F4: la cadena y el sticky viven en la capa 2 (`loader-mirrors`); el núcleo conserva la lista por defecto
+  // (`L.mirrors` es síncrono) y solo pide la capa si su raíz falla.
   assert.match(code, /DEFAULT_MIRRORS/);
-  assert.match(code, /jsDelivr → githack → Pages/);
+  assert.match(code, /import\('@jeff-aporta\/iswc-base\/cdn\/loader-mirrors\.js'\)/);
+  const espejos = readFileSync(join(root, 'src', 'cdn', 'loader-mirrors.ts'), 'utf8');
+  assert.match(espejos, /let stickyBase/);
+  assert.match(espejos, /export function rememberBase/);
+  assert.match(espejos, /export function orderBases/);
+  assert.match(espejos, /jsDelivr → githack → Pages/);
+});
+
+// WHAT (D2, F4): la extensión declara el tipo. `load(href)` fuera del catálogo: `.js` → `<script src>` clásico (con
+// promesa de carga), `.mjs` → `import()`. `registerPageModule` infiere igual; `classic:`/`module:` fuerzan el tipo.
+test('F4 inferencia por extensión: .js → <script> clásico, .mjs → import(), overrides classic:/module:', async () => {
+  const g = globalThis as Record<string, unknown>;
+  g.__IS_LOADER_CATALOG__ ??= { tags: {}, categories: {}, aliases: {} };
+  g.__IS_ASSET_HASHES__ ??= {};
+  g.__IS_BUILD_SHA__ ??= 'test';
+  type Nodo = { tagName: string; src?: string; type?: string; dataset: Record<string, string>; onload?: () => void; setAttribute: (k: string, v: string) => void; remove: () => void };
+  const creados: Nodo[] = [];
+  const crear = (tag: string): Nodo => ({ tagName: tag.toUpperCase(), dataset: {}, setAttribute() {}, remove() {} });
+  g.document = {
+    head: { appendChild(n: Nodo) { creados.push(n); setTimeout(() => n.onload?.(), 0); return n; } },
+    createElement: crear,
+    querySelectorAll: () => [],
+    querySelector: () => null,
+  };
+  const dir = mkdtempSync(join(tmpdir(), 'iswc-f4-ext-'));
+  const mjs = join(dir, 'modulo.mjs');
+  writeFileSync(mjs, 'globalThis.__f4Mjs = (globalThis.__f4Mjs ?? 0) + 1;\n');
+  try {
+    const { iswcLoader: L } = await import('../../src/cdn/loader.ts');
+    const clasico = 'https://iswc-f4.test/a/boton.classic.js';
+    const r = await L.load(clasico, pathToFileURL(mjs).href);
+    assert.equal(r.loaded.length, 2, 'los dos hrefs cuentan como cargados');
+    const scripts = creados.filter((n) => n.tagName === 'SCRIPT');
+    assert.equal(scripts.length, 1, 'solo el .js va por <script>');
+    assert.equal(scripts[0]!.src, clasico);
+    assert.notEqual(scripts[0]!.type, 'module', '<script> clásico, sin type="module"');
+    assert.equal(g.__f4Mjs, 1, 'el .mjs se importó (una vez)');
+    await L.load(clasico);
+    assert.equal(creados.filter((n) => n.tagName === 'SCRIPT').length, 1, 'el clásico no se repite');
+    const tipo = (alias: string, href: string) => {
+      L.registerPageModule(alias, href);
+      return L.getPageModules()[alias]!.type;
+    };
+    assert.equal(tipo('f4-js', 'x/y.min.js'), 'classic');
+    assert.equal(tipo('f4-mjs', 'x/y.min.mjs'), 'module');
+    assert.equal(tipo('f4-sin-ext', 'https://x.test/modulo'), 'module');
+    assert.equal(tipo('f4-module', 'module:x/y.js'), 'module');
+    assert.equal(tipo('f4-classic', 'classic:x/y.mjs'), 'classic');
+  } finally {
+    delete g.document;
+  }
 });
 
 export default lista();

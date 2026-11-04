@@ -41,6 +41,19 @@ export function depsJson(opts: GrafoOptions): DepsJson {
   return { sha: opts.sha, tags, core };
 }
 
+/**
+ * `deps.json` con `v`: el `?v=` (de `asset-hashes`) de cada ENTRADA que aparece en algún cierre. Los chunks no van:
+ * su nombre ya es un hash y no se sellan. El loader lo usa en orígenes mutables (Pages/local) para pedir la entrada
+ * con su `?v=` sin bajar asset-hashes.json; sobre un pin SHA lo ignora.
+ */
+export function conVersiones(deps: DepsJson, hashes: Record<string, string>): DepsJson {
+  const v: Record<string, string> = {};
+  for (const cierre of [...Object.values(deps.tags), ...Object.values(deps.core)]) {
+    for (const ruta of cierre) if (!ruta.startsWith('_chunks/') && hashes[ruta]) v[ruta] = hashes[ruta];
+  }
+  return { ...deps, v: Object.fromEntries(Object.entries(v).sort(([a], [b]) => a.localeCompare(b))) };
+}
+
 /** `exports.json`: `./loader`, `./core/<x>`, `./<cat>/<tag>` y comodines por carpeta. */
 export function exportsJson(opts: GrafoOptions): ExportsJson {
   const out: ExportsJson = { './loader': './dist/cdn/core/loader.min.mjs' };

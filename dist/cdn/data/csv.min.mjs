@@ -9,4 +9,4 @@
  * cdn-install: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/is-cdn-install/SKILL.md
  * blob: https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/data/csv.js
  */
-import{a,b,c}from"../_chunks/chunk-GXLJU5KY.mjs?v=20af78";import"../_chunks/chunk-4PV5NT2U.mjs?v=58b9qn";export{a as detectDelimiter,b as parseDelimited,c as toDelimited};
+import{a,b,c}from"../_chunks/chunk-6QO5QC74.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";export{a as detectDelimiter,b as parseDelimited,c as toDelimited};

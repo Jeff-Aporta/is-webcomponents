@@ -1,1 +1,0 @@
-var o=Object.freeze(["accent","filled","outlined","filled-outlined","plain"]),i="filled";function u(e,n=i){return typeof e!="string"?n:o.includes(e)?e:n}function l(e,n,t){t==null||t===""?e.removeAttribute(n):e.setAttribute(n,t)}export{o as a,i as b,u as c,l as d};

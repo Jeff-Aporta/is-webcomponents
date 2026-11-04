@@ -9,4 +9,4 @@
  * cdn-install: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/is-cdn-install/SKILL.md
  * blob: https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/isp/isp-color.js
  */
-import{a,b,c,d,e,f}from"../_chunks/chunk-QBF2BVL2.mjs?v=6c6cjt";import"../_chunks/chunk-4PV5NT2U.mjs?v=58b9qn";export{a as SEMANTIC_COLORS,d as classifyColor,f as isSemanticColor,b as normalizeMix,c as resolveMixWith,e as syncIspColor};
+import{a,b,c,d,e,f}from"../_chunks/chunk-S73XLFUO.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";export{a as SEMANTIC_COLORS,d as classifyColor,f as isSemanticColor,b as normalizeMix,c as resolveMixWith,e as syncIspColor};
