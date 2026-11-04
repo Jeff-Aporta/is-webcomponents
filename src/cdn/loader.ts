@@ -1,24 +1,28 @@
 /**
- * iswcLoader — entry CDN liviano + mirrors + pin + anti-redundancia.
+ * iswcLoader — núcleo (capa 1) del loader CDN del kit (plan D7, fase F4).
  *
- * - loadPageStyles / loadPageModules (galería + aliases CDN)
- * - sheets.install / warm* — Cache Storage + adoptedStyleSheets (apps)
- * - registerApp / ensure — tags de app + lazy ensure de custom elements
- * - Fallbacks entre espejos (jsDelivr → githack → Pages)
- * - Registro persistente: si ya cargaste `actions`, `load('iswc-button')` no re-fetch
- * - `?v=` sale del mapa de build: si el archivo cambia, la URL cambia
+ * Capa 1 (este archivo, `core/loader.min.mjs`): catálogo, host/pin, `load`/`ensure`/`has`/`getLoaded`, registro
+ * anti-redundancia (`load-plan`), `registerApp`, inferencia por extensión (D2: `.mjs`/sin extensión → `import()`,
+ * `.js` → `<script src>` clásico, `.css` → `<link>`) y precarga del cierre: al primer `load()` pide `deps.json`
+ * una vez e inyecta `<link rel="modulepreload">` por cada módulo del cierre del lote (una ráfaga, no una por nivel).
+ *
+ * Capa 2 (`import()` solo al primer uso; cada una recibe el contexto `ctx` del núcleo):
+ *   loader-sheets   sheets.* (Cache Storage + adoptedStyleSheets) y loadPageStyles
+ *   loader-store    asset-store (IndexedDB) y syncHashMemory; nunca en el arranque
+ *   loader-mirrors  fallback jsDelivr → githack → Pages, stickyBase y reintentos; en el camino feliz no se carga
+ *   loader-pages    loadPageModules (módulos de página de la galería)
+ *   loader-ref      resolveRef (API de GitHub): solo sin pin y con espejos que lo necesiten
+ *   loader-hashes   `asset-hashes.json` en diferido: `?v=` solo en orígenes mutables (Pages/local)
  *
  * Docs: ./loader.md (también en dist/cdn/core/loader.md)
  * Build sustituye __IS_LOADER_CATALOG__, __IS_ASSET_HASHES__ y __IS_BUILD_SHA__.
  */
 import {
-  resolveRef,
   jsdelivrBase,
   githackBase,
   pagesBase,
   MIRRORS as DEFAULT_MIRRORS,
   mirrorById,
-  fallbackBases,
   GH_REPO,
   fillHostTemplate,
   esOrigenCdn,
@@ -28,11 +32,10 @@ import {
 import { createRegistry, planLoads, commitLoads, resolveTagId, isTagCovered } from './load-plan.js';
 import { type Catalog } from './schemas/load-plan.schemas.js';
 import type { LoadJob } from "./schemas/load-plan.schemas.js";
-import { installSheetCache, getSheetCache } from './sheet-cache.js';
-import { type SheetCacheApi } from './schemas/sheet-cache.schemas.js';
+import type { SheetCacheApi } from './schemas/sheet-cache.schemas.js';
 import { ensureElement, isElementReady } from './ensure-element.js';
 import { ASSET_HASH_PARAM, ASSET_HASH_PARAM_LEGADO, esUrlInmutable, lookupHash, withAssetHash } from './build/asset-url.js';
-import { readBody, writeBody, syncHashMemory } from './asset-store.js';
+import type { DepsLoader, LoaderCtx } from './schemas/loader-capas.schemas.js';
 
 import {
   type AppComponentEntry,
@@ -51,6 +54,21 @@ declare const __IS_LOADER_CATALOG__: Catalog;
 declare const __IS_ASSET_HASHES__: Record<string, string>;
 declare const __IS_BUILD_SHA__: string;
 
+/** Capa 2 memorizada: un `import()` por módulo; si falla (red), el siguiente uso reintenta. */
+function capa<T>(cargar: () => Promise<T>): () => Promise<T> {
+  let p: Promise<T> | null = null;
+  return () => (p ??= cargar().catch((e: unknown) => {
+    p = null;
+    throw e;
+  }));
+}
+const hojas = capa(() => import('@jeff-aporta/iswc-base/cdn/loader-sheets.js'));
+const almacen = capa(() => import('@jeff-aporta/iswc-base/cdn/loader-store.js'));
+const espejos = capa(() => import('@jeff-aporta/iswc-base/cdn/loader-mirrors.js'));
+const paginas = capa(() => import('@jeff-aporta/iswc-base/cdn/loader-pages.js'));
+const refGithub = capa(() => import('@jeff-aporta/iswc-base/cdn/loader-ref.js'));
+const hashesDiferidos = capa(() => import('@jeff-aporta/iswc-base/cdn/loader-hashes.js'));
+
 /**
  * SHA del script que se está ejecutando (`@abc…` en jsDelivr) o null.
  * Si el consumidor pincha el loader en un commit, ese pin manda sobre el
@@ -67,8 +85,26 @@ function shaFromImportUrl(href: string): string | null {
   }
 }
 
-const CATALOG: Catalog = __IS_LOADER_CATALOG__;
-const HASHES: Record<string, string> = __IS_ASSET_HASHES__;
+/**
+ * El catálogo viaja compacto (`aliases` + `categories`): cada tag del kit es `iswc-<file>` y también se pide por
+ * `<file>`, así que `tags` se reconstruye aquí. Si el build manda `tags` (vendor, tests), se usa tal cual.
+ */
+function expandirCatalogo(c: Partial<Catalog>): Catalog {
+  const categories = c.categories ?? {};
+  if (c.tags) return { aliases: c.aliases ?? {}, categories, tags: c.tags };
+  const tags: Catalog['tags'] = {};
+  for (const [category, files] of Object.entries(categories)) {
+    for (const file of files) {
+      tags[`iswc-${file}`] = { category, file };
+      tags[file] = { category, file };
+    }
+  }
+  return { aliases: c.aliases ?? {}, categories, tags };
+}
+
+const CATALOG: Catalog = expandirCatalogo(__IS_LOADER_CATALOG__);
+/** Mapa de hashes vivo: el embebido en build (vendor) + `deps.json`/`asset-hashes.json` en orígenes mutables. */
+const HASHES: Record<string, string> = { ...__IS_ASSET_HASHES__ };
 
 /** Plantilla del host. configure({ sha }) sustituye {{cdnUrl}} y {{sha}}. */
 const HOST_DEFAULT = '{{cdnUrl}}@{{sha}}/dist/cdn';
@@ -78,10 +114,6 @@ const CDN_URL_DEFAULT = `https://cdn.jsdelivr.net/gh/${GH_REPO}`;
  * Pin por defecto de ESTE loader:
  * 1) SHA de la URL (`@abc…/loader.min.mjs`) si viene pinneada
  * 2) `__IS_BUILD_SHA__` quemado en el build (HEAD al publicar)
- *
- * Así `import …@REF/…/loader.min.mjs` ya arrastra los componentes de ese
- * commit sin `L.configure({ host })`. El consumidor puede pisar con
- * `configure({ sha })` / `configure({ host })`.
  */
 const SHA_FROM_URL = shaFromImportUrl(import.meta.url);
 const SHA_DEFAULT: string = SHA_FROM_URL || __IS_BUILD_SHA__;
@@ -105,21 +137,27 @@ function hostFromSha(sha: string, cdnUrl: string = CDN_URL_DEFAULT): string {
  * - Loader servido desde jsDelivr o githack: host = jsDelivr@shaDefault.
  * - Cualquier otro origen (Pages, localhost, file:, vendor copiado en otra app): sin host
  *   (preferSelf → CDN_ROOT, su propia carpeta). Así Pages nunca depende de que el SHA
- *   quemado exista en jsDelivr; la cadena de espejos queda como fallback.
- * El pin (`ref`) evita que los mirrors resuelvan el tip de main por API.
+ *   quemado exista en jsDelivr; la cadena de espejos queda como fallback (capa 2).
+ * El pin (`ref`) evita que los espejos resuelvan el tip de main por API.
  */
 const BOOT_PIN = SHA_DEFAULT !== 'main' && SHA_DEFAULT !== '' ? SHA_DEFAULT : null;
 const BOOT_HOST = (esOrigenCdn(import.meta.url) && BOOT_PIN)
   ? hostFromSha(BOOT_PIN)
   : null;
 
+/** D2: la extensión declara el tipo. `.js` (no `.mjs`) → clásico; `.mjs`, `.ts` o sin extensión → módulo. */
+function tipoDe(href: string): PageModuleKind {
+  const ruta = String(href).split(/[?#]/)[0]!;
+  return /\.js$/i.test(ruta) && !/\.mjs$/i.test(ruta) ? 'classic' : 'module';
+}
+
+/** `classic:` / `module:` son overrides explícitos; sin prefijo manda la extensión. */
 function asPageModuleSpec(input: string | PageModuleSpec): PageModuleSpec {
   if (typeof input === 'string') {
     const raw = input.trim();
-    if (raw.startsWith('classic:')) {
-      return { href: raw.slice('classic:'.length), type: 'classic' };
-    }
-    return { href: raw, type: 'module' };
+    if (raw.startsWith('classic:')) return { href: raw.slice('classic:'.length), type: 'classic' };
+    if (raw.startsWith('module:')) return { href: raw.slice('module:'.length), type: 'module' };
+    return { href: raw, type: tipoDe(raw) };
   }
   const href = String(input.href || '').trim();
   if (!href) throw new TypeError('PageModuleSpec.href required');
@@ -165,150 +203,21 @@ const registry = createRegistry();
 
 /** Tags de la app consumidora (fuera del catálogo del kit). */
 const appComponents = new Map<string, AppComponentEntry>();
+/** Cierre de módulos por tag de la app (`registerApp`/`configure({ deps })`), para la precarga. */
+const appDeps = new Map<string, string[]>();
+/** Caché de hojas que pidió `registerApp` (se instala en segundo plano, capa 2). */
+let hojasApp: Promise<unknown> | null = null;
 
 const cssDone = new Set<string>();
 const jsDone = new Map<string, Promise<void>>();
 
-/**
- * Última base CDN que respondió bien en esta página.
- * Si jsDelivr cae y githack salva el primer `load`, los siguientes no
- * reintentan el muerto primero (mitiga timeouts de espejos caídos).
- */
-let stickyBase: string | null = null;
-
-function orderBases(bases: string[]): string[] {
-  if (!stickyBase || !bases.includes(stickyBase)) return bases;
-  // host / preferSelf siguen primero; sticky solo reordena espejos.
-  const preferHead = state.host || state.preferSelf ? 1 : 0;
-  const head = bases.slice(0, preferHead);
-  if (head.includes(stickyBase)) return bases;
-  const rest = bases.slice(preferHead).filter((b) => b !== stickyBase);
-  return [...head, stickyBase, ...rest];
-}
-
-function rememberBase(base: string): void {
-  stickyBase = slash(base);
-}
-
-/**
- * Resuelve un input de `loadPageStyles` a CDN del kit o URL de página.
- * - Alias `iswc-palettes-default` → `cdn:palettes.min.css` (host/`?v=`)
- * - Path literal / absoluto → hoja relativa a la página
- */
-function resolvePageStyle(input: string): { cdn: string } | { href: string } {
-  if (typeof input !== 'string' || input === '') {
-    throw new TypeError('resolvePageStyle: input must be non-empty string');
-  }
-  const trimmed = input.trim();
-  const alias = state.pageStyles.get(trimmed);
-  if (alias) {
-    if (alias.startsWith('cdn:')) return { cdn: alias.slice(4) };
-    return { href: alias };
-  }
-  if (
-    /^[a-z][a-z0-9+.-]*:/i.test(trimmed)
-    || trimmed.startsWith('//')
-    || trimmed.startsWith('/')
-    || trimmed.includes('/')
-    || /\.css(?:\?.*)?$/i.test(trimmed)
-  ) {
-    return { href: trimmed };
-  }
-  throw new Error(
-    `loadPageStyles: alias desconocido "${trimmed}" — registra con L.registerPageStyle(alias, href) o usa un alias válido (${[...state.pageStyles.keys()].join(', ')})`,
-  );
-}
-
-/**
- * Resuelve un input de `loadPageModules` a href + tipo de carga.
- *
- * - Alias de la tabla (`'demo-code'`, `'iswc-doc-demo-boot'`)
- * - Prefijo `classic:` → script clásico
- * - Prefijo `cdn:` en el href del spec → asset del kit (host/`?v=`)
- * - Path literal / URL → module por defecto
- */
-function resolvePageModule(input: string): PageModuleSpec {
-  if (typeof input !== 'string' || input === '') {
-    throw new TypeError('resolvePageModule: input must be non-empty string');
-  }
-  const trimmed = input.trim();
-  const alias = state.pageModules.get(trimmed);
-  if (alias) return { ...alias };
-
-  if (trimmed.startsWith('classic:')) {
-    return asPageModuleSpec(trimmed);
-  }
-
-  if (
-    /^[a-z][a-z0-9+.-]*:/i.test(trimmed)
-    || trimmed.startsWith('//')
-    || trimmed.startsWith('/')
-    || trimmed.includes('/')
-    || /\.(?:js|mjs|cjs|ts|tsx)(?:\?.*)?$/i.test(trimmed)
-  ) {
-    return { href: trimmed, type: 'module' };
-  }
-
-  throw new Error(
-    `loadPageModules: alias desconocido "${trimmed}" — registra con L.registerPageModule(alias, href) o usa un alias válido (${[...state.pageModules.keys()].join(', ')})`,
-  );
-}
-
-async function resolvePageModuleUrl(spec: PageModuleSpec): Promise<string> {
-  const href = spec.href;
-  if (href.startsWith('cdn:')) {
-    const rel = href.slice(4).replace(/^\.\//, '');
-    const bases = orderBases(await coreAssetBases());
-    return assetHref(bases[0] || SELF_BASE, rel);
-  }
-  return new URL(href, typeof location !== 'undefined' ? location.href : SELF_BASE).href;
-}
-
-function loadClassicOnce(href: string): Promise<void> {
-  const key = `classic:${href}`;
-  let p = jsDone.get(key);
-  if (p) return p;
-  p = new Promise<void>((resolve, reject) => {
-    if (typeof document === 'undefined') {
-      resolve();
-      return;
-    }
-    if ([...document.querySelectorAll('script[data-is-page-js]')].some((el) => (el as HTMLScriptElement).dataset.isPageJs === href)) {
-      resolve();
-      return;
-    }
-    const s = document.createElement('script');
-    s.src = href;
-    s.async = false;
-    s.dataset.isPageJs = href;
-    s.onload = () => resolve();
-    s.onerror = () => {
-      jsDone.delete(key);
-      reject(new Error(`loadPageModules: classic script failed ${href}`));
-    };
-    document.head.appendChild(s);
-  });
-  jsDone.set(key, p);
-  return p;
-}
+const docBase = (): string => (typeof location !== 'undefined' ? location.href : SELF_BASE);
 
 function normalizeQuery(input: unknown): Record<string, string> {
   if (input == null || input === '') return {};
   if (typeof input === 'string') {
-    const q = input.replace(/^\?/, '');
     const out: Record<string, string> = {};
-    for (const part of q.split('&')) {
-      if (!part) continue;
-      const eq = part.indexOf('=');
-      const k = eq < 0 ? part : part.slice(0, eq);
-      const val = eq < 0 ? '' : part.slice(eq + 1);
-      if (!k) continue;
-      try {
-        out[decodeURIComponent(k)] = decodeURIComponent(val);
-      } catch {
-        out[k] = val;
-      }
-    }
+    for (const [k, val] of new URLSearchParams(input.replace(/^\?/, ''))) if (k) out[k] = val;
     return out;
   }
   if (typeof input === 'object' && !Array.isArray(input)) {
@@ -338,8 +247,7 @@ function routeHref(href: string): string {
   if (!href) return href;
   let abs = href;
   try {
-    const base = typeof location !== 'undefined' ? location.href : SELF_BASE;
-    abs = new URL(href, base).href;
+    abs = new URL(href, docBase()).href;
   } catch { /* href raro: se busca igual en el mapa */ }
   if (esUrlInmutable(abs)) return href;
   const hash = lookupHash(HASHES, abs) || lookupHash(HASHES, href);
@@ -358,95 +266,29 @@ function assetHref(base: string, rel: string): string {
   return routeHref(withQuery(new URL(rel.replace(/^\//, ''), slash(base)).href));
 }
 
-function cssNeedsLink(css: string): boolean {
-  return /url\(\s*['"]?(?!data:|https?:|\/\/|#)/i.test(css);
+/** Raíz del camino feliz: `host` del consumidor o la carpeta propia (`self`). `null` → solo espejos (capa 2). */
+function raizPrimaria(): string | null {
+  if (state.host) return raizYCore(state.host)[0]!;
+  return state.preferSelf ? CDN_ROOT : null;
 }
 
-function injectStyleText(key: string, css: string): void {
-  if (cssDone.has(key)) return;
-  if (typeof document === 'undefined') {
-    cssDone.add(key);
-    return;
-  }
-  const id = `is-cdn-css:${key}`;
-  if (document.head.querySelector(`style[data-is-cdn-css="${id}"]`)) {
-    cssDone.add(key);
-    return;
-  }
-  const style = document.createElement('style');
-  style.setAttribute('data-is-cdn-css', id);
-  style.textContent = css;
-  document.head.appendChild(style);
-  cssDone.add(key);
+/** Pin para los espejos; sin `state.ref` consulta la API de GitHub (capa 2, `loader-ref`). */
+async function refActual(): Promise<string> {
+  return state.ref ?? (await refGithub()).resolverRef();
 }
 
-/**
- * Bases del entry + CSS base (misma carpeta que loader.min.mjs).
- */
-async function coreAssetBases(forcedRef?: string): Promise<string[]> {
-  const ref = forcedRef ?? state.ref ?? (await resolveRef());
-  const out: string[] = [];
-  const push = (b: string): void => {
-    const n = slash(b);
-    if (!out.includes(n)) out.push(n);
-  };
-  // host = raíz dist/cdn → CSS en raíz y alias en core/
-  if (state.host) {
-    for (const b of raizYCore(state.host)) push(b);
-  } else if (state.preferSelf) {
-    push(CDN_ROOT);
-    push(SELF_BASE);
-  } else {
-    push(SELF_BASE);
-  }
-  const pushMirror = (m: { base: (ref?: string) => string }): void => {
-    // Las bases de cdn-ref no traen barra final: raizYCore la pone antes de componer `core/`.
-    try {
-      for (const b of raizYCore(m.base(ref))) push(b);
-    } catch { /* mirror malo */ }
-  };
-  for (const m of state.mirrors) pushMirror(m);
-  // Sin espejos CDN si el consumidor vació mirrors (modo local).
-  if (!state.mirrorsExplicit || state.mirrors.length) {
-    for (const m of DEFAULT_MIRRORS) pushMirror(m);
-  }
-  if (out.length <= 1 && (!state.mirrorsExplicit || state.mirrors.length)) {
-    for (const b of raizYCore(jsdelivrBase(ref))) push(b);
-  }
-  return out;
-}
+const sinQuery = (href: string): string => href.split(/[?#]/)[0]!;
 
-async function cdnBases(forcedRef?: string): Promise<string[]> {
-  const ref = forcedRef ?? state.ref ?? (await resolveRef());
-  const out: string[] = [];
-  const push = (b: string): void => {
-    const n = slash(b);
-    if (!out.includes(n)) out.push(n);
-  };
-  // host del consumidor manda: evita quedarse en un jsDelivr @main cacheado.
-  if (state.host) push(state.host);
-  else if (state.preferSelf) push(CDN_ROOT);
-  for (const m of state.mirrors) {
-    try { push(m.base(ref)); } catch { /* mirror malo */ }
-  }
-  // Cadena canónica solo si no estamos en modo local (mirrors=[] explícito).
-  if (!state.mirrorsExplicit || state.mirrors.length > 0) {
-    for (const m of DEFAULT_MIRRORS) {
-      try { push(m.base(ref)); } catch { /* */ }
-    }
-  }
-  if (!out.length) push(jsdelivrBase(ref));
-  return out;
+/** ¿Ya hay un `<link rel=stylesheet>` a esa ruta (con o sin `?v=`), p. ej. puesto por la app en el HTML? */
+function yaEnlazada(href: string): boolean {
+  if (typeof document === 'undefined') return false;
+  const ruta = sinQuery(href);
+  return [...document.querySelectorAll<HTMLLinkElement>('link[rel="stylesheet"][href]')].some((l) => sinQuery(l.href) === ruta);
 }
 
 function injectStylesheet(href: string): Promise<void> {
   if (cssDone.has(href)) return Promise.resolve();
-  if (typeof document === 'undefined') {
-    cssDone.add(href);
-    return Promise.resolve();
-  }
-  const existing = document.head.querySelector<HTMLElement>(`link[data-is-cdn-css="${href}"]`);
-  if (existing) {
+  if (typeof document === 'undefined' || yaEnlazada(href)) {
     cssDone.add(href);
     return Promise.resolve();
   }
@@ -459,50 +301,53 @@ function injectStylesheet(href: string): Promise<void> {
       cssDone.add(href);
       resolve();
     };
-    link.onerror = () => reject(new Error(`CSS falló: ${href}`));
+    link.onerror = () => {
+      link.remove();
+      reject(new Error(`CSS falló: ${href}`));
+    };
     document.head.appendChild(link);
   });
 }
 
+/** Hoja del kit por `<link>` (sin fetch ni IndexedDB). Si la raíz primaria falla, prueba los espejos (capa 2). */
 async function injectCdnStylesheet(rel: string): Promise<string> {
-  const bases = orderBases(await coreAssetBases());
-  const hash = lookupHash(HASHES, rel);
-  const key = rel.replace(/^\.\//, '');
-  if (hash) {
-    const hit = await readBody(key, hash);
-    if (hit != null && !cssNeedsLink(hit)) {
-      injectStyleText(key, hit);
-      return assetHref(bases[0] || SELF_BASE, rel);
-    }
-  }
-  let last: Error | null = null;
-  for (const base of bases) {
-    const href = assetHref(base, rel);
+  const raiz = raizPrimaria();
+  const href = raiz ? assetHref(raiz, rel) : null;
+  if (href) {
     try {
-      if (hash && typeof fetch === 'function') {
-        const res = await fetch(href);
-        if (!res.ok) throw new Error(`CSS ${res.status}: ${href}`);
-        const text = await res.text();
-        if (!cssNeedsLink(text)) {
-          await writeBody(key, hash, text);
-          injectStyleText(key, text);
-          rememberBase(base);
-          return href;
-        }
-      }
       await injectStylesheet(href);
-      rememberBase(base);
       return href;
-    } catch (e: unknown) {
-      last = e instanceof Error ? e : new Error(String(e));
-      cssDone.delete(href);
-      cssDone.delete(key);
-      if (typeof document !== 'undefined') {
-        document.head.querySelector<HTMLElement>(`link[data-is-cdn-css="${href}"]`)?.remove();
-      }
-    }
+    } catch { /* espejos */ }
   }
-  throw last || new Error(`iswcLoader: no hay espejo para ${rel}`);
+  return (await espejos()).cssConEspejos(ctx, rel, href);
+}
+
+function loadClassicOnce(href: string): Promise<void> {
+  const key = `classic:${href}`;
+  let p = jsDone.get(key);
+  if (p) return p;
+  p = new Promise<void>((resolve, reject) => {
+    if (typeof document === 'undefined') {
+      resolve();
+      return;
+    }
+    if ([...document.querySelectorAll<HTMLScriptElement>('script[src]')].some((el) => el.dataset.isPageJs === href || el.src === href)) {
+      resolve();
+      return;
+    }
+    const s = document.createElement('script');
+    s.src = href;
+    s.async = false;
+    s.dataset.isPageJs = href;
+    s.onload = () => resolve();
+    s.onerror = () => {
+      jsDone.delete(key);
+      reject(new Error(`iswcLoader: script clásico falló ${href}`));
+    };
+    document.head.appendChild(s);
+  });
+  jsDone.set(key, p);
+  return p;
 }
 
 function importOnce(href: string): Promise<void> {
@@ -518,20 +363,105 @@ function importOnce(href: string): Promise<void> {
   return p;
 }
 
-async function importCdn(rel: string): Promise<string> {
-  const bases = orderBases(await cdnBases());
-  let last: Error | null = null;
-  for (const base of bases) {
-    const href = assetHref(base, rel);
-    try {
-      await importOnce(href);
-      rememberBase(base);
-      return href;
-    } catch (e: unknown) {
-      last = e instanceof Error ? e : new Error(String(e));
+/** Carga un href por su extensión (D2): `.js` → `<script src>` clásico; lo demás → `import()`. */
+function cargarHref(href: string, tipo?: PageModuleKind): Promise<void> {
+  const abs = routeHref(new URL(href, docBase()).href);
+  return (tipo ?? tipoDe(abs)) === 'classic' ? loadClassicOnce(abs) : importOnce(abs);
+}
+
+let hashesListos: Promise<void> | null = null;
+/** `asset-hashes.json` en diferido (capa 2): solo en orígenes mutables, nunca sobre un pin SHA. */
+function cargarHashes(): Promise<void> {
+  const raiz = raizPrimaria() ?? CDN_ROOT;
+  if (esUrlInmutable(raiz) || typeof fetch !== 'function' || typeof document === 'undefined') return Promise.resolve();
+  return (hashesListos ??= hashesDiferidos().then((m) => m.cargar(ctx), () => undefined));
+}
+
+// ── Precarga del cierre (D7): deps.json → <link rel="modulepreload"> ─────────────────────────────
+
+const depsPorRaiz = new Map<string, Promise<DepsLoader | null>>();
+/** `deps.json` de una raíz, una vez. Sobre un pin SHA va con `force-cache`; en orígenes mutables revalida. */
+function depsDe(raiz: string): Promise<DepsLoader | null> {
+  let p = depsPorRaiz.get(raiz);
+  if (p) return p;
+  const inmutable = esUrlInmutable(raiz);
+  p = fetch(new URL('deps.json', raiz).href, { cache: inmutable ? 'force-cache' : 'no-cache' })
+    .then((r) => (r.ok ? r.json() as Promise<DepsLoader> : null))
+    .then((d) => {
+      // `v`: hash de cada entrada. Solo se usa en orígenes mutables (routeHref ignora los inmutables).
+      if (d?.v && !inmutable) for (const [ruta, h] of Object.entries(d.v)) HASHES[ruta] ??= h;
+      return d;
+    })
+    .catch(() => null);
+  depsPorRaiz.set(raiz, p);
+  return p;
+}
+
+let precargados: Set<string> | null = null;
+/** `<link rel="modulepreload">` una vez por href; respeta los que la app ya puso en el HTML y lo ya importado. */
+function precargar(href: string): void {
+  if (typeof document === 'undefined') return;
+  precargados ??= new Set([...document.querySelectorAll<HTMLLinkElement>('link[rel="modulepreload"][href]')].map((l) => l.href));
+  if (precargados.has(href) || jsDone.has(href)) return;
+  precargados.add(href);
+  const link = document.createElement('link');
+  link.rel = 'modulepreload';
+  link.href = href;
+  document.head.appendChild(link);
+}
+
+/**
+ * Cierre del lote: cada módulo del cierre de cada tag. Los chunks (`_chunks/`, nombre con hash) van tal cual: así
+ * los piden sus importadores. Las entradas pasan por `assetHref`, igual que el `import()` del núcleo.
+ */
+function precargarCierre(jobs: readonly LoadJob[], raiz: string, deps: DepsLoader | null): void {
+  if (!deps?.tags) return;
+  for (const job of jobs) {
+    const file = job.path.slice(job.path.indexOf('/') + 1).replace(/\.min\.mjs$/, '');
+    for (const ruta of deps.tags[`iswc-${file}`] ?? []) {
+      precargar(ruta.startsWith('_chunks/') ? new URL(ruta, raiz).href : assetHref(raiz, ruta));
     }
   }
-  throw last || new Error(`iswcLoader: no hay espejo para ${rel}`);
+}
+
+async function importCdn(rel: string): Promise<string> {
+  const raiz = raizPrimaria();
+  if (raiz) {
+    const href = assetHref(raiz, rel);
+    try {
+      await importOnce(href);
+      return href;
+    } catch (e: unknown) {
+      return (await espejos()).importarConEspejos(ctx, rel, href, e);
+    }
+  }
+  return (await espejos()).importarConEspejos(ctx, rel, null, null);
+}
+
+/**
+ * Lote del kit: precarga el cierre e importa las entradas en paralelo. En un origen mutable (Pages/local) espera
+ * `deps.json` (trae los `?v=` de las entradas: sin ellos un HTML cacheado pediría chunks que ya no existen); sobre
+ * un pin SHA no lo espera: `deps.json` llega en paralelo con el primer `import()` y precarga lo que falte.
+ */
+async function cargarKit(jobs: readonly LoadJob[]): Promise<void> {
+  const raiz = raizPrimaria();
+  if (raiz && typeof document !== 'undefined' && typeof fetch === 'function') {
+    const deps = depsDe(raiz);
+    if (esUrlInmutable(raiz)) void deps.then((d) => precargarCierre(jobs, raiz, d));
+    else precargarCierre(jobs, raiz, await deps);
+  }
+  await Promise.all(jobs.map((j: LoadJob) => importCdn(j.path)));
+}
+
+/** Tag de la app: precarga su entrada (si es módulo) y el cierre que la app declaró en `deps`. */
+function cargarApp(tag: string, entry: AppComponentEntry): Promise<unknown> {
+  const tipo = entry.type ?? tipoDe(entry.href);
+  if (tipo === 'module') {
+    precargar(routeHref(entry.href));
+    for (const href of appDeps.get(tag) ?? []) if (tipoDe(href) === 'module') precargar(routeHref(href));
+  }
+  const css = hojasApp ? hojasApp.then(() => hojas()).then((m) => m.calentarEntrada(ctx, entry)).catch(() => undefined) : null;
+  return Promise.all([css, cargarHref(entry.href, tipo)]);
 }
 
 function parseArgs(...args: (string | Record<string, unknown>)[]): {
@@ -550,6 +480,9 @@ function parseArgs(...args: (string | Record<string, unknown>)[]): {
   return { ids, opts };
 }
 
+/** Un id de `load()` que es ruta o URL (no tag ni categoría): `…/x.mjs`, `./y.js`, `https://…`. */
+const esHref = (id: string): boolean => /[/\\:]/.test(id) || /\.m?js(?:[?#]|$)/i.test(id);
+
 function normalizeMirrors(input: string | Mirror | (string | Mirror)[]): Mirror[] {
   const list = Array.isArray(input) ? input : [input];
   const out: Mirror[] = [];
@@ -558,12 +491,7 @@ function normalizeMirrors(input: string | Mirror | (string | Mirror)[]): Mirror[
       if (item === 'jsdelivr') {
         out.push({ id: 'jsdelivr', label: 'jsDelivr', pin: true, base: (ref = 'main') => jsdelivrBase(ref) });
       } else if (item === 'githack') {
-        out.push({
-          id: 'githack',
-          label: 'raw.githack',
-          pin: true,
-          base: (ref = 'main') => githackBase(ref),
-        });
+        out.push({ id: 'githack', label: 'raw.githack', pin: true, base: (ref = 'main') => githackBase(ref) });
       } else if (item === 'pages') {
         out.push({ id: 'pages', label: 'GitHub Pages', pin: false, base: () => pagesBase() });
       } else if (/^https?:\/\//i.test(item)) {
@@ -598,25 +526,47 @@ function normTag(id: string): string {
   return String(id || '').trim().toLowerCase();
 }
 
-async function warmEntryCss(entry: AppComponentEntry): Promise<void> {
-  const sheets = getSheetCache() as (SheetCacheApi & { calentar?: (list: string[]) => Promise<void> }) | null;
-  if (!sheets?.calentar) return;
-  const list: string[] = [];
-  if (entry.css) {
-    const css = Array.isArray(entry.css) ? entry.css : [entry.css];
-    list.push(...css);
-  } else if (entry.href) {
-    list.push(entry.href.replace(/\.min\.m?js$/i, '.min.css').replace(/\.m?js$/i, '.css'));
+function setDeps(map: Record<string, string[]> | undefined): void {
+  for (const [raw, hrefs] of Object.entries(map ?? {})) {
+    const tag = normTag(raw);
+    if (tag && Array.isArray(hrefs)) appDeps.set(tag, hrefs.map((h) => new URL(h, docBase()).href));
   }
-  if (list.length) await sheets.calentar(list.map((href) => routeHref(href)));
 }
+
+/** API global de la caché de hojas, si alguien la instaló (`sheet-cache` publica en `globalThis`). */
+function hojasGlobales(): SheetCacheApi | null {
+  const g = globalThis as Record<string, unknown>;
+  return (g.__isSheetCache ?? g.__patyHojas ?? null) as SheetCacheApi | null;
+}
+
+/** Contexto que reciben las funciones de capa 2. */
+const ctx: LoaderCtx = {
+  state,
+  selfBase: SELF_BASE,
+  cdnRoot: CDN_ROOT,
+  mirrorsDefault: DEFAULT_MIRRORS,
+  hashes: HASHES,
+  raizPrimaria,
+  ref: refActual,
+  assetHref,
+  routeHref,
+  importOnce,
+  loadClassicOnce,
+  injectStylesheet,
+  injectCdnStylesheet,
+  tipoDe,
+  cargarHashes,
+};
 
 export const iswcLoader: iswcLoaderShape = {
   get catalog(): Catalog { return CATALOG; },
-  /** Mapa de hashes del build (`ruta` → 6 caracteres). */
+  /** Mapa de hashes vivo (`ruta` → 6 caracteres): embebido + diferido en orígenes mutables. */
   get hashes(): Record<string, string> { return HASHES; },
-  /** Pega `?v=` si la ruta esta en el mapa. Lo usan adoptCss y las apps. */
-  assetUrl(href: string): string { return routeHref(href); },
+  /** Pega `?v=` si la ruta esta en el mapa (orígenes mutables). Lo usan adoptCss y las apps. */
+  assetUrl(href: string): string {
+    void cargarHashes();
+    return routeHref(href);
+  },
   get repo(): string { return GH_REPO; },
   get mirrors(): Mirror[] { return state.mirrors.slice(); },
   get selfBase(): string { return SELF_BASE; },
@@ -630,34 +580,31 @@ export const iswcLoader: iswcLoaderShape = {
   /** Query de bust activa (`{ v: '2' }` → `?v=2`). */
   get query(): Record<string, string> { return { ...state.query }; },
 
-  /** API de caché de hojas (adoptedStyleSheets + Cache Storage). */
+  /** Caché de hojas (adoptedStyleSheets + Cache Storage), capa 2: `install`/`warm*` cargan `loader-sheets`. */
   sheets: {
     install(opts: { cacheName?: string } = {}) {
-      return installSheetCache(opts);
+      return hojas().then((m) => m.instalar(opts));
     },
     get() {
-      return getSheetCache();
+      return hojasGlobales();
     },
     warm(hrefs: string[]) {
-      const s = getSheetCache() || installSheetCache();
-      return s ? s.calentar(hrefs) : Promise.resolve();
+      return hojas().then((m) => m.calentar(hrefs));
     },
     warmFromCache() {
-      const s = getSheetCache() || installSheetCache();
-      return s ? s.calentarDesdeCache() : Promise.resolve();
+      return hojas().then((m) => m.calentarDesdeCache());
     },
     warmFromManifest(url: string, opts: { base?: string; key?: string } = {}) {
-      const s = getSheetCache() || installSheetCache();
-      return s ? s.calentarDesdeManifiesto(url, opts) : Promise.resolve();
+      return hojas().then((m) => m.calentarDesdeManifiesto(url, opts));
     },
   } satisfies LoaderSheets,
 
   async baseUrl(): Promise<string> {
-    const bases = await cdnBases();
-    return bases[0];
+    return raizPrimaria() ?? (await espejos()).cdnBases(ctx).then((b) => b[0]!);
   },
 
   configure(opts: ConfigureOpts = {}) {
+    setDeps(opts.deps);
     if (opts.local === true) {
       state.preferSelf = true;
       state.host = resolveHostInput(opts.host == null || opts.host === '' ? 'self' : String(opts.host));
@@ -718,33 +665,33 @@ export const iswcLoader: iswcLoaderShape = {
     return this;
   },
 
-  async resolvePin(): Promise<string> {
-    return state.ref ?? (await resolveRef());
+  resolvePin(): Promise<string> {
+    return refActual();
   },
 
   async listBases(): Promise<string[]> {
-    return cdnBases();
+    return (await espejos()).cdnBases(ctx);
   },
 
   async fallbackBases(): Promise<string[]> {
-    const ref = await this.resolvePin();
-    return fallbackBases(ref);
+    const ref = await refActual();
+    return (await espejos()).basesDeRespaldo(ref);
   },
 
   /**
-   * Registra tags de la app (fuera del catálogo del kit). Luego `load('mi-tag')`
-   * importa su `href` y calienta CSS vía sheet-cache si está instalado.
+   * Registra tags de la app (fuera del catálogo del kit). Luego `load('mi-tag')` importa su `href` (por extensión:
+   * `.mjs` → `import()`, `.js` → clásico, salvo `type`), lo precarga con su `deps` y calienta su CSS vía sheet-cache.
    */
   registerApp(
     map: Record<string, string | AppComponentEntry>,
-    opts: { cacheName?: string; installSheets?: boolean } = {},
+    opts: { cacheName?: string; installSheets?: boolean; deps?: Record<string, string[]> } = {},
   ) {
-    if (opts.installSheets !== false) {
-      installSheetCache({ cacheName: opts.cacheName || 'is-sheets-v1' });
-    } else if (opts.cacheName) {
-      installSheetCache({ cacheName: opts.cacheName });
+    if (opts.installSheets !== false || opts.cacheName) {
+      const cacheName = opts.cacheName || 'is-sheets-v1';
+      hojasApp = hojas().then((m) => m.instalar({ cacheName }));
+      hojasApp.catch(() => undefined);
     }
-    const baseDoc = typeof location !== 'undefined' ? location.href : SELF_BASE;
+    const baseDoc = docBase();
     for (const [raw, value] of Object.entries(map || {})) {
       const tag = normTag(raw);
       if (!tag) continue;
@@ -755,9 +702,11 @@ export const iswcLoader: iswcLoaderShape = {
             css: value.css
               ? (Array.isArray(value.css) ? value.css : [value.css]).map((c: string) => new URL(c, baseDoc).href)
               : undefined,
+            ...(value.type ? { type: value.type } : {}),
           };
       appComponents.set(tag, entry);
     }
+    setDeps(opts.deps);
     return this;
   },
 
@@ -799,40 +748,29 @@ export const iswcLoader: iswcLoaderShape = {
     return this;
   },
 
+  /** Hojas de página por alias o ruta (capa 2, `loader-sheets`): `<link rel=stylesheet>`, sin fetch ni IndexedDB. */
   async loadPageStyles(hrefs: string[]) {
-    const jobs = (hrefs || []).map(async (h) => {
-      const resolved = resolvePageStyle(h);
-      if ('cdn' in resolved) return injectCdnStylesheet(resolved.cdn);
-      const abs = new URL(resolved.href, typeof location !== 'undefined' ? location.href : SELF_BASE).href;
-      return injectStylesheet(routeHref(abs));
-    });
-    await Promise.all(jobs);
+    const [m] = await Promise.all([hojas(), cargarHashes()]);
+    await m.cargarEstilos(ctx, hrefs || []);
   },
 
+  /** Módulos de página por alias o ruta (capa 2, `loader-pages`); el tipo sale de la extensión salvo override. */
   async loadPageModules(hrefs: string[]) {
-    const jobs = (hrefs || []).map(async (h) => {
-      const spec = resolvePageModule(h);
-      const abs = await resolvePageModuleUrl(spec);
-      const routed = routeHref(abs);
-      if (spec.type === 'classic') return loadClassicOnce(routed);
-      return importOnce(routed);
-    });
-    await Promise.all(jobs);
+    const [m] = await Promise.all([paginas(), cargarHashes()]);
+    await m.cargarModulos(ctx, hrefs || []);
   },
 
   /**
    * Registra o reemplaza un alias para `loadPageModules`.
-   * Útil para apps de terceros que montan sus propios gallery scripts.
    *
    * @param alias Nombre estable (sin `/`, sin extensión `.js`).
-   * @param href Ruta relativa al host, `cdn:…` del kit, o `classic:…`.
-   * @param opts.type `module` (default) | `classic` (IIFE / `<script>` sin type=module).
+   * @param href Ruta relativa al host, `cdn:…` del kit, o `classic:…` / `module:…`.
+   * @param opts.type `module` | `classic`; sin él manda la extensión (`.js` → clásico).
    */
   registerPageModule(alias: string, href: string, opts?: { type?: PageModuleKind }) {
     if (typeof alias !== 'string' || alias === '') throw new TypeError('registerPageModule: alias required');
     if (typeof href !== 'string' || href === '') throw new TypeError('registerPageModule: href required');
-    const spec = asPageModuleSpec(opts?.type ? { href, type: opts.type } : href);
-    state.pageModules.set(alias, spec);
+    state.pageModules.set(alias, asPageModuleSpec(opts?.type ? { href, type: opts.type } : href));
     return this;
   },
 
@@ -859,7 +797,8 @@ export const iswcLoader: iswcLoaderShape = {
   },
 
   /**
-   * Carga tags/categorías/`all` (kit) y tags registrados con `registerApp`.
+   * Carga tags/categorías/`all` (kit), tags registrados con `registerApp` y hrefs sueltos (por extensión). Resuelve
+   * cuando los módulos del lote están IMPORTADOS (no espera `whenDefined`: para eso está `ensure`).
    */
   async load(...args: (string | Record<string, unknown>)[]): Promise<LoadResult> {
     // parseArgs es rest: pasar `args` suelto (no el array como único argumento)
@@ -870,6 +809,7 @@ export const iswcLoader: iswcLoaderShape = {
 
     const kitIds: string[] = [];
     const appIds: string[] = [];
+    const sueltos: string[] = [];
     const skipped: string[] = [];
 
     for (const id of ids) {
@@ -879,35 +819,31 @@ export const iswcLoader: iswcLoaderShape = {
         else appIds.push(raw);
         continue;
       }
-      kitIds.push(id);
+      if (esHref(id)) sueltos.push(id);
+      else kitIds.push(id);
     }
 
-    const loaded: string[] = [];
-
-    if (kitIds.length) {
-      const planned = planLoads(kitIds, registry, CATALOG);
-      skipped.push(...planned.skipped);
-      await Promise.all(planned.jobs.map((j: LoadJob) => importCdn(j.path)));
-      commitLoads(planned.jobs, registry, CATALOG);
-      loaded.push(...planned.jobs.map((j: LoadJob) => j.path));
-    }
-
-    for (const tag of appIds) {
-      const entry = appComponents.get(tag);
-      if (!entry) continue;
-      await warmEntryCss(entry);
-      await importOnce(routeHref(entry.href));
-      registry.tags.add(tag);
-      loaded.push(entry.href);
-    }
-
+    const planned = kitIds.length ? planLoads(kitIds, registry, CATALOG) : { jobs: [], skipped: [] };
+    skipped.push(...planned.skipped);
+    await Promise.all([
+      cargarKit(planned.jobs),
+      ...appIds.map((tag) => cargarApp(tag, appComponents.get(tag)!)),
+      ...sueltos.map((href) => cargarHref(href)),
+    ]);
+    commitLoads(planned.jobs, registry, CATALOG);
+    for (const tag of appIds) registry.tags.add(tag);
+    const loaded = [
+      ...planned.jobs.map((j: LoadJob) => j.path),
+      ...appIds.map((tag) => appComponents.get(tag)!.href),
+      ...sueltos,
+    ];
     return { loaded, skipped };
   },
 
   /**
    * Deja el custom element definido (load(tag) + whenDefined). Pedirlo N veces cuesta una
    * carga: ya definido → promesa resuelta compartida; en vuelo o ya cargado → la misma promesa
-   * (`ensureElement`). Un tag desconocido para el catálogo y sin `href` responde `false`.
+   * (`ensureElement`). Con `href` lo carga por extensión. Un tag desconocido y sin `href` responde `false`.
    */
   ensure(tag: string, opts: { href?: string } = {}): Promise<boolean> {
     const name = normTag(tag);
@@ -919,7 +855,8 @@ export const iswcLoader: iswcLoaderShape = {
         href: opts.href,
       });
     }
-    return ensureElement(name, { href: opts.href });
+    const href = opts.href;
+    return ensureElement(name, href ? { href, load: () => cargarHref(href) } : {});
   },
 
   isReady: isElementReady,
@@ -935,21 +872,20 @@ if (typeof globalThis !== 'undefined' && !(globalThis as Record<string, unknown>
   (globalThis as Record<string, unknown>).iswcLoader = iswcLoader;
 }
 
-// F3: el build único deja `__IS_ASSET_HASHES__` en `{}` (el mapa vive en dist/cdn/asset-hashes.json y F4 lo leerá
-// en diferido). Con el mapa vacío no se toca la memoria del asset-store: sincronizar `{}` la borraría sin descartar
-// los cuerpos viejos.
-if (Object.keys(HASHES).length) syncHashMemory(HASHES);
-
 if (typeof document !== 'undefined') {
-  const links = document.querySelectorAll<HTMLLinkElement>('link[rel="stylesheet"][href]');
-  for (const link of links) {
-    const next = routeHref(link.href);
-    if (next && next !== link.href) link.href = next;
+  // Mapa embebido (vendor): sella los <link> de la página. El build del kit lo deja vacío: ahí el `?v=` del HTML
+  // lo pone el build de la app (o el del kit para su galería).
+  if (Object.keys(HASHES).length) {
+    for (const link of document.querySelectorAll<HTMLLinkElement>('link[rel="stylesheet"][href]')) {
+      const next = routeHref(link.href);
+      if (next && next !== link.href) link.href = next;
+    }
+    // Memoria del asset-store (IndexedDB) fuera del arranque: en reposo y en capa 2.
+    setTimeout(() => void almacen().then((m) => m.sincronizarSiHabia(HASHES)).catch(() => undefined), 0);
   }
-  // W52: auto-cargar is-base.min.css al inicializar el loader, para que el
-  // consumer no tenga que hacerlo manualmente. Es idempotente (cssDone Set)
-  // y respeta host/pin/mirrors del loader.
-  void injectCdnStylesheet('is-base.min.css');
+  // W52: is-base.min.css por <link> (sin fetch ni IndexedDB), en una microtarea: un `configure({ host })` síncrono
+  // tras el import estático ya cuenta. Idempotente: si la app ya lo enlazó en el HTML (con o sin `?v=`), no duplica.
+  queueMicrotask(() => void injectCdnStylesheet('is-base.min.css').catch(() => undefined));
 }
 
 export default iswcLoader;

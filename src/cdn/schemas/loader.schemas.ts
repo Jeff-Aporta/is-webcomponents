@@ -46,6 +46,8 @@ export type Mirror = z.infer<typeof MirrorSchema>;
 export const AppComponentEntrySchema = z.object({
   href: z.string().min(1),
   css: z.union([z.string(), z.array(z.string())]).optional(),
+  /** Override del tipo inferido por extensión (D2: `.js` → clásico, `.mjs`/sin extensión → módulo). */
+  type: z.enum(["module", "classic"]).optional(),
 });
 export type AppComponentEntry = z.infer<typeof AppComponentEntrySchema>;
 
@@ -126,6 +128,8 @@ export const ConfigureOptsSchema = z.object({
   v: z.union([z.string(), z.number()]).nullable().optional(),
   /** Modo galería local (sin mirrors CDN, host=self). */
   local: z.boolean().optional(),
+  /** Cierre de módulos de los tags de la app (`tag` → hrefs), para precargarlo con `modulepreload` (F4). */
+  deps: z.record(z.string(), z.array(z.string())).optional(),
 });
 export type ConfigureOpts = z.infer<typeof ConfigureOptsSchema>;
 
@@ -220,6 +224,8 @@ const RegisterAppOptsSchema = z
   .object({
     cacheName: z.string().optional(),
     installSheets: z.boolean().optional(),
+    /** Cierre de módulos por tag de la app (`tag` → hrefs): se precarga con `modulepreload` al pedir el tag. */
+    deps: z.record(z.string(), z.array(z.string())).optional(),
   })
   .optional();
 

@@ -11,7 +11,7 @@
  * (`../lib/zod.min.mjs`) vale igual desde una entrada que desde un chunk. Sin lista de «componentes externos»: lo que
  * comparten dos entradas sale como chunk y el core (`IswcElement`, `attrs`, `base-sheets`…) existe UNA vez.
  */
-import { mkdir, readdir, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, readdir, writeFile } from 'node:fs/promises';
 import { basename, dirname, join, relative, resolve } from 'node:path';
 import { build, type Plugin } from 'esbuild';
 import type { BundleKitOptions, BundleKitResult, CatalogoLoader, EntradaKit, ItemManifestKit } from './bundle-kit.schemas.js';
@@ -24,6 +24,9 @@ export const EXT_MODULO = '.mjs';
 
 /** Carpeta de los chunks compartidos dentro de `dist/cdn`. */
 export const CARPETA_CHUNKS = '_chunks';
+
+/** Módulos de capa 2 del loader (`src/cdn/loader-<x>.ts` → `core/loader-<x>.min.mjs`), plan D7 / F4. */
+export const CAPAS_LOADER = ['sheets', 'store', 'mirrors', 'pages', 'ref', 'hashes'];
 
 const barras = (p: string) => p.replaceAll('\\', '/');
 
@@ -66,6 +69,11 @@ export async function entradasKit(raiz: string, manifest: ItemManifestKit[]): Pr
     entradas.push({ in: join(coreRoot, f), out: `core/${f.replace(/\.ts$/, '')}.min` });
   }
   entradas.push({ in: join(raiz, 'src', 'cdn', 'loader.ts'), out: 'core/loader.min' });
+  // Capa 2 del loader (F4): entradas propias para que su nombre sea estable (`core/loader-<x>.min.mjs`) y el núcleo
+  // las pida con `import()` solo al primer uso.
+  for (const capa of CAPAS_LOADER) {
+    entradas.push({ in: join(raiz, 'src', 'cdn', `loader-${capa}.ts`), out: `core/loader-${capa}.min` });
+  }
   for (const lib of ['obj', 'ref-obj', 'zod']) {
     entradas.push({ in: join(raiz, 'src', 'vendor-distributions', 'shared', 'lib', `${lib}.ts`), out: `lib/${lib}.min` });
   }
@@ -116,9 +124,48 @@ export function aiExterno(aiRoot: string, desde = '../lib/ai/'): Plugin {
   };
 }
 
+/**
+ * Catálogo compacto: `aliases` + `categories` (el loader reconstruye `tags` como `iswc-<file>` y `<file>`). Solo si esa
+ * reconstrucción da exactamente los mismos `tags`; si no, va el catálogo entero.
+ */
+export function catalogoCompacto(c: CatalogoLoader): Partial<CatalogoLoader> {
+  const derivados: CatalogoLoader['tags'] = {};
+  for (const [category, files] of Object.entries(c.categories)) {
+    for (const file of files) {
+      derivados[`iswc-${file}`] = { category, file };
+      derivados[file] = { category, file };
+    }
+  }
+  const claves = Object.keys(c.tags);
+  const iguales = claves.length === Object.keys(derivados).length
+    && claves.every((k) => derivados[k]?.category === c.tags[k].category && derivados[k]?.file === c.tags[k].file);
+  return iguales ? { aliases: c.aliases, categories: c.categories } : c;
+}
+
+/**
+ * `__IS_LOADER_CATALOG__` y `__IS_ASSET_HASHES__` se sustituyen SOLO en `src/cdn/loader.ts`, como texto. Un `define`
+ * con objeto lo inyecta esbuild como variable compartida y, con splitting, cae en el chunk de runtime que importa
+ * TODO el kit (F3: 25 KB de catálogo en el cierre de cada componente).
+ */
+export function catalogoEnLoader(catalogo: Partial<CatalogoLoader>, hashes: Record<string, string> = {}): Plugin {
+  return {
+    name: 'catalogo-en-loader',
+    setup(b) {
+      b.onLoad({ filter: /[\\/]src[\\/]cdn[\\/]loader\.ts$/ }, async (args) => {
+        const fuente = await readFile(args.path, 'utf8');
+        const contents = fuente
+          .replace(/(?<!declare const )\b__IS_LOADER_CATALOG__\b/g, `(${JSON.stringify(catalogo)})`)
+          .replace(/(?<!declare const )\b__IS_ASSET_HASHES__\b/g, `(${JSON.stringify(hashes)})`);
+        return { contents, loader: 'ts' };
+      });
+    },
+  };
+}
+
 /** Un solo `esbuild.build` con todas las entradas. Escribe en `outdir` (con el banner de cada archivo) y devuelve el metafile. */
 export async function bundleKit(opts: BundleKitOptions): Promise<BundleKitResult> {
-  const plugins: Plugin[] = [aliasKit(), cssVirtual(opts.staging ? { staging: opts.staging } : {}), zodExterno()];
+  const catalogo = catalogoCompacto(opts.catalogo ?? { aliases: {}, categories: {}, tags: {} });
+  const plugins: Plugin[] = [aliasKit(), catalogoEnLoader(catalogo), cssVirtual(opts.staging ? { staging: opts.staging } : {}), zodExterno()];
   if (opts.aiRoot) plugins.push(aiExterno(opts.aiRoot));
   plugins.push(...(opts.plugins ?? []));
   const r = await build({
@@ -134,7 +181,8 @@ export async function bundleKit(opts: BundleKitOptions): Promise<BundleKitResult
     legalComments: 'none',
     chunkNames: `${CARPETA_CHUNKS}/[name]-[hash]`,
     outExtension: { '.js': EXT_MODULO },
-    define: loaderDefines(opts.catalogo ?? { aliases: {}, categories: {}, tags: {} }, {}, opts.sha ?? 'main'),
+    // Solo el SHA (una cadena se inlina donde se usa); catálogo y hashes van por `catalogoEnLoader`.
+    define: { __IS_BUILD_SHA__: loaderDefines({}, {}, opts.sha ?? 'main').__IS_BUILD_SHA__! },
     logLevel: 'warning',
     plugins,
   });

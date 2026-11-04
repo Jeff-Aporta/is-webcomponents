@@ -46,7 +46,9 @@ export function ensureElement(tag: string, opts: EnsureElementOpts = {}): Promis
       if (!already) {
         await new Promise<void>((resolve, reject) => {
           const el = document.createElement('script');
-          el.type = 'module';
+          // D2: la extensión declara el tipo. `.js` (no `.mjs`) → clásico; `.mjs` o sin extensión → módulo.
+          const ruta = href.split(/[?#]/)[0]!;
+          if (!(/\.js$/i.test(ruta) && !/\.mjs$/i.test(ruta))) el.type = 'module';
           el.src = href;
           el.onload = () => resolve();
           el.onerror = () => reject(new Error(`No se pudo cargar ${name}: ${href}`));
