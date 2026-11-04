@@ -21,6 +21,9 @@ import {
   fallbackBases,
   GH_REPO,
   fillHostTemplate,
+  esOrigenCdn,
+  conBarra,
+  raizYCore,
 } from '../core/cdn-ref.js';
 import { createRegistry, planLoads, commitLoads, resolveTagId, isTagCovered } from './load-plan.js';
 import { type Catalog } from './schemas/load-plan.schemas.js';
@@ -64,19 +67,6 @@ function shaFromImportUrl(href: string): string | null {
   }
 }
 
-/** true si el loader corre en gallery/local (no forzar host CDN). */
-function isLocalKitRoot(url: string): boolean {
-  try {
-    const u = new URL(url);
-    return u.protocol === 'file:'
-      || u.hostname === 'localhost'
-      || u.hostname === '127.0.0.1'
-      || u.hostname === '[::1]';
-  } catch {
-    return false;
-  }
-}
-
 const CATALOG: Catalog = __IS_LOADER_CATALOG__;
 const HASHES: Record<string, string> = __IS_ASSET_HASHES__;
 
@@ -103,7 +93,7 @@ const CDN_ROOT = /\/core\/$/i.test(SELF_BASE)
   ? new URL('../', SELF_BASE).href.replace(/\/?$/, '/')
   : SELF_BASE;
 
-const slash = (u: string): string => (u.endsWith('/') ? u : `${u}/`);
+const slash = conBarra;
 
 /** Host CDN armado con el pin de este loader (jsDelivr @sha). */
 function hostFromSha(sha: string, cdnUrl: string = CDN_URL_DEFAULT): string {
@@ -112,12 +102,14 @@ function hostFromSha(sha: string, cdnUrl: string = CDN_URL_DEFAULT): string {
 
 /**
  * Pin + host de arranque.
- * - Gallery local: sin host (preferSelf → CDN_ROOT localhost).
- * - Loader servido desde CDN / bundle externo: host = jsDelivr@shaDefault.
+ * - Loader servido desde jsDelivr o githack: host = jsDelivr@shaDefault.
+ * - Cualquier otro origen (Pages, localhost, file:, vendor copiado en otra app): sin host
+ *   (preferSelf → CDN_ROOT, su propia carpeta). Así Pages nunca depende de que el SHA
+ *   quemado exista en jsDelivr; la cadena de espejos queda como fallback.
  * El pin (`ref`) evita que los mirrors resuelvan el tip de main por API.
  */
 const BOOT_PIN = SHA_DEFAULT !== 'main' && SHA_DEFAULT !== '' ? SHA_DEFAULT : null;
-const BOOT_HOST = (!isLocalKitRoot(CDN_ROOT) && BOOT_PIN)
+const BOOT_HOST = (esOrigenCdn(import.meta.url) && BOOT_PIN)
   ? hostFromSha(BOOT_PIN)
   : null;
 
@@ -399,8 +391,7 @@ async function coreAssetBases(forcedRef?: string): Promise<string[]> {
   };
   // host = raíz dist/cdn → CSS en raíz y alias en core/
   if (state.host) {
-    push(state.host);
-    push(new URL('core/', state.host).href);
+    for (const b of raizYCore(state.host)) push(b);
   } else if (state.preferSelf) {
     push(CDN_ROOT);
     push(SELF_BASE);
@@ -408,10 +399,9 @@ async function coreAssetBases(forcedRef?: string): Promise<string[]> {
     push(SELF_BASE);
   }
   const pushMirror = (m: { base: (ref?: string) => string }): void => {
+    // Las bases de cdn-ref no traen barra final: raizYCore la pone antes de componer `core/`.
     try {
-      const root = m.base(ref);
-      push(root);
-      push(new URL('core/', root).href);
+      for (const b of raizYCore(m.base(ref))) push(b);
     } catch { /* mirror malo */ }
   };
   for (const m of state.mirrors) pushMirror(m);
@@ -420,9 +410,7 @@ async function coreAssetBases(forcedRef?: string): Promise<string[]> {
     for (const m of DEFAULT_MIRRORS) pushMirror(m);
   }
   if (out.length <= 1 && (!state.mirrorsExplicit || state.mirrors.length)) {
-    const root = jsdelivrBase(ref);
-    push(root);
-    push(new URL('core/', root).href);
+    for (const b of raizYCore(jsdelivrBase(ref))) push(b);
   }
   return out;
 }
@@ -519,19 +507,9 @@ async function injectCdnStylesheet(rel: string): Promise<string> {
 function importOnce(href: string): Promise<void> {
   let p = jsDone.get(href);
   if (p) return p;
-  p = (async () => {
-    // Cache Storage: el módulo queda listo para la próxima visita.
-    try {
-      if (typeof caches !== 'undefined') {
-        const c = await caches.open('is-wc-modules-v1');
-        if (!(await c.match(href))) {
-          const res = await fetch(href);
-          if (res.ok) await c.put(href, res.clone());
-        }
-      }
-    } catch { /* privado / sin caches */ }
-    await import(/* @vite-ignore */ href);
-  })().then(() => undefined, (err: unknown) => {
+  // Solo dedupe + import(): sin fetch previo a Cache Storage (pedía cada módulo dos veces en
+  // frío). La caché HTTP (jsDelivr `immutable`, `?v=` en orígenes mutables) cubre la revisita.
+  p = import(/* @vite-ignore */ href).then(() => undefined, (err: unknown) => {
     jsDone.delete(href);
     throw err;
   });

@@ -28,6 +28,29 @@ export function repoDeUrl(url: string): string | null {
   return pages ? `${pages[1]}/${pages[2]}` : null;
 }
 
+/**
+ * true si la URL viene de un CDN que sirve por commit (jsDelivr o githack). Solo ahí tiene sentido
+ * arrancar contra jsDelivr@sha: desde Pages, localhost, `file:` o un vendor copiado, el loader
+ * prefiere su propia carpeta (`self`) y deja los espejos como fallback.
+ */
+export function esOrigenCdn(url: string): boolean {
+  try {
+    const host = new URL(String(url)).hostname.toLowerCase();
+    return host === 'cdn.jsdelivr.net' || host === 'raw.githack.com';
+  } catch {
+    return false;
+  }
+}
+
+/** Añade la barra final: `new URL('core/', base)` sin ella pisa el último segmento (`dist/cdn` → `dist/core/`). */
+export const conBarra = (u: string): string => (u.endsWith('/') ? u : `${u}/`);
+
+/** Raíz `dist/cdn/` y su `core/`, ambas con barra final. */
+export function raizYCore(root: string): string[] {
+  const raiz = conBarra(root);
+  return [raiz, new URL('core/', raiz).href];
+}
+
 export const GH_REPO = (() => {
   try { return repoDeUrl(import.meta.url) ?? GH_REPO_DEFAULT; } catch { return GH_REPO_DEFAULT; }
 })();

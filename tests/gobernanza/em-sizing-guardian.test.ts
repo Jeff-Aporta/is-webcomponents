@@ -37,13 +37,30 @@ const PENDIENTES: RegExp[] = [
 ];
 
 /**
- * Custom properties que guardan el grosor de un borde o outline: su valor llega a `border-*` /
- * `outline-*` por var(), así que valen lo mismo que el borde literal. Formato: `archivo :: --prop`.
+ * Medidas en px permitidas por archivo y propiedad. Formato: `archivo :: prop`.
+ * - Custom properties que guardan el grosor de un borde o outline (1–2 px): su valor llega a
+ *   `border-*` / `outline-*` por var(), así que valen lo mismo que el borde literal.
+ * - Áreas táctiles (solo 44 px) de los bloques `@media (pointer: coarse)`.
  */
 const EXCEPCIONES_CUSTOM = new Set<string>([
   'src/components/actions/button.scss :: --iswc-button-border-width',
   'src/components/navigation/tab-group.scss :: --iswc-tab-group-track-width',
+  // Área táctil mínima 44 px (WCAG 2.5.5), única medida física a propósito.
+  'src/components/actions/button.scss :: min-block-size',
+  'src/components/actions/button.scss :: min-inline-size',
+  'src/components/forms/input.scss :: min-block-size',
+  'src/components/forms/select.scss :: min-block-size',
+  'src/components/forms/textarea.scss :: min-block-size',
+  'src/components/layout/doc-layout.scss :: inline-size',
+  'src/components/layout/doc-layout.scss :: block-size',
+  'src/components/navigation/breadcrumb-item.scss :: min-block-size',
+  'src/components/navigation/doc-index.scss :: min-block-size',
+  'src/components/navigation/tab-group.scss :: min-block-size',
+  'src/components/navigation/tab-group.scss :: min-inline-size',
 ]);
+
+/** Único valor en px que admite una excepción de área táctil. */
+const PX_TACTIL = 44;
 
 const ES_BORDE = /^(border|outline)(?!.*(radius|spacing|image))/;
 const LONGITUD = /(?:^|[\s,(/*+-])(-?(?:\d*\.)?\d+)(px|rem)\b/g;
@@ -83,6 +100,7 @@ function infracciones(rel: string, fuente: string): string[] {
         if (ES_BORDE.test(prop)) continue;
         if (EXCEPCIONES_CUSTOM.has(`${rel} :: ${prop}`)) continue;
       }
+      if (v[2] === 'px' && n === PX_TACTIL && !ES_BORDE.test(prop) && EXCEPCIONES_CUSTOM.has(`${rel} :: ${prop}`)) continue;
       malas.push(`${rel}:${linea(css, m.index)} ${prop}: ${v[0].trim()}`);
     }
   }

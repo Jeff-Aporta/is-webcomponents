@@ -138,6 +138,19 @@ test('configure acepta host + local + v/query (cache-bust)', () => {
   assert.match(code, /resolveHostInput/);
 });
 
+// WHAT (D7): importOnce es dedupe + import() y nada más. El fetch previo a Cache Storage pedía cada
+// `.min.js` dos veces en frío (105 fetch extra en la portada de Avatar) y serializaba un salto de red
+// por nivel; la caché HTTP (jsDelivr immutable / `?v=`) ya cubre la revisita.
+test('importOnce: solo import() deduplicado, sin fetch ni Cache Storage de módulos', () => {
+  const code = readFileSync(src, 'utf8');
+  const cuerpo = code.match(/function importOnce\([\s\S]*?\n\}/)?.[0] ?? '';
+  assert.ok(cuerpo, 'falta importOnce');
+  assert.match(cuerpo, /jsDone\.get\(href\)/);
+  assert.match(cuerpo, /import\(/);
+  assert.doesNotMatch(cuerpo, /\bfetch\(|\bcaches\b/);
+  assert.doesNotMatch(code, /is-wc-modules-v1/);
+});
+
 test('fallback CDN: jsDelivr → githack → Pages + stickyBase', async () => {
   const code = readFileSync(src, 'utf8');
   // Orden canónico en MIRRORS (WHAT: lo que devuelve el módulo; la URL de

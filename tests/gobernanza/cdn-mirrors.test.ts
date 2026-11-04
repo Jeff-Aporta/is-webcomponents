@@ -27,6 +27,37 @@ test('cdn-ref declara jsDelivr + GitHub Pages', async () => {
   assert.equal(bases.at(-1), 'https://jeff-aporta.github.io/iswc-root/dist/cdn');
 });
 
+// WHAT (D8): el host de arranque solo es jsDelivr@sha si el loader vino de jsDelivr o githack.
+// Desde Pages/local/file:/vendor copiado prefiere su carpeta (self): Pages no depende de que el
+// SHA quemado exista en GitHub (pasó con `dd1bc805`, reescrito → galería muerta).
+test('esOrigenCdn: jsDelivr y githack sí; Pages, localhost, file: y otros no', async () => {
+  const { esOrigenCdn } = await import('../../src/core/cdn-ref.ts');
+  assert.equal(esOrigenCdn('https://cdn.jsdelivr.net/gh/Jeff-Aporta/iswc-root@abc1234/dist/cdn/core/loader.min.js'), true);
+  assert.equal(esOrigenCdn('https://raw.githack.com/Jeff-Aporta/iswc-root/abc1234/dist/cdn/core/loader.min.js'), true);
+  assert.equal(esOrigenCdn('https://jeff-aporta.github.io/is-webcomponents/dist/cdn/core/loader.min.js'), false);
+  assert.equal(esOrigenCdn('http://localhost:4305/dist/cdn/core/loader.min.js'), false);
+  assert.equal(esOrigenCdn('file:///D:/app/vendor/iswc/core/loader.min.js'), false);
+  assert.equal(esOrigenCdn('https://mi-app.example/vendor/iswc/core/loader.min.js'), false);
+  assert.equal(esOrigenCdn('no es url'), false);
+});
+
+test('loader: BOOT_HOST decide por esOrigenCdn(import.meta.url); fuera de CDN host=null y preferSelf', async () => {
+  const code = await readFile(join(raiz, 'src/cdn/loader.ts'), 'utf8');
+  assert.match(code, /const BOOT_HOST = \(esOrigenCdn\(import\.meta\.url\) && BOOT_PIN\)/);
+  assert.doesNotMatch(code, /isLocalKitRoot/);
+  const g = globalThis as Record<string, unknown>;
+  g.__IS_LOADER_CATALOG__ ??= { tags: {}, categories: {}, aliases: {} };
+  g.__IS_ASSET_HASHES__ ??= {};
+  g.__IS_BUILD_SHA__ ??= 'test';
+  // En los tests el loader corre desde file: → origen no CDN.
+  const { iswcLoader: L } = await import('../../src/cdn/loader.ts');
+  assert.equal(L.host, null, 'file: no fuerza jsDelivr');
+  const bases = await L.listBases();
+  const propia = /\/core\/$/.test(L.selfBase) ? new URL('../', L.selfBase).href : L.selfBase;
+  assert.equal(bases[0], propia, 'primera base = su propia carpeta (self)');
+  assert.ok(bases.slice(1).some((b) => /cdn\.jsdelivr\.net/.test(b)), 'espejos siguen como fallback');
+});
+
 test('cdn-snippet: loader copy-paste; L.load del tag (sin radio de alcance, sin mirrors ni all.min)', async () => {
   const src = await readFile(join(raiz, 'src/components/feedback/cdn-snippet.ts'), 'utf8');
   assert.doesNotMatch(src, /data-tab=["']mirrors["']/);

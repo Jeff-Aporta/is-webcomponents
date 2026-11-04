@@ -38,9 +38,19 @@ Cada `loader.min.js` lleva `__IS_BUILD_SHA__` (HEAD al publicar). Si el
 | --- | --- |
 | `L.shaDefault` | Pin efectivo de este loader |
 | `L.shaFromUrl` | SHA leído de la URL, o `null` |
-| `L.host` | `https://cdn.jsdelivr.net/gh/…@<sha>/dist/cdn/` (salvo gallery local) |
+| `L.host` | `https://cdn.jsdelivr.net/gh/…@<sha>/dist/cdn/` si el loader vino de jsDelivr o githack; `null` en cualquier otro origen |
 
-No hace falta `L.configure({ host: '…@sha…/dist/cdn' })` en apps externas.
+**Regla del host de arranque.** El loader solo arranca contra jsDelivr@`shaDefault` cuando él
+mismo fue cargado desde `cdn.jsdelivr.net` o `raw.githack.com` (`esOrigenCdn(import.meta.url)` en
+`src/core/cdn-ref.ts`). Desde cualquier otro origen (GitHub Pages, `localhost`, `file:`, un vendor
+copiado dentro de otra app) `L.host` es `null` y `preferSelf` manda: los componentes salen de la
+carpeta del propio loader (`dist/cdn/`), y la cadena jsDelivr → githack → Pages queda como
+fallback (con el mismo pin, para no consultar la API de GitHub). Motivo: la galería en Pages
+moría cuando el SHA quemado ya no existía en GitHub (historia reescrita). `shaDefault`,
+`shaFromUrl`, `configure({ sha | host })` y `pin()` funcionan igual en todos los orígenes.
+
+No hace falta `L.configure({ host: '…@sha…/dist/cdn' })` en apps externas que importan el loader
+desde jsDelivr.
 
 ### Host y cache-bust (opcional)
 
@@ -85,7 +95,7 @@ Cadena fija al cargar JS/CSS del kit (si un espejo cae, el siguiente responde):
 
 Cada build deja un mapa de 6 caracteres en el loader (`__IS_ASSET_HASHES__`) y en `dist/cdn/asset-hashes.json`. `load`, `loadCSS*` y `assetUrl` agregan `?v=` al enrutar. Si el archivo cambia, el hash cambia y el navegador pide esa URL: no hace falta un refresco forzado.
 
-Los `import` relativos entre `.min.js` llevan el mismo `?v=`, sellado en el build en orden de dependencias. El CSS de documento que no usa `url()` relativo se guarda en IndexedDB con la clave ruta+hash; localStorage recuerda el mapa para tirar los cuerpos viejos.
+Los `import` relativos entre `.min.js` llevan el mismo `?v=`, sellado en el build en orden de dependencias. Los módulos se cargan solo con `import()` (dedupe por URL); no pasan por Cache Storage: la caché HTTP (`immutable` en jsDelivr, `?v=` en orígenes mutables) cubre la revisita sin pedir cada `.min.js` dos veces. El CSS de documento que no usa `url()` relativo se guarda en IndexedDB con la clave ruta+hash; localStorage recuerda el mapa para tirar los cuerpos viejos.
 
 Generadores para otros proyectos (CDN o vendor): `src/cdn/build/` (`bundleMinJs`, `bundleLoader`, `stampHashTexts`, `hashBase`/`hashJs`/`hashCss`/`hashHtml`). El build los publica en `dist/cdn/build/`.
 
