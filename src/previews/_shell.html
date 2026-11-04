@@ -15,14 +15,15 @@
       '../components/layout/preview-component.css',
     ]);
     await L.load(...GALLERY_CHROME_TAGS);
+    // Módulos ES con extensión `.js` (fuente servida por serve.mjs): `module:` fuerza el tipo (D2: `.js` = clásico).
     await L.loadPageModules([
-      '../../scripts/highlight-pre.js',
-      '../../scripts/demo-code.js',
-      '../../scripts/docs-chrome.js',
-      '../../scripts/cdn-panel.js',
-      '../../scripts/view-sources.js',
-      '../../scripts/demo-file-meta.js',
-      '../../scripts/preview-chrome.js',
+      'module:../../scripts/highlight-pre.js',
+      'module:../../scripts/demo-code.js',
+      'module:../../scripts/docs-chrome.js',
+      'module:../../scripts/cdn-panel.js',
+      'module:../../scripts/view-sources.js',
+      'module:../../scripts/demo-file-meta.js',
+      'module:../../scripts/preview-chrome.js',
     ]);
   </script>
   <style>

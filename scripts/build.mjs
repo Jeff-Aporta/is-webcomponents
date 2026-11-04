@@ -12,7 +12,7 @@ import { aliasKit, ALIAS_KIT, reescribirAlias } from '@jeff-aporta/iswc-base/cdn
 import { cssVirtual } from '@jeff-aporta/iswc-base/cdn/build/css-virtual.ts';
 import { bundleMinJs, bundleMinCss, docsBanner } from '@jeff-aporta/iswc-base/cdn/build/bundle-min.ts';
 import { bundleKit, entradasKit, catalogoLoader, zodExterno } from '@jeff-aporta/iswc-base/cdn/build/bundle-kit.ts';
-import { depsJson, exportsJson } from '@jeff-aporta/iswc-base/cdn/build/graph.ts';
+import { conVersiones, depsJson, exportsJson } from '@jeff-aporta/iswc-base/cdn/build/graph.ts';
 import { barrerHashes } from '@jeff-aporta/iswc-base/cdn/build/sync-hashes.ts';
 import { hashesRepetidos } from '@jeff-aporta/iswc-base/cdn/build/hash.ts';
 import { stampDirectory, hashFile, rewriteHtmlTree, hashesJson, applyHashToHtml, ASSET_HASHES_NAME } from '@jeff-aporta/iswc-base/cdn/build/stamp-hashes.ts';
@@ -446,6 +446,9 @@ const galleryStat = await stat(galleryOut);
 console.log(`  ${'gallery-app'.padEnd(18)} js ${String(galleryStat.size).padStart(6)}  (SPA → dist/)`);
 
 // ── grafo: deps.json + exports.json (desde el metafile, antes de sellar: las rutas no cambian) ──
+// deps.json se escribe DESPUÉS de sellar: lleva `v` (el `?v=` de cada entrada de los cierres) para que el loader
+// selle sus `import()` en orígenes mutables sin pedir asset-hashes.json (F4). Los chunks no llevan `?v=`.
+let deps;
 {
   const tags = {};
   for (const [tag, { category, file }] of Object.entries(loaderCatalog.tags)) {
@@ -454,19 +457,21 @@ console.log(`  ${'gallery-app'.padEnd(18)} js ${String(galleryStat.size).padStar
   const core = {};
   for (const e of entradas) if (e.out.startsWith('core/')) core[e.out.slice('core/'.length).replace(/\.min$/, '')] = `${e.out}.mjs`;
   const grafo = { metafile: kit.metafile, outdir: dist, cwd: process.cwd(), sha, tags, core };
-  const deps = depsJson(grafo);
+  deps = depsJson(grafo);
   // El metafile completo queda fuera de lo publicado (.tmp/, ignorado): lo leen los guardianes del grafo
   // (gobernanza/zod-compartido: Zod solo entra en lib/zod.min.mjs).
   await mkdir(join(root, '.tmp'), { recursive: true });
   await writeFile(join(root, '.tmp', 'metafile-kit.json'), JSON.stringify(kit.metafile), 'utf8');
-  await writeFile(join(dist, 'deps.json'), JSON.stringify(deps, null, 2) + '\n', 'utf8');
   await writeFile(join(dist, 'exports.json'), JSON.stringify(exportsJson(grafo), null, 2) + '\n', 'utf8');
   console.log(`  ${'deps.json'.padEnd(18)} ${Object.keys(deps.tags).length} tags + ${Object.keys(deps.core).length} core · exports.json`);
 }
 
 // ── hashes: sellar imports relativos de dist/cdn y escribir el mapa (asset-hashes.json) ────────
-// Los chunks ya llevan hash en el nombre; sellarlos igual da UNA URL por archivo para todos sus importadores.
+// Los chunks ya llevan hash en el nombre: no se sellan (`esChunk` en stamp-hashes), y su URL es la misma para todos
+// sus importadores y para el `modulepreload` del loader.
 const hashes = await stampDirectory(dist);
+// Sin sangría: el loader lo pide en el arranque (126 KB en vez de 158 KB; ~9 KB br por jsDelivr).
+await writeFile(join(dist, 'deps.json'), JSON.stringify(conVersiones(deps, hashes)) + '\n', 'utf8');
 const addHash = async (key, abs) => {
   try { hashes[key] = await hashFile(abs, key); } catch { /* todavia no existe */ }
 };

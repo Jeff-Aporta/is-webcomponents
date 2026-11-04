@@ -9,6 +9,8 @@ export const DepsJsonSchema = z.object({
   sha: z.string(),
   tags: z.record(z.string(), z.array(z.string())),
   core: z.record(z.string(), z.array(z.string())),
+  /** `?v=` de cada entrada de los cierres (no de los chunks): el loader sella con él en orígenes mutables (F4). */
+  v: z.record(z.string(), z.string()).optional(),
 });
 export type DepsJson = z.infer<typeof DepsJsonSchema>;
 

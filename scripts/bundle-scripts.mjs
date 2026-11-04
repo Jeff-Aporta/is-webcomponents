@@ -40,10 +40,18 @@ await mkdir('dist/pages', { recursive: true });
 // primero, `customElements.define` deja esa copia y el CDN ya no puede pisarla
 // (version vieja, estado partido entre dos clases: <dialog> del UA, menu sin panel).
 // Cada componente se importa externo desde su módulo publicado `dist/cdn/<cat>/<tag>.min.mjs` (build único con
-// splitting, F3): ese módulo trae los chunks del kit, los mismos que pide el loader. Sin `?v=`: el loader de F3
-// tampoco lo pone, y dos URLs del mismo módulo lo evaluarían dos veces.
+// splitting, F3): ese módulo trae los chunks del kit, los mismos que pide el loader. Con el `?v=` de
+// asset-hashes.json: la galería corre en un origen mutable (Pages/local), donde el loader de F4 también lo pone
+// (lo lee de deps.json); dos URLs del mismo módulo lo evaluarían dos veces.
 const componentesRoot = resolve('src/components');
 const cdnRoot = resolve('dist/cdn');
+const hashesCdn = (() => {
+  try { return JSON.parse(readFileSync(join(cdnRoot, 'asset-hashes.json'), 'utf8')).files ?? {}; } catch { return {}; }
+})();
+const conV = (abs, ruta) => {
+  const hash = hashesCdn[relative(cdnRoot, abs).replaceAll(sep, '/')];
+  return hash ? `${ruta}?v=${hash}` : ruta;
+};
 const categoriaPorTag = new Map(manifest.map((m) => [m.tag.replace(/^iswc-/, ''), m.category]));
 const registraElemento = new Map();
 const esComponente = (ts) => {
@@ -59,14 +67,14 @@ const componentesExternos = (outfile) => ({
     pluginBuild.onResolve({ filter: /\.(ts|m?js)$/ }, (args) => {
       if (args.kind === 'entry-point') return null;
       const abs = resolve(args.resolveDir, args.path);
-      if (abs.startsWith(cdnRoot + sep)) return { path: relative(dirname(outfile), abs).replaceAll(sep, '/'), external: true };
+      if (abs.startsWith(cdnRoot + sep)) return { path: conV(abs, relative(dirname(outfile), abs).replaceAll(sep, '/')), external: true };
       if (!abs.startsWith(componentesRoot + sep)) return null;
       const ts = abs.replace(/\.js$/, '.ts');
       if (!esComponente(ts)) return null;
       const nombre = basename(ts, '.ts');
       const carpeta = categoriaPorTag.get(nombre) ?? relative(componentesRoot, ts).split(sep)[0];
       const destino = join('dist', 'cdn', carpeta, `${nombre}.min.mjs`);
-      return { path: relative(dirname(outfile), destino).replaceAll(sep, '/'), external: true };
+      return { path: conV(resolve(destino), relative(dirname(outfile), destino).replaceAll(sep, '/')), external: true };
     });
   },
 });
