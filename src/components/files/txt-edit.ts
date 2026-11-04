@@ -1,25 +1,27 @@
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
-import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
 import { setOptionalAttr, setStringAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
 import { loadText, resolveFileSource } from './utils/file-source.js';
 import { sincronizarAlto } from './utils/file-estado.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 (() => {
   const OBSERVED = ['src', 'content', 'height', 'readonly'];
-  class IswcTxtEdit extends ElementBase {
-    static get observedAttributes(): string[] { return OBSERVED; }
+  class IswcTxtEdit extends IswcElement {
+    static tag = 'iswc-txt-edit';
+    static css = css;
+    static observed = OBSERVED;
     #ta!: HTMLTextAreaElement;
     #gen = 0;
     #suppress = false;
 
     constructor() {
       super();
-      const shadow = this.attachShadow({ mode: 'open' });
+      const shadow = this.shadowRoot!;
       shadow.innerHTML = `
         <div class="root" part="root">
           <textarea class="body" part="editor" spellcheck="false" aria-label="Editor de texto"></textarea>
         </div>`;
-      adoptCss(shadow, import.meta.url);
       this.#ta = shadow.querySelector('textarea')!;
       this.#ta.addEventListener('input', () => {
         if (this.#suppress) return;
@@ -63,5 +65,5 @@ import { sincronizarAlto } from './utils/file-estado.js';
       }
     }
   }
-  defineElement('iswc-txt-edit', IswcTxtEdit);
+  define(IswcTxtEdit);
 })();

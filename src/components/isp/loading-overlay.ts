@@ -1,6 +1,6 @@
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
-import '@jeff-aporta/iswc-base/components/feedback/spinner.js';
-import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-loading-overlay> — Capa de bloqueo a pantalla completa con spinner.
@@ -43,9 +43,12 @@ import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
 
   const OBSERVED = ['open', 'message', 'scroll-lock'];
 
-  class IswcLoadingOverlay extends ElementBase {
+  class IswcLoadingOverlay extends IswcElement {
+    static tag = 'iswc-loading-overlay';
+    static css = css;
+    static deps = ['iswc-spinner'];
 
-    static get observedAttributes(): string[] { return [...OBSERVED, 'backdrop-color', 'indicator-color']; }
+    static observed = [...OBSERVED, 'backdrop-color', 'indicator-color'];
 
     #backdrop!: HTMLElement;
     #messageEl!: HTMLElement;
@@ -55,9 +58,8 @@ import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
 
     constructor() {
       super();
-      const shadow = this.attachShadow({ mode: 'open' });
+      const shadow = this.shadowRoot!;
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
-      adoptCss(shadow, import.meta.url);
       this.#backdrop = shadow.querySelector<HTMLElement>('.backdrop')!;
       this.#messageEl = shadow.querySelector<HTMLElement>('.message')!;
       this.#messageText = shadow.querySelector<HTMLElement>('.message-text')!;
@@ -143,5 +145,5 @@ import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
     }
   }
 
-  defineElement('iswc-loading-overlay', IswcLoadingOverlay, 'IswcLoadingOverlay');
+  define(IswcLoadingOverlay, 'IswcLoadingOverlay');
 })();

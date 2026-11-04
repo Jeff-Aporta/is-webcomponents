@@ -1,4 +1,4 @@
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
 import { svgEl } from '@jeff-aporta/iswc-base/core/svg-chart-engine.js';
 import { resolveTreemapSpec, computeTreemapLayout } from './utils/treemap-spec.js';
 import type { TreemapSpec, TreemapLayout } from "./schemas/treemap-spec.schemas.js";
@@ -9,6 +9,8 @@ import { paletteTheme } from '@jeff-aporta/iswc-base/components/diagrams/utils/d
 import { findThemeContainer, readTheme } from '@jeff-aporta/iswc-base/core/theme-scope.js';
 import { inlineMdWeb } from '@jeff-aporta/iswc-base/core/tk-inline-md.js';
 import { registerDiagramKind } from '@jeff-aporta/iswc-base/components/diagrams/utils/diagram-kinds.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-treemap> — treemap anidado en SVG (algoritmo squarified), sin librerías.
@@ -34,8 +36,10 @@ function fmtValue(v: number) {
   return new Intl.NumberFormat('es-CO').format(Math.round(v));
 }
 
-class IswcTreemap extends HTMLElement {
-  static get observedAttributes(): string[] { return ['color', 'open-on-click']; }
+class IswcTreemap extends IswcElement {
+  static tag = 'iswc-treemap';
+  static css = css;
+  static observed = ['color', 'open-on-click'];
 
   #wrap!: HTMLElement; #svg!: HTMLElement; #tooltipEl!: HTMLElement;
   #payload: unknown = null;
@@ -52,7 +56,7 @@ class IswcTreemap extends HTMLElement {
 
   constructor() {
     super();
-    const shadow = this.attachShadow({ mode: 'open' });
+    const shadow = this.shadowRoot!;
     shadow.innerHTML = /* html */ `
       <div part="base" class="wrap">
         <svg part="canvas" class="tm-svg" xmlns="${SVG_NS}" role="img"></svg>
@@ -60,7 +64,6 @@ class IswcTreemap extends HTMLElement {
         <div class="slot-hidden"><slot></slot></div>
       </div>
     `;
-    adoptCss(shadow, import.meta.url);
     this.#wrap = shadow.querySelector<HTMLElement>('.wrap')!;
     this.#svg = shadow.querySelector<HTMLElement>('.tm-svg')!;
     this.#tooltipEl = shadow.querySelector<HTMLElement>('.tm-tooltip')!;
@@ -322,7 +325,7 @@ class IswcTreemap extends HTMLElement {
   }
 }
 
-defineElement('iswc-treemap', IswcTreemap, 'IswcTreemap');
+define(IswcTreemap, 'IswcTreemap');
 
 registerDiagramKind('treemap', 'iswc-treemap');
 

@@ -1,8 +1,9 @@
-import { adoptCss, defineElement } from '@jeff-aporta/iswc-base/core/element.js';
 import { withStyleAttrs } from '@jeff-aporta/iswc-base/core/attrs.js';
 
 import { pathLine, pathArea, roundedBarRect } from '@jeff-aporta/iswc-base/core/svg-chart-engine.js';
 import type { SparkPoint } from "./schemas/sparkline.schemas.js";
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
 
@@ -31,11 +32,11 @@ function fmtNum(v: number): string {
 }
 
 (() => {
-  class IswcSparkline extends withStyleAttrs(HTMLElement) {
+  class IswcSparkline extends withStyleAttrs(IswcElement) {
+    static tag = 'iswc-sparkline';
+    static css = css;
 
-    static get observedAttributes(): string[] {
-      return ['values', 'data', 'type', 'label', 'variant', 'curve', 'trend'];
-    }
+    static observed = ['values', 'data', 'type', 'label', 'variant', 'curve', 'trend'];
 
     #svg!: HTMLElement;
     #srStatusEl!: HTMLElement;
@@ -46,13 +47,12 @@ function fmtNum(v: number): string {
 
     constructor() {
       super();
-      const shadow = this.attachShadow({ mode: 'open' });
+      const shadow = this.shadowRoot!;
       shadow.innerHTML = /* html */ `
         <div part="sparkline" class="wrap">
           <svg part="canvas" class="chart-svg" aria-busy="true"></svg>
           <div part="sr-status" class="sr-status" aria-live="polite" aria-atomic="true"></div>
         </div>`;
-      adoptCss(shadow, import.meta.url);
       this.#svg = shadow.querySelector<HTMLElement>('svg')!;
       this.#srStatusEl = shadow.querySelector<HTMLElement>('.sr-status')!;
     }
@@ -198,5 +198,5 @@ function fmtNum(v: number): string {
     }
   }
 
-  defineElement('iswc-sparkline', IswcSparkline, 'IswcSparkline');
+  define(IswcSparkline, 'IswcSparkline');
 })();

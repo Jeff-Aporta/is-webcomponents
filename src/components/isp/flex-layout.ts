@@ -1,5 +1,6 @@
-import { adoptCss, defineElement } from '@jeff-aporta/iswc-base/core/element.js';
 import { BreakpointHost } from './block-layout.js';
+import { define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * g11 — UX/UI proposals (aria/region/aria-orientation/prefers-*):
@@ -61,16 +62,14 @@ import { BreakpointHost } from './block-layout.js';
   ];
 
   class IswcFlexLayout extends BreakpointHost {
-    static TEMPLATE = TEMPLATE;
-    static get observedAttributes(): string[] { return OBSERVED; }
+    static tag = 'iswc-flex-layout';
+    static css = css;
+    static shadowInit: ShadowRootInit | null = { mode: 'open' };
+    static template = TEMPLATE;
+    static observed = OBSERVED;
     // El attributeChangedCallback lo aporta ElementBase (vía BreakpointHost);
     // aquí solo se implementa el hook onAttributeChanged.
 
-    constructor() {
-      super();
-      this.initShadow();
-      adoptCss(this.shadowRoot!, import.meta.url);
-    }
 
     onConnected() {
       super.onConnected();
@@ -134,5 +133,5 @@ import { BreakpointHost } from './block-layout.js';
     set labelledby(v) { v == null || v === '' ? this.removeAttribute('labelledby') : this.setAttribute('labelledby', String(v)); }
   }
 
-  defineElement('iswc-flex-layout', IswcFlexLayout, 'IswcFlexLayout');
+  define(IswcFlexLayout, 'IswcFlexLayout');
 })();

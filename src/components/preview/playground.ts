@@ -16,14 +16,13 @@
  *   content:      → textContent del host (label / “Hola mundo”)
  *   style: / attr:style → style.cssText
  */
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
-import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
 import { setStringAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
 import { definePreviewControls } from '@jeff-aporta/iswc-base/components/layout/preview-controls.js';
 import '@jeff-aporta/iswc-base/components/code/code.js';
-import '@jeff-aporta/iswc-base/components/actions/button.js';
-import '@jeff-aporta/iswc-base/components/media/icon.js';
 import '@jeff-aporta/iswc-base/components/layout/details.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 (() => {
   definePreviewControls();
@@ -94,8 +93,11 @@ import '@jeff-aporta/iswc-base/components/layout/details.js';
     format(config?: unknown): string;
   };
 
-  class IswcPlayground extends ElementBase {
-    static get observedAttributes(): string[] { return OBSERVED; }
+  class IswcPlayground extends IswcElement {
+    static tag = 'iswc-playground';
+    static css = css;
+    static deps = ['iswc-button', 'iswc-icon'];
+    static observed = OBSERVED;
 
     #titleEl!: HTMLElement;
     #ledeEl!: HTMLElement;
@@ -108,8 +110,7 @@ import '@jeff-aporta/iswc-base/components/layout/details.js';
 
     constructor() {
       super();
-      const shadow = this.attachShadow({ mode: 'open' });
-      adoptCss(shadow, import.meta.url);
+      const shadow = this.shadowRoot!;
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
       this.#titleEl = shadow.querySelector('.title')!;
       this.#ledeEl = shadow.querySelector('.lede')!;
@@ -365,5 +366,5 @@ import '@jeff-aporta/iswc-base/components/layout/details.js';
       || prop === 'textContent';
   }
 
-  defineElement('iswc-playground', IswcPlayground, 'IswcPlayground');
+  define(IswcPlayground, 'IswcPlayground');
 })();

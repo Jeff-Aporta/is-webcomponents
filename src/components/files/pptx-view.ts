@@ -1,11 +1,12 @@
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
-import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
 import { setOptionalAttr, setStringAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
 import { escapeHtml } from '@jeff-aporta/iswc-base/core/dom-utils.js';
 import { loadArrayBuffer, resolveFileSource } from './utils/file-source.js';
 import { pintarEstado, sincronizarAlto } from './utils/file-estado.js';
 import { JSZIP_CDN, loadCdnScript, PPTX_PREVIEW_CDN } from './utils/load-cdn.js';
 import type { ZipLike } from "./schemas/pptx-view.schemas.js";
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 (() => {
   const OBSERVED = ['src', 'content', 'height'];
@@ -29,16 +30,17 @@ import type { ZipLike } from "./schemas/pptx-view.schemas.js";
     return slides;
   }
 
-  class IswcPptxView extends ElementBase {
-    static get observedAttributes(): string[] { return OBSERVED; }
+  class IswcPptxView extends IswcElement {
+    static tag = 'iswc-pptx-view';
+    static css = css;
+    static observed = OBSERVED;
     #stage!: HTMLElement;
     #gen = 0;
 
     constructor() {
       super();
-      const shadow = this.attachShadow({ mode: 'open' });
+      const shadow = this.shadowRoot!;
       shadow.innerHTML = `<div class="root" part="root"><div class="stage slides" part="stage"></div></div>`;
-      adoptCss(shadow, import.meta.url);
       this.#stage = shadow.querySelector('.stage')!;
     }
 
@@ -83,5 +85,5 @@ import type { ZipLike } from "./schemas/pptx-view.schemas.js";
       }
     }
   }
-  defineElement('iswc-pptx-view', IswcPptxView);
+  define(IswcPptxView);
 })();

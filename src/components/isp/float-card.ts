@@ -1,6 +1,6 @@
-import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
-import { adoptCss, defineElement } from '@jeff-aporta/iswc-base/core/element.js';
 import type { LinearTransform } from "./schemas/float-card.schemas.js";
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * g11 — UX/UI proposals:
@@ -44,11 +44,11 @@ function cssLen(v: string | number | null | undefined): string {
   return String(v);
 }
 
-class IswcFloatCard extends ElementBase {
-  static TEMPLATE = TEMPLATE;
-  static get observedAttributes(): string[] {
-    return ['open', 'horizontal', 'vertical', 'locked', 'label', 'labelledby'];
-  }
+class IswcFloatCard extends IswcElement {
+  static tag = 'iswc-float-card';
+  static css = css;
+  static template = TEMPLATE;
+  static observed = ['open', 'horizontal', 'vertical', 'locked', 'label', 'labelledby'];
 
   #panel!: HTMLElement;
   #keep = 0;
@@ -58,8 +58,6 @@ class IswcFloatCard extends ElementBase {
 
   constructor() {
     super();
-    this.initShadow();
-    adoptCss(this.shadowRoot!, import.meta.url);
     this.#panel = this.shadowRoot!.querySelector<HTMLElement>('.panel')!;
   }
 
@@ -211,4 +209,4 @@ class IswcFloatCard extends ElementBase {
   }
 }
 
-defineElement('iswc-float-card', IswcFloatCard, 'IswcFloatCard');
+define(IswcFloatCard, 'IswcFloatCard');

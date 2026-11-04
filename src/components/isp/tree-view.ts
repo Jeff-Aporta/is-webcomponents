@@ -1,13 +1,10 @@
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
-import '@jeff-aporta/iswc-base/components/actions/button.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
 import '@jeff-aporta/iswc-base/components/actions/button-group.js';
 import '@jeff-aporta/iswc-base/components/actions/check-icon-button.js';
 import '@jeff-aporta/iswc-base/components/actions/dropdown.js';
 import '@jeff-aporta/iswc-base/components/actions/dropdown-item.js';
-import '@jeff-aporta/iswc-base/components/media/icon.js';
 import '@jeff-aporta/iswc-base/components/layout/drawer.js';
 import '@jeff-aporta/iswc-base/components/layout/dialog.js';
-import '@jeff-aporta/iswc-base/components/layout/divider.js';
 import './confirm-delete.js';
 import './flex-options.js';
 import './float-card.js';
@@ -16,6 +13,8 @@ import { TreeCustomsBase } from './utils/tree-view/customs-base.js';
 import { paintForest } from './utils/tree-view/render-rows.js';
 import type { TNode, TRecord, TreeActionEntry, TreeCustoms } from './schemas/tree-view-types.schemas.js';
 import type { _AdapterLike, _DrawerLike, _ModalDeleteLike, _DialogLike } from "./schemas/tree-view.schemas.js";
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /** Subset del adapter que `IswcTreeView` consume (no necesita el tipo completo). */
 
@@ -71,8 +70,11 @@ const OBSERVED = ['readonly', 'draggable', 'disabled', 'label-field', 'helper-fi
 
 /** Diálogo de protección. */
 
-class IswcTreeView extends HTMLElement {
-  static get observedAttributes(): string[] { return OBSERVED; }
+class IswcTreeView extends IswcElement {
+  static tag = 'iswc-tree-view';
+  static css = css;
+  static deps = ['iswc-button', 'iswc-icon', 'iswc-divider'];
+  static observed = OBSERVED;
 
   #mounted = false;
   #root!: HTMLElement;
@@ -154,9 +156,8 @@ class IswcTreeView extends HTMLElement {
 
   constructor() {
     super();
-    const shadow = this.attachShadow({ mode: 'open' });
+    const shadow = this.shadowRoot!;
     shadow.appendChild(TEMPLATE.content.cloneNode(true));
-    adoptCss(shadow, import.meta.url);
     this.#root = shadow.querySelector<HTMLElement>('.isp-tree')!;
     this.#toolbar = shadow.querySelector<HTMLElement>('.isp-tree-toolbar')!;
     this.#body = shadow.querySelector<HTMLElement>('.isp-tree-body')!;
@@ -168,6 +169,7 @@ class IswcTreeView extends HTMLElement {
   }
 
   connectedCallback(): void {
+    super.connectedCallback();
     this.#mounted = true;
     this.#upgrade();
     if (!this.#adapter) this.#adapter = new TreeRowViewAdapter() as unknown as _AdapterLike;
@@ -381,4 +383,4 @@ class IswcTreeView extends HTMLElement {
   runCustomsPreSubmit(): unknown { return this.#adapter?.runCustomsPreSubmit?.(); }
 }
 
-defineElement('iswc-tree-view', IswcTreeView, 'IswcTreeView');
+define(IswcTreeView, 'IswcTreeView');

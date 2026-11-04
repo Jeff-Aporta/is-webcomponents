@@ -1,10 +1,9 @@
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
-import '@jeff-aporta/iswc-base/components/actions/button.js';
-import '@jeff-aporta/iswc-base/components/media/icon.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
 import '@jeff-aporta/iswc-base/components/layout/dialog.js';
 import './text.js';
 import './heading.js';
-import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-modal-verificacion> — port de `src/lib/base/modal/ModalVerificacion.svelte`.
@@ -125,9 +124,12 @@ export function lowerCase(value: string) {
 
   const OBSERVED = ['open', 'loading', 'entity', 'icon', 'close-label', 'light-dismiss'];
 
-  class IswcModalVerificacion extends ElementBase {
+  class IswcModalVerificacion extends IswcElement {
+    static tag = 'iswc-modal-verificacion';
+    static css = css;
+    static deps = ['iswc-button', 'iswc-icon'];
 
-    static get observedAttributes(): string[] { return [...OBSERVED, 'accent']; }
+    static observed = [...OBSERVED, 'accent'];
 
     #dlg!: HTMLElement & { show(): void; hide(): void };
     #headingText!: HTMLElement;
@@ -152,9 +154,8 @@ export function lowerCase(value: string) {
 
     constructor() {
       super();
-      const shadow = this.attachShadow({ mode: 'open' });
+      const shadow = this.shadowRoot!;
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
-      adoptCss(shadow, import.meta.url);
 
       this.#dlg = shadow.querySelector<HTMLElement>('.dlg') as HTMLElement & { show(): void; hide(): void };
       this.#headingText = shadow.querySelector<HTMLElement>('.heading-text')!;
@@ -351,5 +352,5 @@ export function lowerCase(value: string) {
     }
   }
 
-  defineElement('iswc-modal-verificacion', IswcModalVerificacion, 'IswcModalVerificacion');
+  define(IswcModalVerificacion, 'IswcModalVerificacion');
 })();

@@ -1,5 +1,4 @@
-import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
 import {
   applyJsonBody,
   html2json,
@@ -12,6 +11,8 @@ import {
   bindScrollMemoryApi,
 } from '@jeff-aporta/iswc-base/core/scroll-memory.js';
 import type { Breakpoint, BreakpointFlags, LerpwFn } from "./schemas/block-layout.schemas.js";
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-block-layout> — port de ISP `layout/BlockLayout.svelte`.
@@ -64,7 +65,8 @@ export function lerpFor(width: number, b0: string = 'sm', b1: string = 'xl'): nu
  *
  * Geometría y memoria de scroll viven aquí para que block/flex/grid las hereden.
  */
-export class BreakpointHost extends ElementBase {
+export class BreakpointHost extends IswcElement {
+  static shadowInit: ShadowRootInit | null = null;
   #ro: ResizeObserver | null = null;
   #width = -1;
   #height = -1;
@@ -172,21 +174,17 @@ export class BreakpointHost extends ElementBase {
   TEMPLATE.innerHTML = /* html */ `<slot part="content"></slot>`;
 
   class IswcBlockLayout extends BreakpointHost {
-    static TEMPLATE = TEMPLATE;
-    static get observedAttributes(): string[] {
-      return ['inline', 'cscroll', 'label', 'labelledby', ...SCROLL_MEMORY_ATTRS];
-    }
+    static tag = 'iswc-block-layout';
+    static css = css;
+    static shadowInit: ShadowRootInit | null = { mode: 'open' };
+    static template = TEMPLATE;
+    static observed = ['inline', 'cscroll', 'label', 'labelledby', ...SCROLL_MEMORY_ATTRS];
 
     static json2html = json2html;
     static html2json = html2json;
 
     #inlineApplied = false;
 
-    constructor() {
-      super();
-      this.initShadow();
-      adoptCss(this.shadowRoot!, import.meta.url);
-    }
 
     onConnected(): void {
       super.onConnected();
@@ -274,5 +272,5 @@ export class BreakpointHost extends ElementBase {
     }
   }
 
-  defineElement('iswc-block-layout', IswcBlockLayout, 'IswcBlockLayout');
+  define(IswcBlockLayout, 'IswcBlockLayout');
 })();

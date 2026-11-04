@@ -1,26 +1,28 @@
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
-import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
 import { setOptionalAttr, setStringAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
 import { loadArrayBuffer, resolveFileSource } from './utils/file-source.js';
 import { pintarEstado, sincronizarAlto } from './utils/file-estado.js';
 import { loadCdnScript, MAMMOTH_CDN } from './utils/load-cdn.js';
 import type { MammothApi } from "./schemas/docx-view.schemas.js";
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 (() => {
   const OBSERVED = ['src', 'content', 'height'];
-  class IswcDocxView extends ElementBase {
-    static get observedAttributes(): string[] { return OBSERVED; }
+  class IswcDocxView extends IswcElement {
+    static tag = 'iswc-docx-view';
+    static css = css;
+    static observed = OBSERVED;
     #body!: HTMLElement;
     #gen = 0;
 
     constructor() {
       super();
-      const shadow = this.attachShadow({ mode: 'open' });
+      const shadow = this.shadowRoot!;
       shadow.innerHTML = `
         <div class="root" part="root">
           <div class="body" part="body"></div>
         </div>`;
-      adoptCss(shadow, import.meta.url);
       this.#body = shadow.querySelector('.body')!;
     }
 
@@ -57,5 +59,5 @@ import type { MammothApi } from "./schemas/docx-view.schemas.js";
       }
     }
   }
-  defineElement('iswc-docx-view', IswcDocxView);
+  define(IswcDocxView);
 })();

@@ -1,14 +1,11 @@
-import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
-import { adoptCss, defineElement } from '@jeff-aporta/iswc-base/core/element.js';
-import '@jeff-aporta/iswc-base/components/actions/button.js';
 import '@jeff-aporta/iswc-base/components/actions/button-group.js';
 import '@jeff-aporta/iswc-base/components/actions/check-icon-button.js';
 import '@jeff-aporta/iswc-base/components/actions/dropdown.js';
 import '@jeff-aporta/iswc-base/components/actions/dropdown-item.js';
-import '@jeff-aporta/iswc-base/components/layout/divider.js';
-import '@jeff-aporta/iswc-base/components/media/icon.js';
 import { paintFlexOptions } from './utils/tree-view/paint-flex-options.js';
 import { type FlexActionEntry } from './schemas/tree-view-flex-options.schemas.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * g11 — UX/UI proposals sobre la toolbar:
@@ -36,9 +33,12 @@ TEMPLATE.innerHTML = /* html */ `
   <div part="toolbar" class="toolbar" role="toolbar"></div>
 `;
 
-class IswcFlexOptions extends ElementBase {
-  static TEMPLATE = TEMPLATE;
-  static get observedAttributes(): string[] { return ['compact', 'more-disabled', 'label', 'labelledby']; }
+class IswcFlexOptions extends IswcElement {
+  static tag = 'iswc-flex-options';
+  static css = css;
+  static deps = ['iswc-button', 'iswc-divider', 'iswc-icon'];
+  static template = TEMPLATE;
+  static observed = ['compact', 'more-disabled', 'label', 'labelledby'];
 
   #root!: HTMLElement;
   #actions: FlexActionEntry[] = [];
@@ -46,8 +46,6 @@ class IswcFlexOptions extends ElementBase {
 
   constructor() {
     super();
-    this.initShadow();
-    adoptCss(this.shadowRoot!, import.meta.url);
     this.#root = this.shadowRoot!.querySelector<HTMLElement>('.toolbar')!;
   }
 
@@ -209,4 +207,4 @@ class IswcFlexOptions extends ElementBase {
   };
 }
 
-defineElement('iswc-flex-options', IswcFlexOptions, 'IswcFlexOptions');
+define(IswcFlexOptions, 'IswcFlexOptions');

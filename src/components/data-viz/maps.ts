@@ -1,8 +1,10 @@
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
 import { withStyleAttrs } from '@jeff-aporta/iswc-base/core/attrs.js';
 
 import { svgEl } from '@jeff-aporta/iswc-base/core/svg-chart-engine.js';
 import type { Viewport, DragState, TileCfg } from "./schemas/maps.schemas.js";
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /** Viewport geográfico (lon/lat) usado por <iswc-maps>. */
 
@@ -39,23 +41,23 @@ import type { Viewport, DragState, TileCfg } from "./schemas/maps.schemas.js";
 (() => {
   const OBSERVED = ['viewbox', 'zoom', 'engine', 'interactive'];
 
-  class IswcMaps extends withStyleAttrs(HTMLElement) {
+  class IswcMaps extends withStyleAttrs(IswcElement) {
+    static tag = 'iswc-maps';
+    static css = css;
 
-    static get observedAttributes(): string[] { return [...OBSERVED, 'grid-color', 'meridian-color']; }
+    static observed = [...OBSERVED, 'grid-color', 'meridian-color'];
     #mounted = false;
     #vp: Viewport = { minLon: -180, minLat: -85, maxLon: 180, maxLat: 85 };
     #onWinPointerUp!: () => void;
 
     constructor() {
       super();
-      this.attachShadow({ mode: 'open' });
       this.shadowRoot!.innerHTML = /* html */ `
         <div part="root" class="root">
           <div class="zoom-info"></div>
           <div part="canvas" class="canvas"></div>
         </div>
       `;
-      adoptCss(this.shadowRoot!, import.meta.url);
       this.#canvas = this.shadowRoot!.querySelector<HTMLElement>('.canvas')!;
       this.#zoomInfo = this.shadowRoot!.querySelector<HTMLElement>('.zoom-info')!;
       this.#canvas.addEventListener('wheel', (e: WheelEvent) => this.#onWheel(e), { passive: false });
@@ -257,11 +259,13 @@ import type { Viewport, DragState, TileCfg } from "./schemas/maps.schemas.js";
     #zoomInfo!: HTMLElement;
   }
 
-  defineElement('iswc-maps', IswcMaps);
+  define(IswcMaps);
 
-  class IswcMapMarker extends HTMLElement {
-    static get observedAttributes(): string[] { return ['lat', 'lon', 'label']; }
+  class IswcMapMarker extends IswcElement {
+    static tag = 'iswc-map-marker';
+    static shadowInit: ShadowRootInit | null = null;
+    static observed = ['lat', 'lon', 'label'];
     connectedCallback(): void { /* re-sincroniza el padre cuando entra */ }
   }
-  defineElement('iswc-map-marker', IswcMapMarker);
+  define(IswcMapMarker);
 })();

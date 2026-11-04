@@ -1,10 +1,8 @@
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
 import {
   attachFormInternals, setFormValue, setValidity, clearValidity,
 } from '@jeff-aporta/iswc-base/core/form-associated.js';
-import '@jeff-aporta/iswc-base/components/actions/button.js';
 import '@jeff-aporta/iswc-base/components/forms/input.js';
-import '@jeff-aporta/iswc-base/components/media/icon.js';
 import '@jeff-aporta/iswc-base/components/layout/dialog.js';
 import './catalogo-gen.js';
 import {
@@ -16,6 +14,8 @@ import {
 /** Columna y datos arbitrarios que devuelve el controller. */
 import { _RecordLikeSchema, type _RecordLike } from "./schemas/btn-ref.schemas.js";
 import type { _CatalogLike, _FieldLike, _DialogLike, _CatalogEl } from "./schemas/btn-ref.schemas.js";
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /** Input field con attrs custom (label/name/value/etc.). */
 
@@ -74,9 +74,12 @@ const FILTER_SVG = `<svg fill="currentColor" width="20" height="20" viewBox="0 0
     'label', 'value', 'name', 'id', 'required', 'optional', 'readonly', 'maxlength', 'multi',
   ];
 
-  class IswcBtnRef extends HTMLElement {
+  class IswcBtnRef extends IswcElement {
+    static tag = 'iswc-btn-ref';
+    static css = css;
+    static deps = ['iswc-button', 'iswc-icon'];
     static formAssociated = true;
-    static get observedAttributes(): string[] { return OBSERVED; }
+    static observed = OBSERVED;
 
     /** Indexer usado por `#upgradeProps()` para re-leer propiedades pre-upgrade. */
     [key: string]: unknown;
@@ -102,9 +105,8 @@ const FILTER_SVG = `<svg fill="currentColor" width="20" height="20" viewBox="0 0
     constructor() {
       super();
       this.#internals = attachFormInternals(this);
-      const shadow = this.attachShadow({ mode: 'open' });
+      const shadow = this.shadowRoot!;
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
-      adoptCss(shadow, import.meta.url);
 
       this.#field = shadow.querySelector<HTMLElement>('.field') as _FieldLike;
       this.#valueLabel = shadow.querySelector<HTMLElement>('.value-label')!;
@@ -116,6 +118,7 @@ const FILTER_SVG = `<svg fill="currentColor" width="20" height="20" viewBox="0 0
     }
 
     connectedCallback(): void {
+      super.connectedCallback();
       this.#mounted = true;
       this.#upgradeProps();
       this.#syncFieldAttrs();
@@ -383,5 +386,5 @@ const FILTER_SVG = `<svg fill="currentColor" width="20" height="20" viewBox="0 0
     };
   }
 
-  defineElement('iswc-btn-ref', IswcBtnRef);
+  define(IswcBtnRef);
 })();

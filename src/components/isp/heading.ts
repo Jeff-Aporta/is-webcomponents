@@ -1,10 +1,10 @@
-import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
-import { adoptCss, defineElement } from '@jeff-aporta/iswc-base/core/element.js';
 import {
   classifyColor,
   normalizeMix,
   syncIspColor,
 } from './utils/isp-color.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-heading> — port de ISP `typography/H1.svelte` … `H6.svelte`.
@@ -29,19 +29,14 @@ import {
   const LEVELS = ['1', '2', '3', '4', '5', '6'];
   const DEFAULT_MIX = { 1: '15%', 2: '30%', 3: '45%', 4: '65%', 5: '80%', 6: '90%' };
 
-  class IswcHeading extends ElementBase {
+  class IswcHeading extends IswcElement {
+    static tag = 'iswc-heading';
+    static css = css;
 
-    static get observedAttributes(): string[] {
-      return ['level', 'color', 'mix', 'mix-with', 'size'];
-    }
+    static observed = ['level', 'color', 'mix', 'mix-with', 'size'];
 
     #heading: HTMLElement | null = null;
 
-    constructor() {
-      super();
-      this.initShadow();
-      adoptCss(this.shadowRoot!, import.meta.url);
-    }
 
     onConnected() {
       if (!this.hasAttribute('level')) this.setAttribute('level', '1');
@@ -80,7 +75,7 @@ import {
       }
     }
 
-    /** Reemplaza SOLO el <hN>; los <link> que puso adoptCss se conservan. */
+    /** Reemplaza SOLO el <hN>; el resto del shadow (y sus hojas adoptadas) se conserva. */
     #render() {
       const level = this.level;
       const tag = `h${level}`;
@@ -140,5 +135,5 @@ import {
     }
   }
 
-  defineElement('iswc-heading', IswcHeading, 'IswcHeading');
+  define(IswcHeading, 'IswcHeading');
 })();

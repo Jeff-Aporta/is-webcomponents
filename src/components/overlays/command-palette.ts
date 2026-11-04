@@ -1,7 +1,7 @@
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
 import { escapeHtml } from '@jeff-aporta/iswc-base/core/dom-utils.js';
-import '@jeff-aporta/iswc-base/components/media/icon.js';
-import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-command-palette> — Paleta de comandos al estilo Cmd+K / Ctrl+K.
@@ -59,9 +59,12 @@ import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
   /** Letras/numeros previos a la query (LIFO). Solo memoria de la sesion. */
   type History = string[];
 
-  class IswcCommandPalette extends ElementBase {
+  class IswcCommandPalette extends IswcElement {
+    static tag = 'iswc-command-palette';
+    static css = css;
+    static deps = ['iswc-icon'];
 
-    static get observedAttributes(): string[] { return [...OBSERVED, 'radius', 'shadow', 'bar-gap']; }
+    static observed = [...OBSERVED, 'radius', 'shadow', 'bar-gap'];
     #commands: Command[] = [];
     #results: Command[] = [];
     #active = 0;
@@ -85,7 +88,6 @@ import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
 
     constructor() {
       super();
-      this.attachShadow({ mode: 'open' });
       // IDs estables para combobox <-> listbox <-> options (necesario para
       // aria-controls y aria-activedescendant segun WAI-ARIA 1.2).
       const rootId = `cmd-palette-${Math.random().toString(36).slice(2, 8)}`;
@@ -113,7 +115,6 @@ import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
           </div>
         </dialog>
       `;
-      adoptCss(this.shadowRoot!, import.meta.url);
       this.#dialog = this.shadowRoot!.querySelector<HTMLDialogElement>('.dialog')!;
       this.#input = this.shadowRoot!.getElementById('input') as HTMLInputElement;
       this.#resultsEl = this.shadowRoot!.getElementById(`${rootId}-listbox`) as HTMLElement;
@@ -465,5 +466,5 @@ import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
     #hotkeyCombos: string[] = [];
   }
 
-  defineElement('iswc-command-palette', IswcCommandPalette);
+  define(IswcCommandPalette);
 })();

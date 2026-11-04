@@ -1,4 +1,4 @@
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
 import { withStyleAttrs } from '@jeff-aporta/iswc-base/core/attrs.js';
 
 import { scaleLinear, scaleBand, niceTicks, svgEl } from '@jeff-aporta/iswc-base/core/svg-chart-engine.js';
@@ -8,6 +8,8 @@ import { PathTurtle } from '@jeff-aporta/iswc-base/core/path-turtle.js';
 import { registerDiagramKind } from '@jeff-aporta/iswc-base/components/diagrams/utils/diagram-kinds.js';
 import { setStringAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
 import type { TypedChartFactory, ChartDataPoint, ChartDataset, ChartConfig, LegendEntry, HitRecord, ResolvedOptions, DrawMarksFn, ChartCtx } from "./schemas/chart.schemas.js";
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-chart> — motor de charts en SVG, sin dependencias.
@@ -82,11 +84,13 @@ function isNumericXY(datasets: ChartDataset[]): boolean {
   return !!first && typeof first === 'object' && 'x' in first;
 }
 
-class IswcChart extends withStyleAttrs(HTMLElement) {
+class IswcChart extends withStyleAttrs(IswcElement) {
+  static tag = 'iswc-chart';
+  /** Los charts tipados heredan esta hoja: sus .scss solo importan chart.css. */
+  static css = css;
 
-  static get observedAttributes(): string[] { return [...OBSERVED]; }
+  static observed = [...OBSERVED];
   static fixedType: string | null = null;
-  static styleModuleUrl: string | null = null;
   static drawMarks: ((ctx: ChartCtx) => void) | null = null;
 
   #wrap!: HTMLElement;
@@ -116,7 +120,7 @@ class IswcChart extends withStyleAttrs(HTMLElement) {
   constructor() {
     super();
     this.#fixedType = (this.constructor as typeof IswcChart).fixedType || null;
-    const shadow = this.attachShadow({ mode: 'open' });
+    const shadow = this.shadowRoot!;
     shadow.innerHTML = /* html */ `
       <div part="base" class="wrap">
         <svg part="canvas" class="chart-svg" role="img" aria-busy="true"></svg>
@@ -127,7 +131,6 @@ class IswcChart extends withStyleAttrs(HTMLElement) {
         <div class="slot-hidden"><slot></slot></div>
       </div>
     `;
-    adoptCss(shadow, (this.constructor as typeof IswcChart).styleModuleUrl || import.meta.url);
     this.#wrap = shadow.querySelector<HTMLElement>('.wrap') as HTMLElement;
     this.#svg = shadow.querySelector<HTMLElement>('.chart-svg') as HTMLElement;
     this.#legendEl = shadow.querySelector<HTMLElement>('.legend') as HTMLElement;
@@ -853,7 +856,7 @@ class IswcChart extends withStyleAttrs(HTMLElement) {
  * @param tag tag del custom element
  * @param fixedType tipo interno del chart
  * @param drawMarks función que dibuja las marks
- * @param styleModuleUrl URL opcional al CSS de la variante
+ * @param styleModuleUrl URL opcional a una hoja extra de la variante (va como `static cssHref` del molde)
  */
 function defineTypedChart(
   tag: string,
@@ -863,14 +866,15 @@ function defineTypedChart(
 ): typeof IswcChart {
   if (typeof drawMarks === 'function') MARK_REGISTRY[fixedType] = drawMarks;
   class Typed extends IswcChart {
+    static override tag = tag;
     static override fixedType: string = fixedType;
     static override drawMarks: (ctx: ChartCtx) => void = drawMarks;
-    static override styleModuleUrl: string | null = styleModuleUrl || null;
+    static override cssHref: string | null = styleModuleUrl || null;
   }
-  return defineElement(tag, Typed, true) as unknown as typeof IswcChart;
+  return define(Typed, true) as unknown as typeof IswcChart;
 }
 
-defineElement('iswc-chart', IswcChart, 'IswcChart');
+define(IswcChart, 'IswcChart');
 for (const kind of ['chart', 'bar', 'line', 'pie', 'doughnut', 'radar', 'polarArea', 'scatter', 'bubble']) {
   registerDiagramKind(kind, 'iswc-chart');
 }

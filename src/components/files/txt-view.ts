@@ -1,26 +1,28 @@
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
-import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
 import { setOptionalAttr, setStringAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
 import { loadText, resolveFileSource } from './utils/file-source.js';
 import { pintarEstado, sincronizarAlto } from './utils/file-estado.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 (() => {
   const OBSERVED = ['src', 'content', 'height'];
-  class IswcTxtView extends ElementBase {
-    static get observedAttributes(): string[] { return OBSERVED; }
+  class IswcTxtView extends IswcElement {
+    static tag = 'iswc-txt-view';
+    static css = css;
+    static observed = OBSERVED;
     #pre!: HTMLElement;
     #empty!: HTMLElement;
     #gen = 0;
 
     constructor() {
       super();
-      const shadow = this.attachShadow({ mode: 'open' });
+      const shadow = this.shadowRoot!;
       shadow.innerHTML = `
         <div class="root" part="root">
           <pre class="body" part="body" hidden></pre>
           <div class="estado" part="empty"></div>
         </div>`;
-      adoptCss(shadow, import.meta.url);
       this.#pre = shadow.querySelector('.body')!;
       this.#empty = shadow.querySelector('.estado')!;
     }
@@ -60,5 +62,5 @@ import { pintarEstado, sincronizarAlto } from './utils/file-estado.js';
       }
     }
   }
-  defineElement('iswc-txt-view', IswcTxtView);
+  define(IswcTxtView);
 })();

@@ -1,8 +1,9 @@
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
-import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
 import { setOptionalAttr, setStringAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
 import { pintarEstado, sincronizarAlto } from './utils/file-estado.js';
 import { resolveDispatch } from './utils/mime-map.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 (() => {
   const MODE = 'view' as const;
@@ -18,16 +19,17 @@ import { resolveDispatch } from './utils/mime-map.js';
     'iswc-pdf-viewer': () => import('@jeff-aporta/iswc-base/components/overlays/pdf-viewer.js'),
   };
 
-  class IswcFileView extends ElementBase {
-    static get observedAttributes(): string[] { return OBSERVED; }
+  class IswcFileView extends IswcElement {
+    static tag = 'iswc-file-view';
+    static css = css;
+    static observed = OBSERVED;
     #stage!: HTMLElement;
     #gen = 0;
 
     constructor() {
       super();
-      const shadow = this.attachShadow({ mode: 'open' });
+      const shadow = this.shadowRoot!;
       shadow.innerHTML = `<div class="root" part="root"><div class="stage" part="stage"></div></div>`;
-      adoptCss(shadow, import.meta.url);
       this.#stage = shadow.querySelector('.stage')!;
     }
 
@@ -75,5 +77,5 @@ import { resolveDispatch } from './utils/mime-map.js';
       emit(this, 'iswc-dispatch', { tag: d.tag, kind: d.kind, mode: MODE });
     }
   }
-  defineElement('iswc-file-view', IswcFileView);
+  define(IswcFileView);
 })();

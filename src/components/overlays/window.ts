@@ -1,8 +1,7 @@
-import '@jeff-aporta/iswc-base/components/actions/button.js';
-import '@jeff-aporta/iswc-base/components/media/icon.js';
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
-import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
 import { createPopupDismiss } from '@jeff-aporta/iswc-base/core/popup-dismiss.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-window> — Ventana flotante (estilo escritorio).
@@ -51,9 +50,12 @@ import { createPopupDismiss } from '@jeff-aporta/iswc-base/core/popup-dismiss.js
   interface DragState { x: number; y: number; rect: Rect; }
   interface ResizeState { x: number; y: number; rect: Rect; }
 
-  class IswcWindow extends ElementBase {
+  class IswcWindow extends IswcElement {
+    static tag = 'iswc-window';
+    static css = css;
+    static deps = ['iswc-button', 'iswc-icon'];
 
-    static get observedAttributes(): string[] { return [...OBSERVED, 'shadow', 'bar-gap', 'bar-padding']; }
+    static observed = [...OBSERVED, 'shadow', 'bar-gap', 'bar-padding'];
     #onWinMove!: (e: PointerEvent) => void;
     #onWinUp!: () => void;
     #state: WindowState = 'normal';
@@ -70,7 +72,6 @@ import { createPopupDismiss } from '@jeff-aporta/iswc-base/core/popup-dismiss.js
 
     constructor() {
       super();
-      this.attachShadow({ mode: 'open' });
       this.shadowRoot!.innerHTML = /* html */ `
         <div part="root" class="root iswc-popover-panel" data-state="normal">
           <header part="header" class="header iswc-surface-bar">
@@ -87,7 +88,6 @@ import { createPopupDismiss } from '@jeff-aporta/iswc-base/core/popup-dismiss.js
           <span class="resizer" part="resizer" hidden></span>
         </div>
       `;
-      adoptCss(this.shadowRoot!, import.meta.url);
       this.#root = this.shadowRoot!.querySelector<HTMLElement>('.root')!;
       this.#title = this.shadowRoot!.getElementById('ttl')!;
       this.#body = this.shadowRoot!.querySelector<HTMLElement>('.body')!;
@@ -422,5 +422,5 @@ import { createPopupDismiss } from '@jeff-aporta/iswc-base/core/popup-dismiss.js
     #titleSlot!: HTMLSlotElement;
   }
 
-  defineElement('iswc-window', IswcWindow);
+  define(IswcWindow);
 })();

@@ -1,14 +1,12 @@
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
-import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
 import { setOptionalAttr, setStringAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
-import '@jeff-aporta/iswc-base/components/actions/button.js';
-import '@jeff-aporta/iswc-base/components/media/icon.js';
-import '@jeff-aporta/iswc-base/components/feedback/empty-state.js';
 import {
   blobUrlFromBuffer,
   loadArrayBuffer,
   resolveFileSource,
 } from '@jeff-aporta/iswc-base/components/files/utils/file-source.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-pdf-viewer> — Visor de PDF. Por defecto usa el visor nativo del navegador
@@ -36,13 +34,15 @@ import {
 (() => {
   const OBSERVED = ['src', 'content', 'page', 'zoom', 'engine', 'height', 'download', 'print'];
 
-  class IswcPdfViewer extends ElementBase {
+  class IswcPdfViewer extends IswcElement {
+    static tag = 'iswc-pdf-viewer';
+    static css = css;
+    static deps = ['iswc-button', 'iswc-icon', 'iswc-empty-state'];
 
-    static get observedAttributes(): string[] { return [...OBSERVED, 'shadow', 'bar-gap']; }
+    static observed = [...OBSERVED, 'shadow', 'bar-gap'];
 
     constructor() {
       super();
-      this.attachShadow({ mode: 'open' });
       this.shadowRoot!.innerHTML = /* html */ `
         <div part="root" class="root iswc-popover-panel" role="region" aria-label="Visor de PDF">
           <div part="toolbar" class="toolbar iswc-surface-bar" role="toolbar" aria-label="Controles del visor">
@@ -61,7 +61,6 @@ import {
           <iswc-empty-state part="empty" class="vacio" icono="mdi:file-pdf-box" titulo="Sin documento" texto="Indica un PDF con src o content." hidden></iswc-empty-state>
         </div>
       `;
-      adoptCss(this.shadowRoot!, import.meta.url);
       this.#iframe = this.shadowRoot!.getElementById('frame') as HTMLIFrameElement;
       this.#dl = this.shadowRoot!.getElementById('dl')!;
       this.#print = this.shadowRoot!.getElementById('print')!;
@@ -173,5 +172,5 @@ import {
     }
   }
 
-  defineElement('iswc-pdf-viewer', IswcPdfViewer);
+  define(IswcPdfViewer);
 })();

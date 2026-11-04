@@ -1,9 +1,11 @@
 import { fontOn } from '@jeff-aporta/iswc-base/components/charts/utils/chart-palette.js';
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
 import { withStyleAttrs } from '@jeff-aporta/iswc-base/core/attrs.js';
 
 import { niceTicks, scaleLinear, svgEl } from '@jeff-aporta/iswc-base/core/svg-chart-engine.js';
 import type { HeatmapCfg } from "./schemas/heatmap.schemas.js";
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /** Config leída del slot JSON. */
 
@@ -44,9 +46,11 @@ import type { HeatmapCfg } from "./schemas/heatmap.schemas.js";
     return [0.18, 0.36, 0.55, 0.75, 0.95].map((a: number) => `color-mix(in srgb, ${color} ${Math.round(a * 100)}%, var(--iswc-bg-elev))`);
   }
 
-  class IswcHeatmap extends withStyleAttrs(HTMLElement) {
+  class IswcHeatmap extends withStyleAttrs(IswcElement) {
+    static tag = 'iswc-heatmap';
+    static css = css;
 
-    static get observedAttributes(): string[] { return [...OBSERVED, 'text-color', 'grid-color']; }
+    static observed = [...OBSERVED, 'text-color', 'grid-color'];
 
     #ro: ResizeObserver | null = null;
     #mo: MutationObserver | null = null;
@@ -58,7 +62,6 @@ import type { HeatmapCfg } from "./schemas/heatmap.schemas.js";
 
     constructor() {
       super();
-      this.attachShadow({ mode: 'open' });
       this.shadowRoot!.innerHTML = /* html */ `
         <div part="root" class="root" data-legend="end">
           <svg part="canvas" class="chart-svg" role="img" aria-busy="true"></svg>
@@ -66,7 +69,6 @@ import type { HeatmapCfg } from "./schemas/heatmap.schemas.js";
           <div part="sr-status" class="sr-status" aria-live="polite" aria-atomic="true"></div>
         </div>
       `;
-      adoptCss(this.shadowRoot!, import.meta.url);
       this.#svg = this.shadowRoot!.querySelector<HTMLElement>('.chart-svg')!;
       this.#legendEl = this.shadowRoot!.querySelector<HTMLElement>('.legend')!;
       this.#srStatusEl = this.shadowRoot!.querySelector<HTMLElement>('.sr-status')!;
@@ -312,5 +314,5 @@ import type { HeatmapCfg } from "./schemas/heatmap.schemas.js";
     return Number(v.toFixed(2)).toString();
   }
 
-  defineElement('iswc-heatmap', IswcHeatmap);
+  define(IswcHeatmap);
 })();

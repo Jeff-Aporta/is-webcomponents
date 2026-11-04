@@ -1,5 +1,4 @@
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
-import '@jeff-aporta/iswc-base/components/actions/button.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
 import '@jeff-aporta/iswc-base/components/forms/input.js';
 import '@jeff-aporta/iswc-base/components/forms/textarea.js';
 import '@jeff-aporta/iswc-base/components/forms/select.js';
@@ -7,7 +6,6 @@ import '@jeff-aporta/iswc-base/components/forms/option.js';
 import '@jeff-aporta/iswc-base/components/forms/checkbox.js';
 import '@jeff-aporta/iswc-base/components/forms/switch.js';
 import '@jeff-aporta/iswc-base/components/forms/radio.js';
-import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
 import {
   applyJsonBody,
   html2json,
@@ -15,6 +13,8 @@ import {
   json2html,
 } from '@jeff-aporta/iswc-base/core/json-html.js';
 import { getValues, setValues } from './utils/form-json.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-form> — Ficha con header / content / footer (Aceptar · Cancelar).
@@ -51,8 +51,11 @@ import { getValues, setValues } from './utils/form-json.js';
   const VALID_MODE = ['edit', 'view'];
   const OBSERVED = ['mode', 'submit-label', 'cancel-label', 'loading'];
 
-  class IswcForm extends ElementBase {
-    static get observedAttributes(): string[] { return OBSERVED; }
+  class IswcForm extends IswcElement {
+    static tag = 'iswc-form';
+    static css = css;
+    static deps = ['iswc-button'];
+    static observed = OBSERVED;
 
     static json2html = json2html;
     static html2json = html2json;
@@ -71,9 +74,8 @@ import { getValues, setValues } from './utils/form-json.js';
 
     constructor() {
       super();
-      const shadow = this.attachShadow({ mode: 'open' });
+      const shadow = this.shadowRoot!;
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
-      adoptCss(shadow, import.meta.url);
 
       this.#form = shadow.querySelector<HTMLFormElement>('.form')!;
       this.#submitBtn = shadow.querySelector<HTMLElement>('.submit')!;
@@ -245,5 +247,5 @@ import { getValues, setValues } from './utils/form-json.js';
     #syncLoading() { this.#submitBtn.toggleAttribute('loading', this.loading); }
   }
 
-  defineElement('iswc-form', IswcForm, 'IswcForm');
+  define(IswcForm, 'IswcForm');
 })();

@@ -1,6 +1,7 @@
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
 import '@jeff-aporta/iswc-base/components/layout/details.js';
-import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-accordion-group> — Coordinador de varios <iswc-details>.
@@ -39,16 +40,17 @@ import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
   hide(): void;
 }
 
-class IswcAccordionGroup extends ElementBase {
-    static get observedAttributes(): string[] { return OBSERVED; }
+class IswcAccordionGroup extends IswcElement {
+  static tag = 'iswc-accordion-group';
+  static css = css;
+    static observed = OBSERVED;
 
     #slot!: HTMLSlotElement;
 
     constructor() {
       super();
-      const shadow = this.attachShadow({ mode: 'open' });
+      const shadow = this.shadowRoot!;
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
-      adoptCss(shadow, import.meta.url);
       this.#slot = shadow.querySelector<HTMLSlotElement>('slot')!;
     }
 
@@ -140,5 +142,5 @@ class IswcAccordionGroup extends ElementBase {
     }
   }
 
-  defineElement('iswc-accordion-group', IswcAccordionGroup, 'IswcAccordionGroup');
+  define(IswcAccordionGroup, 'IswcAccordionGroup');
 })();

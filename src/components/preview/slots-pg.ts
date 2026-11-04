@@ -49,10 +49,9 @@
  * Eventos
  *   iswc-slots-pg-restart — al pulsar Restart. detail: { tag, slots }.
  */
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
-import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
-import '@jeff-aporta/iswc-base/components/actions/button.js';
-import '@jeff-aporta/iswc-base/components/media/icon.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 (() => {
   const TEMPLATE = document.createElement('template');
@@ -135,8 +134,11 @@ import '@jeff-aporta/iswc-base/components/media/icon.js';
 
   const OBSERVED = ['tag', 'title', 'default-tab'];
 
-  class IswcSlotsPg extends ElementBase {
-    static get observedAttributes(): string[] { return OBSERVED; }
+  class IswcSlotsPg extends IswcElement {
+    static tag = 'iswc-slots-pg';
+    static css = css;
+    static deps = ['iswc-button', 'iswc-icon'];
+    static observed = OBSERVED;
 
     #tag = '';
     #titleEl!: HTMLElement;
@@ -162,8 +164,7 @@ import '@jeff-aporta/iswc-base/components/media/icon.js';
 
     constructor() {
       super();
-      const shadow = this.attachShadow({ mode: 'open' });
-      adoptCss(shadow, import.meta.url);
+      const shadow = this.shadowRoot!;
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
 
       const root = shadow as unknown as Document | ShadowRoot;
@@ -285,8 +286,9 @@ import '@jeff-aporta/iswc-base/components/media/icon.js';
         this.#renderFallback();
         return;
       }
-      // Intentar leer __TEMPLATE estático (muchos modal/tempés lo exponen).
-      const tpl = (ctor as unknown as { __TEMPLATE?: HTMLTemplateElement }).__TEMPLATE;
+      // Intentar leer la plantilla estática del molde (`static template`; `__TEMPLATE` en código externo viejo).
+      const estaticos = ctor as unknown as { template?: HTMLTemplateElement | null; __TEMPLATE?: HTMLTemplateElement };
+      const tpl = estaticos.template ?? estaticos.__TEMPLATE;
       if (tpl && tpl.innerHTML) {
         this.#initialShadowTemplate = tpl.innerHTML.trim();
         this.#renderPanels();
@@ -566,5 +568,5 @@ import '@jeff-aporta/iswc-base/components/media/icon.js';
     }
   }
 
-  defineElement('iswc-slots-pg', IswcSlotsPg, 'IswcSlotsPg');
+  define(IswcSlotsPg, 'IswcSlotsPg');
 })();

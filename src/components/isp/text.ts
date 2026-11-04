@@ -1,10 +1,10 @@
-import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
-import { adoptCss, defineElement } from '@jeff-aporta/iswc-base/core/element.js';
 import {
   classifyColor,
   normalizeMix,
   syncIspColor,
 } from './utils/isp-color.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-text> — port de ISP `typography/Text.svelte`.
@@ -26,18 +26,13 @@ import {
   const TEMPLATE = document.createElement('template');
   TEMPLATE.innerHTML = /* html */ `<slot part="content"></slot>`;
 
-  class IswcText extends ElementBase {
+  class IswcText extends IswcElement {
+    static tag = 'iswc-text';
+    static css = css;
 
-    static TEMPLATE = TEMPLATE;
-    static get observedAttributes(): string[] {
-      return ['color', 'mix', 'mix-with', 'lines'];
-    }
+    static template = TEMPLATE;
+    static observed = ['color', 'mix', 'mix-with', 'lines'];
 
-    constructor() {
-      super();
-      this.initShadow();
-      adoptCss(this.shadowRoot!, import.meta.url);
-    }
 
     onConnected() {
       this.#syncColor();
@@ -100,5 +95,5 @@ import {
     }
   }
 
-  defineElement('iswc-text', IswcText, 'IswcText');
+  define(IswcText, 'IswcText');
 })();

@@ -1,23 +1,25 @@
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
-import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
 import { setOptionalAttr, setStringAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
 import { escapeHtml } from '@jeff-aporta/iswc-base/core/dom-utils.js';
 import { loadText, resolveFileSource } from './utils/file-source.js';
 import { pintarEstado, sincronizarAlto } from './utils/file-estado.js';
 import { parseCsv } from './utils/csv-parse.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 (() => {
   const OBSERVED = ['src', 'content', 'height'];
-  class IswcCsvView extends ElementBase {
-    static get observedAttributes(): string[] { return OBSERVED; }
+  class IswcCsvView extends IswcElement {
+    static tag = 'iswc-csv-view';
+    static css = css;
+    static observed = OBSERVED;
     #stage!: HTMLElement;
     #gen = 0;
 
     constructor() {
       super();
-      const shadow = this.attachShadow({ mode: 'open' });
+      const shadow = this.shadowRoot!;
       shadow.innerHTML = `<div class="root" part="root"><div class="stage" part="stage"></div></div>`;
-      adoptCss(shadow, import.meta.url);
       this.#stage = shadow.querySelector('.stage')!;
     }
 
@@ -59,5 +61,5 @@ import { parseCsv } from './utils/csv-parse.js';
       }
     }
   }
-  defineElement('iswc-csv-view', IswcCsvView);
+  define(IswcCsvView);
 })();

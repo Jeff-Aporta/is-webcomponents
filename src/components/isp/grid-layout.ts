@@ -1,6 +1,7 @@
-import { adoptCss, defineElement } from '@jeff-aporta/iswc-base/core/element.js';
 import { BreakpointHost } from './block-layout.js';
 import { setStringAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
+import { define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * g11 — UX/UI proposals (aria/region/aria-orientation/prefers-*):
@@ -49,16 +50,14 @@ import { setStringAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
   const IS_NUMBER = /^\d+(\.\d+)?$/;
 
   class IswcGridLayout extends BreakpointHost {
-    static TEMPLATE = TEMPLATE;
-    static get observedAttributes(): string[] { return OBSERVED; }
+    static tag = 'iswc-grid-layout';
+    static css = css;
+    static shadowInit: ShadowRootInit | null = { mode: 'open' };
+    static template = TEMPLATE;
+    static observed = OBSERVED;
     // El attributeChangedCallback lo aporta ElementBase (vía BreakpointHost);
     // aquí solo se implementa el hook onAttributeChanged.
 
-    constructor() {
-      super();
-      this.initShadow();
-      adoptCss(this.shadowRoot!, import.meta.url);
-    }
 
     onConnected() {
       super.onConnected();
@@ -129,5 +128,5 @@ import { setStringAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
     set labelledby(v) { setStringAttr(this, 'labelledby', v); }
   }
 
-  defineElement('iswc-grid-layout', IswcGridLayout, 'IswcGridLayout');
+  define(IswcGridLayout, 'IswcGridLayout');
 })();

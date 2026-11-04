@@ -56,21 +56,23 @@
  *   iswc-examples-category   detail: { category }
  *                                  Se emite al cambiar de tab de categoria.
  */
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
-import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
 import { setStringAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
 // W19 reuso: cada bloque de UI del carrusel se monta con un componente del kit.
 // Estos imports son side-effect: registran los CE si el bundle los necesita.
 import '@jeff-aporta/iswc-base/components/layout/card.js';
-import '@jeff-aporta/iswc-base/components/actions/button.js';
-import '@jeff-aporta/iswc-base/components/media/icon.js';
 import '@jeff-aporta/iswc-base/components/navigation/tab-group.js';
 import type { ExampleSpec } from "./schemas/examples-carousel.schemas.js";
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 const OBSERVED = ['tag', 'target', 'label', 'lede', 'default-index', 'category-field'];
 
-class IswcExamplesCarousel extends ElementBase {
-  static get observedAttributes(): string[] { return OBSERVED; }
+class IswcExamplesCarousel extends IswcElement {
+  static tag = 'iswc-examples-carousel';
+  static css = css;
+  static deps = ['iswc-button', 'iswc-icon'];
+  static observed = OBSERVED;
 
   #titleEl!: HTMLElement;
   #ledeEl!: HTMLElement;
@@ -84,8 +86,7 @@ class IswcExamplesCarousel extends ElementBase {
 
   constructor() {
     super();
-    const shadow = this.attachShadow({ mode: 'open' });
-    adoptCss(shadow, import.meta.url);
+    const shadow = this.shadowRoot!;
     shadow.innerHTML = `
       <div class="root" part="root">
         <header class="head" part="head">
@@ -505,7 +506,7 @@ export function defineExamplesCarousel(): void {
     _defined = true;
     return;
   }
-  defineElement('iswc-examples-carousel', IswcExamplesCarousel, 'IswcExamplesCarousel');
+  define(IswcExamplesCarousel, 'IswcExamplesCarousel');
   _defined = true;
 }
 

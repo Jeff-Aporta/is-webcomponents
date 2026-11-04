@@ -1,10 +1,9 @@
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
-import '@jeff-aporta/iswc-base/components/actions/button.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
 import '@jeff-aporta/iswc-base/components/forms/input.js';
-import '@jeff-aporta/iswc-base/components/media/icon.js';
 import '@jeff-aporta/iswc-base/components/layout/dialog.js';
-import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
 import type { InputLike } from "./schemas/confirm-delete.schemas.js";
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /** Custom input-like element con label, value, y errores. */
 
@@ -86,9 +85,12 @@ import type { InputLike } from "./schemas/confirm-delete.schemas.js";
     'case-sensitive', 'loading', 'light-dismiss'
   ];
 
-  class IswcConfirmDelete extends ElementBase {
+  class IswcConfirmDelete extends IswcElement {
+    static tag = 'iswc-confirm-delete';
+    static css = css;
+    static deps = ['iswc-button', 'iswc-icon'];
 
-    static get observedAttributes(): string[] { return [...OBSERVED, 'accent']; }
+    static observed = [...OBSERVED, 'accent'];
 
     #dlg!: HTMLElement & { show(): void; hide(): void };
     #headingText!: HTMLElement;
@@ -105,9 +107,8 @@ import type { InputLike } from "./schemas/confirm-delete.schemas.js";
 
     constructor() {
       super();
-      const shadow = this.attachShadow({ mode: 'open' });
+      const shadow = this.shadowRoot!;
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
-      adoptCss(shadow, import.meta.url);
 
       this.#dlg = shadow.querySelector<HTMLElement>('.dlg') as HTMLElement & { show(): void; hide(): void };
       this.#headingText = shadow.querySelector<HTMLElement>('.heading-text')!;
@@ -334,5 +335,5 @@ import type { InputLike } from "./schemas/confirm-delete.schemas.js";
     }
   }
 
-  defineElement('iswc-confirm-delete', IswcConfirmDelete, 'IswcConfirmDelete');
+  define(IswcConfirmDelete, 'IswcConfirmDelete');
 })();

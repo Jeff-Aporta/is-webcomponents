@@ -1,12 +1,12 @@
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
 import { crearNodo } from '@jeff-aporta/iswc-base/core/dom-utils.js';
 import { atributosDe, PropsElement } from '@jeff-aporta/iswc-base/core/props-element.js';
 import { JsonDialogPropsSchema, JsonValidacionSchema } from './schemas/json-dialog.schemas.js';
 import type { JsonBotonEl, JsonDialogoEl, JsonDialogProps, JsonEditorEl, JsonValidacion } from './schemas/json-dialog.schemas.js';
 import '@jeff-aporta/iswc-base/components/layout/dialog.js';
-import '@jeff-aporta/iswc-base/components/layout/callout.js';
 import '@jeff-aporta/iswc-base/components/code/code.js';
-import '@jeff-aporta/iswc-base/components/actions/button.js';
+import { define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-json-dialog> — ver y editar un documento como JSON en un diálogo. Valida mientras se escribe, para que los
@@ -37,7 +37,10 @@ TEMPLATE.innerHTML = /* html */ `
 `;
 
 class IswcJsonDialog extends PropsElement<JsonDialogProps> {
-  static override get observedAttributes(): string[] { return atributosDe(INICIAL); }
+  static tag = 'iswc-json-dialog';
+  static css = css;
+  static deps = ['iswc-callout', 'iswc-button'];
+  static observed = atributosDe(INICIAL);
 
   #dialogo: JsonDialogoEl;
   #errores: HTMLElement;
@@ -50,8 +53,7 @@ class IswcJsonDialog extends PropsElement<JsonDialogProps> {
 
   constructor() {
     super(INICIAL, JsonDialogPropsSchema.partial());
-    const shadow = this.attachShadow({ mode: 'open' });
-    adoptCss(shadow, import.meta.url);
+    const shadow = this.shadowRoot!;
     shadow.appendChild(TEMPLATE.content.cloneNode(true));
     this.#dialogo = shadow.querySelector<JsonDialogoEl>('.dialogo')!;
     this.#errores = shadow.querySelector<HTMLElement>('.errores')!;
@@ -95,4 +97,4 @@ class IswcJsonDialog extends PropsElement<JsonDialogProps> {
   }
 }
 
-defineElement('iswc-json-dialog', IswcJsonDialog, 'IswcJsonDialog');
+define(IswcJsonDialog, 'IswcJsonDialog');

@@ -1,24 +1,26 @@
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
-import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
 import { setOptionalAttr, setStringAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
 import { escapeHtml } from '@jeff-aporta/iswc-base/core/dom-utils.js';
 import { loadText, resolveFileSource } from './utils/file-source.js';
 import { pintarEstado, sincronizarAlto } from './utils/file-estado.js';
 import { parseCsv, toCsv } from './utils/csv-parse.js';
-import '@jeff-aporta/iswc-base/components/actions/button.js';
-import '@jeff-aporta/iswc-base/components/media/icon.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 (() => {
   const OBSERVED = ['src', 'content', 'height'];
-  class IswcCsvEdit extends ElementBase {
-    static get observedAttributes(): string[] { return OBSERVED; }
+  class IswcCsvEdit extends IswcElement {
+    static tag = 'iswc-csv-edit';
+    static css = css;
+    static deps = ['iswc-button', 'iswc-icon'];
+    static observed = OBSERVED;
     #stage!: HTMLElement;
     #rows: string[][] = [];
     #gen = 0;
 
     constructor() {
       super();
-      const shadow = this.attachShadow({ mode: 'open' });
+      const shadow = this.shadowRoot!;
       shadow.innerHTML = `
         <div class="root" part="root">
           <div class="toolbar" part="toolbar">
@@ -30,7 +32,6 @@ import '@jeff-aporta/iswc-base/components/media/icon.js';
           </div>
           <div class="stage" part="stage"></div>
         </div>`;
-      adoptCss(shadow, import.meta.url);
       this.#stage = shadow.querySelector('.stage')!;
       shadow.querySelector('.toolbar')!.addEventListener('click', (ev) => {
         const accion = (ev.target as HTMLElement).closest<HTMLElement>('[data-accion]')?.dataset['accion'];
@@ -122,5 +123,5 @@ import '@jeff-aporta/iswc-base/components/media/icon.js';
       }
     }
   }
-  defineElement('iswc-csv-edit', IswcCsvEdit);
+  define(IswcCsvEdit);
 })();

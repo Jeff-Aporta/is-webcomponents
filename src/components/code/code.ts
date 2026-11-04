@@ -29,11 +29,10 @@
  * `format` / `formatConfig` — JSON estilo Prettier:
  *   { tabWidth, useTabs, printWidth, semi, singleQuote, trailingComma, endOfLine }
  */
-import { adoptCss, defineElement, emit, upgradeProperties } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit, upgradeProperties } from '@jeff-aporta/iswc-base/core/element.js';
 import {
   attachFormInternals, setFormValue, setCustomState,
 } from '@jeff-aporta/iswc-base/core/form-associated.js';
-import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
 import { setStringAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
 import {
   listLanguages, registerLanguage, resolveLanguage, inferLanguage,
@@ -51,6 +50,8 @@ import type { Token as HighlightToken, HighlightLine as CodeHighlightLine } from
 import type { CodeFormatConfig as CodeFmtConfigShared } from './schemas/code-format.schemas.js';
 import '@jeff-aporta/iswc-base/components/feedback/tooltip.js';
 import type { CodeMarkKind, CodeMarkTone, CodeMark, CodeDocument, CodeFormatConfig, CodeLangDef, IswcTooltipEl, HighlightLine, HighlightResult } from "./schemas/code.schemas.js";
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 // Tipos locales (los _shared sólo los declaran vía JSDoc; replicamos forma).
 
@@ -96,12 +97,13 @@ function editRange(oldText: string, newText: string): [number, number, number] {
   return [from, o, n - from];
 }
 
-class IswcCode extends ElementBase {
+class IswcCode extends IswcElement {
+  static tag = 'iswc-code';
+  static css = css;
+  static shadowInit: ShadowRootInit | null = { mode: 'open', delegatesFocus: true };
 
   static formAssociated = true;
-  static get observedAttributes(): string[] {
-    return [...OBSERVED];
-  }
+  static observed = [...OBSERVED];
 
   #internals: ElementInternals | null = null;
   #textarea: HTMLTextAreaElement | null = null;
@@ -126,8 +128,7 @@ class IswcCode extends ElementBase {
 
   constructor() {
     super();
-    const shadow = this.attachShadow({ mode: 'open', delegatesFocus: true });
-    adoptCss(shadow, import.meta.url);
+    const shadow = this.shadowRoot!;
     shadow.appendChild(TEMPLATE.content.cloneNode(true));
     this.#textarea = shadow.querySelector<HTMLTextAreaElement>('.seed');
     this.#host = shadow.querySelector<HTMLElement>('.editor-host');
@@ -1016,7 +1017,7 @@ class IswcCode extends ElementBase {
   }
 }
 
-defineElement('iswc-code', IswcCode, 'IswcCode');
+define(IswcCode, 'IswcCode');
 
 export { IswcCode };
 export default IswcCode;

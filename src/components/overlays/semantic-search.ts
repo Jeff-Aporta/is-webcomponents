@@ -1,11 +1,10 @@
-import { adoptCss, defineElement } from '@jeff-aporta/iswc-base/core/element.js';
 import { crearNodo } from '@jeff-aporta/iswc-base/core/dom-utils.js';
 import { atributosDe, PropsElement } from '@jeff-aporta/iswc-base/core/props-element.js';
 import { SemanticSearchPropsSchema } from './schemas/semantic-search.schemas.js';
 import type { SemanticComando, SemanticPaletaEl, SemanticSearchProps } from './schemas/semantic-search.schemas.js';
 import './command-palette.js';
-import '@jeff-aporta/iswc-base/components/actions/button.js';
-import '@jeff-aporta/iswc-base/components/media/icon.js';
+import { define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-semantic-search> — búsqueda global: un botón que abre `iswc-command-palette` (Ctrl+K) con orden por significado.
@@ -34,7 +33,10 @@ const INICIAL: SemanticSearchProps = {
 const coincide = (c: SemanticComando, q: string): boolean => [c.title, c.hint ?? '', ...(c.keywords ?? [])].join(' ').toLowerCase().includes(q.toLowerCase());
 
 class IswcSemanticSearch extends PropsElement<SemanticSearchProps> {
-  static override get observedAttributes(): string[] { return atributosDe(INICIAL); }
+  static tag = 'iswc-semantic-search';
+  static css = css;
+  static deps = ['iswc-button', 'iswc-icon'];
+  static observed = atributosDe(INICIAL);
 
   #root: ShadowRoot;
   #abrir: HTMLElement | null = null;
@@ -42,8 +44,7 @@ class IswcSemanticSearch extends PropsElement<SemanticSearchProps> {
 
   constructor() {
     super(INICIAL, SemanticSearchPropsSchema.partial());
-    this.#root = this.attachShadow({ mode: 'open' });
-    adoptCss(this.#root, import.meta.url);
+    this.#root = this.shadowRoot!;
   }
 
   open(): void { this.#paleta?.open(); }
@@ -89,4 +90,4 @@ class IswcSemanticSearch extends PropsElement<SemanticSearchProps> {
   }
 }
 
-defineElement('iswc-semantic-search', IswcSemanticSearch, 'IswcSemanticSearch');
+define(IswcSemanticSearch, 'IswcSemanticSearch');

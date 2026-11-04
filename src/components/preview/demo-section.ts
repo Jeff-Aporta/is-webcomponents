@@ -35,9 +35,9 @@
  *
  * CSS Parts: ::part(head) ::part(card)
  */
-import { adoptCss, defineElement } from '@jeff-aporta/iswc-base/core/element.js';
-import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
 import { setStringAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 (() => {
   const TEMPLATE = document.createElement('template');
@@ -53,8 +53,10 @@ import { setStringAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
 
   const OBSERVED = ['id', 'as', 'aria-label', 'aria-labelledby', 'role'];
 
-  class IswcDemoSection extends ElementBase {
-    static get observedAttributes(): string[] { return OBSERVED; }
+  class IswcDemoSection extends IswcElement {
+    static tag = 'iswc-demo-section';
+    static css = css;
+    static observed = OBSERVED;
 
     #headEl!: HTMLElement;
     #titleSlot!: HTMLSlotElement;
@@ -63,8 +65,7 @@ import { setStringAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
 
     constructor() {
       super();
-      const shadow = this.attachShadow({ mode: 'open' });
-      adoptCss(shadow, import.meta.url);
+      const shadow = this.shadowRoot!;
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
       this.#headEl = shadow.querySelector<HTMLElement>('.head')!;
       this.#titleSlot = shadow.querySelector<HTMLSlotElement>('slot[name="title"]')!;
@@ -152,5 +153,5 @@ import { setStringAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
     }
   }
 
-  defineElement('iswc-demo-section', IswcDemoSection, 'IswcDemoSection');
+  define(IswcDemoSection, 'IswcDemoSection');
 })();
