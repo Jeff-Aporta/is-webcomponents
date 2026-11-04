@@ -110,12 +110,16 @@ export function nestedMaxSize(spec: NodeEmbedSpec): EmbedSize {
 
 /* ───────────────────────── navegador ───────────────────────── */
 
-/** URL del bundle que define `tag`: `script` (relativo a la raíz del CDN) o hermano del módulo. */
+/**
+ * URL del bundle que define `tag`: `script` (relativo a la raíz del CDN) o, por defecto, `diagrams/<tag>.min.mjs`.
+ * Publicado (`.mjs`) el código de quien captura puede vivir en `diagrams/` o en un chunk de `_chunks/`, ambos a un
+ * nivel de `dist/cdn/`: por eso se resuelve desde la raíz y no como hermano. Desde fuente, hermano `.js`.
+ */
 export function embedScriptUrl(diagram: EmbeddedDiagram, moduleUrl: string): string {
   if (diagram.script) return new URL(diagram.script, new URL('../', moduleUrl)).href;
   const name = diagram.tag.replace(/^iswc-/, '');
-  const min = /\.min\.js(\?|$)/.test(moduleUrl);
-  return new URL(`./${name}${min ? '.min' : ''}.js`, moduleUrl).href;
+  if (/\.mjs(\?|#|$)/.test(moduleUrl)) return new URL(`../diagrams/${name}.min.mjs`, moduleUrl).href;
+  return new URL(`./${name}.js`, moduleUrl).href;
 }
 
 /** Diagrama efectivo de un nodo: carga `src` si lo hay; si falla, usa el inline. */

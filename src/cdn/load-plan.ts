@@ -1,6 +1,6 @@
 /**
  * Planificador de cargas CDN — sin I/O.
- * Cada job es un `<cat>/<file>.min.js`. Categoría / `all` se expanden a tags.
+ * Cada job es un `<cat>/<file>.min.mjs`. Categoría / `all` se expanden a tags.
  */
 
 import type { TagEntry, Catalog, LoadRegistry, LoadJob, PlanLoadsResult } from "./schemas/load-plan.schemas.js";
@@ -48,7 +48,7 @@ function pushTagJob(
   batchTags.add(k);
   jobs.push({
     kind: 'tag',
-    path: `${tag.category}/${tag.file}.min.js`,
+    path: `${tag.category}/${tag.file}.min.mjs`,
     category: tag.category,
     tagKey: k,
   });

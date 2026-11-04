@@ -31,7 +31,7 @@ import type { LoadJob } from "./schemas/load-plan.schemas.js";
 import { installSheetCache, getSheetCache } from './sheet-cache.js';
 import { type SheetCacheApi } from './schemas/sheet-cache.schemas.js';
 import { ensureElement, isElementReady } from './ensure-element.js';
-import { ASSET_HASH_PARAM, ASSET_HASH_PARAM_LEGADO, lookupHash, withAssetHash } from './build/asset-url.js';
+import { ASSET_HASH_PARAM, ASSET_HASH_PARAM_LEGADO, esUrlInmutable, lookupHash, withAssetHash } from './build/asset-url.js';
 import { readBody, writeBody, syncHashMemory } from './asset-store.js';
 
 import {
@@ -76,10 +76,10 @@ const HOST_DEFAULT = '{{cdnUrl}}@{{sha}}/dist/cdn';
 const CDN_URL_DEFAULT = `https://cdn.jsdelivr.net/gh/${GH_REPO}`;
 /**
  * Pin por defecto de ESTE loader:
- * 1) SHA de la URL (`@abc…/loader.min.js`) si viene pinneada
+ * 1) SHA de la URL (`@abc…/loader.min.mjs`) si viene pinneada
  * 2) `__IS_BUILD_SHA__` quemado en el build (HEAD al publicar)
  *
- * Así `import …@REF/…/loader.min.js` ya arrastra los componentes de ese
+ * Así `import …@REF/…/loader.min.mjs` ya arrastra los componentes de ese
  * commit sin `L.configure({ host })`. El consumidor puede pisar con
  * `configure({ sha })` / `configure({ host })`.
  */
@@ -145,12 +145,12 @@ const state: LoaderState = {
     // IIFE sin export → classic (import() fallaría).
     ['dev-reload',           { href: 'scripts/dev-reload.js', type: 'classic' }],
     // Theme/palette del shell doc (ESM; lo importa el host vía loader).
-    ['iswc-doc-demo-boot',   { href: 'cdn:preview/doc-demo-boot.min.js', type: 'module' }],
-    ['iswc-doc-demo-host',   { href: 'cdn:preview/doc-demo-host.min.js', type: 'module' }],
+    ['iswc-doc-demo-boot',   { href: 'cdn:preview/doc-demo-boot.min.mjs', type: 'module' }],
+    ['iswc-doc-demo-host',   { href: 'cdn:preview/doc-demo-host.min.mjs', type: 'module' }],
     // SPA de la galería (fuera de dist/cdn/; relativo a la página).
     ['iswc-gallery-app',     { href: 'dist/gallery-app.min.js', type: 'module' }],
     // Tema ER InSoft (json2css + resolveErTheme). Sin CE nuevo.
-    ['iswc-diagram-theme',   { href: 'cdn:diagrams/theme.min.js', type: 'module' }],
+    ['iswc-diagram-theme',   { href: 'cdn:diagrams/theme.min.mjs', type: 'module' }],
   ]),
   pageStyles: new Map<string, string>([
     // Kit CDN (respeta host/local/`?v=`). Reemplaza la antigua API de palettes.
@@ -333,7 +333,7 @@ function withQuery(href: string): string {
   return u.href;
 }
 
-/** Ruta publicada + `?v=` del mapa. Si no hay hash, deja el href. */
+/** Ruta publicada + `?v=` del mapa. Si no hay hash, o la URL es un pin SHA de jsDelivr/githack (inmutable), deja el href. */
 function routeHref(href: string): string {
   if (!href) return href;
   let abs = href;
@@ -341,6 +341,7 @@ function routeHref(href: string): string {
     const base = typeof location !== 'undefined' ? location.href : SELF_BASE;
     abs = new URL(href, base).href;
   } catch { /* href raro: se busca igual en el mapa */ }
+  if (esUrlInmutable(abs)) return href;
   const hash = lookupHash(HASHES, abs) || lookupHash(HASHES, href);
   if (!hash) return href;
   if (/^https?:/i.test(href) || href.startsWith('//')) {
@@ -380,7 +381,7 @@ function injectStyleText(key: string, css: string): void {
 }
 
 /**
- * Bases del entry + CSS base (misma carpeta que loader.min.js).
+ * Bases del entry + CSS base (misma carpeta que loader.min.mjs).
  */
 async function coreAssetBases(forcedRef?: string): Promise<string[]> {
   const ref = forcedRef ?? state.ref ?? (await resolveRef());
@@ -605,7 +606,7 @@ async function warmEntryCss(entry: AppComponentEntry): Promise<void> {
     const css = Array.isArray(entry.css) ? entry.css : [entry.css];
     list.push(...css);
   } else if (entry.href) {
-    list.push(entry.href.replace(/\.min\.js$/i, '.min.css').replace(/\.js$/i, '.css'));
+    list.push(entry.href.replace(/\.min\.m?js$/i, '.min.css').replace(/\.m?js$/i, '.css'));
   }
   if (list.length) await sheets.calentar(list.map((href) => routeHref(href)));
 }
@@ -927,14 +928,17 @@ export const iswcLoader: iswcLoaderShape = {
 if (typeof globalThis !== 'undefined' && !(globalThis as Record<string, unknown>).iswcLoader) {
   // Idempotente: si el loader ya está registrado (caso típico: un page bundle
   // bundleó el loader dentro y se ejecuta después del boot canónico desde
-  // `dist/cdn/core/loader.min.js`), la primera instancia gana. Si tomáramos la
+  // `dist/cdn/core/loader.min.mjs`), la primera instancia gana. Si tomáramos la
   // del bundle, su SELF_BASE/CDN_ROOT sería la ruta del bundle (`dist/pages/…`)
   // y `L.load(tag)` pediría URLs tipo `dist/pages/{cat}/{tag}.min.js` → 48× 404
   // en cada nav-click posterior. Guardian: tests/loader-global-guardian.test.ts.
   (globalThis as Record<string, unknown>).iswcLoader = iswcLoader;
 }
 
-syncHashMemory(HASHES);
+// F3: el build único deja `__IS_ASSET_HASHES__` en `{}` (el mapa vive en dist/cdn/asset-hashes.json y F4 lo leerá
+// en diferido). Con el mapa vacío no se toca la memoria del asset-store: sincronizar `{}` la borraría sin descartar
+// los cuerpos viejos.
+if (Object.keys(HASHES).length) syncHashMemory(HASHES);
 
 if (typeof document !== 'undefined') {
   const links = document.querySelectorAll<HTMLLinkElement>('link[rel="stylesheet"][href]');

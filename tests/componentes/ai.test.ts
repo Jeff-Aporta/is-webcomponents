@@ -45,7 +45,7 @@ test('ai: los motores se piden por URL, fuera del componente y de los barriles',
   for (const f of ['descarga', 'motores', 'vector-local', 'herramientas', 'orden', 'aplanado']) {
     assert.doesNotMatch(readFileSync(join(RAIZ, 'src', 'ai', `${f}.ts`), 'utf8'), /from 'runonweb/, f);
   }
-  assert.match(readFileSync(join(RAIZ, 'src', 'ai', 'motores.ts'), 'utf8'), /new URL\(`\.\/motores\/\$\{h\.id\}\.min\.js/);
+  assert.match(readFileSync(join(RAIZ, 'src', 'ai', 'motores.ts'), 'utf8'), /new URL\(`\.\/motores\/\$\{h\.id\}\.min\.mjs/);
 });
 
 test('ai: hasta 20 MB la descarga no pide modal y lo ya bajado no se repite', async () => {

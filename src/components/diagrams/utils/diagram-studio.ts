@@ -62,16 +62,20 @@ export function buildShareUrl(pageHref: string, kind: string, value: unknown): s
   return url.href;
 }
 
+/** Publicado (`.mjs`): este código vive en `diagrams/` o en un chunk de `_chunks/`, ambos a un nivel de `dist/cdn/`. */
+const PUBLICADO = /\.mjs(?:[?#]|$)/.test(import.meta.url);
+
 function moduleHref(stem: string): string {
-  const name = import.meta.url.includes('.min.js') ? `${stem}.min.js` : `${stem}.ts`;
-  const href = new URL(`./${name}`, import.meta.url).href;
+  const href = PUBLICADO
+    ? new URL(`../diagrams/${stem}.min.mjs`, import.meta.url).href
+    : new URL(`./${stem}.ts`, import.meta.url).href;
   const loader = (globalThis as { iswcLoader?: { assetUrl?: (h: string) => string } }).iswcLoader;
   return loader?.assetUrl ? loader.assetUrl(href) : href;
 }
 
 function kitHref(category: string, stem: string): string {
-  const name = import.meta.url.includes('.min.js') ? `${stem}.min.js` : `${stem}.ts`;
-  // Desde dist/cdn/diagrams/ → ../{cat}/{stem}.min.js
+  const name = PUBLICADO ? `${stem}.min.mjs` : `${stem}.ts`;
+  // Desde dist/cdn/diagrams/ o dist/cdn/_chunks/ → ../{cat}/{stem}.min.mjs
   // Desde src/components/diagrams/ → ../{cat}/{stem}.ts
   const href = new URL(`../${category}/${name}`, import.meta.url).href;
   const loader = (globalThis as { iswcLoader?: { assetUrl?: (h: string) => string } }).iswcLoader;

@@ -1,5 +1,5 @@
 /**
- * Barril cdn-first. Para cada componente intenta primero `dist/cdn/<name>.min.js`
+ * Barril cdn-first. Para cada componente intenta primero `dist/cdn/<name>.min.mjs`
  * (bundle minificado publicado) y si no existe cae al path de fuente en `components/`.
  *
  * Esto permite que `index.html` siga mostrando:
@@ -20,7 +20,7 @@ const [cdnBase, devBase] = (() => {
   ];
 })();
 
-/** Catálogo: tag → devPath (sin .js). El path CDN es <name>.min.js con mismo nombre. */
+/** Catálogo: tag → devPath (sin .js). El path CDN es <name>.min.mjs con mismo nombre. */
 const CATALOG = {
   // actions
   'iswc-button':            'actions/button',
@@ -171,10 +171,10 @@ const CATALOG = {
 
 async function load(tag: string, devPath: string) {
   if (customElements.get(tag)) return;
-  // 1) CDN minificado: dist/cdn/<categoria>/<name>.min.js (folderizado)
+  // 1) CDN minificado: dist/cdn/<categoria>/<name>.min.mjs (folderizado)
   const [folder] = devPath.split('/');
   const name = devPath.split('/').pop();
-  const cdn = `${cdnBase}${folder}/${name}.min.js`;
+  const cdn = `${cdnBase}${folder}/${name}.min.mjs`;
   const dev = `${devBase}${devPath}.js`;
   try {
     await import(/* @vite-ignore */ cdn);

@@ -24,7 +24,7 @@ export function manifestToComponentsPath(rel: string | null | undefined): string
  * Resuelve las rutas locales (TS/CSS/MD) de una entrada del manifest.
  * El manifiesto nombra el módulo con `.js` —es un especificador, no un
  * fichero— pero en el repositorio el fuente es TypeScript. Para enlazar al
- * código hay que traducir la extensión; el `.min.js` publicado no se toca.
+ * código hay que traducir la extensión; el `.min.mjs` publicado no se toca.
  */
 export function resolveSourceFiles(entry: ManifestEntry): {
   js?: SourceFile;
@@ -78,7 +78,7 @@ export function resolveCdnMinPaths(entry: ManifestEntry): CdnMinPaths | null {
   if (!entry?.tag || !entry?.category) return null;
   const short = String(entry.tag).replace(/^iswc-/, '');
   const category = entry.category;
-  const js = `${category}/${short}.min.js`;
+  const js = `${category}/${short}.min.mjs`;
   const css = `${category}/${short}.min.css`;
   return { js, css, short, category };
 }

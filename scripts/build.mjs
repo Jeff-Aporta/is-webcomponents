@@ -1,18 +1,22 @@
-// build.mjs — CDN folderizado: dist/cdn/{categoria}/{tag}.min.js + .min.css
-// + is-base/palettes + loader.min.js. Sin all.min.js ni category.*.min.js.
+// build.mjs — CDN folderizado con UN build de esbuild con splitting (plan D5, fase F3):
+//   dist/cdn/{categoria}/{tag}.min.mjs + .min.css, core/{x}.min.mjs, lib/{x}.min.mjs, core/loader.min.mjs,
+//   _chunks/chunk-<hash>.mjs (código compartido), deps.json y exports.json (grafo del metafile).
+// `.mjs` = módulo ES, `.js` = clásico (D2). Sin all.min.js ni category.*.min.js.
 import { access, readdir, mkdir, stat, rm, writeFile, readFile, copyFile, unlink } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import { execSync } from 'node:child_process';
-import { join, dirname, basename, relative, resolve, sep, posix } from 'node:path';
+import { join, dirname, relative, posix } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { build } from 'esbuild';
 import { aliasKit, ALIAS_KIT, reescribirAlias } from '@jeff-aporta/iswc-base/cdn/build/alias.ts';
 import { cssVirtual } from '@jeff-aporta/iswc-base/cdn/build/css-virtual.ts';
-import { bundleMinJs, bundleMinCss, docsBanner, bundleLoader } from '@jeff-aporta/iswc-base/cdn/build/bundle-min.ts';
+import { bundleMinJs, bundleMinCss, docsBanner } from '@jeff-aporta/iswc-base/cdn/build/bundle-min.ts';
+import { bundleKit, entradasKit, catalogoLoader, zodExterno } from '@jeff-aporta/iswc-base/cdn/build/bundle-kit.ts';
+import { depsJson, exportsJson } from '@jeff-aporta/iswc-base/cdn/build/graph.ts';
 import { barrerHashes } from '@jeff-aporta/iswc-base/cdn/build/sync-hashes.ts';
 import { hashesRepetidos } from '@jeff-aporta/iswc-base/cdn/build/hash.ts';
 import { stampDirectory, hashFile, rewriteHtmlTree, hashesJson, applyHashToHtml, ASSET_HASHES_NAME } from '@jeff-aporta/iswc-base/cdn/build/stamp-hashes.ts';
-import { aiExterno, construirAi } from './builds/ai.mjs';
+import { construirAi } from './builds/ai.mjs';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const root = dirname(here);
@@ -29,13 +33,13 @@ const cssRoot = join(root, '.tmp-scss', 'src');
 
 /**
  * Un `.ts` publicado en dist/cdn/<carpeta>/ (copias para extender) no puede llevar el alias: el dist va con rutas
- * relativas y funciona sin import map. src → dist: `components/<c>/<t>.js` → `<c>/<t>.min.js`,
+ * relativas y funciona sin import map. src → dist: `components/<c>/<t>.js` → `<c>/<t>.min.mjs`,
  * `cdn/build/x.js` y `cdn/asset-store.js` → `build/…`, el resto igual (`core/x.js` → `core/x.js`).
  * Guardián: tests/gobernanza/alias-imports.test.ts.
  */
 const aliasEnDist = (fuente, carpeta) => reescribirAlias(fuente, (ruta) => {
   const comp = ruta.match(/^components\/([^/]+)\/([^/]+)\.js$/);
-  const destino = comp ? `${comp[1]}/${comp[2]}.min.js`
+  const destino = comp ? `${comp[1]}/${comp[2]}.min.mjs`
     : ruta.startsWith('cdn/build/') ? `build/${ruta.slice('cdn/build/'.length)}`
     : ruta === 'cdn/asset-store.js' ? 'build/asset-store.js'
     : ruta;
@@ -61,7 +65,7 @@ await import('./ops/gen-shared-index.ts');
 //   En dist/cdn/ se borra TODO en cada build. Los assets estáticos (iconos,
 //   favicon, etc.) viven en dist/assets/, hermano de dist/cdn/, y NO se tocan.
 //
-// Todo lo de dist/cdn/ (los .min.js, .min.css, loader, skills, docs) es
+// Todo lo de dist/cdn/ (los .min.mjs, .min.css, loader, skills, docs) es
 // GENERADO: se reconstruye entero en cada corrida.
 //
 // `dist/assets/` es FUENTE versionada: ~317k SVG y material del kit. No se
@@ -95,20 +99,14 @@ for (const entry of await readdir(dist, { withFileTypes: true })) {
   await rm(join(dist, entry.name), { recursive: true, force: true });
 }
 
-const bundleJs = (entry, outfile, plugins = [], bannerJs = '') =>
-  bundleMinJs({ entry, outfile, plugins, banner: bannerJs });
-
-// El CSS de cada componente viaja DENTRO de su .min.js, no como fetch aparte.
-// El href del .css hermano solo se conocia tras ejecutar el .js, asi que esas
-// peticiones eran cascada pura y no se paralelizaban con nada: para pintar un
-// <iswc-tree-view> eran 24 de 38. Cada componente hace `import css from
-// 'iswc:css'` y el plugin `cssVirtual` (src/cdn/build/css-virtual.ts, ya dentro
-// de `bundleMinJs`) le pone su .css del staging aplanado y minificado; el molde
-// `IswcElement` lo adopta con replaceSync. Es por importador, no un `define`
-// global por build: vale también para el build único con splitting (F3).
+// El CSS de cada componente viaja DENTRO de su módulo, no como fetch aparte:
+// cada componente hace `import css from 'iswc:css'` y el plugin `cssVirtual`
+// (src/cdn/build/css-virtual.ts) le pone su .css del staging aplanado y
+// minificado; el molde `IswcElement` lo adopta con replaceSync. Es por
+// importador, así que vale dentro del build único con splitting.
 //
 // Se sigue emitiendo el .min.css hermano: lo consumen el sheet-cache del
-// loader y quien enlace la hoja a mano.
+// loader y quien enlace la hoja a mano (D6).
 
 // Mismo valor que `REPO_GITHUB` (src/core/cdn-ref.ts): nombre real del repo en GitHub hasta que se renombre a iswc-base.
 const REPO_GITHUB = 'Jeff-Aporta/is-webcomponents';
@@ -146,225 +144,111 @@ const kitDocsBanner = (extra = []) => docsBanner([
   ...extra,
 ]);
 
+const loaderBanner = docsBanner([
+  `kit-skill: ${KIT_SKILL}`,
+  `md: ${CDN_LOADER_MD}`,
+  `specs: ${CDN_COMP_INDEX}`,
+  `cdn-copy: dist/cdn/core/loader.md`,
+  `kit: ${CDN_COMP_INDEX}`,
+  `cdn-install: ${CDN_SKILL}`,
+]);
+
 const bundleCss = (entry, outfile) => bundleMinCss(entry, outfile);
-
-async function walk(dir, out = []) {
-  for (const name of await readdir(dir, { withFileTypes: true })) {
-    const p = join(dir, name.name);
-    if (name.isDirectory()) {
-      await walk(p, out);
-    } else if (/\.(ts|js)$/.test(name.name) && !/^index\.(ts|js)$/.test(name.name)
-               && !name.name.endsWith('.d.ts')
-               && !name.name.includes('.selfcheck.')
-               && !name.name.includes('.preview.')
-               && !name.name.endsWith('.json')
-               // Companions de iswc-doc-demo: boot ESM + host module (no CE).
-               && !/^doc-demo-(boot|host|galeria|estado)\.(ts|js)$/.test(name.name)
-               // Companions Zod (W54): esquemas declarativos; los importa el
-               // `.ts` padre via `import {...} from './foo.schemas.js'`, asi
-               // que esbuild los inlinea cuando procesa al padre. Procesarlos
-               // ademas como entry los duplica y rompe si el WIP no compila.
-               && !name.name.endsWith('.schemas.ts')) {
-      out.push(p);
-    }
-  }
-  return out;
-}
-
-const entries = (await walk(compRoot)).sort();
 
 // Componentes por categoria segun manifest.js (single source of truth).
 const manifestMod = await import('@jeff-aporta/iswc-base/manifest.js');
 const manifest = manifestMod.default;
-const byCategory = new Map();
-for (const m of manifest) {
-  if (!byCategory.has(m.category)) byCategory.set(m.category, []);
-  byCategory.get(m.category).push(m);
+
+// ── Entradas del build único ─────────────────────────────────────
+// Componentes y módulos de src/components (cada uno en <carpeta>/<nombre>.min.mjs, su ruta pública de siempre),
+// src/core/*.ts (core/<x>.min.mjs), el loader (core/loader.min.mjs) y lib (obj, ref-obj, zod). Lo que comparten
+// dos entradas sale como chunk en _chunks/: el core existe UNA vez. Sin lista de «componentes externos».
+const entradas = await entradasKit(root, manifest);
+const fuentePorSalida = new Map(entradas.map((e) => [`${e.out}.mjs`, e.in]));
+const entradasComp = entradas.filter((e) => e.in.startsWith(compRoot));
+
+// El catálogo del loader sale del manifest y de las rutas previstas, ANTES del build: el loader es una entrada
+// más y recibe el catálogo por `define`. `__IS_ASSET_HASHES__` queda en `{}`: el mapa vive solo en
+// dist/cdn/asset-hashes.json (F4 lo leerá en diferido).
+const loaderCatalog = catalogoLoader(manifest, entradas);
+const sha = shaDelBuild();
+
+// Banner de docs por archivo: el del componente en sus entradas, el del kit en core/lib, el del loader en el
+// loader. Los chunks van sin banner (no son puerta de entrada de nadie).
+const bannerDe = (salida) => {
+  if (salida.startsWith('_chunks/')) return null;
+  if (salida === 'core/loader.min.mjs') return loaderBanner;
+  const fuente = fuentePorSalida.get(salida);
+  if (!fuente) return null;
+  if (fuente.startsWith(compRoot)) {
+    const srcFolder = relative(compRoot, fuente).split(/[\\/]/)[0];
+    return componentDocsBanner(srcFolder, salida.split('/').pop().replace(/\.min\.mjs$/, ''));
+  }
+  if (salida.startsWith('core/')) return kitDocsBanner([`source: ${GH_BLOB}/${relative(root, fuente).replaceAll('\\', '/')}`]);
+  return kitDocsBanner();
+};
+
+// El .min.css hermano de cada módulo con hoja (lo que viaja DENTRO del JS lo pone `iswc:css`).
+for (const e of entradasComp) {
+  const cssIn = join(cssRoot, relative(join(root, 'src'), e.in).replace(/\.(ts|js)$/i, '.css'));
+  if (!(await access(cssIn).then(() => true, () => false))) continue;
+  const outCss = join(dist, `${e.out}.css`);
+  await mkdir(dirname(outCss), { recursive: true });
+  await bundleCss(cssIn, outCss);
 }
 
-// Mapa tag → componente
-const tagToComponent = new Map();
-for (const e of entries) {
-  // `.ts` ademas de `.js`: sin esto un componente migrado se registraba con el
-  // tag «dropdown.ts» y los que lo importaban dejaban de reconocerlo, asi que
-  // esbuild lo inlineaba en vez de dejarlo externo — y adoptCss del componente
-  // inlineado se rompe.
-  const tag = basename(e).replace(/\.(ts|js)$/, '');
-  tagToComponent.set(tag, e);
+const t0 = Date.now();
+const kit = await bundleKit({
+  entradas,
+  outdir: dist,
+  staging: cssRoot,
+  sha,
+  catalogo: loaderCatalog,
+  aiRoot: join(root, 'src', 'ai'),
+  banner: bannerDe,
+});
+const nChunks = kit.archivos.filter((f) => f.startsWith('_chunks/')).length;
+console.log(`  ${'build único'.padEnd(28)} ${entradas.length} entradas + ${nChunks} chunks en ${Date.now() - t0} ms`);
+for (const t of ['actions/button', 'layout/dialog', 'data/ag-grid', 'diagrams/flowchart', 'core/loader']) {
+  const f = join(dist, `${t}.min.mjs`);
+  if (existsSync(f)) console.log(`  ${(t + '.min.mjs').padEnd(28)} js ${String((await stat(f)).size).padStart(6)}`);
 }
-
-// Carpeta de salida por tag: la categoria del manifest manda; los modulos
-// internos (marks, specs, datagrid-core...) usan su carpeta top-level en
-// components/ como fallback.
-const manifestCategoryByTag = new Map(
-  manifest.map((m) => [m.tag.replace(/^iswc-/, ''), m.category]),
-);
-const folderFor = (file) => {
-  const tag = basename(file).replace(/\.(ts|js)$/, '');
-  if (manifestCategoryByTag.has(tag)) return manifestCategoryByTag.get(tag);
-  return relative(compRoot, file).split(/[\\/]/)[0];
-};
-
-// Los componentes que importan OTROS componentes (p. ej. casi todos importan
-// media/icon.js) no deben inlinearlos: esbuild duplicaria la clase y, peor,
-// `import.meta.url` del componente inlineado apuntaria al ARCHIVO ANFITRION,
-// asi que adoptCss pedia el CSS equivocado (iswc-icon acababa cargando
-// actions/button.min.css y perdia su tamano). Se marcan como externos y se
-// reescriben al hermano folderizado, que ya existe en dist.
-// Zod va UNA vez en el CDN (lib/zod.min.js): los schemas se usan en runtime (`.shape`,
-// `.extend`, `z.custom`) y cada bundle de componente o de core inlineaba ~300 KB de Zod.
-// Guardian: tests/gobernanza/zod-compartido.test.ts.
-const zodExterno = {
-  name: 'zod-externo',
-  setup(pluginBuild) {
-    pluginBuild.onResolve({ filter: /^zod$/ }, () => ({ path: '../lib/zod.min.js', external: true }));
-  },
-};
-
-const externalComponents = {
-  name: 'external-components',
-  setup(pluginBuild) {
-    zodExterno.setup(pluginBuild);
-    pluginBuild.onResolve({ filter: /\.(ts|js)$/ }, (args) => {
-      if (args.kind === 'entry-point') return null;
-      const abs = resolve(args.resolveDir, args.path);
-      // `base-sheets` lleva host-base + scrollbars incrustados y vale para toda
-      // la pagina: externo, para que sea UNA peticion y UNA CSSStyleSheet
-      // compartida en vez de 1,4 KB duplicados en los 150 bundles. Mismo
-      // criterio que `decors`.
-      if (basename(abs).replace(/\.(ts|js)$/, '') === 'base-sheets') {
-        return { path: '../_shared/base-sheets.min.js', external: true };
-      }
-      if (!abs.startsWith(compRoot)) return null;
-      const tag = basename(abs).replace(/\.(ts|js)$/, '');
-      if (!tagToComponent.has(tag)) return null;
-      return { path: `../${folderFor(abs)}/${tag}.min.js`, external: true };
-    });
-  },
-};
-
-// src/ai: lib/ai/*.min.js. Componentes y módulos los importan externos, así el estado (motores, cola) existe una vez.
-const aiExternoEnComponentes = aiExterno(join(root, 'src', 'ai'), '../lib/ai/');
-// Desde lib/ai/ los componentes están dos niveles arriba y Zod uno.
-const componentesDesdeAi = {
-  name: 'componentes-desde-ai',
-  setup(pluginBuild) {
-    pluginBuild.onResolve({ filter: /^zod$/ }, () => ({ path: '../zod.min.js', external: true }));
-    pluginBuild.onResolve({ filter: /\.(ts|js)$/ }, (args) => {
-      if (args.kind === 'entry-point') return null;
-      const abs = resolve(args.resolveDir, args.path);
-      const tag = basename(abs).replace(/\.(ts|js)$/, '');
-      if (!abs.startsWith(compRoot) || !tagToComponent.has(tag)) return null;
-      return { path: `../../${folderFor(abs)}/${tag}.min.js`, external: true };
-    });
-  },
-};
-
-// Los SCSS comunes (src/core/*.scss) y los parciales de grupo se incrustan con @use de Sass:
-// no quedan @import que el navegador tenga que resolver contra dist.
-
-// base-sheets: host-base + scrollbars incrustados, externo y compartido por
-// toda la pagina. Sustituye a los dos <link> que adoptCss ponia en CADA
-// instancia de CADA componente (10 de las 38 peticiones de un <iswc-tree-view>).
-{
-  const coreRoot = join(root, 'src', 'core');
-  const outBase = join(dist, '_shared', 'base-sheets.min.js');
-  await mkdir(join(dist, '_shared'), { recursive: true });
-  // El CSS llega por `iswc:css/host-base` e `iswc:css/scrollbars` (plugin cssVirtual dentro de bundleMinJs).
-  await bundleJs(join(coreRoot, 'base-sheets.ts'), outBase, [], kitDocsBanner());
-  console.log(`  ${'_shared/base-sheets.min.js'.padEnd(28)} js  (hojas base compartidas)`);
-}
-
 
 // `src/core/` se publica en las DOS formas, y no es redundancia:
-//   .js  para quien lo ejecute (lo importan los componentes minificados).
-//   .ts  para quien lo extienda — otro proyecto que escriba sus propios `is-*`
-//        lo trae por vendor y necesita los decoradores expresados y los tipos.
-// Regla corta: `.js` lo que se ejecuta, `.ts` lo que se extiende.
+//   .min.mjs  para quien lo ejecute (sale del build único: re-exporta el chunk compartido).
+//   .ts       para quien lo extienda — otro proyecto que escriba sus propios `is-*`
+//             lo trae por vendor y necesita los decoradores expresados y los tipos.
+// Regla corta: `.mjs` lo que se ejecuta, `.ts` lo que se extiende.
 {
   const coreRoot = join(root, 'src', 'core');
-  if (existsSync(coreRoot)) {
-    const outCore = join(dist, 'core');
-    await mkdir(outCore, { recursive: true });
-    for (const f of await readdir(coreRoot)) {
-      if (!f.endsWith('.ts') || f.includes('.selfcheck.')) continue;
-      await bundleJs(join(coreRoot, f), join(outCore, f.replace(/\.ts$/, '.min.js')), [zodExterno], kitDocsBanner([
-        `source: ${GH_BLOB}/src/core/${f}`,
-      ]));
-      // En dist `src/cdn/build/` se publica como `build/` (ver más abajo): el .ts publicado importa de ahí (aliasEnDist).
-      const fuente = await readFile(join(coreRoot, f), 'utf8');
-      // Un common que carga un componente lo pide a su bundle publicado (dist/cdn/<grupo>/<tag>.min.js).
-      await writeFile(join(outCore, f), aliasEnDist(fuente, 'core'));
-    }
-    // Los tipos del core (`core/schemas/`) viajan con el .ts publicado que los importa.
-    const coreSchemas = join(coreRoot, 'schemas');
-    if (existsSync(coreSchemas)) {
-      await mkdir(join(outCore, 'schemas'), { recursive: true });
-      for (const f of await readdir(coreSchemas)) await copyFile(join(coreSchemas, f), join(outCore, 'schemas', f));
-    }
-    // `adoptCss` resuelve `./host-base.css` y `./scrollbars.css` contra la URL
-    // de su propio modulo. Con el core inlineado eso cae en la carpeta del
-    // componente; emitirlas tambien aqui cubre el consumo directo del core.
-    await bundleCss(join(cssRoot, 'core', 'scrollbars.css'), join(outCore, 'scrollbars.css'));
-    await bundleCss(join(cssRoot, 'core', 'host-base.css'), join(outCore, 'host-base.css'));
-    console.log('  core/                     .js + .ts (base para extender)');
+  const outCore = join(dist, 'core');
+  await mkdir(outCore, { recursive: true });
+  for (const f of await readdir(coreRoot)) {
+    if (!f.endsWith('.ts') || f.includes('.selfcheck.')) continue;
+    // En dist `src/cdn/build/` se publica como `build/` (ver más abajo): el .ts publicado importa de ahí (aliasEnDist).
+    const fuente = await readFile(join(coreRoot, f), 'utf8');
+    // Un common que carga un componente lo pide a su módulo publicado (dist/cdn/<grupo>/<tag>.min.mjs).
+    await writeFile(join(outCore, f), aliasEnDist(fuente, 'core'));
   }
-}
-
-const scrollbarsIn = join(cssRoot, 'core', 'scrollbars.css');
-const hostBaseIn = join(cssRoot, 'core', 'host-base.css');
-const emittedFolders = new Set();
-
-for (const inFile of entries) {
-  const tag = basename(inFile).replace(/\.(ts|js)$/, '');
-  // Carpeta FISICA en src/components (charts/, data/, …): el .md y el LLM.md
-  // viven ahi y el banner de docs debe enlazar a la fuente, no a la carpeta de
-  // publicacion (que para chart/bar-chart es data-viz/ segun el manifest).
-  const srcFolder = relative(compRoot, inFile).split(/[\\/]/)[0];
-  const folder = folderFor(inFile);
-  const outDir = join(dist, folder);
-  await mkdir(outDir, { recursive: true });
-  // El .css fuente vive en el staging, NO en `src/`. `deno task build:scss`
-  // lo pone ahi antes de este build; build-scss es la primera mitad de
-  // `deno task build`.
-  const cssIn = join(cssRoot, relative(join(root, 'src'), inFile).replace(/\.(ts|js)$/i, '.css'));
-  const outJs = join(outDir, `${tag}.min.js`);
-  const outCss = join(outDir, `${tag}.min.css`);
-
-  // adoptCss busca ./host-base.css y ./scrollbars.css junto al modulo:
-  // emitirlos una vez por carpeta.
-  if (!emittedFolders.has(folder)) {
-    emittedFolders.add(folder);
-    await bundleCss(scrollbarsIn, join(outDir, 'scrollbars.css'));
-    await bundleCss(hostBaseIn, join(outDir, 'host-base.css'));
+  // Los tipos del core (`core/schemas/`) viajan con el .ts publicado que los importa.
+  const coreSchemas = join(coreRoot, 'schemas');
+  if (existsSync(coreSchemas)) {
+    await mkdir(join(outCore, 'schemas'), { recursive: true });
+    for (const f of await readdir(coreSchemas)) await copyFile(join(coreSchemas, f), join(outCore, 'schemas', f));
   }
-
-  // El .min.css hermano se sigue publicando (sheet-cache, enlace a mano). Lo que
-  // viaja DENTRO del JS lo pone `iswc:css` con el mismo aplanado y minificado.
-  const hasCss = await access(cssIn).then(() => true, () => false);
-  if (hasCss) await bundleCss(cssIn, outCss);
-
-  await bundleJs(
-    inFile,
-    outJs,
-    [aiExternoEnComponentes, externalComponents],
-    componentDocsBanner(srcFolder, tag),
-  );
-
-  const [jsIn, jsOut] = await Promise.all([stat(inFile), stat(outJs)]);
-  const cssSize = hasCss ? String((await stat(outCss)).size) : '—';
-  console.log(
-    `  ${(folder + '/' + tag).padEnd(28)} js ${String(jsIn.size).padStart(6)}→${String(jsOut.size).padStart(6)}  css ${cssSize.padStart(6)}`,
-  );
+  // `adoptCss` (compat para código externo) resuelve `./host-base.css` y `./scrollbars.css` contra su `baseUrl`:
+  // se publican en core/ para quien consuma el core directo. Las copias por carpeta de componente ya no existen:
+  // los componentes llevan esas hojas incrustadas (`iswc:css/host-base`, `iswc:css/scrollbars`).
+  await bundleCss(join(cssRoot, 'core', 'scrollbars.css'), join(outCore, 'scrollbars.css'));
+  await bundleCss(join(cssRoot, 'core', 'host-base.css'), join(outCore, 'host-base.css'));
+  console.log('  core/                     .min.mjs + .ts (base para extender)');
 }
 
 // Reescribe los @import a hermanos: en fuente son `./chart.css`, pero en dist
 // el archivo se llama `chart.min.css`. Sin esto los 10 charts tipados
 // (bar, line, pie...) importaban una ruta inexistente y perdian la hoja base
-// entera en el bundle publicado. Los `_shared/*.css` se emiten con su nombre
-// original, asi que no se tocan.
+// entera en el bundle publicado.
 {
-  const { readFile: rf, writeFile: wf } = await import('node:fs/promises');
   const dirs = (await readdir(dist, { withFileTypes: true }))
     .filter((d) => d.isDirectory())
     .map((d) => d.name);
@@ -375,14 +259,14 @@ for (const inFile of entries) {
     const minSet = new Set(files.filter((f) => f.endsWith('.min.css')));
     for (const f of files.filter((x) => x.endsWith('.min.css'))) {
       const file = join(abs, f);
-      const css = await rf(file, 'utf8');
+      const css = await readFile(file, 'utf8');
       const next = css.replace(
         /@import\s*(url\(\s*)?["'](\.\/)?([\w-]+)\.css["']\s*\)?/g,
         (whole, urlOpen, dot, name) => (minSet.has(`${name}.min.css`)
           ? `@import"./${name}.min.css"`
           : whole),
       );
-      if (next !== css) { await wf(file, next); arreglados += 1; }
+      if (next !== css) { await writeFile(file, next); arreglados += 1; }
     }
   }
   if (arreglados) console.log(`  @import hermanos reescritos a .min.css en ${arreglados} archivos`);
@@ -409,13 +293,15 @@ await copyFile(baseOut, join(dist, 'is-base.min.css'));
 await copyFile(palettesOut, join(dist, 'palettes.min.css'));
 
 // ── iswc-doc-demo companions (boot ESM + host module + page CSS) ──
+// Fuera del build único: doc-demo-host usa top-level await (es2022) y ninguno define componentes del kit
+// (los pide al loader), así que no duplican el core.
 {
   const previewDist = join(dist, 'preview');
   await mkdir(previewDist, { recursive: true });
   const bootIn = join(compRoot, 'layout', 'utils', 'doc-demo-boot.ts');
   const hostIn = join(compRoot, 'layout', 'utils', 'doc-demo-host.ts');
-  const bootOut = join(previewDist, 'doc-demo-boot.min.js');
-  const hostOut = join(previewDist, 'doc-demo-host.min.js');
+  const bootOut = join(previewDist, 'doc-demo-boot.min.mjs');
+  const hostOut = join(previewDist, 'doc-demo-host.min.mjs');
   const shellOut = join(previewDist, 'doc-shell.min.css');
   const presentationOut = join(previewDist, 'doc-presentation.min.css');
 
@@ -434,10 +320,10 @@ await copyFile(palettesOut, join(dist, 'palettes.min.css'));
   });
   await bundleMinJs({
     entry: join(compRoot, 'layout', 'utils', 'doc-demo-galeria.ts'),
-    outfile: join(previewDist, 'doc-demo-galeria.min.js'),
+    outfile: join(previewDist, 'doc-demo-galeria.min.mjs'),
     format: 'esm',
     target: 'es2022',
-    plugins: [zodExterno],
+    plugins: [zodExterno()],
     banner: docsBanner([`md: ${GH_RAW}/src/components/layout/doc-demo.md`]),
   });
   await bundleCss(join(cssRoot, 'styles', 'shell.css'), shellOut);
@@ -452,42 +338,8 @@ await copyFile(palettesOut, join(dist, 'palettes.min.css'));
   console.log(`  ${'doc-presentation'.padEnd(18)} css ${String(pr.size).padStart(6)}`);
 }
 
-try { await unlink(join(dist, 'all.min.js')); } catch { /* leftover */ }
-for (const [category] of byCategory) {
-  try { await unlink(join(dist, category, `category.${category}.min.js`)); } catch { /* leftover */ }
-}
-
-// ── loader.min.js ────────────────────────────────────────────────
-// Entry liviano: manifiesto embebido + load / loadPageStyles (alias iswc-palettes-default).
-const loaderCatalog = {
-  aliases: { charts: 'data-viz', 'data-viz': 'data-viz', dataviz: 'data-viz' },
-  categories: {},
-  tags: {},
-};
-for (const [category, items] of byCategory) {
-  const files = [];
-  for (const m of items) {
-    const file = m.tag.replace(/^iswc-/, '');
-    if (!tagToComponent.has(file)) continue;
-    files.push(file);
-    loaderCatalog.tags[m.tag] = { category, file };
-    loaderCatalog.tags[file] = { category, file };
-  }
-  if (files.length) loaderCatalog.categories[category] = files;
-}
-const loaderSrc = join(root, 'src', 'cdn', 'loader.ts');
-const loaderOut = join(coreDist, 'loader.min.js');
-const loaderBanner = docsBanner([
-  `kit-skill: ${KIT_SKILL}`,
-  `md: ${CDN_LOADER_MD}`,
-  `specs: ${CDN_COMP_INDEX}`,
-  `cdn-copy: dist/cdn/core/loader.md`,
-  `kit: ${CDN_COMP_INDEX}`,
-  `cdn-install: ${CDN_SKILL}`,
-]);
 await copyFile(join(root, 'src', 'cdn', 'loader.md'), join(coreDist, 'loader.md'));
 console.log(`  ${'loader.md'.padEnd(18)} docs`);
-// El .min.js del loader se emite al final, cuando el mapa de hashes ya existe.
 // Consolidación 2026-09-07: src/cdn/LLM.md eliminado. El contenido del visor del
 // loader vive en specs/cdn.md (catálogo visible por LLM); no se copia nada a
 // dist/cdn/LLM.md raíz (apps que lo enlazaban fueron migradas al spec).
@@ -549,47 +401,33 @@ try {
 // y nadie llegaba a esas 177 paginas. Para agentes el canal es `skills/`,
 // que este mismo build publica en `dist/cdn/skills/`.
 
-// ── lib/: bundles para el navegador (obj.min.js = Obj virtual y ref-obj.min.js = RefObj físico, con Zod incluido; zod.min.js compartido) ──
+// ── lib/: obj.min.mjs (Obj virtual), ref-obj.min.mjs (RefObj físico) y zod.min.mjs (compartido) salen del build único.
 // Las FUENTES vendorizables (obj.ts, ref-obj.ts, obj.md, zod.ts; contratos en shared/schemas.ts) viven en
 // src/vendor-distributions/shared/lib y se publican en dist/cdn/vendor-distributions/shared/lib (más abajo).
-// Los bundles quedan en dist/cdn/lib porque los de componentes importan `../lib/zod.min.js`
-// (resolver `zod-externo`; guardián meta/zod-compartido.test.ts).
+// Los módulos quedan en dist/cdn/lib porque todo el kit importa `../lib/zod.min.mjs` (plugin `zodExterno`;
+// guardián gobernanza/zod-compartido.test.ts).
 const vendorSrc = join(root, 'src', 'vendor-distributions');
-const libOut = join(dist, 'lib');
-await mkdir(libOut, { recursive: true });
-await build({
-  entryPoints: [join(vendorSrc, 'shared', 'lib', 'obj.ts')],
-  outfile: join(libOut, 'obj.min.js'),
-  bundle: true,
-  minify: true,
-  format: 'esm',
-  target: 'es2022',
-  legalComments: 'none',
-});
-await build({
-  entryPoints: [join(vendorSrc, 'shared', 'lib', 'ref-obj.ts')],
-  outfile: join(libOut, 'ref-obj.min.js'),
-  bundle: true,
-  minify: true,
-  format: 'esm',
-  target: 'es2022',
-  legalComments: 'none',
-});
-await build({
-  entryPoints: [join(vendorSrc, 'shared', 'lib', 'zod.ts')],
-  outfile: join(libOut, 'zod.min.js'),
-  bundle: true,
-  minify: true,
-  format: 'esm',
-  target: 'es2022',
-  legalComments: 'none',
-});
-console.log(`  ${'lib/'.padEnd(18)} obj.min.js + ref-obj.min.js (navegador) + zod.min.js (compartido por los bundles)`);
+// src/ai: lib/ai/*.min.mjs, build aparte (un módulo por archivo; el estado de motores y cola existe una vez).
+// Desde lib/ai/ un módulo de src/components queda externo a su entrada publicada (`../../<carpeta>/<x>.min.mjs`)
+// y Zod a `../zod.min.mjs`: nada del kit se duplica dentro de la IA.
+const salidaPorFuente = new Map(entradasComp.map((e) => [e.in.replace(/\.(ts|js)$/, ''), `${e.out}.mjs`]));
+const componentesDesdeAi = {
+  name: 'componentes-desde-ai',
+  setup(b) {
+    b.onResolve({ filter: /^zod$/ }, () => ({ path: '../zod.min.mjs', external: true }));
+    b.onResolve({ filter: /\.(ts|js)$/ }, (args) => {
+      if (args.kind === 'entry-point') return null;
+      const salida = salidaPorFuente.get(join(args.resolveDir, args.path).replace(/\.(ts|js)$/, ''));
+      return salida ? { path: `../../${salida}`, external: true } : null;
+    });
+  },
+};
 await construirAi({ root, dist, componentes: componentesDesdeAi, bundleMinJs });
 
 // ── gallery-app.min.js ───────────────────────────────────────────
 // Consumo de la SPA: Live Server / Pages no transpilan src/*.ts.
-// El entry vive en src/app/app.ts; el runtime solo carga dist/.
+// El entry vive en src/app/app.ts; el runtime solo carga dist/. La galería (dist/gallery-app, dist/scripts,
+// dist/pages, dist/previews) conserva `.min.js`: no es parte del CDN del kit.
 const galleryOut = join(root, 'dist', 'gallery-app.min.js');
 await build({
   entryPoints: [join(root, 'src', 'app', 'app.ts')],
@@ -607,22 +445,28 @@ await build({
 const galleryStat = await stat(galleryOut);
 console.log(`  ${'gallery-app'.padEnd(18)} js ${String(galleryStat.size).padStart(6)}  (SPA → dist/)`);
 
-// ── hashes: sellar imports y embeber el mapa en el loader ────────
-const hashes = await stampDirectory(dist);
-// Los bundles de galeria importan componentes del CDN (`componentes-externos` en
-// bundle-scripts.mjs): con el mismo ?v= que pide el loader, o el modulo se evalua dos veces.
-const IMPORT_CDN = /(["'])((?:\.\.\/)+cdn\/([^"'?]+\.min\.js))(?:\?v=[^"']*)?\1/g;
-for (const bucket of ['scripts', 'pages', 'previews']) {
-  const dir = join(root, 'dist', bucket);
-  const nombres = await readdir(dir, { recursive: true }).catch(() => []);
-  for (const nombre of nombres) {
-    if (!nombre.endsWith('.min.js')) continue;
-    const archivo = join(dir, nombre);
-    const previo = await readFile(archivo, 'utf8');
-    const sellado = previo.replace(IMPORT_CDN, (entero, q, ruta, clave) => (hashes[clave] ? `${q}${ruta}?v=${hashes[clave]}${q}` : entero));
-    if (sellado !== previo) await writeFile(archivo, sellado);
+// ── grafo: deps.json + exports.json (desde el metafile, antes de sellar: las rutas no cambian) ──
+{
+  const tags = {};
+  for (const [tag, { category, file }] of Object.entries(loaderCatalog.tags)) {
+    if (tag.startsWith('iswc-')) tags[tag] = `${category}/${file}.min.mjs`;
   }
+  const core = {};
+  for (const e of entradas) if (e.out.startsWith('core/')) core[e.out.slice('core/'.length).replace(/\.min$/, '')] = `${e.out}.mjs`;
+  const grafo = { metafile: kit.metafile, outdir: dist, cwd: process.cwd(), sha, tags, core };
+  const deps = depsJson(grafo);
+  // El metafile completo queda fuera de lo publicado (.tmp/, ignorado): lo leen los guardianes del grafo
+  // (gobernanza/zod-compartido: Zod solo entra en lib/zod.min.mjs).
+  await mkdir(join(root, '.tmp'), { recursive: true });
+  await writeFile(join(root, '.tmp', 'metafile-kit.json'), JSON.stringify(kit.metafile), 'utf8');
+  await writeFile(join(dist, 'deps.json'), JSON.stringify(deps, null, 2) + '\n', 'utf8');
+  await writeFile(join(dist, 'exports.json'), JSON.stringify(exportsJson(grafo), null, 2) + '\n', 'utf8');
+  console.log(`  ${'deps.json'.padEnd(18)} ${Object.keys(deps.tags).length} tags + ${Object.keys(deps.core).length} core · exports.json`);
 }
+
+// ── hashes: sellar imports relativos de dist/cdn y escribir el mapa (asset-hashes.json) ────────
+// Los chunks ya llevan hash en el nombre; sellarlos igual da UNA URL por archivo para todos sus importadores.
+const hashes = await stampDirectory(dist);
 const addHash = async (key, abs) => {
   try { hashes[key] = await hashFile(abs, key); } catch { /* todavia no existe */ }
 };
@@ -636,18 +480,15 @@ for (const bucket of ['scripts', 'pages']) {
     await addHash(`dist/${bucket}/${name}`, join(dir, name));
   }
 }
-await bundleLoader({
-  entry: loaderSrc,
-  outfile: loaderOut,
-  banner: loaderBanner,
-  catalog: loaderCatalog,
-  hashes,
-  sha: shaDelBuild(),
-});
-const loaderHash = await hashFile(loaderOut, 'core/loader.min.js');
-hashes['core/loader.min.js'] = loaderHash;
-hashes['loader.min.js'] = loaderHash;
-await copyFile(loaderOut, join(dist, 'loader.min.js'));
+// Compatibilidad: `core/loader.min.js` es copia byte a byte de `core/loader.min.mjs` (módulo ES con la extensión
+// vieja) para los consumidores que pinean la URL vieja. Se retira cuando re-pineen (F5); ver specs/cdn.md.
+// Ningún otro artefacto conserva `.min.js`.
+const loaderOut = join(coreDist, 'loader.min.mjs');
+const LOADER_COMPAT = 'core/loader.min.js'; // compat (F5)
+await copyFile(loaderOut, join(dist, LOADER_COMPAT));
+// Alias en la raíz (path pre-folderizado): no puede ser copia, porque el loader importa `../_chunks/…`; re-exporta.
+await writeFile(join(dist, 'loader.min.mjs'), 'export*from"./core/loader.min.mjs";export{default}from"./core/loader.min.mjs";\n', 'utf8');
+for (const k of ['core/loader.min.mjs', LOADER_COMPAT, 'loader.min.mjs']) await addHash(k, join(dist, k));
 // Cada hash debe nombrar un solo archivo: el barrido ?v=viejo → ?v=nuevo depende de ello.
 const repetidos = hashesRepetidos(hashes);
 if (repetidos.length) throw new Error(`hashes repetidos (subir HASH_LEN en src/cdn/build/hash.ts):\n${repetidos.join('\n')}`);
@@ -655,8 +496,8 @@ await writeFile(hashesPath, hashesJson(hashes));
 // Barrido determinista: todo ?v=<hash viejo> del repo pasa al hash nuevo (html, md, json, js…).
 console.log(`  ${'?v= barrido'.padEnd(18)} ${barrerHashes(hashesPrevios, hashes, [root])} archivos`);
 const loaderStat = await stat(loaderOut);
-console.log(`  ${'loader.min'.padEnd(18)} js ${String(loaderStat.size).padStart(6)}  (${Object.keys(loaderCatalog.categories).length} cats, ${Object.keys(hashes).length} hashes)`);
-console.log(`  ${'loader.min'.padEnd(18)} alias raíz (compat)`);
+console.log(`  ${'loader.min.mjs'.padEnd(18)} js ${String(loaderStat.size).padStart(6)}  (${Object.keys(loaderCatalog.categories).length} cats, ${Object.keys(hashes).length} hashes en asset-hashes.json)`);
+console.log(`  ${'loader.min.js'.padEnd(18)} copia compat (se retira en F5)`);
 
 const buildSrc = join(root, 'src', 'cdn', 'build');
 const buildOut = join(dist, 'build');
@@ -672,7 +513,7 @@ console.log(`  ${'build/'.padEnd(18)} ts vendor (hash + bundle)`);
 // su `deno.json` (specs/cdn.md §Alias). El SHA es el del build; `pin-update` lo mueve después.
 await writeFile(
   join(dist, 'importmap.json'),
-  JSON.stringify({ imports: { [ALIAS_KIT]: `https://cdn.jsdelivr.net/gh/${REPO_GITHUB}@${shaDelBuild()}/dist/cdn/` } }, null, 2) + '\n',
+  JSON.stringify({ imports: { [ALIAS_KIT]: `https://cdn.jsdelivr.net/gh/${REPO_GITHUB}@${sha}/dist/cdn/` }, scopes: {} }, null, 2) + '\n',
   'utf8',
 );
 console.log(`  ${'importmap.json'.padEnd(18)} alias ${ALIAS_KIT} → dist/cdn/@<sha>`);
@@ -725,6 +566,8 @@ console.log(`  ${'diagrams/themes/'.padEnd(18)} ${nTemas} temas (carga diferida 
   console.log(`  ${'diagrams/'.padEnd(18)} routing-costs.json (campo de costos compartido)`);
 }
 
+// `?v=` en los HTML del repo (Pages y carpeta local son orígenes mutables). Sobre un pin SHA de jsDelivr/githack
+// el loader no sella (la URL ya es inmutable; ver `esUrlInmutable` en src/cdn/build/asset-url.ts).
 const indexPath = join(root, 'index.html');
 const indexPrev = await readFile(indexPath, 'utf8');
 const indexNext = applyHashToHtml(indexPrev, hashes);
@@ -739,9 +582,11 @@ console.log(`  html                 ${htmlTouched} con ?v=`);
 // con un timestamp al detectar cambios.
 await writeFile(
   join(dist, 'reload-pin'),
-  `build:${shaDelBuild().slice(0, 12)}\n`,
+  `build:${sha.slice(0, 12)}\n`,
   'utf8',
 );
 console.log(`  reload-pin           build:<sha>`);
 
-console.log(`OK dist/cdn  ${entries.length} components + is-base + loader + gallery-app`);
+try { await unlink(join(dist, 'all.min.js')); } catch { /* leftover */ }
+
+console.log(`OK dist/cdn  ${entradasComp.length} módulos de componentes + core + lib + loader (${nChunks} chunks) + gallery-app`);

@@ -5,7 +5,7 @@
 //   foo.min.js → foo.min.css
 //
 // Paso de verdad: diagram-lightbox hardcodeaba `./diagram-lightbox.css`, así
-// que al cargar diagram-lightbox.min.js pedía un .css sin .min (404 en CDN).
+// que al cargar diagram-lightbox.min.mjs pedía un .css sin .min (404 en CDN).
 //
 // Uso:  node tests/sibling-css-href.test.ts
 
@@ -25,7 +25,7 @@ test('componentes/sibling-css-href', async () => {
   // El core es TypeScript: un `.mjs` no lo importa directo. Se prueba el
   // artefacto publicado, que ademas es lo que consumen los componentes.
   const { siblingCssHref } = await import(
-    pathToFileURL(join(root, 'dist/cdn/core/element.min.js')).href
+    pathToFileURL(join(root, 'dist/cdn/core/element.min.mjs')).href
   );
   
   check(
@@ -34,19 +34,19 @@ test('componentes/sibling-css-href', async () => {
     'foo.js debe mapear a foo.css',
   );
   check(
-    siblingCssHref('http://127.0.0.1:8391/dist/cdn/diagrams/diagram-lightbox.min.js')
+    siblingCssHref('http://127.0.0.1:8391/dist/cdn/diagrams/diagram-lightbox.min.mjs')
       === 'http://127.0.0.1:8391/dist/cdn/diagrams/diagram-lightbox.min.css',
     'foo.min.js debe mapear a foo.min.css (no a foo.css)',
   );
   check(
-    siblingCssHref('http://127.0.0.1:8391/dist/cdn/data-viz/chart.min.js')
+    siblingCssHref('http://127.0.0.1:8391/dist/cdn/data-viz/chart.min.mjs')
       === 'http://127.0.0.1:8391/dist/cdn/data-viz/chart.min.css',
-    'chart.min.js → chart.min.css',
+    'chart.min.mjs → chart.min.css',
   );
   check(
-    siblingCssHref('http://127.0.0.1:8391/dist/cdn/diagrams/sequence-diagram.min.js')
+    siblingCssHref('http://127.0.0.1:8391/dist/cdn/diagrams/sequence-diagram.min.mjs')
       === 'http://127.0.0.1:8391/dist/cdn/diagrams/sequence-diagram.min.css',
-    'sequence-diagram.min.js → sequence-diagram.min.css',
+    'sequence-diagram.min.mjs → sequence-diagram.min.css',
   );
   
   const src = readFileSync(
@@ -63,12 +63,12 @@ test('componentes/sibling-css-href', async () => {
     'diagram-lightbox.ts debe llevar su CSS por iswc:css (static css), no por siblingCssHref',
   );
   
-  const distJs = join(root, 'dist/cdn/diagrams/diagram-lightbox.min.js');
+  const distJs = join(root, 'dist/cdn/diagrams/diagram-lightbox.min.mjs');
   if (existsSync(distJs)) {
     const bundled = readFileSync(distJs, 'utf8');
     check(
       !/new URL\(\s*["']\.\/diagram-lightbox\.css["']/.test(bundled),
-      'dist diagram-lightbox.min.js no debe pedir ./diagram-lightbox.css sin .min',
+      'dist diagram-lightbox.min.mjs no debe pedir ./diagram-lightbox.css sin .min',
     );
     check(
       existsSync(join(root, 'dist/cdn/diagrams/diagram-lightbox.min.css')),

@@ -21,7 +21,7 @@ export function motor(id: string | Herramienta, opciones: Opciones = {}): Promis
   const k = clave(h, o);
   if (!motores.has(k)) {
     const cargar = (alProgreso: (p: { progress?: number }) => void): Promise<Motor> => {
-      const url = new URL(`./motores/${h.id}.min.js${reintentos ? `?r=${reintentos}` : ''}`, import.meta.url).href;
+      const url = new URL(`./motores/${h.id}.min.mjs${reintentos ? `?r=${reintentos}` : ''}`, import.meta.url).href;
       const medir = medidor();
       return import(url).then((m: { crear: Crear }) => m.crear(o, (p) => {
         const progress = medir(p);

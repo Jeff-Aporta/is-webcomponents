@@ -69,13 +69,13 @@ export function defineElement<T extends CustomElementConstructor>(
 /**
  * Href del `.css` hermano de un módulo JS.
  *
- * Conserva el sufijo `.min`: `foo.min.js` → `foo.min.css`. Es lo que permite
- * que el mismo código valga en desarrollo (fuente) y en el CDN (minificado)
- * sin saber cuál de los dos está corriendo.
+ * Conserva el sufijo `.min`: `foo.min.mjs` (o `foo.min.js`) → `foo.min.css`. Es lo
+ * que permite que el mismo código valga en desarrollo (fuente) y en el CDN
+ * (minificado) sin saber cuál de los dos está corriendo.
  */
 export function siblingCssHref(moduleUrl: string): string {
   const sibling = new URL(moduleUrl);
-  sibling.pathname = sibling.pathname.replace(/\.js$/i, '.css');
+  sibling.pathname = sibling.pathname.replace(/\.m?js$/i, '.css');
   return sibling.href;
 }
 

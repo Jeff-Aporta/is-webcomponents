@@ -5,7 +5,7 @@ import assert from 'node:assert/strict';
 import { hashBase, hashCss, hashHtml, hashJs, hashPorRuta, hashesRepetidos, HASH_LEN } from '../../src/cdn/build/hash.ts';
 import { cambiosDeHash, reemplazarHashes } from '../../src/cdn/build/sync-hashes.ts';
 import { stampHashTexts } from '../../src/cdn/build/stamp-hashes.ts';
-import { withAssetHash, lookupHash } from '../../src/cdn/build/asset-url.ts';
+import { withAssetHash, lookupHash, esUrlInmutable } from '../../src/cdn/build/asset-url.ts';
 import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
 
 const { test, lista } = coleccionPruebas({ categoria: 'how' });
@@ -31,7 +31,7 @@ test('hashJs/hashCss/hashHtml: solo cambian con lo ejecutable', () => {
 });
 
 test('hashesRepetidos: dos archivos con el mismo hash, salvo alias del mismo nombre', () => {
-  assert.deepEqual(hashesRepetidos({ 'loader.min.js': 'aaaaaa', 'core/loader.min.js': 'aaaaaa', 'x.css': 'bbbbbb' }), []);
+  assert.deepEqual(hashesRepetidos({ 'loader.min.mjs': 'aaaaaa', 'core/loader.min.mjs': 'aaaaaa', 'x.css': 'bbbbbb' }), []);
   assert.equal(hashesRepetidos({ 'a.js': 'cccccc', 'b.js': 'cccccc' }).length, 1);
 });
 
@@ -44,19 +44,19 @@ test('sync-hashes: ?v=viejo → ?v=nuevo, sin tocar otras cadenas ni hashes ambi
 
 test('stampHashTexts: el padre lleva el hash del hijo y el suyo cambia si el hijo cambia', () => {
   const first = stampHashTexts({
-    'media/icon.min.js': 'export const icon = 1;\n',
-    'actions/button.min.js': 'import"../media/icon.min.js";\nexport const button = 1;\n',
+    'media/icon.min.mjs': 'export const icon = 1;\n',
+    'actions/button.min.mjs': 'import"../media/icon.min.mjs";\nexport const button = 1;\n',
   });
-  assert.equal(first.hashes['media/icon.min.js'].length, 6);
-  assert.match(first.texts['actions/button.min.js'], new RegExp(`icon\\.min\\.js\\?v=${first.hashes['media/icon.min.js']}`));
-  assert.notEqual(first.hashes['actions/button.min.js'], first.hashes['media/icon.min.js']);
+  assert.equal(first.hashes['media/icon.min.mjs'].length, 6);
+  assert.match(first.texts['actions/button.min.mjs'], new RegExp(`icon\\.min\\.mjs\\?v=${first.hashes['media/icon.min.mjs']}`));
+  assert.notEqual(first.hashes['actions/button.min.mjs'], first.hashes['media/icon.min.mjs']);
 
   const second = stampHashTexts({
-    'media/icon.min.js': 'export const icon = 2;\n',
-    'actions/button.min.js': 'import"../media/icon.min.js";\nexport const button = 1;\n',
+    'media/icon.min.mjs': 'export const icon = 2;\n',
+    'actions/button.min.mjs': 'import"../media/icon.min.mjs";\nexport const button = 1;\n',
   });
-  assert.notEqual(second.hashes['media/icon.min.js'], first.hashes['media/icon.min.js']);
-  assert.notEqual(second.hashes['actions/button.min.js'], first.hashes['actions/button.min.js']);
+  assert.notEqual(second.hashes['media/icon.min.mjs'], first.hashes['media/icon.min.mjs']);
+  assert.notEqual(second.hashes['actions/button.min.mjs'], first.hashes['actions/button.min.mjs']);
 });
 
 test('stampHashTexts: en un ciclo de imports todos los importadores usan la MISMA URL de cada archivo', () => {
@@ -87,10 +87,25 @@ test('lookupHash prefiere el sufijo mas largo', () => {
     'actions/host-base.css': 'bbbbbb',
   };
   assert.equal(lookupHash(files, 'https://x/dist/cdn/actions/host-base.css'), 'bbbbbb');
-  assert.equal(lookupHash(files, 'actions/button.min.js'), null);
-  assert.equal(withAssetHash('../media/icon.min.js', 'abc123'), '../media/icon.min.js?v=abc123');
-  assert.equal(withAssetHash('../media/icon.min.js?h=old', 'abc123'), '../media/icon.min.js?v=abc123', 'el ?h= legado se reemplaza por ?v=');
-  assert.equal(withAssetHash('../media/icon.min.js?v=old', 'abc123'), '../media/icon.min.js?v=abc123');
+  assert.equal(lookupHash(files, 'actions/button.min.mjs'), null);
+  assert.equal(withAssetHash('../media/icon.min.mjs', 'abc123'), '../media/icon.min.mjs?v=abc123');
+  assert.equal(withAssetHash('../media/icon.min.mjs?h=old', 'abc123'), '../media/icon.min.mjs?v=abc123', 'el ?h= legado se reemplaza por ?v=');
+  assert.equal(withAssetHash('../media/icon.min.mjs?v=old', 'abc123'), '../media/icon.min.mjs?v=abc123');
+});
+
+test('esUrlInmutable: el loader no sella ?v= sobre un pin SHA de jsDelivr/githack, sí en orígenes mutables', () => {
+  const sha = '0123456789abcdef0123456789abcdef01234567';
+  // Rama inmutable: el pin SHA ya identifica el contenido (Cache-Control: immutable).
+  assert.equal(esUrlInmutable(`https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@${sha}/dist/cdn/actions/button.min.mjs`), true);
+  assert.equal(esUrlInmutable('https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@abc1234/dist/cdn/core/loader.min.mjs'), true, 'SHA corto');
+  assert.equal(esUrlInmutable(`https://raw.githack.com/Jeff-Aporta/is-webcomponents/${sha}/dist/cdn/actions/button.min.mjs`), true);
+  assert.equal(esUrlInmutable(`https://rawcdn.githack.com/Jeff-Aporta/is-webcomponents/${sha}/dist/cdn/actions/button.min.mjs`), true);
+  // Rama mutable: se sella con el hash del mapa.
+  assert.equal(esUrlInmutable('https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn/actions/button.min.mjs'), false, 'pin a rama');
+  assert.equal(esUrlInmutable('https://raw.githack.com/Jeff-Aporta/is-webcomponents/main/dist/cdn/actions/button.min.mjs'), false);
+  assert.equal(esUrlInmutable('https://jeff-aporta.github.io/is-webcomponents/dist/cdn/actions/button.min.mjs'), false, 'Pages');
+  assert.equal(esUrlInmutable('http://localhost:8391/dist/cdn/actions/button.min.mjs'), false, 'local');
+  assert.equal(esUrlInmutable('../actions/button.min.mjs'), false, 'relativa');
 });
 
 export default lista();

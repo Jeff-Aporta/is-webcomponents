@@ -116,6 +116,9 @@ export function hostStyleName(host: Element): string | null {
 // Estilo InSoft: los tres temas en una sola carga. Viven junto a los
 // bundles de diagramas (`dist/cdn/diagrams/themes/`). Solo se registra si
 // nadie lo hizo antes (otro bundle, o una librería que lo reemplazó).
+// Publicado (`.mjs`) este código puede vivir en `diagrams/` o en un chunk de `_chunks/` (ambos a un nivel de
+// `dist/cdn/`): la base es `../diagrams/`. Desde fuente, junto a este módulo (`utils/themes/`).
+const BASE_TEMAS = /\.mjs(?:[?#]|$)/.test(import.meta.url) ? new URL('../diagrams/', import.meta.url) : import.meta.url;
 if (!ARCHIVOS.has('insoft')) registerStyleDiagram({
   insoft: ['./themes/insoft.json', './themes/insoft-cd.json', './themes/insoft-class.json', './themes/insoft-seq.json', './themes/insoft-flow.json'],
-});
+}, BASE_TEMAS);

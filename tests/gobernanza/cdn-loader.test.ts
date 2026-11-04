@@ -14,7 +14,7 @@ const { test, lista } = coleccionPruebas({ categoria: 'how' });
 
 const root = dirname(dirname(dirname(fileURLToPath(import.meta.url))));
 const src = join(root, 'src', 'cdn', 'loader.ts');
-const dist = join(root, 'dist', 'cdn', 'core', 'loader.min.js');
+const dist = join(root, 'dist', 'cdn', 'core', 'loader.min.mjs');
 const indexHtml = readFileSync(join(root, 'index.html'), 'utf8');
 
 test('src/cdn/loader.ts expone API pública + mirrors/pin + has/getLoaded', () => {
@@ -48,11 +48,15 @@ test('src/cdn/loader.ts expone API pública + mirrors/pin + has/getLoaded', () =
   assert.match(code, /syncHashMemory/);
 });
 
-test('dist/cdn/core/loader.min.js y loader.md existen; banner con docs', () => {
-  assert.ok(existsSync(dist), 'falta dist/cdn/core/loader.min.js — corre deno task build');
+test('dist/cdn/core/loader.min.mjs y loader.md existen; banner con docs', () => {
+  assert.ok(existsSync(dist), 'falta dist/cdn/core/loader.min.mjs — corre deno task build');
   assert.ok(existsSync(join(root, 'dist', 'cdn', 'core', 'loader.md')), 'falta dist/cdn/core/loader.md');
-  const code = readFileSync(dist, 'utf8');
-  assert.ok(code.length < 120_000, `loader.min.js demasiado grande (${code.length} B)`);
+  // Build único (F3): el loader importa chunks compartidos (cdn-ref, catálogo del `define`…). Se lee su cierre
+  // completo, el que sale de dist/cdn/deps.json (`core.loader`).
+  const cierre: string[] = JSON.parse(readFileSync(join(root, 'dist', 'cdn', 'deps.json'), 'utf8')).core.loader;
+  assert.ok(cierre.includes('core/loader.min.mjs'), 'deps.json: core.loader incluye el loader');
+  const code = cierre.map((r) => readFileSync(join(root, 'dist', 'cdn', r), 'utf8')).join('\n');
+  assert.ok(code.length < 120_000, `loader.min.mjs + su cierre demasiado grande (${code.length} B)`);
   assert.match(code, /iswcLoader/);
   // W52: loadCSSBase se elimino; el loader auto-carga is-base.min.css.
   assert.match(code, /jsdelivr|Jeff-Aporta\/is-webcomponents/);
@@ -80,7 +84,7 @@ test('fillHostTemplate sustituye {{sha}} y {{cdnUrl}}', () => {
 test('min.js de componente lleva banner de docs MD', () => {
   // Consolidación 2026-09-07: el banner ya no apunta a LLM.md per-carpeta
   // (eliminado); apunta a specs/componentes.md (índice global consolidado).
-  const btn = readFileSync(join(root, 'dist', 'cdn', 'actions', 'button.min.js'), 'utf8');
+  const btn = readFileSync(join(root, 'dist', 'cdn', 'actions', 'button.min.mjs'), 'utf8');
   assert.match(btn, /^\/\*!/);
   assert.match(btn, /src\/components\/actions\/button\.md/);
   assert.match(btn, /specs\/componentes\.md/);
@@ -89,9 +93,9 @@ test('min.js de componente lleva banner de docs MD', () => {
 });
 
 test('index.html arranca con loader module (sin all.min; CSS vía loader)', () => {
-  assert.match(indexHtml, /loader\.min\.js/);
+  assert.match(indexHtml, /loader\.min\.mjs/);
   assert.match(indexHtml, /loadPageModules\s*\(\s*\[[\s\S]*iswc-doc-demo-host/);
-  assert.doesNotMatch(indexHtml, /doc-demo-boot\.min\.js/);
+  assert.doesNotMatch(indexHtml, /doc-demo-boot\.min\.m?js/);
   assert.match(indexHtml, /<iswc-doc-demo/);
   assert.doesNotMatch(indexHtml, /<link\s+rel="stylesheet"\s+href="dist\/cdn\/is-base\.min\.css/);
   assert.doesNotMatch(indexHtml, /L\.load\(['"]all['"]\)/);
@@ -114,7 +118,7 @@ test('specs/cdn.md documenta pin/mirrors (consolidación 2026-09-07)', () => {
   // Consolidación 2026-09-07: LLM.md eliminado; el contenido vive en
   // specs/cdn.md § "Detalle operativo". El guardián migró.
   const cdn = readFileSync(join(root, 'specs', 'cdn.md'), 'utf8');
-  assert.match(cdn, /loader\.min\.js/);
+  assert.match(cdn, /loader\.min\.mjs/);
   // W52: loadCSSBase se elimino del loader; iswcLoader es el contrato.
   assert.match(cdn, /iswcLoader/);
   assert.match(cdn, /pin|SHA|branch/i);

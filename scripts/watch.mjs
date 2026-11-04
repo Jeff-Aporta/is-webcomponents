@@ -13,14 +13,15 @@
  * static server (deno serve, Live Server, python -m http.server, etc.).
  */
 import { watch, existsSync } from 'node:fs';
-import { access, mkdir, readFile, stat, writeFile } from 'node:fs/promises';
+import { access, copyFile, mkdir, readFile, stat, writeFile } from 'node:fs/promises';
 import { spawn } from 'node:child_process';
-import { basename, dirname, join, relative, resolve, sep } from 'node:path';
+import { basename, dirname, join, relative, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { build } from 'esbuild';
 import { aliasKit } from '@jeff-aporta/iswc-base/cdn/build/alias.ts';
 import { cssVirtual } from '@jeff-aporta/iswc-base/cdn/build/css-virtual.ts';
-import { bundleMinJs, bundleMinCss, docsBanner } from '@jeff-aporta/iswc-base/cdn/build/bundle-min.ts';
+import { bundleMinCss } from '@jeff-aporta/iswc-base/cdn/build/bundle-min.ts';
+import { bundleKit, entradasKit, catalogoLoader } from '@jeff-aporta/iswc-base/cdn/build/bundle-kit.ts';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const root = dirname(here);
@@ -54,42 +55,34 @@ async function walk(dir) {
 }
 await walk(compRoot);
 
-const externalComponents = {
-  name: 'external-components',
-  setup(b) {
-    b.onResolve({ filter: /\.(ts|js)$/ }, (args) => {
-      if (args.kind === 'entry-point') return null;
-      const abs = resolve(args.resolveDir, args.path);
-      if (basename(abs).replace(/\.(ts|js)$/, '') === 'base-sheets') {
-        return { path: '../_shared/base-sheets.min.js', external: true };
-      }
-      if (!abs.startsWith(compRoot)) return null;
-      const tag = basename(abs).replace(/\.(ts|js)$/, '');
-      if (!tagToFile.has(tag)) return null;
-      return { path: `../${folderFor(abs)}/${tag}.min.js`, external: true };
-    });
-  },
-};
-
-// El CSS que viaja dentro del .min.js lo pone `iswc:css` (cssVirtual, dentro de bundleMinJs) desde el staging.
-async function rebuildComponent(inFile) {
-  const tag = basename(inFile).replace(/\.(ts|js)$/, '');
-  const folder = folderFor(inFile);
-  const outDir = join(dist, folder);
-  await mkdir(outDir, { recursive: true });
-  const cssIn = inFile.replace(/\.(ts|js)$/i, '.css');
-  const outJs = join(outDir, `${tag}.min.js`);
-  const outCss = join(outDir, `${tag}.min.css`);
-  const hasCss = await access(cssIn).then(() => true, () => false);
-  if (hasCss) await bundleMinCss(cssIn, outCss);
-  await bundleMinJs({
-    entry: inFile,
-    outfile: outJs,
-    plugins: [externalComponents],
-    banner: docsBanner([`watch: ${tag}`]),
+// Build único con splitting (F3): un componente no se puede reconstruir suelto sin duplicar el core, así que
+// cualquier cambio vuelve a correr `bundleKit` entero (~10 s). Los chunks viejos quedan hasta el próximo
+// `deno task build`, que limpia dist/cdn.
+let kitPendiente = false;
+async function rebuildKit() {
+  const entradas = await entradasKit(root, manifest);
+  const t0 = Date.now();
+  const r = await bundleKit({
+    entradas,
+    outdir: dist,
+    catalogo: catalogoLoader(manifest, entradas),
+    aiRoot: join(root, 'src', 'ai'),
   });
-  const sz = (await stat(outJs)).size;
-  console.log(`  ✓ ${folder}/${tag}.min.js (${sz} B)`);
+  await copyFile(join(dist, 'core', 'loader.min.mjs'), join(dist, 'core', 'loader.min.js')); // compat (F5)
+  console.log(`  ✓ build único: ${r.archivos.length} archivos en ${Date.now() - t0} ms`);
+}
+
+// El CSS que viaja dentro del módulo lo pone `iswc:css` (cssVirtual, dentro de bundleKit) desde el staging; aquí
+// solo se refresca el .min.css hermano y se marca el kit para reconstruir.
+async function rebuildComponent(inFile) {
+  const cssIn = join(root, '.tmp-scss', relative(root, inFile)).replace(/\.(ts|js)$/i, '.css');
+  const outCss = join(dist, folderFor(inFile), `${basename(inFile).replace(/\.(ts|js)$/, '')}.min.css`);
+  const hasCss = await access(cssIn).then(() => true, () => false);
+  if (hasCss) {
+    await mkdir(dirname(outCss), { recursive: true });
+    await bundleMinCss(cssIn, outCss);
+  }
+  kitPendiente = true;
 }
 
 async function rebuildGallery() {
@@ -180,6 +173,10 @@ async function flush() {
   try {
     if (jobs.has('preview-shell')) await rebuildPreviewShell();
     for (const file of comps) await rebuildComponent(file);
+    if (kitPendiente) {
+      kitPendiente = false;
+      await rebuildKit();
+    }
     if (jobs.has('gallery')) await rebuildGallery();
     if (jobs.size || comps.size) {
       console.log(`[watch] listo en ${Date.now() - t0}ms — reload-pin (Live Server / cualquier static)`);
