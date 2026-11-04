@@ -153,3 +153,8 @@
     border-style: dashed;
   }
 }
+
+/* Táctil: en punteros gruesos el área mínima es 44 px (WCAG 2.5.5), única medida en px a propósito; el escritorio no cambia. */
+@media (pointer: coarse) {
+  .textarea { min-block-size: 44px; }
+}

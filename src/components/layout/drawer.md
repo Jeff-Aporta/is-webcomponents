@@ -141,8 +141,10 @@ No expone.
 | `--spacing` | Token leído o definido por componente. |
 | `--show-duration` | Token leído o definido por componente. |
 | `--hide-duration` | Token leído o definido por componente. |
+| (movimiento reducido) | Con `prefers-reduced-motion: reduce` las duraciones bajan a 90 ms y 70 ms, nunca a cero: la entrada y la salida se siguen viendo. |
 | `--backdrop-color` | Token leído o definido por componente. |
 | `--iswc-space-l` | Token leído o definido por componente. |
+| `--iswc-drawer-radius` | Radio de las esquinas expuestas. Default `0`: esquinas rectas, porque el cajón toca el borde. |
 | `--_radius` | Token leído o definido por componente. |
 | `--iswc-radius` | Token leído o definido por componente. |
 | `--_shadow` | Token leído o definido por componente. |

@@ -178,3 +178,8 @@ nav.toc { padding: 2.1505em 1.2289em 2.4578em 1.3825em; font-size: .84em; }
 
 /* Riel de íconos: sin divisor ni arrastre. */
 :host([data-rail]) .ext { --divider-width: 0px; }
+
+/* Táctil: en punteros gruesos el área mínima es 44 px (WCAG 2.5.5), única medida en px a propósito; el escritorio no cambia. */
+@media (pointer: coarse) {
+  .toggle { inline-size: 44px; block-size: 44px; }
+}

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-02T03:17:39.216Z",
+  "generatedAt": "2026-11-02T21:44:08.411Z",
   "count": 41,
   "modules": [
     {
@@ -7,7 +7,7 @@
       "id": "app-cfg",
       "path": "src/core/app-cfg.ts",
       "summary": "Módulo compartido `app-cfg.ts`.",
-      "bytes": 4057,
+      "bytes": 3971,
       "exports": [
         "APP_CFG_KEY",
         "PALETAS",
@@ -23,7 +23,7 @@
       "id": "app-init",
       "path": "src/core/app-init.ts",
       "summary": "Módulo compartido `app-init.ts`.",
-      "bytes": 3307,
+      "bytes": 3254,
       "exports": [
         "ICONS_FOLDER_DEFAULT",
         "iconsBase",
@@ -413,7 +413,7 @@
       "id": "props-element",
       "path": "src/core/props-element.ts",
       "summary": "props-element — Cada clave de `props` que no sea una función es también un atributo en kebab-case (`textoCargando` →",
-      "bytes": 4603,
+      "bytes": 4489,
       "exports": [
         "atributosDe"
       ]

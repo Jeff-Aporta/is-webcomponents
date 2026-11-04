@@ -129,3 +129,9 @@ mark { padding: 0 .125em; border-radius: .1875em; background: color-mix(in srgb,
   .sub { border: 0; margin-inline-start: 0; padding-inline-start: 0; }
   .sub::before { display: none; }
 }
+
+/* Táctil: en punteros gruesos el área mínima es 44 px (WCAG 2.5.5), única medida en px a propósito; el escritorio no cambia. */
+@media (pointer: coarse) {
+  .item { min-block-size: 44px; align-items: center; }
+  input { min-block-size: 44px; }
+}

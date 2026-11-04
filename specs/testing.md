@@ -53,21 +53,57 @@ La estructura de `specs/` se valida con `src/utils/health/meta/specs-sdd.test.ts
 3. Si tocó la carta (constraints/lessons): `src/utils/testing/meta/llm-contract.test.ts` *(migrar el test a los specs consolidados)*.
 4. Si tocó `specs/`: `src/utils/health/meta/specs-sdd.test.ts`.
 
-## S-T6 Guardianes de caja negra
+## S-T6 Guardianes de caja negra (WHAT, no HOW)
 
-Un guardián verifica el **WHAT** del spec, no la implementación: entra por la API pública (función
-exportada, CLI, HTTP, DOM del componente) y afirma sobre lo observable. Si un refactor que respeta el
-WHAT rompe el guardián, el guardián está mal escrito.
+Un guardián verifica el **WHAT** del spec, no la implementación. Entra por la **API pública**
+(función exportada, CLI, HTTP, DOM del componente, SVG emitido) y afirma sobre lo **observable**.
+Prueba de fuego: **si un refactor que respeta el WHAT rompe el guardián, el guardián está mal escrito.**
 
-| Qué se prueba | Cómo |
+### S-T6.1 Reglas de oro
+
+1. **Una sola puerta.** El test importa solo lo público (`mod.ts`, entrypoint del CLI, URL, tag del
+   componente). Nunca utilidades privadas ni rutas profundas de `src/**`.
+2. **Afirma sobre la salida, no sobre el cómo.** Valor devuelto, efecto observable, XML/SVG, DOM
+   renderizado, exit code, cabecera HTTP. No asserts sobre nombres de funciones internas ni sobre el
+   orden de las llamadas.
+3. **Nombra el requisito.** Cabecera del test: `S-X#: <frase del spec>`. Sin `S-X#` el caso no
+   pertenece a ningún contrato: o se crea la regla en el spec, o se borra el test.
+4. **Cero dependencia de rutas/archivos internos**, salvo que el spec declare esa ruta como contrato
+   (HOW fuerte) y el test lo cite.
+5. **Sin snapshots de código.** No congeles el fuente, el AST, la lista de imports ni un `git diff`.
+   Congela el **artefacto observable** (SVG, JSON de salida, HTML renderizado, respuesta HTTP).
+6. **Falla por el síntoma.** El mensaje dice qué se esperaba y qué salió; no "assertion failed".
+
+### S-T6.2 Qué se prueba en cada tipo
+
+| Qué se prueba | Cómo (puerta pública) |
 |---|---|
 | Lógica pura (layout, parsers, libs) | llamar la función exportada y afirmar sobre su salida |
-| E2E de un servicio o parches SQL | controladores de cliente/servidor: el test habla con el servicio como lo haría un consumidor, y verifica el estado resultante por la misma vía |
+| E2E de un servicio o parches SQL | el test habla con el servicio como un consumidor y verifica el estado por la misma vía |
 | UI/UX (interacción, legibilidad) | Stagehand sobre la página real (`tests/*.stagehand.test.mjs`) |
 | Render de diagramas | SVG exportado (XML válido, sin texto fuera de su caja), no el código del pintor |
+| Contratos de estructura | solo los congelados por constitution/constraints como HOW fuerte, citándolos |
 
-Ideas de casos: `/deep-test-proposals`. Un caso que solo se explica leyendo el código es un HOW;
-si es contrato estricto, va como HOW fuerte en el spec y su guardián lo cita.
+### S-T6.3 Señales de que un test es HOW (revisar y reescribir)
+
+- Importa algo de `src/**` que no es un entrypoint público.
+- Afirma sobre `readFileSync(...).includes('...')` de un fuente propio.
+- Cuenta archivos, líneas, imports o exports para deducir comportamiento.
+- Pasa solo si el código está escrito de una forma concreta, aunque el comportamiento sea correcto.
+- Su nombre describe una función ("valida que paintOne use…") en vez de un requisito.
+
+### S-T6.4 Excepción admitida: guardianes de gobernanza
+
+Los que vigilan **arquitectura congelada** (layout de `src/`, CDN sin bundles sueltos, sin CSS en
+`src/`) son HOW fuerte **por definición**: la constitution los fija. Deben:
+
+- estar listados en `constraints.md` o en este spec;
+- decir en su cabecera qué artículo de la constitution aplican;
+- limitar el assert a lo congelado (nada de "y además el archivo mide X líneas").
+
+Ideas de casos: `/deep-test-proposals`. Un caso que solo se explica leyendo el código es HOW; si es
+contrato estricto, va como HOW fuerte en el spec y su guardián lo cita.
+
 
 ## S-T7 Toda prueba corre dentro del cooldown
 

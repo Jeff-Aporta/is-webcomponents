@@ -425,3 +425,8 @@
 
   font-size: 0.875em;
 }
+
+/* Táctil: en punteros gruesos el área mínima es 44 px (WCAG 2.5.5), única medida en px a propósito; el escritorio no cambia. */
+@media (pointer: coarse) {
+  :host(:not([variant~="glyph"])) .btn { min-block-size: 44px; min-inline-size: 44px; }
+}
