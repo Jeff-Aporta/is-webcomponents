@@ -21,9 +21,9 @@
 import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { basename, dirname, join, relative, sep } from 'node:path';
 import esbuild from 'esbuild';
-import { hashPorRuta } from '../vendor/iswc-root/build/hash.ts';
-import { withAssetHash } from '../vendor/iswc-root/build/asset-url.ts';
-import { hashesJson, stampDirectory } from '../vendor/iswc-root/build/stamp-hashes.ts';
+import { hashPorRuta } from '../vendor/iswc-base/build/hash.ts';
+import { withAssetHash } from '../vendor/iswc-base/build/asset-url.ts';
+import { hashesJson, stampDirectory } from '../vendor/iswc-base/build/stamp-hashes.ts';
 import { mapaRutas, PREFIJO } from '../js/kit-tags.ts';
 
 const ROOT = join(import.meta.dirname!, '..', '..');

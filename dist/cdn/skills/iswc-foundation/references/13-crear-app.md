@@ -17,7 +17,7 @@ de la misma versión, así la app nace con vendor = pin.
 | `--titulo` | nombre de la carpeta | Título visible |
 | `--puerto` | `4200` | `deno task serve` |
 | `--sha` | el SHA de la URL del script, o `origin/main` del checkout local (publicado) | 40 hex, ya publicado |
-| `--repo` | `Jeff-Aporta/iswc-root` | Owner/nombre del kit |
+| `--repo` | `Jeff-Aporta/is-webcomponents` | Owner/nombre del kit |
 
 ## Qué deja
 

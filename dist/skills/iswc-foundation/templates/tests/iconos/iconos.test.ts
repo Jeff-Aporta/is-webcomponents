@@ -6,7 +6,7 @@
 //   W-ICO-03  el registrador publicado declara <html data-icons> = iswc.host + assets/iconify/
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { definirPruebas } from '../../src/vendor/iswc-root/tools/pruebas.ts';
+import { definirPruebas } from '../../src/vendor/iswc-base/tools/pruebas.ts';
 import { PREFIJO } from '../../src/js/kit-tags.ts';
 
 const RAIZ = Deno.cwd();

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-04T13:28:52.333Z",
+  "generatedAt": "2026-11-04T15:32:04.185Z",
   "count": 41,
   "modules": [
     {
@@ -81,8 +81,10 @@
       "id": "cdn-ref",
       "path": "src/core/cdn-ref.ts",
       "summary": "cdn-ref — Orden de fallback al cargar assets:",
-      "bytes": 5221,
+      "bytes": 5407,
       "exports": [
+        "REPO_GITHUB",
+        "NOMBRE_KIT",
         "repoDeUrl",
         "esOrigenCdn",
         "conBarra",
@@ -92,9 +94,7 @@
         "jsdelivrBase",
         "githackBase",
         "pagesBase",
-        "MIRRORS",
-        "mirrorById",
-        "readMirrorId"
+        "MIRRORS"
       ]
     },
     {

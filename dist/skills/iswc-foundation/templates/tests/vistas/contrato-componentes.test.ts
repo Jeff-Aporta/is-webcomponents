@@ -4,7 +4,7 @@
 //   W-COMP-08  cada tag registrado tiene .ts, .scss, .md y .json con su mismo nombre en la misma carpeta
 //   W-COMP-08  cada .md lleva front matter (name, description) y los H2 de la ficha; la Anatomía nunca se excluye
 //   W-COMP-08  cada .json es iswc-preview/v1 del mismo tag y está en la galería; si el .md declara API, trae controles
-import { definirPruebas } from '../../src/vendor/iswc-root/tools/pruebas.ts';
+import { definirPruebas } from '../../src/vendor/iswc-base/tools/pruebas.ts';
 import { APP_TAGS, PREFIJO, VIEW_TAGS } from '../../src/js/kit-tags.ts';
 
 const raiz = new URL('../../', import.meta.url);

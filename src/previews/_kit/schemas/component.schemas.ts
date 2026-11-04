@@ -261,12 +261,12 @@ export const SectionSchema = z
  * general y se evalúa periódicamente para subirlo al kit (`iswc-*`). Los componentes del
  * kit no lo llevan; lo llevan los candidatos de las apps en su `.json` iswc-preview/v1.
  *
- *   "reuso": { "candidato": "iswc-root", "motivo": "Paginador genérico sin dominio", "propuesta": "iswc-pagination" }
+ *   "reuso": { "candidato": "iswc-base", "motivo": "Paginador genérico sin dominio", "propuesta": "iswc-pagination" }
  */
 export const ReusoCandidatoSchema = z
   .object({
     /** Destino del reuso: siempre el kit. */
-    candidato: z.literal("iswc-root"),
+    candidato: z.literal("iswc-base"),
     /** Por qué es general (qué lo hace útil a otras apps). */
     motivo: z.string().trim().min(10),
     /** Tag propuesto en el kit, si ya se sabe. */

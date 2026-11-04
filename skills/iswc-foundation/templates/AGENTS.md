@@ -1,7 +1,7 @@
 <!-- @vendor 2026-10-13T15:51:18.306Z Jeff-Aporta/is-webcomponents@main skills/iswc-foundation/templates/AGENTS.md -->
 # AGENTS.md — __TITULO__
 
-Punto de entrada para cualquier agente. App de web components sobre el kit **iswc-root**, creada con
+Punto de entrada para cualquier agente. App de web components sobre el kit **iswc-base**, creada con
 `create-iswc-app` (estándar **iswc-foundation**): misma estructura, mismas tareas y mismas reglas que
 todas las apps iswc.
 
@@ -60,7 +60,7 @@ __APP__/
 │   │   └── components/__PREFIJO__/    ← componentes transversales + all.ts
 │   ├── styles/                 ← _tokens.scss, _mixins.scss, app.scss
 │   ├── utils/build.ts          ← build
-│   └── vendor/iswc-root/       ← tools del kit (no editar)
+│   └── vendor/iswc-base/       ← tools del kit (no editar)
 ├── view/<vista>/               ← index.html, README.md, demo/, components/, utils/
 ├── view/demo/                  ← galería de componentes (manifest.json)
 ├── scripts/{build,gate,vendor}/

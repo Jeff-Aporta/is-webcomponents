@@ -28,7 +28,7 @@ leen a demanda según el área que estés tocando.
 
 Si lo que vas a hacer es **consumir** el kit (HTML con `<iswc-button>`,
 estilos con tokens `--iswc-*`, etc.), esta skill **no** aplica: usa
-[`../iswc-root/SKILL.md`](../iswc-root/SKILL.md).
+[`../iswc-base/SKILL.md`](../iswc-base/SKILL.md).
 
 ## 2. Los cuatro archivos y la anatomía del `.md`
 
@@ -87,7 +87,7 @@ Estructura canónica del `.md` (mínimo):
   `iswc-*` (o se reusa uno del catálogo). Solo el markup interno del shadow queda como HTML.
 - **Demo con playground obligatoria**: el `.json` `iswc-preview/v1` lleva ≥1 bloque `demo` con
   `controls` y el tag entra en `src/manifest.ts` (galería).
-- Un componente de app candidato a subir al kit trae `"reuso": { "candidato": "iswc-root", … }`
+- Un componente de app candidato a subir al kit trae `"reuso": { "candidato": "iswc-base", … }`
   en su `.json`; al subirlo, se quita el marcador y se reemplaza el de la app por el `iswc-*`.
 ## Fuentes
 ```
@@ -435,7 +435,7 @@ Patrón mínimo (extracto):
 <html lang="es">
 <head>
   <meta charset="utf-8" />
-  <title>Demo: <iswc-foo> · iswc-root</title>
+  <title>Demo: <iswc-foo> · iswc-base</title>
   <style>
     html, body {
       margin: 0; padding: 24px; min-height: 100%;
@@ -521,7 +521,7 @@ Antes de abrir PR con un componente nuevo, verifica:
       `...: PASS — <resumen>`.
 - [ ] §9 `.json` `iswc-preview/v1` con playground (`target` y `controls`), y entrada en
       `src/manifest.ts` y `src/previews/catalog.ts`.
-- [ ] Fila en `skills/iswc-root/SKILL.md` y `skills/iswc-root/catalog.md`.
+- [ ] Fila en `skills/iswc-base/SKILL.md` y `skills/iswc-base/catalog.md`.
 - [ ] Ninguna estructura de UI del componente o de sus consumidores queda como HTML suelto
       fuera de un shadow (todo es componente).
 - [ ] §10 `.md` hermano con frontmatter, secciones y "Reglas para LLM".
@@ -542,7 +542,7 @@ Antes de abrir PR con un componente nuevo, verifica:
 ## Cómo se conecta con el resto
 
 - Esta skill **no sustituye** a
-  [`../iswc-root/SKILL.md`](../iswc-root/SKILL.md), que
+  [`../iswc-base/SKILL.md`](../iswc-base/SKILL.md), que
   cubre el **consumo** del kit desde apps externas. Esta cubre la
   **construcción** de un componente dentro del repo.
 - Para los `_shared/` (bases, mixins, helpers) ver la sección

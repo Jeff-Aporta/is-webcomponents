@@ -492,7 +492,7 @@ export function inventariar(raiz: string, archivos: readonly string[], repo: str
   const vendorizados: { hacia: string; cabecera: TCabeceraVendor & { doc: string | null } }[] = [];
   const pines = new Map<string, number>();
   const nombre = repo.split("/")[1]!;
-  const rePin = new RegExp(`(?:${nombre}|iswc-root|is-webcomponents)@([0-9a-f]{40})`, "g");
+  const rePin = new RegExp(`(?:${nombre}|iswc-base|is-webcomponents|iswc-root)@([0-9a-f]{40})`, "g");
   for (const h of archivos) {
     let t: string;
     try { t = readFileSync(join(raiz, h), "utf8"); } catch { continue; }

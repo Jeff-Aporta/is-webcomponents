@@ -33,7 +33,7 @@ import { execFileSync } from "node:child_process";
 import process from "node:process";
 import { pathToFileURL } from "node:url";
 function opciones(o = {}) {
-  const repo = String(o.repo || "Jeff-Aporta/is-webcomponents");
+  const repo = String(o.repo || REPO_GITHUB);
   const nombre2 = repo.split("/")[1];
   const lista = (v, def) => v ? (Array.isArray(v) ? v : String(v).split(",")).map((s) => s.trim()).filter(Boolean) : def;
   return {
@@ -266,11 +266,13 @@ function esPrincipal() {
     return false;
   }
 }
-var ALIAS, RAICES_DEFAULT, ALIAS_KIT, SALTAR_DEFAULT, EXT, ONLINE, CABECERA_VENDOR, SHA, auth, esc, log, urlAlias;
+var REPO_GITHUB, NOMBRES_REPO, ALIAS, RAICES_DEFAULT, ALIAS_KIT, SALTAR_DEFAULT, EXT, ONLINE, CABECERA_VENDOR, SHA, auth, esc, log, urlAlias;
 var init_pin_update = __esm({
   async "src/vendor-distributions/shared/tools/pin-update.mjs"() {
     "use strict";
-    ALIAS = { "is-webcomponents": ["iswc-root"], "iswc-root": ["is-webcomponents"] };
+    REPO_GITHUB = "Jeff-Aporta/is-webcomponents";
+    NOMBRES_REPO = ["iswc-base", "is-webcomponents", "iswc-root"];
+    ALIAS = Object.fromEntries(NOMBRES_REPO.map((n) => [n, NOMBRES_REPO.filter((o) => o !== n)]));
     RAICES_DEFAULT = ["index.html", "sw.js", "staticwebapp.config.json", "manifest.json", "deno.json", "src", "view", "demo", "public"];
     ALIAS_KIT = "@jeff-aporta/iswc-base/";
     SALTAR_DEFAULT = ["node_modules", "vendor", "dist", ".tmp-scss", ".git"];
@@ -332,7 +334,7 @@ async function leer(url) {
   if (!r.ok) throw new Error(`create-iswc-app: ${r.status} ${url.href}`);
   return r.text();
 }
-var REPO_KIT = args.repo ?? import.meta.url.match(/raw\.githubusercontent\.com\/([^/]+\/[^/]+)\//)?.[1] ?? import.meta.url.match(/cdn\.jsdelivr\.net\/gh\/([^/]+\/[^/@]+)@/)?.[1] ?? "Jeff-Aporta/iswc-root";
+var REPO_KIT = args.repo ?? import.meta.url.match(/raw\.githubusercontent\.com\/([^/]+\/[^/]+)\//)?.[1] ?? import.meta.url.match(/cdn\.jsdelivr\.net\/gh\/([^/]+\/[^/@]+)@/)?.[1] ?? "Jeff-Aporta/is-webcomponents";
 async function shaPorDefecto() {
   const deUrl = import.meta.url.match(/@([0-9a-f]{40})\//)?.[1] ?? import.meta.url.match(/\/([0-9a-f]{40})\//)?.[1];
   if (deUrl) return deUrl;

@@ -4,7 +4,7 @@ import { dirname, join } from 'node:path';
 
 const root = join(import.meta.dirname, '..', '..');
 const comp = join(root, 'src', 'components');
-const gh = 'https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components';
+const gh = 'https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components';
 
 const faltantes = [
   ['actions/speed-dial-action.md', 'iswc-speed-dial-action', 'actions', 'Acción hija de `<iswc-speed-dial>`. No se usa sola: vive dentro del speed dial y dispara su comando.'],
@@ -298,7 +298,7 @@ const API_MODULES = [
   {
     id: 'iswcLoader',
     cdn: 'core/loader.min.js',
-    guia: 'https://github.com/Jeff-Aporta/iswc-root/blob/main/src/cdn/loader.md',
+    guia: 'https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/cdn/loader.md',
     resumen: 'Entry CDN: loadCSS*, load/ensure/has, pin, configure, espejos jsDelivr -> githack -> Pages, sheets, registerApp, SHA quemado.',
   },
   {
@@ -340,37 +340,37 @@ const API_MODULES = [
   {
     id: 'ai/motores',
     cdn: 'lib/ai/motores.min.js',
-    guia: 'https://github.com/Jeff-Aporta/iswc-root/blob/main/src/ai/ai.md',
+    guia: 'https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/ai/ai.md',
     resumen: 'IA en el navegador sin UI: ejecutar(herramienta, entrada); 13 motores runonweb fuera de los barriles.',
   },
   {
     id: 'ai/descarga',
     cdn: 'lib/ai/descarga.min.js',
-    guia: 'https://github.com/Jeff-Aporta/iswc-root/blob/main/src/ai/ai.md',
+    guia: 'https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/ai/ai.md',
     resumen: 'conDescarga: regla única para bajar un modelo (hasta 20 MB toast; más, modal); pospuesta, medidor.',
   },
   {
     id: 'ai/vector-local',
     cdn: 'lib/ai/vector-local.min.js',
-    guia: 'https://github.com/Jeff-Aporta/iswc-root/blob/main/src/ai/ai.md',
+    guia: 'https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/ai/ai.md',
     resumen: 'vectorLocal, cargarCorpus, ordenarPorSentido: buscar por significado con el modelo multilingüe; null si no está.',
   },
   {
     id: 'ai/orden',
     cdn: 'lib/ai/orden.min.js',
-    guia: 'https://github.com/Jeff-Aporta/iswc-root/blob/main/src/ai/ai.md',
+    guia: 'https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/ai/ai.md',
     resumen: 'ordenarAplanado: exactas primero, luego embeddings y léxico tolerante. Puro.',
   },
   {
     id: 'ai/aplanado',
     cdn: 'lib/ai/aplanado.min.js',
-    guia: 'https://github.com/Jeff-Aporta/iswc-root/blob/main/src/ai/ai.md',
+    guia: 'https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/ai/ai.md',
     resumen: 'Reducción de vectores: aplanar, abrirCorpus, empacar; ajustar (PCA/LDA) en aplanado-ajuste para el build.',
   },
   {
     id: 'sync-pins',
     cdn: 'scripts/sync-pins.mjs (repo)',
-    guia: 'https://github.com/Jeff-Aporta/iswc-root/blob/main/scripts/sync-pins.mjs',
+    guia: 'https://github.com/Jeff-Aporta/is-webcomponents/blob/main/scripts/sync-pins.mjs',
     resumen: 'Tras commit del kit: propaga SHA a kit-pin / ISS / PIN (deno task sync:pins).',
   },
 ];
@@ -389,7 +389,7 @@ for (const m of API_MODULES) {
 }
 apisLineas.push('');
 
-const skillPath = join(root, 'skills', 'iswc-root', 'SKILL.md');
+const skillPath = join(root, 'skills', 'iswc-base', 'SKILL.md');
 let skill = readFileSync(skillPath, 'utf8');
 if (!/<!-- apis:inicio -->/.test(skill)) {
   skill = skill.replace(
@@ -409,7 +409,7 @@ writeFileSync(skillPath, skill, 'utf8');
 console.log('catalogo', orden.length, 'tags;', API_MODULES.length, 'apis');
 
 // catalog.md — inventario completo (tags + APIs) para agentes
-const catPath = join(root, 'skills', 'iswc-root', 'catalog.md');
+const catPath = join(root, 'skills', 'iswc-base', 'catalog.md');
 const catOut = [
   '# Catálogo iswc-* (inventario completo)',
   '',

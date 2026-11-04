@@ -7,7 +7,7 @@
 ## 1. Propósito (WHAT)
 
 __TITULO__ es una aplicación estática (HTML + módulos ES servidos tal cual, sin framework) construida
-con el kit iswc-root (`iswc-*`) y componentes propios `__PREFIJO__-*`.
+con el kit iswc-base (`iswc-*`) y componentes propios `__PREFIJO__-*`.
 
 ## 2. Requisitos WHAT
 

@@ -3,7 +3,7 @@
  * create-iswc-app — crea una app iswc nueva con el estándar iswc-foundation (el «create-react-app» del kit).
  *
  * Se ejecuta DIRECTO desde la URL (Deno no necesita descargar ni clonar nada) o desde un checkout local:
- *   deno run -A https://raw.githubusercontent.com/Jeff-Aporta/iswc-root/<sha40>/skills/iswc-foundation/tools/create-iswc-app.ts mi-app
+ *   deno run -A https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/<sha40>/skills/iswc-foundation/tools/create-iswc-app.ts mi-app
  *   deno run -A skills/iswc-foundation/tools/create-iswc-app.ts ../mi-app --prefijo=mia --titulo="Mi App"
  * (raw por SHA: jsDelivr rechaza archivos nuevos de repos > 50 MB; la forma `…/gh/<repo>@<sha>/dist/cdn/skills/…` también sirve.)
  *
@@ -13,7 +13,7 @@
  *   --puerto=<n>    puerto de `deno task serve`. Default 4200.
  *   --sha=<sha40>   pin del kit. Default: la versión del kit desde la que corre esta herramienta
  *                   (el SHA de su URL, o `origin/main` del checkout local: siempre publicado).
- *   --repo=<o/n>    repo del kit. Default Jeff-Aporta/iswc-root.
+ *   --repo=<o/n>    repo del kit. Default Jeff-Aporta/is-webcomponents.
  *   --host=<url>    sitio donde se publica la app (`deno.json` → `iswc.host`; base de `<html data-icons>`).
  *                   Default GitHub Pages del dueño del repo del kit: https://<owner>.github.io/<carpeta>/.
  *
@@ -55,7 +55,7 @@ async function leer(url: URL): Promise<string> {
 
 /** `dueño/repo` del kit: `--repo`, o el de la URL desde la que corre (raw/jsDelivr), o el nombre por defecto. */
 const REPO_KIT = args.repo ?? import.meta.url.match(/raw\.githubusercontent\.com\/([^/]+\/[^/]+)\//)?.[1]
-  ?? import.meta.url.match(/cdn\.jsdelivr\.net\/gh\/([^/]+\/[^/@]+)@/)?.[1] ?? 'Jeff-Aporta/iswc-root';
+  ?? import.meta.url.match(/cdn\.jsdelivr\.net\/gh\/([^/]+\/[^/@]+)@/)?.[1] ?? 'Jeff-Aporta/is-webcomponents';
 
 async function shaPorDefecto(): Promise<string> {
   const deUrl = import.meta.url.match(/@([0-9a-f]{40})\//)?.[1] ?? import.meta.url.match(/\/([0-9a-f]{40})\//)?.[1];

@@ -7,7 +7,7 @@
 ## 1. Propósito (WHAT)
 
 La app es una única página hecha de piezas con nombre propio (`<__PREFIJO__-…>`) sobre el kit
-iswc-root. Cada pieza muestra una parte concreta, recibe datos (atributos o `props`) y avisa hacia
+iswc-base. Cada pieza muestra una parte concreta, recibe datos (atributos o `props`) y avisa hacia
 arriba con eventos `__PREFIJO__-…`; se ve igual en claro y oscuro; tiene una ficha (`.md`) y un
 ejemplo vivo en la galería.
 

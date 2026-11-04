@@ -84,7 +84,8 @@ const bundleJs = (entry, outfile, plugins, banner, define) =>
     ...(banner ? { banner: { js: banner } } : {}),
   });
 
-const GH_RAW = 'https://raw.githubusercontent.com/Jeff-Aporta/iswc-root/main';
+// Mismo valor que `REPO_GITHUB` (src/core/cdn-ref.ts).
+const GH_RAW = 'https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main';
 const docsBanner = (tag) =>
   ['/*!',
    ' * ISWC - docs (LLM)',

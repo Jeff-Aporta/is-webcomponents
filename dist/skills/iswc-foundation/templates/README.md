@@ -2,7 +2,7 @@
 # __TITULO__
 
 App de web components (vanilla, sin framework) sobre el kit
-[iswc-root](https://github.com/__REPO__), creada con `create-iswc-app`.
+[iswc-base](https://github.com/__REPO__), creada con `create-iswc-app`.
 
 ```bash
 deno install

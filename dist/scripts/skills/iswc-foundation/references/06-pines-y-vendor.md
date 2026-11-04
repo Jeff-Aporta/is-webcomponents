@@ -5,8 +5,8 @@
 
 - Un único SHA de 40 hex **ya publicado** del kit en TODA la app: `src/js/iswc.ts` (canónico), los HTML
   (raíz, vistas, demos, galería) y `deno.json`.
-- Formas válidas: `https://cdn.jsdelivr.net/gh/Jeff-Aporta/iswc-root@<sha40>/…` (runtime) y
-  `https://raw.githubusercontent.com/Jeff-Aporta/iswc-root/<sha40>/…` (fuentes `.ts` para Deno).
+- Formas válidas: `https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@<sha40>/…` (runtime) y
+  `https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/<sha40>/…` (fuentes `.ts` para Deno).
 - Prohibido: `@main`, `@master`, `@latest`, SHA corto, `*.github.io`, ramas en raw/githack.
 - El kit nunca escribe en la app: **la app se actualiza a sí misma**.
 
@@ -29,7 +29,8 @@ deno task build && deno task test:all
   commit a commit (hasta 30) hasta el último publicado; (4) reescribe TODOS los `is-webcomponents@<sha40>` (y la
   forma raw por SHA) de las `--raices` del consumidor a ese SHA. Así todo el proyecto apunta siempre al último SHA
   publicado. `--nuevo=<sha40>` fija uno exacto (también verificado).
-- Reconoce y reescribe el nombre anterior del repo (`is-webcomponents@…` ↔ `iswc-root@…`, en `@sha` y en raw).
+- Reconoce los otros nombres del kit en un pin (`iswc-base@…`, el canónico, y el histórico) y los reescribe al nombre
+  real del repo en GitHub (`is-webcomponents@…` hasta que se renombre), en `@sha` y en raw.
 - Regla intacta: nunca `@main`/`@latest`/SHA corto (quedan como refs mutables → exit 1).
 - Códigos: 0 ok · 1 heterogéneo/mutable/legado · 2 uso inválido · 3 pin no publicado (nada se tocó) · 4 sin red
   (nada se tocó). En `vendor.ts`: 4 es aviso (los pines se conservan); 1, 2 y 3 hacen salir con 1.
@@ -37,7 +38,7 @@ deno task build && deno task test:all
   barrido (por defecto las raíces de un front típico: `index.html`, `src`, `view`, `demo`, `public`…); `activo: false`
   lo apaga. Si falta `pin-update.mjs` junto a `vendor.ts`, el protocolo no corre y se avisa.
 
-## Vendor (`src/vendor/iswc-root/`)
+## Vendor (`src/vendor/iswc-base/`)
 
 | Carpeta | Archivos |
 | --- | --- |
@@ -85,7 +86,7 @@ Las carpetas `scripts/vendor/ISU` (ISW) y `src-experimental/vendor/ISU` (ISS) de
 ```json
 "vendor": "deno run -A --reload=https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/ https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/dist/cdn/vendor-distributions/shared/tools/vendor.mjs scripts/vendor/vendor.json",
 "pin": "deno run -A --reload=https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/ https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/dist/cdn/vendor-distributions/shared/tools/pin-update.mjs --raices=index.html,src,view",
-"docs:diagramas": "deno run -A --no-check --sloppy-imports --reload=https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/ https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/dist/cdn/vendor-distributions/client/tools/render-lote.mjs --carpeta=… --svg=… --png=… --kit=../../../Personal/apps/is-webcomponents"
+"docs:diagramas": "deno run -A --no-check --sloppy-imports --reload=https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/ https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/dist/cdn/vendor-distributions/client/tools/render-lote.mjs --carpeta=… --svg=… --png=… --kit=../../../Personal/apps/iswc-base"
 ```
 
 ## Vendor por BARRIDO: `shared/tools/vendor.ts` (cabecera `@vendor` en cada archivo, perfil, pin estático)
@@ -208,7 +209,7 @@ El `deno task docs:diagramas` de ISS e ISW es el módulo vendorizado tal cual (s
 `docs-experimental/diagramas/<slug>.json` `{ slug?, module, tag, script, attrs?, payload }`:
 
 ```
-deno run -A --no-check --sloppy-imports <ISU>/render-lote.ts --carpeta=docs-experimental/diagramas --svg=docs-experimental/gen/diagrams/iswc/svg --png=docs-experimental/gen/diagrams/iswc/png --kit=../../../Personal/apps/is-webcomponents [--forzar] [--solo=a,b]
+deno run -A --no-check --sloppy-imports <ISU>/render-lote.ts --carpeta=docs-experimental/diagramas --svg=docs-experimental/gen/diagrams/iswc/svg --png=docs-experimental/gen/diagrams/iswc/png --kit=../../../Personal/apps/iswc-base [--forzar] [--solo=a,b]
 ```
 
 - **Huella**: sha256 del spec RESUELTO (`module`, `tag`, `script`, `attrs`, payload con sus referencias

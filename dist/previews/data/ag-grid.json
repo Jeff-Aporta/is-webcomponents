@@ -305,7 +305,7 @@
             "  quick-filter                 texto",
             "  group-by                     CSV de colIds iniciales",
             "  remember-state               boolean — persiste en localStorage['iswc:root']",
-            "  storage-key                  keyid bajo iswc-root.iswc-ag-grid",
+            "  storage-key                  keyid bajo iswc:root.iswc-ag-grid",
             "  toolbar                      true | false",
             "",
             "Tipos de columna:",

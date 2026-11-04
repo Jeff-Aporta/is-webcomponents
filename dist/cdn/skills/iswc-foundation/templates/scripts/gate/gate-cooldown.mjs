@@ -19,7 +19,7 @@ import { createHash } from "node:crypto";
 import { existsSync, mkdirSync, readdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
 import { dirname, join, relative } from "node:path";
 
-const { testCooldownFromEnv, formatMs } = await import("../../src/vendor/iswc-root/tools/test-cooldown.ts");
+const { testCooldownFromEnv, formatMs } = await import("../../src/vendor/iswc-base/tools/test-cooldown.ts");
 
 const IGNORAR = new Set(["node_modules", ".git", ".tmp", "dist", "coverage", ".cobertura"]);
 

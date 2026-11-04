@@ -18,8 +18,10 @@ const arg = (k: string) => process.argv.find((a) => a.startsWith(`--${k}=`))?.sl
 const git = (args: string[]) => new TextDecoder().decode(new Deno.Command('git', { args, cwd: RAIZ }).outputSync().stdout).trim();
 const sha = arg('sha') ?? git(['rev-parse', 'origin/main']);
 const remoto = git(['remote', 'get-url', 'origin']).match(/github\.com[/:]([^/]+)\/([^/.]+)/);
-const owner = remoto?.[1] ?? 'Jeff-Aporta';
-const repo = remoto?.[2] ?? 'is-webcomponents';
+// Por defecto, `REPO_GITHUB` de src/core/cdn-ref.ts (nombre real del repo en GitHub).
+const [OWNER_DEF, REPO_DEF] = 'Jeff-Aporta/is-webcomponents'.split('/');
+const owner = remoto?.[1] ?? OWNER_DEF;
+const repo = remoto?.[2] ?? REPO_DEF;
 const pages = `https://${owner.toLowerCase()}.github.io/${repo}/`;
 const set = arg('set') ?? 'mdi';
 const lotes = (arg('lotes') ?? '25,100,300').split(',').map(Number);

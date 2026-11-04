@@ -77,7 +77,7 @@ test('heading: 9. custom element registrado', async () => {
 });
 
 test('10. preview.ts existe', async () => {
-  // El test se ejecuta con CWD en `iswc-root`, así que usamos
+  // El test se ejecuta con CWD en `iswc-base`, así que usamos
   // una ruta relativa robusta. Si no existe, es fail legítimo.
   const { join: pJoin } = await import('node:path');
   const possiblePaths = [

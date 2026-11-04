@@ -12,8 +12,8 @@
   "zod": "npm:zod@4.4.3",
   "sass": "npm:sass@^1.105.0",
   "@std/http/file-server": "jsr:@std/http@1/file-server",
-  "@iswc/component-schemas": "https://raw.githubusercontent.com/Jeff-Aporta/iswc-root/<sha40>/src/previews/_kit/schemas/component.schemas.ts",
-  "@iswc/loader-schemas": "https://raw.githubusercontent.com/Jeff-Aporta/iswc-root/<sha40>/src/cdn/schemas/loader.schemas.ts"
+  "@iswc/component-schemas": "https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/<sha40>/src/previews/_kit/schemas/component.schemas.ts",
+  "@iswc/loader-schemas": "https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/<sha40>/src/cdn/schemas/loader.schemas.ts"
 }
 ```
 

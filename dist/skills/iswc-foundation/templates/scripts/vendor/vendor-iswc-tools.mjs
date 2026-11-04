@@ -1,5 +1,5 @@
 // @vendor 2026-10-14T15:03:31.623Z Jeff-Aporta/is-webcomponents@main skills/iswc-foundation/templates/scripts/vendor/vendor-iswc-tools.mjs
-// vendor-iswc-tools.mjs — copia las herramientas del kit iswc-root al MISMO SHA del pin de la app.
+// vendor-iswc-tools.mjs — copia las herramientas del kit iswc-base al MISMO SHA del pin de la app.
 //
 //   deno task vendor:iswc            # al SHA de src/js/iswc.ts (pin canonico): raw por SHA, jsDelivr de respaldo
 //
@@ -7,7 +7,7 @@
 // para probar un cambio del kit, se publica (push) y se sube el pin.
 //
 // Protocolo: `deno task pin --nuevo=<sha40|ultimo>` sube el pin; despues `deno task vendor:iswc`,
-// build y tests. La copia lleva cabecera `@vendor iswc-root@<sha> <origen>` y NO se edita: se cambia
+// build y tests. La copia lleva cabecera `@vendor is-webcomponents@<sha> <origen>` y NO se edita: se cambia
 // en el kit y se vuelve a descargar. Un guardian exige vendor == pin.
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
@@ -23,7 +23,7 @@ if (!pin) {
 
 /**
  * Herramientas comunes de las apps del kit (pruebas, cooldown, sync, pines) y del build (hashes):
- * `[destino en src/vendor/iswc-root/, ruta en el kit]`. En el kit, `vendor-distributions/…` vive en `src/` y
+ * `[destino en src/vendor/iswc-base/, ruta en el kit]`. En el kit, `vendor-distributions/…` vive en `src/` y
  * `build/…` en `src/cdn/`; publicadas, las dos bajo `dist/cdn/`.
  */
 export const ARCHIVOS = [
@@ -51,25 +51,25 @@ for (const [rel, kit] of ARCHIVOS) {
   if (texto === undefined) throw new Error(`vendor-iswc: ${rel} no responde en ${urls.join(' ni en ')}`);
   // Una cabecera @vendor previa (copia de otra copia) se reemplaza, no se apila.
   texto = aplanar(rel, texto.replace(/^\/\/ @vendor [^\n]*\n\/\/ No editar[^\n]*\n/, ''));
-  const destino = join(ROOT, 'src', 'vendor', 'iswc-root', rel);
+  const destino = join(ROOT, 'src', 'vendor', 'iswc-base', rel);
   mkdirSync(dirname(destino), { recursive: true });
-  writeFileSync(destino, `// @vendor iswc-root@${pin} dist/cdn/${kit}\n// No editar: se cambia en el kit y se descarga con \`deno task vendor:iswc\`.\n${texto}`);
+  writeFileSync(destino, `// @vendor is-webcomponents@${pin} dist/cdn/${kit}\n// No editar: se cambia en el kit y se descarga con \`deno task vendor:iswc\`.\n${texto}`);
 }
 // Skill general del kit (índice de todos los componentes) en specs/iswc/kit/, fijada al pin.
 const SKILL_KIT = ['SKILL.md', 'catalog.md', 'reference.md', 'PROMPT.md', 'tools/build.md', 'tools/local.md', 'tools/migrate.md', 'tools/runtime.md'];
 const fijar = (md) => md
-  .replaceAll('Jeff-Aporta/iswc-root', REPO)
+  .replaceAll('Jeff-Aporta/is-webcomponents', REPO)
   .replace(new RegExp(`(github\.com/${REPO}/(?:blob|tree))/main/`, 'g'), `$1/${pin}/`)
   .replace(new RegExp(`(raw\.githubusercontent\.com/${REPO})/main/`, 'g'), `$1/${pin}/`)
   .replace(/\]\(\.\.\/((?!catalog\.md|reference\.md|SKILL\.md|PROMPT\.md)[a-z0-9-]+\/[^)]*)\)/g, `](https://raw.githubusercontent.com/${REPO}/${pin}/skills/$1)`);
 for (const rel of SKILL_KIT) {
   let texto;
-  const r = await fetch(`https://raw.githubusercontent.com/${REPO}/${pin}/skills/iswc-root/${rel}`);
-  if (!r.ok) { console.warn(`[vendor:iswc] sin skills/iswc-root/${rel} en ${pin.slice(0, 12)} (${r.status})`); continue; }
+  const r = await fetch(`https://raw.githubusercontent.com/${REPO}/${pin}/skills/iswc-base/${rel}`);
+  if (!r.ok) { console.warn(`[vendor:iswc] sin skills/iswc-base/${rel} en ${pin.slice(0, 12)} (${r.status})`); continue; }
   texto = await r.text();
   const destino = join(ROOT, 'specs', 'iswc', 'kit', rel);
   mkdirSync(dirname(destino), { recursive: true });
-  writeFileSync(destino, `<!-- Copia de skills/iswc-root/${rel} del kit ${REPO}@${pin}. No editar: se refresca con \`deno task vendor:iswc\`. -->\n${fijar(texto)}`);
+  writeFileSync(destino, `<!-- Copia de skills/iswc-base/${rel} del kit ${REPO}@${pin}. No editar: se refresca con \`deno task vendor:iswc\`. -->\n${fijar(texto)}`);
 }
 
-console.log(`[vendor:iswc] ${ARCHIVOS.length} archivos <- iswc-root@${pin.slice(0, 12)}`);
+console.log(`[vendor:iswc] ${ARCHIVOS.length} archivos <- is-webcomponents@${pin.slice(0, 12)}`);

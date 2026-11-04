@@ -1,4 +1,4 @@
-// env.ts: configuración E2E de iswc-root SIN .env.
+// env.ts: configuración E2E de iswc-base SIN .env.
 // Los secretos se leen de un archivo explícito (nunca de otra carpeta local por defecto):
 //   - MiniMax:  $ISWC_SECRETS (o <repo>/.secrets.json, ignorado por git) -> Values.MINIMAX_API_KEY_50USD
 // Base URL / modelo / host de MiniMax no son secretos y quedan quemados como

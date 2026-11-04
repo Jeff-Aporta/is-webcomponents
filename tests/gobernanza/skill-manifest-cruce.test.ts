@@ -1,5 +1,5 @@
 /**
- * skill-manifest-cruce.test.ts — el índice de la skill general (`skills/iswc-root/SKILL.md`) lista
+ * skill-manifest-cruce.test.ts — el índice de la skill general (`skills/iswc-base/SKILL.md`) lista
  * TODOS los componentes del manifest: un agente que lea la skill encuentra cada tag publicado con su
  * guía. Un tag nuevo en `src/manifest.ts` sin fila en la skill rompe aquí.
  *
@@ -15,7 +15,7 @@ const { test, lista } = coleccionPruebas({ categoria: 'how' });
 
 const RAIZ = join(import.meta.dirname, '..', '..');
 const manifest = readFileSync(join(RAIZ, 'src', 'manifest.ts'), 'utf8');
-const skill = readFileSync(join(RAIZ, 'skills', 'iswc-root', 'SKILL.md'), 'utf8');
+const skill = readFileSync(join(RAIZ, 'skills', 'iswc-base', 'SKILL.md'), 'utf8');
 /** Tags del manifest con su categoría, en orden de aparición. */
 const tags = [...manifest.matchAll(/tag:\s*'(iswc-[^']+)'[^\n]*?category:\s*'([^']+)'/g)].map((m) => ({ tag: m[1]!, categoria: m[2]! }));
 const catalogo = skill.match(/<!-- catalogo:inicio -->([\s\S]*)<!-- catalogo:fin -->/)?.[1] ?? '';
@@ -34,7 +34,7 @@ test('la skill tiene el bloque de catálogo y el manifest tiene componentes', ()
 
 test('cero componentes del manifest ausentes en SKILL.md', () => {
   const faltan = tags.filter((t) => !filas.has(t.tag) && !omitidos.has(t.tag)).map((t) => `${t.tag} (${t.categoria})`);
-  assert.deepEqual(faltan, [], `faltan en skills/iswc-root/SKILL.md:\n  ${faltan.join('\n  ')}`);
+  assert.deepEqual(faltan, [], `faltan en skills/iswc-base/SKILL.md:\n  ${faltan.join('\n  ')}`);
 });
 
 test('cada tag del manifest está en la tabla de su categoría', () => {

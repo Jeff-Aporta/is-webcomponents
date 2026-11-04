@@ -4,7 +4,7 @@
 // no depende de él: sin `dev-token.json` (ignorado por git; formato en dev-token.example.json) se salta.
 //
 //   W-CAT-03   el usuario pide abrir la explicación y el modal se abre
-import { definirPruebas } from '../../src/vendor/iswc-root/tools/pruebas.ts';
+import { definirPruebas } from '../../src/vendor/iswc-base/tools/pruebas.ts';
 import { abrir, esperar } from '../../scripts/gate/e2e/harness.ts';
 import { credencialesMiniMax } from '../../scripts/gate/e2e/minimax.ts';
 

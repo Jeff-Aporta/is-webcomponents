@@ -6,7 +6,8 @@ Flujo: [flujo-sdd.md](flujo-sdd.md).
 
 ## C-1 Un solo repo
 
-- Repo: `Jeff-Aporta/iswc-root`. Galería + CDN + fuentes en el mismo árbol.
+- Repo: `Jeff-Aporta/is-webcomponents`. Galería + CDN + fuentes en el mismo árbol.
+- Nombre canónico del kit: **`iswc-base`** en todo (prosa, rutas, carpetas, títulos, nombres); el nombre del repo en GitHub solo vive dentro de sus URLs (GitHub/jsDelivr/githack/raw/Pages) y en `REPO_GITHUB` hasta que se renombre ([ADR nomenclatura](adr.md#adr-nomenclatura-iswc-base-2026-11-04), guardián `nomenclatura`).
 - Commits: solo si el usuario lo pide. Autor **Jeff-Aporta**. Sin `Co-authored-by`.
 - Push: solo con pedido explícito.
 

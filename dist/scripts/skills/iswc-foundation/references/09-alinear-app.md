@@ -7,7 +7,7 @@ de prueba con `create-iswc-app` y compara carpeta por carpeta.
 | Paso | Qué | Verificación |
 | --- | --- | --- |
 | 1 | Deno: `deno.json` con los imports de [02](02-deno-y-build.md); fuera `package.json`/npm | `deno task build` |
-| 2 | Pin único + vendor `src/vendor/iswc-root/` al mismo SHA | `deno task pin` exit 0 |
+| 2 | Pin único + vendor `src/vendor/iswc-base/` al mismo SHA | `deno task pin` exit 0 |
 | 3 | Layout de [01](01-estructura.md): `src/js/{base,core,dominio,components/<p>,consts/schemas}`, `view/<v>/` | guardián de estructura |
 | 4 | Registro único en `kit-tags.ts` + registrador `L.registerApp` + arranque estándar ([03](03-registro-y-carga.md)) | e2e de arranque |
 | 5 | Componentes con sus 4 archivos; fichas con las 6 secciones; `.json` con playground en la galería | `tests/vistas/contrato-componentes.test.ts` |
@@ -16,6 +16,6 @@ de prueba con `create-iswc-app` y compara carpeta por carpeta.
 | 8 | Specs fundación WHAT y pruebas con `definirPruebas` ([07](07-pruebas-y-gate.md)) | cada `[W-*]` con prueba |
 | 9 | Gate `test:all` y, si hay entregable, sync estándar ([08](08-sync-entregable.md)) | `deno task test:all` verde |
 
-Nombres del kit: el repo se llama **iswc-root** (antes `is-webcomponents`). `deno task pin --nuevo=<sha>`
-reescribe los pines con el nombre viejo; las rutas de vendor `src/vendor/is-webcomponents/` pasan a
-`src/vendor/iswc-root/`.
+Nombres del kit: el kit se llama **iswc-base** en todo (prosa, rutas, carpetas de vendor `src/vendor/iswc-base/`).
+El repo de GitHub conserva por ahora su nombre real y solo aparece dentro de las URLs (jsDelivr, githack, raw, Pages);
+`deno task pin --nuevo=<sha>` reescribe al nombre real los pines que traigan otro nombre del kit.

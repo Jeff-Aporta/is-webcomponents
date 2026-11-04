@@ -45,11 +45,16 @@ import { execFileSync } from 'node:child_process';
 import process from 'node:process';
 import { pathToFileURL } from 'node:url';
 
-// Otros nombres del mismo repo. Se inventarían como pines del repo y, al pinear, se reescriben al
-// nombre real. Hoy el repo de GitHub es `is-webcomponents`: el rename a `iswc-root` no se hizo y
-// jsDelivr da 404 con ese nombre, así que un `iswc-root@x` se corrige a `is-webcomponents@y`.
-// Cuando el rename exista, se invierte (default `iswc-root`, alias `is-webcomponents`).
-const ALIAS = { 'is-webcomponents': ['iswc-root'], 'iswc-root': ['is-webcomponents'] };
+// Repo por defecto de `--repo`: mismo valor que `REPO_GITHUB` (src/core/cdn-ref.ts). Es el nombre REAL del repo en
+// GitHub hoy; cambiará a `Jeff-Aporta/iswc-base` cuando se renombre, coordinado con las apps.
+const REPO_GITHUB = 'Jeff-Aporta/is-webcomponents';
+// Nombres del mismo repo. El canónico del kit es `iswc-base`; `is-webcomponents` es el real en GitHub hasta el rename e
+// `iswc-root` es histórico (nunca existió: jsDelivr da 404). Se inventarían como pines del repo y, al pinear, se
+// reescriben al nombre de `--repo`: hoy un `iswc-base@x` o `iswc-root@x` se corrige a `is-webcomponents@y`.
+// Cuándo invertir: el día que el repo de GitHub se llame `iswc-base`, `REPO_GITHUB` pasa a `Jeff-Aporta/iswc-base` y
+// el mapa sigue igual (cada nombre tiene a los otros dos como alias).
+const NOMBRES_REPO = ['iswc-base', 'is-webcomponents', 'iswc-root'];
+const ALIAS = Object.fromEntries(NOMBRES_REPO.map((n) => [n, NOMBRES_REPO.filter((o) => o !== n)]));
 const RAICES_DEFAULT = ['index.html', 'sw.js', 'staticwebapp.config.json', 'manifest.json', 'deno.json', 'src', 'view', 'demo', 'public'];
 /** Clave del alias del kit en `deno.json` y en los import maps (con barra final). */
 export const ALIAS_KIT = '@jeff-aporta/iswc-base/';
@@ -70,7 +75,7 @@ const log = (m) => console.log(`[pin] ${m}`);
 
 /** Opciones normalizadas (de la CLI o de quien importa). */
 export function opciones(o = {}) {
-  const repo = String(o.repo || 'Jeff-Aporta/is-webcomponents');
+  const repo = String(o.repo || REPO_GITHUB);
   const nombre = repo.split('/')[1];
   const lista = (v, def) => (v ? (Array.isArray(v) ? v : String(v).split(',')).map((s) => s.trim()).filter(Boolean) : def);
   return {

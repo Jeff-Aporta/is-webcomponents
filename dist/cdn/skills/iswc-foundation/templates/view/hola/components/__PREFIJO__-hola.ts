@@ -37,7 +37,7 @@ const __CLASE__Hola = crearComponente<__CLASE__HolaProps>(
       <section class="hero" part="hero" aria-labelledby="titulo">
         <p class="kicker">__TITULO__ · iswc</p>
         <__PREFIJO__-hola-mundo id="titulo"></__PREFIJO__-hola-mundo>
-        <p class="lede">App de web components sobre el kit iswc-root: vanilla, Deno y un estándar común para todas las apps.</p>
+        <p class="lede">App de web components sobre el kit iswc-base: vanilla, Deno y un estándar común para todas las apps.</p>
         <div class="acciones">
           <iswc-button id="abrir-modal" color="brand" variant="filled" oniswc-click=${abrir}>
             Ver cómo está hecha

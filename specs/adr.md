@@ -28,3 +28,11 @@ Si el debate solo afecta un dominio, puede vivir como sección fija en `specs/<d
 **Decisión:** `data-viz` queda en el manifest como **legacy alias** de `charts/`. Sólo conserva dos entradas: `iswc-heatmap` y `iswc-maps`/`iswc-map-marker` (por motivos históricos de folder). Las features nuevas van a `charts/` sin excepción. AGENTS.md §2 (estructura) y §4.1 (categorías) declaran la política en un solo lugar.
 
 **Consecuencias:** No se borra la categoría para no romper links profundos ni manifests externos que ya apuntan a `data-viz`. El guardián (futuro `tests/category-aliases.test.ts`) puede advertir cuando una feature nueva intenta usar `data-viz`. Documentos de planes viejos que mencionan `data-viz` como válida (`docs/auditoria-final.md`, `docs/superpowers/plans/2026-10-03-zod-migration.md` antes de moverlo) ahora se archivan en `.audit/` o se actualizan para referenciar la política vigente.
+
+## ADR nomenclatura iswc-base, 2026-11-04
+
+**Contexto:** El kit tenía tres nombres: `is-webcomponents` (el repo real en GitHub), `iswc-root` (un rename que nunca se hizo: 920 menciones, banners del build y docs con URLs `raw.githubusercontent.com/Jeff-Aporta/iswc-root/…` que daban 404) e `iswc-base` (la carpeta en disco y el alias `@jeff-aporta/iswc-base/`).
+
+**Decisión:** El nombre canónico es **`iswc-base`** en todas las referencias internas y de documentación (prosa, rutas, carpetas como `skills/iswc-base/`, títulos, nombres). El repo de GitHub conserva `is-webcomponents` por ahora: solo aparece dentro de URLs (GitHub/jsDelivr/githack/raw/Pages) y en `REPO_GITHUB` (`src/core/cdn-ref.ts`), que el build, `sync-pins` y `pin-update` repiten. `iswc-root` desaparece salvo como nombre histórico (este ADR, `lessons.md`), en las listas de alias y en las llaves de storage en producción (`iswc-root`, `is-webcomponents`), que no se renombran: se migran en `iswc-storage`/`prefs`.
+
+**Consecuencias:** `pin-update` `ALIAS` reconoce los tres nombres y reescribe los pines al de `--repo` (default el real); el loader (`shaFromImportUrl`) y `repoDeUrl` aceptan cualquiera. Cuando el repo se renombre a `iswc-base` (coordinado con las apps, para no romper enlaces pineados) basta cambiar `REPO_GITHUB` y sus copias. Codemod `scripts/codemods/nomenclatura-iswc-base.mjs` (idempotente) y guardián `tests/gobernanza/nomenclatura.test.ts`.

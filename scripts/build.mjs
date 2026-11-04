@@ -114,10 +114,12 @@ const defineCss = async (cssFile) => {
   }
 };
 
-const GH_RAW = 'https://raw.githubusercontent.com/Jeff-Aporta/iswc-root/main';
-const GH_BLOB = 'https://github.com/Jeff-Aporta/iswc-root/blob/main';
+// Mismo valor que `REPO_GITHUB` (src/core/cdn-ref.ts): nombre real del repo en GitHub hasta que se renombre a iswc-base.
+const REPO_GITHUB = 'Jeff-Aporta/is-webcomponents';
+const GH_RAW = `https://raw.githubusercontent.com/${REPO_GITHUB}/main`;
+const GH_BLOB = `https://github.com/${REPO_GITHUB}/blob/main`;
 const CDN_SKILL = `${GH_RAW}/skills/is-cdn-install/SKILL.md`;
-const KIT_SKILL = `${GH_RAW}/skills/iswc-root/SKILL.md`;
+const KIT_SKILL = `${GH_RAW}/skills/iswc-base/SKILL.md`;
 // Consolidación 2026-09-07: src/components/LLM.md y src/cdn/LLM.md eliminados.
 // El catálogo global vive en specs/componentes.md; el doc del loader en
 // src/cdn/loader.md (sin cambio).
@@ -684,7 +686,7 @@ console.log(`  ${'build/'.padEnd(18)} ts vendor (hash + bundle)`);
 // su `deno.json` (specs/cdn.md §Alias). El SHA es el del build; `pin-update` lo mueve después.
 await writeFile(
   join(dist, 'importmap.json'),
-  JSON.stringify({ imports: { [ALIAS_KIT]: `https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@${shaDelBuild()}/dist/cdn/` } }, null, 2) + '\n',
+  JSON.stringify({ imports: { [ALIAS_KIT]: `https://cdn.jsdelivr.net/gh/${REPO_GITHUB}@${shaDelBuild()}/dist/cdn/` } }, null, 2) + '\n',
   'utf8',
 );
 console.log(`  ${'importmap.json'.padEnd(18)} alias ${ALIAS_KIT} → dist/cdn/@<sha>`);

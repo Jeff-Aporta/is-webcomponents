@@ -1,4 +1,4 @@
-# Reporte F6 — Refactor ISWC iswc-root (2026-09-08)
+# Reporte F6 — Refactor ISWC iswc-base (2026-09-08)
 
 > **Fecha:** 2026-09-08
 > **Sesión:** admin-is-dsh / agent-teams `iswc-full-refactor`
@@ -14,7 +14,7 @@
 | 3. `deno task build` | ✅ PASS dist/cdn 212 components |
 | 4. `python -B -m pytest tests/` (motor) | ✅ 908 passed, 1 skipped, 1 xfailed |
 | 5. `auditor.py audit --sin-deep` | ✅ 0 hallazgos canónicos H1-H10 |
-| 6. `auditor.py fast iswc-root` | ✅ 0 categorías de perfil-violation |
+| 6. `auditor.py fast iswc-base` | ✅ 0 categorías de perfil-violation |
 
 **Métricas de hallazgos:**
 
@@ -32,8 +32,8 @@
 
 | Repo | Commit | Descripción |
 |---|---|---|
-| iswc-root | `74fa28a598` | fix(iswc): cerrar H1-H4 PREF-IMPORT-TYPE + B1-B2 S-PUERTO + documentar H5-H10 (8 files, +193 -8) |
-| motor | `d375e47` | feat(motor): asignar puerto 8801 a iswc-root (S-PUERTO-SIN-ASIGNAR) |
+| iswc-base | `74fa28a598` | fix(iswc): cerrar H1-H4 PREF-IMPORT-TYPE + B1-B2 S-PUERTO + documentar H5-H10 (8 files, +193 -8) |
+| motor | `d375e47` | feat(motor): asignar puerto 8801 a iswc-base (S-PUERTO-SIN-ASIGNAR) |
 | motor | `4a11ac1` | feat(motor): S-TIPOS-FOLDER respeta tipos referenciados desde .d.ts (perfil ISWC kit) |
 | motor | `23cb9f7` | fix(motor): S-TIPOS-FOLDER usa kit_de awareness (no d.ts-reference) + perfil-proyectos.json |
 
@@ -114,7 +114,7 @@ python -B -m pytest tests/
 
 ---
 
-## Gate 5 — `auditor.py audit iswc-root --sin-deep`
+## Gate 5 — `auditor.py audit iswc-base --sin-deep`
 
 ```bash
 python -B auditor.py audit <repo> \
@@ -137,7 +137,7 @@ python -B auditor.py audit <repo> \
 
 ---
 
-## Gate 6 — `auditor.py fast iswc-root`
+## Gate 6 — `auditor.py fast iswc-base`
 
 ```bash
 python -B auditor.py fast <repo>
@@ -173,7 +173,7 @@ NO bloqueantes del perfil ISWC.
 
 ## Cambios técnicos realizados
 
-### iswc-root (rama `feature/limpieza-docs`)
+### iswc-base (rama `feature/limpieza-docs`)
 
 1. **`src/utils/testing/e2e/05-cobertura-total.test.ts`** (H1)
    - Separado `import { chromium }` (valor) de `import type { Browser, Page }` (tipos).
@@ -208,10 +208,10 @@ NO bloqueantes del perfil ISWC.
    - Nueva regex `_RE_MD_SESION` para `WIP-*.md` / `HANDOFF-*.md` / `EXEC-PLAN-*.md`.
 
 10. **`motor/perfil-puertos.json`** (B1)
-    - `iswc-root: {server: 8801, testing: null}`.
+    - `iswc-base: {server: 8801, testing: null}`.
 
 11. **`motor/perfil-proyectos.json`** (NUEVO entry)
-    - `iswc-root` registrado como `iswc/kit`.
+    - `iswc-base` registrado como `iswc/kit`.
 
 12. **`motor/tests/test_tipos_kit_aware.py`** (NUEVO, 9 tests)
 13. **`motor/tests/test_fast_misplaced_docs.py`** (NUEVO, 10 tests)
@@ -227,7 +227,7 @@ NO bloqueantes del perfil ISWC.
 
 ## Referencias
 
-- WIP inicial: `Personal/apps/iswc-root/WIP-2026-09-07-profile-iswc.md`
-- Plan refactor: `Personal/apps/iswc-root/specs/iswc-refactor-plan.md`
-- Handoff v3: `Personal/apps/iswc-root/HANDOFF-2026-09-07-v3.md`
-- Reporte F6 (este archivo): `Personal/apps/iswc-root/specs/iswc-refactor-f6.md`
+- WIP inicial: `Personal/apps/iswc-base/WIP-2026-09-07-profile-iswc.md`
+- Plan refactor: `Personal/apps/iswc-base/specs/iswc-refactor-plan.md`
+- Handoff v3: `Personal/apps/iswc-base/HANDOFF-2026-09-07-v3.md`
+- Reporte F6 (este archivo): `Personal/apps/iswc-base/specs/iswc-refactor-f6.md`

@@ -53,7 +53,7 @@ define('__PREFIJO__-x', __CLASE__X);
 - `src/js/kit-tags.ts`: en `APP_TAGS` (transversal) o en `VIEW_TAGS.<vista>`. Si usa un `iswc-*` nuevo, añádelo a `KIT_TAGS`.
 - Barril: `import('./__PREFIJO__-x.js')` en el `all.ts` de su carpeta (hijos antes que el shell).
 - Galería: su línea en `view/demo/manifest.json`, con demo y playground (`controls`); el guardián de demos falla si falta.
-- ¿Es general (sin dominio de la app)? Marca en su `.json`: `"reuso": { "candidato": "iswc-root", "motivo": "…", "propuesta": "iswc-…" }`.
+- ¿Es general (sin dominio de la app)? Marca en su `.json`: `"reuso": { "candidato": "iswc-base", "motivo": "…", "propuesta": "iswc-…" }`.
 
 ## 6. Cierre
 

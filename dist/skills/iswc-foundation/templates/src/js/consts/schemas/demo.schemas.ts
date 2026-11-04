@@ -27,11 +27,11 @@ export const BloqueDemoSchema = z.object({
 export type BloqueDemo = z.infer<typeof BloqueDemoSchema>;
 
 /**
- * Marcador de candidato a iswc-root: componente general de la app (sin dominio) que se evalúa
+ * Marcador de candidato a iswc-base: componente general de la app (sin dominio) que se evalúa
  * periódicamente para subirlo al kit. Misma forma que `ReusoCandidatoSchema` del kit.
  */
 export const ReusoDemoSchema = z.object({
-  candidato: z.literal('iswc-root'),
+  candidato: z.literal('iswc-base'),
   motivo: z.string().trim().min(10),
   propuesta: z.string().regex(/^iswc-[a-z0-9]+(?:-[a-z0-9]+)*$/).optional(),
   cubre: z.string().regex(/^iswc-[a-z0-9]+(?:-[a-z0-9]+)*$/).optional(),

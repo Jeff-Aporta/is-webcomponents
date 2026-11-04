@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Editor de código · &lt;iswc-code&gt; · iswc-root</title>
+<title>Editor de código · &lt;iswc-code&gt; · iswc-base</title>
 <meta name="description" content="Editor de código nativo (sin CodeMirror) con highlighting, line numbers, marks, format, code2json/json2code, modo readonly/editable, dark/light." />
 <style>
   html, body { margin: 0; padding: 0; height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
@@ -61,7 +61,7 @@
       '  return `Hello, ${name}!`;',
       '}',
       '',
-      'console.log(greet("iswc-root"));',
+      'console.log(greet("iswc-base"));',
     ].join('\n'),
     css: [
       '/* estilos del propio editor */',
@@ -156,7 +156,7 @@
     ].join('\n'),
     json: [
       '{',
-      '  "name": "iswc-root",',
+      '  "name": "iswc-base",',
       '  "version": "1.0.0",',
       '  "kind": "code-editor"',
       '}',

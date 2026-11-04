@@ -35,7 +35,7 @@ tests.push({
     await waitReady(page, 'data-prefs-clear-ready');
     // Sembrar una key en el root esperado.
     await page.evaluate(() => {
-      localStorage.setItem('iswc-root:__test__', JSON.stringify({ foo: 1 }));
+      localStorage.setItem('iswc-base:__test__', JSON.stringify({ foo: 1 }));
     });
     const peek = await page.evaluate(() => {
       const silent = document.getElementById('silent');

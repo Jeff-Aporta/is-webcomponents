@@ -5,7 +5,7 @@
 // en `localStorage` y lo restaura al hacer F5:
 //
 //   1. Al marcar una sección como activa (vía click en el TOC o scroll) se
-//      escribe `iswc-root['iswc-scrollspy'][storageKey].activeId` con
+//      escribe `iswc:root['iswc-scrollspy'][storageKey].activeId` con
 //      un `savedAt` reciente.
 //   2. F5 (page.reload) sobre la misma URL reposiciona el scroll dentro del
 //      `<iswc-main>` para que la sección guardada quede visible.

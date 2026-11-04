@@ -21,6 +21,9 @@ import { execFileSync } from 'node:child_process';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, '..');
 const TARGETS = join(ROOT, 'scripts', 'pin-targets');
+// Mismo valor que `REPO_GITHUB` (src/core/cdn-ref.ts): nombre real del repo en GitHub hasta que se renombre a iswc-base.
+const REPO_GITHUB = 'Jeff-Aporta/is-webcomponents';
+const REPO_NOMBRE = REPO_GITHUB.split('/')[1];
 
 const args = process.argv.slice(2);
 const dry = args.includes('--dry-run');
@@ -127,8 +130,8 @@ function patchFile(kind, file) {
     );
   } else if (kind === 'cdn_url') {
     text = text.replace(
-      /(?:iswc-root|is-webcomponents)@[0-9a-fA-F]{7,40}/gi,
-      `iswc-root@${SHA}`,
+      /(?:iswc-base|is-webcomponents|iswc-root)@[0-9a-fA-F]{7,40}/gi,
+      `${REPO_NOMBRE}@${SHA}`,
     );
   } else {
     console.error('modo desconocido:', kind);

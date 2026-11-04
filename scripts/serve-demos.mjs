@@ -71,6 +71,6 @@ createServer(async (req, res) => {
   });
   createReadStream(file).pipe(res);
 }).listen(PORT, () => {
-  console.log(`Demos de iswc-root en http://localhost:${PORT}/ (raíz ${ROOT})`);
+  console.log(`Demos de iswc-base en http://localhost:${PORT}/ (raíz ${ROOT})`);
   console.log(`  http://localhost:${PORT}/demos/diagramas/ER/index.html`);
 });

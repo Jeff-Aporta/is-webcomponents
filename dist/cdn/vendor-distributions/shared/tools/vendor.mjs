@@ -33,7 +33,7 @@ import { execFileSync } from "node:child_process";
 import process from "node:process";
 import { pathToFileURL } from "node:url";
 function opciones(o = {}) {
-  const repo = String(o.repo || "Jeff-Aporta/is-webcomponents");
+  const repo = String(o.repo || REPO_GITHUB);
   const nombre = repo.split("/")[1];
   const lista = (v, def) => v ? (Array.isArray(v) ? v : String(v).split(",")).map((s) => s.trim()).filter(Boolean) : def;
   return {
@@ -266,11 +266,13 @@ function esPrincipal() {
     return false;
   }
 }
-var ALIAS, RAICES_DEFAULT, ALIAS_KIT, SALTAR_DEFAULT, EXT, ONLINE, CABECERA_VENDOR, SHA, auth, esc, log, urlAlias;
+var REPO_GITHUB, NOMBRES_REPO, ALIAS, RAICES_DEFAULT, ALIAS_KIT, SALTAR_DEFAULT, EXT, ONLINE, CABECERA_VENDOR, SHA, auth, esc, log, urlAlias;
 var init_pin_update = __esm({
   async "src/vendor-distributions/shared/tools/pin-update.mjs"() {
     "use strict";
-    ALIAS = { "is-webcomponents": ["iswc-root"], "iswc-root": ["is-webcomponents"] };
+    REPO_GITHUB = "Jeff-Aporta/is-webcomponents";
+    NOMBRES_REPO = ["iswc-base", "is-webcomponents", "iswc-root"];
+    ALIAS = Object.fromEntries(NOMBRES_REPO.map((n) => [n, NOMBRES_REPO.filter((o) => o !== n)]));
     RAICES_DEFAULT = ["index.html", "sw.js", "staticwebapp.config.json", "manifest.json", "deno.json", "src", "view", "demo", "public"];
     ALIAS_KIT = "@jeff-aporta/iswc-base/";
     SALTAR_DEFAULT = ["node_modules", "vendor", "dist", ".tmp-scss", ".git"];
@@ -853,7 +855,7 @@ function inventariar(raiz, archivos2, repo) {
   const vendorizados = [];
   const pines = /* @__PURE__ */ new Map();
   const nombre = repo.split("/")[1];
-  const rePin = new RegExp(`(?:${nombre}|iswc-root|is-webcomponents)@([0-9a-f]{40})`, "g");
+  const rePin = new RegExp(`(?:${nombre}|iswc-base|is-webcomponents|iswc-root)@([0-9a-f]{40})`, "g");
   for (const h of archivos2) {
     let t;
     try {

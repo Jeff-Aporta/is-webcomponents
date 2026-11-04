@@ -1,7 +1,7 @@
 ---
 name: iswc-foundation
 description: >-
-  Estándar de creación y mantenimiento de APPS sobre el kit iswc-root (el «create-react-app» de
+  Estándar de creación y mantenimiento de APPS sobre el kit iswc-base (el «create-react-app» de
   iswc, vanilla + web components + Deno). Usar al crear una app nueva (create-iswc-app), al añadir
   componentes, vistas o demos a una app iswc, al escribir sus specs y pruebas WHAT, al actualizar
   pines o vendor del kit, al configurar build, gate de pruebas (Stagehand) o sync a entregable, o al
@@ -12,7 +12,7 @@ description: >-
 
 # iswc-foundation — el estándar de las apps iswc
 
-Una app iswc es una app estática (HTML + módulos ES servidos tal cual) hecha con el kit **iswc-root**
+Una app iswc es una app estática (HTML + módulos ES servidos tal cual) hecha con el kit **iswc-base**
 (`iswc-*`) y componentes propios `<prefijo>-*`, en **Deno**, sin framework ni bundler en runtime.
 Este estándar es el que siguen todas (ISW-TestPatyIA y las nuevas) para que se mantengan,
 actualicen y escalen igual, por cualquier agente en cualquier sesión.
@@ -43,7 +43,7 @@ pin. Opciones: `--prefijo`, `--titulo`, `--puerto`, `--sha`, `--repo`. Detalle: 
 | 1 | **Deno** (`deno.json` con `imports` fijados); vanilla + Web Components. Cero React/MUI/JSX/Babel/bundler en runtime |
 | 2 | **Kit por CDN pineado**: un único SHA de 40 hex en toda la app. Nunca `@main`, `@latest`, SHA corto, GitHub Pages ni ramas en raw |
 | 3 | **Protocolo de pines del kit** (`deno task pin` / `pin --nuevo=<sha40\|ultimo>` / `vendor:iswc`): vendor = pin |
-| 4 | **UI con `iswc-*`** y colores solo con tokens `--iswc-*`; no reinventar lo que el [catálogo](../iswc-root/catalog.md) trae |
+| 4 | **UI con `iswc-*`** y colores solo con tokens `--iswc-*`; no reinventar lo que el [catálogo](../iswc-base/catalog.md) trae |
 | 5 | **Componente = 4 archivos hermanos**: `.ts` + `.scss` + `.md` (6 secciones) + `.json` (`iswc-preview/v1`). Lo verifica `tests/vistas/contrato-componentes.test.ts`, que se apoya en `kit-tags.ts`; el kit aplica la misma regla en su auditoría |
 | 6 | **Registro único** en `src/js/kit-tags.ts` (`KIT_TAGS`, `APP_TAGS`, `VIEW_TAGS`) → registrador `L.registerApp` |
 | 7 | **Vista = `view/<v>/`** con `index.html` aislado, `README.md`, `demo/`, `components/`, `utils/`; un shell por vista |
@@ -55,7 +55,7 @@ pin. Opciones: `--prefijo`, `--titulo`, `--puerto`, `--sha`, `--repo`. Detalle: 
 | 13 | **Íconos: localStorage → web publicada → API (sin mapa)**: `assets/dl.js` (rutas y `extra`) → `assets/iconify/<set>/<n>.svg` con `deno task icons` (dentro de `build`); `<html data-icons>` = `deno.json` → `iswc.host` + `assets/iconify/` (lo declara el registrador; `initApp({ icons: { host } })`); lo que falta sale de la API con el aviso `[iswc-icon] falta en local: <id>`; ids `set:nombre` literales |
 | 14 | **Toda estructura es un componente**: toda pieza de UI, por pequeña que sea (figura, fila de metadatos, pie, paginador, caja vacía, fila de acciones), es un web component: `iswc-*` del catálogo o `<prefijo>-*` propio. Prohibido armar HTML suelto en renders, vistas, `index.html` o visores (`innerHTML`/plantillas con estructura, `createElement('div')` que compone UI); solo cabe el markup interno mínimo dentro del shadow de un componente |
 | 15 | **Todo componente tiene demo con playground**: su `.json` `iswc-preview/v1` trae ≥1 bloque `demo` con `controls` y está en la galería de la app (`view/demo/manifest.json`); un `iswc-*` además en la galería del kit (`src/manifest.ts`). Un guardián falla si un tag registrado no tiene demo |
-| 16 | **Candidatos a iswc-root**: un componente de app sin dominio (útil a otras apps) se marca en su `.json` con `"reuso": { "candidato": "iswc-root", "motivo": "…", "propuesta": "iswc-…" }` (validado por `ReusoCandidatoSchema`). Se revisan periódicamente y se suben al kit; el kit es el sistema de reuso entre apps |
+| 16 | **Candidatos a iswc-base**: un componente de app sin dominio (útil a otras apps) se marca en su `.json` con `"reuso": { "candidato": "iswc-base", "motivo": "…", "propuesta": "iswc-…" }` (validado por `ReusoCandidatoSchema`). Se revisan periódicamente y se suben al kit; el kit es el sistema de reuso entre apps |
 
 ## 3. Mapa de referencias
 
@@ -89,7 +89,7 @@ pin. Opciones: `--prefijo`, `--titulo`, `--puerto`, `--sha`, `--repo`. Detalle: 
 
 ## 5. Mantener el estándar
 
-El estándar vive aquí (`iswc-root/skills/iswc-foundation`). Las plantillas (`templates/`) son la
+El estándar vive aquí (`iswc-base/skills/iswc-foundation`). Las plantillas (`templates/`) son la
 verdad ejecutable: lo que dicen las referencias, las plantillas lo cumplen y `create-iswc-app` lo
 siembra. Al cambiar una regla: plantilla + referencia en el mismo commit, `deno run -A
 skills/iswc-foundation/tools/manifest.ts` y regenerar una app de prueba con `deno task test:all` en
@@ -110,7 +110,7 @@ deno run -A --reload=https://raw.githubusercontent.com/Jeff-Aporta/is-webcompone
 ```
 
 - **Qué hace y cuándo**: crea una app iswc nueva con el estándar (shell, registro de tags, base de componentes, Zod, SCSS, build, galería, vista `hola`, gate de pruebas, sync, specs WHAT). Al fundar un proyecto front; para alinear uno existente ver 09-alinear-app.
-- **Entradas**: argumento `<carpeta>` (se crea); flags de arriba (`--sha` default: el pin publicado del kit, `--repo` default `Jeff-Aporta/iswc-root`, `--host` default GitHub Pages del dueño). Lee `templates/manifest.json` y `templates/**` del kit por HTTPS; no lee nada del consumidor.
+- **Entradas**: argumento `<carpeta>` (se crea); flags de arriba (`--sha` default: el pin publicado del kit, `--repo` default `Jeff-Aporta/is-webcomponents`, `--host` default GitHub Pages del dueño). Lee `templates/manifest.json` y `templates/**` del kit por HTTPS; no lee nada del consumidor.
 - **Escribe**: el árbol completo de la app bajo `<carpeta>` (sin `deno install`); deja la app lista para `deno install` + `deno task build`.
 - **Salida y errores típicos**: 0 ok · lanza (exit 1) si la carpeta existe y no está vacía, si `--sha` no es un sha40 o si una plantilla no se puede bajar (sin red). Siguiente paso: `deno install && deno task build && deno task test:all`.
 

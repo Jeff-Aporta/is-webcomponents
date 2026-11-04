@@ -64,7 +64,7 @@ Lecciones pagadas, agrupadas por tema. Cada fila: síntoma → regla/fix → gua
 
 | Lección | Regla | Guardián |
 |---|---|---|
-| Keys planas / `sessionStorage` / root `is-components` → fragmentado | Un solo `localStorage['iswc-root'][tag][storage-key]` vía `_shared/prefs.js`; opt-in | `prefs-contract` |
+| Keys planas / `sessionStorage` / root `is-components` → fragmentado | Un solo `localStorage['iswc:root'][tag][storage-key]` vía `_shared/prefs.js` (la vieja `iswc-root` se migra en `iswc-storage`); opt-in | `prefs-contract` |
 | Sidebar de columnas en template sin cablear | Cero lógica de UI en el shadow sin wire | — |
 
 ## Previews y galería
@@ -103,6 +103,7 @@ Lecciones pagadas, agrupadas por tema. Cada fila: síntoma → regla/fix → gua
 | Pin por SHA en jsDelivr → 403 "Package size exceeded" (>50 MB por iconos) | Usar `@main` | — |
 | `importOnce` hacía `caches.open` → `match` → `fetch` → `put` y luego `import()` → cada `.min.js` pedido dos veces en frío (105 `fetch` extra en la portada de Avatar) y un salto de red serializado por nivel (2026-11-04) | `importOnce` = dedupe por `jsDone` + `import()`, nada más; la caché HTTP (jsDelivr `immutable, max-age=1y`, `?v=` en orígenes mutables) cubre la revisita. Cache Storage queda solo para hojas (`sheet-cache`) | `cdn-loader` |
 | `new URL('core/', '…/dist/cdn')` sin barra final → `…/dist/core/is-base.min.css` 404 en Pages (2026-11-04) | Normalizar con barra antes de componer: `raizYCore` / `conBarra` de `cdn-ref` | `cdn-bases` |
+| Nombre de repo que nunca existió (`iswc-root`) en banners, docs y URLs → 404 en `raw.githubusercontent.com`/`github.com` y dos nombres para lo mismo (2026-11-04) | Un nombre: `iswc-base` en todo; el real del repo (`REPO_GITHUB`) solo dentro de URLs; storage legacy se deja y se migra en código | `nomenclatura` |
 | Galería en Pages forzaba jsDelivr@`__IS_BUILD_SHA__`; el SHA (`dd1bc805`) se reescribió en GitHub → galería muerta (2026-11-04) | Host de arranque jsDelivr@sha solo si el loader vino de jsDelivr/githack (`esOrigenCdn`); en Pages/local/`file:`/vendor, `self` y espejos de fallback | `cdn-mirrors` |
 
 ## Diagramas

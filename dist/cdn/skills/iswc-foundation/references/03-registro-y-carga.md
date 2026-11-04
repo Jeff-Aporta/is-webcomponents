@@ -23,7 +23,7 @@ export const tagsArranque = () => [...APP_TAGS, ...Object.values(VIEW_TAGS).flat
 ```html
 <script src="./dist/cdn/boot.js"></script>                         <!-- tema antes de pintar -->
 <link rel="stylesheet" href="./dist/cdn/styles/app.css">
-<script type="module" src="https://cdn.jsdelivr.net/gh/Jeff-Aporta/iswc-root@<sha40>/dist/cdn/core/loader.min.js"></script>
+<script type="module" src="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@<sha40>/dist/cdn/core/loader.min.js"></script>
 <script type="module" src="./dist/cdn/<p>Loader.min.js"></script>  <!-- registerApp: tag → URL?v= -->
 <script type="module">
   const L = globalThis.iswcLoader;

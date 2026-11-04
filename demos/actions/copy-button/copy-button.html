@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Demo: <iswc-copy-button> · iswc-root</title>
+  <title>Demo: <iswc-copy-button> · iswc-base</title>
   <meta name="description" content="Demo de <iswc-copy-button>: copia al portapapeles con feedback visual (éxito/error), tooltip configurable." />
   <style>
     html, body {
@@ -32,7 +32,7 @@
   <section>
     <h2>value directo</h2>
     <div class="row">
-      <iswc-copy-button title="npm install iswc-root" value="npm install iswc-root"></iswc-copy-button>
+      <iswc-copy-button title="npm install iswc-base" value="npm install iswc-base"></iswc-copy-button>
       <iswc-copy-button title="Copiar URL" value="https://github.com/" copy-label="Copiar URL" success-label="¡Copiado!" error-label="No se pudo copiar"></iswc-copy-button>
     </div>
   </section>
@@ -40,7 +40,7 @@
   <section>
     <h2>from (lee texto de otro elemento)</h2>
     <div class="row">
-      <code class="block" id="snippet">const is = require('iswc-root');</code>
+      <code class="block" id="snippet">const is = require('iswc-base');</code>
       <iswc-copy-button title="copy button" from="snippet"></iswc-copy-button>
     </div>
   </section>

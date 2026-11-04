@@ -18,7 +18,7 @@ const { test, lista } = coleccionPruebas({ categoria: 'how' });
 
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
-const pages = 'https://jeff-aporta.github.io/iswc-root';
+const pages = 'https://jeff-aporta.github.io/is-webcomponents';
 const robots = readFileSync(join(root, 'robots.txt'), 'utf8');
 const indexHtml = readFileSync(join(root, 'index.html'), 'utf8');
 

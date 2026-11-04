@@ -39,7 +39,7 @@ test('iswc-cdn-snippet pinta Skill simple (enlaces + ver), sin visor MD', async 
   assert.doesNotMatch(src, /iswc-md-editor|data-slot="llm-prompt"/);
   const prompt = await readFile(join(raiz, 'src/components/feedback/utils/llm-agent-prompt.ts'), 'utf8');
   const skillDocs = prompt.match(/export const SKILL_DOCS[\s\S]*?\];/)?.[0] || '';
-  assert.match(skillDocs, /skills\/iswc-root\/SKILL\.md/);
+  assert.match(skillDocs, /skills\/iswc-base\/SKILL\.md/);
   assert.equal((skillDocs.match(/label:\s*'/g) || []).length, 1, 'SKILL_DOCS debe tener un solo enlace general');
   assert.doesNotMatch(skillDocs, /is-cdn-install|PROMPT\.md|tools\//);
 });

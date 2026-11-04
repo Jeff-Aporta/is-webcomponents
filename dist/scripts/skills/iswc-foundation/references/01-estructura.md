@@ -19,7 +19,7 @@
 │   │   └── components/<p>/       ← componentes transversales (los usan varias vistas) + all.ts
 │   ├── styles/                   ← _tokens.scss, _mixins.scss, app.scss (solo light DOM)
 │   ├── utils/build.ts            ← build (ver 02)
-│   └── vendor/iswc-root/         ← tools del kit al SHA del pin (tools/, build/). NO se edita
+│   └── vendor/iswc-base/         ← tools del kit al SHA del pin (tools/, build/). NO se edita
 ├── view/
 │   ├── <vista>/                  ← index.html, README.md, demo/, components/, utils/ (ver nueva-vista)
 │   └── demo/                     ← galería: index.html, manifest.json, components/<p>-galeria.ts
@@ -51,6 +51,6 @@ Todas las apps comparten este árbol. Avatar y Jeff-Aporta son la referencia. Ca
 | Componente de varias vistas | `src/js/components/<p>/` | una vista |
 | Estilos de componente | `.scss` hermano | el `.ts` (`<style>`, constantes CSS) |
 | Estilos de página | `src/styles/app.scss` | — |
-| Código del kit | `src/vendor/iswc-root/` (vendorizado) | editado a mano |
+| Código del kit | `src/vendor/iswc-base/` (vendorizado) | editado a mano |
 
 El prefijo `<p>` es el de la app (`paty`, `docs`, `mia`…): minúsculas, sin guiones, igual en todos sus tags.

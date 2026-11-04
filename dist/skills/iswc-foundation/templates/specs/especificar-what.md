@@ -6,7 +6,7 @@ description: Cómo se escriben specs y pruebas en una app iswc (estándar común
 
 # Specs y pruebas WHAT (estándar iswc)
 
-Copia sembrada por `create-iswc-app` desde el kit (`iswc-root/skills/iswc-foundation`). Todas las
+Copia sembrada por `create-iswc-app` desde el kit (`iswc-base/skills/iswc-foundation`). Todas las
 apps iswc especifican y prueban igual, para que cualquier agente, en cualquier sesión, siga lo mismo.
 
 ## 1. Prioridad de redacción
@@ -53,7 +53,7 @@ Todas en `tests/<area>/*.test.ts` (áreas: `plataforma`, `componentes`, `vistas`
 archivo exporta su lista:
 
 ```ts
-import { definirPruebas } from '../../src/vendor/iswc-root/tools/pruebas.ts';
+import { definirPruebas } from '../../src/vendor/iswc-base/tools/pruebas.ts';
 export default definirPruebas([
   { nombre: 'bienvenida W-CAT-02 cuatro piezas del estándar', categoria: 'what', correr({ eq }) {
     eq('títulos', caracteristicas().map((c) => c.titulo), ['Componentes', 'Vistas', 'Tipos', 'Pruebas']);

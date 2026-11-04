@@ -55,7 +55,7 @@ test('dist/cdn/core/loader.min.js y loader.md existen; banner con docs', () => {
   assert.ok(code.length < 120_000, `loader.min.js demasiado grande (${code.length} B)`);
   assert.match(code, /iswcLoader/);
   // W52: loadCSSBase se elimino; el loader auto-carga is-base.min.css.
-  assert.match(code, /jsdelivr|Jeff-Aporta\/iswc-root/);
+  assert.match(code, /jsdelivr|Jeff-Aporta\/is-webcomponents/);
   assert.match(code, /"iswc-button"/);
   assert.match(code, /src\/cdn\/loader\.md|loader\.md/);
   // El build incrusta el SHA del commit sobre el que se compiló; al commitear el propio build, HEAD
@@ -70,10 +70,10 @@ test('dist/cdn/core/loader.min.js y loader.md existen; banner con docs', () => {
 
 test('fillHostTemplate sustituye {{sha}} y {{cdnUrl}}', () => {
   const host = fillHostTemplate('{{cdnUrl}}@{{sha}}/dist/cdn', {
-    cdnUrl: 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/iswc-root',
+    cdnUrl: 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents',
     sha: 'abc',
   });
-  assert.equal(host, 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/iswc-root@abc/dist/cdn');
+  assert.equal(host, 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@abc/dist/cdn');
   assert.equal(fillHostTemplate('{{otro}}', {}), '{{otro}}');
 });
 
@@ -158,9 +158,9 @@ test('fallback CDN: jsDelivr → githack → Pages + stickyBase', async () => {
   const { MIRRORS, fallbackBases } = await import('../../src/core/cdn-ref.ts');
   assert.deepEqual(MIRRORS.map((m) => m.id), ['jsdelivr', 'githack', 'pages'], 'MIRRORS: jsdelivr → githack → pages');
   const [jd, gh, pg] = fallbackBases('abc123');
-  assert.match(jd, /^https:\/\/cdn\.jsdelivr\.net\/gh\/Jeff-Aporta\/iswc-root@abc123\//);
-  assert.match(gh, /^https:\/\/raw\.githack\.com\/Jeff-Aporta\/iswc-root\/abc123\//);
-  assert.match(pg, /^https:\/\/jeff-aporta\.github\.io\/iswc-root\//);
+  assert.match(jd, /^https:\/\/cdn\.jsdelivr\.net\/gh\/Jeff-Aporta\/is-webcomponents@abc123\//);
+  assert.match(gh, /^https:\/\/raw\.githack\.com\/Jeff-Aporta\/is-webcomponents\/abc123\//);
+  assert.match(pg, /^https:\/\/jeff-aporta\.github\.io\/is-webcomponents\//);
   // Loader: cadena + sticky para no martillar espejo caído
   assert.match(code, /stickyBase/);
   assert.match(code, /rememberBase/);

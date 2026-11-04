@@ -11,7 +11,7 @@
 2. **Prioridad**: `[W-*]` primero; `[HW-*]` como guía con libertad; `[HS-*]` contrato exacto.
 3. **HOW STRONG obligatorios** (estándar iswc-foundation, no se relajan):
    - Deno; vanilla + Web Components (sin React/MUI/JSX/Babel ni bundler en runtime).
-   - Kit iswc-root por CDN pineado a un SHA de 40 hex; herramientas del kit vendorizadas al mismo SHA.
+   - Kit iswc-base por CDN pineado a un SHA de 40 hex; herramientas del kit vendorizadas al mismo SHA.
    - UI con `iswc-*` y tokens `--iswc-*`; estilos en SCSS.
    - Cada componente: `.ts` + `.scss` + `.md` (6 secciones) + `.json` (playground) + registro en
      `kit-tags.ts` y en la galería; cada vista con su `index.html`, `README.md` y demo.

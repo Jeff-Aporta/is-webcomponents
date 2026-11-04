@@ -15,16 +15,16 @@ const { test, lista } = coleccionPruebas({ categoria: 'how' });
 const raiz = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 
 // WHAT: la URL de Pages ya no está escrita literal en cdn-ref.ts (sale de
-// GH_REPO: el repo desde el que corre el módulo, o Jeff-Aporta/iswc-root por
+// GH_REPO: el repo desde el que corre el módulo, o Jeff-Aporta/is-webcomponents por
 // defecto). Se afirma sobre lo que devuelven las funciones exportadas.
 test('cdn-ref declara jsDelivr + GitHub Pages', async () => {
   const ref = await import('../../src/core/cdn-ref.ts');
   const ids = ref.MIRRORS.map((m) => m.id);
   assert.ok(ids.includes('jsdelivr') && ids.includes('pages'), `MIRRORS: ${ids}`);
-  assert.equal(ref.pagesBase(), 'https://jeff-aporta.github.io/iswc-root/dist/cdn');
+  assert.equal(ref.pagesBase(), 'https://jeff-aporta.github.io/is-webcomponents/dist/cdn');
   const bases = ref.fallbackBases('abc123');
-  assert.equal(bases[0], 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/iswc-root@abc123/dist/cdn');
-  assert.equal(bases.at(-1), 'https://jeff-aporta.github.io/iswc-root/dist/cdn');
+  assert.equal(bases[0], 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@abc123/dist/cdn');
+  assert.equal(bases.at(-1), 'https://jeff-aporta.github.io/is-webcomponents/dist/cdn');
 });
 
 // WHAT (D8): el host de arranque solo es jsDelivr@sha si el loader vino de jsDelivr o githack.
@@ -32,8 +32,8 @@ test('cdn-ref declara jsDelivr + GitHub Pages', async () => {
 // SHA quemado exista en GitHub (pasó con `dd1bc805`, reescrito → galería muerta).
 test('esOrigenCdn: jsDelivr y githack sí; Pages, localhost, file: y otros no', async () => {
   const { esOrigenCdn } = await import('../../src/core/cdn-ref.ts');
-  assert.equal(esOrigenCdn('https://cdn.jsdelivr.net/gh/Jeff-Aporta/iswc-root@abc1234/dist/cdn/core/loader.min.js'), true);
-  assert.equal(esOrigenCdn('https://raw.githack.com/Jeff-Aporta/iswc-root/abc1234/dist/cdn/core/loader.min.js'), true);
+  assert.equal(esOrigenCdn('https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@abc1234/dist/cdn/core/loader.min.js'), true);
+  assert.equal(esOrigenCdn('https://raw.githack.com/Jeff-Aporta/is-webcomponents/abc1234/dist/cdn/core/loader.min.js'), true);
   assert.equal(esOrigenCdn('https://jeff-aporta.github.io/is-webcomponents/dist/cdn/core/loader.min.js'), false);
   assert.equal(esOrigenCdn('http://localhost:4305/dist/cdn/core/loader.min.js'), false);
   assert.equal(esOrigenCdn('file:///D:/app/vendor/iswc/core/loader.min.js'), false);

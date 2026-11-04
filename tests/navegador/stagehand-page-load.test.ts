@@ -3,7 +3,7 @@
 // Por qué este test existe:
 //
 //   W54/W55/W56 — el usuario reportó que al abrir
-//   `http://127.0.0.1:5505/apps/iswc-root/index.html` la página se
+//   `http://127.0.0.1:5505/apps/iswc-base/index.html` la página se
 //   quedaba en blanco. El network tab mostraba:
 //
 //     - loader.min.js                          304 (14 ms)
@@ -39,7 +39,7 @@
 //
 //   Si quieres reproducir el bug original, lanza VS Code Live Server
 //   sobre `<workspace>/Personal` apuntando a
-//   `apps/iswc-root/index.html` y corre este test — el request a
+//   `apps/iswc-base/index.html` y corre este test — el request a
 //   `dist/cdn/preview/doc-demo.min.js` quedará 404 (Live Server no
 //   transpila TS) y el test fallará con un mensaje claro.
 

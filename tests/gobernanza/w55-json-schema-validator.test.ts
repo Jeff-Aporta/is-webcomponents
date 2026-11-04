@@ -248,12 +248,12 @@ test('W55: ComponentJsonSchema acepta campos extra en la raíz (passthrough)', (
   });
   assert.equal(ok.success, true, JSON.stringify(ok));
 });
-test('W55: reuso acepta el marcador de candidato a iswc-root', () => {
+test('W55: reuso acepta el marcador de candidato a iswc-base', () => {
   const ok = ComponentJsonSchema.safeParse({
     $schema: 'iswc-preview/v1',
     tag: 'paty-pagination',
     sections: [],
-    reuso: { candidato: 'iswc-root', motivo: 'Paginador genérico sin datos de dominio', propuesta: 'iswc-pagination' },
+    reuso: { candidato: 'iswc-base', motivo: 'Paginador genérico sin datos de dominio', propuesta: 'iswc-pagination' },
   });
   assert.equal(ok.success, true, JSON.stringify(ok));
 });
@@ -262,9 +262,9 @@ test('W55: reuso rechaza destino distinto, motivo vacío o campos desconocidos',
   const base = { $schema: 'iswc-preview/v1', tag: 'paty-x', sections: [] };
   for (const reuso of [
     { candidato: 'otra-lib', motivo: 'Motivo suficientemente largo' },
-    { candidato: 'iswc-root', motivo: '' },
-    { candidato: 'iswc-root', motivo: 'Motivo suficientemente largo', propuesta: 'paty-x' },
-    { candidato: 'iswc-root', motivo: 'Motivo suficientemente largo', extra: true },
+    { candidato: 'iswc-base', motivo: '' },
+    { candidato: 'iswc-base', motivo: 'Motivo suficientemente largo', propuesta: 'paty-x' },
+    { candidato: 'iswc-base', motivo: 'Motivo suficientemente largo', extra: true },
   ]) {
     assert.equal(ComponentJsonSchema.safeParse({ ...base, reuso }).success, false, JSON.stringify(reuso));
   }

@@ -25,7 +25,7 @@ test('migrados: .ts + .scss + .md + .json hermanos', () => {
 test('migrados: registrados en el manifest, el catálogo de previews y la skill', () => {
   const manifest = readFileSync(join(RAIZ, 'src', 'manifest.ts'), 'utf8');
   const catalogo = readFileSync(join(RAIZ, 'src', 'previews', 'catalog.ts'), 'utf8');
-  const skill = readFileSync(join(RAIZ, 'skills', 'iswc-root', 'SKILL.md'), 'utf8');
+  const skill = readFileSync(join(RAIZ, 'skills', 'iswc-base', 'SKILL.md'), 'utf8');
   for (const c of COMPONENTES) {
     const tag = tagDe(c);
     assert.ok(manifest.includes(`tag: '${tag}'`), `${tag} en manifest.ts`);

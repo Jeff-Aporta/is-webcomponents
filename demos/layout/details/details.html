@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Demo de <iswc-details> · iswc-root</title>
+<title>Demo de <iswc-details> · iswc-base</title>
 <meta name="description" content="Disclosure colapsable con summary + contenido. show()/hide()/toggle(), atributo open, name para accordion, eventos iswc-show/iswc-after-show/iswc-hide/iswc-after-hide." />
 <style>
   html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
@@ -27,7 +27,7 @@
 
   // (1) Details básico: atributo summary + slot content.
   const d1 = document.createElement('iswc-details');
-  d1.setAttribute('summary', '¿Qué es iswc-root?');
+  d1.setAttribute('summary', '¿Qué es iswc-base?');
   d1.id = 'd1';
   d1.innerHTML = '<p>Una librería de Web Components vanilla sin dependencias, con shell de demo y galería.</p>';
   document.getElementById('host-1').appendChild(d1);

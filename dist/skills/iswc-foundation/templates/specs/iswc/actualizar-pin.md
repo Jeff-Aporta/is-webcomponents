@@ -1,6 +1,6 @@
 ---
 name: actualizar-pin
-description: Subir el kit iswc-root a otro SHA en una app iswc (pin congelado + vendor + gate). Úsala para alinear la app con la última versión del kit, periódicamente.
+description: Subir el kit iswc-base a otro SHA en una app iswc (pin congelado + vendor + gate). Úsala para alinear la app con la última versión del kit, periódicamente.
 ---
 <!-- @vendor 2026-10-13T14:13:48.240Z Jeff-Aporta/is-webcomponents@main skills/iswc-foundation/templates/specs/iswc/actualizar-pin.md -->
 
@@ -17,8 +17,8 @@ deno task vendor:iswc                           # tools del kit al MISMO SHA del
 deno task build && deno task test:all           # el gate decide si el pin nuevo se queda
 ```
 
-- `pin-update.mjs` reconoce el nombre anterior del repo (`is-webcomponents@…`) y lo reescribe a
-  `iswc-root@…` en el mismo paso.
+- `pin-update.mjs` reconoce los otros nombres del kit en un pin (`iswc-base@…`, el canónico, y el histórico) y los
+  reescribe al nombre real del repo en GitHub (`is-webcomponents@…`, hasta que se renombre) en el mismo paso.
 - El pin canónico es `src/js/iswc.ts`; los HTML lo repiten y el inventario los audita.
 - `deno.json` (`@iswc/component-schemas`, `@iswc/loader-schemas`) también va por SHA: lo cubre el inventario.
 - Si el gate queda en rojo con el pin nuevo: se arregla la app o se vuelve al SHA anterior con

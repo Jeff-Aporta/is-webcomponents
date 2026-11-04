@@ -28,7 +28,7 @@ El kit se consume desde jsDelivr/GitHub Pages como módulos por tag. La galería
 
 ## S-C4 Publicación
 
-- Pages: `jeff-aporta.github.io/iswc-root/`
+- Pages: `jeff-aporta.github.io/is-webcomponents/`
 - jsDelivr: `@main` (pin por SHA puede fallar >50 MB por iconos en dist).
 - `robots.txt` en raíz. Sin `sitemap.xml` ni HTML SEO en `docs/`: la galería es
   una SPA de una sola URL y esas 178 páginas no se alcanzaban (31-ago-2026).
@@ -66,7 +66,13 @@ Iconos: `dist/assets/icons/` (fuera de `dist/cdn/`; única copia versionada). **
 </script>
 ```
 
-Skills: `npx skills add Jeff-Aporta/iswc-root -s is-cdn-install` · `-s iswc-root`.
+Skills: `npx skills add Jeff-Aporta/is-webcomponents -s is-cdn-install` · `-s iswc-base`.
+
+### Nombre del kit y del repo
+
+- El kit se llama **`iswc-base`** (alias de imports, prosa, rutas, `skills/iswc-base/`).
+- Las URLs del repo usan el nombre REAL en GitHub, `REPO_GITHUB = 'Jeff-Aporta/is-webcomponents'` (`src/core/cdn-ref.ts`; el build, `sync-pins` y `pin-update` usan el mismo valor). Cambiará a `iswc-base` cuando se renombre, coordinado con las apps.
+- `repoDeUrl` (cdn-ref) toma el repo de la URL desde la que corre el módulo; `shaFromImportUrl` (loader) y `pin-update` (`ALIAS`) reconocen los tres nombres (`iswc-base`, el real y el histórico) y los pines se reescriben al real.
 
 ### Alias `@jeff-aporta/iswc-base`
 

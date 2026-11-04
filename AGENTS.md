@@ -15,9 +15,12 @@
 Galería de Web Components vanilla de Insoft (`iswc-*`). Todo escrito a mano con
 Custom Elements + Shadow DOM, sin frameworks, empaquetado con esbuild.
 
-- Demo publicada: <https://jeff-aporta.github.io/iswc-root/>
-- Repo: `Jeff-Aporta/iswc-root`
-- Sirve por CDN jsDelivr: `https://cdn.jsdelivr.net/gh/Jeff-Aporta/iswc-root@3c722aca9579cb2f764c026c6385685c1603e789/...`
+- Demo publicada: <https://jeff-aporta.github.io/is-webcomponents/>
+- Nombre del kit: **`iswc-base`** en prosa, rutas, carpetas y nombres. El repo de GitHub sigue con su nombre
+  actual solo dentro de las URLs (y en `REPO_GITHUB` de `src/core/cdn-ref.ts`) hasta que se renombre; el guardián
+  `tests/gobernanza/nomenclatura.test.ts` lo vigila y `scripts/codemods/nomenclatura-iswc-base.mjs` lo corrige.
+- Repo: `Jeff-Aporta/is-webcomponents`
+- Sirve por CDN jsDelivr: `https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@3c722aca9579cb2f764c026c6385685c1603e789/...`
 
 ## 2. Estructura — no inventar, sigue esto
 
@@ -89,7 +92,7 @@ deno install
 deno task dev
 
 # levantar dev server en modo Live Server (puerto 5505, ruta /apps/<repo>/)
-# Necesario si el navegador apunta a `http://127.0.0.1:5505/apps/iswc-root/...`
+# Necesario si el navegador apunta a `http://127.0.0.1:5505/apps/iswc-base/...`
 # y NO usas `deno task dev`.
 SERVE_ROOT=<workspace>/Personal deno run -A --no-check scripts/serve.mjs 5505
 

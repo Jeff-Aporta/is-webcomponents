@@ -1,12 +1,12 @@
 # Plan: Editor visual editable para `<iswc-er-diagram>` alineado con archify
 
-> Documento vivo del laboratorio de diagramas editables en `iswc-root`.
+> Documento vivo del laboratorio de diagramas editables en `iswc-base`.
 > Parte del objetivo mayor: hacer todo lo relacionado a diagramas editable y
 > similar a archify.
 
 ## 0. Contexto y motivación
 
-`iswc-root` ya tiene una librería amplia de `<is-*>` web components para
+`iswc-base` ya tiene una librería amplia de `<is-*>` web components para
 diagramas (ER, flowchart, sequence, etc.). Cada uno recibe un JSON estático y
 produce SVG determinista. La limitación es que **no son editables desde la UI**:
 posiciones, aristas, estilos y textos solo se cambian tocando el JSON.
@@ -307,7 +307,7 @@ JSON que el componente consume. Esta es la clave del determinismo:
 ## 4. Estructura de archivos (propuesta)
 
 ```
-iswc-root/
+iswc-base/
 ├── src/
 │   └── components/
 │       └── diagrams/

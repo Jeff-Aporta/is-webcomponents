@@ -14,7 +14,8 @@
   --iswc-drawer-show-duration: 220ms;
   --iswc-drawer-hide-duration: 180ms;
 
-  --_radius: calc(var(--iswc-radius));
+  /* Esquinas rectas por defecto: el cajón es una hoja que toca el borde; `--iswc-drawer-radius` las redondea si una app lo pide. */
+  --_radius: var(--iswc-drawer-radius, 0);
   --_shadow: 0 -.5em 1.5em rgba(0, 0, 0, 0.18), .5em 0 1.5em rgba(0, 0, 0, 0.18);
 
   position: fixed;
@@ -132,4 +133,12 @@
   color: var(--iswc-text-muted);
 
   &:hover { color: var(--iswc-text); }
+}
+
+/* Con movimiento reducido el deslizamiento y el velo siguen, pero breves: nunca a cero, para que la entrada y la salida se vean. */
+@media (prefers-reduced-motion: reduce) {
+  :host {
+    --iswc-drawer-show-duration: 90ms;
+    --iswc-drawer-hide-duration: 70ms;
+  }
 }

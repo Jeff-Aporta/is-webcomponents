@@ -6,7 +6,7 @@
 //   deno task test:health [--solo=a,b] [--categoria=what|how] [--sin-cooldown]
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { codigoSalida, correrCarpeta, opcionesDeArgv, resumirReporte } from '../../src/vendor/iswc-root/tools/pruebas.ts';
+import { codigoSalida, correrCarpeta, opcionesDeArgv, resumirReporte } from '../../src/vendor/iswc-base/tools/pruebas.ts';
 
 const raiz = Deno.cwd();
 // Cada archivo en su proceso: varios instalan DOM, localStorage o fetch globales.

@@ -6,7 +6,9 @@ import { join, relative } from "node:path";
 import { execFileSync } from "node:child_process";
 import process from "node:process";
 import { pathToFileURL } from "node:url";
-var ALIAS = { "is-webcomponents": ["iswc-root"], "iswc-root": ["is-webcomponents"] };
+var REPO_GITHUB = "Jeff-Aporta/is-webcomponents";
+var NOMBRES_REPO = ["iswc-base", "is-webcomponents", "iswc-root"];
+var ALIAS = Object.fromEntries(NOMBRES_REPO.map((n) => [n, NOMBRES_REPO.filter((o) => o !== n)]));
 var RAICES_DEFAULT = ["index.html", "sw.js", "staticwebapp.config.json", "manifest.json", "deno.json", "src", "view", "demo", "public"];
 var ALIAS_KIT = "@jeff-aporta/iswc-base/";
 var SALTAR_DEFAULT = ["node_modules", "vendor", "dist", ".tmp-scss", ".git"];
@@ -18,7 +20,7 @@ var auth = () => process.env.GITHUB_TOKEN ? { Authorization: `Bearer ${process.e
 var esc = (s) => s.replace(/[.*+?^${}()|[\]\\/]/g, "\\$&");
 var log = (m) => console.log(`[pin] ${m}`);
 function opciones(o = {}) {
-  const repo = String(o.repo || "Jeff-Aporta/is-webcomponents");
+  const repo = String(o.repo || REPO_GITHUB);
   const nombre = repo.split("/")[1];
   const lista = (v, def) => v ? (Array.isArray(v) ? v : String(v).split(",")).map((s) => s.trim()).filter(Boolean) : def;
   return {

@@ -2,7 +2,7 @@
 // cargar sin errores de red y registrar `<iswc-doc-demo>`.
 //
 // Por qué este test existe: en W54/W55/W56 hubo reportes de "carga eterna"
-// en `http://127.0.0.1:5505/apps/iswc-root/index.html`. El network
+// en `http://127.0.0.1:5505/apps/iswc-base/index.html`. El network
 // tab mostraba `doc-demo.min.js?h=...` fallando con `net::ERR_*` y el
 // custom element nunca se registraba → la página quedaba en blanco.
 //

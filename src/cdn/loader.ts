@@ -58,9 +58,9 @@ declare const __IS_BUILD_SHA__: string;
  */
 function shaFromImportUrl(href: string): string | null {
   try {
-    // `is-webcomponents` es el nombre del repo antes de iswc-root: jsDelivr sigue
-    // resolviéndolo, así que un loader pineado con el nombre viejo vale igual.
-    const m = String(href).match(/(?:iswc-root|is-webcomponents)@([0-9a-f]{7,40})\b/i);
+    // Los tres nombres del repo (ver ALIAS de pin-update): el real hoy en GitHub, `iswc-base` (canónico, tras el
+    // rename) y el histórico: un loader pineado con cualquiera vale igual.
+    const m = String(href).match(/(?:iswc-base|is-webcomponents|iswc-root)@([0-9a-f]{7,40})\b/i);
     return m ? m[1]!.toLowerCase() : null;
   } catch {
     return null;

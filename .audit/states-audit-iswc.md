@@ -1,4 +1,4 @@
-# Auditoría de `:state()` custom states — iswc-root (Phase G1)
+# Auditoría de `:state()` custom states — iswc-base (Phase G1)
 
 > **Fecha:** 2026 (sesión de auditoría).
 > **Alcance:** `src/components/**/*.ts` — todos los componentes que declaran

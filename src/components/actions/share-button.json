@@ -14,7 +14,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-share-button id=\"pg-share-button\" share-title=\"ISWC\" text=\"Galería is-*\" url=\"https://jeff-aporta.github.io/iswc-root/\"></iswc-share-button>",
+          "html": "<iswc-share-button id=\"pg-share-button\" share-title=\"ISWC\" text=\"Galería is-*\" url=\"https://jeff-aporta.github.io/is-webcomponents/\"></iswc-share-button>",
           "target": "#pg-share-button",
           "controls": [
             {
@@ -33,7 +33,7 @@
               "control": "text",
               "prop": "attr:url",
               "label": "url",
-              "default": "https://jeff-aporta.github.io/iswc-root/"
+              "default": "https://jeff-aporta.github.io/is-webcomponents/"
             },
             {
               "control": "boolean",
@@ -57,7 +57,7 @@
       "ejemplos": {
         "content": [
           "```html",
-          "<iswc-share-button share-title=\"ISWC\" text=\"Galería is-*\" url=\"https://jeff-aporta.github.io/iswc-root/\"></iswc-share-button>",
+          "<iswc-share-button share-title=\"ISWC\" text=\"Galería is-*\" url=\"https://jeff-aporta.github.io/is-webcomponents/\"></iswc-share-button>",
           "```"
         ]
       }

@@ -91,7 +91,7 @@ const ctx = await context({
   target: 'es2022',
   minify: false,
   legalComments: 'none',
-  banner: { js: `// LAB generado desde is-webcomponents/${relative(raiz, entradaAbs).replace(/\\/g, '/')}: no editar aqui, editar el fuente del kit y regenerar.` },
+  banner: { js: `// LAB generado desde iswc-base/${relative(raiz, entradaAbs).replace(/\\/g, '/')}: no editar aqui, editar el fuente del kit y regenerar.` },
   define: { __IS_COMPONENT_CSS__: JSON.stringify(css()) },
   plugins: [aliasKit(), jsATs, cssEnVivo],
   logLevel: 'warning',

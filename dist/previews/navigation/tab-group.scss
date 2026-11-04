@@ -182,3 +182,9 @@
   .panel { padding: 0.5em 0; }
 }
 :host(iswc-tab-panel[hidden]) { display: none; }
+
+/* Táctil: en punteros gruesos el área mínima es 44 px (WCAG 2.5.5), única medida en px a propósito; el escritorio no cambia. */
+@media (pointer: coarse) {
+  .scroll { min-inline-size: 44px; min-block-size: 44px; }
+  :host(iswc-tab) .tab { min-block-size: 44px; }
+}

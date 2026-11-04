@@ -59,7 +59,7 @@ import './cdn-snippet.js';
 ### Snippet generado (forma canónica)
 
 ```html
-<script type="module" src="https://cdn.jsdelivr.net/gh/Jeff-Aporta/iswc-root@REF/dist/cdn/core/loader.min.js"></script>
+<script type="module" src="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@REF/dist/cdn/core/loader.min.js"></script>
 <!-- si hay deps (p. ej. patyLoader), van aquí en el mismo bloque -->
 <script type="module">
   const L = globalThis.iswcLoader;

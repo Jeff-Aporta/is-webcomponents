@@ -1,4 +1,4 @@
-# Audit: Anti-pattern "Internal CSS Variables Set From Props" — `iswc-root`
+# Audit: Anti-pattern "Internal CSS Variables Set From Props" — `iswc-base`
 
 - **Phase:** I1 (zod migration, audit only)
 - **Scope:** every component in `src/components/**/*.ts` (excluding `*.preview.ts` preview helpers and `*.*.selfcheck.ts` self-tests)

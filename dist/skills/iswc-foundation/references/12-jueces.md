@@ -88,7 +88,7 @@ Cada app baja estos archivos con su `vendor.ts` (pin por fecha ISO). Compiten el
 | App | Destino | Adaptador |
 |---|---|---|
 | ISS | `tests/.audit/ISU/` | `tests/_shared/jueces.ts` (`probabilidadJuez`) |
-| ISW | `tests/vendor/is-webcomponents/tools/` (nunca `src/`: va al entregable) | `tests/e2e/lib/jueces.ts` (`probabilidadJuez`) |
+| ISW | `tests/vendor/iswc-base/tools/` (nunca `src/`: va al entregable) | `tests/e2e/lib/jueces.ts` (`probabilidadJuez`) |
 
 Los imports relativos viajan juntos: `jueces.ts` necesita `test-cooldown.ts`, `proveedores-llm.ts` (ambos de `shared/testing/`) y el `schemas.ts` único (que `vendor.ts` poda a `comun`, `jueces`, `proveedores-llm`, `test-cooldown`); `semantica.ts` solo necesita `schemas.ts` (sección `semantica`). Ya no necesita `stagehand.ts`: un server (ISS) vendoriza los jueces sin nada de `client/`.
 

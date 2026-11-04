@@ -6,7 +6,7 @@
   "attrs": {
     "diagram-style": "insoft"
   },
-  "_fuente": "Esquema real de PostgreSQL clientesis (information_schema, 2026-10-06) sobre el lab is-webcomponents/labs/iss-ayudascpia-der. Sin FK en DDL: las relaciones son lógicas. Actualizado 2026-10-07: gen_almacenamientos (cuenta de almacenamiento R2 de los adjuntos; PatyIA solo la lee).",
+  "_fuente": "Esquema real de PostgreSQL clientesis (information_schema, 2026-10-06) sobre el lab iswc-base/labs/iss-ayudascpia-der. Sin FK en DDL: las relaciones son lógicas. Actualizado 2026-10-07: gen_almacenamientos (cuenta de almacenamiento R2 de los adjuntos; PatyIA solo la lee).",
   "payload": {
     "erDiagram": {
       "title": "ISS PatyIA · DER",
