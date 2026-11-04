@@ -55,4 +55,48 @@ test('navegador/classic-artifact: <script src> sin módulos define iswc-button',
   }
 });
 
+// F4 (D2): el loader infiere el tipo por extensión. `L.load('…/button.classic.js')` (fuera del catálogo, termina en
+// `.js`) va por `<script src>` clásico, no por `import()` (que fallaría: el IIFE no es un módulo ES).
+test('navegador/classic-artifact: L.load(…/button.classic.js) lo carga como script clásico', { timeout: 120_000 }, async () => {
+  const dir = await mkdtemp(join(tmpdir(), 'iswc-classic-loader-'));
+  const dist = join(import.meta.dirname ?? '.', '..', '..', 'dist', 'cdn');
+  const browser = await chromium.launch({ headless: true, channel: 'msedge' });
+  try {
+    const [archivo] = await construirClasico({ tags: ['iswc-button'], outdir: dir });
+    const codigo = await readFile(archivo, 'utf8');
+    const page = await browser.newPage();
+    const errores: string[] = [];
+    page.on('pageerror', (e) => errores.push(String(e)));
+    const base = 'http://iswc-classic.test';
+    await page.route(`${base}/**`, async (r) => {
+      const url = new URL(r.request().url());
+      if (url.pathname === '/x/button.classic.js') return r.fulfill({ contentType: 'text/javascript', body: codigo });
+      if (url.pathname === '/') return r.fulfill({ contentType: 'text/html', body: '<!doctype html><title>clásico por loader</title><iswc-button id="b">Hola</iswc-button>' });
+      if (url.pathname.startsWith('/dist/cdn/')) {
+        const ruta = join(dist, ...url.pathname.slice('/dist/cdn/'.length).split('/'));
+        try {
+          const cuerpo = await readFile(ruta);
+          return r.fulfill({ body: cuerpo, contentType: ruta.endsWith('.css') ? 'text/css' : ruta.endsWith('.json') ? 'application/json' : 'text/javascript' });
+        } catch { /* 404 */ }
+      }
+      return r.fulfill({ status: 404, body: '' });
+    });
+    await page.goto(`${base}/`);
+    const estado = await page.evaluate(async () => {
+      const { iswcLoader: L } = await import('/dist/cdn/core/loader.min.mjs' as string);
+      L.configure({ mirrors: [] });
+      await L.load('/x/button.classic.js');
+      const s = [...document.scripts].find((x) => x.src.endsWith('/x/button.classic.js'));
+      return { definido: !!customElements.get('iswc-button'), script: !!s, tipo: s?.type ?? null };
+    });
+    assert.deepEqual(errores, [], `errores en la página: ${errores.join(' | ')}`);
+    assert.equal(estado.script, true, 'el loader inyectó un <script src>');
+    assert.equal(estado.tipo, '', 'sin type="module"');
+    assert.equal(estado.definido, true, 'iswc-button definido por el script clásico');
+  } finally {
+    await cerrarChromium(browser);
+    await rm(dir, { recursive: true, force: true });
+  }
+});
+
 export default lista();
