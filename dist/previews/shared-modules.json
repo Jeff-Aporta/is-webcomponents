@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-04T17:41:40.403Z",
+  "generatedAt": "2026-11-04T19:19:44.515Z",
   "count": 43,
   "modules": [
     {
@@ -56,7 +56,7 @@
       "id": "base-sheets",
       "path": "src/core/base-sheets.ts",
       "summary": "base-sheets — creadas una sola vez y compartidas por todos los ShadowRoot de la página.",
-      "bytes": 2598,
+      "bytes": 2596,
       "exports": [
         "soportaHojasAdoptadas",
         "textoHojasBase",
@@ -210,7 +210,7 @@
       "id": "element",
       "path": "src/core/element.ts",
       "summary": "element — Consolida cuatro módulos que estaban sueltos en `_shared/` y que ningún",
-      "bytes": 8584,
+      "bytes": 8604,
       "exports": [
         "globalNameFor",
         "defineElement",
@@ -286,7 +286,7 @@
       "id": "intent",
       "path": "src/core/intent.ts",
       "summary": "intent — Un \"intent\" describe EL SIGNIFICADO del color que aplica el componente,",
-      "bytes": 2882,
+      "bytes": 2883,
       "exports": [
         "INTENT",
         "DEFAULT_INTENT",

@@ -47,8 +47,8 @@ Prohibiciones y reglas transversales ya pagadas. Detalle por dominio: [`componen
 
 ## Boot (galería)
 
-- CSS en `<link>` en el head; `await` solo shell tags mínimo + `import('./dist/cdn/layout/preview-component.min.js')`. No `await loadCSS*` / `await load('all')` / `await loadPageModules(cdn-panel)` como primer paint.
-- `cdn-panel.js` importa `dist/cdn/feedback/cdn-snippet.min.js`, no `src/` (arrastra `md-editor` y cuelga el `Promise.all`).
+- CSS en `<link>` en el head; `await` solo shell tags mínimo + `import('./dist/cdn/layout/preview-component.min.mjs')`. No `await loadCSS*` / `await load('all')` / `await loadPageModules(cdn-panel)` como primer paint.
+- `cdn-panel.js` importa `dist/cdn/feedback/cdn-snippet.min.mjs`, no `src/` (arrastra `md-editor` y cuelga el `Promise.all`).
 - No reimportar `preview-component` desde `src/` si `load('all'|'layout')` ya lo registró desde `dist/cdn/`.
 
 ## CDN e iconos

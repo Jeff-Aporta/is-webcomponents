@@ -52,7 +52,7 @@ Casos especiales, declarados en el `.json`:
 
 Lo verifica `tests/.audit/motor/validators/cuatro-archivos.ts`, tanto en
 `tests/gobernanza/contrato-cuatro-archivos.test.ts` como en `deno task audit`. Un tag
-registrado con `defineElement` y fuera de `src/manifest.ts` también falla.
+registrado con `define(Clase)` y fuera de `src/manifest.ts` también falla.
 
 Estructura canónica del `.md` (mínimo):
 
@@ -145,9 +145,15 @@ Patrón mínimo:
 
 ```ts
 // src/components/actions/foo.ts
-import { ElementBase, setCustomState } from '../../core/element.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import { setCustomState } from '@jeff-aporta/iswc-base/core/element.js';
+import css from 'iswc:css';
 
-class IswcFoo extends ElementBase {
+class IswcFoo extends IswcElement {
+  static tag = 'iswc-foo';
+  static css = css;
+  static shadowInit: ShadowRootInit | null = { mode: 'open', delegatesFocus: true };
+  static observed = ['loading'];
   static states = {
     loading: 'loading',
     iconButton: 'icon-button',
@@ -157,8 +163,6 @@ class IswcFoo extends ElementBase {
 
   constructor() {
     super();
-    const shadow = this.attachShadow({ mode: 'open', delegatesFocus: true });
-    // ...
     if ('attachInternals' in this) {
       try { this.#internals = this.attachInternals(); } catch {}
     }
@@ -170,6 +174,7 @@ class IswcFoo extends ElementBase {
     }
   }
 }
+define(IswcFoo);
 ```
 
 Detalle: [`references/states.md`](references/states.md).
@@ -214,9 +219,9 @@ propiedad → atributo.
 
 Convenciones:
 
-- Lista los atributos observados en el array estático `OBSERVED` y expón
-  `static get observedAttributes()` (o hereda de `ElementBase`, que ya lo
-  gestiona).
+- Lista los atributos observados en `static observed = [...]`; el molde
+  `IswcElement` arma `observedAttributes` (nada de `static get
+  observedAttributes()` a mano).
 - Cada propiedad pública tiene un getter que **lee** el atributo (fuente
   de verdad) y un setter que **escribe** el atributo. No guardes estado
   duplicado.
@@ -236,12 +241,9 @@ Patrón mínimo:
 
 ```ts
 // src/components/actions/foo.ts
-const OBSERVED = ['color', 'variant', 'shape', 'disabled', 'loading'];
-
-class IswcFoo extends ElementBase {
-  static get observedAttributes(): string[] {
-    return [...OBSERVED, ...ARIA_FORWARD];
-  }
+class IswcFoo extends IswcElement {
+  static tag = 'iswc-foo';
+  static observed = ['color', 'variant', 'shape', 'disabled', 'loading', ...ARIA_FORWARD];
 
   get shape(): string {
     return normalizeShape(this.getAttribute('shape'), DEFAULT_SHAPE);
@@ -257,6 +259,7 @@ class IswcFoo extends ElementBase {
     }
   }
 }
+define(IswcFoo);
 ```
 
 Detalle: [`references/props-events.md`](references/props-events.md).

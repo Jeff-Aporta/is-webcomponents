@@ -9,7 +9,7 @@
     {
       "id": "intro",
       "title": "Uso",
-      "lede": "Panel copy-paste via <code>loader.min.js</code>: un script del loader y otro que hace <code>loadCSS*</code> y <code>load(tag)</code>. Cada componente se carga solo.",
+      "lede": "Panel copy-paste via <code>loader.min.mjs</code>: un script del loader y otro que hace <code>loadCSS*</code> y <code>load(tag)</code>. Cada componente se carga solo.",
       "blocks": [
         {
           "kind": "demo",
@@ -185,7 +185,7 @@
   "ficha": {
     "sections": {
       "anatomia": {
-        "content": "Panel copy-paste via <code>loader.min.js</code>: un script del loader y otro que hace <code>loadCSS*</code> y <code>load(tag)</code>. Cada componente se carga solo."
+        "content": "Panel copy-paste via <code>loader.min.mjs</code>: un script del loader y otro que hace <code>loadCSS*</code> y <code>load(tag)</code>. Cada componente se carga solo."
       },
       "apiJs": {
         "table": [

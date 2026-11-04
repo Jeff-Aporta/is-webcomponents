@@ -1,0 +1,1 @@
+function u(r,n=""){if(!Number.isFinite(r))return"";let t=Math.round(r*1e3)/1e3;return n?`${t}${n}`:`${t}`}function o(r,n){let t=(String(n).split(".")[1]||"").length;return t?Number(r.toFixed(Math.min(20,t))):r}function m(r,n,t){return Number.isFinite(r)?Math.min(Math.max(r,n),t):n}function b(r){return typeof r=="number"&&Number.isFinite(r)}export{u as a,o as b,m as c,b as d};

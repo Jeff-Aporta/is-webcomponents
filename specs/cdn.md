@@ -12,7 +12,7 @@ El kit se consume desde jsDelivr/GitHub Pages como módulos por tag. La galería
 ## S-C1 Layout de salida
 
 - Solo `dist/cdn/<categoria>/<tag>.min.js` (+ `.min.css` si el componente tiene estilos).
-- `dist/cdn/core/loader.min.js` + `core/loader.md` (banner con rutas MD).
+- `dist/cdn/core/loader.min.mjs` + `core/loader.md` (banner con rutas MD).
 - **No** `dist/cdn/all.min.js`, **no** `category.*.min.js`, **no** `.js` sueltos en `dist/` raíz.
 - Build: `deno task build` → `deno run -A --no-check scripts/build.mjs`.
 
@@ -42,19 +42,38 @@ El kit se consume desde jsDelivr/GitHub Pages como módulos por tag. La galería
 | `core/is-base.min.css` | Themes + paletas de marca (`<link>` en la app host) |
 | `core/palettes.min.css` | Paletas de marca |
 | `is-base.min.css` / `palettes.min.css` | Alias estables (= `core/…`) pre-folderizado |
-| `core/loader.min.js` | `iswcLoader` (carga selectiva + pin/mirrors) |
+| `core/loader.min.mjs` | `iswcLoader` (carga selectiva + pin/mirrors) |
+| `core/loader.min.js` | Copia byte a byte de `core/loader.min.mjs` para pines viejos (compat): se retira cuando los consumidores re-pineen (F5) |
 | `core/loader.md` | Docs del loader (API) |
-| `<categoria>/<name>.min.js` | Componente individual (carga su `.min.css` hermano en el shadow) |
-| `<categoria>/<name>.min.css` | Estilos del componente (junto al `.min.js`) |
+| `core/<x>.min.mjs` · `lib/<x>.min.mjs` | Módulos del core y de lib (zod, obj, ref-obj) para ejecutar; `core/<x>.ts` para extender |
+| `<categoria>/<name>.min.mjs` | Componente individual (módulo ES; su CSS va dentro, por `iswc:css`) |
+| `<categoria>/<name>.min.css` | Estilos del componente (para `sheet-cache` y para enlazarlos a mano) |
+| `_chunks/chunk-<hash>.mjs` | Código compartido entre módulos (el core del molde vive en UNO) |
+| `deps.json` | Tag → cierre completo de módulos (`<cat>/<tag>.min.mjs` + `_chunks/…`); lo usará el loader (F4) para precargar |
+| `exports.json` | Mapa `exports` para el `package.json` de npm (F6) |
+| `<categoria>/<name>.classic.js` | Solo si se pide: artefacto clásico IIFE (`deno task build:classic`) |
 | `skills/<name>/SKILL.md` | Skills para agentes (copiado en build) |
 
 Iconos: `dist/assets/icons/` (fuera de `dist/cdn/`; única copia versionada). **No** recrear `README.txt` en `dist/cdn/`: el consolidador del loader es el índice.
+
+### Build único con splitting
+
+Desde F3 (plan `specs/plan-carga-modular.md` D2/D5) `scripts/build.mjs` corre **un** `esbuild.build` (`bundleKit` en `src/cdn/build/bundle-kit.ts`) con `splitting: true`, `format: 'esm'`, `chunkNames: '_chunks/[name]-[hash]'` y `outExtension: { '.js': '.mjs' }`.
+
+- **Entradas:** cada módulo de `src/components` en su ruta pública de siempre (`<categoria>/<nombre>.min.mjs`; también los utils que se consumen por URL, como `diagrams/theme` o `helpers/md-lite`), `src/core/*.ts` (`core/<x>.min.mjs`), `src/cdn/loader.ts` (`core/loader.min.mjs`) y `lib/{obj,ref-obj,zod}.min.mjs`. Todas las salidas viven a un nivel de `dist/cdn/`, así una ruta relativa (`../lib/zod.min.mjs`, `../diagrams/themes/…`) vale igual desde una entrada que desde un chunk.
+- **Chunks automáticos:** lo que usan dos entradas sale a `_chunks/`; no hay lista de «componentes externos». El molde `IswcElement` existe en un solo archivo (guardián `gobernanza/cdn-folders`). Siguen **externos** `zod` (`lib/zod.min.mjs`) y `src/ai` (`lib/ai/*.min.mjs`, build aparte).
+- **Grafo:** del metafile salen `deps.json` (cierre por tag y por módulo del core, ordenado) y `exports.json` (`src/cdn/build/graph.ts`; guardián `gobernanza/deps-json`). El metafile entero queda en `.tmp/metafile-kit.json` para los guardianes.
+- **Extensiones (D2):** `.mjs` = módulo ES, `.js` = clásico. Los únicos `.js` de `dist/cdn` son la copia compat `core/loader.min.js` y los `*.classic.js` que se pidan (guardián `gobernanza/extension-modulos`). La galería (`dist/scripts`, `dist/pages`, `dist/previews`, `dist/gallery-app.min.js`) no es parte del CDN y conserva `.min.js`.
+- **Clásico opcional:** `deno task build:classic -- <tag> [<tag>…]` → `<categoria>/<tag>.classic.js`, IIFE autosuficiente (core, zod y estilos dentro) para `<script src>` sin módulos. No entra en `deno task build` ni en el catálogo.
+- **`?v=`:** el build sella los imports relativos dentro de `dist/cdn` y los HTML de `index.html`/`demos/**` (orígenes mutables: Pages y carpeta local) y escribe el mapa en `asset-hashes.json`. El loader ya no lo lleva embebido (`__IS_ASSET_HASHES__` = `{}`; F4 lo leerá en diferido) y, sobre un pin SHA de jsDelivr/githack, nunca añade `?v=` (`esUrlInmutable`, `src/cdn/build/asset-url.ts`): la URL ya es inmutable.
+- **Compat `loader.min.js`:** se publica mientras haya consumidores con la URL vieja pineada; se retira cuando re-pineen (F5). La raíz `dist/cdn/loader.min.mjs` re-exporta `./core/loader.min.mjs` (no puede ser copia: el loader importa `../_chunks/…`).
+- **Tamaño publicado (D8):** `gobernanza/tamano-publicado` mide `git archive HEAD` (≤ 48 MB; jsDelivr rechaza > 50 MB) y `dist/cdn`.
 
 ### Bootstrap recomendado
 
 ```html
 <script type="module">
-  import { iswcLoader } from '…/dist/cdn/core/loader.min.js';
+  import { iswcLoader } from '…/dist/cdn/core/loader.min.mjs';
   // Pin opcional (SHA o branch). Sin pin → tip de main (API GitHub).
   // iswcLoader.pin('abcdef0123…');
   // Fallback canónico (si no configuras mirrors): jsDelivr → githack → Pages.
@@ -62,7 +81,7 @@ Iconos: `dist/assets/icons/` (fuera de `dist/cdn/`; única copia versionada). **
   await iswcLoader.loadCSSBase();
   await iswcLoader.loadCSSPalettesDefault();
   await iswcLoader.load('iswc-button', 'iswc-button-group');
-  // o: load('actions') expande a cada tag.min.js (sin bundle de categoría)
+  // o: load('actions') expande a cada tag.min.mjs (sin bundle de categoría)
 </script>
 ```
 
@@ -110,7 +129,7 @@ HTML del consumidor (el import map va antes de cualquier `<script type="module">
 { "imports": { "@jeff-aporta/iswc-base/": "https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@<sha40>/dist/cdn/" } }
 </script>
 <script type="module">
-  import { iswcLoader } from '@jeff-aporta/iswc-base/core/loader.min.js';
+  import { iswcLoader } from '@jeff-aporta/iswc-base/core/loader.min.mjs';
   await iswcLoader.load('iswc-button');
 </script>
 ```
@@ -130,7 +149,7 @@ respeta). Casos: `tests/gobernanza/pin-update.test.ts` (P10).
 ### Qué no hacer
 
 - **No** re-cargar un tag ya cubierto por su categoría (`actions` → `iswc-button`).
-- **No** default a `load('all')` "por comodidad" (expande a cada tag.min.js).
+- **No** default a `load('all')` "por comodidad" (expande a cada tag.min.mjs).
 - **No** volver a emitir `all.min.js` ni `category.*.min.js`.
 - **No** marcar `coveredTag` por categoría **antes** de empujar los jobs del lote (`planLoads(['actions'])` quedaría en 0 jobs).
 - **No** inventar un segundo entry aparte de `src/cdn/loader.ts` + `load-plan.js`.
@@ -159,9 +178,9 @@ respeta). Casos: `tests/gobernanza/pin-update.test.ts` (P10).
 ### Contrato de boot de la galería (`index.html`)
 
 - CSS en `<link>` (is-base/palettes/shell/presentation/preview-component.css) + CSS crítico inline; **no** `await loadCSS*` como primer paint.
-- `await` solo: tags shell (`split-panel`, `main`, `drawer`, `demo`, `scrollspy`, `button`, `icon`, `theme-toggle`, `code`) + `import('./dist/cdn/layout/preview-component.min.js')`; luego `dataset.kitShell='1'`; `loadPageModules`/`load('all')` **sin** await en el path crítico.
+- `await` solo: tags shell (`split-panel`, `main`, `drawer`, `demo`, `scrollspy`, `button`, `icon`, `theme-toggle`, `code`) + `import('./dist/cdn/layout/preview-component.min.mjs')`; luego `dataset.kitShell='1'`; `loadPageModules`/`load('all')` **sin** await en el path crítico.
 - `setHostPreview`: `delete` own property + `whenDefined` antes de asignar; `ensurePreviewDeps(tag)` on-demand.
-- `cdn-panel.js` importa `dist/cdn/feedback/cdn-snippet.min.js`, no `src/`.
+- `cdn-panel.js` importa `dist/cdn/feedback/cdn-snippet.min.mjs`, no `src/`.
 - **No** asignar `.preview` antes de que el tag esté defined (own property tapa el setter → main vacío, sin error de consola). Ver error #43.
 
 ## Contratos
@@ -170,7 +189,7 @@ respeta). Casos: `tests/gobernanza/pin-update.test.ts` (P10).
 |---|---|
 | Build | `deno task build` |
 | Dev CDN local | `deno run -A --no-check scripts/serve.mjs` |
-| Carga | `core/loader.min.js` + `L.load(...)` |
+| Carga | `core/loader.min.mjs` + `L.load(...)` |
 | Iconos en dist | `dist/assets/icons/` (fuente versionada, fuera de `dist/cdn/`) |
 
 ## Aceptación

@@ -12,7 +12,7 @@
  * iswc-toast-item, iswc-stat, iswc-fab, iswc-checkbox, iswc-radio, iswc-radio-group,
  * iswc-rating, iswc-switch.
  *
- * CDN: reexportado en `helpers/ui.min.js` (`IswcUi.INTENT`, `ensureDefaultColor`, …).
+ * CDN: reexportado en `helpers/ui.min.mjs` (`IswcUi.INTENT`, `ensureDefaultColor`, …).
  */
 
 import type { Intent } from "./schemas/intent.schemas.js";

@@ -1,0 +1,1 @@
+var i=new Map;function e(n,t){i.set(String(n).toLowerCase(),t)}function r(n){return i.get(String(n??"").toLowerCase())}function s(){return[...i.keys()]}typeof window<"u"&&Object.assign(window,{__isDiagramKinds:{registerDiagramKind:e,getDiagramTag:r,listDiagramKinds:s}});export{e as a,r as b,s as c};

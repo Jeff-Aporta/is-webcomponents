@@ -132,7 +132,7 @@ Cada tag es un Custom Element con Shadow DOM. El inventario y rutas de build sal
 ### S-K12 feedback
 
 - **Snippets CDN (`iswc-cdn-snippet`) ≠ snippets de demo (`demo-code.js`).** El primero es **loader copy-paste** (`script src` + `load(tag|cat|all)`); el segundo serializa el ejemplo y **debe** incluir tema/paleta activos (`withSnippetContext`/`stampContext`).
-- **Galería `cdn-panel.js`:** importar `dist/cdn/feedback/cdn-snippet.min.js`, **no** `src/.../cdn-snippet.js` (arrastra `md-editor` y cuelga el boot). Ver error #43.
+- **Galería `cdn-panel.js`:** importar `dist/cdn/feedback/cdn-snippet.min.mjs`, **no** `src/.../cdn-snippet.js` (arrastra `md-editor` y cuelga el boot). Ver error #43.
 - **Reusar:** `_shared/prefs.js`, `helpers/floating.js`. **No** duplicar overlays/position; no emitir señales redundantes.
 - Tema/paleta: default `delfin`; snippet de demo sella `data-theme`+`data-palette`. **No** `color-scheme` en `:root`; **no** background de página en `is-base`/`palettes`.
 - **`<iswc-tooltip>` `iswc-hide` no burbujea** (`bubbles:false`, `composed:true`): un tooltip en un `iswc-dialog` no debe cerrar al ancestro; escuchar en el propio tooltip, no en `document`.
@@ -165,7 +165,7 @@ Cada tag es un Custom Element con Shadow DOM. El inventario y rutas de build sal
 
 ### S-K16 layout
 
-- **`<iswc-preview-component>`** es chrome del sistema de preview; se publica en `dist/cdn/preview/preview-component.min.js`. **No está en el catálogo del loader** (`L.load('iswc-preview-component')` no resuelve; no figura en `categories.layout`). Importar desde `dist/` (nunca desde `src/`: Pages 404 lucide). Ver errores #42–#43.
+- **`<iswc-preview-component>`** es chrome del sistema de preview; se publica en `dist/cdn/preview/preview-component.min.mjs`. **No está en el catálogo del loader** (`L.load('iswc-preview-component')` no resuelve; no figura en `categories.layout`). Importar desde `dist/` (nunca desde `src/`: Pages 404 lucide). Ver errores #42–#43.
 - **Full-page dialog:** `width="100vw"` + `spacing="0"`; en light DOM `::part(dialog) { width/height:100%; align-self/justify-self: stretch; border-radius:0; box-shadow:none }`. Ver `presentation.css` + clase `.iswc-view-sources`.
 - **Style-attrs de `<iswc-dialog>`:** `width → --iswc-dialog-width`, `spacing → --iswc-dialog-spacing`; padding del host = `var(--iswc-dialog-spacing)`.
 - **No** `iswc-split-panel` con % alto como sidebar fijo (deja hueco enorme): grid CSS con ancho fijo (`14.5rem`) o `position-in-pixels`.

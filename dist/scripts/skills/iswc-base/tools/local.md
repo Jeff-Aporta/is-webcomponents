@@ -25,9 +25,11 @@ Desde `dist/cdn/` del repo del kit (SHA fijado o `main`), descargar:
 - Siempre `is-base.min.css` + `palettes.min.css`.
 - **Para componentes individuales:** el CSS vive como hermano del `.min.js`
   bajo la misma estructura de carpetas que `dist/cdn/` (p. ej.
-  `actions/button.min.js` + `actions/button.min.css`). El JS del componente
-  carga ese CSS vía `adoptCss`/`siblingCssHref` resolviendo la ruta con
-  `import.meta.url` — por eso hay que **preservar las rutas relativas**
+  `actions/button.min.mjs` + `actions/button.min.css`). Los componentes del kit
+  (molde `IswcElement`) traen su CSS incrustado por el build (`import css from 'iswc:css'`);
+  el `.min.css` hermano se sigue publicando y lo cargan `adoptCss`/`siblingCssHref`
+  (compat para código externo, o `static cssHref` si hay `url()` relativos)
+  resolviendo la ruta con `import.meta.url` — por eso hay que **preservar las rutas relativas**
   entre el `.js` y su `.css` al copiarlos a `vendor/`. No aplanar ni renombrar
   sin ajustar también la ruta que el JS espera resolver.
 
@@ -43,7 +45,7 @@ vendor/iswc-base/<sha>/
   all.min.js
   all.min.css              (si existe)
   actions/
-    button.min.js
+    button.min.mjs
     button.min.css
     category.actions.min.js
     category.actions.min.css

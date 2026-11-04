@@ -1,0 +1,12 @@
+/*!
+ * ISWC - docs (LLM)
+ * component-skill: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/charts/chart.md
+ * kit-skill: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/iswc-base/SKILL.md
+ * component: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/charts/chart.md
+ * category: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/specs/componentes.md
+ * kit: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/specs/componentes.md
+ * loader: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/cdn/loader.md
+ * cdn-install: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/is-cdn-install/SKILL.md
+ * blob: https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/charts/chart.js
+ */
+import{a,b,c}from"../_chunks/chunk-H65UWRBS.mjs?v=1j2fjk";import"../_chunks/chunk-P3H5B5O4.mjs?v=day1lj";import"../_chunks/chunk-NTRDH4TM.mjs?v=4ir35m";import"../_chunks/chunk-WFUY7XYS.mjs?v=ae8k5h";import"../_chunks/chunk-KQCUEVRL.mjs?v=plao4b";import"../_chunks/chunk-ILILPR6R.mjs?v=bztzw8";import"../_chunks/chunk-Z322TDRE.mjs?v=pik3ae";import"../_chunks/chunk-JUXAZSGN.mjs?v=tr38yi";import"../_chunks/chunk-QOB7RFMH.mjs?v=qimetc";import"../_chunks/chunk-ULE6IXA5.mjs?v=67tj6l";import"../_chunks/chunk-2SX4KFRW.mjs?v=6l2b2u";import"../_chunks/chunk-GEIAAPCJ.mjs?v=v9s562";import"../_chunks/chunk-OUZPM6SD.mjs?v=0row6q";import"../_chunks/chunk-S5AOGS65.mjs?v=nbzru6";import"../_chunks/chunk-UCMASPOL.mjs?v=34t4kr";import"../_chunks/chunk-NXN5A2MA.mjs?v=fncrll";import"../_chunks/chunk-XP253YBZ.mjs?v=7txe1k";import"../_chunks/chunk-MNU2XQTU.mjs?v=khcy6g";import"../_chunks/chunk-HCLZRPU3.mjs?v=nylj0w";import"../_chunks/chunk-C7ON665Q.mjs?v=6f2qf1";import"../_chunks/chunk-SNHMDDOU.mjs?v=6lxkqf";import"../_chunks/chunk-4PV5NT2U.mjs?v=58b9qn";export{b as IswcChart,c as defineTypedChart,a as formatValue};

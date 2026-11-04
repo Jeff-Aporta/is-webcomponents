@@ -25,7 +25,7 @@ deno task build && deno task test:all
   (el `local` del `vendor.json`), lo busca en el checkout (`git rev-parse HEAD`, `git cat-file -e <sha>`) y lo dice;
   si la ruta no existe, no es un repo git o no se puede leer, lo anota («checkout local omitido: …», ruta no
   accesible o mal configurada) y SIGUE: nunca falla por el local; (3) verifica en jsDelivr que
-  `dist/cdn/core/loader.min.js` (`--verificar`) exista en ese SHA y, si el HEAD aún no está publicado, retrocede
+  `dist/cdn/core/loader.min.mjs` (`--verificar`) exista en ese SHA y, si el HEAD aún no está publicado, retrocede
   commit a commit (hasta 30) hasta el último publicado; (4) reescribe TODOS los `is-webcomponents@<sha40>` (y la
   forma raw por SHA) de las `--raices` del consumidor a ese SHA. Así todo el proyecto apunta siempre al último SHA
   publicado. `--nuevo=<sha40>` fija uno exacto (también verificado).

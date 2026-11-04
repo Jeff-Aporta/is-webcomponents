@@ -122,7 +122,7 @@ Utiliza siempre **jsDelivr** con un SHA fijo (pinned commit) para garantizar ver
 Sustituye `{{SHA}}` por el tip de `main` (referencia: `ca31ad04be5bba79c8ef4652b7540058169ca891`).
 
 ```html
-<script type="module" src="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@{{SHA}}/dist/cdn/core/loader.min.js"></script>
+<script type="module" src="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@{{SHA}}/dist/cdn/core/loader.min.mjs"></script>
 <script type="module">
   const L = globalThis.iswcLoader;
   await L.loadCSSBase();
@@ -160,7 +160,7 @@ const css=u=>new Promise((ok,err)=>{
 
 for(const base of MIRRORS){
  try{
-  await import(`${base}/core/loader.min.js`);
+  await import(`${base}/core/loader.min.mjs`);
   const L = globalThis.iswcLoader;
   await L.loadCSSBase();
   await L.loadCSSPalettesDefault();
@@ -171,7 +171,7 @@ for(const base of MIRRORS){
 </script>
 ```
 
-Los snippets CDN únicamente deben usar `loader.min.js` + `L.load(tags…)`.
+Los snippets CDN únicamente deben usar `loader.min.mjs` + `L.load(tags…)`.
 No hay `all.min.js` ni `category.*.min.js` publicados.
 
 No cargues manualmente los CSS individuales de cada componente; estos se resuelven automáticamente mediante `import.meta.url`.

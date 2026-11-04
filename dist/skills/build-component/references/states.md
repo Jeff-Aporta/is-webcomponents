@@ -21,7 +21,8 @@ clave es el nombre lógico (camelCase) y el valor es el nombre del
 custom state (kebab-case). Ejemplo:
 
 ```ts
-class IswcButton extends ElementBase {
+class IswcButton extends IswcElement {
+  static tag = 'iswc-button';
   static states = {
     loading: 'loading',
     disabled: 'disabled',
@@ -41,12 +42,15 @@ de `_shared/form-associated.ts`:
 ```ts
 import { setCustomState } from '../_shared/form-associated.js';
 
-class IswcFoo extends ElementBase {
+class IswcFoo extends IswcElement {
+  static tag = 'iswc-foo';
+  static shadowInit: ShadowRootInit | null = { mode: 'open', delegatesFocus: true };
+  static observed = ['loading', 'href'];
+
   #internals: ElementInternals | null = null;
 
   constructor() {
     super();
-    this.initShadow({ mode: 'open', delegatesFocus: true });
     if ('attachInternals' in this) {
       try { this.#internals = this.attachInternals(); } catch {}
     }

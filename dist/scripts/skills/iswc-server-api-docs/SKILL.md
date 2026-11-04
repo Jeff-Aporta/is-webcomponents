@@ -41,7 +41,7 @@ Un solo CDN: el kit, pineado por SHA de 40 (nunca `@main`). Nada de `isc-swagger
 <title>Mi API · Documentación</title>
 <style>html, body { margin: 0; height: 100%; } iswc-server-api-docs { display: block; height: 100dvh; }</style>
 <script type="module">
-  const { iswcLoader: L } = await import("https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@<sha40>/dist/cdn/core/loader.min.js");
+  const { iswcLoader: L } = await import("https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@<sha40>/dist/cdn/core/loader.min.mjs");
   await L.loadPageStyles(["iswc-palettes-default"]);
   await L.load("iswc-server-api-docs", "iswc-theme-toggle");
 </script>

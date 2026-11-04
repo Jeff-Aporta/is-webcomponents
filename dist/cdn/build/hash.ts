@@ -92,7 +92,7 @@ export function hashPorRuta(ruta: string, texto: string): string {
 }
 
 /** Archivos distintos con el mismo hash. Los alias publicados del mismo archivo (mismo nombre,
- *  p. ej. `loader.min.js` y `core/loader.min.js`) no cuentan. */
+ *  p. ej. `loader.min.mjs` y `core/loader.min.mjs`) no cuentan. */
 export function hashesRepetidos(files: Record<string, string>): string[] {
   const porHash = new Map<string, string[]>();
   for (const [ruta, hash] of Object.entries(files)) porHash.set(hash, [...(porHash.get(hash) ?? []), ruta]);

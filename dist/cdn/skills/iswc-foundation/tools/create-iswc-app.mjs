@@ -43,7 +43,7 @@ function opciones(o = {}) {
     nombre: nombre2,
     nombres: [nombre2, ...lista(o.alias, ALIAS[nombre2] ?? [])],
     rama: String(o.rama || "main"),
-    verificar: String(o.verificar || "dist/cdn/core/loader.min.js"),
+    verificar: String(o.verificar || "dist/cdn/core/loader.min.mjs"),
     raices: lista(o.raices, RAICES_DEFAULT),
     saltar: new Set(lista(o.saltar, SALTAR_DEFAULT)),
     local: o.local ? String(o.local) : "",

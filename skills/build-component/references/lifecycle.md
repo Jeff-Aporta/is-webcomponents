@@ -2,30 +2,31 @@
 # Lifecycle
 
 Ciclo de vida de un componente del kit: hooks, shadow, upgrade de
-propiedades, form-associated y cleanup. La clase base es
-[`ElementBase`](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/core/element-base.ts),
-que centraliza el patrón repetido en ~150 componentes del repo.
+propiedades, form-associated y cleanup. La clase base es el molde
+[`IswcElement`](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/core/iswc-element.ts),
+que centraliza el patrón repetido en ~150 componentes del repo
+(`ElementBase` queda como subclase de compatibilidad para código externo).
 
-## 1. Hooks de `ElementBase`
+## 1. Hooks de `IswcElement`
 
 | Hook | Cuándo corre | Notas |
 | --- | --- | --- |
-| `constructor()` | Una vez, al instanciar. | `super()` primero, luego `initShadow()` + `adoptCss(...)`. |
+| `constructor()` | Una vez, al instanciar. | El molde ya crea el shadow (`static shadowInit`), clona `static template` y adopta `static css`. Solo `super()` + estado privado. |
 | `onConnected()` | En CADA conexión al DOM (no solo la primera). | `this.mounted === true`. Útil para `ResizeObserver`, listeners globales. |
 | `onDisconnected()` | Cada desconexión. | Limpia observers/listeners si quieres. |
 | `onAttributeChanged(name, oldVal, newVal)` | Tras el guard de montado y de igualdad. | La base ya filtra `oldVal === newVal` y atributos previos al connect. |
 | `attributeChangedCallback(...)` | Nivel DOM. **No** lo sobreescribas: usa `onAttributeChanged`. | La base lo delega. |
 
-`ElementBase` **no** corre `onConnected` si no hay shadow todavía: en
-el constructor, primero `super()`, luego `initShadow()`. Saltarse el
-`initShadow` significa que `onConnected` corre sin `this.shadowRoot` y
-muchos componentes rompen.
+El molde crea el shadow en el constructor según `static shadowInit`
+(`null` = light DOM), así que `onConnected` ya encuentra `this.shadowRoot`.
+Además `connectedCallback` hace `upgradeProperties` (una vez), marca
+`mounted` y pide a `iswcLoader.ensure()` los tags de `static deps`.
 
 ## 2. Plantilla mínima
 
 ```ts
-import { adoptCss, defineElement } from '../../core/element.js';
-import { ElementBase } from '../../core/element-base.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 const TEMPLATE = document.createElement('template');
 TEMPLATE.innerHTML = /* html */ `
@@ -34,15 +35,13 @@ TEMPLATE.innerHTML = /* html */ `
   </div>
 `;
 
-class IswcFoo extends ElementBase {
-  static TEMPLATE = TEMPLATE;
-  static get observedAttributes(): string[] { return ['variant', 'disabled']; }
-
-  constructor() {
-    super();
-    this.initShadow({ mode: 'open', delegatesFocus: true });
-    adoptCss(this.shadowRoot!, import.meta.url);
-  }
+class IswcFoo extends IswcElement {
+  static tag = 'iswc-foo';
+  static css = css;
+  static template = TEMPLATE;
+  static shadowInit: ShadowRootInit | null = { mode: 'open', delegatesFocus: true };
+  static observed = ['variant', 'disabled'];
+  static deps = ['iswc-icon'];
 
   onConnected() { /* sync inicial */ }
   onAttributeChanged(name: string) {
@@ -50,12 +49,13 @@ class IswcFoo extends ElementBase {
   }
 }
 
-defineElement('iswc-foo', IswcFoo);
+define(IswcFoo);
 ```
 
-`defineElement` registra el tag y, si el navegador no soporta Custom
-Elements v1 (legacy), **no** falla en silencio: lo loguea. Si necesitas
-soporte en navegadores muy viejos, usa el polyfill oficial o asume v1.
+`define(Clase)` registra la clase con su `static tag`; es idempotente
+(gana el primero que define, por si el kit se carga dos veces). Nada de
+`adoptCss(…, import.meta.url)`, `<link>` al `.css` hermano ni
+`static get observedAttributes` a mano.
 
 ## 3. Upgrade de propiedades
 
@@ -63,7 +63,7 @@ Típico problema: el usuario hace `el.variant = 'outlined'` **antes** de
 que el custom element se haya registrado. La propiedad se asigna al
 prototipo de `HTMLElement` y se pierde.
 
-`ElementBase.connectedCallback` llama a `upgradeProperties(this, ...)`
+`IswcElement.connectedCallback` llama a `upgradeProperties(this, ...)`
 **una sola vez** (la primera conexión) y reescribe los valores perdidos
 sobre los setters reales. **No** lo hagas a mano en el constructor.
 
@@ -77,9 +77,10 @@ constructor() {
   }
 }
 
-// ✅ SÍ — heredar ElementBase ya lo hace
-class IswcFoo extends ElementBase {
-  static get observedAttributes(): string[] { return ['variant']; }
+// ✅ SÍ — heredar IswcElement ya lo hace
+class IswcFoo extends IswcElement {
+  static tag = 'iswc-foo';
+  static observed = ['variant'];
   get variant() { return this.getAttribute('variant'); }
   set variant(v: string) { this.setAttribute('variant', v); }
 }
@@ -153,7 +154,7 @@ onDisconnected() {
 ## 6. `delegatesFocus: true`
 
 Por defecto, hacer foco en el host **no** enfoca nada visible para el
-usuario. Con `delegatesFocus: true` en `attachShadow({...})`, el primer
+usuario. Con `delegatesFocus: true` en `static shadowInit`, el primer
 elemento focuseable del shadow recibe el foco cuando se enfoca el host
 (y el estilo `:focus` se aplica a ese primer focuseable).
 
@@ -177,8 +178,8 @@ callouts, layouts) déjalo en `false`.
 
 ## 8. Checklist
 
-- [ ] `super()` primero, `initShadow()` después, `adoptCss` por
-      último.
+- [ ] `static tag/css/observed/deps` declarados, `import css from 'iswc:css'`
+      y `define(Clase)` al final (sin `adoptCss` ni `defineElement`).
 - [ ] `onConnected` idempotente: corre en cada conexión.
 - [ ] Upgrade de propiedades cubierto por la base.
 - [ ] `formAssociated = true` solo si el componente entra en `<form>`.

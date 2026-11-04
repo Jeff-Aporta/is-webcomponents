@@ -19,7 +19,7 @@ Si el tour rojo (cualquier 404), NO hacer push hasta corregir.
 ```javascript
 const CRITICAL_PATHS = [
   'index.html',
-  'dist/cdn/core/loader.min.js',
+  'dist/cdn/core/loader.min.mjs',
   'dist/gallery-app.min.js',
   ...SCRIPTS_BUNDLES.map(s => `dist/scripts/${s}.min.js`),
   ...PAGES_BUNDLES.flatMap(p => [`dist/pages/${p}.min.js`, `dist/pages/${p}.json`]),

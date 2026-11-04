@@ -39,7 +39,9 @@ await mkdir('dist/pages', { recursive: true });
 // componente: duplicaria su clase y, como este bundle suele registrar el tag
 // primero, `customElements.define` deja esa copia y el CDN ya no puede pisarla
 // (version vieja, estado partido entre dos clases: <dialog> del UA, menu sin panel).
-// Mismo criterio que `external-components` en build.mjs.
+// Cada componente se importa externo desde su módulo publicado `dist/cdn/<cat>/<tag>.min.mjs` (build único con
+// splitting, F3): ese módulo trae los chunks del kit, los mismos que pide el loader. Sin `?v=`: el loader de F3
+// tampoco lo pone, y dos URLs del mismo módulo lo evaluarían dos veces.
 const componentesRoot = resolve('src/components');
 const cdnRoot = resolve('dist/cdn');
 const categoriaPorTag = new Map(manifest.map((m) => [m.tag.replace(/^iswc-/, ''), m.category]));
@@ -54,7 +56,7 @@ const esComponente = (ts) => {
 const componentesExternos = (outfile) => ({
   name: 'componentes-externos',
   setup(pluginBuild) {
-    pluginBuild.onResolve({ filter: /\.(ts|js)$/ }, (args) => {
+    pluginBuild.onResolve({ filter: /\.(ts|m?js)$/ }, (args) => {
       if (args.kind === 'entry-point') return null;
       const abs = resolve(args.resolveDir, args.path);
       if (abs.startsWith(cdnRoot + sep)) return { path: relative(dirname(outfile), abs).replaceAll(sep, '/'), external: true };
@@ -63,7 +65,7 @@ const componentesExternos = (outfile) => ({
       if (!esComponente(ts)) return null;
       const nombre = basename(ts, '.ts');
       const carpeta = categoriaPorTag.get(nombre) ?? relative(componentesRoot, ts).split(sep)[0];
-      const destino = join('dist', 'cdn', carpeta, `${nombre}.min.js`);
+      const destino = join('dist', 'cdn', carpeta, `${nombre}.min.mjs`);
       return { path: relative(dirname(outfile), destino).replaceAll(sep, '/'), external: true };
     });
   },

@@ -27,18 +27,18 @@ Skill general: [SKILL.md](SKILL.md) · Runtime sin tag: [tools/runtime.md](tools
 
 | API / módulo | CDN o ruta | Resumen | Guía |
 | --- | --- | --- | --- |
-| `iswcLoader` | `core/loader.min.js` | Entry CDN: loadCSS*, load/ensure/has, pin, configure, espejos jsDelivr -> githack -> Pages, sheets, registerApp, SHA quemado. | [docs](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/cdn/loader.md) |
-| `IswcUi / Ui` | `helpers/ui.min.js` | html, adoptCss, define, css, el: primitivas de apps dominio. No es CE. | [docs](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/helpers/ui.md) |
-| `mdToHtml` | `helpers/md-lite.min.js` | Markdown -> HTML sin npm; fences codigo e iswc-* (diagramas). | [docs](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/helpers/utils/md-lite.md) |
-| `resolveIswcFenceTag` | `helpers/md-iswc-fences.min.js` | Lang fence iswc-* -> tag de diagrama (flowchart, er, sequence, ...). | [docs](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/helpers/utils/md-iswc-fences.md) |
-| `hydrateMdEmbeds` | `helpers/md-hydrate.min.js` | Carga perezosa de los iswc-* que pusieron los renders por defecto del markdown. | [docs](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/helpers/utils/md-hydrate.md) |
-| `md-editor-api` | `helpers/md-editor-api.min.js` | CRUD/normalizacion para iswc-md-editor (endpoints, fieldMap, token). | [docs](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/helpers/utils/md-editor-api.md) |
-| `IswcResponseCache` | `helpers/response-cache.min.js` | SWR IndexedDB: vivo/leer/guardar/invalidar; no bloquea el pintado. | [docs](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/helpers/utils/response-cache.md) |
-| `ai/motores` | `lib/ai/motores.min.js` | IA en el navegador sin UI: ejecutar(herramienta, entrada); 13 motores runonweb fuera de los barriles. | [docs](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/ai/ai.md) |
-| `ai/descarga` | `lib/ai/descarga.min.js` | conDescarga: regla única para bajar un modelo (hasta 20 MB toast; más, modal); pospuesta, medidor. | [docs](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/ai/ai.md) |
-| `ai/vector-local` | `lib/ai/vector-local.min.js` | vectorLocal, cargarCorpus, ordenarPorSentido: buscar por significado con el modelo multilingüe; null si no está. | [docs](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/ai/ai.md) |
-| `ai/orden` | `lib/ai/orden.min.js` | ordenarAplanado: exactas primero, luego embeddings y léxico tolerante. Puro. | [docs](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/ai/ai.md) |
-| `ai/aplanado` | `lib/ai/aplanado.min.js` | Reducción de vectores: aplanar, abrirCorpus, empacar; ajustar (PCA/LDA) en aplanado-ajuste para el build. | [docs](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/ai/ai.md) |
+| `iswcLoader` | `core/loader.min.mjs` | Entry CDN: loadCSS*, load/ensure/has, pin, configure, espejos jsDelivr -> githack -> Pages, sheets, registerApp, SHA quemado. | [docs](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/cdn/loader.md) |
+| `IswcUi / Ui` | `helpers/ui.min.mjs` | html, adoptCss, define, css, el: primitivas de apps dominio externas (compat; el kit usa el molde `IswcElement`). No es CE. | [docs](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/helpers/ui.md) |
+| `mdToHtml` | `helpers/md-lite.min.mjs` | Markdown -> HTML sin npm; fences codigo e iswc-* (diagramas). | [docs](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/helpers/utils/md-lite.md) |
+| `resolveIswcFenceTag` | `helpers/md-iswc-fences.min.mjs` | Lang fence iswc-* -> tag de diagrama (flowchart, er, sequence, ...). | [docs](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/helpers/utils/md-iswc-fences.md) |
+| `hydrateMdEmbeds` | `helpers/md-hydrate.min.mjs` | Carga perezosa de los iswc-* que pusieron los renders por defecto del markdown. | [docs](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/helpers/utils/md-hydrate.md) |
+| `md-editor-api` | `helpers/md-editor-api.min.mjs` | CRUD/normalizacion para iswc-md-editor (endpoints, fieldMap, token). | [docs](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/helpers/utils/md-editor-api.md) |
+| `IswcResponseCache` | `helpers/response-cache.min.mjs` | SWR IndexedDB: vivo/leer/guardar/invalidar; no bloquea el pintado. | [docs](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/helpers/utils/response-cache.md) |
+| `ai/motores` | `lib/ai/motores.min.mjs` | IA en el navegador sin UI: ejecutar(herramienta, entrada); 13 motores runonweb fuera de los barriles. | [docs](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/ai/ai.md) |
+| `ai/descarga` | `lib/ai/descarga.min.mjs` | conDescarga: regla única para bajar un modelo (hasta 20 MB toast; más, modal); pospuesta, medidor. | [docs](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/ai/ai.md) |
+| `ai/vector-local` | `lib/ai/vector-local.min.mjs` | vectorLocal, cargarCorpus, ordenarPorSentido: buscar por significado con el modelo multilingüe; null si no está. | [docs](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/ai/ai.md) |
+| `ai/orden` | `lib/ai/orden.min.mjs` | ordenarAplanado: exactas primero, luego embeddings y léxico tolerante. Puro. | [docs](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/ai/ai.md) |
+| `ai/aplanado` | `lib/ai/aplanado.min.mjs` | Reducción de vectores: aplanar, abrirCorpus, empacar; ajustar (PCA/LDA) en aplanado-ajuste para el build. | [docs](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/ai/ai.md) |
 | `sync-pins` | `scripts/sync-pins.mjs (repo)` | Tras commit del kit: propaga SHA a kit-pin / ISS / PIN (deno task sync:pins). | [docs](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/scripts/sync-pins.mjs) |
 
 ## Tags por categoría

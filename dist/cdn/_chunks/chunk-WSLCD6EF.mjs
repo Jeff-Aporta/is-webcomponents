@@ -1,0 +1,1 @@
+function a(t){let e=t.getAttribute("height");e?t.style.setProperty("--iswc-file-height",e):t.style.removeProperty("--iswc-file-height")}function c(t,e,r="vacio"){let i=document.createElement("iswc-empty-state");i.setAttribute("estado",r),i.setAttribute("titulo",e),i.setAttribute("part","state"),t.replaceChildren(i)}export{a,c as b};

@@ -1,0 +1,12 @@
+/*!
+ * ISWC - docs (LLM)
+ * component-skill: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/helpers/wake-lock.md
+ * kit-skill: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/iswc-base/SKILL.md
+ * component: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/helpers/wake-lock.md
+ * category: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/specs/componentes.md
+ * kit: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/specs/componentes.md
+ * loader: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/cdn/loader.md
+ * cdn-install: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/is-cdn-install/SKILL.md
+ * blob: https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/helpers/wake-lock.js
+ */
+import{a as m,b as g}from"../_chunks/chunk-XP253YBZ.mjs?v=7txe1k";import{e as r}from"../_chunks/chunk-MNU2XQTU.mjs?v=khcy6g";import"../_chunks/chunk-HCLZRPU3.mjs?v=nylj0w";import"../_chunks/chunk-C7ON665Q.mjs?v=6f2qf1";import"../_chunks/chunk-SNHMDDOU.mjs?v=6lxkqf";import{f as l,g as a,h,i as c,j as n}from"../_chunks/chunk-4PV5NT2U.mjs?v=58b9qn";var k=":host{display:contents}";(()=>{var t,s,e,d,u;let v=document.createElement("template");v.innerHTML="<slot></slot>";class o extends m{constructor(){super();h(this,e);h(this,t,null);h(this,s);this.shadowRoot.appendChild(v.content.cloneNode(!0)),c(this,s,()=>{document.visibilityState==="visible"&&this.active&&n(this,e,d).call(this)})}connectedCallback(){document.addEventListener("visibilitychange",a(this,s)),this.active&&n(this,e,d).call(this)}disconnectedCallback(){document.removeEventListener("visibilitychange",a(this,s)),n(this,e,u).call(this)}attributeChangedCallback(){this.active?n(this,e,d).call(this):n(this,e,u).call(this)}get active(){return this.hasAttribute("active")}set active(i){this.toggleAttribute("active",!!i)}get held(){return!!a(this,t)}}t=new WeakMap,s=new WeakMap,e=new WeakSet,d=async function(){if(!(!("wakeLock"in navigator)||a(this,t)))try{let i=await navigator.wakeLock.request("screen");c(this,t,i),i.addEventListener("release",()=>{c(this,t,null),r(this,"iswc-change",{held:!1})}),r(this,"iswc-change",{held:!0})}catch{r(this,"iswc-change",{held:!1})}},u=async function(){let i=a(this,t);if(i){try{await i.release()}catch{}c(this,t,null)}},l(o,"tag","iswc-wake-lock"),l(o,"css",k),l(o,"observed",["active"]),g(o,"IswcWakeLock")})();

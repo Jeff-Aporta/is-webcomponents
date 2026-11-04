@@ -1,4 +1,4 @@
-# `iswcLoader` (`loader.min.js`)
+# `iswcLoader` (`loader.min.mjs`)
 
 Entry CDN liviano del kit. Carga solo lo pedido, con pin, mirrors y anti-redundancia.
 
@@ -9,9 +9,9 @@ Entry CDN liviano del kit. Carga solo lo pedido, con pin, mirrors y anti-redunda
 | Fuente | `src/cdn/loader.ts` |
 | Planificador | `src/cdn/load-plan.ts` |
 | Este doc | `src/cdn/loader.md` |
-| Publicado | `dist/cdn/core/loader.min.js` · `dist/cdn/core/loader.md` |
+| Publicado | `dist/cdn/core/loader.min.mjs` · `dist/cdn/core/loader.md` |
 | Raw | `https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/cdn/loader.md` |
-| CDN | `https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn/core/loader.min.js` |
+| CDN | `https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn/core/loader.min.mjs` |
 
 Skill de instalación: [`skills/is-cdn-install/SKILL.md`](../../skills/is-cdn-install/SKILL.md).
 
@@ -21,7 +21,7 @@ Nombre: el kit es **`iswc-base`**; en las URLs va el nombre real del repo en Git
 
 ```js
 import { iswcLoader as L } from
-  'https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@REF/dist/cdn/core/loader.min.js';
+  'https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@REF/dist/cdn/core/loader.min.mjs';
 
 // Sin configure: el loader ya trae quemado el SHA de ESTE build (o el de @REF
 // si la URL venía pinneada). load() pide componentes a jsDelivr@eseSha.
@@ -38,15 +38,15 @@ Con import map (alias `@jeff-aporta/iswc-base/`, la entrada que publica `dist/cd
 { "imports": { "@jeff-aporta/iswc-base/": "https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@REF/dist/cdn/" } }
 </script>
 <script type="module">
-  import { iswcLoader as L } from '@jeff-aporta/iswc-base/core/loader.min.js';
+  import { iswcLoader as L } from '@jeff-aporta/iswc-base/core/loader.min.mjs';
   await L.load('iswc-button');
 </script>
 ```
 
 ### Pin quemado (default)
 
-Cada `loader.min.js` lleva `__IS_BUILD_SHA__` (HEAD al publicar). Si el
-`script src` / `import` usa `@<sha>/…/loader.min.js`, ese SHA de la URL gana.
+Cada `loader.min.mjs` lleva `__IS_BUILD_SHA__` (HEAD al publicar). Si el
+`script src` / `import` usa `@<sha>/…/loader.min.mjs`, ese SHA de la URL gana.
 
 | | |
 | --- | --- |
@@ -107,9 +107,11 @@ Cadena fija al cargar JS/CSS del kit (si un espejo cae, el siguiente responde):
 
 ## Hash de contenido (`?v=`)
 
-Cada build deja un mapa de 6 caracteres en el loader (`__IS_ASSET_HASHES__`) y en `dist/cdn/asset-hashes.json`. `load`, `loadCSS*` y `assetUrl` agregan `?v=` al enrutar. Si el archivo cambia, el hash cambia y el navegador pide esa URL: no hace falta un refresco forzado.
+Cada build deja un mapa de 6 caracteres en `dist/cdn/asset-hashes.json`. Desde F3 el loader **no** lo lleva embebido (`__IS_ASSET_HASHES__` queda en `{}`; F4 lo leerá en diferido), así que hoy `load` y `assetUrl` no agregan `?v=`; sobre un pin SHA de jsDelivr/githack no lo agregarán nunca (`esUrlInmutable`: la URL ya es inmutable). Si el archivo cambia, el hash cambia y el navegador pide esa URL: no hace falta un refresco forzado.
 
-Los `import` relativos entre `.min.js` llevan el mismo `?v=`, sellado en el build en orden de dependencias. Los módulos se cargan solo con `import()` (dedupe por URL); no pasan por Cache Storage: la caché HTTP (`immutable` en jsDelivr, `?v=` en orígenes mutables) cubre la revisita sin pedir cada `.min.js` dos veces. El CSS de documento que no usa `url()` relativo se guarda en IndexedDB con la clave ruta+hash; localStorage recuerda el mapa para tirar los cuerpos viejos.
+**Extensiones y grafo (F3).** Los módulos ES del kit son `.min.mjs` (`<cat>/<tag>.min.mjs`, `core/<x>.min.mjs`, `_chunks/chunk-<hash>.mjs`); `.js` queda para lo clásico (`*.classic.js`, `<script src>`) y para la copia compat `core/loader.min.js` (se retira en F5). `dist/cdn/deps.json` da, por tag, el cierre completo de módulos que trae: F4 lo usará para precargar el lote con `modulepreload`.
+
+Los `import` relativos entre `.min.mjs` llevan el mismo `?v=`, sellado en el build en orden de dependencias. Los módulos se cargan solo con `import()` (dedupe por URL); no pasan por Cache Storage: la caché HTTP (`immutable` en jsDelivr, `?v=` en orígenes mutables) cubre la revisita sin pedir cada `.min.js` dos veces. El CSS de documento que no usa `url()` relativo se guarda en IndexedDB con la clave ruta+hash; localStorage recuerda el mapa para tirar los cuerpos viejos.
 
 Generadores para otros proyectos (CDN o vendor): `src/cdn/build/` (`bundleMinJs`, `bundleLoader`, `stampHashTexts`, `hashBase`/`hashJs`/`hashCss`/`hashHtml`). El build los publica en `dist/cdn/build/`.
 
@@ -224,7 +226,7 @@ Misma pieza para la galería ISWC y para **cualquier app** de docs/demos.
 
 ```html
 <!-- CDN / otra app -->
-<script type="module" src="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents/dist/cdn/preview/doc-demo-host.min.js"></script>
+<script type="module" src="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents/dist/cdn/preview/doc-demo-host.min.mjs"></script>
 <script type="module" src="./app.min.js"></script>
 <body>
   <iswc-doc-demo brand="MiApp" sheets-cache="mi-app-sheets"></iswc-doc-demo>
@@ -234,7 +236,7 @@ Misma pieza para la galería ISWC y para **cualquier app** de docs/demos.
 ```html
 <!-- Galería local (self-test) — solo loader; sin ?v= ni script src de bundles -->
 <script type="module">
-  import { iswcLoader as L } from './dist/cdn/core/loader.min.js';
+  import { iswcLoader as L } from './dist/cdn/core/loader.min.mjs';
   await L.loadPageModules(['iswc-doc-demo-host']);
   await L.loadPageModules(['iswc-gallery-app']);
 </script>
@@ -245,7 +247,7 @@ Misma pieza para la galería ISWC y para **cualquier app** de docs/demos.
 
 | Artefacto | Tipo | Rol |
 | --- | --- | --- |
-| `loader.min.js` | module | entry; enruta `?v=` y espejos |
+| `loader.min.mjs` | module | entry; enruta `?v=` y espejos |
 | `iswc-doc-demo-host` | alias module | `configure` + boot + `L.load('iswc-doc-demo')` |
 | `iswc-gallery-app` | alias module | SPA `dist/gallery-app.min.js` |
 | `iswc-doc-demo-boot` | alias module | theme/palette + CSS crítico |
@@ -253,7 +255,7 @@ Misma pieza para la galería ISWC y para **cualquier app** de docs/demos.
 
 Aliases CSS: `iswc-palettes-default`, `iswc-doc-shell`, `iswc-doc-presentation`.  
 Page modules: `type: 'module' | 'classic'` (`dev-reload` classic, **opt-in** con attr `dev`).
-Tema ER InSoft (sin CE nuevo): alias JS `iswc-diagram-theme` → `cdn:diagrams/theme.min.js`
+Tema ER InSoft (sin CE nuevo): alias JS `iswc-diagram-theme` → `cdn:diagrams/theme.min.mjs`
 (`json2css`, `resolveErTheme`, `INSOFT_THEME`); JSON editable en `dist/cdn/diagrams/themes/insoft.json`.
 Uso: `<iswc-er-diagram theme="insoft">` / `<iswc-er-editor theme="insoft">`.  
 Evento canónico: `iswc-doc-demo-ready` / `.whenReady()`.

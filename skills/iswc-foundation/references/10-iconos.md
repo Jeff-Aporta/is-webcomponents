@@ -35,7 +35,7 @@ La base es el sitio publicado de la app (`deno.json` → `"iswc": { "host": "htt
 Va junto a tema y paleta, en la config inicial de la app (`core/app-init`):
 
 ```ts
-import { initApp } from '<kit>/dist/cdn/core/app-init.min.js';
+import { initApp } from '<kit>/dist/cdn/core/app-init.min.mjs';
 initApp({
   theme: 'light',
   palette: 'delfin',

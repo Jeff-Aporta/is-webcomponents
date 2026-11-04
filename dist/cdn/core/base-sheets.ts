@@ -8,7 +8,7 @@
  * paralelizar: el `href` sólo se conoce cuando el módulo que lo pide ya se
  * ejecutó.
  *
- * Este módulo se publica **externo** (`dist/cdn/_shared/base-sheets.min.js`),
+ * Este módulo se publica **externo** (`dist/cdn/core/base-sheets.min.mjs`),
  * igual que `decors`: una petición por página en lugar de dos por carpeta, y
  * una única `CSSStyleSheet` que todos los shadows adoptan por referencia.
  *

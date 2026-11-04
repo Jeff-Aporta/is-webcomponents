@@ -4,7 +4,7 @@ description: >-
   Instala y consume el kit ISWC solo por CDN (jsDelivr / GitHub Pages),
   sin npm ni npx. Cubre bootstrap (is-base + palettes + .min.js), espejos, pin por
   SHA, boot con fallback, y lectura de docs vía iswc-cdn-snippet. Usar cuando el
-  usuario pida instalar is-*, enlaces CDN, loader.min.js, L.load,
+  usuario pida instalar is-*, enlaces CDN, loader.min.mjs, L.load,
   mirrors, o copiar el panel Consumo por CDN.
 ---
 <!-- @vendor 2026-10-14T16:13:19.844Z Jeff-Aporta/is-webcomponents@main skills/is-cdn-install/SKILL.md -->
@@ -52,7 +52,7 @@ Skill general del kit (reuso de tags, arquitectura, prompt, herramientas): [`isw
 <html lang="es" data-theme="dark" data-palette="delfin">
 <head>
   <script type="module"
-    src="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn/core/loader.min.js"></script>
+    src="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn/core/loader.min.mjs"></script>
   <script type="module">
     const L = globalThis.iswcLoader;
     await L.loadCSSBase();
@@ -102,7 +102,7 @@ build en `dist/cdn/importmap.json`; `pin-update.mjs` la mantiene al día (tambi�
 { "imports": { "@jeff-aporta/iswc-base/": "https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@<sha40>/dist/cdn/" } }
 </script>
 <script type="module">
-  import { iswcLoader as L } from '@jeff-aporta/iswc-base/core/loader.min.js';
+  import { iswcLoader as L } from '@jeff-aporta/iswc-base/core/loader.min.mjs';
   await L.loadCSSBase();
   await L.load('iswc-button');
 </script>
@@ -144,7 +144,7 @@ async function boot(files) {
 }
 await boot({
   css: ["is-base.min.css", "palettes.min.css"],
-  js: ["loader.min.js"],
+  js: ["loader.min.mjs"],
 });
 </script>
 ```
@@ -153,7 +153,7 @@ await boot({
 
 En la demo del kit, cada preview monta el panel **Consumo por CDN**:
 
-- Copy-paste: `loader.min.js` + `L.loadCSS*` + `L.load(tag)`.
+- Copy-paste: `loader.min.mjs` + `L.loadCSS*` + `L.load(tag)`.
 - Bloque **Para agentes / LLM**: prompt + enlaces MD.
 
 Al instalar en otra app, **copia los mismos URLs** que muestra el panel (no inventes rutas).
@@ -172,7 +172,7 @@ No inventar props/eventos que no están en el MD.
 
 - [ ] Solo CDN (sin npm del kit)
 - [ ] Un solo espejo / un solo `base` en la página
-- [ ] `loader.min.js` + `L.loadCSSBase` + `L.loadCSSPalettesDefault` + `L.load(tags…)`
+- [ ] `loader.min.mjs` + `L.loadCSSBase` + `L.loadCSSPalettesDefault` + `L.load(tags…)`
 - [ ] JS: solo los tags de la vista (no `all.min.js`)
 - [ ] `data-theme` + `data-palette` en `<html>`
 - [ ] Pin `@<sha>` (o `@main` justificado, o copia local vía `/iswc-base:local`)

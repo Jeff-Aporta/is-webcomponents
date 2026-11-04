@@ -24,7 +24,7 @@ export function withAssetHash(href: string, hash: string): string {
   return `${path}?${params.toString()}${frag}`;
 }
 
-/** Busca el hash por ruta exacta o por el sufijo mas largo (`…/actions/button.min.js`). */
+/** Busca el hash por ruta exacta o por el sufijo mas largo (`…/actions/button.min.mjs`). */
 export function lookupHash(files: Record<string, string>, href: string): string | null {
   if (!href || !files) return null;
   const path = href.split(/[?#]/)[0].replace(/\\/g, '/');
@@ -40,6 +40,20 @@ export function lookupHash(files: Record<string, string>, href: string): string 
     }
   }
   return best;
+}
+
+/**
+ * `true` si la URL es de jsDelivr o githack pineada a un SHA (`…/gh/<owner>/<repo>@<sha>/…`, `raw.githack.com/
+ * <owner>/<repo>/<sha>/…`): el contenido es inmutable (`Cache-Control: immutable`), así que no lleva `?v=`. Pages,
+ * localhost, `file:` y los pines a una rama (`@main`) son mutables y sí se sellan (plan D5).
+ */
+export function esUrlInmutable(href: string): boolean {
+  let u: URL;
+  try { u = new URL(href); } catch { return false; }
+  const host = u.hostname.toLowerCase();
+  if (host === 'cdn.jsdelivr.net') return /^\/gh\/[^/]+\/[^/@]+@[0-9a-f]{7,40}\//i.test(u.pathname);
+  if (host === 'raw.githack.com' || host === 'rawcdn.githack.com') return /^\/[^/]+\/[^/]+\/[0-9a-f]{7,40}\//i.test(u.pathname);
+  return false;
 }
 
 /** Si el loader ya esta en la pagina, enruta por el. Si no, deja el href. */

@@ -8,7 +8,7 @@ Stagehand/Playwright (is-webcomponents@60be5643d6).
 ```html
 <script type="module">
   import { iswcLoader as L }
-    from 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@<sha>/dist/cdn/core/loader.min.js';
+    from 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@<sha>/dist/cdn/core/loader.min.mjs';
   L.configure({ mirrors: ['jsdelivr', 'pages'], preferSelf: false });
   await L.load('iswc-preview-component', 'iswc-preview-controls', /* …tags del demo… */);
   await customElements.whenDefined('iswc-preview-component');

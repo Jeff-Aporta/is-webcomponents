@@ -2,7 +2,7 @@
 name: iswc-base
 description: >-
   Obliga a reusar el kit iswc-* (Jeff-Aporta/is-webcomponents) al fundar o extender
-  apps de web components sin framework. Usar cuando hay CDN loader.min.js / is-base /
+  apps de web components sin framework. Usar cuando hay CDN loader.min.mjs / is-base /
   palettes, tags iswc-button iswc-dialog iswc-data-grid iswc-chart iswc-icon, APIs
   IswcUi / md-hydrate / response-cache, apps tipo frontend-webcomponents / tk-*,
   migraciones desde React/MUI/Svelte, o cuando se pueda reinventar UI del catálogo.
@@ -166,7 +166,7 @@ Excepción: apps que declaran seguimiento continuo (por ejemplo `jagudeloe/front
 <html lang="es" data-theme="dark" data-palette="delfin">
 <head>
   <script type="module"
-    src="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@{{SHA}}/dist/cdn/core/loader.min.js"></script>
+    src="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@{{SHA}}/dist/cdn/core/loader.min.mjs"></script>
   <script type="module">
     const L = globalThis.iswcLoader;
     await L.loadCSSBase();
@@ -213,9 +213,9 @@ Cada `app-*` / `tk-*` lleva **JS y CSS hermanos**. No van embebidos en el TS.
 
 1. Fuente: `app-files.ts` + `app-files.css`
 2. Build: minifica a `dist/cdn/app-files.js` + `dist/cdn/app-files.css`
-3. Runtime: `IswcUi.adoptCss(shadow, import.meta.url)` (la misma idea que `_shared/adopt-css.js`)
+3. Runtime: `IswcUi.adoptCss(shadow, import.meta.url)` (compatibilidad para código externo al kit, que enlaza su `.css` hermano). Los componentes **del kit** no lo usan: extienden `IswcElement` con `static css = css` (`import css from 'iswc:css'`) y se registran con `define(Clase)` (ver `specs/componentes.md`, «Forma canónica»).
 
-Tras vaciar el shadow, vuelve a llamar `adoptCss` (los `<link>` se borran con el contenido).
+Tras vaciar el shadow, vuelve a llamar `adoptCss` (los `<link>` se borran con el contenido; las hojas adoptadas por el molde sí sobreviven).
 
 `IswcUi.css(shadow, cssText)` queda solo para prototipos sin archivo hermano.
 
@@ -252,7 +252,7 @@ Base raw: `https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/s
 - Traer MUI, React, Iconify o Chart.js directo cuando el kit cubre el caso (si vienes de uno de estos, ver [`/iswc-base:migrate`](tools/migrate.md)).
 - Usar o documentar `iswc-popup` (eliminado).
 - Meter CSS de un componente del kit en el `<head>` (solo tema y paletas).
-- Meter el CSS del wrapper de dominio como string dentro del `.ts` (usar el `.css` hermano y `adoptCss`).
+- Meter el CSS del wrapper de dominio como string dentro del `.ts` (usar el `.css` hermano: `adoptCss` en apps externas; en el kit, `static css` del molde `IswcElement`).
 - Inventar props o `data-*` que la guía no documenta.
 - Usar APIs ad hoc fuera del contrato de la guía.
 - Crear un `tk-*` que pinte UI genérica en vez de delegar a `is-*`.
@@ -275,7 +275,7 @@ Antes de cambiar el repo del kit, leer [`specs/lessons.md`](https://github.com/J
 - [ ] Tema y paleta con tokens `--iswc-*`.
 - [ ] Los wrappers de dominio solo traducen datos al kit.
 - [ ] CDN: SHA fijado (`{{SHA}}` resuelto), o `@main` si el proyecto sigue la punta, o copia local vía `/iswc-base:local`.
-- [ ] CSS de dominio en archivo hermano + `adoptCss` (no un `const CSS` gigante en el JS).
+- [ ] CSS de dominio en archivo hermano + `adoptCss` en apps externas, o `static css` del molde `IswcElement` en el kit (no un `const CSS` gigante en el JS).
 - [ ] El build de la app emite `.css` minificado junto al `.js` en `dist/cdn`.
 - [ ] Sin `npm install`, `npx` ni bundler para el kit.
 
@@ -296,18 +296,18 @@ Detalle operativo: [`tools/runtime.md`](tools/runtime.md).
 
 | API / módulo | CDN o ruta | Resumen | Guía |
 | --- | --- | --- | --- |
-| `iswcLoader` | `core/loader.min.js` | Entry CDN: loadCSS*, load/ensure/has, pin, configure, espejos jsDelivr -> githack -> Pages, sheets, registerApp, SHA quemado. | [docs](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/cdn/loader.md) |
-| `IswcUi / Ui` | `helpers/ui.min.js` | html, adoptCss, define, css, el: primitivas de apps dominio. No es CE. | [docs](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/helpers/ui.md) |
-| `mdToHtml` | `helpers/md-lite.min.js` | Markdown -> HTML sin npm; fences codigo e iswc-* (diagramas). | [docs](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/helpers/utils/md-lite.md) |
-| `resolveIswcFenceTag` | `helpers/md-iswc-fences.min.js` | Lang fence iswc-* -> tag de diagrama (flowchart, er, sequence, ...). | [docs](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/helpers/utils/md-iswc-fences.md) |
-| `hydrateMdEmbeds` | `helpers/md-hydrate.min.js` | Carga perezosa de los iswc-* que pusieron los renders por defecto del markdown. | [docs](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/helpers/utils/md-hydrate.md) |
-| `md-editor-api` | `helpers/md-editor-api.min.js` | CRUD/normalizacion para iswc-md-editor (endpoints, fieldMap, token). | [docs](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/helpers/utils/md-editor-api.md) |
-| `IswcResponseCache` | `helpers/response-cache.min.js` | SWR IndexedDB: vivo/leer/guardar/invalidar; no bloquea el pintado. | [docs](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/helpers/utils/response-cache.md) |
-| `ai/motores` | `lib/ai/motores.min.js` | IA en el navegador sin UI: ejecutar(herramienta, entrada); 13 motores runonweb fuera de los barriles. | [docs](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/ai/ai.md) |
-| `ai/descarga` | `lib/ai/descarga.min.js` | conDescarga: regla única para bajar un modelo (hasta 20 MB toast; más, modal); pospuesta, medidor. | [docs](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/ai/ai.md) |
-| `ai/vector-local` | `lib/ai/vector-local.min.js` | vectorLocal, cargarCorpus, ordenarPorSentido: buscar por significado con el modelo multilingüe; null si no está. | [docs](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/ai/ai.md) |
-| `ai/orden` | `lib/ai/orden.min.js` | ordenarAplanado: exactas primero, luego embeddings y léxico tolerante. Puro. | [docs](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/ai/ai.md) |
-| `ai/aplanado` | `lib/ai/aplanado.min.js` | Reducción de vectores: aplanar, abrirCorpus, empacar; ajustar (PCA/LDA) en aplanado-ajuste para el build. | [docs](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/ai/ai.md) |
+| `iswcLoader` | `core/loader.min.mjs` | Entry CDN: loadCSS*, load/ensure/has, pin, configure, espejos jsDelivr -> githack -> Pages, sheets, registerApp, SHA quemado. | [docs](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/cdn/loader.md) |
+| `IswcUi / Ui` | `helpers/ui.min.mjs` | html, adoptCss, define, css, el: primitivas de apps dominio externas (compat; el kit usa el molde `IswcElement`). No es CE. | [docs](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/helpers/ui.md) |
+| `mdToHtml` | `helpers/md-lite.min.mjs` | Markdown -> HTML sin npm; fences codigo e iswc-* (diagramas). | [docs](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/helpers/utils/md-lite.md) |
+| `resolveIswcFenceTag` | `helpers/md-iswc-fences.min.mjs` | Lang fence iswc-* -> tag de diagrama (flowchart, er, sequence, ...). | [docs](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/helpers/utils/md-iswc-fences.md) |
+| `hydrateMdEmbeds` | `helpers/md-hydrate.min.mjs` | Carga perezosa de los iswc-* que pusieron los renders por defecto del markdown. | [docs](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/helpers/utils/md-hydrate.md) |
+| `md-editor-api` | `helpers/md-editor-api.min.mjs` | CRUD/normalizacion para iswc-md-editor (endpoints, fieldMap, token). | [docs](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/helpers/utils/md-editor-api.md) |
+| `IswcResponseCache` | `helpers/response-cache.min.mjs` | SWR IndexedDB: vivo/leer/guardar/invalidar; no bloquea el pintado. | [docs](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/helpers/utils/response-cache.md) |
+| `ai/motores` | `lib/ai/motores.min.mjs` | IA en el navegador sin UI: ejecutar(herramienta, entrada); 13 motores runonweb fuera de los barriles. | [docs](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/ai/ai.md) |
+| `ai/descarga` | `lib/ai/descarga.min.mjs` | conDescarga: regla única para bajar un modelo (hasta 20 MB toast; más, modal); pospuesta, medidor. | [docs](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/ai/ai.md) |
+| `ai/vector-local` | `lib/ai/vector-local.min.mjs` | vectorLocal, cargarCorpus, ordenarPorSentido: buscar por significado con el modelo multilingüe; null si no está. | [docs](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/ai/ai.md) |
+| `ai/orden` | `lib/ai/orden.min.mjs` | ordenarAplanado: exactas primero, luego embeddings y léxico tolerante. Puro. | [docs](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/ai/ai.md) |
+| `ai/aplanado` | `lib/ai/aplanado.min.mjs` | Reducción de vectores: aplanar, abrirCorpus, empacar; ajustar (PCA/LDA) en aplanado-ajuste para el build. | [docs](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/ai/ai.md) |
 | `sync-pins` | `scripts/sync-pins.mjs (repo)` | Tras commit del kit: propaga SHA a kit-pin / ISS / PIN (deno task sync:pins). | [docs](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/scripts/sync-pins.mjs) |
 
 <!-- apis:fin -->
@@ -330,7 +330,7 @@ el contrato), sigue la skill paralela:
 
 Sub-guías de la skill:
 
-- [`references/lifecycle.md`](../build-component/references/lifecycle.md) — Hooks de `ElementBase`, shadow, upgrade de propiedades, form-associated, cleanup.
+- [`references/lifecycle.md`](../build-component/references/lifecycle.md) — Hooks del molde `IswcElement`, shadow, upgrade de propiedades, form-associated, cleanup.
 - [`references/states.md`](../build-component/references/states.md) — Custom states, `setCustomState`, fallback `data-state-*`.
 - [`references/parts-slots.md`](../build-component/references/parts-slots.md) — `part="..."`, slots semánticos, `:slotted(...)`.
 - [`references/props-events.md`](../build-component/references/props-events.md) — Atributos observados, propiedades, eventos `iswc-*` con `composed: true`.

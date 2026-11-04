@@ -1,0 +1,17 @@
+/*!
+ * ISWC - docs (LLM)
+ * component-skill: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/media/person.md
+ * kit-skill: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/iswc-base/SKILL.md
+ * component: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/media/person.md
+ * category: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/specs/componentes.md
+ * kit: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/specs/componentes.md
+ * loader: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/cdn/loader.md
+ * cdn-install: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/is-cdn-install/SKILL.md
+ * blob: https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/media/person.js
+ */
+import"../_chunks/chunk-ST7BPP3O.mjs?v=hlg5dr";import"../_chunks/chunk-CMMNDMPL.mjs?v=0iv9ee";import{a as y,b as E}from"../_chunks/chunk-H7JGCL52.mjs?v=t671vi";import"../_chunks/chunk-Z322TDRE.mjs?v=pik3ae";import"../_chunks/chunk-2SX4KFRW.mjs?v=6l2b2u";import"../_chunks/chunk-UCMASPOL.mjs?v=34t4kr";import"../_chunks/chunk-NXN5A2MA.mjs?v=fncrll";import{b as v}from"../_chunks/chunk-XP253YBZ.mjs?v=7txe1k";import"../_chunks/chunk-MNU2XQTU.mjs?v=khcy6g";import"../_chunks/chunk-HCLZRPU3.mjs?v=nylj0w";import"../_chunks/chunk-C7ON665Q.mjs?v=6f2qf1";import"../_chunks/chunk-SNHMDDOU.mjs?v=6lxkqf";import{f as d,g as t,h as o,i as n}from"../_chunks/chunk-4PV5NT2U.mjs?v=58b9qn";import{z as l}from"../lib/zod.min.mjs?v=r69zzt";var P=l.object({usuario:l.string(),nombre:l.string().nullable(),detalle:l.string(),compacto:l.boolean()});var g='@charset "UTF-8";:host{display:inline-block;min-width:0;font-family:var(--iswc-sans)}:host([hidden]){display:none!important}.persona{display:inline-flex;align-items:center;gap:.5em;min-width:0}.avatar{flex:none;font-size:1.9em}.texto{display:flex;flex-direction:column;min-width:0;line-height:1.2}.texto[hidden]{display:none}.nombre,.detalle{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.nombre{font-weight:600}.detalle{color:var(--iswc-text-dim);font-size:.82em}.detalle[hidden]{display:none}';var w={usuario:"",nombre:null,detalle:"",compacto:!1},M=document.createElement("template");M.innerHTML=`
+  <span class="persona" part="persona">
+    <iswc-avatar class="avatar" part="avatar"></iswc-avatar>
+    <span class="texto"><span class="nombre" part="nombre"></span><span class="detalle" part="detalle" hidden></span></span>
+  </span>
+`;function H(f,b){let e=(f||b||"?").trim(),s=e.split(/\s+/).filter(Boolean);return(s.length>1?`${s[0][0]}${s[1][0]}`:e.slice(0,2)).toUpperCase()}var p,a,c,m,i,r=class extends E{constructor(){super(w,P.partial());o(this,p);o(this,a);o(this,c);o(this,m);o(this,i);let e=this.shadowRoot;e.appendChild(M.content.cloneNode(!0)),n(this,p,e.querySelector(".persona")),n(this,a,e.querySelector(".avatar")),n(this,c,e.querySelector(".texto")),n(this,m,e.querySelector(".nombre")),n(this,i,e.querySelector(".detalle"))}pintar(){let{usuario:e,nombre:s,detalle:h,compacto:x}=this.props,u=s||e;t(this,p).title=x?u:"",t(this,a).setAttribute("initials",H(s,e)),t(this,a).setAttribute("label",u),t(this,c).hidden=x,t(this,m).textContent=u,t(this,i).textContent=h,t(this,i).hidden=!h}};p=new WeakMap,a=new WeakMap,c=new WeakMap,m=new WeakMap,i=new WeakMap,d(r,"tag","iswc-person"),d(r,"css",g),d(r,"observed",y(w));v(r,"IswcPerson");

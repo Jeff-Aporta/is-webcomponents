@@ -48,7 +48,7 @@ CDN (o por copia local si la app ya corrió [`/iswc-base:local`](local.md)).
    y el componente encapsula lógica de negocio (mapear JSON — varios `is-*`).
 5. **Feedback global:** un único `<iswc-toast placement="bottom-end">` en el shell.
 6. **CSS de dominio** igual que el kit: archivo hermano (`app-files.css`) +
-   `IswcUi.adoptCss(shadow, import.meta.url)` en runtime. Nunca `const CSS = \`—\`` embebido en el JS.
+   `IswcUi.adoptCss(shadow, import.meta.url)` en runtime (compat para apps externas; un componente que se sube al kit pasa a `IswcElement` con `static css`). Nunca `const CSS = \`—\`` embebido en el JS.
 7. **Tema:** `data-theme` / `data-palette` en `<html>`; tokens `--iswc-text`,
    `--iswc-bg`, `--iswc-border`, `--iswc-accent`, etc. en el CSS propio.
 
@@ -61,7 +61,7 @@ CDN (o por copia local si la app ya corrió [`/iswc-base:local`](local.md)).
 - [ ] Wrappers de dominio (`tk-*`/`app-*`) solo traducen datos — kit.
 - [ ] Sin `iswc-popup` (usar `iswc-popover`/`iswc-tooltip`).
 - [ ] CDN: pin `@<sha>` o `@main` justificado (o local-first si aplica).
-- [ ] CSS de dominio en archivo hermano + `adoptCss`, no string embebido.
+- [ ] CSS de dominio en archivo hermano + `adoptCss` (app externa) o `static css` del molde (kit), no string embebido.
 
 ## Ver también
 

@@ -19,8 +19,9 @@ Regla: **el atributo es la fuente de verdad; la propiedad es un atajo
 de lectura/escritura que refleja al atributo**.
 
 ```ts
-class IswcFoo extends ElementBase {
-  static get observedAttributes(): string[] { return ['variant', 'shape']; }
+class IswcFoo extends IswcElement {
+  static tag = 'iswc-foo';
+  static observed = ['variant', 'shape'];
 
   // El atributo es la fuente de verdad
   get variant(): string {
@@ -41,13 +42,13 @@ Presencia ⇒ `true`. **Nunca** uses `attr="false"`. El getter devuelve
 `this.hasAttribute('foo')` y el setter usa `this.toggleAttribute('foo', v)`.
 
 ```ts
-static get observedAttributes(): string[] { return ['disabled', 'loading', 'pill']; }
+static observed = ['disabled', 'loading', 'pill'];
 
 get disabled(): boolean { return this.hasAttribute('disabled'); }
 set disabled(v: boolean) { this.toggleAttribute('disabled', !!v); }
 ```
 
-`ElementBase` tiene un atajo: `this.setBooleanAttr('disabled', v)`.
+`IswcElement` tiene un atajo: `this.setBooleanAttr('disabled', v)`.
 
 ### Enums
 
@@ -63,8 +64,9 @@ function normalizeVariant(v: string | null | undefined, def: FooVariant): FooVar
   return (FOO_VARIANT as readonly string[]).includes(v ?? '') ? v as FooVariant : def;
 }
 
-class IswcFoo extends ElementBase {
-  static get observedAttributes(): string[] { return ['variant']; }
+class IswcFoo extends IswcElement {
+  static tag = 'iswc-foo';
+  static observed = ['variant'];
   get variant(): FooVariant { return normalizeVariant(this.getAttribute('variant'), DEFAULT_FOO_VARIANT); }
   set variant(v: string | null | undefined) {
     if (v == null || v === '') this.removeAttribute('variant');
@@ -145,7 +147,8 @@ set href(v: string | null | undefined) {
 **No** serialices objetos a JSON en atributos. Usa **propiedades JS**:
 
 ```ts
-class IswcFoo extends ElementBase {
+class IswcFoo extends IswcElement {
+  static tag = 'iswc-foo';
   #data: unknown[] = [];
 
   get data(): unknown[] { return this.#data; }
@@ -189,7 +192,8 @@ Convención del kit: `iswc-<nombre>` (kebab-case), `composed: true`,
 ```ts
 import { emit } from '../../core/element.js';
 
-class IswcFoo extends ElementBase {
+class IswcFoo extends IswcElement {
+  static tag = 'iswc-foo';
   #boundClick = (e: Event) => {
     emit(this, 'iswc-click', { originalEvent: e });
   };

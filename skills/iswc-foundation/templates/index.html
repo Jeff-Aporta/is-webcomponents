@@ -13,7 +13,7 @@
 <link rel="stylesheet" href="./dist/cdn/styles/app.css">
 
 <!-- 1) Loader del kit por CDN pineado (un solo SHA en toda la app; `deno task pin` lo mantiene). -->
-<script type="module" src="https://cdn.jsdelivr.net/gh/__REPO__@__SHA__/dist/cdn/core/loader.min.js"></script>
+<script type="module" src="https://cdn.jsdelivr.net/gh/__REPO__@__SHA__/dist/cdn/core/loader.min.mjs"></script>
 <!-- 2) Registrador de la app: tag → URL ?v=<hash> (lo genera el build). Sin ?v= aquí: el loader lo pone. -->
 <script type="module" src="./dist/cdn/__PREFIJO__Loader.min.js"></script>
 <!-- 3) Arranque: estilos del kit, tags del kit y de la app, marca de lista con watchdog. -->

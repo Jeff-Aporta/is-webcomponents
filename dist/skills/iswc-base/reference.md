@@ -23,8 +23,8 @@ Usar este mapa al elegir tag. API exacta: MD del módulo en el repo.
 | Fila de indicadores | `iswc-stat-group` | rejilla propia de `iswc-stat` |
 | Cliente activo (multi-tenant) | `iswc-tenant-selector` | `iswc-select` en cada app |
 | OCR, voz a texto, traducción u otra IA con su pantalla | `iswc-ai-tool` | `runonweb` a mano |
-| IA dentro de otro componente, sin UI | `ejecutar` de `lib/ai/motores.min.js` | importar `runonweb` o bajar modelos a mano |
-| Buscar por significado en el navegador | `vectorLocal` + `ordenarPorSentido` de `lib/ai/vector-local.min.js` | modelo por defecto de `runonweb/embed` (inglés) |
+| IA dentro de otro componente, sin UI | `ejecutar` de `lib/ai/motores.min.mjs` | importar `runonweb` o bajar modelos a mano |
+| Buscar por significado en el navegador | `vectorLocal` + `ordenarPorSentido` de `lib/ai/vector-local.min.mjs` | modelo por defecto de `runonweb/embed` (inglés) |
 | Búsqueda global con orden por significado | `iswc-semantic-search` | paleta + botón a mano |
 | Carga en línea con texto | `iswc-loading` | spinner + span |
 | Paso de un proceso (pendiente, hecho, error) | `iswc-status-pill` | etiqueta con spinner a mano |
@@ -78,7 +78,7 @@ Escala: subir `font-size` del contexto o del host.
 
 ## Patrón wrapper de dominio
 
-Tras cargar `all.min.js` (incluye `helpers/ui`), usa `IswcUi` / `Ui`:
+Para código **externo al kit**, tras cargar `all.min.js` (incluye `helpers/ui`), usa `IswcUi` / `Ui` (`adoptCss` es compatibilidad: enlaza el `.css` hermano; los componentes del kit usan el molde `IswcElement` con `static css`, ver `specs/componentes.md`):
 
 ```js
 const { html, adoptCss, define, jsonScript } = IswcUi;
@@ -99,7 +99,7 @@ define('tk-badges', TkBadges);
 - Dist: `tk-badges.js` + `tk-badges.css` (minificados)
 - Mal: `const CSS = \`…\`` embebido + reinventar badge con `<span class="badge">`
 
-CDN suelto: `…/dist/cdn/helpers/ui.min.js`. Docs: `src/components/helpers/ui.md`.
+CDN suelto: `…/dist/cdn/helpers/ui.min.mjs`. Docs: `src/components/helpers/ui.md`.
 
 Referencia real: wrappers de dominio tipo `tk-badges` → `iswc-tag`, `tk-chart` → `iswc-chart`, `tk-block` → `iswc-callout` para kinds desconocidos.
 

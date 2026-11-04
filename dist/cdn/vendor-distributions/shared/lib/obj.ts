@@ -22,7 +22,7 @@
  * `"[campo=valor]"` = el primer elemento con ese campo (ver la sección `obj` de `shared/schemas.ts`). Nada muta: cada
  * operación devuelve un objeto nuevo. Importable por URL desde Deno (`zod` en el import map del consumidor):
  * https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/vendor-distributions/shared/lib/obj.ts
- * Bundle `obj.min.js` (Zod incluido) para el navegador en `dist/cdn/lib/`.
+ * Bundle `obj.min.mjs` (Zod incluido) para el navegador en `dist/cdn/lib/`.
  *
  * Skill: src/vendor-distributions/shared/lib/obj.md
  * Doc: https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/src/vendor-distributions/shared/lib/obj.md

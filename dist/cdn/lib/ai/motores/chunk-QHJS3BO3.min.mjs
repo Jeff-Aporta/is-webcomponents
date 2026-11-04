@@ -1,0 +1,4023 @@
+import"./chunk-YZ72RWW5.min.mjs?v=0a5auo";var ke=Object.freeze({float16:"float16",float32:"float32",uint32:"uint32"});function Sr(e){if(e===ke.float16)return 2;if(e===ke.float32||e===ke.uint32)return 4;throw Error(`Unsupported dtype: ${e}`)}function Pt(e){if(!Array.isArray(e)||e.length===0)throw Error("shape must be a non-empty array");let t=1;for(let r of e){if(!Number.isInteger(r)||r<=0)throw Error(`invalid shape dimension: ${r}`);t*=r}return t}function aa(e){let t=Array(e.length),r=1;for(let a=e.length-1;a>=0;--a)t[a]=r,r*=e[a];return t}var ia=["shader-f16","subgroups","chromium-experimental-subgroup-matrix"];async function oa(e={}){return new sa({host:e.host??await ua(e)})}var bt=class{constructor({runtime:e,dtype:t,shape:r,buffer:a,strides:i=aa(r)}){this.runtime=e,this.dtype=t,this.shape=r,this.strides=i,this.buffer=a,this.size=Pt(r),this.byteLength=this.size*Sr(t),this.destroyed=!1}destroy(){this.destroyed||=(this.buffer?.destroy?.(),!0)}},sa=class{constructor({host:e}){this.host=e,this.pipelineCache=new Map,this.bindGroupCache=new Map,this.maxBindGroupCacheEntries=4096,this.bufferIds=new WeakMap,this.nextBufferId=1,this.readbackPool=new Map,this.readbackPoolBytes=0,this.maxReadbackPoolBytes=64*1024*1024,this.destroyed=!1}caps(){return this.host.caps()}async destroy(){this.destroyed||(this.destroyed=!0,this.clearTransientCaches(),this.clearReadbackPool(),await this.host.destroy?.())}clearTransientCaches(){return{bindGroups:this.clearBindGroupCache()}}clearBindGroupCache(){let e=this.bindGroupCache.size;return this.bindGroupCache.clear(),e}clearReadbackPool(){let e=0;for(let t of this.readbackPool.values())for(let r of t)r.destroy?.(),e++;return this.readbackPool.clear(),this.readbackPoolBytes=0,e}tensorFromTypedArray(e,t,r){if(!da(e,r))throw Error("Only float16/Uint16Array, float32/Float32Array and uint32/Uint32Array tensors are supported");let a=Pt(t);if(r.length!==a)throw Error(`tensor data length ${r.length} does not match shape element count ${a}`);let i=this.host.createBuffer({label:"tensor",size:r.byteLength,usage:GPUBufferUsage.STORAGE|GPUBufferUsage.COPY_DST|GPUBufferUsage.COPY_SRC,mappedAtCreation:!0}),o=r.constructor;return new o(i.getMappedRange()).set(r),i.unmap(),new bt({runtime:this,dtype:e,shape:t,buffer:i})}allocateWeightsBuffer({byteLength:e,dtype:t,shape:r,label:a="weights"}){if(!Object.values(ke).includes(t))throw Error(`Unsupported dtype: ${t}`);if(!Number.isInteger(e)||e<0)throw Error(`byteLength must be a nonnegative integer, got ${e}`);let i=this.host.createBuffer({label:a,size:e,usage:GPUBufferUsage.STORAGE|GPUBufferUsage.COPY_DST|GPUBufferUsage.COPY_SRC});return new bt({runtime:this,dtype:t,shape:r,buffer:i})}writeWeightsRange(e,t,r){if(!(e instanceof bt))throw Error("writeWeightsRange expects a BonsaiWebGpuTensor");if(!Number.isInteger(t)||t<0)throw Error(`byteOffset must be a nonnegative integer, got ${t}`);if(t+r.byteLength>e.byteLength)throw Error(`write range [${t}, ${t+r.byteLength}] exceeds tensor byteLength ${e.byteLength}`);this.host.writeBuffer(e.buffer,t,r)}async copyBufferToBuffer({src:e,dst:t,srcOffset:r=0,dstOffset:a=0,byteLength:i,wait:o=!1}){let s=e?.buffer??e,u=t?.buffer??t,n=this.host.device.createCommandEncoder({label:"copyBufferToBuffer"});n.copyBufferToBuffer(s,r,u,a,i),await this.host.submit([n.finish()],{wait:o})}empty(e,t,r="tensor-output"){if(!Object.values(ke).includes(e))throw Error(`Unsupported dtype: ${e}`);let a=Pt(t)*Sr(e),i=this.host.createBuffer({label:r,size:a,usage:GPUBufferUsage.STORAGE|GPUBufferUsage.COPY_SRC|GPUBufferUsage.COPY_DST});return new bt({runtime:this,dtype:e,shape:t,buffer:i})}readTensor(e){let t=this.#t(e.byteLength),r=this.host.device.createCommandEncoder({label:"readTensor"});r.copyBufferToBuffer(e.buffer,0,t,0,e.byteLength),this.host.device.queue.submit([r.finish()]);let{dtype:a,byteLength:i}=e;return(async()=>{let o=await this.host.mapRead(t,0,i);if(this.#r(i,t),a===ke.float32)return new Float32Array(o);if(a===ke.float16)return new Uint16Array(o);if(a===ke.uint32)return new Uint32Array(o);throw Error(`Unsupported dtype: ${a}`)})()}createUniformU32(e,t){let r=new Uint32Array(e),a=this.host.createBuffer({label:t,size:r.byteLength,usage:GPUBufferUsage.UNIFORM|GPUBufferUsage.COPY_DST});return this.host.writeBuffer(a,0,r),a}async runProgram(e,t={}){let r=await this.#e(e),a=t.wait??!1,i=this.host.device.createCommandEncoder({label:"compute-dispatch"}),o=i.beginComputePass({label:"compute-pass"});o.setPipeline(r.pipeline),o.setBindGroup(0,r.bindGroup),o.dispatchWorkgroups(r.workgroups[0],r.workgroups[1],r.workgroups[2]),o.end(),await this.host.submit([i.finish()],{wait:a})}#t(e){let t=this.readbackPool.get(e);return t&&t.length>0?(this.readbackPoolBytes-=e,t.pop()):this.host.createBuffer({label:"tensor-readback",size:e,usage:GPUBufferUsage.COPY_DST|GPUBufferUsage.MAP_READ})}#r(e,t){if(this.readbackPoolBytes+e>this.maxReadbackPoolBytes){t.destroy?.();return}let r=this.readbackPool.get(e);r||(r=[],this.readbackPool.set(e,r)),r.push(t),this.readbackPoolBytes+=e}async#e(e){let{name:t,source:r,entryPoint:a="main",cacheKey:i=t,bindings:o,workgroups:s}=e;if(typeof r!="string"||r.length===0)throw Error("program requires WGSL source");if(!Array.isArray(o)||o.length===0)throw Error("program requires bindings");if(!Array.isArray(s)||s.length!==3)throw Error("program requires a 3D workgroups array");let u=await this.#a({name:t,source:r,entryPoint:a,cacheKey:i,layoutFactory:()=>this.#s(t,o.map(n=>n.type))});return{pipeline:u,bindGroup:this.#i({name:t,cacheKey:i,pipeline:u,bindings:o}),workgroups:s}}async#a({name:e,source:t,entryPoint:r,cacheKey:a,layoutFactory:i}){let o=this.pipelineCache.get(a);if(o)return o;let s=this.host.createShaderModule(t,e),u=await this.host.createComputePipeline({label:e,layout:i(),compute:{module:s,entryPoint:r}});return this.pipelineCache.set(a,u),u}#i({name:e,cacheKey:t,pipeline:r,bindings:a}){let i=a.map((u,n)=>{let l=u.tensor?.buffer??u.buffer,_={buffer:l,offset:u.offset??0};return u.size!==void 0&&(_.size=u.size),{binding:u.binding??n,resource:_,cachePart:`${u.binding??n}:${this.#o(l)}:${_.offset}:${_.size??""}`}}),o=`${t}|${i.map(u=>u.cachePart).join("|")}`,s=this.bindGroupCache.get(o);if(s===void 0&&(s=this.host.device.createBindGroup({label:`${e}-bind-group`,layout:r.getBindGroupLayout(0),entries:i.map(({binding:u,resource:n})=>({binding:u,resource:n}))}),this.bindGroupCache.set(o,s),this.bindGroupCache.size>this.maxBindGroupCacheEntries)){let u=this.bindGroupCache.keys().next().value;this.bindGroupCache.delete(u)}return s}#o(e){let t=this.bufferIds.get(e);return t===void 0&&(t=this.nextBufferId++,this.bufferIds.set(e,t)),t}#s(e,t){let r=this.host.device.createBindGroupLayout({label:`${e}-bgl`,entries:t.map((a,i)=>({binding:i,visibility:GPUShaderStage.COMPUTE,buffer:{type:a}}))});return this.host.device.createPipelineLayout({label:`${e}-layout`,bindGroupLayouts:[r]})}};async function ua(e={}){let t=globalThis.navigator?.gpu;if(!t)throw Error("WebGPU is not available in this browser context");let r=await t.requestAdapter({powerPreference:e.powerPreference??"high-performance"});if(!r)throw Error("No WebGPU adapter was returned");let a=await r.requestDevice({requiredFeatures:na(r),requiredLimits:e.requiredLimits??la(r),label:e.label??"webgpu-ml-runtime"});return a.addEventListener("uncapturederror",i=>{console.error("WebGPU uncaptured error:",i.error)}),ca({adapter:r,device:a,caps:_a(a,r),destroy:()=>a.destroy?.()})}function na(e){let t=new Set(({}.BONSAI_DISABLE_WEBGPU_FEATURES??"").split(",").map(r=>r.trim()).filter(Boolean));return ia.filter(r=>e.features.has(r)&&!t.has(r))}function la(e){let t={};return e.limits.maxBufferSize&&(t.maxBufferSize=Number(e.limits.maxBufferSize)),e.limits.maxStorageBufferBindingSize&&(t.maxStorageBufferBindingSize=Number(e.limits.maxStorageBufferBindingSize)),t}function _a(e,t=null){let r=t?.info??{};return{adapter:{vendor:r.vendor??"",architecture:r.architecture??"",device:r.device??"",description:r.description??""},f16:e.features.has("shader-f16"),subgroups:e.features.has("subgroups"),subgroupMatrix:e.features.has("chromium-experimental-subgroup-matrix")}}function ca({adapter:e,device:t,caps:r,destroy:a,gpu:i}){return{gpu:i,adapter:e,device:t,caps:()=>r,createShaderModule:(o,s)=>t.createShaderModule({code:o,label:s}),createComputePipeline:o=>t.createComputePipelineAsync(o),createBuffer:o=>t.createBuffer(o),writeBuffer:(o,s,u)=>t.queue.writeBuffer(o,s,u),submit:async(o,s={})=>{t.queue.submit(o),s.wait!==!1&&await t.queue.onSubmittedWorkDone()},mapRead:async(o,s,u)=>{await o.mapAsync(GPUMapMode.READ,s,u);let n=o.getMappedRange(s,u).slice(0);return o.unmap(),n},destroy:a}}function da(e,t){return e===ke.float16&&t instanceof Uint16Array||e===ke.float32&&t instanceof Float32Array||e===ke.uint32&&t instanceof Uint32Array}var pa=BigInt(1e8),fa=new TextDecoder("utf-8",{fatal:!0}),Ar=Object.freeze({BOOL:8,F4:4,F6_E2M3:6,F6_E3M2:6,U8:8,I8:8,F8_E5M2:8,F8_E4M3:8,F8_E8M0:8,F8_E4M3FNUZ:8,F8_E5M2FNUZ:8,I16:16,U16:16,F16:16,BF16:16,I32:32,U32:32,F32:32,F64:64,I64:64,U64:64,C64:64});function ga(e){let t=Ar[e];if(!t)throw new V(`Unknown dtype: ${e}`);return t}var V=class extends Error{constructor(e){super(e),this.name="SafeTensorsError"}};function ma(e){if(e.byteLength<8)throw new V(`File too small: ${e.byteLength} bytes < 8 byte header prefix`);let t=new DataView(e.buffer,e.byteOffset,e.byteLength).getBigUint64(0,!0);if(t>pa)throw new V(`Header length ${t} exceeds maximum 100000000`);let r=Number(t),a=8+r;if(a>e.byteLength)throw new V(`Header length ${r} exceeds buffer size`);let i=e.subarray(8,a),o;try{o=fa.decode(i)}catch{throw new V("Header is not valid UTF-8")}let s;try{s=JSON.parse(o)}catch(u){throw new V(`Header is not valid JSON: ${u.message}`)}if(typeof s!="object"||!s||Array.isArray(s))throw new V("Header must be a JSON object");return{headerByteLength:r,dataStart:a,header:s}}function sr(e,t){let r=e.__metadata__;if(r!==void 0&&!ha(r))throw new V("__metadata__ must be a {string: string} map");let a=[];for(let[o,s]of Object.entries(e))o!=="__metadata__"&&a.push([o,ba(o,s)]);a.sort((o,s)=>o[1].dataOffsets[0]-s[1].dataOffsets[0]);let i=0;for(let[o,s]of a){let[u,n]=s.dataOffsets;if(u!==i)throw new V(`Invalid offset for tensor ${o}: expected ${i}, got ${u}`);let l=s.elementCount*ga(s.dtype);if(l%8!=0)throw new V(`Tensor ${o} has subbyte size ${l} bits not divisible by 8`);if(n-u!==l/8)throw new V(`Tensor ${o} byte length ${n-u} does not match shape*dtype ${l/8}`);i=n}if(t!==null&&i!==t)throw new V(`Data length mismatch: header expects ${i} bytes, got ${t}`);return{metadata:r??null,tensors:new Map(a),dataByteLength:i}}function ba(e,t){if(typeof t!="object"||!t||Array.isArray(t))throw new V(`Tensor ${e}: info must be an object`);let{dtype:r,shape:a,data_offsets:i}=t;if(!(r in Ar))throw new V(`Tensor ${e}: unknown dtype ${r}`);if(!Array.isArray(a)||!a.every(n=>Number.isInteger(n)&&n>=0))throw new V(`Tensor ${e}: shape must be an array of nonnegative integers`);if(!Array.isArray(i)||i.length!==2||!i.every(n=>Number.isInteger(n)&&n>=0))throw new V(`Tensor ${e}: data_offsets must be a 2-element array of nonnegative integers`);let[o,s]=i;if(s<o)throw new V(`Tensor ${e}: data_offsets end < begin`);let u=1;for(let n of a)if(u*=n,!Number.isSafeInteger(u))throw new V(`Tensor ${e}: shape product exceeds Number.MAX_SAFE_INTEGER`);return{dtype:r,shape:[...a],dataOffsets:[o,s],elementCount:u}}function ha(e){if(typeof e!="object"||!e||Array.isArray(e))return!1;for(let t of Object.values(e))if(typeof t!="string")return!1;return!0}var ya=262144,wa=128<<20,va=1<<20,$a=4,Ir="safetensors-cache-v1",Ze="chunks",Qe="meta";async function ka(e,t={}){return xa(e,t,Ea)}async function xa(e,t,r){let a=t.cacheKey??(typeof e=="string"?e:e.toString()),i=t.cache===!1,o=!!t.force,s=i||t.source?null:t.chunkCache??Wr(t.cacheName??Ir);if(s&&!o)try{let v=await s.getMeta?.(a);if(v&&v.header&&Number.isFinite(v.size)&&Number.isFinite(v.dataStart)){let S=await r(e,{...t,chunkCache:s,knownSize:v.size,knownAcceptsRanges:v.acceptsRanges??!0}),$=v.size-v.dataStart,{metadata:w,tensors:m}=sr(v.header,$);return new ur({source:S,dataStart:v.dataStart,metadata:w,tensors:m,headerByteLength:v.dataStart-8,dataLength:$})}}catch(v){typeof console<"u"&&console.warn(`safetensors meta cache read failed: ${v.message}`)}let u=await r(e,{...t,chunkCache:s}),n=t.headerProbeBytes??ya,l=u.size==null?n:Math.min(n,u.size),_=await u.readRange(0,l);if(_.byteLength<8)throw new V(`Probe returned ${_.byteLength} bytes; need at least 8`);let c=new DataView(_.buffer,_.byteOffset,_.byteLength).getBigUint64(0,!0);if(c>BigInt(1e8))throw new V(`Header length ${c} exceeds maximum 100000000`);let p=Number(c),d=8+p,f;if(_.byteLength>=d)f=_.subarray(0,d);else{let v=await u.readRange(_.byteLength,d);f=new Uint8Array(d),f.set(_),f.set(v,_.byteLength)}let{header:b}=ma(f),g=u.size==null?null:u.size-d,{metadata:h,tensors:y}=sr(b,g);return s&&!o&&u.size!=null&&s.putMeta?.(a,{size:u.size,dataStart:d,header:b,acceptsRanges:u.acceptsRanges}).catch?.(()=>{}),new ur({source:u,dataStart:d,metadata:h,tensors:y,headerByteLength:p,dataLength:g})}var ur=class{#t;#r;#e;constructor({source:e,dataStart:t,metadata:r,tensors:a,headerByteLength:i,dataLength:o}){this.#t=e,this.#r=t,this.#e=a,this.metadata=r,this.url=e.url,this.totalSize=e.size,this.headerByteLength=i,this.dataByteLength=o}names(){return[...this.#e.keys()]}has(e){return this.#e.has(e)}info(e){let t=this.#a(e);return{dtype:t.dtype,shape:[...t.shape],dataOffsets:[...t.dataOffsets]}}byteLength(e){let t=this.#a(e);return t.dataOffsets[1]-t.dataOffsets[0]}async tensorBytes(e,t){let[r,a]=this.#a(e).dataOffsets;return this.#t.readRange(this.#r+r,this.#r+a,t)}async streamAll(e,{concurrency:t=$a,chunkMaxBytes:r=wa,chunkMaxGap:a=va,names:i=null,onProgress:o,signal:s}={}){let u=i==null?null:new Set(i);if(u&&u.size===0)return;if(u){for(let w of u)if(!this.#e.has(w))throw new V(`Unknown tensor: ${w}`)}let n=[];for(let[w,m]of this.#e){if(u&&!u.has(w))continue;let[T,I]=m.dataOffsets;I>T&&n.push({name:w,begin:T,end:I})}if(n.sort((w,m)=>w.begin-m.begin),n.length===0)return;let l=Ta(n,{maxBytes:r,maxGap:a}),_=l.reduce((w,m)=>w+(m.end-m.begin),0),c=0,p=new Map,d=(w={})=>{if(!o)return;let m=c;for(let T of p.values())m+=T;o({loaded:m,total:_,...w})},f=this.#r,b=this.#t;b.writeCachedChunk?.bind(b);let g=0,h=b.readTensor?.bind(b)||null,y=b.writeTensor?.bind(b)||null,v=async w=>{let{begin:m,end:T,tensors:I}=l[w],E=f+m,k=f+T,A=T-m,W=null,P=!0,U=h?await Promise.all(I.map(x=>h(f+x.begin,f+x.end))):I.map(()=>null);for(let x of U)if(!x){P=!1;break}if(P){W=new Uint8Array(A);for(let x=0;x<I.length;++x)W.set(U[x],I[x].begin-m)}else p.set(w,0),W=await b.readRange(E,k,{signal:s,onByteProgress:x=>{p.set(w,(p.get(w)??0)+x),d({fromCache:!1,range:[E,k],inFlight:!0})}});let H=P,M=I.map(x=>({name:x.name,offset:x.begin-m,length:x.end-x.begin})),O=e({begin:E,end:k,bytes:W,tensors:M}),D=!H&&y?Promise.all(I.map((x,L)=>{if(U[L])return null;let C=W.subarray(x.begin-m,x.end-m);return y(f+x.begin,f+x.end,C).catch(()=>{})})).catch(()=>{}):Promise.resolve();await Promise.all([O,D]),p.delete(w),c+=A,d({fromCache:H,range:[E,k]})},S=async()=>{for(;;){if(s?.aborted)throw s.reason??Error("aborted");let w=g++;if(w>=l.length)return;await v(w)}},$=[];for(let w=0;w<Math.min(t,l.length);++w)$.push(S());await Promise.all($)}async close(){await this.#t.close?.()}#a(e){let t=this.#e.get(e);if(!t)throw new V(`Unknown tensor: ${e}`);return t}};function Ta(e,{maxBytes:t,maxGap:r}){let a=[],i=null;for(let o of e){if(!i){i={begin:o.begin,end:o.end,tensors:[o]};continue}let s=o.begin-i.end,u=o.end-i.begin;s<=r&&u<=t?(i.end=o.end,i.tensors.push(o)):(a.push(i),i={begin:o.begin,end:o.end,tensors:[o]})}return i&&a.push(i),a}async function Ea(e,t){let r=e instanceof URL?e.toString():String(e);if(!/^https?:/i.test(r))throw new V(`Expected http(s) safetensors URL, got: ${r}`);return Sa(r,t)}async function Sa(e,t){let r=t.fetch??globalThis.fetch;if(typeof r!="function")throw new V("No fetch implementation available; pass options.fetch");let a=!!(t.requireRangeRequests??t.requireRanges??!1),i,o;if(t.knownSize!=null)i=t.knownSize,o=t.knownAcceptsRanges!==!1;else{let _=await r(e,{method:"HEAD",signal:t.signal});if(!_.ok)throw new V(`HEAD ${e} failed: ${_.status} ${_.statusText}`);let c=_.headers.get("content-length");if(o=(_.headers.get("accept-ranges")??"").toLowerCase().includes("bytes"),i=c===null?null:Number(c),c!==null&&!Number.isFinite(i))throw new V(`Invalid content-length header: ${c}`)}if(a&&!o)throw new V(`Range requests are required for ${e}, but the server did not advertise Accept-Ranges: bytes`);let s=t.cacheKey??e,u=t.cache===!1,n=!!t.force,l=t.chunkCache===void 0?u?null:Wr(t.cacheName??Ir):t.chunkCache;return{url:e,size:i,acceptsRanges:o,async readRange(_,c,p={}){if(_===c)return new Uint8Array;let d=p.signal??t.signal,f=p.onByteProgress??null;if(o){let g=await r(e,{headers:{Range:`bytes=${_}-${c-1}`},signal:d});if(g.status!==206&&g.status!==200)throw new V(`Range ${_}-${c-1} of ${e} failed: ${g.status}`);let h=await nr(g,c-_,f);if(g.status===200){if(a)throw new V(`Range ${_}-${c-1} of ${e} returned 200 instead of 206; refusing full-response fallback`);return h.subarray(_,c)}if(h.byteLength!==c-_)throw new V(`Range ${_}-${c-1} returned ${h.byteLength} bytes`);return h}let b=await r(e,{signal:d});if(!b.ok)throw new V(`GET ${e} failed: ${b.status}`);return(await nr(b,null,f)).subarray(_,c)},async readTensor(_,c){if(!l||n)return null;try{return await l.get(s,_,c)}catch(p){return typeof console<"u"&&console.warn(`safetensors cache read failed: ${p.message}`),null}},async writeTensor(_,c,p){if(l)try{let d=p.byteOffset===0&&p.byteLength===p.buffer.byteLength?p:new Uint8Array(p);await l.put(s,_,c,d)}catch(d){typeof console<"u"&&console.warn(`safetensors cache write failed: ${d.message}`)}}}}var Je=new Map;function Wr(e){return typeof indexedDB>"u"?null:{async get(t,r,a){let i=await ht(e);return new Promise((o,s)=>{let u=i.transaction(Ze,"readonly").objectStore(Ze).get([t,r,a]);u.onsuccess=async()=>{let n=u.result;if(!n)return o(null);o(new Uint8Array(await n.arrayBuffer()))},u.onerror=()=>s(u.error)})},async put(t,r,a,i){let o=await ht(e);return new Promise((s,u)=>{let n=o.transaction(Ze,"readwrite").objectStore(Ze).put(new Blob([i]),[t,r,a]);n.onsuccess=()=>s(),n.onerror=()=>u(n.error)})},async getMeta(t){let r=await ht(e);return new Promise((a,i)=>{let o=r.transaction(Qe,"readonly").objectStore(Qe).get(t);o.onsuccess=()=>a(o.result??null),o.onerror=()=>i(o.error)})},async putMeta(t,r){let a=await ht(e);return new Promise((i,o)=>{let s=a.transaction(Qe,"readwrite").objectStore(Qe).put(r,t);s.onsuccess=()=>i(),s.onerror=()=>o(s.error)})}}}async function nr(e,t,r){if(!r||!e.body?.getReader){let n=await e.arrayBuffer();return new Uint8Array(n)}let a=e.body.getReader();if(Number.isFinite(t)&&t>0){let n=new Uint8Array(t),l=0;for(;;){let{done:_,value:c}=await a.read();if(_)break;n.set(c,l),l+=c.byteLength,r(c.byteLength)}return l===t?n:n.subarray(0,l)}let i=[],o=0;for(;;){let{done:n,value:l}=await a.read();if(n)break;i.push(l),o+=l.byteLength,r(l.byteLength)}if(i.length===1)return i[0];let s=new Uint8Array(o),u=0;for(let n of i)s.set(n,u),u+=n.byteLength;return s}function ht(e){if(Je.has(e))return Je.get(e);let t=new Promise((r,a)=>{let i=indexedDB.open(e,2);i.onupgradeneeded=o=>{let s=i.result;s.objectStoreNames.contains(Ze)||s.createObjectStore(Ze),s.objectStoreNames.contains(Qe)||s.createObjectStore(Qe)},i.onsuccess=()=>r(i.result),i.onerror=()=>a(i.error),i.onblocked=()=>a(Error("indexedDB open blocked"))});return Je.set(e,t),t}var lr=class{constructor(e){this.trie=this._build_trie(e)}_build_trie(e){let t=Object.create(null);for(let r of e){let a=t;for(let i=0;i<r.length;++i){let o=r[i];a=a[o]??=Object.create(null)}a.end=r}return t}split(e){let t=[],r=e.length,a=0,i=0;for(;i<r;){let o=this.trie,s=null,u=i;for(;u<r&&(o=o[e[u]]);)o.end&&(s=o.end),++u;s?(i>a&&t.push(e.slice(a,i)),t.push(s),i+=s.length,a=i):++i}return a<r&&t.push(e.slice(a)),t}},Aa=class{constructor(e){this.content=e.content,this.id=e.id,this.single_word=e.single_word??!1,this.lstrip=e.lstrip??!1,this.rstrip=e.rstrip??!1,this.special=e.special??!1,this.normalized=e.normalized??!this.special}},Br=(()=>{let e=[...Array.from({length:94},(i,o)=>o+33),...Array.from({length:12},(i,o)=>o+161),...Array.from({length:82},(i,o)=>o+174)],t=e.slice(),r=0;for(let i=0;i<256;++i)e.includes(i)||(e.push(i),t.push(256+r),r+=1);let a=t.map(i=>String.fromCharCode(i));return Object.fromEntries(e.map((i,o)=>[i,a[o]]))})(),Ia=(e=>Object.fromEntries(Object.entries(e).map(([t,r])=>[r,t])))(Br),_r=".,!?\u2026\u3002\uFF0C\u3001\u0964\u06D4\u060C",Wa=new Map([["(?i:'s|'t|'re|'ve|'m|'ll|'d)","(?:'([sS]|[tT]|[rR][eE]|[vV][eE]|[mM]|[lL][lL]|[dD]))"],["(?i:[sdmt]|ll|ve|re)","(?:[sS]|[dD]|[mM]|[tT]|[lL][lL]|[vV][eE]|[rR][eE])"],["[^\\r\\n\\p{L}\\p{N}]?+","[^\\r\\n\\p{L}\\p{N}]?"],["[^\\s\\p{L}\\p{N}]++","[^\\s\\p{L}\\p{N}]+"],["(?>\\p{Nd}{510})","(?:\\p{Nd}{510})"],["\\p{Nd}{3}+","(?:\\p{Nd}{3})+"],["\\G",""],[` ?[^(\\s|[${_r}])]+`,` ?[^\\s${_r}]+`]]),vt="\\p{P}\\u0021-\\u002F\\u003A-\\u0040\\u005B-\\u0060\\u007B-\\u007E",Ut=e=>e.replace(/ \./g,".").replace(/ \?/g,"?").replace(/ \!/g,"!").replace(/ ,/g,",").replace(/ \' /g,"'").replace(/ n't/g,"n't").replace(/ 'm/g,"'m").replace(/ 's/g,"'s").replace(/ 've/g,"'ve").replace(/ 're/g,"'re"),xt=(e,t=!0)=>{if(e.Regex!==void 0){let r=e.Regex.replace(/\\([#&~])/g,"$1");r=r.replace(/\\A/g,"^").replace(/\\z/g,"$").replace(/\\Z/g,"(?=\\r?\\n?$)");for(let[a,i]of Wa)r=r.replaceAll(a,i);try{return new RegExp(r,"gu")}catch(a){if(!(a instanceof SyntaxError)||!a.message.toLowerCase().includes("invalid property name"))throw a;let i=!1,o=r.replace(/(\\[pP])\{([^}=]+)\}/g,(s,u,n)=>{try{return RegExp(`\\p{${n}}`,"u"),`${u}{${n}}`}catch{return i=!0,`${u}{Script=${n}}`}});if(!i)throw a;try{return new RegExp(o,"gu")}catch{throw a}}}else if(e.String!==void 0){let r=Ba(e.String);return new RegExp(t?r:`(${r})`,"gu")}else return console.warn("Unknown pattern type:",e),null},Ba=e=>e.replace(/[.*+?^${}()|[\]\\]/g,"\\$&"),Ma=(e,t,r)=>{let a=[],i=0;for(;i<e.length;){if(a.push(e[i]),(t.get(e[i])??r)!==r){++i;continue}for(;++i<e.length&&(t.get(e[i])??r)===r;)t.get(a.at(-1))!==r&&(a[a.length-1]+=e[i])}return a},La=e=>e>=19968&&e<=40959||e>=13312&&e<=19903||e>=131072&&e<=173791||e>=173824&&e<=177983||e>=177984&&e<=178207||e>=178208&&e<=183983||e>=63744&&e<=64255||e>=194560&&e<=195103,Da=e=>Number.isInteger(e)||typeof e=="bigint",Pa=e=>{let t=0;for(let r of e)++t;return t},Ca=e=>Mr(e.toLowerCase()),xe=(...e)=>Array.prototype.concat.apply([],e),Ht=e=>new Map(Object.entries(e)),Oa=(e,t)=>{let r=[],a=0;for(let i of e.matchAll(t)){let o=i[0];a<i.index&&r.push(e.slice(a,i.index)),o.length>0&&r.push(o),a=i.index+o.length}return a<e.length&&r.push(e.slice(a)),r},Mr=e=>e.replace(/\p{M}/gu,""),cr=(e,t,r=[])=>{if(!e||Array.isArray(e)||typeof e!="object")return`${t} must be a valid object`;for(let a of r)if(!(a in e))return`${t} must contain a "${a}" property`;return null},qa=e=>e.match(/\S+/g)||[],pt=class{constructor(){let e=function(...t){return e._call(...t)};return Object.setPrototypeOf(e,new.target.prototype)}},De=class extends pt{constructor(e){super(),this.config=e}_call(e){return this.normalize(e)}},Fa=class extends De{tokenize_chinese_chars(e){let t=[];for(let r=0;r<e.length;++r){let a=e[r];La(a.charCodeAt(0))?(t.push(" "),t.push(a),t.push(" ")):t.push(a)}return t.join("")}strip_accents(e){return e.normalize("NFD").replace(/\p{Mn}/gu,"")}is_control(e){switch(e){case"	":case`
+`:case"\r":return!1;default:return/^\p{Cc}|\p{Cf}|\p{Co}|\p{Cs}$/u.test(e)}}clean_text(e){let t=[];for(let r of e){let a=r.charCodeAt(0);a===0||a===65533||this.is_control(r)||(/^\s$/.test(r)?t.push(" "):t.push(r))}return t.join("")}normalize(e){return this.config.clean_text&&(e=this.clean_text(e)),this.config.handle_chinese_chars&&(e=this.tokenize_chinese_chars(e)),this.config.lowercase?(e=e.toLowerCase(),this.config.strip_accents!==!1&&(e=this.strip_accents(e))):this.config.strip_accents&&(e=this.strip_accents(e)),e}},Ua=class extends De{constructor(e){super(e),this.charsmap=e.precompiled_charsmap??null}normalize(e){return e=e.replace(/[\u0001-\u0008\u000B\u000E-\u001F\u007F\u008F\u009F]/gm,""),e=e.replace(/[\u0009\u000A\u000C\u000D\u00A0\u1680\u2000-\u200F\u2028\u2029\u202F\u205F\u2581\u3000\uFEFF\uFFFD]/gm," "),e=e.includes("\uFF5E")?e.split("\uFF5E").map(t=>t.normalize("NFKC")).join("\uFF5E"):e.normalize("NFKC"),e}},Ha=class extends De{constructor(e){super(e),this.normalizers=(e.normalizers??[]).map(t=>Lr(t))}normalize(e){return this.normalizers.reduce((t,r)=>r?r.normalize(t):t,e)}},Ra=class extends De{normalize(e){let t=xt(this.config.pattern??{});return t===null?e:e.replaceAll(t,this.config.content??"")}},Tt=class extends De{constructor(){super(...arguments),this.form="NFC"}normalize(e){return e=e.normalize(this.form),e}},za=class extends Tt{constructor(){super(...arguments),this.form="NFC"}},Ga=class extends Tt{constructor(){super(...arguments),this.form="NFD"}},Na=class extends Tt{constructor(){super(...arguments),this.form="NFKC"}},Ka=class extends Tt{constructor(){super(...arguments),this.form="NFKD"}},Va=class extends De{normalize(e){return this.config.strip_left&&this.config.strip_right?e=e.trim():(this.config.strip_left&&(e=e.trimStart()),this.config.strip_right&&(e=e.trimEnd())),e}},ja=class extends De{normalize(e){return Mr(e)}},Xa=class extends De{normalize(e){return e.toLowerCase()}},Ya=class extends De{normalize(e){return e=this.config.prepend+e,e}};function Za(e){if(e===null)return null;switch(e.type){case"BertNormalizer":return new Fa(e);case"Precompiled":return new Ua(e);case"Sequence":return new Ha(e);case"Replace":return new Ra(e);case"NFC":return new za(e);case"NFD":return new Ga(e);case"NFKC":return new Na(e);case"NFKD":return new Ka(e);case"Strip":return new Va(e);case"StripAccents":return new ja(e);case"Lowercase":return new Xa(e);case"Prepend":return new Ya(e);default:throw Error(`Unknown Normalizer type: ${e.type}`)}}var Lr=Za,Te=class extends pt{pre_tokenize(e,t){return(Array.isArray(e)?e.map(r=>this.pre_tokenize_text(r,t)):this.pre_tokenize_text(e,t)).flat()}_call(e,t){return this.pre_tokenize(e,t)}},Qa=class extends Te{constructor(e){super(),this.config=e,this.add_prefix_space=this.config.add_prefix_space??!1,this.trim_offsets=this.config.trim_offsets??!1,this.use_regex=this.config.use_regex??!0,this.pattern=/'s|'t|'re|'ve|'m|'ll|'d| ?\p{L}+| ?\p{N}+| ?[^\s\p{L}\p{N}]+|\s+(?!\S)|\s+/gu,this.byte_encoder=Br,this.text_encoder=new TextEncoder}pre_tokenize_text(e,t){return this.add_prefix_space&&!e.startsWith(" ")&&(e=" "+e),(this.use_regex?e.match(this.pattern)||[]:[e]).map(r=>Array.from(this.text_encoder.encode(r),a=>this.byte_encoder[a]).join(""))}},Ja=class extends Te{pre_tokenize_text(e,t){return e.match(/\w+|[^\w\s]+/g)||[]}},ei=class extends Te{constructor(e){super(),this.replacement=e.replacement??"\u2581",this.str_rep=e.str_rep||this.replacement,this.prepend_scheme=e.prepend_scheme??"always"}pre_tokenize_text(e,t){let{section_index:r=void 0}=t??{},a=e.replaceAll(" ",this.str_rep);return!a.startsWith(this.replacement)&&(this.prepend_scheme==="always"||this.prepend_scheme==="first"&&r===0)&&(a=this.str_rep+a),[a]}},ti=class extends Te{constructor(e){super(),this.config=e,this.pattern=xt(this.config.pattern??{},this.config.invert??!0)}pre_tokenize_text(e){return this.pattern===null?[]:this.config.invert?e.match(this.pattern)||[]:this.config.behavior?.toLowerCase()==="removed"?e.split(this.pattern).filter(t=>t):Oa(e,this.pattern)}},ri=class extends Te{constructor(e){super(),this.config=e,this.pattern=RegExp(`[^${vt}]+|[${vt}]+`,"gu")}pre_tokenize_text(e){return e.match(this.pattern)||[]}},ai=class extends Te{constructor(e){super(),this.config=e;let t=`[^\\d]+|\\d${this.config.individual_digits?"":"+"}`;this.pattern=new RegExp(t,"gu")}pre_tokenize_text(e){return e.match(this.pattern)||[]}},ii=class extends Te{constructor(){super(),this.pattern=RegExp(`[^\\s${vt}]+|[${vt}]`,"gu")}pre_tokenize_text(e,t){return e.trim().match(this.pattern)||[]}},oi=class extends Te{constructor(e){super(),this.config=e,this.pattern=xt(this.config.pattern??{}),this.content=this.config.content??""}pre_tokenize_text(e){return this.pattern===null?[e]:[e.replaceAll(this.pattern,this.config.content??"")]}},si=class extends Te{constructor(e){super(),this.tokenizers=(e.pretokenizers??[]).map(t=>Dr(t))}pre_tokenize_text(e,t){return this.tokenizers.reduce((r,a)=>a?a.pre_tokenize(r,t):r,[e])}},ui=class extends Te{pre_tokenize_text(e){return qa(e)}},ni=class extends Te{constructor(e){super(),this.config=e,this._length=e.length}pre_tokenize_text(e){let t=[];for(let r=0;r<e.length;r+=this._length)t.push(e.slice(r,r+this._length));return t}};function li(e){if(e===null)return null;switch(e.type){case"BertPreTokenizer":return new ii;case"Sequence":return new si(e);case"Whitespace":return new Ja;case"WhitespaceSplit":return new ui;case"Metaspace":return new ei(e);case"ByteLevel":return new Qa(e);case"Split":return new ti(e);case"Punctuation":return new ri(e);case"Digits":return new ai(e);case"Replace":return new oi(e);case"FixedLength":return new ni(e);default:throw Error(`Unknown PreTokenizer type: ${e.type}`)}}var Dr=li,Et=class extends pt{constructor(e){super(),this.config=e,this.vocab=[],this.tokens_to_ids=new Map,this.unk_token_id=void 0,this.unk_token=void 0,this.end_of_word_suffix=void 0,this.fuse_unk=this.config.fuse_unk??!1}_call(e){let t=this.encode(e);return this.fuse_unk&&(t=Ma(t,this.tokens_to_ids,this.unk_token_id)),t}},dr=class extends Et{constructor(e){super(e),this.max_input_chars_per_word=100,this.tokens_to_ids=Ht(e.vocab),this.unk_token_id=this.tokens_to_ids.get(e.unk_token),this.unk_token=e.unk_token,this.max_input_chars_per_word=e.max_input_chars_per_word??100,this.vocab=Array(this.tokens_to_ids.size);for(let[t,r]of this.tokens_to_ids)this.vocab[r]=t}encode(e){let t=[];for(let r of e){let a=[...r];if(a.length>this.max_input_chars_per_word){t.push(this.unk_token);continue}let i=!1,o=0,s=[];for(;o<a.length;){let u=a.length,n=null;for(;o<u;){let l=a.slice(o,u).join("");if(o>0&&(l=this.config.continuing_subword_prefix+l),this.tokens_to_ids.has(l)){n=l;break}--u}if(n===null){i=!0;break}s.push(n),o=u}i?t.push(this.unk_token):t.push(...s)}return t}},pr=class Pr{constructor(t,r){this.is_leaf=t,this.children=r}static default(){return new Pr(!1,new Map)}},_i=class{constructor(){this.root=pr.default()}extend(e){for(let t of e)this.push(t)}push(e){let t=this.root;for(let r of e){let a=t.children.get(r);a===void 0&&(a=pr.default(),t.children.set(r,a)),t=a}t.is_leaf=!0}*common_prefix_search(e){let t=this.root;if(t===void 0)return;let r="";for(let a of e){if(r+=a,t=t.children.get(a),t===void 0)return;t.is_leaf&&(yield r)}}},It=class Cr{constructor(t,r,a,i,o){this.token_id=t,this.node_id=r,this.pos=a,this.length=i,this.score=o,this.prev=null,this.backtrace_score=0}clone(){let t=new Cr(this.token_id,this.node_id,this.pos,this.length,this.score);return t.prev=this.prev,t.backtrace_score=this.backtrace_score,t}},ci=class{constructor(e,t,r){this.chars=Array.from(e),this.len=this.chars.length,this.bos_token_id=t,this.eos_token_id=r,this.nodes=[],this.begin_nodes=Array.from({length:this.len+1},()=>[]),this.end_nodes=Array.from({length:this.len+1},()=>[]);let a=new It(this.bos_token_id??0,0,0,0,0),i=new It(this.eos_token_id??0,1,this.len,0,0);this.nodes.push(a.clone()),this.nodes.push(i.clone()),this.begin_nodes[this.len].push(i),this.end_nodes[0].push(a)}insert(e,t,r,a){let i=this.nodes.length,o=new It(a,i,e,t,r);this.begin_nodes[e].push(o),this.end_nodes[e+t].push(o),this.nodes.push(o)}viterbi(){let e=this.len,t=0;for(;t<=e;){if(this.begin_nodes[t].length==0)return[];for(let o of this.begin_nodes[t]){o.prev=null;let s=0,u=null;for(let n of this.end_nodes[t]){let l=n.backtrace_score+o.score;(u===null||l>s)&&(u=n.clone(),s=l)}if(u!==null)o.prev=u,o.backtrace_score=s;else return[]}++t}let r=[],a=this.begin_nodes[e][0].prev;if(a===null)return[];let i=a.clone();for(;i.prev!==null;)r.push(i.clone()),i=i.clone().prev.clone();return r.reverse(),r}piece(e){return this.chars.slice(e.pos,e.pos+e.length).join("")}tokens(){return this.viterbi().map(e=>this.piece(e))}token_ids(){return this.viterbi().map(e=>e.token_id)}};function di(e){if(e.length===0)throw Error("Array must not be empty");let t=e[0],r=0;for(let a=1;a<e.length;++a)e[a]<t&&(t=e[a],r=a);return[t,r]}var fr=class extends Et{constructor(e,t){super(e);let r=e.vocab.length;this.vocab=Array(r),this.scores=Array(r);for(let a=0;a<r;++a)[this.vocab[a],this.scores[a]]=e.vocab[a];this.unk_token_id=e.unk_id,this.unk_token=this.vocab[e.unk_id],this.tokens_to_ids=new Map(this.vocab.map((a,i)=>[a,i])),this.bos_token=" ",this.bos_token_id=this.tokens_to_ids.get(this.bos_token),this.eos_token=t,this.eos_token_id=this.tokens_to_ids.get(this.eos_token),this.unk_token=this.vocab[this.unk_token_id],this.min_score=di(this.scores)[0],this.unk_score=this.min_score-10,this.scores[this.unk_token_id]=this.unk_score,this.trie=new _i,this.trie.extend(this.vocab),this.fuse_unk=!0}populate_nodes(e){let t=e.chars,r=0;for(;r<t.length;){let a=!1,i=[],o=t.slice(r).join(""),s=this.trie.common_prefix_search(o);for(let u of s){i.push(u);let n=this.tokens_to_ids.get(u),l=this.scores[n],_=Pa(u);e.insert(r,_,l,n),!a&&_===1&&(a=!0)}a||e.insert(r,1,this.unk_score,this.unk_token_id),r+=1}}tokenize(e){let t=new ci(e,this.bos_token_id,this.eos_token_id);return this.populate_nodes(t),t.tokens()}encode(e){let t=[];for(let r of e){let a=this.tokenize(r);t.push(...a)}return t}},pi=class{constructor(e=(r,a)=>r>a,t=1/0){this._heap=[],this._comparator=e,this._max_size=t}get size(){return this._heap.length}is_empty(){return this.size===0}peek(){return this._heap[0]}push(...e){return this.extend(e)}extend(e){for(let t of e)if(this.size<this._max_size)this._heap.push(t),this._sift_up();else{let r=this._smallest();this._comparator(t,this._heap[r])&&(this._heap[r]=t,this._sift_up_from(r))}return this.size}pop(){let e=this.peek(),t=this.size-1;return t>0&&this._swap(0,t),this._heap.pop(),this._sift_down(),e}replace(e){let t=this.peek();return this._heap[0]=e,this._sift_down(),t}_parent(e){return(e+1>>>1)-1}_left(e){return(e<<1)+1}_right(e){return e+1<<1}_greater(e,t){return this._comparator(this._heap[e],this._heap[t])}_swap(e,t){let r=this._heap[e];this._heap[e]=this._heap[t],this._heap[t]=r}_sift_up(){this._sift_up_from(this.size-1)}_sift_up_from(e){for(;e>0&&this._greater(e,this._parent(e));)this._swap(e,this._parent(e)),e=this._parent(e)}_sift_down(){let e=0;for(;this._left(e)<this.size&&this._greater(this._left(e),e)||this._right(e)<this.size&&this._greater(this._right(e),e);){let t=this._right(e)<this.size&&this._greater(this._right(e),this._left(e))?this._right(e):this._left(e);this._swap(e,t),e=t}}_smallest(){return 2**Math.floor(Math.log2(this.size))-1}},fi=class{constructor(e){this.capacity=e,this.cache=new Map}get(e){if(!this.cache.has(e))return;let t=this.cache.get(e);return this.cache.delete(e),this.cache.set(e,t),t}put(e,t){this.cache.has(e)&&this.cache.delete(e),this.cache.set(e,t),this.cache.size>this.capacity&&this.cache.delete(this.cache.keys().next().value)}clear(){this.cache.clear()}},gr=class extends Et{constructor(e){super(e),this.tokens_to_ids=Ht(e.vocab),this.unk_token_id=this.tokens_to_ids.get(e.unk_token),this.unk_token=e.unk_token,this.vocab=Array(this.tokens_to_ids.size);for(let[r,a]of this.tokens_to_ids)this.vocab[a]=r;let t=Array.isArray(e.merges[0]);this.merges=t?e.merges:e.merges.map(r=>r.split(" ",2)),this.bpe_ranks=new Map(this.merges.map((r,a)=>[JSON.stringify(r),a])),this.end_of_word_suffix=e.end_of_word_suffix,this.continuing_subword_suffix=e.continuing_subword_suffix??null,this.byte_fallback=this.config.byte_fallback??!1,this.byte_fallback&&(this.text_encoder=new TextEncoder),this.ignore_merges=this.config.ignore_merges??!1,this.max_length_to_cache=256,this.cache_capacity=1e4,this.cache=new fi(this.cache_capacity)}clear_cache(){this.cache.clear()}bpe(e){if(e.length===0)return[];let t=this.cache.get(e);if(t!==void 0)return t;let r=Array.from(e);this.end_of_word_suffix&&(r[r.length-1]+=this.end_of_word_suffix);let a=[];if(r.length>1){let i=new pi((u,n)=>u.score<n.score),o={token:r[0],bias:0,prev:null,next:null},s=o;for(let u=1;u<r.length;++u){let n={bias:u/r.length,token:r[u],prev:s,next:null};s.next=n,this.add_node(i,s),s=n}for(;!i.is_empty();){let u=i.pop();if(u.deleted||!u.next||u.next.deleted)continue;if(u.deleted=!0,u.next.deleted=!0,u.prev){let l={...u.prev};u.prev.deleted=!0,u.prev=l,l.prev?l.prev.next=l:o=l}let n={token:u.token+u.next.token,bias:u.bias,prev:u.prev,next:u.next.next};n.prev?(n.prev.next=n,this.add_node(i,n.prev)):o=n,n.next&&(n.next.prev=n,this.add_node(i,n))}for(let u=o;u!==null;u=u.next)a.push(u.token)}else a=r;if(this.continuing_subword_suffix)for(let i=0;i<a.length-1;++i)a[i]+=this.continuing_subword_suffix;return e.length<this.max_length_to_cache&&this.cache.put(e,a),a}add_node(e,t){let r=this.bpe_ranks.get(JSON.stringify([t.token,t.next.token]));r!==void 0&&(t.score=r+t.bias,e.push(t))}encode(e){let t=[];for(let r of e){if(this.ignore_merges&&this.tokens_to_ids.has(r)){t.push(r);continue}let a=this.bpe(r);for(let i of a)if(this.tokens_to_ids.has(i))t.push(i);else if(this.byte_fallback){let o=Array.from(this.text_encoder.encode(i)).map(s=>`<0x${s.toString(16).toUpperCase().padStart(2,"0")}>`);o.every(s=>this.tokens_to_ids.has(s))?t.push(...o):this.unk_token!=null&&t.push(this.unk_token)}else this.unk_token!=null&&t.push(this.unk_token)}return t}},gi=class extends Et{constructor(e,t){super(e);let r=e.vocab;this.tokens_to_ids=Ht(t.target_lang?r[t.target_lang]:r),this.bos_token=t.bos_token,this.bos_token_id=this.tokens_to_ids.get(this.bos_token),this.eos_token=t.eos_token,this.eos_token_id=this.tokens_to_ids.get(this.eos_token),this.pad_token=t.pad_token,this.pad_token_id=this.tokens_to_ids.get(this.pad_token),this.unk_token=t.unk_token,this.unk_token_id=this.tokens_to_ids.get(this.unk_token),this.vocab=Array(this.tokens_to_ids.size);for(let[a,i]of this.tokens_to_ids)this.vocab[i]=a}encode(e){return e}};function mi(e,t){switch(e.type){case"WordPiece":return new dr(e);case"Unigram":return new fr(e,t.eos_token);case"BPE":return new gr(e);default:if(e.vocab)return Array.isArray(e.vocab)?new fr(e,t.eos_token):Object.hasOwn(e,"continuing_subword_prefix")&&Object.hasOwn(e,"unk_token")?Object.hasOwn(e,"merges")?new gr(e):new dr(e):new gi(e,{target_lang:t.target_lang,bos_token:t.bos_token,eos_token:t.eos_token,pad_token:t.pad_token,unk_token:t.unk_token});throw Error(`Unknown TokenizerModel type: ${e?.type}`)}}var bi=mi,ft=class extends pt{constructor(e){super(),this.config=e}_call(e,...t){return this.post_process(e,...t)}},hi=class extends ft{post_process(e,t=null,r=!0){let a=t===null?this.config.single:this.config.pair,i=[],o=[];for(let s of a)"SpecialToken"in s?r&&(i.push(s.SpecialToken.id),o.push(s.SpecialToken.type_id)):"Sequence"in s&&(s.Sequence.id==="A"?(i=xe(i,e),o=xe(o,Array(e.length).fill(s.Sequence.type_id))):s.Sequence.id==="B"&&(i=xe(i,t),o=xe(o,Array(t.length).fill(s.Sequence.type_id))));return{tokens:i,token_type_ids:o}}},yi=class extends ft{post_process(e,t=null){return{tokens:e,tokens_pair:t}}},wi=class extends ft{constructor(e){super(e),this.sep=e.sep,this.cls=e.cls}post_process(e,t=null,r=!0){r&&(e=xe([this.cls[0]],e,[this.sep[0]]));let a=Array(e.length).fill(0);if(t){let i=[],o=r?[this.sep[0]]:[];e=xe(e,i,t,o),a=xe(a,Array(t.length+i.length+o.length).fill(1))}return{tokens:e,token_type_ids:a}}},vi=class extends ft{constructor(e){super(e),this.sep=e.sep,this.cls=e.cls}post_process(e,t,r=!0){r&&(e=xe([this.cls[0]],e,[this.sep[0]]));let a=Array(e.length).fill(0);if(t){let i=r?[this.sep[0]]:[],o=r?[this.sep[0]]:[];e=xe(e,i,t,o),a=xe(a,Array(t.length+i.length+o.length).fill(1))}return{tokens:e,token_type_ids:a}}},$i=class extends ft{constructor(e){super(e),this.processors=(e.processors??[]).map(t=>Or(t))}post_process(e,t=null,r=!0){let a={tokens:e,tokens_pair:t};for(let i of this.processors)a=i.post_process(a.tokens,a.tokens_pair,r);return a}};function ki(e){if(e===null)return null;switch(e.type){case"TemplateProcessing":return new hi(e);case"ByteLevel":return new yi(e);case"BertProcessing":return new wi(e);case"RobertaProcessing":return new vi(e);case"Sequence":return new $i(e);default:throw Error(`Unknown PostProcessor type: ${e.type}`)}}var Or=ki,Ie=class extends pt{constructor(e){super(),this.config=e,this.added_tokens=[],this.end_of_word_suffix=null,this.trim_offsets="trim_offsets"in e?e.trim_offsets:!1}_call(e){return this.decode(e)}decode(e){return this.decode_chain(e).join("")}},xi=class extends Ie{constructor(e){super(e),this.byte_decoder=Ia,this.text_decoder=new TextDecoder("utf-8",{fatal:!1,ignoreBOM:!0}),this.end_of_word_suffix=null}convert_tokens_to_string(e){let t=e.join(""),r=new Uint8Array([...t].map(a=>this.byte_decoder[a]));return this.text_decoder.decode(r)}decode_chain(e){let t=[],r=[];for(let a of e)this.added_tokens.find(i=>i.content===a)===void 0?r.push(a):(r.length>0&&(t.push(this.convert_tokens_to_string(r)),r=[]),t.push(a));return r.length>0&&t.push(this.convert_tokens_to_string(r)),t}},Ti=class extends Ie{constructor(e){super(e),this.cleanup=e.cleanup}decode_chain(e){return e.map((t,r)=>{if(r!==0){let a=this.config.prefix;t=a&&t.startsWith(a)?t.replace(a,""):" "+t}return this.cleanup&&(t=Ut(t)),t})}},Ei=class extends Ie{constructor(e){super(e),this.replacement=e.replacement??"\u2581"}decode_chain(e){let t=[];for(let r=0;r<e.length;++r){let a=e[r].replaceAll(this.replacement," ");r==0&&a.startsWith(" ")&&(a=a.substring(1)),t.push(a)}return t}},Si=class extends Ie{constructor(e){super(e),this.suffix=e.suffix??""}decode_chain(e){return e.map((t,r)=>t.replaceAll(this.suffix,r===e.length-1?"":" "))}},Ai=class extends Ie{constructor(e){super(e),this.pad_token=e.pad_token??"",this.word_delimiter_token=e.word_delimiter_token??"",this.cleanup=e.cleanup}convert_tokens_to_string(e){if(e.length===0)return"";let t=[e[0]];for(let a=1;a<e.length;++a)e[a]!==t.at(-1)&&t.push(e[a]);let r=t.filter(a=>a!==this.pad_token).join("");return this.cleanup&&(r=Ut(r).replaceAll(this.word_delimiter_token," ").trim()),r}decode_chain(e){return[this.convert_tokens_to_string(e)]}},Ii=class extends Ie{constructor(e){super(e),this.decoders=(e.decoders??[]).map(t=>qr(t))}decode_chain(e){return this.decoders.reduce((t,r)=>r.decode_chain(t),e)}},Wi=class extends Ie{decode_chain(e){let t=xt(this.config.pattern),r=this.config.content??"";return t===null?e:e.map(a=>a.replaceAll(t,r))}},Bi=class extends Ie{decode_chain(e){return[e.join("")]}},Mi=class extends Ie{constructor(e){super(e),this.content=e.content??"",this.start=e.start??0,this.stop=e.stop??0}decode_chain(e){return e.map(t=>{let r=0;for(let i=0;i<this.start&&t[i]===this.content;++i)r=i+1;let a=t.length;for(let i=0;i<this.stop;++i){let o=t.length-i-1;if(t[o]===this.content){a=o;continue}else break}return t.slice(r,a)})}},Li=class extends Ie{constructor(e){super(e),this.text_decoder=new TextDecoder}decode_chain(e){let t=[],r=[];for(let a of e){let i=null;if(a.length===6&&a.startsWith("<0x")&&a.endsWith(">")){let o=parseInt(a.slice(3,5),16);isNaN(o)||(i=o)}if(i!==null)r.push(i);else{if(r.length>0){let o=this.text_decoder.decode(Uint8Array.from(r));t.push(o),r=[]}t.push(a)}}if(r.length>0){let a=this.text_decoder.decode(Uint8Array.from(r));t.push(a),r=[]}return t}};function Di(e){if(e===null)return null;switch(e.type){case"ByteLevel":return new xi(e);case"WordPiece":return new Ti(e);case"Metaspace":return new Ei(e);case"BPEDecoder":return new Si(e);case"CTC":return new Ai(e);case"Sequence":return new Ii(e);case"Replace":return new Wi(e);case"Fuse":return new Bi(e);case"Strip":return new Mi(e);case"ByteFallback":return new Li(e);default:throw Error(`Unknown Decoder type: ${e.type}`)}}var qr=Di,Pi=class{constructor(e,t){let r=cr(e,"Tokenizer",["model","decoder","post_processor","pre_tokenizer","normalizer"]);if(r)throw Error(r);let a=cr(t,"Config");if(a)throw Error(a);this.tokenizer=e,this.config=t,this.normalizer=Lr(this.tokenizer.normalizer),this.pre_tokenizer=Dr(this.tokenizer.pre_tokenizer),this.model=bi(this.tokenizer.model,this.config),this.post_processor=Or(this.tokenizer.post_processor),this.decoder=qr(this.tokenizer.decoder),this.special_tokens=[],this.all_special_ids=[],this.added_tokens=[];let i=[],o=[];this.added_tokens_map=new Map;for(let s of this.tokenizer.added_tokens){let u=new Aa(s);if(this.added_tokens.push(u),this.model.tokens_to_ids.set(u.content,u.id),this.model.vocab[u.id]=u.content,u.special&&(this.special_tokens.push(u.content),this.all_special_ids.push(u.id)),this.added_tokens_map.set(u.content,u),u.normalized&&this.normalizer!==null){let n=this.normalizer(u.content);o.push(n),this.added_tokens_map.set(n,u)}else i.push(u.content)}(this.config.additional_special_tokens??[]).forEach(s=>{this.special_tokens.includes(s)||this.special_tokens.push(s)}),this.decoder&&(this.decoder.added_tokens=this.added_tokens,this.decoder.end_of_word_suffix=this.model.end_of_word_suffix),this.splitter_unnormalized=new lr(i),this.splitter_normalized=new lr(o),this.remove_space=this.config.remove_space,this.clean_up_tokenization_spaces=this.config.clean_up_tokenization_spaces??!0,this.do_lowercase_and_remove_accent=this.config.do_lowercase_and_remove_accent??!1}encode(e,{text_pair:t=null,add_special_tokens:r=!0,return_token_type_ids:a=null}={}){let{tokens:i,token_type_ids:o}=this.tokenize_helper(e,{text_pair:t,add_special_tokens:r}),s=i.map(n=>this.added_tokens_map.get(n)?.id??this.model.tokens_to_ids.get(n)??this.model.unk_token_id),u={ids:s,tokens:i,attention_mask:Array(s.length).fill(1)};return a&&o&&(u.token_type_ids=o),u}decode(e,t={}){if(!Array.isArray(e)||e.length===0||!Da(e[0]))throw Error("token_ids must be a non-empty array of integers.");let r=e.map(i=>this.model.vocab[Number(i)]??this.model.unk_token);t.skip_special_tokens&&(r=r.filter(i=>!this.special_tokens.includes(i)));let a=this.decoder?this.decoder(r):r.join(" ");return this.decoder&&this.decoder.end_of_word_suffix&&(a=a.replaceAll(this.decoder.end_of_word_suffix," "),t.skip_special_tokens&&(a=a.trim())),(t.clean_up_tokenization_spaces??this.clean_up_tokenization_spaces)&&(a=Ut(a)),a}tokenize(e,{text_pair:t=null,add_special_tokens:r=!1}={}){return this.tokenize_helper(e,{text_pair:t,add_special_tokens:r}).tokens}encode_text(e){if(e===null)return null;let t=this.splitter_unnormalized.split(e);return t.forEach((r,a)=>{let i=this.added_tokens_map.get(r);i&&(i.lstrip&&a>0&&(t[a-1]=t[a-1].trimEnd()),i.rstrip&&a<t.length-1&&(t[a+1]=t[a+1].trimStart()))}),t.flatMap((r,a)=>{if(r.length===0)return[];if(this.added_tokens_map.has(r))return[r];if(this.remove_space===!0&&(r=r.trim().split(/\s+/).join(" ")),this.do_lowercase_and_remove_accent&&(r=Ca(r)),this.normalizer!==null&&(r=this.normalizer(r)),r.length===0)return[];let i=this.splitter_normalized.split(r);return i.forEach((o,s)=>{let u=this.added_tokens_map.get(o);u&&(u.lstrip&&s>0&&(i[s-1]=i[s-1].trimEnd()),u.rstrip&&s<i.length-1&&(i[s+1]=i[s+1].trimStart()))}),i.flatMap(o=>{if(o.length===0)return[];if(this.added_tokens_map.has(o))return[o];let s=this.pre_tokenizer===null?[o]:this.pre_tokenizer(o,{section_index:a});return this.model(s)})})}tokenize_helper(e,{text_pair:t=null,add_special_tokens:r=!0}){let a=this.encode_text(e),i=this.encode_text(t||null);return this.post_processor?this.post_processor(a,i,r):{tokens:xe(a??[],i??[])}}token_to_id(e){return this.model.tokens_to_ids.get(e)}id_to_token(e){return this.model.vocab[e]}get_added_tokens_decoder(){let e=new Map;for(let t of this.added_tokens)e.set(t.id,t);return e}get_vocab(e=!0){let t=new Map;for(let r=0;r<this.model.vocab.length;++r){let a=this.model.vocab[r];(e||!this.added_tokens_map.has(a))&&t.set(a,r)}return t}};function Se(e){let t=e.byteLength/2,r=new Float32Array(t),a=new Uint32Array(r.buffer);if(e.byteOffset%2==0){let i=new Uint16Array(e.buffer,e.byteOffset,t);for(let o=0;o<t;++o)a[o]=i[o]<<16}else for(let i=0;i<t;++i){let o=e[i*2];a[i]=(e[i*2+1]<<8|o)<<16}return r}function Ue(e){let t=e.byteLength/2,r=new Uint16Array(t);return Ct(e,r),r}function Ct(e,t,r=0,a=1){let i=e.byteLength/2,o=Hr();if(e.byteOffset%2==0){let s=new Uint16Array(e.buffer,e.byteOffset,i);for(let u=0,n=r;u<i;++u,n+=a)t[n]=o[s[u]]}else for(let s=0,u=r;s<i;++s,u+=a){let n=e[s*2];t[u]=o[e[s*2+1]<<8|n]}return t}function Ot(e,t,r){let a=t*r;if(e.byteLength!==a*2)throw Error(`BF16 byte length ${e.byteLength} does not match ${t}x${r}`);let i=new Uint16Array(a),o=Hr();if(e.byteOffset%2==0){let s=new Uint16Array(e.buffer,e.byteOffset,a);for(let u=0;u<r;++u){let n=u*t;for(let l=0;l<t;++l)i[n+l]=o[s[l*r+u]]}}else for(let s=0;s<r;++s){let u=s*t;for(let n=0;n<t;++n){let l=(n*r+s)*2;i[u+n]=o[e[l+1]<<8|e[l]]}}return i}function Fr(e){let t=e&32768?-1:1,r=e>>>10&31,a=e&1023;return r===31?a===0?t*(1/0):NaN:r===0?t*2**-14*(a/1024):t*2**(r-15)*(1+a/1024)}function Ur(e){if(Number.isNaN(e))return 32256;if(e===1/0)return 31744;if(e===-1/0)return 64512;let t=e<0||Object.is(e,-0)?32768:0,r=Math.abs(e);if(r===0)return t;if(r>=65504)return t|31743;if(r<5960464477539063e-23)return t;if(r<6103515625e-14)return t|Math.round(r/5960464477539063e-23);let a=Math.floor(Math.log2(r)),i=Math.round((r/2**a-1)*1024);return i===1024?t|a+16<<10:t|a+15<<10|i}function Ci(e){let t=e&32768,r=e>>>7&255,a=e&127;if(r===255)return a===0?t|31744:32256;if(r===0)return t;let i=r-112;if(i>=31)return t|31743;if(i>0)return t|i<<10|a<<3;if(r<103)return t;let o=128|a,s=110-r,u;return u=s<=0?o<<-s:s>=16?0:(o>>>s)+ +((o&(1<<s)-1)*2>=1<<s),t|Math.min(u,1023)}var Wt=null;function Hr(){if(Wt)return Wt;let e=new Uint16Array(65536);for(let t=0;t<e.length;++t)e[t]=Ci(t);return Wt=e,e}function He(e,t=new Set){if(!(typeof e!="object"||!e)&&!t.has(e)&&(t.add(e),!(ArrayBuffer.isView(e)||e instanceof ArrayBuffer))){if(Rr(e)){e.destroy?.();return}if(zr(e)){e.destroy();return}if(e instanceof Map){for(let r of e.values())He(r,t);e.clear();return}if(e instanceof Set){for(let r of e.values())He(r,t);e.clear();return}for(let r of Object.keys(e))He(e[r],t)}}function _t(){let e=[],t=new Set,r=!1;return{track(a){if(r)throw Error("Cannot track GPU resources after scope.destroy()");return typeof a=="object"&&a&&e.push(a),a},keep(a){return wt(a,t),a},destroy(){if(r)return;r=!0;let a=new Set(t);for(let i=e.length-1;i>=0;--i)He(e[i],a);e.length=0,t.clear()},get size(){return e.length}}}function ct(e,t){if(!t)return e;let r=new Set(["empty","tensorFromTypedArray","createUniformU32"]);return new Proxy(e,{get(a,i,o){let s=Reflect.get(a,i,o);return typeof s=="function"?r.has(i)?(...u)=>t.track(s.apply(a,u)):s.bind(a):s}})}function wt(e,t){if(!(typeof e!="object"||!e)&&!t.has(e)&&(t.add(e),!(ArrayBuffer.isView(e)||e instanceof ArrayBuffer)&&!(Rr(e)||zr(e)))){if(e instanceof Map){for(let r of e.values())wt(r,t);return}if(e instanceof Set){for(let r of e.values())wt(r,t);return}for(let r of Object.keys(e))wt(e[r],t)}}function Rr(e){return Array.isArray(e.shape)&&typeof e.dtype=="string"&&e.buffer&&typeof e.buffer.destroy=="function"}function zr(e){return typeof e.destroy=="function"&&typeof e.mapAsync=="function"&&typeof e.getMappedRange=="function"}function Gr(e){return Math.floor(32/e)}function Rt(e,t){if(e%t!==0)throw Error(`inFeatures (${e}) must be divisible by groupSize (${t})`);return Math.floor(e/t)}function Bt({scalesBytes:e,biasesBytes:t,outFeatures:r,inFeatures:a,groupSize:i,dtype:o="f32"}){let s=Rt(a,i),u=o==="f16"?Ue(e):Se(e),n=o==="f16"?Ue(t):Se(t);if(u.length!==r*s||n.length!==r*s)throw Error(`scale/bias length mismatch (expected ${r*s})`);let l=o==="f16"?new Uint16Array(r*s*2):new Float32Array(r*s*2);for(let _=0;_<r;++_)for(let c=0;c<s;++c){let p=(c*r+_)*2;l[p]=u[_*s+c],l[p+1]=n[_*s+c]}if(o==="f32"||o==="f16")return l;throw Error(`Unsupported scaleBias dtype: ${o}`)}function Nr({scalesBytes:e,biasesBytes:t,outFeatures:r,inFeatures:a,groupSize:i,dtype:o="f32"}){let s=Rt(a,i),u=o==="f16"?new Uint16Array(r*s*2):new Float32Array(r*s*2);return qt({scalesBytes:e,biasesBytes:t,out:u,outFeatures:r,inFeatures:a,groupSize:i,dtype:o}),u}function qt({scalesBytes:e,biasesBytes:t,out:r,outFeatures:a,inFeatures:i,groupSize:o,dtype:s="f32",dstElementOffset:u=0}){let n=Rt(i,o),l=a*n;if(s==="f16"){if(e.byteLength!==l*2||t.byteLength!==l*2)throw Error(`scale/bias length mismatch (expected ${l})`);return Ct(e,r,u,2),Ct(t,r,u+1,2),r}let _=Se(e),c=Se(t);if(_.length!==l||c.length!==l)throw Error(`scale/bias length mismatch (expected ${l})`);for(let p=0;p<a*n;++p){let d=u+p*2;r[d]=_[p],r[d+1]=c[p]}if(s==="f32")return r;throw Error(`Unsupported scaleBias dtype: ${s}`)}function zt(){let e=new Map,t=new Set;function r(u,n){if(e.has(u))throw Error(`Duplicate handler for tensor: ${u}`);t.add(u),e.set(u,{async receive(l){t.delete(u),await n(l)}})}function a(u,n){let l={},_=u.length,c=null,p=null,d=null;for(let f of u){if(e.has(f))throw Error(`Duplicate handler for tensor: ${f}`);t.add(f),e.set(f,{async receive(b){if(t.delete(f),l[f]=b,--_===0)try{await n(l),p&&p()}catch(g){if(d)d(g);else throw g}finally{for(let g of u)delete l[g]}}})}return c=new Promise((f,b)=>{p=f,d=b}),c}async function i({bytes:u,tensors:n}){let l=[];for(let _ of n){let c=e.get(_.name);if(!c)continue;let p=u.subarray(_.offset,_.offset+_.length);l.push(c.receive(p))}l.length&&await Promise.all(l)}function o(){if(t.size>0){let u=[...t].slice(0,5).join(", ");throw Error(`Stream plan incomplete \u2014 ${t.size} tensor(s) never arrived (first: ${u})`)}}function s(){return[...e.keys()]}return{tensor:r,group:a,onChunk:i,assertComplete:o,names:s}}function Z(e,t,r){let a=new ArrayBuffer(16),i=new Uint32Array(a),o=new Float32Array(a);for(let s=0;s<4;++s){let u=t[s];if(u==null){i[s]=0;continue}if("u32"in u)i[s]=u.u32>>>0;else if("f32"in u)o[s]=u.f32;else throw Error(`uniform item ${s} must be {u32} or {f32}`)}return e.createUniformU32(new Uint32Array(a),r)}function re(e){return e==="float16"?"f16":"f32"}function ye(...e){return e.includes("float16")?`enable f16;
+`:""}function _e(e,t){return t==="float16"?`f32(${e})`:e}function ne(e,t){return t==="float16"?`f16(${e})`:e}function et(e,t){return t==="float16"?`vec4<f32>(${e})`:e}function Oi({dim:e,eps:t,withWeight:r=!0,inputDtype:a="float32",weightDtype:i="float32",outputDtype:o="float32"}){let s=re(a),u=re(i),n=re(o);return`${ye(a,i,o)}struct Params { rows: u32, rowStride: u32, _pad0: u32, _pad1: u32 };
+@group(0) @binding(0) var<storage, read>       x: array<${s}>;
+${r?`@group(0) @binding(1) var<storage, read>       w: array<${u}>;
+`:""}@group(0) @binding(${r?2:1}) var<storage, read_write> y: array<${n}>;
+@group(0) @binding(${r?3:2}) var<uniform>             params: Params;
+
+const DIM: u32 = ${e}u;
+const EPS: f32 = ${t};
+const WG: u32 = 64u;
+
+var<workgroup> partial: array<f32, WG>;
+
+@compute @workgroup_size(WG, 1, 1)
+fn main(@builtin(workgroup_id) wg: vec3<u32>, @builtin(local_invocation_id) lid: vec3<u32>) {
+  let rowStride = select(params.rowStride, params.rows, params.rowStride == 0u);
+  let row = wg.x + wg.y * rowStride;
+  if (row >= params.rows) { return; }
+  let tid = lid.x;
+  let base = row * DIM;
+
+  // Compute sum of squares.
+  var acc: f32 = 0.0;
+  var i: u32 = tid;
+  loop {
+    if (i >= DIM) { break; }
+    let v = ${_e("x[base + i]",a)};
+    acc = acc + v * v;
+    i = i + WG;
+  }
+  partial[tid] = acc;
+  workgroupBarrier();
+  var stride: u32 = WG / 2u;
+  loop {
+    if (stride == 0u) { break; }
+    if (tid < stride) { partial[tid] = partial[tid] + partial[tid + stride]; }
+    stride = stride / 2u;
+    workgroupBarrier();
+  }
+  let scale = inverseSqrt(partial[0] / f32(DIM) + EPS);
+
+  // Apply normalization (+ optional weight).
+  var j: u32 = tid;
+  loop {
+    if (j >= DIM) { break; }
+    let xv = ${_e("x[base + j]",a)};
+    ${r?`let wv = ${_e("w[j]",i)};
+    y[base + j] = ${ne("xv * scale * wv",o)};`:`y[base + j] = ${ne("xv * scale",o)};`}
+    j = j + WG;
+  }
+}
+`}function qi({headDim:e,activationDtype:t="float32"}){let r=e/2,a=Math.min(64,r),i=re(t);return`${ye(t)}struct Params { seq: u32, heads: u32, _pad0: u32, _pad1: u32 };
+@group(0) @binding(0) var<storage, read_write> q: array<${i}>;
+@group(0) @binding(1) var<storage, read>       cosTbl: array<f32>;
+@group(0) @binding(2) var<storage, read>       sinTbl: array<f32>;
+@group(0) @binding(3) var<uniform>             params: Params;
+
+const HEAD_DIM: u32 = ${e}u;
+const HALF_DIM: u32 = ${r}u;
+const WG: u32 = ${a}u;
+
+@compute @workgroup_size(WG, 1, 1)
+fn main(@builtin(workgroup_id) wg: vec3<u32>, @builtin(local_invocation_id) lid: vec3<u32>) {
+  let t = wg.x;
+  let h = wg.y;
+  if (t >= params.seq || h >= params.heads) { return; }
+  let tid = lid.x;
+  let qBase = (t * params.heads + h) * HEAD_DIM;
+  let csBase = t * HALF_DIM;
+
+  var k: u32 = tid;
+  loop {
+    if (k >= HALF_DIM) { break; }
+    let c = cosTbl[csBase + k];
+    let s = sinTbl[csBase + k];
+    let x0 = ${_e("q[qBase + k]",t)};
+    let x1 = ${_e("q[qBase + k + HALF_DIM]",t)};
+    q[qBase + k] = ${ne("x0 * c - x1 * s",t)};
+    q[qBase + k + HALF_DIM] = ${ne("x1 * c + x0 * s",t)};
+    k = k + WG;
+  }
+}
+`}function Fi({dtype:e="float32"}={}){let t=re(e);return`${ye(e)}struct Params { count: u32, wgY: u32, _pad0: u32, _pad1: u32 };
+@group(0) @binding(0) var<storage, read_write> x: array<${t}>;
+@group(0) @binding(1) var<uniform>             params: Params;
+const WG: u32 = 64u;
+@compute @workgroup_size(WG, 1, 1)
+fn main(@builtin(workgroup_id) wg: vec3<u32>, @builtin(local_invocation_id) lid: vec3<u32>) {
+  let wg_idx = wg.x + wg.y * params.wgY;
+  let i = wg_idx * WG + lid.x;
+  if (i >= params.count) { return; }
+  let v = ${_e("x[i]",e)};
+  x[i] = ${ne("v / (1.0 + exp(-v))",e)};
+}
+`}function Ke(e,t=64){let r=Math.ceil(e/t),a=Math.min(r,1024);return{wgX:Math.ceil(r/a),wgY:a}}function Ui({mlpInner:e,inputDtype:t="float32",outputDtype:r="float32"}){if(t==="float16"&&r==="float16"&&e%4==0)return`enable f16;
+struct Params { rows: u32, _pad0: u32, _pad1: u32, _pad2: u32 };
+@group(0) @binding(0) var<storage, read>       x: array<vec4<f16>>;
+@group(0) @binding(1) var<storage, read_write> y: array<vec4<f16>>;
+@group(0) @binding(2) var<uniform>             params: Params;
+const MLP_V4: u32 = ${e/4}u;
+const WG: u32 = 64u;
+@compute @workgroup_size(WG, 1, 1)
+fn main(@builtin(workgroup_id) wg: vec3<u32>, @builtin(local_invocation_id) lid: vec3<u32>) {
+  let r = wg.x;
+  if (r >= params.rows) { return; }
+  let i0 = wg.y * WG + lid.x;
+  if (i0 >= MLP_V4) { return; }
+  let row_base = r * 2u * MLP_V4;
+  let x1 = vec4<f32>(x[row_base + i0]);
+  let x2 = vec4<f32>(x[row_base + MLP_V4 + i0]);
+  y[r * MLP_V4 + i0] = vec4<f16>((x1 / (vec4<f32>(1.0) + exp(-x1))) * x2);
+}
+`;let a=re(t),i=re(r);return`${ye(t,r)}struct Params { rows: u32, _pad0: u32, _pad1: u32, _pad2: u32 };
+@group(0) @binding(0) var<storage, read>       x: array<${a}>;
+@group(0) @binding(1) var<storage, read_write> y: array<${i}>;
+@group(0) @binding(2) var<uniform>             params: Params;
+const MLP: u32 = ${e}u;
+const WG: u32 = 64u;
+@compute @workgroup_size(WG, 1, 1)
+fn main(@builtin(workgroup_id) wg: vec3<u32>, @builtin(local_invocation_id) lid: vec3<u32>) {
+  let r = wg.x;
+  if (r >= params.rows) { return; }
+  let i0 = wg.y * WG + lid.x;
+  if (i0 >= MLP) { return; }
+  let x1 = ${_e("x[r * 2u * MLP + i0]",t)};
+  let x2 = ${_e("x[r * 2u * MLP + MLP + i0]",t)};
+  y[r * MLP + i0] = ${ne("(x1 / (1.0 + exp(-x1))) * x2",r)};
+}
+`}function Hi({xDtype:e="float32",yDtype:t="float32"}={}){let r=re(e),a=re(t);return`${ye(e,t)}struct Params { count: u32, alpha: f32, wgY: u32, _pad0: u32 };
+@group(0) @binding(0) var<storage, read_write> x: array<${r}>;
+@group(0) @binding(1) var<storage, read>       y: array<${a}>;
+@group(0) @binding(2) var<uniform>             params: Params;
+const WG: u32 = 64u;
+@compute @workgroup_size(WG, 1, 1)
+fn main(@builtin(workgroup_id) wg: vec3<u32>, @builtin(local_invocation_id) lid: vec3<u32>) {
+  let wg_idx = wg.x + wg.y * params.wgY;
+  let i = wg_idx * WG + lid.x;
+  if (i >= params.count) { return; }
+  x[i] = ${ne(`${_e("x[i]",e)} + params.alpha * ${_e("y[i]",t)}`,e)};
+}
+`}function Ri({xDtype:e="float32",factorDtype:t="float32"}={}){let r=re(e),a=re(t);return`${ye(e,t)}struct Params { count: u32, period: u32, wgY: u32, _pad0: u32 };
+@group(0) @binding(0) var<storage, read_write> x: array<${r}>;
+@group(0) @binding(1) var<storage, read>       factor: array<${a}>;
+@group(0) @binding(2) var<uniform>             params: Params;
+const WG: u32 = 64u;
+@compute @workgroup_size(WG, 1, 1)
+fn main(@builtin(workgroup_id) wg: vec3<u32>, @builtin(local_invocation_id) lid: vec3<u32>) {
+  let wg_idx = wg.x + wg.y * params.wgY;
+  let i = wg_idx * WG + lid.x;
+  if (i >= params.count) { return; }
+  let pIdx = select(i, i % params.period, params.period > 0u);
+  x[i] = ${ne(`${_e("x[i]",e)} * ${_e("factor[pIdx]",t)}`,e)};
+}
+`}function zi({headDim:e,inputDtype:t="float32",outputDtype:r="float32"}){let a=re(t),i=re(r);return`${ye(t,r)}struct Params { seq: u32, qHeads: u32, kvHeads: u32, causal: u32 };
+@group(0) @binding(0) var<storage, read>       q: array<${a}>;
+@group(0) @binding(1) var<storage, read>       k: array<${a}>;
+@group(0) @binding(2) var<storage, read>       v: array<${a}>;
+@group(0) @binding(3) var<storage, read_write> out: array<${i}>;
+@group(0) @binding(4) var<uniform>             params: Params;
+
+const HEAD_DIM: u32 = ${e}u;
+const WG: u32 = 64u;
+const SCALE: f32 = ${(1/Math.sqrt(e)).toFixed(8)};
+
+var<workgroup> partial: array<f32, WG>;
+var<workgroup> reduced_scalar: f32;
+var<workgroup> running_max: f32;
+var<workgroup> running_denom: f32;
+var<workgroup> running_out: array<f32, ${e}>;
+
+fn reduce_sum(tid: u32) -> f32 {
+  workgroupBarrier();
+  var stride: u32 = WG / 2u;
+  loop {
+    if (stride == 0u) { break; }
+    if (tid < stride) { partial[tid] = partial[tid] + partial[tid + stride]; }
+    stride = stride / 2u;
+    workgroupBarrier();
+  }
+  return partial[0];
+}
+
+@compute @workgroup_size(WG, 1, 1)
+fn main(@builtin(workgroup_id) wg: vec3<u32>, @builtin(local_invocation_id) lid: vec3<u32>) {
+  let qi = wg.x;
+  let h  = wg.y;
+  if (qi >= params.seq || h >= params.qHeads) { return; }
+  let tid = lid.x;
+  let groupSize = params.qHeads / params.kvHeads;
+  let hKv = h / groupSize;
+
+  let qBase = (qi * params.qHeads + h) * HEAD_DIM;
+
+  if (tid == 0u) {
+    running_max = -3.4e38;
+    running_denom = 0.0;
+  }
+  for (var d: u32 = tid; d < HEAD_DIM; d = d + WG) { running_out[d] = 0.0; }
+  workgroupBarrier();
+
+  let maxKj = select(params.seq, qi + 1u, params.causal != 0u);
+
+  for (var kj: u32 = 0u; kj < maxKj; kj = kj + 1u) {
+    let kBase = (kj * params.kvHeads + hKv) * HEAD_DIM;
+    // dot(Q[qi,h], K[kj,hKv])
+    var acc: f32 = 0.0;
+    for (var d: u32 = tid; d < HEAD_DIM; d = d + WG) {
+      acc = acc + ${_e("q[qBase + d]",t)} * ${_e("k[kBase + d]",t)};
+    }
+    partial[tid] = acc;
+    let dot = reduce_sum(tid) * SCALE;
+
+    // Online softmax update.
+    if (tid == 0u) {
+      let mNew = max(running_max, dot);
+      let exp_old = exp(running_max - mNew);
+      let exp_new = exp(dot - mNew);
+      reduced_scalar = exp_old; // reuse: factor to scale previous outputs
+      running_max = mNew;
+      running_denom = running_denom * exp_old + exp_new;
+    }
+    workgroupBarrier();
+    let scaleOld = reduced_scalar;
+    let probNew = exp(dot - running_max);
+    // Update running_out: scale prior accum + add probNew * V[kj]
+    let vBase = (kj * params.kvHeads + hKv) * HEAD_DIM;
+    for (var d: u32 = tid; d < HEAD_DIM; d = d + WG) {
+      running_out[d] = running_out[d] * scaleOld + probNew * ${_e("v[vBase + d]",t)};
+    }
+    workgroupBarrier();
+  }
+
+  // Write final.
+  let outBase = (qi * params.qHeads + h) * HEAD_DIM;
+  let inv = 1.0 / running_denom;
+  for (var d: u32 = tid; d < HEAD_DIM; d = d + WG) {
+    out[outBase + d] = ${ne("running_out[d] * inv",r)};
+  }
+}
+`}function Gi({headDim:e,kTile:t=64,inputDtype:r="float32",outputDtype:a="float32",useSubgroups:i=!1}){if(e%4!=0)throw Error("headDim must be divisible by 4");let o=t;if(o>256)throw Error(`flash attn kTile=${t} exceeds maxComputeInvocationsPerWorkgroup`);let s=e/4,u=re(r),n=re(a),l=i?", sg_size: u32":"",_=i?", sg_size":"",c=i?`enable subgroups;
+`:"",p=i?`  if (sg_size == WG) {
+    return subgroupMax(value);
+  }
+`:"",d=i?`  if (sg_size == WG) {
+    return subgroupAdd(value);
+  }
+`:"";return`${ye(r,a)}${c}struct Params { seq: u32, qHeads: u32, kvHeads: u32, _pad0: u32 };
+@group(0) @binding(0) var<storage, read>       q: array<vec4<${u}>>;
+@group(0) @binding(1) var<storage, read>       k: array<vec4<${u}>>;
+@group(0) @binding(2) var<storage, read>       v: array<vec4<${u}>>;
+@group(0) @binding(3) var<storage, read_write> out: array<${n}>;
+@group(0) @binding(4) var<uniform>             params: Params;
+
+const HEAD_DIM:    u32 = ${e}u;
+const HEAD_DIM_V4: u32 = ${s}u;
+const K_TILE:      u32 = ${t}u;
+const WG:          u32 = ${o}u;
+const SCALE:       f32 = ${(1/Math.sqrt(e)).toFixed(8)};
+const NEG_INF:     f32 = -3.4e38;
+
+var<workgroup> q_shared:     array<vec4<f32>, HEAD_DIM_V4>;
+var<workgroup> probs:        array<f32, K_TILE>;
+var<workgroup> running_out:  array<f32, HEAD_DIM>;
+var<workgroup> running_max:  f32;
+var<workgroup> running_denom: f32;
+var<workgroup> scale_old:    f32;
+var<workgroup> reduce_buf:   array<f32, K_TILE>;
+
+fn reduce_max(value: f32, tid: u32${l}) -> f32 {
+${p}  reduce_buf[tid] = value;
+  workgroupBarrier();
+  var stride: u32 = K_TILE / 2u;
+  loop {
+    if (stride == 0u) { break; }
+    if (tid < stride) {
+      reduce_buf[tid] = max(reduce_buf[tid], reduce_buf[tid + stride]);
+    }
+    stride = stride / 2u;
+    workgroupBarrier();
+  }
+  return reduce_buf[0];
+}
+
+fn reduce_sum(value: f32, tid: u32${l}) -> f32 {
+${d}  reduce_buf[tid] = value;
+  workgroupBarrier();
+  var stride: u32 = K_TILE / 2u;
+  loop {
+    if (stride == 0u) { break; }
+    if (tid < stride) {
+      reduce_buf[tid] = reduce_buf[tid] + reduce_buf[tid + stride];
+    }
+    stride = stride / 2u;
+    workgroupBarrier();
+  }
+  return reduce_buf[0];
+}
+
+@compute @workgroup_size(WG, 1, 1)
+fn main(@builtin(workgroup_id) wg: vec3<u32>, @builtin(local_invocation_id) lid: vec3<u32>${i?", @builtin(subgroup_size) sg_size: u32":""}) {
+  let qi = wg.x;
+  let h  = wg.y;
+  if (qi >= params.seq || h >= params.qHeads) { return; }
+  let tid = lid.x;
+  let kvGroupSize = params.qHeads / params.kvHeads;
+  let hKv = h / kvGroupSize;
+
+  // Load Q row (as vec4) into wgmem (cooperative).
+  let qBaseV4 = (qi * params.qHeads + h) * HEAD_DIM_V4;
+  for (var d: u32 = tid; d < HEAD_DIM_V4; d = d + WG) {
+    q_shared[d] = ${et("q[qBaseV4 + d]",r)};
+  }
+  // Init accumulators.
+  for (var d: u32 = tid; d < HEAD_DIM; d = d + WG) {
+    running_out[d] = 0.0;
+  }
+  if (tid == 0u) {
+    running_max = NEG_INF;
+    running_denom = 0.0;
+  }
+  workgroupBarrier();
+
+  let seqLocal = params.seq;
+  var kj_base: u32 = 0u;
+  loop {
+    if (kj_base >= seqLocal) { break; }
+    let kj = kj_base + tid;
+    var dot_val: f32 = NEG_INF;
+    if (kj < seqLocal) {
+      let kBaseV4 = (kj * params.kvHeads + hKv) * HEAD_DIM_V4;
+      var acc: f32 = 0.0;
+      for (var d: u32 = 0u; d < HEAD_DIM_V4; d = d + 1u) {
+        acc = acc + dot(q_shared[d], ${et("k[kBaseV4 + d]",r)});
+      }
+      dot_val = acc * SCALE;
+    }
+    let tile_max = reduce_max(dot_val, tid${_});
+    if (tid == 0u) {
+      let new_max = max(running_max, tile_max);
+      scale_old = exp(running_max - new_max);
+      running_max = new_max;
+    }
+    workgroupBarrier();
+
+    var prob_val: f32 = 0.0;
+    if (kj < seqLocal) {
+      prob_val = exp(dot_val - running_max);
+    }
+    probs[tid] = prob_val;
+
+    let tile_sum = reduce_sum(prob_val, tid${_});
+    if (tid == 0u) {
+      running_denom = running_denom * scale_old + tile_sum;
+    }
+    workgroupBarrier();
+
+    // Update running_out using vec4 V loads. Each thread handles HEAD_DIM_V4 / WG groups of 4 dims.
+    let tile_count = min(K_TILE, seqLocal - kj_base);
+    let scale_old_v = scale_old;
+    for (var d4: u32 = tid; d4 < HEAD_DIM_V4; d4 = d4 + WG) {
+      var v_sum: vec4<f32> = vec4<f32>(0.0, 0.0, 0.0, 0.0);
+      for (var i: u32 = 0u; i < tile_count; i = i + 1u) {
+        let vBaseV4 = ((kj_base + i) * params.kvHeads + hKv) * HEAD_DIM_V4;
+        v_sum = v_sum + probs[i] * ${et("v[vBaseV4 + d4]",r)};
+      }
+      let dBase = d4 * 4u;
+      running_out[dBase + 0u] = running_out[dBase + 0u] * scale_old_v + v_sum.x;
+      running_out[dBase + 1u] = running_out[dBase + 1u] * scale_old_v + v_sum.y;
+      running_out[dBase + 2u] = running_out[dBase + 2u] * scale_old_v + v_sum.z;
+      running_out[dBase + 3u] = running_out[dBase + 3u] * scale_old_v + v_sum.w;
+    }
+    workgroupBarrier();
+
+    kj_base = kj_base + K_TILE;
+  }
+
+  let outBase = (qi * params.qHeads + h) * HEAD_DIM;
+  let inv = 1.0 / running_denom;
+  for (var d: u32 = tid; d < HEAD_DIM; d = d + WG) {
+    out[outBase + d] = ${ne("running_out[d] * inv",a)};
+  }
+}
+`}function Ni({headDim:e,kTile:t=32,inputDtype:r="float32",outputDtype:a="float32",useSubgroups:i=!1,useHalfQk:o=!1}){if(e%4!=0)throw Error("headDim must be divisible by 4");if(o&&r!=="float16")throw Error("useHalfQk requires float16 attention inputs");let s=t;if(s>256)throw Error(`flash attn kTile=${t} exceeds maxComputeInvocationsPerWorkgroup`);let u=e/4,n=re(r),l=re(a),_=o?"f16":"f32",c=y=>o?y:et(y,r),p=(y,v)=>o?`f32(dot(${y}, ${v}))`:`dot(${y}, ${v})`,d=i?", sg_size: u32":"",f=i?", sg_size":"",b=i?`enable subgroups;
+`:"",g=i?`  if (sg_size == WG) {
+    return subgroupMax(value);
+  }
+`:"",h=i?`  if (sg_size == WG) {
+    return subgroupAdd(value);
+  }
+`:"";return`${ye(r,a)}${b}struct Params { seq: u32, qHeads: u32, kvHeads: u32, _pad0: u32 };
+@group(0) @binding(0) var<storage, read>       q: array<vec4<${n}>>;
+@group(0) @binding(1) var<storage, read>       k: array<vec4<${n}>>;
+@group(0) @binding(2) var<storage, read>       v: array<vec4<${n}>>;
+@group(0) @binding(3) var<storage, read_write> out: array<${l}>;
+@group(0) @binding(4) var<uniform>             params: Params;
+
+const HEAD_DIM:    u32 = ${e}u;
+const HEAD_DIM_V4: u32 = ${u}u;
+const K_TILE:      u32 = ${t}u;
+const WG:          u32 = ${s}u;
+const SCALE:       f32 = ${(1/Math.sqrt(e)).toFixed(8)};
+const NEG_INF:     f32 = -3.4e38;
+
+var<workgroup> q0_shared:     array<vec4<${_}>, HEAD_DIM_V4>;
+var<workgroup> q1_shared:     array<vec4<${_}>, HEAD_DIM_V4>;
+var<workgroup> probs0:        array<f32, K_TILE>;
+var<workgroup> probs1:        array<f32, K_TILE>;
+var<workgroup> running_out0:  array<f32, HEAD_DIM>;
+var<workgroup> running_out1:  array<f32, HEAD_DIM>;
+var<workgroup> running_max0:  f32;
+var<workgroup> running_max1:  f32;
+var<workgroup> running_denom0: f32;
+var<workgroup> running_denom1: f32;
+var<workgroup> scale_old0:    f32;
+var<workgroup> scale_old1:    f32;
+var<workgroup> reduce_buf:    array<f32, K_TILE>;
+
+fn reduce_max(value: f32, tid: u32${d}) -> f32 {
+${g}  reduce_buf[tid] = value;
+  workgroupBarrier();
+  var stride: u32 = K_TILE / 2u;
+  loop {
+    if (stride == 0u) { break; }
+    if (tid < stride) {
+      reduce_buf[tid] = max(reduce_buf[tid], reduce_buf[tid + stride]);
+    }
+    stride = stride / 2u;
+    workgroupBarrier();
+  }
+  return reduce_buf[0];
+}
+
+fn reduce_sum(value: f32, tid: u32${d}) -> f32 {
+${h}  reduce_buf[tid] = value;
+  workgroupBarrier();
+  var stride: u32 = K_TILE / 2u;
+  loop {
+    if (stride == 0u) { break; }
+    if (tid < stride) {
+      reduce_buf[tid] = reduce_buf[tid] + reduce_buf[tid + stride];
+    }
+    stride = stride / 2u;
+    workgroupBarrier();
+  }
+  return reduce_buf[0];
+}
+
+@compute @workgroup_size(WG, 1, 1)
+fn main(@builtin(workgroup_id) wg: vec3<u32>, @builtin(local_invocation_id) lid: vec3<u32>${i?", @builtin(subgroup_size) sg_size: u32":""}) {
+  let qi0 = wg.x * 2u;
+  let qi1 = qi0 + 1u;
+  let h = wg.y;
+  if (qi0 >= params.seq || h >= params.qHeads) { return; }
+  let tid = lid.x;
+  let q1_valid = qi1 < params.seq;
+  let kvGroupSize = params.qHeads / params.kvHeads;
+  let hKv = h / kvGroupSize;
+
+  let q0BaseV4 = (qi0 * params.qHeads + h) * HEAD_DIM_V4;
+  let q1BaseV4 = (qi1 * params.qHeads + h) * HEAD_DIM_V4;
+  for (var d: u32 = tid; d < HEAD_DIM_V4; d = d + WG) {
+    q0_shared[d] = ${c("q[q0BaseV4 + d]")};
+    if (q1_valid) {
+      q1_shared[d] = ${c("q[q1BaseV4 + d]")};
+    } else {
+      q1_shared[d] = vec4<${_}>(0.0);
+    }
+  }
+  for (var d: u32 = tid; d < HEAD_DIM; d = d + WG) {
+    running_out0[d] = 0.0;
+    running_out1[d] = 0.0;
+  }
+  if (tid == 0u) {
+    running_max0 = NEG_INF;
+    running_max1 = NEG_INF;
+    running_denom0 = 0.0;
+    running_denom1 = 0.0;
+  }
+  workgroupBarrier();
+
+  let seqLocal = params.seq;
+  var kj_base: u32 = 0u;
+  loop {
+    if (kj_base >= seqLocal) { break; }
+    let kj = kj_base + tid;
+    var dot0: f32 = NEG_INF;
+    var dot1: f32 = NEG_INF;
+    if (kj < seqLocal) {
+      let kBaseV4 = (kj * params.kvHeads + hKv) * HEAD_DIM_V4;
+      var acc0: f32 = 0.0;
+      var acc1: f32 = 0.0;
+      for (var d: u32 = 0u; d < HEAD_DIM_V4; d = d + 1u) {
+        let kval = ${c("k[kBaseV4 + d]")};
+        acc0 = acc0 + ${p("q0_shared[d]","kval")};
+        acc1 = acc1 + ${p("q1_shared[d]","kval")};
+      }
+      dot0 = acc0 * SCALE;
+      if (q1_valid) {
+        dot1 = acc1 * SCALE;
+      }
+    }
+
+    let tile_max0 = reduce_max(dot0, tid${f});
+    let tile_max1 = reduce_max(dot1, tid${f});
+    if (tid == 0u) {
+      let new_max0 = max(running_max0, tile_max0);
+      scale_old0 = exp(running_max0 - new_max0);
+      running_max0 = new_max0;
+      let new_max1 = max(running_max1, tile_max1);
+      scale_old1 = exp(running_max1 - new_max1);
+      running_max1 = new_max1;
+    }
+    workgroupBarrier();
+
+    var prob0: f32 = 0.0;
+    var prob1: f32 = 0.0;
+    if (kj < seqLocal) {
+      prob0 = exp(dot0 - running_max0);
+      if (q1_valid) {
+        prob1 = exp(dot1 - running_max1);
+      }
+    }
+    probs0[tid] = prob0;
+    probs1[tid] = prob1;
+
+    let tile_sum0 = reduce_sum(prob0, tid${f});
+    let tile_sum1 = reduce_sum(prob1, tid${f});
+    if (tid == 0u) {
+      running_denom0 = running_denom0 * scale_old0 + tile_sum0;
+      running_denom1 = running_denom1 * scale_old1 + tile_sum1;
+    }
+    workgroupBarrier();
+
+    let tile_count = min(K_TILE, seqLocal - kj_base);
+    let scale_old_v0 = scale_old0;
+    let scale_old_v1 = scale_old1;
+    for (var d4: u32 = tid; d4 < HEAD_DIM_V4; d4 = d4 + WG) {
+      var v_sum0: vec4<f32> = vec4<f32>(0.0);
+      var v_sum1: vec4<f32> = vec4<f32>(0.0);
+      for (var i: u32 = 0u; i < tile_count; i = i + 1u) {
+        let vBaseV4 = ((kj_base + i) * params.kvHeads + hKv) * HEAD_DIM_V4;
+        let vval = ${et("v[vBaseV4 + d4]",r)};
+        v_sum0 = v_sum0 + probs0[i] * vval;
+        v_sum1 = v_sum1 + probs1[i] * vval;
+      }
+      let dBase = d4 * 4u;
+      running_out0[dBase + 0u] = running_out0[dBase + 0u] * scale_old_v0 + v_sum0.x;
+      running_out0[dBase + 1u] = running_out0[dBase + 1u] * scale_old_v0 + v_sum0.y;
+      running_out0[dBase + 2u] = running_out0[dBase + 2u] * scale_old_v0 + v_sum0.z;
+      running_out0[dBase + 3u] = running_out0[dBase + 3u] * scale_old_v0 + v_sum0.w;
+      running_out1[dBase + 0u] = running_out1[dBase + 0u] * scale_old_v1 + v_sum1.x;
+      running_out1[dBase + 1u] = running_out1[dBase + 1u] * scale_old_v1 + v_sum1.y;
+      running_out1[dBase + 2u] = running_out1[dBase + 2u] * scale_old_v1 + v_sum1.z;
+      running_out1[dBase + 3u] = running_out1[dBase + 3u] * scale_old_v1 + v_sum1.w;
+    }
+    workgroupBarrier();
+
+    kj_base = kj_base + K_TILE;
+  }
+
+  let outBase0 = (qi0 * params.qHeads + h) * HEAD_DIM;
+  let inv0 = 1.0 / running_denom0;
+  for (var d: u32 = tid; d < HEAD_DIM; d = d + WG) {
+    out[outBase0 + d] = ${ne("running_out0[d] * inv0",a)};
+  }
+  if (q1_valid) {
+    let outBase1 = (qi1 * params.qHeads + h) * HEAD_DIM;
+    let inv1 = 1.0 / running_denom1;
+    for (var d: u32 = tid; d < HEAD_DIM; d = d + WG) {
+      out[outBase1 + d] = ${ne("running_out1[d] * inv1",a)};
+    }
+  }
+}
+`}function Ki({headDim:e,kTile:t=32,inputDtype:r="float16",outputDtype:a="float32",useSubgroups:i=!1,useHalfQk:o=!0}){if(e%4!=0)throw Error("headDim must be divisible by 4");if(r!=="float16"||!o)throw Error("Q4 flash attention requires f16 Q/K inputs");let s=t;if(s>256)throw Error(`flash attn kTile=${t} exceeds maxComputeInvocationsPerWorkgroup`);let u=e/4,n=re(r),l=re(a),_=i?", sg_size: u32":"",c=i?", sg_size":"",p=i?`enable subgroups;
+`:"",d=i?`  if (sg_size == WG) {
+    return subgroupMax(value);
+  }
+`:"",f=i?`  if (sg_size == WG) {
+    return subgroupAdd(value);
+  }
+`:"";return`${ye(r,a)}${p}struct Params { seq: u32, qHeads: u32, kvHeads: u32, _pad0: u32 };
+@group(0) @binding(0) var<storage, read>       q: array<vec4<${n}>>;
+@group(0) @binding(1) var<storage, read>       k: array<vec4<${n}>>;
+@group(0) @binding(2) var<storage, read>       v: array<vec4<${n}>>;
+@group(0) @binding(3) var<storage, read_write> out: array<${l}>;
+@group(0) @binding(4) var<uniform>             params: Params;
+
+const HEAD_DIM:    u32 = ${e}u;
+const HEAD_DIM_V4: u32 = ${u}u;
+const K_TILE:      u32 = ${t}u;
+const WG:          u32 = ${s}u;
+const SCALE:       f32 = ${(1/Math.sqrt(e)).toFixed(8)};
+const NEG_INF:     f32 = -3.4e38;
+
+var<workgroup> q0_shared:     array<vec4<f16>, HEAD_DIM_V4>;
+var<workgroup> q1_shared:     array<vec4<f16>, HEAD_DIM_V4>;
+var<workgroup> q2_shared:     array<vec4<f16>, HEAD_DIM_V4>;
+var<workgroup> q3_shared:     array<vec4<f16>, HEAD_DIM_V4>;
+var<workgroup> probs0:        array<f32, K_TILE>;
+var<workgroup> probs1:        array<f32, K_TILE>;
+var<workgroup> probs2:        array<f32, K_TILE>;
+var<workgroup> probs3:        array<f32, K_TILE>;
+var<workgroup> running_out0:  array<f32, HEAD_DIM>;
+var<workgroup> running_out1:  array<f32, HEAD_DIM>;
+var<workgroup> running_out2:  array<f32, HEAD_DIM>;
+var<workgroup> running_out3:  array<f32, HEAD_DIM>;
+var<workgroup> running_max0:  f32;
+var<workgroup> running_max1:  f32;
+var<workgroup> running_max2:  f32;
+var<workgroup> running_max3:  f32;
+var<workgroup> running_denom0: f32;
+var<workgroup> running_denom1: f32;
+var<workgroup> running_denom2: f32;
+var<workgroup> running_denom3: f32;
+var<workgroup> scale_old0:    f32;
+var<workgroup> scale_old1:    f32;
+var<workgroup> scale_old2:    f32;
+var<workgroup> scale_old3:    f32;
+var<workgroup> reduce_buf:    array<f32, K_TILE>;
+
+fn reduce_max(value: f32, tid: u32${_}) -> f32 {
+${d}  reduce_buf[tid] = value;
+  workgroupBarrier();
+  var stride: u32 = K_TILE / 2u;
+  loop {
+    if (stride == 0u) { break; }
+    if (tid < stride) {
+      reduce_buf[tid] = max(reduce_buf[tid], reduce_buf[tid + stride]);
+    }
+    stride = stride / 2u;
+    workgroupBarrier();
+  }
+  return reduce_buf[0];
+}
+
+fn reduce_sum(value: f32, tid: u32${_}) -> f32 {
+${f}  reduce_buf[tid] = value;
+  workgroupBarrier();
+  var stride: u32 = K_TILE / 2u;
+  loop {
+    if (stride == 0u) { break; }
+    if (tid < stride) {
+      reduce_buf[tid] = reduce_buf[tid] + reduce_buf[tid + stride];
+    }
+    stride = stride / 2u;
+    workgroupBarrier();
+  }
+  return reduce_buf[0];
+}
+
+@compute @workgroup_size(WG, 1, 1)
+fn main(@builtin(workgroup_id) wg: vec3<u32>, @builtin(local_invocation_id) lid: vec3<u32>${i?", @builtin(subgroup_size) sg_size: u32":""}) {
+  let qi0 = wg.x * 4u;
+  let qi1 = qi0 + 1u;
+  let qi2 = qi0 + 2u;
+  let qi3 = qi0 + 3u;
+  let h = wg.y;
+  if (qi0 >= params.seq || h >= params.qHeads) { return; }
+  let tid = lid.x;
+  let q1_valid = qi1 < params.seq;
+  let q2_valid = qi2 < params.seq;
+  let q3_valid = qi3 < params.seq;
+  let kvGroupSize = params.qHeads / params.kvHeads;
+  let hKv = h / kvGroupSize;
+
+  let q0BaseV4 = (qi0 * params.qHeads + h) * HEAD_DIM_V4;
+  let q1BaseV4 = (qi1 * params.qHeads + h) * HEAD_DIM_V4;
+  let q2BaseV4 = (qi2 * params.qHeads + h) * HEAD_DIM_V4;
+  let q3BaseV4 = (qi3 * params.qHeads + h) * HEAD_DIM_V4;
+  for (var d: u32 = tid; d < HEAD_DIM_V4; d = d + WG) {
+    q0_shared[d] = q[q0BaseV4 + d];
+    if (q1_valid) { q1_shared[d] = q[q1BaseV4 + d]; } else { q1_shared[d] = vec4<f16>(0.0); }
+    if (q2_valid) { q2_shared[d] = q[q2BaseV4 + d]; } else { q2_shared[d] = vec4<f16>(0.0); }
+    if (q3_valid) { q3_shared[d] = q[q3BaseV4 + d]; } else { q3_shared[d] = vec4<f16>(0.0); }
+  }
+  for (var d: u32 = tid; d < HEAD_DIM; d = d + WG) {
+    running_out0[d] = 0.0;
+    running_out1[d] = 0.0;
+    running_out2[d] = 0.0;
+    running_out3[d] = 0.0;
+  }
+  if (tid == 0u) {
+    running_max0 = NEG_INF;
+    running_max1 = NEG_INF;
+    running_max2 = NEG_INF;
+    running_max3 = NEG_INF;
+    running_denom0 = 0.0;
+    running_denom1 = 0.0;
+    running_denom2 = 0.0;
+    running_denom3 = 0.0;
+  }
+  workgroupBarrier();
+
+  let seqLocal = params.seq;
+  var kj_base: u32 = 0u;
+  loop {
+    if (kj_base >= seqLocal) { break; }
+    let kj = kj_base + tid;
+    var dot0: f32 = NEG_INF;
+    var dot1: f32 = NEG_INF;
+    var dot2: f32 = NEG_INF;
+    var dot3: f32 = NEG_INF;
+    if (kj < seqLocal) {
+      let kBaseV4 = (kj * params.kvHeads + hKv) * HEAD_DIM_V4;
+      var acc0: f32 = 0.0;
+      var acc1: f32 = 0.0;
+      var acc2: f32 = 0.0;
+      var acc3: f32 = 0.0;
+      for (var d: u32 = 0u; d < HEAD_DIM_V4; d = d + 1u) {
+        let kval = k[kBaseV4 + d];
+        acc0 = acc0 + f32(dot(q0_shared[d], kval));
+        acc1 = acc1 + f32(dot(q1_shared[d], kval));
+        acc2 = acc2 + f32(dot(q2_shared[d], kval));
+        acc3 = acc3 + f32(dot(q3_shared[d], kval));
+      }
+      dot0 = acc0 * SCALE;
+      if (q1_valid) { dot1 = acc1 * SCALE; }
+      if (q2_valid) { dot2 = acc2 * SCALE; }
+      if (q3_valid) { dot3 = acc3 * SCALE; }
+    }
+
+    let tile_max0 = reduce_max(dot0, tid${c});
+    let tile_max1 = reduce_max(dot1, tid${c});
+    let tile_max2 = reduce_max(dot2, tid${c});
+    let tile_max3 = reduce_max(dot3, tid${c});
+    if (tid == 0u) {
+      let new_max0 = max(running_max0, tile_max0);
+      scale_old0 = exp(running_max0 - new_max0);
+      running_max0 = new_max0;
+      let new_max1 = max(running_max1, tile_max1);
+      scale_old1 = exp(running_max1 - new_max1);
+      running_max1 = new_max1;
+      let new_max2 = max(running_max2, tile_max2);
+      scale_old2 = exp(running_max2 - new_max2);
+      running_max2 = new_max2;
+      let new_max3 = max(running_max3, tile_max3);
+      scale_old3 = exp(running_max3 - new_max3);
+      running_max3 = new_max3;
+    }
+    workgroupBarrier();
+
+    var prob0: f32 = 0.0;
+    var prob1: f32 = 0.0;
+    var prob2: f32 = 0.0;
+    var prob3: f32 = 0.0;
+    if (kj < seqLocal) {
+      prob0 = exp(dot0 - running_max0);
+      if (q1_valid) { prob1 = exp(dot1 - running_max1); }
+      if (q2_valid) { prob2 = exp(dot2 - running_max2); }
+      if (q3_valid) { prob3 = exp(dot3 - running_max3); }
+    }
+    probs0[tid] = prob0;
+    probs1[tid] = prob1;
+    probs2[tid] = prob2;
+    probs3[tid] = prob3;
+
+    let tile_sum0 = reduce_sum(prob0, tid${c});
+    let tile_sum1 = reduce_sum(prob1, tid${c});
+    let tile_sum2 = reduce_sum(prob2, tid${c});
+    let tile_sum3 = reduce_sum(prob3, tid${c});
+    if (tid == 0u) {
+      running_denom0 = running_denom0 * scale_old0 + tile_sum0;
+      running_denom1 = running_denom1 * scale_old1 + tile_sum1;
+      running_denom2 = running_denom2 * scale_old2 + tile_sum2;
+      running_denom3 = running_denom3 * scale_old3 + tile_sum3;
+    }
+    workgroupBarrier();
+
+    let tile_count = min(K_TILE, seqLocal - kj_base);
+    let scale_old_v0 = scale_old0;
+    let scale_old_v1 = scale_old1;
+    let scale_old_v2 = scale_old2;
+    let scale_old_v3 = scale_old3;
+    for (var d4: u32 = tid; d4 < HEAD_DIM_V4; d4 = d4 + WG) {
+      var v_sum0: vec4<f32> = vec4<f32>(0.0);
+      var v_sum1: vec4<f32> = vec4<f32>(0.0);
+      var v_sum2: vec4<f32> = vec4<f32>(0.0);
+      var v_sum3: vec4<f32> = vec4<f32>(0.0);
+      for (var i: u32 = 0u; i < tile_count; i = i + 1u) {
+        let vBaseV4 = ((kj_base + i) * params.kvHeads + hKv) * HEAD_DIM_V4;
+        let vval = ${et("v[vBaseV4 + d4]",r)};
+        v_sum0 = v_sum0 + probs0[i] * vval;
+        v_sum1 = v_sum1 + probs1[i] * vval;
+        v_sum2 = v_sum2 + probs2[i] * vval;
+        v_sum3 = v_sum3 + probs3[i] * vval;
+      }
+      let dBase = d4 * 4u;
+      running_out0[dBase + 0u] = running_out0[dBase + 0u] * scale_old_v0 + v_sum0.x;
+      running_out0[dBase + 1u] = running_out0[dBase + 1u] * scale_old_v0 + v_sum0.y;
+      running_out0[dBase + 2u] = running_out0[dBase + 2u] * scale_old_v0 + v_sum0.z;
+      running_out0[dBase + 3u] = running_out0[dBase + 3u] * scale_old_v0 + v_sum0.w;
+      running_out1[dBase + 0u] = running_out1[dBase + 0u] * scale_old_v1 + v_sum1.x;
+      running_out1[dBase + 1u] = running_out1[dBase + 1u] * scale_old_v1 + v_sum1.y;
+      running_out1[dBase + 2u] = running_out1[dBase + 2u] * scale_old_v1 + v_sum1.z;
+      running_out1[dBase + 3u] = running_out1[dBase + 3u] * scale_old_v1 + v_sum1.w;
+      running_out2[dBase + 0u] = running_out2[dBase + 0u] * scale_old_v2 + v_sum2.x;
+      running_out2[dBase + 1u] = running_out2[dBase + 1u] * scale_old_v2 + v_sum2.y;
+      running_out2[dBase + 2u] = running_out2[dBase + 2u] * scale_old_v2 + v_sum2.z;
+      running_out2[dBase + 3u] = running_out2[dBase + 3u] * scale_old_v2 + v_sum2.w;
+      running_out3[dBase + 0u] = running_out3[dBase + 0u] * scale_old_v3 + v_sum3.x;
+      running_out3[dBase + 1u] = running_out3[dBase + 1u] * scale_old_v3 + v_sum3.y;
+      running_out3[dBase + 2u] = running_out3[dBase + 2u] * scale_old_v3 + v_sum3.z;
+      running_out3[dBase + 3u] = running_out3[dBase + 3u] * scale_old_v3 + v_sum3.w;
+    }
+    workgroupBarrier();
+
+    kj_base = kj_base + K_TILE;
+  }
+
+  let outBase0 = (qi0 * params.qHeads + h) * HEAD_DIM;
+  let inv0 = 1.0 / running_denom0;
+  for (var d: u32 = tid; d < HEAD_DIM; d = d + WG) {
+    out[outBase0 + d] = ${ne("running_out0[d] * inv0",a)};
+  }
+  if (q1_valid) {
+    let outBase1 = (qi1 * params.qHeads + h) * HEAD_DIM;
+    let inv1 = 1.0 / running_denom1;
+    for (var d: u32 = tid; d < HEAD_DIM; d = d + WG) {
+      out[outBase1 + d] = ${ne("running_out1[d] * inv1",a)};
+    }
+  }
+  if (q2_valid) {
+    let outBase2 = (qi2 * params.qHeads + h) * HEAD_DIM;
+    let inv2 = 1.0 / running_denom2;
+    for (var d: u32 = tid; d < HEAD_DIM; d = d + WG) {
+      out[outBase2 + d] = ${ne("running_out2[d] * inv2",a)};
+    }
+  }
+  if (q3_valid) {
+    let outBase3 = (qi3 * params.qHeads + h) * HEAD_DIM;
+    let inv3 = 1.0 / running_denom3;
+    for (var d: u32 = tid; d < HEAD_DIM; d = d + WG) {
+      out[outBase3 + d] = ${ne("running_out3[d] * inv3",a)};
+    }
+  }
+}
+`}function Vi({headDim:e,kStep:t=32,inputDtype:r="float16",outputDtype:a="float16"}){if(e%4!=0)throw Error("headDim must be divisible by 4");if(r!=="float16")throw Error("Q32 flash attention requires f16 Q/K/V inputs");if(t!==32&&t!==64)throw Error("Q32 flash attention supports kStep=32 or 64");let i=e/4,o=re(r),s=re(a),u=["x","y","z","w"],n=t/4,l=Array.from({length:n},(S,$)=>`    var qk${$}: vec4<f32> = vec4<f32>(0.0);`).join(`
+`),_=Array.from({length:t},(S,$)=>{let w=Math.floor($/4),m=u[$%4];return`        qk${w}.${m} = qk${w}.${m} + f32(dot(q_own, subgroupShuffle(${$<32?"k_local0":"k_local1"}, ${$%32}u)));`}).join(`
+`),c=Array.from({length:n},(S,$)=>{let w=[`    qk${$} = qk${$} * vec4<f32>(SCALE);`];for(let m=0;m<4;++m){let T=$*4+m;w.push(`    if (k_start + ${T}u >= seqLocal) { qk${$}.${u[m]} = NEG_INF; }`)}return w.join(`
+`)}).join(`
+`),p=Array.from({length:t},(S,$)=>{let w=Math.floor($/4),m=u[$%4];return`      acc = acc + vec4<f32>(subgroupShuffle(${$<32?"v_local0":"v_local1"}, ${$%32}u)) * qk${w}.${m};`}).join(`
+`),d=t===32?`      var k_local0: vec4<f16> = vec4<f16>(0.0h);
+      if (k_start + sg_id < seqLocal) {
+        let kBaseV4 = ((k_start + sg_id) * params.kvHeads + hKv) * HEAD_DIM_V4;
+        k_local0 = k[kBaseV4 + d4];
+      }`:`      var k_local0: vec4<f16> = vec4<f16>(0.0h);
+      var k_local1: vec4<f16> = vec4<f16>(0.0h);
+      if (k_start + sg_id < seqLocal) {
+        let kBaseV4 = ((k_start + sg_id) * params.kvHeads + hKv) * HEAD_DIM_V4;
+        k_local0 = k[kBaseV4 + d4];
+      }
+      if (k_start + sg_id + 32u < seqLocal) {
+        let kBaseV4 = ((k_start + sg_id + 32u) * params.kvHeads + hKv) * HEAD_DIM_V4;
+        k_local1 = k[kBaseV4 + d4];
+      }`,f=t===32?`      var v_local0: vec4<f16> = vec4<f16>(0.0h);
+      if (k_start + sg_id < seqLocal) {
+        let vBaseV4 = ((k_start + sg_id) * params.kvHeads + hKv) * HEAD_DIM_V4;
+        v_local0 = v[vBaseV4 + d4];
+      }`:`      var v_local0: vec4<f16> = vec4<f16>(0.0h);
+      var v_local1: vec4<f16> = vec4<f16>(0.0h);
+      if (k_start + sg_id < seqLocal) {
+        let vBaseV4 = ((k_start + sg_id) * params.kvHeads + hKv) * HEAD_DIM_V4;
+        v_local0 = v[vBaseV4 + d4];
+      }
+      if (k_start + sg_id + 32u < seqLocal) {
+        let vBaseV4 = ((k_start + sg_id + 32u) * params.kvHeads + hKv) * HEAD_DIM_V4;
+        v_local1 = v[vBaseV4 + d4];
+      }`,b=a==="float16"?"    out[outBaseV4 + d4] = vec4<f16>(o_tile[d4]);":"    out[outBaseV4 + d4] = o_tile[d4];",g=Array.from({length:n},(S,$)=>`    local_max = max(local_max, max(max(qk${$}.x, qk${$}.y), max(qk${$}.z, qk${$}.w)));`).join(`
+`),h=Array.from({length:n},(S,$)=>`    qk${$} = exp(qk${$} - vec4<f32>(new_max));`).join(`
+`),y=Array.from({length:n},(S,$)=>`    tile_sum = tile_sum + qk${$}.x + qk${$}.y + qk${$}.z + qk${$}.w;`).join(`
+`),v=Array.from({length:n},(S,$)=>`    qk${$} = qk${$} / vec4<f32>(denom);`).join(`
+`);return`${ye(r,a)}enable subgroups;
+struct Params { seq: u32, qHeads: u32, kvHeads: u32, _pad0: u32 };
+@group(0) @binding(0) var<storage, read>       q: array<vec4<${o}>>;
+@group(0) @binding(1) var<storage, read>       k: array<vec4<${o}>>;
+@group(0) @binding(2) var<storage, read>       v: array<vec4<${o}>>;
+@group(0) @binding(3) var<storage, read_write> out: array<vec4<${s}>>;
+@group(0) @binding(4) var<uniform>             params: Params;
+
+const HEAD_DIM:    u32 = ${e}u;
+const HEAD_DIM_V4: u32 = ${i}u;
+const WG:          u32 = 32u;
+const K_STEP:      u32 = ${t}u;
+const SCALE:       f32 = ${(1/Math.sqrt(e)).toFixed(8)};
+const NEG_INF:     f32 = -3.4e38;
+
+@compute @workgroup_size(WG, 1, 1)
+fn main(
+  @builtin(workgroup_id) wg: vec3<u32>,
+  @builtin(local_invocation_id) lid: vec3<u32>,
+  @builtin(subgroup_invocation_id) sg_id: u32
+) {
+  let qi = wg.x * WG + lid.x;
+  let h = wg.y;
+  if (h >= params.qHeads) { return; }
+  let valid_q = qi < params.seq;
+  let kvGroupSize = params.qHeads / params.kvHeads;
+  let hKv = h / kvGroupSize;
+  let qBaseV4 = (qi * params.qHeads + h) * HEAD_DIM_V4;
+
+  var q_tile: array<vec4<f16>, HEAD_DIM_V4>;
+  var o_tile: array<vec4<f32>, HEAD_DIM_V4>;
+  for (var d4: u32 = 0u; d4 < HEAD_DIM_V4; d4 = d4 + 1u) {
+    if (valid_q) {
+      q_tile[d4] = q[qBaseV4 + d4];
+    } else {
+      q_tile[d4] = vec4<f16>(0.0h);
+    }
+    o_tile[d4] = vec4<f32>(0.0);
+  }
+
+  var previous_max: f32 = NEG_INF;
+  var previous_denom: f32 = 0.0;
+  let seqLocal = params.seq;
+  for (var k_start: u32 = 0u; k_start < seqLocal; k_start = k_start + K_STEP) {
+${l}
+    for (var d4: u32 = 0u; d4 < HEAD_DIM_V4; d4 = d4 + 1u) {
+      let q_own = q_tile[d4];
+${d}
+${_}
+    }
+${c}
+
+    var local_max: f32 = NEG_INF;
+${g}
+    let new_max = max(previous_max, local_max);
+${h}
+    var tile_sum: f32 = 0.0;
+${y}
+    let dleft = previous_denom * exp(previous_max - new_max);
+    let denom = max(dleft + tile_sum, 0.0000001);
+    let o_ratio = dleft / denom;
+${v}
+    previous_max = new_max;
+    previous_denom = denom;
+
+    for (var d4: u32 = 0u; d4 < HEAD_DIM_V4; d4 = d4 + 1u) {
+${f}
+      var acc: vec4<f32> = vec4<f32>(0.0);
+${p}
+      o_tile[d4] = o_tile[d4] * vec4<f32>(o_ratio) + acc;
+    }
+  }
+
+  if (valid_q) {
+    let outBaseV4 = (qi * params.qHeads + h) * HEAD_DIM_V4;
+    for (var d4: u32 = 0u; d4 < HEAD_DIM_V4; d4 = d4 + 1u) {
+${b}
+    }
+  }
+}
+`}function ji({dtype:e="float32"}={}){let t=re(e);return`${ye(e)}struct Params { totalElems: u32, aElems: u32, wgY: u32, _pad0: u32 };
+@group(0) @binding(0) var<storage, read>       a: array<${t}>;
+@group(0) @binding(1) var<storage, read>       b: array<${t}>;
+@group(0) @binding(2) var<storage, read_write> out: array<${t}>;
+@group(0) @binding(3) var<uniform>             params: Params;
+const WG: u32 = 64u;
+@compute @workgroup_size(WG, 1, 1)
+fn main(@builtin(workgroup_id) wg: vec3<u32>, @builtin(local_invocation_id) lid: vec3<u32>) {
+  let wg_idx = wg.x + wg.y * params.wgY;
+  let i = wg_idx * WG + lid.x;
+  if (i >= params.totalElems) { return; }
+  if (i < params.aElems) {
+    out[i] = a[i];
+  } else {
+    out[i] = b[i - params.aElems];
+  }
+}
+`}function Xi({bits:e,groupSize:t,inFeatures:r,outFeatures:a,label:i="mlx_matmul"}){if(![1,2,4,8].includes(e))throw Error(`unsupported bits=${e}`);if(r%t!==0)throw Error("inFeatures must be divisible by groupSize");let o=Math.floor(32/e);if(t%o!==0)throw Error("groupSize must be divisible by valsPerWord");let s=t/o,u=r/o;return`// MLX matmul, bits=${e}, group_size=${t}, in=${r}, out=${a}.
+struct Params { M: u32 };
+@group(0) @binding(0) var<storage, read>       a:         array<f32>;
+@group(0) @binding(1) var<storage, read>       bits_buf:  array<u32>;
+@group(0) @binding(2) var<storage, read>       scaleBias: array<f32>;
+@group(0) @binding(3) var<storage, read_write> y:         array<f32>;
+@group(0) @binding(4) var<uniform>             params:    Params;
+
+const IN_FEATURES:     u32 = ${r}u;
+const OUT_FEATURES:    u32 = ${a}u;
+const GROUP_SIZE:      u32 = ${t}u;
+const NUM_GROUPS:      u32 = ${r/t}u;
+const WORDS_PER_ROW:   u32 = ${u}u;
+const WORDS_PER_GROUP: u32 = ${s}u;
+const VALS_PER_WORD:   u32 = ${o}u;
+const BITS:            u32 = ${e}u;
+const MASK:            u32 = ${(1<<e)-1}u;
+const WG_SIZE:         u32 = 64u;
+
+var<workgroup> partial_acc: array<f32, WG_SIZE>;
+
+@compute @workgroup_size(WG_SIZE, 1, 1)
+fn main(@builtin(workgroup_id) wg: vec3<u32>, @builtin(local_invocation_id) lid: vec3<u32>) {
+  let row: u32 = wg.x;            // output feature
+  let mrow: u32 = wg.y;           // input row (token index)
+  if (row >= OUT_FEATURES || mrow >= params.M) { return; }
+  let tid: u32 = lid.x;
+
+  let row_words_base: u32 = row * WORDS_PER_ROW;
+  let row_sb_base:    u32 = row * NUM_GROUPS * 2u;
+  let a_row_base:     u32 = mrow * IN_FEATURES;
+
+  var thread_acc: f32 = 0.0;
+  var g: u32 = tid;
+  loop {
+    if (g >= NUM_GROUPS) { break; }
+    let group_word_base: u32 = row_words_base + g * WORDS_PER_GROUP;
+    let col_base: u32 = g * GROUP_SIZE;
+
+    var sum_qa: f32 = 0.0;
+    var sum_a:  f32 = 0.0;
+    for (var w: u32 = 0u; w < WORDS_PER_GROUP; w = w + 1u) {
+      let packed: u32 = bits_buf[group_word_base + w];
+      let lane_base: u32 = col_base + w * VALS_PER_WORD;
+      for (var v: u32 = 0u; v < VALS_PER_WORD; v = v + 1u) {
+        let q: f32 = f32((packed >> (v * BITS)) & MASK);
+        let ai: f32 = a[a_row_base + lane_base + v];
+        sum_qa = sum_qa + q * ai;
+        sum_a  = sum_a  + ai;
+      }
+    }
+    let scale: f32 = scaleBias[row_sb_base + g * 2u];
+    let bias:  f32 = scaleBias[row_sb_base + g * 2u + 1u];
+    thread_acc = thread_acc + scale * sum_qa + bias * sum_a;
+
+    g = g + WG_SIZE;
+  }
+
+  partial_acc[tid] = thread_acc;
+  workgroupBarrier();
+
+  var stride: u32 = WG_SIZE / 2u;
+  loop {
+    if (stride == 0u) { break; }
+    if (tid < stride) {
+      partial_acc[tid] = partial_acc[tid] + partial_acc[tid + stride];
+    }
+    stride = stride / 2u;
+    workgroupBarrier();
+  }
+
+  if (tid == 0u) {
+    y[mrow * OUT_FEATURES + row] = partial_acc[0];
+  }
+}
+`}function Kr({bits:e,groupSize:t,inFeatures:r,outFeatures:a,mTile:i=4,outTile:o=64,kGroupsPerChunk:s=2,nPerThread:u=1,inputDtype:n="float32",outputDtype:l="float32",scaleBiasDtype:_="float32"}){if(![1,2,4,8].includes(e))throw Error(`unsupported bits=${e}`);if(r%t!==0)throw Error("inFeatures must be divisible by groupSize");let c=Math.floor(32/e);if(t%c!==0)throw Error("groupSize must be divisible by valsPerWord");if(t%4!=0)throw Error("groupSize must be divisible by 4 for vec4 loads");let p=t/c,d=r/c,f=r/t;if(f%s!==0)throw Error(`numGroups=${f} not divisible by kGroupsPerChunk=${s}`);let b=f/s,g=t*s,h=(1<<e)-1,y=i*o,v=n==="float16"?"f16":"f32",S=_==="float16"?"f16":"f32",$=l==="float16"?"f16":"f32",w=n==="float16"||l==="float16"||_==="float16"?`enable f16;
+`:"",m=l==="float16"?"f16(thread_accs[nn])":"thread_accs[nn]";if(y>256)throw Error(`mTile * outTile = ${y} exceeds maxComputeInvocationsPerWorkgroup=256`);let T=i*g/4;if(c%4!=0)throw Error("valsPerWord must be divisible by 4");let I=c/4,E=o*u,k=[];for(let W=0;W<I;W++){let P=U=>`(packed >> ${(W*4+U)*e}u) & ${h}u`;k.push(`let q${W}: vec4<f32> = vec4<f32>(f32(${P(0)}), f32(${P(1)}), f32(${P(2)}), f32(${P(3)}));`)}let A="";for(let W=0;W<I;W++)A+=`          ${k[W]}
+`,A+=`          let a${W}: vec4<f32> = vec4<f32>(a_chunk[a_vec_off + ${W}u]);
+`,A+=`          sum_qa = sum_qa + dot(q${W}, a${W});
+`,A+=`          sum_a  = sum_a  + dot(vec4<f32>(1.0, 1.0, 1.0, 1.0), a${W});
+`;return`// MLX matmul tiled, bits=${e}, group_size=${t}, in=${r}, out=${a}, mTile=${i}, outTile=${o}, kGroupsPerChunk=${s}, nPerThread=${u}, input=${n}, scaleBias=${_}, output=${l}.
+${w}struct Params { M: u32, _pad0: u32, _pad1: u32, _pad2: u32 };
+@group(0) @binding(0) var<storage, read>       a:         array<vec4<${v}>>;
+@group(0) @binding(1) var<storage, read>       bits_buf:  array<u32>;
+@group(0) @binding(2) var<storage, read>       scaleBias: array<${S}>;
+@group(0) @binding(3) var<storage, read_write> y:         array<${$}>;
+@group(0) @binding(4) var<uniform>             params:    Params;
+
+const IN_FEATURES:     u32 = ${r}u;
+const IN_FEATURES_V4:  u32 = ${r/4}u;
+const OUT_FEATURES:    u32 = ${a}u;
+const GROUP_SIZE:      u32 = ${t}u;
+const GROUP_SIZE_V4:   u32 = ${t/4}u;
+const NUM_GROUPS:      u32 = ${f}u;
+const WORDS_PER_ROW:   u32 = ${d}u;
+const WORDS_PER_GROUP: u32 = ${p}u;
+const VEC4_PER_WORD:   u32 = ${I}u;
+const BITS:            u32 = ${e}u;
+const MASK:            u32 = ${h}u;
+const M_TILE:          u32 = ${i}u;
+const OUT_TILE:        u32 = ${o}u;
+const N_PER_THREAD:    u32 = ${u}u;
+const OUT_TILE_TOTAL:  u32 = ${E}u;
+const WG_SIZE:         u32 = ${y}u;
+const A_CHUNK_VEC4:    u32 = ${T}u;
+const NUM_CHUNKS:      u32 = ${b}u;
+const K_GROUPS_PER_CHUNK: u32 = ${s}u;
+const CHUNK_GROUP_SIZE_V4: u32 = ${g/4}u;
+
+var<workgroup> a_chunk: array<vec4<${v}>, A_CHUNK_VEC4>;
+
+@compute @workgroup_size(WG_SIZE, 1, 1)
+fn main(@builtin(workgroup_id) wg: vec3<u32>, @builtin(local_invocation_id) lid: vec3<u32>) {
+  let n_block: u32 = wg.x * OUT_TILE_TOTAL;
+  let m_block: u32 = wg.y * M_TILE;
+  let tid: u32 = lid.x;
+
+  let m_local: u32 = tid / OUT_TILE;   // 0..M_TILE-1
+  let n_local0: u32 = tid % OUT_TILE;  // 0..OUT_TILE-1
+  let m_row: u32 = m_block + m_local;
+
+  let m_valid: bool = m_row < params.M;
+
+  // Each thread computes N_PER_THREAD outputs, spaced by OUT_TILE within n_block.
+  var thread_accs: array<f32, N_PER_THREAD>;
+  for (var nn: u32 = 0u; nn < N_PER_THREAD; nn = nn + 1u) {
+    thread_accs[nn] = 0.0;
+  }
+
+  for (var chunk: u32 = 0u; chunk < NUM_CHUNKS; chunk = chunk + 1u) {
+    let chunk_k_vec_base: u32 = chunk * CHUNK_GROUP_SIZE_V4;
+    for (var i: u32 = tid; i < A_CHUNK_VEC4; i = i + WG_SIZE) {
+      let mi: u32 = i / CHUNK_GROUP_SIZE_V4;
+      let kvi: u32 = i % CHUNK_GROUP_SIZE_V4;
+      let src_m: u32 = m_block + mi;
+      if (src_m < params.M) {
+        a_chunk[i] = a[src_m * IN_FEATURES_V4 + chunk_k_vec_base + kvi];
+      } else {
+        a_chunk[i] = vec4<${v}>(0.0);
+      }
+    }
+    workgroupBarrier();
+
+    let chunk_g0: u32 = chunk * K_GROUPS_PER_CHUNK;
+    for (var nn: u32 = 0u; nn < N_PER_THREAD; nn = nn + 1u) {
+      let n_row: u32 = n_block + nn * OUT_TILE + n_local0;
+      if (n_row < OUT_FEATURES) {
+        let row_words_base: u32 = n_row * WORDS_PER_ROW;
+        let row_sb_base: u32 = n_row * NUM_GROUPS * 2u;
+        for (var gi: u32 = 0u; gi < K_GROUPS_PER_CHUNK; gi = gi + 1u) {
+          let g: u32 = chunk_g0 + gi;
+          let group_word_base: u32 = row_words_base + g * WORDS_PER_GROUP;
+          let a_vec_base: u32 = m_local * CHUNK_GROUP_SIZE_V4 + gi * GROUP_SIZE_V4;
+          var sum_qa: f32 = 0.0;
+          var sum_a:  f32 = 0.0;
+          for (var w: u32 = 0u; w < WORDS_PER_GROUP; w = w + 1u) {
+            let packed: u32 = bits_buf[group_word_base + w];
+            let a_vec_off: u32 = a_vec_base + w * VEC4_PER_WORD;
+${A}        }
+          let scale: f32 = f32(scaleBias[row_sb_base + g * 2u]);
+          let bias:  f32 = f32(scaleBias[row_sb_base + g * 2u + 1u]);
+          thread_accs[nn] = thread_accs[nn] + scale * sum_qa + bias * sum_a;
+        }
+      }
+    }
+    workgroupBarrier();
+  }
+
+  if (m_valid) {
+    for (var nn: u32 = 0u; nn < N_PER_THREAD; nn = nn + 1u) {
+      let n_row: u32 = n_block + nn * OUT_TILE + n_local0;
+      if (n_row < OUT_FEATURES) {
+        y[m_row * OUT_FEATURES + n_row] = ${m};
+      }
+    }
+  }
+}
+`}function Yi({inFeatures:e,outFeatures:t,tileM:r=10,tileN:a=256,nPerThread:i=1,assumeBiasNegHalfScale:o=!1,scaleOnly:s=!1}){if(e%128!=0)throw Error("binary LUT matmul requires K divisible by 128");if(!Number.isInteger(i)||i<1)throw Error("binary LUT matmul requires nPerThread >= 1");if(a%i!==0)throw Error("binary LUT matmul tileN must be divisible by nPerThread");let u=a/i;if(u>256)throw Error("binary LUT matmul workgroup size exceeds max workgroup invocations");let n=e/128,l=e/4,_=r*32*16,c=r*32,p=_*2+(o?0:r*4);if(p>16*1024)throw Error(`binary LUT matmul uses ${p} bytes of workgroup storage`);let d=Array.from({length:i},(w,m)=>Array.from({length:r},(T,I)=>`  var acc${m}_${I}: f32 = 0.0;`).join(`
+`)).join(`
+`),f=w=>Array.from({length:r},(m,T)=>`      var qa${w}_${T}: f32 = 0.0;`).join(`
+`),b=w=>Array.from({length:4},(m,T)=>Array.from({length:4},(I,E)=>{let k=T*8+E*2;return`      {
+        let byte${T}_${E}: u32 = (p${T} >> ${E*8}u) & 0xffu;
+        let lo${T}_${E}: u32 = byte${T}_${E} & 0x0fu;
+        let hi${T}_${E}: u32 = byte${T}_${E} >> 4u;
+${Array.from({length:r},(A,W)=>`        qa${w}_${W} = qa${w}_${W} + f32(lut[lutIndex(${W}u, ${k}u, lo${T}_${E})]) + f32(lut[lutIndex(${W}u, ${k+1}u, hi${T}_${E})]);`).join(`
+`)}
+      }`}).join(`
+`)).join(`
+`),g=w=>o?s?`      let scale: f32 = f32(scaleBias[n${w} * NUM_GROUPS + g]);`:"      let scale: f32 = f32(scaleBias[sb]);":`      let scale: f32 = f32(scaleBias[sb]);
+      let bias: f32 = f32(scaleBias[sb + 1u]);`,h=w=>Array.from({length:r},(m,T)=>o?`      acc${w}_${T} = acc${w}_${T} + scale * qa${w}_${T};`:`      acc${w}_${T} = acc${w}_${T} + scale * qa${w}_${T} + bias * sumA[${T}u];`).join(`
+`),y=Array.from({length:i},(w,m)=>`  let n${m}: u32 = n_base + ${m}u * WG_SIZE;
+  let n${m}_valid: bool = n${m} < OUT_FEATURES;`).join(`
+`),v=Array.from({length:i},(w,m)=>`    if (n${m}_valid) {
+      let packed: vec4<u32> = bits_buf[n${m} * NUM_GROUPS + g];
+      let p0: u32 = packed.x;
+      let p1: u32 = packed.y;
+      let p2: u32 = packed.z;
+      let p3: u32 = packed.w;
+      let sb: u32 = (n${m} * NUM_GROUPS + g) * 2u;
+${g(m)}
+${f(m)}
+${b(m)}
+${h(m)}
+    }`).join(`
+`),S=Array.from({length:i},(w,m)=>`  if (n${m}_valid) {
+${Array.from({length:r},(T,I)=>`    { let mr: u32 = m_block + ${I}u; if (mr < params.M) { y[mr * OUT_FEATURES + n${m}] = f16(acc${m}_${I}); } }`).join(`
+`)}
+  }`).join(`
+`),$=o?`      let c: f32 = 0.5 * (x + yv + z + wv);
+      lut[base] = f16(-c);
+      lut[base + 1u] = f16(x - c);
+      lut[base + 2u] = f16(yv - c);
+      lut[base + 3u] = f16(xy - c);
+      lut[base + 4u] = f16(z - c);
+      lut[base + 5u] = f16(xz - c);
+      lut[base + 6u] = f16(yz - c);
+      lut[base + 7u] = f16(xyz - c);
+      lut[base + 8u] = f16(wv - c);
+      lut[base + 9u] = f16(x + wv - c);
+      lut[base + 10u] = f16(yv + wv - c);
+      lut[base + 11u] = f16(xy + wv - c);
+      lut[base + 12u] = f16(z + wv - c);
+      lut[base + 13u] = f16(xz + wv - c);
+      lut[base + 14u] = f16(yz + wv - c);
+      lut[base + 15u] = f16(xyz + wv - c);`:`      lut[base] = 0.0h;
+      lut[base + 1u] = f16(x);
+      lut[base + 2u] = f16(yv);
+      lut[base + 3u] = f16(xy);
+      lut[base + 4u] = f16(z);
+      lut[base + 5u] = f16(xz);
+      lut[base + 6u] = f16(yz);
+      lut[base + 7u] = f16(xyz);
+      lut[base + 8u] = f16(wv);
+      lut[base + 9u] = f16(x + wv);
+      lut[base + 10u] = f16(yv + wv);
+      lut[base + 11u] = f16(xy + wv);
+      lut[base + 12u] = f16(z + wv);
+      lut[base + 13u] = f16(xz + wv);
+      lut[base + 14u] = f16(yz + wv);
+      lut[base + 15u] = f16(xyz + wv);`;return`enable f16;
+struct Params { M: u32, _pad0: u32, _pad1: u32, _pad2: u32 };
+@group(0) @binding(0) var<storage, read>       a:         array<vec4<f16>>;
+@group(0) @binding(1) var<storage, read>       bits_buf:  array<vec4<u32>>;
+@group(0) @binding(2) var<storage, read>       scaleBias: array<f16>;
+@group(0) @binding(3) var<storage, read_write> y:         array<f16>;
+@group(0) @binding(4) var<uniform>             params:    Params;
+
+const IN_FEATURES:    u32 = ${e}u;
+const IN_FEATURES_V4: u32 = ${l}u;
+const OUT_FEATURES:   u32 = ${t}u;
+const NUM_GROUPS:     u32 = ${n}u;
+const M_TILE:         u32 = ${r}u;
+const N_TILE:         u32 = ${a}u;
+const WG_SIZE:        u32 = ${u}u;
+const LUT_ENTRIES:    u32 = ${_}u;
+const LUT_NIBBLES:    u32 = ${c}u;
+
+var<workgroup> lut: array<f16, ${_}>;
+${o?"":`var<workgroup> sumA: array<f32, ${r}>;
+`}
+
+fn lutIndex(m: u32, nibble: u32, mask: u32) -> u32 {
+  return (m * 32u + nibble) * 16u + mask;
+}
+
+@compute @workgroup_size(${u}, 1, 1)
+fn main(@builtin(workgroup_id) wg: vec3<u32>, @builtin(local_invocation_id) lid: vec3<u32>) {
+  let tid: u32 = lid.x;
+  let n_block: u32 = wg.x * N_TILE;
+  let m_block: u32 = wg.y * M_TILE;
+  let n_base: u32 = n_block + tid;
+${y}
+
+${d}
+
+  for (var g: u32 = 0u; g < NUM_GROUPS; g = g + 1u) {
+    for (var i: u32 = tid; i < LUT_NIBBLES; i = i + WG_SIZE) {
+      let nibble: u32 = i & 31u;
+      let m_local: u32 = i >> 5u;
+      let m: u32 = m_block + m_local;
+      var v: vec4<f16> = vec4<f16>(0.0h);
+      if (m < params.M) {
+        v = a[m * IN_FEATURES_V4 + g * 32u + nibble];
+      }
+      let x: f32 = f32(v.x);
+      let yv: f32 = f32(v.y);
+      let z: f32 = f32(v.z);
+      let wv: f32 = f32(v.w);
+      let xy: f32 = x + yv;
+      let xz: f32 = x + z;
+      let yz: f32 = yv + z;
+      let xyz: f32 = xy + z;
+      let base: u32 = (m_local * 32u + nibble) * 16u;
+${$}
+    }
+    workgroupBarrier();
+${o?"":`
+    for (var mi: u32 = tid; mi < M_TILE; mi = mi + WG_SIZE) {
+      var s: f32 = 0.0;
+      for (var nibble: u32 = 0u; nibble < 32u; nibble = nibble + 1u) {
+        s = s + f32(lut[lutIndex(mi, nibble, 15u)]);
+      }
+      sumA[mi] = s;
+    }
+    workgroupBarrier();
+`}
+
+${v}
+    workgroupBarrier();
+  }
+
+${S}
+}
+`}function Zi({inFeatures:e,groupSize:t,inputDtype:r="float32"}){if(e%t!==0)throw Error("inFeatures must be divisible by groupSize");if(t%16!=0)throw Error("groupSize must be divisible by 16 (packs of 4 i8)");if(t%4!=0)throw Error("groupSize must be divisible by 4 (vec4 loads)");if(r!=="float32"&&r!=="float16")throw Error(`unsupported quantize-A input dtype: ${r}`);let a=e/t,i=t/4,o=t/4,s=Math.min(32,t/4),u=t/s,n=r==="float16"?"f16":"f32",l=r==="float16"?`enable f16;
+`:"",_=c=>r==="float16"?`vec4<f32>(${c})`:c;return`${l}// Quantize A ${r} \u2192 i8, per-block scale + per-block sum.
+struct Params { M: u32, _pad0: u32, _pad1: u32, _pad2: u32 };
+@group(0) @binding(0) var<storage, read>       a:       array<vec4<${n}>>;
+@group(0) @binding(1) var<storage, read_write> a_i8:    array<u32>;
+@group(0) @binding(2) var<storage, read_write> scale_a: array<f32>;
+@group(0) @binding(3) var<storage, read_write> sum_a:   array<f32>;
+@group(0) @binding(4) var<uniform>             params:  Params;
+
+const IN_FEATURES:   u32 = ${e}u;
+const IN_FEATURES_V4: u32 = ${e/4}u;
+const GROUP_SIZE:    u32 = ${t}u;
+const GROUP_SIZE_V4: u32 = ${i}u;
+const NUM_GROUPS:    u32 = ${a}u;
+const U32_PER_GROUP: u32 = ${o}u;
+const WG:            u32 = ${s}u;
+const ELS_PER_THREAD: u32 = ${u}u;
+
+var<workgroup> partial_max: array<f32, WG>;
+var<workgroup> partial_sum: array<f32, WG>;
+var<workgroup> group_scale: f32;
+
+@compute @workgroup_size(WG, 1, 1)
+fn main(@builtin(workgroup_id) wg: vec3<u32>, @builtin(local_invocation_id) lid: vec3<u32>) {
+  let m_row: u32 = wg.y;
+  let g: u32 = wg.x;
+  let tid: u32 = lid.x;
+  if (m_row >= params.M) { return; }
+
+  let group_k_v4_base: u32 = m_row * IN_FEATURES_V4 + g * GROUP_SIZE_V4;
+  let thread_v4_start: u32 = tid * (ELS_PER_THREAD / 4u);
+  var local_max: f32 = 0.0;
+  var local_sum: f32 = 0.0;
+  var v0: vec4<f32>;
+  var v1: vec4<f32>;
+  v0 = ${_("a[group_k_v4_base + thread_v4_start]")};
+  local_max = max(local_max, max(max(abs(v0.x), abs(v0.y)), max(abs(v0.z), abs(v0.w))));
+  local_sum = local_sum + v0.x + v0.y + v0.z + v0.w;
+${u===8?`  v1 = ${_("a[group_k_v4_base + thread_v4_start + 1u]")};
+  local_max = max(local_max, max(max(abs(v1.x), abs(v1.y)), max(abs(v1.z), abs(v1.w))));
+  local_sum = local_sum + v1.x + v1.y + v1.z + v1.w;`:""}
+
+  partial_max[tid] = local_max;
+  partial_sum[tid] = local_sum;
+  workgroupBarrier();
+  var stride: u32 = WG / 2u;
+  loop {
+    if (stride == 0u) { break; }
+    if (tid < stride) {
+      let other = partial_max[tid + stride];
+      if (other > partial_max[tid]) { partial_max[tid] = other; }
+      partial_sum[tid] = partial_sum[tid] + partial_sum[tid + stride];
+    }
+    stride = stride / 2u;
+    workgroupBarrier();
+  }
+  if (tid == 0u) {
+    let m = partial_max[0];
+    if (m > 0.0) {
+      group_scale = m / 127.0;
+    } else {
+      group_scale = 1.0;
+    }
+    scale_a[m_row * NUM_GROUPS + g] = group_scale;
+    sum_a[m_row * NUM_GROUPS + g] = partial_sum[0];
+  }
+  workgroupBarrier();
+  let inv_scale: f32 = 1.0 / group_scale;
+  let q0 = clamp(round(v0.x * inv_scale), -128.0, 127.0);
+  let q1 = clamp(round(v0.y * inv_scale), -128.0, 127.0);
+  let q2 = clamp(round(v0.z * inv_scale), -128.0, 127.0);
+  let q3 = clamp(round(v0.w * inv_scale), -128.0, 127.0);
+  let u32_0: u32 = pack4xI8(vec4<i32>(i32(q0), i32(q1), i32(q2), i32(q3)));
+  let out_base: u32 = (m_row * NUM_GROUPS + g) * U32_PER_GROUP;
+  a_i8[out_base + thread_v4_start] = u32_0;
+${u===8?`  let q4 = clamp(round(v1.x * inv_scale), -128.0, 127.0);
+  let q5 = clamp(round(v1.y * inv_scale), -128.0, 127.0);
+  let q6 = clamp(round(v1.z * inv_scale), -128.0, 127.0);
+  let q7 = clamp(round(v1.w * inv_scale), -128.0, 127.0);
+  let u32_1: u32 = pack4xI8(vec4<i32>(i32(q4), i32(q5), i32(q6), i32(q7)));
+  a_i8[out_base + thread_v4_start + 1u] = u32_1;`:""}
+}
+`}function Qi({bits:e,groupSize:t,inFeatures:r,outFeatures:a,scaleBiasDtype:i="float16",scaleBiasLayout:o="out-group",outputLayout:s="out-k",assumeTernaryBias:u=!1}){if(![1,2,4,8].includes(e))throw Error(`unsupported bits=${e}`);if(u&&e!==2)throw Error("assumeTernaryBias is only valid for 2-bit MLX weights");if(r%t!==0)throw Error("inFeatures must be divisible by groupSize");if(i!=="float32"&&i!=="float16"&&i!=="bfloat16")throw Error(`unsupported scaleBias dtype: ${i}`);if(o!=="out-group"&&o!=="group-out")throw Error(`unsupported scaleBias layout: ${o}`);if(s!=="out-k"&&s!=="k-out")throw Error(`unsupported output layout: ${s}`);let n=Math.floor(32/e),l=r/n,_=r/t,c=(1<<e)-1,p=i==="bfloat16"?"u32":i==="float16"?"f16":"f32",d=u?"1u":"2u",f=o==="group-out"?`let sb_idx: u32 = (g * OUT_FEATURES + row) * ${d};`:`let sb_idx: u32 = (row * NUM_GROUPS + g) * ${d};`;return`enable f16;
+struct Params { count: u32, wgY: u32, _pad0: u32, _pad1: u32 };
+@group(0) @binding(0) var<storage, read>       bits_buf:  array<u32>;
+@group(0) @binding(1) var<storage, read>       scaleBias: array<${p}>;
+@group(0) @binding(2) var<storage, read_write> out:       array<f16>;
+@group(0) @binding(3) var<uniform>             params:    Params;
+
+${i==="bfloat16"?`
+fn loadBf16(idx: u32) -> f32 {
+  let packed = scaleBias[idx / 2u];
+  let half = select(packed & 0xffffu, packed >> 16u, (idx & 1u) == 1u);
+  return bitcast<f32>(half << 16u);
+}
+`:""}
+
+const IN_FEATURES:   u32 = ${r}u;
+const OUT_FEATURES:  u32 = ${a}u;
+const GROUP_SIZE:    u32 = ${t}u;
+const NUM_GROUPS:    u32 = ${_}u;
+const VALS_PER_WORD: u32 = ${n}u;
+const WORDS_PER_ROW: u32 = ${l}u;
+const MASK:          u32 = ${c}u;
+
+@compute @workgroup_size(64, 1, 1)
+fn main(@builtin(workgroup_id) wg: vec3<u32>, @builtin(local_invocation_id) lid: vec3<u32>) {
+  let wg_idx = wg.x + wg.y * params.wgY;
+  let idx = wg_idx * 64u + lid.x;
+  if (idx >= params.count) { return; }
+  let row = idx / WORDS_PER_ROW;
+  let word = idx - row * WORDS_PER_ROW;
+  let k_base = word * VALS_PER_WORD;
+  let g = k_base / GROUP_SIZE;
+  ${f}
+  let scale_g: f32 = ${i==="bfloat16"?"loadBf16(sb_idx)":"f32(scaleBias[sb_idx])"};
+  ${u?"let bias_g: f32 = -scale_g;":`let bias_g: f32 = ${i==="bfloat16"?"loadBf16(sb_idx + 1u)":"f32(scaleBias[sb_idx + 1u])"};`}
+  let packed = bits_buf[idx];
+${Array.from({length:n},(b,g)=>`  out[${s==="k-out"?`(k_base + ${g}u) * OUT_FEATURES + row`:`row * IN_FEATURES + k_base + ${g}u`}] = f16(scale_g * f32((packed >> ${g*e}u) & MASK) + bias_g);`).join(`
+`)}
+}
+`}function Ji({bits:e,groupSize:t,inFeatures:r,outFeatures:a,tileM:i=2,tileN:o=64,outputDtype:s="float32",scaleBiasDtype:u="float32"}){if(e!==2)throw Error("DP4A kernel currently only supports bits=2");if(t!==128)throw Error("DP4A kernel currently only supports groupSize=128");if(r%t!==0)throw Error("inFeatures must be divisible by groupSize");if(s!=="float32"&&s!=="float16")throw Error(`unsupported DP4A output dtype: ${s}`);if(u!=="float32"&&u!=="float16")throw Error(`unsupported DP4A scaleBias dtype: ${u}`);let n=r/t,l=t/4;t/16;let _=r/16,c=_/4;if(_%4!=0)throw Error("wordsPerRow must be divisible by 4 for vec4<u32> loads");let p=l/4,d=o;if(d>256)throw Error(`tileN=${o} exceeds 256`);let f=s==="float16"?"f16":"f32",b=u==="float16"?"f16":"f32",g=s==="float16"||u==="float16"?`enable f16;
+`:"",h=m=>s==="float16"?`f16(${m})`:m;i*p;let y=Array.from({length:i},(m,T)=>`  var r${T}: i32 = 0;`).join(`
+`),v=Array.from({length:i},(m,T)=>`  var y${T}: f32 = 0.0;`).join(`
+`);function S(m){let T="";T+=`        let b_vec_h${m}: vec4<u32> = b_quad_${m};
+`,T+=`        let p${m}_0: u32 = b_vec_h${m}[0u];
+`,T+=`        let p${m}_1: u32 = b_vec_h${m}[1u];
+`,T+=`        let p${m}_2: u32 = b_vec_h${m}[2u];
+`,T+=`        let p${m}_3: u32 = b_vec_h${m}[3u];
+`;for(let I=0;I<4;I++)for(let E=0;E<4;E++)T+=`        let b_byte_${m}_${I}_${E}: u32 = (p${m}_${I} >> ${E*8}u) & 0xFFu;
+`,T+=`        let qb_${m}_${I}_${E}: u32 = (b_byte_${m}_${I}_${E} & 0x03u) | ((b_byte_${m}_${I}_${E} & 0x0Cu) << 6u) | ((b_byte_${m}_${I}_${E} & 0x30u) << 12u) | ((b_byte_${m}_${I}_${E} & 0xC0u) << 18u);
+`;for(let I=0;I<i;I++){let E=`(${I}u * AU32_PER_GROUP) + ${m}u * 16u`;for(let k=0;k<4;k++)for(let A=0;A<4;A++)T+=`        r${I} = r${I} + dot4I8Packed(a_tile[${E} + ${k*4+A}u], qb_${m}_${k}_${A});
+`}return T}let $=Array.from({length:i},(m,T)=>`      {
+        let sa_mg: f32 = scale_a[(m_block + ${T}u) * NUM_GROUPS + g];
+        let raw_sum: f32 = sum_a[(m_block + ${T}u) * NUM_GROUPS + g];
+        y${T} = y${T} + sa_mg * scale_g * f32(r${T}) + bias_g * raw_sum;
+        r${T} = 0;
+      }`).join(`
+`),w=Array.from({length:i},(m,T)=>`    { let mr: u32 = m_block + ${T}u; if (mr < params.M) { y[mr * OUT_FEATURES + n_row] = ${h(`y${T}`)}; } }`).join(`
+`);return`${g}// DP4A MLX matmul, bits=2, gs=128, in=${r}, out=${a}, tileM=${i}, tileN=${o}, scaleBias=${u}, output=${s}.
+struct Params { M: u32, _pad0: u32, _pad1: u32, _pad2: u32 };
+@group(0) @binding(0) var<storage, read>       a_i8:     array<u32>;
+@group(0) @binding(1) var<storage, read>       scale_a:  array<f32>;
+@group(0) @binding(2) var<storage, read>       sum_a:    array<f32>;
+@group(0) @binding(3) var<storage, read>       bits_buf: array<vec4<u32>>;
+@group(0) @binding(4) var<storage, read>       scaleBias: array<${b}>;
+@group(0) @binding(5) var<storage, read_write> y:        array<${f}>;
+@group(0) @binding(6) var<uniform>             params:   Params;
+
+const IN_FEATURES:       u32 = ${r}u;
+const OUT_FEATURES:      u32 = ${a}u;
+const GROUP_SIZE:        u32 = ${t}u;
+const NUM_GROUPS:        u32 = ${n}u;
+const WORDS_PER_ROW_V4:  u32 = ${c}u;
+const AU32_PER_GROUP:    u32 = ${l}u;
+const A_TILE_U32:        u32 = ${i*l}u;
+const TILE_M:            u32 = ${i}u;
+const TILE_N:            u32 = ${o}u;
+const WG_SIZE:           u32 = ${d}u;
+
+var<workgroup> a_tile: array<u32, A_TILE_U32>;
+
+@compute @workgroup_size(WG_SIZE, 1, 1)
+fn main(@builtin(workgroup_id) wg: vec3<u32>, @builtin(local_invocation_id) lid: vec3<u32>) {
+  let n_block: u32 = wg.x * TILE_N;
+  let m_block: u32 = wg.y * TILE_M;
+  let tid: u32 = lid.x;
+  let n_row: u32 = n_block + tid;
+  let n_valid: bool = n_row < OUT_FEATURES;
+
+${y}
+${v}
+
+  for (var g: u32 = 0u; g < NUM_GROUPS; g = g + 1u) {
+    // Load A tile: TILE_M rows \xD7 AU32_PER_GROUP u32 from a_i8.
+    let a_global_base: u32 = m_block * NUM_GROUPS * AU32_PER_GROUP + g * AU32_PER_GROUP;
+    let a_group_stride: u32 = NUM_GROUPS * AU32_PER_GROUP;
+    for (var i: u32 = tid; i < A_TILE_U32; i = i + WG_SIZE) {
+      let mi: u32 = i / AU32_PER_GROUP;
+      let ki: u32 = i % AU32_PER_GROUP;
+      let src_m: u32 = m_block + mi;
+      if (src_m < params.M) {
+        a_tile[i] = a_i8[src_m * a_group_stride + g * AU32_PER_GROUP + ki];
+      } else {
+        a_tile[i] = 0u;
+      }
+    }
+    workgroupBarrier();
+
+    if (n_valid) {
+      let row_base_v4: u32 = n_row * WORDS_PER_ROW_V4 + g * 2u;
+      let b_quad_0: vec4<u32> = bits_buf[row_base_v4];
+      let b_quad_1: vec4<u32> = bits_buf[row_base_v4 + 1u];
+      let sb_idx: u32 = (n_row * NUM_GROUPS + g) * 2u;
+      let scale_g: f32 = f32(scaleBias[sb_idx]);
+      let bias_g: f32 = f32(scaleBias[sb_idx + 1u]);
+
+${S(0)}
+${S(1)}
+
+${$}
+    }
+    workgroupBarrier();
+  }
+
+  if (n_valid) {
+${w}
+  }
+}
+`}function eo({bits:e,groupSize:t,inFeatures:r,outFeatures:a,useF16:i=!1,tileM:o=32,tileN:s=64,inputDtype:u="float32",outputDtype:n="float32",scaleBiasDtype:l="float32",scaleBiasLayout:_="out-group",assumeFullM:c=!1,assumeTernaryBias:p=!1,useARowOffset:d=!1}){if(e!==1&&e!==2&&e!==4)throw Error("subgroup-matrix kernel currently only supports bits=1, bits=2, or bits=4");if(p&&e!==2)throw Error("assumeTernaryBias is only valid for 2-bit MLX weights");if(o!==32&&o!==64)throw Error("subgroup-matrix kernel currently supports tileM=32 or tileM=64");if(s!==64&&s!==128)throw Error("subgroup-matrix kernel currently supports tileN=64 or tileN=128");if(o===64&&s!==64)throw Error("tileM=64 currently requires tileN=64");if(o===64&&!i)throw Error("tileM=64 requires f16 compute to stay within workgroup storage limits");if(s>64&&!i)throw Error("tileN=128 requires f16 compute to stay within workgroup storage limits");if(r%t!==0)throw Error("inFeatures must be divisible by groupSize");if(t%32!=0)throw Error("groupSize must be divisible by subgroup K tile=32");if(r%32!=0)throw Error("inFeatures must be divisible by subgroup K tile=32");if(a%s!==0)throw Error(`outFeatures must be divisible by subgroup N tile=${s}`);if(_!=="out-group"&&_!=="group-out")throw Error(`unsupported scaleBiasLayout: ${_}`);let f=32/e,b=r/f,g=r/t,h=o===64?s:s/2,y=h/8,v=i?"f16":"f32",S=u==="float16"?"f16":"f32",$=l==="float16"?"f16":"f32",w=n==="float16"?"f16":"f32",m=i||u==="float16"||n==="float16"||l==="float16"?`enable f16;
+`:"",T=d?"(params.aRowOffset + a_global)":"a_global",I=i?u==="float16"?`a[${T} * IN_FEATURES + k]`:`f16(a[${T} * IN_FEATURES + k])`:u==="float16"?`f32(a[${T} * IN_FEATURES + k])`:`a[${T} * IN_FEATURES + k]`,E=i?"0.0h":"0.0",k=p?i?l==="float16"?`  let scale_g: f16 = scaleBias[sb_idx];
+  let bias_g: f16 = -scale_g;`:`  let scale_g: f16 = f16(scaleBias[sb_idx]);
+  let bias_g: f16 = -scale_g;`:`  let scale_g: f32 = f32(scaleBias[sb_idx]);
+  let bias_g: f32 = -scale_g;`:i?l==="float16"?`  let scale_g: f16 = scaleBias[sb_idx];
+  let bias_g: f16 = scaleBias[sb_idx + 1u];`:`  let scale_g: f16 = f16(scaleBias[sb_idx]);
+  let bias_g: f16 = f16(scaleBias[sb_idx + 1u]);`:`  let scale_g: f32 = f32(scaleBias[sb_idx]);
+  let bias_g: f32 = f32(scaleBias[sb_idx + 1u]);`,A=_==="group-out"?`    let g: u32 = k_base / GROUP_SIZE;
+    let sb_idx: u32 = (g * OUT_FEATURES + b_global) * 2u;`:`    let g: u32 = k_base / GROUP_SIZE;
+    let sb_idx: u32 = (b_global * NUM_GROUPS + g) * 2u;`,W=`vec4<${v}>`,P=(X,N)=>`    tile_B[tile_b_base + ${N}u] = ${X}.x;
+    tile_B[tile_b_base + ${N+1}u] = ${X}.y;
+    tile_B[tile_b_base + ${N+2}u] = ${X}.z;
+    tile_B[tile_b_base + ${N+3}u] = ${X}.w;`,U=Array.from({length:16},(X,N)=>`  {
+    ${`let q: bool = ((packed >> (col + ${N}u)) & 0x1u) != 0u;`}
+    tile_B[b_row * TILE_K + col + ${N}u] = select(bias_g, bias_g + scale_g, q);
+  }`).join(`
+`),H=Array.from({length:16},(X,N)=>{let ae=N*2;return`  {
+    ${i?`let q: f16 = f16((packed >> ${ae}u) & 0x3u);`:`let q: f32 = f32((packed >> ${ae}u) & 0x3u);`}
+    tile_B[b_row * TILE_K + col + ${N}u] = scale_g * q + bias_g;
+  }`}).join(`
+`),M=`  let lower0: ${W} = ${W}(unpack4xU8(packed0 & 0x0F0F0F0Fu));
+  let upper0: ${W} = ${W}(unpack4xU8((packed0 >> 4u) & 0x0F0F0F0Fu));
+  let lower1: ${W} = ${W}(unpack4xU8(packed1 & 0x0F0F0F0Fu));
+  let upper1: ${W} = ${W}(unpack4xU8((packed1 >> 4u) & 0x0F0F0F0Fu));
+  let b0: ${W} = ${W}(lower0.x, upper0.x, lower0.y, upper0.y) * scale_g + ${W}(bias_g);
+  let b1: ${W} = ${W}(lower0.z, upper0.z, lower0.w, upper0.w) * scale_g + ${W}(bias_g);
+  let b2: ${W} = ${W}(lower1.x, upper1.x, lower1.y, upper1.y) * scale_g + ${W}(bias_g);
+  let b3: ${W} = ${W}(lower1.z, upper1.z, lower1.w, upper1.w) * scale_g + ${W}(bias_g);
+  let tile_b_base: u32 = b_row * TILE_K + col;
+${P("b0",0)}
+${P("b1",4)}
+${P("b2",8)}
+${P("b3",12)}`,O=e===1||e===2?"  let packed: u32 = bits_buf[b_global * WORDS_PER_ROW + k_base / VALS_PER_WORD];":`  let word_idx: u32 = b_global * WORDS_PER_ROW + k_base / VALS_PER_WORD;
+  let packed0: u32 = bits_buf[word_idx];
+  let packed1: u32 = bits_buf[word_idx + 1u];`,D=e===1?U:e===2?H:M,x=X=>n==="float16"?i?X:`f16(${X})`:`f32(${X})`,L=i&&n==="float16"||!i&&n==="float32",C=!(L&&c),B=c?`    tile_A[row * TILE_K + col + col_offset] = ${I};`:`    if (a_global < params.M) {
+      tile_A[row * TILE_K + col + col_offset] = ${I};
+    } else {
+      tile_A[row * TILE_K + col + col_offset] = ${E};
+    }`,R=o===64?`  let subtile_idx: u32 = 0u;
+  let subtile_idy: u32 = subtile_id;`:`  let subtile_idx: u32 = subtile_id / 2u;
+  let subtile_idy: u32 = subtile_id % 2u;`,F=o===64?`    loadSHMA(a_global_base, kidx, local_idx / 4u, local_idx % 4u);
+    loadSHMA(a_global_base, kidx, local_idx / 4u + 32u, local_idx % 4u);`:"    loadSHMA(a_global_base, kidx, local_idx / 4u, local_idx % 4u);",oe=Array.from({length:2},(X,N)=>Array.from({length:y},(ae,pe)=>`  var matC${N}${pe}: subgroup_matrix_result<${v}, 8, 8>;`).join(`
+`)).join(`
+`),j=Array.from({length:y},(X,N)=>`      var matB${N}: subgroup_matrix_right<${v}, 8, 8> = subgroupMatrixLoad<subgroup_matrix_right<${v}, 8, 8>>(&tile_B, matrix_b_offset + ${N*8}u * TILE_K, true, TILE_K);`).join(`
+`),ie=Array.from({length:2},(X,N)=>Array.from({length:y},(ae,pe)=>`      matC${N}${pe} = subgroupMatrixMultiplyAccumulate(matA${N}, matB${pe}, matC${N}${pe});`).join(`
+`)).join(`
+`),de=X=>Array.from({length:y},(N,ae)=>`  subgroupMatrixStore(&scratch[subtile_id][${ae}], 0u, matC${X}${ae}, false, 8u);`).join(`
+`),be=X=>Array.from({length:y},(N,ae)=>`    subgroupMatrixStore(&y, matrix_c_offset + ${X===0?"":"8u * OUT_FEATURES + "}${ae*8}u, matC${X}${ae}, false, OUT_FEATURES);`).join(`
+`),se=`${de(0)}
+  let row: u32 = sg_id / 4u;
+  let col: u32 = (sg_id % 4u) * 2u;
+${c?"":"  var row_limit: i32 = i32(params.M) - i32(a_global_base + base_A);"}
+  storeOutput(matrix_c_offset, row, col, subtile_id${c?"":", row_limit, full_m_tile"});
+
+${de(1)}
+${c?"":"  row_limit = i32(params.M) - i32(a_global_base + base_A + 8u);"}
+  storeOutput(matrix_c_offset + 8u * OUT_FEATURES, row, col, subtile_id${c?"":", row_limit, full_m_tile"});`,J=L?c?`${be(0)}
+${be(1)}`:`  if (full_m_tile) {
+${be(0)}
+${be(1)}
+  } else {
+${se}
+  }`:se,ee=Array.from({length:y},(X,N)=>{let ae=N*8;return`    y[offset + row * OUT_FEATURES + col + ${ae}u] = ${x(`scratch[src_slot][${N}][row * 8u + col]`)};
+    y[offset + row * OUT_FEATURES + col + ${ae+1}u] = ${x(`scratch[src_slot][${N}][row * 8u + col2]`)};`}).join(`
+`);return`// Subgroup-matrix MLX matmul, bits=${e}, gs=${t}, in=${r}, out=${a}, tileM=${o}, tileN=${s}, precision=${v}, input=${u}, scaleBias=${l}/${_}, output=${n}, fullM=${c}, ternaryBias=${p}, aRowOffset=${d}.
+enable subgroups;
+${m}enable chromium_experimental_subgroup_matrix;
+diagnostic(off, chromium.subgroup_matrix_uniformity);
+
+struct Params { M: u32, aRowOffset: u32, _pad0: u32, _pad1: u32 };
+@group(0) @binding(0) var<storage, read>       a:         array<${S}>;
+@group(0) @binding(1) var<storage, read>       bits_buf:  array<u32>;
+@group(0) @binding(2) var<storage, read>       scaleBias: array<${$}>;
+@group(0) @binding(3) var<storage, read_write> y:         array<${w}>;
+@group(0) @binding(4) var<uniform>             params:    Params;
+
+const IN_FEATURES:    u32 = ${r}u;
+const OUT_FEATURES:   u32 = ${a}u;
+const GROUP_SIZE:     u32 = ${t}u;
+const NUM_GROUPS:     u32 = ${g}u;
+const VALS_PER_WORD:  u32 = ${f}u;
+const WORDS_PER_ROW:  u32 = ${b}u;
+
+const TILE_COLS:      u32 = ${s}u;
+const TILE_ROWS:      u32 = ${o}u;
+const TILE_K:         u32 = 32u;
+const SUBTILE_COLS:   u32 = ${h}u;
+const SUBTILE_ROWS:   u32 = 16u;
+
+var<workgroup> tile_A: array<${v}, ${o} * 32>;
+var<workgroup> tile_B: array<${v}, ${s} * 32>;
+${C?`var<workgroup> scratch: array<array<array<${v}, 64>, ${y}>, 4>;`:""}
+
+fn loadSHMA(tile_base: u32, k_idx: u32, row: u32, c_idx: u32) {
+  let a_global: u32 = tile_base + row;
+  let col: u32 = c_idx * 8u;
+  for (var col_offset: u32 = 0u; col_offset < 8u; col_offset++) {
+    let k: u32 = k_idx + col + col_offset;
+${B}
+  }
+}
+
+fn loadSHMB(tile_base: u32, k_idx: u32, row: u32, c_idx: u32) {
+  let col: u32 = c_idx * 16u;
+  for (var row_offset: u32 = 0u; row_offset < TILE_COLS; row_offset += 64u) {
+    let b_row: u32 = row + row_offset;
+    let b_global: u32 = tile_base + b_row;
+    let k_base: u32 = k_idx + col;
+${A}
+${O}
+${k}
+${D}
+  }
+}
+
+${C?`fn storeOutput(offset: u32, row: u32, col: u32, src_slot: u32${c?"":", row_limit: i32, full_m_tile: bool"}) {
+${c?"":"  if (full_m_tile || (row_limit > 0 && row < u32(row_limit))) {"}
+    let col2: u32 = col + 1u;
+${ee}
+${c?"":"  }"}
+}`:""}
+
+@compute @workgroup_size(128, 1, 1)
+fn main(
+  @builtin(workgroup_id) workgroup_id: vec3<u32>,
+  @builtin(local_invocation_index) local_idx: u32,
+  @builtin(subgroup_invocation_id) sg_id: u32,
+  @builtin(subgroup_size) sg_size: u32
+) {
+  let a_global_base: u32 = workgroup_id.y * TILE_ROWS;
+  let b_global_base: u32 = workgroup_id.x * TILE_COLS;
+
+  let subtile_id: u32 = local_idx / sg_size;
+${R}
+  let base_A: u32 = subtile_idy * SUBTILE_ROWS;
+  let base_B: u32 = subtile_idx * SUBTILE_COLS;
+${c?"":"  let full_m_tile: bool = a_global_base + TILE_ROWS <= params.M;"}
+
+${oe}
+
+  for (var kidx: u32 = 0u; kidx < IN_FEATURES; kidx += TILE_K) {
+${F}
+    loadSHMB(b_global_base, kidx, local_idx / 2u, local_idx % 2u);
+    workgroupBarrier();
+
+    for (var step: u32 = 0u; step < TILE_K; step += 8u) {
+      let matrix_a_offset: u32 = subtile_idy * SUBTILE_ROWS * TILE_K + step;
+      var matA0: subgroup_matrix_left<${v}, 8, 8> = subgroupMatrixLoad<subgroup_matrix_left<${v}, 8, 8>>(&tile_A, matrix_a_offset, false, TILE_K);
+      var matA1: subgroup_matrix_left<${v}, 8, 8> = subgroupMatrixLoad<subgroup_matrix_left<${v}, 8, 8>>(&tile_A, matrix_a_offset + 8u * TILE_K, false, TILE_K);
+
+      let matrix_b_offset: u32 = subtile_idx * SUBTILE_COLS * TILE_K + step;
+${j}
+
+${ie}
+    }
+    workgroupBarrier();
+  }
+
+  var matrix_c_offset: u32 = (a_global_base + base_A) * OUT_FEATURES + b_global_base + base_B;
+${J}
+}
+`}function to({inFeatures:e,outFeatures:t,mTile:r=88,nTile:a=16,rowPerThread:i=11,kTile:o=32,assumeFullN:s=!1}){if(e%4!=0||o%4!=0||e%o!==0)throw Error("packed dense dual-N matmul requires K divisible by 4 and kTile");if(t%4!=0)throw Error("packed dense dual-N matmul requires N divisible by 4");if(r%i!==0)throw Error("packed dense dual-N matmul requires mTile divisible by rowPerThread");let u=a,n=r/i,l=u*n;if(l>256)throw Error("packed dense dual-N matmul exceeds max workgroup invocations");let _=o/4;if((r*_+2*o*u)*8>16*1024)throw Error("packed dense dual-N matmul exceeds 16KB workgroup storage");let c=u*8,p=Array.from({length:i},(y,v)=>`  var acc0_${v}: vec4<f16> = vec4<f16>(0.0h);
+  var acc1_${v}: vec4<f16> = vec4<f16>(0.0h);`).join(`
+`),d=Array.from({length:i},(y,v)=>`        let a_vec${v} = aTile[(row_base + ${v}u) * K_TILE_V4 + kv];
+        acc0_${v} = fma(b0_3, vec4<f16>(a_vec${v}.w), fma(b0_2, vec4<f16>(a_vec${v}.z), fma(b0_1, vec4<f16>(a_vec${v}.y), fma(b0_0, vec4<f16>(a_vec${v}.x), acc0_${v}))));
+        acc1_${v} = fma(b1_3, vec4<f16>(a_vec${v}.w), fma(b1_2, vec4<f16>(a_vec${v}.z), fma(b1_1, vec4<f16>(a_vec${v}.y), fma(b1_0, vec4<f16>(a_vec${v}.x), acc1_${v}))));`).join(`
+`),f=s?"":"n_group0 < N_V4 && ",b=s?"":"n_group1 < N_V4 && ",g=Array.from({length:i},(y,v)=>`  if (${f}m_base + ${v}u < params.M) { y[(m_base + ${v}u) * N_V4 + n_group0] = acc0_${v}; }
+  if (${b}m_base + ${v}u < params.M) { y[(m_base + ${v}u) * N_V4 + n_group1] = acc1_${v}; }`).join(`
+`),h=s?`      bTile0[i] = w[(k_base + kk) * N_V4 + b_group0];
+      bTile1[i] = w[(k_base + kk) * N_V4 + b_group1];`:`      if (b_group0 < N_V4) {
+        bTile0[i] = w[(k_base + kk) * N_V4 + b_group0];
+      } else {
+        bTile0[i] = vec4<f16>(0.0h);
+      }
+      if (b_group1 < N_V4) {
+        bTile1[i] = w[(k_base + kk) * N_V4 + b_group1];
+      } else {
+        bTile1[i] = vec4<f16>(0.0h);
+      }`;return`enable f16;
+struct Params { M: u32, _pad0: u32, _pad1: u32, _pad2: u32 };
+@group(0) @binding(0) var<storage, read>       a: array<vec4<f16>>;
+@group(0) @binding(1) var<storage, read>       w: array<vec4<f16>>;
+@group(0) @binding(2) var<storage, read_write> y: array<vec4<f16>>;
+@group(0) @binding(3) var<uniform>             params: Params;
+
+const K: u32 = ${e}u;
+const N: u32 = ${t}u;
+const K_V4: u32 = ${e/4}u;
+const N_V4: u32 = ${t/4}u;
+const M_TILE: u32 = ${r}u;
+const WG_X: u32 = ${u}u;
+const WG_Y: u32 = ${n}u;
+const ROW_PER_THREAD: u32 = ${i}u;
+const OUT_TILE: u32 = ${c}u;
+const K_TILE: u32 = ${o}u;
+const K_TILE_V4: u32 = ${_}u;
+const WG: u32 = ${l}u;
+
+var<workgroup> aTile: array<vec4<f16>, ${r*_}>;
+var<workgroup> bTile0: array<vec4<f16>, ${o*u}>;
+var<workgroup> bTile1: array<vec4<f16>, ${o*u}>;
+
+@compute @workgroup_size(${u}, ${n}, 1)
+fn main(@builtin(workgroup_id) wg: vec3<u32>, @builtin(local_invocation_id) lid: vec3<u32>) {
+  let lx = lid.x;
+  let ly = lid.y;
+  let tid = ly * WG_X + lx;
+  let row_base = ly * ROW_PER_THREAD;
+  let m_base = wg.y * M_TILE + row_base;
+  let n_group0 = wg.x * (WG_X * 2u) + lx;
+  let n_group1 = n_group0 + WG_X;
+${p}
+
+  for (var k_base: u32 = 0u; k_base < K; k_base = k_base + K_TILE) {
+    let k_base_v4 = k_base / 4u;
+    for (var i: u32 = tid; i < ${r*_}u; i = i + WG) {
+      let tm = i / K_TILE_V4;
+      let kv = i - tm * K_TILE_V4;
+      let gm = wg.y * M_TILE + tm;
+      if (gm < params.M) {
+        aTile[i] = a[gm * K_V4 + k_base_v4 + kv];
+      } else {
+        aTile[i] = vec4<f16>(0.0h);
+      }
+    }
+    for (var i: u32 = tid; i < ${o*u}u; i = i + WG) {
+      let kk = i / WG_X;
+      let nx = i - kk * WG_X;
+      let b_group0 = wg.x * (WG_X * 2u) + nx;
+      let b_group1 = b_group0 + WG_X;
+${h}
+    }
+    workgroupBarrier();
+
+    if (m_base < params.M) {
+      for (var kv: u32 = 0u; kv < K_TILE_V4; kv = kv + 1u) {
+        let b0_0 = bTile0[(kv * 4u + 0u) * WG_X + lx];
+        let b0_1 = bTile0[(kv * 4u + 1u) * WG_X + lx];
+        let b0_2 = bTile0[(kv * 4u + 2u) * WG_X + lx];
+        let b0_3 = bTile0[(kv * 4u + 3u) * WG_X + lx];
+        let b1_0 = bTile1[(kv * 4u + 0u) * WG_X + lx];
+        let b1_1 = bTile1[(kv * 4u + 1u) * WG_X + lx];
+        let b1_2 = bTile1[(kv * 4u + 2u) * WG_X + lx];
+        let b1_3 = bTile1[(kv * 4u + 3u) * WG_X + lx];
+${d}
+      }
+    }
+    workgroupBarrier();
+  }
+
+${g}
+}
+`}async function ro(e,{aT:t,wT:r,outT:a,M:i,inFeatures:o,outFeatures:s,mTile:u=null,nTile:n=null,rowPerThread:l=null,kTile:_=null}){if(t.dtype!=="float16"||r.dtype!=="float16"||a.dtype!=="float16")throw Error("gpuDenseF16PackedVec4NDualNMatmul requires f16 input, weight, and output tensors");let c=i>=128?{mTile:88,nTile:16,rowPerThread:11,kTile:32}:{mTile:32,nTile:16,rowPerThread:4,kTile:32};u??=c.mTile,n??=c.nTile,l??=c.rowPerThread,_??=c.kTile;let p=s%(n*8)==0,d=`dense_f16_packed_vec4n_dual_${o}_${s}_tm${u}_tn${n}_rpt${l}_tk${_}_fn${+!!p}`,f=to({inFeatures:o,outFeatures:s,mTile:u,nTile:n,rowPerThread:l,kTile:_,assumeFullN:p}),b=Z(e,[{u32:i}],"dense-f16-packed-dual-params");await e.runProgram({name:"dense_f16_packed_dual",source:f,cacheKey:d,bindings:[{tensor:t,type:"read-only-storage"},{tensor:r,type:"read-only-storage"},{tensor:a,type:"storage"},{buffer:b,type:"uniform"}],workgroups:[Math.ceil(s/(n*8)),Math.ceil(i/u),1]})}function ao({inFeatures:e,innerFeatures:t,mTile:r=64,nTile:a=16,rowPerThread:i=8,kTile:o=32,assumeFullN:s=!1}){if(e%4!=0||o%4!=0||e%o!==0)throw Error("packed dense swiglu matmul requires K divisible by 4 and kTile");if(t%4!=0)throw Error("packed dense swiglu matmul requires innerFeatures divisible by 4");if(r%i!==0)throw Error("packed dense swiglu matmul requires mTile divisible by rowPerThread");let u=a,n=r/i,l=u*n;if(l>256)throw Error("packed dense swiglu matmul exceeds max workgroup invocations");let _=o/4;if((r*_+2*o*u)*8>16*1024)throw Error("packed dense swiglu matmul exceeds 16KB workgroup storage");let c=u*4,p=Array.from({length:i},(h,y)=>`  var accA${y}: vec4<f16> = vec4<f16>(0.0h);
+  var accB${y}: vec4<f16> = vec4<f16>(0.0h);`).join(`
+`),d=Array.from({length:i},(h,y)=>`        let a_vec${y} = aTile[(row_base + ${y}u) * K_TILE_V4 + kv];
+        accA${y} = fma(bA3, vec4<f16>(a_vec${y}.w), fma(bA2, vec4<f16>(a_vec${y}.z), fma(bA1, vec4<f16>(a_vec${y}.y), fma(bA0, vec4<f16>(a_vec${y}.x), accA${y}))));
+        accB${y} = fma(bB3, vec4<f16>(a_vec${y}.w), fma(bB2, vec4<f16>(a_vec${y}.z), fma(bB1, vec4<f16>(a_vec${y}.y), fma(bB0, vec4<f16>(a_vec${y}.x), accB${y}))));`).join(`
+`),f=s?"":"n_group < INNER_V4 && ",b=Array.from({length:i},(h,y)=>`  if (${f}m_base + ${y}u < params.M) {
+    let x${y} = vec4<f32>(accA${y});
+    let yv${y} = vec4<f32>(accB${y});
+    y[(m_base + ${y}u) * INNER_V4 + n_group] = vec4<f16>((x${y} / (vec4<f32>(1.0) + exp(-x${y}))) * yv${y});
+  }`).join(`
+`),g=s?"":`      if (b_group >= INNER_V4) {
+        bTileA[i] = vec4<f16>(0.0h);
+        bTileB[i] = vec4<f16>(0.0h);
+        continue;
+      }`;return`enable f16;
+struct Params { M: u32, _pad0: u32, _pad1: u32, _pad2: u32 };
+@group(0) @binding(0) var<storage, read>       a: array<vec4<f16>>;
+@group(0) @binding(1) var<storage, read>       w: array<vec4<f16>>;
+@group(0) @binding(2) var<storage, read_write> y: array<vec4<f16>>;
+@group(0) @binding(3) var<uniform>             params: Params;
+
+const K: u32 = ${e}u;
+const INNER: u32 = ${t}u;
+const K_V4: u32 = ${e/4}u;
+const INNER_V4: u32 = ${t/4}u;
+const FULL_N_V4: u32 = ${t/2}u;
+const M_TILE: u32 = ${r}u;
+const WG_X: u32 = ${u}u;
+const WG_Y: u32 = ${n}u;
+const ROW_PER_THREAD: u32 = ${i}u;
+const OUT_TILE: u32 = ${c}u;
+const K_TILE: u32 = ${o}u;
+const K_TILE_V4: u32 = ${_}u;
+const WG: u32 = ${l}u;
+
+var<workgroup> aTile: array<vec4<f16>, ${r*_}>;
+var<workgroup> bTileA: array<vec4<f16>, ${o*u}>;
+var<workgroup> bTileB: array<vec4<f16>, ${o*u}>;
+
+@compute @workgroup_size(${u}, ${n}, 1)
+fn main(@builtin(workgroup_id) wg: vec3<u32>, @builtin(local_invocation_id) lid: vec3<u32>) {
+  let lx = lid.x;
+  let ly = lid.y;
+  let tid = ly * WG_X + lx;
+  let row_base = ly * ROW_PER_THREAD;
+  let m_base = wg.y * M_TILE + row_base;
+  let n_group = wg.x * WG_X + lx;
+${p}
+
+  for (var k_base: u32 = 0u; k_base < K; k_base = k_base + K_TILE) {
+    let k_base_v4 = k_base / 4u;
+    for (var i: u32 = tid; i < ${r*_}u; i = i + WG) {
+      let tm = i / K_TILE_V4;
+      let kv = i - tm * K_TILE_V4;
+      let gm = wg.y * M_TILE + tm;
+      if (gm < params.M) {
+        aTile[i] = a[gm * K_V4 + k_base_v4 + kv];
+      } else {
+        aTile[i] = vec4<f16>(0.0h);
+      }
+    }
+    for (var i: u32 = tid; i < ${o*u}u; i = i + WG) {
+      let kk = i / WG_X;
+      let nx = i - kk * WG_X;
+      let b_group = wg.x * WG_X + nx;
+${g}
+      bTileA[i] = w[(k_base + kk) * FULL_N_V4 + b_group];
+      bTileB[i] = w[(k_base + kk) * FULL_N_V4 + b_group + INNER_V4];
+    }
+    workgroupBarrier();
+
+    if (m_base < params.M) {
+      for (var kv: u32 = 0u; kv < K_TILE_V4; kv = kv + 1u) {
+        let bA0 = bTileA[(kv * 4u + 0u) * WG_X + lx];
+        let bA1 = bTileA[(kv * 4u + 1u) * WG_X + lx];
+        let bA2 = bTileA[(kv * 4u + 2u) * WG_X + lx];
+        let bA3 = bTileA[(kv * 4u + 3u) * WG_X + lx];
+        let bB0 = bTileB[(kv * 4u + 0u) * WG_X + lx];
+        let bB1 = bTileB[(kv * 4u + 1u) * WG_X + lx];
+        let bB2 = bTileB[(kv * 4u + 2u) * WG_X + lx];
+        let bB3 = bTileB[(kv * 4u + 3u) * WG_X + lx];
+${d}
+      }
+    }
+    workgroupBarrier();
+  }
+
+${b}
+}
+`}async function mr(e,{aT:t,wT:r,outT:a,M:i,inFeatures:o,innerFeatures:s,mTile:u=null,nTile:n=null,rowPerThread:l=null,kTile:_=null}){if(t.dtype!=="float16"||r.dtype!=="float16"||a.dtype!=="float16")throw Error("gpuDenseF16PackedVec4NSwiGluMatmul requires f16 input, weight, and output tensors");let c=i>=128?{mTile:88,nTile:16,rowPerThread:11,kTile:32}:{mTile:32,nTile:16,rowPerThread:4,kTile:32};u??=c.mTile,n??=c.nTile,l??=c.rowPerThread,_??=c.kTile;let p=s%(n*4)==0,d=`dense_f16_packed_swiglu_${o}_${s}_tm${u}_tn${n}_rpt${l}_tk${_}_fn${+!!p}`,f=ao({inFeatures:o,innerFeatures:s,mTile:u,nTile:n,rowPerThread:l,kTile:_,assumeFullN:p}),b=Z(e,[{u32:i}],"dense-f16-packed-swiglu-params");await e.runProgram({name:"dense_f16_packed_swiglu",source:f,cacheKey:d,bindings:[{tensor:t,type:"read-only-storage"},{tensor:r,type:"read-only-storage"},{tensor:a,type:"storage"},{buffer:b,type:"uniform"}],workgroups:[Math.ceil(s/(n*4)),Math.ceil(i/u),1]})}function he(e){return e==="float16"?"f16":"f32"}function gt(...e){return e.includes("float16")?`enable f16;
+`:""}function Le(e,t){return t==="float16"?`f32(${e})`:e}function tt(e,t){return t==="float16"?`f16(${e})`:e}async function yt(e,{xT:t,wT:r,yT:a,rows:i,dim:o,eps:s=1e-6}){let u=t.dtype,n=r?.dtype??"float32",l=a.dtype,_=`rmsnorm_d${o}_e${s}_${r?"w":"nw"}_${u}_${n}_${l}`,c=Oi({dim:o,eps:s,withWeight:!!r,inputDtype:u,weightDtype:n,outputDtype:l}),p=Math.min(i,65535),d=Math.ceil(i/p),f=Z(e,[{u32:i},{u32:p}],"rmsnorm-params"),b=[{tensor:t,type:"read-only-storage"},...r?[{tensor:r,type:"read-only-storage"}]:[],{tensor:a,type:"storage"},{buffer:f,type:"uniform"}];await e.runProgram({name:"rmsnorm",source:c,cacheKey:_,bindings:b,workgroups:[p,d,1]})}async function br(e,{xT:t,cosT:r,sinT:a,seq:i,heads:o,headDim:s}){let u=t.dtype,n=`rope1d_hd${s}_${u}`,l=qi({headDim:s,activationDtype:u}),_=Z(e,[{u32:i},{u32:o}],"rope-params");await e.runProgram({name:"rope1d",source:l,cacheKey:n,bindings:[{tensor:t,type:"storage"},{tensor:r,type:"read-only-storage"},{tensor:a,type:"read-only-storage"},{buffer:_,type:"uniform"}],workgroups:[i,o,1]})}async function $t(e,{xT:t,count:r}){let a=t.dtype,i=`silu_2d_${a}`,o=Fi({dtype:a}),{wgX:s,wgY:u}=Ke(r),n=Z(e,[{u32:r},{u32:u}],"silu-params");await e.runProgram({name:"silu",source:o,cacheKey:i,bindings:[{tensor:t,type:"storage"},{buffer:n,type:"uniform"}],workgroups:[u,s,1]})}async function hr(e,{xT:t,yT:r,rows:a,mlpInner:i}){let o=t.dtype,s=r.dtype,u=o==="float16"&&s==="float16"&&i%4==0,n=`swiglu_m${i}_${o}_${s}${u?"_v4":""}`,l=Ui({mlpInner:i,inputDtype:o,outputDtype:s}),_=Z(e,[{u32:a}],"swiglu-params");await e.runProgram({name:"swiglu",source:l,cacheKey:n,bindings:[{tensor:t,type:"read-only-storage"},{tensor:r,type:"storage"},{buffer:_,type:"uniform"}],workgroups:[a,Math.ceil((u?i/4:i)/64),1]})}async function Ft(e,{xT:t,yT:r,count:a,alpha:i}){let o=t.dtype,s=r.dtype,u=`axpy_2d_${o}_${s}`,n=Hi({xDtype:o,yDtype:s}),{wgX:l,wgY:_}=Ke(a),c=Z(e,[{u32:a},{f32:i},{u32:_}],"axpy-params");await e.runProgram({name:"axpy",source:n,cacheKey:u,bindings:[{tensor:t,type:"storage"},{tensor:r,type:"read-only-storage"},{buffer:c,type:"uniform"}],workgroups:[_,l,1]})}async function io(e,{packedT:t,meanT:r,stdT:a,outT:i=null,outputDtype:o="float32",latentC:s,latentH:u,latentW:n}){let l=u/2,_=n/2;if(!Number.isInteger(l)||!Number.isInteger(_))throw Error("latentH and latentW must be divisible by 2");let c=s*4,p=s*u*n,d=i?.dtype??o,f=he(d),b=i??e.empty(d,[s,u,n],"flux-vae-latents"),g=`flux_pack_to_vae_lc${s}_h${u}_w${n}_${d}`,h=`${gt(d)}struct Params { count: u32, wgY: u32, _pad0: u32, _pad1: u32 };
+@group(0) @binding(0) var<storage, read>       packed: array<f32>;
+@group(0) @binding(1) var<storage, read>       mean: array<f32>;
+@group(0) @binding(2) var<storage, read>       bnStd: array<f32>;
+@group(0) @binding(3) var<storage, read_write> out: array<${f}>;
+@group(0) @binding(4) var<uniform>             params: Params;
+
+const LATENT_C: u32 = ${s}u;
+const LATENT_H: u32 = ${u}u;
+const LATENT_W: u32 = ${n}u;
+const PATCH_W:  u32 = ${_}u;
+const PATCHED_C: u32 = ${c}u;
+const HW: u32 = ${u*n}u;
+
+@compute @workgroup_size(64, 1, 1)
+fn main(@builtin(workgroup_id) wg: vec3<u32>, @builtin(local_invocation_id) lid: vec3<u32>) {
+  let wg_idx = wg.x + wg.y * params.wgY;
+  let i = wg_idx * 64u + lid.x;
+  if (i >= params.count) { return; }
+
+  let c = i / HW;
+  let rem = i - c * HW;
+  let y = rem / LATENT_W;
+  let x = rem - y * LATENT_W;
+  let py = y & 1u;
+  let px = x & 1u;
+  let in_chan = c * 4u + py * 2u + px;
+  let seq = (y / 2u) * PATCH_W + (x / 2u);
+  let v = packed[seq * PATCHED_C + in_chan];
+  out[i] = ${tt("v * bnStd[in_chan] + mean[in_chan]",d)};
+}
+`,{wgX:y,wgY:v}=Ke(p),S=Z(e,[{u32:p},{u32:v}],"flux-vae-latents-params");return await e.runProgram({name:"flux_pack_to_vae",source:h,cacheKey:g,bindings:[{tensor:t,type:"read-only-storage"},{tensor:r,type:"read-only-storage"},{tensor:a,type:"read-only-storage"},{tensor:b,type:"storage"},{buffer:S,type:"uniform"}],workgroups:[v,y,1]}),b}function oo({inputDtype:e="float32",outputDtype:t="float16"}){let r=he(e),a=he(t);return`${gt(e,t)}struct Params { count: u32, wgY: u32, _pad0: u32, _pad1: u32 };
+@group(0) @binding(0) var<storage, read>       x: array<${r}>;
+@group(0) @binding(1) var<storage, read_write> y: array<${a}>;
+@group(0) @binding(2) var<uniform>             params: Params;
+
+@compute @workgroup_size(64, 1, 1)
+fn main(@builtin(workgroup_id) wg: vec3<u32>, @builtin(local_invocation_id) lid: vec3<u32>) {
+  let wg_idx = wg.x + wg.y * params.wgY;
+  let i = wg_idx * 64u + lid.x;
+  if (i >= params.count) { return; }
+  y[i] = ${tt(Le("x[i]",e),t)};
+}
+`}async function ut(e,{xT:t,yT:r,count:a}){let i=t.dtype,o=r.dtype,s=`cast_${i}_${o}`,u=oo({inputDtype:i,outputDtype:o}),{wgX:n,wgY:l}=Ke(a),_=Z(e,[{u32:a},{u32:l}],"cast-params");await e.runProgram({name:"cast",source:u,cacheKey:s,bindings:[{tensor:t,type:"read-only-storage"},{tensor:r,type:"storage"},{buffer:_,type:"uniform"}],workgroups:[l,n,1]})}function so({dtype:e="float16"}){let t=he(e);return`${gt(e)}struct Params { rows: u32, cols: u32, scale: f32, _pad0: u32 };
+@group(0) @binding(0) var<storage, read_write> x: array<${t}>;
+@group(0) @binding(1) var<uniform>             params: Params;
+
+const WG: u32 = 256u;
+var<workgroup> partial: array<f32, 256>;
+
+fn reduce_max(v: f32, tid: u32) -> f32 {
+  partial[tid] = v;
+  workgroupBarrier();
+  var stride: u32 = WG / 2u;
+  loop {
+    if (stride == 0u) { break; }
+    if (tid < stride) {
+      partial[tid] = max(partial[tid], partial[tid + stride]);
+    }
+    stride = stride / 2u;
+    workgroupBarrier();
+  }
+  return partial[0];
+}
+
+fn reduce_sum(v: f32, tid: u32) -> f32 {
+  partial[tid] = v;
+  workgroupBarrier();
+  var stride: u32 = WG / 2u;
+  loop {
+    if (stride == 0u) { break; }
+    if (tid < stride) {
+      partial[tid] = partial[tid] + partial[tid + stride];
+    }
+    stride = stride / 2u;
+    workgroupBarrier();
+  }
+  return partial[0];
+}
+
+@compute @workgroup_size(256, 1, 1)
+fn main(@builtin(workgroup_id) wg: vec3<u32>, @builtin(local_invocation_id) lid: vec3<u32>) {
+  let row = wg.x;
+  if (row >= params.rows) { return; }
+  let tid = lid.x;
+  let base = row * params.cols;
+  var local_max = -3.4e38;
+  for (var c: u32 = tid; c < params.cols; c = c + WG) {
+    local_max = max(local_max, ${Le("x[base + c]",e)} * params.scale);
+  }
+  let row_max = reduce_max(local_max, tid);
+
+  var local_sum = 0.0;
+  for (var c: u32 = tid; c < params.cols; c = c + WG) {
+    local_sum = local_sum + exp(${Le("x[base + c]",e)} * params.scale - row_max);
+  }
+  let inv_sum = 1.0 / reduce_sum(local_sum, tid);
+
+  for (var c: u32 = tid; c < params.cols; c = c + WG) {
+    let p = exp(${Le("x[base + c]",e)} * params.scale - row_max) * inv_sum;
+    x[base + c] = ${tt("p",e)};
+  }
+}
+`}async function uo(e,{xT:t,rows:r,cols:a,scale:i=1}){let o=t.dtype,s=`row_softmax_inplace_${o}`,u=so({dtype:o}),n=Z(e,[{u32:r},{u32:a},{f32:i}],"row-softmax-params");await e.runProgram({name:"row_softmax",source:u,cacheKey:s,bindings:[{tensor:t,type:"storage"},{buffer:n,type:"uniform"}],workgroups:[r,1,1]})}async function no(e,{xT:t,factorT:r,count:a,period:i=0}){let o=t.dtype,s=r.dtype,u=`mulbcast_2d_${o}_${s}`,n=Ri({xDtype:o,factorDtype:s}),{wgX:l,wgY:_}=Ke(a),c=Z(e,[{u32:a},{u32:i},{u32:_}],"mulbcast-params");await e.runProgram({name:"mulbcast",source:n,cacheKey:u,bindings:[{tensor:t,type:"storage"},{tensor:r,type:"read-only-storage"},{buffer:c,type:"uniform"}],workgroups:[_,l,1]})}async function kt(e,{qT:t,kT:r,vT:a,outT:i,seq:o,qHeads:s,kvHeads:u,headDim:n,causal:l}){let _=t.dtype,c=i.dtype;if(!l&&o>=8){let b=!!e.caps().subgroups,g=b&&_==="float16"&&c==="float16"&&n===128?32:_==="float16"&&c==="float16"&&n===512?4:_==="float16"&&c==="float16"&&n<=512||!b&&_==="float32"&&c==="float32"&&n===128?2:1,h=Number({}.BONSAI_FLASH_Q32_KSTEP??64)===64?64:32,y=g===32?h:32,v=g>1&&_==="float16",S=`bonsai_flash_attn_q${g}_hd${n}_kt${y}_${_}_${c}_${b?"sg":"nosg"}_${v?"qkh":"qkf"}`,$=g===32?Vi({headDim:n,kStep:y,inputDtype:_,outputDtype:c}):g===4?Ki({headDim:n,kTile:y,inputDtype:_,outputDtype:c,useSubgroups:b,useHalfQk:v}):g===2?Ni({headDim:n,kTile:y,inputDtype:_,outputDtype:c,useSubgroups:b,useHalfQk:v}):Gi({headDim:n,kTile:y,inputDtype:_,outputDtype:c,useSubgroups:b}),w=Z(e,[{u32:o},{u32:s},{u32:u},{u32:0}],"flash-attn-params");await e.runProgram({name:"flash_attention",source:$,cacheKey:S,bindings:[{tensor:t,type:"read-only-storage"},{tensor:r,type:"read-only-storage"},{tensor:a,type:"read-only-storage"},{tensor:i,type:"storage"},{buffer:w,type:"uniform"}],workgroups:[Math.ceil(o/g),s,1]});return}let p=`bonsai_attn_hd${n}_${_}_${c}`,d=zi({headDim:n,inputDtype:_,outputDtype:c}),f=Z(e,[{u32:o},{u32:s},{u32:u},{u32:+!!l}],"attn-params");await e.runProgram({name:"attention",source:d,cacheKey:p,bindings:[{tensor:t,type:"read-only-storage"},{tensor:r,type:"read-only-storage"},{tensor:a,type:"read-only-storage"},{tensor:i,type:"storage"},{buffer:f,type:"uniform"}],workgroups:[o,s,1]})}async function lo(e,{aT:t,bT:r,outT:a,aElems:i,totalElems:o}){let s=a.dtype,u=`concat_${s}`,n=ji({dtype:s}),{wgX:l,wgY:_}=Ke(o),c=Z(e,[{u32:o},{u32:i},{u32:_}],"concat-params");await e.runProgram({name:"concat",source:n,cacheKey:u,bindings:[{tensor:t,type:"read-only-storage"},{tensor:r,type:"read-only-storage"},{tensor:a,type:"storage"},{buffer:c,type:"uniform"}],workgroups:[_,l,1]})}function Fe(e,{M:t,inFeatures:r,groupSize:a}){let i=r/a;return{aQT:e.empty("uint32",[t,r/4],"a-quantized"),scaleAT:e.empty("float32",[t,i],"a-scale"),sumAT:e.empty("float32",[t,i],"a-sum")}}async function _o(e,{aT:t,aQT:r,scaleAT:a,sumAT:i,M:o,inFeatures:s,groupSize:u}){let n=t.dtype,l=`quantize_a_i8_${n}_g${u}_k${s}`,_=Zi({inFeatures:s,groupSize:u,inputDtype:n}),c=Z(e,[{u32:o}],"quantizeA-params"),p=s/u;await e.runProgram({name:"quantize_a_i8",source:_,cacheKey:l,bindings:[{tensor:t,type:"read-only-storage"},{tensor:r,type:"storage"},{tensor:a,type:"storage"},{tensor:i,type:"storage"},{buffer:c,type:"uniform"}],workgroups:[p,o,1]})}async function co(e,{aQT:t,scaleAT:r,sumAT:a,bitsT:i,sbT:o,outT:s,M:u,inFeatures:n,outFeatures:l,bits:_,groupSize:c}){if(u<2)throw Error("gpuMlxMatmulDP4A requires M >= 2");if(_!==2||c!==128)throw Error("DP4A path requires bits=2, groupSize=128");let p=64;for(let $ of[128,64,32])if(l%$===0){p=$;break}let d=n<=9216?3:2;u<d&&(d=1);let f=s.dtype,b=o.dtype,g=`mlxmatmul_dp4a_${f}_${b}_b${_}_g${c}_i${n}_o${l}_tm${d}_tn${p}`,h=Ji({bits:_,groupSize:c,inFeatures:n,outFeatures:l,tileM:d,tileN:p,outputDtype:f,scaleBiasDtype:b}),y=Z(e,[{u32:u}],"mlxmatmul-dp4a-params"),v=Math.ceil(l/p),S=Math.ceil(u/d);await e.runProgram({name:"mlx_matmul",source:h,cacheKey:g,bindings:[{tensor:t,type:"read-only-storage"},{tensor:r,type:"read-only-storage"},{tensor:a,type:"read-only-storage"},{tensor:i,type:"read-only-storage"},{tensor:o,type:"read-only-storage"},{tensor:s,type:"storage"},{buffer:y,type:"uniform"}],workgroups:[v,S,1]})}async function yr(e,{bitsT:t,sbT:r,outT:a,inFeatures:i,outFeatures:o,bits:s,groupSize:u,outputLayout:n="out-k"}){if(a.dtype!=="float16")throw Error("gpuMlxDequantizeToF16 requires a float16 output tensor");let l=r.scaleBiasDtype??r.dtype,_=r.scaleBiasLayout??"out-group",c=!!r.ternaryBiasFromScale,p=`mlx_dequant_f16_${l}_${_}_${n}_b${s}_g${u}_i${i}_o${o}_tb${+!!c}`,d=Qi({bits:s,groupSize:u,inFeatures:i,outFeatures:o,scaleBiasDtype:l,scaleBiasLayout:_,outputLayout:n,assumeTernaryBias:c}),f=o*(i/(32/s)),{wgX:b,wgY:g}=Ke(f),h=Z(e,[{u32:f},{u32:g}],"mlx-dequant-f16-params");await e.runProgram({name:"mlx_dequant_f16",source:d,cacheKey:p,bindings:[{tensor:t,type:"read-only-storage"},{tensor:r,type:"read-only-storage"},{tensor:a,type:"storage"},{buffer:h,type:"uniform"}],workgroups:[g,b,1]})}async function Gt(e,{aT:t,bitsT:r,sbT:a,outT:i,M:o,inFeatures:s,outFeatures:u,bits:n,groupSize:l,useF16:_=!1,assumeTernaryBias:c=!1,aRowOffset:p=0,scaleBiasLayout:d="out-group",tileM:f=32,tileN:b=null}){if(!e.caps().subgroupMatrix)throw Error("gpuMlxMatmulSubgroupMatrix requires chromium-experimental-subgroup-matrix");if(!(n===1&&l===128||n===2&&l===128||n===4&&l===64))throw Error("subgroup-matrix path requires bits=1/groupSize=128, bits=2/groupSize=128, or bits=4/groupSize=64");if(u%64!=0)throw Error("subgroup-matrix path requires outFeatures divisible by 64");if(s%32!=0)throw Error("subgroup-matrix path requires inFeatures divisible by 32");let g=f,h=_&&g===32&&u%128==0&&(o>=g||s===3072&&u>=18432),y=b??(h?128:64),v=t.dtype,S=a.dtype,$=i.dtype,w=_?"f16":"f32",m=o%g===0,T=p!==0,I=`mlxmatmul_sgmat_${w}_${v}_${S}_${$}_${d==="group-out"?"go":"og"}_b${n}_g${l}_i${s}_o${u}_tm${g}_tn${y}_fm${+!!m}_tb${+!!c}_ao${+!!T}`,E=eo({bits:n,groupSize:l,inFeatures:s,outFeatures:u,useF16:_,tileM:g,tileN:y,inputDtype:v,scaleBiasDtype:S,outputDtype:$,scaleBiasLayout:d,assumeFullM:m,assumeTernaryBias:c,useARowOffset:T}),k=Z(e,[{u32:o},{u32:p}],"mlxmatmul-sgmat-params");await e.runProgram({name:"mlx_matmul",source:E,cacheKey:I,bindings:[{tensor:t,type:"read-only-storage"},{tensor:r,type:"read-only-storage"},{tensor:a,type:"read-only-storage"},{tensor:i,type:"storage"},{buffer:k,type:"uniform"}],workgroups:[Math.ceil(u/y),Math.ceil(o/g),1]})}async function po(e,{aT:t,bitsT:r,sbT:a,outT:i,M:o,inFeatures:s,outFeatures:u,tileM:n=null,tileN:l=256,nPerThread:_=null,assumeBiasNegHalfScale:c=!1,scaleOnly:p=!1}){if(t.dtype!=="float16"||a.dtype!=="float16"||i.dtype!=="float16")throw Error("gpuMlxMatmulBinaryLut4 requires f16 A, scaleBias, and output tensors");if(s%128!=0)throw Error("gpuMlxMatmulBinaryLut4 requires K divisible by 128");n??=o<128?o>=8?10:Math.max(1,o):c?u===3072&&s===3072?10:u>=27648?14:16:u===3072&&s===3072?6:u===3072&&s>=9216?15:13,_??(c&&o>=128&&s===3072&&u>=9216?(_=2,l===256&&(l=512)):_=1);let d=!!(p&&c),f=`mlxmatmul_binary_lut4_${s}_${u}_tm${n}_tn${l}_npt${_}_nh${+!!c}_so${+!!d}`,b=Yi({inFeatures:s,outFeatures:u,tileM:n,tileN:l,nPerThread:_,assumeBiasNegHalfScale:c,scaleOnly:d}),g=Z(e,[{u32:o}],"mlxmatmul-binary-lut4-params");await e.runProgram({name:"mlx_matmul_binary_lut4",source:b,cacheKey:f,bindings:[{tensor:t,type:"read-only-storage"},{tensor:r,type:"read-only-storage"},{tensor:a,type:"read-only-storage"},{tensor:i,type:"storage"},{buffer:g,type:"uniform"}],workgroups:[Math.ceil(u/l),Math.ceil(o/n),1]})}async function fo(e,{aT:t,bitsT:r,sbT:a,outT:i,M:o,inFeatures:s,outFeatures:u,bits:n,groupSize:l}){let _=t.dtype,c=a.dtype,p=i.dtype;if(o>=16&&e.caps().subgroupMatrix&&e.caps().f16&&_==="float16"&&p==="float16"&&(n===1&&l===128||n===2&&l===128||n===4&&l===64)&&s%32==0&&u%64==0){await Gt(e,{aT:t,bitsT:r,sbT:a,outT:i,M:o,inFeatures:s,outFeatures:u,bits:n,groupSize:l,useF16:!0,assumeTernaryBias:n===2});return}let d,f;if(o===1?_==="float32"&&c==="float32"&&p==="float32"?d=0:u%64==0?(d=1,f=64):u%32==0?(d=1,f=32):u%16==0?(d=1,f=16):d=0:u%64==0?(d=o>=4?4:o>=2?2:1,f=64):u%32==0?(d=o>=8?8:o>=4?4:o>=2?2:1,f=32):u%16==0?(d=o>=16?16:o>=8?8:4,f=16):d=0,d===0){if(t.dtype!=="float32"||a.dtype!=="float32"||i.dtype!=="float32")throw Error("MLX matmul fallback path only supports float32 tensors");let T=`mlxmatmul_b${n}_g${l}_i${s}_o${u}`,I=Xi({bits:n,groupSize:l,inFeatures:s,outFeatures:u}),E=Z(e,[{u32:o}],"mlxmatmul-params");await e.runProgram({name:"mlx_matmul",source:I,cacheKey:T,bindings:[{tensor:t,type:"read-only-storage"},{tensor:r,type:"read-only-storage"},{tensor:a,type:"read-only-storage"},{tensor:i,type:"storage"},{buffer:E,type:"uniform"}],workgroups:[u,o,1]});return}let b=s/l,g=1;for(let T of[4,2])if(b%T===0&&d*T*l*4<=8192){g=T;break}let h=1;for(let T of[4,2])if(u%(f*T)===0){h=T;break}let y=f*h,v=`mlxmatmul_tiled_${_}_${c}_${p}_b${n}_g${l}_i${s}_o${u}_m${d}_n${f}_kgc${g}_npt${h}`,S=Kr({bits:n,groupSize:l,inFeatures:s,outFeatures:u,mTile:d,outTile:f,kGroupsPerChunk:g,nPerThread:h,inputDtype:_,outputDtype:p,scaleBiasDtype:c}),$=Z(e,[{u32:o}],"mlxmatmul-params"),w=Math.ceil(u/y),m=Math.ceil(o/d);await e.runProgram({name:"mlx_matmul",source:S,cacheKey:v,bindings:[{tensor:t,type:"read-only-storage"},{tensor:r,type:"read-only-storage"},{tensor:a,type:"read-only-storage"},{tensor:i,type:"storage"},{buffer:$,type:"uniform"}],workgroups:[w,m,1]})}async function Ne(e,{aT:t,bitsT:r,sbT:a,outT:i,M:o,inFeatures:s,outFeatures:u,bits:n,groupSize:l}){let _=t.dtype,c=a.dtype,p=i.dtype;if(o>=16&&e.caps().subgroupMatrix&&e.caps().f16&&_==="float16"&&p==="float16"&&n===4&&l===64&&s%32==0&&u%64==0){await Gt(e,{aT:t,bitsT:r,sbT:a,outT:i,M:o,inFeatures:s,outFeatures:u,bits:n,groupSize:l,useF16:!0,assumeTernaryBias:!1});return}let d,f;if(u%64==0)d=o>=4?4:o>=2?2:1,f=64;else if(u%32==0)d=o>=8?8:o>=4?4:o>=2?2:1,f=32;else if(u%16==0)d=o>=16?16:o>=8?8:o>=4?4:1,f=16;else throw Error("Bonsai text MLX matmul requires outFeatures divisible by 16");let b=s/l,g=1;for(let w of[4,2])if(b%w===0&&d*w*l*4<=8192){g=w;break}let h=1;for(let w of[4,2])if(u%(f*w)===0){h=w;break}let y=f*h,v=`bonsai_mlxmatmul_tiled_${_}_${c}_${p}_b${n}_g${l}_i${s}_o${u}_m${d}_n${f}_kgc${g}_npt${h}`,S=Kr({bits:n,groupSize:l,inFeatures:s,outFeatures:u,mTile:d,outTile:f,kGroupsPerChunk:g,nPerThread:h,inputDtype:_,outputDtype:p,scaleBiasDtype:c}),$=Z(e,[{u32:o}],"mlxmatmul-params");await e.runProgram({name:"mlx_matmul",source:S,cacheKey:v,bindings:[{tensor:t,type:"read-only-storage"},{tensor:r,type:"read-only-storage"},{tensor:a,type:"read-only-storage"},{tensor:i,type:"storage"},{buffer:$,type:"uniform"}],workgroups:[Math.ceil(u/y),Math.ceil(o/d),1]})}function go({inFeatures:e,outFeatures:t,hasBias:r,inputDtype:a="float32",weightDtype:i="float32",biasDtype:o="float32",outputDtype:s="float32"}){let u=he(a),n=he(i),l=he(o),_=he(s);return`${gt(a,i,o,s)}struct Params { M: u32, _pad0: u32, _pad1: u32, _pad2: u32 };
+@group(0) @binding(0) var<storage, read>       x: array<${u}>;
+@group(0) @binding(1) var<storage, read>       w: array<${n}>;
+${r?`@group(0) @binding(2) var<storage, read>       b: array<${l}>;
+`:""}@group(0) @binding(${r?3:2}) var<storage, read_write> y: array<${_}>;
+@group(0) @binding(${r?4:3}) var<uniform>             params: Params;
+
+const IN_F: u32 = ${e}u;
+const OUT_F: u32 = ${t}u;
+const WG: u32 = 64u;
+
+var<workgroup> partial: array<f32, WG>;
+
+@compute @workgroup_size(WG, 1, 1)
+fn main(@builtin(workgroup_id) wg: vec3<u32>, @builtin(local_invocation_id) lid: vec3<u32>) {
+  let n = wg.x;
+  let m = wg.y;
+  if (n >= OUT_F || m >= params.M) { return; }
+  let tid = lid.x;
+  let wBase = n * IN_F;
+  let xBase = m * IN_F;
+
+  var acc: f32 = 0.0;
+  for (var i: u32 = tid; i < IN_F; i = i + WG) {
+    acc = acc + ${Le("x[xBase + i]",a)} * ${Le("w[wBase + i]",i)};
+  }
+  partial[tid] = acc;
+  workgroupBarrier();
+  var stride: u32 = WG / 2u;
+  loop {
+    if (stride == 0u) { break; }
+    if (tid < stride) { partial[tid] = partial[tid] + partial[tid + stride]; }
+    stride = stride / 2u;
+    workgroupBarrier();
+  }
+  if (tid == 0u) {
+    ${r?`y[m * OUT_F + n] = ${tt(`partial[0] + ${Le("b[n]",o)}`,s)};`:`y[m * OUT_F + n] = ${tt("partial[0]",s)};`}
+  }
+}
+`}function mo({inFeatures:e,outFeatures:t,outputDtype:r="float16",mTile:a=16,nTile:i=8,nPerThread:o=8,kTile:s=64}){if(e%4!=0||s%4!=0)throw Error("dense f16 tiled matmul requires K and kTile divisible by 4");if(a*i>256)throw Error("dense f16 tiled matmul tile exceeds max workgroup invocations");if(r!=="float16"&&r!=="float32")throw Error("dense f16 tiled matmul output must be f16/f32");let u=a*i,n=s/4,l=i*o;if((a*n+l*n)*8>16*1024)throw Error("dense f16 tiled matmul exceeds 16KB workgroup storage");let _=he(r),c=Array.from({length:o},(f,b)=>`  var acc${b}: f32 = 0.0;`).join(`
+`),p=Array.from({length:o},(f,b)=>`        let b_idx${b} = (n_local + ${b*i}u) * K_TILE_V4 + kv;
+        acc${b} = acc${b} + dot(vec4<f32>(a_vec), vec4<f32>(bTile[b_idx${b}]));`).join(`
+`),d=Array.from({length:o},(f,b)=>{let g=`n0 + ${b*i}u`;return`    if (${g} < N) { y[m * N + ${g}] = ${tt(`acc${b}`,r)}; }`}).join(`
+`);return`enable f16;
+struct Params { M: u32, _pad0: u32, _pad1: u32, _pad2: u32 };
+@group(0) @binding(0) var<storage, read>       a: array<vec4<f16>>;
+@group(0) @binding(1) var<storage, read>       w: array<vec4<f16>>;
+@group(0) @binding(2) var<storage, read_write> y: array<${_}>;
+@group(0) @binding(3) var<uniform>             params: Params;
+
+const K: u32 = ${e}u;
+const N: u32 = ${t}u;
+const K_V4: u32 = ${e/4}u;
+const M_TILE: u32 = ${a}u;
+const N_TILE: u32 = ${i}u;
+const OUT_TILE: u32 = ${l}u;
+const K_TILE: u32 = ${s}u;
+const K_TILE_V4: u32 = ${n}u;
+const WG: u32 = ${u}u;
+
+var<workgroup> aTile: array<vec4<f16>, ${a*n}>;
+var<workgroup> bTile: array<vec4<f16>, ${l*n}>;
+
+@compute @workgroup_size(WG, 1, 1)
+fn main(@builtin(workgroup_id) wg: vec3<u32>, @builtin(local_invocation_id) lid: vec3<u32>) {
+  let tid = lid.x;
+  let m_local = tid / N_TILE;
+  let n_local = tid - m_local * N_TILE;
+  let m = wg.y * M_TILE + m_local;
+  let n0 = wg.x * OUT_TILE + n_local;
+${c}
+
+  for (var k_base: u32 = 0u; k_base < K; k_base = k_base + K_TILE) {
+    let k_base_v4 = k_base / 4u;
+    for (var i: u32 = tid; i < ${a*n}u; i = i + WG) {
+      let tm = i / K_TILE_V4;
+      let kv = i - tm * K_TILE_V4;
+      let gm = wg.y * M_TILE + tm;
+      if (gm < params.M) {
+        aTile[i] = a[gm * K_V4 + k_base_v4 + kv];
+      } else {
+        aTile[i] = vec4<f16>(0.0h);
+      }
+    }
+    for (var i: u32 = tid; i < ${l*n}u; i = i + WG) {
+      let tn = i / K_TILE_V4;
+      let kv = i - tn * K_TILE_V4;
+      let gn = wg.x * OUT_TILE + tn;
+      if (gn < N) {
+        bTile[i] = w[gn * K_V4 + k_base_v4 + kv];
+      } else {
+        bTile[i] = vec4<f16>(0.0h);
+      }
+    }
+    workgroupBarrier();
+
+    if (m < params.M) {
+      for (var kv: u32 = 0u; kv < K_TILE_V4; kv = kv + 1u) {
+        let a_idx = m_local * K_TILE_V4 + kv;
+        let a_vec = aTile[a_idx];
+${p}
+      }
+    }
+    workgroupBarrier();
+  }
+
+  if (m < params.M) {
+${d}
+  }
+}
+`}async function bo(e,{aT:t,wT:r,outT:a,M:i,inFeatures:o,outFeatures:s}){if(t.dtype!=="float16"||r.dtype!=="float16")throw Error("gpuDenseF16TiledMatmul requires f16 input and weight tensors");let u=a.dtype,n=`dense_f16_tiled_${o}_${s}_${u}_tm32_tn4_npt16_tk64`,l=mo({inFeatures:o,outFeatures:s,outputDtype:u,mTile:32,nTile:4,nPerThread:16,kTile:64}),_=Z(e,[{u32:i}],"dense-f16-tiled-params");await e.runProgram({name:"dense_f16_tiled",source:l,cacheKey:n,bindings:[{tensor:t,type:"read-only-storage"},{tensor:r,type:"read-only-storage"},{tensor:a,type:"storage"},{buffer:_,type:"uniform"}],workgroups:[Math.ceil(s/64),Math.ceil(i/32),1]})}function ho({inFeatures:e,outFeatures:t,mTile:r=32,nTile:a=16,rowPerThread:i=4,kTile:o=64,accumDtype:s="float16",assumeFullN:u=!1}){if(e%4!=0||o%4!=0||e%o!==0)throw Error("packed dense f16 matmul requires K divisible by 4 and kTile");if(t%4!=0)throw Error("packed dense f16 matmul requires N divisible by 4");if(r%i!==0)throw Error("packed dense f16 matmul requires mTile divisible by rowPerThread");let n=a,l=r/i,_=n*l;if(_>256)throw Error("packed dense f16 matmul exceeds max workgroup invocations");let c=o/4;if((r*c+o*n)*8>16*1024)throw Error("packed dense f16 matmul exceeds 16KB workgroup storage");let p=n*4;if(s!=="float16"&&s!=="float32")throw Error("packed dense f16 matmul accumulation must be f16 or f32");let d=s==="float32",f=d?"f32":"f16",b=d?"vec4<f32>(0.0)":"vec4<f16>(0.0h)",g=Array.from({length:i},($,w)=>`  var acc${w}: vec4<${f}> = ${b};`).join(`
+`),h=Array.from({length:i},($,w)=>d?`        let a_vec${w} = aTile[(row_base + ${w}u) * K_TILE_V4 + kv];
+        acc${w} = fma(vec4<f32>(b3), vec4<f32>(f32(a_vec${w}.w)), fma(vec4<f32>(b2), vec4<f32>(f32(a_vec${w}.z)), fma(vec4<f32>(b1), vec4<f32>(f32(a_vec${w}.y)), fma(vec4<f32>(b0), vec4<f32>(f32(a_vec${w}.x)), acc${w}))));`:`        let a_vec${w} = aTile[(row_base + ${w}u) * K_TILE_V4 + kv];
+        acc${w} = fma(b3, vec4<f16>(a_vec${w}.w), fma(b2, vec4<f16>(a_vec${w}.z), fma(b1, vec4<f16>(a_vec${w}.y), fma(b0, vec4<f16>(a_vec${w}.x), acc${w}))));`).join(`
+`),y=u?"":"n_group < N_V4 && ",v=Array.from({length:i},($,w)=>`  if (${y}m_base + ${w}u < params.M) { y[(m_base + ${w}u) * N_V4 + n_group] = ${d?`vec4<f16>(acc${w})`:`acc${w}`}; }`).join(`
+`),S=u?"      bTile[i] = w[(k_base + kk) * N_V4 + b_group];":`      if (b_group < N_V4) {
+        bTile[i] = w[(k_base + kk) * N_V4 + b_group];
+      } else {
+        bTile[i] = vec4<f16>(0.0h);
+      }`;return`enable f16;
+struct Params { M: u32, _pad0: u32, _pad1: u32, _pad2: u32 };
+@group(0) @binding(0) var<storage, read>       a: array<vec4<f16>>;
+@group(0) @binding(1) var<storage, read>       w: array<vec4<f16>>;
+@group(0) @binding(2) var<storage, read_write> y: array<vec4<f16>>;
+@group(0) @binding(3) var<uniform>             params: Params;
+
+const K: u32 = ${e}u;
+const N: u32 = ${t}u;
+const K_V4: u32 = ${e/4}u;
+const N_V4: u32 = ${t/4}u;
+const M_TILE: u32 = ${r}u;
+const WG_X: u32 = ${n}u;
+const WG_Y: u32 = ${l}u;
+const ROW_PER_THREAD: u32 = ${i}u;
+const OUT_TILE: u32 = ${p}u;
+const K_TILE: u32 = ${o}u;
+const K_TILE_V4: u32 = ${c}u;
+const WG: u32 = ${_}u;
+
+var<workgroup> aTile: array<vec4<f16>, ${r*c}>;
+var<workgroup> bTile: array<vec4<f16>, ${o*n}>;
+
+@compute @workgroup_size(${n}, ${l}, 1)
+fn main(@builtin(workgroup_id) wg: vec3<u32>, @builtin(local_invocation_id) lid: vec3<u32>) {
+  let lx = lid.x;
+  let ly = lid.y;
+  let tid = ly * WG_X + lx;
+  let row_base = ly * ROW_PER_THREAD;
+  let m_base = wg.y * M_TILE + row_base;
+  let n_group = wg.x * WG_X + lx;
+${g}
+
+  for (var k_base: u32 = 0u; k_base < K; k_base = k_base + K_TILE) {
+    let k_base_v4 = k_base / 4u;
+    for (var i: u32 = tid; i < ${r*c}u; i = i + WG) {
+      let tm = i / K_TILE_V4;
+      let kv = i - tm * K_TILE_V4;
+      let gm = wg.y * M_TILE + tm;
+      if (gm < params.M) {
+        aTile[i] = a[gm * K_V4 + k_base_v4 + kv];
+      } else {
+        aTile[i] = vec4<f16>(0.0h);
+      }
+    }
+    for (var i: u32 = tid; i < ${o*n}u; i = i + WG) {
+      let kk = i / WG_X;
+      let nx = i - kk * WG_X;
+      let b_group = wg.x * WG_X + nx;
+${S}
+    }
+    workgroupBarrier();
+
+    if (m_base < params.M) {
+      for (var kv: u32 = 0u; kv < K_TILE_V4; kv = kv + 1u) {
+        let b0 = bTile[(kv * 4u + 0u) * WG_X + lx];
+        let b1 = bTile[(kv * 4u + 1u) * WG_X + lx];
+        let b2 = bTile[(kv * 4u + 2u) * WG_X + lx];
+        let b3 = bTile[(kv * 4u + 3u) * WG_X + lx];
+${h}
+      }
+    }
+    workgroupBarrier();
+  }
+
+${v}
+}
+`}async function nt(e,{aT:t,wT:r,outT:a,M:i,inFeatures:o,outFeatures:s,mTile:u=null,nTile:n=null,rowPerThread:l=null,kTile:_=null,accumDtype:c=null}){if(t.dtype!=="float16"||r.dtype!=="float16"||a.dtype!=="float16")throw Error("gpuDenseF16PackedVec4NMatmul requires f16 input, weight, and output tensors");let p=i>=128?{mTile:88,nTile:16,rowPerThread:11,kTile:32,accumDtype:"float16"}:{mTile:32,nTile:16,rowPerThread:4,kTile:64,accumDtype:"float16"};u??=p.mTile,n??=p.nTile,l??=p.rowPerThread,_??=p.kTile,c??=p.accumDtype;let d=s%(n*4)==0,f=`dense_f16_packed_vec4n_${c}_${o}_${s}_tm${u}_tn${n}_rpt${l}_tk${_}_fn${+!!d}`,b=ho({inFeatures:o,outFeatures:s,mTile:u,nTile:n,rowPerThread:l,kTile:_,accumDtype:c,assumeFullN:d}),g=Z(e,[{u32:i}],"dense-f16-packed-params");await e.runProgram({name:"dense_f16_packed",source:b,cacheKey:f,bindings:[{tensor:t,type:"read-only-storage"},{tensor:r,type:"read-only-storage"},{tensor:a,type:"storage"},{buffer:g,type:"uniform"}],workgroups:[Math.ceil(s/(n*4)),Math.ceil(i/u),1]})}function yo({inFeatures:e,outFeatures:t,inputDtype:r="float32",weightDtype:a="float32",outputDtype:i="float16"}){if(e%32!=0)throw Error("dense subgroup matmul requires inFeatures divisible by 32");if(t%64!=0)throw Error("dense subgroup matmul requires outFeatures divisible by 64");if(i!=="float16"&&i!=="float32")throw Error("dense subgroup matmul requires f16/f32 output");let o=he(r),s=he(a),u=he(i),n=u,l=i==="float16"?"0.0h":"0.0",_=i==="float16"?r==="float16"?"x[a_global * IN_F + k]":"f16(x[a_global * IN_F + k])":Le("x[a_global * IN_F + k]",r),c=i==="float16"?a==="float16"?"w[w_global * IN_F + k]":"f16(w[w_global * IN_F + k])":Le("w[w_global * IN_F + k]",a);return`${gt(r,a,i)}enable subgroups;
+enable chromium_experimental_subgroup_matrix;
+diagnostic(off, chromium.subgroup_matrix_uniformity);
+
+struct Params { M: u32, _pad0: u32, _pad1: u32, _pad2: u32 };
+@group(0) @binding(0) var<storage, read>       x: array<${o}>;
+@group(0) @binding(1) var<storage, read>       w: array<${s}>;
+@group(0) @binding(2) var<storage, read_write> y: array<${u}>;
+@group(0) @binding(3) var<uniform>             params: Params;
+
+const IN_F:       u32 = ${e}u;
+const OUT_F:      u32 = ${t}u;
+const TILE_COLS:  u32 = 64u;
+const TILE_ROWS:  u32 = 32u;
+const TILE_K:     u32 = 32u;
+const SUB_COLS:   u32 = 32u;
+const SUB_ROWS:   u32 = 16u;
+
+var<workgroup> tile_A: array<${n}, 32 * 32>;
+var<workgroup> tile_B: array<${n}, 64 * 32>;
+var<workgroup> scratch: array<array<array<${n}, 64>, 4>, 4>;
+
+fn loadSHMA(tile_base: u32, k_idx: u32, row: u32, c_idx: u32) {
+  let a_global: u32 = tile_base + row;
+  let col: u32 = c_idx * 8u;
+  for (var col_offset: u32 = 0u; col_offset < 8u; col_offset++) {
+    let k: u32 = k_idx + col + col_offset;
+    if (a_global < params.M) {
+      tile_A[row * TILE_K + col + col_offset] = ${_};
+    } else {
+      tile_A[row * TILE_K + col + col_offset] = ${l};
+    }
+  }
+}
+
+fn loadSHMB(tile_base: u32, k_idx: u32, row: u32, c_idx: u32) {
+  let w_global: u32 = tile_base + row;
+  let col: u32 = c_idx * 16u;
+  for (var i: u32 = 0u; i < 16u; i++) {
+    let k: u32 = k_idx + col + i;
+    tile_B[row * TILE_K + col + i] = ${c};
+  }
+}
+
+fn storeOutput(offset: u32, row: u32, col: u32, src_slot: u32, row_limit: i32) {
+  if (row_limit > 0 && row < u32(row_limit)) {
+    let col2: u32 = col + 1u;
+    y[offset + row * OUT_F + col]       = scratch[src_slot][0][row * 8u + col];
+    y[offset + row * OUT_F + col + 8u]  = scratch[src_slot][1][row * 8u + col];
+    y[offset + row * OUT_F + col + 16u] = scratch[src_slot][2][row * 8u + col];
+    y[offset + row * OUT_F + col + 24u] = scratch[src_slot][3][row * 8u + col];
+
+    y[offset + row * OUT_F + col2]       = scratch[src_slot][0][row * 8u + col2];
+    y[offset + row * OUT_F + col2 + 8u]  = scratch[src_slot][1][row * 8u + col2];
+    y[offset + row * OUT_F + col2 + 16u] = scratch[src_slot][2][row * 8u + col2];
+    y[offset + row * OUT_F + col2 + 24u] = scratch[src_slot][3][row * 8u + col2];
+  }
+}
+
+@compute @workgroup_size(128, 1, 1)
+fn main(
+  @builtin(workgroup_id) workgroup_id: vec3<u32>,
+  @builtin(local_invocation_index) local_idx: u32,
+  @builtin(subgroup_invocation_id) sg_id: u32,
+  @builtin(subgroup_size) sg_size: u32
+) {
+  let a_global_base: u32 = workgroup_id.y * TILE_ROWS;
+  let w_global_base: u32 = workgroup_id.x * TILE_COLS;
+
+  let subtile_id: u32 = local_idx / sg_size;
+  let subtile_idx: u32 = subtile_id / 2u;
+  let subtile_idy: u32 = subtile_id % 2u;
+  let base_A: u32 = subtile_idy * SUB_ROWS;
+  let base_B: u32 = subtile_idx * SUB_COLS;
+
+  var matC00: subgroup_matrix_result<${n}, 8, 8>;
+  var matC01: subgroup_matrix_result<${n}, 8, 8>;
+  var matC02: subgroup_matrix_result<${n}, 8, 8>;
+  var matC03: subgroup_matrix_result<${n}, 8, 8>;
+  var matC10: subgroup_matrix_result<${n}, 8, 8>;
+  var matC11: subgroup_matrix_result<${n}, 8, 8>;
+  var matC12: subgroup_matrix_result<${n}, 8, 8>;
+  var matC13: subgroup_matrix_result<${n}, 8, 8>;
+
+  for (var kidx: u32 = 0u; kidx < IN_F; kidx += TILE_K) {
+    loadSHMA(a_global_base, kidx, local_idx / 4u, local_idx % 4u);
+    loadSHMB(w_global_base, kidx, local_idx / 2u, local_idx % 2u);
+    workgroupBarrier();
+
+    for (var step: u32 = 0u; step < TILE_K; step += 8u) {
+      let matrix_a_offset: u32 = subtile_idy * SUB_ROWS * TILE_K + step;
+      var matA0: subgroup_matrix_left<${n}, 8, 8> = subgroupMatrixLoad<subgroup_matrix_left<${n}, 8, 8>>(&tile_A, matrix_a_offset, false, TILE_K);
+      var matA1: subgroup_matrix_left<${n}, 8, 8> = subgroupMatrixLoad<subgroup_matrix_left<${n}, 8, 8>>(&tile_A, matrix_a_offset + 8u * TILE_K, false, TILE_K);
+
+      let matrix_b_offset: u32 = subtile_idx * SUB_COLS * TILE_K + step;
+      var matB0: subgroup_matrix_right<${n}, 8, 8> = subgroupMatrixLoad<subgroup_matrix_right<${n}, 8, 8>>(&tile_B, matrix_b_offset, true, TILE_K);
+      var matB1: subgroup_matrix_right<${n}, 8, 8> = subgroupMatrixLoad<subgroup_matrix_right<${n}, 8, 8>>(&tile_B, matrix_b_offset +  8u * TILE_K, true, TILE_K);
+      var matB2: subgroup_matrix_right<${n}, 8, 8> = subgroupMatrixLoad<subgroup_matrix_right<${n}, 8, 8>>(&tile_B, matrix_b_offset + 16u * TILE_K, true, TILE_K);
+      var matB3: subgroup_matrix_right<${n}, 8, 8> = subgroupMatrixLoad<subgroup_matrix_right<${n}, 8, 8>>(&tile_B, matrix_b_offset + 24u * TILE_K, true, TILE_K);
+
+      matC00 = subgroupMatrixMultiplyAccumulate(matA0, matB0, matC00);
+      matC01 = subgroupMatrixMultiplyAccumulate(matA0, matB1, matC01);
+      matC02 = subgroupMatrixMultiplyAccumulate(matA0, matB2, matC02);
+      matC03 = subgroupMatrixMultiplyAccumulate(matA0, matB3, matC03);
+      matC10 = subgroupMatrixMultiplyAccumulate(matA1, matB0, matC10);
+      matC11 = subgroupMatrixMultiplyAccumulate(matA1, matB1, matC11);
+      matC12 = subgroupMatrixMultiplyAccumulate(matA1, matB2, matC12);
+      matC13 = subgroupMatrixMultiplyAccumulate(matA1, matB3, matC13);
+    }
+    workgroupBarrier();
+  }
+
+  subgroupMatrixStore(&scratch[subtile_id][0], 0u, matC00, false, 8u);
+  subgroupMatrixStore(&scratch[subtile_id][1], 0u, matC01, false, 8u);
+  subgroupMatrixStore(&scratch[subtile_id][2], 0u, matC02, false, 8u);
+  subgroupMatrixStore(&scratch[subtile_id][3], 0u, matC03, false, 8u);
+  let row: u32 = sg_id / 4u;
+  let col: u32 = (sg_id % 4u) * 2u;
+  var matrix_c_offset: u32 = (a_global_base + base_A) * OUT_F + w_global_base + base_B;
+  var row_limit: i32 = i32(params.M) - i32(a_global_base + base_A);
+  storeOutput(matrix_c_offset, row, col, subtile_id, row_limit);
+
+  subgroupMatrixStore(&scratch[subtile_id][0], 0u, matC10, false, 8u);
+  subgroupMatrixStore(&scratch[subtile_id][1], 0u, matC11, false, 8u);
+  subgroupMatrixStore(&scratch[subtile_id][2], 0u, matC12, false, 8u);
+  subgroupMatrixStore(&scratch[subtile_id][3], 0u, matC13, false, 8u);
+  matrix_c_offset = matrix_c_offset + 8u * OUT_F;
+  row_limit = i32(params.M) - i32(a_global_base + base_A + 8u);
+  storeOutput(matrix_c_offset, row, col, subtile_id, row_limit);
+}
+`}async function $e(e,{aT:t,wT:r,bT:a,outT:i,M:o,inFeatures:s,outFeatures:u}){let n=t.dtype,l=r.dtype,_=a?.dtype??"float32",c=i.dtype;if(!a&&e.caps().subgroupMatrix&&(c==="float16"&&e.caps().f16||c==="float32"&&o>=32)&&s%32==0&&u%64==0){let g=`dense_sgmat_${c==="float16"?"f16":"f32"}_${s}_${u}_${n}_${l}_${c}_tm32_tn64`,h=yo({inFeatures:s,outFeatures:u,inputDtype:n,weightDtype:l,outputDtype:c}),y=Z(e,[{u32:o}],"dense-sgmat-params");await e.runProgram({name:"dense_matmul",source:h,cacheKey:g,bindings:[{tensor:t,type:"read-only-storage"},{tensor:r,type:"read-only-storage"},{tensor:i,type:"storage"},{buffer:y,type:"uniform"}],workgroups:[Math.ceil(u/64),Math.ceil(o/32),1]});return}let p=`dense_m_${s}_${u}_${a?"b":"nb"}_${n}_${l}_${_}_${c}`,d=go({inFeatures:s,outFeatures:u,hasBias:!!a,inputDtype:n,weightDtype:l,biasDtype:_,outputDtype:c}),f=Z(e,[{u32:o}],"dense-params"),b=[{tensor:t,type:"read-only-storage"},{tensor:r,type:"read-only-storage"},...a?[{tensor:a,type:"read-only-storage"}]:[],{tensor:i,type:"storage"},{buffer:f,type:"uniform"}];await e.runProgram({name:"dense_matmul",source:d,cacheKey:p,bindings:b,workgroups:[u,o,1]})}var wo=[8,17,26],vo=class Vr{constructor({rt:t,config:r,embedBitsT:a,embedScaleBiasT:i,layers:o,finalNormT:s,hiddenLayerIndices:u}){this.rt=t,this.config=r,this.embedBitsT=a,this.embedScaleBiasT=i,this.layers=o,this.finalNormT=s,this.hiddenLayerIndices=u}static async fromMlxSafeTensors({rt:t,config:r,safeTensors:a,hiddenLayerIndices:i=wo,onProgress:o=null,concurrency:s,chunkMaxBytes:u,signal:n}){let l=r.quantization?.group_size??r.quantization_config?.group_size??64,_=Gr(r.quantization?.bits??r.quantization_config?.bits??4),c=!!t.caps().f16,p=r.hidden_size,d=r.intermediate_size,f=r.num_attention_heads,b=r.num_key_value_heads,g=r.head_dim,h=f*g,y=b*g,v=Math.max(...i);if(!Number.isInteger(v)||v<0||v>=r.num_hidden_layers)throw Error(`hiddenLayerIndices must be within [0, ${r.num_hidden_layers-1}]`);let S=v+1,$={embedQ:null,layers:Array(S)};for(let I=0;I<S;++I)$.layers[I]={};let w=zt(),m=(I,E,k,A)=>{w.group([`${I}.weight`,`${I}.scales`,`${I}.biases`],async({[`${I}.weight`]:W,[`${I}.scales`]:P,[`${I}.biases`]:U})=>{let H=t.allocateWeightsBuffer({byteLength:W.byteLength,dtype:"uint32",shape:[E,k/_],label:`${I}.bits`});t.writeWeightsRange(H,0,W);let M=Nr({scalesBytes:P,biasesBytes:U,outFeatures:E,inFeatures:k,groupSize:l,dtype:c?"f16":"f32"}),O=t.tensorFromTypedArray(c?"float16":"float32",[E,k/l,2],M);A.bitsT=H,A.sbT=O})},T=(I,E)=>{w.tensor(I,async k=>{let A=Se(k);E(t.tensorFromTypedArray("float32",[A.length],A))})};$.embedQ={},m("model.embed_tokens",r.vocab_size,r.hidden_size,$.embedQ);for(let I=0;I<S;++I){let E=`model.layers.${I}`,k=$.layers[I];k.qProj={},k.kProj={},k.vProj={},k.oProj={},k.gateProj={},k.upProj={},k.downProj={},T(`${E}.input_layernorm.weight`,A=>{k.inputLn=A}),T(`${E}.post_attention_layernorm.weight`,A=>{k.postAttnLn=A}),T(`${E}.self_attn.q_norm.weight`,A=>{k.qNorm=A}),T(`${E}.self_attn.k_norm.weight`,A=>{k.kNorm=A}),m(`${E}.self_attn.q_proj`,h,p,k.qProj),m(`${E}.self_attn.k_proj`,y,p,k.kProj),m(`${E}.self_attn.v_proj`,y,p,k.vProj),m(`${E}.self_attn.o_proj`,p,h,k.oProj),m(`${E}.mlp.gate_proj`,d,p,k.gateProj),m(`${E}.mlp.up_proj`,d,p,k.upProj),m(`${E}.mlp.down_proj`,p,d,k.downProj)}return await a.streamAll(w.onChunk,{concurrency:s,chunkMaxBytes:u,names:w.names(),onProgress:o,signal:n}),w.assertComplete(),new Vr({rt:t,config:r,embedBitsT:$.embedQ.bitsT,embedScaleBiasT:$.embedQ.sbT,layers:$.layers,finalNormT:null,hiddenLayerIndices:i})}async encode(t,{scope:r=null}={}){let a=!r,i=r??_t(),o=ct(this.rt,i);try{let s=await this._encodeWithRuntime(t,o);return a&&i.keep(s.hiddenStackT),s}finally{a&&i.destroy()}}async _encodeWithRuntime(t,r){let a=this.config,i=t.length,o=a.hidden_size,s=a.num_attention_heads,u=a.num_key_value_heads,n=a.head_dim,l=s*n,_=u*n,c=a.intermediate_size,p=a.rope_theta??1e6,d=a.rms_norm_eps??1e-6,f=new Set(this.hiddenLayerIndices),b=this.hiddenLayerIndices.length,g=r.caps().f16?"float16":"float32",h=r.tensorFromTypedArray("uint32",[i],t),y=r.empty(g,[i,o],"qwen3-hidden");await $o(r,{idsT:h,bitsT:this.embedBitsT,sbT:this.embedScaleBiasT,yT:y,seq:i,hidden:o,vocab:a.vocab_size,bits:a.quantization?.bits??a.quantization_config?.bits??4,groupSize:a.quantization?.group_size??a.quantization_config?.group_size??64});let v=n/2,S=new Float32Array(i*v),$=new Float32Array(i*v);for(let C=0;C<i;++C)for(let B=0;B<v;++B){let R=1/p**(2*B/n),F=C*R;S[C*v+B]=Math.cos(F),$[C*v+B]=Math.sin(F)}let w=r.tensorFromTypedArray("float32",[i,v],S),m=r.tensorFromTypedArray("float32",[i,v],$),T=r.empty(g,[i,o],"qwen3-normed"),I=r.empty(g,[i,l],"qwen3-q"),E=r.empty(g,[i,_],"qwen3-k"),k=r.empty(g,[i,_],"qwen3-v"),A=r.empty(g,[i,l],"qwen3-q-normed"),W=r.empty(g,[i,_],"qwen3-k-normed"),P=r.empty(g,[i,l],"qwen3-attn"),U=r.empty(g,[i,o],"qwen3-oproj"),H=r.empty(g,[i,c],"qwen3-gate"),M=r.empty(g,[i,c],"qwen3-up"),O=r.empty(g,[i,o],"qwen3-ff"),D=r.empty(g,[i,b*o],"qwen3-stack"),x=a.quantization?.bits??a.quantization_config?.bits??4,L=a.quantization?.group_size??a.quantization_config?.group_size??64;for(let C=0;C<this.layers.length;++C){let B=this.layers[C];if(await yt(r,{xT:y,wT:B.inputLn,yT:T,rows:i,dim:o,eps:d}),await Ne(r,{aT:T,bitsT:B.qProj.bitsT,sbT:B.qProj.sbT,outT:I,M:i,inFeatures:o,outFeatures:l,bits:x,groupSize:L}),await Ne(r,{aT:T,bitsT:B.kProj.bitsT,sbT:B.kProj.sbT,outT:E,M:i,inFeatures:o,outFeatures:_,bits:x,groupSize:L}),await Ne(r,{aT:T,bitsT:B.vProj.bitsT,sbT:B.vProj.sbT,outT:k,M:i,inFeatures:o,outFeatures:_,bits:x,groupSize:L}),await yt(r,{xT:I,wT:B.qNorm,yT:A,rows:i*s,dim:n,eps:d}),await yt(r,{xT:E,wT:B.kNorm,yT:W,rows:i*u,dim:n,eps:d}),await br(r,{xT:A,cosT:w,sinT:m,seq:i,heads:s,headDim:n}),await br(r,{xT:W,cosT:w,sinT:m,seq:i,heads:u,headDim:n}),await kt(r,{qT:A,kT:W,vT:k,outT:P,seq:i,qHeads:s,kvHeads:u,headDim:n,causal:!0}),await Ne(r,{aT:P,bitsT:B.oProj.bitsT,sbT:B.oProj.sbT,outT:U,M:i,inFeatures:l,outFeatures:o,bits:x,groupSize:L}),await Ft(r,{xT:y,yT:U,count:i*o,alpha:1}),await yt(r,{xT:y,wT:B.postAttnLn,yT:T,rows:i,dim:o,eps:d}),await Ne(r,{aT:T,bitsT:B.gateProj.bitsT,sbT:B.gateProj.sbT,outT:H,M:i,inFeatures:o,outFeatures:c,bits:x,groupSize:L}),await Ne(r,{aT:T,bitsT:B.upProj.bitsT,sbT:B.upProj.sbT,outT:M,M:i,inFeatures:o,outFeatures:c,bits:x,groupSize:L}),await $t(r,{xT:H,count:i*c}),await no(r,{xT:H,factorT:M,count:i*c,period:0}),await Ne(r,{aT:H,bitsT:B.downProj.bitsT,sbT:B.downProj.sbT,outT:O,M:i,inFeatures:c,outFeatures:o,bits:x,groupSize:L}),await Ft(r,{xT:y,yT:O,count:i*o,alpha:1}),f.has(C)){let R=this.hiddenLayerIndices.indexOf(C);await ko(r,{srcT:y,dstT:D,rows:i,srcRowStrideEl:o,srcStartCol:0,dstRowStrideEl:b*o,dstStartCol:R*o,copyCols:o})}}return{hiddenStackT:D,seq:i,stackDim:b*o}}destroy(){He({embedBitsT:this.embedBitsT,embedScaleBiasT:this.embedScaleBiasT,layers:this.layers,finalNormT:this.finalNormT}),this.embedBitsT=null,this.embedScaleBiasT=null,this.layers=[],this.finalNormT=null}};async function $o(e,{idsT:t,bitsT:r,sbT:a,yT:i,seq:o,hidden:s,vocab:u,bits:n,groupSize:l}){if(n!==4)throw Error("only bits=4 supported in mlxEmbedGather for now");let _=s/8,c=s/l,p=a.dtype==="float16"?"f16":"f32",d=i.dtype==="float16"?"f16":"f32",f=`${p==="f16"||d==="f16"?`enable f16;
+`:""}struct Params { seq: u32, _pad0: u32, _pad1: u32, _pad2: u32 };
+@group(0) @binding(0) var<storage, read>       ids: array<u32>;
+@group(0) @binding(1) var<storage, read>       bits_buf: array<u32>;
+@group(0) @binding(2) var<storage, read>       scaleBias: array<${p}>;
+@group(0) @binding(3) var<storage, read_write> y: array<${d}>;
+@group(0) @binding(4) var<uniform>             params: Params;
+
+const HIDDEN:        u32 = ${s}u;
+const VOCAB:         u32 = ${u}u;
+const GROUP_SIZE:    u32 = ${l}u;
+const NUM_GROUPS:    u32 = ${c}u;
+const WORDS_PER_ROW: u32 = ${_}u;
+const VALS_PER_WORD: u32 = 8u;
+const BITS:          u32 = ${n}u;
+const MASK:          u32 = 0xfu;
+const WG: u32 = 64u;
+
+@compute @workgroup_size(WG, 1, 1)
+fn main(@builtin(workgroup_id) wg: vec3<u32>, @builtin(local_invocation_id) lid: vec3<u32>) {
+  let t = wg.x;
+  if (t >= params.seq) { return; }
+  let id = ids[t];
+  if (id >= VOCAB) { return; }
+
+  let row_words_base: u32 = id * WORDS_PER_ROW;
+  let row_sb_base:    u32 = id * NUM_GROUPS * 2u;
+
+  // Each thread fills VALS_PER_WORD output positions per word it handles.
+  var w: u32 = lid.x;
+  loop {
+    if (w >= WORDS_PER_ROW) { break; }
+    let packed: u32 = bits_buf[row_words_base + w];
+    let colBase: u32 = w * VALS_PER_WORD;
+    let g: u32 = colBase / GROUP_SIZE;
+    let scale: f32 = f32(scaleBias[row_sb_base + g * 2u]);
+    let bias:  f32 = f32(scaleBias[row_sb_base + g * 2u + 1u]);
+    for (var v: u32 = 0u; v < VALS_PER_WORD; v = v + 1u) {
+      let q: f32 = f32((packed >> (v * BITS)) & MASK);
+      y[t * HIDDEN + colBase + v] = ${d==="f16"?"f16(scale * q + bias)":"scale * q + bias"};
+    }
+    w = w + WG;
+  }
+}
+`,b=e.createUniformU32([o,0,0,0],"embed-gather-params");await e.runProgram({name:"mlx_embed_gather",source:f,entryPoint:"main",cacheKey:`mlx_embed_gather_${p}_${d}_h${s}_v${u}_g${l}_b${n}`,bindings:[{tensor:t,type:"read-only-storage"},{tensor:r,type:"read-only-storage"},{tensor:a,type:"read-only-storage"},{tensor:i,type:"storage"},{buffer:b,type:"uniform"}],workgroups:[o,1,1]})}async function ko(e,{srcT:t,dstT:r,rows:a,srcRowStrideEl:i,srcStartCol:o,dstRowStrideEl:s,dstStartCol:u,copyCols:n}){let l=t.dtype==="float16"?"f16":"f32",_=r.dtype==="float16"?"f16":"f32",c=l==="f16"||_==="f16"?`enable f16;
+`:"",p=l==="f16"?"f32(s[r * p.srcStride + p.srcStart + i])":"s[r * p.srcStride + p.srcStart + i]",d=_==="f16"?`f16(${p})`:p,f=`strided_copy_${t.dtype}_${r.dtype}`,b=`${c}struct Params { rows: u32, copyCols: u32, srcStride: u32, srcStart: u32, dstStride: u32, dstStart: u32, _pad0: u32, _pad1: u32 };
+@group(0) @binding(0) var<storage, read>       s: array<${l}>;
+@group(0) @binding(1) var<storage, read_write> d: array<${_}>;
+@group(0) @binding(2) var<uniform>             p: Params;
+@compute @workgroup_size(64, 1, 1)
+fn main(@builtin(workgroup_id) wg: vec3<u32>, @builtin(local_invocation_id) lid: vec3<u32>) {
+  let r = wg.x;
+  if (r >= p.rows) { return; }
+  var i: u32 = lid.x;
+  loop {
+    if (i >= p.copyCols) { break; }
+    d[r * p.dstStride + p.dstStart + i] = ${d};
+    i = i + 64u;
+  }
+}
+`,g=new ArrayBuffer(32),h=new Uint32Array(g);h[0]=a,h[1]=n,h[2]=i,h[3]=o,h[4]=s,h[5]=u;let y=e.createUniformU32(new Uint32Array(g),"strided-copy-params");await e.runProgram({name:"strided_copy",source:b,entryPoint:"main",cacheKey:f,bindings:[{tensor:t,type:"read-only-storage"},{tensor:r,type:"storage"},{buffer:y,type:"uniform"}],workgroups:[a,1,1]})}function xo(e,t){let r=16927e-8,a=.45666666;if(e>4300)return r*e+a;let i=r*e+a,o=(i-(873809524e-13*e+1.89833333))/190,s=i-200*o;return o*t+s}function To(e,t,r=1){let a=Math.exp(e);if(typeof t=="number")return a/(a+(1/t-1)**r);let i=new Float32Array(t.length);for(let o=0;o<t.length;++o)i[o]=a/(a+(1/t[o]-1)**r);return i}var Eo=class jr{constructor(t={}){if(this.num_train_timesteps=t.num_train_timesteps??1e3,this.shift=t.shift??1,this.use_dynamic_shifting=t.use_dynamic_shifting??!1,this.base_image_seq_len=t.base_image_seq_len??256,this.max_image_seq_len=t.max_image_seq_len??4096,this.base_shift=t.base_shift??.5,this.max_shift=t.max_shift??1.15,this.shift_terminal=t.shift_terminal??null,this.time_shift_type=t.time_shift_type??"exponential",this.invert_sigmas=t.invert_sigmas??!1,this.stochastic_sampling=t.stochastic_sampling??!1,this.use_beta_sigmas=t.use_beta_sigmas??!1,this.use_exponential_sigmas=t.use_exponential_sigmas??!1,this.use_karras_sigmas=t.use_karras_sigmas??!1,this.time_shift_type!=="exponential")throw Error(`Unsupported time_shift_type: ${this.time_shift_type}`);if(this.use_beta_sigmas||this.use_exponential_sigmas||this.use_karras_sigmas)throw Error("Alternative sigma schedules not implemented");if(this.shift_terminal!==null)throw Error("shift_terminal stretch not implemented");if(this.invert_sigmas)throw Error("invert_sigmas not implemented");this.sigmas=null,this.timesteps=null,this.numInferenceSteps=null,this._stepIndex=null}static fromConfig(t){return new jr(t)}setTimesteps({numInferenceSteps:t,mu:r}){if(this.use_dynamic_shifting&&r==null)throw Error("mu is required when use_dynamic_shifting=true");let a=1/this.num_train_timesteps,i=this.num_train_timesteps,o=new Float32Array(t);if(t===1)o[0]=1*i;else{let l=1*i,_=(a*i-l)/(t-1);for(let c=0;c<t;++c)o[c]=l+c*_}let s=new Float32Array(t);for(let l=0;l<t;++l)s[l]=o[l]/i;if(this.use_dynamic_shifting)s=To(r,s,1);else if(this.shift!==1){let l=new Float32Array(t);for(let _=0;_<t;++_){let c=s[_];l[_]=this.shift*c/(1+(this.shift-1)*c)}s=l}let u=new Float32Array(t);for(let l=0;l<t;++l)u[l]=s[l]*i;let n=new Float32Array(t+1);n.set(s),n[t]=0,this.sigmas=n,this.timesteps=u,this.numInferenceSteps=t,this._stepIndex=null}stepDelta(t){if(this.sigmas===null)throw Error("setTimesteps not called");if(t<0||t>=this.numInferenceSteps)throw Error(`stepIndex ${t} out of range`);return this.sigmas[t+1]-this.sigmas[t]}stepCpu(t,r,a){let i=this.stepDelta(r);if(t.length!==a.length)throw Error("modelOutput and sample length mismatch");let o=new Float32Array(a.length);for(let s=0;s<a.length;++s)o[s]=a[s]+i*t[s];return o}},So=new Uint8Array([137,80,78,71,13,10,26,10]),wr=null;function Ao(){let e=new Uint32Array(256);for(let t=0;t<256;++t){let r=t;for(let a=0;a<8;++a)r=r&1?(3988292384^r>>>1)>>>0:r>>>1;e[t]=r>>>0}return e}function Io(e){wr||=Ao();let t=4294967295;for(let r=0;r<e.byteLength;++r)t=(wr[(t^e[r])&255]^t>>>8)>>>0;return(t^4294967295)>>>0}function Mt(e,t){let r=new TextEncoder().encode(e);if(r.length!==4)throw Error(`chunk type must be 4 bytes: ${e}`);let a=new Uint8Array(8+t.byteLength+4),i=new DataView(a.buffer);i.setUint32(0,t.byteLength,!1),a.set(r,4),a.set(t,8);let o=new Uint8Array(4+t.byteLength);return o.set(r,0),o.set(t,4),i.setUint32(8+t.byteLength,Io(o),!1),a}function Wo(e,t){let r=new Uint8Array(13),a=new DataView(r.buffer);return a.setUint32(0,e,!1),a.setUint32(4,t,!1),r[8]=8,r[9]=2,r[10]=0,r[11]=0,r[12]=0,r}function Bo(e,t,r){if(!Number.isInteger(e)||e<=0)throw Error("width must be positive integer");if(!Number.isInteger(t)||t<=0)throw Error("height must be positive integer");if(!(r instanceof Uint8Array))throw Error("rgb must be Uint8Array");if(r.byteLength!==e*t*3)throw Error(`rgb length ${r.byteLength} != width*height*3 = ${e*t*3}`);let a=e*3,i=new Uint8Array(t*(1+a));for(let _=0;_<t;++_)i[_*(1+a)]=0,i.set(r.subarray(_*a,(_+1)*a),_*(1+a)+1);let o=Mo(i),s=[So,Mt("IHDR",Wo(e,t)),Mt("IDAT",o),Mt("IEND",new Uint8Array)],u=0;for(let _ of s)u+=_.byteLength;let n=new Uint8Array(u),l=0;for(let _ of s)n.set(_,l),l+=_.byteLength;return n}function Mo(e){let t=Math.ceil(e.byteLength/65535),r=new Uint8Array(2+t*5+e.byteLength+4),a=0;r[a++]=120,r[a++]=1;let i=0;for(;i<e.byteLength;){let s=Math.min(65535,e.byteLength-i),u=i+s===e.byteLength;r[a++]=+!!u,r[a++]=s&255,r[a++]=s>>>8;let n=~s&65535;r[a++]=n&255,r[a++]=n>>>8,r.set(e.subarray(i,i+s),a),a+=s,i+=s}let o=Lo(e);return r[a++]=o>>>24&255,r[a++]=o>>>16&255,r[a++]=o>>>8&255,r[a++]=o&255,r}function Lo(e){let t=1,r=0;for(let a=0;a<e.byteLength;++a)t+=e[a],r+=t,(a&4095)==4095&&(t%=65521,r%=65521);return t%=65521,r%=65521,(r<<16|t)>>>0}function vr(e){let t={}.BONSAI_FORCE_DENSE_F16_MATMUL;return t==="1"||t==="true"?!0:t==="0"||t==="false"?!1:e.caps().f16&&e.caps().adapter?.vendor==="apple"}function Do(e,t,r){let a=e.quantization_config??e.quantization??{},i=Po(t,"transformer_blocks.0.attn.to_q.weight",r),o=Number(a.bits??a.nbits??i??2),s=Number(a.group_size??a.groupSize??128);if(![1,2].includes(o))throw Error(`Flux2 transformer MLX weights require 1-bit or 2-bit quantization, got bits=${o}`);if(s!==128)throw Error(`Flux2 transformer MLX weights require group_size=128, got ${s}`);if(i!=null&&i!==o)throw Error(`Flux2 transformer weight shape implies ${i}-bit packing, but quantization_config says ${o}-bit`);return{bits:o,groupSize:s,quantSolver:a.solver??null}}function Po(e,t,r){if(!e.has?.(t))return null;let a=e.info(t).shape;if(a.length!==2)return null;let i=a[1]*32;if(i%r!==0)return null;let o=i/r;return Number.isInteger(o)?o:null}function $r(e,t){if(e.byteLength!==t.byteLength)return!1;for(let r=0;r<e.byteLength;r+=2){let a=e[r]|e[r+1]<<8,i=a&32640;if(i===0||i===32640)return!1;let o=((a&32767)-128|32768)&65535;if((t[r]|t[r+1]<<8)!==o)return!1}return!0}function Co(e,t,r){let a=t.byteLength+3&-4,i=e.allocateWeightsBuffer({byteLength:a,dtype:"uint32",shape:[a/4],label:r});return e.writeWeightsRange(i,0,t),i.scaleBiasDtype="bfloat16",i.scaleBiasLayout="out-group",i}function Oo(e){return e==="float16"?2:4}function Ae(e){return e==="float16"?"f16":"f32"}function rt(...e){return e.includes("float16")?`enable f16;
+`:""}function me(e,t){return t==="float16"?`f32(${e})`:e}function dt(e,t){return t==="float16"?`f16(${e})`:e}var qo=class Xr{constructor({rt:t,config:r,w:a}){this.rt=t,this.config=r,this.w=a,this.ropeCache=new Map}destroy(){He(this.w),He(this.ropeCache),this.w=null,this.ropeCache=new Map}static async fromMlxSafeTensors({rt:t,config:r,safeTensors:a,onProgress:i=null,concurrency:o,chunkMaxBytes:s,signal:u}){let n=r.num_layers,l=r.num_single_layers,_=r.num_attention_heads*r.attention_head_dim,{bits:c,groupSize:p,quantSolver:d}=Do(r,a,_),f=Gr(c),b=!!t.caps().f16,g=r.joint_attention_dim,h=r.in_channels,y=r.out_channels??h,v=r.timestep_guidance_channels??256,S=r.mlp_ratio??3,$=Math.floor(_*S),w=3*_+$*2,m=_+$,T=vr(t),I=!!(c===1&&p===128&&t.caps().f16),E=!!(c===2&&p===128&&d==="ternary"&&t.caps().f16),k=t.caps().subgroupMatrix&&!T&&!I&&b?"group-out":"out-group",A=!!(t.caps().f16&&!I&&(!t.caps().subgroupMatrix||T)),W=zt(),P=(x,L,C,B,R={})=>{let F=!!(R.denseF16&&E),oe=F?[`${x}.weight`,`${x}.scales`]:[`${x}.weight`,`${x}.scales`,`${x}.biases`];W.group(oe,async j=>{let ie=j[`${x}.weight`],de=j[`${x}.scales`],be=j[`${x}.biases`],se=t.allocateWeightsBuffer({byteLength:ie.byteLength,dtype:"uint32",shape:[L,C/f],label:`${x}.bits`});t.writeWeightsRange(se,0,ie);let J;if(F)J=Co(t,de,`${x}.scales_bf16`),J.ternaryBiasFromScale=!0;else if(I&&$r(de,be)){let ee=Ue(de);J=t.tensorFromTypedArray("float16",[L,C/p],ee),J.scaleBiasLayout="out-group",J.binaryBiasIsNegHalfScale=!0,J.binaryScaleOnly=!0}else{let ee=(k==="group-out"?Bt:Nr)({scalesBytes:de,biasesBytes:be,outFeatures:L,inFeatures:C,groupSize:p,dtype:b?"f16":"f32"}),X=k==="group-out"?[C/p,L,2]:[L,C/p,2];J=t.tensorFromTypedArray(b?"float16":"float32",X,ee),J.scaleBiasLayout=k,I&&(J.binaryBiasIsNegHalfScale=!1)}if(B.bitsT=se,B.sbT=J,R.denseF16){let ee=t.empty("float16",[C,L],`${x}.dense_f16_kn`);await yr(t,{bitsT:se,sbT:J,outT:ee,inFeatures:C,outFeatures:L,bits:c,groupSize:p,outputLayout:"k-out"}),ee.denseLayout="k-out-vec4n",B.denseT=ee,B.denseLayout="k-out-vec4n"}})},U=(x,L,C,B,R={})=>{let F=!!(R.denseF16&&E),oe=C/f,j=C/p,ie=L*x.length,de=Array(x.length),be=0,se=null,J=null,ee=null,X=null,N=null,ae=null,pe=null,Pe=I,Ge=(fe,ge=null)=>{if(se)return;let Ce=fe.byteLength*x.length;if(se=t.allocateWeightsBuffer({byteLength:Ce,dtype:"uint32",shape:[ie,oe],label:`${x[0]}.fused_bits`}),I)X=new Uint16Array(ie*j),ae=Array(x.length),pe=Array(x.length);else if(F){let we=ge.byteLength*x.length+3&-4;N=t.allocateWeightsBuffer({byteLength:we,dtype:"uint32",shape:[we/4],label:`${x[0]}.fused_scales_bf16`}),N.scaleBiasDtype="bfloat16",N.scaleBiasLayout="out-group",N.ternaryBiasFromScale=!0}else J=b?Uint16Array:Float32Array,ee=new J(ie*j*2)};x.forEach((fe,ge)=>{let Ce=F?[`${fe}.weight`,`${fe}.scales`]:[`${fe}.weight`,`${fe}.scales`,`${fe}.biases`];W.group(Ce,async we=>{let Ve=we[`${fe}.weight`],ce=we[`${fe}.scales`],Ee=we[`${fe}.biases`];if(Ge(Ve,ce),t.writeWeightsRange(se,Ve.byteLength*ge,Ve),F)t.writeWeightsRange(N,ce.byteLength*ge,ce);else if(I){ae[ge]=new Uint8Array(ce),pe[ge]=new Uint8Array(Ee),$r(ce,Ee)||(Pe=!1);let Q=Ue(ce);for(let Y=0;Y<L;++Y){let te=Y*j,ve=(ge*L+Y)*j;X.set(Q.subarray(te,te+j),ve)}}else if(k==="group-out"){let Q=Bt({scalesBytes:ce,biasesBytes:Ee,outFeatures:L,inFeatures:C,groupSize:p,dtype:b?"f16":"f32"});for(let Y=0;Y<j;++Y){let te=(Y*ie+ge*L)*2,ve=Y*L*2;ee.set(Q.subarray(ve,ve+L*2),te)}}else qt({scalesBytes:ce,biasesBytes:Ee,out:ee,outFeatures:L,inFeatures:C,groupSize:p,dtype:b?"f16":"f32",dstElementOffset:ge*L*j*2});if(de[ge]=!0,++be===x.length){let Q;if(F)Q=N;else if(I&&Pe)Q=t.tensorFromTypedArray("float16",[ie,j],X),Q.scaleBiasLayout="out-group",Q.binaryBiasIsNegHalfScale=!0,Q.binaryScaleOnly=!0;else{if(I){J=b?Uint16Array:Float32Array,ee=new J(ie*j*2);for(let te=0;te<x.length;++te)if(k==="group-out"){let ve=Bt({scalesBytes:ae[te],biasesBytes:pe[te],outFeatures:L,inFeatures:C,groupSize:p,dtype:b?"f16":"f32"});for(let We=0;We<j;++We){let at=(We*ie+te*L)*2,je=We*L*2;ee.set(ve.subarray(je,je+L*2),at)}}else qt({scalesBytes:ae[te],biasesBytes:pe[te],out:ee,outFeatures:L,inFeatures:C,groupSize:p,dtype:b?"f16":"f32",dstElementOffset:te*L*j*2})}let Y=k==="group-out"?[j,ie,2]:[ie,j,2];Q=t.tensorFromTypedArray(b?"float16":"float32",Y,ee),Q.scaleBiasLayout=k,I&&(Q.binaryBiasIsNegHalfScale=!1)}if(B.bitsT=se,B.sbT=Q,R.denseF16){let Y=t.empty("float16",[C,ie],`${x[0]}.fused_dense_f16_kn`);await yr(t,{bitsT:se,sbT:Q,outT:Y,inFeatures:C,outFeatures:ie,bits:c,groupSize:p,outputLayout:"k-out"}),Y.denseLayout="k-out-vec4n",B.denseT=Y,B.denseLayout="k-out-vec4n"}ee=null,X=null,N=null,ae=null,pe=null}})})},H=(x,L)=>{W.tensor(x,async C=>{let B=Se(C);L(t.tensorFromTypedArray("float32",[B.length],B))})},M=(x,L)=>{a.has(x)?H(x,L):L(null)},O={},D=(x,L,C,B)=>{W.tensor(x,async R=>{let F=a.has(x.replace(/\.weight$/,".bias")),oe=t.caps().f16&&!F&&C%4==0&&B%4==0;if(!oe){let j=Se(R);L.weight=t.tensorFromTypedArray("float32",[j.length],j)}if(oe){let j=Ot(R,B,C);L.weightPackedKOutF16=t.tensorFromTypedArray("float16",[j.length],j)}})};O.x_embedder={},D("x_embedder.weight",O.x_embedder,h,_),M("x_embedder.bias",x=>{O.x_embedder.bias=x}),O.context_embedder={},D("context_embedder.weight",O.context_embedder,g,_),M("context_embedder.bias",x=>{O.context_embedder.bias=x}),O.time_text_embed={linear_1:{},linear_2:{}},H("time_guidance_embed.timestep_embedder.linear_1.weight",x=>{O.time_text_embed.linear_1.weight=x}),M("time_guidance_embed.timestep_embedder.linear_1.bias",x=>{O.time_text_embed.linear_1.bias=x}),H("time_guidance_embed.timestep_embedder.linear_2.weight",x=>{O.time_text_embed.linear_2.weight=x}),M("time_guidance_embed.timestep_embedder.linear_2.bias",x=>{O.time_text_embed.linear_2.bias=x}),O.double_stream_modulation_img={},H("double_stream_modulation_img.linear.weight",x=>{O.double_stream_modulation_img.weight=x}),M("double_stream_modulation_img.linear.bias",x=>{O.double_stream_modulation_img.bias=x}),O.double_stream_modulation_txt={},H("double_stream_modulation_txt.linear.weight",x=>{O.double_stream_modulation_txt.weight=x}),M("double_stream_modulation_txt.linear.bias",x=>{O.double_stream_modulation_txt.bias=x}),O.single_stream_modulation={},H("single_stream_modulation.linear.weight",x=>{O.single_stream_modulation.weight=x}),M("single_stream_modulation.linear.bias",x=>{O.single_stream_modulation.bias=x}),O.norm_out={},H("norm_out.linear.weight",x=>{O.norm_out.weight=x}),M("norm_out.linear.bias",x=>{O.norm_out.bias=x}),O.proj_out={},H("proj_out.weight",x=>{O.proj_out.weight=x}),M("proj_out.bias",x=>{O.proj_out.bias=x}),O.joint=[];for(let x=0;x<n;++x){let L=`transformer_blocks.${x}`,C={attn:{to_qkv:{},to_out_0:{},add_qkv:{},to_add_out:{}},ff:{linear_in:{},linear_out:{}},ff_context:{linear_in:{},linear_out:{}}};O.joint.push(C),U([`${L}.attn.to_q`,`${L}.attn.to_k`,`${L}.attn.to_v`],_,_,C.attn.to_qkv,{denseF16:A}),P(`${L}.attn.to_out.0`,_,_,C.attn.to_out_0,{denseF16:A}),U([`${L}.attn.add_q_proj`,`${L}.attn.add_k_proj`,`${L}.attn.add_v_proj`],_,_,C.attn.add_qkv,{denseF16:A}),P(`${L}.attn.to_add_out`,_,_,C.attn.to_add_out,{denseF16:A}),H(`${L}.attn.norm_q.weight`,B=>{C.attn.norm_q=B}),H(`${L}.attn.norm_k.weight`,B=>{C.attn.norm_k=B}),H(`${L}.attn.norm_added_q.weight`,B=>{C.attn.norm_added_q=B}),H(`${L}.attn.norm_added_k.weight`,B=>{C.attn.norm_added_k=B}),P(`${L}.ff.linear_in`,$*2,_,C.ff.linear_in,{denseF16:A}),P(`${L}.ff.linear_out`,_,$,C.ff.linear_out,{denseF16:A}),P(`${L}.ff_context.linear_in`,$*2,_,C.ff_context.linear_in,{denseF16:A}),P(`${L}.ff_context.linear_out`,_,$,C.ff_context.linear_out,{denseF16:A})}O.single=[];for(let x=0;x<l;++x){let L=`single_transformer_blocks.${x}`,C={attn:{to_qkv_mlp_proj:{},to_out:{}}};O.single.push(C),P(`${L}.attn.to_qkv_mlp_proj`,w,_,C.attn.to_qkv_mlp_proj,{denseF16:A}),P(`${L}.attn.to_out`,_,m,C.attn.to_out,{denseF16:A}),H(`${L}.attn.norm_q.weight`,B=>{C.attn.norm_q=B}),H(`${L}.attn.norm_k.weight`,B=>{C.attn.norm_k=B})}return await a.streamAll(W.onChunk,{concurrency:o,chunkMaxBytes:s,names:W.names(),onProgress:i,signal:u}),W.assertComplete(),new Xr({rt:t,config:{...r,inner_dim:_,mlp_inner:$,ts_channels:v,out_channels:y,bits:c,groupSize:p,quantSolver:d,fusedSingleOutRows:w,fusedSingleAttnOutInF:m},w:O})}getRopeTensors({textSeq:t,imageSeq:r,totalSeq:a,headDim:i,txtIds:o,imgIds:s}){let u=this.config.axes_dims_rope??[32,32,32,32],n=this.config.rope_theta??2e3,l=`${a}:${i}:${u.join(",")}:${n}:${kr(o)}:${kr(s)}`,_=this.ropeCache.get(l);if(_)return _;let c=new Float32Array((t+r)*4);c.set(o,0),c.set(s,t*4);let{cos:p,sin:d}=Uo(c,a,u,n);return _={cosT:this.rt.tensorFromTypedArray("float32",[a,i],p),sinT:this.rt.tensorFromTypedArray("float32",[a,i],d)},this.ropeCache.set(l,_),_}async forward({hiddenStatesT:t,encoderHiddenStatesT:r,timestep:a,imgIds:i,txtIds:o,scope:s=null}){let u=!s,n=s??_t(),l=ct(this.rt,n);try{let _=await this._forwardWithRuntime({hiddenStatesT:t,encoderHiddenStatesT:r,timestep:a,imgIds:i,txtIds:o},l);return u&&n.keep(_),_}finally{u&&n.destroy()}}async _forwardWithRuntime({hiddenStatesT:t,encoderHiddenStatesT:r,timestep:a,imgIds:i,txtIds:o},s){let u=this.config,n=this.w,l=u.inner_dim,_=u.num_attention_heads,c=u.attention_head_dim,p=u.mlp_inner,d=u.eps??1e-6,f=u.bits,b=u.groupSize,g=t.shape[0],h=r.shape[0],y=h+g,v=!!(f===1&&b===128&&s.caps().f16),S=!!(!v&&!vr(s)&&s.caps().subgroupMatrix&&(f===1||f===2)&&b===128),$=S&&s.caps().f16,w=f===2&&u.quantSolver==="ternary",m=s.caps().f16?"float16":"float32",T=Oo(m),I=S?Math.ceil(y/32)*32:y,E=Fo(a*1e3,u.ts_channels),k=s.tensorFromTypedArray("float32",[1,u.ts_channels],E),A=s.empty("float32",[1,l],"ts-h1");await $e(s,{aT:k,wT:n.time_text_embed.linear_1.weight,bT:n.time_text_embed.linear_1.bias,outT:A,M:1,inFeatures:u.ts_channels,outFeatures:l}),await $t(s,{xT:A,count:l});let W=s.empty("float32",[1,l],"temb");await $e(s,{aT:A,wT:n.time_text_embed.linear_2.weight,bT:n.time_text_embed.linear_2.bias,outT:W,M:1,inFeatures:l,outFeatures:l});let P=s.empty("float32",[1,l],"temb-silu");await s.copyBufferToBuffer({src:W.buffer,dst:P.buffer,byteLength:l*4}),await $t(s,{xT:P,count:l});let U=s.empty("float32",[1,l*6],"dbl-img-mod");await $e(s,{aT:P,wT:n.double_stream_modulation_img.weight,bT:n.double_stream_modulation_img.bias,outT:U,M:1,inFeatures:l,outFeatures:l*6});let H=s.empty("float32",[1,l*6],"dbl-txt-mod");await $e(s,{aT:P,wT:n.double_stream_modulation_txt.weight,bT:n.double_stream_modulation_txt.bias,outT:H,M:1,inFeatures:l,outFeatures:l*6});let M=s.empty("float32",[1,l*3],"single-mod");await $e(s,{aT:P,wT:n.single_stream_modulation.weight,bT:n.single_stream_modulation.bias,outT:M,M:1,inFeatures:l,outFeatures:l*3});let O=s.empty(m,[g,l],"hs");if(m==="float16"&&!n.x_embedder.bias&&n.x_embedder.weightPackedKOutF16){let K=t.dtype==="float16"?t:s.empty("float16",[g,u.in_channels],"hidden-states-f16");K!==t&&await ut(s,{xT:t,yT:K,count:g*u.in_channels}),await nt(s,{aT:K,wT:n.x_embedder.weightPackedKOutF16,outT:O,M:g,inFeatures:u.in_channels,outFeatures:l})}else await $e(s,{aT:t,wT:n.x_embedder.weight,bT:n.x_embedder.bias,outT:O,M:g,inFeatures:u.in_channels,outFeatures:l});let D=s.empty(m,[h,l],"ehs");if(m==="float16"&&!n.context_embedder.bias&&n.context_embedder.weightPackedKOutF16){let K=r.dtype==="float16"?r:s.empty("float16",[h,u.joint_attention_dim],"encoder-hidden-states-f16");K!==r&&await ut(s,{xT:r,yT:K,count:h*u.joint_attention_dim}),await nt(s,{aT:K,wT:n.context_embedder.weightPackedKOutF16,outT:D,M:h,inFeatures:u.joint_attention_dim,outFeatures:l})}else await $e(s,{aT:r,wT:n.context_embedder.weight,bT:n.context_embedder.bias,outT:D,M:h,inFeatures:u.joint_attention_dim,outFeatures:l});let{cosT:x,sinT:L}=this.getRopeTensors({textSeq:h,imageSeq:g,totalSeq:y,headDim:c,txtIds:o,imgIds:i}),C=s.empty(m,[g,l],"norm-img"),B=s.empty(m,[h,l],"norm-txt"),R=s.empty(m,[g,l*3],"qkv-img"),F=s.empty(m,[h,l*3],"qkv-txt"),oe=s.empty(m,[g,l],"vi"),j=s.empty(m,[h,l],"vt"),ie=s.empty(m,[y,l],"q-full"),de=s.empty(m,[y,l],"k-full"),be=s.empty(m,[y,l],"v-full"),se=s.empty(m,[y,l],"attn-full"),J=s.empty(m,[g,l],"o-img"),ee=s.empty(m,[h,l],"o-txt"),X=null,N=null,ae=()=>X??=s.empty(m,[g,p*2],"ff-pre-img"),pe=()=>N??=s.empty(m,[h,p*2],"ff-pre-txt"),Pe=s.empty(m,[g,p],"ff-post-img"),Ge=s.empty(m,[h,p],"ff-post-txt"),fe=s.empty(m,[g,l],"ff-out-img"),ge=s.empty(m,[h,l],"ff-out-txt"),Ce=xr(U,l),we=xr(H,l),Ve=Ho(M,l),ce=(K,q)=>({shiftT:K.t,scaleT:K.t,shiftOffset:K[`${q}ShiftOffset`],scaleOffset:K[`${q}ScaleOffset`]}),Ee=(K,q)=>({gateT:K.t,gateOffset:K[`${q}GateOffset`]}),Q=async({aT:K,q,M:ue,inFeatures:le})=>{S||f!==2||await _o(s,{aT:K,aQT:q.aQT,scaleAT:q.scaleAT,sumAT:q.sumAT,M:ue,inFeatures:le,groupSize:b})},Y=async({aT:K,q,bitsT:ue,sbT:le,denseT:ot,outT:Be,M:Oe,inFeatures:Me,outFeatures:qe,aRowOffset:or=0})=>{if(S){await Gt(s,{aT:K,bitsT:ue,sbT:le,outT:Be,M:Oe,inFeatures:Me,outFeatures:qe,bits:f,groupSize:b,useF16:$,assumeTernaryBias:w,aRowOffset:or,scaleBiasLayout:le.scaleBiasLayout??"out-group"});return}if(v&&or===0&&K.dtype==="float16"&&le.dtype==="float16"&&Be.dtype==="float16"&&(le.scaleBiasLayout??"out-group")==="out-group"&&Me%128==0){await po(s,{aT:K,bitsT:ue,sbT:le,outT:Be,M:Oe,inFeatures:Me,outFeatures:qe,assumeBiasNegHalfScale:!!le.binaryBiasIsNegHalfScale,scaleOnly:!!le.binaryScaleOnly});return}if(ot&&K.dtype==="float16"&&Be.dtype==="float16"){ot.denseLayout==="k-out-vec4n"?Oe>=128&&Me===l&&qe>=l*3?await ro(s,{aT:K,wT:ot,outT:Be,M:Oe,inFeatures:Me,outFeatures:qe}):await nt(s,{aT:K,wT:ot,outT:Be,M:Oe,inFeatures:Me,outFeatures:qe}):await bo(s,{aT:K,wT:ot,outT:Be,M:Oe,inFeatures:Me,outFeatures:qe});return}f===2&&q?await co(s,{aQT:q.aQT,scaleAT:q.scaleAT,sumAT:q.sumAT,bitsT:ue,sbT:le,outT:Be,M:Oe,inFeatures:Me,outFeatures:qe,bits:f,groupSize:b}):await fo(s,{aT:K,bitsT:ue,sbT:le,outT:Be,M:Oe,inFeatures:Me,outFeatures:qe,bits:f,groupSize:b})},te=f===2&&!S,ve=te?Fe(s,{M:g,inFeatures:l,groupSize:b}):null,We=te?Fe(s,{M:h,inFeatures:l,groupSize:b}):null,at=te?Fe(s,{M:g,inFeatures:l,groupSize:b}):null,je=te?Fe(s,{M:h,inFeatures:l,groupSize:b}):null,Kt=te?Fe(s,{M:g,inFeatures:p,groupSize:b}):null,Vt=te?Fe(s,{M:h,inFeatures:p,groupSize:b}):null;for(let K=0;K<u.num_layers;++K){let q=n.joint[K];if(await Ye(s,{xT:O,yT:C,rows:g,dim:l,eps:d,...ce(Ce,"msa")}),await Ye(s,{xT:D,yT:B,rows:h,dim:l,eps:d,...ce(we,"msa")}),q.attn.to_qkv.denseT||await Q({aT:C,q:ve,M:g,inFeatures:l}),q.attn.add_qkv.denseT||await Q({aT:B,q:We,M:h,inFeatures:l}),await Y({aT:C,q:ve,bitsT:q.attn.to_qkv.bitsT,sbT:q.attn.to_qkv.sbT,denseT:q.attn.to_qkv.denseT,outT:R,M:g,inFeatures:l,outFeatures:l*3}),await Y({aT:B,q:We,bitsT:q.attn.add_qkv.bitsT,sbT:q.attn.add_qkv.sbT,denseT:q.attn.add_qkv.denseT,outT:F,M:h,inFeatures:l,outFeatures:l*3}),await Xe(s,{srcT:F,wT:q.attn.norm_added_q,cosT:x,sinT:L,yT:ie,seq:h,heads:_,headDim:c,srcStride:l*3,srcStart:0,dstRowOffset:0,eps:d}),await Xe(s,{srcT:R,wT:q.attn.norm_q,cosT:x,sinT:L,yT:ie,seq:g,heads:_,headDim:c,srcStride:l*3,srcStart:0,dstRowOffset:h,eps:d}),await Xe(s,{srcT:F,wT:q.attn.norm_added_k,cosT:x,sinT:L,yT:de,seq:h,heads:_,headDim:c,srcStride:l*3,srcStart:l,dstRowOffset:0,eps:d}),await Xe(s,{srcT:R,wT:q.attn.norm_k,cosT:x,sinT:L,yT:de,seq:g,heads:_,headDim:c,srcStride:l*3,srcStart:l,dstRowOffset:h,eps:d}),await Lt(s,{srcT:R,dstT:oe,rows:g,srcStride:l*3,srcStart:2*l,dstStride:l,copyCols:l}),await Lt(s,{srcT:F,dstT:j,rows:h,srcStride:l*3,srcStart:2*l,dstStride:l,copyCols:l}),await Tr(s,{aT:j,bT:oe,outT:be,aElems:h*l,totalElems:y*l}),await kt(s,{qT:ie,kT:de,vT:be,outT:se,seq:y,qHeads:_,kvHeads:_,headDim:c,causal:!1}),S)await Y({aT:se,q:at,bitsT:q.attn.to_out_0.bitsT,sbT:q.attn.to_out_0.sbT,outT:J,M:g,inFeatures:l,outFeatures:l,aRowOffset:h}),await Y({aT:se,q:je,bitsT:q.attn.to_add_out.bitsT,sbT:q.attn.to_add_out.sbT,outT:ee,M:h,inFeatures:l,outFeatures:l});else{let ue=s.empty(m,[h,l],"attn-txt"),le=s.empty(m,[g,l],"attn-img");await s.copyBufferToBuffer({src:se.buffer,dst:ue.buffer,srcOffset:0,byteLength:h*l*T}),await s.copyBufferToBuffer({src:se.buffer,dst:le.buffer,srcOffset:h*l*T,byteLength:g*l*T}),q.attn.to_out_0.denseT||await Q({aT:le,q:at,M:g,inFeatures:l}),q.attn.to_add_out.denseT||await Q({aT:ue,q:je,M:h,inFeatures:l}),await Y({aT:le,q:at,bitsT:q.attn.to_out_0.bitsT,sbT:q.attn.to_out_0.sbT,denseT:q.attn.to_out_0.denseT,outT:J,M:g,inFeatures:l,outFeatures:l}),await Y({aT:ue,q:je,bitsT:q.attn.to_add_out.bitsT,sbT:q.attn.to_add_out.sbT,denseT:q.attn.to_add_out.denseT,outT:ee,M:h,inFeatures:l,outFeatures:l})}if(await st(s,{xT:O,addT:J,count:g*l,...Ee(Ce,"msa"),inner:l}),await st(s,{xT:D,addT:ee,count:h*l,...Ee(we,"msa"),inner:l}),await Ye(s,{xT:O,yT:C,rows:g,dim:l,eps:d,...ce(Ce,"mlp")}),await Ye(s,{xT:D,yT:B,rows:h,dim:l,eps:d,...ce(we,"mlp")}),q.ff.linear_in.denseT||await Q({aT:C,q:ve,M:g,inFeatures:l}),q.ff_context.linear_in.denseT||await Q({aT:B,q:We,M:h,inFeatures:l}),q.ff.linear_in.denseT?.denseLayout==="k-out-vec4n"&&C.dtype==="float16"&&Pe.dtype==="float16")await mr(s,{aT:C,wT:q.ff.linear_in.denseT,outT:Pe,M:g,inFeatures:l,innerFeatures:p});else{let ue=ae();await Y({aT:C,q:ve,bitsT:q.ff.linear_in.bitsT,sbT:q.ff.linear_in.sbT,denseT:q.ff.linear_in.denseT,outT:ue,M:g,inFeatures:l,outFeatures:p*2}),await hr(s,{xT:ue,yT:Pe,rows:g,mlpInner:p})}if(q.ff_context.linear_in.denseT?.denseLayout==="k-out-vec4n"&&B.dtype==="float16"&&Ge.dtype==="float16")await mr(s,{aT:B,wT:q.ff_context.linear_in.denseT,outT:Ge,M:h,inFeatures:l,innerFeatures:p});else{let ue=pe();await Y({aT:B,q:We,bitsT:q.ff_context.linear_in.bitsT,sbT:q.ff_context.linear_in.sbT,denseT:q.ff_context.linear_in.denseT,outT:ue,M:h,inFeatures:l,outFeatures:p*2}),await hr(s,{xT:ue,yT:Ge,rows:h,mlpInner:p})}q.ff.linear_out.denseT||await Q({aT:Pe,q:Kt,M:g,inFeatures:p}),q.ff_context.linear_out.denseT||await Q({aT:Ge,q:Vt,M:h,inFeatures:p}),await Y({aT:Pe,q:Kt,bitsT:q.ff.linear_out.bitsT,sbT:q.ff.linear_out.sbT,denseT:q.ff.linear_out.denseT,outT:fe,M:g,inFeatures:p,outFeatures:l}),await Y({aT:Ge,q:Vt,bitsT:q.ff_context.linear_out.bitsT,sbT:q.ff_context.linear_out.sbT,denseT:q.ff_context.linear_out.denseT,outT:ge,M:h,inFeatures:p,outFeatures:l}),await st(s,{xT:O,addT:fe,count:g*l,...Ee(Ce,"mlp"),inner:l}),await st(s,{xT:D,addT:ge,count:h*l,...Ee(we,"mlp"),inner:l})}let mt=s.empty(m,[y,l],"combined");await Tr(s,{aT:D,bT:O,outT:mt,aElems:h*l,totalElems:y*l});let St=s.empty(m,[I,l],"s-norm"),it=s.empty(m,[I,u.fusedSingleOutRows],"s-fused"),jt=s.empty(m,[y,l],"s-v"),Xt=s.empty(m,[y,l],"s-q-norm"),Yt=s.empty(m,[y,l],"s-k-norm"),Zt=s.empty(m,[y,l],"s-attn"),Qt=s.empty(m,[y,p],"s-mlp-post"),At=s.empty(m,[I,l+p],"s-cat"),Jt=s.empty(m,[I,l],"s-out"),er=te?Fe(s,{M:I,inFeatures:l,groupSize:b}):null,tr=te?Fe(s,{M:I,inFeatures:l+p,groupSize:b}):null;for(let K=0;K<u.num_single_layers;++K){let q=n.single[K];await Ye(s,{xT:mt,yT:St,rows:y,dim:l,eps:d,...ce(Ve,"msa")}),q.attn.to_qkv_mlp_proj.denseT||await Q({aT:St,q:er,M:I,inFeatures:l}),await Y({aT:St,q:er,bitsT:q.attn.to_qkv_mlp_proj.bitsT,sbT:q.attn.to_qkv_mlp_proj.sbT,denseT:q.attn.to_qkv_mlp_proj.denseT,outT:it,M:I,inFeatures:l,outFeatures:u.fusedSingleOutRows}),await Lt(s,{srcT:it,dstT:jt,rows:y,srcStride:u.fusedSingleOutRows,srcStart:2*l,dstStride:l,copyCols:l}),await Xe(s,{srcT:it,wT:q.attn.norm_q,cosT:x,sinT:L,yT:Xt,seq:y,heads:_,headDim:c,srcStride:u.fusedSingleOutRows,srcStart:0,eps:d}),await Xe(s,{srcT:it,wT:q.attn.norm_k,cosT:x,sinT:L,yT:Yt,seq:y,heads:_,headDim:c,srcStride:u.fusedSingleOutRows,srcStart:l,eps:d}),await kt(s,{qT:Xt,kT:Yt,vT:jt,outT:Zt,seq:y,qHeads:_,kvHeads:_,headDim:c,causal:!1}),await Ro(s,{srcT:it,yT:Qt,rows:y,srcStride:u.fusedSingleOutRows,srcStart:3*l,mlpInner:p}),await zo(s,{aT:Zt,bT:Qt,outT:At,rows:y,aCols:l,bCols:p}),q.attn.to_out.denseT||await Q({aT:At,q:tr,M:I,inFeatures:l+p}),await Y({aT:At,q:tr,bitsT:q.attn.to_out.bitsT,sbT:q.attn.to_out.sbT,denseT:q.attn.to_out.denseT,outT:Jt,M:I,inFeatures:l+p,outFeatures:l}),await st(s,{xT:mt,addT:Jt,count:y*l,...Ee(Ve,"msa"),inner:l})}let rr=s.empty(m,[g,l],"img-only");await s.copyBufferToBuffer({src:mt.buffer,dst:rr.buffer,srcOffset:h*l*T,byteLength:g*l*T});let ar=s.empty("float32",[g,l],"final-normed");await Go(s,{xT:rr,yT:ar,rows:g,dim:l,eps:d,tembT:W,normLinear:n.norm_out});let ir=s.empty("float32",[g,u.out_channels],"noise-pred");return await $e(s,{aT:ar,wT:n.proj_out.weight,bT:n.proj_out.bias,outT:ir,M:g,inFeatures:l,outFeatures:u.out_channels}),ir}};function Fo(e,t,r=1e4){let a=t/2,i=new Float32Array(t);for(let o=0;o<a;++o){let s=e*Math.exp(-Math.log(r)*o/a);i[o]=Math.cos(s),i[a+o]=Math.sin(s)}return i}function Uo(e,t,r,a){let i=r.length,o=0;for(let l of r)o+=l;let s=new Float32Array(t*o),u=new Float32Array(t*o),n=r.map(l=>{let _=l/2,c=new Float64Array(_);for(let p=0;p<_;++p)c[p]=1/a**(2*p/l);return c});for(let l=0;l<t;++l){let _=l*o,c=0;for(let p=0;p<i;++p){let d=e[l*i+p],f=n[p],b=r[p],g=b/2;for(let h=0;h<g;++h){let y=d*f[h],v=Math.fround(Math.cos(y)),S=Math.fround(Math.sin(y));s[_+c+2*h]=v,s[_+c+2*h+1]=v,u[_+c+2*h]=S,u[_+c+2*h+1]=S}c+=b}}return{cos:s,sin:u}}function kr(e){let t=2166136261;for(let r=0;r<e.length;++r)t^=Math.trunc(e[r])+2654435769+(r<<6)+(r>>>2)>>>0,t=Math.imul(t,16777619)>>>0;return t.toString(16)}function xr(e,t){return{t:e,msaShiftOffset:0,msaScaleOffset:t,msaGateOffset:2*t,mlpShiftOffset:3*t,mlpScaleOffset:4*t,mlpGateOffset:5*t}}function Ho(e,t){return{t:e,msaShiftOffset:0,msaScaleOffset:t,msaGateOffset:2*t}}async function Ye(e,{xT:t,yT:r,rows:a,dim:i,eps:o,shift:s,scale:u,shiftT:n=null,scaleT:l=null,shiftOffset:_=0,scaleOffset:c=0}){let p=t.dtype,d=r.dtype,f=Ae(p),b=Ae(d),g=`lnmod_d${i}_e${o}_${p}_${d}`,h=`${rt(p,d)}struct Params { rows: u32, shiftOffset: u32, scaleOffset: u32, _pad0: u32 };
+@group(0) @binding(0) var<storage, read>       x: array<${f}>;
+@group(0) @binding(1) var<storage, read>       shiftBuf: array<f32>;
+@group(0) @binding(2) var<storage, read>       scaleBuf: array<f32>;
+@group(0) @binding(3) var<storage, read_write> y: array<${b}>;
+@group(0) @binding(4) var<uniform>             params: Params;
+const DIM: u32 = ${i}u;
+const EPS: f32 = ${o};
+const WG: u32 = 64u;
+var<workgroup> partial: array<f32, 64>;
+var<workgroup> sum_acc: f32;
+fn red(tid: u32) -> f32 {
+  workgroupBarrier();
+  var stride: u32 = WG / 2u;
+  loop {
+    if (stride == 0u) { break; }
+    if (tid < stride) { partial[tid] = partial[tid] + partial[tid + stride]; }
+    stride = stride / 2u;
+    workgroupBarrier();
+  }
+  return partial[0];
+}
+@compute @workgroup_size(64, 1, 1)
+fn main(@builtin(workgroup_id) wg: vec3<u32>, @builtin(local_invocation_id) lid: vec3<u32>) {
+  let r = wg.x; if (r >= params.rows) { return; }
+  let tid = lid.x;
+  let base = r * DIM;
+  var s: f32 = 0.0;
+  for (var i: u32 = tid; i < DIM; i = i + WG) { s = s + ${me("x[base + i]",p)}; }
+  partial[tid] = s;
+  let mean = red(tid) / f32(DIM);
+  var sq: f32 = 0.0;
+  for (var i: u32 = tid; i < DIM; i = i + WG) {
+    let d = ${me("x[base + i]",p)} - mean;
+    sq = sq + d * d;
+  }
+  partial[tid] = sq;
+  let invStd = inverseSqrt(red(tid) / f32(DIM) + EPS);
+  for (var i: u32 = tid; i < DIM; i = i + WG) {
+    let normed_v = (${me("x[base + i]",p)} - mean) * invStd;
+    y[base + i] = ${dt("normed_v * (1.0 + scaleBuf[params.scaleOffset + i]) + shiftBuf[params.shiftOffset + i]",d)};
+  }
+}
+`,y=n??e.tensorFromTypedArray("float32",[i],s),v=l??e.tensorFromTypedArray("float32",[i],u),S=e.createUniformU32([a,_,c,0],"lnmod-params");await e.runProgram({name:"lnmod",source:h,cacheKey:g,bindings:[{tensor:t,type:"read-only-storage"},{tensor:y,type:"read-only-storage"},{tensor:v,type:"read-only-storage"},{tensor:r,type:"storage"},{buffer:S,type:"uniform"}],workgroups:[a,1,1]})}async function Tr(e,{aT:t,bT:r,outT:a,aElems:i,totalElems:o}){await lo(e,{aT:t,bT:r,outT:a,aElems:i,totalElems:o})}async function st(e,{xT:t,addT:r,count:a,gate:i,gateT:o=null,gateOffset:s=0,inner:u}){let n=t.dtype;if(n==="float16"&&r.dtype==="float16"&&a%4==0&&u%4==0&&s%4==0){let h=`gatedres_d${u}_${n}_v4`,y=o??e.tensorFromTypedArray("float32",[u],i),v=a/4,S=Math.ceil(v/64),$=Math.min(S,1024),w=Math.ceil(S/$),m=e.createUniformU32([v,u/4,$,s/4],"gatedres-v4-params");await e.runProgram({name:"gatedres",source:`enable f16;
+struct Params { countV4: u32, periodV4: u32, wgY: u32, gateOffsetV4: u32 };
+@group(0) @binding(0) var<storage, read_write> x: array<vec4<f16>>;
+@group(0) @binding(1) var<storage, read>       add: array<vec4<f16>>;
+@group(0) @binding(2) var<storage, read>       g: array<vec4<f32>>;
+@group(0) @binding(3) var<uniform>             params: Params;
+@compute @workgroup_size(64, 1, 1)
+fn main(@builtin(workgroup_id) wg: vec3<u32>, @builtin(local_invocation_id) lid: vec3<u32>) {
+  let wg_idx = wg.x + wg.y * params.wgY;
+  let i = wg_idx * 64u + lid.x;
+  if (i >= params.countV4) { return; }
+  let p = i % params.periodV4;
+  let xv = vec4<f32>(x[i]);
+  let av = vec4<f32>(add[i]);
+  let gv = g[params.gateOffsetV4 + p];
+  x[i] = vec4<f16>(xv + gv * av);
+}
+`,cacheKey:h,bindings:[{tensor:t,type:"storage"},{tensor:r,type:"read-only-storage"},{tensor:y,type:"read-only-storage"},{buffer:m,type:"uniform"}],workgroups:[$,w,1]});return}let l=Ae(n),_=`gatedres_d${u}_${n}`,c=`${rt(n)}struct Params { count: u32, period: u32, wgY: u32, gateOffset: u32 };
+@group(0) @binding(0) var<storage, read_write> x: array<${l}>;
+@group(0) @binding(1) var<storage, read>       add: array<${l}>;
+@group(0) @binding(2) var<storage, read>       g: array<f32>;
+@group(0) @binding(3) var<uniform>             params: Params;
+@compute @workgroup_size(64, 1, 1)
+fn main(@builtin(workgroup_id) wg: vec3<u32>, @builtin(local_invocation_id) lid: vec3<u32>) {
+  let wg_idx = wg.x + wg.y * params.wgY;
+  let i = wg_idx * 64u + lid.x;
+  if (i >= params.count) { return; }
+  let p = i % params.period;
+  x[i] = ${dt(`${me("x[i]",n)} + g[params.gateOffset + p] * ${me("add[i]",n)}`,n)};
+}
+`,p=o??e.tensorFromTypedArray("float32",[u],i),d=Math.ceil(a/64),f=Math.min(d,1024),b=Math.ceil(d/f),g=e.createUniformU32([a,u,f,s],"gatedres-params");await e.runProgram({name:"gatedres",source:c,cacheKey:_,bindings:[{tensor:t,type:"storage"},{tensor:r,type:"read-only-storage"},{tensor:p,type:"read-only-storage"},{buffer:g,type:"uniform"}],workgroups:[f,b,1]})}async function Lt(e,{srcT:t,dstT:r,rows:a,srcStride:i,srcStart:o,dstStride:s,copyCols:u}){let n=r.dtype;if(n==="float16"&&t.dtype==="float16"&&i%4==0&&o%4==0&&s%4==0&&u%4==0){let b=`slice_cols_${n}_v4`,g=new ArrayBuffer(32),h=new Uint32Array(g);h[0]=a,h[1]=u/4,h[2]=i/4,h[3]=o/4,h[4]=s/4,h[5]=0;let y=e.createUniformU32(new Uint32Array(g),"slice-v4-params");await e.runProgram({name:"slice_cols",source:`enable f16;
+struct Params { rows: u32, copyColsV4: u32, srcStrideV4: u32, srcStartV4: u32, dstStrideV4: u32, dstStartV4: u32, _pad0: u32, _pad1: u32 };
+@group(0) @binding(0) var<storage, read>       s: array<vec4<f16>>;
+@group(0) @binding(1) var<storage, read_write> d: array<vec4<f16>>;
+@group(0) @binding(2) var<uniform>             p: Params;
+@compute @workgroup_size(64, 1, 1)
+fn main(@builtin(workgroup_id) wg: vec3<u32>, @builtin(local_invocation_id) lid: vec3<u32>) {
+  let r = wg.x; if (r >= p.rows) { return; }
+  var i: u32 = lid.x;
+  loop {
+    if (i >= p.copyColsV4) { break; }
+    d[r * p.dstStrideV4 + p.dstStartV4 + i] = s[r * p.srcStrideV4 + p.srcStartV4 + i];
+    i = i + 64u;
+  }
+}
+`,cacheKey:b,bindings:[{tensor:t,type:"read-only-storage"},{tensor:r,type:"storage"},{buffer:y,type:"uniform"}],workgroups:[a,1,1]});return}let l=Ae(n),_=`slice_cols_${n}`,c=`${rt(n)}struct Params { rows: u32, copyCols: u32, srcStride: u32, srcStart: u32, dstStride: u32, dstStart: u32, _pad0: u32, _pad1: u32 };
+@group(0) @binding(0) var<storage, read>       s: array<${l}>;
+@group(0) @binding(1) var<storage, read_write> d: array<${l}>;
+@group(0) @binding(2) var<uniform>             p: Params;
+@compute @workgroup_size(64, 1, 1)
+fn main(@builtin(workgroup_id) wg: vec3<u32>, @builtin(local_invocation_id) lid: vec3<u32>) {
+  let r = wg.x; if (r >= p.rows) { return; }
+  var i: u32 = lid.x;
+  loop {
+    if (i >= p.copyCols) { break; }
+    d[r * p.dstStride + p.dstStart + i] = s[r * p.srcStride + p.srcStart + i];
+    i = i + 64u;
+  }
+}
+`,p=new ArrayBuffer(32),d=new Uint32Array(p);d[0]=a,d[1]=u,d[2]=i,d[3]=o,d[4]=s,d[5]=0;let f=e.createUniformU32(new Uint32Array(p),"slice-params");await e.runProgram({name:"slice_cols",source:c,cacheKey:_,bindings:[{tensor:t,type:"read-only-storage"},{tensor:r,type:"storage"},{buffer:f,type:"uniform"}],workgroups:[a,1,1]})}async function Ro(e,{srcT:t,yT:r,rows:a,srcStride:i,srcStart:o,mlpInner:s}){let u=t.dtype,n=r.dtype;if(u==="float16"&&n==="float16"&&i%4==0&&o%4==0&&s%4==0){let f=`swiglu_cols_${u}_${n}_v4`,b=e.createUniformU32([a,i/4,o/4,s/4],"swiglu-cols-v4-params");await e.runProgram({name:"swiglu",source:`enable f16;
+struct Params { rows: u32, srcStrideV4: u32, srcStartV4: u32, mlpInnerV4: u32 };
+@group(0) @binding(0) var<storage, read>       x: array<vec4<f16>>;
+@group(0) @binding(1) var<storage, read_write> y: array<vec4<f16>>;
+@group(0) @binding(2) var<uniform>             p: Params;
+@compute @workgroup_size(64, 1, 1)
+fn main(@builtin(workgroup_id) wg: vec3<u32>, @builtin(local_invocation_id) lid: vec3<u32>) {
+  let r = wg.x;
+  if (r >= p.rows) { return; }
+  let i = wg.y * 64u + lid.x;
+  if (i >= p.mlpInnerV4) { return; }
+  let base = r * p.srcStrideV4 + p.srcStartV4 + i;
+  let x1 = vec4<f32>(x[base]);
+  let x2 = vec4<f32>(x[base + p.mlpInnerV4]);
+  y[r * p.mlpInnerV4 + i] = vec4<f16>((x1 / (vec4<f32>(1.0) + exp(-x1))) * x2);
+}
+`,cacheKey:f,bindings:[{tensor:t,type:"read-only-storage"},{tensor:r,type:"storage"},{buffer:b,type:"uniform"}],workgroups:[a,Math.ceil(s/4/64),1]});return}let l=Ae(u),_=Ae(n),c=`swiglu_cols_${u}_${n}`,p=`${rt(u,n)}struct Params { rows: u32, srcStride: u32, srcStart: u32, mlpInner: u32 };
+@group(0) @binding(0) var<storage, read>       x: array<${l}>;
+@group(0) @binding(1) var<storage, read_write> y: array<${_}>;
+@group(0) @binding(2) var<uniform>             p: Params;
+@compute @workgroup_size(64, 1, 1)
+fn main(@builtin(workgroup_id) wg: vec3<u32>, @builtin(local_invocation_id) lid: vec3<u32>) {
+  let r = wg.x;
+  if (r >= p.rows) { return; }
+  let i = wg.y * 64u + lid.x;
+  if (i >= p.mlpInner) { return; }
+  let base = r * p.srcStride + p.srcStart + i;
+  let x1 = ${me("x[base]",u)};
+  let x2 = ${me("x[base + p.mlpInner]",u)};
+  y[r * p.mlpInner + i] = ${dt("(x1 / (1.0 + exp(-x1))) * x2",n)};
+}
+`,d=e.createUniformU32([a,i,o,s],"swiglu-cols-params");await e.runProgram({name:"swiglu",source:p,cacheKey:c,bindings:[{tensor:t,type:"read-only-storage"},{tensor:r,type:"storage"},{buffer:d,type:"uniform"}],workgroups:[a,Math.ceil(s/64),1]})}async function Xe(e,{srcT:t,wT:r,cosT:a,sinT:i,yT:o,seq:s,heads:u,headDim:n,srcStride:l,srcStart:_,dstRowOffset:c=0,eps:p}){if(n%2!=0)throw Error("rmsNormRopeFromColumns requires even headDim");let d=n/2;if(d>256)throw Error(`rmsNormRopeFromColumns headDim=${n} exceeds workgroup limit`);let f=t.dtype,b=r.dtype,g=o.dtype,h=Ae(f),y=Ae(b),v=Ae(g),S=`rmsrope_cols_hd${n}_${f}_${b}_${g}`,$=`${rt(f,b,g)}struct Params { seq: u32, heads: u32, srcStride: u32, srcStart: u32, dstRowOffset: u32, eps: f32, _pad0: u32, _pad1: u32 };
+@group(0) @binding(0) var<storage, read>       x: array<${h}>;
+@group(0) @binding(1) var<storage, read>       w: array<${y}>;
+@group(0) @binding(2) var<storage, read>       cosTbl: array<f32>;
+@group(0) @binding(3) var<storage, read>       sinTbl: array<f32>;
+@group(0) @binding(4) var<storage, read_write> y: array<${v}>;
+@group(0) @binding(5) var<uniform>             p: Params;
+
+const HEAD_DIM: u32 = ${n}u;
+const HALF_DIM: u32 = ${d}u;
+const WG:       u32 = ${d}u;
+
+var<workgroup> partial: array<f32, WG>;
+
+@compute @workgroup_size(WG, 1, 1)
+fn main(@builtin(workgroup_id) wg: vec3<u32>, @builtin(local_invocation_id) lid: vec3<u32>) {
+  let t = wg.x;
+  let h = wg.y;
+  if (t >= p.seq || h >= p.heads) { return; }
+  let tid = lid.x;
+  let srcBase = t * p.srcStride + p.srcStart + h * HEAD_DIM;
+
+  let a0 = ${me("x[srcBase + tid]",f)};
+  let a1 = ${me("x[srcBase + tid + HALF_DIM]",f)};
+  partial[tid] = a0 * a0 + a1 * a1;
+  workgroupBarrier();
+  var stride: u32 = WG / 2u;
+  loop {
+    if (stride == 0u) { break; }
+    if (tid < stride) {
+      partial[tid] = partial[tid] + partial[tid + stride];
+    }
+    stride = stride / 2u;
+    workgroupBarrier();
+  }
+  let normScale = inverseSqrt(partial[0] / f32(HEAD_DIM) + p.eps);
+
+  let idx = tid * 2u;
+  let xe = ${me("x[srcBase + idx]",f)} * normScale * ${me("w[idx]",b)};
+  let xo = ${me("x[srcBase + idx + 1u]",f)} * normScale * ${me("w[idx + 1u]",b)};
+  let dstT = p.dstRowOffset + t;
+  let tableBase = dstT * HEAD_DIM + idx;
+  let c = cosTbl[tableBase];
+  let s = sinTbl[tableBase];
+  let outBase = (dstT * p.heads + h) * HEAD_DIM;
+  y[outBase + idx] = ${dt("xe * c - xo * s",g)};
+  y[outBase + idx + 1u] = ${dt("xo * c + xe * s",g)};
+}
+`,w=new ArrayBuffer(32),m=new Uint32Array(w),T=new Float32Array(w);m[0]=s,m[1]=u,m[2]=l,m[3]=_,m[4]=c,T[5]=p;let I=e.createUniformU32(new Uint32Array(w),"rmsrope-cols-params");await e.runProgram({name:"rmsnorm_rope",source:$,cacheKey:S,bindings:[{tensor:t,type:"read-only-storage"},{tensor:r,type:"read-only-storage"},{tensor:a,type:"read-only-storage"},{tensor:i,type:"read-only-storage"},{tensor:o,type:"storage"},{buffer:I,type:"uniform"}],workgroups:[s,u,1]})}async function zo(e,{aT:t,bT:r,outT:a,rows:i,aCols:o,bCols:s}){let u=a.dtype;if(u==="float16"&&t.dtype==="float16"&&r.dtype==="float16"&&o%4==0&&s%4==0){let p=`row_concat_${u}_v4`,d=e.createUniformU32([i,o/4,s/4,0],"rowconcat-v4-params");await e.runProgram({name:"row_concat",source:`enable f16;
+struct Params { rows: u32, aColsV4: u32, bColsV4: u32, _pad0: u32 };
+@group(0) @binding(0) var<storage, read>       a: array<vec4<f16>>;
+@group(0) @binding(1) var<storage, read>       b: array<vec4<f16>>;
+@group(0) @binding(2) var<storage, read_write> o: array<vec4<f16>>;
+@group(0) @binding(3) var<uniform>             p: Params;
+@compute @workgroup_size(64, 1, 1)
+fn main(@builtin(workgroup_id) wg: vec3<u32>, @builtin(local_invocation_id) lid: vec3<u32>) {
+  let r = wg.x; if (r >= p.rows) { return; }
+  let outStride = p.aColsV4 + p.bColsV4;
+  var i: u32 = lid.x;
+  loop {
+    if (i >= p.aColsV4) { break; }
+    o[r * outStride + i] = a[r * p.aColsV4 + i];
+    i = i + 64u;
+  }
+  i = lid.x;
+  loop {
+    if (i >= p.bColsV4) { break; }
+    o[r * outStride + p.aColsV4 + i] = b[r * p.bColsV4 + i];
+    i = i + 64u;
+  }
+}
+`,cacheKey:p,bindings:[{tensor:t,type:"read-only-storage"},{tensor:r,type:"read-only-storage"},{tensor:a,type:"storage"},{buffer:d,type:"uniform"}],workgroups:[i,1,1]});return}let n=Ae(u),l=`row_concat_${u}`,_=`${rt(u)}struct Params { rows: u32, aCols: u32, bCols: u32, _pad0: u32 };
+@group(0) @binding(0) var<storage, read>       a: array<${n}>;
+@group(0) @binding(1) var<storage, read>       b: array<${n}>;
+@group(0) @binding(2) var<storage, read_write> o: array<${n}>;
+@group(0) @binding(3) var<uniform>             p: Params;
+@compute @workgroup_size(64, 1, 1)
+fn main(@builtin(workgroup_id) wg: vec3<u32>, @builtin(local_invocation_id) lid: vec3<u32>) {
+  let r = wg.x; if (r >= p.rows) { return; }
+  let outStride = p.aCols + p.bCols;
+  var i: u32 = lid.x;
+  loop {
+    if (i >= p.aCols) { break; }
+    o[r * outStride + i] = a[r * p.aCols + i];
+    i = i + 64u;
+  }
+  i = lid.x;
+  loop {
+    if (i >= p.bCols) { break; }
+    o[r * outStride + p.aCols + i] = b[r * p.bCols + i];
+    i = i + 64u;
+  }
+}
+`,c=e.createUniformU32([i,o,s,0],"rowconcat-params");await e.runProgram({name:"row_concat",source:_,cacheKey:l,bindings:[{tensor:t,type:"read-only-storage"},{tensor:r,type:"read-only-storage"},{tensor:a,type:"storage"},{buffer:c,type:"uniform"}],workgroups:[i,1,1]})}async function Go(e,{xT:t,yT:r,rows:a,dim:i,eps:o,tembT:s,normLinear:u}){let n=e.empty("float32",[1,i],"ada-silu");await e.copyBufferToBuffer({src:s.buffer,dst:n.buffer,byteLength:i*4}),await $t(e,{xT:n,count:i});let l=e.empty("float32",[1,2*i],"ada-proj");await $e(e,{aT:n,wT:u.weight,bT:u.bias,outT:l,M:1,inFeatures:i,outFeatures:2*i});let _=await e.readTensor(l),c=_.slice(0,i);await Ye(e,{xT:t,yT:r,rows:a,dim:i,eps:o,shift:_.slice(i,2*i),scale:c})}function G(e){return e==="float16"?"f16":"f32"}function Re(...e){return e.includes("float16")?`enable f16;
+`:""}function z(e,t){return t==="float16"?`f32(${e})`:e}function ze(e,t){return t==="float16"?`f16(${e})`:e}function No({inC:e,outC:t,H:r,W:a,kH:i,kW:o,pad:s,hasBias:u,inputDtype:n="float32",weightDtype:l="float32",biasDtype:_="float32",outputDtype:c="float32"}){let p=G(n),d=G(l),f=G(_),b=G(c);return`${Re(n,l,_,c)}struct Params { _pad0: u32, _pad1: u32, _pad2: u32, _pad3: u32 };
+@group(0) @binding(0) var<storage, read>       input: array<${p}>;
+@group(0) @binding(1) var<storage, read>       weight: array<${d}>;
+${u?`@group(0) @binding(2) var<storage, read>       bias: array<${f}>;
+`:""}@group(0) @binding(${u?3:2}) var<storage, read_write> output: array<${b}>;
+
+const IN_C: u32 = ${e}u;
+const OUT_C: u32 = ${t}u;
+const H: u32 = ${r}u;
+const W: u32 = ${a}u;
+const KH: i32 = ${i};
+const KW: i32 = ${o};
+const PAD: i32 = ${s};
+
+@compute @workgroup_size(8, 8, 1)
+fn main(@builtin(global_invocation_id) gid: vec3<u32>) {
+  let y = gid.x;
+  let x = gid.y;
+  let oc = gid.z;
+  if (y >= H || x >= W || oc >= OUT_C) { return; }
+
+  var acc: f32 = ${u?z("bias[oc]",_):"0.0"};
+  let oc_base = oc * IN_C * u32(KH * KW);
+  for (var ic: u32 = 0u; ic < IN_C; ic = ic + 1u) {
+    let ic_w_base = oc_base + ic * u32(KH * KW);
+    let ic_in_base = ic * H * W;
+    for (var kh: i32 = 0; kh < KH; kh = kh + 1) {
+      let iy: i32 = i32(y) + kh - PAD;
+      if (iy < 0 || iy >= i32(H)) { continue; }
+      for (var kw: i32 = 0; kw < KW; kw = kw + 1) {
+        let ix: i32 = i32(x) + kw - PAD;
+        if (ix < 0 || ix >= i32(W)) { continue; }
+        let w_idx = ic_w_base + u32(kh) * u32(KW) + u32(kw);
+        let in_idx = ic_in_base + u32(iy) * W + u32(ix);
+        acc = acc + ${z("input[in_idx]",n)} * ${z("weight[w_idx]",l)};
+      }
+    }
+  }
+  output[oc * H * W + y * W + x] = ${ze("acc",c)};
+}
+`}function Ko({inC:e,outC:t,H:r,W:a,kH:i,kW:o,pad:s,hasBias:u,outTile:n=4,inputDtype:l="float32",weightDtype:_="float32",biasDtype:c="float32",outputDtype:p="float32"}){if(t%n!==0)throw Error("outC must be divisible by outTile");let d=G(l),f=G(_),b=G(c),g=G(p),h=[],y=[],v=[];for(let S=0;S<n;++S)h.push(`  var acc${S}: f32 = ${u?z(`bias[oc_base + ${S}u]`,c):"0.0"};`),y.push(`        acc${S} = acc${S} + in_val * ${z(`weight[(oc_base + ${S}u) * OC_STRIDE + k_offset]`,_)};`),v.push(`  output[(oc_base + ${S}u) * H * W + y * W + x] = ${ze(`acc${S}`,p)};`);return`${Re(l,_,c,p)}struct Params { _pad0: u32, _pad1: u32, _pad2: u32, _pad3: u32 };
+@group(0) @binding(0) var<storage, read>       input: array<${d}>;
+@group(0) @binding(1) var<storage, read>       weight: array<${f}>;
+${u?`@group(0) @binding(2) var<storage, read>       bias: array<${b}>;
+`:""}@group(0) @binding(${u?3:2}) var<storage, read_write> output: array<${g}>;
+
+const IN_C: u32 = ${e}u;
+const OUT_C: u32 = ${t}u;
+const H: u32 = ${r}u;
+const W: u32 = ${a}u;
+const KH: i32 = ${i};
+const KW: i32 = ${o};
+const PAD: i32 = ${s};
+const OUT_TILE: u32 = ${n}u;
+const K_PER_IC: u32 = ${i*o}u;
+const OC_STRIDE: u32 = ${e*i*o}u;
+
+@compute @workgroup_size(8, 8, 1)
+fn main(@builtin(global_invocation_id) gid: vec3<u32>) {
+  let y = gid.x;
+  let x = gid.y;
+  let oc_base = gid.z * OUT_TILE;
+  if (y >= H || x >= W || oc_base >= OUT_C) { return; }
+
+${h.join(`
+`)}
+  for (var ic: u32 = 0u; ic < IN_C; ic = ic + 1u) {
+    let ic_in_base = ic * H * W;
+    for (var kh: i32 = 0; kh < KH; kh = kh + 1) {
+      let iy: i32 = i32(y) + kh - PAD;
+      if (iy < 0 || iy >= i32(H)) { continue; }
+      for (var kw: i32 = 0; kw < KW; kw = kw + 1) {
+        let ix: i32 = i32(x) + kw - PAD;
+        if (ix < 0 || ix >= i32(W)) { continue; }
+        let k_offset = ic * K_PER_IC + u32(kh) * u32(KW) + u32(kw);
+        let in_val = ${z("input[ic_in_base + u32(iy) * W + u32(ix)]",l)};
+${y.join(`
+`)}
+      }
+    }
+  }
+${v.join(`
+`)}
+}
+`}function Vo({inC:e,outC:t,H:r,W:a,hasBias:i,outTile:o=16,icTile:s=16,inputDtype:u="float32",weightDtype:n="float32",biasDtype:l="float32",outputDtype:_="float32"}){if(t%o!==0)throw Error("outC must be divisible by outTile");let c=n==="float16"?"float16":"float32",p=c==="float16"?2:4;if(o*s*9*p>16*1024)throw Error("conv shared-weight tile exceeds 16KB workgroup storage");let d=G(u),f=G(n),b=G(c),g=G(l),h=G(_),y=o*s*9,v=[],S=[],$=[];for(let w=0;w<o;++w){v.push(`  var acc${w}: f32 = ${i?z(`bias[oc_base + ${w}u]`,l):"0.0"};`);for(let m=0;m<9;++m)S.push(`      acc${w} = acc${w} + v${m} * ${z(`wTile[${w*s*9}u + li * 9u + ${m}u]`,c)};`);$.push(`    output[(oc_base + ${w}u) * H * W + y * W + x] = ${ze(`acc${w}`,_)};`)}return`${Re(u,n,l,_)}struct Params { _pad0: u32, _pad1: u32, _pad2: u32, _pad3: u32 };
+@group(0) @binding(0) var<storage, read>       input: array<${d}>;
+@group(0) @binding(1) var<storage, read>       weight: array<${f}>;
+${i?`@group(0) @binding(2) var<storage, read>       bias: array<${g}>;
+`:""}@group(0) @binding(${i?3:2}) var<storage, read_write> output: array<${h}>;
+
+const IN_C: u32 = ${e}u;
+const OUT_C: u32 = ${t}u;
+const H: u32 = ${r}u;
+const W: u32 = ${a}u;
+const OUT_TILE: u32 = ${o}u;
+const IC_TILE: u32 = ${s}u;
+const OC_STRIDE: u32 = ${e*9}u;
+const WTILE_ELEMS: u32 = ${y}u;
+
+var<workgroup> wTile: array<${b}, ${y}>;
+
+fn loadInput(ic: u32, iy: i32, ix: i32) -> f32 {
+  if (iy < 0 || iy >= i32(H) || ix < 0 || ix >= i32(W)) {
+    return 0.0;
+  }
+  return ${z("input[ic * H * W + u32(iy) * W + u32(ix)]",u)};
+}
+
+@compute @workgroup_size(8, 8, 1)
+fn main(
+  @builtin(global_invocation_id) gid: vec3<u32>,
+  @builtin(local_invocation_index) local_idx: u32
+) {
+  let y = gid.x;
+  let x = gid.y;
+  let oc_base = gid.z * OUT_TILE;
+  let isActive = y < H && x < W && oc_base < OUT_C;
+
+${v.join(`
+`)}
+  for (var ic_base: u32 = 0u; ic_base < IN_C; ic_base = ic_base + IC_TILE) {
+    let tile_count = min(IC_TILE, IN_C - ic_base);
+    for (var wi: u32 = local_idx; wi < WTILE_ELEMS; wi = wi + 64u) {
+      let tile_oc = wi / (IC_TILE * 9u);
+      let rem0 = wi - tile_oc * IC_TILE * 9u;
+      let tile_ic = rem0 / 9u;
+      let tap = rem0 - tile_ic * 9u;
+      if (tile_ic < tile_count) {
+        wTile[wi] = weight[(oc_base + tile_oc) * OC_STRIDE + (ic_base + tile_ic) * 9u + tap];
+      } else {
+        wTile[wi] = ${c==="float16"?"0.0h":"0.0"};
+      }
+    }
+    workgroupBarrier();
+
+    for (var li: u32 = 0u; li < tile_count; li = li + 1u) {
+      let ic = ic_base + li;
+      var v0: f32;
+      var v1: f32;
+      var v2: f32;
+      var v3: f32;
+      var v4: f32;
+      var v5: f32;
+      var v6: f32;
+      var v7: f32;
+      var v8: f32;
+      if (y > 0u && y + 1u < H && x > 0u && x + 1u < W) {
+        let base0 = ic * H * W + (y - 1u) * W + x - 1u;
+        let base1 = base0 + W;
+        let base2 = base1 + W;
+        v0 = ${z("input[base0]",u)};
+        v1 = ${z("input[base0 + 1u]",u)};
+        v2 = ${z("input[base0 + 2u]",u)};
+        v3 = ${z("input[base1]",u)};
+        v4 = ${z("input[base1 + 1u]",u)};
+        v5 = ${z("input[base1 + 2u]",u)};
+        v6 = ${z("input[base2]",u)};
+        v7 = ${z("input[base2 + 1u]",u)};
+        v8 = ${z("input[base2 + 2u]",u)};
+      } else {
+        let iy = i32(y);
+        let ix = i32(x);
+        v0 = loadInput(ic, iy - 1, ix - 1);
+        v1 = loadInput(ic, iy - 1, ix);
+        v2 = loadInput(ic, iy - 1, ix + 1);
+        v3 = loadInput(ic, iy, ix - 1);
+        v4 = loadInput(ic, iy, ix);
+        v5 = loadInput(ic, iy, ix + 1);
+        v6 = loadInput(ic, iy + 1, ix - 1);
+        v7 = loadInput(ic, iy + 1, ix);
+        v8 = loadInput(ic, iy + 1, ix + 1);
+      }
+${S.join(`
+`)}
+    }
+    workgroupBarrier();
+  }
+  if (isActive) {
+${$.join(`
+`)}
+  }
+}
+`}function jo({inC:e,outC:t,H:r,W:a,hasBias:i,hasAdd:o=!1,inputDtype:s="float16",weightDtype:u="float16",biasDtype:n="float16",outputDtype:l="float16",residualDtype:_="float16",mTile:c=32,nTile:p=16,rowPerThread:d=4,kTile:f=64,accumDtype:b="float16"}){if(s!=="float16"||u!=="float16"||l!=="float16")throw Error("packed 3x3 conv requires f16 input/weight/output");if(o&&_!=="float16")throw Error("packed 3x3 conv fused add requires f16 residual");if(t%4!=0||f%4!=0||c%d!==0)throw Error("invalid packed 3x3 conv tile");if(b!=="float16"&&b!=="float32")throw Error("invalid packed 3x3 conv accum dtype");let g=p,h=c/d,y=g*h;if(y>256)throw Error("packed 3x3 conv exceeds max workgroup invocations");let v=e*9,S=f/4;if((c*S+f*g)*8>16*1024)throw Error("packed 3x3 conv exceeds 16KB workgroup storage");let $=t%(p*4)==0,w=v%f===0,m=b==="float32",T=m?"f32":"f16",I=G(n),E=i?3:2,k=E+ +!!o,A=O=>i?m?`f32(bias[n_group * 4u + ${O}u])`:`bias[n_group * 4u + ${O}u]`:m?"0.0":"0.0h",W=Array.from({length:d},(O,D)=>`  var acc${D}: vec4<${T}> = vec4<${T}>(${A(0)}, ${A(1)}, ${A(2)}, ${A(3)});`).join(`
+`),P=Array.from({length:d},(O,D)=>m?`        let a${D} = aTile[(row_base + ${D}u) * K_TILE_V4 + kv];
+        acc${D} = acc${D} + vec4<f32>(b0) * f32(a${D}.x) + vec4<f32>(b1) * f32(a${D}.y) + vec4<f32>(b2) * f32(a${D}.z) + vec4<f32>(b3) * f32(a${D}.w);`:`        let a${D} = aTile[(row_base + ${D}u) * K_TILE_V4 + kv];
+        acc${D} = acc${D} + b0 * a${D}.x + b1 * a${D}.y + b2 * a${D}.z + b3 * a${D}.w;`).join(`
+`),U=Array.from({length:d},(O,D)=>{let x=m?`vec4<f16>(acc${D})`:`acc${D}`;return`  if (${$?`m_base + ${D}u < HW`:`n_group < OUT_C_V4 && m_base + ${D}u < HW`}) {
+    let m${D} = m_base + ${D}u;
+    let oc${D} = n_group * 4u;
+    let v${D} = ${x};
+    let idx${D}0 = (oc${D} + 0u) * HW + m${D};
+    let idx${D}1 = (oc${D} + 1u) * HW + m${D};
+    let idx${D}2 = (oc${D} + 2u) * HW + m${D};
+    let idx${D}3 = (oc${D} + 3u) * HW + m${D};
+    output[idx${D}0] = v${D}.x${o?` + residual[idx${D}0]`:""};
+    output[idx${D}1] = v${D}.y${o?` + residual[idx${D}1]`:""};
+    output[idx${D}2] = v${D}.z${o?` + residual[idx${D}2]`:""};
+    output[idx${D}3] = v${D}.w${o?` + residual[idx${D}3]`:""};
+  }`}).join(`
+`),H=w&&$?"      bTile[i] = weight[(k_base + kk) * OUT_C_V4 + bg];":w?`      if (bg < OUT_C_V4) { bTile[i] = weight[(k_base + kk) * OUT_C_V4 + bg]; }
+      else { bTile[i] = vec4<f16>(0.0h); }`:$?`      if (k_base + kk < K_TOTAL) { bTile[i] = weight[(k_base + kk) * OUT_C_V4 + bg]; }
+      else { bTile[i] = vec4<f16>(0.0h); }`:`      if (k_base + kk < K_TOTAL && bg < OUT_C_V4) { bTile[i] = weight[(k_base + kk) * OUT_C_V4 + bg]; }
+      else { bTile[i] = vec4<f16>(0.0h); }`,M=w?`fn loadIm2col(m: u32, k: u32) -> f16 {
+  if (m >= HW) { return 0.0h; }
+  let ic = k / 9u;
+  let tap = k - ic * 9u;
+  let kh = tap / 3u;
+  let kw = tap - kh * 3u;
+  let y = m / W;
+  let x = m - y * W;
+  if (y > 0u && y + 1u < H && x > 0u && x + 1u < W) {
+    return input[ic * HW + (y + kh - 1u) * W + (x + kw - 1u)];
+  }
+  let iy = i32(y) + i32(kh) - 1;
+  let ix = i32(x) + i32(kw) - 1;
+  if (iy < 0 || iy >= i32(H) || ix < 0 || ix >= i32(W)) { return 0.0h; }
+  return input[ic * HW + u32(iy) * W + u32(ix)];
+}`:`fn loadIm2col(m: u32, k: u32) -> f16 {
+  if (m >= HW || k >= K_TOTAL) { return 0.0h; }
+  let ic = k / 9u;
+  let tap = k - ic * 9u;
+  let kh = tap / 3u;
+  let kw = tap - kh * 3u;
+  let y = m / W;
+  let x = m - y * W;
+  if (y > 0u && y + 1u < H && x > 0u && x + 1u < W) {
+    return input[ic * HW + (y + kh - 1u) * W + (x + kw - 1u)];
+  }
+  let iy = i32(y) + i32(kh) - 1;
+  let ix = i32(x) + i32(kw) - 1;
+  if (iy < 0 || iy >= i32(H) || ix < 0 || ix >= i32(W)) { return 0.0h; }
+  return input[ic * HW + u32(iy) * W + u32(ix)];
+}`;return`enable f16;
+@group(0) @binding(0) var<storage, read>       input: array<f16>;
+@group(0) @binding(1) var<storage, read>       weight: array<vec4<f16>>;
+${i?`@group(0) @binding(2) var<storage, read>       bias: array<${I}>;
+`:""}${o?`@group(0) @binding(${E}) var<storage, read>       residual: array<f16>;
+`:""}@group(0) @binding(${k}) var<storage, read_write> output: array<f16>;
+
+const OUT_C_V4: u32 = ${t/4}u;
+const H: u32 = ${r}u;
+const W: u32 = ${a}u;
+const HW: u32 = ${r*a}u;
+const K_TOTAL: u32 = ${v}u;
+const M_TILE: u32 = ${c}u;
+const WG_X: u32 = ${g}u;
+const ROW_PER_THREAD: u32 = ${d}u;
+const K_TILE: u32 = ${f}u;
+const K_TILE_V4: u32 = ${S}u;
+const WG: u32 = ${y}u;
+
+var<workgroup> aTile: array<vec4<f16>, ${c*S}>;
+var<workgroup> bTile: array<vec4<f16>, ${f*g}>;
+
+${M}
+
+@compute @workgroup_size(${g}, ${h}, 1)
+fn main(@builtin(workgroup_id) wg: vec3<u32>, @builtin(local_invocation_id) lid: vec3<u32>) {
+  let lx = lid.x;
+  let ly = lid.y;
+  let tid = ly * WG_X + lx;
+  let row_base = ly * ROW_PER_THREAD;
+  let m_base = wg.y * M_TILE + row_base;
+  let n_group = wg.x * WG_X + lx;
+${W}
+  for (var k_base: u32 = 0u; k_base < K_TOTAL; k_base = k_base + K_TILE) {
+    for (var i: u32 = tid; i < ${c*S}u; i = i + WG) {
+      let tm = i / K_TILE_V4;
+      let kv = i - tm * K_TILE_V4;
+      let m = wg.y * M_TILE + tm;
+      let k0 = k_base + kv * 4u;
+      aTile[i] = vec4<f16>(loadIm2col(m, k0 + 0u), loadIm2col(m, k0 + 1u), loadIm2col(m, k0 + 2u), loadIm2col(m, k0 + 3u));
+    }
+    for (var i: u32 = tid; i < ${f*g}u; i = i + WG) {
+      let kk = i / WG_X;
+      let nx = i - kk * WG_X;
+      let bg = wg.x * WG_X + nx;
+${H}
+    }
+    workgroupBarrier();
+    if (m_base < HW) {
+      for (var kv: u32 = 0u; kv < K_TILE_V4; kv = kv + 1u) {
+        let b0 = bTile[(kv * 4u + 0u) * WG_X + lx];
+        let b1 = bTile[(kv * 4u + 1u) * WG_X + lx];
+        let b2 = bTile[(kv * 4u + 2u) * WG_X + lx];
+        let b3 = bTile[(kv * 4u + 3u) * WG_X + lx];
+${P}
+      }
+    }
+    workgroupBarrier();
+  }
+${U}
+}
+`}function Xo({inC:e,outC:t,H:r,W:a,hasBias:i,hasAdd:o=!1,inputDtype:s="float16",weightDtype:u="float16",biasDtype:n="float16",outputDtype:l="float16",residualDtype:_="float16",mTile:c=32,nTile:p=8,kTile:d=8}){if(s!=="float16"||u!=="float16"||l!=="float16")throw Error("winograd 3x3 conv requires f16 input/weight/output");if(o&&_!=="float16")throw Error("winograd 3x3 conv fused add requires f16 residual");if(t%4!=0||e%d!==0)throw Error("invalid winograd 3x3 conv shape");let f=p,b=c,g=f*b;if(g>256)throw Error("winograd 3x3 conv exceeds max workgroup invocations");let h=c*d*16,y=d*16*p;if(h*2+y*8>16*1024)throw Error("winograd 3x3 conv exceeds 16KB workgroup storage");let v=Math.ceil(a/2),S=v*Math.ceil(r/2),$=t%(p*4)==0,w=G(n),m=i?3:2,T=m+ +!!o,I=i?`vec4<f16>(
+    ${n==="float16"?"bias[n_group * 4u + 0u]":"f16(bias[n_group * 4u + 0u])"},
+    ${n==="float16"?"bias[n_group * 4u + 1u]":"f16(bias[n_group * 4u + 1u])"},
+    ${n==="float16"?"bias[n_group * 4u + 2u]":"f16(bias[n_group * 4u + 2u])"},
+    ${n==="float16"?"bias[n_group * 4u + 3u]":"f16(bias[n_group * 4u + 3u])"})`:"vec4<f16>(0.0h)",E=Array.from({length:16},(P,U)=>`  var acc${U}: vec4<f16> = vec4<f16>(0.0h);`).join(`
+`),k=Array.from({length:16},(P,U)=>`        acc${U} = fma(bTile[(kk * 16u + ${U}u) * WG_X + lx], vec4<f16>(aTile[(tile_local * K_TILE + kk) * 16u + ${U}u]), acc${U});`).join(`
+`),A=$?"if (tile_global >= TILES_TOTAL) { return; }":"if (tile_global >= TILES_TOTAL || n_group >= OUT_C_V4) { return; }",W=$?"      bTile[i] = weight[(ic * 16u + alpha) * OUT_C_V4 + bg];":`      if (bg < OUT_C_V4) { bTile[i] = weight[(ic * 16u + alpha) * OUT_C_V4 + bg]; }
+      else { bTile[i] = vec4<f16>(0.0h); }`;return`enable f16;
+@group(0) @binding(0) var<storage, read>       input: array<f16>;
+@group(0) @binding(1) var<storage, read>       weight: array<vec4<f16>>;
+${i?`@group(0) @binding(2) var<storage, read>       bias: array<${w}>;
+`:""}${o?`@group(0) @binding(${m}) var<storage, read>       residual: array<f16>;
+`:""}@group(0) @binding(${T}) var<storage, read_write> output: array<f16>;
+
+const IN_C: u32 = ${e}u;
+const OUT_C_V4: u32 = ${t/4}u;
+const H: u32 = ${r}u;
+const W: u32 = ${a}u;
+const HW: u32 = ${r*a}u;
+const TILES_X: u32 = ${v}u;
+const TILES_TOTAL: u32 = ${S}u;
+const M_TILE: u32 = ${c}u;
+const WG_X: u32 = ${f}u;
+const WG_Y: u32 = ${b}u;
+const WG: u32 = ${g}u;
+const K_TILE: u32 = ${d}u;
+
+var<workgroup> aTile: array<f16, ${h}>;
+var<workgroup> bTile: array<vec4<f16>, ${y}>;
+
+fn loadOne(ic: u32, y: i32, x: i32) -> f16 {
+  if (y < 0 || y >= i32(H) || x < 0 || x >= i32(W)) {
+    return 0.0h;
+  }
+  return input[ic * HW + u32(y) * W + u32(x)];
+}
+
+fn writeInputTransform(tile_global: u32, ic: u32, dst: u32) {
+  if (tile_global >= TILES_TOTAL || ic >= IN_C) {
+    for (var i: u32 = 0u; i < 16u; i = i + 1u) {
+      aTile[dst + i] = 0.0h;
+    }
+    return;
+  }
+
+  let ty = tile_global / TILES_X;
+  let tx = tile_global - ty * TILES_X;
+  let oy = i32(ty * 2u);
+  let ox = i32(tx * 2u);
+
+  let d00 = loadOne(ic, oy - 1, ox - 1);
+  let d01 = loadOne(ic, oy - 1, ox + 0);
+  let d02 = loadOne(ic, oy - 1, ox + 1);
+  let d03 = loadOne(ic, oy - 1, ox + 2);
+  let d10 = loadOne(ic, oy + 0, ox - 1);
+  let d11 = loadOne(ic, oy + 0, ox + 0);
+  let d12 = loadOne(ic, oy + 0, ox + 1);
+  let d13 = loadOne(ic, oy + 0, ox + 2);
+  let d20 = loadOne(ic, oy + 1, ox - 1);
+  let d21 = loadOne(ic, oy + 1, ox + 0);
+  let d22 = loadOne(ic, oy + 1, ox + 1);
+  let d23 = loadOne(ic, oy + 1, ox + 2);
+  let d30 = loadOne(ic, oy + 2, ox - 1);
+  let d31 = loadOne(ic, oy + 2, ox + 0);
+  let d32 = loadOne(ic, oy + 2, ox + 1);
+  let d33 = loadOne(ic, oy + 2, ox + 2);
+
+  let t00 = d00 - d20;
+  let t01 = d01 - d21;
+  let t02 = d02 - d22;
+  let t03 = d03 - d23;
+  let t10 = d10 + d20;
+  let t11 = d11 + d21;
+  let t12 = d12 + d22;
+  let t13 = d13 + d23;
+  let t20 = d20 - d10;
+  let t21 = d21 - d11;
+  let t22 = d22 - d12;
+  let t23 = d23 - d13;
+  let t30 = d10 - d30;
+  let t31 = d11 - d31;
+  let t32 = d12 - d32;
+  let t33 = d13 - d33;
+
+  aTile[dst + 0u] = t00 - t02;
+  aTile[dst + 1u] = t01 + t02;
+  aTile[dst + 2u] = t02 - t01;
+  aTile[dst + 3u] = t01 - t03;
+  aTile[dst + 4u] = t10 - t12;
+  aTile[dst + 5u] = t11 + t12;
+  aTile[dst + 6u] = t12 - t11;
+  aTile[dst + 7u] = t11 - t13;
+  aTile[dst + 8u] = t20 - t22;
+  aTile[dst + 9u] = t21 + t22;
+  aTile[dst + 10u] = t22 - t21;
+  aTile[dst + 11u] = t21 - t23;
+  aTile[dst + 12u] = t30 - t32;
+  aTile[dst + 13u] = t31 + t32;
+  aTile[dst + 14u] = t32 - t31;
+  aTile[dst + 15u] = t31 - t33;
+}
+
+fn storeOutput(tile_global: u32, n_group: u32,
+  y00: vec4<f16>, y01: vec4<f16>, y10: vec4<f16>, y11: vec4<f16>) {
+  ${A}
+  let ty = tile_global / TILES_X;
+  let tx = tile_global - ty * TILES_X;
+  let oy = ty * 2u;
+  let ox = tx * 2u;
+  let oc = n_group * 4u;
+
+  if (oy < H && ox < W) {
+    let idx = oy * W + ox;
+    output[(oc + 0u) * HW + idx] = y00.x${o?" + residual[(oc + 0u) * HW + idx]":""};
+    output[(oc + 1u) * HW + idx] = y00.y${o?" + residual[(oc + 1u) * HW + idx]":""};
+    output[(oc + 2u) * HW + idx] = y00.z${o?" + residual[(oc + 2u) * HW + idx]":""};
+    output[(oc + 3u) * HW + idx] = y00.w${o?" + residual[(oc + 3u) * HW + idx]":""};
+  }
+  if (oy < H && ox + 1u < W) {
+    let idx = oy * W + ox + 1u;
+    output[(oc + 0u) * HW + idx] = y01.x${o?" + residual[(oc + 0u) * HW + idx]":""};
+    output[(oc + 1u) * HW + idx] = y01.y${o?" + residual[(oc + 1u) * HW + idx]":""};
+    output[(oc + 2u) * HW + idx] = y01.z${o?" + residual[(oc + 2u) * HW + idx]":""};
+    output[(oc + 3u) * HW + idx] = y01.w${o?" + residual[(oc + 3u) * HW + idx]":""};
+  }
+  if (oy + 1u < H && ox < W) {
+    let idx = (oy + 1u) * W + ox;
+    output[(oc + 0u) * HW + idx] = y10.x${o?" + residual[(oc + 0u) * HW + idx]":""};
+    output[(oc + 1u) * HW + idx] = y10.y${o?" + residual[(oc + 1u) * HW + idx]":""};
+    output[(oc + 2u) * HW + idx] = y10.z${o?" + residual[(oc + 2u) * HW + idx]":""};
+    output[(oc + 3u) * HW + idx] = y10.w${o?" + residual[(oc + 3u) * HW + idx]":""};
+  }
+  if (oy + 1u < H && ox + 1u < W) {
+    let idx = (oy + 1u) * W + ox + 1u;
+    output[(oc + 0u) * HW + idx] = y11.x${o?" + residual[(oc + 0u) * HW + idx]":""};
+    output[(oc + 1u) * HW + idx] = y11.y${o?" + residual[(oc + 1u) * HW + idx]":""};
+    output[(oc + 2u) * HW + idx] = y11.z${o?" + residual[(oc + 2u) * HW + idx]":""};
+    output[(oc + 3u) * HW + idx] = y11.w${o?" + residual[(oc + 3u) * HW + idx]":""};
+  }
+}
+
+@compute @workgroup_size(${f}, ${b}, 1)
+fn main(@builtin(workgroup_id) wg: vec3<u32>, @builtin(local_invocation_id) lid: vec3<u32>) {
+  let lx = lid.x;
+  let ly = lid.y;
+  let tid = ly * WG_X + lx;
+  let tile_local = ly;
+  let tile_global = wg.y * M_TILE + tile_local;
+  let n_group = wg.x * WG_X + lx;
+${E}
+
+  for (var k_base: u32 = 0u; k_base < IN_C; k_base = k_base + K_TILE) {
+    for (var i: u32 = tid; i < ${c*d}u; i = i + WG) {
+      let tm = i / K_TILE;
+      let kk = i - tm * K_TILE;
+      writeInputTransform(wg.y * M_TILE + tm, k_base + kk, i * 16u);
+    }
+    for (var i: u32 = tid; i < ${y}u; i = i + WG) {
+      let ka = i / WG_X;
+      let nx = i - ka * WG_X;
+      let kk = ka / 16u;
+      let alpha = ka - kk * 16u;
+      let ic = k_base + kk;
+      let bg = wg.x * WG_X + nx;
+${W}
+    }
+    workgroupBarrier();
+
+    if (${$?"tile_global < TILES_TOTAL":"tile_global < TILES_TOTAL && n_group < OUT_C_V4"}) {
+      for (var kk: u32 = 0u; kk < K_TILE; kk = kk + 1u) {
+${k}
+      }
+    }
+    workgroupBarrier();
+  }
+
+  let b = ${I};
+  let s00 = acc0 + acc4 + acc8;
+  let s01 = acc1 + acc5 + acc9;
+  let s02 = acc2 + acc6 + acc10;
+  let s03 = acc3 + acc7 + acc11;
+  let s10 = acc4 - acc8 - acc12;
+  let s11 = acc5 - acc9 - acc13;
+  let s12 = acc6 - acc10 - acc14;
+  let s13 = acc7 - acc11 - acc15;
+  storeOutput(tile_global, n_group, s00 + s01 + s02 + b, s01 - s02 - s03 + b, s10 + s11 + s12 + b, s11 - s12 - s13 + b);
+}
+`}function Yo({inC:e,outC:t}){if(t%4!=0)throw Error("winograd weight transform requires outC divisible by 4");return`enable f16;
+@group(0) @binding(0) var<storage, read>       weight: array<f16>;
+@group(0) @binding(1) var<storage, read_write> packed: array<f16>;
+
+const IN_C: u32 = ${e}u;
+const OUT_C: u32 = ${t}u;
+
+fn store(ic: u32, oc: u32, alpha: u32, value: f32) {
+  packed[(ic * 16u + alpha) * OUT_C + oc] = f16(value);
+}
+
+@compute @workgroup_size(16, 16, 1)
+fn main(@builtin(global_invocation_id) gid: vec3<u32>) {
+  let oc = gid.x;
+  let ic = gid.y;
+  if (oc >= OUT_C || ic >= IN_C) { return; }
+
+  let base = oc * IN_C * 9u + ic * 9u;
+  let g00 = f32(weight[base + 0u]);
+  let g01 = f32(weight[base + 1u]);
+  let g02 = f32(weight[base + 2u]);
+  let g10 = f32(weight[base + 3u]);
+  let g11 = f32(weight[base + 4u]);
+  let g12 = f32(weight[base + 5u]);
+  let g20 = f32(weight[base + 6u]);
+  let g21 = f32(weight[base + 7u]);
+  let g22 = f32(weight[base + 8u]);
+
+  let t00 = g00;
+  let t01 = g01;
+  let t02 = g02;
+  let t10 = 0.5 * (g00 + g10 + g20);
+  let t11 = 0.5 * (g01 + g11 + g21);
+  let t12 = 0.5 * (g02 + g12 + g22);
+  let t20 = 0.5 * (g00 - g10 + g20);
+  let t21 = 0.5 * (g01 - g11 + g21);
+  let t22 = 0.5 * (g02 - g12 + g22);
+  let t30 = g20;
+  let t31 = g21;
+  let t32 = g22;
+
+  store(ic, oc, 0u, t00);
+  store(ic, oc, 1u, 0.5 * (t00 + t01 + t02));
+  store(ic, oc, 2u, 0.5 * (t00 - t01 + t02));
+  store(ic, oc, 3u, t02);
+  store(ic, oc, 4u, t10);
+  store(ic, oc, 5u, 0.5 * (t10 + t11 + t12));
+  store(ic, oc, 6u, 0.5 * (t10 - t11 + t12));
+  store(ic, oc, 7u, t12);
+  store(ic, oc, 8u, t20);
+  store(ic, oc, 9u, 0.5 * (t20 + t21 + t22));
+  store(ic, oc, 10u, 0.5 * (t20 - t21 + t22));
+  store(ic, oc, 11u, t22);
+  store(ic, oc, 12u, t30);
+  store(ic, oc, 13u, 0.5 * (t30 + t31 + t32));
+  store(ic, oc, 14u, 0.5 * (t30 - t31 + t32));
+  store(ic, oc, 15u, t32);
+}
+`}function Zo({inC:e,outC:t,H:r,W:a,hasBias:i,hasAdd:o=!1,inputDtype:s="float16",weightDtype:u="float16",biasDtype:n="float16",outputDtype:l="float16",residualDtype:_="float16",mTile:c=112,nTile:p=16,rowPerThread:d=14,kTile:f=32,accumDtype:b="float16"}){if(s!=="float16"||u!=="float16"||l!=="float16")throw Error("packed 1x1 conv requires f16 input/weight/output");if(o&&_!=="float16")throw Error("packed 1x1 conv fused add requires f16 residual");if(t%4!=0||e%4!=0||f%4!=0||c%d!==0)throw Error("invalid packed 1x1 conv tile");if(b!=="float16"&&b!=="float32")throw Error("invalid packed 1x1 conv accum dtype");let g=p,h=c/d,y=g*h;if(y>256)throw Error("packed 1x1 conv exceeds max workgroup invocations");let v=f/4;if((c*v+f*g)*8>16*1024)throw Error("packed 1x1 conv exceeds 16KB workgroup storage");let S=t%(p*4)==0,$=e%f===0,w=b==="float32",m=w?"f32":"f16",T=G(n),I=i?3:2,E=I+ +!!o,k=H=>i?w?`f32(bias[n_group * 4u + ${H}u])`:`bias[n_group * 4u + ${H}u]`:w?"0.0":"0.0h",A=Array.from({length:d},(H,M)=>`  var acc${M}: vec4<${m}> = vec4<${m}>(${k(0)}, ${k(1)}, ${k(2)}, ${k(3)});`).join(`
+`),W=Array.from({length:d},(H,M)=>w?`        let a${M} = aTile[(row_base + ${M}u) * K_TILE_V4 + kv];
+        acc${M} = fma(vec4<f32>(b3), vec4<f32>(f32(a${M}.w)), fma(vec4<f32>(b2), vec4<f32>(f32(a${M}.z)), fma(vec4<f32>(b1), vec4<f32>(f32(a${M}.y)), fma(vec4<f32>(b0), vec4<f32>(f32(a${M}.x)), acc${M}))));`:`        let a${M} = aTile[(row_base + ${M}u) * K_TILE_V4 + kv];
+        acc${M} = fma(b3, vec4<f16>(a${M}.w), fma(b2, vec4<f16>(a${M}.z), fma(b1, vec4<f16>(a${M}.y), fma(b0, vec4<f16>(a${M}.x), acc${M}))));`).join(`
+`),P=Array.from({length:d},(H,M)=>{let O=w?`vec4<f16>(acc${M})`:`acc${M}`;return`  if (${S?`m_base + ${M}u < HW`:`n_group < OUT_C_V4 && m_base + ${M}u < HW`}) {
+    let m${M} = m_base + ${M}u;
+    let oc${M} = n_group * 4u;
+    let v${M} = ${O};
+    let idx${M}0 = (oc${M} + 0u) * HW + m${M};
+    let idx${M}1 = (oc${M} + 1u) * HW + m${M};
+    let idx${M}2 = (oc${M} + 2u) * HW + m${M};
+    let idx${M}3 = (oc${M} + 3u) * HW + m${M};
+    output[idx${M}0] = v${M}.x${o?` + residual[idx${M}0]`:""};
+    output[idx${M}1] = v${M}.y${o?` + residual[idx${M}1]`:""};
+    output[idx${M}2] = v${M}.z${o?` + residual[idx${M}2]`:""};
+    output[idx${M}3] = v${M}.w${o?` + residual[idx${M}3]`:""};
+  }`}).join(`
+`),U=$&&S?"      bTile[i] = weight[(k_base + kk) * OUT_C_V4 + bg];":$?`      if (bg < OUT_C_V4) { bTile[i] = weight[(k_base + kk) * OUT_C_V4 + bg]; }
+      else { bTile[i] = vec4<f16>(0.0h); }`:S?`      if (k_base + kk < IN_C) { bTile[i] = weight[(k_base + kk) * OUT_C_V4 + bg]; }
+      else { bTile[i] = vec4<f16>(0.0h); }`:`      if (k_base + kk < IN_C && bg < OUT_C_V4) { bTile[i] = weight[(k_base + kk) * OUT_C_V4 + bg]; }
+      else { bTile[i] = vec4<f16>(0.0h); }`;return`enable f16;
+@group(0) @binding(0) var<storage, read>       input: array<f16>;
+@group(0) @binding(1) var<storage, read>       weight: array<vec4<f16>>;
+${i?`@group(0) @binding(2) var<storage, read>       bias: array<${T}>;
+`:""}${o?`@group(0) @binding(${I}) var<storage, read>       residual: array<f16>;
+`:""}@group(0) @binding(${E}) var<storage, read_write> output: array<f16>;
+
+const IN_C: u32 = ${e}u;
+const OUT_C_V4: u32 = ${t/4}u;
+const H: u32 = ${r}u;
+const W: u32 = ${a}u;
+const HW: u32 = ${r*a}u;
+const K_TILE: u32 = ${f}u;
+const K_TILE_V4: u32 = ${v}u;
+const WG_X: u32 = ${g}u;
+const ROW_PER_THREAD: u32 = ${d}u;
+const WG: u32 = ${y}u;
+
+var<workgroup> aTile: array<vec4<f16>, ${c*v}>;
+var<workgroup> bTile: array<vec4<f16>, ${f*g}>;
+
+fn loadInput(m: u32, ic: u32) -> f16 {
+  if (m >= HW || ic >= IN_C) { return 0.0h; }
+  return input[ic * HW + m];
+}
+
+@compute @workgroup_size(${g}, ${h}, 1)
+fn main(@builtin(workgroup_id) wg: vec3<u32>, @builtin(local_invocation_id) lid: vec3<u32>) {
+  let lx = lid.x;
+  let ly = lid.y;
+  let tid = ly * WG_X + lx;
+  let row_base = ly * ROW_PER_THREAD;
+  let m_base = wg.y * ${c}u + row_base;
+  let n_group = wg.x * WG_X + lx;
+${A}
+  for (var k_base: u32 = 0u; k_base < IN_C; k_base = k_base + K_TILE) {
+    for (var i: u32 = tid; i < ${c*v}u; i = i + WG) {
+      let tm = i / K_TILE_V4;
+      let kv = i - tm * K_TILE_V4;
+      let m = wg.y * ${c}u + tm;
+      let k0 = k_base + kv * 4u;
+      aTile[i] = vec4<f16>(loadInput(m, k0 + 0u), loadInput(m, k0 + 1u), loadInput(m, k0 + 2u), loadInput(m, k0 + 3u));
+    }
+    for (var i: u32 = tid; i < ${f*g}u; i = i + WG) {
+      let kk = i / WG_X;
+      let nx = i - kk * WG_X;
+      let bg = wg.x * WG_X + nx;
+${U}
+    }
+    workgroupBarrier();
+    if (m_base < HW) {
+      for (var kv: u32 = 0u; kv < K_TILE_V4; kv = kv + 1u) {
+        let b0 = bTile[(kv * 4u + 0u) * WG_X + lx];
+        let b1 = bTile[(kv * 4u + 1u) * WG_X + lx];
+        let b2 = bTile[(kv * 4u + 2u) * WG_X + lx];
+        let b3 = bTile[(kv * 4u + 3u) * WG_X + lx];
+${W}
+      }
+    }
+    workgroupBarrier();
+  }
+${P}
+}
+`}function Qo({inC:e,outC:t,H:r,W:a,hasBias:i,outTile:o=16,icTile:s=16,inputDtype:u="float16",weightDtype:n="float16",biasDtype:l="float16",outputDtype:_="float16",phaseY:c=0,phaseX:p=0}){if(t%o!==0)throw Error("outC must be divisible by outTile");if(c!==0&&c!==1||p!==0&&p!==1)throw Error("upsample conv phase must be 0 or 1");let d=n==="float16"?"float16":"float32",f=d==="float16"?2:4;if(o*s*4*f>16*1024)throw Error("upsample conv shared-weight tile exceeds 16KB workgroup storage");let b=G(u),g=G(n),h=G(d),y=G(l),v=G(_),S=r*2,$=a*2,w=o*s*4,m=c===0?-1:0,T=c===0?0:1,I=p===0?-1:0,E=p===0?0:1,k=[],A=[],W=[];for(let P=0;P<o;++P)k.push(`  var acc${P}: f32 = ${i?z(`bias[oc_base + ${P}u]`,l):"0.0"};`),A.push(`      acc${P} = acc${P} + v0 * ${z(`wTile[${P*s*4}u + li * 4u + 0u]`,d)}
+          + v1 * ${z(`wTile[${P*s*4}u + li * 4u + 1u]`,d)}
+          + v2 * ${z(`wTile[${P*s*4}u + li * 4u + 2u]`,d)}
+          + v3 * ${z(`wTile[${P*s*4}u + li * 4u + 3u]`,d)};`),W.push(`    output[(oc_base + ${P}u) * OUT_HW + out_y * OUT_W + out_x] = ${ze(`acc${P}`,_)};`);return`${Re(u,n,l,_)}struct Params { _pad0: u32, _pad1: u32, _pad2: u32, _pad3: u32 };
+@group(0) @binding(0) var<storage, read>       input: array<${b}>;
+@group(0) @binding(1) var<storage, read>       weight: array<${g}>;
+${i?`@group(0) @binding(2) var<storage, read>       bias: array<${y}>;
+`:""}@group(0) @binding(${i?3:2}) var<storage, read_write> output: array<${v}>;
+
+const IN_C: u32 = ${e}u;
+const OUT_C: u32 = ${t}u;
+const H: u32 = ${r}u;
+const W: u32 = ${a}u;
+const OUT_H: u32 = ${S}u;
+const OUT_W: u32 = ${$}u;
+const LOW_HW: u32 = ${r*a}u;
+const OUT_HW: u32 = ${S*$}u;
+const OUT_TILE: u32 = ${o}u;
+const IC_TILE: u32 = ${s}u;
+const WTILE_ELEMS: u32 = ${w}u;
+const PHASE_Y: u32 = ${c}u;
+const PHASE_X: u32 = ${p}u;
+
+var<workgroup> wTile: array<${h}, ${w}>;
+
+fn loadInput(ic: u32, iy: i32, ix: i32) -> f32 {
+  if (iy < 0 || iy >= i32(H) || ix < 0 || ix >= i32(W)) {
+    return 0.0;
+  }
+  return ${z("input[ic * LOW_HW + u32(iy) * W + u32(ix)]",u)};
+}
+
+@compute @workgroup_size(8, 8, 1)
+fn main(
+  @builtin(global_invocation_id) gid: vec3<u32>,
+  @builtin(local_invocation_index) local_idx: u32
+) {
+  let y = gid.x;
+  let x = gid.y;
+  let oc_base = gid.z * OUT_TILE;
+  let isActive = y < H && x < W && oc_base < OUT_C;
+  let out_y = y * 2u + PHASE_Y;
+  let out_x = x * 2u + PHASE_X;
+
+${k.join(`
+`)}
+  for (var ic_base: u32 = 0u; ic_base < IN_C; ic_base = ic_base + IC_TILE) {
+    let tile_count = min(IC_TILE, IN_C - ic_base);
+    for (var wi: u32 = local_idx; wi < WTILE_ELEMS; wi = wi + 64u) {
+      let tile_oc = wi / (IC_TILE * 4u);
+      let rem0 = wi - tile_oc * IC_TILE * 4u;
+      let tile_ic = rem0 / 4u;
+      let tap = rem0 - tile_ic * 4u;
+      if (tile_ic < tile_count) {
+        wTile[wi] = weight[(oc_base + tile_oc) * IN_C * 4u + (ic_base + tile_ic) * 4u + tap];
+      } else {
+        wTile[wi] = ${d==="float16"?"0.0h":"0.0"};
+      }
+    }
+    workgroupBarrier();
+
+    for (var li: u32 = 0u; li < tile_count; li = li + 1u) {
+      let ic = ic_base + li;
+      let v0 = select(0.0, loadInput(ic, i32(y) + ${m}, i32(x) + ${I}), isActive);
+      let v1 = select(0.0, loadInput(ic, i32(y) + ${m}, i32(x) + ${E}), isActive);
+      let v2 = select(0.0, loadInput(ic, i32(y) + ${T}, i32(x) + ${I}), isActive);
+      let v3 = select(0.0, loadInput(ic, i32(y) + ${T}, i32(x) + ${E}), isActive);
+${A.join(`
+`)}
+    }
+    workgroupBarrier();
+  }
+
+  if (isActive) {
+${W.join(`
+`)}
+  }
+}
+`}function Jo({inC:e,outC:t,H:r,W:a,hasBias:i,inputDtype:o="float16",weightDtype:s="float16",biasDtype:u="float16",outputDtype:n="float16",phaseY:l=0,phaseX:_=0,mTile:c=88,nTile:p=16,rowPerThread:d=11,kTile:f=32,accumDtype:b="float16"}){if(o!=="float16"||s!=="float16"||n!=="float16")throw Error("packed upsample conv currently requires f16 input, weights, and output");if(t%4!=0||f%4!=0||e*4%f!=0)throw Error("packed upsample conv requires outC divisible by 4 and K divisible by kTile");if(c%d!==0)throw Error("packed upsample conv requires mTile divisible by rowPerThread");if(l!==0&&l!==1||_!==0&&_!==1)throw Error("upsample conv phase must be 0 or 1");let g=p,h=c/d,y=g*h;if(y>256)throw Error("packed upsample conv exceeds max workgroup invocations");let v=e*4,S=f/4;if((c*S+f*g)*8>16*1024)throw Error("packed upsample conv exceeds 16KB workgroup storage");let $=t%(p*4)==0;if(b!=="float16"&&b!=="float32")throw Error("packed upsample conv accumulation must be f16 or f32");let w=r*2,m=a*2,T=w*m,I=g*4,E=b==="float32",k=E?"f32":"f16",A=G(u),W=l===0?-1:0,P=l===0?0:1,U=_===0?-1:0,H=_===0?0:1,M=i?E?`vec4<f32>(
+    ${z("bias[n_group * 4u + 0u]",u)},
+    ${z("bias[n_group * 4u + 1u]",u)},
+    ${z("bias[n_group * 4u + 2u]",u)},
+    ${z("bias[n_group * 4u + 3u]",u)})`:`vec4<f16>(
+    ${u==="float16"?"bias[n_group * 4u + 0u]":"f16(bias[n_group * 4u + 0u])"},
+    ${u==="float16"?"bias[n_group * 4u + 1u]":"f16(bias[n_group * 4u + 1u])"},
+    ${u==="float16"?"bias[n_group * 4u + 2u]":"f16(bias[n_group * 4u + 2u])"},
+    ${u==="float16"?"bias[n_group * 4u + 3u]":"f16(bias[n_group * 4u + 3u])"})`:E?"vec4<f32>(0.0)":"vec4<f16>(0.0h)",O=Array.from({length:d},(R,F)=>`  var acc${F}: vec4<${k}> = ${M};`).join(`
+`),D=Array.from({length:d},(R,F)=>E?`        let a_vec${F} = aTile[(row_base + ${F}u) * K_TILE_V4 + kv];
+        acc${F} = fma(vec4<f32>(b3), vec4<f32>(f32(a_vec${F}.w)), fma(vec4<f32>(b2), vec4<f32>(f32(a_vec${F}.z)), fma(vec4<f32>(b1), vec4<f32>(f32(a_vec${F}.y)), fma(vec4<f32>(b0), vec4<f32>(f32(a_vec${F}.x)), acc${F}))));`:`        let a_vec${F} = aTile[(row_base + ${F}u) * K_TILE_V4 + kv];
+        acc${F} = fma(b3, vec4<f16>(a_vec${F}.w), fma(b2, vec4<f16>(a_vec${F}.z), fma(b1, vec4<f16>(a_vec${F}.y), fma(b0, vec4<f16>(a_vec${F}.x), acc${F}))));`).join(`
+`),x=Array.from({length:d},(R,F)=>`  storeVec4(m_base + ${F}u, n_group, ${E?`vec4<f16>(acc${F})`:`acc${F}`});`).join(`
+`),L=$?"if (m_global >= LOW_HW) {":"if (m_global >= LOW_HW || n_group >= N_V4) {",C=$?"      bTile[i] = weight[(k_base + kk) * N_V4 + b_group];":`      if (b_group < N_V4) {
+        bTile[i] = weight[(k_base + kk) * N_V4 + b_group];
+      } else {
+        bTile[i] = vec4<f16>(0.0h);
+      }`,B=i?3:2;return`enable f16;
+@group(0) @binding(0) var<storage, read>       input: array<f16>;
+@group(0) @binding(1) var<storage, read>       weight: array<vec4<f16>>;
+${i?`@group(0) @binding(2) var<storage, read>       bias: array<${A}>;
+`:""}@group(0) @binding(${B}) var<storage, read_write> output: array<f16>;
+
+const IN_C: u32 = ${e}u;
+const OUT_C: u32 = ${t}u;
+const H: u32 = ${r}u;
+const W: u32 = ${a}u;
+const LOW_HW: u32 = ${r*a}u;
+const OUT_H: u32 = ${w}u;
+const OUT_W: u32 = ${m}u;
+const OUT_HW: u32 = ${T}u;
+const K_TOTAL: u32 = ${v}u;
+const K_V4: u32 = ${e}u;
+const N_V4: u32 = ${t/4}u;
+const M_TILE: u32 = ${c}u;
+const WG_X: u32 = ${g}u;
+const WG_Y: u32 = ${h}u;
+const ROW_PER_THREAD: u32 = ${d}u;
+const OUT_TILE: u32 = ${I}u;
+const K_TILE: u32 = ${f}u;
+const K_TILE_V4: u32 = ${S}u;
+const WG: u32 = ${y}u;
+const PHASE_Y: u32 = ${l}u;
+const PHASE_X: u32 = ${_}u;
+
+var<workgroup> aTile: array<vec4<f16>, ${c*S}>;
+var<workgroup> bTile: array<vec4<f16>, ${f*g}>;
+
+fn loadOne(ic: u32, iy: i32, ix: i32) -> f16 {
+  if (iy < 0 || iy >= i32(H) || ix < 0 || ix >= i32(W)) {
+    return 0.0h;
+  }
+  return input[ic * LOW_HW + u32(iy) * W + u32(ix)];
+}
+
+fn loadInputVec(m_global: u32, ic: u32) -> vec4<f16> {
+  if (m_global >= LOW_HW || ic >= IN_C) {
+    return vec4<f16>(0.0h);
+  }
+  let y = m_global / W;
+  let x = m_global - y * W;
+  return vec4<f16>(
+    loadOne(ic, i32(y) + ${W}, i32(x) + ${U}),
+    loadOne(ic, i32(y) + ${W}, i32(x) + ${H}),
+    loadOne(ic, i32(y) + ${P}, i32(x) + ${U}),
+    loadOne(ic, i32(y) + ${P}, i32(x) + ${H})
+  );
+}
+
+fn storeVec4(m_global: u32, n_group: u32, v: vec4<f16>) {
+  ${L}
+    return;
+  }
+  let y = m_global / W;
+  let x = m_global - y * W;
+  let out_y = y * 2u + PHASE_Y;
+  let out_x = x * 2u + PHASE_X;
+  let out_pos = out_y * OUT_W + out_x;
+  let oc = n_group * 4u;
+  output[(oc + 0u) * OUT_HW + out_pos] = v.x;
+  output[(oc + 1u) * OUT_HW + out_pos] = v.y;
+  output[(oc + 2u) * OUT_HW + out_pos] = v.z;
+  output[(oc + 3u) * OUT_HW + out_pos] = v.w;
+}
+
+@compute @workgroup_size(${g}, ${h}, 1)
+fn main(@builtin(workgroup_id) wg: vec3<u32>, @builtin(local_invocation_id) lid: vec3<u32>) {
+  let lx = lid.x;
+  let ly = lid.y;
+  let tid = ly * WG_X + lx;
+  let row_base = ly * ROW_PER_THREAD;
+  let m_base = wg.y * M_TILE + row_base;
+  let n_group = wg.x * WG_X + lx;
+${O}
+
+  for (var k_base: u32 = 0u; k_base < K_TOTAL; k_base = k_base + K_TILE) {
+    let k_base_v4 = k_base / 4u;
+    for (var i: u32 = tid; i < ${c*S}u; i = i + WG) {
+      let tm = i / K_TILE_V4;
+      let kv = i - tm * K_TILE_V4;
+      let gm = wg.y * M_TILE + tm;
+      aTile[i] = loadInputVec(gm, k_base_v4 + kv);
+    }
+    for (var i: u32 = tid; i < ${f*g}u; i = i + WG) {
+      let kk = i / WG_X;
+      let nx = i - kk * WG_X;
+      let b_group = wg.x * WG_X + nx;
+${C}
+    }
+    workgroupBarrier();
+
+    if (m_base < LOW_HW) {
+      for (var kv: u32 = 0u; kv < K_TILE_V4; kv = kv + 1u) {
+        let b0 = bTile[(kv * 4u + 0u) * WG_X + lx];
+        let b1 = bTile[(kv * 4u + 1u) * WG_X + lx];
+        let b2 = bTile[(kv * 4u + 2u) * WG_X + lx];
+        let b3 = bTile[(kv * 4u + 3u) * WG_X + lx];
+${D}
+      }
+    }
+    workgroupBarrier();
+  }
+
+${x}
+}
+`}function es({inC:e,outC:t,H:r,W:a,hasBias:i,hasAdd:o=!1,inputDtype:s="float32",weightDtype:u="float32",biasDtype:n="float32",outputDtype:l="float32",residualDtype:_="float32",tileM:c=32,tileN:p=64,k:d=3,pad:f=1,weightLayout:b="ic-tap"}){if(e%32!=0)throw Error("conv subgroup matrix requires inC divisible by 32");if(t%64!=0)throw Error("conv subgroup matrix requires outC divisible by 64");if(c!==32&&c!==64)throw Error("conv subgroup matrix supports tileM=32 or tileM=64");if(p!==64&&p!==128)throw Error("conv subgroup matrix supports tileN=64 or tileN=128");if(c===64&&p!==64)throw Error("conv subgroup matrix tileM=64 requires tileN=64");if(t%p!==0)throw Error(`outC must be divisible by tileN=${p}`);if(!(d===3&&f===1||d===1&&f===0))throw Error("conv subgroup matrix supports only 3x3 pad1 or 1x1 pad0");if(b!=="ic-tap"&&b!=="tap-ic")throw Error(`unsupported conv subgroup weightLayout: ${b}`);if(d!==3&&b!=="ic-tap")throw Error("tap-ic conv subgroup weight layout is only valid for 3x3");let g=r*a,h=e*d*d,y=G(s),v=G(u),S=G(n),$=G(l),w=G(_),m=c===64?p:p/2,T=m/8,I=i?3:2,E=I+ +!!o,k=B=>s==="float16"?B:`f16(${B})`,A=u==="float16"?"weight[oc * K_TOTAL + kk]":"f16(weight[oc * K_TOTAL + kk])",W=d===3&&b==="tap-ic",P=W?"":d===1?`fn loadInputValue(m_global: u32, kk: u32) -> f16 {
+  if (m_global >= HW || kk >= K_TOTAL) {
+    return 0.0h;
+  }
+  return ${k("input[kk * HW + m_global]")};
+}
+`:`fn loadInputValue(m_global: u32, kk: u32) -> f16 {
+  if (m_global >= HW || kk >= K_TOTAL) {
+    return 0.0h;
+  }
+  let y = m_global / W;
+  let x = m_global - y * W;
+  let ic = kk / 9u;
+  let tap = kk - ic * 9u;
+  let kh = tap / 3u;
+  let kw = tap - kh * 3u;
+  let iy = i32(y) + i32(kh) - 1;
+  let ix = i32(x) + i32(kw) - 1;
+  if (iy < 0 || iy >= i32(H) || ix < 0 || ix >= i32(W)) {
+    return 0.0h;
+  }
+  return ${k("input[ic * HW + u32(iy) * W + u32(ix)]")};
+}
+`,U=W?`fn loadSHMA(tile_base: u32, k_idx: u32, row: u32, c_idx: u32) {
+  let m_global = tile_base + row;
+  let col = c_idx * 8u;
+  if (m_global >= HW) {
+    for (var col_offset: u32 = 0u; col_offset < 8u; col_offset++) {
+      tile_A[row * TILE_K + col + col_offset] = 0.0h;
+    }
+    return;
+  }
+
+  let y = m_global / W;
+  let x = m_global - y * W;
+  let tap = k_idx / IN_C;
+  let kh = tap / 3u;
+  let kw = tap - kh * 3u;
+  let iy = i32(y) + i32(kh) - 1;
+  let ix = i32(x) + i32(kw) - 1;
+  let valid_pos = iy >= 0 && iy < i32(H) && ix >= 0 && ix < i32(W);
+  let ic_base = k_idx - tap * IN_C + col;
+  let in_base = u32(iy) * W + u32(ix);
+  for (var col_offset: u32 = 0u; col_offset < 8u; col_offset++) {
+    if (valid_pos) {
+      let ic = ic_base + col_offset;
+      tile_A[row * TILE_K + col + col_offset] = ${k("input[ic * HW + in_base]")};
+    } else {
+      tile_A[row * TILE_K + col + col_offset] = 0.0h;
+    }
+  }
+}
+`:`fn loadSHMA(tile_base: u32, k_idx: u32, row: u32, c_idx: u32) {
+  let m_global = tile_base + row;
+  let col = c_idx * 8u;
+  for (var col_offset: u32 = 0u; col_offset < 8u; col_offset++) {
+    let kk = k_idx + col + col_offset;
+    tile_A[row * TILE_K + col + col_offset] = loadInputValue(m_global, kk);
+  }
+}
+`,H=c===64?`  let subtile_idx = 0u;
+  let subtile_idy = subtile_id;`:`  let subtile_idx = subtile_id / 2u;
+  let subtile_idy = subtile_id % 2u;`,M=c===64?`    loadSHMA(m_global_base, kidx, local_idx / 4u, local_idx % 4u);
+    loadSHMA(m_global_base, kidx, local_idx / 4u + 32u, local_idx % 4u);`:"    loadSHMA(m_global_base, kidx, local_idx / 4u, local_idx % 4u);",O=Array.from({length:2},(B,R)=>Array.from({length:T},(F,oe)=>`  var matC${R}${oe}: subgroup_matrix_result<f16, 8, 8>;`).join(`
+`)).join(`
+`),D=Array.from({length:T},(B,R)=>`      var matB${R}: subgroup_matrix_right<f16, 8, 8> = subgroupMatrixLoad<subgroup_matrix_right<f16, 8, 8>>(&tile_B, matrix_b_offset + ${R*8}u * TILE_K, true, TILE_K);`).join(`
+`),x=Array.from({length:2},(B,R)=>Array.from({length:T},(F,oe)=>`      matC${R}${oe} = subgroupMatrixMultiplyAccumulate(matA${R}, matB${oe}, matC${R}${oe});`).join(`
+`)).join(`
+`),L=B=>Array.from({length:T},(R,F)=>`  subgroupMatrixStore(&scratch[subtile_id][${F}], 0u, matC${B}${F}, false, 8u);`).join(`
+`),C=Array.from({length:T},(B,R)=>{let F=R*8;return`  storeOne(m, oc_base + col + ${F}u, scratch[src_slot][${R}][row * 8u + col]);
+  storeOne(m, oc_base + col2 + ${F}u, scratch[src_slot][${R}][row * 8u + col2]);`}).join(`
+`);return`enable f16;
+enable subgroups;
+enable chromium_experimental_subgroup_matrix;
+diagnostic(off, chromium.subgroup_matrix_uniformity);
+
+@group(0) @binding(0) var<storage, read>       input: array<${y}>;
+@group(0) @binding(1) var<storage, read>       weight: array<${v}>;
+${i?`@group(0) @binding(2) var<storage, read>       bias: array<${S}>;
+`:""}${o?`@group(0) @binding(${I}) var<storage, read>       residual: array<${w}>;
+`:""}@group(0) @binding(${E}) var<storage, read_write> output: array<${$}>;
+
+const IN_C:       u32 = ${e}u;
+const OUT_C:      u32 = ${t}u;
+const H:          u32 = ${r}u;
+const W:          u32 = ${a}u;
+const HW:         u32 = ${g}u;
+const K_TOTAL:    u32 = ${h}u;
+const TILE_COLS:  u32 = ${p}u;
+const TILE_ROWS:  u32 = ${c}u;
+const TILE_K:     u32 = 32u;
+const SUB_COLS:   u32 = ${m}u;
+const SUB_ROWS:   u32 = 16u;
+
+var<workgroup> tile_A: array<f16, ${c} * 32>;
+var<workgroup> tile_B: array<f16, ${p} * 32>;
+var<workgroup> scratch: array<array<array<f16, 64>, ${T}>, 4>;
+
+${P}
+${U}
+
+fn loadSHMB(tile_base: u32, k_idx: u32, row: u32, c_idx: u32) {
+  let col = c_idx * 16u;
+  for (var row_offset: u32 = 0u; row_offset < TILE_COLS; row_offset = row_offset + 64u) {
+    let b_row = row + row_offset;
+    let oc = tile_base + b_row;
+    for (var i: u32 = 0u; i < 16u; i++) {
+      let kk = k_idx + col + i;
+      if (oc < OUT_C && kk < K_TOTAL) {
+        tile_B[b_row * TILE_K + col + i] = ${A};
+      } else {
+        tile_B[b_row * TILE_K + col + i] = 0.0h;
+      }
+    }
+  }
+}
+
+fn storeOne(m_global: u32, oc: u32, value: f16) {
+  if (m_global < HW && oc < OUT_C) {
+    let idx = oc * HW + m_global;
+    let out_value = f32(value)${i?` + ${z("bias[oc]",n)}`:""}${o?` + ${z("residual[idx]",_)}`:""};
+    output[idx] = ${ze("out_value",l)};
+  }
+}
+
+fn storeOutput(m_base: u32, oc_base: u32, row: u32, col: u32, src_slot: u32) {
+  let m = m_base + row;
+  let col2 = col + 1u;
+${C}
+}
+
+@compute @workgroup_size(128, 1, 1)
+fn main(
+  @builtin(workgroup_id) workgroup_id: vec3<u32>,
+  @builtin(local_invocation_index) local_idx: u32,
+  @builtin(subgroup_invocation_id) sg_id: u32,
+  @builtin(subgroup_size) sg_size: u32
+) {
+  let m_global_base = workgroup_id.y * TILE_ROWS;
+  let oc_global_base = workgroup_id.x * TILE_COLS;
+
+  let subtile_id = local_idx / sg_size;
+${H}
+  let base_A = subtile_idy * SUB_ROWS;
+  let base_B = subtile_idx * SUB_COLS;
+
+${O}
+
+  for (var kidx: u32 = 0u; kidx < K_TOTAL; kidx = kidx + TILE_K) {
+${M}
+    loadSHMB(oc_global_base, kidx, local_idx / 2u, local_idx % 2u);
+    workgroupBarrier();
+
+    for (var step: u32 = 0u; step < TILE_K; step = step + 8u) {
+      let matrix_a_offset = subtile_idy * SUB_ROWS * TILE_K + step;
+      var matA0: subgroup_matrix_left<f16, 8, 8> = subgroupMatrixLoad<subgroup_matrix_left<f16, 8, 8>>(&tile_A, matrix_a_offset, false, TILE_K);
+      var matA1: subgroup_matrix_left<f16, 8, 8> = subgroupMatrixLoad<subgroup_matrix_left<f16, 8, 8>>(&tile_A, matrix_a_offset + 8u * TILE_K, false, TILE_K);
+
+      let matrix_b_offset = subtile_idx * SUB_COLS * TILE_K + step;
+${D}
+
+${x}
+    }
+    workgroupBarrier();
+  }
+
+${L(0)}
+  let row = sg_id / 4u;
+  let col = (sg_id % 4u) * 2u;
+  storeOutput(m_global_base + base_A, oc_global_base + base_B, row, col, subtile_id);
+
+${L(1)}
+  storeOutput(m_global_base + base_A + 8u, oc_global_base + base_B, row, col, subtile_id);
+}
+`}function ts({inC:e,outC:t,H:r,W:a,hasBias:i,inputDtype:o="float16",weightDtype:s="float16",biasDtype:u="float16",outputDtype:n="float16",tileN:l=64,phaseY:_=0,phaseX:c=0,fusedWeights:p=!1}){if(e%32!=0)throw Error("upsample conv subgroup matrix requires inC divisible by 32");if(t%64!=0)throw Error("upsample conv subgroup matrix requires outC divisible by 64");if(l!==64&&l!==128)throw Error("upsample conv subgroup matrix supports tileN=64 or tileN=128");if(t%l!==0)throw Error(`outC must be divisible by tileN=${l}`);if(_!==0&&_!==1||c!==0&&c!==1)throw Error("upsample conv phase must be 0 or 1");let d=r*a,f=r*2,b=a*2,g=f*b,h=e*4,y=G(o),v=G(s),S=G(u),$=G(n),w=l/2,m=w/8,T=i?3:2,I=_===0?-1:0,E=_===0?0:1,k=c===0?-1:0,A=c===0?0:1,W=_===0?[[0],[1,2]]:[[0,1],[2]],P=c===0?[[0],[1,2]]:[[0,1],[2]],U=p?"":[0,1,2,3].map(C=>{let B=Math.floor(C/2),R=C%2,F=[];for(let oe of W[B])for(let j of P[R])F.push(z(`weight[oc * OC_STRIDE + ic * 9u + ${oe*3+j}u]`,s));return`${C===0?"  if":"  else if"} (tap == ${C}u) {
+    return f16(${F.join(" + ")});
+  }`}).join(`
+`),H=p?`fn loadWeightValue(oc: u32, kk: u32) -> f16 {
+  if (oc >= OUT_C || kk >= K_TOTAL) {
+    return 0.0h;
+  }
+  return ${s==="float16"?"weight[oc * K_TOTAL + kk]":"f16(weight[oc * K_TOTAL + kk])"};
+}
+`:`fn loadWeightValue(oc: u32, kk: u32) -> f16 {
+  if (oc >= OUT_C || kk >= K_TOTAL) {
+    return 0.0h;
+  }
+  let ic = kk / 4u;
+  let tap = kk - ic * 4u;
+${U}
+  return 0.0h;
+}
+`,M=Array.from({length:2},(C,B)=>Array.from({length:m},(R,F)=>`  var matC${B}${F}: subgroup_matrix_result<f16, 8, 8>;`).join(`
+`)).join(`
+`),O=Array.from({length:m},(C,B)=>`      var matB${B}: subgroup_matrix_right<f16, 8, 8> = subgroupMatrixLoad<subgroup_matrix_right<f16, 8, 8>>(&tile_B, matrix_b_offset + ${B*8}u * TILE_K, true, TILE_K);`).join(`
+`),D=Array.from({length:2},(C,B)=>Array.from({length:m},(R,F)=>`      matC${B}${F} = subgroupMatrixMultiplyAccumulate(matA${B}, matB${F}, matC${B}${F});`).join(`
+`)).join(`
+`),x=C=>Array.from({length:m},(B,R)=>`  subgroupMatrixStore(&scratch[subtile_id][${R}], 0u, matC${C}${R}, false, 8u);`).join(`
+`),L=Array.from({length:m},(C,B)=>{let R=B*8;return`  storeOne(m, oc_base + col + ${R}u, scratch[src_slot][${B}][row * 8u + col]);
+  storeOne(m, oc_base + col2 + ${R}u, scratch[src_slot][${B}][row * 8u + col2]);`}).join(`
+`);return`enable f16;
+enable subgroups;
+enable chromium_experimental_subgroup_matrix;
+diagnostic(off, chromium.subgroup_matrix_uniformity);
+
+@group(0) @binding(0) var<storage, read>       input: array<${y}>;
+@group(0) @binding(1) var<storage, read>       weight: array<${v}>;
+${i?`@group(0) @binding(2) var<storage, read>       bias: array<${S}>;
+`:""}@group(0) @binding(${T}) var<storage, read_write> output: array<${$}>;
+
+const IN_C:       u32 = ${e}u;
+const OUT_C:      u32 = ${t}u;
+const H:          u32 = ${r}u;
+const W:          u32 = ${a}u;
+const LOW_HW:     u32 = ${d}u;
+const OUT_H:      u32 = ${f}u;
+const OUT_W:      u32 = ${b}u;
+const OUT_HW:     u32 = ${g}u;
+const K_TOTAL:    u32 = ${h}u;
+const OC_STRIDE:  u32 = ${e*9}u;
+const TILE_COLS:  u32 = ${l}u;
+const TILE_ROWS:  u32 = 32u;
+const TILE_K:     u32 = 32u;
+const SUB_COLS:   u32 = ${w}u;
+const SUB_ROWS:   u32 = 16u;
+const PHASE_Y:    u32 = ${_}u;
+const PHASE_X:    u32 = ${c}u;
+
+var<workgroup> tile_A: array<f16, 32 * 32>;
+var<workgroup> tile_B: array<f16, ${l} * 32>;
+var<workgroup> scratch: array<array<array<f16, 64>, ${m}>, 4>;
+
+fn loadInputValue(m_global: u32, kk: u32) -> f16 {
+  if (m_global >= LOW_HW || kk >= K_TOTAL) {
+    return 0.0h;
+  }
+  let y = m_global / W;
+  let x = m_global - y * W;
+  let ic = kk / 4u;
+  let tap = kk - ic * 4u;
+  let tap_y = tap / 2u;
+  let tap_x = tap - tap_y * 2u;
+  let iy = i32(y) + select(${I}, ${E}, tap_y == 1u);
+  let ix = i32(x) + select(${k}, ${A}, tap_x == 1u);
+  if (iy < 0 || iy >= i32(H) || ix < 0 || ix >= i32(W)) {
+    return 0.0h;
+  }
+  return ${o==="float16"?"input[ic * LOW_HW + u32(iy) * W + u32(ix)]":"f16(input[ic * LOW_HW + u32(iy) * W + u32(ix)])"};
+}
+
+${H}
+
+fn loadSHMA(tile_base: u32, k_idx: u32, row: u32, c_idx: u32) {
+  let m_global = tile_base + row;
+  let col = c_idx * 8u;
+  for (var col_offset: u32 = 0u; col_offset < 8u; col_offset++) {
+    let kk = k_idx + col + col_offset;
+    tile_A[row * TILE_K + col + col_offset] = loadInputValue(m_global, kk);
+  }
+}
+
+fn loadSHMB(tile_base: u32, k_idx: u32, row: u32, c_idx: u32) {
+  let col = c_idx * 16u;
+  for (var row_offset: u32 = 0u; row_offset < TILE_COLS; row_offset = row_offset + 64u) {
+    let b_row = row + row_offset;
+    let oc = tile_base + b_row;
+    for (var i: u32 = 0u; i < 16u; i++) {
+      let kk = k_idx + col + i;
+      tile_B[b_row * TILE_K + col + i] = loadWeightValue(oc, kk);
+    }
+  }
+}
+
+fn storeOne(m_global: u32, oc: u32, value: f16) {
+  if (m_global < LOW_HW && oc < OUT_C) {
+    let low_y = m_global / W;
+    let low_x = m_global - low_y * W;
+    let out_y = low_y * 2u + PHASE_Y;
+    let out_x = low_x * 2u + PHASE_X;
+    let idx = oc * OUT_HW + out_y * OUT_W + out_x;
+    let out_value = f32(value)${i?` + ${z("bias[oc]",u)}`:""};
+    output[idx] = ${ze("out_value",n)};
+  }
+}
+
+fn storeOutput(m_base: u32, oc_base: u32, row: u32, col: u32, src_slot: u32) {
+  let m = m_base + row;
+  let col2 = col + 1u;
+${L}
+}
+
+@compute @workgroup_size(128, 1, 1)
+fn main(
+  @builtin(workgroup_id) workgroup_id: vec3<u32>,
+  @builtin(local_invocation_index) local_idx: u32,
+  @builtin(subgroup_invocation_id) sg_id: u32,
+  @builtin(subgroup_size) sg_size: u32
+) {
+  let m_global_base = workgroup_id.y * TILE_ROWS;
+  let oc_global_base = workgroup_id.x * TILE_COLS;
+
+  let subtile_id = local_idx / sg_size;
+  let subtile_idx = subtile_id / 2u;
+  let subtile_idy = subtile_id % 2u;
+  let base_A = subtile_idy * SUB_ROWS;
+  let base_B = subtile_idx * SUB_COLS;
+
+${M}
+
+  for (var kidx: u32 = 0u; kidx < K_TOTAL; kidx = kidx + TILE_K) {
+    loadSHMA(m_global_base, kidx, local_idx / 4u, local_idx % 4u);
+    loadSHMB(oc_global_base, kidx, local_idx / 2u, local_idx % 2u);
+    workgroupBarrier();
+
+    for (var step: u32 = 0u; step < TILE_K; step = step + 8u) {
+      let matrix_a_offset = subtile_idy * SUB_ROWS * TILE_K + step;
+      var matA0: subgroup_matrix_left<f16, 8, 8> = subgroupMatrixLoad<subgroup_matrix_left<f16, 8, 8>>(&tile_A, matrix_a_offset, false, TILE_K);
+      var matA1: subgroup_matrix_left<f16, 8, 8> = subgroupMatrixLoad<subgroup_matrix_left<f16, 8, 8>>(&tile_A, matrix_a_offset + 8u * TILE_K, false, TILE_K);
+
+      let matrix_b_offset = subtile_idx * SUB_COLS * TILE_K + step;
+${O}
+
+${D}
+    }
+    workgroupBarrier();
+  }
+
+${x(0)}
+  let row = sg_id / 4u;
+  let col = (sg_id % 4u) * 2u;
+  storeOutput(m_global_base + base_A, oc_global_base + base_B, row, col, subtile_id);
+
+${x(1)}
+  storeOutput(m_global_base + base_A + 8u, oc_global_base + base_B, row, col, subtile_id);
+}
+`}function rs({C:e,H:t,W:r,groups:a,eps:i,applySilu:o=!1,inputDtype:s="float32",weightDtype:u="float32",biasDtype:n="float32",outputDtype:l="float32"}){if(e%a!==0)throw Error("C must be divisible by groups");let _=e/a,c=G(s),p=G(u),d=G(n),f=G(l);return`${Re(s,u,n,l)}struct Params { _pad0: u32, _pad1: u32, _pad2: u32, _pad3: u32 };
+@group(0) @binding(0) var<storage, read>       input: array<${c}>;
+@group(0) @binding(1) var<storage, read>       gWeight: array<${p}>;
+@group(0) @binding(2) var<storage, read>       gBias: array<${d}>;
+@group(0) @binding(3) var<storage, read_write> output: array<${f}>;
+
+const C: u32 = ${e}u;
+const H: u32 = ${t}u;
+const W: u32 = ${r}u;
+const GROUPS: u32 = ${a}u;
+const CPG: u32 = ${_}u;
+const HW: u32 = ${t*r}u;
+const GROUP_SIZE: u32 = ${_*t*r}u;
+const EPS: f32 = ${i};
+const WG: u32 = 256u;
+
+var<workgroup> partial: array<f32, 256>;
+fn reduce_sum(tid: u32) -> f32 {
+  workgroupBarrier();
+  var stride: u32 = WG / 2u;
+  loop {
+    if (stride == 0u) { break; }
+    if (tid < stride) { partial[tid] = partial[tid] + partial[tid + stride]; }
+    stride = stride / 2u;
+    workgroupBarrier();
+  }
+  return partial[0];
+}
+
+@compute @workgroup_size(256, 1, 1)
+fn main(@builtin(workgroup_id) wg: vec3<u32>, @builtin(local_invocation_id) lid: vec3<u32>) {
+  let g = wg.x;
+  if (g >= GROUPS) { return; }
+  let tid = lid.x;
+  let g_offset = g * GROUP_SIZE;
+
+  // Sum to compute mean.
+  var s: f32 = 0.0;
+  for (var i: u32 = tid; i < GROUP_SIZE; i = i + WG) {
+    s = s + ${z("input[g_offset + i]",s)};
+  }
+  partial[tid] = s;
+  let mean = reduce_sum(tid) / f32(GROUP_SIZE);
+
+  // Sum of squared deviations.
+  var sq: f32 = 0.0;
+  for (var i: u32 = tid; i < GROUP_SIZE; i = i + WG) {
+    let d = ${z("input[g_offset + i]",s)} - mean;
+    sq = sq + d * d;
+  }
+  partial[tid] = sq;
+  let invStd = inverseSqrt(reduce_sum(tid) / f32(GROUP_SIZE) + EPS);
+
+  // Apply per-channel weight/bias.
+  for (var i: u32 = tid; i < GROUP_SIZE; i = i + WG) {
+    let local_c = i / HW;
+    let c_idx = g * CPG + local_c;
+    var v = (${z("input[g_offset + i]",s)} - mean) * invStd * ${z("gWeight[c_idx]",u)} + ${z("gBias[c_idx]",n)};
+${o?`    v = v / (1.0 + exp(-v));
+`:""}    output[g_offset + i] = ${ze("v",l)};
+  }
+}
+`}function as({C:e,H:t,W:r,groups:a,elementsPerWorkgroup:i=1024,inputDtype:o="float32"}){if(e%a!==0)throw Error("C must be divisible by groups");let s=e/a*t*r,u=Math.ceil(s/i),n=G(o);return`${Re(o)}@group(0) @binding(0) var<storage, read>       input: array<${n}>;
+@group(0) @binding(1) var<storage, read_write> partial: array<f32>;
+
+const GROUP_SIZE: u32 = ${s}u;
+const CHUNKS: u32 = ${u}u;
+const ELEMENTS_PER_WG: u32 = ${i}u;
+const WG: u32 = 256u;
+
+var<workgroup> partialSum: array<f32, 256>;
+var<workgroup> partialSq: array<f32, 256>;
+
+@compute @workgroup_size(256, 1, 1)
+fn main(@builtin(workgroup_id) wg: vec3<u32>, @builtin(local_invocation_id) lid: vec3<u32>) {
+  let chunk = wg.x;
+  let g = wg.y;
+  let tid = lid.x;
+  let group_start = g * GROUP_SIZE;
+  let start = group_start + chunk * ELEMENTS_PER_WG;
+  let end = min(start + ELEMENTS_PER_WG, group_start + GROUP_SIZE);
+
+  var s = 0.0;
+  var ss = 0.0;
+  for (var i = start + tid; i < end; i = i + WG) {
+    let v = ${z("input[i]",o)};
+    s = s + v;
+    ss = ss + v * v;
+  }
+  partialSum[tid] = s;
+  partialSq[tid] = ss;
+  workgroupBarrier();
+  var stride = WG / 2u;
+  loop {
+    if (stride == 0u) { break; }
+    if (tid < stride) {
+      partialSum[tid] = partialSum[tid] + partialSum[tid + stride];
+      partialSq[tid] = partialSq[tid] + partialSq[tid + stride];
+    }
+    stride = stride / 2u;
+    workgroupBarrier();
+  }
+  if (tid == 0u) {
+    let out_idx = (g * CHUNKS + chunk) * 2u;
+    partial[out_idx] = partialSum[0];
+    partial[out_idx + 1u] = partialSq[0];
+  }
+}
+`}function is({C:e,H:t,W:r,groups:a,elementsPerWorkgroup:i=4096}){if(e%a!==0)throw Error("C must be divisible by groups");if(i%4!=0)throw Error("vec4 groupnorm reduce requires elementsPerWorkgroup divisible by 4");let o=e/a*t*r;if(o%4!=0)throw Error("vec4 groupnorm reduce requires group size divisible by 4");let s=o/4,u=i/4;return`enable f16;
+@group(0) @binding(0) var<storage, read>       input: array<vec4<f16>>;
+@group(0) @binding(1) var<storage, read_write> partial: array<f32>;
+
+const GROUP_SIZE: u32 = ${o}u;
+const VEC_GROUP_SIZE: u32 = ${s}u;
+const CHUNKS: u32 = ${Math.ceil(s/u)}u;
+const VECS_PER_WG: u32 = ${u}u;
+const WG: u32 = 256u;
+
+var<workgroup> partialSum: array<f32, 256>;
+var<workgroup> partialSq: array<f32, 256>;
+
+@compute @workgroup_size(256, 1, 1)
+fn main(@builtin(workgroup_id) wg: vec3<u32>, @builtin(local_invocation_id) lid: vec3<u32>) {
+  let chunk = wg.x;
+  let g = wg.y;
+  let tid = lid.x;
+  let group_start = g * VEC_GROUP_SIZE;
+  let start = group_start + chunk * VECS_PER_WG;
+  let end = min(start + VECS_PER_WG, group_start + VEC_GROUP_SIZE);
+
+  var s = 0.0;
+  var ss = 0.0;
+  for (var i = start + tid; i < end; i = i + WG) {
+    let v = vec4<f32>(input[i]);
+    s = s + v.x + v.y + v.z + v.w;
+    ss = ss + dot(v, v);
+  }
+  partialSum[tid] = s;
+  partialSq[tid] = ss;
+  workgroupBarrier();
+  var stride = WG / 2u;
+  loop {
+    if (stride == 0u) { break; }
+    if (tid < stride) {
+      partialSum[tid] = partialSum[tid] + partialSum[tid + stride];
+      partialSq[tid] = partialSq[tid] + partialSq[tid + stride];
+    }
+    stride = stride / 2u;
+    workgroupBarrier();
+  }
+  if (tid == 0u) {
+    let out_idx = (g * CHUNKS + chunk) * 2u;
+    partial[out_idx] = partialSum[0];
+    partial[out_idx + 1u] = partialSq[0];
+  }
+}
+`}function os({C:e,H:t,W:r,groups:a,eps:i,elementsPerWorkgroup:o=1024}){if(e%a!==0)throw Error("C must be divisible by groups");let s=e/a*t*r;return`@group(0) @binding(0) var<storage, read>       partial: array<f32>;
+@group(0) @binding(1) var<storage, read_write> stats: array<f32>;
+
+const GROUP_SIZE: u32 = ${s}u;
+const CHUNKS: u32 = ${Math.ceil(s/o)}u;
+const EPS: f32 = ${i};
+const WG: u32 = 256u;
+
+var<workgroup> partialSum: array<f32, 256>;
+var<workgroup> partialSq: array<f32, 256>;
+
+@compute @workgroup_size(256, 1, 1)
+fn main(@builtin(workgroup_id) wg: vec3<u32>, @builtin(local_invocation_id) lid: vec3<u32>) {
+  let g = wg.x;
+  let tid = lid.x;
+  var s = 0.0;
+  var ss = 0.0;
+  for (var chunk = tid; chunk < CHUNKS; chunk = chunk + WG) {
+    let idx = (g * CHUNKS + chunk) * 2u;
+    s = s + partial[idx];
+    ss = ss + partial[idx + 1u];
+  }
+  partialSum[tid] = s;
+  partialSq[tid] = ss;
+  workgroupBarrier();
+  var stride = WG / 2u;
+  loop {
+    if (stride == 0u) { break; }
+    if (tid < stride) {
+      partialSum[tid] = partialSum[tid] + partialSum[tid + stride];
+      partialSq[tid] = partialSq[tid] + partialSq[tid + stride];
+    }
+    stride = stride / 2u;
+    workgroupBarrier();
+  }
+  if (tid == 0u) {
+    let mean = partialSum[0] / f32(GROUP_SIZE);
+    let ex2 = partialSq[0] / f32(GROUP_SIZE);
+    let variance = max(ex2 - mean * mean, 0.0);
+    stats[g * 2u] = mean;
+    stats[g * 2u + 1u] = inverseSqrt(variance + EPS);
+  }
+}
+`}function ss({C:e,H:t,W:r,groups:a,applySilu:i=!1,inputDtype:o="float32",weightDtype:s="float32",biasDtype:u="float32",outputDtype:n="float32"}){if(e%a!==0)throw Error("C must be divisible by groups");let l=e/a;e*t*r;let _=G(o),c=G(s),p=G(u),d=G(n);return`${Re(o,s,u,n)}struct Params { count: u32, wgY: u32, _pad0: u32, _pad1: u32 };
+@group(0) @binding(0) var<storage, read>       input: array<${_}>;
+@group(0) @binding(1) var<storage, read>       stats: array<f32>;
+@group(0) @binding(2) var<storage, read>       gWeight: array<${c}>;
+@group(0) @binding(3) var<storage, read>       gBias: array<${p}>;
+@group(0) @binding(4) var<storage, read_write> output: array<${d}>;
+@group(0) @binding(5) var<uniform>             params: Params;
+
+const HW: u32 = ${t*r}u;
+const CPG: u32 = ${l}u;
+
+@compute @workgroup_size(64, 1, 1)
+fn main(@builtin(workgroup_id) wg: vec3<u32>, @builtin(local_invocation_id) lid: vec3<u32>) {
+  let wg_idx = wg.x + wg.y * params.wgY;
+  let i = wg_idx * 64u + lid.x;
+  if (i >= params.count) { return; }
+  let c = i / HW;
+  let g = c / CPG;
+  let mean = stats[g * 2u];
+  let invStd = stats[g * 2u + 1u];
+  var v = (${z("input[i]",o)} - mean) * invStd * ${z("gWeight[c]",s)} + ${z("gBias[c]",u)};
+${i?`  v = v / (1.0 + exp(-v));
+`:""}  output[i] = ${ze("v",n)};
+}
+`}function us({C:e,H:t,W:r,groups:a,applySilu:i=!1}){if(e%a!==0)throw Error("C must be divisible by groups");if(t*r%4!=0)throw Error("vec4 groupnorm apply requires HW divisible by 4");let o=e/a;return e*t*r/4,`enable f16;
+struct Params { count4: u32, wgY: u32, _pad0: u32, _pad1: u32 };
+@group(0) @binding(0) var<storage, read>       input: array<vec4<f16>>;
+@group(0) @binding(1) var<storage, read>       stats: array<f32>;
+@group(0) @binding(2) var<storage, read>       gWeight: array<f16>;
+@group(0) @binding(3) var<storage, read>       gBias: array<f16>;
+@group(0) @binding(4) var<storage, read_write> output: array<vec4<f16>>;
+@group(0) @binding(5) var<uniform>             params: Params;
+
+const HW: u32 = ${t*r}u;
+const CPG: u32 = ${o}u;
+
+@compute @workgroup_size(64, 1, 1)
+fn main(@builtin(workgroup_id) wg: vec3<u32>, @builtin(local_invocation_id) lid: vec3<u32>) {
+  let wg_idx = wg.x + wg.y * params.wgY;
+  let i4 = wg_idx * 64u + lid.x;
+  if (i4 >= params.count4) { return; }
+  let elem = i4 * 4u;
+  let c = elem / HW;
+  let g = c / CPG;
+  let mean = stats[g * 2u];
+  let invStd = stats[g * 2u + 1u];
+  var v = (vec4<f32>(input[i4]) - vec4<f32>(mean)) * vec4<f32>(invStd * f32(gWeight[c])) + vec4<f32>(f32(gBias[c]));
+${i?`  v = v / (vec4<f32>(1.0) + exp(-v));
+`:""}  output[i4] = vec4<f16>(v);
+}
+`}function ns({C:e,H:t,W:r,dtype:a="float32"}){let i=G(a);return`${Re(a)}@group(0) @binding(0) var<storage, read>       input: array<${i}>;
+@group(0) @binding(1) var<storage, read_write> output: array<${i}>;
+const C: u32 = ${e}u;
+const H: u32 = ${t}u;
+const W: u32 = ${r}u;
+const H2: u32 = ${t*2}u;
+const W2: u32 = ${r*2}u;
+@compute @workgroup_size(8, 8, 1)
+fn main(@builtin(global_invocation_id) gid: vec3<u32>) {
+  let y = gid.x;
+  let x = gid.y;
+  let c = gid.z;
+  if (y >= H2 || x >= W2 || c >= C) { return; }
+  output[c * H2 * W2 + y * W2 + x] = input[c * H * W + (y / 2u) * W + (x / 2u)];
+}
+`}var ls=class Yr{constructor({rt:t,config:r,w:a}){this.rt=t,this.config=r,this.w=a}destroy(){He(this.w),this.w=null}static async fromBf16SafeTensors({rt:t,config:r,safeTensors:a,onProgress:i=null,concurrency:o,chunkMaxBytes:s,signal:u}){let n=!!t.caps().f16,l=t.caps().adapter?.vendor==="apple",_=r.latent_channels??32,c=zt(),p=(E,k)=>{c.tensor(E,async A=>{let W=Se(A);k(t.tensorFromTypedArray("float32",[W.length],W))})},d=(E,k)=>{a.has(E)?p(E,k):k(null)},f=(E,k)=>{c.tensor(E,async A=>{let W=lt(Ue(A));k(t.tensorFromTypedArray("float16",[W.length],W))})},b=(E,k)=>{a.has(E)?f(E,k):k(null)},g=(E,{inC:k=0,outC:A=0,k:W=0}={})=>{let P={};return n?(c.tensor(`${E}.weight`,async U=>{let H=l&&W===3&&A%4==0&&k>=128&&A>=128,M=l&&W===3&&A%4==0&&k>=128&&A>=128,O=l&&W===1&&A%4==0&&k>=128&&A>=64;if(H){P.weightWinogradF2x2=await ps({rt:t,weightF16:Ue(U),inC:k,outC:A});return}if(M){let x=Ot(U,A,k*9);P.weightPackedKOut=t.tensorFromTypedArray("float16",[x.length],x);return}if(O){let x=Ot(U,A,k);P.weightPackedKOut1x1=t.tensorFromTypedArray("float16",[x.length],x);return}let D=Ue(U);if(!M&&!O){let x=lt(D);P.weight=t.tensorFromTypedArray("float16",[x.length],x)}!M&&t.caps().subgroupMatrix&&W===3&&k%32==0&&A%64==0&&(P.weightTapIC=ds({rt:t,weightF16:D,inC:k,outC:A}))}),b(`${E}.bias`,U=>{P.bias=U}),P):(p(`${E}.weight`,U=>{P.weight=U}),d(`${E}.bias`,U=>{P.bias=U}),P)},h=(E,k)=>{let A={};return n?(c.tensor(`${E}.weight`,async W=>{let P=Ue(W),U=l&&k>=128&&k%4==0;if(!U){let H=lt(P);A.weight=t.tensorFromTypedArray("float16",[H.length],H)}U||(A.upsampleFusedWeights=_s({rt:t,weightF16:P,inC:k,outC:k})),A.upsamplePackedKOutWeights=cs({rt:t,weightF16:P,inC:k,outC:k})}),b(`${E}.bias`,W=>{A.bias=W}),A):(p(`${E}.weight`,W=>{A.weight=W}),d(`${E}.bias`,W=>{A.bias=W}),A)},y=E=>{let k={};return n?(f(`${E}.weight`,A=>{k.weight=A}),b(`${E}.bias`,A=>{k.bias=A})):(p(`${E}.weight`,A=>{k.weight=A}),d(`${E}.bias`,A=>{k.bias=A})),k},v=(E,k,A)=>({norm1:y(`${E}.norm1`),conv1:g(`${E}.conv1`,{inC:k,outC:A,k:3}),norm2:y(`${E}.norm2`),conv2:g(`${E}.conv2`,{inC:A,outC:A,k:3}),conv_shortcut:a.has(`${E}.conv_shortcut.weight`)?g(`${E}.conv_shortcut`,{inC:k,outC:A,k:1}):null,inC:k,outC:A}),S=(E,k)=>({group_norm:y(`${E}.group_norm`),to_q:g(`${E}.to_q`,{inC:k,outC:k,k:1}),to_k:g(`${E}.to_k`,{inC:k,outC:k,k:1}),to_v:g(`${E}.to_v`,{inC:k,outC:k,k:1}),to_out:g(`${E}.to_out.0`,{inC:k,outC:k,k:1}),channels:k}),$={},w=r.batch_norm_eps??1e-4;$.bn={eps:w},c.tensor("bn.running_mean",async E=>{let k=Se(E);$.bn.running_mean=k,$.bn.running_meanT=t.tensorFromTypedArray("float32",[k.length],k),$.bn.running_var&&($.bn.running_std=Float32Array.from($.bn.running_var,A=>Math.sqrt(A+w)),$.bn.running_stdT=t.tensorFromTypedArray("float32",[$.bn.running_std.length],$.bn.running_std))}),c.tensor("bn.running_var",async E=>{let k=Se(E);$.bn.running_var=k,$.bn.running_mean&&($.bn.running_std=Float32Array.from(k,A=>Math.sqrt(A+w)),$.bn.running_stdT=t.tensorFromTypedArray("float32",[$.bn.running_std.length],$.bn.running_std))}),$.post_quant_conv=g("post_quant_conv",{inC:_,outC:_,k:1}),$.decoder={conv_in:g("decoder.conv_in",{inC:_,outC:512,k:3}),mid_block:{resnets:[v("decoder.mid_block.resnets.0",512,512),v("decoder.mid_block.resnets.1",512,512)],attentions:[S("decoder.mid_block.attentions.0",512)]},up_blocks:[],conv_norm_out:y("decoder.conv_norm_out"),conv_out:g("decoder.conv_out")};let m=(r.block_out_channels??[128,256,512,512]).slice().reverse(),T=(r.layers_per_block??2)+1,I=m[0];for(let E=0;E<m.length;++E){let k=m[E],A=[];for(let P=0;P<T;++P){let U=P===0?I:k;A.push(v(`decoder.up_blocks.${E}.resnets.${P}`,U,k))}let W=a.has(`decoder.up_blocks.${E}.upsamplers.0.conv.weight`)?h(`decoder.up_blocks.${E}.upsamplers.0.conv`,k):null;$.decoder.up_blocks.push({resnets:A,upsampler:W,inC:I,outC:k}),I=k}return await a.streamAll(c.onChunk,{concurrency:o,chunkMaxBytes:s,names:c.names(),onProgress:i,signal:u}),c.assertComplete(),new Yr({rt:t,config:{...r,blockOut:m,layersPerBlock:T},w:$})}async decode(t,r,a,{scope:i=null}={}){let o=!i,s=i??_t(),u=this.rt;this.rt=ct(u,s);try{let n=await this._decodeWithRuntime(t,r,a);return o&&s.keep(n.image),n}finally{this.rt=u,o&&s.destroy()}}async _decodeWithRuntime(t,r,a){let i=this.rt,o=this.w,s=this.config.latent_channels??32,u=i.caps().f16?"float16":"float32",n=await this._conv2d({inT:t,conv:o.post_quant_conv,inC:s,outC:s,H:r,W:a,k:1,pad:0,outputDtype:u});n=await this._conv2d({inT:n,conv:o.decoder.conv_in,inC:s,outC:512,H:r,W:a,k:3,pad:1,outputDtype:u});let l=512,_=r,c=a;n=await this._resnet({inT:n,rn:o.decoder.mid_block.resnets[0],inC:l,H:_,W:c}),n=await this._attentionMid({inT:n,attn:o.decoder.mid_block.attentions[0],C:l,H:_,W:c}),n=await this._resnet({inT:n,rn:o.decoder.mid_block.resnets[1],inC:l,H:_,W:c});for(let p of o.decoder.up_blocks){for(let d of p.resnets)n=await this._resnet({inT:n,rn:d,inC:d.inC,H:_,W:c}),l=d.outC;if(p.upsampler)if(this._canFuseUpsampleConv({inT:n,conv:p.upsampler,inC:l,outC:l}))n=await this._upsampleConv2d({inT:n,conv:p.upsampler,inC:l,outC:l,H:_,W:c,outputDtype:u}),_*=2,c*=2;else{let d=n.dtype,f=i.empty(d,[l,_*2,c*2],`ups${_}`),b=ns({C:l,H:_,W:c,dtype:d});await i.runProgram({name:"upsample",source:b,cacheKey:`ups_c${l}_h${_}_w${c}_${d}`,bindings:[{tensor:n,type:"read-only-storage"},{tensor:f,type:"storage"}],workgroups:[Math.ceil(_*2/8),Math.ceil(c*2/8),l]}),_*=2,c*=2,n=await this._conv2d({inT:f,conv:p.upsampler,inC:l,outC:l,H:_,W:c,k:3,pad:1,outputDtype:u})}}return n=await this._groupnorm({inT:n,gn:o.decoder.conv_norm_out,C:l,H:_,W:c,groups:32,eps:1e-6,applySilu:!0,outputDtype:u}),{image:await this._conv2d({inT:n,conv:o.decoder.conv_out,inC:l,outC:3,H:_,W:c,k:3,pad:1,outputDtype:u}),H:_,W:c,channels:3}}async _conv2d({inT:t,conv:r,inC:a,outC:i,H:o,W:s,k:u,pad:n,addT:l=null,outputDtype:_="float32"}){let c=this.rt,p=i%16==0?16:i%8==0?8:i%4==0?4:1,d=t.dtype,f=u===3&&n===1&&d==="float16"&&_==="float16"&&r.weightWinogradF2x2&&a%8==0&&i%4==0,b=u===3&&n===1&&d==="float16"&&_==="float16"&&r.weightPackedKOut,g=u===1&&n===0&&d==="float16"&&_==="float16"&&r.weightPackedKOut1x1&&a>=128&&i>=64,h=f&&c.caps().adapter?.vendor==="apple"&&a>=128&&i>=128,y=b&&c.caps().adapter?.vendor==="apple"&&a>=128&&i>=128,v=g&&c.caps().adapter?.vendor==="apple",S=!h&&!y&&!v&&c.caps().subgroupMatrix&&c.caps().f16&&(u===3&&n===1||u===1&&n===0)&&a%32==0&&i%64==0,$=S&&u===3&&r.weightTapIC?r.weightTapIC:r.weight,w=$===r.weightTapIC?"tap-ic":"ic-tap",m=r.bias?.dtype??"float32",T=l?.dtype??"float32",I=S&&u===3&&w==="tap-ic"?64:32,E=I===64?64:S&&i%128==0?128:64,k=!S&&h,A=!S&&!k&&b,W=!S&&v,P=!A&&!S&&u===3&&n===1&&p>=16,U=k?r.weightWinogradF2x2:A?r.weightPackedKOut:W?r.weightPackedKOut1x1:$,H=y||v?112:32,M=y||v?14:4,O=y||v?32:64,D=S?`sgmat_tm${I}_tn${E}${w==="tap-ic"?"_wti":""}`:k?"wgf2_tm32_tn8_tk8":A?`pkn4_tm${H}_tn16_rpt${M}_tk${O}`:W?`pkn4_1x1_tm${H}_tn16_rpt${M}_tk${O}`:P?"sw":`ot${p}`,x=!!(l&&(S||k||A||W)),L=U.dtype,C=`conv2d_${a}_${i}_${o}_${s}_${u}_${n}_${r.bias?"b":"nb"}_${d}_${U.dtype}_${m}_${_}_${D}${x?`_add_${T}`:""}`,B=S?es({inC:a,outC:i,H:o,W:s,hasBias:!!r.bias,hasAdd:x,inputDtype:d,weightDtype:L,biasDtype:m,outputDtype:_,residualDtype:T,tileM:I,tileN:E,k:u,pad:n,weightLayout:w}):k?Xo({inC:a,outC:i,H:o,W:s,hasBias:!!r.bias,hasAdd:x,inputDtype:d,weightDtype:L,biasDtype:m,outputDtype:_,residualDtype:T,mTile:32,nTile:8,kTile:8}):A?jo({inC:a,outC:i,H:o,W:s,hasBias:!!r.bias,hasAdd:x,inputDtype:d,weightDtype:L,biasDtype:m,outputDtype:_,residualDtype:T,mTile:H,nTile:16,rowPerThread:M,kTile:O}):W?Zo({inC:a,outC:i,H:o,W:s,hasBias:!!r.bias,hasAdd:x,inputDtype:d,weightDtype:L,biasDtype:m,outputDtype:_,residualDtype:T,mTile:H,nTile:16,rowPerThread:M,kTile:O}):P?Vo({inC:a,outC:i,H:o,W:s,hasBias:!!r.bias,outTile:p,inputDtype:d,weightDtype:L,biasDtype:m,outputDtype:_}):p>1?Ko({inC:a,outC:i,H:o,W:s,kH:u,kW:u,pad:n,hasBias:!!r.bias,outTile:p,inputDtype:d,weightDtype:L,biasDtype:m,outputDtype:_}):No({inC:a,outC:i,H:o,W:s,kH:u,kW:u,pad:n,hasBias:!!r.bias,inputDtype:d,weightDtype:L,biasDtype:m,outputDtype:_}),R=c.empty(_,[i,o,s],`conv-out-${C}`),F=[{tensor:t,type:"read-only-storage"},{tensor:U,type:"read-only-storage"}];return r.bias&&F.push({tensor:r.bias,type:"read-only-storage"}),x&&F.push({tensor:l,type:"read-only-storage"}),F.push({tensor:R,type:"storage"}),await c.runProgram({name:"conv2d",source:B,cacheKey:C,bindings:F,workgroups:S?[Math.ceil(i/E),Math.ceil(o*s/I),1]:k?[Math.ceil(i/32),Math.ceil(Math.ceil(o/2)*Math.ceil(s/2)/32),1]:A||W?[Math.ceil(i/64),Math.ceil(o*s/H),1]:[Math.ceil(o/8),Math.ceil(s/8),Math.ceil(i/p)]}),l&&!x&&await this._addInplace({yT:R,xT:l,count:i*o*s}),R}_canFuseUpsampleConv({inT:t,conv:r,inC:a,outC:i}){let o=this.rt;return o.caps().f16&&o.caps().adapter?.vendor==="apple"&&t.dtype==="float16"&&r.upsamplePackedKOutWeights&&a>=128&&i>=128&&i%4==0||o.caps().subgroupMatrix&&o.caps().f16&&t.dtype==="float16"&&r.weight?.dtype==="float16"&&a%32==0&&i%64==0?!0:o.caps().f16&&t.dtype==="float16"&&r.weight?.dtype==="float16"&&!!r.upsampleFusedWeights&&i%16==0}async _upsampleConv2d({inT:t,conv:r,inC:a,outC:i,H:o,W:s,outputDtype:u="float16"}){let n=this.rt,l=t.dtype,_=r.bias?.dtype??"float32",c=n.caps().f16&&l==="float16"&&r.upsamplePackedKOutWeights&&u==="float16"&&i%4==0&&a>=128&&i>=128,p=c&&n.caps().adapter?.vendor==="apple",d=!p&&n.caps().subgroupMatrix&&n.caps().f16&&l==="float16"&&r.weight?.dtype==="float16"&&a%32==0&&i%64==0,f=!d&&c,b=i%128==0?128:64,g=i%16==0?16:i%8==0?8:i%4==0?4:1,h=p?96:32,y=p?12:4,v=p?32:64,S=n.empty(u,[i,o*2,s*2],"ups-conv-out");for(let $=0;$<2;++$)for(let w=0;w<2;++w){let m=$*2+w,T=f?r.upsamplePackedKOutWeights[m]:r.upsampleFusedWeights?.[m]??r.weight,I=T!==r.weight,E=d?`sg_tn${b}`:f?`pkn4_tm${h}_tn16_rpt${y}_tk${v}`:`sw_ot${g}`,k=`ups_conv2d_${a}_${i}_${o}_${s}_${r.bias?"b":"nb"}_${l}_${T.dtype}_${_}_${u}_${E}_${I?"fw":"ow"}_py${$}_px${w}`,A=d?ts({inC:a,outC:i,H:o,W:s,hasBias:!!r.bias,inputDtype:l,weightDtype:T.dtype,biasDtype:_,outputDtype:u,tileN:b,phaseY:$,phaseX:w,fusedWeights:I}):f?Jo({inC:a,outC:i,H:o,W:s,hasBias:!!r.bias,inputDtype:l,weightDtype:T.dtype,biasDtype:_,outputDtype:u,phaseY:$,phaseX:w,mTile:h,nTile:16,rowPerThread:y,kTile:v}):Qo({inC:a,outC:i,H:o,W:s,hasBias:!!r.bias,inputDtype:l,weightDtype:T.dtype,biasDtype:_,outputDtype:u,outTile:g,phaseY:$,phaseX:w}),W=[{tensor:t,type:"read-only-storage"},{tensor:T,type:"read-only-storage"}];r.bias&&W.push({tensor:r.bias,type:"read-only-storage"}),W.push({tensor:S,type:"storage"}),await n.runProgram({name:"upsample_conv2d",source:A,cacheKey:k,bindings:W,workgroups:d?[Math.ceil(i/b),Math.ceil(o*s/32),1]:f?[Math.ceil(i/64),Math.ceil(o*s/h),1]:[Math.ceil(o/8),Math.ceil(s/8),Math.ceil(i/g)]})}return S}async _groupnorm({inT:t,gn:r,C:a,H:i,W:o,groups:s,eps:u,applySilu:n=!1,outputDtype:l="float32"}){let _=this.rt,c=t.dtype,p=r.weight.dtype,d=r.bias?.dtype??"float32",f=_.empty(l,[a,i,o],"gn-out"),b=a/s*i*o;if(b>=131072){let y=c==="float16"&&b%4==0,v=y?8192:1024,S=Math.ceil(b/v),$=_.empty("float32",[s,S,2],"gn-partial"),w=_.empty("float32",[s,2],"gn-stats");await _.runProgram({name:"groupnorm_reduce",source:y?is({C:a,H:i,W:o,groups:s,elementsPerWorkgroup:v}):as({C:a,H:i,W:o,groups:s,elementsPerWorkgroup:v,inputDtype:c}),cacheKey:`gn_reduce_${a}_${i}_${o}_${s}_${v}_${c}${y?"_v4":""}`,bindings:[{tensor:t,type:"read-only-storage"},{tensor:$,type:"storage"}],workgroups:[S,s,1]}),await _.runProgram({name:"groupnorm_stats",source:os({C:a,H:i,W:o,groups:s,eps:u,elementsPerWorkgroup:v}),cacheKey:`gn_stats_${a}_${i}_${o}_${s}_${u}_${v}`,bindings:[{tensor:$,type:"read-only-storage"},{tensor:w,type:"storage"}],workgroups:[s,1,1]});let m=a*i*o,T=c==="float16"&&p==="float16"&&d==="float16"&&l==="float16"&&i*o%4==0,I=T?m/4:m,E=Math.ceil(I/64),k=Math.min(E,1024),A=Math.ceil(E/k),W=_.createUniformU32([I,k,0,0],"gn-apply-params");return await _.runProgram({name:n?"groupnorm_silu_apply":"groupnorm_apply",source:T?us({C:a,H:i,W:o,groups:s,applySilu:n}):ss({C:a,H:i,W:o,groups:s,applySilu:n,inputDtype:c,weightDtype:p,biasDtype:d,outputDtype:l}),cacheKey:`gn_apply_${a}_${i}_${o}_${s}_${n?"silu":"linear"}_${c}_${p}_${d}_${l}${T?"_v4":""}`,bindings:[{tensor:t,type:"read-only-storage"},{tensor:w,type:"read-only-storage"},{tensor:r.weight,type:"read-only-storage"},{tensor:r.bias,type:"read-only-storage"},{tensor:f,type:"storage"},{buffer:W,type:"uniform"}],workgroups:[k,A,1]}),f}let g=`gn_${a}_${i}_${o}_${s}_${u}_${n?"silu":"linear"}_${c}_${p}_${d}_${l}`,h=rs({C:a,H:i,W:o,groups:s,eps:u,applySilu:n,inputDtype:c,weightDtype:p,biasDtype:d,outputDtype:l});return await _.runProgram({name:n?"groupnorm_silu":"groupnorm",source:h,cacheKey:g,bindings:[{tensor:t,type:"read-only-storage"},{tensor:r.weight,type:"read-only-storage"},{tensor:r.bias,type:"read-only-storage"},{tensor:f,type:"storage"}],workgroups:[s,1,1]}),f}async _addInplace({yT:t,xT:r,count:a}){let i=this.rt;if(t.dtype!==r.dtype)throw Error(`_addInplace dtype mismatch: y=${t.dtype} x=${r.dtype}`);let o=t.dtype,s=o==="float16"?"f16":"f32",u=o==="float16"?`enable f16;
+`:"",n=`img_add_2d_${o}`,l=`${u}struct Params { count: u32, wgY: u32, _pad0: u32, _pad1: u32 };
+@group(0) @binding(0) var<storage, read_write> y: array<${s}>;
+@group(0) @binding(1) var<storage, read>       x: array<${s}>;
+@group(0) @binding(2) var<uniform>             p: Params;
+@compute @workgroup_size(64, 1, 1)
+fn main(@builtin(workgroup_id) wg: vec3<u32>, @builtin(local_invocation_id) lid: vec3<u32>) {
+  let wg_idx = wg.x + wg.y * p.wgY;
+  let i = wg_idx * 64u + lid.x;
+  if (i >= p.count) { return; }
+  y[i] = y[i] + x[i];
+}
+`,_=Math.ceil(a/64),c=Math.min(_,1024),p=Math.ceil(_/c),d=i.createUniformU32([a,c,0,0],"img-add-params");await i.runProgram({name:"img_add",source:l,cacheKey:n,bindings:[{tensor:t,type:"storage"},{tensor:r,type:"read-only-storage"},{buffer:d,type:"uniform"}],workgroups:[c,p,1]})}async _resnet({inT:t,rn:r,inC:a,H:i,W:o}){let s=this.rt.caps().f16?"float16":"float32",u=await this._groupnorm({inT:t,gn:r.norm1,C:a,H:i,W:o,groups:32,eps:1e-6,applySilu:!0,outputDtype:s});u=await this._conv2d({inT:u,conv:r.conv1,inC:a,outC:r.outC,H:i,W:o,k:3,pad:1,outputDtype:s}),u=await this._groupnorm({inT:u,gn:r.norm2,C:r.outC,H:i,W:o,groups:32,eps:1e-6,applySilu:!0,outputDtype:s});let n=t;return r.conv_shortcut&&(n=await this._conv2d({inT:t,conv:r.conv_shortcut,inC:a,outC:r.outC,H:i,W:o,k:1,pad:0,outputDtype:s})),u=await this._conv2d({inT:u,conv:r.conv2,inC:r.outC,outC:r.outC,H:i,W:o,k:3,pad:1,addT:n,outputDtype:s}),u}async _attentionMid({inT:t,attn:r,C:a,H:i,W:o}){let s=this.rt,u=i*o,n=await this._groupnorm({inT:t,gn:r.group_norm,C:a,H:i,W:o,groups:32,eps:1e-6,outputDtype:s.caps().f16?"float16":"float32"}),l=s.caps().f16?"float16":"float32",_=await this._conv2d({inT:n,conv:r.to_q,inC:a,outC:a,H:i,W:o,k:1,pad:0,outputDtype:l}),c=await this._conv2d({inT:n,conv:r.to_k,inC:a,outC:a,H:i,W:o,k:1,pad:0,outputDtype:l}),p=await this._conv2d({inT:n,conv:r.to_v,inC:a,outC:a,H:i,W:o,k:1,pad:0,outputDtype:l}),d=await this._transposeChwToNc({inT:_,C:a,H:i,W:o}),f=await this._transposeChwToNc({inT:c,C:a,H:i,W:o}),b=await this._transposeChwToNc({inT:p,C:a,H:i,W:o}),g=d,h=f,y=b;s.caps().f16&&d.dtype!=="float16"&&(g=s.empty("float16",[u,1,a],"vae-attn-q-f16"),h=s.empty("float16",[u,1,a],"vae-attn-k-f16"),y=s.empty("float16",[u,1,a],"vae-attn-v-f16"),await ut(s,{xT:d,yT:g,count:u*a}),await ut(s,{xT:f,yT:h,count:u*a}),await ut(s,{xT:b,yT:y,count:u*a}));let v=s.empty(l,[u,1,a],"vae-attn-out");if(s.caps().f16&&g.dtype==="float16"&&h.dtype==="float16"&&y.dtype==="float16"&&l==="float16"&&a===512&&u<=4096&&u%64==0){let $=s.empty("float16",[u,u],"vae-attn-logits"),w=s.caps().subgroupMatrix?h:await this._transposeNcToCn({inT:h,rows:u,cols:a});s.caps().subgroupMatrix?await $e(s,{aT:g,wT:w,outT:$,M:u,inFeatures:a,outFeatures:u}):await nt(s,{aT:g,wT:w,outT:$,M:u,inFeatures:a,outFeatures:u}),await uo(s,{xT:$,rows:u,cols:u,scale:1/Math.sqrt(a)});let m=await this._transposeNcToCn({inT:y,rows:u,cols:a});s.caps().subgroupMatrix?await $e(s,{aT:$,wT:m,outT:v,M:u,inFeatures:u,outFeatures:a}):await nt(s,{aT:$,wT:m,outT:v,M:u,inFeatures:u,outFeatures:a})}else await kt(s,{qT:g,kT:h,vT:y,outT:v,seq:u,qHeads:1,kvHeads:1,headDim:a,causal:!1});let S=await this._transposeNcToChw({inT:v,C:a,H:i,W:o});return await this._conv2d({inT:S,conv:r.to_out,inC:a,outC:a,H:i,W:o,k:1,pad:0,addT:t,outputDtype:l})}async _transposeChwToNc({inT:t,C:r,H:a,W:i}){let o=this.rt,s=a*i,u=t.dtype,n=u==="float16"?"f16":"f32",l=u==="float16"?`enable f16;
+`:"",_=`t_chw_nc_${r}_${a}_${i}_${u}`,c=`${l}@group(0) @binding(0) var<storage, read>       x: array<${n}>;
+@group(0) @binding(1) var<storage, read_write> y: array<${n}>;
+const C: u32 = ${r}u;
+const H: u32 = ${a}u;
+const W: u32 = ${i}u;
+const N: u32 = ${s}u;
+@compute @workgroup_size(8, 8, 1)
+fn main(@builtin(global_invocation_id) gid: vec3<u32>) {
+  let h = gid.x; let w = gid.y; let c = gid.z;
+  if (h >= H || w >= W || c >= C) { return; }
+  let n_idx = h * W + w;
+  y[n_idx * C + c] = x[c * N + n_idx];
+}
+`,p=o.empty(u,[s,r],"t-chw-nc");return await o.runProgram({name:"t_chw_nc",source:c,cacheKey:_,bindings:[{tensor:t,type:"read-only-storage"},{tensor:p,type:"storage"}],workgroups:[Math.ceil(a/8),Math.ceil(i/8),r]}),p}async _transposeNcToCn({inT:t,rows:r,cols:a}){let i=this.rt,o=t.dtype,s=o==="float16"?"f16":"f32",u=o==="float16"?`enable f16;
+`:"",n=`t_nc_cn_${r}_${a}_${o}`,l=`${u}@group(0) @binding(0) var<storage, read>       x: array<${s}>;
+@group(0) @binding(1) var<storage, read_write> y: array<${s}>;
+const ROWS: u32 = ${r}u;
+const COLS: u32 = ${a}u;
+@compute @workgroup_size(16, 16, 1)
+fn main(@builtin(global_invocation_id) gid: vec3<u32>) {
+  let c = gid.x;
+  let r = gid.y;
+  if (r >= ROWS || c >= COLS) { return; }
+  y[c * ROWS + r] = x[r * COLS + c];
+}
+`,_=i.empty(o,[a,r],"vae-attn-v-cn");return await i.runProgram({name:"t_nc_cn",source:l,cacheKey:n,bindings:[{tensor:t,type:"read-only-storage"},{tensor:_,type:"storage"}],workgroups:[Math.ceil(a/16),Math.ceil(r/16),1]}),_}async _transposeNcToChw({inT:t,C:r,H:a,W:i}){let o=this.rt,s=a*i,u=t.dtype,n=u==="float16"?"f16":"f32",l=u==="float16"?`enable f16;
+`:"",_=`t_nc_chw_${r}_${a}_${i}_${u}`,c=`${l}@group(0) @binding(0) var<storage, read>       x: array<${n}>;
+@group(0) @binding(1) var<storage, read_write> y: array<${n}>;
+const C: u32 = ${r}u;
+const H: u32 = ${a}u;
+const W: u32 = ${i}u;
+const N: u32 = ${s}u;
+@compute @workgroup_size(8, 8, 1)
+fn main(@builtin(global_invocation_id) gid: vec3<u32>) {
+  let h = gid.x; let w = gid.y; let c = gid.z;
+  if (h >= H || w >= W || c >= C) { return; }
+  let n_idx = h * W + w;
+  y[c * N + n_idx] = x[n_idx * C + c];
+}
+`,p=o.empty(u,[r,a,i],"t-nc-chw");return await o.runProgram({name:"t_nc_chw",source:c,cacheKey:_,bindings:[{tensor:t,type:"read-only-storage"},{tensor:p,type:"storage"}],workgroups:[Math.ceil(a/8),Math.ceil(i/8),r]}),p}};function lt(e){if(e.byteLength%4==0)return e;let t=new Uint16Array(e.length+1);return t.set(e),t}function _s({rt:e,weightF16:t,inC:r,outC:a}){let i=Zr(),o=[];for(let s=0;s<2;++s){let u=s===0?[[0],[1,2]]:[[0,1],[2]];for(let n=0;n<2;++n){let l=n===0?[[0],[1,2]]:[[0,1],[2]],_=new Uint16Array(a*r*4);for(let p=0;p<a;++p)for(let d=0;d<r;++d)for(let f=0;f<2;++f)for(let b=0;b<2;++b){let g=0;for(let h of u[f])for(let y of l[b])g+=i[t[p*r*9+d*9+h*3+y]];_[p*r*4+d*4+f*2+b]=Ur(g)}let c=lt(_);o.push(e.tensorFromTypedArray("float16",[c.length],c))}}return o}function cs({rt:e,weightF16:t,inC:r,outC:a}){let i=Zr(),o=[];for(let s=0;s<2;++s){let u=s===0?[[0],[1,2]]:[[0,1],[2]];for(let n=0;n<2;++n){let l=n===0?[[0],[1,2]]:[[0,1],[2]],_=new Uint16Array(r*4*a);for(let p=0;p<r;++p)for(let d=0;d<2;++d)for(let f=0;f<2;++f){let b=d*2+f,g=(p*4+b)*a;for(let h=0;h<a;++h){let y=0;for(let v of u[d])for(let S of l[f])y+=i[t[h*r*9+p*9+v*3+S]];_[g+h]=Ur(y)}}let c=lt(_);o.push(e.tensorFromTypedArray("float16",[c.length],c))}}return o}function ds({rt:e,weightF16:t,inC:r,outC:a}){let i=new Uint16Array(a*9*r);for(let o=0;o<a;++o){let s=o*r*9;for(let u=0;u<9;++u){let n=s+u*r;for(let l=0;l<r;++l)i[n+l]=t[s+l*9+u]}}return e.tensorFromTypedArray("float16",[i.length],i)}async function ps({rt:e,weightF16:t,inC:r,outC:a}){let i=e.tensorFromTypedArray("float16",[t.length],t),o=e.empty("float16",[r*16,a],"conv-wino-f2x2-weight");return await e.runProgram({name:"conv2d_winograd_weight_transform",source:Yo({inC:r,outC:a}),cacheKey:`conv2d_winograd_weight_transform_${r}_${a}`,bindings:[{tensor:i,type:"read-only-storage"},{tensor:o,type:"storage"}],workgroups:[Math.ceil(a/16),Math.ceil(r/16),1]}),e.clearBindGroupCache?.(),e.host.device.queue.onSubmittedWorkDone().then(()=>i.destroy?.()).catch(()=>{}),o}var Dt=null;function Zr(){if(Dt)return Dt;let e=new Float32Array(65536);for(let t=0;t<e.length;++t)e[t]=Fr(t);return Dt=e,e}function fs(e){let t=new Float32Array(e*4);for(let r=0;r<e;++r)t[r*4+3]=r;return t}function gs(e,t){let r=new Float32Array(e*t*4);for(let a=0;a<e;++a)for(let i=0;i<t;++i){let o=(a*t+i)*4;r[o+1]=a,r[o+2]=i}return r}var ms=class{constructor({rt:e,snapshotDir:t,tokenizer:r,textEncoder:a,transformer:i,vae:o,vaeConfig:s,schedulerConfig:u,bnStats:n}){this.rt=e,this.snapshotDir=t,this.tokenizer=r,this.textEncoder=a,this.transformer=i,this.vae=o,this.vaeConfig=s??o?.config??null,this.schedulerConfig=u,this.bnStats=n,this.destroyed=!1}async ensureVae(){if(this.vae&&this.bnStats)return this.vae;throw Error("VAE was not loaded; construct the pipeline without skipVae to decode images")}async generate(e){let t=_t();try{return await this._generate(e,t)}finally{this.rt.clearTransientCaches?.(),this.rt.clearReadbackPool?.(),t.destroy(),this.rt.clearTransientCaches?.()}}async _generate({prompt:e,height:t=1024,width:r=1024,numInferenceSteps:a=4,seed:i=0,log:o=null,callbackOnStepEnd:s=null,encoderHiddenStatesT:u=null,signal:n=null},l=null){if(t%16!=0||r%16!=0)throw Error("height and width must be divisible by 16");let _=this.rt,c=this.schedulerConfig,p=this.transformer.config;p.num_attention_heads*p.attention_head_dim;let d=u,f,b;if(d){if(d.runtime!==_)throw Error("encoderHiddenStatesT belongs to a different runtime");if(d.shape.length!==2)throw Error("encoderHiddenStatesT must have shape [seq, stackDim]");[f,b]=d.shape,o?.("text encode cache")}else({hiddenStackT:d,seq:f,stackDim:b}=await this.encodePrompt(e,{log:o,scope:l}));if(b!==p.joint_attention_dim)throw Error(`text stackDim ${b} != joint_attention_dim ${p.joint_attention_dim}`);o?.("scheduler");let g=xo(t/16*(r/16),a),h=new Eo(c);h.setTimesteps({numInferenceSteps:a,mu:g});let y=t/8,v=r/8,S=this.vaeConfig?.latent_channels??32,$=y/2,w=v/2,m=S*4,T=Ss(Es(i,m*$*w),m,$,w),I=l?.track(_.tensorFromTypedArray("float32",[$*w,m],T))??_.tensorFromTypedArray("float32",[$*w,m],T),E=gs($,w),k=fs(f);for(let O=0;O<a;++O){if(n&&n.aborted)throw new DOMException("The operation was aborted.","AbortError");let D=_t(),x=ct(_,D);try{let L=h.timesteps[O]/1e3;o?.(`step ${O}/${a} t=${L.toFixed(4)}`);let C=await this.transformer.forward({hiddenStatesT:I,encoderHiddenStatesT:d,timestep:L,imgIds:E,txtIds:k,scope:D}),B=h.stepDelta(O);await Ft(x,{xT:I,yT:C,count:$*w*128,alpha:B}),s&&await s(this,O,h.timesteps[O],{latents:I})}finally{_.clearBindGroupCache?.(),D.destroy()}}await this.ensureVae(),o?.("unpack + BN-denorm");let A=await io(l?ct(_,l):_,{packedT:I,meanT:this.bnStats.running_meanT,stdT:this.bnStats.running_stdT,outputDtype:_.caps().f16?"float16":"float32",latentC:S,latentH:y,latentW:v});o?.("vae decode");let{image:W,H:P,W:U}=await this.vae.decode(A,y,v,{scope:l}),H=await ys(_,W);o?.("to RGB");let M=new Uint8Array(P*U*3);for(let O=0;O<3;O++)for(let D=0;D<P;D++)for(let x=0;x<U;x++){let L=(H[O*P*U+D*U+x]+1)*127.5;M[(D*U+x)*3+O]=Math.min(255,Math.max(0,Math.round(L)))}return o?.("png encode"),Bo(U,P,M)}destroy(){this.destroyed||(this.destroyed=!0,this.rt.clearTransientCaches?.(),this.textEncoder?.destroy?.(),this.transformer?.destroy?.(),this.vae?.destroy?.(),this.tokenizer=null,this.textEncoder=null,this.transformer=null,this.vae=null,this.bnStats=null,this.rt.clearTransientCaches?.())}async encodePrompt(e,{log:t=null,scope:r=null}={}){if(!this.tokenizer||!this.textEncoder)throw Error("Text encoder was not loaded; provide encoderHiddenStatesT to generate()");t?.("tokenize");let a=Ts(e),i=(await this.tokenizer.encode(a)).ids.slice(0,512),o=new Uint32Array(Math.max(1,i.length));for(let s=0;s<i.length;++s)o[s]=i[s];return t?.(`tokens: ${i.length}`),t?.("text encode"),this.textEncoder.encode(o,{scope:r})}},bs=class Qr extends ms{static async fromSnapshot(t,r,a={}){return hs(Qr,t,r,a,{readJsonResource:Jr,readJsonResourceOptional:ws,openSafeTensorsResource:vs})}};async function hs(e,t,r,{onProgress:a=null,fetch:i=null,cacheStorage:o=null,cacheName:s=null,cache:u=void 0,force:n=!1,signal:l=null,skipTextEncoder:_=!1,skipVae:c=!1,requireRangeRequests:p=!0}={},d){let f={fetch:i,cacheStorage:o,cacheName:s,cache:u,force:n,signal:l,requireRangeRequests:p},b=null,g=null,h=null,y=S=>{a&&a({component:S,phase:"open"})},v=S=>$=>{a&&a({component:S,phase:"download",...$})};try{a&&a({phase:"init"});let S=d.readJsonResourceOptional?await d.readJsonResourceOptional(r,"scheduler/scheduler_config.json",f):null;S=S??{base_image_seq_len:256,base_shift:.5,max_image_seq_len:4096,max_shift:1.15,num_train_timesteps:1e3,shift:3,use_dynamic_shifting:!0};let $=new Pi(await d.readJsonResource(r,"tokenizer/tokenizer.json",f),await d.readJsonResource(r,"tokenizer/tokenizer_config.json",f));if(!_){y("text_encoder");let A=await d.readJsonResource(r,"text_encoder-mlx-4bit/config.json",f),W=await d.openSafeTensorsResource(r,"text_encoder-mlx-4bit/model.safetensors",f);try{b=await vo.fromMlxSafeTensors({rt:t,config:A,safeTensors:W,onProgress:v("text_encoder"),signal:l})}finally{await W.close()}}y("transformer");let w=await d.readJsonResource(r,"transformer-packed-mflux/config.json",f),m=d.readJsonResourceOptional?await d.readJsonResourceOptional(r,"transformer-packed-mflux/quantization_config.json",f):null,T=m?{...w,quantization_config:m}:w,I=await d.openSafeTensorsResource(r,"transformer-packed-mflux/diffusion_pytorch_model.safetensors",f);try{g=await qo.fromMlxSafeTensors({rt:t,config:T,safeTensors:I,onProgress:v("transformer"),signal:l})}finally{await I.close()}let E=await d.readJsonResource(r,"vae/config.json",f),k=null;if(!c){y("vae");let A=await d.openSafeTensorsResource(r,"vae/diffusion_pytorch_model.safetensors",f);try{h=await ls.fromBf16SafeTensors({rt:t,config:E,safeTensors:A,onProgress:v("vae"),signal:l}),k=h.w.bn}finally{await A.close()}}return new e({rt:t,snapshotDir:r,tokenizer:$,textEncoder:b,transformer:g,vae:h,vaeConfig:E,schedulerConfig:S,bnStats:k})}catch(S){throw b?.destroy?.(),g?.destroy?.(),h?.destroy?.(),t.clearTransientCaches?.(),S}}async function ys(e,t){let r=await e.readTensor(t);return t.dtype==="float16"?Float32Array.from(r,Fr):r}async function Jr(e,t,r){return JSON.parse(await $s(ea(e,t),r))}async function ws(e,t,r){try{return await Jr(e,t,r)}catch{return null}}async function vs(e,t,r={}){return ka(ea(e,t),r)}function ea(e,t){let r=e instanceof URL?e.toString():String(e);return new URL(t,xs(r),globalThis.location?.href).toString()}async function $s(e,t={}){let r=t.fetch??globalThis.fetch;if(typeof r!="function")throw Error("No fetch implementation available");let a=await ks(t);if(a&&!t.force){let o=await a.match(e);if(o)return o.text()}let i=await r(e,{signal:t.signal});if(!i.ok)throw Error(`GET ${e} failed: ${i.status} ${i.statusText}`);if(a)try{await a.put(e,i.clone())}catch(o){typeof console<"u"&&console.warn(`resource cache write failed: ${o.message}`)}return i.text()}async function ks(e={}){if(e.cache===!1)return null;let t=e.cacheStorage??globalThis.caches;return t?.open?t.open(e.cacheName??"bonsai-pipeline-v1"):null}function xs(e){return e.endsWith("/")?e:`${e}/`}function Ts(e){return`<|im_start|>user
+${e}<|im_end|>
+<|im_start|>assistant
+<think>
+
+</think>
+
+`}function Es(e,t){let r=e>>>0^3735928559;function a(){r=r+1831565813>>>0;let s=r;return s=Math.imul(s^s>>>15,s|1),s^=s+Math.imul(s^s>>>7,s|61),(s^s>>>14)>>>0}function i(){return(a()+1)/4294967297}let o=new Float32Array(t);for(let s=0;s<t;s+=2){let u=i(),n=i(),l=Math.sqrt(-2*Math.log(u)),_=2*Math.PI*n;o[s]=l*Math.cos(_),s+1<t&&(o[s+1]=l*Math.sin(_))}return o}function Ss(e,t,r,a){let i=r*a,o=new Float32Array(i*t);for(let s=0;s<t;++s)for(let u=0;u<i;++u)o[u*t+s]=e[s*i+u];return o}var As="https://huggingface.co",ta="prism-ml/bonsai-image-ternary-4B-mlx-2bit",Er="bonsai-image-v1",Is=class ra{constructor({runtime:t,pipeline:r,modelRoot:a,ownsRuntime:i,modelName:o}){this.runtime=t,this.gpuPipeline=r,this.modelRoot=a,this.ownsRuntime=i,this.modelName=o,this.destroyed=!1}getModelName(){return this.modelName}static async clearCache(t=null){let r=t??Er;if(Je.has(r)){try{(await Je.get(r)).close()}catch{}Je.delete(r)}if(typeof indexedDB<"u"&&await new Promise((a,i)=>{let o=indexedDB.deleteDatabase(r);o.onsuccess=()=>a(),o.onerror=()=>i(o.error),o.onblocked=()=>{console.warn(`indexedDB.deleteDatabase(${r}) was blocked. It will be deleted once all connections are closed.`),a()}}),typeof globalThis.caches<"u")try{await globalThis.caches.delete(t??"bonsai-pipeline-v1")}catch(a){console.warn("Cache API deletion failed:",a)}}static async from_pretrained(t=null,r={}){let a=Bs(t,r),i=r.runtime??r.rt??await oa(r.runtimeOptions??{}),o=!(r.runtime??r.rt),s,u=t??r.repoId??ta;try{s=await bs.fromSnapshot(i,a,{onProgress:r.onProgress,fetch:r.fetch,cacheStorage:r.cacheStorage,cacheName:r.cacheName??Er,cache:r.cache,force:r.force,signal:r.signal,requireRangeRequests:r.requireRangeRequests??r.require_range_requests??!0})}catch(n){if(o)try{await i.destroy()}catch{}throw n}return new ra({runtime:i,pipeline:s,modelRoot:a,ownsRuntime:o,modelName:u})}async generate(t={}){let r=Ws(t);return new Nt({bytes:await this.gpuPipeline.generate(r),width:r.width,height:r.height,prompt:r.prompt,seed:r.seed})}async destroy(){if(this.destroyed)return;this.destroyed=!0;let t=this.gpuPipeline;this.gpuPipeline=null,t?.destroy?.(),this.ownsRuntime&&await this.runtime.destroy()}},Nt=class{constructor({bytes:e,width:t,height:r,prompt:a="",seed:i=0}){this.bytes=e,this.width=t,this.height=r,this.prompt=a,this.seed=i}toBlob(){return new Blob([this.bytes],{type:"image/png"})}};function Ws(e){let t=e.prompt;if(typeof t!="string"||t.length===0)throw Error("Flux2KleinPipeline requires a non-empty prompt string");if((e.guidanceScale??e.guidance_scale??1)!==1)throw Error("Flux2-Klein Bonsai currently supports guidance_scale/guidanceScale = 1.0 only");return{prompt:t,height:Number(e.height??1024),width:Number(e.width??1024),numInferenceSteps:Number(e.numInferenceSteps??e.num_inference_steps??4),seed:Number(e.seed??0),log:e.log??null,callbackOnStepEnd:e.callbackOnStepEnd??e.callback_on_step_end??null,signal:e.signal??null}}function Bs(e,t){let r=e??t.repoId??ta;return Ms(r)||r.startsWith("/")||r.startsWith(".")?r:`${As}/${r}/resolve/${t.revision??"main"}`}function Ms(e){return typeof e=="string"&&/^https?:/i.test(e)}Is.isSupported=async function(){if(!globalThis.navigator?.gpu)return!1;try{return await navigator.gpu.requestAdapter()!==null}catch{return!1}};Nt.prototype.toDataURL=async function(){let e=this.toBlob();return new Promise((t,r)=>{let a=new FileReader;a.onload=()=>t(a.result),a.onerror=r,a.readAsDataURL(e)})};Nt.prototype.toImageBitmap=async function(){return createImageBitmap(this.toBlob())};export{Is as BonsaiImagePipeline,Nt as BonsaiImageResult};

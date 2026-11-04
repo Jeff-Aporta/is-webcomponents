@@ -108,7 +108,7 @@
       "title": "CDN",
       "lede": [
         "Tag del catálogo: <code class=\"code\">iswc-ui</code> (módulo). Artefacto:",
-        "          <code class=\"code\">dist/cdn/helpers/ui.min.js</code>. También va dentro de",
+        "          <code class=\"code\">dist/cdn/helpers/ui.min.mjs</code>. También va dentro de",
         "          <code class=\"code\">all.min.js</code>."
       ],
       "blocks": [
@@ -116,7 +116,7 @@
           "kind": "code",
           "code": [
             "<script type=\"module\"",
-            "  src=\"https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn/helpers/ui.min.js\">",
+            "  src=\"https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn/helpers/ui.min.mjs\">",
             "</script>"
           ],
           "lang": "html"

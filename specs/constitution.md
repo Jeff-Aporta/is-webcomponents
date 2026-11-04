@@ -38,9 +38,9 @@ Flujo: [flujo-sdd.md](flujo-sdd.md).
 
 ## C-5 CDN
 
-- Publicación: solo `dist/cdn/<categoria>/<tag>.min.js` (+ `.min.css` si aplica) y `loader.min.js`.
+- Publicación: solo `dist/cdn/<categoria>/<tag>.min.js` (+ `.min.css` si aplica) y `loader.min.mjs`.
 - **No** `all.min.js`, **no** `category.*.min.js`, **no** bundles sueltos en `dist/` raíz.
-- Consumo: `loader.min.js` + `L.load(tags|categorias)` con anti-redundancia.
+- Consumo: `loader.min.mjs` + `L.load(tags|categorias)` con anti-redundancia.
 
 ## C-6 Previews
 

@@ -88,7 +88,7 @@ var ZPinVendor = z.object({
   raices: z.array(z.string().min(1)).optional(),
   /** Carpetas que no se barren. Default: `node_modules, vendor, dist, .tmp-scss, .git`. */
   saltar: z.array(z.string().min(1)).optional(),
-  /** Archivo que debe existir en el pin para darlo por publicado. Default `dist/cdn/core/loader.min.js`. */
+  /** Archivo que debe existir en el pin para darlo por publicado. Default `dist/cdn/core/loader.min.mjs`. */
   verificar: z.string().min(1).optional(),
   /** Pin a usar como fuente web cuando el consumidor no cita ningún `<repo>@<sha40>` (p. ej. un server sin front). */
   sha: z.string().regex(/^[0-9a-f]{40}$/).optional()
@@ -183,7 +183,7 @@ var EditableLoteSchema = z.object({
   module: z.string().optional(),
   /** Custom element del kit (`iswc-flowchart`, `iswc-er-diagram`…). */
   tag: z.string(),
-  /** Módulo relativo a `<kit>/dist/cdn/` (`diagrams/flowchart.min.js`). */
+  /** Módulo relativo a `<kit>/dist/cdn/` (`diagrams/flowchart.min.mjs`). */
   script: z.string(),
   attrs: z.record(z.string(), z.string()).optional(),
   /** Payload declarativo; puede llevar referencias `{ path, query, actions }` relativas al editable. */

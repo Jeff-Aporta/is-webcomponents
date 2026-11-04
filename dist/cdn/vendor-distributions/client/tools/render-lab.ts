@@ -42,7 +42,7 @@ export async function jobsDeEditables(dir: string, op: OpcionesEditables = {}): 
 export function jobDeEditable(spec: Editable, archivo: string, op: OpcionesEditables = {}): SyntheticDiagramJob {
   return {
     tag: spec.tag || op.tag || 'iswc-flowchart',
-    scriptUrl: `dist/cdn/${spec.script || op.script || 'diagrams/flowchart.min.js'}`,
+    scriptUrl: `dist/cdn/${spec.script || op.script || 'diagrams/flowchart.min.mjs'}`,
     payload: spec.payload,
     payloadBase: archivo,
     attrs: spec.attrs || op.attrs || { 'diagram-style': 'insoft' },

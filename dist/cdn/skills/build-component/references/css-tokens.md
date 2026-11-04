@@ -95,11 +95,13 @@ Reglas:
 
 ## 4. Customización por atributo (`static styleAttrs`)
 
-`ElementBase` permite mapear un atributo del host a una CSS custom
-property del `:host` sin escribir CSS adicional:
+El molde, con el mixin `withStyleAttrs(IswcElement)` (`core/attrs.ts`),
+permite mapear un atributo del host a una CSS custom property del
+`:host` sin escribir CSS adicional:
 
 ```ts
-class IswcButton extends ElementBase {
+class IswcButton extends withStyleAttrs(IswcElement) {
+  static tag = 'iswc-button';
   static styleAttrs = {
     radius: '--iswc-button-border-radius',
     'border-width': '--iswc-button-border-width',
@@ -116,7 +118,7 @@ El consumidor puede entonces:
 <iswc-button radius="12px" font-weight="700">Personalizado</iswc-button>
 ```
 
-`ElementBase.connectedCallback` y `attributeChangedCallback` se
+`connectedCallback` y `attributeChangedCallback` del molde se
 encargan de sincronizar el atributo con la custom property.
 
 Para **colores** (no tamaños), usa el `onlyColorValues: true` para

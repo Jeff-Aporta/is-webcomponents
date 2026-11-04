@@ -54,7 +54,7 @@ la ruta desde `src/` y la extensión `.js` de S-TS2: `'@jeff-aporta/iswc-base/co
 `./schemas/x.schemas.js`, `./utils/x.js`).
 
 **Excepciones.** `src/vendor-distributions/**` no usa relativos ni alias (viaja a otros repos). Un `../` que sale de
-`src/` (p. ej. `../../dist/cdn/core/loader.min.js`) no lo cubre el alias.
+`src/` (p. ej. `../../dist/cdn/core/loader.min.mjs`) no lo cubre el alias.
 
 **HOW.** `deno.json` (`"@jeff-aporta/iswc-base/": "./src/"`), `tsconfig.json` (`paths`), el plugin esbuild `aliasKit()`
 (`src/cdn/build/alias.ts`, incluido en `bundleMinJs`) y la reescritura de `scripts/serve.mjs`. El `dist/cdn/` publicado
@@ -189,7 +189,7 @@ el kit publica en `dist/cdn/` resuelve sus imports relativos sin barriles: lo qu
 vendoriza no apunta a un archivo inexistente.
 
 Única excepción declarada (y verificada): los módulos de copia única de Zod —
-`src/vendor-distributions/shared/lib/zod.ts` (entrada CDN `dist/cdn/lib/zod.min.js`) y `base/zod.ts` de
+`src/vendor-distributions/shared/lib/zod.ts` (entrada CDN `dist/cdn/lib/zod.min.mjs`) y `base/zod.ts` de
 la plantilla de apps—. Una excepción cuyo archivo ya no existe es un error.
 
 **HOW débil.** El guardián lee los fuentes sin comentarios ni plantillas de texto y busca las formas

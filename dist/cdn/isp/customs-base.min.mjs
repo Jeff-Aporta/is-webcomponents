@@ -1,0 +1,12 @@
+/*!
+ * ISWC - docs (LLM)
+ * component-skill: (sin customs-base.md) → https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/iswc-base/SKILL.md
+ * kit-skill: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/iswc-base/SKILL.md
+ * component: (sin customs-base.md) → https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/iswc-base/SKILL.md
+ * category: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/specs/componentes.md
+ * kit: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/specs/componentes.md
+ * loader: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/cdn/loader.md
+ * cdn-install: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/is-cdn-install/SKILL.md
+ * blob: https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/isp/customs-base.js
+ */
+import"../_chunks/chunk-4PV5NT2U.mjs?v=58b9qn";var r=class{topMenuActions(o){let n=!!o.isReadOnly||void 0,e=(this.levelName?.({depth:0})??"").trim(),p=[{icon:"mdi:plus-circle-outline",label:"Agregar",title:e&&e!=="---"?`Agregar ${e}`:"Agregar",hotkey:"Insert",disabled:n,onClick:()=>{n||o.addRoot?.()}}],i=!!o.canCollapseAll,t=!!o.canExpandAll,u=[{icon:"mdi:unfold-less-horizontal",title:"Colapsar todo",hotkey:"Ctrl+ArrowLeft",disabled:!i||void 0,onClick:()=>{i&&o.collapseAll?.()}},{icon:"mdi:unfold-more-horizontal",title:"Expandir todo",hotkey:"Ctrl+ArrowRight",disabled:!t||void 0,onClick:()=>{t&&o.expandAll?.()}}],l=!!o.isReadOnlyExternal,d=l||!o.historyCanUndo||void 0,a=l||!o.historyCanRedo||void 0,s=!!o.isProtected,c=!(o.canToggleProtection??!0)||void 0;return[p,u,[{icon:"mdi:arrow-u-left-top",title:"Deshacer",hotkey:"Ctrl+KeyZ",disabled:d,onClick:()=>{d||o.historyUndo?.()}},{iconTrue:"mdi:lock-outline",iconFalse:"mdi:lock-open-variant-outline",checked:s,color:"warning",colorFalse:"neutral",title:s?"Desproteger":"Proteger",disabled:c,onClick:()=>{c||o.protectionToggle?.()}},{icon:"mdi:arrow-u-right-top",title:"Rehacer",hotkey:"Ctrl+KeyY",disabled:a,onClick:()=>{a||o.historyRedo?.()}}]]}};export{r as TreeCustomsBase};

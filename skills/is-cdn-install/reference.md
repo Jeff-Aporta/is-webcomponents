@@ -22,7 +22,7 @@ Fuente de verdad en código: `src/components/_shared/cdn-ref.js` (`MIRRORS`, `re
 ```
 dist/cdn/
   core/
-    loader.min.js
+    loader.min.mjs
     is-base.min.css
     palettes.min.css
   skills/<name>/SKILL.md    ← skills para agentes

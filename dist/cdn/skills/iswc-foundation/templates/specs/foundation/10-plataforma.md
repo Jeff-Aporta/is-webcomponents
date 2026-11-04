@@ -30,7 +30,7 @@ con el kit iswc-base (`iswc-*`) y componentes propios `__PREFIJO__-*`.
 - [HS-PLAT-02] Tareas: `build:scss`, `build`, `dev`, `serve`, `check`, `pin`, `vendor:iswc`, `test`, `test:health`, `test:e2e`, `test:all`, `test:all:halt`, `sync:entregable`.
 - [HS-PLAT-03] Build: `src/js/<x>.ts` → `dist/cdn/js/<x>.js`, `view/<v>/<x>.ts` → `dist/cdn/view/<v>/<x>.js` (sin bundle); bundles solo para `js/base/zod.ts` y los barriles `all.ts`; `js/boot.ts` → `dist/cdn/boot.js` (IIFE). Hojas `.scss` → `.css` hermana del módulo.
 - [HS-PLAT-04] Cache busting `?v=<6 caracteres del hash de contenido>` con `stampDirectory` del kit; `dist/cdn/asset-hashes.json`; `dist/cdn/__PREFIJO__Loader.min.js` llama `L.registerApp({tag: url?v=…}, { installSheets: false })`; `dist/cdn/build-stamp.json`.
-- [HS-PLAT-05] Pin único: `https://cdn.jsdelivr.net/gh/__REPO__@<sha40>/dist/cdn/core/loader.min.js` (`src/js/iswc.ts`). Prohibido `@main`, `@latest`, SHA corto, GitHub Pages o ramas en raw. `deno task pin` audita; `--nuevo=<sha40|ultimo>` actualiza tras verificar en jsDelivr; luego `deno task vendor:iswc` al mismo SHA.
+- [HS-PLAT-05] Pin único: `https://cdn.jsdelivr.net/gh/__REPO__@<sha40>/dist/cdn/core/loader.min.mjs` (`src/js/iswc.ts`). Prohibido `@main`, `@latest`, SHA corto, GitHub Pages o ramas en raw. `deno task pin` audita; `--nuevo=<sha40|ultimo>` actualiza tras verificar en jsDelivr; luego `deno task vendor:iswc` al mismo SHA.
 - [HS-PLAT-06] Arranque de `index.html`: `boot.js` → `styles/app.css` → loader del kit → `__PREFIJO__Loader.min.js` → `L.loadPageStyles(['iswc-palettes-default'])` + `L.load(...KIT_TAGS, ...tagsArranque())` → `data-app-ready`.
 
 ## 5. Casos borde y errores

@@ -1,0 +1,1 @@
+import{d as n}from"./chunk-JUXAZSGN.mjs?v=tr38yi";var a=7.4,c=5.9;function g(e,i,{padding:r=32}={}){let o=n(e??"").length*a,d=n(i??"").length*c,t=Math.max(o,d);return t?Math.ceil(t+r*2):0}export{g as a};
