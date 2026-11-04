@@ -1,14 +1,14 @@
 // host.ts — biblioteca de una macro: lo único que puede tocar. Opera sobre el documento y una
 // interfaz mínima de la vista. Cada función tiene nombre en español y alias en inglés.
-import { cellName, colIndex, colName, normalize, parseCell, parseRange, rangeName } from '../address.js';
-import type { Rect } from '../address.schemas.js';
-import type { SpreadsheetDoc } from '../document.js';
-import type { Sheet } from '../engine.js';
-import { CellError } from '../values.js';
-import type { Scalar } from '../values.schemas.js';
+import { cellName, colIndex, colName, normalize, parseCell, parseRange, rangeName } from '@jeff-aporta/iswc-base/components/data/utils/spreadsheet/address.js';
+import type { Rect } from '@jeff-aporta/iswc-base/components/data/utils/spreadsheet/address.schemas.js';
+import type { SpreadsheetDoc } from '@jeff-aporta/iswc-base/components/data/utils/spreadsheet/document.js';
+import type { Sheet } from '@jeff-aporta/iswc-base/components/data/utils/spreadsheet/engine.js';
+import { CellError } from '@jeff-aporta/iswc-base/components/data/utils/spreadsheet/values.js';
+import type { Scalar } from '@jeff-aporta/iswc-base/components/data/utils/spreadsheet/values.schemas.js';
 import { macroText, MacroDict, MacroInterpreter } from './interp.js';
 import type { Builtin, MacroLimits, MacroValue } from './interp.schemas.js';
-import type { BorderSide, CellStyle } from '../../../schemas/spreadsheet.schemas.js';
+import type { BorderSide, CellStyle } from '@jeff-aporta/iswc-base/components/data/schemas/spreadsheet.schemas.js';
 import type { MacroView, MacroResult } from './host.schemas.js';
 
 

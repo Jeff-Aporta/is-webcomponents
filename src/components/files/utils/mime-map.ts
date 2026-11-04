@@ -1,6 +1,6 @@
 /** Despacho MIME/ext -> tags view/edit (S-FP3). */
 
-import type { FileKind, FileDispatch } from "../schemas/mime-map.schemas.js";
+import type { FileKind, FileDispatch } from "@jeff-aporta/iswc-base/components/files/schemas/mime-map.schemas.js";
 const BY_MIME: Record<string, FileKind> = {
   'text/plain': 'txt',
   'text/markdown': 'txt',

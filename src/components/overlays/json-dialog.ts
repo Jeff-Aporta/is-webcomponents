@@ -1,12 +1,12 @@
-import { adoptCss, defineElement, emit } from '../../core/element.js';
-import { crearNodo } from '../../core/dom-utils.js';
-import { atributosDe, PropsElement } from '../../core/props-element.js';
+import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { crearNodo } from '@jeff-aporta/iswc-base/core/dom-utils.js';
+import { atributosDe, PropsElement } from '@jeff-aporta/iswc-base/core/props-element.js';
 import { JsonDialogPropsSchema, JsonValidacionSchema } from './schemas/json-dialog.schemas.js';
 import type { JsonBotonEl, JsonDialogoEl, JsonDialogProps, JsonEditorEl, JsonValidacion } from './schemas/json-dialog.schemas.js';
-import '../layout/dialog.js';
-import '../layout/callout.js';
-import '../code/code.js';
-import '../actions/button.js';
+import '@jeff-aporta/iswc-base/components/layout/dialog.js';
+import '@jeff-aporta/iswc-base/components/layout/callout.js';
+import '@jeff-aporta/iswc-base/components/code/code.js';
+import '@jeff-aporta/iswc-base/components/actions/button.js';
 
 /**
  * <iswc-json-dialog> — ver y editar un documento como JSON en un diálogo. Valida mientras se escribe, para que los

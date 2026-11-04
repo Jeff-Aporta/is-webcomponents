@@ -1,11 +1,11 @@
-import { adoptCss } from '../../../core/element.js';
-import { withStyleAttrs } from '../../../core/attrs.js';
-import { computePosition } from '../../../core/position.js';
+import { adoptCss } from '@jeff-aporta/iswc-base/core/element.js';
+import { withStyleAttrs } from '@jeff-aporta/iswc-base/core/attrs.js';
+import { computePosition } from '@jeff-aporta/iswc-base/core/position.js';
 import { formatDate, formatTime, splitDateTime, todayISO, toTime } from './date-utils.js';
-import { defineElement } from '../../../core/element.js';
-import { emit } from '../../../core/element.js';
-import { resolveLocale } from '../../../core/resolve-locale.js';
-import type { PickerKind, PickerPanelDef, PickerField, PanelsBuilder, DefinePickerInputOpts } from "../schemas/picker-element.schemas.js";
+import { defineElement } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { resolveLocale } from '@jeff-aporta/iswc-base/core/resolve-locale.js';
+import type { PickerKind, PickerPanelDef, PickerField, PanelsBuilder, DefinePickerInputOpts } from "@jeff-aporta/iswc-base/components/forms/schemas/picker-element.schemas.js";
 
 /**
  * Fábrica de los pickers "campo + panel": iswc-date-input, iswc-time-input,

@@ -6,7 +6,7 @@
  * que ya no aplica desaparece solo, sin el "se acumulan" que AG documenta.
  */
 
-import type { ColDefAg } from '../contrato.schemas.js';
+import type { ColDefAg } from '@jeff-aporta/iswc-base/components/data/utils/ag-grid/contrato.schemas.js';
 import { claseSegura, escaparHtml, limpiarCss, unirClases } from './html.js';
 import type { ParamsCelda } from './schemas.js';
 import { ambitoDe } from './celdas-valores.js';

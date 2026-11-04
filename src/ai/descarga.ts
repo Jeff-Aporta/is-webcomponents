@@ -2,8 +2,8 @@
  * descarga.ts — regla única para bajar un modelo de IA, sea cual sea el componente que lo use. Hasta 20 MB baja solo, con
  * un toast promise; más pesado, un modal la anuncia y arranca sola a los 5 s, con opción de posponer. Lo ya bajado no vuelve a avisar.
  */
-import { crearNodo } from '../core/dom-utils.js';
-import { readIswc, writeIswc } from '../core/iswc-storage.js';
+import { crearNodo } from '@jeff-aporta/iswc-base/core/dom-utils.js';
+import { readIswc, writeIswc } from '@jeff-aporta/iswc-base/core/iswc-storage.js';
 import type { DialogoDescarga, Pedido, ToastEstatico } from './schemas/ai.schemas.js';
 
 export const LIMITE_MB = 20;
@@ -33,7 +33,7 @@ export function medidor(): (p: { status?: string; file?: string; loaded?: number
 }
 
 /** Los tags del modal se piden al abrirlo: quien solo usa un motor no paga el diálogo. */
-const tagsDelModal = (): Promise<unknown> => Promise.all([import('../components/layout/dialog.js'), import('../components/feedback/progress-bar.js'), import('../components/actions/button.js')]);
+const tagsDelModal = (): Promise<unknown> => Promise.all([import('@jeff-aporta/iswc-base/components/layout/dialog.js'), import('@jeff-aporta/iswc-base/components/feedback/progress-bar.js'), import('@jeff-aporta/iswc-base/components/actions/button.js')]);
 
 const boton = (texto: string, variante: 'outlined' | 'filled'): HTMLElement => crearNodo('iswc-button', { slot: 'footer', variant: variante, color: variante === 'filled' ? 'brand' : 'neutral' }, texto);
 
@@ -124,7 +124,7 @@ function enCola<T>(p: Pedido<T>): Promise<T> {
 async function conToast<T>(p: Pedido<T>): Promise<T> {
   const carga = p.cargar(() => {});
   try {
-    await import('../components/feedback/toast.js');
+    await import('@jeff-aporta/iswc-base/components/feedback/toast.js');
     const toast = customElements.get('iswc-toast') as unknown as ToastEstatico | undefined;
     void toast?.promise?.(carga, { loading: `Descargando ${p.nombre}…`, success: `${p.nombre} listo`, error: `No se pudo descargar ${p.nombre}` }).catch(() => {});
   } catch { /* sin DOM: solo falta el aviso */ }

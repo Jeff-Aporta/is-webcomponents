@@ -1,7 +1,7 @@
-import { adoptCss, defineElement, emit } from '../../core/element.js';
-import '../media/icon.js';
+import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import '@jeff-aporta/iswc-base/components/media/icon.js';
 import './button.js';
-import { setStringAttr } from '../../core/reflect.js';
+import { setStringAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
 
 /**
  * <iswc-check-icon-button> — botón icon-only con dos estados (unchecked / checked).

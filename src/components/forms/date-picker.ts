@@ -1,5 +1,5 @@
-import '../actions/button.js';
-import { adoptCss, defineElement, emit } from '../../core/element.js';
+import '@jeff-aporta/iswc-base/components/actions/button.js';
+import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
 import {
   addMonths,
   clampISO,
@@ -16,10 +16,10 @@ import {
   toISO,
   weekdayLabels,
 } from './utils/date-utils.js';
-import '../actions/dropdown.js';
+import '@jeff-aporta/iswc-base/components/actions/dropdown.js';
 import './month-calendar.js';
 import './year-calendar.js';
-import { ElementBase } from '../../core/element-base.js';
+import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
 /**
  * <iswc-date-picker> — Calendario inline (equivalente a DateCalendar de MUI X).
  *

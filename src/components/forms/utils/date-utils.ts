@@ -6,8 +6,8 @@
  * Los `Date` solo se usan como aritmética intermedia.
  */
 
-import { resolveLocale } from '../../../core/resolve-locale.js';
-import type { ClockTime, WeekdayLabelsOpts, MonthLabelsOpts, FormatDateOpts, FormatTimeOpts } from "../schemas/date-utils.schemas.js";
+import { resolveLocale } from '@jeff-aporta/iswc-base/core/resolve-locale.js';
+import type { ClockTime, WeekdayLabelsOpts, MonthLabelsOpts, FormatDateOpts, FormatTimeOpts } from "@jeff-aporta/iswc-base/components/forms/schemas/date-utils.schemas.js";
 
 export const ISO_DATE = /^(\d{4})-(\d{2})-(\d{2})$/;
 export const ISO_TIME = /^(\d{1,2}):(\d{2})(?::(\d{2}))?$/;

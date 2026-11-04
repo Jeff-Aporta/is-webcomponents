@@ -17,8 +17,8 @@ import { createRequire } from 'node:module';
 import { extname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
-import { denoTestCon } from '../_shared/deno-test.ts';
-import { lanzarChromium } from '../_shared/navegador.ts';
+import { denoTestCon } from '../_shared/deno-test.ts';
+import { cerrarChromium, lanzarChromium } from '../_shared/navegador.ts';
 
 const { test, lista } = coleccionPruebas({ categoria: 'how' });
 
@@ -130,7 +130,7 @@ denoTest({
       // U5
       assertEquals(errores, [], `U5 errores en consola:\n${errores.join('\n')}`);
     } finally {
-      await nav.close();
+      await cerrarChromium(nav as unknown as Parameters<typeof cerrarChromium>[0]);
       ac.abort();
       await srv.finished;
     }

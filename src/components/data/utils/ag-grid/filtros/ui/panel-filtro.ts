@@ -2,13 +2,13 @@
  * ui/panel-filtro — Contenido de un filtro de columna: condiciones, set o multi. Es el
  * mismo en el popup y en el panel lateral; solo cambia quien lo aloja.
  */
-import { combinarCondiciones, condicionActiva, condicionesDe, opcionInicial, opcionesDe } from '../condiciones.js';
-import { arbolSet, filtrarMini, hojasDe, itemsSet, marcaDeTodo, modeloSet, seleccionDe } from '../set.js';
-import { TEXTOS } from '../textos.js';
+import { combinarCondiciones, condicionActiva, condicionesDe, opcionInicial, opcionesDe } from '@jeff-aporta/iswc-base/components/data/utils/ag-grid/filtros/condiciones.js';
+import { arbolSet, filtrarMini, hojasDe, itemsSet, marcaDeTodo, modeloSet, seleccionDe } from '@jeff-aporta/iswc-base/components/data/utils/ag-grid/filtros/set.js';
+import { TEXTOS } from '@jeff-aporta/iswc-base/components/data/utils/ag-grid/filtros/textos.js';
 import { boton, casilla, crear, fijarCasilla, icono, inputDe, retardo, selectDe } from './controles.js';
-import type { Condicion, FilaSet, ItemSet, ModeloColumna, ModeloMulti, ModeloSet, NodoArbolSet, OpcionesPanelFiltro, OperadorUnion, ParamsFiltro, TipoCondicion, TipoFiltro } from '../filtros.schemas.js';
-import type { MotorFiltros } from '../filtros-motor.js';
-import type { ColumnState, RowNode } from '../../../../schemas/datagrid-types.schemas.js';
+import type { Condicion, FilaSet, ItemSet, ModeloColumna, ModeloMulti, ModeloSet, NodoArbolSet, OpcionesPanelFiltro, OperadorUnion, ParamsFiltro, TipoCondicion, TipoFiltro } from '@jeff-aporta/iswc-base/components/data/utils/ag-grid/filtros/filtros.schemas.js';
+import type { MotorFiltros } from '@jeff-aporta/iswc-base/components/data/utils/ag-grid/filtros/filtros-motor.js';
+import type { ColumnState, RowNode } from '@jeff-aporta/iswc-base/components/data/schemas/datagrid-types.schemas.js';
 
 
 const ALTO_FILA_EM = 1.875;

@@ -1,7 +1,7 @@
 /** Tipos de editores.ts. */
 
-import type { ColDefAg } from '../contrato.schemas.js';
-import type { GridHost } from '../contrato.schemas.js';
+import type { ColDefAg } from '@jeff-aporta/iswc-base/components/data/utils/ag-grid/contrato.schemas.js';
+import type { GridHost } from '@jeff-aporta/iswc-base/components/data/utils/ag-grid/contrato.schemas.js';
 import type { Parametros } from './apoyo.schemas.js';
 import type { OpcionLista } from './schemas/edicion.schemas.js';
 

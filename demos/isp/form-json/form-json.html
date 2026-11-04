@@ -34,7 +34,7 @@
   await import('../../../dist/cdn/forms/checkbox.min.js?v=17d7tn');
   await import('../../../dist/cdn/forms/switch.js');
   // Cargar también el form (lo usa como contenedor del helper).
-  await import('../../../dist/cdn/isp/form-json.min.js?v=7h3ui9');
+  await import('../../../dist/cdn/isp/form-json.min.js?v=n5xcuy');
 
   // ── form-json es un módulo helper, NO un custom element ────────────
   // Expone: getValues, setValues, listControls, getControlValue, setControlValue.
@@ -48,7 +48,7 @@
 
   // Helper para invocar los exports del módulo.
   async function loadHelpers() {
-    return await import('../../../dist/cdn/isp/form-json.min.js?v=7h3ui9');
+    return await import('../../../dist/cdn/isp/form-json.min.js?v=n5xcuy');
   }
 
   document.getElementById('btn-get').addEventListener('click', async () => {

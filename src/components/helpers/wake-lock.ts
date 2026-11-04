@@ -1,4 +1,4 @@
-import { adoptCss, defineElement, emit } from '../../core/element.js';
+import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
 
 /**
  * <iswc-wake-lock> — Screen Wake Lock. Host display:contents.

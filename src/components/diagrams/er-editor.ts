@@ -16,16 +16,16 @@
 //   Playwright: smoke + funcional (drag, click-to-connect, undo/redo,
 //     export JSON/SVG) + determinismo (round-trip idéntico).
 //   Stagehand: validación visual (cajas no se solapan, aristas legibles).
-import { adoptCss, defineElement, emit } from '../../core/element.js';
+import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
 import { serializeErPayload, renderErSvg as renderErSvgString } from './utils/er-archify.js';
 import type { ErEditorState, ErSpec, ErSpecAttribute, ErSpecEntity, ErSpecRelation, EdgeStyleOverride, ErRouteKind, ErDashStyle, EdgeVariant } from "./schemas/diagram-types.schemas.js";
-import '../media/icon.js';
-import '../actions/context-menu.js';
-import '../layout/split-panel.js';
+import '@jeff-aporta/iswc-base/components/media/icon.js';
+import '@jeff-aporta/iswc-base/components/actions/context-menu.js';
+import '@jeff-aporta/iswc-base/components/layout/split-panel.js';
 import { createPanZoom } from './utils/pan-zoom.js';
 import { type PanZoomController } from './schemas/pan-zoom.schemas.js';
 import type { DiagramElementBase } from './utils/diagram-element-base.js';
-import { snapDiagramGrid } from '../../core/diagram-grid.js';
+import { snapDiagramGrid } from '@jeff-aporta/iswc-base/core/diagram-grid.js';
 
 const SNAP = 8;
 const HISTORY_LIMIT = 200;

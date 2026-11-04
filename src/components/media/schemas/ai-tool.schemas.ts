@@ -2,7 +2,7 @@
  * ai-tool.schemas.ts — props de `<iswc-ai-tool>`.
  */
 import { z } from 'zod';
-import type { Entrada, Salida } from '../../../ai/schemas/ai.schemas.js';
+import type { Entrada, Salida } from '@jeff-aporta/iswc-base/ai/schemas/ai.schemas.js';
 
 export const AiToolVarianteSchema = z.enum(['plain', 'card']);
 export const AiToolPropsSchema = z.object({

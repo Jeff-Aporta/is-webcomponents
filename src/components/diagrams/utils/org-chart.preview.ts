@@ -3,8 +3,8 @@
  * Se ejecuta en mount() tras pintar la definition JSON.
  */
 
-import type { OrgSelectDetail, OrgToggleDetail } from "../schemas/org-chart.preview.schemas.js";
-export async function mount(ctx: import('../../../previews/_kit/schemas/preview.schemas.ts').PreviewMountContext): Promise<void> {
+import type { OrgSelectDetail, OrgToggleDetail } from "@jeff-aporta/iswc-base/components/diagrams/schemas/org-chart.preview.schemas.js";
+export async function mount(ctx: import('@jeff-aporta/iswc-base/previews/_kit/schemas/preview.schemas.ts').PreviewMountContext): Promise<void> {
   void ctx.main;
   const log = document.getElementById('log');
   for (const org of document.querySelectorAll<HTMLElement>('iswc-org-chart')) {

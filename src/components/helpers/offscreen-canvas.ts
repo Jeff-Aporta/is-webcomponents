@@ -1,4 +1,4 @@
-import { adoptCss, defineElement, emit } from '../../core/element.js';
+import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
 
 /**
  * <iswc-offscreen-canvas> — transferControlToOffscreen; worker-src opcional.

@@ -1,12 +1,12 @@
-import { adoptCss, defineElement, emit } from '../../core/element.js';
-import { withStyleAttrs } from '../../core/attrs.js';
+import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { withStyleAttrs } from '@jeff-aporta/iswc-base/core/attrs.js';
 
-import { scaleLinear, scaleBand, niceTicks, svgEl } from '../../core/svg-chart-engine.js';
+import { scaleLinear, scaleBand, niceTicks, svgEl } from '@jeff-aporta/iswc-base/core/svg-chart-engine.js';
 import { getCategoricalColors, getFillColors, getStatusColor, resolveColor, withAlpha } from './utils/chart-palette.js';
-import { findThemeContainer, readTheme } from '../../core/theme-scope.js';
-import { PathTurtle } from '../../core/path-turtle.js';
-import { registerDiagramKind } from '../diagrams/utils/diagram-kinds.js';
-import { setStringAttr } from '../../core/reflect.js';
+import { findThemeContainer, readTheme } from '@jeff-aporta/iswc-base/core/theme-scope.js';
+import { PathTurtle } from '@jeff-aporta/iswc-base/core/path-turtle.js';
+import { registerDiagramKind } from '@jeff-aporta/iswc-base/components/diagrams/utils/diagram-kinds.js';
+import { setStringAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
 import type { TypedChartFactory, ChartDataPoint, ChartDataset, ChartConfig, LegendEntry, HitRecord, ResolvedOptions, DrawMarksFn, ChartCtx } from "./schemas/chart.schemas.js";
 
 /**
@@ -540,7 +540,7 @@ class IswcChart extends withStyleAttrs(HTMLElement) {
   };
 
   async #openOwnViewer(): Promise<void> {
-    await import('../diagrams/diagram-lightbox.js');
+    await import('@jeff-aporta/iswc-base/components/diagrams/diagram-lightbox.js');
     let lb = this.#ownLightbox;
     if (!lb || !lb.isConnected) {
       lb = document.createElement('iswc-diagram-lightbox');

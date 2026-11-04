@@ -6,8 +6,8 @@
  * diagramas usan `resolveColor()`: su SVG se exporta y necesita valores literales.
  */
 
-import type { PaletteKey, PaletteMode, Status } from "../schemas/chart-palette.schemas.js";
-import { PALETAS } from "../../../core/app-cfg.js";
+import type { PaletteKey, PaletteMode, Status } from "@jeff-aporta/iswc-base/components/charts/schemas/chart-palette.schemas.js";
+import { PALETAS } from "@jeff-aporta/iswc-base/core/app-cfg.js";
 
 const DEFAULT_PALETTE = 'delfin';
 const SERIES = 8;

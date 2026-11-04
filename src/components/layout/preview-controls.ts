@@ -12,7 +12,7 @@
  * Atributos:
  *   label   string — header del panel (default: "Atributos").
  */
-import { adoptCss } from "../../core/element.js";
+import { adoptCss } from "@jeff-aporta/iswc-base/core/element.js";
 import type { OpcionPanel, PanelInfo, ControlPanel } from "./schemas/preview-controls.schemas.js";
 
 /**

@@ -1,4 +1,4 @@
-import { defineElement, emit } from '../../core/element.js';
+import { defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
 
 /**
  * <iswc-demo> — sección de demo de documentación (light DOM, zero dependencies).

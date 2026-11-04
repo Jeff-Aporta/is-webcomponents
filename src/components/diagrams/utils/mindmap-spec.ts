@@ -1,19 +1,19 @@
-import { buildTree, layoutTree, layoutRadialTree } from '../../../core/tree-layout.js';
-import { countIconTokens, extractLeadingIconToken } from '../../../core/tk-icon-inline.js';
-import { richTextPlain } from '../../../core/tk-rich-text.js';
-import { resolveTkHue, SERIE_HUES } from '../../../core/tk-hue.js';
+import { buildTree, layoutTree, layoutRadialTree } from '@jeff-aporta/iswc-base/core/tree-layout.js';
+import { countIconTokens, extractLeadingIconToken } from '@jeff-aporta/iswc-base/core/tk-icon-inline.js';
+import { richTextPlain } from '@jeff-aporta/iswc-base/core/tk-rich-text.js';
+import { resolveTkHue, SERIE_HUES } from '@jeff-aporta/iswc-base/core/tk-hue.js';
 
 import {
   makeCostGrid,
   snapDiagramGrid,
   snapPointAwayFromSide,
-} from '../../../core/diagram-grid.js';
+} from '@jeff-aporta/iswc-base/core/diagram-grid.js';
 import {
   routeOrthogonal,
   pixelToGrid,
   buildOrthogonalPath,
 } from './diagram-astar.js';
-import type { MindmapNode, MindmapSpec, LeadingIcon, TreeNode, MindmapLayoutNode, MindmapLayoutEdge, MindmapLayout } from "../schemas/mindmap-spec.schemas.js";
+import type { MindmapNode, MindmapSpec, LeadingIcon, TreeNode, MindmapLayoutNode, MindmapLayoutEdge, MindmapLayout } from "@jeff-aporta/iswc-base/components/diagrams/schemas/mindmap-spec.schemas.js";
 
 /**
  * Especificación y layout de mindmaps (sin Mermaid).

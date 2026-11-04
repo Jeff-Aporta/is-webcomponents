@@ -22,7 +22,7 @@ import {
   EdgeKindDefSchema,
   EdgeStyleSchema,
   NodeStructureDefSchema,
-} from '../schemas/diagram-vocab.schemas.js';
+} from '@jeff-aporta/iswc-base/components/diagrams/schemas/diagram-vocab.schemas.js';
 import type {
   DiagramKindId,
   DiagramPolicy,
@@ -34,7 +34,7 @@ import type {
   NodeStructureDefInput,
   PolicyReport,
   VocabStore,
-} from '../schemas/diagram-vocab.schemas.js';
+} from '@jeff-aporta/iswc-base/components/diagrams/schemas/diagram-vocab.schemas.js';
 
 // Un registro por página: cada bundle trae su copia del módulo.
 const GLOBAL_KEY = '__iswcDiagramVocab';

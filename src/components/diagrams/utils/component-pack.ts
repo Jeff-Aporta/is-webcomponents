@@ -10,9 +10,9 @@
  * geométricos (`pathIllegal`, `segmentoCortaCaja`…) que usan los tests.
  */
 
-import { boundsOf } from '../../../core/diagram-grid.js';
-import type { Arista, Caja, Componente, Lado, OpcionesEmpaque, Paquete, Punto } from '../schemas/diagram-tipos.schemas.js';
-import type { ClusterColumn, GroupConv } from "../schemas/component-pack.schemas.js";
+import { boundsOf } from '@jeff-aporta/iswc-base/core/diagram-grid.js';
+import type { Arista, Caja, Componente, Lado, OpcionesEmpaque, Paquete, Punto } from '@jeff-aporta/iswc-base/components/diagrams/schemas/diagram-tipos.schemas.js';
+import type { ClusterColumn, GroupConv } from "@jeff-aporta/iswc-base/components/diagrams/schemas/component-pack.schemas.js";
 
 export const COL_GUTTER = 52;
 export const PKG_CORRIDOR = 72;

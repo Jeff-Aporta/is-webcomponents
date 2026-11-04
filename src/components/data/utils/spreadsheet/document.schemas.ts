@@ -1,14 +1,14 @@
 // document.schemas.ts: contratos de tipos de document.ts.
 import type { Rect } from './address.schemas.js';
-import type { CfRule } from '../../schemas/spreadsheet.schemas.js';
-import type { ValidationRule } from '../../schemas/spreadsheet.schemas.js';
-import type { AutoFilter } from '../../schemas/spreadsheet.schemas.js';
-import type { ChartDef } from '../../schemas/spreadsheet.schemas.js';
+import type { CfRule } from '@jeff-aporta/iswc-base/components/data/schemas/spreadsheet.schemas.js';
+import type { ValidationRule } from '@jeff-aporta/iswc-base/components/data/schemas/spreadsheet.schemas.js';
+import type { AutoFilter } from '@jeff-aporta/iswc-base/components/data/schemas/spreadsheet.schemas.js';
+import type { ChartDef } from '@jeff-aporta/iswc-base/components/data/schemas/spreadsheet.schemas.js';
 import type { CellData } from './engine.schemas.js';
 import type { Scalar } from './values.schemas.js';
-import type { CellStyle } from '../../schemas/spreadsheet.schemas.js';
+import type { CellStyle } from '@jeff-aporta/iswc-base/components/data/schemas/spreadsheet.schemas.js';
 import type { Sheet } from './engine.js';
-import type { MacroDef } from '../../schemas/spreadsheet.schemas.js';
+import type { MacroDef } from '@jeff-aporta/iswc-base/components/data/schemas/spreadsheet.schemas.js';
 
 /** Datos de una hoja que no son celdas. */
 export interface SheetExtras {

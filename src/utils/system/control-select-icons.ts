@@ -3,8 +3,8 @@
  * Enrichment en runtime: el JSON puede omitir `icon` y se completa aquí.
  */
 
-import { BUTTON_SHAPE_ICON } from '../../core/button-shape.js';
-import { MEDIA_SHAPE_ICON } from '../../core/media-shape.js';
+import { BUTTON_SHAPE_ICON } from '@jeff-aporta/iswc-base/core/button-shape.js';
+import { MEDIA_SHAPE_ICON } from '@jeff-aporta/iswc-base/core/media-shape.js';
 
 /** Por valor de opción (compartido entre attrs). */
 const BY_VALUE: Record<string, string> = {

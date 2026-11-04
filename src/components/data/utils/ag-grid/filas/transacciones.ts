@@ -6,7 +6,7 @@
  * transacciones que traiga. Sin `getRowId` la identidad es la referencia.
  */
 import type { IdFila, ResultadoTransaccion, Transaccion } from './filas.schemas.js';
-import type { RowData } from '../../../schemas/datagrid-types.schemas.js';
+import type { RowData } from '@jeff-aporta/iswc-base/components/data/schemas/datagrid-types.schemas.js';
 
 function clavesDe(filas: readonly RowData[], idDe: IdFila): Map<unknown, number> {
   const mapa = new Map<unknown, number>();

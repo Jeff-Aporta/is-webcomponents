@@ -1,7 +1,7 @@
 /**
  * Behavior de iswc-relative-time: fechas relativas al now + grid de locales.
  */
-import type { PreviewMountContext } from '../../../previews/_kit/schemas/preview.schemas.ts';
+import type { PreviewMountContext } from '@jeff-aporta/iswc-base/previews/_kit/schemas/preview.schemas.ts';
 
 function applyOffsets(root: HTMLElement): void {
   const now = Date.now();

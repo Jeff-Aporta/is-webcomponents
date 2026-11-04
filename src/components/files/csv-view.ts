@@ -1,7 +1,7 @@
-import { adoptCss, defineElement, emit } from '../../core/element.js';
-import { ElementBase } from '../../core/element-base.js';
-import { setOptionalAttr, setStringAttr } from '../../core/reflect.js';
-import { escapeHtml } from '../../core/dom-utils.js';
+import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
+import { setOptionalAttr, setStringAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
+import { escapeHtml } from '@jeff-aporta/iswc-base/core/dom-utils.js';
 import { loadText, resolveFileSource } from './utils/file-source.js';
 import { pintarEstado, sincronizarAlto } from './utils/file-estado.js';
 import { parseCsv } from './utils/csv-parse.js';

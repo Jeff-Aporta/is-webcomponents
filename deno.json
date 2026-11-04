@@ -4,6 +4,7 @@
   "compilerOptions": { "strict": true },
   "unstable": ["sloppy-imports"],
   "imports": {
+    "@jeff-aporta/iswc-base/": "./src/",
     "esbuild": "npm:esbuild@^0.25.0",
     "playwright": "npm:playwright@^1.62.1",
     "@browserbasehq/stagehand": "npm:@browserbasehq/stagehand@^4.0.2",

@@ -1,17 +1,17 @@
-import { defineElement } from '../../core/element.js';
+import { defineElement } from '@jeff-aporta/iswc-base/core/element.js';
 import {
   DEFAULT_INTENT,
   INTENT,
   ensureDefaultColor,
   normalizeIntent,
   setEnumAttr,
-} from '../../core/intent.js';
+} from '@jeff-aporta/iswc-base/core/intent.js';
 import {
   DEFAULT_TONE,
   TONE,
   normalizeTone,
   setEnumToneAttr,
-} from '../../core/tone.js';
+} from '@jeff-aporta/iswc-base/core/tone.js';
 import type { ElChild, ElAttrs, Crudo, HandlerEntry } from "./schemas/ui.schemas.js";
 
 /**

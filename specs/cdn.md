@@ -68,6 +68,51 @@ Iconos: `dist/assets/icons/` (fuera de `dist/cdn/`; única copia versionada). **
 
 Skills: `npx skills add Jeff-Aporta/iswc-root -s is-cdn-install` · `-s iswc-root`.
 
+### Alias `@jeff-aporta/iswc-base`
+
+Un solo especificador para importar del kit, `@jeff-aporta/iswc-base/<ruta>`, que cada entorno resuelve a su sitio
+(plan: `specs/plan-carga-modular.md` §D3; regla de fuentes: `specs/typescript/spec.md` S-TS2b).
+
+| Dónde | Cómo se resuelve |
+|---|---|
+| Fuentes del kit (`src/**`) | `deno.json` → `"@jeff-aporta/iswc-base/": "./src/"`; tsc por `paths` en `tsconfig.json`; esbuild por el plugin `aliasKit()` (`src/cdn/build/alias.ts`, va solo en `bundleMinJs`); `scripts/serve.mjs` lo reescribe a `/src/<ruta>` al servir. |
+| Deno de una app | `deno.json` del consumidor con la entrada a `dist/cdn/` por SHA (ejemplo abajo). |
+| Navegador de una app | `<script type="importmap">` con la **misma** entrada (ejemplo abajo), antes del primer módulo. |
+| `dist/cdn/` publicado | **Rutas relativas**, nunca el alias: el build lo reescribe (`aliasEnDist` en `scripts/build.mjs`) y el dist funciona por jsDelivr, Pages, carpeta local o WebView sin import map. Guardián: `tests/gobernanza/alias-imports.test.ts` (L4). |
+| npm (futuro) | `package.json` con `name: "@jeff-aporta/iswc-base"` y `exports` hacia `dist/cdn/`: los mismos especificadores resuelven por `node_modules`. |
+
+El build publica `dist/cdn/importmap.json` con la entrada lista para pegar (SHA del build):
+
+```json
+{ "imports": { "@jeff-aporta/iswc-base/": "https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@<sha40>/dist/cdn/" } }
+```
+
+`deno.json` del consumidor:
+
+```json
+{
+  "imports": {
+    "@jeff-aporta/iswc-base/": "https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@<sha40>/dist/cdn/"
+  }
+}
+```
+
+HTML del consumidor (el import map va antes de cualquier `<script type="module">`):
+
+```html
+<script type="importmap">
+{ "imports": { "@jeff-aporta/iswc-base/": "https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@<sha40>/dist/cdn/" } }
+</script>
+<script type="module">
+  import { iswcLoader } from '@jeff-aporta/iswc-base/core/loader.min.js';
+  await iswcLoader.load('iswc-button');
+</script>
+```
+
+El SHA lo mueve `pin-update.mjs` (`src/vendor-distributions/shared/tools/`): además de las URL literales, fija la entrada
+del alias en `deno.json` y en el import map de cada HTML a la forma canónica `…@<sha40>/dist/cdn/` (una ruta local se
+respeta). Casos: `tests/gobernanza/pin-update.test.ts` (P10).
+
 ### Qué hacer
 
 - Apps CDN: `loadCSSBase()` + `loadCSSPalettesDefault()` explícitos (CSS no "mágico").

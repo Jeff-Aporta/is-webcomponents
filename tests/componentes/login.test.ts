@@ -51,15 +51,15 @@ test('login: está registrado en el manifest', () => {
 test('login: reutiliza los componentes obligatorios', () => {
   const ts = leer(join(BASE, 'login.ts'));
   for (const dep of [
-    '../forms/input.js',
-    '../forms/select.js',
-    '../forms/checkbox.js',
-    '../actions/button.js',
-    '../media/avatar.js',
-    '../layout/dialog.js',
-    '../layout/callout.js',
-    '../feedback/toast.js',
-    '../feedback/tooltip.js',
+    '@jeff-aporta/iswc-base/components/forms/input.js',
+    '@jeff-aporta/iswc-base/components/forms/select.js',
+    '@jeff-aporta/iswc-base/components/forms/checkbox.js',
+    '@jeff-aporta/iswc-base/components/actions/button.js',
+    '@jeff-aporta/iswc-base/components/media/avatar.js',
+    '@jeff-aporta/iswc-base/components/layout/dialog.js',
+    '@jeff-aporta/iswc-base/components/layout/callout.js',
+    '@jeff-aporta/iswc-base/components/feedback/toast.js',
+    '@jeff-aporta/iswc-base/components/feedback/tooltip.js',
   ]) {
     assert.ok(ts.includes(dep), 'login.ts debe importar ' + dep);
   }

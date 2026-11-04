@@ -1,10 +1,10 @@
 import { parseDate, addDuration, timeScale, niceTimeTicks } from './lane-layout.js';
-import { makeCostGrid, blockRect, snapPointAwayFromSide, snapDiagramGrid } from '../../../core/diagram-grid.js';
+import { makeCostGrid, blockRect, snapPointAwayFromSide, snapDiagramGrid } from '@jeff-aporta/iswc-base/core/diagram-grid.js';
 import { routeOrthogonal, pixelToGrid, gridPathToSvg, buildOrthogonalPath } from './diagram-astar.js';
-import { richTextPlain } from '../../../core/tk-rich-text.js';
-import { resolveTkHue, SERIE_HUES } from '../../../core/tk-hue.js';
-import type { GridPoint } from '../schemas/diagram-types.schemas.js';
-import type { GanttGroup, GanttTask, GanttSpec, GanttRow, GanttArrow, GanttTick, GanttLayout, GanttOpts } from "../schemas/gantt-spec.schemas.js";
+import { richTextPlain } from '@jeff-aporta/iswc-base/core/tk-rich-text.js';
+import { resolveTkHue, SERIE_HUES } from '@jeff-aporta/iswc-base/core/tk-hue.js';
+import type { GridPoint } from '@jeff-aporta/iswc-base/components/diagrams/schemas/diagram-types.schemas.js';
+import type { GanttGroup, GanttTask, GanttSpec, GanttRow, GanttArrow, GanttTick, GanttLayout, GanttOpts } from "@jeff-aporta/iswc-base/components/diagrams/schemas/gantt-spec.schemas.js";
 
 /**
  * Especificación y layout de diagramas Gantt (sin Mermaid).

@@ -1,7 +1,7 @@
-import { adoptCss, defineElement, emit } from '../../core/element.js';
-import { escapeHtml } from '../../core/dom-utils.js';
+import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { escapeHtml } from '@jeff-aporta/iswc-base/core/dom-utils.js';
 import { registerDiagramKind } from './utils/diagram-kinds.js';
-import { svgEl } from '../../core/svg-chart-engine.js';
+import { svgEl } from '@jeff-aporta/iswc-base/core/svg-chart-engine.js';
 
 /**
  * <iswc-org-chart> — Organigrama. Layout jerárquico top-down, a partir de un árbol.

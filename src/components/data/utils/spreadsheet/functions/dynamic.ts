@@ -1,7 +1,7 @@
 // dynamic.ts — funciones de matrices dinámicas: devuelven matrices que desbordan.
-import type { Ctx } from '../evaluator.schemas.js';
-import { CellError, compare, ERR, toBool, toNumber } from '../values.js';
-import type { EvalValue, Matrix, Scalar } from '../values.schemas.js';
+import type { Ctx } from '@jeff-aporta/iswc-base/components/data/utils/spreadsheet/evaluator.schemas.js';
+import { CellError, compare, ERR, toBool, toNumber } from '@jeff-aporta/iswc-base/components/data/utils/spreadsheet/values.js';
+import type { EvalValue, Matrix, Scalar } from '@jeff-aporta/iswc-base/components/data/utils/spreadsheet/values.schemas.js';
 import { flat, matrix, num, optBool, optNum } from './fn-helpers.js';
 import { def } from './registry.js';
 

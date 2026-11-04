@@ -41,7 +41,7 @@
  * @param {unknown} v
  * @returns {string}
  */
-import type { FiltroEntrada, PeticionLista, TFiltroLista, TListaPaginacion, ParamsGetRows, Literal } from "../../schemas/datagrid-server-datasource.schemas.js";
+import type { FiltroEntrada, PeticionLista, TFiltroLista, TListaPaginacion, ParamsGetRows, Literal } from "@jeff-aporta/iswc-base/components/data/schemas/datagrid-server-datasource.schemas.js";
 export function sqlLiteral(v: unknown) {
   if (v === null || v === undefined) return 'NULL';
   if (typeof v === 'number') return String(v);

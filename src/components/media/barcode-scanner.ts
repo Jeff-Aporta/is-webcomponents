@@ -1,7 +1,7 @@
-import '../actions/button.js';
-import '../media/icon.js';
-import { adoptCss, defineElement, emit } from '../../core/element.js';
-import { setStringAttr } from '../../core/reflect.js';
+import '@jeff-aporta/iswc-base/components/actions/button.js';
+import '@jeff-aporta/iswc-base/components/media/icon.js';
+import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { setStringAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
 import type { BarcodeDetectorCtor, BarcodeDetectorInstance, DetectedBarcode } from "./schemas/barcode-scanner.schemas.js";
 
 /**

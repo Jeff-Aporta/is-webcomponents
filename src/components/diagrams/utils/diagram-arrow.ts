@@ -7,8 +7,8 @@
  * ("la flecha no toca la línea"). Aquí la orientación sale del ÚLTIMO TRAMO
  * REAL del path, no de la dirección global origen→destino.
  */
-import { svgEl } from '../../../core/svg-chart-engine.js';
-import type { ArrowPoint, SvgArrowHeadOpts } from "../schemas/diagram-arrow.schemas.js";
+import { svgEl } from '@jeff-aporta/iswc-base/core/svg-chart-engine.js';
+import type { ArrowPoint, SvgArrowHeadOpts } from "@jeff-aporta/iswc-base/components/diagrams/schemas/diagram-arrow.schemas.js";
 
 /** Punto en píxeles. */
 

@@ -1,8 +1,8 @@
-import { fontOn } from '../charts/utils/chart-palette.js';
-import { adoptCss, defineElement, emit } from '../../core/element.js';
-import { withStyleAttrs } from '../../core/attrs.js';
+import { fontOn } from '@jeff-aporta/iswc-base/components/charts/utils/chart-palette.js';
+import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { withStyleAttrs } from '@jeff-aporta/iswc-base/core/attrs.js';
 
-import { niceTicks, scaleLinear, svgEl } from '../../core/svg-chart-engine.js';
+import { niceTicks, scaleLinear, svgEl } from '@jeff-aporta/iswc-base/core/svg-chart-engine.js';
 import type { HeatmapCfg } from "./schemas/heatmap.schemas.js";
 
 /** Config leída del slot JSON. */

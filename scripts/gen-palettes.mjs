@@ -11,7 +11,7 @@
 import { readFileSync, writeFileSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { palettesScss, checkPaletteContrast } from '../src/styles/palette-build.ts';
+import { palettesScss, checkPaletteContrast } from '@jeff-aporta/iswc-base/styles/palette-build.ts';
 
 const root = dirname(dirname(fileURLToPath(import.meta.url)));
 const out = join(root, 'src', 'styles', 'palettes.scss');

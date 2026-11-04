@@ -1,11 +1,11 @@
-import { adoptCss, defineElement } from '../../core/element.js';
-import { crearNodo } from '../../core/dom-utils.js';
-import { atributosDe, PropsElement } from '../../core/props-element.js';
+import { adoptCss, defineElement } from '@jeff-aporta/iswc-base/core/element.js';
+import { crearNodo } from '@jeff-aporta/iswc-base/core/dom-utils.js';
+import { atributosDe, PropsElement } from '@jeff-aporta/iswc-base/core/props-element.js';
 import { StatGroupPropsSchema } from './schemas/stat-group.schemas.js';
 import type { StatGroupItem, StatGroupProps } from './schemas/stat-group.schemas.js';
 import './stat.js';
-import '../isp/grid-layout.js';
-import '../feedback/skeleton.js';
+import '@jeff-aporta/iswc-base/components/isp/grid-layout.js';
+import '@jeff-aporta/iswc-base/components/feedback/skeleton.js';
 
 /**
  * <iswc-stat-group> — fila de indicadores: `iswc-stat` en una rejilla que se acomoda al ancho. Con `items: null` pinta

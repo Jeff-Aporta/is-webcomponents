@@ -5,21 +5,21 @@ import {
   blockRect,
   makeCostGrid,
   snapDiagramGrid,
-} from '../../../core/diagram-grid.js';
+} from '@jeff-aporta/iswc-base/core/diagram-grid.js';
 import { routeSequenceHorizontal, routeSequenceSelf } from './diagram-astar.js';
 import {
   countIconTokens,
   extractLeadingIconToken,
   hasIconJsonSugar,
-} from '../../../core/tk-icon-inline.js';
-import { richTextPlain } from '../../../core/tk-rich-text.js';
-import { resolveTkHue } from '../../../core/tk-hue.js';
+} from '@jeff-aporta/iswc-base/core/tk-icon-inline.js';
+import { richTextPlain } from '@jeff-aporta/iswc-base/core/tk-rich-text.js';
+import { resolveTkHue } from '@jeff-aporta/iswc-base/core/tk-hue.js';
 import { diagramHeaderWidth } from './diagram-header.js';
 import { fitContain, nestedMaxSize, readNodeEmbed } from './diagram-embed.js';
-import type { EmbedBox, EmbedSize } from '../schemas/diagram-embed.schemas.js';
-import type { DiagramTheme } from '../schemas/diagram-types.schemas.js';
-import type { SequenceNestedSpec, SequenceActorSpec, SequenceMessageSpec, SequenceAltSpec, SequenceResolvedSpec, LeadingIconToken, FlatMessage, SequenceLayoutActor, SequenceLayoutLifeline, SequenceLayoutMessage, SequenceLayoutAltBox, SequenceLayout, SequenceGroupSpec, SequenceFragmentSpec, SequenceLayoutFragment } from "../schemas/sequence-spec.schemas.js";
-import { SequenceFragmentSpecSchema } from "../schemas/sequence-spec.schemas.js";
+import type { EmbedBox, EmbedSize } from '@jeff-aporta/iswc-base/components/diagrams/schemas/diagram-embed.schemas.js';
+import type { DiagramTheme } from '@jeff-aporta/iswc-base/components/diagrams/schemas/diagram-types.schemas.js';
+import type { SequenceNestedSpec, SequenceActorSpec, SequenceMessageSpec, SequenceAltSpec, SequenceResolvedSpec, LeadingIconToken, FlatMessage, SequenceLayoutActor, SequenceLayoutLifeline, SequenceLayoutMessage, SequenceLayoutAltBox, SequenceLayout, SequenceGroupSpec, SequenceFragmentSpec, SequenceLayoutFragment } from "@jeff-aporta/iswc-base/components/diagrams/schemas/sequence-spec.schemas.js";
+import { SequenceFragmentSpecSchema } from "@jeff-aporta/iswc-base/components/diagrams/schemas/sequence-spec.schemas.js";
 
 /** Ancho px estimado de una etiqueta, descontando tokens {{icon}} y sumando su ancho. */
 const ICON_INLINE_W = 16;

@@ -1,4 +1,4 @@
-import { defineElement } from '../../core/element.js';
+import { defineElement } from '@jeff-aporta/iswc-base/core/element.js';
 import { createObserverElement } from './observer.js';
 
 /**

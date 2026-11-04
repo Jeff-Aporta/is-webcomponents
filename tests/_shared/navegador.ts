@@ -21,3 +21,14 @@ export async function lanzarChromium(opciones: LaunchOptions = {}): Promise<Brow
   }
   throw ultimo;
 }
+
+/**
+ * Cierra el navegador sin colgar la prueba: con el Chrome/Edge del sistema `browser.close()` a veces no resuelve
+ * nunca (visto el 4-nov-2026 en TEMU-JEFF, también sin cambios en el kit). Pasado `ms` se sigue sin esperarlo.
+ */
+export async function cerrarChromium(browser: Browser, ms = 5000): Promise<void> {
+  let reloj: number | undefined;
+  const plazo = new Promise<void>((r) => { reloj = setTimeout(r, ms); });
+  await Promise.race([browser.close().catch(() => {}), plazo]);
+  clearTimeout(reloj);
+}

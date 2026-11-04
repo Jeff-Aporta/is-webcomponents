@@ -4,7 +4,7 @@
  * recuerda el mapa para borrar entradas cuando un archivo cambia.
  * La clave incluye el hash: un hit es el contenido de ese build.
  */
-import { readIswc, writeIswc } from '../core/iswc-storage.js';
+import { readIswc, writeIswc } from '@jeff-aporta/iswc-base/core/iswc-storage.js';
 
 const DB_NAME = 'iswc-wc-assets';
 const STORE = 'bodies';

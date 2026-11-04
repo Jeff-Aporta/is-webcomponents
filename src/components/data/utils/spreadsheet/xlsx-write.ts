@@ -7,7 +7,7 @@ import type { Sheet } from './engine.js';
 import { canonicalName } from './functions/registry.js';
 import { mapTokens } from './rewrite.js';
 import { CellError } from './values.js';
-import type { CellStyle, CfRule, ValidationRule } from '../../schemas/spreadsheet.schemas.js';
+import type { CellStyle, CfRule, ValidationRule } from '@jeff-aporta/iswc-base/components/data/schemas/spreadsheet.schemas.js';
 import { escapeXml } from './xml.js';
 import { writeZip } from './zip.js';
 

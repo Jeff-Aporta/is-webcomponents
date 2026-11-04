@@ -27,8 +27,8 @@
  * para obtener un `HTMLElement` que añadir al shadow.
  */
 
-import { emit } from '../../../core/element.js';
-import type { EditorAction, EditorActionDetail, EditorToolbarOptions, ButtonDef } from "../schemas/_editor-toolbar.schemas.js";
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
+import type { EditorAction, EditorActionDetail, EditorToolbarOptions, ButtonDef } from "@jeff-aporta/iswc-base/components/diagrams/schemas/_editor-toolbar.schemas.js";
 
 /** Acción emitida por la toolbar; el editor decide qué hacer con ella. */
 

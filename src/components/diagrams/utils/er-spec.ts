@@ -1,17 +1,17 @@
 import { layoutNodeLink } from './node-link-layout.js';
-import { snapDiagramGrid } from '../../../core/diagram-grid.js';
+import { snapDiagramGrid } from '@jeff-aporta/iswc-base/core/diagram-grid.js';
 import { routeEdges, planPorts, pointsToPath, simplifyOrthoPath } from './component-router.js';
 import { readRoutingOverride } from './routing-costs.js';
-import type { RouterEdge, RouterWorld } from '../schemas/component-router.schemas.js';
-import type { Caja, Lado, Punto } from '../schemas/diagram-tipos.schemas.js';
-import { resolveTkHue } from '../../../core/tk-hue.js';
-import { countIconTokens, stripIconTokensPlain } from '../../../core/tk-icon-inline.js';
+import type { RouterEdge, RouterWorld } from '@jeff-aporta/iswc-base/components/diagrams/schemas/component-router.schemas.js';
+import type { Caja, Lado, Punto } from '@jeff-aporta/iswc-base/components/diagrams/schemas/diagram-tipos.schemas.js';
+import { resolveTkHue } from '@jeff-aporta/iswc-base/core/tk-hue.js';
+import { countIconTokens, stripIconTokensPlain } from '@jeff-aporta/iswc-base/core/tk-icon-inline.js';
 import { applyEdgeActorLayout } from './diagram-edge-actors.js';
 import { assignEdgeHues } from './diagram-edge-style.js';
 import { wrapLabel } from './component-spec.js';
 import { normalizeErPayload as _archifyNormalize } from './er-archify.js';
-import type { BoxSide, DiagramGroup, EdgeStyleOverride, ErCardinality, ErDashStyle, ErRouteKind, ErSpec, ErSpecAttribute, ErSpecEntity, ErSpecRelation, ErLayout, EdgeVariant, NodeStyleOverride } from '../schemas/diagram-types.schemas.js';
-import type { ClusterBox, ClusterRaw } from "../schemas/er-spec.schemas.js";
+import type { BoxSide, DiagramGroup, EdgeStyleOverride, ErCardinality, ErDashStyle, ErRouteKind, ErSpec, ErSpecAttribute, ErSpecEntity, ErSpecRelation, ErLayout, EdgeVariant, NodeStyleOverride } from '@jeff-aporta/iswc-base/components/diagrams/schemas/diagram-types.schemas.js';
+import type { ClusterBox, ClusterRaw } from "@jeff-aporta/iswc-base/components/diagrams/schemas/er-spec.schemas.js";
 
 /**
  * Especificación y layout de diagramas entidad-relación (sin Mermaid).

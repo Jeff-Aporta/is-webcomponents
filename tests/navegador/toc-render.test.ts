@@ -35,6 +35,7 @@ import { extname, join, normalize, sep, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { chromium } from 'playwright';
 import * as esbuildApi from 'esbuild';
+import { aliasKit } from '../../src/cdn/build/alias.ts';
 import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
 
 const { test, lista } = coleccionPruebas({ categoria: 'what' });
@@ -122,6 +123,7 @@ test('navegador/toc-render', { timeout: 180_000 }, async () => {
           write: false,
           platform: 'browser',
           nodePaths: [join(root, 'node_modules')],
+          plugins: [aliasKit()],
           // `node:*` son runtime modules no resolubles en browser.
           external: ['node:url', 'node:fs', 'node:fs/promises', 'node:path', 'node:assert', 'node:child_process'],
         });

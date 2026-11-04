@@ -13,7 +13,7 @@
  * - `_domRoot` y `treeRootId` son heredados de `TTreeAdapterContext`.
  */
 import { TATreeFlow } from "./04-tree-flow.js";
-import { TreeContext, TNode, TRecord } from '../../schemas/tree-view-types.schemas.js';
+import { TreeContext, TNode, TRecord } from '@jeff-aporta/iswc-base/components/isp/schemas/tree-view-types.schemas.js';
 
 class TAView extends TATreeFlow {
   // ── Re-declaraciones de campos heredados ───────────────────────────────

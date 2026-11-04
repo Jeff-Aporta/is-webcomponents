@@ -6,9 +6,9 @@
  * indentación, ancho, comillas, punto y coma (JS), pretty HTML.
  */
 
-import { prettyHtml, softFormat, dedent } from '../../../core/code-text.js';
-import { formatDiff } from '../../../core/code-diff.js';
-import type { CodeFormatConfig, NormalizedFormatConfig } from "../schemas/code-format.schemas.js";
+import { prettyHtml, softFormat, dedent } from '@jeff-aporta/iswc-base/core/code-text.js';
+import { formatDiff } from '@jeff-aporta/iswc-base/core/code-diff.js';
+import type { CodeFormatConfig, NormalizedFormatConfig } from "@jeff-aporta/iswc-base/components/code/schemas/code-format.schemas.js";
 
 export const DEFAULT_FORMAT: CodeFormatConfig = Object.freeze({
   tabWidth: 2,

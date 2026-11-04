@@ -1,6 +1,6 @@
-import '../actions/button.js';
-import { adoptCss, defineElement, emit } from '../../core/element.js';
-import { ElementBase } from '../../core/element-base.js';
+import '@jeff-aporta/iswc-base/components/actions/button.js';
+import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
 
 /**
  * <iswc-duration-picker> — Selector de duración HH:MM:SS.

@@ -1,13 +1,13 @@
 /**
  * Behavior migrado desde HTML inline de iswc-video-playlist.
  * Se ejecuta en mount() tras pintar la definition JSON.
- * @param {import('../../../previews/_kit/schemas/preview.schemas.ts').PreviewMountContext} ctx
+ * @param {import('@jeff-aporta/iswc-base/previews/_kit/schemas/preview.schemas.ts').PreviewMountContext} ctx
  */
 
 // Tipo mínimo del `<iswc-video-playlist>` para acceder a `placement`.
 
-import type { IswcVideoPlaylist } from "../schemas/video-playlist.preview.schemas.js";
-export async function mount(ctx: import('../../../previews/_kit/schemas/preview.schemas.ts').PreviewMountContext) {
+import type { IswcVideoPlaylist } from "@jeff-aporta/iswc-base/components/media/schemas/video-playlist.preview.schemas.js";
+export async function mount(ctx: import('@jeff-aporta/iswc-base/previews/_kit/schemas/preview.schemas.ts').PreviewMountContext) {
   const root = ctx.main;
   void root;
   const placePl = document.getElementById('plPlace') as IswcVideoPlaylist | null;

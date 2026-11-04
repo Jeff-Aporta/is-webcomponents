@@ -1,6 +1,6 @@
-import { tkHueToHex } from '../../../core/tk-hue.js';
-import { bg2fontColor } from '../../../core/tk-color.js';
-import type { EdgeWithHue, Colored, Edged } from "../schemas/diagram-edge-style.schemas.js";
+import { tkHueToHex } from '@jeff-aporta/iswc-base/core/tk-hue.js';
+import { bg2fontColor } from '@jeff-aporta/iswc-base/core/tk-color.js';
+import type { EdgeWithHue, Colored, Edged } from "@jeff-aporta/iswc-base/components/diagrams/schemas/diagram-edge-style.schemas.js";
 
 /** Arista del grafo con un hue opcional para colorearla. */
 

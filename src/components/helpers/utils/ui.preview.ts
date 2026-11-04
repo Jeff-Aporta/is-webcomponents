@@ -2,9 +2,9 @@
  * Behavior migrado desde HTML inline de iswc-ui.
  * Se ejecuta en mount() tras pintar la definition JSON.
  */
-import type { PreviewMountContext } from '../../../previews/_kit/schemas/preview.schemas.ts';
-import type { html as HtmlFn, esc as EscFn } from '../ui.js';
-import type { IswcUiApi } from "../schemas/ui.preview.schemas.js";
+import type { PreviewMountContext } from '@jeff-aporta/iswc-base/previews/_kit/schemas/preview.schemas.ts';
+import type { html as HtmlFn, esc as EscFn } from '@jeff-aporta/iswc-base/components/helpers/ui.js';
+import type { IswcUiApi } from "@jeff-aporta/iswc-base/components/helpers/schemas/ui.preview.schemas.js";
 
 declare global {
   interface Window {

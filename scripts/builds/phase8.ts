@@ -1,6 +1,7 @@
 // build-phase8.ts — Build ONLY the new Phase 8 components into dist/cdn
 // (Skips video.js which has a pre-existing esbuild/private-field bug NOT in scope here.)
 import { build } from 'esbuild';
+import { aliasKit } from '@jeff-aporta/iswc-base/cdn/build/alias.ts';
 import { access, mkdir, stat } from 'node:fs/promises';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -24,7 +25,7 @@ const NEW = [
 
 const bundleJs = (entry, out) => build({
   entryPoints: [entry], outfile: out, bundle: true, minify: true,
-  format: 'esm', target: 'es2020', legalComments: 'none',
+  format: 'esm', target: 'es2020', legalComments: 'none', plugins: [aliasKit()],
 });
 const bundleCss = (entry, out) => build({
   entryPoints: [entry], outfile: out, minify: true,

@@ -74,11 +74,11 @@ test('iswc-data-grid: adopta CSS', () => {
 
 test('iswc-data-grid: integra iswc-button, iswc-input, iswc-select, iswc-option, iswc-checkbox', () => {
   const src = read(MOD);
-  assert.match(src, /import[^;]+['"]\.\.\/actions\/button/);
-  assert.match(src, /import[^;]+['"]\.\.\/forms\/input/);
-  assert.match(src, /import[^;]+['"]\.\.\/forms\/select/);
-  assert.match(src, /import[^;]+['"]\.\.\/forms\/option/);
-  assert.match(src, /import[^;]+['"]\.\.\/forms\/checkbox/);
+  assert.match(src, /import[^;]+['"]@jeff-aporta\/iswc-base\/components\/actions\/button/);
+  assert.match(src, /import[^;]+['"]@jeff-aporta\/iswc-base\/components\/forms\/input/);
+  assert.match(src, /import[^;]+['"]@jeff-aporta\/iswc-base\/components\/forms\/select/);
+  assert.match(src, /import[^;]+['"]@jeff-aporta\/iswc-base\/components\/forms\/option/);
+  assert.match(src, /import[^;]+['"]@jeff-aporta\/iswc-base\/components\/forms\/checkbox/);
 });
 
 test('iswc-data-grid: API — setters `columns` y `rows`', () => {

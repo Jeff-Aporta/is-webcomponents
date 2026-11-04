@@ -1,9 +1,9 @@
 // text.ts — funciones de texto.
-import type { Ctx } from '../evaluator.schemas.js';
-import { formatValue } from '../numfmt.js';
-import { wildcardRegex } from '../criteria.js';
-import { CellError, ERR, parseNumberText, toBool, toNumber, toText } from '../values.js';
-import type { EvalValue, Matrix, Scalar } from '../values.schemas.js';
+import type { Ctx } from '@jeff-aporta/iswc-base/components/data/utils/spreadsheet/evaluator.schemas.js';
+import { formatValue } from '@jeff-aporta/iswc-base/components/data/utils/spreadsheet/numfmt.js';
+import { wildcardRegex } from '@jeff-aporta/iswc-base/components/data/utils/spreadsheet/criteria.js';
+import { CellError, ERR, parseNumberText, toBool, toNumber, toText } from '@jeff-aporta/iswc-base/components/data/utils/spreadsheet/values.js';
+import type { EvalValue, Matrix, Scalar } from '@jeff-aporta/iswc-base/components/data/utils/spreadsheet/values.schemas.js';
 import { flat, forEach, lifted, matrix, optBool, optNum, scalar, str } from './fn-helpers.js';
 import { roundTo } from './math.js';
 import { def } from './registry.js';

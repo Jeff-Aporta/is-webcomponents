@@ -50,6 +50,8 @@ test('gobernanza/cdn-folders', async () => {
     // Pin del dev-reload: build.mjs lo escribe (`build:<sha>`) y watch.mjs lo
     // sobreescribe; scripts/dev-reload.js lo sondea en dist/cdn/reload-pin.
     'reload-pin',
+    // Entrada del alias `@jeff-aporta/iswc-base/` lista para el import map / deno.json del consumidor (specs/cdn.md §Alias).
+    'importmap.json',
   ]);
   
   const CORE_REQUIRED = [
@@ -208,7 +210,8 @@ test('gobernanza/cdn-folders', async () => {
     if (!existsSync(outFile)) continue;
     const code = readFileSync(src, 'utf8');
     const built = readFileSync(outFile, 'utf8');
-    const imports = [...code.matchAll(/from\s+['"]\.\.\/([a-z-]+)\/([a-z0-9-]+)\.js['"]|import\s+['"]\.\.\/([a-z-]+)\/([a-z0-9-]+)\.js['"]/g)];
+    // Entre componentes se importa por alias (`@jeff-aporta/iswc-base/components/<cat>/<tag>.js`, S-TS2b).
+    const imports = [...code.matchAll(/from\s+['"](?:\.\.\/|@jeff-aporta\/iswc-base\/components\/)([a-z-]+)\/([a-z0-9-]+)\.js['"]|import\s+['"](?:\.\.\/|@jeff-aporta\/iswc-base\/components\/)([a-z-]+)\/([a-z0-9-]+)\.js['"]/g)];
     for (const m of imports) {
       const depTag = m[2] || m[4];
       if (!depTag || !catByTag.has(depTag) || depTag === tag) continue;

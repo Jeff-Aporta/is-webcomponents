@@ -1,7 +1,7 @@
-import { adoptCss, defineElement } from '../../core/element.js';
-import { ElementBase } from '../../core/element-base.js';
-import { setStringAttr } from '../../core/reflect.js';
-import { resolveLocale } from '../../core/resolve-locale.js';
+import { adoptCss, defineElement } from '@jeff-aporta/iswc-base/core/element.js';
+import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
+import { setStringAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
+import { resolveLocale } from '@jeff-aporta/iswc-base/core/resolve-locale.js';
 import { parseLooseDate } from './format-date.js';
 
 /**

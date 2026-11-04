@@ -1,10 +1,10 @@
 /**
  * Playground <iswc-flex-layout>: switches booleanos + selects + snippet en vivo.
- * @param {import('../../../previews/_kit/schemas/preview.schemas.ts').PreviewMountContext} ctx
+ * @param {import('@jeff-aporta/iswc-base/previews/_kit/schemas/preview.schemas.ts').PreviewMountContext} ctx
  */
 
-import type { InputLike } from "../schemas/flex-layout.preview.schemas.js";
-export async function mount(ctx: import('../../../previews/_kit/schemas/preview.schemas.ts').PreviewMountContext): Promise<void> {
+import type { InputLike } from "@jeff-aporta/iswc-base/components/isp/schemas/flex-layout.preview.schemas.js";
+export async function mount(ctx: import('@jeff-aporta/iswc-base/previews/_kit/schemas/preview.schemas.ts').PreviewMountContext): Promise<void> {
   const root = ctx.main;
   const flex = root.querySelector<HTMLElement>('#fxPlay');
   if (!flex) return;

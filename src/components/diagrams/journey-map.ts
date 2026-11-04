@@ -1,12 +1,12 @@
-import { adoptCss, defineElement, emit } from '../../core/element.js';
+import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
 import { DiagramElementBase } from './utils/diagram-element-base.js';
 import { resolveJourneySpec, computeJourneyLayout } from './utils/journey-spec.js';
 import type { DiagramTheme } from './schemas/diagram-types.schemas.js';
-import { tkHueToHex } from '../../core/tk-hue.js';
-import { inlineMdWeb, applySvgTextContent } from '../../core/tk-inline-md.js';
+import { tkHueToHex } from '@jeff-aporta/iswc-base/core/tk-hue.js';
+import { inlineMdWeb, applySvgTextContent } from '@jeff-aporta/iswc-base/core/tk-inline-md.js';
 import { wrapText, buildTspans } from './utils/diagram-text-wrap.js';
 import { registerDiagramKind } from './utils/diagram-kinds.js';
-import { svgEl } from '../../core/svg-chart-engine.js';
+import { svgEl } from '@jeff-aporta/iswc-base/core/svg-chart-engine.js';
 import type { JourneyLayout } from "./schemas/journey-spec.schemas.js";
 import type { StepEntry } from "./schemas/journey-map.schemas.js";
 

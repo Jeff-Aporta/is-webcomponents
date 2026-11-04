@@ -1,5 +1,5 @@
-import { adoptCss, defineElement } from '../../core/element.js';
-import { atributosDe, PropsElement } from '../../core/props-element.js';
+import { adoptCss, defineElement } from '@jeff-aporta/iswc-base/core/element.js';
+import { atributosDe, PropsElement } from '@jeff-aporta/iswc-base/core/props-element.js';
 import { LoadingPropsSchema } from './schemas/loading.schemas.js';
 import type { LoadingProps } from './schemas/loading.schemas.js';
 import './spinner.js';

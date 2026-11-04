@@ -1,5 +1,5 @@
 // doc-demo-galeria.schemas.ts: contratos de tipos de doc-demo-galeria.ts.
-import type { Anatomia } from '../../../previews/_kit/schemas/anatomia.schemas.js';
+import type { Anatomia } from '@jeff-aporta/iswc-base/previews/_kit/schemas/anatomia.schemas.js';
 
 export type Bloque = { kind?: string; target?: string; props?: Record<string, unknown>; controls?: unknown[] };
 

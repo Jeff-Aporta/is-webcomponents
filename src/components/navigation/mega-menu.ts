@@ -1,6 +1,6 @@
-import { adoptCss, defineElement, emit } from '../../core/element.js';
-import '../actions/button.js';
-import '../media/icon.js';
+import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import '@jeff-aporta/iswc-base/components/actions/button.js';
+import '@jeff-aporta/iswc-base/components/media/icon.js';
 
 /**
  * <iswc-mega-menu> — Mega-menú para e-commerce/portal masivo. Abre un panel

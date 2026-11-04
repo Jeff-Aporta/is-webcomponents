@@ -1,9 +1,9 @@
-import { adoptCss, defineElement, emit } from '../../core/element.js';
-import '../actions/button.js';
-import '../forms/input.js';
-import '../media/icon.js';
-import '../layout/dialog.js';
-import { ElementBase } from '../../core/element-base.js';
+import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import '@jeff-aporta/iswc-base/components/actions/button.js';
+import '@jeff-aporta/iswc-base/components/forms/input.js';
+import '@jeff-aporta/iswc-base/components/media/icon.js';
+import '@jeff-aporta/iswc-base/components/layout/dialog.js';
+import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
 import type { InputLike } from "./schemas/confirm-delete.schemas.js";
 
 /** Custom input-like element con label, value, y errores. */

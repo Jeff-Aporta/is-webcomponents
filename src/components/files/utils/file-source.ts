@@ -1,7 +1,7 @@
 /** Contrato src|content de la familia file-preview (S-FP1). */
 
 /** Si ambos llegan, gana content. */
-import type { FileSource } from "../schemas/file-source.schemas.js";
+import type { FileSource } from "@jeff-aporta/iswc-base/components/files/schemas/file-source.schemas.js";
 export function resolveFileSource(
   src: string | null | undefined,
   content: string | null | undefined,

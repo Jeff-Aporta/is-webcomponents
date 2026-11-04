@@ -1,8 +1,8 @@
 // financial.ts — anualidades, flujos de caja y depreciación.
-import { parseDateText } from '../dates.js';
-import type { Ctx } from '../evaluator.schemas.js';
-import { ERR, toNumber } from '../values.js';
-import type { EvalValue, Scalar } from '../values.schemas.js';
+import { parseDateText } from '@jeff-aporta/iswc-base/components/data/utils/spreadsheet/dates.js';
+import type { Ctx } from '@jeff-aporta/iswc-base/components/data/utils/spreadsheet/evaluator.schemas.js';
+import { ERR, toNumber } from '@jeff-aporta/iswc-base/components/data/utils/spreadsheet/values.js';
+import type { EvalValue, Scalar } from '@jeff-aporta/iswc-base/components/data/utils/spreadsheet/values.schemas.js';
 import { finite, flat, lifted, matrix, num, numbers, optNum } from './fn-helpers.js';
 import { def } from './registry.js';
 

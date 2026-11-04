@@ -49,10 +49,10 @@
  * Eventos
  *   iswc-slots-pg-restart — al pulsar Restart. detail: { tag, slots }.
  */
-import { adoptCss, defineElement, emit } from '../../core/element.js';
-import { ElementBase } from '../../core/element-base.js';
-import '../actions/button.js';
-import '../media/icon.js';
+import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
+import '@jeff-aporta/iswc-base/components/actions/button.js';
+import '@jeff-aporta/iswc-base/components/media/icon.js';
 
 (() => {
   const TEMPLATE = document.createElement('template');

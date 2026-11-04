@@ -6,6 +6,7 @@ import { readFileSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+import { resolverEspecificador } from '../_shared/alias.ts';
 
 const { test, lista } = coleccionPruebas({ categoria: 'what' });
 
@@ -21,12 +22,12 @@ test('scroll-memory compartido entre iswc-main y layouts', () => {
   assert.match(shared, /export class ScrollMemory/);
   assert.match(shared, /restorePolicy/);
   // Ambos importan EL MISMO módulo compartido (hoy src/core/scroll-memory.ts):
-  // se resuelve el especificador relativo de cada uno contra su carpeta.
+  // se resuelve el especificador (relativo o por alias) de cada uno contra su carpeta.
   const sharedPath = join(ROOT, 'src/core/scroll-memory.ts');
   for (const [nombre, src, rel] of [['main', main, 'src/components/layout'], ['block', block, 'src/components/isp']]) {
     const spec = src.match(/from '([^']*scroll-memory\.js)'/)?.[1];
     assert.ok(spec, `${nombre} debe importar scroll-memory`);
-    assert.equal(join(ROOT, rel, spec.replace(/\.js$/, '.ts')), sharedPath, `${nombre} debe usar el scroll-memory compartido`);
+    assert.equal(resolverEspecificador(join(ROOT, rel), spec), sharedPath, `${nombre} debe usar el scroll-memory compartido`);
   }
   assert.match(block, /restorePolicy:\s*'always'/);
   assert.match(main, /restorePolicy:\s*'reload'/);

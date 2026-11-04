@@ -1,5 +1,5 @@
 // host.schemas.ts: contratos de tipos de host.ts.
-import type { Rect } from '../address.schemas.js';
+import type { Rect } from '@jeff-aporta/iswc-base/components/data/utils/spreadsheet/address.schemas.js';
 import type { MacroValue } from './interp.schemas.js';
 
 /** Lo que la macro necesita de la vista. Todo opcional: sin vista corre sobre el documento. */

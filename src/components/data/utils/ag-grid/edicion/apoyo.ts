@@ -2,12 +2,12 @@
  * ag-grid/edicion/apoyo — Lecturas comunes de los controladores sobre el host.
  */
 import type { Parametros } from './apoyo.schemas.js';
-import type { ColDefAg } from '../contrato.schemas.js';
-import type { ColumnState } from '../../../schemas/datagrid-types.schemas.js';
-import type { FilaDisplay } from '../contrato.schemas.js';
-import type { GridHost } from '../contrato.schemas.js';
-import type { RefCelda } from '../contrato.schemas.js';
-import type { RowNode } from '../../../schemas/datagrid-types.schemas.js';
+import type { ColDefAg } from '@jeff-aporta/iswc-base/components/data/utils/ag-grid/contrato.schemas.js';
+import type { ColumnState } from '@jeff-aporta/iswc-base/components/data/schemas/datagrid-types.schemas.js';
+import type { FilaDisplay } from '@jeff-aporta/iswc-base/components/data/utils/ag-grid/contrato.schemas.js';
+import type { GridHost } from '@jeff-aporta/iswc-base/components/data/utils/ag-grid/contrato.schemas.js';
+import type { RefCelda } from '@jeff-aporta/iswc-base/components/data/utils/ag-grid/contrato.schemas.js';
+import type { RowNode } from '@jeff-aporta/iswc-base/components/data/schemas/datagrid-types.schemas.js';
 import type { MapaNavegacion } from './schemas/edicion.schemas.js';
 import type { Posicion } from './schemas/edicion.schemas.js';
 import type { TextosValidacion } from './schemas/edicion.schemas.js';

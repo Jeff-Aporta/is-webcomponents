@@ -14,7 +14,7 @@
 
 import { ColumnType } from './types.js';
 import { getCellValue } from './value-formatter.js';
-import type { SortDirName, ColumnState, RowNode, SortModel } from "../../schemas/datagrid-types.schemas.js";
+import type { SortDirName, ColumnState, RowNode, SortModel } from "@jeff-aporta/iswc-base/components/data/schemas/datagrid-types.schemas.js";
 
 /** Normaliza el valor a algo barato de comparar: numero, texto o null. */
 function claveOrden(v: unknown, type: string): number | string | null {

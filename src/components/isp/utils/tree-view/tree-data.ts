@@ -5,7 +5,7 @@
 
 /** Self shape de los getters de NODE_DIM_DESCRIPTORS. */
 
-import type { _NodeAny, _TreeRoot, _TreeBaseCtor, _GroupEntry, _DecoratedSelf } from "../../schemas/tree-view-tree-data.schemas.js";
+import type { _NodeAny, _TreeRoot, _TreeBaseCtor, _GroupEntry, _DecoratedSelf } from "@jeff-aporta/iswc-base/components/isp/schemas/tree-view-tree-data.schemas.js";
 const NODE_DECORATED = /* @__PURE__ */ new WeakSet<object>();
 const NODE_DIM_DESCRIPTORS: Record<string, PropertyDescriptor> = {
   isAtom: { get() {

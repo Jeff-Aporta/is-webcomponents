@@ -1,7 +1,7 @@
-import { adoptCss, defineElement, emit } from '../../core/element.js';
-import { escapeHtml } from '../../core/dom-utils.js';
-import '../media/icon.js';
-import { ElementBase } from '../../core/element-base.js';
+import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { escapeHtml } from '@jeff-aporta/iswc-base/core/dom-utils.js';
+import '@jeff-aporta/iswc-base/components/media/icon.js';
+import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
 
 /**
  * <iswc-command-palette> — Paleta de comandos al estilo Cmd+K / Ctrl+K.

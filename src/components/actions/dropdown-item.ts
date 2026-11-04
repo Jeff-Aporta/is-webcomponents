@@ -1,9 +1,9 @@
-import { adoptCss, defineElement, emit } from '../../core/element.js';
-import { withStyleAttrs } from '../../core/attrs.js';
+import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { withStyleAttrs } from '@jeff-aporta/iswc-base/core/attrs.js';
 
-import { computePosition } from '../../core/position.js';
-import '../media/icon.js';
-import { setStringAttr } from '../../core/reflect.js';
+import { computePosition } from '@jeff-aporta/iswc-base/core/position.js';
+import '@jeff-aporta/iswc-base/components/media/icon.js';
+import { setStringAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
 
 /**
  * <iswc-dropdown-item> — ítem de menú para iswc-dropdown.

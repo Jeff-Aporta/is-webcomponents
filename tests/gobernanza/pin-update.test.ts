@@ -9,6 +9,7 @@
 //   P6 scripts ONLINE por raw@main con --reload → no alertan. P7 cabecera @vendor @main → no alerta.
 //   P8 ida y vuelta: lo que el vendor escribe (`conCabecera`, cada estilo: ts, md, html, css, json) nunca alerta.
 //   P9 una ref @main del kit en una línea que NO es la cabecera (aunque lleve un comentario `@vendor` al final) → rojo.
+//   P10 la entrada del alias `@jeff-aporta/iswc-base/` (deno.json e importmap de los HTML) se fija a la URL canónica del SHA.
 import { assert, assertEquals } from 'jsr:@std/assert@1';
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
@@ -157,5 +158,51 @@ for (const c of P9) {
     assert(r.out.includes('src/z.ts'), r.out);
   });
 }
+
+// P10 Alias del kit (specs/cdn.md §Alias): `actualizarPines` fija la entrada `"@jeff-aporta/iswc-base/"` de `deno.json` y del
+//     `<script type="importmap">` de los HTML a `https://cdn.jsdelivr.net/gh/<repo>@<sha>/dist/cdn/`, venga por SHA viejo,
+//     por rama, por raw o con el nombre anterior del repo. Una ruta local no se toca. `deno.json` entra en las raíces
+//     por defecto. Sin red: se importa la función.
+const ALIAS_URL = (sha: string) => `https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@${sha}/dist/cdn/`;
+
+function appConAlias(valorDeno: string, valorHtml: string): string {
+  const raiz = Deno.makeTempDirSync({ prefix: 'pin-alias-' });
+  mkdirSync(join(raiz, 'src'), { recursive: true });
+  writeFileSync(join(raiz, 'deno.json'), JSON.stringify({ imports: { '@jeff-aporta/iswc-base/': valorDeno, zod: 'npm:zod@^4' } }, null, 2));
+  writeFileSync(join(raiz, 'index.html'), `<!doctype html>\n<script type="importmap">\n{ "imports": { "@jeff-aporta/iswc-base/": "${valorHtml}" } }\n</script>\n`);
+  return raiz;
+}
+
+const leerAlias = (raiz: string) => ({
+  deno: JSON.parse(Deno.readTextFileSync(join(raiz, 'deno.json'))).imports['@jeff-aporta/iswc-base/'],
+  html: Deno.readTextFileSync(join(raiz, 'index.html')).match(/"@jeff-aporta\/iswc-base\/":\s*"([^"]*)"/)?.[1],
+});
+
+denoTest('pin-update: P10 el alias del kit en deno.json y en el importmap queda en la URL canónica del SHA nuevo', async () => {
+  const { actualizarPines, opciones, urlAlias, ALIAS_KIT } = await import('../../src/vendor-distributions/shared/tools/pin-update.mjs');
+  assertEquals(ALIAS_KIT, '@jeff-aporta/iswc-base/');
+  for (const [deno, html] of [
+    [ALIAS_URL(B), ALIAS_URL(B)],
+    ['https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn/', 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/iswc-root@main/dist/cdn/'],
+    [`https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/${B}/dist/cdn/`, `https://cdn.jsdelivr.net/gh/Jeff-Aporta/iswc-root@${B}/dist/cdn/`],
+  ]) {
+    const raiz = appConAlias(deno, html);
+    const op = opciones({ root: raiz });
+    assertEquals(urlAlias(A, op), ALIAS_URL(A));
+    const r = actualizarPines(A, op);
+    assert(r.tocados.includes('deno.json') && r.tocados.includes('index.html'), JSON.stringify(r));
+    assertEquals(leerAlias(raiz), { deno: ALIAS_URL(A), html: ALIAS_URL(A) }, `${deno} · ${html}`);
+  }
+});
+
+denoTest('pin-update: P10 un alias a una carpeta local no se toca; ya canónico no cuenta reemplazos', async () => {
+  const { actualizarPines, opciones } = await import('../../src/vendor-distributions/shared/tools/pin-update.mjs');
+  const local = appConAlias('./vendor/iswc/', '/vendor/iswc/');
+  const r = actualizarPines(A, opciones({ root: local }));
+  assertEquals(r.n, 0, JSON.stringify(r));
+  assertEquals(leerAlias(local), { deno: './vendor/iswc/', html: '/vendor/iswc/' });
+  const alDia = appConAlias(ALIAS_URL(A), ALIAS_URL(A));
+  assertEquals(actualizarPines(A, opciones({ root: alDia })).n, 0);
+});
 
 export default lista();

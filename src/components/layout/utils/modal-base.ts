@@ -45,11 +45,11 @@
  * cualquier navegador con Custom Elements.
  */
 
-import { withStyleAttrs } from '../../../core/attrs.js';
+import { withStyleAttrs } from '@jeff-aporta/iswc-base/core/attrs.js';
 
-import { upgradeProperties } from '../../../core/element.js';
-import { emit } from '../../../core/element.js';
-import type { ModalBaseCtor } from "../schemas/modal-base.schemas.js";
+import { upgradeProperties } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
+import type { ModalBaseCtor } from "@jeff-aporta/iswc-base/components/layout/schemas/modal-base.schemas.js";
 const BASE_OBSERVED: readonly string[] = ['open', 'label', 'without-header', 'light-dismiss'];
 
 /** Selector CSS para "cualquier elemento focuseable" usado en focus trap. */

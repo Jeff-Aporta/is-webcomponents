@@ -7,7 +7,7 @@ import { parseInput } from './input-parse.js';
 import { shiftFormula } from './rewrite.js';
 import { toBool } from './values.js';
 import type { Scalar } from './values.schemas.js';
-import type { ValidationRule } from '../../schemas/spreadsheet.schemas.js';
+import type { ValidationRule } from '@jeff-aporta/iswc-base/components/data/schemas/spreadsheet.schemas.js';
 
 /** Elementos de una lista: valores escritos o un rango (`=A1:A5`). */
 export function listItems(doc: SpreadsheetDoc, sheet: Sheet, rule: ValidationRule): string[] {

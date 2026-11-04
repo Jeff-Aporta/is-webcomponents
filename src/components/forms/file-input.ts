@@ -1,8 +1,8 @@
-import { adoptCss, defineElement, emit } from '../../core/element.js';
-import '../media/icon.js';
-import '../actions/button.js';
-import '../helpers/format-bytes.js';
-import { ElementBase } from '../../core/element-base.js';
+import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import '@jeff-aporta/iswc-base/components/media/icon.js';
+import '@jeff-aporta/iswc-base/components/actions/button.js';
+import '@jeff-aporta/iswc-base/components/helpers/format-bytes.js';
+import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
 
 /**
  * <iswc-file-input> — Web Component (vanilla).

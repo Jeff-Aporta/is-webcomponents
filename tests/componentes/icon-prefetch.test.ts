@@ -36,7 +36,7 @@ test('preview-component fuente declara dependencia de icon (por eso Pages no deb
   // Documenta la cadena: src preview-component → icon.ts → icon-loader.
   // Si index.html vuelve a loadPageModules(ese archivo) tras load('all'),
   // el prefetch de icon-loader corre con bases src/assets → 404.
-  assert.match(preview, /import\s+['"]\.\.\/media\/icon\.js['"]/);
+  assert.match(preview, /import\s+['"]@jeff-aporta\/iswc-base\/components\/media\/icon\.js['"]/);
 });
 
 export default lista();

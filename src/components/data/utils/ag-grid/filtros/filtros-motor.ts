@@ -11,8 +11,8 @@ import { coincideQuick, partesQuick } from './quick.js';
 import { coincideSet } from './set.js';
 import { ModeloFiltrosSchema } from './filtros.schemas.js';
 import type { ActivoFiltro, Condicion, ContextoValor, ModeloAvanzado, ModeloColumna, ModeloFiltros, ModeloMulti, ModeloSet, ParamsFiltro, TipoCondicion, TipoFiltro } from './filtros.schemas.js';
-import type { ColumnState, RowNode } from '../../../schemas/datagrid-types.schemas.js';
-import type { GridHost } from '../contrato.schemas.js';
+import type { ColumnState, RowNode } from '@jeff-aporta/iswc-base/components/data/schemas/datagrid-types.schemas.js';
+import type { GridHost } from '@jeff-aporta/iswc-base/components/data/utils/ag-grid/contrato.schemas.js';
 
 const TIPOS: Record<string, TipoFiltro> = {
   agTextColumnFilter: 'text', agNumberColumnFilter: 'number', agDateColumnFilter: 'date', agSetColumnFilter: 'set', agMultiColumnFilter: 'multi',

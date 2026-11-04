@@ -7,8 +7,8 @@
  */
 
 import type { Funcion, Reloj, Fase } from './tooltips.schemas.js';
-import type { ColumnState, RowNode } from '../../../schemas/datagrid-types.schemas.js';
-import type { ColDefAg, Flotante, GridHost, Rect, RefCelda } from '../contrato.schemas.js';
+import type { ColumnState, RowNode } from '@jeff-aporta/iswc-base/components/data/schemas/datagrid-types.schemas.js';
+import type { ColDefAg, Flotante, GridHost, Rect, RefCelda } from '@jeff-aporta/iswc-base/components/data/utils/ag-grid/contrato.schemas.js';
 import { escaparHtml } from './html.js';
 import type { ParamsCelda } from './schemas.js';
 import { contextoCelda } from './contexto.js';

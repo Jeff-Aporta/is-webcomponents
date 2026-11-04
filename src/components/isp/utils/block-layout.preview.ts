@@ -1,12 +1,12 @@
 /**
  * Demo <iswc-block-layout>: breakpoint + json2html/html2json.
- * @param {import('../../../previews/_kit/schemas/preview.schemas.ts').PreviewMountContext} ctx
+ * @param {import('@jeff-aporta/iswc-base/previews/_kit/schemas/preview.schemas.ts').PreviewMountContext} ctx
  */
 
 /** `<iswc-block-layout>` con APIs específicas. */
 
-import type { _BlockLayoutLike } from "../schemas/block-layout.preview.schemas.js";
-export async function mount(ctx: import('../../../previews/_kit/schemas/preview.schemas.ts').PreviewMountContext): Promise<void> {
+import type { _BlockLayoutLike } from "@jeff-aporta/iswc-base/components/isp/schemas/block-layout.preview.schemas.js";
+export async function mount(ctx: import('@jeff-aporta/iswc-base/previews/_kit/schemas/preview.schemas.ts').PreviewMountContext): Promise<void> {
   const root = ctx.main;
 
   const intro = root.querySelector<HTMLElement>('#bl-intro');

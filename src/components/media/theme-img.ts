@@ -1,13 +1,13 @@
-import { adoptCss, defineElement, emit } from '../../core/element.js';
-import { ElementBase } from '../../core/element-base.js';
-import { setStringAttr } from '../../core/reflect.js';
+import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
+import { setStringAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
 import {
   findThemeContainer,
   readTheme,
   watchThemeContainer,
-} from '../../core/theme-scope.js';
-import { MEDIA_SHAPE } from '../../core/media-shape.js';
-import { type MediaShape } from '../../core/schemas/media-shape.schemas.js';
+} from '@jeff-aporta/iswc-base/core/theme-scope.js';
+import { MEDIA_SHAPE } from '@jeff-aporta/iswc-base/core/media-shape.js';
+import { type MediaShape } from '@jeff-aporta/iswc-base/core/schemas/media-shape.schemas.js';
 
 /**
  * <iswc-theme-img> — una sola imagen que cambia dark ↔ light según el tema.

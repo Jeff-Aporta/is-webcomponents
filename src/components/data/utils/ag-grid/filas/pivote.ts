@@ -6,7 +6,7 @@
  * clave la hace `agregarArbol` con `clavesPivote`.
  */
 import type { ClaveArbol, ColPivote, DefPivote, GrupoPivote, OpcionesPivote, ResultadoPivote, ValorAgg } from './filas.schemas.js';
-import type { RowNode } from '../../../schemas/datagrid-types.schemas.js';
+import type { RowNode } from '@jeff-aporta/iswc-base/components/data/schemas/datagrid-types.schemas.js';
 
 const SEP = '\u0002';
 const TOTAL = 'PivotRowTotal';

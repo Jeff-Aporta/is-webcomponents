@@ -6,8 +6,8 @@
  * tipo plano porque Zod no aporta nada ahi. Modulos de runtime: `import type`.
  */
 import { z } from 'zod';
-import type { FilterModel, RowData, RowNode, SortModel } from '../../../schemas/datagrid-types.schemas.js';
-import type { FilaDisplay } from '../contrato.schemas.js';
+import type { FilterModel, RowData, RowNode, SortModel } from '@jeff-aporta/iswc-base/components/data/schemas/datagrid-types.schemas.js';
+import type { FilaDisplay } from '@jeff-aporta/iswc-base/components/data/utils/ag-grid/contrato.schemas.js';
 
 /* ── Arbol de grupos ──────────────────────────────────────────────────── */
 

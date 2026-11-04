@@ -1,9 +1,9 @@
 // logical.ts — lógica, control de flujo perezoso, LET/LAMBDA e información de celdas.
-import { evalNode, callLambda } from '../evaluator.js';
-import type { Ctx, Env } from '../evaluator.schemas.js';
-import type { Node } from '../parser.schemas.js';
-import { CellError, compare, ERR, LambdaValue, RefValue, toBool } from '../values.js';
-import type { EvalValue, Matrix, Scalar } from '../values.schemas.js';
+import { evalNode, callLambda } from '@jeff-aporta/iswc-base/components/data/utils/spreadsheet/evaluator.js';
+import type { Ctx, Env } from '@jeff-aporta/iswc-base/components/data/utils/spreadsheet/evaluator.schemas.js';
+import type { Node } from '@jeff-aporta/iswc-base/components/data/utils/spreadsheet/parser.schemas.js';
+import { CellError, compare, ERR, LambdaValue, RefValue, toBool } from '@jeff-aporta/iswc-base/components/data/utils/spreadsheet/values.js';
+import type { EvalValue, Matrix, Scalar } from '@jeff-aporta/iswc-base/components/data/utils/spreadsheet/values.schemas.js';
 import { forEach, isArrayLike, lifted, matrix, scalar, str } from './fn-helpers.js';
 import { def, defLazy } from './registry.js';
 

@@ -24,7 +24,7 @@
 
 /* ── Enums como Object.freeze para que `intent in ENUM` funcione en runtime ── */
 
-import type { TextFilterOp, NumberFilterOp, DateFilterOp, TextFilter, NumberFilter, DateFilter, SetFilter, ColumnFilter, FilterModel, ColumnTypeName, AggFuncName, SortDirName, PinSideName, AlignName, DensityName, SelectionModeName, FilterTypeName, RowData, RowNode, GroupRow, LeafRow, DisplayRow, ColumnDef, ColumnState, SortModelItem, SortModel, GridOptions, GridState, GridListener, GridApi } from "../../schemas/datagrid-types.schemas.js";
+import type { TextFilterOp, NumberFilterOp, DateFilterOp, TextFilter, NumberFilter, DateFilter, SetFilter, ColumnFilter, FilterModel, ColumnTypeName, AggFuncName, SortDirName, PinSideName, AlignName, DensityName, SelectionModeName, FilterTypeName, RowData, RowNode, GroupRow, LeafRow, DisplayRow, ColumnDef, ColumnState, SortModelItem, SortModel, GridOptions, GridState, GridListener, GridApi } from "@jeff-aporta/iswc-base/components/data/schemas/datagrid-types.schemas.js";
 export const ColumnType = Object.freeze({
   TEXT: 'text',
   NUMBER: 'number',

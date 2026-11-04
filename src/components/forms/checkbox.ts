@@ -1,5 +1,5 @@
-import { adoptCss, defineElement, emit } from '../../core/element.js';
-import '../media/icon.js';
+import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import '@jeff-aporta/iswc-base/components/media/icon.js';
 
 import {
   attachFormInternals,
@@ -7,10 +7,10 @@ import {
   setCustomState,
   setFormValue,
   setValidity,
-} from '../../core/form-associated.js';
-import { ElementBase } from '../../core/element-base.js';
-import { setStringAttr, setOptionalAttr } from '../../core/reflect.js';
-import { hasSlotted } from '../../core/dom-utils.js';
+} from '@jeff-aporta/iswc-base/core/form-associated.js';
+import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
+import { setStringAttr, setOptionalAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
+import { hasSlotted } from '@jeff-aporta/iswc-base/core/dom-utils.js';
 /**
  * <iswc-checkbox> — Casilla form-associated: entra en FormData y en la validación del <form>.
  *

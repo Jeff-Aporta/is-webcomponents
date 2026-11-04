@@ -1,7 +1,7 @@
-import { adoptCss, defineElement, emit, upgradeProperties } from '../../core/element.js';
-import { createSpaState } from '../../core/spa-state.js';
-import { readIswc, removeIswc, writeIswc } from '../../core/iswc-storage.js';
-import type { EstadoSpa, SpaState } from '../../core/schemas/spa-state.schemas.js';
+import { adoptCss, defineElement, emit, upgradeProperties } from '@jeff-aporta/iswc-base/core/element.js';
+import { createSpaState } from '@jeff-aporta/iswc-base/core/spa-state.js';
+import { readIswc, removeIswc, writeIswc } from '@jeff-aporta/iswc-base/core/iswc-storage.js';
+import type { EstadoSpa, SpaState } from '@jeff-aporta/iswc-base/core/schemas/spa-state.schemas.js';
 import {
   ServerApiDocsLoginRespuestaSchema,
   ServerApiDocsSesionSchema,
@@ -31,17 +31,17 @@ import {
   validarEstricto,
 } from './utils/server-api-docs-md.js';
 import './doc-layout.js';
-import '../navigation/doc-index.js';
-import '../navigation/pager.js';
-import '../diagrams/sequence-diagram.js';
-import '../code/code.js';
-import '../feedback/tag.js';
-import '../feedback/spinner.js';
-import '../actions/copy-button.js';
-import '../actions/button.js';
-import '../actions/button-group.js';
-import '../media/icon.js';
-import '../forms/input.js';
+import '@jeff-aporta/iswc-base/components/navigation/doc-index.js';
+import '@jeff-aporta/iswc-base/components/navigation/pager.js';
+import '@jeff-aporta/iswc-base/components/diagrams/sequence-diagram.js';
+import '@jeff-aporta/iswc-base/components/code/code.js';
+import '@jeff-aporta/iswc-base/components/feedback/tag.js';
+import '@jeff-aporta/iswc-base/components/feedback/spinner.js';
+import '@jeff-aporta/iswc-base/components/actions/copy-button.js';
+import '@jeff-aporta/iswc-base/components/actions/button.js';
+import '@jeff-aporta/iswc-base/components/actions/button-group.js';
+import '@jeff-aporta/iswc-base/components/media/icon.js';
+import '@jeff-aporta/iswc-base/components/forms/input.js';
 import './dialog.js';
 import './callout.js';
 

@@ -17,8 +17,8 @@
 import { TObject } from "./helpers.js";
 import { objRootsToNodes } from "./tree-data.js";
 import { TATreeShape } from "./03-tree-shape.js";
-import { DropPosition, MoveDirection, TNode, TRecord, TreeCustoms } from '../../schemas/tree-view-types.schemas.js';
-import type { CursorHook } from "../../schemas/tree-view-04-tree-flow.schemas.js";
+import { DropPosition, MoveDirection, TNode, TRecord, TreeCustoms } from '@jeff-aporta/iswc-base/components/isp/schemas/tree-view-types.schemas.js';
+import type { CursorHook } from "@jeff-aporta/iswc-base/components/isp/schemas/tree-view-04-tree-flow.schemas.js";
 
 /** Comparador estable por la última sección numérica del `flatPath`. */
 function flatPathTailCmp(a: TNode, b: TNode): number {

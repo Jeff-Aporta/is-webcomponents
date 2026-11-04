@@ -5,8 +5,8 @@
  * valores no pasaba nada. Además el naming era legacy: “variant” = color y
  * “appearance” = variant real del componente.
  */
-import '../../media/icon.js';
-import type { MountCtx } from "../schemas/button.preview.schemas.js";
+import '@jeff-aporta/iswc-base/components/media/icon.js';
+import type { MountCtx } from "@jeff-aporta/iswc-base/components/actions/schemas/button.preview.schemas.js";
 
 const START_ICONS: Record<string, string> = {
   'i-floppy': 'mdi:content-save-outline',

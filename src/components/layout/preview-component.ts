@@ -11,16 +11,16 @@
  *
  *   el.preview = new SomeComponentPreview();
  */
-import { withStyleAttrs } from '../../core/attrs.js';
-import { renderDefinition } from '../../previews/_kit/render.js';
+import { withStyleAttrs } from '@jeff-aporta/iswc-base/core/attrs.js';
+import { renderDefinition } from '@jeff-aporta/iswc-base/previews/_kit/render.js';
 import './drawer.js';
-import '../actions/button.js';
-import '../media/icon.js';
-import { defineElement } from '../../core/element.js';
+import '@jeff-aporta/iswc-base/components/actions/button.js';
+import '@jeff-aporta/iswc-base/components/media/icon.js';
+import { defineElement } from '@jeff-aporta/iswc-base/core/element.js';
 import type {
   IswcComponentPreviewLike,
   PreviewMountContext,
-} from '../../previews/_kit/schemas/preview.schemas.ts';
+} from '@jeff-aporta/iswc-base/previews/_kit/schemas/preview.schemas.ts';
 import type { DrawerEl } from "./schemas/preview-component.schemas.js";
 
 /** Ancho a partir del cual el TOC deja de caber al lado del contenido. */

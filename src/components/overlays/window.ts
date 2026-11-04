@@ -1,8 +1,8 @@
-import '../actions/button.js';
-import '../media/icon.js';
-import { adoptCss, defineElement, emit } from '../../core/element.js';
-import { ElementBase } from '../../core/element-base.js';
-import { createPopupDismiss } from '../../core/popup-dismiss.js';
+import '@jeff-aporta/iswc-base/components/actions/button.js';
+import '@jeff-aporta/iswc-base/components/media/icon.js';
+import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
+import { createPopupDismiss } from '@jeff-aporta/iswc-base/core/popup-dismiss.js';
 
 /**
  * <iswc-window> — Ventana flotante (estilo escritorio).

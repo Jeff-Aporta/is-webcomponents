@@ -14,7 +14,7 @@
  */
 
 import { cellText, getCellValue } from './value-formatter.js';
-import type { ColumnFilter, ColumnState, DateFilter, EvaluadoresFiltro, FiltroExterno, FilterModel, NumberFilter, RowNode, SetFilter, TextFilter } from "../../schemas/datagrid-types.schemas.js";
+import type { ColumnFilter, ColumnState, DateFilter, EvaluadoresFiltro, FiltroExterno, FilterModel, NumberFilter, RowNode, SetFilter, TextFilter } from "@jeff-aporta/iswc-base/components/data/schemas/datagrid-types.schemas.js";
 
 function toNum(v: unknown): number | null {
   if (v == null || v === '') return null;

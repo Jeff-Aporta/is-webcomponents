@@ -1,10 +1,10 @@
-import { adoptCss, defineElement, emit } from '../../core/element.js';
-import { ElementBase } from '../../core/element-base.js';
-import { setCustomState } from '../../core/form-associated.js';
-import '../media/icon.js';
-import '../actions/button.js';
+import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
+import { setCustomState } from '@jeff-aporta/iswc-base/core/form-associated.js';
+import '@jeff-aporta/iswc-base/components/media/icon.js';
+import '@jeff-aporta/iswc-base/components/actions/button.js';
 import './drawer.js';
-import '../feedback/toast.js';
+import '@jeff-aporta/iswc-base/components/feedback/toast.js';
 
 /**
  * <iswc-app-shell> — Armazón de aplicación: barra superior fija + vista con scroll propio.

@@ -1,5 +1,5 @@
 /** Lo común del chrome de la familia file-preview: alto por atributo y estados vacío/error. */
-import '../../feedback/empty-state.js';
+import '@jeff-aporta/iswc-base/components/feedback/empty-state.js';
 
 /** El atributo `height` llega al token que usa `:host([height]) .root`. */
 export function sincronizarAlto(host: HTMLElement): void {

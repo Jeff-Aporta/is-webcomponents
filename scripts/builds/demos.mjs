@@ -2,6 +2,7 @@
 // + theme.min.js + themes/*.json. Necesario porque los HTML de los demos
 // cargan desde dist/cdn/ y el build principal puede fallar en otros tags.
 import { build } from 'esbuild';
+import { aliasKit } from '@jeff-aporta/iswc-base/cdn/build/alias.ts';
 import { mkdirSync, copyFileSync, readdirSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -17,6 +18,7 @@ await build({
   outfile: join(OUT, 'er-diagram.min.js'),
   minify: true, sourcemap: false, treeShaking: true,
   loader: { '.json': 'json' },
+  plugins: [aliasKit()],
 });
 console.log('OK er-diagram.min.js');
 
@@ -26,6 +28,7 @@ await build({
   outfile: join(OUT, 'er-editor.min.js'),
   minify: true, sourcemap: false, treeShaking: true,
   loader: { '.json': 'json' },
+  plugins: [aliasKit()],
 });
 console.log('OK er-editor.min.js');
 
@@ -36,6 +39,7 @@ await build({
   outfile: join(OUT, 'theme.min.js'),
   minify: true, sourcemap: false, treeShaking: true,
   loader: { '.json': 'json' },
+  plugins: [aliasKit()],
 });
 console.log('OK theme.min.js');
 

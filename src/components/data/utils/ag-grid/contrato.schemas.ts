@@ -1,6 +1,6 @@
 /** Tipos de contrato.ts. */
 
-import type { ColumnFilter, ColumnState, DisplayRow, FilterModel, GridApi, GridState, RowData, RowNode } from '../../schemas/datagrid-types.schemas.js';
+import type { ColumnFilter, ColumnState, DisplayRow, FilterModel, GridApi, GridState, RowData, RowNode } from '@jeff-aporta/iswc-base/components/data/schemas/datagrid-types.schemas.js';
 
 export type Desinstalar = () => void;
 

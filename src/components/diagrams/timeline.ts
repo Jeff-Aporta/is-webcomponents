@@ -1,11 +1,11 @@
-import { adoptCss, defineElement, emit, emitCancelable } from '../../core/element.js';
+import { adoptCss, defineElement, emit, emitCancelable } from '@jeff-aporta/iswc-base/core/element.js';
 import { DiagramElementBase } from './utils/diagram-element-base.js';
 import { resolveTimelineSpec, computeTimelineLayout } from './utils/timeline-spec.js';
 import type { DiagramTheme } from './schemas/diagram-types.schemas.js';
-import { tkHueToHex } from '../../core/tk-hue.js';
-import { inlineMdWeb } from '../../core/tk-inline-md.js';
+import { tkHueToHex } from '@jeff-aporta/iswc-base/core/tk-hue.js';
+import { inlineMdWeb } from '@jeff-aporta/iswc-base/core/tk-inline-md.js';
 import { registerDiagramKind } from './utils/diagram-kinds.js';
-import { svgEl } from '../../core/svg-chart-engine.js';
+import { svgEl } from '@jeff-aporta/iswc-base/core/svg-chart-engine.js';
 import type { TimelineLayout } from "./schemas/timeline-spec.schemas.js";
 import type { EventEntry } from "./schemas/timeline.schemas.js";
 

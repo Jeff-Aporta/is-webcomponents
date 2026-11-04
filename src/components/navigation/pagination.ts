@@ -1,12 +1,12 @@
-import { adoptCss, defineElement, emit } from '../../core/element.js';
-import { crearNodo } from '../../core/dom-utils.js';
-import { ElementBase } from '../../core/element-base.js';
-import { getNumberAttr } from '../../core/reflect.js';
+import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { crearNodo } from '@jeff-aporta/iswc-base/core/dom-utils.js';
+import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
+import { getNumberAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
 import { PaginationTextosSchema } from './schemas/pagination.schemas.js';
 import type { PaginationChangeDetail, PaginationSizeDetail, PaginationTextos } from './schemas/pagination.schemas.js';
-import '../actions/button.js';
-import '../forms/select.js';
-import '../media/icon.js';
+import '@jeff-aporta/iswc-base/components/actions/button.js';
+import '@jeff-aporta/iswc-base/components/forms/select.js';
+import '@jeff-aporta/iswc-base/components/media/icon.js';
 
 /**
  * <iswc-pagination> — paginación numérica: pista de números desplazable (flechas, Shift+rueda, arrastre táctil) y selector

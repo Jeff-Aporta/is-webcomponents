@@ -20,6 +20,7 @@
 import { readFileSync, existsSync } from 'node:fs';
 import { dirname, join, sep, isAbsolute } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { rutaDeEspecificador } from './alias.ts';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -226,7 +227,7 @@ export function extraerObservados(rutaOContenido: string): string[] {
           if (importMatch) {
             const impPath = importMatch[1];
             const dir = dirname(ruta);
-            let target = join(dir, impPath);
+            let target = rutaDeEspecificador(dir, impPath) ?? join(dir, impPath);
             if (!exists(target)) target = target.replace(/\.js$/, '.ts');
             if (exists(target)) {
               const impSrc = read(target);
@@ -381,9 +382,9 @@ export function leerConBase(rutaModulo: string): string {
     importRe.lastIndex = 0;
     while ((m = importRe.exec(currentSrc))) {
       const impPath = m[1];
-      if (!impPath.startsWith('.')) continue;
       const dir = dirname(currentRuta);
-      const target = join(dir, impPath);
+      const target = rutaDeEspecificador(dir, impPath);
+      if (!target) continue;
       let resolved: string | null = null;
       if (exists(target)) resolved = target;
       else if (exists(target.replace(/\.js$/, '.ts'))) resolved = target.replace(/\.js$/, '.ts');

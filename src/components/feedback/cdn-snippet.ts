@@ -1,18 +1,18 @@
-import { adoptCss, defineElement } from '../../core/element.js';
-import { withStyleAttrs } from '../../core/attrs.js';
+import { adoptCss, defineElement } from '@jeff-aporta/iswc-base/core/element.js';
+import { withStyleAttrs } from '@jeff-aporta/iswc-base/core/attrs.js';
 
-import { copyText } from '../../core/dom-utils.js';
+import { copyText } from '@jeff-aporta/iswc-base/core/dom-utils.js';
 
 import {
   resolveRef,
   jsdelivrBase,
-} from '../../core/cdn-ref.js';
-import { paint } from '../../core/highlight-code.js';
+} from '@jeff-aporta/iswc-base/core/cdn-ref.js';
+import { paint } from '@jeff-aporta/iswc-base/core/highlight-code.js';
 import { SKILL_DOCS } from './utils/llm-agent-prompt.js';
 import type { SkillDoc } from "./schemas/llm-agent-prompt.schemas.js";
-import '../media/icon.js';
-import '../actions/button.js';
-import '../code/code.js';
+import '@jeff-aporta/iswc-base/components/media/icon.js';
+import '@jeff-aporta/iswc-base/components/actions/button.js';
+import '@jeff-aporta/iswc-base/components/code/code.js';
 
 /**
  * <iswc-cdn-snippet> — panel copy-paste del snippet mínimo de uso.

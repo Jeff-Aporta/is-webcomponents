@@ -4,7 +4,7 @@
 
 /** Tipado del payload que espera `navigator.share` — subset estricto. */
 
-import type { ShareData, ShareResult, NativeShareData } from "../schemas/web-share.schemas.js";
+import type { ShareData, ShareResult, NativeShareData } from "@jeff-aporta/iswc-base/components/actions/schemas/web-share.schemas.js";
 export async function sharePayload(data: ShareData = {}): Promise<ShareResult> {
   const payload: NativeShareData = {
     title: data.title || document.title || '',

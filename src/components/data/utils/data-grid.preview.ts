@@ -1,6 +1,6 @@
-import { paint } from '../../../core/highlight-code.js';
-import type { ColumnDef, Row } from '../schemas/grid-types.schemas.js';
-import type { DataGridElement } from "../schemas/data-grid.preview.schemas.js";
+import { paint } from '@jeff-aporta/iswc-base/core/highlight-code.js';
+import type { ColumnDef, Row } from '@jeff-aporta/iswc-base/components/data/schemas/grid-types.schemas.js';
+import type { DataGridElement } from "@jeff-aporta/iswc-base/components/data/schemas/data-grid.preview.schemas.js";
 
 /** El componente `iswc-data-grid` visto desde fuera: HTMLElement con API extendida. */
 
@@ -9,7 +9,7 @@ import type { DataGridElement } from "../schemas/data-grid.preview.schemas.js";
  * Se ejecuta en mount() tras pintar la definition JSON.
  * @param ctx Contexto de montaje (root, main, aside, definition).
  */
-export async function mount(ctx: import('../../../previews/_kit/schemas/preview.schemas.ts').PreviewMountContext): Promise<void> {
+export async function mount(ctx: import('@jeff-aporta/iswc-base/previews/_kit/schemas/preview.schemas.ts').PreviewMountContext): Promise<void> {
   const root = ctx.main;
   void root;
   /* ── Datos de ejemplo ─────────────────────────────────────────────── */

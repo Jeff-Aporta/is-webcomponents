@@ -29,8 +29,8 @@ import { filterRows } from './pipeline-filtering.js';
 import { sortRows, cycleSort } from './pipeline-sorting.js';
 import { aggregateGroup, buildDisplayRows, collectGroupIds } from './pipeline-grouping.js';
 import { Density, SelectionMode, DEFAULT_PAGE_SIZE } from './types.js';
-import type { ColumnDef, ColumnFilter, ColumnState, DensityName, DisplayRow, FilterModel, GridApi, GridListener, GridOptions, GridState, PinSideName, RowData, RowNode, RowTransaction, SortModel, TransactionResult, TransformadorModelo } from "../../schemas/datagrid-types.schemas.js";
-import type { EvaluadoresFiltro, FiltroExterno } from '../../schemas/datagrid-types.schemas.js';
+import type { ColumnDef, ColumnFilter, ColumnState, DensityName, DisplayRow, FilterModel, GridApi, GridListener, GridOptions, GridState, PinSideName, RowData, RowNode, RowTransaction, SortModel, TransactionResult, TransformadorModelo } from "@jeff-aporta/iswc-base/components/data/schemas/datagrid-types.schemas.js";
+import type { EvaluadoresFiltro, FiltroExterno } from '@jeff-aporta/iswc-base/components/data/schemas/datagrid-types.schemas.js';
 
 
 /**

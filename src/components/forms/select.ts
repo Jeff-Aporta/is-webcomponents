@@ -1,9 +1,9 @@
-import { placementHaciaCentro } from '../../core/position.js';
-import { adoptCss, defineElement, emit } from '../../core/element.js';
+import { placementHaciaCentro } from '@jeff-aporta/iswc-base/core/position.js';
+import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
 import './option.js';
-import '../media/icon.js';
-import '../actions/button.js';
-import '../feedback/tag.js';
+import '@jeff-aporta/iswc-base/components/media/icon.js';
+import '@jeff-aporta/iswc-base/components/actions/button.js';
+import '@jeff-aporta/iswc-base/components/feedback/tag.js';
 
 import {
   attachFormInternals,
@@ -11,9 +11,9 @@ import {
   setCustomState,
   setFormValue,
   setValidity,
-} from '../../core/form-associated.js';
-import { ElementBase } from '../../core/element-base.js';
-import { setStringAttr } from '../../core/reflect.js';
+} from '@jeff-aporta/iswc-base/core/form-associated.js';
+import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
+import { setStringAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
 /**
  * <iswc-select> — Select form-associated con listbox en <dialog modal> (top layer),
  * así el desplegable nunca se pierde por overflow/clipping de ancestros.

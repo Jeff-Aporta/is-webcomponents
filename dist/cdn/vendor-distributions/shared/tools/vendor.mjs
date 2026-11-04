@@ -12,6 +12,7 @@ var __export = (target, all) => {
 // src/vendor-distributions/shared/tools/pin-update.mjs
 var pin_update_exports = {};
 __export(pin_update_exports, {
+  ALIAS_KIT: () => ALIAS_KIT,
   CABECERA_VENDOR: () => CABECERA_VENDOR,
   ONLINE: () => ONLINE,
   SHA: () => SHA,
@@ -23,6 +24,7 @@ __export(pin_update_exports, {
   ultimoPublicado: () => ultimoPublicado,
   ultimoSha: () => ultimoSha,
   ultimosShas: () => ultimosShas,
+  urlAlias: () => urlAlias,
   verificarLocal: () => verificarLocal
 });
 import { existsSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
@@ -162,6 +164,19 @@ function verificarLocal(local, sha = "") {
   }
   return { accesible: true, motivo: "ok", head, tieneSha };
 }
+function fijarAlias(texto, nuevo, op, reNombres) {
+  const reEntrada = new RegExp(`("${esc(ALIAS_KIT)}"\\s*:\\s*")([^"]*)(")`, "g");
+  const deEsteRepo = new RegExp(`${esc(op.owner)}\\/${reNombres}[@/]`);
+  let n = 0;
+  const salida = texto.replace(reEntrada, (m, pre, url, post) => {
+    if (!deEsteRepo.test(url)) return m;
+    const canonica = urlAlias(nuevo, op);
+    if (url === canonica) return m;
+    n += 1;
+    return `${pre}${canonica}${post}`;
+  });
+  return { salida, n };
+}
 function actualizarPines(nuevo, op = opciones(), viejos = null) {
   const { reNombres } = regexes(op);
   const rel = (f) => relative(op.root, f).replace(/\\/g, "/");
@@ -174,7 +189,9 @@ function actualizarPines(nuevo, op = opciones(), viejos = null) {
   const tocados = [];
   for (const f of archivos(op)) {
     const t = readFileSync(f, "utf8");
-    const next = t.replace(reViejo, (m) => {
+    const conAlias = fijarAlias(t, nuevo, op, reNombres);
+    n += conAlias.n;
+    const next = conAlias.salida.replace(reViejo, (m) => {
       const r = `${op.nombre}@${nuevo}`;
       if (m !== r) n += 1;
       return r;
@@ -249,12 +266,13 @@ function esPrincipal() {
     return false;
   }
 }
-var ALIAS, RAICES_DEFAULT, SALTAR_DEFAULT, EXT, ONLINE, CABECERA_VENDOR, SHA, auth, esc, log;
+var ALIAS, RAICES_DEFAULT, ALIAS_KIT, SALTAR_DEFAULT, EXT, ONLINE, CABECERA_VENDOR, SHA, auth, esc, log, urlAlias;
 var init_pin_update = __esm({
   async "src/vendor-distributions/shared/tools/pin-update.mjs"() {
     "use strict";
     ALIAS = { "is-webcomponents": ["iswc-root"], "iswc-root": ["is-webcomponents"] };
-    RAICES_DEFAULT = ["index.html", "sw.js", "staticwebapp.config.json", "manifest.json", "src", "view", "demo", "public"];
+    RAICES_DEFAULT = ["index.html", "sw.js", "staticwebapp.config.json", "manifest.json", "deno.json", "src", "view", "demo", "public"];
+    ALIAS_KIT = "@jeff-aporta/iswc-base/";
     SALTAR_DEFAULT = ["node_modules", "vendor", "dist", ".tmp-scss", ".git"];
     EXT = /\.(html|ts|js|mjs|json|css|scss|md)$/;
     ONLINE = /raw\.githubusercontent\.com\/[^/\s]+\/[^/\s]+\/main\/(?:dist\/cdn\/)?(?:vendor-distributions\/(?:shared\/tools\/(?:vendor|pin-update)|client\/tools\/(?:download-iconify|render-lote))\.(?:ts|mjs)|skills\/[^/\s]+\/tools\/[^/\s]+\.(?:ts|mjs))\b|--reload=https:\/\/raw\.githubusercontent\.com\/[^/\s]+\/[^/\s]+\/(?![\w-])/;
@@ -263,6 +281,7 @@ var init_pin_update = __esm({
     auth = () => process.env.GITHUB_TOKEN ? { Authorization: `Bearer ${process.env.GITHUB_TOKEN}` } : {};
     esc = (s) => s.replace(/[.*+?^${}()|[\]\\/]/g, "\\$&");
     log = (m) => console.log(`[pin] ${m}`);
+    urlAlias = (sha, op = opciones()) => `https://cdn.jsdelivr.net/gh/${op.repo}@${sha}/dist/cdn/`;
     if (esPrincipal()) {
       const args = Object.fromEntries(process.argv.slice(2).map((a) => {
         const [k, ...v] = a.replace(/^--/, "").split("=");

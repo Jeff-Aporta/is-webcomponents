@@ -1,7 +1,7 @@
-import { adoptCss, defineElement, emit } from '../../core/element.js';
-import { withStyleAttrs } from '../../core/attrs.js';
+import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { withStyleAttrs } from '@jeff-aporta/iswc-base/core/attrs.js';
 
-import { escapeHtml } from '../../core/dom-utils.js';
+import { escapeHtml } from '@jeff-aporta/iswc-base/core/dom-utils.js';
 import { AGGREGATION_FNS, LOGIC, filterTest, operatorNeedsInput, toDate } from './utils/grid-types.js';
 import type { CellValue, FilterRule, Operator, Row } from "./schemas/grid-types.schemas.js";
 import type { ColumnDef } from "./schemas/datagrid-types.schemas.js";
@@ -37,12 +37,12 @@ import type { FilterPanelModel } from "./schemas/grid-ui.schemas.js";
 import type { ResolvedColumn } from "./schemas/grid-data.schemas.js";
 import type { FilterModel, SortModelItem } from "./schemas/datagrid-types.schemas.js";
 import type { GridPopoverEl } from "./schemas/grid-ui.schemas.js";
-import '../actions/button.js';
-import '../actions/dropdown-item.js';
-import '../forms/input.js';
-import '../forms/select.js';
-import '../forms/option.js';
-import '../forms/checkbox.js';
+import '@jeff-aporta/iswc-base/components/actions/button.js';
+import '@jeff-aporta/iswc-base/components/actions/dropdown-item.js';
+import '@jeff-aporta/iswc-base/components/forms/input.js';
+import '@jeff-aporta/iswc-base/components/forms/select.js';
+import '@jeff-aporta/iswc-base/components/forms/option.js';
+import '@jeff-aporta/iswc-base/components/forms/checkbox.js';
 
 /* (Los tipos que dependen de `IswcDataGrid` viven dentro del IIFE para evitar el
    problema de ordenación de declaraciones: las clases NO son hoisted como

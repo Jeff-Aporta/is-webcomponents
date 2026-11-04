@@ -1,10 +1,10 @@
 /**
  * Demo <iswc-form> con cuerpo JSON compacto (json2html / html2json).
- * @param {import('../../../previews/_kit/schemas/preview.schemas.ts').PreviewMountContext} ctx
+ * @param {import('@jeff-aporta/iswc-base/previews/_kit/schemas/preview.schemas.ts').PreviewMountContext} ctx
  */
 
-import type { IswcFormEl, SubmitDetail } from "../schemas/form.preview.schemas.js";
-export async function mount(ctx: import('../../../previews/_kit/schemas/preview.schemas.ts').PreviewMountContext): Promise<void> {
+import type { IswcFormEl, SubmitDetail } from "@jeff-aporta/iswc-base/components/isp/schemas/form.preview.schemas.js";
+export async function mount(ctx: import('@jeff-aporta/iswc-base/previews/_kit/schemas/preview.schemas.ts').PreviewMountContext): Promise<void> {
   const root = ctx.main;
   const out = root.querySelector<HTMLElement>('#fJsonOut');
   const bodyOut = root.querySelector<HTMLElement>('#fBodyOut');

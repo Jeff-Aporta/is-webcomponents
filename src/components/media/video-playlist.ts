@@ -29,10 +29,10 @@
  *        tools-right
  */
 
-import { adoptCss, defineElement, emit } from '../../core/element.js';
-import { withStyleAttrs } from '../../core/attrs.js';
+import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { withStyleAttrs } from '@jeff-aporta/iswc-base/core/attrs.js';
 
-import '../actions/button.js';
+import '@jeff-aporta/iswc-base/components/actions/button.js';
 import './video.js';
 import './icon.js';
 import type { IswcVideoLike, IswcVideo, VideoList, MediaObsBag, ActivateOptions, ApplyActiveOptions } from "./schemas/video-playlist.schemas.js";

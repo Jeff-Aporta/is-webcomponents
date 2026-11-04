@@ -6,8 +6,8 @@
  * `rowGroupPanelShow` la pinta el host.
  */
 import type { EnlacesPanel } from './filas.schemas.js';
-import type { ColumnState } from '../../../schemas/datagrid-types.schemas.js';
-import type { GridHost } from '../contrato.schemas.js';
+import type { ColumnState } from '@jeff-aporta/iswc-base/components/data/schemas/datagrid-types.schemas.js';
+import type { GridHost } from '@jeff-aporta/iswc-base/components/data/utils/ag-grid/contrato.schemas.js';
 
 const MIME = 'application/x-iswc-col';
 

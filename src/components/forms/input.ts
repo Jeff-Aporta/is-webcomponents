@@ -1,14 +1,14 @@
-import { adoptCss, defineElement, emit, upgradeProperties } from '../../core/element.js';
+import { adoptCss, defineElement, emit, upgradeProperties } from '@jeff-aporta/iswc-base/core/element.js';
 import {
   attachFormInternals, setCustomState, setFormValue, setValidity, clearValidity
-} from '../../core/form-associated.js';
-import '../media/icon.js';
-import '../actions/button.js';
-import '../actions/check-icon-button.js';
+} from '@jeff-aporta/iswc-base/core/form-associated.js';
+import '@jeff-aporta/iswc-base/components/media/icon.js';
+import '@jeff-aporta/iswc-base/components/actions/button.js';
+import '@jeff-aporta/iswc-base/components/actions/check-icon-button.js';
 import { isOtpAutocomplete, listenWebOtp } from './utils/web-otp.js';
-import { ElementBase } from '../../core/element-base.js';
-import { setStringAttr, setOptionalAttr } from '../../core/reflect.js';
-import { hasSlotted } from '../../core/dom-utils.js';
+import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
+import { setStringAttr, setOptionalAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
+import { hasSlotted } from '@jeff-aporta/iswc-base/core/dom-utils.js';
 /**
  * <iswc-input> — Campo de texto form-associated (vanilla + Shadow DOM).
  *

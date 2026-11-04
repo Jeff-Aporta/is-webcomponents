@@ -22,7 +22,7 @@
  * }
  */
 
-import type { CodeMarkKind, CodeMarkTone, CodeMark, CodeMarkInput, CodeDocument, CodeDocOpts, CodeDocumentInput } from "../schemas/code-model.schemas.js";
+import type { CodeMarkKind, CodeMarkTone, CodeMark, CodeMarkInput, CodeDocument, CodeDocOpts, CodeDocumentInput } from "@jeff-aporta/iswc-base/components/code/schemas/code-model.schemas.js";
 export const CODE_DOC_SCHEMA = 'iswc-code-doc/v1';
 
 /** Anotación externa sobre el texto (highlight / tooltip / message). */

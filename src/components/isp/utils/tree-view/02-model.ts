@@ -15,8 +15,8 @@
  * nodo con `iplan` / `idrow` opcional).
  */
 import { TTreeAdapterContract } from "./01-contract.js";
-import { TNode, TRecord, TreeActionSpec } from '../../schemas/tree-view-types.schemas.js';
-import type { ActionResult, AfterCatalogFn, DeleteConfirmedFn, HistoryPushFn, CloseEditFormFn, RebuildFlatTreeFn } from "../../schemas/tree-view-02-model.schemas.js";
+import { TNode, TRecord, TreeActionSpec } from '@jeff-aporta/iswc-base/components/isp/schemas/tree-view-types.schemas.js';
+import type { ActionResult, AfterCatalogFn, DeleteConfirmedFn, HistoryPushFn, CloseEditFormFn, RebuildFlatTreeFn } from "@jeff-aporta/iswc-base/components/isp/schemas/tree-view-02-model.schemas.js";
 
 /** Resultado de las acciones `ActInsertar` / `actEliminar` / etc. */
 

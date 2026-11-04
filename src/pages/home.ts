@@ -11,11 +11,11 @@
  * y resize van con el `signal` del preview: al desmontar se cortan solos en vez
  * de seguir midiendo un DOM que ya es de otro componente.
  *
- * @typedef {import('../previews/_kit/schemas/preview.schemas.ts').PreviewMountContext} PreviewMountContext
- * @typedef {import('../previews/_kit/schemas/preview.schemas.ts').IswcComponentPreviewLike} IswcComponentPreviewLike
+ * @typedef {import('@jeff-aporta/iswc-base/previews/_kit/schemas/preview.schemas.ts').PreviewMountContext} PreviewMountContext
+ * @typedef {import('@jeff-aporta/iswc-base/previews/_kit/schemas/preview.schemas.ts').IswcComponentPreviewLike} IswcComponentPreviewLike
  */
-import type { PreviewMountContext, IswcComponentPreviewLike } from '../previews/_kit/schemas/preview.schemas.ts';
-import { init as pintarConsumoCdn } from '../utils/home-cdn.js';
+import type { PreviewMountContext, IswcComponentPreviewLike } from '@jeff-aporta/iswc-base/previews/_kit/schemas/preview.schemas.ts';
+import { init as pintarConsumoCdn } from '@jeff-aporta/iswc-base/utils/home-cdn.js';
 
 /**
  * Pide al shell que abra el preview de `tag`.

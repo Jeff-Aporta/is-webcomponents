@@ -24,8 +24,8 @@
  */
 
 import { ColumnType, FilterType } from './types.js';
-import type { AlignName, ColumnDef, ColumnTypeName, SortDirName } from '../../schemas/datagrid-types.schemas.js';
-import type { IspColumn, IspColumnDef, GroupNode, LeafNode, TreeNode } from "../../schemas/datagrid-column-groups.schemas.js";
+import type { AlignName, ColumnDef, ColumnTypeName, SortDirName } from '@jeff-aporta/iswc-base/components/data/schemas/datagrid-types.schemas.js';
+import type { IspColumn, IspColumnDef, GroupNode, LeafNode, TreeNode } from "@jeff-aporta/iswc-base/components/data/schemas/datagrid-column-groups.schemas.js";
 
 let uid = 0;
 const nextId = () => `c${(uid++).toString(36)}${Math.random().toString(36).slice(2, 6)}`;

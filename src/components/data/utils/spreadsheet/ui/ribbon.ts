@@ -1,6 +1,6 @@
 // ribbon.ts — definición de la cinta y de los menús. Solo datos y su HTML con componentes del kit;
 // cada elemento lleva un `cmd` que el componente despacha.
-import { NUMBER_FORMATS } from '../numfmt.js';
+import { NUMBER_FORMATS } from '@jeff-aporta/iswc-base/components/data/utils/spreadsheet/numfmt.js';
 import { esc } from './render.js';
 import type { RibbonItem, MenuItem, RibbonGroup, RibbonTab } from './ribbon.schemas.js';
 

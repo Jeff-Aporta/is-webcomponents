@@ -15,7 +15,7 @@ import {
   pagesBase,
   MIRRORS,
   fallbackBases,
-} from '../core/cdn-ref.js';
+} from '@jeff-aporta/iswc-base/core/cdn-ref.js';
 
 const GH_REPO = 'Jeff-Aporta/iswc-root';
 const RAW = (ref: string = 'main') => `https://raw.githubusercontent.com/${GH_REPO}/${ref}`;

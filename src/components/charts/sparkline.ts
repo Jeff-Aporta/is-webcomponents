@@ -1,7 +1,7 @@
-import { adoptCss, defineElement } from '../../core/element.js';
-import { withStyleAttrs } from '../../core/attrs.js';
+import { adoptCss, defineElement } from '@jeff-aporta/iswc-base/core/element.js';
+import { withStyleAttrs } from '@jeff-aporta/iswc-base/core/attrs.js';
 
-import { pathLine, pathArea, roundedBarRect } from '../../core/svg-chart-engine.js';
+import { pathLine, pathArea, roundedBarRect } from '@jeff-aporta/iswc-base/core/svg-chart-engine.js';
 import type { SparkPoint } from "./schemas/sparkline.schemas.js";
 
 const SVG_NS = 'http://www.w3.org/2000/svg';

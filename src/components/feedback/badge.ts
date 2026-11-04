@@ -1,9 +1,9 @@
-import { adoptCss, defineElement } from '../../core/element.js';
-import { withStyleAttrs } from '../../core/attrs.js';
-import { ocultarSlotsVacios } from '../../core/dom-utils.js';
+import { adoptCss, defineElement } from '@jeff-aporta/iswc-base/core/element.js';
+import { withStyleAttrs } from '@jeff-aporta/iswc-base/core/attrs.js';
+import { ocultarSlotsVacios } from '@jeff-aporta/iswc-base/core/dom-utils.js';
 
-import { INTENT } from '../../core/intent.js';
-import { TONE } from '../../core/tone.js';
+import { INTENT } from '@jeff-aporta/iswc-base/core/intent.js';
+import { TONE } from '@jeff-aporta/iswc-base/core/tone.js';
 
 /**
  * <iswc-badge> — Web Component (vanilla).

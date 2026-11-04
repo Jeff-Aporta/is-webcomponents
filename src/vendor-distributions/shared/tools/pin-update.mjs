@@ -29,6 +29,10 @@
 //   --verificar=<ruta>         archivo que debe existir en el pin (default dist/cdn/core/loader.min.js)
 //   --dry-run                  muestra qué cambiaría, sin escribir
 //
+// Alias del kit: la entrada `"@jeff-aporta/iswc-base/": "…"` de `deno.json` y del `<script type="importmap">` de cada
+// HTML se fija a la forma canónica `https://cdn.jsdelivr.net/gh/<repo>@<sha>/dist/cdn/` (aunque viniera por rama, por
+// raw o con otro nombre del repo). Si apunta a otra cosa (una carpeta local), no se toca.
+//
 // Salida: 0 ok · 1 heterogéneo o refs mutables · 2 uso inválido · 3 pin no publicado (nada se tocó) ·
 //         4 sin red (no se pudo resolver `ultimo`; nada se tocó).
 //
@@ -46,7 +50,9 @@ import { pathToFileURL } from 'node:url';
 // jsDelivr da 404 con ese nombre, así que un `iswc-root@x` se corrige a `is-webcomponents@y`.
 // Cuando el rename exista, se invierte (default `iswc-root`, alias `is-webcomponents`).
 const ALIAS = { 'is-webcomponents': ['iswc-root'], 'iswc-root': ['is-webcomponents'] };
-const RAICES_DEFAULT = ['index.html', 'sw.js', 'staticwebapp.config.json', 'manifest.json', 'src', 'view', 'demo', 'public'];
+const RAICES_DEFAULT = ['index.html', 'sw.js', 'staticwebapp.config.json', 'manifest.json', 'deno.json', 'src', 'view', 'demo', 'public'];
+/** Clave del alias del kit en `deno.json` y en los import maps (con barra final). */
+export const ALIAS_KIT = '@jeff-aporta/iswc-base/';
 const SALTAR_DEFAULT = ['node_modules', 'vendor', 'dist', '.tmp-scss', '.git'];
 const EXT = /\.(html|ts|js|mjs|json|css|scss|md)$/;
 // Scripts ONLINE del kit (Jeff, 2026-10-13): CLI que los consumidores corren desde `@main` con `--reload` y que
@@ -199,6 +205,27 @@ export function verificarLocal(local, sha = '') {
   return { accesible: true, motivo: 'ok', head, tieneSha };
 }
 
+/** URL canónica del alias del kit para un SHA: la carpeta `dist/cdn/` publicada en jsDelivr. */
+export const urlAlias = (sha, op = opciones()) => `https://cdn.jsdelivr.net/gh/${op.repo}@${sha}/dist/cdn/`;
+
+/**
+ * Entrada del alias del kit (`"@jeff-aporta/iswc-base/": "…"`) en un JSON o en el import map de un HTML → forma
+ * canónica con `nuevo`. Solo si el valor es una URL de este repo (cualquier nombre); una ruta local se respeta.
+ */
+function fijarAlias(texto, nuevo, op, reNombres) {
+  const reEntrada = new RegExp(`("${esc(ALIAS_KIT)}"\\s*:\\s*")([^"]*)(")`, 'g');
+  const deEsteRepo = new RegExp(`${esc(op.owner)}\\/${reNombres}[@/]`);
+  let n = 0;
+  const salida = texto.replace(reEntrada, (m, pre, url, post) => {
+    if (!deEsteRepo.test(url)) return m;
+    const canonica = urlAlias(nuevo, op);
+    if (url === canonica) return m;
+    n += 1;
+    return `${pre}${canonica}${post}`;
+  });
+  return { salida, n };
+}
+
 /** Reescribe los pines de `viejos` (o todos los que no sean `nuevo`) a `nuevo`. Devuelve reemplazos y archivos tocados. */
 export function actualizarPines(nuevo, op = opciones(), viejos = null) {
   const { reNombres } = regexes(op);
@@ -213,7 +240,9 @@ export function actualizarPines(nuevo, op = opciones(), viejos = null) {
   const tocados = [];
   for (const f of archivos(op)) {
     const t = readFileSync(f, 'utf8');
-    const next = t
+    const conAlias = fijarAlias(t, nuevo, op, reNombres);
+    n += conAlias.n;
+    const next = conAlias.salida
       .replace(reViejo, (m) => { const r = `${op.nombre}@${nuevo}`; if (m !== r) n += 1; return r; })
       .replace(reViejoRaw, (m, pre) => { const r = `${pre}${op.nombre}/${nuevo}/`; if (m !== r) n += 1; return r; });
     if (next === t) continue;

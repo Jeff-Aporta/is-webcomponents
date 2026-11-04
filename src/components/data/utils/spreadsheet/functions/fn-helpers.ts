@@ -1,8 +1,8 @@
 // helpers.ts — utilidades compartidas por las familias de funciones.
-import type { Ctx } from '../evaluator.schemas.js';
-import { refMatrix } from '../evaluator.js';
-import { CellError, ERR, LambdaValue, RefValue, toBool, toNumber, toText } from '../values.js';
-import type { EvalValue, Matrix, Scalar } from '../values.schemas.js';
+import type { Ctx } from '@jeff-aporta/iswc-base/components/data/utils/spreadsheet/evaluator.schemas.js';
+import { refMatrix } from '@jeff-aporta/iswc-base/components/data/utils/spreadsheet/evaluator.js';
+import { CellError, ERR, LambdaValue, RefValue, toBool, toNumber, toText } from '@jeff-aporta/iswc-base/components/data/utils/spreadsheet/values.js';
+import type { EvalValue, Matrix, Scalar } from '@jeff-aporta/iswc-base/components/data/utils/spreadsheet/values.schemas.js';
 
 /** ¿Es un argumento matricial (rango de varias celdas o matriz)? */
 export function isArrayLike(v: EvalValue): boolean {

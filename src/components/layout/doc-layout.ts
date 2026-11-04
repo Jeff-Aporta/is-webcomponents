@@ -1,7 +1,7 @@
 /// <reference lib="dom" />
-import { adoptCss, defineElement, emit } from '../../core/element.js';
+import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
 import './split-panel.js';
-import { readIswc, writeIswc } from '../../core/iswc-storage.js';
+import { readIswc, writeIswc } from '@jeff-aporta/iswc-base/core/iswc-storage.js';
 import type { EntradaTocDocLayout, FuenteTocDocLayout, PanelesDocLayout, PrefsDocLayout, SplitPanelDocLayout } from './schemas/doc-layout.schemas.js';
 
 /**

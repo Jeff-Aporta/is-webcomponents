@@ -7,7 +7,7 @@
 
 /** Spec mínima que necesitamos de cada acción para construir el botón. */
 
-import type { FlexHost, FlexActionSpec, FlexActionEntry, CompactOpts, MoreOpts } from "../../schemas/tree-view-flex-options.schemas.js";
+import type { FlexHost, FlexActionSpec, FlexActionEntry, CompactOpts, MoreOpts } from "@jeff-aporta/iswc-base/components/isp/schemas/tree-view-flex-options.schemas.js";
 
 function mkIcon(name: string): HTMLElement {
   const ic = document.createElement("iswc-icon");

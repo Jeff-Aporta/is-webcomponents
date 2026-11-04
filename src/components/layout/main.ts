@@ -16,12 +16,12 @@
  * de componente en la galería vía iframe.src) arranca en top.
  */
 
-import { defineElement } from '../../core/element.js';
+import { defineElement } from '@jeff-aporta/iswc-base/core/element.js';
 import {
   SCROLL_MEMORY_ATTRS,
   ScrollMemory,
   bindScrollMemoryApi,
-} from '../../core/scroll-memory.js';
+} from '@jeff-aporta/iswc-base/core/scroll-memory.js';
 
 (() => {
   const TAG = 'iswc-main';

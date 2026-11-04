@@ -1,9 +1,9 @@
-import { adoptCss, defineElement, emit } from '../../core/element.js';
-import { attrBool, attrEnum, attrNum, atributosDeclarados, withStyleAttrs } from '../../core/attrs.js';
-import { computePosition, PLACEMENTS_AUTO } from '../../core/position.js';
+import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { attrBool, attrEnum, attrNum, atributosDeclarados, withStyleAttrs } from '@jeff-aporta/iswc-base/core/attrs.js';
+import { computePosition, PLACEMENTS_AUTO } from '@jeff-aporta/iswc-base/core/position.js';
 import './dropdown-item.js';
-import '../layout/divider.js';
-import { createPopupDismiss } from '../../core/popup-dismiss.js';
+import '@jeff-aporta/iswc-base/components/layout/divider.js';
+import { createPopupDismiss } from '@jeff-aporta/iswc-base/core/popup-dismiss.js';
 import type { Placement, DropdownItemEl } from "./schemas/dropdown.schemas.js";
 
 /** Colocacion del panel respecto al trigger. `position.js` es la fuente. */

@@ -4,7 +4,7 @@
  */
 
 /** @param v valor a evaluar. */
-import type { IspRecord, GridRow, IspColumnDef, FlatGridColumn, IspColumnsMap, IspController } from "../schemas/isp-record-utils.schemas.js";
+import type { IspRecord, GridRow, IspColumnDef, FlatGridColumn, IspColumnsMap, IspController } from "@jeff-aporta/iswc-base/components/isp/schemas/isp-record-utils.schemas.js";
 export function isPresent(v: unknown): boolean {
   if (v == null) return false;
   if (typeof v === 'string') return v.trim().length > 0;

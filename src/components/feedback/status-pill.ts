@@ -1,8 +1,8 @@
-import { adoptCss, defineElement } from '../../core/element.js';
-import { atributosDe, PropsElement } from '../../core/props-element.js';
+import { adoptCss, defineElement } from '@jeff-aporta/iswc-base/core/element.js';
+import { atributosDe, PropsElement } from '@jeff-aporta/iswc-base/core/props-element.js';
 import { StatusPillPropsSchema } from './schemas/status-pill.schemas.js';
 import type { StatusPillProps, StatusPillStatus } from './schemas/status-pill.schemas.js';
-import '../media/icon.js';
+import '@jeff-aporta/iswc-base/components/media/icon.js';
 import './spinner.js';
 
 /**

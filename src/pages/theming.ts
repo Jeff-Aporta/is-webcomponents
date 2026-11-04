@@ -8,12 +8,12 @@
  *     los --iswc-* inline del <html> y deja el switch en off.
  *   - "Restaurar defaults" borra el LS y vuelve a DEFAULTS.
  */
-import { readIswc, removeIswc, writeIswc } from '../core/iswc-storage.js';
+import { readIswc, removeIswc, writeIswc } from '@jeff-aporta/iswc-base/core/iswc-storage.js';
 import type {
   PreviewMountContext,
   IswcComponentPreviewLike,
-} from '../previews/_kit/schemas/preview.schemas.ts';
-import { BRAND_DERIVE, applyBrandVars, seedCss } from '../styles/palette-build.js';
+} from '@jeff-aporta/iswc-base/previews/_kit/schemas/preview.schemas.ts';
+import { BRAND_DERIVE, applyBrandVars, seedCss } from '@jeff-aporta/iswc-base/styles/palette-build.js';
 import type { Rgb, Oklab, Seed, OklchTriplet, PersistedData, TokenMap, BuildTokensResult, ColorPicker, TextEditor, CheckboxEl } from "./schemas/theming.schemas.js";
 
 /** Tripleta RGB lineal (0..1). */

@@ -10,7 +10,7 @@
  * El scale permanece estático hasta un gesto de zoom deliberado.
  */
 
-import type { PanZoomView, PanZoomOptions, PanZoomController } from "../schemas/pan-zoom.schemas.js";
+import type { PanZoomView, PanZoomOptions, PanZoomController } from "@jeff-aporta/iswc-base/components/diagrams/schemas/pan-zoom.schemas.js";
 const DEFAULTS = {
   minScale: 0.3,
   maxScale: 6,

@@ -18,7 +18,8 @@ import { spawn } from 'node:child_process';
 import { basename, dirname, join, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { build } from 'esbuild';
-import { bundleMinJs, bundleMinCss, docsBanner } from '../src/cdn/build/bundle-min.ts';
+import { aliasKit } from '@jeff-aporta/iswc-base/cdn/build/alias.ts';
+import { bundleMinJs, bundleMinCss, docsBanner } from '@jeff-aporta/iswc-base/cdn/build/bundle-min.ts';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const root = dirname(here);
@@ -26,7 +27,7 @@ const dist = join(root, 'dist', 'cdn');
 const compRoot = join(root, 'src', 'components');
 const wantServe = process.argv.includes('--serve');
 
-const manifestMod = await import('../src/manifest.js');
+const manifestMod = await import('@jeff-aporta/iswc-base/manifest.js');
 const manifest = manifestMod.default;
 const catByTag = new Map(manifest.map((m) => [m.tag.replace(/^iswc-/, ''), m.category]));
 
@@ -110,6 +111,7 @@ async function rebuildGallery() {
     legalComments: 'none',
     // load-json.ts: imports node:* solo en tests; en browser usa fetch.
     external: ['node:fs', 'node:url'],
+    plugins: [aliasKit()],
   });
   console.log(`  ✓ dist/gallery-app.min.js (${(await stat(outfile)).size} B)`);
 }

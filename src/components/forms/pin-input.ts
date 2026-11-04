@@ -1,6 +1,6 @@
-import { adoptCss, defineElement, emit } from '../../core/element.js';
+import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
 import { isOtpAutocomplete, listenWebOtp } from './utils/web-otp.js';
-import { ElementBase } from '../../core/element-base.js';
+import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
 
 /**
  * <iswc-pin-input> — Web Component (vanilla, zero dependencies).

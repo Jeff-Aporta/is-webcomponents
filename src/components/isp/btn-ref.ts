@@ -1,11 +1,11 @@
-import { adoptCss, defineElement, emit } from '../../core/element.js';
+import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
 import {
   attachFormInternals, setFormValue, setValidity, clearValidity,
-} from '../../core/form-associated.js';
-import '../actions/button.js';
-import '../forms/input.js';
-import '../media/icon.js';
-import '../layout/dialog.js';
+} from '@jeff-aporta/iswc-base/core/form-associated.js';
+import '@jeff-aporta/iswc-base/components/actions/button.js';
+import '@jeff-aporta/iswc-base/components/forms/input.js';
+import '@jeff-aporta/iswc-base/components/media/icon.js';
+import '@jeff-aporta/iswc-base/components/layout/dialog.js';
 import './catalogo-gen.js';
 import {
   asStr, getProp, isPresent,

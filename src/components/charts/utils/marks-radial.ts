@@ -1,7 +1,7 @@
-import { pathArc, polarToCartesian, svgEl } from '../../../core/svg-chart-engine.js';
+import { pathArc, polarToCartesian, svgEl } from '@jeff-aporta/iswc-base/core/svg-chart-engine.js';
 import { fontOn } from './chart-palette.js';
-import type { ChartCtx, ChartDataset } from '../schemas/chart.schemas.js';
-import type { RadialDataset, Slice } from "../schemas/marks-radial.schemas.js";
+import type { ChartCtx, ChartDataset } from '@jeff-aporta/iswc-base/components/charts/schemas/chart.schemas.js';
+import type { RadialDataset, Slice } from "@jeff-aporta/iswc-base/components/charts/schemas/marks-radial.schemas.js";
 
 /**
  * Marks radiales (pie, doughnut, polarArea, radar).

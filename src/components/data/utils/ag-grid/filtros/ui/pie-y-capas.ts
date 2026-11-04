@@ -1,14 +1,14 @@
 /**
  * ui/pie-y-capas — Status Bar en zona('estado') y overlays sobre el cuerpo.
  */
-import { agregados, funcionesAgregado } from '../resumen.js';
-import { TEXTOS } from '../textos.js';
+import { agregados, funcionesAgregado } from '@jeff-aporta/iswc-base/components/data/utils/ag-grid/filtros/resumen.js';
+import { TEXTOS } from '@jeff-aporta/iswc-base/components/data/utils/ag-grid/filtros/textos.js';
 import { crear } from './controles.js';
-import '../../../../../feedback/empty-state.js';
-import type { DefPanelEstado, EstadoOverlay, FuncionAgregado, PanelEstadoVivo, RangoCeldas } from '../filtros.schemas.js';
-import type { MotorFiltros } from '../filtros-motor.js';
-import type { GridHost, PanelEstado } from '../../contrato.schemas.js';
-import type { RowNode } from '../../../../schemas/datagrid-types.schemas.js';
+import '@jeff-aporta/iswc-base/components/feedback/empty-state.js';
+import type { DefPanelEstado, EstadoOverlay, FuncionAgregado, PanelEstadoVivo, RangoCeldas } from '@jeff-aporta/iswc-base/components/data/utils/ag-grid/filtros/filtros.schemas.js';
+import type { MotorFiltros } from '@jeff-aporta/iswc-base/components/data/utils/ag-grid/filtros/filtros-motor.js';
+import type { GridHost, PanelEstado } from '@jeff-aporta/iswc-base/components/data/utils/ag-grid/contrato.schemas.js';
+import type { RowNode } from '@jeff-aporta/iswc-base/components/data/schemas/datagrid-types.schemas.js';
 
 
 const DEFECTO: DefPanelEstado[] = [{ statusPanel: 'agTotalAndFilteredRowCountComponent', align: 'left' }, { statusPanel: 'agSelectedRowCountComponent', align: 'center' }, { statusPanel: 'agAggregationComponent', align: 'right' }];

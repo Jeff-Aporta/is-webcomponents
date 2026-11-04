@@ -1,6 +1,6 @@
-import '../actions/button.js';
-import { adoptCss, defineElement, emit } from '../../core/element.js';
-import { escapeHtml } from '../../core/dom-utils.js';
+import '@jeff-aporta/iswc-base/components/actions/button.js';
+import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { escapeHtml } from '@jeff-aporta/iswc-base/core/dom-utils.js';
 import type { CalEvent, View } from "./schemas/full-calendar.schemas.js";
 
 /**

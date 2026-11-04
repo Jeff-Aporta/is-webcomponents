@@ -1,8 +1,8 @@
 /**
  * Playground <iswc-loading-overlay>: show/hide desde los botones del demo.
  */
-import type { PreviewMountContext, IswcComponentPreviewLike } from '../../../previews/_kit/schemas/preview.schemas.ts';
-import type { LoadingOverlayLike } from "../schemas/loading-overlay.preview.schemas.js";
+import type { PreviewMountContext, IswcComponentPreviewLike } from '@jeff-aporta/iswc-base/previews/_kit/schemas/preview.schemas.ts';
+import type { LoadingOverlayLike } from "@jeff-aporta/iswc-base/components/isp/schemas/loading-overlay.preview.schemas.js";
 
 export async function mount(ctx: PreviewMountContext, preview: IswcComponentPreviewLike): Promise<void> {
   const root = ctx.main;

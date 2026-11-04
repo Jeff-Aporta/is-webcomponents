@@ -13,7 +13,7 @@ import {
   EmbeddedDiagramFileSchema,
   EmbeddedDiagramSchema,
   NodeEmbedSpecSchema,
-} from '../schemas/diagram-embed.schemas.js';
+} from '@jeff-aporta/iswc-base/components/diagrams/schemas/diagram-embed.schemas.js';
 import type {
   EmbedBox,
   EmbedCapture,
@@ -21,7 +21,7 @@ import type {
   EmbedSize,
   EmbeddedDiagram,
   NodeEmbedSpec,
-} from '../schemas/diagram-embed.schemas.js';
+} from '@jeff-aporta/iswc-base/components/diagrams/schemas/diagram-embed.schemas.js';
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
 

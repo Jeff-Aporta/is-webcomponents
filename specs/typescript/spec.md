@@ -29,7 +29,7 @@ Los especificadores llevan **`.js`, siempre**, aunque en disco el fichero sea
 `.ts`:
 
 ```ts
-import { adoptCss } from '../../core/element.js';   // el fichero es element.ts
+import { adoptCss } from '@jeff-aporta/iswc-base/core/element.js';   // el fichero es src/core/element.ts
 ```
 
 Es lo que exige `allowImportingTsExtensions: false`, y es la convención de
@@ -45,6 +45,21 @@ edita. La traducción `.js` → `.ts` ocurre en **tres sitios y solo tres**:
 Esto vale también para los datos que se importan en runtime —
 `previews/catalog.ts`, `_shell.html`— y para las URL de `dist/cdn/`, que
 apuntan a artefactos publicados y por tanto son `.js` de verdad.
+
+## S-TS2b Alias `@jeff-aporta/iswc-base/<ruta>` entre carpetas
+
+**WHAT.** En `src/**` todo import que sale de la carpeta del archivo hacia otra carpeta del kit va por el alias, con
+la ruta desde `src/` y la extensión `.js` de S-TS2: `'@jeff-aporta/iswc-base/core/element.js'`, nunca
+`'../../core/element.js'`. Los imports de la misma carpeta o de sus subcarpetas siguen relativos (`./x.js`,
+`./schemas/x.schemas.js`, `./utils/x.js`).
+
+**Excepciones.** `src/vendor-distributions/**` no usa relativos ni alias (viaja a otros repos). Un `../` que sale de
+`src/` (p. ej. `../../dist/cdn/core/loader.min.js`) no lo cubre el alias.
+
+**HOW.** `deno.json` (`"@jeff-aporta/iswc-base/": "./src/"`), `tsconfig.json` (`paths`), el plugin esbuild `aliasKit()`
+(`src/cdn/build/alias.ts`, incluido en `bundleMinJs`) y la reescritura de `scripts/serve.mjs`. El `dist/cdn/` publicado
+va con rutas relativas (specs/cdn.md §Alias). Migración mecánica: `deno run -A scripts/codemods/alias-imports.mjs
+[--dry-run]`. Guardián: `tests/gobernanza/alias-imports.test.ts`.
 
 ## S-TS3 `strict: true`, sin excepciones
 

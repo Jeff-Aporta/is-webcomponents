@@ -13,9 +13,9 @@
  * el nav se agrupa por su `category` y el demo lo pinta `<iswc-preview-component>`. Un `props` en un bloque `demo` se
  * asigna a `target.props` al montar; sus `controls` los aplica `<iswc-playground>`. Lo que no cumple se avisa y no se lista.
  */
-import { collectIsTags, GALLERY_CHROME_TAGS } from '../../../cdn/collect-iswc-tags.js';
-import { montarAnatomia, resolverAnatomia } from '../../../previews/_kit/anatomia.js';
-import type { Anatomia } from '../../../previews/_kit/schemas/anatomia.schemas.js';
+import { collectIsTags, GALLERY_CHROME_TAGS } from '@jeff-aporta/iswc-base/cdn/collect-iswc-tags.js';
+import { montarAnatomia, resolverAnatomia } from '@jeff-aporta/iswc-base/previews/_kit/anatomia.js';
+import type { Anatomia } from '@jeff-aporta/iswc-base/previews/_kit/schemas/anatomia.schemas.js';
 import { codificarEstado, leerEstado, readPanelsCompactPref, writePanelsCompactPref } from './doc-demo-estado.js';
 import type { Bloque, Definicion, Montaje, Previsualizable, HostPreview, Loader, Cajon, EstadoGaleria, OpcionesGaleria } from './doc-demo-galeria.schemas.js';
 

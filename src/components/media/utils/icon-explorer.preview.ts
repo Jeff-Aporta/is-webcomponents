@@ -1,11 +1,11 @@
-import '../../layout/card.js';
+import '@jeff-aporta/iswc-base/components/layout/card.js';
 
 /**
  * Behavior migrado desde HTML inline de icon-explorer.
  * Se ejecuta en mount() tras pintar la definition JSON.
  * @param ctx Contexto de montaje (root, main, aside, definition).
  */
-export async function mount(ctx: import('../../../previews/_kit/schemas/preview.schemas.ts').PreviewMountContext): Promise<void> {
+export async function mount(ctx: import('@jeff-aporta/iswc-base/previews/_kit/schemas/preview.schemas.ts').PreviewMountContext): Promise<void> {
   const root = ctx.main;
   void root;
 

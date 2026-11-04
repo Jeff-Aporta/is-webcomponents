@@ -1,12 +1,12 @@
-import { adoptCss } from '../../../core/element.js';
+import { adoptCss } from '@jeff-aporta/iswc-base/core/element.js';
 import { SectionField } from './date-field-core.js';
 import { splitDateTime, uses12Hour } from './date-utils.js';
-import { defineElement } from '../../../core/element.js';
-import { emit } from '../../../core/element.js';
-import { resolveLocale } from '../../../core/resolve-locale.js';
-import '../../media/icon.js';
-import '../../actions/button.js';
-import type { DateFieldKind, DefineDateFieldOpts } from "../schemas/date-field-element.schemas.js";
+import { defineElement } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { resolveLocale } from '@jeff-aporta/iswc-base/core/resolve-locale.js';
+import '@jeff-aporta/iswc-base/components/media/icon.js';
+import '@jeff-aporta/iswc-base/components/actions/button.js';
+import type { DateFieldKind, DefineDateFieldOpts } from "@jeff-aporta/iswc-base/components/forms/schemas/date-field-element.schemas.js";
 
 /**
  * Fábrica de los campos por secciones: iswc-date-field, iswc-time-field e

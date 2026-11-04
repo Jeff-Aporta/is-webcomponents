@@ -8,6 +8,7 @@ import { createServer } from 'node:http';
 import { readFile, stat } from 'node:fs/promises';
 import { extname, join, normalize, resolve, sep } from 'node:path';
 import { repoDir } from './env.ts';
+import { reescribirAlias } from '../../../src/cdn/build/alias.ts';
 import type { Server } from 'node:http';
 import type { ServidorE2E } from "./schemas/server.schemas.js";
 
@@ -77,7 +78,8 @@ export async function levantarServidor(opts: { root?: string; puerto?: number; h
           'content-type': 'text/javascript; charset=utf-8',
           'cache-control': 'no-store',
         });
-        res.end(salida.code);
+        // `@jeff-aporta/iswc-base/<ruta>` → `/src/<ruta>`, como scripts/serve.mjs (root = el repo).
+        res.end(reescribirAlias(salida.code, (ruta) => `/src/${ruta}`));
         return;
       }
       res.writeHead(200, {

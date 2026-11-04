@@ -1,5 +1,5 @@
-import { adoptCss, defineElement } from '../../core/element.js';
-import { ElementBase } from '../../core/element-base.js';
+import { adoptCss, defineElement } from '@jeff-aporta/iswc-base/core/element.js';
+import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
 
 /**
  * <iswc-gauge> — Medidor circular de porcentaje (vanilla, zero dependencies).

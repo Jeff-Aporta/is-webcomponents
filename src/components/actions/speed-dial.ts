@@ -1,9 +1,9 @@
-import { adoptCss, defineElement, emit } from '../../core/element.js';
-import { withStyleAttrs } from '../../core/attrs.js';
+import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { withStyleAttrs } from '@jeff-aporta/iswc-base/core/attrs.js';
 
 import './check-icon-button.js';
-import { clampTo } from '../../core/misc-utils.js';
-import { createPopupDismiss } from '../../core/popup-dismiss.js';
+import { clampTo } from '@jeff-aporta/iswc-base/core/misc-utils.js';
+import { createPopupDismiss } from '@jeff-aporta/iswc-base/core/popup-dismiss.js';
 
 /**
  * <iswc-speed-dial> — FAB que despliega un abanico de acciones.

@@ -7,10 +7,10 @@
 // monta los paneles por demo, escucha sus cambios y aplica el valor al host.
 
 import { iconForSelectOption } from './control-select-icons.js';
-import { DEFAULT_BUTTON_SHAPE } from '../../core/button-shape.js';
-import { DEFAULT_MEDIA_SHAPE } from '../../core/media-shape.js';
-import { DEFAULT_INTENT } from '../../core/intent.js';
-import { DEFAULT_TONE } from '../../core/tone.js';
+import { DEFAULT_BUTTON_SHAPE } from '@jeff-aporta/iswc-base/core/button-shape.js';
+import { DEFAULT_MEDIA_SHAPE } from '@jeff-aporta/iswc-base/core/media-shape.js';
+import { DEFAULT_INTENT } from '@jeff-aporta/iswc-base/core/intent.js';
+import { DEFAULT_TONE } from '@jeff-aporta/iswc-base/core/tone.js';
 import type { TipoControl, OpcionSelect, PanelInfoDef, ControlDef, ControlesDeDemo, BloqueConControles, PanelConSpec, PreviewDefinitionShallow, PreviewMountCtxShallow } from "./schemas/controles.schemas.js";
 
 /** Tipos de control soportados por el panel. */
@@ -227,7 +227,7 @@ export function valorDefault(el: Element, def: ControlDef): unknown {
 export async function montarControles(definition: PreviewDefinitionShallow, ctx: PreviewMountCtxShallow): Promise<void> {
   const main = ctx.main ?? ctx.root;
   if (!main || typeof main.querySelector !== 'function') return;
-  const { definePreviewControls } = await import('../../components/layout/preview-controls.js');
+  const { definePreviewControls } = await import('@jeff-aporta/iswc-base/components/layout/preview-controls.js');
   definePreviewControls();
 
   let errores: string[] = [];

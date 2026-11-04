@@ -1,10 +1,10 @@
-import { adoptCss, defineElement, emit } from '../../core/element.js';
-import { ocultarSlotsVacios } from '../../core/dom-utils.js';
-import '../media/icon.js';
-import '../actions/button.js';
-import { ElementBase } from '../../core/element-base.js';
-import { INTENT } from '../../core/intent.js';
-import { TONE } from '../../core/tone.js';
+import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { ocultarSlotsVacios } from '@jeff-aporta/iswc-base/core/dom-utils.js';
+import '@jeff-aporta/iswc-base/components/media/icon.js';
+import '@jeff-aporta/iswc-base/components/actions/button.js';
+import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
+import { INTENT } from '@jeff-aporta/iswc-base/core/intent.js';
+import { TONE } from '@jeff-aporta/iswc-base/core/tone.js';
 
 /**
  * <iswc-tag> — Web Component (vanilla).

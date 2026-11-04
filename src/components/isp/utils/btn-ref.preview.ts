@@ -1,5 +1,5 @@
 import { createBtnRefController } from './controller-from-config.js';
-import type { _BtnRefLike, _SelectedDetail } from "../schemas/btn-ref.preview.schemas.js";
+import type { _BtnRefLike, _SelectedDetail } from "@jeff-aporta/iswc-base/components/isp/schemas/btn-ref.preview.schemas.js";
 
 /** `<iswc-btn-ref>` con `controller` y eventos `iswc-selected-record`. */
 
@@ -7,9 +7,9 @@ import type { _BtnRefLike, _SelectedDetail } from "../schemas/btn-ref.preview.sc
 
 /**
  * Demo <iswc-btn-ref> single + multi con controller JSON (sin acciones CRUD).
- * @param {import('../../../previews/_kit/schemas/preview.schemas.ts').PreviewMountContext} ctx
+ * @param {import('@jeff-aporta/iswc-base/previews/_kit/schemas/preview.schemas.ts').PreviewMountContext} ctx
  */
-export async function mount(ctx: import('../../../previews/_kit/schemas/preview.schemas.ts').PreviewMountContext): Promise<void> {
+export async function mount(ctx: import('@jeff-aporta/iswc-base/previews/_kit/schemas/preview.schemas.ts').PreviewMountContext): Promise<void> {
   const root = ctx.main;
 
   const datos: Array<{ app: string }> = [

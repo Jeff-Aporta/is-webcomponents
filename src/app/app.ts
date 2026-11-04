@@ -1,10 +1,10 @@
-import components from '../manifest.js';
-import { leerAppCfg } from '../core/app-cfg.js';
-import { DEFAULT_PALETTE, PALETTES } from '../styles/palette-build.js';
-import type { ComponentManifestItem } from '../manifest.schemas.js';
-import { hasControlledPreview, hasCachedPreview, loadPreview } from '../previews/registry.js';
-import { collectIsTags, GALLERY_CHROME_TAGS } from '../cdn/collect-iswc-tags.js';
-import { codificarEstado, leerEstado, readPanelsCompactPref, writePanelsCompactPref } from '../components/layout/utils/doc-demo-estado.js';
+import components from '@jeff-aporta/iswc-base/manifest.js';
+import { leerAppCfg } from '@jeff-aporta/iswc-base/core/app-cfg.js';
+import { DEFAULT_PALETTE, PALETTES } from '@jeff-aporta/iswc-base/styles/palette-build.js';
+import type { ComponentManifestItem } from '@jeff-aporta/iswc-base/manifest.schemas.js';
+import { hasControlledPreview, hasCachedPreview, loadPreview } from '@jeff-aporta/iswc-base/previews/registry.js';
+import { collectIsTags, GALLERY_CHROME_TAGS } from '@jeff-aporta/iswc-base/cdn/collect-iswc-tags.js';
+import { codificarEstado, leerEstado, readPanelsCompactPref, writePanelsCompactPref } from '@jeff-aporta/iswc-base/components/layout/utils/doc-demo-estado.js';
 import type { GalleryState, ThemeName, PaletteName, CategoryMeta, CatalogItem, ThemeToggleElement, PaletteSelectorElement, PreviewLike, PreviewHostElement, SplitPanelElement, FrameElement, DrawerElement, LoaderLike } from "./schemas/app.schemas.js";
 
 /* ──────────────────────────── Tipos locales ───────────────────────────── */

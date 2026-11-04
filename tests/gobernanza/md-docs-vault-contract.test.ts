@@ -87,7 +87,7 @@ test('iswc-md-docs-vault: la hoja se compone con piezas del kit (índice, markdo
   }
   // Las piezas se importan del kit (el bundle CDN las resuelve por el loader), no de copias locales.
   assert.doesNotMatch(lector, /from '\.\/lab\//, 'sin imports de docs/lab');
-  for (const ruta of ['./doc-layout.js', '../navigation/doc-index.js', '../navigation/pager.js', '../media/figure.js', '../data/meta-list.js', '../helpers/md-render.js']) {
+  for (const ruta of ['./doc-layout.js', ...['navigation/doc-index.js', 'navigation/pager.js', 'media/figure.js', 'data/meta-list.js', 'helpers/md-render.js'].map((r) => `@jeff-aporta/iswc-base/components/${r}`)]) {
     assert.ok(lector.includes(`import '${ruta}'`), `importa ${ruta} del kit`);
   }
 });

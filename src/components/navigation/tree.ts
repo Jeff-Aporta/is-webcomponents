@@ -1,6 +1,6 @@
-import { adoptCss, defineElement, emit } from '../../core/element.js';
-import { ElementBase } from '../../core/element-base.js';
-import '../forms/checkbox.js';
+import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
+import '@jeff-aporta/iswc-base/components/forms/checkbox.js';
 
 /**
  * <iswc-tree> + <iswc-tree-item> — Web Components (vanilla, zero dependencies).

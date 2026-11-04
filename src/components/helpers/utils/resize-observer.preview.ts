@@ -1,10 +1,10 @@
 /**
  * Behavior del preview <iswc-resize-observer>.
- * @param {import('../../../previews/_kit/schemas/preview.schemas.ts').PreviewMountContext} ctx
+ * @param {import('@jeff-aporta/iswc-base/previews/_kit/schemas/preview.schemas.ts').PreviewMountContext} ctx
  */
 
-import type { ResizeObserverEntryLike, ResizeDetail, BoxSize } from "../schemas/resize-observer.preview.schemas.js";
-export async function mount(ctx: import('../../../previews/_kit/schemas/preview.schemas.ts').PreviewMountContext): Promise<void> {
+import type { ResizeObserverEntryLike, ResizeDetail, BoxSize } from "@jeff-aporta/iswc-base/components/helpers/schemas/resize-observer.preview.schemas.js";
+export async function mount(ctx: import('@jeff-aporta/iswc-base/previews/_kit/schemas/preview.schemas.ts').PreviewMountContext): Promise<void> {
   const root = ctx.main;
 
   const pushLog = (logEl: HTMLElement | null, cls: string, text: string): void => {

@@ -7,8 +7,8 @@
  * ultimos N elementos para no recrear la grilla interior al volver con scroll.
  */
 import type { InfoDetalle, ParamsDetalle } from './filas.schemas.js';
-import type { Desinstalar, FilaDisplay, FilaExtra, GridHost } from '../contrato.schemas.js';
-import type { RowData, RowNode } from '../../../schemas/datagrid-types.schemas.js';
+import type { Desinstalar, FilaDisplay, FilaExtra, GridHost } from '@jeff-aporta/iswc-base/components/data/utils/ag-grid/contrato.schemas.js';
+import type { RowData, RowNode } from '@jeff-aporta/iswc-base/components/data/schemas/datagrid-types.schemas.js';
 
 const ALTO_DEFECTO = 300;
 const CLASE_TOGGLE = 'iswc-ag-detalle-toggle';

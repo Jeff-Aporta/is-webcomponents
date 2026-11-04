@@ -1,5 +1,5 @@
-import type { ColumnState } from '../../schemas/datagrid-types.schemas.js';
-import type { ColLayout } from "../../schemas/datagrid-viewport.schemas.js";
+import type { ColumnState } from '@jeff-aporta/iswc-base/components/data/schemas/datagrid-types.schemas.js';
+import type { ColLayout } from "@jeff-aporta/iswc-base/components/data/schemas/datagrid-viewport.schemas.js";
 /**
  * datagrid-core/viewport — Matemática de virtualización (filas y columnas).
  *

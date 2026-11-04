@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import type { SequenceActorSpec, SequenceFragmentSpec, SequenceMessageSpec } from '../../diagrams/schemas/sequence-spec.schemas.js';
+import type { SequenceActorSpec, SequenceFragmentSpec, SequenceMessageSpec } from '@jeff-aporta/iswc-base/components/diagrams/schemas/sequence-spec.schemas.js';
 
 /**
  * Contratos de `<iswc-server-api-docs>` (W54: los tipos viven en *.schemas.ts).

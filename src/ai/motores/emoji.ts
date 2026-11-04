@@ -1,7 +1,7 @@
 /** emoji.ts — motor de la herramienta `emoji`. El modelo se entrenó en inglés: el español pasa antes por el traductor. */
 import { Emojifier } from 'runonweb/emoji';
 import { Translator } from 'runonweb/translate';
-import type { Crear } from '../schemas/ai.schemas.js';
+import type { Crear } from '@jeff-aporta/iswc-base/ai/schemas/ai.schemas.js';
 
 export const crear: Crear = async (_o, alProgreso) => {
   const m = new Emojifier({ onProgress: alProgreso });

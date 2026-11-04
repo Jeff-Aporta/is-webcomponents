@@ -1,8 +1,8 @@
 // stats.ts — estadística, condicionales (*IF, *IFS) y distribuciones.
-import { criterion } from '../criteria.js';
-import type { Ctx } from '../evaluator.schemas.js';
-import { CellError, ERR, RefValue, toNumber } from '../values.js';
-import type { EvalValue, Matrix } from '../values.schemas.js';
+import { criterion } from '@jeff-aporta/iswc-base/components/data/utils/spreadsheet/criteria.js';
+import type { Ctx } from '@jeff-aporta/iswc-base/components/data/utils/spreadsheet/evaluator.schemas.js';
+import { CellError, ERR, RefValue, toNumber } from '@jeff-aporta/iswc-base/components/data/utils/spreadsheet/values.js';
+import type { EvalValue, Matrix } from '@jeff-aporta/iswc-base/components/data/utils/spreadsheet/values.schemas.js';
 import { finite, flat, forEach, lifted, matrix, num, numbers, numbersA, optNum, scalar } from './fn-helpers.js';
 import { numericMatrix } from './math.js';
 import { def } from './registry.js';

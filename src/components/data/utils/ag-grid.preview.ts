@@ -2,8 +2,8 @@
  * Behavior migrado desde HTML inline de iswc-ag-grid.
  * Se ejecuta en mount() tras pintar la definition JSON.
  */
-import type { PreviewMountContext } from '../../../previews/_kit/schemas/preview.schemas.ts';
-import type { AgGridApi, IswcAgGridEl } from "../schemas/ag-grid.preview.schemas.js";
+import type { PreviewMountContext } from '@jeff-aporta/iswc-base/previews/_kit/schemas/preview.schemas.ts';
+import type { AgGridApi, IswcAgGridEl } from "@jeff-aporta/iswc-base/components/data/schemas/ag-grid.preview.schemas.js";
 
 const TICKERS = [['AAPL', 'Apple Inc.'], ['MSFT', 'Microsoft Corp.'], ['NVDA', 'NVIDIA Corp.'], ['TSLA', 'Tesla Inc.'], ['AMZN', 'Amazon.com'], ['GOOG', 'Alphabet'], ['META', 'Meta Platforms'], ['NFLX', 'Netflix']];
 

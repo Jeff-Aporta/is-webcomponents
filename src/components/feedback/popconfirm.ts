@@ -1,9 +1,9 @@
-import { adoptCss, defineElement, emit } from '../../core/element.js';
-import { ElementBase } from '../../core/element-base.js';
-import { computePosition } from '../../core/position.js';
-import { createPopupDismiss } from '../../core/popup-dismiss.js';
-import type { Placement } from '../../core/schemas/position.schemas.js';
-import '../actions/button.js';
+import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
+import { computePosition } from '@jeff-aporta/iswc-base/core/position.js';
+import { createPopupDismiss } from '@jeff-aporta/iswc-base/core/popup-dismiss.js';
+import type { Placement } from '@jeff-aporta/iswc-base/core/schemas/position.schemas.js';
+import '@jeff-aporta/iswc-base/components/actions/button.js';
 
 /**
  * <iswc-popconfirm> — Web Component (vanilla, zero dependencies).

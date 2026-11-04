@@ -1,12 +1,12 @@
-import { makeCostGrid, blockRect as blockGridRect, applyRectCost, snapDiagramGrid, snapPointAwayFromSide} from '../../../core/diagram-grid.js';
+import { makeCostGrid, blockRect as blockGridRect, applyRectCost, snapDiagramGrid, snapPointAwayFromSide} from '@jeff-aporta/iswc-base/core/diagram-grid.js';
 import { diagramHeaderWidth } from './diagram-header.js';
 import { applyEdgeActorLayout } from './diagram-edge-actors.js';
 import { assignEdgeHues } from './diagram-edge-style.js';
 import { routeOrthogonal, pixelToGrid, gridPathToSvg, buildOrthogonalPath } from './diagram-astar.js';
-import { countIconTokens, extractLeadingIconToken } from '../../../core/tk-icon-inline.js';
-import { richTextPlain } from '../../../core/tk-rich-text.js';
-import { resolveTkHue, SERIE_HUES } from '../../../core/tk-hue.js';
-import type { BlockSpecGroup, BlockSpecBlock, BlockSpecEdge, BlockSpec, LeadingIcon, BlockPlacement, BlockLayoutBlock, BlockLayoutEdge, BlockLayout, BlockRect, Side } from "../schemas/block-spec.schemas.js";
+import { countIconTokens, extractLeadingIconToken } from '@jeff-aporta/iswc-base/core/tk-icon-inline.js';
+import { richTextPlain } from '@jeff-aporta/iswc-base/core/tk-rich-text.js';
+import { resolveTkHue, SERIE_HUES } from '@jeff-aporta/iswc-base/core/tk-hue.js';
+import type { BlockSpecGroup, BlockSpecBlock, BlockSpecEdge, BlockSpec, LeadingIcon, BlockPlacement, BlockLayoutBlock, BlockLayoutEdge, BlockLayout, BlockRect, Side } from "@jeff-aporta/iswc-base/components/diagrams/schemas/block-spec.schemas.js";
 
 /**
  * Especificación y layout de diagramas de bloques (sin Mermaid).

@@ -1,7 +1,7 @@
-import { adoptCss, defineElement, emit } from '../../core/element.js';
-import { withStyleAttrs } from '../../core/attrs.js';
+import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { withStyleAttrs } from '@jeff-aporta/iswc-base/core/attrs.js';
 
-import '../helpers/floating.js';
+import '@jeff-aporta/iswc-base/components/helpers/floating.js';
 
 /**
  * <iswc-tooltip> — tip contextual anclado vía `for`.

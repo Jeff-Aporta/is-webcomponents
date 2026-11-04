@@ -11,12 +11,12 @@ import { resolver } from './apoyo.js';
 import { filasAMover } from './filas-movidas.js';
 import { gestionadoDisponible } from './filas-movidas.js';
 import { reordenar } from './filas-movidas.js';
-import type { ContextoCelda } from '../contrato.schemas.js';
-import type { Desinstalar } from '../contrato.schemas.js';
-import type { EventoCelda } from '../contrato.schemas.js';
-import type { GridHost } from '../contrato.schemas.js';
-import type { RowData } from '../../../schemas/datagrid-types.schemas.js';
-import type { RowNode } from '../../../schemas/datagrid-types.schemas.js';
+import type { ContextoCelda } from '@jeff-aporta/iswc-base/components/data/utils/ag-grid/contrato.schemas.js';
+import type { Desinstalar } from '@jeff-aporta/iswc-base/components/data/utils/ag-grid/contrato.schemas.js';
+import type { EventoCelda } from '@jeff-aporta/iswc-base/components/data/utils/ag-grid/contrato.schemas.js';
+import type { GridHost } from '@jeff-aporta/iswc-base/components/data/utils/ag-grid/contrato.schemas.js';
+import type { RowData } from '@jeff-aporta/iswc-base/components/data/schemas/datagrid-types.schemas.js';
+import type { RowNode } from '@jeff-aporta/iswc-base/components/data/schemas/datagrid-types.schemas.js';
 import type { SeleccionFilas } from './seleccion-filas-ctl.js';
 
 

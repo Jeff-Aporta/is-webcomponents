@@ -1,5 +1,5 @@
-import { adoptCss, defineElement, emit } from '../../core/element.js';
-import { attachFormInternals, setFormValue } from '../../core/form-associated.js';
+import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { attachFormInternals, setFormValue } from '@jeff-aporta/iswc-base/core/form-associated.js';
 import './input.js';
 
 /**

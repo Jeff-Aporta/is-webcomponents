@@ -5,10 +5,10 @@
 import { paramsCelda } from './apoyo.js';
 import { Historial } from './historial.js';
 import { Lote } from './lote.js';
-import type { ColumnState } from '../../../schemas/datagrid-types.schemas.js';
-import type { Desinstalar } from '../contrato.schemas.js';
-import type { GridHost } from '../contrato.schemas.js';
-import type { RowNode } from '../../../schemas/datagrid-types.schemas.js';
+import type { ColumnState } from '@jeff-aporta/iswc-base/components/data/schemas/datagrid-types.schemas.js';
+import type { Desinstalar } from '@jeff-aporta/iswc-base/components/data/utils/ag-grid/contrato.schemas.js';
+import type { GridHost } from '@jeff-aporta/iswc-base/components/data/utils/ag-grid/contrato.schemas.js';
+import type { RowNode } from '@jeff-aporta/iswc-base/components/data/schemas/datagrid-types.schemas.js';
 import type { AccionHistorial } from './schemas/edicion.schemas.js';
 import type { CambioCelda } from './schemas/edicion.schemas.js';
 

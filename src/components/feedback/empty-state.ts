@@ -1,9 +1,9 @@
-import { adoptCss, defineElement } from '../../core/element.js';
-import { ocultarSlotsVacios } from '../../core/dom-utils.js';
-import { atributosDe, PropsElement } from '../../core/props-element.js';
+import { adoptCss, defineElement } from '@jeff-aporta/iswc-base/core/element.js';
+import { ocultarSlotsVacios } from '@jeff-aporta/iswc-base/core/dom-utils.js';
+import { atributosDe, PropsElement } from '@jeff-aporta/iswc-base/core/props-element.js';
 import { EmptyStatePropsSchema } from './schemas/empty-state.schemas.js';
 import type { EmptyStateProps } from './schemas/empty-state.schemas.js';
-import '../media/icon.js';
+import '@jeff-aporta/iswc-base/components/media/icon.js';
 import './spinner.js';
 
 /**

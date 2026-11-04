@@ -1,6 +1,6 @@
-import { adoptCss, defineElement, emit } from '../../core/element.js';
-import { ElementBase } from '../../core/element-base.js';
-import { setOptionalAttr, setStringAttr } from '../../core/reflect.js';
+import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
+import { setOptionalAttr, setStringAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
 import { pintarEstado, sincronizarAlto } from './utils/file-estado.js';
 import { resolveDispatch } from './utils/mime-map.js';
 
@@ -15,7 +15,7 @@ import { resolveDispatch } from './utils/mime-map.js';
     'iswc-csv-edit': () => import('./csv-edit.js'),
     'iswc-docx-view': () => import('./docx-view.js'),
     'iswc-pptx-view': () => import('./pptx-view.js'),
-    'iswc-pdf-viewer': () => import('../overlays/pdf-viewer.js'),
+    'iswc-pdf-viewer': () => import('@jeff-aporta/iswc-base/components/overlays/pdf-viewer.js'),
   };
 
   class IswcFileEdit extends ElementBase {

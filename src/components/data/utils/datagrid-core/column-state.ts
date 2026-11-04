@@ -13,7 +13,7 @@
  */
 
 import { cellText } from './value-formatter.js';
-import type { AlignName, ColumnDef, ColumnState, RowNode } from "../../schemas/datagrid-types.schemas.js";
+import type { AlignName, ColumnDef, ColumnState, RowNode } from "@jeff-aporta/iswc-base/components/data/schemas/datagrid-types.schemas.js";
 import {
   ColumnType,
   PinSide,

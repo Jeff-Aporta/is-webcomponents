@@ -1,6 +1,6 @@
-import { adoptCss, defineElement, emit } from '../../core/element.js';
+import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
 import { daysInMonth, isoOf, monthLabels, pad } from './utils/date-utils.js';
-import { ElementBase } from '../../core/element-base.js';
+import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
 
 /**
  * <iswc-month-calendar> — Rejilla de los 12 meses de un año (MUI MonthCalendar).

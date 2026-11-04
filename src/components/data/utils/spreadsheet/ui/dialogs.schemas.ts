@@ -1,7 +1,7 @@
 // dialogs.schemas.ts: contratos de tipos de dialogs.ts.
-import type { SpreadsheetDoc } from '../document.js';
-import type { Sheet } from '../engine.js';
-import type { Rect } from '../address.schemas.js';
+import type { SpreadsheetDoc } from '@jeff-aporta/iswc-base/components/data/utils/spreadsheet/document.js';
+import type { Sheet } from '@jeff-aporta/iswc-base/components/data/utils/spreadsheet/engine.js';
+import type { Rect } from '@jeff-aporta/iswc-base/components/data/utils/spreadsheet/address.schemas.js';
 
 /** Lectura de campos de un diálogo. */
 export type Fields = { get(name: string): string; on(name: string): boolean; root: HTMLElement };

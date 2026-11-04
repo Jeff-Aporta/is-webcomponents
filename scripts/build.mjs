@@ -3,13 +3,14 @@
 import { access, readdir, mkdir, stat, rm, writeFile, readFile, copyFile, unlink } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import { execSync } from 'node:child_process';
-import { join, dirname, basename, relative, resolve, sep } from 'node:path';
+import { join, dirname, basename, relative, resolve, sep, posix } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { build } from 'esbuild';
-import { bundleMinJs, bundleMinCss, docsBanner, bundleLoader } from '../src/cdn/build/bundle-min.ts';
-import { barrerHashes } from '../src/cdn/build/sync-hashes.ts';
-import { hashesRepetidos } from '../src/cdn/build/hash.ts';
-import { stampDirectory, hashFile, rewriteHtmlTree, hashesJson, applyHashToHtml, ASSET_HASHES_NAME } from '../src/cdn/build/stamp-hashes.ts';
+import { aliasKit, ALIAS_KIT, reescribirAlias } from '@jeff-aporta/iswc-base/cdn/build/alias.ts';
+import { bundleMinJs, bundleMinCss, docsBanner, bundleLoader } from '@jeff-aporta/iswc-base/cdn/build/bundle-min.ts';
+import { barrerHashes } from '@jeff-aporta/iswc-base/cdn/build/sync-hashes.ts';
+import { hashesRepetidos } from '@jeff-aporta/iswc-base/cdn/build/hash.ts';
+import { stampDirectory, hashFile, rewriteHtmlTree, hashesJson, applyHashToHtml, ASSET_HASHES_NAME } from '@jeff-aporta/iswc-base/cdn/build/stamp-hashes.ts';
 import { aiExterno, construirAi } from './builds/ai.mjs';
 
 const here = dirname(fileURLToPath(import.meta.url));
@@ -24,6 +25,22 @@ const compRoot = join(root, 'src', 'components');
 // `src/**/*.css` directamente para evitar pisar el staging y ensuciar
 // otra vez el working tree.
 const cssRoot = join(root, '.tmp-scss', 'src');
+
+/**
+ * Un `.ts` publicado en dist/cdn/<carpeta>/ (copias para extender) no puede llevar el alias: el dist va con rutas
+ * relativas y funciona sin import map. src → dist: `components/<c>/<t>.js` → `<c>/<t>.min.js`,
+ * `cdn/build/x.js` y `cdn/asset-store.js` → `build/…`, el resto igual (`core/x.js` → `core/x.js`).
+ * Guardián: tests/gobernanza/alias-imports.test.ts.
+ */
+const aliasEnDist = (fuente, carpeta) => reescribirAlias(fuente, (ruta) => {
+  const comp = ruta.match(/^components\/([^/]+)\/([^/]+)\.js$/);
+  const destino = comp ? `${comp[1]}/${comp[2]}.min.js`
+    : ruta.startsWith('cdn/build/') ? `build/${ruta.slice('cdn/build/'.length)}`
+    : ruta === 'cdn/asset-store.js' ? 'build/asset-store.js'
+    : ruta;
+  const rel = posix.relative(carpeta, destino);
+  return rel.startsWith('.') ? rel : `./${rel}`;
+});
 
 /** SHA de HEAD para shaDefault. Sin git, el loader queda en main. */
 function shaDelBuild() {
@@ -159,7 +176,7 @@ async function walk(dir, out = []) {
 const entries = (await walk(compRoot)).sort();
 
 // Componentes por categoria segun manifest.js (single source of truth).
-const manifestMod = await import('../src/manifest.js');
+const manifestMod = await import('@jeff-aporta/iswc-base/manifest.js');
 const manifest = manifestMod.default;
 const byCategory = new Map();
 for (const m of manifest) {
@@ -285,10 +302,10 @@ const componentesDesdeAi = {
       await bundleJs(join(coreRoot, f), join(outCore, f.replace(/\.ts$/, '.min.js')), [zodExterno], kitDocsBanner([
         `source: ${GH_BLOB}/src/core/${f}`,
       ]));
-      // En dist `src/cdn/build/` se publica como `build/` (ver más abajo): el .ts publicado importa de ahí.
+      // En dist `src/cdn/build/` se publica como `build/` (ver más abajo): el .ts publicado importa de ahí (aliasEnDist).
       const fuente = await readFile(join(coreRoot, f), 'utf8');
       // Un common que carga un componente lo pide a su bundle publicado (dist/cdn/<grupo>/<tag>.min.js).
-      await writeFile(join(outCore, f), fuente.replaceAll("'../cdn/build/", "'../build/").replace(/'\.\.\/components\/([^/']+)\/([^/']+)\.js'/g, "'../$1/$2.min.js'"));
+      await writeFile(join(outCore, f), aliasEnDist(fuente, 'core'));
     }
     // Los tipos del core (`core/schemas/`) viajan con el .ts publicado que los importa.
     const coreSchemas = join(coreRoot, 'schemas');
@@ -589,6 +606,7 @@ const galleryOut = join(root, 'dist', 'gallery-app.min.js');
 await build({
   entryPoints: [join(root, 'src', 'app', 'app.ts')],
   outfile: galleryOut,
+  plugins: [aliasKit()],
   bundle: true,
   minify: true,
   format: 'esm',
@@ -657,10 +675,19 @@ const buildOut = join(dist, 'build');
 await mkdir(buildOut, { recursive: true });
 for (const name of await readdir(buildSrc)) {
   if (!name.endsWith('.ts')) continue;
-  await copyFile(join(buildSrc, name), join(buildOut, name));
+  await writeFile(join(buildOut, name), aliasEnDist(await readFile(join(buildSrc, name), 'utf8'), 'build'));
 }
-await copyFile(join(root, 'src', 'cdn', 'asset-store.ts'), join(buildOut, 'asset-store.ts'));
+await writeFile(join(buildOut, 'asset-store.ts'), aliasEnDist(await readFile(join(root, 'src', 'cdn', 'asset-store.ts'), 'utf8'), 'build'));
 console.log(`  ${'build/'.padEnd(18)} ts vendor (hash + bundle)`);
+
+// importmap.json: la entrada del alias que un consumidor pega tal cual en su `<script type="importmap">` o en
+// su `deno.json` (specs/cdn.md §Alias). El SHA es el del build; `pin-update` lo mueve después.
+await writeFile(
+  join(dist, 'importmap.json'),
+  JSON.stringify({ imports: { [ALIAS_KIT]: `https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@${shaDelBuild()}/dist/cdn/` } }, null, 2) + '\n',
+  'utf8',
+);
+console.log(`  ${'importmap.json'.padEnd(18)} alias ${ALIAS_KIT} → dist/cdn/@<sha>`);
 
 // vendor-distributions/: TODO lo que un consumidor trae por vendor (tools/vendor.ts), por PERFIL:
 //   shared/ (sin navegador: lib, testing, tools) · server/ (solo server) · client/ (Playwright,

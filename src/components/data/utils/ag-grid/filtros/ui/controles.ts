@@ -2,13 +2,13 @@
  * ui/controles — Fabricas de controles del kit para los paneles. Todo control visible es
  * un iswc-*; aqui se concentra como se construye y que evento escucha cada uno.
  */
-import '../../../../../forms/input.js';
-import '../../../../../forms/select.js';
-import '../../../../../forms/option.js';
-import '../../../../../forms/checkbox.js';
-import '../../../../../actions/button.js';
-import '../../../../../media/icon.js';
-import type { ConValor } from '../filtros.schemas.js';
+import '@jeff-aporta/iswc-base/components/forms/input.js';
+import '@jeff-aporta/iswc-base/components/forms/select.js';
+import '@jeff-aporta/iswc-base/components/forms/option.js';
+import '@jeff-aporta/iswc-base/components/forms/checkbox.js';
+import '@jeff-aporta/iswc-base/components/actions/button.js';
+import '@jeff-aporta/iswc-base/components/media/icon.js';
+import type { ConValor } from '@jeff-aporta/iswc-base/components/data/utils/ag-grid/filtros/filtros.schemas.js';
 
 export function crear(tag: string, clase = '', texto?: string): HTMLElement {
   const el = document.createElement(tag);

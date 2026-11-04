@@ -17,7 +17,7 @@
  * con `external: ['zod']` en la build de gallery-app.
  */
 import { IswcComponentPreview } from './component-preview.js';
-import { montarControles } from '../../utils/system/controles.js';
+import { montarControles } from '@jeff-aporta/iswc-base/utils/system/controles.js';
 import { loadFichaLikeDefinition } from './ficha-bridge.ts';
 import { montarAnatomia } from './anatomia.js';
 

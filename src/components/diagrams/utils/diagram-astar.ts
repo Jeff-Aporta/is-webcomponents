@@ -6,8 +6,8 @@ import {
   snapDiagramGrid,
   TK_DIAGRAM_GRID,
   applyForbiddenRegions,
-} from '../../../core/diagram-grid.js';
-import type { GridPoint, CostGrid, ForbiddenRegion, PixelPoint, RouteOpts, AestheticsOpts, SequenceRoute } from "../schemas/diagram-astar.schemas.js";
+} from '@jeff-aporta/iswc-base/core/diagram-grid.js';
+import type { GridPoint, CostGrid, ForbiddenRegion, PixelPoint, RouteOpts, AestheticsOpts, SequenceRoute } from "@jeff-aporta/iswc-base/components/diagrams/schemas/diagram-astar.schemas.js";
 
 /** Punto en la rejilla: par (col, row) enteras. */
 

@@ -45,8 +45,8 @@
  * secciones ausentes y excludes espurios. Aparece en el dev server y en
  * el bundle de producción (visible en la consola del navegador).
  */
-import { FichaSchema, inspectFicha, SECTION_IDS } from '../../utils/section-schema.ts';
-import { type Ficha, type SectionId } from '../../utils/schemas/section-schema.schemas.ts';
+import { FichaSchema, inspectFicha, SECTION_IDS } from '@jeff-aporta/iswc-base/utils/section-schema.ts';
+import { type Ficha, type SectionId } from '@jeff-aporta/iswc-base/utils/schemas/section-schema.schemas.ts';
 import type {
   PreviewDefinition,
   PreviewSection,

@@ -10,7 +10,8 @@
     "skipLibCheck": true,
     "types": [],
     "isolatedModules": true,
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
+    "paths": { "@jeff-aporta/iswc-base/*": ["./src/*"] }
   },
   "include": ["src/**/*.ts"],
   "exclude": ["node_modules/**", "dist/**"]

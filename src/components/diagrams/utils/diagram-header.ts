@@ -1,4 +1,4 @@
-import { richTextPlain } from '../../../core/tk-rich-text.js';
+import { richTextPlain } from '@jeff-aporta/iswc-base/core/tk-rich-text.js';
 
 /**
  * Ancho mínimo que necesita la cabecera de un diagrama (título + subtítulo).

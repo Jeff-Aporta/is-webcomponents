@@ -1,6 +1,6 @@
-import { richTextPlain } from '../../../core/tk-rich-text.js';
-import { resolveTkHue, SERIE_HUES } from '../../../core/tk-hue.js';
-import type { JourneyPhase, JourneyStep, JourneyScale, JourneySpec, JourneyJsonOut, JourneyPlotRect, JourneyLayoutStep, JourneyLayoutPhase, JourneyLayoutGridLine, JourneyLayout } from "../schemas/journey-spec.schemas.js";
+import { richTextPlain } from '@jeff-aporta/iswc-base/core/tk-rich-text.js';
+import { resolveTkHue, SERIE_HUES } from '@jeff-aporta/iswc-base/core/tk-hue.js';
+import type { JourneyPhase, JourneyStep, JourneyScale, JourneySpec, JourneyJsonOut, JourneyPlotRect, JourneyLayoutStep, JourneyLayoutPhase, JourneyLayoutGridLine, JourneyLayout } from "@jeff-aporta/iswc-base/components/diagrams/schemas/journey-spec.schemas.js";
 
 /**
  * Especificación y layout de mapas de recorrido (user journey), sin Mermaid.

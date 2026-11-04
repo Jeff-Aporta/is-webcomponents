@@ -8,9 +8,9 @@
  * usuario (config de la app, `iswc:app-cfg`), si no el `<html>` o el default.
  */
 
-import type { DocDemoBootOpts } from "../schemas/doc-demo-boot.schemas.js";
-import { leerAppCfg } from "../../../core/app-cfg.js";
-import { DEFAULT_PALETTE, PALETTES as CATALOGO } from "../../../styles/palette-build.js";
+import type { DocDemoBootOpts } from "@jeff-aporta/iswc-base/components/layout/schemas/doc-demo-boot.schemas.js";
+import { leerAppCfg } from "@jeff-aporta/iswc-base/core/app-cfg.js";
+import { DEFAULT_PALETTE, PALETTES as CATALOGO } from "@jeff-aporta/iswc-base/styles/palette-build.js";
 export function applyDocDemoBoot(opts: DocDemoBootOpts = {}): void {
   const defaultTheme = opts.defaultTheme || 'dark';
   const defaultPalette = opts.defaultPalette || DEFAULT_PALETTE;

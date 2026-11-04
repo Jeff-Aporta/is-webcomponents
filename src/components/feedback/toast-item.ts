@@ -1,8 +1,8 @@
-import { adoptCss, defineElement, emit } from '../../core/element.js';
-import { ocultarSlotsVacios } from '../../core/dom-utils.js';
-import '../media/icon.js';
-import { INTENT, normalizeIntent } from '../../core/intent.js';
-import '../actions/button.js';
+import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { ocultarSlotsVacios } from '@jeff-aporta/iswc-base/core/dom-utils.js';
+import '@jeff-aporta/iswc-base/components/media/icon.js';
+import { INTENT, normalizeIntent } from '@jeff-aporta/iswc-base/core/intent.js';
+import '@jeff-aporta/iswc-base/components/actions/button.js';
 
 /**
  * <iswc-toast-item> — Web Component (vanilla).

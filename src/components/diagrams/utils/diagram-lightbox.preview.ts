@@ -3,8 +3,8 @@
  * Se ejecuta en mount() tras pintar la definition JSON.
  */
 
-import type { LightboxLike, PresetLike } from "../schemas/diagram-lightbox.preview.schemas.js";
-export async function mount(ctx: import('../../../previews/_kit/schemas/preview.schemas.ts').PreviewMountContext): Promise<void> {
+import type { LightboxLike, PresetLike } from "@jeff-aporta/iswc-base/components/diagrams/schemas/diagram-lightbox.preview.schemas.js";
+export async function mount(ctx: import('@jeff-aporta/iswc-base/previews/_kit/schemas/preview.schemas.ts').PreviewMountContext): Promise<void> {
   void ctx.main;
   const lb = document.getElementById('lb') as LightboxLike | null;
   const preset = document.getElementById('preset') as PresetLike | null;

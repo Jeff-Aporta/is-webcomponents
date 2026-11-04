@@ -16,11 +16,11 @@ import { SeleccionFilas } from './seleccion-filas-ctl.js';
 import { SeleccionRangos } from './seleccion-rangos.js';
 import { SesionEdicion } from './sesion.js';
 import { Teclado } from './teclado.js';
-import type { ColumnState } from '../../../schemas/datagrid-types.schemas.js';
-import type { Desinstalar } from '../contrato.schemas.js';
-import type { GridHost } from '../contrato.schemas.js';
-import type { RefCelda } from '../contrato.schemas.js';
-import type { RowNode } from '../../../schemas/datagrid-types.schemas.js';
+import type { ColumnState } from '@jeff-aporta/iswc-base/components/data/schemas/datagrid-types.schemas.js';
+import type { Desinstalar } from '@jeff-aporta/iswc-base/components/data/utils/ag-grid/contrato.schemas.js';
+import type { GridHost } from '@jeff-aporta/iswc-base/components/data/utils/ag-grid/contrato.schemas.js';
+import type { RefCelda } from '@jeff-aporta/iswc-base/components/data/utils/ag-grid/contrato.schemas.js';
+import type { RowNode } from '@jeff-aporta/iswc-base/components/data/schemas/datagrid-types.schemas.js';
 import type { LadoFijado } from './schemas/edicion.schemas.js';
 
 

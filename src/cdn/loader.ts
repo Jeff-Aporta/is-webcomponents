@@ -24,7 +24,7 @@ import {
   esOrigenCdn,
   conBarra,
   raizYCore,
-} from '../core/cdn-ref.js';
+} from '@jeff-aporta/iswc-base/core/cdn-ref.js';
 import { createRegistry, planLoads, commitLoads, resolveTagId, isTagCovered } from './load-plan.js';
 import { type Catalog } from './schemas/load-plan.schemas.js';
 import type { LoadJob } from "./schemas/load-plan.schemas.js";

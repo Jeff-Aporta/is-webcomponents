@@ -1,4 +1,4 @@
-import { adoptCss, defineElement, emit, emitCancelable } from '../../core/element.js';
+import { adoptCss, defineElement, emit, emitCancelable } from '@jeff-aporta/iswc-base/core/element.js';
 import { DiagramElementBase } from './utils/diagram-element-base.js';
 import { resolveFlowchartSpec, computeFlowchartLayout, shapePath, flowPaint, FLOW_LINE_H, FLOW_PILL_ICON, pillStepW, SOCKET, VARS, PUENTE, CRUD_SQL, centroPuente, ejesPuente } from './utils/flowchart-spec.js';
 import type { FlowLayoutOptions, FlowPaint } from './schemas/flowchart-spec.schemas.js';
@@ -7,18 +7,18 @@ import { pickThemeMode, themeToDiagramTheme, injectThemeCss } from './utils/them
 import type { ErThemeJson } from './schemas/theme.schemas.js';
 import { cargarFuente } from './utils/diagram-text-wrap.js';
 import { pathEndDirection, pathPoints } from './utils/diagram-arrow.js';
-import { tokenizeCode } from '../../core/code-highlight.js';
+import { tokenizeCode } from '@jeff-aporta/iswc-base/core/code-highlight.js';
 import { captureEmbeddedDiagram, embedSvgElement, resolveEmbedDiagram } from './utils/diagram-embed.js';
 import type { EmbedCapture, EmbedSize } from './schemas/diagram-embed.schemas.js';
 import type { FlowLayout, FlowLayoutNode, FlowLayoutEdge, FlowLayoutOverrides, FlowResolvedSpec, FlowNodeSpec } from './schemas/flowchart-spec.schemas.js';
-import { PathTurtle as SequenceTurtle } from '../../core/path-turtle.js';
-import type { PathTurtle } from '../../core/path-turtle.js';
-import { tkHueToHex } from '../../core/tk-hue.js';
+import { PathTurtle as SequenceTurtle } from '@jeff-aporta/iswc-base/core/path-turtle.js';
+import type { PathTurtle } from '@jeff-aporta/iswc-base/core/path-turtle.js';
+import { tkHueToHex } from '@jeff-aporta/iswc-base/core/tk-hue.js';
 import { ANGULO_AUREO, hexToOklch, oklchToHex, rotarTono } from './utils/oklch.js';
 import { edgeStrokeHex, edgeChipFill, edgeChipText } from './utils/diagram-edge-style.js';
 import type { DiagramTheme } from './schemas/diagram-types.schemas.js';
-import { inlineMdWeb } from '../../core/tk-inline-md.js';
-import { svgIconGroup } from '../../core/tk-icon-inline.js';
+import { inlineMdWeb } from '@jeff-aporta/iswc-base/core/tk-inline-md.js';
+import { svgIconGroup } from '@jeff-aporta/iswc-base/core/tk-icon-inline.js';
 import { animarRielEn, flujoActivo, pulsoRadar } from './utils/diagram-flow.js';
 import { styledEdgePath } from './utils/diagram-curve.js';
 import { edgeStyleFor } from './utils/diagram-vocab.js';
@@ -26,7 +26,7 @@ import { ETIQUETA_ICONO, ETIQUETA_LINE_H } from './utils/flowchart-labels.js';
 import { wrapText, buildTspans } from './utils/diagram-text-wrap.js';
 import type { TSpanSpec } from './schemas/diagram-text-wrap.schemas.js';
 import { registerDiagramKind } from './utils/diagram-kinds.js';
-import { svgEl } from '../../core/svg-chart-engine.js';
+import { svgEl } from '@jeff-aporta/iswc-base/core/svg-chart-engine.js';
 import { arrowHeadPoints, openArrowHeadPoints, svgArrowHead } from './utils/diagram-arrow.js';
 import { pintarSocket } from './utils/diagram-socket.js';
 
@@ -37,7 +37,7 @@ import {
   attachNodeDrag,
   openInlineEditor,
 } from './utils/diagram-edit.js';
-import { snapDiagramGrid as snapToGrid } from '../../core/diagram-grid.js';
+import { snapDiagramGrid as snapToGrid } from '@jeff-aporta/iswc-base/core/diagram-grid.js';
 import type { DiagramOverrides } from './schemas/diagram-edit.schemas.js';
 import type { TurtleState, NodeNodeEntry, EdgeNodeEntry, FlowInk } from "./schemas/flowchart.schemas.js";
 /**

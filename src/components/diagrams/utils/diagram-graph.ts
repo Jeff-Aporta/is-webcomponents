@@ -10,7 +10,7 @@
  *     alcanzables desde cada nodo y la reunión de varias ramas (el primer nodo común).
  */
 
-import type { AristaDirigida, GrafoDirigido, OpcionesGrafo } from '../schemas/diagram-graph.schemas.js';
+import type { AristaDirigida, GrafoDirigido, OpcionesGrafo } from '@jeff-aporta/iswc-base/components/diagrams/schemas/diagram-graph.schemas.js';
 
 /** Clave estable de una arista (para marcar retornos sin depender de ids opcionales). */
 export const claveArista = (e: AristaDirigida): string => `${e.from}>${e.to}`;

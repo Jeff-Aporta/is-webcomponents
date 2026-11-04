@@ -1,6 +1,6 @@
-import { adoptCss, defineElement } from '../../core/element.js';
-import '../media/icon.js';
-import '../actions/button.js';
+import { adoptCss, defineElement } from '@jeff-aporta/iswc-base/core/element.js';
+import '@jeff-aporta/iswc-base/components/media/icon.js';
+import '@jeff-aporta/iswc-base/components/actions/button.js';
 import { ModalBase } from './utils/modal-base.js';
 
 /**

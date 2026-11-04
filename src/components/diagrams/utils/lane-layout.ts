@@ -5,8 +5,8 @@
  * Sin dependencias externas: se puede testear con Node puro.
  */
 
-import { snapDiagramGrid } from '../../../core/diagram-grid.js';
-import type { TimeScale, TickUnit, TimeTick, LaneItem, PackedLaneItem, PackLanesOpts, LayoutLanesOpts, PositionedLaneItem, LayoutLane, LayoutLanesResult } from "../schemas/lane-layout.schemas.js";
+import { snapDiagramGrid } from '@jeff-aporta/iswc-base/core/diagram-grid.js';
+import type { TimeScale, TickUnit, TimeTick, LaneItem, PackedLaneItem, PackLanesOpts, LayoutLanesOpts, PositionedLaneItem, LayoutLane, LayoutLanesResult } from "@jeff-aporta/iswc-base/components/diagrams/schemas/lane-layout.schemas.js";
 const HOUR_MS = 3600000;
 const DAY_MS = 86400000;
 

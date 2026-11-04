@@ -1,6 +1,6 @@
-import { adoptCss, defineElement } from '../../core/element.js';
-import { createSpaState } from '../../core/spa-state.js';
-import type { EstadoSpa, SpaState } from '../../core/schemas/spa-state.schemas.js';
+import { adoptCss, defineElement } from '@jeff-aporta/iswc-base/core/element.js';
+import { createSpaState } from '@jeff-aporta/iswc-base/core/spa-state.js';
+import type { EstadoSpa, SpaState } from '@jeff-aporta/iswc-base/core/schemas/spa-state.schemas.js';
 // Solo tipos: el schema Zod (`MdDocsVaultListaSchema`) queda para tests y consumidores; en el bundle
 // del CDN sumaría ~330 KB al lector, así que la lista se valida aquí con un guard equivalente.
 import type {
@@ -14,16 +14,16 @@ import type {
   MdDocsVaultRenderers,
 } from './schemas/md-docs-vault.schemas.js';
 import './doc-layout.js';
-import '../navigation/doc-index.js';
-import '../navigation/pager.js';
-import '../media/figure.js';
-import '../data/meta-list.js';
-import '../helpers/md-render.js';
-import '../actions/copy-button.js';
-import '../actions/button.js';
-import '../actions/button-group.js';
-import '../media/icon.js';
-import '../feedback/spinner.js';
+import '@jeff-aporta/iswc-base/components/navigation/doc-index.js';
+import '@jeff-aporta/iswc-base/components/navigation/pager.js';
+import '@jeff-aporta/iswc-base/components/media/figure.js';
+import '@jeff-aporta/iswc-base/components/data/meta-list.js';
+import '@jeff-aporta/iswc-base/components/helpers/md-render.js';
+import '@jeff-aporta/iswc-base/components/actions/copy-button.js';
+import '@jeff-aporta/iswc-base/components/actions/button.js';
+import '@jeff-aporta/iswc-base/components/actions/button-group.js';
+import '@jeff-aporta/iswc-base/components/media/icon.js';
+import '@jeff-aporta/iswc-base/components/feedback/spinner.js';
 import './dialog.js';
 import './callout.js';
 

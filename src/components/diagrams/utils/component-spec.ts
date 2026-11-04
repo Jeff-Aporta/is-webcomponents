@@ -51,15 +51,15 @@
 
 import { diagramHeaderWidth } from './diagram-header.js';
 import { applyEdgeActorLayout } from './diagram-edge-actors.js';
-import { boundsOf } from '../../../core/diagram-grid.js';
+import { boundsOf } from '@jeff-aporta/iswc-base/core/diagram-grid.js';
 import { packDiagram, packRowGapKey, abrazarPaquetes, layoutPackageOutlines, outlineToPath, resolvePackingGaps, inflateTitleObstacle, EDGE_CLEARANCE, GRID_STEP, TITLE_CLEARANCE, PKG_BORDER_CLEARANCE, LANE_PITCH } from './component-pack.js';
 import { routeEdges, pointsToPath, simplifyOrthoPath } from './component-router.js';
-import type { RouterEdge, RouterWorld } from '../schemas/component-router.schemas.js';
+import type { RouterEdge, RouterWorld } from '@jeff-aporta/iswc-base/components/diagrams/schemas/component-router.schemas.js';
 import { pathPoints as parsePathPoints } from './diagram-arrow.js';
 import { assignEdgeHues, assignEmitterReceiverPalette } from './diagram-edge-style.js';
 import { layoutNodeLink } from './node-link-layout.js';
-import type { Caja, Componente, InterfazUml, Lado, OpcionesEmpaque, Paquete, Punto } from '../schemas/diagram-tipos.schemas.js';
-import type { HttpEndpoint, EdgeKind, SpecEdge, LayoutMode, ComponentSpecResult, WireResult, LayoutComponent, LayoutInterface, LayoutEdge, ComponentLayout } from "../schemas/component-spec.schemas.js";
+import type { Caja, Componente, InterfazUml, Lado, OpcionesEmpaque, Paquete, Punto } from '@jeff-aporta/iswc-base/components/diagrams/schemas/diagram-tipos.schemas.js';
+import type { HttpEndpoint, EdgeKind, SpecEdge, LayoutMode, ComponentSpecResult, WireResult, LayoutComponent, LayoutInterface, LayoutEdge, ComponentLayout } from "@jeff-aporta/iswc-base/components/diagrams/schemas/component-spec.schemas.js";
 
 const TAB_W = 56;
 const TAB_H = 14;

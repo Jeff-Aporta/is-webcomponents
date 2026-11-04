@@ -1,7 +1,7 @@
-import { adoptCss, defineElement, upgradeProperties } from '../../core/element.js';
-import { withStyleAttrs } from '../../core/attrs.js';
+import { adoptCss, defineElement, upgradeProperties } from '@jeff-aporta/iswc-base/core/element.js';
+import { withStyleAttrs } from '@jeff-aporta/iswc-base/core/attrs.js';
 
-import { TONE } from '../../core/tone.js';
+import { TONE } from '@jeff-aporta/iswc-base/core/tone.js';
 
 /**
  * <iswc-card> — Web Component (vanilla, zero dependencies).

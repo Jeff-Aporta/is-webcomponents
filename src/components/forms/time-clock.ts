@@ -1,6 +1,6 @@
-import { adoptCss, defineElement, emit } from '../../core/element.js';
+import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
 import { formatTime, from12Hour, pad, parseTime, to12Hour, toTime, uses12Hour } from './utils/date-utils.js';
-import { ElementBase } from '../../core/element-base.js';
+import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
 import type { ParsedTime, RingItem, View, Meridiem, CommitOpts, PickOpts } from "./schemas/time-clock.schemas.js";
 
 /**

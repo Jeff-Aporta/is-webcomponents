@@ -1,6 +1,6 @@
-import { adoptCss, defineElement, emit, upgradeProperties } from '../../core/element.js';
-import { setStringAttr } from '../../core/reflect.js';
-import { withStyleAttrs } from '../../core/attrs.js';
+import { adoptCss, defineElement, emit, upgradeProperties } from '@jeff-aporta/iswc-base/core/element.js';
+import { setStringAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
+import { withStyleAttrs } from '@jeff-aporta/iswc-base/core/attrs.js';
 
 
 /**

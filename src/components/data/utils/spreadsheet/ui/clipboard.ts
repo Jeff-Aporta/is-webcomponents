@@ -1,10 +1,10 @@
 // clipboard.ts — intercambio con Excel y Sheets: TSV más tabla HTML con estilos, en ambos sentidos.
-import type { Rect } from '../address.schemas.js';
-import type { SpreadsheetDoc } from '../document.js';
-import type { Sheet } from '../engine.js';
-import { CellError } from '../values.js';
+import type { Rect } from '@jeff-aporta/iswc-base/components/data/utils/spreadsheet/address.schemas.js';
+import type { SpreadsheetDoc } from '@jeff-aporta/iswc-base/components/data/utils/spreadsheet/document.js';
+import type { Sheet } from '@jeff-aporta/iswc-base/components/data/utils/spreadsheet/engine.js';
+import { CellError } from '@jeff-aporta/iswc-base/components/data/utils/spreadsheet/values.js';
 import { esc, safeColor } from './render.js';
-import type { CellStyle } from '../../../schemas/spreadsheet.schemas.js';
+import type { CellStyle } from '@jeff-aporta/iswc-base/components/data/schemas/spreadsheet.schemas.js';
 
 /** TSV de un rango con el texto visible. */
 export function toTsv(doc: SpreadsheetDoc, sheet: Sheet, x: Rect): string {

@@ -5,8 +5,8 @@
  */
 
 import type { Funcion, Definiciones } from './celdas-valores.schemas.js';
-import type { ColDefAg, ContextoCelda, GridHost } from '../contrato.schemas.js';
-import type { ColumnState, RowNode } from '../../../schemas/datagrid-types.schemas.js';
+import type { ColDefAg, ContextoCelda, GridHost } from '@jeff-aporta/iswc-base/components/data/utils/ag-grid/contrato.schemas.js';
+import type { ColumnState, RowNode } from '@jeff-aporta/iswc-base/components/data/schemas/datagrid-types.schemas.js';
 import { evaluarExpresion } from './expresion.js';
 import { aFecha, fmtFecha } from './formatos.js';
 import type { DefinicionTipo, ParamsCelda, TipoDato } from './schemas.js';

@@ -3,12 +3,12 @@
  * adaptador de editores propios con la interfaz de AG Grid (init, getGui, ...).
  */
 import type { Editor, EntornoEditor, CrearEditor, ConValor, ConChecked, EstadoRico, EditorPropio } from './editores.schemas.js';
-import '../../../../forms/input.js';
-import '../../../../forms/textarea.js';
-import '../../../../forms/select.js';
-import '../../../../forms/option.js';
-import '../../../../forms/checkbox.js';
-import '../../../../forms/date-picker.js';
+import '@jeff-aporta/iswc-base/components/forms/input.js';
+import '@jeff-aporta/iswc-base/components/forms/textarea.js';
+import '@jeff-aporta/iswc-base/components/forms/select.js';
+import '@jeff-aporta/iswc-base/components/forms/option.js';
+import '@jeff-aporta/iswc-base/components/forms/checkbox.js';
+import '@jeff-aporta/iswc-base/components/forms/date-picker.js';
 import { textosValidacion } from './apoyo.js';
 import { erroresInternos } from './validacion.js';
 import { resolverErrores } from './validacion.js';
@@ -19,8 +19,8 @@ import { normalizarOpciones } from './valores.js';
 import { pasoNumero } from './valores.js';
 import { redondear } from './valores.js';
 import { textoANumero } from './valores.js';
-import type { ColDefAg } from '../contrato.schemas.js';
-import type { GridHost } from '../contrato.schemas.js';
+import type { ColDefAg } from '@jeff-aporta/iswc-base/components/data/utils/ag-grid/contrato.schemas.js';
+import type { GridHost } from '@jeff-aporta/iswc-base/components/data/utils/ag-grid/contrato.schemas.js';
 import type { Parametros } from './apoyo.schemas.js';
 import type { BusquedaLista } from './schemas/edicion.schemas.js';
 import type { OpcionLista } from './schemas/edicion.schemas.js';

@@ -1,6 +1,6 @@
-import { adoptCss, defineElement } from '../../core/element.js';
+import { adoptCss, defineElement } from '@jeff-aporta/iswc-base/core/element.js';
 import { BreakpointHost } from './block-layout.js';
-import { setStringAttr } from '../../core/reflect.js';
+import { setStringAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
 
 /**
  * g11 — UX/UI proposals (aria/region/aria-orientation/prefers-*):

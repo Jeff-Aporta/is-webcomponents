@@ -1,12 +1,12 @@
-import { adoptCss, defineElement, emit, upgradeProperties } from '../../core/element.js';
-import { ElementBase } from '../../core/element-base.js';
-import { setCustomState } from '../../core/form-associated.js';
-import '../actions/dropdown.js';
-import '../actions/dropdown-item.js';
-import '../actions/button.js';
-import '../media/avatar.js';
-import '../media/icon.js';
-import '../layout/divider.js';
+import { adoptCss, defineElement, emit, upgradeProperties } from '@jeff-aporta/iswc-base/core/element.js';
+import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
+import { setCustomState } from '@jeff-aporta/iswc-base/core/form-associated.js';
+import '@jeff-aporta/iswc-base/components/actions/dropdown.js';
+import '@jeff-aporta/iswc-base/components/actions/dropdown-item.js';
+import '@jeff-aporta/iswc-base/components/actions/button.js';
+import '@jeff-aporta/iswc-base/components/media/avatar.js';
+import '@jeff-aporta/iswc-base/components/media/icon.js';
+import '@jeff-aporta/iswc-base/components/layout/divider.js';
 import './login-dropdown.js';
 import type { LoginChoice } from './schemas/login-dropdown.schemas.js';
 

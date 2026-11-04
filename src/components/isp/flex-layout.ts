@@ -1,4 +1,4 @@
-import { adoptCss, defineElement } from '../../core/element.js';
+import { adoptCss, defineElement } from '@jeff-aporta/iswc-base/core/element.js';
 import { BreakpointHost } from './block-layout.js';
 
 /**

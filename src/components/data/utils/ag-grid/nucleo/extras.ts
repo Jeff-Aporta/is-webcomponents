@@ -5,9 +5,9 @@
  */
 
 import type { Colref } from './extras.schemas.js';
-import { getCellValue } from '../../datagrid-core/value-formatter.js';
-import type { ColumnState } from '../../../schemas/datagrid-types.schemas.js';
-import type { Desinstalar, GridHost, RendererCelda } from '../contrato.schemas.js';
+import { getCellValue } from '@jeff-aporta/iswc-base/components/data/utils/datagrid-core/value-formatter.js';
+import type { ColumnState } from '@jeff-aporta/iswc-base/components/data/schemas/datagrid-types.schemas.js';
+import type { Desinstalar, GridHost, RendererCelda } from '@jeff-aporta/iswc-base/components/data/utils/ag-grid/contrato.schemas.js';
 import type { DefAplanada, GrupoCabecera } from './opciones.schemas.js';
 import type { Menus } from './menus.schemas.js';
 import type { Motor } from './motor.schemas.js';

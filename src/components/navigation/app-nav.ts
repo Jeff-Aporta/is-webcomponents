@@ -1,7 +1,7 @@
-import { adoptCss, defineElement, emit } from '../../core/element.js';
-import { ElementBase } from '../../core/element-base.js';
-import { setCustomState } from '../../core/form-associated.js';
-import '../media/icon.js';
+import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
+import { setCustomState } from '@jeff-aporta/iswc-base/core/form-associated.js';
+import '@jeff-aporta/iswc-base/components/media/icon.js';
 import type { AppNavRow } from './schemas/app-nav.schemas.js';
 
 /**

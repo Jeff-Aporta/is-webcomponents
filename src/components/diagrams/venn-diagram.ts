@@ -1,16 +1,16 @@
-import { adoptCss, defineElement, emit } from '../../core/element.js';
+import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
 import { DiagramElementBase } from './utils/diagram-element-base.js';
 import { resolveVennSpec, computeVennLayout } from './utils/venn-spec.js';
 import type { VennLayout, VennSpec } from './schemas/venn-spec.schemas.js';
 // `VennLayoutCircle` y `VennLayoutRegion` están declarados pero no exportados
 // en venn-spec.ts. Tipamos localmente para no tocar la firma del spec.
-import { tkHueToHex } from '../../core/tk-hue.js';
+import { tkHueToHex } from '@jeff-aporta/iswc-base/core/tk-hue.js';
 import type { DiagramTheme } from './schemas/diagram-types.schemas.js';
-import { inlineMdWeb, applySvgTextContent } from '../../core/tk-inline-md.js';
+import { inlineMdWeb, applySvgTextContent } from '@jeff-aporta/iswc-base/core/tk-inline-md.js';
 import { wrapText, buildTspans } from './utils/diagram-text-wrap.js';
 import type { TSpanSpec } from './schemas/diagram-text-wrap.schemas.js';
 import { registerDiagramKind } from './utils/diagram-kinds.js';
-import { svgEl } from '../../core/svg-chart-engine.js';
+import { svgEl } from '@jeff-aporta/iswc-base/core/svg-chart-engine.js';
 import type { VennLayoutCircle, VennLayoutRegion, CircleNodeEntry, RegionNodeEntry } from "./schemas/venn-diagram.schemas.js";
 
 /**

@@ -9,8 +9,8 @@ import type { AccionesCabecera } from './cabecera.schemas.js';
 import { ANCHO_SELECCION } from './motor.js';
 import type { ColPos, Motor } from './motor.schemas.js';
 import type { DefAplanada, GrupoCabecera } from './opciones.schemas.js';
-import type { ColumnState } from '../../../schemas/datagrid-types.schemas.js';
-import type { GridHost } from '../contrato.schemas.js';
+import type { ColumnState } from '@jeff-aporta/iswc-base/components/data/schemas/datagrid-types.schemas.js';
+import type { GridHost } from '@jeff-aporta/iswc-base/components/data/utils/ag-grid/contrato.schemas.js';
 
 
 const TIPO_ARRASTRE = 'application/x-is-col-id';

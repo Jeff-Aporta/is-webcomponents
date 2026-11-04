@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-04T12:47:53.193Z",
+  "generatedAt": "2026-11-04T13:28:52.333Z",
   "count": 41,
   "modules": [
     {
@@ -209,7 +209,7 @@
       "id": "element",
       "path": "src/core/element.ts",
       "summary": "element — Consolida cuatro módulos que estaban sueltos en `_shared/` y que ningún",
-      "bytes": 9688,
+      "bytes": 9708,
       "exports": [
         "globalNameFor",
         "defineElement",
@@ -252,7 +252,7 @@
       "id": "highlight-code",
       "path": "src/core/highlight-code.ts",
       "summary": "highlight-code — `<pre class=\"code\">` de la documentación (antes se coloreaban con",
-      "bytes": 8487,
+      "bytes": 8507,
       "exports": [
         "resolveMode",
         "modeToLang",
@@ -554,7 +554,7 @@
       "id": "tk-inline-md",
       "path": "src/core/tk-inline-md.ts",
       "summary": "Módulo compartido `tk-inline-md.ts`.",
-      "bytes": 4238,
+      "bytes": 4258,
       "exports": [
         "inlineMdWeb",
         "applySvgTextContent"

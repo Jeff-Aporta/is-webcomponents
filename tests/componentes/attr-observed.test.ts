@@ -8,7 +8,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
-import { lanzarChromium } from '../_shared/navegador.ts';
+import { cerrarChromium, lanzarChromium } from '../_shared/navegador.ts';
 import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
 
 const { test, lista } = coleccionPruebas({ categoria: 'what' });
@@ -123,7 +123,7 @@ test('runtime: open en observedAttributes dispara ACC tras define', async () => 
     assert.equal(result.fires, 1, 'set open debe disparar attributeChangedCallback');
     assert.equal(result.hostOpen, true);
   } finally {
-    await browser.close();
+    await cerrarChromium(browser);
   }
 });
 

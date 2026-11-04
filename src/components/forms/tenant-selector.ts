@@ -1,11 +1,11 @@
-import { adoptCss, defineElement, emit } from '../../core/element.js';
-import { crearNodo } from '../../core/dom-utils.js';
-import { atributosDe, PropsElement } from '../../core/props-element.js';
+import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { crearNodo } from '@jeff-aporta/iswc-base/core/dom-utils.js';
+import { atributosDe, PropsElement } from '@jeff-aporta/iswc-base/core/props-element.js';
 import { TenantSelectorPropsSchema } from './schemas/tenant-selector.schemas.js';
 import type { TenantChangeDetail, TenantSelectEl, TenantSelectorProps } from './schemas/tenant-selector.schemas.js';
 import './select.js';
-import '../feedback/tag.js';
-import '../media/icon.js';
+import '@jeff-aporta/iswc-base/components/feedback/tag.js';
+import '@jeff-aporta/iswc-base/components/media/icon.js';
 
 /**
  * <iswc-tenant-selector> — selector del cliente activo en apps con varios clientes (empresa, organización, espacio).

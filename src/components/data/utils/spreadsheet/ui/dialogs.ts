@@ -1,17 +1,17 @@
 // dialogs.ts — diálogos de la hoja, con controles del kit. Cada función arma su cuerpo y su acción;
 // el componente solo aporta el `iswc-dialog` y el contexto.
-import { cellName, colName, parseCell, parseRange, rangeName } from '../address.js';
-import type { Rect } from '../address.schemas.js';
-import type { SpreadsheetDoc } from '../document.js';
-import type { SortKey } from '../document.schemas.js';
-import type { Sheet } from '../engine.js';
-import { findAll, replaceAll } from '../find.js';
-import type { FindHit } from '../find.schemas.js';
-import { allFunctions, aliasOf } from '../functions/registry.js';
-import { formatValue, NUMBER_FORMATS } from '../numfmt.js';
+import { cellName, colName, parseCell, parseRange, rangeName } from '@jeff-aporta/iswc-base/components/data/utils/spreadsheet/address.js';
+import type { Rect } from '@jeff-aporta/iswc-base/components/data/utils/spreadsheet/address.schemas.js';
+import type { SpreadsheetDoc } from '@jeff-aporta/iswc-base/components/data/utils/spreadsheet/document.js';
+import type { SortKey } from '@jeff-aporta/iswc-base/components/data/utils/spreadsheet/document.schemas.js';
+import type { Sheet } from '@jeff-aporta/iswc-base/components/data/utils/spreadsheet/engine.js';
+import { findAll, replaceAll } from '@jeff-aporta/iswc-base/components/data/utils/spreadsheet/find.js';
+import type { FindHit } from '@jeff-aporta/iswc-base/components/data/utils/spreadsheet/find.schemas.js';
+import { allFunctions, aliasOf } from '@jeff-aporta/iswc-base/components/data/utils/spreadsheet/functions/registry.js';
+import { formatValue, NUMBER_FORMATS } from '@jeff-aporta/iswc-base/components/data/utils/spreadsheet/numfmt.js';
 import { signatureParts } from './formula-assist.js';
 import { esc } from './render.js';
-import type { BorderSide, CellStyle, CfRule, ValidationRule } from '../../../schemas/spreadsheet.schemas.js';
+import type { BorderSide, CellStyle, CfRule, ValidationRule } from '@jeff-aporta/iswc-base/components/data/schemas/spreadsheet.schemas.js';
 import type { Fields, DialogSpec, DialogHost } from './dialogs.schemas.js';
 
 

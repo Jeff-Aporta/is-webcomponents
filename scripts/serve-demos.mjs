@@ -7,6 +7,7 @@ import { createServer } from 'node:http';
 import { createReadStream } from 'node:fs';
 import { stat, readFile } from 'node:fs/promises';
 import { extname, join, normalize, sep } from 'node:path';
+import { reescribirAlias } from '@jeff-aporta/iswc-base/cdn/build/alias.ts';
 
 const ROOT = join(import.meta.dirname, '..');
 const PORT = Number(process.argv[2]) || 8491;
@@ -56,7 +57,8 @@ createServer(async (req, res) => {
         'content-type': 'text/javascript; charset=utf-8',
         'cache-control': 'no-store',
       });
-      res.end(out.code);
+      // `@jeff-aporta/iswc-base/<ruta>` → `/src/<ruta>` (ROOT es la raíz del repo).
+      res.end(reescribirAlias(out.code, (ruta) => `/src/${ruta}`));
     } catch (e) {
       res.writeHead(500, { 'content-type': 'text/plain; charset=utf-8' });
       res.end(`error transpilando ${file}\n${e?.message ?? e}`);

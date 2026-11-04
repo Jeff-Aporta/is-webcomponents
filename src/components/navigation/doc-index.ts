@@ -1,5 +1,5 @@
 /// <reference lib="dom" />
-import { adoptCss, defineElement, emit } from '../../core/element.js';
+import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
 import type { ItemDocIndex, ResultadoDocIndex, TextosDocIndex } from './schemas/doc-index.schemas.js';
 
 /**

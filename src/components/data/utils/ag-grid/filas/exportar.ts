@@ -7,8 +7,8 @@
 import { csvABlob, tablaACsv } from './exportar-csv.js';
 import { crearEstilos, entradasLibro, hojaAXml, libroABlob, libroABlobComprimido, nombreHoja } from './exportar-excel.js';
 import type { ColExport, DuenoExport, FnExport, FilaCruda, EstiloExcel, FilaExport, FilaLibre, HojaExcel, ParamsExport, TablaExport } from './filas.schemas.js';
-import type { ColumnState, RowNode } from '../../../schemas/datagrid-types.schemas.js';
-import type { FilaDisplay, FilaExtra, GridHost } from '../contrato.schemas.js';
+import type { ColumnState, RowNode } from '@jeff-aporta/iswc-base/components/data/schemas/datagrid-types.schemas.js';
+import type { FilaDisplay, FilaExtra, GridHost } from '@jeff-aporta/iswc-base/components/data/utils/ag-grid/contrato.schemas.js';
 
 const ID_AUTO = 'ag-Grid-AutoColumn';
 const ANCHO_AUTO = 200;

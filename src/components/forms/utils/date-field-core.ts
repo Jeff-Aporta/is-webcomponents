@@ -10,8 +10,8 @@ import { daysInMonth, pad, parseISO, splitDateTime } from './date-utils.js';
 
 /* ──────────────────────────── Tipos locales ───────────────────────────── */
 
-import { SectionTypeSchema, LayoutItemSchema, type SectionType, type LayoutItem } from "../schemas/date-field-core.schemas.js";
-import type { SectionMeta, Parts, FieldKind, SectionFieldOptions } from "../schemas/date-field-core.schemas.js";
+import { SectionTypeSchema, LayoutItemSchema, type SectionType, type LayoutItem } from "@jeff-aporta/iswc-base/components/forms/schemas/date-field-core.schemas.js";
+import type { SectionMeta, Parts, FieldKind, SectionFieldOptions } from "@jeff-aporta/iswc-base/components/forms/schemas/date-field-core.schemas.js";
 
 /** Metadatos por sección (dígitos que caben, rango, etiqueta accesible). */
 

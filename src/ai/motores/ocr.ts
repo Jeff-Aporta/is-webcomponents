@@ -1,6 +1,6 @@
 /** ocr.ts — motor de la herramienta `ocr` (cajas en fracción de la imagen). */
 import { OCR } from 'runonweb/ocr';
-import type { Crear } from '../schemas/ai.schemas.js';
+import type { Crear } from '@jeff-aporta/iswc-base/ai/schemas/ai.schemas.js';
 
 export const crear: Crear = async (o, alProgreso) => {
   const m = new OCR({ size: o['tamano'] as 'tiny' | 'small' | 'medium', onProgress: alProgreso });

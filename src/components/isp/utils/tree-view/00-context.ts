@@ -1,4 +1,4 @@
-import type { _AnyRecord, _AnyCtxProps, _BAllowedShape, _PendingDeleteSnap, _TNodeLike, _TRecordLike } from "../../schemas/tree-view-00-context.schemas.js";
+import type { _AnyRecord, _AnyCtxProps, _BAllowedShape, _PendingDeleteSnap, _TNodeLike, _TRecordLike } from "@jeff-aporta/iswc-base/components/isp/schemas/tree-view-00-context.schemas.js";
 var __defProp = Object.defineProperty;
 var __defNormalProp = (obj: unknown, key: string | symbol, value: unknown) => {
   const o = obj as Record<string | symbol, unknown>;

@@ -1,5 +1,5 @@
-import { adoptCss, defineElement, emit } from '../../core/element.js';
-import { ElementBase } from '../../core/element-base.js';
+import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
 import { parseWorkbookDoc } from './schemas/spreadsheet.schemas.js';
 import type { CellStyle, ChartDef, MacroDef, SpreadsheetChangeDetail, SpreadsheetSelectDetail, WorkbookDoc } from './schemas/spreadsheet.schemas.js';
 import { cellName, colName, inRect, normalize, parseCell, parseRange, quoteSheet, rangeName } from './utils/spreadsheet/address.js';
@@ -29,17 +29,17 @@ import { displayValue } from './utils/spreadsheet/values.js';
 import type { Scalar } from './utils/spreadsheet/values.schemas.js';
 import { readXlsx } from './utils/spreadsheet/xlsx-read.js';
 import { writeXlsx } from './utils/spreadsheet/xlsx-write.js';
-import '../actions/button.js';
-import '../actions/context-menu.js';
-import '../forms/checkbox.js';
-import '../forms/color-picker.js';
-import '../forms/input.js';
-import '../forms/option.js';
-import '../forms/select.js';
-import '../forms/textarea.js';
-import '../layout/dialog.js';
-import '../media/icon.js';
-import '../navigation/tab-group.js';
+import '@jeff-aporta/iswc-base/components/actions/button.js';
+import '@jeff-aporta/iswc-base/components/actions/context-menu.js';
+import '@jeff-aporta/iswc-base/components/forms/checkbox.js';
+import '@jeff-aporta/iswc-base/components/forms/color-picker.js';
+import '@jeff-aporta/iswc-base/components/forms/input.js';
+import '@jeff-aporta/iswc-base/components/forms/option.js';
+import '@jeff-aporta/iswc-base/components/forms/select.js';
+import '@jeff-aporta/iswc-base/components/forms/textarea.js';
+import '@jeff-aporta/iswc-base/components/layout/dialog.js';
+import '@jeff-aporta/iswc-base/components/media/icon.js';
+import '@jeff-aporta/iswc-base/components/navigation/tab-group.js';
 import type { Selection, Edit, Pointing, Drag, Clip, ValueEl } from './spreadsheet.schemas.js';
 
 /**
@@ -70,12 +70,12 @@ const CHART_COLORS = { w: 26, h: 15 };
 
 /** iswc-chart solo pinta las marcas de los tipos cuyo módulo se cargó. */
 const CHART_MODULES: Record<ChartDef['type'], () => Promise<unknown>> = {
-  bar: () => import('../charts/bar-chart.js'),
-  line: () => import('../charts/line-chart.js'),
-  pie: () => import('../charts/pie-chart.js'),
-  doughnut: () => import('../charts/doughnut-chart.js'),
-  scatter: () => import('../charts/scatter-chart.js'),
-  radar: () => import('../charts/radar-chart.js'),
+  bar: () => import('@jeff-aporta/iswc-base/components/charts/bar-chart.js'),
+  line: () => import('@jeff-aporta/iswc-base/components/charts/line-chart.js'),
+  pie: () => import('@jeff-aporta/iswc-base/components/charts/pie-chart.js'),
+  doughnut: () => import('@jeff-aporta/iswc-base/components/charts/doughnut-chart.js'),
+  scatter: () => import('@jeff-aporta/iswc-base/components/charts/scatter-chart.js'),
+  radar: () => import('@jeff-aporta/iswc-base/components/charts/radar-chart.js'),
 };
 
 /** Dirección de cada flecha. */
@@ -2181,7 +2181,7 @@ class IswcSpreadsheet extends ElementBase {
   }
 
   async #macroEditor(preset?: { name: string; code: string }): Promise<void> {
-    await import('../code/code.js');
+    await import('@jeff-aporta/iswc-base/components/code/code.js');
     const list = (): string => this.#doc.macros.map((m) => `<button class="mc-item" data-load="${esc(m.name)}"><iswc-icon icon="mdi:script-text-outline"></iswc-icon>${esc(m.name)}${m.shortcut ? `<kbd>${esc(m.shortcut)}</kbd>` : ''}</button>`).join('') || '<p class="dlg-status">Sin macros todavía.</p>';
     const first: Partial<MacroDef> = preset ?? this.#doc.macros[0] ?? { name: 'MiMacro', code: '# Escribe aquí tu macro\nformato(seleccion(), {negrita: verdadero})\n' };
     this.#openDialog({

@@ -1,5 +1,5 @@
-import { adoptCss, defineElement, emit } from '../../core/element.js';
-import { svgEl } from '../../core/svg-chart-engine.js';
+import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { svgEl } from '@jeff-aporta/iswc-base/core/svg-chart-engine.js';
 
 /**
  * <iswc-barcode> — Generador de códigos de barras en SVG.

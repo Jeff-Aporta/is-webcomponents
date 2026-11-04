@@ -1,10 +1,10 @@
-import { computePosition } from '../../core/position.js';
-import { guardarAppCfg, leerAppCfg } from '../../core/app-cfg.js';
-import { adoptCss, defineElement, emit } from '../../core/element.js';
-import '../media/icon.js';
-import { ElementBase } from '../../core/element-base.js';
-import { createPopupDismiss } from '../../core/popup-dismiss.js';
-import { PALETTES, PALETTE_FAMILIES, paletteSeeds } from '../../styles/palette-build.js';
+import { computePosition } from '@jeff-aporta/iswc-base/core/position.js';
+import { guardarAppCfg, leerAppCfg } from '@jeff-aporta/iswc-base/core/app-cfg.js';
+import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import '@jeff-aporta/iswc-base/components/media/icon.js';
+import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
+import { createPopupDismiss } from '@jeff-aporta/iswc-base/core/popup-dismiss.js';
+import { PALETTES, PALETTE_FAMILIES, paletteSeeds } from '@jeff-aporta/iswc-base/styles/palette-build.js';
 import type { Palette, PaletteCruda } from "./schemas/palette-selector.schemas.js";
 
 /**

@@ -1,13 +1,13 @@
 /**
  * ui/panel-filtros — Filters Tool Panel: un acordeon con el filtro de cada columna.
  */
-import { arbolColumnas, filtrarArbolColumnas, hojasColumna } from '../resumen.js';
-import { TEXTOS } from '../textos.js';
+import { arbolColumnas, filtrarArbolColumnas, hojasColumna } from '@jeff-aporta/iswc-base/components/data/utils/ag-grid/filtros/resumen.js';
+import { TEXTOS } from '@jeff-aporta/iswc-base/components/data/utils/ag-grid/filtros/textos.js';
 import { botonIcono, crear, icono, inputDe } from './controles.js';
 import { PanelFiltro } from './panel-filtro.js';
-import type { EntradaPanelFiltros, NodoColumna } from '../filtros.schemas.js';
-import type { MotorFiltros } from '../filtros-motor.js';
-import type { ColumnState } from '../../../../schemas/datagrid-types.schemas.js';
+import type { EntradaPanelFiltros, NodoColumna } from '@jeff-aporta/iswc-base/components/data/utils/ag-grid/filtros/filtros.schemas.js';
+import type { MotorFiltros } from '@jeff-aporta/iswc-base/components/data/utils/ag-grid/filtros/filtros-motor.js';
+import type { ColumnState } from '@jeff-aporta/iswc-base/components/data/schemas/datagrid-types.schemas.js';
 
 
 export class PanelFiltros {

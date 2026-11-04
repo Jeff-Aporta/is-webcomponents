@@ -1,6 +1,6 @@
-import { adoptCss, defineElement, emitCancelable } from '../../core/element.js';
-import { ElementBase } from '../../core/element-base.js';
-import { setStringAttr } from '../../core/reflect.js';
+import { adoptCss, defineElement, emitCancelable } from '@jeff-aporta/iswc-base/core/element.js';
+import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
+import { setStringAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
 import type { PagerDirection, PagerNavigateDetail } from './schemas/pager.schemas.js';
 
 /**

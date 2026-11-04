@@ -1,6 +1,6 @@
 /** Tipos de tipos.ts. */
 
-import type { GridHost as GridHostPublico, RefCelda } from '../contrato.schemas.js';
+import type { GridHost as GridHostPublico, RefCelda } from '@jeff-aporta/iswc-base/components/data/utils/ag-grid/contrato.schemas.js';
 
 export type SelectionModeLocal = 'none' | 'single' | 'multiple';
 

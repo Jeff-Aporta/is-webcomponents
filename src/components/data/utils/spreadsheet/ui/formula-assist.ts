@@ -1,11 +1,11 @@
 // formula-assist.ts — ayudas del editor de fórmulas: autocompletado, firma de la función en curso,
 // referencias a colorear y modo apuntar. Puro: trabaja con texto y posiciones.
-import type { Rect } from '../address.schemas.js';
-import { aliasOf, canonicalName, lookupFn, suggest } from '../functions/registry.js';
-import type { FnDef } from '../functions/registry.schemas.js';
-import { tokenize } from '../tokenizer.js';
-import type { Token } from '../tokenizer.schemas.js';
-import { colName } from '../address.js';
+import type { Rect } from '@jeff-aporta/iswc-base/components/data/utils/spreadsheet/address.schemas.js';
+import { aliasOf, canonicalName, lookupFn, suggest } from '@jeff-aporta/iswc-base/components/data/utils/spreadsheet/functions/registry.js';
+import type { FnDef } from '@jeff-aporta/iswc-base/components/data/utils/spreadsheet/functions/registry.schemas.js';
+import { tokenize } from '@jeff-aporta/iswc-base/components/data/utils/spreadsheet/tokenizer.js';
+import type { Token } from '@jeff-aporta/iswc-base/components/data/utils/spreadsheet/tokenizer.schemas.js';
+import { colName } from '@jeff-aporta/iswc-base/components/data/utils/spreadsheet/address.js';
 import type { Suggestion } from './formula-assist.schemas.js';
 
 /** Paleta de referencias del editor (el mismo orden en celdas y barra). */

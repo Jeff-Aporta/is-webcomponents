@@ -1,6 +1,6 @@
-import { adoptCss, defineElement } from '../../core/element.js';
-import { ElementBase } from '../../core/element-base.js';
-import { setStringAttr } from '../../core/reflect.js';
+import { adoptCss, defineElement } from '@jeff-aporta/iswc-base/core/element.js';
+import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
+import { setStringAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
 
 /**
  * <iswc-progress-ring> — Web Component (vanilla).

@@ -1,7 +1,7 @@
-import { adoptCss, defineElement } from '../../core/element.js';
-import { ElementBase } from '../../core/element-base.js';
-import { INTENT } from '../../core/intent.js';
-import { TONE } from '../../core/tone.js';
+import { adoptCss, defineElement } from '@jeff-aporta/iswc-base/core/element.js';
+import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
+import { INTENT } from '@jeff-aporta/iswc-base/core/intent.js';
+import { TONE } from '@jeff-aporta/iswc-base/core/tone.js';
 
 /**
  * <iswc-callout> — Web Component (vanilla, zero dependencies).

@@ -11,8 +11,8 @@
  */
 
 import { SelectionMode, HeaderCheckboxState } from './types.js';
-import type { RowNode } from "../../schemas/datagrid-types.schemas.js";
-import type { SelectionModeName } from "../../schemas/datagrid-types.schemas.js";
+import type { RowNode } from "@jeff-aporta/iswc-base/components/data/schemas/datagrid-types.schemas.js";
+import type { SelectionModeName } from "@jeff-aporta/iswc-base/components/data/schemas/datagrid-types.schemas.js";
 
 /**
  * Alterna la seleccion de una fila segun el modo.

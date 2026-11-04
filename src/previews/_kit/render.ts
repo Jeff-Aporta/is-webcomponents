@@ -7,7 +7,7 @@ import type {
   PreviewBlock,
 } from './schemas/preview.schemas.ts';
 import { asText } from './text-like.ts';
-import '../../components/preview/demo-section.js';
+import '@jeff-aporta/iswc-base/components/preview/demo-section.js';
 import type { StandardTocEntry } from "./schemas/render.schemas.js";
 
 /**

@@ -1,11 +1,11 @@
-import { adoptCss, defineElement } from '../../core/element.js';
-import { crearNodo } from '../../core/dom-utils.js';
-import { atributosDe, PropsElement } from '../../core/props-element.js';
+import { adoptCss, defineElement } from '@jeff-aporta/iswc-base/core/element.js';
+import { crearNodo } from '@jeff-aporta/iswc-base/core/dom-utils.js';
+import { atributosDe, PropsElement } from '@jeff-aporta/iswc-base/core/props-element.js';
 import { SemanticSearchPropsSchema } from './schemas/semantic-search.schemas.js';
 import type { SemanticComando, SemanticPaletaEl, SemanticSearchProps } from './schemas/semantic-search.schemas.js';
 import './command-palette.js';
-import '../actions/button.js';
-import '../media/icon.js';
+import '@jeff-aporta/iswc-base/components/actions/button.js';
+import '@jeff-aporta/iswc-base/components/media/icon.js';
 
 /**
  * <iswc-semantic-search> — búsqueda global: un botón que abre `iswc-command-palette` (Ctrl+K) con orden por significado.

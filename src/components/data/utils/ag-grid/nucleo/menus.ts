@@ -7,9 +7,9 @@
  */
 
 import type { MenuKit } from './menus.schemas.js';
-import '../../../../actions/context-menu.js';
-import '../../../../media/icon.js';
-import type { ContextoMenu, GridHost, ItemMenu, ProveedorMenu } from '../contrato.schemas.js';
+import '@jeff-aporta/iswc-base/components/actions/context-menu.js';
+import '@jeff-aporta/iswc-base/components/media/icon.js';
+import type { ContextoMenu, GridHost, ItemMenu, ProveedorMenu } from '@jeff-aporta/iswc-base/components/data/utils/ag-grid/contrato.schemas.js';
 
 
 function fusionarPorId(base: ItemMenu[], extra: ItemMenu[]): ItemMenu[] {

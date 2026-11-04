@@ -7,7 +7,7 @@
  */
 import { colgar, crearNodo, ID_RAIZ } from './grupos.js';
 import type { NodoArbol, OpcionesTree, ResultadoTree } from './filas.schemas.js';
-import type { RowData, RowNode } from '../../../schemas/datagrid-types.schemas.js';
+import type { RowData, RowNode } from '@jeff-aporta/iswc-base/components/data/schemas/datagrid-types.schemas.js';
 
 function hijoDe(padre: NodoArbol, clave: string): NodoArbol {
   const previo = padre.mapa.get(clave);

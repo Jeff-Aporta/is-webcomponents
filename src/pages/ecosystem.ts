@@ -4,7 +4,7 @@
 import type {
   PreviewMountContext,
   IswcComponentPreviewLike,
-} from '../previews/_kit/schemas/preview.schemas.ts';
+} from '@jeff-aporta/iswc-base/previews/_kit/schemas/preview.schemas.ts';
 import type { LoaderCatalog, LoaderModule, SharedModuleEntry, SharedCatalogJSON, SnippetEditor } from "./schemas/ecosystem.schemas.js";
 
 /** Snippet editable: <iswc-code>, <textarea> o <input>. */

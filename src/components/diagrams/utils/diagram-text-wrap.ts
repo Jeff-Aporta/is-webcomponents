@@ -39,7 +39,7 @@
 
 /** Ancho en px que ocupa un caracter promedio en fuentes sans-serif a tamaño
  * dado. Es una aproximación: en runtime se prefiere `getComputedTextLength`. */
-import type { WrapOpts, WrappedLine, WrapResult, TSpanSpec } from "../schemas/diagram-text-wrap.schemas.js";
+import type { WrapOpts, WrappedLine, WrapResult, TSpanSpec } from "@jeff-aporta/iswc-base/components/diagrams/schemas/diagram-text-wrap.schemas.js";
 const APPROX_CHAR_WIDTH_RATIO = 0.55;
 
 /** Estimación de ancho sin DOM: `ratio` em por carácter (0,55 sans-serif genérica; Poppins 500 ≈ 0,6). */

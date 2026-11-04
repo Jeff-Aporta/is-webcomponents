@@ -2,9 +2,9 @@
  * Behavior del catálogo de componentes (`#icons` / tag `icons`).
  * Cada categoría = <iswc-demo-section>: título flotante + card neon-glass.
  */
-import type { PreviewMountContext, IswcComponentPreviewLike } from '../previews/_kit/schemas/preview.schemas.ts';
-import components from '../manifest.js';
-import type { ComponentManifestItem } from "../manifest.schemas.js";
+import type { PreviewMountContext, IswcComponentPreviewLike } from '@jeff-aporta/iswc-base/previews/_kit/schemas/preview.schemas.ts';
+import components from '@jeff-aporta/iswc-base/manifest.js';
+import type { ComponentManifestItem } from "@jeff-aporta/iswc-base/manifest.schemas.js";
 
 const CAT_META: Record<string, { label: string; icon: string }> = {
   actions: { label: 'Acciones', icon: 'mdi:gesture-tap-button' },

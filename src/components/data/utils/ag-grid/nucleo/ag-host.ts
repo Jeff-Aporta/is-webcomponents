@@ -7,9 +7,9 @@
  */
 
 import type { PiezasNucleo, PuertosNucleo } from './ag-host.schemas.js';
-import { escapeHtml } from '../../../../../core/dom-utils.js';
-import { cellText, getCellValue } from '../../datagrid-core/value-formatter.js';
-import { headerCheckboxState, selectAll, clearSelection } from '../../datagrid-core/selection.js';
+import { escapeHtml } from '@jeff-aporta/iswc-base/core/dom-utils.js';
+import { cellText, getCellValue } from '@jeff-aporta/iswc-base/components/data/utils/datagrid-core/value-formatter.js';
+import { headerCheckboxState, selectAll, clearSelection } from '@jeff-aporta/iswc-base/components/data/utils/datagrid-core/selection.js';
 import { crearApiAg } from './api-ag.js';
 import { registrarBase } from './base-celdas.js';
 import { crearCabecera } from './cabecera.js';
@@ -18,8 +18,8 @@ import { crearExtras } from './extras.js';
 import { crearMenus } from './menus.js';
 import { crearMotor } from './motor.js';
 import { aKebab } from './opciones.js';
-import type { Capa, ContextoCelda, Decoracion, Desinstalar, EvaluadorFiltro, Exportador, FilaDisplay, Flotante, GridPlugin, ModeloFilas, PanelEstado, PanelLateral, PresentacionCelda, PresentacionFila, ProveedorMenu, RendererCelda, RendererMontable, TransformadorFilas, Zona } from '../contrato.schemas.js';
-import type { ColumnState, GridApi, GridState, RowNode } from '../../../schemas/datagrid-types.schemas.js';
+import type { Capa, ContextoCelda, Decoracion, Desinstalar, EvaluadorFiltro, Exportador, FilaDisplay, Flotante, GridPlugin, ModeloFilas, PanelEstado, PanelLateral, PresentacionCelda, PresentacionFila, ProveedorMenu, RendererCelda, RendererMontable, TransformadorFilas, Zona } from '@jeff-aporta/iswc-base/components/data/utils/ag-grid/contrato.schemas.js';
+import type { ColumnState, GridApi, GridState, RowNode } from '@jeff-aporta/iswc-base/components/data/schemas/datagrid-types.schemas.js';
 import type { Manejadores } from './interaccion.schemas.js';
 import type { GridHost, SelectionModeLocal } from './tipos.schemas.js';
 

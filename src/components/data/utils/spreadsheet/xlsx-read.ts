@@ -5,7 +5,7 @@ import { mapTokens, shiftFormula } from './rewrite.js';
 import { child, children, parseXml } from './xml.js';
 import type { XNode } from './xml.schemas.js';
 import { readZip } from './zip.js';
-import type { BorderSide, CellDoc, CellStyle, CfRule, SheetDoc, ValidationRule, WorkbookDoc } from '../../schemas/spreadsheet.schemas.js';
+import type { BorderSide, CellDoc, CellStyle, CfRule, SheetDoc, ValidationRule, WorkbookDoc } from '@jeff-aporta/iswc-base/components/data/schemas/spreadsheet.schemas.js';
 
 const EM_PER_CHAR = 0.5;
 const PT_PER_EM = 11;

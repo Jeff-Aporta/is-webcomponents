@@ -3,9 +3,9 @@
  * resueltos a literales porque el SVG de un diagrama se exporta y debe verse igual fuera de la página.
  * Sin tokens (headless, export en Deno) quedan los temas base de sequence-spec.
  */
-import { fijarSerieColores, SERIE_HUES } from '../../../core/tk-hue.js';
-import { resolveColor, seriesColor } from '../../charts/utils/chart-palette.js';
-import type { DiagramTheme } from '../schemas/diagram-types.schemas.js';
+import { fijarSerieColores, SERIE_HUES } from '@jeff-aporta/iswc-base/core/tk-hue.js';
+import { resolveColor, seriesColor } from '@jeff-aporta/iswc-base/components/charts/utils/chart-palette.js';
+import type { DiagramTheme } from '@jeff-aporta/iswc-base/components/diagrams/schemas/diagram-types.schemas.js';
 import { sequenceThemeDark, sequenceThemeLight } from './sequence-spec.js';
 
 /** Tema del diagrama `el` con la paleta activa, y las series listas para los tonos automáticos. */

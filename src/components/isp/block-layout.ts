@@ -1,16 +1,16 @@
-import { ElementBase } from '../../core/element-base.js';
-import { adoptCss, defineElement, emit } from '../../core/element.js';
+import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
+import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
 import {
   applyJsonBody,
   html2json,
   hostToJson,
   json2html,
-} from '../../core/json-html.js';
+} from '@jeff-aporta/iswc-base/core/json-html.js';
 import {
   SCROLL_MEMORY_ATTRS,
   ScrollMemory,
   bindScrollMemoryApi,
-} from '../../core/scroll-memory.js';
+} from '@jeff-aporta/iswc-base/core/scroll-memory.js';
 import type { Breakpoint, BreakpointFlags, LerpwFn } from "./schemas/block-layout.schemas.js";
 
 /**

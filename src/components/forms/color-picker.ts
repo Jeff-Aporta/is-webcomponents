@@ -1,7 +1,7 @@
-import { adoptCss, defineElement, emit } from '../../core/element.js';
-import '../media/icon.js';
-import '../actions/button.js';
-import '../forms/input.js';
+import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import '@jeff-aporta/iswc-base/components/media/icon.js';
+import '@jeff-aporta/iswc-base/components/actions/button.js';
+import '@jeff-aporta/iswc-base/components/forms/input.js';
 
 import {
   attachFormInternals,
@@ -9,10 +9,10 @@ import {
   setCustomState,
   setFormValue,
   setValidity,
-} from '../../core/form-associated.js';
-import { ElementBase } from '../../core/element-base.js';
-import { setStringAttr } from '../../core/reflect.js';
-import { computePosition } from '../../core/position.js';
+} from '@jeff-aporta/iswc-base/core/form-associated.js';
+import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
+import { setStringAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
+import { computePosition } from '@jeff-aporta/iswc-base/core/position.js';
 import type { EyeDropperOpenResult, EyeDropperInterface, EyeDropperConstructor, WindowWithEyeDropper } from "./schemas/color-picker.schemas.js";
 /**
  * <iswc-color-picker> — Selector de color form-associated.

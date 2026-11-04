@@ -7,7 +7,7 @@
  */
 
 import type { Opciones } from './renderers.schemas.js';
-import type { ContextoCelda, RendererCelda } from '../contrato.schemas.js';
+import type { ContextoCelda, RendererCelda } from '@jeff-aporta/iswc-base/components/data/utils/ag-grid/contrato.schemas.js';
 import { fmtFecha, fmtMoneda, fmtNumero, fmtPorcentaje, fmtValor } from './formatos.js';
 import { aNumero, escaparHtml, limpiarCss, urlSegura } from './html.js';
 import { htmlSparkline, normalizarSerie, resumenSerie } from './spark.js';

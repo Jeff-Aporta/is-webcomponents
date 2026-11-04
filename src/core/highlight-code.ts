@@ -50,7 +50,7 @@ const isMountedEditor = (el: Element): boolean => el instanceof HTMLElement
 let editorImport: Promise<unknown> | null = null;
 const ensureEditorDefined = (): Promise<unknown> => {
   if (customElements.get('iswc-code')) return Promise.resolve();
-  editorImport ??= import('../components/code/code.js');
+  editorImport ??= import('@jeff-aporta/iswc-base/components/code/code.js');
   return editorImport;
 };
 

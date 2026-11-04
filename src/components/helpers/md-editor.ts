@@ -1,6 +1,6 @@
-import { adoptCss, defineElement, emit } from '../../core/element.js';
-import { ElementBase } from '../../core/element-base.js';
-import { setStringAttr, setOptionalAttr } from '../../core/reflect.js';
+import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
+import { setStringAttr, setOptionalAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
 import {
   bodyPreviewHtml,
   bodyToEditorHtml,
@@ -21,11 +21,11 @@ import type { HidratacionMd } from './schemas/md-hydrate.schemas.js';
 // Tipos del contrato — declarados aquí localmente (en lugar de re-exportarlos
 // desde md-editor-api.js, que sigue siendo JSDoc-only). El `.d.ts` paralelo
 // sigue siendo la documentación canónica del consumidor externo.
-import '../layout/dialog.js';
-import '../actions/button.js';
-import '../actions/copy-button.js';
-import '../forms/switch.js';
-import '../media/icon.js';
+import '@jeff-aporta/iswc-base/components/layout/dialog.js';
+import '@jeff-aporta/iswc-base/components/actions/button.js';
+import '@jeff-aporta/iswc-base/components/actions/copy-button.js';
+import '@jeff-aporta/iswc-base/components/forms/switch.js';
+import '@jeff-aporta/iswc-base/components/media/icon.js';
 import type { IswcMdEditorDocument, IswcMdEditorApiConfig, IswcMdEditorActions, DialogElement, SwitchElement, CopyButtonElement, TextareaElement, EditorHistory } from "./schemas/md-editor.schemas.js";
 
 /**

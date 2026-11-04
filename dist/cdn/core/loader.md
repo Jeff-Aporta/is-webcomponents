@@ -29,6 +29,18 @@ await L.load('iswc-button', 'iswc-button-group');
 // o: L.load('actions') | L.load('all')
 ```
 
+Con import map (alias `@jeff-aporta/iswc-base/`, la entrada que publica `dist/cdn/importmap.json`; ver `specs/cdn.md` §Alias):
+
+```html
+<script type="importmap">
+{ "imports": { "@jeff-aporta/iswc-base/": "https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@REF/dist/cdn/" } }
+</script>
+<script type="module">
+  import { iswcLoader as L } from '@jeff-aporta/iswc-base/core/loader.min.js';
+  await L.load('iswc-button');
+</script>
+```
+
 ### Pin quemado (default)
 
 Cada `loader.min.js` lleva `__IS_BUILD_SHA__` (HEAD al publicar). Si el

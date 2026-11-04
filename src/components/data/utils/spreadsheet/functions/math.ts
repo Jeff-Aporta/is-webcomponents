@@ -1,7 +1,7 @@
 // math.ts — matemáticas, trigonometría y matrices.
-import type { Ctx } from '../evaluator.schemas.js';
-import { CellError, ERR, RefValue, toNumber } from '../values.js';
-import type { EvalValue, Matrix, Scalar } from '../values.schemas.js';
+import type { Ctx } from '@jeff-aporta/iswc-base/components/data/utils/spreadsheet/evaluator.schemas.js';
+import { CellError, ERR, RefValue, toNumber } from '@jeff-aporta/iswc-base/components/data/utils/spreadsheet/values.js';
+import type { EvalValue, Matrix, Scalar } from '@jeff-aporta/iswc-base/components/data/utils/spreadsheet/values.schemas.js';
 import { finite, flat, lifted, matrix, num, numbers, optNum } from './fn-helpers.js';
 import { def, lookupFn } from './registry.js';
 

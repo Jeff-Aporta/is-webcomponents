@@ -2,12 +2,12 @@
  * ui/panel-columnas — Columns Tool Panel: busqueda, seleccion, arbol de grupos, reorden y
  * secciones de agrupacion, valores y pivote, con actualizaciones diferidas opcionales.
  */
-import { arbolColumnas, filtrarArbolColumnas, hojasColumna } from '../resumen.js';
-import { TEXTOS } from '../textos.js';
+import { arbolColumnas, filtrarArbolColumnas, hojasColumna } from '@jeff-aporta/iswc-base/components/data/utils/ag-grid/filtros/resumen.js';
+import { TEXTOS } from '@jeff-aporta/iswc-base/components/data/utils/ag-grid/filtros/textos.js';
 import { boton, botonIcono, casilla, crear, fijarCasilla, icono, inputDe, selectDe } from './controles.js';
-import type { NodoColumna, SeccionColumnas } from '../filtros.schemas.js';
-import type { ColumnState } from '../../../../schemas/datagrid-types.schemas.js';
-import type { GridHost } from '../../contrato.schemas.js';
+import type { NodoColumna, SeccionColumnas } from '@jeff-aporta/iswc-base/components/data/utils/ag-grid/filtros/filtros.schemas.js';
+import type { ColumnState } from '@jeff-aporta/iswc-base/components/data/schemas/datagrid-types.schemas.js';
+import type { GridHost } from '@jeff-aporta/iswc-base/components/data/utils/ag-grid/contrato.schemas.js';
 
 const TIPO_ARRASTRE = 'application/x-is-col-id';
 const FUNCIONES_AGREGADO = ['sum', 'min', 'max', 'count', 'avg', 'first', 'last'];

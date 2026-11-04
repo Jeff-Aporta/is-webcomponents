@@ -1,5 +1,5 @@
-import { adoptCss, defineElement, emit } from '../../core/element.js';
-import { createPopupDismiss } from '../../core/popup-dismiss.js';
+import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { createPopupDismiss } from '@jeff-aporta/iswc-base/core/popup-dismiss.js';
 
 /**
  * <iswc-context-menu> — Menú emergente anclado al clic derecho del ratón sobre

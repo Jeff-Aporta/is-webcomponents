@@ -5,11 +5,12 @@
 // que NO se sirven en GitHub Pages. Tras esto, los pages y previews
 // del registry cargan rutas dist/... que sí están publicadas.
 import { build } from 'esbuild';
+import { aliasKit } from '@jeff-aporta/iswc-base/cdn/build/alias.ts';
 import { mkdir, copyFile, readdir, writeFile, rm, cp } from 'node:fs/promises';
 import { existsSync, readdirSync } from 'node:fs';
 import { join, dirname, resolve, relative, basename, sep } from 'node:path';
 import { readFileSync } from 'node:fs';
-import manifest from '../src/manifest.js';
+import manifest from '@jeff-aporta/iswc-base/manifest.js';
 
 let ok = 0;
 let failed = 0;
@@ -132,7 +133,7 @@ for (const name of scripts) {
     await build({
       entryPoints: [`scripts/${name}.js`],
       outfile: `dist/scripts/${name}.min.js`,
-      plugins: [componentesExternos(`dist/scripts/${name}.min.js`)],
+      plugins: [aliasKit(), componentesExternos(`dist/scripts/${name}.min.js`)],
       bundle: true,
       minify: true,
       format: 'esm',
@@ -158,7 +159,7 @@ for (const name of pages) {
     await build({
       entryPoints: [`src/pages/${name}.ts`],
       outfile: `dist/pages/${name}.min.js`,
-      plugins: [componentesExternos(`dist/pages/${name}.min.js`)],
+      plugins: [aliasKit(), componentesExternos(`dist/pages/${name}.min.js`)],
       bundle: true,
       minify: true,
       format: 'esm',
@@ -218,7 +219,7 @@ for (const { category, name } of allPreviews) {
     await build({
       entryPoints: [src],
       outfile: dstFile,
-      plugins: [componentesExternos(dstFile)],
+      plugins: [aliasKit(), componentesExternos(dstFile)],
       bundle: true,
       minify: true,
       format: 'esm',

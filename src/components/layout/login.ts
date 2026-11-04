@@ -1,16 +1,16 @@
-import { adoptCss, defineElement, upgradeProperties } from '../../core/element.js';
-import { ElementBase } from '../../core/element-base.js';
+import { adoptCss, defineElement, upgradeProperties } from '@jeff-aporta/iswc-base/core/element.js';
+import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
 
-import '../forms/input.js';
-import '../forms/select.js';
-import '../forms/checkbox.js';
-import '../forms/option.js';
-import '../actions/button.js';
-import '../media/avatar.js';
-import '../layout/dialog.js';
-import '../layout/callout.js';
-import '../feedback/toast.js';
-import '../feedback/tooltip.js';
+import '@jeff-aporta/iswc-base/components/forms/input.js';
+import '@jeff-aporta/iswc-base/components/forms/select.js';
+import '@jeff-aporta/iswc-base/components/forms/checkbox.js';
+import '@jeff-aporta/iswc-base/components/forms/option.js';
+import '@jeff-aporta/iswc-base/components/actions/button.js';
+import '@jeff-aporta/iswc-base/components/media/avatar.js';
+import '@jeff-aporta/iswc-base/components/layout/dialog.js';
+import '@jeff-aporta/iswc-base/components/layout/callout.js';
+import '@jeff-aporta/iswc-base/components/feedback/toast.js';
+import '@jeff-aporta/iswc-base/components/feedback/tooltip.js';
 import type { LoginAccount, LoginSession } from './schemas/login.schemas.js';
 
 /**

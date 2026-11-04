@@ -28,8 +28,8 @@
  * Reduced motion: sin animaciones (sólo cambio de color al hover).
  */
 
-import { emit } from '../../../core/element.js';
-import type { EditorPanelNodeLite, EditorPanelOptions } from "../schemas/_editor-panel.schemas.js";
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
+import type { EditorPanelNodeLite, EditorPanelOptions } from "@jeff-aporta/iswc-base/components/diagrams/schemas/_editor-panel.schemas.js";
 
 /** Tipos compartidos por cualquier editor. La subclase los strecha. */
 

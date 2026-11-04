@@ -4,8 +4,8 @@
  */
 
 import type { RegistroRenderers, Seleccion, Funcion } from './contexto.schemas.js';
-import type { ColDefAg, ContextoCelda, GridHost, RendererCelda, RendererMontable } from '../contrato.schemas.js';
-import type { ColumnState, RowNode } from '../../../schemas/datagrid-types.schemas.js';
+import type { ColDefAg, ContextoCelda, GridHost, RendererCelda, RendererMontable } from '@jeff-aporta/iswc-base/components/data/utils/ag-grid/contrato.schemas.js';
+import type { ColumnState, RowNode } from '@jeff-aporta/iswc-base/components/data/schemas/datagrid-types.schemas.js';
 import { paramsCelda } from './celdas-valores.js';
 
 

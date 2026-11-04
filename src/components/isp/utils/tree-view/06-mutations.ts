@@ -18,8 +18,8 @@
  * - Las firmas se ajustan a los tipos concretos para evitar `any`.
  */
 import { TAView } from "./05-view.js";
-import { DropPosition, MoveDirection, PendingDeleteSnapshot, TNode, TRecord } from '../../schemas/tree-view-types.schemas.js';
-import type { MutationResult } from "../../schemas/tree-view-06-mutations.schemas.js";
+import { DropPosition, MoveDirection, PendingDeleteSnapshot, TNode, TRecord } from '@jeff-aporta/iswc-base/components/isp/schemas/tree-view-types.schemas.js';
+import type { MutationResult } from "@jeff-aporta/iswc-base/components/isp/schemas/tree-view-06-mutations.schemas.js";
 
 /** Resultado de las operaciones async de mutación. */
 

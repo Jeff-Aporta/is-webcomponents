@@ -1,15 +1,15 @@
 // render.ts — HTML de la rejilla visible. Función pura de (documento, ventana): el componente
 // decide cuándo pintar; aquí no se toca el DOM.
-import { cellName, colName } from '../address.js';
-import type { Rect } from '../address.schemas.js';
-import { Axis } from '../axis.js';
-import type { CfEffect } from '../conditional.schemas.js';
-import type { CfEvaluator } from '../conditional.js';
-import type { SpreadsheetDoc } from '../document.js';
-import { cellKey } from '../engine.js';
-import type { Sheet } from '../engine.js';
-import { CellError } from '../values.js';
-import type { BorderSide, CellStyle } from '../../../schemas/spreadsheet.schemas.js';
+import { cellName, colName } from '@jeff-aporta/iswc-base/components/data/utils/spreadsheet/address.js';
+import type { Rect } from '@jeff-aporta/iswc-base/components/data/utils/spreadsheet/address.schemas.js';
+import { Axis } from '@jeff-aporta/iswc-base/components/data/utils/spreadsheet/axis.js';
+import type { CfEffect } from '@jeff-aporta/iswc-base/components/data/utils/spreadsheet/conditional.schemas.js';
+import type { CfEvaluator } from '@jeff-aporta/iswc-base/components/data/utils/spreadsheet/conditional.js';
+import type { SpreadsheetDoc } from '@jeff-aporta/iswc-base/components/data/utils/spreadsheet/document.js';
+import { cellKey } from '@jeff-aporta/iswc-base/components/data/utils/spreadsheet/engine.js';
+import type { Sheet } from '@jeff-aporta/iswc-base/components/data/utils/spreadsheet/engine.js';
+import { CellError } from '@jeff-aporta/iswc-base/components/data/utils/spreadsheet/values.js';
+import type { BorderSide, CellStyle } from '@jeff-aporta/iswc-base/components/data/schemas/spreadsheet.schemas.js';
 import type { GridWindow, RenderOptions } from './render.schemas.js';
 
 /** Medidas fijas de la rejilla, en em. */

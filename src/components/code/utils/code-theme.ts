@@ -44,7 +44,7 @@
  * @property {string} [infoHighlight]
  */
 
-import type { CodeThemeConfig } from "../schemas/code-theme.schemas.js";
+import type { CodeThemeConfig } from "@jeff-aporta/iswc-base/components/code/schemas/code-theme.schemas.js";
 export const THEME_PROP_MAP = Object.freeze({
   background: '--iswc-code-bg',
   foreground: '--iswc-code-fg',

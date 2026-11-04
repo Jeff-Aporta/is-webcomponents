@@ -1,7 +1,7 @@
 import { TAHistory } from "./06b-history.js";
-import { TNode, TRecord } from '../../schemas/tree-view-types.schemas.js';
-import type { TreeActionSpec } from '../../schemas/tree-view-types.schemas.js';
-import type { TARolesInternals } from "../../schemas/tree-view-07-roles.schemas.js";
+import { TNode, TRecord } from '@jeff-aporta/iswc-base/components/isp/schemas/tree-view-types.schemas.js';
+import type { TreeActionSpec } from '@jeff-aporta/iswc-base/components/isp/schemas/tree-view-types.schemas.js';
+import type { TARolesInternals } from "@jeff-aporta/iswc-base/components/isp/schemas/tree-view-07-roles.schemas.js";
 
 class TARoles extends TAHistory {
   get groupTypes(): string[] {

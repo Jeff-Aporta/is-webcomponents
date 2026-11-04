@@ -1,5 +1,5 @@
-import type { ColumnState, RowNode } from '../../schemas/datagrid-types.schemas.js';
-import type { CsvOptions } from "../../schemas/datagrid-csv-export.schemas.js";
+import type { ColumnState, RowNode } from '@jeff-aporta/iswc-base/components/data/schemas/datagrid-types.schemas.js';
+import type { CsvOptions } from "@jeff-aporta/iswc-base/components/data/schemas/datagrid-csv-export.schemas.js";
 /**
  * datagrid-core/csv-export — Exportar filas a CSV.
  *

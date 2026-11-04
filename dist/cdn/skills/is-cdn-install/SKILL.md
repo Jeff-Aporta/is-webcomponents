@@ -92,6 +92,24 @@ La galería lo pinta en `<iswc-cdn-snippet>` (copy-paste del loader + `L.load(ta
 
 `load('all')` / `load('actions')` expanden a cada `<cat>/<file>.min.js`. No se publican `all.min.js` ni `category.*.min.js`.
 
+### Con import map (alias `@jeff-aporta/iswc-base/`)
+
+La app declara UNA vez dónde vive el kit y sus módulos importan sin repetir el SHA. La entrada exacta la publica cada
+build en `dist/cdn/importmap.json`; `pin-update.mjs` la mantiene al día (también en `deno.json`).
+
+```html
+<script type="importmap">
+{ "imports": { "@jeff-aporta/iswc-base/": "https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@<sha40>/dist/cdn/" } }
+</script>
+<script type="module">
+  import { iswcLoader as L } from '@jeff-aporta/iswc-base/core/loader.min.js';
+  await L.loadCSSBase();
+  await L.load('iswc-button');
+</script>
+```
+
+El import map va antes de cualquier `<script type="module">`. En Deno, la misma entrada en `imports` de `deno.json`.
+
 ## Boot con fallback (si un espejo cae)
 
 Probar bases **en orden**, siempre el mismo `base` para CSS y JS:

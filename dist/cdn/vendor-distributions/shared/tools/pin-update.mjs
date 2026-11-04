@@ -7,7 +7,8 @@ import { execFileSync } from "node:child_process";
 import process from "node:process";
 import { pathToFileURL } from "node:url";
 var ALIAS = { "is-webcomponents": ["iswc-root"], "iswc-root": ["is-webcomponents"] };
-var RAICES_DEFAULT = ["index.html", "sw.js", "staticwebapp.config.json", "manifest.json", "src", "view", "demo", "public"];
+var RAICES_DEFAULT = ["index.html", "sw.js", "staticwebapp.config.json", "manifest.json", "deno.json", "src", "view", "demo", "public"];
+var ALIAS_KIT = "@jeff-aporta/iswc-base/";
 var SALTAR_DEFAULT = ["node_modules", "vendor", "dist", ".tmp-scss", ".git"];
 var EXT = /\.(html|ts|js|mjs|json|css|scss|md)$/;
 var ONLINE = /raw\.githubusercontent\.com\/[^/\s]+\/[^/\s]+\/main\/(?:dist\/cdn\/)?(?:vendor-distributions\/(?:shared\/tools\/(?:vendor|pin-update)|client\/tools\/(?:download-iconify|render-lote))\.(?:ts|mjs)|skills\/[^/\s]+\/tools\/[^/\s]+\.(?:ts|mjs))\b|--reload=https:\/\/raw\.githubusercontent\.com\/[^/\s]+\/[^/\s]+\/(?![\w-])/;
@@ -148,6 +149,20 @@ function verificarLocal(local, sha = "") {
   }
   return { accesible: true, motivo: "ok", head, tieneSha };
 }
+var urlAlias = (sha, op = opciones()) => `https://cdn.jsdelivr.net/gh/${op.repo}@${sha}/dist/cdn/`;
+function fijarAlias(texto, nuevo, op, reNombres) {
+  const reEntrada = new RegExp(`("${esc(ALIAS_KIT)}"\\s*:\\s*")([^"]*)(")`, "g");
+  const deEsteRepo = new RegExp(`${esc(op.owner)}\\/${reNombres}[@/]`);
+  let n = 0;
+  const salida = texto.replace(reEntrada, (m, pre, url, post) => {
+    if (!deEsteRepo.test(url)) return m;
+    const canonica = urlAlias(nuevo, op);
+    if (url === canonica) return m;
+    n += 1;
+    return `${pre}${canonica}${post}`;
+  });
+  return { salida, n };
+}
 function actualizarPines(nuevo, op = opciones(), viejos = null) {
   const { reNombres } = regexes(op);
   const rel = (f) => relative(op.root, f).replace(/\\/g, "/");
@@ -160,7 +175,9 @@ function actualizarPines(nuevo, op = opciones(), viejos = null) {
   const tocados = [];
   for (const f of archivos(op)) {
     const t = readFileSync(f, "utf8");
-    const next = t.replace(reViejo, (m) => {
+    const conAlias = fijarAlias(t, nuevo, op, reNombres);
+    n += conAlias.n;
+    const next = conAlias.salida.replace(reViejo, (m) => {
       const r = `${op.nombre}@${nuevo}`;
       if (m !== r) n += 1;
       return r;
@@ -256,6 +273,7 @@ if (esPrincipal()) {
   process.exit(await protocolo(String(args.nuevo), op, args.viejo ? String(args.viejo) : ""));
 }
 export {
+  ALIAS_KIT,
   CABECERA_VENDOR,
   ONLINE,
   SHA,
@@ -267,5 +285,6 @@ export {
   ultimoPublicado,
   ultimoSha,
   ultimosShas,
+  urlAlias,
   verificarLocal
 };

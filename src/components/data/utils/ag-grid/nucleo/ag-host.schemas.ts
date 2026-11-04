@@ -1,7 +1,7 @@
 /** Tipos de host.ts. */
 
-import type { Capa, Zona } from '../contrato.schemas.js';
-import type { GridApi } from '../../../schemas/datagrid-types.schemas.js';
+import type { Capa, Zona } from '@jeff-aporta/iswc-base/components/data/utils/ag-grid/contrato.schemas.js';
+import type { GridApi } from '@jeff-aporta/iswc-base/components/data/schemas/datagrid-types.schemas.js';
 import type { SelectionModeLocal } from './tipos.schemas.js';
 import type { crearNucleo } from './ag-host.js';
 

@@ -1,19 +1,19 @@
-import { adoptCss, defineElement, emit } from '../../core/element.js';
-import '../actions/button.js';
-import '../forms/input.js';
-import '../forms/textarea.js';
-import '../forms/select.js';
-import '../forms/option.js';
-import '../forms/checkbox.js';
-import '../forms/switch.js';
-import '../forms/radio.js';
-import { ElementBase } from '../../core/element-base.js';
+import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import '@jeff-aporta/iswc-base/components/actions/button.js';
+import '@jeff-aporta/iswc-base/components/forms/input.js';
+import '@jeff-aporta/iswc-base/components/forms/textarea.js';
+import '@jeff-aporta/iswc-base/components/forms/select.js';
+import '@jeff-aporta/iswc-base/components/forms/option.js';
+import '@jeff-aporta/iswc-base/components/forms/checkbox.js';
+import '@jeff-aporta/iswc-base/components/forms/switch.js';
+import '@jeff-aporta/iswc-base/components/forms/radio.js';
+import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
 import {
   applyJsonBody,
   html2json,
   hostToJson,
   json2html,
-} from '../../core/json-html.js';
+} from '@jeff-aporta/iswc-base/core/json-html.js';
 import { getValues, setValues } from './utils/form-json.js';
 
 /**

@@ -15,8 +15,8 @@ import { FilaFlotante, PopupFiltro } from './ui/flotantes.js';
 import { BarraEstado, Overlays } from './ui/pie-y-capas.js';
 import { PanelColumnas } from './ui/panel-columnas.js';
 import type { ColumnaOrden, ItemOrden, ModeloAvanzado, ModeloColumna, ModeloFiltros } from './filtros.schemas.js';
-import type { ColumnState, RowNode } from '../../../schemas/datagrid-types.schemas.js';
-import type { Desinstalar, Flotante, GridHost } from '../contrato.schemas.js';
+import type { ColumnState, RowNode } from '@jeff-aporta/iswc-base/components/data/schemas/datagrid-types.schemas.js';
+import type { Desinstalar, Flotante, GridHost } from '@jeff-aporta/iswc-base/components/data/utils/ag-grid/contrato.schemas.js';
 
 function necesitaOrden(grid: GridHost, modelo: ItemOrden[]): boolean {
   if (grid.opcion('accentedSort') === true) return true;

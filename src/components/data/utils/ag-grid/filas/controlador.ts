@@ -9,9 +9,9 @@
  * Totales, pivote y tree data salen como hojas sinteticas: asi sus valores quedan
  * alineados con las columnas y el host las pinta con su camino normal de celdas.
  */
-import { formatValue } from '../../datagrid-core/value-formatter.js';
-import { filterRows } from '../../datagrid-core/pipeline-filtering.js';
-import { sortRows } from '../../datagrid-core/pipeline-sorting.js';
+import { formatValue } from '@jeff-aporta/iswc-base/components/data/utils/datagrid-core/value-formatter.js';
+import { filterRows } from '@jeff-aporta/iswc-base/components/data/utils/datagrid-core/pipeline-filtering.js';
+import { sortRows } from '@jeff-aporta/iswc-base/components/data/utils/datagrid-core/pipeline-sorting.js';
 import { ControladorDetalle } from './detalle.js';
 import { validarEstado, fusionarEstado, leerEstado, omitirPropiedades } from './estado-grilla.js';
 import { ExpansionGrupos } from './expansion.js';
@@ -22,9 +22,9 @@ import { pivotar, resolverIdPivote } from './pivote.js';
 import { aplicarLote } from './transacciones.js';
 import { construirTree, filtrarTree } from './ag-tree-data.js';
 import type { ArbolVigente, ColPivote, CriterioGrupo, DefPivote, DatasourceInfinito, DatasourceServidor, DatasourceViewport, DuenoExport, EstadoGrilla, FuncionAgg, IdFila, InfoSintetica, LecturaPipeline, NivelGrupo, NodoArbol, OpcionesAplanar, OpcionesPivote, ParamsExport, PosicionTotal, ResultadoNodos, ResultadoPivote, TicketAsincrono, Transaccion, ValorAgg } from './filas.schemas.js';
-import type { ColumnDef } from '../../../schemas/datagrid-types.schemas.js';
-import type { ColumnState, GridApi, GridState, RowData, RowNode } from '../../../schemas/datagrid-types.schemas.js';
-import type { ContextoCelda, Decoracion, Desinstalar, FilaDisplay, GridHost, ModeloFilas } from '../contrato.schemas.js';
+import type { ColumnDef } from '@jeff-aporta/iswc-base/components/data/schemas/datagrid-types.schemas.js';
+import type { ColumnState, GridApi, GridState, RowData, RowNode } from '@jeff-aporta/iswc-base/components/data/schemas/datagrid-types.schemas.js';
+import type { ContextoCelda, Decoracion, Desinstalar, FilaDisplay, GridHost, ModeloFilas } from '@jeff-aporta/iswc-base/components/data/utils/ag-grid/contrato.schemas.js';
 
 const ID_AUTO = 'ag-Grid-AutoColumn';
 const CLASE_TOGGLE = 'iswc-ag-arbol-toggle';

@@ -56,15 +56,15 @@
  *   iswc-examples-category   detail: { category }
  *                                  Se emite al cambiar de tab de categoria.
  */
-import { adoptCss, defineElement, emit } from '../../core/element.js';
-import { ElementBase } from '../../core/element-base.js';
-import { setStringAttr } from '../../core/reflect.js';
+import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
+import { setStringAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
 // W19 reuso: cada bloque de UI del carrusel se monta con un componente del kit.
 // Estos imports son side-effect: registran los CE si el bundle los necesita.
-import '../layout/card.js';
-import '../actions/button.js';
-import '../media/icon.js';
-import '../navigation/tab-group.js';
+import '@jeff-aporta/iswc-base/components/layout/card.js';
+import '@jeff-aporta/iswc-base/components/actions/button.js';
+import '@jeff-aporta/iswc-base/components/media/icon.js';
+import '@jeff-aporta/iswc-base/components/navigation/tab-group.js';
 import type { ExampleSpec } from "./schemas/examples-carousel.schemas.js";
 
 const OBSERVED = ['tag', 'target', 'label', 'lede', 'default-index', 'category-field'];

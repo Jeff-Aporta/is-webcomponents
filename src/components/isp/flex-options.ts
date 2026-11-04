@@ -1,12 +1,12 @@
-import { ElementBase } from '../../core/element-base.js';
-import { adoptCss, defineElement } from '../../core/element.js';
-import '../actions/button.js';
-import '../actions/button-group.js';
-import '../actions/check-icon-button.js';
-import '../actions/dropdown.js';
-import '../actions/dropdown-item.js';
-import '../layout/divider.js';
-import '../media/icon.js';
+import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
+import { adoptCss, defineElement } from '@jeff-aporta/iswc-base/core/element.js';
+import '@jeff-aporta/iswc-base/components/actions/button.js';
+import '@jeff-aporta/iswc-base/components/actions/button-group.js';
+import '@jeff-aporta/iswc-base/components/actions/check-icon-button.js';
+import '@jeff-aporta/iswc-base/components/actions/dropdown.js';
+import '@jeff-aporta/iswc-base/components/actions/dropdown-item.js';
+import '@jeff-aporta/iswc-base/components/layout/divider.js';
+import '@jeff-aporta/iswc-base/components/media/icon.js';
 import { paintFlexOptions } from './utils/tree-view/paint-flex-options.js';
 import { type FlexActionEntry } from './schemas/tree-view-flex-options.schemas.js';
 

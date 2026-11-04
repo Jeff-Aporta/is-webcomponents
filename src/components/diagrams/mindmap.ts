@@ -1,13 +1,13 @@
-import { adoptCss, defineElement, emit } from '../../core/element.js';
+import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
 import { DiagramElementBase } from './utils/diagram-element-base.js';
 import { resolveMindmapSpec, computeMindmapLayout } from './utils/mindmap-spec.js';
 import type { DiagramTheme } from './schemas/diagram-types.schemas.js';
-import { tkHueToHex } from '../../core/tk-hue.js';
-import { inlineMdWeb } from '../../core/tk-inline-md.js';
-import { svgIconGroup } from '../../core/tk-icon-inline.js';
+import { tkHueToHex } from '@jeff-aporta/iswc-base/core/tk-hue.js';
+import { inlineMdWeb } from '@jeff-aporta/iswc-base/core/tk-inline-md.js';
+import { svgIconGroup } from '@jeff-aporta/iswc-base/core/tk-icon-inline.js';
 import { registerDiagramKind } from './utils/diagram-kinds.js';
 import { wrapText, buildTspans } from './utils/diagram-text-wrap.js';
-import { svgEl } from '../../core/svg-chart-engine.js';
+import { svgEl } from '@jeff-aporta/iswc-base/core/svg-chart-engine.js';
 import type { MindmapLayout } from "./schemas/mindmap-spec.schemas.js";
 import type { NodeEntry, EdgeEntry } from "./schemas/mindmap.schemas.js";
 

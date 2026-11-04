@@ -6,10 +6,10 @@
  */
 
 import type { Colref, Tx } from './api-ag.schemas.js';
-import { cellText } from '../../datagrid-core/value-formatter.js';
+import { cellText } from '@jeff-aporta/iswc-base/components/data/utils/datagrid-core/value-formatter.js';
 import type { Motor } from './motor.schemas.js';
-import type { ColumnState, RowData, RowNode } from '../../../schemas/datagrid-types.schemas.js';
-import type { GridHost, OpcionesGrid } from '../contrato.schemas.js';
+import type { ColumnState, RowData, RowNode } from '@jeff-aporta/iswc-base/components/data/schemas/datagrid-types.schemas.js';
+import type { GridHost, OpcionesGrid } from '@jeff-aporta/iswc-base/components/data/utils/ag-grid/contrato.schemas.js';
 
 const idDe = (c: Colref): string => (typeof c === 'string' ? c : c.colId);
 

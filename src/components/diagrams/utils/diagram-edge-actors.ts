@@ -9,8 +9,8 @@
 
 import { spreadOrthogonalPaths } from './diagram-edge-spread.js';
 import { pathPoints as parsePathPoints } from './diagram-arrow.js';
-import { rectsOverlap } from '../../../core/diagram-grid.js';
-import type { XYPoint, RectLike, LabeledEdge, PlaceEdgeActorsOpts, PlaceEdgeActorsResult, EdgeActorLayout } from "../schemas/diagram-edge-actors.schemas.js";
+import { rectsOverlap } from '@jeff-aporta/iswc-base/core/diagram-grid.js';
+import type { XYPoint, RectLike, LabeledEdge, PlaceEdgeActorsOpts, PlaceEdgeActorsResult, EdgeActorLayout } from "@jeff-aporta/iswc-base/components/diagrams/schemas/diagram-edge-actors.schemas.js";
 
 export const EDGE_ACTOR_H = 16;
 

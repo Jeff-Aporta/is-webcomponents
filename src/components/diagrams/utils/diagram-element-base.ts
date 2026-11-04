@@ -14,7 +14,7 @@
  * Uso por la subclase:
  *
  *   import { DiagramElementBase } from './diagram-element-base.js';
- *   import { adoptCss } from '../../../core/element.js';
+ *   import { adoptCss } from '@jeff-aporta/iswc-base/core/element.js';
  *
  *   class IswcFlowchart extends DiagramElementBase {
  *     static get observedAttributes(): string[] {
@@ -56,12 +56,12 @@
  *     render, tal como hace flowchart.js hoy.
  */
 
-import { ElementBase } from '../../../core/element-base.js';
-import { findThemeContainer, readTheme } from '../../../core/theme-scope.js';
+import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
+import { findThemeContainer, readTheme } from '@jeff-aporta/iswc-base/core/theme-scope.js';
 import { paletteTheme } from './diagram-palette.js';
-import type { DiagramTheme } from '../schemas/diagram-types.schemas.js';
+import type { DiagramTheme } from '@jeff-aporta/iswc-base/components/diagrams/schemas/diagram-types.schemas.js';
 import { hostStyleName, loadStylesDiagram } from './diagram-styles.js';
-import { svgIconsReady } from '../../../core/tk-icon-inline.js';
+import { svgIconsReady } from '@jeff-aporta/iswc-base/core/tk-icon-inline.js';
 
 /** ¿Hay alguna referencia `{ path, query }` en el payload? (recorrido liviano, sin dependencias). */
 function tieneRefs(v: unknown, n = 0): boolean {
@@ -359,7 +359,7 @@ export class DiagramElementBase extends ElementBase {
    *  Pasa de largo atributos opt-in (hoy `animation`) para que la copia
    *  montada dentro del visor conserve los efectos declarados en la fuente. */
   async openOwnViewer(kind: string): Promise<void> {
-    await import('../diagram-lightbox.js');
+    await import('@jeff-aporta/iswc-base/components/diagrams/diagram-lightbox.js');
     let lb = this.#ownViewer as HTMLElement & { payload: unknown; open: boolean } | null;
     if (!lb || !lb.isConnected) {
       lb = document.createElement('iswc-diagram-lightbox') as unknown as HTMLElement & { payload: unknown; open: boolean };

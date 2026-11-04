@@ -9,9 +9,9 @@ import { ControladorFilas } from './controlador.js';
 import { datosCsv } from './exportar.js';
 import { moverEn, crearPanelAgrupacion } from './panel-agrupacion.js';
 import type { DatasourceInfinito, EstadoGrilla, ExitoServidor, FuncionAgg, ParamsExport, RefrescoServidor, RutaServidor, Transaccion, TransaccionServidor, ResultadoNodos } from './filas.schemas.js';
-import type { ColumnDef } from '../../../schemas/datagrid-types.schemas.js';
-import type { ColumnState } from '../../../schemas/datagrid-types.schemas.js';
-import type { ContextoMenu, Desinstalar, GridHost, ItemMenu } from '../contrato.schemas.js';
+import type { ColumnDef } from '@jeff-aporta/iswc-base/components/data/schemas/datagrid-types.schemas.js';
+import type { ColumnState } from '@jeff-aporta/iswc-base/components/data/schemas/datagrid-types.schemas.js';
+import type { ContextoMenu, Desinstalar, GridHost, ItemMenu } from '@jeff-aporta/iswc-base/components/data/utils/ag-grid/contrato.schemas.js';
 
 export const nombre = 'filas';
 

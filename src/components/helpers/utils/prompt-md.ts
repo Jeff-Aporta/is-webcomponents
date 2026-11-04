@@ -1,6 +1,6 @@
 import { mdToHtml } from './md-lite.js';
-import type { OpcionesMdLite } from '../schemas/md-lite.schemas.js';
-import type { BodySegment, VarPlaceholder } from "../schemas/prompt-md.schemas.js";
+import type { OpcionesMdLite } from '@jeff-aporta/iswc-base/components/helpers/schemas/md-lite.schemas.js';
+import type { BodySegment, VarPlaceholder } from "@jeff-aporta/iswc-base/components/helpers/schemas/prompt-md.schemas.js";
 
 /**
  * prompt-md.js — Variables {{nombre}} + render MD/HTML híbrido para

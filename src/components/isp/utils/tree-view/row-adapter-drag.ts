@@ -1,5 +1,5 @@
 import { TRABase } from "./row-adapter-base.js";
-import type { DragOverPosition, SummaryRect } from "../../schemas/tree-view-row-adapter-drag.schemas.js";
+import type { DragOverPosition, SummaryRect } from "@jeff-aporta/iswc-base/components/isp/schemas/tree-view-row-adapter-drag.schemas.js";
 
 /**
  * Posición relativa al target durante una operación de drag & drop.

@@ -1,7 +1,7 @@
-import { adoptCss, defineElement, emit } from '../../core/element.js';
-import '../actions/check-icon-button.js';
-import { findThemeContainer } from '../../core/theme-scope.js';
-import { guardarAppCfg } from '../../core/app-cfg.js';
+import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import '@jeff-aporta/iswc-base/components/actions/check-icon-button.js';
+import { findThemeContainer } from '@jeff-aporta/iswc-base/core/theme-scope.js';
+import { guardarAppCfg } from '@jeff-aporta/iswc-base/core/app-cfg.js';
 import type { IswcCheckIconButtonEvent, ThemeChangeDetail, ThemeName } from './schemas/theme-toggle.schemas.js';
 
 /**

@@ -29,27 +29,27 @@
  * `format` / `formatConfig` — JSON estilo Prettier:
  *   { tabWidth, useTabs, printWidth, semi, singleQuote, trailingComma, endOfLine }
  */
-import { adoptCss, defineElement, emit, upgradeProperties } from '../../core/element.js';
+import { adoptCss, defineElement, emit, upgradeProperties } from '@jeff-aporta/iswc-base/core/element.js';
 import {
   attachFormInternals, setFormValue, setCustomState,
-} from '../../core/form-associated.js';
-import { ElementBase } from '../../core/element-base.js';
-import { setStringAttr } from '../../core/reflect.js';
+} from '@jeff-aporta/iswc-base/core/form-associated.js';
+import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
+import { setStringAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
 import {
   listLanguages, registerLanguage, resolveLanguage, inferLanguage,
-} from '../../core/code-langs.js';
+} from '@jeff-aporta/iswc-base/core/code-langs.js';
 import { formatCode, normalizeFormatConfig, DEFAULT_FORMAT } from './utils/code-format.js';
 import { applyThemeConfig, brandMonoTheme, parseThemeConfig } from './utils/code-theme.js';
 import type { CodeThemeConfig } from './schemas/code-theme.schemas.js';
-import { softFormat, softFormatMode } from '../../core/code-text.js';
+import { softFormat, softFormatMode } from '@jeff-aporta/iswc-base/core/code-text.js';
 import {
   code2json, json2code, parseCodeDocument, normalizeMark, rebaseMarks,
 } from './utils/code-model.js';
 import type { CodeDocument as CodeDocModel, CodeMark as CodeMarkModel } from './schemas/code-model.schemas.js';
-import { tokenizeCode, lineToHtml, tokenClass, escapeHtml, tokensToText } from '../../core/code-highlight.js';
-import type { Token as HighlightToken, HighlightLine as CodeHighlightLine } from '../../core/schemas/code-highlight.schemas.js';
+import { tokenizeCode, lineToHtml, tokenClass, escapeHtml, tokensToText } from '@jeff-aporta/iswc-base/core/code-highlight.js';
+import type { Token as HighlightToken, HighlightLine as CodeHighlightLine } from '@jeff-aporta/iswc-base/core/schemas/code-highlight.schemas.js';
 import type { CodeFormatConfig as CodeFmtConfigShared } from './schemas/code-format.schemas.js';
-import '../feedback/tooltip.js';
+import '@jeff-aporta/iswc-base/components/feedback/tooltip.js';
 import type { CodeMarkKind, CodeMarkTone, CodeMark, CodeDocument, CodeFormatConfig, CodeLangDef, IswcTooltipEl, HighlightLine, HighlightResult } from "./schemas/code.schemas.js";
 
 // Tipos locales (los _shared sólo los declaran vía JSDoc; replicamos forma).

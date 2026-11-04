@@ -6,7 +6,7 @@
  * mientras no se conoce el ultimo indice crece con `desborde` filas de margen.
  */
 import type { BloqueCache, EstadoBloque, OpcionesCache } from './filas.schemas.js';
-import type { RowData } from '../../../schemas/datagrid-types.schemas.js';
+import type { RowData } from '@jeff-aporta/iswc-base/components/data/schemas/datagrid-types.schemas.js';
 
 export class CacheBloques {
   #op: OpcionesCache;

@@ -1,6 +1,6 @@
 /** classify.ts — motor de la herramienta `classify`: una pregunta de opción sobre el texto. */
 import { Classifier } from 'runonweb/classify';
-import type { Crear } from '../schemas/ai.schemas.js';
+import type { Crear } from '@jeff-aporta/iswc-base/ai/schemas/ai.schemas.js';
 
 export const crear: Crear = async (_o, alProgreso) => {
   const m = new Classifier({ onProgress: alProgreso });

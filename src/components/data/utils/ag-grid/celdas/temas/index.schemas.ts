@@ -1,6 +1,6 @@
 /** Tipos de index.ts. */
 
-import type { ParamsTema } from '../schemas.js';
+import type { ParamsTema } from '@jeff-aporta/iswc-base/components/data/utils/ag-grid/celdas/schemas.js';
 
 export type ModoColor = 'light' | 'dark';
 

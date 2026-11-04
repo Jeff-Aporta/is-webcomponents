@@ -20,6 +20,7 @@ import { existsSync, readFileSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+import { rutaDeEspecificador } from '../_shared/alias.ts';
 
 const { test, lista } = coleccionPruebas({ categoria: 'what' });
 
@@ -45,8 +46,9 @@ const sinComentarios = (s: string): string =>
 function schemasDe(ruta: string): string {
   const src = readFileSync(ruta, 'utf8');
   let out = '';
-  for (const m of src.matchAll(/from\s*['"](\.[^'"]+\.schemas)\.js['"]/g)) {
-    const f = join(dirname(ruta), `${m[1]}.ts`);
+  // Relativo (misma carpeta) o por alias `@jeff-aporta/iswc-base/<ruta>` (specs/typescript/spec.md S-TS2b).
+  for (const m of src.matchAll(/from\s*['"]((?:\.|@jeff-aporta\/iswc-base\/)[^'"]+\.schemas)\.js['"]/g)) {
+    const f = `${rutaDeEspecificador(dirname(ruta), m[1]!)}.ts`;
     assert.ok(existsSync(f), `${f} debe existir (importado por ${ruta})`);
     out += '\n' + readFileSync(f, 'utf8');
   }

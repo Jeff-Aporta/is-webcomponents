@@ -8,6 +8,7 @@
 // protocolo de output del build principal (esbuild + plugin externalComponents
 // + defineCss para inline del CSS).
 import { build } from 'esbuild';
+import { aliasKit } from '@jeff-aporta/iswc-base/cdn/build/alias.ts';
 import { mkdir, readFile, stat } from 'node:fs/promises';
 import { join, dirname, basename, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -78,7 +79,7 @@ const bundleJs = (entry, outfile, plugins, banner, define) =>
     format: 'esm',
     target: 'es2020',
     legalComments: 'none',
-    plugins,
+    plugins: [aliasKit(), ...(plugins ?? [])],
     ...(define ? { define } : {}),
     ...(banner ? { banner: { js: banner } } : {}),
   });

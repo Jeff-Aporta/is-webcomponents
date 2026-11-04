@@ -1,7 +1,7 @@
 /** Tipos de motor.ts. */
 
-import type { ColumnState, RowNode } from '../../../schemas/datagrid-types.schemas.js';
-import type { ContextoCelda, Decoracion, Desinstalar, FilaDisplay, PresentacionCelda, PresentacionFila, RendererMontable } from '../contrato.schemas.js';
+import type { ColumnState, RowNode } from '@jeff-aporta/iswc-base/components/data/schemas/datagrid-types.schemas.js';
+import type { ContextoCelda, Decoracion, Desinstalar, FilaDisplay, PresentacionCelda, PresentacionFila, RendererMontable } from '@jeff-aporta/iswc-base/components/data/utils/ag-grid/contrato.schemas.js';
 import type { crearMotor } from './motor.js';
 
 export type ColPos = { col: ColumnState; x: number; ancho: number; aria: number; };

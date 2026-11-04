@@ -29,7 +29,7 @@ export const FLUJO = {
   pulso: { periodo: 3, inicio: 1.5, crece: 2.4, alfa: 0.55 },
 } as const;
 
-import type { TOpcionesFlujo } from '../schemas/diagram-flow.schemas.js';
+import type { TOpcionesFlujo } from '@jeff-aporta/iswc-base/components/diagrams/schemas/diagram-flow.schemas.js';
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
 

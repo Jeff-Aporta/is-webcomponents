@@ -42,7 +42,7 @@
  */
 
 import { DiagramElementBase } from './utils/diagram-element-base.js';
-import { emit } from '../../core/element.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
 import type { EditorMode, EditorSpecLike, IswcStateChangeDetail, IswcEditorConstructor, EditorSpecGet } from "./schemas/_editor-base.schemas.js";
 
 /** Modo de operación del editor. 'edit' muestra toolbar + panel; 'view' los oculta. */

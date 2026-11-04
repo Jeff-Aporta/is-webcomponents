@@ -5,8 +5,8 @@ import { resolverMenu } from './resumen.js';
 import { TEXTOS } from './textos.js';
 import type { MotorFiltros } from './filtros-motor.js';
 import type { ItemOrden } from './filtros.schemas.js';
-import type { ColumnState, RowNode } from '../../../schemas/datagrid-types.schemas.js';
-import type { ContextoMenu, ItemMenu } from '../contrato.schemas.js';
+import type { ColumnState, RowNode } from '@jeff-aporta/iswc-base/components/data/schemas/datagrid-types.schemas.js';
+import type { ContextoMenu, ItemMenu } from '@jeff-aporta/iswc-base/components/data/utils/ag-grid/contrato.schemas.js';
 
 const COLUMNA_DEFECTO = ['sortAscending', 'sortDescending', 'sortAbsoluteAscending', 'sortAbsoluteDescending', 'sortUnSort', 'separator', 'columnFilter', 'separator', 'pinSubMenu', 'valueAggSubMenu', 'autoSizeThis', 'autoSizeAll', 'separator', 'rowGroup', 'rowUnGroup', 'separator', 'resetColumns', 'separator', 'columnChooser', 'expandAll', 'contractAll'];
 const CONTEXTO_DEFECTO = ['copy', 'copyWithHeaders', 'copyWithGroupHeaders', 'paste', 'separator', 'export'];

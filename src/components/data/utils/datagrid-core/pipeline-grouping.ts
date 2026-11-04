@@ -19,8 +19,8 @@
 
 import { AggFunc } from './types.js';
 import { getCellValue, formatValue } from './value-formatter.js';
-import type { ColumnState, DisplayRow, RowNode } from "../../schemas/datagrid-types.schemas.js";
-import { CuboSchema, type Cubo } from '../../schemas/datagrid-pipeline-grouping.schemas.js';
+import type { ColumnState, DisplayRow, RowNode } from "@jeff-aporta/iswc-base/components/data/schemas/datagrid-types.schemas.js";
+import { CuboSchema, type Cubo } from '@jeff-aporta/iswc-base/components/data/schemas/datagrid-pipeline-grouping.schemas.js';
 
 /**
  * @param {string} fn

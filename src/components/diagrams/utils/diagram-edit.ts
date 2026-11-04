@@ -17,8 +17,8 @@
  * `mode === "edit"`.
  */
 
-import { readIswc, removeIswc, writeIswc } from '../../../core/iswc-storage.js';
-import type { NodeOverride, EdgeOverride, NodeOverrideMap, EdgeOverrideMap, DiagramOverrides, EditorAnchor, DiagramPersist, LayoutChangeDetail, NodeLayoutEntry, EdgeLayoutEntry, LayoutLike, NodeDragMove, NodeDragEnd, NodeDragDestroy, InlineEditorInitial, InlineEditorSave, InlineEditorCancel, OpenInlineEditorOpts } from "../schemas/diagram-edit.schemas.js";
+import { readIswc, removeIswc, writeIswc } from '@jeff-aporta/iswc-base/core/iswc-storage.js';
+import type { NodeOverride, EdgeOverride, NodeOverrideMap, EdgeOverrideMap, DiagramOverrides, EditorAnchor, DiagramPersist, LayoutChangeDetail, NodeLayoutEntry, EdgeLayoutEntry, LayoutLike, NodeDragMove, NodeDragEnd, NodeDragDestroy, InlineEditorInitial, InlineEditorSave, InlineEditorCancel, OpenInlineEditorOpts } from "@jeff-aporta/iswc-base/components/diagrams/schemas/diagram-edit.schemas.js";
 const STORAGE_PREFIX = 'diagram:';
 
 /** Override parcial por nodo (posición / label / hue). */

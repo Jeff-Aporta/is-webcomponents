@@ -1,7 +1,7 @@
-import { adoptCss, defineElement, emit } from '../../core/element.js';
-import { escapeHtml } from '../../core/dom-utils.js';
-import '../media/icon.js';
-import '../actions/button.js';
+import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { escapeHtml } from '@jeff-aporta/iswc-base/core/dom-utils.js';
+import '@jeff-aporta/iswc-base/components/media/icon.js';
+import '@jeff-aporta/iswc-base/components/actions/button.js';
 
 /**
  * <iswc-dropzone> — Zona de drop con preview, cola y progreso por archivo.

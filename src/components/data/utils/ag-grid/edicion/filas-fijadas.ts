@@ -6,13 +6,13 @@
 import { apiPublica } from './apoyo.js';
 import { ladoPermitido } from './filas-movidas.js';
 import { partirFijadas } from './filas-movidas.js';
-import type { ContextoMenu } from '../contrato.schemas.js';
-import type { Desinstalar } from '../contrato.schemas.js';
-import type { FilaDisplay } from '../contrato.schemas.js';
-import type { GridHost } from '../contrato.schemas.js';
-import type { ItemMenu } from '../contrato.schemas.js';
-import type { RowData } from '../../../schemas/datagrid-types.schemas.js';
-import type { RowNode } from '../../../schemas/datagrid-types.schemas.js';
+import type { ContextoMenu } from '@jeff-aporta/iswc-base/components/data/utils/ag-grid/contrato.schemas.js';
+import type { Desinstalar } from '@jeff-aporta/iswc-base/components/data/utils/ag-grid/contrato.schemas.js';
+import type { FilaDisplay } from '@jeff-aporta/iswc-base/components/data/utils/ag-grid/contrato.schemas.js';
+import type { GridHost } from '@jeff-aporta/iswc-base/components/data/utils/ag-grid/contrato.schemas.js';
+import type { ItemMenu } from '@jeff-aporta/iswc-base/components/data/utils/ag-grid/contrato.schemas.js';
+import type { RowData } from '@jeff-aporta/iswc-base/components/data/schemas/datagrid-types.schemas.js';
+import type { RowNode } from '@jeff-aporta/iswc-base/components/data/schemas/datagrid-types.schemas.js';
 import type { LadoFijado } from './schemas/edicion.schemas.js';
 import type { PermisoFijado } from './schemas/edicion.schemas.js';
 

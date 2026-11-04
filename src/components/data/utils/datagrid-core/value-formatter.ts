@@ -9,7 +9,7 @@
  */
 
 import { ColumnType } from './types.js';
-import type { ColumnState, Lectora, RowNode } from "../../schemas/datagrid-types.schemas.js";
+import type { ColumnState, Lectora, RowNode } from "@jeff-aporta/iswc-base/components/data/schemas/datagrid-types.schemas.js";
 
 /**
  * @param {ColumnState} col

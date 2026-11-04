@@ -16,8 +16,8 @@
  */
 import { ROUTING_COSTS_DEFAULTS } from './routing-costs.js';
 import { pathPoints } from './diagram-arrow.js';
-import type { EmbedBox } from '../schemas/diagram-embed.schemas.js';
-import type { FlowLayoutEdge, FlowLayoutNode, FlowPoint } from '../schemas/flowchart-spec.schemas.js';
+import type { EmbedBox } from '@jeff-aporta/iswc-base/components/diagrams/schemas/diagram-embed.schemas.js';
+import type { FlowLayoutEdge, FlowLayoutNode, FlowPoint } from '@jeff-aporta/iswc-base/components/diagrams/schemas/flowchart-spec.schemas.js';
 
 /** 1U (el paso de la rejilla de ruteo del kit, 15 px): margen de las etiquetas con todo lo que no es su arista. */
 export const U = ROUTING_COSTS_DEFAULTS.grid.step;

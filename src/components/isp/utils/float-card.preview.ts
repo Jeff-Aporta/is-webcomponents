@@ -1,6 +1,6 @@
-import '../flex-options.js';
-import type { PreviewMountContext } from '../../../previews/_kit/schemas/preview.schemas.ts';
-import type { FloatCardLike, FlexOptionsLike } from "../schemas/float-card.preview.schemas.js";
+import '@jeff-aporta/iswc-base/components/isp/flex-options.js';
+import type { PreviewMountContext } from '@jeff-aporta/iswc-base/previews/_kit/schemas/preview.schemas.ts';
+import type { FloatCardLike, FlexOptionsLike } from "@jeff-aporta/iswc-base/components/isp/schemas/float-card.preview.schemas.js";
 
 export function mount(ctx: PreviewMountContext): void {
   const root = ctx.main;

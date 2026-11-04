@@ -12,18 +12,18 @@
  *
  * Local (kit self-test): añadir `local` (+ opcional `dev` para hot-reload).
  */
-import { defineElement } from '../../core/element.js';
+import { defineElement } from '@jeff-aporta/iswc-base/core/element.js';
 import './split-panel.js';
 import './drawer.js';
 import './demo.js';
 import './scrollspy.js';
 import './main.js';
 import './preview-component.js';
-import '../actions/button.js';
-import '../media/icon.js';
-import '../feedback/theme-toggle.js';
-import '../feedback/palette-selector.js';
-import '../code/code.js';
+import '@jeff-aporta/iswc-base/components/actions/button.js';
+import '@jeff-aporta/iswc-base/components/media/icon.js';
+import '@jeff-aporta/iswc-base/components/feedback/theme-toggle.js';
+import '@jeff-aporta/iswc-base/components/feedback/palette-selector.js';
+import '@jeff-aporta/iswc-base/components/code/code.js';
 import type { LoaderLike } from "./schemas/doc-demo.schemas.js";
 
 /** CSS del shell vía aliases del loader (apps pueden override con `page-styles`). */

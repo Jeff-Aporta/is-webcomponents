@@ -1,14 +1,14 @@
 /**
  * Playground <iswc-heading>: level / color / mix / mix-with / size / texto.
- * @param {import('../../../previews/_kit/schemas/preview.schemas.ts').PreviewMountContext} ctx
+ * @param {import('@jeff-aporta/iswc-base/previews/_kit/schemas/preview.schemas.ts').PreviewMountContext} ctx
  */
 
 /** `<iswc-heading>` con `level`, `color`, `mix`, `mixWith`, `size`. */
 
 /** Input element con `value`/`checked`/`disabled` y `textContent`. */
 
-import type { _HeadingLike, _InputLike } from "../schemas/heading.preview.schemas.js";
-export async function mount(ctx: import('../../../previews/_kit/schemas/preview.schemas.ts').PreviewMountContext): Promise<void> {
+import type { _HeadingLike, _InputLike } from "@jeff-aporta/iswc-base/components/isp/schemas/heading.preview.schemas.js";
+export async function mount(ctx: import('@jeff-aporta/iswc-base/previews/_kit/schemas/preview.schemas.ts').PreviewMountContext): Promise<void> {
   const root = ctx.main;
   const el = root.querySelector<HTMLElement>('#hdLive') as _HeadingLike | null;
   if (!el) return;

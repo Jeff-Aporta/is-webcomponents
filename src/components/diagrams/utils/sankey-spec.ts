@@ -1,7 +1,7 @@
-import { richTextPlain } from '../../../core/tk-rich-text.js';
+import { richTextPlain } from '@jeff-aporta/iswc-base/core/tk-rich-text.js';
 import { diagramHeaderWidth } from './diagram-header.js';
-import { resolveTkHue, SERIE_HUES } from '../../../core/tk-hue.js';
-import type { SankeyNodeSpec, SankeyLinkSpec, SankeyGroupSpec, SankeyResolvedSpec, SankeyLayoutNode, SankeyLayoutLink, SankeyLayout, SankeyLayoutOptions } from "../schemas/sankey-spec.schemas.js";
+import { resolveTkHue, SERIE_HUES } from '@jeff-aporta/iswc-base/core/tk-hue.js';
+import type { SankeyNodeSpec, SankeyLinkSpec, SankeyGroupSpec, SankeyResolvedSpec, SankeyLayoutNode, SankeyLayoutLink, SankeyLayout, SankeyLayoutOptions } from "@jeff-aporta/iswc-base/components/diagrams/schemas/sankey-spec.schemas.js";
 
 /**
  * Especificación y layout de diagramas de Sankey (sin Mermaid).

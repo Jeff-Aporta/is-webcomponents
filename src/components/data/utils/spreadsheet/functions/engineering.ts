@@ -1,8 +1,8 @@
 // engineering.ts — ingeniería (bases, bits, conversión) y funciones de base de datos (D*).
-import { criterion } from '../criteria.js';
-import type { Ctx } from '../evaluator.schemas.js';
-import { compare, ERR, toNumber, toText } from '../values.js';
-import type { EvalValue, Matrix, Scalar } from '../values.schemas.js';
+import { criterion } from '@jeff-aporta/iswc-base/components/data/utils/spreadsheet/criteria.js';
+import type { Ctx } from '@jeff-aporta/iswc-base/components/data/utils/spreadsheet/evaluator.schemas.js';
+import { compare, ERR, toNumber, toText } from '@jeff-aporta/iswc-base/components/data/utils/spreadsheet/values.js';
+import type { EvalValue, Matrix, Scalar } from '@jeff-aporta/iswc-base/components/data/utils/spreadsheet/values.schemas.js';
 import { lifted, matrix, scalar } from './fn-helpers.js';
 import { def, lookupFn } from './registry.js';
 import { erf } from './stats.js';

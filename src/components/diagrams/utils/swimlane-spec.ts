@@ -1,10 +1,10 @@
-import { richTextPlain } from '../../../core/tk-rich-text.js';
+import { richTextPlain } from '@jeff-aporta/iswc-base/core/tk-rich-text.js';
 import { aristasDeRetorno, claveArista } from './diagram-graph.js';
 import { diagramHeaderWidth } from './diagram-header.js';
 import { applyEdgeActorLayout } from './diagram-edge-actors.js';
 import { assignEdgeHues } from './diagram-edge-style.js';
-import { resolveTkHue, SERIE_HUES } from '../../../core/tk-hue.js';
-import type { SwimlaneStepKind, SwimlaneLaneSpec, SwimlaneStepSpec, SwimlaneLinkSpec, SwimlaneResolvedSpec, SwimlaneLayoutLane, SwimlaneLayoutStep, SwimlaneLayoutLink, SwimlaneLayout } from "../schemas/swimlane-spec.schemas.js";
+import { resolveTkHue, SERIE_HUES } from '@jeff-aporta/iswc-base/core/tk-hue.js';
+import type { SwimlaneStepKind, SwimlaneLaneSpec, SwimlaneStepSpec, SwimlaneLinkSpec, SwimlaneResolvedSpec, SwimlaneLayoutLane, SwimlaneLayoutStep, SwimlaneLayoutLink, SwimlaneLayout } from "@jeff-aporta/iswc-base/components/diagrams/schemas/swimlane-spec.schemas.js";
 
 /**
  * Especificación y layout de diagramas de carriles (cross-functional flowchart).

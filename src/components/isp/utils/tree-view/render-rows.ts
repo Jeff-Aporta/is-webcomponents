@@ -7,11 +7,11 @@
  * drag, float-card con actions y dropdown de cascade options. Recursivo:
  * si el nodo tiene hijos y está expandido, pinta los hijos dentro.
  */
-import "../../flex-options.js";
-import "../../float-card.js";
-import type { TreeActionEntry, TreeActionSpec, TNode } from '../../schemas/tree-view-types.schemas.js';
-import { HandlerStoreSchema, ControllerWithLockSchema, type HandlerStore, type ControllerWithLock } from "../../schemas/tree-view-render-rows.schemas.js";
-import type { RenderOpts, RenderAdapter, RowController } from "../../schemas/tree-view-render-rows.schemas.js";
+import "@jeff-aporta/iswc-base/components/isp/flex-options.js";
+import "@jeff-aporta/iswc-base/components/isp/float-card.js";
+import type { TreeActionEntry, TreeActionSpec, TNode } from '@jeff-aporta/iswc-base/components/isp/schemas/tree-view-types.schemas.js';
+import { HandlerStoreSchema, ControllerWithLockSchema, type HandlerStore, type ControllerWithLock } from "@jeff-aporta/iswc-base/components/isp/schemas/tree-view-render-rows.schemas.js";
+import type { RenderOpts, RenderAdapter, RowController } from "@jeff-aporta/iswc-base/components/isp/schemas/tree-view-render-rows.schemas.js";
 
 /** Opciones que recibe `paintForest` para customizar el pintado. */
 

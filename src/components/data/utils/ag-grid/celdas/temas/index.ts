@@ -8,9 +8,9 @@
  */
 
 import type { ModoColor, Tema } from './index.schemas.js';
-import type { GridHost } from '../../contrato.schemas.js';
-import { aEm, limpiarCss } from '../html.js';
-import type { MedidasTema, ParamsTema } from '../schemas.js';
+import type { GridHost } from '@jeff-aporta/iswc-base/components/data/utils/ag-grid/contrato.schemas.js';
+import { aEm, limpiarCss } from '@jeff-aporta/iswc-base/components/data/utils/ag-grid/celdas/html.js';
+import type { MedidasTema, ParamsTema } from '@jeff-aporta/iswc-base/components/data/utils/ag-grid/celdas/schemas.js';
 
 
 const TOKENS: Record<string, string> = {

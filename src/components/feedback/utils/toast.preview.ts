@@ -2,8 +2,8 @@
  * Behavior migrado desde HTML inline de iswc-toast.
  * Se ejecuta en mount() tras pintar la definition JSON.
  */
-import type { PreviewMountContext } from '../../../previews/_kit/schemas/preview.schemas.ts';
-import type { IswcToastEl } from "../schemas/toast.preview.schemas.js";
+import type { PreviewMountContext } from '@jeff-aporta/iswc-base/previews/_kit/schemas/preview.schemas.ts';
+import type { IswcToastEl } from "@jeff-aporta/iswc-base/components/feedback/schemas/toast.preview.schemas.js";
 
 export async function mount(ctx: PreviewMountContext): Promise<void> {
   const root = ctx.main;

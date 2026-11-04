@@ -1,11 +1,11 @@
 /**
  * Behavior migrado desde HTML inline de iswc-progress-bar.
  * Se ejecuta en mount() tras pintar la definition JSON.
- * @param {import('../../../previews/_kit/schemas/preview.schemas.ts').PreviewMountContext} ctx
+ * @param {import('@jeff-aporta/iswc-base/previews/_kit/schemas/preview.schemas.ts').PreviewMountContext} ctx
  */
 
-import type { ProgressBarEl } from "../schemas/progress-bar.preview.schemas.js";
-export async function mount(ctx: import('../../../previews/_kit/schemas/preview.schemas.ts').PreviewMountContext): Promise<void> {
+import type { ProgressBarEl } from "@jeff-aporta/iswc-base/components/feedback/schemas/progress-bar.preview.schemas.js";
+export async function mount(ctx: import('@jeff-aporta/iswc-base/previews/_kit/schemas/preview.schemas.ts').PreviewMountContext): Promise<void> {
   void ctx.main;
   await customElements.whenDefined('iswc-progress-bar');
   await customElements.whenDefined('iswc-button');

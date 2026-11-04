@@ -1,6 +1,6 @@
-import { adoptCss, defineElement } from '../../core/element.js';
-import { resolveIconRaw } from '../../core/icon-loader.js';
-import { setStringAttr } from '../../core/reflect.js';
+import { adoptCss, defineElement } from '@jeff-aporta/iswc-base/core/element.js';
+import { resolveIconRaw } from '@jeff-aporta/iswc-base/core/icon-loader.js';
+import { setStringAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
 
 /**
  * <iswc-icon> — Web Component (vanilla, zero dependencies).

@@ -108,7 +108,7 @@ test('theme-toggle expone forceSync() publico para re-sincronizar desde fuera', 
 test('theme-toggle resuelve el contenedor atravesando Shadow DOM', () => {
   assert.ok(
     // theme-scope pasó de components/_shared/ a src/core/.
-    /from '\.\.\/\.\.\/core\/theme-scope\.js'/.test(themeToggleSrc),
+    /from '@jeff-aporta\/iswc-base\/core\/theme-scope\.js'/.test(themeToggleSrc),
     'debe importar findThemeContainer de theme-scope (closest se corta en el shadow)',
   );
   assert.ok(

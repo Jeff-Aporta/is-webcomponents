@@ -1,8 +1,8 @@
-import { adoptCss, defineElement } from '../../core/element.js';
-import { atributosDe, PropsElement } from '../../core/props-element.js';
+import { adoptCss, defineElement } from '@jeff-aporta/iswc-base/core/element.js';
+import { atributosDe, PropsElement } from '@jeff-aporta/iswc-base/core/props-element.js';
 import { PageHeaderPropsSchema } from './schemas/page-header.schemas.js';
 import type { PageHeaderProps } from './schemas/page-header.schemas.js';
-import '../media/icon.js';
+import '@jeff-aporta/iswc-base/components/media/icon.js';
 
 /**
  * <iswc-page-header> — cabecera de una vista: ícono, título, subtítulo, acciones (slot `acciones`) e ilustración

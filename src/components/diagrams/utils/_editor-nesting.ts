@@ -32,8 +32,8 @@
  *     los listeners eliminados.
  */
 
-import { emit } from '../../../core/element.js';
-import type { NestingOpenDetail, NestingCloseDetail, NestingOptions } from "../schemas/_editor-nesting.schemas.js";
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
+import type { NestingOpenDetail, NestingCloseDetail, NestingOptions } from "@jeff-aporta/iswc-base/components/diagrams/schemas/_editor-nesting.schemas.js";
 
 /** Profundidad máxima permitida (handoff §0, decisión cerrada). */
 export const NESTING_DEFAULT_MAX_DEPTH = 5;

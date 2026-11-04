@@ -27,7 +27,7 @@
 
 /** Comparador de ordenacion: mismo contrato que `Array.prototype.sort`. */
 
-import type { CellValue, FilterValue, Row, Operator, ColumnDef, Comparator, ColumnType, ColumnTypeName, FilterRule, AggregationFn } from "../schemas/grid-types.schemas.js";
+import type { CellValue, FilterValue, Row, Operator, ColumnDef, Comparator, ColumnType, ColumnTypeName, FilterRule, AggregationFn } from "@jeff-aporta/iswc-base/components/data/schemas/grid-types.schemas.js";
 export const LOGIC = { AND: 'and', OR: 'or' } as const;
 
 /* ── Comparadores ─────────────────────────────────────────────────────── */

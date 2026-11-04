@@ -19,6 +19,7 @@ import { createServer } from 'node:http';
 import { createReadStream, existsSync } from 'node:fs';
 import { stat, readFile } from 'node:fs/promises';
 import { extname, join, normalize, relative, sep } from 'node:path';
+import { reescribirAlias } from '@jeff-aporta/iswc-base/cdn/build/alias.ts';
 
 const ROOT = process.env.SERVE_ROOT
   ? join(process.env.SERVE_ROOT)
@@ -29,6 +30,14 @@ const REPO = join(import.meta.dirname, '..');
 /** Prefijo URL de las dependencias npm empaquetadas al vuelo (p. ej. `zod`). */
 const NPM_PREFIX = '/__npm/';
 const npmCache = new Map();
+/** URL de `src/` del kit vista desde ROOT (con SERVE_ROOT = workspace padre queda `/apps/<repo>/src/`). */
+const SRC_URL = (() => {
+  const rel = relative(ROOT, join(REPO, 'src')).replaceAll('\\', '/');
+  return rel.startsWith('..') ? '/src/' : `/${rel}/`;
+})();
+
+/** `@jeff-aporta/iswc-base/<ruta>` → `<SRC_URL><ruta>`: el navegador no tiene import map al servir desde fuente. */
+const reescribirAliasKit = (code) => reescribirAlias(code, (ruta) => `${SRC_URL}${ruta}`);
 
 /** El navegador no resuelve specifiers desnudos (`import { z } from "zod"`):
  *  se reescriben a `/__npm/<pkg>.js`, que sirve el paquete empaquetado con esbuild. */
@@ -133,7 +142,7 @@ createServer(async (req, res) => {
         'content-type': 'text/javascript; charset=utf-8',
         'cache-control': 'no-store',
       });
-      res.end(reescribirBare(salida.code));
+      res.end(reescribirBare(reescribirAliasKit(salida.code)));
     } catch (e) {
       res.writeHead(500, { 'content-type': 'text/plain; charset=utf-8' });
       res.end(`error transpilando ${file}

@@ -2,16 +2,16 @@ import { layoutNodeLink } from './node-link-layout.js';
 import { diagramHeaderWidth } from './diagram-header.js';
 import { applyEdgeActorLayout } from './diagram-edge-actors.js';
 import { assignEdgeHues } from './diagram-edge-style.js';
-import { snapDiagramGrid } from '../../../core/diagram-grid.js';
+import { snapDiagramGrid } from '@jeff-aporta/iswc-base/core/diagram-grid.js';
 import { routeEdges, planPorts, pointsToPath, simplifyOrthoPath, perimeterPorts } from './component-router.js';
 import { packDiagram, resolvePackingGaps, EDGE_CLEARANCE, GRID_STEP } from './component-pack.js';
 import { assignEmitterReceiverPalette } from './diagram-edge-style.js';
-import type { Componente, Paquete } from '../schemas/diagram-tipos.schemas.js';
-import type { ClassPackage, ClassLayoutOpts, ClassLayoutSection } from '../schemas/diagram-types.schemas.js';
-import { richTextPlain } from '../../../core/tk-rich-text.js';
-import { resolveTkHue } from '../../../core/tk-hue.js';
-import type { ClassSpec, ClassSpecClass, ClassSpecRelation, ClassLayout, ClassLayoutNode, ClassLayoutEdge, ClassRelationKind, DiagramGroup } from '../schemas/diagram-types.schemas.js';
-import type { Point2D } from "../schemas/class-spec.schemas.js";
+import type { Componente, Paquete } from '@jeff-aporta/iswc-base/components/diagrams/schemas/diagram-tipos.schemas.js';
+import type { ClassPackage, ClassLayoutOpts, ClassLayoutSection } from '@jeff-aporta/iswc-base/components/diagrams/schemas/diagram-types.schemas.js';
+import { richTextPlain } from '@jeff-aporta/iswc-base/core/tk-rich-text.js';
+import { resolveTkHue } from '@jeff-aporta/iswc-base/core/tk-hue.js';
+import type { ClassSpec, ClassSpecClass, ClassSpecRelation, ClassLayout, ClassLayoutNode, ClassLayoutEdge, ClassRelationKind, DiagramGroup } from '@jeff-aporta/iswc-base/components/diagrams/schemas/diagram-types.schemas.js';
+import type { Point2D } from "@jeff-aporta/iswc-base/components/diagrams/schemas/class-spec.schemas.js";
 
 /**
  * Especificación y layout de diagramas de clases (sin Mermaid).

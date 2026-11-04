@@ -6,7 +6,7 @@
  * del evento `pintado`; un alto sin cambio no vuelve a notificar y asi no hay bucle.
  */
 
-import type { GridHost, FilaDisplay } from '../contrato.schemas.js';
+import type { GridHost, FilaDisplay } from '@jeff-aporta/iswc-base/components/data/utils/ag-grid/contrato.schemas.js';
 
 const TOLERANCIA = 0.5;
 

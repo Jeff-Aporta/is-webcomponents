@@ -1,5 +1,5 @@
-import { adoptCss, defineElement } from '../../core/element.js';
-import { atributosDe, PropsElement } from '../../core/props-element.js';
+import { adoptCss, defineElement } from '@jeff-aporta/iswc-base/core/element.js';
+import { atributosDe, PropsElement } from '@jeff-aporta/iswc-base/core/props-element.js';
 import { PersonPropsSchema } from './schemas/person.schemas.js';
 import type { PersonProps } from './schemas/person.schemas.js';
 import './avatar.js';

@@ -1,11 +1,11 @@
-import { adoptCss, defineElement, emit } from '../../core/element.js';
+import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
 import {
   attachFormInternals, setCustomState, setFormValue, setValidity, clearValidity
-} from '../../core/form-associated.js';
-import { ElementBase } from '../../core/element-base.js';
-import { setStringAttr, setOptionalAttr } from '../../core/reflect.js';
-import { hasSlotted } from '../../core/dom-utils.js';
-import { clampTo, tidyToStep } from '../../core/misc-utils.js';
+} from '@jeff-aporta/iswc-base/core/form-associated.js';
+import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
+import { setStringAttr, setOptionalAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
+import { hasSlotted } from '@jeff-aporta/iswc-base/core/dom-utils.js';
+import { clampTo, tidyToStep } from '@jeff-aporta/iswc-base/core/misc-utils.js';
 /**
  * <iswc-slider> — Control de rango form-associated (vanilla + Shadow DOM).
  *

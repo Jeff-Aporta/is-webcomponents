@@ -2,7 +2,7 @@
  * doc-demo-estado.ts — estado de los exploradores `iswc-doc-demo`, compartido por la galería del kit y la de las apps:
  * el `?s=` (JSON en b64url) y la preferencia de compactar paneles.
  */
-import { getComponentPrefs, removeComponentPrefs, setComponentPrefs } from '../../../core/prefs.js';
+import { getComponentPrefs, removeComponentPrefs, setComponentPrefs } from '@jeff-aporta/iswc-base/core/prefs.js';
 
 const PANELS_TTL_MS = 3_600_000;
 const SHELL_PREFS_TAG = 'iswc-gallery';

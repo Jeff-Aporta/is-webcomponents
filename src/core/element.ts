@@ -14,7 +14,7 @@
 
 import { sheetsBase, soportaHojasAdoptadas } from './base-sheets.js';
 import { materializarAtributos } from './attrs.js';
-import { routeThroughLoader } from '../cdn/build/asset-url.js';
+import { routeThroughLoader } from '@jeff-aporta/iswc-base/cdn/build/asset-url.js';
 
 /* ─────────────────────────────── registro ─────────────────────────────── */
 

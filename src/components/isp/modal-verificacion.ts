@@ -1,10 +1,10 @@
-import { adoptCss, defineElement, emit } from '../../core/element.js';
-import '../actions/button.js';
-import '../media/icon.js';
-import '../layout/dialog.js';
+import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import '@jeff-aporta/iswc-base/components/actions/button.js';
+import '@jeff-aporta/iswc-base/components/media/icon.js';
+import '@jeff-aporta/iswc-base/components/layout/dialog.js';
 import './text.js';
 import './heading.js';
-import { ElementBase } from '../../core/element-base.js';
+import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
 
 /**
  * <iswc-modal-verificacion> — port de `src/lib/base/modal/ModalVerificacion.svelte`.

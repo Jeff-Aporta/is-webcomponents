@@ -1,7 +1,7 @@
-import { adoptCss, defineElement, emit } from '../../core/element.js';
-import { escapeHtml } from '../../core/dom-utils.js';
-import { attachFormInternals, setCustomState, setFormValue } from '../../core/form-associated.js';
-import { setOptionalAttr } from '../../core/reflect.js';
+import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { escapeHtml } from '@jeff-aporta/iswc-base/core/dom-utils.js';
+import { attachFormInternals, setCustomState, setFormValue } from '@jeff-aporta/iswc-base/core/form-associated.js';
+import { setOptionalAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
 
 /**
  * <iswc-inline-edit> — "Inplace" / "Inline edit".

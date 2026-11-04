@@ -1,13 +1,13 @@
-import { adoptCss, defineElement, emit } from '../../core/element.js';
+import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
 import { DiagramElementBase } from './utils/diagram-element-base.js';
 import { resolveSwimlaneSpec, computeSwimlaneLayout } from './utils/swimlane-spec.js';
 import type { DiagramTheme } from './schemas/diagram-types.schemas.js';
-import { tkHueToHex } from '../../core/tk-hue.js';
+import { tkHueToHex } from '@jeff-aporta/iswc-base/core/tk-hue.js';
 import { edgeStrokeHex, edgeChipFill, edgeChipText } from './utils/diagram-edge-style.js';
-import { inlineMdWeb, applySvgTextContent } from '../../core/tk-inline-md.js';
+import { inlineMdWeb, applySvgTextContent } from '@jeff-aporta/iswc-base/core/tk-inline-md.js';
 import { wrapText, buildTspans } from './utils/diagram-text-wrap.js';
 import { registerDiagramKind } from './utils/diagram-kinds.js';
-import { svgEl } from '../../core/svg-chart-engine.js';
+import { svgEl } from '@jeff-aporta/iswc-base/core/svg-chart-engine.js';
 import { svgArrowHead } from './utils/diagram-arrow.js';
 import type { SwimlaneLayout, SwimlaneStepKind } from "./schemas/swimlane-spec.schemas.js";
 import type { StepEntry, LinkEntry } from "./schemas/swimlane-diagram.schemas.js";

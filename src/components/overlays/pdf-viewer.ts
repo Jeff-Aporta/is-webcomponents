@@ -1,14 +1,14 @@
-import { adoptCss, defineElement, emit } from '../../core/element.js';
-import { ElementBase } from '../../core/element-base.js';
-import { setOptionalAttr, setStringAttr } from '../../core/reflect.js';
-import '../actions/button.js';
-import '../media/icon.js';
-import '../feedback/empty-state.js';
+import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
+import { setOptionalAttr, setStringAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
+import '@jeff-aporta/iswc-base/components/actions/button.js';
+import '@jeff-aporta/iswc-base/components/media/icon.js';
+import '@jeff-aporta/iswc-base/components/feedback/empty-state.js';
 import {
   blobUrlFromBuffer,
   loadArrayBuffer,
   resolveFileSource,
-} from '../files/utils/file-source.js';
+} from '@jeff-aporta/iswc-base/components/files/utils/file-source.js';
 
 /**
  * <iswc-pdf-viewer> — Visor de PDF. Por defecto usa el visor nativo del navegador

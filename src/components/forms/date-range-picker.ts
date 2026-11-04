@@ -1,8 +1,8 @@
-import { adoptCss, defineElement, emit } from '../../core/element.js';
+import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
 import { addMonths, monthKey, parseISO, startOfMonth, toISO } from './utils/date-utils.js';
-import '../actions/button.js';
+import '@jeff-aporta/iswc-base/components/actions/button.js';
 import './date-picker.js';
-import { ElementBase } from '../../core/element-base.js';
+import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
 
 /**
  * <iswc-date-range-picker> — Rango de fechas con varios meses a la vista

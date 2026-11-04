@@ -1,7 +1,7 @@
 import { layoutNodeLink, edgeAnchor, pickSides, assignLayers, orderLayers } from './node-link-layout.js';
 import { readNodeEmbed, embedIsNatural, fitContain, nestedMaxSize, EMBED_FALLBACK_SIZE } from './diagram-embed.js';
 import { pathPoints, pathSinAutoCruces } from './diagram-arrow.js';
-import type { BoxSide } from '../schemas/diagram-types.schemas.js';
+import type { BoxSide } from '@jeff-aporta/iswc-base/components/diagrams/schemas/diagram-types.schemas.js';
 
 // `BoxSide` admite `'auto'`; los anclajes efectivos del router son siempre
 // una dirección cardinal. Estrechamos para satisfacer la firma del helper.
@@ -11,26 +11,26 @@ import { assignEdgeHues } from './diagram-edge-style.js';
 import {
   makeCostGrid, blockRect, applyRectCost, applyRadialCost, snapDiagramGrid, ceilDiagramGrid, rectsOverlap,
   readExclusionZones, nudgeRectFromZones, blockExclusionZones, snapPointAwayFromSide,
-} from '../../../core/diagram-grid.js';
+} from '@jeff-aporta/iswc-base/core/diagram-grid.js';
 import { routeOrthogonal, pixelToGrid, gridPathToSvg, buildOrthogonalPath } from './diagram-astar.js';
-import { countIconTokens, extractLeadingIconToken } from '../../../core/tk-icon-inline.js';
-import { richTextPlain } from '../../../core/tk-rich-text.js';
-import { resolveTkHue } from '../../../core/tk-hue.js';
+import { countIconTokens, extractLeadingIconToken } from '@jeff-aporta/iswc-base/core/tk-icon-inline.js';
+import { richTextPlain } from '@jeff-aporta/iswc-base/core/tk-rich-text.js';
+import { resolveTkHue } from '@jeff-aporta/iswc-base/core/tk-hue.js';
 import { estimateTextWidth, wrapText } from './diagram-text-wrap.js';
 import { grafoDirigido } from './diagram-graph.js';
-import type { CajaPuente, LadoPuente, PuertoPuente, AnchorSide, FlowDirection, FlowShape, FlowEdgeKind, FlowOverflow, LeadingIconToken, FlowExclusionZone, FlowNodeSpec, FlowEdgeSpec, FlowGroupSpec, FlowResolvedSpec, FlowLayoutNode, FlowLayoutEdge, FlowLayout, FlowLayoutOverrides, FlowLayoutOptions, FlowSizedNode, FlowPlacement, FlowPlacedNode, FlowPaint, FlowSegment, FlowPoint, FlowLaneSpec, FlowLaneDirection, FlowLayoutLane, FlowLayoutContext, FlowVar, TipoEntidad, FlowBridge } from "../schemas/flowchart-spec.schemas.js";
-import type { TPuntosRiel } from "../schemas/diagram-flow.schemas.js";
-import type { ErThemeJson } from "../schemas/theme.schemas.js";
+import type { CajaPuente, LadoPuente, PuertoPuente, AnchorSide, FlowDirection, FlowShape, FlowEdgeKind, FlowOverflow, LeadingIconToken, FlowExclusionZone, FlowNodeSpec, FlowEdgeSpec, FlowGroupSpec, FlowResolvedSpec, FlowLayoutNode, FlowLayoutEdge, FlowLayout, FlowLayoutOverrides, FlowLayoutOptions, FlowSizedNode, FlowPlacement, FlowPlacedNode, FlowPaint, FlowSegment, FlowPoint, FlowLaneSpec, FlowLaneDirection, FlowLayoutLane, FlowLayoutContext, FlowVar, TipoEntidad, FlowBridge } from "@jeff-aporta/iswc-base/components/diagrams/schemas/flowchart-spec.schemas.js";
+import type { TPuntosRiel } from "@jeff-aporta/iswc-base/components/diagrams/schemas/diagram-flow.schemas.js";
+import type { ErThemeJson } from "@jeff-aporta/iswc-base/components/diagrams/schemas/theme.schemas.js";
 import { resolverEtiquetas, U } from './flowchart-labels.js';
 import { perimeterPorts, routeEdges, simplifyOrthoPath } from './component-router.js';
 import { anchoDeComponente } from './component-spec.js';
 import { vectorAFlujo } from './vector-flow-spec.js';
 import { ROUTING_COSTS_DEFAULTS } from './routing-costs.js';
 import { oklchToHex } from './oklch.js';
-import { FlowBridgeSchema, FlowVarSchema, TipoEntidadSchema } from '../schemas/flowchart-spec.schemas.js';
-import type { RouterEdge, RouterPort } from '../schemas/component-router.schemas.js';
-import type { Lado } from '../schemas/diagram-tipos.schemas.js';
-import type { EmbedBox } from "../schemas/diagram-embed.schemas.js";
+import { FlowBridgeSchema, FlowVarSchema, TipoEntidadSchema } from '@jeff-aporta/iswc-base/components/diagrams/schemas/flowchart-spec.schemas.js';
+import type { RouterEdge, RouterPort } from '@jeff-aporta/iswc-base/components/diagrams/schemas/component-router.schemas.js';
+import type { Lado } from '@jeff-aporta/iswc-base/components/diagrams/schemas/diagram-tipos.schemas.js';
+import type { EmbedBox } from "@jeff-aporta/iswc-base/components/diagrams/schemas/diagram-embed.schemas.js";
 
 /**
  * Especificación y layout de diagramas de flujo (sin Mermaid).

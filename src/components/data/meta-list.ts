@@ -1,8 +1,8 @@
-import { adoptCss, defineElement } from '../../core/element.js';
-import { ElementBase } from '../../core/element-base.js';
-import { setStringAttr } from '../../core/reflect.js';
+import { adoptCss, defineElement } from '@jeff-aporta/iswc-base/core/element.js';
+import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
+import { setStringAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
 import type { MetaGroup, MetaListLayout, MetaRow } from './schemas/meta-list.schemas.js';
-import '../feedback/tag.js';
+import '@jeff-aporta/iswc-base/components/feedback/tag.js';
 
 /**
  * <iswc-meta-list> — lista de metadatos clave → valor agrupada (ubicación, autor, estado, tags,

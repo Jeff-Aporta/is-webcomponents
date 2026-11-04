@@ -3,7 +3,7 @@ var __defNormalProp = (obj: object, key: PropertyKey, value: unknown) => key in 
 var __publicField = (obj: object, key: PropertyKey, value: unknown) => __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
 import { TTreeAdapterContext } from "./00-context.js";
 import { asRecord } from './_types.js';
-import { type TNode } from '../../schemas/tree-view-types.schemas.js';
+import { type TNode } from '@jeff-aporta/iswc-base/components/isp/schemas/tree-view-types.schemas.js';
 
 /**
  * TTreeAdapterContract — contrato vacío sobre `_TTreeAdapterContext`.

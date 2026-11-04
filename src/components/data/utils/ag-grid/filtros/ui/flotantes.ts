@@ -1,14 +1,14 @@
 /**
  * ui/flotantes — Fila de filtros flotantes bajo el encabezado y popup del filtro de columna.
  */
-import { condicionesDe, esCondicional, resumenCondicion } from '../condiciones.js';
-import { TEXTOS } from '../textos.js';
+import { condicionesDe, esCondicional, resumenCondicion } from '@jeff-aporta/iswc-base/components/data/utils/ag-grid/filtros/condiciones.js';
+import { TEXTOS } from '@jeff-aporta/iswc-base/components/data/utils/ag-grid/filtros/textos.js';
 import { botonIcono, crear, inputDe, retardo } from './controles.js';
 import { PanelFiltro } from './panel-filtro.js';
-import type { CeldaFlotante, Condicion, ConValor, ModeloColumna, ModeloMulti, ModeloSet, TipoCondicion } from '../filtros.schemas.js';
-import type { MotorFiltros } from '../filtros-motor.js';
-import type { ColumnState } from '../../../../schemas/datagrid-types.schemas.js';
-import type { Desinstalar, Flotante, GridHost } from '../../contrato.schemas.js';
+import type { CeldaFlotante, Condicion, ConValor, ModeloColumna, ModeloMulti, ModeloSet, TipoCondicion } from '@jeff-aporta/iswc-base/components/data/utils/ag-grid/filtros/filtros.schemas.js';
+import type { MotorFiltros } from '@jeff-aporta/iswc-base/components/data/utils/ag-grid/filtros/filtros-motor.js';
+import type { ColumnState } from '@jeff-aporta/iswc-base/components/data/schemas/datagrid-types.schemas.js';
+import type { Desinstalar, Flotante, GridHost } from '@jeff-aporta/iswc-base/components/data/utils/ag-grid/contrato.schemas.js';
 
 
 /** Popup unico: abrir el de otra columna cierra el anterior. */

@@ -3,7 +3,7 @@
  * rompe su sombreador `LayerNorm` en WebGPU (microsoft/onnxruntime#32627).
  */
 import { RemoveBackground } from 'runonweb/remove-bg';
-import type { Crear } from '../schemas/ai.schemas.js';
+import type { Crear } from '@jeff-aporta/iswc-base/ai/schemas/ai.schemas.js';
 
 export const crear: Crear = async (_o, alProgreso) => {
   const m = new RemoveBackground({ device: 'wasm', onProgress: alProgreso });

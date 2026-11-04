@@ -3,12 +3,12 @@
  * Se ejecuta en mount() tras pintar la definition JSON.
  */
 
-import type { LightboxLike } from "../schemas/lightbox.preview.schemas.js";
+import type { LightboxLike } from "@jeff-aporta/iswc-base/components/diagrams/schemas/lightbox.preview.schemas.js";
 function asLightbox(el: HTMLElement | null): LightboxLike | null {
   return (el as LightboxLike | null);
 }
 
-export async function mount(ctx: import('../../../previews/_kit/schemas/preview.schemas.ts').PreviewMountContext): Promise<void> {
+export async function mount(ctx: import('@jeff-aporta/iswc-base/previews/_kit/schemas/preview.schemas.ts').PreviewMountContext): Promise<void> {
   void ctx.main;
   const lb1 = asLightbox(document.getElementById('lb1'));
   const lb1Solid = asLightbox(document.getElementById('lb1-solid'));

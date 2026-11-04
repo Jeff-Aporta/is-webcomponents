@@ -1,14 +1,14 @@
 /**
  * ui/barra-lateral — Side Bar: pestanas, panel abierto, posicion, ancho y su api.
  */
-import { normalizarSideBar } from '../resumen.js';
-import { TEXTOS } from '../textos.js';
+import { normalizarSideBar } from '@jeff-aporta/iswc-base/components/data/utils/ag-grid/filtros/resumen.js';
+import { TEXTOS } from '@jeff-aporta/iswc-base/components/data/utils/ag-grid/filtros/textos.js';
 import { crear, icono } from './controles.js';
 import { PanelColumnas } from './panel-columnas.js';
 import { PanelFiltros } from './panel-filtros.js';
-import type { InstanciaPanel, PanelLateralDef, PanelMontado, SideBarDef } from '../filtros.schemas.js';
-import type { MotorFiltros } from '../filtros-motor.js';
-import type { GridHost, PanelLateral } from '../../contrato.schemas.js';
+import type { InstanciaPanel, PanelLateralDef, PanelMontado, SideBarDef } from '@jeff-aporta/iswc-base/components/data/utils/ag-grid/filtros/filtros.schemas.js';
+import type { MotorFiltros } from '@jeff-aporta/iswc-base/components/data/utils/ag-grid/filtros/filtros-motor.js';
+import type { GridHost, PanelLateral } from '@jeff-aporta/iswc-base/components/data/utils/ag-grid/contrato.schemas.js';
 
 
 const ANCHO_DEFECTO = 200;

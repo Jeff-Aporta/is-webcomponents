@@ -2,7 +2,7 @@
  * resumen — Calculos puros de los paneles: paginacion, agregados, side bar, columnas y menus.
  */
 import type { DefItemMenu, FuncionAgregado, NodoColumna, PanelLateralDef, ResultadoAgregados, ResumenPagina, SideBarDef } from './filtros.schemas.js';
-import type { ItemMenu } from '../contrato.schemas.js';
+import type { ItemMenu } from '@jeff-aporta/iswc-base/components/data/utils/ag-grid/contrato.schemas.js';
 
 const TAMANOS_DEFECTO = [20, 50, 100];
 const PANELES: Record<string, PanelLateralDef> = {

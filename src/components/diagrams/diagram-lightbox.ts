@@ -1,9 +1,9 @@
-import { defineElement, siblingCssHref } from '../../core/element.js';
+import { defineElement, siblingCssHref } from '@jeff-aporta/iswc-base/core/element.js';
 import { IswcLightbox } from './lightbox.js';
 import { getDiagramTag } from './utils/diagram-kinds.js';
 import { expandSequencePayloadForJson } from './utils/sequence-spec.js';
-import '../actions/button.js';
-import '../media/icon.js';
+import '@jeff-aporta/iswc-base/components/actions/button.js';
+import '@jeff-aporta/iswc-base/components/media/icon.js';
 import type { TurtleStateDetail, ToggleGroupDetail, TurtleApi, DiagramHost } from "./schemas/diagram-lightbox.schemas.js";
 
 /**

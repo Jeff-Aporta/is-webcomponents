@@ -1,6 +1,6 @@
-import { richTextPlain } from '../../../core/tk-rich-text.js';
-import { resolveTkHue, SERIE_HUES } from '../../../core/tk-hue.js';
-import type { QuadrantPoint, QuadrantGroup, QuadrantAxes, QuadrantQuadrants, QuadrantSpec, QuadrantJsonOut, PlotRect, QuadrantLayoutPoint, QuadrantLayoutQuadrant, QuadrantLayoutAxisLabel, QuadrantLayoutAxes, QuadrantLayout } from "../schemas/quadrant-spec.schemas.js";
+import { richTextPlain } from '@jeff-aporta/iswc-base/core/tk-rich-text.js';
+import { resolveTkHue, SERIE_HUES } from '@jeff-aporta/iswc-base/core/tk-hue.js';
+import type { QuadrantPoint, QuadrantGroup, QuadrantAxes, QuadrantQuadrants, QuadrantSpec, QuadrantJsonOut, PlotRect, QuadrantLayoutPoint, QuadrantLayoutQuadrant, QuadrantLayoutAxisLabel, QuadrantLayoutAxes, QuadrantLayout } from "@jeff-aporta/iswc-base/components/diagrams/schemas/quadrant-spec.schemas.js";
 
 /**
  * Especificación y layout de matrices 2×2 (quadrant chart), sin Mermaid.

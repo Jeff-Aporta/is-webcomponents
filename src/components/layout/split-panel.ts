@@ -1,8 +1,8 @@
-import { adoptCss, defineElement, emit, upgradeProperties } from '../../core/element.js';
-import { withStyleAttrs } from '../../core/attrs.js';
+import { adoptCss, defineElement, emit, upgradeProperties } from '@jeff-aporta/iswc-base/core/element.js';
+import { withStyleAttrs } from '@jeff-aporta/iswc-base/core/attrs.js';
 
-import { getComponentPrefs, setComponentPrefs } from '../../core/prefs.js';
-import { clampTo } from '../../core/misc-utils.js';
+import { getComponentPrefs, setComponentPrefs } from '@jeff-aporta/iswc-base/core/prefs.js';
+import { clampTo } from '@jeff-aporta/iswc-base/core/misc-utils.js';
 
 /**
  * <iswc-split-panel> — Web Component (vanilla, zero dependencies).

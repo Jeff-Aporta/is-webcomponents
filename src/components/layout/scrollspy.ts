@@ -1,9 +1,9 @@
-import { adoptCss, defineElement, emit } from '../../core/element.js';
+import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
 import {
   getComponentPrefs,
   removeComponentPrefs,
   setComponentPrefs,
-} from '../../core/prefs.js';
+} from '@jeff-aporta/iswc-base/core/prefs.js';
 
 /**
  * <iswc-scrollspy> — Web Component (vanilla, zero dependencies).

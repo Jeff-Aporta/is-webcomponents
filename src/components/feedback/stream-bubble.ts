@@ -1,6 +1,6 @@
-import { adoptCss, defineElement } from '../../core/element.js';
-import { crearNodo, escapeHtml } from '../../core/dom-utils.js';
-import { atributosDe, PropsElement } from '../../core/props-element.js';
+import { adoptCss, defineElement } from '@jeff-aporta/iswc-base/core/element.js';
+import { crearNodo, escapeHtml } from '@jeff-aporta/iswc-base/core/dom-utils.js';
+import { atributosDe, PropsElement } from '@jeff-aporta/iswc-base/core/props-element.js';
 import { StreamBubblePropsSchema } from './schemas/stream-bubble.schemas.js';
 import type { StreamBubblePaso, StreamBubbleProps, StreamBubbleTextos } from './schemas/stream-bubble.schemas.js';
 

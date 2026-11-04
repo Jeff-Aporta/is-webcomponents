@@ -86,18 +86,18 @@
  *   grid.api.refresh()
  */
 
-import { ElementBase } from '../../core/element-base.js';
+import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
 import {
   getComponentPrefs, removeComponentPrefs, replaceComponentPrefs,
-} from '../../core/prefs.js';
-import type { PrefsEntry } from '../../core/schemas/prefs.schemas.js';
-import { adoptCss, defineElement, emit } from '../../core/element.js';
-import '../media/icon.js';
-import '../forms/checkbox.js';
-import '../forms/input.js';
-import '../forms/select.js';
-import '../forms/option.js';
-import '../actions/button.js';
+} from '@jeff-aporta/iswc-base/core/prefs.js';
+import type { PrefsEntry } from '@jeff-aporta/iswc-base/core/schemas/prefs.schemas.js';
+import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import '@jeff-aporta/iswc-base/components/media/icon.js';
+import '@jeff-aporta/iswc-base/components/forms/checkbox.js';
+import '@jeff-aporta/iswc-base/components/forms/input.js';
+import '@jeff-aporta/iswc-base/components/forms/select.js';
+import '@jeff-aporta/iswc-base/components/forms/option.js';
+import '@jeff-aporta/iswc-base/components/actions/button.js';
 
 import { Density, SelectionMode, DEFAULT_PAGE_SIZE } from './utils/datagrid-core/types.js';
 import { selectAll as selectAllCore, clearSelection as clearSelectionCore } from './utils/datagrid-core/selection.js';

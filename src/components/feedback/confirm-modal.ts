@@ -1,7 +1,7 @@
-import { adoptCss, defineElement, emit } from '../../core/element.js';
-import { ElementBase } from '../../core/element-base.js';
-import { createPopupDismiss } from '../../core/popup-dismiss.js';
-import '../actions/button.js';
+import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
+import { createPopupDismiss } from '@jeff-aporta/iswc-base/core/popup-dismiss.js';
+import '@jeff-aporta/iswc-base/components/actions/button.js';
 
 /**
  * <iswc-confirm-modal> — Web Component (vanilla, zero dependencies).
