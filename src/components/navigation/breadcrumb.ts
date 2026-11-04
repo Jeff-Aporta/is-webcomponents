@@ -1,6 +1,6 @@
-import { adoptCss, defineElement } from '@jeff-aporta/iswc-base/core/element.js';
-import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
 import './breadcrumb-item.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-breadcrumb> — contenedor de una ruta de migas de pan.
@@ -26,16 +26,17 @@ import './breadcrumb-item.js';
     </nav>
   `;
 
-  class IswcBreadcrumb extends ElementBase {
-    static get observedAttributes(): string[] { return ['label']; }
+  class IswcBreadcrumb extends IswcElement {
+    static tag = 'iswc-breadcrumb';
+    static css = css;
+    static observed = ['label'];
 
     #itemObserver: MutationObserver | null = null;
 
 
     constructor() {
       super();
-      const shadow = this.attachShadow({ mode: 'open' });
-      adoptCss(shadow, import.meta.url);
+      const shadow = this.shadowRoot!;
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
     }
 
@@ -81,5 +82,5 @@ import './breadcrumb-item.js';
     }
   }
 
-  defineElement('iswc-breadcrumb', IswcBreadcrumb, 'IswcBreadcrumb');
+  define(IswcBreadcrumb, 'IswcBreadcrumb');
 })();

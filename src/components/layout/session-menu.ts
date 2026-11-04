@@ -1,14 +1,11 @@
-import { adoptCss, defineElement, emit, upgradeProperties } from '@jeff-aporta/iswc-base/core/element.js';
-import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
+import { emit, upgradeProperties } from '@jeff-aporta/iswc-base/core/element.js';
 import { setCustomState } from '@jeff-aporta/iswc-base/core/form-associated.js';
 import '@jeff-aporta/iswc-base/components/actions/dropdown.js';
 import '@jeff-aporta/iswc-base/components/actions/dropdown-item.js';
-import '@jeff-aporta/iswc-base/components/actions/button.js';
-import '@jeff-aporta/iswc-base/components/media/avatar.js';
-import '@jeff-aporta/iswc-base/components/media/icon.js';
-import '@jeff-aporta/iswc-base/components/layout/divider.js';
 import './login-dropdown.js';
 import type { LoginChoice } from './schemas/login-dropdown.schemas.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-session-menu> — Sesión del usuario en la barra.
@@ -76,10 +73,11 @@ function iniciales(nombre: string): string {
   return (a + b).toUpperCase();
 }
 
-class IswcSessionMenu extends ElementBase {
-  static override get observedAttributes(): string[] {
-    return ['logged', 'name', 'subtitle', 'avatar', 'placement', 'logout-label', ...LOGIN_ATTRS];
-  }
+class IswcSessionMenu extends IswcElement {
+  static tag = 'iswc-session-menu';
+  static css = css;
+  static deps = ['iswc-button', 'iswc-avatar', 'iswc-icon', 'iswc-divider'];
+  static observed = ['logged', 'name', 'subtitle', 'avatar', 'placement', 'logout-label', ...LOGIN_ATTRS];
 
   #internals: ElementInternals | null = null;
   #login!: HTMLElement & { error: string; loading: boolean; choices: LoginChoice[]; reset(): void; show(): void; hide(): void };
@@ -89,8 +87,7 @@ class IswcSessionMenu extends ElementBase {
 
   constructor() {
     super();
-    this.#root = this.attachShadow({ mode: 'open' });
-    adoptCss(this.#root, import.meta.url);
+    this.#root = this.shadowRoot!;
     this.#root.appendChild(TEMPLATE.content.cloneNode(true));
     try { this.#internals = this.attachInternals(); } catch { this.#internals = null; }
     this.#login = this.#root.querySelector('.login') as HTMLElement & { error: string; loading: boolean; choices: LoginChoice[]; reset(): void; show(): void; hide(): void };
@@ -179,7 +176,7 @@ class IswcSessionMenu extends ElementBase {
   }
 }
 
-defineElement('iswc-session-menu', IswcSessionMenu as unknown as CustomElementConstructor);
+define(IswcSessionMenu);
 
 declare global {
   interface HTMLElementTagNameMap {

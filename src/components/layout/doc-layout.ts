@@ -1,8 +1,10 @@
 /// <reference lib="dom" />
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
 import './split-panel.js';
 import { readIswc, writeIswc } from '@jeff-aporta/iswc-base/core/iswc-storage.js';
 import type { EntradaTocDocLayout, FuenteTocDocLayout, PanelesDocLayout, PrefsDocLayout, SplitPanelDocLayout } from './schemas/doc-layout.schemas.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-doc-layout> — layout documental común: navegación a la izquierda, contenido
@@ -121,10 +123,10 @@ function buscarProfundo(raiz: ParentNode, selector: string, out: HTMLElement[] =
   return out;
 }
 
-class IswcDocLayout extends HTMLElement {
-  static get observedAttributes(): string[] {
-    return ['storage-key', 'toc', 'toc-title', 'start-width', 'end-width', 'start-rail', 'hide-start', 'hide-end', 'toc-min', 'no-bar'];
-  }
+class IswcDocLayout extends IswcElement {
+  static tag = 'iswc-doc-layout';
+  static css = css;
+  static observed = ['storage-key', 'toc', 'toc-title', 'start-width', 'end-width', 'start-rail', 'hide-start', 'hide-end', 'toc-min', 'no-bar'];
 
   /** Fuente propia de encabezados; por defecto, búsqueda profunda de `toc-selector` en el contenido. */
   tocSource: FuenteTocDocLayout | null = null;
@@ -144,8 +146,7 @@ class IswcDocLayout extends HTMLElement {
 
   constructor() {
     super();
-    this.#shadow = this.attachShadow({ mode: 'open' });
-    adoptCss(this.#shadow, import.meta.url);
+    this.#shadow = this.shadowRoot!;
     this.#shadow.appendChild(TEMPLATE.content.cloneNode(true));
     this.#ext = this.#shadow.querySelector<SplitPanelDocLayout>('.ext')!;
     this.#int = this.#shadow.querySelector<SplitPanelDocLayout>('.int')!;
@@ -483,4 +484,4 @@ class IswcDocLayout extends HTMLElement {
   }
 }
 
-defineElement('iswc-doc-layout', IswcDocLayout);
+define(IswcDocLayout);

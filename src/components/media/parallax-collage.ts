@@ -1,6 +1,6 @@
-import { adoptCss, defineElement } from '@jeff-aporta/iswc-base/core/element.js';
-import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
 import type { Capa } from './schemas/parallax-collage.schemas.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-parallax-collage> — Collage por capas (imágenes y formas teñidas con la paleta) con parallax opcional.
@@ -84,8 +84,10 @@ import type { Capa } from './schemas/parallax-collage.schemas.js';
     return capa;
   }
 
-  class IswcParallaxCollage extends ElementBase {
-    static get observedAttributes(): string[] { return OBSERVED; }
+  class IswcParallaxCollage extends IswcElement {
+    static tag = 'iswc-parallax-collage';
+    static css = css;
+    static observed = OBSERVED;
     #lienzo!: HTMLElement;
     #capas: Capa[] = [];
     #siguiendo = false;
@@ -96,8 +98,7 @@ import type { Capa } from './schemas/parallax-collage.schemas.js';
 
     constructor() {
       super();
-      const shadow = this.attachShadow({ mode: 'open' });
-      adoptCss(shadow, import.meta.url);
+      const shadow = this.shadowRoot!;
       this.#lienzo = document.createElement('figure');
       this.#lienzo.className = 'lienzo';
       this.#lienzo.setAttribute('part', 'lienzo');
@@ -186,5 +187,5 @@ import type { Capa } from './schemas/parallax-collage.schemas.js';
     };
   }
 
-  defineElement('iswc-parallax-collage', IswcParallaxCollage, 'IswcParallaxCollage');
+  define(IswcParallaxCollage, 'IswcParallaxCollage');
 })();

@@ -1,7 +1,7 @@
-import { adoptCss, defineElement } from '@jeff-aporta/iswc-base/core/element.js';
-import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
 import { INTENT } from '@jeff-aporta/iswc-base/core/intent.js';
 import { TONE } from '@jeff-aporta/iswc-base/core/tone.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-callout> — Web Component (vanilla, zero dependencies).
@@ -63,9 +63,11 @@ import { TONE } from '@jeff-aporta/iswc-base/core/tone.js';
     danger: 'mdi:alert-octagon-outline',
   };
 
-  class IswcCallout extends ElementBase {
+  class IswcCallout extends IswcElement {
+    static tag = 'iswc-callout';
+    static css = css;
 
-    static get observedAttributes(): string[] { return [...OBSERVED, 'bg', 'border-color', 'text-color', 'accent', 'spacing']; }
+    static observed = [...OBSERVED, 'bg', 'border-color', 'text-color', 'accent', 'spacing'];
 
     #defaultIcon!: HTMLElement & { icon?: string };
     #customIconObserver: MutationObserver | null = null;
@@ -73,8 +75,7 @@ import { TONE } from '@jeff-aporta/iswc-base/core/tone.js';
 
     constructor() {
       super();
-      const shadow = this.attachShadow({ mode: 'open' });
-      adoptCss(shadow, import.meta.url);
+      const shadow = this.shadowRoot!;
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
       this.#defaultIcon = shadow.querySelector<HTMLElement>('.default-icon')!;
     }
@@ -165,5 +166,5 @@ import { TONE } from '@jeff-aporta/iswc-base/core/tone.js';
     }
   }
 
-  defineElement('iswc-callout', IswcCallout, 'IswcCallout');
+  define(IswcCallout, 'IswcCallout');
 })();

@@ -1,8 +1,8 @@
-import '@jeff-aporta/iswc-base/components/actions/button.js';
-import '@jeff-aporta/iswc-base/components/media/icon.js';
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
 import { setStringAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
 import type { SpeechRecognitionEvent, SpeechRecognitionResultList, SpeechRecognitionResult, SpeechRecognitionAlternative, SpeechRecognitionErrorEvent, SpeechRecognitionInstance, SpeechRecognitionCtor, SpeechRecognitionConstructorBag } from "./schemas/speech.schemas.js";
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-speech> — SpeechRecognition (dictado) + SpeechSynthesis (lectura).
@@ -48,8 +48,11 @@ declare global {
     return w.SpeechRecognition || w.webkitSpeechRecognition || null;
   }
 
-  class IswcSpeech extends HTMLElement {
-    static get observedAttributes(): string[] { return ['lang', 'text']; }
+  class IswcSpeech extends IswcElement {
+    static tag = 'iswc-speech';
+    static css = css;
+    static deps = ['iswc-button', 'iswc-icon'];
+    static observed = ['lang', 'text'];
 
     /**
      * 2026-Q1 fix: attributeChangedCallback faltaba → los cambios de
@@ -76,8 +79,7 @@ declare global {
     #mounted = false;
     constructor() {
       super();
-      const shadow = this.attachShadow({ mode: 'open' });
-      adoptCss(shadow, import.meta.url);
+      const shadow = this.shadowRoot!;
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
       this.#out = shadow.querySelector<HTMLElement>('.out')!;
       this.#listenBtn = shadow.querySelector<HTMLElement>('.listen')!;
@@ -90,6 +92,7 @@ declare global {
     }
 
     connectedCallback(): void {
+      super.connectedCallback();
       this.#mounted = true;
       // F0.3 g12 [a11y/region]: landmark + label.
       if (!this.hasAttribute('role')) this.setAttribute('role', 'region');
@@ -222,5 +225,5 @@ declare global {
     }
   }
 
-  defineElement('iswc-speech', IswcSpeech, 'IswcSpeech');
+  define(IswcSpeech, 'IswcSpeech');
 })();

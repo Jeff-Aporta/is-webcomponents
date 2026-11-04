@@ -7,7 +7,7 @@
 import { z } from "zod";
 
 export const ModalBaseCtorSchema = z.intersection(z.unknown() /* TODO: cannot convert */, z.object({
-  __TEMPLATE: z.unknown() /* TODO: ref HTMLTemplateElement */,
+  template: z.unknown() /* TODO: ref HTMLTemplateElement */,
   observedAttributes: z.array(z.unknown() /* TODO: cannot convert */),
 }));
 export type ModalBaseCtor = z.infer<typeof ModalBaseCtorSchema>;

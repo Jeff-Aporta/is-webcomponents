@@ -1,9 +1,11 @@
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
 import {
   getComponentPrefs,
   removeComponentPrefs,
   setComponentPrefs,
 } from '@jeff-aporta/iswc-base/core/prefs.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-scrollspy> — Web Component (vanilla, zero dependencies).
@@ -115,10 +117,10 @@ import {
     active: boolean;
   }
 
-  class IswcScrollspy extends HTMLElement {
-    static get observedAttributes(): string[] {
-      return ['target', 'trigger', 'root-margin', 'threshold', 'storage-key'];
-    }
+  class IswcScrollspy extends IswcElement {
+    static tag = 'iswc-scrollspy';
+    static css = css;
+    static observed = ['target', 'trigger', 'root-margin', 'threshold', 'storage-key'];
 
     #target: HTMLElement | null = null;
     #targetSelector: string | null = null;
@@ -137,9 +139,8 @@ import {
 
     constructor() {
       super();
-      const shadow = this.attachShadow({ mode: 'open' });
+      const shadow = this.shadowRoot!;
       shadow.innerHTML = '<slot></slot>';
-      adoptCss(shadow, import.meta.url);
 
       shadow.querySelector<HTMLSlotElement>('slot')?.addEventListener('slotchange', () => {
         if (this.#mounted) this.#refreshLinks();
@@ -568,5 +569,5 @@ import {
     }
   }
 
-  defineElement('iswc-scrollspy', IswcScrollspy, 'IswcScrollspy');
+  define(IswcScrollspy, 'IswcScrollspy');
 })();

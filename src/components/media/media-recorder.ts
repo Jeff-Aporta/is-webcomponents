@@ -1,6 +1,7 @@
-import '@jeff-aporta/iswc-base/components/actions/button.js';
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
 import { setStringAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-media-recorder> — getUserMedia / getDisplayMedia + MediaRecorder.
@@ -28,8 +29,11 @@ import { setStringAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
     <p class="status" part="status" aria-live="polite"></p>
   `;
 
-  class IswcMediaRecorder extends HTMLElement {
-    static get observedAttributes(): string[] { return ['source', 'disabled']; }
+  class IswcMediaRecorder extends IswcElement {
+    static tag = 'iswc-media-recorder';
+    static css = css;
+    static deps = ['iswc-button'];
+    static observed = ['source', 'disabled'];
 
     /**
      * 2026-Q1 fix: attributeChangedCallback faltaba → el playground no
@@ -61,8 +65,7 @@ import { setStringAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
 
     constructor() {
       super();
-      const shadow = this.attachShadow({ mode: 'open' });
-      adoptCss(shadow, import.meta.url);
+      const shadow = this.shadowRoot!;
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
       this.#video = shadow.querySelector<HTMLVideoElement>('.preview')!;
       this.#go = shadow.querySelector<HTMLElement>('.go')!;
@@ -82,6 +85,7 @@ import { setStringAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
     }
 
     connectedCallback(): void {
+      super.connectedCallback();
       // F0.3 g12 [a11y/region]: landmark + label. aria-keyshortcuts para
       // que el lector exponga la lista de atajos al pedirla.
       if (!this.hasAttribute('role')) this.setAttribute('role', 'region');
@@ -197,5 +201,5 @@ import { setStringAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
     }
   }
 
-  defineElement('iswc-media-recorder', IswcMediaRecorder, 'IswcMediaRecorder');
+  define(IswcMediaRecorder, 'IswcMediaRecorder');
 })();

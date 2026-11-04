@@ -29,13 +29,14 @@
  *        tools-right
  */
 
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
 import { withStyleAttrs } from '@jeff-aporta/iswc-base/core/attrs.js';
 
-import '@jeff-aporta/iswc-base/components/actions/button.js';
 import './video.js';
 import './icon.js';
 import type { IswcVideoLike, IswcVideo, VideoList, MediaObsBag, ActivateOptions, ApplyActiveOptions } from "./schemas/video-playlist.schemas.js";
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 // Tipo mínimo del <iswc-video> hijo. Sólo accedemos a `media`, `play`, `pause`
 // y atributos — no hace falta arrastrar todo el componente.
@@ -183,9 +184,12 @@ import type { IswcVideoLike, IswcVideo, VideoList, MediaObsBag, ActivateOptions,
     return attr ? attr.trim() : '';
   }
 
-  class IswcVideoPlaylist extends withStyleAttrs(HTMLElement) {
+  class IswcVideoPlaylist extends withStyleAttrs(IswcElement) {
+    static tag = 'iswc-video-playlist';
+    static css = css;
+    static deps = ['iswc-button'];
 
-    static get observedAttributes(): string[] { return [...OBSERVED, 'radius', 'bg', 'border-color', 'stripe-color', 'accent']; }
+    static observed = [...OBSERVED, 'radius', 'bg', 'border-color', 'stripe-color', 'accent'];
 
     #root!: HTMLElement;
     #listEl!: HTMLElement;
@@ -212,8 +216,7 @@ import type { IswcVideoLike, IswcVideo, VideoList, MediaObsBag, ActivateOptions,
 
     constructor() {
       super();
-      const shadow = this.attachShadow({ mode: 'open' });
-      adoptCss(shadow, import.meta.url);
+      const shadow = this.shadowRoot!;
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
 
       this.#root = shadow.querySelector<HTMLElement>('.video-playlist')!;
@@ -892,5 +895,5 @@ import type { IswcVideoLike, IswcVideo, VideoList, MediaObsBag, ActivateOptions,
     }
   }
 
-  defineElement('iswc-video-playlist', IswcVideoPlaylist, 'IswcVideoPlaylist');
+  define(IswcVideoPlaylist, 'IswcVideoPlaylist');
 })();

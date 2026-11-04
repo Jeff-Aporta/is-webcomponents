@@ -1,8 +1,9 @@
-import { adoptCss, defineElement, emitCancelable } from '@jeff-aporta/iswc-base/core/element.js';
-import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
+import { emitCancelable } from '@jeff-aporta/iswc-base/core/element.js';
 import { setStringAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
 import type { FigureFit, FigureOpenDetail, FigureVariant } from './schemas/figure.schemas.js';
 import './theme-img.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-figure> — figura de contenido: imagen (dual tema opcional) + pie + enlace
@@ -47,8 +48,10 @@ TEMPLATE.innerHTML = /* html */ `
 const asVariant = (v: string | null): FigureVariant => (v === 'plain' ? 'plain' : 'framed');
 const asFit = (v: string | null): FigureFit => (v === 'cover' ? 'cover' : 'contain');
 
-class IswcFigure extends ElementBase {
-  static override get observedAttributes(): string[] { return [...OBSERVED]; }
+class IswcFigure extends IswcElement {
+  static tag = 'iswc-figure';
+  static css = css;
+  static observed = [...OBSERVED];
 
   #link: HTMLAnchorElement;
   #img: HTMLElement;
@@ -58,8 +61,7 @@ class IswcFigure extends ElementBase {
 
   constructor() {
     super();
-    const shadow = this.attachShadow({ mode: 'open' });
-    adoptCss(shadow, import.meta.url);
+    const shadow = this.shadowRoot!;
     shadow.appendChild(TEMPLATE.content.cloneNode(true));
     this.#link = shadow.querySelector<HTMLAnchorElement>('.link')!;
     this.#img = shadow.querySelector<HTMLElement>('.img')!;
@@ -162,4 +164,4 @@ class IswcFigure extends ElementBase {
   }
 }
 
-defineElement('iswc-figure', IswcFigure, 'IswcFigure');
+define(IswcFigure, 'IswcFigure');

@@ -1,6 +1,8 @@
 /// <reference lib="dom" />
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
 import type { ItemDocIndex, ResultadoDocIndex, TextosDocIndex } from './schemas/doc-index.schemas.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-doc-index> — índice documental con búsqueda: lista páginas agrupadas
@@ -35,10 +37,10 @@ const sinAcentos = (t: string) => t.toLowerCase().normalize('NFD').replace(/[̀-
 const escapar = (s: string) => s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c] ?? c));
 const TEXTOS: TextosDocIndex = { placeholder: 'Buscar…', sinResultados: 'Sin resultados. Pruebe con otra palabra.', resumen: '{items} hojas · {grupos} módulos' };
 
-class IswcDocIndex extends HTMLElement {
-  static get observedAttributes(): string[] {
-    return ['current', 'placeholder', 'compact', 'flat'];
-  }
+class IswcDocIndex extends IswcElement {
+  static tag = 'iswc-doc-index';
+  static css = css;
+  static observed = ['current', 'placeholder', 'compact', 'flat'];
 
   #shadow: ShadowRoot;
   #items: ItemDocIndex[] = [];
@@ -47,8 +49,7 @@ class IswcDocIndex extends HTMLElement {
 
   constructor() {
     super();
-    this.#shadow = this.attachShadow({ mode: 'open' });
-    adoptCss(this.#shadow, import.meta.url);
+    this.#shadow = this.shadowRoot!;
     this.#shadow.appendChild(TEMPLATE.content.cloneNode(true));
     this.#input.addEventListener('input', () => this.search(this.#input.value));
     this.#shadow.querySelector('nav.lista')!.addEventListener('click', (e) => {
@@ -189,4 +190,4 @@ class IswcDocIndex extends HTMLElement {
   }
 }
 
-defineElement('iswc-doc-index', IswcDocIndex);
+define(IswcDocIndex);

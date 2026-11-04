@@ -1,7 +1,6 @@
-import { adoptCss, defineElement } from '@jeff-aporta/iswc-base/core/element.js';
-import '@jeff-aporta/iswc-base/components/media/icon.js';
-import '@jeff-aporta/iswc-base/components/actions/button.js';
 import { ModalBase } from './utils/modal-base.js';
+import { define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-drawer> — Web Component (vanilla, zero dependencies).
@@ -81,20 +80,17 @@ import { ModalBase } from './utils/modal-base.js';
   };
 
   class IswcDrawer extends ModalBase {
+    static tag = 'iswc-drawer';
+    static css = css;
+    static deps = ['iswc-icon', 'iswc-button'];
 
-    static __TEMPLATE = TEMPLATE;
+    static template = TEMPLATE;
 
-    static get observedAttributes(): string[] {
-      return [...super.observedAttributes, 'placement'];
-    }
+    static observed = [...super.observed, 'placement'];
 
     get modalClass() { return '.drawer'; }
     get closeAttr() { return 'data-drawer'; }
 
-    constructor() {
-      super();
-      adoptCss(this.shadowRoot!, import.meta.url);
-    }
 
     onConnected() {
       if (!this.hasAttribute('placement')) this.setAttribute('placement', 'end');
@@ -156,5 +152,5 @@ import { ModalBase } from './utils/modal-base.js';
     }
   }
 
-  defineElement('iswc-drawer', IswcDrawer, 'IswcDrawer');
+  define(IswcDrawer, 'IswcDrawer');
 })();

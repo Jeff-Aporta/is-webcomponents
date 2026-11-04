@@ -1,4 +1,4 @@
-import { adoptCss, defineElement, emit, upgradeProperties } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit, upgradeProperties } from '@jeff-aporta/iswc-base/core/element.js';
 import { createSpaState } from '@jeff-aporta/iswc-base/core/spa-state.js';
 import { readIswc, removeIswc, writeIswc } from '@jeff-aporta/iswc-base/core/iswc-storage.js';
 import type { EstadoSpa, SpaState } from '@jeff-aporta/iswc-base/core/schemas/spa-state.schemas.js';
@@ -35,15 +35,12 @@ import '@jeff-aporta/iswc-base/components/navigation/doc-index.js';
 import '@jeff-aporta/iswc-base/components/navigation/pager.js';
 import '@jeff-aporta/iswc-base/components/diagrams/sequence-diagram.js';
 import '@jeff-aporta/iswc-base/components/code/code.js';
-import '@jeff-aporta/iswc-base/components/feedback/tag.js';
-import '@jeff-aporta/iswc-base/components/feedback/spinner.js';
-import '@jeff-aporta/iswc-base/components/actions/copy-button.js';
-import '@jeff-aporta/iswc-base/components/actions/button.js';
 import '@jeff-aporta/iswc-base/components/actions/button-group.js';
-import '@jeff-aporta/iswc-base/components/media/icon.js';
 import '@jeff-aporta/iswc-base/components/forms/input.js';
 import './dialog.js';
 import './callout.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-server-api-docs> — endpoints de la API de un SERVER al estilo Swagger (solo para servers: el
@@ -111,7 +108,10 @@ const leerArchivo = (f: File): Promise<string> => new Promise((ok, mal) => {
   r.readAsDataURL(f);
 });
 
-class IswcServerApiDocs extends HTMLElement {
+class IswcServerApiDocs extends IswcElement {
+  static tag = 'iswc-server-api-docs';
+  static css = css;
+  static deps = ['iswc-tag', 'iswc-spinner', 'iswc-copy-button', 'iswc-button', 'iswc-icon'];
   #raiz: ShadowRoot;
   #doc: unknown = null;
   #modelo: ServerApiDocsModelo | null = null;
@@ -122,14 +122,11 @@ class IswcServerApiDocs extends HTMLElement {
   #actual: string | null = null;
   #base = '';
 
-  static get observedAttributes(): string[] {
-    return ['src', 'api-base'];
-  }
+  static observed = ['src', 'api-base'];
 
   constructor() {
     super();
-    this.#raiz = this.attachShadow({ mode: 'open' });
-    adoptCss(this.#raiz, import.meta.url);
+    this.#raiz = this.shadowRoot!;
   }
 
   /** Documento del server (InSoft `kind:"config"` u OpenAPI 3). Asignarlo valida y repinta. */
@@ -159,6 +156,7 @@ class IswcServerApiDocs extends HTMLElement {
   }
 
   connectedCallback(): void {
+    super.connectedCallback();
     upgradeProperties(this, ['doc']);
     if (this.#layout) return;
     this.#raiz.append(TEMPLATE.content.cloneNode(true));
@@ -672,4 +670,4 @@ class IswcServerApiDocs extends HTMLElement {
   };
 }
 
-defineElement('iswc-server-api-docs', IswcServerApiDocs, 'IswcServerApiDocs');
+define(IswcServerApiDocs, 'IswcServerApiDocs');

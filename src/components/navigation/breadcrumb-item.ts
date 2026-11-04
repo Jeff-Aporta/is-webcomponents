@@ -1,5 +1,5 @@
-import { adoptCss, defineElement } from '@jeff-aporta/iswc-base/core/element.js';
-import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-breadcrumb-item> — un paso individual dentro de un <iswc-breadcrumb>.
@@ -44,16 +44,17 @@ import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
 
   const OBSERVED = ['href', 'icon', 'target', 'rel'];
 
-  class IswcBreadcrumbItem extends ElementBase {
-    static get observedAttributes(): string[] { return OBSERVED; }
+  class IswcBreadcrumbItem extends IswcElement {
+    static tag = 'iswc-breadcrumb-item';
+    static css = css;
+    static observed = OBSERVED;
 
     #anchor: HTMLAnchorElement | null = null;
     #upgradeProps: string[] = ['href', 'icon', 'target', 'rel'];
 
     constructor() {
       super();
-      const shadow = this.attachShadow({ mode: 'open' });
-      adoptCss(shadow, import.meta.url);
+      const shadow = this.shadowRoot!;
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
     }
 
@@ -164,5 +165,5 @@ import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
     }
   }
 
-  defineElement('iswc-breadcrumb-item', IswcBreadcrumbItem, 'IswcBreadcrumbItem');
+  define(IswcBreadcrumbItem, 'IswcBreadcrumbItem');
 })();

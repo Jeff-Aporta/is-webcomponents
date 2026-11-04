@@ -1,7 +1,6 @@
-import { adoptCss, defineElement } from '@jeff-aporta/iswc-base/core/element.js';
-import '@jeff-aporta/iswc-base/components/media/icon.js';
-import '@jeff-aporta/iswc-base/components/actions/button.js';
 import { ModalBase } from './utils/modal-base.js';
+import { define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-dialog> — Web Component (vanilla, zero dependencies).
@@ -86,20 +85,17 @@ import { ModalBase } from './utils/modal-base.js';
   const BACKDROP_VARIANTS = new Set(['none', 'basic', 'dim', 'blur']);
 
   class IswcDialog extends ModalBase {
+    static tag = 'iswc-dialog';
+    static css = css;
+    static deps = ['iswc-icon', 'iswc-button'];
 
-    static get observedAttributes(): string[] {
-      return [...super.observedAttributes, 'backdrop-variant'];
-    }
+    static observed = [...super.observed, 'backdrop-variant'];
 
-    static __TEMPLATE = TEMPLATE;
+    static template = TEMPLATE;
 
     get modalClass() { return '.dialog'; }
     get closeAttr() { return 'data-dialog'; }
 
-    constructor() {
-      super();
-      adoptCss(this.shadowRoot!, import.meta.url);
-    }
 
     /** basic | dim | blur | none. Ausente o inválido → basic. */
     get backdropVariant() {
@@ -178,5 +174,5 @@ import { ModalBase } from './utils/modal-base.js';
     }
   }
 
-  defineElement('iswc-dialog', IswcDialog, 'IswcDialog');
+  define(IswcDialog, 'IswcDialog');
 })();

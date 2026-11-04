@@ -1,5 +1,6 @@
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
-import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-scroller> — Web Component (vanilla, zero dependencies).
@@ -48,9 +49,11 @@ import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
 
   const OBSERVED = ['orientation', 'without-scroll-buttons', 'label'];
 
-  class IswcScroller extends ElementBase {
+  class IswcScroller extends IswcElement {
+    static tag = 'iswc-scroller';
+    static css = css;
 
-    static get observedAttributes(): string[] { return [...OBSERVED, 'button-size', 'button-bg', 'button-color']; }
+    static observed = [...OBSERVED, 'button-size', 'button-bg', 'button-color'];
 
     #scroller!: HTMLElement;
     #viewport!: HTMLElement;
@@ -61,8 +64,7 @@ import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
 
     constructor() {
       super();
-      const shadow = this.attachShadow({ mode: 'open' });
-      adoptCss(shadow, import.meta.url);
+      const shadow = this.shadowRoot!;
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
       this.#scroller = shadow.querySelector<HTMLElement>('.scroller')!;
       this.#viewport = shadow.querySelector<HTMLElement>('.viewport')!;
@@ -170,5 +172,5 @@ import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
     };
   }
 
-  defineElement('iswc-scroller', IswcScroller, 'IswcScroller');
+  define(IswcScroller, 'IswcScroller');
 })();

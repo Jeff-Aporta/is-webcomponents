@@ -1,12 +1,11 @@
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
 import { crearNodo } from '@jeff-aporta/iswc-base/core/dom-utils.js';
-import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
 import { getNumberAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
 import { PaginationTextosSchema } from './schemas/pagination.schemas.js';
 import type { PaginationChangeDetail, PaginationSizeDetail, PaginationTextos } from './schemas/pagination.schemas.js';
-import '@jeff-aporta/iswc-base/components/actions/button.js';
 import '@jeff-aporta/iswc-base/components/forms/select.js';
-import '@jeff-aporta/iswc-base/components/media/icon.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-pagination> — paginación numérica: pista de números desplazable (flechas, Shift+rueda, arrastre táctil) y selector
@@ -46,8 +45,11 @@ function parseSizes(raw: string | null): number[] {
 
 const rellenar = (plantilla: string, n: number, total = 0): string => plantilla.replace('{n}', String(n)).replace('{total}', String(total));
 
-class IswcPagination extends ElementBase {
-  static override get observedAttributes(): string[] { return [...OBSERVED]; }
+class IswcPagination extends IswcElement {
+  static tag = 'iswc-pagination';
+  static css = css;
+  static deps = ['iswc-button', 'iswc-icon'];
+  static observed = [...OBSERVED];
 
   #root: ShadowRoot;
   #abort: AbortController | null = null;
@@ -57,8 +59,7 @@ class IswcPagination extends ElementBase {
 
   constructor() {
     super();
-    this.#root = this.attachShadow({ mode: 'open' });
-    adoptCss(this.#root, import.meta.url);
+    this.#root = this.shadowRoot!;
   }
 
   override onConnected(): void {
@@ -295,4 +296,4 @@ class IswcPagination extends ElementBase {
   }
 }
 
-defineElement('iswc-pagination', IswcPagination, 'IswcPagination');
+define(IswcPagination, 'IswcPagination');

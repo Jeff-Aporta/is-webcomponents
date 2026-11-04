@@ -1,8 +1,9 @@
-import { adoptCss, defineElement } from '@jeff-aporta/iswc-base/core/element.js';
 import { atributosDe, PropsElement } from '@jeff-aporta/iswc-base/core/props-element.js';
 import { PersonPropsSchema } from './schemas/person.schemas.js';
 import type { PersonProps } from './schemas/person.schemas.js';
 import './avatar.js';
+import { define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-person> — una persona en línea: avatar con iniciales, nombre (o usuario) y un detalle. Escala con el
@@ -30,7 +31,9 @@ function iniciales(nombre: string | null, usuario: string): string {
 }
 
 class IswcPerson extends PropsElement<PersonProps> {
-  static override get observedAttributes(): string[] { return atributosDe(INICIAL); }
+  static tag = 'iswc-person';
+  static css = css;
+  static observed = atributosDe(INICIAL);
 
   #persona: HTMLElement;
   #avatar: HTMLElement;
@@ -40,8 +43,7 @@ class IswcPerson extends PropsElement<PersonProps> {
 
   constructor() {
     super(INICIAL, PersonPropsSchema.partial());
-    const shadow = this.attachShadow({ mode: 'open' });
-    adoptCss(shadow, import.meta.url);
+    const shadow = this.shadowRoot!;
     shadow.appendChild(TEMPLATE.content.cloneNode(true));
     this.#persona = shadow.querySelector<HTMLElement>('.persona')!;
     this.#avatar = shadow.querySelector<HTMLElement>('.avatar')!;
@@ -63,4 +65,4 @@ class IswcPerson extends PropsElement<PersonProps> {
   }
 }
 
-defineElement('iswc-person', IswcPerson, 'IswcPerson');
+define(IswcPerson, 'IswcPerson');

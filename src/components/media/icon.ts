@@ -1,6 +1,7 @@
-import { adoptCss, defineElement } from '@jeff-aporta/iswc-base/core/element.js';
 import { resolveIconRaw } from '@jeff-aporta/iswc-base/core/icon-loader.js';
 import { setStringAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-icon> — Web Component (vanilla, zero dependencies).
@@ -34,8 +35,10 @@ import { setStringAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
 
   const OBSERVED = ['icon', 'name', 'library', 'label', 'src'];
 
-  class IswcIcon extends HTMLElement {
-    static get observedAttributes(): string[] { return OBSERVED; }
+  class IswcIcon extends IswcElement {
+    static tag = 'iswc-icon';
+    static css = css;
+    static observed = OBSERVED;
 
     #inline!: HTMLElement;
     #mounted = false;
@@ -44,8 +47,7 @@ import { setStringAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
 
     constructor() {
       super();
-      const shadow = this.attachShadow({ mode: 'open' });
-      adoptCss(shadow, import.meta.url);
+      const shadow = this.shadowRoot!;
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
       this.#inline = shadow.querySelector<HTMLElement>('.inline')!;
     }
@@ -241,5 +243,5 @@ import { setStringAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
     }
   }
 
-  defineElement('iswc-icon', IswcIcon, 'IswcIcon');
+  define(IswcIcon, 'IswcIcon');
 })();

@@ -1,6 +1,7 @@
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
-import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
 import { TONE } from '@jeff-aporta/iswc-base/core/tone.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-details> — Web Component (vanilla, zero dependencies).
@@ -72,9 +73,11 @@ import { TONE } from '@jeff-aporta/iswc-base/core/tone.js';
   const VALID_VARIANT = TONE.filter((t) => t !== 'accent');
   const VALID_ICON_PLACEMENT = ['start', 'end'];
 
-  class IswcDetails extends ElementBase {
+  class IswcDetails extends IswcElement {
+    static tag = 'iswc-details';
+    static css = css;
 
-    static get observedAttributes(): string[] { return [...OBSERVED, 'spacing', 'show-duration', 'hide-duration']; }
+    static observed = [...OBSERVED, 'spacing', 'show-duration', 'hide-duration'];
 
     #button!: HTMLButtonElement;
     #content!: HTMLElement;
@@ -82,8 +85,7 @@ import { TONE } from '@jeff-aporta/iswc-base/core/tone.js';
     #defaultIcon!: HTMLElement;
     constructor() {
       super();
-      const shadow = this.attachShadow({ mode: 'open' });
-      adoptCss(shadow, import.meta.url);
+      const shadow = this.shadowRoot!;
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
       this.#root = shadow.querySelector<HTMLElement>('.root')!;
       this.#button = shadow.querySelector<HTMLButtonElement>('.summary-btn')!;
@@ -342,5 +344,5 @@ import { TONE } from '@jeff-aporta/iswc-base/core/tone.js';
     }
   }
 
-  defineElement('iswc-details', IswcDetails, 'IswcDetails');
+  define(IswcDetails, 'IswcDetails');
 })();

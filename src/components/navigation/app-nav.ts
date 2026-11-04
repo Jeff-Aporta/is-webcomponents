@@ -1,8 +1,8 @@
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
-import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
 import { setCustomState } from '@jeff-aporta/iswc-base/core/form-associated.js';
-import '@jeff-aporta/iswc-base/components/media/icon.js';
 import type { AppNavRow } from './schemas/app-nav.schemas.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-app-nav> — Filas de pestañas para la barra de una app (primaria + secundarias).
@@ -61,8 +61,11 @@ function firma(rows: AppNavRow[]): string {
     .join(';');
 }
 
-class IswcAppNav extends ElementBase {
-  static override get observedAttributes(): string[] { return ['rows']; }
+class IswcAppNav extends IswcElement {
+  static tag = 'iswc-app-nav';
+  static css = css;
+  static deps = ['iswc-icon'];
+  static observed = ['rows'];
 
   #internals: ElementInternals | null = null;
   #rows: AppNavRow[] = [];
@@ -71,8 +74,7 @@ class IswcAppNav extends ElementBase {
 
   constructor() {
     super();
-    const shadow = this.attachShadow({ mode: 'open' });
-    adoptCss(shadow, import.meta.url);
+    const shadow = this.shadowRoot!;
     shadow.appendChild(TEMPLATE.content.cloneNode(true));
     try { this.#internals = this.attachInternals(); } catch { this.#internals = null; }
     this.#nav = shadow.querySelector('.nav') as HTMLElement;
@@ -236,7 +238,7 @@ class IswcAppNav extends ElementBase {
   };
 }
 
-defineElement('iswc-app-nav', IswcAppNav as unknown as CustomElementConstructor);
+define(IswcAppNav);
 
 declare global {
   interface HTMLElementTagNameMap {

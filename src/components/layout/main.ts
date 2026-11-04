@@ -16,18 +16,20 @@
  * de componente en la galería vía iframe.src) arranca en top.
  */
 
-import { defineElement } from '@jeff-aporta/iswc-base/core/element.js';
 import {
   SCROLL_MEMORY_ATTRS,
   ScrollMemory,
   bindScrollMemoryApi,
 } from '@jeff-aporta/iswc-base/core/scroll-memory.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 
 (() => {
   const TAG = 'iswc-main';
 
-  class IswcMain extends HTMLElement {
-    static get observedAttributes(): string[] { return [...SCROLL_MEMORY_ATTRS]; }
+  class IswcMain extends IswcElement {
+    static tag = 'iswc-main';
+    static shadowInit: ShadowRootInit | null = null;
+    static observed = [...SCROLL_MEMORY_ATTRS];
 
     #memory: ScrollMemory | null = null;
     #mounted = false;
@@ -56,5 +58,5 @@ import {
     }
   }
 
-  defineElement(TAG, IswcMain, 'IswcMain');
+  define(IswcMain, 'IswcMain');
 })();

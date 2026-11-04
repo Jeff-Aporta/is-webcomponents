@@ -1,5 +1,4 @@
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
-import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
 import { setStringAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
 import {
   findThemeContainer,
@@ -8,6 +7,8 @@ import {
 } from '@jeff-aporta/iswc-base/core/theme-scope.js';
 import { MEDIA_SHAPE } from '@jeff-aporta/iswc-base/core/media-shape.js';
 import { type MediaShape } from '@jeff-aporta/iswc-base/core/schemas/media-shape.schemas.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-theme-img> — una sola imagen que cambia dark ↔ light según el tema.
@@ -60,19 +61,18 @@ import { type MediaShape } from '@jeff-aporta/iswc-base/core/schemas/media-shape
     return v === 'light' || v === 'dark' ? v : null;
   }
 
-  class IswcThemeImg extends ElementBase {
+  class IswcThemeImg extends IswcElement {
+    static tag = 'iswc-theme-img';
+    static css = css;
 
-    static get observedAttributes(): string[] {
-      return [...OBSERVED];
-    }
+    static observed = [...OBSERVED];
 
     #img!: HTMLImageElement;
     #unwatch: (() => void) | null = null;
 
     constructor() {
       super();
-      const shadow = this.attachShadow({ mode: 'open' });
-      adoptCss(shadow, import.meta.url);
+      const shadow = this.shadowRoot!;
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
       this.#img = shadow.querySelector<HTMLImageElement>('.img')!;
       // F0.3 g12 [media/loading]: aria-busy durante la carga + iswc-error al
@@ -175,5 +175,5 @@ import { type MediaShape } from '@jeff-aporta/iswc-base/core/schemas/media-shape
     }
   }
 
-  defineElement('iswc-theme-img', IswcThemeImg, 'IswcThemeImg');
+  define(IswcThemeImg, 'IswcThemeImg');
 })();

@@ -1,8 +1,8 @@
-import { adoptCss, defineElement } from '@jeff-aporta/iswc-base/core/element.js';
 import { atributosDe, PropsElement } from '@jeff-aporta/iswc-base/core/props-element.js';
 import { PageHeaderPropsSchema } from './schemas/page-header.schemas.js';
 import type { PageHeaderProps } from './schemas/page-header.schemas.js';
-import '@jeff-aporta/iswc-base/components/media/icon.js';
+import { define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-page-header> — cabecera de una vista: ícono, título, subtítulo, acciones (slot `acciones`) e ilustración
@@ -28,7 +28,10 @@ TEMPLATE.innerHTML = /* html */ `
 `;
 
 class IswcPageHeader extends PropsElement<PageHeaderProps> {
-  static override get observedAttributes(): string[] { return atributosDe(INICIAL); }
+  static tag = 'iswc-page-header';
+  static css = css;
+  static deps = ['iswc-icon'];
+  static observed = atributosDe(INICIAL);
 
   #icono: HTMLElement;
   #rotulo: HTMLElement;
@@ -37,8 +40,7 @@ class IswcPageHeader extends PropsElement<PageHeaderProps> {
 
   constructor() {
     super(INICIAL, PageHeaderPropsSchema.partial());
-    const shadow = this.attachShadow({ mode: 'open' });
-    adoptCss(shadow, import.meta.url);
+    const shadow = this.shadowRoot!;
     shadow.appendChild(TEMPLATE.content.cloneNode(true));
     this.#icono = shadow.querySelector<HTMLElement>('iswc-icon')!;
     this.#rotulo = shadow.querySelector<HTMLElement>('.rotulo')!;
@@ -63,4 +65,4 @@ class IswcPageHeader extends PropsElement<PageHeaderProps> {
   }
 }
 
-defineElement('iswc-page-header', IswcPageHeader, 'IswcPageHeader');
+define(IswcPageHeader, 'IswcPageHeader');

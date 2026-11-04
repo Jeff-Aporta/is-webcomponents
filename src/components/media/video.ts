@@ -1,11 +1,12 @@
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
 import { withStyleAttrs } from '@jeff-aporta/iswc-base/core/attrs.js';
 
-import '@jeff-aporta/iswc-base/components/actions/button.js';
 import '@jeff-aporta/iswc-base/components/actions/check-icon-button.js';
 import './icon.js';
 import { setStringAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
 import type { IswcCheckIconButton } from "./schemas/video.schemas.js";
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-video> — Web Component (vanilla).
@@ -146,9 +147,12 @@ import type { IswcCheckIconButton } from "./schemas/video.schemas.js";
     return h > 0 ? `${h}:${pad(m)}:${pad(s)}` : `${m}:${pad(s)}`;
   }
 
-  class IswcVideo extends withStyleAttrs(HTMLElement) {
+  class IswcVideo extends withStyleAttrs(IswcElement) {
+    static tag = 'iswc-video';
+    static css = css;
+    static deps = ['iswc-button'];
 
-    static get observedAttributes(): string[] { return [...OBSERVED, 'accent']; }
+    static observed = [...OBSERVED, 'accent'];
 
     #video!: HTMLVideoElement;
     #controls!: HTMLElement;
@@ -174,8 +178,7 @@ import type { IswcCheckIconButton } from "./schemas/video.schemas.js";
 
     constructor() {
       super();
-      const shadow = this.attachShadow({ mode: 'open' });
-      adoptCss(shadow, import.meta.url);
+      const shadow = this.shadowRoot!;
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
 
       this.#video = shadow.querySelector<HTMLVideoElement>('.video')!;
@@ -664,5 +667,5 @@ import type { IswcCheckIconButton } from "./schemas/video.schemas.js";
     };
   }
 
-  defineElement('iswc-video', IswcVideo, 'IswcVideo');
+  define(IswcVideo, 'IswcVideo');
 })();

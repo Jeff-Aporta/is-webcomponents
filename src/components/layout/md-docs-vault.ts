@@ -1,4 +1,3 @@
-import { adoptCss, defineElement } from '@jeff-aporta/iswc-base/core/element.js';
 import { createSpaState } from '@jeff-aporta/iswc-base/core/spa-state.js';
 import type { EstadoSpa, SpaState } from '@jeff-aporta/iswc-base/core/schemas/spa-state.schemas.js';
 // Solo tipos: el schema Zod (`MdDocsVaultListaSchema`) queda para tests y consumidores; en el bundle
@@ -16,16 +15,13 @@ import type {
 import './doc-layout.js';
 import '@jeff-aporta/iswc-base/components/navigation/doc-index.js';
 import '@jeff-aporta/iswc-base/components/navigation/pager.js';
-import '@jeff-aporta/iswc-base/components/media/figure.js';
 import '@jeff-aporta/iswc-base/components/data/meta-list.js';
 import '@jeff-aporta/iswc-base/components/helpers/md-render.js';
-import '@jeff-aporta/iswc-base/components/actions/copy-button.js';
-import '@jeff-aporta/iswc-base/components/actions/button.js';
 import '@jeff-aporta/iswc-base/components/actions/button-group.js';
-import '@jeff-aporta/iswc-base/components/media/icon.js';
-import '@jeff-aporta/iswc-base/components/feedback/spinner.js';
 import './dialog.js';
 import './callout.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-md-docs-vault> — lector de una documentación modular (norma `documentacion-modular`) como un
@@ -103,7 +99,10 @@ export function resolverRuta(desde: string, rel: string): string {
   return partes.join('/');
 }
 
-class IswcMdDocsVault extends HTMLElement {
+class IswcMdDocsVault extends IswcElement {
+  static tag = 'iswc-md-docs-vault';
+  static css = css;
+  static deps = ['iswc-figure', 'iswc-copy-button', 'iswc-button', 'iswc-icon', 'iswc-spinner'];
   #raiz: ShadowRoot;
   #hojas: Hoja[] = [];
   #textos = new Map<string, string>();
@@ -113,17 +112,15 @@ class IswcMdDocsVault extends HTMLElement {
   /** Renderers extra del consumidor (se suman a los del lector; ver `iswc-md-render.renderers`). */
   renderers: MdDocsVaultRenderers | null = null;
 
-  static get observedAttributes(): string[] {
-    return ['main'];
-  }
+  static observed = ['main'];
 
   constructor() {
     super();
-    this.#raiz = this.attachShadow({ mode: 'open' });
-    adoptCss(this.#raiz, import.meta.url);
+    this.#raiz = this.shadowRoot!;
   }
 
   connectedCallback(): void {
+    super.connectedCallback();
     if (this.#nav || this.#layout) return;
     this.#raiz.append(TEMPLATE.content.cloneNode(true));
     this.#layout = this.#raiz.querySelector<Layout>('iswc-doc-layout');
@@ -409,4 +406,4 @@ class IswcMdDocsVault extends HTMLElement {
   }
 }
 
-defineElement('iswc-md-docs-vault', IswcMdDocsVault, 'IswcMdDocsVault');
+define(IswcMdDocsVault, 'IswcMdDocsVault');

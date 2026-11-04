@@ -1,7 +1,8 @@
-import { adoptCss, defineElement, emitCancelable } from '@jeff-aporta/iswc-base/core/element.js';
-import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
+import { emitCancelable } from '@jeff-aporta/iswc-base/core/element.js';
 import { setStringAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
 import type { PagerDirection, PagerNavigateDetail } from './schemas/pager.schemas.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-pager> — paso a la página anterior / siguiente con el título de cada una
@@ -31,16 +32,17 @@ TEMPLATE.innerHTML = /* html */ `
   </nav>
 `;
 
-class IswcPager extends ElementBase {
-  static override get observedAttributes(): string[] { return [...OBSERVED]; }
+class IswcPager extends IswcElement {
+  static tag = 'iswc-pager';
+  static css = css;
+  static observed = [...OBSERVED];
 
   #nav: HTMLElement;
   #sides: Record<PagerDirection, HTMLAnchorElement>;
 
   constructor() {
     super();
-    const shadow = this.attachShadow({ mode: 'open' });
-    adoptCss(shadow, import.meta.url);
+    const shadow = this.shadowRoot!;
     shadow.appendChild(TEMPLATE.content.cloneNode(true));
     this.#nav = shadow.querySelector<HTMLElement>('.base')!;
     this.#sides = {
@@ -109,4 +111,4 @@ class IswcPager extends ElementBase {
   }
 }
 
-defineElement('iswc-pager', IswcPager, 'IswcPager');
+define(IswcPager, 'IswcPager');

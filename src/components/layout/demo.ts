@@ -1,4 +1,5 @@
-import { defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 
 /**
  * <iswc-demo> — sección de demo de documentación (light DOM, zero dependencies).
@@ -26,7 +27,9 @@ import { defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
  * extractor de código del demo ven el markup real del ejemplo.
  */
 (() => {
-  class IswcDemo extends HTMLElement {
+  class IswcDemo extends IswcElement {
+    static tag = 'iswc-demo';
+    static shadowInit: ShadowRootInit | null = null;
     #headingEl: HTMLElement | null = null;
 
     connectedCallback(): void {
@@ -39,7 +42,7 @@ import { defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
       emit(this, 'iswc-demo-connected');
     }
 
-    static get observedAttributes(): string[] { return ['heading']; }
+    static observed = ['heading'];
 
     attributeChangedCallback(): void {
       if (this.isConnected) this.#syncHeading();
@@ -62,5 +65,5 @@ import { defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
     }
   }
 
-  defineElement('iswc-demo', IswcDemo, 'IswcDemo');
+  define(IswcDemo, 'IswcDemo');
 })();

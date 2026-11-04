@@ -1,5 +1,7 @@
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
 import type { QRInstance, QRLib } from "./schemas/qrcode.schemas.js";
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-qrcode> — Generador de QR en SVG.
@@ -29,8 +31,10 @@ import type { QRInstance, QRLib } from "./schemas/qrcode.schemas.js";
 (() => {
   const OBSERVED = ['value', 'level', 'cell', 'margin', 'fg', 'bg'];
 
-  class IswcQrCode extends HTMLElement {
-    static get observedAttributes(): string[] { return OBSERVED; }
+  class IswcQrCode extends IswcElement {
+    static tag = 'iswc-qrcode';
+    static css = css;
+    static observed = OBSERVED;
     #mounted = false;
     #lib: QRLib | null = null;
     #canvas!: HTMLElement;
@@ -38,14 +42,12 @@ import type { QRInstance, QRLib } from "./schemas/qrcode.schemas.js";
 
     constructor() {
       super();
-      this.attachShadow({ mode: 'open' });
       this.shadowRoot!.innerHTML = /* html */ `
         <div part="root" class="root">
           <div part="canvas" class="canvas" id="canvas"></div>
           <output part="status" class="status"></output>
         </div>
       `;
-      adoptCss(this.shadowRoot!, import.meta.url);
       this.#canvas = this.shadowRoot!.getElementById('canvas')!;
       this.#status = this.shadowRoot!.querySelector<HTMLElement>('.status')!;
     }
@@ -155,5 +157,5 @@ import type { QRInstance, QRLib } from "./schemas/qrcode.schemas.js";
     }
   }
 
-  defineElement('iswc-qrcode', IswcQrCode);
+  define(IswcQrCode);
 })();

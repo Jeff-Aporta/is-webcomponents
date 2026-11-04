@@ -12,8 +12,9 @@
  * Atributos:
  *   label   string — header del panel (default: "Atributos").
  */
-import { adoptCss } from "@jeff-aporta/iswc-base/core/element.js";
 import type { OpcionPanel, PanelInfo, ControlPanel } from "./schemas/preview-controls.schemas.js";
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * Información JSDoc-style del atributo, mostrada en el popover del botón
@@ -235,7 +236,10 @@ async function asegurarWidgets(): Promise<void> {
   );
 }
 
-class IswcPreviewControls extends HTMLElement {
+class IswcPreviewControls extends IswcElement {
+  static tag = 'iswc-preview-controls';
+  static css = css;
+  static shadowInit: ShadowRootInit | null = null;
   #spec: ControlPanel[] = [];
   #listo = false;
   #arrancando = false;
@@ -244,15 +248,12 @@ class IswcPreviewControls extends HTMLElement {
   /** Handler de Escape (Phase W36) — cierra popovers info. */
   #onPopoverEscape: ((ev: KeyboardEvent) => void) | null = null;
 
-  static get observedAttributes(): string[] {
-    return ['label'];
-  }
+  static observed = ['label'];
 
   connectedCallback(): void {
     if (!this.shadowRoot) {
-      this.attachShadow({ mode: 'open' });
+      this.initShadow({ mode: 'open' });
       this.shadowRoot!.appendChild(TPL.content.cloneNode(true));
-      adoptCss(this.shadowRoot!, import.meta.url);
     }
     // Si `spec` se asignó antes del upgrade, queda como data-prop propia y
     // tapa el setter → knobs vacíos. Recuperar.
@@ -834,11 +835,8 @@ class IswcPreviewControls extends HTMLElement {
 let definido = false;
 /** Define <iswc-preview-controls> una sola vez (idempotente). */
 export function definePreviewControls(): void {
-  if (definido || customElements.get('iswc-preview-controls')) {
-    definido = true;
-    return;
-  }
-  customElements.define('iswc-preview-controls', IswcPreviewControls);
+  if (definido) return;
+  define(IswcPreviewControls);
   definido = true;
 }
 

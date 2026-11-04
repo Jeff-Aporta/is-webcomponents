@@ -1,5 +1,7 @@
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
 import { withStyleAttrs } from '@jeff-aporta/iswc-base/core/attrs.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 
 /**
@@ -28,22 +30,22 @@ import { withStyleAttrs } from '@jeff-aporta/iswc-base/core/attrs.js';
 (() => {
   const OBSERVED = ['position', 'max-scale', 'range'];
 
-  class IswcDock extends withStyleAttrs(HTMLElement) {
+  class IswcDock extends withStyleAttrs(IswcElement) {
+    static tag = 'iswc-dock';
+    static css = css;
 
-    static get observedAttributes(): string[] { return [...OBSERVED, 'scale-unit']; }
+    static observed = [...OBSERVED, 'scale-unit'];
     #raf = 0;
     #onMove: ((e: PointerEvent) => void) | null = null;
     #onLeave: (() => void) | null = null;
 
     constructor() {
       super();
-      this.attachShadow({ mode: 'open' });
       this.shadowRoot!.innerHTML = /* html */ `
         <div part="root" class="root" data-position="bottom">
           <slot></slot>
         </div>
       `;
-      adoptCss(this.shadowRoot!, import.meta.url);
       this.#root = this.shadowRoot!.querySelector<HTMLElement>('.root')!;
       this.#onMove = (e: PointerEvent): void => this.#updateMagnification(e);
       this.#onLeave = (): void => this.#clearMagnification();
@@ -102,20 +104,20 @@ import { withStyleAttrs } from '@jeff-aporta/iswc-base/core/attrs.js';
     }
   }
 
-  defineElement('iswc-dock', IswcDock);
+  define(IswcDock);
 
-  class IswcDockItem extends HTMLElement {
-    static get observedAttributes(): string[] { return ['icon', 'label', 'href', 'active']; }
+  class IswcDockItem extends IswcElement {
+    static tag = 'iswc-dock-item';
+    static css = css;
+    static observed = ['icon', 'label', 'href', 'active'];
     constructor() {
       super();
-      this.attachShadow({ mode: 'open' });
       this.shadowRoot!.innerHTML = /* html */ `
         <a part="item" class="item" tabindex="0">
           <span class="ico"><slot name="icon"><iswc-icon></iswc-icon></slot></span>
           <span class="label" part="label"></span>
         </a>
       `;
-      adoptCss(this.shadowRoot!, import.meta.url);
       this.addEventListener('click', (e) => {
         if (this.hasAttribute('disabled')) { e.preventDefault(); return; }
         const dock = this.closest('iswc-dock');
@@ -156,5 +158,5 @@ import { withStyleAttrs } from '@jeff-aporta/iswc-base/core/attrs.js';
       }
     }
   }
-  defineElement('iswc-dock-item', IswcDockItem);
+  define(IswcDockItem);
 })();

@@ -1,6 +1,6 @@
-import { adoptCss, defineElement } from '@jeff-aporta/iswc-base/core/element.js';
-import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
 import './login.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-login-gate> — Cortina de acceso: muestra contenido público y pide login
@@ -32,10 +32,10 @@ const HTML_TEMPLATE = `
 const TEMPLATE = document.createElement('template');
 TEMPLATE.innerHTML = HTML_TEMPLATE;
 
-class IswcLoginGate extends ElementBase {
-  static get observedAttributes(): string[] {
-    return ['logged', 'busy', 'error', 'notice', 'heading', 'subtitle', 'provider', 'providers', 'mode'];
-  }
+class IswcLoginGate extends IswcElement {
+  static tag = 'iswc-login-gate';
+  static css = css;
+  static observed = ['logged', 'busy', 'error', 'notice', 'heading', 'subtitle', 'provider', 'providers', 'mode'];
 
   #curtain!: HTMLElement;
   #protected!: HTMLElement;
@@ -43,8 +43,7 @@ class IswcLoginGate extends ElementBase {
 
   constructor() {
     super();
-    const shadow = this.attachShadow({ mode: 'open' });
-    adoptCss(shadow, import.meta.url);
+    const shadow = this.shadowRoot!;
     shadow.appendChild(TEMPLATE.content.cloneNode(true));
   }
 
@@ -75,7 +74,7 @@ class IswcLoginGate extends ElementBase {
   }
 }
 
-defineElement('iswc-login-gate', IswcLoginGate as unknown as CustomElementConstructor);
+define(IswcLoginGate);
 
 declare global {
   interface HTMLElementTagNameMap {

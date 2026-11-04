@@ -1,5 +1,6 @@
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
-import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-carousel> + <iswc-carousel-item> — Web Components (vanilla, zero dependencies).
@@ -68,9 +69,11 @@ import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
 
   const TG_OBSERVED = ['active', 'loop', 'autoplay', 'without-controls', 'without-indicators', 'vertical', 'slides-per-page', 'aspect-ratio'];
 
-  class IswcCarousel extends ElementBase {
+  class IswcCarousel extends IswcElement {
+    static tag = 'iswc-carousel';
+    static css = css;
 
-    static get observedAttributes(): string[] { return [...TG_OBSERVED]; }
+    static observed = [...TG_OBSERVED];
 
     #scroller!: HTMLElement;
     #track!: HTMLElement;
@@ -86,8 +89,7 @@ import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
 
     constructor() {
       super();
-      const shadow = this.attachShadow({ mode: 'open' });
-      adoptCss(shadow, import.meta.url);
+      const shadow = this.shadowRoot!;
       shadow.appendChild(TG_TEMPLATE.content.cloneNode(true));
       this.#scroller = shadow.querySelector<HTMLElement>('.viewport')!;
       this.#track = shadow.querySelector<HTMLElement>('.track')!;
@@ -342,7 +344,7 @@ import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
     }
   }
 
-  defineElement('iswc-carousel', IswcCarousel, 'IswcCarousel');
+  define(IswcCarousel, 'IswcCarousel');
 
   // ============ <iswc-carousel-item> ============
   const ITEM_TEMPLATE = document.createElement('template');
@@ -352,13 +354,14 @@ import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
     </div>
   `;
 
-  class IswcCarouselItem extends HTMLElement {
-    static get observedAttributes(): string[] { return ['label']; }
+  class IswcCarouselItem extends IswcElement {
+    static tag = 'iswc-carousel-item';
+    static css = css;
+    static observed = ['label'];
 
     constructor() {
       super();
-      const shadow = this.attachShadow({ mode: 'open' });
-      adoptCss(shadow, import.meta.url);
+      const shadow = this.shadowRoot!;
       shadow.appendChild(ITEM_TEMPLATE.content.cloneNode(true));
     }
 
@@ -376,5 +379,5 @@ import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
     }
   }
 
-  defineElement('iswc-carousel-item', IswcCarouselItem, 'IswcCarouselItem');
+  define(IswcCarouselItem, 'IswcCarouselItem');
 })();

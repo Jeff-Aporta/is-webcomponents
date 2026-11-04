@@ -1,5 +1,6 @@
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
-import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-stepper> + <iswc-stepper-step> — Web Components (vanilla, zero dependencies).
@@ -52,15 +53,16 @@ import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
 
   const TG_OBSERVED = ['active', 'orientation', 'without-line', 'color'];
 
-  class IswcStepper extends ElementBase {
+  class IswcStepper extends IswcElement {
+    static tag = 'iswc-stepper';
+    static css = css;
 
-    static get observedAttributes(): string[] { return [...TG_OBSERVED]; }
+    static observed = [...TG_OBSERVED];
 
 
     constructor() {
       super();
-      const shadow = this.attachShadow({ mode: 'open' });
-      adoptCss(shadow, import.meta.url);
+      const shadow = this.shadowRoot!;
       shadow.appendChild(TG_TEMPLATE.content.cloneNode(true));
     }
 
@@ -160,14 +162,15 @@ import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
 
   const STEP_OBSERVED = ['label', 'description', 'icon', 'disabled', 'error'];
 
-  class IswcStepperStep extends ElementBase {
-    static get observedAttributes(): string[] { return STEP_OBSERVED; }
+  class IswcStepperStep extends IswcElement {
+    static tag = 'iswc-stepper-step';
+    static css = css;
+    static observed = STEP_OBSERVED;
 
 
     constructor() {
       super();
-      const shadow = this.attachShadow({ mode: 'open' });
-      adoptCss(shadow, import.meta.url);
+      const shadow = this.shadowRoot!;
       shadow.appendChild(STEP_TEMPLATE.content.cloneNode(true));
     }
 
@@ -216,7 +219,7 @@ import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
     }
   }
 
-  defineElement('iswc-stepper-step', IswcStepperStep, 'IswcStepperStep');
+  define(IswcStepperStep, 'IswcStepperStep');
   // Después del paso: al subir el grupo sus pasos ya tienen shadow.
-  defineElement('iswc-stepper', IswcStepper, 'IswcStepper');
+  define(IswcStepper, 'IswcStepper');
 })();

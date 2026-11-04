@@ -1,5 +1,6 @@
-import { adoptCss, defineElement } from '@jeff-aporta/iswc-base/core/element.js';
 import { withStyleAttrs } from '@jeff-aporta/iswc-base/core/attrs.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 
 /**
@@ -25,17 +26,18 @@ import { withStyleAttrs } from '@jeff-aporta/iswc-base/core/attrs.js';
     'brand', 'accent', 'success', 'warning', 'danger',
   ];
 
-  class IswcDivider extends withStyleAttrs(HTMLElement) {
+  class IswcDivider extends withStyleAttrs(IswcElement) {
+    static tag = 'iswc-divider';
+    static css = css;
 
-    static get observedAttributes(): string[] { return [...OBSERVED, 'color', 'spacing', 'width']; }
+    static observed = [...OBSERVED, 'color', 'spacing', 'width'];
 
     constructor() {
       super();
-      const shadow = this.attachShadow({ mode: 'open' });
+      const shadow = this.shadowRoot!;
       shadow.innerHTML = '<span part="divider" class="divider" aria-hidden="true"></span>'
         + '<span part="label" class="rotulo" hidden><slot></slot></span>'
         + '<span part="divider" class="divider fin" aria-hidden="true" hidden></span>';
-      adoptCss(shadow, import.meta.url);
       const slot = shadow.querySelector('slot')!;
       slot.addEventListener('slotchange', () => {
         const conTexto = slot.assignedNodes().some((n) => (n.textContent ?? '').trim());
@@ -103,5 +105,5 @@ import { withStyleAttrs } from '@jeff-aporta/iswc-base/core/attrs.js';
     }
   }
 
-  defineElement('iswc-divider', IswcDivider, 'IswcDivider');
+  define(IswcDivider, 'IswcDivider');
 })();

@@ -1,8 +1,8 @@
-import '@jeff-aporta/iswc-base/components/actions/button.js';
-import '@jeff-aporta/iswc-base/components/media/icon.js';
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
 import { setStringAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
 import type { BarcodeDetectorCtor, BarcodeDetectorInstance, DetectedBarcode } from "./schemas/barcode-scanner.schemas.js";
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-barcode-scanner> — BarcodeDetector sobre cámara o <img>/canvas.
@@ -44,8 +44,11 @@ function getBarcodeDetector(): BarcodeDetectorCtor | undefined {
     <p class="hint" part="hint" aria-live="polite"></p>
   `;
 
-  class IswcBarcodeScanner extends HTMLElement {
-    static get observedAttributes(): string[] { return ['formats', 'disabled']; }
+  class IswcBarcodeScanner extends IswcElement {
+    static tag = 'iswc-barcode-scanner';
+    static css = css;
+    static deps = ['iswc-button', 'iswc-icon'];
+    static observed = ['formats', 'disabled'];
 
     /**
      * 2026-Q1 fix: attributeChangedCallback faltaba → el playground no
@@ -74,8 +77,7 @@ function getBarcodeDetector(): BarcodeDetectorCtor | undefined {
     #hint!: HTMLElement;
     constructor() {
       super();
-      const shadow = this.attachShadow({ mode: 'open' });
-      adoptCss(shadow, import.meta.url);
+      const shadow = this.shadowRoot!;
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
       this.#video = shadow.querySelector<HTMLVideoElement>('.preview')!;
       this.#go = shadow.querySelector<HTMLElement>('.go')!;
@@ -87,6 +89,7 @@ function getBarcodeDetector(): BarcodeDetectorCtor | undefined {
     }
 
     connectedCallback(): void {
+      super.connectedCallback();
       // F0.3 g12 [a11y/region]: landmark + label.
       if (!this.hasAttribute('role')) this.setAttribute('role', 'region');
       if (!this.hasAttribute('aria-label')) this.setAttribute('aria-label', 'Escáner de códigos');
@@ -191,5 +194,5 @@ function getBarcodeDetector(): BarcodeDetectorCtor | undefined {
     }
   }
 
-  defineElement('iswc-barcode-scanner', IswcBarcodeScanner, 'IswcBarcodeScanner');
+  define(IswcBarcodeScanner, 'IswcBarcodeScanner');
 })();

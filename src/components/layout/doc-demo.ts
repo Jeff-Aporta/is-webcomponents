@@ -12,19 +12,17 @@
  *
  * Local (kit self-test): añadir `local` (+ opcional `dev` para hot-reload).
  */
-import { defineElement } from '@jeff-aporta/iswc-base/core/element.js';
 import './split-panel.js';
 import './drawer.js';
 import './demo.js';
 import './scrollspy.js';
 import './main.js';
 import './preview-component.js';
-import '@jeff-aporta/iswc-base/components/actions/button.js';
-import '@jeff-aporta/iswc-base/components/media/icon.js';
 import '@jeff-aporta/iswc-base/components/feedback/theme-toggle.js';
 import '@jeff-aporta/iswc-base/components/feedback/palette-selector.js';
 import '@jeff-aporta/iswc-base/components/code/code.js';
 import type { LoaderLike } from "./schemas/doc-demo.schemas.js";
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 
 /** CSS del shell vía aliases del loader (apps pueden override con `page-styles`). */
 const DEFAULT_PAGE_STYLES = [
@@ -62,12 +60,14 @@ function parseListAttr(raw: string | null, fallback: string[]): string[] {
   return raw.split(/[,\s]+/).map((s) => s.trim()).filter(Boolean);
 }
 
-class IswcDocDemo extends HTMLElement {
+class IswcDocDemo extends IswcElement {
+  static tag = 'iswc-doc-demo';
+  static shadowInit: ShadowRootInit | null = null;
+  static deps = ['iswc-button', 'iswc-icon'];
   #booted = false;
   #readySignaled = false;
 
-  static get observedAttributes(): string[] {
-    return [
+  static observed = [
       'brand',
       'brand-icon',
       'brand-href',
@@ -80,7 +80,6 @@ class IswcDocDemo extends HTMLElement {
       'page-modules',
       'dev',
     ];
-  }
 
   /** Shell ya pintado y evento `iswc-doc-demo-ready` disparado. */
   get ready(): boolean {
@@ -96,6 +95,7 @@ class IswcDocDemo extends HTMLElement {
   }
 
   connectedCallback(): void {
+    super.connectedCallback();
     if (!this.querySelector(':scope > .shell-bar')) {
       this.#paintShell();
     } else {
@@ -233,4 +233,4 @@ function escapeHtml(value: string): string {
   return value.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
 
-defineElement('iswc-doc-demo', IswcDocDemo, 'IswcDocDemo');
+define(IswcDocDemo, 'IswcDocDemo');

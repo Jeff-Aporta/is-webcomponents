@@ -1,7 +1,9 @@
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
 import { withStyleAttrs } from '@jeff-aporta/iswc-base/core/attrs.js';
 
 import { readUrlNav, readUrlTabs, writeUrlNav, writeUrlTab } from './utils/url-nav.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-tab-group>, <iswc-tab>, <iswc-tab-panel> — Web Components (vanilla, zero dependencies).
@@ -90,10 +92,12 @@ import { readUrlNav, readUrlTabs, writeUrlNav, writeUrlTab } from './utils/url-n
   const VALID_PLACEMENT = ['top', 'bottom', 'start', 'end'];
   const VALID_ACTIVATION = ['auto', 'manual'];
 
-  class IswcTabGroup extends withStyleAttrs(HTMLElement) {
+  class IswcTabGroup extends withStyleAttrs(IswcElement) {
+    static tag = 'iswc-tab-group';
+    static css = css;
 
 
-    static get observedAttributes(): string[] { return [...TG_OBSERVED]; }
+    static observed = [...TG_OBSERVED];
     #mounted = false;
     #navSlot!: HTMLSlotElement;
     #tabsWrap!: HTMLElement;
@@ -106,8 +110,7 @@ import { readUrlNav, readUrlTabs, writeUrlNav, writeUrlTab } from './utils/url-n
 
     constructor() {
       super();
-      const shadow = this.attachShadow({ mode: 'open' });
-      adoptCss(shadow, import.meta.url);
+      const shadow = this.shadowRoot!;
       shadow.appendChild(TG_TEMPLATE.content.cloneNode(true));
       this.#navSlot = shadow.querySelector<HTMLSlotElement>('slot[name="nav"]')!;
       this.#tabsWrap = shadow.querySelector<HTMLElement>('.tabs')!;
@@ -413,7 +416,7 @@ import { readUrlNav, readUrlTabs, writeUrlNav, writeUrlTab } from './utils/url-n
     }
   }
 
-  defineElement('iswc-tab-group', IswcTabGroup, 'IswcTabGroup');
+  define(IswcTabGroup, 'IswcTabGroup');
 
   // ============ <iswc-tab> ============
   const TAB_TEMPLATE = document.createElement('template');
@@ -433,15 +436,16 @@ import { readUrlNav, readUrlTabs, writeUrlNav, writeUrlTab } from './utils/url-n
 
   const TAB_OBSERVED = ['panel', 'disabled', 'closable', 'active'];
 
-  class IswcTab extends HTMLElement {
-    static get observedAttributes(): string[] { return TAB_OBSERVED; }
+  class IswcTab extends IswcElement {
+    static tag = 'iswc-tab';
+    static css = css;
+    static observed = TAB_OBSERVED;
 
     #mounted = false;
 
     constructor() {
       super();
-      const shadow = this.attachShadow({ mode: 'open' });
-      adoptCss(shadow, import.meta.url);
+      const shadow = this.shadowRoot!;
       shadow.appendChild(TAB_TEMPLATE.content.cloneNode(true));
       // Capturar el click en el close button y emitir un evento 'iswc-tab-close' en el host.
       shadow.addEventListener('click', (e: Event) => {
@@ -478,7 +482,7 @@ import { readUrlNav, readUrlTabs, writeUrlNav, writeUrlTab } from './utils/url-n
     }
   }
 
-  defineElement('iswc-tab', IswcTab, 'IswcTab');
+  define(IswcTab, 'IswcTab');
 
   // ============ <iswc-tab-panel> ============
   const PANEL_TEMPLATE = document.createElement('template');
@@ -490,15 +494,16 @@ import { readUrlNav, readUrlTabs, writeUrlNav, writeUrlTab } from './utils/url-n
 
   const PANEL_OBSERVED = ['name'];
 
-  class IswcTabPanel extends HTMLElement {
-    static get observedAttributes(): string[] { return PANEL_OBSERVED; }
+  class IswcTabPanel extends IswcElement {
+    static tag = 'iswc-tab-panel';
+    static css = css;
+    static observed = PANEL_OBSERVED;
 
     #mounted = false;
 
     constructor() {
       super();
-      const shadow = this.attachShadow({ mode: 'open' });
-      adoptCss(shadow, import.meta.url);
+      const shadow = this.shadowRoot!;
       shadow.appendChild(PANEL_TEMPLATE.content.cloneNode(true));
     }
 
@@ -513,5 +518,5 @@ import { readUrlNav, readUrlTabs, writeUrlNav, writeUrlTab } from './utils/url-n
     }
   }
 
-  defineElement('iswc-tab-panel', IswcTabPanel, 'IswcTabPanel');
+  define(IswcTabPanel, 'IswcTabPanel');
 })();

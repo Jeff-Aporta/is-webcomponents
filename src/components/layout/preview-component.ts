@@ -14,14 +14,12 @@
 import { withStyleAttrs } from '@jeff-aporta/iswc-base/core/attrs.js';
 import { renderDefinition } from '@jeff-aporta/iswc-base/previews/_kit/render.js';
 import './drawer.js';
-import '@jeff-aporta/iswc-base/components/actions/button.js';
-import '@jeff-aporta/iswc-base/components/media/icon.js';
-import { defineElement } from '@jeff-aporta/iswc-base/core/element.js';
 import type {
   IswcComponentPreviewLike,
   PreviewMountContext,
 } from '@jeff-aporta/iswc-base/previews/_kit/schemas/preview.schemas.ts';
 import type { DrawerEl } from "./schemas/preview-component.schemas.js";
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 
 /** Ancho a partir del cual el TOC deja de caber al lado del contenido. */
 const COMPACT_QUERY = '(max-width: 900px)';
@@ -40,7 +38,10 @@ TEMPLATE.innerHTML = /* html */ `
              label="Índice"></iswc-drawer>
 `;
 
-class IswcPreviewComponent extends withStyleAttrs(HTMLElement) {
+class IswcPreviewComponent extends withStyleAttrs(IswcElement) {
+  static tag = 'iswc-preview-component';
+  static shadowInit: ShadowRootInit | null = null;
+  static deps = ['iswc-button', 'iswc-icon'];
 
   #preview: IswcComponentPreviewLike | null = null;
   #ctx: PreviewMountContext | null = null;
@@ -56,9 +57,7 @@ class IswcPreviewComponent extends withStyleAttrs(HTMLElement) {
     return document.body?.dataset?.panelsCompact === '1';
   }
 
-  static get observedAttributes(): string[] {
-    return ['storage-key'];
-  }
+  static observed = ['storage-key'];
 
   constructor() {
     super();
@@ -279,7 +278,7 @@ class IswcPreviewComponent extends withStyleAttrs(HTMLElement) {
   }
 }
 
-defineElement('iswc-preview-component', IswcPreviewComponent);
+define(IswcPreviewComponent);
 
 export { IswcPreviewComponent };
 export default IswcPreviewComponent;

@@ -1,17 +1,15 @@
-import { adoptCss, defineElement, upgradeProperties } from '@jeff-aporta/iswc-base/core/element.js';
-import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
+import { upgradeProperties } from '@jeff-aporta/iswc-base/core/element.js';
 
 import '@jeff-aporta/iswc-base/components/forms/input.js';
 import '@jeff-aporta/iswc-base/components/forms/select.js';
 import '@jeff-aporta/iswc-base/components/forms/checkbox.js';
 import '@jeff-aporta/iswc-base/components/forms/option.js';
-import '@jeff-aporta/iswc-base/components/actions/button.js';
-import '@jeff-aporta/iswc-base/components/media/avatar.js';
 import '@jeff-aporta/iswc-base/components/layout/dialog.js';
-import '@jeff-aporta/iswc-base/components/layout/callout.js';
 import '@jeff-aporta/iswc-base/components/feedback/toast.js';
 import '@jeff-aporta/iswc-base/components/feedback/tooltip.js';
 import type { LoginAccount, LoginSession } from './schemas/login.schemas.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-login> — Puerta de acceso reutilizable: single y multi-cuenta.
@@ -134,15 +132,16 @@ const HTML_TEMPLATE: string = [
 const TEMPLATE = document.createElement('template');
 TEMPLATE.innerHTML = HTML_TEMPLATE;
 
-class IswcLogin extends ElementBase {
-  static get observedAttributes(): string[] {
-    return [
+class IswcLogin extends IswcElement {
+  static tag = 'iswc-login';
+  static css = css;
+  static deps = ['iswc-button', 'iswc-avatar', 'iswc-callout'];
+  static observed = [
       'mode', 'provider', 'providers', 'heading', 'subtitle', 'selected',
       'remember', 'busy', 'disabled', 'error', 'notice',
       'allow-add-account', 'allow-logout-all', 'show-sessions', 'show-password',
       'compact', 'password-toggle',
     ];
-  }
 
   #accounts: LoginAccount[] = [];
   #sessions: LoginSession[] = [];
@@ -178,8 +177,7 @@ class IswcLogin extends ElementBase {
 
   constructor() {
     super();
-    const shadow = this.attachShadow({ mode: 'open' });
-    adoptCss(shadow, import.meta.url);
+    const shadow = this.shadowRoot!;
     shadow.appendChild(TEMPLATE.content.cloneNode(true));
 
     // Referencias y listeners en el constructor, no en connectedCallback: en el
@@ -543,7 +541,7 @@ class IswcLogin extends ElementBase {
   }
 }
 
-defineElement('iswc-login', IswcLogin as unknown as CustomElementConstructor);
+define(IswcLogin);
 
 declare global {
   interface HTMLElementTagNameMap {

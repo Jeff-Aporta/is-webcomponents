@@ -1,4 +1,4 @@
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
 import { crearNodo } from '@jeff-aporta/iswc-base/core/dom-utils.js';
 import { atributosDe, PropsElement } from '@jeff-aporta/iswc-base/core/props-element.js';
 import { pospuesta } from '@jeff-aporta/iswc-base/ai/descarga.js';
@@ -7,18 +7,16 @@ import { ejecutar } from '@jeff-aporta/iswc-base/ai/motores.js';
 import type { Caja, Entrada, Herramienta, Opcion, Opciones, Salida } from '@jeff-aporta/iswc-base/ai/schemas/ai.schemas.js';
 import { AiToolPropsSchema } from './schemas/ai-tool.schemas.js';
 import type { AiCampo, AiToolErrorDetalle, AiToolProps, AiToolResultadoDetalle, AiZona } from './schemas/ai-tool.schemas.js';
-import '@jeff-aporta/iswc-base/components/actions/button.js';
-import '@jeff-aporta/iswc-base/components/actions/copy-button.js';
 import '@jeff-aporta/iswc-base/components/feedback/progress-bar.js';
-import '@jeff-aporta/iswc-base/components/feedback/tag.js';
 import '@jeff-aporta/iswc-base/components/forms/dropzone.js';
 import '@jeff-aporta/iswc-base/components/forms/input.js';
 import '@jeff-aporta/iswc-base/components/forms/option.js';
 import '@jeff-aporta/iswc-base/components/forms/select.js';
 import '@jeff-aporta/iswc-base/components/forms/textarea.js';
-import '@jeff-aporta/iswc-base/components/layout/callout.js';
 import './icon.js';
 import './media-recorder.js';
+import { define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-ai-tool> — una herramienta de IA que corre en el navegador: recibe una imagen, un audio o un texto, baja su modelo
@@ -49,7 +47,10 @@ const campoDeOpcion = (o: Opcion): HTMLElement => (o.valores
 const aviso = (color: string, texto: string): HTMLElement => crearNodo('iswc-callout', { color }, texto);
 
 class IswcAiTool extends PropsElement<AiToolProps> {
-  static override get observedAttributes(): string[] { return atributosDe(INICIAL); }
+  static tag = 'iswc-ai-tool';
+  static css = css;
+  static deps = ['iswc-button', 'iswc-copy-button', 'iswc-tag', 'iswc-callout'];
+  static observed = atributosDe(INICIAL);
 
   #root: ShadowRoot;
   #caja: HTMLElement | null = null;
@@ -61,8 +62,7 @@ class IswcAiTool extends PropsElement<AiToolProps> {
 
   constructor() {
     super(INICIAL, AiToolPropsSchema.partial());
-    this.#root = this.attachShadow({ mode: 'open' });
-    adoptCss(this.#root, import.meta.url);
+    this.#root = this.shadowRoot!;
   }
 
   override onDisconnected(): void {
@@ -222,4 +222,4 @@ class IswcAiTool extends PropsElement<AiToolProps> {
   }
 }
 
-defineElement('iswc-ai-tool', IswcAiTool, 'IswcAiTool');
+define(IswcAiTool, 'IswcAiTool');

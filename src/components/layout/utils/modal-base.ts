@@ -30,9 +30,10 @@
  *   import { ModalBase } from './modal-base.js';
  *
  *   class IswcDialog extends ModalBase {
- *     static get observedAttributes(): string[] {
- *       return [...super.observedAttributes, ...EXTRA];
- *     }
+ *     static tag = 'iswc-dialog';
+ *     static css = css;                       // import css from 'iswc:css'
+ *     static template = TEMPLATE;             // el molde lo clona en el shadow
+ *     static observed = [...super.observed, ...EXTRA];
  *     get modalClass() { return '.dialog'; }
  *     get closeAttr()  { return 'data-dialog'; }
  *     #animateOpen()  { /* dialog-specific keyframes *\/ }
@@ -47,8 +48,8 @@
 
 import { withStyleAttrs } from '@jeff-aporta/iswc-base/core/attrs.js';
 
-import { upgradeProperties } from '@jeff-aporta/iswc-base/core/element.js';
 import { emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { IswcElement } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import type { ModalBaseCtor } from "@jeff-aporta/iswc-base/components/layout/schemas/modal-base.schemas.js";
 const BASE_OBSERVED: readonly string[] = ['open', 'label', 'without-header', 'light-dismiss'];
 
@@ -63,23 +64,17 @@ const FOCUSABLE_SELECTOR =
 const SOPORTA_POPOVER = 'showPopover' in HTMLElement.prototype;
 
 // `withStyleAttrs` da la personalización por atributo (radio, colores,
-// duraciones) a dialog/drawer y a cualquier modal que herede de aquí, sin
-// que ModalBase tenga que extender ElementBase.
-export class ModalBase extends withStyleAttrs(HTMLElement) {
-  static get observedAttributes(): string[] { return [...BASE_OBSERVED]; }
+// duraciones) a dialog/drawer y a cualquier modal que herede de aquí, sobre el
+// molde `IswcElement` (shadow + plantilla + hojas). Los hooks `onConnected`,
+// `onDisconnected` y `onAttributeChanged` son los del molde (no-op por defecto).
+export class ModalBase extends withStyleAttrs(IswcElement) {
+  static observed = [...BASE_OBSERVED];
 
   // ── Subclass hooks ──────────────────────────────────────────────────
   /** Selector del contenedor modal dentro del shadow (p.ej. '.dialog'). */
   get modalClass(): string { return '.modal'; }
   /** Atributo data-* para close declarativo en hijos (p.ej. 'data-dialog'). */
   get closeAttr(): string   { return 'data-modal'; }
-
-  /** Hook opcional que la subclase puede definir (no es obligatorio). */
-  onConnected?(): void;
-  /** Hook opcional que la subclase puede definir (no es obligatorio). */
-  onDisconnected?(): void;
-  /** Hook opcional que la subclase puede definir (no es obligatorio). */
-  onAttributeChanged?(name: string, oldVal: string | null, newVal: string | null): void;
 
   // ── Refs expuestas a subclases ──────────────────────────────────────
   // Las subclases que extiendan ModalBase necesitan acceder al modal y al
@@ -103,12 +98,12 @@ export class ModalBase extends withStyleAttrs(HTMLElement) {
 
   constructor() {
     super();
-    const shadow = this.attachShadow({ mode: 'open' });
+    // El molde ya creó el shadow y clonó `static template`.
+    const shadow = this.shadowRoot!;
     const ctor = this.constructor as unknown as ModalBaseCtor;
-    if (!ctor.__TEMPLATE) {
-      throw new Error(`${this.constructor.name} must define a static __TEMPLATE`);
+    if (!ctor.template) {
+      throw new Error(`${this.constructor.name} must define a static template`);
     }
-    shadow.appendChild(ctor.__TEMPLATE.content.cloneNode(true));
     this.#backdrop = shadow.querySelector<HTMLElement>('.backdrop')!;
     this.#modal    = shadow.querySelector<HTMLElement>(this.modalClass)!;
     this.#title    = shadow.querySelector<HTMLElement>('.title')!;
@@ -130,13 +125,12 @@ export class ModalBase extends withStyleAttrs(HTMLElement) {
   }
 
   connectedCallback(): void {
-    super.connectedCallback();
     this.#mounted = true;
-    upgradeProperties(this, (this.constructor as unknown as ModalBaseCtor).observedAttributes);
     this.#syncLabel();
     this.#syncFooterVisibility();
     this.#syncHeaderVisibility();
-    this.onConnected?.();
+    // Molde: upgradeProperties (una vez), deps y `onConnected()` de la subclase.
+    super.connectedCallback();
     if (this.open) {
       this.dataset.state = 'open';
       this.#modal.hidden = false;
@@ -150,16 +144,16 @@ export class ModalBase extends withStyleAttrs(HTMLElement) {
   disconnectedCallback(): void {
     this.#detachKeydown();
     this.#bajarCapa();
-    this.onDisconnected?.();
+    this.onDisconnected();
   }
 
+  // Pisa el del molde (no lo llama): el hook de la subclase va DESPUÉS de lo propio del modal.
   attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
-    super.attributeChangedCallback(name, oldVal, newVal);
     if (!this.#mounted || oldVal === newVal) return;
     if (name === 'open') this.#onOpenAttrChanged();
     if (name === 'label') this.#syncLabel();
     if (name === 'without-header') this.#syncHeaderVisibility();
-    this.onAttributeChanged?.(name, oldVal, newVal);
+    this.onAttributeChanged(name, oldVal, newVal);
   }
 
   // ── Public API ──────────────────────────────────────────────────────

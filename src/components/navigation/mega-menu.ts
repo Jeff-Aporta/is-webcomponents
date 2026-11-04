@@ -1,6 +1,6 @@
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
-import '@jeff-aporta/iswc-base/components/actions/button.js';
-import '@jeff-aporta/iswc-base/components/media/icon.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-mega-menu> — Mega-menú para e-commerce/portal masivo. Abre un panel
@@ -55,8 +55,11 @@ import '@jeff-aporta/iswc-base/components/media/icon.js';
 (() => {
   const OBSERVED = ['label', 'icon', 'placement', 'width', 'hover', 'disabled'];
 
-  class IswcMegaMenu extends HTMLElement {
-    static get observedAttributes(): string[] { return OBSERVED; }
+  class IswcMegaMenu extends IswcElement {
+    static tag = 'iswc-mega-menu';
+    static css = css;
+    static deps = ['iswc-button', 'iswc-icon'];
+    static observed = OBSERVED;
     #openTimer: ReturnType<typeof setTimeout> | null = null;
     #closeTimer: ReturnType<typeof setTimeout> | null = null;
     /** Listener temporal de outside-click; se quita al cerrar. */
@@ -69,7 +72,6 @@ import '@jeff-aporta/iswc-base/components/media/icon.js';
 
     constructor() {
       super();
-      this.attachShadow({ mode: 'open' });
       this.shadowRoot!.innerHTML = /* html */ `
         <div part="root" class="root">
           <iswc-button part="trigger" class="trigger" variant="text" color="neutral" with-caret
@@ -83,7 +85,6 @@ import '@jeff-aporta/iswc-base/components/media/icon.js';
           </dialog>
         </div>
       `;
-      adoptCss(this.shadowRoot!, import.meta.url);
       this.#trigger = this.shadowRoot!.querySelector<HTMLElement>('.trigger')!;
       this.#panel = this.shadowRoot!.querySelector<HTMLDialogElement>('.panel')!;
       this.#labelEl = this.shadowRoot!.querySelector<HTMLElement>('.trigger-label')!;
@@ -104,6 +105,7 @@ import '@jeff-aporta/iswc-base/components/media/icon.js';
     }
 
     connectedCallback(): void {
+      super.connectedCallback();
       this.#sync();
       // Asegurar aria-controls en cuanto conocemos el id del panel.
       this.#trigger.setAttribute('aria-controls', this.#panelId());
@@ -483,5 +485,5 @@ import '@jeff-aporta/iswc-base/components/media/icon.js';
     #iconEl!: HTMLElement;
   }
 
-  defineElement('iswc-mega-menu', IswcMegaMenu);
+  define(IswcMegaMenu);
 })();

@@ -1,10 +1,9 @@
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
-import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
 import { setCustomState } from '@jeff-aporta/iswc-base/core/form-associated.js';
-import '@jeff-aporta/iswc-base/components/media/icon.js';
-import '@jeff-aporta/iswc-base/components/actions/button.js';
 import './drawer.js';
 import '@jeff-aporta/iswc-base/components/feedback/toast.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-app-shell> — Armazón de aplicación: barra superior fija + vista con scroll propio.
@@ -115,10 +114,11 @@ const HTML_TEMPLATE = `
 const TEMPLATE = document.createElement('template');
 TEMPLATE.innerHTML = HTML_TEMPLATE;
 
-class IswcAppShell extends ElementBase {
-  static override get observedAttributes(): string[] {
-    return ['brand', 'logo', 'brand-href', 'home-label', 'sidebar-label', 'toast'];
-  }
+class IswcAppShell extends IswcElement {
+  static tag = 'iswc-app-shell';
+  static css = css;
+  static deps = ['iswc-icon', 'iswc-button'];
+  static observed = ['brand', 'logo', 'brand-href', 'home-label', 'sidebar-label', 'toast'];
 
   #internals: ElementInternals | null = null;
   #brand!: HTMLAnchorElement;
@@ -135,8 +135,7 @@ class IswcAppShell extends ElementBase {
 
   constructor() {
     super();
-    const shadow = this.attachShadow({ mode: 'open' });
-    adoptCss(shadow, import.meta.url);
+    const shadow = this.shadowRoot!;
     shadow.appendChild(TEMPLATE.content.cloneNode(true));
     try { this.#internals = this.attachInternals(); } catch { this.#internals = null; }
 
@@ -283,7 +282,7 @@ class IswcAppShell extends ElementBase {
   }
 }
 
-defineElement('iswc-app-shell', IswcAppShell as unknown as CustomElementConstructor);
+define(IswcAppShell);
 
 declare global {
   interface HTMLElementTagNameMap {

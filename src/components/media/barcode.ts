@@ -1,5 +1,7 @@
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
 import { svgEl } from '@jeff-aporta/iswc-base/core/svg-chart-engine.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-barcode> — Generador de códigos de barras en SVG.
@@ -104,20 +106,20 @@ import { svgEl } from '@jeff-aporta/iswc-base/core/svg-chart-engine.js';
   }
 
   // ── Componente ───────────────────────────────────────────────────────
-  class IswcBarcode extends HTMLElement {
-    static get observedAttributes(): string[] { return OBSERVED; }
+  class IswcBarcode extends IswcElement {
+    static tag = 'iswc-barcode';
+    static css = css;
+    static observed = OBSERVED;
     #mounted = false;
 
     constructor() {
       super();
-      this.attachShadow({ mode: 'open' });
       this.shadowRoot!.innerHTML = `
         <div part="root" class="root">
           <svg part="canvas" class="svg" aria-label="Código de barras" role="img"></svg>
           <div part="text" class="text" hidden></div>
         </div>
       `;
-      adoptCss(this.shadowRoot!, import.meta.url);
       this.#svg = this.shadowRoot!.querySelector<HTMLElement>('.svg')!;
       this.#text = this.shadowRoot!.querySelector<HTMLElement>('.text')!;
     }
@@ -195,5 +197,5 @@ import { svgEl } from '@jeff-aporta/iswc-base/core/svg-chart-engine.js';
     #text!: HTMLElement;
   }
 
-  defineElement('iswc-barcode', IswcBarcode, 'IswcBarcode');
+  define(IswcBarcode, 'IswcBarcode');
 })();

@@ -1,9 +1,10 @@
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
 import './icon.js';
-import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
 import { setStringAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
 import { DEFAULT_MEDIA_SHAPE, MEDIA_SHAPE, normalizeMediaShape } from '@jeff-aporta/iswc-base/core/media-shape.js';
 import { type MediaShape } from '@jeff-aporta/iswc-base/core/schemas/media-shape.schemas.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-avatar> — Web Component (vanilla).
@@ -47,8 +48,10 @@ import { type MediaShape } from '@jeff-aporta/iswc-base/core/schemas/media-shape
   type Shape = MediaShape;
   type Loading = typeof VALID_LOADING[number];
 
-  class IswcAvatar extends ElementBase {
-    static get observedAttributes(): string[] { return OBSERVED; }
+  class IswcAvatar extends IswcElement {
+    static tag = 'iswc-avatar';
+    static css = css;
+    static observed = OBSERVED;
 
     #img!: HTMLImageElement;
     #initials!: HTMLElement;
@@ -57,8 +60,7 @@ import { type MediaShape } from '@jeff-aporta/iswc-base/core/schemas/media-shape
 
     constructor() {
       super();
-      const shadow = this.attachShadow({ mode: 'open' });
-      adoptCss(shadow, import.meta.url);
+      const shadow = this.shadowRoot!;
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
       this.#img = shadow.querySelector<HTMLImageElement>('.image')!;
       this.#initials = shadow.querySelector<HTMLElement>('.initials')!;
@@ -147,5 +149,5 @@ import { type MediaShape } from '@jeff-aporta/iswc-base/core/schemas/media-shape
     }
   }
 
-  defineElement('iswc-avatar', IswcAvatar, 'IswcAvatar');
+  define(IswcAvatar, 'IswcAvatar');
 })();

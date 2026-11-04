@@ -1,5 +1,7 @@
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
 import type { CropRect, DragHandle, DragState } from "./schemas/image-editor.schemas.js";
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-image-editor> — Editor de imagen con crop, zoom y rotación.
@@ -29,8 +31,10 @@ import type { CropRect, DragHandle, DragState } from "./schemas/image-editor.sch
 (() => {
   const OBSERVED = ['src', 'zoom', 'rotation', 'aspect'];
 
-  class IswcImageEditor extends HTMLElement {
-    static get observedAttributes(): string[] { return OBSERVED; }
+  class IswcImageEditor extends IswcElement {
+    static tag = 'iswc-image-editor';
+    static css = css;
+    static observed = OBSERVED;
     #mounted = false;
     #img: HTMLImageElement | null = null;
     #cropRect: CropRect = { x: 0, y: 0, width: 0, height: 0 };
@@ -41,7 +45,6 @@ import type { CropRect, DragHandle, DragState } from "./schemas/image-editor.sch
 
     constructor() {
       super();
-      this.attachShadow({ mode: 'open' });
       this.shadowRoot!.innerHTML = /* html */ `
         <div part="root" class="root">
           <div part="viewport" class="viewport" tabindex="0" aria-label="Lienzo del editor. Use flechas para mover el recorte.">
@@ -59,7 +62,6 @@ import type { CropRect, DragHandle, DragState } from "./schemas/image-editor.sch
           <output part="status" class="status" aria-live="polite"></output>
         </div>
       `;
-      adoptCss(this.shadowRoot!, import.meta.url);
       this.#canvas = this.shadowRoot!.querySelector<HTMLCanvasElement>('.canvas')!;
       this.#viewport = this.shadowRoot!.querySelector<HTMLElement>('.viewport')!;
       this.#selection = this.shadowRoot!.querySelector<HTMLElement>('.selection')!;
@@ -408,5 +410,5 @@ import type { CropRect, DragHandle, DragState } from "./schemas/image-editor.sch
     return a / b;
   }
 
-  defineElement('iswc-image-editor', IswcImageEditor);
+  define(IswcImageEditor);
 })();

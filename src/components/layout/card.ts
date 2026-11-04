@@ -1,7 +1,9 @@
-import { adoptCss, defineElement, upgradeProperties } from '@jeff-aporta/iswc-base/core/element.js';
+import { upgradeProperties } from '@jeff-aporta/iswc-base/core/element.js';
 import { withStyleAttrs } from '@jeff-aporta/iswc-base/core/attrs.js';
 
 import { TONE } from '@jeff-aporta/iswc-base/core/tone.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-card> — Web Component (vanilla, zero dependencies).
@@ -68,9 +70,11 @@ import { TONE } from '@jeff-aporta/iswc-base/core/tone.js';
   const VALID_VARIANT = TONE;
   const VALID_ORIENTATION = ['horizontal', 'vertical'];
 
-  class IswcCard extends withStyleAttrs(HTMLElement) {
+  class IswcCard extends withStyleAttrs(IswcElement) {
+    static tag = 'iswc-card';
+    static css = css;
 
-    static get observedAttributes(): string[] { return [...OBSERVED, 'spacing']; }
+    static observed = [...OBSERVED, 'spacing'];
 
     _sections: NodeListOf<HTMLElement> | null = null;
     _slots: NodeListOf<HTMLSlotElement> | null = null;
@@ -79,8 +83,7 @@ import { TONE } from '@jeff-aporta/iswc-base/core/tone.js';
 
     constructor() {
       super();
-      const shadow = this.attachShadow({ mode: 'open' });
-      adoptCss(shadow, import.meta.url);
+      const shadow = this.shadowRoot!;
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
 
       this._sections = shadow.querySelectorAll<HTMLElement>('.section');
@@ -164,5 +167,5 @@ import { TONE } from '@jeff-aporta/iswc-base/core/tone.js';
     }
   }
 
-  defineElement('iswc-card', IswcCard, 'IswcCard');
+  define(IswcCard, 'IswcCard');
 })();

@@ -1,8 +1,10 @@
-import { adoptCss, defineElement, emit, upgradeProperties } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit, upgradeProperties } from '@jeff-aporta/iswc-base/core/element.js';
 import { withStyleAttrs } from '@jeff-aporta/iswc-base/core/attrs.js';
 
 import { getComponentPrefs, setComponentPrefs } from '@jeff-aporta/iswc-base/core/prefs.js';
 import { clampTo } from '@jeff-aporta/iswc-base/core/misc-utils.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-split-panel> — Web Component (vanilla, zero dependencies).
@@ -69,9 +71,11 @@ import { clampTo } from '@jeff-aporta/iswc-base/core/misc-utils.js';
   const VALID_SIDE: string[] = ['start', 'end'];
 
 
-  class IswcSplitPanel extends withStyleAttrs(HTMLElement) {
+  class IswcSplitPanel extends withStyleAttrs(IswcElement) {
+    static tag = 'iswc-split-panel';
+    static css = css;
 
-    static get observedAttributes(): string[] { return [...OBSERVED, 'min-size', 'max-size']; }
+    static observed = [...OBSERVED, 'min-size', 'max-size'];
 
     _divider!: HTMLElement;
     _size: number = 0;
@@ -89,8 +93,7 @@ import { clampTo } from '@jeff-aporta/iswc-base/core/misc-utils.js';
 
     constructor() {
       super();
-      const shadow = this.attachShadow({ mode: 'open' });
-      adoptCss(shadow, import.meta.url);
+      const shadow = this.shadowRoot!;
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
       this._divider = shadow.querySelector<HTMLElement>('.divider') as HTMLElement;
 
@@ -494,5 +497,5 @@ import { clampTo } from '@jeff-aporta/iswc-base/core/misc-utils.js';
     }
   }
 
-  defineElement('iswc-split-panel', IswcSplitPanel, 'IswcSplitPanel');
+  define(IswcSplitPanel, 'IswcSplitPanel');
 })();

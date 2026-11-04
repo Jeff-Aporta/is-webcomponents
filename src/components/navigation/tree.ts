@@ -1,6 +1,7 @@
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
-import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
 import '@jeff-aporta/iswc-base/components/forms/checkbox.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-tree> + <iswc-tree-item> — Web Components (vanilla, zero dependencies).
@@ -56,16 +57,17 @@ import '@jeff-aporta/iswc-base/components/forms/checkbox.js';
 
   const VALID_SELECTION = ['none', 'single', 'leaf', 'multiple'];
 
-  class IswcTree extends ElementBase {
+  class IswcTree extends IswcElement {
+    static tag = 'iswc-tree';
+    static css = css;
 
-    static get observedAttributes(): string[] { return [...TREE_OBSERVED]; }
+    static observed = [...TREE_OBSERVED];
 
     #syncObserver: MutationObserver | null = null;
 
     constructor() {
       super();
-      const shadow = this.attachShadow({ mode: 'open' });
-      adoptCss(shadow, import.meta.url);
+      const shadow = this.shadowRoot!;
       shadow.appendChild(TREE_TEMPLATE.content.cloneNode(true));
       this.addEventListener('click', this.#onClick);
       this.addEventListener('keydown', this.#onKeyDown);
@@ -265,7 +267,7 @@ import '@jeff-aporta/iswc-base/components/forms/checkbox.js';
     }
   }
 
-  defineElement('iswc-tree', IswcTree, 'IswcTree');
+  define(IswcTree, 'IswcTree');
 
   // ============ <iswc-tree-item> ============
   const ITEM_TEMPLATE = document.createElement('template');
@@ -291,14 +293,15 @@ import '@jeff-aporta/iswc-base/components/forms/checkbox.js';
 
   const ITEM_OBSERVED = ['expanded', 'selected', 'disabled', 'has-children', 'lazy'];
 
-  class IswcTreeItem extends ElementBase {
-    static get observedAttributes(): string[] { return ITEM_OBSERVED; }
+  class IswcTreeItem extends IswcElement {
+    static tag = 'iswc-tree-item';
+    static css = css;
+    static observed = ITEM_OBSERVED;
 
 
     constructor() {
       super();
-      const shadow = this.attachShadow({ mode: 'open' });
-      adoptCss(shadow, import.meta.url);
+      const shadow = this.shadowRoot!;
       shadow.appendChild(ITEM_TEMPLATE.content.cloneNode(true));
       this.setAttribute('tabindex', '0');
     }
@@ -351,5 +354,5 @@ import '@jeff-aporta/iswc-base/components/forms/checkbox.js';
     }
   }
 
-  defineElement('iswc-tree-item', IswcTreeItem, 'IswcTreeItem');
+  define(IswcTreeItem, 'IswcTreeItem');
 })();
