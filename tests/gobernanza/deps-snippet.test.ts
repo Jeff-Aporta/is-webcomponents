@@ -34,8 +34,9 @@ test('gobernanza/deps-snippet', async () => {
   check(/tag:\s*['"]iswc-cdn-snippet['"]/.test(manifest),
     'manifest.ts: iswc-cdn-snippet no está registrado');
   
-  check(/observedAttributes[\s\S]*?dependencies/.test(csJs),
-    'cdn-snippet.ts: dependencies debe estar en observedAttributes');
+  // Molde IswcElement: los observados van en `static observed` (o en la constante que referencia).
+  check(/(?:observedAttributes|static observed)[\s\S]*?dependencies/.test(csJs),
+    'cdn-snippet.ts: dependencies debe estar en los atributos observados');
   
   check(/#parseDeps|#deps/.test(csJs),
     'cdn-snippet.ts: debe tener un parser/almacén de deps');

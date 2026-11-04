@@ -20,7 +20,7 @@ const src = leerComponente(TAG);
 test('rating: archivo y registro', () => {
   assert.ok(src.length > 500);
   assert.ok(existeCss(TAG));
-  assert.ok(/defineElement\s*\(\s*['"`]iswc-rating['"`]/.test(src));
+  assert.ok(/(?:defineElement\s*\(\s*|static\s+(?:override\s+)?tag\s*=\s*|createObserverElement\(\s*'\w+',\s*)['"`]iswc-rating['"`]/.test(src));
 });
 
 test('rating: atributos observados', () => {

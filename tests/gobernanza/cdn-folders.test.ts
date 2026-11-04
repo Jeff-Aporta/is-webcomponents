@@ -118,7 +118,7 @@ test('gobernanza/cdn-folders', async () => {
       };
       walk(join(root, 'src'));
     }
-    const re = new RegExp(`(?:defineElement|customElements\\.define)\\(\\s*['"\`]${tagName}['"\`]`);
+    const re = new RegExp(`(?:(?:defineElement|customElements\\.define)\\(\\s*|static\\s+(?:override\\s+)?tag\\s*=\\s*)['"\`]${tagName}['"\`]`);
     return srcTexts.some((t) => re.test(t));
   };
   const manifestCategories = new Set();

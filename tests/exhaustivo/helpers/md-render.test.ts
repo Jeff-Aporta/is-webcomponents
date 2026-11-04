@@ -81,7 +81,7 @@ test('9. custom element registrado', () => {
   const src = readFileSync(TS, 'utf8');
   assert.ok(
     /customElements\.define\s*\(\s*['"]iswc-md-render['"]/.test(src) ||
-    /defineElement\s*\(\s*['"]iswc-md-render['"]/.test(src),
+    /(?:defineElement\s*\(\s*|static\s+(?:override\s+)?tag\s*=\s*|createObserverElement\(\s*'\w+',\s*)['"]iswc-md-render['"]/.test(src),
   );
 });
 

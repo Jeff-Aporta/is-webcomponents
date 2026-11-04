@@ -86,7 +86,7 @@ test('10. expone CSS parts para la chrome', async () => {
 test('11. custom element registrado', async () => {
   const src = readFileSync(TS, 'utf8');
   assert.ok(/customElements\.define\s*\(\s*['"]iswc-video['"]/.test(src) ||
-             /defineElement\s*\(\s*['"]iswc-video['"]/.test(src));
+             /(?:defineElement\s*\(\s*|static\s+(?:override\s+)?tag\s*=\s*|createObserverElement\(\s*'\w+',\s*)['"]iswc-video['"]/.test(src));
 });
 
 test('12. preview.ts existe (componente complejo)', async () => {

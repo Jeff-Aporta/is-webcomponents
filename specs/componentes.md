@@ -19,8 +19,26 @@ Cada tag es un Custom Element con Shadow DOM. El inventario y rutas de build sal
 ## S-K2 Shadow DOM y estilos
 
 - Tokens `--iswc-*` desde light DOM (`is-base.css` / paletas). Default paleta: `delfin`. 25 paletas generales (`src/styles/palettes.json` → `scripts/gen-palettes.mjs` escribe `palettes.scss`) con main, contraste, bright, superficies y textos tintados; `data-panda` junto a `data-theme` invierte las superficies. Contrato AA 25 × claro/oscuro × panda: `tests/gobernanza/palettes-contrast.test.ts`.
-- `adoptCss(shadowRoot, import.meta.url)` + CSS hermano `.css` cuando aplique. Tras `innerHTML=''` del shadow, volver a llamar `adoptCss` (los `<link>` se borran).
-- Scrollbars: `src/components/_shared/scrollbars.css` vía adopt (no reimportar en cada tag).
+- **Forma canónica (molde `IswcElement`, plan D4/D6).** Todo componente extiende `IswcElement` (`src/core/iswc-element.ts`) o una subclase del molde (`PropsElement`, `DiagramElementBase`, `ModalBase`, `BreakpointHost`, `withStyleAttrs(IswcElement)`) y se registra con `define(Clase)`:
+
+  ```ts
+  import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+  import css from 'iswc:css';               // .css compilado hermano, lo incrusta el build (plugin cssVirtual)
+
+  class IswcButton extends IswcElement {
+    static tag = 'iswc-button';
+    static css = css;                        // el molde crea UNA CSSStyleSheet por clase y la adopta
+    static template = TEMPLATE;              // opcional: se clona en el shadow
+    static shadowInit: ShadowRootInit | null = { mode: 'open', delegatesFocus: true };  // null = light DOM
+    static observed = ['color', 'variant'];  // + styleAttrs + @attr → observedAttributes
+    static deps = ['iswc-icon'];             // hijos que se piden a iswcLoader.ensure() al conectar
+    onConnected() { … }                      // también onDisconnected / onAttributeChanged
+  }
+  define(IswcButton);
+  ```
+
+  Nada de `adoptCss(…, import.meta.url)`, `<link>` al `.css` hermano ni `static get observedAttributes` a mano (guardián `tests/gobernanza/molde-iswc-element.test.ts`). Las hojas adoptadas sobreviven a `shadow.innerHTML = …`. `static deps` solo para hijos que el padre pinta sin usar su API síncrona; si el padre necesita una clase o un helper del hijo, `import` normal. En Deno sin build, `iswc:css` resuelve a `''` (`deno.json` → `core/iswc-css-vacio.ts`); `scripts/serve.mjs` lo sirve desde `.tmp-scss`.
+- Hojas base (`host-base`, `scrollbars`): las adopta el molde desde `core/base-sheets.ts` (`iswc:css/host-base`, `iswc:css/scrollbars`), compartidas por toda la página.
 - Escala: preferir `em` / `font-size` en controles; no `size=` legacy, no `size` colors. Las bases se derivan de `import.meta.url`, no de `location.pathname`.
 
 ## S-K3 Enums y eventos
@@ -32,7 +50,7 @@ Cada tag es un Custom Element con Shadow DOM. El inventario y rutas de build sal
 
 ## S-K4 `_shared/` y bases
 
-- Reusar: `element-base.js`, `modal-base.js`, `form-control-mixin.js`, `intent.js`, `tone.js`, `upgrade-properties.js`, `dom-utils.js`, `misc-utils.js`, `scrollbars.css`, `grid-*.js`, `date-*.js`, `picker-element.js`, `svg-chart-engine.js`, `chart-palette.js`, `node-link-layout.js`, `tree-layout.js`, `icon-loader.js`, `prefs.js`, `position.js`.
+- Reusar: `iswc-element.js` (molde; `element-base.js` queda como alias de compatibilidad para código externo), `modal-base.js`, `form-control-mixin.js`, `intent.js`, `tone.js`, `upgrade-properties.js`, `dom-utils.js`, `misc-utils.js`, `scrollbars.css`, `grid-*.js`, `date-*.js`, `picker-element.js`, `svg-chart-engine.js`, `chart-palette.js`, `node-link-layout.js`, `tree-layout.js`, `icon-loader.js`, `prefs.js`, `position.js`.
 - Nuevo helper solo si ≥3 usos o lógica no trivial; si no, inline en el tag. Preferir `_shared/` a duplicar `escapeHtml`/`copyText` (había 9 copias de `escapeHtml`).
 - `helpers/` públicos = manifest + preview JSON + MD.
 - Barreras de alcance (CSS en shadow): NO `&[attr]` anidado dentro de `:host {}` (compila a `:host[attr]`, que nunca matchea el host — usar `:host([attr])` top-level en shadow root y hook de component). NO `mi-tag .algo` en la hoja adoptada por `mi-tag` (es CSS muerto: el host queda fuera del árbol; usar `:host(mi-tag) .algo` / `::slotted(mi-tag)`). NO estilar `otro-tag::part(x)` desde el shadow de un padre cuando el tag llega slotted.

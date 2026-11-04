@@ -1,5 +1,5 @@
 {
   "imports": {
-    "@jeff-aporta/iswc-base/": "https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@ced5460a91a2c0f4a8a52f2ab67d796ac3513bf0/dist/cdn/"
+    "@jeff-aporta/iswc-base/": "https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@0260221e5ac02b68fb982a8fceaba4f4d0d7b12c/dist/cdn/"
   }
 }

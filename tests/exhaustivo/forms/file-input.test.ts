@@ -25,7 +25,7 @@ const src = leerComponente(TAG);
 test('file-input: archivo y registro', () => {
   assert.ok(src.length > 300);
   assert.ok(existeCss(TAG));
-  assert.ok(/defineElement\s*\(\s*['"`]iswc-file-input['"`]/.test(src));
+  assert.ok(/(?:defineElement\s*\(\s*|static\s+(?:override\s+)?tag\s*=\s*|createObserverElement\(\s*'\w+',\s*)['"`]iswc-file-input['"`]/.test(src));
 });
 
 test('file-input: atributos observados', () => {

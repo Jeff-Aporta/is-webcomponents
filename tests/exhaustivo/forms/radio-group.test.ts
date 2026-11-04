@@ -20,7 +20,7 @@ const src = leerComponente(TAG);
 test('radio-group: archivo y registro', () => {
   assert.ok(src.length > 300);
   assert.ok(existeCss(TAG));
-  assert.ok(/defineElement\s*\(\s*['"`]iswc-radio-group['"`]/.test(src));
+  assert.ok(/(?:defineElement\s*\(\s*|static\s+(?:override\s+)?tag\s*=\s*|createObserverElement\(\s*'\w+',\s*)['"`]iswc-radio-group['"`]/.test(src));
 });
 
 test('radio-group: atributos observados', () => {

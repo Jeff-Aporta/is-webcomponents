@@ -86,9 +86,9 @@ test('8. backdrop-variant acepta "none" | "basic"', async () => {
 
 test('9. integra con iswc-icon e iswc-button (chrome)', async () => {
   const src = readFileSync(TS, 'utf8');
-  // Side-effect imports `import '../media/icon.js'` y `import '../actions/button.js'`.
-  assert.ok(/media[\\/]+icon/.test(src), 'importa icon');
-  assert.ok(/actions[\\/]+button/.test(src), 'importa button');
+  // Hijos hoja declarados en `static deps` (molde IswcElement: iswcLoader.ensure al conectar) o importados.
+  assert.ok(/media[\\/]+icon/.test(src) || /static deps = \[[^\]]*'iswc-icon'/.test(src), 'depende de icon');
+  assert.ok(/actions[\\/]+button/.test(src) || /static deps = \[[^\]]*'iswc-button'/.test(src), 'depende de button');
 });
 
 test('10. soporta slot default y header-actions, footer, label', async () => {
@@ -110,7 +110,7 @@ test('11. atributo open es reflected (getter/setter + toggleAttribute)', async (
 
 test('dialog: 12. custom element registrado', async () => {
   const src = readFileSync(TS, 'utf8');
-  assert.ok(/defineElement\s*\(\s*['"]iswc-dialog['"]/.test(src));
+  assert.ok(/(?:defineElement\s*\(\s*|static\s+(?:override\s+)?tag\s*=\s*|createObserverElement\(\s*'\w+',\s*)['"]iswc-dialog['"]/.test(src));
 });
 
 export default lista();

@@ -61,7 +61,8 @@ test('boot ESM + host module fuentes', () => {
   assert.match(hostTs, /local:\s*true/);
   assert.match(hostTs, /loadPageModules\s*\(\s*\[\s*['"]iswc-doc-demo-boot['"]\s*\]\s*\)/);
   assert.match(hostTs, /load\s*\(\s*['"]iswc-doc-demo['"]\s*\)/);
-  assert.match(docDemoTs, /defineElement\s*\(\s*['"]iswc-doc-demo['"]/);
+  assert.match(docDemoTs, /static tag = ['"]iswc-doc-demo['"]/);
+  assert.match(docDemoTs, /\bdefine\(\s*[A-Za-z_$][\w$]*/);
   assert.match(docDemoTs, /id=["']shellNav["']/);
   assert.match(docDemoTs, /id=["']previewHost["']/);
   assert.match(read('.tmp-scss/src/components/layout/doc-demo.css'), /display:\s*contents/);

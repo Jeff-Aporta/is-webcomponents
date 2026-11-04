@@ -73,7 +73,7 @@ test('componentes/attr-enums', async () => {
     const src = await readFile(file, 'utf8');
   
     // Un mismo .js puede registrar varios tags (iswc-tab-group + iswc-tab).
-    const tags = [...src.matchAll(/(?:customElements\.define|defineElement)\(\s*['"]([\w-]+)['"]/g)].map((m) => m[1]);
+    const tags = [...src.matchAll(/(?:(?:customElements\.define|defineElement)\(\s*|static\s+(?:override\s+)?tag\s*=\s*)['"]([\w-]+)['"]/g)].map((m) => m[1]);
     if (!tags.length) continue;
   
     const attrs = new Map();

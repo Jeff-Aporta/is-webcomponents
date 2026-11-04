@@ -87,7 +87,8 @@ export function auditarRuntimeComponente(rutaModulo: string | null, tag: string,
   }
 
   // 4. observedAttributes sin callback (o viceversa).
-  const extendsBase = /extends\s+(ElementBase|ModalBase|DiagramElementBase|withStyleAttrs|PickerElement|DateFieldElement|BreakpointHost)/.test(src);
+  // El molde IswcElement (y sus subclases) aporta attributeChangedCallback y lo enruta a onAttributeChanged.
+  const extendsBase = /extends\s+(IswcElement|Iswc\w*(?:Base|Lightbox|Chart)|ElementBase|PropsElement|ModalBase|DiagramElementBase|withStyleAttrs|PickerElement|DateFieldElement|BreakpointHost)/.test(src);
   if (!extendsBase) {
     const hasObserved = /static\s+(?:get\s+)?observedAttributes\s*(?:\(\s*\))?\s*(?::\s*[A-Za-z_$<>[\]|. ,]+\s*)?[\{:]/.test(src)
       // Variante: const OBSERVED = [...] (común en isp/*).
@@ -124,8 +125,9 @@ export function auditarRuntimeComponente(rutaModulo: string | null, tag: string,
   // `.css` hermano en runtime, pero la auditoria se hace sobre la fuente.
   const hasScss = existsSync(rutaModulo.replace(/\.[jt]s$/, '.scss'));
   const usesShadow = /attachShadow\s*\(/.test(src);
-  const adoptCssCall = /(?<!export const )adoptCss\s*\(/.test(src)
-    && !/export\s+const\s+adoptCss\s*=/.test(src);
+  // Molde IswcElement: `static css = css` (import `iswc:css`) cuenta como adopción.
+  const adoptCssCall = (/(?<!export const )adoptCss\s*\(/.test(src)
+    && !/export\s+const\s+adoptCss\s*=/.test(src)) || /static\s+(?:override\s+)?css\s*=/.test(src);
   if (hasScss && usesShadow && !adoptCssCall) {
     hallazgos.push({
       categoria: 'runtime',
@@ -151,7 +153,7 @@ export function auditarRuntimeComponente(rutaModulo: string | null, tag: string,
   // ya traen guard: las exoneramos. Igual el patrón __isDefineTypedChart
   // de los charts tipados.
   const defineMatches = [...src.matchAll(/customElements\.define\s*\(\s*['"`]([a-zA-Z0-9-]+)['"`]/g)];
-  const usaFabrica = /\b(?:defineElement|defineTypedChart|definePickerInput|defineDateField)\s*\(/.test(src)
+  const usaFabrica = /\b(?:defineElement|defineTypedChart|definePickerInput|defineDateField|define)\s*\(/.test(src)
     || /__isDefineTypedChart/.test(src);
   if (defineMatches.length > 0 && !/customElements\.get\s*\(/.test(src) && !usaFabrica) {
     hallazgos.push({

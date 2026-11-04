@@ -35,7 +35,7 @@ test('date-field: archivo y registro', () => {
 });
 
 test('date-field: atributos vienen del factory (OBSERVED const)', () => {
-  assert.ok(/static\s+get\s+observedAttributes/.test(factorySrc),
+  assert.ok(/static\s+observed\s*=\s*OBSERVED/.test(factorySrc),
     'factory debe declarar observedAttributes');
   for (const a of ['label', 'hint', 'name', 'value', 'min', 'max',
                    'required', 'disabled', 'readonly', 'locale',
@@ -54,7 +54,7 @@ test('date-field: eventos del factory (iswc-change, iswc-input)', () => {
 });
 
 test('date-field: shadow DOM (open + delegatesFocus para teclado)', () => {
-  assert.ok(/attachShadow\s*\(\s*\{\s*mode:\s*['"]open['"]\s*,\s*delegatesFocus:\s*true/.test(factorySrc),
+  assert.ok(/(?:attachShadow\s*\(\s*|shadowInit[^=\n]*=\s*)\{\s*mode:\s*['"]open['"]\s*,\s*delegatesFocus:\s*true/.test(factorySrc),
     'factory debe abrir shadow con delegatesFocus:true (a11y teclado)');
 });
 

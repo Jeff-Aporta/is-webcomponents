@@ -45,7 +45,8 @@ test('S-PG1: fuentes playground existen', () => {
 });
 
 test('S-PG1: CE registra iswc-playground y reusa preview-controls', () => {
-  assert.match(pgTs, /defineElement\(\s*'iswc-playground'/);
+  assert.match(pgTs, /static tag = 'iswc-playground'/);
+  assert.match(pgTs, /\bdefine\(\s*IswcPlayground\b/);
   assert.ok(pgTs.includes('preview-controls') || pgTs.includes('iswc-preview-controls'));
   assert.ok(!/<select[\s>]/i.test(pgTs), 'sin select nativo en CE');
   assert.ok(pgCss.includes('[layout="split"]') || pgCss.includes('layout="split"'));

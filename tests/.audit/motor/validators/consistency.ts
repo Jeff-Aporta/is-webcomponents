@@ -72,6 +72,9 @@ export async function extraerMetaComponente(rutaModulo: string | null): Promise<
     // (entre { y su }) encontrar la primera `return [`. Restringimos
     // el lazy a 200 chars (más que suficiente para `return OBSERVED;`
     // o `return [...OBSERVED, ...STYLE];`).
+    // Molde IswcElement: `static observed = [ … ]` (la lista va directa en el campo).
+    const molde = /static\s+(?:override\s+)?observed\s*(?::[^=\n]*)?=\s*\[/.exec(s);
+    if (molde) return findBalancedArray(s, molde.index + molde[0].length - 1);
     const re = /static\s+get\s+observedAttributes\s*\(\s*\)\s*(?::\s*[A-Za-z_$<>[\]|. ,]+\s*)?\{([\s\S]{0,300}?)\}/;
     const m = s.match(re);
     if (!m) return null;
@@ -112,7 +115,7 @@ export async function extraerMetaComponente(rutaModulo: string | null): Promise<
   //     Como puede haber varias clases con `static get observedAttributes()`
   //     (e.g. BOARD_OBSERVED, COLUMN_OBSERVED, CARD_OBSERVED en kanban.ts),
   //     iteramos sobre TODAS las coincidencias para recoger cada `return X`.
-  const obsConstMatches = src.matchAll(/static\s+get\s+observedAttributes\s*\(\s*\)\s*(?::\s*[A-Za-z_$<>[\]|. ,]+\s*)?\{[\s\S]*?return\s+([A-Z_$][\w$]*)/g);
+  const obsConstMatches = src.matchAll(/(?:static\s+get\s+observedAttributes\s*\(\s*\)\s*(?::\s*[A-Za-z_$<>[\]|. ,]+\s*)?\{[\s\S]*?return|static\s+(?:override\s+)?observed\s*(?::[^=\n]*)?=)\s+([A-Z_$][\w$]*)/g);
   for (const obsConstMatch of obsConstMatches) {
     const constName = obsConstMatch[1];
     // Como el nombre de la const puede repetirse (BOARD_OBSERVED = []), iteramos
@@ -284,17 +287,22 @@ export async function extraerMetaComponente(rutaModulo: string | null): Promise<
     // Patrón chart-tipado: cada chart llama a la fábrica global.
     || /__isDefineTypedChart\s*\?\s*\.\s*\(\s*['"`]([a-zA-Z0-9-]+)['"`]/.test(src)
     // Patrón factory options: defineDateField({...}) o definePickerInput({...}).
-    || /\b(?:defineDateField|definePickerInput|defineTypedChart)\s*\(\s*\{/.test(src);
+    || /\b(?:defineDateField|definePickerInput|defineTypedChart)\s*\(\s*\{/.test(src)
+    // Molde IswcElement: `static tag = 'iswc-x'` + `define(Clase)` (define() es idempotente).
+    || (/static\s+(?:override\s+)?tag\s*=\s*['"`]/.test(src) && /\bdefine\(\s*[A-Za-z_$]/.test(src))
+    // Wrappers de observer: `define(createObserverElement('t', 'iswc-x'), …)`.
+    || /\bdefine\(\s*createObserverElement\(\s*['"`]\w+['"`]\s*,\s*['"`]iswc-/.test(src);
   const guardIdempotente = /customElements\.get\s*\(\s*['"`][a-zA-Z0-9-]+['"`]\s*\)/.test(src)
     // Las fábricas ya traen guard internamente; no lo penalizamos.
     || /\bdefineElement\s*\(/.test(src)
     || /\bdefineTypedChart\s*\(/.test(src)
     || /\bdefinePickerInput\s*\(/.test(src)
     || /\bdefineDateField\s*\(/.test(src)
-    || /__isDefineTypedChart/.test(src);
+    || /__isDefineTypedChart/.test(src)
+    || /\bdefine\(\s*[A-Za-z_$]/.test(src);
 
   // 7. Herencia.
-  const heredaBase = /extends\s+(ElementBase|ModalBase|DiagramElementBase|withStyleAttrs|PickerElement|DateFieldElement|BreakpointHost)/.test(src);
+  const heredaBase = /extends\s+(IswcElement|PropsElement|ElementBase|ModalBase|DiagramElementBase|withStyleAttrs|PickerElement|DateFieldElement|BreakpointHost)/.test(src);
 
   return {
     ruta: rutaModulo,

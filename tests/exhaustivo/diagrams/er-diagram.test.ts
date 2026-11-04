@@ -74,7 +74,7 @@ test('iswc-er-diagram: adopta CSS', () => {
 
 test('iswc-er-diagram: registrado', () => {
   const src = leerConBase(MOD);
-  assert.match(src, /defineElement\s*\(\s*['"`]iswc-er-diagram['"`]/);
+  assert.match(src, /(?:defineElement\s*\(\s*|static\s+(?:override\s+)?tag\s*=\s*|createObserverElement\(\s*'\w+',\s*)['"`]iswc-er-diagram['"`]/);
 });
 
 export default lista();

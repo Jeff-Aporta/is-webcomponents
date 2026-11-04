@@ -12,13 +12,15 @@
  * igual que `decors`: una petición por página en lugar de dos por carpeta, y
  * una única `CSSStyleSheet` que todos los shadows adoptan por referencia.
  *
- * El build inyecta el CSS con `define`. Sin él —consumo directo de `src/`, sin
- * empaquetar— no hay texto que adoptar y `sheetsBase()` devuelve `null` para
- * que el llamador siga usando `<link>`.
+ * El CSS llega por los módulos virtuales `iswc:css/host-base` e
+ * `iswc:css/scrollbars` (plan D6): el plugin `cssVirtual`
+ * (src/cdn/build/css-virtual.ts) los resuelve contra `.tmp-scss/src/core/` en
+ * cada build, y `scripts/serve.mjs` los sirve igual desde el staging. En Deno sin
+ * empaquetar (tests jsdom) el import map de `deno.json` los apunta a un módulo
+ * vacío: no hay texto que adoptar y `sheetsBase()` devuelve `null`.
  */
-
-declare const __IS_HOST_BASE_CSS__: string;
-declare const __IS_SCROLLBARS_CSS__: string;
+import textoBase from 'iswc:css/host-base';
+import textoScroll from 'iswc:css/scrollbars';
 
 /** `true` si el navegador admite hojas construidas y adoptadas. */
 export const soportaHojasAdoptadas = (() => {
@@ -33,18 +35,18 @@ export const soportaHojasAdoptadas = (() => {
   }
 })();
 
-/** Texto incrustado por el build, o `''` cuando se consume `src/` sin empaquetar. */
-const textoBase = typeof __IS_HOST_BASE_CSS__ === 'string' ? __IS_HOST_BASE_CSS__ : '';
-const textoScroll = typeof __IS_SCROLLBARS_CSS__ === 'string' ? __IS_SCROLLBARS_CSS__ : '';
-
 let hojas: CSSStyleSheet[] | null | undefined;
+
+/** Texto de las dos hojas base, en orden de cascada (base y luego scrollbars). Para el respaldo `<style>`. */
+export function textoHojasBase(): string {
+  return [textoBase, textoScroll].filter(Boolean).join('\n');
+}
 
 /**
  * Las dos hojas base, construidas al primer uso y memorizadas.
  *
  * Devuelve `null` cuando el navegador no admite `adoptedStyleSheets` o cuando
- * el build no incrustó el CSS; en ambos casos el llamador debe recurrir a
- * `<link>`, que es el comportamiento anterior.
+ * no hay CSS incrustado; en ambos casos el llamador recurre a `<style>`.
  */
 export function sheetsBase(): CSSStyleSheet[] | null {
   if (hojas !== undefined) return hojas;

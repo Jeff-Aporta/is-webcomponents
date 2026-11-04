@@ -20,7 +20,7 @@ const src = leerComponente(TAG);
 test('switch: archivo y registro', () => {
   assert.ok(src.length > 500);
   assert.ok(existeCss(TAG));
-  assert.ok(/defineElement\s*\(\s*['"`]iswc-switch['"`]/.test(src));
+  assert.ok(/(?:defineElement\s*\(\s*|static\s+(?:override\s+)?tag\s*=\s*|createObserverElement\(\s*'\w+',\s*)['"`]iswc-switch['"`]/.test(src));
 });
 
 test('switch: atributos observados', () => {

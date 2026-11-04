@@ -58,8 +58,9 @@ test('componentes/shadow-css-scope', async () => {
     const jsFile = cssFile.replace(/\.css$/, '.js');
     if (!existsSync(jsFile)) return [];
     const js = readFileSync(jsFile, 'utf8');
-    if (!/attachShadow|adoptCss/.test(js)) return [];
-    return [...js.matchAll(/(?:customElements\.define|defineElement)\(\s*['"]([\w-]+)['"]/g)].map((m) => m[1]);
+    // Molde IswcElement: el shadow lo crea el molde y el CSS llega por `static css` (import `iswc:css`).
+    if (!/attachShadow|adoptCss|static\s+css\s*=/.test(js)) return [];
+    return [...js.matchAll(/(?:(?:customElements\.define|defineElement)\(\s*|static\s+(?:override\s+)?tag\s*=\s*)['"]([\w-]+)['"]/g)].map((m) => m[1]);
   };
   
   /** Numero de linea de un indice de caracter, para poder citar file:line. */

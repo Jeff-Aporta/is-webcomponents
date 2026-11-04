@@ -36,8 +36,10 @@ test('iswc-kanban: archivo existe', () => {
 test('iswc-kanban: shadow DOM en board y column (card usa class CSS)', () => {
   const src = read(MOD);
   // board + column tienen shadow; card usa class CSS sin shadow propio.
-  const matches = src.match(/attachShadow\s*\(\s*\{\s*mode\s*:\s*['"]open['"]\s*\}/g);
-  assert.ok((matches?.length ?? 0) >= 2, `kanban.ts debe attachShadow 2+ veces (encontró ${matches?.length ?? 0})`);
+  // Molde IswcElement: cada clase abre su shadow salvo `static shadowInit = null` (light DOM).
+  const clases = src.split(/\bclass\s+\w+\s+extends\s+IswcElement\b/).slice(1);
+  const conShadow = clases.filter((cuerpo) => !/^\s*\{[^}]*?static shadowInit[^=\n]*= null/.test(cuerpo)).length;
+  assert.ok(conShadow >= 2, `kanban.ts debe montar shadow en 2+ clases (encontró ${conShadow})`);
 });
 
 test('iswc-kanban: observados (columns, orientation)', () => {
@@ -81,7 +83,7 @@ test('iswc-kanban: adopta CSS', () => {
 
 test('iswc-kanban: registrado — 3 custom elements', () => {
   const src = read(MOD);
-  const defines = src.match(/defineElement\s*\(\s*['"`](iswc-[a-z0-9-]+)['"`]/g);
+  const defines = src.match(/(?:defineElement\s*\(\s*|static\s+(?:override\s+)?tag\s*=\s*|createObserverElement\(\s*'\w+',\s*)['"`](iswc-[a-z0-9-]+)['"`]/g);
   assert.ok((defines?.length ?? 0) >= 3,
     `kanban.ts debe registrar 3+ custom elements (board/column/card), encontró: ${defines?.join(',')}`);
 });

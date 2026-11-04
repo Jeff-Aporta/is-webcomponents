@@ -47,15 +47,16 @@ test('iswc-button: módulo existe y es importable', async () => {
   assert.ok(src.length > 0, `El módulo ${RUTA_COMPONENTE} debe existir y no estar vacío`);
   // El módulo debe registrar el custom element (vía customElements.define o factory).
   assert.ok(
-    /customElements\.define\s*\(/.test(src) || /define[A-Z][\w]*\(/.test(src),
+    /customElements\.define\s*\(/.test(src) || /define[A-Z][\w]*\(/.test(src) || /\bdefine\(\s*[A-Z]/.test(src),
     'El módulo debe registrar el custom element',
   );
 });
 
 test('iswc-button: declares observedAttributes', async () => {
   const src = leerFuente();
-  const obs = src.match(/static\s+get\s+observedAttributes/);
-  assert.ok(obs, 'debe declarar static get observedAttributes');
+  // Molde IswcElement: los observados van en `static observed` (el molde arma observedAttributes).
+  const obs = src.match(/static\s+observed\s*=/);
+  assert.ok(obs, 'debe declarar static observed');
   const meta = await extraerMetaComponente(RUTA_COMPONENTE);
   assert.ok(meta, 'extraerMetaComponente debe devolver meta');
   assert.ok(
@@ -110,7 +111,8 @@ test('iswc-button: tiene JSDoc de cabecera', () => {
 
 test('iswc-button: tiene Shadow DOM', () => {
   const src = leerFuente();
-  assert.ok(/attachShadow\s*\(/.test(src), 'debe usar attachShadow para Shadow DOM');
+  // Molde IswcElement: el shadow lo abre el molde con `static shadowInit` (null = light DOM).
+  assert.ok(/attachShadow\s*\(/.test(src) || /static\s+shadowInit[^=\n]*=\s*\{/.test(src), 'debe usar Shadow DOM (shadowInit del molde)');
 });
 
 test('iswc-button: edge case — maneja atributo vacío sin errores', () => {

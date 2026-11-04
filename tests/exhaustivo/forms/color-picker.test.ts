@@ -22,7 +22,7 @@ const src = leerComponente(TAG);
 test('color-picker: archivo y registro', () => {
   assert.ok(src.length > 500);
   assert.ok(existeCss(TAG));
-  assert.ok(/defineElement\s*\(\s*['"`]iswc-color-picker['"`]/.test(src));
+  assert.ok(/(?:defineElement\s*\(\s*|static\s+(?:override\s+)?tag\s*=\s*|createObserverElement\(\s*'\w+',\s*)['"`]iswc-color-picker['"`]/.test(src));
   assert.ok(usaShadowDom(src));
 });
 

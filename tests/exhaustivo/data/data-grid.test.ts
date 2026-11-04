@@ -74,7 +74,8 @@ test('iswc-data-grid: adopta CSS', () => {
 
 test('iswc-data-grid: integra iswc-button, iswc-input, iswc-select, iswc-option, iswc-checkbox', () => {
   const src = read(MOD);
-  assert.match(src, /import[^;]+['"]@jeff-aporta\/iswc-base\/components\/actions\/button/);
+  // iswc-button es hoja: va en `static deps` (molde IswcElement) en vez de import de efecto.
+  assert.match(src, /import[^;]+['"]@jeff-aporta\/iswc-base\/components\/actions\/button|static deps = \[[^\]]*'iswc-button'/);
   assert.match(src, /import[^;]+['"]@jeff-aporta\/iswc-base\/components\/forms\/input/);
   assert.match(src, /import[^;]+['"]@jeff-aporta\/iswc-base\/components\/forms\/select/);
   assert.match(src, /import[^;]+['"]@jeff-aporta\/iswc-base\/components\/forms\/option/);
@@ -90,7 +91,7 @@ test('iswc-data-grid: API — setters `columns` y `rows`', () => {
 
 test('iswc-data-grid: registrado vía defineElement', () => {
   const src = read(MOD);
-  assert.match(src, /defineElement\s*\(\s*['"`]iswc-data-grid['"`]/);
+  assert.match(src, /(?:defineElement\s*\(\s*|static\s+(?:override\s+)?tag\s*=\s*|createObserverElement\(\s*'\w+',\s*)['"`]iswc-data-grid['"`]/);
 });
 
 test('iswc-data-grid: performance — cleanup en disconnectedCallback', () => {

@@ -47,15 +47,18 @@ test('W19 fuentes existen (ts/css/json/md)', () => {
 test('W19: importa los modulos de los componentes reusados', () => {
   // Cada import es side-effect: registra el CE si el bundle lo necesita.
   // Si reescribes a mano el shadow y borras el import, esto falla.
-  // Acepta tanto `import '...'` (side-effect) como `import ... from '...'`.
-  const sideEffect = (rel: string) =>
-    new RegExp(`import\\s+['"][^'"]*${rel.replace(/\//g, '\\/')}['"]`);
+  // Acepta tanto `import '...'` (side-effect) como `import ... from '...'`, o el tag en `static deps`
+  // (molde IswcElement: los hijos hoja se piden a iswcLoader.ensure al conectar).
+  const sideEffect = (rel: string) => {
+    const tag = `iswc-${rel.split('/').pop()!.replace(/\.js$/, '')}`;
+    return new RegExp(`import\\s+['"][^'"]*${rel.replace(/\//g, '\\/')}['"]|static deps = \\[[^\\]]*'${tag}'`);
+  };
   assert.match(ts, sideEffect('layout/card.js'),
     'examples-carousel.ts debe importar el modulo de <iswc-card>');
   assert.match(ts, sideEffect('actions/button.js'),
-    'examples-carousel.ts debe importar el modulo de <iswc-button>');
+    'examples-carousel.ts debe importar (o declarar en deps) <iswc-button>');
   assert.match(ts, sideEffect('media/icon.js'),
-    'examples-carousel.ts debe importar el modulo de <iswc-icon>');
+    'examples-carousel.ts debe importar (o declarar en deps) <iswc-icon>');
   assert.match(ts, sideEffect('navigation/tab-group.js'),
     'examples-carousel.ts debe importar el modulo de <iswc-tab-group>');
 });

@@ -61,7 +61,10 @@ test('login: reutiliza los componentes obligatorios', () => {
     '@jeff-aporta/iswc-base/components/feedback/toast.js',
     '@jeff-aporta/iswc-base/components/feedback/tooltip.js',
   ]) {
-    assert.ok(ts.includes(dep), 'login.ts debe importar ' + dep);
+    // Molde IswcElement: un hijo hoja puede ir en `static deps` (perezoso) en vez de un import de efecto.
+    const tag = `iswc-${dep.split('/').pop()!.replace(/\.js$/, '')}`;
+    const enDeps = new RegExp(`static deps = \\[[^\\]]*'${tag}'`).test(ts);
+    assert.ok(ts.includes(dep) || enDeps, 'login.ts debe importar (o declarar en static deps) ' + dep);
   }
 });
 

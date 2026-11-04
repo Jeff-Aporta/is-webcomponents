@@ -95,7 +95,7 @@ test('iswc-treemap: adopta CSS', () => {
 
 test('iswc-treemap: registrado', () => {
   const src = read(MOD);
-  assert.match(src, /defineElement\s*\(\s*['"`]iswc-treemap['"`]/);
+  assert.match(src, /(?:defineElement\s*\(\s*|static\s+(?:override\s+)?tag\s*=\s*|createObserverElement\(\s*'\w+',\s*)['"`]iswc-treemap['"`]/);
   assert.ok(estaRegistrado(src, 'iswc-treemap'));
 });
 

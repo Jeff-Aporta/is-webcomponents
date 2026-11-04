@@ -22,7 +22,7 @@ const src = leerComponente(TAG);
 test('date-picker: archivo y registro', () => {
   assert.ok(src.length > 500);
   assert.ok(existeCss(TAG));
-  assert.ok(/defineElement\s*\(\s*['"`]iswc-date-picker['"`]/.test(src));
+  assert.ok(/(?:defineElement\s*\(\s*|static\s+(?:override\s+)?tag\s*=\s*|createObserverElement\(\s*'\w+',\s*)['"`]iswc-date-picker['"`]/.test(src));
   assert.ok(extiendeElementBase(src));
   assert.ok(usaShadowDom(src));
 });

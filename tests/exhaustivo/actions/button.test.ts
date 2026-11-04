@@ -47,7 +47,7 @@ test('iswc-button: módulo existe y registra el custom element', () => {
   const src = leerFuente();
   assert.ok(src.length > 0, `${RUTA_COMPONENTE} debe existir y no estar vacío`);
   assert.ok(
-    /customElements\.define\s*\(/.test(src) || /define[A-Z][\w]*\s*\(/.test(src),
+    /customElements\.define\s*\(/.test(src) || /define[A-Z][\w]*\s*\(/.test(src) || /\bdefine\(\s*[A-Z]/.test(src),
     'debe registrar el custom element (customElements.define o factory defineElement)',
   );
 });
@@ -92,7 +92,7 @@ test('iswc-button: declara slots default, start, end', () => {
 // 5. Shadow DOM + parts
 test('iswc-button: usa Shadow DOM con delegatesFocus y CSS parts', () => {
   const src = leerFuente();
-  assert.ok(/attachShadow\s*\(\s*\{[^}]*mode:\s*["']open["']/.test(src), 'attachShadow mode open');
+  assert.ok(/(?:attachShadow\s*\(\s*|shadowInit[^=\n]*=\s*)\{[^}]*mode:\s*["']open["']/.test(src), 'attachShadow mode open');
   assert.ok(/delegatesFocus/.test(src), 'delegatesFocus para que el foco aterrice en el <button> interno');
   for (const part of ['button', 'label', 'start', 'end', 'caret', 'spinner']) {
     assert.ok(

@@ -78,14 +78,14 @@ test('9. integra con iswc-tab e iswc-tab-panel (slots)', async () => {
 
 test('10. registra <iswc-tab> y <iswc-tab-panel>', async () => {
   const src = readFileSync(TS, 'utf8');
-  assert.ok(/defineElement\s*\(\s*['"]iswc-tab['"]/.test(src) ||
-             /defineElement\s*\(\s*['"]iswc-tab-panel['"]/.test(src),
+  assert.ok(/(?:defineElement\s*\(\s*|static\s+(?:override\s+)?tag\s*=\s*|createObserverElement\(\s*'\w+',\s*)['"]iswc-tab['"]/.test(src) ||
+             /(?:defineElement\s*\(\s*|static\s+(?:override\s+)?tag\s*=\s*|createObserverElement\(\s*'\w+',\s*)['"]iswc-tab-panel['"]/.test(src),
              'debe registrar iswc-tab o iswc-tab-panel');
 });
 
 test('11. custom element iswc-tab-group registrado', async () => {
   const src = readFileSync(TS, 'utf8');
-  assert.ok(/defineElement\s*\(\s*['"]iswc-tab-group['"]/.test(src));
+  assert.ok(/(?:defineElement\s*\(\s*|static\s+(?:override\s+)?tag\s*=\s*|createObserverElement\(\s*'\w+',\s*)['"]iswc-tab-group['"]/.test(src));
 });
 
 test('12. JSON tiene demo(s) y reference', async () => {

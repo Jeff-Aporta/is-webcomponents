@@ -96,7 +96,7 @@ test('11. OBSERVED incluye atributos principales', async () => {
 
 test('12. custom element registrado', async () => {
   const src = readFileSync(TS, 'utf8');
-  assert.ok(/defineElement\s*\(\s*['"]iswc-block-layout['"]/.test(src));
+  assert.ok(/(?:defineElement\s*\(\s*|static\s+(?:override\s+)?tag\s*=\s*|createObserverElement\(\s*'\w+',\s*)['"]iswc-block-layout['"]/.test(src));
 });
 
 test('13. CSS hermano tiene reglas para grid/flex (es un layout)', async () => {

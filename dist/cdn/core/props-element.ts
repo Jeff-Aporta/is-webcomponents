@@ -5,8 +5,11 @@
  * `texto-cargando`; un arreglo o un objeto va como JSON), así el mismo componente sirve desde HTML y desde JS. `props`
  * mezcla lo nuevo con lo anterior, valida con el esquema del componente y solo repinta si algo cambió: un refresco
  * idéntico no toca el DOM (ni parpadea, ni pierde el foco).
+ *
+ * Es una subclase del molde `IswcElement` (core/iswc-element.ts): la subclase declara `static tag`, `static css` y
+ * `static observed = atributosDe(INICIAL)`, y el molde crea el shadow y adopta las hojas.
  */
-import { ElementBase } from './element-base.js';
+import { IswcElement } from './iswc-element.js';
 import { upgradeProperties } from './element.js';
 import type { EsquemaProps } from './schemas/props-element.schemas.js';
 
@@ -47,7 +50,7 @@ function leerAtributo(el: Element, atributo: string, inicial: unknown): unknown 
   return texto;
 }
 
-export abstract class PropsElement<P extends object> extends ElementBase {
+export abstract class PropsElement<P extends object> extends IswcElement {
   readonly #inicial: P;
   readonly #esquema: EsquemaProps;
   #props: P;

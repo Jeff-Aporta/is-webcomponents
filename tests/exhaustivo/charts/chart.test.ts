@@ -41,7 +41,9 @@ test('iswc-chart: render — attachShadow open + svg en shadow DOM', () => {
   const src = read(MOD);
   assert.ok(tieneShadow(src));
   assert.match(src, /<svg\b/);
-  assert.match(src, /attachShadow\s*\(\s*\{\s*mode\s*:\s*['"]open['"]\s*\}/);
+  // Molde IswcElement: el shadow abierto lo crea el molde (shadowInit por defecto { mode: 'open' }).
+  assert.match(src, /class IswcChart extends withStyleAttrs\(IswcElement\)/);
+  assert.doesNotMatch(src, /static shadowInit[^=\n]*= null/);
 });
 
 test('iswc-chart: atributos observados (mínimo 10)', () => {
@@ -86,7 +88,7 @@ test('iswc-chart: edge cases — null/undefined/empty arrays', () => {
 
 test('iswc-chart: integración — registrado vía defineElement', () => {
   const src = read(MOD);
-  assert.match(src, /defineElement\s*\(\s*['"`]iswc-chart['"`]/);
+  assert.match(src, /(?:defineElement\s*\(\s*|static\s+(?:override\s+)?tag\s*=\s*|createObserverElement\(\s*'\w+',\s*)['"`]iswc-chart['"`]/);
   assert.ok(estaRegistrado(src, 'iswc-chart'));
 });
 

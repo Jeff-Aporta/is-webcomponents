@@ -87,7 +87,8 @@ export function tagsRegistrados(raiz: string): string[] {
   const tags = new Set<string>();
   for (const ruta of recorrer(join(raiz, 'src', 'components'))) {
     const fuente = readFileSync(ruta, 'utf8');
-    for (const m of fuente.matchAll(/(?:customElements\.define|\bdefineElement)\(\s*['"`](iswc-[a-z0-9-]+)['"`]/g)) tags.add(m[1]!);
+    // Molde IswcElement: `static tag = 'iswc-x'` + `define(Clase)`.
+    for (const m of fuente.matchAll(/(?:(?:customElements\.define|\bdefineElement)\(\s*|static\s+(?:override\s+)?tag\s*=\s*)['"`](iswc-[a-z0-9-]+)['"`]/g)) tags.add(m[1]!);
   }
   return [...tags].sort();
 }

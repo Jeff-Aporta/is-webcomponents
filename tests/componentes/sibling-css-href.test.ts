@@ -57,9 +57,10 @@ test('componentes/sibling-css-href', async () => {
     !/new URL\(\s*['"]\.\/diagram-lightbox\.css['"]/.test(src),
     'diagram-lightbox.ts no debe hardcodear ./diagram-lightbox.css',
   );
+  // Molde IswcElement: la hoja viaja dentro del módulo (`import css from 'iswc:css'`), sin pedir ningún .css.
   check(
-    /siblingCssHref\s*\(\s*import\.meta\.url\s*\)/.test(src),
-    'diagram-lightbox.ts debe usar siblingCssHref(import.meta.url)',
+    /static css = css;/.test(src) && /import css from 'iswc:css';/.test(src) && !/siblingCssHref\s*\(/.test(src),
+    'diagram-lightbox.ts debe llevar su CSS por iswc:css (static css), no por siblingCssHref',
   );
   
   const distJs = join(root, 'dist/cdn/diagrams/diagram-lightbox.min.js');

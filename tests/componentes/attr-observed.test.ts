@@ -41,7 +41,11 @@ test('attrs.ts vuelca PENDIENTES sin construir la clase', () => {
 
 test('dropdown observa open vía atributosDeclarados (no lista hardcodeada rota)', () => {
   const src = readFileSync(join(root, 'src/components/actions/dropdown.ts'), 'utf8');
-  assert.ok(/atributosDeclarados\(this\)/.test(src), 'dropdown usa atributosDeclarados');
+  const molde = readFileSync(join(root, 'src/core/iswc-element.ts'), 'utf8');
+  // El molde IswcElement suma los @attr a observedAttributes: dropdown no lista `open` a mano.
+  assert.ok(/atributosDeclarados\(this\)/.test(molde), 'el molde une atributosDeclarados en observedAttributes');
+  assert.ok(/extends withStyleAttrs\(IswcElement\)/.test(src), 'dropdown hereda del molde');
+  assert.ok(!/static observed = \[[^\]]*'open'/.test(src), 'open no se lista a mano');
   assert.ok(/@attrBool\s+accessor open/.test(src), 'open es @attrBool');
 });
 

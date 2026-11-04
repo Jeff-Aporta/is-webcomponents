@@ -73,7 +73,7 @@ test('input: shadow DOM parts', () => {
 
 test('input: shadow DOM (open + delegatesFocus)', () => {
   assert.ok(usaShadowDom(src));
-  assert.ok(/attachShadow\s*\(\s*\{\s*mode:\s*['"]open['"]\s*,\s*delegatesFocus:\s*true/.test(src),
+  assert.ok(/(?:attachShadow\s*\(\s*|shadowInit[^=\n]*=\s*)\{\s*mode:\s*['"]open['"]\s*,\s*delegatesFocus:\s*true/.test(src),
     '<iswc-input> debe abrir shadow con delegatesFocus:true (accesibilidad teclado)');
 });
 

@@ -20,7 +20,7 @@ const src = leerComponente(TAG);
 test('textarea: archivo y registro', () => {
   assert.ok(src.length > 1000);
   assert.ok(existeCss(TAG));
-  assert.ok(/defineElement\s*\(\s*['"`]iswc-textarea['"`]/.test(src));
+  assert.ok(/(?:defineElement\s*\(\s*|static\s+(?:override\s+)?tag\s*=\s*|createObserverElement\(\s*'\w+',\s*)['"`]iswc-textarea['"`]/.test(src));
 });
 
 test('textarea: atributos observados', () => {

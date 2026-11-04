@@ -31,7 +31,7 @@ test('iswc-pivot-table: shadow DOM', () => {
 
 test('iswc-pivot-table: registrado', () => {
   const src = read(MOD);
-  assert.match(src, /defineElement\s*\(\s*['"`]iswc-pivot-table['"`]/);
+  assert.match(src, /(?:defineElement\s*\(\s*|static\s+(?:override\s+)?tag\s*=\s*|createObserverElement\(\s*'\w+',\s*)['"`]iswc-pivot-table['"`]/);
 });
 
 test('iswc-pivot-table: adopta CSS', () => {
@@ -52,9 +52,9 @@ test('iswc-pivot-table: behavior — preview asigna properties o config', () => 
 });
 
 test('iswc-pivot-table: usa shadow DOM (no requiere importar otros is-*)', () => {
-  // pivot-table.ts usa attachShadow({mode:'open'}) en su ctor.
+  // pivot-table.ts extiende el molde IswcElement, que abre el shadow ({ mode: 'open' }) al construir.
   const src = read(MOD);
-  assert.match(src, /attachShadow\s*\(\s*\{\s*mode\s*:\s*['"]open['"]\s*\}/);
+  assert.ok(tieneShadow(src), 'pivot-table monta shadow DOM abierto');
 });
 
 export default lista();

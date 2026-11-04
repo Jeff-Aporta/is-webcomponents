@@ -77,7 +77,7 @@ test('md-editor: 10. custom element registrado', async () => {
   const src = readFileSync(TS, 'utf8');
   assert.ok(
     /customElements\.define\s*\(\s*['"]iswc-md-editor['"]/.test(src) ||
-    /defineElement\s*\(\s*['"]iswc-md-editor['"]/.test(src),
+    /(?:defineElement\s*\(\s*|static\s+(?:override\s+)?tag\s*=\s*|createObserverElement\(\s*'\w+',\s*)['"]iswc-md-editor['"]/.test(src),
   );
 });
 

@@ -66,14 +66,14 @@ test('7. usa isp-color helpers (classifyColor, normalizeMix, syncIspColor)', asy
   }
 });
 
-test('8. extiende ElementBase (cambios de atributo se procesan)', async () => {
+test('8. extiende el molde IswcElement (cambios de atributo se procesan)', async () => {
   const src = readFileSync(TS, 'utf8');
-  assert.ok(/extends\s+ElementBase/.test(src));
+  assert.ok(/extends\s+IswcElement/.test(src));
 });
 
 test('heading: 9. custom element registrado', async () => {
   const src = readFileSync(TS, 'utf8');
-  assert.ok(/defineElement\s*\(\s*['"]iswc-heading['"]/.test(src));
+  assert.ok(/(?:defineElement\s*\(\s*|static\s+(?:override\s+)?tag\s*=\s*|createObserverElement\(\s*'\w+',\s*)['"]iswc-heading['"]/.test(src));
 });
 
 test('10. preview.ts existe', async () => {

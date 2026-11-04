@@ -78,7 +78,7 @@ test('10. custom element registrado correctamente', async () => {
   const src = readFileSync(TS, 'utf8');
   assert.ok(
     /customElements\.define\s*\(\s*['"]iswc-relative-time['"]/.test(src) ||
-    /defineElement\s*\(\s*['"]iswc-relative-time['"]/.test(src),
+    /(?:defineElement\s*\(\s*|static\s+(?:override\s+)?tag\s*=\s*|createObserverElement\(\s*'\w+',\s*)['"]iswc-relative-time['"]/.test(src),
   );
 });
 

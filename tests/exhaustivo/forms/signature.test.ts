@@ -21,7 +21,7 @@ const src = leerComponente(TAG);
 test('signature: archivo y registro', () => {
   assert.ok(src.length > 300);
   assert.ok(existeCss(TAG));
-  assert.ok(/defineElement\s*\(\s*['"`]iswc-signature['"`]/.test(src));
+  assert.ok(/(?:defineElement\s*\(\s*|static\s+(?:override\s+)?tag\s*=\s*|createObserverElement\(\s*'\w+',\s*)['"`]iswc-signature['"`]/.test(src));
   assert.ok(usaShadowDom(src));
 });
 

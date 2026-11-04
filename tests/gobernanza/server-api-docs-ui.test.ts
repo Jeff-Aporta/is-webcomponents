@@ -20,8 +20,8 @@ import { createRequire } from 'node:module';
 import { extname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
-import { denoTestCon } from '../_shared/deno-test.ts';
-import { lanzarChromium } from '../_shared/navegador.ts';
+import { denoTestCon } from '../_shared/deno-test.ts';
+import { cerrarChromium, lanzarChromium } from '../_shared/navegador.ts';
 
 const { test, lista } = coleccionPruebas({ categoria: 'how' });
 
@@ -167,9 +167,11 @@ denoTest({
       // U6
       assertEquals(errores, [], `U6 errores en consola:\n${errores.join('\n')}`);
     } finally {
-      await nav.close();
+      // `browser.close()` del Chrome/Edge del sistema a veces no resuelve nunca: se cierra con plazo.
+      await cerrarChromium(nav as unknown as Parameters<typeof cerrarChromium>[0]);
       ac.abort();
-      await srv.finished;
+      // Con conexiones keep-alive del navegador colgadas, `finished` puede tardar: se espera con plazo.
+      await Promise.race([srv.finished, new Promise((r) => setTimeout(r, 2000))]);
     }
   },
 });

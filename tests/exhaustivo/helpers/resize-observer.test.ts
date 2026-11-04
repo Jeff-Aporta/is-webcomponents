@@ -36,7 +36,7 @@ test('resize-observer: 3. JSON existe y respeta iswc-preview/v1', () => {
 
 test('4. delega en createObserverElement("resize")', () => {
   const src = readFileSync(TS, 'utf8');
-  assert.ok(/createObserverElement\s*\(\s*['"]resize['"]\s*\)/.test(src));
+  assert.ok(/createObserverElement\s*\(\s*['"]resize['"]\s*[,)]/.test(src));
 });
 
 test('resize-observer: 5. importa desde ./observer.js', () => {
@@ -46,7 +46,7 @@ test('resize-observer: 5. importa desde ./observer.js', () => {
 
 test('resize-observer: 6. está registrado con defineElement', () => {
   const src = readFileSync(TS, 'utf8');
-  assert.ok(/defineElement\s*\(\s*['"]iswc-resize-observer['"]/.test(src));
+  assert.ok(/(?:defineElement\s*\(\s*|static\s+(?:override\s+)?tag\s*=\s*|createObserverElement\(\s*'\w+',\s*)['"]iswc-resize-observer['"]/.test(src));
 });
 
 test('resize-observer: 7. hereda OBSERVED del factory (no redefinir)', () => {

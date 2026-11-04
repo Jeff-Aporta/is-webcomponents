@@ -86,7 +86,7 @@ test('iswc-stat: adopta CSS', () => {
 
 test('iswc-stat: registrado vía defineElement', () => {
   const src = read(MOD);
-  assert.match(src, /defineElement\s*\(\s*['"`]iswc-stat['"`]/);
+  assert.match(src, /(?:defineElement\s*\(\s*|static\s+(?:override\s+)?tag\s*=\s*|createObserverElement\(\s*'\w+',\s*)['"`]iswc-stat['"`]/);
   assert.ok(estaRegistrado(src, 'iswc-stat'));
 });
 

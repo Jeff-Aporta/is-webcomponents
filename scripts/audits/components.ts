@@ -32,7 +32,7 @@ for (const f of walk(compRoot)) {
   // definePickerInput, ...). Los módulos helper sin clases HTMLElement no
   // necesitan registrar nada.
   const defines = [...src.matchAll(/customElements\.define\(\s*['"`]([a-z0-9-]+)['"`]/g)].map((m) => m[1]);
-  const definesAny = /customElements\.define\(/.test(src) || /\bdefine[A-Z][A-Za-z]*\(/.test(src);
+  const definesAny = /customElements\.define\(/.test(src) || /\bdefine[A-Z][A-Za-z]*\(/.test(src) || /\bdefine\(\s*[A-Za-z_$]/.test(src);
   const declaresElement = /extends\s+HTMLElement/.test(src);
   if (declaresElement && !definesAny) issues.push('no-define: declara HTMLElement pero no lo registra');
   for (const tag of defines) {
@@ -45,7 +45,8 @@ for (const f of walk(compRoot)) {
   // `adoptCss(` = lo llama. Un módulo que EXPORTA su propio `adoptCss`
   // (helpers/ui.js) no está adoptando nada y no necesita un .css hermano;
   // buscar el identificador a secas lo marcaba como falso positivo.
-  const usesAdopt = /(?<!export const )\badoptCss\(/.test(src) && !/export const adoptCss\s*=/.test(src);
+  // Molde IswcElement: el CSS llega por `static css = css` (import `iswc:css`) y el shadow lo crea el molde.
+  const usesAdopt = (/(?<!export const )\badoptCss\(/.test(src) && !/export const adoptCss\s*=/.test(src)) || /static\s+css\s*=/.test(src);
   if (hasCss && usesShadow && !usesAdopt) issues.push('css-huerfano: existe .css pero no se adopta en el shadow');
   if (!hasCss && usesAdopt) issues.push('adoptCss-sin-css: adoptCss apunta a un .css inexistente (404 en runtime)');
 
@@ -67,7 +68,7 @@ for (const f of walk(compRoot)) {
   // (ModalBase para dialog/drawer, DiagramElementBase para los diagramas):
   // ahí el componente implementa `onAttributeChanged`, no el callback nativo.
   // `withStyleAttrs(HTMLElement)` también aporta attributeChangedCallback.
-  const extendsBase = /extends\s+(ElementBase|ModalBase|DiagramElementBase|withStyleAttrs\()/.test(src);
+  const extendsBase = /extends\s+(IswcElement|ElementBase|ModalBase|DiagramElementBase|PropsElement|BreakpointHost|withStyleAttrs\()/.test(src);
   if (!extendsBase) {
     const hasObserved = /static get observedAttributes/.test(src) || /static observedAttributes/.test(src);
     const hasACC = /attributeChangedCallback/.test(src);

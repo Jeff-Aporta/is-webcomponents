@@ -82,7 +82,13 @@ export function extraerParts(src: string): string[] {
 
 /** ¿La clase monta shadow DOM? */
 export function tieneShadow(src: string): boolean {
-  return /attachShadow\s*\(\s*\{\s*mode\s*:\s*['"]open['"]\s*\}\s*\)/.test(src);
+  if (/attachShadow\s*\(\s*\{\s*mode\s*:\s*['"]open['"]\s*\}\s*\)/.test(src)) return true;
+  // Molde IswcElement: lo abre el propio molde (`shadowInit` por defecto `{ mode: 'open' }`), o `initShadow`/
+  // `initDiagramShadow` de una subclase; `static shadowInit = null` es light DOM.
+  if (/\binit(?:Diagram)?Shadow\s*\(/.test(src) || /static\s+shadowInit\s*(?::[^=\n]*)?=\s*\{\s*mode\s*:\s*['"]open['"]/.test(src)) return true;
+  // Alguna clase del molde sin `shadowInit = null` entre sus estáticos (cabecera del cuerpo).
+  const cuerpos = src.split(/\bclass\s+\w+\s+extends\s+(?:withStyleAttrs\(\s*)?(?:IswcElement|PropsElement<[^>]*>|ModalBase)\b/).slice(1);
+  return cuerpos.some((c) => !/^[^{]*\{(?:\s*static [^\n]*\n)*?\s*static\s+shadowInit\s*(?::[^=\n]*)?=\s*null/.test(c));
 }
 
 /** ¿Limpia observers y listeners en disconnectedCallback? */
@@ -125,6 +131,10 @@ export function tieneAccesibilidad(src: string): boolean {
 export function estaRegistrado(src: string): boolean {
   return /customElements\.define\s*\(/.test(src)
     || /defineElement\s*\(\s*['"`][a-z0-9-]+['"`]/.test(src)
+    // Molde IswcElement: `static tag = 'iswc-x'` + `define(Clase)`; fábricas con el tag literal.
+    || (/static\s+(?:override\s+)?tag\s*=/.test(src) && /\bdefine\(\s*[A-Za-z_$]/.test(src))
+    || /\bdefine\(\s*createObserverElement\(/.test(src)
+    || /\b(?:defineDateField|definePickerInput)\(\{\s*tag:\s*['"]iswc-/.test(src)
     || /window\.__isDefineTypedChart\s*\?/.test(src)
     || /registerDiagramKind/.test(src);
 }
@@ -154,10 +164,15 @@ export function usaMutationObserver(src: string): boolean {
   return /new\s+MutationObserver\s*\(/.test(src);
 }
 
-/** ¿Adopta CSS via adoptCss? */
+/** ¿Adopta su CSS? Con el molde IswcElement: `static css = css` (import `iswc:css`); antes, `adoptCss(…)`. */
 export function adoptaCss(src: string): boolean {
-  return /\badoptCss\s*\(/.test(src);
+  return /\badoptCss\s*\(/.test(src) || /static\s+(?:override\s+)?css\s*=/.test(src) || /\bcss,\s*$/m.test(src);
 }
+
+/** Inicio de la lista de observados: `static observed = [` (molde) o `static get observedAttributes() { return [`. */
+const RE_OBS_LITERAL = /(?:static\s+get\s+observedAttributes[\s\S]*?return|static\s+(?:override\s+)?observed\s*(?::[^=\n]*)?=)\s*\[/;
+/** Observados por constante: `static observed = OBSERVED` o `return OBSERVED;`. */
+const RE_OBS_CONST = /(?:static\s+get\s+observedAttributes[\s\S]*?return|static\s+(?:override\s+)?observed\s*(?::[^=\n]*)?=)\s+([A-Z_$][\w$]*)/;
 
 /** ¿Tiene JSDoc de cabecera? */
 export function tieneJsDoc(src: string): boolean {
@@ -199,7 +214,7 @@ export function extraerObservados(rutaOContenido: string): string[] {
   const srcSinComentarios = src
     .replace(/\/\*[\s\S]*?\*\//g, '')     // block comments
     .replace(/^\s*\/\/.*$/gm, '');        // line comments
-  const obsStart = srcSinComentarios.match(/static\s+get\s+observedAttributes[\s\S]*?return\s*\[/);
+  const obsStart = srcSinComentarios.match(RE_OBS_LITERAL);
   if (obsStart) {
     // Re-mapear el índice al src original.
     const startInSrc = src.indexOf(obsStart[0].slice(0, -1));
@@ -247,7 +262,7 @@ export function extraerObservados(rutaOContenido: string): string[] {
   //     `static get observedAttributes() { return OBSERVED; }`.
   //     También funciona con nombres como `BOARD_OBSERVED`, etc.
   if (set.size === 0) {
-    const obsConst = srcSinComentarios.match(/static\s+get\s+observedAttributes[\s\S]*?return\s+([A-Z_$][\w$]*)/);
+    const obsConst = srcSinComentarios.match(RE_OBS_CONST);
     if (obsConst) {
       const alias = obsConst[1];
       // Buscar el array en el source completo (no solo sin comentarios).
@@ -309,23 +324,23 @@ export function extraerObservados(rutaOContenido: string): string[] {
             .replace(/\/\*[\s\S]*?\*\//g, '')
             .replace(/^\s*\/\/.*$/gm, '');
           // Caso 1: array literal `return [...]`.
-          const baseObsStart = baseSinComentarios.match(/static\s+get\s+observedAttributes[\s\S]*?return\s*\[/);
+          const baseObsStart = baseSinComentarios.match(RE_OBS_LITERAL);
           if (baseObsStart) {
-            const startInBase = baseSrc.indexOf(baseObsStart[0].slice(0, -1));
-            const idx = startInBase >= 0 ? startInBase + baseObsStart[0].length - 1 : -1;
+            // Se recorre el texto SIN comentarios: un ejemplo en el JSDoc de la base no debe tomarse por la lista real.
+            const idx = (baseObsStart.index ?? -1) >= 0 ? baseObsStart.index! + baseObsStart[0].length - 1 : -1;
             if (idx >= 0) {
               let depth = 0;
               let end = idx;
-              for (let i = idx; i < baseSrc.length; i++) {
-                if (baseSrc[i] === '[') depth++;
-                else if (baseSrc[i] === ']') { depth--; if (depth === 0) { end = i; break; } }
+              for (let i = idx; i < baseSinComentarios.length; i++) {
+                if (baseSinComentarios[i] === '[') depth++;
+                else if (baseSinComentarios[i] === ']') { depth--; if (depth === 0) { end = i; break; } }
               }
-              const literal = baseSrc.substring(idx + 1, end);
+              const literal = baseSinComentarios.substring(idx + 1, end);
               for (const mm of literal.matchAll(/['"`]([a-zA-Z0-9-]+)['"`]/g)) set.add(mm[1]);
             }
           }
           // Caso 2: `return CONST_NAME;` (const reference, e.g. ModalBase).
-          const baseObsConst = baseSinComentarios.match(/static\s+get\s+observedAttributes[\s\S]*?return\s+([A-Z_$][\w$]*)/);
+          const baseObsConst = baseSinComentarios.match(RE_OBS_CONST);
           if (baseObsConst) {
             const alias = baseObsConst[1];
             for (const m of baseSrc.matchAll(new RegExp(`(?:const|let|var)\\s+${alias}\\s*(?::[^=\\n]*)?=\\s*\\[([\\s\\S]*?)\\]`, 'g'))) {

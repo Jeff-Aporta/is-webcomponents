@@ -31,6 +31,7 @@ import { fileURLToPath } from 'node:url';
 import { spawn } from 'node:child_process';
 import { chromium } from 'playwright';
 import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+import { cerrarChromium } from '../_shared/navegador.ts';
 
 const { test, lista } = coleccionPruebas({ categoria: 'what' });
 
@@ -174,7 +175,8 @@ test('navegador/home-coverage', async () => {
     console.error(err?.stack || err);
     exitCode = 1;
   } finally {
-    await browser.close().catch(() => {});
+    // `browser.close()` del Chrome/Edge del sistema a veces no resuelve: se cierra con plazo.
+    await cerrarChromium(browser);
   }
 
   { const salida = exitCode; if (salida) throw new Error(`salida ${salida}`); return; }

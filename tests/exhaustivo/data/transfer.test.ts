@@ -70,12 +70,12 @@ test('iswc-transfer: adopta CSS', () => {
 
 test('iswc-transfer: registrado', () => {
   const src = read(MOD);
-  assert.match(src, /defineElement\s*\(\s*['"`]iswc-transfer['"`]/);
+  assert.match(src, /(?:defineElement\s*\(\s*|static\s+(?:override\s+)?tag\s*=\s*|createObserverElement\(\s*'\w+',\s*)['"`]iswc-transfer['"`]/);
 });
 
 test('iswc-transfer-item: registrado', () => {
   const src = read(MOD);
-  assert.match(src, /defineElement\s*\(\s*['"`]iswc-transfer-item['"`]/);
+  assert.match(src, /(?:defineElement\s*\(\s*|static\s+(?:override\s+)?tag\s*=\s*|createObserverElement\(\s*'\w+',\s*)['"`]iswc-transfer-item['"`]/);
 });
 
 export default lista();

@@ -79,7 +79,7 @@ test('iswc-sequence-diagram: adopta CSS', () => {
 
 test('iswc-sequence-diagram: registrado', () => {
   const src = leerConBase(MOD);
-  assert.match(src, /defineElement\s*\(\s*['"`]iswc-sequence-diagram['"`]/);
+  assert.match(src, /(?:defineElement\s*\(\s*|static\s+(?:override\s+)?tag\s*=\s*|createObserverElement\(\s*'\w+',\s*)['"`]iswc-sequence-diagram['"`]/);
 });
 
 export default lista();

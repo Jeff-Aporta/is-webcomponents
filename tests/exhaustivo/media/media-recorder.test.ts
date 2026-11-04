@@ -94,7 +94,7 @@ test('11. expone parte preview y download', async () => {
 test('media-recorder: 12. custom element registrado', async () => {
   const src = readFileSync(TS, 'utf8');
   assert.ok(/customElements\.define\s*\(\s*['"]iswc-media-recorder['"]/.test(src) ||
-             /defineElement\s*\(\s*['"]iswc-media-recorder['"]/.test(src));
+             /(?:defineElement\s*\(\s*|static\s+(?:override\s+)?tag\s*=\s*|createObserverElement\(\s*'\w+',\s*)['"]iswc-media-recorder['"]/.test(src));
 });
 
 export default lista();

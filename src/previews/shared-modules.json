@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-11-04T15:32:04.185Z",
-  "count": 41,
+  "generatedAt": "2026-11-04T17:41:40.403Z",
+  "count": 43,
   "modules": [
     {
       "file": "app-cfg.ts",
@@ -35,7 +35,7 @@
       "id": "attrs",
       "path": "src/core/attrs.ts",
       "summary": "attrs — Phase V5: el volcado automático del mapa `styleAttrs` quedó deshabilitado",
-      "bytes": 13521,
+      "bytes": 13503,
       "exports": [
         "isCssColorValue",
         "syncStyleAttr",
@@ -56,9 +56,10 @@
       "id": "base-sheets",
       "path": "src/core/base-sheets.ts",
       "summary": "base-sheets — creadas una sola vez y compartidas por todos los ShadowRoot de la página.",
-      "bytes": 2524,
+      "bytes": 2598,
       "exports": [
         "soportaHojasAdoptadas",
+        "textoHojasBase",
         "sheetsBase"
       ]
     },
@@ -198,10 +199,10 @@
       "file": "element-base.ts",
       "id": "element-base",
       "path": "src/core/element-base.ts",
-      "summary": "element-base — Centraliza el patrón que se repetía en ~150 componentes: shadow más template,",
-      "bytes": 6359,
+      "summary": "element-base — Los componentes del kit extienden `IswcElement` directamente. `ElementBase` se conserva para el código externo que",
+      "bytes": 1094,
       "exports": [
-        "ElementBase extends HTMLElement"
+        "ElementBase extends IswcElement \n  static override shadowInit"
       ]
     },
     {
@@ -209,7 +210,7 @@
       "id": "element",
       "path": "src/core/element.ts",
       "summary": "element — Consolida cuatro módulos que estaban sueltos en `_shared/` y que ningún",
-      "bytes": 9708,
+      "bytes": 8584,
       "exports": [
         "globalNameFor",
         "defineElement",
@@ -292,6 +293,25 @@
         "normalizeIntent",
         "setEnumAttr",
         "ensureDefaultColor"
+      ]
+    },
+    {
+      "file": "iswc-css-vacio.ts",
+      "id": "iswc-css-vacio",
+      "path": "src/core/iswc-css-vacio.ts",
+      "summary": "iswc-css-vacio — `iswc:css` es un módulo virtual: el plugin esbuild `cssVirtual` (src/cdn/build/css-virtual.ts) lo sustituye por",
+      "bytes": 677,
+      "exports": []
+    },
+    {
+      "file": "iswc-element.ts",
+      "id": "iswc-element",
+      "path": "src/core/iswc-element.ts",
+      "summary": "iswc-element — import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';",
+      "bytes": 11540,
+      "exports": [
+        "IswcElement extends HTMLElement",
+        "define"
       ]
     },
     {
@@ -413,7 +433,7 @@
       "id": "props-element",
       "path": "src/core/props-element.ts",
       "summary": "props-element — Cada clave de `props` que no sea una función es también un atributo en kebab-case (`textoCargando` →",
-      "bytes": 4489,
+      "bytes": 4699,
       "exports": [
         "atributosDe"
       ]

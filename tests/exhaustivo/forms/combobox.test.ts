@@ -20,7 +20,7 @@ const src = leerComponente(TAG);
 test('combobox: archivo y registro', () => {
   assert.ok(src.length > 500);
   assert.ok(existeCss(TAG));
-  assert.ok(/defineElement\s*\(\s*['"`]iswc-combobox['"`]/.test(src));
+  assert.ok(/(?:defineElement\s*\(\s*|static\s+(?:override\s+)?tag\s*=\s*|createObserverElement\(\s*'\w+',\s*)['"`]iswc-combobox['"`]/.test(src));
 });
 
 test('combobox: atributos observados', () => {

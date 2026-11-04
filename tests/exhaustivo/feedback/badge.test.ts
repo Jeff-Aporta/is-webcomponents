@@ -89,7 +89,7 @@ test('9. slots default + start + end', () => {
 
 test('10. custom element registrado', () => {
   const src = leerConBase(TS);
-  assert.ok(/defineElement\s*\(\s*['"]iswc-badge['"]/.test(src));
+  assert.ok(/(?:defineElement\s*\(\s*|static\s+(?:override\s+)?tag\s*=\s*|createObserverElement\(\s*'\w+',\s*)['"]iswc-badge['"]/.test(src));
 });
 
 test('11. JSDoc de cabecera', () => {

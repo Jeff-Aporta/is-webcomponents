@@ -103,7 +103,7 @@ test('14. slot default para los hijos observados', () => {
 
 test('15. custom element registrado con defineElement', () => {
   const src = readFileSync(TS, 'utf8');
-  assert.ok(/defineElement\s*\(\s*['"]iswc-observer['"]/.test(src));
+  assert.ok(/(?:defineElement\s*\(\s*|static\s+(?:override\s+)?tag\s*=\s*|createObserverElement\(\s*'\w+',\s*)['"]iswc-observer['"]/.test(src));
 });
 
 export default lista();

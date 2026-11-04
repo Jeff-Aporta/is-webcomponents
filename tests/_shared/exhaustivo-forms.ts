@@ -69,12 +69,13 @@ function arrayDeclRe(nombre: string): RegExp {
 /** Atributos observados declarados como `static get observedAttributes()`. */
 export function atributosObservados(src: string): string[] {
   const attrs = new Set<string>();
-  // Encuentra el getter.
-  const m = src.match(
+  // Molde IswcElement: `static observed = EXPR;`. Antes: el getter `static get observedAttributes() { return EXPR; }`.
+  const molde = src.match(/static\s+(?:override\s+)?observed\s*(?::[^=\n]*)?=\s*([\s\S]+?)\s*;/);
+  const m = molde ? null : src.match(
     /static\s+get\s+observedAttributes\s*\(\s*\)\s*(?::\s*[A-Za-z_$<>[\]|. ,]+\s*)?\{([\s\S]{0,400}?)\}/,
   );
-  if (!m) return [];
-  const cuerpo = m[1];
+  if (!m && !molde) return [];
+  const cuerpo = molde ? `return ${molde[1]};` : m![1];
   // Captura la expresión de retorno (`return [...]` o `return CONST`).
   const ret = cuerpo.match(/return\s+([\s\S]+?)\s*;/);
   if (!ret) return [];
@@ -105,7 +106,7 @@ export function atributosObservados(src: string): string[] {
 /** Tags `<iswc-foo>` que aparecen como `defineElement('iswc-foo', ...)`. */
 export function tagsDefinidos(src: string): string[] {
   const tags = new Set<string>();
-  for (const m of src.matchAll(/defineElement\s*\(\s*['"`](iswc-[a-z0-9-]+)['"`]/g)) {
+  for (const m of src.matchAll(/(?:defineElement\s*\(\s*|static\s+(?:override\s+)?tag\s*=\s*)['"`](iswc-[a-z0-9-]+)['"`]/g)) {
     tags.add(m[1]);
   }
   for (const m of src.matchAll(/customElements\.define\s*\(\s*['"`](iswc-[a-z0-9-]+)['"`]/g)) {
@@ -199,24 +200,30 @@ export function esFormAssociated(src: string): boolean {
   return /static\s+formAssociated\s*=\s*true/.test(src) || /attachFormInternals\s*\(/.test(src);
 }
 
-/** Indica si extiende ElementBase (no HTMLElement). */
+/** Indica si extiende el molde con ciclo de vida guardado: `IswcElement` (o el alias `ElementBase`), no HTMLElement. */
 export function extiendeElementBase(src: string): boolean {
-  return /extends\s+ElementBase/.test(src);
+  return /extends\s+(?:withStyleAttrs\(\s*)?(?:IswcElement|ElementBase)\b/.test(src);
 }
 
-/** Indica si usa Shadow DOM. */
+/**
+ * Indica si usa Shadow DOM: `attachShadow(` a mano, o el molde IswcElement (crea el shadow salvo
+ * `static shadowInit = null`).
+ */
 export function usaShadowDom(src: string): boolean {
-  return /attachShadow\s*\(/.test(src);
+  if (/attachShadow\s*\(/.test(src)) return true;
+  const molde = /extends\s+(?:withStyleAttrs\(\s*)?IswcElement\b/.test(src);
+  const ligero = /static\s+shadowInit\s*(?::[^=\n]*)?=\s*null/.test(src);
+  return (molde && !ligero) || /static\s+shadowInit\s*(?::[^=\n]*)?=\s*\{/.test(src);
 }
 
-/** Indica si tiene un getter `static get observedAttributes` con anotación TS de tipo. */
+/** Indica si declara sus observados tipados: `static observed = …` (molde) o el getter con `: string[]`. */
 export function tieneObservedTipado(src: string): boolean {
-  return /static\s+get\s+observedAttributes\s*\(\s*\)\s*:\s*string\[\]/.test(src);
+  return /static\s+get\s+observedAttributes\s*\(\s*\)\s*:\s*string\[\]/.test(src) || /static\s+(?:override\s+)?observed\s*(?::[^=\n]*)?=/.test(src);
 }
 
-/** Indica si tiene `defineElement(...)` (es un custom element registrado). */
+/** Indica si se registra: `defineElement(...)` o el `define(Clase)` del molde. */
 export function tieneDefineElement(src: string): boolean {
-  return /defineElement\s*\(/.test(src);
+  return /defineElement\s*\(/.test(src) || /\bdefine\(\s*[A-Za-z_$]/.test(src);
 }
 
 /** Indica si el componente es un wrapper de factory (`defineDateField`, `definePickerInput`). */

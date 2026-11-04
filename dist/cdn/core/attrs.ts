@@ -124,12 +124,12 @@ export function applyToneRamp(el: HTMLElement, color: string | null, opts: { pre
 }
 
 /**
- * Mixin para componentes que NO extienden `ElementBase` (los que siguen
- * heredando de `HTMLElement` directamente).
+ * Mixin del mapa `styleAttrs` sobre el molde (core/iswc-element.ts):
  *
- *   class IswcFoo extends withStyleAttrs(HTMLElement) {
+ *   class IswcFoo extends withStyleAttrs(IswcElement) {
+ *     static tag = 'iswc-foo';
  *     static styleAttrs = { radius: '--iswc-foo-radius' };
- *     static get observedAttributes() { return [...OBSERVED, ...IswcFoo.styleAttrNames]; }
+ *     static observed = OBSERVED;   // el molde suma styleAttrNames a observedAttributes
  *   }
  *
  * Phase V5: el volcado automático del mapa `styleAttrs` quedó deshabilitado

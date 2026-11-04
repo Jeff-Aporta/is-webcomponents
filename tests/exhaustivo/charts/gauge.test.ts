@@ -67,7 +67,7 @@ test('iswc-gauge: adopta CSS', () => {
 
 test('iswc-gauge: registrado', () => {
   const src = read(MOD);
-  assert.match(src, /defineElement\s*\(\s*['"`]iswc-gauge['"`]/);
+  assert.match(src, /(?:defineElement\s*\(\s*|static\s+(?:override\s+)?tag\s*=\s*|createObserverElement\(\s*'\w+',\s*)['"`]iswc-gauge['"`]/);
 });
 
 export default lista();

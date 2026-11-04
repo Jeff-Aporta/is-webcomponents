@@ -36,7 +36,7 @@ test('mutation-observer: 3. JSON existe y respeta iswc-preview/v1', () => {
 
 test('4. delega en createObserverElement("mutation")', () => {
   const src = readFileSync(TS, 'utf8');
-  assert.ok(/createObserverElement\s*\(\s*['"]mutation['"]\s*\)/.test(src));
+  assert.ok(/createObserverElement\s*\(\s*['"]mutation['"]\s*[,)]/.test(src));
 });
 
 test('5. importa desde ./observer.js', () => {
@@ -46,7 +46,7 @@ test('5. importa desde ./observer.js', () => {
 
 test('mutation-observer: 6. está registrado con defineElement', () => {
   const src = readFileSync(TS, 'utf8');
-  assert.ok(/defineElement\s*\(\s*['"]iswc-mutation-observer['"]/.test(src));
+  assert.ok(/(?:defineElement\s*\(\s*|static\s+(?:override\s+)?tag\s*=\s*|createObserverElement\(\s*'\w+',\s*)['"]iswc-mutation-observer['"]/.test(src));
 });
 
 test('7. hereda OBSERVED del factory (no redefinir)', () => {

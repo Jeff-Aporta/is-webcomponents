@@ -61,7 +61,7 @@ test('iswc-sparkline: adopta CSS', () => {
 
 test('iswc-sparkline: registrado como custom element', () => {
   const src = read(MOD);
-  assert.match(src, /defineElement\s*\(\s*['"`]iswc-sparkline['"`]/);
+  assert.match(src, /(?:defineElement\s*\(\s*|static\s+(?:override\s+)?tag\s*=\s*|createObserverElement\(\s*'\w+',\s*)['"`]iswc-sparkline['"`]/);
 });
 
 export default lista();

@@ -37,6 +37,7 @@ import { fileURLToPath } from 'node:url';
 import { chromium } from 'playwright';
 import * as esbuildApi from 'esbuild';
 import { aliasKit } from '../../src/cdn/build/alias.ts';
+import { cssVirtual } from '../../src/cdn/build/css-virtual.ts';
 import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
 
 const { test, lista } = coleccionPruebas({ categoria: 'what' });
@@ -117,7 +118,7 @@ test('navegador/scrollspy-restore', { timeout: 180_000 }, async () => {
           write: false,
           platform: 'browser',
           nodePaths: [join(root, 'node_modules')],
-          plugins: [aliasKit()],
+          plugins: [aliasKit(), cssVirtual()],
           external: ['node:url', 'node:fs', 'node:fs/promises', 'node:path', 'node:assert', 'node:child_process'],
         });
         res.writeHead(200, {

@@ -111,7 +111,7 @@ test('13. tiene snap points para anclar el divisor', () => {
 test('14. custom element registrado', () => {
   const src = readFileSync(TS, 'utf8');
   assert.ok(
-    /defineElement\s*\(\s*['"]iswc-split-panel['"]/.test(src) ||
+    /(?:defineElement\s*\(\s*|static\s+(?:override\s+)?tag\s*=\s*|createObserverElement\(\s*'\w+',\s*)['"]iswc-split-panel['"]/.test(src) ||
     /customElements\.define\s*\(\s*['"]iswc-split-panel['"]/.test(src),
     '<iswc-split-panel> debe estar registrado',
   );

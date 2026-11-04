@@ -60,16 +60,16 @@ test('5. la clase reacciona a cambios de atributo (override o via ElementBase.on
   const src = readFileSync(TS, 'utf8');
   const ok =
     /attributeChangedCallback\s*\(/.test(src) ||
-    /extends\s+ElementBase\b/.test(src) ||
+    /extends\s+(?:IswcElement|ElementBase)\b/.test(src) ||
     /onAttributeChanged\s*\(/.test(src);
   assert.ok(ok, 'debe reaccionar a cambios de atributo (override, ElementBase o onAttributeChanged)');
 });
 
-test('6. la clase llama adoptCss() con import.meta.url', async () => {
+test('6. la clase trae su CSS por iswc:css (static css del molde IswcElement)', async () => {
   const src = readFileSync(TS, 'utf8');
   assert.ok(
-    /adoptCss\s*\(\s*[^,)]+,\s*import\.meta\.url/.test(src),
-    'adoptCss(shadow, import.meta.url) debe estar presente',
+    /import css from 'iswc:css';/.test(src) && /static css = css;/.test(src),
+    "import css from 'iswc:css' + static css = css deben estar presentes",
   );
 });
 
@@ -82,7 +82,7 @@ test('8. la clase está registrada con defineElement o customElements.define', a
   const src = readFileSync(TS, 'utf8');
   assert.ok(
     /customElements\.define\s*\(\s*['"]iswc-format-date['"]/.test(src) ||
-    /defineElement\s*\(\s*['"]iswc-format-date['"]/.test(src),
+    /(?:defineElement\s*\(\s*|static\s+(?:override\s+)?tag\s*=\s*|createObserverElement\(\s*'\w+',\s*)['"]iswc-format-date['"]/.test(src),
     'debe haber registro del custom element',
   );
 });

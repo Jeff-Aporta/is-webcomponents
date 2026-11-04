@@ -67,7 +67,7 @@ test('6. importa paintForest para pintar el árbol', async () => {
 
 test('7. custom element registrado', async () => {
   const src = readFileSync(TS, 'utf8');
-  assert.ok(/defineElement\s*\(\s*['"]iswc-tree-view['"]/.test(src));
+  assert.ok(/(?:defineElement\s*\(\s*|static\s+(?:override\s+)?tag\s*=\s*|createObserverElement\(\s*'\w+',\s*)['"]iswc-tree-view['"]/.test(src));
 });
 
 test('8. integra con confirm-delete', async () => {

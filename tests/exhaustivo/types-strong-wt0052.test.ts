@@ -162,8 +162,8 @@ test('WT-0052 / md-editor: archivo existe y registra iswc-md-editor', () => {
   assert.ok(existsSync(MD_EDITOR), `${MD_EDITOR} debe existir`);
   const src = readFileSync(MD_EDITOR, 'utf8');
   assert.match(src, /class\s+IswcMdEditor\b/, 'declara IswcMdEditor');
-  assert.match(src, /defineElement\s*\(\s*['"]iswc-md-editor['"]/, 'registra iswc-md-editor');
-  assert.match(src, /extends\s+ElementBase\b/, 'extiende ElementBase');
+  assert.match(src, /(?:defineElement\s*\(\s*|static\s+(?:override\s+)?tag\s*=\s*|createObserverElement\(\s*'\w+',\s*)['"]iswc-md-editor['"]/, 'registra iswc-md-editor');
+  assert.match(src, /extends\s+(?:IswcElement|ElementBase)\b/, 'extiende el molde IswcElement');
 });
 
 test('WT-0052 / md-editor: tipos del contrato declarados (md-editor.schemas)', () => {
@@ -211,7 +211,7 @@ test('WT-0052 / popover: archivo existe y registra iswc-popover', () => {
   assert.ok(existsSync(POPOVER), `${POPOVER} debe existir`);
   const src = readFileSync(POPOVER, 'utf8');
   assert.match(src, /class\s+IswcPopover\b/, 'declara IswcPopover');
-  assert.match(src, /defineElement\s*\(\s*['"]iswc-popover['"]/, 'registra iswc-popover');
+  assert.match(src, /(?:defineElement\s*\(\s*|static\s+(?:override\s+)?tag\s*=\s*|createObserverElement\(\s*'\w+',\s*)['"]iswc-popover['"]/, 'registra iswc-popover');
 });
 
 test('WT-0052 / popover: define el tipo FloatingElement', () => {
@@ -261,8 +261,8 @@ test('WT-0052 / format: archivo existe y registra iswc-format', () => {
   assert.ok(existsSync(FORMAT), `${FORMAT} debe existir`);
   const src = readFileSync(FORMAT, 'utf8');
   assert.match(src, /class\s+FormatElement\b/, 'declara FormatElement');
-  assert.match(src, /extends\s+ElementBase\b/, 'extiende ElementBase');
-  assert.match(src, /defineElement\s*\(\s*['"]iswc-format['"]/, 'registra iswc-format');
+  assert.match(src, /extends\s+(?:IswcElement|ElementBase)\b/, 'extiende el molde IswcElement');
+  assert.match(src, /(?:defineElement\s*\(\s*|static\s+(?:override\s+)?tag\s*=\s*|createObserverElement\(\s*'\w+',\s*)['"]iswc-format['"]/, 'registra iswc-format');
 });
 
 test('WT-0052 / format: discriminated union ExcelPreset', () => {
@@ -324,7 +324,7 @@ test('WT-0052 / total: los 5 archivos tienen clases y usan tipos explícitos', (
     // Algunos archivos exportan sus clases (row-adapter-base/drag), otros sólo
     // registran el custom element vía defineElement (md-editor/popover/format).
     const exportsClass = /export\s+(class|interface|type)\s+\w+/.test(src);
-    const registersElement = /defineElement\s*\(/.test(src);
+    const registersElement = /(?:defineElement|\bdefine)\s*\(/.test(src);
     assert.ok(exportsClass || registersElement, `${f} debe exportar una clase o registrar un custom element`);
   }
 });

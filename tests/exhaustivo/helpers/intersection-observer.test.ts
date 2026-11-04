@@ -37,7 +37,7 @@ test('intersection-observer: 3. JSON existe y respeta iswc-preview/v1', () => {
 test('4. delega en createObserverElement("intersection") del factory observer.ts', () => {
   const src = readFileSync(TS, 'utf8');
   assert.ok(
-    /createObserverElement\s*\(\s*['"]intersection['"]\s*\)/.test(src),
+    /createObserverElement\s*\(\s*['"]intersection['"]\s*[,)]/.test(src),
     'debe invocar createObserverElement("intersection")',
   );
 });
@@ -49,7 +49,7 @@ test('5. importa createObserverElement desde ./observer.js', () => {
 
 test('6. está registrado con defineElement', () => {
   const src = readFileSync(TS, 'utf8');
-  assert.ok(/defineElement\s*\(\s*['"]iswc-intersection-observer['"]/.test(src));
+  assert.ok(/(?:defineElement\s*\(\s*|static\s+(?:override\s+)?tag\s*=\s*|createObserverElement\(\s*'\w+',\s*)['"]iswc-intersection-observer['"]/.test(src));
 });
 
 test('7. hereda OBSERVED del observer genérico', () => {

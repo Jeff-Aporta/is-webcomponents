@@ -24,7 +24,7 @@ const src = leerComponente(TAG);
 test('slider: archivo y registro', () => {
   assert.ok(src.length > 500);
   assert.ok(existeCss(TAG));
-  assert.ok(/defineElement\s*\(\s*['"`]iswc-slider['"`]/.test(src));
+  assert.ok(/(?:defineElement\s*\(\s*|static\s+(?:override\s+)?tag\s*=\s*|createObserverElement\(\s*'\w+',\s*)['"`]iswc-slider['"`]/.test(src));
 });
 
 test('slider: atributos observados', () => {

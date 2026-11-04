@@ -19,7 +19,7 @@ const src = leerComponente(TAG);
 test('year-calendar: archivo y registro', () => {
   assert.ok(src.length > 300);
   assert.ok(existeCss(TAG));
-  assert.ok(/defineElement\s*\(\s*['"`]iswc-year-calendar['"`]/.test(src));
+  assert.ok(/(?:defineElement\s*\(\s*|static\s+(?:override\s+)?tag\s*=\s*|createObserverElement\(\s*'\w+',\s*)['"`]iswc-year-calendar['"`]/.test(src));
   assert.ok(extiendeElementBase(src));
 });
 

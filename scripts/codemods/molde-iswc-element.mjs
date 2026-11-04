@@ -13,7 +13,7 @@
  *   clase sin shadow propio (extendía ElementBase/HTMLElement)         → static shadowInit = null (light DOM)
  *   adoptCss(X, import.meta.url);                                      → se borra; static css = css + import css from 'iswc:css'
  *   defineElement('iswc-x', IswcX[, global])                           → static tag = 'iswc-x' + define(IswcX[, global])
- *   import '@jeff-aporta/iswc-base/components/<c>/<hoja>.js';          → static deps = ['iswc-<hoja>'] (solo hojas de LEAVES)
+ *   import de efecto del componente <c>/<hoja> (alias del kit)          → static deps = ['iswc-<hoja>'] (solo hojas de LEAVES)
  *
  * Lo que no entiende lo deja igual y lo lista (`MANUAL`): se migra a mano. Cada archivo reescrito se valida con
  * `esbuild.transform`; si no compila se descarta el cambio y va a la lista.
