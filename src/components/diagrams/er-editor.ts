@@ -16,16 +16,17 @@
 //   Playwright: smoke + funcional (drag, click-to-connect, undo/redo,
 //     export JSON/SVG) + determinismo (round-trip idéntico).
 //   Stagehand: validación visual (cajas no se solapan, aristas legibles).
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
 import { serializeErPayload, renderErSvg as renderErSvgString } from './utils/er-archify.js';
 import type { ErEditorState, ErSpec, ErSpecAttribute, ErSpecEntity, ErSpecRelation, EdgeStyleOverride, ErRouteKind, ErDashStyle, EdgeVariant } from "./schemas/diagram-types.schemas.js";
-import '@jeff-aporta/iswc-base/components/media/icon.js';
 import '@jeff-aporta/iswc-base/components/actions/context-menu.js';
 import '@jeff-aporta/iswc-base/components/layout/split-panel.js';
 import { createPanZoom } from './utils/pan-zoom.js';
 import { type PanZoomController } from './schemas/pan-zoom.schemas.js';
 import type { DiagramElementBase } from './utils/diagram-element-base.js';
 import { snapDiagramGrid } from '@jeff-aporta/iswc-base/core/diagram-grid.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 const SNAP = 8;
 const HISTORY_LIMIT = 200;
@@ -169,10 +170,11 @@ const EDITOR_TEMPLATE = `
 </div>
 `;
 
-class IswcErEditor extends HTMLElement {
-  static get observedAttributes(): string[] {
-    return ['animation', 'theme'];
-  }
+class IswcErEditor extends IswcElement {
+  static tag = 'iswc-er-editor';
+  static css = css;
+  static deps = ['iswc-icon'];
+  static observed = ['animation', 'theme'];
 
   #diagram: DiagramElementBase | null = null;
   #state: ErEditorState | null = null;
@@ -190,15 +192,15 @@ class IswcErEditor extends HTMLElement {
 
   constructor() {
     super();
-    const sr = this.attachShadow({ mode: 'open' });
+    const sr = this.shadowRoot!;
     const tmpl = document.createElement('div');
     tmpl.innerHTML = EDITOR_TEMPLATE;
     while (tmpl.firstChild) sr.appendChild(tmpl.firstChild);
-    adoptCss(sr, import.meta.url);
     this.#installListeners();
   }
 
   connectedCallback() {
+    super.connectedCallback();
     this.#ensureDiagram();
     this.#ensurePanZoom();
     this.#installHotkeys();
@@ -1229,6 +1231,6 @@ function cloneEntities(arr: ErSpecEntity[]): ErSpecEntity[] {
 }
 function cloneRelations(arr: ErSpecRelation[]): ErSpecRelation[] { return arr.map((r) => ({ ...r })); }
 
-defineElement('iswc-er-editor', IswcErEditor, 'IswcErEditor');
+define(IswcErEditor, 'IswcErEditor');
 
 export { IswcErEditor };

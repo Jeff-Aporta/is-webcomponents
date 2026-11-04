@@ -1,11 +1,12 @@
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
 import { withStyleAttrs } from '@jeff-aporta/iswc-base/core/attrs.js';
 
-import '@jeff-aporta/iswc-base/components/media/icon.js';
 import '@jeff-aporta/iswc-base/components/actions/share-button.js';
 import { createPanZoom } from './utils/pan-zoom.js';
 import { type PanZoomController } from './schemas/pan-zoom.schemas.js';
 import type { ViewTransform } from "./schemas/lightbox.schemas.js";
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-lightbox> — visor a pantalla completa para cualquier contenido.
@@ -75,11 +76,12 @@ function isActionable(n: EventTarget | null): n is HTMLElement {
   return n instanceof HTMLElement && !!n.dataset.act;
 }
 
-class IswcLightbox extends withStyleAttrs(HTMLElement) {
+class IswcLightbox extends withStyleAttrs(IswcElement) {
+  static tag = 'iswc-lightbox';
+  static css = css;
+  static deps = ['iswc-icon'];
 
-  static get observedAttributes(): string[] {
-    return ['open', 'variant', 'zoomable', 'close-on-backdrop', 'toolbar', 'no-default-actions'];
-  }
+  static observed = ['open', 'variant', 'zoomable', 'close-on-backdrop', 'toolbar', 'no-default-actions'];
 
   #dialog!: HTMLDialogElement;
   #stage!: HTMLElement;
@@ -97,7 +99,7 @@ class IswcLightbox extends withStyleAttrs(HTMLElement) {
 
   constructor() {
     super();
-    const shadow = this.attachShadow({ mode: 'open' });
+    const shadow = this.shadowRoot!;
     shadow.innerHTML = /* html */ `
       <dialog part="dialog" class="lb">
         <div class="lb-bar" part="toolbar">
@@ -135,7 +137,6 @@ class IswcLightbox extends withStyleAttrs(HTMLElement) {
         <div class="lb-toast" part="toast" hidden>Enlace copiado al portapapeles</div>
       </dialog>
     `;
-    adoptCss(shadow, import.meta.url);
     this.#dialog = shadow.querySelector<HTMLDialogElement>('.lb')!;
     this.#stage = shadow.querySelector<HTMLElement>('.lb-stage')!;
     this.#host = shadow.querySelector<HTMLElement>('.lb-host')!;
@@ -371,6 +372,6 @@ class IswcLightbox extends withStyleAttrs(HTMLElement) {
   }
 }
 
-defineElement('iswc-lightbox', IswcLightbox, 'IswcLightbox');
+define(IswcLightbox, 'IswcLightbox');
 
 export { IswcLightbox };

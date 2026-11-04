@@ -1,5 +1,4 @@
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
-import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
 import { setOptionalAttr, setStringAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
 import {
   bodyPreviewHtml,
@@ -10,6 +9,8 @@ import {
 import { hydrateMdEmbeds } from './utils/md-hydrate.js';
 import type { HidratacionMd } from './schemas/md-hydrate.schemas.js';
 import type { RenderersMd } from './schemas/md-lite.schemas.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-md-render> — render inline de markdown/HTML + chips {{var}}.
@@ -92,8 +93,10 @@ import type { RenderersMd } from './schemas/md-lite.schemas.js';
     requestAnimationFrame(() => setCaretOffset(root, offset));
   }
 
-  class IswcMdRender extends ElementBase {
-    static get observedAttributes(): string[] { return OBSERVED; }
+  class IswcMdRender extends IswcElement {
+    static tag = 'iswc-md-render';
+    static css = css;
+    static observed = OBSERVED;
 
     #body!: HTMLElement;
     #empty!: HTMLElement;
@@ -103,8 +106,7 @@ import type { RenderersMd } from './schemas/md-lite.schemas.js';
 
     constructor() {
       super();
-      const shadow = this.attachShadow({ mode: 'open' });
-      adoptCss(shadow, import.meta.url);
+      const shadow = this.shadowRoot!;
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
       this.#body = shadow.querySelector<HTMLElement>('.body')!;
       this.#empty = shadow.querySelector<HTMLElement>('.empty')!;
@@ -256,5 +258,5 @@ import type { RenderersMd } from './schemas/md-lite.schemas.js';
     }
   }
 
-  defineElement('iswc-md-render', IswcMdRender, 'IswcMdRender');
+  define(IswcMdRender, 'IswcMdRender');
 })();

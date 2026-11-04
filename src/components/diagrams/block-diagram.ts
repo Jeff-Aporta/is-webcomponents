@@ -1,4 +1,4 @@
-import { adoptCss, defineElement, emit, emitCancelable } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit, emitCancelable } from '@jeff-aporta/iswc-base/core/element.js';
 import { DiagramElementBase } from './utils/diagram-element-base.js';
 import { resolveBlockSpec, computeBlockLayout, blockShapePath } from './utils/block-spec.js';
 import type { BlockLayout, BlockSpec } from './schemas/block-spec.schemas.js';
@@ -17,6 +17,8 @@ import { registerDiagramKind } from './utils/diagram-kinds.js';
 import { svgEl } from '@jeff-aporta/iswc-base/core/svg-chart-engine.js';
 import { svgArrowHead } from './utils/diagram-arrow.js';
 import type { BlockSpecGroup, BlockSpecBlock, BlockSpecEdge, BlockLayoutBlock, BlockLayoutEdge, TurtleState, BlockNodeEntry, EdgeNodeEntry } from "./schemas/block-diagram.schemas.js";
+import { define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-block-diagram> — diagrama de bloques en SVG, sin Mermaid.
@@ -46,6 +48,8 @@ const SVG_NS = 'http://www.w3.org/2000/svg';
 /** Arista cacheada en el SVG para aplicar hover sin reconstruir el DOM. */
 
 class IswcBlockDiagram extends DiagramElementBase {
+  static tag = 'iswc-block-diagram';
+  static css = css;
   #theme: DiagramTheme | null = null;
   #turtle: PathTurtle | null = null;
   #hiddenGroups: Set<string> = new Set<string>();
@@ -56,7 +60,6 @@ class IswcBlockDiagram extends DiagramElementBase {
   constructor() {
     super();
     this.initDiagramShadow('block-svg', 'block-tooltip');
-    adoptCss(this.shadowRoot!, import.meta.url);
   }
 
   onDiagramConnected(): void {
@@ -456,7 +459,7 @@ class IswcBlockDiagram extends DiagramElementBase {
   }
 }
 
-defineElement('iswc-block-diagram', IswcBlockDiagram, 'IswcBlockDiagram');
+define(IswcBlockDiagram, 'IswcBlockDiagram');
 
 registerDiagramKind('block', 'iswc-block-diagram');
 registerDiagramKind('blockDiagram', 'iswc-block-diagram');

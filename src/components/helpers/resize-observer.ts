@@ -1,4 +1,4 @@
-import { defineElement } from '@jeff-aporta/iswc-base/core/element.js';
+import { define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import { createObserverElement } from './observer.js';
 
 /**
@@ -13,8 +13,4 @@ import { createObserverElement } from './observer.js';
  *   iswc-resize  detail: { entries }
  */
 
-defineElement(
-  'iswc-resize-observer',
-  createObserverElement('resize'),
-  'IswcResizeObserver',
-);
+define(createObserverElement('resize', 'iswc-resize-observer'), 'IswcResizeObserver');

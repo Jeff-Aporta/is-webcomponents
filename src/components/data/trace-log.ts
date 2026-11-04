@@ -1,10 +1,10 @@
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
 import { copyText, crearNodo } from '@jeff-aporta/iswc-base/core/dom-utils.js';
 import { atributosDe, PropsElement } from '@jeff-aporta/iswc-base/core/props-element.js';
 import { TraceLogPropsSchema } from './schemas/trace-log.schemas.js';
 import type { TraceEvento, TraceFiltro, TraceLogProps, TraceNivel, TraceTextos } from './schemas/trace-log.schemas.js';
-import '@jeff-aporta/iswc-base/components/feedback/badge.js';
-import '@jeff-aporta/iswc-base/components/media/icon.js';
+import { define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-trace-log> — log de un proceso: cabecera plegable con el resumen y, desplegada, cada paso con su tiempo, nivel,
@@ -38,7 +38,10 @@ export function filtrarEventos(eventos: readonly TraceEvento[], filtro: TraceFil
 }
 
 class IswcTraceLog extends PropsElement<TraceLogProps> {
-  static override get observedAttributes(): string[] { return atributosDe(INICIAL); }
+  static tag = 'iswc-trace-log';
+  static css = css;
+  static deps = ['iswc-badge', 'iswc-icon'];
+  static observed = atributosDe(INICIAL);
 
   #root: ShadowRoot;
   #abierto = false;
@@ -47,8 +50,7 @@ class IswcTraceLog extends PropsElement<TraceLogProps> {
 
   constructor() {
     super(INICIAL, TraceLogPropsSchema.partial());
-    this.#root = this.attachShadow({ mode: 'open' });
-    adoptCss(this.#root, import.meta.url);
+    this.#root = this.shadowRoot!;
   }
 
   /** Si está desplegada (quien repinte alrededor la puede conservar). */
@@ -123,4 +125,4 @@ class IswcTraceLog extends PropsElement<TraceLogProps> {
   }
 }
 
-defineElement('iswc-trace-log', IswcTraceLog, 'IswcTraceLog');
+define(IswcTraceLog, 'IswcTraceLog');

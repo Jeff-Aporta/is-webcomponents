@@ -1,4 +1,4 @@
-import { adoptCss, defineElement, emit, emitCancelable } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit, emitCancelable } from '@jeff-aporta/iswc-base/core/element.js';
 import { DiagramElementBase } from './utils/diagram-element-base.js';
 import { resolveFlowchartSpec, computeFlowchartLayout, shapePath, flowPaint, FLOW_LINE_H, FLOW_PILL_ICON, pillStepW, SOCKET, VARS, PUENTE, CRUD_SQL, centroPuente, ejesPuente } from './utils/flowchart-spec.js';
 import type { FlowLayoutOptions, FlowPaint } from './schemas/flowchart-spec.schemas.js';
@@ -40,6 +40,8 @@ import {
 import { snapDiagramGrid as snapToGrid } from '@jeff-aporta/iswc-base/core/diagram-grid.js';
 import type { DiagramOverrides } from './schemas/diagram-edit.schemas.js';
 import type { TurtleState, NodeNodeEntry, EdgeNodeEntry, FlowInk } from "./schemas/flowchart.schemas.js";
+import { define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 /**
  * <iswc-flowchart> — diagrama de flujo en SVG, sin Mermaid.
  *
@@ -174,9 +176,9 @@ function parseAnimationTokens(raw: string | null | undefined): string[] {
 }
 
 class IswcFlowchart extends DiagramElementBase {
-  static get observedAttributes(): string[] {
-    return [...DiagramElementBase.observedAttributes, 'mode', 'persist', 'storage-key', 'animation'];
-  }
+  static tag = 'iswc-flowchart';
+  static css = css;
+  static observed = [...DiagramElementBase.observed, 'mode', 'persist', 'storage-key', 'animation'];
 
   #theme: DiagramTheme | null = null;
   #turtle: PathTurtle | null = null;
@@ -201,7 +203,6 @@ class IswcFlowchart extends DiagramElementBase {
   constructor() {
     super();
     this.initDiagramShadow('flow-svg', 'flow-tooltip');
-    adoptCss(this.shadowRoot!, import.meta.url);
   }
 
   onDiagramConnected(): void {
@@ -1247,7 +1248,7 @@ class IswcFlowchart extends DiagramElementBase {
   }
 }
 
-defineElement('iswc-flowchart', IswcFlowchart, 'IswcFlowchart');
+define(IswcFlowchart, 'IswcFlowchart');
 
 registerDiagramKind('flowchart', 'iswc-flowchart');
 registerDiagramKind('flow', 'iswc-flowchart');

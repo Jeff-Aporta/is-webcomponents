@@ -14,17 +14,17 @@
  * Uso por la subclase:
  *
  *   import { DiagramElementBase } from './diagram-element-base.js';
- *   import { adoptCss } from '@jeff-aporta/iswc-base/core/element.js';
+ *   import { define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+ *   import css from 'iswc:css';
  *
  *   class IswcFlowchart extends DiagramElementBase {
- *     static get observedAttributes(): string[] {
- *       return [...DiagramElementBase.observedAttributes, 'mode'];
- *     }
+ *     static tag = 'iswc-flowchart';
+ *     static css = css;
+ *     static observed = [...DiagramElementBase.observed, 'mode'];
  *
  *     constructor() {
  *       super();
  *       this.initDiagramShadow('flow-svg', 'flow-tooltip');
- *       adoptCss(this.shadowRoot!, import.meta.url);
  *     }
  *
  *     // Hook: lógica extra de connect (listeners, overrides, etc).
@@ -44,9 +44,9 @@
  *   }
  *
  * Notas:
- *   - `initDiagramShadow` NO llama a `adoptCss` (necesita el `import.meta.url`
- *     del módulo de la subclase) — la subclase la llama después, igual que
- *     hoy.
+ *   - La base es una subclase del molde `IswcElement` con `shadowInit = null`:
+ *     el shadow lo crea `initDiagramShadow` (vía `initShadow`), que adopta las
+ *     hojas base y el `static css` de la SUBCLASE.
  *   - `renderDiagram()` es abstracto: la base lo llama debounced desde
  *     `queueRender()`; lanza si no se sobrescribe.
  *   - `payload`/`spec`/`layout` son props normales (no privadas) para que la
@@ -56,12 +56,12 @@
  *     render, tal como hace flowchart.js hoy.
  */
 
-import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
 import { findThemeContainer, readTheme } from '@jeff-aporta/iswc-base/core/theme-scope.js';
 import { paletteTheme } from './diagram-palette.js';
 import type { DiagramTheme } from '@jeff-aporta/iswc-base/components/diagrams/schemas/diagram-types.schemas.js';
 import { hostStyleName, loadStylesDiagram } from './diagram-styles.js';
 import { svgIconsReady } from '@jeff-aporta/iswc-base/core/tk-icon-inline.js';
+import { IswcElement } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 
 /** ¿Hay alguna referencia `{ path, query }` en el payload? (recorrido liviano, sin dependencias). */
 function tieneRefs(v: unknown, n = 0): boolean {
@@ -92,8 +92,9 @@ async function resolverRefs(payload: unknown, base: string): Promise<unknown> {
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
 
-export class DiagramElementBase extends ElementBase {
-  static get observedAttributes(): string[] { return ['color', 'look', 'diagram-style']; }
+export class DiagramElementBase extends IswcElement {
+  static shadowInit: ShadowRootInit | null = null;
+  static observed = ['color', 'look', 'diagram-style'];
 
   #wrap: HTMLElement | null = null;
   #svg: SVGElement | null = null;
@@ -107,10 +108,11 @@ export class DiagramElementBase extends ElementBase {
   #ownViewer: HTMLElement | null = null;
 
   /** Construye el scaffold estándar (wrap/svg/tooltip/slot-hidden) y guarda
-   *  referencias. Llamar en el constructor de la subclase, ANTES de
-   *  `adoptCss` (adoptCss debe correr después de fijar `shadow.innerHTML`). */
+   *  referencias. Llamar en el constructor de la subclase: crea el shadow con
+   *  `initShadow` (hojas base + `static css` de la subclase, adoptadas, así que
+   *  el `innerHTML` de aquí no las borra). */
   initDiagramShadow(svgClass: string, tooltipClass: string): void {
-    const shadow = this.shadowRoot ?? this.attachShadow({ mode: 'open' });
+    const shadow = this.shadowRoot ?? this.initShadow({ mode: 'open' });
     shadow.innerHTML = /* html */ `
       <div part="base" class="wrap">
         <svg part="canvas" class="${svgClass}" xmlns="${SVG_NS}" role="img"></svg>

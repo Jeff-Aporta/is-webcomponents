@@ -1,4 +1,4 @@
-import { adoptCss, defineElement, emit, emitCancelable } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit, emitCancelable } from '@jeff-aporta/iswc-base/core/element.js';
 import { DiagramElementBase } from './utils/diagram-element-base.js';
 import { resolveQuadrantSpec, computeQuadrantLayout } from './utils/quadrant-spec.js';
 import type { DiagramTheme } from './schemas/diagram-types.schemas.js';
@@ -9,6 +9,8 @@ import { registerDiagramKind } from './utils/diagram-kinds.js';
 import { svgEl } from '@jeff-aporta/iswc-base/core/svg-chart-engine.js';
 import type { QuadrantLayout, QuadrantLayoutAxisLabel } from "./schemas/quadrant-spec.schemas.js";
 import type { PointEntry } from "./schemas/quadrant-chart.schemas.js";
+import { define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-quadrant-chart> — matriz 2×2 en SVG, sin Mermaid.
@@ -28,6 +30,8 @@ import type { PointEntry } from "./schemas/quadrant-chart.schemas.js";
  */
 
 class IswcQuadrantChart extends DiagramElementBase {
+  static tag = 'iswc-quadrant-chart';
+  static css = css;
   #hiddenGroups = new Set<string>();
   #pointNodes = new Map<string, PointEntry>();
   #hoverId: string | null = null;
@@ -35,7 +39,6 @@ class IswcQuadrantChart extends DiagramElementBase {
   constructor() {
     super();
     this.initDiagramShadow('qd-svg', 'qd-tooltip');
-    adoptCss(this.shadowRoot!, import.meta.url);
   }
 
   onDiagramConnected() {
@@ -298,7 +301,7 @@ class IswcQuadrantChart extends DiagramElementBase {
   }
 }
 
-defineElement('iswc-quadrant-chart', IswcQuadrantChart, 'IswcQuadrantChart');
+define(IswcQuadrantChart, 'IswcQuadrantChart');
 
 registerDiagramKind('quadrant', 'iswc-quadrant-chart');
 

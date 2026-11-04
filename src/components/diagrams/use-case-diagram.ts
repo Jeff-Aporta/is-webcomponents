@@ -1,4 +1,4 @@
-import { adoptCss, defineElement, emit, emitCancelable } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit, emitCancelable } from '@jeff-aporta/iswc-base/core/element.js';
 import { DiagramElementBase } from './utils/diagram-element-base.js';
 import { resolveUseCaseSpec, computeUseCaseLayout } from './utils/use-case-spec.js';
 import type { UseCaseLayout, UseCaseLayoutActor, UseCaseLayoutCase, UseCaseLayoutLink, UseCaseResolvedSpec } from './schemas/use-case-spec.schemas.js';
@@ -12,6 +12,8 @@ import { registerDiagramKind } from './utils/diagram-kinds.js';
 import { svgEl } from '@jeff-aporta/iswc-base/core/svg-chart-engine.js';
 import { svgArrowHead } from './utils/diagram-arrow.js';
 import type { NodeNodeEntry, LinkNodeEntry } from "./schemas/use-case-diagram.schemas.js";
+import { define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-use-case-diagram> — diagrama de casos de uso UML en SVG, sin Mermaid.
@@ -84,6 +86,8 @@ function generalizationHead(
 }
 
 class IswcUseCaseDiagram extends DiagramElementBase {
+  static tag = 'iswc-use-case-diagram';
+  static css = css;
   #hiddenGroups: Set<string> = new Set<string>();
   #nodeNodes: Map<string, NodeNodeEntry> = new Map();
   #linkNodes: Map<string, LinkNodeEntry> = new Map();
@@ -92,7 +96,6 @@ class IswcUseCaseDiagram extends DiagramElementBase {
   constructor() {
     super();
     this.initDiagramShadow('uc-svg', 'uc-tooltip');
-    adoptCss(this.shadowRoot!, import.meta.url);
   }
 
   onDiagramConnected(): void {
@@ -425,7 +428,7 @@ class IswcUseCaseDiagram extends DiagramElementBase {
   }
 }
 
-defineElement('iswc-use-case-diagram', IswcUseCaseDiagram, 'IswcUseCaseDiagram');
+define(IswcUseCaseDiagram, 'IswcUseCaseDiagram');
 
 registerDiagramKind('useCase', 'iswc-use-case-diagram');
 registerDiagramKind('usecase', 'iswc-use-case-diagram');

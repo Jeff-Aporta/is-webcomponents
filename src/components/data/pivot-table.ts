@@ -1,5 +1,6 @@
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
-import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-pivot-table> — Pivot table: agrupar una colección por `rows` × `cols`,
@@ -36,18 +37,18 @@ import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
 
   type Row = Record<string, unknown>;
 
-  class IswcPivotTable extends ElementBase {
-    static get observedAttributes(): string[] { return OBSERVED; }
+  class IswcPivotTable extends IswcElement {
+    static tag = 'iswc-pivot-table';
+    static css = css;
+    static observed = OBSERVED;
 
     constructor() {
       super();
-      this.attachShadow({ mode: 'open' });
       this.shadowRoot!.innerHTML = `
         <div part="root" class="root">
           <table part="table" class="pivot" role="table"></table>
         </div>
       `;
-      adoptCss(this.shadowRoot!, import.meta.url);
     }
 
     onConnected() {
@@ -214,5 +215,5 @@ import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
     return t;
   }
 
-  defineElement('iswc-pivot-table', IswcPivotTable);
+  define(IswcPivotTable);
 })();

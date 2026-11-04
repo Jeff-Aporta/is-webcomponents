@@ -1,4 +1,4 @@
-import { adoptCss, defineElement, emit, emitCancelable } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit, emitCancelable } from '@jeff-aporta/iswc-base/core/element.js';
 import { DiagramElementBase } from './utils/diagram-element-base.js';
 import { resolveStateSpec, computeStateLayout } from './utils/state-spec.js';
 import type { StateLayout, StateLayoutNode, StateLayoutTransition, StateResolvedSpec, StateSpec } from './schemas/state-spec.schemas.js';
@@ -14,6 +14,8 @@ import { registerDiagramKind } from './utils/diagram-kinds.js';
 import { svgEl } from '@jeff-aporta/iswc-base/core/svg-chart-engine.js';
 import { svgArrowHead } from './utils/diagram-arrow.js';
 import type { TurtleState, NodeNodeEntry, EdgeNodeEntry } from "./schemas/state-diagram.schemas.js";
+import { define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-state-diagram> — diagrama de estados en SVG, sin Mermaid.
@@ -53,6 +55,8 @@ function statePath(kind: string, x: number, y: number, w: number, h: number): st
 }
 
 class IswcStateDiagram extends DiagramElementBase {
+  static tag = 'iswc-state-diagram';
+  static css = css;
   #theme: DiagramTheme | null = null;
   #turtle: PathTurtle | null = null;
   #hiddenGroups: Set<string> = new Set<string>();
@@ -63,7 +67,6 @@ class IswcStateDiagram extends DiagramElementBase {
   constructor() {
     super();
     this.initDiagramShadow('st-svg', 'st-tooltip');
-    adoptCss(this.shadowRoot!, import.meta.url);
   }
 
   onDiagramConnected(): void {
@@ -398,7 +401,7 @@ class IswcStateDiagram extends DiagramElementBase {
   }
 }
 
-defineElement('iswc-state-diagram', IswcStateDiagram, 'IswcStateDiagram');
+define(IswcStateDiagram, 'IswcStateDiagram');
 
 registerDiagramKind('state', 'iswc-state-diagram');
 registerDiagramKind('stateDiagram', 'iswc-state-diagram');

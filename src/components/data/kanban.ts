@@ -1,5 +1,6 @@
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
-import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-kanban> + <iswc-kanban-column> + <iswc-kanban-card> — Tablero (vanilla, zero dependencies).
@@ -88,8 +89,10 @@ import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
   const COLUMN_OBSERVED = ['title', 'accent', 'badge'];
   const CARD_OBSERVED = ['heading', 'meta', 'tag', 'tag-color', 'cover', 'without-shadow'];
 
-  class IswcKanban extends HTMLElement {
-    static get observedAttributes(): string[] { return BOARD_OBSERVED; }
+  class IswcKanban extends IswcElement {
+    static tag = 'iswc-kanban';
+    static shadowInit: ShadowRootInit | null = null;
+    static observed = BOARD_OBSERVED;
     #mo: MutationObserver | null = null;
     connectedCallback(): void {
       if (!this.hasAttribute('role')) this.setAttribute('role', 'list');
@@ -114,17 +117,18 @@ import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
       }
     }
   }
-  defineElement('iswc-kanban', IswcKanban);
+  define(IswcKanban);
 
-  class IswcKanbanColumn extends ElementBase {
-    static get observedAttributes(): string[] { return COLUMN_OBSERVED; }
+  class IswcKanbanColumn extends IswcElement {
+    static tag = 'iswc-kanban-column';
+    static css = css;
+    static observed = COLUMN_OBSERVED;
     #root!: HTMLElement | null;
     #title!: HTMLElement;
     #badge!: HTMLElement;
     constructor() {
       super();
-      const shadow = this.attachShadow({ mode: 'open' });
-      adoptCss(shadow, import.meta.url);
+      const shadow = this.shadowRoot!;
       shadow.appendChild(COLUMN_TEMPLATE.content.cloneNode(true));
       this.#root = shadow.querySelector<HTMLElement>('.column')!;
       this.#title = shadow.querySelector<HTMLElement>('.title')!;
@@ -207,10 +211,12 @@ import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
       }
     }
   }
-  defineElement('iswc-kanban-column', IswcKanbanColumn);
+  define(IswcKanbanColumn);
 
-  class IswcKanbanCard extends ElementBase {
-    static get observedAttributes(): string[] { return CARD_OBSERVED; }
+  class IswcKanbanCard extends IswcElement {
+    static tag = 'iswc-kanban-card';
+    static css = css;
+    static observed = CARD_OBSERVED;
     #root!: HTMLElement;
     #cover!: HTMLElement;
     #heading!: HTMLElement;
@@ -219,8 +225,7 @@ import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
     #footer!: HTMLElement;
     constructor() {
       super();
-      const shadow = this.attachShadow({ mode: 'open' });
-      adoptCss(shadow, import.meta.url);
+      const shadow = this.shadowRoot!;
       shadow.appendChild(CARD_TEMPLATE.content.cloneNode(true));
       this.#root = shadow.querySelector<HTMLElement>('.card')!;
       this.#cover = shadow.querySelector<HTMLElement>('.cover')!;
@@ -286,5 +291,5 @@ import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
       this.#footer.hidden = !footerSlot || footerSlot.assignedNodes().length === 0;
     }
   }
-  defineElement('iswc-kanban-card', IswcKanbanCard);
+  define(IswcKanbanCard);
 })();

@@ -1,9 +1,7 @@
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
-import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
-import '@jeff-aporta/iswc-base/components/actions/button.js';
-import '@jeff-aporta/iswc-base/components/feedback/empty-state.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
 import '@jeff-aporta/iswc-base/components/forms/input.js';
-import '@jeff-aporta/iswc-base/components/media/icon.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-transfer> — Doble lista de selección (vanilla, zero dependencies).
@@ -72,9 +70,12 @@ import '@jeff-aporta/iswc-base/components/media/icon.js';
 
   const TRANSFER_OBSERVED = ['source-title', 'target-title', 'searchable', 'without-buttons', 'without-headings', 'max-target'];
 
-  class IswcTransfer extends ElementBase {
+  class IswcTransfer extends IswcElement {
+    static tag = 'iswc-transfer';
+    static css = css;
+    static deps = ['iswc-button', 'iswc-empty-state', 'iswc-icon'];
 
-    static get observedAttributes(): string[] { return [...TRANSFER_OBSERVED]; }
+    static observed = [...TRANSFER_OBSERVED];
     #panelSource!: HTMLElement;
     #panelTarget!: HTMLElement;
     #searchSource!: HTMLElement & { value?: string };
@@ -89,8 +90,7 @@ import '@jeff-aporta/iswc-base/components/media/icon.js';
 
     constructor() {
       super();
-      const shadow = this.attachShadow({ mode: 'open' });
-      adoptCss(shadow, import.meta.url);
+      const shadow = this.shadowRoot!;
       shadow.appendChild(TRANSFER_TEMPLATE.content.cloneNode(true));
       this.#panelSource = shadow.querySelector<HTMLElement>('.pane.source')!;
       this.#panelTarget = shadow.querySelector<HTMLElement>('.pane.target')!;
@@ -259,13 +259,15 @@ import '@jeff-aporta/iswc-base/components/media/icon.js';
     }
   }
 
-  defineElement('iswc-transfer', IswcTransfer, 'IswcTransfer');
+  define(IswcTransfer, 'IswcTransfer');
 
   // ============ <iswc-transfer-item> ============
   const ITEM_OBSERVED = ['value', 'selected', 'disabled'];
 
-  class IswcTransferItem extends HTMLElement {
-    static get observedAttributes(): string[] { return ITEM_OBSERVED; }
+  class IswcTransferItem extends IswcElement {
+    static tag = 'iswc-transfer-item';
+    static shadowInit: ShadowRootInit | null = null;
+    static observed = ITEM_OBSERVED;
 
     connectedCallback(): void {
       this.setAttribute('role', 'presentation');
@@ -274,5 +276,5 @@ import '@jeff-aporta/iswc-base/components/media/icon.js';
     attributeChangedCallback() {}
   }
 
-  defineElement('iswc-transfer-item', IswcTransferItem, 'IswcTransferItem');
+  define(IswcTransferItem, 'IswcTransferItem');
 })();

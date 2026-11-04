@@ -1,9 +1,9 @@
-import { adoptCss, defineElement } from '@jeff-aporta/iswc-base/core/element.js';
-import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
 import { resolveLocale } from '@jeff-aporta/iswc-base/core/resolve-locale.js';
 import { formatBytes, toBytes } from './format-bytes.js';
 import { parseLooseDate } from './format-date.js';
 import type { NumberPreset, CurrencyPreset, AccountingPreset, FractionPreset, TextPreset, DatePreset, ExcelPreset, RelativeUnit, NumberFormatKind, RelativeStyle, RelativeNumeric, TextCase, FormatType, FormatBytesOpts } from "./schemas/format.schemas.js";
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-format type="…" value="…"> — Formateo con Intl + presets estilo Excel.
@@ -177,16 +177,17 @@ function titleCase(s: string): string {
 // Subset declarado de `formatBytes` (en format-bytes.ts) porque ese archivo
 // sigue siendo JSDoc-only y no expone la opción `locale` en su tipo inferido.
 
-class FormatElement extends ElementBase {
-  static override get observedAttributes(): string[] { return [...OBSERVED]; }
+class FormatElement extends IswcElement {
+  static tag = 'iswc-format';
+  static css = css;
+  static observed = [...OBSERVED];
 
   #el!: HTMLElement;
   #timer: ReturnType<typeof setInterval> | null = null;
 
   constructor() {
     super();
-    const shadow = this.attachShadow({ mode: 'open' });
-    adoptCss(shadow, import.meta.url);
+    const shadow = this.shadowRoot!;
     shadow.appendChild(TEMPLATE.content.cloneNode(true));
     this.#el = shadow.querySelector<HTMLElement>('.value')!;
   }
@@ -544,7 +545,7 @@ class FormatElement extends ElementBase {
   }
 }
 
-defineElement('iswc-format', FormatElement, 'IswcFormat');
+define(FormatElement, 'IswcFormat');
 
 /**
  * @param {'date'|'number'|'bytes'|'relative'|'text'} defaultType

@@ -1,7 +1,7 @@
-import { adoptCss, defineElement } from '@jeff-aporta/iswc-base/core/element.js';
-import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
 import { resolveLocale } from '@jeff-aporta/iswc-base/core/resolve-locale.js';
 import type { ByteUnit, FormatBytesOptions } from "./schemas/format-bytes.schemas.js";
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-format-bytes> — Web Component (vanilla).
@@ -73,14 +73,15 @@ export function formatBytes(bytes: number, { locale, display = 'short', autofit 
 
   const OBSERVED = ['value', 'unit', 'display', 'locale', 'autofit'];
 
-  class IswcFormatBytes extends ElementBase {
-    static get observedAttributes(): string[] { return OBSERVED; }
+  class IswcFormatBytes extends IswcElement {
+    static tag = 'iswc-format-bytes';
+    static css = css;
+    static observed = OBSERVED;
 
     #el!: HTMLElement;
     constructor() {
       super();
-      const shadow = this.attachShadow({ mode: 'open' });
-      adoptCss(shadow, import.meta.url);
+      const shadow = this.shadowRoot!;
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
       this.#el = shadow.querySelector<HTMLElement>('.bytes')!;
     }
@@ -119,5 +120,5 @@ export function formatBytes(bytes: number, { locale, display = 'short', autofit 
     }
   }
 
-  defineElement('iswc-format-bytes', IswcFormatBytes, 'IswcFormatBytes');
+  define(IswcFormatBytes, 'IswcFormatBytes');
 })();

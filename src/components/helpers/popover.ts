@@ -1,8 +1,10 @@
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
 import { withStyleAttrs } from '@jeff-aporta/iswc-base/core/attrs.js';
 
 import './floating.js';
 import type { FloatingElement } from "./schemas/popover.schemas.js";
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-popover> — panel flotante con contenido interactivo, anclado vía `for`.
@@ -66,10 +68,10 @@ import type { FloatingElement } from "./schemas/popover.schemas.js";
 
   const OBSERVED: readonly string[] = ['for', 'open', ...POPUP_DELEGATED];
 
-  class IswcPopover extends withStyleAttrs(HTMLElement) {
-    static get observedAttributes(): string[] {
-      return [...OBSERVED, 'max-width', 'arrow-size', 'show-duration', 'hide-duration'];
-    }
+  class IswcPopover extends withStyleAttrs(IswcElement) {
+    static tag = 'iswc-popover';
+    static css = css;
+    static observed = [...OBSERVED, 'max-width', 'arrow-size', 'show-duration', 'hide-duration'];
 
     // `internals` existe en cualquier HTMLElement con `attachInternals`
     // declarado en el prototipo del custom element. El kit no usa
@@ -84,8 +86,7 @@ import type { FloatingElement } from "./schemas/popover.schemas.js";
 
     constructor() {
       super();
-      const shadow = this.attachShadow({ mode: 'open' });
-      adoptCss(shadow, import.meta.url);
+      const shadow = this.shadowRoot!;
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
       this.#popup = shadow.querySelector<HTMLElement>('iswc-floating') as FloatingElement;
       this.#dialog = shadow.querySelector<HTMLElement>('.dialog')!;
@@ -313,6 +314,6 @@ import type { FloatingElement } from "./schemas/popover.schemas.js";
     }
   }
 
-  defineElement('iswc-popover', IswcPopover, 'IswcPopover');
+  define(IswcPopover, 'IswcPopover');
 
 })();

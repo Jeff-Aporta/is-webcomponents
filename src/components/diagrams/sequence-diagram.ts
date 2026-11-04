@@ -1,4 +1,4 @@
-import { adoptCss, defineElement, emit, emitCancelable } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit, emitCancelable } from '@jeff-aporta/iswc-base/core/element.js';
 import { DiagramElementBase } from './utils/diagram-element-base.js';
 import { animarRielEn, flujoActivo } from './utils/diagram-flow.js';
 import { svgArrowHead } from './utils/diagram-arrow.js';
@@ -32,6 +32,8 @@ import { registerDiagramKind } from './utils/diagram-kinds.js';
 import { svgEl } from '@jeff-aporta/iswc-base/core/svg-chart-engine.js';
 import type { SequenceMessageSpec } from './schemas/sequence-spec.schemas.js';
 import type { TurtleState, MsgNode, LifelineNode, ActorNode, PartBox } from "./schemas/sequence-diagram.schemas.js";
+import { define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-sequence-diagram> — diagrama de secuencia en SVG, sin Mermaid.
@@ -97,6 +99,8 @@ function foreignHtml(
 
 /** Región de participantes calculada por el layout. */
 class IswcSequenceDiagram extends DiagramElementBase {
+  static tag = 'iswc-sequence-diagram';
+  static css = css;
   #theme: DiagramTheme | null = null;
   /** Tema del estilo (`diagram-style="insoft"` → tema `sequence`), ya fusionado con el modo. */
   #styleTheme: ErThemeJson | null = null;
@@ -121,7 +125,6 @@ class IswcSequenceDiagram extends DiagramElementBase {
   constructor() {
     super();
     this.initDiagramShadow('seq-svg', 'seq-tooltip');
-    adoptCss(this.shadowRoot!, import.meta.url);
   }
 
   onDiagramConnected(): void {
@@ -1057,7 +1060,7 @@ class IswcSequenceDiagram extends DiagramElementBase {
   }
 }
 
-defineElement('iswc-sequence-diagram', IswcSequenceDiagram, 'IswcSequenceDiagram');
+define(IswcSequenceDiagram, 'IswcSequenceDiagram');
 
 registerDiagramKind('sequence', 'iswc-sequence-diagram');
 registerDiagramKind('sequence-diagram', 'iswc-sequence-diagram');

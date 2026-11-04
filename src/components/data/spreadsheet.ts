@@ -1,5 +1,4 @@
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
-import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
 import { parseWorkbookDoc } from './schemas/spreadsheet.schemas.js';
 import type { CellStyle, ChartDef, MacroDef, SpreadsheetChangeDetail, SpreadsheetSelectDetail, WorkbookDoc } from './schemas/spreadsheet.schemas.js';
 import { cellName, colName, inRect, normalize, parseCell, parseRange, quoteSheet, rangeName } from './utils/spreadsheet/address.js';
@@ -29,7 +28,6 @@ import { displayValue } from './utils/spreadsheet/values.js';
 import type { Scalar } from './utils/spreadsheet/values.schemas.js';
 import { readXlsx } from './utils/spreadsheet/xlsx-read.js';
 import { writeXlsx } from './utils/spreadsheet/xlsx-write.js';
-import '@jeff-aporta/iswc-base/components/actions/button.js';
 import '@jeff-aporta/iswc-base/components/actions/context-menu.js';
 import '@jeff-aporta/iswc-base/components/forms/checkbox.js';
 import '@jeff-aporta/iswc-base/components/forms/color-picker.js';
@@ -38,9 +36,10 @@ import '@jeff-aporta/iswc-base/components/forms/option.js';
 import '@jeff-aporta/iswc-base/components/forms/select.js';
 import '@jeff-aporta/iswc-base/components/forms/textarea.js';
 import '@jeff-aporta/iswc-base/components/layout/dialog.js';
-import '@jeff-aporta/iswc-base/components/media/icon.js';
 import '@jeff-aporta/iswc-base/components/navigation/tab-group.js';
 import type { Selection, Edit, Pointing, Drag, Clip, ValueEl } from './spreadsheet.schemas.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-spreadsheet> — Hoja de cálculo completa en un web component: varias hojas, más de 380
@@ -87,8 +86,11 @@ const ARROWS: Record<string, readonly [number, number]> = { ArrowUp: [-1, 0], Ar
 
 
 
-class IswcSpreadsheet extends ElementBase {
-  static get observedAttributes(): string[] { return OBSERVED; }
+class IswcSpreadsheet extends IswcElement {
+  static tag = 'iswc-spreadsheet';
+  static css = css;
+  static deps = ['iswc-button', 'iswc-icon'];
+  static observed = OBSERVED;
 
   #doc = new SpreadsheetDoc(this.#initialLocale());
   #sel: Selection = { r: 0, c: 0, ranges: [{ r1: 0, c1: 0, r2: 0, c2: 0 }] };
@@ -131,7 +133,6 @@ class IswcSpreadsheet extends ElementBase {
 
   constructor() {
     super();
-    this.attachShadow({ mode: 'open' });
     this.shadowRoot!.innerHTML = /* html */ `
       <div part="root" class="root">
         <div part="toolbar" class="ribbon"></div>
@@ -154,7 +155,6 @@ class IswcSpreadsheet extends ElementBase {
         <iswc-dialog class="dlg"></iswc-dialog>
       </div>
     `;
-    adoptCss(this.shadowRoot!, import.meta.url);
     const q = <T extends HTMLElement>(s: string): T => this.shadowRoot!.querySelector<T>(s)!;
     this.#root = q('.root');
     this.#ribbon = q('.ribbon');
@@ -2679,4 +2679,4 @@ class IswcSpreadsheet extends ElementBase {
   }
 }
 
-defineElement('iswc-spreadsheet', IswcSpreadsheet);
+define(IswcSpreadsheet);

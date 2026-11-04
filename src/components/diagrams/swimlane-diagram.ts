@@ -1,4 +1,4 @@
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
 import { DiagramElementBase } from './utils/diagram-element-base.js';
 import { resolveSwimlaneSpec, computeSwimlaneLayout } from './utils/swimlane-spec.js';
 import type { DiagramTheme } from './schemas/diagram-types.schemas.js';
@@ -11,6 +11,8 @@ import { svgEl } from '@jeff-aporta/iswc-base/core/svg-chart-engine.js';
 import { svgArrowHead } from './utils/diagram-arrow.js';
 import type { SwimlaneLayout, SwimlaneStepKind } from "./schemas/swimlane-spec.schemas.js";
 import type { StepEntry, LinkEntry } from "./schemas/swimlane-diagram.schemas.js";
+import { define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-swimlane-diagram> — diagrama de carriles en SVG, sin Mermaid.
@@ -39,6 +41,8 @@ function stepPath(kind: SwimlaneStepKind, x: number, y: number, w: number, h: nu
 }
 
 class IswcSwimlaneDiagram extends DiagramElementBase {
+  static tag = 'iswc-swimlane-diagram';
+  static css = css;
   #hiddenLanes = new Set<string>();
   #stepNodes = new Map<string, StepEntry>();
   #linkNodes = new Map<string, LinkEntry>();
@@ -47,7 +51,6 @@ class IswcSwimlaneDiagram extends DiagramElementBase {
   constructor() {
     super();
     this.initDiagramShadow('sw-svg', 'sw-tooltip');
-    adoptCss(this.shadowRoot!, import.meta.url);
   }
 
   onDiagramConnected() {
@@ -357,7 +360,7 @@ class IswcSwimlaneDiagram extends DiagramElementBase {
   }
 }
 
-defineElement('iswc-swimlane-diagram', IswcSwimlaneDiagram, 'IswcSwimlaneDiagram');
+define(IswcSwimlaneDiagram, 'IswcSwimlaneDiagram');
 
 registerDiagramKind('swimlane', 'iswc-swimlane-diagram');
 

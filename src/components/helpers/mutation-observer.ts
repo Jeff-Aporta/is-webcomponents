@@ -1,4 +1,4 @@
-import { defineElement } from '@jeff-aporta/iswc-base/core/element.js';
+import { define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import { createObserverElement } from './observer.js';
 
 /**
@@ -16,8 +16,4 @@ import { createObserverElement } from './observer.js';
  *   iswc-mutate  detail: { records }
  */
 
-defineElement(
-  'iswc-mutation-observer',
-  createObserverElement('mutation'),
-  'IswcMutationObserver',
-);
+define(createObserverElement('mutation', 'iswc-mutation-observer'), 'IswcMutationObserver');

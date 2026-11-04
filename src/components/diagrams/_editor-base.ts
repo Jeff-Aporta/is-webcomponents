@@ -32,7 +32,7 @@
  * `er-archify.ts`, `flowchart-spec.ts` etc. se hacen en cada editor.
  *
  * Notas de implementación:
- *   - No usa decorators (TypeScript legacy). Usar `static get observedAttributes()`.
+ *   - No usa decorators (TypeScript legacy). Atributos en `static observed` (molde IswcElement).
  *   - El atributo `mode` es observado vía `attributeChangedCallback`.
  *   - El `state` event se dispara DESPUÉS de mutar `this.spec`/`this.layout`
  *     (los lightboxes están suscritos). NO usar before-undo/redo, ya que
@@ -64,12 +64,10 @@ const BASE_OBSERVED: readonly string[] = ['mode', 'allow-self-loop', 'max-depth'
  * redo/zoom-in-out/fit/onNodeDoubleClick) y strechan el tipo de `spec`.
  *
  * Esta clase no se registra en `customElements` por sí sola; cada subclase
- * llama a `defineElement(tag, SubClass)` en su IIFE de registro.
+ * declara `static tag` y llama a `define(SubClass)` (core/iswc-element.ts).
  */
 export abstract class IswcEditorBase<Spec extends EditorSpecLike> extends DiagramElementBase {
-  static get observedAttributes(): readonly string[] {
-    return [...DiagramElementBase.observedAttributes, ...BASE_OBSERVED];
-  }
+  static observed = [...DiagramElementBase.observed, ...BASE_OBSERVED];
 
   #mode: EditorMode = 'edit';
   #allowSelfLoop = false;

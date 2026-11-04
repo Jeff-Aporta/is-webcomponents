@@ -1,7 +1,7 @@
-import { adoptCss, defineElement } from '@jeff-aporta/iswc-base/core/element.js';
-import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
 import { setStringAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
 import { resolveLocale } from '@jeff-aporta/iswc-base/core/resolve-locale.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-format-date> — Web Component (vanilla).
@@ -60,14 +60,15 @@ export function parseLooseDate(raw: string|number|null|undefined) {
     'time-zone-name': 'timeZoneName'
   };
 
-  class IswcFormatDate extends ElementBase {
-    static get observedAttributes(): string[] { return OBSERVED; }
+  class IswcFormatDate extends IswcElement {
+    static tag = 'iswc-format-date';
+    static css = css;
+    static observed = OBSERVED;
 
     #el!: HTMLElement;
     constructor() {
       super();
-      const shadow = this.attachShadow({ mode: 'open' });
-      adoptCss(shadow, import.meta.url);
+      const shadow = this.shadowRoot!;
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
       this.#el = shadow.querySelector<HTMLElement>('.date')!;
     }
@@ -189,5 +190,5 @@ export function parseLooseDate(raw: string|number|null|undefined) {
     }
   }
 
-  defineElement('iswc-format-date', IswcFormatDate, 'IswcFormatDate');
+  define(IswcFormatDate, 'IswcFormatDate');
 })();

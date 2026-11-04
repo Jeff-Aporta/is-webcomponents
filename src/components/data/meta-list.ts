@@ -1,8 +1,7 @@
-import { adoptCss, defineElement } from '@jeff-aporta/iswc-base/core/element.js';
-import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
 import { setStringAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
 import type { MetaGroup, MetaListLayout, MetaRow } from './schemas/meta-list.schemas.js';
-import '@jeff-aporta/iswc-base/components/feedback/tag.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-meta-list> — lista de metadatos clave → valor agrupada (ubicación, autor, estado, tags,
@@ -60,8 +59,11 @@ function aGrupos(crudo: unknown): MetaGroup[] {
 
 const tieneValor = (r: MetaRow): boolean => Boolean((r.value ?? '').trim()) || Boolean(r.tags?.length);
 
-class IswcMetaList extends ElementBase {
-  static override get observedAttributes(): string[] { return ['heading', 'layout']; }
+class IswcMetaList extends IswcElement {
+  static tag = 'iswc-meta-list';
+  static css = css;
+  static deps = ['iswc-tag'];
+  static observed = ['heading', 'layout'];
 
   #groups: MetaGroup[] = [];
   #heading: HTMLElement;
@@ -69,8 +71,7 @@ class IswcMetaList extends ElementBase {
 
   constructor() {
     super();
-    const shadow = this.attachShadow({ mode: 'open' });
-    adoptCss(shadow, import.meta.url);
+    const shadow = this.shadowRoot!;
     shadow.appendChild(TEMPLATE.content.cloneNode(true));
     this.#heading = shadow.querySelector<HTMLElement>('.heading')!;
     this.#root = shadow.querySelector<HTMLElement>('.groups')!;
@@ -158,4 +159,4 @@ class IswcMetaList extends ElementBase {
   }
 }
 
-defineElement('iswc-meta-list', IswcMetaList, 'IswcMetaList');
+define(IswcMetaList, 'IswcMetaList');

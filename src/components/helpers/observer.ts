@@ -1,5 +1,7 @@
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
 import type { ObserverType } from "./schemas/observer.schemas.js";
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-observer type="…"> — Web Component genérico para envolver
@@ -65,8 +67,10 @@ const OBSERVED = [
   'attr', 'child-list', 'character-data',
 ];
 
-class ObserverElement extends HTMLElement {
-  static get observedAttributes(): string[] { return OBSERVED; }
+class ObserverElement extends IswcElement {
+  static tag = 'iswc-observer';
+  static css = css;
+  static observed = OBSERVED;
 
   #observer: IntersectionObserver | MutationObserver | ResizeObserver | null = null;
   #mounted = false;
@@ -74,8 +78,7 @@ class ObserverElement extends HTMLElement {
 
   constructor() {
     super();
-    const shadow = this.attachShadow({ mode: 'open' });
-    adoptCss(shadow, import.meta.url);
+    const shadow = this.shadowRoot!;
     shadow.appendChild(TEMPLATE.content.cloneNode(true));
     this.#slot = shadow.querySelector<HTMLSlotElement>('slot')!;
   }
@@ -263,14 +266,16 @@ class ObserverElement extends HTMLElement {
   }
 }
 
-defineElement('iswc-observer', ObserverElement, 'IswcObserver');
+define(ObserverElement, 'IswcObserver');
 
 /**
  * Colore con `type` prefijado al construir. Usada por los wrappers
  * históricos (intersection-observer, mutation-observer, resize-observer).
+ * `tag` es el `static tag` con el que el wrapper la registra (`define(clase)`).
  */
-export function createObserverElement(defaultType: ObserverType) {
+export function createObserverElement(defaultType: ObserverType, tag = '') {
   class PrefixedObserver extends ObserverElement {
+    static override tag = tag;
     constructor() {
       super();
       this.setAttribute('type', defaultType);

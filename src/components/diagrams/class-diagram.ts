@@ -1,4 +1,4 @@
-import { adoptCss, defineElement, emit, emitCancelable } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit, emitCancelable } from '@jeff-aporta/iswc-base/core/element.js';
 import { readEdgeStyle, edgeStyleFor } from './utils/diagram-vocab.js';
 import { styledEdgePath } from './utils/diagram-curve.js';
 import { DiagramElementBase } from './utils/diagram-element-base.js';
@@ -15,6 +15,8 @@ import { svgIconBadge } from '@jeff-aporta/iswc-base/core/tk-icon-inline.js';
 import type { ClassLayout, ClassLayoutEdge, ClassLayoutNode, ClassLayoutSection, DiagramGroup, DiagramTheme } from "./schemas/diagram-types.schemas.js";
 import { hostStyleName, styleThemeFor } from './utils/diagram-styles.js';
 import type { ErThemeJson } from './schemas/theme.schemas.js';
+import { define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-class-diagram> — diagrama de clases UML en SVG, sin Mermaid.
@@ -90,6 +92,8 @@ function pintarMiembros(
 }
 
 class IswcClassDiagram extends DiagramElementBase {
+  static tag = 'iswc-class-diagram';
+  static css = css;
   #theme: DiagramTheme | null = null;
   /** Tema `class` del estilo cargado (paletas y rellenos semánticos). */
   #classTheme: ErThemeJson | null = null;
@@ -102,7 +106,6 @@ class IswcClassDiagram extends DiagramElementBase {
   constructor() {
     super();
     this.initDiagramShadow('cls-svg', 'cls-tooltip');
-    adoptCss(this.shadowRoot!, import.meta.url);
   }
 
   onDiagramConnected() {
@@ -728,7 +731,7 @@ class IswcClassDiagram extends DiagramElementBase {
   }
 }
 
-defineElement('iswc-class-diagram', IswcClassDiagram, 'IswcClassDiagram');
+define(IswcClassDiagram, 'IswcClassDiagram');
 
 registerDiagramKind('class', 'iswc-class-diagram');
 registerDiagramKind('classDiagram', 'iswc-class-diagram');

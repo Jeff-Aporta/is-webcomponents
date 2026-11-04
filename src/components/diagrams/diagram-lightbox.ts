@@ -1,10 +1,9 @@
-import { defineElement, siblingCssHref } from '@jeff-aporta/iswc-base/core/element.js';
 import { IswcLightbox } from './lightbox.js';
 import { getDiagramTag } from './utils/diagram-kinds.js';
 import { expandSequencePayloadForJson } from './utils/sequence-spec.js';
-import '@jeff-aporta/iswc-base/components/actions/button.js';
-import '@jeff-aporta/iswc-base/components/media/icon.js';
 import type { TurtleStateDetail, ToggleGroupDetail, TurtleApi, DiagramHost } from "./schemas/diagram-lightbox.schemas.js";
+import { define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-diagram-lightbox> — colore del lightbox para diagramas.
@@ -84,9 +83,11 @@ function buildViewerUrl(kind: string, payload: unknown): string {
 }
 
 class IswcDiagramLightbox extends IswcLightbox {
-  static get observedAttributes(): string[] {
-    return [...super.observedAttributes, 'kind', 'animation', 'min-gap'];
-  }
+  static tag = 'iswc-diagram-lightbox';
+  /** diagram-lightbox.scss importa lightbox.css: el texto aplanado ya trae la hoja base del lightbox. */
+  static css = css;
+  static deps = ['iswc-button', 'iswc-icon'];
+  static observed = [...super.observed, 'kind', 'animation', 'min-gap'];
 
   #payload: unknown = null;
   #basePayload: unknown = null;
@@ -102,12 +103,6 @@ class IswcDiagramLightbox extends IswcLightbox {
 
   constructor() {
     super();
-    // CSS específico encima del base que ya inyectó `adoptCss()` en el padre.
-    // Usar siblingCssHref para respetar .min.js → .min.css en el CDN.
-    const link = document.createElement('link');
-    link.rel = 'stylesheet';
-    link.href = siblingCssHref(import.meta.url);
-    this.shadowRoot!.appendChild(link);
     this.#installDiagramToolbar();
   }
 
@@ -395,6 +390,6 @@ class IswcDiagramLightbox extends IswcLightbox {
   }
 }
 
-defineElement('iswc-diagram-lightbox', IswcDiagramLightbox, 'IswcDiagramLightbox');
+define(IswcDiagramLightbox, 'IswcDiagramLightbox');
 
 export { IswcDiagramLightbox };

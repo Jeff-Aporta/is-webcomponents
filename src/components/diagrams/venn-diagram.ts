@@ -1,4 +1,4 @@
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
 import { DiagramElementBase } from './utils/diagram-element-base.js';
 import { resolveVennSpec, computeVennLayout } from './utils/venn-spec.js';
 import type { VennLayout, VennSpec } from './schemas/venn-spec.schemas.js';
@@ -12,6 +12,8 @@ import type { TSpanSpec } from './schemas/diagram-text-wrap.schemas.js';
 import { registerDiagramKind } from './utils/diagram-kinds.js';
 import { svgEl } from '@jeff-aporta/iswc-base/core/svg-chart-engine.js';
 import type { VennLayoutCircle, VennLayoutRegion, CircleNodeEntry, RegionNodeEntry } from "./schemas/venn-diagram.schemas.js";
+import { define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-venn-diagram> — diagrama de Venn (2 o 3 conjuntos) en SVG, sin Mermaid.
@@ -35,6 +37,8 @@ import type { VennLayoutCircle, VennLayoutRegion, CircleNodeEntry, RegionNodeEnt
 /** Región cacheada en el SVG para aplicar hover sin reconstruir. */
 
 class IswcVennDiagram extends DiagramElementBase {
+  static tag = 'iswc-venn-diagram';
+  static css = css;
   #circleNodes: Map<string, CircleNodeEntry> = new Map();
   #regionNodes: Map<string, RegionNodeEntry> = new Map();
   #hoverId: string | null = null;
@@ -42,7 +46,6 @@ class IswcVennDiagram extends DiagramElementBase {
   constructor() {
     super();
     this.initDiagramShadow('vn-svg', 'vn-tooltip');
-    adoptCss(this.shadowRoot!, import.meta.url);
   }
 
   onDiagramConnected(): void {
@@ -270,7 +273,7 @@ class IswcVennDiagram extends DiagramElementBase {
   }
 }
 
-defineElement('iswc-venn-diagram', IswcVennDiagram, 'IswcVennDiagram');
+define(IswcVennDiagram, 'IswcVennDiagram');
 
 registerDiagramKind('venn', 'iswc-venn-diagram');
 

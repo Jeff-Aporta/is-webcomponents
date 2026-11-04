@@ -1,4 +1,4 @@
-import { adoptCss, defineElement, emit, emitCancelable } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit, emitCancelable } from '@jeff-aporta/iswc-base/core/element.js';
 import { DiagramElementBase } from './utils/diagram-element-base.js';
 import { resolveTimelineSpec, computeTimelineLayout } from './utils/timeline-spec.js';
 import type { DiagramTheme } from './schemas/diagram-types.schemas.js';
@@ -8,6 +8,8 @@ import { registerDiagramKind } from './utils/diagram-kinds.js';
 import { svgEl } from '@jeff-aporta/iswc-base/core/svg-chart-engine.js';
 import type { TimelineLayout } from "./schemas/timeline-spec.schemas.js";
 import type { EventEntry } from "./schemas/timeline.schemas.js";
+import { define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-timeline> — línea de tiempo de hitos en SVG, sin Mermaid.
@@ -28,6 +30,8 @@ import type { EventEntry } from "./schemas/timeline.schemas.js";
  */
 
 class IswcTimeline extends DiagramElementBase {
+  static tag = 'iswc-timeline';
+  static css = css;
   #hiddenGroups = new Set<string>();
   #eventNodes = new Map<string, EventEntry>();
   #hoverId: string | null = null;
@@ -37,7 +41,6 @@ class IswcTimeline extends DiagramElementBase {
   constructor() {
     super();
     this.initDiagramShadow('tl-svg', 'tl-tooltip');
-    adoptCss(this.shadowRoot!, import.meta.url);
   }
 
   onDiagramConnected() {
@@ -330,7 +333,7 @@ class IswcTimeline extends DiagramElementBase {
   }
 }
 
-defineElement('iswc-timeline', IswcTimeline, 'IswcTimeline');
+define(IswcTimeline, 'IswcTimeline');
 
 registerDiagramKind('timeline', 'iswc-timeline');
 

@@ -1,4 +1,4 @@
-import { adoptCss, defineElement, emit, emitCancelable } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit, emitCancelable } from '@jeff-aporta/iswc-base/core/element.js';
 import { DiagramElementBase } from './utils/diagram-element-base.js';
 import { resolveGanttSpec, computeGanttLayout } from './utils/gantt-spec.js';
 import type { GanttLayout, GanttSpec } from './schemas/gantt-spec.schemas.js';
@@ -15,6 +15,8 @@ import { registerDiagramKind } from './utils/diagram-kinds.js';
 import { svgEl } from '@jeff-aporta/iswc-base/core/svg-chart-engine.js';
 import { svgArrowHead } from './utils/diagram-arrow.js';
 import type { GanttRow, GanttArrow, GanttTick, TurtleState, RowNodeEntry, ArrowNodeEntry } from "./schemas/gantt.schemas.js";
+import { define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-gantt> — diagrama de Gantt en SVG, sin Mermaid.
@@ -43,6 +45,8 @@ const SVG_NS = 'http://www.w3.org/2000/svg';
 /** Flecha cacheada en el SVG para aplicar hover sin reconstruir el DOM. */
 
 class IswcGantt extends DiagramElementBase {
+  static tag = 'iswc-gantt';
+  static css = css;
   #turtle: PathTurtle | null = null;
   #hiddenGroups: Set<string> = new Set<string>();
   #rowNodes: Map<string, RowNodeEntry> = new Map();
@@ -52,7 +56,6 @@ class IswcGantt extends DiagramElementBase {
   constructor() {
     super();
     this.initDiagramShadow('gantt-svg', 'gantt-tooltip');
-    adoptCss(this.shadowRoot!, import.meta.url);
   }
 
   onDiagramConnected(): void {
@@ -400,7 +403,7 @@ class IswcGantt extends DiagramElementBase {
   }
 }
 
-defineElement('iswc-gantt', IswcGantt, 'IswcGantt');
+define(IswcGantt, 'IswcGantt');
 
 registerDiagramKind('gantt', 'iswc-gantt');
 

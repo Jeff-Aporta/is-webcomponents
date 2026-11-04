@@ -1,6 +1,6 @@
-import { adoptCss, defineElement } from '@jeff-aporta/iswc-base/core/element.js';
-import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
 import { resolveLocale } from '@jeff-aporta/iswc-base/core/resolve-locale.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-format-number> — Web Component (vanilla).
@@ -30,14 +30,15 @@ import { resolveLocale } from '@jeff-aporta/iswc-base/core/resolve-locale.js';
   ];
   const VALID_TYPE = ['decimal', 'currency', 'percent', 'unit'];
 
-  class IswcFormatNumber extends ElementBase {
-    static get observedAttributes(): string[] { return OBSERVED; }
+  class IswcFormatNumber extends IswcElement {
+    static tag = 'iswc-format-number';
+    static css = css;
+    static observed = OBSERVED;
 
     #el!: HTMLElement;
     constructor() {
       super();
-      const shadow = this.attachShadow({ mode: 'open' });
-      adoptCss(shadow, import.meta.url);
+      const shadow = this.shadowRoot!;
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
       this.#el = shadow.querySelector<HTMLElement>('.number')!;
     }
@@ -109,5 +110,5 @@ import { resolveLocale } from '@jeff-aporta/iswc-base/core/resolve-locale.js';
     }
   }
 
-  defineElement('iswc-format-number', IswcFormatNumber, 'IswcFormatNumber');
+  define(IswcFormatNumber, 'IswcFormatNumber');
 })();

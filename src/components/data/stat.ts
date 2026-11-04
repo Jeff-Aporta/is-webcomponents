@@ -1,5 +1,5 @@
-import { adoptCss, defineElement } from '@jeff-aporta/iswc-base/core/element.js';
-import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-stat> — Stat / KPI Card (vanilla, zero dependencies).
@@ -46,13 +46,14 @@ import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
 
   const OBSERVED = ['label', 'value', 'helper', 'trend', 'trend-direction', 'icon', 'color'];
 
-  class IswcStat extends ElementBase {
-    static get observedAttributes(): string[] { return OBSERVED; }
+  class IswcStat extends IswcElement {
+    static tag = 'iswc-stat';
+    static css = css;
+    static observed = OBSERVED;
     #root!: HTMLElement;
     constructor() {
       super();
-      const shadow = this.attachShadow({ mode: 'open' });
-      adoptCss(shadow, import.meta.url);
+      const shadow = this.shadowRoot!;
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
       this.#root = shadow.querySelector<HTMLElement>('.stat')!;
     }
@@ -124,5 +125,5 @@ import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
     }
   }
 
-  defineElement('iswc-stat', IswcStat, 'IswcStat');
+  define(IswcStat, 'IswcStat');
 })();

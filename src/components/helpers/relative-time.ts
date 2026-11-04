@@ -1,8 +1,8 @@
-import { adoptCss, defineElement } from '@jeff-aporta/iswc-base/core/element.js';
-import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
 import { setStringAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
 import { resolveLocale } from '@jeff-aporta/iswc-base/core/resolve-locale.js';
 import { parseLooseDate } from './format-date.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-relative-time> — Web Component (vanilla).
@@ -36,8 +36,10 @@ import { parseLooseDate } from './format-date.js';
     ['second', 1],
   ];
 
-  class IswcRelativeTime extends ElementBase {
-    static get observedAttributes(): string[] { return OBSERVED; }
+  class IswcRelativeTime extends IswcElement {
+    static tag = 'iswc-relative-time';
+    static css = css;
+    static observed = OBSERVED;
 
     #el!: HTMLTimeElement;
     #timer: ReturnType<typeof setInterval> | null = null;
@@ -45,8 +47,7 @@ import { parseLooseDate } from './format-date.js';
 
     constructor() {
       super();
-      const shadow = this.attachShadow({ mode: 'open' });
-      adoptCss(shadow, import.meta.url);
+      const shadow = this.shadowRoot!;
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
       this.#el = shadow.querySelector<HTMLTimeElement>('.time')!;
     }
@@ -188,5 +189,5 @@ import { parseLooseDate } from './format-date.js';
     }
   }
 
-  defineElement('iswc-relative-time', IswcRelativeTime, 'IswcRelativeTime');
+  define(IswcRelativeTime, 'IswcRelativeTime');
 })();

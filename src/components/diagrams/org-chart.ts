@@ -1,7 +1,9 @@
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
 import { escapeHtml } from '@jeff-aporta/iswc-base/core/dom-utils.js';
 import { registerDiagramKind } from './utils/diagram-kinds.js';
 import { svgEl } from '@jeff-aporta/iswc-base/core/svg-chart-engine.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-org-chart> — Organigrama. Layout jerárquico top-down, a partir de un árbol.
@@ -82,8 +84,10 @@ import { svgEl } from '@jeff-aporta/iswc-base/core/svg-chart-engine.js';
     return ini || '?';
   }
 
-  class IswcOrgChart extends HTMLElement {
-    static get observedAttributes(): string[] { return OBSERVED; }
+  class IswcOrgChart extends IswcElement {
+    static tag = 'iswc-org-chart';
+    static css = css;
+    static observed = OBSERVED;
     #mounted = false;
     #nodes: Map<string, OrgNode> = new Map();
     #children: Map<string, string[]> = new Map();
@@ -102,14 +106,12 @@ import { svgEl } from '@jeff-aporta/iswc-base/core/svg-chart-engine.js';
 
     constructor() {
       super();
-      this.attachShadow({ mode: 'open' });
       this.shadowRoot!.innerHTML = /* html */ `
         <div part="root" class="root">
           <svg part="canvas" class="canvas" role="tree"></svg>
           <div part="tooltip" class="oc-tooltip dg-tooltip iswc-rich" hidden></div>
         </div>
       `;
-      adoptCss(this.shadowRoot!, import.meta.url);
       this.#rootEl = this.shadowRoot!.querySelector<HTMLElement>('.root')!;
       this.#svg = this.shadowRoot!.querySelector<SVGSVGElement>('.canvas')!;
       this.#tooltipEl = this.shadowRoot!.querySelector<HTMLElement>('.oc-tooltip')!;
@@ -477,7 +479,7 @@ import { svgEl } from '@jeff-aporta/iswc-base/core/svg-chart-engine.js';
     }
   }
 
-  defineElement('iswc-org-chart', IswcOrgChart, 'IswcOrgChart');
+  define(IswcOrgChart, 'IswcOrgChart');
 
   registerDiagramKind('org-chart', 'iswc-org-chart');
 })();

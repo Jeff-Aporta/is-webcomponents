@@ -1,4 +1,6 @@
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-offscreen-canvas> — transferControlToOffscreen; worker-src opcional.
@@ -12,8 +14,10 @@ import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/eleme
   const TEMPLATE = document.createElement('template');
   TEMPLATE.innerHTML = '<canvas part="canvas" class="cv"></canvas>';
 
-  class IswcOffscreenCanvas extends HTMLElement {
-    static get observedAttributes(): string[] { return ['width', 'height', 'worker-src']; }
+  class IswcOffscreenCanvas extends IswcElement {
+    static tag = 'iswc-offscreen-canvas';
+    static css = css;
+    static observed = ['width', 'height', 'worker-src'];
 
     #cv!: HTMLCanvasElement;
     #off: OffscreenCanvas | null = null;
@@ -22,8 +26,7 @@ import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/eleme
 
     constructor() {
       super();
-      const shadow = this.attachShadow({ mode: 'open' });
-      adoptCss(shadow, import.meta.url);
+      const shadow = this.shadowRoot!;
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
       this.#cv = shadow.querySelector<HTMLCanvasElement>('.cv')!;
     }
@@ -65,5 +68,5 @@ import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/eleme
     }
   }
 
-  defineElement('iswc-offscreen-canvas', IswcOffscreenCanvas, 'IswcOffscreenCanvas');
+  define(IswcOffscreenCanvas, 'IswcOffscreenCanvas');
 })();

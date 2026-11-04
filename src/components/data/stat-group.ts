@@ -1,11 +1,11 @@
-import { adoptCss, defineElement } from '@jeff-aporta/iswc-base/core/element.js';
 import { crearNodo } from '@jeff-aporta/iswc-base/core/dom-utils.js';
 import { atributosDe, PropsElement } from '@jeff-aporta/iswc-base/core/props-element.js';
 import { StatGroupPropsSchema } from './schemas/stat-group.schemas.js';
 import type { StatGroupItem, StatGroupProps } from './schemas/stat-group.schemas.js';
 import './stat.js';
 import '@jeff-aporta/iswc-base/components/isp/grid-layout.js';
-import '@jeff-aporta/iswc-base/components/feedback/skeleton.js';
+import { define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-stat-group> — fila de indicadores: `iswc-stat` en una rejilla que se acomoda al ancho. Con `items: null` pinta
@@ -28,14 +28,16 @@ function aplicar(el: Element, k: StatGroupItem): void {
 }
 
 class IswcStatGroup extends PropsElement<StatGroupProps> {
-  static override get observedAttributes(): string[] { return atributosDe(INICIAL); }
+  static tag = 'iswc-stat-group';
+  static css = css;
+  static deps = ['iswc-skeleton'];
+  static observed = atributosDe(INICIAL);
 
   #root: ShadowRoot;
 
   constructor() {
     super(INICIAL, StatGroupPropsSchema.partial());
-    this.#root = this.attachShadow({ mode: 'open' });
-    adoptCss(this.#root, import.meta.url);
+    this.#root = this.shadowRoot!;
   }
 
   protected override pintar(): void {
@@ -56,4 +58,4 @@ class IswcStatGroup extends PropsElement<StatGroupProps> {
   }
 }
 
-defineElement('iswc-stat-group', IswcStatGroup, 'IswcStatGroup');
+define(IswcStatGroup, 'IswcStatGroup');

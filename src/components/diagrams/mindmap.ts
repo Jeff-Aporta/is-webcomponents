@@ -1,4 +1,4 @@
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
 import { DiagramElementBase } from './utils/diagram-element-base.js';
 import { resolveMindmapSpec, computeMindmapLayout } from './utils/mindmap-spec.js';
 import type { DiagramTheme } from './schemas/diagram-types.schemas.js';
@@ -10,6 +10,8 @@ import { wrapText, buildTspans } from './utils/diagram-text-wrap.js';
 import { svgEl } from '@jeff-aporta/iswc-base/core/svg-chart-engine.js';
 import type { MindmapLayout } from "./schemas/mindmap-spec.schemas.js";
 import type { NodeEntry, EdgeEntry } from "./schemas/mindmap.schemas.js";
+import { define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-mindmap> — mapa mental en SVG, sin Mermaid.
@@ -29,6 +31,8 @@ import type { NodeEntry, EdgeEntry } from "./schemas/mindmap.schemas.js";
  */
 
 class IswcMindmap extends DiagramElementBase {
+  static tag = 'iswc-mindmap';
+  static css = css;
   #nodeNodes = new Map<string, NodeEntry>();
   #edgeNodes = new Map<string, EdgeEntry>();
   #hoverId: string | null = null;
@@ -36,7 +40,6 @@ class IswcMindmap extends DiagramElementBase {
   constructor() {
     super();
     this.initDiagramShadow('mm-svg', 'mm-tooltip');
-    adoptCss(this.shadowRoot!, import.meta.url);
   }
 
   onDiagramConnected() {
@@ -287,7 +290,7 @@ class IswcMindmap extends DiagramElementBase {
   }
 }
 
-defineElement('iswc-mindmap', IswcMindmap, 'IswcMindmap');
+define(IswcMindmap, 'IswcMindmap');
 
 registerDiagramKind('mindmap', 'iswc-mindmap');
 

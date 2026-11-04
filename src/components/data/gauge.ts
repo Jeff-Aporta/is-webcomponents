@@ -1,5 +1,5 @@
-import { adoptCss, defineElement } from '@jeff-aporta/iswc-base/core/element.js';
-import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-gauge> — Medidor circular de porcentaje (vanilla, zero dependencies).
@@ -40,9 +40,11 @@ import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
 
   const OBSERVED = ['value', 'min', 'max', 'label', 'unit', 'thickness', 'color', 'half', 'format', 'show-value'];
 
-  class IswcGauge extends ElementBase {
+  class IswcGauge extends IswcElement {
+    static tag = 'iswc-gauge';
+    static css = css;
 
-    static get observedAttributes(): string[] { return [...OBSERVED, 'track-color']; }
+    static observed = [...OBSERVED, 'track-color'];
     #svg!: HTMLElement;
     #circle!: HTMLElement;
     #track!: HTMLElement;
@@ -51,8 +53,7 @@ import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
     #root!: HTMLElement;
     constructor() {
       super();
-      const shadow = this.attachShadow({ mode: 'open' });
-      adoptCss(shadow, import.meta.url);
+      const shadow = this.shadowRoot!;
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
       this.#root = shadow.querySelector<HTMLElement>('.gauge')!;
       this.#svg = shadow.querySelector<HTMLElement>('svg')!;
@@ -148,5 +149,5 @@ import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
     }
   }
 
-  defineElement('iswc-gauge', IswcGauge, 'IswcGauge');
+  define(IswcGauge, 'IswcGauge');
 })();

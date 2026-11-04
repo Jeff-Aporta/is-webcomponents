@@ -1,8 +1,10 @@
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
 import { withStyleAttrs } from '@jeff-aporta/iswc-base/core/attrs.js';
 
 import { computePosition, PLACEMENTS, isVirtualElement } from '@jeff-aporta/iswc-base/core/position.js';
 import { type AnchorLike, type ComputePositionResult } from '@jeff-aporta/iswc-base/core/schemas/position.schemas.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-floating> — building block interno de posicionamiento anclado.
@@ -60,9 +62,11 @@ import { type AnchorLike, type ComputePositionResult } from '@jeff-aporta/iswc-b
     'modal', 'label', 'labelledby',
   ];
 
-  class IswcFloating extends withStyleAttrs(HTMLElement) {
+  class IswcFloating extends withStyleAttrs(IswcElement) {
+    static tag = 'iswc-floating';
+    static css = css;
 
-    static get observedAttributes(): string[] { return [...OBSERVED, 'arrow-size', 'show-duration', 'hide-duration']; }
+    static observed = [...OBSERVED, 'arrow-size', 'show-duration', 'hide-duration'];
 
     #popup!: HTMLElement;
     #arrow!: HTMLElement;
@@ -79,8 +83,7 @@ import { type AnchorLike, type ComputePositionResult } from '@jeff-aporta/iswc-b
 
     constructor() {
       super();
-      const shadow = this.attachShadow({ mode: 'open' });
-      adoptCss(shadow, import.meta.url);
+      const shadow = this.shadowRoot!;
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
       this.#popup = shadow.querySelector<HTMLElement>('.popup')!;
       this.#arrow = shadow.querySelector<HTMLElement>('.arrow')!;
@@ -648,5 +651,5 @@ import { type AnchorLike, type ComputePositionResult } from '@jeff-aporta/iswc-b
     }
   }
 
-  defineElement('iswc-floating', IswcFloating, 'IswcFloating');
+  define(IswcFloating, 'IswcFloating');
 })();

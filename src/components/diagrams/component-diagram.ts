@@ -1,4 +1,4 @@
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
 import { DiagramElementBase } from './utils/diagram-element-base.js';
 import { animarRielEn, flujoActivo, pulsoRadar } from './utils/diagram-flow.js';
 import { resolveComponentSpec, computeComponentLayout, packageShapePath, LOLLI_R, HTTP_METHOD_BADGE, CARD_TEXT_X, CARD_STEREO_DY } from './utils/component-spec.js';
@@ -20,6 +20,8 @@ import { readEdgeStyle, edgeStyleFor } from './utils/diagram-vocab.js';
 import { styledEdgePath } from './utils/diagram-curve.js';
 
 import type { InterfaceStemPoint, LayoutPackage, AnchorPoint } from "./schemas/component-diagram.schemas.js";
+import { define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-component-diagram> — diagrama de componentes UML en SVG, sin Mermaid.
@@ -127,9 +129,9 @@ function stemInner(iface: { cx: number; cy: number; side: Lado }, r: number): In
 /** Punto anchor de una arista. */
 
 class IswcComponentDiagram extends DiagramElementBase {
-  static get observedAttributes(): string[] {
-    return [...DiagramElementBase.observedAttributes, 'min-gap', 'theme'];
-  }
+  static tag = 'iswc-component-diagram';
+  static css = css;
+  static observed = [...DiagramElementBase.observed, 'min-gap', 'theme'];
 
   /** Capa superior con las etiquetas de arista (ver #buildEdges). */
   #etiquetasEdges: SVGGElement | null = null;
@@ -140,7 +142,6 @@ class IswcComponentDiagram extends DiagramElementBase {
   constructor() {
     super();
     this.initDiagramShadow('cd-svg', 'cd-tooltip');
-    adoptCss(this.shadowRoot!, import.meta.url);
   }
 
   onDiagramConnected(): void {
@@ -740,7 +741,7 @@ class IswcComponentDiagram extends DiagramElementBase {
   #onMouseLeave = (): void => { this.tooltipEl.hidden = true; };
 }
 
-defineElement('iswc-component-diagram', IswcComponentDiagram, 'IswcComponentDiagram');
+define(IswcComponentDiagram, 'IswcComponentDiagram');
 registerDiagramKind('component', 'iswc-component-diagram');
 registerDiagramKind('componentDiagram', 'iswc-component-diagram');
 

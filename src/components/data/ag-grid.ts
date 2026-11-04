@@ -86,18 +86,15 @@
  *   grid.api.refresh()
  */
 
-import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
 import {
   getComponentPrefs, removeComponentPrefs, replaceComponentPrefs,
 } from '@jeff-aporta/iswc-base/core/prefs.js';
 import type { PrefsEntry } from '@jeff-aporta/iswc-base/core/schemas/prefs.schemas.js';
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
-import '@jeff-aporta/iswc-base/components/media/icon.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
 import '@jeff-aporta/iswc-base/components/forms/checkbox.js';
 import '@jeff-aporta/iswc-base/components/forms/input.js';
 import '@jeff-aporta/iswc-base/components/forms/select.js';
 import '@jeff-aporta/iswc-base/components/forms/option.js';
-import '@jeff-aporta/iswc-base/components/actions/button.js';
 
 import { Density, SelectionMode, DEFAULT_PAGE_SIZE } from './utils/datagrid-core/types.js';
 import { selectAll as selectAllCore, clearSelection as clearSelectionCore } from './utils/datagrid-core/selection.js';
@@ -111,6 +108,8 @@ import { ATRIBUTOS, aplanarDefs, autogenerarDefs, ordenInicial, valorAtributo } 
 import type { ColDefAg, Capa, Desinstalar, OpcionesGrid, Zona } from './utils/ag-grid/contrato.schemas.js';
 import type { ColumnDef, RowData, SortDirName, PinSideName, DensityName, GridState, GridApi, ColumnFilter, SelectionModeName, TextFilterOp } from './schemas/datagrid-types.schemas.js';
 import type { StateSavedDetail, PageChangeDetail } from "./schemas/ag-grid.schemas.js";
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 const TEMPLATE = document.createElement('template');
 TEMPLATE.innerHTML = /* html */ `
@@ -226,11 +225,13 @@ function numeroLocal(n: number): string {
   return Number.isFinite(n) ? n.toLocaleString() : '0';
 }
 
-export class IswcAgGrid extends ElementBase {
+export class IswcAgGrid extends IswcElement {
+  static tag = 'iswc-ag-grid';
+  static css = css;
+  static deps = ['iswc-icon', 'iswc-button'];
 
-  static TEMPLATE = TEMPLATE;
-  static get observedAttributes(): string[] {
-    return [
+  static template = TEMPLATE;
+  static observed = [
       'rows', 'columns', 'get-row-id',
       'page-size', 'page-size-options', 'pagination',
       'row-selection', 'selectable', 'density',
@@ -239,7 +240,6 @@ export class IswcAgGrid extends ElementBase {
       'toolbar', 'theme', 'loading',
       ...Object.keys(ATRIBUTOS),
     ];
-  }
 
   /** El motor: `null` hasta `onConnected`; la fachada lo comprueba antes de usarlo. */
   #api: GridApi | null = null;
@@ -274,8 +274,6 @@ export class IswcAgGrid extends ElementBase {
 
   constructor() {
     super();
-    this.initShadow();
-    adoptCss(this.shadowRoot!, import.meta.url);
     this.#cacheRefs();
     this.#crearNucleo();
     this.#bindStaticEvents();
@@ -902,4 +900,4 @@ export class IswcAgGrid extends ElementBase {
   set rememberState(v: boolean) { this.setBooleanAttr('remember-state', v); }
 }
 
-defineElement('iswc-ag-grid', IswcAgGrid, 'IswcAgGrid');
+define(IswcAgGrid, 'IswcAgGrid');

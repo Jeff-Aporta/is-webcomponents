@@ -1,4 +1,4 @@
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
 import { DiagramElementBase } from './utils/diagram-element-base.js';
 import { resolveJourneySpec, computeJourneyLayout } from './utils/journey-spec.js';
 import type { DiagramTheme } from './schemas/diagram-types.schemas.js';
@@ -9,6 +9,8 @@ import { registerDiagramKind } from './utils/diagram-kinds.js';
 import { svgEl } from '@jeff-aporta/iswc-base/core/svg-chart-engine.js';
 import type { JourneyLayout } from "./schemas/journey-spec.schemas.js";
 import type { StepEntry } from "./schemas/journey-map.schemas.js";
+import { define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-journey-map> — mapa de recorrido (user journey) en SVG, sin Mermaid.
@@ -28,6 +30,8 @@ import type { StepEntry } from "./schemas/journey-map.schemas.js";
  */
 
 class IswcJourneyMap extends DiagramElementBase {
+  static tag = 'iswc-journey-map';
+  static css = css;
   #hiddenPhases = new Set<string>();
   #stepNodes = new Map<string, StepEntry>();
   #hoverId: string | null = null;
@@ -35,7 +39,6 @@ class IswcJourneyMap extends DiagramElementBase {
   constructor() {
     super();
     this.initDiagramShadow('jn-svg', 'jn-tooltip');
-    adoptCss(this.shadowRoot!, import.meta.url);
   }
 
   onDiagramConnected() {
@@ -307,7 +310,7 @@ class IswcJourneyMap extends DiagramElementBase {
   }
 }
 
-defineElement('iswc-journey-map', IswcJourneyMap, 'IswcJourneyMap');
+define(IswcJourneyMap, 'IswcJourneyMap');
 
 registerDiagramKind('journey', 'iswc-journey-map');
 

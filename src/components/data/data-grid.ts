@@ -1,4 +1,4 @@
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
 import { withStyleAttrs } from '@jeff-aporta/iswc-base/core/attrs.js';
 
 import { escapeHtml } from '@jeff-aporta/iswc-base/core/dom-utils.js';
@@ -37,12 +37,13 @@ import type { FilterPanelModel } from "./schemas/grid-ui.schemas.js";
 import type { ResolvedColumn } from "./schemas/grid-data.schemas.js";
 import type { FilterModel, SortModelItem } from "./schemas/datagrid-types.schemas.js";
 import type { GridPopoverEl } from "./schemas/grid-ui.schemas.js";
-import '@jeff-aporta/iswc-base/components/actions/button.js';
 import '@jeff-aporta/iswc-base/components/actions/dropdown-item.js';
 import '@jeff-aporta/iswc-base/components/forms/input.js';
 import '@jeff-aporta/iswc-base/components/forms/select.js';
 import '@jeff-aporta/iswc-base/components/forms/option.js';
 import '@jeff-aporta/iswc-base/components/forms/checkbox.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /* (Los tipos que dependen de `IswcDataGrid` viven dentro del IIFE para evitar el
    problema de ordenación de declaraciones: las clases NO son hoisted como
@@ -363,11 +364,12 @@ function aEm(u: number): string {
   /** Argumento del `getActions` que acepta el kit (forma más explícita). */
   type ActionParams = { row: Row; id: CellValue; colDef: ColumnDef };
 
-  class IswcDataGrid extends withStyleAttrs(HTMLElement) {
+  class IswcDataGrid extends withStyleAttrs(IswcElement) {
+    static tag = 'iswc-data-grid';
+    static css = css;
+    static deps = ['iswc-button'];
 
-    static get observedAttributes(): string[] {
-      return [...OBSERVED, 'radius', 'accent', 'header-bg', 'row-hover', 'height', 'padding'];
-    }
+    static observed = [...OBSERVED, 'radius', 'accent', 'header-bg', 'row-hover', 'height', 'padding'];
 
     /* DOM */
     #base!: HTMLElement;
@@ -450,8 +452,7 @@ function aEm(u: number): string {
 
     constructor() {
       super();
-      const shadow = this.attachShadow({ mode: 'open' });
-      adoptCss(shadow, import.meta.url);
+      const shadow = this.shadowRoot!;
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
 
       // Todos estos elementos vienen de la plantilla que este mismo
@@ -3437,5 +3438,5 @@ function aEm(u: number): string {
     }
   }
 
-  defineElement('iswc-data-grid', IswcDataGrid, 'IswcDataGrid');
+  define(IswcDataGrid, 'IswcDataGrid');
 })();

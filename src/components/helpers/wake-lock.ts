@@ -1,4 +1,6 @@
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-wake-lock> — Screen Wake Lock. Host display:contents.
@@ -10,16 +12,17 @@ import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/eleme
   const TEMPLATE = document.createElement('template');
   TEMPLATE.innerHTML = '<slot></slot>';
 
-  class IswcWakeLock extends HTMLElement {
-    static get observedAttributes(): string[] { return ['active']; }
+  class IswcWakeLock extends IswcElement {
+    static tag = 'iswc-wake-lock';
+    static css = css;
+    static observed = ['active'];
 
     #lock: WakeLockSentinel | null = null;
     #onVis: () => void;
 
     constructor() {
       super();
-      const shadow = this.attachShadow({ mode: 'open' });
-      adoptCss(shadow, import.meta.url);
+      const shadow = this.shadowRoot!;
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
       this.#onVis = () => { if (document.visibilityState === 'visible' && this.active) this.#acquire(); };
     }
@@ -66,5 +69,5 @@ import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/eleme
     }
   }
 
-  defineElement('iswc-wake-lock', IswcWakeLock, 'IswcWakeLock');
+  define(IswcWakeLock, 'IswcWakeLock');
 })();

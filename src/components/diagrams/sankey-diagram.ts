@@ -1,4 +1,4 @@
-import { adoptCss, defineElement, emit, emitCancelable } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit, emitCancelable } from '@jeff-aporta/iswc-base/core/element.js';
 import { DiagramElementBase } from './utils/diagram-element-base.js';
 import { resolveSankeySpec, computeSankeyLayout } from './utils/sankey-spec.js';
 import type { DiagramTheme } from './schemas/diagram-types.schemas.js';
@@ -9,6 +9,8 @@ import { registerDiagramKind } from './utils/diagram-kinds.js';
 import { svgEl } from '@jeff-aporta/iswc-base/core/svg-chart-engine.js';
 import type { SankeyLayout } from "./schemas/sankey-spec.schemas.js";
 import type { NodeEntry, LinkEntry } from "./schemas/sankey-diagram.schemas.js";
+import { define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-sankey-diagram> — diagrama de Sankey en SVG, sin Mermaid.
@@ -30,9 +32,9 @@ import type { NodeEntry, LinkEntry } from "./schemas/sankey-diagram.schemas.js";
 const DEFAULT_HEIGHT = 320;
 
 class IswcSankeyDiagram extends DiagramElementBase {
-  static get observedAttributes(): string[] {
-    return [...DiagramElementBase.observedAttributes, 'height'];
-  }
+  static tag = 'iswc-sankey-diagram';
+  static css = css;
+  static observed = [...DiagramElementBase.observed, 'height'];
 
   #hiddenGroups = new Set<string>();
   #nodeNodes = new Map<string, NodeEntry>();
@@ -42,7 +44,6 @@ class IswcSankeyDiagram extends DiagramElementBase {
   constructor() {
     super();
     this.initDiagramShadow('sk-svg', 'sk-tooltip');
-    adoptCss(this.shadowRoot!, import.meta.url);
   }
 
   onDiagramConnected() {
@@ -323,7 +324,7 @@ class IswcSankeyDiagram extends DiagramElementBase {
   }
 }
 
-defineElement('iswc-sankey-diagram', IswcSankeyDiagram, 'IswcSankeyDiagram');
+define(IswcSankeyDiagram, 'IswcSankeyDiagram');
 
 registerDiagramKind('sankey', 'iswc-sankey-diagram');
 

@@ -1,4 +1,4 @@
-import { adoptCss, defineElement, emit, emitCancelable } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit, emitCancelable } from '@jeff-aporta/iswc-base/core/element.js';
 import { readEdgeStyle, edgeStyleFor } from './utils/diagram-vocab.js';
 import { styledEdgePath } from './utils/diagram-curve.js';
 import { DiagramElementBase } from './utils/diagram-element-base.js';
@@ -15,6 +15,8 @@ import { resolveErTheme, themeToDiagramTheme, clusterPalette, entityPaint, edgeP
 import { type ErThemeJson } from './schemas/theme.schemas.js';
 import { hostStyleName, styleThemeFor } from './utils/diagram-styles.js';
 import type { DiagramGroup, DiagramTheme, ErLayout, ErLayoutEdge, ErLayoutEdgeMark, ErLayoutEntity } from "./schemas/diagram-types.schemas.js";
+import { define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-er-diagram> — diagrama entidad-relación en SVG, sin Mermaid.
@@ -52,9 +54,9 @@ const iswcAnimDashCss = `
 `;
 
 class IswcErDiagram extends DiagramElementBase {
-  static get observedAttributes(): string[] {
-    return [...DiagramElementBase.observedAttributes, 'theme', 'animation', 'open-on-click'];
-  }
+  static tag = 'iswc-er-diagram';
+  static css = css;
+  static observed = [...DiagramElementBase.observed, 'theme', 'animation', 'open-on-click'];
 
   #theme: DiagramTheme | null = null;
   #styleTheme: ErThemeJson | null = null;
@@ -70,7 +72,6 @@ class IswcErDiagram extends DiagramElementBase {
   constructor() {
     super();
     this.initDiagramShadow('er-svg', 'er-tooltip');
-    adoptCss(this.shadowRoot!, import.meta.url);
   }
 
   /** Tema de estilo InSoft (JSON). Attr `theme`, o `erDiagram.theme` / `theme` en payload. */
@@ -647,7 +648,7 @@ class IswcErDiagram extends DiagramElementBase {
   }
 }
 
-defineElement('iswc-er-diagram', IswcErDiagram, 'IswcErDiagram');
+define(IswcErDiagram, 'IswcErDiagram');
 
 registerDiagramKind('er', 'iswc-er-diagram');
 registerDiagramKind('erDiagram', 'iswc-er-diagram');

@@ -1,4 +1,4 @@
-import { defineElement } from '@jeff-aporta/iswc-base/core/element.js';
+import { define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import { createObserverElement } from './observer.js';
 
 /**
@@ -18,8 +18,4 @@ import { createObserverElement } from './observer.js';
  *   iswc-intersect  detail: { entry }
  */
 
-defineElement(
-  'iswc-intersection-observer',
-  createObserverElement('intersection'),
-  'IswcIntersectionObserver',
-);
+define(createObserverElement('intersection', 'iswc-intersection-observer'), 'IswcIntersectionObserver');

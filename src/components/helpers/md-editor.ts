@@ -1,5 +1,4 @@
-import { adoptCss, defineElement, emit } from '@jeff-aporta/iswc-base/core/element.js';
-import { ElementBase } from '@jeff-aporta/iswc-base/core/element-base.js';
+import { emit } from '@jeff-aporta/iswc-base/core/element.js';
 import { setStringAttr, setOptionalAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
 import {
   bodyPreviewHtml,
@@ -22,11 +21,10 @@ import type { HidratacionMd } from './schemas/md-hydrate.schemas.js';
 // desde md-editor-api.js, que sigue siendo JSDoc-only). El `.d.ts` paralelo
 // sigue siendo la documentación canónica del consumidor externo.
 import '@jeff-aporta/iswc-base/components/layout/dialog.js';
-import '@jeff-aporta/iswc-base/components/actions/button.js';
-import '@jeff-aporta/iswc-base/components/actions/copy-button.js';
 import '@jeff-aporta/iswc-base/components/forms/switch.js';
-import '@jeff-aporta/iswc-base/components/media/icon.js';
 import type { IswcMdEditorDocument, IswcMdEditorApiConfig, IswcMdEditorActions, DialogElement, SwitchElement, CopyButtonElement, TextareaElement, EditorHistory } from "./schemas/md-editor.schemas.js";
+import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import css from 'iswc:css';
 
 /**
  * <iswc-md-editor> — preview MD + diálogo fullscreen (edición / revisión).
@@ -231,11 +229,12 @@ import type { IswcMdEditorDocument, IswcMdEditorApiConfig, IswcMdEditorActions, 
     bytes: number;
   }
 
-  class IswcMdEditor extends ElementBase {
+  class IswcMdEditor extends IswcElement {
+    static tag = 'iswc-md-editor';
+    static css = css;
+    static deps = ['iswc-button', 'iswc-copy-button', 'iswc-icon'];
 
-    static override get observedAttributes(): string[] {
-      return [...OBSERVED, 'preview-max-height'];
-    }
+    static observed = [...OBSERVED, 'preview-max-height'];
 
     #preview!: HTMLElement;
     #previewBody!: HTMLElement;
@@ -268,8 +267,7 @@ import type { IswcMdEditorDocument, IswcMdEditorApiConfig, IswcMdEditorActions, 
 
     constructor() {
       super();
-      const shadow = this.attachShadow({ mode: 'open' });
-      adoptCss(shadow, import.meta.url);
+      const shadow = this.shadowRoot!;
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
 
       this.#preview = shadow.querySelector<HTMLElement>('.preview')!;
@@ -1008,5 +1006,5 @@ import type { IswcMdEditorDocument, IswcMdEditorApiConfig, IswcMdEditorActions, 
     }
   }
 
-  defineElement('iswc-md-editor', IswcMdEditor, 'IswcMdEditor');
+  define(IswcMdEditor, 'IswcMdEditor');
 })();
