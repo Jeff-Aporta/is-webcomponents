@@ -5,7 +5,7 @@ import { chromium } from 'playwright';
 
 const TAG = process.argv[2] || 'iswc-use-case-diagram';
 const state = Buffer.from(JSON.stringify({ component: TAG }), 'utf8').toString('base64url');
-const browser = await chromium.launch({ headless: true });
+const browser = await chromium.launch({ channel: 'msedge', headless: true });
 const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 } });
 const page = await ctx.newPage();
 await page.goto(`http://127.0.0.1:8491/?s=${state}`, { waitUntil: 'domcontentloaded' });

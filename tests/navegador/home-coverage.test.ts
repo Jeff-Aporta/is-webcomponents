@@ -82,13 +82,9 @@ async function startDevServer(env = {}) {
   throw new Error(`scripts/serve.mjs no arrancó tras 4 intentos:\n${salida.slice(-2000)}`);
 }
 
-/** Chromium de Playwright; si no está descargado, el Chrome o Edge del sistema. */
+/** Edge headless del sistema (regla del repo: nunca el Chrome del usuario). */
 async function lanzar() {
-  let ultimo;
-  for (const channel of [undefined, 'chrome', 'msedge']) {
-    try { return await chromium.launch({ headless: true, ...(channel ? { channel } : {}) }); } catch (e) { ultimo = e; }
-  }
-  throw ultimo;
+  return await chromium.launch({ headless: true, channel: 'msedge' });
 }
 
 test('navegador/home-coverage', async () => {

@@ -21,7 +21,7 @@ const findings = [];
 const ok = (msg) => findings.push({ ok: true, msg });
 const bad = (msg) => findings.push({ ok: false, msg });
 
-const browser = await chromium.launch({ headless: true });
+const browser = await chromium.launch({ channel: 'msedge', headless: true });
 const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
 
 try {

@@ -31,7 +31,7 @@ if (r.status !== 0) {
 const tags = JSON.parse(r.stdout);
 console.log(`Capturando ${tags.length} demos...`);
 
-const browser = await chromium.launch({ headless: true });
+const browser = await chromium.launch({ channel: 'msedge', headless: true });
 const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 } });
 let ok = 0, fail = 0;
 for (const tag of tags) {

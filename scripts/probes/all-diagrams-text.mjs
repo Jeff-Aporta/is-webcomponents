@@ -9,7 +9,7 @@ const BASE = 'http://127.0.0.1:8491';
 const PREVIEWS = 'dist/previews';
 const DEMOS = ['flowchart', 'class-diagram', 'state-diagram', 'sequence-diagram', 'gantt', 'mindmap', 'sankey-diagram', 'use-case-diagram', 'block-diagram', 'venn-diagram', 'journey-map', 'quadrant-chart', 'org-chart'];
 
-const browser = await chromium.launch({ headless: true });
+const browser = await chromium.launch({ channel: 'msedge', headless: true });
 const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 } });
 
 let totalFails = 0;

@@ -7,7 +7,7 @@ const TAG = process.argv[2] || 'iswc-heatmap';
 const OUT = process.argv[3] || `./.shot-${TAG}.png`;
 mkdirSync('./.shots', { recursive: true });
 const state = Buffer.from(JSON.stringify({ component: TAG }), 'utf8').toString('base64url');
-const browser = await chromium.launch({ headless: true });
+const browser = await chromium.launch({ channel: 'msedge', headless: true });
 const page = await (await browser.newContext({ viewport: { width: 1440, height: 900 } })).newPage();
 await page.goto(`http://127.0.0.1:8491/?s=${state}`, { waitUntil: 'domcontentloaded' });
 await page.waitForTimeout(2500);

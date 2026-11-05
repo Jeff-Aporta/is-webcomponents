@@ -193,16 +193,9 @@ async function capturePng(
   }
 }
 
-/**
- * Chromium de Playwright; si su navegador no está descargado (la descarga no funciona en todas las
- * máquinas), el Chrome o el Edge instalados en el sistema (canales `chrome` / `msedge`).
- */
+/** Edge headless del sistema (canal `msedge`): nunca el Chrome del usuario ni el Chromium descargado. */
 async function lanzarNavegador(chromium: RenderDiagramOptions['chromium']): Promise<RenderBrowser> {
-  let ultimo: unknown;
-  for (const channel of [undefined, 'chrome', 'msedge']) {
-    try { return await chromium.launch({ headless: true, ...(channel ? { channel } : {}) }); } catch (e) { ultimo = e; }
-  }
-  throw ultimo;
+  return await chromium.launch({ headless: true, channel: 'msedge' });
 }
 
 async function runOnePage(

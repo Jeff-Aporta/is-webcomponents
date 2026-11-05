@@ -29,7 +29,7 @@ const wrap = staticSvgWrapper(sano.svg, {
 const wrapPath = join(tmpdir(), `iswc-png-${Date.now()}.html`);
 await writeFile(wrapPath, wrap, 'utf8');
 
-const browser = await chromium.launch({ headless: true });
+const browser = await chromium.launch({ headless: true, channel: 'msedge' });
 try {
   const ctx = await browser.newContext({
     deviceScaleFactor: 2,

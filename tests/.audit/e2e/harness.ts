@@ -4,6 +4,7 @@
 // sin login ni ISS — el "estado" es el tag del componente (deep link ?s=).
 // TODO el codigo esta fuertemente tipado (tsc strict).
 import { localBrowser, Stagehand } from '@browserbasehq/stagehand';
+import { rutaEdge } from '../../_shared/navegador.ts';
 import { mkdirSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import test from 'node:test';
@@ -433,6 +434,7 @@ export async function arrancar({ etiqueta = 'e2e' }: { etiqueta?: string } = {})
   // temprano si el puerto indicado está ocupado.
   await asegurarServidor();
   const browser = await localBrowser.launch({
+    executablePath: rutaEdge() ?? undefined,
     headless: ENV.headless,
     args: ['--disable-blink-features=AutomationControlled'],
   });

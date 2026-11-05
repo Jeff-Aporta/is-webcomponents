@@ -13,7 +13,7 @@
 // IMPLEMENTACIÓN: Playwright directo (sin Stagehand). Stagehand cierra el
 // RPC client tras ~10 navegaciones, por lo que no escala para 182 entradas;
 // el wrapper añade una capa RPC sobre CDP que se desconecta. Aquí usamos
-// chromium.launch() directo y rotamos el browser context cada BATCH_SIZE
+// chromium.launch({ channel: 'msedge' }) directo y rotamos el browser context cada BATCH_SIZE
 // componentes para liberar memoria entre rondas.
 //
 // Al inicio de la suite, PURGA dist/assets/currstate/ — no quedan vestigios de
@@ -69,7 +69,7 @@ before(async () => {
   // Server garantizado una sola vez por corrida.
   serverReady = asegurarServidor();
   await serverReady;
-  browser = await chromium.launch({ headless: true });
+  browser = await chromium.launch({ channel: 'msedge', headless: true });
 });
 
 after(async () => {

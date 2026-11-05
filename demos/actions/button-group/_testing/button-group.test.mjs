@@ -9,7 +9,7 @@ const URL_DEMO = 'http://127.0.0.1:8491/demos/actions/button-group/button-group.
 let browser;
 
 test.before(async () => {
-  browser = await chromium.launch();
+  browser = await chromium.launch({ channel: 'msedge' });
 });
 
 test.after(async () => {

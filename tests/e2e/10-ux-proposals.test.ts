@@ -83,7 +83,7 @@ let serverReady: Promise<string> | null = null;
 before(async () => {
   if (!DISPONIBLE) return;
   // El servidor es levantado por run.ts (autoserve). Solo abrimos browser.
-  browser = await chromium.launch({ headless: true });
+  browser = await chromium.launch({ channel: 'msedge', headless: true });
 });
 
 after(async () => {

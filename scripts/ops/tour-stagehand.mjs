@@ -40,7 +40,7 @@ const tags = discoverTags();
 console.log(`Discovered ${tags.length} demos in dist/previews/`);
 
 // ── Browser run ──────────────────────────────────────────────────────
-const browser = await chromium.launch({ headless: true });
+const browser = await chromium.launch({ channel: 'msedge', headless: true });
 const ctx = await browser.newContext();
 const page = await ctx.newPage();
 

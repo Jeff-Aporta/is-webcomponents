@@ -41,7 +41,7 @@ await new Promise((r) => server.listen(0, '127.0.0.1', r));
 const { port } = server.address();
 const base = `http://127.0.0.1:${port}`;
 
-const browser = await chromium.launch({ headless: true });
+const browser = await chromium.launch({ channel: 'msedge', headless: true });
 const page = await browser.newPage();
 page.on('pageerror', (e) => console.error('pageerror', e.message));
 page.on('console', (m) => { if (m.type() === 'error') console.error('console', m.text()); });

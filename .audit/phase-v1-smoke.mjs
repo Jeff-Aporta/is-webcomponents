@@ -14,7 +14,7 @@ const TARGETS = [
   '/demos/forms/year-calendar/year-calendar.html',
 ];
 
-const browser = await chromium.launch();
+const browser = await chromium.launch({ channel: 'msedge' });
 const ctx = await browser.newContext();
 const errors = {};
 

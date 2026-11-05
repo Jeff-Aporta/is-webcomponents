@@ -22,7 +22,7 @@ await mkdir(ARTIFACTS_DIR, { recursive: true });
 export const BASE_URL = process.env.DEMOS_BASE_URL ?? 'http://127.0.0.1:8491';
 
 export async function newPage(opts = {}) {
-  const browser = await chromium.launch({
+  const browser = await chromium.launch({ channel: 'msedge',
     headless: process.env.DEMOS_HEADLESS !== 'false',
   });
   const page = await (await browser.newContext({

@@ -1,5 +1,5 @@
 import { chromium } from 'playwright';
-const b = await chromium.launch();
+const b = await chromium.launch({ channel: 'msedge' });
 const p = await b.newPage();
 const errs = [];
 p.on('console', (m) => { if (m.type() === 'error') errs.push(m.text()); });

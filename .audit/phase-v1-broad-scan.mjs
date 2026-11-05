@@ -20,7 +20,7 @@ for (const f of forms) {
   catch { /* skip missing */ }
 }
 
-const browser = await chromium.launch();
+const browser = await chromium.launch({ channel: 'msedge' });
 const ctx = await browser.newContext();
 const results = [];
 

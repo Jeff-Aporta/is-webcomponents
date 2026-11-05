@@ -3,7 +3,7 @@ import { chromium } from 'playwright';
 const state = Buffer.from(JSON.stringify({ component: 'iswc-code' })).toString('base64');
 const url = `http://127.0.0.1:8391/?s=${state}&_=${Date.now()}`;
 
-const browser = await chromium.launch({ headless: true });
+const browser = await chromium.launch({ channel: 'msedge', headless: true });
 const page = await browser.newPage({ viewport: { width: 1400, height: 900 } });
 const findings = [];
 const ok = (m) => findings.push({ ok: true, m });

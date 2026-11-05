@@ -8,7 +8,7 @@ const BASE = 'http://127.0.0.1:8491';
 const state = Buffer.from(JSON.stringify({ component: 'iswc-swimlane-diagram' }), 'utf8').toString('base64url');
 const URL = `${BASE}/?s=${state}`;
 
-const browser = await chromium.launch({ headless: true });
+const browser = await chromium.launch({ channel: 'msedge', headless: true });
 const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 } });
 const page = await ctx.newPage();
 

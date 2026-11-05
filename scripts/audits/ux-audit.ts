@@ -87,7 +87,7 @@ await mkdir(join(OUT, 'shots'), { recursive: true });
 const server = await ensureServer();
 const base = `http://127.0.0.1:${PORT}`;
 
-const browser = await chromium.launch({ headless: true });
+const browser = await chromium.launch({ channel: 'msedge', headless: true });
 const context = await browser.newContext({
   viewport: { width: 1280, height: 900 },
   deviceScaleFactor: 1,

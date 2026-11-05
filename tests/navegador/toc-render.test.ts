@@ -166,13 +166,9 @@ test('navegador/toc-render', { timeout: 180_000 }, async () => {
   
   // ─── 3. Playwright: auditar cada tag ────────────────────────────────────
   
-  // Chromium de Playwright; si no está descargado, el Chrome o Edge del sistema.
+  // Edge headless del sistema (regla del repo: nunca el Chrome del usuario).
   async function lanzar() {
-    let ultimo;
-    for (const channel of [undefined, 'chrome', 'msedge']) {
-      try { return await chromium.launch({ headless: true, ...(channel ? { channel } : {}) }); } catch (e) { ultimo = e; }
-    }
-    throw ultimo;
+    return await chromium.launch({ headless: true, channel: 'msedge' });
   }
   const browser = await lanzar().catch((e) => { server.close(); throw e; });
   let exitCode = 0;

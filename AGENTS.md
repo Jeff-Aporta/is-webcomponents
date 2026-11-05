@@ -54,8 +54,9 @@ Las fuentes viven en `src/components/`. La carpeta `components/` en la raíz del
 │   ├── dl.js                   # `deno task icons`: rutas + `extra` de la descarga
 │   └── iconify/<set>/<n>.svg   # SOLO los íconos que el kit usa (sin colecciones completas)
 ├── scripts/
-│   ├── build.mjs               # genera dist/cdn/{tag}.min.js etc.
-│   ├── build-phase8.mjs        # sub-build sin tocar video.js (legacy, no usar)
+│   ├── build.mjs               # genera dist/cdn/<cat>/<tag>.min.mjs (un build: bundleKit con splitting)
+│   ├── build-lote.mjs          # `deno task build:lote`: lote ESM opcional de varios tags (lo publica la app)
+│   ├── medir-carga.mjs         # `deno task medir`: cascada, web vitals y SEO en Edge headless
 │   ├── generate-templates.mjs  # esqueleto de preview vacío
 │   ├── serve.mjs               # dev server (no-store) en puerto 8391
 │   ├── preview-chrome.js       # inyecta <iswc-cdn-snippet>, theme, palette

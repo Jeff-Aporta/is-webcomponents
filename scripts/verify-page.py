@@ -4,7 +4,7 @@ from playwright.sync_api import sync_playwright
 URL = "http://localhost:8765/"
 
 with sync_playwright() as p:
-    browser = p.chromium.launch(headless=True)
+    browser = p.chromium.launch(channel="msedge", headless=True)
     page = browser.new_page(viewport={"width": 1400, "height": 900})
     page_errors = []
     page.on("pageerror", lambda error: page_errors.append(str(error)))

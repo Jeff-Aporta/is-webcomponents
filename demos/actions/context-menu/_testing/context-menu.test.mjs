@@ -6,7 +6,7 @@ import { chromium } from 'playwright';
 const URL_DEMO = 'http://127.0.0.1:8491/demos/actions/context-menu/context-menu.html';
 let browser;
 
-test.before(async () => { browser = await chromium.launch(); });
+test.before(async () => { browser = await chromium.launch({ channel: 'msedge' }); });
 test.after(async () => { await browser?.close(); });
 
 test('context-menu: bundle registra <iswc-context-menu>', async () => {

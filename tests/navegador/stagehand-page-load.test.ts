@@ -51,6 +51,7 @@ import { basename, dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { localBrowser, Stagehand } from '@browserbasehq/stagehand';
 import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+import { rutaEdge } from '../_shared/navegador.ts';
 
 const { test, lista, before, after } = coleccionPruebas({ categoria: 'what' });
 
@@ -119,7 +120,9 @@ before(async () => {
   // Stagehand con localBrowser.headless=true y SIN modelo LLM. Solo usamos
   // los métodos CDP del Page (goto / waitForSelector / evaluate /
   // screenshot) — no `act()` / `observe()` / `extract()`.
+  // Edge del sistema: sin ruta Stagehand buscaría el Chrome del usuario.
   const browser = await localBrowser.launch({
+    executablePath: rutaEdge() ?? undefined,
     headless: true,
     chromiumSandbox: false,
   });

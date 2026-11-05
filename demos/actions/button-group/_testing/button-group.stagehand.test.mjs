@@ -9,7 +9,7 @@ import { chromium } from 'playwright';
 const URL_DEMO = 'http://127.0.0.1:8491/demos/actions/button-group/button-group.html';
 let browser;
 
-test.before(async () => { browser = await chromium.launch(); });
+test.before(async () => { browser = await chromium.launch({ channel: 'msedge' }); });
 test.after(async () => { await browser?.close(); });
 
 test('stagehand: la página monta los 3 grupos y expone data-ready', async () => {

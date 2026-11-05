@@ -84,7 +84,7 @@ try {
   console.log(`[static-server] plain HTTP server up at ${BASE} (raíz ${repoRoot})`);
 
   for (const t of TESTS) {
-    const browser = await chromium.launch({ headless: true });
+    const browser = await chromium.launch({ channel: 'msedge', headless: true });
     try {
       const page = await browser.newPage();
       const pageErrors = [];

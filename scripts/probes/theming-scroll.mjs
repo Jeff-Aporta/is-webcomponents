@@ -10,7 +10,7 @@ console.log('NAV URL:', URL);
 console.log('STATE:', state, '← decodes to', Buffer.from(state, 'base64url').toString('utf8'));
 console.log('CACHE BUST:', cacheBust);
 
-const browser = await chromium.launch({ headless: true });
+const browser = await chromium.launch({ channel: 'msedge', headless: true });
 const ctx = await browser.newContext({ viewport: { width: 1280, height: 800 }, bypassCSP: true });
 const page = await ctx.newPage();
 // Disable HTTP cache.

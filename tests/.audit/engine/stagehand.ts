@@ -26,6 +26,7 @@ import { join } from 'node:path';
 import type { Hallazgo } from '../motor/schemas/types.schemas.js';
 import type { EntradaCatalogo } from '../motor/schemas/catalog.schemas.js';
 import { leerDefinicion } from './cargar.js';
+import { rutaEdge } from '../../_shared/navegador.ts';
 import type { SesionStagehand, ReportePagina } from "./schemas/stagehand.schemas.js";
 
 /** Estado del browser que supervisa el motor. */
@@ -70,7 +71,10 @@ export async function crearSesion(baseUrl: string, raiz: string, opts: { verbose
     return null;
   }
 
-  // Configuración local (sin Browserbase API): usa chromium local.
+  // Configuración local (sin Browserbase API). Stagehand busca el navegador en CHROME_PATH: Edge del sistema
+  // (regla del repo: nunca el Chrome del usuario).
+  const edge = rutaEdge();
+  if (edge) process.env.CHROME_PATH = edge;
   const stagehand = new StagehandCtor({
     env: 'LOCAL',
     headless: true,

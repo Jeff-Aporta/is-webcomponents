@@ -2,7 +2,7 @@
 import { chromium } from 'playwright';
 
 const BASE = 'http://localhost:8491';
-const browser = await chromium.launch();
+const browser = await chromium.launch({ channel: 'msedge' });
 const ctx = await browser.newContext();
 const page = await ctx.newPage();
 
