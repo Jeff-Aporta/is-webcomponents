@@ -29,7 +29,7 @@ dist/cdn/
   <categoria>/<name>.min.js|.min.css
 ```
 
-Iconos: `dist/assets/icons/` (fuera de `dist/cdn/`).
+Íconos: el kit no versiona colecciones completas (4-nov-2026). Los que usa viven en `assets/iconify/<set>/<nombre>.svg` (fuera de `dist/`); una app sirve los suyos con `deno task icons` (su `assets/dl.js`) y `<html data-icons>`. Lo que falte lo resuelve `<iswc-icon>` contra la API de Iconify.
 
 ## Skills en CDN
 

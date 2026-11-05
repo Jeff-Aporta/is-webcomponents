@@ -37,7 +37,8 @@ especificador `@jeff-aporta/iswc-base/<ruta>` resolverá por `node_modules`. Det
 |------|-----------|
 | `src/components/` | Fuentes por categoría (`actions`, `feedback`, `helpers`, …) |
 | `src/styles/` | Tokens (`is-base.css`) y shell |
-| `src/assets/` | Iconos Iconify y favicon |
+| `assets/iconify/` | Íconos Iconify que el kit usa (`deno task icons`); el resto, API de Iconify |
+| `dist/assets/` | Favicon, playlist y material de demos |
 | `skills/iswc-base/` | Guía para agentes IDE (CDN-first) — fuente en raíz, se copia a `dist/cdn/skills/` en el build |
 | `src/components/**/*.md` | Docs LLM por módulo / categoría — raw bajo `…/main/src/components/` |
 | `src/manifest.ts` | Índice de la galería |

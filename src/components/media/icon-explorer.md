@@ -11,7 +11,7 @@ preview: ./icon-explorer.json
 
 ## Propósito
 
-Explorador sin conexión de las familias e íconos publicados en el CDN: buscar, filtrar por familia y copiar el nombre para `<iswc-icon>`.
+Explorador de las familias e íconos de Iconify: buscar, filtrar por familia y copiar el nombre para `<iswc-icon>`.
 
 ## Importación
 
@@ -40,7 +40,14 @@ Sin atributos: es una meta-página de la galería, no un custom element. No tien
 
 ## Comportamiento
 
-Busca por nombre, filtra por familia y copia el identificador. Carga los íconos desde el CDN del kit.
+Busca por nombre, filtra por familia y copia el identificador. Desde el 4-nov-2026 ninguna colección completa viaja en el repo: todo sale de la API de Iconify vía `core/icon-loader`, cacheado en localStorage con el mismo TTL que los SVG (15 días):
+
+- familias y metadatos (filtros): `https://api.iconify.design/collections` (`listIconFamilies`);
+- nombres de una familia: `https://api.iconify.design/collection?prefix=<set>` (`listIconNames`);
+- búsqueda en todas las familias: `https://api.iconify.design/search?query=…` (`searchIconNames`);
+- SVG del grid POR LOTES, un fetch por página (240 íconos): `https://api.iconify.design/<set>.json?icons=a,b,c` (`prefetchIcons`); los `<iswc-icon>` los encuentran ya en memoria.
+
+Sin API (sin red, bloqueada o caída) muestra un aviso en vez de romperse. Medido (Edge headless, 4-nov-2026): la primera página de `mdi` hace 3 peticiones a la API (catálogo, nombres y un lote) y pinta los 240 íconos en ~2 s; al recargar, 0 peticiones.
 
 ## Accesibilidad
 

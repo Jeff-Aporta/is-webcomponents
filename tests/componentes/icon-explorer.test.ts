@@ -53,8 +53,8 @@ test('componentes/icon-explorer', async () => {
     'debe existir una rutina que pinte resultados de iconos (no solo familias)',
   );
   assert.ok(
-    /ensureIcons/.test(html),
-    'la búsqueda global debe indexar los nombres de todas las familias bajo demanda',
+    /ensureIcons/.test(html) && /searchIconNames\(/.test(html),
+    'la búsqueda global debe resolverse con la búsqueda de la API (searchIconNames), no bajando los nombres de 200+ familias',
   );
   
   // Los filtros se emiten con un helper (`sel('fltCategory', …)`), así que el
@@ -65,33 +65,82 @@ test('componentes/icon-explorer', async () => {
       `falta el filtro ${id}`,
     );
   }
+  // Desde el 4-nov-2026 ninguna colección completa viaja en el repo: catálogo, nombres y SVG salen de la
+  // API de Iconify, pero SIEMPRE vía core/icon-loader (cachea en localStorage con su TTL). El explorador
+  // no declara la URL de la API ni hace fetch propios.
+  for (const fn of ['listIconFamilies', 'listIconNames', 'prefetchIcons', 'searchIconNames']) {
+    assert.ok(html.includes(`${fn}(`), `el explorador debe usar ${fn} de core/icon-loader`);
+  }
   assert.ok(
-    /collections\.json/.test(html),
-    'los filtros deben leer collections.json (metadatos offline, no la API de Iconify en runtime)',
+    !/api\.iconify\.design\//.test(html),
+    'la URL de la API vive solo en core/icon-loader: nada de fetch sueltos a api.iconify.design',
   );
-  // Desde 2026-10-09 solo mdi/solar/tabler viajan en el repo (protocolo de
-  // icon-loader: local → API). La API de Iconify se admite SOLO como respaldo
-  // de un intento local fallido: cada uso del endpoint debe ir dentro de un
-  // `.catch(` o de un `r.ok ? r : fetch(API…)` que sigue a la carga local.
-  const usosApi = [...html.matchAll(/fetch\(`\$\{API_ICONOS\}/g)];
+  assert.ok(!/\bfetch\(/.test(html), 'el explorador no hace fetch propios: todo pasa por core/icon-loader');
   assert.ok(
-    /api\.iconify\.design/.test(html) ? usosApi.length > 0 : true,
-    'la API de Iconify solo puede usarse vía la constante API_ICONOS (respaldo explícito)',
+    !/dist\/assets\/icons|index\.json|collections\.json/.test(html),
+    'dist/assets/icons ya no existe: el catálogo sale de la API (/collections)',
   );
-  assert.equal(
-    (html.match(/api\.iconify\.design/g) || []).length <= 1,
-    true,
-    'la URL de la API se declara una sola vez (API_ICONOS): nada de fetch sueltos a api.iconify.design',
-  );
-  for (const uso of usosApi) {
-    // Los nombres de cada familia no viajan en el kit (dist/assets/icons solo trae catálogo y SVG): su fuente es la API.
-    if (html.startsWith('collection?prefix=', uso.index + 'fetch(`${API_ICONOS}'.length)) continue;
-    const antes = html.slice(Math.max(0, uso.index - 260), uso.index);
-    assert.ok(
-      /\.catch\(\s*async\s*\(/.test(antes) || /r\.ok\s*\?\s*r\s*:\s*$/.test(antes),
-      'el explorador solo puede pegarle a api.iconify.design como respaldo de la carga local ' +
-        `(contexto: …${antes.slice(-120).replace(/\s+/g, ' ')})`,
-    );
+  assert.ok(/AVISO_SIN_API/.test(html), 'sin API el explorador muestra un aviso en vez de romperse');
+
+  // WHAT: lo que icon-loader le pide de verdad a la API (fetch interceptado, sin red real).
+  {
+    const loader = await import(new URL('../../src/core/icon-loader.ts', import.meta.url).href);
+    const fetchOriginal = globalThis.fetch;
+    const pedidos = [];
+    let apiCaida = false;
+    globalThis.fetch = async (url) => {
+      const u = String(url);
+      pedidos.push(u);
+      if (apiCaida) throw new TypeError('sin red');
+      if (u.endsWith('/collections')) {
+        return Response.json({ mdi: { name: 'Material Design Icons', total: 3, author: { name: 'Pictogrammers' }, license: { title: 'Apache 2.0' }, samples: ['home'], height: 24, category: 'Material', palette: false } });
+      }
+      const lote = u.match(/\/mdi\.json\?icons=(.+)$/);
+      if (lote) {
+        const icons = Object.fromEntries(decodeURIComponent(lote[1]).split(',').filter((n) => n !== 'no-existe' && n !== 'casa').map((n) => [n, { body: `<path d="M0 0h1v1z" data-n="${n}"/>` }]));
+        return Response.json({ prefix: 'mdi', width: 24, height: 24, icons, aliases: { 'casa': { parent: 'n0' } } });
+      }
+      return new Response('no', { status: 404 });
+    };
+    try {
+      loader.clearPersistedIcons();
+      loader.clearRawCache();
+      const fams = await loader.listIconFamilies();
+      assert.equal(fams.length, 1, 'listIconFamilies aplana /collections');
+      assert.equal(fams[0].author, 'Pictogrammers');
+      assert.equal(fams[0].license, 'Apache 2.0');
+      assert.equal(fams[0].count, 3);
+
+      // Una página del grid (240 nombres) = UN fetch por lotes; luego los <iswc-icon> no piden nada.
+      const pagina = Array.from({ length: 240 }, (_, i) => `n${i}`);
+      pedidos.length = 0;
+      const llegaron = await loader.prefetchIcons('mdi', [...pagina, 'no-existe', 'casa']);
+      assert.equal(pedidos.length, 1, `la página debe pedirse en un solo lote, hubo ${pedidos.length} fetch`);
+      assert.match(pedidos[0], /^https:\/\/api\.iconify\.design\/mdi\.json\?icons=n0,n1,/);
+      assert.equal(llegaron, 241, 'llegan los 240 nombres y el alias simple; el inexistente no');
+      pedidos.length = 0;
+      const svg = await loader.resolveIconRaw('mdi', 'n7');
+      assert.ok(svg?.includes('viewBox="0 0 24 24"') && svg.includes('data-n="n7"'), 'el SVG armado del lote conserva viewBox y cuerpo');
+      assert.ok((await loader.resolveIconRaw('mdi', 'casa'))?.includes('data-n="n0"'), 'el alias simple apunta al cuerpo del padre');
+      assert.equal(pedidos.length, 0, 'tras el lote, resolver un ícono de la página no hace fetch');
+      assert.equal(await loader.prefetchIcons('mdi', pagina), 0, 'repetir la página no vuelve a pedir nada');
+      assert.equal(pedidos.length, 0);
+
+      // API caída: catálogo vacío (el explorador pinta AVISO_SIN_API), nada lanza.
+      loader.clearPersistedIcons();
+      loader.clearRawCache();
+      const { clearIswcStorage } = await import(new URL('../../src/core/iswc-storage.ts', import.meta.url).href);
+      clearIswcStorage();
+      apiCaida = true;
+      assert.deepEqual(await loader.listIconFamilies(), [], 'sin API, listIconFamilies devuelve []');
+      assert.deepEqual(await loader.listIconNames('mdi'), [], 'sin API, listIconNames devuelve []');
+      assert.equal(await loader.prefetchIcons('mdi', ['home']), 0, 'sin API, prefetchIcons no lanza');
+      assert.deepEqual(await loader.searchIconNames('home'), [], 'sin API, searchIconNames devuelve []');
+    } finally {
+      globalThis.fetch = fetchOriginal;
+      loader.clearPersistedIcons();
+      loader.clearRawCache();
+    }
   }
   
   // --- 3. Formulario de personalizacion --------------------------------------

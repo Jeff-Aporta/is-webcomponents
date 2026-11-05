@@ -1,37 +1,33 @@
 // S-I1: requisito de specs/iconos.md (WHAT-first, ver specs/testing.md S-T6)
-// tests/icon-references.test.ts
+// tests/componentes/icon-references.test.ts
 //
-// Verifica que cada <iswc-icon icon="X:Y"> en los previews apunta a un icono
-// que existe localmente en assets/icons/X.json (es decir, descargado).
+// Cada <iswc-icon icon="X:Y"> escrito en los demos (src/previews y los JSON de src/components) apunta a
+// un ícono que existe en `assets/iconify/X/Y.svg`, la carpeta que publica el kit con los íconos que usa
+// de verdad (la genera `deno task icons`). Ninguna colección completa viaja en el repo (4-nov-2026).
 //
-// Esto evita el bug clasico: alguien escribe <iswc-icon icon="mdi:foo-bar">
-// sin descargar `foo-bar`, y la pagina queda en blanco porque el loader no
-// lo encuentra local y cae al CDN. Aqui lo detectamos en CI antes del push.
+// Evita el bug clásico: alguien escribe <iswc-icon icon="mdi:foo-bar"> y no corre `deno task icons`; en
+// las apps (que sirven assets/iconify por `<html data-icons>`) el ícono da 404, cae a la API y avisa
+// `[iswc-icon] falta en local`. Aquí se detecta en CI antes del push.
 //
-// Reglas:
-//   1. Si el icono esta en assets/icons/X.json       -> OK (local)
-//   2. Si NO esta pero el .json no existe tampoco    -> WARN (CDN fallback)
-//   3. Si esta en assets/icons/{prefix}/ pero NO en el .json -> ERROR (inconsistente)
-//
-// Uso:  node tests/icon-references.test.ts
+// Uso:  deno task test -- --solo=icon-references
 
-import { readFile, readdir, stat } from 'node:fs/promises';
+import { readFile, readdir } from 'node:fs/promises';
+import { existsSync } from 'node:fs';
 import { join, dirname, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import assert from 'node:assert/strict';
 import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
 
 const { test, lista } = coleccionPruebas({ categoria: 'what' });
 
 test('componentes/icon-references', async () => {
-  const here = dirname(fileURLToPath(import.meta.url));
-  const root = dirname(dirname(here));
-  const previewsDir = join(root, 'src', 'previews');
-  const iconsDir = join(root, 'src', 'assets', 'icons');
-  
+  const root = dirname(dirname(dirname(fileURLToPath(import.meta.url))));
+  const iconsDir = join(root, 'assets', 'iconify');
+
   const ICON_RE = /<iswc-icon\b[^>]*\bicon\s*=\s*["']([a-z0-9-]+):([a-z0-9-]+)["']/gi;
-  
-  async function walk(dir) {
-    const out = [];
+
+  async function walk(dir: string): Promise<string[]> {
+    const out: string[] = [];
     for (const e of await readdir(dir, { withFileTypes: true })) {
       const p = join(dir, e.name);
       if (e.isDirectory()) out.push(...await walk(p));
@@ -39,99 +35,37 @@ test('componentes/icon-references', async () => {
     }
     return out;
   }
-  
-  async function loadIndex(prefix) {
-    try {
-      const txt = await readFile(join(iconsDir, `${prefix}.json`), 'utf8');
-      const j = JSON.parse(txt);
-      return new Set(j.icons || []);
-    } catch {
-      return null;
-    }
-  }
-  
-  async function svgExists(prefix, name) {
-    try {
-      const s = await stat(join(iconsDir, prefix, `${name}.svg`));
-      return s.isFile();
-    } catch {
-      return false;
-    }
-  }
-  
-  const files = await walk(previewsDir);
-  const refs = new Map(); // "prefix:name" -> [{ file, line }]
-  const indexCache = new Map();
-  
+
+  const files = [...await walk(join(root, 'src', 'previews')), ...await walk(join(root, 'src', 'components'))];
+  const refs = new Map<string, string[]>(); // "prefix:name" -> ["archivo:línea"]
+
   for (const f of files) {
-    const body = await readFile(f, 'utf8');
-    let m;
+    // En los JSON las comillas del markup van escapadas (icon=\"mdi:..\").
+    const body = (await readFile(f, 'utf8')).replace(/\\"/g, '"');
+    ICON_RE.lastIndex = 0;
+    let m: RegExpExecArray | null;
     while ((m = ICON_RE.exec(body)) !== null) {
       const key = `${m[1]}:${m[2]}`;
-      if (!refs.has(key)) refs.set(key, []);
-      // Calcular la linea aproximada con el offset del match.
-      const before = body.slice(0, m.index);
-      const line = before.split('\n').length;
-      refs.get(key).push({ file: relative(root, f), line });
+      const line = body.slice(0, m.index).split('\n').length;
+      refs.set(key, [...(refs.get(key) ?? []), `${relative(root, f).replaceAll('\\', '/')}:${line}`]);
     }
   }
-  
-  let ok = 0;
-  let warn = 0;
-  let fail = 0;
-  const failures = [];
-  const warnings = [];
-  
-  for (const [key, sites] of refs) {
+
+  const faltan = [...refs].filter(([key]) => {
     const [prefix, name] = key.split(':');
-    if (!indexCache.has(prefix)) indexCache.set(prefix, await loadIndex(prefix));
-    const idx = indexCache.get(prefix);
-    const svg = await svgExists(prefix, name);
-  
-    if (idx === null) {
-      // El .json no existe -> la coleccion no se ha descargado localmente.
-      // El icono caera al CDN de api.iconify.design o al <iconify-icon>.
-      warn++;
-      warnings.push(`${key} (en ${sites.length} preview${sites.length > 1 ? 's' : ''}) -> coleccion ${prefix}/ no descargada localmente, cae al CDN`);
-      continue;
-    }
-  
-    if (idx.has(name)) {
-      ok++;
-      // Verificacion extra: si el .json dice que existe, el .svg debe estar.
-      if (!svg) {
-        fail++;
-        failures.push(`${key} -> esta en ${prefix}.json pero NO existe el SVG assets/icons/${prefix}/${name}.svg (corrupto)`);
-      }
-    } else if (svg) {
-      fail++;
-      failures.push(`${key} -> existe assets/icons/${prefix}/${name}.svg pero NO esta en ${prefix}.json (indice desactualizado, re-corre download-icons.ts)`);
-    } else {
-      // Ni en el json ni en disco -> cae al CDN.
-      warn++;
-      warnings.push(`${key} -> no descargado localmente, cae al CDN (sites: ${sites.slice(0, 2).map(s => `${s.file}:${s.line}`).join(', ')}${sites.length > 2 ? '…' : ''})`);
-    }
-  }
-  
-  console.log(`referencias totales: ${refs.size}`);
-  console.log(`  locales (OK):  ${ok}`);
-  console.log(`  CDN (WARN):    ${warn}`);
-  console.log(`  inconsistentes (FAIL): ${fail}`);
-  
-  if (warnings.length) {
-    console.log('\nWARN:');
-    for (const w of warnings.slice(0, 10)) console.log(`  - ${w}`);
-    if (warnings.length > 10) console.log(`  ... y ${warnings.length - 10} mas`);
-  }
-  
-  if (failures.length) {
-    console.log('\nFAIL:');
-    for (const f of failures.slice(0, 10)) console.log(`  - ${f}`);
-    if (failures.length > 10) console.log(`  ... y ${failures.length - 10} mas`);
-    { const salida = 1; if (salida) throw new Error(`salida ${salida}`); return; }
-  }
-  
-  console.log(`icon-references.test.ts: PASS — ${ok} iconos locales verificados${warn ? `, ${warn} warnings (caen al CDN, no son fatales)` : ''}`);
+    return !existsSync(join(iconsDir, prefix, `${name}.svg`));
+  });
+
+  console.log(`referencias totales: ${refs.size} · en assets/iconify: ${refs.size - faltan.length} · faltan: ${faltan.length}`);
+  assert.ok(refs.size > 0, 'no se encontró ningún <iswc-icon icon="…"> en los demos: el barrido está roto');
+  assert.equal(
+    faltan.length,
+    0,
+    'íconos usados en los demos que no están en assets/iconify/ (corre `deno task icons`):\n  ' +
+      faltan.slice(0, 20).map(([k, sitios]) => `${k} (${sitios.slice(0, 2).join(', ')}${sitios.length > 2 ? '…' : ''})`).join('\n  '),
+  );
+
+  console.log(`icon-references.test.ts: PASS — ${refs.size} íconos de los demos en assets/iconify`);
 });
 
 export default lista();

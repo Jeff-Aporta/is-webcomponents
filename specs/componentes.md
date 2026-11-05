@@ -175,10 +175,10 @@ Cada tag es un Custom Element con Shadow DOM. El inventario y rutas de build sal
 
 ### S-K17 media
 
-- **Iconos:** `<iswc-icon icon="prefix:name">`; sistema propio (231 familias / ~317k SVG en `assets/icons/`, publicados en `dist/assets/icons/`). `iswc-icon` inyecta el SVG **inline** (no `<img>`) para que `currentColor` funcione.
+- **Iconos:** `<iswc-icon icon="prefix:name">`; sistema propio (`core/icon-loader`): los íconos que usa el kit en `assets/iconify/` (`deno task icons`), el resto desde la API de Iconify; ninguna colección completa viaja en el repo (4-nov-2026). `iswc-icon` inyecta el SVG **inline** (no `<img>`) para que `currentColor` funcione.
 - **Host de `iswc-icon`** es caja cuadrada 1em con `line-height:1`. Sin tamaño explícito la línea lo estira. `#normalizeInlineSvg()` fuerza `fill`/`stroke: currentColor` en hijos.
 - **Iconos con paleta propia** (banderas, logos, emoji) **no** se normalizan a `currentColor` (paths sin `fill` heredarían el color del host → a medio pintar). Detección **por icono, no por colección** (`logos` es mixta).
-- **Grid por colección:** el grid nativo no siempre es 24. `collections.json` guarda el `height` real por prefijo (academicons 32, fa 512); un SVG local debe declarar `viewBox` con esas dimensiones. **No** normalizar todos a `24`.
+- **Grid por colección:** el grid nativo no siempre es 24. el catálogo de la API (`/collections`, `height`) y el JSON del set traen el tamaño real (academicons 32, fa 512); un SVG local debe declarar `viewBox` con esas dimensiones (`deno task icons` lo conserva). **No** normalizar todos a `24`.
 - **No** forzar `stroke: currentColor` a nivel `<svg>` en iconos de relleno (se contornean/engrosan). Solo pisar `stroke` en elementos que ya lo traen.
 - **Bases derivadas de `import.meta.url`**, no de `location.pathname` (el bundle publicado encuentra sus assets). Si un SVG sale del DOM (PNG rasterizado, data-URI), materializar el color al exportar (no hereda `currentColor`).
 - **No** usar `api.iconify.design` en runtime (el sistema es propio y se sirve con el bundle); **no** `<iconify-icon>`.

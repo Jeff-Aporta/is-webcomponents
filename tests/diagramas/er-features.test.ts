@@ -31,9 +31,9 @@ test('diagramas/er-features', async () => {
   assert.ok(ER_KEY_ICON_IDS.PK, 'PK debe tener un icono');
   assert.ok(ER_KEY_ICON_IDS.FK, 'FK debe tener un icono distinto');
 
-  // Los iconos deben vivir en dist/assets/icons/<col>/<name>.svg — la fuente
-  // de iconos del kit. Si la ruta cambia, falla la build de iconos, pero este
-  // test cubre la regresión: si alguien borra los SVGs o los renombra, salta.
+  // Los iconos deben vivir en assets/iconify/<col>/<name>.svg — los que publica
+  // el kit (`deno task icons`). Si alguien borra los SVG o cambia el id sin
+  // regenerar la carpeta, salta.
   {
     const pkIcon = ER_KEY_ICON_IDS.PK;
     const fkIcon = ER_KEY_ICON_IDS.FK;
@@ -41,8 +41,8 @@ test('diagramas/er-features', async () => {
     const [fkCol, fkName] = fkIcon.split(':');
     assert.ok(pkCol && pkName, `icono PK mal formado: ${pkIcon}`);
     assert.ok(fkCol && fkName, `icono FK mal formado: ${fkIcon}`);
-    const pkPath = join(repoRoot, 'dist', 'assets', 'icons', pkCol, `${pkName}.svg`);
-    const fkPath = join(repoRoot, 'dist', 'assets', 'icons', fkCol, `${fkName}.svg`);
+    const pkPath = join(repoRoot, 'assets', 'iconify', pkCol, `${pkName}.svg`);
+    const fkPath = join(repoRoot, 'assets', 'iconify', fkCol, `${fkName}.svg`);
     assert.ok(readFileSync(pkPath, 'utf8').includes('<svg'), `PK SVG no existe en ${pkPath}`);
     assert.ok(readFileSync(fkPath, 'utf8').includes('<svg'), `FK SVG no existe en ${fkPath}`);
   }

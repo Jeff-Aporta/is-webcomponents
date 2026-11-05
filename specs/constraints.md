@@ -56,11 +56,12 @@ Prohibiciones y reglas transversales ya pagadas. Detalle por dominio: [`componen
 - No emitir ni documentar `all.min.js` / bundles de categoría (solo listas de `import`; expandir a `.min.js` reales para estimar peso).
 - No usar `<iconify-icon>` en light DOM del consumidor (API interna del componente).
 - No cargar SVG de icono como `<img>` (rompe `currentColor`; inyectarlo inline).
-- No commitear las 231 colecciones Iconify (~723 MB). Default: `mdi` + `tabler` (+ `--only` en `download-icons.ts`). No desanotar el `.gitignore`.
-- No usar `api.iconify.design` en runtime (sistema propio, servido con el bundle).
-- No hardcodear paths absolutos de iconos (`/assets/icons/...`) en dev (requiere `<base href>` correcto; usar `rootFromBaseURI()`).
+- No versionar colecciones Iconify completas (desde el 4-nov-2026 ni siquiera `mdi`/`tabler`): solo los íconos usados, en `assets/iconify/` vía `deno task icons`. `dist/assets/icons/` está en `.gitignore` y su reaparición la frena `assets-copia-unica`.
+- No pegarle a `api.iconify.design` fuera de `core/icon-loader` (respaldo de lo que no está en `assets/iconify` y catálogo del explorador) y las herramientas de descarga.
+- No pedir los SVG de un grid uno por uno a la API: un lote por página (`prefetchIcons` → `/<set>.json?icons=a,b,c`).
+- No hardcodear paths absolutos de iconos (`/assets/iconify/...`) en dev (requiere `<base href>` correcto; usar `rootFromBaseURI()`).
 - No pedir iconos con `fetch(..., { cache: 'force-cache' })` (sirve copia cacheada sin revalidar; usar `cache: 'default'`).
-- No "normalizar" todos los SVG a `viewBox="0 0 24 24"` ni a `currentColor` (rompe familias con grid ≠ 24 y banderas/logos/emoji). Usar el metadato de Iconify (`collections.json`), no heurísticas de coordenadas.
+- No "normalizar" todos los SVG a `viewBox="0 0 24 24"` ni a `currentColor` (rompe familias con grid ≠ 24 y banderas/logos/emoji). El viewBox correcto es el que sirve la API (`deno task icons` lo conserva), no heurísticas de coordenadas.
 - Bases de iconos derivadas de `import.meta.url`, no de `location.pathname`.
 
 ## Componentes

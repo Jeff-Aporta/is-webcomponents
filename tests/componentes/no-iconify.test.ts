@@ -2,7 +2,7 @@
 //
 // El proyecto NO depende del web component `<iconify-icon>` ni de scripts o
 // endpoints de Iconify en runtime. La unica API de iconos es <iswc-icon>, que
-// resuelve el SVG desde el sistema propio (assets/icons -> dist/assets).
+// resuelve el SVG con core/icon-loader (localStorage → assets/iconify publicado → API).
 //
 // Falla si aparece:
 //   - el tag <iconify-icon> (markup, template o selector CSS)
@@ -10,8 +10,8 @@
 //   - una llamada a api.iconify.design en codigo ejecutable
 //     (los .md y los comentarios que explican la migracion sí pueden citarla)
 //
-// scripts/download-icons.ts SÍ usa la API: es la herramienta offline que
-// puebla assets/icons/, no corre en el navegador.
+// download-iconify.ts SÍ usa la API: es la herramienta offline (`deno task icons`) que
+// puebla assets/iconify/, no corre en el navegador.
 //
 // Uso:  node tests/no-iconify.test.ts
 
@@ -28,27 +28,18 @@ test('componentes/no-iconify', async () => {
 
   const SCAN_DIRS = ['components', 'scripts', 'previews', 'styles'];
   const SCAN_EXT = /\.(js|mjs|css|html)$/;
-  // Herramienta offline: descarga los SVG desde la API para poblar assets/.
-  // Mismo caso que download-icons.ts: herramientas offline de mantenimiento del
-  // catalogo, se corren a mano y dejan el resultado en assets/. Nada de esto se
-  // ejecuta en runtime ni entra al bundle.
-  // Herramientas de build/CLI: se ejecutan a mano en Node para llenar
-  // `assets/icons`, nunca en el navegador. La regla es sobre RUNTIME.
+  // Herramientas de build/CLI (descargan los SVG desde la API para poblar assets/iconify): se
+  // ejecutan a mano, nunca en el navegador. La regla es sobre RUNTIME.
   const ALLOWED_API_FILES = new Set([
-    // Respaldo de runtime para los sets que no viajan en el kit (decisión 2026-10-09: el repo debe
-    // quedar bajo el límite de 50 MB de jsDelivr). SVG suelto por ícono; el web component y el
-    // script de iconify siguen prohibidos.
+    // Respaldo de runtime para lo que no está en assets/iconify y catálogo del explorador (familias,
+    // nombres, búsqueda y SVG por lotes): ninguna colección completa viaja en el repo (4-nov-2026).
+    // El web component y el script de iconify siguen prohibidos.
     'src/core/icon-loader.ts',
     'scripts/download-iconify.ts',
     // Herramienta de las apps (assets/dl.js): descarga en build, no en runtime.
     'src/vendor-distributions/client/tools/download-iconify.ts',
     // HTML para correo: se abre fuera de la app, sin sus assets.
     'src/core/tk-icon-inline.ts',
-    // Explorador del catálogo: la lista de nombres de cada set y los SVG que no viajan en el kit.
-    'src/components/media/utils/icon-explorer.preview.ts',
-    'scripts/download-icons.ts',
-    'scripts/fixes/icon-viewbox.ts',
-    'scripts/sync-icon-collections.ts',
   ]);
 
   const walk = (dir, out = []) => {

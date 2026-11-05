@@ -50,8 +50,8 @@ function labelBox(label: string): { w: number; lines: number } {
 }
 
 const DEFAULT_HUES: number[] = [239, 199, 210];
-// Solo iconos presentes en `dist/assets/icons`: uno inexistente deja el avatar
-// vacío (le pasó a `simple-icons:openai`, que no viaja en el kit).
+// Solo iconos presentes en `assets/iconify` (`deno task icons` los baja al verlos aquí):
+// uno inexistente deja el avatar vacío (le pasó a `simple-icons:openai`).
 const DEFAULT_ICONS: string[] = ['mdi:account', 'mdi:robot-outline', 'mdi:server', 'mdi:database'];
 
 /** Guía editorial: `log` ≤70 caracteres visibles (`**`, `{{iconify}}` no cuentan). Sin recorte automático. */

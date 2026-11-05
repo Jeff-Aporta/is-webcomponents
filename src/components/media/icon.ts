@@ -7,11 +7,10 @@ import css from 'iswc:css';
  * <iswc-icon> — Web Component (vanilla, zero dependencies).
  *
  * UNICA API de iconos del kit. No depende del web component `<iconify-icon>`
- * ni de ningun script externo: el SVG se trae por fetch desde el sistema de
- * iconos propio (`assets/icons/`, publicado en `dist/assets/icons/`) y se
- * inyecta INLINE en el Shadow DOM, para que `currentColor` del contexto se
- * propague al fill del path. Ver `_shared/icon-loader.js` para el orden de
- * las bases (bundle CDN -> fuente -> GitHub Pages -> jsDelivr).
+ * ni de ningun script externo: el SVG se trae por fetch con `core/icon-loader`
+ * (localStorage -> `<html data-icons>`/`assets/iconify/` publicado -> API de
+ * Iconify) y se inyecta INLINE en el Shadow DOM, para que `currentColor` del
+ * contexto se propague al fill del path.
  *
  * Atributos
  *   icon    string  — "grupo:nombre" Iconify (ej. mdi:home). Preferido.

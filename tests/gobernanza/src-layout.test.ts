@@ -26,8 +26,10 @@ test('gobernanza/src-layout', async () => {
     'tests/e2e',
     // 'skills/' en la raíz es la fuente canónica (consolidada desde src/skills/).
     'skills',
-    // `src/assets/` se consolidó en `dist/assets/` (fuera de dist/cdn/).
-    'dist/assets/icons',
+    // `src/assets/` se consolidó en `dist/assets/` (fuera de dist/cdn/); los íconos que usa el kit
+    // viven en `assets/iconify/` (deno task icons). Ninguna colección completa viaja (4-nov-2026).
+    'dist/assets',
+    'assets/iconify',
     // Consolidación 2026-09-07: LLM.md (root + per-componente) eliminado;
     // el contenido vive en specs/lessons.md + specs/constraints.md +
     // specs/componentes.md.
@@ -53,11 +55,10 @@ test('gobernanza/src-layout', async () => {
     }
   }
   
-  // assets/ en raiz solo se tolera si es symlink vacio residual; si tiene icons -> error
-  if (existsSync(join(root, 'assets'))) {
-    const icons = join(root, 'assets', 'icons');
-    if (existsSync(icons)) {
-      failures.push('NO debe existir assets/icons/ en la raiz — usa dist/assets/icons/');
+  // Íconos: solo `assets/iconify/` (los usados). Ni `assets/icons/` ni `dist/assets/icons/` (colecciones completas).
+  for (const viejo of ['assets/icons', 'dist/assets/icons']) {
+    if (existsSync(join(root, viejo))) {
+      failures.push(`NO debe existir ${viejo}/ — los íconos usados van en assets/iconify/ y el resto lo sirve la API`);
     }
   }
   

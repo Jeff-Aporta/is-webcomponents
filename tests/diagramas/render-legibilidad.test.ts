@@ -142,14 +142,14 @@ test('diagramas/render-legibilidad', async () => {
   
   // Todos los iconos por defecto tienen que EXISTIR en los assets del kit: uno
   // inexistente deja el avatar vacío (le pasó a simple-icons:openai).
-  // Los iconos viven en dist/assets/icons (src/assets ya no existe).
+  // Los iconos del kit viven en assets/iconify (los genera `deno task icons`).
   const { readdirSync, existsSync } = await import('node:fs');
-  const raizIconos = new URL('../../dist/assets/icons/', import.meta.url);
+  const raizIconos = new URL('../../assets/iconify/', import.meta.url);
   for (const actor of sec.actors) {
     const [prefijo, nombre] = actor.icon.split(':');
     const ruta = new URL(`${prefijo}/${nombre}.svg`, raizIconos);
     assert.ok(existsSync(ruta),
-      `sequence: el icono por defecto "${actor.icon}" no está en assets/icons — el avatar saldría vacío`);
+      `sequence: el icono por defecto "${actor.icon}" no está en assets/iconify — el avatar saldría vacío`);
   }
   void readdirSync;
   

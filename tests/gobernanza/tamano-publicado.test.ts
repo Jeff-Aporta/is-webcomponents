@@ -4,7 +4,7 @@
  * jsDelivr resuelve un SHA frío empaquetando el repo (`git archive`, que respeta los `export-ignore` de
  * .gitattributes) y rechaza paquetes de más de 50 MB: un pin nuevo dejaría de servir. Se mide HEAD (lo publicado):
  *
- *   - `git archive HEAD` ≤ 48 MB (margen de 2 MB antes del límite);
+ *   - `git archive HEAD` ≤ MAX_ARCHIVO (lo medido tras sacar las colecciones completas de íconos + 10 %);
  *   - `dist/cdn` ≤ MAX_DIST_CDN (lo medido tras el build único de F3 + 20 %: el core ya no se duplica).
  *
  * Además reporta el peso por carpeta de primer nivel del repo (`git ls-tree`), `labs/` incluido: es la más pesada,
@@ -18,7 +18,12 @@ const { test, lista } = coleccionPruebas({ categoria: 'how' });
 const RAIZ = new URL('../../', import.meta.url);
 
 const MB = 1024 * 1024;
-const MAX_ARCHIVO = 48 * MB;
+/**
+ * `git archive` medido el 4-nov-2026 tras retirar `dist/assets/icons/` (13 635 archivos de mdi/tabler y su
+ * catálogo): 28,5 MB (antes 43,0 MB); + 10 %. Muy por debajo de los 50 MB de jsDelivr: crecer de nuevo es
+ * una decisión, no un accidente.
+ */
+const MAX_ARCHIVO = 31.4 * MB;
 /** dist/cdn medido el 4-nov-2026 tras F3: 9,5 MB (antes 11,3 MB con el core inlinado en cada bundle); + 20 %. */
 const MAX_DIST_CDN = 11.4 * MB;
 

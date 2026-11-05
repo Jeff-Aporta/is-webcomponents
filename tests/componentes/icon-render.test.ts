@@ -29,9 +29,9 @@ const { test, lista } = coleccionPruebas({ categoria: 'what' });
 test('componentes/icon-render', async () => {
   const here = dirname(fileURLToPath(import.meta.url));
   const root = dirname(dirname(here));
-  // Los iconos viven SOLO en dist/assets/icons (src/assets/ se elimino en el
-  // refactor de layout CDN; ver el doc-block de _shared/icon-loader.ts).
-  const assetsIcons = join(root, 'dist', 'assets', 'icons');
+  // Los únicos SVG versionados son los que usa el kit, en assets/iconify (4-nov-2026: ninguna colección
+  // completa viaja en el repo; el resto lo sirve la API de Iconify).
+  const assetsIcons = join(root, 'assets', 'iconify');
   
   const iconJs = await readFile(join(root, 'src/components/media/icon.ts'), 'utf8');
   const iconCss = await readFile(join(root, 'src/components/media/icon.scss'), 'utf8');
@@ -148,8 +148,8 @@ test('componentes/icon-render', async () => {
       .map((m) => m[1].trim().toLowerCase())
       .filter((v) => !NEUTRAL.has(v));
   
-  // Sets fuera del repo desde 2026-10-09 (solo mdi/solar/tabler viajan; el resto llega por API): si no
-  // están en disco no hay muestra que revisar.
+  // Solo viajan los sets que el kit usa (assets/iconify); el resto llega por API: si no están en disco
+  // no hay muestra que revisar.
   const enDisco = (prefix) => existsSync(join(assetsIcons, prefix));
   const sample = async (prefix, n = 6) => {
     if (!enDisco(prefix)) return [];
@@ -163,7 +163,7 @@ test('componentes/icon-render', async () => {
   };
   
   const MULTICOLOR = ['cif', 'circle-flags', 'logos', 'twemoji'];
-  const MONOTONE = ['mdi', 'tabler', 'academicons'];
+  const MONOTONE = ['mdi', 'tabler', 'simple-icons', 'academicons'];
   
   // La deteccion es POR ICONO, no por coleccion: `logos` es mixta (la mayoria
   // traen su paleta, pero p.ej. logos/game-analytics-icon es una silueta negra

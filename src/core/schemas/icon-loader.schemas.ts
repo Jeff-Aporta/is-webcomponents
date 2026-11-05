@@ -6,11 +6,28 @@
  */
 import { z } from "zod";
 
+/**
+ * Familia del catálogo de Iconify (`https://api.iconify.design/collections`), aplanada: `count` es el
+ * `total` de la API; `author`/`license` son los nombres; `samples`, los íconos de muestra del set.
+ */
 export const IconFamilySchema = z.object({
   prefix: z.string(),
   count: z.number(),
+  name: z.string().optional(),
+  category: z.string().optional(),
+  author: z.string().optional(),
+  license: z.string().optional(),
+  height: z.number().optional(),
+  palette: z.boolean().optional(),
+  samples: z.array(z.string()).optional(),
 });
 export type IconFamily = z.infer<typeof IconFamilySchema>;
+
+/** Catálogo persistido en localStorage (`iswc:icon-catalogo:<clave>`): `{ t: <ms de guardado>, d: <datos> }`, mismo TTL que los SVG. */
+export interface CatalogoPersistido<T> { t: number; d: T }
+
+/** Datos de un set en el JSON por lotes de la API (`<set>.json?icons=a,b`): solo lo que se usa para armar el SVG. */
+export interface LoteIconify { width?: number; height?: number; left?: number; top?: number; icons?: Record<string, { body: string; width?: number; height?: number; left?: number; top?: number }>; aliases?: Record<string, { parent: string; rotate?: number; hFlip?: boolean; vFlip?: boolean }> }
 
 
 /**

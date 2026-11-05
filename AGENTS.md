@@ -51,17 +51,11 @@ Las fuentes viven en `src/components/`. La carpeta `components/` en la raíz del
 │   ├── presentation.css        # chrome de los previews
 │   └── shell.css               # barra lateral, iframe split-panel
 ├── assets/
-│   └── icons/
-│       ├── mdi/                # 7447 SVGs (commiteado)
-│       ├── tabler/             # 6184 SVGs (commiteado)
-│       ├── mdi.json            # índice por colección (commiteado)
-│       ├── tabler.json         # id
-│       ├── manifest.json       # resumen de TODAS las colecciones (commiteado)
-│       └── .state/             # progreso del download (IGNORADO por git)
+│   ├── dl.js                   # `deno task icons`: rutas + `extra` de la descarga
+│   └── iconify/<set>/<n>.svg   # SOLO los íconos que el kit usa (sin colecciones completas)
 ├── scripts/
 │   ├── build.mjs               # genera dist/cdn/{tag}.min.js etc.
 │   ├── build-phase8.mjs        # sub-build sin tocar video.js (legacy, no usar)
-│   ├── download-icons.mjs      # descarga Iconify a assets/icons/
 │   ├── generate-templates.mjs  # esqueleto de preview vacío
 │   ├── serve.mjs               # dev server (no-store) en puerto 8391
 │   ├── preview-chrome.js       # inyecta <iswc-cdn-snippet>, theme, palette
@@ -106,10 +100,8 @@ deno task build
 > galería se queda en loading eterno. La regresión está cubierta por
 > `tests/smoke-page-load.stagehand.test.mjs`.
 
-# descargar iconos de Iconify (~300 MB si haces TODAS las colecciones, ~5 MB si solo mdi + tabler)
-deno run -A --no-check scripts/download-icons.ts --only=mdi --only=tabler
-deno run -A --no-check scripts/download-icons.ts --no-skip
-deno task icons:download
+# bajar a assets/iconify/ los íconos que el código usa (barrido + `extra` de assets/dl.js; poda los que sobran)
+deno task icons
 
 # verificaciones
 deno run -A --no-check scripts/verify-theme-contract.cjs     # contrato de contraste: 25 paletas × claro/oscuro × panda
@@ -203,12 +195,13 @@ Los SVG los baja `deno task icons` (`assets/dl.js` → `download-iconify`, dentr
 prefijo `iswc:` (`src/core/iswc-storage.ts`; `clearIswcStorage()` lo usa `<iswc-prefs-clear>`).
 Detalle: `skills/iswc-foundation/references/10-iconos.md`. Bench de raíces: `labs/icon-cdn-bench/NOTES.md`.
 
-Del set completo solo viajan `dist/assets/icons/{mdi,tabler}/` y el catálogo (`index.json`,
-`collections.json`): los usan el explorador y los diagramas, no `<iswc-icon>`.
+Ninguna colección completa viaja en el repo (4-nov-2026: `dist/assets/icons/` retirado). El explorador
+de íconos de la galería lee familias, nombres, búsqueda y SVG por lotes de la API de Iconify vía
+`core/icon-loader` (`listIconFamilies`, `listIconNames`, `searchIconNames`, `prefetchIcons`), cacheado en localStorage.
 
 ### 5.2 Trampas que ya nos mordieron
 
-- **Hardcodear paths absolutos** tipo `/assets/icons/mdi.json` solo funciona
+- **Hardcodear paths absolutos** tipo `/assets/iconify/mdi/home.svg` solo funciona
   en producción con `base href` correcto. Para dev local con previews en
   `previews/<cat>/`, hay que usar `rootFromBaseURI()` o un `<base href>`.
 - **No confiar en `cache: 'force-cache'` para SVG**: el `<img>` no respeta los
@@ -218,23 +211,20 @@ Del set completo solo viajan `dist/assets/icons/{mdi,tabler}/` y el catálogo (`
 - **El `<iconify-icon>` de Iconify** carga un web component JS de ~50 KB solo
   para ser fallback. Si te toca añadir un SVG, **primero intenta el `<img>`
   local**, no el `<iconify-icon>`.
-- **`index.json` por colección**: si borras `assets/icons/mdi.json`, el
-  índice cachea `null` y todos los iconos `mdi:*` caen al fallback hasta
-  recargar la página. El `inflight` map evita fetches concurrentes, pero
-  también cachea el `null`.
+- **Un fallo se recuerda por página**: si un ícono no resolvió (ni local ni
+  API), `icon-loader` cachea el `null` y no lo reintenta hasta recargar. El
+  mapa de fetches en vuelo evita peticiones concurrentes del mismo ícono.
 
 ### 5.3 Descarga de iconos
 
 ```bash
-# descargar SOLO las colecciones que vas a usar (rápido, ~5 MB para mdi+tabler)
-deno task icons:download -- --only=mdi --only=tabler
-
-# descargar todas las colecciones
-deno run -A --no-check scripts/download-icons.ts --no-skip
+deno task icons
 ```
 
-El script es idempotente: si la colección ya está completa (matchea el total
-de la API), la salta. Si solo faltan algunos iconos, los baja sueltos.
+Barre `src/components`, `src/core` y `labs`, suma `extra` de `assets/dl.js` (íconos de las apps del VPS
+y los que el kit arma en tiempo de ejecución), baja lo que falta a `assets/iconify/` y poda lo que nadie
+usa. Idempotente. **No** bajes colecciones completas al repo: el guardián `assets-copia-unica` falla si
+`assets/iconify/` pasa de 2 000 archivos o si reaparece `dist/assets/icons/`.
 
 ## 6. Errores a NO repetir (bitácora de mierdas que ya nos pasaron)
 
@@ -291,15 +281,14 @@ usa `browser_cdp Runtime.evaluate` con expresiones pequeñas.
 
 ### 6.8 `git add` con 13k archivos tarda ~60 segundos
 
-No es un error, pero si ves `git add assets/icons/` "colgado", **espera**.
-PowerShell no muestra progreso pero el comando está corriendo. Hecho: tarda
-~1 minuto en añadir 13.6k SVGs.
+Histórico: pasaba con `dist/assets/icons/` (13.6k SVG de mdi/tabler), retirado
+el 4-nov-2026. Si vuelve a pasar, alguien está versionando una colección completa.
 
-### 6.9 Re-descargar 723 MB cuando ya están descargados
+### 6.9 Colecciones completas en el repo
 
-Si corres `download-icons.mjs` sin `--only`, **se baja todo otra vez** porque
-al inicio el script borra el `.state/` y empieza de cero. Antes de re-correr
-"para estar seguros", **comprueba el `manifest.json`**.
+`scripts/download-icons.ts` (bajaba colecciones enteras) se borró el 4-nov-2026
+junto con `dist/assets/icons/`. Para el kit basta `deno task icons`; para
+explorar el resto, el explorador de la galería consulta la API.
 
 ### 6.10 `previews/iswc-scrollspy.html` no existe
 
@@ -335,10 +324,10 @@ solo porque el primer `Invoke-WebRequest` dio 404.
 
 ### 6.15 Los 308k iconos de Iconify son 723 MB
 
-Si commiteas todas las colecciones, **inflas el repo** y rompes `git clone`.
-Solo commiteamos `mdi/` (7447) y `tabler/` (6184) → 5 MB. El resto se
-regenera con `deno task icons:download`. El `.gitignore` ya lo deja claro; **no
-lo desanotes**.
+Si commiteas colecciones completas, **inflas el repo** y el tarball de jsDelivr
+se acerca a su límite de 50 MB. Desde el 4-nov-2026 no se commitea ninguna (ni
+mdi ni tabler): solo los íconos usados, en `assets/iconify/` (`deno task icons`).
+`dist/assets/icons/` está en el `.gitignore`; **no lo desanotes**.
 
 ## 7. Tests (lo nuevo de esta sesión)
 
@@ -359,9 +348,9 @@ un runner sencillo los pueda enumerar.
 |------|-------|
 | `tests/manifest-paths.test.mjs` | Cada `page:` en `src/manifest.ts` existe; `script:`/`style:` apuntan a archivos reales |
 | `tests/preview-paths.test.mjs` | Los `<script src>` y `<link href>` de cada preview resuelven a archivos reales |
-| `tests/icon-references.test.mjs` | Cada `icon="X:Y"` en previews/componentes existe en `assets/icons/X.json` (o se acepta caer a CDN) |
+| `tests/componentes/icon-references.test.ts` | Cada `icon="X:Y"` en previews/componentes existe en `assets/iconify/X/Y.svg` |
 | `tests/theme-contract.test.mjs` | Reemplazo del antiguo `verify-theme-contract.cjs` |
-| `tests/cdn-icons.test.mjs` | Servidor arriba → cada preview carga `<iswc-icon>` sin caer al fallback `<iconify-icon>` |
+| `tests/gobernanza/cdn-icons.test.ts` | Los íconos de un demo resuelven desde `assets/iconify` por `<html data-icons>`, sin API (fetch simulado, sin servidor) |
 
 ### 7.3 Cómo correrlos
 
@@ -369,11 +358,8 @@ un runner sencillo los pueda enumerar.
 # individuales (sin servidor)
 node tests/manifest-paths.test.mjs
 node tests/preview-paths.test.mjs
-node tests/icon-references.test.mjs
+deno task test -- --solo=icon-references,cdn-icons
 node tests/theme-contract.test.mjs
-
-# con servidor (levanta en otro terminal: deno task dev)
-node tests/cdn-icons.test.mjs
 
 # todos (runner)
 node tests/run-all.mjs
@@ -384,9 +370,9 @@ node tests/run-all.mjs
 ```
 manifest-paths.test.mjs: PASS — 110 componentes referenciados, 0 huérfanos
 preview-paths.test.mjs:  PASS — 88 previews con paths correctos
-icon-references.test.mjs: PASS — 412 iconos, 0 referencias rotas
+icon-references.test.ts: PASS — 93 íconos de los demos en assets/iconify
 theme-contract.test.mjs:  PASS — 2 temas + 3 paletas + tokens --iswc-*
-cdn-icons.test.mjs:       PASS — 8/8 iconos cargados como <img> local
+cdn-icons.test.ts:       PASS — 12 íconos servidos desde assets/iconify (sin API)
 run-all: 5/5 PASS
 ```
 
@@ -553,10 +539,10 @@ Si estás escribiendo uno de estos, para y reconsidera:
 - Lee este archivo entero antes de tocar el repo.
 - Si vas a mover archivos en masa, **primero commit lo pendiente**, luego
   `git mv`, luego `scripts/fix-preview-paths.mjs`.
-- Si vas a descargar iconos, **usa `--only=mdi --only=tabler`** salvo que
-  sepas que necesitas los 308k.
-- Si vas a tocar `components/_shared/iconify-loader.js`, **corre
-  `tests/icon-references.test.mjs` y `tests/cdn-icons.test.mjs` después**.
+- Si vas a descargar iconos, **usa `deno task icons`** (solo los usados); nunca
+  colecciones completas al repo.
+- Si vas a tocar `src/core/icon-loader.ts`, **corre
+  `deno task test -- --solo=icon-references,cdn-icons,icon-explorer,icon-render` después**.
 - Si vas a tocar `manifest.js`, **corre `tests/manifest-paths.test.mjs`**.
 - Si vas a tocar `styles/is-base.css` o `palettes.css`, **corre
   `tests/theme-contract.test.mjs`**.

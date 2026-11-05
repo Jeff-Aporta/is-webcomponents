@@ -14,5 +14,7 @@ await descargarIconos({
     'mdi:account-circle', 'mdi:account-group', 'mdi:account-multiple', 'mdi:android', 'mdi:chat',
     'mdi:cogs', 'mdi:database-search', 'mdi:lan-connect', 'mdi:routes', 'mdi:table-large',
     'mdi:update', 'mdi:view-dashboard-outline',
+    // Pintados por el kit con el id armado en tiempo de ejecución (pendientes F5a: 404 en las apps).
+    'mdi:close', 'mdi:weather-sunny',
   ],
 });

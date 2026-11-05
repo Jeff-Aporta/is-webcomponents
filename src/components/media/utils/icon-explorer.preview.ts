@@ -1,8 +1,14 @@
 import '@jeff-aporta/iswc-base/components/layout/card.js';
+import { iconApiUrl, listIconFamilies, listIconNames, prefetchIcons, resolveIconRaw, searchIconNames } from '@jeff-aporta/iswc-base/core/icon-loader.js';
+import type { IconFamily } from '@jeff-aporta/iswc-base/core/schemas/icon-loader.schemas.js';
 
 /**
  * Behavior migrado desde HTML inline de icon-explorer.
  * Se ejecuta en mount() tras pintar la definition JSON.
+ *
+ * Datos (4-nov-2026): ninguna colección completa viaja en el repo. Familias, nombres y SVG salen de la
+ * API de Iconify vía `core/icon-loader` (cacheados en localStorage con su TTL); los SVG del grid llegan
+ * POR LOTES, un fetch por página (`prefetchIcons`). Sin API, aviso en vez de romperse.
  * @param ctx Contexto de montaje (root, main, aside, definition).
  */
 export async function mount(ctx: import('@jeff-aporta/iswc-base/previews/_kit/schemas/preview.schemas.ts').PreviewMountContext): Promise<void> {
@@ -76,28 +82,12 @@ export async function mount(ctx: import('@jeff-aporta/iswc-base/previews/_kit/sc
     value: string;
   }
 
-  /* ── Datos servidos por el builder: index, familias y SVGs ─────────── */
+  /* ── Datos de la API de Iconify (vía core/icon-loader): familias, nombres y SVGs ── */
 
-  interface CollectionMeta {
-    name?: string;
-    category?: string;
-    author?: string;
-    license?: string;
-    /** Tamaño de la rejilla en píxeles (puede no estar para iconos sin grid). */
-    height?: number;
-    /** `true` cuando la familia tiene paleta en color; `false`/`undefined` → monocromo. */
-    palette?: string | boolean;
-  }
+  /** Metadatos de una familia (`/collections`): nombre, categoría, autor, licencia, grid y paleta. */
+  type CollectionMeta = Partial<IconFamily>;
 
-  interface FamilyItem {
-    prefix: string;
-    count: number;
-  }
-
-  interface IndexJson {
-    families: FamilyItem[];
-    total: number;
-  }
+  type FamilyItem = IconFamily;
 
   interface IconsJson {
     icons: string[];
@@ -143,15 +133,6 @@ export async function mount(ctx: import('@jeff-aporta/iswc-base/previews/_kit/sc
   const app = $byId<HTMLElement>('app');
   const scroller = $byId<HTMLElement>('scroller');
 
-  // Misma lógica que `{assets}` en render.js: la página vive en la raíz o en
-  // `_shell.html`, así que no se puede fijar un relativo a `location.href`.
-  const raiz = (() => {
-    const href = location.href;
-    const corte = href.search(/\/(?:src\/previews|index\.html)/);
-    return corte > 0 ? href.slice(0, corte + 1) : new URL('./', href).href;
-  })();
-  // Los iconos viven sólo en dist/assets/: única copia, es la publicada.
-  const base = new URL('dist/assets/icons/', raiz);
   const params = new URLSearchParams(location.search);
   const family = params.get('f');
   const PAGE = 240;
@@ -163,40 +144,15 @@ export async function mount(ctx: import('@jeff-aporta/iswc-base/previews/_kit/sc
       .replace(/>/g, '&gt;')
       .replace(/"/g, '&quot;');
 
-  /* jsonCache: nombre → promesa del JSON parseado. */
-  const jsonCache = new Map<string, Promise<unknown>>();
-
-  async function loadJson<T = unknown>(name: string): Promise<T> {
-    const cached = jsonCache.get(name);
-    if (cached) return cached as Promise<T>;
-    const p: Promise<T> = fetch(new URL(name, base)).then((r) => {
-      if (!r.ok) throw new Error(name);
-      return r.json() as Promise<T>;
-    });
-    jsonCache.set(name, p as Promise<unknown>);
-    return p;
+  /** Nombres de una familia (`/collection?prefix=`, cacheados por icon-loader); lanza si no existe o sin API. */
+  async function iconosDe(prefix: string): Promise<IconsJson> {
+    const icons = await listIconNames(prefix);
+    if (!icons.length) throw new Error(prefix);
+    return { icons };
   }
 
-  /*
-   * Nombres de una familia. El kit solo trae en local el catálogo (`index.json`, `collections.json`) y
-   * los SVG de mdi/tabler; la lista de nombres de cada set sale de la API de Iconify (`/collection`).
-   */
-  const API_ICONOS = 'https://api.iconify.design/';
-  const familiaCache = new Map<string, Promise<IconsJson>>();
-  function iconosDe(prefix: string): Promise<IconsJson> {
-    const cached = familiaCache.get(prefix);
-    if (cached) return cached;
-    const p = (async (): Promise<IconsJson> => {
-      const r = await fetch(`${API_ICONOS}collection?prefix=${encodeURIComponent(prefix)}`);
-      if (!r.ok) throw new Error(prefix);
-      const d = await r.json() as { uncategorized?: string[]; categories?: Record<string, string[]> };
-      const icons = [...new Set([...(d.uncategorized ?? []), ...Object.values(d.categories ?? {}).flat()])].sort();
-      if (!icons.length) throw new Error(prefix);
-      return { icons };
-    })();
-    familiaCache.set(prefix, p);
-    return p;
-  }
+  /** Aviso cuando la API de Iconify no responde (sin red, bloqueada o caída): el explorador no se rompe. */
+  const AVISO_SIN_API = `<iswc-callout color="warning" variant="outlined" icon="mdi:cloud-off-outline">El explorador lee el catálogo de la API de Iconify (<code>api.iconify.design</code>) y no respondió. Revisa la conexión y recarga; los íconos del kit siguen sirviéndose desde <code>assets/iconify/</code>.</iswc-callout>`;
 
   /* El feedback de "copiado" lo da <iswc-copy-button> por sí solo; el toaster
      queda para lo que no nace de un botón de copia (descargas, errores). */
@@ -238,10 +194,9 @@ export async function mount(ctx: import('@jeff-aporta/iswc-base/previews/_kit/sc
     const key = `${prefix}:${name}`;
     const cached = svgCache.get(key);
     if (cached) return cached;
-    // Local (mdi/tabler viajan en el kit) o, si no está, la API de Iconify.
-    const p: Promise<SvgParsed> = fetch(new URL(`${prefix}/${name}.svg`, base))
-      .then((r) => (r.ok ? r : fetch(`${API_ICONOS}${encodeURIComponent(prefix)}/${encodeURIComponent(name)}.svg`)))
-      .then((r) => (r.ok ? r.text() : Promise.reject(new Error(key))))
+    // El mismo resolvedor que <iswc-icon>: memoria/localStorage (el lote del grid ya lo dejó ahí) → API.
+    const p: Promise<SvgParsed> = resolveIconRaw(prefix, name)
+      .then((txt: string | null) => (txt ?? Promise.reject(new Error(key))))
       .then((txt: string): SvgParsed => {
         const vb = txt.match(/viewBox="\s*([\d.\-]+)\s+([\d.\-]+)\s+([\d.\-]+)\s+([\d.\-]+)\s*"/);
         const body = txt.replace(/^[\s\S]*?<svg[^>]*>/, '').replace(/<\/svg>\s*$/, '');
@@ -380,7 +335,7 @@ export async function mount(ctx: import('@jeff-aporta/iswc-base/previews/_kit/sc
     F.root.open = true;
     F.id.textContent = `${prefix}:${name}`;
     F.copyId.value = `${prefix}:${name}`;
-    F.copyUrl.value = new URL(`${prefix}/${name}.svg`, base).href;
+    F.copyUrl.value = iconApiUrl(prefix, name);
     F.alt.textContent = `Alt sugerido: “${name.replace(/[-_]/g, ' ')}”`;
     const meta: CollectionMeta = collectionsMeta[prefix] ?? {};
     F.collection.textContent = meta
@@ -498,13 +453,12 @@ export async function mount(ctx: import('@jeff-aporta/iswc-base/previews/_kit/sc
 
   /* ══ Datos compartidos ══════════════════════════════════════════════ */
   let collectionsMeta: Record<string, CollectionMeta> = {};
+  let families: FamilyItem[] = [];
 
+  /** Catálogo de familias (`/collections`): una sola petición, cacheada por icon-loader. */
   async function loadMeta(): Promise<void> {
-    try {
-      collectionsMeta = await loadJson<Record<string, CollectionMeta>>('collections.json');
-    } catch {
-      collectionsMeta = {};
-    }
+    families = await listIconFamilies();
+    collectionsMeta = Object.fromEntries(families.map((f: FamilyItem) => [f.prefix, f]));
   }
 
   const uniqSorted = (vals: string[]): string[] =>
@@ -555,8 +509,12 @@ export async function mount(ctx: import('@jeff-aporta/iswc-base/previews/_kit/sc
 
   /* ══ Vista índice: familias + búsqueda global de iconos ════════════ */
   async function renderIndex(): Promise<void> {
-    const { families, total } = await loadJson<IndexJson>('index.json');
     if (!app) return;
+    if (!families.length) {
+      app.innerHTML = AVISO_SIN_API;
+      return;
+    }
+    const total = families.reduce((n: number, f: FamilyItem): number => n + f.count, 0);
     app.innerHTML = `
       <div class="xp-head">
         <h1>Explorador de iconos</h1>
@@ -627,9 +585,13 @@ export async function mount(ctx: import('@jeff-aporta/iswc-base/previews/_kit/sc
             if (!e.isIntersecting) continue;
             io?.unobserve(e.target);
             const prefix = (e.target as HTMLElement).dataset.prefix ?? '';
-            iconosDe(prefix)
-              .then((d: IconsJson) => {
-                for (const n of d.icons.slice(0, 4)) {
+            // Muestras del catálogo (`samples` de /collections) y sus SVG en UN lote por familia.
+            const muestras = (collectionsMeta[prefix]?.samples ?? []).slice(0, 4);
+            const nombres = muestras.length ? Promise.resolve(muestras) : iconosDe(prefix).then((d: IconsJson) => d.icons.slice(0, 4));
+            nombres
+              .then(async (lista: string[]) => {
+                await prefetchIcons(prefix, lista);
+                for (const n of lista) {
                   const ic = document.createElement('iswc-icon');
                   ic.setAttribute('icon', `${prefix}:${n}`);
                   e.target.appendChild(ic);
@@ -648,36 +610,24 @@ export async function mount(ctx: import('@jeff-aporta/iswc-base/previews/_kit/sc
     }
 
     /* — búsqueda global de iconos —
-       Los nombres viven en 231 JSON sueltos (~5,7 MB). Se cargan bajo demanda
-       la primera vez que se busca en modo «Iconos» y quedan en caché. */
-    let allIcons: IconListItem[] | null = null;
-    let loadingIcons: Promise<IconListItem[]> | null = null;
+       La hace la API (`/search`): nada de bajar los nombres de las 200+ familias. Los SVG de los
+       resultados llegan en un lote por familia antes de pintar el grid. */
+    const LIMIT = 600;
 
-    async function ensureIcons(onProgress?: (done: number, total: number) => void): Promise<IconListItem[]> {
-      if (allIcons) return allIcons;
-      if (loadingIcons) return loadingIcons;
-      loadingIcons = (async (): Promise<IconListItem[]> => {
-        const out: IconListItem[] = [];
-        let done = 0;
-        const queue: FamilyItem[] = families.slice();
-        const worker = async (): Promise<void> => {
-          while (queue.length > 0) {
-            const fam = queue.shift();
-            if (!fam) break;
-            try {
-              const d = await iconosDe(fam.prefix);
-              for (const n of d.icons) out.push({ prefix: fam.prefix, name: n });
-            } catch {
-              /* familia inaccesible: seguimos */
-            }
-            onProgress?.(++done, families.length);
-          }
-        };
-        await Promise.all(Array.from({ length: 8 }, () => worker()));
-        allIcons = out;
-        return out;
-      })();
-      return loadingIcons;
+    /** Ids que coinciden con `term` en las familias permitidas por los filtros (todas si no hay filtro). */
+    async function ensureIcons(term: string, allowed: Set<string>): Promise<IconListItem[]> {
+      const prefijos = allowed.size < families.length ? [...allowed] : [];
+      const ids = await searchIconNames(term, prefijos, LIMIT);
+      const out: IconListItem[] = [];
+      for (const id of ids) {
+        const corte = id.indexOf(':');
+        const it = { prefix: id.slice(0, corte), name: id.slice(corte + 1) };
+        if (allowed.has(it.prefix)) out.push(it);
+      }
+      const porFamilia = new Map<string, string[]>();
+      for (const it of out) porFamilia.set(it.prefix, [...(porFamilia.get(it.prefix) ?? []), it.name]);
+      await Promise.all([...porFamilia].map(([prefix, nombres]) => prefetchIcons(prefix, nombres)));
+      return out;
     }
 
     let searchToken = 0;
@@ -688,32 +638,18 @@ export async function mount(ctx: import('@jeff-aporta/iswc-base/previews/_kit/sc
       const allowed = new Set(
         filterFamilies(families, { ...f, q: '' }).map((x: FamilyItem): string => x.prefix),
       );
-      if (!allIcons) {
-        results.innerHTML = `
-          <div class="status">
-            <iswc-progress-bar id="prog" value="0" label="Indexando iconos"></iswc-progress-bar>
-            <span class="count" id="progTxt">Indexando iconos… 0%</span>
-          </div>`;
-        const loaded = await ensureIcons((done: number, total: number): void => {
-          const pct = Math.round((done / total) * 100);
-          document.getElementById('prog')?.setAttribute('value', String(pct));
-          const t = document.getElementById('progTxt');
-          if (t) t.textContent = `Indexando iconos… ${pct}%`;
-        });
-        allIcons = loaded;
-        if (token !== searchToken) return;
-      }
       const term = f.q;
-      const matches: IconListItem[] = [];
-      const LIMIT = 600;
-      const icons = allIcons;
-      if (!icons) return;
-      for (const it of icons) {
-        if (!allowed.has(it.prefix)) continue;
-        if (term && !it.name.includes(term) && !`${it.prefix}:${it.name}`.includes(term)) continue;
-        matches.push(it);
-        if (matches.length >= LIMIT) break;
+      if (!term) {
+        results.innerHTML = `<iswc-callout color="neutral" variant="outlined" icon="mdi:magnify">Escribe una palabra para buscar íconos en todas las familias.</iswc-callout>`;
+        return;
       }
+      results.innerHTML = `
+        <div class="status">
+          <iswc-progress-bar id="prog" indeterminate label="Buscando iconos"></iswc-progress-bar>
+          <span class="count" id="progTxt">Buscando “${esc(term)}”…</span>
+        </div>`;
+      const matches = await ensureIcons(term, allowed);
+      if (token !== searchToken) return;
       if (matches.length === 0) {
         results.innerHTML = `<iswc-callout color="neutral" variant="outlined" icon="mdi:magnify-close">Ningún icono coincide${term ? ` con “${esc(term)}”` : ''}.</iswc-callout>`;
         return;
@@ -795,7 +731,9 @@ export async function mount(ctx: import('@jeff-aporta/iswc-base/previews/_kit/sc
       data = await iconosDe(prefix);
     } catch {
       if (app) {
-        app.innerHTML = `<iswc-callout color="danger" variant="outlined" icon="mdi:alert">No existe la familia <code>${esc(prefix)}</code>. <a href="icon-explorer.html">Volver</a></iswc-callout>`;
+        app.innerHTML = families.length
+          ? `<iswc-callout color="danger" variant="outlined" icon="mdi:alert">No existe la familia <code>${esc(prefix)}</code>. <a href="icon-explorer.html">Volver</a></iswc-callout>`
+          : AVISO_SIN_API;
       }
       return;
     }
@@ -848,9 +786,17 @@ export async function mount(ctx: import('@jeff-aporta/iswc-base/previews/_kit/sc
     tSize.addEventListener('iswc-input', applyTools);
     tSize.addEventListener('iswc-change', applyTools);
 
-    const appendPage = (): void => {
+    // Una página del grid = UN fetch (`/<set>.json?icons=…`): los <iswc-icon> la encuentran en memoria.
+    let pagina = 0;
+    const appendPage = async (): Promise<void> => {
+      const turno = ++pagina;
+      const lote = filtered.slice(shown, shown + PAGE);
+      more.disabled = true;
+      await prefetchIcons(prefix, lote);
+      more.disabled = false;
+      if (turno !== pagina) return; // otra búsqueda repintó mientras llegaba el lote
       const frag = document.createDocumentFragment();
-      for (const name of filtered.slice(shown, shown + PAGE)) {
+      for (const name of lote) {
         const btn = document.createElement('button');
         btn.type = 'button';
         btn.className = 'icon-cell';
@@ -869,13 +815,18 @@ export async function mount(ctx: import('@jeff-aporta/iswc-base/previews/_kit/sc
     const repaint = (): void => {
       grid.innerHTML = '';
       shown = 0;
-      appendPage();
+      void appendPage();
     };
-    more.addEventListener('click', appendPage);
+    more.addEventListener('click', () => void appendPage());
+    // Con espera corta: cada repintado es un lote a la API, no uno por tecla.
+    let espera: ReturnType<typeof setTimeout> | null = null;
     q.addEventListener('iswc-input', (): void => {
-      const term = String(q.value).trim().toLowerCase();
-      filtered = term ? data.icons.filter((n: string): boolean => n.includes(term)) : data.icons;
-      repaint();
+      if (espera !== null) clearTimeout(espera);
+      espera = setTimeout((): void => {
+        const term = String(q.value).trim().toLowerCase();
+        filtered = term ? data.icons.filter((n: string): boolean => n.includes(term)) : data.icons;
+        repaint();
+      }, 160);
     });
 
     grid.addEventListener('click', (e: Event): void => {
@@ -893,7 +844,7 @@ export async function mount(ctx: import('@jeff-aporta/iswc-base/previews/_kit/sc
     });
 
     applyTools();
-    appendPage();
+    await appendPage();
   }
 
   await loadMeta();
