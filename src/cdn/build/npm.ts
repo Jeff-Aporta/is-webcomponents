@@ -42,6 +42,7 @@ export function exportsNpm(exports: ExportsJson): ExportsJson {
   out['./palettes.css'] = `${DIST}/palettes.min.css`;
   out['./palettes.min.css'] = `${DIST}/palettes.min.css`;
   out['./deps.json'] = `${DIST}/deps.json`;
+  out['./deps/*'] = `${DIST}/deps/*`;
   out['./importmap.json'] = `${DIST}/importmap.json`;
   out['./package.json'] = './package.json';
   return out;

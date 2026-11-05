@@ -4,7 +4,7 @@
  * El build único deja `__IS_ASSET_HASHES__` vacío: el mapa completo vive en `asset-hashes.json`. Solo en orígenes
  * mutables (Pages, localhost, carpeta local) el loader lo lee para sellar `?v=` en hojas, módulos de página y
  * `assetUrl()`; sobre un pin SHA de jsDelivr/githack la URL ya es inmutable y no se pide (`esUrlInmutable`).
- * Las entradas del kit no lo necesitan: su `?v=` viaja en `deps.json` (`v`).
+ * Las entradas del kit no lo necesitan: su `?v=` viaja en `deps/<cat>.json` (`v`).
  */
 import { esUrlInmutable } from './build/asset-url.js';
 import type { LoaderCtx } from './schemas/loader-capas.schemas.js';

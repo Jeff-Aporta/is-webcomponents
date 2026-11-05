@@ -6,7 +6,7 @@
  *       módulo de capa 2 importa el núcleo (reciben su contexto por argumento: sin ciclo).
  *   (b) `dist/cdn/core/loader.min.mjs` ≤ 8 KB brotli (reporta gzip, el crudo y el cierre estático completo).
  *   (c) `core/loader.min.js` (compat hasta F5) es copia byte a byte de `core/loader.min.mjs`.
- *   (d) cada `loader-<x>` sale con nombre estable `core/loader-<x>.min.mjs` y `deps.json` lo lista bajo `core`.
+ *   (d) cada `loader-<x>` sale con nombre estable `core/loader-<x>.min.mjs` y `deps/core.json` lo lista bajo `core`.
  */
 import assert from 'node:assert/strict';
 import { existsSync, readFileSync } from 'node:fs';
@@ -48,7 +48,7 @@ test('gobernanza/loader-capas: core/loader.min.mjs ≤ 8 KB br; loader.min.js es
   const cuerpo = readFileSync(mjs);
   const br = brotliCompressSync(cuerpo).length;
   const gz = gzipSync(cuerpo).length;
-  const deps = JSON.parse(readFileSync(join(DIST, 'deps.json'), 'utf8')) as { core: Record<string, string[]> };
+  const deps = JSON.parse(readFileSync(join(DIST, 'deps', 'core.json'), 'utf8')) as { core: Record<string, string[]> };
   const cierre = Buffer.concat((deps.core.loader ?? []).map((r) => readFileSync(join(DIST, r))));
   console.log(`  core/loader.min.mjs: ${cuerpo.length} B · br ${br} B · gzip ${gz} B · cierre estático ${deps.core.loader?.length} archivos ${cierre.length} B (br ${brotliCompressSync(cierre).length} B)`);
   assert.ok(br <= MAX_BR, `core/loader.min.mjs pesa ${br} B br > ${MAX_BR}`);
@@ -59,7 +59,7 @@ test('gobernanza/loader-capas: core/loader.min.mjs ≤ 8 KB br; loader.min.js es
 
 test('gobernanza/loader-capas: cada capa 2 sale como core/loader-<x>.min.mjs y deps.json la lista bajo core', () => {
   if (!existsSync(join(DIST, 'deps.json'))) return;
-  const deps = JSON.parse(readFileSync(join(DIST, 'deps.json'), 'utf8')) as { core: Record<string, string[]> };
+  const deps = JSON.parse(readFileSync(join(DIST, 'deps', 'core.json'), 'utf8')) as { core: Record<string, string[]> };
   const nucleo = readFileSync(join(DIST, 'core', 'loader.min.mjs'), 'utf8');
   for (const c of CAPAS_LOADER) {
     const ruta = `core/loader-${c}.min.mjs`;

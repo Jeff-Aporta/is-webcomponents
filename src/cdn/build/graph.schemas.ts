@@ -14,6 +14,14 @@ export const DepsJsonSchema = z.object({
 });
 export type DepsJson = z.infer<typeof DepsJsonSchema>;
 
+/** Índice publicado en `dist/cdn/deps.json` (F7): SHA base del build y tag → categoría (`deps/<cat>.json`). */
+export const DepsIndiceSchema = z.object({ sha: z.string(), categorias: z.record(z.string(), z.string()) });
+export type DepsIndice = z.infer<typeof DepsIndiceSchema>;
+
+/** `deps.json` partido: el índice y una parte por categoría (más `core`), cada una con la forma de `DepsJson`. */
+export const DepsPartidoSchema = z.object({ indice: DepsIndiceSchema, partes: z.record(z.string(), DepsJsonSchema) });
+export type DepsPartido = z.infer<typeof DepsPartidoSchema>;
+
 /** `dist/cdn/exports.json`: subruta npm → archivo publicado (`./actions/button` → `./dist/cdn/actions/button.min.mjs`). */
 export const ExportsJsonSchema = z.record(z.string(), z.string());
 export type ExportsJson = z.infer<typeof ExportsJsonSchema>;

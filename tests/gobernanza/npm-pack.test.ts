@@ -17,6 +17,7 @@ import { existsSync, mkdirSync, readFileSync, readdirSync, rmSync, statSync, wri
 import { basename, dirname, join } from 'node:path';
 import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
 import { empaquetar } from '../../scripts/npm-pack.mjs';
+import { leerDeps } from '../_shared/deps.ts';
 
 const { test, prueba, lista } = coleccionPruebas({ categoria: 'how' });
 
@@ -53,7 +54,7 @@ test('gobernanza/npm-pack: (a) exports cubre ./loader y todo tag del catálogo',
   assert.equal(pkg.exports['./package.json'], './package.json');
   const efectos = new Set(pkg.sideEffects);
   assert.ok(efectos.has('./dist/cdn/core/loader.min.mjs'), 'sideEffects: falta el loader');
-  const deps = JSON.parse(readFileSync(join(RAIZ, 'dist', 'cdn', 'deps.json'), 'utf8')) as { tags: Record<string, string[]> };
+  const deps = leerDeps(join(RAIZ, 'dist', 'cdn'))!;
   const valores = new Set(Object.values(pkg.exports));
   for (const tag of await tagsDelCatalogo()) {
     const propia = (deps.tags[tag] ?? []).find((r) => !r.startsWith('_chunks/') && r.endsWith(`/${tag.replace(/^iswc-/, '')}.min.mjs`));
@@ -94,6 +95,7 @@ const RESOLUCIONES: Record<string, string> = {
   'is-base.css': 'is-base.min.css',
   'palettes.css': 'palettes.min.css',
   'deps.json': 'deps.json',
+  'deps/actions.json': 'deps/actions.json',
   'importmap.json': 'importmap.json',
 };
 

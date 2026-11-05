@@ -5,12 +5,15 @@
  * importa `core/loader.min.mjs` y pide `load('iswc-app-shell', 'iswc-button', 'iswc-dialog', 'iswc-icon')`. En Edge
  * headless (nunca el Chrome del usuario), en frío y por dos orígenes:
  *
- *   - `self` (mutable, como Pages o una carpeta local): el loader espera `deps.json` y lo precarga todo junto;
- *   - pin SHA de jsDelivr (inmutable, como las apps): `deps.json` va en paralelo con el primer `import()`.
+ *   - `self` (mutable, como Pages o una carpeta local): el loader espera `deps/<cat>.json` y lo precarga todo junto;
+ *   - pin SHA de jsDelivr (inmutable, como las apps): `deps/<cat>.json` va en paralelo con el primer `import()`;
+ *   - pin SHA con el cierre ya precargado en el HTML (`<link rel=modulepreload>` + `<meta name="iswc-precargado">`,
+ *     lo que emite el build de una app, F7 0.1): el loader no pide ningún `deps`.
  *
- * Afirma, por cada origen: el cierre del lote (de `deps.json`) llega entero y en ≤ 2 ráfagas; ninguna URL se pide dos
- * veces (ni la misma ruta con dos `?v=`); cero peticiones a `api.github.com`; y cero `indexedDB.open` / `caches.open`
- * hasta `data-app-ready` (is-base va por `<link>`, sin fetch ni IndexedDB).
+ * Afirma, por cada origen: el cierre del lote (de `deps/<cat>.json`) llega entero y en ≤ 2 ráfagas; ninguna URL se pide
+ * dos veces (ni la misma ruta con dos `?v=`); el índice `deps.json` (grafo entero hasta F7) nunca se pide; cero
+ * peticiones a `api.github.com`; y cero `indexedDB.open` / `caches.open` hasta `data-app-ready` (is-base va por
+ * `<link>`, sin fetch ni IndexedDB).
  */
 import assert from 'node:assert/strict';
 import { existsSync, readFileSync } from 'node:fs';
@@ -20,6 +23,7 @@ import { REPO_GITHUB } from '../../src/core/cdn-ref.ts';
 import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
 import { cerrarChromium } from '../_shared/navegador.ts';
 import { duplicadas, rafagas, rutasDuplicadas, type Peticion } from '../_shared/rafagas.ts';
+import { leerDeps as grafo } from '../_shared/deps.ts';
 
 const { test, lista } = coleccionPruebas({ categoria: 'what' });
 
@@ -34,11 +38,15 @@ const MIME: Record<string, string> = { '.mjs': 'text/javascript', '.js': 'text/j
 
 type Medida = { peticiones: Peticion[]; cierre: Set<string>; base: string; idb: number; caches: number; github: number; definidos: boolean[]; errores: string[]; tLoad: number };
 
-const leerDeps = () => JSON.parse(readFileSync(join(DIST, 'deps.json'), 'utf8')) as { sha: string; tags: Record<string, string[]> };
+const leerDeps = () => grafo(DIST)!;
 
-async function medir(browser: Browser, base: string): Promise<Medida> {
+async function medir(browser: Browser, base: string, precargaHtml = false): Promise<Medida> {
   const deps = leerDeps();
   const cierre = new Set(LOTE.flatMap((t) => deps.tags[t] ?? []));
+  // Lo que emite el build de una app: el cierre del lote por `modulepreload` y la marca con el pin de la precarga.
+  const cabeza = precargaHtml
+    ? `<meta name="iswc-precargado" content="${deps.sha}">${[...cierre].map((r) => `<link rel="modulepreload" href="${base}${r}">`).join('')}`
+    : '';
   const ctx = await browser.newContext();
   await ctx.addInitScript(() => {
     const w = window as unknown as Record<string, number>;
@@ -64,7 +72,7 @@ async function medir(browser: Browser, base: string): Promise<Medida> {
   });
   await ctx.route(`${ORIGEN}/`, (r) => r.fulfill({
     contentType: 'text/html',
-    body: `<!doctype html><title>ráfagas</title><script type="module">
+    body: `<!doctype html><title>ráfagas</title>${cabeza}<script type="module">
 import { iswcLoader as L } from '${base}core/loader.min.mjs';
 const lote = ${JSON.stringify(LOTE)};
 window.__tLoad = Date.now();
@@ -97,8 +105,12 @@ document.documentElement.setAttribute('data-app-ready', '');
   }
 }
 
-function afirmar(m: Medida, origen: string): void {
+function afirmar(m: Medida, origen: string, sinDeps = false): void {
   const rel = (p: Peticion) => p.url.slice(m.base.length).split(/[?#]/)[0]!;
+  const pedidasDeps = m.peticiones.map(rel).filter((r) => r === 'deps.json' || r.startsWith('deps/'));
+  assert.ok(!pedidasDeps.includes('deps.json'), `${origen}: el loader pidió el índice deps.json (solo necesita deps/<cat>.json)`);
+  if (sinDeps) assert.deepEqual(pedidasDeps, [], `${origen}: con el cierre precargado en el HTML no se pide ningún deps`);
+  else assert.ok(pedidasDeps.length >= 1, `${origen}: sin precarga en el HTML el loader debe pedir deps/<cat>.json`);
   const delCierre = m.peticiones.filter((p) => m.cierre.has(rel(p)));
   // La cascada del lote: lo que el `load()` pidió. Los chunks que el loader ya trajo al arrancar (comparten
   // `iswc-storage`, `asset-url`, el runtime de esbuild) están en el cierre pero no forman parte de ella.
@@ -133,6 +145,18 @@ test('navegador/loader-rafagas: pin SHA de jsDelivr (inmutable) — cierre en �
   const browser = await chromium.launch({ headless: true, channel: 'msedge' });
   try {
     afirmar(await medir(browser, `https://cdn.jsdelivr.net/gh/${REPO_GITHUB}@${sha}/dist/cdn/`), 'pin');
+  } finally {
+    await cerrarChromium(browser);
+  }
+});
+
+test('navegador/loader-rafagas: pin SHA con el cierre precargado en el HTML — ningún deps, ≤ 2 ráfagas, sin duplicados', { timeout: 120_000 }, async () => {
+  if (!existsSync(join(DIST, 'deps.json'))) return;
+  const { sha } = leerDeps();
+  if (!/^[0-9a-f]{40}$/.test(sha)) return;
+  const browser = await chromium.launch({ headless: true, channel: 'msedge' });
+  try {
+    afirmar(await medir(browser, `https://cdn.jsdelivr.net/gh/${REPO_GITHUB}@${sha}/dist/cdn/`, true), 'pin+precarga', true);
   } finally {
     await cerrarChromium(browser);
   }

@@ -153,10 +153,12 @@ test('smoke: doc-demo.min.mjs existe y es servible', async () => {
   const text = await resp.text();
   assert.ok(text.length > 1000, `doc-demo.min.mjs demasiado pequeño: ${text.length} B`);
   // Build único con splitting (F3): el registro (`define` del molde → `customElements.define`) vive en un chunk
-  // compartido del cierre del módulo. Se pide cada archivo del cierre (deps.json) al mismo servidor.
-  const deps = await (await fetch(`http://127.0.0.1:${server.port}${APP_PATH}/dist/cdn/deps.json`)).json();
+  // compartido del cierre del módulo. Se pide cada archivo del cierre (índice deps.json → deps/<cat>.json, F7) al
+  // mismo servidor.
+  const indice = await (await fetch(`http://127.0.0.1:${server.port}${APP_PATH}/dist/cdn/deps.json`)).json();
+  const deps = await (await fetch(`http://127.0.0.1:${server.port}${APP_PATH}/dist/cdn/deps/${indice.categorias['iswc-doc-demo']}.json`)).json();
   const cierre: string[] = deps.tags['iswc-doc-demo'] ?? [];
-  assert.ok(cierre.includes('preview/doc-demo.min.mjs'), 'deps.json: el cierre de iswc-doc-demo incluye su módulo');
+  assert.ok(cierre.includes('preview/doc-demo.min.mjs'), 'deps/<cat>.json: el cierre de iswc-doc-demo incluye su módulo');
   const todo = (await Promise.all(cierre.map(async (r) => {
     const res = await fetch(`http://127.0.0.1:${server.port}${APP_PATH}/dist/cdn/${r}`);
     assert.ok(res.ok, `${r} no responde: ${res.status}`);

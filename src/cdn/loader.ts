@@ -279,11 +279,14 @@ async function refActual(): Promise<string> {
 
 const sinQuery = (href: string): string => href.split(/[?#]/)[0]!;
 
-/** ¿Ya hay un `<link rel=stylesheet>` a esa ruta (con o sin `?v=`), p. ej. puesto por la app en el HTML? */
+/**
+ * ¿Ya hay un `<link>` a esa hoja (con o sin `?v=`), p. ej. puesto por la app en el HTML? Cuenta también la hoja no
+ * bloqueante `<link rel="preload" as="style" onload="this.rel='stylesheet'">` (F7, 0.4): no se duplica.
+ */
 function yaEnlazada(href: string): boolean {
   if (typeof document === 'undefined') return false;
   const ruta = sinQuery(href);
-  return [...document.querySelectorAll<HTMLLinkElement>('link[rel="stylesheet"][href]')].some((l) => sinQuery(l.href) === ruta);
+  return [...document.querySelectorAll<HTMLLinkElement>('link[rel="stylesheet"][href], link[rel="preload"][as="style"][href]')].some((l) => sinQuery(l.href) === ruta);
 }
 
 function injectStylesheet(href: string): Promise<void> {
@@ -380,12 +383,16 @@ function cargarHashes(): Promise<void> {
 // ── Precarga del cierre (D7): deps.json → <link rel="modulepreload"> ─────────────────────────────
 
 const depsPorRaiz = new Map<string, Promise<DepsLoader | null>>();
-/** `deps.json` de una raíz, una vez. Sobre un pin SHA va con `force-cache`; en orígenes mutables revalida. */
-function depsDe(raiz: string): Promise<DepsLoader | null> {
-  let p = depsPorRaiz.get(raiz);
+/**
+ * `deps/<cat>.json` de una raíz, una vez por categoría (F7: `deps.json` es solo el índice; cada parte pesa 1–15 KB).
+ * Sobre un pin SHA va con `force-cache`; en orígenes mutables revalida.
+ */
+function depsDe(raiz: string, cat: string): Promise<DepsLoader | null> {
+  const clave = `${raiz}|${cat}`;
+  let p = depsPorRaiz.get(clave);
   if (p) return p;
   const inmutable = esUrlInmutable(raiz);
-  p = fetch(new URL('deps.json', raiz).href, { cache: inmutable ? 'force-cache' : 'no-cache' })
+  p = fetch(new URL(`deps/${cat}.json`, raiz).href, { cache: inmutable ? 'force-cache' : 'no-cache' })
     .then((r) => (r.ok ? r.json() as Promise<DepsLoader> : null))
     .then((d) => {
       // `v`: hash de cada entrada. Solo se usa en orígenes mutables (routeHref ignora los inmutables).
@@ -393,7 +400,7 @@ function depsDe(raiz: string): Promise<DepsLoader | null> {
       return d;
     })
     .catch(() => null);
-  depsPorRaiz.set(raiz, p);
+  depsPorRaiz.set(clave, p);
   return p;
 }
 
@@ -407,7 +414,26 @@ function precargar(href: string): void {
   const link = document.createElement('link');
   link.rel = 'modulepreload';
   link.href = href;
+  link.setAttribute('data-iswc-precarga', '');
   document.head.appendChild(link);
+}
+
+/**
+ * ¿El HTML (no el loader) ya precargó la entrada? Devuelve el href exacto del `<link rel="modulepreload">` (con su
+ * `?v=` si lo trae) o null. Si la app lo hizo, su build emitió el cierre entero desde `deps`: no hace falta pedir
+ * `deps/<cat>.json` (F7, 0.1). `<meta name="iswc-precargado" content="<sha>">` (lo emite el build del consumidor)
+ * avisa de qué pin salió esa precarga: si no coincide con el pin de la raíz, se ignora y se pide `deps`.
+ */
+function precargadaEnHtml(href: string, raiz: string): string | null {
+  if (typeof document === 'undefined') return null;
+  const marca = document.querySelector<HTMLMetaElement>('meta[name="iswc-precargado"]')?.content.trim().toLowerCase();
+  const pin = shaFromImportUrl(raiz);
+  if (marca && pin && !pin.startsWith(marca) && !marca.startsWith(pin)) return null;
+  const ruta = sinQuery(href);
+  for (const l of document.querySelectorAll<HTMLLinkElement>('link[rel="modulepreload"][href]:not([data-iswc-precarga])')) {
+    if (sinQuery(l.href) === ruta) return l.href;
+  }
+  return null;
 }
 
 /**
@@ -424,10 +450,10 @@ function precargarCierre(jobs: readonly LoadJob[], raiz: string, deps: DepsLoade
   }
 }
 
-async function importCdn(rel: string): Promise<string> {
+async function importCdn(rel: string, exacto?: string): Promise<string> {
   const raiz = raizPrimaria();
   if (raiz) {
-    const href = assetHref(raiz, rel);
+    const href = exacto ?? assetHref(raiz, rel);
     try {
       await importOnce(href);
       return href;
@@ -439,18 +465,29 @@ async function importCdn(rel: string): Promise<string> {
 }
 
 /**
- * Lote del kit: precarga el cierre e importa las entradas en paralelo. En un origen mutable (Pages/local) espera
- * `deps.json` (trae los `?v=` de las entradas: sin ellos un HTML cacheado pediría chunks que ya no existen); sobre
- * un pin SHA no lo espera: `deps.json` llega en paralelo con el primer `import()` y precarga lo que falte.
+ * Lote del kit: precarga el cierre e importa las entradas en paralelo. Una entrada que el HTML ya precargó se importa
+ * con ese mismo href y no pide `deps` (F7). Las demás piden `deps/<cat>.json` de su categoría: en un origen mutable
+ * (Pages/local) se espera (trae los `?v=` de las entradas: sin ellos un HTML cacheado pediría chunks que ya no
+ * existen); sobre un pin SHA no: llega en paralelo con el primer `import()` y precarga lo que falte.
  */
 async function cargarKit(jobs: readonly LoadJob[]): Promise<void> {
   const raiz = raizPrimaria();
+  const exactos = new Map<LoadJob, string>();
   if (raiz && typeof document !== 'undefined' && typeof fetch === 'function') {
-    const deps = depsDe(raiz);
-    if (esUrlInmutable(raiz)) void deps.then((d) => precargarCierre(jobs, raiz, d));
-    else precargarCierre(jobs, raiz, await deps);
+    const porCat = new Map<string, LoadJob[]>();
+    for (const job of jobs) {
+      const html = precargadaEnHtml(new URL(job.path, raiz).href, raiz);
+      if (html) exactos.set(job, html);
+      else {
+        const cat = job.path.slice(0, job.path.indexOf('/'));
+        porCat.set(cat, [...(porCat.get(cat) ?? []), job]);
+      }
+    }
+    const inmutable = esUrlInmutable(raiz);
+    const esperas = [...porCat].map(([cat, js]) => depsDe(raiz, cat).then((d) => precargarCierre(js, raiz, d)));
+    if (!inmutable) await Promise.all(esperas);
   }
-  await Promise.all(jobs.map((j: LoadJob) => importCdn(j.path)));
+  await Promise.all(jobs.map((j: LoadJob) => importCdn(j.path, exactos.get(j))));
 }
 
 /** Tag de la app: precarga su entrada (si es módulo) y el cierre que la app declaró en `deps`. */

@@ -2,7 +2,8 @@
 //
 // dist/cdn está folderizado por categoría y sale de UN build con splitting (F3). Verifica que:
 //   - La raíz: lista cerrada (alias estables loader.min.mjs, is-base.min.css, palettes.min.css, deps.json,
-//     exports.json, asset-hashes.json, importmap.json, reload-pin) — sin artefactos planos sueltos.
+//     exports.json, asset-hashes.json, importmap.json, reload-pin) — sin artefactos planos sueltos; `deps/` (grafo
+//     partido por categoría, F7) no es una categoría.
 //   - core/: loader (.min.mjs + la copia compat .min.js), CSS base, módulos src/core.
 //   - _chunks/: el código compartido; el core (`IswcElement`) existe UNA vez en todo dist/cdn.
 //   - Cada componente del manifest existe en <categoria>/<tag>.min.mjs (o lo registra un módulo de su categoría).
@@ -19,6 +20,7 @@ import { readFileSync, readdirSync, existsSync, statSync } from 'node:fs';
 import { join, dirname, basename } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+import { leerDeps } from '../_shared/deps.ts';
 
 const { test, lista } = coleccionPruebas({ categoria: 'how' });
 
@@ -26,7 +28,9 @@ const { test, lista } = coleccionPruebas({ categoria: 'how' });
 const FIRMA_CORE = /setBooleanAttr\([\w$]+,[\w$]+\)\{/;
 
 /** Carpetas de dist/cdn que no son categorías de componentes. */
-const NO_CATEGORIA = new Set(['llm', 'skills', 'core', 'build', 'lib', '_chunks', 'vendor-distributions']);
+// `deps/` (F7, 0.1): el grafo partido por categoría (`deps/<cat>.json` + `deps/core.json`); `deps.json` de la raíz es
+// solo el índice tag → categoría. Así el loader baja 1–15 KB de lo que pide en vez de los 123 KB del grafo entero.
+const NO_CATEGORIA = new Set(['llm', 'skills', 'core', 'build', 'lib', '_chunks', 'vendor-distributions', 'deps']);
 
 test('gobernanza/cdn-folders', async () => {
   const here = dirname(fileURLToPath(import.meta.url));
@@ -201,7 +205,7 @@ test('gobernanza/cdn-folders', async () => {
 
   // Un componente que importa a otro no lo inlinea: lo trae por los MISMOS chunks. Con splitting todo el código de B
   // alcanzable desde A sale a chunks compartidos, así que el cierre de B (menos su propia entrada) está dentro del de A.
-  const deps = existsSync(join(dist, 'deps.json')) ? JSON.parse(readFileSync(join(dist, 'deps.json'), 'utf8')).tags : {};
+  const deps = leerDeps(dist)?.tags ?? {};
   let crossImportsChecked = 0;
   for (const src of walkSrc(compRoot)) {
     const tag = basename(src).replace(/\.ts$/, '');

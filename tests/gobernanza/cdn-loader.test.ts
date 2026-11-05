@@ -58,8 +58,8 @@ test('dist/cdn/core/loader.min.mjs y loader.md existen; banner con docs', () => 
   assert.ok(existsSync(join(root, 'dist', 'cdn', 'core', 'loader.md')), 'falta dist/cdn/core/loader.md');
   // Build único (F3): el loader importa chunks compartidos (cdn-ref, asset-url…). Se lee su cierre completo, el que
   // sale de dist/cdn/deps.json (`core.loader`). El catálogo va DENTRO del loader (F4) y compacto: categorías.
-  const cierre: string[] = JSON.parse(readFileSync(join(root, 'dist', 'cdn', 'deps.json'), 'utf8')).core.loader;
-  assert.ok(cierre.includes('core/loader.min.mjs'), 'deps.json: core.loader incluye el loader');
+  const cierre: string[] = JSON.parse(readFileSync(join(root, 'dist', 'cdn', 'deps', 'core.json'), 'utf8')).core.loader;
+  assert.ok(cierre.includes('core/loader.min.mjs'), 'deps/core.json: core.loader incluye el loader');
   const code = cierre.map((r) => readFileSync(join(root, 'dist', 'cdn', r), 'utf8')).join('\n');
   assert.ok(code.length < 120_000, `loader.min.mjs + su cierre demasiado grande (${code.length} B)`);
   assert.match(code, /iswcLoader/);

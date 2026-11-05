@@ -42,18 +42,24 @@ La API pública (`iswcLoaderShape`) no cambia de forma: cada método de capa 2 e
 ## Bootstrap recomendado (apps)
 
 El arranque más rápido no espera a que el loader descubra nada: el HTML de la app ya trae el import map, la precarga
-del cierre del shell crítico (sacada de `deps.json` en el build de la app) y las hojas base.
+del cierre del shell crítico (sacada del grafo vendorizado `src/vendor/iswc-base/deps.json` en el build de la app), la
+marca `iswc-precargado` y las hojas base sin bloquear.
 
 ```html
 <script type="importmap">
 { "imports": { "@jeff-aporta/iswc-base/": "https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@SHA/dist/cdn/" } }
 </script>
-<!-- Cierre del shell crítico: deps.json → tags[tag] de cada tag del shell (chunks tal cual, sin ?v=). -->
+<!-- Pin del que salió la precarga: el loader no pide deps/<cat>.json para lo que ya está precargado (F7). -->
+<meta name="iswc-precargado" content="SHA">
+<!-- Cierre del shell crítico: tags[tag] de cada tag del shell (chunks tal cual, sin ?v=; lib/zod incluido). -->
 <link rel="modulepreload" href="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@SHA/dist/cdn/core/loader.min.mjs">
 <link rel="modulepreload" href="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@SHA/dist/cdn/layout/app-shell.min.mjs">
 <link rel="modulepreload" href="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@SHA/dist/cdn/_chunks/chunk-XXXXXXXX.mjs">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@SHA/dist/cdn/is-base.min.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@SHA/dist/cdn/palettes.min.css">
+<!-- Hojas base no bloqueantes (F7): no frenan la ejecución de los módulos que siguen. -->
+<link rel="preload" as="style" href="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@SHA/dist/cdn/is-base.min.css" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@SHA/dist/cdn/is-base.min.css"></noscript>
+<link rel="preload" as="style" href="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@SHA/dist/cdn/palettes.min.css" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@SHA/dist/cdn/palettes.min.css"></noscript>
 <script type="module">
   import { iswcLoader as L } from '@jeff-aporta/iswc-base/core/loader.min.mjs';
   await Promise.all(['iswc-app-shell', 'iswc-button'].map((t) => L.ensure(t)));   // shell crítico definido
@@ -63,13 +69,21 @@ del cierre del shell crítico (sacada de `deps.json` en el build de la app) y la
 ```
 
 - Sobre un pin SHA (jsDelivr/githack) las URLs no llevan `?v=` (son inmutables). En un origen mutable (Pages, carpeta
-  local) el build de la app sella las entradas con el `?v=` de `deps.json` (`v`) y deja los chunks tal cual.
-- Si el HTML ya enlaza `is-base.min.css` (con o sin `?v=`), el loader no lo duplica; los `modulepreload` del HTML
-  tampoco se repiten.
-- Aunque el HTML no precargue nada, el primer `load()` pide `deps.json` (una vez) e inyecta `<link rel="modulepreload">`
-  para todo el cierre del lote: el navegador lo baja en una ráfaga en vez de un nivel por `import()`. Sobre pin SHA
-  `deps.json` va con `cache: 'force-cache'` y en paralelo con el primer `import()`; en un origen mutable el loader lo
-  espera (trae el `?v=` de las entradas: sin él, una entrada cacheada pediría chunks que ya no existen).
+  local) el build de la app sella las entradas con el `?v=` del grafo (`v`) y deja tal cual los chunks y los módulos
+  que otro importa (`lib/zod`, capas del loader, tags pedidos por `import()`): esos no llevan `?v=` en ninguna parte.
+- Si el HTML ya enlaza `is-base.min.css` (con o sin `?v=`, como `stylesheet` o como `preload as=style`), el loader no
+  lo duplica; los `modulepreload` del HTML tampoco se repiten.
+- Grafo partido (F7): `dist/cdn/deps.json` es solo un índice (`sha` + tag → categoría, ~6 KB) y el cierre de cada tag
+  va en `dist/cdn/deps/<cat>.json` (1–20 KB; el del core en `deps/core.json`). `sha` es el SHA **base** del build (el
+  commit sobre el que se construyó, anterior al que lo publica): informativo, no se compara con el pin.
+- Si una entrada pedida ya está en un `<link rel="modulepreload">` del HTML (no puesto por el loader), el loader la
+  importa con ese mismo href y no pide `deps/<cat>.json`: el build de la app ya emitió su cierre. Con
+  `<meta name="iswc-precargado" content="SHA">`, esa precarga solo cuenta si el SHA coincide con el pin de la raíz
+  (un HTML de otro pin pide `deps` igual).
+- Sin precarga en el HTML, `load()` pide `deps/<cat>.json` de cada categoría del lote (una vez) e inyecta
+  `<link rel="modulepreload">` para todo el cierre: el navegador lo baja en una ráfaga en vez de un nivel por
+  `import()`. Sobre pin SHA va con `cache: 'force-cache'` y en paralelo con el primer `import()`; en un origen mutable el
+  loader lo espera (trae el `?v=` de las entradas: sin él, una entrada cacheada pediría chunks que ya no existen).
 - Nada de top-level await en los módulos que cargan las apps (regla del WebView Android): el núcleo y la capa 2 no
   lo usan.
 
@@ -167,8 +181,12 @@ Cada build deja un mapa de 6 caracteres en `dist/cdn/asset-hashes.json`. El load
 (`__IS_ASSET_HASHES__` queda en `{}`); desde F4 sella solo en orígenes mutables (Pages, `localhost`, carpeta local) y
 nunca sobre un pin SHA de jsDelivr/githack (`esUrlInmutable`: la URL ya es inmutable):
 
-- **Entradas del kit** (`<cat>/<tag>.min.mjs`): su `?v=` viaja en `deps.json` (`v`), que el loader ya pide para la
-  precarga. No hace falta bajar `asset-hashes.json` para `load`/`ensure`.
+- **Entradas del kit** (`<cat>/<tag>.min.mjs`): su `?v=` viaja en `deps/<cat>.json` (`v`), que el loader ya pide para
+  la precarga. No hace falta bajar `asset-hashes.json` para `load`/`ensure`.
+- **Ningún `.mjs` lleva `?v=` dentro** (F7): ni chunks ni entradas sellan sus imports. Un módulo que otro importa por
+  ruta relativa (`lib/zod.min.mjs`, las capas `core/loader-<x>`, un tag pedido por `import()` desde otro) tiene UNA
+  URL sin `?v=` para todos: queda fuera de `asset-hashes.json` y de `v`, así nadie lo pide con dos URLs (dos
+  instancias). En Pages/local se revalida por la caché HTTP (`max-age` corto); sobre pin SHA es inmutable.
 - **Hojas, módulos de página y `assetUrl()`**: `loader-hashes` lee `asset-hashes.json` en diferido (en
   `loadPageModules`/`loadPageStyles`; `assetUrl` lo dispara y sella cuando llega).
 - **Chunks** (`_chunks/chunk-<hash>.mjs`): nunca llevan `?v=` (el nombre ya es el hash de su contenido). Su URL es una
@@ -176,7 +194,7 @@ nunca sobre un pin SHA de jsDelivr/githack (`esUrlInmutable`: la URL ya es inmut
 
 Si el archivo cambia, el hash cambia y el navegador pide esa URL: no hace falta un refresco forzado.
 
-**Extensiones y grafo.** Los módulos ES del kit son `.min.mjs` (`<cat>/<tag>.min.mjs`, `core/<x>.min.mjs`, `_chunks/chunk-<hash>.mjs`); `.js` queda para lo clásico (`*.classic.js`, `<script src>`) y para la copia compat `core/loader.min.js` (se retira en F5). `dist/cdn/deps.json` da, por tag, el cierre completo de módulos que trae (`tags`, `core`) y el `?v=` de cada entrada (`v`): el loader lo usa para precargar el lote con `modulepreload`.
+**Extensiones y grafo.** Los módulos ES del kit son `.min.mjs` (`<cat>/<tag>.min.mjs`, `core/<x>.min.mjs`, `_chunks/chunk-<hash>.mjs`); `.js` queda para lo clásico (`*.classic.js`, `<script src>`) y para la copia compat `core/loader.min.js` (se retira en F5). `dist/cdn/deps.json` es el índice (tag → categoría) y `dist/cdn/deps/<cat>.json` da, por tag, el cierre completo de módulos que trae (`tags`; `deps/core.json`: `core`) y el `?v=` de cada entrada (`v`): el loader pide solo la parte de la categoría que carga para precargar el lote con `modulepreload`. Los consumidores vendorizan el grafo unido (`pin-update`, `vendor:iswc`).
 
 **La extensión declara el tipo (D2).** En `load(href)`, `ensure(tag, { href })`, `registerApp` y `loadPageModules`:
 `.mjs`, `.ts` o sin extensión → `import()`; `.js` → `<script src>` clásico (promesa en `load`/`error`); `.css` →

@@ -13,11 +13,11 @@ import { aliasKit, ALIAS_KIT, reescribirAlias } from '@jeff-aporta/iswc-base/cdn
 import { cssVirtual } from '@jeff-aporta/iswc-base/cdn/build/css-virtual.ts';
 import { bundleMinJs, bundleMinCss, docsBanner } from '@jeff-aporta/iswc-base/cdn/build/bundle-min.ts';
 import { bundleKit, entradasKit, catalogoLoader, zodExterno } from '@jeff-aporta/iswc-base/cdn/build/bundle-kit.ts';
-import { conVersiones, depsJson, exportsJson } from '@jeff-aporta/iswc-base/cdn/build/graph.ts';
+import { conVersiones, depsJson, exportsJson, partirDeps } from '@jeff-aporta/iswc-base/cdn/build/graph.ts';
 import { packageJson } from '@jeff-aporta/iswc-base/cdn/build/npm.ts';
 import { barrerHashes } from '@jeff-aporta/iswc-base/cdn/build/sync-hashes.ts';
 import { hashesRepetidos } from '@jeff-aporta/iswc-base/cdn/build/hash.ts';
-import { stampDirectory, hashFile, rewriteHtmlTree, hashesJson, applyHashToHtml, ASSET_HASHES_NAME } from '@jeff-aporta/iswc-base/cdn/build/stamp-hashes.ts';
+import { stampDirectory, mjsReferenciadosEn, hashFile, rewriteHtmlTree, hashesJson, applyHashToHtml, ASSET_HASHES_NAME } from '@jeff-aporta/iswc-base/cdn/build/stamp-hashes.ts';
 import { construirAi } from './builds/ai.mjs';
 
 const here = dirname(fileURLToPath(import.meta.url));
@@ -64,32 +64,21 @@ await import('./ops/gen-shared-index.ts');
 
 // ─────────────────────── PROTOCOLO DE CONSTRUCCION ───────────────────────
 //
-//   En dist/cdn/ se borra TODO en cada build. Los assets estáticos (iconos,
-//   favicon, etc.) viven en dist/assets/, hermano de dist/cdn/, y NO se tocan.
+//   En dist/cdn/ se borra TODO en cada build. Los assets estáticos (favicon,
+//   playlist, PDF de ejemplo) viven en dist/assets/, hermano de dist/cdn/, y NO se tocan.
 //
 // Todo lo de dist/cdn/ (los .min.mjs, .min.css, loader, skills, docs) es
 // GENERADO: se reconstruye entero en cada corrida.
 //
-// `dist/assets/` es FUENTE versionada: ~317k SVG y material del kit. No se
-// genera desde `src/` — `src/assets/` se eliminó para no duplicar.
+// `dist/assets/` es FUENTE versionada (material del kit). No se genera desde
+// `src/` — `src/assets/` se eliminó para no duplicar.
 //
-// Consecuencias practicas:
-//   - `deno task icons:download` escribe en dist/assets/icons/.
-//   - Mas abajo se VERIFICA que el set siga entero (MIN_ICONOS); no se copia.
-//   - Quien anada material nuevo al kit lo pone en dist/assets/, no en src.
+// Íconos (4-nov-2026): ninguna colección completa viaja en el repo. Los que el kit,
+// labs y apps usan de verdad viven en `assets/iconify/` (los genera `deno task icons`,
+// que corre antes de este script); el resto lo sirve la API de Iconify.
 //
 // Los assets fuera de dist/cdn/ evitan mezclar material estático con bundles CDN.
 const PRESERVAR = new Set();
-
-/**
- * Minimo de ficheros que debe tener dist/assets/icons/.
- *
- * Es un canario, no una cifra exacta. Desde 2026-10-09 solo viajan en el repo
- * mdi (7447) y tabler (6184) + el catalogo (index/collections/manifest/viewbox):
- * el resto de sets lo sirve la API de Iconify y cada app lleva sus iconos en
- * assets/iconify/. Quedar por debajo significa que alguien borro material publicado.
- */
-const MIN_ICONOS = 13_000;
 
 // Mapa de hashes del build anterior: se lee ANTES de limpiar dist/ para el barrido ?v= del final.
 const hashesPath = join(dist, ASSET_HASHES_NAME);
@@ -346,39 +335,6 @@ console.log(`  ${'loader.md'.padEnd(18)} docs`);
 // loader vive en specs/cdn.md (catálogo visible por LLM); no se copia nada a
 // dist/cdn/LLM.md raíz (apps que lo enlazaban fueron migradas al spec).
 
-// ── Iconos: dist/assets/ no se toca en el build ───────────────────
-// `dist/assets/` es la unica copia del material del kit. No se genera desde
-// `src/` — `src/assets/` ya no existe. El borrado de arriba solo afecta
-// dist/cdn/; los assets viven al lado, en dist/assets/.
-//
-// Aqui solo se verifica que siga entero.
-const iconsOut = join(root, 'dist', 'assets', 'icons');
-{
-  const contar = async (dir) => {
-    let n = 0;
-    for (const e of await readdir(dir, { withFileTypes: true })) {
-      if (e.name.startsWith('.')) continue;
-      n += e.isDirectory() ? await contar(join(dir, e.name)) : 1;
-    }
-    return n;
-  };
-  try {
-    const n = await contar(iconsOut);
-    if (n < MIN_ICONOS) {
-      console.error(`
-ERROR assets/icons: ${n} ficheros, se esperaban >= ${MIN_ICONOS}.`);
-      console.error('dist/assets/ es la unica copia y el build NUNCA la borra.');
-      console.error('Si falta, recuperala con `git checkout -- dist/assets` o `deno task icons:download`.');
-      process.exit(1);
-    }
-    console.log(`  assets/icons         ${n} preservados (no se regeneran: unica copia)`);
-  } catch {
-    console.error('\nERROR: falta dist/assets/icons/. Es la unica copia del set de iconos.');
-    console.error('Recuperala con `git checkout -- dist/assets` antes de volver a construir.');
-    process.exit(1);
-  }
-}
-
 // ── Skills para agentes (Cursor / Claude / LLM) ──────────────────
 // Van a dist/cdn/skills/ para que jsDelivr y Pages las sirvan igual que
 // el resto del kit. La fuente canónica vive en `skills/` (raíz); se
@@ -476,9 +432,23 @@ let tagsKit;
 // ── hashes: sellar imports relativos de dist/cdn y escribir el mapa (asset-hashes.json) ────────
 // Los chunks ya llevan hash en el nombre: no se sellan (`esChunk` en stamp-hashes), y su URL es la misma para todos
 // sus importadores y para el `modulepreload` del loader.
-const hashes = await stampDirectory(dist);
-// Sin sangría: el loader lo pide en el arranque (126 KB en vez de 158 KB; ~9 KB br por jsDelivr).
-await writeFile(join(dist, 'deps.json'), JSON.stringify(conVersiones(deps, hashes)) + '\n', 'utf8');
+// F7 (0.2): ningún `.mjs` lleva `?v=` dentro (ni chunks ni entradas). Un módulo que otro importa por ruta relativa
+// (`lib/zod`, `import()` entre tags, capas del loader) tiene UNA URL, sin `?v=`, para todos: sale del mapa para que
+// ni el loader (`v` de deps) ni la galería (`asset-hashes.json`) ni los HTML lo sellen. El sello en orígenes
+// mutables queda para las entradas que nadie importa, y lo pone quien las pide (loader vía `deps/<cat>.json`).
+const hashes = await stampDirectory(dist, undefined, { sellarMjs: false });
+const compartidos = await mjsReferenciadosEn(dist);
+compartidos.delete('core/loader.min.mjs');
+for (const ruta of compartidos) delete hashes[ruta];
+// Índice mínimo + una parte por categoría (F7, 0.1): el loader baja solo `deps/<cat>.json` de lo que pide, y nada
+// si el HTML ya precargó el cierre. Sin sangría.
+{
+  const partido = partirDeps(conVersiones(deps, hashes, compartidos), (tag) => loaderCatalog.tags[tag].category);
+  await mkdir(join(dist, 'deps'), { recursive: true });
+  for (const [cat, parte] of Object.entries(partido.partes)) await writeFile(join(dist, 'deps', `${cat}.json`), JSON.stringify(parte) + '\n', 'utf8');
+  await writeFile(join(dist, 'deps.json'), JSON.stringify(partido.indice) + '\n', 'utf8');
+  console.log(`  ${'deps/'.padEnd(18)} ${Object.keys(partido.partes).length} partes · ${compartidos.size} módulos compartidos sin ?v=`);
+}
 const addHash = async (key, abs) => {
   try { hashes[key] = await hashFile(abs, key); } catch { /* todavia no existe */ }
 };

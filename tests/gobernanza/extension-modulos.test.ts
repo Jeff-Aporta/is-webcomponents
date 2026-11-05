@@ -5,7 +5,7 @@
  *       la copia compat `core/loader.min.js` (F5 la retira) y los artefactos clásicos `*.classic.js`;
  *   (b) en src/**, skills/**, specs/** y README.md no queda `<módulo del kit>.min.js` (misma detección que el codemod
  *       scripts/codemods/min-mjs.mjs; sus excepciones: terceros, galería, pines SHA, líneas de compat, historia);
- *   (c) deps.json no nombra ningún `.js`.
+ *   (c) deps.json (índice) y deps/<cat>.json no nombran ningún `.js`.
  */
 import assert from 'node:assert/strict';
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
@@ -41,10 +41,13 @@ test('gobernanza/extension-modulos: sin .min.js del kit en src, skills, specs y 
   assert.deepEqual(quedan, {}, `quedan .min.js del kit (corre scripts/codemods/min-mjs.mjs): ${JSON.stringify(quedan)}`);
 });
 
-test('gobernanza/extension-modulos: deps.json no nombra .js', () => {
+test('gobernanza/extension-modulos: deps.json y deps/<cat>.json no nombran .js', () => {
   if (!existsSync(join(DIST, 'deps.json'))) return;
-  const texto = readFileSync(join(DIST, 'deps.json'), 'utf8');
-  assert.doesNotMatch(texto, /\.js"/, 'deps.json debe nombrar solo .mjs');
+  const partes = existsSync(join(DIST, 'deps')) ? readdirSync(join(DIST, 'deps')).map((n) => join('deps', n)) : [];
+  for (const rel of ['deps.json', ...partes]) {
+    const texto = readFileSync(join(DIST, rel), 'utf8');
+    assert.doesNotMatch(texto, /\.js"/, `${rel} debe nombrar solo .mjs`);
+  }
 });
 
 export default lista();
