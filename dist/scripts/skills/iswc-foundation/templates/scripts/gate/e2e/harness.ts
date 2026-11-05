@@ -24,6 +24,15 @@
 import { localBrowser, Stagehand } from '@browserbasehq/stagehand';
 import { type CredencialesMiniMax, crearGeneradorMiniMax } from './minimax.ts';
 
+/** Edge del sistema: Stagehand buscaría el Chrome del usuario si no se le da ruta (regla: siempre Edge). */
+const RUTAS_EDGE = [
+  'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe',
+  'C:/Program Files/Microsoft/Edge/Application/msedge.exe',
+  '/usr/bin/microsoft-edge',
+  '/Applications/Microsoft Edge.app/Contents/MacOS/Microsoft Edge',
+];
+const rutaEdge = (): string | undefined => RUTAS_EDGE.find((r) => { try { return Deno.statSync(r).isFile; } catch { return false; } });
+
 type Pagina = {
   goto(url: string, o?: { waitUntil?: string }): Promise<unknown>;
   evaluate<T, A>(fn: (a: A) => T, arg: A): Promise<T>;
@@ -36,7 +45,7 @@ type Pagina = {
  */
 export async function abrir(ruta = 'index.html', opciones: { llm?: CredencialesMiniMax } = {}) {
   const base = Deno.env.get('E2E_BASE_URL') ?? 'http://127.0.0.1:8851/';
-  const browser = await localBrowser.launch({ headless: Deno.env.get('E2E_HEADLESS') !== 'false' });
+  const browser = await localBrowser.launch({ headless: Deno.env.get('E2E_HEADLESS') !== 'false', executablePath: rutaEdge() });
   // Stagehand 4.1 exige adjuntar el navegador antes de usar su contexto. Sin modelo por defecto: el gate
   // no usa act()/extract(); con `llm`, el modelo es MiniMax con la clave de dev-token.json.
   const stagehand = await Stagehand.create({

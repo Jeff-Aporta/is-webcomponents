@@ -7,6 +7,7 @@ import { readFile, writeFile, readdir } from 'node:fs/promises';
 import { join, posix } from 'node:path';
 import { hashBase, hashPorRuta } from './hash.js';
 import { lookupHash, withAssetHash } from './asset-url.js';
+import { ASSET_HASH_PARAM, ASSET_HASH_PARAM_LEGADO } from './asset-url.js';
 
 export const ASSET_HASHES_NAME = 'asset-hashes.json';
 
@@ -155,9 +156,37 @@ export async function hashFile(abs: string, clave: string): Promise<string> {
   return hashPorRuta(clave, await readFile(abs, 'utf8'));
 }
 
-/** Reescribe href, src, import() y from de un HTML con el mapa ya cerrado. */
-export function applyHashToHtml(html: string, files: Record<string, string>): string {
+/** `url` sin los parámetros de sello (`v`, y el legado `h`); el resto de la query y el fragmento quedan. */
+export function sinSelloUrl(url: string): string {
+  const cut = url.indexOf('#');
+  const frag = cut < 0 ? '' : url.slice(cut);
+  const base = cut < 0 ? url : url.slice(0, cut);
+  const q = base.indexOf('?');
+  if (q < 0) return url;
+  const params = new URLSearchParams(base.slice(q + 1));
+  params.delete(ASSET_HASH_PARAM);
+  params.delete(ASSET_HASH_PARAM_LEGADO);
+  const resto = params.toString();
+  return `${base.slice(0, q)}${resto ? `?${resto}` : ''}${frag}`;
+}
+
+/** ¿`url` apunta (ruta exacta o por sufijo, como `lookupHash`) a uno de `rutas`? */
+function apuntaA(url: string, rutas: ReadonlySet<string>): boolean {
+  const path = url.split(/[?#]/)[0].replace(/\\/g, '/').replace(/^\.\//, '');
+  if (rutas.has(path)) return true;
+  for (const r of rutas) if (path.endsWith('/' + r)) return true;
+  return false;
+}
+
+/**
+ * Reescribe href, src, import() y from de un HTML con el mapa ya cerrado. `sinSello`: rutas que no llevan `?v=` (los
+ * `.mjs` que otro módulo importa por ruta relativa, plan F7 0.2): se les quita el que tengan de un build anterior, o
+ * el HTML pediría una URL distinta de la de sus importadores y el navegador evaluaría dos instancias.
+ */
+export function applyHashToHtml(html: string, files: Record<string, string>, sinSello: Iterable<string> = []): string {
+  const fuera = new Set(sinSello);
   const stamp = (url: string): string => {
+    if (fuera.size && apuntaA(url, fuera)) return sinSelloUrl(url);
     const hash = lookupHash(files, url);
     return hash ? withAssetHash(url, hash) : url;
   };
@@ -167,7 +196,7 @@ export function applyHashToHtml(html: string, files: Record<string, string>): st
   return out;
 }
 
-export async function rewriteHtmlTree(dir: string, files: Record<string, string>, skipDir?: (name: string) => boolean): Promise<number> {
+export async function rewriteHtmlTree(dir: string, files: Record<string, string>, skipDir?: (name: string) => boolean, sinSello: Iterable<string> = []): Promise<number> {
   let n = 0;
   let entries;
   try { entries = await readdir(dir, { withFileTypes: true }); }
@@ -177,12 +206,12 @@ export async function rewriteHtmlTree(dir: string, files: Record<string, string>
     if (skipDir?.(e.name)) continue;
     const abs = join(dir, e.name);
     if (e.isDirectory()) {
-      n += await rewriteHtmlTree(abs, files);
+      n += await rewriteHtmlTree(abs, files, skipDir, sinSello);
       continue;
     }
     if (!e.name.endsWith('.html')) continue;
     const prev = await readFile(abs, 'utf8');
-    const next = applyHashToHtml(prev, files);
+    const next = applyHashToHtml(prev, files, sinSello);
     if (next === prev) continue;
     await writeFile(abs, next);
     n += 1;

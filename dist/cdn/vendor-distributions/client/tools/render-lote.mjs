@@ -927,15 +927,7 @@ async function capturePng(ctx, sano, hrefs, id) {
   }
 }
 async function lanzarNavegador(chromium) {
-  let ultimo;
-  for (const channel of [void 0, "chrome", "msedge"]) {
-    try {
-      return await chromium.launch({ headless: true, ...channel ? { channel } : {} });
-    } catch (e) {
-      ultimo = e;
-    }
-  }
-  throw ultimo;
+  return await chromium.launch({ headless: true, channel: "msedge" });
 }
 async function runOnePage(browser, pageUrl, opts, id) {
   const timeoutMs = opts.timeoutMs ?? 9e4;
