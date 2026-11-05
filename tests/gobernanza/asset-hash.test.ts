@@ -5,6 +5,8 @@ import assert from 'node:assert/strict';
 import { hashBase, hashCss, hashHtml, hashJs, hashPorRuta, hashesRepetidos, HASH_LEN } from '../../src/cdn/build/hash.ts';
 import { cambiosDeHash, reemplazarHashes } from '../../src/cdn/build/sync-hashes.ts';
 import { stampHashTexts } from '../../src/cdn/build/stamp-hashes.ts';
+import { applyHashToHtml } from '../../src/cdn/build/stamp-hashes.ts';
+import { sinSelloUrl } from '../../src/cdn/build/stamp-hashes.ts';
 import { withAssetHash, lookupHash, esUrlInmutable } from '../../src/cdn/build/asset-url.ts';
 import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
 
@@ -106,6 +108,18 @@ test('esUrlInmutable: el loader no sella ?v= sobre un pin SHA de jsDelivr/githac
   assert.equal(esUrlInmutable('https://jeff-aporta.github.io/is-webcomponents/dist/cdn/actions/button.min.mjs'), false, 'Pages');
   assert.equal(esUrlInmutable('http://localhost:8391/dist/cdn/actions/button.min.mjs'), false, 'local');
   assert.equal(esUrlInmutable('../actions/button.min.mjs'), false, 'relativa');
+});
+
+test('applyHashToHtml: un módulo compartido pierde el ?v= viejo (una sola URL con sus importadores); el resto se sella', () => {
+  const html = `<link rel="modulepreload" href="./dist/cdn/core/loader-pages.min.mjs?v=viejo1">
+<script type="module">import { iswcLoader } from './dist/cdn/core/loader.min.mjs?v=viejo2&x=1#f';</script>
+<script src="dist/gallery-app.min.js?v=viejo3"></script>`;
+  const out = applyHashToHtml(html, { 'dist/gallery-app.min.js': 'nuevo1', 'core/loader.min.mjs': 'nunca' }, new Set(['core/loader.min.mjs', 'core/loader-pages.min.mjs']));
+  assert.match(out, /href="\.\/dist\/cdn\/core\/loader-pages\.min\.mjs"/);
+  assert.match(out, /from '\.\/dist\/cdn\/core\/loader\.min\.mjs\?x=1#f'/);
+  assert.match(out, /gallery-app\.min\.js\?v=nuevo1/);
+  assert.equal(sinSelloUrl('a.mjs?v=1'), 'a.mjs');
+  assert.equal(sinSelloUrl('a.mjs?h=1&k=2'), 'a.mjs?k=2');
 });
 
 export default lista();

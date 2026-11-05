@@ -437,8 +437,9 @@ let tagsKit;
 // ni el loader (`v` de deps) ni la galería (`asset-hashes.json`) ni los HTML lo sellen. El sello en orígenes
 // mutables queda para las entradas que nadie importa, y lo pone quien las pide (loader vía `deps/<cat>.json`).
 const hashes = await stampDirectory(dist, undefined, { sellarMjs: false });
+// El loader también: `preview/doc-demo-host` lo importa sin `?v=`; si el HTML lo sellara, la galería evaluaría dos
+// instancias (F7b: 2× loader y capas, 2× asset-hashes.json y deps/preview.json). Los HTML le quitan el sello viejo.
 const compartidos = await mjsReferenciadosEn(dist);
-compartidos.delete('core/loader.min.mjs');
 for (const ruta of compartidos) delete hashes[ruta];
 // Índice mínimo + una parte por categoría (F7, 0.1): el loader baja solo `deps/<cat>.json` de lo que pide, y nada
 // si el HTML ya precargó el cierre. Sin sangría.
@@ -552,9 +553,9 @@ console.log(`  ${'diagrams/themes/'.padEnd(18)} ${nTemas} temas (carga diferida 
 // el loader no sella (la URL ya es inmutable; ver `esUrlInmutable` en src/cdn/build/asset-url.ts).
 const indexPath = join(root, 'index.html');
 const indexPrev = await readFile(indexPath, 'utf8');
-const indexNext = applyHashToHtml(indexPrev, hashes);
+const indexNext = applyHashToHtml(indexPrev, hashes, compartidos);
 if (indexNext !== indexPrev) await writeFile(indexPath, indexNext);
-const htmlTouched = await rewriteHtmlTree(join(root, 'demos'), hashes) + (indexNext !== indexPrev ? 1 : 0);
+const htmlTouched = await rewriteHtmlTree(join(root, 'demos'), hashes, undefined, compartidos) + (indexNext !== indexPrev ? 1 : 0);
 console.log(`  html                 ${htmlTouched} con ?v=`);
 
 // Pin de auto-reload: el snippet embebido en cada HTML hace polling de este

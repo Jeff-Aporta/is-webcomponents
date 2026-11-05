@@ -26,10 +26,10 @@
   </script>
   <link rel="icon" href="dist/assets/favicon.svg" type="image/svg+xml">
   <!-- Capa 2 del loader que la galería usa al arrancar (loadPageModules + ?v= en origen mutable): en la misma ráfaga que el núcleo. -->
-  <link rel="modulepreload" href="./dist/cdn/core/loader-pages.min.mjs?v=ssvsae">
-  <link rel="modulepreload" href="./dist/cdn/core/loader-hashes.min.mjs?v=ae51dc">
+  <link rel="modulepreload" href="./dist/cdn/core/loader-pages.min.mjs">
+  <link rel="modulepreload" href="./dist/cdn/core/loader-hashes.min.mjs">
   <script type="module">
-    import { iswcLoader as L } from './dist/cdn/core/loader.min.mjs?v=xcddd9';
+    import { iswcLoader as L } from './dist/cdn/core/loader.min.mjs';
     // Alias en fuente; register por si el dist aún no lo trae (módulo ES con extensión `.js`: tipo explícito).
     if (!L.getPageModules()['iswc-gallery-app']) {
       L.registerPageModule('iswc-gallery-app', 'dist/gallery-app.min.js', { type: 'module' });
