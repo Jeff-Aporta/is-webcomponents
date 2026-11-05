@@ -304,6 +304,8 @@ API:
 
 Orden por defecto: `host` (si hay) → `self` (si `preferSelf` y no hay host) → **jsDelivr → githack → Pages**. Un fallo en un espejo prueba el siguiente; el que funciona queda sticky. El núcleo solo prueba la primera base (host o self); la cadena y el sticky viven en `loader-mirrors` (capa 2), que se pide únicamente si esa base falla. Sin pin la cadena consulta la API de GitHub (`loader-ref`); con pin, `BOOT_HOST`, `self` o `mirrors: []` (modo local) nunca.
 
+Una hoja cuenta como caída solo si cae ella: un `@import` que no responde (las fuentes web de `doc-presentation` sin red) también dispara `error` en el `<link>`, pero si la hoja propia llegó (estado 2xx/3xx en Resource Timing o, sin estado, reglas legibles) el `<link>` se queda y no se baja a los espejos. Guardián: `tests/navegador/scrollspy-restore.test.ts` (galería sin red externa).
+
 ## CSS
 
 ### Apps consumidoras (CDN)
