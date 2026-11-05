@@ -26,6 +26,9 @@ deno task build
 
 Artefactos en `dist/cdn/` (`{categoria}/{tag}.min.mjs` + `.min.css`, `core/loader.min.mjs`, `is-base.min.css`).
 
+Medir la carga de una página (Edge headless: tiempos, ráfagas, duplicados, web vitals y SEO):
+`deno task medir -- --url=<url> [--warm] [--throttle] [--seo] [--corridas=5] [--json=<ruta>]`; detalle en `specs/cdn.md` §Medir la carga.
+
 **npm: preparado, no publicado.** El build escribe el `package.json` de la raíz (`@jeff-aporta/iswc-base`, versión
 provisional `0.0.0-<yyyymmdd>.<sha7>`, `exports` hacia `dist/cdn/`) y `deno task npm:pack` arma el tarball en
 `.tmp/npm/` sin publicar nada. Hoy el kit se consume por CDN (import map a jsDelivr@sha); cuando se publique, el mismo

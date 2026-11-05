@@ -278,6 +278,36 @@ Qué cambia al publicar: los consumidores dejan el import map y el re-pin por SH
 - Con `@main` cacheado 24 h, `all.min.js` servido puede ser **anterior** a que existiera un componente: el componente nuevo no queda definido aunque su archivo sí se sirva fresco. Síntoma: `customElements.get('iswc-button')` true y `customElements.get('iswc-code')` false, sin error. **Solución:** pedir el componente por su ruta propia (`dist/cdn/<cat>/<comp>.min.js`) además de `all.min.js`.
 - `all.min.js` y `category.*.min.js` son **solo listas de `import`** (~250 B): sumar su tamaño literal da el ranking invertido; hay que expandirlos a los `.min.js` reales (UI con `autofit`).
 
+### Medir la carga
+
+`deno task medir` (`scripts/medir-carga.mjs`, plan de carga F7) carga una página en **Edge headless** (nunca el Chrome
+del usuario) y resume lo que pasó hasta el hito de «lista» y unos segundos después:
+
+```bash
+deno task medir -- --url=https://jeff-aporta.github.io/is-webcomponents/ --ready='iswc-doc-demo[data-ready="1"]' --warm --seo
+deno task medir -- --servir=. --url=/ --ready='iswc-doc-demo[data-ready="1"]' --solo-local --corridas=5   # galería local
+deno task medir -- --lote=iswc-button,iswc-dialog --latencia=120                                          # lote por el loader
+deno task medir -- --url=https://localhost:4441/ --resolver=cdn.jsdelivr.net=127.0.0.1:4450 --throttle     # app con CDN local
+```
+
+- `--ready`: atributo (`data-app-ready`, en `<html>` o en cualquier elemento) o selector. `--cold` (por defecto) o
+  `--warm` (además la segunda visita con caché). `--throttle`: 3G rápido (80 ms, 1,5 Mbit/s) y CPU ×4.
+- `--servir=<carpeta>` la sirve estática en un puerto libre (`max-age=600` + ETag, como Pages); `--latencia=<ms>` retrasa
+  cada respuesta (con más de 50 ms una cascada se ve como ráfagas). `--lote=<tags>` monta una página mínima contra `dist`
+  que pide esos tags al loader (`load` + `ensure`) y cuenta además las ráfagas **tras `load()`**.
+- `--solo-local`: ningún host salvo localhost resuelve (medición hermética). `--resolver=<host>=<ip:puerto>`: servidores
+  locales en lugar del CDN o del API (TLS autofirmado aceptado).
+- `--corridas=<n>`: navegador nuevo en cada una; el resumen es la mediana. `--json=<ruta>`: resumen y corridas.
+- Mide: DCL, FCP, hito, peticiones (totales y hasta el hito), KB transferidos y decodificados, ráfagas (algoritmo de
+  `tests/_shared/rafagas.ts`), URLs y rutas duplicadas, módulos del kit, errores de consola, respuestas ≥ 400,
+  `indexedDB.open`, `caches.open`, peticiones a api.github.com; LCP, CLS, long tasks (TBT aproximado: lo que pasa de
+  50 ms), INP si hubo interacción; `Performance.getMetrics` por CDP (ScriptDuration, LayoutDuration, JSHeapUsedSize).
+- `--seo`: checklist 0–100 (title ≤ 70, description 50–160, canonical, `lang`, viewport, un solo `h1` contando shadow
+  roots, `img` con `alt`, enlaces con texto, `og:` y `twitter:`, consola sin errores, HTML ≤ 100 KB, `.mjs` con
+  `type=module`) con la lista de fallos. Lighthouse no está en las dependencias del kit y no se usa.
+- Presupuestos permanentes (rojo bloquea): `tests/navegador/carga.test.ts` usa esta misma medición (loader ≤ 8 KB br,
+  media por tag, lote shell en ≤ 2 ráfagas sin duplicados ni IndexedDB, galería local ≤ 1,5 s).
+
 ### Contrato de boot de la galería (`index.html`)
 
 - CSS en `<link>` (is-base/palettes/shell/presentation/preview-component.css) + CSS crítico inline; **no** `await loadCSS*` como primer paint.
