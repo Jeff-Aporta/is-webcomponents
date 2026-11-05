@@ -8,11 +8,12 @@ Lecciones pagadas, agrupadas por tema. Cada fila: síntoma → regla/fix → gua
 |---|---|---|
 | SVG de icono servido como `<img>` → icono "congelado" en su color (negro sobre claro) | Inyectar inline (`resolveIconRaw` + innerHTML en shadow) y `#normalizeInlineSvg()` fuerza `fill`/`stroke: currentColor` | `icon-references`, `icon-currentcolor` |
 | `currentColor` en SVG que sale del DOM (PNG/data-URI) → negro o invisible | Materializar el color al exportar | — |
-| "Normalizar" todo a `viewBox="0 0 24 24"` → familias enteras en blanco (grid ≠ 24) | Usar `collections.json` (height real), no heurísticas de coordenadas | — |
+| "Normalizar" todo a `viewBox="0 0 24 24"` → familias enteras en blanco (grid ≠ 24) | Conservar el viewBox que sirve la API (`deno task icons`), no heurísticas de coordenadas | `icon-viewbox` |
 | Iconos con paleta propia (banderas/logos/emoji) normalizados a `currentColor` → a medio pintar | Detectar paleta **por icono**, respetar el SVG | `icon-currentcolor` |
 | `<iconify-icon>` / `api.iconify.design` en runtime → sistema duplicado / 404 | Sistema propio servido con el bundle | `no-iconify` |
 | `fetch(..., { cache: 'force-cache' })` → iconos rotos persistidos en cache web | Usar `cache: 'default'`; `rawCache` en memoria | — |
 | Hardcodear paths absolutos de iconos en dev → 404 con previews en `previews/<cat>/` | `rootFromBaseURI()` / `<base href>` | — |
+| `dist/assets/icons` versionaba mdi + tabler completos y su catálogo (13 635 archivos) solo para el explorador → tarball de jsDelivr en ~43 MB, al borde de los 50 MB (4-nov-2026) | Ninguna colección completa en el repo: solo los usados en `assets/iconify/` (`deno task icons`); el explorador lee familias, nombres, búsqueda y SVG **por lotes** (`/<set>.json?icons=…`, un fetch por página) de la API vía `core/icon-loader`, cacheado en localStorage; sin API, aviso | `assets-copia-unica`, `icon-explorer`, `tamano-publicado` |
 
 ## Tema y paleta
 
@@ -109,6 +110,8 @@ Lecciones pagadas, agrupadas por tema. Cada fila: síntoma → regla/fix → gua
 | Galería en Pages forzaba jsDelivr@`__IS_BUILD_SHA__`; el SHA (`dd1bc805`) se reescribió en GitHub → galería muerta (2026-11-04) | Host de arranque jsDelivr@sha solo si el loader vino de jsDelivr/githack (`esOrigenCdn`); en Pages/local/`file:`/vendor, `self` y espejos de fallback | `cdn-mirrors` |
 | `exports` de npm con solo `./core/*` → `*.min.mjs`: el especificador del import map `core/loader.min.mjs` resolvería a `core/loader.min.mjs.min.mjs` (2026-11-04) | Añadir `./<carpeta>/*.min.mjs` (y `.min.css`): con el mismo prefijo, Node prefiere la clave más larga; probar la resolución desde `node_modules` real, no leyendo el JSON | `npm-pack` |
 | Bootstrap de consumidor documentado con el registrador de la app (`<p>Loader.min.js`) ANTES del loader → los módulos se ejecutan en orden de documento y el registrador lanza «falta iswcLoader»; y los componentes de la app tipados contra el molde publicado (`core/iswc-element.min.mjs`, JS minificado) no ven los estáticos declarados (2026-11-04, F5a) | Orden fijo: import map → precarga (bloque `iswc:precarga` que escribe el build desde `deps.json` vendorizado) → `<script type="module">` del loader → registrador → arranque; estáticos de la subclase (`tag`, `css`, `observed`, `deps`) sin `override`, métodos con `override`. Referencia viva: plantillas de `skills/iswc-foundation/templates/` | `probar-foundation` (`deno task test:foundation`) |
+| Avatar re-pineado al kit nuevo no ganaba `data-app-ready`: el loader bajaba `deps.json` (123 KB) en el primer `load()` aunque el HTML ya precargaba el cierre; varios chunks importaban `../lib/zod.min.mjs?v=…` (sello dentro de un chunk de nombre-hash, `lib/zod` fuera de los cierres y de la precarga); y las hojas por `<link rel=stylesheet>` en `<head>` frenaban los módulos (2026-11-05, F7a) | Grafo partido: índice `deps.json` + `deps/<cat>.json`, y ninguno si la entrada ya está en un `modulepreload` del HTML (`<meta name="iswc-precargado">` con el pin); ningún `?v=` dentro de un `.mjs` y un módulo que otro importa no lleva `?v=` en ninguna parte (fuera del mapa); externos del mismo build (`lib/zod`) dentro del cierre; hojas base `preload as=style` + `onload` | `deps-json` · `loader-rafagas` · `cdn-folders` |
+| Codemod de nomenclatura reescribió una regex de código en un consumidor (`/is-webcomponents\/…/`) y no barría `scripts/**/*.mjs`; `pin-update` no veía rutas `*.min.js` armadas en runtime (`new URL('x.min.js', L.selfBase)`) → 404 en el SHA nuevo (2026-11-05, F7a) | El codemod protege literales de regex en código y barre `scripts/**/*.mjs`; `pin-update` lista (sin reescribir) esas rutas runtime con archivo:línea | `nomenclatura` (N7, N8) · `pin-update` (P15, P16) |
 
 ## Diagramas
 
@@ -138,7 +141,7 @@ Lecciones pagadas, agrupadas por tema. Cada fila: síntoma → regla/fix → gua
 | `git show … > file` en UTF-16 → Node lee basura | `execSync('git show …', { encoding:'utf8' })` u `Out-File -Encoding utf8` | — |
 | Mojibake UTF-8 al reescribir `.ts`/`.html` desde PowerShell | Editar desde Node `writeFileSync(p, s, 'utf8')` o herramienta de edición | `deno task test:e2e` (00 nav «Código») |
 | Heredoc bash se come el escapado de una regex | Escribir archivos con la herramienta de edición (no `cat > file << 'EOF'`) | — |
-| `git add assets/icons/` "colgado" (~60 s) | Esperar; el comando está corriendo | — |
+| `git add` de miles de SVG "colgado" (~60 s; pasaba con el set completo, retirado el 4-nov-2026) | Esperar; y si ocurre, sospechar: nadie debería versionar una colección completa | `assets-copia-unica` |
 | Bundles `bundle:true` colapsan `import.meta.url` | Los bundles (`category.*.min.js`/`all.min.js`) solo re-importan `.min.js` individuales (`bundle:false`) | `cdn-folders` |
 | `rm -rf dist/cdn` y recopiar ~317k iconos en cada run → watcher de Live Server en bucle | Preservar `dist/assets/`; copia incremental; excluir rutas del watcher | — |
 

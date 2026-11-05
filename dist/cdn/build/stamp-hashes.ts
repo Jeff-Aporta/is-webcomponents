@@ -26,21 +26,43 @@ export function resolveRel(fromFile: string, spec: string): string {
  */
 export const esChunk = (ruta: string): boolean => /(?:^|\/)_chunks\//.test(ruta);
 
-function depsOf(from: string, text: string, known: Set<string>): string[] {
+/** Un módulo ES (`.mjs`): con `sellarMjs: false` ni se sella por dentro ni se sella su URL (plan F7, tarea 0.2). */
+const esMjs = (ruta: string): boolean => /\.mjs$/i.test(ruta);
+
+function depsOf(from: string, text: string, known: Set<string>, sellarMjs = true): string[] {
+  if (!sellarMjs && esMjs(from)) return [];
   REL_REF.lastIndex = 0;
   const found = new Set<string>();
   for (const m of text.matchAll(REL_REF)) {
     const target = resolveRel(from, m[2]);
-    if (target !== from && known.has(target) && !esChunk(target)) found.add(target);
+    if (target !== from && known.has(target) && !esChunk(target) && (sellarMjs || !esMjs(target))) found.add(target);
   }
   return [...found];
 }
 
-function stampText(from: string, text: string, hashes: Map<string, string>, known: Set<string>): string {
+/**
+ * Módulos `.mjs` que otro archivo del conjunto importa por ruta relativa (estático o `import()`). Sin sello entre
+ * módulos su URL es UNA (sin `?v=`) para todos: el loader, la galería y los HTML tampoco la sellan, o el navegador
+ * evaluaría dos instancias (plan F7, tarea 0.2).
+ */
+export function mjsReferenciados(input: Record<string, string>): Set<string> {
+  const known = new Set(Object.keys(input));
+  const out = new Set<string>();
+  for (const [from, text] of Object.entries(input)) {
+    for (const m of text.matchAll(REL_REF)) {
+      const target = resolveRel(from, m[2]);
+      if (target !== from && known.has(target) && esMjs(target) && !esChunk(target)) out.add(target);
+    }
+  }
+  return out;
+}
+
+function stampText(from: string, text: string, hashes: Map<string, string>, known: Set<string>, sellarMjs = true): string {
+  if (!sellarMjs && esMjs(from)) return text;
   return text.replace(REL_REF, (whole, quote: string, spec: string, query?: string) => {
     const target = resolveRel(from, spec);
     if (!known.has(target)) return whole;
-    if (esChunk(target)) return query ? `${quote}${spec}${quote}` : whole;
+    if (esChunk(target) || (!sellarMjs && esMjs(target))) return query ? `${quote}${spec}${quote}` : whole;
     const hash = hashes.get(target);
     if (!hash) return whole;
     const next = withAssetHash(`${spec}${query || ''}`, hash);
@@ -52,11 +74,12 @@ function stampText(from: string, text: string, hashes: Map<string, string>, know
  * Sella un conjunto ruta → texto. Las rutas son relativas a la raiz del CDN
  * (`actions/button.min.mjs`). No toca el disco.
  */
-export function stampHashTexts(input: Record<string, string>): { texts: Record<string, string>; hashes: Record<string, string> } {
+export function stampHashTexts(input: Record<string, string>, opts: { sellarMjs?: boolean } = {}): { texts: Record<string, string>; hashes: Record<string, string> } {
+  const sellarMjs = opts.sellarMjs !== false;
   const keys = Object.keys(input);
   const known = new Set(keys);
   const deps = new Map<string, string[]>();
-  for (const key of keys) deps.set(key, depsOf(key, input[key], known));
+  for (const key of keys) deps.set(key, depsOf(key, input[key], known, sellarMjs));
 
   const texts: Record<string, string> = { ...input };
   const hashes = new Map<string, string>();
@@ -66,7 +89,7 @@ export function stampHashTexts(input: Record<string, string>): { texts: Record<s
     const ready = [...pending].filter((k) => deps.get(k)!.every((d) => hashes.has(d)));
     if (!ready.length) break;
     for (const key of ready) {
-      const text = stampText(key, texts[key], hashes, known);
+      const text = stampText(key, texts[key], hashes, known, sellarMjs);
       texts[key] = text;
       hashes.set(key, hashPorRuta(key, text));
       pending.delete(key);
@@ -81,7 +104,7 @@ export function stampHashTexts(input: Record<string, string>): { texts: Record<s
     // cada archivo recibe uno fijo: la misma URL para todos sus importadores.
     const grupo = hashBase([...pending].sort().map((k) => `${k}\n${texts[k].replace(/[?&][vh]=[0-9a-z]+/gi, '')}`).join('\n--\n'));
     for (const key of pending) hashes.set(key, hashBase(`${grupo}:${key}`));
-    for (const key of pending) texts[key] = stampText(key, texts[key], hashes, known);
+    for (const key of pending) texts[key] = stampText(key, texts[key], hashes, known, sellarMjs);
   }
   return { texts, hashes: Object.fromEntries(hashes) };
 }
@@ -105,16 +128,26 @@ async function walkFiles(dir: string, rel: string, out: Record<string, string>, 
   }
 }
 
-/** Lee el arbol, sella los .js/.css y escribe solo lo que cambio. */
-export async function stampDirectory(dir: string, skip?: (rel: string) => boolean): Promise<Record<string, string>> {
+/**
+ * Lee el arbol, sella los .js/.css y escribe solo lo que cambio. Con `sellarMjs: false` (el `dist/cdn` del kit, F7)
+ * ningún `.mjs` lleva `?v=` dentro ni hacia él: su hash solo va al mapa (`asset-hashes.json`, `deps/<cat>.json`).
+ */
+export async function stampDirectory(dir: string, skip?: (rel: string) => boolean, opts: { sellarMjs?: boolean } = {}): Promise<Record<string, string>> {
   const input: Record<string, string> = {};
   await walkFiles(dir, '', input, skip);
-  const { texts, hashes } = stampHashTexts(input);
+  const { texts, hashes } = stampHashTexts(input, opts);
   await Promise.all(Object.keys(texts).map(async (rel) => {
     if (texts[rel] === input[rel]) return;
     await writeFile(join(dir, ...rel.split('/')), texts[rel]);
   }));
   return hashes;
+}
+
+/** `mjsReferenciados` de un árbol en disco (rutas relativas a `dir`). */
+export async function mjsReferenciadosEn(dir: string): Promise<Set<string>> {
+  const input: Record<string, string> = {};
+  await walkFiles(dir, '', input);
+  return mjsReferenciados(input);
 }
 
 /** Hash de un archivo suelto; `clave` es su ruta publicada (como en `stampHashTexts`). */

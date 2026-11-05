@@ -40,9 +40,12 @@ deno task build && deno task test:all
   `*.preview.min.js`, `vendor-distributions/`, `skills/` ni `build/`. Un pin anterior a F3 no publica
   `core/loader.min.mjs` (`--verificar`): exit 3 con el mensaje «es anterior a F3 … pinea un SHA posterior».
 - **`deps.json` vendorizado (kit F4)**: con `--nuevo`, si el consumidor tiene `src/vendor/iswc-base/`, se baja
-  `dist/cdn/deps.json` del SHA nuevo a `src/vendor/iswc-base/deps.json` (se valida que traiga `tags`; un error no pisa
-  el vigente y da exit 1). Su build emite con él los `<link rel="modulepreload">` del cierre del shell crítico sin red.
-  `--sin-deps` lo apaga (apps sin build de HTML).
+  el grafo del SHA nuevo a `src/vendor/iswc-base/deps.json` (desde el kit F7 `dist/cdn/deps.json` es un índice y el
+  cierre va en `dist/cdn/deps/<cat>.json`: se bajan las partes y se escribe el grafo unido `{ sha, tags, core, v }`; un
+  error no pisa el vigente y da exit 1; `sha` es el SHA base del build, no se compara con el pin). Su build emite con él
+  la marca `<meta name="iswc-precargado">` y los `<link rel="modulepreload">` del cierre del shell crítico sin red.
+  `--sin-deps` lo apaga (apps sin build de HTML). También avisa (sin reescribir) de rutas `*.min.js` del kit armadas en
+  runtime (`new URL('x.min.js', L.selfBase)`).
 - **Carpeta vendor con el nombre histórico** (`src/vendor/` + el nombre que nunca existió en GitHub): el inventario y
   `--nuevo` la avisan y proponen `git mv … src/vendor/iswc-base` y el codemod de abajo; nunca se renombra sola.
 - **Codemod de nomenclatura sobre un consumidor**: `deno run -A <kit>/scripts/codemods/nomenclatura-iswc-base.mjs

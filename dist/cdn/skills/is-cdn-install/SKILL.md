@@ -112,19 +112,24 @@ El import map va antes de cualquier `<script type="module">`. En Deno, la misma 
 
 ### Bootstrap recomendado para apps (loader en dos capas, F4)
 
-El arranque más rápido: import map con el alias al pin, `modulepreload` del cierre del shell crítico (sacado de
-`dist/cdn/deps.json` en el build de la app: `tags[tag]` de cada tag del shell; los `_chunks/` van tal cual, sin `?v=`),
-`<link>` de las hojas base y un módulo que importa el núcleo y pide el shell con `ensure` y el resto con `load`.
+El arranque más rápido: import map con el alias al pin, `<meta name="iswc-precargado">` con el pin, `modulepreload`
+del cierre del shell crítico (sacado del grafo del pin en el build de la app: `tags[tag]` de cada tag del shell; los
+`_chunks/` y `lib/zod` van tal cual, sin `?v=`; desde F7 el grafo publicado es `deps.json` (índice) + `deps/<cat>.json`
+y `pin-update`/`vendor:iswc` lo dejan unido en `src/vendor/iswc-base/deps.json`), las hojas base no bloqueantes y un
+módulo que importa el núcleo y pide el shell con `ensure` y el resto con `load`.
 
 ```html
 <script type="importmap">
 { "imports": { "@jeff-aporta/iswc-base/": "https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@<sha40>/dist/cdn/" } }
 </script>
+<meta name="iswc-precargado" content="<sha40>">
 <link rel="modulepreload" href="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@<sha40>/dist/cdn/core/loader.min.mjs">
 <link rel="modulepreload" href="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@<sha40>/dist/cdn/layout/app-shell.min.mjs">
-<!-- … un modulepreload por cada ruta de deps.json → tags[tag] del shell crítico … -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@<sha40>/dist/cdn/is-base.min.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@<sha40>/dist/cdn/palettes.min.css">
+<!-- … un modulepreload por cada ruta de tags[tag] del shell crítico … -->
+<link rel="preload" as="style" href="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@<sha40>/dist/cdn/is-base.min.css" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@<sha40>/dist/cdn/is-base.min.css"></noscript>
+<link rel="preload" as="style" href="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@<sha40>/dist/cdn/palettes.min.css" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@<sha40>/dist/cdn/palettes.min.css"></noscript>
 <script type="module">
   import { iswcLoader as L } from '@jeff-aporta/iswc-base/core/loader.min.mjs';
   await Promise.all(['iswc-app-shell', 'iswc-button'].map((t) => L.ensure(t)));   // shell definido → revelar
@@ -133,8 +138,9 @@ El arranque más rápido: import map con el alias al pin, `modulepreload` del ci
 </script>
 ```
 
-- `load()` resuelve al importar; `ensure()` al definirse. Sin precarga en el HTML, el primer `load()` pide
-  `deps.json` una vez y precarga el cierre del lote con `modulepreload` (una ráfaga).
+- `load()` resuelve al importar; `ensure()` al definirse. Lo que el HTML ya precargó no pide ningún `deps`; sin
+  precarga, `load()` pide `deps/<cat>.json` de cada categoría del lote (una vez) y precarga el cierre con
+  `modulepreload` (una ráfaga).
 - `is-base.min.css` lo pone el loader por `<link>` si el HTML no lo trae (nunca lo duplica); el arranque no usa
   IndexedDB ni Cache Storage ni la API de GitHub.
 - La extensión declara el tipo: `.mjs` → `import()`, `.js` → `<script src>` clásico. Componentes de app que son

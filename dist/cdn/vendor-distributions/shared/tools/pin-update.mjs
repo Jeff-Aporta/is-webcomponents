@@ -116,6 +116,25 @@ function inventario(op = opciones()) {
   }
   return { pines, mutables, legados };
 }
+var LITERAL_MIN_JS = /(['"`])[^'"`\n]*\.min\.js\1/;
+var BASE_RUNTIME = /\b(?:selfBase|cdnUrl|baseUrl)\b|\bL\.host\b|\biswcLoader\.host\b/;
+function rutasRuntimeMinJs(op = opciones()) {
+  const rel = (f) => relative(op.root, f).replace(/\\/g, "/");
+  const avisos = [];
+  for (const f of archivos(op)) {
+    readFileSync(f, "utf8").split("\n").forEach((l, i) => {
+      if (!LITERAL_MIN_JS.test(l) || !BASE_RUNTIME.test(l) || CABECERA_VENDOR.test(l)) return;
+      if (aMinMjs(l, op).n) return;
+      avisos.push(`${rel(f)}:${i + 1}: ${l.trim().slice(0, 140)}`);
+    });
+  }
+  return avisos;
+}
+function avisoRutasRuntime(avisos) {
+  if (!avisos.length) return "";
+  return `AVISO: rutas .min.js del kit construidas en runtime (dan 404 en un SHA nuevo; c\xE1mbialas a .min.mjs a mano, no se reescriben):
+  ${avisos.join("\n  ")}`;
+}
 async function estado(sha, ruta, op) {
   const u = `https://cdn.jsdelivr.net/gh/${op.repo}@${sha}/${ruta}`;
   const r = await fetch(u, { method: "HEAD", signal: AbortSignal.timeout(2e4) }).catch(() => null);
@@ -146,19 +165,34 @@ async function vendorizarDeps(sha, op = opciones(), traer = fetch) {
   const ruta = `${VENDOR_KIT}/deps.json`;
   if (op.sinDeps) return { estado: "omitido", ruta, motivo: "--sin-deps" };
   if (!existsSync(join(op.root, VENDOR_KIT))) return { estado: "sin-carpeta", ruta, motivo: `sin ${VENDOR_KIT}/` };
-  const u = `https://cdn.jsdelivr.net/gh/${op.repo}@${sha}/dist/cdn/deps.json`;
-  const r = await traer(u, { signal: AbortSignal.timeout(2e4) }).catch(() => null);
-  if (!r?.ok) return { estado: "error", ruta, motivo: `${u} \u2192 ${r?.status ?? "sin red"}` };
-  const texto = await r.text();
-  let json = null;
-  try {
-    json = JSON.parse(texto);
-  } catch {
+  const base = `https://cdn.jsdelivr.net/gh/${op.repo}@${sha}/dist/cdn/`;
+  const bajar = async (rel) => {
+    const r = await traer(`${base}${rel}`, { signal: AbortSignal.timeout(2e4) }).catch(() => null);
+    if (!r?.ok) return { error: `${base}${rel} \u2192 ${r?.status ?? "sin red"}` };
+    try {
+      return { json: JSON.parse(await r.text()) };
+    } catch {
+      return { error: `${base}${rel} no es JSON` };
+    }
+  };
+  const indice = await bajar("deps.json");
+  if (indice.error) return { estado: "error", ruta, motivo: indice.error };
+  let json = indice.json;
+  if (json && typeof json === "object" && json.categorias && typeof json.categorias === "object") {
+    const unido = { sha: json.sha, tags: {}, core: {}, v: {} };
+    for (const cat of [.../* @__PURE__ */ new Set([...Object.values(json.categorias), "core"])].sort()) {
+      const parte = await bajar(`deps/${cat}.json`);
+      if (parte.error) return { estado: "error", ruta, motivo: parte.error };
+      Object.assign(unido.tags, parte.json.tags ?? {});
+      Object.assign(unido.core, parte.json.core ?? {});
+      Object.assign(unido.v, parte.json.v ?? {});
+    }
+    json = unido;
   }
   if (!json || typeof json !== "object" || typeof json.tags !== "object" || json.tags === null) {
-    return { estado: "error", ruta, motivo: `${u} no es un deps.json (falta \`tags\`)` };
+    return { estado: "error", ruta, motivo: `${base}deps.json no es un deps.json (falta \`tags\` o \`categorias\`)` };
   }
-  if (!op.dryRun) writeFileSync(join(op.root, ruta), texto.endsWith("\n") ? texto : `${texto}
+  if (!op.dryRun) writeFileSync(join(op.root, ruta), `${JSON.stringify(json)}
 `);
   return { estado: "escrito", ruta, motivo: `${Object.keys(json.tags).length} tags \u2190 ${op.repo}@${sha.slice(0, 12)}` };
 }
@@ -309,6 +343,8 @@ async function protocolo(nuevoPedido, op = opciones(), viejo = "") {
   ${mutables.join("\n  ")}`);
     return 1;
   }
+  const runtime = avisoRutasRuntime(rutasRuntimeMinJs(op));
+  if (runtime) log(runtime);
   if (!code) log("siguiente: build + tests del consumidor");
   return code;
 }
@@ -342,6 +378,8 @@ if (esPrincipal()) {
     ${[...legados].join("\n    ")}`);
     const vendorLegado = avisoVendorLegado(op);
     if (vendorLegado) log(`  ${vendorLegado}`);
+    const runtime = avisoRutasRuntime(rutasRuntimeMinJs(op));
+    if (runtime) log(`  ${runtime}`);
     process.exit(pines.size > 1 || mutables.length || legados.size || vendorLegado ? 1 : 0);
   }
   process.exit(await protocolo(String(args.nuevo), op, args.viejo ? String(args.viejo) : ""));
@@ -355,12 +393,14 @@ export {
   VENDOR_LEGADO,
   aMinMjs,
   actualizarPines,
+  avisoRutasRuntime,
   avisoVendorLegado,
   inventario,
   mensajeNoPublicado,
   opciones,
   protocolo,
   publicado,
+  rutasRuntimeMinJs,
   ultimoPublicado,
   ultimoSha,
   ultimosShas,

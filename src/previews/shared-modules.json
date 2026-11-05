@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-04T23:40:34.664Z",
+  "generatedAt": "2026-11-05T15:45:21.685Z",
   "count": 43,
   "modules": [
     {
@@ -267,8 +267,9 @@
       "id": "icon-loader",
       "path": "src/core/icon-loader.ts",
       "summary": "Módulo compartido `icon-loader.ts`.",
-      "bytes": 10848,
+      "bytes": 18878,
       "exports": [
+        "iconApiUrl",
         "AVISO_FALTA_LOCAL",
         "baseAbsoluta",
         "resolveIconBase",
@@ -278,7 +279,8 @@
         "resolveIconSvg",
         "resolveIconRaw",
         "clearRawCache",
-        "listIconFamilies"
+        "listIconFamilies",
+        "listIconNames"
       ]
     },
     {
@@ -553,7 +555,7 @@
       "id": "tk-icon-inline",
       "path": "src/core/tk-icon-inline.ts",
       "summary": "Iconos inline en MD/HTML TK. El SVG lo resuelve el sistema propio de — iconos (_shared/icon-loader.js); no hay dependencia de terceros.",
-      "bytes": 18990,
+      "bytes": 19006,
       "exports": [
         "TK_ICON_TOKEN_RE",
         "iconAssetPath",

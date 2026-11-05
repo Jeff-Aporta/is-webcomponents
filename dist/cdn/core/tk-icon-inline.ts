@@ -203,7 +203,7 @@ function scanIconTemplateTokens(text: string, onToken: (start: number, end: numb
  * Inserta un icono como <svg> anidado dentro de un SVG (diagramas).
  *
  * Devuelve un <g> vacio que se rellena cuando el SVG del icono llega desde
- * el sistema propio de iconos (assets/icons -> dist/assets/icons). Antes
+ * el sistema propio de iconos (core/icon-loader: assets/iconify publicado -> API). Antes
  * esto era un <image href="https://api.iconify.design/...?color=">: dependia
  * de un tercero en runtime y no se podia teñir sin query params.
  *

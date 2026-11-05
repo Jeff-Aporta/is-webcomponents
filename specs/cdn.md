@@ -50,12 +50,13 @@ El kit se consume desde jsDelivr/GitHub Pages como módulos por tag. La galería
 | `<categoria>/<name>.min.mjs` | Componente individual (módulo ES; su CSS va dentro, por `iswc:css`) |
 | `<categoria>/<name>.min.css` | Estilos del componente (para `sheet-cache` y para enlazarlos a mano) |
 | `_chunks/chunk-<hash>.mjs` | Código compartido entre módulos (el core del molde vive en UNO) |
-| `deps.json` | Tag → cierre completo de módulos (`<cat>/<tag>.min.mjs` + `_chunks/…`) y `v` (`?v=` de cada entrada); el loader lo pide una vez para precargar el lote con `modulepreload` (F4) |
+| `deps.json` | Índice (F7): `sha` (SHA **base** del build, informativo) y `categorias` (tag → categoría), ~6 KB |
+| `deps/<cat>.json` | Grafo partido (F7): por tag de la categoría, cierre completo de módulos (`<cat>/<tag>.min.mjs` + `_chunks/…` + `lib/zod.min.mjs` si lo importa) y `v` (`?v=` de cada entrada sellable); `deps/core.json` lleva los cierres del core. El loader pide solo la parte de lo que carga, y ninguna si el HTML ya precargó el cierre |
 | `exports.json` | Mapa `exports` para el `package.json` de npm (F6) |
 | `<categoria>/<name>.classic.js` | Solo si se pide: artefacto clásico IIFE (`deno task build:classic`) |
 | `skills/<name>/SKILL.md` | Skills para agentes (copiado en build) |
 
-Iconos: `dist/assets/icons/` (fuera de `dist/cdn/`; única copia versionada). **No** recrear `README.txt` en `dist/cdn/`: el consolidador del loader es el índice.
+Íconos (4-nov-2026): **ninguna colección completa se versiona**. Solo viajan los que el kit, labs y apps usan de verdad, en `assets/iconify/<set>/<nombre>.svg` (fuera de `dist/`; los genera `deno task icons` = `assets/dl.js`, que barre el código, suma `extra` y poda lo que nadie usa). Las apps los sirven desde jsDelivr con `<html data-icons>`; lo que no esté ahí, y todo el catálogo del explorador de la galería (familias `/collections`, nombres `/collection?prefix=`, búsqueda `/search` y SVG por lotes `/<set>.json?icons=a,b`), lo sirve la API de Iconify vía `core/icon-loader`, cacheado en localStorage (TTL 15 días). `dist/assets/icons/` ya no existe (guardián `tests/gobernanza/assets-copia-unica.test.ts`). **No** recrear `README.txt` en `dist/cdn/`: el consolidador del loader es el índice.
 
 ### Build único con splitting
 
@@ -63,30 +64,36 @@ Desde F3 (plan `specs/plan-carga-modular.md` D2/D5) `scripts/build.mjs` corre **
 
 - **Entradas:** cada módulo de `src/components` en su ruta pública de siempre (`<categoria>/<nombre>.min.mjs`; también los utils que se consumen por URL, como `diagrams/theme` o `helpers/md-lite`), `src/core/*.ts` (`core/<x>.min.mjs`), `src/cdn/loader.ts` (`core/loader.min.mjs`) y `lib/{obj,ref-obj,zod}.min.mjs`. Todas las salidas viven a un nivel de `dist/cdn/`, así una ruta relativa (`../lib/zod.min.mjs`, `../diagrams/themes/…`) vale igual desde una entrada que desde un chunk.
 - **Chunks automáticos:** lo que usan dos entradas sale a `_chunks/`; no hay lista de «componentes externos». El molde `IswcElement` existe en un solo archivo (guardián `gobernanza/cdn-folders`). Siguen **externos** `zod` (`lib/zod.min.mjs`) y `src/ai` (`lib/ai/*.min.mjs`, build aparte).
-- **Grafo:** del metafile salen `deps.json` (cierre por tag y por módulo del core, ordenado) y `exports.json` (`src/cdn/build/graph.ts`; guardián `gobernanza/deps-json`). El metafile entero queda en `.tmp/metafile-kit.json` para los guardianes.
+- **Grafo:** del metafile salen el grafo (cierre por tag y por módulo del core, ordenado; un externo que es otra salida del build, `lib/zod.min.mjs`, entra al cierre) y `exports.json` (`src/cdn/build/graph.ts`; guardián `gobernanza/deps-json`). Desde F7 se publica partido: índice `deps.json` + `deps/<cat>.json` (`partirDeps`); los consumidores vendorizan el grafo unido (`pin-update`, `vendor:iswc`; `unirDeps`). El metafile entero queda en `.tmp/metafile-kit.json` para los guardianes.
+- **Entradas públicas (decisión F7, 0.3):** se midió quitar como entradas los utils de `src/components/<cat>/utils/` que no son tags (salvo `diagrams/theme`, `helpers/md-*`, `isp/customs-base`, `charts/marks-*`): 504 → 274 entradas y 344 → 160 chunks, pero el cierre del shell de Avatar (38 tags de `SHELL_KIT_TAGS`) solo baja 104 → 103 módulos (488 989 → 488 755 B); quitar además las entradas de `src/core`, 100 módulos. No llega al −15 % pedido: las entradas se quedan como están.
 - **Extensiones (D2):** `.mjs` = módulo ES, `.js` = clásico. Los únicos `.js` de `dist/cdn` son la copia compat `core/loader.min.js` y los `*.classic.js` que se pidan (guardián `gobernanza/extension-modulos`). La galería (`dist/scripts`, `dist/pages`, `dist/previews`, `dist/gallery-app.min.js`) no es parte del CDN y conserva `.min.js`.
 - **Clásico opcional:** `deno task build:classic -- <tag> [<tag>…]` → `<categoria>/<tag>.classic.js`, IIFE autosuficiente (core, zod y estilos dentro) para `<script src>` sin módulos. No entra en `deno task build` ni en el catálogo.
-- **`?v=`:** el build sella los imports relativos dentro de `dist/cdn` hacia entradas (los chunks no: su nombre ya es un hash, `esChunk` en `stamp-hashes.ts`) y los HTML de `index.html`/`demos/**` (orígenes mutables: Pages y carpeta local) y escribe el mapa en `asset-hashes.json`; `deps.json` lleva en `v` el de cada entrada. El loader no lo lleva embebido (`__IS_ASSET_HASHES__` = `{}`): en orígenes mutables sella sus `import()` con `deps.json` (`v`) y hojas/módulos de página con `asset-hashes.json` en diferido (`loader-hashes`); sobre un pin SHA de jsDelivr/githack nunca añade `?v=` (`esUrlInmutable`, `src/cdn/build/asset-url.ts`): la URL ya es inmutable. Los bundles de la galería (`dist/pages`, `dist/scripts`) importan las entradas del kit con el mismo `?v=` (una sola instancia por módulo).
+- **`?v=`:** desde F7 **ningún `.mjs` de `dist/cdn` lleva `?v=` dentro** (ni chunks ni entradas: `stampDirectory(dist, …, { sellarMjs: false })`); el build sí sella CSS/`.js` y los HTML de `index.html`/`demos/**` (orígenes mutables: Pages y carpeta local) y escribe el mapa en `asset-hashes.json`. Un `.mjs` que otro módulo importa por ruta relativa (`lib/zod.min.mjs`, capas `core/loader-<x>`, tags pedidos con `import()` desde otro) sale del mapa y de `v` (`mjsReferenciados`): su URL es una sola, sin `?v=`, para el loader, la galería y los HTML. `deps/<cat>.json` lleva en `v` el `?v=` del resto de entradas. El loader no lo lleva embebido (`__IS_ASSET_HASHES__` = `{}`): en orígenes mutables sella sus `import()` con `v` y hojas/módulos de página con `asset-hashes.json` en diferido (`loader-hashes`); sobre un pin SHA de jsDelivr/githack nunca añade `?v=` (`esUrlInmutable`, `src/cdn/build/asset-url.ts`): la URL ya es inmutable. Los bundles de la galería (`dist/pages`, `dist/scripts`) importan las entradas del kit con el `?v=` del mismo mapa (una sola instancia por módulo). Precio: en Pages un módulo compartido se revalida por la caché HTTP (`max-age=600`), no por `?v=`; los chunks son por contenido y sobre pin SHA todo es inmutable.
+- **Lote ESM opcional (F7, 0.3):** `deno task build:lote -- tag1,tag2,… [--out=<archivo>] [--zod=<especificador>]` (`scripts/build-lote.mjs`) arma UN `.min.mjs` autosuficiente con los tags y todo lo que importan (core incluido), `zod` externo (por defecto el especificador `zod` del import map de la app), y exporta `tags`. Lo publica el **consumidor** en su propio dist (no va en `dist/cdn` ni en el catálogo) y lo registra con `iswcLoader.registerApp({ <tag>: <href del lote> })`, así `load`/`ensure` y las `static deps` usan el lote. Debe incluir los hijos de sus padres: un hijo que falte se pide al kit y trae otra copia del core. Medido (Edge headless, HTTP/2 local, 5 corridas en frío, mediana) con los 38 tags de `SHELL_KIT_TAGS` de Avatar: 520 ms frente a 1 290 ms con chunks + `modulepreload` (10 peticiones frente a 110; detalle en `specs/plan-carga-modular.md` §F7a).
 - **Catálogo del loader:** va dentro de `core/loader.min.mjs` (compacto: `aliases` + `categories`; el núcleo reconstruye `tags`), sustituido como texto solo en `src/cdn/loader.ts` (`catalogoEnLoader`). Con `define` de objeto esbuild lo inyectaba en el chunk de runtime que importa todo el kit (F3: 25 KB de catálogo en el cierre de cada componente).
 - **Compat `loader.min.js`:** se publica mientras haya consumidores con la URL vieja pineada; se retira cuando re-pineen (F5). La raíz `dist/cdn/loader.min.mjs` re-exporta `./core/loader.min.mjs` (no puede ser copia: el loader importa `../_chunks/…`).
-- **Tamaño publicado (D8):** `gobernanza/tamano-publicado` mide `git archive HEAD` (≤ 48 MB; jsDelivr rechaza > 50 MB) y `dist/cdn`.
+- **Tamaño publicado (D8):** `gobernanza/tamano-publicado` mide `git archive HEAD` (tope = lo medido tras sacar las colecciones de íconos + 10 %; jsDelivr rechaza > 50 MB) y `dist/cdn`.
 
 ### Bootstrap recomendado
 
-Desde F4 (loader en dos capas, plan D7). El HTML de la app trae el import map con el alias al pin, la precarga del
-cierre del shell crítico (sacada de `deps.json` en el build de la app: `tags[tag]` de cada tag del shell, chunks tal
-cual) y las hojas base; el módulo de arranque importa el núcleo y pide el shell con `ensure` (revela al definirse) y
-el resto con `load` (progresivo).
+Desde F4 (loader en dos capas, plan D7). El HTML de la app trae el import map con el alias al pin, la marca
+`iswc-precargado` con ese pin (F7), la precarga del cierre del shell crítico (sacada del grafo vendorizado
+`src/vendor/iswc-base/deps.json` en el build de la app: `tags[tag]` de cada tag del shell, chunks tal cual) y las
+hojas base **no bloqueantes** (F7); el módulo de arranque importa el núcleo y pide el shell con `ensure` (revela al
+definirse) y el resto con `load` (progresivo).
 
 ```html
 <script type="importmap">
 { "imports": { "@jeff-aporta/iswc-base/": "https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@SHA/dist/cdn/" } }
 </script>
+<meta name="iswc-precargado" content="SHA">
 <link rel="modulepreload" href="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@SHA/dist/cdn/core/loader.min.mjs">
 <link rel="modulepreload" href="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@SHA/dist/cdn/layout/app-shell.min.mjs">
-<!-- … un modulepreload por cada ruta de deps.json → tags[tag] del shell crítico (chunks sin ?v=) … -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@SHA/dist/cdn/is-base.min.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@SHA/dist/cdn/palettes.min.css">
+<!-- … un modulepreload por cada ruta de tags[tag] del shell crítico (chunks y lib/zod sin ?v=) … -->
+<link rel="preload" as="style" href="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@SHA/dist/cdn/is-base.min.css" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@SHA/dist/cdn/is-base.min.css"></noscript>
+<link rel="preload" as="style" href="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@SHA/dist/cdn/palettes.min.css" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@SHA/dist/cdn/palettes.min.css"></noscript>
 <script type="module">
   import { iswcLoader as L } from '@jeff-aporta/iswc-base/core/loader.min.mjs';
   await Promise.all(['iswc-app-shell', 'iswc-button'].map((t) => L.ensure(t)));
@@ -96,9 +103,17 @@ el resto con `load` (progresivo).
 ```
 
 - `load()` resuelve al **importar** el lote (no espera `whenDefined`); `ensure(tag)` resuelve al **definirse**.
-- Sin precarga en el HTML, el primer `load()` pide `deps.json` una vez e inyecta `<link rel="modulepreload">` para todo
-  el cierre del lote (una ráfaga). Sobre pin SHA va en paralelo con el primer `import()` (`cache: 'force-cache'`); en
-  un origen mutable el loader lo espera (trae el `?v=` de las entradas).
+- Una entrada que el HTML ya precargó (`<link rel="modulepreload">` puesto por la app) se importa con ese mismo href
+  y no se pide ningún `deps` (F7). Con `<meta name="iswc-precargado" content="SHA">` la precarga solo cuenta si ese SHA
+  es el pin de la raíz del loader.
+- Sin precarga en el HTML, `load()` pide `deps/<cat>.json` de cada categoría del lote (una vez) e inyecta
+  `<link rel="modulepreload">` para todo el cierre (una ráfaga). Sobre pin SHA va en paralelo con el primer `import()`
+  (`cache: 'force-cache'`); en un origen mutable el loader lo espera (trae el `?v=` de las entradas). El índice
+  `deps.json` no lo pide nunca (el catálogo ya va en el núcleo).
+- Hojas base no bloqueantes (F7, 0.4): un `<link rel="stylesheet">` en `<head>` frena la ejecución de los
+  `<script type="module">` que lo siguen hasta que llega; `preload as=style` + `onload` no. El loader no las duplica
+  (`yaEnlazada` cuenta también `rel="preload" as="style"`). Alternativa equivalente: los `<link rel="stylesheet">`
+  después del `<script type="module">` del loader.
 - `is-base.min.css` lo inyecta el loader por `<link>` (sin fetch ni IndexedDB) salvo que el HTML ya lo enlace.
 - Sin pin ni host el loader usa `self`; nunca consulta `api.github.com` en el arranque (solo `loader-ref`, si una app
   quita el pin y hay espejos). Nada de top-level await en los módulos que cargan las apps (WebView Android).
@@ -120,11 +135,15 @@ así (F5b, por app):
    `ReusoCandidatoSchema` no acepta el nombre histórico.
 2. **Pin**: `pin-update.mjs --nuevo=<sha40|ultimo>` (online desde `@main` o el vendorizado). Fija todas las URL y el
    alias `@jeff-aporta/iswc-base/` (deno.json e import maps) al SHA, pasa `<ruta>.min.js` → `.min.mjs` en las URL de
-   módulos del kit (`core/`, `lib/`, `<cat>/<tag>`; nunca terceros ni `*.classic.js`) y baja `dist/cdn/deps.json` del
-   SHA a `src/vendor/iswc-base/deps.json` (`--sin-deps` lo apaga). Un SHA anterior a F3 sale con exit 3 y lo dice.
+   módulos del kit (`core/`, `lib/`, `<cat>/<tag>`; nunca terceros ni `*.classic.js`) y baja el grafo del SHA a
+   `src/vendor/iswc-base/deps.json` (`--sin-deps` lo apaga; desde F7 une índice + `deps/<cat>.json` en la forma completa
+   `{ sha, tags, core, v }`; `sha` es el SHA base del build y no se compara con el pin). Avisa (sin reescribir) de rutas
+   `*.min.js` del kit armadas en runtime (`new URL('x.min.js', L.selfBase)` y similares). Un SHA anterior a F3 sale con
+   exit 3 y lo dice.
 3. **Vendor**: re-vendorizar las tools del kit al mismo SHA (`vendor:iswc` / `vendor.ts`).
-4. **Bootstrap**: copiar el de las plantillas: import map con el alias, `modulepreload` del cierre del shell crítico
-   (de `deps.json`, sin `?v=`), `<link>` de `is-base.min.css` y `palettes.min.css`, loader `core/loader.min.mjs`,
+4. **Bootstrap**: copiar el de las plantillas: import map con el alias, `<meta name="iswc-precargado">` con el pin,
+   `modulepreload` del cierre del shell crítico (del grafo vendorizado, sin `?v=`), `is-base.min.css` y
+   `palettes.min.css` no bloqueantes (`preload as=style` + `<noscript>`), loader `core/loader.min.mjs`,
    registrador con `{ href, type: 'module' }` (componentes `.js` ES) o componentes `.mjs`.
 5. **Componentes**: al molde (`IswcElement`, `static tag/css/observed/deps`, `import css from 'iswc:css'` incrustado
    por el build, `define()`); nada de `adoptCss` ni `<link>` a la hoja hermana.
@@ -255,7 +274,7 @@ Qué cambia al publicar: los consumidores dejan el import map y el re-pin por SH
 
 ### jsDelivr y peso
 
-- **`@main`** es lo que se consume: el repo supera 50 MB por `dist/assets/icons` y jsDelivr aplica el límite (403 "Package size exceeded") al resolver un SHA aún no cacheado; `@main` responde 200 porque está caliente. **Conclusión:** un consumidor externo no puede pinear versión mientras los iconos vivan dentro de `dist/`.
+- **Límite de 50 MB:** jsDelivr empaqueta el árbol (`git archive`) al resolver un SHA aún no cacheado y responde 403 "Package size exceeded" por encima de 50 MB. Hasta el 4-nov-2026 `dist/assets/icons` (colecciones completas de mdi/tabler, 13 635 archivos) dejaba el tarball en ~43 MB; retirado, mide ~28,5 MB y `tests/gobernanza/tamano-publicado.test.ts` lo topa en lo medido + 10 % (31,4 MB): pinear por SHA es seguro.
 - Con `@main` cacheado 24 h, `all.min.js` servido puede ser **anterior** a que existiera un componente: el componente nuevo no queda definido aunque su archivo sí se sirva fresco. Síntoma: `customElements.get('iswc-button')` true y `customElements.get('iswc-code')` false, sin error. **Solución:** pedir el componente por su ruta propia (`dist/cdn/<cat>/<comp>.min.js`) además de `all.min.js`.
 - `all.min.js` y `category.*.min.js` son **solo listas de `import`** (~250 B): sumar su tamaño literal da el ranking invertido; hay que expandirlos a los `.min.js` reales (UI con `autofit`).
 
@@ -274,7 +293,7 @@ Qué cambia al publicar: los consumidores dejan el import map y el re-pin por SH
 | Build | `deno task build` |
 | Dev CDN local | `deno run -A --no-check scripts/serve.mjs` |
 | Carga | `core/loader.min.mjs` + `L.load(...)` |
-| Iconos en dist | `dist/assets/icons/` (fuente versionada, fuera de `dist/cdn/`) |
+| Íconos | `assets/iconify/` (solo los usados, `deno task icons`); el resto y el catálogo del explorador, API de Iconify |
 
 ## Aceptación
 
@@ -284,4 +303,4 @@ Qué cambia al publicar: los consumidores dejan el import map y el re-pin por SH
 | Carpetas CDN | una carpeta por categoría manifest | `tests/gobernanza/cdn-folders.test.ts` |
 | Loader y plan | sin doble fetch categoría+tag | `tests/gobernanza/cdn-loader.test.ts`, `tests/componentes/load-plan.test.ts` |
 | Snippet match preview | paths coherentes con manifest | `tests/gobernanza/cdn-snippet-match.test.ts` |
-| Iconos vía CDN local | fetch OK con server :8391 | `tests/gobernanza/cdn-icons.test.ts` (requiere `PORT=8391`) |
+| Íconos desde la carpeta publicada | los de los demos resuelven desde `assets/iconify` por `<html data-icons>`, sin API (fetch simulado, sin servidor) | `tests/gobernanza/cdn-icons.test.ts` |

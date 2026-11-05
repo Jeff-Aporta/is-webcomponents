@@ -1,6 +1,6 @@
 {
   "name": "@jeff-aporta/iswc-base",
-  "version": "0.0.0-20261104.37cc1b3",
+  "version": "0.0.0-20261104.40f6eae",
   "description": "iswc-base: web components del kit ISWC, un módulo ES por tag (dist/cdn).",
   "type": "module",
   "license": "UNLICENSED",
@@ -332,6 +332,7 @@
     "./palettes.css": "./dist/cdn/palettes.min.css",
     "./palettes.min.css": "./dist/cdn/palettes.min.css",
     "./deps.json": "./dist/cdn/deps.json",
+    "./deps/*": "./dist/cdn/deps/*",
     "./importmap.json": "./dist/cdn/importmap.json",
     "./package.json": "./package.json"
   },

@@ -30,11 +30,14 @@ es la referencia que copian las apps existentes al re-pinear (F5b).
 <script src="./dist/cdn/boot.js"></script>                         <!-- tema antes de pintar -->
 <link rel="stylesheet" href="./dist/cdn/styles/app.css">
 <!-- iswc:precarga:inicio -->                                        <!-- 1) lo escribe `deno task build` -->
+<meta name="iswc-precargado" content="<sha40>">                     <!-- el loader no pide deps de lo precargado -->
 <link rel="modulepreload" href="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@<sha40>/dist/cdn/core/loader.min.mjs">
 <link rel="modulepreload" href="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@<sha40>/dist/cdn/_chunks/chunk-….mjs">
 <!-- … un modulepreload por ruta de deps.json → tags[tag] de cada tag de SHELL_CRITICO … -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@<sha40>/dist/cdn/is-base.min.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@<sha40>/dist/cdn/palettes.min.css">
+<link rel="preload" as="style" href="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@<sha40>/dist/cdn/is-base.min.css" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@<sha40>/dist/cdn/is-base.min.css"></noscript>
+<link rel="preload" as="style" href="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@<sha40>/dist/cdn/palettes.min.css" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@<sha40>/dist/cdn/palettes.min.css"></noscript>
 <!-- iswc:precarga:fin -->
 <script type="module" src="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@<sha40>/dist/cdn/core/loader.min.mjs"></script>
 <script type="module" src="./dist/cdn/<p>Loader.min.js"></script>  <!-- registerApp: tag → { href: URL?v=, type: 'module' } -->
@@ -54,8 +57,10 @@ es la referencia que copian las apps existentes al re-pinear (F5b).
   tal cual. Es la misma entrada de `deno.json` (typecheck). `deno task pin` mueve las dos.
 - **Precarga**: `src/utils/build.ts` reescribe el bloque entre `<!-- iswc:precarga:inicio -->` y
   `<!-- iswc:precarga:fin -->` de cada HTML con el loader, el cierre de `SHELL_CRITICO` (`src/js/kit-tags.ts`) sacado
-  de `src/vendor/iswc-base/deps.json` (lo vendorizan `deno task vendor:iswc` y `deno task pin --nuevo=…`) y las hojas
-  base. Sobre pin SHA todo es inmutable: sin `?v=`. Idempotente.
+  de `src/vendor/iswc-base/deps.json` (lo vendorizan `deno task vendor:iswc` y `deno task pin --nuevo=…`, unido desde
+  el índice + `deps/<cat>.json` del kit), la marca `iswc-precargado` con el pin (el loader no pide `deps` para lo que
+  ya está precargado) y las hojas base no bloqueantes (`preload as=style` → `stylesheet`; un `<link rel=stylesheet>`
+  en `<head>` frena los módulos que siguen). Sobre pin SHA todo es inmutable: sin `?v=`. Idempotente.
 - **Orden**: el `<script type="module">` del loader va ANTES del registrador (los módulos se ejecutan en orden de
   documento y el registrador necesita `globalThis.iswcLoader`).
 - `data-app-ready` es la marca común de «arranque terminado» (las pruebas e2e la esperan; `app.scss`

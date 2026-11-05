@@ -57,18 +57,32 @@ for (const [rel, kit] of ARCHIVOS) {
 }
 // Grafo de módulos del kit al pin (`dist/cdn/deps.json`, F4): el build lee de aquí el cierre del shell crítico y emite
 // los `<link rel="modulepreload">` sin red. `deno task pin --nuevo=…` también lo refresca (pin-update, salvo `--sin-deps`).
+// Desde F7 el `deps.json` publicado es un índice (`categorias`: tag → categoría) y el cierre va en `deps/<cat>.json`:
+// se bajan las partes y se escribe el grafo unido (`{ sha, tags, core, v }`), la forma que lee el build.
 {
-  let deps;
-  for (const url of [`https://cdn.jsdelivr.net/gh/${REPO}@${pin}/dist/cdn/deps.json`, `https://raw.githubusercontent.com/${REPO}/${pin}/dist/cdn/deps.json`]) {
-    const r = await fetch(url);
-    if (r.ok) { deps = await r.text(); break; }
-    await r.body?.cancel();
+  const bajar = async (rel) => {
+    for (const url of [`https://cdn.jsdelivr.net/gh/${REPO}@${pin}/dist/cdn/${rel}`, `https://raw.githubusercontent.com/${REPO}/${pin}/dist/cdn/${rel}`]) {
+      const r = await fetch(url);
+      if (r.ok) return JSON.parse(await r.text());
+      await r.body?.cancel();
+    }
+    throw new Error(`vendor-iswc: ${rel} no responde para ${pin.slice(0, 12)} (¿SHA anterior a F3?)`);
+  };
+  let deps = await bajar('deps.json');
+  if (deps?.categorias && typeof deps.categorias === 'object') {
+    const unido = { sha: deps.sha, tags: {}, core: {}, v: {} };
+    for (const cat of [...new Set([...Object.values(deps.categorias), 'core'])].sort()) {
+      const parte = await bajar(`deps/${cat}.json`);
+      Object.assign(unido.tags, parte.tags ?? {});
+      Object.assign(unido.core, parte.core ?? {});
+      Object.assign(unido.v, parte.v ?? {});
+    }
+    deps = unido;
   }
-  if (deps === undefined) throw new Error(`vendor-iswc: deps.json no responde para ${pin.slice(0, 12)} (¿SHA anterior a F3?)`);
-  if (typeof JSON.parse(deps)?.tags !== 'object') throw new Error('vendor-iswc: deps.json sin `tags`');
+  if (typeof deps?.tags !== 'object') throw new Error('vendor-iswc: deps.json sin `tags` ni `categorias`');
   const destino = join(ROOT, 'src', 'vendor', 'iswc-base', 'deps.json');
   mkdirSync(dirname(destino), { recursive: true });
-  writeFileSync(destino, deps.endsWith('\n') ? deps : `${deps}\n`);
+  writeFileSync(destino, `${JSON.stringify(deps)}\n`);
 }
 // Skill general del kit (índice de todos los componentes) en specs/iswc/kit/, fijada al pin.
 const SKILL_KIT = ['SKILL.md', 'catalog.md', 'reference.md', 'PROMPT.md', 'tools/build.md', 'tools/local.md', 'tools/migrate.md', 'tools/runtime.md'];

@@ -193,16 +193,28 @@ function cierreShell(): string[] {
   return [...rutas].sort();
 }
 
+/** SHA del pin del kit (de la URL del loader), o '' si no va pineado. */
+const PIN_KIT = CDN_KIT.match(/@([0-9a-f]{40})\//)?.[1] ?? '';
+
+/** Hoja del kit no bloqueante (F7): `preload` que pasa a `stylesheet` al llegar, con `<noscript>` de respaldo. */
+const hojaNoBloqueante = (href: string): string[] => [
+  `<link rel="preload" as="style" href="${href}" onload="this.onload=null;this.rel='stylesheet'">`,
+  `<noscript><link rel="stylesheet" href="${href}"></noscript>`,
+];
+
 /**
- * Bloque entre las marcas de cada HTML: `<link rel="modulepreload">` del loader y del cierre del shell crítico y
- * `<link rel="stylesheet">` de las hojas base del kit. Todo sobre el pin SHA (inmutable): sin `?v=`.
+ * Bloque entre las marcas de cada HTML: `<meta name="iswc-precargado">` con el pin (el loader no pide `deps` para
+ * lo que el HTML ya precargó, F7), `<link rel="modulepreload">` del loader y del cierre del shell crítico, y las hojas
+ * base del kit sin bloquear la ejecución de los módulos (`preload` → `stylesheet`). Todo sobre el pin SHA (inmutable):
+ * sin `?v=`.
  */
 function bloquePrecarga(sangria: string): string {
   const lineas = [
+    ...(PIN_KIT ? [`<meta name="iswc-precargado" content="${PIN_KIT}">`] : []),
     `<link rel="modulepreload" href="${CDN_KIT}core/loader.min.mjs">`,
     ...cierreShell().map((r) => `<link rel="modulepreload" href="${CDN_KIT}${r}">`),
-    `<link rel="stylesheet" href="${CDN_KIT}is-base.min.css">`,
-    `<link rel="stylesheet" href="${CDN_KIT}palettes.min.css">`,
+    ...hojaNoBloqueante(`${CDN_KIT}is-base.min.css`),
+    ...hojaNoBloqueante(`${CDN_KIT}palettes.min.css`),
   ];
   return [MARCA_INICIO, ...lineas, MARCA_FIN].join(`\n${sangria}`);
 }

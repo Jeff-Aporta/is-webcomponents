@@ -4,7 +4,7 @@
   "tag": "iswc-icon-explorer",
   "category": "media",
   "title": "Explorador de iconos",
-  "description": "Explorador offline de familias e iconos del CDN.",
+  "description": "Explorador de familias e iconos de Iconify (catálogo y SVG por lotes desde su API, cacheados en el navegador).",
   "styles": [
     "/* presentation.css deja html/body en `overflow:hidden` porque el shell de",
     "      docs scrollea dentro de `.main`. Esta página no usa ese shell, así que el",
@@ -233,7 +233,7 @@
   "ficha": {
     "sections": {
       "anatomia": {
-        "content": "Explorador offline de familias e iconos del CDN."
+        "content": "Explorador de familias e iconos de Iconify (catálogo y SVG por lotes desde su API, cacheados en el navegador)."
       }
     },
     "exclude": [

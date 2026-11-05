@@ -1,4 +1,4 @@
-import"./chunk-YZ72RWW5.min.mjs?v=0a5auo";var e=String.raw`
+import"./chunk-YZ72RWW5.min.mjs";var e=String.raw`
 'use strict'
 var Module = {}
 self.Module = Module
