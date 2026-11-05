@@ -1,6 +1,7 @@
 // build.mjs — CDN folderizado con UN build de esbuild con splitting (plan D5, fase F3):
 //   dist/cdn/{categoria}/{tag}.min.mjs + .min.css, core/{x}.min.mjs, lib/{x}.min.mjs, core/loader.min.mjs,
-//   _chunks/chunk-<hash>.mjs (código compartido), deps.json y exports.json (grafo del metafile).
+//   _chunks/chunk-<hash>.mjs (código compartido), deps.json y exports.json (grafo del metafile), y el package.json
+//   de npm en la raíz (F6, sin publicar).
 // `.mjs` = módulo ES, `.js` = clásico (D2). Sin all.min.js ni category.*.min.js.
 import { access, readdir, mkdir, stat, rm, writeFile, readFile, copyFile, unlink } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
@@ -13,6 +14,7 @@ import { cssVirtual } from '@jeff-aporta/iswc-base/cdn/build/css-virtual.ts';
 import { bundleMinJs, bundleMinCss, docsBanner } from '@jeff-aporta/iswc-base/cdn/build/bundle-min.ts';
 import { bundleKit, entradasKit, catalogoLoader, zodExterno } from '@jeff-aporta/iswc-base/cdn/build/bundle-kit.ts';
 import { conVersiones, depsJson, exportsJson } from '@jeff-aporta/iswc-base/cdn/build/graph.ts';
+import { packageJson } from '@jeff-aporta/iswc-base/cdn/build/npm.ts';
 import { barrerHashes } from '@jeff-aporta/iswc-base/cdn/build/sync-hashes.ts';
 import { hashesRepetidos } from '@jeff-aporta/iswc-base/cdn/build/hash.ts';
 import { stampDirectory, hashFile, rewriteHtmlTree, hashesJson, applyHashToHtml, ASSET_HASHES_NAME } from '@jeff-aporta/iswc-base/cdn/build/stamp-hashes.ts';
@@ -449,6 +451,9 @@ console.log(`  ${'gallery-app'.padEnd(18)} js ${String(galleryStat.size).padStar
 // deps.json se escribe DESPUÉS de sellar: lleva `v` (el `?v=` de cada entrada de los cierres) para que el loader
 // selle sus `import()` en orígenes mutables sin pedir asset-hashes.json (F4). Los chunks no llevan `?v=`.
 let deps;
+// Para el package.json del final (F6): el mismo `exports.json` y el tag → archivo del catálogo.
+let exportsKit;
+let tagsKit;
 {
   const tags = {};
   for (const [tag, { category, file }] of Object.entries(loaderCatalog.tags)) {
@@ -462,7 +467,9 @@ let deps;
   // (gobernanza/zod-compartido: Zod solo entra en lib/zod.min.mjs).
   await mkdir(join(root, '.tmp'), { recursive: true });
   await writeFile(join(root, '.tmp', 'metafile-kit.json'), JSON.stringify(kit.metafile), 'utf8');
-  await writeFile(join(dist, 'exports.json'), JSON.stringify(exportsJson(grafo), null, 2) + '\n', 'utf8');
+  exportsKit = exportsJson(grafo);
+  tagsKit = tags;
+  await writeFile(join(dist, 'exports.json'), JSON.stringify(exportsKit, null, 2) + '\n', 'utf8');
   console.log(`  ${'deps.json'.padEnd(18)} ${Object.keys(deps.tags).length} tags + ${Object.keys(deps.core).length} core · exports.json`);
 }
 
@@ -593,5 +600,16 @@ await writeFile(
 console.log(`  reload-pin           build:<sha>`);
 
 try { await unlink(join(dist, 'all.min.js')); } catch { /* leftover */ }
+
+// package.json de npm (F6, preparado y NO publicado): `exports` desde exports.json, `sideEffects` desde el catálogo,
+// versión provisional `0.0.0-<fecha del commit>.<sha7>` (specs/cdn.md §npm). `deno task npm:pack` arma el tarball.
+{
+  let fecha = '00000000';
+  try { fecha = execSync('git log -1 --format=%cd --date=format:%Y%m%d', { cwd: root, encoding: 'utf8' }).trim(); } catch { /* sin git */ }
+  const licencia = existsSync(join(root, 'LICENSE')) ? 'SEE LICENSE IN LICENSE' : 'UNLICENSED';
+  const pkg = packageJson({ exports: exportsKit, tags: tagsKit, sha, fecha, repo: REPO_GITHUB, licencia });
+  await writeFile(join(root, 'package.json'), JSON.stringify(pkg, null, 2) + '\n', 'utf8');
+  console.log(`  ${'package.json'.padEnd(18)} ${pkg.version} · ${Object.keys(pkg.exports).length} exports · ${pkg.sideEffects.length} sideEffects`);
+}
 
 console.log(`OK dist/cdn  ${entradasComp.length} módulos de componentes + core + lib + loader (${nChunks} chunks) + gallery-app`);

@@ -24,7 +24,12 @@ deno install
 deno task build
 ```
 
-Artefactos en `dist/cdn/` (`{name}.min.js` + `{name}.min.css` + `is-base.min.css`).
+Artefactos en `dist/cdn/` (`{categoria}/{tag}.min.mjs` + `.min.css`, `core/loader.min.mjs`, `is-base.min.css`).
+
+**npm: preparado, no publicado.** El build escribe el `package.json` de la raíz (`@jeff-aporta/iswc-base`, versión
+provisional `0.0.0-<yyyymmdd>.<sha7>`, `exports` hacia `dist/cdn/`) y `deno task npm:pack` arma el tarball en
+`.tmp/npm/` sin publicar nada. Hoy el kit se consume por CDN (import map a jsDelivr@sha); cuando se publique, el mismo
+especificador `@jeff-aporta/iswc-base/<ruta>` resolverá por `node_modules`. Detalle en `specs/cdn.md` §npm.
 
 ## Estructura
 

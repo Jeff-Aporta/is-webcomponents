@@ -151,7 +151,7 @@ Un solo especificador para importar del kit, `@jeff-aporta/iswc-base/<ruta>`, qu
 | Deno de una app | `deno.json` del consumidor con la entrada a `dist/cdn/` por SHA (ejemplo abajo). |
 | Navegador de una app | `<script type="importmap">` con la **misma** entrada (ejemplo abajo), antes del primer módulo. |
 | `dist/cdn/` publicado | **Rutas relativas**, nunca el alias: el build lo reescribe (`aliasEnDist` en `scripts/build.mjs`) y el dist funciona por jsDelivr, Pages, carpeta local o WebView sin import map. Guardián: `tests/gobernanza/alias-imports.test.ts` (L4). |
-| npm (futuro) | `package.json` con `name: "@jeff-aporta/iswc-base"` y `exports` hacia `dist/cdn/`: los mismos especificadores resuelven por `node_modules`. |
+| npm (preparado, no publicado) | `package.json` de la raíz (lo escribe el build) con `name: "@jeff-aporta/iswc-base"` y `exports` hacia `dist/cdn/`: los mismos especificadores resuelven por `node_modules` (§npm abajo). |
 
 El build publica `dist/cdn/importmap.json` con la entrada lista para pegar (SHA del build):
 
@@ -184,6 +184,43 @@ HTML del consumidor (el import map va antes de cualquier `<script type="module">
 El SHA lo mueve `pin-update.mjs` (`src/vendor-distributions/shared/tools/`): además de las URL literales, fija la entrada
 del alias en `deno.json` y en el import map de cada HTML a la forma canónica `…@<sha40>/dist/cdn/` (una ruta local se
 respeta). Casos: `tests/gobernanza/pin-update.test.ts` (P10).
+
+### npm (preparado, no publicado)
+
+Plan D9 / F6. **Nada está publicado en npm** (no hay cuenta ni token; nunca se corre `npm publish`). El terreno queda
+listo para que, al publicar, el alias resuelva igual desde `node_modules` que desde el CDN.
+
+- `package.json` en la raíz: lo genera `scripts/build.mjs` al final con `packageJson()` de `src/cdn/build/npm.ts`
+  (contrato en `npm.schemas.ts`). No se edita a mano: el siguiente build lo pisa.
+- `exports` = `dist/cdn/exports.json` (`./loader`, `./core/<x>`, `./<cat>/<tag>` y `./<carpeta>/*` → `*.min.mjs`) más
+  las formas con extensión que usa el import map (`./<carpeta>/*.min.mjs` y `*.min.css`; por la regla de Node la clave
+  más larga con el mismo prefijo gana, así `core/loader.min.mjs` no se dobla en `.min.mjs.min.mjs`), `./loader.min.mjs`,
+  `./is-base.css`/`./palettes.css` (y sus `.min.css`), `./deps.json`, `./importmap.json` y `./package.json`.
+- `sideEffects`: cada `<cat>/<tag>.min.mjs` del catálogo, `core/loader.min.mjs` (y su alias de raíz) y `**/*.css`;
+  lo demás (chunks, `core/*`, `lib/*`) es puro para los bundlers.
+- `files: ["dist/cdn", "README.md"]`: el tarball no lleva `labs/`, `demos/`, `tests/`, `.tmp*` ni `dist/assets`. Sin
+  `scripts` ni `dependencies`; `zod` va como `peerDependencies` opcional (el kit trae el suyo en `lib/zod.min.mjs`).
+  `license: "UNLICENSED"` mientras el repo no tenga `LICENSE` (README: uso interno); con `LICENSE` el build pone
+  `SEE LICENSE IN LICENSE`.
+- **`version` es provisional**: `0.0.0-<yyyymmdd>.<sha7>` (fecha del commit de HEAD y su SHA corto; un sha7 todo
+  dígitos con cero inicial lleva `g` delante para ser semver válido). Se reemplaza por semver real al publicar.
+- `deno task npm:pack` (`scripts/npm-pack.mjs`) arma el tarball en `.tmp/npm/` y reporta peso y archivos (4-nov-2026:
+  ~2,9 MB gzip, ~1 375 archivos). Guardián: `tests/gobernanza/npm-pack.test.ts` (exports cubre el catálogo, cada
+  destino existe, y el tarball se instala en `.tmp/npm-test/` y Node resuelve los subpaths). Limitación: sin DOM, el
+  módulo de un tag lanza en Node al evaluarse (`HTMLElement is not defined`); el loader sí evalúa. npm omite los
+  `.gitignore` anidados del tarball (el de `skills/iswc-foundation/templates/` no viaja por npm; sí por el CDN).
+
+Cómo resuelve el alias en cada entorno:
+
+| Entorno | `@jeff-aporta/iswc-base/<ruta>` → |
+|---|---|
+| Deno (fuentes del kit) | `deno.json` → `./src/` (el import map manda sobre el `package.json` de la raíz) |
+| Apps web / Deno de una app | import map → `https://cdn.jsdelivr.net/gh/<repo>@<sha40>/dist/cdn/` (`importmap.json`, `pin-update`) |
+| npm (cuando se publique) | `exports` del `package.json` → `node_modules/@jeff-aporta/iswc-base/dist/cdn/…` |
+
+Qué cambia al publicar: los consumidores dejan el import map y el re-pin por SHA y hacen `npm i @jeff-aporta/iswc-base`
+(los especificadores no cambian; `core/loader.min.mjs` y `core/loader` resuelven igual); `version` pasa a semver y
+`pin-update` deja de ser el mecanismo de actualización para ellos.
 
 ### Qué hacer
 

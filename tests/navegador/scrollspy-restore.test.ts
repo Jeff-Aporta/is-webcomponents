@@ -286,16 +286,21 @@ test('navegador/scrollspy-restore', { timeout: 180_000 }, async () => {
           pickedAnchor = chosen.id;
           console.log(`[info] ${tag} TOC tiene ${tocLinks.length} items, elegido mid=${mid} id="${chosen.id}" (text="${chosen.text}")`);
   
-          // Click → optimistic setActive + persistencia debounced.
-          await page2.evaluate((id) => {
-            const host = document.querySelector('iswc-preview-component');
-            const link = host?.querySelector(`iswc-scrollspy.docs-toc a[href="#${CSS.escape(id)}"]`);
-            if (link) link.click();
-          }, pickedAnchor);
-          // El debounce es 200 ms; el IO puede tardar 1-2 frames. Damos 1.5s.
-          await page2.waitForTimeout(1500);
+          // Click → optimistic setActive + persistencia debounced (200 ms; el IO tarda 1-2 frames). Con la máquina
+          // cargada (gate completo) el primer click puede caer antes de que el scrollspy enganche sus enlaces y la
+          // pref no se escribe: se reintenta el click hasta 6 veces, 750 ms cada una, en vez de esperar 1,5 s fijos.
+          let pref = null;
+          for (let intento = 0; intento < 6; intento++) {
+            await page2.evaluate((id) => {
+              const host = document.querySelector('iswc-preview-component');
+              const link = host?.querySelector(`iswc-scrollspy.docs-toc a[href="#${CSS.escape(id)}"]`);
+              if (link) link.click();
+            }, pickedAnchor);
+            await page2.waitForTimeout(750);
+            pref = await readActiveAnchorPref(page2, storageKey);
+            if (pref?.activeId === pickedAnchor) break;
+          }
   
-          const pref = await readActiveAnchorPref(page2, storageKey);
           checksTotal += 1;
           if (!pref || pref.activeId !== pickedAnchor) {
             failures.push(

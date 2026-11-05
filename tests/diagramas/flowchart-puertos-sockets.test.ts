@@ -11,11 +11,12 @@
 import { assertEquals } from 'https://deno.land/std@0.224.0/assert/mod.ts';
 import { fileURLToPath } from 'node:url';
 import { RefObj } from '../../src/vendor-distributions/shared/lib/ref-obj.ts';
-import { computeFlowchartLayout, resolveFlowchartSpec } from '../../src/components/diagrams/utils/flowchart-spec.ts';
+import { resolveFlowchartSpec } from '../../src/components/diagrams/utils/flowchart-spec.ts';
 import { pathPoints } from '../../src/components/diagrams/utils/diagram-arrow.ts';
 import type { FlowLayout, FlowResolvedSpec } from '../../src/components/diagrams/schemas/flowchart-spec.schemas.ts';
-import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
 import { TIMEOUT_RUTAS_REALES } from '../_shared/rutas-reales.ts';
+import { layoutRuta } from '../_shared/rutas-reales.ts';
 import { denoTestCon } from '../_shared/deno-test.ts';
 
 // Rutas reales: layout memoizado y timeout medido (ver tests/_shared/rutas-reales.ts).
@@ -35,7 +36,8 @@ async function rutas(): Promise<Array<{ nombre: string; spec: FlowResolvedSpec; 
     const crudo = JSON.parse(await Deno.readTextFile(url));
     const j = await RefObj.resolver(crudo, { base: fileURLToPath(url), cargar: async (u: string) => JSON.parse(await Deno.readTextFile(u)) }) as { payload: Record<string, unknown> };
     const spec = resolveFlowchartSpec(j.payload)!;
-    out.push({ nombre: f.name, spec, L: computeFlowchartLayout(spec, null, { style: 'insoft' }) });
+    // Memoizado por proceso (`layoutRuta`): P1 y K2 comparten el cálculo; recalcularlo en K2 lo llevaba al timeout.
+    out.push({ nombre: f.name, spec, L: layoutRuta(f.name, j.payload) });
   }
   return out;
 }
