@@ -51,10 +51,10 @@ export const EXCEPCIONES_ARCHIVO: [string, string][] = [
   ['scripts/verify-server.cjs', 'documentado en AGENTS.md (servidor de verificación en :8765)'],
   ['scripts/verify-fetch.cjs', 'documentado en AGENTS.md (pide URLs a verify-server)'],
   ['scripts/lab-componente.mjs', 'lab local de un componente (lo documenta gobernanza/build-unico)'],
-  ['scripts/migrations/previews-to-json.ts', 'genera src/previews/catalog.ts (cabecera AUTO-GENERADO)'],
-  ['scripts/ops/generate-templates.ts', 'esqueleto de preview: documentado en AGENTS.md y specs/constraints.md'],
-  ['scripts/ops/sync-skill-catalog.mjs', 'regenera skills/iswc-base/catalog.md'],
-  ['scripts/probes/shoot-one.mjs', 'captura de un tag: la cita tests/e2e/10-ux-proposals'],
+  ['scripts/sondas/previews-to-json.ts', 'genera src/previews/catalog.ts (cabecera AUTO-GENERADO)'],
+  ['scripts/sondas/generate-templates.ts', 'esqueleto de preview: documentado en AGENTS.md y specs/constraints.md'],
+  ['scripts/sondas/sync-skill-catalog.mjs', 'regenera skills/iswc-base/catalog.md'],
+  ['scripts/sondas/shoot-one.mjs', 'captura de un tag: la cita tests/e2e/10-ux-proposals'],
 ];
 
 /** Símbolos sueltos que usan apps fuera del repo (grep en D:\VPS y D:\Dev\avatar, 5-nov-2026). */

@@ -1,0 +1,131 @@
+/**
+ * format-date.test.ts — Tier A (15 aserciones) para `<iswc-format-date>`.
+ *
+ * Estrategia: análisis estático del .ts. No levantamos DOM porque el módulo
+ * toca HTMLElement en element-base.ts y eso requiere jsdom. Las pruebas
+ * validan estructura, contrato y consistencia con el JSDoc.
+ *
+ * Cómo correr:
+ *   deno test -A --no-check \
+ *     tests/exhaustivo/helpers-format-date.test.ts
+ */
+
+import assert from 'node:assert/strict';
+import { existsSync, readFileSync } from 'node:fs';
+import { join, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'what' });
+
+
+const HERE = dirname(fileURLToPath(import.meta.url));
+const ROOT = join(HERE, '..', '..');
+const TAG = 'iswc-format-date';
+const TS  = join(ROOT, 'src', 'components', 'helpers', 'format-date.ts');
+const CSS = join(ROOT, '.tmp-scss', 'src', 'components', 'helpers', 'format-date.css');
+const JSON_PATH = join(ROOT, 'src', 'components', 'helpers', 'format-date.json');
+
+test('1. el módulo .ts existe y es legible', async () => {
+  assert.ok(existsSync(TS), `debe existir ${TS}`);
+  const src = readFileSync(TS, 'utf8');
+  assert.ok(src.length > 100, 'el módulo debe tener contenido real');
+});
+
+test('2. CSS hermano existe (.css)', async () => {
+  assert.ok(existsSync(CSS), `debe existir ${CSS}`);
+});
+
+test('3. JSON existe, declara el tag y respeta el esquema iswc-preview/v1', async () => {
+  assert.ok(existsSync(JSON_PATH));
+  const json = JSON.parse(readFileSync(JSON_PATH, 'utf8'));
+  assert.equal(json.tag, TAG);
+  assert.equal(json.$schema, 'iswc-preview/v1');
+  assert.ok(Array.isArray(json.sections) && json.sections.length > 0, 'sections[] debe estar');
+});
+
+test('4. static observedAttributes incluye TODOS los atributos documentados en JSDoc', async () => {
+  const helpers = await import('../_shared/exhaustivo.js');
+  console.log('DEBUG helpers keys:', Object.keys(helpers).filter(k => k.includes('extraer')));
+  console.log('DEBUG helpers.extraerObservados type:', typeof helpers.extraerObservados);
+  const list = helpers.extraerObservados(TS);
+  console.log('DEBUG format-date list:', list, 'TS=', TS, 'has date?', list.includes('date'));
+  const esperados = ['date', 'weekday', 'era', 'year', 'month', 'day', 'hour', 'minute', 'second', 'time-zone', 'time-zone-name', 'hour-format', 'locale'];
+  for (const e of esperados) {
+    assert.ok(list.includes(e), `OBSERVED debe incluir "${e}"`);
+  }
+});
+
+test('5. la clase reacciona a cambios de atributo (override o via ElementBase.onAttributeChanged)', async () => {
+  const src = readFileSync(TS, 'utf8');
+  const ok =
+    /attributeChangedCallback\s*\(/.test(src) ||
+    /extends\s+(?:IswcElement|ElementBase)\b/.test(src) ||
+    /onAttributeChanged\s*\(/.test(src);
+  assert.ok(ok, 'debe reaccionar a cambios de atributo (override, ElementBase o onAttributeChanged)');
+});
+
+test('6. la clase trae su CSS por iswc:css (static css del molde IswcElement)', async () => {
+  const src = readFileSync(TS, 'utf8');
+  assert.ok(
+    /import css from 'iswc:css';/.test(src) && /static css = css;/.test(src),
+    "import css from 'iswc:css' + static css = css deben estar presentes",
+  );
+});
+
+test('7. Shadow DOM contiene <time part="date">', async () => {
+  const src = readFileSync(TS, 'utf8');
+  assert.ok(/<time[^>]*part=["']date["']/.test(src), 'el template debe exponer part="date"');
+});
+
+test('8. la clase está registrada con defineElement o customElements.define', async () => {
+  const src = readFileSync(TS, 'utf8');
+  assert.ok(
+    /customElements\.define\s*\(\s*['"]iswc-format-date['"]/.test(src) ||
+    /(?:defineElement\s*\(\s*|static\s+(?:override\s+)?tag\s*=\s*|createObserverElement\(\s*'\w+',\s*)['"]iswc-format-date['"]/.test(src),
+    'debe haber registro del custom element',
+  );
+});
+
+test('9. parseLooseDate() exporta la función de parseo laxo', async () => {
+  const src = readFileSync(TS, 'utf8');
+  assert.ok(/export\s+function\s+parseLooseDate\s*\(/.test(src), 'parseLooseDate debe estar exportada');
+});
+
+test('10. parseLooseDate() maneja YYYY-MM-DD como fecha local', async () => {
+  const src = readFileSync(TS, 'utf8');
+  assert.ok(/const\s+only\s*=\s*\/\^\(\\d\{4\}\)-/.test(src), 'regex de YYYY-MM-DD debe estar');
+  assert.ok(/new\s+Date\(\+only\[1\],\s*\+only\[2\]\s*-\s*1,\s*\+only\[3\]\)/.test(src), 'parseo local debe estar');
+});
+
+test('11. parseLooseDate() maneja timestamp numérico', async () => {
+  const src = readFileSync(TS, 'utf8');
+  assert.ok(/new\s+Date\(Number\(s\)\)/.test(src), 'timestamp numérico → Date debe estar');
+});
+
+test('12. parseLooseDate() delega en new Date() para ISO completo', async () => {
+  const src = readFileSync(TS, 'utf8');
+  assert.ok(/new\s+Date\(s\)/.test(src), 'delegación a Date(s) debe estar');
+});
+
+test('13. parseLooseDate() devuelve null en entradas inválidas', async () => {
+  const src = readFileSync(TS, 'utf8');
+  assert.ok(/Number\.isNaN\(d\.getTime\(\)\)\s*\?\s*null\s*:\s*d/.test(src), 'NaN → null debe estar');
+});
+
+test('14. la clase expone getters/setters para los atributos principales', async () => {
+  const src = readFileSync(TS, 'utf8');
+  // Al menos getter/setter para `date` y `locale`
+  assert.ok(/get\s+date\s*\(\)/.test(src), 'getter date() debe existir');
+  assert.ok(/set\s+date\s*\(/.test(src), 'setter date() debe existir');
+  assert.ok(/get\s+locale\s*\(\)/.test(src), 'getter locale() debe existir');
+});
+
+test('15. OPT_ATTRS mapea kebab-case a camelCase para Intl.DateTimeFormat', async () => {
+  const src = readFileSync(TS, 'utf8');
+  assert.ok(/OPT_ATTRS\s*=\s*\{/.test(src), 'OPT_ATTRS debe estar');
+  assert.ok(/['"]time-zone['"]\s*:\s*['"]timeZone['"]/.test(src), 'time-zone → timeZone');
+  assert.ok(/['"]time-zone-name['"]\s*:\s*['"]timeZoneName['"]/.test(src), 'time-zone-name → timeZoneName');
+});
+
+export default lista();

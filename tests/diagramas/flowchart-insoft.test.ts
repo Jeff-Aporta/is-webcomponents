@@ -35,7 +35,7 @@ const denoTest = denoTestCon(test);
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 // Fixtures: payloads de flujo estables (copias de los primeros labs), independientes de lo que el lab regenere.
-const LAB = join(ROOT, 'tests', '_shared', 'fixtures');
+const LAB = join(ROOT, 'tests', 'fixtures');
 const labPayload = (slug: string): unknown => JSON.parse(readFileSync(join(LAB, `${slug}.json`), 'utf8')).payload;
 
 type Caja = { x: number; y: number; w: number; h: number };

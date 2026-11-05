@@ -1,0 +1,85 @@
+/**
+ * kanban.test.ts — verificación exhaustiva de <iswc-kanban>,
+ * <iswc-kanban-column> y <iswc-kanban-card>.
+ *
+ * Kanban es composicional: <iswc-kanban> contiene columnas, que contienen
+ * cards. Atributos por nivel:
+ *   - kanban: columns, orientation
+ *   - column: title, accent, badge
+ *   - card:   heading, meta, tag, tag-color, cover, without-shadow
+ * Eventos: iswc-kanban-card-click, iswc-kanban-move.
+ */
+import assert from 'node:assert/strict';
+import { exists, read, extraerObservados, extraerSlots, extraerParts, adoptaCss } from '../_shared/exhaustivo.ts';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'what' });
+
+
+const MOD = 'src/components/data/kanban.ts';
+
+test('iswc-kanban: archivo existe', () => {
+  assert.ok(exists(MOD));
+});
+
+test('iswc-kanban: shadow DOM en board y column (card usa class CSS)', () => {
+  const src = read(MOD);
+  // board + column tienen shadow; card usa class CSS sin shadow propio.
+  // Molde IswcElement: cada clase abre su shadow salvo `static shadowInit = null` (light DOM).
+  const clases = src.split(/\bclass\s+\w+\s+extends\s+IswcElement\b/).slice(1);
+  const conShadow = clases.filter((cuerpo) => !/^\s*\{[^}]*?static shadowInit[^=\n]*= null/.test(cuerpo)).length;
+  assert.ok(conShadow >= 2, `kanban.ts debe montar shadow en 2+ clases (encontró ${conShadow})`);
+});
+
+test('iswc-kanban: observados (columns, orientation)', () => {
+  const obs = extraerObservados(read(MOD));
+  assert.ok(obs.includes('columns') || obs.includes('orientation'),
+    `kanban declara columns u orientation: actual=${obs.join(',')}`);
+});
+
+test('iswc-kanban: eventos (iswc-kanban-card-click, iswc-kanban-move)', () => {
+  // kanban.ts emite con `emit(dragCard, 'iswc-kanban-move', ...)` y
+  // `emit(this, 'iswc-kanban-card-click', ...)`. El helper extraerEventos
+  // solo captura `emit(this, ...)`, así que verificamos manualmente.
+  const src = read(MOD);
+  assert.match(src, /iswc-kanban-card-click/);
+  assert.match(src, /iswc-kanban-move/);
+});
+
+test('iswc-kanban: slots (default en board, header-actions en column)', () => {
+  const slots = extraerSlots(read(MOD));
+  assert.ok(slots.includes('(default)'));
+  assert.ok(slots.includes('header-actions'), `kanban slot header-actions: actual=${slots.join(',')}`);
+});
+
+test('iswc-kanban: CSS parts (base, column, col-head, title, badge, actions)', () => {
+  const parts = extraerParts(read(MOD));
+  assert.ok(parts.includes('base'));
+  assert.ok(parts.includes('column'));
+  assert.ok(parts.includes('title'));
+});
+
+test('iswc-kanban: edge cases — drag state global (kanban usa null guards)', () => {
+  // kanban.ts usa `let dragCard: HTMLElement | null = null;` y compara `if (!dragCard) return;`.
+  const src = read(MOD);
+  assert.match(src, /let\s+dragCard\s*(?::\s*[\w$.<>| ]+)?=\s*null/);
+  assert.match(src, /if\s*\(\s*!dragCard\s*\)/);
+});
+
+test('iswc-kanban: adopta CSS', () => {
+  assert.ok(adoptaCss(read(MOD)));
+});
+
+test('iswc-kanban: registrado — 3 custom elements', () => {
+  const src = read(MOD);
+  const defines = src.match(/(?:defineElement\s*\(\s*|static\s+(?:override\s+)?tag\s*=\s*|createObserverElement\(\s*'\w+',\s*)['"`](iswc-[a-z0-9-]+)['"`]/g);
+  assert.ok((defines?.length ?? 0) >= 3,
+    `kanban.ts debe registrar 3+ custom elements (board/column/card), encontró: ${defines?.join(',')}`);
+});
+
+test('iswc-kanban: usa addEventListener (drag events)', () => {
+  const src = read(MOD);
+  assert.ok(/addEventListener\s*\(/.test(src));
+});
+
+export default lista();

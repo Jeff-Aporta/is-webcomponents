@@ -23,12 +23,12 @@ El reporte completo de la última corrida queda en `.tmp/tests-reporte.json`.
 |---|---|---|
 | `componentes/` | Contratos y comportamiento de los componentes (sin navegador o con jsdom). | what |
 | `diagramas/` | Motores de diagramas: layout, ruteo, specs, render a SVG/PNG. | what |
-| `exhaustivo/` | Barrido por componente: archivos, JSON, atributos y estados. | what |
+| `exhaustivo/` | Barrido por componente, plano: `<categoria>-<tag>.test.ts` (archivos, JSON, atributos y estados). | what |
 | `navegador/` | Página real con servidor efímero (Playwright/Stagehand). | what |
-| `gobernanza/` | Guardianes del repo: estructura, schemas, vendor, docs, build. | how |
-| `auditoria/` | El motor de auditoría (`deno task audit`). | how |
+| `gobernanza/` | Guardianes del repo: estructura, schemas, vendor, docs, build, motor de auditoría. | how |
 | `e2e/` | Recorridos E2E con Stagehand (`deno task test:e2e`). | what |
-| `_shared/` | Ayudas de las pruebas (adaptador `Deno.test`, jsdom, fixtures, HTML de apoyo). | — |
+| `fixtures/` | Datos de prueba, planos y con prefijo (`html-*`, `diagramas-*`); `iss-ayudascpia/` es un árbol de docs. | — |
+| `_shared/` | Ayudas de las pruebas (adaptador `Deno.test`, jsdom, alias, deps). | — |
 | `.audit/` | Runner (`run.ts`), motor de auditoría (`motor/`, `engine/`) y harness E2E (`e2e/`). | — |
 
 Para agregar una prueba: un archivo `tests/<carpeta>/<tema>.test.ts` con

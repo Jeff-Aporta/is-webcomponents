@@ -18,7 +18,7 @@ import { packageJson } from '@jeff-aporta/iswc-base/cdn/build/npm.ts';
 import { barrerHashes } from '@jeff-aporta/iswc-base/cdn/build/sync-hashes.ts';
 import { hashesRepetidos } from '@jeff-aporta/iswc-base/cdn/build/hash.ts';
 import { stampDirectory, mjsReferenciadosEn, hashFile, rewriteHtmlTree, hashesJson, applyHashToHtml, ASSET_HASHES_NAME } from '@jeff-aporta/iswc-base/cdn/build/stamp-hashes.ts';
-import { construirAi } from './builds/ai.mjs';
+import { construirAi } from './build-ai.mjs';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const root = dirname(here);
@@ -60,7 +60,7 @@ function shaDelBuild() {
 
 // Índice de utilidades _shared para el preview «Ecosistema JS».
 // (Carpeta `ops/` desde refactor(scripts) c693e58a45; antes vivía en `scripts/`.)
-await import('./ops/gen-shared-index.ts');
+await import('./sondas/gen-shared-index.ts');
 
 // ─────────────────────── PROTOCOLO DE CONSTRUCCION ───────────────────────
 //

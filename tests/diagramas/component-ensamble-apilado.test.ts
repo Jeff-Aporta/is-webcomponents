@@ -18,7 +18,7 @@ const solapan = (a: Caja, b: Caja): boolean =>
   a.x < b.x + b.w - MARGEN && b.x < a.x + a.w - MARGEN && a.y < b.y + b.h - MARGEN && b.y < a.y + a.h - MARGEN;
 
 test('diagramas/component-ensamble-apilado: cajas sin solape y rieles fuera de las entidades', async () => {
-  const url = new URL('./fixtures/component-ensamble-apilado.job.json', import.meta.url);
+  const url = new URL('../fixtures/diagramas-component-ensamble-apilado.job.json', import.meta.url);
   const job = JSON.parse(await Deno.readTextFile(url)) as { payload: unknown };
   const spec = resolveComponentSpec(job.payload, {});
   if (!spec) throw new Error('spec null');

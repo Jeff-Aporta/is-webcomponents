@@ -1,0 +1,64 @@
+/**
+ * class-diagram.test.ts — verificación exhaustiva de <iswc-class-diagram>.
+ *
+ * Diagrama de clases UML en SVG. Config por JSON con nodes/edges.
+ */
+import assert from 'node:assert/strict';
+
+
+import { exists, leerConBase, extraerObservados, extraerEventos, extraerParts, tieneShadow, leeJsonScript, parseaJson, usaMutationObserver, tieneEdgeCaseGuards, adoptaCss } from '../_shared/exhaustivo.js';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'what' });
+
+const MOD = 'src/components/diagrams/class-diagram.ts';
+
+test('iswc-class-diagram: archivo existe', () => {
+  assert.ok(exists(MOD));
+});
+
+test('iswc-class-diagram: shadow DOM con svg', () => {
+  const src = leerConBase(MOD);
+  assert.ok(tieneShadow(src));
+  assert.match(src, /<svg\b/);
+});
+
+test('iswc-class-diagram: observados (color)', () => {
+  const obs = extraerObservados(leerConBase(MOD));
+  assert.ok(obs.includes('color'));
+});
+
+test('iswc-class-diagram: eventos', () => {
+  const evts = extraerEventos(leerConBase(MOD));
+  assert.ok(evts.length >= 1, `class-diagram eventos: ${evts.join(',')}`);
+});
+
+test('iswc-class-diagram: shadow DOM parts', () => {
+  const parts = extraerParts(leerConBase(MOD));
+  assert.ok(parts.length >= 1, `class-diagram parts: ${parts.join(',')}`);
+});
+
+test('iswc-class-diagram: JSON payload', () => {
+  const src = leerConBase(MOD);
+  assert.ok(leeJsonScript(src));
+  assert.ok(parseaJson(src));
+});
+
+test('iswc-class-diagram: usa MutationObserver', () => {
+  assert.ok(usaMutationObserver(leerConBase(MOD)));
+});
+
+test('iswc-class-diagram: edge cases', () => {
+  assert.ok(tieneEdgeCaseGuards(leerConBase(MOD)));
+});
+
+test('iswc-class-diagram: adopta CSS', () => {
+  assert.ok(adoptaCss(leerConBase(MOD)));
+});
+
+test('iswc-class-diagram: registrado', () => {
+  const src = leerConBase(MOD);
+  assert.match(src, /(?:defineElement\s*\(\s*|static\s+(?:override\s+)?tag\s*=\s*|createObserverElement\(\s*'\w+',\s*)['"`]iswc-class-diagram['"`]/);
+});
+
+export default lista();

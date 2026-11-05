@@ -90,7 +90,7 @@ test('gobernanza/llm-contract', async () => {
   
   // Ubicación real de cada guardián: las pruebas volvieron de
   // src/utils/health/<sub>/ a tests/<carpeta>/ (gobernanza, componentes, …).
-  const TEST_DIRS = ['gobernanza', 'componentes', 'exhaustivo', 'navegador', 'diagramas', 'server', 'auditoria', 'e2e'];
+  const TEST_DIRS = ['gobernanza', 'componentes', 'exhaustivo', 'navegador', 'diagramas', 'e2e'];
   function locateGuardian(name) {
     for (const sub of TEST_DIRS) {
       const p = join(root, 'tests', sub, name);

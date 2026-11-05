@@ -1,0 +1,58 @@
+/**
+ * time-field.test.ts — Tests exhaustivos de <iswc-time-field>.
+ *
+ * Wrapper de `defineDateField` con `kind: "time"`.
+ */
+
+import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
+import {
+  leerComponente, leerPreview, existeCss, esFactoryWrapper,
+} from '../_shared/exhaustivo-forms.js';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'what' });
+
+
+const RAIZ = join(import.meta.dirname, '..');
+const FACTORY = readFileSync(join(import.meta.dirname!, '..', '..', 'src', 'components', 'forms', 'utils', 'date-field-element.ts'), 'utf8');
+
+const TAG = 'iswc-time-field';
+const src = leerComponente(TAG);
+
+test('time-field: archivo y registro', () => {
+  assert.ok(src.length > 100);
+  assert.ok(existeCss(TAG));
+  assert.ok(esFactoryWrapper(src));
+  assert.ok(/tag:\s*['"`]iswc-time-field['"`]/.test(src));
+  assert.ok(/kind:\s*['"]time['"]/.test(src),
+    '<iswc-time-field> debe usar kind: "time"');
+});
+
+test('time-field: atributos del factory (ampm, hour24, seconds)', () => {
+  for (const a of ['ampm', 'hour24', 'seconds']) {
+    assert.ok(new RegExp(`['"\`]${a}['"\`]`).test(FACTORY),
+      `factory OBSERVED debe incluir "${a}"`);
+  }
+});
+
+test('time-field: eventos (iswc-change, iswc-input)', () => {
+  for (const e of ['iswc-change', 'iswc-input']) {
+    assert.ok(new RegExp(`[#]?emit\\s*\\(\\s*(this\\s*,\\s*)?['"\`]${e}['"\`]`).test(FACTORY),
+      `factory debe emitir "${e}"`);
+  }
+});
+
+test('time-field: usa 12h/24h según locale/am-pm', () => {
+  assert.ok(/uses12Hour|hour24|ampm/.test(FACTORY),
+    'factory debe distinguir 12h vs 24h');
+});
+
+test('time-field: preview JSON', () => {
+  const prev = leerPreview(TAG);
+  assert.ok(prev);
+  assert.equal(prev!['$schema'], 'iswc-preview/v1');
+});
+
+export default lista();

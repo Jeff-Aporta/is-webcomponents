@@ -2,7 +2,7 @@
  * Guardián: controles de demos alineados al API del CE
  * (shape vs pill, enums VALID_*, options).
  *
- * Fuente: `node scripts/audits/preview-controls.mjs` (sin --fix).
+ * Fuente: `node scripts/sondas/preview-controls.mjs` (sin --fix).
  */
 import { assertEquals } from 'jsr:@std/assert@1';
 import { dirname, fromFileUrl, join } from 'jsr:@std/path@1';
@@ -17,7 +17,7 @@ const denoTest = denoTestCon(test);
 const root = join(dirname(fromFileUrl(import.meta.url)), '../..');
 
 denoTest('preview controls: auditoría homogénea sin hallazgos', async () => {
-  const script = join(root, 'scripts/audits/preview-controls.mjs');
+  const script = join(root, 'scripts/sondas/preview-controls.mjs');
   const cmd = new Deno.Command('node', {
     args: [script],
     cwd: root,
