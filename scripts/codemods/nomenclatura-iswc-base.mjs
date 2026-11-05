@@ -23,6 +23,9 @@
 //     no se toca.
 //   - Las rutas con `iswc-root` en el nombre se mueven con `git mv` (p. ej. `skills/iswc-root/` → `skills/iswc-base/`).
 //
+//   - En archivos de código (js/mjs/ts…) los literales de regex (`/…/flags`) no se tocan: son patrones del consumidor.
+//   - En un consumidor, `scripts/**/*.mjs` se barre aunque esté bajo `scripts/vendor/` (son scripts propios).
+//
 // Excepciones (EXCEPCIONES): archivos que citan los nombres viejos a propósito (historia, alias, llaves de storage en
 // producción que se migran en código). El guardián `tests/gobernanza/nomenclatura.test.ts` usa la misma lista.
 //
@@ -98,13 +101,87 @@ export function transformarLinea(linea) {
   return [out, n];
 }
 
-/** Reescribe un texto; devuelve `[nuevo, cambios]`. */
-export function transformar(texto) {
+/** Extensiones de código JS/TS: en ellas los literales de regex no se reescriben. */
+const EXT_CODIGO = /\.(?:[cm]?[jt]s|[jt]sx)$/;
+/** Palabras tras las que un `/` abre una regex (no una división). */
+const PALABRAS_ANTES_REGEX = /(?:^|[^\w$.])(?:return|typeof|case|in|of|delete|void|throw|new|else|do|yield|await)$/;
+
+/**
+ * Tokenizador sencillo de una línea de JS/TS: reemplaza cada literal de regex (`/…/flags`) por un marcador para que
+ * las reglas de nombres no lo toquen. Salta cadenas y comentarios. `estado.bloque` sigue un comentario de bloque entre líneas.
+ * Devuelve `[línea con marcadores, literales]`.
+ */
+export function protegerRegex(linea, estado = { bloque: false }) {
+  const guardados = [];
+  let out = '';
+  let i = 0;
+  const n = linea.length;
+  const previo = () => out.replace(/\s+$/, '');
+  while (i < n) {
+    const c = linea[i];
+    if (estado.bloque) {
+      const fin = linea.indexOf('*/', i);
+      if (fin < 0) { out += linea.slice(i); break; }
+      out += linea.slice(i, fin + 2);
+      i = fin + 2;
+      estado.bloque = false;
+      continue;
+    }
+    if (c === '"' || c === "'" || c === '`') {
+      let j = i + 1;
+      while (j < n && linea[j] !== c) j += linea[j] === '\\' ? 2 : 1;
+      if (j >= n) { out += linea.slice(i); break; } // sin cierre en la línea: no es cadena (prosa), se deja tal cual
+      out += linea.slice(i, j + 1);
+      i = j + 1;
+      continue;
+    }
+    if (c === '/' && linea[i + 1] === '/') { out += linea.slice(i); break; }
+    if (c === '/' && linea[i + 1] === '*') { estado.bloque = true; out += '/*'; i += 2; continue; }
+    if (c === '/') {
+      const p = previo();
+      const ultimo = p.slice(-1);
+      const permite = p === '' || '(,=:[!&|?{};+-*%<>~^'.includes(ultimo) || PALABRAS_ANTES_REGEX.test(p);
+      if (permite) {
+        let j = i + 1;
+        let clase = false;
+        while (j < n && (clase || linea[j] !== '/')) {
+          if (linea[j] === '\\') j += 2;
+          else {
+            if (linea[j] === '[') clase = true;
+            else if (linea[j] === ']') clase = false;
+            j += 1;
+          }
+        }
+        if (j < n && j > i + 1) {
+          let f = j + 1;
+          while (f < n && /[a-z]/i.test(linea[f])) f += 1;
+          out += `\u0001${guardados.length}\u0002`;
+          guardados.push(linea.slice(i, f));
+          i = f;
+          continue;
+        }
+      }
+    }
+    out += c;
+    i += 1;
+  }
+  return [out, guardados];
+}
+
+/** Reescribe un texto; devuelve `[nuevo, cambios]`. `esCodigo`: JS/TS (los literales de regex quedan intactos). */
+export function transformar(texto, esCodigo = false) {
   let total = 0;
+  const estado = { bloque: false };
   const lineas = texto.split('\n').map((l) => {
-    const [nueva, n] = transformarLinea(l);
+    if (!esCodigo) {
+      const [nueva, n] = transformarLinea(l);
+      total += n;
+      return nueva;
+    }
+    const [protegida, regex] = protegerRegex(l, estado);
+    const [nueva, n] = transformarLinea(protegida);
     total += n;
-    return nueva;
+    return nueva.replace(/\u0001(\d+)\u0002/g, (_, k) => regex[Number(k)]);
   });
   return [lineas.join('\n'), total];
 }
@@ -115,8 +192,12 @@ function esTexto(buf) {
   return true;
 }
 
-/** true si `rel` (desde la raíz de un CONSUMIDOR) está bajo una carpeta `vendor/`: copias del kit, no se reescriben. */
+/**
+ * true si `rel` (desde la raíz de un CONSUMIDOR) está bajo una carpeta `vendor/`: copias del kit, no se reescriben.
+ * Excepción: los `.mjs` de `scripts/` (p. ej. `scripts/vendor/vendor-iswc-tools.mjs`) son del consumidor y sí se barren.
+ */
 export function esVendorDeConsumidor(rel) {
+  if (/^scripts\/.*\.mjs$/.test(rel)) return false;
   return /(?:^|\/)vendor\//.test(rel);
 }
 
@@ -192,7 +273,7 @@ function main() {
     const buf = readFileSync(archivo);
     if (!esTexto(buf)) continue;
     const previo = buf.toString('utf8');
-    const [nuevo, n] = transformar(previo);
+    const [nuevo, n] = transformar(previo, EXT_CODIGO.test(archivo));
     if (!n) continue;
     const rel = barras(relative(raiz, archivo));
     const carpeta = rel.includes('/') ? rel.split('/')[0] : '(raíz)';

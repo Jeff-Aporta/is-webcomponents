@@ -138,4 +138,56 @@ denoTest('nomenclatura: N6 el codemod con --raiz barre un consumidor (texto prop
   assert(new TextDecoder().decode(otra.stdout).includes('0 menciones en 0 archivos; 0 rutas movidas'), 'idempotente');
 });
 
+function codemodEn(app: string): string {
+  const r = new Deno.Command(Deno.execPath(), {
+    args: ['run', '-A', join(KIT, 'scripts', 'codemods', 'nomenclatura-iswc-base.mjs'), `--raiz=${app}`],
+    stdout: 'piped', stderr: 'piped',
+  }).outputSync();
+  const salida = new TextDecoder().decode(r.stdout) + new TextDecoder().decode(r.stderr);
+  assertEquals(r.code, 0, salida);
+  return salida;
+}
+
+denoTest('nomenclatura: N7 los literales de regex del código no se reescriben (cadenas y prosa sí)', () => {
+  const app = Deno.makeTempDirSync({ prefix: 'nomenclatura-regex-' });
+  mkdirSync(join(app, 'src'), { recursive: true });
+  const antes = [
+    'const re = /iswc-root\\/dist/g;',
+    'const r2 = x.replace(/Jeff-Aporta\\/is-webcomponents/i, "");',
+    "const t = 'iswc-root'; const m = a / b; // iswc-root",
+    'if (/[/]iswc-root/.test(s)) run();',
+    '',
+  ].join('\n');
+  writeFileSync(join(app, 'src', 'a.mjs'), antes);
+  writeFileSync(join(app, 'src', 'nota.md'), 'ver /iswc-root/ y /is-webcomponents/x\n');
+  codemodEn(app);
+  assertEquals(readFileSync(join(app, 'src', 'a.mjs'), 'utf8'), [
+    'const re = /iswc-root\\/dist/g;',
+    'const r2 = x.replace(/Jeff-Aporta\\/is-webcomponents/i, "");',
+    "const t = 'iswc-base'; const m = a / b; // iswc-base",
+    'if (/[/]iswc-root/.test(s)) run();',
+    '',
+  ].join('\n'));
+  assertEquals(readFileSync(join(app, 'src', 'nota.md'), 'utf8'), 'ver /iswc-base/ y /iswc-base/x\n', 'fuera del código no hay regex');
+});
+
+denoTest('nomenclatura: N8 en un consumidor scripts/**/*.mjs se barre (también scripts/vendor/), el resto de vendor/ no', () => {
+  const app = Deno.makeTempDirSync({ prefix: 'nomenclatura-scripts-' });
+  const escribir = (rel: string, texto: string) => {
+    mkdirSync(dirname(join(app, rel)), { recursive: true });
+    writeFileSync(join(app, rel), texto);
+  };
+  const viejo = "const REPO = 'is-webcomponents'; const L = 'iswc-root';\n";
+  escribir('scripts/vendor/vendor-iswc-tools.mjs', viejo);
+  escribir('scripts/otro.mjs', viejo);
+  escribir('scripts/vendor/copia.json', viejo);
+  escribir('src/vendor/x.mjs', viejo);
+  codemodEn(app);
+  const nuevo = "const REPO = 'iswc-base'; const L = 'iswc-base';\n";
+  assertEquals(readFileSync(join(app, 'scripts/vendor/vendor-iswc-tools.mjs'), 'utf8'), nuevo);
+  assertEquals(readFileSync(join(app, 'scripts/otro.mjs'), 'utf8'), nuevo);
+  assertEquals(readFileSync(join(app, 'scripts/vendor/copia.json'), 'utf8'), viejo, 'solo los .mjs de scripts/');
+  assertEquals(readFileSync(join(app, 'src/vendor/x.mjs'), 'utf8'), viejo, 'lo vendorizado no se reescribe');
+});
+
 export default lista();

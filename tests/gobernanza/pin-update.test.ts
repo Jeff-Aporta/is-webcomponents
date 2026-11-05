@@ -16,6 +16,9 @@
 //       Pages y el alias); terceros, `*.classic.js`, `*.preview.min.js`, `vendor-distributions/` y `skills/` no se tocan.
 //   P13 la carpeta vendor con el nombre histórico se avisa (inventario en rojo) y no se renombra.
 //   P14 un SHA anterior a F3 (sin `.min.mjs`) da un mensaje que lo dice.
+//   P15 una ruta `.min.js` del kit armada en runtime (selfBase, cdnUrl, L.host…) se avisa con archivo:línea; no se reescribe.
+//   P16 sin falso positivo: URL estática ya reescrita, `.min.js` sin base runtime o base sin `.min.js`.
+//   P17 grafo partido (F7): índice `deps.json` + `deps/<cat>.json` → el vendor recibe el deps.json completo unido.
 import { assert, assertEquals } from 'jsr:@std/assert@1';
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
@@ -249,6 +252,38 @@ denoTest('pin-update: P11 deps.json del SHA nuevo en src/vendor/iswc-base/ (si l
   assertEquals(JSON.parse(Deno.readTextFileSync(join(raiz, 'src/vendor/iswc-base/deps.json'))).sha, A, 'un error no pisa el deps.json vigente');
 });
 
+// P17 grafo partido (F7): `deps.json` es un índice (tag → categoría) y el cierre va en `deps/<cat>.json`; el vendor
+//     del consumidor recibe el deps.json COMPLETO (`tags`, `core`, `v`) unido de las partes. Una parte caída es error.
+denoTest('pin-update: P17 deps.json partido por categoría → vendor con el grafo unido', async () => {
+  const { vendorizarDeps, opciones } = await import('../../src/vendor-distributions/shared/tools/pin-update.mjs');
+  const raiz = Deno.makeTempDirSync({ prefix: 'pin-deps2-' });
+  mkdirSync(join(raiz, 'src', 'vendor', 'iswc-base'), { recursive: true });
+  const base = `https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@${A}/dist/cdn/`;
+  const cuerpos: Record<string, string> = {
+    'deps.json': JSON.stringify({ sha: B, categorias: { 'iswc-button': 'actions', 'iswc-dialog': 'layout' } }),
+    'deps/actions.json': JSON.stringify({ sha: B, tags: { 'iswc-button': ['_chunks/chunk-X.mjs', 'actions/button.min.mjs'] }, core: {}, v: { 'actions/button.min.mjs': 'aaaaaa' } }),
+    'deps/layout.json': JSON.stringify({ sha: B, tags: { 'iswc-dialog': ['_chunks/chunk-X.mjs', 'layout/dialog.min.mjs'] }, core: {}, v: {} }),
+    'deps/core.json': JSON.stringify({ sha: B, tags: {}, core: { loader: ['core/loader.min.mjs'] }, v: {} }),
+  };
+  const pedidas: string[] = [];
+  const traer = (u: string) => {
+    pedidas.push(u.slice(base.length));
+    const c = cuerpos[u.slice(base.length)];
+    return Promise.resolve(new Response(c ?? '', { status: c ? 200 : 404 }));
+  };
+  const r = await vendorizarDeps(A, opciones({ root: raiz }), traer);
+  assertEquals(r.estado, 'escrito', JSON.stringify(r));
+  assertEquals(pedidas, ['deps.json', 'deps/actions.json', 'deps/core.json', 'deps/layout.json']);
+  const escrito = JSON.parse(Deno.readTextFileSync(join(raiz, 'src/vendor/iswc-base/deps.json')));
+  assertEquals(Object.keys(escrito.tags).sort(), ['iswc-button', 'iswc-dialog']);
+  assertEquals(escrito.core.loader, ['core/loader.min.mjs']);
+  assertEquals(escrito.v, { 'actions/button.min.mjs': 'aaaaaa' });
+  assertEquals(escrito.sha, B, 'sha = SHA base del build (informativo), no el pin');
+  delete cuerpos['deps/layout.json'];
+  const caido = await vendorizarDeps(A, opciones({ root: raiz }), traer);
+  assertEquals(caido.estado, 'error', JSON.stringify(caido));
+});
+
 // P12 Extensión de los módulos del kit (plan D2, F3): al re-pinear, `.min.js` → `.min.mjs` solo en rutas del kit.
 const KIT = 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents';
 const P12 = [
@@ -308,6 +343,44 @@ denoTest('pin-update: P14 el mensaje de no publicado dice si el SHA es anterior 
   assert(/anterior a F3/.test(mensajeNoPublicado(A, op, true)) && mensajeNoPublicado(A, op, true).includes('--nuevo=ultimo'));
   assert(mensajeNoPublicado(A, op, true).includes('dist/cdn/core/loader.min.js'));
   assert(!/anterior a F3/.test(mensajeNoPublicado(A, op, false)) && /publícalo/.test(mensajeNoPublicado(A, op, false)));
+});
+
+// P15 Ruta `.min.js` del kit armada en runtime (no es URL estática: pin-update no la reescribe y daría 404): se AVISA con
+//     archivo:línea y la sugerencia `.min.mjs`, sin tocar el archivo ni cambiar el código de salida.
+denoTest('pin-update: P15 una ruta .min.js construida en runtime se avisa con archivo:línea', () => {
+  for (const linea of [
+    "const u = new URL('preview/x.min.js', L.selfBase);",
+    'const u = `${cdnUrl}actions/button.min.js`;',
+    'const u = baseUrl + "core/loader.min.js";',
+    "const u = new URL('x.min.js', iswcLoader.host);",
+  ]) {
+    const r = inventario({ ...SANO, 'src/r.ts': `export const a = 1;\n${linea}\n` });
+    assertEquals(r.code, 0, `${linea}\n${r.out}`);
+    assert(r.out.includes('src/r.ts:2'), `${linea}\n${r.out}`);
+    assert(r.out.includes('.min.mjs'), r.out);
+  }
+});
+
+// P16 Sin falso positivo: una URL estática (ya reescrita a `.min.mjs` o que `aMinMjs` reescribe), un `.min.js` sin base de
+//     runtime en la línea y una base sin literal `.min.js` no avisan.
+denoTest('pin-update: P16 URL estática ya reescrita, .min.js sin base runtime o base sin .min.js no avisan', async () => {
+  const sano = inventario({
+    ...SANO,
+    'src/r.ts': [
+      `const a = baseUrl + 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/iswc-base@${A}/dist/cdn/core/loader.min.mjs';`,
+      `const b = baseUrl + 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/iswc-base@${A}/dist/cdn/core/loader.min.js';`,
+      "const c = 'https://cdn.jsdelivr.net/npm/marked@12.0.0/lib/marked.min.js';",
+      "const d = new URL('preview/x.min.mjs', L.selfBase);",
+    ].join('\n'),
+  });
+  assertEquals(sano.code, 0, sano.out);
+  assert(!/AVISO/.test(sano.out), sano.out);
+  const { actualizarPines, opciones } = await import('../../src/vendor-distributions/shared/tools/pin-update.mjs');
+  const raiz = Deno.makeTempDirSync({ prefix: 'pin-runtime-' });
+  mkdirSync(join(raiz, 'src'), { recursive: true });
+  writeFileSync(join(raiz, 'src', 'a.ts'), `const u = new URL('preview/x.min.js', L.selfBase);\n`);
+  actualizarPines(A, opciones({ root: raiz }));
+  assertEquals(Deno.readTextFileSync(join(raiz, 'src', 'a.ts')), `const u = new URL('preview/x.min.js', L.selfBase);\n`, 'solo se avisa: no se reescribe');
 });
 
 export default lista();

@@ -38,6 +38,9 @@
 // githack y Pages bajo `dist/cdn/`, y el alias `@jeff-aporta/iswc-base/`) solo para módulos del kit: `core/`, `lib/` y
 // `<categoría>/<tag>`. Nunca terceros, `*.classic.js`, `*.preview.min.js` ni `vendor-distributions/`, `skills/`, `build/`.
 //
+// Rutas runtime: las rutas `*.min.js` del kit armadas en código (`new URL('preview/x.min.js', L.selfBase)`) no son URL
+// estáticas y no se reescriben; la salida las AVISA como `archivo:línea` (sugiere `.min.mjs`). No cambian el código de salida.
+//
 // deps.json (F4): con `--nuevo`, si el consumidor tiene `src/vendor/iswc-base/`, se baja `dist/cdn/deps.json` del SHA
 // nuevo ahí (su build emite los `<link rel="modulepreload">` sin red). `--sin-deps` lo apaga. La carpeta con el
 // nombre histórico (`src/vendor/iswc-root/`) se avisa y se propone renombrar; nunca se renombra sola.
@@ -183,6 +186,35 @@ export function inventario(op = opciones()) {
   return { pines, mutables, legados };
 }
 
+/** Literal de cadena (comilla simple, doble o backtick) que termina en `.min.js`. */
+const LITERAL_MIN_JS = /(['"`])[^'"`\n]*\.min\.js\1/;
+/** Base del kit en runtime: lo que un consumidor usa para construir rutas sin URL estática. */
+const BASE_RUNTIME = /\b(?:selfBase|cdnUrl|baseUrl)\b|\bL\.host\b|\biswcLoader\.host\b/;
+
+/**
+ * Rutas `*.min.js` del kit construidas en runtime (`new URL('preview/x.min.js', L.selfBase)`): no son URL estáticas,
+ * así que `aMinMjs` no las reescribe y dan 404 en un SHA posterior a F3. Solo se AVISAN (`archivo:línea: texto`),
+ * nunca se reescriben. Una línea cuya URL estática `aMinMjs` ya corrige no cuenta.
+ */
+export function rutasRuntimeMinJs(op = opciones()) {
+  const rel = (f) => relative(op.root, f).replace(/\\/g, '/');
+  const avisos = [];
+  for (const f of archivos(op)) {
+    readFileSync(f, 'utf8').split('\n').forEach((l, i) => {
+      if (!LITERAL_MIN_JS.test(l) || !BASE_RUNTIME.test(l) || CABECERA_VENDOR.test(l)) return;
+      if (aMinMjs(l, op).n) return;
+      avisos.push(`${rel(f)}:${i + 1}: ${l.trim().slice(0, 140)}`);
+    });
+  }
+  return avisos;
+}
+
+/** Texto del aviso de rutas runtime (vacío si no hay). */
+export function avisoRutasRuntime(avisos) {
+  if (!avisos.length) return '';
+  return `AVISO: rutas .min.js del kit construidas en runtime (dan 404 en un SHA nuevo; cámbialas a .min.mjs a mano, no se reescriben):\n  ${avisos.join('\n  ')}`;
+}
+
 /** Estado HTTP de `ruta` en jsDelivr para ese SHA (0 sin red). */
 async function estado(sha, ruta, op) {
   const u = `https://cdn.jsdelivr.net/gh/${op.repo}@${sha}/${ruta}`;
@@ -223,23 +255,41 @@ export function avisoVendorLegado(op = opciones()) {
 }
 
 /**
- * Baja `dist/cdn/deps.json` del SHA a `src/vendor/iswc-base/deps.json` si el consumidor tiene esa carpeta.
+ * Baja el grafo del kit del SHA a `src/vendor/iswc-base/deps.json` si el consumidor tiene esa carpeta, siempre con la
+ * forma completa `{ sha, tags, core, v }` (la que leen los builds de las apps). Desde F7 `dist/cdn/deps.json` es solo un
+ * índice (`categorias`: tag → categoría) y el cierre va en `dist/cdn/deps/<cat>.json`: se bajan las partes y se unen.
+ * Un SHA anterior a F7 trae `tags` en el propio `deps.json` y se copia tal cual. `sha` del grafo es el SHA BASE del
+ * build (el commit anterior al que lo publica): informativo, no se compara con el pin.
  * `{ estado: 'escrito' | 'sin-carpeta' | 'omitido' | 'error', ruta, motivo }`. `traer` es `fetch` (inyectable).
  */
 export async function vendorizarDeps(sha, op = opciones(), traer = fetch) {
   const ruta = `${VENDOR_KIT}/deps.json`;
   if (op.sinDeps) return { estado: 'omitido', ruta, motivo: '--sin-deps' };
   if (!existsSync(join(op.root, VENDOR_KIT))) return { estado: 'sin-carpeta', ruta, motivo: `sin ${VENDOR_KIT}/` };
-  const u = `https://cdn.jsdelivr.net/gh/${op.repo}@${sha}/dist/cdn/deps.json`;
-  const r = await traer(u, { signal: AbortSignal.timeout(20_000) }).catch(() => null);
-  if (!r?.ok) return { estado: 'error', ruta, motivo: `${u} → ${r?.status ?? 'sin red'}` };
-  const texto = await r.text();
-  let json = null;
-  try { json = JSON.parse(texto); } catch { /* abajo */ }
-  if (!json || typeof json !== 'object' || typeof json.tags !== 'object' || json.tags === null) {
-    return { estado: 'error', ruta, motivo: `${u} no es un deps.json (falta \`tags\`)` };
+  const base = `https://cdn.jsdelivr.net/gh/${op.repo}@${sha}/dist/cdn/`;
+  const bajar = async (rel) => {
+    const r = await traer(`${base}${rel}`, { signal: AbortSignal.timeout(20_000) }).catch(() => null);
+    if (!r?.ok) return { error: `${base}${rel} → ${r?.status ?? 'sin red'}` };
+    try { return { json: JSON.parse(await r.text()) }; } catch { return { error: `${base}${rel} no es JSON` }; }
+  };
+  const indice = await bajar('deps.json');
+  if (indice.error) return { estado: 'error', ruta, motivo: indice.error };
+  let json = indice.json;
+  if (json && typeof json === 'object' && json.categorias && typeof json.categorias === 'object') {
+    const unido = { sha: json.sha, tags: {}, core: {}, v: {} };
+    for (const cat of [...new Set([...Object.values(json.categorias), 'core'])].sort()) {
+      const parte = await bajar(`deps/${cat}.json`);
+      if (parte.error) return { estado: 'error', ruta, motivo: parte.error };
+      Object.assign(unido.tags, parte.json.tags ?? {});
+      Object.assign(unido.core, parte.json.core ?? {});
+      Object.assign(unido.v, parte.json.v ?? {});
+    }
+    json = unido;
   }
-  if (!op.dryRun) writeFileSync(join(op.root, ruta), texto.endsWith('\n') ? texto : `${texto}\n`);
+  if (!json || typeof json !== 'object' || typeof json.tags !== 'object' || json.tags === null) {
+    return { estado: 'error', ruta, motivo: `${base}deps.json no es un deps.json (falta \`tags\` o \`categorias\`)` };
+  }
+  if (!op.dryRun) writeFileSync(join(op.root, ruta), `${JSON.stringify(json)}\n`);
   return { estado: 'escrito', ruta, motivo: `${Object.keys(json.tags).length} tags ← ${op.repo}@${sha.slice(0, 12)}` };
 }
 
@@ -394,6 +444,8 @@ export async function protocolo(nuevoPedido, op = opciones(), viejo = '') {
     log(`ALERTA: quedan refs mutables (corrígelas a mano):\n  ${mutables.join('\n  ')}`);
     return 1;
   }
+  const runtime = avisoRutasRuntime(rutasRuntimeMinJs(op));
+  if (runtime) log(runtime);
   if (!code) log('siguiente: build + tests del consumidor');
   return code;
 }
@@ -426,6 +478,8 @@ if (esPrincipal()) {
     if (legados.size) log(`  ALERTA: nombre anterior del repo (→ ${op.nombre}; se corrige con --nuevo):\n    ${[...legados].join('\n    ')}`);
     const vendorLegado = avisoVendorLegado(op);
     if (vendorLegado) log(`  ${vendorLegado}`);
+    const runtime = avisoRutasRuntime(rutasRuntimeMinJs(op));
+    if (runtime) log(`  ${runtime}`);
     process.exit(pines.size > 1 || mutables.length || legados.size || vendorLegado ? 1 : 0);
   }
   process.exit(await protocolo(String(args.nuevo), op, args.viejo ? String(args.viejo) : ''));
