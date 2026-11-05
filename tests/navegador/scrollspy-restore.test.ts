@@ -34,7 +34,8 @@ import { createReadStream } from 'node:fs';
 import { stat, readFile } from 'node:fs/promises';
 import { extname, join, normalize, sep, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { chromium } from 'playwright';
+import { cerrarChromium } from '../_shared/navegador.ts';
+import { lanzarChromium } from '../_shared/navegador.ts';
 import * as esbuildApi from 'esbuild';
 import { aliasKit } from '../../src/cdn/build/alias.ts';
 import { cssVirtual } from '../../src/cdn/build/css-virtual.ts';
@@ -195,11 +196,30 @@ test('navegador/scrollspy-restore', { timeout: 180_000 }, async () => {
     });
   }
   
+  // Click en el enlace del TOC → optimistic setActive + persistencia debounced (200 ms; el IO tarda 1-2 frames). Con
+  // la máquina cargada (gate completo) el primer click puede caer antes de que el scrollspy enganche sus enlaces y la
+  // pref no se escribe: se reintenta hasta 6 veces, 750 ms cada una, en vez de esperar un tiempo fijo.
+  async function clicHastaPref(page, id, storageKey) {
+    let pref = null;
+    for (let intento = 0; intento < 6; intento++) {
+      await page.evaluate((anchor) => {
+        const host = document.querySelector('iswc-preview-component');
+        const link = host?.querySelector(`iswc-scrollspy.docs-toc a[href="#${CSS.escape(anchor)}"]`);
+        if (link) link.click();
+      }, id);
+      await page.waitForTimeout(750);
+      pref = await readActiveAnchorPref(page, storageKey);
+      if (pref?.activeId === id) break;
+    }
+    return pref;
+  }
+
   async function waitForMain(page) {
     await page.waitForFunction(() => {
       const host = document.querySelector('iswc-preview-component');
       if (!host || host.hidden) return false;
-      return !!host.querySelector('iswc-main');
+      // El TOC con sus enlaces, no solo el <iswc-main>: con el equipo cargado el TOC llega después.
+      return !!host.querySelector('iswc-main') && host.querySelectorAll('iswc-scrollspy.docs-toc a[href^="#"]').length >= 2;
     }, { timeout: 30000, polling: 100 });
     // Margen para que el IO del scroll-spy ejecute su primer pickActive.
     await page.waitForTimeout(2500);
@@ -207,11 +227,10 @@ test('navegador/scrollspy-restore', { timeout: 180_000 }, async () => {
   
   // ─── 4. Playwright: auditar cada tag ────────────────────────────────────
   
-  // Edge headless del sistema (regla del repo: nunca el Chrome del usuario).
-  async function lanzar() {
-    return await chromium.launch({ headless: true, channel: 'msedge' });
-  }
-  const browser = await lanzar().catch((e) => { server.close(); throw e; });
+  // Edge headless del sistema (regla del repo: nunca el Chrome del usuario), hermético: todo host que no sea el
+  // servidor efímero no resuelve. Así la prueba no depende de la red y cubre siempre el caso «sin red»: el @import de
+  // fuentes web de doc-presentation cae y el loader no debe quitar la hoja ni bajar a los espejos (rojo de F7b).
+  const browser = await lanzarChromium({ args: ['--host-resolver-rules=MAP * ~NOTFOUND, EXCLUDE 127.0.0.1'] }).catch((e) => { server.close(); throw e; });
   let exitCode = 0;
   const failures = [];
   let checksPass = 0;
@@ -242,6 +261,18 @@ test('navegador/scrollspy-restore', { timeout: 180_000 }, async () => {
           console.log(`[ok]   ${tag} [no-guard] arranca en scrollTop≈0 (got ${top0})`);
         } else {
           failures.push(`${tag} [no-guard]: scrollTop=${top0}, esperado ≈0`);
+        }
+
+        // Sin red el @import de fuentes web de doc-presentation cae: la hoja del kit sigue puesta (no se quita ni se
+        // pide a los espejos: core/preview/… da 404 y la ref por api.github.com tampoco resuelve).
+        const hojas = await page1.evaluate(() => [...document.querySelectorAll('link[rel="stylesheet"]')].map((l) => l.href));
+        checksTotal += 1;
+        const presentacion = hojas.filter((h) => /\/preview\/doc-presentation\.min\.css/.test(h));
+        if (presentacion.length === 1 && !presentacion[0].includes('/core/preview/')) {
+          checksPass += 1;
+          console.log(`[ok]   ${tag} [no-guard] doc-presentation sigue enlazada sin red (${new URL(presentacion[0]).pathname})`);
+        } else {
+          failures.push(`${tag} [no-guard]: hoja doc-presentation sin red: ${JSON.stringify(presentacion)} (esperada una, la de dist/cdn/preview/)`);
         }
       } catch (err) {
         failures.push(`${tag} [no-guard]: error durante navegación — ${err?.message ?? err}`);
@@ -282,20 +313,7 @@ test('navegador/scrollspy-restore', { timeout: 180_000 }, async () => {
           pickedAnchor = chosen.id;
           console.log(`[info] ${tag} TOC tiene ${tocLinks.length} items, elegido mid=${mid} id="${chosen.id}" (text="${chosen.text}")`);
   
-          // Click → optimistic setActive + persistencia debounced (200 ms; el IO tarda 1-2 frames). Con la máquina
-          // cargada (gate completo) el primer click puede caer antes de que el scrollspy enganche sus enlaces y la
-          // pref no se escribe: se reintenta el click hasta 6 veces, 750 ms cada una, en vez de esperar 1,5 s fijos.
-          let pref = null;
-          for (let intento = 0; intento < 6; intento++) {
-            await page2.evaluate((id) => {
-              const host = document.querySelector('iswc-preview-component');
-              const link = host?.querySelector(`iswc-scrollspy.docs-toc a[href="#${CSS.escape(id)}"]`);
-              if (link) link.click();
-            }, pickedAnchor);
-            await page2.waitForTimeout(750);
-            pref = await readActiveAnchorPref(page2, storageKey);
-            if (pref?.activeId === pickedAnchor) break;
-          }
+          const pref = await clicHastaPref(page2, pickedAnchor, storageKey);
   
           checksTotal += 1;
           if (!pref || pref.activeId !== pickedAnchor) {
@@ -323,33 +341,35 @@ test('navegador/scrollspy-restore', { timeout: 180_000 }, async () => {
           const restored = await page2.evaluate((id) => {
             const host = document.querySelector('iswc-preview-component');
             const main = host?.querySelector('iswc-main');
-            if (!main) return { found: false, top: -1, delta: -1, max: -1, height: -1 };
+            if (!main) return { found: false, top: -1, delta: -1, max: -1, height: -1, client: -1 };
             const section = main.querySelector(`#${CSS.escape(id)}`);
-            if (!section) return { found: false, top: Math.round(main.scrollTop), delta: -1, max: -1, height: -1 };
+            if (!section) return { found: false, top: Math.round(main.scrollTop), delta: -1, max: -1, height: -1, client: -1 };
             // Posición esperada: la sección debe estar cerca del top del viewport
             // del main. Calculamos la distancia entre sectionTop y main.scrollTop.
             const r = section.getBoundingClientRect();
             const mr = main.getBoundingClientRect();
             const delta = Math.round(r.top - mr.top);
             const max = main.scrollHeight - main.clientHeight;
-            return { found: true, top: Math.round(main.scrollTop), delta, max, height: main.scrollHeight };
+            return { found: true, top: Math.round(main.scrollTop), delta, max, height: main.scrollHeight, client: main.clientHeight };
           }, pickedAnchor);
           checksTotal += 1;
           if (!restored.found) {
             failures.push(`${tag} [restore]: tras F5, no se encontró #${pickedAnchor} en <iswc-main>`);
           } else {
-            // Si la sección está cerca del final, scrollTo queda clamped al
-            // máximo (scrollHeight - clientHeight) y la sección queda al fondo
-            // del viewport en lugar de al top. En ese caso, exigimos que la
-            // sección esté dentro del viewport visible (delta ∈ [-max, clientH]).
-            // En caso contrario (sección con contenido debajo), exigimos delta ∈
-            // [-20, 20] (sección casi al top).
-            const inViewport = restored.delta >= -20
-              || (restored.max > 0 && restored.delta >= -restored.max);
-            if (!inViewport) {
+            // La restauración deja el encabezado elegido en el tope del área de scroll: |delta| ≤ TOLERANCIA (el
+            // scroll-margin del encabezado da unos −10 px). Solo si el scroll quedó topado al fondo (la sección está
+            // tan abajo que no puede subir hasta el tope) basta con que el encabezado quede dentro del área visible.
+            // Antes se aceptaba cualquier delta positivo: una restauración que no ocurrió (scrollTop=0, la sección
+            // abajo) pasaba por buena.
+            const TOLERANCIA = 40;
+            const alTope = Math.abs(restored.delta) <= TOLERANCIA;
+            const topadoAlFondo = restored.max > 0 && restored.top >= restored.max - 2
+              && restored.delta >= -TOLERANCIA && restored.delta < restored.client;
+            if (restored.top <= 4 || !(alTope || topadoAlFondo)) {
               failures.push(
                 `${tag} [restore]: tras F5, #${pickedAnchor} dista ${restored.delta}px del top del main ` +
-                `(scrollTop=${restored.top}, max=${restored.max}). Esperado en viewport.`,
+                `(scrollTop=${restored.top}, max=${restored.max}, alto visible=${restored.client}). ` +
+                `Esperado |delta| ≤ ${TOLERANCIA}px (o dentro del área visible si el scroll quedó topado al fondo).`,
               );
             } else {
               checksPass += 1;
@@ -375,14 +395,8 @@ test('navegador/scrollspy-restore', { timeout: 180_000 }, async () => {
           await page3.reload({ waitUntil: 'domcontentloaded', timeout: 30000 });
           await waitForMain(page3);
   
-          // Sembrar pref: marcar la sección y dejar que persista.
-          await page3.evaluate((id) => {
-            const host = document.querySelector('iswc-preview-component');
-            const link = host?.querySelector(`iswc-scrollspy.docs-toc a[href="#${CSS.escape(id)}"]`);
-            if (link) link.click();
-          }, pickedAnchor);
-          await page3.waitForTimeout(1200);
-          const beforeTopPref = await readActiveAnchorPref(page3, storageKey);
+          // Sembrar pref: marcar la sección y dejar que persista (mismos reintentos de clic que el caso 2).
+          const beforeTopPref = await clicHastaPref(page3, pickedAnchor, storageKey);
           if (!beforeTopPref || beforeTopPref.activeId !== pickedAnchor) {
             failures.push(
               `${tag} [clear-on-top]: pref no se sembró (got ${JSON.stringify(beforeTopPref)})`,
@@ -422,7 +436,9 @@ test('navegador/scrollspy-restore', { timeout: 180_000 }, async () => {
     console.error(err?.stack || err);
     exitCode = 1;
   } finally {
-    await browser.close().catch(() => {});
+    // `browser.close()` del Edge del sistema a veces no resuelve: cerrarChromium no cuelga la prueba.
+    await cerrarChromium(browser);
+    server.closeAllConnections?.();
     server.close();
   }
   
@@ -437,7 +453,8 @@ test('navegador/scrollspy-restore', { timeout: 180_000 }, async () => {
       `scrollspy-restore.test.mjs: FAIL — ${failures.length} issues (${checksPass}/${checksTotal} checks OK):`,
     );
     for (const f of failures) console.error(`  - ${f}`);
-    { const salida = 1; if (salida) throw new Error(`salida ${salida}`); return; }
+    // El mensaje lleva las fallas: el runner solo muestra el error (el stderr del proceso no llega al log del gate).
+    throw new Error(failures.length ? `${failures.length} falla(s): ${failures.join(' · ')}` : 'error inesperado fuera de los casos');
   }
 });
 

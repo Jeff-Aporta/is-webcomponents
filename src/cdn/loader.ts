@@ -289,6 +289,24 @@ function yaEnlazada(href: string): boolean {
   return [...document.querySelectorAll<HTMLLinkElement>('link[rel="stylesheet"][href], link[rel="preload"][as="style"][href]')].some((l) => sinQuery(l.href) === ruta);
 }
 
+/**
+ * ¿El `error` de un `<link rel=stylesheet>` vino de un `@import` y no de la hoja? La hoja llegó si su entrada de Resource
+ * Timing trae un estado 2xx/3xx; sin estado (navegador sin `responseStatus`, búfer lleno), si sus reglas se leen y hay
+ * alguna (una respuesta 404 deja una hoja vacía; una hoja de otro origen sin CORS no se lee: cuenta como caída).
+ */
+function hojaPropiaCargada(link: HTMLLinkElement): boolean {
+  try {
+    const entradas = performance.getEntriesByName(link.href, 'resource') as Array<PerformanceResourceTiming & { responseStatus?: number }>;
+    const estado = entradas[entradas.length - 1]?.responseStatus;
+    if (typeof estado === 'number' && estado > 0) return estado < 400;
+  } catch { /* sin Resource Timing */ }
+  try {
+    return (link.sheet?.cssRules.length ?? 0) > 0;
+  } catch {
+    return false;
+  }
+}
+
 function injectStylesheet(href: string): Promise<void> {
   if (cssDone.has(href)) return Promise.resolve();
   if (typeof document === 'undefined' || yaEnlazada(href)) {
@@ -305,6 +323,13 @@ function injectStylesheet(href: string): Promise<void> {
       resolve();
     };
     link.onerror = () => {
+      // Un `@import` caído (las fuentes web de doc-presentation sin red) también dispara `error` en el `<link>`: si la
+      // hoja propia llegó, se queda puesta. Quitarla dejaba la página sin estilos y bajaba a los espejos.
+      if (hojaPropiaCargada(link)) {
+        cssDone.add(href);
+        resolve();
+        return;
+      }
       link.remove();
       reject(new Error(`CSS falló: ${href}`));
     };
