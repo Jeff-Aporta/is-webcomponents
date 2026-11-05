@@ -9,7 +9,8 @@
  *     (F7b, 5-nov-2026: 7 145 B de media; el objetivo de 6 KB sin comprimir NO se cumple y queda como pendiente en
  *     specs/plan-carga-modular.md §8). `actions/button.min.mjs` ≤ 2 KB sin comprimir.
  *   - Lote shell (los 17 tags de `SHELL_CRITICO` de `gobernanza/deps-json`) por el loader, origen mutable, servidor
- *     con 120 ms de latencia (mayor que el umbral de ráfaga): la cascada de `load()` en ≤ 2 ráfagas, 0 URLs
+ *     con 120 ms de latencia (mayor que el umbral de ráfaga): la cascada de `load()` en ≤ 2 ráfagas encadenadas
+ *     (`rafagasEncadenadas`: un grupo que salió antes de que respondiera el anterior no es un nivel nuevo), 0 URLs
  *     duplicadas, 0 `indexedDB.open`, 0 `caches.open`, 0 peticiones a api.github.com, 0 errores de consola, y los
  *     17 tags definidos.
  *   - Galería local (`index.html` de la raíz, que carga `dist/`), servida estática sin latencia y sin red externa:
@@ -21,6 +22,8 @@ import { join } from 'node:path';
 import { brotliCompressSync } from 'node:zlib';
 import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
 import { medirCarga } from '../../scripts/medir-carga.mjs';
+import { rafagas } from '../_shared/rafagas.ts';
+import { rafagasEncadenadas } from '../_shared/rafagas.ts';
 
 const { test, lista } = coleccionPruebas({ categoria: 'what' });
 
@@ -49,6 +52,14 @@ function modulosDeTag(): string[] {
     .map(([tag, cat]) => join(DIST, cat, `${tag.replace(/^iswc-/, '')}.min.mjs`))
     .filter((ruta) => existsSync(ruta));
 }
+
+test('navegador/carga: rafagasEncadenadas une el escalonado (sin respuesta entre medias) y separa la cascada', () => {
+  const p = (inicio: number, fin: number) => ({ url: `u${inicio}`, inicio, fin });
+  // 0 y 80 ms salen antes de la primera respuesta (120): un nivel; 260 sale tras ella: otro nivel.
+  const ps = [p(0, 120), p(80, 200), p(260, 380)];
+  assert.equal(rafagas(ps).length, 3);
+  assert.equal(rafagasEncadenadas(ps).length, 2);
+});
 
 test('navegador/carga: loader núcleo ≤ 8 KB brotli', () => {
   if (!hayDist()) return;

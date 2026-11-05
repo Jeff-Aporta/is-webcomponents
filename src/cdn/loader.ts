@@ -483,9 +483,15 @@ async function cargarKit(jobs: readonly LoadJob[]): Promise<void> {
         porCat.set(cat, [...(porCat.get(cat) ?? []), job]);
       }
     }
-    const inmutable = esUrlInmutable(raiz);
-    const esperas = [...porCat].map(([cat, js]) => depsDe(raiz, cat).then((d) => precargarCierre(js, raiz, d)));
-    if (!inmutable) await Promise.all(esperas);
+    const pares = [...porCat];
+    if (esUrlInmutable(raiz)) {
+      for (const [cat, js] of pares) void depsDe(raiz, cat).then((d) => precargarCierre(js, raiz, d));
+    } else {
+      // Origen mutable: se esperan TODAS las partes y se precarga el cierre de una vez. Precargar al llegar cada parte
+      // partía el cierre en tantas ráfagas como partes tardías (F7b: 3 ráfagas con el equipo cargado).
+      const partes = await Promise.all(pares.map(([cat]) => depsDe(raiz, cat)));
+      pares.forEach(([, js], i) => precargarCierre(js, raiz, partes[i] ?? null));
+    }
   }
   await Promise.all(jobs.map((j: LoadJob) => importCdn(j.path, exactos.get(j))));
 }

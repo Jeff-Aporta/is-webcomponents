@@ -47,6 +47,7 @@ import { fileURLToPath } from 'node:url';
 import { chromium } from 'playwright';
 import { duplicadas } from '../tests/_shared/rafagas.ts';
 import { rafagas } from '../tests/_shared/rafagas.ts';
+import { rafagasEncadenadas } from '../tests/_shared/rafagas.ts';
 import { rutasDuplicadas } from '../tests/_shared/rafagas.ts';
 
 const RAIZ = resolve(dirname(fileURLToPath(import.meta.url)), '..');
@@ -244,8 +245,10 @@ async function visita(ctx, page, cdp, url, op, etiqueta) {
       kbDecodificados: Math.round(lista.reduce((s, p) => s + p.decodificados, 0) / 1024),
       rafagas: rafagas(hasta.map((p) => ({ url: p.url, inicio: p.inicio, fin: p.fin }))).length,
       // Con --lote: solo la cascada que pidió `load()` (lo que el loader trajo al arrancar no cuenta; igual que
-      // tests/navegador/loader-rafagas). El cero de las peticiones es la del documento (≈ fetchStart).
-      rafagasTrasLoad: m.tLoad == null ? null : rafagas(hasta.filter((p) => p.inicio >= m.tLoad - m.fetchStart)).length,
+      // tests/navegador/loader-rafagas). El cero de las peticiones es la del documento (≈ fetchStart). Encadenadas:
+      // un grupo que salió antes de que respondiera el anterior no es un nivel nuevo (rafagasEncadenadas).
+      rafagasTrasLoad: m.tLoad == null ? null : rafagasEncadenadas(hasta.filter((p) => p.inicio >= m.tLoad - m.fetchStart)).length,
+      rafagasTrasLoadBrutas: m.tLoad == null ? null : rafagas(hasta.filter((p) => p.inicio >= m.tLoad - m.fetchStart)).length,
       duplicadas: duplicadas(lista).length,
       rutasDuplicadas: rutasDuplicadas(lista).length,
       modulosKit: lista.filter((p) => kit.test(p.url)).length,
@@ -274,7 +277,7 @@ async function visita(ctx, page, cdp, url, op, etiqueta) {
     }
     const fallidas = lista.filter((p) => (p.estado ?? 0) >= 400).map((p) => `${p.estado} ${p.url}`);
     resumen.fallidas = fallidas.length;
-    return { resumen, detalle: { errores, fallidas, duplicadas: duplicadas(lista), rutasDuplicadas: rutasDuplicadas(lista), peticiones: lista } };
+    return { resumen, detalle: { errores, fallidas, duplicadas: duplicadas(lista), rutasDuplicadas: rutasDuplicadas(lista), peticiones: lista, tLoad: m.tLoad == null ? null : m.tLoad - m.fetchStart } };
   } finally {
     cdp.off('Network.requestWillBeSent', onSent);
     cdp.off('Network.responseReceived', onResp);
@@ -342,7 +345,7 @@ export async function medirCarga(op) {
       r.readys = vs.map((v) => v.ready);
       resumen[etiqueta] = r;
     }
-    return { url, opciones: { ...op, url }, lighthouse: 'no disponible (lighthouse no está en las dependencias del kit)', resumen, corridas: corridas.map((c) => c.map((v) => ({ ...v.resumen, detalle: { errores: v.detalle.errores, fallidas: v.detalle.fallidas, duplicadas: v.detalle.duplicadas, rutasDuplicadas: v.detalle.rutasDuplicadas } }))) };
+    return { url, opciones: { ...op, url }, lighthouse: 'no disponible (lighthouse no está en las dependencias del kit)', resumen, corridas: corridas.map((c) => c.map((v) => ({ ...v.resumen, detalle: { errores: v.detalle.errores, fallidas: v.detalle.fallidas, duplicadas: v.detalle.duplicadas, rutasDuplicadas: v.detalle.rutasDuplicadas, ...(op.conPeticiones ? { peticiones: v.detalle.peticiones, tLoad: v.detalle.tLoad } : {}) } }))) };
   } finally {
     await servidor?.cerrar();
   }
@@ -354,7 +357,7 @@ if (import.meta.main ?? (process.argv[1] && resolve(process.argv[1]) === fileURL
   for (const [etiqueta, v] of Object.entries(r.resumen)) {
     console.log(`\n== ${etiqueta} · ${r.url} · n=${v.n} (mediana)`);
     console.log(`  ready ${v.ready} ms [${v.readys.join('/')}] · DCL ${v.dcl} · FCP ${v.fcp} · LCP ${v.lcp} · CLS ${v.cls} · long tasks ${v.longTasks} (TBT ≈ ${v.tbt} ms) · INP ${v.inp}`);
-    console.log(`  peticiones ${v.peticiones} (${v.peticionesHastaReady} hasta el hito) · ${v.kbTransferidos} KB transferidos / ${v.kbDecodificados} KB · ráfagas ${v.rafagas}${v.rafagasTrasLoad == null ? '' : ` (${v.rafagasTrasLoad} tras load())`} · módulos del kit ${v.modulosKit} · JS ${v.js}`);
+    console.log(`  peticiones ${v.peticiones} (${v.peticionesHastaReady} hasta el hito) · ${v.kbTransferidos} KB transferidos / ${v.kbDecodificados} KB · ráfagas ${v.rafagas}${v.rafagasTrasLoad == null ? '' : ` (${v.rafagasTrasLoad} encadenadas tras load(), ${v.rafagasTrasLoadBrutas} por hueco)`} · módulos del kit ${v.modulosKit} · JS ${v.js}`);
     console.log(`  duplicadas ${v.duplicadas} (rutas ${v.rutasDuplicadas}) · IndexedDB ${v.idb} (${v.idbAntesReady} antes del hito) · caches ${v.caches} · api.github ${v.github} · errores ${v.errores} · respuestas ≥ 400 ${v.fallidas}`);
     console.log(`  CDP: script ${v.scriptMs} ms · layout ${v.layoutMs} ms · heap ${v.heapMb} MB · HTML ${v.htmlKb} KB${v.seo == null ? '' : ` · SEO ${v.seo}/100${v.seoFallos.length ? ` (falla: ${v.seoFallos.join(', ')})` : ''}`}`);
   }

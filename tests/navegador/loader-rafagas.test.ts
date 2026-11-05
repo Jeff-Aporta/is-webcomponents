@@ -22,7 +22,7 @@ import { chromium, type Browser } from 'playwright';
 import { REPO_GITHUB } from '../../src/core/cdn-ref.ts';
 import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
 import { cerrarChromium } from '../_shared/navegador.ts';
-import { duplicadas, rafagas, rutasDuplicadas, type Peticion } from '../_shared/rafagas.ts';
+import { duplicadas, rafagasEncadenadas, rutasDuplicadas, type Peticion } from '../_shared/rafagas.ts';
 import { leerDeps as grafo } from '../_shared/deps.ts';
 
 const { test, lista } = coleccionPruebas({ categoria: 'what' });
@@ -114,7 +114,9 @@ function afirmar(m: Medida, origen: string, sinDeps = false): void {
   const delCierre = m.peticiones.filter((p) => m.cierre.has(rel(p)));
   // La cascada del lote: lo que el `load()` pidió. Los chunks que el loader ya trajo al arrancar (comparten
   // `iswc-storage`, `asset-url`, el runtime de esbuild) están en el cierre pero no forman parte de ella.
-  const grupos = rafagas(delCierre.filter((p) => p.inicio >= m.tLoad));
+  // Encadenadas: un grupo que salió antes de que respondiera el anterior no es un nivel de la cascada (el loader puede
+  // inyectar los `modulepreload` escalonados con el equipo cargado; F7b).
+  const grupos = rafagasEncadenadas(delCierre.filter((p) => p.inicio >= m.tLoad));
   console.log(`  ${origen}: ${m.peticiones.length} peticiones · cierre ${delCierre.length}/${m.cierre.size} · tras load() en ${grupos.length} ráfaga(s) [${grupos.map((g) => g.length).join(', ')}] · idb ${m.idb} · caches ${m.caches} · github ${m.github}`);
   assert.deepEqual(m.errores, [], `${origen}: errores en la página: ${m.errores.join(' | ')}`);
   assert.deepEqual(m.definidos, LOTE.map(() => true), `${origen}: el lote quedó definido`);

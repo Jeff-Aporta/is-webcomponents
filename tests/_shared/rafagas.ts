@@ -24,6 +24,24 @@ export function rafagas(peticiones: readonly Peticion[], umbralMs = 50): Peticio
   return out;
 }
 
+/**
+ * Ráfagas encadenadas: como `rafagas`, pero una ráfaga que empezó ANTES de que terminara alguna petición de la
+ * anterior se une a ella. Así cuenta solo la cascada real (un nivel que espera la respuesta del anterior) y no el
+ * escalonado que mete un hilo principal cargado (el loader inyecta los `modulepreload` con > 50 ms entre sí cuando el
+ * equipo está ocupado: visto en el gate de F7b, 3 «ráfagas» sin ninguna espera entre ellas). Con el servidor de las
+ * pruebas respondiendo con latencia > umbral, un nivel nuevo siempre empieza después de un `fin` del anterior.
+ */
+export function rafagasEncadenadas(peticiones: readonly Peticion[], umbralMs = 50): Peticion[][] {
+  const out: Peticion[][] = [];
+  for (const g of rafagas(peticiones, umbralMs)) {
+    const previa = out[out.length - 1];
+    const finPrevio = previa ? Math.min(...previa.map((p) => p.fin ?? Infinity)) : -Infinity;
+    if (previa && g[0]!.inicio < finPrevio) previa.push(...g);
+    else out.push([...g]);
+  }
+  return out;
+}
+
 /** URLs pedidas más de una vez (misma URL exacta, query incluida). */
 export function duplicadas(peticiones: readonly Peticion[]): string[] {
   const n = new Map<string, number>();
