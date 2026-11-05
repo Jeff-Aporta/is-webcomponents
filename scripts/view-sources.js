@@ -20,19 +20,11 @@ import '../src/components/code/code.js';
 import './highlight-pre.js';
 import { repaint } from '../src/core/highlight-code.js';
 import components from '../src/manifest.js';
-import {
-  resolveSourceFiles,
-  fetchSourceFile,
-  rawSourceUrl,
-  localSourceUrl,
-} from '../src/utils/source-paths.js';
+import { resolveSourceFiles, fetchSourceFile, localSourceUrl } from '../src/utils/source-paths.js';
 
 const DIALOG_ID = 'iswc-view-sources-dialog';
 const KINDS = /** @type {const} */ (['js', 'css', 'md']);
 const LANG = { js: 'javascript', css: 'css', md: 'markdown' };
-
-/** @type {string | null} */
-let currentTag = null;
 
 /** @type {Map<string, Promise<{ text: string, url: string, source: string } | { error: string }>>} */
 const cache = new Map();
@@ -295,7 +287,6 @@ document.addEventListener('iswc-demo-connected', (e) => {
 document.addEventListener('iswc-preview-ready', (e) => {
   const { tag } = e.detail ?? {};
   if (typeof tag !== 'string') return;
-  currentTag = tag;
   cache.clear();
   mountPageButton(tag);
   document.querySelectorAll('.demo, iswc-demo').forEach(enhanceDemo);

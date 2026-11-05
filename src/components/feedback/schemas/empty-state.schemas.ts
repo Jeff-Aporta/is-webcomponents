@@ -3,12 +3,10 @@
  */
 import { z } from "zod";
 
-export const EmptyStateEstadoSchema = z.enum(["vacio", "cargando", "error"]);
-export type EmptyStateEstado = z.infer<typeof EmptyStateEstadoSchema>;
+const EmptyStateEstadoSchema = z.enum(["vacio", "cargando", "error"]);
 
 /** `caja` punteada para listas; `tarjeta` con cuerpo propio para una vista entera (sin sesión, sin permiso). */
-export const EmptyStateVarianteSchema = z.enum(["caja", "tarjeta"]);
-export type EmptyStateVariante = z.infer<typeof EmptyStateVarianteSchema>;
+const EmptyStateVarianteSchema = z.enum(["caja", "tarjeta"]);
 
 export const EmptyStatePropsSchema = z.object({
   icono: z.string(),

@@ -6,7 +6,7 @@
  */
 import { z } from "zod";
 
-export const ZipLikeSchema = z.object({
+const ZipLikeSchema = z.object({
   loadAsync: z.function({ input: [z.unknown() /* TODO: ref ArrayBuffer */], output: z.promise(z.object({
   file: z.function({ input: [z.string()], output: z.union([z.object({
   async: z.function({ input: [z.string()], output: z.promise(z.string()) }),

@@ -8,19 +8,16 @@ import { rutaEdge } from '../../_shared/navegador.ts';
 import { mkdirSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import test from 'node:test';
-import { ENV, e2eDir, faltanRequisitos } from './env.ts';
+import { ENV, faltanRequisitos } from './env.ts';
 import { crearGeneradorMiniMax } from './minimax.ts';
 import { estadoDe } from './estados.ts';
 import { levantarServidor } from './server.ts';
-import { titulo, marcar, tituloDe, lineaDe, EMOJIS } from './e2e-config.ts';
+import { titulo } from './e2e-config.ts';
 import type { Page, Locator, StagehandCreateOptions } from '@browserbasehq/stagehand';
 import type { TestContext } from 'node:test';
 import type { ServidorE2E } from './schemas/server.schemas.ts';
-import type { EstadoE2E } from './schemas/e2e-config.schemas.ts';
-import type {
-  CtxE2E, RegistroConsola, RastroCodeMirror, EditorIsCode,
-} from './schemas/tipos.schemas.ts';
-import { OpcionesEsperaSchema, type OpcionesEspera } from './schemas/harness.schemas.js';
+import type { CtxE2E, RegistroConsola, RastroCodeMirror } from './schemas/tipos.schemas.ts';
+import { type OpcionesEspera } from './schemas/harness.schemas.js';
 import type { BotonVisible } from "./schemas/harness.schemas.js";
 
 /**

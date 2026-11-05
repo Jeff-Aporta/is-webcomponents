@@ -6,11 +6,10 @@
  */
 import { z } from "zod";
 
-export const DragOverPositionSchema = z.union([z.literal("before"), z.literal("after"), z.literal("into")]);
+const DragOverPositionSchema = z.union([z.literal("before"), z.literal("after"), z.literal("into")]);
 export type DragOverPosition = z.infer<typeof DragOverPositionSchema>;
 
-
-export const SummaryRectSchema = z.object({
+const SummaryRectSchema = z.object({
   top: z.number(),
   height: z.number(),
 });

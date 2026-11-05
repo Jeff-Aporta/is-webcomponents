@@ -6,7 +6,7 @@
  */
 import { z } from "zod";
 
-export const CropRectSchema = z.object({
+const CropRectSchema = z.object({
   x: z.number(),
   y: z.number(),
   width: z.number(),
@@ -14,12 +14,10 @@ export const CropRectSchema = z.object({
 });
 export type CropRect = z.infer<typeof CropRectSchema>;
 
-
-export const DragHandleSchema = z.union([z.literal('move'), z.literal('nw'), z.literal('ne'), z.literal('sw'), z.literal('se')]);
+const DragHandleSchema = z.union([z.literal('move'), z.literal('nw'), z.literal('ne'), z.literal('sw'), z.literal('se')]);
 export type DragHandle = z.infer<typeof DragHandleSchema>;
 
-
-export const DragStateSchema = z.object({
+const DragStateSchema = z.object({
   handle: DragHandleSchema,
   startX: z.number(),
   startY: z.number(),

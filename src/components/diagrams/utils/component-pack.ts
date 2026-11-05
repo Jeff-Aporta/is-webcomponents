@@ -15,15 +15,15 @@ import type { Arista, Caja, Componente, Lado, OpcionesEmpaque, Paquete, Punto } 
 import type { ClusterColumn, GroupConv } from "@jeff-aporta/iswc-base/components/diagrams/schemas/component-pack.schemas.js";
 
 export const COL_GUTTER = 52;
-export const PKG_CORRIDOR = 72;
-export const PKG_PAD = 16;
-export const PKG_TAB = 22;
+const PKG_CORRIDOR = 72;
+const PKG_PAD = 16;
+const PKG_TAB = 22;
 /** Hueco filas: C+O+stem + un carril de arista (≈ assemblyEntityMargin). */
-export const ROW_GAP = 72;
+const ROW_GAP = 72;
 /** Hueco entre paquetes raíz apilados en la misma columna: 3U, para que no quede apretado. */
 export const PKG_ROW_GAP = 60;
 /** Distancia mínima entre cajas si el consumidor no pone `min-gap`. */
-export const DEFAULT_MIN_GAP = ROW_GAP;
+const DEFAULT_MIN_GAP = ROW_GAP;
 /** Holgura arista vs perímetro de componentes (≥20px pedido). */
 export const EDGE_CLEARANCE = 22;
 /** Margen arista ↔ borde de agrupador: correr paralelo a < esto cuesta. */
@@ -39,29 +39,29 @@ export const LANE_PITCH = 20;
  */
 export const GRID_STEP = 15;
 /** Factor de costo si el tramo corre a < lanePitch de otro riel ajeno. */
-export const LANE_NEAR_FACTOR = 28;
+const LANE_NEAR_FACTOR = 28;
 /** Factor de costo al correr paralelo cerca del borde de un agrupador. */
-export const PKG_BORDER_NEAR_FACTOR = 9;
+const PKG_BORDER_NEAR_FACTOR = 9;
 /**
  * Costo de caminar por el interior de agrupadores: × factor·nivel
  * (Azure+API = nivel 2 → ×2·factor). Fuera = ×1.
  */
-export const PKG_CROSS_FACTOR = 3;
+const PKG_CROSS_FACTOR = 3;
 /** Hueco entre componentes dentro de paquetes anidados (p.ej. PatyIA API). */
-export const NESTED_ROW_GAP = 36;
+const NESTED_ROW_GAP = 36;
 /**
  * W58: hueco horizontal mínimo entre paquetes hermanos anidados
  * (p.ej. PatyIA API ↔ clientesis). Más aire = más corredor para rieles.
  */
-export const NESTED_PKG_GAP = 88;
+const NESTED_PKG_GAP = 88;
 /** W58: si uno de los hermanos es `prohibido`, el hueco sube. */
-export const NESTED_PKG_GAP_PROHIBIDO = 128;
+const NESTED_PKG_GAP_PROHIBIDO = 128;
 /**
  * W58: pad interior de paquete ≥ stem+radio O + aire vs borde.
  * Evita que el -(O- quede dibujado encima del trazo del agrupador.
  * (18 stem + 8 R + 14 keep ≈ 40).
  */
-export const PKG_PAD_LOLLI = 40;
+const PKG_PAD_LOLLI = 40;
 /** Aire extra alrededor del título de paquete. */
 export const TITLE_CLEARANCE = 22;
 export function packDiagram(packages: Paquete[], components: Componente[], edges: readonly Arista[] = [], opts: OpcionesEmpaque = {}): void {
@@ -600,20 +600,6 @@ function xOverlap(a: Caja, b: Caja): number {
   return Math.min(a.x + a.w, b.x + b.w) - Math.max(a.x, b.x);
 }
 
-/** Unión de rectángulos → polígono ortogonal (CCW). */
-export function orthogonalUnion(rects: readonly Caja[]) {
-  const g = occupyRects(rects, false);
-  if (!g) return [];
-  return occupyOutline(g.xs, g.ys, g.occ);
-}
-
-/** Cuadrícula orto-convexa: envuelve todos los rects (rellena huecos del grupo). */
-export function orthogonalWrap(rects: readonly Caja[]) {
-  const g = occupyRects(rects, true);
-  if (!g) return [];
-  return occupyOutline(g.xs, g.ys, g.occ);
-}
-
 export function pointInOrtho(pts: readonly Punto[], x: number, y: number): boolean {
   if (!pts || pts.length < 4) return false;
   let n = 0;
@@ -955,7 +941,7 @@ export function outlineToPath(pts: readonly Punto[]): string {
   return `M${pts[0].x},${pts[0].y} ` + pts.slice(1).map((p) => `L${p.x},${p.y}`).join(' ') + ' Z';
 }
 
-export function inflateBox(c: Caja, pad: number): Caja {
+function inflateBox(c: Caja, pad: number): Caja {
   return { ...c, x: c.x - pad, y: c.y - pad, w: c.w + 2 * pad, h: c.h + 2 * pad };
 }
 
@@ -969,7 +955,7 @@ export function inflateTitleObstacle(tb: Caja, pad: number, yClip: number): Caja
   return { ...tb, x, y, w, h };
 }
 
-export function segmentoEsDiagonal(x1: number, y1: number, x2: number, y2: number) {
+function segmentoEsDiagonal(x1: number, y1: number, x2: number, y2: number) {
   return Math.abs(x1 - x2) >= 0.6 && Math.abs(y1 - y2) >= 0.6;
 }
 
@@ -1006,7 +992,7 @@ export function segmentoCortaCaja(x1: number, y1: number, x2: number, y2: number
   return false;
 }
 
-export function rutaChoca(puntos: readonly Punto[], obstaculos: readonly Caja[]): boolean {
+function rutaChoca(puntos: readonly Punto[], obstaculos: readonly Caja[]): boolean {
   for (let i = 0; i < puntos.length - 1; i++) {
     const a = puntos[i];
     const b = puntos[i + 1];

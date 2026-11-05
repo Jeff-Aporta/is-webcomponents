@@ -6,36 +6,31 @@
  */
 import { z } from "zod";
 
-export const ParsedTimeSchema = z.object({
+const ParsedTimeSchema = z.object({
   h: z.number(),
   m: z.number(),
   s: z.number(),
 });
 export type ParsedTime = z.infer<typeof ParsedTimeSchema>;
 
-
-export const RingItemSchema = z.object({
+const RingItemSchema = z.object({
   label: z.string(),
   raw: z.number(),
 });
 export type RingItem = z.infer<typeof RingItemSchema>;
 
-
-export const ViewSchema = z.union([z.literal('hours'), z.literal('minutes'), z.literal('seconds')]);
+const ViewSchema = z.union([z.literal('hours'), z.literal('minutes'), z.literal('seconds')]);
 export type View = z.infer<typeof ViewSchema>;
 
-
-export const MeridiemSchema = z.union([z.literal('AM'), z.literal('PM')]);
+const MeridiemSchema = z.union([z.literal('AM'), z.literal('PM')]);
 export type Meridiem = z.infer<typeof MeridiemSchema>;
 
-
-export const CommitOptsSchema = z.object({
+const CommitOptsSchema = z.object({
   advance: z.boolean().optional(),
 });
 export type CommitOpts = z.infer<typeof CommitOptsSchema>;
 
-
-export const PickOptsSchema = z.object({
+const PickOptsSchema = z.object({
   advance: z.boolean().optional(),
 });
 export type PickOpts = z.infer<typeof PickOptsSchema>;

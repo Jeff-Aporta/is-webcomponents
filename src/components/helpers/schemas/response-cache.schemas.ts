@@ -6,7 +6,7 @@
  */
 import { z } from "zod";
 
-export const CreateResponseCacheOptsSchema = z.object({
+const CreateResponseCacheOptsSchema = z.object({
   dbName: z.string().optional(),
   storeName: z.string().optional(),
   ttlMs: z.number().optional(),
@@ -14,8 +14,7 @@ export const CreateResponseCacheOptsSchema = z.object({
 });
 export type CreateResponseCacheOpts = z.infer<typeof CreateResponseCacheOptsSchema>;
 
-
-export const ClaveDeInputSchema = z.object({
+const ClaveDeInputSchema = z.object({
   app: z.string().optional(),
   metodo: z.string().optional(),
   ruta: z.string().optional(),
@@ -28,8 +27,7 @@ export const ClaveDeInputSchema = z.object({
 });
 export type ClaveDeInput = z.infer<typeof ClaveDeInputSchema>;
 
-
-export const CachedRowSchema = z.object({
+const CachedRowSchema = z.object({
   clave: z.string(),
   datos: z.unknown() /* TODO: ref T */,
   texto: z.string(),
@@ -37,15 +35,7 @@ export const CachedRowSchema = z.object({
 });
 export type CachedRow = z.infer<typeof CachedRowSchema>;
 
-
-export const VivoAvisoSchema = z.object({
-  origen: z.union([z.literal('cache'), z.literal('red')]),
-  cambio: z.boolean(),
-});
-export type VivoAviso = z.infer<typeof VivoAvisoSchema>;
-
-
-export const VivoOptsSchema = z.object({
+const VivoOptsSchema = z.object({
   key: z.string(),
   pintar: z.function({ input: [z.unknown() /* TODO: ref T */, z.unknown() /* TODO: ref VivoAviso */], output: z.void() }).optional(),
   onCached: z.function({ input: [z.unknown() /* TODO: ref T */, z.unknown() /* TODO: ref VivoAviso */], output: z.void() }).optional(),
@@ -53,8 +43,7 @@ export const VivoOptsSchema = z.object({
 });
 export type VivoOpts = z.infer<typeof VivoOptsSchema>;
 
-
-export const ResponseCacheSchema = z.object({
+const ResponseCacheSchema = z.object({
   dbName: z.string(),
   storeName: z.string(),
   ttlMs: z.number(),

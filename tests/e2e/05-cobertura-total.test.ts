@@ -34,11 +34,10 @@ import { join } from 'node:path';
 import assert from 'node:assert/strict';
 import { chromium } from 'playwright';
 import catalog from '../../src/previews/catalog.ts';
-import { asegurarServidor, abrirGaleria as abrirGaleriaHarness, esperarMs, baseUrlResuelta, crearTestE2E } from '../.audit/e2e/harness.ts';
+import { asegurarServidor, esperarMs, baseUrlResuelta, crearTestE2E } from '../.audit/e2e/harness.ts';
 import { faltanRequisitos } from '../.audit/e2e/env.ts';
 import { repoDir } from '../.audit/e2e/env.ts';
 import type { Browser, Page } from 'playwright';
-import type { CtxE2E } from '../.audit/e2e/schemas/tipos.schemas.ts';
 
 type EntradaCatalogo = {
   json: string;

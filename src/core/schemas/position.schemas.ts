@@ -6,17 +6,15 @@
  */
 import { z } from "zod";
 
-export const PlacementSchema = z.union([z.literal('top'), z.literal('top-start'), z.literal('top-end'), z.literal('bottom'), z.literal('bottom-start'), z.literal('bottom-end'), z.literal('left'), z.literal('left-start'), z.literal('left-end'), z.literal('right'), z.literal('right-start'), z.literal('right-end')]);
+const PlacementSchema = z.union([z.literal('top'), z.literal('top-start'), z.literal('top-end'), z.literal('bottom'), z.literal('bottom-start'), z.literal('bottom-end'), z.literal('left'), z.literal('left-start'), z.literal('left-end'), z.literal('right'), z.literal('right-start'), z.literal('right-end')]);
 export type Placement = z.infer<typeof PlacementSchema>;
 
-
-export const AnchorLikeSchema = z.union([z.unknown() /* TODO: ref Element */, z.object({
+const AnchorLikeSchema = z.union([z.unknown() /* TODO: ref Element */, z.object({
   getBoundingClientRect: z.function({ input: [], output: z.unknown() /* TODO: ref DOMRect */ }),
 })]);
 export type AnchorLike = z.infer<typeof AnchorLikeSchema>;
 
-
-export const RectSchema = z.object({
+const RectSchema = z.object({
   top: z.number(),
   left: z.number(),
   right: z.number(),
@@ -28,27 +26,23 @@ export const RectSchema = z.object({
 });
 export type Rect = z.infer<typeof RectSchema>;
 
-
-export const SizeSchema = z.object({
+const SizeSchema = z.object({
   width: z.number(),
   height: z.number(),
 });
 export type Size = z.infer<typeof SizeSchema>;
 
-
-export const CoordsSchema = z.object({
+const CoordsSchema = z.object({
   top: z.number(),
   left: z.number(),
   placement: z.string(),
 });
 export type Coords = z.infer<typeof CoordsSchema>;
 
-
-export const BoundarySchema = RectSchema;
+const BoundarySchema = RectSchema;
 export type Boundary = z.infer<typeof BoundarySchema>;
 
-
-export const ArrowOffsetSchema = z.object({
+const ArrowOffsetSchema = z.object({
   top: z.string(),
   left: z.string(),
   right: z.string(),
@@ -56,8 +50,7 @@ export const ArrowOffsetSchema = z.object({
 });
 export type ArrowOffset = z.infer<typeof ArrowOffsetSchema>;
 
-
-export const ComputePositionOptsSchema = z.object({
+const ComputePositionOptsSchema = z.object({
   anchor: AnchorLikeSchema,
   popupEl: z.unknown() /* TODO: ref HTMLElement */,
   placement: z.string().optional(),
@@ -80,8 +73,7 @@ export const ComputePositionOptsSchema = z.object({
 });
 export type ComputePositionOpts = z.infer<typeof ComputePositionOptsSchema>;
 
-
-export const ComputePositionResultSchema = z.object({
+const ComputePositionResultSchema = z.object({
   top: z.number(),
   left: z.number(),
   viewportTop: z.number(),

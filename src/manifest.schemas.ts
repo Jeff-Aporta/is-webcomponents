@@ -6,7 +6,7 @@
  */
 import { z } from "zod";
 
-export const ComponentManifestItemSchema = z.object({
+const ComponentManifestItemSchema = z.object({
   tag: z.string(),
   title: z.string(),
   category: z.string(),

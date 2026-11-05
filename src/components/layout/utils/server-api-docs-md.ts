@@ -35,12 +35,12 @@ const str = (v: unknown, def = ''): string => (typeof v === 'string' ? v : def);
 const esObjeto = (v: unknown): boolean => !!v && typeof v === 'object' && !Array.isArray(v);
 
 /** Orquestador público de InSoft: canjea credenciales por JWT cuando el documento no trae `loginUrl`. */
-export const LOGIN_ORQUESTADOR = 'https://main-orchestrator.jeffaporta.workers.dev';
+const LOGIN_ORQUESTADOR = 'https://main-orchestrator.jeffaporta.workers.dev';
 /** Empresa por defecto cuando el login responde `MULTI_EMPRESA` (lo mismo que hace el portal). */
 export const ITERCERO_POR_DEFECTO = '810000630';
 
 /** Formato del documento por su forma (sin validarlo). */
-export function formatoDe(doc: unknown): ServerApiDocsValidacion['formato'] {
+function formatoDe(doc: unknown): ServerApiDocsValidacion['formato'] {
   const d = obj(doc);
   if (d.kind === 'config') return 'insoft';
   if (typeof d.openapi === 'string') return 'openapi';

@@ -19,7 +19,7 @@
  *   tipar las operaciones.
  */
 import { TAMutations } from "./06-mutations.js";
-import { TNode, TRecord } from '@jeff-aporta/iswc-base/components/isp/schemas/tree-view-types.schemas.js';
+import { TNode } from '@jeff-aporta/iswc-base/components/isp/schemas/tree-view-types.schemas.js';
 
 /** Límite máximo de snapshots en el stack de undo. */
 const HISTORY_LIMIT = 50;

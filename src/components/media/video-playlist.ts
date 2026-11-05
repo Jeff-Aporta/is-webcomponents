@@ -34,7 +34,7 @@ import { withStyleAttrs } from '@jeff-aporta/iswc-base/core/attrs.js';
 
 import './video.js';
 import './icon.js';
-import type { IswcVideoLike, IswcVideo, VideoList, MediaObsBag, ActivateOptions, ApplyActiveOptions } from "./schemas/video-playlist.schemas.js";
+import type { IswcVideo, VideoList, MediaObsBag, ActivateOptions, ApplyActiveOptions } from "./schemas/video-playlist.schemas.js";
 import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import css from 'iswc:css';
 

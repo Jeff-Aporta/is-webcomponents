@@ -6,15 +6,14 @@
  */
 import { z } from "zod";
 
-export const GanttGroupSchema = z.object({
+const GanttGroupSchema = z.object({
   id: z.string(),
   name: z.string(),
   hue: z.number(),
 });
 export type GanttGroup = z.infer<typeof GanttGroupSchema>;
 
-
-export const GanttTaskSchema = z.object({
+const GanttTaskSchema = z.object({
   id: z.string(),
   label: z.string(),
   start: z.union([z.string(), z.number(), z.undefined()]),
@@ -29,8 +28,7 @@ export const GanttTaskSchema = z.object({
 });
 export type GanttTask = z.infer<typeof GanttTaskSchema>;
 
-
-export const GanttSpecSchema = z.object({
+const GanttSpecSchema = z.object({
   title: z.string().optional(),
   dateFormat: z.string(),
   groups: z.array(GanttGroupSchema).optional(),
@@ -38,8 +36,7 @@ export const GanttSpecSchema = z.object({
 });
 export type GanttSpec = z.infer<typeof GanttSpecSchema>;
 
-
-export const GanttRowSchema = z.object({
+const GanttRowSchema = z.object({
   id: z.string(),
   label: z.string(),
   y: z.number(),
@@ -57,8 +54,7 @@ export const GanttRowSchema = z.object({
 });
 export type GanttRow = z.infer<typeof GanttRowSchema>;
 
-
-export const GanttArrowSchema = z.object({
+const GanttArrowSchema = z.object({
   id: z.string(),
   from: z.string(),
   to: z.string(),
@@ -70,16 +66,14 @@ export const GanttArrowSchema = z.object({
 });
 export type GanttArrow = z.infer<typeof GanttArrowSchema>;
 
-
-export const GanttTickSchema = z.object({
+const GanttTickSchema = z.object({
   ms: z.number(),
   label: z.string(),
   x: z.number(),
 });
 export type GanttTick = z.infer<typeof GanttTickSchema>;
 
-
-export const GanttLayoutSchema = z.object({
+const GanttLayoutSchema = z.object({
   width: z.number(),
   height: z.number(),
   title: z.string().optional(),
@@ -97,8 +91,7 @@ export const GanttLayoutSchema = z.object({
 });
 export type GanttLayout = z.infer<typeof GanttLayoutSchema>;
 
-
-export const GanttOptsSchema = z.object({
+const GanttOptsSchema = z.object({
   width: z.number().optional(),
   now: z.number().optional(),
 });

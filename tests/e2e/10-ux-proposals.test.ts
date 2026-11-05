@@ -26,7 +26,7 @@
 //   las ESPECIFICAS unicas por demo se documentan en .audit/proposals/demo-gNN.md
 //   y se priorizan en tandas siguientes.
 
-import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
+import { mkdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import assert from 'node:assert/strict';
 import { chromium } from 'playwright';
@@ -40,7 +40,6 @@ import type { Browser, Page } from 'playwright';
 import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
 
 const { test, lista, before, after } = coleccionPruebas({ categoria: 'what' });
-
 
 // Este test NO usa MiniMax: no requiere la key. Saltamos el gate global.
 const DISPONIBLE = true;
@@ -77,8 +76,10 @@ type Resultado = {
 };
 
 let browser: Browser | null = null;
-let activePage: Page | null = null;
 let serverReady: Promise<string> | null = null;
+/** Página en curso (solo se escribe: la lee quien depura con un breakpoint). */
+// deno-lint-ignore no-unused-vars
+let activePage: Page | null = null;
 
 before(async () => {
   if (!DISPONIBLE) return;
@@ -320,14 +321,12 @@ test('UX/UI proposals: validaciones distribuidas sobre los demos del catálogo (
   const resultados: Resultado[] = [];
 
   let page = await nuevoPage();
-  activePage = page;
   let enLote = 0;
 
   for (let i = 0; i < tags.length; i++) {
     if (enLote >= BATCH_SIZE) {
       await liberarPage(page);
       page = await nuevoPage();
-      activePage = page;
       enLote = 0;
     }
     enLote++;

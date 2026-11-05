@@ -6,6 +6,6 @@
  */
 import { z } from "zod";
 
-export const ButtonShapeSchema = z.unknown() /* TODO: cannot convert */;
+const ButtonShapeSchema = z.unknown() /* TODO: cannot convert */;
 export type ButtonShape = z.infer<typeof ButtonShapeSchema>;
 

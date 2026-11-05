@@ -11,7 +11,7 @@
  *   deno task test -- tests/em-scale-font-inherit.test.ts
  */
 import assert from 'node:assert/strict';
-import { readFile, readdir } from 'node:fs/promises';
+import { readFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { leerCssCompilado } from './_css-compilado.ts';
@@ -19,16 +19,12 @@ import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/
 
 const { test, lista } = coleccionPruebas({ categoria: 'what' });
 
-
 const raiz = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const comps = join(raiz, 'src', 'components');
 
 const read = (...p) => readFile(join(comps, ...p), 'utf8');
 /** El CSS de los componentes sale de .scss: se lee el compilado (.tmp-scss/src/**). */
 const readCss = async (...p) => leerCssCompilado(raiz, ['src', 'components', ...p].join('/'));
-
-/** Controles nativos que el UA no escala con el font del host. */
-const NATIVE_CONTROL = /\b(button|input|select|textarea)\b/i;
 
 test('iswc-fab: host + .fab heredan font-size (escala em)', async () => {
   const css = await readCss('actions', 'fab.css');

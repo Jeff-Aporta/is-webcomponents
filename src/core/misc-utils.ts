@@ -6,20 +6,6 @@
  */
 
 /**
- * Redondea `n` a 3 decimales y le concatena `unit` si se pasa.
- * Para `unit=''` devuelve sólo el número como string.
- *
- * @param {number} n
- * @param {string} [unit='']
- * @returns {string}
- */
-export function tidy(n: number, unit: string = '') {
-  if (!Number.isFinite(n)) return '';
-  const rounded = Math.round(n * 1000) / 1000;
-  return unit ? `${rounded}${unit}` : `${rounded}`;
-}
-
-/**
  * Redondea `n` a los decimales que tenga `step`.
  *
  * OJO: no es lo mismo que `tidy(n, unit)` de arriba, aunque el nombre se le
@@ -54,14 +40,3 @@ export function clampTo(n: number, min: number, max: number) {
   return Math.min(Math.max(n, min), max);
 }
 
-/**
- * Comprueba si un valor es un número válido (no NaN, no Infinity).
- * Wrapper sobre `Number.isFinite` para que sea explícito en sitios donde
- * `isFinite` global aceptaría strings (legacy behavior).
- *
- * @param {*} v
- * @returns {boolean}
- */
-export function isValidNumber(v: unknown) {
-  return typeof v === 'number' && Number.isFinite(v);
-}

@@ -1,6 +1,6 @@
 import { richTextPlain } from '@jeff-aporta/iswc-base/core/tk-rich-text.js';
 import { resolveTkHue, SERIE_HUES } from '@jeff-aporta/iswc-base/core/tk-hue.js';
-import type { JourneyPhase, JourneyStep, JourneyScale, JourneySpec, JourneyJsonOut, JourneyPlotRect, JourneyLayoutStep, JourneyLayoutPhase, JourneyLayoutGridLine, JourneyLayout } from "@jeff-aporta/iswc-base/components/diagrams/schemas/journey-spec.schemas.js";
+import type { JourneyPhase, JourneyStep, JourneySpec, JourneyPlotRect, JourneyLayoutStep, JourneyLayoutPhase, JourneyLayoutGridLine, JourneyLayout } from "@jeff-aporta/iswc-base/components/diagrams/schemas/journey-spec.schemas.js";
 
 /**
  * Especificación y layout de mapas de recorrido (user journey), sin Mermaid.
@@ -78,23 +78,6 @@ export function resolveJourneySpec(payload: unknown): JourneySpec | null {
     phases: [...byId.values()],
     steps,
   };
-}
-
-/** spec → objeto `journey` listo para persistir / mostrar en el editor. */
-export function journeySpecToJson(spec: JourneySpec): JourneyJsonOut {
-  const out: JourneyJsonOut = { phases: [], steps: [] };
-  if (spec.title) out.title = spec.title;
-  if (spec.subtitle) out.subtitle = spec.subtitle;
-  if (spec.scale.min !== 1 || spec.scale.max !== 5) out.scale = { ...spec.scale };
-  out.phases = spec.phases.map((f) => ({ id: f.id, name: f.name, hue: f.hue }));
-  out.steps = spec.steps.map((s) => {
-    const row: JourneyJsonOut['steps'][number] = { id: s.id, phase: s.phase, label: s.label };
-    if (s.score != null) row.score = s.score;
-    if (s.actor) row.actor = s.actor;
-    if (s.description) row.desc = s.description;
-    return row;
-  });
-  return out;
 }
 
 /**

@@ -3,7 +3,7 @@ import { computePosition } from '@jeff-aporta/iswc-base/core/position.js';
 import { formatDate, formatTime, splitDateTime, todayISO, toTime } from './date-utils.js';
 import { emit } from '@jeff-aporta/iswc-base/core/element.js';
 import { resolveLocale } from '@jeff-aporta/iswc-base/core/resolve-locale.js';
-import type { PickerKind, PickerPanelDef, PickerField, PanelsBuilder, DefinePickerInputOpts } from "@jeff-aporta/iswc-base/components/forms/schemas/picker-element.schemas.js";
+import type { PickerPanelDef, PickerField, DefinePickerInputOpts } from "@jeff-aporta/iswc-base/components/forms/schemas/picker-element.schemas.js";
 import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 
 /**

@@ -18,8 +18,8 @@
 import { resolveColor } from "./helpers.js";
 import { TreeRowAdapter } from "./row-adapter.js";
 import { TARoles } from "./07-roles.js";
-import { asActionSpec, asNumber, asRecord } from './_types.js';
-import { CustomsRuntime, DropPosition, FloatCardConfig, IconConfig, MoveDirection, PendingDeleteSnapshot, RowConfig, RowAdapterBridge, SiblingPosition, TreeActionEntry, TreeActionSpec, TreeContext, TreeCustoms, TNode, TRecord } from '@jeff-aporta/iswc-base/components/isp/schemas/tree-view-types.schemas.js';
+import { asNumber, asRecord } from './_types.js';
+import { CustomsRuntime, DropPosition, FloatCardConfig, IconConfig, MoveDirection, RowConfig, RowAdapterBridge, SiblingPosition, TreeActionEntry, TreeActionSpec, TreeContext, TreeCustoms, TNode, TRecord } from '@jeff-aporta/iswc-base/components/isp/schemas/tree-view-types.schemas.js';
 import type { BridgeCallStat, AdapterConfig, HotkeyClickHandler, HotkeyList } from "@jeff-aporta/iswc-base/components/isp/schemas/tree-view-00-as-row.schemas.js";
 
 /** Stats de invocación de `getOrCreateRowAdapter` para rate-limit. */

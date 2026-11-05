@@ -6,7 +6,7 @@
  */
 import { z } from "zod";
 
-export const DrawerElSchema = z.object({
+const DrawerElSchema = z.object({
   show: z.function({ input: [], output: z.void() }).optional(),
   hide: z.function({ input: [], output: z.void() }).optional(),
 });

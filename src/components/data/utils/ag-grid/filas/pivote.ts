@@ -20,7 +20,7 @@ function textoClave(v: unknown): string {
   return v == null || v === '' ? '' : String(v);
 }
 
-export function idPivote(pivotes: readonly string[], claves: readonly string[], colId: string): string {
+function idPivote(pivotes: readonly string[], claves: readonly string[], colId: string): string {
   return `pivot_${pivotes.join('-')}_${claves.join('_')}_${colId}`;
 }
 

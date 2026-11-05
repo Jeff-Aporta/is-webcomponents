@@ -18,10 +18,10 @@ import { crearExtras } from './extras.js';
 import { crearMenus } from './menus.js';
 import { crearMotor } from './motor.js';
 import { aKebab } from './opciones.js';
-import type { Capa, ContextoCelda, Decoracion, Desinstalar, EvaluadorFiltro, Exportador, FilaDisplay, Flotante, GridPlugin, ModeloFilas, PanelEstado, PanelLateral, PresentacionCelda, PresentacionFila, ProveedorMenu, RendererCelda, RendererMontable, TransformadorFilas, Zona } from '@jeff-aporta/iswc-base/components/data/utils/ag-grid/contrato.schemas.js';
-import type { ColumnState, GridApi, GridState, RowNode } from '@jeff-aporta/iswc-base/components/data/schemas/datagrid-types.schemas.js';
+import type { ContextoCelda, Decoracion, Desinstalar, EvaluadorFiltro, Exportador, FilaDisplay, Flotante, GridPlugin, ModeloFilas, PanelEstado, PanelLateral, PresentacionCelda, PresentacionFila, ProveedorMenu, RendererCelda, RendererMontable, TransformadorFilas } from '@jeff-aporta/iswc-base/components/data/utils/ag-grid/contrato.schemas.js';
+import type { ColumnState, GridState, RowNode } from '@jeff-aporta/iswc-base/components/data/schemas/datagrid-types.schemas.js';
 import type { Manejadores } from './interaccion.schemas.js';
-import type { GridHost, SelectionModeLocal } from './tipos.schemas.js';
+import type { GridHost } from './tipos.schemas.js';
 
 
 const INTERNOS = new Set(['pintado']);

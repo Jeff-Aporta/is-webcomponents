@@ -7,7 +7,7 @@
 import { z } from "zod";
 import { EmbedBoxSchema, NodeEmbedSpecSchema } from "./diagram-embed.schemas.js";
 
-export const SequenceActorSpecSchema = z.object({
+const SequenceActorSpecSchema = z.object({
   id: z.string(),
   label: z.string(),
   kind: z.union([z.literal('participant'), z.literal('actor')]).optional(),
@@ -16,19 +16,18 @@ export const SequenceActorSpecSchema = z.object({
 });
 export type SequenceActorSpec = z.infer<typeof SequenceActorSpecSchema>;
 
-
 /**
  * Subproceso que inicia un mensaje al llegar: el MISMO nodo `kind: "nested"`
  * de `diagram-embed.schemas.ts` (src / diagram, maxW / maxH, bg) más un
  * `title` opcional para la franja superior del recuadro.
  */
-export const SequenceNestedSpecSchema = NodeEmbedSpecSchema.extend({
+const SequenceNestedSpecSchema = NodeEmbedSpecSchema.extend({
   kind: z.literal('nested'),
   title: z.string().optional(),
 });
 export type SequenceNestedSpec = z.infer<typeof SequenceNestedSpecSchema>;
 
-export const SequenceMessageSpecSchema = z.object({
+const SequenceMessageSpecSchema = z.object({
   /** Invierte el sentido de la animación de flujo de esta arista (ver _shared/diagram-flow). */
   reverse: z.boolean().optional(),
   id: z.string(),
@@ -47,8 +46,7 @@ export const SequenceMessageSpecSchema = z.object({
 });
 export type SequenceMessageSpec = z.infer<typeof SequenceMessageSpecSchema>;
 
-
-export const SequenceAltSpecSchema = z.object({
+const SequenceAltSpecSchema = z.object({
   /** Título de la bifurcación en la pestaña (default «alternativas»). */
   name: z.string().optional(),
   branches: z.array(z.object({
@@ -58,13 +56,12 @@ export const SequenceAltSpecSchema = z.object({
 });
 export type SequenceAltSpec = z.infer<typeof SequenceAltSpecSchema>;
 
-
 /**
  * Grupo (subproceso): colorea las aristas de sus mensajes. `color` es un
  * nombre de paleta del tema (`auth`, `data`, `llm`…) o un hex; sin `color`
  * manda `hue`.
  */
-export const SequenceGroupSpecSchema = z.object({
+const SequenceGroupSpecSchema = z.object({
   id: z.string(),
   name: z.string(),
   hue: z.number(),
@@ -92,7 +89,7 @@ export const SequenceFragmentSpecSchema = z.object({
 });
 export type SequenceFragmentSpec = z.infer<typeof SequenceFragmentSpecSchema>;
 
-export const SequenceResolvedSpecSchema = z.object({
+const SequenceResolvedSpecSchema = z.object({
   title: z.string().optional(),
   subtitle: z.string().optional(),
   actors: z.array(SequenceActorSpecSchema),
@@ -113,16 +110,14 @@ export const SequenceResolvedSpecSchema = z.object({
 });
 export type SequenceResolvedSpec = z.infer<typeof SequenceResolvedSpecSchema>;
 
-
-export const LeadingIconTokenSchema = z.object({
+const LeadingIconTokenSchema = z.object({
   iconId: z.string(),
   hue: z.number().optional(),
   rest: z.string(),
 });
 export type LeadingIconToken = z.infer<typeof LeadingIconTokenSchema>;
 
-
-export const FlatMessageSchema = z.object({
+const FlatMessageSchema = z.object({
   /** Invierte el sentido de la animación de flujo de esta arista (ver _shared/diagram-flow). */
   reverse: z.boolean().optional(),
   m: SequenceMessageSpecSchema,
@@ -138,8 +133,7 @@ export const FlatMessageSchema = z.object({
 });
 export type FlatMessage = z.infer<typeof FlatMessageSchema>;
 
-
-export const SequenceLayoutActorSchema = z.object({
+const SequenceLayoutActorSchema = z.object({
   id: z.string(),
   x: z.number(),
   y: z.number(),
@@ -151,8 +145,7 @@ export const SequenceLayoutActorSchema = z.object({
 });
 export type SequenceLayoutActor = z.infer<typeof SequenceLayoutActorSchema>;
 
-
-export const SequenceLayoutLifelineSchema = z.object({
+const SequenceLayoutLifelineSchema = z.object({
   id: z.string(),
   x: z.number(),
   y1: z.number(),
@@ -160,8 +153,7 @@ export const SequenceLayoutLifelineSchema = z.object({
 });
 export type SequenceLayoutLifeline = z.infer<typeof SequenceLayoutLifelineSchema>;
 
-
-export const SequenceLayoutMessageSchema = z.object({
+const SequenceLayoutMessageSchema = z.object({
   /** Invierte el sentido de la animación de flujo de esta arista (ver _shared/diagram-flow). */
   reverse: z.boolean().optional(),
   id: z.string(),
@@ -202,8 +194,7 @@ export const SequenceLayoutMessageSchema = z.object({
 });
 export type SequenceLayoutMessage = z.infer<typeof SequenceLayoutMessageSchema>;
 
-
-export const SequenceLayoutAltBoxSchema = z.object({
+const SequenceLayoutAltBoxSchema = z.object({
   x: z.number(),
   y: z.number(),
   w: z.number(),
@@ -212,9 +203,8 @@ export const SequenceLayoutAltBoxSchema = z.object({
 });
 export type SequenceLayoutAltBox = z.infer<typeof SequenceLayoutAltBoxSchema>;
 
-
 /** Región horizontal ya acotada en píxeles. */
-export const SequenceLayoutFragmentSchema = z.object({
+const SequenceLayoutFragmentSchema = z.object({
   id: z.string(),
   name: z.string(),
   kind: z.string(),
@@ -229,7 +219,7 @@ export const SequenceLayoutFragmentSchema = z.object({
 });
 export type SequenceLayoutFragment = z.infer<typeof SequenceLayoutFragmentSchema>;
 
-export const SequenceLayoutSchema = z.object({
+const SequenceLayoutSchema = z.object({
   width: z.number(),
   height: z.number(),
   title: z.string().optional(),

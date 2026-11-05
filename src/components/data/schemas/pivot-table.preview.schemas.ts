@@ -6,7 +6,7 @@
  */
 import { z } from "zod";
 
-export const CellClickDetailSchema = z.object({
+const CellClickDetailSchema = z.object({
   row: z.string(),
   col: z.string(),
   value: z.unknown(),

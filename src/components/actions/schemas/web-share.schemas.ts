@@ -6,7 +6,7 @@
  */
 import { z } from "zod";
 
-export const ShareDataSchema = z.object({
+const ShareDataSchema = z.object({
   title: z.string().optional(),
   text: z.string().optional(),
   url: z.string().optional(),
@@ -14,12 +14,10 @@ export const ShareDataSchema = z.object({
 });
 export type ShareData = z.infer<typeof ShareDataSchema>;
 
-
-export const ShareResultSchema = z.union([z.literal('shared'), z.literal('copied'), z.literal('abort'), z.literal('fail')]);
+const ShareResultSchema = z.union([z.literal('shared'), z.literal('copied'), z.literal('abort'), z.literal('fail')]);
 export type ShareResult = z.infer<typeof ShareResultSchema>;
 
-
-export const NativeShareDataSchema = z.object({
+const NativeShareDataSchema = z.object({
   title: z.string().optional(),
   text: z.string().optional(),
   url: z.string().optional(),

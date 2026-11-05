@@ -7,7 +7,7 @@
 import { z } from "zod";
 import { TimelineLayoutEventSchema } from "./timeline-spec.schemas.js";
 
-export const EventEntrySchema = z.object({
+const EventEntrySchema = z.object({
   e: TimelineLayoutEventSchema,
   g: z.unknown() /* TODO: ref SVGGElement */,
 });

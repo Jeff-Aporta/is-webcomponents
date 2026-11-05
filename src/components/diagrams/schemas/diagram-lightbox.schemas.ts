@@ -6,7 +6,7 @@
  */
 import { z } from "zod";
 
-export const TurtleStateDetailSchema = z.object({
+const TurtleStateDetailSchema = z.object({
   playing: z.boolean(),
   replay: z.number(),
   idx: z.number(),
@@ -14,14 +14,12 @@ export const TurtleStateDetailSchema = z.object({
 });
 export type TurtleStateDetail = z.infer<typeof TurtleStateDetailSchema>;
 
-
-export const ToggleGroupDetailSchema = z.object({
+const ToggleGroupDetailSchema = z.object({
   id: z.string(),
 });
 export type ToggleGroupDetail = z.infer<typeof ToggleGroupDetailSchema>;
 
-
-export const TurtleApiSchema = z.object({
+const TurtleApiSchema = z.object({
   play: z.function({ input: [], output: z.void() }),
   pause: z.function({ input: [], output: z.void() }),
   stop: z.function({ input: [], output: z.void() }),
@@ -30,8 +28,7 @@ export const TurtleApiSchema = z.object({
 });
 export type TurtleApi = z.infer<typeof TurtleApiSchema>;
 
-
-export const DiagramHostSchema = z.intersection(z.unknown() /* TODO: ref HTMLElement */, z.object({
+const DiagramHostSchema = z.intersection(z.unknown() /* TODO: ref HTMLElement */, z.object({
   payload: z.unknown(),
   hiddenGroups: z.set(z.string()).optional(),
   turtle: z.union([TurtleApiSchema, z.null()]).optional(),

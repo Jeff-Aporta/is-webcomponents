@@ -8,7 +8,7 @@ import { csvABlob, tablaACsv } from './exportar-csv.js';
 import { crearEstilos, entradasLibro, hojaAXml, libroABlob, libroABlobComprimido, nombreHoja } from './exportar-excel.js';
 import type { ColExport, DuenoExport, FnExport, FilaCruda, EstiloExcel, FilaExport, FilaLibre, HojaExcel, ParamsExport, TablaExport } from './filas.schemas.js';
 import type { ColumnState, RowNode } from '@jeff-aporta/iswc-base/components/data/schemas/datagrid-types.schemas.js';
-import type { FilaDisplay, FilaExtra, GridHost } from '@jeff-aporta/iswc-base/components/data/utils/ag-grid/contrato.schemas.js';
+import type { FilaDisplay, GridHost } from '@jeff-aporta/iswc-base/components/data/utils/ag-grid/contrato.schemas.js';
 
 const ID_AUTO = 'ag-Grid-AutoColumn';
 const ANCHO_AUTO = 200;
@@ -55,7 +55,7 @@ function celdaAgg(c: ColumnState, agg: Record<string, unknown>): [unknown, strin
 }
 
 /** Traduce el arbol de cabeceras de pivote y las filas a la tabla comun. */
-export function tablaDe(grid: GridHost, dueno: DuenoExport, entrada: ParamsExport, tipo: 'csv' | 'excel'): TablaExport {
+function tablaDe(grid: GridHost, dueno: DuenoExport, entrada: ParamsExport, tipo: 'csv' | 'excel'): TablaExport {
   const predeterminado = grid.opcion<ParamsExport>(tipo === 'csv' ? 'defaultCsvExportParams' : 'defaultExcelExportParams', {});
   const params: ParamsExport = { ...predeterminado, ...entrada };
   const columnas = columnasDe(grid, params);
@@ -137,7 +137,7 @@ function filaAgregada(tipo: 'grupo' | 'total', nivel: number, etiqueta: string, 
 
 /* ── Descarga ─────────────────────────────────────────────────────────── */
 
-export function descargar(grid: GridHost, blob: Blob, nombre: string): void {
+function descargar(grid: GridHost, blob: Blob, nombre: string): void {
   const url = URL.createObjectURL(blob);
   const a = grid.el.ownerDocument.createElement('a');
   a.href = url;

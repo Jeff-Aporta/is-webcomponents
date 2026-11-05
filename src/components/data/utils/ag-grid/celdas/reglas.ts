@@ -45,7 +45,7 @@ function reglaCumple(regla: unknown, params: ParamsCelda): boolean {
   return Boolean(regla);
 }
 
-export function clasesPorReglas(reglas: unknown, params: ParamsCelda): string {
+function clasesPorReglas(reglas: unknown, params: ParamsCelda): string {
   if (reglas == null || typeof reglas !== 'object') return '';
   let salida = '';
   for (const [clase, regla] of Object.entries(reglas)) {
@@ -71,10 +71,6 @@ export function estiloCelda(def: ColDefAg, params: ParamsCelda): string {
   const estilo = def['cellStyle'];
   if (estilo == null) return '';
   return estiloATexto(typeof estilo === 'function' ? estilo(params) : estilo);
-}
-
-export function clasesCabecera(def: ColDefAg, params: ParamsCelda): string {
-  return clasesDe(def['headerClass'], params);
 }
 
 export function opcionesAClasesFila(rowClass: unknown, getRowClass: unknown, rowClassRules: unknown, params: ParamsCelda): string {

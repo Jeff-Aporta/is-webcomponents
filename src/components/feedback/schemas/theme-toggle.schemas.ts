@@ -4,7 +4,7 @@
 import { z } from 'zod';
 
 /** Tema del contenedor (`data-theme`). */
-export const ThemeNameSchema = z.enum(['dark', 'light']);
+const ThemeNameSchema = z.enum(['dark', 'light']);
 export type ThemeName = z.infer<typeof ThemeNameSchema>;
 
 /** Detalle del evento `iswc-theme-change`: el tema aplicado y el contenedor que lo recibió. */

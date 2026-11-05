@@ -355,7 +355,7 @@ d('MINIFS', 'rango_min, rango1, criterio1, ...', 'Mínimo según varios criterio
 // ---- Distribuciones ----
 
 /** ln Γ(x) (Lanczos). */
-export function gammaln(x: number): number {
+function gammaln(x: number): number {
   const g = [76.18009172947146, -86.50532032941677, 24.01409824083091, -1.231739572450155, 0.1208650973866179e-2, -0.5395239384953e-5];
   let y = x;
   const t = x + 5.5 - (x + 0.5) * Math.log(x + 5.5);

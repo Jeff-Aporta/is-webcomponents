@@ -15,8 +15,8 @@ import {
   stringComparator,
   typeOf,
 } from './grid-types.js';
-import type { CellValue, ColumnDef, ColumnType, Comparator, Operator, Row } from '@jeff-aporta/iswc-base/components/data/schemas/grid-types.schemas.js';
-import type { ResolvedColumn, NormalizeOptions, PivotModel, SortModelItem, FilterModel, AggregationModel, BuildTreeOpts, FilterCtx, ApplyFiltersOpts, TreeNode, PivotResult } from "@jeff-aporta/iswc-base/components/data/schemas/grid-data.schemas.js";
+import type { CellValue, ColumnDef, ColumnType, Comparator, Row } from '@jeff-aporta/iswc-base/components/data/schemas/grid-types.schemas.js';
+import type { ResolvedColumn, NormalizeOptions, PivotModel, SortModelItem, AggregationModel, BuildTreeOpts, FilterCtx, ApplyFiltersOpts, TreeNode, PivotResult } from "@jeff-aporta/iswc-base/components/data/schemas/grid-data.schemas.js";
 
 /** Columna con los defaults aplicados: misma forma que `ColumnDef` pero mutable,
  * porque `normalizeColumns` la construye con spreads + assigns. */

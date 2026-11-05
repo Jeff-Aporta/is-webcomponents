@@ -6,21 +6,18 @@
  */
 import { z } from "zod";
 
-export const ElChildSchema = z.union([z.unknown() /* TODO: ref Node */, z.string(), z.null(), z.literal(false), z.literal(true)]);
+const ElChildSchema = z.union([z.unknown() /* TODO: ref Node */, z.string(), z.null(), z.literal(false), z.literal(true)]);
 export type ElChild = z.infer<typeof ElChildSchema>;
 
-
-export const ElAttrsSchema = z.record(z.string(), z.union([z.string(), z.number(), z.boolean(), z.null(), z.undefined(), z.function({ input: [z.unknown() /* TODO: ref Event */], output: z.void() })]));
+const ElAttrsSchema = z.record(z.string(), z.union([z.string(), z.number(), z.boolean(), z.null(), z.undefined(), z.function({ input: [z.unknown() /* TODO: ref Event */], output: z.void() })]));
 export type ElAttrs = z.infer<typeof ElAttrsSchema>;
 
-
-export const CrudoSchema = z.object({
+const CrudoSchema = z.object({
   /* TODO: member [CRUDO]: string */
 });
 export type Crudo = z.infer<typeof CrudoSchema>;
 
-
-export const HandlerEntrySchema = z.object({
+const HandlerEntrySchema = z.object({
   evento: z.string(),
   fn: z.function({ input: [z.unknown() /* TODO: ref Event */], output: z.void() }),
 });

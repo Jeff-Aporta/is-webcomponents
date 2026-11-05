@@ -6,7 +6,7 @@
  */
 import { z } from "zod";
 
-export const PopupDismissOpcionesSchema = z.object({
+const PopupDismissOpcionesSchema = z.object({
   onEscape: z.function({ input: [], output: z.void() }).optional(),
   onKeydown: z.function({ input: [z.unknown() /* TODO: ref KeyboardEvent */], output: z.void() }).optional(),
   onOutside: z.function({ input: [], output: z.void() }).optional(),

@@ -7,7 +7,7 @@
 import { build } from 'esbuild';
 import { aliasKit } from '@jeff-aporta/iswc-base/cdn/build/alias.ts';
 import { cssVirtual } from '@jeff-aporta/iswc-base/cdn/build/css-virtual.ts';
-import { mkdir, copyFile, readdir, writeFile, rm, cp } from 'node:fs/promises';
+import { mkdir, copyFile, readdir, writeFile, cp } from 'node:fs/promises';
 import { existsSync, readdirSync } from 'node:fs';
 import { join, dirname, resolve, relative, basename, sep } from 'node:path';
 import { readFileSync } from 'node:fs';
@@ -124,9 +124,6 @@ try {
 } catch (err) {
   console.warn(`  ⚠ no se pudieron copiar skills siblings: ${err}`);
 }
-
-// Gallery scripts: ../scripts/*.js → ../dist/scripts/*.min.js (placeholder — loop abajo).
-let ok_unused_placeholder = 0;
 
 // ── Stub CSS files alongside bundles: cada `.min.js` adopta CSS via
 // `siblingCssHref(importMetaUrl)` que resuelve `<bundle>.min.css`. Como

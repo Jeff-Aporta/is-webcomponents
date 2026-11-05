@@ -35,7 +35,7 @@ export const NESTED_DEFAULT_MAX = 200;
  * Miembros por sección de una clase incrustada en otro diagrama: el mismo default de toda clase
  * (5); el diagrama anfitrión lo cambia con `classMaxMembers` en su config.
  */
-export const EMBED_CLASS_MAX_MEMBERS = 5;
+const EMBED_CLASS_MAX_MEMBERS = 5;
 /** Tamaño de respaldo de `tableder` / `component` mientras no hay captura. */
 export const EMBED_FALLBACK_SIZE: EmbedSize = { w: 180, h: 96 };
 
@@ -115,7 +115,7 @@ export function nestedMaxSize(spec: NodeEmbedSpec): EmbedSize {
  * Publicado (`.mjs`) el código de quien captura puede vivir en `diagrams/` o en un chunk de `_chunks/`, ambos a un
  * nivel de `dist/cdn/`: por eso se resuelve desde la raíz y no como hermano. Desde fuente, hermano `.js`.
  */
-export function embedScriptUrl(diagram: EmbeddedDiagram, moduleUrl: string): string {
+function embedScriptUrl(diagram: EmbeddedDiagram, moduleUrl: string): string {
   if (diagram.script) return new URL(diagram.script, new URL('../', moduleUrl)).href;
   const name = diagram.tag.replace(/^iswc-/, '');
   if (/\.mjs(\?|#|$)/.test(moduleUrl)) return new URL(`../diagrams/${name}.min.mjs`, moduleUrl).href;

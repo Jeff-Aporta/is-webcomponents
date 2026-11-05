@@ -13,7 +13,7 @@
  * static server (deno serve, Live Server, python -m http.server, etc.).
  */
 import { watch, existsSync } from 'node:fs';
-import { access, copyFile, mkdir, readFile, stat, writeFile } from 'node:fs/promises';
+import { access, copyFile, mkdir, stat, writeFile } from 'node:fs/promises';
 import { spawn } from 'node:child_process';
 import { basename, dirname, join, relative, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';

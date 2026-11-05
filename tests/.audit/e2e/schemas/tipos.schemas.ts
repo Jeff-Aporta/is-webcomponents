@@ -1,6 +1,6 @@
 // tipos.schemas.ts: tipos compartidos de la suite E2E.
 // Convención: las formas se declaran como `type` en UNA línea.
-import type { Page, Locator, Stagehand, LocalBrowser, StagehandBrowser } from '@browserbasehq/stagehand';
+import type { Page, Stagehand, StagehandBrowser } from '@browserbasehq/stagehand';
 
 
 /** Evento de consola ya normalizado (tipo + texto legible). */

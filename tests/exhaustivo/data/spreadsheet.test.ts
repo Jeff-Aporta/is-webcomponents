@@ -4,15 +4,7 @@
  * Hoja de cálculo con celdas editables. Datos vía property assignment.
  */
 import assert from 'node:assert/strict';
-import {
-  exists,
-  read,
-  extraerObservados,
-  tieneShadow,
-  tieneEdgeCaseGuards,
-  adoptaCss,
-  estaRegistrado,
-} from '../../_shared/exhaustivo.ts';
+import { exists, read, tieneShadow, tieneEdgeCaseGuards, adoptaCss } from '../../_shared/exhaustivo.ts';
 import { coleccionPruebas } from '../../../src/vendor-distributions/shared/testing/pruebas.ts';
 
 const { test, lista } = coleccionPruebas({ categoria: 'what' });

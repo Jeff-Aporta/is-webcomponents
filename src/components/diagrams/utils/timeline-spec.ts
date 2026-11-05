@@ -110,7 +110,7 @@ function readEvent(raw: Record<string, unknown>, i: number): TimelineEventSpec {
 }
 
 /** payload → spec normalizada, o null si no hay eventos. */
-export function timelineSpecFromPayload(payload: unknown): TimelineResolvedSpec | null {
+function timelineSpecFromPayload(payload: unknown): TimelineResolvedSpec | null {
   const p = asRecord(payload);
   const src = asRecord(p.timeline ?? p);
   const rawEvents = src.events;

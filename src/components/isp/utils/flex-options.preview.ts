@@ -1,4 +1,3 @@
-import type { FlexActionEntry } from '@jeff-aporta/iswc-base/components/isp/schemas/tree-view-flex-options.schemas.js';
 import type { PreviewMountContext } from '@jeff-aporta/iswc-base/previews/_kit/schemas/preview.schemas.ts';
 import type { FlexOptionsLike } from "@jeff-aporta/iswc-base/components/isp/schemas/flex-options.preview.schemas.js";
 

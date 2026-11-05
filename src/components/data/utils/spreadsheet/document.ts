@@ -13,7 +13,7 @@ import { isFormulaText } from './parser.js';
 import { shiftFormula } from './rewrite.js';
 import { CellError, compare, displayValue } from './values.js';
 import type { Scalar } from './values.schemas.js';
-import type { AutoFilter, BorderSide, CellDoc, CellStyle, CfRule, ChartDef, FilterColumn, MacroDef, SheetDoc, ValidationRule, WorkbookDoc } from '@jeff-aporta/iswc-base/components/data/schemas/spreadsheet.schemas.js';
+import type { BorderSide, CellDoc, CellStyle, CfRule, ChartDef, FilterColumn, MacroDef, SheetDoc, ValidationRule, WorkbookDoc } from '@jeff-aporta/iswc-base/components/data/schemas/spreadsheet.schemas.js';
 import type { SheetExtras, SortKey, PasteOptions, ClipCell, ClipBlock, CellPatch, Snapshot, HistoryEntry } from './document.schemas.js';
 
 

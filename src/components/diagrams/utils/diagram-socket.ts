@@ -13,7 +13,7 @@ import { pulsoRadar } from './diagram-flow.js';
 import type { OpcionesSocket } from '@jeff-aporta/iswc-base/components/diagrams/schemas/diagram-socket.schemas.js';
 
 /** Color de relleno estándar de las O (el celeste secundario del kit). */
-export const SOCKET_FILL = '#7ACFF4';
+const SOCKET_FILL = '#7ACFF4';
 
 /** Pinta palo + socket `(` + (pulso) + bola O dentro de `g`; devuelve el centro de la bola. */
 export function pintarSocket(g: Element, o: OpcionesSocket): { x: number; y: number } {

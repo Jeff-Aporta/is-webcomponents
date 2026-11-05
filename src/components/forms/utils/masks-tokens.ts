@@ -7,8 +7,8 @@
  *  *  alfanumérico
  *  Cualquier otro carácter cuenta como literal (se imprime tal cual).
  */
-import type { MaskTokenDef, SlotToken, SlotLiteral, Slot } from "@jeff-aporta/iswc-base/components/forms/schemas/masks-tokens.schemas.js";
-export const MASK_TOKENS: Record<string, MaskTokenDef> = {
+import type { MaskTokenDef, SlotToken, Slot } from "@jeff-aporta/iswc-base/components/forms/schemas/masks-tokens.schemas.js";
+const MASK_TOKENS: Record<string, MaskTokenDef> = {
   '0': { re: /\d/,       transform: (c: string) => c, required: true  },
   '9': { re: /\d/,       transform: (c: string) => c, required: false },
   'A': { re: /[A-Za-z]/, transform: (c: string) => c.toUpperCase(), required: true },
@@ -22,7 +22,7 @@ export const MASK_TOKENS: Record<string, MaskTokenDef> = {
  * Los literales se imprimen a medida que el usuario rellena sus slots previos.
  */
 
-export function tokenize(pattern: string | null | undefined): Slot[] {
+function tokenize(pattern: string | null | undefined): Slot[] {
   const slots: Slot[] = [];
   for (const ch of String(pattern || '')) {
     if (MASK_TOKENS[ch]) slots.push({ kind: 'token', char: ch, ...MASK_TOKENS[ch] });

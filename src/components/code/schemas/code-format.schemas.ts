@@ -6,7 +6,7 @@
  */
 import { z } from "zod";
 
-export const CodeFormatConfigSchema = z.object({
+const CodeFormatConfigSchema = z.object({
   tabWidth: z.number().optional(),
   useTabs: z.boolean().optional(),
   printWidth: z.number().optional(),
@@ -17,8 +17,7 @@ export const CodeFormatConfigSchema = z.object({
 });
 export type CodeFormatConfig = z.infer<typeof CodeFormatConfigSchema>;
 
-
-export const NormalizedFormatConfigSchema = z.object({
+const NormalizedFormatConfigSchema = z.object({
   tabWidth: z.number(),
   useTabs: z.boolean(),
   printWidth: z.number(),

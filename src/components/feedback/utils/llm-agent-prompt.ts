@@ -7,7 +7,7 @@
 /** Doc individual de skill/prompt referenciada por el prompt canónico. */
 
 /** Doc general del kit. El MD del módulo lo aporta el panel (config.docs). Solo dos. */
-import type { SkillDoc, PromptMdOpts, LoadAgentPromptOpts, BuildLlmPromptOpts } from "@jeff-aporta/iswc-base/components/feedback/schemas/llm-agent-prompt.schemas.js";
+import type { SkillDoc, LoadAgentPromptOpts, BuildLlmPromptOpts } from "@jeff-aporta/iswc-base/components/feedback/schemas/llm-agent-prompt.schemas.js";
 export const SKILL_DOCS: readonly SkillDoc[] = [
   {
     label: 'Skill · kit (general)',

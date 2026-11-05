@@ -5,18 +5,7 @@
  * propiedad .value o atributo `value`. Eventos: iswc-change.
  */
 import assert from 'node:assert/strict';
-import {
-  exists,
-  read,
-  extraerObservados,
-  extraerEventos,
-  tieneShadow,
-  leeJsonScript,
-  parseaJson,
-  tieneEdgeCaseGuards,
-  adoptaCss,
-  estaRegistrado,
-} from '../../_shared/exhaustivo.ts';
+import { exists, read, extraerObservados, extraerEventos, tieneShadow, tieneEdgeCaseGuards, adoptaCss } from '../../_shared/exhaustivo.ts';
 import { coleccionPruebas } from '../../../src/vendor-distributions/shared/testing/pruebas.ts';
 
 const { test, lista } = coleccionPruebas({ categoria: 'what' });

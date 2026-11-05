@@ -4,7 +4,7 @@
 import { z } from "zod";
 
 /** Lo que md-hydrate usa del loader del kit (`globalThis.iswcLoader`). */
-export const LoaderLikeSchema = z.object({
+const LoaderLikeSchema = z.object({
   ensure: z.function({ input: [z.string()], output: z.promise(z.boolean()) }),
 });
 export type LoaderLike = z.infer<typeof LoaderLikeSchema>;
@@ -19,7 +19,7 @@ export interface RaizMd<N extends NodoMd = Element> {
 }
 
 /** Vigila nodos y avisa cuando uno se acerca a la pantalla. */
-export interface VigiaMd<N extends NodoMd = Element> {
+interface VigiaMd<N extends NodoMd = Element> {
   observar(nodo: N): void;
   dejar(nodo: N): void;
   cancelar(): void;

@@ -6,11 +6,10 @@
  */
 import { z } from "zod";
 
-export const ActionLabelSchema = z.union([z.literal('Crear'), z.literal('Modificar'), z.literal('Visualizar'), z.literal('Verificar'), z.literal('Duplicar'), z.literal('Recodificar'), z.literal('Eliminar'), z.literal('Consolidar')]);
+const ActionLabelSchema = z.union([z.literal('Crear'), z.literal('Modificar'), z.literal('Visualizar'), z.literal('Verificar'), z.literal('Duplicar'), z.literal('Recodificar'), z.literal('Eliminar'), z.literal('Consolidar')]);
 export type ActionLabel = z.infer<typeof ActionLabelSchema>;
 
-
-export const BAllowedSchema = z.object({
+const BAllowedSchema = z.object({
   Crear: z.boolean(),
   Modificar: z.boolean(),
   Visualizar: z.boolean(),
@@ -22,16 +21,13 @@ export const BAllowedSchema = z.object({
 });
 export type BAllowed = z.infer<typeof BAllowedSchema>;
 
-
-export const IconKindSchema = z.union([z.literal('crear'), z.literal('modificar'), z.literal('visualizar'), z.literal('verificar'), z.literal('recodificar'), z.literal('duplicar'), z.literal('eliminar'), z.literal('consolidar'), z.literal('refrescar')]);
+const IconKindSchema = z.union([z.literal('crear'), z.literal('modificar'), z.literal('visualizar'), z.literal('verificar'), z.literal('recodificar'), z.literal('duplicar'), z.literal('eliminar'), z.literal('consolidar'), z.literal('refrescar')]);
 export type IconKind = z.infer<typeof IconKindSchema>;
 
-
-export const FrmModeSchema = z.union([z.literal('create'), z.literal('edit'), z.literal('view')]);
+const FrmModeSchema = z.union([z.literal('create'), z.literal('edit'), z.literal('view')]);
 export type FrmMode = z.infer<typeof FrmModeSchema>;
 
-
-export const InputElementSchema = z.object({
+const InputElementSchema = z.object({
   value: z.string(),
   label: z.string(),
   readonly: z.boolean(),
@@ -41,15 +37,13 @@ export const InputElementSchema = z.object({
 });
 export type InputElement = z.infer<typeof InputElementSchema>;
 
-
-export const ButtonElementSchema = z.object({
+const ButtonElementSchema = z.object({
   disabled: z.boolean(),
   loading: z.boolean(),
 });
 export type ButtonElement = z.infer<typeof ButtonElementSchema>;
 
-
-export const AgGridElementSchema = z.object({
+const AgGridElementSchema = z.object({
   api: z.object({
   setRows: z.function({ input: [z.array(z.intersection(z.unknown() /* TODO: ref IspRecord */, z.object({
   id: z.string(),
@@ -64,8 +58,7 @@ export const AgGridElementSchema = z.object({
 });
 export type AgGridElement = z.infer<typeof AgGridElementSchema>;
 
-
-export const VerifyModalElementSchema = z.object({
+const VerifyModalElementSchema = z.object({
   controller: z.union([z.unknown() /* TODO: ref IspController */, z.null()]),
   record: z.union([z.unknown() /* TODO: ref IspRecord */, z.null()]),
   entity: z.string(),
@@ -75,31 +68,27 @@ export const VerifyModalElementSchema = z.object({
 });
 export type VerifyModalElement = z.infer<typeof VerifyModalElementSchema>;
 
-
-export const ConfirmDeleteElementSchema = z.object({
+const ConfirmDeleteElementSchema = z.object({
   entity: z.string(),
   show: z.function({ input: [], output: z.void() }),
   hide: z.function({ input: [], output: z.void() }),
 });
 export type ConfirmDeleteElement = z.infer<typeof ConfirmDeleteElementSchema>;
 
-
-export const DialogElementSchema = z.object({
+const DialogElementSchema = z.object({
   show: z.function({ input: [], output: z.void() }),
   hide: z.function({ input: [], output: z.void() }),
 });
 export type DialogElement = z.infer<typeof DialogElementSchema>;
 
-
-export const DrawerElementSchema = z.object({
+const DrawerElementSchema = z.object({
   label: z.string(),
   show: z.function({ input: [], output: z.void() }),
   hide: z.function({ input: [], output: z.void() }),
 });
 export type DrawerElement = z.infer<typeof DrawerElementSchema>;
 
-
-export const GridRowSelectDetailSchema = z.object({
+const GridRowSelectDetailSchema = z.object({
   rows: z.array(z.object({
   id: z.union([z.string(), z.number()]).optional(),
   __record: z.unknown() /* TODO: ref IspRecord */.optional(),
@@ -107,8 +96,7 @@ export const GridRowSelectDetailSchema = z.object({
 });
 export type GridRowSelectDetail = z.infer<typeof GridRowSelectDetailSchema>;
 
-
-export const GridCellClickDetailSchema = z.object({
+const GridCellClickDetailSchema = z.object({
   row: z.object({
   id: z.union([z.string(), z.number()]).optional(),
   __record: z.unknown() /* TODO: ref IspRecord */.optional(),
@@ -116,8 +104,7 @@ export const GridCellClickDetailSchema = z.object({
 });
 export type GridCellClickDetail = z.infer<typeof GridCellClickDetailSchema>;
 
-
-export const PkModalFieldSchema = z.object({
+const PkModalFieldSchema = z.object({
   key: z.string(),
   label: z.string(),
   value: z.string().optional(),
@@ -127,8 +114,7 @@ export const PkModalFieldSchema = z.object({
 });
 export type PkModalField = z.infer<typeof PkModalFieldSchema>;
 
-
-export const PkModalCfgSchema = z.object({
+const PkModalCfgSchema = z.object({
   title: z.string(),
   fields: z.array(PkModalFieldSchema),
   okLabel: z.string(),

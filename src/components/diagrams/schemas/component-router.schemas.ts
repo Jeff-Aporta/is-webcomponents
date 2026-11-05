@@ -9,17 +9,16 @@ import { CajaSchema, LadoSchema, PuntoSchema } from "./diagram-tipos.schemas.js"
 
 const SetDeTextoSchema = z.custom<ReadonlySet<string>>((v) => v instanceof Set);
 
-export const RouterBoxSchema = CajaSchema.extend({
+const RouterBoxSchema = CajaSchema.extend({
   id: z.string(),
 });
 export type RouterBox = z.infer<typeof RouterBoxSchema>;
 
-export const RouterPackageSchema = RouterBoxSchema.extend({
+const RouterPackageSchema = RouterBoxSchema.extend({
   prohibido: z.boolean().optional(),
 });
-export type RouterPackage = z.infer<typeof RouterPackageSchema>;
 
-export const RouterWorldSchema = z.object({
+const RouterWorldSchema = z.object({
   /** Entidades (cajas). Nunca se dibuja encima. */
   components: z.array(RouterBoxSchema),
   /** Agrupadores: costo por anidación y por cercanía al borde; muro si prohibido. */
@@ -37,10 +36,10 @@ export const RouterWorldSchema = z.object({
 export type RouterWorld = z.infer<typeof RouterWorldSchema>;
 
 /** Puerto candidato: punto sobre una cara y la cara. */
-export const RouterPortSchema = z.object({ x: z.number(), y: z.number(), side: LadoSchema });
+const RouterPortSchema = z.object({ x: z.number(), y: z.number(), side: LadoSchema });
 export type RouterPort = z.infer<typeof RouterPortSchema>;
 
-export const RouterEdgeSchema = z.object({
+const RouterEdgeSchema = z.object({
   id: z.string(),
   /** Punto en la cara del origen y cara por la que sale. */
   from: PuntoSchema,
@@ -178,7 +177,7 @@ export type RoutingCosts = z.infer<typeof RoutingCostsSchema>;
 /** Sobreescritura parcial (cualquier sección, cualquier clave). */
 export type RoutingCostsInput = { [K in keyof RoutingCosts]?: Partial<RoutingCosts[K]> };
 
-export const RouterOptsSchema = z.object({
+const RouterOptsSchema = z.object({
   /**
    * Fecha límite (ms epoch): pasada, no se empiezan más iteraciones ni pasadas de unión, y las
    * aristas aún sin rutear vuelven sin camino (el llamador conserva la ruta que tenía). Acota el
@@ -215,7 +214,7 @@ export const RouterOptsSchema = z.object({
 });
 export type RouterOpts = z.infer<typeof RouterOptsSchema>;
 
-export const RouteResultSchema = z.object({
+const RouteResultSchema = z.object({
   paths: z.array(z.union([z.array(PuntoSchema), z.null()])),
   /** Por arista: reglas duras violadas (vacío = legal). */
   violations: z.array(z.array(z.string())),
@@ -237,7 +236,7 @@ export const RouteResultSchema = z.object({
 });
 export type RouteResult = z.infer<typeof RouteResultSchema>;
 
-export const PortLinkSchema = z.object({
+const PortLinkSchema = z.object({
   from: z.string(),
   to: z.string(),
   /** Cara fija opcional (autor). */
@@ -246,7 +245,7 @@ export const PortLinkSchema = z.object({
 });
 export type PortLink = z.infer<typeof PortLinkSchema>;
 
-export const PortPlanSchema = z.object({
+const PortPlanSchema = z.object({
   fromSide: LadoSchema,
   toSide: LadoSchema,
   from: PuntoSchema,

@@ -2,7 +2,7 @@
  * Behavior preview: <iswc-code>
  */
 import type { PreviewMountContext } from '@jeff-aporta/iswc-base/previews/_kit/schemas/preview.schemas.ts';
-import type { CodeMark, CodeDoc, IswcCodeEl, IswcFormatEl } from "@jeff-aporta/iswc-base/components/code/schemas/code.preview.schemas.js";
+import type { CodeDoc, IswcCodeEl, IswcFormatEl } from "@jeff-aporta/iswc-base/components/code/schemas/code.preview.schemas.js";
 
 const SAMPLES: Record<string, string> = {
   javascript: `function greet(name) {\n  return \`Hola, \${name}\`;\n}\n\nconsole.log(greet('IS'));`,

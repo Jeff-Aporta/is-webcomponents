@@ -6,7 +6,7 @@
  */
 import { z } from "zod";
 
-export const SectionMetaSchema = z.object({
+const SectionMetaSchema = z.object({
   len: z.number(),
   min: z.number(),
   max: z.number(),
@@ -15,8 +15,7 @@ export const SectionMetaSchema = z.object({
 });
 export type SectionMeta = z.infer<typeof SectionMetaSchema>;
 
-
-export const PartsSchema = z.object({
+const PartsSchema = z.object({
   year: z.number().optional(),
   month: z.number().optional(),
   day: z.number().optional(),
@@ -27,12 +26,10 @@ export const PartsSchema = z.object({
 });
 export type Parts = z.infer<typeof PartsSchema>;
 
-
-export const FieldKindSchema = z.union([z.literal('date'), z.literal('time'), z.literal('datetime')]);
+const FieldKindSchema = z.union([z.literal('date'), z.literal('time'), z.literal('datetime')]);
 export type FieldKind = z.infer<typeof FieldKindSchema>;
 
-
-export const SectionFieldOptionsSchema = z.object({
+const SectionFieldOptionsSchema = z.object({
   container: z.unknown() /* TODO: ref HTMLElement */,
   kind: FieldKindSchema.optional(),
   locale: z.string().optional(),

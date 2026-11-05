@@ -3,15 +3,14 @@
  */
 import { z } from "zod";
 
-export const StreamBubbleStateSchema = z.enum(["idle", "streaming", "end", "error"]);
-export type StreamBubbleState = z.infer<typeof StreamBubbleStateSchema>;
+const StreamBubbleStateSchema = z.enum(["idle", "streaming", "end", "error"]);
 
 /** Un paso previo a la respuesta (tool, búsqueda…): `icono` es texto corto, por ejemplo un emoji. */
-export const StreamBubblePasoSchema = z.object({ icono: z.string().default(""), texto: z.string() });
+const StreamBubblePasoSchema = z.object({ icono: z.string().default(""), texto: z.string() });
 export type StreamBubblePaso = z.infer<typeof StreamBubblePasoSchema>;
 
 /** Textos visibles; cada clave reemplaza la de por defecto. */
-export const StreamBubbleTextosSchema = z.object({
+const StreamBubbleTextosSchema = z.object({
   idle: z.string(),
   streaming: z.string(),
   end: z.string(),

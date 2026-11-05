@@ -17,7 +17,6 @@ import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/
 
 const { test, lista, before, after } = coleccionPruebas({ categoria: 'what' });
 
-
 const DISPONIBLE = faltanRequisitos().length === 0;
 let ctx: CtxE2E | null = null;
 const testE2E = crearTestE2E(() => (ctx ? ctx.page : null));
@@ -37,7 +36,7 @@ function pagina(): Page {
 }
 
 const previewsDir = join(repoDir, 'src', 'previews');
-export type TagConControles = { tag: string; cat: string; nControles: number; nPaneles: number; };
+type TagConControles = { tag: string; cat: string; nControles: number; nPaneles: number; };
 /** Documentación .md del componente (si existe) para verificar objetivos. */
 function mdDelComponente(tag: string, cat: string): string | null {
   const base = tag.replace(/^iswc-/, '');
@@ -98,8 +97,8 @@ function listarTagsConControles(): TagConControles[] {
   const solo = process.env.E2E_TAGS?.split(',').map((s) => s.trim()).filter(Boolean) ?? [];
   return solo.length ? out.filter((t) => solo.includes(t.tag)) : out;
 }
-export type ControlVivo = { control: string; prop: string; label: string; options?: Array<{ value: unknown; label: string }>; min?: number; max?: number; value?: unknown; };
-export type PanelVivo = { idx: number; target: string; spec: ControlVivo[]; };
+type ControlVivo = { control: string; prop: string; label: string; options?: Array<{ value: unknown; label: string }>; min?: number; max?: number; value?: unknown; };
+type PanelVivo = { idx: number; target: string; spec: ControlVivo[]; };
 async function panelesVivos(page: Page): Promise<PanelVivo[]> {
   return (await page.evaluate(() => {
     const paneles = [...document.querySelectorAll('iswc-preview-controls')];
@@ -215,7 +214,7 @@ async function manipularYVerificar(
     return { ok, actual };
   }, { idx: panelIdx, control: c.control, prop: c.prop, vRaw: v, esp: esperado })) as { ok: boolean; actual: unknown } | null;
 }
-export type Fallo = { tag: string; control: string; detalle: string; };
+type Fallo = { tag: string; control: string; detalle: string; };
 testE2E('controles data-driven: cada control del panel reacciona en el host', { timeout: 1200000 }, async (t) => {
   if (!DISPONIBLE) return t.skip('faltan variables E2E');
   const page = pagina();

@@ -6,7 +6,7 @@
  */
 import { z } from "zod";
 
-export const ResolvedColumnSchema = z.object({
+const ResolvedColumnSchema = z.object({
   field: z.string(),
   headerName: z.string(),
   align: z.string(),
@@ -29,52 +29,43 @@ export const ResolvedColumnSchema = z.object({
 });
 export type ResolvedColumn = z.infer<typeof ResolvedColumnSchema>;
 
-
-export const NormalizeOptionsSchema = z.object({
+const NormalizeOptionsSchema = z.object({
   defaultWidth: z.number().optional(),
   editableAll: z.boolean().optional(),
 });
 export type NormalizeOptions = z.infer<typeof NormalizeOptionsSchema>;
 
-
-export const PivotModelSchema = z.object({
+const PivotModelSchema = z.object({
   rows: z.array(z.unknown() /* TODO: cannot convert */).optional(),
   columns: z.array(z.unknown() /* TODO: cannot convert */).optional(),
   values: z.array(z.unknown() /* TODO: cannot convert */).optional(),
 });
 export type PivotModel = z.infer<typeof PivotModelSchema>;
 
-
-export const SortModelItemSchema = z.object({
+const SortModelItemSchema = z.object({
   field: z.string(),
   sort: z.union([z.literal('asc'), z.literal('desc')]),
 });
 export type SortModelItem = z.infer<typeof SortModelItemSchema>;
 
-
-export const FilterModelSchema = z.object({
+const FilterModelSchema = z.object({
   items: z.array(z.unknown() /* TODO: cannot convert */).optional(),
   logicOperator: z.union([z.literal('and'), z.literal('or')]).optional(),
 });
-export type FilterModel = z.infer<typeof FilterModelSchema>;
 
-
-export const AggregationModelSchema = z.record(z.string(), z.string());
+const AggregationModelSchema = z.record(z.string(), z.string());
 export type AggregationModel = z.infer<typeof AggregationModelSchema>;
 
-
-export const BuildTreeOptsSchema = z.object({
+const BuildTreeOptsSchema = z.object({
   paths: z.array(z.union([z.unknown() /* TODO: cannot convert */, z.number()])),
   getRowId: z.function({ input: [z.unknown() /* TODO: ref Row */, z.number()], output: z.unknown() /* TODO: ref CellValue */ }),
 });
 export type BuildTreeOpts = z.infer<typeof BuildTreeOptsSchema>;
 
-
-export const FilterCtxSchema = z.unknown();
+const FilterCtxSchema = z.unknown();
 export type FilterCtx = z.infer<typeof FilterCtxSchema>;
 
-
-export const ApplyFiltersOptsSchema = z.object({
+const ApplyFiltersOptsSchema = z.object({
   model: FilterModelSchema.optional(),
   quick: z.string().optional(),
   columns: z.array(z.unknown() /* TODO: cannot convert */),
@@ -83,8 +74,7 @@ export const ApplyFiltersOptsSchema = z.object({
 });
 export type ApplyFiltersOpts = z.infer<typeof ApplyFiltersOptsSchema>;
 
-
-export const TreeNodeSchema = z.object({
+const TreeNodeSchema = z.object({
   kind: z.union([z.literal('leaf'), z.literal('group')]),
   id: z.unknown() /* TODO: ref CellValue */,
   key: z.union([z.string(), z.number()]).optional(),
@@ -102,8 +92,7 @@ export const TreeNodeSchema = z.object({
 });
 export type TreeNode = z.infer<typeof TreeNodeSchema>;
 
-
-export const PivotResultSchema = z.object({
+const PivotResultSchema = z.object({
   rows: z.array(z.unknown() /* TODO: ref Row */),
   columns: z.array(z.unknown() /* TODO: ref ColumnDef */),
   colKeys: z.array(z.string()),

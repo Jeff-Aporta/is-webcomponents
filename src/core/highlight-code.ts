@@ -15,7 +15,7 @@
  * carga bajo demanda en `paint`.
  */
 
-import { dedent, unwrapHandHighlight, prettyHtml, softFormat, softFormatMode } from './code-text.js';
+import { softFormat, softFormatMode } from './code-text.js';
 import { inferLanguage } from './code-langs.js';
 import type { CodeEditor } from "./schemas/highlight-code.schemas.js";
 

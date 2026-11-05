@@ -20,16 +20,11 @@ import { pasoNumero } from './valores.js';
 import { redondear } from './valores.js';
 import { textoANumero } from './valores.js';
 import type { ColDefAg } from '@jeff-aporta/iswc-base/components/data/utils/ag-grid/contrato.schemas.js';
-import type { GridHost } from '@jeff-aporta/iswc-base/components/data/utils/ag-grid/contrato.schemas.js';
 import type { Parametros } from './apoyo.schemas.js';
 import type { BusquedaLista } from './schemas/edicion.schemas.js';
 import type { OpcionLista } from './schemas/edicion.schemas.js';
 import type { ReglasValidacion } from './schemas/edicion.schemas.js';
 import type { TipoValidacion } from './schemas/edicion.schemas.js';
-
-
-
-
 
 const FILAS_LARGO = 10;
 const COLS_LARGO = 60;
@@ -89,7 +84,7 @@ export const editorTexto: CrearEditor = (entorno) => {
   return { el: campo, popup: false, valor, enfocar: (s) => enfocarCampo(campo, s && !entorno.caracter), errores: validador(entorno, 'texto', valor) };
 };
 
-export const editorTextoLargo: CrearEditor = (entorno) => {
+const editorTextoLargo: CrearEditor = (entorno) => {
   const { extra } = entorno;
   const campo = crear<ConValor>('iswc-textarea', { rows: extra['rows'] ?? FILAS_LARGO, cols: extra['cols'] ?? COLS_LARGO, maxlength: extra['maxLength'], value: textoInicial(entorno, formatear(entorno, entorno.inicial)) });
   const valor = (): unknown => parsear(entorno, campo.value);
@@ -98,7 +93,7 @@ export const editorTextoLargo: CrearEditor = (entorno) => {
 
 /* ── Numero ────────────────────────────────────────────────────────────── */
 
-export const editorNumero: CrearEditor = (entorno) => {
+const editorNumero: CrearEditor = (entorno) => {
   const { extra } = entorno;
   const min = extra['min'] as number | undefined;
   const max = extra['max'] as number | undefined;
@@ -165,12 +160,12 @@ function crearEditorFecha(entorno: EntornoEditor, comoTexto: boolean): Editor {
   return { el: campo, popup: false, valor, enfocar, errores: validador(entorno, 'fecha', valor), destruir: () => flotante.cerrar() };
 }
 
-export const editorFecha: CrearEditor = (entorno) => crearEditorFecha(entorno, false);
-export const editorFechaTexto: CrearEditor = (entorno) => crearEditorFecha(entorno, true);
+const editorFecha: CrearEditor = (entorno) => crearEditorFecha(entorno, false);
+const editorFechaTexto: CrearEditor = (entorno) => crearEditorFecha(entorno, true);
 
 /* ── Checkbox ──────────────────────────────────────────────────────────── */
 
-export const editorCheckbox: CrearEditor = (entorno) => {
+const editorCheckbox: CrearEditor = (entorno) => {
   const campo = crear<ConChecked>('iswc-checkbox');
   campo.checked = entorno.inicial === true;
   campo.setAttribute('aria-label', String(entorno.params['colDef'] && (entorno.params['colDef'] as ColDefAg).headerName || ''));
@@ -191,7 +186,7 @@ function textoOpcion(extra: Parametros, entorno: EntornoEditor, valor: unknown):
   return formatear({ ...entorno, extra: { ...extra, useFormatter: true } }, valor);
 }
 
-export const editorSelect: CrearEditor = (entorno) => {
+const editorSelect: CrearEditor = (entorno) => {
   const { extra } = entorno;
   const campo = crear<ConValor>('iswc-select', { 'full-width': true });
   let opciones: OpcionLista[] = [];
@@ -213,8 +208,7 @@ export const editorSelect: CrearEditor = (entorno) => {
   return { el: campo, popup: false, valor, enfocar: () => campo.focus(), errores: () => [] };
 };
 
-
-export const editorSelectRico: CrearEditor = (entorno) => {
+const editorSelectRico: CrearEditor = (entorno) => {
   const { extra } = entorno;
   const multi = extra['multiSelect'] === true;
   const filtrar = extra['filterList'] === true;
@@ -313,7 +307,6 @@ export const editorSelectRico: CrearEditor = (entorno) => {
 };
 
 /* ── Editores propios ──────────────────────────────────────────────────── */
-
 
 /** Clase o fabrica con la interfaz de componente de AG Grid. */
 export function adaptarPropio(fuente: unknown, entorno: EntornoEditor): Editor {

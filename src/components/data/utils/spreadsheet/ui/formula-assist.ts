@@ -1,7 +1,7 @@
 // formula-assist.ts — ayudas del editor de fórmulas: autocompletado, firma de la función en curso,
 // referencias a colorear y modo apuntar. Puro: trabaja con texto y posiciones.
 import type { Rect } from '@jeff-aporta/iswc-base/components/data/utils/spreadsheet/address.schemas.js';
-import { aliasOf, canonicalName, lookupFn, suggest } from '@jeff-aporta/iswc-base/components/data/utils/spreadsheet/functions/registry.js';
+import { aliasOf, lookupFn, suggest } from '@jeff-aporta/iswc-base/components/data/utils/spreadsheet/functions/registry.js';
 import type { FnDef } from '@jeff-aporta/iswc-base/components/data/utils/spreadsheet/functions/registry.schemas.js';
 import { tokenize } from '@jeff-aporta/iswc-base/components/data/utils/spreadsheet/tokenizer.js';
 import type { Token } from '@jeff-aporta/iswc-base/components/data/utils/spreadsheet/tokenizer.schemas.js';
@@ -9,8 +9,7 @@ import { colName } from '@jeff-aporta/iswc-base/components/data/utils/spreadshee
 import type { Suggestion } from './formula-assist.schemas.js';
 
 /** Paleta de referencias del editor (el mismo orden en celdas y barra). */
-export const REF_COLORS = ['#3b82f6', '#ef4444', '#a855f7', '#16a34a', '#f59e0b', '#06b6d4', '#ec4899', '#65a30d'];
-
+const REF_COLORS = ['#3b82f6', '#ef4444', '#a855f7', '#16a34a', '#f59e0b', '#06b6d4', '#ec4899', '#65a30d'];
 
 /** Tokens de la fórmula con posiciones absolutas. */
 function tokensOf(text: string): Token[] {
@@ -131,7 +130,3 @@ export function rectText(x: Rect, sheetPrefix: string): string {
   return sheetPrefix + (a === b ? a : `${a}:${b}`);
 }
 
-/** ¿El nombre escrito corresponde a una función? */
-export function isFunctionName(name: string): boolean {
-  return canonicalName(name) !== null;
-}

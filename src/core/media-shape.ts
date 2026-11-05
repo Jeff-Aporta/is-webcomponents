@@ -26,14 +26,3 @@ export function normalizeMediaShape(
     : fallback;
 }
 
-export function mediaShapeSelectOptions(): Array<{
-  value: MediaShape;
-  label: string;
-  icon: string;
-}> {
-  return MEDIA_SHAPE.map((value) => ({
-    value,
-    label: value,
-    icon: MEDIA_SHAPE_ICON[value],
-  }));
-}

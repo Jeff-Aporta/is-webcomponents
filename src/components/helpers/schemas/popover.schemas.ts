@@ -7,7 +7,7 @@
 import { z } from "zod";
 
 // <iswc-floating> es un HTMLElement con estas props/métodos públicos.
-export const FloatingElementSchema = z.intersection(z.custom<HTMLElement>(), z.object({
+const FloatingElementSchema = z.intersection(z.custom<HTMLElement>(), z.object({
   active: z.boolean(),
   placement: z.string(),
   distance: z.number(),

@@ -5,9 +5,9 @@
  */
 import { z } from "zod";
 
-export const ZAnimacionCapa = z.enum(["flotar", "mecer", "girar", "latir", "ninguna"]);
-export const ZFormaCapa = z.enum(["circulo", "anillo", "triangulo", "zigzag", "puntos"]);
-export const ZColorCapa = z.enum(["acento", "contraste", "marca", "suave"]);
+const ZAnimacionCapa = z.enum(["flotar", "mecer", "girar", "latir", "ninguna"]);
+const ZFormaCapa = z.enum(["circulo", "anillo", "triangulo", "zigzag", "puntos"]);
+const ZColorCapa = z.enum(["acento", "contraste", "marca", "suave"]);
 
 const ZCapaBase = z.object({
   x: z.number(),
@@ -24,14 +24,9 @@ const ZCapaBase = z.object({
   giro: z.number().optional(),
 });
 
-export const ZCapaImagen = ZCapaBase.extend({ tipo: z.literal("imagen"), src: z.string().min(1) }).strict();
-export const ZCapaForma = ZCapaBase.extend({ tipo: z.literal("forma"), forma: ZFormaCapa, color: ZColorCapa.optional() }).strict();
-export const ZCapa = z.discriminatedUnion("tipo", [ZCapaImagen, ZCapaForma]);
+const ZCapaImagen = ZCapaBase.extend({ tipo: z.literal("imagen"), src: z.string().min(1) }).strict();
+const ZCapaForma = ZCapaBase.extend({ tipo: z.literal("forma"), forma: ZFormaCapa, color: ZColorCapa.optional() }).strict();
+const ZCapa = z.discriminatedUnion("tipo", [ZCapaImagen, ZCapaForma]);
 export const ZCapas = z.array(ZCapa);
 
-export const ZEfectoCollage = z.enum(["ninguno", "desplazar", "rotar", "capas"]);
-export const ZDireccionCollage = z.enum(["corriente", "pegajoso"]);
-
 export type Capa = z.infer<typeof ZCapa>;
-export type EfectoCollage = z.infer<typeof ZEfectoCollage>;
-export type DireccionCollage = z.infer<typeof ZDireccionCollage>;

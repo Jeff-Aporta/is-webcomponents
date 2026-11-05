@@ -11,7 +11,7 @@ import { DEFAULT_BUTTON_SHAPE } from '@jeff-aporta/iswc-base/core/button-shape.j
 import { DEFAULT_MEDIA_SHAPE } from '@jeff-aporta/iswc-base/core/media-shape.js';
 import { DEFAULT_INTENT } from '@jeff-aporta/iswc-base/core/intent.js';
 import { DEFAULT_TONE } from '@jeff-aporta/iswc-base/core/tone.js';
-import type { TipoControl, OpcionSelect, PanelInfoDef, ControlDef, ControlesDeDemo, BloqueConControles, PanelConSpec, PreviewDefinitionShallow, PreviewMountCtxShallow } from "./schemas/controles.schemas.js";
+import type { ControlDef, BloqueConControles, PanelConSpec, PreviewDefinitionShallow, PreviewMountCtxShallow } from "./schemas/controles.schemas.js";
 
 /** Tipos de control soportados por el panel. */
 

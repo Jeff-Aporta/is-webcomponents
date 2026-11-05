@@ -6,6 +6,6 @@
  */
 import { z } from "zod";
 
-export const IntentSchema = z.unknown() /* TODO: cannot convert */;
+const IntentSchema = z.unknown() /* TODO: cannot convert */;
 export type Intent = z.infer<typeof IntentSchema>;
 

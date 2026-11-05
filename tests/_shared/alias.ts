@@ -4,7 +4,7 @@
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
 
-export const ALIAS_KIT = '@jeff-aporta/iswc-base/';
+const ALIAS_KIT = '@jeff-aporta/iswc-base/';
 
 const SRC = join(import.meta.dirname!, '..', '..', 'src');
 

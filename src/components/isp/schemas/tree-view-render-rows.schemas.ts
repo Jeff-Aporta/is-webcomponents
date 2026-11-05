@@ -6,7 +6,7 @@
  */
 import { z } from "zod";
 
-export const RenderOptsSchema = z.object({
+const RenderOptsSchema = z.object({
   labelField: z.string().optional(),
   helperField: z.string().optional(),
   renderRow: z.function({ input: [z.unknown() /* TODO: ref TNode */, z.unknown() /* TODO: ref HTMLElement */], output: z.void() }).optional(),
@@ -14,15 +14,13 @@ export const RenderOptsSchema = z.object({
 });
 export type RenderOpts = z.infer<typeof RenderOptsSchema>;
 
-
-export const RenderAdapterSchema = z.object({
+const RenderAdapterSchema = z.object({
   flatPath: z.string(),
   getOrCreateRowAdapter: z.function({ input: [z.unknown()], output: z.unknown() }),
 });
 export type RenderAdapter = z.infer<typeof RenderAdapterSchema>;
 
-
-export const RowControllerSchema = z.object({
+const RowControllerSchema = z.object({
   flatPath: z.string(),
   isSelected: z.boolean(),
   isHighlighted: z.boolean(),

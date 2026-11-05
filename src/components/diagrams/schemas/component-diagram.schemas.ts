@@ -6,19 +6,17 @@
  */
 import { z } from "zod";
 
-export const InterfaceStemPointSchema = z.object({
+const InterfaceStemPointSchema = z.object({
   x: z.number(),
   y: z.number(),
 });
 export type InterfaceStemPoint = z.infer<typeof InterfaceStemPointSchema>;
 
-
-export const LayoutPackageSchema = z.intersection(z.unknown() /* TODO: ref Paquete */, z.object({
+const LayoutPackageSchema = z.intersection(z.unknown() /* TODO: ref Paquete */, z.object({
   titleBox: z.unknown() /* TODO: ref Caja */.optional(),
 }));
 export type LayoutPackage = z.infer<typeof LayoutPackageSchema>;
 
-
-export const AnchorPointSchema = z.unknown() /* TODO: ref Punto */;
+const AnchorPointSchema = z.unknown() /* TODO: ref Punto */;
 export type AnchorPoint = z.infer<typeof AnchorPointSchema>;
 

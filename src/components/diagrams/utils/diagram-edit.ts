@@ -17,8 +17,8 @@
  * `mode === "edit"`.
  */
 
-import { readIswc, removeIswc, writeIswc } from '@jeff-aporta/iswc-base/core/iswc-storage.js';
-import type { NodeOverride, EdgeOverride, NodeOverrideMap, EdgeOverrideMap, DiagramOverrides, EditorAnchor, DiagramPersist, LayoutChangeDetail, NodeLayoutEntry, EdgeLayoutEntry, LayoutLike, NodeDragMove, NodeDragEnd, NodeDragDestroy, InlineEditorInitial, InlineEditorSave, InlineEditorCancel, OpenInlineEditorOpts } from "@jeff-aporta/iswc-base/components/diagrams/schemas/diagram-edit.schemas.js";
+import { readIswc, writeIswc } from '@jeff-aporta/iswc-base/core/iswc-storage.js';
+import type { DiagramOverrides, LayoutChangeDetail, NodeDragMove, NodeDragEnd, NodeDragDestroy, OpenInlineEditorOpts } from "@jeff-aporta/iswc-base/components/diagrams/schemas/diagram-edit.schemas.js";
 const STORAGE_PREFIX = 'diagram:';
 
 /** Override parcial por nodo (posición / label / hue). */
@@ -52,13 +52,6 @@ export function saveOverrides(host: HTMLElement, key: string, data: DiagramOverr
   if (!writeIswc(STORAGE_PREFIX + key, JSON.stringify(data), persist === 'session' ? 'session' : 'local')) console.warn('[diagram-edit] override save failed');
 }
 
-export function clearOverrides(host: HTMLElement, key: string): void {
-  if (!key) return;
-  const persist = host.getAttribute('persist') || 'none';
-  if (persist === 'none') return;
-  removeIswc(STORAGE_PREFIX + key, persist === 'session' ? 'session' : 'local');
-}
-
 /** Detalle del evento `iswc-layout-change`. */
 
 /**
@@ -79,41 +72,6 @@ export function emitLayoutChange(host: HTMLElement, detail: LayoutChangeDetail):
 /** Nodo del layout con `id` y los campos que `applyOverrides` pisa. */
 
 /** Arista del layout con `id` y los campos que `applyOverrides` pisa. */
-
-/**
- * Aplica overrides persistidos a un layout recién calculado.
- *
- *   overrides = {
- *     nodes: { [id]: { x?, y?, label?, hue? } },
- *     edges: { [id]: { label?, hue? } },
- *   }
- *
- * Solo pisa lo que el override trae definido. Si el nodo ha sido reposicionado
- * (x/y presentes) se respeta la posición y se omite el algoritmo de layout
- * automático para ese nodo (caller debe comprobar).
- */
-export function applyOverrides<T extends LayoutLike>(layout: T, overrides: DiagramOverrides | null): T {
-  if (!overrides) return layout;
-  if (overrides.nodes) {
-    for (const n of layout.nodes ?? []) {
-      const o = overrides.nodes[n.id];
-      if (!o) continue;
-      if (Number.isFinite(o.x)) n.x = o.x;
-      if (Number.isFinite(o.y)) n.y = o.y;
-      if (typeof o.label === 'string') n.label = o.label;
-      if (Number.isFinite(o.hue)) n.hue = o.hue;
-    }
-  }
-  if (overrides.edges) {
-    for (const e of layout.edges ?? layout.relations ?? []) {
-      const o = overrides.edges[e.id];
-      if (!o) continue;
-      if (typeof o.label === 'string') e.label = o.label;
-      if (Number.isFinite(o.hue)) e.hue = o.hue;
-    }
-  }
-  return layout;
-}
 
 /** Callback que recibe el delta desde el último move del drag. */
 
@@ -272,7 +230,7 @@ export function openInlineEditor({ anchor, initial = {}, onSave, onCancel }: Ope
   return host;
 }
 
-export function closeInlineEditor(): void {
+function closeInlineEditor(): void {
   document.querySelectorAll<HTMLElement>('.iswc-diagram-editor').forEach((el) => el.remove());
 }
 

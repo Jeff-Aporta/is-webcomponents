@@ -13,8 +13,8 @@ import type { RowNode } from '@jeff-aporta/iswc-base/components/data/schemas/dat
 import type { FilaDisplay } from '@jeff-aporta/iswc-base/components/data/utils/ag-grid/contrato.schemas.js';
 
 export const ID_RAIZ = 'ROOT_NODE_ID';
-export const PREFIJO_TOTAL = 'rowGroupFooter_';
-export const FUNCIONES_AGG = ['sum', 'min', 'max', 'count', 'avg', 'first', 'last'];
+const PREFIJO_TOTAL = 'rowGroupFooter_';
+const FUNCIONES_AGG = ['sum', 'min', 'max', 'count', 'avg', 'first', 'last'];
 
 /** Compartidos: un arbol de 100.000 hojas no paga dos Map por nodo que nunca usara. */
 const SIN_MAPA: Map<string, NodoArbol> = new Map();

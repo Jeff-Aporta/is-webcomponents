@@ -6,7 +6,7 @@
  */
 import { z } from "zod";
 
-export const DiagramKindSchema = z.object({
+const DiagramKindSchema = z.object({
   kind: z.string(),
   title: z.string(),
   tag: z.string(),
@@ -19,21 +19,18 @@ export const DiagramKindSchema = z.object({
 });
 export type DiagramKind = z.infer<typeof DiagramKindSchema>;
 
-
-export const HostSchema = z.intersection(z.unknown() /* TODO: ref HTMLElement */, z.object({
+const HostSchema = z.intersection(z.unknown() /* TODO: ref HTMLElement */, z.object({
   payload: z.unknown().optional(),
   exportJson: z.function({ input: [], output: z.string() }).optional(),
 }));
 export type Host = z.infer<typeof HostSchema>;
 
-
-export const CodeElSchema = z.intersection(z.unknown() /* TODO: ref HTMLElement */, z.object({
+const CodeElSchema = z.intersection(z.unknown() /* TODO: ref HTMLElement */, z.object({
   value: z.string(),
 }));
 export type CodeEl = z.infer<typeof CodeElSchema>;
 
-
-export const ShareElSchema = z.intersection(z.unknown() /* TODO: ref HTMLElement */, z.object({
+const ShareElSchema = z.intersection(z.unknown() /* TODO: ref HTMLElement */, z.object({
   url: z.string(),
   shareTitle: z.string(),
   text: z.string(),

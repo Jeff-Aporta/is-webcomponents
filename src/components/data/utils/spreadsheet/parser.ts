@@ -1,13 +1,11 @@
 // parser.ts — descenso recursivo con precedencia: de tokens a árbol de fórmula.
-import type { RefEnd, Token } from './tokenizer.schemas.js';
+import type { Token } from './tokenizer.schemas.js';
 import { tokenize } from './tokenizer.js';
 import { errorFromCode, ERR } from './values.js';
-import type { CellError } from './values.js';
 import type { Node } from './parser.schemas.js';
 
-
 /** Error de sintaxis. */
-export class FormulaSyntaxError extends Error {}
+class FormulaSyntaxError extends Error {}
 
 const PREC: Record<string, number> = { '=': 1, '<>': 1, '<': 1, '>': 1, '<=': 1, '>=': 1, '&': 2, '+': 3, '-': 3, '*': 4, '/': 4, '^': 5 };
 

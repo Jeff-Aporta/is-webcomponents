@@ -6,11 +6,9 @@
  */
 import { z } from "zod";
 
-export const PickerKindSchema = z.union([z.literal('date'), z.literal('time'), z.literal('datetime')]);
-export type PickerKind = z.infer<typeof PickerKindSchema>;
+const PickerKindSchema = z.union([z.literal('date'), z.literal('time'), z.literal('datetime')]);
 
-
-export const PickerPanelDefSchema = z.intersection(z.unknown() /* TODO: ref HTMLElement */, z.object({
+const PickerPanelDefSchema = z.intersection(z.unknown() /* TODO: ref HTMLElement */, z.object({
   dataset: z.object({
   role: z.string().optional(),
   which: z.string().optional(),
@@ -25,8 +23,7 @@ export const PickerPanelDefSchema = z.intersection(z.unknown() /* TODO: ref HTML
 }));
 export type PickerPanelDef = z.infer<typeof PickerPanelDefSchema>;
 
-
-export const PickerFieldSchema = z.intersection(z.unknown() /* TODO: ref HTMLElement */, z.object({
+const PickerFieldSchema = z.intersection(z.unknown() /* TODO: ref HTMLElement */, z.object({
   value: z.string(),
   setAttribute: z.function({ input: [z.string(), z.string()], output: z.void() }),
   removeAttribute: z.function({ input: [z.string()], output: z.void() }),
@@ -38,15 +35,12 @@ export const PickerFieldSchema = z.intersection(z.unknown() /* TODO: ref HTMLEle
 }));
 export type PickerField = z.infer<typeof PickerFieldSchema>;
 
-
-export const PanelsBuilderSchema = z.array(z.function({ input: [z.object({
+const PanelsBuilderSchema = z.array(z.function({ input: [z.object({
   host: z.unknown() /* TODO: ref HTMLElement */,
   range: z.boolean(),
 })], output: z.unknown() /* TODO: ref PickerPanelDef */ }));
-export type PanelsBuilder = z.infer<typeof PanelsBuilderSchema>;
 
-
-export const DefinePickerInputOptsSchema = z.object({
+const DefinePickerInputOptsSchema = z.object({
   tag: z.string(),
   kind: PickerKindSchema,
   /** CSS del tag (`import css from 'iswc:css'` en el módulo que llama a la fábrica). */

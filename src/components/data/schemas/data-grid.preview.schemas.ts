@@ -6,7 +6,7 @@
  */
 import { z } from "zod";
 
-export const DataGridElementSchema = z.intersection(z.unknown() /* TODO: ref HTMLElement */, z.object({
+const DataGridElementSchema = z.intersection(z.unknown() /* TODO: ref HTMLElement */, z.object({
   columns: z.array(z.unknown() /* TODO: ref ColumnDef */),
   rows: z.array(z.unknown() /* TODO: ref Row */),
   pinnedRows: z.object({

@@ -4,8 +4,7 @@
 import { z } from "zod";
 
 /** Un cliente (empresa, organización, espacio) al que pertenece el usuario. */
-export const TenantOpcionSchema = z.object({ id: z.union([z.string(), z.number()]), nombre: z.string() });
-export type TenantOpcion = z.infer<typeof TenantOpcionSchema>;
+const TenantOpcionSchema = z.object({ id: z.union([z.string(), z.number()]), nombre: z.string() });
 
 export const TenantSelectorPropsSchema = z.object({
   opciones: z.array(TenantOpcionSchema),
@@ -20,7 +19,7 @@ export const TenantSelectorPropsSchema = z.object({
 export type TenantSelectorProps = z.infer<typeof TenantSelectorPropsSchema>;
 
 /** Detalle de `iswc-tenant-change`: el id tal como vino en `opciones`. */
-export const TenantChangeDetailSchema = z.object({ id: z.union([z.string(), z.number()]) });
+const TenantChangeDetailSchema = z.object({ id: z.union([z.string(), z.number()]) });
 export type TenantChangeDetail = z.infer<typeof TenantChangeDetailSchema>;
 
 /** Lo que este componente lee de `iswc-select`. */

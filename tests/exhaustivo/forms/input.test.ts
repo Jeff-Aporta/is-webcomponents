@@ -15,14 +15,7 @@
  */
 
 import assert from 'node:assert/strict';
-import {
-  leerComponente, leerPreview, leerDoc, existeCss,
-  atributosObservados, tagsDefinidos, eventosEmitidos,
-  slotsDeclarados, partsDeclaradas, customStates, tokensCss,
-  eventosDocumentados, atributosDocumentados,
-  esFormAssociated, extiendeElementBase, usaShadowDom,
-  tieneObservedTipado, tieneDefineElement,
-} from '../../_shared/exhaustivo-forms.js';
+import { leerComponente, leerPreview, leerDoc, existeCss, atributosObservados, tagsDefinidos, eventosEmitidos, slotsDeclarados, partsDeclaradas, customStates, esFormAssociated, extiendeElementBase, usaShadowDom, tieneDefineElement } from '../../_shared/exhaustivo-forms.js';
 import { coleccionPruebas } from '../../../src/vendor-distributions/shared/testing/pruebas.ts';
 
 const { test, lista } = coleccionPruebas({ categoria: 'what' });

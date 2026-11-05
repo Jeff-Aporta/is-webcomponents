@@ -6,30 +6,25 @@
  */
 import { z } from "zod";
 
-export const IspRecordSchema = z.record(z.string(), z.unknown());
+const IspRecordSchema = z.record(z.string(), z.unknown());
 export type IspRecord = z.infer<typeof IspRecordSchema>;
 
-
-export const IspActionKeySchema = z.union([z.literal('crear'), z.literal('modificar'), z.literal('visualizar'), z.literal('verificar'), z.literal('duplicar'), z.literal('recodificar'), z.literal('eliminar'), z.literal('consolidar')]);
+const IspActionKeySchema = z.union([z.literal('crear'), z.literal('modificar'), z.literal('visualizar'), z.literal('verificar'), z.literal('duplicar'), z.literal('recodificar'), z.literal('eliminar'), z.literal('consolidar')]);
 export type IspActionKey = z.infer<typeof IspActionKeySchema>;
 
-
-export const IspColumnDefSchema = z.object({
+const IspColumnDefSchema = z.object({
   field: z.string(),
   header: z.string().optional(),
 });
-export type IspColumnDef = z.infer<typeof IspColumnDefSchema>;
 
-
-export const IspServerConfigSchema = z.object({
+const IspServerConfigSchema = z.object({
   useLocal: z.boolean().optional(),
   local: z.union([IspConnectionSchema, z.null()]).optional(),
   remote: z.union([IspConnectionSchema, z.null()]).optional(),
 });
 export type IspServerConfig = z.infer<typeof IspServerConfigSchema>;
 
-
-export const IspConnectionSchema = z.object({
+const IspConnectionSchema = z.object({
   host: z.string(),
   port: z.union([z.number(), z.null()]).optional(),
   https: z.boolean().optional(),
@@ -37,8 +32,7 @@ export const IspConnectionSchema = z.object({
 });
 export type IspConnection = z.infer<typeof IspConnectionSchema>;
 
-
-export const IspEndpointsSchema = z.object({
+const IspEndpointsSchema = z.object({
   recurso: z.string().optional(),
   recursos: z.string().optional(),
   crud: z.string().optional(),
@@ -50,12 +44,10 @@ export const IspEndpointsSchema = z.object({
 });
 export type IspEndpoints = z.infer<typeof IspEndpointsSchema>;
 
-
-export const IspTokenSchema = z.union([z.string(), z.function({ input: [], output: z.union([z.string(), z.null(), z.undefined()]) }), z.null(), z.undefined()]);
+const IspTokenSchema = z.union([z.string(), z.function({ input: [], output: z.union([z.string(), z.null(), z.undefined()]) }), z.null(), z.undefined()]);
 export type IspToken = z.infer<typeof IspTokenSchema>;
 
-
-export const IspListaArgsSchema = z.object({
+const IspListaArgsSchema = z.object({
   pagina: z.number().optional(),
   qregistros: z.number().optional(),
   filtro: z.object({
@@ -64,18 +56,7 @@ export const IspListaArgsSchema = z.object({
 });
 export type IspListaArgs = z.infer<typeof IspListaArgsSchema>;
 
-
-export const IspListaResultSchema = z.object({
-  datos: z.array(IspRecordSchema),
-  qregistros: z.number().optional(),
-  totalregistros: z.number().optional(),
-  pagina: z.number().optional(),
-  totalpaginas: z.number().optional(),
-});
-export type IspListaResult = z.infer<typeof IspListaResultSchema>;
-
-
-export const IspControllerConfigSchema = z.object({
+const IspControllerConfigSchema = z.object({
   kind: z.union([z.literal('catalog'), z.literal('btnref')]).optional(),
   entrie: z.string().optional(),
   primaryKeys: z.array(z.string()).optional(),
@@ -94,8 +75,7 @@ export const IspControllerConfigSchema = z.object({
 });
 export type IspControllerConfig = z.infer<typeof IspControllerConfigSchema>;
 
-
-export const IspControllerSchema = z.object({
+const IspControllerSchema = z.object({
   entrie: z.string(),
   primaryKeys: z.array(z.string()),
   columns: z.array(IspColumnDefSchema),
@@ -124,8 +104,7 @@ export const IspControllerSchema = z.object({
 });
 export type IspController = z.infer<typeof IspControllerSchema>;
 
-
-export const IspHttpEnvelopeSchema = z.object({
+const IspHttpEnvelopeSchema = z.object({
   encabezado: z.object({
   resultado: z.boolean().optional(),
   mensaje: z.string().optional(),
@@ -147,8 +126,7 @@ export const IspHttpEnvelopeSchema = z.object({
 });
 export type IspHttpEnvelope = z.infer<typeof IspHttpEnvelopeSchema>;
 
-
-export const MutableIspControllerSchema = z.object({
+const MutableIspControllerSchema = z.object({
   /* TODO: member -readonly [K in keyof IspController]: IspController[K] */
 });
 export type MutableIspController = z.infer<typeof MutableIspControllerSchema>;

@@ -8,35 +8,29 @@ import { z } from "zod";
 import { ZPuntosRiel } from "./diagram-flow.schemas.js";
 import { DiagramNodeKindSchema, NodeEmbedSpecSchema, EmbedBoxSchema, EmbedSizeSchema } from "./diagram-embed.schemas.js";
 
-export const AnchorSideSchema = z.union([z.literal('left'), z.literal('right'), z.literal('top'), z.literal('bottom')]);
+const AnchorSideSchema = z.union([z.literal('left'), z.literal('right'), z.literal('top'), z.literal('bottom')]);
 export type AnchorSide = z.infer<typeof AnchorSideSchema>;
 
-
-export const FlowDirectionSchema = z.union([z.literal('TB'), z.literal('BT'), z.literal('LR'), z.literal('RL')]);
+const FlowDirectionSchema = z.union([z.literal('TB'), z.literal('BT'), z.literal('LR'), z.literal('RL')]);
 export type FlowDirection = z.infer<typeof FlowDirectionSchema>;
 
-
-export const FlowShapeSchema = z.union([z.literal('rect'), z.literal('round'), z.literal('stadium'), z.literal('circle'), z.literal('diamond'), z.literal('hexagon'), z.literal('parallelogram'), z.literal('cylinder'), z.literal('subroutine'), z.literal('start'), z.literal('end'), z.literal('bar'), z.literal('comment'), z.literal('vars'), z.literal('bridge')]);
+const FlowShapeSchema = z.union([z.literal('rect'), z.literal('round'), z.literal('stadium'), z.literal('circle'), z.literal('diamond'), z.literal('hexagon'), z.literal('parallelogram'), z.literal('cylinder'), z.literal('subroutine'), z.literal('start'), z.literal('end'), z.literal('bar'), z.literal('comment'), z.literal('vars'), z.literal('bridge')]);
 export type FlowShape = z.infer<typeof FlowShapeSchema>;
 
-
-export const FlowEdgeKindSchema = z.union([z.literal('solid'), z.literal('dashed'), z.literal('thick')]);
+const FlowEdgeKindSchema = z.union([z.literal('solid'), z.literal('dashed'), z.literal('thick')]);
 export type FlowEdgeKind = z.infer<typeof FlowEdgeKindSchema>;
 
-
-export const FlowOverflowSchema = z.union([z.literal('grow'), z.literal('ellipsis')]);
+const FlowOverflowSchema = z.union([z.literal('grow'), z.literal('ellipsis')]);
 export type FlowOverflow = z.infer<typeof FlowOverflowSchema>;
 
-
-export const LeadingIconTokenSchema = z.object({
+const LeadingIconTokenSchema = z.object({
   iconId: z.string(),
   hue: z.number().optional(),
   rest: z.string(),
 });
 export type LeadingIconToken = z.infer<typeof LeadingIconTokenSchema>;
 
-
-export const FlowExclusionZoneSchema = z.object({
+const FlowExclusionZoneSchema = z.object({
   x: z.number(),
   y: z.number(),
   w: z.number(),
@@ -45,12 +39,11 @@ export const FlowExclusionZoneSchema = z.object({
 });
 export type FlowExclusionZone = z.infer<typeof FlowExclusionZoneSchema>;
 
-
 /**
  * Carril de contexto (swimlane): la entidad o el contexto donde ocurre cada paso (Cliente, Turno,
  * PostgreSQL…). Los nodos lo nombran con `lane`. Sin carriles el diagrama es un flujo simple.
  */
-export const FlowLaneSpecSchema = z.object({
+const FlowLaneSpecSchema = z.object({
   id: z.string(),
   label: z.string(),
   /** `center`: los nodos del carril van centrados a lo largo del diagrama (p. ej. el controller de cliente solo en su columna). */
@@ -64,7 +57,7 @@ export const FlowLaneSpecSchema = z.object({
 export type FlowLaneSpec = z.infer<typeof FlowLaneSpecSchema>;
 
 /** Carriles como columnas (`vertical`, por defecto; el flujo baja) o como filas (`horizontal`; el flujo avanza a la derecha). */
-export const FlowLaneDirectionSchema = z.union([z.literal('vertical'), z.literal('horizontal')]);
+const FlowLaneDirectionSchema = z.union([z.literal('vertical'), z.literal('horizontal')]);
 export type FlowLaneDirection = z.infer<typeof FlowLaneDirectionSchema>;
 
 /**
@@ -95,7 +88,7 @@ export const FlowVarSchema = z.object({
 });
 export type FlowVar = z.infer<typeof FlowVarSchema>;
 
-export const FlowNodeSpecSchema = z.object({
+const FlowNodeSpecSchema = z.object({
   /** `shape: "bridge"`: el controller al que pertenece y la letra CRUD. */
   bridge: FlowBridgeSchema.optional(),
   /** `shape: "vars"`: las variables que declara (tabla nombre · valor · desc). */
@@ -122,8 +115,7 @@ export const FlowNodeSpecSchema = z.object({
 });
 export type FlowNodeSpec = z.infer<typeof FlowNodeSpecSchema>;
 
-
-export const FlowEdgeSpecSchema = z.object({
+const FlowEdgeSpecSchema = z.object({
   id: z.string(),
   from: z.string(),
   to: z.string(),
@@ -147,16 +139,14 @@ export const FlowEdgeSpecSchema = z.object({
 });
 export type FlowEdgeSpec = z.infer<typeof FlowEdgeSpecSchema>;
 
-
-export const FlowGroupSpecSchema = z.object({
+const FlowGroupSpecSchema = z.object({
   id: z.string(),
   name: z.string(),
   hue: z.number(),
 });
 export type FlowGroupSpec = z.infer<typeof FlowGroupSpecSchema>;
 
-
-export const FlowResolvedSpecSchema = z.object({
+const FlowResolvedSpecSchema = z.object({
   title: z.string().optional(),
   subtitle: z.string().optional(),
   direction: FlowDirectionSchema,
@@ -175,8 +165,7 @@ export const FlowResolvedSpecSchema = z.object({
 });
 export type FlowResolvedSpec = z.infer<typeof FlowResolvedSpecSchema>;
 
-
-export const FlowLayoutNodeSchema = z.object({
+const FlowLayoutNodeSchema = z.object({
   id: z.string(),
   x: z.number(),
   y: z.number(),
@@ -227,8 +216,7 @@ export const FlowLayoutNodeSchema = z.object({
 });
 export type FlowLayoutNode = z.infer<typeof FlowLayoutNodeSchema>;
 
-
-export const FlowLayoutEdgeSchema = z.object({
+const FlowLayoutEdgeSchema = z.object({
   /** Arista de un puente `-(O=`: `entrada` (consumo que llega al O) o `salida` (lo que el O redirige). */
   puente: z.enum(['entrada', 'salida']).optional(),
   /**
@@ -267,19 +255,16 @@ export const FlowLayoutEdgeSchema = z.object({
 });
 export type FlowLayoutEdge = z.infer<typeof FlowLayoutEdgeSchema>;
 
-
-export const FlowLayoutExclusionZoneSchema = z.object({
+const FlowLayoutExclusionZoneSchema = z.object({
   x: z.number(),
   y: z.number(),
   w: z.number(),
   h: z.number(),
   label: z.string().optional(),
 });
-export type FlowLayoutExclusionZone = z.infer<typeof FlowLayoutExclusionZoneSchema>;
-
 
 /** Carril ya colocado (coords del lienzo): banda del carril y dónde va su rótulo. */
-export const FlowLayoutLaneSchema = z.object({
+const FlowLayoutLaneSchema = z.object({
   id: z.string(),
   label: z.string(),
   x: z.number(),
@@ -293,7 +278,7 @@ export type FlowLayoutLane = z.infer<typeof FlowLayoutLaneSchema>;
  * Grupo de contexto ya colocado: recuadro con título y fondo suave que separa, dentro de un mismo
  * carril, entidades de distinta naturaleza (clases, tablas, componentes) del flujo.
  */
-export const FlowLayoutContextSchema = z.object({
+const FlowLayoutContextSchema = z.object({
   label: z.string(),
   lane: z.string(),
   /** Ids de los nodos que abraza (la caja es su unión, más aire y título). */
@@ -305,7 +290,7 @@ export const FlowLayoutContextSchema = z.object({
 });
 export type FlowLayoutContext = z.infer<typeof FlowLayoutContextSchema>;
 
-export const FlowLayoutSchema = z.object({
+const FlowLayoutSchema = z.object({
   width: z.number(),
   height: z.number(),
   nodes: z.array(FlowLayoutNodeSchema),
@@ -323,8 +308,7 @@ export const FlowLayoutSchema = z.object({
 });
 export type FlowLayout = z.infer<typeof FlowLayoutSchema>;
 
-
-export const FlowLayoutOverridesSchema = z.object({
+const FlowLayoutOverridesSchema = z.object({
   nodes: z.record(z.string(), z.object({
   x: z.number().optional(),
   y: z.number().optional(),
@@ -338,14 +322,11 @@ export const FlowLayoutOverridesSchema = z.object({
 });
 export type FlowLayoutOverrides = z.infer<typeof FlowLayoutOverridesSchema>;
 
-
-
 /** Estilo de layout: `classic` (el de siempre) o `insoft` (actividad estilo Visual Paradigm). */
-export const FlowLayoutStyleSchema = z.union([z.literal('classic'), z.literal('insoft')]);
-export type FlowLayoutStyle = z.infer<typeof FlowLayoutStyleSchema>;
+const FlowLayoutStyleSchema = z.union([z.literal('classic'), z.literal('insoft')]);
 
 /** Opciones de `computeFlowchartLayout` (todas opcionales; sin ellas = classic). */
-export const FlowLayoutOptionsSchema = z.object({
+const FlowLayoutOptionsSchema = z.object({
   style: FlowLayoutStyleSchema.optional(),
   /** Ancho en px de un texto con la tipografía real (navegador); por defecto, estimación. */
   measure: z.custom<(text: string) => number>((v) => typeof v === 'function').optional(),
@@ -356,7 +337,7 @@ export const FlowLayoutOptionsSchema = z.object({
 export type FlowLayoutOptions = z.infer<typeof FlowLayoutOptionsSchema>;
 
 /** Tamaño de un nodo antes de colocarlo, con su texto ya partido (insoft). */
-export const FlowSizedNodeSchema = z.object({
+const FlowSizedNodeSchema = z.object({
   id: z.string(),
   w: z.number(),
   h: z.number(),
@@ -379,7 +360,7 @@ export const FlowSizedNodeSchema = z.object({
 export type FlowSizedNode = z.infer<typeof FlowSizedNodeSchema>;
 
 /** Nodo colocado por el layout (antes del margen del lienzo). */
-export const FlowPlacedNodeSchema = z.object({
+const FlowPlacedNodeSchema = z.object({
   id: z.string(),
   x: z.number(),
   y: z.number(),
@@ -389,7 +370,7 @@ export const FlowPlacedNodeSchema = z.object({
 });
 export type FlowPlacedNode = z.infer<typeof FlowPlacedNodeSchema>;
 
-export const FlowPlacementSchema = z.object({
+const FlowPlacementSchema = z.object({
   nodes: z.array(FlowPlacedNodeSchema),
   width: z.number(),
   height: z.number(),
@@ -402,7 +383,7 @@ export const FlowPlacementSchema = z.object({
 export type FlowPlacement = z.infer<typeof FlowPlacementSchema>;
 
 /** Pintura del estilo insoft ya resuelta (tokens del tema → colores). */
-export const FlowPaintSchema = z.object({
+const FlowPaintSchema = z.object({
   font: z.string(),
   fontSize: z.number(),
   fontWeight: z.number(),
@@ -433,11 +414,11 @@ export const FlowPaintSchema = z.object({
 export type FlowPaint = z.infer<typeof FlowPaintSchema>;
 
 /** Punto en píxeles del lienzo. */
-export const FlowPointSchema = z.object({ x: z.number(), y: z.number() });
+const FlowPointSchema = z.object({ x: z.number(), y: z.number() });
 export type FlowPoint = z.infer<typeof FlowPointSchema>;
 
 /** Tramo ortogonal ya ruteado (insoft), con el destino de su arista. */
-export const FlowSegmentSchema = z.object({
+const FlowSegmentSchema = z.object({
   x1: z.number(),
   y1: z.number(),
   x2: z.number(),
@@ -447,7 +428,7 @@ export const FlowSegmentSchema = z.object({
 export type FlowSegment = z.infer<typeof FlowSegmentSchema>;
 
 /** Lado del controller del que cuelga un puente `-(O=`. */
-export const LadoPuenteSchema = z.enum(['bottom', 'right', 'left', 'top']);
+const LadoPuenteSchema = z.enum(['bottom', 'right', 'left', 'top']);
 export type LadoPuente = z.infer<typeof LadoPuenteSchema>;
 /** Caja de un puente colocado (con su lado). */
 export type CajaPuente = { x: number; y: number; w: number; h: number; lado?: LadoPuente };

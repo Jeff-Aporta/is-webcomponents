@@ -6,7 +6,7 @@
  */
 import { z } from "zod";
 
-export const VennLayoutCircleSchema = z.object({
+const VennLayoutCircleSchema = z.object({
   id: z.string(),
   label: z.string(),
   description: z.string().optional(),
@@ -17,10 +17,8 @@ export const VennLayoutCircleSchema = z.object({
   labelX: z.number(),
   labelY: z.number(),
 });
-export type VennLayoutCircle = z.infer<typeof VennLayoutCircleSchema>;
 
-
-export const VennLayoutRegionSchema = z.object({
+const VennLayoutRegionSchema = z.object({
   id: z.string(),
   sets: z.array(z.string()),
   label: z.string().optional(),
@@ -30,17 +28,14 @@ export const VennLayoutRegionSchema = z.object({
   y: z.number(),
   hues: z.array(z.number()),
 });
-export type VennLayoutRegion = z.infer<typeof VennLayoutRegionSchema>;
 
-
-export const CircleNodeEntrySchema = z.object({
+const CircleNodeEntrySchema = z.object({
   c: VennLayoutCircleSchema,
   g: z.unknown() /* TODO: ref SVGGElement */,
 });
 export type CircleNodeEntry = z.infer<typeof CircleNodeEntrySchema>;
 
-
-export const RegionNodeEntrySchema = z.object({
+const RegionNodeEntrySchema = z.object({
   r: VennLayoutRegionSchema,
   g: z.unknown() /* TODO: ref SVGGElement */,
 });

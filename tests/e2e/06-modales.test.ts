@@ -31,7 +31,6 @@ import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/
 
 const { test, lista, before, after } = coleccionPruebas({ categoria: 'what' });
 
-
 const DISPONIBLE = faltanRequisitos().length === 0;
 let ctx: CtxE2E | null = null;
 const testE2E = crearTestE2E(() => (ctx ? ctx.page : null));
@@ -48,19 +47,6 @@ after(async () => {
 function pagina(): Page {
   assert.ok(ctx, 'contexto no disponible');
   return ctx.page;
-}
-
-/**
- * Abre el primer <iswc-dialog> o <iswc-dialog id="..."> del demo, devolviendo
- * el id y referencia del wrapper. Penetra shadow DOM.
- */
-async function primerDialog(page: Page): Promise<{ id: string; open: boolean } | null> {
-  return (await page.evaluate(() => {
-    const dlgs = [...document.querySelectorAll<HTMLElement>('#previewHost iswc-dialog')];
-    if (!dlgs.length) return null;
-    const d = dlgs[0];
-    return { id: d.id || '(no-id)', open: d.hasAttribute('open') };
-  })) as { id: string; open: boolean } | null;
 }
 
 async function abrirDialogPorId(page: Page, id: string): Promise<boolean> {

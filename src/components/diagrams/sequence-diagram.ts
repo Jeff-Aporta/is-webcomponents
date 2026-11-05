@@ -14,13 +14,13 @@ import type { EmbedCapture, EmbedSize } from './schemas/diagram-embed.schemas.js
 import { hostStyleName, styleThemeFor } from './utils/diagram-styles.js';
 import { injectThemeCss, lineColor, paletteColor, pickThemeMode, resolveErTheme, sequencePaint, themeToDiagramTheme } from './utils/theme.js';
 import type { ErThemeJson } from './schemas/theme.schemas.js';
-import { readEdgeStyle, edgeStyleFor } from './utils/diagram-vocab.js';
+import { edgeStyleFor } from './utils/diagram-vocab.js';
 import type { EdgeStyle } from './schemas/diagram-vocab.schemas.js';
 import { styledEdgePath } from './utils/diagram-curve.js';
 import { PathTurtle as SequenceTurtle } from '@jeff-aporta/iswc-base/core/path-turtle.js';
 import type { PathTurtle } from '@jeff-aporta/iswc-base/core/path-turtle.js';
 import { TK_DIAGRAM_RADIUS_PX } from '@jeff-aporta/iswc-base/core/diagram-grid.js';
-import { svgIconGroup, svgIconBadge, hasIconJsonSugar } from '@jeff-aporta/iswc-base/core/tk-icon-inline.js';
+import { svgIconBadge, hasIconJsonSugar } from '@jeff-aporta/iswc-base/core/tk-icon-inline.js';
 import { pathPoints } from './utils/diagram-arrow.js';
 import { tkHueToHex } from '@jeff-aporta/iswc-base/core/tk-hue.js';
 import type { DiagramTheme } from './schemas/diagram-types.schemas.js';

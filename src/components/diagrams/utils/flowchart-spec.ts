@@ -1,7 +1,6 @@
 import { layoutNodeLink, edgeAnchor, pickSides, assignLayers, orderLayers } from './node-link-layout.js';
 import { readNodeEmbed, embedIsNatural, fitContain, nestedMaxSize, EMBED_FALLBACK_SIZE } from './diagram-embed.js';
 import { pathPoints, pathSinAutoCruces } from './diagram-arrow.js';
-import type { BoxSide } from '@jeff-aporta/iswc-base/components/diagrams/schemas/diagram-types.schemas.js';
 
 // `BoxSide` admite `'auto'`; los anclajes efectivos del router son siempre
 // una dirección cardinal. Estrechamos para satisfacer la firma del helper.
@@ -12,7 +11,7 @@ import {
   makeCostGrid, blockRect, applyRectCost, applyRadialCost, snapDiagramGrid, ceilDiagramGrid, rectsOverlap,
   readExclusionZones, nudgeRectFromZones, blockExclusionZones, snapPointAwayFromSide,
 } from '@jeff-aporta/iswc-base/core/diagram-grid.js';
-import { routeOrthogonal, pixelToGrid, gridPathToSvg, buildOrthogonalPath } from './diagram-astar.js';
+import { routeOrthogonal, pixelToGrid, buildOrthogonalPath } from './diagram-astar.js';
 import { countIconTokens, extractLeadingIconToken } from '@jeff-aporta/iswc-base/core/tk-icon-inline.js';
 import { richTextPlain } from '@jeff-aporta/iswc-base/core/tk-rich-text.js';
 import { resolveTkHue } from '@jeff-aporta/iswc-base/core/tk-hue.js';
@@ -66,7 +65,6 @@ const DECISION_GAP = 6;
 export const FLOW_PILL_ICON = 14;
 const PILL_PAD = 6;
 const PILL_GAP = 4;
-const PILL_AIRE = 8;
 /** Ancho del número de paso en la pastilla (negrita de 10 px; el punto de un índice jerárquico es angosto). */
 export const pillStepW = (step: number | string): number => String(step).replace(/\./g, '').length * 6.5 + (String(step).match(/\./g)?.length ?? 0) * 3;
 /** Ancho de la pastilla de un nodo (0 si no trae ni paso ni ícono). */

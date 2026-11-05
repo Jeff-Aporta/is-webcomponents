@@ -7,7 +7,7 @@ import { findThemeContainer, readTheme } from '@jeff-aporta/iswc-base/core/theme
 import { PathTurtle } from '@jeff-aporta/iswc-base/core/path-turtle.js';
 import { registerDiagramKind } from '@jeff-aporta/iswc-base/components/diagrams/utils/diagram-kinds.js';
 import { setStringAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
-import type { TypedChartFactory, ChartDataPoint, ChartDataset, ChartConfig, LegendEntry, HitRecord, ResolvedOptions, DrawMarksFn, ChartCtx } from "./schemas/chart.schemas.js";
+import type { TypedChartFactory, ChartDataPoint, ChartDataset, ChartConfig, LegendEntry, HitRecord, ResolvedOptions, ChartCtx } from "./schemas/chart.schemas.js";
 import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import css from 'iswc:css';
 

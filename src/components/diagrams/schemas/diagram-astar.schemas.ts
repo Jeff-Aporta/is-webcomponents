@@ -6,14 +6,13 @@
  */
 import { z } from "zod";
 
-export const GridPointSchema = z.object({
+const GridPointSchema = z.object({
   col: z.number(),
   row: z.number(),
 });
 export type GridPoint = z.infer<typeof GridPointSchema>;
 
-
-export const CostGridSchema = z.object({
+const CostGridSchema = z.object({
   cols: z.number(),
   rows: z.number(),
   grid: z.number(),
@@ -22,8 +21,7 @@ export const CostGridSchema = z.object({
 });
 export type CostGrid = z.infer<typeof CostGridSchema>;
 
-
-export const ForbiddenRegionSchema = z.object({
+const ForbiddenRegionSchema = z.object({
   id: z.string(),
   kind: z.union([z.literal('rect'), z.literal('poly')]),
   x: z.number().optional(),
@@ -34,32 +32,21 @@ export const ForbiddenRegionSchema = z.object({
   color: z.string().optional(),
   label: z.string().optional(),
 });
-export type ForbiddenRegion = z.infer<typeof ForbiddenRegionSchema>;
 
-
-export const PixelPointSchema = z.object({
+const PixelPointSchema = z.object({
   x: z.number(),
   y: z.number(),
 });
 export type PixelPoint = z.infer<typeof PixelPointSchema>;
 
-
-export const RouteOptsSchema = z.object({
+const RouteOptsSchema = z.object({
   turnCost: z.number().optional(),
   waypoints: z.array(z.unknown() /* TODO: cannot convert */).optional(),
   forbiddenRegions: z.array(z.union([z.array(z.unknown() /* TODO: cannot convert */), ForbiddenRegionSchema])).optional(),
 });
 export type RouteOpts = z.infer<typeof RouteOptsSchema>;
 
-
-export const AestheticsOptsSchema = z.intersection(RouteOptsSchema, z.object({
-  suggestCount: z.number().optional(),
-  turnWeight: z.number().optional(),
-}));
-export type AestheticsOpts = z.infer<typeof AestheticsOptsSchema>;
-
-
-export const SequenceRouteSchema = z.object({
+const SequenceRouteSchema = z.object({
   path: z.string(),
   arrowTipX: z.number(),
   arrowTipY: z.number(),

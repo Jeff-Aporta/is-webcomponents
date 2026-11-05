@@ -6,6 +6,6 @@
  */
 import { z } from "zod";
 
-export const IswcChartElementSchema = z.intersection(z.unknown() /* TODO: ref HTMLElement */, z.unknown() /* TODO: ref IswcChart */);
+const IswcChartElementSchema = z.intersection(z.unknown() /* TODO: ref HTMLElement */, z.unknown() /* TODO: ref IswcChart */);
 export type IswcChartElement = z.infer<typeof IswcChartElementSchema>;
 

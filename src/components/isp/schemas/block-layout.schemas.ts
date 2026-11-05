@@ -6,14 +6,12 @@
  */
 import { z } from "zod";
 
-export const BreakpointSchema = z.unknown() /* TODO: cannot convert */;
+const BreakpointSchema = z.unknown() /* TODO: cannot convert */;
 export type Breakpoint = z.infer<typeof BreakpointSchema>;
 
-
-export const BreakpointFlagsSchema = z.record(z.string(), z.boolean());
+const BreakpointFlagsSchema = z.record(z.string(), z.boolean());
 export type BreakpointFlags = z.infer<typeof BreakpointFlagsSchema>;
 
-
-export const LerpwFnSchema = z.function({ input: [z.string(), z.string()], output: z.number() });
+const LerpwFnSchema = z.function({ input: [z.string(), z.string()], output: z.number() });
 export type LerpwFn = z.infer<typeof LerpwFnSchema>;
 

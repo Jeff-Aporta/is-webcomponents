@@ -6,7 +6,7 @@
  */
 import { z } from "zod";
 
-export const ScatterChartLikeSchema = z.object({
+const ScatterChartLikeSchema = z.object({
   config: z.object({
   data: z.object({
   datasets: z.array(z.object({

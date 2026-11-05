@@ -8,14 +8,13 @@
 import { z } from "zod";
 import { SwimlaneLayoutStepSchema, SwimlaneLayoutLinkSchema } from "./swimlane-spec.schemas.js";
 
-export const StepEntrySchema = z.object({
+const StepEntrySchema = z.object({
   s: SwimlaneLayoutStepSchema,
   g: z.unknown() /* TODO: ref SVGGElement */,
 });
 export type StepEntry = z.infer<typeof StepEntrySchema>;
 
-
-export const LinkEntrySchema = z.object({
+const LinkEntrySchema = z.object({
   l: SwimlaneLayoutLinkSchema,
   g: z.unknown() /* TODO: ref SVGGElement */,
 });

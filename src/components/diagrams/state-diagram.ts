@@ -1,7 +1,7 @@
 import { emit, emitCancelable } from '@jeff-aporta/iswc-base/core/element.js';
 import { DiagramElementBase } from './utils/diagram-element-base.js';
 import { resolveStateSpec, computeStateLayout } from './utils/state-spec.js';
-import type { StateLayout, StateLayoutNode, StateLayoutTransition, StateResolvedSpec, StateSpec } from './schemas/state-spec.schemas.js';
+import type { StateLayout, StateResolvedSpec, StateSpec } from './schemas/state-spec.schemas.js';
 import { PathTurtle as SequenceTurtle } from '@jeff-aporta/iswc-base/core/path-turtle.js';
 import type { PathTurtle } from '@jeff-aporta/iswc-base/core/path-turtle.js';
 import { tkHueToHex } from '@jeff-aporta/iswc-base/core/tk-hue.js';

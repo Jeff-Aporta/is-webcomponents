@@ -15,9 +15,8 @@
  */
 import { collectIsTags, GALLERY_CHROME_TAGS } from '@jeff-aporta/iswc-base/cdn/collect-iswc-tags.js';
 import { montarAnatomia, resolverAnatomia } from '@jeff-aporta/iswc-base/previews/_kit/anatomia.js';
-import type { Anatomia } from '@jeff-aporta/iswc-base/previews/_kit/schemas/anatomia.schemas.js';
 import { codificarEstado, leerEstado, readPanelsCompactPref, writePanelsCompactPref } from './doc-demo-estado.js';
-import type { Bloque, Definicion, Montaje, Previsualizable, HostPreview, Loader, Cajon, EstadoGaleria, OpcionesGaleria } from './doc-demo-galeria.schemas.js';
+import type { Definicion, HostPreview, Loader, Cajon, EstadoGaleria, OpcionesGaleria } from './doc-demo-galeria.schemas.js';
 
 
 

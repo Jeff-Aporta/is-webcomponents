@@ -7,7 +7,7 @@
  */
 
 import { diffLineClass } from './code-diff.js';
-import type { CodeLangDef, LanguageSummary, LanguageResolution } from "./schemas/code-langs.schemas.js";
+import type { CodeLangDef, LanguageSummary } from "./schemas/code-langs.schemas.js";
 
 /**
  * Definición de un lenguaje: id, alias, y opcionalmente una clase de fondo
@@ -72,15 +72,6 @@ export function listLanguages(): LanguageSummary[] {
     aliases: [...(d.aliases || [])],
     heavy: !!d.heavy,
   }));
-}
-
-/** Devuelve el id y la definición del lenguaje (sin cargar modos CDN). */
-export function ensureLanguage(name: string | null | undefined): LanguageResolution {
-  const def = resolveLanguage(name);
-  if (!def) {
-    return { id: 'plaintext', def: null };
-  }
-  return { id: def.id, def };
 }
 
 // —— Built-ins (motor nativo code-highlight; sin modos CM) ——

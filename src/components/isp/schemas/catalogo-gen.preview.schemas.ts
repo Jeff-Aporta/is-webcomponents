@@ -6,7 +6,7 @@
  */
 import { z } from "zod";
 
-export const CatalogElSchema = z.object({
+const CatalogElSchema = z.object({
   controller: z.unknown(),
 });
 export type CatalogEl = z.infer<typeof CatalogElSchema>;

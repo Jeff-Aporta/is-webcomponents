@@ -6,7 +6,7 @@
  */
 import { z } from "zod";
 
-export const IspRecordSchema = z.object({
+const IspRecordSchema = z.object({
   getProp: z.function({ input: [z.string()], output: z.unknown() }).optional(),
   setProp: z.function({ input: [z.string(), z.unknown()], output: z.void() }).optional(),
   toJSON: z.function({ input: [z.boolean()], output: z.unknown() }).optional(),
@@ -16,16 +16,14 @@ export const IspRecordSchema = z.object({
 });
 export type IspRecord = z.infer<typeof IspRecordSchema>;
 
-
-export const GridRowSchema = z.object({
+const GridRowSchema = z.object({
   id: z.union([z.string(), z.number()]).optional(),
   __record: IspRecordSchema.optional(),
   /* TODO: member [key: string]: unknown */
 });
 export type GridRow = z.infer<typeof GridRowSchema>;
 
-
-export const IspColumnDefSchema = z.object({
+const IspColumnDefSchema = z.object({
   caption: z.string().optional(),
   size: z.number().optional(),
   align: z.union([z.literal('left'), z.literal('right'), z.literal('center')]).optional(),
@@ -34,10 +32,8 @@ export const IspColumnDefSchema = z.object({
   type: z.union([z.literal('number'), z.literal('currency'), z.literal('date'), z.literal('dateTime'), z.literal('bool'), z.string()]).optional(),
   get children(): z.ZodOptional<z.ZodRecord<z.ZodString, typeof IspColumnDefSchema>> { return z.record(z.string(), IspColumnDefSchema).optional(); },
 });
-export type IspColumnDef = z.infer<typeof IspColumnDefSchema>;
 
-
-export const FlatGridColumnSchema = z.object({
+const FlatGridColumnSchema = z.object({
   field: z.string(),
   header: z.string(),
   width: z.number().optional(),
@@ -49,12 +45,10 @@ export const FlatGridColumnSchema = z.object({
 });
 export type FlatGridColumn = z.infer<typeof FlatGridColumnSchema>;
 
-
-export const IspColumnsMapSchema = z.record(z.string(), IspColumnDefSchema);
+const IspColumnsMapSchema = z.record(z.string(), IspColumnDefSchema);
 export type IspColumnsMap = z.infer<typeof IspColumnsMapSchema>;
 
-
-export const IspControllerSchema = z.object({
+const IspControllerSchema = z.object({
   columns: z.array(FlatGridColumnSchema).optional(),
   Columns: IspColumnsMapSchema.optional(),
   /* TODO: member [key: string]: unknown */

@@ -6,7 +6,7 @@
  */
 import { z } from "zod";
 
-export const CodeLangDefSchema = z.object({
+const CodeLangDefSchema = z.object({
   id: z.string(),
   aliases: z.array(z.string()).optional(),
   heavy: z.boolean().optional(),
@@ -15,18 +15,10 @@ export const CodeLangDefSchema = z.object({
 });
 export type CodeLangDef = z.infer<typeof CodeLangDefSchema>;
 
-
-export const LanguageSummarySchema = z.object({
+const LanguageSummarySchema = z.object({
   id: z.string(),
   aliases: z.array(z.string()),
   heavy: z.boolean(),
 });
 export type LanguageSummary = z.infer<typeof LanguageSummarySchema>;
-
-
-export const LanguageResolutionSchema = z.object({
-  id: z.string(),
-  def: z.union([CodeLangDefSchema, z.null()]),
-});
-export type LanguageResolution = z.infer<typeof LanguageResolutionSchema>;
 

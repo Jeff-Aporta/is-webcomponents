@@ -11,7 +11,7 @@ import { wrapText, buildTspans } from './utils/diagram-text-wrap.js';
 import type { TSpanSpec } from './schemas/diagram-text-wrap.schemas.js';
 import { registerDiagramKind } from './utils/diagram-kinds.js';
 import { svgEl } from '@jeff-aporta/iswc-base/core/svg-chart-engine.js';
-import type { VennLayoutCircle, VennLayoutRegion, CircleNodeEntry, RegionNodeEntry } from "./schemas/venn-diagram.schemas.js";
+import type { CircleNodeEntry, RegionNodeEntry } from "./schemas/venn-diagram.schemas.js";
 import { define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import css from 'iswc:css';
 

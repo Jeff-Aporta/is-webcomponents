@@ -6,13 +6,12 @@
  */
 import { z } from "zod";
 
-export const _SummaryEventSchema = z.object({
+const _SummaryEventSchema = z.object({
   currentTarget: z.unknown() /* TODO: ref HTMLElement */,
 });
 export type _SummaryEvent = z.infer<typeof _SummaryEventSchema>;
 
-
-export const _RowAdapterSchema = z.object({
+const _RowAdapterSchema = z.object({
   onrowclick: z.function({ input: [z.unknown() /* TODO: ref TNode */], output: z.void() }),
   onrowdblclick: z.function({ input: [z.unknown() /* TODO: ref TNode */], output: z.void() }),
   syncRowSelectionChrome: z.function({ input: [], output: z.void() }),
@@ -32,8 +31,7 @@ export const _RowAdapterSchema = z.object({
 });
 export type _RowAdapter = z.infer<typeof _RowAdapterSchema>;
 
-
-export const TRAAccessibleSchema = z.object({
+const TRAAccessibleSchema = z.object({
   get treeAdapter(): z.ZodIntersection<typeof TRAAccessibleSchema, typeof _RowAdapterSchema> { return z.intersection(TRAAccessibleSchema, _RowAdapterSchema); },
   mergedDisabled: z.boolean(),
   hasChildren: z.boolean(),

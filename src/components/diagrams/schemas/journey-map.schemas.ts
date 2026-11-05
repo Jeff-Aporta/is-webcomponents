@@ -8,7 +8,7 @@
 import { z } from "zod";
 import { JourneyLayoutStepSchema } from "./journey-spec.schemas.js";
 
-export const StepEntrySchema = z.object({
+const StepEntrySchema = z.object({
   s: JourneyLayoutStepSchema,
   g: z.unknown() /* TODO: ref SVGGElement */,
 });

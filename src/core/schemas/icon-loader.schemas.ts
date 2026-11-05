@@ -10,7 +10,7 @@ import { z } from "zod";
  * Familia del catálogo de Iconify (`https://api.iconify.design/collections`), aplanada: `count` es el
  * `total` de la API; `author`/`license` son los nombres; `samples`, los íconos de muestra del set.
  */
-export const IconFamilySchema = z.object({
+const IconFamilySchema = z.object({
   prefix: z.string(),
   count: z.number(),
   name: z.string().optional(),
@@ -29,7 +29,6 @@ export interface CatalogoPersistido<T> { t: number; d: T }
 /** Datos de un set en el JSON por lotes de la API (`<set>.json?icons=a,b`): solo lo que se usa para armar el SVG. */
 export interface LoteIconify { width?: number; height?: number; left?: number; top?: number; icons?: Record<string, { body: string; width?: number; height?: number; left?: number; top?: number }>; aliases?: Record<string, { parent: string; rotate?: number; hFlip?: boolean; vFlip?: boolean }> }
 
-
 /**
  * Estado en memoria del resolvedor, compartido en `globalThis.__iswcIcons` por todas las copias del
  * módulo: SVG resueltos (`null` = falló, no se reintenta en la página), fetches en vuelo (uno por
@@ -42,5 +41,5 @@ export interface EstadoIconos {
 }
 
 /** Formato persistido en localStorage (`iswc:icon:<set>:<nombre>`): `{ t: <ms de guardado>, s: <svg> }` (TTL 15 días). */
-export const PersistidoSchema = z.object({ t: z.number(), s: z.string() });
+const PersistidoSchema = z.object({ t: z.number(), s: z.string() });
 export type Persistido = z.infer<typeof PersistidoSchema>;

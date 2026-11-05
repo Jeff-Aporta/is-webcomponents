@@ -6,7 +6,7 @@
  */
 import { z } from "zod";
 
-export const IswcMdEditorDocumentSchema = z.object({
+const IswcMdEditorDocumentSchema = z.object({
   id: z.string().optional(),
   filename: z.string().optional(),
   content: z.string(),
@@ -18,17 +18,14 @@ export const IswcMdEditorDocumentSchema = z.object({
 });
 export type IswcMdEditorDocument = z.infer<typeof IswcMdEditorDocumentSchema>;
 
-
-export const IswcMdEditorEndpointsSchema = z.object({
+const IswcMdEditorEndpointsSchema = z.object({
   get: z.string().optional(),
   put: z.string().optional(),
   post: z.string().optional(),
   delete: z.string().optional(),
 });
-export type IswcMdEditorEndpoints = z.infer<typeof IswcMdEditorEndpointsSchema>;
 
-
-export const IswcMdEditorApiConfigSchema = z.object({
+const IswcMdEditorApiConfigSchema = z.object({
   baseUrl: z.string().optional(),
   endpoints: IswcMdEditorEndpointsSchema.optional(),
   headers: z.union([z.record(z.string(), z.string()), z.function({ input: [], output: z.record(z.string(), z.string()) })]).optional(),
@@ -37,11 +34,9 @@ export const IswcMdEditorApiConfigSchema = z.object({
 });
 export type IswcMdEditorApiConfig = z.infer<typeof IswcMdEditorApiConfigSchema>;
 
-
-export const CanonKeySchema = z.union([z.literal('content'), z.literal('filename'), z.literal('updatedAt'), z.literal('updatedBy'), z.literal('id'), z.literal('sizeBytes'), z.literal('contentType')]);
+const CanonKeySchema = z.union([z.literal('content'), z.literal('filename'), z.literal('updatedAt'), z.literal('updatedBy'), z.literal('id'), z.literal('sizeBytes'), z.literal('contentType')]);
 export type CanonKey = z.infer<typeof CanonKeySchema>;
 
-
-export const SrcMapSchema = z.record(z.string(), z.unknown());
+const SrcMapSchema = z.record(z.string(), z.unknown());
 export type SrcMap = z.infer<typeof SrcMapSchema>;
 

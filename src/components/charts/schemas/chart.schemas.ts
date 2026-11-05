@@ -6,27 +6,24 @@
  */
 import { z } from "zod";
 
-export const TypedChartFactorySchema = z.unknown() /* TODO: cannot convert */;
+const TypedChartFactorySchema = z.unknown() /* TODO: cannot convert */;
 export type TypedChartFactory = z.infer<typeof TypedChartFactorySchema>;
 
-
-export const ChartDataPointSchema = z.union([z.number(), z.object({
+const ChartDataPointSchema = z.union([z.number(), z.object({
   x: z.number().optional(),
   y: z.number(),
   r: z.number().optional(),
 })]);
 export type ChartDataPoint = z.infer<typeof ChartDataPointSchema>;
 
-
-export const ChartDatasetSchema = z.object({
+const ChartDatasetSchema = z.object({
   label: z.string().optional(),
   data: z.array(ChartDataPointSchema),
   /* TODO: member [key: string]: unknown */
 });
 export type ChartDataset = z.infer<typeof ChartDatasetSchema>;
 
-
-export const ChartConfigSchema = z.object({
+const ChartConfigSchema = z.object({
   type: z.string().optional(),
   data: z.object({
   labels: z.array(z.string()).optional(),
@@ -36,16 +33,14 @@ export const ChartConfigSchema = z.object({
 });
 export type ChartConfig = z.infer<typeof ChartConfigSchema>;
 
-
-export const LegendEntrySchema = z.object({
+const LegendEntrySchema = z.object({
   label: z.string(),
   index: z.number(),
   hidden: z.boolean(),
 });
 export type LegendEntry = z.infer<typeof LegendEntrySchema>;
 
-
-export const HitRecordSchema = z.object({
+const HitRecordSchema = z.object({
   el: z.union([z.unknown() /* TODO: ref Element */, z.null()]).optional(),
   x: z.number(),
   y: z.number(),
@@ -64,8 +59,7 @@ export const HitRecordSchema = z.object({
 });
 export type HitRecord = z.infer<typeof HitRecordSchema>;
 
-
-export const ResolvedOptionsSchema = z.object({
+const ResolvedOptionsSchema = z.object({
   type: z.string(),
   horizontal: z.boolean(),
   stacked: z.boolean(),
@@ -84,12 +78,9 @@ export const ResolvedOptionsSchema = z.object({
 });
 export type ResolvedOptions = z.infer<typeof ResolvedOptionsSchema>;
 
+const DrawMarksFnSchema = z.function({ input: [z.function({ input: [z.unknown() /* TODO: ref ChartCtx */], output: z.unknown() /* TODO: cannot convert */ })], output: z.unknown() /* TODO: cannot convert */ });
 
-export const DrawMarksFnSchema = z.function({ input: [z.function({ input: [z.unknown() /* TODO: ref ChartCtx */], output: z.unknown() /* TODO: cannot convert */ })], output: z.unknown() /* TODO: cannot convert */ });
-export type DrawMarksFn = z.infer<typeof DrawMarksFnSchema>;
-
-
-export const ChartCtxSchema = z.object({
+const ChartCtxSchema = z.object({
   svg: z.unknown() /* TODO: ref HTMLElement */,
   group: z.unknown() /* TODO: ref SVGGElement */,
   plot: z.object({

@@ -1,7 +1,7 @@
 import { resolveLocale } from '@jeff-aporta/iswc-base/core/resolve-locale.js';
 import { formatBytes, toBytes } from './format-bytes.js';
 import { parseLooseDate } from './format-date.js';
-import type { NumberPreset, CurrencyPreset, AccountingPreset, FractionPreset, TextPreset, DatePreset, ExcelPreset, RelativeUnit, NumberFormatKind, RelativeStyle, RelativeNumeric, TextCase, FormatType, FormatBytesOpts } from "./schemas/format.schemas.js";
+import type { ExcelPreset, RelativeUnit, NumberFormatKind, RelativeStyle, RelativeNumeric, TextCase, FormatType, FormatBytesOpts } from "./schemas/format.schemas.js";
 import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import css from 'iswc:css';
 

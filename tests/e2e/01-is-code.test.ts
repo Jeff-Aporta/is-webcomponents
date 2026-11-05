@@ -16,7 +16,6 @@ import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/
 
 const { test, lista, before, after } = coleccionPruebas({ categoria: 'what' });
 
-
 // Textos de test SIEMPRE desde los toons (src/utils/system/*.toon.json).
 const TOON_CODE = cargarToon('iswc-code');
 const TEXTO_ESCRITURA = textoDe(TOON_CODE, 'escribirEnEditor') || '// e2e nativo';
@@ -39,9 +38,9 @@ function pagina(): Page {
   assert.ok(ctx, 'contexto no disponible');
   return ctx.page;
 }
-export type EstadoPintado = { total: number; conShadow: number; pintados: number; readonly: number; editables: number; inline: number; tokens: number; };
-export type EstadoEscrituraAntes = { value: string; lineas: number; gutter: number; };
-export type EstadoEscrituraDespues = { evs: ContadoresEventos; valueOk: boolean; lineas: number; gutter: number; activa: number; };
+type EstadoPintado = { total: number; conShadow: number; pintados: number; readonly: number; editables: number; inline: number; tokens: number; };
+type EstadoEscrituraAntes = { value: string; lineas: number; gutter: number; };
+type EstadoEscrituraDespues = { evs: ContadoresEventos; valueOk: boolean; lineas: number; gutter: number; activa: number; };
 testE2E('sin CodeMirror: sin nodos .CodeMirror, sin global y sin recursos cm-*', { timeout: 240000 }, async (t) => {
   if (!DISPONIBLE) return t.skip('faltan variables E2E');
   const page = pagina();
@@ -150,8 +149,8 @@ testE2E('escribir en el editor editable emite iswc-input/iswc-change/iswc-cursor
   t.diagnostic(`editor: ${JSON.stringify(despues.evs)} eventos; ${despues.lineas} lineas; gutter ${despues.gutter}`);
   await evidencia(page, '01c-editor-escritura');
 });
-export type EstadoMarks = { n: number; value: string; };
-export type EstadoTip = { open: boolean; texto: string; phases: FasesMarks; };
+type EstadoMarks = { n: number; value: string; };
+type EstadoTip = { open: boolean; texto: string; phases: FasesMarks; };
 testE2E('marks nativas: spans con data-mark-id y tooltip por caret', { timeout: 180000 }, async (t) => {
   if (!DISPONIBLE) return t.skip('faltan variables E2E');
   const page = pagina();

@@ -10,25 +10,7 @@
  * viven en la base. Usamos `leerConBase` para verlas en los tests.
  */
 import assert from 'node:assert/strict';
-import {
-  exists,
-  leerConBase,
-  extraerObservados,
-  extraerEventos,
-  extraerParts,
-  tieneShadow,
-  leeJsonScript,
-  parseaJson,
-  usaMutationObserver,
-  usaResizeObserver,
-  tieneEdgeCaseGuards,
-  adoptaCss,
-  estaRegistrado,
-  cleanupCompleto,
-  tieneJsDoc,
-  tieneSvg,
-  tieneCanvas,
-} from '../../_shared/exhaustivo.js';
+import { exists, leerConBase, extraerObservados, extraerParts, tieneShadow, leeJsonScript, parseaJson, usaMutationObserver, usaResizeObserver, tieneEdgeCaseGuards, adoptaCss, estaRegistrado, cleanupCompleto, tieneJsDoc, tieneSvg } from '../../_shared/exhaustivo.js';
 import { coleccionPruebas } from '../../../src/vendor-distributions/shared/testing/pruebas.ts';
 
 const { test, lista } = coleccionPruebas({ categoria: 'what' });

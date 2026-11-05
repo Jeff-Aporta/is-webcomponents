@@ -15,31 +15,30 @@ import { z } from 'zod';
  */
 
 /** Métodos HTTP que admite el documento estricto (`query`: listado con el filtro en el cuerpo). */
-export const ApiDocsMetodoSchema = z.enum(['get', 'post', 'put', 'patch', 'delete', 'query']);
-export type ApiDocsMetodo = z.infer<typeof ApiDocsMetodoSchema>;
+const ApiDocsMetodoSchema = z.enum(['get', 'post', 'put', 'patch', 'delete', 'query']);
 
 /** Id de catálogo, tag de subgrupo o plantilla: kebab-case en minúsculas. */
-export const ApiDocsIdSchema = z.string().regex(/^[a-z][a-z0-9]*(-[a-z0-9]+)*$/, 'id kebab-case en minúsculas');
+const ApiDocsIdSchema = z.string().regex(/^[a-z][a-z0-9]*(-[a-z0-9]+)*$/, 'id kebab-case en minúsculas');
 /** Icono Iconify de la colección mdi. */
-export const ApiDocsIconoSchema = z.string().regex(/^mdi:[a-z0-9-]+$/, 'icono mdi:<nombre>');
+const ApiDocsIconoSchema = z.string().regex(/^mdi:[a-z0-9-]+$/, 'icono mdi:<nombre>');
 /** Ruta del server sin el prefijo `/api`, con parámetros `{nombre}`. */
-export const ApiDocsRutaSchema = z.string().regex(/^\/[A-Za-z0-9_\-/{}.]*$/, 'ruta /x/{pk}');
+const ApiDocsRutaSchema = z.string().regex(/^\/[A-Za-z0-9_\-/{}.]*$/, 'ruta /x/{pk}');
 /** Permiso que exige el endpoint (id SEG `METODO:/ruta`, `QUERY:/x` o `CFG:/x`). */
-export const ApiDocsPermisoSchema = z.string().regex(/^[A-Z]+:\/[A-Za-z0-9_\-/{}.]*$/, 'permiso METODO:/ruta');
+const ApiDocsPermisoSchema = z.string().regex(/^[A-Z]+:\/[A-Za-z0-9_\-/{}.]*$/, 'permiso METODO:/ruta');
 /** Controller y método que atienden el endpoint (`TClaseController.metodo`). */
-export const ApiDocsControllerSchema = z.string().regex(/^T[A-Za-z0-9]+\.[A-Za-z0-9_]+$/, 'controller TClase.metodo');
+const ApiDocsControllerSchema = z.string().regex(/^T[A-Za-z0-9]+\.[A-Za-z0-9_]+$/, 'controller TClase.metodo');
 /** Código HTTP de tres dígitos. */
-export const ApiDocsCodigoSchema = z.string().regex(/^[1-5]\d\d$/, 'código HTTP de 3 dígitos');
+const ApiDocsCodigoSchema = z.string().regex(/^[1-5]\d\d$/, 'código HTTP de 3 dígitos');
 /** Texto de una línea, sin markdown de bloque. */
 const textoApiDocs = () => z.string().trim().min(1);
 
 /** Tipos de JSON Schema que describe el documento. */
-export const ApiDocsTipoSchema = z.enum(['object', 'array', 'string', 'integer', 'number', 'boolean']);
+const ApiDocsTipoSchema = z.enum(['object', 'array', 'string', 'integer', 'number', 'boolean']);
 /** Formatos de cadena que el visor reconoce. */
-export const ApiDocsFormatoSchema = z.enum(['date-time', 'date', 'uri', 'email', 'uuid', 'binary']);
+const ApiDocsFormatoSchema = z.enum(['date-time', 'date', 'uri', 'email', 'uuid', 'binary']);
 
 /** Subconjunto estricto de JSON Schema que usan parámetros, cuerpos y respuestas (recursivo). */
-export const ApiDocsJsonSchemaSchema = z.strictObject({
+const ApiDocsJsonSchemaSchema = z.strictObject({
   type: ApiDocsTipoSchema,
   description: textoApiDocs().optional(),
   format: ApiDocsFormatoSchema.optional(),
@@ -56,13 +55,11 @@ export const ApiDocsJsonSchemaSchema = z.strictObject({
     return ApiDocsJsonSchemaSchema.optional();
   },
 });
-export type ApiDocsJsonSchema = z.infer<typeof ApiDocsJsonSchemaSchema>;
 
 /** Referencia a un schema del catálogo (`#/catalog/schemas/<id>`). */
-export const ApiDocsRefSchema = z.object({ $ref: z.string().regex(/^#\/catalog\/schemas\/[a-z][a-z0-9-]*$/, 'ref #/catalog/schemas/<id>') }).strict();
-export type ApiDocsRef = z.infer<typeof ApiDocsRefSchema>;
+const ApiDocsRefSchema = z.object({ $ref: z.string().regex(/^#\/catalog\/schemas\/[a-z][a-z0-9-]*$/, 'ref #/catalog/schemas/<id>') }).strict();
 
-export const ApiDocsInfoSchema = z.object({
+const ApiDocsInfoSchema = z.object({
   title: textoApiDocs(),
   version: z.string().regex(/^\d+\.\d+\.\d+$/, 'versión semver x.y.z'),
   /** Una o dos líneas: qué expone la API (sin markdown de bloque ni diagramas). */
@@ -70,7 +67,7 @@ export const ApiDocsInfoSchema = z.object({
 }).strict();
 
 /** Cómo inicia sesión «Probar»: el portal del propio server o el orquestador de InSoft. */
-export const ApiDocsAuthSchema = z.object({
+const ApiDocsAuthSchema = z.object({
   enabled: z.boolean(),
   loginKind: z.enum(['portal', 'orquestador']),
   loginPath: z.string().startsWith('/'),
@@ -78,9 +75,9 @@ export const ApiDocsAuthSchema = z.object({
   provider: z.enum(['patyia-portal', 'orquestador']),
 }).strict();
 
-export const ApiDocsServidorSchema = z.object({ url: z.url(), description: textoApiDocs() }).strict();
+const ApiDocsServidorSchema = z.object({ url: z.url(), description: textoApiDocs() }).strict();
 
-export const ApiDocsViewerSchema = z.object({
+const ApiDocsViewerSchema = z.object({
   /** Espacio de nombres del server (`ISS`). */
   ns: z.string().regex(/^[A-Z][A-Z0-9]*$/, 'ns en mayúsculas'),
   brand: z.object({ title: textoApiDocs(), icon: ApiDocsIconoSchema }).strict(),
@@ -92,10 +89,10 @@ export const ApiDocsViewerSchema = z.object({
   servers: z.array(ApiDocsServidorSchema).min(1).optional(),
 }).strict();
 
-export const ApiDocsSubgrupoSchema = z.object({ id: ApiDocsIdSchema, name: textoApiDocs(), icon: ApiDocsIconoSchema, description: textoApiDocs() }).strict();
-export const ApiDocsTagSchema = z.object({ name: textoApiDocs(), description: textoApiDocs(), subgroups: z.array(ApiDocsSubgrupoSchema).min(1) }).strict();
+const ApiDocsSubgrupoSchema = z.object({ id: ApiDocsIdSchema, name: textoApiDocs(), icon: ApiDocsIconoSchema, description: textoApiDocs() }).strict();
+const ApiDocsTagSchema = z.object({ name: textoApiDocs(), description: textoApiDocs(), subgroups: z.array(ApiDocsSubgrupoSchema).min(1) }).strict();
 
-export const ApiDocsParametroSchema = z.object({
+const ApiDocsParametroSchema = z.object({
   name: textoApiDocs(),
   in: z.enum(['path', 'query']),
   required: z.boolean(),
@@ -103,9 +100,8 @@ export const ApiDocsParametroSchema = z.object({
   schema: ApiDocsJsonSchemaSchema,
   example: z.json().optional(),
 }).strict();
-export type ApiDocsParametro = z.infer<typeof ApiDocsParametroSchema>;
 
-export const ApiDocsCuerpoSchema = z.object({
+const ApiDocsCuerpoSchema = z.object({
   required: z.boolean(),
   description: textoApiDocs(),
   schema: z.union([ApiDocsRefSchema, ApiDocsJsonSchemaSchema]),
@@ -114,7 +110,7 @@ export const ApiDocsCuerpoSchema = z.object({
 }).strict();
 
 /** Respuesta concreta de un código (template `raw`). */
-export const ApiDocsItemRespuestaSchema = z.object({
+const ApiDocsItemRespuestaSchema = z.object({
   description: textoApiDocs(),
   schema: ApiDocsJsonSchemaSchema.optional(),
   payload: ApiDocsIdSchema.optional(),
@@ -126,7 +122,7 @@ export const ApiDocsItemRespuestaSchema = z.object({
  * 200/401/403; `authNotFound` → 200/401/404; `deleteEnvelope` → 200 con la fila borrada/401/404) o `raw`
  * con cada código declarado. `schema` (opcional en los templates) describe el contenido de `respuesta`.
  */
-export const ApiDocsRespuestasSchema = z.discriminatedUnion('template', [
+const ApiDocsRespuestasSchema = z.discriminatedUnion('template', [
   z.object({ template: z.literal('ok'), description: textoApiDocs(), payload: ApiDocsIdSchema, schema: z.union([ApiDocsRefSchema, ApiDocsJsonSchemaSchema]).optional() }).strict(),
   z.object({ template: z.literal('auth'), description: textoApiDocs(), payload: ApiDocsIdSchema, schema: z.union([ApiDocsRefSchema, ApiDocsJsonSchemaSchema]).optional() }).strict(),
   z.object({ template: z.literal('authForbidden'), description: textoApiDocs(), payload: ApiDocsIdSchema, schema: z.union([ApiDocsRefSchema, ApiDocsJsonSchemaSchema]).optional() }).strict(),
@@ -134,9 +130,8 @@ export const ApiDocsRespuestasSchema = z.discriminatedUnion('template', [
   z.object({ template: z.literal('deleteEnvelope'), description: textoApiDocs(), payload: ApiDocsIdSchema, schema: ApiDocsIdSchema }).strict(),
   z.object({ template: z.literal('raw'), items: z.record(ApiDocsCodigoSchema, ApiDocsItemRespuestaSchema).refine((i) => Object.keys(i).length > 0, 'raw sin items') }).strict(),
 ]);
-export type ApiDocsRespuestas = z.infer<typeof ApiDocsRespuestasSchema>;
 
-export const ApiDocsOperacionSchema = z.object({
+const ApiDocsOperacionSchema = z.object({
   summary: textoApiDocs().max(80),
   description: textoApiDocs().max(400),
   tags: z.tuple([textoApiDocs()]),
@@ -154,7 +149,6 @@ export const ApiDocsOperacionSchema = z.object({
   if (op.security === 'bearer' && !op.permission) ctx.addIssue({ code: 'custom', path: ['permission'], message: 'un endpoint con sesión declara su permiso' });
   if (op.security === 'none' && op.permission) ctx.addIssue({ code: 'custom', path: ['permission'], message: 'un endpoint público no declara permiso' });
 });
-export type ApiDocsOperacion = z.infer<typeof ApiDocsOperacionSchema>;
 
 const ApiDocsAdjuntoSchema = z.object({
   max: z.number().int().min(1).max(20),
@@ -164,7 +158,7 @@ const ApiDocsAdjuntoSchema = z.object({
   clipboard: z.boolean().optional(),
 }).strict();
 
-export const ApiDocsCatalogSchema = z.object({
+const ApiDocsCatalogSchema = z.object({
   /** Ejemplos de `respuesta` por id (lo que devuelve el endpoint dentro del sobre). */
   payloads: z.record(ApiDocsIdSchema, z.json()),
   /** Ejemplos de cuerpo por id (`requestBody.bodyKey`). */
@@ -243,4 +237,3 @@ export const ApiDocsDocumentoSchema = z.object({
     for (const id of Object.keys(tablas[tipo])) if (!usados[tipo].has(id)) falta(['catalog', tipo, id], `«${id}» de catalog.${tipo} no lo usa ningún endpoint`);
   }
 });
-export type ApiDocsDocumento = z.infer<typeof ApiDocsDocumentoSchema>;

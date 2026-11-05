@@ -13,7 +13,7 @@ const GLOBAL_KEY = '__isSheetCache';
 
 let prependInstalled = false;
 
-export function createSheetCache(opts: SheetCacheOpts = {}): SheetCacheApi | null {
+function createSheetCache(opts: SheetCacheOpts = {}): SheetCacheApi | null {
   const cacheName = String(opts.cacheName || 'is-sheets-v1');
   const globalKey = String(opts.globalKey || GLOBAL_KEY);
   const patchPrepend = opts.patchPrepend !== false;
@@ -226,4 +226,3 @@ export function getSheetCache(globalKey: string = GLOBAL_KEY): SheetCacheApi | n
   return cache || legacy || null;
 }
 
-export { GLOBAL_KEY as SHEET_CACHE_GLOBAL_KEY };

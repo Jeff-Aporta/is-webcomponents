@@ -6,7 +6,7 @@
  */
 import { z } from "zod";
 
-export const WrapOptsSchema = z.object({
+const WrapOptsSchema = z.object({
   text: z.string(),
   maxWidth: z.number(),
   maxHeight: z.number(),
@@ -21,15 +21,13 @@ export const WrapOptsSchema = z.object({
 });
 export type WrapOpts = z.infer<typeof WrapOptsSchema>;
 
-
-export const WrappedLineSchema = z.object({
+const WrappedLineSchema = z.object({
   text: z.string(),
   truncated: z.boolean(),
 });
 export type WrappedLine = z.infer<typeof WrappedLineSchema>;
 
-
-export const WrapResultSchema = z.object({
+const WrapResultSchema = z.object({
   lines: z.array(WrappedLineSchema),
   requiredHeight: z.number(),
   requiredHeightUsed: z.number(),
@@ -37,8 +35,7 @@ export const WrapResultSchema = z.object({
 });
 export type WrapResult = z.infer<typeof WrapResultSchema>;
 
-
-export const TSpanSpecSchema = z.object({
+const TSpanSpecSchema = z.object({
   text: z.string(),
   x: z.number(),
   y: z.number(),

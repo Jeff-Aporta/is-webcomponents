@@ -1,8 +1,7 @@
 // values.ts — valores del motor: errores, escalares, matrices, referencias y coerciones.
 
-
 /** Error de celda. Se compara por identidad con las constantes de ERR. */
-import type { ErrorCode, Scalar, Matrix, EvalValue } from './values.schemas.ts';
+import type { ErrorCode, Scalar } from './values.schemas.ts';
 export class CellError {
   constructor(readonly code: ErrorCode) {}
   toString(): string { return this.code; }
@@ -22,8 +21,6 @@ export function errorFromCode(code: string): CellError | null {
   return BY_CODE.get(code.toUpperCase()) ?? null;
 }
 
-
-
 /** Referencia evaluada: rango de una hoja. */
 export class RefValue {
   constructor(readonly sheet: number, readonly r1: number, readonly c1: number, readonly r2: number, readonly c2: number) {}
@@ -36,7 +33,6 @@ export class RefValue {
 export class LambdaValue {
   constructor(readonly params: string[], readonly body: unknown, readonly env: unknown) {}
 }
-
 
 /** Número desde texto, tal como lo coerciona una fórmula. NaN si no es número. */
 export function parseNumberText(t: string): number {
@@ -91,7 +87,7 @@ export function toBool(v: Scalar): boolean {
 }
 
 /** Iguala dos números hasta la cifra 15, como la comparación de Excel. */
-export function nearlyEqual(a: number, b: number): boolean {
+function nearlyEqual(a: number, b: number): boolean {
   if (a === b) return true;
   return Number(a.toPrecision(15)) === Number(b.toPrecision(15));
 }

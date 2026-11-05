@@ -4,17 +4,17 @@
  */
 import { z } from "zod";
 
-export const LoginChoiceSchema = z.object({
+const LoginChoiceSchema = z.object({
   id: z.string(),
   label: z.string(),
   icon: z.string().optional(),
 });
 export type LoginChoice = z.infer<typeof LoginChoiceSchema>;
 
-export const LoginModeSchema = z.enum(['password', 'token']);
+const LoginModeSchema = z.enum(['password', 'token']);
 export type LoginMode = z.infer<typeof LoginModeSchema>;
 
-export const LoginDropdownSubmitSchema = z.object({
+const LoginDropdownSubmitSchema = z.object({
   mode: LoginModeSchema,
   username: z.string(),
   password: z.string(),

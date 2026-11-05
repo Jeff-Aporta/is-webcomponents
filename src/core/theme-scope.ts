@@ -6,7 +6,7 @@
  * erradicaron del CSS en W48.
  */
 
-export const THEME_SCOPE =
+const THEME_SCOPE =
   '[container-theme], .container-theme, [data-theme]';
 
 /**

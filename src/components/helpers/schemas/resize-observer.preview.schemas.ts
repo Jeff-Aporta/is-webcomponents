@@ -6,7 +6,7 @@
  */
 import { z } from "zod";
 
-export const ResizeObserverEntryLikeSchema = z.object({
+const ResizeObserverEntryLikeSchema = z.object({
   contentBoxSize: z.array(z.unknown() /* TODO: cannot convert */).optional(),
   borderBoxSize: z.array(z.unknown() /* TODO: cannot convert */).optional(),
   contentRect: z.object({
@@ -16,14 +16,12 @@ export const ResizeObserverEntryLikeSchema = z.object({
 });
 export type ResizeObserverEntryLike = z.infer<typeof ResizeObserverEntryLikeSchema>;
 
-
-export const ResizeDetailSchema = z.object({
+const ResizeDetailSchema = z.object({
   entries: z.array(z.unknown() /* TODO: cannot convert */).optional(),
 });
 export type ResizeDetail = z.infer<typeof ResizeDetailSchema>;
 
-
-export const BoxSizeSchema = z.object({
+const BoxSizeSchema = z.object({
   w: z.union([z.number(), z.null()]),
   h: z.union([z.number(), z.null()]),
 });

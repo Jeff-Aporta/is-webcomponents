@@ -6,14 +6,13 @@
  */
 import { z } from "zod";
 
-export const SpreadPointSchema = z.object({
+const SpreadPointSchema = z.object({
   x: z.number(),
   y: z.number(),
 });
 export type SpreadPoint = z.infer<typeof SpreadPointSchema>;
 
-
-export const SpreadItemSchema = z.object({
+const SpreadItemSchema = z.object({
   e: z.object({
   path: z.string(),
 }),

@@ -1,5 +1,4 @@
 import { TRADrag } from "./row-adapter-drag.js";
-import type { TNode, TreeActionEntry } from '@jeff-aporta/iswc-base/components/isp/schemas/tree-view-types.schemas.js';
 import type { _SummaryEvent, _RowAdapter, TRAAccessible } from "@jeff-aporta/iswc-base/components/isp/schemas/tree-view-row-adapter.schemas.js";
 
 /** Detalle con un evento custom del row-adapter (summary/pointer). */

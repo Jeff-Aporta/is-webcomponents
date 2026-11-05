@@ -7,7 +7,7 @@ import {
   TK_DIAGRAM_GRID,
   applyForbiddenRegions,
 } from '@jeff-aporta/iswc-base/core/diagram-grid.js';
-import type { GridPoint, CostGrid, ForbiddenRegion, PixelPoint, RouteOpts, AestheticsOpts, SequenceRoute } from "@jeff-aporta/iswc-base/components/diagrams/schemas/diagram-astar.schemas.js";
+import type { GridPoint, CostGrid, PixelPoint, RouteOpts, SequenceRoute } from "@jeff-aporta/iswc-base/components/diagrams/schemas/diagram-astar.schemas.js";
 
 /** Punto en la rejilla: par (col, row) enteras. */
 
@@ -275,67 +275,13 @@ export function countTurns(points: readonly GridPoint[] | null | undefined): num
   return turns;
 }
 
-/** Longitud Manhattan total de la polyline (suma de |dx|+|dy|). */
-export function manhattanLength(points: readonly GridPoint[] | null | undefined): number {
-  if (!points || points.length < 2) return 0;
-  let total = 0;
-  for (let i = 1; i < points.length; i++) {
-    total += Math.abs(points[i]!.col - points[i - 1]!.col) + Math.abs(points[i]!.row - points[i - 1]!.row);
-  }
-  return total;
-}
-
-/**
- * Genera candidatos de waypoints a lo largo del "corredor" entre start y end.
- * Si start→end es horizontal, los candidatos son (midCol, ±offset) por encima
- * y por debajo del eje. Si es vertical, análogo. Sirve para sugerir rutas
- * que evitan obstáculos grandes atravesando por arriba o por abajo.
- */
-export function suggestWaypoints(start: GridPoint, end: GridPoint, g: CostGrid, count: number = 4): GridPoint[] {
-  const dx = end.col - start.col;
-  const dy = end.row - start.row;
-  const out: GridPoint[] = [];
-  if (Math.abs(dx) >= Math.abs(dy)) {
-    const midCol = Math.round((start.col + end.col) / 2);
-    const halfRows = Math.max(2, Math.floor(g.rows / (count + 2)));
-    for (let i = 1; i <= count; i++) {
-      const off = i * halfRows;
-      out.push({ col: midCol, row: Math.max(1, Math.min(g.rows - 2, start.row - off)) });
-      out.push({ col: midCol, row: Math.max(1, Math.min(g.rows - 2, start.row + off)) });
-    }
-  } else {
-    const midRow = Math.round((start.row + end.row) / 2);
-    const halfCols = Math.max(2, Math.floor(g.cols / (count + 2)));
-    for (let i = 1; i <= count; i++) {
-      const off = i * halfCols;
-      out.push({ col: Math.max(1, Math.min(g.cols - 2, start.col - off)), row: midRow });
-      out.push({ col: Math.max(1, Math.min(g.cols - 2, start.col + off)), row: midRow });
-    }
-  }
-  return out;
-}
-
 /**
  * Prueba la ruta directa + N rutas con waypoints sugeridos, y devuelve la
  * de menor "costo estético" = turnos + longitud (con peso). Útil cuando el
  * ruteo directo cae en diagonal zigzagueante y queremos forzar un corredor.
  */
 
-export function routeWithAesthetics(start: GridPoint, end: GridPoint, g: CostGrid, opts: AestheticsOpts = {}): GridPoint[] {
-  const suggest = opts.suggestCount ?? 4;
-  const turnWeight = opts.turnWeight ?? 4;
-  const candidates: GridPoint[] = [start, ...suggestWaypoints(start, end, g, suggest), end];
-  let best: { path: GridPoint[]; cost: number } | null = null;
-  for (let i = 0; i < candidates.length - 1; i++) {
-    const wp = candidates.slice(i + 1, -1);
-    const path = routeOrthogonal(start, end, g, { ...opts, waypoints: wp });
-    const cost = countTurns(path) * turnWeight + manhattanLength(path);
-    if (!best || cost < best.cost) best = { path, cost };
-  }
-  return best?.path ?? routeOrthogonal(start, end, g, opts);
-}
-
-export function gridToPixel(p: GridPoint, grid: number = TK_DIAGRAM_GRID): PixelPoint {
+function gridToPixel(p: GridPoint, grid: number = TK_DIAGRAM_GRID): PixelPoint {
   return { x: p.col * grid, y: p.row * grid };
 }
 

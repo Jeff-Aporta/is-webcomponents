@@ -14,14 +14,13 @@ import type { FilaDisplay } from '@jeff-aporta/iswc-base/components/data/utils/a
 export type NivelGrupo = { colId: string; field: string; valor: (n: RowNode) => unknown; clave?: (valor: unknown, n: RowNode) => string; etiqueta: (valor: unknown) => string; };
 export type Acumulado = { suma: number; sumaBig: bigint | null; numericos: number; total: number; min: unknown; max: unknown; primero: unknown; ultimo: unknown; vacio: boolean; valores: unknown[] | null; };
 export type NodoArbol = { id: string; padre: NodoArbol | null; colId: string; field: string; clave: string; valor: unknown; etiqueta: string; nivel: number; hijos: NodoArbol[]; mapa: Map<string, NodoArbol>; directas: RowNode[]; hojas: RowNode[]; agg: Record<string, unknown>; acum: Map<string, Acumulado>; nodo: RowNode | null; };
-export type ParamsAgg = { values: unknown[]; rowNode: NodoArbol; colDef?: unknown; column?: unknown; api?: unknown; context?: unknown; };
+type ParamsAgg = { values: unknown[]; rowNode: NodoArbol; colDef?: unknown; column?: unknown; api?: unknown; context?: unknown; };
 export type FuncionAgg = (p: ParamsAgg) => unknown;
 export type ValorAgg = { colId: string; func: string | FuncionAgg; valor: (n: RowNode) => unknown; colDef?: unknown; column?: unknown; };
 export type OpcionesAgg = { funciones?: Record<string, FuncionAgg>; api?: unknown; contexto?: unknown; porGrupo?: (grupo: NodoArbol) => Record<string, unknown> | null | undefined; clavesPivote?: (hoja: RowNode) => string[]; soloPivote?: boolean; idPivote?: (clave: string, colId: string) => string; };
 export type CriterioGrupo = { colId: string; dir: 'asc' | 'desc'; comparar?: (a: unknown, b: unknown) => number; };
 export type PosicionTotal = 'top' | 'bottom' | null;
 export type OpcionesAplanar = { abierto: (g: NodoArbol) => boolean; totalGrupo?: PosicionTotal | ((g: NodoArbol) => PosicionTotal); totalGeneral?: PosicionTotal; ocultarPadresAbiertos?: boolean; ocultarHijoUnico?: boolean | 'leafGroupsOnly'; sinHojas?: boolean; textoTotal?: (g: NodoArbol | null) => string; formatear?: (colId: string, valor: unknown) => string; };
-export type FilaTotal = FilaDisplay & { kind: 'total'; agg: Record<string, unknown>; grupoId: string | null; etiqueta: string; };
 
 /* ── Pivote ───────────────────────────────────────────────────────────── */
 
@@ -39,7 +38,7 @@ export type ResultadoTree = { raiz: NodoArbol; nodos: RowNode[]; };
 
 /* ── Transacciones ────────────────────────────────────────────────────── */
 
-export const TransaccionSchema = z.object({
+const TransaccionSchema = z.object({
   add: z.array(z.record(z.string(), z.unknown())).nullish(),
   addIndex: z.number().int().min(0).nullish(),
   update: z.array(z.record(z.string(), z.unknown())).nullish(),
@@ -57,23 +56,23 @@ export type EstadoBloque = 'needsLoading' | 'loading' | 'loaded' | 'failed';
 export type BloqueCache = { id: number; estado: EstadoBloque; filas: RowData[]; desde: number; toque: number; version: number; };
 export type PeticionBloque = { startRow: number; endRow: number; exito: (filas: RowData[], ultima?: number | null) => void; fallo: () => void; };
 export type OpcionesCache = { tamBloque: number; maxBloques?: number | null; maxConcurrentes?: number | null; desborde: number; inicial: number; cargarBloques?: boolean; pedir: (p: PeticionBloque) => void; alCambiar: () => void; };
-export type RespuestaInfinita = { startRow: number; endRow: number; sortModel: unknown[]; filterModel: unknown; context: unknown; successCallback: (filas: RowData[], ultima?: number | null) => void; failCallback: () => void; };
+type RespuestaInfinita = { startRow: number; endRow: number; sortModel: unknown[]; filterModel: unknown; context: unknown; successCallback: (filas: RowData[], ultima?: number | null) => void; failCallback: () => void; };
 export type DatasourceInfinito = { getRows: (p: RespuestaInfinita) => void; destroy?: () => void; rowCount?: number; };
 export type ColServidor = { id: string; displayName: string; field: string; aggFunc?: unknown; };
-export type PeticionServidor = { startRow: number; endRow: number; rowGroupCols: ColServidor[]; valueCols: ColServidor[]; pivotCols: ColServidor[]; pivotMode: boolean; groupKeys: string[]; filterModel: unknown; sortModel: unknown[]; };
+type PeticionServidor = { startRow: number; endRow: number; rowGroupCols: ColServidor[]; valueCols: ColServidor[]; pivotCols: ColServidor[]; pivotMode: boolean; groupKeys: string[]; filterModel: unknown; sortModel: unknown[]; };
 export type ExitoServidor = { rowData: RowData[]; rowCount?: number | null; groupLevelInfo?: unknown; pivotResultFields?: string[]; };
-export type ParamsServidor = { request: PeticionServidor; parentNode: unknown; context: unknown; api: unknown; success: (r: ExitoServidor) => void; fail: () => void; };
+type ParamsServidor = { request: PeticionServidor; parentNode: unknown; context: unknown; api: unknown; success: (r: ExitoServidor) => void; fail: () => void; };
 export type DatasourceServidor = { getRows: (p: ParamsServidor) => void; destroy?: () => void; };
 export type RutaServidor = string[];
 export type RefrescoServidor = { route?: RutaServidor; purge?: boolean; };
 export type TransaccionServidor = Transaccion & { route?: RutaServidor; };
 export type ResultadoServidor = { status: 'Applied' | 'StoreNotFound' | 'StoreLoading' | 'StoreWaitingToLoad' | 'StoreLoadingFailed' | 'Cancelled'; add?: RowNode[]; update?: RowNode[]; remove?: RowNode[]; };
-export type ParamsViewport = { setRowCount: (n: number, mantener?: boolean) => void; setRowData: (filas: Record<number, RowData>) => void; getRow: (i: number) => RowNode | null; };
+type ParamsViewport = { setRowCount: (n: number, mantener?: boolean) => void; setRowData: (filas: Record<number, RowData>) => void; getRow: (i: number) => RowNode | null; };
 export type DatasourceViewport = { init: (p: ParamsViewport) => void; setViewportRange: (primera: number, ultima: number) => void; destroy?: () => void; };
 
 /* ── Exportacion ──────────────────────────────────────────────────────── */
 
-export const ParamsExportSchema = z.looseObject({
+const ParamsExportSchema = z.looseObject({
   fileName: z.string().optional(),
   sheetName: z.string().optional(),
   columnSeparator: z.string().optional(),
@@ -98,7 +97,7 @@ export const ParamsExportSchema = z.looseObject({
   fontSize: z.number().optional(),
 });
 export type ParamsExport = z.infer<typeof ParamsExportSchema>;
-export type TipoFilaExport = 'hoja' | 'grupo' | 'total';
+type TipoFilaExport = 'hoja' | 'grupo' | 'total';
 export type ColExport = { colId: string; encabezado: string; ancho: number; tipo: string; fijada: boolean; clase?: string; claseEncabezado?: string; };
 export type FilaExport = { tipo: TipoFilaExport; nivel: number; valores: unknown[]; textos: string[]; contraida: boolean; };
 export type CeldaLibre = { data?: { value?: unknown; type?: string } | null; styleId?: string; mergeAcross?: number; };

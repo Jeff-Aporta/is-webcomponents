@@ -6,11 +6,9 @@
  */
 import { z } from "zod";
 
-export const WaterfallKindSchema = z.union([z.literal('up'), z.literal('down'), z.literal('total')]);
-export type WaterfallKind = z.infer<typeof WaterfallKindSchema>;
+const WaterfallKindSchema = z.union([z.literal('up'), z.literal('down'), z.literal('total')]);
 
-
-export const WaterfallBarSchema = z.object({
+const WaterfallBarSchema = z.object({
   index: z.number(),
   start: z.number(),
   end: z.number(),
@@ -18,8 +16,7 @@ export const WaterfallBarSchema = z.object({
 });
 export type WaterfallBar = z.infer<typeof WaterfallBarSchema>;
 
-
-export const WaterfallDatasetSchema = z.intersection(z.unknown() /* TODO: ref ChartDataset */, z.object({
+const WaterfallDatasetSchema = z.intersection(z.unknown() /* TODO: ref ChartDataset */, z.object({
   totals: z.array(z.unknown() /* TODO: cannot convert */).optional(),
 }));
 export type WaterfallDataset = z.infer<typeof WaterfallDatasetSchema>;

@@ -6,17 +6,15 @@
  */
 import { z } from "zod";
 
-export const AgGridApiSchema = z.object({
+const AgGridApiSchema = z.object({
   selectAll: z.function({ input: [], output: z.void() }).optional(),
   exportCSV: z.function({ input: [z.string()], output: z.void() }).optional(),
   goToPage: z.function({ input: [z.number()], output: z.void() }).optional(),
   setDensity: z.function({ input: [z.union([z.literal('compact'), z.literal('normal'), z.literal('comfortable')])], output: z.void() }).optional(),
   resetPersistedState: z.function({ input: [], output: z.void() }).optional(),
 });
-export type AgGridApi = z.infer<typeof AgGridApiSchema>;
 
-
-export const IswcAgGridElSchema = z.object({
+const IswcAgGridElSchema = z.object({
   api: AgGridApiSchema.optional(),
 });
 export type IswcAgGridEl = z.infer<typeof IswcAgGridElSchema>;

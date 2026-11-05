@@ -10,7 +10,7 @@ import { pathEndDirection, pathPoints } from './utils/diagram-arrow.js';
 import { tokenizeCode } from '@jeff-aporta/iswc-base/core/code-highlight.js';
 import { captureEmbeddedDiagram, embedSvgElement, resolveEmbedDiagram } from './utils/diagram-embed.js';
 import type { EmbedCapture, EmbedSize } from './schemas/diagram-embed.schemas.js';
-import type { FlowLayout, FlowLayoutNode, FlowLayoutEdge, FlowLayoutOverrides, FlowResolvedSpec, FlowNodeSpec } from './schemas/flowchart-spec.schemas.js';
+import type { FlowLayout, FlowLayoutNode, FlowLayoutOverrides, FlowResolvedSpec, FlowNodeSpec } from './schemas/flowchart-spec.schemas.js';
 import { PathTurtle as SequenceTurtle } from '@jeff-aporta/iswc-base/core/path-turtle.js';
 import type { PathTurtle } from '@jeff-aporta/iswc-base/core/path-turtle.js';
 import { tkHueToHex } from '@jeff-aporta/iswc-base/core/tk-hue.js';
@@ -71,9 +71,6 @@ const COLOR_CODIGO: Record<string, string> = {
 
 /** Layouts ya calculados por firma de su entrada (ver render). */
 const LAYOUTS = new Map<string, FlowLayout>();
-
-/** Relleno de la bola del `-(O-`: el mismo del lollipop del diagrama de componentes (insoft). */
-const SVG_NS = 'http://www.w3.org/2000/svg';
 
 /** Tokens de `animation` conocidos (otros se ignoran para no romper). */
 const VALID_ANIMATION: Set<string> = new Set(['flow']);

@@ -17,7 +17,6 @@ const { test, lista } = coleccionPruebas({ categoria: 'what' });
 
 const denoTest = denoTestCon(test);
 
-
 type P = { x: number; y: number };
 type Caja = { x: number; y: number; w: number; h: number };
 const dentro = (p: P, c: Caja, m = 1): boolean => p.x > c.x + m && p.x < c.x + c.w - m && p.y > c.y + m && p.y < c.y + c.h - m;
@@ -112,7 +111,7 @@ const codosDe = (pts: readonly P[]): P[] =>
  *     codo de dos aristas que salen del mismo nodo: es el tronco compartido del abanico);
  *   - un escalón corto: dos codos consecutivos de la misma arista a menos de `RADIO_CODO`.
  */
-export function fallasVecindadCodos(edges: ReadonlyArray<{ from: string; to: string; path: string }>): string[] {
+function fallasVecindadCodos(edges: ReadonlyArray<{ from: string; to: string; path: string }>): string[] {
   const fallas: string[] = [];
   const todas = edges.map((e) => ({ e, codos: codosDe(pathPoints(e.path)) }));
   const cerca = (p: P, q: P): boolean => Math.abs(p.x - q.x) <= RADIO_CODO && Math.abs(p.y - q.y) <= RADIO_CODO;

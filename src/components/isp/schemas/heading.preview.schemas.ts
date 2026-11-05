@@ -6,7 +6,7 @@
  */
 import { z } from "zod";
 
-export const _HeadingLikeSchema = z.object({
+const _HeadingLikeSchema = z.object({
   level: z.string(),
   color: z.union([z.string(), z.null()]),
   mix: z.union([z.string(), z.null()]),
@@ -15,8 +15,7 @@ export const _HeadingLikeSchema = z.object({
 });
 export type _HeadingLike = z.infer<typeof _HeadingLikeSchema>;
 
-
-export const _InputLikeSchema = z.object({
+const _InputLikeSchema = z.object({
   value: z.string(),
   checked: z.boolean(),
   disabled: z.boolean(),

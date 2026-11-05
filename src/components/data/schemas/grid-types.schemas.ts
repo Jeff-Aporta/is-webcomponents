@@ -6,19 +6,16 @@
  */
 import { z } from "zod";
 
-export const CellValueSchema = z.unknown();
+const CellValueSchema = z.unknown();
 export type CellValue = z.infer<typeof CellValueSchema>;
 
-
-export const FilterValueSchema = z.array(z.union([z.string(), z.number(), z.boolean(), z.unknown() /* TODO: cannot convert */]));
+const FilterValueSchema = z.array(z.union([z.string(), z.number(), z.boolean(), z.unknown() /* TODO: cannot convert */]));
 export type FilterValue = z.infer<typeof FilterValueSchema>;
 
-
-export const RowSchema = z.record(z.string(), CellValueSchema);
+const RowSchema = z.record(z.string(), CellValueSchema);
 export type Row = z.infer<typeof RowSchema>;
 
-
-export const OperatorSchema = z.object({
+const OperatorSchema = z.object({
   /* TODO: member readonly value: string */
   /* TODO: member readonly label: string */
   /* TODO: member readonly input?: boolean */
@@ -29,8 +26,7 @@ export const OperatorSchema = z.object({
 });
 export type Operator = z.infer<typeof OperatorSchema>;
 
-
-export const ColumnDefSchema = z.object({
+const ColumnDefSchema = z.object({
   /* TODO: member readonly field?: string */
   /* TODO: member readonly type?: string */
   /* TODO: member readonly headerName?: string */
@@ -70,12 +66,10 @@ export const ColumnDefSchema = z.object({
 });
 export type ColumnDef = z.infer<typeof ColumnDefSchema>;
 
-
-export const ComparatorSchema = z.function({ input: [z.unknown() /* TODO: ref CellValue */, z.unknown() /* TODO: ref CellValue */], output: z.number() });
+const ComparatorSchema = z.function({ input: [z.unknown() /* TODO: ref CellValue */, z.unknown() /* TODO: ref CellValue */], output: z.number() });
 export type Comparator = z.infer<typeof ComparatorSchema>;
 
-
-export const ColumnTypeSchema = z.object({
+const ColumnTypeSchema = z.object({
   /* TODO: member readonly align: string */
   /* TODO: member readonly headerAlign?: string */
   /* TODO: member readonly comparator?: Comparator */
@@ -92,20 +86,17 @@ export const ColumnTypeSchema = z.object({
 });
 export type ColumnType = z.infer<typeof ColumnTypeSchema>;
 
-
-export const ColumnTypeNameSchema = z.unknown() /* TODO: cannot convert */;
+const ColumnTypeNameSchema = z.unknown() /* TODO: cannot convert */;
 export type ColumnTypeName = z.infer<typeof ColumnTypeNameSchema>;
 
-
-export const FilterRuleSchema = z.object({
+const FilterRuleSchema = z.object({
   /* TODO: member readonly field?: string */
   /* TODO: member readonly operator?: string */
   /* TODO: member readonly value?: CellValue */
 });
 export type FilterRule = z.infer<typeof FilterRuleSchema>;
 
-
-export const AggregationFnSchema = z.object({
+const AggregationFnSchema = z.object({
   /* TODO: member readonly label: string */
   /* TODO: member readonly types: readonly string[] | null */
   apply: z.function({ input: [z.array(z.unknown() /* TODO: cannot convert */), z.string()], output: z.unknown() /* TODO: ref CellValue */ }),

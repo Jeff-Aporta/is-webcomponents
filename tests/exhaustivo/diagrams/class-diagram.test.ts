@@ -6,23 +6,7 @@
 import assert from 'node:assert/strict';
 
 
-import {
-  exists,
-  leerConBase,
-  tieneSvg,
-  extraerObservados,
-  extraerEventos,
-  extraerParts,
-  tieneShadow,
-  leeJsonScript,
-  parseaJson,
-  usaMutationObserver,
-  tieneEdgeCaseGuards,
-  adoptaCss,
-  estaRegistrado,
-  cleanupCompleto,
-  tieneJsDoc,
-} from '../../_shared/exhaustivo.js';
+import { exists, leerConBase, extraerObservados, extraerEventos, extraerParts, tieneShadow, leeJsonScript, parseaJson, usaMutationObserver, tieneEdgeCaseGuards, adoptaCss } from '../../_shared/exhaustivo.js';
 import { coleccionPruebas } from '../../../src/vendor-distributions/shared/testing/pruebas.ts';
 
 const { test, lista } = coleccionPruebas({ categoria: 'what' });

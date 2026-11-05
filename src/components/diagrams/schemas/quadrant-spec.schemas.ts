@@ -6,7 +6,7 @@
  */
 import { z } from "zod";
 
-export const QuadrantPointSchema = z.object({
+const QuadrantPointSchema = z.object({
   id: z.string(),
   label: z.string(),
   x: z.number(),
@@ -17,25 +17,21 @@ export const QuadrantPointSchema = z.object({
 });
 export type QuadrantPoint = z.infer<typeof QuadrantPointSchema>;
 
-
-export const QuadrantGroupSchema = z.object({
+const QuadrantGroupSchema = z.object({
   id: z.string(),
   name: z.string(),
   hue: z.number(),
 });
 export type QuadrantGroup = z.infer<typeof QuadrantGroupSchema>;
 
-
-export const QuadrantAxesSchema = z.object({
+const QuadrantAxesSchema = z.object({
   left: z.string().optional(),
   right: z.string().optional(),
   bottom: z.string().optional(),
   top: z.string().optional(),
 });
-export type QuadrantAxes = z.infer<typeof QuadrantAxesSchema>;
 
-
-export const QuadrantQuadrantsSchema = z.object({
+const QuadrantQuadrantsSchema = z.object({
   topRight: z.string(),
   bottomRight: z.string(),
   bottomLeft: z.string(),
@@ -43,8 +39,7 @@ export const QuadrantQuadrantsSchema = z.object({
 });
 export type QuadrantQuadrants = z.infer<typeof QuadrantQuadrantsSchema>;
 
-
-export const QuadrantSpecSchema = z.object({
+const QuadrantSpecSchema = z.object({
   title: z.string().optional(),
   subtitle: z.string().optional(),
   xAxis: QuadrantAxesSchema,
@@ -55,34 +50,13 @@ export const QuadrantSpecSchema = z.object({
 });
 export type QuadrantSpec = z.infer<typeof QuadrantSpecSchema>;
 
-
-export const QuadrantJsonOutSchema = z.object({
-  title: z.string().optional(),
-  subtitle: z.string().optional(),
-  xAxis: QuadrantAxesSchema.optional(),
-  yAxis: QuadrantAxesSchema.optional(),
-  quadrants: QuadrantQuadrantsSchema.optional(),
-  groups: z.array(QuadrantGroupSchema).optional(),
-  points: z.array(z.object({
-  label: z.string(),
-  x: z.number(),
-  y: z.number(),
-  id: z.string().optional(),
-  group: z.string().optional(),
-  desc: z.string().optional(),
-})),
-});
-export type QuadrantJsonOut = z.infer<typeof QuadrantJsonOutSchema>;
-
-
-export const PlotRectSchema = z.object({
+const PlotRectSchema = z.object({
   x: z.number(),
   y: z.number(),
   w: z.number(),
   h: z.number(),
 });
 export type PlotRect = z.infer<typeof PlotRectSchema>;
-
 
 /** `computeQuadrantLayout` devuelve `{ ...pt, cx, cy, r, labelDy }`: el punto original más su geometría. */
 export const QuadrantLayoutPointSchema = QuadrantPointSchema.extend({
@@ -93,8 +67,7 @@ export const QuadrantLayoutPointSchema = QuadrantPointSchema.extend({
 });
 export type QuadrantLayoutPoint = z.infer<typeof QuadrantLayoutPointSchema>;
 
-
-export const QuadrantLayoutQuadrantSchema = z.object({
+const QuadrantLayoutQuadrantSchema = z.object({
   id: z.string(),
   name: z.string(),
   cx: z.number(),
@@ -102,16 +75,14 @@ export const QuadrantLayoutQuadrantSchema = z.object({
 });
 export type QuadrantLayoutQuadrant = z.infer<typeof QuadrantLayoutQuadrantSchema>;
 
-
-export const QuadrantLayoutAxisLabelSchema = z.object({
+const QuadrantLayoutAxisLabelSchema = z.object({
   text: z.string(),
   x: z.number(),
   y: z.number(),
 });
 export type QuadrantLayoutAxisLabel = z.infer<typeof QuadrantLayoutAxisLabelSchema>;
 
-
-export const QuadrantLayoutAxesSchema = z.object({
+const QuadrantLayoutAxesSchema = z.object({
   midX: z.number(),
   midY: z.number(),
   xLeft: QuadrantLayoutAxisLabelSchema.optional(),
@@ -121,8 +92,7 @@ export const QuadrantLayoutAxesSchema = z.object({
 });
 export type QuadrantLayoutAxes = z.infer<typeof QuadrantLayoutAxesSchema>;
 
-
-export const QuadrantLayoutSchema = z.object({
+const QuadrantLayoutSchema = z.object({
   width: z.number(),
   height: z.number(),
   plot: PlotRectSchema,

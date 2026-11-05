@@ -7,7 +7,7 @@
 import { z } from "zod";
 import type { TNode, FloatCardConfig } from "./tree-view-types.schemas.js";
 
-export const TreeAdapterLikeSchema = z.object({
+const TreeAdapterLikeSchema = z.object({
   context: z.record(z.string(), z.unknown()),
   disabled: z.boolean(),
   isProtected: z.boolean(),

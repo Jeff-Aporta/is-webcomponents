@@ -6,7 +6,7 @@
  */
 import { z } from "zod";
 
-export const ResolvedIconTokenSchema = z.object({
+const ResolvedIconTokenSchema = z.object({
   iconId: z.string(),
   hue: z.number().optional(),
   size: z.number().optional(),
@@ -15,8 +15,7 @@ export const ResolvedIconTokenSchema = z.object({
 });
 export type ResolvedIconToken = z.infer<typeof ResolvedIconTokenSchema>;
 
-
-export const SvgIconGroupOptsSchema = z.object({
+const SvgIconGroupOptsSchema = z.object({
   x: z.number().optional(),
   y: z.number().optional(),
   size: z.number().optional(),
@@ -31,7 +30,7 @@ export type SvgIconGroupOpts = z.infer<typeof SvgIconGroupOptsSchema>;
  * color propio o el del icono y alpha (por defecto translúcido). `size` es
  * el lado del fondo; el icono ocupa ~62 %.
  */
-export const SvgIconBadgeOptsSchema = z.object({
+const SvgIconBadgeOptsSchema = z.object({
   cx: z.number(),
   cy: z.number(),
   size: z.number().optional(),
@@ -44,8 +43,7 @@ export const SvgIconBadgeOptsSchema = z.object({
 });
 export type SvgIconBadgeOpts = z.infer<typeof SvgIconBadgeOptsSchema>;
 
-
-export const IconInlineOptsSchema = z.object({
+const IconInlineOptsSchema = z.object({
   size: z.union([z.string(), z.number()]).optional(),
   className: z.string().optional(),
   hue: z.number().optional(),
@@ -53,12 +51,10 @@ export const IconInlineOptsSchema = z.object({
 });
 export type IconInlineOpts = z.infer<typeof IconInlineOptsSchema>;
 
-
-export const IconHtmlRenderSchema = z.string();
+const IconHtmlRenderSchema = z.string();
 export type IconHtmlRender = z.infer<typeof IconHtmlRenderSchema>;
 
-
-export const IconRunSchema = z.union([z.object({
+const IconRunSchema = z.union([z.object({
   kind: z.literal('text'),
   text: z.string(),
 }), z.object({
@@ -67,8 +63,7 @@ export const IconRunSchema = z.union([z.object({
 })]);
 export type IconRun = z.infer<typeof IconRunSchema>;
 
-
-export const LeadingIconSchema = z.object({
+const LeadingIconSchema = z.object({
   iconId: z.string(),
   hue: z.union([z.number(), z.undefined()]),
   color: z.string().optional(),

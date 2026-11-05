@@ -10,8 +10,8 @@ import type { PuertosInteraccion, Manejadores } from './interaccion.schemas.js';
 import { clearSelection, selectAll, toggleRowSelection } from '@jeff-aporta/iswc-base/components/data/utils/datagrid-core/selection.js';
 import type { Menus } from './menus.schemas.js';
 import type { Motor } from './motor.schemas.js';
-import type { EventoCelda, ManejadorCelda, ManejadorTeclado, RefCelda } from '@jeff-aporta/iswc-base/components/data/utils/ag-grid/contrato.schemas.js';
-import type { GridHost, SelectionModeLocal } from './tipos.schemas.js';
+import type { EventoCelda, ManejadorCelda, RefCelda } from '@jeff-aporta/iswc-base/components/data/utils/ag-grid/contrato.schemas.js';
+import type { GridHost } from './tipos.schemas.js';
 import type { RowNode } from '@jeff-aporta/iswc-base/components/data/schemas/datagrid-types.schemas.js';
 
 

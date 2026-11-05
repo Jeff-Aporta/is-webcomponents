@@ -6,19 +6,12 @@
  */
 import { z } from "zod";
 
-export const BarcodeDetectorCtorSchema = z.object({
+const BarcodeDetectorCtorSchema = z.object({
   /* TODO: parse fail new (init?: { formats?: string[] }): BarcodeDetectorInstance */
 });
 export type BarcodeDetectorCtor = z.infer<typeof BarcodeDetectorCtorSchema>;
 
-
-export const BarcodeDetectorInstanceSchema = z.object({
-  detect: z.function({ input: [z.unknown() /* TODO: ref CanvasImageSource */], output: z.promise(z.array(z.unknown() /* TODO: ref DetectedBarcode */)) }),
-});
-export type BarcodeDetectorInstance = z.infer<typeof BarcodeDetectorInstanceSchema>;
-
-
-export const DetectedBarcodeSchema = z.object({
+const DetectedBarcodeSchema = z.object({
   rawValue: z.string(),
   format: z.string(),
 });

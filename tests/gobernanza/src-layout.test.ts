@@ -6,8 +6,8 @@
 //
 // Uso: node tests/src-layout.test.ts
 
-import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
-import { join, dirname, relative } from 'node:path';
+import { existsSync, readdirSync, readFileSync } from 'node:fs';
+import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
 

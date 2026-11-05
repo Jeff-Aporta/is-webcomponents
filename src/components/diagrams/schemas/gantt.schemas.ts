@@ -6,7 +6,7 @@
  */
 import { z } from "zod";
 
-export const GanttRowSchema = z.object({
+const GanttRowSchema = z.object({
   id: z.string(),
   label: z.string(),
   y: z.number(),
@@ -24,8 +24,7 @@ export const GanttRowSchema = z.object({
 });
 export type GanttRow = z.infer<typeof GanttRowSchema>;
 
-
-export const GanttArrowSchema = z.object({
+const GanttArrowSchema = z.object({
   id: z.string(),
   from: z.string(),
   to: z.string(),
@@ -37,8 +36,7 @@ export const GanttArrowSchema = z.object({
 });
 export type GanttArrow = z.infer<typeof GanttArrowSchema>;
 
-
-export const GanttTickSchema = z.object({
+const GanttTickSchema = z.object({
   ms: z.number(),
   label: z.string(),
   x: z.number(),
@@ -46,8 +44,7 @@ export const GanttTickSchema = z.object({
 });
 export type GanttTick = z.infer<typeof GanttTickSchema>;
 
-
-export const TurtleStateSchema = z.object({
+const TurtleStateSchema = z.object({
   playing: z.boolean(),
   idx: z.number(),
   total: z.number(),
@@ -55,15 +52,13 @@ export const TurtleStateSchema = z.object({
 });
 export type TurtleState = z.infer<typeof TurtleStateSchema>;
 
-
-export const RowNodeEntrySchema = z.object({
+const RowNodeEntrySchema = z.object({
   r: GanttRowSchema,
   g: z.unknown() /* TODO: ref SVGGElement */,
 });
 export type RowNodeEntry = z.infer<typeof RowNodeEntrySchema>;
 
-
-export const ArrowNodeEntrySchema = z.object({
+const ArrowNodeEntrySchema = z.object({
   a: GanttArrowSchema,
   g: z.unknown() /* TODO: ref SVGGElement */,
 });

@@ -18,7 +18,7 @@ const FORMATO_MINUSCULAS = (v: string): string => v.toLowerCase();
 const FORMATO_IDENTIDAD = (v: string): string => v;
 
 /** Cuantas entradas pide una opcion integrada: 0, 1 o 2. */
-export function entradasDe(clave: string): number {
+function entradasDe(clave: string): number {
   if (clave === 'inRange') return 2;
   if (SIN_ENTRADA.has(clave) || RANGOS_FECHA.has(clave)) return 0;
   return 1;
@@ -49,13 +49,6 @@ export function aFecha(v: unknown): Date | null {
   if (m) return new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]));
   const d = new Date(typeof v === 'number' ? v : String(v));
   return Number.isNaN(d.getTime()) ? null : new Date(d.getFullYear(), d.getMonth(), d.getDate());
-}
-
-/** 'YYYY-MM-DD' local. */
-export function fechaIso(d: Date): string {
-  const mes = String(d.getMonth() + 1).padStart(2, '0');
-  const dia = String(d.getDate()).padStart(2, '0');
-  return `${d.getFullYear()}-${mes}-${dia}`;
 }
 
 function sumarDias(d: Date, n: number): Date {

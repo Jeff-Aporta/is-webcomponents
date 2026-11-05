@@ -6,7 +6,7 @@
  */
 import { z } from "zod";
 
-export const ClusterBoxSchema = z.object({
+const ClusterBoxSchema = z.object({
   key: z.number(),
   nodes: z.array(z.object({
   id: z.string(),
@@ -24,8 +24,7 @@ export const ClusterBoxSchema = z.object({
 });
 export type ClusterBox = z.infer<typeof ClusterBoxSchema>;
 
-
-export const ClusterRawSchema = z.object({
+const ClusterRawSchema = z.object({
   id: z.union([z.string(), z.null()]),
   name: z.string(),
   hue: z.union([z.number(), z.undefined()]),

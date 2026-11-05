@@ -6,7 +6,7 @@
  */
 import { z } from "zod";
 
-export const CalEventSchema = z.object({
+const CalEventSchema = z.object({
   id: z.string(),
   title: z.string(),
   date: z.string(),
@@ -16,7 +16,6 @@ export const CalEventSchema = z.object({
 });
 export type CalEvent = z.infer<typeof CalEventSchema>;
 
-
-export const ViewSchema = z.union([z.literal('month'), z.literal('week'), z.literal('day')]);
+const ViewSchema = z.union([z.literal('month'), z.literal('week'), z.literal('day')]);
 export type View = z.infer<typeof ViewSchema>;
 

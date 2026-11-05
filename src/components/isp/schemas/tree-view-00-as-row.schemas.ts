@@ -6,7 +6,7 @@
  */
 import { z } from "zod";
 
-export const BridgeCallStatSchema = z.object({
+const BridgeCallStatSchema = z.object({
   count: z.number(),
   since: z.number(),
   loggedAt: z.number().optional(),
@@ -14,18 +14,15 @@ export const BridgeCallStatSchema = z.object({
 });
 export type BridgeCallStat = z.infer<typeof BridgeCallStatSchema>;
 
-
-export const AdapterConfigSchema = z.object({
+const AdapterConfigSchema = z.object({
   floatCard: z.unknown() /* TODO: ref FloatCardConfig */.optional(),
   /* TODO: parse fail [key: string]: unknown */
 });
 export type AdapterConfig = z.infer<typeof AdapterConfigSchema>;
 
-
-export const HotkeyClickHandlerSchema = z.union([z.function({ input: [], output: z.void() }), z.null()]);
+const HotkeyClickHandlerSchema = z.union([z.function({ input: [], output: z.void() }), z.null()]);
 export type HotkeyClickHandler = z.infer<typeof HotkeyClickHandlerSchema>;
 
-
-export const HotkeyListSchema = z.array(z.union([z.unknown() /* TODO: ref TreeActionEntry */, z.undefined(), z.null(), z.literal(false)]));
+const HotkeyListSchema = z.array(z.union([z.unknown() /* TODO: ref TreeActionEntry */, z.undefined(), z.null(), z.literal(false)]));
 export type HotkeyList = z.infer<typeof HotkeyListSchema>;
 

@@ -6,7 +6,7 @@
  */
 import { z } from "zod";
 
-export const FunnelBandSchema = z.object({
+const FunnelBandSchema = z.object({
   index: z.number(),
   ratio: z.number(),
   dropPct: z.number(),

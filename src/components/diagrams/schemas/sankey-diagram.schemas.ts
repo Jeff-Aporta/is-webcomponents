@@ -7,14 +7,13 @@
 import { z } from "zod";
 import { SankeyLayoutNodeSchema, SankeyLayoutLinkSchema } from "./sankey-spec.schemas.js";
 
-export const NodeEntrySchema = z.object({
+const NodeEntrySchema = z.object({
   n: SankeyLayoutNodeSchema,
   g: z.unknown() /* TODO: ref SVGGElement */,
 });
 export type NodeEntry = z.infer<typeof NodeEntrySchema>;
 
-
-export const LinkEntrySchema = z.object({
+const LinkEntrySchema = z.object({
   l: SankeyLayoutLinkSchema,
   g: z.unknown() /* TODO: ref SVGGElement */,
 });

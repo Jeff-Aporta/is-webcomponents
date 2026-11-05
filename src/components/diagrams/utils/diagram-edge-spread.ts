@@ -11,7 +11,7 @@
 // reprocesos de swimlane) se colapsaba a su primer punto cuando había ≥2
 // aristas etiquetadas y las líneas desaparecían del render.
 import { pathPoints as parsePathPoints } from './diagram-arrow.js';
-import { RunSchema, type Run } from '@jeff-aporta/iswc-base/components/diagrams/schemas/diagram-edge-spread.schemas.js';
+import { type Run } from '@jeff-aporta/iswc-base/components/diagrams/schemas/diagram-edge-spread.schemas.js';
 import type { SpreadPoint, SpreadItem } from "@jeff-aporta/iswc-base/components/diagrams/schemas/diagram-edge-spread.schemas.js";
 
 function rangesOverlap(a0: number, a1: number, b0: number, b1: number, min: number = 12): boolean {

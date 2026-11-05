@@ -14,8 +14,8 @@ import type { ColPos, Diseno, PiezasMotor, InternosMotor, RecCelda, RecFila, Gru
 import { applyFlex, colWindow, columnLayout } from '@jeff-aporta/iswc-base/components/data/utils/datagrid-core/viewport.js';
 import { orderedForLayout } from '@jeff-aporta/iswc-base/components/data/utils/datagrid-core/column-state.js';
 import { crearAlturas } from './alturas.js';
-import type { ColumnState, RowNode } from '@jeff-aporta/iswc-base/components/data/schemas/datagrid-types.schemas.js';
-import type { ContextoCelda, Decoracion, Desinstalar, FilaDisplay, FilaExtra, GridHost, PresentacionCelda, PresentacionFila, Rect, RefCelda, RendererMontable } from '@jeff-aporta/iswc-base/components/data/utils/ag-grid/contrato.schemas.js';
+import type { RowNode } from '@jeff-aporta/iswc-base/components/data/schemas/datagrid-types.schemas.js';
+import type { ContextoCelda, FilaDisplay, FilaExtra, GridHost, Rect, RefCelda, RendererMontable } from '@jeff-aporta/iswc-base/components/data/utils/ag-grid/contrato.schemas.js';
 
 
 

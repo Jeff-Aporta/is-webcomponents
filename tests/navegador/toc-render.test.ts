@@ -30,7 +30,7 @@
 import assert from 'node:assert/strict';
 import { createServer } from 'node:http';
 import { createReadStream } from 'node:fs';
-import { stat, readFile } from 'node:fs/promises';
+import { stat } from 'node:fs/promises';
 import { extname, join, normalize, sep, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { chromium } from 'playwright';

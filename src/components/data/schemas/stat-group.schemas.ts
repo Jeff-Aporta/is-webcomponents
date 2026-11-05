@@ -4,7 +4,7 @@
 import { z } from "zod";
 
 /** Un indicador: lo que pinta un `iswc-stat`. El `id` identifica la celda entre refrescos. */
-export const StatGroupItemSchema = z.object({
+const StatGroupItemSchema = z.object({
   id: z.string(),
   label: z.string(),
   value: z.string(),

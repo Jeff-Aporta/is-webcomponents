@@ -5,8 +5,7 @@
 // Validación STRICT: cualquier campo desconocido lanza error (en consola, sin
 // romper render para no boicotear demos legacy que pasen por aquí).
 import { snapDiagramGrid } from '@jeff-aporta/iswc-base/core/diagram-grid.js';
-import type { DiagramGroup, DiagramTheme, EdgeStyleOverride, ErRouteKind, ErSpec, ErSpecAttribute, ErSpecEntity, ErSpecRelation, ErCardinality, ErDashStyle, ErLayout, ErLayoutEdge, ErLayoutEntity, BoxSide, EdgeVariant, NodeStyleOverride } from '@jeff-aporta/iswc-base/components/diagrams/schemas/diagram-types.schemas.js';
-import type { AnchorLike } from "@jeff-aporta/iswc-base/components/diagrams/schemas/er-archify.schemas.js";
+import type { DiagramGroup, EdgeStyleOverride, ErRouteKind, ErSpec, ErSpecAttribute, ErSpecEntity, ErSpecRelation, ErCardinality, ErDashStyle, BoxSide, EdgeVariant, NodeStyleOverride } from '@jeff-aporta/iswc-base/components/diagrams/schemas/diagram-types.schemas.js';
 
 /* ──────────────── allowlists de campos conocidos ──────────────── */
 
@@ -191,7 +190,6 @@ function readRelation(raw: unknown, i: number, known: Set<string>, strict: boole
   return out;
 }
 
-const CARDS: Set<ErCardinality> = new Set(['one', 'many', 'zeroOrOne', 'zeroOrMany']);
 const DIRECTIONS: Set<'TB' | 'BT' | 'LR' | 'RL'> = new Set(['TB', 'BT', 'LR', 'RL']);
 
 /** Lee `meta` con validación strict. */
@@ -394,7 +392,7 @@ export function renderErSvg(svg: SVGElement, opts: { skipStyleFix?: boolean; emb
   return new XMLSerializer().serializeToString(clone);
 }
 
-export function getEmbeddedCss(traceEnabled: boolean): string {
+function getEmbeddedCss(traceEnabled: boolean): string {
   return `
 .iswc-anim-dash {
   stroke-dasharray: 8 6;
@@ -423,38 +421,6 @@ ${traceEnabled ? `
 }
 
 /* ──────────────── route helpers (archify-aligned) ──────────────── */
-
-/**
- * Decide los lados (fromSide, toSide) de una relación según la posición
- * relativa de los centros de las cajas (mismo algoritmo que archify).
- */
-export function pickSidesArchify(from: AnchorLike, to: AnchorLike): { fromSide: BoxSide; toSide: BoxSide } {
-  const dx = to.cx - from.cx;
-  const dy = to.cy - from.cy;
-  if (Math.abs(dx) > Math.abs(dy)) {
-    return { fromSide: dx > 0 ? 'right' : 'left', toSide: dx > 0 ? 'left' : 'right' };
-  }
-  return { fromSide: dy > 0 ? 'bottom' : 'top', toSide: dy > 0 ? 'top' : 'bottom' };
-}
-
-/** Devuelve el path SVG para una línea recta entre entre dos puntos. */
-export function straightPath(a: { x: number; y: number }, b: { x: number; y: number }): string {
-  return `M${a.x},${a.y} L${b.x},${b.y}`;
-}
-
-/** Devuelve el path SVG para un dogleg orthogonal-h (primero vertical, luego horizontal).
- *  Usa comandos H/V para que el render sea más legible y round-trip archify-friendly. */
-export function orthogonalHPath(a: { x: number; y: number }, b: { x: number; y: number }): string {
-  const midX = (a.x + b.x) / 2;
-  return `M${a.x},${a.y} V${midX} H${b.y} L${b.x},${b.y}`;
-}
-
-/** Devuelve el path SVG para un dogleg orthogonal-v (primero horizontal, luego vertical).
- *  Usa comandos H/V para que el render sea más legible y round-trip archify-friendly. */
-export function orthogonalVPath(a: { x: number; y: number }, b: { x: number; y: number }): string {
-  const midY = (a.y + b.y) / 2;
-  return `M${a.x},${a.y} H${midY} V${b.x} L${b.x},${b.y}`;
-}
 
 // Re-exports para que consumers que ya importaban tipos desde diagram-types.js
 // puedan seguir importándolos desde aquí si lo desean.

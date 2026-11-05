@@ -22,7 +22,7 @@ import type { FlowLayoutEdge, FlowLayoutNode, FlowPoint } from '@jeff-aporta/isw
 /** 1U (el paso de la rejilla de ruteo del kit, 15 px): margen de las etiquetas con todo lo que no es su arista. */
 export const U = ROUTING_COSTS_DEFAULTS.grid.step;
 /** Ancho máximo de una etiqueta antes de partirse (20U). */
-export const ETIQUETA_MAX_W = 20 * U;
+const ETIQUETA_MAX_W = 20 * U;
 /** Interlineado y distancia a la arista dueña. */
 export const ETIQUETA_LINE_H = 12;
 /** Ícono de la etiqueta: lado y aire hasta el texto. */
@@ -39,7 +39,7 @@ const cajaTramo = (p: FlowPoint, q: FlowPoint): EmbedBox => ({
 });
 
 /** Parte un texto en líneas de ancho ≤ `max` (por palabras); más de 2 líneas → 2 con «…». */
-export function partirEtiqueta(texto: string, max: number, mide: (t: string) => number): string[] {
+function partirEtiqueta(texto: string, max: number, mide: (t: string) => number): string[] {
   if (mide(texto) <= max) return [texto];
   const lineas: string[] = [];
   let actual = '';
@@ -57,7 +57,7 @@ export function partirEtiqueta(texto: string, max: number, mide: (t: string) => 
 }
 
 /** Recorta con «…» hasta caber en `max`. */
-export function resumir(texto: string, max: number, mide: (t: string) => number): string {
+function resumir(texto: string, max: number, mide: (t: string) => number): string {
   if (mide(texto) <= max) return texto;
   let t = texto;
   while (t.length > 1 && mide(`${t}…`) > max) t = t.slice(0, -1);

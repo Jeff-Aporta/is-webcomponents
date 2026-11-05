@@ -70,4 +70,3 @@ export function resolveDispatch(opts: {
   };
 }
 
-export { BY_MIME, BY_EXT, TAGS };

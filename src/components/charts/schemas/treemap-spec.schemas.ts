@@ -6,7 +6,7 @@
  */
 import { z } from "zod";
 
-export const RectSchema = z.object({
+const RectSchema = z.object({
   x: z.number(),
   y: z.number(),
   w: z.number(),
@@ -14,12 +14,7 @@ export const RectSchema = z.object({
 });
 export type Rect = z.infer<typeof RectSchema>;
 
-
-export const RawSpecNodeSchema = z.record(z.string(), z.unknown());
-export type RawSpecNode = z.infer<typeof RawSpecNodeSchema>;
-
-
-export const SpecNodeSchema = z.object({
+const SpecNodeSchema = z.object({
   id: z.string(),
   parent: z.string().optional(),
   label: z.string(),
@@ -28,16 +23,14 @@ export const SpecNodeSchema = z.object({
 });
 export type SpecNode = z.infer<typeof SpecNodeSchema>;
 
-
-export const TreemapSpecSchema = z.object({
+const TreemapSpecSchema = z.object({
   title: z.string().optional(),
   subtitle: z.string().optional(),
   nodes: z.array(SpecNodeSchema),
 });
 export type TreemapSpec = z.infer<typeof TreemapSpecSchema>;
 
-
-export const TreemapLayoutSchema = z.object({
+const TreemapLayoutSchema = z.object({
   width: z.number(),
   height: z.number(),
   title: z.string().optional(),
@@ -49,8 +42,7 @@ export const TreemapLayoutSchema = z.object({
 });
 export type TreemapLayout = z.infer<typeof TreemapLayoutSchema>;
 
-
-export const TreemapLayoutNodeSchema = z.object({
+const TreemapLayoutNodeSchema = z.object({
   id: z.string(),
   x: z.number(),
   y: z.number(),
@@ -67,8 +59,7 @@ export const TreemapLayoutNodeSchema = z.object({
 });
 export type TreemapLayoutNode = z.infer<typeof TreemapLayoutNodeSchema>;
 
-
-export const TreemapLayoutOptsSchema = z.object({
+const TreemapLayoutOptsSchema = z.object({
   width: z.number().optional(),
   height: z.number().optional(),
 });

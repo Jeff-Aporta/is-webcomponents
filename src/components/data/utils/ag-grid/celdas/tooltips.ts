@@ -14,10 +14,9 @@ import type { ParamsCelda } from './schemas.js';
 import { contextoCelda } from './contexto.js';
 import { leerRuta, paramsCelda } from './celdas-valores.js';
 
-
-export const SHOW_MS = 2000;
-export const SWITCH_MS = 200;
-export const HIDE_MS = 10000;
+const SHOW_MS = 2000;
+const SWITCH_MS = 200;
+const HIDE_MS = 10000;
 const GRACIA_MS = 300;
 
 /** Contenido segun precedencia de AG: `tooltip`, luego `tooltipValueGetter`, luego `tooltipField`. */

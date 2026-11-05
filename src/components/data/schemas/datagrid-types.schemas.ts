@@ -6,27 +6,21 @@
  */
 import { z } from "zod";
 
-export const TextFilterOpSchema = z.union([z.literal('contains'), z.literal('notContains'), z.literal('equals'), z.literal('notEqual'), z.literal('startsWith'), z.literal('endsWith'), z.literal('blank'), z.literal('notBlank')]);
+const TextFilterOpSchema = z.union([z.literal('contains'), z.literal('notContains'), z.literal('equals'), z.literal('notEqual'), z.literal('startsWith'), z.literal('endsWith'), z.literal('blank'), z.literal('notBlank')]);
 export type TextFilterOp = z.infer<typeof TextFilterOpSchema>;
 
+const NumberFilterOpSchema = z.union([z.literal('eq'), z.literal('neq'), z.literal('gt'), z.literal('gte'), z.literal('lt'), z.literal('lte'), z.literal('inRange'), z.literal('blank'), z.literal('notBlank')]);
 
-export const NumberFilterOpSchema = z.union([z.literal('eq'), z.literal('neq'), z.literal('gt'), z.literal('gte'), z.literal('lt'), z.literal('lte'), z.literal('inRange'), z.literal('blank'), z.literal('notBlank')]);
-export type NumberFilterOp = z.infer<typeof NumberFilterOpSchema>;
+const DateFilterOpSchema = z.union([z.literal('eq'), z.literal('before'), z.literal('after'), z.literal('inRange')]);
 
-
-export const DateFilterOpSchema = z.union([z.literal('eq'), z.literal('before'), z.literal('after'), z.literal('inRange')]);
-export type DateFilterOp = z.infer<typeof DateFilterOpSchema>;
-
-
-export const TextFilterSchema = z.object({
+const TextFilterSchema = z.object({
   type: z.literal('text'),
   op: TextFilterOpSchema,
   value: z.string(),
 });
 export type TextFilter = z.infer<typeof TextFilterSchema>;
 
-
-export const NumberFilterSchema = z.object({
+const NumberFilterSchema = z.object({
   type: z.literal('number'),
   op: NumberFilterOpSchema,
   value: z.union([z.number(), z.null()]),
@@ -34,8 +28,7 @@ export const NumberFilterSchema = z.object({
 });
 export type NumberFilter = z.infer<typeof NumberFilterSchema>;
 
-
-export const DateFilterSchema = z.object({
+const DateFilterSchema = z.object({
   type: z.literal('date'),
   op: DateFilterOpSchema,
   value: z.string(),
@@ -43,80 +36,59 @@ export const DateFilterSchema = z.object({
 });
 export type DateFilter = z.infer<typeof DateFilterSchema>;
 
-
-export const SetFilterSchema = z.object({
+const SetFilterSchema = z.object({
   type: z.literal('set'),
   values: z.array(z.string()),
 });
 export type SetFilter = z.infer<typeof SetFilterSchema>;
 
-
 /** Condicion simple: los filtros combinados (A y/o B) anidan estas. */
-export const FilterCondSchema = z.union([TextFilterSchema, NumberFilterSchema, DateFilterSchema, SetFilterSchema]);
-export type FilterCond = z.infer<typeof FilterCondSchema>;
+const FilterCondSchema = z.union([TextFilterSchema, NumberFilterSchema, DateFilterSchema, SetFilterSchema]);
 
-
-export const CombinedFilterSchema = z.object({
+const CombinedFilterSchema = z.object({
   type: z.literal('combined'),
   op: z.union([z.literal('AND'), z.literal('OR')]),
   conditions: z.array(FilterCondSchema),
 });
-export type CombinedFilter = z.infer<typeof CombinedFilterSchema>;
 
-
-export const ColumnFilterSchema = z.union([FilterCondSchema, CombinedFilterSchema]);
+const ColumnFilterSchema = z.union([FilterCondSchema, CombinedFilterSchema]);
 export type ColumnFilter = z.infer<typeof ColumnFilterSchema>;
 
-
-export const FilterModelSchema = z.record(z.string(), ColumnFilterSchema);
+const FilterModelSchema = z.record(z.string(), ColumnFilterSchema);
 export type FilterModel = z.infer<typeof FilterModelSchema>;
 
+const ColumnTypeNameSchema = z.unknown() /* TODO: cannot convert */;
 
-export const ColumnTypeNameSchema = z.unknown() /* TODO: cannot convert */;
-export type ColumnTypeName = z.infer<typeof ColumnTypeNameSchema>;
+const AggFuncNameSchema = z.unknown() /* TODO: cannot convert */;
 
-
-export const AggFuncNameSchema = z.unknown() /* TODO: cannot convert */;
-export type AggFuncName = z.infer<typeof AggFuncNameSchema>;
-
-
-export const SortDirNameSchema = z.unknown() /* TODO: cannot convert */;
+const SortDirNameSchema = z.unknown() /* TODO: cannot convert */;
 export type SortDirName = z.infer<typeof SortDirNameSchema>;
 
-
-export const PinSideNameSchema = z.unknown() /* TODO: cannot convert */;
+const PinSideNameSchema = z.unknown() /* TODO: cannot convert */;
 export type PinSideName = z.infer<typeof PinSideNameSchema>;
 
-
-export const AlignNameSchema = z.unknown() /* TODO: cannot convert */;
+const AlignNameSchema = z.unknown() /* TODO: cannot convert */;
 export type AlignName = z.infer<typeof AlignNameSchema>;
 
-
-export const DensityNameSchema = z.unknown() /* TODO: cannot convert */;
+const DensityNameSchema = z.unknown() /* TODO: cannot convert */;
 export type DensityName = z.infer<typeof DensityNameSchema>;
 
-
-export const SelectionModeNameSchema = z.unknown() /* TODO: cannot convert */;
+const SelectionModeNameSchema = z.unknown() /* TODO: cannot convert */;
 export type SelectionModeName = z.infer<typeof SelectionModeNameSchema>;
 
+const FilterTypeNameSchema = z.unknown() /* TODO: cannot convert */;
 
-export const FilterTypeNameSchema = z.unknown() /* TODO: cannot convert */;
-export type FilterTypeName = z.infer<typeof FilterTypeNameSchema>;
-
-
-export const RowDataSchema = z.record(z.string(), z.unknown());
+const RowDataSchema = z.record(z.string(), z.unknown());
 export type RowData = z.infer<typeof RowDataSchema>;
 
-
-export const RowNodeSchema = z.object({
+const RowNodeSchema = z.object({
   id: z.string(),
   index: z.number(),
   data: RowDataSchema,
 });
 export type RowNode = z.infer<typeof RowNodeSchema>;
 
-
-export const GroupRowSchema = z.object({
+const GroupRowSchema = z.object({
   kind: z.literal('group'),
   id: z.string(),
   colId: z.string(),
@@ -129,22 +101,17 @@ export const GroupRowSchema = z.object({
   agg: z.record(z.string(), z.unknown()),
   leafIds: z.array(z.string()),
 });
-export type GroupRow = z.infer<typeof GroupRowSchema>;
 
-
-export const LeafRowSchema = z.object({
+const LeafRowSchema = z.object({
   kind: z.literal('leaf'),
   level: z.number(),
   node: RowNodeSchema,
 });
-export type LeafRow = z.infer<typeof LeafRowSchema>;
 
-
-export const DisplayRowSchema = z.union([GroupRowSchema, LeafRowSchema]);
+const DisplayRowSchema = z.union([GroupRowSchema, LeafRowSchema]);
 export type DisplayRow = z.infer<typeof DisplayRowSchema>;
 
-
-export const ColumnDefSchema = z.object({
+const ColumnDefSchema = z.object({
   field: z.string(),
   colId: z.string().optional(),
   headerName: z.string().optional(),
@@ -175,8 +142,7 @@ export const ColumnDefSchema = z.object({
 });
 export type ColumnDef = z.infer<typeof ColumnDefSchema>;
 
-
-export const ColumnStateSchema = z.object({
+const ColumnStateSchema = z.object({
   colId: z.string(),
   field: z.string(),
   headerName: z.string(),
@@ -198,19 +164,16 @@ export const ColumnStateSchema = z.object({
 });
 export type ColumnState = z.infer<typeof ColumnStateSchema>;
 
-
-export const SortModelItemSchema = z.object({
+const SortModelItemSchema = z.object({
   colId: z.string(),
   dir: SortDirNameSchema,
 });
 export type SortModelItem = z.infer<typeof SortModelItemSchema>;
 
-
-export const SortModelSchema = z.array(SortModelItemSchema);
+const SortModelSchema = z.array(SortModelItemSchema);
 export type SortModel = z.infer<typeof SortModelSchema>;
 
-
-export const GridOptionsSchema = z.object({
+const GridOptionsSchema = z.object({
   columns: z.array(ColumnDefSchema),
   rows: z.array(RowDataSchema),
   getRowId: z.function({ input: [z.unknown() /* TODO: ref RowData */, z.number()], output: z.string() }).optional(),
@@ -227,8 +190,7 @@ export const GridOptionsSchema = z.object({
 });
 export type GridOptions = z.infer<typeof GridOptionsSchema>;
 
-
-export const GridStateSchema = z.object({
+const GridStateSchema = z.object({
   columns: z.array(ColumnStateSchema),
   sortModel: SortModelSchema,
   filterModel: FilterModelSchema,
@@ -248,8 +210,7 @@ export const GridStateSchema = z.object({
 });
 export type GridState = z.infer<typeof GridStateSchema>;
 
-
-export const RowTransactionSchema = z.object({
+const RowTransactionSchema = z.object({
   add: z.array(RowDataSchema).optional(),
   update: z.array(RowDataSchema).optional(),
   remove: z.array(RowDataSchema).optional(),
@@ -259,28 +220,23 @@ export const RowTransactionSchema = z.object({
 });
 export type RowTransaction = z.infer<typeof RowTransactionSchema>;
 
-
-export const TransactionResultSchema = z.object({
+const TransactionResultSchema = z.object({
   add: z.array(RowNodeSchema),
   update: z.array(RowNodeSchema),
   remove: z.array(RowNodeSchema),
 });
 export type TransactionResult = z.infer<typeof TransactionResultSchema>;
 
-
-export const TransformadorModeloSchema = z.object({
+const TransformadorModeloSchema = z.object({
   etapa: z.string(),
   aplicar: z.function({ input: [z.array(z.unknown())], output: z.array(z.unknown()) }),
   activo: z.function({ input: [], output: z.boolean() }).optional(),
 });
 export type TransformadorModelo = { etapa: string; aplicar: (filas: unknown[]) => unknown[]; activo?: () => boolean };
 
-
-export const GridListenerSchema = z.function({ input: [z.unknown() /* TODO: ref GridState */, z.string()], output: z.void() });
 export type GridListener = (state: GridState, reason?: string) => void;
 
-
-export const GridApiSchema = z.object({
+const GridApiSchema = z.object({
   getState: z.function({ input: [], output: z.unknown() /* TODO: ref GridState */ }),
   subscribe: z.function({ input: [z.unknown() /* TODO: ref GridListener */], output: z.function({ input: [], output: z.void() }) }),
   setRows: z.function({ input: [z.union([z.array(z.unknown() /* TODO: ref RowData */), z.null(), z.undefined()])], output: z.void() }),
@@ -321,8 +277,6 @@ export const GridApiSchema = z.object({
 });
 /** Los campos con referencias circulares quedan como `unknown` en el schema: aqui llevan su tipo real. */
 export type GridApi = Omit<z.infer<typeof GridApiSchema>, 'getState' | 'subscribe' | 'setRows' | 'setColumnDefs' | 'setSortModel' | 'toggleSort' | 'setFilter' | 'setSelection' | 'setDensity' | 'pinColumn' | 'addRowGroupCol' | 'getColumns' | 'getDisplayedRows' | 'getAllRows' | 'getRowNode' | 'setTransforms' | 'setFilterEvaluators' | 'setExternalFilter' | 'invalidate' | 'loadState'> & { getState(): GridState; subscribe(fn: (state: GridState, reason?: string) => void): () => void; setRows(rows: RowData[] | null | undefined): void; setColumnDefs(defs: ColumnDef[] | null | undefined): void; setSortModel(model: SortModel): void; toggleSort(colId: string, additive?: boolean): void; setFilter(colId: string, filter: ColumnFilter | null): void; setSelection(ids: Iterable<string>): void; setDensity(d: DensityName): void; pinColumn(colId: string, side: PinSideName | null): void; addRowGroupCol(colId: string, index?: number): void; getColumns(): ColumnState[]; getDisplayedRows(): RowNode[]; getAllRows(): RowNode[]; getRowNode(id: string): RowNode | null; setTransforms(lista: { etapa: string; aplicar: (filas: unknown[]) => unknown[]; activo?: () => boolean }[]): void; setFilterEvaluators(mapa: EvaluadoresFiltro): void; setExternalFilter(fn: FiltroExterno | null): void; invalidate(desde?: 'filtrar' | 'ordenar' | 'agrupar'): void; loadState(json: string): void; };
-
-
 
 /** Evaluadores por `type` de filtro que aportan los plugins; ganan al nativo. */
 export type EvaluadoresFiltro = Map<string, (f: unknown, valor: unknown, texto: string, node: RowNode, col: ColumnState) => boolean>;

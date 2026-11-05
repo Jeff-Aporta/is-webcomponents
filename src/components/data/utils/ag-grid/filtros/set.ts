@@ -85,7 +85,7 @@ export function coincideSet(modelo: ModeloSet, valor: unknown, params: ParamsFil
 }
 
 /** Ruta por defecto del arbol: fecha → anio/mes/dia; lo demas, un nivel. */
-export function rutaDefecto(item: ItemSet): string[] {
+function rutaDefecto(item: ItemSet): string[] {
   const v = item.valor;
   const d = v instanceof Date ? v : null;
   if (!d) return [item.etiqueta];

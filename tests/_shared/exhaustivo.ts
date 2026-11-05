@@ -18,7 +18,7 @@
  *  10. Performance   → disconnectedCallback cleanup
  */
 import { readFileSync, existsSync } from 'node:fs';
-import { dirname, join, sep, isAbsolute } from 'node:path';
+import { dirname, join, isAbsolute } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { rutaDeEspecificador } from './alias.ts';
 

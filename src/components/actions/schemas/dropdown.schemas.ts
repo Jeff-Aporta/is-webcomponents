@@ -6,11 +6,10 @@
  */
 import { z } from "zod";
 
-export const PlacementSchema = z.unknown() /* TODO: cannot convert */;
+const PlacementSchema = z.unknown() /* TODO: cannot convert */;
 export type Placement = z.infer<typeof PlacementSchema>;
 
-
-export const DropdownItemElSchema = z.intersection(z.unknown() /* TODO: ref HTMLElement */, z.object({
+const DropdownItemElSchema = z.intersection(z.unknown() /* TODO: ref HTMLElement */, z.object({
   disabled: z.boolean().optional(),
   type: z.string().optional(),
   closeSubmenu: z.function({ input: [], output: z.void() }).optional(),

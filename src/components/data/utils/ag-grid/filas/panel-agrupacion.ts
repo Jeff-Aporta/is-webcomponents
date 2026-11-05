@@ -20,7 +20,7 @@ export function moverEn(lista: readonly string[], id: string, destino: number): 
   return sin;
 }
 
-export function crearZona(grid: GridHost, clave: string, titulo: string, icono: string, leer: () => string[], escribir: (ids: string[]) => void): HTMLElement {
+function crearZona(grid: GridHost, clave: string, titulo: string, icono: string, leer: () => string[], escribir: (ids: string[]) => void): HTMLElement {
   const doc = grid.el.ownerDocument;
   const zona = doc.createElement('section');
   zona.className = 'iswc-ag-zona';

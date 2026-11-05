@@ -6,7 +6,7 @@
  */
 import { z } from "zod";
 
-export const RgbSchema = z.object({
+const RgbSchema = z.object({
   r: z.number(),
   g: z.number(),
   b: z.number(),

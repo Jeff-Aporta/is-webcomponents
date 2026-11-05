@@ -1,11 +1,9 @@
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
 
 const { test, lista } = coleccionPruebas({ categoria: 'what' });
-
 
 const here = dirname(fileURLToPath(import.meta.url));
 const root = dirname(dirname(here));
@@ -14,7 +12,6 @@ const manifestMod = await import(pathToFileURL(join(root, 'src', 'manifest.ts'))
 const manifest = manifestMod.default;
 
 const ourTags = new Set(manifest.map((c) => c.tag));
-const ourTitles = new Set(manifest.map((c) => c.title.toLowerCase().trim()));
 
 // Mapeo oficial: nombre canónico de Ant Design → tag nuestro (o null si falta)
 const ANT_DESIGN = [

@@ -2,7 +2,7 @@
  * Playground <iswc-modal-verificacion>: mock controller + botón Verificar.
  */
 import type { PreviewMountContext, IswcComponentPreviewLike } from '@jeff-aporta/iswc-base/previews/_kit/schemas/preview.schemas.ts';
-import type { MensajeItem, VerificationController, ModalVerificacionEl } from "@jeff-aporta/iswc-base/components/isp/schemas/modal-verificacion.preview.schemas.js";
+import type { ModalVerificacionEl } from "@jeff-aporta/iswc-base/components/isp/schemas/modal-verificacion.preview.schemas.js";
 
 export async function mount(ctx: PreviewMountContext, preview: IswcComponentPreviewLike): Promise<void> {
   const root = ctx.main;

@@ -17,16 +17,15 @@ import type { SequenceActorSpec, SequenceFragmentSpec, SequenceMessageSpec } fro
 
 export const METODOS_API = ['get', 'post', 'put', 'patch', 'delete', 'query', 'options', 'head'] as const;
 export const ServerApiDocsMetodoSchema = z.enum(METODOS_API);
-export type ServerApiDocsMetodo = z.infer<typeof ServerApiDocsMetodoSchema>;
 
 /** Templates de respuesta que el visor expande a respuestas concretas (200/401/403/404). */
-export const TEMPLATES_RESPUESTA = ['ok', 'auth', 'authForbidden', 'authNotFound', 'deleteEnvelope', 'raw'] as const;
+const TEMPLATES_RESPUESTA = ['ok', 'auth', 'authForbidden', 'authNotFound', 'deleteEnvelope', 'raw'] as const;
 
 const ObjetoJsonSchema = z.record(z.string(), z.unknown());
 
-export const InsoftServidorSchema = z.object({ url: z.string().min(1), description: z.string().optional() }).loose();
+const InsoftServidorSchema = z.object({ url: z.string().min(1), description: z.string().optional() }).loose();
 
-export const InsoftNavSchema = z.object({
+const InsoftNavSchema = z.object({
   id: z.string().min(1),
   label: z.string().min(1),
   icon: z.string().optional(),
@@ -34,7 +33,7 @@ export const InsoftNavSchema = z.object({
   requiresSession: z.boolean().optional(),
 }).loose();
 
-export const InsoftAuthSchema = z.object({
+const InsoftAuthSchema = z.object({
   enabled: z.boolean().optional(),
   loginKind: z.string().optional(),
   loginPath: z.string().optional(),
@@ -43,7 +42,7 @@ export const InsoftAuthSchema = z.object({
   provider: z.string().optional(),
 }).loose();
 
-export const InsoftViewerSchema = z.object({
+const InsoftViewerSchema = z.object({
   ns: z.string().optional(),
   brand: z.object({ title: z.string().optional(), icon: z.string().optional() }).loose().optional(),
   auth: InsoftAuthSchema.optional(),
@@ -52,20 +51,20 @@ export const InsoftViewerSchema = z.object({
   servers: z.array(InsoftServidorSchema).optional(),
 }).loose();
 
-export const InsoftSubgrupoSchema = z.object({
+const InsoftSubgrupoSchema = z.object({
   id: z.string().min(1),
   name: z.string().optional(),
   icon: z.string().optional(),
   description: z.string().optional(),
 }).loose();
 
-export const InsoftTagSchema = z.object({
+const InsoftTagSchema = z.object({
   name: z.string().min(1),
   description: z.string().optional(),
   subgroups: z.array(InsoftSubgrupoSchema).optional(),
 }).loose();
 
-export const InsoftParametroSchema = z.object({
+const InsoftParametroSchema = z.object({
   name: z.string().min(1),
   in: z.enum(['path', 'query', 'header', 'cookie']),
   required: z.boolean().optional(),
@@ -74,7 +73,7 @@ export const InsoftParametroSchema = z.object({
   example: z.unknown().optional(),
 }).loose();
 
-export const InsoftRespuestasSchema = z.object({
+const InsoftRespuestasSchema = z.object({
   template: z.enum(TEMPLATES_RESPUESTA),
   description: z.string().optional(),
   payload: z.string().optional(),
@@ -85,7 +84,7 @@ export const InsoftRespuestasSchema = z.object({
   ).optional(),
 }).loose();
 
-export const InsoftOperacionSchema = z.object({
+const InsoftOperacionSchema = z.object({
   summary: z.string().min(1),
   description: z.string().optional(),
   tags: z.array(z.string()).optional(),
@@ -106,13 +105,13 @@ export const InsoftOperacionSchema = z.object({
   tryitAttachments: z.union([z.string(), ObjetoJsonSchema]).optional(),
 }).loose();
 
-export const InsoftAdjuntoSchema = z.object({
+const InsoftAdjuntoSchema = z.object({
   field: z.string().min(1),
   max: z.number().int().min(1).optional(),
   encoding: z.string().optional(),
 }).loose();
 
-export const InsoftCatalogSchema = z.object({
+const InsoftCatalogSchema = z.object({
   docs: z.record(z.string(), z.string()).optional(),
   payloads: ObjetoJsonSchema.optional(),
   requestBodies: ObjetoJsonSchema.optional(),
@@ -162,9 +161,6 @@ export const InsoftDocumentoSchema = z.object({
     }
   }
 });
-export type InsoftDocumento = z.infer<typeof InsoftDocumentoSchema>;
-export type InsoftOperacion = z.infer<typeof InsoftOperacionSchema>;
-export type InsoftCatalog = z.infer<typeof InsoftCatalogSchema>;
 
 // ── Entrada: OpenAPI 3 (lo mínimo que el visor lee) ──────────────────────────
 
@@ -176,10 +172,9 @@ export const OpenApiDocumentoSchema = z.object({
   paths: z.record(z.string().startsWith('/', 'la ruta empieza por /'), z.record(z.string(), z.unknown())),
   components: z.object({ schemas: z.record(z.string(), ObjetoJsonSchema).optional() }).loose().optional(),
 }).loose();
-export type OpenApiDocumento = z.infer<typeof OpenApiDocumentoSchema>;
 
 /** Resultado de validar la entrada: cada error con su ruta JSON (`paths › /x › get › doc: …`). */
-export const ServerApiDocsValidacionSchema = z.object({
+const ServerApiDocsValidacionSchema = z.object({
   ok: z.boolean(),
   formato: z.enum(['insoft', 'openapi', 'desconocido']),
   errores: z.array(z.string()),
@@ -187,12 +182,12 @@ export const ServerApiDocsValidacionSchema = z.object({
 export type ServerApiDocsValidacion = z.infer<typeof ServerApiDocsValidacionSchema>;
 
 /** ¿El documento admite el parse estricto (InSoft v2)? `aplica: false` para OpenAPI 3. */
-export const ServerApiDocsEstrictoSchema = z.object({ aplica: z.boolean(), ok: z.boolean(), errores: z.array(z.string()) });
+const ServerApiDocsEstrictoSchema = z.object({ aplica: z.boolean(), ok: z.boolean(), errores: z.array(z.string()) });
 export type ServerApiDocsEstricto = z.infer<typeof ServerApiDocsEstrictoSchema>;
 
 // ── Modelo normalizado (lo que el visor pinta) ───────────────────────────────
 
-export const ServerApiDocsParametroSchema = z.object({
+const ServerApiDocsParametroSchema = z.object({
   nombre: z.string(),
   en: z.enum(['path', 'query', 'header', 'cookie']),
   requerido: z.boolean(),
@@ -202,7 +197,7 @@ export const ServerApiDocsParametroSchema = z.object({
 });
 export type ServerApiDocsParametro = z.infer<typeof ServerApiDocsParametroSchema>;
 
-export const ServerApiDocsRespuestaSchema = z.object({
+const ServerApiDocsRespuestaSchema = z.object({
   codigo: z.string(),
   descripcion: z.string(),
   schema: z.unknown().optional(),
@@ -210,10 +205,10 @@ export const ServerApiDocsRespuestaSchema = z.object({
 });
 export type ServerApiDocsRespuesta = z.infer<typeof ServerApiDocsRespuestaSchema>;
 
-export const ServerApiDocsAdjuntoSchema = z.object({ tipo: z.enum(['images', 'audios']), campo: z.string(), max: z.number().int().min(1) });
+const ServerApiDocsAdjuntoSchema = z.object({ tipo: z.enum(['images', 'audios']), campo: z.string(), max: z.number().int().min(1) });
 export type ServerApiDocsAdjunto = z.infer<typeof ServerApiDocsAdjuntoSchema>;
 
-export const ServerApiDocsOperacionSchema = z.object({
+const ServerApiDocsOperacionSchema = z.object({
   /** Identidad estable (`get_conversacion_by_iconversacion`): va en `?s=`. */
   id: z.string(),
   metodo: ServerApiDocsMetodoSchema,
@@ -236,12 +231,12 @@ export const ServerApiDocsOperacionSchema = z.object({
 });
 export type ServerApiDocsOperacion = z.infer<typeof ServerApiDocsOperacionSchema>;
 
-export const ServerApiDocsSubgrupoSchema = z.object({ id: z.string(), nombre: z.string(), icono: z.string(), descripcion: z.string(), operaciones: z.array(z.string()) });
-export const ServerApiDocsGrupoSchema = z.object({ nombre: z.string(), descripcion: z.string(), subgrupos: z.array(ServerApiDocsSubgrupoSchema) });
+const ServerApiDocsSubgrupoSchema = z.object({ id: z.string(), nombre: z.string(), icono: z.string(), descripcion: z.string(), operaciones: z.array(z.string()) });
+const ServerApiDocsGrupoSchema = z.object({ nombre: z.string(), descripcion: z.string(), subgrupos: z.array(ServerApiDocsSubgrupoSchema) });
 export type ServerApiDocsGrupo = z.infer<typeof ServerApiDocsGrupoSchema>;
 
 /** Cómo se inicia sesión para «Probar»: proveedor + endpoint ya resuelto contra la base activa. */
-export const ServerApiDocsAuthSchema = z.object({
+const ServerApiDocsAuthSchema = z.object({
   proveedor: z.enum(['patyia-portal', 'orquestador']),
   /** Base del login; vacía = la base de la API activa (el server se autentica a sí mismo). */
   loginUrl: z.string(),
@@ -265,7 +260,7 @@ export const ServerApiDocsModeloSchema = z.object({
 export type ServerApiDocsModelo = z.infer<typeof ServerApiDocsModeloSchema>;
 
 /** Petición de login ya armada por el proveedor (endpoint, headers y cuerpo del POST). */
-export const ServerApiDocsLoginSchema = z.object({ endpoint: z.string(), headers: z.record(z.string(), z.string()), body: z.record(z.string(), z.unknown()) });
+const ServerApiDocsLoginSchema = z.object({ endpoint: z.string(), headers: z.record(z.string(), z.string()), body: z.record(z.string(), z.unknown()) });
 export type ServerApiDocsLogin = z.infer<typeof ServerApiDocsLoginSchema>;
 
 /** Respuesta del login que el visor acepta: `{ ok: true, token }` (el resto se conserva). */
@@ -276,7 +271,7 @@ export const ServerApiDocsSesionSchema = z.object({ token: z.string().min(1), us
 export type ServerApiDocsSesion = z.infer<typeof ServerApiDocsSesionSchema>;
 
 /** Valores que el usuario llenó en «Probar»: parámetros de ruta y de query por nombre. */
-export const ServerApiDocsValoresSchema = z.object({ path: z.record(z.string(), z.string()).optional(), query: z.record(z.string(), z.string()).optional() });
+const ServerApiDocsValoresSchema = z.object({ path: z.record(z.string(), z.string()).optional(), query: z.record(z.string(), z.string()).optional() });
 export type ServerApiDocsValores = z.infer<typeof ServerApiDocsValoresSchema>;
 
 /** Objeto JSON genérico que el dominio lee con lectores tipados (sin `as`). */
@@ -285,11 +280,11 @@ export type ServerApiDocsObjeto = Record<string, unknown>;
 // ── Eventos ──────────────────────────────────────────────────────────────────
 
 /** `iswc-server-api-docs-page`: la vista que se acaba de abrir (`''` = portada). */
-export const ServerApiDocsPageDetailSchema = z.object({ id: z.string(), titulo: z.string(), metodo: z.string(), ruta: z.string() });
+const ServerApiDocsPageDetailSchema = z.object({ id: z.string(), titulo: z.string(), metodo: z.string(), ruta: z.string() });
 export type ServerApiDocsPageDetail = z.infer<typeof ServerApiDocsPageDetailSchema>;
 
 /** `iswc-server-api-docs-response`: resultado de «Probar». */
-export const ServerApiDocsResponseDetailSchema = z.object({ id: z.string(), url: z.string(), status: z.number(), ms: z.number() });
+const ServerApiDocsResponseDetailSchema = z.object({ id: z.string(), url: z.string(), status: z.number(), ms: z.number() });
 export type ServerApiDocsResponseDetail = z.infer<typeof ServerApiDocsResponseDetailSchema>;
 
 // ── Superficies de los componentes del kit que el visor usa ──────────────────
@@ -302,7 +297,6 @@ export type ServerApiDocsLayout = HTMLElement & {
   scrollToHeading(id: string): void;
 };
 export type ServerApiDocsIndice = HTMLElement & { items: unknown[]; current: string; textos: Partial<{ placeholder: string; sinResultados: string; resumen: string }>; focusSearch(): void };
-export type ServerApiDocsRender = HTMLElement & { value: string };
 export type ServerApiDocsCampo = HTMLElement & { value: string };
 
 /** Payload de `<iswc-sequence-diagram>` que arma `secuenciaDeOperacion` (el visor lo pinta con `diagram-style="insoft"`). */

@@ -14,8 +14,7 @@ export const CajaSchema = z.object({
 });
 export type Caja = z.infer<typeof CajaSchema>;
 
-
-export const ComponenteSchema = z.intersection(CajaSchema, z.object({
+const ComponenteSchema = z.intersection(CajaSchema, z.object({
   id: z.string(),
   package: z.union([z.string(), z.undefined()]).optional(),
   name: z.string().optional(),
@@ -38,8 +37,7 @@ export const ComponenteSchema = z.intersection(CajaSchema, z.object({
 }));
 export type Componente = z.infer<typeof ComponenteSchema>;
 
-
-export const PaqueteSchema = z.intersection(CajaSchema, z.object({
+const PaqueteSchema = z.intersection(CajaSchema, z.object({
   id: z.string(),
   name: z.string().optional(),
   /** Icono Iconify del rótulo (con fondo circular): ilustra el propósito del agrupador. */
@@ -72,18 +70,15 @@ export const PaqueteSchema = z.intersection(CajaSchema, z.object({
 }));
 export type Paquete = z.infer<typeof PaqueteSchema>;
 
-
-export const AristaSchema = z.object({
+const AristaSchema = z.object({
   from: z.string(),
   to: z.string(),
   /* TODO: member [extra: string]: unknown */
 });
 export type Arista = z.infer<typeof AristaSchema>;
 
-
 export const LadoSchema = z.union([z.literal('top'), z.literal('right'), z.literal('bottom'), z.literal('left')]);
 export type Lado = z.infer<typeof LadoSchema>;
-
 
 export const OpcionesEmpaqueSchema = z.object({
   mode: z.union([z.literal('manual'), z.literal('triptych'), z.string()]).optional(),
@@ -152,15 +147,13 @@ export const OpcionesEmpaqueSchema = z.object({
 });
 export type OpcionesEmpaque = z.infer<typeof OpcionesEmpaqueSchema>;
 
-
 export const PuntoSchema = z.object({
   x: z.number(),
   y: z.number(),
 });
 export type Punto = z.infer<typeof PuntoSchema>;
 
-
-export const InterfazUmlSchema = z.object({
+const InterfazUmlSchema = z.object({
   id: z.string(),
   component: z.string(),
   name: z.union([z.string(), z.undefined()]).optional(),

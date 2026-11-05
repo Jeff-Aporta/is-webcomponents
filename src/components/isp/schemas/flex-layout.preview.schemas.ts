@@ -6,7 +6,7 @@
  */
 import { z } from "zod";
 
-export const InputLikeSchema = z.object({
+const InputLikeSchema = z.object({
   value: z.string(),
   checked: z.boolean(),
 });

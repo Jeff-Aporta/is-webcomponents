@@ -22,7 +22,7 @@ import { loadFichaLikeDefinition } from './ficha-bridge.ts';
 import { montarAnatomia } from './anatomia.js';
 
 import type { PreviewDefinition, PreviewMountContext } from './schemas/preview.schemas.ts';
-import type { DefinicionPreview, CtxMontaje, ModuloBehavior, ConDefinicion } from "./schemas/JsonPreview.schemas.js";
+import type { DefinicionPreview, ModuloBehavior, ConDefinicion } from "./schemas/JsonPreview.schemas.js";
 
 /** Forma mínima de la definición (iswc-preview/v1 o ficha via sub-objeto). */
 

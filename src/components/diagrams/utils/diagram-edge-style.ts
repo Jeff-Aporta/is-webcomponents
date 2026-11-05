@@ -5,17 +5,17 @@ import type { EdgeWithHue, Colored, Edged } from "@jeff-aporta/iswc-base/compone
 /** Arista del grafo con un hue opcional para colorearla. */
 
 /** Paleta de aristas: un hue por índice, distinto del tono de la caja origen. */
-export const EDGE_HUES: readonly number[] = [205, 160, 18, 280, 40, 330, 195, 250, 90, 145, 310, 55];
+const EDGE_HUES: readonly number[] = [205, 160, 18, 280, 40, 330, 195, 250, 90, 145, 310, 55];
 
 /** Emisores: misma S/L, H rota (TestPatyIA verde / soporte rojo ≈ este perfil). */
-export const EMITTER_S = 85;
-export const EMITTER_L = 28;
+const EMITTER_S = 85;
+const EMITTER_L = 28;
 /** Hues de reserva si el emisor no trae color. */
-export const EMITTER_HUES: readonly number[] = [145, 0, 210, 280, 40, 320, 190, 90];
+const EMITTER_HUES: readonly number[] = [145, 0, 210, 280, 40, 320, 190, 90];
 /** Solo-receptores: lila fijo del theme InSoft CD. */
 export const RECEIVER_COLOR = '#C1BFFF';
 /** Aristas = color del emisor con B (L) −5% (más oscuro). */
-export const EDGE_DARKEN = 0.95;
+const EDGE_DARKEN = 0.95;
 
 export function assignEdgeHues<T extends EdgeWithHue>(edges: readonly T[]): T[] {
   if (!edges?.length) return edges.slice();
@@ -30,7 +30,7 @@ function clampPct(n: number): number {
 }
 
 /** #rgb/#rrggbb → HSL (H 0..360, S/L 0..100). */
-export function hexToHsl(hex: string): { h: number; s: number; l: number } | null {
+function hexToHsl(hex: string): { h: number; s: number; l: number } | null {
   const m = /^#?([0-9a-f]{3}|[0-9a-f]{6})$/i.exec(String(hex).trim());
   if (!m) return null;
   let h = m[1]!;
@@ -51,22 +51,15 @@ export function hexToHsl(hex: string): { h: number; s: number; l: number } | nul
   return { h: hue * 360, s: s * 100, l: l * 100 };
 }
 
-export function hslToHex(h: number, s: number, l: number): string {
+function hslToHex(h: number, s: number, l: number): string {
   return tkHueToHex(((h % 360) + 360) % 360, clampPct(s), clampPct(l)) ?? '#334155';
 }
 
 /** Baja el brillo (L) por factor (p.ej. 0.95 = −5%). */
-export function darkenHex(hex: string, factor = EDGE_DARKEN): string {
+function darkenHex(hex: string, factor = EDGE_DARKEN): string {
   const hsl = hexToHsl(hex);
   if (!hsl) return hex;
   return hslToHex(hsl.h, hsl.s, Math.max(4, hsl.l * factor));
-}
-
-/** @deprecated usar darkenHex — se mantiene por compat. */
-export function brightenHex(hex: string, factor = 1 / EDGE_DARKEN): string {
-  const hsl = hexToHsl(hex);
-  if (!hsl) return hex;
-  return hslToHex(hsl.h, hsl.s, Math.min(92, hsl.l * factor));
 }
 
 /**

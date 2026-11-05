@@ -3,7 +3,6 @@
 import { parseDateText } from './dates.js';
 import type { ParsedInput } from './input-parse.schemas.js';
 
-
 /** Cierra paréntesis y comillas que quedaron abiertos, como hace Excel al confirmar. */
 function balance(formula: string): string {
   let depth = 0;
@@ -17,7 +16,7 @@ function balance(formula: string): string {
 }
 
 /** Número en el formato local, o NaN. En `es` admite `1.234,56` y `12,5`. */
-export function parseLocaleNumber(text: string, locale: 'es' | 'en'): number {
+function parseLocaleNumber(text: string, locale: 'es' | 'en'): number {
   let s = text.trim();
   if (locale === 'es' && /^[+-]?(\d{1,3}(\.\d{3})+|\d+),\d+$/.test(s)) s = s.replace(/\./g, '').replace(',', '.');
   else if (locale === 'es' && /^[+-]?\d{1,3}(\.\d{3}){2,}$/.test(s)) s = s.replace(/\./g, '');

@@ -14,7 +14,6 @@ import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/
 
 const { test, lista } = coleccionPruebas({ categoria: 'how' });
 
-
 const RAIZ = join(import.meta.dirname, '..', '..');
 
 async function* walk(dir: string): AsyncGenerator<string> {
@@ -29,10 +28,10 @@ async function* walk(dir: string): AsyncGenerator<string> {
   }
 }
 
-/** Pares `[nombre, cuerpo]` de cada `export const XSchema = z.object({ ... })` top-level (llaves balanceadas). */
-export function objetosZod(fuente: string): Array<{ nombre: string; cuerpo: string }> {
+/** Pares `[nombre, cuerpo]` de cada `[export] const XSchema = z.object({ ... })` top-level (llaves balanceadas). */
+function objetosZod(fuente: string): Array<{ nombre: string; cuerpo: string }> {
   const out: Array<{ nombre: string; cuerpo: string }> = [];
-  const re = /^export const (\w+Schema)\s*=\s*z\.object\(\{/gm;
+  const re = /^(?:export )?const (\w+Schema)\s*=\s*z\.object\(\{/gm;
   for (let m = re.exec(fuente); m; m = re.exec(fuente)) {
     const inicio = m.index + m[0].length;
     let nivel = 1;
@@ -42,14 +41,14 @@ export function objetosZod(fuente: string): Array<{ nombre: string; cuerpo: stri
       else if (fuente[i] === '}') nivel -= 1;
     }
     // Una llave dentro de un string/regex desbalancea el conteo: el cuerpo nunca pasa del siguiente `export`.
-    const cuerpo = fuente.slice(inicio, i - 1).split(/\nexport /)[0]!;
+    const cuerpo = fuente.slice(inicio, i - 1).split(/\n(?:export |const )/)[0]!;
     out.push({ nombre: m[1]!, cuerpo });
   }
   return out;
 }
 
 /** Líneas del cuerpo que nombran al propio schema sin ser un getter. */
-export function autorreferenciasDirectas(nombre: string, cuerpo: string): string[] {
+function autorreferenciasDirectas(nombre: string, cuerpo: string): string[] {
   const propio = new RegExp(`\\b${nombre}\\b`);
   return cuerpo.split('\n').filter((linea) => propio.test(linea) && !/^\s*get \w+\(\)/.test(linea) && !/^\s*(\/\/|\*|\/\*)/.test(linea));
 }

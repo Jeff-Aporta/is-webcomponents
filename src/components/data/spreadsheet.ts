@@ -7,7 +7,6 @@ import type { Axis } from './utils/spreadsheet/axis.js';
 import { CfEvaluator } from './utils/spreadsheet/conditional.js';
 import { detectDelimiter, parseDelimited, toDelimited } from './utils/spreadsheet/csv.js';
 import { SpreadsheetDoc } from './utils/spreadsheet/document.js';
-import type { ClipBlock } from './utils/spreadsheet/document.schemas.js';
 import type { Sheet } from './utils/spreadsheet/engine.js';
 import { runMacro } from './utils/spreadsheet/macro/host.js';
 import type { MacroView } from './utils/spreadsheet/macro/host.schemas.js';

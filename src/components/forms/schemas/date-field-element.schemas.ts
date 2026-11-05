@@ -6,11 +6,10 @@
  */
 import { z } from "zod";
 
-export const DateFieldKindSchema = z.union([z.literal('date'), z.literal('time'), z.literal('datetime')]);
+const DateFieldKindSchema = z.union([z.literal('date'), z.literal('time'), z.literal('datetime')]);
 export type DateFieldKind = z.infer<typeof DateFieldKindSchema>;
 
-
-export const DefineDateFieldOptsSchema = z.object({
+const DefineDateFieldOptsSchema = z.object({
   tag: z.string(),
   kind: DateFieldKindSchema,
   /** CSS del tag (`import css from 'iswc:css'` en el módulo que llama a la fábrica). */

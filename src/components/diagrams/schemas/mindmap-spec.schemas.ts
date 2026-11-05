@@ -7,7 +7,7 @@
 import { z } from "zod";
 import type { TreeNodeOf } from "@jeff-aporta/iswc-base/core/schemas/tree-layout.schemas.js";
 
-export const MindmapNodeSchema = z.object({
+const MindmapNodeSchema = z.object({
   id: z.string(),
   parent: z.string().optional(),
   label: z.string(),
@@ -17,8 +17,7 @@ export const MindmapNodeSchema = z.object({
 });
 export type MindmapNode = z.infer<typeof MindmapNodeSchema>;
 
-
-export const MindmapSpecSchema = z.object({
+const MindmapSpecSchema = z.object({
   title: z.string().optional(),
   subtitle: z.string().optional(),
   layout: z.union([z.literal('tree'), z.literal('radial')]),
@@ -26,18 +25,15 @@ export const MindmapSpecSchema = z.object({
 });
 export type MindmapSpec = z.infer<typeof MindmapSpecSchema>;
 
-
-export const LeadingIconSchema = z.object({
+const LeadingIconSchema = z.object({
   iconId: z.string().optional(),
   hue: z.number().optional(),
   rest: z.string().optional(),
 });
 export type LeadingIcon = z.infer<typeof LeadingIconSchema>;
 
-
 /** Árbol de `buildTree` sobre los nodos del mapa, anotado con `depth` y `resolvedHue` por el layout. */
 export type TreeNode = TreeNodeOf<MindmapNode & { depth?: number; resolvedHue?: number }>;
-
 
 export const MindmapLayoutNodeSchema = z.object({
   id: z.string(),
@@ -54,7 +50,6 @@ export const MindmapLayoutNodeSchema = z.object({
 });
 export type MindmapLayoutNode = z.infer<typeof MindmapLayoutNodeSchema>;
 
-
 export const MindmapLayoutEdgeSchema = z.object({
   id: z.string(),
   from: z.string(),
@@ -65,8 +60,7 @@ export const MindmapLayoutEdgeSchema = z.object({
 });
 export type MindmapLayoutEdge = z.infer<typeof MindmapLayoutEdgeSchema>;
 
-
-export const MindmapLayoutSchema = z.object({
+const MindmapLayoutSchema = z.object({
   width: z.number(),
   height: z.number(),
   nodes: z.array(MindmapLayoutNodeSchema),

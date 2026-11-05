@@ -6,11 +6,10 @@
  */
 import { z } from "zod";
 
-export const FileKindSchema = z.union([z.literal('txt'), z.literal('csv'), z.literal('pdf'), z.literal('docx'), z.literal('pptx'), z.literal('unknown')]);
+const FileKindSchema = z.union([z.literal('txt'), z.literal('csv'), z.literal('pdf'), z.literal('docx'), z.literal('pptx'), z.literal('unknown')]);
 export type FileKind = z.infer<typeof FileKindSchema>;
 
-
-export const FileDispatchSchema = z.object({
+const FileDispatchSchema = z.object({
   kind: FileKindSchema,
   viewTag: z.union([z.string(), z.null()]),
   editTag: z.union([z.string(), z.null()]),

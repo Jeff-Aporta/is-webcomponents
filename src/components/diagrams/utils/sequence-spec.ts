@@ -23,9 +23,6 @@ import { SequenceFragmentSpecSchema } from "@jeff-aporta/iswc-base/components/di
 
 /** Ancho px estimado de una etiqueta, descontando tokens {{icon}} y sumando su ancho. */
 const ICON_INLINE_W = 16;
-function diagramLabelW(label: string): number {
-  return labelBox(label).w;
-}
 
 /** Ancho máximo de un chip de una línea; más largo → 2 líneas (sin recortar). */
 const LABEL_MAX_W = 460;
@@ -54,22 +51,14 @@ const DEFAULT_HUES: number[] = [239, 199, 210];
 // uno inexistente deja el avatar vacío (le pasó a `simple-icons:openai`).
 const DEFAULT_ICONS: string[] = ['mdi:account', 'mdi:robot-outline', 'mdi:server', 'mdi:database'];
 
-/** Guía editorial: `log` ≤70 caracteres visibles (`**`, `{{iconify}}` no cuentan). Sin recorte automático. */
-export const SEQUENCE_LOG_MAX_VISIBLE = 70;
-
-/** Longitud visible del log — ignora marcado md/html/iconify. */
-export function sequenceLogVisibleLength(raw: unknown): number {
-  return richTextPlain(raw as string | null | undefined).length;
-}
-
 /** Normaliza `log`: solo trim; el texto debe ser conciso y completo en BD. */
-export function normalizeSequenceLog(raw: unknown): string | undefined {
+function normalizeSequenceLog(raw: unknown): string | undefined {
   const text = String(raw ?? '').trim();
   return text || undefined;
 }
 
 /** Normaliza `desc`: sin límite de longitud (md/html/iconify/imágenes). */
-export function normalizeSequenceDesc(raw: unknown): string | undefined {
+function normalizeSequenceDesc(raw: unknown): string | undefined {
   const text = String(raw ?? '').trim();
   return text || undefined;
 }
@@ -214,7 +203,7 @@ function readFragments(seq: Record<string, unknown>): SequenceFragmentSpec[] | u
   return out.length ? out : undefined;
 }
 
-export function sequenceSpecFromPayload(payload: unknown): SequenceResolvedSpec | null {
+function sequenceSpecFromPayload(payload: unknown): SequenceResolvedSpec | null {
   const p = asRecord(payload);
   const seq = asRecord(p.sequence ?? p);
   const rawActors = seq.actors;
@@ -310,7 +299,7 @@ function sequenceActorToJson(a: SequenceActorSpec): Record<string, unknown> {
 }
 
 /** Spec de secuencia → objeto `sequence` listo para persistir en TK_CONTENT. */
-export function sequenceSpecToJson(spec: SequenceResolvedSpec): Record<string, unknown> {
+function sequenceSpecToJson(spec: SequenceResolvedSpec): Record<string, unknown> {
   const seq: Record<string, unknown> = { actors: spec.actors.map(sequenceActorToJson) };
   if (spec.title) seq.title = spec.title;
   if (spec.subtitle) seq.subtitle = spec.subtitle;
@@ -345,47 +334,6 @@ export function expandSequencePayloadForJson(payload: Record<string, unknown>): 
   const spec = resolveSequenceSpec(out);
   if (spec) out.sequence = sequenceSpecToJson(spec);
   return out;
-}
-
-/**
- * Payload con los mensajes de los grupos en `hiddenIds` OCULTOS (re-diseña sin esas
- * aristas). Materializa la spec (sin preset). Solo afecta render / `d` / código — no BD.
- */
-export function sequencePayloadHideGroups(payload: Record<string, unknown>, hiddenIds: Set<string> | null | undefined): Record<string, unknown> {
-  if (!hiddenIds || hiddenIds.size === 0) return payload;
-  const spec = resolveSequenceSpec(payload);
-  if (!spec) return payload;
-  const keep = (m: SequenceMessageSpec): boolean => !m.group || !hiddenIds.has(m.group);
-  const filtered: SequenceResolvedSpec = {
-    ...spec,
-    messages: spec.messages ? spec.messages.filter(keep) : undefined,
-    preamble: spec.preamble ? spec.preamble.filter(keep) : undefined,
-    epilogue: spec.epilogue ? spec.epilogue.filter(keep) : undefined,
-    alt: spec.alt
-      ? { branches: spec.alt.branches.map((b) => ({ ...b, messages: b.messages.filter(keep) })) }
-      : undefined,
-  };
-  const out: Record<string, unknown> = { ...payload, sequence: sequenceSpecToJson(filtered) };
-  delete out.preset;
-  return out;
-}
-
-/** Quita `icon`/`hue` sueltos de actores — deben ir solo en el sugar del `label`. */
-export function compactSequenceActorsInPayload(payload: Record<string, unknown>): Record<string, unknown> {
-  const seq = asRecord(payload.sequence);
-  const rawActors = seq.actors;
-  if (!Array.isArray(rawActors)) return payload;
-  return {
-    ...payload,
-    sequence: {
-      ...seq,
-      actors: rawActors.map((raw, i: number) => {
-        const a = asRecord(raw);
-        const spec = readActor(a, i);
-        return sequenceActorToJson(spec);
-      }),
-    },
-  };
 }
 
 /* ───────────────────────── auto-layout ───────────────────────── */
@@ -1030,7 +978,7 @@ const TK1437191_SEQUENCE_MESSAGES: SequenceMessageSpec[] = [
 ];
 
 /** Spec predefinida TK-1437191 — imensaje + calificación (estilo sequenceDiagram). */
-export function tk1437191SequenceSpec(): SequenceResolvedSpec {
+function tk1437191SequenceSpec(): SequenceResolvedSpec {
   return {
     title: 'Diagrama de secuencia',
     subtitle: 'imensaje · mensajesOpenAI · calificación',
@@ -1049,7 +997,7 @@ export function tk1437191SequenceSpec(): SequenceResolvedSpec {
 }
 
 /** Spec predefinida TK-1431662 — resolución de modelo por turno. */
-export function tk1431662SequenceSpec(): SequenceResolvedSpec {
+function tk1431662SequenceSpec(): SequenceResolvedSpec {
   return {
     title: 'Resolución del modelo por turno',
     subtitle: 'Clasificación operativa → MODELO en BD → respuesta final',

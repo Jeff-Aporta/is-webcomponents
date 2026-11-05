@@ -6,7 +6,7 @@
  */
 import { z } from "zod";
 
-export const ViewTransformSchema = z.object({
+const ViewTransformSchema = z.object({
   scale: z.number(),
   x: z.number(),
   y: z.number(),

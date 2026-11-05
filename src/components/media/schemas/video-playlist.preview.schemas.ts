@@ -6,7 +6,7 @@
  */
 import { z } from "zod";
 
-export const IswcVideoPlaylistSchema = z.object({
+const IswcVideoPlaylistSchema = z.object({
   placement: z.union([z.literal('left'), z.literal('right'), z.literal('bottom')]),
 });
 export type IswcVideoPlaylist = z.infer<typeof IswcVideoPlaylistSchema>;

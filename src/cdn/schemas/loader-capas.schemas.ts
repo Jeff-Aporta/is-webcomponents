@@ -11,7 +11,7 @@ import { MirrorSchema, PageModuleKindSchema, type LoaderState } from "./loader.s
 const HrefFnSchema = z.function({ input: [z.string()], output: z.string() });
 const CargaFnSchema = z.function({ input: [z.string()], output: z.promise(z.void()) });
 
-export const LoaderCtxSchema = z.object({
+const LoaderCtxSchema = z.object({
   /** Estado mutable del loader (host, pin, espejos, query, alias de página). */
   state: z.custom<LoaderState>(),
   /** Carpeta del loader (`…/dist/cdn/core/`). */
@@ -40,5 +40,5 @@ export const LoaderCtxSchema = z.object({
 export type LoaderCtx = z.infer<typeof LoaderCtxSchema>;
 
 /** `dist/cdn/deps.json` visto por el loader: cierre por tag y `?v=` de las entradas (orígenes mutables). */
-export const DepsLoaderSchema = z.object({ sha: z.string().optional(), tags: z.record(z.string(), z.array(z.string())), v: z.record(z.string(), z.string()).optional() });
+const DepsLoaderSchema = z.object({ sha: z.string().optional(), tags: z.record(z.string(), z.array(z.string())), v: z.record(z.string(), z.string()).optional() });
 export type DepsLoader = z.infer<typeof DepsLoaderSchema>;

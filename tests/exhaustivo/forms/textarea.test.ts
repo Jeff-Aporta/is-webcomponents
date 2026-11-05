@@ -3,12 +3,7 @@
  */
 
 import assert from 'node:assert/strict';
-import {
-  leerComponente, leerPreview, leerDoc, existeCss,
-  atributosObservados, eventosEmitidos,
-  slotsDeclarados, partsDeclaradas, tokensCss,
-  esFormAssociated, extiendeElementBase, usaShadowDom,
-} from '../../_shared/exhaustivo-forms.js';
+import { leerComponente, leerPreview, existeCss, atributosObservados, eventosEmitidos, slotsDeclarados, partsDeclaradas, esFormAssociated, extiendeElementBase } from '../../_shared/exhaustivo-forms.js';
 import { coleccionPruebas } from '../../../src/vendor-distributions/shared/testing/pruebas.ts';
 
 const { test, lista } = coleccionPruebas({ categoria: 'what' });

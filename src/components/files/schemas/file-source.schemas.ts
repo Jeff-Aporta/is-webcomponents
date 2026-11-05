@@ -6,7 +6,7 @@
  */
 import { z } from "zod";
 
-export const FileSourceSchema = z.union([z.object({
+const FileSourceSchema = z.union([z.object({
   kind: z.literal('empty'),
 }), z.object({
   kind: z.literal('content'),

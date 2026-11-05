@@ -4,7 +4,7 @@
 import { z } from 'zod';
 
 /** Arista dirigida mínima: basta con `from` y `to` (cualquier arista de cualquier diagrama la cumple). */
-export const AristaDirigidaSchema = z.object({ from: z.string(), to: z.string() });
+const AristaDirigidaSchema = z.object({ from: z.string(), to: z.string() });
 export type AristaDirigida = z.infer<typeof AristaDirigidaSchema>;
 
 /** Grafo listo para recorrer (lo devuelve `grafoDirigido`). */

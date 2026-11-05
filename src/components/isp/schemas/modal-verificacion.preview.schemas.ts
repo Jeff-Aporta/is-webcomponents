@@ -6,14 +6,7 @@
  */
 import { z } from "zod";
 
-export const MensajeItemSchema = z.object({
-  itdmensaje: z.string(),
-  mensaje: z.string(),
-});
-export type MensajeItem = z.infer<typeof MensajeItemSchema>;
-
-
-export const VerificationControllerSchema = z.object({
+const VerificationControllerSchema = z.object({
   entrie: z.string(),
   actVerificar: z.function({ input: [z.union([z.object({
   nit: z.string().optional(),
@@ -22,10 +15,8 @@ export const VerificationControllerSchema = z.object({
   mensajes: z.array(z.unknown() /* TODO: ref MensajeItem */),
 })) }),
 });
-export type VerificationController = z.infer<typeof VerificationControllerSchema>;
 
-
-export const ModalVerificacionElSchema = z.object({
+const ModalVerificacionElSchema = z.object({
   controller: VerificationControllerSchema,
   record: z.object({
   nit: z.string(),

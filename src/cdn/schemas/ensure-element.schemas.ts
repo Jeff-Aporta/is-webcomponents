@@ -6,7 +6,7 @@
  */
 import { z } from "zod";
 
-export const EnsureElementOptsSchema = z.object({
+const EnsureElementOptsSchema = z.object({
   href: z.string().optional(),
   load: z.function({ input: [], output: z.promise(z.unknown()) }).optional(),
   timeoutMs: z.number().optional(),

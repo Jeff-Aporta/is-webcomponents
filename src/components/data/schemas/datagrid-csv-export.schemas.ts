@@ -6,7 +6,7 @@
  */
 import { z } from "zod";
 
-export const CsvOptionsSchema = z.object({
+const CsvOptionsSchema = z.object({
   separator: z.string().optional(),
   onlySelected: z.boolean().optional(),
   selection: z.set(z.string()).optional(),

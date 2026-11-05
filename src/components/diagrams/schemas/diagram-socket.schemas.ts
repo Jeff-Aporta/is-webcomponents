@@ -4,13 +4,12 @@
 import { z } from 'zod';
 
 /** Medidas del conector: largo del palo, radio del socket `(` y radio de la bola O (px). */
-export const MedidasSocketSchema = z.object({ palo: z.number(), socket: z.number(), bola: z.number() });
-export type MedidasSocket = z.infer<typeof MedidasSocketSchema>;
+const MedidasSocketSchema = z.object({ palo: z.number(), socket: z.number(), bola: z.number() });
 
 const PuntoSchema = z.object({ x: z.number(), y: z.number() });
 
 /** Opciones de `pintarSocket`. */
-export const OpcionesSocketSchema = z.object({
+const OpcionesSocketSchema = z.object({
   /** Borde del expositor donde nace el palo. */
   tip: PuntoSchema,
   /** Unitario de la bola hacia el expositor. */

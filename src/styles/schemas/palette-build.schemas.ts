@@ -3,10 +3,10 @@
  */
 import { z } from "zod";
 
-export const PaletteFamilySchema = z.enum(['rojos', 'calidos', 'verdes', 'azules', 'violetas', 'neutros']);
+const PaletteFamilySchema = z.enum(['rojos', 'calidos', 'verdes', 'azules', 'violetas', 'neutros']);
 export type PaletteFamily = z.infer<typeof PaletteFamilySchema>;
 
-export const PaletteConfigSchema = z.object({
+const PaletteConfigSchema = z.object({
   value: z.string(),
   label: z.string(),
   family: PaletteFamilySchema,
@@ -24,10 +24,10 @@ export const PaletteConfigSchema = z.object({
 export type PaletteConfig = z.infer<typeof PaletteConfigSchema>;
 
 /** Lo mínimo para derivar una paleta: h/s/b; el resto de semillas es opcional. */
-export const PaletteSeedInputSchema = PaletteConfigSchema.partial().required({ h: true, s: true, b: true });
+const PaletteSeedInputSchema = PaletteConfigSchema.partial().required({ h: true, s: true, b: true });
 export type PaletteSeedInput = z.infer<typeof PaletteSeedInputSchema>;
 
-export const SurfaceRecipeSchema = z.object({
+const SurfaceRecipeSchema = z.object({
   token: z.string(),
   from: z.enum(['brand', 'bright']),
   pct: z.number(),
@@ -37,15 +37,15 @@ export const SurfaceRecipeSchema = z.object({
 export type SurfaceRecipe = z.infer<typeof SurfaceRecipeSchema>;
 
 /** Color sRGB 0–255 (matemática del contrato de contraste). */
-export const RgbSchema = z.tuple([z.number(), z.number(), z.number()]);
+const RgbSchema = z.tuple([z.number(), z.number(), z.number()]);
 export type Rgb = z.infer<typeof RgbSchema>;
 
 /** Colores resueltos de una paleta en un juego de superficies. */
-export const ResolvedSurfacesSchema = z.record(z.string(), RgbSchema);
+const ResolvedSurfacesSchema = z.record(z.string(), RgbSchema);
 export type ResolvedSurfaces = z.infer<typeof ResolvedSurfacesSchema>;
 
 /** Un par texto/fondo que no llega al mínimo de contraste. */
-export const ContrastFailureSchema = z.object({
+const ContrastFailureSchema = z.object({
   palette: z.string(),
   theme: z.enum(['light', 'dark']),
   panda: z.boolean(),

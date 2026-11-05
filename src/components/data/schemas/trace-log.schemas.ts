@@ -3,11 +3,11 @@
  */
 import { z } from "zod";
 
-export const TraceNivelSchema = z.enum(["debug", "info", "warn", "error"]);
+const TraceNivelSchema = z.enum(["debug", "info", "warn", "error"]);
 export type TraceNivel = z.infer<typeof TraceNivelSchema>;
 
 /** Un paso del proceso: `ms` desde el inicio, nivel, etapa, mensaje y, si los hay, su duración y sus datos. */
-export const TraceEventoSchema = z.object({
+const TraceEventoSchema = z.object({
   seq: z.number().int().nonnegative(),
   ts: z.string(),
   ms: z.number().int().nonnegative(),
@@ -19,11 +19,11 @@ export const TraceEventoSchema = z.object({
 });
 export type TraceEvento = z.infer<typeof TraceEventoSchema>;
 
-export const TraceFiltroSchema = z.enum(["todo", "info", "warn", "error"]);
+const TraceFiltroSchema = z.enum(["todo", "info", "warn", "error"]);
 export type TraceFiltro = z.infer<typeof TraceFiltroSchema>;
 
 /** Textos visibles; cada clave reemplaza la de por defecto. */
-export const TraceTextosSchema = z.object({
+const TraceTextosSchema = z.object({
   evento: z.string(),
   eventos: z.string(),
   aviso: z.string(),

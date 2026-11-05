@@ -14,8 +14,8 @@ export const PaginationTextosSchema = z.object({
 });
 export type PaginationTextos = z.infer<typeof PaginationTextosSchema>;
 
-export const PaginationChangeDetailSchema = z.object({ page: z.number() });
+const PaginationChangeDetailSchema = z.object({ page: z.number() });
 export type PaginationChangeDetail = z.infer<typeof PaginationChangeDetailSchema>;
 
-export const PaginationSizeDetailSchema = z.object({ pageSize: z.number() });
+const PaginationSizeDetailSchema = z.object({ pageSize: z.number() });
 export type PaginationSizeDetail = z.infer<typeof PaginationSizeDetailSchema>;

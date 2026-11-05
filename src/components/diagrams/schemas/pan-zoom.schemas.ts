@@ -6,15 +6,14 @@
  */
 import { z } from "zod";
 
-export const PanZoomViewSchema = z.object({
+const PanZoomViewSchema = z.object({
   scale: z.number(),
   x: z.number(),
   y: z.number(),
 });
 export type PanZoomView = z.infer<typeof PanZoomViewSchema>;
 
-
-export const PanZoomOptionsSchema = z.object({
+const PanZoomOptionsSchema = z.object({
   minScale: z.number().optional(),
   maxScale: z.number().optional(),
   zoomFactor: z.number().optional(),
@@ -25,8 +24,7 @@ export const PanZoomOptionsSchema = z.object({
 });
 export type PanZoomOptions = z.infer<typeof PanZoomOptionsSchema>;
 
-
-export const PanZoomControllerSchema = z.object({
+const PanZoomControllerSchema = z.object({
   /* TODO: parse fail readonly view: PanZoomView */
   setView: z.function({ input: [z.unknown() /* TODO: ref PanZoomView */], output: z.void() }),
   zoomBy: z.function({ input: [z.number(), z.number(), z.number()], output: z.void() }),

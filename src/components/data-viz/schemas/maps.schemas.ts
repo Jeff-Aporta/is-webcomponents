@@ -6,7 +6,7 @@
  */
 import { z } from "zod";
 
-export const ViewportSchema = z.object({
+const ViewportSchema = z.object({
   minLon: z.number(),
   minLat: z.number(),
   maxLon: z.number(),
@@ -14,16 +14,14 @@ export const ViewportSchema = z.object({
 });
 export type Viewport = z.infer<typeof ViewportSchema>;
 
-
-export const DragStateSchema = z.object({
+const DragStateSchema = z.object({
   x: z.number(),
   y: z.number(),
   start: ViewportSchema,
 });
 export type DragState = z.infer<typeof DragStateSchema>;
 
-
-export const TileCfgSchema = z.object({
+const TileCfgSchema = z.object({
   tileUrl: z.string().optional(),
   bbox: z.string().optional(),
   zoom: z.number().optional(),

@@ -6,7 +6,7 @@
  */
 import { z } from "zod";
 
-export const BodySegmentSchema = z.union([z.object({
+const BodySegmentSchema = z.union([z.object({
   type: z.literal('text'),
   value: z.string(),
 }), z.object({
@@ -15,8 +15,7 @@ export const BodySegmentSchema = z.union([z.object({
 })]);
 export type BodySegment = z.infer<typeof BodySegmentSchema>;
 
-
-export const VarPlaceholderSchema = z.object({
+const VarPlaceholderSchema = z.object({
   token: z.string(),
   name: z.string(),
 });

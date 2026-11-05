@@ -1,10 +1,9 @@
 // address.ts — direcciones A1: letras de columna, celdas y rangos. Índices base 0.
 
-
 /** Máximos admitidos por el motor (los de Excel). */
 import type { Rect } from './address.schemas.ts';
-export const MAX_ROWS = 1048576;
-export const MAX_COLS = 16384;
+const MAX_ROWS = 1048576;
+const MAX_COLS = 16384;
 
 /** Índice de columna a letras: 0 → A, 26 → AA. */
 export function colName(c: number): string {

@@ -63,7 +63,6 @@ import type { HttpEndpoint, EdgeKind, SpecEdge, LayoutMode, ComponentSpecResult,
 
 const TAB_W = 56;
 const TAB_H = 14;
-const STEREO_GAP = 4;
 /** Radio del lollipop / socket. Visible en PNG a tamaño ficha. */
 export const LOLLI_R = 8;
 /** Distancia borde → centro O. C acopla al O, no al origen. */

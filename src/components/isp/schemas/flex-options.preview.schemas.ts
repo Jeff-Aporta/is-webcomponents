@@ -6,7 +6,7 @@
  */
 import { z } from "zod";
 
-export const FlexOptionsLikeSchema = z.object({
+const FlexOptionsLikeSchema = z.object({
   actions: z.array(z.unknown() /* TODO: ref FlexActionEntry */),
   more: z.array(z.unknown() /* TODO: ref FlexActionEntry */),
 });

@@ -16,7 +16,7 @@ import type { TSpanSpec } from './schemas/diagram-text-wrap.schemas.js';
 import { registerDiagramKind } from './utils/diagram-kinds.js';
 import { svgEl } from '@jeff-aporta/iswc-base/core/svg-chart-engine.js';
 import { svgArrowHead } from './utils/diagram-arrow.js';
-import type { BlockSpecGroup, BlockSpecBlock, BlockSpecEdge, BlockLayoutBlock, BlockLayoutEdge, TurtleState, BlockNodeEntry, EdgeNodeEntry } from "./schemas/block-diagram.schemas.js";
+import type { BlockSpecBlock, BlockLayoutBlock, BlockLayoutEdge, TurtleState, BlockNodeEntry, EdgeNodeEntry } from "./schemas/block-diagram.schemas.js";
 import { define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import css from 'iswc:css';
 
@@ -38,8 +38,6 @@ import css from 'iswc:css';
  * Propiedades: payload, spec, layout, turtle, hiddenGroups
  * Eventos: iswc-render, iswc-turtle-state, iswc-open-viewer, iswc-toggle-group
  */
-
-const SVG_NS = 'http://www.w3.org/2000/svg';
 
 /** Estado del callback `onState` del motor de tortuga (path-turtle). */
 

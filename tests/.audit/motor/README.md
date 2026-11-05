@@ -211,7 +211,7 @@ interface ReporteAuditoria {
 Las pruebas son funciones puras. Para agregar una:
 
 1. Elegí una categoría existente o agregá una nueva en
-   `motor/types.ts` (`CategoriaHallazgo`).
+   `motor/schemas/types.schemas.ts` (`CategoriaHallazgo`).
 2. Implementá la prueba en `motor/validators/`. Debe exportar una
    función `(def, meta, rutaJson) => Hallazgo[]`.
 3. Si la prueba es JSON-only, agregala en `auditarComponente` dentro de

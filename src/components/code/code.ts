@@ -44,12 +44,9 @@ import { softFormat, softFormatMode } from '@jeff-aporta/iswc-base/core/code-tex
 import {
   code2json, json2code, parseCodeDocument, normalizeMark, rebaseMarks,
 } from './utils/code-model.js';
-import type { CodeDocument as CodeDocModel, CodeMark as CodeMarkModel } from './schemas/code-model.schemas.js';
 import { tokenizeCode, lineToHtml, tokenClass, escapeHtml, tokensToText } from '@jeff-aporta/iswc-base/core/code-highlight.js';
-import type { Token as HighlightToken, HighlightLine as CodeHighlightLine } from '@jeff-aporta/iswc-base/core/schemas/code-highlight.schemas.js';
-import type { CodeFormatConfig as CodeFmtConfigShared } from './schemas/code-format.schemas.js';
 import '@jeff-aporta/iswc-base/components/feedback/tooltip.js';
-import type { CodeMarkKind, CodeMarkTone, CodeMark, CodeDocument, CodeFormatConfig, CodeLangDef, IswcTooltipEl, HighlightLine, HighlightResult } from "./schemas/code.schemas.js";
+import type { CodeMark, CodeDocument, CodeFormatConfig, CodeLangDef, IswcTooltipEl, HighlightLine, HighlightResult } from "./schemas/code.schemas.js";
 import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import css from 'iswc:css';
 

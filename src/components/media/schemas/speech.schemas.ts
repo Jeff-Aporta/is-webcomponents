@@ -6,43 +6,24 @@
  */
 import { z } from "zod";
 
-export const SpeechRecognitionEventSchema = z.object({
+const SpeechRecognitionEventSchema = z.object({
   resultIndex: z.number(),
   results: SpeechRecognitionResultListSchema,
 });
 export type SpeechRecognitionEvent = z.infer<typeof SpeechRecognitionEventSchema>;
 
-
-export const SpeechRecognitionResultListSchema = z.object({
+const SpeechRecognitionResultListSchema = z.object({
   /* TODO: parse fail readonly length: number */
   /* TODO: parse fail [index: number]: SpeechRecognitionResult */
 });
-export type SpeechRecognitionResultList = z.infer<typeof SpeechRecognitionResultListSchema>;
 
-
-export const SpeechRecognitionResultSchema = z.object({
-  /* TODO: parse fail readonly length: number */
-  isFinal: z.boolean(),
-  /* TODO: parse fail [index: number]: SpeechRecognitionAlternative */
-});
-export type SpeechRecognitionResult = z.infer<typeof SpeechRecognitionResultSchema>;
-
-
-export const SpeechRecognitionAlternativeSchema = z.object({
-  transcript: z.string(),
-  confidence: z.number(),
-});
-export type SpeechRecognitionAlternative = z.infer<typeof SpeechRecognitionAlternativeSchema>;
-
-
-export const SpeechRecognitionErrorEventSchema = z.object({
+const SpeechRecognitionErrorEventSchema = z.object({
   error: z.string(),
   message: z.string().optional(),
 });
 export type SpeechRecognitionErrorEvent = z.infer<typeof SpeechRecognitionErrorEventSchema>;
 
-
-export const SpeechRecognitionInstanceSchema = z.object({
+const SpeechRecognitionInstanceSchema = z.object({
   lang: z.string(),
   continuous: z.boolean(),
   interimResults: z.boolean(),
@@ -55,12 +36,10 @@ export const SpeechRecognitionInstanceSchema = z.object({
 });
 export type SpeechRecognitionInstance = z.infer<typeof SpeechRecognitionInstanceSchema>;
 
-
-export const SpeechRecognitionCtorSchema = z.unknown() /* TODO: cannot convert */;
+const SpeechRecognitionCtorSchema = z.unknown() /* TODO: cannot convert */;
 export type SpeechRecognitionCtor = z.infer<typeof SpeechRecognitionCtorSchema>;
 
-
-export const SpeechRecognitionConstructorBagSchema = z.object({
+const SpeechRecognitionConstructorBagSchema = z.object({
   SpeechRecognition: SpeechRecognitionCtorSchema.optional(),
   webkitSpeechRecognition: SpeechRecognitionCtorSchema.optional(),
 });

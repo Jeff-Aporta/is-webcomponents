@@ -59,7 +59,7 @@ export function pastelColor(color: string, amount: number = 0.8): string {
   return `#${mix(ch(0))}${mix(ch(2))}${mix(ch(4))}`.toUpperCase();
 }
 
-export function oklchLightness(color: string | null | undefined): number {
+function oklchLightness(color: string | null | undefined): number {
   const rgb = toRgb(color);
   if (!rgb) return 0.5;
   const r = srgbToLinear(rgb.r);
@@ -72,7 +72,7 @@ export function oklchLightness(color: string | null | undefined): number {
 }
 
 /** Umbral OKLCH por defecto: por debajo → texto claro; por encima → oscuro. */
-export const BG2FONT_L_THRESHOLD = 0.75;
+const BG2FONT_L_THRESHOLD = 0.75;
 
 /**
  * Color de fuente legible sobre `bg` (OKLCH L vs umbral).

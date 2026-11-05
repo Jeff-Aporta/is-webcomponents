@@ -162,14 +162,3 @@ export function filterRows(rows: RowNode[], filterModel: FilterModel, quickFilte
   });
 }
 
-/**
- * Valores únicos de una columna (para set filter).
- * @param {RowNode[]} rows
- * @param {ColumnState} col
- * @returns {string[]}
- */
-export function uniqueValues(rows: RowNode[], col: ColumnState): string[] {
-  const set = new Set<string>();
-  for (const node of rows) set.add(cellText(col, node));
-  return [...set].sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
-}

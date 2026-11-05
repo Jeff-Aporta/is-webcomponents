@@ -6,7 +6,7 @@
  */
 import { z } from "zod";
 
-export const MutationResultSchema = z.object({
+const MutationResultSchema = z.object({
   selectedNode: z.string(),
   flashRowFlatPaths: z.array(z.string()),
   ensureExpandedIds: z.array(z.string()).optional(),

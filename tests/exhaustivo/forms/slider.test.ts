@@ -3,12 +3,7 @@
  */
 
 import assert from 'node:assert/strict';
-import {
-  leerComponente, leerPreview, existeCss,
-  atributosObservados, eventosEmitidos,
-  slotsDeclarados,
-  esFormAssociated,
-} from '../../_shared/exhaustivo-forms.js';
+import { leerComponente, leerPreview, existeCss, atributosObservados, eventosEmitidos, esFormAssociated } from '../../_shared/exhaustivo-forms.js';
 // `partsDeclaradas` solo captura `part="x"` estáticos; el slider además
 // define `mark` / `mark-label` dinámicamente vía `setAttribute('part', …)`,
 // así que usamos el helper del root `_helpers.ts` que cubre ambos casos.

@@ -6,15 +6,13 @@
  */
 import { z } from "zod";
 
-export const CodeMarkKindSchema = z.union([z.literal('highlight'), z.literal('tooltip'), z.literal('message')]);
+const CodeMarkKindSchema = z.union([z.literal('highlight'), z.literal('tooltip'), z.literal('message')]);
 export type CodeMarkKind = z.infer<typeof CodeMarkKindSchema>;
 
-
-export const CodeMarkToneSchema = z.union([z.literal('error'), z.literal('warning'), z.literal('info'), z.literal('success'), z.literal('neutral')]);
+const CodeMarkToneSchema = z.union([z.literal('error'), z.literal('warning'), z.literal('info'), z.literal('success'), z.literal('neutral')]);
 export type CodeMarkTone = z.infer<typeof CodeMarkToneSchema>;
 
-
-export const CodeMarkSchema = z.object({
+const CodeMarkSchema = z.object({
   id: z.string(),
   from: z.number(),
   to: z.number(),
@@ -27,8 +25,7 @@ export const CodeMarkSchema = z.object({
 });
 export type CodeMark = z.infer<typeof CodeMarkSchema>;
 
-
-export const CodeMarkInputSchema = z.object({
+const CodeMarkInputSchema = z.object({
   id: z.unknown().optional(),
   from: z.unknown().optional(),
   to: z.unknown().optional(),
@@ -41,8 +38,7 @@ export const CodeMarkInputSchema = z.object({
 });
 export type CodeMarkInput = z.infer<typeof CodeMarkInputSchema>;
 
-
-export const CodeDocumentSchema = z.object({
+const CodeDocumentSchema = z.object({
   /* TODO: member $schema: string */
   lang: z.string(),
   value: z.string(),
@@ -52,8 +48,7 @@ export const CodeDocumentSchema = z.object({
 });
 export type CodeDocument = z.infer<typeof CodeDocumentSchema>;
 
-
-export const CodeDocOptsSchema = z.object({
+const CodeDocOptsSchema = z.object({
   lang: z.string().optional(),
   marks: z.array(z.unknown() /* TODO: cannot convert */).optional(),
   format: z.object({}).optional(),
@@ -61,8 +56,7 @@ export const CodeDocOptsSchema = z.object({
 });
 export type CodeDocOpts = z.infer<typeof CodeDocOptsSchema>;
 
-
-export const CodeDocumentInputSchema = z.object({
+const CodeDocumentInputSchema = z.object({
   /* TODO: member $schema?: unknown */
   value: z.unknown().optional(),
   lang: z.unknown().optional(),

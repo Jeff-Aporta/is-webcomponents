@@ -5,19 +5,7 @@
  * icon, color. Slots: label, value, helper, trend, icon. Events: ninguno.
  */
 import assert from 'node:assert/strict';
-import {
-  exists,
-  read,
-  extraerObservados,
-  extraerEventos,
-  extraerSlots,
-  extraerParts,
-  tieneShadow,
-  tieneEdgeCaseGuards,
-  adoptaCss,
-  estaRegistrado,
-  tieneAccesibilidad,
-} from '../../_shared/exhaustivo.ts';
+import { exists, read, extraerObservados, extraerEventos, extraerSlots, extraerParts, tieneShadow, adoptaCss, estaRegistrado, tieneAccesibilidad } from '../../_shared/exhaustivo.ts';
 import { coleccionPruebas } from '../../../src/vendor-distributions/shared/testing/pruebas.ts';
 
 const { test, lista } = coleccionPruebas({ categoria: 'what' });

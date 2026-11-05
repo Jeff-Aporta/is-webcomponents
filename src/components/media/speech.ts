@@ -1,6 +1,6 @@
 import { emit } from '@jeff-aporta/iswc-base/core/element.js';
 import { setStringAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
-import type { SpeechRecognitionEvent, SpeechRecognitionResultList, SpeechRecognitionResult, SpeechRecognitionAlternative, SpeechRecognitionErrorEvent, SpeechRecognitionInstance, SpeechRecognitionCtor, SpeechRecognitionConstructorBag } from "./schemas/speech.schemas.js";
+import type { SpeechRecognitionEvent, SpeechRecognitionErrorEvent, SpeechRecognitionInstance, SpeechRecognitionCtor, SpeechRecognitionConstructorBag } from "./schemas/speech.schemas.js";
 import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import css from 'iswc:css';
 

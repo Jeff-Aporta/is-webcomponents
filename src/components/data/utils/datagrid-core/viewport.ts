@@ -21,29 +21,6 @@ import type { ColLayout } from "@jeff-aporta/iswc-base/components/data/schemas/d
  */
 
 /**
- * Ventana de filas a renderizar dado scrollTop/altura de viewport.
- * Filas de alto fijo (la densidad las cambia en runtime).
- *
- * @param {number} rowCount
- * @param {number} rowHeight
- * @param {number} scrollTop
- * @param {number} viewportHeight
- * @param {number} [overscan=6]
- * @returns {RowWindow}
- */
-export function rowWindow(rowCount: number, rowHeight: number, scrollTop: number, viewportHeight: number, overscan: number = 6) {
-  const totalHeight = rowCount * rowHeight;
-  if (rowCount === 0 || rowHeight <= 0) {
-    return { startIndex: 0, endIndex: 0, topPad: 0, totalHeight };
-  }
-  const first = Math.floor(scrollTop / rowHeight);
-  const visible = Math.ceil(viewportHeight / rowHeight);
-  const startIndex = Math.max(0, first - overscan);
-  const endIndex = Math.min(rowCount, first + visible + overscan);
-  return { startIndex, endIndex, topPad: startIndex * rowHeight, totalHeight };
-}
-
-/**
  * @typedef {Object} ColLayout
  * @property {number[]} positions     x acumulado por columna (centro)
  * @property {number} totalWidth

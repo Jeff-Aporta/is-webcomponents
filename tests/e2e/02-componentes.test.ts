@@ -12,7 +12,6 @@ import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/
 
 const { test, lista, before, after } = coleccionPruebas({ categoria: 'what' });
 
-
 const DISPONIBLE = faltanRequisitos().length === 0;
 let ctx: CtxE2E | null = null;
 const testE2E = crearTestE2E(() => (ctx ? ctx.page : null));
@@ -45,7 +44,7 @@ const VISTAS: Array<[string, { svg: boolean } | null]> = [
   ['iswc-bar-chart', { svg: true }],
   ['iswc-split-panel', null],
 ];
-export type EstadoVista = { definido: boolean; instancias: number; texto: number; svg: number; canvas: number; demos: number; };
+type EstadoVista = { definido: boolean; instancias: number; texto: number; svg: number; canvas: number; demos: number; };
 testE2E('cada vista representativa monta contenido real con su componente definido', { timeout: 600000 }, async (t) => {
   if (!DISPONIBLE) return t.skip('faltan variables E2E');
   const page = pagina();

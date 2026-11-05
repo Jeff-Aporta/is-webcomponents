@@ -6,7 +6,7 @@
  */
 import { z } from "zod";
 
-export const DocDemoBootOptsSchema = z.object({
+const DocDemoBootOptsSchema = z.object({
   defaultTheme: z.string().optional(),
   defaultPalette: z.string().optional(),
 });

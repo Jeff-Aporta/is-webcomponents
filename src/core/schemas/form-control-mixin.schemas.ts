@@ -6,10 +6,9 @@
  */
 import { z } from "zod";
 
-export const LabelPlacementSchema = z.union([z.literal('start'), z.literal('end'), z.literal('top'), z.literal('bottom')]);
+const LabelPlacementSchema = z.union([z.literal('start'), z.literal('end'), z.literal('top'), z.literal('bottom')]);
 export type LabelPlacement = z.infer<typeof LabelPlacementSchema>;
 
-
-export const ElementCtorSchema = z.unknown() /* TODO: cannot convert */;
+const ElementCtorSchema = z.unknown() /* TODO: cannot convert */;
 export type ElementCtor = z.infer<typeof ElementCtorSchema>;
 

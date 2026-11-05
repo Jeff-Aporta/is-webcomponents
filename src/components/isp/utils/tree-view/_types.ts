@@ -67,16 +67,10 @@
 // ── Helpers de casteo (convención `asRecord(v: unknown)`) ─────────────────
 
 /** Castea `unknown` a `Record<string, unknown>` de forma segura. */
-import type { TNode, TRecord, TreeActionSpec, TreeActionEntry, IconConfig, FloatCardConfig, RowConfig, SiblingPosition, DropPosition, MoveDirection, PendingDeleteSnapshot, RowAdapterBridge, TreeContext, LevelNameArgs, NodeIconArgs, CustomsRuntime, HotkeyHandler, TreeCustoms } from "@jeff-aporta/iswc-base/components/isp/schemas/tree-view-types.schemas.js";
+import type { TNode, TRecord, TreeActionSpec, PendingDeleteSnapshot, TreeContext } from "@jeff-aporta/iswc-base/components/isp/schemas/tree-view-types.schemas.js";
 export function asRecord(v: unknown): Record<string, unknown> {
   if (v === null || typeof v !== "object") return {};
   return v as Record<string, unknown>;
-}
-
-/** Castea `unknown` a `TNode | null` de forma segura. */
-export function asNode(v: unknown): TNode | null {
-  if (v === null || typeof v !== "object") return null;
-  return v as TNode;
 }
 
 /** Convierte `unknown` a `string` (fallback por defecto `""`). */

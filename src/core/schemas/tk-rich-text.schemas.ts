@@ -6,7 +6,7 @@
  */
 import { z } from "zod";
 
-export const RichTextSegmentSchema = z.object({
+const RichTextSegmentSchema = z.object({
   type: z.union([z.literal('html'), z.literal('text')]),
   value: z.string(),
 });

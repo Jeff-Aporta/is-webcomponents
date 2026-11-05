@@ -17,7 +17,7 @@
 // Uso:  node tests/cdn-snippet-match.test.ts
 
 import { readdirSync } from 'node:fs';
-import { join, dirname, basename, relative } from 'node:path';
+import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import assert from 'node:assert/strict';
 import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';

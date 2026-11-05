@@ -54,9 +54,11 @@ test('4. las piezas de personalización se importan de su módulo de origen y ti
   assert.ok(!/export\s*\{[^}]*TreeCustomsBase/.test(readFileSync(TS, 'utf8')), 'tree-view no re-exporta (S-TS9)');
 });
 
-test('5. importa customs base compartido (utils/tree-view/customs-base)', async () => {
-  const src = readFileSync(TS, 'utf8');
-  assert.ok(/from\s*['"][./]+utils\/tree-view\/customs-base/.test(src));
+// tree-view.ts no usa TreeCustomsBase (lo extiende la app): el import que tenía era código muerto (F9a).
+test('5. customs base compartido: la doc enseña a extenderlo desde su módulo', async () => {
+  const doc = readFileSync(join(ROOT, 'src', 'components', 'isp', 'tree-view.md'), 'utf8');
+  assert.match(doc, /import \{ TreeCustomsBase \} from '\.\/isp\/customs-base\.min\.mjs';/);
+  assert.match(doc, /extends TreeCustomsBase/);
 });
 
 test('6. importa paintForest para pintar el árbol', async () => {

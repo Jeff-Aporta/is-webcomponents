@@ -6,6 +6,6 @@
  */
 import { z } from "zod";
 
-export const CursorHookSchema = z.function({ input: [], output: z.void() });
+const CursorHookSchema = z.function({ input: [], output: z.void() });
 export type CursorHook = z.infer<typeof CursorHookSchema>;
 

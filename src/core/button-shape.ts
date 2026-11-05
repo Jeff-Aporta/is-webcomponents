@@ -35,15 +35,3 @@ export function normalizeButtonShape(
     : fallback;
 }
 
-/** Opciones de select para demos: value + label + icon. */
-export function buttonShapeSelectOptions(): Array<{
-  value: ButtonShape;
-  label: string;
-  icon: string;
-}> {
-  return BUTTON_SHAPE.map((value) => ({
-    value,
-    label: value,
-    icon: BUTTON_SHAPE_ICON[value],
-  }));
-}

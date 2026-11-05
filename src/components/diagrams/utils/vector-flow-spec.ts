@@ -9,7 +9,7 @@ import { ZVectorFlow } from '@jeff-aporta/iswc-base/components/diagrams/schemas/
 import type { TColumnaVector, TNodoVector, TTipoColumna, TTipoVector, TVectorFlow } from '@jeff-aporta/iswc-base/components/diagrams/schemas/vector-flow-spec.schemas.js';
 
 /** Lo que acepta cada tipo de columna por defecto (una nota puede comentar cualquier entidad). */
-export const ACEPTA_POR_TIPO: Record<TTipoColumna, readonly TTipoVector[]> = {
+const ACEPTA_POR_TIPO: Record<TTipoColumna, readonly TTipoVector[]> = {
   clientes: ['cliente', 'nota'],
   componentes: ['componente', 'fin', 'inicio', 'nota'],
   flujo: ['paso', 'decision', 'variables', 'barra', 'nota', 'anidado', 'inicio', 'fin'],
@@ -22,7 +22,7 @@ export const ACEPTA_POR_TIPO: Record<TTipoColumna, readonly TTipoVector[]> = {
 const registro = (v: unknown): Record<string, unknown> => (v && typeof v === 'object' ? v as Record<string, unknown> : {});
 
 /** Tipo de entidad de un nodo del vector (por su `kind`, su clase y su forma). */
-export function tipoVector(n: TNodoVector): TTipoVector {
+function tipoVector(n: TNodoVector): TTipoVector {
   const kind = String(n.kind ?? '');
   if (kind === 'component') return 'componente';
   if (kind === 'tableder') return 'tabla';
@@ -44,7 +44,7 @@ export function tipoVector(n: TNodoVector): TTipoVector {
 }
 
 /** Tipos que acepta una columna (los propios o los de su tipo). */
-export const aceptaColumna = (c: TColumnaVector): readonly TTipoVector[] => c.accepts ?? ACEPTA_POR_TIPO[c.tipo];
+const aceptaColumna = (c: TColumnaVector): readonly TTipoVector[] => c.accepts ?? ACEPTA_POR_TIPO[c.tipo];
 
 /** Violaciones del vector (vacío si es válido). */
 export function validarVector(v: TVectorFlow): string[] {

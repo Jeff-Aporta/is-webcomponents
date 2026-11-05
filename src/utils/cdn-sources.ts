@@ -8,14 +8,7 @@
  * Espejo: GitHub Pages (`jeff-aporta.github.io/.../dist/cdn`).
  * Ver `src/core/cdn-ref.ts` → `MIRRORS`.
  */
-import {
-  resolveRef,
-  resolvedBase,
-  jsdelivrBase,
-  pagesBase,
-  MIRRORS,
-  fallbackBases,
-} from '@jeff-aporta/iswc-base/core/cdn-ref.js';
+import { jsdelivrBase, MIRRORS } from '@jeff-aporta/iswc-base/core/cdn-ref.js';
 import { REPO_GITHUB } from '@jeff-aporta/iswc-base/core/cdn-ref.js';
 
 const RAW = (ref: string = 'main') => `https://raw.githubusercontent.com/${REPO_GITHUB}/${ref}`;

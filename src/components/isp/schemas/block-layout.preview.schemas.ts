@@ -6,7 +6,7 @@
  */
 import { z } from "zod";
 
-export const _BlockLayoutLikeSchema = z.object({
+const _BlockLayoutLikeSchema = z.object({
   sizew: z.string(),
   clientWidthMeasured: z.number(),
   fromJSON: z.function({ input: [z.unknown()], output: z.unknown() /* TODO: ref this */ }),

@@ -6,7 +6,7 @@
  */
 import { z } from "zod";
 
-export const QRInstanceSchema = z.object({
+const QRInstanceSchema = z.object({
   addData: z.function({ input: [z.string()], output: z.void() }),
   make: z.function({ input: [], output: z.void() }),
   getModuleCount: z.function({ input: [], output: z.number() }),
@@ -14,7 +14,6 @@ export const QRInstanceSchema = z.object({
 });
 export type QRInstance = z.infer<typeof QRInstanceSchema>;
 
-
-export const QRLibSchema = z.function({ input: [z.number(), z.string()], output: z.unknown() /* TODO: ref QRInstance */ });
+const QRLibSchema = z.function({ input: [z.number(), z.string()], output: z.unknown() /* TODO: ref QRInstance */ });
 export type QRLib = z.infer<typeof QRLibSchema>;
 

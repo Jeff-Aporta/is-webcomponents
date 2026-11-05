@@ -6,16 +6,16 @@ import { z } from 'zod';
 import type { ProgressInfo } from 'runonweb/core';
 
 /** Lo que cada componente recibe de una herramienta. */
-export const CajaSchema = z.object({ etiqueta: z.string(), puntaje: z.number(), xmin: z.number(), ymin: z.number(), xmax: z.number(), ymax: z.number() });
+const CajaSchema = z.object({ etiqueta: z.string(), puntaje: z.number(), xmin: z.number(), ymin: z.number(), xmax: z.number(), ymax: z.number() });
 export type Caja = z.infer<typeof CajaSchema>;
-export const BarraSchema = z.object({ etiqueta: z.string(), valor: z.number() });
-export type Barra = z.infer<typeof BarraSchema>;
+const BarraSchema = z.object({ etiqueta: z.string(), valor: z.number() });
+type Barra = z.infer<typeof BarraSchema>;
 export type Salida = { texto?: string; imagen?: Blob; audio?: Blob; cajas?: Caja[]; barras?: Barra[] };
 export type Entrada = Blob | string;
 export type Opciones = Record<string, string>;
 
 /** `carga`: cambia el modelo, así que crea otro motor. `pesos`: su descarga según el valor. Sin `valores` es un campo de texto. */
-export const OpcionSchema = z.object({
+const OpcionSchema = z.object({
   id: z.string(),
   rotulo: z.string(),
   defecto: z.string(),
@@ -47,19 +47,19 @@ export type Motor = { ejecutar(entrada: Entrada, opciones: Opciones, parcial: (t
 export type Crear = (opciones: Opciones, alProgreso: (p: ProgressInfo) => void) => Promise<Motor>;
 
 /** Progreso de una descarga, 0..100 y sin retroceder. */
-export type Progreso = { progress?: number };
-export type Cargar<T> = (alProgreso: (p: Progreso) => void) => Promise<T>;
+type Progreso = { progress?: number };
+type Cargar<T> = (alProgreso: (p: Progreso) => void) => Promise<T>;
 /** `clave`: id del modelo (con `/` si es de Hugging Face, para mirar la caché real). `mb`: lo que decide toast o modal. */
 export type Pedido<T> = { clave: string; nombre: string; mb: number; cargar: Cargar<T> };
 export type DialogoDescarga = HTMLElement & { open: boolean };
 export type ToastEstatico = { promise?<T>(p: Promise<T>, c: { loading: string; success: string; error: string }): Promise<T> };
 
-export const CuantizacionSchema = z.union([z.object({ tipo: z.enum(['int8', 'int16', 'bits']) }), z.object({ tipo: z.literal('decimales'), decimales: z.number().int().min(0) })]);
-export type Cuantizacion = z.infer<typeof CuantizacionSchema>;
+const CuantizacionSchema = z.union([z.object({ tipo: z.enum(['int8', 'int16', 'bits']) }), z.object({ tipo: z.literal('decimales'), decimales: z.number().int().min(0) })]);
+type Cuantizacion = z.infer<typeof CuantizacionSchema>;
 /** Transformación lista para usar. `matriz` null: toma las primeras `dims` entradas tal cual. */
 export type Aplanado = { metodo: string; dims: number; media: Float32Array | null; matriz: Float32Array[] | null; cuantizacion: Cuantizacion; escala: number };
 /** Enteros en base64 con su escala: así viajan media, matriz y vectores. */
-export const EmpaqueSchema = z.object({ bits: z.union([z.literal(8), z.literal(16)]), escalas: z.array(z.number()), datos: z.string() });
+const EmpaqueSchema = z.object({ bits: z.union([z.literal(8), z.literal(16)]), escalas: z.array(z.number()), datos: z.string() });
 export type Empaque = z.infer<typeof EmpaqueSchema>;
 /** Forma JSON de `Aplanado`. */
 export type AplanadoJson = Omit<Aplanado, 'media' | 'matriz'> & { media: Empaque | null; matriz: Empaque | null };
@@ -75,7 +75,7 @@ export type Muestras = { base: ArrayLike<number>[]; extra?: ArrayLike<number>[];
 export type Eigen = { valores: Float64Array; vectores: Float64Array[] };
 
 /** Cómo se ordena. `exacta`: qué cuenta como coincidencia que va primero; `umbral`: desvíos sobre la media para marcar `relevante`. */
-export const AjusteOrdenSchema = z.object({
+const AjusteOrdenSchema = z.object({
   exacta: z.enum(['ninguna', 'subcadena', 'palabra', 'palabra-clave']),
   minimoExacta: z.number().int().min(0),
   pesoLexico: z.number().min(0),

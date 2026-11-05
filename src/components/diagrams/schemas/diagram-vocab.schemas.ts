@@ -9,7 +9,7 @@
 import { z } from "zod";
 
 /** Diagramas del kit que participan del vocabulario. */
-export const DiagramKindIdSchema = z.enum([
+const DiagramKindIdSchema = z.enum([
   'component', 'er', 'class', 'sequence', 'flowchart', 'state', 'block',
   'swimlane', 'usecase', 'mindmap', 'org-chart', 'timeline', 'gantt',
   'sankey', 'quadrant', 'venn', 'journey',
@@ -17,19 +17,17 @@ export const DiagramKindIdSchema = z.enum([
 export type DiagramKindId = z.infer<typeof DiagramKindIdSchema>;
 
 /** Familias de arista: cada una tiene semántica y remates propios. */
-export const EdgeFamilySchema = z.enum(['connector', 'relational', 'signal', 'flow', 'structural']);
+const EdgeFamilySchema = z.enum(['connector', 'relational', 'signal', 'flow', 'structural']);
 export type EdgeFamily = z.infer<typeof EdgeFamilySchema>;
 
 /** Glifo en un extremo de arista. */
-export const EndGlyphSchema = z.enum([
+const EndGlyphSchema = z.enum([
   'none', 'arrow', 'open-arrow', 'triangle', 'diamond', 'filled-diamond',
   'ball', 'socket', 'crow-one', 'crow-many', 'crow-zero-one', 'crow-zero-many', 'dot',
 ]);
-export type EndGlyph = z.infer<typeof EndGlyphSchema>;
 
 /** Trazo de la línea. */
-export const LineDashSchema = z.enum(['solid', 'dashed', 'dotted']);
-export type LineDash = z.infer<typeof LineDashSchema>;
+const LineDashSchema = z.enum(['solid', 'dashed', 'dotted']);
 
 /**
  * Estilo geométrico de las aristas. `orthogonal` es el router de siempre;
@@ -38,10 +36,6 @@ export type LineDash = z.infer<typeof LineDashSchema>;
  */
 export const EdgeStyleSchema = z.enum(['orthogonal', 'curved', 'bezier', 'straight']);
 export type EdgeStyle = z.infer<typeof EdgeStyleSchema>;
-
-/** Cardinalidad relacional (familia `relational`). */
-export const CardinalitySchema = z.enum(['one', 'many', 'zero-one', 'zero-many', 'one-many']);
-export type Cardinality = z.infer<typeof CardinalitySchema>;
 
 /** Definición de un tipo de arista en el vocabulario. */
 export const EdgeKindDefSchema = z.object({
@@ -80,7 +74,7 @@ export type NodeStructureDef = z.infer<typeof NodeStructureDefSchema>;
 export type NodeStructureDefInput = z.input<typeof NodeStructureDefSchema>;
 
 /** Almacén compartido en `globalThis` (un registro por página). */
-export const VocabStoreSchema = z.object({
+const VocabStoreSchema = z.object({
   edges: z.custom<Map<string, EdgeKindDef>>((v) => v instanceof Map),
   nodes: z.custom<Map<string, NodeStructureDef>>((v) => v instanceof Map),
 });
@@ -105,7 +99,7 @@ export const DiagramPolicySchema = z.object({
 export type DiagramPolicy = z.infer<typeof DiagramPolicySchema>;
 
 /** Resultado de aplicar una política a una lista de ítems. */
-export const PolicyReportSchema = z.object({
+const PolicyReportSchema = z.object({
   acceptedIds: z.array(z.string()),
   rejected: z.array(z.object({ id: z.string(), kind: z.string(), reason: z.string() })),
 });

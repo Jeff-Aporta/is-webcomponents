@@ -6,22 +6,20 @@
  */
 import { z } from "zod";
 
-export const SheetCacheOptsSchema = z.object({
+const SheetCacheOptsSchema = z.object({
   cacheName: z.string().optional(),
   globalKey: z.string().optional(),
   patchPrepend: z.boolean().optional(),
 });
 export type SheetCacheOpts = z.infer<typeof SheetCacheOptsSchema>;
 
-
-export const SheetCacheManifestOptsSchema = z.object({
+const SheetCacheManifestOptsSchema = z.object({
   base: z.string().optional(),
   key: z.string().optional(),
 });
 export type SheetCacheManifestOpts = z.infer<typeof SheetCacheManifestOptsSchema>;
 
-
-export const SheetCacheApiSchema = z.object({
+const SheetCacheApiSchema = z.object({
   cacheName: z.string(),
   hojas: z.map(z.string(), z.unknown() /* TODO: ref CSSStyleSheet */),
   cargas: z.map(z.string(), z.promise(z.union([z.unknown() /* TODO: ref CSSStyleSheet */, z.null()]))),

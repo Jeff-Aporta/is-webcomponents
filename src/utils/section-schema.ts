@@ -23,7 +23,7 @@
  */
 import { z } from "zod";
 import { TextLikeSchema } from "@jeff-aporta/iswc-base/previews/_kit/schemas/component.schemas.ts";
-import type { SectionId, ContentBlock, SectionTableRow, SectionTable, AtributosRow, PropRow, StateRow, EventoRow, SlotRow, PartRow, ApiJsRow, Example, Examples, SectionsMap, ExcludeList, FichaWarning, FichaInspection, Ficha } from "./schemas/section-schema.schemas.js";
+import type { FichaInspection, Ficha } from "./schemas/section-schema.schemas.js";
 
 /* --------------------------------------------------------------------------
  * IDs y constantes
@@ -52,7 +52,7 @@ export const SECTION_IDS = [
  * Anatomía y Ejemplos: bloque de markdown libre. El validador no interpreta
  * el contenido, sólo garantiza que sea string no vacío.
  */
-export const ContentBlockSchema = z.object({
+const ContentBlockSchema = z.object({
   // TextLike (W43): los JSON guardan el markdown multi-línea como string[] (una línea por item).
   content: TextLikeSchema.refine(
     (v) => (Array.isArray(v) ? v.join("\n") : v).length > 0,
@@ -65,7 +65,7 @@ export const ContentBlockSchema = z.object({
  * parts / apiJs). Se usa `passthrough()` para que columnas extra definidas
  * en el .md (ej. `deprecated`, `since`, `notes`) sobrevivan al parseo.
  */
-export const SectionTableRowSchema = z
+const SectionTableRowSchema = z
   .object({
     name: z.string().optional(),
     type: z.string().optional(),
@@ -83,20 +83,15 @@ export const SectionTableRowSchema = z
   })
   .passthrough();
 
-/** Tabla con shape `{ table: SectionTableRow[] }`. */
-export const SectionTableSchema = z.object({
-  table: z.array(SectionTableRowSchema).min(0),
-});
-
 /* --------------------------------------------------------------------------
  * Schemas por sección (refinan el bloque genérico con required concretos)
  * ------------------------------------------------------------------------*/
 
 /** Anatomía: `content` markdown. */
-export const AnatomiaSectionSchema = ContentBlockSchema;
+const AnatomiaSectionSchema = ContentBlockSchema;
 
 /** Atributos: filas `{ name, type?, desc? }`. */
-export const AtributosSectionSchema = z.object({
+const AtributosSectionSchema = z.object({
   table: z.array(
     z
       .object({
@@ -109,7 +104,7 @@ export const AtributosSectionSchema = z.object({
 });
 
 /** Props: filas `{ name, type, default?, desc? }`. */
-export const PropsSectionSchema = z.object({
+const PropsSectionSchema = z.object({
   table: z.array(
     z
       .object({
@@ -123,7 +118,7 @@ export const PropsSectionSchema = z.object({
 });
 
 /** Custom states: filas `{ state, selector?, cuando }`. */
-export const StatesSectionSchema = z.object({
+const StatesSectionSchema = z.object({
   table: z.array(
     z
       .object({
@@ -136,7 +131,7 @@ export const StatesSectionSchema = z.object({
 });
 
 /** Eventos: filas `{ evento, detalle?, cuando }`. */
-export const EventosSectionSchema = z.object({
+const EventosSectionSchema = z.object({
   table: z.array(
     z
       .object({
@@ -149,7 +144,7 @@ export const EventosSectionSchema = z.object({
 });
 
 /** Slots: filas `{ slot, descripcion? }`. */
-export const SlotsSectionSchema = z.object({
+const SlotsSectionSchema = z.object({
   table: z.array(
     z
       .object({
@@ -161,7 +156,7 @@ export const SlotsSectionSchema = z.object({
 });
 
 /** CSS parts: filas `{ part, descripcion? }`. */
-export const PartsSectionSchema = z.object({
+const PartsSectionSchema = z.object({
   table: z.array(
     z
       .object({
@@ -173,7 +168,7 @@ export const PartsSectionSchema = z.object({
 });
 
 /** API JS: filas `{ metodo, descripcion?, ejemplo? }`. */
-export const ApiJsSectionSchema = z.object({
+const ApiJsSectionSchema = z.object({
   table: z.array(
     z
       .object({
@@ -198,7 +193,7 @@ export const ApiJsSectionSchema = z.object({
 });
 
 /** Ejemplos: `content` markdown. */
-export const EjemplosSectionSchema = ContentBlockSchema;
+const EjemplosSectionSchema = ContentBlockSchema;
 
 /* --------------------------------------------------------------------------
  * Examples (Phase W21)
@@ -259,7 +254,7 @@ export const ExamplesSchema = z.array(ExampleSchema);
  * sección ausente se considera "no presente" y se valida contra `exclude`
  * en el `.refine()` final.
  */
-export const SectionsMapSchema = z.object({
+const SectionsMapSchema = z.object({
   anatomia: AnatomiaSectionSchema.optional(),
   atributos: AtributosSectionSchema.optional(),
   props: PropsSectionSchema.optional(),
@@ -276,7 +271,7 @@ export const SectionsMapSchema = z.object({
  * ------------------------------------------------------------------------*/
 
 /** Lista de secciones que NO aplican al componente. */
-export const ExcludeListSchema = z
+const ExcludeListSchema = z
   .array(z.enum(SECTION_IDS))
   .default([])
   .refine(

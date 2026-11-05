@@ -2,11 +2,7 @@
 // cada elemento lleva un `cmd` que el componente despacha.
 import { NUMBER_FORMATS } from '@jeff-aporta/iswc-base/components/data/utils/spreadsheet/numfmt.js';
 import { esc } from './render.js';
-import type { RibbonItem, MenuItem, RibbonGroup, RibbonTab } from './ribbon.schemas.js';
-
-
-
-
+import type { RibbonItem, MenuItem, RibbonTab } from './ribbon.schemas.js';
 
 /** Muestras de los selectores de color: se asignan por propiedad, ya actualizados. */
 export const SWATCHES = ['#000000', '#ffffff', '#c00000', '#ff0000', '#ffc000', '#ffff00', '#92d050', '#00b050', '#00b0f0', '#0070c0', '#002060', '#7030a0', '#f2f2f2', '#d9d9d9', '#fce4d6', '#fff2cc', '#e2efda', '#ddebf7'];
@@ -65,7 +61,7 @@ const FREEZE_MENU: MenuItem[] = [
 ];
 
 /** Cinta completa. */
-export const RIBBON: RibbonTab[] = [
+const RIBBON: RibbonTab[] = [
   {
     id: 'home', label: 'Inicio', groups: [
       { label: 'Historial', items: [

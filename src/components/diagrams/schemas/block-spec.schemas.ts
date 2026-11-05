@@ -6,15 +6,14 @@
  */
 import { z } from "zod";
 
-export const BlockSpecGroupSchema = z.object({
+const BlockSpecGroupSchema = z.object({
   id: z.string(),
   name: z.string(),
   hue: z.number(),
 });
 export type BlockSpecGroup = z.infer<typeof BlockSpecGroupSchema>;
 
-
-export const BlockSpecBlockSchema = z.object({
+const BlockSpecBlockSchema = z.object({
   id: z.string(),
   label: z.string(),
   shape: z.union([z.literal('rect'), z.literal('round')]),
@@ -25,8 +24,7 @@ export const BlockSpecBlockSchema = z.object({
 });
 export type BlockSpecBlock = z.infer<typeof BlockSpecBlockSchema>;
 
-
-export const BlockSpecEdgeSchema = z.object({
+const BlockSpecEdgeSchema = z.object({
   id: z.string(),
   from: z.string(),
   to: z.string(),
@@ -34,8 +32,7 @@ export const BlockSpecEdgeSchema = z.object({
 });
 export type BlockSpecEdge = z.infer<typeof BlockSpecEdgeSchema>;
 
-
-export const BlockSpecSchema = z.object({
+const BlockSpecSchema = z.object({
   title: z.string().optional(),
   subtitle: z.string().optional(),
   columns: z.number(),
@@ -45,16 +42,14 @@ export const BlockSpecSchema = z.object({
 });
 export type BlockSpec = z.infer<typeof BlockSpecSchema>;
 
-
-export const LeadingIconSchema = z.object({
+const LeadingIconSchema = z.object({
   iconId: z.string().optional(),
   hue: z.number().optional(),
   rest: z.string().optional(),
 });
 export type LeadingIcon = z.infer<typeof LeadingIconSchema>;
 
-
-export const BlockPlacementSchema = z.object({
+const BlockPlacementSchema = z.object({
   id: z.string(),
   row: z.number(),
   col: z.number(),
@@ -62,8 +57,7 @@ export const BlockPlacementSchema = z.object({
 });
 export type BlockPlacement = z.infer<typeof BlockPlacementSchema>;
 
-
-export const BlockLayoutBlockSchema = z.object({
+const BlockLayoutBlockSchema = z.object({
   id: z.string(),
   x: z.number(),
   y: z.number(),
@@ -79,8 +73,7 @@ export const BlockLayoutBlockSchema = z.object({
 });
 export type BlockLayoutBlock = z.infer<typeof BlockLayoutBlockSchema>;
 
-
-export const BlockLayoutEdgeSchema = z.object({
+const BlockLayoutEdgeSchema = z.object({
   id: z.string(),
   from: z.string(),
   to: z.string(),
@@ -95,8 +88,7 @@ export const BlockLayoutEdgeSchema = z.object({
 });
 export type BlockLayoutEdge = z.infer<typeof BlockLayoutEdgeSchema>;
 
-
-export const BlockLayoutSchema = z.object({
+const BlockLayoutSchema = z.object({
   width: z.number(),
   height: z.number(),
   blocks: z.array(BlockLayoutBlockSchema),
@@ -110,13 +102,11 @@ export const BlockLayoutSchema = z.object({
 });
 export type BlockLayout = z.infer<typeof BlockLayoutSchema>;
 
-
-export const BlockRectSchema = z.object({
+const BlockRectSchema = z.object({
 
 });
 export type BlockRect = z.infer<typeof BlockRectSchema>;
 
-
-export const SideSchema = z.union([z.literal('left'), z.literal('right'), z.literal('top'), z.literal('bottom')]);
+const SideSchema = z.union([z.literal('left'), z.literal('right'), z.literal('top'), z.literal('bottom')]);
 export type Side = z.infer<typeof SideSchema>;
 

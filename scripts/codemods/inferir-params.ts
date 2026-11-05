@@ -24,7 +24,7 @@
 import { readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import ts from 'typescript';
-import { claveParametro, leerDescartes, nombreDeFuncion } from './ts-parametros-comunes.js';
+import { claveParametro, leerDescartes, nombreDeFuncion } from './parametros-comunes.ts';
 
 /**
  * Señales por tipo: patrones que solo aparecen cuando el parámetro ES de ese

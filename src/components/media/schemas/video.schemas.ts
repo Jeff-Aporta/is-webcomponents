@@ -6,7 +6,7 @@
  */
 import { z } from "zod";
 
-export const IswcCheckIconButtonSchema = z.object({
+const IswcCheckIconButtonSchema = z.object({
   checked: z.boolean(),
   icon: z.string(),
 });

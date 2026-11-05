@@ -23,7 +23,7 @@
  */
 import { readFileSync, writeFileSync } from 'node:fs';
 import ts from 'typescript';
-import { claveParametro, guardarDescartes, leerDescartes, nombreDeFuncion } from './ts-parametros-comunes.js';
+import { claveParametro, guardarDescartes, leerDescartes, nombreDeFuncion } from './parametros-comunes.ts';
 
 /** Tipos que pone `ts-inferir-params.ts`; no se tocan anotaciones de otra procedencia. */
 const INFERIDOS = new Set(['number', 'string', 'HTMLElement', 'Event', 'KeyboardEvent', 'MouseEvent', 'CustomEvent']);

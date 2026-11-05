@@ -6,22 +6,18 @@
  */
 import { z } from "zod";
 
-export const ToonTextoSchema = z.object({
+const ToonTextoSchema = z.object({
   texto: z.string(),
   variantes: z.array(z.string()).optional(),
 });
-export type ToonTexto = z.infer<typeof ToonTextoSchema>;
 
-
-export const ToonControlSchema = z.object({
+const ToonControlSchema = z.object({
   control: z.string(),
   prop: z.string(),
   label: z.string(),
 });
-export type ToonControl = z.infer<typeof ToonControlSchema>;
 
-
-export const ToonDocSchema = z.object({
+const ToonDocSchema = z.object({
   /* TODO: member $schema: 'toon/v1' */
   tag: z.string(),
   textos: z.record(z.string(), ToonTextoSchema).optional(),

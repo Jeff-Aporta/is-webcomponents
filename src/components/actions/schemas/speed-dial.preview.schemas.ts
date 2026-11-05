@@ -6,7 +6,7 @@
  */
 import { z } from "zod";
 
-export const CustomEventWithDetailSchema = z.object({
+const CustomEventWithDetailSchema = z.object({
   detail: z.unknown() /* TODO: ref T */.optional(),
 });
 export type CustomEventWithDetail = z.infer<typeof CustomEventWithDetailSchema>;

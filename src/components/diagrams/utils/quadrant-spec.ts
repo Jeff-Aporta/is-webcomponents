@@ -1,6 +1,6 @@
 import { richTextPlain } from '@jeff-aporta/iswc-base/core/tk-rich-text.js';
 import { resolveTkHue, SERIE_HUES } from '@jeff-aporta/iswc-base/core/tk-hue.js';
-import type { QuadrantPoint, QuadrantGroup, QuadrantAxes, QuadrantQuadrants, QuadrantSpec, QuadrantJsonOut, PlotRect, QuadrantLayoutPoint, QuadrantLayoutQuadrant, QuadrantLayoutAxisLabel, QuadrantLayoutAxes, QuadrantLayout } from "@jeff-aporta/iswc-base/components/diagrams/schemas/quadrant-spec.schemas.js";
+import type { QuadrantPoint, QuadrantGroup, QuadrantQuadrants, QuadrantSpec, PlotRect, QuadrantLayoutPoint, QuadrantLayoutQuadrant, QuadrantLayoutAxes, QuadrantLayout } from "@jeff-aporta/iswc-base/components/diagrams/schemas/quadrant-spec.schemas.js";
 
 /**
  * Especificación y layout de matrices 2×2 (quadrant chart), sin Mermaid.
@@ -92,26 +92,6 @@ export function resolveQuadrantSpec(payload: unknown): QuadrantSpec | null {
     groups: readGroups(src),
     points: rawPoints.map(readPoint),
   };
-}
-
-/** spec → objeto `quadrant` listo para persistir / mostrar en el editor. */
-export function quadrantSpecToJson(spec: QuadrantSpec): QuadrantJsonOut {
-  const out: QuadrantJsonOut = { points: [] };
-  if (spec.title) out.title = spec.title;
-  if (spec.subtitle) out.subtitle = spec.subtitle;
-  if (spec.xAxis.left || spec.xAxis.right) out.xAxis = { ...spec.xAxis };
-  if (spec.yAxis.bottom || spec.yAxis.top) out.yAxis = { ...spec.yAxis };
-  const q = spec.quadrants;
-  if (q.topRight || q.topLeft || q.bottomRight || q.bottomLeft) out.quadrants = { ...q };
-  if (spec.groups?.length) out.groups = spec.groups;
-  out.points = spec.points.map((pt) => {
-    const row: QuadrantJsonOut['points'][number] = { label: pt.label, x: pt.x, y: pt.y };
-    if (pt.id) row.id = pt.id;
-    if (pt.group) row.group = pt.group;
-    if (pt.description) row.desc = pt.description;
-    return row;
-  });
-  return out;
 }
 
 /**

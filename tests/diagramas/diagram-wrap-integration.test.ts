@@ -9,7 +9,6 @@
 // sola línea, este test lo detecta.
 
 import assert from 'node:assert/strict';
-import { window as jsdomWindow } from '../_shared/jsdom-shim.ts';
 import {
   computeFlowchartLayout,
   resolveFlowchartSpec,
@@ -26,20 +25,7 @@ import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/
 
 const { test, lista } = coleccionPruebas({ categoria: 'what' });
 
-
 const LONG_LABEL = 'Este es un label muy largo que definitivamente no cabe en una sola línea y debería hacer wrap con múltiples tspans';
-
-function countTspans(layout: any, key: string, labelKey: string = 'label'): number {
-  // Cuenta cuántos nodos tienen un layout.lines > 1, lo que indica wrap.
-  if (!layout || !layout[key]) return 0;
-  let wrappedCount = 0;
-  for (const node of layout[key]) {
-    if (typeof node[labelKey] === 'string' && node[labelKey].length > 30) {
-      wrappedCount++;
-    }
-  }
-  return wrappedCount;
-}
 
 test('flowchart: label largo activa wrap (overflow=grow aumenta altura)', () => {
   const spec = resolveFlowchartSpec({

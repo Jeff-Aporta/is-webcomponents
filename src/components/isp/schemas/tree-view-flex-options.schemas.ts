@@ -6,15 +6,14 @@
  */
 import { z } from "zod";
 
-export const FlexHostSchema = z.object({
+const FlexHostSchema = z.object({
   _trvwrFlexSig: z.string().optional(),
   _trvwrOnClick: z.function({ input: [], output: z.void() }).optional(),
   _trvwrBound: z.boolean().optional(),
 });
 export type FlexHost = z.infer<typeof FlexHostSchema>;
 
-
-export const FlexActionSpecSchema = z.object({
+const FlexActionSpecSchema = z.object({
   icon: z.string().optional(),
   iconTrue: z.string().optional(),
   iconFalse: z.string().optional(),
@@ -30,18 +29,15 @@ export const FlexActionSpecSchema = z.object({
 });
 export type FlexActionSpec = z.infer<typeof FlexActionSpecSchema>;
 
-
-export const FlexActionEntrySchema = z.union([FlexActionSpecSchema, z.array(FlexActionSpecSchema), z.null(), z.undefined(), z.literal(false)]);
+const FlexActionEntrySchema = z.union([FlexActionSpecSchema, z.array(FlexActionSpecSchema), z.null(), z.undefined(), z.literal(false)]);
 export type FlexActionEntry = z.infer<typeof FlexActionEntrySchema>;
 
-
-export const CompactOptsSchema = z.object({
+const CompactOptsSchema = z.object({
   compact: z.boolean().optional(),
 });
 export type CompactOpts = z.infer<typeof CompactOptsSchema>;
 
-
-export const MoreOptsSchema = z.object({
+const MoreOptsSchema = z.object({
   more: z.array(FlexActionEntrySchema).optional(),
   moreDisabled: z.boolean().optional(),
   compact: z.boolean().optional(),

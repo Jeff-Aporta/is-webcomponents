@@ -1,5 +1,5 @@
-import type { FloatCardConfig, IconConfig, RowAdapterBridge, RowConfig, TNode, TreeActionEntry } from '@jeff-aporta/iswc-base/components/isp/schemas/tree-view-types.schemas.js';
-import { TRAContextSchema, type TRAContext } from "@jeff-aporta/iswc-base/components/isp/schemas/tree-view-row-adapter-base.schemas.js";
+import type { FloatCardConfig, RowConfig, TNode, TreeActionEntry } from '@jeff-aporta/iswc-base/components/isp/schemas/tree-view-types.schemas.js';
+import { type TRAContext } from "@jeff-aporta/iswc-base/components/isp/schemas/tree-view-row-adapter-base.schemas.js";
 import type { TreeAdapterLike } from "@jeff-aporta/iswc-base/components/isp/schemas/tree-view-row-adapter-base.schemas.js";
 
 /**

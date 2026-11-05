@@ -6,7 +6,7 @@
  */
 import { z } from "zod";
 
-export const IswcFormElSchema = z.object({
+const IswcFormElSchema = z.object({
   fromJSON: z.function({ input: [z.unknown()], output: z.unknown() }),
   toJSON: z.function({ input: [], output: z.unknown() }),
   setValues: z.function({ input: [z.record(z.string(), z.unknown())], output: z.void() }),
@@ -15,8 +15,7 @@ export const IswcFormElSchema = z.object({
 });
 export type IswcFormEl = z.infer<typeof IswcFormElSchema>;
 
-
-export const SubmitDetailSchema = z.object({
+const SubmitDetailSchema = z.object({
   json: z.unknown().optional(),
 });
 export type SubmitDetail = z.infer<typeof SubmitDetailSchema>;

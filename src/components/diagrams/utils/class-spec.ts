@@ -23,7 +23,6 @@ import type { Point2D } from "@jeff-aporta/iswc-base/components/diagrams/schemas
 
 const MIN_W = 140;
 const MAX_W = 320;
-const ROW_H = 16;
 const HEADER_H = 24;
 const STEREO_H = 14;
 const SECTION_PAD_V = 6;

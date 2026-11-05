@@ -3,7 +3,6 @@
  * Se ejecuta en mount() tras pintar la definition JSON.
  */
 import type { PreviewMountContext } from '@jeff-aporta/iswc-base/previews/_kit/schemas/preview.schemas.ts';
-import type { html as HtmlFn, esc as EscFn } from '@jeff-aporta/iswc-base/components/helpers/ui.js';
 import type { IswcUiApi } from "@jeff-aporta/iswc-base/components/helpers/schemas/ui.preview.schemas.js";
 
 declare global {

@@ -1,8 +1,5 @@
 // registry.ts — registro de funciones de hoja. La firma escrita es también la aridad y la
 // ayuda: `valor, [precision], ...` da mínimo 1, máximo infinito y el texto del autocompletado.
-import type { Node } from '@jeff-aporta/iswc-base/components/data/utils/spreadsheet/parser.schemas.js';
-import type { Ctx } from '@jeff-aporta/iswc-base/components/data/utils/spreadsheet/evaluator.schemas.js';
-import type { EvalValue } from '@jeff-aporta/iswc-base/components/data/utils/spreadsheet/values.schemas.js';
 import type { Fn, LazyFn, FnDef } from './registry.schemas.js';
 
 

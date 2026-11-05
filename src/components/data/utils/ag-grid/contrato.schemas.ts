@@ -1,10 +1,10 @@
 /** Tipos de contrato.ts. */
 
-import type { ColumnFilter, ColumnState, DisplayRow, FilterModel, GridApi, GridState, RowData, RowNode } from '@jeff-aporta/iswc-base/components/data/schemas/datagrid-types.schemas.js';
+import type { ColumnFilter, ColumnState, DisplayRow, GridApi, GridState, RowData, RowNode } from '@jeff-aporta/iswc-base/components/data/schemas/datagrid-types.schemas.js';
 
 export type Desinstalar = () => void;
 
-export type InstalarPlugin = (grid: GridHost) => Desinstalar | void;
+type InstalarPlugin = (grid: GridHost) => Desinstalar | void;
 
 export type GridPlugin = { nombre: string; instalar: InstalarPlugin };
 
@@ -25,7 +25,7 @@ export type RendererMontable = { html: RendererCelda; montar?: (celda: HTMLEleme
 /** Filtro de columna: `filtro` es el del FilterModel; `valor` ya pasa por filterValueGetter. */
 export type EvaluadorFiltro = { tipo: string; coincide: (filtro: ColumnFilter | Record<string, unknown>, valor: unknown, texto: string, node: RowNode, col: ColumnState) => boolean; activo?: (filtro: unknown) => boolean; etiqueta?: (filtro: unknown, col: ColumnState) => string; };
 
-export type EtapaPipeline = 'filtrar' | 'ordenar' | 'agrupar' | 'aplanar';
+type EtapaPipeline = 'filtrar' | 'ordenar' | 'agrupar' | 'aplanar';
 
 /** `activo`: si devuelve false, una transaccion que solo actualiza filas no repite el pipeline por este transformador. */
 export type TransformadorFilas = { etapa: EtapaPipeline; depende: string[]; aplicar: (filas: unknown[], grid: GridHost) => unknown[]; activo?: () => boolean; };

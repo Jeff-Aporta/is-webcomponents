@@ -5,17 +5,7 @@
  * propiedad `data = [...]`. Variantes: type=line|bar, variant=gradient|solid.
  */
 import assert from 'node:assert/strict';
-import {
-  exists,
-  read,
-  extraerObservados,
-  tieneShadow,
-  estaRegistrado,
-  usaResizeObserver,
-  tieneEdgeCaseGuards,
-  adoptaCss,
-  cleanupCompleto,
-} from '../../_shared/exhaustivo.ts';
+import { exists, read, extraerObservados, tieneShadow, usaResizeObserver, adoptaCss, cleanupCompleto } from '../../_shared/exhaustivo.ts';
 import { coleccionPruebas } from '../../../src/vendor-distributions/shared/testing/pruebas.ts';
 
 const { test, lista } = coleccionPruebas({ categoria: 'what' });

@@ -3,7 +3,7 @@
  */
 import { z } from "zod";
 
-export const AppNavTabSchema = z.object({
+const AppNavTabSchema = z.object({
   id: z.string(),
   label: z.string(),
   icon: z.string().optional(),
@@ -13,7 +13,7 @@ export const AppNavTabSchema = z.object({
 });
 export type AppNavTab = z.infer<typeof AppNavTabSchema>;
 
-export const AppNavRowSchema = z.object({
+const AppNavRowSchema = z.object({
   id: z.string(),
   label: z.string().optional(),
   value: z.string().optional(),

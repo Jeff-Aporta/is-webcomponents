@@ -113,23 +113,6 @@ export function svgArrowHead({
 }
 
 /**
- * Pata de gallo (crow's foot) de los diagramas ER: tres trazos que se abren
- * desde el nodo hacia la entidad, para la cardinalidad "muchos".
- * @returns Atributo `d` de un `<path>`.
- */
-export function crowFootPath(tip: ArrowPoint, dir: ArrowPoint, len: number = 9, halfWidth: number = 5): string {
-  const baseX = tip.x - dir.x * len;
-  const baseY = tip.y - dir.y * len;
-  const px = -dir.y * halfWidth;
-  const py = dir.x * halfWidth;
-  return [
-    `M${tip.x},${tip.y} L${baseX + px},${baseY + py}`,
-    `M${tip.x},${tip.y} L${baseX - px},${baseY - py}`,
-    `M${tip.x},${tip.y} L${baseX},${baseY}`,
-  ].join(' ');
-}
-
-/**
  * Auto-cruce PROHIBIDO: una arista nunca se corta (ni se pisa) a sí misma. Si su polilínea ortogonal
  * se cruza, se corta en el cruce y se descarta el bucle: la ruta resultante solo usa tramos que ya
  * tenía (no invade terreno nuevo) y conserva sus extremos. Sin cruce devuelve los mismos puntos.
@@ -170,7 +153,7 @@ export function tieneAutoCruce(pts: readonly ArrowPoint[]): boolean {
 }
 
 /** Path `M/L` de una polilínea. */
-export function polilineaPath(pts: readonly ArrowPoint[]): string {
+function polilineaPath(pts: readonly ArrowPoint[]): string {
   return pts.map((q, i) => `${i ? 'L' : 'M'}${q.x},${q.y}`).join(' ');
 }
 

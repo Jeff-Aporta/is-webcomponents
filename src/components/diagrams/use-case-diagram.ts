@@ -1,7 +1,7 @@
 import { emit, emitCancelable } from '@jeff-aporta/iswc-base/core/element.js';
 import { DiagramElementBase } from './utils/diagram-element-base.js';
 import { resolveUseCaseSpec, computeUseCaseLayout } from './utils/use-case-spec.js';
-import type { UseCaseLayout, UseCaseLayoutActor, UseCaseLayoutCase, UseCaseLayoutLink, UseCaseResolvedSpec } from './schemas/use-case-spec.schemas.js';
+import type { UseCaseLayout, UseCaseLayoutActor, UseCaseResolvedSpec } from './schemas/use-case-spec.schemas.js';
 import { tkHueToHex } from '@jeff-aporta/iswc-base/core/tk-hue.js';
 import { edgeStrokeHex, edgeChipFill, edgeChipText } from './utils/diagram-edge-style.js';
 import type { DiagramTheme } from './schemas/diagram-types.schemas.js';

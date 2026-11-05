@@ -4,7 +4,7 @@
  * NOTA: buscando <iswc-heatmap> en components/charts/.
  */
 import assert from 'node:assert/strict';
-import { exists, read } from '../../_shared/exhaustivo.ts';
+import { exists } from '../../_shared/exhaustivo.ts';
 import { coleccionPruebas } from '../../../src/vendor-distributions/shared/testing/pruebas.ts';
 
 const { test, lista } = coleccionPruebas({ categoria: 'what' });

@@ -29,7 +29,7 @@ export function getCellValue(col: ColumnState, node: RowNode) {
  * @param {RowNode} node
  * @returns {string}
  */
-export function formatCellValue(col: ColumnState, value: unknown, node: RowNode) {
+function formatCellValue(col: ColumnState, value: unknown, node: RowNode) {
   const def = col.def;
   if (typeof def.valueFormatter === 'function') return def.valueFormatter(value, node.data);
   if (value == null || value === '') return '';

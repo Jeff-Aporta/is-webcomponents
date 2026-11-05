@@ -6,15 +6,14 @@
  */
 import { z } from "zod";
 
-export const FloatCardLikeSchema = z.object({
+const FloatCardLikeSchema = z.object({
   open: z.boolean(),
   locked: z.boolean().optional(),
   _fcOff: z.function({ input: [], output: z.void() }).optional(),
 });
 export type FloatCardLike = z.infer<typeof FloatCardLikeSchema>;
 
-
-export const FlexOptionsLikeSchema = z.object({
+const FlexOptionsLikeSchema = z.object({
   actions: z.array(z.unknown()),
 });
 export type FlexOptionsLike = z.infer<typeof FlexOptionsLikeSchema>;

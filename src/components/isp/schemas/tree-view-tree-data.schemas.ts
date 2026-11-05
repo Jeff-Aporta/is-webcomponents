@@ -6,7 +6,7 @@
  */
 import { z } from "zod";
 
-export const _NodeAnySchema = z.intersection(z.record(z.string(), z.unknown()), z.object({
+const _NodeAnySchema = z.intersection(z.record(z.string(), z.unknown()), z.object({
   flatPath: z.string(),
   childrens: z.array(_NodeAnySchema).optional(),
   topology: z.unknown().optional(),
@@ -17,26 +17,22 @@ export const _NodeAnySchema = z.intersection(z.record(z.string(), z.unknown()), 
 }));
 export type _NodeAny = z.infer<typeof _NodeAnySchema>;
 
-
-export const _TreeRootSchema = z.intersection(_NodeAnySchema, z.object({
+const _TreeRootSchema = z.intersection(_NodeAnySchema, z.object({
   childrens: z.array(_NodeAnySchema),
   flatPath: z.string().optional(),
 }));
 export type _TreeRoot = z.infer<typeof _TreeRootSchema>;
 
-
-export const _TreeBaseCtorSchema = z.unknown() /* TODO: cannot convert */;
+const _TreeBaseCtorSchema = z.unknown() /* TODO: cannot convert */;
 export type _TreeBaseCtor = z.infer<typeof _TreeBaseCtorSchema>;
 
-
-export const _GroupEntrySchema = z.object({
+const _GroupEntrySchema = z.object({
   separator: z.boolean().optional(),
   /* TODO: member [key: string]: unknown */
 });
 export type _GroupEntry = z.infer<typeof _GroupEntrySchema>;
 
-
-export const _DecoratedSelfSchema = z.object({
+const _DecoratedSelfSchema = z.object({
   topology: z.string().optional(),
   containment: z.string().optional(),
   mobility: z.string().optional(),

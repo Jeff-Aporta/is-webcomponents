@@ -7,11 +7,10 @@
 import { z } from "zod";
 import { LabeledEdgeSchema } from "./diagram-edge-actors.schemas.js";
 
-export const SwimlaneStepKindSchema = z.union([z.literal('start'), z.literal('end'), z.literal('process'), z.literal('decision')]);
+const SwimlaneStepKindSchema = z.union([z.literal('start'), z.literal('end'), z.literal('process'), z.literal('decision')]);
 export type SwimlaneStepKind = z.infer<typeof SwimlaneStepKindSchema>;
 
-
-export const SwimlaneLaneSpecSchema = z.object({
+const SwimlaneLaneSpecSchema = z.object({
   id: z.string(),
   name: z.string(),
   hue: z.number(),
@@ -19,8 +18,7 @@ export const SwimlaneLaneSpecSchema = z.object({
 });
 export type SwimlaneLaneSpec = z.infer<typeof SwimlaneLaneSpecSchema>;
 
-
-export const SwimlaneStepSpecSchema = z.object({
+const SwimlaneStepSpecSchema = z.object({
   id: z.string(),
   lane: z.string(),
   label: z.string(),
@@ -30,8 +28,7 @@ export const SwimlaneStepSpecSchema = z.object({
 });
 export type SwimlaneStepSpec = z.infer<typeof SwimlaneStepSpecSchema>;
 
-
-export const SwimlaneLinkSpecSchema = z.object({
+const SwimlaneLinkSpecSchema = z.object({
   id: z.string(),
   from: z.string(),
   to: z.string(),
@@ -39,8 +36,7 @@ export const SwimlaneLinkSpecSchema = z.object({
 });
 export type SwimlaneLinkSpec = z.infer<typeof SwimlaneLinkSpecSchema>;
 
-
-export const SwimlaneResolvedSpecSchema = z.object({
+const SwimlaneResolvedSpecSchema = z.object({
   title: z.string().optional(),
   subtitle: z.string().optional(),
   lanes: z.array(SwimlaneLaneSpecSchema),
@@ -49,8 +45,7 @@ export const SwimlaneResolvedSpecSchema = z.object({
 });
 export type SwimlaneResolvedSpec = z.infer<typeof SwimlaneResolvedSpecSchema>;
 
-
-export const SwimlaneLayoutLaneSchema = z.object({
+const SwimlaneLayoutLaneSchema = z.object({
   id: z.string(),
   name: z.string(),
   hue: z.number(),
@@ -62,7 +57,6 @@ export const SwimlaneLayoutLaneSchema = z.object({
   labelW: z.number(),
 });
 export type SwimlaneLayoutLane = z.infer<typeof SwimlaneLayoutLaneSchema>;
-
 
 export const SwimlaneLayoutStepSchema = z.object({
   id: z.string(),
@@ -78,7 +72,6 @@ export const SwimlaneLayoutStepSchema = z.object({
   h: z.number(),
 });
 export type SwimlaneLayoutStep = z.infer<typeof SwimlaneLayoutStepSchema>;
-
 
 export const SwimlaneLayoutLinkSchema = z.object({
   id: z.string(),
@@ -97,8 +90,7 @@ export const SwimlaneLayoutLinkSchema = z.object({
 });
 export type SwimlaneLayoutLink = z.infer<typeof SwimlaneLayoutLinkSchema>;
 
-
-export const SwimlaneLayoutSchema = z.object({
+const SwimlaneLayoutSchema = z.object({
   width: z.number(),
   height: z.number(),
   lanes: z.array(SwimlaneLayoutLaneSchema),

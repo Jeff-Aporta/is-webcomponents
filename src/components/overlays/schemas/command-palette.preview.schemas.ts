@@ -6,14 +6,13 @@
  */
 import { z } from "zod";
 
-export const PaletteElSchema = z.object({
+const PaletteElSchema = z.object({
   open: z.function({ input: [], output: z.void() }),
   close: z.function({ input: [], output: z.void() }),
 });
 export type PaletteEl = z.infer<typeof PaletteElSchema>;
 
-
-export const SelectDetailSchema = z.object({
+const SelectDetailSchema = z.object({
   command: z.object({
   id: z.string(),
 }),

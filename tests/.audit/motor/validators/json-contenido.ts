@@ -20,7 +20,7 @@
  */
 
 import type { Hallazgo } from '../schemas/types.schemas.js';
-import { DefSchema, BloqueSchema, type Def, type Bloque } from "./schemas/json-contenido.schemas.js";
+import { type Def, type Bloque } from "./schemas/json-contenido.schemas.js";
 import type { OpcionesContenido } from "./schemas/json-contenido.schemas.js";
 
 /** Une `string | string[] | undefined` en un string. Si es array, lo une con `\n`. */

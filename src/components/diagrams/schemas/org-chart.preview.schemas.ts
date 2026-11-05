@@ -6,7 +6,7 @@
  */
 import { z } from "zod";
 
-export const OrgSelectDetailSchema = z.object({
+const OrgSelectDetailSchema = z.object({
   node: z.object({
   title: z.string().optional(),
   name: z.string().optional(),
@@ -14,8 +14,7 @@ export const OrgSelectDetailSchema = z.object({
 });
 export type OrgSelectDetail = z.infer<typeof OrgSelectDetailSchema>;
 
-
-export const OrgToggleDetailSchema = z.object({
+const OrgToggleDetailSchema = z.object({
   id: z.string(),
   collapsed: z.boolean(),
 });

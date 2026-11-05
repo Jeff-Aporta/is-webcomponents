@@ -6,15 +6,13 @@
  */
 import { z } from "zod";
 
-export const PrefsRootSchema = z.record(z.unknown() /* TODO: cannot convert */, z.unknown() /* TODO: cannot convert */);
+const PrefsRootSchema = z.record(z.unknown() /* TODO: cannot convert */, z.unknown() /* TODO: cannot convert */);
 export type PrefsRoot = z.infer<typeof PrefsRootSchema>;
 
-
-export const PrefsEntrySchema = z.record(z.string(), z.unknown());
+const PrefsEntrySchema = z.record(z.string(), z.unknown());
 export type PrefsEntry = z.infer<typeof PrefsEntrySchema>;
 
-
-export const ClearAllPrefsResultSchema = z.object({
+const ClearAllPrefsResultSchema = z.object({
   cleared: z.boolean(),
   tags: z.array(z.string()),
 });

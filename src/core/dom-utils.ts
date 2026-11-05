@@ -39,17 +39,6 @@ export function assignedNodes(slot: HTMLSlotElement|null) {
 }
 
 /**
- * Devuelve los elementos asignados a un slot como array.
- * Atajo sobre `slot.assignedElements({ flatten: true })`.
- *
- * @param {HTMLSlotElement|null} slot
- * @returns {Element[]}
- */
-export function assignedElements(slot: HTMLSlotElement|null) {
-  if (!slot) return [];
-  return slot.assignedElements({ flatten: true });
-}
-/**
  * Escapa texto para interpolarlo en HTML (innerHTML/templates).
  * Sustituye las copias locales que había en ag-grid, data-grid, spreadsheet,
  * org-chart, cdn-snippet, dropzone, full-calendar, inline-edit y

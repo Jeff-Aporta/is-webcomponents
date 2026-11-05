@@ -15,7 +15,7 @@
  */
 import { TObject, capitalizar } from "./helpers.js";
 import { TAModel } from "./02-model.js";
-import { CustomsRuntime, IconConfig, LevelNameArgs, NodeIconArgs, SiblingPosition, TreeCustoms, TNode, TRecord } from '@jeff-aporta/iswc-base/components/isp/schemas/tree-view-types.schemas.js';
+import { CustomsRuntime, SiblingPosition, TreeCustoms, TNode, TRecord } from '@jeff-aporta/iswc-base/components/isp/schemas/tree-view-types.schemas.js';
 
 class TATreeShape extends TAModel {
   // ── Estado interno ─────────────────────────────────────────────────────

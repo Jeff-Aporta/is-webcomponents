@@ -276,11 +276,6 @@ let panelsCompactUser =
 
 const encodeState = (obj: GalleryState): string => codificarEstado(obj);
 
-/** Preview URL legado (solo si faltara en catalog — no debería ocurrir). */
-function previewSrc(page: string): string {
-  return `src/previews/${page}?s=${encodeState({ embed: true, theme, palette })}`;
-}
-
 function controlledShellSrc(tag: string): string {
   return `src/previews/_shell.html?tag=${encodeURIComponent(tag)}&s=${encodeState({ embed: true, theme, palette })}`;
 }

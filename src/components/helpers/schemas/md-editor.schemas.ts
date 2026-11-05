@@ -6,7 +6,7 @@
  */
 import { z } from "zod";
 
-export const IswcMdEditorDocumentSchema = z.object({
+const IswcMdEditorDocumentSchema = z.object({
   id: z.string().optional(),
   filename: z.string().optional(),
   content: z.string(),
@@ -18,8 +18,7 @@ export const IswcMdEditorDocumentSchema = z.object({
 });
 export type IswcMdEditorDocument = z.infer<typeof IswcMdEditorDocumentSchema>;
 
-
-export const IswcMdEditorApiConfigSchema = z.object({
+const IswcMdEditorApiConfigSchema = z.object({
   baseUrl: z.string().optional(),
   endpoints: z.object({
   get: z.string().optional(),
@@ -33,16 +32,14 @@ export const IswcMdEditorApiConfigSchema = z.object({
 });
 export type IswcMdEditorApiConfig = z.infer<typeof IswcMdEditorApiConfigSchema>;
 
-
-export const IswcMdEditorActionsSchema = z.object({
+const IswcMdEditorActionsSchema = z.object({
   load: z.function({ input: [], output: z.promise(z.union([z.unknown() /* TODO: ref IswcMdEditorDocument */, z.string()])) }).optional(),
   persist: z.function({ input: [z.unknown() /* TODO: ref IswcMdEditorDocument */], output: z.promise(z.union([z.unknown() /* TODO: ref IswcMdEditorDocument */, z.void()])) }).optional(),
   delete: z.function({ input: [z.unknown() /* TODO: ref IswcMdEditorDocument */], output: z.promise(z.void()) }).optional(),
 });
 export type IswcMdEditorActions = z.infer<typeof IswcMdEditorActionsSchema>;
 
-
-export const DialogElementSchema = z.intersection(z.unknown() /* TODO: ref HTMLElement */, z.object({
+const DialogElementSchema = z.intersection(z.unknown() /* TODO: ref HTMLElement */, z.object({
   open: z.boolean(),
   show: z.function({ input: [], output: z.void() }),
   hide: z.function({ input: [], output: z.void() }),
@@ -51,26 +48,22 @@ export const DialogElementSchema = z.intersection(z.unknown() /* TODO: ref HTMLE
 }));
 export type DialogElement = z.infer<typeof DialogElementSchema>;
 
-
-export const SwitchElementSchema = z.object({
+const SwitchElementSchema = z.object({
   checked: z.boolean(),
 });
 export type SwitchElement = z.infer<typeof SwitchElementSchema>;
 
-
-export const CopyButtonElementSchema = z.object({
+const CopyButtonElementSchema = z.object({
   value: z.string(),
 });
 export type CopyButtonElement = z.infer<typeof CopyButtonElementSchema>;
 
-
-export const TextareaElementSchema = z.object({
+const TextareaElementSchema = z.object({
   value: z.string(),
 });
 export type TextareaElement = z.infer<typeof TextareaElementSchema>;
 
-
-export const EditorHistorySchema = z.object({
+const EditorHistorySchema = z.object({
   past: z.array(z.string()),
   future: z.array(z.string()),
 });

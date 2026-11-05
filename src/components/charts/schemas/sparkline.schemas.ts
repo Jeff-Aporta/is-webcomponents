@@ -6,7 +6,7 @@
  */
 import { z } from "zod";
 
-export const SparkPointSchema = z.object({
+const SparkPointSchema = z.object({
   x: z.number(),
   y: z.number(),
 });

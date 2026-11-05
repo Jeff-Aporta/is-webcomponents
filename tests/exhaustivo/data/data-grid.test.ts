@@ -13,19 +13,7 @@
  *          iswc-row-click, iswc-edit-start, iswc-edit-stop, iswc-row-update, …
  */
 import assert from 'node:assert/strict';
-import {
-  exists,
-  read,
-  extraerObservados,
-  extraerEventos,
-  extraerSlots,
-  extraerParts,
-  tieneShadow,
-  tieneEdgeCaseGuards,
-  adoptaCss,
-  estaRegistrado,
-  cleanupCompleto,
-} from '../../_shared/exhaustivo.ts';
+import { exists, read, extraerObservados, extraerEventos, extraerParts, tieneShadow, tieneEdgeCaseGuards, adoptaCss, cleanupCompleto } from '../../_shared/exhaustivo.ts';
 import { coleccionPruebas } from '../../../src/vendor-distributions/shared/testing/pruebas.ts';
 
 const { test, lista } = coleccionPruebas({ categoria: 'what' });

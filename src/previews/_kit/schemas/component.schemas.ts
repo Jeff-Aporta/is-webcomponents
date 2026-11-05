@@ -131,11 +131,6 @@ export const ControlSchema = z
  * Bloques (discriminated union por `kind`)
  * ──────────────────────────────────────────────────────────────────────── */
 
-const HtmlBase = z.object({
-  kind: z.string(),
-  html: TextLikeSchema.optional(),
-});
-
 const DemoBlockSchema = z
   .object({
     kind: z.literal("demo"),

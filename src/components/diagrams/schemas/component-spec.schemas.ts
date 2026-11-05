@@ -7,18 +7,16 @@
 import { z } from "zod";
 import { OpcionesEmpaqueSchema } from "./diagram-tipos.schemas.js";
 
-export const HttpEndpointSchema = z.object({
+const HttpEndpointSchema = z.object({
   methods: z.array(z.string()),
   path: z.string(),
 });
 export type HttpEndpoint = z.infer<typeof HttpEndpointSchema>;
 
-
-export const EdgeKindSchema = z.union([z.literal('dependency'), z.literal('association'), z.literal('realization'), z.literal('assembly')]);
+const EdgeKindSchema = z.union([z.literal('dependency'), z.literal('association'), z.literal('realization'), z.literal('assembly')]);
 export type EdgeKind = z.infer<typeof EdgeKindSchema>;
 
-
-export const SpecEdgeSchema = z.object({
+const SpecEdgeSchema = z.object({
   /** Invierte el sentido de la animación de flujo de esta arista (ver _shared/diagram-flow). */
   reverse: z.boolean().optional(),
   id: z.string(),
@@ -34,12 +32,10 @@ export const SpecEdgeSchema = z.object({
 });
 export type SpecEdge = z.infer<typeof SpecEdgeSchema>;
 
-
-export const LayoutModeSchema = z.union([z.literal('manual'), z.literal('triptych'), z.string()]);
+const LayoutModeSchema = z.union([z.literal('manual'), z.literal('triptych'), z.string()]);
 export type LayoutMode = z.infer<typeof LayoutModeSchema>;
 
-
-export const ComponentSpecResultSchema = z.object({
+const ComponentSpecResultSchema = z.object({
   title: z.string().optional(),
   subtitle: z.string().optional(),
   layout: OpcionesEmpaqueSchema,
@@ -50,16 +46,14 @@ export const ComponentSpecResultSchema = z.object({
 });
 export type ComponentSpecResult = z.infer<typeof ComponentSpecResultSchema>;
 
-
-export const WireResultSchema = z.object({
+const WireResultSchema = z.object({
   components: z.array(z.unknown() /* TODO: ref Componente */),
   interfaces: z.array(z.unknown() /* TODO: ref InterfazUml */),
   edges: z.array(SpecEdgeSchema),
 });
 export type WireResult = z.infer<typeof WireResultSchema>;
 
-
-export const LayoutComponentSchema = z.object({
+const LayoutComponentSchema = z.object({
   stereoY: z.number().optional(),
   labelY: z.number().optional(),
   itemsY: z.number().optional(),
@@ -79,16 +73,14 @@ export const LayoutComponentSchema = z.object({
 });
 export type LayoutComponent = z.infer<typeof LayoutComponentSchema>;
 
-
-export const LayoutInterfaceSchema = z.object({
+const LayoutInterfaceSchema = z.object({
   hue: z.number().optional(),
   cx: z.number(),
   cy: z.number(),
 });
 export type LayoutInterface = z.infer<typeof LayoutInterfaceSchema>;
 
-
-export const LayoutEdgeSchema = z.object({
+const LayoutEdgeSchema = z.object({
   /** Invierte el sentido de la animación de flujo de esta arista (ver _shared/diagram-flow). */
   reverse: z.boolean().optional(),
   fromX: z.number(),
@@ -105,8 +97,7 @@ export const LayoutEdgeSchema = z.object({
 });
 export type LayoutEdge = z.infer<typeof LayoutEdgeSchema>;
 
-
-export const ComponentLayoutSchema = z.object({
+const ComponentLayoutSchema = z.object({
   width: z.number(),
   height: z.number(),
   packages: z.array(z.unknown() /* TODO: ref Paquete */),

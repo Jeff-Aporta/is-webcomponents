@@ -3,7 +3,6 @@ import { makeCostGrid, blockRect, snapPointAwayFromSide, snapDiagramGrid } from 
 import { routeOrthogonal, pixelToGrid, gridPathToSvg, buildOrthogonalPath } from './diagram-astar.js';
 import { richTextPlain } from '@jeff-aporta/iswc-base/core/tk-rich-text.js';
 import { resolveTkHue, SERIE_HUES } from '@jeff-aporta/iswc-base/core/tk-hue.js';
-import type { GridPoint } from '@jeff-aporta/iswc-base/components/diagrams/schemas/diagram-types.schemas.js';
 import type { GanttGroup, GanttTask, GanttSpec, GanttRow, GanttArrow, GanttTick, GanttLayout, GanttOpts } from "@jeff-aporta/iswc-base/components/diagrams/schemas/gantt-spec.schemas.js";
 
 /**
@@ -64,7 +63,7 @@ function readTask(raw: unknown, i: number): GanttTask {
 }
 
 /** payload → spec normalizada, o null si no hay tareas. */
-export function ganttSpecFromPayload(payload: unknown): GanttSpec | null {
+function ganttSpecFromPayload(payload: unknown): GanttSpec | null {
   const p = asRecord(payload);
   const src = asRecord(p.gantt ?? p);
   const rawTasks = src.tasks ?? [];

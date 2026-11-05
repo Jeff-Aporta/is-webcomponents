@@ -119,7 +119,7 @@ export function defaultMeasureTextWidth(
  * pintar el SVG, así que en el primer render el set parece «loaded» y se
  * medía con la de respaldo, más estrecha.
  */
-export function fuentesListas(fontFamily?: string, fontSize = 10): boolean {
+function fuentesListas(fontFamily?: string, fontSize = 10): boolean {
   const fonts = typeof document !== 'undefined' ? (document as Document & { fonts?: FontFaceSet }).fonts : undefined;
   if (!fonts) return true;
   if (fonts.status !== 'loaded') return false;
@@ -271,8 +271,7 @@ export function wrapText(opts: WrapOpts): WrapResult {
 // -----------------------------------------------------------------------------
 
 const DEFAULT_PADDING_X = 10;
-const DEFAULT_PADDING_Y = 8;
-const BASELINE_RATIO = 0.85; // baseline ≈ 0.85 × fontSize por debajo del top
+// baseline ≈ 0.85 × fontSize por debajo del top
 
 /** Coordenadas X según el text-anchor solicitado. El padding X por defecto
  *  (10) coincide con el de `wrapText`. */
@@ -285,48 +284,6 @@ function anchorX(
   if (anchor === 'start') return boxX + paddingX;
   if (anchor === 'end') return boxX + boxW - paddingX;
   return boxX + boxW / 2;
-}
-
-/** Construye un `<text>` SVG con tspans ya listos. La primera línea lleva
- *  `y` absoluto; las siguientes llevan `dy` incremental.
- *
- *  Devuelve el `<text>` element pre-armado con `text-anchor` correcto para
- *  que cada tspan (que ya lleva su `x` calculado por `anchorX`) se centre
- *  correctamente. Sin esto, el default SVG es `start` y el texto se
- *  renderiza arrancando en x y extendiéndose a la derecha → descentrado
- *  visible (ver swimlane-diagram: 22-33px offset por nodo).
- *
- *  Uso:
- *    const text = buildTextWithTspans({ lines, box, anchor: 'middle', ... });
- *    g.appendChild(text);
- */
-export function buildTextWithTspans(opts: {
-  lines: WrappedLine[];
-  boxX: number;
-  boxY: number;
-  boxW: number;
-  _boxH: number;
-  textAnchor: 'start' | 'middle' | 'end';
-  fontSize: number;
-  lineHeight: number;
-  baseAttrs: Record<string, string | number | null>;
-}): { text: SVGTextElement; tspans: TSpanSpec[] } {
-  const { lines, boxX, boxY, textAnchor, fontSize, lineHeight, baseAttrs } = opts;
-  const x = anchorX(textAnchor, boxX, opts.boxW);
-  const firstY = boxY + DEFAULT_PADDING_Y + fontSize * BASELINE_RATIO;
-  const dy = fontSize * lineHeight;
-  const tspans: TSpanSpec[] = lines.map((line, i) => {
-    if (i === 0) return { text: line.text, x, y: firstY };
-    return { text: line.text, x, y: firstY, dy };
-  });
-  // Construye el <text> con text-anchor correcto (el bug que esto evita).
-  const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-  for (const [k, v] of Object.entries(baseAttrs)) {
-    if (v == null) continue;
-    text.setAttribute(k, String(v));
-  }
-  text.setAttribute('text-anchor', textAnchor);
-  return { text, tspans };
 }
 
 /** Construye specs de `<tspan>` listas para un `<text>` SVG. La primera

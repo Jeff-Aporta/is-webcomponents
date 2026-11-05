@@ -6,7 +6,7 @@
  */
 import { z } from "zod";
 
-export const SankeyNodeSpecSchema = z.object({
+const SankeyNodeSpecSchema = z.object({
   id: z.string(),
   label: z.string(),
   hue: z.number().optional(),
@@ -15,8 +15,7 @@ export const SankeyNodeSpecSchema = z.object({
 });
 export type SankeyNodeSpec = z.infer<typeof SankeyNodeSpecSchema>;
 
-
-export const SankeyLinkSpecSchema = z.object({
+const SankeyLinkSpecSchema = z.object({
   id: z.string(),
   from: z.string(),
   to: z.string(),
@@ -26,16 +25,14 @@ export const SankeyLinkSpecSchema = z.object({
 });
 export type SankeyLinkSpec = z.infer<typeof SankeyLinkSpecSchema>;
 
-
-export const SankeyGroupSpecSchema = z.object({
+const SankeyGroupSpecSchema = z.object({
   id: z.string(),
   name: z.string(),
   hue: z.number(),
 });
 export type SankeyGroupSpec = z.infer<typeof SankeyGroupSpecSchema>;
 
-
-export const SankeyResolvedSpecSchema = z.object({
+const SankeyResolvedSpecSchema = z.object({
   title: z.string().optional(),
   subtitle: z.string().optional(),
   unit: z.string().optional(),
@@ -44,7 +41,6 @@ export const SankeyResolvedSpecSchema = z.object({
   links: z.array(SankeyLinkSpecSchema),
 });
 export type SankeyResolvedSpec = z.infer<typeof SankeyResolvedSpecSchema>;
-
 
 export const SankeyLayoutNodeSchema = z.object({
   id: z.string(),
@@ -62,7 +58,6 @@ export const SankeyLayoutNodeSchema = z.object({
 });
 export type SankeyLayoutNode = z.infer<typeof SankeyLayoutNodeSchema>;
 
-
 export const SankeyLayoutLinkSchema = z.object({
   id: z.string(),
   from: z.string(),
@@ -78,8 +73,7 @@ export const SankeyLayoutLinkSchema = z.object({
 });
 export type SankeyLayoutLink = z.infer<typeof SankeyLayoutLinkSchema>;
 
-
-export const SankeyLayoutSchema = z.object({
+const SankeyLayoutSchema = z.object({
   width: z.number(),
   height: z.number(),
   nodes: z.array(SankeyLayoutNodeSchema),
@@ -94,8 +88,7 @@ export const SankeyLayoutSchema = z.object({
 });
 export type SankeyLayout = z.infer<typeof SankeyLayoutSchema>;
 
-
-export const SankeyLayoutOptionsSchema = z.object({
+const SankeyLayoutOptionsSchema = z.object({
   width: z.number().optional(),
   height: z.number().optional(),
 });

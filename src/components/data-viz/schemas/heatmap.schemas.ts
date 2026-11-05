@@ -6,7 +6,7 @@
  */
 import { z } from "zod";
 
-export const HeatmapCfgSchema = z.object({
+const HeatmapCfgSchema = z.object({
   xLabels: z.array(z.unknown()).optional(),
   yLabels: z.array(z.unknown()).optional(),
   data: z.array(z.unknown()).optional(),

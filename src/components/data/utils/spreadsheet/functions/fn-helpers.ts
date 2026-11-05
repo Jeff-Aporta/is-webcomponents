@@ -136,12 +136,6 @@ export function lifted(fn: (a: Scalar[], ctx: Ctx) => Scalar): (args: EvalValue[
   };
 }
 
-/** Primer error de una matriz, para propagarlo. */
-export function firstError(m: Matrix): CellError | null {
-  for (const row of m) for (const x of row) if (x instanceof CellError) return x;
-  return null;
-}
-
 /** Aplana una matriz por filas. */
 export function flat(m: Matrix): Scalar[] {
   const out: Scalar[] = [];

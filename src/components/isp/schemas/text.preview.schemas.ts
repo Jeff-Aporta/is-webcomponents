@@ -6,7 +6,7 @@
  */
 import { z } from "zod";
 
-export const _TextLikeSchema = z.object({
+const _TextLikeSchema = z.object({
   color: z.union([z.string(), z.null()]),
   mix: z.union([z.string(), z.null()]),
   mixWith: z.union([z.string(), z.null()]),
@@ -14,8 +14,7 @@ export const _TextLikeSchema = z.object({
 });
 export type _TextLike = z.infer<typeof _TextLikeSchema>;
 
-
-export const _InputLikeSchema = z.object({
+const _InputLikeSchema = z.object({
   value: z.string(),
   checked: z.boolean(),
   disabled: z.boolean(),

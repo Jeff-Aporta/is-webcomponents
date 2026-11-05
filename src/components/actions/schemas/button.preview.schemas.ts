@@ -6,7 +6,7 @@
  */
 import { z } from "zod";
 
-export const MountCtxSchema = z.object({
+const MountCtxSchema = z.object({
   main: z.unknown() /* TODO: ref ParentNode */.optional(),
   root: z.unknown() /* TODO: ref ParentNode */.optional(),
 });

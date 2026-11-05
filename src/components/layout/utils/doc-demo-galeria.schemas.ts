@@ -1,13 +1,13 @@
 // doc-demo-galeria.schemas.ts: contratos de tipos de doc-demo-galeria.ts.
 import type { Anatomia } from '@jeff-aporta/iswc-base/previews/_kit/schemas/anatomia.schemas.js';
 
-export type Bloque = { kind?: string; target?: string; props?: Record<string, unknown>; controls?: unknown[] };
+type Bloque = { kind?: string; target?: string; props?: Record<string, unknown>; controls?: unknown[] };
 
 export type Definicion = { tag: string; navTitle?: string; title?: string; category?: string; anatomy?: Anatomia | undefined; sections: Array<{ id?: string; blocks?: Bloque[] }> };
 
-export type Montaje = { main?: ParentNode };
+type Montaje = { main?: ParentNode };
 
-export type Previsualizable = { definition: Definicion; mount(ctx: Montaje): void; unmount(): void };
+type Previsualizable = { definition: Definicion; mount(ctx: Montaje): void; unmount(): void };
 
 export type HostPreview = HTMLElement & { preview: Previsualizable | null };
 

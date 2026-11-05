@@ -12,11 +12,11 @@ import { registerDiagramKind } from './utils/diagram-kinds.js';
 import { svgEl } from '@jeff-aporta/iswc-base/core/svg-chart-engine.js';
 import { svgIconGroup, svgIconBadge } from '@jeff-aporta/iswc-base/core/tk-icon-inline.js';
 import { svgArrowHead, pathEndDirection } from './utils/diagram-arrow.js';
-import type { Caja, Lado, Paquete, Punto } from './schemas/diagram-tipos.schemas.js';
+import type { Caja, Lado, Paquete } from './schemas/diagram-tipos.schemas.js';
 import { resolveErTheme, pickThemeMode, themeToDiagramTheme, clusterPalette, componentBoxPaint, edgePaint, injectThemeCss } from './utils/theme.js';
 import { type ErThemeJson } from './schemas/theme.schemas.js';
 import { hostStyleName, styleThemeFor } from './utils/diagram-styles.js';
-import { readEdgeStyle, edgeStyleFor } from './utils/diagram-vocab.js';
+import { edgeStyleFor } from './utils/diagram-vocab.js';
 import { styledEdgePath } from './utils/diagram-curve.js';
 
 import type { InterfaceStemPoint, LayoutPackage, AnchorPoint } from "./schemas/component-diagram.schemas.js";

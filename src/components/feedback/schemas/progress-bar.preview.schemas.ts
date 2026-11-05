@@ -6,7 +6,7 @@
  */
 import { z } from "zod";
 
-export const ProgressBarElSchema = z.object({
+const ProgressBarElSchema = z.object({
   value: z.number(),
   label: z.string(),
 });

@@ -61,12 +61,12 @@ export function html2json(node: Node | ParentNode | string | null | undefined, o
 }
 
 /** Alias: crea nodos sin padre. */
-export function json2dom(json: unknown): ParentNode {
+function json2dom(json: unknown): ParentNode {
   return json2html(json);
 }
 
 /** Mismo codec. La forma `{ tag: { ...attrs, content } }` es la de xml. */
-export const json2xml = json2html;
+const json2xml = json2html;
 
 /**
  * Vuelca JSON en un host: si el root es el mismo tag que el host, aplica attrs

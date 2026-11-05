@@ -20,7 +20,7 @@
 //      console errors. Si `@browserbasehq/stagehand` está instalado,
 //      el motor se prefiere al HEAD+catalog.
 
-import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
+import { existsSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { performance } from 'node:perf_hooks';
 

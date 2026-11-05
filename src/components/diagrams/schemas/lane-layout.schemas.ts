@@ -8,22 +8,19 @@ import { z } from "zod";
 
 /** Escala lineal tiempo → píxel, invertible (`invert(px)` devuelve ms). */
 export type TimeScale = ((ms: number) => number) & { invert: (px: number) => number };
-export const TimeScaleSchema = z.custom<TimeScale>((v) => typeof v === 'function' && typeof Reflect.get(v, 'invert') === 'function');
+const TimeScaleSchema = z.custom<TimeScale>((v) => typeof v === 'function' && typeof Reflect.get(v, 'invert') === 'function');
 
-
-export const TickUnitSchema = z.union([z.literal('hour'), z.literal('day'), z.literal('month'), z.literal('year')]);
+const TickUnitSchema = z.union([z.literal('hour'), z.literal('day'), z.literal('month'), z.literal('year')]);
 export type TickUnit = z.infer<typeof TickUnitSchema>;
 
-
-export const TimeTickSchema = z.object({
+const TimeTickSchema = z.object({
   ms: z.number(),
   label: z.string(),
   major: z.boolean(),
 });
 export type TimeTick = z.infer<typeof TimeTickSchema>;
 
-
-export const LaneItemSchema = z.object({
+const LaneItemSchema = z.object({
   id: z.string(),
   start: z.number(),
   end: z.number().optional(),
@@ -31,20 +28,17 @@ export const LaneItemSchema = z.object({
 });
 export type LaneItem = z.infer<typeof LaneItemSchema>;
 
-
-export const PackedLaneItemSchema = z.intersection(LaneItemSchema, z.object({
+const PackedLaneItemSchema = z.intersection(LaneItemSchema, z.object({
   lane: z.number(),
 }));
 export type PackedLaneItem = z.infer<typeof PackedLaneItemSchema>;
 
-
-export const PackLanesOptsSchema = z.object({
+const PackLanesOptsSchema = z.object({
   laneKey: z.string().optional(),
 });
 export type PackLanesOpts = z.infer<typeof PackLanesOptsSchema>;
 
-
-export const LayoutLanesOptsSchema = z.object({
+const LayoutLanesOptsSchema = z.object({
   width: z.number().optional(),
   rowH: z.number().optional(),
   rowGap: z.number().optional(),
@@ -53,8 +47,7 @@ export const LayoutLanesOptsSchema = z.object({
 });
 export type LayoutLanesOpts = z.infer<typeof LayoutLanesOptsSchema>;
 
-
-export const PositionedLaneItemSchema = z.object({
+const PositionedLaneItemSchema = z.object({
   id: z.string(),
   x: z.number(),
   y: z.number(),
@@ -64,8 +57,7 @@ export const PositionedLaneItemSchema = z.object({
 });
 export type PositionedLaneItem = z.infer<typeof PositionedLaneItemSchema>;
 
-
-export const LayoutLaneSchema = z.object({
+const LayoutLaneSchema = z.object({
   key: z.number(),
   label: z.string(),
   y: z.number(),
@@ -73,8 +65,7 @@ export const LayoutLaneSchema = z.object({
 });
 export type LayoutLane = z.infer<typeof LayoutLaneSchema>;
 
-
-export const LayoutLanesResultSchema = z.object({
+const LayoutLanesResultSchema = z.object({
   items: z.array(PositionedLaneItemSchema),
   lanes: z.array(LayoutLaneSchema),
   width: z.number(),

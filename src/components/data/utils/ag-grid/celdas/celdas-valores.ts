@@ -11,7 +11,6 @@ import { evaluarExpresion } from './expresion.js';
 import { aFecha, fmtFecha } from './formatos.js';
 import type { DefinicionTipo, ParamsCelda, TipoDato } from './schemas.js';
 
-
 const RE_FECHA_ISO = /^\d{4}-\d{2}-\d{2}(?:[T ]\d{2}:\d{2}(?::\d{2}(?:\.\d+)?)?(?:Z|[+-]\d{2}:?\d{2})?)?$/;
 const TIPOS_BASE = new Set<string>(['text', 'number', 'boolean', 'date', 'dateString', 'object']);
 
@@ -49,7 +48,7 @@ export function leerRuta(data: unknown, campo: string, literal = false): unknown
   return actual;
 }
 
-export function escribirRuta(data: Record<string, unknown>, campo: string, valor: unknown, literal = false): void {
+function escribirRuta(data: Record<string, unknown>, campo: string, valor: unknown, literal = false): void {
   if (literal || !campo.includes('.')) {
     data[campo] = valor;
     return;
@@ -176,12 +175,6 @@ export function lectores(grid: GridHost): { valor: (col: ColumnState, node: RowN
     return formatearValor(def, v, { ...params(col, node, def), value: v }, grid.opcion<Definiciones | undefined>('dataTypeDefinitions'));
   };
   return { valor, texto };
-}
-
-export function textoBusqueda(def: ColDefAg, valor: unknown, params: ParamsCelda): string {
-  const propio = def['getQuickFilterText'];
-  if (typeof propio === 'function') return String((propio as Funcion)({ ...params, value: valor }) ?? '');
-  return formatearValor(def, valor, params);
 }
 
 /** Copia y exportacion: `useValueFormatterForExport: false` entrega el valor crudo. */

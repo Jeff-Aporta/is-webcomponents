@@ -6,6 +6,6 @@
  */
 import { z } from "zod";
 
-export const ObserverTypeSchema = z.union([z.literal('intersection'), z.literal('mutation'), z.literal('resize')]);
+const ObserverTypeSchema = z.union([z.literal('intersection'), z.literal('mutation'), z.literal('resize')]);
 export type ObserverType = z.infer<typeof ObserverTypeSchema>;
 

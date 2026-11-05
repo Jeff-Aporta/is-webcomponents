@@ -6,23 +6,21 @@
  */
 import { z } from "zod";
 
-export const EdgeWithHueSchema = z.object({
+const EdgeWithHueSchema = z.object({
   hue: z.number().optional(),
   /* TODO: member [key: string]: unknown */
 });
 export type EdgeWithHue = z.infer<typeof EdgeWithHueSchema>;
 
-
-
 /** Caja con color propio (emisor / receptor de la paleta W60). */
-export const ColoredSchema = z.object({
+const ColoredSchema = z.object({
   id: z.string(),
   color: z.string().optional(),
 });
 export type Colored = z.infer<typeof ColoredSchema>;
 
 /** Arista con color propio. */
-export const EdgedSchema = z.object({
+const EdgedSchema = z.object({
   from: z.string(),
   to: z.string(),
   color: z.string().optional(),

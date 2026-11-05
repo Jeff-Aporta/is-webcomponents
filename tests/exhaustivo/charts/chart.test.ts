@@ -8,24 +8,7 @@
  * 10 dimensiones completas.
  */
 import assert from 'node:assert/strict';
-import {
-  exists,
-  read,
-  extraerObservados,
-  extraerEventos,
-  extraerSlots,
-  extraerParts,
-  tieneShadow,
-  leeJsonScript,
-  parseaJson,
-  estaRegistrado,
-  usaResizeObserver,
-  usaMutationObserver,
-  tieneEdgeCaseGuards,
-  tieneAccesibilidad,
-  adoptaCss,
-  cleanupCompleto,
-} from '../../_shared/exhaustivo.ts';
+import { exists, read, extraerObservados, extraerEventos, extraerParts, tieneShadow, leeJsonScript, parseaJson, estaRegistrado, usaResizeObserver, usaMutationObserver, tieneEdgeCaseGuards, tieneAccesibilidad, adoptaCss, cleanupCompleto } from '../../_shared/exhaustivo.ts';
 import { coleccionPruebas } from '../../../src/vendor-distributions/shared/testing/pruebas.ts';
 
 const { test, lista } = coleccionPruebas({ categoria: 'what' });

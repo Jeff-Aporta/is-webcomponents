@@ -40,7 +40,7 @@ function dispersion(filas: ArrayLike<number>[], centro: Float64Array | ((i: numb
 }
 
 /** Autovalores de una simétrica por Jacobi cíclico: exacto y sin dependencias; orden descendente y signo fijo. */
-export function autodescomponer(a: Float64Array[]): Eigen {
+function autodescomponer(a: Float64Array[]): Eigen {
   const n = a.length;
   const v = Array.from({ length: n }, (_, i) => Float64Array.from({ length: n }, (_x, j) => (i === j ? 1 : 0)));
   for (let barrido = 0; barrido < 30; barrido++) {

@@ -6,7 +6,7 @@
  */
 import { z } from "zod";
 
-export const ColLayoutSchema = z.object({
+const ColLayoutSchema = z.object({
   positions: z.array(z.number()),
   totalWidth: z.number(),
   leftWidth: z.number(),

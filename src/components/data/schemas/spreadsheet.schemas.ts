@@ -7,10 +7,10 @@
  */
 import { z } from 'zod';
 
-export const BorderSideSchema = z.object({ style: z.enum(['thin', 'medium', 'thick', 'dashed', 'dotted', 'double']), color: z.string().optional() });
+const BorderSideSchema = z.object({ style: z.enum(['thin', 'medium', 'thick', 'dashed', 'dotted', 'double']), color: z.string().optional() });
 export type BorderSide = z.infer<typeof BorderSideSchema>;
 
-export const CellStyleSchema = z.object({
+const CellStyleSchema = z.object({
   bold: z.boolean(), italic: z.boolean(), underline: z.boolean(), strike: z.boolean(),
   color: z.string(), bg: z.string(), font: z.string(), size: z.number(),
   align: z.enum(['left', 'center', 'right']), valign: z.enum(['top', 'middle', 'bottom']),
@@ -19,7 +19,7 @@ export const CellStyleSchema = z.object({
 }).partial();
 export type CellStyle = z.infer<typeof CellStyleSchema>;
 
-export const CellDocSchema = z.object({
+const CellDocSchema = z.object({
   v: z.union([z.number(), z.string(), z.boolean()]).optional(),
   f: z.string().optional(),
   s: CellStyleSchema.optional(),
@@ -28,10 +28,10 @@ export const CellDocSchema = z.object({
 });
 export type CellDoc = z.infer<typeof CellDocSchema>;
 
-export const CfStyleSchema = z.object({ color: z.string(), bg: z.string(), bold: z.boolean(), italic: z.boolean() }).partial();
+const CfStyleSchema = z.object({ color: z.string(), bg: z.string(), bold: z.boolean(), italic: z.boolean() }).partial();
 export type CfStyle = z.infer<typeof CfStyleSchema>;
 
-export const CfRuleSchema = z.object({
+const CfRuleSchema = z.object({
   id: z.string(),
   range: z.string(),
   type: z.enum(['cell', 'text', 'formula', 'top', 'bottom', 'aboveAverage', 'belowAverage', 'duplicate', 'unique', 'blank', 'colorScale', 'dataBar', 'iconSet']),
@@ -46,7 +46,7 @@ export const CfRuleSchema = z.object({
 });
 export type CfRule = z.infer<typeof CfRuleSchema>;
 
-export const ValidationRuleSchema = z.object({
+const ValidationRuleSchema = z.object({
   id: z.string(),
   range: z.string(),
   type: z.enum(['list', 'whole', 'decimal', 'date', 'textLength', 'custom']),
@@ -60,17 +60,17 @@ export const ValidationRuleSchema = z.object({
 });
 export type ValidationRule = z.infer<typeof ValidationRuleSchema>;
 
-export const FilterColumnSchema = z.object({
+const FilterColumnSchema = z.object({
   values: z.array(z.string()).optional(),
   op: z.enum(['contains', 'notContains', 'eq', 'ne', 'gt', 'lt', 'gte', 'lte', 'begins', 'ends', 'blank', 'notBlank']).optional(),
   a: z.string().optional(),
 });
 export type FilterColumn = z.infer<typeof FilterColumnSchema>;
 
-export const AutoFilterSchema = z.object({ range: z.string(), columns: z.record(z.string(), FilterColumnSchema) });
+const AutoFilterSchema = z.object({ range: z.string(), columns: z.record(z.string(), FilterColumnSchema) });
 export type AutoFilter = z.infer<typeof AutoFilterSchema>;
 
-export const ChartDefSchema = z.object({
+const ChartDefSchema = z.object({
   id: z.string(),
   type: z.enum(['bar', 'line', 'pie', 'doughnut', 'scatter', 'radar']),
   range: z.string(),
@@ -81,7 +81,7 @@ export const ChartDefSchema = z.object({
 });
 export type ChartDef = z.infer<typeof ChartDefSchema>;
 
-export const SheetDocSchema = z.object({
+const SheetDocSchema = z.object({
   name: z.string(),
   rows: z.number().optional(),
   cols: z.number().optional(),
@@ -102,13 +102,12 @@ export const SheetDocSchema = z.object({
 });
 export type SheetDoc = z.infer<typeof SheetDocSchema>;
 
-export const MacroDefSchema = z.object({ name: z.string(), code: z.string(), shortcut: z.string().optional(), button: z.boolean().optional() });
+const MacroDefSchema = z.object({ name: z.string(), code: z.string(), shortcut: z.string().optional(), button: z.boolean().optional() });
 export type MacroDef = z.infer<typeof MacroDefSchema>;
 
-export const NameDocSchema = z.object({ name: z.string(), ref: z.string() });
-export type NameDoc = z.infer<typeof NameDocSchema>;
+const NameDocSchema = z.object({ name: z.string(), ref: z.string() });
 
-export const WorkbookDocSchema = z.object({
+const WorkbookDocSchema = z.object({
   $schema: z.literal('iswc-spreadsheet/v1').optional(),
   sheets: z.array(SheetDocSchema).min(1),
   names: z.array(NameDocSchema).optional(),
@@ -117,13 +116,13 @@ export const WorkbookDocSchema = z.object({
 });
 export type WorkbookDoc = z.infer<typeof WorkbookDocSchema>;
 
-export const SpreadsheetChangeDetailSchema = z.object({
+const SpreadsheetChangeDetailSchema = z.object({
   row: z.number(), col: z.number(), raw: z.union([z.string(), z.number()]), value: z.union([z.string(), z.number()]),
   sheet: z.string().optional(), cells: z.number().optional(),
 });
 export type SpreadsheetChangeDetail = z.infer<typeof SpreadsheetChangeDetailSchema>;
 
-export const SpreadsheetSelectDetailSchema = z.object({
+const SpreadsheetSelectDetailSchema = z.object({
   row: z.number(), col: z.number(), value: z.union([z.string(), z.number()]),
   range: z.string().optional(), sheet: z.string().optional(),
 });

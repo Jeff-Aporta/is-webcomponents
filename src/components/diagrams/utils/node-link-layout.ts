@@ -9,7 +9,7 @@
 /** Redondea al múltiplo de 8px más cercano (misma rejilla que el resto de los diagramas). */
 import { snapDiagramGrid } from '@jeff-aporta/iswc-base/core/diagram-grid.js';
 import { aristasDeRetorno, claveArista } from './diagram-graph.js';
-import type { GraphNode, GraphEdge, NodeRect, EdgeAnchorXY, PositionedNode, LayoutOpts, LayoutResult } from "@jeff-aporta/iswc-base/components/diagrams/schemas/node-link-layout.schemas.js";
+import type { GraphNode, GraphEdge, NodeRect, EdgeAnchorXY, LayoutOpts, LayoutResult } from "@jeff-aporta/iswc-base/components/diagrams/schemas/node-link-layout.schemas.js";
 /** Nodo de un grafo tipo node-link. Solo se necesitan id/w/h para `assignLayers`; el layout completo exige w/h. */
 
 /** Arista de un grafo tipo node-link. */

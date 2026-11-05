@@ -8,7 +8,7 @@
  * de cada modulo y no exige un grid montado.
  */
 
-import type { ColDefAg, ContextoCelda, Desinstalar, EventoCelda, GridHost, RendererCelda, RendererMontable } from '@jeff-aporta/iswc-base/components/data/utils/ag-grid/contrato.schemas.js';
+import type { ColDefAg, ContextoCelda, Desinstalar, EventoCelda, GridHost, RendererCelda } from '@jeff-aporta/iswc-base/components/data/utils/ag-grid/contrato.schemas.js';
 import type { RowNode } from '@jeff-aporta/iswc-base/components/data/schemas/datagrid-types.schemas.js';
 import { AlturasFilas } from './celdas-alturas.js';
 import { contextoCelda, pintarCelda, resolverRenderer } from './contexto.js';

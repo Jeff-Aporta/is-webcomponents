@@ -6,7 +6,7 @@ import type { Sheet } from './engine.js';
 import { shiftFormula } from './rewrite.js';
 import { CellError, compare, toBool } from './values.js';
 import type { Scalar } from './values.schemas.js';
-import type { CfRule, CfStyle } from '@jeff-aporta/iswc-base/components/data/schemas/spreadsheet.schemas.js';
+import type { CfRule } from '@jeff-aporta/iswc-base/components/data/schemas/spreadsheet.schemas.js';
 import type { CfEffect, RangeStats } from './conditional.schemas.js';
 
 

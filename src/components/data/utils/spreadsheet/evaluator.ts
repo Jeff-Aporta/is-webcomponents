@@ -4,10 +4,7 @@ import type { Node } from './parser.schemas.js';
 import { compare, CellError, ERR, LambdaValue, RefValue, toNumber, toText } from './values.js';
 import type { EvalValue, Matrix, Scalar } from './values.schemas.js';
 import { lookupFn } from './functions/registry.js';
-import type { EvalHost, Env, Ctx } from './evaluator.schemas.js';
-
-
-
+import type { Env, Ctx } from './evaluator.schemas.js';
 
 const MAX_DEPTH = 256;
 
@@ -38,7 +35,7 @@ function operand(v: EvalValue, ctx: Ctx): Scalar | Matrix {
 }
 
 /** Aplica una operación celda a celda con difusión de dimensiones. */
-export function broadcast(a: Scalar | Matrix, b: Scalar | Matrix, fn: (x: Scalar, y: Scalar) => Scalar): Scalar | Matrix {
+function broadcast(a: Scalar | Matrix, b: Scalar | Matrix, fn: (x: Scalar, y: Scalar) => Scalar): Scalar | Matrix {
   const ma = Array.isArray(a);
   const mb = Array.isArray(b);
   if (!ma && !mb) return fn(a as Scalar, b as Scalar);

@@ -24,7 +24,6 @@
 
 /* ── Enums como Object.freeze para que `intent in ENUM` funcione en runtime ── */
 
-import type { TextFilterOp, NumberFilterOp, DateFilterOp, TextFilter, NumberFilter, DateFilter, SetFilter, ColumnFilter, FilterModel, ColumnTypeName, AggFuncName, SortDirName, PinSideName, AlignName, DensityName, SelectionModeName, FilterTypeName, RowData, RowNode, GroupRow, LeafRow, DisplayRow, ColumnDef, ColumnState, SortModelItem, SortModel, GridOptions, GridState, GridListener, GridApi } from "@jeff-aporta/iswc-base/components/data/schemas/datagrid-types.schemas.js";
 export const ColumnType = Object.freeze({
   TEXT: 'text',
   NUMBER: 'number',
@@ -42,19 +41,8 @@ export const AggFunc = Object.freeze({
   LAST: 'last',
 });
 
-export const SortDir = Object.freeze({
-  ASC: 'asc',
-  DESC: 'desc',
-});
-
 export const PinSide = Object.freeze({
   LEFT: 'left',
-  RIGHT: 'right',
-});
-
-export const Align = Object.freeze({
-  LEFT: 'left',
-  CENTER: 'center',
   RIGHT: 'right',
 });
 
@@ -88,15 +76,7 @@ export const HeaderCheckboxState = Object.freeze({
 export const DEFAULT_COL_WIDTH = 160;
 export const DEFAULT_MIN_WIDTH = 60;
 export const DEFAULT_MAX_WIDTH = 2000;
-export const DEFAULT_HEADER_HEIGHT = 44;
-export const DEFAULT_ROW_HEIGHT = 40;
 export const DEFAULT_PAGE_SIZE = 50;
-
-export const DENSITY_ROW_HEIGHT = Object.freeze({
-  [Density.COMPACT]: 32,
-  [Density.NORMAL]: 40,
-  [Density.COMFORTABLE]: 52,
-});
 
 /* ── Filtros ──────────────────────────────────────────────────────────── */
 

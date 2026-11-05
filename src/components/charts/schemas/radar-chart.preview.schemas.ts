@@ -6,7 +6,7 @@
  */
 import { z } from "zod";
 
-export const RadarChartLikeSchema = z.object({
+const RadarChartLikeSchema = z.object({
   config: z.object({
   data: z.object({
   labels: z.array(z.string()),

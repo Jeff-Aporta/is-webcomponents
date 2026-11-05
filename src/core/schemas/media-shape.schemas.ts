@@ -6,6 +6,6 @@
  */
 import { z } from "zod";
 
-export const MediaShapeSchema = z.unknown() /* TODO: cannot convert */;
+const MediaShapeSchema = z.unknown() /* TODO: cannot convert */;
 export type MediaShape = z.infer<typeof MediaShapeSchema>;
 

@@ -6,14 +6,13 @@
  */
 import { z } from "zod";
 
-export const CodeLikeSchema = z.object({
+const CodeLikeSchema = z.object({
   value: z.string(),
   lang: z.string(),
 });
 export type CodeLike = z.infer<typeof CodeLikeSchema>;
 
-
-export const DescribePartSchema = z.object({
+const DescribePartSchema = z.object({
   cls: z.string(),
   text: z.string(),
 });

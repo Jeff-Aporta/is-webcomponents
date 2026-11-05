@@ -6,7 +6,7 @@
  */
 import { z } from "zod";
 
-export const MammothApiSchema = z.object({
+const MammothApiSchema = z.object({
   convertToHtml: z.function({ input: [z.object({
   arrayBuffer: z.unknown() /* TODO: ref ArrayBuffer */,
 })], output: z.promise(z.object({

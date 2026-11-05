@@ -4,7 +4,7 @@
 import { z } from "zod";
 
 /** Comando de la paleta: la forma de `iswc-command-palette`. Campos extra del consumidor se conservan. */
-export const SemanticComandoSchema = z.looseObject({
+const SemanticComandoSchema = z.looseObject({
   id: z.string(),
   title: z.string(),
   group: z.string().optional(),
@@ -15,9 +15,9 @@ export const SemanticComandoSchema = z.looseObject({
 export type SemanticComando = z.infer<typeof SemanticComandoSchema>;
 
 /** Reordena (o filtra) por significado los comandos para la consulta. */
-export type SemanticRanker = (consulta: string, comandos: SemanticComando[]) => SemanticComando[] | Promise<SemanticComando[]>;
+type SemanticRanker = (consulta: string, comandos: SemanticComando[]) => SemanticComando[] | Promise<SemanticComando[]>;
 /** Trae resultados que no son comandos (registros encontrados por embeddings en el servidor del consumidor). */
-export type SemanticBuscar = (consulta: string) => Promise<SemanticComando[]>;
+type SemanticBuscar = (consulta: string) => Promise<SemanticComando[]>;
 
 export const SemanticSearchPropsSchema = z.object({
   comandos: z.array(SemanticComandoSchema),

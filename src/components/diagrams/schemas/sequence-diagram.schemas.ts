@@ -6,7 +6,7 @@
  */
 import { z } from "zod";
 
-export const TurtleStateSchema = z.object({
+const TurtleStateSchema = z.object({
   playing: z.boolean(),
   idx: z.number(),
   total: z.number(),
@@ -14,8 +14,7 @@ export const TurtleStateSchema = z.object({
 });
 export type TurtleState = z.infer<typeof TurtleStateSchema>;
 
-
-export const MsgNodeSchema = z.object({
+const MsgNodeSchema = z.object({
   m: z.unknown() /* TODO: ref SequenceLayoutMessage */,
   g: z.unknown() /* TODO: ref SVGGElement */,
   path: z.unknown() /* TODO: ref SVGPathElement */,
@@ -25,25 +24,21 @@ export const MsgNodeSchema = z.object({
 });
 export type MsgNode = z.infer<typeof MsgNodeSchema>;
 
-
-export const LifelineNodeSchema = z.object({
+const LifelineNodeSchema = z.object({
   x: z.number(),
   line: z.unknown() /* TODO: ref SVGLineElement */,
 });
 export type LifelineNode = z.infer<typeof LifelineNodeSchema>;
 
-
-export const ActorNodeSchema = z.object({
+const ActorNodeSchema = z.object({
   x: z.number(),
   g: z.unknown() /* TODO: ref SVGGElement */,
   rect: z.unknown() /* TODO: ref SVGRectElement */,
 });
 export type ActorNode = z.infer<typeof ActorNodeSchema>;
 
-
-
 /** Caja de participante (región que agrupa actores en la cabecera). */
-export const PartBoxSchema = z.object({
+const PartBoxSchema = z.object({
   id: z.string(),
   name: z.string(),
   color: z.string().optional(),

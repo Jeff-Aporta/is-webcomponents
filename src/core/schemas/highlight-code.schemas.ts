@@ -6,7 +6,7 @@
  */
 import { z } from "zod";
 
-export const CodeEditorSchema = z.intersection(z.unknown() /* TODO: ref HTMLElement */, z.object({
+const CodeEditorSchema = z.intersection(z.unknown() /* TODO: ref HTMLElement */, z.object({
   value: z.string(),
   lang: z.string(),
   refresh: z.function({ input: [], output: z.void() }).optional(),

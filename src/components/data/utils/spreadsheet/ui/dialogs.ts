@@ -12,7 +12,7 @@ import { formatValue, NUMBER_FORMATS } from '@jeff-aporta/iswc-base/components/d
 import { signatureParts } from './formula-assist.js';
 import { esc } from './render.js';
 import type { BorderSide, CellStyle, CfRule, ValidationRule } from '@jeff-aporta/iswc-base/components/data/schemas/spreadsheet.schemas.js';
-import type { Fields, DialogSpec, DialogHost } from './dialogs.schemas.js';
+import type { Fields, DialogHost } from './dialogs.schemas.js';
 
 
 

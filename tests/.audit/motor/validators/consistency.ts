@@ -25,7 +25,7 @@
 import { readFileSync, existsSync } from 'node:fs';
 import { basename } from 'node:path';
 import type { Hallazgo } from '../schemas/types.schemas.js';
-import { DefSchema, type Def } from "./schemas/consistency.schemas.js";
+import { type Def } from "./schemas/consistency.schemas.js";
 import type { MetaComponente, OpcionesConsistencia } from "./schemas/consistency.schemas.js";
 
 /**

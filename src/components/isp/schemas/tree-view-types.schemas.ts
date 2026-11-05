@@ -6,7 +6,7 @@
  */
 import { z } from "zod";
 
-export const TNodeSchema = z.object({
+const TNodeSchema = z.object({
   flatPath: z.string(),
   pathInit: z.string().optional(),
   get childrens(): z.ZodOptional<z.ZodArray<typeof TNodeSchema>> { return z.array(TNodeSchema).optional(); },
@@ -28,15 +28,13 @@ export const TNodeSchema = z.object({
 });
 export type TNode = z.infer<typeof TNodeSchema>;
 
-
-export const TRecordSchema = z.object({
+const TRecordSchema = z.object({
   iplan: z.string().optional(),
   idrow: z.string().optional(),
 });
 export type TRecord = z.infer<typeof TRecordSchema>;
 
-
-export const TreeActionSpecSchema = z.object({
+const TreeActionSpecSchema = z.object({
   icon: z.string().optional(),
   iconTrue: z.string().optional(),
   iconFalse: z.string().optional(),
@@ -52,12 +50,10 @@ export const TreeActionSpecSchema = z.object({
 });
 export type TreeActionSpec = z.infer<typeof TreeActionSpecSchema>;
 
-
-export const TreeActionEntrySchema = z.union([TreeActionSpecSchema, z.array(TreeActionEntrySchema), z.null(), z.undefined(), z.literal(false)]);
+const TreeActionEntrySchema = z.union([TreeActionSpecSchema, z.array(TreeActionEntrySchema), z.null(), z.undefined(), z.literal(false)]);
 export type TreeActionEntry = z.infer<typeof TreeActionEntrySchema>;
 
-
-export const IconConfigSchema = z.object({
+const IconConfigSchema = z.object({
   icon: z.string(),
   color: z.string().optional(),
   style: z.string().optional(),
@@ -65,16 +61,14 @@ export const IconConfigSchema = z.object({
 });
 export type IconConfig = z.infer<typeof IconConfigSchema>;
 
-
-export const FloatCardConfigSchema = z.object({
+const FloatCardConfigSchema = z.object({
   e: z.number().optional(),
   ty: z.union([z.number(), z.string()]).optional(),
   /* TODO: parse fail [key: string]: unknown */
 });
 export type FloatCardConfig = z.infer<typeof FloatCardConfigSchema>;
 
-
-export const RowConfigSchema = z.object({
+const RowConfigSchema = z.object({
   icono: IconConfigSchema.optional(),
   actions: z.array(TreeActionEntrySchema),
   cascadeOptions: z.array(TreeActionEntrySchema),
@@ -93,38 +87,32 @@ export const RowConfigSchema = z.object({
 });
 export type RowConfig = z.infer<typeof RowConfigSchema>;
 
-
-export const SiblingPositionSchema = z.object({
+const SiblingPositionSchema = z.object({
   isFirst: z.boolean(),
   isLast: z.boolean(),
 });
 export type SiblingPosition = z.infer<typeof SiblingPositionSchema>;
 
-
-export const DropPositionSchema = z.union([z.literal("before"), z.literal("after"), z.literal("into")]);
+const DropPositionSchema = z.union([z.literal("before"), z.literal("after"), z.literal("into")]);
 export type DropPosition = z.infer<typeof DropPositionSchema>;
 
-
-export const MoveDirectionSchema = z.union([z.literal("up"), z.literal("down")]);
+const MoveDirectionSchema = z.union([z.literal("up"), z.literal("down")]);
 export type MoveDirection = z.infer<typeof MoveDirectionSchema>;
 
-
-export const PendingDeleteSnapshotSchema = z.object({
+const PendingDeleteSnapshotSchema = z.object({
   prevVisibleIds: z.array(z.string()),
   prevDeleteIdx: z.number(),
 });
 export type PendingDeleteSnapshot = z.infer<typeof PendingDeleteSnapshotSchema>;
 
-
-export const RowAdapterBridgeSchema = z.object({
+const RowAdapterBridgeSchema = z.object({
   treeController: z.unknown().optional(),
   node: TNodeSchema.optional(),
   forceRefresh: z.function({ input: [], output: z.void() }).optional(),
 });
 export type RowAdapterBridge = z.infer<typeof RowAdapterBridgeSchema>;
 
-
-export const TreeContextSchema = z.object({
+const TreeContextSchema = z.object({
   readonly: z.boolean().optional(),
   disabled: z.boolean().optional(),
   draggable: z.boolean().optional(),
@@ -140,24 +128,12 @@ export const TreeContextSchema = z.object({
 });
 export type TreeContext = z.infer<typeof TreeContextSchema>;
 
-
-export const LevelNameArgsSchema = z.object({
+const LevelNameArgsSchema = z.object({
   depth: z.number(),
 });
 export type LevelNameArgs = z.infer<typeof LevelNameArgsSchema>;
 
-
-export const NodeIconArgsSchema = z.object({
-  isLastNode: z.boolean(),
-  isFolder: z.boolean(),
-  hasChildren: z.boolean(),
-  isExpanded: z.boolean(),
-  isEmptyFolder: z.boolean(),
-});
-export type NodeIconArgs = z.infer<typeof NodeIconArgsSchema>;
-
-
-export const CustomsRuntimeSchema = z.object({
+const CustomsRuntimeSchema = z.object({
   /* TODO: parse fail readonly record: TRecord | null */
   /* TODO: parse fail readonly rootNodes: TNode[] */
   /* TODO: parse fail readonly canCollapseAll: boolean */
@@ -198,12 +174,9 @@ export const CustomsRuntimeSchema = z.object({
 });
 export type CustomsRuntime = z.infer<typeof CustomsRuntimeSchema>;
 
+const HotkeyHandlerSchema = z.function({ input: [z.unknown() /* TODO: ref TNode */, z.unknown() /* TODO: ref CustomsRuntime */, z.unknown() /* TODO: ref KeyboardEvent */], output: z.void() });
 
-export const HotkeyHandlerSchema = z.function({ input: [z.unknown() /* TODO: ref TNode */, z.unknown() /* TODO: ref CustomsRuntime */, z.unknown() /* TODO: ref KeyboardEvent */], output: z.void() });
-export type HotkeyHandler = z.infer<typeof HotkeyHandlerSchema>;
-
-
-export const TreeCustomsSchema = z.object({
+const TreeCustomsSchema = z.object({
   entrie: z.string().optional(),
   entries: z.string().optional(),
   klass: z.unknown() /* TODO: cannot convert */.optional(),

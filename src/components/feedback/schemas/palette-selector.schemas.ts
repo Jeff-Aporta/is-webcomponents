@@ -4,7 +4,7 @@
 import { z } from "zod";
 
 /** Entrada normalizada de paleta, lista para render. */
-export const PaletteSchema = z.object({
+const PaletteSchema = z.object({
   value: z.string(),
   label: z.string(),
   family: z.string(),
@@ -24,7 +24,7 @@ export const PaletteSchema = z.object({
 export type Palette = z.infer<typeof PaletteSchema>;
 
 /** Entrada cruda que puede llegar en el atributo `palettes`. */
-export const PaletteCrudaSchema = z.object({
+const PaletteCrudaSchema = z.object({
   value: z.unknown().optional(),
   label: z.unknown().optional(),
   family: z.unknown().optional(),

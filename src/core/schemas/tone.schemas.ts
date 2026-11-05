@@ -6,6 +6,6 @@
  */
 import { z } from "zod";
 
-export const ToneSchema = z.unknown() /* TODO: cannot convert */;
+const ToneSchema = z.unknown() /* TODO: cannot convert */;
 export type Tone = z.infer<typeof ToneSchema>;
 

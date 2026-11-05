@@ -6,7 +6,7 @@
  */
 import { z } from "zod";
 
-export const RteCommandDefSchema = z.object({
+const RteCommandDefSchema = z.object({
   icon: z.string().optional(),
   title: z.string().optional(),
   run: z.function({ input: [z.unknown() /* TODO: ref HTMLElement */], output: z.void() }),

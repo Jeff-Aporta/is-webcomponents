@@ -46,7 +46,7 @@ function readNode(raw: unknown, i: number): MindmapNode {
 }
 
 /** payload → spec normalizada, o null si no hay nodos. */
-export function mindmapSpecFromPayload(payload: unknown): MindmapSpec | null {
+function mindmapSpecFromPayload(payload: unknown): MindmapSpec | null {
   const p = asRecord(payload);
   const src = asRecord(p.mindmap ?? p);
   const rawNodes = src.nodes ?? [];

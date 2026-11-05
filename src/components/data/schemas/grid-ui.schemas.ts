@@ -6,15 +6,14 @@
  */
 import { z } from "zod";
 
-export const GridPopoverElSchema = z.intersection(z.unknown() /* TODO: ref HTMLElement */, z.object({
+const GridPopoverElSchema = z.intersection(z.unknown() /* TODO: ref HTMLElement */, z.object({
   popover: z.string().optional(),
   showPopover: z.function({ input: [], output: z.void() }).optional(),
   hidePopover: z.function({ input: [], output: z.void() }).optional(),
 }));
 export type GridPopoverEl = z.infer<typeof GridPopoverElSchema>;
 
-
-export const MenuItemSchema = z.object({
+const MenuItemSchema = z.object({
   label: z.string().optional(),
   icon: z.string().optional(),
   action: z.string().optional(),
@@ -25,23 +24,20 @@ export const MenuItemSchema = z.object({
 });
 export type MenuItem = z.infer<typeof MenuItemSchema>;
 
-
-export const RenderColumnsPanelOptsSchema = z.object({
+const RenderColumnsPanelOptsSchema = z.object({
   columns: z.array(z.unknown() /* TODO: cannot convert */),
   isVisible: z.function({ input: [z.string()], output: z.boolean() }),
   search: z.string().optional(),
 });
 export type RenderColumnsPanelOpts = z.infer<typeof RenderColumnsPanelOptsSchema>;
 
-
-export const FilterPanelModelSchema = z.object({
+const FilterPanelModelSchema = z.object({
   items: z.array(z.unknown() /* TODO: ref FilterRule */),
   logicOperator: z.union([z.literal('and'), z.literal('or')]).optional(),
 });
 export type FilterPanelModel = z.infer<typeof FilterPanelModelSchema>;
 
-
-export const RenderFilterPanelOptsSchema = z.object({
+const RenderFilterPanelOptsSchema = z.object({
   columns: z.array(z.unknown() /* TODO: cannot convert */),
   model: FilterPanelModelSchema,
 });

@@ -24,7 +24,6 @@ import { z } from "zod";
 
 /** Clase de nodo especial. Ausente = nodo normal del diagrama. */
 export const DiagramNodeKindSchema = z.union([z.literal('nested'), z.literal('tableder'), z.literal('component'), z.literal('class')]);
-export type DiagramNodeKind = z.infer<typeof DiagramNodeKindSchema>;
 
 /** Diagrama referenciado: mismo formato que el editable del ISS (tag/script/attrs/payload). */
 export const EmbeddedDiagramSchema = z.object({
@@ -45,7 +44,6 @@ export const EmbeddedDiagramFileSchema = z.object({
   attrs: z.record(z.string(), z.string()).optional(),
   payload: z.unknown().optional(),
 }).passthrough();
-export type EmbeddedDiagramFile = z.infer<typeof EmbeddedDiagramFileSchema>;
 
 /** Campos de un nodo especial, tal como llegan en el JSON del nodo. */
 export const NodeEmbedSpecSchema = z.object({
@@ -87,7 +85,7 @@ export const EmbedSizeSchema = z.object({
 export type EmbedSize = z.infer<typeof EmbedSizeSchema>;
 
 /** SVG capturado de un diagrama montado fuera de pantalla. */
-export const EmbedCaptureSchema = z.object({
+const EmbedCaptureSchema = z.object({
   /** Hijos del `<svg>` capturado, con ids prefijados y estilos acotados. */
   markup: z.string(),
   /** Caja del contenido en coordenadas del svg capturado (viewBox recortado). */
@@ -101,10 +99,9 @@ export type EmbedCapture = z.infer<typeof EmbedCaptureSchema>;
 export const DiagramHostLikeSchema = z.custom<HTMLElement & { updateComplete: () => Promise<void> }>(
   (v) => typeof HTMLElement !== 'undefined' && v instanceof HTMLElement && typeof Reflect.get(v, 'updateComplete') === 'function',
 );
-export type DiagramHostLike = z.infer<typeof DiagramHostLikeSchema>;
 
 /** Opciones de captura. */
-export const EmbedCaptureOptsSchema = z.object({
+const EmbedCaptureOptsSchema = z.object({
   /** `import.meta.url` del bundle que captura: base para resolver el bundle del tag. */
   moduleUrl: z.string(),
   /** Estilo heredado del diagrama padre (`insoft`), si el anidado no trae el suyo. */

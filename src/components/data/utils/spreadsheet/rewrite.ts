@@ -15,7 +15,7 @@ function endText(e: RefEnd): string {
 }
 
 /** Texto de una referencia completa. */
-export function refText(sheet: string | undefined, a: RefEnd, b?: RefEnd): string {
+function refText(sheet: string | undefined, a: RefEnd, b?: RefEnd): string {
   const prefix = sheet === undefined ? '' : `${quoteSheet(sheet)}!`;
   return prefix + endText(a) + (b ? `:${endText(b)}` : '');
 }
@@ -53,7 +53,6 @@ export function shiftFormula(formula: string, dr: number, dc: number, maxRows = 
     return refText(t.sheet, a, b);
   });
 }
-
 
 /** Ajusta un intervalo [lo, hi] a un borrado; null si desaparece. */
 function deleted(lo: number, hi: number, at: number, n: number): [number, number] | null {

@@ -11,7 +11,7 @@ export const JsonValidacionSchema = z.object({
 });
 export type JsonValidacion = z.infer<typeof JsonValidacionSchema>;
 
-export type JsonValidador = (texto: string) => JsonValidacion;
+type JsonValidador = (texto: string) => JsonValidacion;
 
 export const JsonDialogPropsSchema = z.object({
   open: z.boolean(),

@@ -3,10 +3,9 @@ import { diagramHeaderWidth } from './diagram-header.js';
 import { applyEdgeActorLayout } from './diagram-edge-actors.js';
 import { assignEdgeHues } from './diagram-edge-style.js';
 import { makeCostGrid, blockRect, applyRectCost, snapDiagramGrid, snapPointAwayFromSide} from '@jeff-aporta/iswc-base/core/diagram-grid.js';
-import { routeOrthogonal, pixelToGrid, gridPathToSvg, buildOrthogonalPath } from './diagram-astar.js';
+import { routeOrthogonal, pixelToGrid, buildOrthogonalPath } from './diagram-astar.js';
 import { richTextPlain } from '@jeff-aporta/iswc-base/core/tk-rich-text.js';
 import { resolveTkHue } from '@jeff-aporta/iswc-base/core/tk-hue.js';
-import type { BoxSide } from '@jeff-aporta/iswc-base/components/diagrams/schemas/diagram-types.schemas.js';
 import type { StateKind, StateDirection, AnchorSide, StateSpec, StateTransitionSpec, StateGroupSpec, StateResolvedSpec, StateLayoutNode, StateLayoutTransition, StateLayout } from "@jeff-aporta/iswc-base/components/diagrams/schemas/state-spec.schemas.js";
 
 /**

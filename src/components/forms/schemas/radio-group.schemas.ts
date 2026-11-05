@@ -6,7 +6,7 @@
  */
 import { z } from "zod";
 
-export const IswcRadioElementSchema = z.object({
+const IswcRadioElementSchema = z.object({
   value: z.string(),
   checked: z.boolean(),
   disabled: z.boolean(),

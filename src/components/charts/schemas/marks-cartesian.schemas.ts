@@ -6,7 +6,7 @@
  */
 import { z } from "zod";
 
-export const MarksDatasetSchema = z.intersection(z.unknown() /* TODO: ref ChartDataset */, z.object({
+const MarksDatasetSchema = z.intersection(z.unknown() /* TODO: ref ChartDataset */, z.object({
   curve: z.string().optional(),
   stepped: z.boolean().optional(),
   tension: z.number().optional(),
@@ -20,8 +20,7 @@ export const MarksDatasetSchema = z.intersection(z.unknown() /* TODO: ref ChartD
 }));
 export type MarksDataset = z.infer<typeof MarksDatasetSchema>;
 
-
-export const ProjectedPointSchema = z.object({
+const ProjectedPointSchema = z.object({
   x: z.number(),
   y: z.number(),
   value: z.number(),
@@ -29,15 +28,13 @@ export const ProjectedPointSchema = z.object({
 });
 export type ProjectedPoint = z.infer<typeof ProjectedPointSchema>;
 
-
-export const XYPointSchema = z.object({
+const XYPointSchema = z.object({
   x: z.number().optional(),
   y: z.number(),
   r: z.number().optional(),
 });
 export type XYPoint = z.infer<typeof XYPointSchema>;
 
-
-export const CurveKindSchema = z.union([z.literal('linear'), z.literal('natural'), z.literal('step')]);
+const CurveKindSchema = z.union([z.literal('linear'), z.literal('natural'), z.literal('step')]);
 export type CurveKind = z.infer<typeof CurveKindSchema>;
 

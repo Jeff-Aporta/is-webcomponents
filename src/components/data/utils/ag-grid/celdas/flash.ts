@@ -11,10 +11,9 @@ import type { Reloj, Programar, Cancelar, Alcance, Vencimiento, OpcionesDestello
 import { unirClases } from './html.js';
 import type { CambioCelda } from './schemas.js';
 
-
-export const FLASH_MS = 500;
-export const FADE_MS = 1000;
-export const CAMBIO_MS = 3000;
+const FLASH_MS = 500;
+const FADE_MS = 1000;
+const CAMBIO_MS = 3000;
 
 function claveCelda(filaId: string, colId: string): string {
   return `${filaId}\u0000${colId}`;

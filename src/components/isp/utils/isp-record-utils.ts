@@ -4,7 +4,7 @@
  */
 
 /** @param v valor a evaluar. */
-import type { IspRecord, GridRow, IspColumnDef, FlatGridColumn, IspColumnsMap, IspController } from "@jeff-aporta/iswc-base/components/isp/schemas/isp-record-utils.schemas.js";
+import type { IspRecord, GridRow, FlatGridColumn, IspColumnsMap, IspController } from "@jeff-aporta/iswc-base/components/isp/schemas/isp-record-utils.schemas.js";
 export function isPresent(v: unknown): boolean {
   if (v == null) return false;
   if (typeof v === 'string') return v.trim().length > 0;
@@ -103,7 +103,7 @@ export function toGridRow(record: IspRecord, primaryKeys: readonly string[] = []
  * @param cols Mapa anidado de columnas (puede ser null).
  * @param out Acumulador al que se empujan las columnas planas.
  */
-export function flattenIspColumns(cols: IspColumnsMap | null | undefined, out: FlatGridColumn[] = []): FlatGridColumn[] {
+function flattenIspColumns(cols: IspColumnsMap | null | undefined, out: FlatGridColumn[] = []): FlatGridColumn[] {
   if (!cols || typeof cols !== 'object') return out;
   for (const [key, def] of Object.entries(cols)) {
     if (!def || typeof def !== 'object') continue;

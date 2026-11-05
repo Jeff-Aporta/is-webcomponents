@@ -10,7 +10,7 @@
  * Con attr `locale` ese valor gana siempre.
  */
 
-export const FALLBACK_LOCALE = 'es';
+const FALLBACK_LOCALE = 'es';
 
 /**
  * @param {string | null | undefined} [explicit]  Valor del atributo `locale` u override.
@@ -33,16 +33,3 @@ export function resolveLocale(explicit: string | null | undefined) {
   return FALLBACK_LOCALE;
 }
 
-/**
- * Si `<html lang>` está vacío, lo rellena con el sistema (o `es`).
- * Las apps ContaPyme pueden fijar `lang="es"` a propósito para forzar español.
- */
-export function applyDocumentLocaleFromSystem() {
-  if (typeof document === 'undefined') return;
-  const current = String(document.documentElement.lang || '').trim();
-  if (current) return;
-  const sys = typeof navigator !== 'undefined'
-    ? String(navigator.language || navigator.languages?.[0] || '').trim()
-    : '';
-  document.documentElement.lang = sys || FALLBACK_LOCALE;
-}

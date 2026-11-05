@@ -6,15 +6,14 @@
  */
 import { z } from "zod";
 
-export const RadialDatasetSchema = z.intersection(z.unknown() /* TODO: ref ChartDataset */, z.object({
+const RadialDatasetSchema = z.intersection(z.unknown() /* TODO: ref ChartDataset */, z.object({
   backgroundColor: z.array(z.union([z.string(), z.string()])).optional(),
   borderColor: z.string().optional(),
   __i: z.number().optional(),
 }));
 export type RadialDataset = z.infer<typeof RadialDatasetSchema>;
 
-
-export const SliceSchema = z.object({
+const SliceSchema = z.object({
   value: z.number(),
   index: z.number(),
   label: z.string(),

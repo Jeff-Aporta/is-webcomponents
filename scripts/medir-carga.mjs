@@ -56,7 +56,7 @@ const KIT_PIN = 'is-webcomponents@[0-9a-f]{7,40}/dist/cdn/.+\\.m?js(?:[?#]|$)';
 const UMBRAL_LONG_TASK = 50;
 
 /** Opciones desde argv (`--clave=valor` o `--bandera`). */
-export function opcionesDeArgv(argv) {
+function opcionesDeArgv(argv) {
   const o = {};
   for (const a of argv) {
     const m = /^--([a-z-]+)(?:=(.*))?$/.exec(a);
@@ -114,7 +114,7 @@ export async function servirEstatico(raiz, { latencia = 0, extra = {} } = {}) {
 }
 
 /** Página mínima del lote: loader del kit, `load()` + `ensure()` de cada tag y `data-app-ready`. */
-export function paginaLote(tags, loader = '/cdn/core/loader.min.mjs') {
+function paginaLote(tags, loader = '/cdn/core/loader.min.mjs') {
   return `<!doctype html><html lang="es"><meta charset="utf-8"><title>lote</title><link rel="icon" href="data:,"><body><script type="module">
 import { iswcLoader as L } from '${loader}';
 const lote = ${JSON.stringify(tags)};

@@ -124,6 +124,3 @@ export function syncIspColor(el: HTMLElement, opts: { colorVar: string; mixVar?:
   }
 }
 
-export function isSemanticColor(raw: unknown): boolean {
-  return classifyColor(raw).kind === 'semantic';
-}

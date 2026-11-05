@@ -9,7 +9,7 @@
 import { computePosition } from '@jeff-aporta/iswc-base/core/position.js';
 import { AGGREGATION_FNS, operatorNeedsInput } from './grid-types.js';
 import type { ColumnDef, FilterRule, Operator } from '@jeff-aporta/iswc-base/components/data/schemas/grid-types.schemas.js';
-import type { GridPopoverEl, MenuItem, RenderColumnsPanelOpts, FilterPanelModel, RenderFilterPanelOpts } from "@jeff-aporta/iswc-base/components/data/schemas/grid-ui.schemas.js";
+import type { GridPopoverEl, MenuItem, RenderColumnsPanelOpts, RenderFilterPanelOpts } from "@jeff-aporta/iswc-base/components/data/schemas/grid-ui.schemas.js";
 
 const SUPPORTS_POPOVER = typeof HTMLElement !== 'undefined' && 'popover' in HTMLElement.prototype;
 

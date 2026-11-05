@@ -100,28 +100,6 @@ export function resolveSankeySpec(payload: unknown): SankeyResolvedSpec | null {
   };
 }
 
-/** spec → objeto `sankey` listo para persistir / mostrar en el editor. */
-export function sankeySpecToJson(spec: SankeyResolvedSpec): Record<string, unknown> {
-  const out: Record<string, unknown> = { nodes: [], links: [] };
-  if (spec.title) out.title = spec.title;
-  if (spec.subtitle) out.subtitle = spec.subtitle;
-  if (spec.unit) out.unit = spec.unit;
-  if (spec.groups?.length) out.groups = spec.groups;
-  out.nodes = spec.nodes.map((n) => {
-    const row: Record<string, unknown> = { id: n.id, label: n.label };
-    if (n.group) row.group = n.group;
-    if (n.description) row.desc = n.description;
-    return row;
-  });
-  out.links = spec.links.map((l) => {
-    const row: Record<string, unknown> = { from: l.from, to: l.to, value: l.value };
-    if (l.label) row.label = l.label;
-    if (l.group) row.group = l.group;
-    return row;
-  });
-  return out;
-}
-
 /**
  * Capa de cada nodo: el más lejano desde cualquier fuente (longest path).
  * Los ciclos se cortan con un tope de iteraciones — un Sankey cíclico no

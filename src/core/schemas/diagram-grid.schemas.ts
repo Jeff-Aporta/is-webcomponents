@@ -6,7 +6,7 @@
  */
 import { z } from "zod";
 
-export const GridRectSchema = z.object({
+const GridRectSchema = z.object({
   x: z.number(),
   y: z.number(),
   w: z.number(),
@@ -14,15 +14,13 @@ export const GridRectSchema = z.object({
 });
 export type GridRect = z.infer<typeof GridRectSchema>;
 
-
-export const GridPointSchema = z.object({
+const GridPointSchema = z.object({
   x: z.number(),
   y: z.number(),
 });
 export type GridPoint = z.infer<typeof GridPointSchema>;
 
-
-export const CostGridSchema = z.object({
+const CostGridSchema = z.object({
   cols: z.number(),
   rows: z.number(),
   grid: z.number(),
@@ -31,8 +29,7 @@ export const CostGridSchema = z.object({
 });
 export type CostGrid = z.infer<typeof CostGridSchema>;
 
-
-export const ForbiddenRegionSchema = z.object({
+const ForbiddenRegionSchema = z.object({
   id: z.string(),
   kind: z.union([z.literal('rect'), z.literal('poly')]),
   x: z.number().optional(),
@@ -45,8 +42,7 @@ export const ForbiddenRegionSchema = z.object({
 });
 export type ForbiddenRegion = z.infer<typeof ForbiddenRegionSchema>;
 
-
-export const ExclusionZoneSchema = z.object({
+const ExclusionZoneSchema = z.object({
   x: z.number(),
   y: z.number(),
   w: z.number(),
@@ -55,7 +51,6 @@ export const ExclusionZoneSchema = z.object({
 });
 export type ExclusionZone = z.infer<typeof ExclusionZoneSchema>;
 
-
-export const DiagramSideSchema = z.union([z.literal('top'), z.literal('bottom'), z.literal('left'), z.literal('right')]);
+const DiagramSideSchema = z.union([z.literal('top'), z.literal('bottom'), z.literal('left'), z.literal('right')]);
 export type DiagramSide = z.infer<typeof DiagramSideSchema>;
 

@@ -6,7 +6,7 @@
  */
 import { z } from "zod";
 
-export const _AdapterLikeSchema = z.object({
+const _AdapterLikeSchema = z.object({
   treeRootId: z.string(),
   _domRoot: z.union([z.unknown() /* TODO: ref HTMLElement */, z.null()]).optional(),
   customs: z.union([z.unknown() /* TODO: ref TreeCustoms */, z.null()]).optional(),
@@ -47,16 +47,14 @@ export const _AdapterLikeSchema = z.object({
 });
 export type _AdapterLike = z.infer<typeof _AdapterLikeSchema>;
 
-
-export const _DrawerLikeSchema = z.object({
+const _DrawerLikeSchema = z.object({
   show: z.function({ input: [], output: z.void() }).optional(),
   hide: z.function({ input: [], output: z.void() }).optional(),
   label: z.string().optional(),
 });
 export type _DrawerLike = z.infer<typeof _DrawerLikeSchema>;
 
-
-export const _ModalDeleteLikeSchema = z.object({
+const _ModalDeleteLikeSchema = z.object({
   show: z.function({ input: [], output: z.void() }).optional(),
   hide: z.function({ input: [], output: z.void() }).optional(),
   loading: z.boolean().optional(),
@@ -64,8 +62,7 @@ export const _ModalDeleteLikeSchema = z.object({
 });
 export type _ModalDeleteLike = z.infer<typeof _ModalDeleteLikeSchema>;
 
-
-export const _DialogLikeSchema = z.object({
+const _DialogLikeSchema = z.object({
   show: z.function({ input: [], output: z.void() }).optional(),
   hide: z.function({ input: [], output: z.void() }).optional(),
 });

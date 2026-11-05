@@ -6,7 +6,7 @@
  */
 import { z } from "zod";
 
-export const IswcUiApiSchema = z.object({
+const IswcUiApiSchema = z.object({
   html: z.unknown() /* TODO: cannot convert */,
   esc: z.unknown() /* TODO: cannot convert */,
   define: z.function({ input: [z.string(), z.unknown() /* TODO: ref CustomElementConstructor */], output: z.void() }),

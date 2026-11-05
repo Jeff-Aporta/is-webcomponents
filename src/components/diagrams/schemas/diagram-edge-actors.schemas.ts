@@ -6,21 +6,19 @@
  */
 import { z } from "zod";
 
-export const XYPointSchema = z.object({
+const XYPointSchema = z.object({
   x: z.number(),
   y: z.number(),
 });
 export type XYPoint = z.infer<typeof XYPointSchema>;
 
-
-export const RectLikeSchema = z.object({
+const RectLikeSchema = z.object({
   x: z.number(),
   y: z.number(),
   w: z.number(),
   h: z.number(),
 });
 export type RectLike = z.infer<typeof RectLikeSchema>;
-
 
 export const LabeledEdgeSchema = z.object({
   label: z.string().optional(),
@@ -37,8 +35,7 @@ export const LabeledEdgeSchema = z.object({
 });
 export type LabeledEdge = z.infer<typeof LabeledEdgeSchema>;
 
-
-export const PlaceEdgeActorsOptsSchema = z.object({
+const PlaceEdgeActorsOptsSchema = z.object({
   edges: z.array(z.unknown() /* TODO: cannot convert */).optional(),
   obstacles: z.array(z.unknown() /* TODO: cannot convert */).optional(),
   canvas: z.object({
@@ -49,16 +46,14 @@ export const PlaceEdgeActorsOptsSchema = z.object({
 });
 export type PlaceEdgeActorsOpts = z.infer<typeof PlaceEdgeActorsOptsSchema>;
 
-
-export const PlaceEdgeActorsResultSchema = z.object({
+const PlaceEdgeActorsResultSchema = z.object({
   width: z.number(),
   height: z.number(),
   actors: z.array(RectLikeSchema),
 });
 export type PlaceEdgeActorsResult = z.infer<typeof PlaceEdgeActorsResultSchema>;
 
-
-export const EdgeActorLayoutSchema = z.object({
+const EdgeActorLayoutSchema = z.object({
   edges: z.array(LabeledEdgeSchema).optional(),
   relations: z.array(LabeledEdgeSchema).optional(),
   links: z.array(LabeledEdgeSchema).optional(),

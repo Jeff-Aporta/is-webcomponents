@@ -11,7 +11,7 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
 /** `[attr=valor]` → `[attr="valor"]` (también `~=`, `|=`, `^=`, `$=`, `*=`). */
-export function normalizarCss(css: string): string {
+function normalizarCss(css: string): string {
   return css
     .replace(/\[\s*([\w-]+)\s*([~|^$*]?=)\s*'([^']*)'\s*\]/g, '[$1$2"$3"]')
     .replace(/\[\s*([\w-]+)\s*([~|^$*]?=)\s*(-?[A-Za-z_][\w-]*)\s*\]/g, '[$1$2"$3"]');
@@ -22,7 +22,7 @@ export function leerCssCompilado(root: string, rel: string): string {
   return normalizarCss(readFileSync(join(root, '.tmp-scss', rel), 'utf8'));
 }
 
-export type Regla = { selector: string; cuerpo: string; at: string[] };
+type Regla = { selector: string; cuerpo: string; at: string[] };
 
 /**
  * Reglas hoja del CSS (sin comentarios), con los @-bloques que las envuelven.
@@ -89,8 +89,3 @@ export function selectores(lista: string): string[] {
   return out.map((s) => s.replace(/\s+/g, ' ').trim()).filter(Boolean);
 }
 
-/** Reglas cuyo selector (lista separada por comas) incluye exactamente `sel`. */
-export function reglasDe(css: string, sel: string): Regla[] {
-  const objetivo = sel.replace(/\s+/g, ' ').trim();
-  return reglas(css).filter((r) => selectores(r.selector).includes(objetivo));
-}

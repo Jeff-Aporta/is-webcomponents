@@ -30,13 +30,10 @@ import type { ArgSpec } from "./schemas/cli.schemas.js";
 import { writeFileSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import {
-  crearEstado, auditarCatalogo, MOTOR_VERSION, resumenMotor,
-  prepararSesionBrowser,
-} from './auditor.js';
+import { crearEstado, auditarCatalogo, MOTOR_VERSION, prepararSesionBrowser } from './auditor.js';
 import type { OpcionesRunner } from './schemas/types.schemas.js';
 import { aJson, aMarkdown, imprimirConsola, imprimirResumenUnaLinea } from './reporter.js';
-import { enumerarCatalogo, resumirCatalogo } from './catalog.js';
+import { resumirCatalogo } from './catalog.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

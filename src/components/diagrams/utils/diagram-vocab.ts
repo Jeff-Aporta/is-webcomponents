@@ -44,14 +44,14 @@ const STORE: VocabStore = raiz[GLOBAL_KEY] ??= { edges: new Map(), nodes: new Ma
 const clave = (s: string): string => String(s ?? '').trim().toLowerCase();
 
 /** Registra (o reemplaza) un tipo de arista. Valida con Zod. */
-export function registerEdgeKind(def: EdgeKindDef): EdgeKindDef {
+function registerEdgeKind(def: EdgeKindDef): EdgeKindDef {
   const d = EdgeKindDefSchema.parse(def);
   STORE.edges.set(clave(d.id), d);
   return d;
 }
 
 /** Registra (o reemplaza) una estructura de nodo. Valida con Zod. */
-export function registerNodeStructure(def: NodeStructureDef): NodeStructureDef {
+function registerNodeStructure(def: NodeStructureDef): NodeStructureDef {
   const d = NodeStructureDefSchema.parse(def);
   STORE.nodes.set(clave(d.id), d);
   return d;
@@ -60,15 +60,12 @@ export function registerNodeStructure(def: NodeStructureDef): NodeStructureDef {
 export function getEdgeKind(id: string | null | undefined): EdgeKindDef | undefined {
   return STORE.edges.get(clave(id ?? ''));
 }
-export function getNodeStructure(id: string | null | undefined): NodeStructureDef | undefined {
+function getNodeStructure(id: string | null | undefined): NodeStructureDef | undefined {
   return STORE.nodes.get(clave(id ?? ''));
 }
 export function listEdgeKinds(family?: EdgeFamily): EdgeKindDef[] {
   const all = [...STORE.edges.values()];
   return family ? all.filter((e) => e.family === family) : all;
-}
-export function listNodeStructures(): NodeStructureDef[] {
-  return [...STORE.nodes.values()];
 }
 
 /**
@@ -88,7 +85,7 @@ function nestedDiagram(o: Record<string, unknown>): Record<string, unknown> | un
 }
 
 /** Lee `policy` de un payload (o del objeto anidado del diagrama). */
-export function readDiagramPolicy(payload: unknown): DiagramPolicy | null {
+function readDiagramPolicy(payload: unknown): DiagramPolicy | null {
   if (!payload || typeof payload !== 'object') return null;
   const o = payload as Record<string, unknown>;
   const raw = o.policy ?? nestedDiagram(o)?.policy;

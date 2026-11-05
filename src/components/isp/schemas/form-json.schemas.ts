@@ -6,7 +6,7 @@
  */
 import { z } from "zod";
 
-export const ControlElSchema = z.object({
+const ControlElSchema = z.object({
   value: z.union([z.string(), z.null()]).optional(),
   checked: z.boolean().optional(),
   values: z.union([z.array(z.string()), z.null()]).optional(),
@@ -17,7 +17,6 @@ export const ControlElSchema = z.object({
 });
 export type ControlEl = z.infer<typeof ControlElSchema>;
 
-
-export const ControlValueSchema = z.union([z.string(), z.boolean(), z.array(z.string()), z.number(), z.null(), z.undefined()]);
+const ControlValueSchema = z.union([z.string(), z.boolean(), z.array(z.string()), z.number(), z.null(), z.undefined()]);
 export type ControlValue = z.infer<typeof ControlValueSchema>;
 

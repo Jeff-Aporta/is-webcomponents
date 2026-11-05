@@ -4,7 +4,7 @@
 import { z } from 'zod';
 import type { Entrada, Salida } from '@jeff-aporta/iswc-base/ai/schemas/ai.schemas.js';
 
-export const AiToolVarianteSchema = z.enum(['plain', 'card']);
+const AiToolVarianteSchema = z.enum(['plain', 'card']);
 export const AiToolPropsSchema = z.object({
   /** Herramienta del catálogo (`ocr`, `translate`…). Una desconocida cae en la primera. */
   herramienta: z.string(),

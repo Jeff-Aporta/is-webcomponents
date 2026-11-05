@@ -1,11 +1,10 @@
 // xml.ts — lector XML mínimo para OOXML: etiquetas, atributos y texto, sin DOM.
 
-
 import type { XNode } from './xml.schemas.ts';
 const ENTITIES: Record<string, string> = { amp: '&', lt: '<', gt: '>', quot: '"', apos: "'" };
 
 /** Decodifica entidades. */
-export function unescapeXml(s: string): string {
+function unescapeXml(s: string): string {
   if (!s.includes('&')) return s;
   return s.replace(/&(#x[0-9a-fA-F]+|#\d+|\w+);/g, (m, e: string) => {
     if (e[0] === '#') return String.fromCodePoint(e[1] === 'x' ? parseInt(e.slice(2), 16) : Number(e.slice(1)));

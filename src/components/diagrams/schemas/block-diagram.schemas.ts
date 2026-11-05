@@ -6,15 +6,7 @@
  */
 import { z } from "zod";
 
-export const BlockSpecGroupSchema = z.object({
-  id: z.string(),
-  name: z.string(),
-  hue: z.number(),
-});
-export type BlockSpecGroup = z.infer<typeof BlockSpecGroupSchema>;
-
-
-export const BlockSpecBlockSchema = z.object({
+const BlockSpecBlockSchema = z.object({
   id: z.string(),
   label: z.string(),
   shape: z.union([z.literal('rect'), z.literal('round')]),
@@ -25,17 +17,7 @@ export const BlockSpecBlockSchema = z.object({
 });
 export type BlockSpecBlock = z.infer<typeof BlockSpecBlockSchema>;
 
-
-export const BlockSpecEdgeSchema = z.object({
-  id: z.string(),
-  from: z.string(),
-  to: z.string(),
-  label: z.string().optional(),
-});
-export type BlockSpecEdge = z.infer<typeof BlockSpecEdgeSchema>;
-
-
-export const BlockLayoutBlockSchema = z.object({
+const BlockLayoutBlockSchema = z.object({
   id: z.string(),
   x: z.number(),
   y: z.number(),
@@ -51,8 +33,7 @@ export const BlockLayoutBlockSchema = z.object({
 });
 export type BlockLayoutBlock = z.infer<typeof BlockLayoutBlockSchema>;
 
-
-export const BlockLayoutEdgeSchema = z.object({
+const BlockLayoutEdgeSchema = z.object({
   id: z.string(),
   from: z.string(),
   to: z.string(),
@@ -67,8 +48,7 @@ export const BlockLayoutEdgeSchema = z.object({
 });
 export type BlockLayoutEdge = z.infer<typeof BlockLayoutEdgeSchema>;
 
-
-export const TurtleStateSchema = z.object({
+const TurtleStateSchema = z.object({
   playing: z.boolean(),
   idx: z.number(),
   total: z.number(),
@@ -76,16 +56,14 @@ export const TurtleStateSchema = z.object({
 });
 export type TurtleState = z.infer<typeof TurtleStateSchema>;
 
-
-export const BlockNodeEntrySchema = z.object({
+const BlockNodeEntrySchema = z.object({
   b: BlockLayoutBlockSchema,
   g: z.unknown() /* TODO: ref SVGGElement */,
   box: z.unknown() /* TODO: ref SVGPathElement */,
 });
 export type BlockNodeEntry = z.infer<typeof BlockNodeEntrySchema>;
 
-
-export const EdgeNodeEntrySchema = z.object({
+const EdgeNodeEntrySchema = z.object({
   e: BlockLayoutEdgeSchema,
   g: z.unknown() /* TODO: ref SVGGElement */,
   path: z.unknown() /* TODO: ref SVGPathElement */,

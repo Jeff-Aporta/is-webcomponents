@@ -13,7 +13,6 @@ import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/
 
 const { test, lista, before, after } = coleccionPruebas({ categoria: 'what' });
 
-
 const DISPONIBLE = faltanRequisitos().length === 0;
 let ctx: CtxE2E | null = null;
 const testE2E = crearTestE2E(() => (ctx ? ctx.page : null));
@@ -31,7 +30,7 @@ function pagina(): Page {
   assert.ok(ctx, 'contexto no disponible');
   return ctx.page;
 }
-export type Hallazgo = { vista: string; tipo: string; texto: string; captura: string; };
+type Hallazgo = { vista: string; tipo: string; texto: string; captura: string; };
 testE2E('barrido: ninguna vista del catalogo debe producir errores ni peligros', { timeout: 900000 }, async (t) => {
   if (!DISPONIBLE) return t.skip('faltan variables E2E');
   const page = pagina();

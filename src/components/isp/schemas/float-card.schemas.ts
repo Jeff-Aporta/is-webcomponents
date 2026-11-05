@@ -6,7 +6,7 @@
  */
 import { z } from "zod";
 
-export const LinearTransformSchema = z.object({
+const LinearTransformSchema = z.object({
   tx: z.union([z.string(), z.number()]).optional(),
   ty: z.union([z.string(), z.number()]).optional(),
   e: z.number().optional(),

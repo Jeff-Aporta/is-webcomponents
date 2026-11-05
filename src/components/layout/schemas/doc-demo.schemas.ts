@@ -6,7 +6,7 @@
  */
 import { z } from "zod";
 
-export const LoaderLikeSchema = z.object({
+const LoaderLikeSchema = z.object({
   loadPageStyles: z.function({ input: [z.array(z.string())], output: z.promise(z.unknown()) }),
   loadPageModules: z.function({ input: [z.array(z.string())], output: z.promise(z.unknown()) }),
 });

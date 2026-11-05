@@ -26,13 +26,13 @@ import { fileURLToPath } from 'node:url';
 const RAIZ = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..');
 
 /** Raíces barridas (carpetas o archivos, desde la raíz del repo). */
-export const RAICES = ['src', 'scripts', 'skills', 'tests', 'specs', 'README.md', 'AGENTS.md', 'index.html', 'demos', 'labs'];
+const RAICES = ['src', 'scripts', 'skills', 'tests', 'specs', 'README.md', 'AGENTS.md', 'index.html', 'demos', 'labs'];
 
 /** Carpetas que no se barren (por nombre, en cualquier nivel). */
 const SALTAR_CARPETAS = new Set(['node_modules', '.git', 'dist', '.shots', '.iswc-render-tmp', '.tmp']);
 
 /** Archivos (ruta desde la raíz, con `/`) que citan `.min.js` a propósito. */
-export const EXCEPCIONES = {
+const EXCEPCIONES = {
   'scripts/codemods/min-mjs.mjs': 'este codemod: define las reglas con la extensión vieja',
   'tests/gobernanza/extension-modulos.test.ts': 'el guardián: busca la extensión vieja',
   'specs/lessons.md': 'historia: filas fechadas que citan los artefactos de su momento',
@@ -45,7 +45,7 @@ const EXT_TEXTO = /\.(ts|tsx|js|mjs|cjs|md|html|json|txt|yml|yaml|sh|ps1|py|css|
 const barras = (ruta) => ruta.replaceAll('\\', '/');
 
 /** Nombres de los módulos ES que publica el kit (sin `.min.mjs`). */
-export function nombresKit(raiz = RAIZ) {
+function nombresKit(raiz = RAIZ) {
   const nombres = new Set(['loader', 'obj', 'ref-obj', 'zod', 'doc-demo-boot', 'doc-demo-host', 'doc-demo-galeria']);
   const recorrer = (dir) => {
     for (const n of readdirSync(dir)) {
@@ -79,7 +79,7 @@ function esDelKit(prefijo, nombre, nombres) {
 }
 
 /** Reescribe un texto; devuelve `{ texto, n, saltados }` (saltados: tokens `.min.js` que no son del kit, para revisar). */
-export function reescribir(texto, nombres) {
+function reescribir(texto, nombres) {
   let n = 0;
   const saltados = [];
   const lineas = texto.split('\n').map((linea) => {
@@ -99,12 +99,12 @@ export function reescribir(texto, nombres) {
 }
 
 /** true si la ruta (desde la raíz, con `/`) es una excepción. */
-export function esExcepcion(rel) {
+function esExcepcion(rel) {
   return Object.hasOwn(EXCEPCIONES, rel);
 }
 
 /** Archivos de texto bajo las raíces dadas (rutas absolutas). */
-export function archivos(raices = RAICES, raiz = RAIZ) {
+function archivos(raices = RAICES, raiz = RAIZ) {
   const out = [];
   const recorrer = (p) => {
     if (!existsSync(p)) return;

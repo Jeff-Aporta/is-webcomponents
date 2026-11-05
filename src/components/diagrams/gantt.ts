@@ -36,8 +36,6 @@ import css from 'iswc:css';
  * Eventos: iswc-render, iswc-turtle-state, iswc-open-viewer, iswc-toggle-group
  */
 
-const SVG_NS = 'http://www.w3.org/2000/svg';
-
 /** Estado del callback `onState` del motor de tortuga (path-turtle). */
 
 /** Fila cacheada en el SVG para aplicar hover sin reconstruir el DOM. */

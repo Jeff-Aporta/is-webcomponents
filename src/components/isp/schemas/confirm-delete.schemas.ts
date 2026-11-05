@@ -6,7 +6,7 @@
  */
 import { z } from "zod";
 
-export const InputLikeSchema = z.object({
+const InputLikeSchema = z.object({
   label: z.string(),
   value: z.string(),
   maxlength: z.union([z.string(), z.null()]),

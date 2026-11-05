@@ -6,7 +6,7 @@
  */
 import { z } from "zod";
 
-export const VennSetSchema = z.object({
+const VennSetSchema = z.object({
   id: z.string(),
   label: z.string(),
   hue: z.number(),
@@ -14,8 +14,7 @@ export const VennSetSchema = z.object({
 });
 export type VennSet = z.infer<typeof VennSetSchema>;
 
-
-export const VennRegionSchema = z.object({
+const VennRegionSchema = z.object({
   id: z.string(),
   sets: z.array(z.string()),
   label: z.string().optional(),
@@ -24,8 +23,7 @@ export const VennRegionSchema = z.object({
 });
 export type VennRegion = z.infer<typeof VennRegionSchema>;
 
-
-export const VennSpecSchema = z.object({
+const VennSpecSchema = z.object({
   title: z.string().optional(),
   subtitle: z.string().optional(),
   sets: z.array(VennSetSchema),
@@ -33,27 +31,7 @@ export const VennSpecSchema = z.object({
 });
 export type VennSpec = z.infer<typeof VennSpecSchema>;
 
-
-export const VennJsonOutSchema = z.object({
-  title: z.string().optional(),
-  subtitle: z.string().optional(),
-  sets: z.array(z.object({
-  id: z.string(),
-  label: z.string(),
-  hue: z.number(),
-  desc: z.string().optional(),
-})),
-  regions: z.array(z.object({
-  sets: z.array(z.string()),
-  label: z.string().optional(),
-  value: z.number().optional(),
-  desc: z.string().optional(),
-})).optional(),
-});
-export type VennJsonOut = z.infer<typeof VennJsonOutSchema>;
-
-
-export const VennLayoutCircleSchema = z.object({
+const VennLayoutCircleSchema = z.object({
   id: z.string(),
   label: z.string(),
   description: z.string().optional(),
@@ -66,16 +44,14 @@ export const VennLayoutCircleSchema = z.object({
 });
 export type VennLayoutCircle = z.infer<typeof VennLayoutCircleSchema>;
 
-
-export const VennLayoutRegionSchema = z.object({
+const VennLayoutRegionSchema = z.object({
   x: z.number(),
   y: z.number(),
   hues: z.array(z.number()),
 });
 export type VennLayoutRegion = z.infer<typeof VennLayoutRegionSchema>;
 
-
-export const VennLayoutSchema = z.object({
+const VennLayoutSchema = z.object({
   width: z.number(),
   height: z.number(),
   circles: z.array(VennLayoutCircleSchema),

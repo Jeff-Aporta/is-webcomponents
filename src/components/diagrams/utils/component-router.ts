@@ -32,7 +32,7 @@
  */
 
 import type { Caja, Lado, Punto } from '@jeff-aporta/iswc-base/components/diagrams/schemas/diagram-tipos.schemas.js';
-import type { RouterBox, RouterPackage, RouterWorld, RouterEdge, RouterOpts, RouteResult, PortLink, PortPlan, RouterPort } from '@jeff-aporta/iswc-base/components/diagrams/schemas/component-router.schemas.js';
+import type { RouterBox, RouterWorld, RouterEdge, RouterOpts, RouteResult, PortLink, PortPlan, RouterPort } from '@jeff-aporta/iswc-base/components/diagrams/schemas/component-router.schemas.js';
 import { resolveRoutingCosts, readConsolidate, ROUTING_COSTS_DEFAULTS } from './routing-costs.js';
 
 const DIRS: ReadonlyArray<readonly [number, number]> = [[1, 0], [0, 1], [-1, 0], [0, -1]];
@@ -1165,7 +1165,7 @@ export function routeEdges(world: RouterWorld, edges: readonly RouterEdge[], opt
 const FACE_SIDES: readonly Lado[] = ['right', 'left', 'bottom', 'top'];
 const faceLen = (b: Caja, s: Lado): number => (s === 'top' || s === 'bottom' ? b.w : b.h);
 /** Puertos que caben en la cara a `pitch` (12px de aire por punta). */
-export function faceCapacity(b: Caja, s: Lado, pitch: number): number {
+function faceCapacity(b: Caja, s: Lado, pitch: number): number {
   return Math.max(1, Math.floor((faceLen(b, s) - 24) / pitch) + 1);
 }
 const facePoint = (b: Caja, s: Lado, off: number): Punto => {

@@ -7,14 +7,12 @@
 import { z } from "zod";
 
 /** Nombre de una de las paletas del kit (src/styles/palettes.json). */
-export const PaletteKeySchema = z.string();
+const PaletteKeySchema = z.string();
 export type PaletteKey = z.infer<typeof PaletteKeySchema>;
 
-
-export const PaletteModeSchema = z.union([z.literal('dark'), z.literal('light')]);
+const PaletteModeSchema = z.union([z.literal('dark'), z.literal('light')]);
 export type PaletteMode = z.infer<typeof PaletteModeSchema>;
 
-
-export const StatusSchema = z.union([z.literal('success'), z.literal('warning'), z.literal('danger')]);
+const StatusSchema = z.union([z.literal('success'), z.literal('warning'), z.literal('danger')]);
 export type Status = z.infer<typeof StatusSchema>;
 

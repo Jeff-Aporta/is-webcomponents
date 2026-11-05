@@ -3,7 +3,7 @@
 import { readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import type { ToonTexto, ToonControl, ToonDoc } from "./schemas/toons.schemas.js";
+import type { ToonDoc } from "./schemas/toons.schemas.js";
 
 /** Texto/label de test con variantes (sin acentos vs con acentos). */
 
@@ -34,9 +34,3 @@ export function textoDe(toon: ToonDoc, clave: string): string {
   return t?.texto ?? '';
 }
 
-/** Todas las variantes aceptadas (canónica + variantes) de un texto toon. */
-export function variantesDe(toon: ToonDoc, clave: string): string[] {
-  const t = toon.textos?.[clave];
-  if (!t) return [];
-  return [t.texto, ...(t.variantes ?? [])];
-}

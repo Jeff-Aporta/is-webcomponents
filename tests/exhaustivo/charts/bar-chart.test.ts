@@ -8,20 +8,7 @@
  * JSON payload, accesibilidad, edge cases, integración, performance.
  */
 import assert from 'node:assert/strict';
-import {
-  ROOT,
-  exists,
-  read,
-  extraerObservados,
-  extraerEventos,
-  extraerSlots,
-  extraerParts,
-  tieneShadow,
-  leeJsonScript,
-  tieneEdgeCaseGuards,
-  estaRegistrado,
-  usaResizeObserver,
-} from '../../_shared/exhaustivo.ts';
+import { exists, read, extraerObservados, tieneShadow, leeJsonScript, tieneEdgeCaseGuards, estaRegistrado, usaResizeObserver } from '../../_shared/exhaustivo.ts';
 import { coleccionPruebas } from '../../../src/vendor-distributions/shared/testing/pruebas.ts';
 
 const { test, lista } = coleccionPruebas({ categoria: 'what' });

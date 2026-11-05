@@ -14,7 +14,6 @@ import { htmlSparkline, normalizarSerie, resumenSerie } from './spark.js';
 import type { AccionCelda, CambioCelda, FormatoFecha, FormatoMoneda, FormatoNumero, FormatoPorcentaje, FormatoValor, OpcionesSparkline, Umbral } from './schemas.js';
 import { paramsCelda } from './celdas-valores.js';
 
-
 const TONOS = new Set<string>(['success', 'danger', 'warning', 'info', 'neutral', 'brand']);
 const FLECHA_ARRIBA = '<svg class="iswc-ag-flecha" viewBox="0 0 10 10" aria-hidden="true"><path d="M5 1.5 9.5 8.5H.5z"/></svg>';
 const FLECHA_ABAJO = '<svg class="iswc-ag-flecha" viewBox="0 0 10 10" aria-hidden="true"><path d="M5 8.5.5 1.5h9z"/></svg>';
@@ -59,7 +58,7 @@ function logoHtml(url: unknown, texto: string): string {
 }
 
 /** Logo + texto + subtexto, p. ej. ticker y nombre de empresa. El logo roto deja las iniciales. */
-export const logoTexto: RendererCelda = (ctx) => {
+const logoTexto: RendererCelda = (ctx) => {
   const p = ctx.params;
   const principal = ctx.texto;
   if (!principal) return '';
@@ -142,7 +141,7 @@ export const progreso: RendererCelda = (ctx) => {
   return `<span class="iswc-ag-progreso ${clase}"${estilo} role="progressbar" aria-valuemin="${min}" aria-valuemax="${max}" aria-valuenow="${n}"><span class="iswc-ag-progreso-riel"><span style="inline-size:${Math.round(porcentaje * 10) / 10}%"></span></span>${etiqueta}</span>`;
 };
 
-export const rating: RendererCelda = (ctx) => {
+const rating: RendererCelda = (ctx) => {
   const n = aNumero(ctx.value);
   if (n == null) return '';
   const max = aNumero(ctx.params['max']) ?? 5;
@@ -173,8 +172,8 @@ function claseSigno(valor: unknown): string {
   return n > 0 ? 'iswc-ag-up' : 'iswc-ag-down';
 }
 
-export const numero: RendererCelda = (ctx) => numerico(ctx, ctx.def['valueFormatter'] ? ctx.texto : fmtNumero(ctx.value, ctx.params as FormatoNumero), ctx.params);
-export const moneda: RendererCelda = (ctx) => numerico(ctx, ctx.def['valueFormatter'] ? ctx.texto : fmtMoneda(ctx.value, ctx.params as FormatoMoneda), ctx.params);
+const numero: RendererCelda = (ctx) => numerico(ctx, ctx.def['valueFormatter'] ? ctx.texto : fmtNumero(ctx.value, ctx.params as FormatoNumero), ctx.params);
+const moneda: RendererCelda = (ctx) => numerico(ctx, ctx.def['valueFormatter'] ? ctx.texto : fmtMoneda(ctx.value, ctx.params as FormatoMoneda), ctx.params);
 export const porcentaje: RendererCelda = (ctx) => numerico(ctx, ctx.def['valueFormatter'] ? ctx.texto : fmtPorcentaje(ctx.value, ctx.params as FormatoPorcentaje), ctx.params);
 
 export const fecha: RendererCelda = (ctx) => {
@@ -212,7 +211,7 @@ export const acciones: RendererCelda = (ctx) => {
 };
 
 /** Equivale a agAnimateShowChangeCellRenderer: la diferencia junto al valor, y luego se apaga. */
-export const animarCambio: RendererCelda = (ctx) => {
+const animarCambio: RendererCelda = (ctx) => {
   const valor = `<span class="iswc-ag-num">${escaparHtml(ctx.texto)}</span>`;
   const cambio = ctx.params['cambio'] as CambioCelda | undefined;
   const nuevo = aNumero(cambio?.nuevo);
@@ -224,7 +223,7 @@ export const animarCambio: RendererCelda = (ctx) => {
 };
 
 /** Equivale a agAnimateSlideCellRenderer: el valor previo se desliza y se desvanece. */
-export const animarDeslizar: RendererCelda = (ctx) => {
+const animarDeslizar: RendererCelda = (ctx) => {
   const valor = `<span class="iswc-ag-num">${escaparHtml(ctx.texto)}</span>`;
   const cambio = ctx.params['cambio'] as CambioCelda | undefined;
   if (cambio == null || cambio.anterior == null) return valor;

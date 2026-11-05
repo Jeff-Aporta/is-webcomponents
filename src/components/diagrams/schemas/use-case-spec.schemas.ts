@@ -6,15 +6,13 @@
  */
 import { z } from "zod";
 
-export const UseCaseActorSideSchema = z.union([z.literal('left'), z.literal('right')]);
+const UseCaseActorSideSchema = z.union([z.literal('left'), z.literal('right')]);
 export type UseCaseActorSide = z.infer<typeof UseCaseActorSideSchema>;
 
-
-export const UseCaseLinkKindSchema = z.union([z.literal('association'), z.literal('include'), z.literal('extend'), z.literal('generalization')]);
+const UseCaseLinkKindSchema = z.union([z.literal('association'), z.literal('include'), z.literal('extend'), z.literal('generalization')]);
 export type UseCaseLinkKind = z.infer<typeof UseCaseLinkKindSchema>;
 
-
-export const UseCaseActorSpecSchema = z.object({
+const UseCaseActorSpecSchema = z.object({
   id: z.string(),
   label: z.string(),
   side: UseCaseActorSideSchema,
@@ -24,8 +22,7 @@ export const UseCaseActorSpecSchema = z.object({
 });
 export type UseCaseActorSpec = z.infer<typeof UseCaseActorSpecSchema>;
 
-
-export const UseCaseCaseSpecSchema = z.object({
+const UseCaseCaseSpecSchema = z.object({
   id: z.string(),
   label: z.string(),
   group: z.string().optional(),
@@ -34,8 +31,7 @@ export const UseCaseCaseSpecSchema = z.object({
 });
 export type UseCaseCaseSpec = z.infer<typeof UseCaseCaseSpecSchema>;
 
-
-export const UseCaseLinkSpecSchema = z.object({
+const UseCaseLinkSpecSchema = z.object({
   id: z.string(),
   from: z.string(),
   to: z.string(),
@@ -44,16 +40,14 @@ export const UseCaseLinkSpecSchema = z.object({
 });
 export type UseCaseLinkSpec = z.infer<typeof UseCaseLinkSpecSchema>;
 
-
-export const UseCaseGroupSpecSchema = z.object({
+const UseCaseGroupSpecSchema = z.object({
   id: z.string(),
   name: z.string(),
   hue: z.number(),
 });
 export type UseCaseGroupSpec = z.infer<typeof UseCaseGroupSpecSchema>;
 
-
-export const UseCaseResolvedSpecSchema = z.object({
+const UseCaseResolvedSpecSchema = z.object({
   title: z.string().optional(),
   subtitle: z.string().optional(),
   system: z.string().optional(),
@@ -64,8 +58,7 @@ export const UseCaseResolvedSpecSchema = z.object({
 });
 export type UseCaseResolvedSpec = z.infer<typeof UseCaseResolvedSpecSchema>;
 
-
-export const UseCaseLayoutActorSchema = z.object({
+const UseCaseLayoutActorSchema = z.object({
   id: z.string(),
   label: z.string(),
   description: z.string().optional(),
@@ -79,8 +72,7 @@ export const UseCaseLayoutActorSchema = z.object({
 });
 export type UseCaseLayoutActor = z.infer<typeof UseCaseLayoutActorSchema>;
 
-
-export const UseCaseLayoutCaseSchema = z.object({
+const UseCaseLayoutCaseSchema = z.object({
   id: z.string(),
   label: z.string(),
   description: z.string().optional(),
@@ -93,8 +85,7 @@ export const UseCaseLayoutCaseSchema = z.object({
 });
 export type UseCaseLayoutCase = z.infer<typeof UseCaseLayoutCaseSchema>;
 
-
-export const UseCaseLayoutLinkSchema = z.object({
+const UseCaseLayoutLinkSchema = z.object({
   id: z.string(),
   from: z.string(),
   to: z.string(),
@@ -112,8 +103,7 @@ export const UseCaseLayoutLinkSchema = z.object({
 });
 export type UseCaseLayoutLink = z.infer<typeof UseCaseLayoutLinkSchema>;
 
-
-export const UseCaseLayoutSystemSchema = z.object({
+const UseCaseLayoutSystemSchema = z.object({
   x: z.number(),
   y: z.number(),
   w: z.number(),
@@ -124,8 +114,7 @@ export const UseCaseLayoutSystemSchema = z.object({
 });
 export type UseCaseLayoutSystem = z.infer<typeof UseCaseLayoutSystemSchema>;
 
-
-export const UseCaseLayoutSchema = z.object({
+const UseCaseLayoutSchema = z.object({
   width: z.number(),
   height: z.number(),
   actors: z.array(UseCaseLayoutActorSchema),

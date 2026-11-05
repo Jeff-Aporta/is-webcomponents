@@ -1,5 +1,5 @@
 import { emit, emitCancelable } from '@jeff-aporta/iswc-base/core/element.js';
-import { readEdgeStyle, edgeStyleFor } from './utils/diagram-vocab.js';
+import { edgeStyleFor } from './utils/diagram-vocab.js';
 import { styledEdgePath } from './utils/diagram-curve.js';
 import { DiagramElementBase } from './utils/diagram-element-base.js';
 import { animarRielEn, flujoActivo } from './utils/diagram-flow.js';
@@ -33,8 +33,6 @@ import css from 'iswc:css';
  * Propiedades: payload, spec, layout, turtle, hiddenGroups
  * Eventos: iswc-render, iswc-turtle-state, iswc-open-viewer, iswc-toggle-group
  */
-
-const SVG_NS = 'http://www.w3.org/2000/svg';
 
 // CSS embebido para animación de aristas dashed. Sobrevive a la exportación del
 // SVG porque vive dentro del propio <svg>. Se desactiva automáticamente cuando

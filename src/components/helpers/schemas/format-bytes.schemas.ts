@@ -6,11 +6,10 @@
  */
 import { z } from "zod";
 
-export const ByteUnitSchema = z.unknown() /* TODO: cannot convert */;
+const ByteUnitSchema = z.unknown() /* TODO: cannot convert */;
 export type ByteUnit = z.infer<typeof ByteUnitSchema>;
 
-
-export const FormatBytesOptionsSchema = z.object({
+const FormatBytesOptionsSchema = z.object({
   locale: z.string().optional(),
   display: z.union([z.literal('short'), z.literal('long')]).optional(),
   autofit: z.boolean().optional(),

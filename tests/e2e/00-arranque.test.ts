@@ -10,7 +10,6 @@ import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/
 
 const { test, lista, before, after } = coleccionPruebas({ categoria: 'what' });
 
-
 const DISPONIBLE = faltanRequisitos().length === 0;
 let ctx: CtxE2E | null = null;
 const testE2E = crearTestE2E(() => (ctx ? ctx.page : null));
@@ -28,9 +27,9 @@ function pagina(): Page {
   assert.ok(ctx, 'contexto no disponible');
   return ctx.page;
 }
-export type EstadoHome = { categorias: string[]; items: number; kitShell: string; hostTexto: number; };
-export type EstadoDocs = { current: string; isCodeDefined: boolean; isCodeEnHost: boolean; demos: number; texto: number; };
-export type EstadoNav = { current: string; texto: number; svg: number; };
+type EstadoHome = { categorias: string[]; items: number; kitShell: string; hostTexto: number; };
+type EstadoDocs = { current: string; isCodeDefined: boolean; isCodeEnHost: boolean; demos: number; texto: number; };
+type EstadoNav = { current: string; texto: number; svg: number; };
 testE2E('la galeria sin estado monta el catalogo (categorias) y el home', { timeout: 150000 }, async (t) => {
   if (!DISPONIBLE) return t.skip('faltan variables E2E (MINIMAX_API_KEY)');
   const page = pagina();

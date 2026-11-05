@@ -14,10 +14,10 @@
 export const CHART_SERIES = 8;
 
 /** Rotación de tono de cada serie respecto al main (grados). */
-export const CHART_ROTATION: readonly number[] = [0, 225, 315, 90, 180, 270, 135, 45];
+const CHART_ROTATION: readonly number[] = [0, 225, 315, 90, 180, 270, 135, 45];
 
 /** Desplazamiento de luminosidad de cada serie: alterna para separar vecinas sin depender del tono. */
-export const CHART_LIGHTNESS: readonly number[] = [0, -0.14, 0.14, -0.06, 0.06, -0.14, 0.14, 0];
+const CHART_LIGHTNESS: readonly number[] = [0, -0.14, 0.14, -0.06, 0.06, -0.14, 0.14, 0];
 
 /** Banda de L del main y de las series rotadas, por modo. El main solo se mueve si cae fuera. */
 export const CHART_BAND = {
@@ -26,9 +26,7 @@ export const CHART_BAND = {
 } as const;
 
 /** Croma de las series rotadas: el piso da color a las paletas neutras y el techo las mantiene en sRGB. */
-export const CHART_CHROMA: readonly [number, number] = [0.09, 0.15];
-
-
+const CHART_CHROMA: readonly [number, number] = [0.09, 0.15];
 
 function ramaCss(k: number, modo: keyof typeof CHART_BAND): string {
   const main = CHART_BAND[modo].main;

@@ -6,6 +6,6 @@
  */
 import { z } from "zod";
 
-export const CodeThemeConfigSchema = z.record(z.string(), z.string());
+const CodeThemeConfigSchema = z.record(z.string(), z.string());
 export type CodeThemeConfig = z.infer<typeof CodeThemeConfigSchema>;
 

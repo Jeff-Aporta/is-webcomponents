@@ -25,7 +25,7 @@ export function getDiagramTag(kind: string | null | undefined): string | undefin
 }
 
 /** Lista de todos los `kind` registrados (en minúsculas, orden de inserción). */
-export function listDiagramKinds(): string[] {
+function listDiagramKinds(): string[] {
   return [...REGISTRY.keys()];
 }
 

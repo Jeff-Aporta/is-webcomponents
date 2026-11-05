@@ -4,11 +4,11 @@ import { z } from 'zod';
  * Frontmatter de una hoja del vault (norma `documentacion-modular`): claves sueltas (`Titulo`,
  * `Estado`, `Autor`…) y listas (`tags`, `aliases`). Lo que no se reconoce se muestra en «Otros datos».
  */
-export const MdDocsVaultMetaSchema = z.record(z.string(), z.union([z.string(), z.array(z.string())]));
+const MdDocsVaultMetaSchema = z.record(z.string(), z.union([z.string(), z.array(z.string())]));
 export type MdDocsVaultMeta = z.infer<typeof MdDocsVaultMetaSchema>;
 
 /** Detalle del evento `iswc-md-docs-vault-page`: la hoja que se acaba de abrir. */
-export const MdDocsVaultPageDetailSchema = z.object({
+const MdDocsVaultPageDetailSchema = z.object({
   ruta: z.string(),
   titulo: z.string(),
   meta: MdDocsVaultMetaSchema,

@@ -69,9 +69,10 @@ function tipoDeSchemas(ruta: string, nombre: string): void {
 /** Cuerpo `z.object({...})` (sin comentarios) del schema `nombre` en los schemas de `ruta`. */
 function cuerpoSchema(ruta: string, nombre: string): string {
   const s = schemasDe(ruta);
-  const i = s.search(new RegExp(`export\\s+const\\s+${nombre}Schema\\s*=`));
+  // El schema puede no exportarse si solo lo usa su `z.infer` (F9a: sin exports sin consumidor).
+  const i = s.search(new RegExp(`(?:export\\s+)?const\\s+${nombre}Schema\\s*=`));
   assert.ok(i >= 0, `${nombre}Schema debe existir`);
-  const fin = s.indexOf(`export type ${nombre}`, i);
+  const fin = s.indexOf(`type ${nombre}`, i);
   return s.slice(i, fin > i ? fin : undefined);
 }
 
@@ -267,7 +268,8 @@ test('WT-0052 / format: archivo existe y registra iswc-format', () => {
 
 test('WT-0052 / format: discriminated union ExcelPreset', () => {
   const variantes = ['NumberPreset', 'CurrencyPreset', 'AccountingPreset', 'FractionPreset', 'TextPreset', 'DatePreset'];
-  for (const t of ['ExcelPreset', ...variantes]) tipoDeSchemas(FORMAT, t);
+  // format.ts importa solo la unión; las variantes viven dentro de su schema (F9a: sin imports en desuso).
+  tipoDeSchemas(FORMAT, 'ExcelPreset');
   // ExcelPreset es la unión de las 6 variantes.
   const cuerpo = cuerpoSchema(FORMAT, 'ExcelPreset');
   assert.match(cuerpo, /z\.(?:union|discriminatedUnion)\(/, 'ExcelPreset es una unión');

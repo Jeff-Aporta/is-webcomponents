@@ -6,7 +6,7 @@
  */
 import { z } from "zod";
 
-export const ExampleSpecSchema = z.object({
+const ExampleSpecSchema = z.object({
   label: z.string(),
   props: z.record(z.string(), z.unknown()).optional(),
   text: z.string().optional(),

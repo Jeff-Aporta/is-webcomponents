@@ -6,7 +6,7 @@
  */
 import { z } from "zod";
 
-export const LoadingOverlayLikeSchema = z.object({
+const LoadingOverlayLikeSchema = z.object({
   show: z.function({ input: [], output: z.void() }),
   hide: z.function({ input: [], output: z.void() }),
 });

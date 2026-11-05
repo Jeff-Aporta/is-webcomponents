@@ -6,7 +6,7 @@
  */
 import { z } from "zod";
 
-export const CodeMarkSchema = z.object({
+const CodeMarkSchema = z.object({
   id: z.string().optional(),
   from: z.number(),
   to: z.number(),
@@ -16,17 +16,14 @@ export const CodeMarkSchema = z.object({
   tone: z.string().optional(),
   message: z.string().optional(),
 });
-export type CodeMark = z.infer<typeof CodeMarkSchema>;
 
-
-export const CodeDocSchema = z.object({
+const CodeDocSchema = z.object({
   text: z.string(),
   marks: z.array(CodeMarkSchema).optional(),
 });
 export type CodeDoc = z.infer<typeof CodeDocSchema>;
 
-
-export const IswcCodeElSchema = z.object({
+const IswcCodeElSchema = z.object({
   lang: z.string(),
   mode: z.union([z.literal('inline'), z.literal('block')]),
   value: z.string(),
@@ -43,8 +40,7 @@ export const IswcCodeElSchema = z.object({
 });
 export type IswcCodeEl = z.infer<typeof IswcCodeElSchema>;
 
-
-export const IswcFormatElSchema = z.object({
+const IswcFormatElSchema = z.object({
   format: z.function({ input: [], output: z.void() }),
 });
 export type IswcFormatEl = z.infer<typeof IswcFormatElSchema>;

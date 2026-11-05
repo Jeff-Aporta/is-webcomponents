@@ -25,9 +25,9 @@ import { fileURLToPath } from 'node:url';
 const __filename = fileURLToPath(import.meta.url);
 // _helpers.ts está en tests/_shared/exhaustivo-forms.ts.
 // Tres niveles arriba llegan a src/ (raíz del kit).
-export const RAIZ = join(dirname(__filename), '..', '..', 'src');
+const RAIZ = join(dirname(__filename), '..', '..', 'src');
 
-export const FORMS_DIR = join(RAIZ, 'components', 'forms');
+const FORMS_DIR = join(RAIZ, 'components', 'forms');
 
 /** Lee el .ts fuente de un componente de forms. */
 export function leerComponente(tag: string): string {
@@ -161,40 +161,6 @@ export function customStates(src: string): string[] {
   return [...states];
 }
 
-/** Tokens CSS declarados (`--iswc-foo` en styleAttrs o TEMPLATE inline). */
-export function tokensCss(src: string): string[] {
-  const toks = new Set<string>();
-  for (const m of src.matchAll(/['"`](--iswc-[a-z0-9-]+)['"`]/g)) toks.add(m[1]);
-  // styleAttrs con prefijo `--iswc-x`
-  for (const m of src.matchAll(/prop:\s*['"`](--iswc-[a-z0-9-]+)['"`]/g)) toks.add(m[1]);
-  return [...toks];
-}
-
-/** Eventos documentados en la cabecera JSDoc (`Eventos: ...`). */
-export function eventosDocumentados(src: string): string[] {
-  const evs = new Set<string>();
-  // Busca la sección "Eventos: ..." antes del primer `(() => {` o `class `.
-  const cabecera = src.slice(0, src.indexOf('class ') > -1 ? src.indexOf('class ') : src.indexOf('(() =>'));
-  for (const m of cabecera.matchAll(/['"`](iswc-[a-z0-9-]+)['"`]/g)) evs.add(m[1]);
-  return [...evs];
-}
-
-/** Slots documentados en la cabecera (`Slots: ...`). */
-export function slotsDocumentados(src: string): string[] {
-  const slots = new Set<string>();
-  const cabecera = src.slice(0, src.indexOf('class ') > -1 ? src.indexOf('class ') : src.indexOf('(() =>'));
-  for (const m of cabecera.matchAll(/name=["']([a-z0-9-]+)["']/g)) slots.add(m[1]);
-  return [...slots];
-}
-
-/** Atributos documentados (líneas de `   attr` o `   attr   descripción`). */
-export function atributosDocumentados(src: string): string[] {
-  const attrs = new Set<string>();
-  const cabecera = src.slice(0, src.indexOf('class ') > -1 ? src.indexOf('class ') : src.indexOf('(() =>'));
-  for (const m of cabecera.matchAll(/^\s+([a-z][a-z0-9-]*)\s+\w/gm)) attrs.add(m[1]);
-  return [...attrs];
-}
-
 /** Indica si el componente usa form-associated custom elements. */
 export function esFormAssociated(src: string): boolean {
   return /static\s+formAssociated\s*=\s*true/.test(src) || /attachFormInternals\s*\(/.test(src);
@@ -216,11 +182,6 @@ export function usaShadowDom(src: string): boolean {
   return (molde && !ligero) || /static\s+shadowInit\s*(?::[^=\n]*)?=\s*\{/.test(src);
 }
 
-/** Indica si declara sus observados tipados: `static observed = …` (molde) o el getter con `: string[]`. */
-export function tieneObservedTipado(src: string): boolean {
-  return /static\s+get\s+observedAttributes\s*\(\s*\)\s*:\s*string\[\]/.test(src) || /static\s+(?:override\s+)?observed\s*(?::[^=\n]*)?=/.test(src);
-}
-
 /** Indica si se registra: `defineElement(...)` o el `define(Clase)` del molde. */
 export function tieneDefineElement(src: string): boolean {
   return /defineElement\s*\(/.test(src) || /\bdefine\(\s*[A-Za-z_$]/.test(src);
@@ -231,7 +192,3 @@ export function esFactoryWrapper(src: string): boolean {
   return /\b(defineDateField|definePickerInput|createObserverElement)\s*\(/.test(src);
 }
 
-/** Indica si el componente importa `defineTypedChart` global (charts). */
-export function esTypedChart(src: string): boolean {
-  return /window\.__isDefineTypedChart/.test(src);
-}

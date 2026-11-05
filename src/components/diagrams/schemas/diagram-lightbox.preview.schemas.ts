@@ -6,13 +6,12 @@
  */
 import { z } from "zod";
 
-export const LightboxLikeSchema = z.intersection(z.unknown() /* TODO: ref HTMLElement */, z.object({
+const LightboxLikeSchema = z.intersection(z.unknown() /* TODO: ref HTMLElement */, z.object({
   payload: z.unknown(),
   open: z.boolean(),
 }));
 export type LightboxLike = z.infer<typeof LightboxLikeSchema>;
 
-
-export const PresetLikeSchema = z.unknown() /* TODO: ref HTMLSelectElement */;
+const PresetLikeSchema = z.unknown() /* TODO: ref HTMLSelectElement */;
 export type PresetLike = z.infer<typeof PresetLikeSchema>;
 

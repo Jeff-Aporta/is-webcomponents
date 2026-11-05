@@ -3,7 +3,7 @@
  */
 import { z } from "zod";
 
-export const StatusPillStatusSchema = z.enum(["pending", "done", "error"]);
+const StatusPillStatusSchema = z.enum(["pending", "done", "error"]);
 export type StatusPillStatus = z.infer<typeof StatusPillStatusSchema>;
 
 export const StatusPillPropsSchema = z.object({

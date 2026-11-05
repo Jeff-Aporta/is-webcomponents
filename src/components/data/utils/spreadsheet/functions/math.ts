@@ -19,7 +19,7 @@ export function roundTo(x: number, digits: number, mode: 'near' | 'up' | 'down' 
 }
 
 /** Factorial. */
-export function factorial(n: number): number {
+function factorial(n: number): number {
   if (n < 0) throw ERR.NUM;
   let r = 1;
   for (let i = 2; i <= Math.floor(n); i++) r *= i;
@@ -27,7 +27,7 @@ export function factorial(n: number): number {
 }
 
 /** Combinaciones. */
-export function combin(n: number, k: number): number {
+function combin(n: number, k: number): number {
   if (k < 0 || n < 0 || k > n) throw ERR.NUM;
   let r = 1;
   for (let i = 1; i <= Math.min(k, n - k); i++) r = (r * (n - i + 1)) / i;

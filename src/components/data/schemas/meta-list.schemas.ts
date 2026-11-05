@@ -4,7 +4,7 @@
 import { z } from "zod";
 
 /** Una fila: etiqueta y valor (texto, código o etiquetas). */
-export const MetaRowSchema = z.object({
+const MetaRowSchema = z.object({
   /** Clave visible (columna izquierda). */
   label: z.string(),
   /** Valor en texto plano. */
@@ -26,5 +26,5 @@ export const MetaGroupSchema = z.object({
 export type MetaGroup = z.infer<typeof MetaGroupSchema>;
 
 /** Disposición: `grid` (clave | valor en columnas) o `stacked` (clave sobre valor). */
-export const MetaListLayoutSchema = z.enum(["grid", "stacked"]);
+const MetaListLayoutSchema = z.enum(["grid", "stacked"]);
 export type MetaListLayout = z.infer<typeof MetaListLayoutSchema>;

@@ -9,7 +9,7 @@ export interface RibbonItem {
 export interface MenuItem { cmd?: string; label?: string; icon?: string; arg?: string; key?: string; disabled?: boolean }
 
 /** Grupo de la cinta. */
-export interface RibbonGroup { label: string; items: RibbonItem[] }
+interface RibbonGroup { label: string; items: RibbonItem[] }
 
 /** Pestaña de la cinta. */
 export interface RibbonTab { id: string; label: string; groups: RibbonGroup[] }

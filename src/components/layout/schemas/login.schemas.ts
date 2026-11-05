@@ -3,7 +3,7 @@
  */
 import { z } from "zod";
 
-export const LoginAccountSchema = z.object({
+const LoginAccountSchema = z.object({
   id: z.string(),
   name: z.string().optional(),
   email: z.string().optional(),
@@ -13,7 +13,7 @@ export const LoginAccountSchema = z.object({
 });
 export type LoginAccount = z.infer<typeof LoginAccountSchema>;
 
-export const LoginSessionSchema = z.object({
+const LoginSessionSchema = z.object({
   id: z.string(),
   ip: z.string().optional(),
   device: z.string().optional(),

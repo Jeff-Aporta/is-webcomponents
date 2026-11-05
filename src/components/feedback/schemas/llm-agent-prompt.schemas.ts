@@ -6,27 +6,19 @@
  */
 import { z } from "zod";
 
-export const SkillDocSchema = z.object({
+const SkillDocSchema = z.object({
   label: z.string(),
   url: z.string(),
 });
 export type SkillDoc = z.infer<typeof SkillDocSchema>;
 
-
-export const PromptMdOptsSchema = z.object({
-  importMetaUrl: z.string().optional(),
-});
-export type PromptMdOpts = z.infer<typeof PromptMdOptsSchema>;
-
-
-export const LoadAgentPromptOptsSchema = z.object({
+const LoadAgentPromptOptsSchema = z.object({
   importMetaUrl: z.string().optional(),
   force: z.boolean().optional(),
 });
 export type LoadAgentPromptOpts = z.infer<typeof LoadAgentPromptOptsSchema>;
 
-
-export const BuildLlmPromptOptsSchema = z.object({
+const BuildLlmPromptOptsSchema = z.object({
   sha: z.string().optional(),
   base: z.string().optional(),
 });

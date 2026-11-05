@@ -6,15 +6,14 @@
  */
 import { z } from "zod";
 
-export const JourneyPhaseSchema = z.object({
+const JourneyPhaseSchema = z.object({
   id: z.string(),
   name: z.string(),
   hue: z.number(),
 });
 export type JourneyPhase = z.infer<typeof JourneyPhaseSchema>;
 
-
-export const JourneyStepSchema = z.object({
+const JourneyStepSchema = z.object({
   id: z.string(),
   phase: z.string(),
   label: z.string(),
@@ -24,15 +23,12 @@ export const JourneyStepSchema = z.object({
 });
 export type JourneyStep = z.infer<typeof JourneyStepSchema>;
 
-
-export const JourneyScaleSchema = z.object({
+const JourneyScaleSchema = z.object({
   min: z.number(),
   max: z.number(),
 });
-export type JourneyScale = z.infer<typeof JourneyScaleSchema>;
 
-
-export const JourneySpecSchema = z.object({
+const JourneySpecSchema = z.object({
   title: z.string().optional(),
   subtitle: z.string().optional(),
   scale: JourneyScaleSchema,
@@ -41,36 +37,13 @@ export const JourneySpecSchema = z.object({
 });
 export type JourneySpec = z.infer<typeof JourneySpecSchema>;
 
-
-export const JourneyJsonOutSchema = z.object({
-  title: z.string().optional(),
-  subtitle: z.string().optional(),
-  scale: JourneyScaleSchema.optional(),
-  phases: z.array(z.object({
-  id: z.string(),
-  name: z.string(),
-  hue: z.number(),
-})),
-  steps: z.array(z.object({
-  id: z.string(),
-  phase: z.string(),
-  label: z.string(),
-  score: z.number().optional(),
-  actor: z.string().optional(),
-  desc: z.string().optional(),
-})),
-});
-export type JourneyJsonOut = z.infer<typeof JourneyJsonOutSchema>;
-
-
-export const JourneyPlotRectSchema = z.object({
+const JourneyPlotRectSchema = z.object({
   x: z.number(),
   y: z.number(),
   w: z.number(),
   h: z.number(),
 });
 export type JourneyPlotRect = z.infer<typeof JourneyPlotRectSchema>;
-
 
 export const JourneyLayoutStepSchema = z.object({
   id: z.string(),
@@ -88,8 +61,7 @@ export const JourneyLayoutStepSchema = z.object({
 });
 export type JourneyLayoutStep = z.infer<typeof JourneyLayoutStepSchema>;
 
-
-export const JourneyLayoutPhaseSchema = z.object({
+const JourneyLayoutPhaseSchema = z.object({
   id: z.string(),
   name: z.string(),
   hue: z.number().optional(),
@@ -100,8 +72,7 @@ export const JourneyLayoutPhaseSchema = z.object({
 });
 export type JourneyLayoutPhase = z.infer<typeof JourneyLayoutPhaseSchema>;
 
-
-export const JourneyLayoutGridLineSchema = z.object({
+const JourneyLayoutGridLineSchema = z.object({
   value: z.number(),
   y: z.number(),
   x1: z.number(),
@@ -110,8 +81,7 @@ export const JourneyLayoutGridLineSchema = z.object({
 });
 export type JourneyLayoutGridLine = z.infer<typeof JourneyLayoutGridLineSchema>;
 
-
-export const JourneyLayoutSchema = z.object({
+const JourneyLayoutSchema = z.object({
   width: z.number(),
   height: z.number(),
   plot: JourneyPlotRectSchema,

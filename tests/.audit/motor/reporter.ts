@@ -9,7 +9,7 @@
  * del runner. Solo los presenta.
  */
 
-import type { ReporteAuditoria, Hallazgo, Severidad } from './schemas/types.schemas.js';
+import type { ReporteAuditoria, Severidad } from './schemas/types.schemas.js';
 import type { ReporteJson, ReporteJsonComponente } from "./schemas/reporter.schemas.js";
 
 // ─────────────────────────────────────────────────────────────────────────────

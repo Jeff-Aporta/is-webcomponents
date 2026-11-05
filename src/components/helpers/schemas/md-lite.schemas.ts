@@ -13,12 +13,12 @@
  */
 
 export interface DatosHeadingMd { tipo: 'heading'; level: 1 | 2 | 3 | 4 | 5 | 6; text: string; html: string; id: string }
-export interface DatosParagraphMd { tipo: 'paragraph'; text: string; html: string }
-export interface DatosImageMd { tipo: 'image'; src: string; alt: string; title: string }
-export interface DatosLinkMd { tipo: 'link'; href: string; text: string; html: string; title: string; external: boolean }
-export interface DatosCodeMd { tipo: 'code'; code: string }
-export interface DatosCodeblockMd { tipo: 'codeblock'; lang: string; code: string }
-export interface DatosTableMd {
+interface DatosParagraphMd { tipo: 'paragraph'; text: string; html: string }
+interface DatosImageMd { tipo: 'image'; src: string; alt: string; title: string }
+interface DatosLinkMd { tipo: 'link'; href: string; text: string; html: string; title: string; external: boolean }
+interface DatosCodeMd { tipo: 'code'; code: string }
+interface DatosCodeblockMd { tipo: 'codeblock'; lang: string; code: string }
+interface DatosTableMd {
   tipo: 'table';
   /** Celdas del encabezado (texto markdown tal cual). */
   header: string[];
@@ -30,11 +30,11 @@ export interface DatosTableMd {
   rowsHtml: string[][];
 }
 export interface ItemListaMd { text: string; html: string; checked: boolean | null }
-export interface DatosListMd { tipo: 'list'; ordered: boolean; start: number; items: ItemListaMd[] }
-export interface DatosBlockquoteMd { tipo: 'blockquote'; text: string; html: string }
+interface DatosListMd { tipo: 'list'; ordered: boolean; start: number; items: ItemListaMd[] }
+interface DatosBlockquoteMd { tipo: 'blockquote'; text: string; html: string }
 /** Aviso estilo GitHub: `> [!NOTE]`, `[!TIP]`, `[!IMPORTANT]`, `[!WARNING]`, `[!CAUTION]`. */
 export interface DatosCalloutMd { tipo: 'callout'; kind: 'note' | 'tip' | 'important' | 'warning' | 'caution'; title: string; text: string; html: string }
-export interface DatosHrMd { tipo: 'hr' }
+interface DatosHrMd { tipo: 'hr' }
 /** Una pestaña de imagen: el `alt` es su nombre. */
 export interface TabImagenMd { label: string; src: string; title: string; html: string }
 /**
@@ -42,8 +42,8 @@ export interface TabImagenMd { label: string; src: string; title: string; html: 
  * su `alt` el nombre. En markdown plano se lee como separadores con imágenes.
  */
 export interface DatosTabsMd { tipo: 'tabs'; tabs: TabImagenMd[] }
-export interface DatosHtmlMd { tipo: 'html'; html: string }
-export interface DatosDiagramMd { tipo: 'diagram'; tag: string; json: string }
+interface DatosHtmlMd { tipo: 'html'; html: string }
+interface DatosDiagramMd { tipo: 'diagram'; tag: string; json: string }
 
 export interface DatosPorTipoMd {
   heading: DatosHeadingMd;

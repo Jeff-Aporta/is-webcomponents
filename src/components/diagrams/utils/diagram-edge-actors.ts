@@ -12,7 +12,7 @@ import { pathPoints as parsePathPoints } from './diagram-arrow.js';
 import { rectsOverlap } from '@jeff-aporta/iswc-base/core/diagram-grid.js';
 import type { XYPoint, RectLike, LabeledEdge, PlaceEdgeActorsOpts, PlaceEdgeActorsResult, EdgeActorLayout } from "@jeff-aporta/iswc-base/components/diagrams/schemas/diagram-edge-actors.schemas.js";
 
-export const EDGE_ACTOR_H = 16;
+const EDGE_ACTOR_H = 16;
 
 // API pública conservada: parsePathPoints era export de este módulo y la usan
 // specs (component-spec) y utilidades. Ahora delega en diagram-arrow (H/V-aware).
@@ -23,7 +23,7 @@ export const EDGE_ACTOR_H = 16;
 
 /** Arista con etiqueta tal y como la modelan los diagramas del kit. */
 
-export function edgeActorWidth(text: string | number | null | undefined): number {
+function edgeActorWidth(text: string | number | null | undefined): number {
   return Math.max(28, String(text ?? '').length * 5.6 + 10);
 }
 

@@ -96,7 +96,6 @@ TEMPLATE.innerHTML = /* html */ `
 
 const CLAVE_SESION = 'server-api-docs:sesion';
 const escapar = (s: unknown): string => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c] ?? c));
-const idHtml = (s: string): string => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'x';
 const json = (v: unknown): string => (typeof v === 'string' ? v : JSON.stringify(v ?? null, null, 2));
 const corto = (m: string): string => ({ delete: 'DEL', patch: 'PAT', query: 'QRY', options: 'OPT' }[m] ?? m.toUpperCase());
 const tagMetodo = (m: string): string => `<iswc-tag class="metodo" color="${COLOR_METODO[m] ?? 'neutral'}" variant="filled">${escapar(m.toUpperCase())}</iswc-tag>`;

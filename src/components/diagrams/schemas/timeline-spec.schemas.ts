@@ -5,13 +5,12 @@
  * entradas marcadas con TODO cuando se quiera validación runtime.
  */
 import { z } from "zod";
-import { TimeScaleSchema, type TimeScale } from "./lane-layout.schemas.js";
+import { type TimeScale } from "./lane-layout.schemas.js";
 
-export const TimelineOrientationSchema = z.union([z.literal('horizontal'), z.literal('vertical')]);
+const TimelineOrientationSchema = z.union([z.literal('horizontal'), z.literal('vertical')]);
 export type TimelineOrientation = z.infer<typeof TimelineOrientationSchema>;
 
-
-export const TimelineEventSpecSchema = z.object({
+const TimelineEventSpecSchema = z.object({
   id: z.string(),
   label: z.string(),
   date: z.unknown(),
@@ -21,23 +20,20 @@ export const TimelineEventSpecSchema = z.object({
 });
 export type TimelineEventSpec = z.infer<typeof TimelineEventSpecSchema>;
 
-
-export const TimelineGroupSpecSchema = z.object({
+const TimelineGroupSpecSchema = z.object({
   id: z.string(),
   name: z.string(),
   hue: z.number(),
 });
 export type TimelineGroupSpec = z.infer<typeof TimelineGroupSpecSchema>;
 
-
-export const TimelineResolvedSpecSchema = z.object({
+const TimelineResolvedSpecSchema = z.object({
   title: z.string().optional(),
   orientation: TimelineOrientationSchema,
   groups: z.array(TimelineGroupSpecSchema).optional(),
   events: z.array(TimelineEventSpecSchema),
 });
 export type TimelineResolvedSpec = z.infer<typeof TimelineResolvedSpecSchema>;
-
 
 export const TimelineLayoutEventSchema = z.object({
   id: z.string(),
@@ -57,16 +53,14 @@ export const TimelineLayoutEventSchema = z.object({
 });
 export type TimelineLayoutEvent = z.infer<typeof TimelineLayoutEventSchema>;
 
-
-export const TimelineTickSchema = z.object({
+const TimelineTickSchema = z.object({
   ms: z.number(),
   label: z.string(),
   pos: z.number(),
 });
 export type TimelineTick = z.infer<typeof TimelineTickSchema>;
 
-
-export const TimelineLayoutSchema = z.object({
+const TimelineLayoutSchema = z.object({
   width: z.number(),
   height: z.number(),
   orientation: TimelineOrientationSchema,
@@ -83,15 +77,12 @@ export const TimelineLayoutSchema = z.object({
 });
 export type TimelineLayout = z.infer<typeof TimelineLayoutSchema>;
 
-
-export const TimelineLayoutOptionsSchema = z.object({
+const TimelineLayoutOptionsSchema = z.object({
   width: z.number().optional(),
   now: z.number().optional(),
 });
 export type TimelineLayoutOptions = z.infer<typeof TimelineLayoutOptionsSchema>;
 
-
 /** Escala de eventos con huecos comprimidos: una `TimeScale` más el largo en px que ocupa (`span`). */
 export type CompressedScale = TimeScale & { span: number };
-export const CompressedScaleSchema = z.custom<CompressedScale>((v) => typeof v === 'function' && TimeScaleSchema.safeParse(v).success && typeof Reflect.get(v, 'span') === 'number');
 

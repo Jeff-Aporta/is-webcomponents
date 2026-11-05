@@ -1,6 +1,6 @@
 import { richTextPlain } from '@jeff-aporta/iswc-base/core/tk-rich-text.js';
 import { resolveTkHue, SERIE_HUES } from '@jeff-aporta/iswc-base/core/tk-hue.js';
-import type { VennSet, VennRegion, VennSpec, VennJsonOut, VennLayoutCircle, VennLayoutRegion, VennLayout } from "@jeff-aporta/iswc-base/components/diagrams/schemas/venn-spec.schemas.js";
+import type { VennSet, VennRegion, VennSpec, VennLayoutCircle, VennLayoutRegion, VennLayout } from "@jeff-aporta/iswc-base/components/diagrams/schemas/venn-spec.schemas.js";
 
 /**
  * Especificación y layout de diagramas de Venn, sin Mermaid.
@@ -62,27 +62,6 @@ export function resolveVennSpec(payload: unknown): VennSpec | null {
     sets,
     regions,
   };
-}
-
-/** spec → objeto `venn` listo para persistir / mostrar en el editor. */
-export function vennSpecToJson(spec: VennSpec): VennJsonOut {
-  const out: VennJsonOut = { sets: [], regions: [] };
-  if (spec.title) out.title = spec.title;
-  if (spec.subtitle) out.subtitle = spec.subtitle;
-  out.sets = spec.sets.map((s) => {
-    const row: { id: string; label: string; hue: number; desc?: string } = { id: s.id, label: s.label, hue: s.hue };
-    if (s.description) row.desc = s.description;
-    return row;
-  });
-  out.regions = spec.regions.map((r) => {
-    const row: { sets: string[]; label?: string; value?: number; desc?: string } = { sets: r.sets };
-    if (r.label) row.label = r.label;
-    if (r.value != null) row.value = r.value;
-    if (r.description) row.desc = r.description;
-    return row;
-  });
-  if (!out.regions.length) delete out.regions;
-  return out;
 }
 
 /** Centros canónicos: dos círculos solapados, o tres en triángulo equilátero. */

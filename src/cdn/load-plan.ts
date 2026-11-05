@@ -4,7 +4,7 @@
  */
 
 import type { TagEntry, Catalog, LoadRegistry, LoadJob, PlanLoadsResult } from "./schemas/load-plan.schemas.js";
-export function resolveCategoryId(id: string, catalog: Catalog): string | null {
+function resolveCategoryId(id: string, catalog: Catalog): string | null {
   const raw = String(id || '').trim().toLowerCase();
   if (!raw) return null;
   const aliased = catalog.aliases[raw] || raw;

@@ -13,7 +13,7 @@ export const ZPuntosRiel = z.object({
 });
 export type TPuntosRiel = z.infer<typeof ZPuntosRiel>;
 
-export const ZOpcionesFlujo = z.object({
+const ZOpcionesFlujo = z.object({
   /** El riel es punteado (anima su patrón) o continuo (lleva la línea de puntos encima). */
   punteado: z.boolean(),
   /** De la punta al origen (p. ej. herencia en clases). */
