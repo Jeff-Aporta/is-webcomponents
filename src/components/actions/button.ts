@@ -1,14 +1,7 @@
-import { applyToneRamp, isCssColorValue } from '@jeff-aporta/iswc-base/core/attrs.js';
-import { emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { applyToneRamp, isCssColorValue, BUTTON_SHAPE, DEFAULT_BUTTON_SHAPE, normalizeButtonShape, DEFAULT_INTENT, ensureDefaultColor } from '@jeff-aporta/iswc-base/core/attrs.js';
+import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 
-import {
-  BUTTON_SHAPE,
-  DEFAULT_BUTTON_SHAPE,
-  normalizeButtonShape,
-} from '@jeff-aporta/iswc-base/core/button-shape.js';
 import { setCustomState } from '@jeff-aporta/iswc-base/core/form-associated.js';
-import { DEFAULT_INTENT, ensureDefaultColor } from '@jeff-aporta/iswc-base/core/intent.js';
-import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import css from 'iswc:css';
 
 /**

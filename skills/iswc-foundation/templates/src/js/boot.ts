@@ -4,12 +4,12 @@
  *
  * Orden: `?s=` (base64url JSON con `theme`/`palette`) > lo que eligió el usuario en la config
  * persistente del kit (`iswc:app-cfg`, la que escriben `<iswc-theme-toggle>` y
- * `<iswc-palette-selector>`, ver core/app-cfg.ts) > los defaults de la app (`<html data-theme
+ * `<iswc-palette-selector>`, ver core/app-init.ts) > los defaults de la app (`<html data-theme
  * data-palette>`, los mismos que van a `initApp`). Sin esto, cada carga parpadea con el default y
  * el tema elegido se pierde al recargar.
  *
  * Lee también las llaves viejas (`iswc-app-cfg`, `iswc-theme`, `iswc-palette`) por si el kit aún no
- * las migró en este navegador; no escribe nada (la migración es de `core/app-cfg.ts`).
+ * las migró en este navegador; no escribe nada (la migración es de `core/app-init.ts`).
  */
 (function () {
   type Estado = { theme?: unknown; palette?: unknown };

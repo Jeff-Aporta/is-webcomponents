@@ -8,7 +8,7 @@ const { test, lista } = coleccionPruebas({ categoria: 'what' });
 test('componentes/intent-default', async () => {
   const here = dirname(fileURLToPath(import.meta.url));
   const root = dirname(dirname(here));
-  const modUrl = `file:///${join(root, 'src/core/intent.ts').replace(/\\/g, '/')}`;
+  const modUrl = `file:///${join(root, 'src/core/attrs.ts').replace(/\\/g, '/')}`;
   const {
     DEFAULT_INTENT,
     INTENT,

@@ -1,4 +1,4 @@
-import { emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import '@jeff-aporta/iswc-base/components/forms/input.js';
 
 import {
@@ -8,10 +8,9 @@ import {
   setFormValue,
   setValidity,
 } from '@jeff-aporta/iswc-base/core/form-associated.js';
-import { setStringAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
+import { setStringAttr } from '@jeff-aporta/iswc-base/core/attrs.js';
 import { computePosition } from '@jeff-aporta/iswc-base/core/position.js';
 import type { WindowWithEyeDropper } from "./schemas/color-picker.schemas.js";
-import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import css from 'iswc:css';
 /**
  * <iswc-color-picker> — Selector de color form-associated.

@@ -1,0 +1,11 @@
+{
+  "// C4": "F9a: fusiones menores (propuesta aplanar §3.3 y §3.5).",
+  "components/forms/utils/masks-tokens": "components/forms/utils/input-tokens",
+  "components/forms/utils/web-otp": "components/forms/utils/input-tokens",
+  "components/files/utils/file-estado": "components/files/utils/file-source",
+  "components/files/utils/load-cdn": "components/files/utils/file-source",
+  "components/files/utils/file-source": "components/files/utils/file-source",
+  "components/layout/utils/doc-demo-estado": "components/layout/utils/doc-demo-host",
+  "components/layout/utils/doc-demo-boot": "components/layout/utils/doc-demo-host",
+  "components/layout/utils/doc-demo-host": "components/layout/utils/doc-demo-host"
+}

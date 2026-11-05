@@ -1,21 +1,20 @@
-import { emit, emitCancelable } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit, emitCancelable, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import { edgeStyleFor } from './utils/diagram-vocab.js';
 import { styledEdgePath } from './utils/diagram-curve.js';
 import { DiagramElementBase } from './utils/diagram-element-base.js';
 import { resolveClassSpec, computeClassLayout, sentidoFlujoClase } from './utils/class-spec.js';
 import { animarRielEn, flujoActivo } from './utils/diagram-flow.js';
 import { PathTurtle as SequenceTurtle } from '@jeff-aporta/iswc-base/core/path-turtle.js';
-import { tkHueToHex } from '@jeff-aporta/iswc-base/core/tk-hue.js';
+import { tkHueToHex } from '@jeff-aporta/iswc-base/core/color.js';
 import { edgeStrokeHex, edgeChipFill, edgeChipText } from './utils/diagram-edge-style.js';
+import { svgIconBadge } from '@jeff-aporta/iswc-base/core/tk-text.js';
 import { inlineMdWeb, applySvgTextContent } from '@jeff-aporta/iswc-base/core/tk-inline-md.js';
 import { wrapText, buildTspans } from './utils/diagram-text-wrap.js';
 import { registerDiagramKind } from './utils/diagram-kinds.js';
 import { svgEl } from '@jeff-aporta/iswc-base/core/svg-chart-engine.js';
-import { svgIconBadge } from '@jeff-aporta/iswc-base/core/tk-icon-inline.js';
 import type { ClassLayout, ClassLayoutEdge, ClassLayoutNode, ClassLayoutSection, DiagramGroup, DiagramTheme } from "./schemas/diagram-types.schemas.js";
 import { hostStyleName, styleThemeFor } from './utils/diagram-styles.js';
 import type { ErThemeJson } from './schemas/theme.schemas.js';
-import { define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import css from 'iswc:css';
 
 /**

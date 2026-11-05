@@ -7,7 +7,7 @@
  */
 
 import type { PiezasNucleo, PuertosNucleo } from './ag-host.schemas.js';
-import { escapeHtml } from '@jeff-aporta/iswc-base/core/dom-utils.js';
+import { escapeHtml } from '@jeff-aporta/iswc-base/core/dom.js';
 import { cellText, getCellValue } from '@jeff-aporta/iswc-base/components/data/utils/datagrid-core/value-formatter.js';
 import { headerCheckboxState, selectAll, clearSelection } from '@jeff-aporta/iswc-base/components/data/utils/datagrid-core/selection.js';
 import { crearApiAg } from './api-ag.js';

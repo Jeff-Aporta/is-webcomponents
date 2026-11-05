@@ -23,7 +23,8 @@
  * @param json Estructura JSON a renderizar.
  * @param parent Si se pasa, append y devuelve parent; si no, DocumentFragment.
  */
-import type { Html2JsonOpts, ApplyJsonBodyOpts, HostToJsonOpts, JsonAttrs, VerboseNode, ElementTuple } from "./schemas/json-html.schemas.js";
+import type { Html2JsonOpts, ApplyJsonBodyOpts, HostToJsonOpts, JsonAttrs, VerboseNode, ElementTuple } from '@jeff-aporta/iswc-base/components/isp/schemas/isp-json.schemas.js';
+
 export function json2html(json: unknown, parent?: ParentNode): ParentNode {
   const target = parent || document.createDocumentFragment();
   appendJson(target, json);

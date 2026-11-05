@@ -1,11 +1,10 @@
-import { emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import './confirm-modal.js';
 import { clearAllComponentPrefs, peekComponentPrefsRoot } from '@jeff-aporta/iswc-base/core/prefs.js';
-import { leerAppCfg } from '@jeff-aporta/iswc-base/core/app-cfg.js';
+import { leerAppCfg } from '@jeff-aporta/iswc-base/core/app-init.js';
 import { clearIswcStorage, listIswcKeys } from '@jeff-aporta/iswc-base/core/iswc-storage.js';
 // Solo tipos: el schema Zod no entra al bundle del CDN (sumaría ~330 KB al componente).
 import type { PrefsClearDetail, PrefsClearScope } from './schemas/prefs-clear.schemas.js';
-import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import css from 'iswc:css';
 
 /**

@@ -4,8 +4,8 @@ import { routeEdges, planPorts, pointsToPath, simplifyOrthoPath } from './compon
 import { readRoutingOverride } from './routing-costs.js';
 import type { RouterEdge, RouterWorld } from '@jeff-aporta/iswc-base/components/diagrams/schemas/component-router.schemas.js';
 import type { Caja, Lado, Punto } from '@jeff-aporta/iswc-base/components/diagrams/schemas/diagram-tipos.schemas.js';
-import { resolveTkHue } from '@jeff-aporta/iswc-base/core/tk-hue.js';
-import { countIconTokens, stripIconTokensPlain } from '@jeff-aporta/iswc-base/core/tk-icon-inline.js';
+import { resolveTkHue } from '@jeff-aporta/iswc-base/core/color.js';
+import { countIconTokens, stripIconTokensPlain } from '@jeff-aporta/iswc-base/core/tk-text.js';
 import { applyEdgeActorLayout } from './diagram-edge-actors.js';
 import { assignEdgeHues } from './diagram-edge-style.js';
 import { wrapLabel } from './component-spec.js';

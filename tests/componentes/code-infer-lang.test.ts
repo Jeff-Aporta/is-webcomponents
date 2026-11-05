@@ -2,8 +2,7 @@
  * Inferencia de lang + softFormat para snippets de demos.
  */
 import assert from 'node:assert/strict';
-import { inferLanguage, resolveLanguage } from '../../src/core/code-langs.ts';
-import { softFormat, softFormatMode } from '../../src/core/code-text.ts';
+import { inferLanguage, resolveLanguage, softFormat, softFormatMode } from '../../src/core/code.ts';
 import { formatCode } from '../../src/components/code/utils/code-format.ts';
 import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
 

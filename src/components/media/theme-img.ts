@@ -1,13 +1,11 @@
-import { emit } from '@jeff-aporta/iswc-base/core/element.js';
-import { setStringAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
+import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import { setStringAttr, MEDIA_SHAPE } from '@jeff-aporta/iswc-base/core/attrs.js';
 import {
   findThemeContainer,
   readTheme,
   watchThemeContainer,
-} from '@jeff-aporta/iswc-base/core/theme-scope.js';
-import { MEDIA_SHAPE } from '@jeff-aporta/iswc-base/core/media-shape.js';
-import { type MediaShape } from '@jeff-aporta/iswc-base/core/schemas/media-shape.schemas.js';
-import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+} from '@jeff-aporta/iswc-base/core/dom.js';
+import { type MediaShape } from '@jeff-aporta/iswc-base/core/schemas/attrs.schemas.js';
 import css from 'iswc:css';
 
 /**

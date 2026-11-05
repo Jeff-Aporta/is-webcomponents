@@ -1,4 +1,4 @@
-import { crearNodo } from '@jeff-aporta/iswc-base/core/dom-utils.js';
+import { crearNodo } from '@jeff-aporta/iswc-base/core/dom.js';
 import { atributosDe, PropsElement } from '@jeff-aporta/iswc-base/core/props-element.js';
 import { StatGroupPropsSchema } from './schemas/stat-group.schemas.js';
 import type { StatGroupItem, StatGroupProps } from './schemas/stat-group.schemas.js';

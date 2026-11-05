@@ -1,6 +1,6 @@
-import { richTextPlain } from '@jeff-aporta/iswc-base/core/tk-rich-text.js';
+import { richTextPlain } from '@jeff-aporta/iswc-base/core/tk-text.js';
 import { diagramHeaderWidth } from './diagram-header.js';
-import { resolveTkHue, SERIE_HUES } from '@jeff-aporta/iswc-base/core/tk-hue.js';
+import { resolveTkHue, SERIE_HUES } from '@jeff-aporta/iswc-base/core/color.js';
 import type { SankeyNodeSpec, SankeyLinkSpec, SankeyGroupSpec, SankeyResolvedSpec, SankeyLayoutNode, SankeyLayoutLink, SankeyLayout, SankeyLayoutOptions } from "@jeff-aporta/iswc-base/components/diagrams/schemas/sankey-spec.schemas.js";
 
 /**

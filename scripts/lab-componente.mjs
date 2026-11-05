@@ -8,7 +8,7 @@
 //
 // Se empaqueta SOLO el componente y sus módulos internos (md-lite, md-hydrate…):
 // los demás componentes (todo módulo que registra un tag con `defineElement`) y
-// las hojas base (`core/base-sheets`) se importan del CDN pineado (`--cdn`), igual
+// las hojas base (`core/iswc-element`) se importan del CDN pineado (`--cdn`), igual
 // que en el build publicado; así cada componente conserva su propio CSS.
 //
 // El archivo generado (`<destino>/<nombre>.js`) es ESM autocontenido: lleva su CSS
@@ -50,7 +50,7 @@ const css = () => (existsSync(scss)
   : '');
 
 const componentes = join(raiz, 'src', 'components');
-const baseSheets = join(raiz, 'src', 'core', 'base-sheets.ts');
+const baseSheets = join(raiz, 'src', 'core', 'iswc-element.ts');
 /** Otro componente del kit (registra un tag): se toma del CDN, no se empaqueta. */
 const norm = (p) => resolve(p).toLowerCase();
 const esOtroComponente = (ts) => norm(ts) !== norm(entradaAbs) && norm(ts).startsWith(norm(componentes)) && /defineElement\(|customElements\.define\(|\bdefine\([A-Z]\w*[,)]/.test(readFileSync(ts, 'utf8'));
@@ -62,7 +62,7 @@ const jsATs = {
     b.onResolve({ filter: /^\.{1,2}\/.*\.js$/ }, (args) => {
       const ts = resolve(args.resolveDir, args.path.replace(/\.js$/, '.ts'));
       if (!existsSync(ts)) return undefined;
-      if (cdn && norm(ts) === norm(baseSheets)) return { path: `${cdn}/core/base-sheets.min.mjs`, external: true };
+      if (cdn && norm(ts) === norm(baseSheets)) return { path: `${cdn}/core/iswc-element.min.mjs`, external: true };
       if (cdn && esOtroComponente(ts)) {
         const rel = relative(componentes, ts).split(sep).join('/').replace(/\.ts$/, '.min.js');
         return { path: `${cdn}/${rel}`, external: true };

@@ -1,10 +1,9 @@
 import { fontOn } from '@jeff-aporta/iswc-base/components/charts/utils/chart-palette.js';
-import { emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import { withStyleAttrs } from '@jeff-aporta/iswc-base/core/attrs.js';
 
 import { niceTicks, svgEl } from '@jeff-aporta/iswc-base/core/svg-chart-engine.js';
 import type { HeatmapCfg } from "./schemas/heatmap.schemas.js";
-import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import css from 'iswc:css';
 
 /** Config leída del slot JSON. */

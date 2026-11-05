@@ -1,7 +1,7 @@
-import { emit, upgradeProperties } from '@jeff-aporta/iswc-base/core/element.js';
-import { createSpaState } from '@jeff-aporta/iswc-base/core/spa-state.js';
+import { emit, upgradeProperties, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import { createSpaState } from '@jeff-aporta/iswc-base/components/layout/utils/spa-state.js';
 import { readIswc, removeIswc, writeIswc } from '@jeff-aporta/iswc-base/core/iswc-storage.js';
-import type { EstadoSpa, SpaState } from '@jeff-aporta/iswc-base/core/schemas/spa-state.schemas.js';
+import type { EstadoSpa, SpaState } from '@jeff-aporta/iswc-base/components/layout/schemas/spa-state.schemas.js';
 import {
   ServerApiDocsLoginRespuestaSchema,
   ServerApiDocsSesionSchema,
@@ -39,7 +39,6 @@ import '@jeff-aporta/iswc-base/components/actions/button-group.js';
 import '@jeff-aporta/iswc-base/components/forms/input.js';
 import './dialog.js';
 import './callout.js';
-import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import css from 'iswc:css';
 
 /**

@@ -1,9 +1,7 @@
-import { emit } from '@jeff-aporta/iswc-base/core/element.js';
-import { withStyleAttrs } from '@jeff-aporta/iswc-base/core/attrs.js';
+import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import { withStyleAttrs, setStringAttr } from '@jeff-aporta/iswc-base/core/attrs.js';
 
 import { computePosition } from '@jeff-aporta/iswc-base/core/position.js';
-import { setStringAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
-import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import css from 'iswc:css';
 
 /**

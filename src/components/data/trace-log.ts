@@ -1,9 +1,8 @@
-import { emit } from '@jeff-aporta/iswc-base/core/element.js';
-import { copyText, crearNodo } from '@jeff-aporta/iswc-base/core/dom-utils.js';
+import { emit, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import { copyText, crearNodo } from '@jeff-aporta/iswc-base/core/dom.js';
 import { atributosDe, PropsElement } from '@jeff-aporta/iswc-base/core/props-element.js';
 import { TraceLogPropsSchema } from './schemas/trace-log.schemas.js';
 import type { TraceEvento, TraceFiltro, TraceLogProps, TraceNivel, TraceTextos } from './schemas/trace-log.schemas.js';
-import { define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import css from 'iswc:css';
 
 /**

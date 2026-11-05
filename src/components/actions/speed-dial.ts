@@ -1,10 +1,9 @@
-import { emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import { withStyleAttrs } from '@jeff-aporta/iswc-base/core/attrs.js';
 
 import './check-icon-button.js';
-import { clampTo } from '@jeff-aporta/iswc-base/core/misc-utils.js';
-import { createPopupDismiss } from '@jeff-aporta/iswc-base/core/popup-dismiss.js';
-import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import { clampTo } from '@jeff-aporta/iswc-base/core/dom.js';
+import { createPopupDismiss } from '@jeff-aporta/iswc-base/core/position.js';
 import css from 'iswc:css';
 
 /**

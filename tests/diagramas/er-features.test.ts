@@ -53,7 +53,7 @@ test('diagramas/er-features', async () => {
   {
     const erSrc = readFileSync(join(here, '..', '..', 'src', 'components', 'diagrams', 'er-diagram.ts'), 'utf8');
     // svgIconGroup está importado y referenciado.
-    assert.match(erSrc, /import\s*\{[^}]*svgIconGroup[^}]*\}\s*from\s*['"][^'"]*tk-icon-inline/, 'er-diagram.ts debe importar svgIconGroup');
+    assert.match(erSrc, /import\s*\{[^}]*svgIconGroup[^}]*\}\s*from\s*['"][^'"]*core\/tk-text/, 'er-diagram.ts debe importar svgIconGroup (core/tk-text, antes tk-icon-inline)');
     assert.match(erSrc, /svgIconGroup\s*\(\s*iconId/, 'er-diagram.ts debe invocar svgIconGroup para los marcadores PK/FK');
     // El viejo `<text>PK</text>` literal ya no debe quedar. Permitimos "PK" como
     // substring de identificadores (p.ej. ER_KEY_ICON_IDS.PK) y dentro de

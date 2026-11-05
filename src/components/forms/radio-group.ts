@@ -1,4 +1,4 @@
-import { emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import './radio.js';
 
 import {
@@ -8,9 +8,8 @@ import {
   setFormValue,
   setValidity,
 } from '@jeff-aporta/iswc-base/core/form-associated.js';
-import { setStringAttr, setOptionalAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
+import { setStringAttr, setOptionalAttr } from '@jeff-aporta/iswc-base/core/attrs.js';
 import type { IswcRadioElement } from "./schemas/radio-group.schemas.js";
-import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import css from 'iswc:css';
 /**
  * <iswc-radio-group> — Grupo form-associated de <iswc-radio>. El grupo es el dueño

@@ -1,9 +1,8 @@
-import { emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import '@jeff-aporta/iswc-base/components/actions/check-icon-button.js';
-import { findThemeContainer } from '@jeff-aporta/iswc-base/core/theme-scope.js';
-import { guardarAppCfg } from '@jeff-aporta/iswc-base/core/app-cfg.js';
+import { findThemeContainer } from '@jeff-aporta/iswc-base/core/dom.js';
+import { guardarAppCfg } from '@jeff-aporta/iswc-base/core/app-init.js';
 import type { IswcCheckIconButtonEvent, ThemeChangeDetail, ThemeName } from './schemas/theme-toggle.schemas.js';
-import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import css from 'iswc:css';
 
 /**
@@ -16,7 +15,7 @@ import css from 'iswc:css';
  *   2. Alterna data-theme en ese contenedor
  *   3. Refleja `dark` en el host
  *   4. Si el contenedor es <html>, guarda la elección en la config de la app
- *      (`iswc:app-cfg`, ver core/app-cfg.ts): sobrevive al F5 y la lee `initApp`.
+ *      (`iswc:app-cfg`, ver core/app-init.ts): sobrevive al F5 y la lee `initApp`.
  *   5. Emite `iswc-theme-change` { detail: { theme, dark, container } }
  *
  * Attributes

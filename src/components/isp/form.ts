@@ -1,4 +1,4 @@
-import { emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import '@jeff-aporta/iswc-base/components/forms/input.js';
 import '@jeff-aporta/iswc-base/components/forms/textarea.js';
 import '@jeff-aporta/iswc-base/components/forms/select.js';
@@ -11,9 +11,8 @@ import {
   html2json,
   hostToJson,
   json2html,
-} from '@jeff-aporta/iswc-base/core/json-html.js';
+} from '@jeff-aporta/iswc-base/components/isp/utils/isp-json.js';
 import { getValues, setValues } from './utils/form-json.js';
-import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import css from 'iswc:css';
 
 /**

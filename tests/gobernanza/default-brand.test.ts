@@ -36,7 +36,7 @@ test('Todos los componentes con color tienen default="brand" (no "neutral")', ()
       `getAttribute\\(\\s*['"]color['"]\\s*\\)\\s*\\|\\|\\s*['"](${expected})['"]`,
     ).test(src);
     // Forma actual: el helper compartido `ensureDefaultColor(this[, DEFAULT_INTENT])`
-    // de core/intent (su comportamiento se afirma en el caso «ensureDefaultColor…»).
+    // de core/attrs (su comportamiento se afirma en el caso «ensureDefaultColor…»).
     const helper = /ensureDefaultColor\(\s*this\s*(?:,\s*(?:DEFAULT_INTENT|['"]brand['"])\s*)?\)/.test(src);
     assert.ok(
       setAttr || fallback || helper,
@@ -60,7 +60,7 @@ test('Todos los componentes con color tienen default="brand" (no "neutral")', ()
 });
 
 test('ensureDefaultColor: sin atributo pone DEFAULT_INTENT (brand); con atributo válido no lo toca', async () => {
-  const { DEFAULT_INTENT, ensureDefaultColor } = await import('../../src/core/intent.ts');
+  const { DEFAULT_INTENT, ensureDefaultColor } = await import('../../src/core/attrs.ts');
   assert.equal(DEFAULT_INTENT, 'brand');
   const fake = (attrs: Record<string, string>) => ({
     hasAttribute: (n: string) => n in attrs,

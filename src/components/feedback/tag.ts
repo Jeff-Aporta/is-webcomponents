@@ -1,8 +1,6 @@
-import { emit } from '@jeff-aporta/iswc-base/core/element.js';
-import { ocultarSlotsVacios } from '@jeff-aporta/iswc-base/core/dom-utils.js';
-import { INTENT } from '@jeff-aporta/iswc-base/core/intent.js';
-import { TONE } from '@jeff-aporta/iswc-base/core/tone.js';
-import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import { ocultarSlotsVacios } from '@jeff-aporta/iswc-base/core/dom.js';
+import { INTENT, TONE } from '@jeff-aporta/iswc-base/core/attrs.js';
 import css from 'iswc:css';
 
 /**

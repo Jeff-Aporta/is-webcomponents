@@ -1,4 +1,4 @@
-import { crearNodo, escapeHtml } from '@jeff-aporta/iswc-base/core/dom-utils.js';
+import { crearNodo, escapeHtml } from '@jeff-aporta/iswc-base/core/dom.js';
 import { atributosDe, PropsElement } from '@jeff-aporta/iswc-base/core/props-element.js';
 import { StreamBubblePropsSchema } from './schemas/stream-bubble.schemas.js';
 import type { StreamBubblePaso, StreamBubbleProps, StreamBubbleTextos } from './schemas/stream-bubble.schemas.js';

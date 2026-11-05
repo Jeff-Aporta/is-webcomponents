@@ -1,4 +1,4 @@
-import { upgradeProperties } from '@jeff-aporta/iswc-base/core/element.js';
+import { upgradeProperties, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 
 import '@jeff-aporta/iswc-base/components/forms/input.js';
 import '@jeff-aporta/iswc-base/components/forms/select.js';
@@ -8,7 +8,6 @@ import '@jeff-aporta/iswc-base/components/layout/dialog.js';
 import '@jeff-aporta/iswc-base/components/feedback/toast.js';
 import '@jeff-aporta/iswc-base/components/feedback/tooltip.js';
 import type { LoginAccount, LoginSession } from './schemas/login.schemas.js';
-import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import css from 'iswc:css';
 
 /**

@@ -1,5 +1,4 @@
-import { repaint } from '@jeff-aporta/iswc-base/core/highlight-code.js';
-import { prettyHtml } from '@jeff-aporta/iswc-base/core/code-text.js';
+import { repaint, prettyHtml } from '@jeff-aporta/iswc-base/core/code.js';
 import type { CodeLike, DescribePart } from "@jeff-aporta/iswc-base/components/helpers/schemas/mutation-observer.preview.schemas.js";
 
 /**

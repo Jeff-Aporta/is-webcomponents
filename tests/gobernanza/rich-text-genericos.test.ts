@@ -4,7 +4,7 @@
  * escapa. Antes se insertaba como elemento y el SVG exportado quedaba mal formado (imagen rota).
  */
 import { assertEquals } from 'https://deno.land/std@0.224.0/assert/mod.ts';
-import { richTextEsc, richTextInline, splitRichTextSegments } from '../../src/core/tk-rich-text.ts';
+import { richTextEsc, richTextInline, splitRichTextSegments } from '../../src/core/tk-text.ts';
 import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
 import { denoTestCon } from '../_shared/deno-test.ts';
 

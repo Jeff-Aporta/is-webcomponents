@@ -27,7 +27,7 @@ test('context-menu: cierra al scroll por defecto', async () => {
   // iswc-dropdown. El contrato es el mismo; lo que cambia es dónde se cumple:
   // context-menu.ts aporta el QUÉ (su #onScroll y el modo scroll-lock) y el
   // módulo compartido el CÓMO (capture, overflow hidden).
-  const dismiss = await readFile(join(raiz, 'src', 'core', 'popup-dismiss.ts'), 'utf8');
+  const dismiss = await readFile(join(raiz, 'src', 'core', 'position.ts'), 'utf8');
 
   assert.match(
     js,

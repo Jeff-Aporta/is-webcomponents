@@ -27,7 +27,7 @@ const ALIAS = '@jeff-aporta/iswc-base/';
 const EXTS = ['.ts', '.mjs', '.js'];
 const TEXTO = /\.(ts|mts|mjs|js|cjs|md|json|jsonc|html|yml|yaml|txt|scss|css)$/;
 // Los mapas de aplanar y el historial (specs/health) conservan los nombres viejos a propósito.
-const FUERA = /^(dist|node_modules|\.tmp|\.audit|labs\/[^/]+\/out|assets|specs\/health)\/|^scripts\/codemods\/aplanar-[^/]+\.json$/;
+const FUERA = /^(dist|node_modules|\.tmp|\.audit|labs\/[^/]+\/out|assets|specs\/health)\/|^scripts\/codemods\/aplanar[^/]*\.(json|mjs)$|^tests\/gobernanza\/aplanar-codemod\.test\.ts$/;
 
 const argumentos = Deno.args.filter((a) => !a.startsWith('--'));
 const dry = Deno.args.includes('--dry');
@@ -65,7 +65,8 @@ function schemasDestino(schemasOrigen, origen, destino) {
   const nombreD = posix.basename(destino).replace(/\.(ts|mjs|js)$/, '');
   const dirD = posix.dirname(destino);
   const catD = destino.match(/^src\/components\/[^/]+/)?.[0];
-  if (schemasOrigen === `${dirO}/schemas/${posix.basename(schemasOrigen)}`) return `${dirD}/schemas/${nombreD}.schemas.ts`;
+  // En src/components los schemas de los utils viven en `<cat>/schemas/` (no en `utils/schemas/`).
+  if (schemasOrigen === `${dirO}/schemas/${posix.basename(schemasOrigen)}`) return catD ? `${catD}/schemas/${nombreD}.schemas.ts` : `${dirD}/schemas/${nombreD}.schemas.ts`;
   if (schemasOrigen.startsWith(`${dirO}/`) && !schemasOrigen.includes('/schemas/')) return `${dirD}/${nombreD}.schemas.ts`;
   return catD ? `${catD}/schemas/${nombreD}.schemas.ts` : `${dirD}/schemas/${nombreD}.schemas.ts`;
 }
@@ -380,6 +381,13 @@ function reemplazosDeTexto() {
     if (dO && dD && dO !== dD) pares.push([`${dO}.min.`, `${dD}.min.`]);
     // Ruta sin extensión en prosa: `core/dom-utils`, `diagrams/utils/diagram-curve`.
     pares.push([so.slice(4), sd.slice(4), true]);
+    // Tramos de `join(raiz, 'src', 'core', 'x.ts')`: carpeta y nombre como cadenas sueltas (misma carpeta).
+    if (posix.dirname(o) === posix.dirname(d)) {
+      const dir = posix.basename(posix.dirname(o));
+      for (const q of ["'", '"']) {
+        for (const ext of ['.ts', '.js']) pares.push([`${q}${dir}${q}, ${q}${posix.basename(so)}${ext}${q}`, `${q}${dir}${q}, ${q}${posix.basename(sd)}${ext}${q}`]);
+      }
+    }
     if (so.startsWith('src/components/')) pares.push([so.slice('src/components/'.length), sd.slice('src/components/'.length), true]);
   }
   // Más largos primero: `src/core/x.` antes que `core/x`.

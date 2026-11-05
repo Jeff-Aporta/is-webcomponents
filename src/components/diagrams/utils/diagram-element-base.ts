@@ -56,11 +56,11 @@
  *     render, tal como hace flowchart.js hoy.
  */
 
-import { findThemeContainer, readTheme } from '@jeff-aporta/iswc-base/core/theme-scope.js';
+import { findThemeContainer, readTheme } from '@jeff-aporta/iswc-base/core/dom.js';
 import { paletteTheme } from './diagram-palette.js';
 import type { DiagramTheme } from '@jeff-aporta/iswc-base/components/diagrams/schemas/diagram-types.schemas.js';
 import { hostStyleName, loadStylesDiagram } from './diagram-styles.js';
-import { svgIconsReady } from '@jeff-aporta/iswc-base/core/tk-icon-inline.js';
+import { svgIconsReady } from '@jeff-aporta/iswc-base/core/tk-text.js';
 import { IswcElement } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 
 /** ¿Hay alguna referencia `{ path, query }` en el payload? (recorrido liviano, sin dependencias). */

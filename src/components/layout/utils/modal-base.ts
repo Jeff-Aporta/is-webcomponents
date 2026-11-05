@@ -48,8 +48,7 @@
 
 import { withStyleAttrs } from '@jeff-aporta/iswc-base/core/attrs.js';
 
-import { emit } from '@jeff-aporta/iswc-base/core/element.js';
-import { IswcElement } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import { emit, IswcElement } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import type { ModalBaseCtor } from "@jeff-aporta/iswc-base/components/layout/schemas/modal-base.schemas.js";
 const BASE_OBSERVED: readonly string[] = ['open', 'label', 'without-header', 'light-dismiss'];
 

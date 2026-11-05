@@ -1,11 +1,10 @@
-import { emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import { withStyleAttrs } from '@jeff-aporta/iswc-base/core/attrs.js';
 
 import '@jeff-aporta/iswc-base/components/actions/share-button.js';
 import { createPanZoom } from './utils/pan-zoom.js';
 import { type PanZoomController } from './schemas/pan-zoom.schemas.js';
 import type { ViewTransform } from "./schemas/lightbox.schemas.js";
-import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import css from 'iswc:css';
 
 /**

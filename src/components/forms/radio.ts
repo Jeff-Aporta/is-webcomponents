@@ -1,7 +1,6 @@
-import { emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import { attachFormInternals, setCustomState } from '@jeff-aporta/iswc-base/core/form-associated.js';
-import { setOptionalAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
-import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import { setOptionalAttr } from '@jeff-aporta/iswc-base/core/attrs.js';
 import css from 'iswc:css';
 
 /**

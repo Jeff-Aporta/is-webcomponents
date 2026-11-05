@@ -1,5 +1,5 @@
 /**
- * Estado de SPA en la URL (`core/spa-state.ts`), con un navegador simulado
+ * Estado de SPA en la URL (`components/layout/utils/spa-state.ts`), con un navegador simulado
  * (location + history + popstate) para correr en Deno.
  *
  *   S1 base64url ida y vuelta con UTF-8 (tildes, emoji) y sin `+ / =`
@@ -13,7 +13,7 @@
  *   S8 navigate reemplaza el estado completo (no mezcla)
  */
 import assert from 'node:assert/strict';
-import { b64urlDecode, b64urlEncode, createSpaState, recortarPorValor } from '../../src/core/spa-state.ts';
+import { b64urlDecode, b64urlEncode, createSpaState, recortarPorValor } from '../../src/components/layout/utils/spa-state.ts';
 import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
 
 const { test, lista } = coleccionPruebas({ categoria: 'how' });

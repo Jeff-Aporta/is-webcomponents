@@ -1,14 +1,13 @@
-import { emit, emitCancelable } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit, emitCancelable, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import { DiagramElementBase } from './utils/diagram-element-base.js';
 import { resolveQuadrantSpec, computeQuadrantLayout } from './utils/quadrant-spec.js';
 import type { DiagramTheme } from './schemas/diagram-types.schemas.js';
-import { tkHueToHex } from '@jeff-aporta/iswc-base/core/tk-hue.js';
+import { tkHueToHex } from '@jeff-aporta/iswc-base/core/color.js';
 import { inlineMdWeb, applySvgTextContent } from '@jeff-aporta/iswc-base/core/tk-inline-md.js';
 import { registerDiagramKind } from './utils/diagram-kinds.js';
 import { svgEl } from '@jeff-aporta/iswc-base/core/svg-chart-engine.js';
 import type { QuadrantLayout, QuadrantLayoutAxisLabel } from "./schemas/quadrant-spec.schemas.js";
 import type { PointEntry } from "./schemas/quadrant-chart.schemas.js";
-import { define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import css from 'iswc:css';
 
 /**

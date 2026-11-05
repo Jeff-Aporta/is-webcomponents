@@ -1,8 +1,7 @@
-import { emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import { setCustomState } from '@jeff-aporta/iswc-base/core/form-associated.js';
 import './drawer.js';
 import '@jeff-aporta/iswc-base/components/feedback/toast.js';
-import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import css from 'iswc:css';
 
 /**

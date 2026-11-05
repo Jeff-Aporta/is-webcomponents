@@ -1,5 +1,5 @@
-import { emit } from '@jeff-aporta/iswc-base/core/element.js';
-import { crearNodo } from '@jeff-aporta/iswc-base/core/dom-utils.js';
+import { emit, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import { crearNodo } from '@jeff-aporta/iswc-base/core/dom.js';
 import { atributosDe, PropsElement } from '@jeff-aporta/iswc-base/core/props-element.js';
 import { pospuesta } from '@jeff-aporta/iswc-base/ai/descarga.js';
 import { herramienta, mbDe, pesoDe } from '@jeff-aporta/iswc-base/ai/herramientas.js';
@@ -15,7 +15,6 @@ import '@jeff-aporta/iswc-base/components/forms/select.js';
 import '@jeff-aporta/iswc-base/components/forms/textarea.js';
 import './icon.js';
 import './media-recorder.js';
-import { define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import css from 'iswc:css';
 
 /**

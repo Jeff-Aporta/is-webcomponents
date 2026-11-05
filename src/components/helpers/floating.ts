@@ -1,9 +1,8 @@
-import { emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import { withStyleAttrs } from '@jeff-aporta/iswc-base/core/attrs.js';
 
 import { computePosition, PLACEMENTS, isVirtualElement } from '@jeff-aporta/iswc-base/core/position.js';
 import { type AnchorLike, type ComputePositionResult } from '@jeff-aporta/iswc-base/core/schemas/position.schemas.js';
-import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import css from 'iswc:css';
 
 /**

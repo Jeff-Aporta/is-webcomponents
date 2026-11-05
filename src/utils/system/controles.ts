@@ -7,10 +7,7 @@
 // monta los paneles por demo, escucha sus cambios y aplica el valor al host.
 
 import { iconForSelectOption } from './control-select-icons.js';
-import { DEFAULT_BUTTON_SHAPE } from '@jeff-aporta/iswc-base/core/button-shape.js';
-import { DEFAULT_MEDIA_SHAPE } from '@jeff-aporta/iswc-base/core/media-shape.js';
-import { DEFAULT_INTENT } from '@jeff-aporta/iswc-base/core/intent.js';
-import { DEFAULT_TONE } from '@jeff-aporta/iswc-base/core/tone.js';
+import { DEFAULT_BUTTON_SHAPE, DEFAULT_MEDIA_SHAPE, DEFAULT_INTENT, DEFAULT_TONE } from '@jeff-aporta/iswc-base/core/attrs.js';
 import type { ControlDef, BloqueConControles, PanelConSpec, PreviewDefinitionShallow, PreviewMountCtxShallow } from "./schemas/controles.schemas.js";
 
 /** Tipos de control soportados por el panel. */

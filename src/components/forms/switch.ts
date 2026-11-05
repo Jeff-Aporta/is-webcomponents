@@ -1,4 +1,4 @@
-import { emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 
 import {
   attachFormInternals,
@@ -7,10 +7,8 @@ import {
   setFormValue,
   setValidity,
 } from '@jeff-aporta/iswc-base/core/form-associated.js';
-import { setStringAttr, setOptionalAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
-import { hasSlotted } from '@jeff-aporta/iswc-base/core/dom-utils.js';
-import { DEFAULT_INTENT, ensureDefaultColor } from '@jeff-aporta/iswc-base/core/intent.js';
-import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import { setStringAttr, setOptionalAttr, DEFAULT_INTENT, ensureDefaultColor } from '@jeff-aporta/iswc-base/core/attrs.js';
+import { hasSlotted } from '@jeff-aporta/iswc-base/core/dom.js';
 import css from 'iswc:css';
 /**
  * <iswc-switch> — Interruptor form-associated (track + thumb).

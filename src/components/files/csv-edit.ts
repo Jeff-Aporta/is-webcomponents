@@ -1,10 +1,9 @@
-import { emit } from '@jeff-aporta/iswc-base/core/element.js';
-import { setOptionalAttr, setStringAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
-import { escapeHtml } from '@jeff-aporta/iswc-base/core/dom-utils.js';
+import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import { setOptionalAttr, setStringAttr } from '@jeff-aporta/iswc-base/core/attrs.js';
+import { escapeHtml } from '@jeff-aporta/iswc-base/core/dom.js';
 import { loadText, resolveFileSource } from './utils/file-source.js';
 import { pintarEstado, sincronizarAlto } from './utils/file-estado.js';
 import { parseCsv, toCsv } from './utils/csv-parse.js';
-import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import css from 'iswc:css';
 
 (() => {

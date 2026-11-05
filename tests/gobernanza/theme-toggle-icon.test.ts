@@ -107,9 +107,9 @@ test('theme-toggle expone forceSync() publico para re-sincronizar desde fuera', 
 // igual a los listeners globales. Disparar los dos los invocaba dos veces.
 test('theme-toggle resuelve el contenedor atravesando Shadow DOM', () => {
   assert.ok(
-    // theme-scope pasó de components/_shared/ a src/core/.
-    /from '@jeff-aporta\/iswc-base\/core\/theme-scope\.js'/.test(themeToggleSrc),
-    'debe importar findThemeContainer de theme-scope (closest se corta en el shadow)',
+    // theme-scope pasó de components/_shared/ a src/core/ y en F9a a core/dom.ts.
+    /import \{[^}]*\bfindThemeContainer\b[^}]*\} from '@jeff-aporta\/iswc-base\/core\/dom\.js'/.test(themeToggleSrc),
+    'debe importar findThemeContainer de core/dom (theme-scope; closest se corta en el shadow)',
   );
   assert.ok(
     /findThemeContainer\(this\)/.test(themeToggleSrc),

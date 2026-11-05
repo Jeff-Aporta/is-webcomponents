@@ -1,7 +1,6 @@
-import { emit } from '@jeff-aporta/iswc-base/core/element.js';
-import { INTENT } from '@jeff-aporta/iswc-base/core/intent.js';
+import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import { INTENT } from '@jeff-aporta/iswc-base/core/attrs.js';
 import './button.js';
-import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import css from 'iswc:css';
 
 /**

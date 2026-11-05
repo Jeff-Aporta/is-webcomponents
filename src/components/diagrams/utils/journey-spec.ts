@@ -1,5 +1,5 @@
-import { richTextPlain } from '@jeff-aporta/iswc-base/core/tk-rich-text.js';
-import { resolveTkHue, SERIE_HUES } from '@jeff-aporta/iswc-base/core/tk-hue.js';
+import { richTextPlain } from '@jeff-aporta/iswc-base/core/tk-text.js';
+import { resolveTkHue, SERIE_HUES } from '@jeff-aporta/iswc-base/core/color.js';
 import type { JourneyPhase, JourneyStep, JourneySpec, JourneyPlotRect, JourneyLayoutStep, JourneyLayoutPhase, JourneyLayoutGridLine, JourneyLayout } from "@jeff-aporta/iswc-base/components/diagrams/schemas/journey-spec.schemas.js";
 
 /**

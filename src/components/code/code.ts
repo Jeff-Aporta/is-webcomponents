@@ -29,25 +29,21 @@
  * `format` / `formatConfig` — JSON estilo Prettier:
  *   { tabWidth, useTabs, printWidth, semi, singleQuote, trailingComma, endOfLine }
  */
-import { emit, upgradeProperties } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit, upgradeProperties, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import {
   attachFormInternals, setFormValue, setCustomState,
 } from '@jeff-aporta/iswc-base/core/form-associated.js';
-import { setStringAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
-import {
-  listLanguages, registerLanguage, resolveLanguage, inferLanguage,
-} from '@jeff-aporta/iswc-base/core/code-langs.js';
+import { setStringAttr } from '@jeff-aporta/iswc-base/core/attrs.js';
+import { listLanguages, registerLanguage, resolveLanguage, inferLanguage, softFormat, softFormatMode } from '@jeff-aporta/iswc-base/core/code.js';
 import { formatCode, normalizeFormatConfig, DEFAULT_FORMAT } from './utils/code-format.js';
 import { applyThemeConfig, brandMonoTheme, parseThemeConfig } from './utils/code-theme.js';
 import type { CodeThemeConfig } from './schemas/code-theme.schemas.js';
-import { softFormat, softFormatMode } from '@jeff-aporta/iswc-base/core/code-text.js';
 import {
   code2json, json2code, parseCodeDocument, normalizeMark, rebaseMarks,
 } from './utils/code-model.js';
 import { tokenizeCode, lineToHtml, tokenClass, escapeHtml, tokensToText } from '@jeff-aporta/iswc-base/core/code-highlight.js';
 import '@jeff-aporta/iswc-base/components/feedback/tooltip.js';
 import type { CodeMark, CodeDocument, CodeFormatConfig, CodeLangDef, IswcTooltipEl, HighlightLine, HighlightResult } from "./schemas/code.schemas.js";
-import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import css from 'iswc:css';
 
 // Tipos locales (los _shared sólo los declaran vía JSDoc; replicamos forma).

@@ -90,7 +90,7 @@ import {
   getComponentPrefs, removeComponentPrefs, replaceComponentPrefs,
 } from '@jeff-aporta/iswc-base/core/prefs.js';
 import type { PrefsEntry } from '@jeff-aporta/iswc-base/core/schemas/prefs.schemas.js';
-import { emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import '@jeff-aporta/iswc-base/components/forms/checkbox.js';
 import '@jeff-aporta/iswc-base/components/forms/input.js';
 import '@jeff-aporta/iswc-base/components/forms/select.js';
@@ -108,7 +108,6 @@ import { ATRIBUTOS, aplanarDefs, autogenerarDefs, ordenInicial, valorAtributo } 
 import type { ColDefAg, Capa, Desinstalar, OpcionesGrid, Zona } from './utils/ag-grid/contrato.schemas.js';
 import type { ColumnDef, RowData, SortDirName, PinSideName, DensityName, GridState, GridApi, ColumnFilter, SelectionModeName, TextFilterOp } from './schemas/datagrid-types.schemas.js';
 import type { StateSavedDetail, PageChangeDetail } from "./schemas/ag-grid.schemas.js";
-import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import css from 'iswc:css';
 
 const TEMPLATE = document.createElement('template');

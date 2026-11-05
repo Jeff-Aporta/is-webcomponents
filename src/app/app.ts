@@ -1,5 +1,5 @@
 import components from '@jeff-aporta/iswc-base/manifest.js';
-import { leerAppCfg } from '@jeff-aporta/iswc-base/core/app-cfg.js';
+import { leerAppCfg } from '@jeff-aporta/iswc-base/core/app-init.js';
 import { DEFAULT_PALETTE, PALETTES } from '@jeff-aporta/iswc-base/styles/palette-build.js';
 import type { ComponentManifestItem } from '@jeff-aporta/iswc-base/manifest.schemas.js';
 import { hasControlledPreview, hasCachedPreview, loadPreview } from '@jeff-aporta/iswc-base/previews/registry.js';

@@ -16,12 +16,11 @@
  *   content:      → textContent del host (label / “Hola mundo”)
  *   style: / attr:style → style.cssText
  */
-import { emit } from '@jeff-aporta/iswc-base/core/element.js';
-import { setStringAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
+import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import { setStringAttr } from '@jeff-aporta/iswc-base/core/attrs.js';
 import { definePreviewControls } from '@jeff-aporta/iswc-base/components/layout/preview-controls.js';
 import '@jeff-aporta/iswc-base/components/code/code.js';
 import '@jeff-aporta/iswc-base/components/layout/details.js';
-import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import css from 'iswc:css';
 
 (() => {

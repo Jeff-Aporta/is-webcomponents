@@ -1,12 +1,12 @@
 import { withStyleAttrs } from '@jeff-aporta/iswc-base/core/attrs.js';
 
-import { copyText } from '@jeff-aporta/iswc-base/core/dom-utils.js';
+import { copyText } from '@jeff-aporta/iswc-base/core/dom.js';
 
 import {
   resolveRef,
   jsdelivrBase,
 } from '@jeff-aporta/iswc-base/core/cdn-ref.js';
-import { paint } from '@jeff-aporta/iswc-base/core/highlight-code.js';
+import { paint } from '@jeff-aporta/iswc-base/core/code.js';
 import { SKILL_DOCS } from './utils/llm-agent-prompt.js';
 import type { SkillDoc } from "./schemas/llm-agent-prompt.schemas.js";
 import '@jeff-aporta/iswc-base/components/code/code.js';

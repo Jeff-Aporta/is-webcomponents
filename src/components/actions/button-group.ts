@@ -1,7 +1,5 @@
-import { emit, upgradeProperties } from '@jeff-aporta/iswc-base/core/element.js';
-import { setStringAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
-import { withStyleAttrs } from '@jeff-aporta/iswc-base/core/attrs.js';
-import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import { emit, upgradeProperties, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import { setStringAttr, withStyleAttrs } from '@jeff-aporta/iswc-base/core/attrs.js';
 import css from 'iswc:css';
 
 

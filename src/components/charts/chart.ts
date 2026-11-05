@@ -1,14 +1,12 @@
-import { emit } from '@jeff-aporta/iswc-base/core/element.js';
-import { withStyleAttrs } from '@jeff-aporta/iswc-base/core/attrs.js';
+import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import { withStyleAttrs, setStringAttr } from '@jeff-aporta/iswc-base/core/attrs.js';
 
 import { scaleLinear, scaleBand, niceTicks, svgEl } from '@jeff-aporta/iswc-base/core/svg-chart-engine.js';
 import { getCategoricalColors, getFillColors, getStatusColor, resolveColor, withAlpha } from './utils/chart-palette.js';
-import { findThemeContainer, readTheme } from '@jeff-aporta/iswc-base/core/theme-scope.js';
+import { findThemeContainer, readTheme } from '@jeff-aporta/iswc-base/core/dom.js';
 import { PathTurtle } from '@jeff-aporta/iswc-base/core/path-turtle.js';
 import { registerDiagramKind } from '@jeff-aporta/iswc-base/components/diagrams/utils/diagram-kinds.js';
-import { setStringAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
 import type { TypedChartFactory, ChartDataPoint, ChartDataset, ChartConfig, LegendEntry, HitRecord, ResolvedOptions, ChartCtx } from "./schemas/chart.schemas.js";
-import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import css from 'iswc:css';
 
 /**

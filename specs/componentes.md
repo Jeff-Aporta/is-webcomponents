@@ -38,7 +38,7 @@ Cada tag es un Custom Element con Shadow DOM. El inventario y rutas de build sal
   ```
 
   Nada de `adoptCss(…, import.meta.url)`, `<link>` al `.css` hermano ni `static get observedAttributes` a mano (guardián `tests/gobernanza/molde-iswc-element.test.ts`). Las hojas adoptadas sobreviven a `shadow.innerHTML = …`. `static deps` solo para hijos que el padre pinta sin usar su API síncrona; si el padre necesita una clase o un helper del hijo, `import` normal. En Deno sin build, `iswc:css` resuelve a `''` (`deno.json` → `core/iswc-css-vacio.ts`); `scripts/serve.mjs` lo sirve desde `.tmp-scss`.
-- Hojas base (`host-base`, `scrollbars`): las adopta el molde desde `core/base-sheets.ts` (`iswc:css/host-base`, `iswc:css/scrollbars`), compartidas por toda la página.
+- Hojas base (`host-base`, `scrollbars`): las adopta el molde desde `core/iswc-element.ts` (`iswc:css/host-base`, `iswc:css/scrollbars`), compartidas por toda la página.
 - Escala: preferir `em` / `font-size` en controles; no `size=` legacy, no `size` colors. Las bases se derivan de `import.meta.url`, no de `location.pathname`.
 
 ## S-K3 Enums y eventos

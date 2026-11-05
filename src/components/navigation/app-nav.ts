@@ -1,7 +1,6 @@
-import { emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import { setCustomState } from '@jeff-aporta/iswc-base/core/form-associated.js';
 import type { AppNavRow } from './schemas/app-nav.schemas.js';
-import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import css from 'iswc:css';
 
 /**

@@ -1,5 +1,5 @@
 import { parseDate, timeScale, packLanes } from './lane-layout.js';
-import { resolveTkHue, SERIE_HUES } from '@jeff-aporta/iswc-base/core/tk-hue.js';
+import { resolveTkHue, SERIE_HUES } from '@jeff-aporta/iswc-base/core/color.js';
 import type { TimelineOrientation, TimelineEventSpec, TimelineGroupSpec, TimelineResolvedSpec, TimelineLayoutEvent, TimelineTick, TimelineLayout, TimelineLayoutOptions, CompressedScale } from "@jeff-aporta/iswc-base/components/diagrams/schemas/timeline-spec.schemas.js";
 
 /**

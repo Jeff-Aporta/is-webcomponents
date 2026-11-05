@@ -30,7 +30,7 @@ test('componentes/code-theme-native', async () => {
   // scripts/highlight-pre.js es solo el arranque en las paginas del docs.
   // El contrato se verifica sobre los dos juntos + el motor en code.ts.
   const highlight = [
-    await readFile(join(root, 'src', 'core', 'highlight-code.ts'), 'utf8'),
+    await readFile(join(root, 'src', 'core', 'code.ts'), 'utf8'),
     await readFile(join(root, 'scripts', 'highlight-pre.js'), 'utf8'),
   ].join(String.fromCharCode(10));
   const isCode = await readFile(join(root, 'src', 'components', 'code', 'code.ts'), 'utf8');
@@ -79,7 +79,7 @@ test('componentes/code-theme-native', async () => {
   check(/emit\(this,\s*['"]iswc-theme-change['"]/.test(themeToggle),
     'theme-toggle.ts: debe emitir iswc-theme-change (llega a document por bubbles+composed)');
   
-  // `emit()` de core/element.ts aplica bubbles+composed por defecto, así que
+  // `emit()` de core/iswc-element.ts aplica bubbles+composed por defecto, así que
   // tanto el literal como el helper valen.
   check(/composed:\s*true/.test(themeToggle) || /emit\(this,\s*['"]iswc-theme-change['"]/.test(themeToggle),
     'theme-toggle.ts: el evento debe salir con composed: true (literal o vía emit())');

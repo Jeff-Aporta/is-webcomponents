@@ -11,5 +11,5 @@ export const AliasKitOptionsSchema = z.object({
 });
 export type AliasKitOptions = z.infer<typeof AliasKitOptionsSchema>;
 
-/** Traduce la ruta bajo el alias (`core/element.js`) al especificador final, o null para dejarlo igual. */
+/** Traduce la ruta bajo el alias (`core/iswc-element.js`) al especificador final, o null para dejarlo igual. */
 export type MapeoAlias = (ruta: string) => string | null;

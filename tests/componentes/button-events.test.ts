@@ -28,7 +28,7 @@ const EVENTOS = ['iswc-focus', 'iswc-blur', 'iswc-click', 'iswc-invalid'];
 test('cada evento documentado se emite de verdad', () => {
   for (const ev of EVENTOS) {
     assert.ok(
-      // `emit(this, ...)` de core/element.ts sustituyó al antiguo `#emit(...)`
+      // `emit(this, ...)` de core/iswc-element.ts sustituyó al antiguo `#emit(...)`
       // privado; se aceptan ambas formas.
       new RegExp(`(?:#emit|emit)\\(\\s*(?:this,\\s*)?["']${ev}["']`).test(src),
       `${ev} aparece en la documentacion pero no hay ningun emit(this, "${ev}")`,

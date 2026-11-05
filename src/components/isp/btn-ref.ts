@@ -1,4 +1,4 @@
-import { emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import {
   attachFormInternals, setFormValue, setValidity, clearValidity,
 } from '@jeff-aporta/iswc-base/core/form-associated.js';
@@ -14,7 +14,6 @@ import {
 /** Columna y datos arbitrarios que devuelve el controller. */
 import { _RecordLikeSchema, type _RecordLike } from "./schemas/btn-ref.schemas.js";
 import type { _CatalogLike, _FieldLike, _DialogLike, _CatalogEl } from "./schemas/btn-ref.schemas.js";
-import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import css from 'iswc:css';
 
 /** Input field con attrs custom (label/name/value/etc.). */

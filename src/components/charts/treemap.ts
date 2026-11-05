@@ -1,15 +1,14 @@
-import { emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import { svgEl } from '@jeff-aporta/iswc-base/core/svg-chart-engine.js';
 import { resolveTreemapSpec, computeTreemapLayout } from './utils/treemap-spec.js';
 import type { TreemapSpec, TreemapLayout } from "./schemas/treemap-spec.schemas.js";
 import type { DiagramTheme } from "@jeff-aporta/iswc-base/components/diagrams/schemas/diagram-types.schemas.js";
-import { tkHueToCss } from '@jeff-aporta/iswc-base/core/tk-hue.js';
+import { tkHueToCss } from '@jeff-aporta/iswc-base/core/color.js';
 import { fontOn } from './utils/chart-palette.js';
 import { paletteTheme } from '@jeff-aporta/iswc-base/components/diagrams/utils/diagram-palette.js';
-import { findThemeContainer, readTheme } from '@jeff-aporta/iswc-base/core/theme-scope.js';
+import { findThemeContainer, readTheme } from '@jeff-aporta/iswc-base/core/dom.js';
 import { inlineMdWeb } from '@jeff-aporta/iswc-base/core/tk-inline-md.js';
 import { registerDiagramKind } from '@jeff-aporta/iswc-base/components/diagrams/utils/diagram-kinds.js';
-import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import css from 'iswc:css';
 
 /**

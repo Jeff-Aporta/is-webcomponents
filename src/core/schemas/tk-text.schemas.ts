@@ -4,7 +4,7 @@
  * Generado por `scripts/migrate-zod.py`. Refinar manualmente las
  * entradas marcadas con TODO cuando se quiera validación runtime.
  */
-import { z } from "zod";
+import { z } from 'zod';
 
 const ResolvedIconTokenSchema = z.object({
   iconId: z.string(),
@@ -77,3 +77,16 @@ export type LeadingIcon = z.infer<typeof LeadingIconSchema>;
  * (la lee `svgIconsReady`). Clave `Symbol.for` y no un WeakMap: cada bundle inlinea su copia del módulo.
  */
 export type SvgIconConPromesa = SVGGElement & { [clave: symbol]: Promise<void> | undefined };
+
+// ── tk-rich-text.schemas ──
+/**
+ * tk-rich-text.ts — Zod schemas para los tipos extraídos de este módulo.
+ *
+ * Generado por `scripts/migrate-zod.py`. Refinar manualmente las
+ * entradas marcadas con TODO cuando se quiera validación runtime.
+ */
+const RichTextSegmentSchema = z.object({
+  type: z.union([z.literal('html'), z.literal('text')]),
+  value: z.string(),
+});
+export type RichTextSegment = z.infer<typeof RichTextSegmentSchema>;

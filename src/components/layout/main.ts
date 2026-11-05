@@ -20,7 +20,7 @@ import {
   SCROLL_MEMORY_ATTRS,
   ScrollMemory,
   bindScrollMemoryApi,
-} from '@jeff-aporta/iswc-base/core/scroll-memory.js';
+} from '@jeff-aporta/iswc-base/core/prefs.js';
 import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 
 (() => {

@@ -136,7 +136,7 @@ Usa los tokens del kit (`--iswc-text`, `--iswc-text-dim`, `--iswc-border`, `--is
 ## Dependencias y componentes relacionados
 
 `iswc-doc-layout`, `iswc-doc-index`, `iswc-sequence-diagram`, `iswc-code`, `iswc-tag`, `iswc-pager`,
-`iswc-input`, `iswc-dialog`, `iswc-copy-button`, `iswc-button-group`, `iswc-callout`; `core/spa-state`
+`iswc-input`, `iswc-dialog`, `iswc-copy-button`, `iswc-button-group`, `iswc-callout`; `components/layout/utils/spa-state`
 para la URL. Dominio puro y schema estricto en `server-api-docs-md.ts` / `server-api-docs-md.schemas.ts`
 (ver `server-api-docs-md.md`).
 

@@ -14,8 +14,8 @@ const { test, lista } = coleccionPruebas({ categoria: 'what' });
 
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
-const hl = await import(pathToFileURL(join(root, 'src/core/highlight-code.ts')).href);
-const ct = await import(pathToFileURL(join(root, 'src/core/code-text.ts')).href);
+const hl = await import(pathToFileURL(join(root, 'src/core/code.ts')).href);
+const ct = await import(pathToFileURL(join(root, 'src/core/code.ts')).href);
 
 test('soft-format: unwrapHandHighlight quita el coloreado a mano de la migración', () => {
   const dirty = '<span class="tag"><button</span> <span class="attr">part</span>=<span class="val">"button"</span><span class="tag">></span>';
@@ -73,7 +73,7 @@ test('soft-format: el highlighter vigila el DOM: nada se queda sin colorear', ()
   assert.equal(typeof hl.watchDom, 'function', 'falta watchDom');
   assert.equal(typeof hl.repaint, 'function', 'falta repaint');
 
-  const src = readFileSync(join(root, 'src/core/highlight-code.ts'), 'utf8');
+  const src = readFileSync(join(root, 'src/core/code.ts'), 'utf8');
   // Tras migrar a <iswc-code>, el criterio de “contenido cambió” es value.
   // (la variable local puede llamarse el / ed tras castear a CodeEditor).
   assert.match(src, /\b(\w+)\.value\s*!==\s*\1\.dataset\.cmSource/);

@@ -29,7 +29,7 @@ Los especificadores llevan **`.js`, siempre**, aunque en disco el fichero sea
 `.ts`:
 
 ```ts
-import { adoptCss } from '@jeff-aporta/iswc-base/core/element.js';   // el fichero es src/core/element.ts
+import { adoptCss } from '@jeff-aporta/iswc-base/core/iswc-element.js';   // el fichero es src/core/iswc-element.ts
 ```
 
 Es lo que exige `allowImportingTsExtensions: false`, y es la convención de
@@ -49,7 +49,7 @@ apuntan a artefactos publicados y por tanto son `.js` de verdad.
 ## S-TS2b Alias `@jeff-aporta/iswc-base/<ruta>` entre carpetas
 
 **WHAT.** En `src/**` todo import que sale de la carpeta del archivo hacia otra carpeta del kit va por el alias, con
-la ruta desde `src/` y la extensión `.js` de S-TS2: `'@jeff-aporta/iswc-base/core/element.js'`, nunca
+la ruta desde `src/` y la extensión `.js` de S-TS2: `'@jeff-aporta/iswc-base/core/iswc-element.js'`, nunca
 `'../../core/element.js'`. Los imports de la misma carpeta o de sus subcarpetas siguen relativos (`./x.js`,
 `./schemas/x.schemas.js`, `./utils/x.js`).
 

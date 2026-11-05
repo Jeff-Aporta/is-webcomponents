@@ -1,6 +1,6 @@
 import { buildTree, squarify } from '@jeff-aporta/iswc-base/core/tree-layout.js';
-import { richTextPlain } from '@jeff-aporta/iswc-base/core/tk-rich-text.js';
-import { resolveTkHue, SERIE_HUES } from '@jeff-aporta/iswc-base/core/tk-hue.js';
+import { richTextPlain } from '@jeff-aporta/iswc-base/core/tk-text.js';
+import { resolveTkHue, SERIE_HUES } from '@jeff-aporta/iswc-base/core/color.js';
 import type { TreeNode } from '@jeff-aporta/iswc-base/core/schemas/tree-layout.schemas.js';
 import type { Rect, SpecNode, TreemapSpec, TreemapLayout, TreemapLayoutNode, TreemapLayoutOpts } from "@jeff-aporta/iswc-base/components/charts/schemas/treemap-spec.schemas.js";
 

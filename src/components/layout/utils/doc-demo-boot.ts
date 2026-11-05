@@ -9,7 +9,7 @@
  */
 
 import type { DocDemoBootOpts } from "@jeff-aporta/iswc-base/components/layout/schemas/doc-demo-boot.schemas.js";
-import { leerAppCfg } from "@jeff-aporta/iswc-base/core/app-cfg.js";
+import { leerAppCfg } from "@jeff-aporta/iswc-base/core/app-init.js";
 import { DEFAULT_PALETTE, PALETTES as CATALOGO } from "@jeff-aporta/iswc-base/styles/palette-build.js";
 export function applyDocDemoBoot(opts: DocDemoBootOpts = {}): void {
   const defaultTheme = opts.defaultTheme || 'dark';

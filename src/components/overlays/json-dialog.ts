@@ -1,11 +1,10 @@
-import { emit } from '@jeff-aporta/iswc-base/core/element.js';
-import { crearNodo } from '@jeff-aporta/iswc-base/core/dom-utils.js';
+import { emit, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import { crearNodo } from '@jeff-aporta/iswc-base/core/dom.js';
 import { atributosDe, PropsElement } from '@jeff-aporta/iswc-base/core/props-element.js';
 import { JsonDialogPropsSchema, JsonValidacionSchema } from './schemas/json-dialog.schemas.js';
 import type { JsonBotonEl, JsonDialogoEl, JsonDialogProps, JsonEditorEl, JsonValidacion } from './schemas/json-dialog.schemas.js';
 import '@jeff-aporta/iswc-base/components/layout/dialog.js';
 import '@jeff-aporta/iswc-base/components/code/code.js';
-import { define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import css from 'iswc:css';
 
 /**

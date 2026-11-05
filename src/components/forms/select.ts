@@ -1,5 +1,5 @@
 import { placementHaciaCentro } from '@jeff-aporta/iswc-base/core/position.js';
-import { emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import './option.js';
 
 import {
@@ -9,8 +9,7 @@ import {
   setFormValue,
   setValidity,
 } from '@jeff-aporta/iswc-base/core/form-associated.js';
-import { setStringAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
-import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import { setStringAttr } from '@jeff-aporta/iswc-base/core/attrs.js';
 import css from 'iswc:css';
 /**
  * <iswc-select> — Select form-associated con listbox en <dialog modal> (top layer),

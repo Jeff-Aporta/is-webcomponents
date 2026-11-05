@@ -1,4 +1,4 @@
-import { emit, emitCancelable } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit, emitCancelable, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import { DiagramElementBase } from './utils/diagram-element-base.js';
 import { resolveGanttSpec, computeGanttLayout } from './utils/gantt-spec.js';
 import type { GanttLayout, GanttSpec } from './schemas/gantt-spec.schemas.js';
@@ -6,7 +6,7 @@ import type { GanttLayout, GanttSpec } from './schemas/gantt-spec.schemas.js';
 // redefinimos localmente para no tocar la firma del spec.
 import { shapePath } from './utils/flowchart-spec.js';
 import { PathTurtle } from '@jeff-aporta/iswc-base/core/path-turtle.js';
-import { tkHueToHex } from '@jeff-aporta/iswc-base/core/tk-hue.js';
+import { tkHueToHex } from '@jeff-aporta/iswc-base/core/color.js';
 import type { DiagramTheme } from './schemas/diagram-types.schemas.js';
 import { inlineMdWeb } from '@jeff-aporta/iswc-base/core/tk-inline-md.js';
 import { wrapText, buildTspans } from './utils/diagram-text-wrap.js';
@@ -15,7 +15,6 @@ import { registerDiagramKind } from './utils/diagram-kinds.js';
 import { svgEl } from '@jeff-aporta/iswc-base/core/svg-chart-engine.js';
 import { svgArrowHead } from './utils/diagram-arrow.js';
 import type { GanttRow, GanttArrow, GanttTick, TurtleState, RowNodeEntry, ArrowNodeEntry } from "./schemas/gantt.schemas.js";
-import { define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import css from 'iswc:css';
 
 /**

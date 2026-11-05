@@ -1,10 +1,9 @@
-import { emit } from '@jeff-aporta/iswc-base/core/element.js';
-import { crearNodo } from '@jeff-aporta/iswc-base/core/dom-utils.js';
+import { emit, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import { crearNodo } from '@jeff-aporta/iswc-base/core/dom.js';
 import { atributosDe, PropsElement } from '@jeff-aporta/iswc-base/core/props-element.js';
 import { TenantSelectorPropsSchema } from './schemas/tenant-selector.schemas.js';
 import type { TenantChangeDetail, TenantSelectEl, TenantSelectorProps } from './schemas/tenant-selector.schemas.js';
 import './select.js';
-import { define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import css from 'iswc:css';
 
 /**

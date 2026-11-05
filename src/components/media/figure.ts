@@ -1,8 +1,7 @@
-import { emitCancelable } from '@jeff-aporta/iswc-base/core/element.js';
-import { setStringAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
+import { emitCancelable, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import { setStringAttr } from '@jeff-aporta/iswc-base/core/attrs.js';
 import type { FigureFit, FigureOpenDetail, FigureVariant } from './schemas/figure.schemas.js';
 import './theme-img.js';
-import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import css from 'iswc:css';
 
 /**

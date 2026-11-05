@@ -1,10 +1,9 @@
-import { emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import {
   getComponentPrefs,
   removeComponentPrefs,
   setComponentPrefs,
 } from '@jeff-aporta/iswc-base/core/prefs.js';
-import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import css from 'iswc:css';
 
 /**

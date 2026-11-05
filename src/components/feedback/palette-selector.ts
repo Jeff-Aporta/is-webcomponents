@@ -1,10 +1,8 @@
-import { computePosition } from '@jeff-aporta/iswc-base/core/position.js';
-import { guardarAppCfg, leerAppCfg } from '@jeff-aporta/iswc-base/core/app-cfg.js';
-import { emit } from '@jeff-aporta/iswc-base/core/element.js';
-import { createPopupDismiss } from '@jeff-aporta/iswc-base/core/popup-dismiss.js';
+import { computePosition, createPopupDismiss } from '@jeff-aporta/iswc-base/core/position.js';
+import { guardarAppCfg, leerAppCfg } from '@jeff-aporta/iswc-base/core/app-init.js';
+import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import { PALETTES, PALETTE_FAMILIES, paletteSeeds } from '@jeff-aporta/iswc-base/styles/palette-build.js';
 import type { Palette, PaletteCruda } from "./schemas/palette-selector.schemas.js";
-import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import css from 'iswc:css';
 
 /**
@@ -27,7 +25,7 @@ import css from 'iswc:css';
  *   aria-label    etiqueta del trigger (default "Elegir paleta").
  *
  * Persistencia: con scope=root la elección queda en la config de la app
- * (`iswc:app-cfg` → `palette` y `panda`, ver core/app-cfg.ts). closest no persiste.
+ * (`iswc:app-cfg` → `palette` y `panda`, ver core/app-init.ts). closest no persiste.
  *
  * Slots
  *   trigger       sustituye el botón interno por HTML del consumidor.

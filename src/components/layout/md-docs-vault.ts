@@ -1,5 +1,5 @@
-import { createSpaState } from '@jeff-aporta/iswc-base/core/spa-state.js';
-import type { EstadoSpa, SpaState } from '@jeff-aporta/iswc-base/core/schemas/spa-state.schemas.js';
+import { createSpaState } from '@jeff-aporta/iswc-base/components/layout/utils/spa-state.js';
+import type { EstadoSpa, SpaState } from '@jeff-aporta/iswc-base/components/layout/schemas/spa-state.schemas.js';
 // Solo tipos: el schema Zod (`MdDocsVaultListaSchema`) queda para tests y consumidores; en el bundle
 // del CDN sumaría ~330 KB al lector, así que la lista se valida aquí con un guard equivalente.
 import type {

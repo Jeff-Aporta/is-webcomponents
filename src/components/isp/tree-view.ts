@@ -1,4 +1,4 @@
-import { emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import '@jeff-aporta/iswc-base/components/actions/button-group.js';
 import '@jeff-aporta/iswc-base/components/actions/check-icon-button.js';
 import '@jeff-aporta/iswc-base/components/actions/dropdown.js';
@@ -12,7 +12,6 @@ import { TreeRowViewAdapter } from './utils/tree-view/adapter.js';
 import { paintForest } from './utils/tree-view/render-rows.js';
 import type { TNode, TRecord, TreeActionEntry, TreeCustoms } from './schemas/tree-view-types.schemas.js';
 import type { _AdapterLike, _DrawerLike, _ModalDeleteLike, _DialogLike } from "./schemas/tree-view.schemas.js";
-import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import css from 'iswc:css';
 
 /** Subset del adapter que `IswcTreeView` consume (no necesita el tipo completo). */

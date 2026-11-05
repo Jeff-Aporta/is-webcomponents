@@ -1,5 +1,5 @@
 import { BreakpointHost } from './block-layout.js';
-import { setStringAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
+import { setStringAttr } from '@jeff-aporta/iswc-base/core/attrs.js';
 import { define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import css from 'iswc:css';
 

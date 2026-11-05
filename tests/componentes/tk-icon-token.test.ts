@@ -5,7 +5,7 @@ import {
   iconInlineHtmlWeb,
   resolveIconToken,
   splitIconRuns,
-} from '../../src/core/tk-icon-inline.ts';
+} from '../../src/core/tk-text.ts';
 import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
 
 const { test, lista } = coleccionPruebas({ categoria: 'what' });

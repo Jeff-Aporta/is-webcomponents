@@ -1,9 +1,8 @@
-import { emit, upgradeProperties } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit, upgradeProperties, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import { withStyleAttrs } from '@jeff-aporta/iswc-base/core/attrs.js';
 
 import { getComponentPrefs, setComponentPrefs } from '@jeff-aporta/iswc-base/core/prefs.js';
-import { clampTo } from '@jeff-aporta/iswc-base/core/misc-utils.js';
-import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import { clampTo } from '@jeff-aporta/iswc-base/core/dom.js';
 import css from 'iswc:css';
 
 /**

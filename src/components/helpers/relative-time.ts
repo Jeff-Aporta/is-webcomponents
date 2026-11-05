@@ -1,4 +1,4 @@
-import { setStringAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
+import { setStringAttr } from '@jeff-aporta/iswc-base/core/attrs.js';
 import { resolveLocale } from '@jeff-aporta/iswc-base/core/resolve-locale.js';
 import { parseLooseDate } from './format-date.js';
 import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';

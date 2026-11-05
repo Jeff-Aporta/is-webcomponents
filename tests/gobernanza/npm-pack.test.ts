@@ -87,7 +87,7 @@ const RESOLUCIONES: Record<string, string> = {
   'loader.min.mjs': 'loader.min.mjs',
   'core/loader': 'core/loader.min.mjs',
   'core/loader.min.mjs': 'core/loader.min.mjs',
-  'core/app-cfg': 'core/app-cfg.min.mjs',
+  'core/app-init': 'core/app-init.min.mjs',
   'actions/button': 'actions/button.min.mjs',
   'actions/button.min.mjs': 'actions/button.min.mjs',
   'actions/button.min.css': 'actions/button.min.css',

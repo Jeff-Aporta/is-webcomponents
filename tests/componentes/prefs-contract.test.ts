@@ -33,7 +33,8 @@ test('componentes/prefs-contract', async () => {
   const agGridPath = join(root, 'src', 'components', 'data', 'ag-grid.ts');
   const agGridMdPath = join(root, 'src', 'components', 'data', 'ag-grid.md');
   const mainPath = join(root, 'src', 'components', 'layout', 'main.ts');
-  const scrollMemoryPath = join(root, 'src', 'core', 'scroll-memory.ts');
+  // F9a: scroll-memory vive en core/prefs.ts (misma familia de almacenamiento).
+  const scrollMemoryPath = join(root, 'src', 'core', 'prefs.ts');
   const splitPath = join(root, 'src', 'components', 'layout', 'split-panel.ts');
   // Consolidación 2026-09-07: data/LLM.md y components/LLM.md eliminados.
   // El catálogo de componentes vive ahora en specs/componentes.md (índice
@@ -48,7 +49,6 @@ test('componentes/prefs-contract', async () => {
   const prefs = readFileSync(prefsPath, 'utf8');
   const agGrid = readFileSync(agGridPath, 'utf8');
   const mainSrc = readFileSync(mainPath, 'utf8');
-  const scrollMemorySrc = readFileSync(scrollMemoryPath, 'utf8');
   const splitSrc = readFileSync(splitPath, 'utf8');
 
   // ── 1. prefs.ts: raíz y API ─────────────────────────────────────────────
@@ -81,7 +81,6 @@ test('componentes/prefs-contract', async () => {
   // ── 2. Consumidores importan prefs ──────────────────────────────────────
   for (const [label, src] of [
     ['ag-grid.ts', agGrid],
-    ['scroll-memory.ts', scrollMemorySrc],
     ['split-panel.ts', splitSrc],
   ]) {
     check(
@@ -90,7 +89,7 @@ test('componentes/prefs-contract', async () => {
     );
   }
   check(
-    /from\s+['"][^'"]*scroll-memory\.js['"]/.test(mainSrc),
+    /from\s+['"][^'"]*core\/prefs\.js['"]/.test(mainSrc),
     'main.ts: debe delegar scroll a _shared/scroll-memory.ts',
   );
 

@@ -4,7 +4,7 @@
  * Generado por `scripts/migrate-zod.py`. Refinar manualmente las
  * entradas marcadas con TODO cuando se quiera validación runtime.
  */
-import { z } from "zod";
+import { z } from 'zod';
 
 const Html2JsonOptsSchema = z.object({
   trim: z.boolean().optional(),
@@ -37,4 +37,3 @@ export type VerboseNode = z.infer<typeof VerboseNodeSchema>;
 
 const ElementTupleSchema = z.tuple([z.string(), z.unknown() /* TODO: cannot convert */, z.array(z.unknown() /* TODO: cannot convert */)]);
 export type ElementTuple = z.infer<typeof ElementTupleSchema>;
-

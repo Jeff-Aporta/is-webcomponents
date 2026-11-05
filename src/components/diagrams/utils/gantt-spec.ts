@@ -1,8 +1,8 @@
 import { parseDate, addDuration, timeScale, niceTimeTicks } from './lane-layout.js';
 import { makeCostGrid, blockRect, snapPointAwayFromSide, snapDiagramGrid } from '@jeff-aporta/iswc-base/core/diagram-grid.js';
 import { routeOrthogonal, pixelToGrid, gridPathToSvg, buildOrthogonalPath } from './diagram-astar.js';
-import { richTextPlain } from '@jeff-aporta/iswc-base/core/tk-rich-text.js';
-import { resolveTkHue, SERIE_HUES } from '@jeff-aporta/iswc-base/core/tk-hue.js';
+import { richTextPlain } from '@jeff-aporta/iswc-base/core/tk-text.js';
+import { resolveTkHue, SERIE_HUES } from '@jeff-aporta/iswc-base/core/color.js';
 import type { GanttGroup, GanttTask, GanttSpec, GanttRow, GanttArrow, GanttTick, GanttLayout, GanttOpts } from "@jeff-aporta/iswc-base/components/diagrams/schemas/gantt-spec.schemas.js";
 
 /**

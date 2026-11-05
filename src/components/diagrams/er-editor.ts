@@ -16,7 +16,7 @@
 //   Playwright: smoke + funcional (drag, click-to-connect, undo/redo,
 //     export JSON/SVG) + determinismo (round-trip idéntico).
 //   Stagehand: validación visual (cajas no se solapan, aristas legibles).
-import { emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import { serializeErPayload, renderErSvg as renderErSvgString } from './utils/er-archify.js';
 import type { ErEditorState, ErSpec, ErSpecAttribute, ErSpecEntity, ErSpecRelation, EdgeStyleOverride } from "./schemas/diagram-types.schemas.js";
 import '@jeff-aporta/iswc-base/components/actions/context-menu.js';
@@ -25,7 +25,6 @@ import { createPanZoom } from './utils/pan-zoom.js';
 import { type PanZoomController } from './schemas/pan-zoom.schemas.js';
 import type { DiagramElementBase } from './utils/diagram-element-base.js';
 import { snapDiagramGrid } from '@jeff-aporta/iswc-base/core/diagram-grid.js';
-import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import css from 'iswc:css';
 
 const HISTORY_LIMIT = 200;

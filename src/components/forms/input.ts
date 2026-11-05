@@ -1,12 +1,11 @@
-import { emit, upgradeProperties } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit, upgradeProperties, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import {
   attachFormInternals, setCustomState, setFormValue, setValidity, clearValidity
 } from '@jeff-aporta/iswc-base/core/form-associated.js';
 import '@jeff-aporta/iswc-base/components/actions/check-icon-button.js';
 import { isOtpAutocomplete, listenWebOtp } from './utils/web-otp.js';
-import { setStringAttr, setOptionalAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
-import { hasSlotted } from '@jeff-aporta/iswc-base/core/dom-utils.js';
-import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import { setStringAttr, setOptionalAttr } from '@jeff-aporta/iswc-base/core/attrs.js';
+import { hasSlotted } from '@jeff-aporta/iswc-base/core/dom.js';
 import css from 'iswc:css';
 /**
  * <iswc-input> — Campo de texto form-associated (vanilla + Shadow DOM).

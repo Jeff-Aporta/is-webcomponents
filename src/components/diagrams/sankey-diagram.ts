@@ -1,15 +1,14 @@
-import { emit, emitCancelable } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit, emitCancelable, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import { DiagramElementBase } from './utils/diagram-element-base.js';
 import { resolveSankeySpec, computeSankeyLayout } from './utils/sankey-spec.js';
 import type { DiagramTheme } from './schemas/diagram-types.schemas.js';
-import { tkHueToHex } from '@jeff-aporta/iswc-base/core/tk-hue.js';
+import { tkHueToHex } from '@jeff-aporta/iswc-base/core/color.js';
 import { inlineMdWeb, applySvgTextContent } from '@jeff-aporta/iswc-base/core/tk-inline-md.js';
 import { wrapText, buildTspans } from './utils/diagram-text-wrap.js';
 import { registerDiagramKind } from './utils/diagram-kinds.js';
 import { svgEl } from '@jeff-aporta/iswc-base/core/svg-chart-engine.js';
 import type { SankeyLayout } from "./schemas/sankey-spec.schemas.js";
 import type { NodeEntry, LinkEntry } from "./schemas/sankey-diagram.schemas.js";
-import { define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import css from 'iswc:css';
 
 /**

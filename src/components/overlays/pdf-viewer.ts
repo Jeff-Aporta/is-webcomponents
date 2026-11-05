@@ -1,11 +1,10 @@
-import { emit } from '@jeff-aporta/iswc-base/core/element.js';
-import { setOptionalAttr, setStringAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
+import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import { setOptionalAttr, setStringAttr } from '@jeff-aporta/iswc-base/core/attrs.js';
 import {
   blobUrlFromBuffer,
   loadArrayBuffer,
   resolveFileSource,
 } from '@jeff-aporta/iswc-base/components/files/utils/file-source.js';
-import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import css from 'iswc:css';
 
 /**

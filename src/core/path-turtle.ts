@@ -1,5 +1,4 @@
-import { tkHueToHex } from './tk-hue.js';
-import { contrastFontColor } from './tk-color.js';
+import { tkHueToHex, contrastFontColor } from './color.js';
 import { inlineMdWeb } from './tk-inline-md.js';
 import { svgEl } from './svg-chart-engine.js';
 import type { TurtleMessage, TurtleTheme, TurtleState, TurtleReport, TurtleDataOpts, TurtleMeasure } from "./schemas/path-turtle.schemas.js";

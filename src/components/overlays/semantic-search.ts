@@ -1,4 +1,4 @@
-import { crearNodo } from '@jeff-aporta/iswc-base/core/dom-utils.js';
+import { crearNodo } from '@jeff-aporta/iswc-base/core/dom.js';
 import { atributosDe, PropsElement } from '@jeff-aporta/iswc-base/core/props-element.js';
 import { SemanticSearchPropsSchema } from './schemas/semantic-search.schemas.js';
 import type { SemanticComando, SemanticPaletaEl, SemanticSearchProps } from './schemas/semantic-search.schemas.js';

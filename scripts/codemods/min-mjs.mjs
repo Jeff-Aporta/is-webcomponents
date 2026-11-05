@@ -5,7 +5,7 @@
 // Reescribe `<nombre>.min.js` → `<nombre>.min.mjs` cuando `<nombre>` es un módulo publicado del kit (componentes y
 // módulos de src/components, src/core, el loader, lib, src/ai y sus motores, los compañeros de doc-demo) en
 // src/**, scripts/**, skills/**, tests/**, specs/**, README.md, AGENTS.md, index.html, demos/** y labs/**.
-// `_shared/base-sheets.min.js` (carpeta retirada) pasa a `core/base-sheets.min.mjs`.
+// `_shared/base-sheets.min.js` (carpeta retirada) pasa a `core/iswc-element.min.mjs`.
 //
 // No se toca (NO_KIT / línea de compat):
 //   - lo que no es del kit: vendor de terceros (`/npm/`, cdnjs, unpkg, esm.sh), `x.preview.min.js`, nombres que
@@ -87,7 +87,7 @@ function reescribir(texto, nombres) {
     return linea.replace(PATRON, (entero, prefijo, nombre) => {
       if (prefijo.endsWith('_shared/') && nombre === 'base-sheets') {
         n++;
-        return `${prefijo.slice(0, -'_shared/'.length)}core/base-sheets.min.mjs`;
+        return `${prefijo.slice(0, -'_shared/'.length)}core/iswc-element.min.mjs`;
       }
       if (!esDelKit(prefijo, nombre, nombres)) { saltados.push(entero); return entero; }
       if (nombre === 'loader' && LINEA_COMPAT.test(linea)) { saltados.push(entero); return entero; }

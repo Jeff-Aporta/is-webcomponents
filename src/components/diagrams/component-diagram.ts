@@ -1,16 +1,16 @@
-import { emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import { DiagramElementBase } from './utils/diagram-element-base.js';
 import { animarRielEn, flujoActivo, pulsoRadar } from './utils/diagram-flow.js';
 import { resolveComponentSpec, computeComponentLayout, packageShapePath, LOLLI_R, HTTP_METHOD_BADGE, CARD_TEXT_X, CARD_STEREO_DY } from './utils/component-spec.js';
 import type { ComponentLayout } from './schemas/component-spec.schemas.js';
-import { tkHueToHex } from '@jeff-aporta/iswc-base/core/tk-hue.js';
+import { tkHueToHex } from '@jeff-aporta/iswc-base/core/color.js';
 import {
   edgeStrokeHex, edgeChipFill, edgeChipText, hexMixWhite, RECEIVER_COLOR,
 } from './utils/diagram-edge-style.js';
 import type { DiagramTheme } from './schemas/diagram-types.schemas.js';
 import { registerDiagramKind } from './utils/diagram-kinds.js';
 import { svgEl } from '@jeff-aporta/iswc-base/core/svg-chart-engine.js';
-import { svgIconGroup, svgIconBadge } from '@jeff-aporta/iswc-base/core/tk-icon-inline.js';
+import { svgIconGroup, svgIconBadge } from '@jeff-aporta/iswc-base/core/tk-text.js';
 import { svgArrowHead, pathEndDirection } from './utils/diagram-arrow.js';
 import type { Caja, Lado, Paquete } from './schemas/diagram-tipos.schemas.js';
 import { resolveErTheme, pickThemeMode, themeToDiagramTheme, clusterPalette, componentBoxPaint, edgePaint, injectThemeCss } from './utils/theme.js';
@@ -20,7 +20,6 @@ import { edgeStyleFor } from './utils/diagram-vocab.js';
 import { styledEdgePath } from './utils/diagram-curve.js';
 
 import type { InterfaceStemPoint, LayoutPackage, AnchorPoint } from "./schemas/component-diagram.schemas.js";
-import { define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import css from 'iswc:css';
 
 /**

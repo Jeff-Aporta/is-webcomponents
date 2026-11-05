@@ -1,4 +1,4 @@
-import { emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import { parseWorkbookDoc } from './schemas/spreadsheet.schemas.js';
 import type { CellStyle, ChartDef, MacroDef, SpreadsheetChangeDetail, SpreadsheetSelectDetail, WorkbookDoc } from './schemas/spreadsheet.schemas.js';
 import { cellName, colName, inRect, normalize, parseCell, parseRange, quoteSheet, rangeName } from './utils/spreadsheet/address.js';
@@ -37,7 +37,6 @@ import '@jeff-aporta/iswc-base/components/forms/textarea.js';
 import '@jeff-aporta/iswc-base/components/layout/dialog.js';
 import '@jeff-aporta/iswc-base/components/navigation/tab-group.js';
 import type { Selection, Edit, Pointing, Drag, Clip, ValueEl } from './spreadsheet.schemas.js';
-import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import css from 'iswc:css';
 
 /**

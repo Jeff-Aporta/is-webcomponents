@@ -1,8 +1,6 @@
-import { upgradeProperties } from '@jeff-aporta/iswc-base/core/element.js';
-import { withStyleAttrs } from '@jeff-aporta/iswc-base/core/attrs.js';
+import { upgradeProperties, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import { withStyleAttrs, TONE } from '@jeff-aporta/iswc-base/core/attrs.js';
 
-import { TONE } from '@jeff-aporta/iswc-base/core/tone.js';
-import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import css from 'iswc:css';
 
 /**

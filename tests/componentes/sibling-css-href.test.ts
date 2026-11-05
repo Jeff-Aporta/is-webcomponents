@@ -24,8 +24,11 @@ test('componentes/sibling-css-href', async () => {
   
   // El core es TypeScript: un `.mjs` no lo importa directo. Se prueba el
   // artefacto publicado, que ademas es lo que consumen los componentes.
+  // Desde F9a siblingCssHref vive con el molde (core/iswc-element), que declara `extends HTMLElement`
+  // al cargar: en Deno (sin DOM) basta una clase vacía para evaluar el módulo.
+  (globalThis as { HTMLElement?: unknown }).HTMLElement ??= class {};
   const { siblingCssHref } = await import(
-    pathToFileURL(join(root, 'dist/cdn/core/element.min.mjs')).href
+    pathToFileURL(join(root, 'dist/cdn/core/iswc-element.min.mjs')).href
   );
   
   check(

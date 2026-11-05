@@ -1,12 +1,10 @@
 import './button.js';
-import { withStyleAttrs } from '@jeff-aporta/iswc-base/core/attrs.js';
+import { withStyleAttrs, setStringAttr, setOptionalAttr } from '@jeff-aporta/iswc-base/core/attrs.js';
 
-import { emit, upgradeProperties } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit, upgradeProperties, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import '@jeff-aporta/iswc-base/components/feedback/tooltip.js';
-import { setStringAttr, setOptionalAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
 import { setCustomState } from '@jeff-aporta/iswc-base/core/form-associated.js';
-import { copyText } from '@jeff-aporta/iswc-base/core/dom-utils.js';
-import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import { copyText } from '@jeff-aporta/iswc-base/core/dom.js';
 import css from 'iswc:css';
 
 /**

@@ -1,7 +1,6 @@
-import { emit } from '@jeff-aporta/iswc-base/core/element.js';
-import { escapeHtml } from '@jeff-aporta/iswc-base/core/dom-utils.js';
+import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import { escapeHtml } from '@jeff-aporta/iswc-base/core/dom.js';
 import type { CalEvent, View } from "./schemas/full-calendar.schemas.js";
-import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import css from 'iswc:css';
 
 /**

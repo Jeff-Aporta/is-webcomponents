@@ -39,7 +39,7 @@ test('componentes/no-iconify', async () => {
     // Herramienta de las apps (assets/dl.js): descarga en build, no en runtime.
     'src/vendor-distributions/client/tools/download-iconify.ts',
     // HTML para correo: se abre fuera de la app, sin sus assets.
-    'src/core/tk-icon-inline.ts',
+    'src/core/tk-text.ts',
   ]);
 
   const walk = (dir, out = []) => {

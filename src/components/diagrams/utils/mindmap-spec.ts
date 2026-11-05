@@ -1,7 +1,6 @@
 import { buildTree, layoutTree, layoutRadialTree } from '@jeff-aporta/iswc-base/core/tree-layout.js';
-import { countIconTokens, extractLeadingIconToken } from '@jeff-aporta/iswc-base/core/tk-icon-inline.js';
-import { richTextPlain } from '@jeff-aporta/iswc-base/core/tk-rich-text.js';
-import { resolveTkHue, SERIE_HUES } from '@jeff-aporta/iswc-base/core/tk-hue.js';
+import { countIconTokens, extractLeadingIconToken, richTextPlain } from '@jeff-aporta/iswc-base/core/tk-text.js';
+import { resolveTkHue, SERIE_HUES } from '@jeff-aporta/iswc-base/core/color.js';
 
 import {
   makeCostGrid,

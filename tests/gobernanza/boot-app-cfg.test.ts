@@ -10,7 +10,7 @@
  *   B5 guardado corrupto cae al default sin romper la carga
  */
 import assert from 'node:assert/strict';
-import { APP_CFG_KEY } from '../../src/core/app-cfg.ts';
+import { APP_CFG_KEY } from '../../src/core/app-init.ts';
 import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
 
 const { test, lista } = coleccionPruebas({ categoria: 'how' });

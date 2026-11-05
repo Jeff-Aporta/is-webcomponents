@@ -1,10 +1,9 @@
-import { emit, upgradeProperties } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit, upgradeProperties, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import { setCustomState } from '@jeff-aporta/iswc-base/core/form-associated.js';
 import '@jeff-aporta/iswc-base/components/actions/dropdown.js';
 import '@jeff-aporta/iswc-base/components/actions/dropdown-item.js';
 import './login-dropdown.js';
 import type { LoginChoice } from './schemas/login-dropdown.schemas.js';
-import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import css from 'iswc:css';
 
 /**

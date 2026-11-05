@@ -1,6 +1,5 @@
-import { emit } from '@jeff-aporta/iswc-base/core/element.js';
-import { createPopupDismiss } from '@jeff-aporta/iswc-base/core/popup-dismiss.js';
-import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import { createPopupDismiss } from '@jeff-aporta/iswc-base/core/position.js';
 import css from 'iswc:css';
 
 /**

@@ -1,8 +1,6 @@
-import { emit } from '@jeff-aporta/iswc-base/core/element.js';
-import { computePosition } from '@jeff-aporta/iswc-base/core/position.js';
-import { createPopupDismiss } from '@jeff-aporta/iswc-base/core/popup-dismiss.js';
+import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import { computePosition, createPopupDismiss } from '@jeff-aporta/iswc-base/core/position.js';
 import type { Placement } from '@jeff-aporta/iswc-base/core/schemas/position.schemas.js';
-import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import css from 'iswc:css';
 
 /**

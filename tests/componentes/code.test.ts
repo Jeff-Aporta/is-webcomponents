@@ -10,8 +10,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 import {
   tokenizeCode, normalizeLang, diffLineClass, lineToHtml, emptyState, tokensToText,
 } from '../../src/core/code-highlight.ts';
-import { inferLanguage, resolveLanguage } from '../../src/core/code-langs.ts';
-import { softFormat, softFormatMode } from '../../src/core/code-text.ts';
+import { inferLanguage, resolveLanguage, softFormat, softFormatMode } from '../../src/core/code.ts';
 import { formatCode } from '../../src/components/code/utils/code-format.ts';
 import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
 
@@ -19,8 +18,8 @@ const { test, lista } = coleccionPruebas({ categoria: 'what' });
 
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
-const hl = await import(pathToFileURL(join(root, 'src/core/highlight-code.ts')).href);
-const ct = await import(pathToFileURL(join(root, 'src/core/code-text.ts')).href);
+const hl = await import(pathToFileURL(join(root, 'src/core/code.ts')).href);
+const ct = await import(pathToFileURL(join(root, 'src/core/code.ts')).href);
 const typesOf = (tokens) => tokens.map((t) => t.type);
 
 test('code: normalizeLang mapea alias legacy', () => {
@@ -200,7 +199,7 @@ test('el highlighter vigila el DOM: nada se queda sin colorear', () => {
   assert.equal(typeof hl.watchDom, 'function', 'falta watchDom');
   assert.equal(typeof hl.repaint, 'function', 'falta repaint');
 
-  const src = readFileSync(join(root, 'src/core/highlight-code.ts'), 'utf8');
+  const src = readFileSync(join(root, 'src/core/code.ts'), 'utf8');
   // Criterio de "contenido cambió": value del editor frente a su fuente pintada
   // (la variable local puede llamarse el / ed tras castear a CodeEditor).
   assert.match(src, /\b(\w+)\.value\s*!==\s*\1\.dataset\.cmSource/);

@@ -29,13 +29,12 @@
  *        tools-right
  */
 
-import { emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import { withStyleAttrs } from '@jeff-aporta/iswc-base/core/attrs.js';
 
 import './video.js';
 import './icon.js';
 import type { IswcVideo, VideoList, MediaObsBag, ActivateOptions, ApplyActiveOptions } from "./schemas/video-playlist.schemas.js";
-import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import css from 'iswc:css';
 
 // Tipo mínimo del <iswc-video> hijo. Sólo accedemos a `media`, `play`, `pause`

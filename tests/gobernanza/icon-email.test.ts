@@ -1,7 +1,7 @@
 // icon-email.test.ts — el HTML de íconos para correo (tk-icon-inline) se ve fuera de la app.
 //   E1 la imagen apunta a la API de Iconify (sirve cualquier set), nunca a una ref mutable del repo.
 import { assert, assertEquals } from 'jsr:@std/assert@1';
-import { iconInlineHtmlEmail } from '../../src/core/tk-icon-inline.ts';
+import { iconInlineHtmlEmail } from '../../src/core/tk-text.ts';
 import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
 import { denoTestCon } from '../_shared/deno-test.ts';
 

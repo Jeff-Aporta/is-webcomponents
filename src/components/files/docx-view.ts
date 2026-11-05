@@ -1,10 +1,9 @@
-import { emit } from '@jeff-aporta/iswc-base/core/element.js';
-import { setOptionalAttr, setStringAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
+import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import { setOptionalAttr, setStringAttr } from '@jeff-aporta/iswc-base/core/attrs.js';
 import { loadArrayBuffer, resolveFileSource } from './utils/file-source.js';
 import { pintarEstado, sincronizarAlto } from './utils/file-estado.js';
 import { loadCdnScript, MAMMOTH_CDN } from './utils/load-cdn.js';
 import type { MammothApi } from "./schemas/docx-view.schemas.js";
-import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import css from 'iswc:css';
 
 (() => {

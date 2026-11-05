@@ -27,8 +27,8 @@ test('palettes: 25 paletas con valores únicos, familia válida y delfin por def
   assert.equal(PALETTES[0].value, 'delfin');
 });
 
-test('palettes: core/app-cfg conoce las mismas 25 paletas (sin importar styles/)', async () => {
-  const { PALETAS } = await import('../../src/core/app-cfg.ts');
+test('palettes: core/app-init conoce las mismas 25 paletas (sin importar styles/)', async () => {
+  const { PALETAS } = await import('../../src/core/app-init.ts');
   assert.deepEqual([...PALETAS], PALETTES.map((p) => p.value));
 });
 

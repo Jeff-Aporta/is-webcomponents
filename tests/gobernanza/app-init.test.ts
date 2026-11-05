@@ -1,6 +1,6 @@
 /// <reference lib="dom" />
 /**
- * Configuración de la app: inicial (`core/app-init.ts`) y persistente (`core/app-cfg.ts`).
+ * Configuración de la app: inicial (`core/app-init.ts`) y persistente (`core/app-init.ts`).
  *
  *   A1 sin config guardada: aplica el tema y la paleta iniciales de la app
  *   A2 lo que el usuario eligió (iswc-app-cfg) gana sobre la config inicial
@@ -14,8 +14,7 @@
  *   A9 la config vive bajo el prefijo `iswc:` (`iswc:app-cfg`)
  */
 import assert from 'node:assert/strict';
-import { ICONS_FOLDER_DEFAULT, iconsBase, initApp } from '../../src/core/app-init.ts';
-import { APP_CFG_KEY, borrarAppCfg, guardarAppCfg, leerAppCfg } from '../../src/core/app-cfg.ts';
+import { ICONS_FOLDER_DEFAULT, iconsBase, initApp, APP_CFG_KEY, borrarAppCfg, guardarAppCfg, leerAppCfg } from '../../src/core/app-init.ts';
 import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
 
 const { test, lista } = coleccionPruebas({ categoria: 'how' });

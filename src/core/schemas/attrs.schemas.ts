@@ -4,7 +4,7 @@
  * Generado por `scripts/migrate-zod.py`. Refinar manualmente las
  * entradas marcadas con TODO cuando se quiera validación runtime.
  */
-import { z } from "zod";
+import { z } from 'zod';
 
 const StyleAttrDefSchema = z.union([z.string(), z.object({
   prop: z.string(),
@@ -22,3 +22,42 @@ export type Constructor = new (...args: any[]) => HTMLElement;
 const CtxSchema = z.unknown() /* TODO: ref ClassAccessorDecoratorContext<...> */;
 export type Ctx = z.infer<typeof CtxSchema>;
 
+// ── intent.schemas ──
+/**
+ * intent.ts — Zod schemas para los tipos extraídos de este módulo.
+ *
+ * Generado por `scripts/migrate-zod.py`. Refinar manualmente las
+ * entradas marcadas con TODO cuando se quiera validación runtime.
+ */
+const IntentSchema = z.unknown() /* TODO: cannot convert */;
+export type Intent = z.infer<typeof IntentSchema>;
+
+// ── tone.schemas ──
+/**
+ * tone.ts — Zod schemas para los tipos extraídos de este módulo.
+ *
+ * Generado por `scripts/migrate-zod.py`. Refinar manualmente las
+ * entradas marcadas con TODO cuando se quiera validación runtime.
+ */
+const ToneSchema = z.unknown() /* TODO: cannot convert */;
+export type Tone = z.infer<typeof ToneSchema>;
+
+// ── button-shape.schemas ──
+/**
+ * button-shape.ts — Zod schemas para los tipos extraídos de este módulo.
+ *
+ * Generado por `scripts/migrate-zod.py`. Refinar manualmente las
+ * entradas marcadas con TODO cuando se quiera validación runtime.
+ */
+const ButtonShapeSchema = z.unknown() /* TODO: cannot convert */;
+export type ButtonShape = z.infer<typeof ButtonShapeSchema>;
+
+// ── media-shape.schemas ──
+/**
+ * media-shape.ts — Zod schemas para los tipos extraídos de este módulo.
+ *
+ * Generado por `scripts/migrate-zod.py`. Refinar manualmente las
+ * entradas marcadas con TODO cuando se quiera validación runtime.
+ */
+const MediaShapeSchema = z.unknown() /* TODO: cannot convert */;
+export type MediaShape = z.infer<typeof MediaShapeSchema>;

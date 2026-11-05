@@ -7,7 +7,7 @@
  */
 
 import type { PaletteKey, PaletteMode, Status } from "@jeff-aporta/iswc-base/components/charts/schemas/chart-palette.schemas.js";
-import { PALETAS } from "@jeff-aporta/iswc-base/core/app-cfg.js";
+import { PALETAS } from "@jeff-aporta/iswc-base/core/app-init.js";
 
 const DEFAULT_PALETTE = 'delfin';
 const SERIES = 8;

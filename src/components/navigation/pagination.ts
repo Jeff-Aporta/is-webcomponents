@@ -1,10 +1,9 @@
-import { emit } from '@jeff-aporta/iswc-base/core/element.js';
-import { crearNodo } from '@jeff-aporta/iswc-base/core/dom-utils.js';
-import { getNumberAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
+import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import { crearNodo } from '@jeff-aporta/iswc-base/core/dom.js';
+import { getNumberAttr } from '@jeff-aporta/iswc-base/core/attrs.js';
 import { PaginationTextosSchema } from './schemas/pagination.schemas.js';
 import type { PaginationChangeDetail, PaginationSizeDetail, PaginationTextos } from './schemas/pagination.schemas.js';
 import '@jeff-aporta/iswc-base/components/forms/select.js';
-import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import css from 'iswc:css';
 
 /**

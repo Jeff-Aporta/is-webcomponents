@@ -12,9 +12,8 @@ import {
   readExclusionZones, nudgeRectFromZones, blockExclusionZones, snapPointAwayFromSide,
 } from '@jeff-aporta/iswc-base/core/diagram-grid.js';
 import { routeOrthogonal, pixelToGrid, buildOrthogonalPath } from './diagram-astar.js';
-import { countIconTokens, extractLeadingIconToken } from '@jeff-aporta/iswc-base/core/tk-icon-inline.js';
-import { richTextPlain } from '@jeff-aporta/iswc-base/core/tk-rich-text.js';
-import { resolveTkHue } from '@jeff-aporta/iswc-base/core/tk-hue.js';
+import { countIconTokens, extractLeadingIconToken, richTextPlain } from '@jeff-aporta/iswc-base/core/tk-text.js';
+import { resolveTkHue } from '@jeff-aporta/iswc-base/core/color.js';
 import { estimateTextWidth, wrapText } from './diagram-text-wrap.js';
 import { grafoDirigido } from './diagram-graph.js';
 import type { CajaPuente, LadoPuente, PuertoPuente, AnchorSide, FlowDirection, FlowShape, FlowEdgeKind, FlowOverflow, LeadingIconToken, FlowExclusionZone, FlowNodeSpec, FlowEdgeSpec, FlowGroupSpec, FlowResolvedSpec, FlowLayoutNode, FlowLayoutEdge, FlowLayout, FlowLayoutOverrides, FlowLayoutOptions, FlowSizedNode, FlowPlacement, FlowPlacedNode, FlowPaint, FlowSegment, FlowPoint, FlowLaneSpec, FlowLaneDirection, FlowLayoutLane, FlowLayoutContext, FlowVar, TipoEntidad, FlowBridge } from "@jeff-aporta/iswc-base/components/diagrams/schemas/flowchart-spec.schemas.js";

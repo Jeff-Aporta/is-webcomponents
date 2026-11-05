@@ -1,4 +1,4 @@
-import { emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import '@jeff-aporta/iswc-base/components/forms/input.js';
 import '@jeff-aporta/iswc-base/components/data/ag-grid.js';
 import '@jeff-aporta/iswc-base/components/layout/drawer.js';
@@ -21,7 +21,6 @@ import {
   toGridRow,
 } from './utils/isp-record-utils.js';
 import type { ActionLabel, BAllowed, IconKind, FrmMode, InputElement, ButtonElement, AgGridElement, VerifyModalElement, ConfirmDeleteElement, DialogElement, DrawerElement, GridRowSelectDetail, GridCellClickDetail, PkModalField, PkModalCfg } from "./schemas/catalogo-gen.schemas.js";
-import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import css from 'iswc:css';
 /**
  * <iswc-catalogo-gen> — port de `src/lib/base/CatalogoGen.svelte` (ISP).

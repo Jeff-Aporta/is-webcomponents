@@ -1,5 +1,5 @@
 [
-  "src/core/json-html.ts::appendJson::json",
+  "src/components/isp/utils/isp-json.ts::appendJson::json",
   "src/core/tree-layout.ts::<anonima>::e",
   "src/core/tree-layout.ts::computeExtent::entry",
   "src/components/data/ag-grid.ts::<anonima>::e",

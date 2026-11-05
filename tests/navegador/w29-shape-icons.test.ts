@@ -7,8 +7,8 @@
 //     no mostraba icono en el panel de controles.
 //   - El render del panel consulta el JSON de la demo (`opcionesDe` en controles.ts) y,
 //     si el JSON omite `icon`, lo enriquece con `iconForSelectOption` que mira
-//     `BUTTON_SHAPE_ICON` (src/core/button-shape.ts) y `MEDIA_SHAPE_ICON`
-//     (src/core/media-shape.ts). Se importan los módulos reales (no se parsea
+//     `BUTTON_SHAPE_ICON` (src/core/attrs.ts) y `MEDIA_SHAPE_ICON`
+//     (src/core/attrs.ts). Se importan los módulos reales (no se parsea
 //     su texto): si se mueven o cambian de forma, el test lo dice al importar.
 //   - Para evitar que cualquier cambio manual (p. ej. reescritura del JSON con
 //     `--fix` del audit-preview-controls, o un edit del fuente TS) deje el icono
@@ -30,8 +30,7 @@ import { readFile, readdir } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
-import { BUTTON_SHAPE, BUTTON_SHAPE_ICON } from '../../src/core/button-shape.ts';
-import { MEDIA_SHAPE, MEDIA_SHAPE_ICON } from '../../src/core/media-shape.ts';
+import { BUTTON_SHAPE, BUTTON_SHAPE_ICON, MEDIA_SHAPE, MEDIA_SHAPE_ICON } from '../../src/core/attrs.ts';
 
 const { test, lista } = coleccionPruebas({ categoria: 'what' });
 

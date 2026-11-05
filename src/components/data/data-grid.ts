@@ -1,10 +1,10 @@
-import { emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import { withStyleAttrs } from '@jeff-aporta/iswc-base/core/attrs.js';
 
-import { escapeHtml } from '@jeff-aporta/iswc-base/core/dom-utils.js';
+import { escapeHtml } from '@jeff-aporta/iswc-base/core/dom.js';
 import { AGGREGATION_FNS, LOGIC, filterTest, operatorNeedsInput, toDate } from './utils/grid-types.js';
 import type { CellValue, FilterRule, Operator, Row } from "./schemas/grid-types.schemas.js";
-import type { ColumnDef } from "./schemas/datagrid-types.schemas.js";
+import type { ColumnDef, FilterModel, SortModelItem } from "./schemas/datagrid-types.schemas.js";
 
 import {
   aggregateRows,
@@ -33,16 +33,13 @@ import {
   renderMenu,
   showPopover,
 } from './utils/grid-ui.js';
-import type { FilterPanelModel } from "./schemas/grid-ui.schemas.js";
+import type { FilterPanelModel, GridPopoverEl } from "./schemas/grid-ui.schemas.js";
 import type { ResolvedColumn } from "./schemas/grid-data.schemas.js";
-import type { FilterModel, SortModelItem } from "./schemas/datagrid-types.schemas.js";
-import type { GridPopoverEl } from "./schemas/grid-ui.schemas.js";
 import '@jeff-aporta/iswc-base/components/actions/dropdown-item.js';
 import '@jeff-aporta/iswc-base/components/forms/input.js';
 import '@jeff-aporta/iswc-base/components/forms/select.js';
 import '@jeff-aporta/iswc-base/components/forms/option.js';
 import '@jeff-aporta/iswc-base/components/forms/checkbox.js';
-import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import css from 'iswc:css';
 
 /* (Los tipos que dependen de `IswcDataGrid` viven dentro del IIFE para evitar el

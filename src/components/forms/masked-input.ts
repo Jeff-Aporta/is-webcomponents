@@ -1,9 +1,8 @@
-import { emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import { attachFormInternals, clearValidity, setCustomState, setFormValue, setValidity } from '@jeff-aporta/iswc-base/core/form-associated.js';
 import { apply, isComplete } from './utils/masks-tokens.js';
-import { setStringAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
+import { setStringAttr } from '@jeff-aporta/iswc-base/core/attrs.js';
 import './input.js';
-import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import css from 'iswc:css';
 
 /**

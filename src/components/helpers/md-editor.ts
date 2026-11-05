@@ -1,5 +1,5 @@
-import { emit } from '@jeff-aporta/iswc-base/core/element.js';
-import { setStringAttr, setOptionalAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
+import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import { setStringAttr, setOptionalAttr } from '@jeff-aporta/iswc-base/core/attrs.js';
 import {
   bodyPreviewHtml,
   bodyToEditorHtml,
@@ -23,7 +23,6 @@ import type { HidratacionMd } from './schemas/md-hydrate.schemas.js';
 import '@jeff-aporta/iswc-base/components/layout/dialog.js';
 import '@jeff-aporta/iswc-base/components/forms/switch.js';
 import type { IswcMdEditorDocument, IswcMdEditorApiConfig, IswcMdEditorActions, DialogElement, SwitchElement, CopyButtonElement, TextareaElement, EditorHistory } from "./schemas/md-editor.schemas.js";
-import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import css from 'iswc:css';
 
 /**

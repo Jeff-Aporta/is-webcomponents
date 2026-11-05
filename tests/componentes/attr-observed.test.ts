@@ -18,7 +18,7 @@ const here = dirname(fileURLToPath(import.meta.url));
 const root = dirname(dirname(here));
 
 test('defineElement materializa @attr* antes de customElements.define', () => {
-  const src = readFileSync(join(root, 'src/core/element.ts'), 'utf8');
+  const src = readFileSync(join(root, 'src/core/iswc-element.ts'), 'utf8');
   assert.ok(
     /materializarAtributos\(ctor\)/.test(src),
     'defineElement debe llamar materializarAtributos(ctor) antes del define',

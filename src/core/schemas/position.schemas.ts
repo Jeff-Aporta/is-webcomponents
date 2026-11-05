@@ -4,7 +4,7 @@
  * Generado por `scripts/migrate-zod.py`. Refinar manualmente las
  * entradas marcadas con TODO cuando se quiera validación runtime.
  */
-import { z } from "zod";
+import { z } from 'zod';
 
 const PlacementSchema = z.union([z.literal('top'), z.literal('top-start'), z.literal('top-end'), z.literal('bottom'), z.literal('bottom-start'), z.literal('bottom-end'), z.literal('left'), z.literal('left-start'), z.literal('left-end'), z.literal('right'), z.literal('right-start'), z.literal('right-end')]);
 export type Placement = z.infer<typeof PlacementSchema>;
@@ -88,3 +88,19 @@ const ComputePositionResultSchema = z.object({
 });
 export type ComputePositionResult = z.infer<typeof ComputePositionResultSchema>;
 
+// ── popup-dismiss.schemas ──
+/**
+ * popup-dismiss.ts — Zod schemas para los tipos extraídos de este módulo.
+ *
+ * Generado por `scripts/migrate-zod.py`. Refinar manualmente las
+ * entradas marcadas con TODO cuando se quiera validación runtime.
+ */
+const PopupDismissOpcionesSchema = z.object({
+  onEscape: z.function({ input: [], output: z.void() }).optional(),
+  onKeydown: z.function({ input: [z.unknown() /* TODO: ref KeyboardEvent */], output: z.void() }).optional(),
+  onOutside: z.function({ input: [], output: z.void() }).optional(),
+  onReposition: z.function({ input: [], output: z.void() }).optional(),
+  onScroll: z.function({ input: [z.unknown() /* TODO: ref Event */], output: z.void() }).optional(),
+  scrollLock: z.boolean().optional(),
+});
+export type PopupDismissOpciones = z.infer<typeof PopupDismissOpcionesSchema>;

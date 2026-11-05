@@ -57,7 +57,7 @@ export const EXCEPCIONES_ARCHIVO: [string, string][] = [
   ['scripts/sondas/shoot-one.mjs', 'captura de un tag: la cita tests/e2e/10-ux-proposals'],
 ];
 
-/** Símbolos sueltos que usan apps fuera del repo (grep en D:\VPS y D:\Dev\avatar, 5-nov-2026). */
+/** Símbolos sueltos que usan apps fuera del repo (grep en los proyectos consumidores y Avatar, 5-nov-2026). */
 export const EXCEPCIONES_SIMBOLO: [string, string, string][] = [
   ['src/components/diagrams/utils/diagram-studio.ts', 'bootDiagramStudio', 'lo importan labs/DER por dist/cdn/diagrams/diagram-studio'],
 ];

@@ -268,7 +268,7 @@ export async function extraerMetaComponente(rutaModulo: string | null): Promise<
 
   // 6. Define / guard.
   // El kit usa cuatro fábricas + un patrón "TypeScript-typed" para los
-  // charts: `defineElement` (core/element.ts), `defineTypedChart`,
+  // charts: `defineElement` (core/iswc-element.ts), `defineTypedChart`,
   // `definePickerInput`, `defineDateField`. Todas terminan llamando
   // `customElements.define` con guard. Detectamos cualquiera de las
   // cuatro formas para no generar falsos positivos.

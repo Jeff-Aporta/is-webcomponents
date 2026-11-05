@@ -7,13 +7,8 @@ import {
   snapDiagramGrid,
 } from '@jeff-aporta/iswc-base/core/diagram-grid.js';
 import { routeSequenceHorizontal, routeSequenceSelf } from './diagram-astar.js';
-import {
-  countIconTokens,
-  extractLeadingIconToken,
-  hasIconJsonSugar,
-} from '@jeff-aporta/iswc-base/core/tk-icon-inline.js';
-import { richTextPlain } from '@jeff-aporta/iswc-base/core/tk-rich-text.js';
-import { resolveTkHue } from '@jeff-aporta/iswc-base/core/tk-hue.js';
+import { countIconTokens, extractLeadingIconToken, hasIconJsonSugar, richTextPlain } from '@jeff-aporta/iswc-base/core/tk-text.js';
+import { resolveTkHue } from '@jeff-aporta/iswc-base/core/color.js';
 import { diagramHeaderWidth } from './diagram-header.js';
 import { fitContain, nestedMaxSize, readNodeEmbed } from './diagram-embed.js';
 import type { EmbedBox, EmbedSize } from '@jeff-aporta/iswc-base/components/diagrams/schemas/diagram-embed.schemas.js';

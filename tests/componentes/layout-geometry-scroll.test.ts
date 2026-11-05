@@ -15,17 +15,18 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const block = readFileSync(join(ROOT, 'src/components/isp/block-layout.ts'), 'utf8');
 const flex = readFileSync(join(ROOT, 'src/components/isp/flex-layout.ts'), 'utf8');
 const grid = readFileSync(join(ROOT, 'src/components/isp/grid-layout.ts'), 'utf8');
-const shared = readFileSync(join(ROOT, 'src/core/scroll-memory.ts'), 'utf8');
+const shared = readFileSync(join(ROOT, 'src/core/prefs.ts'), 'utf8');
 const main = readFileSync(join(ROOT, 'src/components/layout/main.ts'), 'utf8');
 
 test('scroll-memory compartido entre iswc-main y layouts', () => {
   assert.match(shared, /export class ScrollMemory/);
   assert.match(shared, /restorePolicy/);
-  // Ambos importan EL MISMO módulo compartido (hoy src/core/scroll-memory.ts):
+  // Ambos importan EL MISMO módulo compartido (hoy src/core/prefs.ts):
   // se resuelve el especificador (relativo o por alias) de cada uno contra su carpeta.
-  const sharedPath = join(ROOT, 'src/core/scroll-memory.ts');
+  const sharedPath = join(ROOT, 'src/core/prefs.ts');
   for (const [nombre, src, rel] of [['main', main, 'src/components/layout'], ['block', block, 'src/components/isp']]) {
-    const spec = src.match(/from '([^']*scroll-memory\.js)'/)?.[1];
+    // ScrollMemory vive en core/prefs.ts desde F9a: el import debe nombrarlo de ahí.
+    const spec = src.match(/import \{[^}]*\bScrollMemory\b[^}]*\} from '([^']*core\/prefs\.js)'/)?.[1];
     assert.ok(spec, `${nombre} debe importar scroll-memory`);
     assert.equal(resolverEspecificador(join(ROOT, rel), spec), sharedPath, `${nombre} debe usar el scroll-memory compartido`);
   }

@@ -116,7 +116,7 @@ Usa los tokens del kit (`--iswc-text`, `--iswc-text-dim`, `--iswc-border`, `--is
 ## Dependencias y componentes relacionados
 
 `iswc-doc-layout`, `iswc-doc-index`, `iswc-md-render`, `iswc-pager`, `iswc-figure`, `iswc-meta-list`,
-`iswc-dialog`, `iswc-copy-button`, `iswc-button-group`, `iswc-callout`; `core/spa-state` para la URL.
+`iswc-dialog`, `iswc-copy-button`, `iswc-button-group`, `iswc-callout`; `components/layout/utils/spa-state` para la URL.
 
 ## Accesibilidad
 

@@ -1,9 +1,7 @@
-import { emit } from '@jeff-aporta/iswc-base/core/element.js';
+import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import './icon.js';
-import { setStringAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
-import { DEFAULT_MEDIA_SHAPE, MEDIA_SHAPE, normalizeMediaShape } from '@jeff-aporta/iswc-base/core/media-shape.js';
-import { type MediaShape } from '@jeff-aporta/iswc-base/core/schemas/media-shape.schemas.js';
-import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import { setStringAttr, DEFAULT_MEDIA_SHAPE, MEDIA_SHAPE, normalizeMediaShape } from '@jeff-aporta/iswc-base/core/attrs.js';
+import { type MediaShape } from '@jeff-aporta/iswc-base/core/schemas/attrs.schemas.js';
 import css from 'iswc:css';
 
 /**

@@ -13,7 +13,7 @@ const root = dirname(dirname(here));
 
 test('iswc-tag acepta color="info" (VALID_COLOR = INTENT, que incluye info)', async () => {
   // WHAT: el vocabulario común INTENT trae `info` y tag valida contra él (sin duplicarlo a mano).
-  const { INTENT } = await import('../../src/core/intent.ts');
+  const { INTENT } = await import('../../src/core/attrs.ts');
   assert.ok((INTENT as readonly string[]).includes('info'), 'INTENT incluye info');
   const src = readFileSync(join(root, 'src', 'components', 'feedback', 'tag.ts'), 'utf8');
   assert.ok(

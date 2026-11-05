@@ -210,7 +210,7 @@ class IswcFoo extends IswcElement {
 }
 ```
 
-`emit` está en [`core/element.ts`](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/core/element.ts)
+`emit` está en [`core/iswc-element.ts`](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/core/iswc-element.ts)
 y centraliza el `new CustomEvent(name, { detail, bubbles, composed,
 cancelable })`.
 

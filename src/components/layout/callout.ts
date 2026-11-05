@@ -1,5 +1,4 @@
-import { INTENT } from '@jeff-aporta/iswc-base/core/intent.js';
-import { TONE } from '@jeff-aporta/iswc-base/core/tone.js';
+import { INTENT, TONE } from '@jeff-aporta/iswc-base/core/attrs.js';
 import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import css from 'iswc:css';
 

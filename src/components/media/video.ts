@@ -1,11 +1,9 @@
-import { emit } from '@jeff-aporta/iswc-base/core/element.js';
-import { withStyleAttrs } from '@jeff-aporta/iswc-base/core/attrs.js';
+import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import { withStyleAttrs, setStringAttr } from '@jeff-aporta/iswc-base/core/attrs.js';
 
 import '@jeff-aporta/iswc-base/components/actions/check-icon-button.js';
 import './icon.js';
-import { setStringAttr } from '@jeff-aporta/iswc-base/core/reflect.js';
 import type { IswcCheckIconButton } from "./schemas/video.schemas.js";
-import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import css from 'iswc:css';
 
 /**
