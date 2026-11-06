@@ -243,11 +243,11 @@ Contrato común en `_shared/diagram-embed.schemas.ts` (reutilizable por otros di
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 - [`./flowchart-spec.js`](./utils/flowchart-spec.js)
 - [`./sequence-spec.js`](./utils/sequence-spec.js)
-- [`../_shared/tk-hue.js`](../../core/tk-hue.js)
+- [`../_shared/tk-hue.js`](../../core/color.js)
 - [`../_shared/tk-inline-md.js`](../../core/tk-inline-md.js)
-- [`../_shared/tk-icon-inline.js`](../../core/tk-icon-inline.js)
+- [`../_shared/tk-icon-inline.js`](../../core/tk-text.js)
 - [`../_shared/icon-loader.js`](../../core/icon-loader.js)
-- [`./diagram-kinds.js`](./utils/diagram-kinds.js)
+- [`./diagram-kinds.js`](./utils/diagram-model.js)
 - [`../_shared/diagram-edit.js`](./utils/diagram-edit.js)
 
 Tags del módulo: `<iswc-flowchart>`.

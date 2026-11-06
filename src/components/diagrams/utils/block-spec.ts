@@ -1,8 +1,8 @@
 import { makeCostGrid, blockRect as blockGridRect, applyRectCost, snapDiagramGrid, snapPointAwayFromSide} from '@jeff-aporta/iswc-base/core/diagram-grid.js';
-import { diagramHeaderWidth } from './diagram-header.js';
+import { diagramHeaderWidth } from './diagram-model.js';
 import { applyEdgeActorLayout } from './diagram-edge-actors.js';
-import { assignEdgeHues } from './diagram-edge-style.js';
-import { routeOrthogonal, pixelToGrid, gridPathToSvg, buildOrthogonalPath } from './diagram-astar.js';
+import { assignEdgeHues } from './diagram-edges.js';
+import { routeOrthogonal, pixelToGrid, gridPathToSvg, buildOrthogonalPath } from './diagram-routing.js';
 import { countIconTokens, extractLeadingIconToken, richTextPlain } from '@jeff-aporta/iswc-base/core/tk-text.js';
 import { resolveTkHue, SERIE_HUES } from '@jeff-aporta/iswc-base/core/color.js';
 import type { BlockSpecGroup, BlockSpecBlock, BlockSpecEdge, BlockSpec, LeadingIcon, BlockPlacement, BlockLayoutBlock, BlockLayoutEdge, BlockLayout, BlockRect, Side } from "@jeff-aporta/iswc-base/components/diagrams/schemas/block-spec.schemas.js";

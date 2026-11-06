@@ -1,4 +1,41 @@
 /**
+ * pan-zoom.ts — Zod schemas para los tipos extraídos de este módulo.
+ *
+ * Generado por `scripts/migrate-zod.py`. Refinar manualmente las
+ * entradas marcadas con TODO cuando se quiera validación runtime.
+ */
+import { z } from 'zod';
+
+const PanZoomViewSchema = z.object({
+  scale: z.number(),
+  x: z.number(),
+  y: z.number(),
+});
+export type PanZoomView = z.infer<typeof PanZoomViewSchema>;
+
+const PanZoomOptionsSchema = z.object({
+  minScale: z.number().optional(),
+  maxScale: z.number().optional(),
+  zoomFactor: z.number().optional(),
+  panThresholdPx: z.number().optional(),
+  wheelZooms: z.boolean().optional(),
+  onChange: z.function({ input: [z.unknown() /* TODO: ref PanZoomView */], output: z.void() }).optional(),
+  onPanEnd: z.function({ input: [], output: z.void() }).optional(),
+});
+export type PanZoomOptions = z.infer<typeof PanZoomOptionsSchema>;
+
+const PanZoomControllerSchema = z.object({
+  /* TODO: parse fail readonly view: PanZoomView */
+  setView: z.function({ input: [z.unknown() /* TODO: ref PanZoomView */], output: z.void() }),
+  zoomBy: z.function({ input: [z.number(), z.number(), z.number()], output: z.void() }),
+  reset: z.function({ input: [], output: z.void() }),
+  apply: z.function({ input: [], output: z.void() }),
+  destroy: z.function({ input: [], output: z.void() }),
+});
+export type PanZoomController = z.infer<typeof PanZoomControllerSchema>;
+
+// ── diagram-embed.schemas ──
+/**
  * diagram-embed.schemas.ts — contrato de los NODOS ESPECIALES reutilizables
  * entre diagramas (`kind` de nodo).
  *
@@ -20,8 +57,6 @@
  * diagrama se monta fuera de pantalla, su SVG se copia (vectorial, con ids
  * prefijados) dentro del nodo y el export estático lo conserva.
  */
-import { z } from "zod";
-
 /** Clase de nodo especial. Ausente = nodo normal del diagrama. */
 export const DiagramNodeKindSchema = z.union([z.literal('nested'), z.literal('tableder'), z.literal('component'), z.literal('class')]);
 

@@ -1,5 +1,5 @@
 import { IswcLightbox } from './lightbox.js';
-import { getDiagramTag } from './utils/diagram-kinds.js';
+import { getDiagramTag } from './utils/diagram-model.js';
 import { expandSequencePayloadForJson } from './utils/sequence-spec.js';
 import type { TurtleStateDetail, ToggleGroupDetail, TurtleApi, DiagramHost } from "./schemas/diagram-lightbox.schemas.js";
 import { define } from '@jeff-aporta/iswc-base/core/iswc-element.js';

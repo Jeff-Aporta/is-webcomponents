@@ -1,7 +1,7 @@
 import { richTextPlain } from '@jeff-aporta/iswc-base/core/tk-text.js';
 import { resolveTkHue } from '@jeff-aporta/iswc-base/core/color.js';
 import { applyEdgeActorLayout } from './diagram-edge-actors.js';
-import { assignEdgeHues } from './diagram-edge-style.js';
+import { assignEdgeHues } from './diagram-edges.js';
 import type { UseCaseActorSide, UseCaseLinkKind, UseCaseActorSpec, UseCaseCaseSpec, UseCaseLinkSpec, UseCaseGroupSpec, UseCaseResolvedSpec, UseCaseLayoutActor, UseCaseLayoutCase, UseCaseLayoutLink, UseCaseLayoutSystem, UseCaseLayout } from "@jeff-aporta/iswc-base/components/diagrams/schemas/use-case-spec.schemas.js";
 
 /**

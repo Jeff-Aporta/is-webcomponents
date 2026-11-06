@@ -6,8 +6,8 @@
  *   C4 sin `edgeStyle`, `look="sketch"` (servilleta) usa `bezier`; uno explícito gana.
  */
 import { assert, assertEquals } from 'https://deno.land/std@0.224.0/assert/mod.ts';
-import { BEZIER_MAX, styledEdgePath } from '../../src/components/diagrams/utils/diagram-curve.ts';
-import { edgeStyleFor } from '../../src/components/diagrams/utils/diagram-vocab.ts';
+import { BEZIER_MAX, styledEdgePath } from '../../src/components/diagrams/utils/diagram-edges.ts';
+import { edgeStyleFor } from '../../src/components/diagrams/utils/diagram-model.ts';
 import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
 import { denoTestCon } from '../_shared/deno-test.ts';
 

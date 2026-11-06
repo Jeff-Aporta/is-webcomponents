@@ -4,7 +4,7 @@
  * Generado por `scripts/migrate-zod.py`. Refinar manualmente las
  * entradas marcadas con TODO cuando se quiera validación runtime.
  */
-import { z } from "zod";
+import { z } from 'zod';
 
 const GridPointSchema = z.object({
   col: z.number(),
@@ -54,4 +54,3 @@ const SequenceRouteSchema = z.object({
   points: z.array(GridPointSchema),
 });
 export type SequenceRoute = z.infer<typeof SequenceRouteSchema>;
-

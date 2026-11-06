@@ -190,7 +190,7 @@ Convención del kit: `iswc-<nombre>` (kebab-case), `composed: true`,
 `bubbles: true` (salvo casos justificados).
 
 ```ts
-import { emit } from '../../core/element.js';
+import { emit } from '../../core/iswc-element.js';
 
 class IswcFoo extends IswcElement {
   static tag = 'iswc-foo';

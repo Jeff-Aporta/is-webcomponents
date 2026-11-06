@@ -544,7 +544,7 @@ console.log(`  ${'diagrams/themes/'.padEnd(18)} ${nTemas} temas (carga diferida 
 // Campo de costos del router: los defaults del kit se publican como JSON
 // para consumidores y auditoría (la fuente es routing-costs.ts).
 {
-  const { ROUTING_COSTS_DEFAULTS } = await import(pathToFileURL(join(root, 'src', 'components', 'diagrams', 'utils', 'routing-costs.ts')).href);
+  const { ROUTING_COSTS_DEFAULTS } = await import(pathToFileURL(join(root, 'src', 'components', 'diagrams', 'utils', 'diagram-routing.ts')).href);
   await writeFile(join(dist, 'diagrams', 'routing-costs.json'), JSON.stringify(ROUTING_COSTS_DEFAULTS, null, 2) + '\n', 'utf8');
   console.log(`  ${'diagrams/'.padEnd(18)} routing-costs.json (campo de costos compartido)`);
 }

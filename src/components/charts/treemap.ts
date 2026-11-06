@@ -8,7 +8,7 @@ import { fontOn } from './utils/chart-palette.js';
 import { paletteTheme } from '@jeff-aporta/iswc-base/components/diagrams/utils/diagram-palette.js';
 import { findThemeContainer, readTheme } from '@jeff-aporta/iswc-base/core/dom.js';
 import { inlineMdWeb } from '@jeff-aporta/iswc-base/core/tk-inline-md.js';
-import { registerDiagramKind } from '@jeff-aporta/iswc-base/components/diagrams/utils/diagram-kinds.js';
+import { registerDiagramKind } from '@jeff-aporta/iswc-base/components/diagrams/utils/diagram-model.js';
 import css from 'iswc:css';
 
 /**

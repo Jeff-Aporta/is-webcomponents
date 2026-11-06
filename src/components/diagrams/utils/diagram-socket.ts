@@ -9,7 +9,7 @@
  * Doc: diagram-flow.md § Pulsos.
  */
 import { svgEl } from '@jeff-aporta/iswc-base/core/svg-chart-engine.js';
-import { pulsoRadar } from './diagram-flow.js';
+import { pulsoRadar } from './diagram-layout.js';
 import type { OpcionesSocket } from '@jeff-aporta/iswc-base/components/diagrams/schemas/diagram-socket.schemas.js';
 
 /** Color de relleno estándar de las O (el celeste secundario del kit). */

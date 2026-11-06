@@ -14,7 +14,7 @@ import { fileURLToPath } from 'node:url';
 import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
 import { contrastRatio, PALETTES, resolvePalette, toHex } from '../../src/styles/palette-build.ts';
 import { CHART_BAND, CHART_SERIES, chartSerieOklch } from '../../src/styles/chart-tokens.ts';
-import { hexToOklch, oklchToHex } from '../../src/components/diagrams/utils/oklch.ts';
+import { hexToOklch, oklchToHex } from '../../src/components/diagrams/utils/diagram-styles.ts';
 
 const { test, lista } = coleccionPruebas({ categoria: 'how' });
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..');

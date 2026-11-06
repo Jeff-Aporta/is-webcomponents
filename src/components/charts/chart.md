@@ -220,7 +220,7 @@ El guardián `tests/gobernanza/chart-tokens.test.ts` rechaza hex, `rgb()` y `hsl
 - [`../_shared/svg-chart-engine.js`](../../core/svg-chart-engine.js)
 - [`../_shared/chart-palette.js`](./utils/chart-palette.js)
 - [`../_shared/path-turtle.js`](../../core/path-turtle.js)
-- [`../diagrams/diagram-kinds.js`](../diagrams/utils/diagram-kinds.js)
+- [`../diagrams/diagram-kinds.js`](../diagrams/utils/diagram-model.js)
 
 Tags del módulo: `<iswc-chart>`.
 

@@ -1,6 +1,6 @@
 import assert from 'node:assert';
 import { resolveFlowchartSpec, computeFlowchartLayout } from '../../src/components/diagrams/utils/flowchart-spec.js';
-import { pathPoints as parsePathPoints } from '../../src/components/diagrams/utils/diagram-arrow.js';
+import { pathPoints as parsePathPoints } from '../../src/components/diagrams/utils/diagram-edges.js';
 import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
 
 const { test, lista } = coleccionPruebas({ categoria: 'what' });

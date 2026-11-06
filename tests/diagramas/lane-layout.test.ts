@@ -7,7 +7,7 @@ import {
   niceTimeTicks,
   packLanes,
   layoutLanes,
-} from '../../src/components/diagrams/utils/lane-layout.js';
+} from '../../src/components/diagrams/utils/swimlane-spec.js';
 import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
 
 const { test, lista } = coleccionPruebas({ categoria: 'what' });

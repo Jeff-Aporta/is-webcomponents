@@ -18,7 +18,7 @@
   "core/tk-color": "core/color",
   "core/tk-icon-inline": "core/tk-text",
   "core/tk-rich-text": "core/tk-text",
-  "core/tk-inline-md": "core/tk-text",
+  "// tk-inline-md": "queda aparte (su import de efecto de <iswc-icon> no debe llegar a los importadores de tk-text); se fundió y se separó a mano en el mismo lote",
   "core/code-text": "core/code",
   "core/code-diff": "core/code",
   "core/code-langs": "core/code",

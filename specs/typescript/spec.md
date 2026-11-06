@@ -50,7 +50,7 @@ apuntan a artefactos publicados y por tanto son `.js` de verdad.
 
 **WHAT.** En `src/**` todo import que sale de la carpeta del archivo hacia otra carpeta del kit va por el alias, con
 la ruta desde `src/` y la extensión `.js` de S-TS2: `'@jeff-aporta/iswc-base/core/iswc-element.js'`, nunca
-`'../../core/element.js'`. Los imports de la misma carpeta o de sus subcarpetas siguen relativos (`./x.js`,
+`'../../core/iswc-element.js'`. Los imports de la misma carpeta o de sus subcarpetas siguen relativos (`./x.js`,
 `./schemas/x.schemas.js`, `./utils/x.js`).
 
 **Excepciones.** `src/vendor-distributions/**` no usa relativos ni alias (viaja a otros repos). Un `../` que sale de
@@ -208,7 +208,7 @@ Guardián: [`tests/gobernanza/no-reexports.test.ts`](../../tests/gobernanza/no-r
 | Formas legítimas no se reportan: declaración local, valor derivado (`z.object`), expresión, ejemplos en comentarios y plantillas | Implementado | X4 |
 | La regla cubre `skills/` y `scripts/`, no solo `src/` | Implementado | X5 (encontró `scripts/highlight-pre.js`, corregido) |
 | La excepción declarada existe y publica su entrada CDN | Implementado | X6 |
-| `dist/cdn/` sin imports relativos rotos | Implementado | X7 (encontró `dist/cdn/core/element.ts → ../cdn/build/`, corregido en el build) |
+| `dist/cdn/` sin imports relativos rotos | Implementado | X7 (encontró `dist/cdn/core/iswc-element.ts → ../cdn/build/`, corregido en el build) |
 | Ninguna página o demo cita un barril retirado (`core/index.min.js`) | Descartado | lo cubre X7 para módulos; las páginas se regeneran en el build y el gate e2e las abre |
 | ISS/ISW no importan barriles del kit | Descartado | fuera de este repo: lo verifica el re-vendor de cada app al nuevo pin |
 | `export =`/CommonJS (`module.exports = require(…)`) | Descartado | el kit es ESM; no hay CommonJS que vigilar |

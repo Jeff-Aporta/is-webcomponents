@@ -17,9 +17,9 @@
 import { assert, assertEquals } from 'https://deno.land/std@0.224.0/assert/mod.ts';
 import { fileURLToPath } from 'node:url';
 import { RefObj } from '../../src/vendor-distributions/shared/lib/ref-obj.ts';
-import { costoGiros, computeFlowchartLayout, flowchartSpecToJson, resolveFlowchartSpec } from '../../src/components/diagrams/utils/flowchart-spec.ts';
-import { NESTED_DEFAULT_MAX } from '../../src/components/diagrams/utils/diagram-embed.ts';
-import { pathPoints } from '../../src/components/diagrams/utils/diagram-arrow.ts';
+import { costoGiros, computeFlowchartLayout, flowchartSpecToJson, resolveFlowchartSpec, flowPaint } from '../../src/components/diagrams/utils/flowchart-spec.ts';
+import { NESTED_DEFAULT_MAX, embedDiagramOf, embedIsNatural, readNodeEmbed } from '../../src/components/diagrams/utils/diagram-view.ts';
+import { pathPoints } from '../../src/components/diagrams/utils/diagram-edges.ts';
 import type { FlowLayout, FlowLayoutNode } from '../../src/components/diagrams/schemas/flowchart-spec.schemas.ts';
 
 /** Editable del lab con sus referencias { path, query, actions } resueltas (como al exportar). */
@@ -158,9 +158,7 @@ Deno.test('decisión: R1 ramas por el mismo costado no comparten riel (cada una 
 });
 
 // ── Diagramas combinados: usos punteados, vuelta al origen, clase e íconos ──────────────
-import { embedDiagramOf, embedIsNatural, readNodeEmbed } from '../../src/components/diagrams/utils/diagram-embed.ts';
 import { computeClassLayout, resolveClassSpec } from '../../src/components/diagrams/utils/class-spec.ts';
-import { flowPaint } from '../../src/components/diagrams/utils/flowchart-spec.ts';
 import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
 import { layoutRuta, TIMEOUT_RUTAS_REALES } from '../_shared/rutas-reales.ts';
 import { denoTestCon } from '../_shared/deno-test.ts';

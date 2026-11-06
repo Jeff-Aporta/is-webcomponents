@@ -159,7 +159,7 @@ Al abrir, el foco va a Cancelar (WAI-APG alertdialog) y Tab da la vuelta entre l
 ## Dependencias y componentes relacionados
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
-- [`../_shared/popup-dismiss.js`](../../core/popup-dismiss.js)
+- [`../_shared/popup-dismiss.js`](../../core/position.js)
 - [`../actions/button.js`](../actions/button.js)
 - [`./popconfirm.md`](./popconfirm.md) — la variante anclada, sin backdrop.
 

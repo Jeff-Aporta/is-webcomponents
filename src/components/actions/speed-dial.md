@@ -210,8 +210,8 @@ reparto por layout nativo.
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 - [`../_shared/define.js`](../_shared/define.js)
 - [`../_shared/emit.js`](../_shared/emit.js)
-- [`../_shared/misc-utils.js`](../../core/misc-utils.js)
-- [`../_shared/popup-dismiss.js`](../../core/popup-dismiss.js)
+- [`../_shared/misc-utils.js`](../../core/dom.js)
+- [`../_shared/popup-dismiss.js`](../../core/position.js)
 - [`./check-icon-button.js`](./check-icon-button.js) — el trigger es un
   `<iswc-check-icon-button>` que alterna entre `icon` y `open-icon`.
 

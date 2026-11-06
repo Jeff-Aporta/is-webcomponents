@@ -167,9 +167,9 @@ obligatorio.
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 - [`../_shared/define.js`](../_shared/define.js)
 - [`../_shared/emit.js`](../_shared/emit.js)
-- [`../_shared/dom-utils.js`](../../core/dom-utils.js)
+- [`../_shared/dom-utils.js`](../../core/dom.js)
 - [`../_shared/form-associated.js`](../../core/form-associated.js)
-- [`../_shared/reflect.js`](../../core/reflect.js)
+- [`../_shared/reflect.js`](../../core/attrs.js)
 
 Tags del módulo: `<iswc-inline-edit>`.
 

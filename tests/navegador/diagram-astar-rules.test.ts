@@ -31,7 +31,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { routeEdges, validateRoute } from '../../src/components/diagrams/utils/component-router.ts';
 import { computeComponentLayout, resolveComponentSpec } from '../../src/components/diagrams/utils/component-spec.ts';
-import { pathPoints as parsePathPoints } from '../../src/components/diagrams/utils/diagram-arrow.ts';
+import { pathPoints as parsePathPoints } from '../../src/components/diagrams/utils/diagram-edges.ts';
 import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
 
 const { test, lista } = coleccionPruebas({ categoria: 'what' });

@@ -163,7 +163,7 @@ DocumentaciÃ³n de cabecera preservada desde fuente:
 - [`../_shared/position.js`](../../core/position.js)
 - [`./dropdown-item.js`](./dropdown-item.js)
 - [`../layout/divider.js`](../layout/divider.js)
-- [`../_shared/popup-dismiss.js`](../../core/popup-dismiss.js) â€” ciclo de escucha
+- [`../_shared/popup-dismiss.js`](../../core/position.js) â€” ciclo de escucha
   mientras el panel esta abierto (teclado, scroll), compartido con `iswc-context-menu`.
 
 Tags del mÃ³dulo: `<iswc-dropdown>`.

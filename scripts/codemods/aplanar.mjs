@@ -233,16 +233,26 @@ function partir(ruta, texto) {
   // La cabecera llega hasta antes de los comentarios pegados a la primera sentencia (JSDoc de una función).
   const jsdocPrimera = primera && !ts.isImportDeclaration(primera) ? (ts.getJSDocCommentsAndTags(primera)[0] ?? null) : null;
   if (jsdocPrimera && jsdocPrimera.pos >= 0 && jsdocPrimera.getStart(fuente) < inicioPrimera) cabecera = texto.slice(0, jsdocPrimera.getStart(fuente));
-  const imports = [];
-  let finImports = cabecera.length;
-  for (const st of sts) {
-    if (!ts.isImportDeclaration(st)) continue;
-    imports.push(st);
-    finImports = Math.max(finImports, st.getEnd());
-  }
+  const imports = sts.filter((st) => ts.isImportDeclaration(st));
   const nombres = new Set();
   for (const st of sts) for (const n of declarados(st)) nombres.add(n);
-  return { fuente, texto, finImports, cabecera: cabecera.trimEnd(), imports, cuerpo: texto.slice(finImports).replace(/^\s*\n/, ''), nombres };
+  return { fuente, texto, finImports: cabecera.length, cabecera: cabecera.trimEnd(), imports, cuerpo: sinImports(texto, imports, cabecera.length), nombres };
+}
+
+/** Texto desde `desde` sin las declaraciones import (estén donde estén: hay imports después de código). */
+function sinImports(texto, imports, desde, quitarTambien = []) {
+  const rangos = [...imports, ...quitarTambien].map((st) => {
+    let fin = st.getEnd();
+    while (texto[fin] === ' ' || texto[fin] === '\t') fin++;
+    // Un comentario de línea pegado al import (`import 'x'; // por qué`) se va con él.
+    if (texto[fin] === '/' && texto[fin + 1] === '/') while (fin < texto.length && texto[fin] !== '\n') fin++;
+    if (texto[fin] === '\r') fin++;
+    if (texto[fin] === '\n') fin++;
+    return [st.getStart(), fin];
+  }).filter(([a]) => a >= desde).sort((a, b) => b[0] - a[0]);
+  let salida = texto;
+  for (const [a, b] of rangos) salida = salida.slice(0, a) + salida.slice(b);
+  return salida.slice(desde).replace(/^\s*\n/, '');
 }
 
 /** Fusiona las partes (en orden) para el destino; devuelve el texto o lanza con las colisiones. */
@@ -272,16 +282,7 @@ function fusionar(destino, partes) {
         }
       }
     }
-    if (quitar.length) {
-      let cuerpo = pz.texto;
-      for (const st of quitar.sort((a, b) => b.getStart(pz.fuente) - a.getStart(pz.fuente))) {
-        let fin = st.getEnd();
-        if (cuerpo[fin] === '\r') fin++;
-        if (cuerpo[fin] === '\n') fin++;
-        cuerpo = cuerpo.slice(0, st.getStart(pz.fuente)) + cuerpo.slice(fin);
-      }
-      pz.cuerpo = cuerpo.slice(pz.finImports).replace(/^\s*\n/, '');
-    }
+    if (quitar.length) pz.cuerpo = sinImports(pz.texto, pz.imports, pz.finImports, quitar);
   }
   // Imports: por módulo y tipo; los que apuntan a otra parte del grupo (o al propio destino) se van.
   const porModulo = new Map();
@@ -384,6 +385,8 @@ function reemplazosDeTexto() {
     // Tramos de `join(raiz, 'src', 'core', 'x.ts')`: carpeta y nombre como cadenas sueltas (misma carpeta).
     if (posix.dirname(o) === posix.dirname(d)) {
       const dir = posix.basename(posix.dirname(o));
+      // Enlaces relativos de los md (`./utils/x.js`, `../core/x.ts`): `<carpeta>/<nombre>.`.
+      pares.push([`${dir}/${posix.basename(so)}.`, `${dir}/${posix.basename(sd)}.`]);
       for (const q of ["'", '"']) {
         for (const ext of ['.ts', '.js']) pares.push([`${q}${dir}${q}, ${q}${posix.basename(so)}${ext}${q}`, `${q}${dir}${q}, ${q}${posix.basename(sd)}${ext}${q}`]);
       }
@@ -413,8 +416,7 @@ const nuevos = new Map();
 const errores = [];
 for (const [destino, partes] of grupos) {
   try {
-    nuevos.set(destino, fusionar(destino, partes));
-  } catch (e) {
+    nuevos.set(destino, fusionar(destino, partes));  } catch (e) {
     errores.push(String(e.message ?? e));
   }
 }

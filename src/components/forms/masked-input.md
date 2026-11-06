@@ -190,7 +190,7 @@ campo espejo.
 - [`../_shared/define.js`](../_shared/define.js)
 - [`../_shared/emit.js`](../_shared/emit.js)
 - [`../_shared/form-associated.js`](../../core/form-associated.js)
-- [`../_shared/reflect.js`](../../core/reflect.js)
+- [`../_shared/reflect.js`](../../core/attrs.js)
 
 Tags del módulo: `<iswc-masked-input>`.
 

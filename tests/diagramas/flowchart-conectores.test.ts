@@ -14,9 +14,9 @@ import { assert, assertEquals } from 'https://deno.land/std@0.224.0/assert/mod.t
 import { fileURLToPath } from 'node:url';
 import { RefObj } from '../../src/vendor-distributions/shared/lib/ref-obj.ts';
 import { computeFlowchartLayout, resolveFlowchartSpec, CRUD_SQL, PROXIMIDAD, unionesDe } from '../../src/components/diagrams/utils/flowchart-spec.ts';
-import { pathPoints, quitarAutoCruces, tieneAutoCruce } from '../../src/components/diagrams/utils/diagram-arrow.ts';
+import { pathPoints, quitarAutoCruces, tieneAutoCruce } from '../../src/components/diagrams/utils/diagram-edges.ts';
 import { applyRadialCost, makeCostGrid } from '../../src/core/diagram-grid.ts';
-import { U } from '../../src/components/diagrams/utils/flowchart-labels.ts';
+import { U } from '../../src/components/diagrams/utils/diagram-labels.ts';
 import type { FlowLayout } from '../../src/components/diagrams/schemas/flowchart-spec.schemas.ts';
 import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
 import { layoutRuta, TIMEOUT_RUTAS_REALES } from '../_shared/rutas-reales.ts';
@@ -152,7 +152,7 @@ function domFalso(): void {
 
 denoTest('conectores: C5 los puntos toman el color de la arista y se personalizan', async () => {
   domFalso();
-  const { animarRiel, FLUJO } = await import('../../src/components/diagrams/utils/diagram-flow.ts');
+  const { animarRiel, FLUJO } = await import('../../src/components/diagrams/utils/diagram-layout.ts');
   const riel = document.createElementNS('http://www.w3.org/2000/svg', 'path') as unknown as SVGElement;
   riel.setAttribute('d', 'M0,0 L100,0');
   riel.setAttribute('stroke', '#112233');

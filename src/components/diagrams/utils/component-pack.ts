@@ -11,7 +11,7 @@
  */
 
 import { boundsOf } from '@jeff-aporta/iswc-base/core/diagram-grid.js';
-import type { Arista, Caja, Componente, Lado, OpcionesEmpaque, Paquete, Punto } from '@jeff-aporta/iswc-base/components/diagrams/schemas/diagram-tipos.schemas.js';
+import type { Arista, Caja, Componente, Lado, OpcionesEmpaque, Paquete, Punto } from '@jeff-aporta/iswc-base/components/diagrams/schemas/diagram-types.schemas.js';
 import type { ClusterColumn, GroupConv } from "@jeff-aporta/iswc-base/components/diagrams/schemas/component-pack.schemas.js";
 
 export const COL_GUTTER = 52;

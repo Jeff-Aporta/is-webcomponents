@@ -4,7 +4,7 @@
  * Generado por `scripts/migrate-zod.py`. Refinar manualmente las
  * entradas marcadas con TODO cuando se quiera validación runtime.
  */
-import { z } from "zod";
+import { z } from 'zod';
 
 const WrapOptsSchema = z.object({
   text: z.string(),
@@ -44,4 +44,3 @@ const TSpanSpecSchema = z.object({
   dominantBaseline: z.union([z.literal('auto'), z.literal('middle'), z.literal('central'), z.literal('hanging'), z.literal('alphabetic'), z.literal('ideographic')]).optional(),
 });
 export type TSpanSpec = z.infer<typeof TSpanSpecSchema>;
-

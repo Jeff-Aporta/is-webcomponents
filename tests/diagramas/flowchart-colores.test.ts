@@ -6,7 +6,7 @@
  */
 import { assert, assertEquals } from 'https://deno.land/std@0.224.0/assert/mod.ts';
 import { coloresDeEntidad, resolveFlowchartSpec, TIPOS_ENTIDAD } from '../../src/components/diagrams/utils/flowchart-spec.ts';
-import { hexToOklch } from '../../src/components/diagrams/utils/oklch.ts';
+import { hexToOklch } from '../../src/components/diagrams/utils/diagram-styles.ts';
 import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
 import { denoTestCon } from '../_shared/deno-test.ts';
 

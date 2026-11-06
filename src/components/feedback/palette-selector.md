@@ -179,8 +179,8 @@ muestras, íconos, interruptor); solo los hairlines usan `1px`. Un
 ## Dependencias y componentes relacionados
 
 - [`../../core/element-base.ts`](../../core/element-base.ts)
-- [`../../core/popup-dismiss.ts`](../../core/popup-dismiss.ts)
-- [`../../core/app-cfg.ts`](../../core/app-cfg.ts)
+- [`../../core/position.ts`](../../core/position.ts)
+- [`../../core/app-init.ts`](../../core/app-init.ts)
 - [`../../styles/palette-build.ts`](../../styles/palette-build.ts)
 - [`../media/icon.ts`](../media/icon.ts)
 - `<iswc-theme-toggle>` (tema claro/oscuro).

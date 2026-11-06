@@ -9,11 +9,11 @@ import { PathTurtle } from '@jeff-aporta/iswc-base/core/path-turtle.js';
 import { tkHueToHex } from '@jeff-aporta/iswc-base/core/color.js';
 import type { DiagramTheme } from './schemas/diagram-types.schemas.js';
 import { inlineMdWeb } from '@jeff-aporta/iswc-base/core/tk-inline-md.js';
-import { wrapText, buildTspans } from './utils/diagram-text-wrap.js';
-import type { TSpanSpec } from './schemas/diagram-text-wrap.schemas.js';
-import { registerDiagramKind } from './utils/diagram-kinds.js';
+import { wrapText, buildTspans } from './utils/diagram-labels.js';
+import type { TSpanSpec } from './schemas/diagram-labels.schemas.js';
+import { registerDiagramKind } from './utils/diagram-model.js';
 import { svgEl } from '@jeff-aporta/iswc-base/core/svg-chart-engine.js';
-import { svgArrowHead } from './utils/diagram-arrow.js';
+import { svgArrowHead } from './utils/diagram-edges.js';
 import type { GanttRow, GanttArrow, GanttTick, TurtleState, RowNodeEntry, ArrowNodeEntry } from "./schemas/gantt.schemas.js";
 import css from 'iswc:css';
 

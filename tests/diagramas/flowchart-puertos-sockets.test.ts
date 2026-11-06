@@ -12,11 +12,10 @@ import { assertEquals } from 'https://deno.land/std@0.224.0/assert/mod.ts';
 import { fileURLToPath } from 'node:url';
 import { RefObj } from '../../src/vendor-distributions/shared/lib/ref-obj.ts';
 import { resolveFlowchartSpec } from '../../src/components/diagrams/utils/flowchart-spec.ts';
-import { pathPoints } from '../../src/components/diagrams/utils/diagram-arrow.ts';
+import { pathPoints } from '../../src/components/diagrams/utils/diagram-edges.ts';
 import type { FlowLayout, FlowResolvedSpec } from '../../src/components/diagrams/schemas/flowchart-spec.schemas.ts';
 import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
-import { TIMEOUT_RUTAS_REALES } from '../_shared/rutas-reales.ts';
-import { layoutRuta } from '../_shared/rutas-reales.ts';
+import { TIMEOUT_RUTAS_REALES, layoutRuta } from '../_shared/rutas-reales.ts';
 import { denoTestCon } from '../_shared/deno-test.ts';
 
 // Rutas reales: layout memoizado y timeout medido (ver tests/_shared/rutas-reales.ts).

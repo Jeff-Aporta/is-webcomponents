@@ -163,13 +163,13 @@ No declara integración form-associated.
 
 ## Dependencias y componentes relacionados
 
-- [`./diagram-kinds.js`](./utils/diagram-kinds.js) — registro de tipos de diagrama.
+- [`./diagram-kinds.js`](./utils/diagram-model.js) — registro de tipos de diagrama.
 - [`./diagram-lightbox.js`](./diagram-lightbox.js) — visor a pantalla completa.
 - [`../_shared/svg-chart-engine.js`](../../core/svg-chart-engine.js) — creación de nodos SVG.
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 - [`../_shared/define.js`](../_shared/define.js)
 - [`../_shared/emit.js`](../_shared/emit.js)
-- [`../_shared/dom-utils.js`](../../core/dom-utils.js)
+- [`../_shared/dom-utils.js`](../../core/dom.js)
 
 Tags del módulo: `<iswc-org-chart>`.
 

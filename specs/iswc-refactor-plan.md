@@ -111,7 +111,7 @@ muestra como código de ejemplo, sin que el puerto sea funcional.
 El auditor asume que TODO `type`/`interface` debe vivir en la folder
 `src/consts/types/` (patrón `patyia-api`). PERO el **perfil ISWC kit**
 mantiene tipos **COLOCALIZADOS** con cada componente — p. ej.
-`src/components/diagrams/utils/diagram-text-wrap.ts` declara `WrapOpts`,
+`src/components/diagrams/utils/diagram-labels.ts` declara `WrapOpts`,
 `WrappedLine`, `WrapResult`, `TSpanSpec` junto al helper que los
 consume.
 

@@ -269,7 +269,7 @@ denoTest('router: con candidatos elige la pareja de puertos más barata, no repi
 });
 
 denoTest('routing-costs: defaults válidos, sobreescritura parcial profunda y valor inválido ignorado', async () => {
-  const { ROUTING_COSTS_DEFAULTS, resolveRoutingCosts } = await import('../../src/components/diagrams/utils/routing-costs.ts');
+  const { ROUTING_COSTS_DEFAULTS, resolveRoutingCosts } = await import('../../src/components/diagrams/utils/diagram-routing.ts');
   assertEquals(ROUTING_COSTS_DEFAULTS.share.radius, 200);
   const r = resolveRoutingCosts({ share: { radius: 260 }, rail: { overlap: 50 } });
   assertEquals(r.share.radius, 260);

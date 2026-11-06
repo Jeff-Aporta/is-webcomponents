@@ -5,7 +5,7 @@
  * entradas marcadas con TODO cuando se quiera validación runtime.
  */
 import { z } from "zod";
-import { type TimeScale } from "./lane-layout.schemas.js";
+import { type TimeScale } from "./swimlane-spec.schemas.js";
 
 const TimelineOrientationSchema = z.union([z.literal('horizontal'), z.literal('vertical')]);
 export type TimelineOrientation = z.infer<typeof TimelineOrientationSchema>;

@@ -5,7 +5,7 @@ import { scaleLinear, scaleBand, niceTicks, svgEl } from '@jeff-aporta/iswc-base
 import { getCategoricalColors, getFillColors, getStatusColor, resolveColor, withAlpha } from './utils/chart-palette.js';
 import { findThemeContainer, readTheme } from '@jeff-aporta/iswc-base/core/dom.js';
 import { PathTurtle } from '@jeff-aporta/iswc-base/core/path-turtle.js';
-import { registerDiagramKind } from '@jeff-aporta/iswc-base/components/diagrams/utils/diagram-kinds.js';
+import { registerDiagramKind } from '@jeff-aporta/iswc-base/components/diagrams/utils/diagram-model.js';
 import type { TypedChartFactory, ChartDataPoint, ChartDataset, ChartConfig, LegendEntry, HitRecord, ResolvedOptions, ChartCtx } from "./schemas/chart.schemas.js";
 import css from 'iswc:css';
 

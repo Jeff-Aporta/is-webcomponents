@@ -16,7 +16,7 @@
 // Si alguien refactoriza `routeSequenceSelf` y vuelve al A* (o pierde
 // una esquina), el test detecta cuál invariante se rompió.
 
-import { routeSequenceSelf } from '../../src/components/diagrams/utils/diagram-astar.ts';
+import { routeSequenceSelf } from '../../src/components/diagrams/utils/diagram-routing.ts';
 import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
 
 const { test, lista } = coleccionPruebas({ categoria: 'what' });

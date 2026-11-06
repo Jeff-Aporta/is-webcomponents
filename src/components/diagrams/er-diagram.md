@@ -198,9 +198,9 @@ El consumidor no define colores ni temas: elige un estilo por atributo.
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 - [`./er-spec.js`](./utils/er-spec.js)
 - [`./sequence-spec.js`](./utils/sequence-spec.js)
-- [`../_shared/tk-hue.js`](../../core/tk-hue.js)
+- [`../_shared/tk-hue.js`](../../core/color.js)
 - [`../_shared/tk-inline-md.js`](../../core/tk-inline-md.js)
-- [`./diagram-kinds.js`](./utils/diagram-kinds.js)
+- [`./diagram-kinds.js`](./utils/diagram-model.js)
 
 Tags del módulo: `<iswc-er-diagram>`.
 

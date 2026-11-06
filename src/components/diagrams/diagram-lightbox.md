@@ -159,7 +159,7 @@ Documentación de cabecera preservada desde fuente:
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 - [`./lightbox.js`](./lightbox.js)
-- [`./diagram-kinds.js`](./utils/diagram-kinds.js)
+- [`./diagram-kinds.js`](./utils/diagram-model.js)
 - [`./sequence-spec.js`](./utils/sequence-spec.js)
 - [`../media/icon.js`](../media/icon.js)
 

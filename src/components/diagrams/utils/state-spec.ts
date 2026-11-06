@@ -1,9 +1,9 @@
-import { layoutNodeLink, edgeAnchor, pickSides } from './node-link-layout.js';
-import { diagramHeaderWidth } from './diagram-header.js';
+import { layoutNodeLink, edgeAnchor, pickSides } from './diagram-layout.js';
+import { diagramHeaderWidth } from './diagram-model.js';
 import { applyEdgeActorLayout } from './diagram-edge-actors.js';
-import { assignEdgeHues } from './diagram-edge-style.js';
+import { assignEdgeHues } from './diagram-edges.js';
 import { makeCostGrid, blockRect, applyRectCost, snapDiagramGrid, snapPointAwayFromSide} from '@jeff-aporta/iswc-base/core/diagram-grid.js';
-import { routeOrthogonal, pixelToGrid, buildOrthogonalPath } from './diagram-astar.js';
+import { routeOrthogonal, pixelToGrid, buildOrthogonalPath } from './diagram-routing.js';
 import { richTextPlain } from '@jeff-aporta/iswc-base/core/tk-text.js';
 import { resolveTkHue } from '@jeff-aporta/iswc-base/core/color.js';
 import type { StateKind, StateDirection, AnchorSide, StateSpec, StateTransitionSpec, StateGroupSpec, StateResolvedSpec, StateLayoutNode, StateLayoutTransition, StateLayout } from "@jeff-aporta/iswc-base/components/diagrams/schemas/state-spec.schemas.js";

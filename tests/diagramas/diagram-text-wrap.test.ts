@@ -23,7 +23,7 @@ import {
   wrapText,
   buildTspans,
   defaultMeasureTextWidth,
-} from '../../src/components/diagrams/utils/diagram-text-wrap.js';
+} from '../../src/components/diagrams/utils/diagram-labels.js';
 import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
 
 const { test, lista } = coleccionPruebas({ categoria: 'what' });

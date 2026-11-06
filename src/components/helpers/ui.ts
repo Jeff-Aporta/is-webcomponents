@@ -236,7 +236,7 @@ export const define = (tag: string, clase: CustomElementConstructor): void => {
 
 /**
  * Inyecta el `.css` hermano del módulo en el ShadowRoot (mismo contrato que
- * `components/core/element.ts` del kit, sin scrollbars del kit).
+ * `components/core/iswc-element.ts` del kit, sin scrollbars del kit).
  *
  * Convención CDN/apps: `app-foo.js` ↔ `app-foo.css` (o `.min.js` ↔ `.min.css`).
  * Llamar **después** de rellenar el shadow: un `innerHTML = …` / vaciado

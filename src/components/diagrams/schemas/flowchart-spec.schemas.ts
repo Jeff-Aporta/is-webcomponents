@@ -5,8 +5,8 @@
  * entradas marcadas con TODO cuando se quiera validación runtime.
  */
 import { z } from "zod";
-import { ZPuntosRiel } from "./diagram-flow.schemas.js";
-import { DiagramNodeKindSchema, NodeEmbedSpecSchema, EmbedBoxSchema, EmbedSizeSchema } from "./diagram-embed.schemas.js";
+import { ZPuntosRiel } from "./diagram-layout.schemas.js";
+import { DiagramNodeKindSchema, NodeEmbedSpecSchema, EmbedBoxSchema, EmbedSizeSchema } from "./diagram-view.schemas.js";
 
 const AnchorSideSchema = z.union([z.literal('left'), z.literal('right'), z.literal('top'), z.literal('bottom')]);
 export type AnchorSide = z.infer<typeof AnchorSideSchema>;

@@ -11,7 +11,7 @@ import {
   routeOrthogonal,
   pixelToGrid,
   buildOrthogonalPath,
-} from './diagram-astar.js';
+} from './diagram-routing.js';
 import type { MindmapNode, MindmapSpec, LeadingIcon, TreeNode, MindmapLayoutNode, MindmapLayoutEdge, MindmapLayout } from "@jeff-aporta/iswc-base/components/diagrams/schemas/mindmap-spec.schemas.js";
 
 /**

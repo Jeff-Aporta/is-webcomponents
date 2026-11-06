@@ -5,14 +5,13 @@ import type { StateLayout, StateResolvedSpec, StateSpec } from './schemas/state-
 import { PathTurtle as SequenceTurtle } from '@jeff-aporta/iswc-base/core/path-turtle.js';
 import type { PathTurtle } from '@jeff-aporta/iswc-base/core/path-turtle.js';
 import { tkHueToHex } from '@jeff-aporta/iswc-base/core/color.js';
-import { edgeStrokeHex, edgeChipFill, edgeChipText } from './utils/diagram-edge-style.js';
+import { edgeStrokeHex, edgeChipFill, edgeChipText, svgArrowHead } from './utils/diagram-edges.js';
 import type { DiagramTheme } from './schemas/diagram-types.schemas.js';
 import { inlineMdWeb, applySvgTextContent } from '@jeff-aporta/iswc-base/core/tk-inline-md.js';
-import { wrapText, buildTspans } from './utils/diagram-text-wrap.js';
-import type { TSpanSpec } from './schemas/diagram-text-wrap.schemas.js';
-import { registerDiagramKind } from './utils/diagram-kinds.js';
+import { wrapText, buildTspans } from './utils/diagram-labels.js';
+import type { TSpanSpec } from './schemas/diagram-labels.schemas.js';
+import { registerDiagramKind } from './utils/diagram-model.js';
 import { svgEl } from '@jeff-aporta/iswc-base/core/svg-chart-engine.js';
-import { svgArrowHead } from './utils/diagram-arrow.js';
 import type { TurtleState, NodeNodeEntry, EdgeNodeEntry } from "./schemas/state-diagram.schemas.js";
 import css from 'iswc:css';
 

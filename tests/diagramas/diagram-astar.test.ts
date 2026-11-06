@@ -5,7 +5,7 @@ import {
 import {
   routeSequenceHorizontal, routeSequenceSelf, routeOrthogonal, pixelToGrid,
   buildOrthogonalPath, countTurns,
-} from '../../src/components/diagrams/utils/diagram-astar.js';
+} from '../../src/components/diagrams/utils/diagram-routing.js';
 import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
 
 const { test, lista } = coleccionPruebas({ categoria: 'what' });

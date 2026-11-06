@@ -1,6 +1,6 @@
 // Self-check plano (node:assert) para node-link-layout.js. Sin framework.
 import assert from 'node:assert';
-import { assignLayers, layoutNodeLink, edgeAnchor, pickSides } from '../../src/components/diagrams/utils/node-link-layout.js';
+import { assignLayers, layoutNodeLink, edgeAnchor, pickSides } from '../../src/components/diagrams/utils/diagram-layout.js';
 import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
 
 const { test, lista } = coleccionPruebas({ categoria: 'what' });

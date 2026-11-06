@@ -21,8 +21,8 @@ import { serializeErPayload, renderErSvg as renderErSvgString } from './utils/er
 import type { ErEditorState, ErSpec, ErSpecAttribute, ErSpecEntity, ErSpecRelation, EdgeStyleOverride } from "./schemas/diagram-types.schemas.js";
 import '@jeff-aporta/iswc-base/components/actions/context-menu.js';
 import '@jeff-aporta/iswc-base/components/layout/split-panel.js';
-import { createPanZoom } from './utils/pan-zoom.js';
-import { type PanZoomController } from './schemas/pan-zoom.schemas.js';
+import { createPanZoom } from './utils/diagram-view.js';
+import { type PanZoomController } from './schemas/diagram-view.schemas.js';
 import type { DiagramElementBase } from './utils/diagram-element-base.js';
 import { snapDiagramGrid } from '@jeff-aporta/iswc-base/core/diagram-grid.js';
 import css from 'iswc:css';

@@ -6,7 +6,7 @@
  * diagrama restringe qué acepta. Los motores consumen estos tipos; el JSON
  * del consumidor se valida contra ellos.
  */
-import { z } from "zod";
+import { z } from 'zod';
 
 /** Diagramas del kit que participan del vocabulario. */
 const DiagramKindIdSchema = z.enum([

@@ -1,3 +1,43 @@
+import { DiagramPolicySchema, EdgeKindDefSchema, EdgeStyleSchema, NodeStructureDefSchema } from '@jeff-aporta/iswc-base/components/diagrams/schemas/diagram-model.schemas.js';
+import type { DiagramKindId, DiagramPolicy, EdgeFamily, EdgeKindDef, EdgeKindDefInput, EdgeStyle, NodeStructureDef, NodeStructureDefInput, PolicyReport, VocabStore } from '@jeff-aporta/iswc-base/components/diagrams/schemas/diagram-model.schemas.js';
+import { richTextPlain } from '@jeff-aporta/iswc-base/core/tk-text.js';
+
+/**
+ * Registro de tipos de diagrama: `kind` (string del JSON) → tag del web component.
+ *
+ * Es la pieza que permite migrar más diagramas Mermaid sin tocar el visor: cada
+ * componente nuevo se auto-registra al importarse y el lightbox ya sabe montarlo.
+ *
+ *   registerDiagramKind('flow', 'iswc-flow-diagram');
+ *
+ * El componente registrado debe aceptar la propiedad `payload` y el atributo
+ * `color="viewer"`.
+ */
+
+const REGISTRY = new Map<string, string>();
+
+/** Asocia el `kind` de un diagrama (cadena, se normaliza a minúsculas) al
+ *  nombre del web component que sabe pintarlo. Si ya existía, se reemplaza. */
+export function registerDiagramKind(kind: string, tagName: string): void {
+  REGISTRY.set(String(kind).toLowerCase(), tagName);
+}
+
+/** Devuelve el tag del web component registrado para un `kind`, o `undefined`
+ *  si no hay soporte. Acepta `string | null | undefined`. */
+export function getDiagramTag(kind: string | null | undefined): string | undefined {
+  return REGISTRY.get(String(kind ?? '').toLowerCase());
+}
+
+/** Lista de todos los `kind` registrados (en minúsculas, orden de inserción). */
+function listDiagramKinds(): string[] {
+  return [...REGISTRY.keys()];
+}
+
+if (typeof window !== 'undefined') {
+  Object.assign(window, { __isDiagramKinds: { registerDiagramKind, getDiagramTag, listDiagramKinds } });
+}
+
+// ── diagram-vocab ──
 /**
  * diagram-vocab.ts — Vocabulario común de diagramas: estructuras de nodo,
  * tipos de arista y política de aceptación.
@@ -17,25 +57,6 @@
  * Los motores siguen con sus tipos propios; este módulo es el catálogo y
  * el árbitro, no un renderizador.
  */
-import {
-  DiagramPolicySchema,
-  EdgeKindDefSchema,
-  EdgeStyleSchema,
-  NodeStructureDefSchema,
-} from '@jeff-aporta/iswc-base/components/diagrams/schemas/diagram-vocab.schemas.js';
-import type {
-  DiagramKindId,
-  DiagramPolicy,
-  EdgeFamily,
-  EdgeKindDef,
-  EdgeKindDefInput,
-  EdgeStyle,
-  NodeStructureDef,
-  NodeStructureDefInput,
-  PolicyReport,
-  VocabStore,
-} from '@jeff-aporta/iswc-base/components/diagrams/schemas/diagram-vocab.schemas.js';
-
 // Un registro por página: cada bundle trae su copia del módulo.
 const GLOBAL_KEY = '__iswcDiagramVocab';
 const raiz = globalThis as typeof globalThis & { [GLOBAL_KEY]?: VocabStore };
@@ -190,4 +211,27 @@ if (!STORE.nodes.size) {
   N({ id: 'participant-box', label: 'Caja de participantes', usage: 'Región vertical que agrupa líneas de vida por sistema (ISS, Servicios).', recommendedFor: ['sequence'], fields: ['name', 'actors', 'color'], container: true, icon: false });
   N({ id: 'entity', label: 'Entidad', usage: 'Tabla con atributos y llaves; el relleno naranja es exclusivo del DER InSoft.', recommendedFor: ['er'], fields: ['name', 'attributes', 'cluster'] });
   N({ id: 'note', label: 'Nota', usage: 'Texto libre pegado a un nodo o flotante.', recommendedFor: ['component', 'class', 'er', 'sequence', 'flowchart'], fields: ['text', 'target'], icon: false });
+}
+
+// ── diagram-header ──
+/**
+ * Ancho mínimo que necesita la cabecera de un diagrama (título + subtítulo).
+ *
+ * El título y el subtítulo se pintan centrados en `width / 2`, así que cuando
+ * el contenido del diagrama es más estrecho que el texto, la cabecera se sale
+ * del lienzo por los dos lados y el PNG exportado sale con las frases cortadas.
+ * Esto pasó de verdad con varios diagramas del proyecto iswc-tkts.
+ *
+ * El cálculo es una estimación por número de caracteres — el mismo criterio
+ * que ya usan los specs para medir etiquetas — con los pesos reales del
+ * render: el título va a 13px en negrita y el subtítulo a 11px.
+ */
+const TITULO_CHAR_W = 7.4;
+const SUBTITULO_CHAR_W = 5.9;
+
+export function diagramHeaderWidth(title: string | null | undefined, subtitle: string | null | undefined, { padding = 32 }: { padding?: number } = {}): number {
+  const t = richTextPlain(title ?? '').length * TITULO_CHAR_W;
+  const s = richTextPlain(subtitle ?? '').length * SUBTITULO_CHAR_W;
+  const texto = Math.max(t, s);
+  return texto ? Math.ceil(texto + padding * 2) : 0;
 }

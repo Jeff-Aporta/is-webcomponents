@@ -23,8 +23,8 @@ import {
   fitContain,
   NESTED_DEFAULT_MAX,
   readNodeEmbed,
-} from '../../src/components/diagrams/utils/diagram-embed.ts';
-import { pathPoints } from '../../src/components/diagrams/utils/diagram-arrow.ts';
+} from '../../src/components/diagrams/utils/diagram-view.ts';
+import { pathPoints } from '../../src/components/diagrams/utils/diagram-edges.ts';
 import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
 import { denoTestCon } from '../_shared/deno-test.ts';
 

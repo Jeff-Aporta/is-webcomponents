@@ -1,21 +1,20 @@
 import { emit, emitCancelable, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import { DiagramElementBase } from './utils/diagram-element-base.js';
-import { animarRielEn, flujoActivo } from './utils/diagram-flow.js';
-import { svgArrowHead, pathPoints } from './utils/diagram-arrow.js';
+import { animarRielEn, flujoActivo } from './utils/diagram-layout.js';
+import { svgArrowHead, pathPoints, styledEdgePath } from './utils/diagram-edges.js';
 import {
   computeSequenceLayout,
   resolveSequenceSpec,
   sequenceMessageTooltipText,
 } from './utils/sequence-spec.js';
 import type { SequenceLayout, SequenceLayoutAltBox, SequenceLayoutMessage, SequenceResolvedSpec, SequenceLayoutFragment, SequenceNestedSpec, SequenceMessageSpec } from './schemas/sequence-spec.schemas.js';
-import { captureNodeEmbed, embedStage, embedSvgElement } from './utils/diagram-embed.js';
-import type { EmbedCapture, EmbedSize } from './schemas/diagram-embed.schemas.js';
+import { captureNodeEmbed, embedStage, embedSvgElement } from './utils/diagram-view.js';
+import type { EmbedCapture, EmbedSize } from './schemas/diagram-view.schemas.js';
 import { hostStyleName, styleThemeFor } from './utils/diagram-styles.js';
 import { injectThemeCss, lineColor, paletteColor, pickThemeMode, resolveErTheme, sequencePaint, themeToDiagramTheme } from './utils/theme.js';
 import type { ErThemeJson } from './schemas/theme.schemas.js';
-import { edgeStyleFor } from './utils/diagram-vocab.js';
-import type { EdgeStyle } from './schemas/diagram-vocab.schemas.js';
-import { styledEdgePath } from './utils/diagram-curve.js';
+import { edgeStyleFor, registerDiagramKind } from './utils/diagram-model.js';
+import type { EdgeStyle } from './schemas/diagram-model.schemas.js';
 import { PathTurtle as SequenceTurtle } from '@jeff-aporta/iswc-base/core/path-turtle.js';
 import type { PathTurtle } from '@jeff-aporta/iswc-base/core/path-turtle.js';
 import { TK_DIAGRAM_RADIUS_PX } from '@jeff-aporta/iswc-base/core/diagram-grid.js';
@@ -23,9 +22,8 @@ import { svgIconBadge, hasIconJsonSugar } from '@jeff-aporta/iswc-base/core/tk-t
 import { inlineMdWeb } from '@jeff-aporta/iswc-base/core/tk-inline-md.js';
 import { tkHueToHex, contrastFontColor, pastelColor } from '@jeff-aporta/iswc-base/core/color.js';
 import type { DiagramTheme } from './schemas/diagram-types.schemas.js';
-import { wrapText, buildTspans, defaultMeasureTextWidth } from './utils/diagram-text-wrap.js';
-import type { TSpanSpec } from './schemas/diagram-text-wrap.schemas.js';
-import { registerDiagramKind } from './utils/diagram-kinds.js';
+import { wrapText, buildTspans, defaultMeasureTextWidth } from './utils/diagram-labels.js';
+import type { TSpanSpec } from './schemas/diagram-labels.schemas.js';
 import { svgEl } from '@jeff-aporta/iswc-base/core/svg-chart-engine.js';
 import type { TurtleState, MsgNode, LifelineNode, ActorNode, PartBox } from "./schemas/sequence-diagram.schemas.js";
 import css from 'iswc:css';

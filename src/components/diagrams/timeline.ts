@@ -4,7 +4,7 @@ import { resolveTimelineSpec, computeTimelineLayout } from './utils/timeline-spe
 import type { DiagramTheme } from './schemas/diagram-types.schemas.js';
 import { tkHueToHex } from '@jeff-aporta/iswc-base/core/color.js';
 import { inlineMdWeb } from '@jeff-aporta/iswc-base/core/tk-inline-md.js';
-import { registerDiagramKind } from './utils/diagram-kinds.js';
+import { registerDiagramKind } from './utils/diagram-model.js';
 import { svgEl } from '@jeff-aporta/iswc-base/core/svg-chart-engine.js';
 import type { TimelineLayout } from "./schemas/timeline-spec.schemas.js";
 import type { EventEntry } from "./schemas/timeline.schemas.js";

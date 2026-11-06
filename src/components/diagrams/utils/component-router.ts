@@ -31,9 +31,9 @@
  * decidir re-empaque y el audit del lab).
  */
 
-import type { Caja, Lado, Punto } from '@jeff-aporta/iswc-base/components/diagrams/schemas/diagram-tipos.schemas.js';
+import type { Caja, Lado, Punto } from '@jeff-aporta/iswc-base/components/diagrams/schemas/diagram-types.schemas.js';
 import type { RouterBox, RouterWorld, RouterEdge, RouterOpts, RouteResult, PortLink, PortPlan, RouterPort } from '@jeff-aporta/iswc-base/components/diagrams/schemas/component-router.schemas.js';
-import { resolveRoutingCosts, readConsolidate, ROUTING_COSTS_DEFAULTS } from './routing-costs.js';
+import { resolveRoutingCosts, readConsolidate, ROUTING_COSTS_DEFAULTS } from './diagram-routing.js';
 
 const DIRS: ReadonlyArray<readonly [number, number]> = [[1, 0], [0, 1], [-1, 0], [0, -1]];
 const SIDE_DIR: Record<Lado, number> = { right: 0, bottom: 1, left: 2, top: 3 };

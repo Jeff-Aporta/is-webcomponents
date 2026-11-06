@@ -1,16 +1,15 @@
-import { layoutNodeLink } from './node-link-layout.js';
+import { layoutNodeLink } from './diagram-layout.js';
 import { snapDiagramGrid } from '@jeff-aporta/iswc-base/core/diagram-grid.js';
 import { routeEdges, planPorts, pointsToPath, simplifyOrthoPath } from './component-router.js';
-import { readRoutingOverride } from './routing-costs.js';
+import { readRoutingOverride } from './diagram-routing.js';
 import type { RouterEdge, RouterWorld } from '@jeff-aporta/iswc-base/components/diagrams/schemas/component-router.schemas.js';
-import type { Caja, Lado, Punto } from '@jeff-aporta/iswc-base/components/diagrams/schemas/diagram-tipos.schemas.js';
+import type { Caja, Lado, Punto, BoxSide, DiagramGroup, EdgeStyleOverride, ErCardinality, ErDashStyle, ErRouteKind, ErSpec, ErSpecAttribute, ErSpecEntity, ErSpecRelation, ErLayout, EdgeVariant, NodeStyleOverride } from '@jeff-aporta/iswc-base/components/diagrams/schemas/diagram-types.schemas.js';
 import { resolveTkHue } from '@jeff-aporta/iswc-base/core/color.js';
 import { countIconTokens, stripIconTokensPlain } from '@jeff-aporta/iswc-base/core/tk-text.js';
 import { applyEdgeActorLayout } from './diagram-edge-actors.js';
-import { assignEdgeHues } from './diagram-edge-style.js';
+import { assignEdgeHues } from './diagram-edges.js';
 import { wrapLabel } from './component-spec.js';
 import { normalizeErPayload as _archifyNormalize } from './er-archify.js';
-import type { BoxSide, DiagramGroup, EdgeStyleOverride, ErCardinality, ErDashStyle, ErRouteKind, ErSpec, ErSpecAttribute, ErSpecEntity, ErSpecRelation, ErLayout, EdgeVariant, NodeStyleOverride } from '@jeff-aporta/iswc-base/components/diagrams/schemas/diagram-types.schemas.js';
 import type { ClusterBox, ClusterRaw } from "@jeff-aporta/iswc-base/components/diagrams/schemas/er-spec.schemas.js";
 
 /**

@@ -12,9 +12,8 @@ import {
   listEdgeKinds,
   readEdgeStyle,
   recommendationFor,
-} from '../../src/components/diagrams/utils/diagram-vocab.ts';
-import { roundOrthogonalPath, styledEdgePath } from '../../src/components/diagrams/utils/diagram-curve.ts';
-import { pathPoints } from '../../src/components/diagrams/utils/diagram-arrow.ts';
+} from '../../src/components/diagrams/utils/diagram-model.ts';
+import { roundOrthogonalPath, styledEdgePath, pathPoints } from '../../src/components/diagrams/utils/diagram-edges.ts';
 import { computeSequenceLayout, resolveSequenceSpec } from '../../src/components/diagrams/utils/sequence-spec.ts';
 import { lineColor, paletteColor, pickThemeMode, sequencePaint } from '../../src/components/diagrams/utils/theme.ts';
 import { ErThemeJsonSchema } from '../../src/components/diagrams/schemas/theme.schemas.ts';

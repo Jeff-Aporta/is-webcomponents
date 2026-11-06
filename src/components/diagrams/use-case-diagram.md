@@ -154,13 +154,13 @@ Documentación de cabecera preservada desde fuente:
 - [`../_shared/diagram-element-base.js`](./utils/diagram-element-base.js)
 - [`./use-case-spec.js`](./utils/use-case-spec.js)
 - [`./sequence-spec.js`](./utils/sequence-spec.js)
-- [`../_shared/tk-hue.js`](../../core/tk-hue.js)
+- [`../_shared/tk-hue.js`](../../core/color.js)
 - [`../_shared/tk-inline-md.js`](../../core/tk-inline-md.js)
-- [`./diagram-kinds.js`](./utils/diagram-kinds.js)
+- [`./diagram-kinds.js`](./utils/diagram-model.js)
 - [`../_shared/define.js`](../_shared/define.js)
 - [`../_shared/emit.js`](../_shared/emit.js)
 - [`../_shared/svg-chart-engine.js`](../../core/svg-chart-engine.js)
-- [`../_shared/diagram-arrow.js`](./utils/diagram-arrow.js)
+- [`../_shared/diagram-arrow.js`](./utils/diagram-edges.js)
 
 Tags del módulo: `<iswc-use-case-diagram>`.
 
