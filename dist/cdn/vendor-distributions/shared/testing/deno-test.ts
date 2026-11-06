@@ -22,7 +22,6 @@ import { tmpdir } from "node:os";
 import { join, relative } from "node:path";
 import process from "node:process";
 import { formatMs, testConcurrency, testCooldownFromEnv, testId } from './test-cooldown.ts';
-import { type TestCooldown } from '../schemas.ts';
 
 import type { DenoTestOptions } from "../schemas.ts";
 

@@ -1,6 +1,5 @@
 /** Rejilla de alineación para diagramas SVG (secuencia / flujo). */
 
-import { countIconTokens, stripIconTokensPlain } from './tk-icon-inline.js';
 import type { GridRect, GridPoint, CostGrid, ForbiddenRegion, ExclusionZone, DiagramSide } from "./schemas/diagram-grid.schemas.js";
 
 export const TK_DIAGRAM_GRID = 8;
@@ -28,18 +27,11 @@ export function boundsOf(items: readonly GridRect[]): GridRect {
   return { x, y, w: Math.max(...items.map((c) => c.x + c.w)) - x, h: Math.max(...items.map((c) => c.y + c.h)) - y };
 }
 
-export function diagramLabelWidth(text: string, min: number = 120, max: number = 320): number {
-  const plain = stripIconTokensPlain(text);
-  const icons = countIconTokens(text);
-  const est = Math.ceil(plain.length * 6.2) + 20 + icons * 18;
-  return snapDiagramGrid(Math.min(max, Math.max(min, est)));
-}
-
-export function diagramGridCols(width: number, grid: number = TK_DIAGRAM_GRID): number {
+function diagramGridCols(width: number, grid: number = TK_DIAGRAM_GRID): number {
   return Math.ceil(width / grid) + 1;
 }
 
-export function diagramGridRows(height: number, grid: number = TK_DIAGRAM_GRID): number {
+function diagramGridRows(height: number, grid: number = TK_DIAGRAM_GRID): number {
   return Math.ceil(height / grid) + 1;
 }
 
@@ -140,7 +132,7 @@ export function applyForbiddenRegions(g: CostGrid | null | undefined): void {
 }
 
 /** Bloquea el interior de un polígono (point-in-polygon por scanline). */
-export function blockPolygon(g: CostGrid, points: readonly (readonly [number, number])[] | null | undefined): void {
+function blockPolygon(g: CostGrid, points: readonly (readonly [number, number])[] | null | undefined): void {
   if (!points?.length) return;
   const xs = points.map((p) => p[0]);
   const ys = points.map((p) => p[1]);
@@ -192,16 +184,6 @@ export function removeForbiddenRegion(g: CostGrid | null | undefined, id: string
   return g.forbidden.delete(id);
 }
 
-export function clearForbiddenRegions(g: CostGrid | null | undefined): void {
-  if (!g?.forbidden) return;
-  g.forbidden.clear();
-}
-
-export function listForbiddenRegions(g: CostGrid | null | undefined): ForbiddenRegion[] {
-  if (!g?.forbidden) return [];
-  return [...g.forbidden.values()];
-}
-
 /* ────────────────────────────────────────────────────────────────────────
  * Zonas de exclusión (soledad) — leídas del JSON de un diagrama.
  *
@@ -245,7 +227,7 @@ export function readExclusionZones(raw: unknown): ExclusionZone[] {
  * está a 4px de un bloqueo justo DENTRO de esa celda si cae del lado
  * equivocado del .5; con `direction` fijo eso no puede pasar.
  */
-export function snapAway(value: number, direction: number, grid: number = TK_DIAGRAM_GRID): number {
+function snapAway(value: number, direction: number, grid: number = TK_DIAGRAM_GRID): number {
   return direction > 0 ? Math.ceil(value / grid) * grid : Math.floor(value / grid) * grid;
 }
 

@@ -9,4 +9,4 @@
  * cdn-install: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/is-cdn-install/SKILL.md
  * blob: https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/data/criteria.js
  */
-import{a,b}from"../_chunks/chunk-USNPAFVT.mjs";import"../_chunks/chunk-QWVO5FUO.mjs";import"../_chunks/chunk-ZEHEDVTO.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";export{b as criterion,a as wildcardRegex};
+import{a,b}from"../_chunks/chunk-4RY267LP.mjs";import"../_chunks/chunk-ZEHEDVTO.mjs";import"../_chunks/chunk-PK2UL4FC.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";export{b as criterion,a as wildcardRegex};

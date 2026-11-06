@@ -9,4 +9,4 @@
  * cdn-install: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/is-cdn-install/SKILL.md
  * blob: https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/data/xlsx-read.js
  */
-import{a}from"../_chunks/chunk-IFO5WQX5.mjs";import"../_chunks/chunk-IC5VJ6AC.mjs";import"../_chunks/chunk-3IX4Y7JG.mjs";import"../_chunks/chunk-RARAAPTG.mjs";import"../_chunks/chunk-KCGMDMQ3.mjs";import"../_chunks/chunk-BDDWZ3TG.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";export{a as readXlsx};
+import{a}from"../_chunks/chunk-GT27WOTT.mjs";import"../_chunks/chunk-SH7VKLLX.mjs";import"../_chunks/chunk-D32PYGOW.mjs";import"../_chunks/chunk-7N6D3HK6.mjs";import"../_chunks/chunk-VRUDUNQX.mjs";import"../_chunks/chunk-CYQH7UVL.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";export{a as readXlsx};

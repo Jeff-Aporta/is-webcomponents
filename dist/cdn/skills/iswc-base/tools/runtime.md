@@ -78,7 +78,7 @@ Guía: [`helpers/utils/response-cache.md`](https://github.com/Jeff-Aporta/is-web
 | --- | --- |
 | `core/element-base.min.mjs` | Base CE del kit |
 | `core/attrs.min.mjs` | Observación / coerce de atributos |
-| `core/base-sheets.min.mjs` | Hojas base compartidas |
+| `core/iswc-element.min.mjs` | Hojas base compartidas |
 
 Apps consumidoras **no** reimplementan esta capa; extienden vía `IswcUi.define` + tags.
 

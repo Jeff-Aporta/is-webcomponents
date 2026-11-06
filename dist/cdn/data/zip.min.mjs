@@ -9,4 +9,4 @@
  * cdn-install: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/is-cdn-install/SKILL.md
  * blob: https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/data/zip.js
  */
-import{a,b,c}from"../_chunks/chunk-3IX4Y7JG.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";export{a as crc32,b as readZip,c as writeZip};
+import{a,b}from"../_chunks/chunk-D32PYGOW.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";export{a as readZip,b as writeZip};

@@ -9,4 +9,4 @@
  * cdn-install: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/is-cdn-install/SKILL.md
  * blob: https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/data/numfmt.js
  */
-import{a,b,c,d}from"../_chunks/chunk-7ZEOIENZ.mjs";import"../_chunks/chunk-QWVO5FUO.mjs";import"../_chunks/chunk-ZEHEDVTO.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";export{d as NUMBER_FORMATS,c as adjustDecimals,a as formatValue,b as isDateFormat};
+import{a,b,c,d}from"../_chunks/chunk-ODYF3R6L.mjs";import"../_chunks/chunk-ZEHEDVTO.mjs";import"../_chunks/chunk-PK2UL4FC.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";export{d as NUMBER_FORMATS,c as adjustDecimals,a as formatValue,b as isDateFormat};

@@ -1,1 +1,0 @@
-function t(e){return e===null||typeof e!="object"?{}:e}function d(e){return e===null||typeof e!="object"?null:e}function r(e,n=""){return e==null?n:String(e)}function i(e,n=0){let o=typeof e=="number"?e:Number(e);return Number.isFinite(o)?o:n}function l(e){return!!e}function a(e){return!e||typeof e!="object"?null:e}export{t as a,d as b,r as c,i as d,l as e,a as f};

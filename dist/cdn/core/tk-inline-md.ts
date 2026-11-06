@@ -1,10 +1,9 @@
-import { replaceIconTokensWeb, splitIconRuns, svgIconGroup } from './tk-icon-inline.js';
-import { richTextInline, richTextEsc } from './tk-rich-text.js';
+// tk-inline-md.ts — markdown en línea (negrita, `código`, enlaces y {{íconos}}) para HTML y para <text> de SVG.
+// Aparte de tk-text a propósito (F9a): emite <iswc-icon>, así que registra el tag; quien solo usa los tokens o el
+// texto enriquecido no debe cargar el componente.
+import { replaceIconTokensWeb, splitIconRuns, svgIconGroup, richTextInline, esc } from './tk-text.js';
 import '../media/icon.min.mjs'; // {{iswc-icon}} emite el tag; sin esto el HTML no lo define
 
-function esc(s: string | number | null | undefined): string {
-  return richTextEsc(s);
-}
 
 function codeChipWeb(text: string): string {
   return `<code class="tk-inline-code">${text}</code>`;

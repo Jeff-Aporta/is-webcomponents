@@ -6,7 +6,7 @@
  */
 import { z } from "zod";
 
-export const TurtleMessageSchema = z.object({
+const TurtleMessageSchema = z.object({
   step: z.union([z.string(), z.number()]),
   path: z.string(),
   color: z.string().optional(),
@@ -16,19 +16,15 @@ export const TurtleMessageSchema = z.object({
 });
 export type TurtleMessage = z.infer<typeof TurtleMessageSchema>;
 
-
-export const TurtleThemeSchema = z.object({
+const TurtleThemeSchema = z.object({
   accent: z.string(),
   /* TODO: member [key: string]: unknown */
 });
 export type TurtleTheme = z.infer<typeof TurtleThemeSchema>;
 
+const TurtlePhaseSchema = z.union([z.literal('idle'), z.literal('playing'), z.literal('between'), z.literal('waiting'), z.literal('paused'), z.literal('done')]);
 
-export const TurtlePhaseSchema = z.union([z.literal('idle'), z.literal('playing'), z.literal('between'), z.literal('waiting'), z.literal('paused'), z.literal('done')]);
-export type TurtlePhase = z.infer<typeof TurtlePhaseSchema>;
-
-
-export const TurtleStateSchema = z.object({
+const TurtleStateSchema = z.object({
   idx: z.number(),
   elapsed: z.number(),
   autoElapsed: z.number(),
@@ -39,8 +35,7 @@ export const TurtleStateSchema = z.object({
 });
 export type TurtleState = z.infer<typeof TurtleStateSchema>;
 
-
-export const TurtleReportSchema = z.object({
+const TurtleReportSchema = z.object({
   playing: z.boolean(),
   idx: z.number(),
   total: z.number(),
@@ -48,8 +43,7 @@ export const TurtleReportSchema = z.object({
 });
 export type TurtleReport = z.infer<typeof TurtleReportSchema>;
 
-
-export const TurtleDataOptsSchema = z.object({
+const TurtleDataOptsSchema = z.object({
   messages: z.array(TurtleMessageSchema).optional(),
   theme: TurtleThemeSchema,
   viewW: z.number().optional(),
@@ -59,8 +53,7 @@ export const TurtleDataOptsSchema = z.object({
 });
 export type TurtleDataOpts = z.infer<typeof TurtleDataOptsSchema>;
 
-
-export const TurtleMeasureSchema = z.object({
+const TurtleMeasureSchema = z.object({
   m: TurtleMessageSchema,
   len: z.number(),
   dur: z.number(),

@@ -12,7 +12,8 @@
 /** Una entrada del mapa: la custom property, o la property con condicion. */
 
 /** Nombres CSS con los que un consumidor puede pintar de verdad. */
-import type { StyleAttrDef, StyleAttrMap, Constructor, Ctx } from "./schemas/attrs.schemas.js";
+import type { StyleAttrDef, StyleAttrMap, Constructor, Ctx, Intent, Tone, ButtonShape, MediaShape } from './schemas/attrs.schemas.js';
+
 const NAMED_COLORS = new Set([
   'currentcolor', 'transparent', 'black', 'white', 'red', 'green', 'blue',
   'yellow', 'orange', 'purple', 'pink', 'gray', 'grey', 'brown', 'cyan',
@@ -312,4 +313,255 @@ export function attrNum(porDefecto = 0) {
       },
     };
   };
+}
+
+// ── reflect ──
+/**
+ * reflect.js — Reflejo de propiedades JS a atributos HTML.
+ *
+ * El kit escribía la MISMA operación de siete maneras distintas repartidas
+ * por ~145 setters:
+ *
+ *   v == null || v === '' ? this.removeAttribute('x') : this.setAttribute('x', v);
+ *   v == null || v === '' ? this.removeAttribute('x') : this.setAttribute('x', String(v));
+ *   if (v == null || v === '') this.removeAttribute('x'); else this.setAttribute('x', v);
+ *   if (v == null || v === '') this.removeAttribute('x'); else this.setAttribute('x', String(v));
+ *
+ * Las cuatro son idénticas (`setAttribute` ya convierte a string), pero al
+ * estar escritas distinto nadie podía ver de un vistazo si el componente de
+ * al lado trataba el string vacío igual. Aquí queda UNA forma por semántica,
+ * y la semántica está en el nombre.
+ *
+ * Booleanos: no hay helper. `this.toggleAttribute('x', !!v)` ya es una línea
+ * y añadir una función encima sólo alarga la pila de llamadas.
+ */
+/**
+ * Atributo de texto: `null`, `undefined` y `''` QUITAN el atributo.
+ *
+ * Es la semántica correcta cuando "vacío" y "ausente" significan lo mismo
+ * para el componente (`label`, `placeholder`, `icon`, `href`…): así el CSS
+ * puede usar `:not([label])` sin tener que contemplar `label=""`.
+ *
+ *   set label(v) { setStringAttr(this, 'label', v); }
+ *
+ * @param {Element} el
+ * @param {string} attr
+ * @param {*} value
+ */
+export function setStringAttr(el: Element, attr: string, value: unknown) {
+  if (value == null || value === '') el.removeAttribute(attr);
+  else el.setAttribute(attr, String(value));
+}
+
+/**
+ * Atributo opcional: sólo `null` y `undefined` quitan el atributo; el string
+ * vacío SE CONSERVA (`x=""`).
+ *
+ * Para atributos donde "" es un valor con significado propio, distinto de
+ * "sin poner" — típicamente `value` en los controles de formulario, donde
+ * `value=""` es "el usuario lo borró" y ausente es "aún sin tocar".
+ *
+ * @param {Element} el
+ * @param {string} attr
+ * @param {*} value
+ */
+export function setOptionalAttr(el: Element, attr: string, value: unknown) {
+  if (value == null) el.removeAttribute(attr);
+  else el.setAttribute(attr, String(value));
+}
+
+/**
+ * Lee un atributo numérico. Devuelve `fallback` si falta, está vacío o no es
+ * un número finito — nunca `NaN`, que es la fuente habitual de anchos y
+ * porcentajes rotos aguas abajo.
+ *
+ *   get max() { return getNumberAttr(this, 'max', 100); }
+ *
+ * @param {Element} el
+ * @param {string} attr
+ * @param {number} [fallback=0]
+ * @returns {number}
+ */
+export function getNumberAttr(el: Element, attr: string, fallback: number = 0) {
+  const raw = el.getAttribute(attr);
+  if (raw == null || raw === '') return fallback;
+  const n = Number(raw);
+  return Number.isFinite(n) ? n : fallback;
+}
+
+// ── intent ──
+/**
+ * intent.js — Intenciones semánticas (atributo `color`) compartidas.
+ *
+ * Un "intent" describe EL SIGNIFICADO del color que aplica el componente,
+ * no su apariencia. Ejemplos: success (verde), warning (amarillo), danger
+ * (rojo), brand (color de marca), neutral (gris muted), text (foreground
+ * del tema — plain/outlined legibles: Editar, Descargar…).
+ *
+ * Default: 'brand' (no 'neutral'). Convención 2026-08 — ver LLM.md §6.16.
+ *
+ * Compartido por: iswc-button, iswc-tag, iswc-badge, iswc-callout, iswc-toast,
+ * iswc-toast-item, iswc-stat, iswc-fab, iswc-checkbox, iswc-radio, iswc-radio-group,
+ * iswc-rating, iswc-switch.
+ *
+ * CDN: reexportado en `helpers/ui.min.mjs` (`IswcUi.INTENT`, `ensureDefaultColor`, …).
+ */
+export const INTENT = Object.freeze([
+  'brand',     // color de marca (default)
+  'neutral',   // gris #888, sin tinte semántico (muted)
+  'text',      // foreground del tema (--iswc-text)
+  'success',   // verde — confirmación / validación OK
+  'warning',   // amarillo — atención, no crítico
+  'danger',    // rojo — error / acción destructiva
+  'info',      // azul informativo
+  'error',     // rojo de error (alias semántico de danger en varios CE)
+]);
+
+export const DEFAULT_INTENT = 'brand';
+
+/** Los valores validos de intencion, derivados de la lista: una sola fuente. */
+
+/**
+ * Devuelve el intent si es válido, o `fallback` si no.
+ * Útil en setters para rechazar valores fuera de la enum sin romper el render.
+ */
+export function normalizeIntent(value: unknown, fallback: Intent = DEFAULT_INTENT): Intent {
+  if (typeof value !== 'string') return fallback;
+  return (INTENT as readonly string[]).includes(value) ? (value as Intent) : fallback;
+}
+
+/**
+ * Setter helper para atributos reflected: acepta cualquier valor y guarda
+ * sólo si está en la enum. Uso típico en componentes con intent:
+ *
+ *   set color(v) { setEnumAttr(this, 'color', normalizeIntent(v)); }
+ */
+export function setEnumAttr(el: Element, attr: string, normalized: string | null | undefined): void {
+  if (normalized == null || normalized === '') el.removeAttribute(attr);
+  else el.setAttribute(attr, normalized);
+}
+
+/**
+ * Garantiza `color` con default de kit (`brand`) si el consumer no lo puso.
+ * Misma regla que button/switch: sin atributo → brand; con valor → se respeta
+ * (tras normalizar). Apps CDN: `IswcUi.ensureDefaultColor(el)`.
+ */
+export function ensureDefaultColor(
+  el: Element,
+  fallback: Intent = DEFAULT_INTENT,
+): Intent {
+  if (!el.hasAttribute('color')) {
+    el.setAttribute('color', fallback);
+    return fallback;
+  }
+  const next = normalizeIntent(el.getAttribute('color'), fallback);
+  if (el.getAttribute('color') !== next) el.setAttribute('color', next);
+  return next;
+}
+
+// ── tone ──
+/**
+ * tone.js — Niveles de relleno (atributo `variant`) compartidos.
+ *
+ * Un "tone" describe EL GRADO DE PESO VISUAL: outlined (sin relleno, sólo
+ * borde), filled (relleno sólido), plain (texto plano), accent (borde +
+ * acento lateral), filled-outlined (combinación).
+ *
+ * Compartido por: iswc-tag, iswc-badge, iswc-card, iswc-callout, iswc-details.
+ *
+ * Diferencia con intent.js: el intent define QUÉ color aplica; el tone
+ * define CUÁNTO PESO VISUAL tiene ese color.
+ */
+export const TONE = Object.freeze([
+  'accent',           // borde + acento lateral (sidebar TOC, callout admonition)
+  'filled',           // relleno sólido
+  'outlined',         // sin relleno, sólo borde
+  'filled-outlined',  // relleno + borde (caso intermedio)
+  'plain',            // texto plano sin borde ni fondo
+]);
+
+export const DEFAULT_TONE = 'filled';
+
+/** Variantes validas, derivadas de la lista: una sola fuente. */
+
+/**
+ * Devuelve el tone si es válido, o `fallback` si no.
+ */
+export function normalizeTone(value: unknown, fallback: Tone = DEFAULT_TONE): Tone {
+  if (typeof value !== 'string') return fallback;
+  return (TONE as readonly string[]).includes(value) ? (value as Tone) : fallback;
+}
+
+/**
+ * Setter helper para atributos reflected: acepta cualquier valor y guarda
+ * sólo si está en la enum. Espejo de `setEnumAttr` en intent.js.
+ *
+ *   set color(v) { setEnumToneAttr(this, 'color', normalizeTone(v)); }
+ */
+export function setEnumToneAttr(el: Element, attr: string, normalized: string | null | undefined): void {
+  if (normalized == null || normalized === '') el.removeAttribute(attr);
+  else el.setAttribute(attr, normalized);
+}
+
+// ── button-shape ──
+/**
+ * button-shape.ts — Contorno de controles tipo botón (atributo `shape`).
+ *
+ * Compartido por: iswc-button (y quien reenvía `shape` al botón, p. ej. prefs-clear).
+ * No mezclar con MEDIA_SHAPE (avatar / theme-img): otro dominio (recorte de media).
+ */
+export const BUTTON_SHAPE = Object.freeze([
+  'none',
+  'round',
+  'square',
+  'rect',
+  'pill',
+] as const);
+
+export const DEFAULT_BUTTON_SHAPE = 'round';
+
+/** Iconos sugeridos para paneles de demo / selects. */
+export const BUTTON_SHAPE_ICON: Record<ButtonShape, string> = Object.freeze({
+  none: 'mdi:cancel',
+  round: 'mdi:rounded-corner',
+  square: 'mdi:square-outline',
+  rect: 'mdi:rectangle-outline',
+  pill: 'mdi:capsule',
+});
+
+export function normalizeButtonShape(
+  value: unknown,
+  fallback: ButtonShape = DEFAULT_BUTTON_SHAPE,
+): ButtonShape {
+  if (typeof value !== 'string') return fallback;
+  return (BUTTON_SHAPE as readonly string[]).includes(value)
+    ? (value as ButtonShape)
+    : fallback;
+}
+
+// ── media-shape ──
+/**
+ * media-shape.ts — Recorte visual de media (atributo `shape`).
+ *
+ * Compartido por: iswc-avatar, iswc-theme-img.
+ * Distinto de BUTTON_SHAPE (contorno de botón / chrome).
+ */
+export const MEDIA_SHAPE = Object.freeze(['circle', 'square', 'rounded'] as const);
+
+export const DEFAULT_MEDIA_SHAPE = 'circle';
+
+export const MEDIA_SHAPE_ICON: Record<MediaShape, string> = Object.freeze({
+  circle: 'mdi:circle-outline',
+  square: 'mdi:square-outline',
+  rounded: 'mdi:rounded-corner',
+});
+
+export function normalizeMediaShape(
+  value: unknown,
+  fallback: MediaShape = DEFAULT_MEDIA_SHAPE,
+): MediaShape {
+  if (typeof value !== 'string') return fallback;
+  return (MEDIA_SHAPE as readonly string[]).includes(value)
+    ? (value as MediaShape)
+    : fallback;
 }

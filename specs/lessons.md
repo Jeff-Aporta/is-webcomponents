@@ -203,6 +203,17 @@ Detalles de **inventario por tag** (tablas de componentes de cada categoría), l
 |---|---|---|---|
 | `src/components/isp/_shared/tree-view/selection.ts` | 26 | JSDoc dice `keyof typeof SelectionMode`, cuerpo compara contra `SelectionMode.NONE` (string `'none'`) | Alinear JSDoc con cuerpo: comparar contra `SelectionMode` completo o cambiar el tipo de `mode` a `SelectionMode` (no `keyof typeof`) |
 
+## Aplanar y depurar (F9a, 2026-11-05)
+
+| Trampa | Mitigación |
+|---|---|
+| Fundir un util puro con uno que registra un tag (`import './x.js'` de un componente) hace que sus importadores carguen el DOM: en Deno, `HTMLElement is not defined` | Antes de fundir, mirar los imports de efecto de cada parte; el que registra queda aparte (`tk-inline-md`, `file-estado`) |
+| Clases que se extienden al cargar (`class B extends A`) en dos archivos que se importan mutuamente tras la fusión | Orden del mapa = cadena de herencia; no fundir partes que cierren un ciclo (tree-view: adapter, row-adapter) |
+| Un import después de código (`export const X…` antes del `import type`) | `aplanar.mjs` saca los imports estén donde estén; comprobar con un listado de nombres top-level antes/después |
+| `declare module './x.js'` que reabre un módulo fundido | Pasar a interfaces en el mismo archivo (se fusionan con su clase; mismo estado de export) |
+| Basename común (`schemas.ts`, `index.ts`) en una cadena hace que el análisis de código muerto dé el archivo por consumido entero | Nombres por familia (`celdas.schemas.ts`); el guardián `sin-codigo-muerto` se vuelve más preciso tras aplanar |
+| Una variable escrita y nunca leída (`x = …`) sale como «sin uso» en lint | `depurar.mjs` no borra declaraciones que aparecen más de una vez en el archivo |
+
 ## Trampas operativas de types-strong-2026
 
 | Trampa | Mitigación |

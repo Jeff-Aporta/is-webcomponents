@@ -190,7 +190,7 @@ Convención del kit: `iswc-<nombre>` (kebab-case), `composed: true`,
 `bubbles: true` (salvo casos justificados).
 
 ```ts
-import { emit } from '../../core/element.js';
+import { emit } from '../../core/iswc-element.js';
 
 class IswcFoo extends IswcElement {
   static tag = 'iswc-foo';
@@ -210,7 +210,7 @@ class IswcFoo extends IswcElement {
 }
 ```
 
-`emit` está en [`core/element.ts`](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/core/element.ts)
+`emit` está en [`core/iswc-element.ts`](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/core/iswc-element.ts)
 y centraliza el `new CustomEvent(name, { detail, bubbles, composed,
 cancelable })`.
 

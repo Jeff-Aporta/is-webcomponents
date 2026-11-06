@@ -9,8 +9,7 @@
  * Es una subclase del molde `IswcElement` (core/iswc-element.ts): la subclase declara `static tag`, `static css` y
  * `static observed = atributosDe(INICIAL)`, y el molde crea el shadow y adopta las hojas.
  */
-import { IswcElement } from './iswc-element.js';
-import { upgradeProperties } from './element.js';
+import { IswcElement, upgradeProperties } from './iswc-element.js';
 import type { EsquemaProps } from './schemas/props-element.schemas.js';
 
 const aKebab = (clave: string): string => clave.replace(/[A-Z]/g, (c) => `-${c.toLowerCase()}`);

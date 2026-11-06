@@ -1,0 +1,1 @@
+import{a as s}from"./chunk-KBNBLPXE.mjs";import{b as i}from"./chunk-RTD3RGJP.mjs";import{b as r}from"./chunk-6W2IJOBM.mjs";import{a}from"./chunk-7KA6AITV.mjs";var m=[{nombre:"celdas",instalar:a},{nombre:"filtros",instalar:s},{nombre:"edicion",instalar:r},{nombre:"filas",instalar:i}];export{m as a};

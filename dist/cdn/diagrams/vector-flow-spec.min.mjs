@@ -9,4 +9,4 @@
  * cdn-install: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/is-cdn-install/SKILL.md
  * blob: https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/diagrams/vector-flow-spec.js
  */
-import{a,b,c,d,e,f}from"../_chunks/chunk-YKSQFM4Z.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";export{a as ACEPTA_POR_TIPO,e as GRUPOS_CRUD,c as aceptaColumna,b as tipoVector,d as validarVector,f as vectorAFlujo};
+import{a,b,c}from"../_chunks/chunk-2EU4X72R.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";export{b as GRUPOS_CRUD,a as validarVector,c as vectorAFlujo};

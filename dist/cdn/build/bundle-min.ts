@@ -3,7 +3,7 @@
  * Otro proyecto is-* los importa por vendor (copia de dist/cdn/build)
  * o desde el CDN, y queda con el mismo formato y los mismos defines.
  */
-import { build, type Plugin } from 'esbuild';
+import { build } from 'esbuild';
 import type { BundleMinJsOptions, BundleLoaderOptions } from "./bundle-min.schemas.js";
 import { aliasKit } from './alias.js';
 import { cssVirtual } from './css-virtual.js';

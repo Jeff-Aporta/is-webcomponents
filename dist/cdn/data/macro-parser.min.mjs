@@ -9,4 +9,4 @@
  * cdn-install: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/is-cdn-install/SKILL.md
  * blob: https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/data/macro-parser.js
  */
-import{a}from"../_chunks/chunk-NDE4PVXQ.mjs";import"../_chunks/chunk-62BF6X5E.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";export{a as parseMacro};
+import{a}from"../_chunks/chunk-FEBPWMSB.mjs";import"../_chunks/chunk-S4SUO4QM.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";export{a as parseMacro};

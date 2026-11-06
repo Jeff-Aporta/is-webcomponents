@@ -9,4 +9,4 @@
  * cdn-install: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/is-cdn-install/SKILL.md
  * blob: https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/data/celdas-alturas.js
  */
-import{a}from"../_chunks/chunk-YTEBEIFC.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";export{a as AlturasFilas};
+import{a}from"../_chunks/chunk-HSN2MUWN.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";export{a as AlturasFilas};

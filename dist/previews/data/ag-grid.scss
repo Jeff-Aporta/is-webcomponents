@@ -1,10 +1,10 @@
-@use 'utils/ag-grid/celdas/estilos' as celdas;
-@use 'utils/ag-grid/filtros/estilos' as filtros;
-@use 'utils/ag-grid/edicion/estilos' as edicion;
-@use 'utils/ag-grid/filas/estilos' as filas;
+@use 'utils/ag-grid/celdas-estilos' as celdas;
+@use 'utils/ag-grid/filtros-estilos' as filtros;
+@use 'utils/ag-grid/edicion-estilos' as edicion;
+@use 'utils/ag-grid/filas-estilos' as filas;
 
 /* <iswc-ag-grid> — todo en em: un `font-size` en el host escala la grilla.
-   Personalizacion por tokens --iswc-grid-*; los temas de utils/ag-grid/celdas/temas
+   Personalizacion por tokens --iswc-grid-*; los temas de utils/ag-grid/celdas-temas
    los sobreescriben sobre el host. Sin px salvo bordes de 1px. */
 
 :host {

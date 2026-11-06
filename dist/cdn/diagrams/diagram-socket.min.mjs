@@ -9,4 +9,4 @@
  * cdn-install: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/is-cdn-install/SKILL.md
  * blob: https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/diagrams/diagram-socket.js
  */
-import{a,b}from"../_chunks/chunk-OM6X4LVU.mjs";import"../_chunks/chunk-DZIPQGNK.mjs";import"../_chunks/chunk-FKA7RWJD.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";export{a as SOCKET_FILL,b as pintarSocket};
+import{a}from"../_chunks/chunk-R5FYBWYT.mjs";import"../_chunks/chunk-34RQPWHR.mjs";import"../_chunks/chunk-NKUMZSHD.mjs";import"../_chunks/chunk-FKA7RWJD.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";export{a as pintarSocket};

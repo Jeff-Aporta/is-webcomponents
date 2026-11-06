@@ -9,4 +9,4 @@
  * cdn-install: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/is-cdn-install/SKILL.md
  * blob: https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/helpers/mutation-observer.js
  */
-import{a as r}from"../_chunks/chunk-JMJVI6EY.mjs";import{b as e}from"../_chunks/chunk-T6VJWPWL.mjs";import"../_chunks/chunk-MGW4N46Z.mjs";import"../_chunks/chunk-FZCPQKWI.mjs";import"../_chunks/chunk-3COKNGLT.mjs";import"../_chunks/chunk-HK2DHHTQ.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";e(r("mutation","iswc-mutation-observer"),"IswcMutationObserver");
+import{a as r}from"../_chunks/chunk-MFSQBI3T.mjs";import{l as e}from"../_chunks/chunk-3JVMZ2Q2.mjs";import"../_chunks/chunk-FZCPQKWI.mjs";import"../_chunks/chunk-54MB44YX.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";e(r("mutation","iswc-mutation-observer"),"IswcMutationObserver");

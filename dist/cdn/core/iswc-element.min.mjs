@@ -4,4 +4,4 @@
  * cdn-install: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/is-cdn-install/SKILL.md
  * source: https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/core/iswc-element.ts
  */
-import{a,b}from"../_chunks/chunk-T6VJWPWL.mjs";import"../_chunks/chunk-MGW4N46Z.mjs";import"../_chunks/chunk-FZCPQKWI.mjs";import"../_chunks/chunk-3COKNGLT.mjs";import"../_chunks/chunk-HK2DHHTQ.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";export{a as IswcElement,b as define};
+import{a,b,c,d,e,f,g,h,i,j,k,l}from"../_chunks/chunk-3JVMZ2Q2.mjs";import"../_chunks/chunk-FZCPQKWI.mjs";import"../_chunks/chunk-54MB44YX.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";export{k as IswcElement,g as adoptCss,l as define,e as defineElement,h as emit,i as emitCancelable,d as globalNameFor,c as sheetsBase,f as siblingCssHref,a as soportaHojasAdoptadas,b as textoHojasBase,j as upgradeProperties};

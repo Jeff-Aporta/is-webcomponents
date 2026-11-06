@@ -11,7 +11,7 @@
 // Destino: `ENTREGABLE` o, por defecto, `../../_entregable/<carpeta del mirror>`. Si no existe, exit 2:
 // una app sin entregable no usa este comando.
 import { existsSync } from 'node:fs';
-import { basename, join, resolve } from 'node:path';
+import { basename, resolve } from 'node:path';
 import process from 'node:process';
 import { codigoSync, correrSync, modoDeArgv } from '../../src/vendor/iswc-base/tools/sync-entregable.ts';
 

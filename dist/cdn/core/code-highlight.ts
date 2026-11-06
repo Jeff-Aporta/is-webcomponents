@@ -18,7 +18,7 @@
  * en la era CodeMirror.
  */
 
-import { TagInnerSchema, type TagInner } from "./schemas/code-highlight.schemas.js";
+import { type TagInner } from "./schemas/code-highlight.schemas.js";
 import type { TokenType, Token, HighlightLine, HighlightState, TokenizeResult } from "./schemas/code-highlight.schemas.js";
 
 /** Tipos de token reconocidos por el highlighter. */
@@ -44,15 +44,6 @@ const JS_KEYWORDS: ReadonlySet<string> = new Set([
   'of', 'package', 'private', 'protected', 'public', 'return', 'set', 'static',
   'super', 'switch', 'this', 'throw', 'true', 'try', 'type', 'typeof', 'undefined',
   'var', 'void', 'while', 'with', 'yield',
-]);
-
-const CSS_ATOMS: ReadonlySet<string> = new Set([
-  'auto', 'none', 'inherit', 'initial', 'unset', 'transparent', 'currentColor',
-  'solid', 'dashed', 'dotted', 'hidden', 'visible', 'absolute', 'relative', 'fixed',
-  'sticky', 'block', 'inline', 'flex', 'grid', 'row', 'column', 'wrap', 'nowrap',
-  'center', 'start', 'end', 'left', 'right', 'top', 'bottom', 'normal', 'bold',
-  'italic', 'pointer', 'default', 'cover', 'contain', 'repeat', 'no-repeat',
-  'ellipsis', 'clip', 'important', 'sans-serif', 'monospace', 'serif',
 ]);
 
 const isDigit = (c: string | undefined): boolean => !!c && c >= '0' && c <= '9';

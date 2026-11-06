@@ -124,6 +124,43 @@ definirse) y el resto con `load` (progresivo).
   `src/vendor/iswc-base/deps.json`). Ojo al orden: el `<script type="module">` del loader va **antes** del registrador
   de la app (los módulos se ejecutan en orden de documento y el registrador necesita `globalThis.iswcLoader`).
 
+### Aplanado de core (F9a, 2026-11-05) — cambio breaking de rutas
+
+`src/core` pasó de 43 a 24 módulos y los utils de `diagrams`, `isp`, `data`, `forms` y `files` a un nivel con prefijo de
+familia (ADR «aplanado de core, 2026-11-05»). Un pin por SHA anterior sigue igual; **al re-pinear**, quien importe un
+módulo suelto cambia la ruta (no hay alias de compatibilidad: sin reexports ni barriles). Se conservan `core/loader`,
+`core/app-init`, `is-base`, `palettes`, `core/iswc-element`, `core/props-element`, `core/attrs`, `core/iswc-storage` y
+`core/cdn-ref`.
+
+| Antes (`dist/cdn/…min.mjs`) | Ahora |
+|---|---|
+| `core/element`, `core/base-sheets` | `core/iswc-element` |
+| `core/reflect`, `core/intent`, `core/tone`, `core/button-shape`, `core/media-shape` | `core/attrs` |
+| `core/dom-utils`, `core/misc-utils`, `core/theme-scope` | `core/dom` |
+| `core/popup-dismiss` | `core/position` |
+| `core/tk-hue`, `core/tk-color` | `core/color` |
+| `core/tk-icon-inline`, `core/tk-rich-text` | `core/tk-text` (`core/tk-inline-md` sigue aparte) |
+| `core/code-text`, `core/code-diff`, `core/code-langs`, `core/highlight-code` | `core/code` |
+| `core/scroll-memory` | `core/prefs` |
+| `core/app-cfg` | `core/app-init` |
+| `core/json-html` | `isp/isp-json` |
+| `core/spa-state` | `layout/spa-state` |
+| `diagrams/diagram-{kinds,vocab,header}` | `diagrams/diagram-model` |
+| `diagrams/diagram-{arrow,curve,edge-spread,edge-style}` | `diagrams/diagram-edges` |
+| `diagrams/routing-costs`, `diagrams/diagram-astar` | `diagrams/diagram-routing` (el JSON `diagrams/routing-costs.json` sigue) |
+| `diagrams/diagram-{graph,flow}`, `diagrams/node-link-layout` | `diagrams/diagram-layout` |
+| `diagrams/diagram-text-wrap`, `diagrams/flowchart-labels` | `diagrams/diagram-labels` |
+| `diagrams/oklch` | `diagrams/diagram-styles` |
+| `diagrams/pan-zoom`, `diagrams/diagram-embed` | `diagrams/diagram-view` |
+| `diagrams/lane-layout` | `diagrams/swimlane-spec` |
+| `isp/adapter`, `isp/row-adapter`, `isp/tree-data`, … (`utils/tree-view/*`) | `isp/tree-view-adapter`, `isp/tree-view-row-adapter`, `isp/tree-view-flow`, … (`isp/customs-base` igual) |
+| `isp/isp-record-utils`, `isp/isp-color` · `isp/form-json`, `isp/controller-from-config` | `isp/isp-utils` · `isp/isp-form` |
+| `data/<x>` de `utils/ag-grid/<familia>/` y `utils/spreadsheet/<sub>/` | `data/<familia>-<x>` (`celdas-`, `edicion-`, `filas-`, `filtros-`, `nucleo-`, `fn-`, `macro-`, `ui-`) |
+| `forms/masks-tokens`, `forms/web-otp` · `files/load-cdn` | `forms/input-tokens` · `files/file-source` |
+
+Los mapas exactos (origen → destino, rutas desde `src/`) están versionados en
+`scripts/codemods/aplanar-{core,diagrams,isp,data,menores}.json`.
+
 ### Consumidores: re-pinear tras F3/F4
 
 Un consumidor con un pin anterior a F3 (módulos `.min.js`) o anterior a F4 (sin `deps.json` ni loader en capas) sube

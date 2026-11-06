@@ -146,7 +146,7 @@ Patrón mínimo:
 ```ts
 // src/components/actions/foo.ts
 import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
-import { setCustomState } from '@jeff-aporta/iswc-base/core/element.js';
+import { setCustomState } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import css from 'iswc:css';
 
 class IswcFoo extends IswcElement {

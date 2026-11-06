@@ -1,8 +1,7 @@
-import { tkHueToHex } from './tk-hue.js';
-import { contrastFontColor } from './tk-color.js';
+import { tkHueToHex, contrastFontColor } from './color.js';
 import { inlineMdWeb } from './tk-inline-md.js';
 import { svgEl } from './svg-chart-engine.js';
-import type { TurtleMessage, TurtleTheme, TurtlePhase, TurtleState, TurtleReport, TurtleDataOpts, TurtleMeasure } from "./schemas/path-turtle.schemas.js";
+import type { TurtleMessage, TurtleTheme, TurtleState, TurtleReport, TurtleDataOpts, TurtleMeasure } from "./schemas/path-turtle.schemas.js";
 
 /**
  * Dot "tortuga cometa" controlable: recorre los flujos en orden, con cola de cometa
@@ -25,8 +24,6 @@ import type { TurtleMessage, TurtleTheme, TurtlePhase, TurtleState, TurtleReport
 /** Opciones de `setData`. */
 
 /** Resultado de medir un mensaje. */
-
-const SVG_NS = 'http://www.w3.org/2000/svg';
 
 const TRAIL = 14;
 const SPEED = 2.5; // ms por unidad de longitud
@@ -329,6 +326,3 @@ export class PathTurtle {
   };
 }
 
-export { AUTO_GAP as TURTLE_AUTO_GAP };
-/** Nombre histórico: lo usan los diagramas. */
-export { PathTurtle as SequenceTurtle };

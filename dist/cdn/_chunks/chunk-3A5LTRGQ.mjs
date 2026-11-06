@@ -1,1 +1,0 @@
-var n=Object.freeze(["none","round","square","rect","pill"]),o="round",r=Object.freeze({none:"mdi:cancel",round:"mdi:rounded-corner",square:"mdi:square-outline",rect:"mdi:rectangle-outline",pill:"mdi:capsule"});function s(e,t=o){return typeof e!="string"?t:n.includes(e)?e:t}function i(){return n.map(e=>({value:e,label:e,icon:r[e]}))}export{n as a,o as b,r as c,s as d,i as e};

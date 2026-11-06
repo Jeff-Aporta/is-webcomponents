@@ -1,1 +1,0 @@
-function u(n,e,t){t==null||t===""?n.removeAttribute(e):n.setAttribute(e,String(t))}function o(n,e,t){t==null?n.removeAttribute(e):n.setAttribute(e,String(t))}function s(n,e,t=0){let r=n.getAttribute(e);if(r==null||r==="")return t;let i=Number(r);return Number.isFinite(i)?i:t}export{u as a,o as b,s as c};

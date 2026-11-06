@@ -9,4 +9,4 @@
  * cdn-install: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/is-cdn-install/SKILL.md
  * blob: https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/data/input-parse.js
  */
-import{a,b}from"../_chunks/chunk-HGIZ6PCK.mjs";import"../_chunks/chunk-ZEHEDVTO.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";export{b as parseInput,a as parseLocaleNumber};
+import{a}from"../_chunks/chunk-GIYRCCCP.mjs";import"../_chunks/chunk-ZEHEDVTO.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";export{a as parseInput};

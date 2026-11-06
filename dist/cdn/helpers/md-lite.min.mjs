@@ -9,4 +9,4 @@
  * cdn-install: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/is-cdn-install/SKILL.md
  * blob: https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/helpers/md-lite.js
  */
-import{a,b}from"../_chunks/chunk-6LHJEDHS.mjs";import"../_chunks/chunk-IRRE3ZS2.mjs";import"../_chunks/chunk-ENTC7HUT.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";export{b as mdToHtml,a as slugMd};
+import{a,b}from"../_chunks/chunk-4KLEPXKB.mjs";import"../_chunks/chunk-IRRE3ZS2.mjs";import"../_chunks/chunk-2GHB5Y6L.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";export{b as mdToHtml,a as slugMd};

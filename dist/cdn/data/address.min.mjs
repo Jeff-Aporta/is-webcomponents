@@ -9,4 +9,4 @@
  * cdn-install: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/is-cdn-install/SKILL.md
  * blob: https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/data/address.js
  */
-import{a,b,c,d,e,f,g,h,i,j,k,l}from"../_chunks/chunk-BDDWZ3TG.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";export{b as MAX_COLS,a as MAX_ROWS,e as cellName,d as colIndex,c as colName,j as inRect,k as intersects,g as normalize,f as parseCell,h as parseRange,l as quoteSheet,i as rangeName};
+import{a,b,c,d,e,f,g,h,i,j}from"../_chunks/chunk-CYQH7UVL.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";export{c as cellName,b as colIndex,a as colName,h as inRect,i as intersects,e as normalize,d as parseCell,f as parseRange,j as quoteSheet,g as rangeName};
