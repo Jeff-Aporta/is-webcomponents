@@ -39,13 +39,14 @@ test('tree-view: 3. JSON existe y respeta iswc-preview/v1', async () => {
 test('4. las piezas de personalización se importan de su módulo de origen y tienen bundle (S-TS9)', async () => {
   // Lo que promete tree-view.md: cada símbolo sale de su propio módulo publicado, no de tree-view.
   const piezas: Array<[string, string[]]> = [
+    // F9a: utils/tree-view/ aplanado a utils/tree-view-*.ts (tree-data vive en tree-view-flow).
     ['customs-base', ['TreeCustomsBase']],
-    ['adapter', ['TreeRowViewAdapter']],
-    ['row-adapter', ['TreeRowAdapter']],
-    ['tree-data', ['objRootsToNodes', 'groupedWithSeparators']],
+    ['tree-view-adapter', ['TreeRowViewAdapter']],
+    ['tree-view-row-adapter', ['TreeRowAdapter']],
+    ['tree-view-flow', ['objRootsToNodes', 'groupedWithSeparators']],
   ];
   for (const [mod, nombres] of piezas) {
-    const m = await import('../../src/components/isp/utils/tree-view/' + mod + '.ts');
+    const m = await import('../../src/components/isp/utils/' + mod + '.ts');
     for (const n of nombres) assert.equal(typeof m[n], 'function', mod + ' exporta ' + n);
     assert.ok(existsSync(join(ROOT, 'dist', 'cdn', 'isp', mod + '.min.mjs')), 'falta el bundle dist/cdn/isp/' + mod + '.min.mjs');
   }
@@ -63,7 +64,7 @@ test('5. customs base compartido: la doc enseña a extenderlo desde su módulo',
 
 test('6. importa paintForest para pintar el árbol', async () => {
   const src = readFileSync(TS, 'utf8');
-  assert.ok(/from\s*['"][./]+utils\/tree-view\/render-rows/.test(src));
+  assert.ok(/from\s*['"][./]+utils\/tree-view-render/.test(src));
   assert.ok(/paintForest/.test(src));
 });
 
@@ -88,8 +89,8 @@ test('10. integra con float-card (ficha del item)', async () => {
   assert.ok(/float-card/.test(src));
 });
 
-test('11. el módulo de customs base existe en utils/tree-view/', async () => {
-  const customs = join(ROOT, 'src', 'components', 'isp', 'utils', 'tree-view', 'customs-base.ts');
+test('11. el módulo de customs base existe en utils/ (entrada pública isp/customs-base)', async () => {
+  const customs = join(ROOT, 'src', 'components', 'isp', 'utils', 'customs-base.ts');
   assert.ok(existsSync(customs));
 });
 

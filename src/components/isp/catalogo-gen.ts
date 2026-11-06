@@ -7,9 +7,9 @@ import './confirm-delete.js';
 import './modal-verificacion.js';
 import './form.js';
 import './heading.js';
-import './utils/controller-from-config.js';
+import './utils/isp-form.js';
 
-import type { IspRecord, IspController } from './schemas/controller-from-config.schemas.js';
+import type { IspRecord, IspController } from './schemas/isp-form.schemas.js';
 import {
   asStr,
   cloneRecord,
@@ -19,7 +19,7 @@ import {
   lowerCase,
   setProp,
   toGridRow,
-} from './utils/isp-record-utils.js';
+} from './utils/isp-utils.js';
 import type { ActionLabel, BAllowed, IconKind, FrmMode, InputElement, ButtonElement, AgGridElement, VerifyModalElement, ConfirmDeleteElement, DialogElement, DrawerElement, GridRowSelectDetail, GridCellClickDetail, PkModalField, PkModalCfg } from "./schemas/catalogo-gen.schemas.js";
 import css from 'iswc:css';
 /**

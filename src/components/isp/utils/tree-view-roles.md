@@ -13,7 +13,7 @@ Guía ilustrativa del modelo de roles del árbol editable. Los roles **no son
 campos sueltos**: son **tres ejes ortogonales** que el adaptador traduce a
 getters (`isAtom`, `isPrison`, …) y a reglas de drag, borrado, expansión y UI.
 
-Fuente de verdad en código: `src/components/isp/utils/tree-view/tree-data.js`
+Fuente de verdad en código: `src/components/isp/utils/tree-view-flow.js`
 (decoración) y `07-roles.js` (reglas).
 
 ## Por qué existen
@@ -308,10 +308,9 @@ subclase los declara, `isGrouper` / `isActionGrouper` también clasifican por
 ## Fuentes
 
 - [tree-view.md](../tree-view.md) — API del componente
-- [tree-data.js](./tree-view/tree-data.js) — decoración y getters
-- [07-roles.js](./tree-view/07-roles.js) — reglas de rol
-- [04-tree-flow.js](./tree-view/04-tree-flow.js) — `canDrop`, `buildTree`
-- [row-adapter-drag.js](./tree-view/row-adapter-drag.js) — zonas de drop
+- [tree-view-flow.ts](./tree-view-flow.ts) — decoración y getters (antes tree-data) · `canDrop`, `buildTree`
+- [tree-view-history.ts](./tree-view-history.ts) — reglas de rol (antes 07-roles)
+- [tree-view-rows.ts](./tree-view-rows.ts) — zonas de drop (antes row-adapter-drag)
 
 
 ## Eventos

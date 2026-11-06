@@ -2,8 +2,8 @@ import '@jeff-aporta/iswc-base/components/actions/button-group.js';
 import '@jeff-aporta/iswc-base/components/actions/check-icon-button.js';
 import '@jeff-aporta/iswc-base/components/actions/dropdown.js';
 import '@jeff-aporta/iswc-base/components/actions/dropdown-item.js';
-import { paintFlexOptions } from './utils/tree-view/paint-flex-options.js';
-import { type FlexActionEntry } from './schemas/tree-view-flex-options.schemas.js';
+import { paintFlexOptions } from './utils/tree-view-paint-flex-options.js';
+import { type FlexActionEntry } from './schemas/tree-view-paint-flex-options.schemas.js';
 import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import css from 'iswc:css';
 

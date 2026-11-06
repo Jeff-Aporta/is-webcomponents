@@ -129,9 +129,9 @@ el.addEventListener('iswc-select', (e) => {
 | `runCustomsPreSubmit()` | Sanea + `commitFlatPaths` antes de persistir. |
 
 Las piezas para personalizar se importan de su módulo de origen (sin re-exports, S-TS9):
-`TreeCustomsBase` de `./isp/customs-base.min.mjs`, `TreeRowViewAdapter` de `./isp/adapter.min.mjs`,
-`TreeRowAdapter` de `./isp/row-adapter.min.mjs` y `objRootsToNodes` / `groupedWithSeparators` /
-`TreeNode` de `./isp/tree-data.min.mjs`.
+`TreeCustomsBase` de `./isp/customs-base.min.mjs`, `TreeRowViewAdapter` de `./isp/tree-view-adapter.min.mjs`,
+`TreeRowAdapter` de `./isp/tree-view-row-adapter.min.mjs` y `objRootsToNodes` / `groupedWithSeparators` /
+`TreeNode` de `./isp/tree-view-flow.min.mjs`.
 
 ### CSS parts
 

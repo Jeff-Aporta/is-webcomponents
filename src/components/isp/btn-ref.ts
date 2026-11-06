@@ -7,7 +7,7 @@ import '@jeff-aporta/iswc-base/components/layout/dialog.js';
 import './catalogo-gen.js';
 import {
   asStr, getProp, isPresent,
-} from './utils/isp-record-utils.js';
+} from './utils/isp-utils.js';
 
 /** Catálogo genérico (subset mínimo que necesitamos del controller). */
 

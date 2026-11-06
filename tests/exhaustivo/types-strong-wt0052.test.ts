@@ -28,8 +28,9 @@ const { test, lista } = coleccionPruebas({ categoria: 'what' });
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(HERE, '..', '..');
 
-const ROW_ADAPTER_BASE = join(ROOT, 'src', 'components', 'isp', 'utils', 'tree-view', 'row-adapter-base.ts');
-const ROW_ADAPTER_DRAG = join(ROOT, 'src', 'components', 'isp', 'utils', 'tree-view', 'row-adapter-drag.ts');
+// F9a: row-adapter-base y row-adapter-drag viven juntos en utils/tree-view-rows.ts (TRADrag extiende TRABase).
+const ROW_ADAPTER_BASE = join(ROOT, 'src', 'components', 'isp', 'utils', 'tree-view-rows.ts');
+const ROW_ADAPTER_DRAG = ROW_ADAPTER_BASE;
 const MD_EDITOR         = join(ROOT, 'src', 'components', 'helpers', 'md-editor.ts');
 const POPOVER           = join(ROOT, 'src', 'components', 'helpers', 'popover.ts');
 const FORMAT            = join(ROOT, 'src', 'components', 'helpers', 'format.ts');

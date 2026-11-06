@@ -173,7 +173,7 @@ Form-associated vía `ElementInternals`: con `name` presente aporta `value` a
 - [`../layout/dialog.js`](../layout/dialog.js)
 - [`../media/icon.js`](../media/icon.js)
 - [`../_shared/form-associated.js`](../../core/form-associated.js)
-- [`../_shared/isp-record-utils.js`](./utils/isp-record-utils.js)
+- [`../_shared/isp-record-utils.js`](./utils/isp-utils.js)
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 - [`../_shared/define.js`](../_shared/define.js)
 - [`../_shared/emit.js`](../_shared/emit.js)

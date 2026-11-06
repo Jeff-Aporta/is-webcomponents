@@ -1,4 +1,4 @@
-import { createCatalogController } from './controller-from-config.js';
+import { createCatalogController } from './isp-form.js';
 import type { CatalogEl } from "@jeff-aporta/iswc-base/components/isp/schemas/catalogo-gen.preview.schemas.js";
 
 /**

@@ -1,4 +1,4 @@
-import { createBtnRefController } from './controller-from-config.js';
+import { createBtnRefController } from './isp-form.js';
 import type { _BtnRefLike, _SelectedDetail } from "@jeff-aporta/iswc-base/components/isp/schemas/btn-ref.preview.schemas.js";
 
 /** `<iswc-btn-ref>` con `controller` y eventos `iswc-selected-record`. */

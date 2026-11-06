@@ -4,7 +4,7 @@ import {
   normalizeMix,
   resolveMixWith,
   SEMANTIC_COLORS,
-} from '../../src/components/isp/utils/isp-color.ts';
+} from '../../src/components/isp/utils/isp-utils.ts';
 import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
 
 const { test, lista } = coleccionPruebas({ categoria: 'what' });

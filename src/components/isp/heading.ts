@@ -2,7 +2,7 @@ import {
   classifyColor,
   normalizeMix,
   syncIspColor,
-} from './utils/isp-color.js';
+} from './utils/isp-utils.js';
 import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import css from 'iswc:css';
 

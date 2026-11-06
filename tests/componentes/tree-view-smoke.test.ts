@@ -22,7 +22,7 @@
 
 import assert from 'node:assert/strict';
 
-import { asActionSpec, asBool, asNumber, asRecord, asString } from '../../src/components/isp/utils/tree-view/_types.ts';
+import { asActionSpec, asBool, asNumber, asRecord, asString } from '../../src/components/isp/utils/tree-view-context.ts';
 import { type IconConfig, type TNode, type TreeActionSpec } from '../../src/components/isp/schemas/tree-view-types.schemas.ts';
 import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
 

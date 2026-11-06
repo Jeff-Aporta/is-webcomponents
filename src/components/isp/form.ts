@@ -12,7 +12,7 @@ import {
   hostToJson,
   json2html,
 } from '@jeff-aporta/iswc-base/components/isp/utils/isp-json.js';
-import { getValues, setValues } from './utils/form-json.js';
+import { getValues, setValues } from './utils/isp-form.js';
 import css from 'iswc:css';
 
 /**

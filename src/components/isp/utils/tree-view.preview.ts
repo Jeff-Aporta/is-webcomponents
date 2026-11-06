@@ -1,4 +1,4 @@
-import { TreeCustomsBase } from './tree-view/customs-base.js';
+import { TreeCustomsBase } from './customs-base.js';
 import type { CustomsRuntime, LevelNameArgs } from '@jeff-aporta/iswc-base/components/isp/schemas/tree-view-types.schemas.js';
 import type { DemoNode, IswcTreeViewEl } from "@jeff-aporta/iswc-base/components/isp/schemas/tree-view.preview.schemas.js";
 
