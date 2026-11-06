@@ -168,7 +168,7 @@ Documentación de cabecera preservada desde fuente:
 ## Dependencias y componentes relacionados
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
-- [`../_shared/web-otp.js`](./utils/web-otp.js)
+- [`../_shared/web-otp.js`](./utils/input-tokens.js)
 
 Tags del módulo: `<iswc-pin-input>`.
 

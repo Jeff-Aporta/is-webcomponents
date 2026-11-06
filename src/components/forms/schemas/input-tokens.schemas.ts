@@ -4,7 +4,7 @@
  * Generado por `scripts/migrate-zod.py`. Refinar manualmente las
  * entradas marcadas con TODO cuando se quiera validación runtime.
  */
-import { z } from "zod";
+import { z } from 'zod';
 
 const MaskTokenDefSchema = z.object({
   re: z.unknown() /* TODO: ref RegExp */,
@@ -29,4 +29,3 @@ const SlotLiteralSchema = z.object({
 
 const SlotSchema = z.union([SlotTokenSchema, SlotLiteralSchema]);
 export type Slot = z.infer<typeof SlotSchema>;
-

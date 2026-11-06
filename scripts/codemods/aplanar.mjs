@@ -286,6 +286,7 @@ function fusionar(destino, partes) {
   }
   // Imports: por módulo y tipo; los que apuntan a otra parte del grupo (o al propio destino) se van.
   const porModulo = new Map();
+  const importadoDe = new Map();
   const efecto = [];
   for (const pz of piezas) {
     for (const st of pz.imports) {
@@ -317,11 +318,18 @@ function fusionar(destino, partes) {
         }
         continue;
       }
-      const clave = `${c.isTypeOnly ? 'type' : 'valor'}:${esp}${atributos}`;
-      if (!porModulo.has(clave)) porModulo.set(clave, { tipo: c.isTypeOnly, esp, atributos, nombres: [] });
+      // El mismo módulo por alias y por relativo es uno: la clave es el archivo resuelto, y el especificador se
+      // reescribe con la regla del destino (relativo en la misma carpeta, alias si sube).
+      const espFinal = objetivo ? especificador(destino, esp.startsWith('.') ? esp : esp.replace(/^.*\//, './'), objetivo) : esp;
+      const clave = `${c.isTypeOnly ? 'type' : 'valor'}:${objetivo || esp}${atributos}`;
+      if (!porModulo.has(clave)) porModulo.set(clave, { tipo: c.isTypeOnly, esp: espFinal, atributos, nombres: [] });
       const entrada = porModulo.get(clave);
       for (const e of c.namedBindings?.elements ?? []) {
-        const t = e.getText(pz.fuente);
+        const t = e.getText(pz.fuente).replace(/^type\s+/, c.isTypeOnly ? '' : 'type ');
+        const local = e.name.text;
+        const deDonde = objetivo || esp;
+        if (importadoDe.has(local) && importadoDe.get(local) !== deDonde) colisiones.push(`${local}: importado de ${importadoDe.get(local)} y de ${deDonde} (dos módulos distintos)`);
+        importadoDe.set(local, deDonde);
         if (!entrada.nombres.includes(t)) entrada.nombres.push(t);
         if (vistos.has(e.name.text)) colisiones.push(`${e.name.text}: importado en ${pz.ruta} y declarado en ${vistos.get(e.name.text)}`);
       }
@@ -330,8 +338,8 @@ function fusionar(destino, partes) {
   // Un mismo nombre importado como valor y como tipo del mismo módulo: basta el de valor.
   for (const [clave, e] of porModulo) {
     if (!e.tipo) continue;
-    const valor = porModulo.get(`valor:${e.esp}${e.atributos}`);
-    if (valor) e.nombres = e.nombres.filter((n) => !valor.nombres.includes(n) && !valor.nombres.includes(n.replace(/^type\s+/, '')));
+    const valor = porModulo.get(clave.replace(/^type:/, 'valor:'));
+    if (valor) e.nombres = e.nombres.filter((n) => !valor.nombres.includes(n) && !valor.nombres.includes(`type ${n}`));
     if (!e.nombres.length) porModulo.delete(clave);
   }
   if (colisiones.length) throw new Error(`aplanar: colisiones en ${destino}:\n  ${[...new Set(colisiones)].join('\n  ')}`);

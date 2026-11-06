@@ -24,7 +24,7 @@ test('componentes/browser-native-apis', async () => {
     ['actions/share-button.ts', ['sharePayload', 'share-title']],
     ['media/barcode-scanner.ts', ['BarcodeDetector', 'getUserMedia']],
     ['media/media-recorder.ts', ['getDisplayMedia', 'MediaRecorder', 'getUserMedia']],
-    ['forms/utils/web-otp.ts', ['OTPCredential', "transport: ['sms']"]],
+    ['forms/utils/input-tokens.ts', ['OTPCredential', "transport: ['sms']"]],
     ['forms/input.ts', ['listenWebOtp', 'iswc-otp']],
     ['forms/pin-input.ts', ['listenWebOtp', 'one-time-code']],
     ['helpers/wake-lock.ts', ["wakeLock.request('screen')", 'visibilitychange']],

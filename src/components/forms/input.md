@@ -259,7 +259,7 @@ Documentación de cabecera preservada desde fuente:
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 - [`../_shared/form-associated.js`](../../core/form-associated.js)
-- [`../_shared/web-otp.js`](./utils/web-otp.js)
+- [`../_shared/web-otp.js`](./utils/input-tokens.js)
 - [`../media/icon.js`](../media/icon.js)
 
 Tags del módulo: `<iswc-input>`.

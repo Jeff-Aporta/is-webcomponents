@@ -3,7 +3,7 @@ import {
   attachFormInternals, setCustomState, setFormValue, setValidity, clearValidity
 } from '@jeff-aporta/iswc-base/core/form-associated.js';
 import '@jeff-aporta/iswc-base/components/actions/check-icon-button.js';
-import { isOtpAutocomplete, listenWebOtp } from './utils/web-otp.js';
+import { isOtpAutocomplete, listenWebOtp } from './utils/input-tokens.js';
 import { setStringAttr, setOptionalAttr } from '@jeff-aporta/iswc-base/core/attrs.js';
 import { hasSlotted } from '@jeff-aporta/iswc-base/core/dom.js';
 import css from 'iswc:css';

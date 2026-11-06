@@ -1,5 +1,5 @@
 import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
-import { isOtpAutocomplete, listenWebOtp } from './utils/web-otp.js';
+import { isOtpAutocomplete, listenWebOtp } from './utils/input-tokens.js';
 import css from 'iswc:css';
 
 /**

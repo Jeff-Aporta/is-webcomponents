@@ -7,7 +7,8 @@
  *  *  alfanumérico
  *  Cualquier otro carácter cuenta como literal (se imprime tal cual).
  */
-import type { MaskTokenDef, SlotToken, Slot } from "@jeff-aporta/iswc-base/components/forms/schemas/masks-tokens.schemas.js";
+import type { MaskTokenDef, SlotToken, Slot } from '@jeff-aporta/iswc-base/components/forms/schemas/input-tokens.schemas.js';
+
 const MASK_TOKENS: Record<string, MaskTokenDef> = {
   '0': { re: /\d/,       transform: (c: string) => c, required: true  },
   '9': { re: /\d/,       transform: (c: string) => c, required: false },
@@ -66,4 +67,30 @@ export function isComplete(value: string | null | undefined, pattern: string | n
   const required = slots.filter((s): s is SlotToken => s.kind === 'token' && s.required).length;
   const got = String(value || '').replace(/[^A-Za-z0-9]/g, '').length;
   return got >= required;
+}
+
+// ── web-otp ──
+/**
+ * Web OTP API: el SMS con el origen rellena el código. AbortError = timeout/cancel.
+ */
+export function isOtpAutocomplete(value: string | null | undefined): boolean {
+  return /one-time-code|\botp\b/i.test(String(value || ''));
+}
+
+/**
+ * Suscribe el `WebOTP Credential` (si el navegador lo soporta) para que el
+ * código del SMS rellene automáticamente el input cuando llegue.
+ *
+ * @param signal Señal para abortar la escucha (timeout / cleanup).
+ * @param onCode Callback con el código recibido.
+ */
+export function listenWebOtp(signal: AbortSignal, onCode: (code: string) => void): void {
+  const win = window as Window & { OTPCredential?: unknown };
+  if (!('OTPCredential' in win) || typeof navigator.credentials?.get !== 'function') return;
+  navigator.credentials.get({ otp: { transport: ['sms'] }, signal } as CredentialRequestOptions)
+    .then((cred) => {
+      const code = cred && (cred as { code?: unknown }).code;
+      if (code) onCode(String(code));
+    })
+    .catch(() => {});
 }
