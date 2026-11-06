@@ -238,9 +238,11 @@ Qué hace, en orden:
 5. **`?v=`** solo en origen mutable (`stampDirectory(…, { sellarMjs: false })`): nunca dentro de un `.mjs`, nunca en un
    chunk ni en un módulo que otro importa por ruta relativa (una URL para todos).
 6. **`deps.json`** de la app (`graph.ts`, cierre por tag) y **registrador** `<prefijo>Loader.min.mjs`:
-   `registerApp({ tag: { href, type: 'module' } }, { installSheets: false })`, `<html data-icons>` desde `iswc.host` y,
-   en reposo, `deps.json` → `configure({ deps })` (los chunks del cierre de cada tag: el registrador está en la ruta
-   crítica de cada página y los cierres solo sirven para lo que se pida después; en Avatar, 19,6 KB → 11,5 KB);
+   `registerApp({ tag: { href, type: 'module' } }, { installSheets: false })` y `<html data-icons>` desde `iswc.host`.
+   Los cierres (`deps`: los chunks del cierre de cada tag) van compactos en `<prefijo>Loader.deps.json` y el registrador
+   los pide con la primera interacción (`pointerover`/`keydown`/`touchstart`) y los pasa con `configure({ deps })`: solo
+   sirven para lo que se pida después (cada página ya precarga su arranque) y no pesan en la carga. En Avatar, con los
+   cierres dentro el registrador pesaba 19,6 KB; sin ellos, 11,6 KB (+5,8 KB de `deps` al interactuar).
    `asset-hashes.json` y `build-stamp.json`.
 7. **HTML.** Entre `<!-- iswc:precarga:inicio -->` y `<!-- iswc:precarga:fin -->`: import map (alias y `zod` del pin, más
    `importMap`), `<meta name="iswc-precargado">`, `modulepreload` del cierre del loader, del de los `kit` de la página
@@ -249,6 +251,24 @@ Qué hace, en orden:
    bloqueantes, loader `.min.mjs` y registrador. Fuera del bloque solo pone o quita el `?v=` de las referencias a
    `<salida>`; `<base href>` se respeta (una base absoluta = la raíz de la app). Un import map fuera del bloque es error.
    Idempotente: sin cambios, ni el HTML ni `<salida>` cambian (salvo `build-stamp.json`).
+
+Medido en la portada de Avatar (6-nov-2026; HTTP/2 local con jsDelivr y el API simulados a 30 ms, Edge headless,
+`deno task medir`; 5 pares alternados build por archivo de F7b al pin `fb68221d` ↔ `construirApp` al pin `c91ebc82`,
+que incluye el aplanado F9a del kit; con el mismo pin `fb68221d` el conversor solo ya daba 209 → 200 peticiones y
+107 → 98 módulos; mínimo · mediana):
+
+| | Antes (build por archivo) | Después (`construirApp`) |
+|---|---|---|
+| `data-app-ready` frío | 1 386 · 1 731 ms | 1 299 · 1 634 ms |
+| `data-app-ready` caliente | 605 · 630 ms | 341 · 434 ms |
+| DCL frío | 869 · 1 126 ms | 711 · 953 ms |
+| Peticiones frío (hasta el hito) | 210 (126) | 195 (130) |
+| Peticiones caliente | 171 | 158 |
+| Módulos JS (del kit) | 107 (35) | 93 (35) |
+| KB transferidos frío · caliente | 1 709 · 76 | 1 709 · 74 |
+| Ráfagas frío | 4 | 3 |
+| HTML · heap | 17,4 KB · 14,7 MB | 16,6 KB · 11,1 MB |
+| Duplicados · errores | 0 · 0 | 0 · 0 |
 
 **Sigue siendo de cada app:** sus entradas, vistas y páginas (qué tags precarga cada una), `boot.ts`, `define`, el SCSS
 (`build:scss`), los íconos, el despliegue y los tests. Guardián: `tests/gobernanza/construir-app.test.ts` (app de fixture

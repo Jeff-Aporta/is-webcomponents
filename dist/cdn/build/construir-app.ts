@@ -23,8 +23,8 @@
  *   4. Lote opcional del armazón (`lote-kit.ts`), desde el pin publicado.
  *   5. Sellado `?v=` solo en origen mutable (`stamp-hashes.ts`, `sellarMjs: false`: ningún `.mjs` lleva `?v=` dentro).
  *   6. `deps.json` de la app (`graph.ts`: cierre por tag) y registrador `<prefijo>Loader.min.mjs`
- *      (`registerApp({ tag: { href, type: 'module' } })`, `deps` desde `deps.json` en reposo con `configure({ deps })`, y
- *      `<html data-icons>` desde `deno.json` → `iswc.host`).
+ *      (`registerApp({ tag: { href, type: 'module' } })`, `deps` compactos en `<prefijo>Loader.deps.json` que pide con la
+ *      primera interacción y pasa con `configure({ deps })`, y `<html data-icons>` desde `deno.json` → `iswc.host`).
  *   7. HTML: entre `<!-- iswc:precarga:inicio -->` y `<!-- iswc:precarga:fin -->`, import map (alias y `zod` del pin),
  *      `modulepreload` del cierre del kit y del de la app, hojas base del kit sin bloquear, loader y registrador. Fuera del
  *      bloque solo pone o quita el `?v=` de las referencias a `<salida>`. Idempotente.
@@ -317,20 +317,37 @@ export async function construirApp(opts: ConstruirAppOpts): Promise<InformeBuild
   const pares = Object.keys(pubTag).sort().map((t) => `${JSON.stringify(t)}:{href:u(${i(pubTag[t]!)}),type:"module"}`);
   if (loteRel) for (const t of [...enLote].sort()) pares.push(`${JSON.stringify(t)}:{href:u(${i(loteRel)}),type:"module"}`);
   const registrador = `${opts.prefijo}Loader.min${EXT_MODULO}`;
-  const hrefDeps = mutable ? withAssetHash('deps.json', await hashFile(join(OUT, 'deps.json'), 'deps.json')) : 'deps.json';
-  // Los cierres (`deps`) no viajan en el registrador, que está en la ruta crítica de cada página: se leen de `deps.json`
-  // en reposo y se pasan con `configure({ deps })`; solo sirven para precargar de una vez lo que se pida después (las
-  // páginas ya precargan su arranque desde el HTML). Del cierre van los chunks: la entrada es el `href` registrado.
+  // Los cierres (`deps`) no viajan en el registrador, que está en la ruta crítica de cada página, ni se piden al cargar:
+  // solo sirven para precargar de una vez lo que se pida DESPUÉS (cada página ya precarga su arranque desde el HTML).
+  // Van compactos en `<prefijo>Loader.deps.json` (chunks del cierre de cada tag; la entrada es el `href` registrado) y
+  // el registrador los pide con la primera interacción (`pointerover`, `keydown`, `touchstart`), antes de navegar, y
+  // se los pasa al loader con `configure({ deps })`.
+  const depsRegistro = `${opts.prefijo}Loader.deps.json`;
+  const chunks: string[] = [];
+  const indiceChunk = new Map<string, number>();
+  const compacto: Record<string, number[]> = {};
+  for (const t of Object.keys(pubTag).sort()) {
+    const propios = deps.tags[t]!.filter((m) => esChunk(m));
+    if (!propios.length) continue;
+    compacto[t] = propios.map((m) => {
+      if (!indiceChunk.has(m)) indiceChunk.set(m, chunks.push(m.slice(CARPETA_CHUNKS.length + 1, -EXT_MODULO.length)) - 1);
+      return indiceChunk.get(m)!;
+    });
+  }
+  writeFileSync(join(OUT, depsRegistro), `${JSON.stringify({ c: chunks, t: compacto })}\n`);
+  const hrefDeps = mutable ? withAssetHash(depsRegistro, await hashFile(join(OUT, depsRegistro), depsRegistro)) : depsRegistro;
   const fuenteRegistrador = [
     'const L=globalThis.iswcLoader;',
     `if(!L)throw new Error("${opts.prefijo}Loader: falta iswcLoader (carga antes el loader del kit)");`,
     `const raiz=new URL("./",import.meta.url),c=${JSON.stringify(rutas)},u=i=>new URL(c[i],raiz).href;`,
     `L.registerApp({${pares.join(',')}},{installSheets:false});`,
-    `(globalThis.requestIdleCallback??setTimeout)(()=>fetch(new URL(${JSON.stringify(hrefDeps)},raiz)).then(r=>r.ok?r.json():null).then(d=>{if(!d)return;const o={};for(const[t,a]of Object.entries(d.tags))o[t]=a.filter(x=>x.startsWith("${CARPETA_CHUNKS}/")).map(x=>new URL(x,raiz).href);L.configure({deps:o})}).catch(()=>{}));`,
+    Object.keys(compacto).length
+      ? `{let p=0;const d=()=>{if(p++)return;fetch(new URL(${JSON.stringify(hrefDeps)},raiz)).then(r=>r.ok?r.json():null).then(j=>{if(!j)return;const o={};for(const[t,a]of Object.entries(j.t))o[t]=a.map(i=>new URL("${CARPETA_CHUNKS}/"+j.c[i]+"${EXT_MODULO}",raiz).href);L.configure({deps:o})}).catch(()=>{})};if(typeof addEventListener==="function")for(const e of["pointerover","keydown","touchstart"])addEventListener(e,d,{once:true,passive:true});}`
+      : '',
     ...iconos(deno.iswc?.host),
   ].join('');
   writeFileSync(join(OUT, registrador), (await transform(fuenteRegistrador, { minify: true, format: 'esm', target: 'es2022' })).code);
-  archivos.push(registrador, 'deps.json');
+  archivos.push(registrador, 'deps.json', depsRegistro);
   if (mutable) {
     hashes[registrador] = await hashFile(join(OUT, registrador), registrador);
     writeFileSync(join(OUT, ASSET_HASHES_NAME), hashesJson(hashes));

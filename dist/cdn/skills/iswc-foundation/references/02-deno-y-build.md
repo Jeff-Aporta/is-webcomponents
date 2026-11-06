@@ -73,7 +73,8 @@ else await stop();
 - **Kit por alias**: `@jeff-aporta/iswc-base/<ruta>` se reescribe a la URL del pin (la misma que usa el loader); `zod`
   y los `externos` los resuelve el import map. En Deno, `iswc:css` resuelve a `src/utils/iswc-css-vacio.ts` (`''`).
 - **`?v=`** solo en origen mutable (Pages, local) y nunca dentro de un `.mjs` ni en un chunk; `asset-hashes.json`.
-- **Registrador**: `L.registerApp({ tag: { href, type: 'module' } }, { installSheets: false, deps })` y `<html data-icons>`.
+- **Registrador**: `L.registerApp({ tag: { href, type: 'module' } }, { installSheets: false })` y `<html data-icons>`; los
+  cierres de cada tag (`<p>Loader.deps.json`) los pide con la primera interacción y los pasa con `configure({ deps })`.
 - **HTML**: el conversor escribe el bloque `<!-- iswc:precarga:inicio -->`…`<!-- iswc:precarga:fin -->` de cada página de
   `html` (import map, precarga del kit y de la app, `is-base`/`palettes` sin bloquear, loader y registrador; ver 03) y
   pone el `?v=` de las demás referencias a `dist/cdn/`. Idempotente.

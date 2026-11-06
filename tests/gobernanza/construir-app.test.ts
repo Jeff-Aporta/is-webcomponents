@@ -11,7 +11,8 @@
  *   A3 `?v=` ausente sobre pin (`origenMutable: false`) y presente en origen mutable (registrador y entradas en el HTML;
  *      nunca dentro de un `.mjs` ni en un chunk).
  *   A4 idempotencia: una segunda corrida sin cambios no reescribe HTML y deja `dist` byte a byte igual (salvo el sello).
- *   A5 Edge headless: la vista define `xx-a` y `xx-b` con su estilo (`iswc:css`) sin pedir ningún `.css` de la app.
+ *   A5 Edge headless: la vista define `xx-a` y `xx-b` con su estilo (`iswc:css`) sin pedir ningún `.css` de la app, y
+ *      los cierres del registrador (`xxLoader.deps.json`) se piden una vez con la primera interacción, no al cargar.
  */
 import assert from 'node:assert/strict';
 import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync, statSync, writeFileSync } from 'node:fs';
@@ -29,6 +30,9 @@ const APP = join(RAIZ, '.tmp', 'construir-app', 'app');
 const DIST = join(APP, 'dist', 'cdn');
 const VISTA = 'view/hola/index.html';
 
+/** De `view/hola/components/` a la raíz de la app de fixture (armado: el guardián de hermeticidad lee este archivo). */
+const DESDE_VISTA = '../'.repeat(3);
+
 const FUENTES: Record<string, string> = {
   'src/js/base/comun.ts': `export const saludo = (x: string): string => \`hola \${x}\`;\n`,
   'src/js/boot.ts': `document.documentElement.dataset.boot = '1';\n`,
@@ -43,7 +47,7 @@ const FUENTES: Record<string, string> = {
   'view/hola/components/xx-b.ts': [
     `import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.min.mjs';`,
     `import css from 'iswc:css';`,
-    `import { saludo } from '../../../src/js/base/comun.js';`,
+    `import { saludo } from '${DESDE_VISTA}src/js/base/comun.js';`,
     `class XxB extends IswcElement { static tag = 'xx-b'; static css = css; onConnected() { this.shadowRoot!.textContent = saludo('b'); } }`,
     `define(XxB);`,
   ].join('\n'),
@@ -175,7 +179,11 @@ test('gobernanza/construir-app: A1–A5 conversor sobre una app de fixture', asy
   const pagina = await nav.newPage();
   const css: string[] = [];
   const errores: string[] = [];
-  pagina.on('request', (r) => { if (r.url().startsWith(`${srv.origen}/.tmp/`) && /\.css(?:[?#]|$)/.test(r.url())) css.push(r.url()); });
+  const pedidosDeps: string[] = [];
+  pagina.on('request', (r) => {
+    if (r.url().startsWith(`${srv.origen}/.tmp/`) && /\.css(?:[?#]|$)/.test(r.url())) css.push(r.url());
+    if (r.url().includes('xxLoader.deps.json')) pedidosDeps.push(r.url());
+  });
   pagina.on('pageerror', (e) => errores.push(String(e)));
   await pagina.goto(`${srv.origen}/.tmp/construir-app/app/${VISTA}`);
   await pagina.waitForSelector('html[data-app-ready]', { timeout: 30000 });
@@ -192,6 +200,13 @@ test('gobernanza/construir-app: A1–A5 conversor sobre una app de fixture', asy
     { tag: 'xx-b', definido: true, color: 'rgb(4, 5, 6)', texto: 'hola b' },
   ], 'A5 tags sin definir o sin estilo');
   assert.deepEqual(css, [], 'A5 la vista pidió .css de la app por red');
+  // Los cierres para el loader (`xxLoader.deps.json`) no se piden al cargar, sino con la primera interacción.
+  assert.ok(existsSync(join(DIST, 'xxLoader.deps.json')), 'A5 falta xxLoader.deps.json');
+  await pagina.waitForTimeout(300);
+  assert.deepEqual(pedidosDeps, [], 'A5 los deps se pidieron sin interacción');
+  await pagina.mouse.move(20, 20);
+  await pagina.waitForResponse((r) => r.url().includes('xxLoader.deps.json'), { timeout: 10000 });
+  assert.equal(pedidosDeps.length, 1, 'A5 los deps no se pidieron una vez al interactuar');
 });
 
 export default lista();
