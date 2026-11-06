@@ -5,7 +5,7 @@
 //   W-CAT-03   el modal lista los comandos para empezar en orden, con su propósito alineado
 import { definirPruebas } from '../../src/vendor/iswc-base/tools/pruebas.ts';
 
-const { caracteristicas, pasosInicio, guionInicio } = await import('../../dist/cdn/view/hola/utils/bienvenida.js');
+const { caracteristicas, pasosInicio, guionInicio } = await import('../../dist/cdn/view/hola/utils/bienvenida.min.mjs');
 
 export default definirPruebas([
   {

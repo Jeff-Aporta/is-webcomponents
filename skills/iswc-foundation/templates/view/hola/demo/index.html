@@ -6,14 +6,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>__TITULO__ · hola · demo</title>
 <meta name="robots" content="noindex">
-<script type="importmap">
-{ "imports": { "@jeff-aporta/iswc-base/": "https://cdn.jsdelivr.net/gh/__REPO__@__SHA__/dist/cdn/" } }
-</script>
 <script src="../../../dist/cdn/boot.js"></script>
 <!-- iswc:precarga:inicio -->
 <!-- iswc:precarga:fin -->
-<script type="module" src="https://cdn.jsdelivr.net/gh/__REPO__@__SHA__/dist/cdn/core/loader.min.mjs"></script>
-<script type="module" src="../../../dist/cdn/__PREFIJO__Loader.min.js"></script>
 <style>
   body { display: grid; gap: 1.5rem; padding: 1.5rem; background: var(--iswc-bg); color: var(--iswc-text); font-family: var(--iswc-font-sans); }
   h2 { margin: 0; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.07em; opacity: 0.6; }
@@ -24,7 +19,7 @@
   const listo = () => document.documentElement.setAttribute('data-app-ready', '');
   const watchdog = setTimeout(listo, 6000);
   try {
-    const { KIT_TAGS, VIEW_TAGS } = await import('../../../dist/cdn/js/kit-tags.js');
+    const { KIT_TAGS, VIEW_TAGS } = await import('../../../dist/cdn/js/kit-tags.min.mjs');
     await L.load(...KIT_TAGS, ...VIEW_TAGS.hola);
     // Datos de muestra: cada sub-pieza de la vista, aislada (aquí, la bienvenida con el modal abierto).
   } finally {

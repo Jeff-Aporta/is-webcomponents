@@ -6,14 +6,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>__TITULO__ · componentes</title>
 <meta name="robots" content="noindex">
-<script type="importmap">
-{ "imports": { "@jeff-aporta/iswc-base/": "https://cdn.jsdelivr.net/gh/__REPO__@__SHA__/dist/cdn/" } }
-</script>
 <script src="../../dist/cdn/boot.js"></script>
 <!-- iswc:precarga:inicio -->
 <!-- iswc:precarga:fin -->
-<script type="module" src="https://cdn.jsdelivr.net/gh/__REPO__@__SHA__/dist/cdn/core/loader.min.mjs"></script>
-<script type="module" src="../../dist/cdn/__PREFIJO__Loader.min.js"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/__REPO__@__SHA__/dist/cdn/preview/preview-component.min.css">
 <style>
   html, body { margin: 0; height: 100%; background: var(--iswc-bg); color: var(--iswc-text); font-family: var(--iswc-font-sans); }
@@ -29,6 +24,6 @@
   </div>
   <!-- La galería marca `data-app-ready` al montar; el watchdog revela la página si falla. -->
   <script>setTimeout(function () { document.documentElement.setAttribute('data-app-ready', ''); }, 6000);</script>
-  <script type="module" src="../../dist/cdn/view/demo/components/__PREFIJO__-galeria.js"></script>
+  <script type="module" src="../../dist/cdn/view/demo/components/__PREFIJO__-galeria.min.mjs"></script>
 </body>
 </html>

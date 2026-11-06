@@ -8,30 +8,22 @@
 <title>__TITULO__</title>
 <meta name="description" content="__TITULO__ — app de web components sobre el kit iswc-base.">
 
-<!-- 0) Import map ANTES de cualquier módulo: el alias del kit al pin (un solo SHA en toda la app; `deno task pin` lo mueve). -->
-<script type="importmap">
-{ "imports": { "@jeff-aporta/iswc-base/": "https://cdn.jsdelivr.net/gh/__REPO__@__SHA__/dist/cdn/" } }
-</script>
 <!-- Tema antes del primer pintado: ?s= (theme/palette) > localStorage del kit > dark. Script plano. -->
 <script src="./dist/cdn/boot.js"></script>
 <link rel="stylesheet" href="./dist/cdn/styles/app.css">
-<!-- 1) Precarga del loader y del cierre del shell crítico (deps.json del pin) + hojas base del kit, sin ?v= (pin SHA).
-     Lo escribe `deno task build` (src/utils/build.ts) entre las marcas: no editar a mano. -->
+<!-- 1) Import map (alias del kit y zod al pin), precarga del cierre del kit y de la app, hojas base del kit sin bloquear,
+     loader del kit (.min.mjs) y registrador `__PREFIJO__Loader.min.mjs`. Lo escribe `deno task build` (construirApp del
+     kit, desde src/utils/build.ts) entre las marcas: no editar a mano. -->
 <!-- iswc:precarga:inicio -->
 <!-- iswc:precarga:fin -->
-
-<!-- 2) Loader del kit (.min.mjs) por CDN pineado. -->
-<script type="module" src="https://cdn.jsdelivr.net/gh/__REPO__@__SHA__/dist/cdn/core/loader.min.mjs"></script>
-<!-- 3) Registrador de la app: tag → { href ?v=<hash>, type: 'module' } (lo genera el build). Sin ?v= aquí: el loader lo pone. -->
-<script type="module" src="./dist/cdn/__PREFIJO__Loader.min.js"></script>
-<!-- 4) Arranque: tags del kit y de la app, marca de lista con watchdog. -->
+<!-- 2) Arranque: tags del kit y de la app, marca de lista con watchdog. -->
 <script type="module">
   const L = globalThis.iswcLoader;
   const listo = () => document.documentElement.setAttribute('data-app-ready', '');
   const watchdog = setTimeout(() => { console.warn('[__PREFIJO__] el arranque excedió 6 s; se revela la página'); listo(); }, 6000);
   try {
     if (!L) throw new Error('falta iswcLoader');
-    const { KIT_TAGS, tagsArranque } = await import('./dist/cdn/js/kit-tags.js');
+    const { KIT_TAGS, tagsArranque } = await import('./dist/cdn/js/kit-tags.min.mjs');
     await L.load(...KIT_TAGS, ...tagsArranque());
   } catch (e) {
     console.warn('[__PREFIJO__] arranque', e);

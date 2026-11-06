@@ -28,10 +28,10 @@ con el kit iswc-base (`iswc-*`) y componentes propios `__PREFIJO__-*`.
 
 - [HS-PLAT-01] Runtime Deno; dependencias de build en `deno.json` `imports`: `esbuild@0.28.1`, `sass@^1.105.0`, `zod@4.4.3`, `jsdom@29.1.1`, `@browserbasehq/stagehand@4.1.0`; schemas del kit (`@iswc/component-schemas`, `@iswc/loader-schemas`) por SHA de 40 hex.
 - [HS-PLAT-02] Tareas: `build:scss`, `build`, `dev`, `serve`, `check`, `pin`, `vendor:iswc`, `test`, `test:health`, `test:e2e`, `test:all`, `test:all:halt`, `sync:entregable`.
-- [HS-PLAT-03] Build: `src/js/<x>.ts` → `dist/cdn/js/<x>.js`, `view/<v>/<x>.ts` → `dist/cdn/view/<v>/<x>.js` (sin bundle); bundles solo para `js/base/zod.ts` y los barriles `all.ts`; `js/boot.ts` → `dist/cdn/boot.js` (IIFE). `import css from 'iswc:css'` de un componente → constante con el `.css` compilado de su `.scss` hermano (`.tmp-scss/`); los imports del kit (`@jeff-aporta/iswc-base/…`) quedan tal cual (externos en los bundles).
-- [HS-PLAT-04] Cache busting `?v=<6 caracteres del hash de contenido>` con `stampDirectory` del kit; `dist/cdn/asset-hashes.json`; `dist/cdn/__PREFIJO__Loader.min.js` llama `L.registerApp({tag: { href: url?v=…, type: 'module' }}, { installSheets: false })`; `dist/cdn/build-stamp.json`.
+- [HS-PLAT-03] Build: `src/utils/build.ts` llama a `construirApp` del kit desde la URL del pin (`dist/cdn/build/construir-app.ts`). `src/js/<x>.ts` → `dist/cdn/js/<x>.min.mjs`, `view/<v>/<x>.ts` → `dist/cdn/view/<v>/<x>.min.mjs`; las raíces (tags, páginas) en un build con splitting y chunks en `dist/cdn/_chunks/`, el resto suelto y autónomo; `js/boot.ts` → `dist/cdn/boot.js` (IIFE). `import css from 'iswc:css'` incrusta el `.css` compilado del `.scss` hermano (`.tmp-scss/`); los imports del kit (`@jeff-aporta/iswc-base/…`) se reescriben a la URL del pin.
+- [HS-PLAT-04] Cache busting `?v=<6 caracteres del hash de contenido>` solo en origen mutable y nunca dentro de un `.mjs`; `dist/cdn/asset-hashes.json`, `dist/cdn/deps.json` (cierre por tag); `dist/cdn/__PREFIJO__Loader.min.mjs` llama `L.registerApp({tag: { href, type: 'module' }}, { installSheets: false, deps })`; `dist/cdn/build-stamp.json`.
 - [HS-PLAT-05] Pin único: `https://cdn.jsdelivr.net/gh/__REPO__@<sha40>/dist/cdn/core/loader.min.mjs` (`src/js/iswc.ts`), el mismo SHA en el alias `@jeff-aporta/iswc-base/` de `deno.json` y del import map de cada HTML. Prohibido `@main`, `@latest`, SHA corto, GitHub Pages o ramas en raw. `deno task pin` audita; `--nuevo=<sha40|ultimo>` actualiza tras verificar en jsDelivr (y vendoriza `src/vendor/iswc-base/deps.json` del SHA nuevo); luego `deno task vendor:iswc` al mismo SHA.
-- [HS-PLAT-06] Arranque de cada HTML: import map (alias del kit al pin) → `boot.js` → `styles/app.css` → bloque `iswc:precarga` (lo escribe el build: `modulepreload` del loader y del cierre de `SHELL_CRITICO` según `deps.json`, `is-base.min.css` y `palettes.min.css`, sin `?v=`) → loader del kit (`.min.mjs`) → `__PREFIJO__Loader.min.js` → `L.load(...KIT_TAGS, ...tagsArranque())` → `data-app-ready`.
+- [HS-PLAT-06] Arranque de cada HTML: `boot.js` → `styles/app.css` → bloque `iswc:precarga` (lo escribe el build: import map con el alias y `zod` del pin, `modulepreload` del cierre de `SHELL_CRITICO` según `deps.json` y del cierre propio de la app, `is-base.min.css` y `palettes.min.css` sin bloquear, loader del kit `.min.mjs` y `__PREFIJO__Loader.min.mjs`) → `L.load(...KIT_TAGS, ...tagsArranque())` → `data-app-ready`.
 
 ## 5. Casos borde y errores
 
@@ -40,7 +40,7 @@ con el kit iswc-base (`iswc-*`) y componentes propios `__PREFIJO__-*`.
 
 ## 6. Pruebas (WHAT / HOW WEAK)
 
-- [W-PLAT-10] Tras el build existen `boot.js`, `__PREFIJO__Loader.min.js`, `asset-hashes.json`, `build-stamp.json` y `all.min.js`.
+- [W-PLAT-10] Tras el build existen `boot.js`, `__PREFIJO__Loader.min.mjs`, `deps.json`, `asset-hashes.json`, `build-stamp.json` y `_chunks/`.
 - [W-PLAT-11] Un solo SHA de 40 hex del kit en todo HTML/TS y cero referencias mutables (`deno task pin` en exit 0).
 - [W-PLAT-12] E2E: la página arranca sin errores de consola y queda marcada como lista.
 
