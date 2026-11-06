@@ -521,7 +521,7 @@ test('macros: seguridad y límites', () => {
   bad('escribir("no es celda", 1)', /no válida/);
   bad('sea = 3', /nombre/);
   bad('si verdadero {', /Falta/);
-  const src = ['interp.ts', 'macro-parser.ts', 'lexer.ts', 'host.ts', 'recorder.ts'].map((f) => readFileSync(join(raiz, 'src/components/data/utils/spreadsheet/macro', f), 'utf8')).join('\n');
+  const src = ['macro-interp.ts', 'macro-parser.ts', 'macro-lexer.ts', 'macro-host.ts', 'macro-recorder.ts'].map((f) => readFileSync(join(raiz, 'src/components/data/utils/spreadsheet', f), 'utf8')).join('\n');
   const code = src.split('\n').filter((l) => !l.trim().startsWith('//')).join('\n');
   assert.doesNotMatch(code, /\beval\s*\(/);
   assert.doesNotMatch(code, /new\s+Function/);
