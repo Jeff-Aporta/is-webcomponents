@@ -5,16 +5,15 @@
  */
 import assert from 'node:assert/strict';
 import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
-import * as rangos from '../../src/components/data/utils/ag-grid/edicion/rangos.ts';
-import * as relleno from '../../src/components/data/utils/ag-grid/edicion/relleno.ts';
-import { Historial } from '../../src/components/data/utils/ag-grid/edicion/historial.ts';
-import * as portapapeles from '../../src/components/data/utils/ag-grid/edicion/portapapeles.ts';
-import { Lote } from '../../src/components/data/utils/ag-grid/edicion/lote.ts';
-import * as validacion from '../../src/components/data/utils/ag-grid/edicion/validacion.ts';
-import * as nav from '../../src/components/data/utils/ag-grid/edicion/navegacion.ts';
-import * as sel from '../../src/components/data/utils/ag-grid/edicion/seleccion-filas.ts';
-import * as movidas from '../../src/components/data/utils/ag-grid/edicion/filas-movidas.ts';
-import * as valores from '../../src/components/data/utils/ag-grid/edicion/valores.ts';
+import * as rangos from '../../src/components/data/utils/ag-grid/edicion-rangos.ts';
+import * as relleno from '../../src/components/data/utils/ag-grid/edicion-relleno.ts';
+import { Historial, Lote } from '../../src/components/data/utils/ag-grid/edicion-escritor.ts';
+import * as portapapeles from '../../src/components/data/utils/ag-grid/edicion-portapapeles.ts';
+import * as validacion from '../../src/components/data/utils/ag-grid/edicion-validacion.ts';
+import * as nav from '../../src/components/data/utils/ag-grid/edicion-navegacion.ts';
+import * as sel from '../../src/components/data/utils/ag-grid/edicion-seleccion-filas.ts';
+import * as movidas from '../../src/components/data/utils/ag-grid/edicion-filas-movidas.ts';
+import * as valores from '../../src/components/data/utils/ag-grid/edicion-valores.ts';
 
 const { test, lista } = coleccionPruebas({ categoria: 'what' });
 

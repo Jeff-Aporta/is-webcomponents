@@ -25,12 +25,13 @@ Este módulo registra `<iswc-ag-grid>`. El estado de cada capacidad está en
 | Pieza | Ruta | Responsabilidad |
 | --- | --- | --- |
 | Elemento | `ag-grid.ts` | Plantilla, atributos, persistencia y fachada `api`. |
-| Núcleo | `utils/ag-grid/nucleo/` | Motor virtualizado, cabecera, menús, teclado, API con nombres AG. |
-| Contrato | `utils/ag-grid/contrato.ts` | Lo que un plugin ve de la grilla (`GridHost`). |
-| Celdas | `utils/ag-grid/celdas/` | Renderers, sparklines, flash, tooltips, reglas y temas. |
-| Filtros | `utils/ag-grid/filtros/` | Filtros, flotantes, quick, avanzado, side bar, status bar, overlays. |
-| Edición | `utils/ag-grid/edicion/` | Editores, rangos, portapapeles, relleno, deshacer, filas fijadas. |
-| Filas | `utils/ag-grid/filas/` | Agrupación, pivote, árbol, detalle, modelos externos, export. |
+| Plugins | `utils/ag-grid/plugins.ts` | Orden de instalación de las cuatro familias. |
+| Núcleo | `utils/ag-grid/nucleo-*.ts` | Motor virtualizado, cabecera, menús, teclado, API con nombres AG. |
+| Contrato | `utils/ag-grid/contrato.schemas.ts` | Lo que un plugin ve de la grilla (`GridHost`). |
+| Celdas | `utils/ag-grid/celdas.ts` + `celdas-*.ts` | Renderers, sparklines, flash, tooltips, reglas y temas. |
+| Filtros | `utils/ag-grid/filtros.ts` + `filtros-*.ts` | Filtros, flotantes, quick, avanzado, side bar, status bar, overlays. |
+| Edición | `utils/ag-grid/edicion.ts` + `edicion-*.ts` | Editores, rangos, portapapeles, relleno, deshacer, filas fijadas. |
+| Filas | `utils/ag-grid/filas.ts` + `filas-*.ts` | Agrupación, pivote, árbol, detalle, modelos externos, export. |
 | Modelo | `utils/datagrid-core/` | Pipeline memoizado filtrar → ordenar → agrupar → paginar. |
 
 ## Nombres de AG Grid

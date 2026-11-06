@@ -100,11 +100,11 @@ import { Density, SelectionMode, DEFAULT_PAGE_SIZE } from './utils/datagrid-core
 import { selectAll as selectAllCore, clearSelection as clearSelectionCore } from './utils/datagrid-core/selection.js';
 import { rowsToCsv } from './utils/datagrid-core/csv-export.js';
 import { createGridModel } from './utils/datagrid-core/grid-model.js';
-import { PLUGINS } from './utils/ag-grid/index.js';
-import { lectores } from './utils/ag-grid/celdas/celdas-valores.js';
-import { crearNucleo } from './utils/ag-grid/nucleo/ag-host.js';
-import type { Nucleo } from './utils/ag-grid/nucleo/ag-host.schemas.js';
-import { ATRIBUTOS, aplanarDefs, autogenerarDefs, ordenInicial, valorAtributo } from './utils/ag-grid/nucleo/opciones.js';
+import { PLUGINS } from './utils/ag-grid/plugins.js';
+import { lectores } from './utils/ag-grid/celdas-valores.js';
+import { crearNucleo } from './utils/ag-grid/nucleo-ag-host.js';
+import type { Nucleo } from './utils/ag-grid/nucleo-ag-host.schemas.js';
+import { ATRIBUTOS, aplanarDefs, autogenerarDefs, ordenInicial, valorAtributo } from './utils/ag-grid/nucleo-opciones.js';
 import type { ColDefAg, Capa, Desinstalar, OpcionesGrid, Zona } from './utils/ag-grid/contrato.schemas.js';
 import type { ColumnDef, RowData, SortDirName, PinSideName, DensityName, GridState, GridApi, ColumnFilter, SelectionModeName, TextFilterOp } from './schemas/datagrid-types.schemas.js';
 import type { StateSavedDetail, PageChangeDetail } from "./schemas/ag-grid.schemas.js";

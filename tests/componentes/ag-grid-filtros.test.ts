@@ -5,15 +5,14 @@
  */
 import assert from 'node:assert/strict';
 import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
-import { aFecha, aModeloAg, coincideModelo, combinarCondiciones, condicionActiva, esLegado, opcionInicial, opcionesDe, rangoRelativo } from '../../src/components/data/utils/ag-grid/filtros/condiciones.ts';
-import { arbolSet, coincideSet, filtrarMini, hojasDe, itemsSet, marcaDeTodo, modeloSet, seleccionDe } from '../../src/components/data/utils/ag-grid/filtros/set.ts';
-import { coincideQuick, partesQuick } from '../../src/components/data/utils/ag-grid/filtros/quick.ts';
-import { avanzadoATexto, coincideAvanzado, parsearAvanzado } from '../../src/components/data/utils/ag-grid/filtros/avanzado.ts';
-import { compararValores, esClicMulti, modeloTrasClic, ordenarFilas, ordenInicial, siguienteDir } from '../../src/components/data/utils/ag-grid/filtros/orden.ts';
-import { agregados, arbolColumnas, filtrarArbolColumnas, funcionesAgregado, hojasColumna, normalizarSideBar, opcionesTam, resolverMenu, resumenPagina, tamAutomatico } from '../../src/components/data/utils/ag-grid/filtros/resumen.ts';
-import { MotorFiltros } from '../../src/components/data/utils/ag-grid/filtros/filtros-motor.ts';
+import { aFecha, aModeloAg, coincideModelo, combinarCondiciones, condicionActiva, esLegado, opcionInicial, opcionesDe, rangoRelativo } from '../../src/components/data/utils/ag-grid/filtros-condiciones.ts';
+import { arbolSet, coincideSet, filtrarMini, hojasDe, itemsSet, marcaDeTodo, modeloSet, seleccionDe } from '../../src/components/data/utils/ag-grid/filtros-set.ts';
+import { coincideQuick, partesQuick, MotorFiltros } from '../../src/components/data/utils/ag-grid/filtros-motor.ts';
+import { avanzadoATexto, coincideAvanzado, parsearAvanzado } from '../../src/components/data/utils/ag-grid/filtros-avanzado.ts';
+import { compararValores, esClicMulti, modeloTrasClic, ordenarFilas, ordenInicial, siguienteDir } from '../../src/components/data/utils/ag-grid/filtros-orden.ts';
+import { agregados, arbolColumnas, filtrarArbolColumnas, funcionesAgregado, hojasColumna, normalizarSideBar, opcionesTam, resolverMenu, resumenPagina, tamAutomatico } from '../../src/components/data/utils/ag-grid/filtros-resumen.ts';
 import { createGridModel } from '../../src/components/data/utils/datagrid-core/grid-model.ts';
-import type { ContextoValor } from '../../src/components/data/utils/ag-grid/filtros/filtros.schemas.ts';
+import type { ContextoValor } from '../../src/components/data/utils/ag-grid/filtros.schemas.ts';
 import type { GridHost } from '../../src/components/data/utils/ag-grid/contrato.schemas.ts';
 
 const { test, lista } = coleccionPruebas({ categoria: 'what' });

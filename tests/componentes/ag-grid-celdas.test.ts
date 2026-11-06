@@ -7,19 +7,19 @@ import assert from 'node:assert/strict';
 
 import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
 import type { ContextoCelda, GridHost } from '../../src/components/data/utils/ag-grid/contrato.schemas.ts';
-import { compilarExpresion, evaluarExpresion } from '../../src/components/data/utils/ag-grid/celdas/expresion.ts';
-import { escribirValor, formatearValor, inferirTipo, lectores, leerRuta, leerValor, parsearValor, textoExportacion, tipoDe } from '../../src/components/data/utils/ag-grid/celdas/celdas-valores.ts';
-import { aFecha, fmtFecha, fmtMoneda, fmtNumero, fmtPorcentaje } from '../../src/components/data/utils/ag-grid/celdas/formatos.ts';
-import { htmlSparkline, normalizarSerie } from '../../src/components/data/utils/ag-grid/celdas/spark.ts';
-import { RENDERERS } from '../../src/components/data/utils/ag-grid/celdas/renderers.ts';
-import { clasesCelda, clasesColumna, clasesPosicionFila, estiloATexto, estiloCelda, opcionesAClasesFila, opcionesAEstiloFila } from '../../src/components/data/utils/ag-grid/celdas/reglas.ts';
-import { Destello } from '../../src/components/data/utils/ag-grid/celdas/flash.ts';
-import { AgendaTooltip, contenidoCabecera, contenidoTooltip } from '../../src/components/data/utils/ag-grid/celdas/tooltips.ts';
-import { crearTema, medidasDe, paramsEfectivos, PRESETS, resolverTema, tokensDe } from '../../src/components/data/utils/ag-grid/celdas/temas/index.ts';
-import { resolverRenderer } from '../../src/components/data/utils/ag-grid/celdas/contexto.ts';
-import { instalar } from '../../src/components/data/utils/ag-grid/celdas/index.ts';
-import { escaparHtml, limpiarCss, urlSegura } from '../../src/components/data/utils/ag-grid/celdas/html.ts';
-import type { ParamsCelda } from '../../src/components/data/utils/ag-grid/celdas/schemas.ts';
+import { compilarExpresion, evaluarExpresion } from '../../src/components/data/utils/ag-grid/celdas-expresion.ts';
+import { escribirValor, formatearValor, inferirTipo, lectores, leerRuta, leerValor, parsearValor, textoExportacion, tipoDe } from '../../src/components/data/utils/ag-grid/celdas-valores.ts';
+import { aFecha, fmtFecha, fmtMoneda, fmtNumero, fmtPorcentaje } from '../../src/components/data/utils/ag-grid/celdas-formatos.ts';
+import { htmlSparkline, normalizarSerie } from '../../src/components/data/utils/ag-grid/celdas-spark.ts';
+import { RENDERERS } from '../../src/components/data/utils/ag-grid/celdas-renderers.ts';
+import { clasesCelda, clasesColumna, clasesPosicionFila, estiloATexto, estiloCelda, opcionesAClasesFila, opcionesAEstiloFila } from '../../src/components/data/utils/ag-grid/celdas-reglas.ts';
+import { Destello } from '../../src/components/data/utils/ag-grid/celdas-flash.ts';
+import { AgendaTooltip, contenidoCabecera, contenidoTooltip } from '../../src/components/data/utils/ag-grid/celdas-tooltips.ts';
+import { crearTema, medidasDe, paramsEfectivos, PRESETS, resolverTema, tokensDe } from '../../src/components/data/utils/ag-grid/celdas-temas.ts';
+import { resolverRenderer } from '../../src/components/data/utils/ag-grid/celdas-contexto.ts';
+import { instalar } from '../../src/components/data/utils/ag-grid/celdas.ts';
+import { escaparHtml, limpiarCss, urlSegura } from '../../src/components/data/utils/ag-grid/celdas-html.ts';
+import type { ParamsCelda } from '../../src/components/data/utils/ag-grid/celdas.schemas.ts';
 
 const { test, lista } = coleccionPruebas({ categoria: 'what' });
 

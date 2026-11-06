@@ -3,7 +3,7 @@
 import type { Node } from './parser.schemas.js';
 import { compare, CellError, ERR, LambdaValue, RefValue, toNumber, toText } from './values.js';
 import type { EvalValue, Matrix, Scalar } from './values.schemas.js';
-import { lookupFn } from './functions/registry.js';
+import { lookupFn } from './fn-registry.js';
 import type { Env, Ctx } from './evaluator.schemas.js';
 
 const MAX_DEPTH = 256;
