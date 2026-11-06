@@ -22,7 +22,8 @@ import type { AliasKitOptions, MapeoAlias } from './alias.schemas.js';
 /** Prefijo del alias del kit, con barra final (igual que la clave de `deno.json` y del importmap). */
 export const ALIAS_KIT = '@jeff-aporta/iswc-base/';
 
-const RAIZ_KIT = fileURLToPath(new URL('../../', import.meta.url));
+// Ejecutado desde el CDN (`deno run https://…/build/construir-app.ts`) no hay carpeta del kit: el defecto queda vacío.
+const RAIZ_KIT = import.meta.url.startsWith('file:') ? fileURLToPath(new URL('../../', import.meta.url)) : '';
 
 const escaparRegex = (texto: string) => texto.replace(/[.*+?^${}()|[\]\\/]/g, '\\$&');
 

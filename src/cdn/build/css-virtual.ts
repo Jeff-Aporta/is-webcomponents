@@ -27,7 +27,8 @@ export const ESPECIFICADOR_CSS = 'iswc:css';
 
 const FILTRO = /^iswc:css(?:\/[\w-]+)?$/;
 
-const RAIZ_SRC = fileURLToPath(new URL('../../', import.meta.url));
+// Ejecutado desde el CDN (construirApp por URL) no hay `src/` del kit: quien lo usa pasa `staging` y `fuentes`.
+const RAIZ_SRC = import.meta.url.startsWith('file:') ? fileURLToPath(new URL('../../', import.meta.url)) : '';
 
 const STAGING = join(RAIZ_SRC, '..', '.tmp-scss', 'src');
 

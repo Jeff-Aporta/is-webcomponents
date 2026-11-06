@@ -485,11 +485,15 @@ console.log(`  ${'loader.min.js'.padEnd(18)} copia compat (se retira en F5)`);
 const buildSrc = join(root, 'src', 'cdn', 'build');
 const buildOut = join(dist, 'build');
 await mkdir(buildOut, { recursive: true });
-for (const name of await readdir(buildSrc)) {
-  if (!name.endsWith('.ts')) continue;
-  await writeFile(join(buildOut, name), aliasEnDist(await readFile(join(buildSrc, name), 'utf8'), 'build'));
+// Publicado, `build/` se ejecuta también por URL (`deno run https://…/build/construir-app.ts`, F10): Deno no aplica
+// `sloppy-imports` a módulos remotos, así que `./x.js` (que nombra la fuente `./x.ts`) se publica como `./x.ts`.
+const nombresBuild = (await readdir(buildSrc)).filter((n) => n.endsWith('.ts'));
+const deTsEnBuild = new Set([...nombresBuild, 'asset-store.ts'].map((n) => n.replace(/\.ts$/, '')));
+const conExtensionTs = (fuente) => fuente.replace(/(\bfrom\s*|\bimport\s*\(?\s*)(["'])\.\/([\w.-]+)\.js\2/g, (entero, antes, comilla, nombre) => (deTsEnBuild.has(nombre) ? `${antes}${comilla}./${nombre}.ts${comilla}` : entero));
+for (const name of nombresBuild) {
+  await writeFile(join(buildOut, name), conExtensionTs(aliasEnDist(await readFile(join(buildSrc, name), 'utf8'), 'build')));
 }
-await writeFile(join(buildOut, 'asset-store.ts'), aliasEnDist(await readFile(join(root, 'src', 'cdn', 'asset-store.ts'), 'utf8'), 'build'));
+await writeFile(join(buildOut, 'asset-store.ts'), conExtensionTs(aliasEnDist(await readFile(join(root, 'src', 'cdn', 'asset-store.ts'), 'utf8'), 'build')));
 console.log(`  ${'build/'.padEnd(18)} ts vendor (hash + bundle)`);
 
 // importmap.json: la entrada del alias que un consumidor pega tal cual en su `<script type="importmap">` o en

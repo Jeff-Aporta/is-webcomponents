@@ -44,6 +44,8 @@ export function exportsNpm(exports: ExportsJson): ExportsJson {
   out['./deps.json'] = `${DIST}/deps.json`;
   out['./deps/*'] = `${DIST}/deps/*`;
   out['./importmap.json'] = `${DIST}/importmap.json`;
+  // Conversor de las apps (F10): un `.ts` para Deno (subruta `build/construir-app` del paquete).
+  out['./build/construir-app'] = `${DIST}/build/construir-app.ts`;
   out['./package.json'] = './package.json';
   return out;
 }
