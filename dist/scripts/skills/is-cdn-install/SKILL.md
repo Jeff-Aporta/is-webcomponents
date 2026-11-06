@@ -229,6 +229,14 @@ No inventar props/eventos que no están en el MD.
 - Espejos y resolución de ref: [reference.md](reference.md)
 - Skill de reuso de tags: `../iswc-base/SKILL.md`
 
+## App Deno con build propio: el conversor del kit
+
+Si la app tiene componentes propios en TypeScript (estándar `iswc-foundation`), el bloque de instalación de sus HTML
+(import map, `modulepreload`, hojas base, loader y registrador) no se escribe a mano: lo escribe `construirApp`, que la
+app ejecuta desde el pin (`https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@<sha40>/dist/cdn/build/construir-app.ts`)
+entre las marcas `<!-- iswc:precarga:inicio -->` y `<!-- iswc:precarga:fin -->`. Guía:
+[02-deno-y-build.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/skills/iswc-foundation/references/02-deno-y-build.md).
+
 ## Scripts online (Deno, siempre `@main` con `--reload`)
 
 Regla (Jeff, 2026-10-13): los scripts de `tools/` de una skill y los CLI de `vendor-distributions/` (`vendor.ts`,

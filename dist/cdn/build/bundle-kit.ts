@@ -14,10 +14,10 @@
 import { mkdir, readFile, readdir, writeFile } from 'node:fs/promises';
 import { basename, dirname, join, relative, resolve } from 'node:path';
 import { build, type Plugin } from 'esbuild';
-import type { BundleKitOptions, BundleKitResult, CatalogoLoader, EntradaKit, ItemManifestKit } from './bundle-kit.schemas.js';
-import { aliasKit } from './alias.js';
-import { cssVirtual } from './css-virtual.js';
-import { loaderDefines } from './bundle-min.js';
+import type { BundleKitOptions, BundleKitResult, CatalogoLoader, EntradaKit, ItemManifestKit } from './bundle-kit.schemas.ts';
+import { aliasKit } from './alias.ts';
+import { cssVirtual } from './css-virtual.ts';
+import { loaderDefines } from './bundle-min.ts';
 
 /** Extensión de los módulos ES publicados (D2): `.mjs` = módulo, `.js` = clásico. */
 export const EXT_MODULO = '.mjs';

@@ -22,9 +22,9 @@ if (!pin) {
 }
 
 /**
- * Herramientas comunes de las apps del kit (pruebas, cooldown, sync, pines) y del build (hashes):
- * `[destino en src/vendor/iswc-base/, ruta en el kit]`. En el kit, `vendor-distributions/…` vive en `src/` y
- * `build/…` en `src/cdn/`; publicadas, las dos bajo `dist/cdn/`.
+ * Herramientas comunes de las apps del kit (pruebas, cooldown, sync, pines): `[destino en src/vendor/iswc-base/, ruta
+ * en el kit]`; en el kit viven en `src/vendor-distributions/…` y publicadas en `dist/cdn/vendor-distributions/…`.
+ * El build NO se copia: `src/utils/build.ts` ejecuta `construirApp` desde la URL del pin (`dist/cdn/build/`, F10).
  */
 export const ARCHIVOS = [
   ['tools/schemas.ts', 'vendor-distributions/shared/schemas.ts'],
@@ -32,10 +32,8 @@ export const ARCHIVOS = [
   ['tools/pruebas.ts', 'vendor-distributions/shared/testing/pruebas.ts'],
   ['tools/sync-entregable.ts', 'vendor-distributions/shared/tools/sync-entregable.ts'],
   ['tools/pin-update.mjs', 'vendor-distributions/shared/tools/pin-update.mjs'],
-  ...['hash.ts', 'asset-url.ts', 'asset-url.schemas.ts', 'stamp-hashes.ts', 'bundle-min.ts', 'bundle-min.schemas.ts']
-    .map((f) => [`build/${f}`, `build/${f}`]),
 ];
-const fuenteEnKit = (kit) => (kit.startsWith('vendor-distributions/') ? `src/${kit}` : `src/cdn/${kit}`);
+const fuenteEnKit = (kit) => `src/${kit}`;
 /** `tools/*` queda plano junto a `schemas.ts`: el `../schemas.ts` de testing/ o tools/ del kit pasa a `./schemas.ts`. */
 const aplanar = (dest, texto) => (dest.startsWith('tools/') ? texto.replace(/(['"])\.\.\/schemas\.(ts|js)\1/g, '$1./schemas.$2$1') : texto);
 
@@ -55,8 +53,8 @@ for (const [rel, kit] of ARCHIVOS) {
   mkdirSync(dirname(destino), { recursive: true });
   writeFileSync(destino, `// @vendor is-webcomponents@${pin} dist/cdn/${kit}\n// No editar: se cambia en el kit y se descarga con \`deno task vendor:iswc\`.\n${texto}`);
 }
-// Grafo de módulos del kit al pin (`dist/cdn/deps.json`, F4): el build lee de aquí el cierre del shell crítico y emite
-// los `<link rel="modulepreload">` sin red. `deno task pin --nuevo=…` también lo refresca (pin-update, salvo `--sin-deps`).
+// Grafo de módulos del kit al pin (`dist/cdn/deps.json`, F4): `construirApp` lee de aquí el cierre del kit y emite
+// los `<link rel="modulepreload">` sin red (si falta, lo baja del pin). `deno task pin --nuevo=…` también lo refresca (pin-update, salvo `--sin-deps`).
 // Desde F7 el `deps.json` publicado es un índice (`categorias`: tag → categoría) y el cierre va en `deps/<cat>.json`:
 // se bajan las partes y se escribe el grafo unido (`{ sha, tags, core, v }`), la forma que lee el build.
 {

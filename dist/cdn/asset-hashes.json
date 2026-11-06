@@ -359,8 +359,8 @@
     "core/iswc-css-vacio.min.mjs": "7w09a5",
     "core/iswc-element.min.mjs": "umbzcn",
     "core/iswc-storage.min.mjs": "wsqx1w",
-    "core/loader.min.js": "8a61d1",
-    "core/loader.min.mjs": "qpm0bc",
+    "core/loader.min.js": "d0i6n3",
+    "core/loader.min.mjs": "lx8n42",
     "core/palettes.min.css": "62ruuk",
     "core/path-turtle.min.mjs": "pt5tvi",
     "core/position.min.mjs": "x9g4gj",
@@ -618,7 +618,7 @@
     "diagrams/venn-diagram.min.mjs": "fvttl8",
     "diagrams/venn-spec.min.mjs": "d7k1v7",
     "dist/gallery-app.min.js": "6ubqvz",
-    "dist/pages/ecosystem.min.js": "b5odxj",
+    "dist/pages/ecosystem.min.js": "h9kh7o",
     "dist/pages/home.min.js": "7jfa84",
     "dist/pages/icons.min.js": "vk088c",
     "dist/pages/theming.min.js": "kt3nmu",
@@ -1000,6 +1000,6 @@
     "skills/iswc-foundation/templates/scripts/gate/sync-protocolo.mjs": "gppw76",
     "skills/iswc-foundation/templates/scripts/gate/sync-to-entregable.mjs": "ofif6b",
     "skills/iswc-foundation/templates/scripts/gate/test-health.mjs": "971549",
-    "skills/iswc-foundation/templates/scripts/vendor/vendor-iswc-tools.mjs": "0om0dl"
+    "skills/iswc-foundation/templates/scripts/vendor/vendor-iswc-tools.mjs": "9f0la0"
   }
 }

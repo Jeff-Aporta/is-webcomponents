@@ -2,17 +2,16 @@
 /**
  * kit-tags.ts — REGISTRO ÚNICO de tags de la app (estándar iswc-foundation).
  *
- * Todo lo demás se deriva de aquí: el registrador (`__PREFIJO__Loader.min.js`, vía `registerApp`),
- * el bundle de compatibilidad, la galería de demos y los guardianes. Un componente nuevo se declara
- * UNA vez, en la lista que le toca:
+ * Todo lo demás se deriva de aquí: el registrador (`__PREFIJO__Loader.min.mjs`, vía `registerApp`, lo escribe
+ * `construirApp`), la galería de demos y los guardianes. Un componente nuevo se declara UNA vez, en la lista que le toca:
  *
  *   KIT_TAGS   → tags `iswc-*` del kit que la app pide al loader (solo padres registrables).
  *   SHELL_CRITICO → los de KIT_TAGS del primer pintado: su cierre se precarga desde el HTML (modulepreload).
- *   APP_TAGS   → componentes transversales → `dist/cdn/js/components/__PREFIJO__/<tag>.js`.
- *   VIEW_TAGS  → componentes de cada vista → `dist/cdn/view/<vista>/components/<tag>.js`.
+ *   APP_TAGS   → componentes transversales → `dist/cdn/js/components/__PREFIJO__/<tag>.min.mjs`.
+ *   VIEW_TAGS  → componentes de cada vista → `dist/cdn/view/<vista>/components/<tag>.min.mjs`.
  *
  * APP_TAGS y la unión de VIEW_TAGS son disjuntos: una vista no importa componentes de otra; lo
- * compartido sube a APP_TAGS. Se publica en `dist/cdn/js/kit-tags.js` para los hosts.
+ * compartido sube a APP_TAGS. Se publica en `dist/cdn/js/kit-tags.min.mjs` para los hosts.
  */
 export const KIT_TAGS = [
   'iswc-button',

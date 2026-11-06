@@ -9,8 +9,8 @@
  * El alias `@jeff-aporta/iswc-base/<ruta>` resuelve por `exports` igual que por el import map del CDN: con extensión
  * (`core/loader.min.mjs`, como en el import map) y sin ella (`core/loader`, `actions/button`).
  */
-import type { ExportsJson } from './graph.schemas.js';
-import type { PackageJson, PackageJsonOptions } from './npm.schemas.js';
+import type { ExportsJson } from './graph.schemas.ts';
+import type { PackageJson, PackageJsonOptions } from './npm.schemas.ts';
 
 const NOMBRE = '@jeff-aporta/iswc-base';
 const DIST = './dist/cdn';
@@ -44,6 +44,8 @@ export function exportsNpm(exports: ExportsJson): ExportsJson {
   out['./deps.json'] = `${DIST}/deps.json`;
   out['./deps/*'] = `${DIST}/deps/*`;
   out['./importmap.json'] = `${DIST}/importmap.json`;
+  // Conversor de las apps (F10): un `.ts` para Deno (subruta `build/construir-app` del paquete).
+  out['./build/construir-app'] = `${DIST}/build/construir-app.ts`;
   out['./package.json'] = './package.json';
   return out;
 }

@@ -5,9 +5,9 @@
  */
 import { readFile, writeFile, readdir } from 'node:fs/promises';
 import { join, posix } from 'node:path';
-import { hashBase, hashPorRuta } from './hash.js';
-import { lookupHash, withAssetHash } from './asset-url.js';
-import { ASSET_HASH_PARAM, ASSET_HASH_PARAM_LEGADO } from './asset-url.js';
+import { hashBase, hashPorRuta } from './hash.ts';
+import { lookupHash, withAssetHash } from './asset-url.ts';
+import { ASSET_HASH_PARAM, ASSET_HASH_PARAM_LEGADO } from './asset-url.ts';
 
 export const ASSET_HASHES_NAME = 'asset-hashes.json';
 

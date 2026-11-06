@@ -214,6 +214,17 @@ Detalles de **inventario por tag** (tablas de componentes de cada categoría), l
 | Basename común (`schemas.ts`, `index.ts`) en una cadena hace que el análisis de código muerto dé el archivo por consumido entero | Nombres por familia (`celdas.schemas.ts`); el guardián `sin-codigo-muerto` se vuelve más preciso tras aplanar |
 | Una variable escrita y nunca leída (`x = …`) sale como «sin uso» en lint | `depurar.mjs` no borra declaraciones que aparecen más de una vez en el archivo |
 
+## Conversor `construirApp` (F10, 2026-11-06)
+
+| Trampa | Mitigación |
+|---|---|
+| Con splitting y CADA fuente como entrada, cada módulo sale en su propio chunk (uno por conjunto de entradas que lo alcanzan): la portada de Avatar pedía 17 módulos más que con el build por archivo y el registrador pesaba 26 KB | Solo las raíces (tags, `app` de las páginas, módulos citados en los HTML) van al build con splitting; el resto sale suelto. Los cierres para el registrador se leen de `deps.json` en reposo |
+| Un `.ts` del kit ejecutado por URL (`deno run https://…`) con `import './x.js'` da 404: `sloppy-imports` solo vale para archivos locales | El build publica `dist/cdn/build/*.ts` con `./x.ts`; módulos con `fileURLToPath(import.meta.url)` al cargar lo protegen (`file:` o nada) |
+| El código de un componente que acaba en un chunk ve `import.meta.url` del chunk (`_chunks/…`) y pide su `.css` hermana en la carpeta equivocada | El conversor sustituye `import.meta.url` de cada fuente por su URL publicada, resuelta desde la raíz de la salida (marca que se reemplaza tras el build por `../` según la profundidad) |
+| Un chunk sellado con `?v=` en el HTML o en el registrador: dos URLs del mismo módulo | Los chunks ya llevan hash en el nombre: fuera del mapa de `?v=` (`esChunk`), igual que los `.mjs` que otro importa por ruta relativa |
+| El runner de `deno task test` importa todos los archivos de prueba en un proceso para leer sus listas: un `import * as sass` arriba rompió la carga (`reading 'length'`) | Importar `sass` (y lo pesado) dentro del cuerpo de la prueba, que corre aislada |
+| Medir en una máquina con carga: la misma portada dio 1 459 ms (F7b) y 3 011 ms (F10) en frío | Comparar antes/después en pares alternados en la misma sesión (copia del build anterior servida aparte) y reportar mínimo y mediana |
+
 ## Trampas operativas de types-strong-2026
 
 | Trampa | Mitigación |

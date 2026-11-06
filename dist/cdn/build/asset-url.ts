@@ -5,7 +5,7 @@
  * para que el consumidor no arme el query a mano.
  */
 
-import type { LoaderGlobal } from "./asset-url.schemas.js";
+import type { LoaderGlobal } from "./asset-url.schemas.ts";
 /** Nombre del parametro de cache busting (convencion `?v=`). */
 export const ASSET_HASH_PARAM = 'v';
 /** Parametro anterior (`?h=`): se reemplaza al sellar. */

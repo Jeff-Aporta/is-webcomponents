@@ -284,6 +284,11 @@ Antes de cambiar el repo del kit, leer [`specs/lessons.md`](https://github.com/J
 - **App nueva o extender una existente:** seguir [`/iswc-base:build`](tools/build.md).
 - **Migrar desde React, MUI, Svelte u otro framework:** seguir [`/iswc-base:migrate`](tools/migrate.md).
 - **Servir el kit sin depender de CDN en runtime:** seguir [`/iswc-base:local`](tools/local.md).
+- **Build de una app Deno (`.ts` → `.mjs` optimizado):** no se escribe ni se copia; `src/utils/build.ts` llama a
+  `construirApp` del kit desde la URL del pin (`dist/cdn/build/construir-app.ts`): splitting con chunks propios,
+  registrador, `deps.json`, `?v=` y bloque de precarga de cada HTML. Paso a paso en
+  [`iswc-foundation/references/02-deno-y-build.md`](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/skills/iswc-foundation/references/02-deno-y-build.md);
+  contrato en `specs/cdn.md` §Conversor `construirApp`.
 
 Resumen de fundación: HTML con bootstrap CDN, `data-theme` y `data-palette`, shell mínimo (`iswc-main`, `iswc-split-panel` o `iswc-drawer`), `<iswc-toast>` global, y capas de dominio que solo mapean datos a tags del kit. Un componente de dominio por concepto de negocio, y cero UI genérica duplicada.
 

@@ -1,6 +1,6 @@
 {
   "name": "@jeff-aporta/iswc-base",
-  "version": "0.0.0-20261105.683b158",
+  "version": "0.0.0-20261106.425f9ee",
   "description": "iswc-base: web components del kit ISWC, un módulo ES por tag (dist/cdn).",
   "type": "module",
   "license": "UNLICENSED",
@@ -315,6 +315,7 @@
     "./deps.json": "./dist/cdn/deps.json",
     "./deps/*": "./dist/cdn/deps/*",
     "./importmap.json": "./dist/cdn/importmap.json",
+    "./build/construir-app": "./dist/cdn/build/construir-app.ts",
     "./package.json": "./package.json"
   },
   "sideEffects": [

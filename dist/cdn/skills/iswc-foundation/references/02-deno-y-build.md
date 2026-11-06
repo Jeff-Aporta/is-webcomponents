@@ -34,31 +34,65 @@
 | `test` · `test:health` · `test:e2e` · `test:all` · `test:all:halt` | pruebas y gate (ver 07) |
 | `sync:entregable` | mirror → entregable (ver 08) |
 
-## Build (`src/utils/build.ts`)
+## Build (`src/utils/build.ts`): el conversor del kit
+
+El build NO se copia en cada app: `src/utils/build.ts` (~15 líneas) llama a **`construirApp`** del kit desde la URL del
+pin, la misma herramienta en todos los proyectos (contrato completo: `specs/cdn.md` §Conversor `construirApp` del kit).
+
+```ts
+import { join } from 'node:path';
+import { stop } from 'esbuild';
+import { construirApp, vigilarApp } from 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@<sha40>/dist/cdn/build/construir-app.ts';
+import { mapaRutas, PREFIJO, SHELL_CRITICO, tagsArranque } from '../js/kit-tags.ts';
+
+const fuente = (rel: string) => (rel.startsWith('js/') ? `src/${rel}` : rel).replace(/\.js$/, '.ts');
+const opts = {
+  raiz: join(import.meta.dirname!, '..', '..'),
+  prefijo: PREFIJO,
+  planos: ['src/js/boot.ts'],
+  tags: Object.fromEntries(Object.entries(mapaRutas()).map(([t, r]) => [t, fuente(r)])),
+  html: [{ archivo: 'index.html', kit: [...SHELL_CRITICO], app: tagsArranque() }],
+};
+await construirApp(opts);
+if (Deno.args.includes('--watch')) await vigilarApp(opts);
+else await stop();
+```
 
 | Fuente | Publicado |
 | --- | --- |
-| `src/js/<x>.ts` | `dist/cdn/js/<x>.js` (esbuild por archivo, sin bundle, minify, es2022) |
-| `view/<v>/<x>.ts` | `dist/cdn/view/<v>/<x>.js` |
-| `.tmp-scss/<ruta>.css` de un componente | dentro de su módulo: `import css from 'iswc:css'` → constante con el CSS minificado (el molde lo adopta) |
+| `src/js/<x>.ts` | `dist/cdn/js/<x>.min.mjs` |
+| `view/<v>/<x>.ts` | `dist/cdn/view/<v>/<x>.min.mjs` |
+| código compartido de las raíces (tags, `app` de cada página, módulos citados en los HTML) | `dist/cdn/_chunks/chunk-<hash>.mjs` |
+| `.tmp-scss/<ruta>.css` de un componente | dentro de su módulo: `import css from 'iswc:css'` (el molde lo adopta); también `dist/cdn/<ruta>.css` |
 | `.tmp-scss/src/styles/<x>.css` | `dist/cdn/styles/<x>.css` (hojas de página, p. ej. `app.css`) |
-| `src/js/boot.ts` | `dist/cdn/boot.js` (IIFE: síncrono en `<head>`) |
-| `src/js/base/zod.ts` | empaquetado con zod (el navegador no resuelve `import "zod"`) |
-| `src/js/components/<p>/all.ts` | `dist/cdn/all.min.js` (bundle de compatibilidad) |
-| `view/<v>/components/all.ts` | `dist/cdn/view/<v>/components/all.min.js` |
+| `src/js/boot.ts` (`planos`) | `dist/cdn/boot.js` (IIFE: síncrono en `<head>`) |
+| `tags` | `dist/cdn/<p>Loader.min.mjs` (registrador) y `dist/cdn/deps.json` (cierre por tag) |
 
-- Imports de vistas `../../../src/js/…` → `../../../js/…` en dist; del shell hacia `view/`, un `../` menos.
-- **Sellado**: `stampDirectory(dist/cdn)` del kit reescribe cada import propio con `?v=<hash>` (FNV-1a,
-  6 caracteres; ciclos con sello de grupo: una URL por módulo) → `asset-hashes.json`.
-- **Registrador** `dist/cdn/<p>Loader.min.js`: exige `iswcLoader` y llama
-  `L.registerApp({ tag: { href: new URL('<ruta>?v=<hash>', raiz).href, type: 'module' }, … }, { installSheets: false })`
-  (`type: 'module'`: el loader del kit infiere el tipo por extensión y un `.js` sin él iría como script clásico).
-- `build-stamp.json`: `{ build, lastbuild, gitCommit, gitBranch }`.
-- El HTML versionado nunca lleva `?v=`: el hash solo vive en dist y en el registrador.
-- **Kit por alias**: `@jeff-aporta/iswc-base/<ruta>` (p. ej. `core/iswc-element.min.mjs`) queda tal cual en dist y en
-  los barriles (externo); lo resuelve el import map de cada HTML y, en Deno, la misma entrada de `deno.json`.
-  `iswc:css` en Deno resuelve a `src/utils/iswc-css-vacio.ts` (`''`).
-- **Bootstrap**: el build reescribe el bloque `<!-- iswc:precarga:inicio -->`…`<!-- iswc:precarga:fin -->` de
-  `index.html` y de cada `view/**/*.html` con el `modulepreload` del loader y del cierre de `SHELL_CRITICO`
-  (`src/vendor/iswc-base/deps.json` → `tags[tag]`) y los `<link>` de `is-base.min.css`/`palettes.min.css` del pin
-  (ver 03). Idempotente; sin `deps.json` vendorizado avisa y deja solo el loader y las hojas.
+- Las raíces van en UN build con splitting (lo común una vez); las demás fuentes salen sueltas y autónomas (las
+  importan los tests y los barriles `all.ts`).
+- **Kit por alias**: `@jeff-aporta/iswc-base/<ruta>` se reescribe a la URL del pin (la misma que usa el loader); `zod`
+  y los `externos` los resuelve el import map. En Deno, `iswc:css` resuelve a `src/utils/iswc-css-vacio.ts` (`''`).
+- **`?v=`** solo en origen mutable (Pages, local) y nunca dentro de un `.mjs` ni en un chunk; `asset-hashes.json`.
+- **Registrador**: `L.registerApp({ tag: { href, type: 'module' } }, { installSheets: false, deps })` y `<html data-icons>`.
+- **HTML**: el conversor escribe el bloque `<!-- iswc:precarga:inicio -->`…`<!-- iswc:precarga:fin -->` de cada página de
+  `html` (import map, precarga del kit y de la app, `is-base`/`palettes` sin bloquear, loader y registrador; ver 03) y
+  pone el `?v=` de las demás referencias a `dist/cdn/`. Idempotente.
+
+## Convertir un proyecto Deno de `.ts` a `.mjs` optimizado
+
+1. **Pin**: `deno task pin --nuevo=<sha40|ultimo>` (verifica en jsDelivr y vendoriza `deps.json`), luego
+   `deno task vendor:iswc` al mismo SHA (tools de pruebas y pines; el build ya no se vendoriza: si quedó
+   `src/vendor/iswc-base/build/`, se borra).
+2. **`src/utils/build.ts`** = el de arriba: `tags` desde `kit-tags.ts`, `planos` (`boot.ts`), una entrada de `html` por
+   página con su `kit` (tags del kit que pinta al arrancar) y su `app` (tags y fuentes propias del arranque), y si hace
+   falta `externos`/`importMap`/`precargas` (un vendor propio) o `lote` (armazón en un módulo).
+3. **HTML**: quitar el import map, el `<script>` del loader y el del registrador y poner en su lugar las marcas
+   `<!-- iswc:precarga:inicio -->` / `<!-- iswc:precarga:fin -->`; las referencias propias pasan a `.min.mjs`
+   (`dist/cdn/js/kit-tags.min.mjs`). Sin `?v=` a mano: lo pone el build.
+4. **Tests** que importan lo publicado: `dist/cdn/<ruta>.js` → `dist/cdn/<ruta>.min.mjs`; el registrador es
+   `<p>Loader.min.mjs`.
+5. **`deno task build`** y revisar el informe (`[construirApp] N entradas + M chunks · KB · tags · HTML reescritos`).
+   Una segunda corrida no debe reescribir ningún HTML.
+6. **Verificar**: `deno task test:all` en verde y medir la portada antes/después con el kit
+   (`deno task medir -- --url=<url> --warm --corridas=5`, Edge headless): peticiones, KB, módulos, ráfagas y
+   `data-app-ready` iguales o mejores.

@@ -11,7 +11,7 @@
  */
 import { posix, relative, resolve } from 'node:path';
 import type { Metafile } from 'esbuild';
-import type { DepsJson, DepsPartido, ExportsJson, GrafoOptions } from './graph.schemas.js';
+import type { DepsJson, DepsPartido, ExportsJson, GrafoOptions } from './graph.schemas.ts';
 
 const barras = (p: string) => p.replaceAll('\\', '/');
 

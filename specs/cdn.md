@@ -190,6 +190,70 @@ La copia compat `core/loader.min.js` se retira cuando todos los consumidores hay
 
 Skills: `npx skills add Jeff-Aporta/is-webcomponents -s is-cdn-install` · `-s iswc-base`.
 
+### Conversor `construirApp` (F10)
+
+Una app Deno convierte sus `.ts` en `.mjs` optimizado con la MISMA herramienta que todas las demás, ejecutada desde el
+pin (ADR «conversor construirApp, 2026-11-05»). Fuente: `src/cdn/build/construir-app.ts` (+ `construir-app.schemas.ts`,
+`lote-kit.ts`); publicada en `dist/cdn/build/construir-app.ts` con imports relativos `.ts` (Deno no aplica
+`sloppy-imports` a módulos remotos). Paso a paso para una app: `skills/iswc-foundation/references/02-deno-y-build.md`.
+
+```ts
+// src/utils/build.ts de la app (≈ 15 líneas; `deno task pin` mueve el SHA de la URL con el resto)
+import { stop } from 'esbuild';
+import { construirApp } from 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@<sha40>/dist/cdn/build/construir-app.ts';
+await construirApp({ raiz, prefijo: 'av', planos: ['src/js/boot.ts'], tags, html });
+await stop();
+```
+
+También como CLI: `deno run -A <url>/construir-app.ts --config=build.json [--watch]` (las mismas opciones en JSON;
+`raiz` relativa al `build.json`). Las dependencias son `node:*`, `esbuild` y `zod`, que resuelve el `deno.json` de la app.
+
+| Opción | Por defecto | Qué hace |
+|---|---|---|
+| `raiz`, `prefijo` | — | carpeta de la app; el prefijo nombra el registrador `<prefijo>Loader.min.mjs` |
+| `entradas` | `['src/js', 'view']` | carpetas cuyos `.ts` se publican como `.min.mjs` (`src/js/x.ts` → `js/x.min.mjs`) |
+| `salida` | `dist/cdn` | carpeta de salida (se borra y se rehace) |
+| `pin` · `cdn` · `repo` | SHA de `src/js/iswc.ts` · jsDelivr al pin | de dónde salen alias, loader, `deps.json` y lote |
+| `planos` | — | entradas IIFE (`boot.ts` → `<salida>/boot.js`) |
+| `define` · `externos` | — · `zod` siempre | constantes de esbuild; especificadores que resuelve el import map |
+| `origenMutable` | `deno.json` → `iswc.host` no inmutable | sella `?v=` (Pages, local); sobre pin jsDelivr, no |
+| `tags` | — | tag de la app → fuente: registrador y `deps.json` |
+| `html` | `index.html` + `view/**` con marcas | `{ archivo, kit?, app? }`: bloque de precarga por página |
+| `importMap` · `precargas` | — | entradas extra del import map y `modulepreload` extra (p. ej. `@avatar/vendor`) |
+| `lote` | — | `{ tags, archivo? }`: lote ESM del armazón armado desde el pin (`lote-kit.ts`) |
+| `depsKit` · `staging` | `src/vendor/iswc-base/deps.json` (o el del pin) · `.tmp-scss` | grafo del kit; staging SCSS espejo de la raíz |
+
+Qué hace, en orden:
+1. **Entradas.** Raíces = fuentes de `tags`, `app` de cada página y módulos `<salida>/…min.mjs` que los HTML citan fuera
+   del bloque. Solo ellas van al build con splitting; las demás fuentes salen sueltas y autónomas (tests, barriles). Si
+   todas fuesen entrada, cada módulo saldría en su propio chunk (uno por conjunto de entradas que lo alcanzan) y la
+   portada de Avatar pedía 17 módulos más que con el build por archivo.
+2. **Bundle.** esbuild `splitting`, `format: 'esm'`, `minify`, `.min.mjs`, chunks en `<salida>/_chunks/`. El alias
+   `@jeff-aporta/iswc-base/<ruta>` (la app lo escribe con la ruta publicada, `core/iswc-element.min.mjs`) queda externo
+   y se reescribe a `<cdn><ruta>`: la misma URL que usa el loader. `iswc:css` incrusta la hoja del staging
+   (`css-virtual.ts`). `import.meta.url` de cada fuente vale su URL publicada aunque su código acabe en un chunk.
+3. **Hojas.** Cada `.css` del staging → `<salida>/<ruta sin src/>.css`, minificada (`url()` de fuentes e imágenes quedan
+   relativas).
+4. **Lote** opcional (`lote-kit.ts`): los tags en un módulo; externos el cierre del loader, `lib/zod` y todo `import()`.
+5. **`?v=`** solo en origen mutable (`stampDirectory(…, { sellarMjs: false })`): nunca dentro de un `.mjs`, nunca en un
+   chunk ni en un módulo que otro importa por ruta relativa (una URL para todos).
+6. **`deps.json`** de la app (`graph.ts`, cierre por tag) y **registrador** `<prefijo>Loader.min.mjs`:
+   `registerApp({ tag: { href, type: 'module' } }, { installSheets: false })`, `<html data-icons>` desde `iswc.host` y,
+   en reposo, `deps.json` → `configure({ deps })` (los chunks del cierre de cada tag: el registrador está en la ruta
+   crítica de cada página y los cierres solo sirven para lo que se pida después; en Avatar, 19,6 KB → 11,5 KB);
+   `asset-hashes.json` y `build-stamp.json`.
+7. **HTML.** Entre `<!-- iswc:precarga:inicio -->` y `<!-- iswc:precarga:fin -->`: import map (alias y `zod` del pin, más
+   `importMap`), `<meta name="iswc-precargado">`, `modulepreload` del cierre del loader, del de los `kit` de la página
+   (sin los del lote) y de lo que la app importa del kit por alias, el lote, el cierre propio (`app`), `preload as=fetch`
+   de las `.css` hermanas que los componentes piden por red (no las de `iswc:css`), `is-base`/`palettes` no
+   bloqueantes, loader `.min.mjs` y registrador. Fuera del bloque solo pone o quita el `?v=` de las referencias a
+   `<salida>`; `<base href>` se respeta (una base absoluta = la raíz de la app). Un import map fuera del bloque es error.
+   Idempotente: sin cambios, ni el HTML ni `<salida>` cambian (salvo `build-stamp.json`).
+
+**Sigue siendo de cada app:** sus entradas, vistas y páginas (qué tags precarga cada una), `boot.ts`, `define`, el SCSS
+(`build:scss`), los íconos, el despliegue y los tests. Guardián: `tests/gobernanza/construir-app.test.ts` (app de fixture
+contra el `dist` local servido como pin, en Edge headless).
+
 ### Nombre del kit y del repo
 
 - El kit se llama **`iswc-base`** (alias de imports, prosa, rutas, `skills/iswc-base/`).

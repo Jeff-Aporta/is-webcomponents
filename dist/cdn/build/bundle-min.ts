@@ -4,9 +4,9 @@
  * o desde el CDN, y queda con el mismo formato y los mismos defines.
  */
 import { build } from 'esbuild';
-import type { BundleMinJsOptions, BundleLoaderOptions } from "./bundle-min.schemas.js";
-import { aliasKit } from './alias.js';
-import { cssVirtual } from './css-virtual.js';
+import type { BundleMinJsOptions, BundleLoaderOptions } from "./bundle-min.schemas.ts";
+import { aliasKit } from './alias.ts';
+import { cssVirtual } from './css-virtual.ts';
 
 // El alias `@jeff-aporta/iswc-base/<ruta>` va siempre y PRIMERO: los plugins del llamador deciden por ruta absoluta (ver alias.ts).
 // Detrás va `iswc:css` (css-virtual.ts): cada módulo que lo importe recibe su .css compilado del staging.

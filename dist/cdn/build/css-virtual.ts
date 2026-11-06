@@ -20,14 +20,15 @@ import { existsSync } from 'node:fs';
 import { isAbsolute, join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { build, type Plugin } from 'esbuild';
-import type { CssVirtualOptions } from './css-virtual.schemas.js';
+import type { CssVirtualOptions } from './css-virtual.schemas.ts';
 
 /** Especificador del import virtual. Con sufijo `/<nombre>` nombra una hoja común de `src/core`. */
 export const ESPECIFICADOR_CSS = 'iswc:css';
 
 const FILTRO = /^iswc:css(?:\/[\w-]+)?$/;
 
-const RAIZ_SRC = fileURLToPath(new URL('../../', import.meta.url));
+// Ejecutado desde el CDN (construirApp por URL) no hay `src/` del kit: quien lo usa pasa `staging` y `fuentes`.
+const RAIZ_SRC = import.meta.url.startsWith('file:') ? fileURLToPath(new URL('../../', import.meta.url)) : '';
 
 const STAGING = join(RAIZ_SRC, '..', '.tmp-scss', 'src');
 
