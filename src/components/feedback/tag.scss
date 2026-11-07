@@ -8,7 +8,12 @@
   max-width: 100%;
   vertical-align: middle;
   font-family: var(--iswc-font-family);
-  font-size: var(--iswc-tag-size, inherit);
+  /* El badge es pequeño (no es un botón): la fuente es 0.7em del contexto y la caja
+     mide 1em del contexto. La altura se calcula en la fuente del propio badge
+     (1 / 0.7 em) para que el relleno no la estire. */
+  --_tag-font: 0.7;
+  --_tag-height: 1;
+  font-size: var(--iswc-tag-size, calc(var(--_tag-font) * 1em));
   font-weight: 500;
   line-height: 1;
 
@@ -16,7 +21,9 @@
     display: inline-flex;
     align-items: center;
     gap: 0.35em;
-    padding: 0.4em 0.7em;
+    box-sizing: border-box;
+    block-size: calc(var(--_tag-height) / var(--_tag-font) * 1em);
+    padding: 0 0.5em;
     border-radius: 0.35em;
     background: var(--_bg);
     border: 1px solid var(--_border);
@@ -37,8 +44,6 @@
     /* Un texto largo se corta con puntos suspensivos; el relleno vertical evita recortar las descendentes. */
     .label {
       min-width: 0;
-      margin-block: -0.1em;
-      padding-block: 0.1em;
       overflow: hidden;
       text-overflow: ellipsis;
     }

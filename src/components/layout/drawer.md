@@ -52,9 +52,10 @@ Contenido.
 | --- | --- | --- |
 | `open` | boolean | Fuente define default/restricción. |
 | `label` | string/según contrato | Fuente define default/restricción. |
-| `placement` | string/según contrato | Fuente define default/restricción. |
+| `placement` | string | `start` | `end` | `top` | `bottom` (default `end` = derecha). Acepta los alias `left`/`right` (e `izquierda`/`derecha`). |
 | `without-header` | boolean | Fuente define default/restricción. |
 | `light-dismiss` | boolean | Fuente define default/restricción. |
+| `storage-key` | string | Llave de la memoria del ancho. **Vacío = no recuerda nada** (opcional, desactivado por defecto). **Se recomienda aplicarlo**: con la misma llave, el cajón recuerda el ancho que dejó el usuario. |
 
 #### Propiedades públicas
 
@@ -62,7 +63,8 @@ Contenido.
 | --- | --- | --- |
 | `open` | lectura/escritura | Declarada por clase. |
 | `label` | lectura/escritura | Declarada por clase. |
-| `placement` | lectura/escritura | Declarada por clase. |
+| `placement` | lectura/escritura | El borde del cajón (normalizado: `data-placement`). |
+| `storageKey` | lectura/escritura | La llave de la memoria del ancho (`storage-key`). |
 | `withoutHeader` | lectura/escritura | Declarada por clase. |
 | `lightDismiss` | lectura/escritura | Declarada por clase. |
 

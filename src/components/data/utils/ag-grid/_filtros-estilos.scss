@@ -52,9 +52,25 @@
 
 /* ── side bar ───────────────────────────────────────────────────────── */
 
-.iswc-ag-lateral { position: relative; display: flex; flex: none; min-block-size: 0; background: var(--iswc-grid-bg, var(--iswc-bg-elev)); border-inline-start: 1px solid var(--iswc-grid-border, var(--iswc-border)); color: var(--iswc-text); }
+/* El panel de columnas/filtros es un drop-down SOBRE la grilla: nunca ensancha el componente.
+   Antes era una columna del flex (position: relative) y al abrirlo la grilla crecía. */
+.iswc-ag-lateral {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-end: 0;
+  z-index: 4;
+  inline-size: min(18rem, 85%);
+  display: flex;
+  flex: none;
+  min-block-size: 0;
+  background: var(--iswc-grid-bg, var(--iswc-bg-elev));
+  border: 1px solid var(--iswc-grid-border, var(--iswc-border));
+  border-radius: var(--iswc-radius, 0.5rem);
+  box-shadow: 0 0.5rem 1.5rem rgb(0 0 0 / 0.25);
+  color: var(--iswc-text);
+}
 .iswc-ag-lateral[hidden] { display: none; }
-.iswc-ag-lateral--izquierda { order: -1; flex-direction: row-reverse; border-inline-start: 0; border-inline-end: 1px solid var(--iswc-grid-border, var(--iswc-border)); }
+.iswc-ag-lateral--izquierda { order: -1; flex-direction: row-reverse; inset-inline: 0 auto; border-inline-start: 1px solid var(--iswc-grid-border, var(--iswc-border)); border-inline-end: 0; }
 .iswc-ag-lateral__contenido { display: none; flex-direction: column; min-block-size: 0; overflow: hidden; border-inline-end: 1px solid var(--iswc-grid-border, var(--iswc-border)); }
 .iswc-ag-lateral--izquierda .iswc-ag-lateral__contenido { border-inline-end: 0; border-inline-start: 1px solid var(--iswc-grid-border, var(--iswc-border)); }
 .iswc-ag-lateral--abierta .iswc-ag-lateral__contenido { display: flex; }

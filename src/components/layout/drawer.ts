@@ -1,5 +1,6 @@
 import { ModalBase } from './utils/modal-base.js';
 import { define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import { getComponentPrefs, setComponentPrefs } from '@jeff-aporta/iswc-base/core/prefs.js';
 import css from 'iswc:css';
 
 /**
@@ -68,10 +69,13 @@ import css from 'iswc:css';
       <footer class="footer" part="footer">
         <slot name="footer"></slot>
       </footer>
+      <div class="resize-handle" part="resize-handle" role="separator" aria-orientation="vertical" tabindex="0" title="Arrastra para cambiar el ancho"></div>
     </div>
   `;
 
   const VALID_PLACEMENT = ['start', 'end', 'top', 'bottom'];
+  /** Alias que la gente escribe de otra forma (y sus equivalentes en español). */
+  const ALIAS_PLACEMENT: Record<string, string> = { left: 'start', right: 'end', izquierda: 'start', derecha: 'end' };
   const HIDDEN_KEYFRAME = {
     start: { transform: 'translateX(-100%)' },
     end: { transform: 'translateX(100%)' },
@@ -86,7 +90,7 @@ import css from 'iswc:css';
 
     static template = TEMPLATE;
 
-    static observed = [...super.observed, 'placement'];
+    static observed = [...super.observed, 'placement', 'storage-key'];
 
     get modalClass() { return '.drawer'; }
     get closeAttr() { return 'data-drawer'; }
@@ -94,23 +98,127 @@ import css from 'iswc:css';
 
     onConnected() {
       if (!this.hasAttribute('placement')) this.setAttribute('placement', 'end');
+      this.#normalizarPlacement();
+      this.#conectarResize();
+      this.#restaurarAncho();
     }
 
     onAttributeChanged(name: string, _oldVal: string | null, newVal: string | null) {
-      if (name === 'placement' && newVal && !VALID_PLACEMENT.includes(newVal)) {
-        this.setAttribute('placement', 'end');
-      }
+      if (name === 'placement') this.#normalizarPlacement();
+    }
+
+    /**
+     * Normaliza el borde: acepta los alias (left/right, izquierda/derecha) y deja siempre un valor
+     * válido. El CSS se apoya en 'data-placement' (nunca en el atributo crudo): así un valor raro
+     * no deja la caja sin tamaño —y sin scroll— en el borde equivocado.
+     */
+    #normalizarPlacement(): void {
+      const bruto = (this.getAttribute('placement') ?? '').trim().toLowerCase();
+      const normal = ALIAS_PLACEMENT[bruto] ?? bruto;
+      const valor = VALID_PLACEMENT.includes(normal) ? normal : 'end';
+      if (this.getAttribute('placement') !== valor) this.setAttribute('placement', valor);
+      this.setAttribute('data-placement', valor);
+    }
+
+    onConnected() {
+      if (!this.hasAttribute('placement')) this.setAttribute('placement', 'end');
+      this.#normalizarPlacement();
+      this.#conectarResize();
+      this.#restaurarAncho();
+    }
+
+    /** El tirador de tamaño: aparece en los bordes horizontales (start/end). */
+    #conectarResize(): void {
+      const handle = this.shadowRoot?.querySelector('.resize-handle');
+      if (!handle) return;
+      handle.addEventListener('pointerdown', this.#iniciarResize);
+      handle.addEventListener('keydown', this.#teclaResize);
+    }
+
+    /** Arrastrar el tirador cambia el ancho del cajón (--iswc-drawer-size). */
+    #iniciarResize = (e: PointerEvent): void => {
+      if (e.button !== 0) return;
+      const handle = e.currentTarget as HTMLElement;
+      handle.setPointerCapture(e.pointerId);
+      const inicio = this.placement === 'start' ? e.clientX : -e.clientX;
+      const anchoInicial = this.#anchoActual();
+      const mover = (ev: PointerEvent): void => {
+        const ahora = this.placement === 'start' ? ev.clientX : -ev.clientX;
+        const ancho = anchoInicial + (ahora - inicio);
+        this.#fijarAncho(Math.max(224, Math.min(ancho, window.innerWidth - 80)));
+      };
+      const soltar = (): void => {
+        handle.removeEventListener('pointermove', mover);
+        handle.removeEventListener('pointerup', soltar);
+        handle.removeEventListener('pointercancel', soltar);
+        this.#persistirAncho();
+      };
+      handle.addEventListener('pointermove', mover);
+      handle.addEventListener('pointerup', soltar);
+      handle.addEventListener('pointercancel', soltar);
+      e.preventDefault();
+    };
+
+    /** Con el teclado el ancho también cambia (flechas: 16 px; Inicio/Fin: mínimo/máximo). */
+    #teclaResize = (e: KeyboardEvent): void => {
+      const paso = e.shiftKey ? 64 : 16;
+      const ancho = this.#anchoActual();
+      if (e.key === 'ArrowLeft') this.#fijarAncho(this.placement === 'start' ? ancho + paso : ancho - paso);
+      else if (e.key === 'ArrowRight') this.#fijarAncho(this.placement === 'start' ? ancho - paso : ancho + paso);
+      else if (e.key === 'Home') this.#fijarAncho(240);
+      else if (e.key === 'End') this.#fijarAncho(Math.max(240, window.innerWidth - 80));
+      else return;
+      e.preventDefault();
+      this.#persistirAncho();
+    };
+
+    /** El ancho actual en píxeles (el que dice el CSS). */
+    #anchoActual(): number {
+      const valor = getComputedStyle(this).getPropertyValue('--iswc-drawer-size').trim();
+      if (valor.endsWith('px')) return parseFloat(valor) || 0;
+      const em = parseFloat(valor) || 0;
+      return em * parseFloat(getComputedStyle(this).fontSize || '16');
+    }
+
+    /** Fija el ancho del cajón. */
+    #fijarAncho(px: number): void {
+      this.style.setProperty('--iswc-drawer-size', `${Math.round(px)}px`);
+    }
+
+    /** La memoria del ancho (opcional: solo si hay storage-key). */
+    get storageKey(): string {
+      return (this.getAttribute('storage-key') ?? '').trim();
+    }
+    set storageKey(v: string | null) {
+      if (v == null || v === '') this.removeAttribute('storage-key');
+      else this.setAttribute('storage-key', String(v));
+    }
+
+    /** Recupera el ancho guardado (si hay storage-key). */
+    #restaurarAncho(): void {
+      const key = this.storageKey;
+      if (!key) return;
+      const guardado = getComponentPrefs('iswc-drawer', key) as { width?: number } | null;
+      const ancho = Number(guardado?.width);
+      if (Number.isFinite(ancho) && ancho > 0) this.#fijarAncho(ancho);
+    }
+
+    /** Guarda el ancho (si hay storage-key). */
+    #persistirAncho(): void {
+      const key = this.storageKey;
+      if (!key) return;
+      setComponentPrefs('iswc-drawer', key, { width: Math.round(this.#anchoActual()) });
     }
 
     // ---- placement ----
 
     get placement(): string {
-      const v = this.getAttribute('placement');
-      return VALID_PLACEMENT.includes(v ?? '') ? (v as string) : 'end';
+      return this.getAttribute('data-placement') ?? 'end';
     }
     set placement(v) {
       if (v == null || v === '') this.removeAttribute('placement');
-      else if (VALID_PLACEMENT.includes(v)) this.setAttribute('placement', v);
+      else this.setAttribute('placement', v);
+      this.#normalizarPlacement();
     }
 
     // ---- animaciones ----

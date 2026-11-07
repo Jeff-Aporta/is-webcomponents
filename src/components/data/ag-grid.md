@@ -1,4 +1,4 @@
-﻿---
+---
 tag: iswc-ag-grid
 tags:
   - iswc-ag-grid
@@ -139,6 +139,9 @@ Orden, visibilidad (`hide`), anchos, pin, `sortModel`, `filterModel`, quick filt
 - Lista de checks para show/hide, búsqueda, Mostrar todo / Ocultar todo.
 - Markup: `.mim-dg__sidebar`, `.mim-dg__panel`, `.mim-dg__col-check`.
 - No reinventar un popover aparte: el sidebar ya es el contrato UI.
+
+> Los paneles de **columnas** y **filtros** se abren como un drop-down **sobre** la grilla: el componente
+> nunca crece ni se sale de su contenedor.
 
 ## API
 

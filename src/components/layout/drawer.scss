@@ -59,13 +59,13 @@
    fixed inset:0, así que 100% sigue al viewport visible en móvil, al
    contrario que 100vh). Cada placement redondea y sombrea solo su cara
    expuesta. */
-:host(:is([placement="start"], [placement="end"])) .drawer {
+:host(:is([data-placement="start"], [data-placement="end"])) .drawer {
   inline-size: min(var(--iswc-drawer-size), calc(100% - 2 * var(--iswc-drawer-spacing)));
   block-size: 100%;
   inset-block: 0;
 }
 
-:host([placement="start"]) {
+:host([data-placement="start"]) {
   --_shadow: .5em 0 1.5em rgba(0, 0, 0, 0.18);
 
   .drawer {
@@ -76,7 +76,7 @@
   }
 }
 
-:host([placement="end"]) {
+:host([data-placement="end"]) {
   --_shadow: -.5em 0 1.5em rgba(0, 0, 0, 0.18);
 
   .drawer {
@@ -87,13 +87,13 @@
   }
 }
 
-:host(:is([placement="top"], [placement="bottom"])) .drawer {
+:host(:is([data-placement="top"], [data-placement="bottom"])) .drawer {
   block-size: min(var(--iswc-drawer-size), calc(100% - 2 * var(--iswc-drawer-spacing)));
   inline-size: 100%;
   inset-inline: 0;
 }
 
-:host([placement="top"]) {
+:host([data-placement="top"]) {
   --_shadow: 0 .5em 1.5em rgba(0, 0, 0, 0.18);
 
   .drawer {
@@ -104,7 +104,7 @@
   }
 }
 
-:host([placement="bottom"]) {
+:host([data-placement="bottom"]) {
   --_shadow: 0 -.5em 1.5em rgba(0, 0, 0, 0.18);
 
   .drawer {
@@ -113,6 +113,33 @@
     border-start-start-radius: var(--_radius);
     border-start-end-radius: var(--_radius);
   }
+}
+
+/* El tirador de tamaño: vive en el borde interior del cajón (solo en start/end). */
+.resize-handle {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: 0;
+  inline-size: 0.4rem;
+  cursor: col-resize;
+  touch-action: none;
+  background: transparent;
+  transition: background 0.15s ease;
+
+  &:hover,
+  &:focus-visible {
+    background: color-mix(in srgb, var(--iswc-color-brand) 45%, transparent);
+    outline: none;
+  }
+}
+
+:host([data-placement="start"]) .resize-handle {
+  inset-inline-start: auto;
+  inset-inline-end: 0;
+}
+
+:host(:not([data-placement="start"]):not([data-placement="end"])) .resize-handle {
+  display: none;
 }
 
 /* .header / .title / .body / .footer → core/modal-chrome.scss */

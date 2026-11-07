@@ -28,7 +28,8 @@
   --_text-hover: var(--_text);
   --_border-hover: var(--_border);
   --_focus: var(--iswc-focus, var(--iswc-color-brand));
-  --_height: var(--iswc-control-height);
+  /* El botón es un 10% más alto que el renglón: resalta la acción sin pesar. */
+  --_height: calc(var(--iswc-control-height) * 1.1);
   /* Proporcional al alto: la densidad compacta también recorta el aire lateral. */
   --_hpad: calc(var(--iswc-control-height) * 0.4);
   display: inline-flex;

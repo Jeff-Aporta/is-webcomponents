@@ -131,10 +131,8 @@ export class ModalBase extends withStyleAttrs(IswcElement) {
     // Molde: upgradeProperties (una vez), deps y `onConnected()` de la subclase.
     super.connectedCallback();
     if (this.open) {
-      this.dataset.state = 'open';
-      this.#modal.hidden = false;
-      this.#subirCapa();
-      this.#attachKeydown();
+      // Nacer abierto también anima: se usa el mismo camino que show() (estado 'opening' → animación → 'open').
+      void this.show();
     } else {
       this.#modal.hidden = false;
     }
