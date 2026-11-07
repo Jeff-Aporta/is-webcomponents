@@ -441,8 +441,10 @@ export function computeFlowchartLayout(
   overrides: FlowLayoutOverrides | null = null,
   opts: FlowLayoutOptions = {},
 ): FlowLayout {
-  // Presupuesto del layout (ms): las vueltas de etiquetas se detienen al agotarlo (el navegador no se cuelga).
-  const inicioLayout = Date.now();
+  // Presupuesto del layout: trabajo del router de usos (estados expandidos) sumado en todas sus llamadas;
+  // las vueltas de etiquetas se detienen al agotarlo (el navegador no se cuelga). Es trabajo y no reloj:
+  // con reloj, la carga del equipo cortaba antes y la misma entrada daba otro diagrama.
+  let trabajoUsos = 0;
   const insoft = opts.style === 'insoft';
   const title = spec.title ?? '';
   const subtitle = spec.subtitle ?? '';
@@ -770,7 +772,7 @@ export function computeFlowchartLayout(
   if (lanesOn && final) {
     const mideFijos = (t: string): number => measurer(opts)(t) * (10.5 / (opts.fontSize ?? INSOFT.fontSize));
     const muros = [...cajasFijas(nodes, placed.lanes, placed.contexts, offsetX, offsetY, spec.laneDirection === 'horizontal', mideFijos), ...textos.values()];
-    rutearUsos(routed, spec, nodes, muros);
+    trabajoUsos += rutearUsos(routed, spec, nodes, muros);
   }
   // Componentes que exponen interfaz: quien llega se conecta por `-(O-` (socket en el riel).
   if (final) socketsDeComponentes(routed, spec);
@@ -794,7 +796,7 @@ export function computeFlowchartLayout(
     const intentadas = new Set<number>();
     for (let vuelta = 0; ; vuelta++) {
       const conflictos = resolverEtiquetas(routedEdges, nodes, fijos(), mide, { w: width, h: height });
-      if (!conflictos.length || vuelta >= 8 || Date.now() - inicioLayout > LAYOUT_PRESUPUESTO) break;
+      if (!conflictos.length || vuelta >= 8 || trabajoUsos > LAYOUT_PRESUPUESTO) break;
       // El primer conflicto aún no intentado (uno que no se resuelve no tapa a los demás).
       const c = conflictos.find((x) => !intentadas.has(x.edge));
       if (!c) break;
@@ -832,7 +834,7 @@ export function computeFlowchartLayout(
     // resuelve no tapa a los demás.
     const intentadas2 = new Set<number>();
     // Cada vuelta re-rutea todo (lo más caro del layout): pocas vueltas bastan.
-    for (let vuelta = 0; vuelta < 3 && Date.now() - inicioLayout <= LAYOUT_PRESUPUESTO; vuelta++) {
+    for (let vuelta = 0; vuelta < 3 && trabajoUsos <= LAYOUT_PRESUPUESTO; vuelta++) {
       const c = pendientes.find((x) => !intentadas2.has(x.edge));
       if (!c) break;
       intentadas2.add(c.edge);
@@ -930,8 +932,13 @@ function ortogonalizar(pts: FlowPoint[]): FlowPoint[] {
   return simplifyOrthoPath(pts);
 }
 
-/** Presupuesto total (ms) de las vueltas de etiquetas de un layout. */
-const LAYOUT_PRESUPUESTO = 40000;
+/**
+ * Presupuesto total de las vueltas de etiquetas de un layout: estados expandidos por el router de usos,
+ * sumados (antes 40 s de reloj). Medido 6-nov-2026 sobre las 24 rutas reales del ISS: el layout que más
+ * gasta completo suma ~0,95 M (ruta-conversacion-tiquete); el tope deja el doble de holgura y solo acota
+ * diagramas mayores.
+ */
+const LAYOUT_PRESUPUESTO = 2_000_000;
 
 /** Paso (px) de la rejilla del ruteo de usos. */
 const RUTEO_USOS_PASO = 16;
@@ -944,16 +951,20 @@ const costosUsos = () => ({
   text: { radius: PROXIMIDAD.radio, glow: 3 },
   connector: { radius: PROXIMIDAD.radio + PUENTE.bola, glow: 6 },
 });
-/** Tiempo máximo (ms) de una llamada al router de usos: pasado, se conserva la ruta previa. */
-const RUTEO_USOS_PRESUPUESTO = 12000;
+/**
+ * Trabajo máximo de una llamada al router de usos (estados expandidos; antes 12 s de reloj): pasado, se
+ * conserva la ruta previa. Determinista: la misma entrada da el mismo diagrama en cualquier equipo.
+ */
+const RUTEO_USOS_PRESUPUESTO = 1_000_000;
 
 /** Memoria del ruteo de usos por firma de su entrada (ver rutearUsos). */
 const RUTEO_USOS = new Map<string, ReturnType<typeof routeEdges>>();
 
-function rutearUsos(routed: Array<FlowLayoutEdge | null>, spec: FlowResolvedSpec, nodes: readonly FlowLayoutNode[], muros: readonly EmbedBox[]): void {
+/** Rutea los usos (punteadas) en lote; devuelve el trabajo del router (también si sale de la memoria). */
+function rutearUsos(routed: Array<FlowLayoutEdge | null>, spec: FlowResolvedSpec, nodes: readonly FlowLayoutNode[], muros: readonly EmbedBox[]): number {
   const porId = new Map(nodes.map((n) => [n.id, n]));
   const usos = spec.edges.map((e, i) => ({ e, i })).filter(({ e, i }) => e.kind === 'dashed' && routed[i] && porId.has(e.from) && porId.has(e.to) && e.from !== e.to);
-  if (!usos.length) return;
+  if (!usos.length) return 0;
   const caja = (n: FlowLayoutNode) => ({ id: n.id, x: n.x, y: n.y, w: n.w, h: n.h });
   const lados = (a: FlowLayoutNode, b: FlowLayoutNode): [Lado, Lado] => {
     // Dos tablas apiladas (propagación maestro → detalle): el riel rodea por la derecha, con largo
@@ -1030,10 +1041,9 @@ function rutearUsos(routed: Array<FlowLayoutEdge | null>, spec: FlowResolvedSpec
   if (!res) {
     // Rejilla de 16 px: gruesa para que el ruteo sea rápido; con 2U (30 px) el router no termina
     // con los puertos de los puentes `-(O=` (deuda del router, ver lessons).
-    const limite = Date.now() + RUTEO_USOS_PRESUPUESTO;
-    res = routeEdges(mundo, edges, { step: RUTEO_USOS_PASO, clearance: 8, stub: U, iterations: 2, deadline: limite, costs: costosUsos() });
-    // Solo se memoriza un ruteo completo (uno cortado por tiempo puede mejorar en otra pasada).
-    if (Date.now() <= limite) RUTEO_USOS.set(firma, res);
+    res = routeEdges(mundo, edges, { step: RUTEO_USOS_PASO, clearance: 8, stub: U, iterations: 2, maxExpansions: RUTEO_USOS_PRESUPUESTO, costs: costosUsos() });
+    // Con tope de trabajo también un ruteo cortado es determinista: se memoriza siempre.
+    RUTEO_USOS.set(firma, res);
     if (RUTEO_USOS.size > 64) RUTEO_USOS.delete(RUTEO_USOS.keys().next().value!);
   }
   // Copia: lo que sigue ajusta las rutas y no debe tocar la memoria. La rejilla gruesa deja los
@@ -1124,6 +1134,7 @@ function rutearUsos(routed: Array<FlowLayoutEdge | null>, spec: FlowResolvedSpec
     const nuevos = simplifyOrthoPath([...pts.slice(0, -1), codo, giro, T0]);
     routed[i] = { ...r, path: polylinePath(nuevos), arrowTipX: T0.x, arrowTipY: T0.y };
   });
+  return res.expansions;
 }
 
 /**

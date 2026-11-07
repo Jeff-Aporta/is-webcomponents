@@ -181,9 +181,16 @@ const RouterOptsSchema = z.object({
   /**
    * Fecha límite (ms epoch): pasada, no se empiezan más iteraciones ni pasadas de unión, y las
    * aristas aún sin rutear vuelven sin camino (el llamador conserva la ruta que tenía). Acota el
-   * tiempo en el navegador.
+   * tiempo en el navegador. Depende del reloj: con el equipo cargado corta antes y la salida cambia;
+   * para un corte reproducible, `maxExpansions`.
    */
   deadline: z.number().optional(),
+  /**
+   * Tope de trabajo: estados expandidos por el A* sumados en todas las aristas y pasadas. Al
+   * alcanzarlo, igual que `deadline` pero determinista (misma entrada, misma salida en cualquier
+   * equipo y con cualquier carga).
+   */
+  maxExpansions: z.number().optional(),
   step: z.number().optional(),
   /** Distancia mínima arista↔entidad / conector / prohibido. */
   clearance: z.number().optional(),
@@ -233,6 +240,8 @@ const RouteResultSchema = z.object({
   /** Por arista: puerto de salida y de llegada elegidos (el de llegada es el de la raíz si se unió). */
   fromPorts: z.array(z.union([RouterPortSchema, z.null()])),
   toPorts: z.array(z.union([RouterPortSchema, z.null()])),
+  /** Estados expandidos por el A* en esta llamada (el trabajo que mide `maxExpansions`). */
+  expansions: z.number(),
 });
 export type RouteResult = z.infer<typeof RouteResultSchema>;
 

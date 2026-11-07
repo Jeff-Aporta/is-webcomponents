@@ -374,16 +374,27 @@ class IswcFlowchart extends DiagramElementBase {
     return w > 0 ? w : text.length * paint.fontSize * 0.6;
   }
 
-  /** Si se midió antes de que llegara la webfont, re-maqueta una vez al llegar. */
+  /**
+   * Si se midió antes de que llegara la webfont, re-maqueta una vez al llegar. También si la HOJA de la
+   * webfont aún no había cargado (pasado el tope de `prepareRender`): sin hoja no hay `@font-face`,
+   * `fonts.check` da `true` y el diagrama se quedaba medido con la fuente de respaldo (visto con el equipo
+   * cargado: 636 px de ancho en vez de 668 y el texto desbordando sus cajas al llegar Poppins).
+   */
   #watchFont(): void {
     const paint = this.#paint;
     if (!paint || this.#fontRetry || !document.fonts) return;
     const spec = `${paint.fontWeight} ${paint.fontSize}px ${paint.font}`;
+    const href = this.#styleTheme?.font?.import;
+    const hoja = href ? [...document.head.querySelectorAll('link[data-iswc-font]')].find((l) => l.getAttribute('data-iswc-font') === href) : undefined;
+    const sinHoja = hoja instanceof HTMLLinkElement && !hoja.sheet ? hoja : null;
     let lista = true;
     try { lista = document.fonts.check(spec); } catch { lista = true; }
-    if (lista) return;
+    if (lista && !sinHoja) return;
     this.#fontRetry = true;
-    document.fonts.load(spec).then(() => this.queueRender()).catch(() => undefined);
+    const llegaHoja = sinHoja
+      ? new Promise<void>((r) => { sinHoja.addEventListener('load', () => r(), { once: true }); sinHoja.addEventListener('error', () => r(), { once: true }); })
+      : Promise.resolve();
+    llegaHoja.then(() => document.fonts.load(spec)).then(() => this.queueRender()).catch(() => undefined);
   }
 
   /**

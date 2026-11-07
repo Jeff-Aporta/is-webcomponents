@@ -875,10 +875,10 @@ async function extractSvg(page) {
   if (!extraido?.svgOuter) throw new Error("sin <svg> de diagrama en el shadow DOM");
   return extraido;
 }
-async function waitReady(page, timeoutMs) {
+async function waitReady(page, timeoutMs, sintetico) {
   const probe = probeSvgExpression();
   await page.waitForFunction(
-    `() => window.${READY_FLAG} === true || !!(${probe})`,
+    sintetico ? `() => window.${READY_FLAG} === true` : `() => window.${READY_FLAG} === true || !!(${probe})`,
     null,
     { timeout: timeoutMs }
   );
@@ -906,6 +906,13 @@ function pngCanvasSize(width, height, scale = 2, maxPx = PNG_MAX_PX) {
     height: height ? Math.floor(height * k) : height
   };
 }
+var CONGELAR_SVG = `(async () => {
+  for (const a of document.querySelectorAll('animate, animateMotion, animateTransform, set')) a.remove();
+  for (const e of document.querySelectorAll('.iswc-flow__radar, .iswc-flow__dots')) e.remove();
+  document.body.getBoundingClientRect();
+  await document.fonts.ready;
+  await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+})()`;
 async function capturePng(ctx, sano, hrefs, id) {
   const lienzo = pngCanvasSize(sano.width, sano.height, 2);
   const wrap = staticSvgWrapper(sano.svg, { width: lienzo.width, height: lienzo.height, cssHrefs: hrefs });
@@ -915,7 +922,7 @@ async function capturePng(ctx, sano, hrefs, id) {
     const page2 = await ctx.newPage();
     if (page2.emulateMedia) await page2.emulateMedia({ colorScheme: "light" });
     await page2.goto(pathToFileURL(wrapPath).href, { waitUntil: "load", timeout: 6e4 });
-    await page2.waitForTimeout(400);
+    await page2.evaluate(CONGELAR_SVG);
     const handle = await page2.$("svg");
     if (!handle) throw new Error("sin <svg> en wrapper PNG");
     const buf = await handle.screenshot({ type: "png", scale: "device", timeout: 6e4 });
@@ -929,7 +936,18 @@ async function capturePng(ctx, sano, hrefs, id) {
 async function lanzarNavegador(chromium) {
   return await chromium.launch({ headless: true, channel: "msedge" });
 }
-async function runOnePage(browser, pageUrl, opts, id) {
+var CIERRE_MS = 2e3;
+var HOJAS_MS = 3e4;
+async function cerrarNavegador(browser) {
+  let reloj;
+  const plazo = new Promise((r) => {
+    reloj = setTimeout(r, CIERRE_MS);
+  });
+  await Promise.race([browser.close().catch(() => {
+  }), plazo]);
+  clearTimeout(reloj);
+}
+async function runOnePage(browser, pageUrl, opts, id, sintetico) {
   const timeoutMs = opts.timeoutMs ?? 9e4;
   const settleMs = opts.settleMs ?? 400;
   const viewport = opts.viewport ?? { width: 1920, height: 1200 };
@@ -945,11 +963,13 @@ async function runOnePage(browser, pageUrl, opts, id) {
       waitUntil: "networkidle",
       timeout: Math.max(timeoutMs, 6e4)
     });
-    await waitReady(page, timeoutMs);
+    await waitReady(page, timeoutMs, sintetico);
     await page.evaluate(`(async () => {
       const espera = (ms) => new Promise((r) => setTimeout(r, ms));
-      // 1) Las hojas de las webfonts (<link data-iswc-font>) terminan de cargar.
-      for (let i = 0; i < 50; i++) {
+      // 1) Las hojas de las webfonts (<link data-iswc-font>) terminan de cargar. Tope ${HOJAS_MS} ms: con el
+      //    equipo cargado la hoja remota tard\xF3 m\xE1s que los 5 s de antes y el diagrama quedaba con la fuente
+      //    de respaldo (sin hoja, la cara ni se pide y fonts.ready no espera nada).
+      for (const fin = Date.now() + ${HOJAS_MS}; Date.now() < fin;) {
         const links = [...document.querySelectorAll('link[data-iswc-font]')];
         if (links.every((l) => l.sheet)) break;
         await espera(100);
@@ -960,8 +980,15 @@ async function runOnePage(browser, pageUrl, opts, id) {
       // 3) El diagrama repite el layout al detectar el cambio de ancho.
       await espera(400);
       await document.fonts.ready;
+      // 4) Si la fuente (o su hoja) lleg\xF3 tras el primer pintado, el host ya encol\xF3 el re-layout
+      //    (flowchart #watchFont): se espera sin encolar otro. Con el equipo cargado sal\xEDa el SVG medido con
+      //    la fuente de respaldo (636 px en vez de 668).
+      for (const h of document.querySelectorAll(${JSON.stringify(DIAGRAM_HOSTS.join(", "))})) {
+        if (typeof h.renderEnCurso === 'function') await h.renderEnCurso();
+      }
     })()`);
     if (settleMs > 0) await page.waitForTimeout(settleMs);
+    await page.waitForFunction(`() => !!(${probeSvgExpression()})`, null, { timeout: timeoutMs }).catch(() => void 0);
     const extraido = await extractSvg(page);
     const sano = sanitizeSvgRoot(extraido.svgOuter);
     let svg = sano.svg;
@@ -1014,15 +1041,14 @@ async function renderDiagramBatch(jobs, opts) {
           written.push(w.abs);
           pageUrl = base + w.rel;
         }
-        const result = await runOnePage(browser, pageUrl, opts, id);
+        const result = await runOnePage(browser, pageUrl, opts, id, !isPageJob(job));
         results.push({ id, result });
       } catch (e) {
         results.push({ id, error: String(e.message || e) });
       }
     }
   } finally {
-    if (browser) await browser.close().catch(() => {
-    });
+    if (browser) await cerrarNavegador(browser);
     if (server) server.close();
     for (const f of written) await rm(f, { force: true }).catch(() => {
     });

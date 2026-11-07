@@ -27,7 +27,7 @@ import { join, dirname, isAbsolute, relative } from 'node:path';
 import { tmpdir } from 'node:os';
 import { pathToFileURL } from 'node:url';
 import { startStaticServer } from './static-server.js';
-import { probeSvgExpression } from './hosts.js';
+import { DIAGRAM_HOSTS, probeSvgExpression } from './hosts.js';
 import { sanitizeSvgRoot, staticSvgWrapper } from './sanitize-svg.js';
 import type {
   HostAttrs,
@@ -114,10 +114,15 @@ async function extractSvg(page: RenderPage): Promise<{
   return extraido;
 }
 
-async function waitReady(page: RenderPage, timeoutMs: number): Promise<void> {
+/**
+ * Espera el diagrama listo. Con el HTML sintético (`buildHostHtml`) manda solo la bandera, que se pone
+ * tras `updateComplete()`: el sondeo del `<svg>` daba por listo el lienzo vacío que el host monta antes de
+ * pintar (con el equipo cargado salía un SVG sin viewBox). Una página ajena no trae bandera: se sondea.
+ */
+async function waitReady(page: RenderPage, timeoutMs: number, sintetico: boolean): Promise<void> {
   const probe = probeSvgExpression();
   await page.waitForFunction(
-    `() => window.${READY_FLAG} === true || !!(${probe})`,
+    sintetico ? `() => window.${READY_FLAG} === true` : `() => window.${READY_FLAG} === true || !!(${probe})`,
     null,
     { timeout: timeoutMs },
   );
@@ -165,6 +170,22 @@ export function pngCanvasSize(
   };
 }
 
+/**
+ * Deja el SVG del wrapper estático antes de la captura: los pulsos del flujo son SMIL (`<animate
+ * begin="1.5s">`, ver `pulsoRadar`/`animarRiel`) y `animation: none` no los detiene. Con una espera fija
+ * la captura caía antes o después de su arranque según la carga del equipo (A8: el PNG del diagrama vivo
+ * salía con radares y puntos). Se quitan las animaciones SMIL (rige el valor base) y las capas que solo
+ * existen para animarse (radares y puntos, transparentes en reposo): el PNG del diagrama vivo es el del
+ * quieto. Solo el wrapper del PNG; el SVG exportado las conserva. Luego espera las webfonts y dos cuadros.
+ */
+const CONGELAR_SVG = `(async () => {
+  for (const a of document.querySelectorAll('animate, animateMotion, animateTransform, set')) a.remove();
+  for (const e of document.querySelectorAll('.iswc-flow__radar, .iswc-flow__dots')) e.remove();
+  document.body.getBoundingClientRect();
+  await document.fonts.ready;
+  await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+})()`;
+
 async function capturePng(
   ctx: { newPage: () => Promise<RenderPage> },
   sano: { svg: string; width: number | null; height: number | null },
@@ -182,7 +203,7 @@ async function capturePng(
     const page2 = await ctx.newPage();
     if (page2.emulateMedia) await page2.emulateMedia({ colorScheme: 'light' });
     await page2.goto(pathToFileURL(wrapPath).href, { waitUntil: 'load', timeout: 60_000 });
-    await page2.waitForTimeout(400);
+    await page2.evaluate(CONGELAR_SVG);
     const handle = await page2.$('svg');
     if (!handle) throw new Error('sin <svg> en wrapper PNG');
     const buf = await handle.screenshot({ type: 'png', scale: 'device', timeout: 60_000 });
@@ -198,11 +219,31 @@ async function lanzarNavegador(chromium: RenderDiagramOptions['chromium']): Prom
   return await chromium.launch({ headless: true, channel: 'msedge' });
 }
 
+/**
+ * Plazo (ms) para esperar el cierre del navegador. El resultado ya está listo cuando se cierra: con el
+ * equipo cargado Edge tarda 23-80 s en salir (Playwright espera 30 s el cierre amable, mata y aún espera la
+ * salida; medido 6-nov-2026 en TEMU-JEFF: 0,7-8 s sin carga), así que pasado el plazo se sigue sin
+ * esperarlo. Edge sale solo al cerrarse su canal (medido: sin procesos a los 60 s aunque el llamador salga).
+ * Un cierre lento casi nunca termina en pocos segundos más: el plazo es corto.
+ */
+const CIERRE_MS = 2000;
+
+/** Tope (ms) de la espera de las hojas de webfonts del tema antes de extraer el SVG. */
+const HOJAS_MS = 30_000;
+
+async function cerrarNavegador(browser: RenderBrowser): Promise<void> {
+  let reloj: ReturnType<typeof setTimeout> | undefined;
+  const plazo = new Promise<void>((r) => { reloj = setTimeout(r, CIERRE_MS); });
+  await Promise.race([browser.close().catch(() => {}), plazo]);
+  clearTimeout(reloj);
+}
+
 async function runOnePage(
   browser: RenderBrowser,
   pageUrl: string,
   opts: RenderDiagramOptions,
   id: string,
+  sintetico: boolean,
 ): Promise<RenderDiagramResult> {
   const timeoutMs = opts.timeoutMs ?? 90_000;
   const settleMs = opts.settleMs ?? 400;
@@ -220,15 +261,17 @@ async function runOnePage(
       waitUntil: 'networkidle',
       timeout: Math.max(timeoutMs, 60_000),
     });
-    await waitReady(page, timeoutMs);
+    await waitReady(page, timeoutMs, sintetico);
     // El diagrama registra la webfont de su tema al pintar y repite el layout
     // cuando termina de cargar (las cajas se miden con la fuente real). Sin
     // esperar eso, el SVG salía medido con la fuente de respaldo y, al
     // rasterizarlo ya con Poppins, los textos desbordaban sus cajas.
     await page.evaluate(`(async () => {
       const espera = (ms) => new Promise((r) => setTimeout(r, ms));
-      // 1) Las hojas de las webfonts (<link data-iswc-font>) terminan de cargar.
-      for (let i = 0; i < 50; i++) {
+      // 1) Las hojas de las webfonts (<link data-iswc-font>) terminan de cargar. Tope ${HOJAS_MS} ms: con el
+      //    equipo cargado la hoja remota tardó más que los 5 s de antes y el diagrama quedaba con la fuente
+      //    de respaldo (sin hoja, la cara ni se pide y fonts.ready no espera nada).
+      for (const fin = Date.now() + ${HOJAS_MS}; Date.now() < fin;) {
         const links = [...document.querySelectorAll('link[data-iswc-font]')];
         if (links.every((l) => l.sheet)) break;
         await espera(100);
@@ -239,8 +282,18 @@ async function runOnePage(
       // 3) El diagrama repite el layout al detectar el cambio de ancho.
       await espera(400);
       await document.fonts.ready;
+      // 4) Si la fuente (o su hoja) llegó tras el primer pintado, el host ya encoló el re-layout
+      //    (flowchart #watchFont): se espera sin encolar otro. Con el equipo cargado salía el SVG medido con
+      //    la fuente de respaldo (636 px en vez de 668).
+      for (const h of document.querySelectorAll(${JSON.stringify(DIAGRAM_HOSTS.join(', '))})) {
+        if (typeof h.renderEnCurso === 'function') await h.renderEnCurso();
+      }
     })()`);
     if (settleMs > 0) await page.waitForTimeout(settleMs);
+    // El `<svg>` con medidas es lo que se extrae: se espera esa condición (con el equipo cargado, 1 de 9
+    // renders llegó aquí antes de que el lienzo tuviera tamaño y falló con «sin <svg> de diagrama»).
+    // Si no llega, `extractSvg` da el error de siempre.
+    await page.waitForFunction(`() => !!(${probeSvgExpression()})`, null, { timeout: timeoutMs }).catch(() => undefined);
 
     const extraido = await extractSvg(page);
     const sano = sanitizeSvgRoot(extraido.svgOuter);
@@ -306,9 +359,9 @@ export async function renderDiagram(
     }
 
     browser = await lanzarNavegador(opts.chromium);
-    return await runOnePage(browser, pageUrl, opts, 'one');
+    return await runOnePage(browser, pageUrl, opts, 'one', !isPageJob(job));
   } finally {
-    if (browser) await browser.close().catch(() => {});
+    if (browser) await cerrarNavegador(browser);
     if (server) server.close();
     if (servedHtml) await rm(servedHtml, { force: true }).catch(() => {});
   }
@@ -354,14 +407,14 @@ export async function renderDiagramBatch(
           written.push(w.abs);
           pageUrl = base + w.rel;
         }
-        const result = await runOnePage(browser, pageUrl, opts, id);
+        const result = await runOnePage(browser, pageUrl, opts, id, !isPageJob(job));
         results.push({ id, result });
       } catch (e) {
         results.push({ id, error: String((e as Error).message || e) });
       }
     }
   } finally {
-    if (browser) await browser.close().catch(() => {});
+    if (browser) await cerrarNavegador(browser);
     if (server) server.close();
     for (const f of written) await rm(f, { force: true }).catch(() => {});
   }

@@ -282,6 +282,11 @@ export function routeEdges(world: RouterWorld, edges: readonly RouterEdge[], opt
   const crossFactor = Math.max(1, opts.pkgCrossFactor ?? C.package.nestingFactor);
   const turnPenalty = opts.turnPenalty ?? C.grid.turnPenalty;
   const iterations = opts.iterations ?? C.grid.iterations;
+  // Trabajo del ruteo (estados expandidos por el A*, sumados en todas las aristas y pasadas). Con
+  // `maxExpansions` el corte es determinista: la misma entrada da la misma salida en cualquier equipo
+  // y con cualquier carga (la fecha límite por reloj no: ver `deadline`).
+  let trabajo = 0;
+  const agotado = (): boolean => trabajo >= (opts.maxExpansions ?? Infinity) || (!!opts.deadline && Date.now() > opts.deadline);
   const stub = Math.max(clearance, opts.stub ?? C.grid.stub);
   const shareRadius = opts.shareRadius ?? C.share.radius;
   const entityGlowR = opts.entityGlow ?? C.entity.radius;
@@ -771,7 +776,9 @@ export function routeEdges(world: RouterWorld, edges: readonly RouterEdge[], opt
     let goal = -1;
     let expandidos = 0;
     while (heap.size) {
-      // Fecha límite (opts.deadline): una arista muy cara no bloquea el hilo; vuelve sin camino.
+      // Tope de trabajo (opts.maxExpansions) o fecha límite (opts.deadline): una arista muy cara no
+      // bloquea el hilo; vuelve sin camino.
+      if (++trabajo > (opts.maxExpansions ?? Infinity)) break;
       if (opts.deadline && (++expandidos & 1023) === 0 && Date.now() > opts.deadline) break;
       const s = heap.pop();
       const k = s >> 2;
@@ -916,8 +923,8 @@ export function routeEdges(world: RouterWorld, edges: readonly RouterEdge[], opt
     const pf = 1 + it * 0.25;
     let changed = false;
     for (const ei of order) {
-      if (opts.deadline && Date.now() > opts.deadline && states[ei]) continue;
-      if (opts.deadline && Date.now() > opts.deadline) break;
+      if (agotado() && states[ei]) continue;
+      if (agotado()) break;
       mark(ei, -1);
       const r = route(ei, pf);
       const st = r.st;
@@ -945,13 +952,13 @@ export function routeEdges(world: RouterWorld, edges: readonly RouterEdge[], opt
     // detiene cuando todos quedan estáticos (o al tope `grid.iterations`).
     void conflicts;
     if (!changed) break;
-    if (opts.deadline && Date.now() > opts.deadline) break;
+    if (agotado()) break;
   }
 
   // Uniones vigentes: el anfitrión tiene que seguir pasando por el nodo de
   // unión (pudo re-rutearse después). Si no, la arista vuelve a su punta propia.
   for (let pass = 0; pass < 4; pass++) {
-    if (opts.deadline && Date.now() > opts.deadline) break;
+    if (agotado()) break;
     let fixed = false;
     for (let ei = 0; ei < edges.length; ei++) {
       const j = joinOf[ei];
@@ -1157,7 +1164,7 @@ export function routeEdges(world: RouterWorld, edges: readonly RouterEdge[], opt
     const p = paths[ei];
     if (p && p.length >= 3) paths[ei] = fundirColineales(p);
   }
-  return { paths, violations, crowding, joinedTo, costs: costOf, fromPorts, toPorts };
+  return { paths, violations, crowding, joinedTo, costs: costOf, fromPorts, toPorts, expansions: trabajo };
 }
 
 /* ─────────────────────── Distribución de puertos ─────────────────────── */

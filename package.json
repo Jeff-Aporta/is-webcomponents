@@ -1,6 +1,6 @@
 {
   "name": "@jeff-aporta/iswc-base",
-  "version": "0.0.0-20261106.c91ebc8",
+  "version": "0.0.0-20261106.a5285b4",
   "description": "iswc-base: web components del kit ISWC, un módulo ES por tag (dist/cdn).",
   "type": "module",
   "license": "UNLICENSED",

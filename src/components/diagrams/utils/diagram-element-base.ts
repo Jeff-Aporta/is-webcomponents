@@ -242,6 +242,13 @@ export class DiagramElementBase extends IswcElement {
 
   async updateComplete(): Promise<void> { await this.queueRender(); }
 
+  /**
+   * El render en curso, sin encolar otro (`updateComplete` siempre vuelve a pintar). El export headless
+   * (render-diagram) lo espera tras las webfonts: si la fuente llegó después del tope del primer pintado,
+   * el re-layout ya está encolado y el SVG no sale medido con la fuente de respaldo.
+   */
+  renderEnCurso(): Promise<void> { return this.#renderQueued ?? Promise.resolve(); }
+
   /** Error del payload (p. ej. una referencia a un valor que no existe): a la consola y al lienzo. */
   #mostrarError(e: unknown): void {
     const msg = e instanceof Error ? e.message : String(e);
