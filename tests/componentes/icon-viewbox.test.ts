@@ -39,17 +39,17 @@ test('componentes/icon-viewbox', async () => {
   const sets = (await readdir(carpeta, { withFileTypes: true })).filter((e) => e.isDirectory()).map((e) => e.name);
   assert.ok(sets.length > 0, 'assets/iconify/ no tiene sets: corre `deno task icons`');
 
-  for (const prefix of sets) {
-    const files = (await readdir(join(carpeta, prefix))).filter((f) => f.endsWith('.svg'));
-    for (const f of files) {
-      const svg = await readFile(join(carpeta, prefix, f), 'utf8');
-      checked++;
-      const box = viewBoxOf(svg);
-      if (!svg.includes('xmlns="http://www.w3.org/2000/svg"')) offenders.push(`${prefix}/${f}: sin xmlns`);
-      if (!box || !(box.w > 0) || !(box.h > 0)) { offenders.push(`${prefix}/${f}: viewBox ausente o degenerado`); continue; }
-      if (GRID_24.has(prefix) && (box.w !== 24 || box.h !== 24)) {
-        offenders.push(`${prefix}/${f}: viewBox ${box.w}x${box.h}, el set es de grid 24x24`);
-      }
+  // Lectura en paralelo: de a uno, cada `await` paga la latencia del disco y del antivirus; medido 6-nov-2026,
+  // 534 SVG en 2,2 s de a uno contra 0,18 s en paralelo, y de a uno pasó los 30 s con el equipo cargado.
+  const listas = await Promise.all(sets.map(async (prefix) => ({ prefix, files: (await readdir(join(carpeta, prefix))).filter((f) => f.endsWith('.svg')) })));
+  const leidos = await Promise.all(listas.flatMap(({ prefix, files }) => files.map(async (f) => ({ prefix, f, svg: await readFile(join(carpeta, prefix, f), 'utf8') }))));
+  for (const { prefix, f, svg } of leidos) {
+    checked++;
+    const box = viewBoxOf(svg);
+    if (!svg.includes('xmlns="http://www.w3.org/2000/svg"')) offenders.push(`${prefix}/${f}: sin xmlns`);
+    if (!box || !(box.w > 0) || !(box.h > 0)) { offenders.push(`${prefix}/${f}: viewBox ausente o degenerado`); continue; }
+    if (GRID_24.has(prefix) && (box.w !== 24 || box.h !== 24)) {
+      offenders.push(`${prefix}/${f}: viewBox ${box.w}x${box.h}, el set es de grid 24x24`);
     }
   }
 

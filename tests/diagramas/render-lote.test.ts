@@ -20,8 +20,8 @@ import {
 } from '../../src/vendor-distributions/client/tools/render-lote.ts';
 import type { OpcionesLote, PlanLote, RenderDiagramOptions } from '../../src/vendor-distributions/shared/schemas.ts';
 import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
-import { denoTestCon } from '../_shared/deno-test.ts';
-import { lanzarChromium } from '../_shared/navegador.ts';
+import { denoTestCon } from '../_shared/deno-test.ts';
+import { lanzarChromium, TIMEOUT_RENDER_NAVEGADOR } from '../_shared/navegador.ts';
 
 const { test, lista } = coleccionPruebas({ categoria: 'what' });
 
@@ -142,6 +142,7 @@ try {
 denoTest({
   name: 'render-lote: L3 caja negra, un flujo mínimo renderiza en hijo, la segunda corrida hace SKIP y no toca el SVG',
   ignore: !chromium || !existsSync(`${RAIZ}${BUNDLE}`),
+  timeout: TIMEOUT_RENDER_NAVEGADOR,
   sanitizeResources: false,
   sanitizeOps: false,
   async fn() {

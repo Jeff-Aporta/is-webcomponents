@@ -14,8 +14,12 @@ import { fileURLToPath } from 'node:url';
 import { renderDiagramBatch } from '../../src/vendor-distributions/client/tools/render-diagram.ts';
 import type { RenderDiagramOptions } from '../../src/vendor-distributions/shared/schemas.ts';
 import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
-import { denoTestCon } from '../_shared/deno-test.ts';
-import { lanzarChromium } from '../_shared/navegador.ts';
+import { denoTestCon } from '../_shared/deno-test.ts';
+import { lanzarChromium, TIMEOUT_RENDER_NAVEGADOR } from '../_shared/navegador.ts';
+import { diferenciaPng } from '../_shared/png.ts';
+
+/** Diferencia por canal que se tolera como antialias (el ruido medido es Δ ≤ 2). */
+const TOLERANCIA_AA = 8;
 
 const { test, lista } = coleccionPruebas({ categoria: 'what' });
 
@@ -59,6 +63,7 @@ try {
 denoTest({
   name: 'png: A8 el PNG con animación de flujo es idéntico al PNG sin ella (sin radares ni puntos)',
   ignore: !chromium || !existsSync(`${RAIZ}${BUNDLE}`),
+  timeout: TIMEOUT_RENDER_NAVEGADOR,
   sanitizeResources: false,
   sanitizeOps: false,
   async fn() {
@@ -73,8 +78,10 @@ denoTest({
     assert(/iswc-flow__radar/.test(vivo.result.svg), 'el SVG vivo lleva radares');
     assert(/iswc-flow__dots/.test(vivo.result.svg), 'el SVG vivo lleva puntos de flujo');
     assert(!/iswc-flow__radar|iswc-flow__dots/.test(quieto.result.svg), 'con flow-anim="off" no hay pulsos');
-    assertEquals(vivo.result.png.length, quieto.result.png.length, 'mismo PNG (tamaño)');
-    assert(vivo.result.png.every((b, i) => b === quieto.result!.png![i]), 'mismo PNG (bytes): ningún pulso queda en la captura');
+    // Por píxel, no por bytes: Edge rasteriza el mismo SVG con ruido de antialias entre corridas (medido 6-nov-2026:
+    // 22 píxeles con Δ ≤ 2, también quieto contra quieto). Un radar o los puntos son miles de píxeles con Δ ~100.
+    const d = diferenciaPng(vivo.result.png, quieto.result.png, TOLERANCIA_AA);
+    assertEquals(d.distintos, 0, `mismo PNG: ningún pulso queda en la captura (${d.distintos} píxeles con Δ > ${TOLERANCIA_AA}; máx ${d.maxima})`);
   },
 });
 

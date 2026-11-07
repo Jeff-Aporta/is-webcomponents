@@ -18,12 +18,13 @@ import { pathPoints, quitarAutoCruces, tieneAutoCruce } from '../../src/componen
 import { applyRadialCost, makeCostGrid } from '../../src/core/diagram-grid.ts';
 import { U } from '../../src/components/diagrams/utils/diagram-labels.ts';
 import type { FlowLayout } from '../../src/components/diagrams/schemas/flowchart-spec.schemas.ts';
-import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
-import { layoutRuta, TIMEOUT_RUTAS_REALES } from '../_shared/rutas-reales.ts';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+import { layoutRuta, payloadsRutas, prepararLayouts, TIMEOUT_RUTAS_REALES } from '../_shared/rutas-reales.ts';
 import { denoTestCon } from '../_shared/deno-test.ts';
 
-// Rutas reales: layout memoizado y timeout medido (ver tests/_shared/rutas-reales.ts).
-const { test, lista } = coleccionPruebas({ categoria: 'what', timeoutMs: TIMEOUT_RUTAS_REALES });
+// Rutas reales: layout calculado en before() con presupuesto de CPU y compartido (ver tests/_shared/rutas-reales.ts).
+const { test, before, lista } = coleccionPruebas({ categoria: 'what', timeoutMs: TIMEOUT_RUTAS_REALES });
+before(async () => prepararLayouts((await payloadsRutas()).map((r) => r.payload)));
 
 const denoTest = denoTestCon(test);
 
@@ -37,7 +38,7 @@ async function rutas(): Promise<Array<{ nombre: string; L: FlowLayout }>> {
     const url = new URL(f.name, DIR);
     const crudo = JSON.parse(await Deno.readTextFile(url));
     const j = await RefObj.resolver(crudo, { base: fileURLToPath(url), cargar: async (u: string) => JSON.parse(await Deno.readTextFile(u)) }) as { payload: Record<string, unknown> };
-    out.push({ nombre: f.name, L: layoutRuta(f.name, j.payload) });
+    out.push({ nombre: f.name, L: layoutRuta(j.payload) });
   }
   return out;
 }

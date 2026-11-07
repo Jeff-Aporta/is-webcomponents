@@ -71,4 +71,19 @@ denoTest('router: A9.3 sin giros ni agrupadores en el camino esos cargos no camb
   assertAlmostEquals(otra.costo, base.costo, 1e-6, 'una recta fuera de todo agrupador no paga giro ni agrupador');
 });
 
+// D1 (6-nov-2026): el corte del router es por trabajo, no por reloj. Con `deadline` la carga del equipo cortaba
+// antes y la misma ruta real daba otro diagrama (10 de 24 rutas del ISS cambiaban con el equipo cargado).
+denoTest('router: D1 el tope de trabajo (maxExpansions) corta igual siempre y el flujo no usa el reloj', () => {
+  const world = { components: [A, B, C], packages: [PKG], titles: [], rings: [] };
+  const e = arista('ac', A, C, ['P']);
+  const libre = routeEdges(world, [e], { step: 20, clearance: 20 });
+  assert(libre.paths[0] && libre.expansions > 10, `precondición: el riel A→C expande estados (${libre.expansions})`);
+  const tope = Math.floor(libre.expansions / 3);
+  const [r1, r2] = [0, 1].map(() => routeEdges(world, [e], { step: 20, clearance: 20, maxExpansions: tope }));
+  assert(r1!.expansions <= tope + 1, `respeta el tope: ${r1!.expansions} > ${tope}`);
+  assertEquals(JSON.stringify(r1), JSON.stringify(r2), 'misma entrada y mismo tope: misma salida');
+  const fuente = Deno.readTextFileSync(new URL('../../src/components/diagrams/utils/flowchart-spec.ts', import.meta.url));
+  assert(!/Date\.now\(|performance\.now\(|deadline:/.test(fuente), 'flowchart-spec no corta por reloj (usa maxExpansions)');
+});
+
 export default lista();

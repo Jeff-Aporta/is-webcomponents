@@ -14,7 +14,7 @@
 //   7. Aristas al mismo conector solo se juntan en el embudo final.
 //   8. Recorrer el interior de agrupadores cuesta × factor·nivel (rodea por fuera).
 //   9. Sin auto-cruces ni bolsillos (giros mínimos).
-//  10. Lab ISS·AyudasCPIA: 0 ilegales, 0 rieles compartidos, < 30 s.
+//  10. Lab ISS·AyudasCPIA: 0 ilegales, 0 rieles compartidos, < 30 s de CPU (no de reloj).
 //
 // Umbral de R10 (medido 2026-10-20, 4 núcleos, con otras suites en paralelo):
 // el layout del lab (18 aristas; ~60 % del tiempo es el A* de `route()` en
@@ -29,6 +29,7 @@
 import { readFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import process from 'node:process';
 import { routeEdges, validateRoute } from '../../src/components/diagrams/utils/component-router.ts';
 import { computeComponentLayout, resolveComponentSpec } from '../../src/components/diagrams/utils/component-spec.ts';
 import { pathPoints as parsePathPoints } from '../../src/components/diagrams/utils/diagram-edges.ts';
@@ -140,10 +141,13 @@ test('navegador/diagram-astar-rules', async () => {
   // 7–10. Lab real (integra distribución + router + embudos).
   {
     const payload = JSON.parse(await readFile(join(root, 'labs', 'iss-ayudascpia-componentes', 'payload.json'), 'utf8'));
-    const t0 = performance.now();
+    // CPU del proceso, no reloj: el cálculo es síncrono y con el equipo cargado el reloj midió 60 s
+    // (6-nov-2026) para los mismos 6–12 s de CPU; lo que se caza es un router que explota, no la carga.
+    const c0 = process.cpuUsage();
     const L = computeComponentLayout(resolveComponentSpec(structuredClone(payload)));
-    const ms = performance.now() - t0;
-    check(ms < 30000, `R10: layout del lab < 30 s (${Math.round(ms)} ms)`);
+    const { user, system } = process.cpuUsage(c0);
+    const ms = (user + system) / 1000;
+    check(ms < 30000, `R10: layout del lab < 30 s de CPU (${Math.round(ms)} ms)`);
     check(!(L._routeViolations ?? []).length, `R10: 0 aristas ilegales (${JSON.stringify(L._routeViolations)})`);
     const P = L.edges.map((e) => parsePathPoints(e.path));
     check(P.every((p) => p.length >= 2), 'R10: todas las aristas tienen path');

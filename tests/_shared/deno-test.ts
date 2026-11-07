@@ -9,13 +9,14 @@
 import type { CuerpoT, OpcionesT } from '../../src/vendor-distributions/shared/schemas.ts';
 
 type Registrar = (nombre: string, a?: OpcionesT | CuerpoT, b?: CuerpoT) => void;
-type DenoDef = { name: string; fn: CuerpoT; ignore?: boolean; sanitizeOps?: boolean; sanitizeResources?: boolean; sanitizeExit?: boolean };
+/** `timeout` (ms) es propio del registrador común (no de Deno.test): el de la prueba, en vez del del archivo. */
+type DenoDef = { name: string; fn: CuerpoT; ignore?: boolean; timeout?: number; sanitizeOps?: boolean; sanitizeResources?: boolean; sanitizeExit?: boolean };
 
 export function denoTestCon(test: Registrar) {
   return (a: string | DenoDef, b?: CuerpoT | { ignore?: boolean }, c?: CuerpoT): void => {
     if (typeof a !== 'string') {
       if (a.ignore) test(a.name, { skip: 'ignore' }, a.fn);
-      else test(a.name, a.fn);
+      else test(a.name, a.timeout ? { timeout: a.timeout } : {}, a.fn);
       return;
     }
     if (typeof b === 'function') {

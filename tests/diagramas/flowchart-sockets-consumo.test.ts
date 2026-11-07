@@ -6,11 +6,14 @@
 import { assert } from 'https://deno.land/std@0.224.0/assert/mod.ts';
 import { fileURLToPath } from 'node:url';
 import { RefObj } from '../../src/vendor-distributions/shared/lib/ref-obj.ts';
-import { computeFlowchartLayout, resolveFlowchartSpec } from '../../src/components/diagrams/utils/flowchart-spec.ts';
+import { resolveFlowchartSpec } from '../../src/components/diagrams/utils/flowchart-spec.ts';
 import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+import { layoutRuta, payloadsRutas, prepararLayouts } from '../_shared/rutas-reales.ts';
 import { denoTestCon } from '../_shared/deno-test.ts';
 
-const { test, lista } = coleccionPruebas({ categoria: 'what' });
+// Rutas reales: layout calculado en before() con presupuesto de CPU y compartido (ver tests/_shared/rutas-reales.ts).
+const { test, before, lista } = coleccionPruebas({ categoria: 'what' });
+before(async () => prepararLayouts((await payloadsRutas()).map((r) => r.payload)));
 
 const denoTest = denoTestCon(test);
 
@@ -35,7 +38,7 @@ denoTest('sockets: A7 todo consumo punteado de un componente o tabla termina en 
   for (const r of await rutas()) {
     const spec = resolveFlowchartSpec(r.payload);
     if (!spec) continue;
-    const L = computeFlowchartLayout(spec, null, { style: 'insoft' });
+    const L = layoutRuta(r.payload);
     const kindDe = new Map(spec.nodes.map((n) => [n.id, n.embed?.kind ?? n.shape ?? 'action']));
     for (const e of L.edges) {
       const k = kindDe.get(e.to);

@@ -15,11 +15,12 @@ import { resolveFlowchartSpec } from '../../src/components/diagrams/utils/flowch
 import { pathPoints } from '../../src/components/diagrams/utils/diagram-edges.ts';
 import type { FlowLayout, FlowResolvedSpec } from '../../src/components/diagrams/schemas/flowchart-spec.schemas.ts';
 import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
-import { TIMEOUT_RUTAS_REALES, layoutRuta } from '../_shared/rutas-reales.ts';
+import { layoutRuta, payloadsRutas, prepararLayouts, TIMEOUT_RUTAS_REALES } from '../_shared/rutas-reales.ts';
 import { denoTestCon } from '../_shared/deno-test.ts';
 
-// Rutas reales: layout memoizado y timeout medido (ver tests/_shared/rutas-reales.ts).
-const { test, lista } = coleccionPruebas({ categoria: 'what', timeoutMs: TIMEOUT_RUTAS_REALES });
+// Rutas reales: layout calculado en before() con presupuesto de CPU y compartido (ver tests/_shared/rutas-reales.ts).
+const { test, before, lista } = coleccionPruebas({ categoria: 'what', timeoutMs: TIMEOUT_RUTAS_REALES });
+before(async () => prepararLayouts((await payloadsRutas()).map((r) => r.payload)));
 
 const denoTest = denoTestCon(test);
 
@@ -36,7 +37,7 @@ async function rutas(): Promise<Array<{ nombre: string; spec: FlowResolvedSpec; 
     const j = await RefObj.resolver(crudo, { base: fileURLToPath(url), cargar: async (u: string) => JSON.parse(await Deno.readTextFile(u)) }) as { payload: Record<string, unknown> };
     const spec = resolveFlowchartSpec(j.payload)!;
     // Memoizado por proceso (`layoutRuta`): P1 y K2 comparten el cálculo; recalcularlo en K2 lo llevaba al timeout.
-    out.push({ nombre: f.name, spec, L: layoutRuta(f.name, j.payload) });
+    out.push({ nombre: f.name, spec, L: layoutRuta(j.payload) });
   }
   return out;
 }

@@ -21,7 +21,7 @@ import { extname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
 import { denoTestCon } from '../_shared/deno-test.ts';
-import { cerrarChromium, lanzarChromium } from '../_shared/navegador.ts';
+import { cerrarChromium, lanzarChromium, TIMEOUT_RENDER_NAVEGADOR } from '../_shared/navegador.ts';
 
 const { test, lista } = coleccionPruebas({ categoria: 'how' });
 
@@ -80,6 +80,8 @@ const espera = (p: Pagina, cond: string) => p.waitForFunction(cond, undefined, {
 denoTest({
   name: 'server-api-docs UI: portada, operación con ?s=, Probar contra el host, .doc por propiedad y documento inválido (navegador real)',
   ignore: !chromium || !existsSync(join(RAIZ, BUNDLE)),
+  // Edge real, 4 páginas: 15 s en el gate del 6-nov-2026 y > 30 s (dos veces) con el equipo cargado.
+  timeout: TIMEOUT_RENDER_NAVEGADOR,
   sanitizeResources: false,
   sanitizeOps: false,
   async fn() {

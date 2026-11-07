@@ -15,12 +15,13 @@ import { assertEquals } from 'https://deno.land/std@0.224.0/assert/mod.ts';
 import { fileURLToPath } from 'node:url';
 import { RefObj } from '../../src/vendor-distributions/shared/lib/ref-obj.ts';
 import { computeFlowchartLayout, resolveFlowchartSpec } from '../../src/components/diagrams/utils/flowchart-spec.ts';
-import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
-import { layoutRuta, TIMEOUT_RUTAS_REALES } from '../_shared/rutas-reales.ts';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+import { layoutRuta, payloadsRutas, prepararLayouts, TIMEOUT_RUTAS_REALES } from '../_shared/rutas-reales.ts';
 import { denoTestCon } from '../_shared/deno-test.ts';
 
-// Rutas reales: layout memoizado y timeout medido (ver tests/_shared/rutas-reales.ts).
-const { test, lista } = coleccionPruebas({ categoria: 'what', timeoutMs: TIMEOUT_RUTAS_REALES });
+// Rutas reales: layout calculado en before() con presupuesto de CPU y compartido (ver tests/_shared/rutas-reales.ts).
+const { test, before, lista } = coleccionPruebas({ categoria: 'what', timeoutMs: TIMEOUT_RUTAS_REALES });
+before(async () => prepararLayouts((await payloadsRutas()).map((r) => r.payload)));
 
 const denoTest = denoTestCon(test);
 
@@ -120,7 +121,7 @@ denoTest('índices: I9 sin huecos en ningún nivel (rutas reales)', async () => 
     const url = new URL(f.name, dir);
     const crudo = JSON.parse(await Deno.readTextFile(url));
     const j = await RefObj.resolver(crudo, { base: fileURLToPath(url), cargar: async (u: string) => JSON.parse(await Deno.readTextFile(u)) }) as { payload: Record<string, unknown> };
-    const L = layoutRuta(f.name, j.payload);
+    const L = layoutRuta(j.payload);
     const porNivel = new Map<string, number[]>();
     for (const n of L.nodes) {
       if (!n.stepLabel) continue;

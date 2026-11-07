@@ -11,11 +11,13 @@ import { assert, assertEquals } from 'https://deno.land/std@0.224.0/assert/mod.t
 import { fileURLToPath } from 'node:url';
 import { RefObj } from '../../src/vendor-distributions/shared/lib/ref-obj.ts';
 import { GRUPOS_CRUD, vectorAFlujo } from '../../src/components/diagrams/utils/vector-flow-spec.ts';
-import { computeFlowchartLayout, resolveFlowchartSpec } from '../../src/components/diagrams/utils/flowchart-spec.ts';
 import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+import { layoutRuta, prepararLayouts } from '../_shared/rutas-reales.ts';
 import { denoTestCon } from '../_shared/deno-test.ts';
 
-const { test, lista } = coleccionPruebas({ categoria: 'what' });
+// Rutas reales: layout calculado en before() con presupuesto de CPU y memoizado (ver tests/_shared/rutas-reales.ts).
+const { test, before, lista } = coleccionPruebas({ categoria: 'what' });
+before(async () => prepararLayouts((await rutas()).map(({ vector }) => vectorAFlujo(vector))));
 
 const denoTest = denoTestCon(test);
 
@@ -53,7 +55,7 @@ denoTest('vector: A10 K1/K2 los pasos se agrupan por verbo CRUD y cada recuadro 
       if (ops.some((o) => /[CUD]/.test(o)) && n.context !== GRUPOS_CRUD.escritura) fallas.push(`K1 ${nombre}: ${n.id} escribe y quedó en ${n.context}`);
       if (n.context === GRUPOS_CRUD.lectura && ops.some((o) => /[CUD]/.test(o))) fallas.push(`K1 ${nombre}: ${n.id} en Lectura usa un puente de escritura`);
     }
-    const L = computeFlowchartLayout(resolveFlowchartSpec(flujo)!, null, { style: 'insoft' });
+    const L = layoutRuta(flujo);
     const grupoDe = new Map(flujo.nodes.map((n) => [n.id, n.context]));
     // La nota de un paso es parte de su grupo (va dentro de su recuadro).
     for (const n of L.nodes) if (n.shape === "comment" && n.about) grupoDe.set(n.id, grupoDe.get(n.about));

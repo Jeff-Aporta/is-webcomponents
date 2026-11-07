@@ -18,8 +18,8 @@ import { fileURLToPath } from 'node:url';
 import { PNG_MAX_PX, pngCanvasSize, renderDiagramBatch } from '../../src/vendor-distributions/client/tools/render-diagram.ts';
 import type { RenderDiagramOptions } from '../../src/vendor-distributions/shared/schemas.ts';
 import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
-import { denoTestCon } from '../_shared/deno-test.ts';
-import { lanzarChromium } from '../_shared/navegador.ts';
+import { denoTestCon } from '../_shared/deno-test.ts';
+import { lanzarChromium, TIMEOUT_RENDER_NAVEGADOR } from '../_shared/navegador.ts';
 
 const { test, lista } = coleccionPruebas({ categoria: 'what' });
 
@@ -78,6 +78,7 @@ try {
 denoTest({
   name: 'png-tope: T4 caja negra, un flujo pequeño a PNG sale con contenido y con las medidas anunciadas',
   ignore: !chromium || !existsSync(`${RAIZ}${BUNDLE}`),
+  timeout: TIMEOUT_RENDER_NAVEGADOR,
   sanitizeResources: false,
   sanitizeOps: false,
   async fn() {

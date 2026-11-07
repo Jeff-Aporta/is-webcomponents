@@ -15,14 +15,23 @@ import { assert, assertEquals, assertThrows } from 'https://deno.land/std@0.224.
 import { join } from 'node:path';
 import { existsSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
-import { bloqueoDePerfil, dependenciasDeNavegador, vendorizar } from '../../src/vendor-distributions/shared/tools/vendor.ts';
+import { bloqueoDePerfil, dependenciasDeNavegador, vendorizar as vendorizarConRed } from '../../src/vendor-distributions/shared/tools/vendor.ts';
 import { ZConfigVendor } from '../../src/vendor-distributions/shared/schemas.ts';
 import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
 import { denoTestCon } from '../_shared/deno-test.ts';
 
-const { test, lista } = coleccionPruebas({ categoria: 'how' });
+// Cada caso arma un checkout git temporal y `vendorizar` lanza 2 procesos `git` por archivo (fechaLocal): el reloj
+// lo ponen los arranques de git.exe, no el código. Medido 6-nov-2026 en el gate con el equipo cargado: V13 24 s,
+// V14 30 s, V15 y V16 > 30 s (rojo por timeout dos veces); los mismos 4-15 s sin esa carga. Como V6 y V12.
+const { test, lista } = coleccionPruebas({ categoria: 'how', timeoutMs: 180_000 });
 
 const denoTest = denoTestCon(test);
+
+// El repo de las pruebas no existe (`nadie/no-existe-iswc-test`): la web siempre responde 404. Se responde aquí, sin
+// red: medido 6-nov-2026, V11 tardaba 18,8 s y 10,3 s eran esperas de api.github.com y jsDelivr (5 s sin red); con el
+// equipo y la red cargados pasaba los 30 s y caía por timeout. Las pruebas de la web (V14) pasan su propia web falsa.
+const sinRed = async (): Promise<Response> => new Response(null, { status: 404 });
+const vendorizar: typeof vendorizarConRed = (entrada, opciones = {}) => vendorizarConRed(entrada, { fetchFn: sinRed, ...opciones });
 
 
 const git = (cwd: string, ...a: string[]) => execFileSync('git', ['-C', cwd, ...a], { encoding: 'utf8' });

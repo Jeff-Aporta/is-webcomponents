@@ -5,6 +5,7 @@
  * montado en un host minimo con el `createGridModel` real. Sin DOM.
  */
 import assert from 'node:assert/strict';
+import process from 'node:process';
 import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
 import { createGridModel } from '../../src/components/data/utils/datagrid-core/grid-model.ts';
 import { getCellValue, cellText } from '../../src/components/data/utils/datagrid-core/value-formatter.ts';
@@ -845,6 +846,16 @@ test('viewport: rango con pagina y buffer; solo guarda la ventana', () => {
 
 /* ── Rendimiento ──────────────────────────────────────────────────────── */
 
+/**
+ * ms de CPU del proceso desde `c0` (user + system). Los presupuestos de rendimiento son de CPU, no de reloj: el
+ * cálculo es síncrono y con el equipo cargado el reloj midió 1,6-6,1 s (6-nov-2026) para lo que cabe holgado en
+ * el presupuesto; la carga ajena no es una regresión del código.
+ */
+function cpuDesde(c0: { user: number; system: number }): number {
+  const { user, system } = process.cpuUsage(c0);
+  return (user + system) / 1000;
+}
+
 function masivo(n: number) {
   const out: Nodo[] = new Array(n);
   for (let i = 0; i < n; i++) out[i] = { id: String(i), index: i, data: { a: i % 10, b: i % 100, c: i % 7, v: i } };
@@ -853,11 +864,11 @@ function masivo(n: number) {
 
 test('rendimiento: 100.000 filas agrupadas, agregadas y aplanadas', () => {
   const hs = masivo(100000);
-  const t0 = performance.now();
+  const c0 = process.cpuUsage();
   const raiz = construirArbol(hs, [nivel('a'), nivel('b'), nivel('c')]);
   agregarArbol(raiz, [valor('v', 'sum'), valor('v', 'avg', 'p'), valor('v', 'max', 'x')]);
   const f = aplanarArbol(raiz, ABIERTO);
-  const ms = performance.now() - t0;
+  const ms = cpuDesde(c0);
   assert.ok(f.length > 100000);
   assert.equal(raiz.agg['v'], (99999 * 100000) / 2);
   assert.ok(ms < 1500, `tardo ${ms} ms`);
@@ -865,7 +876,7 @@ test('rendimiento: 100.000 filas agrupadas, agregadas y aplanadas', () => {
 
 test('rendimiento: 100.000 filas en pivote, tree, transaccion y CSV', () => {
   const hs = masivo(100000);
-  const t0 = performance.now();
+  const c0 = process.cpuUsage();
   const r = pivotar(hs, [{ colId: 'c', valor: (n: Nodo) => n.data['c'] }], [valor('v', 'sum')], (c: string) => c);
   const raiz = construirArbol(hs, [nivel('a')]);
   agregarArbol(raiz, [valor('v', 'sum')], { clavesPivote: r.clavesDe, soloPivote: true, idPivote: resolverIdPivote(['c']) });
@@ -874,7 +885,7 @@ test('rendimiento: 100.000 filas en pivote, tree, transaccion y CSV', () => {
   aplicarTransaccion(filas, { update: filas.slice(0, 1000), remove: filas.slice(1000, 2000) }, null);
   const tabla = { columnas: [{ colId: 'v', encabezado: 'V', ancho: 10, tipo: 'number', fijada: false }], filas: hs.map((n) => ({ tipo: 'hoja', nivel: 0, valores: [n.data['v']], textos: [String(n.data['v'])], contraida: false })) };
   const csv = tablaACsv(tabla);
-  const ms = performance.now() - t0;
+  const ms = cpuDesde(c0);
   assert.ok(tree.raiz.hijos.length === 10 && csv.length > 100000);
   assert.ok(ms < 3000, `tardo ${ms} ms`);
 });
@@ -884,10 +895,10 @@ test('rendimiento: 100.000 filas a XLSX', () => {
   const cols = [{ colId: 'v', encabezado: 'V', ancho: 10, tipo: 'number', fijada: false }, { colId: 't', encabezado: 'T', ancho: 10, tipo: 'text', fijada: false }];
   const filas = hs.map((n) => ({ tipo: 'hoja', nivel: 0, valores: [n.data['v'], `t${n.data['v']}`], textos: ['', `t${n.data['v']}`], contraida: false }));
   const e = crearEstilos();
-  const t0 = performance.now();
+  const c0 = process.cpuUsage();
   const xml = hojaAXml({ nombre: 'H', columnas: cols, filas, antes: [], despues: [], opciones: {} }, e.indice);
   const zip = zipGuardado(entradasLibro(['H'], [xml], e.xml));
-  const ms = performance.now() - t0;
+  const ms = cpuDesde(c0);
   assert.ok(zip.length > 1000000);
   assert.ok(ms < 3000, `tardo ${ms} ms`);
 });

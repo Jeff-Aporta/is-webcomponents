@@ -586,11 +586,14 @@ async function abrirAdopcion(nombre: string): Promise<{ page: Page; errores: str
   await page.route((u) => !u.href.startsWith(base), (r) => r.fulfill({ status: 200, body: '' }));
   await page.goto(`${base}/__adopcion-${nombre}__.html`);
   await page.waitForFunction(() => document.documentElement.dataset.listo === '1', null, { timeout: 30_000 });
-  // Deja asentar las hojas que inyecta el kit (is-base, paleta) y los renders diferidos.
+  // Deja asentar las hojas que inyecta el kit (is-base, paleta) y los renders diferidos: el token base y TODAS
+  // las hojas enlazadas cargadas. Antes solo el token (10 s): con el equipo cargado la paleta aún no había
+  // llegado y S-AP22 leyó el botón de acento sin color (0,0,0) (6-nov-2026).
   await page.waitForFunction(
-    () => getComputedStyle(document.documentElement).getPropertyValue('--iswc-space-l').trim() !== '',
+    () => getComputedStyle(document.documentElement).getPropertyValue('--iswc-space-l').trim() !== ''
+      && [...document.querySelectorAll('link[rel="stylesheet"]')].every((l) => (l as HTMLLinkElement).sheet),
     null,
-    { timeout: 10_000 },
+    { timeout: 30_000 },
   ).catch(() => {});
   await page.waitForTimeout(500);
   return { page, errores, urls };
