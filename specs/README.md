@@ -24,6 +24,7 @@ Planes fechados de una sesión viven en `docs/superpowers/` (si existen). Al cer
 | Spec | [diagramas/spec.md](diagramas/spec.md) | ¿Qué gramática comparten los diagramas (rieles, flujo, curvas, general vs restringidos)? |
 | Spec | [herramientas/spec.md](herramientas/spec.md) | ¿Cómo corren las herramientas online (render-lote sin checkout) y qué vigila el inventario de pines (cabeceras `@vendor`)? |
 | Spec | [app-shell/spec.md](app-shell/spec.md) | ¿Qué garantizan el armazón de app, sus pestañas y el acceso/sesión de la barra? |
+| Spec | [paridad-webawesome.md](paridad-webawesome.md) | ¿Qué le falta al molde frente a Web Awesome (reactividad, form-associated, i18n, overlays, eventos, a11y) y cómo se migra (F8)? |
 | Plan | [iswc-refactor-plan.md](iswc-refactor-plan.md) | Refactor ISWC 2026-09-08 (H1-H10 + S-PUERTO) |
 | Plan | [plan-carga-modular.md](plan-carga-modular.md) | Carga modular perezosa del kit, alias `@jeff-aporta/iswc-base`, loader en capas y retiro de `iswc-graficas` (2026-11-04) |
 | Reporte | [iswc-refactor-f6.md](iswc-refactor-f6.md) | F6 del refactor ISWC 2026-09-08 (gates verdes) |
