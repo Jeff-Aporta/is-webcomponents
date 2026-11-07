@@ -226,7 +226,7 @@ for (const t of ['actions/button', 'layout/dialog', 'data/ag-grid', 'diagrams/fl
   if (existsSync(coreI18n)) {
     await mkdir(join(outCore, 'i18n'), { recursive: true });
     for (const f of await readdir(coreI18n)) {
-      if (f.endsWith('.ts')) await writeFile(join(outCore, 'i18n', f), aliasEnDist(await readFile(join(coreI18n, f), 'utf8'), 'core'));
+      if (f.endsWith('.ts')) await writeFile(join(outCore, 'i18n', f), aliasEnDist(await readFile(join(coreI18n, f), 'utf8'), 'core/i18n'));
     }
   }
   // Los tipos del core (`core/schemas/`) viajan con el .ts publicado que los importa.

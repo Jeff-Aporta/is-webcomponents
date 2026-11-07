@@ -1,5 +1,5 @@
-import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
-import { setCustomState } from '@jeff-aporta/iswc-base/core/form-associated.js';
+import { emit, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import { IswcReactive } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
 import './drawer.js';
 import '@jeff-aporta/iswc-base/components/feedback/toast.js';
 import css from 'iswc:css';
@@ -113,13 +113,12 @@ const HTML_TEMPLATE = `
 const TEMPLATE = document.createElement('template');
 TEMPLATE.innerHTML = HTML_TEMPLATE;
 
-class IswcAppShell extends IswcElement {
+class IswcAppShell extends IswcReactive {
   static tag = 'iswc-app-shell';
   static css = css;
   static deps = ['iswc-icon', 'iswc-button'];
   static observed = ['brand', 'logo', 'brand-href', 'home-label', 'sidebar-label', 'toast'];
 
-  #internals: ElementInternals | null = null;
   #brand!: HTMLAnchorElement;
   #logo!: HTMLElement;
   #brandText!: HTMLElement;
@@ -136,7 +135,6 @@ class IswcAppShell extends IswcElement {
     super();
     const shadow = this.shadowRoot!;
     shadow.appendChild(TEMPLATE.content.cloneNode(true));
-    try { this.#internals = this.attachInternals(); } catch { this.#internals = null; }
 
     const $ = <T extends Element>(sel: string) => shadow.querySelector(sel) as T;
     this.#brand = $<HTMLAnchorElement>('.brand');
@@ -272,8 +270,8 @@ class IswcAppShell extends IswcElement {
     this.#menuButton.hidden = !has || !mobile;
     this.#drawer.setAttribute('label', this.getAttribute('sidebar-label') || 'Menú');
     this.#menuButton.setAttribute('aria-label', this.getAttribute('sidebar-label') || 'Menú');
-    setCustomState(this.#internals, 'mobile', mobile);
-    setCustomState(this.#internals, 'has-sidebar', has);
+    this.estado('mobile', mobile);
+    this.estado('has-sidebar', has);
   }
 
   #syncFooter(): void {

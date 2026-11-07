@@ -1,9 +1,9 @@
 import './button.js';
-import { withStyleAttrs, setStringAttr, setOptionalAttr } from '@jeff-aporta/iswc-base/core/attrs.js';
+import { withStyleAttrs } from '@jeff-aporta/iswc-base/core/attrs.js';
 
-import { emit, upgradeProperties, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import { emit, upgradeProperties, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import '@jeff-aporta/iswc-base/components/feedback/tooltip.js';
-import { setCustomState } from '@jeff-aporta/iswc-base/core/form-associated.js';
+import { IswcReactive, prop } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
 import { copyText } from '@jeff-aporta/iswc-base/core/dom.js';
 import css from 'iswc:css';
 
@@ -83,16 +83,12 @@ import css from 'iswc:css';
     'right', 'right-start', 'right-end',
   ];
 
-  class IswcCopyButton extends withStyleAttrs(IswcElement) {
+  class IswcCopyButton extends withStyleAttrs(IswcReactive) {
     static tag = 'iswc-copy-button';
     static css = css;
     static deps = ['iswc-icon'];
 
-    static observed = [
-        'value', 'from', 'disabled',
-        'copy-label', 'success-label', 'error-label',
-        'feedback-duration', 'tooltip', 'tooltip-placement',
-      ];
+    static observed = ['feedback-duration', 'tooltip', 'tooltip-placement'];
 
     #btn!: HTMLElement;
     // `iswc-tooltip` es un custom element hermano: se declara la forma minima
@@ -101,7 +97,6 @@ import css from 'iswc:css';
     #live!: HTMLElement;
     #icons: { copy: HTMLElement; success: HTMLElement; error: HTMLElement } =
       { copy: null!, success: null!, error: null! };
-    #internals: ElementInternals | null = null;
     #mounted = false;
     #status = 'rest';
     #copying = false;
@@ -121,9 +116,6 @@ import css from 'iswc:css';
         success: shadow.querySelector<HTMLElement>('[data-state="success"]')!,
         error: shadow.querySelector<HTMLElement>('[data-state="error"]')!
       };
-      if ('attachInternals' in this) {
-        try { this.#internals = this.attachInternals(); } catch { /* noop */ }
-      }
       shadow.querySelector<HTMLSlotElement>('slot:not([name])')!.addEventListener('slotchange', () => this.#onSlotChange());
       this.#btn.addEventListener('click', (e: Event) => { e.stopPropagation(); this.#handleCopy(); });
       shadow.querySelector<HTMLElement>('.trigger')!.addEventListener('click', (e: Event) => {
@@ -161,18 +153,12 @@ import css from 'iswc:css';
     }
 
     // --- props ---
-    get value() { return this.getAttribute('value') ?? ''; }
-    set value(v) { setOptionalAttr(this, 'value', v); }
-    get from() { return this.getAttribute('from') ?? ''; }
-    set from(v) { setStringAttr(this, 'from', v); }
-    get disabled() { return this.hasAttribute('disabled'); }
-    set disabled(v) { this.toggleAttribute('disabled', !!v); }
-    get copyLabel() { return this.getAttribute('copy-label') ?? ''; }
-    set copyLabel(v) { setStringAttr(this, 'copy-label', v); }
-    get successLabel() { return this.getAttribute('success-label') ?? ''; }
-    set successLabel(v) { setStringAttr(this, 'success-label', v); }
-    get errorLabel() { return this.getAttribute('error-label') ?? ''; }
-    set errorLabel(v) { setStringAttr(this, 'error-label', v); }
+    @prop({ vacio: true }) accessor value: string = '';
+    @prop() accessor from: string = '';
+    @prop({ type: 'bool' }) accessor disabled: boolean = false;
+    @prop() accessor copyLabel: string = '';
+    @prop() accessor successLabel: string = '';
+    @prop() accessor errorLabel: string = '';
     get feedbackDuration() {
       // Ojo: Number(null) es 0, así que hay que descartar el atributo ausente
       // antes de convertir o el feedback dura 0 ms.
@@ -211,7 +197,7 @@ import css from 'iswc:css';
       // iswc-button expone `disabled` como atributo, no como propiedad del
       // elemento (no es un <button> nativo).
       this.#btn.toggleAttribute('disabled', this.disabled);
-      setCustomState(this.#internals, 'disabled', this.disabled);
+      this.estado('disabled', this.disabled);
     }
 
     #syncTipPlacement() {
@@ -231,8 +217,8 @@ import css from 'iswc:css';
     }
 
     #setState(success: boolean, error: boolean): void {
-      setCustomState(this.#internals, 'success', success);
-      setCustomState(this.#internals, 'error', error);
+      this.estado('success', success);
+      this.estado('error', error);
       this.toggleAttribute('data-state-success', success);
       this.toggleAttribute('data-state-error', error);
     }

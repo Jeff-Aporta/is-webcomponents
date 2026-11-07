@@ -1,5 +1,5 @@
-import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
-import { attachFormInternals, setFormValue } from '@jeff-aporta/iswc-base/core/form-associated.js';
+import { emit, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import { IswcFormControl } from '@jeff-aporta/iswc-base/core/iswc-form-control.js';
 import './input.js';
 import css from 'iswc:css';
 
@@ -40,14 +40,12 @@ import css from 'iswc:css';
 
   type SuggestionsMap = Record<string, string[]>;
 
-  class IswcMention extends IswcElement {
+  class IswcMention extends IswcFormControl {
     static tag = 'iswc-mention';
     static css = css;
     static shadowInit: ShadowRootInit | null = { mode: 'open', delegatesFocus: true };
-    static formAssociated = true;
     static observed = OBSERVED;
 
-    #internals: ElementInternals | null;
     #field: HTMLElement & { value: string };
     #input: HTMLInputElement;
     #onDocPointerDown!: (e: PointerEvent) => void;
@@ -74,11 +72,11 @@ import css from 'iswc:css';
       this.#input = this.#field.shadowRoot!.getElementById('input') as HTMLInputElement;
       this.#input.setAttribute('aria-autocomplete', 'list');
       this.#input.setAttribute('aria-expanded', 'false');
-      this.#internals = attachFormInternals(this);
       // Los eventos del campo interno se reemiten aquí con el contrato de la mención.
       this.#field.addEventListener('iswc-input', (e: Event) => { e.stopPropagation(); this.#onInput(); });
       this.#field.addEventListener('iswc-change', (e: Event) => {
         e.stopPropagation();
+        this.interactuado = true;
         emit(this, 'iswc-change', { value: this.value });
       });
       this.#input.addEventListener('keydown', (e: KeyboardEvent) => this.#onKey(e));
@@ -97,16 +95,18 @@ import css from 'iswc:css';
       document.addEventListener('pointerdown', this.#onDocPointerDown, true);
     }
 
-    disconnectedCallback(): void {
+    override disconnectedCallback(): void {
       this.#mounted = false;
       document.removeEventListener('pointerdown', this.#onDocPointerDown, true);
+      // La base suelta el observador de idioma que registra `t()` (mensaje de `required`).
+      super.disconnectedCallback();
     }
 
     attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
       if (!this.#mounted || oldVal === newVal) return;
       if (name === 'value') {
         if (this.#field.value !== newVal) this.#field.value = newVal ?? '';
-        setFormValue(this.#internals, this.value);
+        this.sincronizarFormulario();
       }
       if (REENVIADOS.includes(name)) this.#forward(name);
     }
@@ -118,12 +118,15 @@ import css from 'iswc:css';
       this.setAttribute('value', next);
     }
 
-    formResetCallback(): void {
+    /** El texto con las menciones es lo que entra en FormData. */
+    override valorFormulario(): string { return this.value; }
+
+    override restablecer(): void {
       this.value = this.defaultValue;
     }
 
     /** Valor inicial del marcado: el que restaura el reset del formulario. */
-    get defaultValue(): string { return this.#defaultValue; }
+    override get defaultValue(): string { return this.#defaultValue; }
     get suggestions(): SuggestionsMap { return this.#suggestions; }
     set suggestions(obj: SuggestionsMap | null | undefined) { this.#suggestions = obj || {}; }
 
@@ -133,7 +136,7 @@ import css from 'iswc:css';
       this.#defaultValue = this.getAttribute('value') ?? '';
       if (this.hasAttribute('value')) this.#field.value = this.#defaultValue;
       for (const name of REENVIADOS) this.#forward(name);
-      setFormValue(this.#internals, this.value);
+      this.sincronizarFormulario();
     }
 
     #forward(name: string): void {
@@ -249,6 +252,7 @@ import css from 'iswc:css';
       this.setAttribute('value', next);
       this.#hidePopup();
       emit(this, 'iswc-select', { trigger: this.#lastTriggerChar, item, range: [start, caret] });
+      this.interactuado = true;
       emit(this, 'iswc-change', { value: next });
     }
   }

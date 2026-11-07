@@ -88,7 +88,7 @@ export function auditarRuntimeComponente(rutaModulo: string | null, tag: string,
 
   // 4. observedAttributes sin callback (o viceversa).
   // El molde IswcElement (y sus subclases) aporta attributeChangedCallback y lo enruta a onAttributeChanged.
-  const extendsBase = /extends\s+(IswcElement|Iswc\w*(?:Base|Lightbox|Chart)|ElementBase|PropsElement|ModalBase|DiagramElementBase|withStyleAttrs|PickerElement|DateFieldElement|BreakpointHost)/.test(src);
+  const extendsBase = /extends\s+(IswcElement|IswcReactive|IswcFormControl|Iswc\w*(?:Base|Lightbox|Chart)|ElementBase|PropsElement|ModalBase|DiagramElementBase|withStyleAttrs|PickerElement|DateFieldElement|BreakpointHost)/.test(src);
   if (!extendsBase) {
     const hasObserved = /static\s+(?:get\s+)?observedAttributes\s*(?:\(\s*\))?\s*(?::\s*[A-Za-z_$<>[\]|. ,]+\s*)?[\{:]/.test(src)
       // Variante: const OBSERVED = [...] (común en isp/*).

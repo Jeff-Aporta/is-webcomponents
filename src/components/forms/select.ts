@@ -1,16 +1,10 @@
 import { placementHaciaCentro } from '@jeff-aporta/iswc-base/core/position.js';
-import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import { emit, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import './option.js';
-
-import {
-  attachFormInternals,
-  clearValidity,
-  setCustomState,
-  setFormValue,
-  setValidity,
-} from '@jeff-aporta/iswc-base/core/form-associated.js';
-import { setStringAttr } from '@jeff-aporta/iswc-base/core/attrs.js';
+import { IswcFormControl } from '@jeff-aporta/iswc-base/core/iswc-form-control.js';
+import type { Validez } from '@jeff-aporta/iswc-base/core/schemas/iswc-form-control.schemas.js';
 import css from 'iswc:css';
+import { prop } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
 /**
  * <iswc-select> — Select form-associated con listbox en <dialog modal> (top layer),
  * así el desplegable nunca se pierde por overflow/clipping de ancestros.
@@ -64,12 +58,9 @@ import css from 'iswc:css';
     <slot hidden></slot>
   `;
 
-  const OBSERVED = [
-    'name', 'value', 'multiple', 'placeholder', 'label', 'hint',
-    'disabled', 'required', 'clearable', 'open',
-    'variant', 'checkmarks', 'selection-display', 'limit-tags',
-    'error', 'error-text', 'full-width', 'auto-width', 'max-visible',
-  ];
+  // Los demás atributos los declara cada `@prop` (y name, label, hint, disabled, required, error y error-text,
+  // `IswcFormControl`).
+  const OBSERVED = ['value', 'variant', 'selection-display', 'limit-tags', 'max-visible'];
 
   const TYPEAHEAD_MS = 500;
   const SELECTION_DISPLAY = ['tags', 'text', 'count'];
@@ -115,16 +106,14 @@ import css from 'iswc:css';
 
   let uidSeq = 0;
 
-  class IswcSelect extends IswcElement {
+  class IswcSelect extends IswcFormControl {
     static tag = 'iswc-select';
     static css = css;
     static shadowInit: ShadowRootInit | null = { mode: 'open', delegatesFocus: true };
     static deps = ['iswc-icon', 'iswc-button', 'iswc-tag'];
 
-    static formAssociated = true;
     static observed = [...OBSERVED, 'radius', 'border-color', 'bg', 'text-color', 'focus-color', 'danger-color'];
 
-    #internals: ElementInternals | null = null;
     #base!: HTMLElement;
     #trigger!: HTMLElement;
     #display!: HTMLElement;
@@ -139,7 +128,6 @@ import css from 'iswc:css';
     #listbox!: HTMLElement;
     #slot!: HTMLSlotElement;
     #uid = `iswc-sel-${++uidSeq}`;
-    #formDisabled = false;
     #defaultsRead = false;
     #defaultValues: string[] = [];
     #options: SelectOption[] = [];
@@ -171,8 +159,6 @@ import css from 'iswc:css';
 
       this.#hintEl.id = `${this.#uid}-hint`;
       this.#errorEl.id = `${this.#uid}-error`;
-
-      this.#internals = attachFormInternals(this);
 
       this.#base.addEventListener('click', this.#onBaseClick);
       this.#trigger.addEventListener('keydown', this.#onKeydown);
@@ -227,7 +213,7 @@ import css from 'iswc:css';
         this.#readValueAttr(false);
         this.#syncMeta();
         this.#apply();
-      } else if (name === 'required') this.#updateValidity();
+      } else if (name === 'required') this.sincronizarFormulario();
       else if (name === 'clearable') this.#syncClear();
       else if (name === 'checkmarks' || name === 'max-visible' || name === 'auto-width') {
         this.#renderList();
@@ -256,35 +242,17 @@ import css from 'iswc:css';
         .map((o) => ({ value: o.value, label: o.label }));
     }
 
-    get multiple(): boolean { return this.hasAttribute('multiple'); }
-    set multiple(v: boolean) { this.toggleAttribute('multiple', !!v); }
+    @prop({ type: 'bool' }) accessor multiple: boolean = false;
 
-    get open(): boolean { return this.hasAttribute('open'); }
-    set open(v: boolean) { this.toggleAttribute('open', !!v); }
+    @prop({ type: 'bool' }) accessor open: boolean = false;
 
-    get disabled(): boolean { return this.hasAttribute('disabled'); }
-    set disabled(v: boolean) { this.toggleAttribute('disabled', !!v); }
+    @prop({ type: 'bool' }) accessor clearable: boolean = false;
 
-    get required(): boolean { return this.hasAttribute('required'); }
-    set required(v: boolean) { this.toggleAttribute('required', !!v); }
+    @prop({ type: 'bool' }) accessor checkmarks: boolean = false;
 
-    get clearable(): boolean { return this.hasAttribute('clearable'); }
-    set clearable(v: boolean) { this.toggleAttribute('clearable', !!v); }
+    @prop({ type: 'bool' }) accessor fullWidth: boolean = false;
 
-    get checkmarks(): boolean { return this.hasAttribute('checkmarks'); }
-    set checkmarks(v: boolean) { this.toggleAttribute('checkmarks', !!v); }
-
-    get error(): boolean { return this.hasAttribute('error'); }
-    set error(v: boolean) { this.toggleAttribute('error', !!v); }
-
-    get errorText(): string { return this.getAttribute('error-text') ?? ''; }
-    set errorText(v: string | null) { setStringAttr(this, 'error-text', v); }
-
-    get fullWidth(): boolean { return this.hasAttribute('full-width'); }
-    set fullWidth(v: boolean) { this.toggleAttribute('full-width', !!v); }
-
-    get autoWidth(): boolean { return this.hasAttribute('auto-width'); }
-    set autoWidth(v: boolean) { this.toggleAttribute('auto-width', !!v); }
+    @prop({ type: 'bool' }) accessor autoWidth: boolean = false;
 
     /** Altura del listbox en nº de opciones (0 = sin límite propio) */
     get maxVisible(): number { return positive(this.getAttribute('max-visible')); }
@@ -312,38 +280,39 @@ import css from 'iswc:css';
       APPEARANCE.includes(raw) ? this.setAttribute('variant', raw) : this.removeAttribute('variant');
     }
 
-    get placeholder(): string { return this.getAttribute('placeholder') ?? ''; }
-    set placeholder(v: string | null) { setStringAttr(this, 'placeholder', v); }
-
-    get name(): string { return this.getAttribute('name') ?? ''; }
-    set name(v: string | null) { setStringAttr(this, 'name', v); }
-
-    get form(): HTMLFormElement | null { return this.#internals?.form ?? null; }
-    get validity(): ValidityState | null { return this.#internals?.validity ?? null; }
-    get validationMessage(): string { return this.#internals?.validationMessage ?? ''; }
+    @prop() accessor placeholder: string = '';
 
     show(): void { this.open = true; }
     hide(): void { this.open = false; }
 
-    checkValidity(): boolean { return this.#internals?.checkValidity() ?? true; }
-    reportValidity(): boolean { return this.#internals?.reportValidity() ?? true; }
-    setCustomValidity(msg: string): void {
-      if (msg) setValidity(this.#internals, { customError: true }, msg, this.#trigger);
-      else this.#updateValidity();
+    /** Con `multiple` y `name`, un FormData con una entrada por valor; si no, el value (o nada). */
+    override valorFormulario(): string | FormData | null {
+      const name = this.name;
+      if (this.multiple && name) {
+        const fd = new FormData();
+        for (const v of this.#values) fd.append(name, v);
+        return fd;
+      }
+      return this.value || null;
     }
 
-    formResetCallback(): void {
+    override estaVacio(): boolean { return !this.#values.length; }
+
+    override validar(): Validez {
+      const [flags, mensaje] = super.validar();
+      return flags.valueMissing ? [flags, 'Seleccione una opción'] : [flags, mensaje];
+    }
+
+    override restablecer(): void {
       this.#values = [...this.#defaultValues];
       this.#writeValueAttr();
       this.#apply();
     }
 
-    formDisabledCallback(disabled: boolean): void {
-      this.#formDisabled = !!disabled;
+    override formDisabledCallback(disabled: boolean): void {
+      super.formDisabledCallback(disabled);
       this.#syncDisabled();
     }
-
-    get #isDisabled(): boolean { return this.disabled || this.#formDisabled; }
 
     // ---------------------------------------------------------------- opciones
 
@@ -425,10 +394,9 @@ import css from 'iswc:css';
       this.#syncOptionEls();
       this.#renderDisplay();
       this.#renderList();
-      this.#setFormValue();
-      this.#updateValidity();
+      this.sincronizarFormulario();
       this.#syncClear();
-      setCustomState(this.#internals, 'blank', this.#values.length === 0);
+      this.estado('blank', this.#values.length === 0);
     }
 
     #syncOptionEls(): void {
@@ -438,31 +406,15 @@ import css from 'iswc:css';
       }
     }
 
-    #setFormValue(): void {
-      const name = this.name;
-      if (this.multiple && name) {
-        const fd = new FormData();
-        for (const v of this.#values) fd.append(name, v);
-        setFormValue(this.#internals, fd as unknown as FormDataEntryValue);
-        return;
-      }
-      setFormValue(this.#internals, this.value || null);
-    }
-
-    #updateValidity(): void {
-      if (this.required && !this.#values.length) {
-        setValidity(this.#internals, { valueMissing: true }, 'Seleccione una opción', this.#trigger);
-        return;
-      }
-      clearValidity(this.#internals, this.#trigger);
-    }
-
     #commit(values: string[]): void {
       const prev = this.value;
       this.#values = this.multiple ? [...new Set(values)] : values.slice(0, 1);
       this.#writeValueAttr();
       this.#apply();
-      if (this.value !== prev) emit(this, 'iswc-change', { value: this.value, values: this.values });
+      if (this.value !== prev) {
+        this.interactuado = true;
+        emit(this, 'iswc-change', { value: this.value, values: this.values });
+      }
     }
 
     #toggleValue(value: string): void {
@@ -508,7 +460,7 @@ import css from 'iswc:css';
 
       if (this.error) this.#trigger.setAttribute('aria-invalid', 'true');
       else this.#trigger.removeAttribute('aria-invalid');
-      setCustomState(this.#internals, 'error', this.error);
+      this.estado('error', this.error);
 
       if (this.required) this.#trigger.setAttribute('aria-required', 'true');
       else this.#trigger.removeAttribute('aria-required');
@@ -522,15 +474,15 @@ import css from 'iswc:css';
     }
 
     #syncClear(): void {
-      this.#clearBtn.hidden = !(this.clearable && this.#values.length > 0 && !this.#isDisabled);
+      this.#clearBtn.hidden = !(this.clearable && this.#values.length > 0 && !this.inhabilitado);
     }
 
     #syncDisabled(): void {
-      const disabled = this.#isDisabled;
+      const disabled = this.inhabilitado;
       this.#trigger.setAttribute('aria-disabled', String(disabled));
       this.#trigger.setAttribute('tabindex', disabled ? '-1' : '0');
       this.#clearBtn.toggleAttribute('disabled', disabled);
-      setCustomState(this.#internals, 'disabled', disabled);
+      this.estado('disabled', disabled);
       this.#syncClear();
       if (disabled && this.open) this.open = false;
     }
@@ -747,9 +699,9 @@ import css from 'iswc:css';
     }
 
     #syncOpen(): void {
-      const open = this.open && !this.#isDisabled;
+      const open = this.open && !this.inhabilitado;
       this.#trigger.setAttribute('aria-expanded', String(open));
-      setCustomState(this.#internals, 'open', open);
+      this.estado('open', open);
 
       if (open) {
         if (this.#activeIndex < 0) {
@@ -780,7 +732,7 @@ import css from 'iswc:css';
     // ----------------------------------------------------------------- eventos
 
     #onBaseClick = (e: PointerEvent): void => {
-      if (this.#isDisabled) return;
+      if (this.inhabilitado) return;
       const target = e.target as Element | null;
       if (target?.closest('.clear')) return;
       this.open = !this.open;
@@ -803,7 +755,7 @@ import css from 'iswc:css';
       const target = e.target as Element | null;
       const tag = target?.closest('iswc-tag') as HTMLElement | null;
       const value = tag?.dataset['value'];
-      if (!value || this.#isDisabled) return;
+      if (!value || this.inhabilitado) return;
       e.stopPropagation();
       this.#commit(this.#values.filter((v) => v !== value));
     };
@@ -811,7 +763,7 @@ import css from 'iswc:css';
     #onClear = (e: Event): void => {
       e.preventDefault();
       e.stopPropagation();
-      if (this.#isDisabled) return;
+      if (this.inhabilitado) return;
       this.#commit([]);
       this.#focusTrigger();
     };
@@ -862,7 +814,7 @@ import css from 'iswc:css';
     }
 
     #onKeydown = (e: KeyboardEvent): void => {
-      if (this.#isDisabled) return;
+      if (this.inhabilitado) return;
       switch (e.key) {
         case 'ArrowDown':
           e.preventDefault();

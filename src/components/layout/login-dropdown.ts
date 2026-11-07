@@ -1,5 +1,5 @@
-import { emit, upgradeProperties, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
-import { setCustomState } from '@jeff-aporta/iswc-base/core/form-associated.js';
+import { emit, upgradeProperties, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import { IswcReactive, prop } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
 import '@jeff-aporta/iswc-base/components/actions/dropdown.js';
 import '@jeff-aporta/iswc-base/components/navigation/tab-group.js';
 import './login.js';
@@ -87,17 +87,16 @@ const HTML_TEMPLATE = `
 const TEMPLATE = document.createElement('template');
 TEMPLATE.innerHTML = HTML_TEMPLATE;
 
-class IswcLoginDropdown extends IswcElement {
+class IswcLoginDropdown extends IswcReactive {
   static tag = 'iswc-login-dropdown';
   static css = css;
   static deps = ['iswc-button', 'iswc-icon', 'iswc-callout'];
   static observed = [
-      'label', 'heading', 'placement', 'modes', 'remember', 'open',
+      'label', 'heading', 'placement', 'modes', 'remember',
       'password-label', 'token-label', 'token-placeholder', 'choices-heading', 'back-label',
       'tab-label', 'extra-label',
     ];
 
-  #internals: ElementInternals | null = null;
   #error = '';
   #loading = false;
   #choices: LoginChoice[] = [];
@@ -114,7 +113,6 @@ class IswcLoginDropdown extends IswcElement {
     super();
     this.#root = this.shadowRoot!;
     this.#root.appendChild(TEMPLATE.content.cloneNode(true));
-    try { this.#internals = this.attachInternals(); } catch { this.#internals = null; }
     this.#dropdown = this.#q<HTMLElement & { show(): void; hide(): void }>('.dropdown')!;
     this.#login = this.#q<HTMLElement & { reset?: () => void; remember?: boolean }>('.login')!;
     this.#tabs = this.#q<HTMLElement & { active: string }>('.tabs')!;
@@ -152,8 +150,7 @@ class IswcLoginDropdown extends IswcElement {
     this.#render();
   }
 
-  get open(): boolean { return this.hasAttribute('open'); }
-  set open(v: boolean) { this.toggleAttribute('open', !!v); }
+  @prop({ type: 'bool' }) accessor open: boolean = false;
 
   show(): void { this.open = true; }
   hide(): void { this.open = false; }
@@ -245,7 +242,7 @@ class IswcLoginDropdown extends IswcElement {
 
     this.#dropdown.addEventListener('iswc-after-show', () => {
       this.toggleAttribute('open', true);
-      setCustomState(this.#internals, 'open', true);
+      this.estado('open', true);
       requestAnimationFrame(() => {
         if (this.#tabs.active === 'extra') return;
         if (this.#choices.length) this.#q<HTMLElement>('.choices-list iswc-button')?.focus();
@@ -255,7 +252,7 @@ class IswcLoginDropdown extends IswcElement {
     });
     this.#dropdown.addEventListener('iswc-after-hide', () => {
       this.toggleAttribute('open', false);
-      setCustomState(this.#internals, 'open', false);
+      this.estado('open', false);
     });
   }
 
@@ -359,8 +356,8 @@ class IswcLoginDropdown extends IswcElement {
     choicesError.textContent = this.#error;
     this.#renderChoices();
 
-    setCustomState(this.#internals, 'loading', this.#loading);
-    setCustomState(this.#internals, 'choosing', choosing);
+    this.estado('loading', this.#loading);
+    this.estado('choosing', choosing);
     if (this.#loading) this.setAttribute('aria-busy', 'true');
     else this.removeAttribute('aria-busy');
   }

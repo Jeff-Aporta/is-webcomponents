@@ -302,7 +302,7 @@ export async function extraerMetaComponente(rutaModulo: string | null): Promise<
     || /\bdefine\(\s*[A-Za-z_$]/.test(src);
 
   // 7. Herencia.
-  const heredaBase = /extends\s+(IswcElement|PropsElement|ElementBase|ModalBase|DiagramElementBase|withStyleAttrs|PickerElement|DateFieldElement|BreakpointHost)/.test(src);
+  const heredaBase = /extends\s+(IswcElement|IswcReactive|IswcFormControl|PropsElement|ElementBase|ModalBase|DiagramElementBase|withStyleAttrs|PickerElement|DateFieldElement|BreakpointHost)/.test(src);
 
   return {
     ruta: rutaModulo,

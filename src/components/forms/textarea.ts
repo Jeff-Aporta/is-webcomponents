@@ -1,10 +1,9 @@
-import { emit, upgradeProperties, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
-import {
-  attachFormInternals, setCustomState, setFormValue, setValidity, clearValidity
-} from '@jeff-aporta/iswc-base/core/form-associated.js';
-import { setStringAttr, setOptionalAttr } from '@jeff-aporta/iswc-base/core/attrs.js';
+import { emit, upgradeProperties, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import { IswcFormControl } from '@jeff-aporta/iswc-base/core/iswc-form-control.js';
+import { setOptionalAttr } from '@jeff-aporta/iswc-base/core/attrs.js';
 import { hasSlotted } from '@jeff-aporta/iswc-base/core/dom.js';
 import css from 'iswc:css';
+import { prop } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
 /**
  * <iswc-textarea> — Área de texto form-associated (vanilla + Shadow DOM).
  *
@@ -46,23 +45,18 @@ import css from 'iswc:css';
   const APPEARANCES = ['outlined', 'filled', 'underlined'];
   const PLACEMENTS = ['top', 'start'];
 
-  const OBSERVED = [
-    'name', 'value', 'placeholder', 'label', 'hint',
-    'disabled', 'required', 'readonly', 'rows', 'maxlength', 'resize',
-    'autosize', 'min-rows', 'max-rows', 'error', 'error-text', 'show-count'
-  ];
+  // Los demás atributos los declara cada `@prop` (y name, disabled, required, readonly y error, `IswcFormControl`).
+  const OBSERVED = ['value', 'rows', 'resize', 'autosize', 'min-rows', 'max-rows'];
 
   const EXTRA_UPGRADE_ATTRS = ['variant', 'label-placement', 'full-width'];
 
-  class IswcTextarea extends IswcElement {
+  class IswcTextarea extends IswcFormControl {
     static tag = 'iswc-textarea';
     static css = css;
     static shadowInit: ShadowRootInit | null = { mode: 'open', delegatesFocus: true };
 
-    static formAssociated = true;
     static observed = [...OBSERVED, 'radius', 'border-color', 'bg', 'text-color', 'focus-color', 'danger-color'];
 
-    #internals: ElementInternals | null = null;
     #textarea!: HTMLTextAreaElement;
     #labelEl!: HTMLElement;
     #supportEl!: HTMLElement;
@@ -73,7 +67,6 @@ import css from 'iswc:css';
     #hintSlot!: HTMLSlotElement;
     #value = '';
     #hasHint = false;
-    #touched = false;
     #ro: ResizeObserver | null = null;
     #lastWidth = -1;
 
@@ -90,8 +83,6 @@ import css from 'iswc:css';
       this.#countEl = shadow.getElementById('count')!;
       this.#labelSlot = this.#labelEl.querySelector<HTMLSlotElement>('slot')!;
       this.#hintSlot = this.#hintEl.querySelector<HTMLSlotElement>('slot')!;
-
-      this.#internals = attachFormInternals(this);
 
       this.#textarea.addEventListener('input', this.#onInput);
       this.#textarea.addEventListener('change', this.#onChange);
@@ -155,20 +146,6 @@ import css from 'iswc:css';
       this.#update();
     }
 
-    get defaultValue(): string { return this.getAttribute('value') ?? ''; }
-
-    get name(): string { return this.getAttribute('name') ?? ''; }
-    set name(v: string) { setStringAttr(this, 'name', v); }
-
-    get disabled(): boolean { return this.hasAttribute('disabled'); }
-    set disabled(v: boolean) { this.toggleAttribute('disabled', !!v); }
-
-    get required(): boolean { return this.hasAttribute('required'); }
-    set required(v: boolean) { this.toggleAttribute('required', !!v); }
-
-    get readonly(): boolean { return this.hasAttribute('readonly'); }
-    set readonly(v: boolean) { this.toggleAttribute('readonly', !!v); }
-
     get rows(): number { return Number(this.getAttribute('rows')) || 3; }
     set rows(v: number) { this.setAttribute('rows', String(v)); }
 
@@ -205,29 +182,19 @@ import css from 'iswc:css';
       else if (PLACEMENTS.includes(String(v))) this.setAttribute('label-placement', String(v));
     }
 
-    get error(): boolean { return this.hasAttribute('error'); }
-    set error(v: boolean) { this.toggleAttribute('error', !!v); }
+    @prop({ vacio: true }) accessor errorText: string = '';
 
-    get errorText(): string { return this.getAttribute('error-text') ?? ''; }
-    set errorText(v: string | null) { setOptionalAttr(this, 'error-text', v); }
+    @prop({ type: 'bool' }) accessor showCount: boolean = false;
 
-    get showCount(): boolean { return this.hasAttribute('show-count'); }
-    set showCount(v: boolean) { this.toggleAttribute('show-count', !!v); }
+    @prop({ type: 'bool' }) accessor fullWidth: boolean = false;
 
-    get fullWidth(): boolean { return this.hasAttribute('full-width'); }
-    set fullWidth(v: boolean) { this.toggleAttribute('full-width', !!v); }
+    @prop({ vacio: true }) accessor placeholder: string = '';
 
-    get placeholder(): string { return this.getAttribute('placeholder') ?? ''; }
-    set placeholder(v: string | null) { setOptionalAttr(this, 'placeholder', v); }
+    @prop({ vacio: true }) accessor label: string = '';
 
-    get label(): string { return this.getAttribute('label') ?? ''; }
-    set label(v: string | null) { setOptionalAttr(this, 'label', v); }
+    @prop({ vacio: true }) accessor hint: string = '';
 
-    get hint(): string { return this.getAttribute('hint') ?? ''; }
-    set hint(v: string | null) { setOptionalAttr(this, 'hint', v); }
-
-    get maxlength(): string | null { return this.getAttribute('maxlength'); }
-    set maxlength(v: string | number | null) { setOptionalAttr(this, 'maxlength', v); }
+    @prop({ vacio: true }) accessor maxlength: string | null = null;
 
     get textarea(): HTMLTextAreaElement { return this.#textarea; }
 
@@ -240,38 +207,33 @@ import css from 'iswc:css';
       this.#textarea.setSelectionRange(...(args as Parameters<HTMLTextAreaElement['setSelectionRange']>));
     }
 
-    get validity(): ValidityState | undefined { return this.#internals?.validity; }
-    get validationMessage(): string { return this.#internals?.validationMessage ?? ''; }
-    get willValidate(): boolean { return this.#internals?.willValidate ?? false; }
-    checkValidity(): boolean { return this.#internals?.checkValidity() ?? true; }
-    reportValidity(): boolean {
-      this.#touched = true;
+    override reportValidity(): boolean {
+      const ok = super.reportValidity();
       this.#syncSupport();
-      return this.#internals?.reportValidity() ?? true;
+      return ok;
     }
-    setCustomValidity(msg: string): void {
-      if (msg) {
-        setValidity(this.#internals, { customError: true }, msg, this.#textarea);
-        this.#syncSupport();
-      } else this.#update();
+    override setCustomValidity(msg: string): void {
+      super.setCustomValidity(msg);
+      this.#syncSupport();
     }
 
-    // ---- form-associated callbacks --------------------------------------
+    // ---- formulario (IswcFormControl) -----------------------------------
 
-    formResetCallback(): void {
+    /** Vacío no entra en FormData. Validez: `required` + la del <textarea> nativo (tooLong). */
+    override valorFormulario(): string | null { return this.#value || null; }
+
+    override get controlNativo(): HTMLTextAreaElement { return this.#textarea; }
+
+    override restablecer(): void {
       this.#value = this.defaultValue;
       this.#textarea.value = this.#value;
-      this.#touched = false;
       this.#update();
     }
 
-    formDisabledCallback(disabled: boolean): void {
-      this.#syncDisabled(disabled);
+    override formDisabledCallback(disabled: boolean): void {
+      super.formDisabledCallback(disabled);
+      this.#syncDisabled();
       this.#update();
-    }
-
-    formStateRestoreCallback(state: string | File | FormData | null): void {
-      if (typeof state === 'string') this.value = state;
     }
 
     // ---- privados --------------------------------------------------------
@@ -300,46 +262,27 @@ import css from 'iswc:css';
       if (ta.value !== this.#value) ta.value = this.#value;
     }
 
-    #syncDisabled(formDisabled?: boolean): void {
-      const disabled = !!formDisabled || this.disabled;
+    #syncDisabled(): void {
+      const disabled = this.inhabilitado;
       this.#textarea.disabled = disabled;
       this.#textarea.readOnly = this.readonly;
-      setCustomState(this.#internals, 'disabled', disabled);
-      setCustomState(this.#internals, 'readonly', this.readonly);
+      this.estado('disabled', disabled);
+      this.estado('readonly', this.readonly);
     }
 
     #update(): void {
       const v = this.#value;
-      setCustomState(this.#internals, 'blank', v === '');
-      setFormValue(this.#internals, v || null);
-      this.#updateValidity();
+      this.estado('blank', v === '');
+      this.sincronizarFormulario();
       this.#syncSupport();
       this.#autofit();
     }
 
-    #updateValidity(): void {
-      if (!this.#internals) return;
-      const v = this.#value;
-      if (this.required && v === '') {
-        setValidity(this.#internals, { valueMissing: true }, 'Este campo es obligatorio', this.#textarea);
-        this.#textarea.setAttribute('aria-invalid', 'true');
-        return;
-      }
-      const native = this.#textarea.validity;
-      if (v !== '' && native?.tooLong) {
-        setValidity(this.#internals, { tooLong: true }, this.#textarea.validationMessage, this.#textarea);
-        this.#textarea.setAttribute('aria-invalid', 'true');
-        return;
-      }
-      clearValidity(this.#internals, this.#textarea);
-      this.#textarea.removeAttribute('aria-invalid');
-    }
-
     /** Fila de apoyo: hint / error-text / contador, y el estado visual `invalid`. */
     #syncSupport(): void {
-      const failed = this.#touched && this.#internals?.validity?.valid === false;
+      const failed = this.interactuado && this.internals?.validity?.valid === false;
       const invalid = this.error || failed;
-      setCustomState(this.#internals, 'invalid', invalid);
+      this.estado('invalid', invalid);
 
       const msg = invalid ? (this.errorText || (failed ? this.validationMessage : '')) : '';
       this.#errorEl.textContent = msg;
@@ -389,17 +332,17 @@ import css from 'iswc:css';
 
     #onChange = (): void => {
       this.#value = this.#textarea.value;
-      this.#touched = true;
+      this.interactuado = true;
       this.#update();
       this.dispatchEvent(new Event('change', { bubbles: true, composed: true }));
       emit(this, 'iswc-change', { value: this.#value });
     };
 
-    #onFocus = (): void => { setCustomState(this.#internals, 'focused', true); };
+    #onFocus = (): void => { this.estado('focused', true); };
 
     #onBlur = (): void => {
-      setCustomState(this.#internals, 'focused', false);
-      this.#touched = true;
+      this.estado('focused', false);
+      this.interactuado = true;
       this.#syncSupport();
     };
   }

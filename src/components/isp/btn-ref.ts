@@ -1,7 +1,6 @@
-import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
-import {
-  attachFormInternals, setFormValue, setValidity, clearValidity,
-} from '@jeff-aporta/iswc-base/core/form-associated.js';
+import { emit, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import { IswcFormControl } from '@jeff-aporta/iswc-base/core/iswc-form-control.js';
+import type { Validez } from '@jeff-aporta/iswc-base/core/schemas/iswc-form-control.schemas.js';
 import '@jeff-aporta/iswc-base/components/forms/input.js';
 import '@jeff-aporta/iswc-base/components/layout/dialog.js';
 import './catalogo-gen.js';
@@ -15,6 +14,7 @@ import {
 import { _RecordLikeSchema, type _RecordLike } from "./schemas/btn-ref.schemas.js";
 import type { _CatalogLike, _FieldLike, _DialogLike, _CatalogEl } from "./schemas/btn-ref.schemas.js";
 import css from 'iswc:css';
+import { prop } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
 
 /** Input field con attrs custom (label/name/value/etc.). */
 
@@ -70,14 +70,12 @@ const FILTER_SVG = `<svg fill="currentColor" width="20" height="20" viewBox="0 0
   `;
 
   const OBSERVED = [
-    'label', 'value', 'name', 'id', 'required', 'optional', 'readonly', 'maxlength', 'multi',
-  ];
+    'label', 'value', 'name', 'id', 'required', 'readonly', 'maxlength'];
 
-  class IswcBtnRef extends IswcElement {
+  class IswcBtnRef extends IswcFormControl {
     static tag = 'iswc-btn-ref';
     static css = css;
     static deps = ['iswc-button', 'iswc-icon'];
-    static formAssociated = true;
     static observed = OBSERVED;
 
     /** Indexer usado por `#upgradeProps()` para re-leer propiedades pre-upgrade. */
@@ -91,7 +89,6 @@ const FILTER_SVG = `<svg fill="currentColor" width="20" height="20" viewBox="0 0
     #cat!: _CatalogEl;
     #cancelBtn!: HTMLElement;
     #pickBtn!: HTMLElement;
-    #internals: ElementInternals | null = null;
     #typingTimer = 0;
     #prevValue: string | symbol = Symbol('init');
 
@@ -103,7 +100,6 @@ const FILTER_SVG = `<svg fill="currentColor" width="20" height="20" viewBox="0 0
 
     constructor() {
       super();
-      this.#internals = attachFormInternals(this);
       const shadow = this.shadowRoot!;
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
 
@@ -162,8 +158,8 @@ const FILTER_SVG = `<svg fill="currentColor" width="20" height="20" viewBox="0 0
       }
     }
 
-    get label() { return this.getAttribute('label') || ''; }
-    set label(v) { this.setAttribute('label', v ?? ''); }
+    override get label() { return this.getAttribute('label') || ''; }
+    override set label(v) { this.setAttribute('label', v ?? ''); }
 
     get value() { return this.getAttribute('value') ?? ''; }
     set value(v) {
@@ -175,17 +171,16 @@ const FILTER_SVG = `<svg fill="currentColor" width="20" height="20" viewBox="0 0
       this.setAttribute('value', next);
     }
 
-    get name() { return this.getAttribute('name') || ''; }
-    set name(v) { this.setAttribute('name', v ?? ''); }
+    override get name() { return this.getAttribute('name') || ''; }
+    override set name(v) { this.setAttribute('name', v ?? ''); }
 
-    get required() { return this.hasAttribute('required') && !this.optional; }
-    set required(v) { this.toggleAttribute('required', !!v); }
+    override get required() { return this.hasAttribute('required') && !this.optional; }
+    override set required(v) { this.toggleAttribute('required', !!v); }
 
-    get optional() { return this.hasAttribute('optional'); }
-    set optional(v) { this.toggleAttribute('optional', !!v); }
+    @prop({ type: 'bool' }) accessor optional: boolean = false;
 
-    get readonly() { return this.hasAttribute('readonly'); }
-    set readonly(v) { this.toggleAttribute('readonly', !!v); }
+    override get readonly() { return this.hasAttribute('readonly'); }
+    override set readonly(v) { this.toggleAttribute('readonly', !!v); }
 
     get maxlength() {
       const n = Number(this.getAttribute('maxlength'));
@@ -194,8 +189,7 @@ const FILTER_SVG = `<svg fill="currentColor" width="20" height="20" viewBox="0 0
     set maxlength(v) { this.setAttribute('maxlength', String(v)); }
 
     /** Selección múltiple en el modal (default: single). */
-    get multi() { return this.hasAttribute('multi'); }
-    set multi(v) { this.toggleAttribute('multi', !!v); }
+    @prop({ type: 'bool' }) accessor multi: boolean = false;
 
     focus() {
       setTimeout(() => this.#field?.focus?.(), 50);
@@ -225,15 +219,20 @@ const FILTER_SVG = `<svg fill="currentColor" width="20" height="20" viewBox="0 0
       (this.#openBtn as unknown as { disabled?: boolean }).disabled = this.readonly;
       this.#openBtn.classList.toggle('focus-required', false);
       this.#openBtn.classList.toggle('focus-optional', false);
-      setFormValue(this.#internals, this.value);
+    }
+
+    /** El value (la clave del registro elegido) es lo que entra en FormData. */
+    override valorFormulario(): string { return this.value; }
+
+    override estaVacio(): boolean { return !isPresent(this.value); }
+
+    override validar(): Validez {
+      const [flags, mensaje] = super.validar();
+      return flags.valueMissing ? [flags, 'Campo obligatorio'] : [flags, mensaje];
     }
 
     #syncValidity(): void {
-      if (this.required && !isPresent(this.value)) {
-        setValidity(this.#internals, { valueMissing: true }, 'Campo obligatorio', this.#field);
-      } else {
-        clearValidity(this.#internals);
-      }
+      this.sincronizarFormulario();
     }
 
     #pk(): string {
@@ -322,6 +321,7 @@ const FILTER_SVG = `<svg fill="currentColor" width="20" height="20" viewBox="0 0
       this.onSelectedRecord(record);
       this.onChange();
       emit(this, 'iswc-selected-record', { record, records: [record], value, label });
+      this.interactuado = true;
       emit(this, 'iswc-change', { value });
       this.#syncValidity();
       this.close();
@@ -340,6 +340,7 @@ const FILTER_SVG = `<svg fill="currentColor" width="20" height="20" viewBox="0 0
       this.onSelectedRecord(record as _RecordLike);
       this.onChange();
       emit(this, 'iswc-selected-record', { record, records, value, label });
+      this.interactuado = true;
       emit(this, 'iswc-change', { value });
       this.#syncValidity();
       this.close();
@@ -375,6 +376,7 @@ const FILTER_SVG = `<svg fill="currentColor" width="20" height="20" viewBox="0 0
 
     #onFieldChange = (): void => {
       this.onChange();
+      this.interactuado = true;
       emit(this, 'iswc-change', { value: this.value });
     };
 

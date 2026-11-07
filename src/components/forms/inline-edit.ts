@@ -1,6 +1,6 @@
-import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import { emit, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import { IswcReactive } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
 import { escapeHtml } from '@jeff-aporta/iswc-base/core/dom.js';
-import { attachFormInternals, setCustomState, setFormValue } from '@jeff-aporta/iswc-base/core/form-associated.js';
 import { setOptionalAttr } from '@jeff-aporta/iswc-base/core/attrs.js';
 import css from 'iswc:css';
 
@@ -47,12 +47,11 @@ import css from 'iswc:css';
 
   type InlineState = 'idle' | 'editing' | 'saved' | 'cancelled';
 
-  class IswcInlineEdit extends IswcElement {
+  class IswcInlineEdit extends IswcReactive {
     static tag = 'iswc-inline-edit';
     static css = css;
     static observed = OBSERVED;
 
-    #internals: ElementInternals | null;
     #mounted = false;
     #state: InlineState = 'idle';
     #snapshot: string | null = null;
@@ -60,7 +59,6 @@ import css from 'iswc:css';
 
     constructor() {
       super();
-      this.#internals = attachFormInternals(this);
       this.#render();
       this.addEventListener('click', (e: MouseEvent) => this.#onClick(e));
       this.addEventListener('keydown', (e: KeyboardEvent) => this.#onKeyDown(e));
@@ -145,12 +143,12 @@ import css from 'iswc:css';
     }
 
     #sync(): void {
-      setFormValue(this.#internals, this.value);
+      // Sin `static formAssociated` el valor no entra en el <form> (el antiguo `setFormValue` fallaba en silencio).
       // Escribir sobre [part="display"] borraría el <slot name="display">; el
       // texto plano vive en el .text hermano.
       const text = this.shadowRoot!.querySelector<HTMLElement>('[part="display"] .text');
       if (text) text.textContent = this.value || this.getAttribute('placeholder') || '';
-      setCustomState(this.#internals, 'blank', !this.value);
+      this.estado('blank', !this.value);
     }
 
     #syncDisabled(): void {
@@ -212,7 +210,7 @@ import css from 'iswc:css';
           if (cancelOnBlur) this.cancel();
           else this.save();
         });
-        input.addEventListener('input', () => setCustomState(this.#internals, 'blank', !input.value));
+        input.addEventListener('input', () => this.estado('blank', !input.value));
       }
     }
 
@@ -222,7 +220,7 @@ import css from 'iswc:css';
       // si no `editing` sobrevive a `save()` y el selector :state(editing)
       // queda pegado.
       for (const candidate of STATES) {
-        setCustomState(this.#internals, candidate, candidate === name);
+        this.estado(candidate, candidate === name);
       }
       this.#syncStateClass();
       if (autoRevertMs) {

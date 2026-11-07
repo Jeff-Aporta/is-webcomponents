@@ -9,4 +9,4 @@
  * cdn-install: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/is-cdn-install/SKILL.md
  * blob: https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/forms/checkbox.js
  */
-import"../_chunks/chunk-IQSSUYHB.mjs";import"../_chunks/chunk-2GHB5Y6L.mjs";import"../_chunks/chunk-USGHOH6C.mjs";import"../_chunks/chunk-DKYDCFSD.mjs";import"../_chunks/chunk-FZCPQKWI.mjs";import"../_chunks/chunk-UFMSFUKG.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";
+import"../_chunks/chunk-BICHX75R.mjs";import"../_chunks/chunk-U2KX35XW.mjs";import"../_chunks/chunk-2GHB5Y6L.mjs";import"../_chunks/chunk-4ILDULKK.mjs";import"../_chunks/chunk-VQADWERW.mjs";import"../_chunks/chunk-DKYDCFSD.mjs";import"../_chunks/chunk-FZCPQKWI.mjs";import"../_chunks/chunk-UFMSFUKG.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";

@@ -11,7 +11,7 @@ import { readFileSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
 import {
   leerComponente, leerPreview, existeCss,
-  esFactoryWrapper,
+  esFactoryWrapper, atributosObservados, esFormAssociated,
 } from '../_shared/exhaustivo-forms.js';
 import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
 
@@ -34,14 +34,14 @@ test('date-field: archivo y registro', () => {
     '<iswc-date-field> debe pasar tag: "iswc-date-field"');
 });
 
-test('date-field: atributos vienen del factory (OBSERVED const)', () => {
+test('date-field: atributos vienen del factory (OBSERVED const + @prop + IswcFormControl)', () => {
   assert.ok(/static\s+observed\s*=\s*OBSERVED/.test(factorySrc),
     'factory debe declarar observedAttributes');
+  const obs = atributosObservados(factorySrc);
   for (const a of ['label', 'hint', 'name', 'value', 'min', 'max',
                    'required', 'disabled', 'readonly', 'locale',
                    'clearable', 'invalid']) {
-    assert.ok(new RegExp(`['"\`]${a}['"\`]`).test(factorySrc),
-      `factory OBSERVED debe incluir "${a}"`);
+    assert.ok(obs.includes(a), `factory debe observar "${a}"`);
   }
 });
 
@@ -58,10 +58,9 @@ test('date-field: shadow DOM (open + delegatesFocus para teclado)', () => {
     'factory debe abrir shadow con delegatesFocus:true (a11y teclado)');
 });
 
-test('date-field: form-associated + ElementBase-ish (HTMLElement + attachInternals)', () => {
-  assert.ok(/static\s+formAssociated\s*=\s*true/.test(factorySrc),
-    'factory debe ser form-associated');
-  assert.ok(/attachInternals/.test(factorySrc),
+test('date-field: form-associated (IswcFormControl: formAssociated + ElementInternals)', () => {
+  assert.ok(esFormAssociated(factorySrc), 'factory debe ser form-associated');
+  assert.ok(/attachInternals|extends\s+IswcFormControl\b/.test(factorySrc),
     'factory debe usar ElementInternals (form-associated)');
 });
 

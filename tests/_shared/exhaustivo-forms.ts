@@ -66,8 +66,42 @@ function arrayDeclRe(nombre: string): RegExp {
   return new RegExp(`(?:const|let|var)\\s+${nombre}\\s*(?::[^=\\n]*)?=\\s*(?:Object\\.freeze\\()?\\[([\\s\\S]*?)\\]`);
 }
 
-/** Atributos observados declarados como `static get observedAttributes()`. */
+/** Extiende `IswcFormControl` (directo o con `withStyleAttrs`). */
+function extiendeFormControl(src: string): boolean {
+  return /extends\s+(?:withStyleAttrs\(\s*)?IswcFormControl\b/.test(src);
+}
+
+/** Atributos que `IswcFormControl` declara con `@prop` (core/iswc-form-control.ts). */
+const ATRIBUTOS_FORM_CONTROL = ['name', 'disabled', 'required', 'readonly', 'label', 'hint', 'error-text', 'error'];
+/** Custom states que `IswcFormControl` mantiene en `actualizarValidez()`. */
+const ESTADOS_FORM_CONTROL = ['user-invalid', 'user-valid', 'required', 'optional', 'disabled', 'readonly'];
+
+const aKebab = (s: string) => s.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase();
+
+/** Atributos declarados con `@prop(…) accessor x` (kebab del nombre, o `attr: '…'`; `attr: false` no tiene). */
+function atributosProp(src: string): string[] {
+  const out: string[] = [];
+  for (const m of src.matchAll(/@prop\(\s*(\{[^}]*\})?\s*\)\s*(?:override\s+)?accessor\s+([A-Za-z_$][\w$]*)/g)) {
+    const opciones = m[1] ?? '';
+    if (/attr:\s*false/.test(opciones)) continue;
+    out.push(/attr:\s*['"]([^'"]+)['"]/.exec(opciones)?.[1] ?? aKebab(m[2]));
+  }
+  return out;
+}
+
+/**
+ * Atributos observados: `static observed` (o el antiguo `static get observedAttributes()`), más los que suma
+ * `IswcReactive` (cada `@prop` del archivo) y, si extiende `IswcFormControl`, los de la base.
+ */
 export function atributosObservados(src: string): string[] {
+  const attrs = new Set<string>(atributosProp(src));
+  if (extiendeFormControl(src)) for (const a of ATRIBUTOS_FORM_CONTROL) attrs.add(a);
+  for (const a of atributosEstaticos(src)) attrs.add(a);
+  return [...attrs];
+}
+
+/** Atributos de `static observed` o de `static get observedAttributes()`. */
+function atributosEstaticos(src: string): string[] {
   const attrs = new Set<string>();
   // Molde IswcElement: `static observed = EXPR;`. Antes: el getter `static get observedAttributes() { return EXPR; }`.
   const molde = src.match(/static\s+(?:override\s+)?observed\s*(?::[^=\n]*)?=\s*([\s\S]+?)\s*;/);
@@ -148,9 +182,14 @@ export function partsDeclaradas(src: string): string[] {
   return [...parts];
 }
 
-/** Custom states (`:state(name)` o `setCustomState(this.#internals, 'name', ...)`). */
+/**
+ * Custom states: `this.estado('name', …)` (molde reactivo), `setCustomState(this.#internals, 'name', ...)` (antes) y,
+ * si extiende `IswcFormControl`, los que mantiene la base.
+ */
 export function customStates(src: string): string[] {
   const states = new Set<string>();
+  for (const m of src.matchAll(/this\.estado\s*\(\s*['"`]([a-z0-9-]+)['"`]/g)) states.add(m[1]);
+  if (extiendeFormControl(src)) for (const s of ESTADOS_FORM_CONTROL) states.add(s);
   for (const m of src.matchAll(/setCustomState\s*\(\s*this\.#\w+\s*,\s*['"`]([a-z0-9-]+)['"`]/g)) {
     states.add(m[1]);
   }
@@ -163,12 +202,15 @@ export function customStates(src: string): string[] {
 
 /** Indica si el componente usa form-associated custom elements. */
 export function esFormAssociated(src: string): boolean {
-  return /static\s+formAssociated\s*=\s*true/.test(src) || /attachFormInternals\s*\(/.test(src);
+  return /static\s+formAssociated\s*=\s*true/.test(src) || /attachFormInternals\s*\(/.test(src) || extiendeFormControl(src);
 }
 
-/** Indica si extiende el molde con ciclo de vida guardado: `IswcElement` (o el alias `ElementBase`), no HTMLElement. */
+/**
+ * Indica si extiende el molde con ciclo de vida guardado: `IswcElement` (o el alias `ElementBase`) o sus derivados
+ * `IswcReactive` / `IswcFormControl`, no HTMLElement.
+ */
 export function extiendeElementBase(src: string): boolean {
-  return /extends\s+(?:withStyleAttrs\(\s*)?(?:IswcElement|ElementBase)\b/.test(src);
+  return /extends\s+(?:withStyleAttrs\(\s*)?(?:IswcElement|ElementBase|IswcReactive|IswcFormControl)\b/.test(src);
 }
 
 /**
@@ -177,7 +219,7 @@ export function extiendeElementBase(src: string): boolean {
  */
 export function usaShadowDom(src: string): boolean {
   if (/attachShadow\s*\(/.test(src)) return true;
-  const molde = /extends\s+(?:withStyleAttrs\(\s*)?IswcElement\b/.test(src);
+  const molde = /extends\s+(?:withStyleAttrs\(\s*)?(?:IswcElement|IswcReactive|IswcFormControl)\b/.test(src);
   const ligero = /static\s+shadowInit\s*(?::[^=\n]*)?=\s*null/.test(src);
   return (molde && !ligero) || /static\s+shadowInit\s*(?::[^=\n]*)?=\s*\{/.test(src);
 }

@@ -1,12 +1,10 @@
-import { emit, upgradeProperties, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
-import {
-  attachFormInternals, setCustomState, setFormValue, setValidity, clearValidity
-} from '@jeff-aporta/iswc-base/core/form-associated.js';
+import { emit, upgradeProperties, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import { IswcFormControl } from '@jeff-aporta/iswc-base/core/iswc-form-control.js';
 import '@jeff-aporta/iswc-base/components/actions/check-icon-button.js';
 import { isOtpAutocomplete, listenWebOtp } from './utils/input-tokens.js';
-import { setStringAttr, setOptionalAttr } from '@jeff-aporta/iswc-base/core/attrs.js';
 import { hasSlotted } from '@jeff-aporta/iswc-base/core/dom.js';
 import css from 'iswc:css';
+import { prop } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
 /**
  * <iswc-input> — Campo de texto form-associated (vanilla + Shadow DOM).
  *
@@ -91,34 +89,22 @@ import css from 'iswc:css';
   /** Debounce por defecto del evento `iswc-typing-end` (ms) — mismo valor que ISP. */
   const DEFAULT_TYPING_DELAY = 600;
 
-  const OBSERVED = [
-    'type', 'name', 'value', 'placeholder', 'label', 'hint',
-    'disabled', 'required', 'readonly', 'clearable', 'password-toggle',
-    'min', 'max', 'step', 'maxlength', 'autocomplete',
-    'error', 'error-text', 'show-count', 'prefix', 'suffix'
-  ];
+  // Los demás atributos los declara cada `@prop` (y name, disabled, required, readonly y error, `IswcFormControl`).
+  const OBSERVED = ['type', 'value'];
 
   const EXTRA_UPGRADE_ATTRS = ['variant', 'label-placement', 'full-width'];
   const EXTRA_UPGRADE_PROPS = ['typingDelay', 'prefixText', 'suffixText'];
 
   const NATIVE_ATTRS = ['placeholder', 'min', 'max', 'step', 'maxlength', 'autocomplete', 'name'];
 
-  const MIRRORED_FLAGS = [
-    'badInput', 'patternMismatch', 'rangeOverflow', 'rangeUnderflow',
-    'stepMismatch', 'tooLong', 'tooShort', 'typeMismatch'
-  ];
-
-
-  class IswcInput extends IswcElement {
+  class IswcInput extends IswcFormControl {
     static tag = 'iswc-input';
     static css = css;
     static shadowInit: ShadowRootInit | null = { mode: 'open', delegatesFocus: true };
     static deps = ['iswc-icon', 'iswc-button'];
 
-    static formAssociated = true;
     static observed = [...OBSERVED, 'radius', 'border-color', 'bg', 'text-color', 'focus-color', 'danger-color'];
 
-    #internals: ElementInternals | null = null;
     #input!: HTMLInputElement;
     #labelEl!: HTMLElement;
     #supportEl!: HTMLElement;
@@ -138,7 +124,6 @@ import css from 'iswc:css';
     #value = '';
     #passwordVisible = false;
     #hasHint = false;
-    #touched = false;
     #typingTimer: ReturnType<typeof setTimeout> | null = null;
     #otpAbort: AbortController | null = null;
 
@@ -163,8 +148,6 @@ import css from 'iswc:css';
       this.#hintSlot = this.#hintEl.querySelector<HTMLSlotElement>('slot')!;
       this.#startSlot = this.#startEl.querySelector<HTMLSlotElement>('slot')!;
       this.#endSlot = this.#endEl.querySelector<HTMLSlotElement>('slot')!;
-
-      this.#internals = attachFormInternals(this);
 
       this.#input.addEventListener('input', this.#onInput);
       this.#input.addEventListener('change', this.#onChange);
@@ -251,9 +234,6 @@ import css from 'iswc:css';
       this.#update();
     }
 
-    /** Valor del atributo `value` — el que restaura formResetCallback. */
-    get defaultValue() { return this.getAttribute('value') ?? ''; }
-
     get type() {
       const t = (this.getAttribute('type') || 'text').toLowerCase();
       return TYPES.includes(t) ? t : 'text';
@@ -293,66 +273,36 @@ import css from 'iswc:css';
       else this.dataset.typingDelay = String(v);
     }
 
-    get name() { return this.getAttribute('name') ?? ''; }
-    set name(v) { setStringAttr(this, 'name', v); }
+    @prop({ type: 'bool' }) accessor clearable: boolean = false;
 
-    get disabled() { return this.hasAttribute('disabled'); }
-    set disabled(v) { this.toggleAttribute('disabled', !!v); }
+    @prop({ type: 'bool' }) accessor passwordToggle: boolean = false;
 
-    get required() { return this.hasAttribute('required'); }
-    set required(v) { this.toggleAttribute('required', !!v); }
+    @prop({ vacio: true }) accessor errorText: string = '';
 
-    get readonly() { return this.hasAttribute('readonly'); }
-    set readonly(v) { this.toggleAttribute('readonly', !!v); }
+    @prop({ type: 'bool' }) accessor showCount: boolean = false;
 
-    get clearable() { return this.hasAttribute('clearable'); }
-    set clearable(v) { this.toggleAttribute('clearable', !!v); }
-
-    get passwordToggle() { return this.hasAttribute('password-toggle'); }
-    set passwordToggle(v) { this.toggleAttribute('password-toggle', !!v); }
-
-    get error() { return this.hasAttribute('error'); }
-    set error(v) { this.toggleAttribute('error', !!v); }
-
-    get errorText() { return this.getAttribute('error-text') ?? ''; }
-    set errorText(v) { setOptionalAttr(this, 'error-text', v); }
-
-    get showCount() { return this.hasAttribute('show-count'); }
-    set showCount(v) { this.toggleAttribute('show-count', !!v); }
-
-    get fullWidth() { return this.hasAttribute('full-width'); }
-    set fullWidth(v) { this.toggleAttribute('full-width', !!v); }
+    @prop({ type: 'bool' }) accessor fullWidth: boolean = false;
 
     /** `prefix` ya existe en Element (namespace XML): la propiedad se llama prefixText. */
-    get prefixText() { return this.getAttribute('prefix') ?? ''; }
-    set prefixText(v) { setOptionalAttr(this, 'prefix', v); }
+    @prop({ attr: 'prefix', vacio: true }) accessor prefixText: string = '';
 
-    get suffixText() { return this.getAttribute('suffix') ?? ''; }
-    set suffixText(v) { setOptionalAttr(this, 'suffix', v); }
+    @prop({ attr: 'suffix', vacio: true }) accessor suffixText: string = '';
 
-    get placeholder() { return this.getAttribute('placeholder') ?? ''; }
-    set placeholder(v) { setOptionalAttr(this, 'placeholder', v); }
+    @prop({ vacio: true }) accessor placeholder: string = '';
 
-    get label() { return this.getAttribute('label') ?? ''; }
-    set label(v) { setOptionalAttr(this, 'label', v); }
+    @prop({ vacio: true }) accessor label: string = '';
 
-    get hint() { return this.getAttribute('hint') ?? ''; }
-    set hint(v) { setOptionalAttr(this, 'hint', v); }
+    @prop({ vacio: true }) accessor hint: string = '';
 
-    get min() { return this.getAttribute('min'); }
-    set min(v) { setOptionalAttr(this, 'min', v); }
+    @prop({ vacio: true }) accessor min: string | null = null;
 
-    get max() { return this.getAttribute('max'); }
-    set max(v) { setOptionalAttr(this, 'max', v); }
+    @prop({ vacio: true }) accessor max: string | null = null;
 
-    get step() { return this.getAttribute('step'); }
-    set step(v) { setOptionalAttr(this, 'step', v); }
+    @prop({ vacio: true }) accessor step: string | null = null;
 
-    get maxlength() { return this.getAttribute('maxlength'); }
-    set maxlength(v) { setOptionalAttr(this, 'maxlength', v); }
+    @prop({ vacio: true }) accessor maxlength: string | null = null;
 
-    get autocomplete() { return this.getAttribute('autocomplete'); }
-    set autocomplete(v) { setOptionalAttr(this, 'autocomplete', v); }
+    @prop({ vacio: true }) accessor autocomplete: string | null = null;
 
     /** Input nativo interno — útil para casos avanzados. */
     get input() { return this.#input; }
@@ -366,38 +316,34 @@ import css from 'iswc:css';
       this.#input.setSelectionRange?.(...args);
     }
 
-    get validity(): ValidityState | undefined { return this.#internals?.validity; }
-    get validationMessage(): string { return this.#internals?.validationMessage ?? ''; }
-    get willValidate(): boolean { return this.#internals?.willValidate ?? false; }
-    checkValidity(): boolean { return this.#internals?.checkValidity() ?? true; }
-    reportValidity(): boolean {
-      this.#touched = true;
+    override reportValidity(): boolean {
+      const ok = super.reportValidity();
       this.#syncSupport();
-      return this.#internals?.reportValidity() ?? true;
+      return ok;
     }
-    setCustomValidity(msg: string): void {
-      if (msg) {
-        setValidity(this.#internals, { customError: true }, msg, this.#input);
-        this.#syncSupport();
-      } else this.#update();
+    override setCustomValidity(msg: string): void {
+      super.setCustomValidity(msg);
+      this.#syncSupport();
     }
 
-    // ---- form-associated callbacks --------------------------------------
+    // ---- formulario (IswcFormControl) -----------------------------------
 
-    formResetCallback(): void {
+    /** Vacío no entra en FormData. Validez: `required` + la del <input> nativo (type, min/max, step…). */
+    override valorFormulario(): string | null { return this.#value || null; }
+
+    override get controlNativo(): HTMLInputElement { return this.#input; }
+
+    /** Restaura el atributo `value` (`defaultValue`): lo llama `formResetCallback`. */
+    override restablecer(): void {
       this.#value = this.defaultValue;
       this.#input.value = this.#value;
-      this.#touched = false;
       this.#update();
     }
 
-    formDisabledCallback(disabled: boolean): void {
-      this.#syncDisabled(disabled);
+    override formDisabledCallback(disabled: boolean): void {
+      super.formDisabledCallback(disabled);
+      this.#syncDisabled();
       this.#update();
-    }
-
-    formStateRestoreCallback(state: string | File | null): void {
-      if (typeof state === 'string') this.value = state;
     }
 
     // ---- privados --------------------------------------------------------
@@ -437,15 +383,15 @@ import css from 'iswc:css';
       if (input.value !== this.#value) input.value = this.#value;
     }
 
-    #syncDisabled(formDisabled?: boolean): void {
-      const disabled = !!formDisabled || this.disabled;
+    #syncDisabled(): void {
+      const disabled = this.inhabilitado;
       const readonly = this.readonly;
       this.#input.disabled = disabled;
       this.#input.readOnly = readonly;
       this.#clearBtn.toggleAttribute('disabled', disabled);
       this.#toggleBtn.toggleAttribute('disabled', disabled);
-      setCustomState(this.#internals, 'disabled', disabled);
-      setCustomState(this.#internals, 'readonly', readonly);
+      this.estado('disabled', disabled);
+      this.estado('readonly', readonly);
     }
 
     /** Recalcula botones, form value, validez y estados. Fuente única de verdad. */
@@ -456,39 +402,16 @@ import css from 'iswc:css';
       this.#clearBtn.hidden = !(this.clearable && v !== '' && interactive);
       this.#toggleBtn.hidden = !(this.type === 'password' && this.passwordToggle && !this.disabled);
 
-      setCustomState(this.#internals, 'blank', v === '');
-      setFormValue(this.#internals, v || null);
-      this.#updateValidity();
+      this.estado('blank', v === '');
+      this.sincronizarFormulario();
       this.#syncSupport();
-    }
-
-    #updateValidity(): void {
-      if (!this.#internals) return;
-      const v = this.#value;
-      if (this.required && v === '') {
-        setValidity(this.#internals, { valueMissing: true }, 'Este campo es obligatorio', this.#input);
-        this.#input.setAttribute('aria-invalid', 'true');
-        return;
-      }
-      const native = this.#input.validity;
-      if (v !== '' && native && !native.valid) {
-        const flags: ValidityStateFlags = {};
-        for (const f of MIRRORED_FLAGS) if (native[f as keyof ValidityState]) flags[f as keyof ValidityStateFlags] = true;
-        if (Object.keys(flags).length) {
-          setValidity(this.#internals, flags, this.#input.validationMessage, this.#input);
-          this.#input.setAttribute('aria-invalid', 'true');
-          return;
-        }
-      }
-      clearValidity(this.#internals, this.#input);
-      this.#input.removeAttribute('aria-invalid');
     }
 
     /** Fila de apoyo: hint / error-text / contador, y el estado visual `invalid`. */
     #syncSupport() {
-      const failed = this.#touched && this.#internals?.validity?.valid === false;
+      const failed = this.interactuado && this.internals?.validity?.valid === false;
       const invalid = this.error || failed;
-      setCustomState(this.#internals, 'invalid', invalid);
+      this.estado('invalid', invalid);
 
       // Sin error-text propio se cae al mensaje nativo, pero solo si el error lo
       // detectó la validación (con `error` a secas el hint sigue siendo el texto).
@@ -526,7 +449,7 @@ import css from 'iswc:css';
 
     #onChange = (): void => {
       this.#value = this.#input.value;
-      this.#touched = true;
+      this.interactuado = true;
       this.#update();
       this.dispatchEvent(new Event('change', { bubbles: true, composed: true }));
       emit(this, 'iswc-change', { value: this.#value });
@@ -538,11 +461,11 @@ import css from 'iswc:css';
       emit(this, 'iswc-enter', { value: this.#value });
     };
 
-    #onFocus = (): void => { setCustomState(this.#internals, 'focused', true); };
+    #onFocus = (): void => { this.estado('focused', true); };
 
     #onBlur = (): void => {
-      setCustomState(this.#internals, 'focused', false);
-      this.#touched = true;
+      this.estado('focused', false);
+      this.interactuado = true;
       this.#syncSupport();
     };
 
@@ -563,7 +486,7 @@ import css from 'iswc:css';
 
     #onTogglePassword = (e: CustomEvent<{ checked?: boolean }>): void => {
       this.#passwordVisible = !!e.detail?.checked;
-      setCustomState(this.#internals, 'password-visible', this.#passwordVisible);
+      this.estado('password-visible', this.#passwordVisible);
       this.#syncNative();
       this.#input.focus();
     };

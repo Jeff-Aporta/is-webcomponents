@@ -1,8 +1,10 @@
 import { placementHaciaCentro } from '@jeff-aporta/iswc-base/core/position.js';
-import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import { emit, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import { IswcFormControl } from '@jeff-aporta/iswc-base/core/iswc-form-control.js';
+import type { Validez } from '@jeff-aporta/iswc-base/core/schemas/iswc-form-control.schemas.js';
 import './option.js';
-import { setStringAttr } from '@jeff-aporta/iswc-base/core/attrs.js';
 import css from 'iswc:css';
+import { prop } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
 
 /**
  * <iswc-combobox> — Input + listbox filtrable.
@@ -59,21 +61,17 @@ import css from 'iswc:css';
     <slot hidden></slot>
   `;
 
-  const OBSERVED = [
-    'label', 'hint', 'name', 'value', 'placeholder',
-    'disabled', 'required', 'open', 'clearable', 'error', 'error-text'
-  ];
+  // open y clearable los declara su `@prop`; label, hint, name, disabled, required, error y error-text, `IswcFormControl`.
+  const OBSERVED = ['value', 'placeholder'];
 
-  class IswcCombobox extends IswcElement {
+  class IswcCombobox extends IswcFormControl {
     static tag = 'iswc-combobox';
     static css = css;
     static shadowInit: ShadowRootInit | null = { mode: 'open', delegatesFocus: true };
     static deps = ['iswc-icon', 'iswc-button'];
 
-    static formAssociated = true;
     static observed = [...OBSERVED, 'radius', 'border-color', 'bg', 'text-color', 'focus-color'];
 
-    #internals: ElementInternals | null = null;
     #input!: HTMLInputElement;
     #dialog!: HTMLDialogElement;
     #listbox!: HTMLElement;
@@ -106,10 +104,6 @@ import css from 'iswc:css';
       this.#trigger = shadow.querySelector<HTMLElement>('.trigger')!;
       this.#slot = shadow.querySelector<HTMLSlotElement>('slot')!;
 
-      if ('attachInternals' in this) {
-        try { this.#internals = this.attachInternals(); } catch { /* noop */ }
-      }
-
       this.#input.addEventListener('input', this.#onInput);
       this.#input.addEventListener('keydown', this.#onKeydown);
       this.#input.addEventListener('focus', this.#onInputFocus);
@@ -128,8 +122,7 @@ import css from 'iswc:css';
       this.#syncValueToInput(false);
       this.#syncOpen();
       this.#syncDisabled();
-      this.#updateValidity();
-      this.#setFormValue();
+      this.sincronizarFormulario();
       addEventListener('resize', this.#onReposition, { passive: true });
       addEventListener('scroll', this.#onReposition, true);
     }
@@ -145,12 +138,11 @@ import css from 'iswc:css';
       else if (name === 'disabled') this.#syncDisabled();
       else if (name === 'value') {
         this.#syncValueToInput(false);
-        this.#setFormValue();
-        this.#updateValidity();
+        this.sincronizarFormulario();
         this.#renderList();
       } else if (name === 'clearable') this.#syncClear();
       else this.#syncMeta();
-      if (name === 'required') this.#updateValidity();
+      if (name === 'required') this.sincronizarFormulario();
     }
 
     get value(): string { return this.getAttribute('value') ?? ''; }
@@ -159,41 +151,27 @@ import css from 'iswc:css';
       else this.setAttribute('value', String(v));
     }
 
-    get open(): boolean { return this.hasAttribute('open'); }
-    set open(v: boolean) { this.toggleAttribute('open', !!v); }
+    @prop({ type: 'bool' }) accessor open: boolean = false;
 
-    get disabled(): boolean { return this.hasAttribute('disabled'); }
-    set disabled(v: boolean) { this.toggleAttribute('disabled', !!v); }
+    @prop({ type: 'bool' }) accessor clearable: boolean = false;
 
-    get required(): boolean { return this.hasAttribute('required'); }
-    set required(v: boolean) { this.toggleAttribute('required', !!v); }
+    /** El value elegido (no el texto del filtro) es lo que entra en FormData. */
+    override valorFormulario(): string | null { return this.value || null; }
 
-    get clearable(): boolean { return this.hasAttribute('clearable'); }
-    set clearable(v: boolean) { this.toggleAttribute('clearable', !!v); }
+    override validar(): Validez {
+      const [flags, mensaje] = super.validar();
+      return flags.valueMissing ? [flags, 'Seleccione un valor'] : [flags, mensaje];
+    }
 
-    get name(): string { return this.getAttribute('name') ?? ''; }
-    set name(v: string | null) { setStringAttr(this, 'name', v); }
-
-    formResetCallback(): void {
+    override restablecer(): void {
       this.value = this.getAttribute('value') ?? '';
       this.#filter = '';
       this.#syncValueToInput(false);
     }
 
-    formDisabledCallback(disabled: boolean): void { this.#syncDisabled(disabled); }
-
-    checkValidity(): boolean { return this.#internals?.checkValidity() ?? true; }
-    reportValidity(): boolean { return this.#internals?.reportValidity() ?? true; }
-    setCustomValidity(msg: string): void {
-      if (!this.#internals) return;
-      this.#internals.setValidity(msg ? { customError: true } : {}, msg || '', this.#input);
-    }
-
-    #setState(name: string, on: boolean): void {
-      const s = this.#internals?.states;
-      if (!s) return;
-      if (on) s.add(name);
-      else s.delete(name);
+    override formDisabledCallback(disabled: boolean): void {
+      super.formDisabledCallback(disabled);
+      this.#syncDisabled();
     }
 
     #syncMeta(): void {
@@ -229,12 +207,12 @@ import css from 'iswc:css';
       this.#clearBtn.hidden = !(this.clearable && !!this.value && !this.disabled);
     }
 
-    #syncDisabled(formDisabled?: boolean): void {
-      const disabled = !!formDisabled || this.disabled;
+    #syncDisabled(): void {
+      const disabled = this.inhabilitado;
       this.#input.disabled = disabled;
       this.#trigger.toggleAttribute('disabled', disabled);
       this.#clearBtn.toggleAttribute('disabled', disabled);
-      this.#setState('disabled', disabled);
+      this.estado('disabled', disabled);
       if (disabled) this.open = false;
     }
 
@@ -256,7 +234,7 @@ import css from 'iswc:css';
     #syncOpen(): void {
       const open = this.open && !this.disabled;
       this.#input.setAttribute('aria-expanded', String(open));
-      this.#setState('open', open);
+      this.estado('open', open);
 
       if (open) {
         // Abrir sobre un valor ya elegido lista todas las opciones; solo filtra lo tecleado.
@@ -370,27 +348,16 @@ import css from 'iswc:css';
       this.#input.value = label ?? value;
       this.#filter = '';
       this.open = false;
-      this.#setFormValue();
-      this.#updateValidity();
+      this.sincronizarFormulario();
       this.#syncClear();
       emit(this, 'iswc-input', { value });
-      if (prev !== value) emit(this, 'iswc-change', { value });
+      if (prev !== value) {
+        this.interactuado = true;
+        emit(this, 'iswc-change', { value });
+      }
       this.#ignoreFocusOpen = true;
       this.#input.focus();
       queueMicrotask(() => { this.#ignoreFocusOpen = false; });
-    }
-
-    #setFormValue(): void {
-      this.#internals?.setFormValue(this.value || null);
-    }
-
-    #updateValidity(): void {
-      if (!this.#internals) return;
-      if (this.required && !this.value) {
-        this.#internals.setValidity({ valueMissing: true }, 'Seleccione un valor', this.#input);
-      } else {
-        this.#internals.setValidity({});
-      }
     }
 
     #onReposition = (): void => {
@@ -524,11 +491,13 @@ import css from 'iswc:css';
       this.removeAttribute('value');
       this.#input.value = '';
       this.#filter = '';
-      this.#setFormValue();
-      this.#updateValidity();
+      this.sincronizarFormulario();
       this.#syncClear();
       emit(this, 'iswc-input', { value: '' });
-      if (prev) emit(this, 'iswc-change', { value: '' });
+      if (prev) {
+        this.interactuado = true;
+        emit(this, 'iswc-change', { value: '' });
+      }
       this.#input.focus();
       this.open = true;
     };

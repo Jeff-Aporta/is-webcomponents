@@ -1,15 +1,9 @@
-import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
-
-import {
-  attachFormInternals,
-  clearValidity,
-  setCustomState,
-  setFormValue,
-  setValidity,
-} from '@jeff-aporta/iswc-base/core/form-associated.js';
-import { setStringAttr, setOptionalAttr } from '@jeff-aporta/iswc-base/core/attrs.js';
+import { emit, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import { IswcFormControl } from '@jeff-aporta/iswc-base/core/iswc-form-control.js';
+import type { Validez } from '@jeff-aporta/iswc-base/core/schemas/iswc-form-control.schemas.js';
 import { hasSlotted } from '@jeff-aporta/iswc-base/core/dom.js';
 import css from 'iswc:css';
+import { prop } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
 /**
  * <iswc-checkbox> — Casilla form-associated: entra en FormData y en la validación del <form>.
  *
@@ -44,33 +38,26 @@ import css from 'iswc:css';
     </div>
   `;
 
-  const OBSERVED: string[] = [
-    'name', 'value', 'checked', 'disabled', 'readonly', 'required', 'indeterminate',
-    'error', 'hint', 'color', 'label-placement',
-    'icon', 'checked-icon', 'indeterminate-icon',
-  ];
+  // Los demás atributos los declara cada `@prop` (y name, disabled, readonly, required y error, `IswcFormControl`).
+  const OBSERVED: string[] = ['color', 'label-placement'];
 
   const VARIANTS: string[] = ['brand', 'neutral', 'text', 'success', 'warning', 'danger'];
   const PLACEMENTS: string[] = ['end', 'start', 'top', 'bottom'];
 
   /** Sin flatten: el texto de fallback del slot no cuenta como contenido propio. */
 
-  class IswcCheckbox extends IswcElement {
+  class IswcCheckbox extends IswcFormControl {
     static tag = 'iswc-checkbox';
     static css = css;
     static deps = ['iswc-icon'];
 
-    static formAssociated = true;
     static observed = [...OBSERVED, 'size', 'radius', 'bg', 'bg-hover', 'border-color', 'accent', 'focus-color', 'mark-color', 'halo'];
 
-    #internals: ElementInternals | null = null;
-    #control!: HTMLElement;
     #mark!: HTMLElement;
     #labelEl!: HTMLElement;
     #labelSlot!: HTMLSlotElement;
     #hintEl!: HTMLElement;
     #hintSlot!: HTMLSlotElement;
-    #formDisabled = false;
     #defaultsRead = false;
     #defaultChecked = false;
     #defaultIndeterminate = false;
@@ -80,13 +67,11 @@ import css from 'iswc:css';
       const shadow = this.shadowRoot!;
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
 
-      this.#control = shadow.querySelector<HTMLElement>('.control')!;
       this.#mark = shadow.querySelector<HTMLElement>('.mark')!;
       this.#labelEl = shadow.getElementById('label')!;
       this.#labelSlot = this.#labelEl.querySelector<HTMLSlotElement>('slot')!;
       this.#hintEl = shadow.getElementById('hint')!;
       this.#hintSlot = this.#hintEl.querySelector<HTMLSlotElement>('slot')!;
-      this.#internals = attachFormInternals(this);
 
       this.addEventListener('click', this.#onClick);
       this.addEventListener('keydown', this.#onKey);
@@ -113,32 +98,13 @@ import css from 'iswc:css';
       this.#sync();
     }
 
-    get checked(): boolean { return this.hasAttribute('checked'); }
-    set checked(v: boolean) { this.toggleAttribute('checked', !!v); }
+    @prop({ type: 'bool' }) accessor checked: boolean = false;
 
-    get indeterminate(): boolean { return this.hasAttribute('indeterminate'); }
-    set indeterminate(v: boolean) { this.toggleAttribute('indeterminate', !!v); }
+    @prop({ type: 'bool' }) accessor indeterminate: boolean = false;
 
-    get disabled(): boolean { return this.hasAttribute('disabled'); }
-    set disabled(v: boolean) { this.toggleAttribute('disabled', !!v); }
+    @prop() accessor value: string = 'on';
 
-    get readonly(): boolean { return this.hasAttribute('readonly'); }
-    set readonly(v: boolean) { this.toggleAttribute('readonly', !!v); }
-
-    get required(): boolean { return this.hasAttribute('required'); }
-    set required(v: boolean) { this.toggleAttribute('required', !!v); }
-
-    get error(): boolean { return this.hasAttribute('error'); }
-    set error(v: boolean) { this.toggleAttribute('error', !!v); }
-
-    get value(): string { return this.getAttribute('value') ?? 'on'; }
-    set value(v: string) { setStringAttr(this, 'value', v); }
-
-    get name(): string { return this.getAttribute('name') ?? ''; }
-    set name(v: string) { setStringAttr(this, 'name', v); }
-
-    get hint(): string { return this.getAttribute('hint') ?? ''; }
-    set hint(v: string | null) { setOptionalAttr(this, 'hint', v); }
+    @prop({ vacio: true }) accessor hint: string = '';
 
     get color(): string {
       const v = this.getAttribute('color');
@@ -152,38 +118,32 @@ import css from 'iswc:css';
     }
     set labelPlacement(v: string) { this.setAttribute('label-placement', PLACEMENTS.includes(v) ? v : 'end'); }
 
-    get icon(): string { return this.getAttribute('icon') ?? ''; }
-    set icon(v: string) { setStringAttr(this, 'icon', v); }
+    @prop() accessor icon: string = '';
 
-    get checkedIcon(): string { return this.getAttribute('checked-icon') ?? ''; }
-    set checkedIcon(v: string) { setStringAttr(this, 'checked-icon', v); }
+    @prop() accessor checkedIcon: string = '';
 
-    get indeterminateIcon(): string { return this.getAttribute('indeterminate-icon') ?? ''; }
-    set indeterminateIcon(v: string) { setStringAttr(this, 'indeterminate-icon', v); }
+    @prop() accessor indeterminateIcon: string = '';
 
-    get form(): HTMLFormElement | null { return this.#internals?.form ?? null; }
-    get validity(): ValidityState | null { return this.#internals?.validity ?? null; }
-    get validationMessage(): string { return this.#internals?.validationMessage ?? ''; }
+    /** Marcada entrega `value`; sin marcar no entra en FormData. */
+    override valorFormulario(): string | null { return this.checked ? this.value : null; }
 
-    checkValidity(): boolean { return this.#internals?.checkValidity() ?? true; }
-    reportValidity(): boolean { return this.#internals?.reportValidity() ?? true; }
-    setCustomValidity(msg: string): void {
-      if (msg) setValidity(this.#internals, { customError: true }, msg, this.#control);
-      else this.#updateValidity();
+    override estaVacio(): boolean { return !this.checked; }
+
+    override validar(): Validez {
+      const [flags, mensaje] = super.validar();
+      return flags.valueMissing ? [flags, 'Marque esta casilla'] : [flags, mensaje];
     }
 
-    formResetCallback(): void {
+    override restablecer(): void {
       this.toggleAttribute('checked', this.#defaultChecked);
       this.toggleAttribute('indeterminate', this.#defaultIndeterminate);
       this.#sync();
     }
 
-    formDisabledCallback(disabled: boolean): void {
-      this.#formDisabled = !!disabled;
+    override formDisabledCallback(disabled: boolean): void {
+      super.formDisabledCallback(disabled);
       this.#sync();
     }
-
-    get #isDisabled(): boolean { return this.disabled || this.#formDisabled; }
 
     #syncSlots = (): void => {
       const hint = this.hint.trim();
@@ -192,12 +152,12 @@ import css from 'iswc:css';
       this.#hintEl.hidden = !hint && !hasHintSlot;
       this.#labelEl.hidden = !hasSlotted(this.#labelSlot);
       try {
-        if (this.#internals) this.#internals.ariaDescribedByElements = this.#hintEl.hidden ? [] : [this.#hintEl];
+        if (this.internals) this.internals.ariaDescribedByElements = this.#hintEl.hidden ? [] : [this.#hintEl];
       } catch { /* motores sin ariaDescribedByElements */ }
     };
 
     #sync(): void {
-      const disabled = this.#isDisabled;
+      const disabled = this.inhabilitado;
       const readonly = this.readonly;
       const mixed = this.indeterminate;
       const checked = this.checked;
@@ -219,35 +179,27 @@ import css from 'iswc:css';
       else this.#mark.removeAttribute('icon');
       this.#mark.hidden = !icon;
 
-      setCustomState(this.#internals, 'checked', checked && !mixed);
-      setCustomState(this.#internals, 'indeterminate', mixed);
-      setCustomState(this.#internals, 'disabled', disabled);
-      setCustomState(this.#internals, 'readonly', readonly);
-      setCustomState(this.#internals, 'error', this.error);
+      this.estado('checked', checked && !mixed);
+      this.estado('indeterminate', mixed);
+      this.estado('disabled', disabled);
+      this.estado('readonly', readonly);
+      this.estado('error', this.error);
 
-      setFormValue(this.#internals, checked ? this.value : null);
-      this.#updateValidity();
-    }
-
-    #updateValidity(): void {
-      if (this.required && !this.checked) {
-        setValidity(this.#internals, { valueMissing: true }, 'Marque esta casilla', this.#control);
-        return;
-      }
-      clearValidity(this.#internals, this.#control);
+      this.sincronizarFormulario();
     }
 
     /** Toggle por interacción: el estado mixto se limpia al primer clic. */
     #toggle(): void {
-      if (this.#isDisabled || this.readonly) return;
+      if (this.inhabilitado || this.readonly) return;
       const next = !this.checked;
       if (this.indeterminate) this.indeterminate = false;
+      this.interactuado = true;
       this.checked = next;
       emit(this, 'iswc-change', { checked: next, value: this.value });
     }
 
     #onClick = (e: PointerEvent): void => {
-      if (this.#isDisabled) {
+      if (this.inhabilitado) {
         e.preventDefault();
         e.stopImmediatePropagation();
         return;

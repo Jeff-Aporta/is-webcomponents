@@ -1,10 +1,10 @@
-import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
-import {
-  attachFormInternals, setCustomState, setFormValue, setValidity, clearValidity
-} from '@jeff-aporta/iswc-base/core/form-associated.js';
+import { emit, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import { IswcFormControl } from '@jeff-aporta/iswc-base/core/iswc-form-control.js';
+import type { Validez } from '@jeff-aporta/iswc-base/core/schemas/iswc-form-control.schemas.js';
 import { setStringAttr, setOptionalAttr } from '@jeff-aporta/iswc-base/core/attrs.js';
 import { hasSlotted, clampTo, tidyToStep } from '@jeff-aporta/iswc-base/core/dom.js';
 import css from 'iswc:css';
+import { prop } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
 /**
  * <iswc-rating> — Valoración form-associated (vanilla + Shadow DOM).
  *
@@ -59,11 +59,8 @@ import css from 'iswc:css';
     </span>
   `;
 
-  const OBSERVED = [
-    'name', 'value', 'max', 'precision', 'allow-half', 'icon', 'empty-icon',
-    'highlight-selected-only', 'color', 'label-format', 'show-label',
-    'clearable', 'disabled', 'readonly', 'required', 'label',
-  ];
+  // Los demás atributos los declara cada `@prop` (y name, disabled, readonly y required, `IswcFormControl`).
+  const OBSERVED = ['value', 'max', 'precision', 'icon', 'empty-icon', 'color', 'label-format'];
 
   const EXTRA_UPGRADE_PROPS: string[] = ['labels', 'getLabelText'];
 
@@ -74,16 +71,14 @@ import css from 'iswc:css';
 
   type LabelFn = (value: number) => string;
 
-  class IswcRating extends IswcElement {
+  class IswcRating extends IswcFormControl {
     static tag = 'iswc-rating';
     static css = css;
     static shadowInit: ShadowRootInit | null = { mode: 'open', delegatesFocus: true };
     static deps = ['iswc-icon'];
 
-    static formAssociated = true;
     static observed = [...OBSERVED, 'size', 'gap', 'color', 'empty-color', 'focus-color'];
 
-    #internals: ElementInternals | null = null;
     #base!: HTMLElement;
     #labelEl!: HTMLElement;
     #labelSlot!: HTMLSlotElement;
@@ -105,8 +100,6 @@ import css from 'iswc:css';
       this.#labelEl = shadow.getElementById('label')!;
       this.#labelSlot = this.#labelEl.querySelector<HTMLSlotElement>('slot')!;
       this.#hoverLabel = shadow.getElementById('hoverLabel')!;
-
-      this.#internals = attachFormInternals(this);
 
       this.#base.addEventListener('pointermove', this.#onPointerMove);
       this.#base.addEventListener('pointerleave', this.#onPointerLeave);
@@ -173,8 +166,7 @@ import css from 'iswc:css';
     }
     set precision(v: number | string) { this.setAttribute('precision', String(v)); }
 
-    get allowHalf(): boolean { return this.hasAttribute('allow-half'); }
-    set allowHalf(v: boolean) { this.toggleAttribute('allow-half', !!v); }
+    @prop({ type: 'bool' }) accessor allowHalf: boolean = false;
 
     get icon(): string { return this.getAttribute('icon') || ICON_FULL; }
     set icon(v: string) { setStringAttr(this, 'icon', v); }
@@ -187,8 +179,7 @@ import css from 'iswc:css';
       setStringAttr(this, 'empty-icon', v);
     }
 
-    get highlightSelectedOnly(): boolean { return this.hasAttribute('highlight-selected-only'); }
-    set highlightSelectedOnly(v: boolean) { this.toggleAttribute('highlight-selected-only', !!v); }
+    @prop({ type: 'bool' }) accessor highlightSelectedOnly: boolean = false;
 
     get color(): string {
       const v = this.getAttribute('color');
@@ -214,26 +205,11 @@ import css from 'iswc:css';
       this.#render();
     }
 
-    get showLabel(): boolean { return this.hasAttribute('show-label'); }
-    set showLabel(v: boolean) { this.toggleAttribute('show-label', !!v); }
+    @prop({ type: 'bool' }) accessor showLabel: boolean = false;
 
-    get clearable(): boolean { return this.hasAttribute('clearable'); }
-    set clearable(v: boolean) { this.toggleAttribute('clearable', !!v); }
+    @prop({ type: 'bool' }) accessor clearable: boolean = false;
 
-    get name(): string { return this.getAttribute('name') ?? ''; }
-    set name(v: string) { setStringAttr(this, 'name', v); }
-
-    get disabled(): boolean { return this.hasAttribute('disabled'); }
-    set disabled(v: boolean) { this.toggleAttribute('disabled', !!v); }
-
-    get readonly(): boolean { return this.hasAttribute('readonly'); }
-    set readonly(v: boolean) { this.toggleAttribute('readonly', !!v); }
-
-    get required(): boolean { return this.hasAttribute('required'); }
-    set required(v: boolean) { this.toggleAttribute('required', !!v); }
-
-    get label(): string { return this.getAttribute('label') ?? ''; }
-    set label(v: string | null | undefined) { setOptionalAttr(this, 'label', v); }
+    @prop({ vacio: true }) accessor label: string = '';
 
     // ---- API pública -----------------------------------------------------
 
@@ -242,30 +218,29 @@ import css from 'iswc:css';
 
     clear(): void { this.#commit(0); }
 
-    get validity(): ValidityState | null | undefined { return this.#internals?.validity; }
-    get validationMessage(): string { return this.#internals?.validationMessage ?? ''; }
-    get willValidate(): boolean { return this.#internals?.willValidate ?? false; }
-    checkValidity(): boolean { return this.#internals?.checkValidity() ?? true; }
-    reportValidity(): boolean { return this.#internals?.reportValidity() ?? true; }
-    setCustomValidity(msg: string): void {
-      if (msg) setValidity(this.#internals, { customError: true }, msg, this.#base);
-      else this.#updateValidity();
+    // ---- formulario (IswcFormControl) -----------------------------------
+
+    /** Sin valoración (0) no entra en FormData. */
+    override valorFormulario(): string | null { return this.#value > 0 ? String(this.#value) : null; }
+
+    override validar(): Validez {
+      const [flags, mensaje] = super.validar();
+      return flags.valueMissing ? [flags, 'Seleccione una valoración'] : [flags, mensaje];
     }
 
-    // ---- form-associated callbacks --------------------------------------
-
-    formResetCallback(): void {
+    override restablecer(): void {
       this.#value = this.#coerce(Number(this.getAttribute('value') ?? '0'));
       this.#hover = null;
       this.#render();
     }
 
-    formDisabledCallback(disabled: boolean): void {
-      this.#syncDisabled(disabled);
+    override formDisabledCallback(disabled: boolean): void {
+      super.formDisabledCallback(disabled);
+      this.#syncDisabled();
       this.#render();
     }
 
-    formStateRestoreCallback(state: string | File | FormData | null): void {
+    override formStateRestoreCallback(state: string | File | FormData | null): void {
       if (state != null) this.value = Number(state);
     }
 
@@ -314,14 +289,14 @@ import css from 'iswc:css';
       }
     }
 
-    #syncDisabled(formDisabled?: boolean): void {
-      const disabled = !!formDisabled || this.disabled;
+    #syncDisabled(): void {
+      const disabled = this.inhabilitado;
       const inert = disabled || this.readonly;
       this.#base.setAttribute('aria-disabled', String(disabled));
       this.#base.setAttribute('aria-readonly', String(this.readonly));
       this.#base.tabIndex = inert ? -1 : 0;
-      setCustomState(this.#internals, 'disabled', disabled);
-      setCustomState(this.#internals, 'readonly', this.readonly);
+      this.estado('disabled', disabled);
+      this.estado('readonly', this.readonly);
       if (inert) this.#hover = null;
     }
 
@@ -352,18 +327,8 @@ import css from 'iswc:css';
       this.#base.setAttribute('aria-valuemax', String(this.max));
       this.#base.setAttribute('aria-valuenow', String(this.#value));
       this.#base.setAttribute('aria-valuetext', this.#labelText(this.#value));
-      setCustomState(this.#internals, 'blank', this.#value === 0);
-      setFormValue(this.#internals, this.#value > 0 ? String(this.#value) : null, null);
-      this.#updateValidity();
-    }
-
-    #updateValidity(): void {
-      if (!this.#internals) return;
-      if (this.required && this.#value === 0) {
-        setValidity(this.#internals, { valueMissing: true }, 'Seleccione una valoración', this.#base);
-        return;
-      }
-      clearValidity(this.#internals, this.#base);
+      this.estado('blank', this.#value === 0);
+      this.sincronizarFormulario();
     }
 
     #interactive(): boolean {
@@ -374,6 +339,7 @@ import css from 'iswc:css';
       const v = this.#coerce(next);
       this.#hover = null;
       if (v === this.#value) { this.#render(); return; }
+      this.interactuado = true;
       this.#value = v;
       this.setAttribute('value', String(v));
       this.#render();

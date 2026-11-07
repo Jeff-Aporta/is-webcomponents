@@ -1,8 +1,11 @@
 import { SectionField } from './date-field-core.js';
 import { splitDateTime, uses12Hour } from './date-utils.js';
-import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import { emit, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import { IswcFormControl } from '@jeff-aporta/iswc-base/core/iswc-form-control.js';
+import type { Validez } from '@jeff-aporta/iswc-base/core/schemas/iswc-form-control.schemas.js';
 import { resolveLocale } from '@jeff-aporta/iswc-base/core/resolve-locale.js';
 import type { DateFieldKind, DefineDateFieldOpts } from "@jeff-aporta/iswc-base/components/forms/schemas/date-field-element.schemas.js";
+import { prop } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
 
 /**
  * Fábrica de los campos por secciones: iswc-date-field, iswc-time-field e
@@ -35,25 +38,22 @@ TEMPLATE.innerHTML = /* html */ `
   </div>
 `;
 
-const OBSERVED = [
-  'label', 'hint', 'name', 'value', 'min', 'max', 'required', 'disabled',
-  'readonly', 'locale', 'ampm', 'hour24', 'seconds', 'clearable', 'invalid',
-];
+// min, max y clearable los declara su `@prop`; name, required, disabled y readonly (y label y hint, que aquí se leen
+// del atributo), `IswcFormControl`.
+const OBSERVED = ['label', 'hint', 'value', 'locale', 'ampm', 'hour24', 'seconds', 'invalid'];
 
 /** Tipo de campo por secciones: solo fecha, hora o ambas. */
 
 /** Opciones de `defineDateField`. */
 
 export function defineDateField({ tag, kind, css }: DefineDateFieldOpts): typeof HTMLElement {
-  class IswcDateFieldBase extends IswcElement {
+  class IswcDateFieldBase extends IswcFormControl {
     static tag = tag;
     static css = css;
     static deps = ['iswc-button', 'iswc-icon'];
     static shadowInit: ShadowRootInit | null = { mode: 'open', delegatesFocus: true };
-    static formAssociated = true;
     static observed = OBSERVED;
 
-    #internals: ElementInternals | null = null;
     #labelEl!: HTMLElement;
     #hintEl!: HTMLElement;
     #base!: HTMLElement;
@@ -62,6 +62,8 @@ export function defineDateField({ tag, kind, css }: DefineDateFieldOpts): typeof
     #mounted = false;
     #silent = false;
     #writing = false;
+    /** La última validación falló por una regla propia (no por `setCustomValidity`). */
+    #reglaFallida = false;
 
     constructor() {
       super();
@@ -72,10 +74,6 @@ export function defineDateField({ tag, kind, css }: DefineDateFieldOpts): typeof
       this.#hintEl = shadow.querySelector<HTMLElement>('.hint')!;
       this.#base = shadow.querySelector<HTMLElement>('.base')!;
       this.#clearBtn = shadow.querySelector<HTMLElement>('.clear')!;
-
-      if ('attachInternals' in this) {
-        try { this.#internals = this.attachInternals(); } catch { /* noop */ }
-      }
 
       this.#field = new SectionField({
         container: shadow.querySelector<HTMLElement>('.sections')!,
@@ -101,8 +99,7 @@ export function defineDateField({ tag, kind, css }: DefineDateFieldOpts): typeof
       this.#silent = false;
       this.#syncDisabled();
       this.#syncClear();
-      this.#setFormValue();
-      this.#updateValidity();
+      this.sincronizarFormulario();
     }
 
     attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
@@ -116,8 +113,7 @@ export function defineDateField({ tag, kind, css }: DefineDateFieldOpts): typeof
           this.#silent = false;
         }
         this.#syncClear();
-        this.#setFormValue();
-        this.#updateValidity();
+        this.sincronizarFormulario();
         return;
       }
       if (name === 'locale' || name === 'ampm' || name === 'hour24' || name === 'seconds') {
@@ -129,7 +125,7 @@ export function defineDateField({ tag, kind, css }: DefineDateFieldOpts): typeof
         return;
       }
       if (name === 'required' || name === 'min' || name === 'max') {
-        this.#updateValidity();
+        this.sincronizarFormulario();
         return;
       }
       if (name === 'clearable') {
@@ -146,28 +142,13 @@ export function defineDateField({ tag, kind, css }: DefineDateFieldOpts): typeof
 
     get kind(): DateFieldKind { return kind; }
 
-    get name(): string { return this.getAttribute('name') ?? ''; }
-    set name(v: string) { v ? this.setAttribute('name', v) : this.removeAttribute('name'); }
+    @prop() accessor min: string = '';
 
-    get min(): string { return this.getAttribute('min') ?? ''; }
-    set min(v: string) { v ? this.setAttribute('min', v) : this.removeAttribute('min'); }
+    @prop() accessor max: string = '';
 
-    get max(): string { return this.getAttribute('max') ?? ''; }
-    set max(v: string) { v ? this.setAttribute('max', v) : this.removeAttribute('max'); }
+    @prop({ type: 'bool' }) accessor clearable: boolean = false;
 
-    get required(): boolean { return this.hasAttribute('required'); }
-    set required(v: boolean) { this.toggleAttribute('required', !!v); }
-
-    get disabled(): boolean { return this.hasAttribute('disabled'); }
-    set disabled(v: boolean) { this.toggleAttribute('disabled', !!v); }
-
-    get readonly(): boolean { return this.hasAttribute('readonly'); }
-    set readonly(v: boolean) { this.toggleAttribute('readonly', !!v); }
-
-    get clearable(): boolean { return this.hasAttribute('clearable'); }
-    set clearable(v: boolean) { this.toggleAttribute('clearable', !!v); }
-
-    get locale(): string { return resolveLocale(this.getAttribute('locale')); }
+    override get locale(): string { return resolveLocale(this.getAttribute('locale')); }
     set locale(v: string) { v ? this.setAttribute('locale', v) : this.removeAttribute('locale'); }
 
     /** 12 horas: lo decide el locale salvo que `ampm`/`hour24` lo fuercen. */
@@ -193,33 +174,42 @@ export function defineDateField({ tag, kind, css }: DefineDateFieldOpts): typeof
       this.#field.clear();
     }
 
-    formResetCallback(): void {
+    /* ── Formulario (IswcFormControl) ─────────────────────────────────── */
+
+    /** La cadena ordenable (`YYYY-MM-DD`, `HH:mm`, `YYYY-MM-DDTHH:mm`) o nada. */
+    override valorFormulario(): string | null { return this.value || null; }
+
+    override restablecer(): void {
       const initial = this.getAttribute('value') || '';
       this.#silent = true;
       this.#field.value = initial;
       this.#silent = false;
       this.#syncClear();
-      this.#setFormValue();
-      this.#updateValidity();
     }
 
-    formDisabledCallback(disabled: boolean): void { this.#syncDisabled(disabled); }
+    override formDisabledCallback(disabled: boolean): void {
+      super.formDisabledCallback(disabled);
+      this.#syncDisabled();
+    }
 
-    checkValidity(): boolean { return this.#internals?.checkValidity() ?? true; }
-    reportValidity(): boolean { return this.#internals?.reportValidity() ?? true; }
-    setCustomValidity(msg: string): void {
-      if (!this.#internals) return;
-      this.#internals.setValidity(msg ? { customError: true } : {}, msg || '', this.#base);
+    /** `setCustomValidity` primero; después las reglas propias (el valor es ordenable: min/max se comparan directo). */
+    override validar(): Validez {
+      const base = super.validar();
+      this.#reglaFallida = false;
+      if (base[0].customError) return base;
+      const propia = this.#reglas();
+      this.#reglaFallida = !!propia;
+      return propia ?? [{}, ''];
+    }
+
+    override actualizarValidez(): void {
+      super.actualizarValidez();
+      const fallo = this.#reglaFallida && !this.inhabilitado;
+      this.estado('invalid', fallo);
+      this.#base.toggleAttribute('data-invalid', fallo);
     }
 
     /* ── Interno ──────────────────────────────────────────────────────── */
-
-    #setState(name: string, on: boolean): void {
-      const s = this.#internals?.states;
-      if (!s) return;
-      if (on) s.add(name);
-      else s.delete(name);
-    }
 
     #onEdit(value: string): void {
       this.#writing = true;
@@ -227,10 +217,10 @@ export function defineDateField({ tag, kind, css }: DefineDateFieldOpts): typeof
       else this.removeAttribute('value');
       this.#writing = false;
       this.#syncClear();
-      this.#setFormValue();
-      this.#updateValidity();
+      this.sincronizarFormulario();
       if (this.#silent) return;
       emit(this, 'iswc-input', { value });
+      this.interactuado = true;
       emit(this, 'iswc-change', { value });
     }
 
@@ -243,9 +233,9 @@ export function defineDateField({ tag, kind, css }: DefineDateFieldOpts): typeof
       this.#hintEl.textContent = hint || '';
     }
 
-    #syncDisabled(formDisabled?: boolean): void {
-      const disabled = !!formDisabled || this.disabled;
-      this.#setState('disabled', disabled);
+    #syncDisabled(): void {
+      const disabled = this.inhabilitado;
+      this.estado('disabled', disabled);
       this.#base.toggleAttribute('data-disabled', disabled);
       this.#base.toggleAttribute('data-readonly', this.readonly);
       for (const sec of this.shadowRoot!.querySelectorAll<HTMLElement>('.sec')) {
@@ -259,41 +249,18 @@ export function defineDateField({ tag, kind, css }: DefineDateFieldOpts): typeof
       this.#clearBtn.hidden = !this.clearable || this.disabled || this.readonly || !this.value;
     }
 
-    #setFormValue(): void {
-      this.#internals?.setFormValue(this.value || null);
-    }
-
-    /** El valor es una cadena ordenable, así que min/max se comparan directo. */
-    #updateValidity(): void {
-      if (!this.#internals) return;
+    /** Reglas propias del campo; `null` = válido. */
+    #reglas(): Validez | null {
       const value = this.value;
-      const invalidFlag = this.hasAttribute('invalid');
-      if (this.required && !value) {
-        this.#fail({ valueMissing: true }, 'Complete la fecha');
-        return;
-      }
-      if (this.#field.incomplete) {
-        this.#fail({ badInput: true }, 'Fecha incompleta');
-        return;
-      }
+      if (this.required && !value) return [{ valueMissing: true }, 'Complete la fecha'];
+      if (this.#field.incomplete) return [{ badInput: true }, 'Fecha incompleta'];
       const { date } = splitDateTime(value);
       const min = this.min;
       const max = this.max;
-      if (value && min && this.#compare(value, min, date) < 0) {
-        this.#fail({ rangeUnderflow: true }, `No puede ser antes de ${min}`);
-        return;
-      }
-      if (value && max && this.#compare(value, max, date) > 0) {
-        this.#fail({ rangeOverflow: true }, `No puede ser después de ${max}`);
-        return;
-      }
-      if (invalidFlag) {
-        this.#fail({ customError: true }, this.getAttribute('invalid') || 'Valor inválido');
-        return;
-      }
-      this.#internals.setValidity({});
-      this.#setState('invalid', false);
-      this.#base.removeAttribute('data-invalid');
+      if (value && min && this.#compare(value, min, date) < 0) return [{ rangeUnderflow: true }, `No puede ser antes de ${min}`];
+      if (value && max && this.#compare(value, max, date) > 0) return [{ rangeOverflow: true }, `No puede ser después de ${max}`];
+      if (this.hasAttribute('invalid')) return [{ customError: true }, this.getAttribute('invalid') || 'Valor inválido'];
+      return null;
     }
 
     /** Compara valor y límite en la misma granularidad. */
@@ -302,11 +269,6 @@ export function defineDateField({ tag, kind, css }: DefineDateFieldOpts): typeof
       return value.localeCompare(limit);
     }
 
-    #fail(flags: ValidityStateFlags, message: string): void {
-      this.#internals?.setValidity(flags, message, this.#base);
-      this.#setState('invalid', true);
-      this.#base.setAttribute('data-invalid', '');
-    }
   }
 
   define(IswcDateFieldBase, true);

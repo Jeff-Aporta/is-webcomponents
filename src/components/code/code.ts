@@ -29,10 +29,8 @@
  * `format` / `formatConfig` — JSON estilo Prettier:
  *   { tabWidth, useTabs, printWidth, semi, singleQuote, trailingComma, endOfLine }
  */
-import { emit, upgradeProperties, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
-import {
-  attachFormInternals, setFormValue, setCustomState,
-} from '@jeff-aporta/iswc-base/core/form-associated.js';
+import { emit, upgradeProperties, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import { IswcReactive, prop } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
 import { setStringAttr } from '@jeff-aporta/iswc-base/core/attrs.js';
 import { listLanguages, registerLanguage, resolveLanguage, inferLanguage, softFormat, softFormatMode } from '@jeff-aporta/iswc-base/core/code.js';
 import { formatCode, normalizeFormatConfig, DEFAULT_FORMAT } from './utils/code-format.js';
@@ -64,10 +62,10 @@ TEMPLATE.innerHTML = /* html */ `
 // `aria-label` propio o `label` y la respetamos (override manual).
 const DEFAULT_HOST_LABEL = 'Editor de código';
 
+// wrap, readonly, disabled, autofocus, compact, name y placeholder los declara su `@prop`.
 const OBSERVED = [
   'lang', 'value', 'document', 'format', 'theme', 'theme-config',
-  'line-numbers', 'wrap', 'readonly', 'disabled', 'autofocus', 'compact',
-  'mode', 'tab-size', 'name', 'placeholder', 'min-height',
+  'line-numbers', 'mode', 'tab-size', 'min-height',
 ];
 
 const PROP_UPGRADE = [
@@ -90,7 +88,9 @@ function editRange(oldText: string, newText: string): [number, number, number] {
   return [from, o, n - from];
 }
 
-class IswcCode extends IswcElement {
+// Sobre `IswcReactive` con `formAssociated` propio: entrega su valor al <form>, sin la validez ni el chrome de
+// `IswcFormControl` (que añadiría atributos label/hint/error y el evento `iswc-invalid`).
+class IswcCode extends IswcReactive {
   static tag = 'iswc-code';
   static css = css;
   static shadowInit: ShadowRootInit | null = { mode: 'open', delegatesFocus: true };
@@ -98,7 +98,6 @@ class IswcCode extends IswcElement {
   static formAssociated = true;
   static observed = [...OBSERVED];
 
-  #internals: ElementInternals | null = null;
   #textarea: HTMLTextAreaElement | null = null;
   #host: HTMLElement | null = null;
   #tooltip: IswcTooltipEl | null = null;
@@ -126,7 +125,15 @@ class IswcCode extends IswcElement {
     this.#textarea = shadow.querySelector<HTMLTextAreaElement>('.seed');
     this.#host = shadow.querySelector<HTMLElement>('.editor-host');
     this.#tooltip = shadow.querySelector<HTMLElement>('iswc-tooltip') as IswcTooltipEl | null;
-    this.#internals = attachFormInternals(this);
+  }
+
+  /** Entrega el texto al <form> (el `state` va nulo, como antes); sin efecto en motores sin form-associated. */
+  #entregar(valor: string): void {
+    try {
+      this.internals?.setFormValue(valor, null);
+    } catch {
+      // Motor sin form-associated.
+    }
   }
 
   override onConnected(): void {
@@ -190,7 +197,7 @@ class IswcCode extends IswcElement {
         this.refresh();
         break;
       case 'name':
-        setFormValue(this.#internals, this.value, null);
+        this.#entregar(this.value);
         break;
       default:
         break;
@@ -229,14 +236,11 @@ class IswcCode extends IswcElement {
     else this.removeAttribute('line-numbers');
   }
 
-  get wrap(): boolean { return this.hasAttribute('wrap'); }
-  set wrap(v: boolean) { this.toggleAttribute('wrap', !!v); }
+  @prop({ type: 'bool' }) accessor wrap: boolean = false;
 
-  get readonly(): boolean { return this.hasAttribute('readonly'); }
-  set readonly(v: boolean) { this.toggleAttribute('readonly', !!v); }
+  @prop({ type: 'bool' }) accessor readonly: boolean = false;
 
-  get compact(): boolean { return this.hasAttribute('compact'); }
-  set compact(v: boolean) { this.toggleAttribute('compact', !!v); }
+  @prop({ type: 'bool' }) accessor compact: boolean = false;
 
   /** `block` (default) | `inline` — modo de inserción en la página. */
   get mode(): 'block' | 'inline' {
@@ -249,11 +253,9 @@ class IswcCode extends IswcElement {
     else this.setAttribute('mode', 'inline');
   }
 
-  get disabled(): boolean { return this.hasAttribute('disabled'); }
-  set disabled(v: boolean) { this.toggleAttribute('disabled', !!v); }
+  @prop({ type: 'bool' }) accessor disabled: boolean = false;
 
-  get autofocus(): boolean { return this.hasAttribute('autofocus'); }
-  set autofocus(v: boolean) { this.toggleAttribute('autofocus', !!v); }
+  @prop({ type: 'bool' }) accessor autofocus: boolean = false;
 
   get tabSize(): number {
     const n = parseInt(this.getAttribute('tab-size') || '2', 10);
@@ -261,11 +263,9 @@ class IswcCode extends IswcElement {
   }
   set tabSize(v: number | string) { setStringAttr(this, 'tab-size', String(v)); }
 
-  get name(): string { return this.getAttribute('name') || ''; }
-  set name(v: string) { setStringAttr(this, 'name', v); }
+  @prop() accessor name: string = '';
 
-  get placeholder(): string { return this.getAttribute('placeholder') || ''; }
-  set placeholder(v: string) { setStringAttr(this, 'placeholder', v); }
+  @prop() accessor placeholder: string = '';
 
   get formatConfig(): CodeFormatConfig { return { ...this.#formatConfig }; }
   set formatConfig(v: unknown) {
@@ -504,8 +504,8 @@ class IswcCode extends IswcElement {
     this.#syncReadonlyDom();
     this.#syncLayoutDom();
     this.#ready = true;
-    setFormValue(this.#internals, this.#nativeText, null);
-    setCustomState(this.#internals, 'blank', !this.#nativeText);
+    this.#entregar(this.#nativeText);
+    this.estado('blank', !this.#nativeText);
     emit(this, 'iswc-ready', { lang: this.lang, value: this.value });
   }
 
@@ -646,8 +646,8 @@ class IswcCode extends IswcElement {
     this.#marks = rebaseMarks(this.#marks, ...editRange(this.#nativeText ?? '', v));
     this.#nativeText = v;
     this.setAttribute('value', v);
-    setFormValue(this.#internals, v, null);
-    setCustomState(this.#internals, 'blank', !v);
+    this.#entregar(v);
+    this.estado('blank', !v);
     this.#paintEdit();
     emit(this, 'iswc-input', { value: v });
     emit(this, 'iswc-change', { value: v });
@@ -789,8 +789,8 @@ class IswcCode extends IswcElement {
     this.#syncReadonlyDom();
     this.#syncLayoutDom();
     this.#ready = true;
-    setFormValue(this.#internals, this.#nativeText, null);
-    setCustomState(this.#internals, 'blank', !this.#nativeText);
+    this.#entregar(this.#nativeText);
+    this.estado('blank', !this.#nativeText);
     if (this.autofocus) ta.focus();
     requestAnimationFrame(() => this.#paintActiveLine(0));
     emit(this, 'iswc-ready', { lang: this.lang, value: this.value });
@@ -816,8 +816,8 @@ class IswcCode extends IswcElement {
       if (this.#textarea) this.#textarea.value = next;
     }
     if (reflect) this.setAttribute('value', next);
-    setFormValue(this.#internals, next, null);
-    setCustomState(this.#internals, 'blank', !next);
+    this.#entregar(next);
+    this.estado('blank', !next);
     this.#syncAriaOnHost();
   }
 
@@ -862,12 +862,12 @@ class IswcCode extends IswcElement {
     const inline = this.mode === 'inline';
     this.toggleAttribute('data-inline', inline);
     this.setAttribute('data-mode', this.mode);
-    setCustomState(this.#internals, 'inline', inline);
+    this.estado('inline', inline);
   }
 
   #syncReadonlyDom(): void {
-    setCustomState(this.#internals, 'disabled', this.disabled);
-    setCustomState(this.#internals, 'readonly', this.readonly);
+    this.estado('disabled', this.disabled);
+    this.estado('readonly', this.readonly);
     this.toggleAttribute('data-disabled', this.disabled);
     this.toggleAttribute('data-readonly', this.readonly);
     this.setAttribute('aria-readonly', this.readonly ? 'true' : 'false');

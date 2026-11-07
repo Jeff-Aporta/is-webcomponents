@@ -55,7 +55,7 @@ class F8Form extends IswcFormControl {
   override valorFormulario() { return this.value || null; }
   override restablecer(): void { this.value = this.defaultValue; }
   override get controlNativo() { return this.shadowRoot!.querySelector('input'); }
-  override render() { return html`${this.chromeEtiqueta()}<input id="input" .value=${this.value} ?disabled=${this.inhabilitado}>${this.chromeAyuda(this.value ? String(this.value.length) : '')}`; }
+  override render() { return html`<input id="input" .value=${this.value} ?disabled=${this.inhabilitado}>`; }
 }
 define(F8Form);
 
@@ -294,29 +294,17 @@ const nuevo = <T extends HTMLElement>(tag: string): T => {
     return true;
   },
 
-  async 'form-control: chrome común (label, hint, error-text, count) y aria-invalid tras interactuar'() {
+  async 'form-control: aria-invalid solo tras interactuar y aria-required en el control nativo'() {
     const el = document.createElement('f8-form') as F8Form;
-    el.label = 'Nombre';
-    el.hint = 'Ayuda';
     el.required = true;
     document.body.append(el);
-    const sr = el.shadowRoot!;
-    const label = sr.querySelector('[part="label"]') as HTMLLabelElement;
-    if (label?.textContent !== 'Nombre' || label.htmlFor !== 'input' || label.hidden) return fallo('label', label?.outerHTML);
-    const hint = sr.querySelector('[part="hint"]') as HTMLElement;
-    if (hint.hidden || hint.textContent !== 'Ayuda') return fallo('hint', hint.outerHTML);
-    const input = sr.querySelector('input')!;
+    const input = el.shadowRoot!.querySelector('input')!;
     if (input.hasAttribute('aria-invalid')) return 'aria-invalid antes de interactuar';
     if (input.getAttribute('aria-required') !== 'true') return 'aria-required';
     el.reportValidity();
     if (input.getAttribute('aria-invalid') !== 'true') return 'aria-invalid tras reportValidity';
-    el.errorText = 'Mal';
     el.value = 'abc';
-    await el.actualizacionCompleta;
-    const err = sr.querySelector('[part="error-text"]') as HTMLElement;
-    if (err.hidden || err.textContent !== 'Mal' || !hint.hidden) return fallo('error-text', err.outerHTML, hint.hidden);
-    if (sr.querySelector('[part="count"]')?.textContent !== '3') return 'count';
-    if (el.getAttribute('error-text') !== 'Mal') return 'errorText no refleja';
+    if (input.hasAttribute('aria-invalid')) return 'aria-invalid tras corregir';
     el.remove();
     return true;
   },

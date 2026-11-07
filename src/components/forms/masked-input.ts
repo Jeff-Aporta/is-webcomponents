@@ -1,5 +1,6 @@
-import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
-import { attachFormInternals, clearValidity, setCustomState, setFormValue, setValidity } from '@jeff-aporta/iswc-base/core/form-associated.js';
+import { emit, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import { IswcFormControl } from '@jeff-aporta/iswc-base/core/iswc-form-control.js';
+import type { Validez } from '@jeff-aporta/iswc-base/core/schemas/iswc-form-control.schemas.js';
 import { apply, isComplete } from './utils/input-tokens.js';
 import { setStringAttr } from '@jeff-aporta/iswc-base/core/attrs.js';
 import './input.js';
@@ -46,14 +47,12 @@ import css from 'iswc:css';
   ];
   const OBSERVED: string[] = [...REENVIADOS, 'pattern', 'value', 'name', 'placeholder', 'maxlength', 'invalid', 'error'];
 
-  class IswcMaskedInput extends IswcElement {
+  class IswcMaskedInput extends IswcFormControl {
     static tag = 'iswc-masked-input';
     static css = css;
     static shadowInit: ShadowRootInit | null = { mode: 'open', delegatesFocus: true };
-    static formAssociated = true;
     static observed = OBSERVED;
 
-    #internals: ElementInternals | null;
     #mounted = false;
     #field: HTMLElement & { value: string };
     #input: HTMLInputElement;
@@ -71,11 +70,11 @@ import css from 'iswc:css';
       `;
       shadow.appendChild(this.#field);
       this.#input = this.#field.shadowRoot!.getElementById('input') as HTMLInputElement;
-      this.#internals = attachFormInternals(this);
       // Los eventos del campo interno se reemiten aquí con el valor enmascarado.
       this.#field.addEventListener('iswc-input', (e: Event) => { e.stopPropagation(); this.#onInput(); });
       this.#field.addEventListener('iswc-change', (e: Event) => {
         e.stopPropagation();
+        this.interactuado = true;
         emit(this, 'iswc-change', { value: this.value });
       });
       this.#field.addEventListener('focusout', () => this.#syncValidity());
@@ -128,7 +127,15 @@ import css from 'iswc:css';
     /** ¿El usuario rellenó todos los slots requeridos? */
     get complete(): boolean { return isComplete(this.value, this.pattern); }
 
-    formResetCallback(): void {
+    /** El texto formateado (con literales) es lo que entra en FormData. */
+    override valorFormulario(): string { return this.value; }
+
+    override validar(): Validez {
+      const [flags, mensaje] = super.validar();
+      return flags.valueMissing ? [flags, 'Completa este campo'] : [flags, mensaje];
+    }
+
+    override restablecer(): void {
       this.value = this.getAttribute('value') ?? '';
     }
 
@@ -166,23 +173,18 @@ import css from 'iswc:css';
 
     #syncComplete(): void {
       const complete = this.complete;
-      setCustomState(this.#internals, 'complete', complete);
+      this.estado('complete', complete);
       if (complete) emit(this, 'iswc-complete');
     }
 
     #syncInvalid(): void {
       const invalid = this.hasAttribute('invalid');
       this.#field.toggleAttribute('error', invalid || this.hasAttribute('error'));
-      setCustomState(this.#internals, 'invalid', invalid);
+      this.estado('invalid', invalid);
     }
 
     #syncFormState(): void {
-      setFormValue(this.#internals, this.value);
-      if (this.hasAttribute('required') && !this.value) {
-        setValidity(this.#internals, { valueMissing: true }, 'Completa este campo', this.#input);
-      } else {
-        clearValidity(this.#internals);
-      }
+      this.sincronizarFormulario();
     }
 
     #syncValidity(): void {

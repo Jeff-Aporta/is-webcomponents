@@ -1,14 +1,7 @@
-import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import { emit, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import '@jeff-aporta/iswc-base/components/forms/input.js';
-
-import {
-  attachFormInternals,
-  clearValidity,
-  setCustomState,
-  setFormValue,
-  setValidity,
-} from '@jeff-aporta/iswc-base/core/form-associated.js';
-import { setStringAttr } from '@jeff-aporta/iswc-base/core/attrs.js';
+import { IswcFormControl } from '@jeff-aporta/iswc-base/core/iswc-form-control.js';
+import type { Validez } from '@jeff-aporta/iswc-base/core/schemas/iswc-form-control.schemas.js';
 import { computePosition } from '@jeff-aporta/iswc-base/core/position.js';
 import type { WindowWithEyeDropper } from "./schemas/color-picker.schemas.js";
 import css from 'iswc:css';
@@ -63,7 +56,8 @@ import css from 'iswc:css';
     </dialog>
   `;
 
-  const OBSERVED = ['name', 'value', 'label', 'hint', 'disabled', 'required', 'swatches'];
+  // name, label, hint, disabled y required los declara `IswcFormControl`.
+  const OBSERVED = ['value', 'swatches'];
 
   /** Normaliza a #rrggbb en minúsculas; devuelve '' si no es un hex válido. */
   function normalizeHex(raw: string | null): string {
@@ -74,16 +68,14 @@ import css from 'iswc:css';
     return /^[0-9a-f]{6}$/.test(s) ? `#${s}` : '';
   }
 
-  class IswcColorPicker extends IswcElement {
+  class IswcColorPicker extends IswcFormControl {
     static tag = 'iswc-color-picker';
     static css = css;
     static shadowInit: ShadowRootInit | null = { mode: 'open', delegatesFocus: true };
     static deps = ['iswc-icon', 'iswc-button'];
 
-    static formAssociated = true;
     static observed = [...OBSERVED, 'radius', 'border-color', 'bg', 'text-color', 'focus-color'];
 
-    #internals: ElementInternals | null = null;
     #trigger!: HTMLButtonElement;
     #swatch!: HTMLElement;
     #hexText!: HTMLElement;
@@ -98,7 +90,6 @@ import css from 'iswc:css';
     #dropper!: HTMLButtonElement;
     #swatchesEl!: HTMLElement;
     #open = false;
-    #formDisabled = false;
     #defaultsRead = false;
     #defaultValue: string = DEFAULT_VALUE;
     #writingValue = false;
@@ -121,8 +112,6 @@ import css from 'iswc:css';
       this.#hexInput = shadow.querySelector<HTMLInputElement>('.hex')!;
       this.#dropper = shadow.querySelector<HTMLButtonElement>('.eyedropper')!;
       this.#swatchesEl = shadow.querySelector<HTMLElement>('.swatches')!;
-
-      this.#internals = attachFormInternals(this);
 
       this.#trigger.addEventListener('click', this.#onTrigger);
       this.#trigger.addEventListener('keydown', this.#onTriggerKey);
@@ -178,7 +167,7 @@ import css from 'iswc:css';
         }
       } else if (name === 'disabled') this.#syncDisabled();
       else if (name === 'swatches') this.#renderSwatches();
-      else if (name === 'required') this.#updateValidity();
+      else if (name === 'required') this.sincronizarFormulario();
       else this.#syncMeta();
     }
 
@@ -188,15 +177,6 @@ import css from 'iswc:css';
       if (!norm) this.removeAttribute('value');
       else this.setAttribute('value', norm);
     }
-
-    get disabled(): boolean { return this.hasAttribute('disabled'); }
-    set disabled(v: boolean) { this.toggleAttribute('disabled', !!v); }
-
-    get required(): boolean { return this.hasAttribute('required'); }
-    set required(v: boolean) { this.toggleAttribute('required', !!v); }
-
-    get name(): string { return this.getAttribute('name') ?? ''; }
-    set name(v: string) { setStringAttr(this, 'name', v); }
 
     /** Paleta activa (`string[]`). */
     get swatches(): string[] {
@@ -211,14 +191,11 @@ import css from 'iswc:css';
     }
 
     get open(): boolean { return this.#open; }
-    get form(): HTMLFormElement | null { return this.#internals?.form ?? null; }
-    get validity(): ValidityState | null { return this.#internals?.validity ?? null; }
-    get validationMessage(): string { return this.#internals?.validationMessage ?? ''; }
 
     show(): void {
-      if (this.#isDisabled || this.#open) return;
+      if (this.inhabilitado || this.#open) return;
       this.#open = true;
-      setCustomState(this.#internals, 'open', true);
+      this.estado('open', true);
       this.#trigger.setAttribute('aria-expanded', 'true');
       if (!this.#dialog.open) this.#dialog.showModal();
       // Tras showModal el scrollbar del body puede desaparecer y mover el ancla:
@@ -233,7 +210,7 @@ import css from 'iswc:css';
     hide(): void {
       if (!this.#open) return;
       this.#open = false;
-      setCustomState(this.#internals, 'open', false);
+      this.estado('open', false);
       this.#trigger.setAttribute('aria-expanded', 'false');
       if (this.#dialog.open) this.#dialog.close();
       queueMicrotask(() => {
@@ -241,24 +218,25 @@ import css from 'iswc:css';
       });
     }
 
-    checkValidity(): boolean { return this.#internals?.checkValidity() ?? true; }
-    reportValidity(): boolean { return this.#internals?.reportValidity() ?? true; }
-    setCustomValidity(msg: string): void {
-      if (msg) setValidity(this.#internals, { customError: true }, msg, this.#trigger);
-      else this.#updateValidity();
+    /** Lo que entra en FormData: el hex normalizado. */
+    override valorFormulario(): string | null { return this.value || null; }
+
+    override estaVacio(): boolean { return !normalizeHex(this.getAttribute('value')); }
+
+    override validar(): Validez {
+      const [flags, mensaje] = super.validar();
+      return flags.valueMissing ? [flags, 'Seleccione un color'] : [flags, mensaje];
     }
 
-    formResetCallback(): void {
+    override restablecer(): void {
       this.#writeValueAttr(this.#defaultValue);
       this.#sync();
     }
 
-    formDisabledCallback(disabled: boolean): void {
-      this.#formDisabled = !!disabled;
+    override formDisabledCallback(disabled: boolean): void {
+      super.formDisabledCallback(disabled);
       this.#syncDisabled();
     }
-
-    get #isDisabled(): boolean { return this.disabled || this.#formDisabled; }
 
     #writeValueAttr(hex: string): void {
       this.#writingValue = true;
@@ -283,12 +261,12 @@ import css from 'iswc:css';
     }
 
     #syncDisabled(): void {
-      const disabled = this.#isDisabled;
+      const disabled = this.inhabilitado;
       this.#trigger.disabled = disabled;
       this.#native.disabled = disabled;
       this.#hexInput.disabled = disabled;
       this.#dropper.disabled = disabled;
-      setCustomState(this.#internals, 'disabled', disabled);
+      this.estado('disabled', disabled);
       if (disabled) this.hide();
     }
 
@@ -306,16 +284,7 @@ import css from 'iswc:css';
         htmlBtn.toggleAttribute('data-selected', htmlBtn.dataset['value'] === v);
         htmlBtn.setAttribute('aria-pressed', String(htmlBtn.dataset['value'] === v));
       }
-      setFormValue(this.#internals, v || null, null);
-      this.#updateValidity();
-    }
-
-    #updateValidity(): void {
-      if (this.required && !normalizeHex(this.getAttribute('value'))) {
-        setValidity(this.#internals, { valueMissing: true }, 'Seleccione un color', this.#trigger);
-        return;
-      }
-      clearValidity(this.#internals, this.#trigger);
+      this.sincronizarFormulario();
     }
 
     #renderSwatches(): void {
@@ -342,7 +311,10 @@ import css from 'iswc:css';
       this.#writeValueAttr(norm);
       this.#sync();
       if (norm !== prev) emit(this, 'iswc-input', { value: norm });
-      if (committed && norm !== prev) emit(this, 'iswc-change', { value: norm });
+      if (committed && norm !== prev) {
+        this.interactuado = true;
+        emit(this, 'iswc-change', { value: norm });
+      }
     }
 
     #positionPanel(): void {
@@ -385,7 +357,7 @@ import css from 'iswc:css';
 
     #onTrigger = (e: Event): void => {
       e.preventDefault();
-      if (this.#isDisabled) return;
+      if (this.inhabilitado) return;
       if (this.#open) this.hide();
       else this.show();
     };
@@ -400,7 +372,7 @@ import css from 'iswc:css';
       e.preventDefault();
       e.stopPropagation();
       const w = window as WindowWithEyeDropper;
-      if (this.#isDisabled || typeof w.EyeDropper !== 'function') return;
+      if (this.inhabilitado || typeof w.EyeDropper !== 'function') return;
       try {
         const result = await new w.EyeDropper!().open();
         this.#setValue(result.sRGBHex, true);

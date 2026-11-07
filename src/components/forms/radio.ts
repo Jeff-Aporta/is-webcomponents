@@ -1,7 +1,7 @@
-import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
-import { attachFormInternals, setCustomState } from '@jeff-aporta/iswc-base/core/form-associated.js';
+import { emit, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import { setOptionalAttr } from '@jeff-aporta/iswc-base/core/attrs.js';
 import css from 'iswc:css';
+import { IswcReactive, prop } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
 
 /**
  * <iswc-radio> — Opción de radio. NO es form-associated a propósito: el valor lo
@@ -33,17 +33,17 @@ import css from 'iswc:css';
     </div>
   `;
 
-  const OBSERVED: string[] = ['value', 'checked', 'disabled', 'color', 'label-placement'];
+  // checked y disabled los declara su `@prop`.
+  const OBSERVED: string[] = ['value', 'color', 'label-placement'];
   const VARIANTS: string[] = ['brand', 'neutral', 'text', 'success', 'warning', 'danger'];
   const PLACEMENTS: string[] = ['end', 'start', 'top', 'bottom'];
 
-  class IswcRadio extends IswcElement {
+  class IswcRadio extends IswcReactive {
     static tag = 'iswc-radio';
     static css = css;
 
     static observed = [...OBSERVED, 'accent'];
 
-    #internals: ElementInternals | null = null;
     #descEl!: HTMLElement;
     #descSlot!: HTMLSlotElement;
 
@@ -52,7 +52,6 @@ import css from 'iswc:css';
       const shadow = this.shadowRoot!;
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
 
-      this.#internals = attachFormInternals(this);
       this.#descEl = shadow.querySelector<HTMLElement>('.description')!;
       this.#descSlot = this.#descEl.querySelector<HTMLSlotElement>('slot')!;
 
@@ -82,11 +81,9 @@ import css from 'iswc:css';
     }
     set value(v: string | null) { setOptionalAttr(this, 'value', v); }
 
-    get checked(): boolean { return this.hasAttribute('checked'); }
-    set checked(v: boolean) { this.toggleAttribute('checked', !!v); }
+    @prop({ type: 'bool' }) accessor checked: boolean = false;
 
-    get disabled(): boolean { return this.hasAttribute('disabled'); }
-    set disabled(v: boolean) { this.toggleAttribute('disabled', !!v); }
+    @prop({ type: 'bool' }) accessor disabled: boolean = false;
 
     /** '' = hereda el del grupo. */
     get color(): string {
@@ -117,9 +114,9 @@ import css from 'iswc:css';
     syncFromGroup(): void {
       const group = this.group;
       const placement = this.#inherit('label-placement', PLACEMENTS, group) ?? 'end';
-      for (const p of PLACEMENTS) setCustomState(this.#internals, `placement-${p}`, p !== 'end' && p === placement);
-      setCustomState(this.#internals, 'readonly', !!group?.readonly);
-      setCustomState(this.#internals, 'error', !!group?.error);
+      for (const p of PLACEMENTS) this.estado(`placement-${p}`, p !== 'end' && p === placement);
+      this.estado('readonly', !!group?.readonly);
+      this.estado('error', !!group?.error);
     }
 
     #inherit(attr: string, allowed: string[], group: (HTMLElement & { disabled?: boolean; readonly?: boolean; error?: boolean }) | null): string | null {

@@ -1,5 +1,5 @@
-import { emit, upgradeProperties, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
-import { setCustomState } from '@jeff-aporta/iswc-base/core/form-associated.js';
+import { emit, upgradeProperties, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import { IswcReactive, prop } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
 import '@jeff-aporta/iswc-base/components/actions/dropdown.js';
 import '@jeff-aporta/iswc-base/components/actions/dropdown-item.js';
 import './login-dropdown.js';
@@ -72,13 +72,12 @@ function iniciales(nombre: string): string {
   return (a + b).toUpperCase();
 }
 
-class IswcSessionMenu extends IswcElement {
+class IswcSessionMenu extends IswcReactive {
   static tag = 'iswc-session-menu';
   static css = css;
   static deps = ['iswc-button', 'iswc-avatar', 'iswc-icon', 'iswc-divider'];
-  static observed = ['logged', 'name', 'subtitle', 'avatar', 'placement', 'logout-label', ...LOGIN_ATTRS];
+  static observed = ['name', 'subtitle', 'avatar', 'placement', 'logout-label', ...LOGIN_ATTRS];
 
-  #internals: ElementInternals | null = null;
   #login!: HTMLElement & { error: string; loading: boolean; choices: LoginChoice[]; reset(): void; show(): void; hide(): void };
   #menu!: HTMLElement & { show(): void; hide(): void };
   #logout!: HTMLElement;
@@ -88,7 +87,6 @@ class IswcSessionMenu extends IswcElement {
     super();
     this.#root = this.shadowRoot!;
     this.#root.appendChild(TEMPLATE.content.cloneNode(true));
-    try { this.#internals = this.attachInternals(); } catch { this.#internals = null; }
     this.#login = this.#root.querySelector('.login') as HTMLElement & { error: string; loading: boolean; choices: LoginChoice[]; reset(): void; show(): void; hide(): void };
     this.#menu = this.#root.querySelector('.menu') as HTMLElement & { show(): void; hide(): void };
     this.#logout = this.#root.querySelector('.logout') as HTMLElement;
@@ -108,8 +106,7 @@ class IswcSessionMenu extends IswcElement {
   }
   override onAttributeChanged(): void { this.#render(); }
 
-  get logged(): boolean { return this.hasAttribute('logged'); }
-  set logged(v: boolean) { this.toggleAttribute('logged', !!v); }
+  @prop({ type: 'bool' }) accessor logged: boolean = false;
 
   get error(): string { return this.#login.error; }
   set error(v: string) { this.#login.error = v; }
@@ -171,7 +168,7 @@ class IswcSessionMenu extends IswcElement {
     (this.#root.querySelector('.logout-label') as HTMLElement).textContent =
       this.getAttribute('logout-label') || 'Cerrar sesión';
 
-    setCustomState(this.#internals, 'logged', logged);
+    this.estado('logged', logged);
   }
 }
 

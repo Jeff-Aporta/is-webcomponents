@@ -1,7 +1,6 @@
 import { applyToneRamp, isCssColorValue, BUTTON_SHAPE, DEFAULT_BUTTON_SHAPE, normalizeButtonShape, DEFAULT_INTENT, ensureDefaultColor } from '@jeff-aporta/iswc-base/core/attrs.js';
-import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
-
-import { setCustomState } from '@jeff-aporta/iswc-base/core/form-associated.js';
+import { emit, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import { IswcReactive } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
 import css from 'iswc:css';
 
 /**
@@ -135,7 +134,9 @@ import css from 'iswc:css';
     "tabindex",
   ];
 
-  class IswcButton extends IswcElement {
+  // Sobre `IswcReactive` (estados e `internals`), no `IswcFormControl`: la base emite su propio `iswc-invalid`
+  // ({ message }) y el botón ya publica `iswc-invalid` con { originalEvent, validationMessage }.
+  class IswcButton extends IswcReactive {
     static tag = 'iswc-button';
     static css = css;
     static shadowInit: ShadowRootInit | null = { mode: "open", delegatesFocus: true };
@@ -161,7 +162,6 @@ import css from 'iswc:css';
       applyToneRamp(this, isCssColorValue(raw) ? raw : null);
     }
 
-    #internals: ElementInternals | null = null;
     #initialAttrs = new Map();
     #btn;          // inner <button> or <a>
     #rootEl!: HTMLElement;       // shadow root first child wrapper
@@ -175,11 +175,6 @@ import css from 'iswc:css';
 
       this.#btn = shadow.querySelector<HTMLElement>(".btn")!;
       this.#rootEl = shadow.querySelector<HTMLElement>(".btn")!;
-
-      // form-associated (en navegadores sin attachInternals, no rompe)
-      if ("attachInternals" in this) {
-        try { this.#internals = this.attachInternals(); } catch { /* already attached */ }
-      }
 
       // capturar atributos iniciales para formResetCallback
       for (const a of OBSERVED) {
@@ -288,12 +283,12 @@ import css from 'iswc:css';
     setFocus(options?: FocusOptions): void { this.#btn.focus(options); }
     // Sin `attachInternals` (navegador viejo) no hay validacion nativa: se
     // devuelven valores neutros en vez de propagar `undefined`.
-    get validity(): ValidityState | null { return this.#internals?.validity ?? null; }
-    get validationMessage(): string { return this.#internals?.validationMessage ?? ""; }
-    get willValidate(): boolean { return this.#internals?.willValidate ?? false; }
-    checkValidity()  { return this.#internals?.checkValidity() ?? true; }
-    reportValidity() { return this.#internals?.reportValidity() ?? true; }
-    setCustomValidity(msg: string): void { this.#internals?.setValidity({ customError: !!msg }, msg); }
+    get validity(): ValidityState | null { return this.internals?.validity ?? null; }
+    get validationMessage(): string { return this.internals?.validationMessage ?? ""; }
+    get willValidate(): boolean { return this.internals?.willValidate ?? false; }
+    checkValidity()  { return this.internals?.checkValidity() ?? true; }
+    reportValidity() { return this.internals?.reportValidity() ?? true; }
+    setCustomValidity(msg: string): void { this.internals?.setValidity({ customError: !!msg }, msg); }
 
     // Custom events composed+bubbles para cruzar Shadow DOM.
     // React: onIsFocus / onIsBlur / onIsClick / onIsInvalid (o addEventListener).
@@ -309,7 +304,7 @@ import css from 'iswc:css';
       if (this.hasAttribute("href")) return;
       const type = (this.getAttribute("type") || "button").toLowerCase();
       if (type !== "submit" && type !== "reset") return;
-      const form = this.#internals?.form ?? this.closest("form");
+      const form = this.internals?.form ?? this.closest("form");
       if (!form) return;
       e.preventDefault();
       if (type === "reset") {
@@ -407,7 +402,7 @@ import css from 'iswc:css';
       const disabled = !!formDisabled || this.hasAttribute("disabled");
       this.#btn.toggleAttribute("disabled", disabled);
       this.#btn.setAttribute("aria-disabled", String(disabled));
-      setCustomState(this.#internals, "disabled", disabled);
+      this.estado("disabled", disabled);
 
       // Sacar del orden de tabulación mientras esté deshabilitado. Va sobre
       // el nodo interno, que es el que está en el recorrido: cuando hay
@@ -454,17 +449,17 @@ import css from 'iswc:css';
         }
       }
       const isIconOnly = elems === 1 && !hasText;
-      setCustomState(this.#internals, "icon-button", isIconOnly);
+      this.estado("icon-button", isIconOnly);
     }
 
     #updateLinkState() {
-      setCustomState(this.#internals, "link", this.hasAttribute("href"));
+      this.estado("link", this.hasAttribute("href"));
     }
 
     #updateLoadingState() {
       const loading = this.hasAttribute("loading");
       if (loading) this.#iconoPerezoso("spinner", "mdi:loading");
-      setCustomState(this.#internals, "loading", loading);
+      this.estado("loading", loading);
       this.toggleAttribute("data-state-loading", loading);
       this.#btn.setAttribute("aria-busy", String(loading));
       // Anunciar el cambio de estado a screen readers via la region aria-live.

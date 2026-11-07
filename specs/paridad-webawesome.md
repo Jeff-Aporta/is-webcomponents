@@ -549,3 +549,15 @@ de desarrollo; **D8** no: los P2 van a F8b. Decididas por el orquestador según 
 Medida del hito 1 (7-nov-2026, `dist/cdn` tras build): unión «base de componentes» 14 476 B br (tope 14 500); cierre de
 `iswc-button` 8 747 B br (antes 9 108) y de `iswc-input` 14 632 B br (antes 14 971), porque los decoradores `@attr*` de
 `core/attrs.ts` salieron del cierre común.
+
+Hito 2 (forms, 7-nov-2026): los 21 usuarios de `core/form-associated.ts` más `combobox` y `forms/utils/date-field-element`
+pasan a `IswcFormControl` (o a `IswcReactive` los que solo usaban estados: `radio`, `app-shell`, `session-menu`,
+`login-dropdown`, `app-nav`, `copy-button`, `inline-edit`; `button` y `code` quedan en `IswcReactive` con su
+`formAssociated` propio porque la base les sumaría el evento `iswc-invalid` con otro `detail`); `form-associated.ts` se
+borra. El chrome común (`chromeEtiqueta`/`chromeAyuda`) se quitó de `IswcFormControl`: ningún control lo usa todavía
+(ninguno pintó su DOM con `render()` en este lote) y costaba bytes del tope D5; entra a F8b junto con el paso de
+`input`/`textarea` a `render()`. Cambios de comportamiento admitidos (API pública igual): `aria-invalid` del control
+nativo solo tras interactuar, `aria-required` nuevo, la burbuja de validación se ancla al host salvo en
+`input`/`textarea`, `mention` valida `required`, `setCustomValidity` persiste hasta limpiarlo. Pendiente: `file-input`
+(no usaba `form-associated`) sigue fuera de `IswcFormControl` (R2, 1 pendiente) e `inline-edit` nunca fue
+form-associated (decidir en F8b). Unión base tras el lote: 14 244 B br.

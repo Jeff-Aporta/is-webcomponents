@@ -2,7 +2,7 @@
  * i18n/en.ts — términos del kit en inglés. `localize.ts` lo pide con `import()` la primera vez que un componente
  * resuelve un locale `en*`; registrarlo repinta los componentes vivos. Mismas claves que el diccionario `es`.
  */
-import { registrarTerminos } from './localize.js';
+import { registrarTerminos } from '../localize.js';
 
 registrarTerminos('en', {
   aceptar: 'OK',

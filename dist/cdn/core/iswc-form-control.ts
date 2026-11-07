@@ -1,5 +1,5 @@
 /**
- * iswc-form-control.ts — Base de los controles de formulario del kit (F8): validez, estados y chrome común.
+ * iswc-form-control.ts — Base de los controles de formulario del kit (F8): validez y estados.
  * Mismo contrato que el control form-associated de referencia (ver la spec de paridad, F8), sin Lit; absorbe
  * `form-associated` y el antiguo `form-control-mixin`.
  *
@@ -19,8 +19,8 @@
  * Valor y validez se sincronizan en el SETTER (lo que lee el consumidor no espera al pintado) y otra vez tras cada
  * pintado, cuando el control nativo ya tiene el valor nuevo.
  */
-import { IswcReactive, html, prop, state } from './iswc-reactive.js';
-import type { DefProp, Resultado } from './schemas/iswc-reactive.schemas.js';
+import { IswcReactive, prop, state } from './iswc-reactive.js';
+import type { DefProp } from './schemas/iswc-reactive.schemas.js';
 import type { ControlNativo, Validez, ValorFormulario } from './schemas/iswc-form-control.schemas.js';
 
 /** Banderas de la validez nativa que se copian al host. */
@@ -129,23 +129,6 @@ export class IswcFormControl extends IswcReactive {
       if (this.required) nativo.setAttribute('aria-required', 'true');
       else nativo.removeAttribute('aria-required');
     }
-  }
-
-  /* ─────────────── chrome común (absorbe el de form-control-mixin) ─────────────── */
-
-  /** Etiqueta: `part="label"`, slot `label` con el atributo como respaldo. `para` = id del control nativo. */
-  chromeEtiqueta(para = 'input'): Resultado {
-    return html`<label part="label" class="label" id="label" for=${para} ?hidden=${!this.label && !this.querySelector(':scope > [slot="label"]')}><slot name="label">${this.label}</slot></label>`;
-  }
-
-  /** Ayuda y error bajo el control: `part="support"`, `hint`, `error-text` y, con `extra`, `count`. */
-  chromeAyuda(extra = ''): Resultado {
-    const error = this.error || !!this.errorText;
-    return html`<div part="support" class="support">
-      <div part="hint" class="hint" id="hint" ?hidden=${error || (!this.hint && !this.querySelector(':scope > [slot="hint"]'))}><slot name="hint">${this.hint}</slot></div>
-      <div part="error-text" class="error-text" id="error-text" role="alert" ?hidden=${!this.errorText}><slot name="error-text">${this.errorText}</slot></div>
-      ${extra ? html`<span part="count" class="count">${extra}</span>` : null}
-    </div>`;
   }
 
   /** Entrega el valor al `<form>` y revalida. Se llama desde los setters y tras cada pintado. */

@@ -1,10 +1,9 @@
-import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
-import {
-  attachFormInternals, setCustomState, setFormValue, setValidity, clearValidity
-} from '@jeff-aporta/iswc-base/core/form-associated.js';
-import { setStringAttr, setOptionalAttr } from '@jeff-aporta/iswc-base/core/attrs.js';
+import { emit, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import { IswcFormControl } from '@jeff-aporta/iswc-base/core/iswc-form-control.js';
+import type { Validez } from '@jeff-aporta/iswc-base/core/schemas/iswc-form-control.schemas.js';
 import { hasSlotted, clampTo, tidyToStep } from '@jeff-aporta/iswc-base/core/dom.js';
 import css from 'iswc:css';
+import { prop } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
 /**
  * <iswc-slider> — Control de rango form-associated (vanilla + Shadow DOM).
  *
@@ -58,11 +57,11 @@ import css from 'iswc:css';
     </div>
   `;
 
+  // Los demás atributos los declara cada `@prop` (y name, disabled, readonly y required, `IswcFormControl`).
   const OBSERVED = [
-    'name', 'value', 'min', 'max', 'step', 'shift-step', 'marks',
+    'value', 'min', 'max', 'step', 'shift-step', 'marks',
     'orientation', 'track', 'value-label', 'with-tooltip',
-    'min-distance', 'disable-swap', 'range', 'format',
-    'disabled', 'readonly', 'required', 'label', 'hint',
+    'min-distance', 'range',
   ];
 
   const EXTRA_UPGRADE_PROPS = ['values', 'scale', 'valueLabelFormat', 'getAriaValueText'];
@@ -70,9 +69,7 @@ import css from 'iswc:css';
   const TRACKS = ['normal', 'none', 'inverted'];
   const VALUE_LABELS = ['off', 'auto', 'on'];
 
-
   /** Quita el ruido float que dejan las sumas de steps decimales. */
-
 
   /**
    * "0:0°C, 20:20°C" → [{ value: 0, label: '0°C' }, …]
@@ -92,15 +89,13 @@ import css from 'iswc:css';
       .filter((m): m is { value: number; label: string } => m !== null);
   }
 
-  class IswcSlider extends IswcElement {
+  class IswcSlider extends IswcFormControl {
     static tag = 'iswc-slider';
     static css = css;
     static shadowInit: ShadowRootInit | null = { mode: 'open', delegatesFocus: true };
 
-    static formAssociated = true;
     static observed = [...OBSERVED, 'track-size', 'thumb-size', 'length', 'rail-color', 'fill-color', 'thumb-color', 'focus-color'];
 
-    #internals: ElementInternals | null = null;
     #base!: HTMLElement;
     #trackEl!: HTMLElement;
     #trackAlt!: HTMLElement;
@@ -133,8 +128,6 @@ import css from 'iswc:css';
       this.#hintEl = shadow.getElementById('hint')!;
       this.#labelSlot = this.#labelEl.querySelector<HTMLSlotElement>('slot')!;
       this.#hintSlot = this.#hintEl.querySelector<HTMLSlotElement>('slot')!;
-
-      this.#internals = attachFormInternals(this);
 
       this.#base.addEventListener('pointerdown', this.#onPointerDown);
       this.#base.addEventListener('keydown', this.#onKeyDown);
@@ -244,7 +237,6 @@ import css from 'iswc:css';
     }
     set orientation(v: 'horizontal' | 'vertical') { this.setAttribute('orientation', v === 'vertical' ? 'vertical' : 'horizontal'); }
 
-
     get track(): string {
       const v = this.getAttribute('track');
       return v != null && TRACKS.includes(v) ? v : 'normal';
@@ -264,11 +256,9 @@ import css from 'iswc:css';
     }
     set minDistance(v: number) { this.setAttribute('min-distance', String(v)); }
 
-    get disableSwap(): boolean { return this.hasAttribute('disable-swap'); }
-    set disableSwap(v: boolean) { this.toggleAttribute('disable-swap', !!v); }
+    @prop({ type: 'bool' }) accessor disableSwap: boolean = false;
 
-    get format(): string { return this.getAttribute('format') ?? ''; }
-    set format(v: string | null) { setOptionalAttr(this, 'format', v); }
+    @prop({ vacio: true }) accessor format: string = '';
 
     /** Escala no lineal: el valor mostrado es scale(value). */
     get scale(): ((v: number) => number) | null { return this.#scale; }
@@ -280,26 +270,12 @@ import css from 'iswc:css';
     get getAriaValueText(): ((v: number, index: number) => string) | null { return this.#ariaValueText; }
     set getAriaValueText(fn: ((v: number, index: number) => string) | null) { this.#ariaValueText = typeof fn === 'function' ? fn : null; this.#render(); }
 
-    get name(): string { return this.getAttribute('name') ?? ''; }
-    set name(v: string | null) { setStringAttr(this, 'name', v); }
-
-    get disabled(): boolean { return this.hasAttribute('disabled'); }
-    set disabled(v: boolean) { this.toggleAttribute('disabled', !!v); }
-
-    get readonly(): boolean { return this.hasAttribute('readonly'); }
-    set readonly(v: boolean) { this.toggleAttribute('readonly', !!v); }
-
-    get required(): boolean { return this.hasAttribute('required'); }
-    set required(v: boolean) { this.toggleAttribute('required', !!v); }
-
     get withTooltip(): boolean { return this.valueLabel !== 'off'; }
     set withTooltip(v: boolean) { this.valueLabel = v ? 'auto' : 'off'; }
 
-    get label(): string { return this.getAttribute('label') ?? ''; }
-    set label(v: string | null) { setOptionalAttr(this, 'label', v); }
+    @prop({ vacio: true }) accessor label: string = '';
 
-    get hint(): string { return this.getAttribute('hint') ?? ''; }
-    set hint(v: string | null) { setOptionalAttr(this, 'hint', v); }
+    @prop({ vacio: true }) accessor hint: string = '';
 
     // ---- API pública -----------------------------------------------------
 
@@ -309,29 +285,49 @@ import css from 'iswc:css';
     stepUp(index: number = 0): void { this.#nudge(index, this.#stepAmount() ?? 1, true); }
     stepDown(index: number = 0): void { this.#nudge(index, -(this.#stepAmount() ?? 1), true); }
 
-    get validity(): ValidityState | undefined { return this.#internals?.validity; }
-    get validationMessage(): string { return this.#internals?.validationMessage ?? ''; }
-    get willValidate(): boolean { return this.#internals?.willValidate ?? false; }
-    checkValidity(): boolean { return this.#internals?.checkValidity() ?? true; }
-    reportValidity(): boolean { return this.#internals?.reportValidity() ?? true; }
-    setCustomValidity(msg: string): void {
-      if (msg) setValidity(this.#internals, { customError: true }, msg, this.#thumbs[0]);
-      else this.#updateValidity();
+    // ---- formulario (IswcFormControl) -----------------------------------
+
+    /** Rango con `name`: un FormData con una entrada por thumb; si no, el primer valor. */
+    override valorFormulario(): string | FormData {
+      const name = this.name;
+      if (this.#values.length > 1 && name) {
+        const fd = new FormData();
+        for (const v of this.#values) fd.append(name, String(v));
+        return fd;
+      }
+      return String(this.#values[0]);
     }
 
-    // ---- form-associated callbacks ---------------------------------------
+    /** Siempre hay un valor; `required` solo exige que el `value` venga declarado. */
+    override estaVacio(): boolean { return !this.hasAttribute('value'); }
 
-    formResetCallback(): void {
+    override validar(): Validez {
+      const [flags, mensaje] = super.validar();
+      return flags.valueMissing ? [flags, 'Seleccione un valor'] : [flags, mensaje];
+    }
+
+    /** Como la base, pero con el estado `a,b` que lee `formStateRestoreCallback`. */
+    override sincronizarFormulario(): void {
+      super.sincronizarFormulario();
+      try {
+        this.internals?.setFormValue(this.valorFormulario(), this.#values.join(','));
+      } catch {
+        // Motor sin form-associated.
+      }
+    }
+
+    override restablecer(): void {
       this.#values = this.#normalize(this.#readAttrValues());
       this.#render();
     }
 
-    formDisabledCallback(disabled: boolean): void {
-      this.#syncDisabled(disabled);
+    override formDisabledCallback(disabled: boolean): void {
+      super.formDisabledCallback(disabled);
+      this.#syncDisabled();
       this.#render();
     }
 
-    formStateRestoreCallback(state: string | File | null): void {
+    override formStateRestoreCallback(state: string | File | FormData | null): void {
       if (state == null) return;
       const parts = String(state).split(',').map(Number).filter(Number.isFinite);
       if (parts.length) this.value = parts.length > 1 ? parts : parts[0];
@@ -430,10 +426,10 @@ import css from 'iswc:css';
       this.#hintEl.hidden = !hintAttr && !hasHintSlot;
     };
 
-    #syncDisabled(formDisabled?: boolean): void {
-      const disabled = !!formDisabled || this.disabled;
-      setCustomState(this.#internals, 'disabled', disabled);
-      setCustomState(this.#internals, 'readonly', this.readonly);
+    #syncDisabled(): void {
+      const disabled = this.inhabilitado;
+      this.estado('disabled', disabled);
+      this.estado('readonly', this.readonly);
       if (disabled) this.#endDrag();
     }
 
@@ -579,31 +575,11 @@ import css from 'iswc:css';
         if (bubble) bubble.textContent = this.#labelText(v, i);
       });
 
-      this.#syncFormValue();
-      this.#updateValidity();
-    }
-
-    #syncFormValue(): void {
-      const name = this.name;
-      if (this.#values.length > 1 && name) {
-        const fd = new FormData();
-        for (const v of this.#values) fd.append(name, String(v));
-        setFormValue(this.#internals, fd as unknown as FormDataEntryValue, this.#values.join(','));
-        return;
-      }
-      setFormValue(this.#internals, String(this.#values[0]), this.#values.join(','));
-    }
-
-    #updateValidity(): void {
-      if (!this.#internals) return;
-      if (this.required && !this.hasAttribute('value')) {
-        setValidity(this.#internals, { valueMissing: true }, 'Seleccione un valor', this.#thumbs[0]);
-        return;
-      }
-      clearValidity(this.#internals, this.#thumbs[0]);
+      this.sincronizarFormulario();
     }
 
     #emit(name: string): void {
+      if (name === 'iswc-change') this.interactuado = true;
       emit(this, name, { value: this.value, values: this.values });
     }
 
@@ -698,7 +674,7 @@ import css from 'iswc:css';
       this.#activeIndex = thumb ? Number((thumb as HTMLElement).dataset.index) : this.#closestIndex(raw);
       this.#valuesAtStart = this.#values.slice();
       this.#dragging = true;
-      setCustomState(this.#internals, 'dragging', true);
+      this.estado('dragging', true);
 
       this.#base.setPointerCapture?.(e.pointerId);
       this.#base.addEventListener('pointermove', this.#onPointerMove);
@@ -726,7 +702,7 @@ import css from 'iswc:css';
     #endDrag(): void {
       if (!this.#dragging) return;
       this.#dragging = false;
-      setCustomState(this.#internals, 'dragging', false);
+      this.estado('dragging', false);
       this.#base.removeEventListener('pointermove', this.#onPointerMove);
       this.#base.removeEventListener('pointerup', this.#onPointerUp);
       this.#base.removeEventListener('pointercancel', this.#onPointerUp);
@@ -768,8 +744,8 @@ import css from 'iswc:css';
       if (nextIndex !== index) this.#thumbs[nextIndex]?.focus({ preventScroll: true });
     };
 
-    #onFocusIn = (): void => { setCustomState(this.#internals, 'focused', true); };
-    #onFocusOut = (): void => { setCustomState(this.#internals, 'focused', false); };
+    #onFocusIn = (): void => { this.estado('focused', true); };
+    #onFocusOut = (): void => { this.estado('focused', false); };
   }
 
   define(IswcSlider, 'IswcSlider');

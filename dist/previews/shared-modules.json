@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-11-07T15:16:26.331Z",
-  "count": 25,
+  "generatedAt": "2026-11-07T21:30:02.853Z",
+  "count": 24,
   "modules": [
     {
       "file": "app-init.ts",
@@ -161,20 +161,6 @@
       ]
     },
     {
-      "file": "form-associated.ts",
-      "id": "form-associated",
-      "path": "src/core/form-associated.ts",
-      "summary": "Utilidades mínimas para form-associated custom elements. — No es un mixin de clase: cada CE llama helpers sobre su ElementInternals.",
-      "bytes": 1807,
-      "exports": [
-        "attachFormInternals",
-        "setCustomState",
-        "setFormValue",
-        "setValidity",
-        "clearValidity"
-      ]
-    },
-    {
       "file": "icon-loader.ts",
       "id": "icon-loader",
       "path": "src/core/icon-loader.ts",
@@ -229,7 +215,7 @@
       "id": "iswc-form-control",
       "path": "src/core/iswc-form-control.ts",
       "summary": "iswc-form-control — Mismo contrato que el control form-associated de referencia (ver la spec de paridad, F8), sin Lit; absorbe",
-      "bytes": 9842,
+      "bytes": 8628,
       "exports": [
         "IswcFormControl extends IswcReactive \n  static formAssociated"
       ]

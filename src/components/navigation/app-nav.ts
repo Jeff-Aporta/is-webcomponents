@@ -1,5 +1,5 @@
-import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
-import { setCustomState } from '@jeff-aporta/iswc-base/core/form-associated.js';
+import { emit, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import { IswcReactive } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
 import type { AppNavRow } from './schemas/app-nav.schemas.js';
 import css from 'iswc:css';
 
@@ -60,13 +60,12 @@ function firma(rows: AppNavRow[]): string {
     .join(';');
 }
 
-class IswcAppNav extends IswcElement {
+class IswcAppNav extends IswcReactive {
   static tag = 'iswc-app-nav';
   static css = css;
   static deps = ['iswc-icon'];
   static observed = ['rows'];
 
-  #internals: ElementInternals | null = null;
   #rows: AppNavRow[] = [];
   #firma = '';
   #nav!: HTMLElement;
@@ -75,7 +74,6 @@ class IswcAppNav extends IswcElement {
     super();
     const shadow = this.shadowRoot!;
     shadow.appendChild(TEMPLATE.content.cloneNode(true));
-    try { this.#internals = this.attachInternals(); } catch { this.#internals = null; }
     this.#nav = shadow.querySelector('.nav') as HTMLElement;
     this.#nav.addEventListener('click', this.#onClick);
     this.#nav.addEventListener('keydown', this.#onKey);
@@ -191,7 +189,7 @@ class IswcAppNav extends IswcElement {
       const parada: HTMLElement | undefined = foco ?? tabs.find((el) => !el.hidden);
       parada?.setAttribute('tabindex', '0');
     });
-    setCustomState(this.#internals, 'secondary', secundariaVisible);
+    this.estado('secondary', secundariaVisible);
   }
 
   #select(rowId: string, tabId: string): void {

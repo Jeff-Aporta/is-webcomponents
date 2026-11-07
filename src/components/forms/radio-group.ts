@@ -1,16 +1,11 @@
-import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import { emit, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import './radio.js';
-
-import {
-  attachFormInternals,
-  clearValidity,
-  setCustomState,
-  setFormValue,
-  setValidity,
-} from '@jeff-aporta/iswc-base/core/form-associated.js';
-import { setStringAttr, setOptionalAttr } from '@jeff-aporta/iswc-base/core/attrs.js';
+import { IswcFormControl } from '@jeff-aporta/iswc-base/core/iswc-form-control.js';
+import type { Validez } from '@jeff-aporta/iswc-base/core/schemas/iswc-form-control.schemas.js';
+import { setOptionalAttr } from '@jeff-aporta/iswc-base/core/attrs.js';
 import type { IswcRadioElement } from "./schemas/radio-group.schemas.js";
 import css from 'iswc:css';
+import { prop } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
 /**
  * <iswc-radio-group> — Grupo form-associated de <iswc-radio>. El grupo es el dueño
  * del valor: los radios solo avisan con `iswc-radio-select`.
@@ -42,9 +37,10 @@ import css from 'iswc:css';
     </div>
   `;
 
+  // name, disabled, required, readonly, label, hint, error y error-text los declara `IswcFormControl` (aquí label,
+  // hint, error y errorText conservan su getter propio).
   const OBSERVED = [
-    'name', 'value', 'disabled', 'required', 'readonly', 'label', 'hint',
-    'orientation', 'row', 'color', 'label-placement', 'error', 'error-text',
+    'orientation', 'row', 'color', 'label-placement',
   ];
 
   const VARIANTS = ['brand', 'neutral', 'text', 'success', 'warning', 'danger'];
@@ -52,14 +48,12 @@ import css from 'iswc:css';
   const NEXT_KEYS = ['ArrowDown', 'ArrowRight'];
   const PREV_KEYS = ['ArrowUp', 'ArrowLeft'];
 
-  class IswcRadioGroup extends IswcElement {
+  class IswcRadioGroup extends IswcFormControl {
     static tag = 'iswc-radio-group';
     static css = css;
 
-    static formAssociated = true;
     static observed = [...OBSERVED, 'accent'];
 
-    #internals: ElementInternals | null = null;
     #base!: HTMLElement;
     #labelEl!: HTMLElement;
     #labelSlot!: HTMLSlotElement;
@@ -67,7 +61,6 @@ import css from 'iswc:css';
     #hintSlot!: HTMLSlotElement;
     #errorEl!: HTMLElement;
     #errorSlot!: HTMLSlotElement;
-    #formDisabled = false;
     #defaultsRead = false;
     #defaultValue: string | null = null;
 
@@ -83,7 +76,6 @@ import css from 'iswc:css';
       this.#hintSlot = shadow.querySelector<HTMLSlotElement>('slot[name="hint"]')!;
       this.#errorEl = shadow.getElementById('error')!;
       this.#errorSlot = shadow.querySelector<HTMLSlotElement>('slot[name="error-text"]')!;
-      this.#internals = attachFormInternals(this);
 
       shadow.querySelector<HTMLSlotElement>('.base slot')!.addEventListener('slotchange', this.#onSlotChange);
       this.#labelSlot.addEventListener('slotchange', this.#syncMeta);
@@ -107,36 +99,23 @@ import css from 'iswc:css';
       if (name !== 'label' && name !== 'hint') this.#sync();
     }
 
-    get value(): string { return this.getAttribute('value') ?? ''; }
-    set value(v: string) { setStringAttr(this, 'value', v); }
-
-    get name(): string { return this.getAttribute('name') ?? ''; }
-    set name(v: string) { setStringAttr(this, 'name', v); }
-
-    get disabled(): boolean { return this.hasAttribute('disabled'); }
-    set disabled(v: boolean) { this.toggleAttribute('disabled', !!v); }
-
-    get required(): boolean { return this.hasAttribute('required'); }
-    set required(v: boolean) { this.toggleAttribute('required', !!v); }
-
-    get readonly(): boolean { return this.hasAttribute('readonly'); }
-    set readonly(v: boolean) { this.toggleAttribute('readonly', !!v); }
+    @prop() accessor value: string = '';
 
     /** Un mensaje de error implica error aunque no esté el booleano. */
-    get error(): boolean { return this.hasAttribute('error') || !!this.errorText || this.#errorEl?.hidden === false; }
-    set error(v: boolean) { this.toggleAttribute('error', !!v); }
+    override get error(): boolean { return this.hasAttribute('error') || !!this.errorText || this.#errorEl?.hidden === false; }
+    override set error(v: boolean) { this.toggleAttribute('error', !!v); }
 
-    get errorText(): string { return (this.getAttribute('error-text') ?? '').trim(); }
-    set errorText(v: string | null | undefined) {
+    override get errorText(): string { return (this.getAttribute('error-text') ?? '').trim(); }
+    override set errorText(v: string | null | undefined) {
       if (v == null || v === '') this.removeAttribute('error-text');
       else this.setAttribute('error-text', String(v));
     }
 
-    get label(): string { return this.getAttribute('label') ?? ''; }
-    set label(v: string | null | undefined) { setOptionalAttr(this, 'label', v); }
+    override get label(): string { return this.getAttribute('label') ?? ''; }
+    override set label(v: string | null | undefined) { setOptionalAttr(this, 'label', v); }
 
-    get hint(): string { return this.getAttribute('hint') ?? ''; }
-    set hint(v: string | null | undefined) { setOptionalAttr(this, 'hint', v); }
+    override get hint(): string { return this.getAttribute('hint') ?? ''; }
+    override set hint(v: string | null | undefined) { setOptionalAttr(this, 'hint', v); }
 
     /** `row` solo decide cuando no hay orientation explícita. */
     get orientation(): 'horizontal' | 'vertical' {
@@ -169,38 +148,33 @@ import css from 'iswc:css';
 
     get radios(): IswcRadioElement[] { return this.#radios(); }
 
-    get form(): HTMLFormElement | null { return this.#internals?.form ?? null; }
-    get validity(): ValidityState | null { return this.#internals?.validity ?? null; }
-    get validationMessage(): string { return this.#internals?.validationMessage ?? ''; }
-
-    checkValidity(): boolean { return this.#internals?.checkValidity() ?? true; }
-    reportValidity(): boolean { return this.#internals?.reportValidity() ?? true; }
-    setCustomValidity(msg: string): void {
-      if (msg) setValidity(this.#internals, { customError: true }, msg, this.#base);
-      else this.#updateValidity();
-    }
-
     focus(options?: FocusOptions): void {
       const radios = this.#radios();
       const target = radios.find((r) => r.getAttribute('tabindex') === '0') ?? radios.find((r) => !r.disabled);
       target?.focus(options);
     }
 
-    formResetCallback(): void {
+    /** Lo que entra en FormData: el value, o nada sin selección. */
+    override valorFormulario(): string | null { return this.value || null; }
+
+    override validar(): Validez {
+      const [flags, mensaje] = super.validar();
+      return flags.valueMissing ? [flags, 'Seleccione una opción'] : [flags, mensaje];
+    }
+
+    override restablecer(): void {
       if (this.#defaultValue == null) this.removeAttribute('value');
       else this.setAttribute('value', this.#defaultValue);
       this.#sync();
     }
 
-    formDisabledCallback(disabled: boolean): void {
-      this.#formDisabled = !!disabled;
+    override formDisabledCallback(disabled: boolean): void {
+      super.formDisabledCallback(disabled);
       this.#sync();
     }
 
-    get #isDisabled(): boolean { return this.disabled || this.#formDisabled; }
-
     /** Ni click ni teclado cambian el valor. */
-    get #isInert(): boolean { return this.#isDisabled || this.readonly; }
+    get #isInert(): boolean { return this.inhabilitado || this.readonly; }
 
     /** Radios propios: ignora los de un grupo anidado. */
     #radios(): IswcRadioElement[] {
@@ -233,19 +207,18 @@ import css from 'iswc:css';
     };
 
     #sync(): void {
-      const disabled = this.#isDisabled;
+      const disabled = this.inhabilitado;
       this.#base.setAttribute('aria-disabled', String(disabled));
       this.#base.setAttribute('aria-orientation', this.orientation);
       this.#base.setAttribute('aria-required', String(this.required));
       this.#base.setAttribute('aria-readonly', String(this.readonly));
       this.#base.setAttribute('aria-invalid', String(this.error));
-      setCustomState(this.#internals, 'disabled', disabled);
-      setCustomState(this.#internals, 'readonly', this.readonly);
-      setCustomState(this.#internals, 'error', this.error);
-      setCustomState(this.#internals, 'blank', !this.value);
+      this.estado('disabled', disabled);
+      this.estado('readonly', this.readonly);
+      this.estado('error', this.error);
+      this.estado('blank', !this.value);
       this.#syncRadios();
-      setFormValue(this.#internals, this.value || null, null);
-      this.#updateValidity();
+      this.sincronizarFormulario();
     }
 
     /** Marca el radio del value actual, propaga herencia y reparte el roving tabindex. */
@@ -260,23 +233,16 @@ import css from 'iswc:css';
         r.syncFromGroup?.();
       }
       if (!focusable) focusable = radios.find((r) => !r.disabled) ?? null;
-      const groupDisabled = this.#isDisabled;
+      const groupDisabled = this.inhabilitado;
       for (const r of radios) {
         r.setAttribute('tabindex', !groupDisabled && r === focusable ? '0' : '-1');
       }
     }
 
-    #updateValidity(): void {
-      if (this.required && !this.value) {
-        setValidity(this.#internals, { valueMissing: true }, 'Seleccione una opción', this.#base);
-        return;
-      }
-      clearValidity(this.#internals, this.#base);
-    }
-
     #select(value: string): void {
       if (this.#isInert) return;
       const changed = this.value !== value;
+      if (changed) this.interactuado = true;
       this.value = value;
       this.#sync();
       if (changed) emit(this, 'iswc-change', { value });
@@ -311,7 +277,7 @@ import css from 'iswc:css';
     };
 
     #onKey = (e: KeyboardEvent): void => {
-      if (this.#isDisabled) return;
+      if (this.inhabilitado) return;
       const target = e.target as HTMLElement | null;
       const radio = target?.closest('iswc-radio') as IswcRadioElement | null;
       if (!radio || radio.closest('iswc-radio-group') !== this) return;
