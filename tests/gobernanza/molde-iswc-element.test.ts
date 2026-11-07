@@ -20,7 +20,7 @@ const COMPONENTES = join(KIT, 'src', 'components');
 const FUERA = new Set(['src/components/helpers/ui.ts']);
 /** Subclases del molde declaradas en el kit que un componente de OTRO archivo puede extender. */
 const LISTA_CORTA = new Set(['PropsElement', 'DiagramElementBase', 'ModalBase', 'BreakpointHost', 'IswcLightbox', 'IswcEditorBase']);
-const MOLDE = new Set(['IswcElement', 'withStyleAttrs(IswcElement)']);
+const MOLDE = new Set(['IswcElement', 'withStyleAttrs(IswcElement)', 'IswcReactive', 'withStyleAttrs(IswcReactive)', 'IswcFormControl', 'withStyleAttrs(IswcFormControl)']);
 const RE_CLASE = /\bclass\s+([A-Za-z_$][\w$]*)?\s*(?:<[^{]*?>)?\s*extends\s+(withStyleAttrs\(\s*\w+\s*\)|[A-Za-z_$][\w$.]*)/g;
 
 const rel = (abs: string) => relative(KIT, abs).split(sep).join('/');

@@ -1,5 +1,5 @@
 {
-  "iswc": { "host": "https://jeff-aporta.github.io/is-webcomponents/", "typecheckBaseline": 1864 },
+  "iswc": { "host": "https://jeff-aporta.github.io/is-webcomponents/", "typecheckBaseline": 1826 },
   "nodeModulesDir": "auto",
   "compilerOptions": { "strict": true },
   "unstable": ["sloppy-imports"],
@@ -16,7 +16,8 @@
     "zod/mini": "npm:zod@^4.4.3/mini",
     "sass": "npm:sass@^1.105.0",
     "@huggingface/transformers": "npm:@huggingface/transformers@^3.8.0",
-    "runonweb": "npm:runonweb@0.1.0"
+    "runonweb": "npm:runonweb@0.1.0",
+    "axe-core": "npm:axe-core@^4.10.3"
   },
   "tasks": {
     "build:scss": "deno run -A --no-check scripts/build-scss.mjs",

@@ -221,6 +221,14 @@ for (const t of ['actions/button', 'layout/dialog', 'data/ag-grid', 'diagrams/fl
     // Un common que carga un componente lo pide a su módulo publicado (dist/cdn/<grupo>/<tag>.min.mjs).
     await writeFile(join(outCore, f), aliasEnDist(fuente, 'core'));
   }
+  // Diccionarios de idioma (F8): `core/localize.ts` los importa como `./i18n/<lang>.js`.
+  const coreI18n = join(coreRoot, 'i18n');
+  if (existsSync(coreI18n)) {
+    await mkdir(join(outCore, 'i18n'), { recursive: true });
+    for (const f of await readdir(coreI18n)) {
+      if (f.endsWith('.ts')) await writeFile(join(outCore, 'i18n', f), aliasEnDist(await readFile(join(coreI18n, f), 'utf8'), 'core'));
+    }
+  }
   // Los tipos del core (`core/schemas/`) viajan con el .ts publicado que los importa.
   const coreSchemas = join(coreRoot, 'schemas');
   if (existsSync(coreSchemas)) {

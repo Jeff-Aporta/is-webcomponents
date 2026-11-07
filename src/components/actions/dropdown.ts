@@ -1,5 +1,6 @@
-import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
-import { attrBool, attrEnum, attrNum, withStyleAttrs } from '@jeff-aporta/iswc-base/core/attrs.js';
+import { emit, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import { withStyleAttrs } from '@jeff-aporta/iswc-base/core/attrs.js';
+import { IswcReactive, prop } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
 import { computePosition, PLACEMENTS_AUTO, createPopupDismiss } from '@jeff-aporta/iswc-base/core/position.js';
 import './dropdown-item.js';
 import type { Placement, DropdownItemEl } from "./schemas/dropdown.schemas.js";
@@ -41,12 +42,12 @@ import css from 'iswc:css';
     </dialog>
   `;
 
-  // Los cuatro atributos ya no se listan aqui: los declara cada campo con su
-  // decorador y el molde los suma a observedAttributes. Una sola fuente.
+  // Los cuatro atributos ya no se listan aqui: los declara cada campo con `@prop`
+  // e `IswcReactive` los suma a observedAttributes. Una sola fuente.
 
   /** Personalización por atributo (ver `core/attrs.ts`). */
 
-  class IswcDropdown extends withStyleAttrs(IswcElement) {
+  class IswcDropdown extends withStyleAttrs(IswcReactive) {
     static tag = 'iswc-dropdown';
     static css = css;
     static deps = ['iswc-divider'];
@@ -100,8 +101,9 @@ import css from 'iswc:css';
       if (this.#dialog.open) this.#dialog.close();
     }
 
-    attributeChangedCallback(name: string): void {
-      super.attributeChangedCallback(name, null, null);
+    attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
+      // Los valores reales: `IswcReactive` convierte `newVal` en la propiedad (`open`, `placement`…).
+      super.attributeChangedCallback(name, oldVal, newVal);
       if (!this.#mounted) return;
       if (name === 'open') {
         if (this.open) this.#doShow(false);
@@ -111,10 +113,10 @@ import css from 'iswc:css';
       }
     }
 
-    @attrBool accessor open!: boolean;
-    @attrEnum(PLACEMENTS_AUTO, 'auto') accessor placement!: Placement | 'auto';
-    @attrNum(0) accessor distance!: number;
-    @attrNum(0) accessor skidding!: number;
+    @prop({ type: 'bool' }) accessor open = false;
+    @prop({ enum: PLACEMENTS_AUTO }) accessor placement: Placement | 'auto' = 'auto';
+    @prop({ type: 'num' }) accessor distance = 0;
+    @prop({ type: 'num' }) accessor skidding = 0;
 
     show() { this.open = true; }
     hide() { this.open = false; }

@@ -19,8 +19,6 @@ export type StyleAttrMap = z.infer<typeof StyleAttrMapSchema>;
 // deno-lint-ignore no-explicit-any
 export type Constructor = new (...args: any[]) => HTMLElement;
 
-const CtxSchema = z.unknown() /* TODO: ref ClassAccessorDecoratorContext<...> */;
-export type Ctx = z.infer<typeof CtxSchema>;
 
 // ── intent.schemas ──
 /**

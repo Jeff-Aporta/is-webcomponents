@@ -178,7 +178,7 @@ muestras, íconos, interruptor); solo los hairlines usan `1px`. Un
 
 ## Dependencias y componentes relacionados
 
-- [`../../core/element-base.ts`](../../core/element-base.ts)
+- [`../../core/iswc-element.ts`](../../core/iswc-element.ts)
 - [`../../core/position.ts`](../../core/position.ts)
 - [`../../core/app-init.ts`](../../core/app-init.ts)
 - [`../../styles/palette-build.ts`](../../styles/palette-build.ts)

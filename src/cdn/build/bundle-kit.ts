@@ -68,6 +68,12 @@ export async function entradasKit(raiz: string, manifest: ItemManifestKit[]): Pr
     if (!f.endsWith('.ts') || f.includes('.selfcheck.')) continue;
     entradas.push({ in: join(coreRoot, f), out: `core/${f.replace(/\.ts$/, '')}.min` });
   }
+  // Diccionarios de idioma (F8): `localize.ts` los pide con `import()`; como entradas salen con nombre estable
+  // (`core/i18n/<lang>.min.mjs`) en vez de un chunk anónimo.
+  const i18nRoot = join(coreRoot, 'i18n');
+  for (const f of (await readdir(i18nRoot).catch(() => [] as string[])).sort()) {
+    if (f.endsWith('.ts')) entradas.push({ in: join(i18nRoot, f), out: `core/i18n/${f.replace(/\.ts$/, '')}.min` });
+  }
   entradas.push({ in: join(raiz, 'src', 'cdn', 'loader.ts'), out: 'core/loader.min' });
   // Capa 2 del loader (F4): entradas propias para que su nombre sea estable (`core/loader-<x>.min.mjs`) y el núcleo
   // las pida con `import()` solo al primer uso.

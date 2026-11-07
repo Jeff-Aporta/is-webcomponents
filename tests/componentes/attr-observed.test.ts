@@ -1,134 +1,45 @@
 // tests/attr-observed.test.ts
 //
-// @attr* encola el nombre al decorar la clase. customElements.define congela
-// observedAttributes en ese instante. materializarAtributos debe volcar la cola
-// al REGISTRO *sin* `new Clase()` (Illegal constructor antes del define).
+// `customElements.define` congela `observedAttributes` en ese instante. Desde F8 los atributos declarados por campo
+// salen de `@prop` (core/iswc-reactive.ts), que los guarda en `Clase[Symbol.metadata]` al evaluar la clase: el getter
+// estático `observedAttributes` de `IswcReactive` ya los ve en el `define`, sin cola ni `new Clase()` (Illegal
+// constructor antes del define). Los antiguos `@attrBool/@attrStr/@attrEnum/@attrNum` se borraron al migrar
+// `iswc-dropdown`, su único usuario. La parte de runtime (herencia, enum, num, bool) la cubre `navegador/core-f8`.
 
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
-import { cerrarChromium, lanzarChromium } from '../_shared/navegador.ts';
 import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
 
 const { test, lista } = coleccionPruebas({ categoria: 'what' });
 
-
 const here = dirname(fileURLToPath(import.meta.url));
 const root = dirname(dirname(here));
+const leer = (r: string) => readFileSync(join(root, r), 'utf8');
 
-test('defineElement materializa @attr* antes de customElements.define', () => {
-  const src = readFileSync(join(root, 'src/core/iswc-element.ts'), 'utf8');
-  assert.ok(
-    /materializarAtributos\(ctor\)/.test(src),
-    'defineElement debe llamar materializarAtributos(ctor) antes del define',
-  );
-  const mat = src.indexOf('materializarAtributos(ctor)');
-  const def = src.indexOf('customElements.define(tag, ctor)');
-  assert.ok(mat >= 0 && def > mat, 'materializarAtributos debe ir antes de customElements.define');
+test('IswcReactive suma los @prop a observedAttributes desde los metadatos de la clase', () => {
+  const src = leer('src/core/iswc-reactive.ts');
+  assert.ok(/static override get observedAttributes\(\)[\s\S]{0,200}definiciones\(this\)/.test(src), 'observedAttributes debe unir definiciones(this)');
+  assert.ok(/Symbol\.metadata/.test(src), 'los @prop viven en Symbol.metadata (sin cola global)');
 });
 
-test('attrs.ts vuelca PENDIENTES sin construir la clase', () => {
-  const src = readFileSync(join(root, 'src/core/attrs.ts'), 'utf8');
-  assert.ok(/export function materializarAtributos/.test(src), 'debe existir materializarAtributos');
-  assert.ok(/PENDIENTES/.test(src), 'debe encolar attrs en PENDIENTES al decorar');
-  assert.ok(
-    !/\btry\s*\{[^}]*new\s+Clase\s*\(/.test(src),
-    'no debe construir la clase: Illegal constructor vacía el REGISTRO',
-  );
-  assert.ok(/PENDIENTES\.length\s*=\s*0/.test(src), 'debe vaciar PENDIENTES tras volcar');
-});
-
-test('dropdown observa open vía atributosDeclarados (no lista hardcodeada rota)', () => {
-  const src = readFileSync(join(root, 'src/components/actions/dropdown.ts'), 'utf8');
-  const molde = readFileSync(join(root, 'src/core/iswc-element.ts'), 'utf8');
-  // El molde IswcElement suma los @attr a observedAttributes: dropdown no lista `open` a mano.
-  assert.ok(/atributosDeclarados\(this\)/.test(molde), 'el molde une atributosDeclarados en observedAttributes');
-  assert.ok(/extends withStyleAttrs\(IswcElement\)/.test(src), 'dropdown hereda del molde');
-  assert.ok(!/static observed = \[[^\]]*'open'/.test(src), 'open no se lista a mano');
-  assert.ok(/@attrBool\s+accessor open/.test(src), 'open es @attrBool');
-});
-
-test('runtime: open en observedAttributes dispara ACC tras define', async () => {
-  // Chromium de Playwright o, si no está descargado, Chrome/Edge del sistema.
-  const browser = await lanzarChromium();
-  try {
-    const page = await browser.newPage();
-    // Página mínima: inyectamos el contrato attrs+define como el kit lo usa.
-    await page.setContent('<!doctype html><html><body></body></html>');
-    const result = await page.evaluate(async () => {
-      // Réplica mínima del contrato (sin bundler): cola + define + @attrBool simulado
-      const REGISTRO = new WeakMap();
-      const PENDIENTES = [];
-      function atributosDeclarados(Clase) {
-        const vistos = new Set();
-        for (let c = Clase; c; c = Object.getPrototypeOf(c)) {
-          for (const a of REGISTRO.get(c) ?? []) vistos.add(a);
-        }
-        return [...vistos];
-      }
-      function materializarAtributos(Clase) {
-        if (!PENDIENTES.length) return;
-        let set = REGISTRO.get(Clase);
-        if (!set) REGISTRO.set(Clase, (set = new Set()));
-        for (const a of PENDIENTES) set.add(a);
-        PENDIENTES.length = 0;
-      }
-      function defineElement(tag, ctor) {
-        if (!customElements.get(tag)) {
-          materializarAtributos(ctor);
-          customElements.define(tag, ctor);
-        }
-        return ctor;
-      }
-
-      // Simula lo que hace el decorador al evaluar la clase
-      PENDIENTES.push('open');
-
-      class IswcProbe extends HTMLElement {
-        static get observedAttributes() {
-          return [...atributosDeclarados(this)];
-        }
-        fires = 0;
-        attributeChangedCallback() {
-          this.fires++;
-        }
-        get open() {
-          return this.hasAttribute('open');
-        }
-        set open(v) {
-          this.toggleAttribute('open', !!v);
-        }
-      }
-
-      // El bug viejo: new antes del define → Illegal constructor
-      let illegal = false;
-      try {
-        new IswcProbe();
-      } catch {
-        illegal = true;
-      }
-
-      defineElement('iswc-probe-attr', IswcProbe);
-      const frozen = IswcProbe.observedAttributes.slice();
-      const el = document.createElement('iswc-probe-attr');
-      document.body.appendChild(el);
-      el.open = true;
-      return {
-        illegalBeforeDefine: illegal,
-        frozen,
-        fires: el.fires,
-        hostOpen: el.hasAttribute('open'),
-      };
-    });
-
-    assert.equal(result.illegalBeforeDefine, true, 'new antes de define debe ser Illegal constructor');
-    assert.deepEqual(result.frozen, ['open'], 'define debe congelar open en observedAttributes');
-    assert.equal(result.fires, 1, 'set open debe disparar attributeChangedCallback');
-    assert.equal(result.hostOpen, true);
-  } finally {
-    await cerrarChromium(browser);
+test('el molde ya no tiene cola de @attr* (borrados en F8)', () => {
+  const attrs = leer('src/core/attrs.ts');
+  const molde = leer('src/core/iswc-element.ts');
+  for (const n of ['attrBool', 'attrStr', 'attrEnum', 'attrNum', 'materializarAtributos', 'atributosDeclarados']) {
+    assert.ok(!new RegExp(`export function ${n}\\b`).test(attrs), `${n} debió borrarse de attrs.ts`);
+    assert.ok(!new RegExp(`\\b${n}\\b`).test(molde), `iswc-element.ts no debe usar ${n}`);
   }
+});
+
+test('dropdown declara open/placement/distance/skidding con @prop sobre IswcReactive', () => {
+  const src = leer('src/components/actions/dropdown.ts');
+  assert.ok(/extends withStyleAttrs\(IswcReactive\)/.test(src), 'dropdown extiende withStyleAttrs(IswcReactive)');
+  assert.ok(/@prop\(\{ type: 'bool' \}\) accessor open = false/.test(src), 'open es @prop bool');
+  assert.ok(/@prop\(\{ enum: PLACEMENTS_AUTO \}\) accessor placement/.test(src), 'placement es @prop enum');
+  for (const n of ['distance', 'skidding']) assert.ok(new RegExp(`@prop\\(\\{ type: 'num' \\}\\) accessor ${n} = 0`).test(src), `${n} es @prop num`);
+  assert.ok(!/static observed = \[[^\]]*'open'/.test(src), 'open no se lista a mano en static observed');
 });
 
 export default lista();

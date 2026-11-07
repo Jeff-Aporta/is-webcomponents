@@ -9,4 +9,4 @@
  * cdn-install: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/is-cdn-install/SKILL.md
  * blob: https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/layout/card.js
  */
-import"../_chunks/chunk-LB64ATDN.mjs";import"../_chunks/chunk-3JVMZ2Q2.mjs";import"../_chunks/chunk-FZCPQKWI.mjs";import"../_chunks/chunk-54MB44YX.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";
+import"../_chunks/chunk-N2RHAV6K.mjs";import"../_chunks/chunk-DKYDCFSD.mjs";import"../_chunks/chunk-FZCPQKWI.mjs";import"../_chunks/chunk-UFMSFUKG.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";

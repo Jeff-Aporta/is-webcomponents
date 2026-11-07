@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-11-06T23:02:46.224Z",
-  "count": 24,
+  "generatedAt": "2026-11-07T15:16:26.331Z",
+  "count": 25,
   "modules": [
     {
       "file": "app-init.ts",
@@ -26,7 +26,7 @@
       "id": "attrs",
       "path": "src/core/attrs.ts",
       "summary": "attrs — Phase V5: el volcado automático del mapa `styleAttrs` quedó deshabilitado",
-      "bytes": 22836,
+      "bytes": 16971,
       "exports": [
         "isCssColorValue",
         "syncStyleAttr",
@@ -36,10 +36,10 @@
         "describeStyleAttrs",
         "applyToneRamp",
         "withStyleAttrs",
-        "aAtributo",
-        "atributosDeclarados",
-        "materializarAtributos",
-        "attrBool"
+        "setStringAttr",
+        "setOptionalAttr",
+        "getNumberAttr",
+        "INTENT"
       ]
     },
     {
@@ -161,16 +161,6 @@
       ]
     },
     {
-      "file": "element-base.ts",
-      "id": "element-base",
-      "path": "src/core/element-base.ts",
-      "summary": "element-base — Los componentes del kit extienden `IswcElement` directamente. `ElementBase` se conserva para el código externo que",
-      "bytes": 1094,
-      "exports": [
-        "ElementBase extends IswcElement \n  static override shadowInit"
-      ]
-    },
-    {
       "file": "form-associated.ts",
       "id": "form-associated",
       "path": "src/core/form-associated.ts",
@@ -182,19 +172,6 @@
         "setFormValue",
         "setValidity",
         "clearValidity"
-      ]
-    },
-    {
-      "file": "form-control-mixin.ts",
-      "id": "form-control-mixin",
-      "path": "src/core/form-control-mixin.ts",
-      "summary": "form-control-mixin — Muchos componentes de formulario (checkbox, input, select, etc.) repiten",
-      "bytes": 7621,
-      "exports": [
-        "formControlTemplate",
-        "getFormControlTemplate",
-        "FORM_CONTROL_PROPS",
-        "MixinFormControl"
       ]
     },
     {
@@ -231,7 +208,7 @@
       "id": "iswc-element",
       "path": "src/core/iswc-element.ts",
       "summary": "iswc-element — import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';",
-      "bytes": 21859,
+      "bytes": 21439,
       "exports": [
         "soportaHojasAdoptadas",
         "textoHojasBase",
@@ -245,6 +222,33 @@
         "upgradeProperties",
         "IswcElement extends HTMLElement",
         "define"
+      ]
+    },
+    {
+      "file": "iswc-form-control.ts",
+      "id": "iswc-form-control",
+      "path": "src/core/iswc-form-control.ts",
+      "summary": "iswc-form-control — Mismo contrato que el control form-associated de referencia (ver la spec de paridad, F8), sin Lit; absorbe",
+      "bytes": 9842,
+      "exports": [
+        "IswcFormControl extends IswcReactive \n  static formAssociated"
+      ]
+    },
+    {
+      "file": "iswc-reactive.ts",
+      "id": "iswc-reactive",
+      "path": "src/core/iswc-reactive.ts",
+      "summary": "iswc-reactive — import { IswcReactive, prop, state, watch, html } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';",
+      "bytes": 24167,
+      "exports": [
+        "html",
+        "svg",
+        "repetir",
+        "render",
+        "prop",
+        "state",
+        "watch",
+        "IswcReactive extends IswcElement \n  static override get observedAttributes"
       ]
     },
     {
@@ -267,6 +271,21 @@
       ]
     },
     {
+      "file": "localize.ts",
+      "id": "localize",
+      "path": "src/core/localize.ts",
+      "summary": "localize — resolverLocale(el, explicito?)   explícito → ancestro con `lang` (cruza shadows) → `<html lang>` → navegador → 'es'",
+      "bytes": 6566,
+      "exports": [
+        "registrarTerminos",
+        "resolverLocale",
+        "resolverDir",
+        "termino",
+        "formato",
+        "observarIdioma"
+      ]
+    },
+    {
       "file": "path-turtle.ts",
       "id": "path-turtle",
       "path": "src/core/path-turtle.ts",
@@ -281,14 +300,17 @@
       "id": "position",
       "path": "src/core/position.ts",
       "summary": "Motor de posicionamiento anclado (flip / shift / arrow). — Sin dependencias — usa getBoundingClientRect + flip/shift.",
-      "bytes": 20048,
+      "bytes": 25601,
       "exports": [
         "PLACEMENTS",
         "PLACEMENTS_AUTO",
         "placementHaciaCentro",
         "computePosition",
         "isVirtualElement",
-        "createPopupDismiss"
+        "createPopupDismiss",
+        "esCapaSuperior",
+        "abrirCapaModal",
+        "cerrarCapaModal"
       ]
     },
     {
@@ -316,7 +338,7 @@
       "id": "props-element",
       "path": "src/core/props-element.ts",
       "summary": "props-element — Cada clave de `props` que no sea una función es también un atributo en kebab-case (`textoCargando` →",
-      "bytes": 4668,
+      "bytes": 4891,
       "exports": [
         "atributosDe"
       ]

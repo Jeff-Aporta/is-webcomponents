@@ -104,3 +104,9 @@ const PopupDismissOpcionesSchema = z.object({
   scrollLock: z.boolean().optional(),
 });
 export type PopupDismissOpciones = z.infer<typeof PopupDismissOpcionesSchema>;
+
+// ── capas.schemas ──
+/** Opciones de `abrirCapaModal`: cómo se cierra (Escape, clic fuera) y qué recibe el foco al abrir. */
+export type OpcionesCapaModal = { cerrar: (origen: 'escape' | 'fuera') => void; inicial?: HTMLElement | null; contenedor?: HTMLElement | null };
+/** Una capa de la pila: modal (inert + trampa) o flotante (solo orden de Escape). */
+export type Capa = { host: HTMLElement; modal: boolean; cerrar: ((origen: 'escape' | 'fuera') => void) | null; contenedor: HTMLElement | null; previo: Element | null; inertes: Element[]; liberados: Element[] };

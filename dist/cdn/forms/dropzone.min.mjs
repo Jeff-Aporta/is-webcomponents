@@ -9,4 +9,4 @@
  * cdn-install: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/is-cdn-install/SKILL.md
  * blob: https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/forms/dropzone.js
  */
-import"../_chunks/chunk-J4LA5BXG.mjs";import"../_chunks/chunk-2GHB5Y6L.mjs";import"../_chunks/chunk-3JVMZ2Q2.mjs";import"../_chunks/chunk-FZCPQKWI.mjs";import"../_chunks/chunk-54MB44YX.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";
+import"../_chunks/chunk-OEMII26Z.mjs";import"../_chunks/chunk-2GHB5Y6L.mjs";import"../_chunks/chunk-DKYDCFSD.mjs";import"../_chunks/chunk-FZCPQKWI.mjs";import"../_chunks/chunk-UFMSFUKG.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";

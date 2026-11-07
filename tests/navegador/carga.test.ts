@@ -8,6 +8,8 @@
  *   - Tamaño medio por `<cat>/<tag>.min.mjs`: ≤ 6 KB brotli (lo que viaja), y sin comprimir ≤ lo medido + 10 %
  *     (F7b, 5-nov-2026: 7 145 B de media; el objetivo de 6 KB sin comprimir NO se cumple y queda como pendiente en
  *     specs/plan-carga-modular.md §8). `actions/button.min.mjs` ≤ 2 KB sin comprimir.
+ *   - Unión del cierre de los módulos «base de componentes» del core (molde, attrs, props, reactivo, form-control,
+ *     localize, position, dom) ≤ 14 500 B brotli (F8, D5).
  *   - Lote shell (los 17 tags de `SHELL_CRITICO` de `gobernanza/deps-json`) por el loader, origen mutable, servidor
  *     con 120 ms de latencia (mayor que el umbral de ráfaga): la cascada de `load()` en ≤ 2 ráfagas encadenadas
  *     (`rafagasEncadenadas`: un grupo que salió antes de que respondiera el anterior no es un nivel nuevo), 0 URLs
@@ -41,6 +43,13 @@ const MAX_MEDIO_TAG_BR = 6 * 1024;
 /** F7b: 7 145 B de media sin comprimir; tope = medido + 10 %. */
 const MAX_MEDIO_TAG = 7_860;
 const MAX_BUTTON = 2 * 1024;
+/**
+ * F8 (D5, specs/paridad-webawesome.md HOW-1): lo que pesa el molde completo que heredan los componentes. Antes de F8
+ * 10 044 B br (con form-associated, form-control-mixin, resolve-locale y element-base); el diseño midió 13 240 B br
+ * con los módulos nuevos y estimó ≈ 14 470 en producción.
+ */
+const MAX_BASE_BR = 14_500;
+const BASE_COMPONENTES = ['iswc-element', 'attrs', 'props-element', 'iswc-reactive', 'iswc-form-control', 'localize', 'position', 'dom'];
 const MAX_RAFAGAS_LOTE = 2;
 const LATENCIA_LOTE_MS = 120;
 const MAX_GALERIA_MS = 1_500;
@@ -88,6 +97,17 @@ test('navegador/carga: tamaño medio por tag ≤ 6 KB brotli (y sin comprimir �
   assert.ok(comprimido <= MAX_MEDIO_TAG_BR, `media por tag: ${comprimido} B brotli > ${MAX_MEDIO_TAG_BR}`);
   assert.ok(crudo <= MAX_MEDIO_TAG, `media por tag: ${crudo} B sin comprimir > ${MAX_MEDIO_TAG}`);
   assert.ok(boton <= MAX_BUTTON, `actions/button.min.mjs: ${boton} B > ${MAX_BUTTON}`);
+});
+
+test('navegador/carga: unión «base de componentes» del core ≤ 14 500 B brotli (F8, D5)', () => {
+  if (!hayDist()) return;
+  const deps = JSON.parse(readFileSync(join(DIST, 'deps', 'core.json'), 'utf8')) as { core: Record<string, string[]> };
+  const union = new Set<string>();
+  for (const m of BASE_COMPONENTES) for (const r of deps.core[m] ?? []) union.add(r);
+  const cuerpo = Buffer.concat([...union].sort().map((r) => readFileSync(join(DIST, r))));
+  const n = brotliCompressSync(cuerpo).length;
+  console.log(`  base de componentes (${BASE_COMPONENTES.join(', ')}): ${union.size} archivos · ${cuerpo.length} B · ${n} B brotli (tope ${MAX_BASE_BR})`);
+  assert.ok(n <= MAX_BASE_BR, `base de componentes: ${n} B brotli > ${MAX_BASE_BR}`);
 });
 
 test('navegador/carga: lote shell (17 tags) en ≤ 2 ráfagas, sin duplicados, sin IndexedDB/Cache Storage/GitHub ni errores', { timeout: 300_000 }, async () => {

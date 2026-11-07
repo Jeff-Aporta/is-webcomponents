@@ -2,7 +2,7 @@
  * Motor de posicionamiento anclado (flip / shift / arrow).
  * Sin dependencias — usa getBoundingClientRect + flip/shift.
  */
-import type { Placement, AnchorLike, Rect, Size, Coords, Boundary, ArrowOffset, ComputePositionOpts, ComputePositionResult, PopupDismissOpciones } from './schemas/position.schemas.js';
+import type { Placement, AnchorLike, Rect, Size, Coords, Boundary, ArrowOffset, ComputePositionOpts, ComputePositionResult, PopupDismissOpciones, Capa, OpcionesCapaModal } from './schemas/position.schemas.js';
 
 export const PLACEMENTS: Placement[] = [
   'top', 'top-start', 'top-end',
@@ -484,7 +484,8 @@ export function createPopupDismiss(host: HTMLElement, opciones: PopupDismissOpci
   let overflowPrevio: string | null = null;
 
   const alPulsar = (e: KeyboardEvent) => {
-    if (e.key === 'Escape') onEscape?.();
+    // Con capas apiladas (un select dentro de un dialog) Escape cierra solo la de arriba.
+    if (e.key === 'Escape' && esCapaSuperior(host)) onEscape?.();
     onKeydown?.(e);
   };
 
@@ -507,6 +508,7 @@ export function createPopupDismiss(host: HTMLElement, opciones: PopupDismissOpci
     attach() {
       if (enganchado) return;
       enganchado = true;
+      apilar({ host, modal: false, cerrar: null, contenedor: null, previo: null, inertes: [], liberados: [] });
 
       if (onEscape || onKeydown) document.addEventListener('keydown', alPulsar, true);
       if (onOutside) document.addEventListener('pointerdown', alApuntar, true);
@@ -528,6 +530,7 @@ export function createPopupDismiss(host: HTMLElement, opciones: PopupDismissOpci
     detach() {
       if (!enganchado) return;
       enganchado = false;
+      desapilar(host);
 
       document.removeEventListener('keydown', alPulsar, true);
       document.removeEventListener('pointerdown', alApuntar, true);
@@ -542,4 +545,119 @@ export function createPopupDismiss(host: HTMLElement, opciones: PopupDismissOpci
       }
     },
   };
+}
+
+// ── capas ──
+/**
+ * Pila única de capas del documento (F8, paridad con el `dismissible-stack` de Web Awesome).
+ *
+ * Flotantes (`createPopupDismiss`) y modales (`abrirCapaModal`) se apilan en orden de apertura: Escape y el clic fuera
+ * son SOLO de la capa de arriba, así que un `select` abierto dentro de un `dialog` se cierra primero. Un modal además:
+ *
+ *   · pone `inert` en los hermanos de cada ancestro del host hasta `<body>` (y lo quita al cerrar solo donde lo puso;
+ *     si el host estaba dentro de algo inertizado por un modal anterior, lo libera mientras esté abierto);
+ *   · atrapa Tab dentro del contenedor, también a través de los shadow roots de los `iswc-*` que tenga dentro;
+ *   · enfoca `inicial`, el primer `[autofocus]` o el primer enfocable, y al cerrar devuelve el foco a quien lo tenía.
+ *
+ * Lo que tiene `[popover]` (toasts, paneles en la capa superior) no se inertiza.
+ */
+const CAPAS: Capa[] = [];
+
+const ENFOCABLE = 'a[href],area[href],button:not([disabled]),input:not([disabled]):not([type="hidden"]),select:not([disabled]),textarea:not([disabled]),iframe,[contenteditable=""],[contenteditable="true"],[tabindex]:not([tabindex="-1"])';
+const NUNCA_INERTE = 'script,style,link,template,[popover]';
+
+/** `true` si `host` es la capa de arriba (o si no hay capas). */
+export function esCapaSuperior(host: HTMLElement): boolean {
+  const tope = CAPAS[CAPAS.length - 1];
+  return !tope || tope.host === host;
+}
+
+function apilar(capa: Capa): void {
+  desapilar(capa.host, false);
+  CAPAS.push(capa);
+  if (capa.modal && CAPAS.filter((c) => c.modal).length === 1) document.addEventListener('keydown', alTecladoModal, true);
+}
+
+function desapilar(host: HTMLElement, restaurar = true): Capa | null {
+  const k = CAPAS.findIndex((c) => c.host === host);
+  if (k < 0) return null;
+  const [capa] = CAPAS.splice(k, 1);
+  if (!CAPAS.some((c) => c.modal)) document.removeEventListener('keydown', alTecladoModal, true);
+  if (restaurar && capa?.modal) {
+    for (const el of capa.inertes) el.removeAttribute('inert');
+    for (const el of capa.liberados) el.setAttribute('inert', '');
+  }
+  return capa ?? null;
+}
+
+/** Elemento con el foco, atravesando shadow roots. */
+function enfocado(): Element | null {
+  let a = document.activeElement;
+  while (a?.shadowRoot?.activeElement) a = a.shadowRoot.activeElement;
+  return a;
+}
+
+/** Enfocables visibles dentro de `raiz`, en orden de documento, entrando en los shadow roots abiertos. */
+function enfocables(raiz: ParentNode, out: HTMLElement[] = []): HTMLElement[] {
+  for (const el of raiz.querySelectorAll<HTMLElement>('*')) {
+    if (el.closest('[inert]')) continue;
+    if (el.matches(ENFOCABLE) && el.getClientRects().length > 0) out.push(el);
+    if (el.shadowRoot) enfocables(el.shadowRoot, out);
+  }
+  return out;
+}
+
+/** Enfocables del host: los de su shadow y después los proyectados desde el light DOM. */
+function enfocablesDe(host: HTMLElement): HTMLElement[] {
+  return host.shadowRoot ? [...enfocables(host.shadowRoot), ...enfocables(host)] : enfocables(host);
+}
+
+function alTecladoModal(e: KeyboardEvent): void {
+  const tope = CAPAS[CAPAS.length - 1];
+  if (!tope?.modal) return;
+  if (e.key === 'Escape') {
+    e.preventDefault();
+    e.stopPropagation();
+    tope.cerrar?.('escape');
+    return;
+  }
+  if (e.key !== 'Tab') return;
+  const lista = enfocablesDe(tope.host);
+  const actual = enfocado();
+  const i = lista.findIndex((el) => el === actual || el.shadowRoot?.contains(actual));
+  const fin = lista.length - 1;
+  if (fin < 0 || (e.shiftKey ? i <= 0 : i === -1 || i === fin)) {
+    e.preventDefault();
+    (lista[e.shiftKey ? fin : 0] ?? tope.contenedor ?? tope.host).focus?.();
+  }
+}
+
+/** Abre `host` como capa modal: `inert` alrededor, trampa de Tab, Escape y foco inicial. Idempotente. */
+export function abrirCapaModal(host: HTMLElement, opciones: OpcionesCapaModal): void {
+  if (CAPAS.some((c) => c.host === host && c.modal)) return;
+  const inertes: Element[] = [];
+  const liberados: Element[] = [];
+  const previo = enfocado();
+  for (let n: Element | null = host; n && n !== document.body && n !== document.documentElement; n = n.parentElement) {
+    if (n.hasAttribute('inert')) {
+      n.removeAttribute('inert');
+      liberados.push(n);
+    }
+    for (const hermano of n.parentElement?.children ?? []) {
+      if (hermano === n || hermano.hasAttribute('inert') || hermano.matches(NUNCA_INERTE)) continue;
+      hermano.setAttribute('inert', '');
+      inertes.push(hermano);
+    }
+  }
+  const contenedor = opciones.contenedor ?? null;
+  apilar({ host, modal: true, cerrar: opciones.cerrar, contenedor, previo, inertes, liberados });
+  const destino = opciones.inicial ?? host.querySelector<HTMLElement>('[autofocus]') ?? enfocablesDe(host)[0] ?? contenedor ?? host;
+  destino.focus?.({ preventScroll: true });
+}
+
+/** Cierra la capa modal de `host`: quita el `inert` que puso y devuelve el foco. */
+export function cerrarCapaModal(host: HTMLElement): void {
+  const capa = desapilar(host);
+  const previo = capa?.previo as HTMLElement | null | undefined;
+  if (previo?.isConnected) previo.focus?.({ preventScroll: true });
 }

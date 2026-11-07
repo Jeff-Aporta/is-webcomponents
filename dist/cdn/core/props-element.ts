@@ -6,10 +6,13 @@
  * mezcla lo nuevo con lo anterior, valida con el esquema del componente y solo repinta si algo cambió: un refresco
  * idéntico no toca el DOM (ni parpadea, ni pierde el foco).
  *
- * Es una subclase del molde `IswcElement` (core/iswc-element.ts): la subclase declara `static tag`, `static css` y
- * `static observed = atributosDe(INICIAL)`, y el molde crea el shadow y adopta las hojas.
+ * Es una subclase de `IswcReactive` (core/iswc-reactive.ts, sobre el molde `IswcElement`): la subclase declara
+ * `static tag`, `static css` y `static observed = atributosDe(INICIAL)`, y el molde crea el shadow y adopta las hojas.
+ * `PropsElement` no usa `render()`: `pintar()` sigue siendo síncrono (un `props = …` se ve pintado en la línea
+ * siguiente) y hereda `t()` y `estado()`.
  */
-import { IswcElement, upgradeProperties } from './iswc-element.js';
+import { upgradeProperties } from './iswc-element.js';
+import { IswcReactive } from './iswc-reactive.js';
 import type { EsquemaProps } from './schemas/props-element.schemas.js';
 
 const aKebab = (clave: string): string => clave.replace(/[A-Z]/g, (c) => `-${c.toLowerCase()}`);
@@ -49,7 +52,7 @@ function leerAtributo(el: Element, atributo: string, inicial: unknown): unknown 
   return texto;
 }
 
-export abstract class PropsElement<P extends object> extends IswcElement {
+export abstract class PropsElement<P extends object> extends IswcReactive {
   readonly #inicial: P;
   readonly #esquema: EsquemaProps;
   #props: P;

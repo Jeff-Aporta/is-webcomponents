@@ -8,7 +8,7 @@
  *     static tag = 'iswc-foo';
  *     static css = css;                              // UNA CSSStyleSheet por clase
  *     static template = TEMPLATE;                    // opcional: se clona en el shadow
- *     static observed = ['color', 'variant'];        // + styleAttrs + @attr → observedAttributes
+ *     static observed = ['color', 'variant'];        // + styleAttrs (+ @prop) → observedAttributes
  *     static deps = ['iswc-icon'];                   // hijos que se piden al loader al conectar
  *     onConnected(): void { … }
  *   }
@@ -26,7 +26,7 @@
  */
 import textoBase from 'iswc:css/host-base';
 import textoScroll from 'iswc:css/scrollbars';
-import { materializarAtributos, atributosDeclarados, styleAttrNames } from './attrs.js';
+import { styleAttrNames } from './attrs.js';
 import { routeThroughLoader } from '@jeff-aporta/iswc-base/cdn/build/asset-url.js';
 import type { StyleAttrMap } from './schemas/attrs.schemas.js';
 import type { ConstructorConTag, IswcElementStatics, LoaderDeps } from './schemas/iswc-element.schemas.js';
@@ -146,11 +146,7 @@ export function defineElement<T extends CustomElementConstructor>(
   ctor: T,
   globalName?: string | true,
 ): T {
-  // Antes del define: materializa @attr* para que observedAttributes no quede [].
-  if (!customElements.get(tag)) {
-    materializarAtributos(ctor);
-    customElements.define(tag, ctor);
-  }
+  if (!customElements.get(tag)) customElements.define(tag, ctor);
   const name = globalName === true ? globalNameFor(tag) : globalName;
   if (name && typeof window !== 'undefined') {
     (window as unknown as Record<string, unknown>)[name] = ctor;
@@ -345,7 +341,7 @@ export class IswcElement extends HTMLElement {
   static cssHref: string | null = null;
   /** Plantilla que se clona en el shadow al construir. */
   static template: HTMLTemplateElement | null = null;
-  /** Atributos observados propios. `observedAttributes` = esto ∪ `styleAttrs` ∪ `@attr`. */
+  /** Atributos observados propios. `observedAttributes` = esto ∪ `styleAttrs` (∪ `@prop` en `IswcReactive`). */
   static observed: readonly string[] = [];
   /** Tags hijos que se piden a `iswcLoader.ensure()` al primer `connectedCallback` (sin loader no hace nada). */
   static deps: readonly string[] = [];
@@ -355,7 +351,7 @@ export class IswcElement extends HTMLElement {
   static styleAttrs: StyleAttrMap = {};
 
   static get observedAttributes(): string[] {
-    return [...new Set([...this.observed, ...styleAttrNames(this.styleAttrs), ...atributosDeclarados(this)])];
+    return [...new Set([...this.observed, ...styleAttrNames(this.styleAttrs)])];
   }
 
   /** Atajo histórico para concatenar el mapa `styleAttrs`. */
@@ -484,7 +480,7 @@ export class IswcElement extends HTMLElement {
 
 /**
  * Registra la clase con su `static tag`. Idempotente (gana el primero que define: el kit puede cargarse dos veces),
- * materializa los `@attr` antes del `define` y, con `globalName`, expone la clase en `window` (`true` lo deriva del tag).
+ * y, con `globalName`, expone la clase en `window` (`true` lo deriva del tag).
  */
 export function define<T extends CustomElementConstructor>(ctor: T, globalName?: string | true): T {
   const tag = (ctor as unknown as ConstructorConTag).tag;

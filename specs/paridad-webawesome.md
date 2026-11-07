@@ -533,3 +533,19 @@ consumidor (`value`, `validity`) se actualizan en el setter, no en el pintado; *
 de desarrollo; **D8** no: los P2 van a F8b. Decididas por el orquestador según la recomendación: **D3** sí
 (`src/core/i18n/<lang>.ts`, `es` incrustado en `localize.ts`); **D4** sí, `element-base` se borra; **D5** sí, tope
 «unión base de componentes ≤ 14 500 B br»; **D7** sí, `lang`/`dir` se resuelven también desde ancestros.
+
+### HOW-13. F8b pendiente (P2, fuera de F8 por D8)
+
+- Ranuras reactivas (`HasSlotController`): `static ranuras` + `ranura(nombre)` en `IswcReactive`. Se probó en el hito 1 y
+  se sacó del core para respetar el tope D5 (cuesta ~150 B br); hasta F8b cada componente escucha su `slotchange`.
+- `reemitir(e)` (`relayNativeEvent`).
+- Popup: `auto-size`, `sync`, `hover-bridge` y flecha como opciones de `computePosition`.
+- `animar(el, 'show' | 'hide' | 'pulse')` común y `pulse` al vetar un cierre.
+- Anunciador vivo único (`anunciar(texto)`).
+- Autoloader opcional por `MutationObserver` (`iswcLoader.observar()`) y `iswcLoader.listos(raiz)`.
+- `vscode.html-custom-data.json` y `web-types.json` generados desde `@prop`, slots, parts y `static events`.
+- Formatos `Intl.ListFormat`/`Intl.PluralRules` en `formato()` (se quitaron por el mismo tope; nadie los usaba).
+
+Medida del hito 1 (7-nov-2026, `dist/cdn` tras build): unión «base de componentes» 14 476 B br (tope 14 500); cierre de
+`iswc-button` 8 747 B br (antes 9 108) y de `iswc-input` 14 632 B br (antes 14 971), porque los decoradores `@attr*` de
+`core/attrs.ts` salieron del cierre común.

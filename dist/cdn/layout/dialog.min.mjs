@@ -9,4 +9,4 @@
  * cdn-install: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/is-cdn-install/SKILL.md
  * blob: https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/layout/dialog.js
  */
-import"../_chunks/chunk-I6SPQUYB.mjs";import"../_chunks/chunk-L542IHJ2.mjs";import"../_chunks/chunk-3JVMZ2Q2.mjs";import"../_chunks/chunk-FZCPQKWI.mjs";import"../_chunks/chunk-54MB44YX.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";
+import"../_chunks/chunk-QLYVPKA6.mjs";import"../_chunks/chunk-LE2LPXPJ.mjs";import"../_chunks/chunk-DKYDCFSD.mjs";import"../_chunks/chunk-FZCPQKWI.mjs";import"../_chunks/chunk-UFMSFUKG.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";
