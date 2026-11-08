@@ -1,4 +1,6 @@
 import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import { IswcReactive } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
+import { registrarTerminos } from '@jeff-aporta/iswc-base/core/localize.js';
 import css from 'iswc:css';
 
 /**
@@ -46,19 +48,21 @@ import css from 'iswc:css';
  *   iswc-carousel-item: ::part(base)
  */
 (() => {
+  registrarTerminos('es', { carrusel: 'Carrusel', carruselRol: 'carrusel', indicadores: 'Indicadores' });
+
   const TG_TEMPLATE = document.createElement('template');
   TG_TEMPLATE.innerHTML = /* html */ `
-    <div class="carousel" part="base" role="region" aria-roledescription="carrusel" aria-label="Carrusel">
+    <div class="carousel" part="base" role="region">
       <div class="viewport" part="viewport" tabindex="0" aria-live="polite">
         <div class="track" part="track"><slot></slot></div>
       </div>
-      <div class="indicators" part="indicators" role="tablist" aria-label="Indicadores"></div>
-      <button type="button" class="ctrl prev" part="controls" tabindex="-1" aria-label="Anterior">
+      <div class="indicators" part="indicators" role="tablist"></div>
+      <button type="button" class="ctrl prev" part="controls" tabindex="-1">
         <slot name="prev-icon">
           <iswc-icon icon="mdi:chevron-left" aria-hidden="true"></iswc-icon>
         </slot>
       </button>
-      <button type="button" class="ctrl next" part="controls" tabindex="-1" aria-label="Siguiente">
+      <button type="button" class="ctrl next" part="controls" tabindex="-1">
         <slot name="next-icon">
           <iswc-icon icon="mdi:chevron-right" aria-hidden="true"></iswc-icon>
         </slot>
@@ -68,7 +72,7 @@ import css from 'iswc:css';
 
   const TG_OBSERVED = ['active', 'loop', 'autoplay', 'without-controls', 'without-indicators', 'vertical', 'slides-per-page', 'aspect-ratio'];
 
-  class IswcCarousel extends IswcElement {
+  class IswcCarousel extends IswcReactive {
     static tag = 'iswc-carousel';
     static css = css;
 
@@ -134,6 +138,16 @@ import css from 'iswc:css';
       this.addEventListener('mouseleave', () => this.#play());
       this.addEventListener('focusin', () => this.#pause('user'));
       this.addEventListener('focusout', () => this.#play());
+    }
+
+    /** Textos de accesibilidad en el idioma heredado (repinta al cambiar `lang`). */
+    override actualizado(): void {
+      const base = this.shadowRoot!.querySelector<HTMLElement>('.carousel')!;
+      base.setAttribute('aria-roledescription', this.t('carruselRol'));
+      base.setAttribute('aria-label', this.t('carrusel'));
+      this.#indicators.setAttribute('aria-label', this.t('indicadores'));
+      this.#btnPrev.setAttribute('aria-label', this.t('anterior'));
+      this.#btnNext.setAttribute('aria-label', this.t('siguiente'));
     }
 
     onConnected() {

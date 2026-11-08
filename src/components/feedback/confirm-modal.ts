@@ -1,4 +1,5 @@
-import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import { emit, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import { IswcReactive } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
 import { createPopupDismiss } from '@jeff-aporta/iswc-base/core/position.js';
 import css from 'iswc:css';
 
@@ -51,7 +52,7 @@ import css from 'iswc:css';
 
   const OBSERVED = ['for', 'heading', 'message', 'open', 'color', 'confirm-label', 'cancel-label'];
 
-  class IswcConfirmModal extends IswcElement {
+  class IswcConfirmModal extends IswcReactive {
     static tag = 'iswc-confirm-modal';
     static css = css;
     static deps = ['iswc-button'];
@@ -111,12 +112,17 @@ import css from 'iswc:css';
       return this.querySelector<HTMLElement>('[slot="cancel"]') ?? this.shadowRoot!.querySelector<HTMLElement>('.cancel');
     }
 
+    /** Repinta los botones por defecto al cambiar el idioma heredado. */
+    override actualizado(): void {
+      if (this.mounted) this.#syncBotones();
+    }
+
     #syncBotones(): void {
       const aceptar = this.shadowRoot!.querySelector<HTMLElement>('.confirm')!;
       const cancelar = this.shadowRoot!.querySelector<HTMLElement>('.cancel')!;
       aceptar.setAttribute('color', this.getAttribute('color') || 'brand');
-      aceptar.textContent = this.getAttribute('confirm-label') || 'Aceptar';
-      cancelar.textContent = this.getAttribute('cancel-label') || 'Cancelar';
+      aceptar.textContent = this.getAttribute('confirm-label') || this.t('aceptar');
+      cancelar.textContent = this.getAttribute('cancel-label') || this.t('cancelar');
     }
 
     onConnected() {

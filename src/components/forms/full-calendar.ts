@@ -1,4 +1,6 @@
-import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import { emit, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import { IswcReactive } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
+import { registrarTerminos } from '@jeff-aporta/iswc-base/core/localize.js';
 import { escapeHtml } from '@jeff-aporta/iswc-base/core/dom.js';
 import type { CalEvent, View } from "./schemas/full-calendar.schemas.js";
 import css from 'iswc:css';
@@ -29,9 +31,11 @@ import css from 'iswc:css';
  */
 
 (() => {
+  registrarTerminos('es', { dia: 'Día', hoy: 'Hoy', mes: 'Mes', semana: 'Semana' });
+
   const OBSERVED = ['view', 'date', 'first-day', 'locale', 'hours-start', 'hours-end'];
 
-  class IswcFullCalendar extends IswcElement {
+  class IswcFullCalendar extends IswcReactive {
     static tag = 'iswc-full-calendar';
     static css = css;
     static deps = ['iswc-button'];
@@ -47,14 +51,14 @@ import css from 'iswc:css';
       this.shadowRoot!.innerHTML = /* html */ `
         <div part="root" class="root">
           <header part="toolbar" class="toolbar">
-            <iswc-button variant="outlined" class="ctrl" data-act="prev" aria-label="Anterior">‹</iswc-button>
-            <iswc-button variant="outlined" class="ctrl today" data-act="today">Hoy</iswc-button>
-            <iswc-button variant="outlined" class="ctrl" data-act="next" aria-label="Siguiente">›</iswc-button>
+            <iswc-button variant="outlined" class="ctrl" data-act="prev">‹</iswc-button>
+            <iswc-button variant="outlined" class="ctrl today" data-act="today"></iswc-button>
+            <iswc-button variant="outlined" class="ctrl" data-act="next">›</iswc-button>
             <span class="title" id="ttl"></span>
             <span class="spacer"></span>
-            <iswc-button variant="filled" color="brand" class="view-btn iswc-active" data-view="month">Mes</iswc-button>
-            <iswc-button variant="outlined" class="view-btn" data-view="week">Semana</iswc-button>
-            <iswc-button variant="outlined" class="view-btn" data-view="day">Día</iswc-button>
+            <iswc-button variant="filled" color="brand" class="view-btn iswc-active" data-view="month"></iswc-button>
+            <iswc-button variant="outlined" class="view-btn" data-view="week"></iswc-button>
+            <iswc-button variant="outlined" class="view-btn" data-view="day"></iswc-button>
           </header>
           <div part="grid" class="grid" id="grid"></div>
         </div>
@@ -63,6 +67,17 @@ import css from 'iswc:css';
       this.#grid = this.shadowRoot!.getElementById('grid')!;
       this.#grid.addEventListener('click', (e) => this.#onClick(e));
       this.shadowRoot!.querySelector<HTMLElement>('.toolbar')!.addEventListener('click', (e) => this.#onToolbar(e));
+    }
+
+    /** Textos de la barra en el idioma heredado (repinta al cambiar `lang`). */
+    override actualizado(): void {
+      const barra = this.shadowRoot!.querySelector<HTMLElement>('.toolbar')!;
+      barra.querySelector('[data-act="prev"]')!.setAttribute('aria-label', this.t('anterior'));
+      barra.querySelector('[data-act="next"]')!.setAttribute('aria-label', this.t('siguiente'));
+      barra.querySelector('[data-act="today"]')!.textContent = this.t('hoy');
+      barra.querySelector('[data-view="month"]')!.textContent = this.t('mes');
+      barra.querySelector('[data-view="week"]')!.textContent = this.t('semana');
+      barra.querySelector('[data-view="day"]')!.textContent = this.t('dia');
     }
 
     connectedCallback(): void {

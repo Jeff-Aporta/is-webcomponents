@@ -48,7 +48,8 @@
 
 import { withStyleAttrs } from '@jeff-aporta/iswc-base/core/attrs.js';
 
-import { emit, IswcElement } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import { emit } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import { IswcReactive } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
 import type { ModalBaseCtor } from "@jeff-aporta/iswc-base/components/layout/schemas/modal-base.schemas.js";
 const BASE_OBSERVED: readonly string[] = ['open', 'label', 'without-header', 'light-dismiss'];
 
@@ -64,9 +65,9 @@ const SOPORTA_POPOVER = 'showPopover' in HTMLElement.prototype;
 
 // `withStyleAttrs` da la personalización por atributo (radio, colores,
 // duraciones) a dialog/drawer y a cualquier modal que herede de aquí, sobre el
-// molde `IswcElement` (shadow + plantilla + hojas). Los hooks `onConnected`,
+// molde `IswcReactive` (shadow + plantilla + hojas; `t()` para el botón de cierre). Los hooks `onConnected`,
 // `onDisconnected` y `onAttributeChanged` son los del molde (no-op por defecto).
-export class ModalBase extends withStyleAttrs(IswcElement) {
+export class ModalBase extends withStyleAttrs(IswcReactive) {
   static observed = [...BASE_OBSERVED];
 
   // ── Subclass hooks ──────────────────────────────────────────────────
@@ -140,10 +141,15 @@ export class ModalBase extends withStyleAttrs(IswcElement) {
     }
   }
 
+  /** Texto del botón de cierre en el idioma heredado (repinta al cambiar `lang`). */
+  override actualizado(): void {
+    this.#closeBtn.setAttribute('aria-label', this.t('cerrar'));
+  }
+
   disconnectedCallback(): void {
     this.#detachKeydown();
     this.#bajarCapa();
-    this.onDisconnected();
+    super.disconnectedCallback();
   }
 
   // Pisa el del molde (no lo llama): el hook de la subclase va DESPUÉS de lo propio del modal.

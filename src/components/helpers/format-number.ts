@@ -1,4 +1,4 @@
-import { resolveLocale } from '@jeff-aporta/iswc-base/core/resolve-locale.js';
+import { formato, resolverLocale } from '@jeff-aporta/iswc-base/core/localize.js';
 import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import css from 'iswc:css';
 
@@ -98,10 +98,10 @@ import css from 'iswc:css';
         this.#el.textContent = '';
         return;
       }
-      const locale = resolveLocale(this.getAttribute('locale'));
+      const locale = resolverLocale(this, this.getAttribute('locale'));
       let text: string;
       try {
-        const fmt = new Intl.NumberFormat(locale, this.#buildOptions());
+        const fmt = formato('number', locale, this.#buildOptions());
         text = fmt.format(val);
       } catch {
         text = String(val);

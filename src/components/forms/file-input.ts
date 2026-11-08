@@ -1,4 +1,6 @@
-import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import { emit, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import { IswcReactive } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
+import { registrarTerminos } from '@jeff-aporta/iswc-base/core/localize.js';
 import '@jeff-aporta/iswc-base/components/helpers/format-bytes.js';
 import css from 'iswc:css';
 
@@ -45,7 +47,7 @@ import css from 'iswc:css';
         <slot name="dropzone">
           <span class="dropzone-default">
             <iswc-icon icon="mdi:cloud-upload" aria-hidden="true"></iswc-icon>
-            <span class="dropzone-text">Arrastra archivos aquí o haz clic para seleccionar</span>
+            <span class="dropzone-text"></span>
           </span>
         </slot>
         <input part="input" class="native" type="file" tabindex="-1" aria-hidden="true" />
@@ -54,9 +56,15 @@ import css from 'iswc:css';
     </div>
   `;
 
+  registrarTerminos('es', {
+    arrastraArchivos: 'Arrastra archivos aquí o haz clic para seleccionar',
+    quitarArchivo: (nombre) => `Quitar ${nombre}`,
+    seleccionaArchivo: 'Selecciona al menos un archivo',
+  });
+
   const OBSERVED = ['label', 'hint', 'name', 'accept', 'capture', 'multiple', 'disabled', 'required'];
 
-  class IswcFileInput extends IswcElement {
+  class IswcFileInput extends IswcReactive {
     static tag = 'iswc-file-input';
     static css = css;
     static deps = ['iswc-icon', 'iswc-button'];
@@ -99,6 +107,14 @@ import css from 'iswc:css';
       this.#input.addEventListener('change', this.#onNativeChange);
       this.#labelSlot.addEventListener('slotchange', () => this.#syncSlots());
       this.#hintSlot.addEventListener('slotchange', () => this.#syncSlots());
+    }
+
+    /** Textos por defecto en el idioma heredado; repinta lista y validez si cambia `lang`. */
+    override actualizado(): void {
+      this.shadowRoot!.querySelector('.dropzone-text')!.textContent = this.t('arrastraArchivos');
+      if (!this.mounted) return;
+      this.#renderList();
+      this.#syncRequired();
     }
 
     onConnected(): void {
@@ -198,7 +214,7 @@ import css from 'iswc:css';
     #syncRequired(): void {
       if (!this.#internals) return;
       if (this.required && this.#files.length === 0) {
-        this.#internals.setValidity({ valueMissing: true }, 'Selecciona al menos un archivo', this.#input);
+        this.#internals.setValidity({ valueMissing: true }, this.t('seleccionaArchivo'), this.#input);
       } else {
         this.#internals.setValidity({});
       }
@@ -312,7 +328,7 @@ import css from 'iswc:css';
         remove.setAttribute('part', 'remove-button');
         remove.setAttribute('variant', 'text');
         remove.setAttribute('color', 'neutral');
-        remove.setAttribute('aria-label', `Quitar ${file.name}`);
+        remove.setAttribute('aria-label', this.t('quitarArchivo', file.name));
         remove.innerHTML = '<iswc-icon icon="mdi:close" aria-hidden="true"></iswc-icon>';
         remove.addEventListener('click', (e) => {
           e.stopPropagation();

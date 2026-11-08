@@ -1,4 +1,6 @@
-import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import { emit, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import { IswcReactive } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
+import { registrarTerminos } from '@jeff-aporta/iswc-base/core/localize.js';
 import { createPopupDismiss } from '@jeff-aporta/iswc-base/core/position.js';
 import css from 'iswc:css';
 
@@ -34,6 +36,8 @@ import css from 'iswc:css';
  *   win.minimize() / .restore() / .maximize() / .unmaximize() / .close()
  */
 (() => {
+  registrarTerminos('es', { maximizar: 'Maximizar', minimizar: 'Minimizar' });
+
   const OBSERVED = ['title', 'x', 'y', 'width', 'height', 'maximizable', 'minimizable', 'closable', 'default', 'resizable', 'dock', 'scope', 'position'];
 
   /** Igual que el de _shared/modal-base.js, que no lo exporta. */
@@ -49,7 +53,7 @@ import css from 'iswc:css';
   interface DragState { x: number; y: number; rect: Rect; }
   interface ResizeState { x: number; y: number; rect: Rect; }
 
-  class IswcWindow extends IswcElement {
+  class IswcWindow extends IswcReactive {
     static tag = 'iswc-window';
     static css = css;
     static deps = ['iswc-button', 'iswc-icon'];
@@ -76,9 +80,9 @@ import css from 'iswc:css';
           <header part="header" class="header iswc-surface-bar">
             <span class="title-wrap"><slot name="title"></slot><span class="title" id="ttl"></span></span>
             <span class="controls">
-              <iswc-button variant="plain" class="ctrl" data-act="min" title="Minimizar" aria-label="Minimizar" hidden><iswc-icon icon="mdi:window-minimize" aria-hidden="true"></iswc-icon></iswc-button>
-              <iswc-button variant="plain" class="ctrl" data-act="max" title="Maximizar" aria-label="Maximizar" hidden><iswc-icon icon="mdi:window-maximize" aria-hidden="true"></iswc-icon></iswc-button>
-              <iswc-button variant="plain" color="danger" class="ctrl" data-act="close" title="Cerrar" aria-label="Cerrar" hidden><iswc-icon icon="mdi:close" aria-hidden="true"></iswc-icon></iswc-button>
+              <iswc-button variant="plain" class="ctrl" data-act="min" hidden><iswc-icon icon="mdi:window-minimize" aria-hidden="true"></iswc-icon></iswc-button>
+              <iswc-button variant="plain" class="ctrl" data-act="max" hidden><iswc-icon icon="mdi:window-maximize" aria-hidden="true"></iswc-icon></iswc-button>
+              <iswc-button variant="plain" color="danger" class="ctrl" data-act="close" hidden><iswc-icon icon="mdi:close" aria-hidden="true"></iswc-icon></iswc-button>
             </span>
           </header>
           <div part="body" class="body" tabindex="0">
@@ -100,6 +104,17 @@ import css from 'iswc:css';
       this.#onWinUp = () => this.#endAny();
       this.#resizer.addEventListener('pointerdown', (e: PointerEvent) => this.#onResizeDown(e));
       this.#root.addEventListener('click', (e: MouseEvent) => this.#onClick(e));
+    }
+
+    /** Títulos de los controles en el idioma heredado (repinta al cambiar `lang`). */
+    override actualizado(): void {
+      const textos: Record<string, string> = { min: this.t('minimizar'), max: this.t('maximizar'), close: this.t('cerrar') };
+      for (const b of this.#root.querySelectorAll<HTMLElement>('.ctrl[data-act]')) {
+        const texto = textos[b.dataset.act ?? ''];
+        if (!texto) continue;
+        b.setAttribute('title', texto);
+        b.setAttribute('aria-label', texto);
+      }
     }
 
     onConnected() {

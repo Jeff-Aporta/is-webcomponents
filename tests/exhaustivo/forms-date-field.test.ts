@@ -78,8 +78,8 @@ test('date-field: usa Intl nativo para locale (delegado en date-utils/date-field
   const utils = readFileSync(join(import.meta.dirname!, '..', '..', 'src', 'components', 'forms', 'utils', 'date-utils.ts'), 'utf8');
   assert.ok(/Intl\./.test(core) || /Intl\./.test(utils),
     'date-field-core o date-utils deben usar Intl.* para formatear locale-aware');
-  assert.ok(/resolveLocale/.test(factorySrc),
-    'factory debe usar resolveLocale() para normalizar el locale');
+  assert.ok(/resolverLocale/.test(factorySrc),
+    'factory debe usar resolverLocale() (core/localize) para normalizar el locale');
 });
 
 test('date-field: kind=date en la invocación', () => {
@@ -111,7 +111,7 @@ test('date-field: edge case — value="" (vacío) y min > max', () => {
 });
 
 test('date-field: edge case — locale inválido cae al del sistema', () => {
-  assert.ok(/resolveLocale/.test(factorySrc) || /Intl\.DateTimeFormat\(\s*\[/.test(factorySrc),
+  assert.ok(/resolverLocale/.test(factorySrc) || /Intl\.DateTimeFormat\(\s*\[/.test(factorySrc),
     'factory debe manejar locales inválidos (fallback)');
 });
 

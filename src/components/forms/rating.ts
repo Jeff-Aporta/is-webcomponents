@@ -5,6 +5,7 @@ import { setStringAttr, setOptionalAttr } from '@jeff-aporta/iswc-base/core/attr
 import { hasSlotted, clampTo, tidyToStep } from '@jeff-aporta/iswc-base/core/dom.js';
 import css from 'iswc:css';
 import { prop } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
+import { registrarTerminos } from '@jeff-aporta/iswc-base/core/localize.js';
 /**
  * <iswc-rating> — Valoración form-associated (vanilla + Shadow DOM).
  *
@@ -60,6 +61,8 @@ import { prop } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
   `;
 
   // Los demás atributos los declara cada `@prop` (y name, disabled, readonly y required, `IswcFormControl`).
+  registrarTerminos('es', { seleccioneValoracion: 'Seleccione una valoración' });
+
   const OBSERVED = ['value', 'max', 'precision', 'icon', 'empty-icon', 'color', 'label-format'];
 
   const EXTRA_UPGRADE_PROPS: string[] = ['labels', 'getLabelText'];
@@ -225,7 +228,7 @@ import { prop } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
 
     override validar(): Validez {
       const [flags, mensaje] = super.validar();
-      return flags.valueMissing ? [flags, 'Seleccione una valoración'] : [flags, mensaje];
+      return flags.valueMissing ? [flags, this.t('seleccioneValoracion')] : [flags, mensaje];
     }
 
     override restablecer(): void {

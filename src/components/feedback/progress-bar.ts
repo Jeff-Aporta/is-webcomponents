@@ -1,5 +1,7 @@
 import { setStringAttr } from '@jeff-aporta/iswc-base/core/attrs.js';
-import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import { define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import { IswcReactive } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
+import { registrarTerminos } from '@jeff-aporta/iswc-base/core/localize.js';
 import css from 'iswc:css';
 
 /**
@@ -18,6 +20,8 @@ import css from 'iswc:css';
  */
 
 (() => {
+  registrarTerminos('es', { estadoCargando: 'Cargando' });
+
   const TEMPLATE = document.createElement('template');
   TEMPLATE.innerHTML = /* html */ `
     <div part="progress-bar" class="track" role="progressbar">
@@ -28,7 +32,7 @@ import css from 'iswc:css';
 
   const OBSERVED = ['value', 'label', 'indeterminate'];
 
-  class IswcProgressBar extends IswcElement {
+  class IswcProgressBar extends IswcReactive {
     static tag = 'iswc-progress-bar';
     static css = css;
 
@@ -56,6 +60,11 @@ import css from 'iswc:css';
 
     onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
       this.#render();
+    }
+
+    /** Repinta al cambiar el idioma heredado (el primer pintado lo hace `onConnected`). */
+    override actualizado(): void {
+      if (this.mounted) this.#render();
     }
 
     get value(): number {
@@ -87,7 +96,7 @@ import css from 'iswc:css';
         // siendo progressbar pero aria-busy=true avisa al SR de que ignore el
         // valuenow ausente y anuncie que el proceso sigue en curso.
         this.#track.removeAttribute('aria-valuenow');
-        this.#track.setAttribute('aria-valuetext', label || 'Cargando');
+        this.#track.setAttribute('aria-valuetext', label || this.t('estadoCargando'));
         this.#track.setAttribute('aria-busy', 'true');
         this.#indicator.style.width = '';
         this.#indicator.classList.add('iswc-indeterminate');

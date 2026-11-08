@@ -1,4 +1,6 @@
-import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import { emit, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import { IswcReactive } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
+import { registrarTerminos } from '@jeff-aporta/iswc-base/core/localize.js';
 import css from 'iswc:css';
 
 /**
@@ -27,18 +29,20 @@ import css from 'iswc:css';
  *   iswc-scroll-position detail: { scrollLeft, scrollTop }
  */
 (() => {
+  registrarTerminos('es', { areaDesplazable: 'Área desplazable' });
+
   const TEMPLATE = document.createElement('template');
   TEMPLATE.innerHTML = /* html */ `
     <div class="scroller" part="base" data-orientation="horizontal">
-      <button type="button" class="scroll-btn scroll-start" part="scroll-button" tabindex="-1" aria-label="Anterior">
+      <button type="button" class="scroll-btn scroll-start" part="scroll-button" tabindex="-1">
         <slot name="scroll-button-start">
           <iswc-icon icon="mdi:chevron-left" aria-hidden="true"></iswc-icon>
         </slot>
       </button>
-      <div class="viewport" part="viewport" role="region" aria-label="Área desplazable" tabindex="0">
+      <div class="viewport" part="viewport" role="region" tabindex="0">
         <slot></slot>
       </div>
-      <button type="button" class="scroll-btn scroll-end" part="scroll-button" tabindex="-1" aria-label="Siguiente">
+      <button type="button" class="scroll-btn scroll-end" part="scroll-button" tabindex="-1">
         <slot name="scroll-button-end">
           <iswc-icon icon="mdi:chevron-right" aria-hidden="true"></iswc-icon>
         </slot>
@@ -48,7 +52,7 @@ import css from 'iswc:css';
 
   const OBSERVED = ['orientation', 'without-scroll-buttons', 'label'];
 
-  class IswcScroller extends IswcElement {
+  class IswcScroller extends IswcReactive {
     static tag = 'iswc-scroller';
     static css = css;
 
@@ -95,8 +99,15 @@ import css from 'iswc:css';
       if (name === 'label') this.#syncLabel();
     }
 
+    /** Textos de accesibilidad en el idioma heredado (repinta al cambiar `lang`). */
+    override actualizado(): void {
+      this.#btnStart.setAttribute('aria-label', this.t('anterior'));
+      this.#btnEnd.setAttribute('aria-label', this.t('siguiente'));
+      this.#syncLabel();
+    }
+
     #syncLabel() {
-      const label = (this.getAttribute('label') || '').trim() || 'Área desplazable';
+      const label = (this.getAttribute('label') || '').trim() || this.t('areaDesplazable');
       if (this.#viewport) this.#viewport.setAttribute('aria-label', label);
     }
 

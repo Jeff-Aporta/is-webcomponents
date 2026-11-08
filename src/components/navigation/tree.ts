@@ -1,4 +1,6 @@
 import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import { IswcReactive } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
+import { registrarTerminos } from '@jeff-aporta/iswc-base/core/localize.js';
 import '@jeff-aporta/iswc-base/components/forms/checkbox.js';
 import css from 'iswc:css';
 
@@ -45,9 +47,11 @@ import css from 'iswc:css';
  *   iswc-tree-item: ::part(item) ::part(item-content) ::part(item-children) ::part(checkbox) ::part(expand-toggle)
  */
 (() => {
+  registrarTerminos('es', { arbol: 'Árbol' });
+
   const TREE_TEMPLATE = document.createElement('template');
   TREE_TEMPLATE.innerHTML = /* html */ `
-    <div class="tree" part="base" role="tree" aria-label="Árbol">
+    <div class="tree" part="base" role="tree">
       <div class="items" part="items"><slot></slot></div>
     </div>
   `;
@@ -56,7 +60,7 @@ import css from 'iswc:css';
 
   const VALID_SELECTION = ['none', 'single', 'leaf', 'multiple'];
 
-  class IswcTree extends IswcElement {
+  class IswcTree extends IswcReactive {
     static tag = 'iswc-tree';
     static css = css;
 
@@ -70,6 +74,11 @@ import css from 'iswc:css';
       shadow.appendChild(TREE_TEMPLATE.content.cloneNode(true));
       this.addEventListener('click', this.#onClick);
       this.addEventListener('keydown', this.#onKeyDown);
+    }
+
+    /** Etiqueta del árbol en el idioma heredado (repinta al cambiar `lang`). */
+    override actualizado(): void {
+      this.shadowRoot!.querySelector('.tree')!.setAttribute('aria-label', this.t('arbol'));
     }
 
     onConnected() {

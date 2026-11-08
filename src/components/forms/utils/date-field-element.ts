@@ -3,7 +3,7 @@ import { splitDateTime, uses12Hour } from './date-utils.js';
 import { emit, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import { IswcFormControl } from '@jeff-aporta/iswc-base/core/iswc-form-control.js';
 import type { Validez } from '@jeff-aporta/iswc-base/core/schemas/iswc-form-control.schemas.js';
-import { resolveLocale } from '@jeff-aporta/iswc-base/core/resolve-locale.js';
+import { registrarTerminos, resolverLocale, termino } from '@jeff-aporta/iswc-base/core/localize.js';
 import type { DateFieldKind, DefineDateFieldOpts } from "@jeff-aporta/iswc-base/components/forms/schemas/date-field-element.schemas.js";
 import { prop } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
 
@@ -27,7 +27,6 @@ TEMPLATE.innerHTML = /* html */ `
         variant="text"
         color="neutral"
         tabindex="-1"
-        aria-label="Borrar"
         hidden
       >
         <iswc-icon icon="mdi:close" aria-hidden="true"></iswc-icon>
@@ -40,6 +39,8 @@ TEMPLATE.innerHTML = /* html */ `
 
 // min, max y clearable los declara su `@prop`; name, required, disabled y readonly (y label y hint, que aquí se leen
 // del atributo), `IswcFormControl`.
+registrarTerminos('es', { borrar: 'Borrar' });
+
 const OBSERVED = ['label', 'hint', 'value', 'locale', 'ampm', 'hour24', 'seconds', 'invalid'];
 
 /** Tipo de campo por secciones: solo fecha, hora o ambas. */
@@ -91,7 +92,10 @@ export function defineDateField({ tag, kind, css }: DefineDateFieldOpts): typeof
     }
 
     connectedCallback(): void {
+      // El ciclo de la base primero: recupera propiedades escritas antes del upgrade, refleja los `@prop` y pinta.
+      super.connectedCallback();
       this.#mounted = true;
+      this.#clearBtn.setAttribute('aria-label', termino(this.locale, 'borrar'));
       this.#syncMeta();
       this.#field.configure({ locale: this.locale, ampm: this.ampm, seconds: this.seconds });
       this.#silent = true;
@@ -103,6 +107,8 @@ export function defineDateField({ tag, kind, css }: DefineDateFieldOpts): typeof
     }
 
     attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
+      // La base convierte el atributo en su `@prop` (name, disabled, required, min, max…) antes de reaccionar aquí.
+      super.attributeChangedCallback(name, oldVal, newVal);
       if (!this.#mounted || oldVal === newVal) return;
       if (name === 'value') {
         // Al editar, el atributo lo escribimos nosotros: reinyectarlo borraría
@@ -148,7 +154,7 @@ export function defineDateField({ tag, kind, css }: DefineDateFieldOpts): typeof
 
     @prop({ type: 'bool' }) accessor clearable: boolean = false;
 
-    override get locale(): string { return resolveLocale(this.getAttribute('locale')); }
+    override get locale(): string { return resolverLocale(this, this.getAttribute('locale')); }
     set locale(v: string) { v ? this.setAttribute('locale', v) : this.removeAttribute('locale'); }
 
     /** 12 horas: lo decide el locale salvo que `ampm`/`hour24` lo fuercen. */

@@ -1,8 +1,9 @@
 import { withStyleAttrs } from '@jeff-aporta/iswc-base/core/attrs.js';
 import { computePosition } from '@jeff-aporta/iswc-base/core/position.js';
 import { formatDate, formatTime, splitDateTime, todayISO, toTime } from './date-utils.js';
-import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
-import { resolveLocale } from '@jeff-aporta/iswc-base/core/resolve-locale.js';
+import { emit, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import { IswcReactive } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
+import { registrarTerminos, resolverLocale } from '@jeff-aporta/iswc-base/core/localize.js';
 import type { PickerPanelDef, PickerField, DefinePickerInputOpts } from "@jeff-aporta/iswc-base/components/forms/schemas/picker-element.schemas.js";
 
 /**
@@ -27,6 +28,8 @@ const OBSERVED = [
   'start', 'end',
 ];
 
+registrarTerminos('es', { abrirSelector: 'Abrir selector', ahora: 'Ahora', hoy: 'Hoy', seleccione: 'Seleccione' });
+
 /** Atributos que el picker copia a su(s) campo(s). */
 const FIELD_ATTRS = [
   'name', 'min', 'max', 'required', 'disabled', 'readonly', 'locale',
@@ -47,7 +50,7 @@ export function definePickerInput({
   // Todos los pickers (date/time/date-time y sus rangos) comparten la
   // personalización por atributo: se declara aquí una vez, no en cada tag.
 
-  class IswcPickerInput extends withStyleAttrs(IswcElement) {
+  class IswcPickerInput extends withStyleAttrs(IswcReactive) {
     static tag = tag;
     static css = css;
     static shadowInit: ShadowRootInit | null = { mode: 'open', delegatesFocus: true };
@@ -95,6 +98,14 @@ export function definePickerInput({
       this.#dialog.addEventListener('keydown', this.#onDialogKey);
     }
 
+    /** Textos fijos (disparador, acciones, cabecera móvil) en el idioma heredado; repinta al cambiar `lang`. */
+    override actualizado(): void {
+      for (const t of this.#triggers) t.setAttribute('aria-label', this.t('abrirSelector'));
+      const acciones: Record<string, string> = { clear: this.t('limpiar'), now: this.t(kind === 'time' ? 'ahora' : 'hoy'), cancel: this.t('cancelar'), accept: this.t('aceptar') };
+      for (const b of this.#actions.querySelectorAll<HTMLElement>('[data-act]')) b.textContent = acciones[b.dataset.act ?? ''] ?? '';
+      if (this.mounted) this.#syncToolbar();
+    }
+
     connectedCallback(): void {
       super.connectedCallback();
       this.#mounted = true;
@@ -109,6 +120,7 @@ export function definePickerInput({
       removeEventListener('scroll', this.#reposition, true);
       cancelAnimationFrame(this.#raf);
       if (this.#dialog.open) this.#dialog.close();
+      super.disconnectedCallback();
     }
 
     attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
@@ -143,7 +155,7 @@ export function definePickerInput({
     get readonly(): boolean { return this.hasAttribute('readonly'); }
     set readonly(v: boolean) { this.toggleAttribute('readonly', !!v); }
 
-    get locale(): string { return resolveLocale(this.getAttribute('locale')); }
+    override get locale(): string { return resolverLocale(this, this.getAttribute('locale')); }
     set locale(v: string) { v ? this.setAttribute('locale', v) : this.removeAttribute('locale'); }
 
     /** Cierra al elegir; en móvil o con barra de acciones espera a Aceptar. */
@@ -203,7 +215,6 @@ export function definePickerInput({
         trigger.setAttribute('slot', 'end');
         trigger.setAttribute('aria-haspopup', 'dialog');
         trigger.setAttribute('aria-expanded', 'false');
-        trigger.setAttribute('aria-label', 'Abrir selector');
         const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
         svg.setAttribute('viewBox', '0 0 16 16');
         svg.setAttribute('width', '1.05em');
@@ -246,21 +257,20 @@ export function definePickerInput({
       actions.className = 'actions';
       actions.hidden = true;
 
-      const mkAct = (act: string, label: string, variant = 'plain', color = 'neutral'): HTMLElement => {
+      const mkAct = (act: string, variant = 'plain', color = 'neutral'): HTMLElement => {
         const b = document.createElement('iswc-button') as HTMLElement & { variant?: string; color?: string };
         b.variant = variant;
         if (color !== 'neutral') b.color = color;
         b.className = 'act';
         b.dataset.act = act;
-        b.textContent = label;
         return b;
       };
       actions.append(
-        mkAct('clear', 'Limpiar'),
-        mkAct('now', 'Hoy'),
+        mkAct('clear'),
+        mkAct('now'),
         Object.assign(document.createElement('span'), { className: 'spacer' }),
-        mkAct('cancel', 'Cancelar'),
-        mkAct('accept', 'Aceptar', 'filled', 'brand'),
+        mkAct('cancel'),
+        mkAct('accept', 'filled', 'brand'),
       );
       panelWrap.append(toolbar, content, actions);
       dialog.appendChild(panelWrap);
@@ -310,7 +320,6 @@ export function definePickerInput({
       const on = this.actionBar;
       this.#actions.hidden = !on;
       this.#panel.dataset.color = this.variant;
-      this.#actions.querySelector<HTMLElement>('[data-act="now"]')!.textContent = kind === 'time' ? 'Ahora' : 'Hoy';
     }
 
     /** El contenido del panel lo aporta la definición del componente. */
@@ -352,7 +361,7 @@ export function definePickerInput({
         return;
       }
       this.#toolbar.hidden = false;
-      this.#toolbar.textContent = this.#readable() || 'Seleccione';
+      this.#toolbar.textContent = this.#readable() || this.t('seleccione');
     }
 
     /** Texto humano del valor actual, para la cabecera del panel móvil. */

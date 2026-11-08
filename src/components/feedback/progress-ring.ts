@@ -1,5 +1,7 @@
 import { setStringAttr } from '@jeff-aporta/iswc-base/core/attrs.js';
-import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import { define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import { IswcReactive } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
+import { registrarTerminos } from '@jeff-aporta/iswc-base/core/localize.js';
 import css from 'iswc:css';
 
 /**
@@ -16,6 +18,8 @@ import css from 'iswc:css';
  */
 
 (() => {
+  registrarTerminos('es', { estadoCargando: 'Cargando' });
+
   const TEMPLATE = document.createElement('template');
   TEMPLATE.innerHTML = /* html */ `
     <div part="progress-ring" class="ring-wrap" role="progressbar">
@@ -30,7 +34,7 @@ import css from 'iswc:css';
   const OBSERVED = ['value', 'label', 'indeterminate'];
   const CIRC = 2 * Math.PI * 15.9155;
 
-  class IswcProgressRing extends IswcElement {
+  class IswcProgressRing extends IswcReactive {
     static tag = 'iswc-progress-ring';
     static css = css;
 
@@ -54,6 +58,11 @@ import css from 'iswc:css';
 
     onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
       this.#render();
+    }
+
+    /** Repinta al cambiar el idioma heredado (el primer pintado lo hace `onConnected`). */
+    override actualizado(): void {
+      if (this.mounted) this.#render();
     }
 
     get value(): number {
@@ -87,7 +96,7 @@ import css from 'iswc:css';
         // el label interno vacío para no duplicar el porcentaje.
         this.#wrap.removeAttribute('aria-valuenow');
         this.#wrap.setAttribute('aria-busy', 'true');
-        this.#wrap.setAttribute('aria-valuetext', label || 'Cargando');
+        this.#wrap.setAttribute('aria-valuetext', label || this.t('estadoCargando'));
         // Arco fijo que gira: el CSS lo anima, aquí solo se fija su largo.
         this.#indicator.style.strokeDasharray = `${CIRC * 0.28} ${CIRC}`;
         this.#indicator.style.strokeDashoffset = '0';

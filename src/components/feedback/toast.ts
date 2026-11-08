@@ -1,6 +1,8 @@
 import './toast-item.js';
 import { normalizeIntent } from '@jeff-aporta/iswc-base/core/attrs.js';
-import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import { define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import { IswcReactive } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
+import { registrarTerminos } from '@jeff-aporta/iswc-base/core/localize.js';
 import css from 'iswc:css';
 
 /**
@@ -35,9 +37,11 @@ import css from 'iswc:css';
  */
 
 (() => {
+  registrarTerminos('es', { algoSalioMal: 'Algo salió mal', listo: 'Listo', notificaciones: 'Notificaciones' });
+
   const TEMPLATE = document.createElement('template');
   TEMPLATE.innerHTML = /* html */ `
-    <div part="stack" class="stack" role="region" aria-label="Notificaciones">
+    <div part="stack" class="stack" role="region">
       <slot></slot>
     </div>
   `;
@@ -94,7 +98,7 @@ import css from 'iswc:css';
     restartTimer?(): void;
   }
 
-  class IswcToast extends IswcElement {
+  class IswcToast extends IswcReactive {
     static tag = 'iswc-toast';
     static css = css;
 
@@ -113,6 +117,11 @@ import css from 'iswc:css';
       const shadow = this.shadowRoot!;
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
       this.addEventListener('iswc-after-hide', this.#onItemHide);
+    }
+
+    /** Etiqueta de la región en el idioma heredado (repinta al cambiar `lang`). */
+    override actualizado(): void {
+      this.shadowRoot!.querySelector('.stack')!.setAttribute('aria-label', this.t('notificaciones'));
     }
 
     onConnected(): void {
@@ -177,7 +186,7 @@ import css from 'iswc:css';
      * Reusa el MISMO toast (update) en vez de crear otro.
      */
     async promise<T>(p: Promise<T>, callbacks: ToastPromiseCallbacks = {}): Promise<T> {
-      const loading = this.#normalizePromiseMsg(callbacks.loading, undefined, 'Cargando…');
+      const loading = this.#normalizePromiseMsg(callbacks.loading, undefined, this.t('cargando'));
       const item = await this.create(loading.message, {
         variant: 'neutral',
         icon: 'mdi:loading',
@@ -186,11 +195,11 @@ import css from 'iswc:css';
       });
       try {
         const data = await p;
-        const ok = this.#normalizePromiseMsg(callbacks.success, data, 'Listo');
+        const ok = this.#normalizePromiseMsg(callbacks.success, data, this.t('listo'));
         this.#update(item, ok.message, { variant: 'success', icon: DEFAULT_ICONS.success, ...ok.options });
         return data;
       } catch (err: unknown) {
-        const bad = this.#normalizePromiseMsg(callbacks.error, err, 'Algo salió mal');
+        const bad = this.#normalizePromiseMsg(callbacks.error, err, this.t('algoSalioMal'));
         this.#update(item, bad.message, { variant: 'danger', icon: DEFAULT_ICONS.danger, ...bad.options });
         throw err;
       }

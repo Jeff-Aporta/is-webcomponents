@@ -1,5 +1,5 @@
 import { setStringAttr } from '@jeff-aporta/iswc-base/core/attrs.js';
-import { resolveLocale } from '@jeff-aporta/iswc-base/core/resolve-locale.js';
+import { formato, resolverLocale } from '@jeff-aporta/iswc-base/core/localize.js';
 import { parseLooseDate } from './format-date.js';
 import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import css from 'iswc:css';
@@ -82,7 +82,7 @@ import css from 'iswc:css';
     set numeric(v: string) { setStringAttr(this, 'numeric', v); }
 
     get locale() {
-      return resolveLocale(this.getAttribute('locale'));
+      return resolverLocale(this, this.getAttribute('locale'));
     }
     set locale(v: string) { setStringAttr(this, 'locale', v); }
 
@@ -112,7 +112,7 @@ import css from 'iswc:css';
       const numeric: NumericStyle = this.numeric;
       const style: FormatStyle = this.format;
       try {
-        const rtf = new Intl.RelativeTimeFormat(locale, { numeric, style });
+        const rtf = formato('relative', locale, { numeric, style });
         for (const [unit, secs] of UNITS) {
           if (abs >= secs || unit === 'second') {
             return rtf.format(Math.round(diffSec / secs), unit);
@@ -122,7 +122,7 @@ import css from 'iswc:css';
         // Locale raro o motor sin RelativeTimeFormat completo → reintento es/en.
         try {
           const fallback = locale.toLowerCase().startsWith('en') ? 'en' : 'es';
-          const rtf = new Intl.RelativeTimeFormat(fallback, { numeric, style });
+          const rtf = formato('relative', fallback, { numeric, style });
           for (const [unit, secs] of UNITS) {
             if (abs >= secs || unit === 'second') {
               return rtf.format(Math.round(diffSec / secs), unit);

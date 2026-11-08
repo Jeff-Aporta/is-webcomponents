@@ -1,4 +1,4 @@
-import { resolveLocale } from '@jeff-aporta/iswc-base/core/resolve-locale.js';
+import { formato, resolverLocale } from '@jeff-aporta/iswc-base/core/localize.js';
 import { formatBytes, toBytes } from './format-bytes.js';
 import { parseLooseDate } from './format-date.js';
 import type { ExcelPreset, RelativeUnit, NumberFormatKind, RelativeStyle, RelativeNumeric, TextCase, FormatType, FormatBytesOpts } from "./schemas/format.schemas.js";
@@ -238,7 +238,7 @@ class FormatElement extends IswcElement {
   }
 
   get locale(): string {
-    return resolveLocale(this.getAttribute('locale'));
+    return resolverLocale(this, this.getAttribute('locale'));
   }
   set locale(v: string | null) {
     if (v == null || v === '') this.removeAttribute('locale');
@@ -265,7 +265,7 @@ class FormatElement extends IswcElement {
 
   #formatWithIntlNumber(n: number, opts: Intl.NumberFormatOptions): void {
     try {
-      this.#el.textContent = new Intl.NumberFormat(this.locale, opts).format(n);
+      this.#el.textContent = formato('number', this.locale, opts).format(n);
     } catch {
       this.#el.textContent = String(n);
     }
@@ -281,7 +281,7 @@ class FormatElement extends IswcElement {
       const d = parseLooseDate(raw);
       if (!d) { this.#el.textContent = ''; return true; }
       try {
-        this.#el.textContent = new Intl.DateTimeFormat(this.locale, preset.opts).format(d);
+        this.#el.textContent = formato('date', this.locale, preset.opts).format(d);
       } catch {
         this.#el.textContent = d.toLocaleString(this.locale);
       }
@@ -344,7 +344,7 @@ class FormatElement extends IswcElement {
       opts.timeStyle = 'short';
     }
     try {
-      this.#el.textContent = new Intl.DateTimeFormat(this.locale, opts).format(d);
+      this.#el.textContent = formato('date', this.locale, opts).format(d);
     } catch {
       this.#el.textContent = d.toLocaleString(this.locale);
     }
@@ -457,7 +457,7 @@ class FormatElement extends IswcElement {
     const diffSec = Math.round((d.getTime() - now) / 1000);
     const abs = Math.abs(diffSec);
     try {
-      const rtf = new Intl.RelativeTimeFormat(this.locale, { numeric, style });
+      const rtf = formato('relative', this.locale, { numeric, style });
       for (const [unit, secs] of RELATIVE_UNITS) {
         if (abs >= secs || unit === 'second') {
           this.#el.textContent = rtf.format(Math.round(diffSec / secs), unit);

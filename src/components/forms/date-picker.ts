@@ -1,4 +1,5 @@
 import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import { observarIdioma, resolverLocale, termino } from '@jeff-aporta/iswc-base/core/localize.js';
 import {
   addMonths,
   clampISO,
@@ -45,7 +46,7 @@ import css from 'iswc:css';
   TEMPLATE.innerHTML = /* html */ `
     <div part="base" class="base">
       <div class="nav" part="nav">
-        <iswc-button variant="plain" pill class="nav-btn" data-nav="-1" aria-label="Anterior">‹</iswc-button>
+        <iswc-button variant="plain" pill class="nav-btn" data-nav="-1">‹</iswc-button>
         <div class="nav-title" part="month-label">
           <iswc-dropdown class="jump" data-jump="month" placement="bottom">
             <iswc-button variant="plain" with-caret slot="trigger" class="nav-select" part="month-select">
@@ -58,7 +59,7 @@ import css from 'iswc:css';
             </iswc-button>
           </iswc-dropdown>
         </div>
-        <iswc-button variant="plain" pill class="nav-btn" data-nav="1" aria-label="Siguiente">›</iswc-button>
+        <iswc-button variant="plain" pill class="nav-btn" data-nav="1">›</iswc-button>
       </div>
       <div class="day-view">
         <div class="weekdays" part="weekdays"></div>
@@ -137,13 +138,22 @@ import css from 'iswc:css';
       this.#yearView.addEventListener('iswc-change', this.#onYearView as EventListener);
     }
 
+    /** `locale` público puede ser undefined (API previa), así que no hereda de `IswcReactive`: se inscribe aparte en el
+     *  observador de idioma para repintar las flechas al cambiar `lang` o al llegar un diccionario. */
+    #idioma = { solicitarRender: (): void => this.#render() };
+
     onConnected(): void {
       if (!this.hasAttribute('mode')) this.setAttribute('mode', 'single');
+      observarIdioma(this.#idioma, true);
       if (!this.hasAttribute('view')) {
         this.setAttribute('view', this.getAttribute('open-to') || this.views[0]);
       }
       this.#parseValueAttr();
       this.#render();
+    }
+
+    onDisconnected(): void {
+      observarIdioma(this.#idioma, false);
     }
 
     onAttributeChanged(name: string, oldVal: string | null, newVal: string | null): void {
@@ -449,8 +459,11 @@ import css from 'iswc:css';
       this.#monthDd.hidden = view !== 'day' || !views.includes('month');
       this.#yearDd.hidden = view === 'year' || !views.includes('year');
       const nav = this.nav;
+      // `locale` público puede ser undefined (API previa): el texto se resuelve aparte, con herencia de `lang`.
+      const idioma = resolverLocale(this, this.getAttribute('locale'));
       for (const btn of this.#nav.querySelectorAll<HTMLElement>('[data-nav]')) {
         const side = btn.dataset.nav === '-1' ? 'prev' : 'next';
+        btn.setAttribute('aria-label', termino(idioma, side === 'prev' ? 'anterior' : 'siguiente'));
         btn.hidden = view === 'year' || nav === 'none' || (nav !== 'both' && nav !== side);
       }
 

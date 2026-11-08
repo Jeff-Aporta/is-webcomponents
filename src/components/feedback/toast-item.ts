@@ -1,4 +1,5 @@
-import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import { emit, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import { IswcReactive } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
 import { ocultarSlotsVacios } from '@jeff-aporta/iswc-base/core/dom.js';
 import { INTENT, normalizeIntent } from '@jeff-aporta/iswc-base/core/attrs.js';
 import css from 'iswc:css';
@@ -42,7 +43,6 @@ import css from 'iswc:css';
         class="close"
         variant="glyph"
         color="text"
-        label="Cerrar"
         exportparts="button: close-button"
       >
         <iswc-icon icon="mdi:close" aria-hidden="true"></iswc-icon>
@@ -57,7 +57,7 @@ import css from 'iswc:css';
   const VALID_COLOR = INTENT;
   const DEFAULT_DURATION = 5000;
 
-  class IswcToastItem extends IswcElement {
+  class IswcToastItem extends IswcReactive {
     static tag = 'iswc-toast-item';
     static css = css;
     static deps = ['iswc-icon', 'iswc-button'];
@@ -96,6 +96,11 @@ import css from 'iswc:css';
       this.#base.addEventListener('keydown', this.#onKeydown);
     }
 
+    /** Texto del botón de cierre en el idioma heredado (repinta al cambiar `lang`). */
+    override actualizado(): void {
+      this.#closeBtn.setAttribute('label', this.t('cerrar'));
+    }
+
     connectedCallback(): void {
       super.connectedCallback();
       this.#mounted = true;
@@ -109,6 +114,7 @@ import css from 'iswc:css';
     disconnectedCallback(): void {
       this.#clearTimers();
       this.#mounted = false;
+      super.disconnectedCallback();
     }
 
     attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {

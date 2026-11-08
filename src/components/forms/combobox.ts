@@ -5,6 +5,7 @@ import type { Validez } from '@jeff-aporta/iswc-base/core/schemas/iswc-form-cont
 import './option.js';
 import css from 'iswc:css';
 import { prop } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
+import { registrarTerminos } from '@jeff-aporta/iswc-base/core/localize.js';
 
 /**
  * <iswc-combobox> — Input + listbox filtrable.
@@ -35,7 +36,6 @@ import { prop } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
           variant="text"
           color="text"
           tabindex="-1"
-          aria-label="Limpiar"
           hidden
         >
           <iswc-icon icon="mdi:close" aria-hidden="true"></iswc-icon>
@@ -47,7 +47,6 @@ import { prop } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
           variant="text"
           color="text"
           tabindex="-1"
-          aria-label="Abrir"
         >
           <iswc-icon icon="mdi:chevron-down" aria-hidden="true"></iswc-icon>
         </iswc-button>
@@ -62,6 +61,8 @@ import { prop } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
   `;
 
   // open y clearable los declara su `@prop`; label, hint, name, disabled, required, error y error-text, `IswcFormControl`.
+  registrarTerminos('es', { abrir: 'Abrir', seleccioneValor: 'Seleccione un valor' });
+
   const OBSERVED = ['value', 'placeholder'];
 
   class IswcCombobox extends IswcFormControl {
@@ -116,6 +117,13 @@ import { prop } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
       this.#slot.addEventListener('slotchange', () => this.#collectOptions());
     }
 
+    /** Textos internos en el idioma heredado (repinta al cambiar `lang`). */
+    override actualizado(): void {
+      super.actualizado();
+      this.#clearBtn.setAttribute('aria-label', this.t('limpiar'));
+      this.#trigger.setAttribute('aria-label', this.t('abrir'));
+    }
+
     onConnected(): void {
       this.#syncMeta();
       this.#collectOptions();
@@ -160,7 +168,7 @@ import { prop } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
 
     override validar(): Validez {
       const [flags, mensaje] = super.validar();
-      return flags.valueMissing ? [flags, 'Seleccione un valor'] : [flags, mensaje];
+      return flags.valueMissing ? [flags, this.t('seleccioneValor')] : [flags, mensaje];
     }
 
     override restablecer(): void {
@@ -304,7 +312,7 @@ import { prop } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
       if (!items.length) {
         const vacio = document.createElement('div');
         vacio.className = 'empty';
-        vacio.textContent = this.getAttribute('no-results') || 'Sin resultados';
+        vacio.textContent = this.getAttribute('no-results') || this.t('sinResultados');
         this.#listbox.appendChild(vacio);
       }
       items.forEach((opt, i) => {

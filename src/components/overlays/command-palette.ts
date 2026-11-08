@@ -1,4 +1,6 @@
-import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import { emit, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import { IswcReactive } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
+import { registrarTerminos } from '@jeff-aporta/iswc-base/core/localize.js';
 import { escapeHtml } from '@jeff-aporta/iswc-base/core/dom.js';
 import css from 'iswc:css';
 
@@ -39,6 +41,19 @@ import css from 'iswc:css';
  *   palette.results  resultados actuales (read-only)
  */
 (() => {
+  registrarTerminos('es', {
+    atajoCerrar: 'cerrar',
+    atajoEjecutar: 'ejecutar',
+    atajoNavegar: 'navegar',
+    buscarComando: 'Buscar comando…',
+    comandosDisponibles: (n) => `${n} comandos disponibles.`,
+    ningunComando: (q) => `Ningún comando coincide con "${q}".`,
+    paletaComandos: 'Paleta de comandos',
+    resultados: 'Resultados',
+    resultadosSugerencia: (n, s) => `${n} resultados. Sugerencia: ${s}.`,
+    sinComandos: 'Sin comandos para mostrar.',
+  });
+
   const OBSERVED = ['hotkey', 'placeholder', 'max-results', 'empty-text'];
 
   interface Command {
@@ -58,7 +73,7 @@ import css from 'iswc:css';
   /** Letras/numeros previos a la query (LIFO). Solo memoria de la sesion. */
   type History = string[];
 
-  class IswcCommandPalette extends IswcElement {
+  class IswcCommandPalette extends IswcReactive {
     static tag = 'iswc-command-palette';
     static css = css;
     static deps = ['iswc-icon'];
@@ -91,7 +106,7 @@ import css from 'iswc:css';
       // aria-controls y aria-activedescendant segun WAI-ARIA 1.2).
       const rootId = `cmd-palette-${Math.random().toString(36).slice(2, 8)}`;
       this.shadowRoot!.innerHTML = /* html */ `
-        <dialog part="dialog" class="dialog" aria-label="Paleta de comandos">
+        <dialog part="dialog" class="dialog">
           <div class="panel iswc-popover-panel" part="panel">
             <header class="bar iswc-surface-bar">
               <span class="ico"><iswc-icon icon="mdi:magnify"></iswc-icon></span>
@@ -100,15 +115,14 @@ import css from 'iswc:css';
                 aria-expanded="false" aria-autocomplete="list"
                 aria-haspopup="listbox" />
             </header>
-            <ol part="results" class="results" id="${rootId}-listbox" role="listbox"
-              aria-label="Resultados"></ol>
+            <ol part="results" class="results" id="${rootId}-listbox" role="listbox"></ol>
             <div part="empty" class="empty" id="empty" role="status" hidden></div>
             <span part="sr-status" class="sr-status" role="status" aria-live="polite"
               aria-atomic="true"></span>
             <footer part="footer" class="footer">
-              <span class="hint-item"><kbd>↑</kbd><kbd>↓</kbd> navegar</span>
-              <span class="hint-item"><kbd>↵</kbd> ejecutar</span>
-              <span class="hint-item"><kbd>Esc</kbd> cerrar</span>
+              <span class="hint-item"><kbd>↑</kbd><kbd>↓</kbd> <span data-t="atajoNavegar"></span></span>
+              <span class="hint-item"><kbd>↵</kbd> <span data-t="atajoEjecutar"></span></span>
+              <span class="hint-item"><kbd>Esc</kbd> <span data-t="atajoCerrar"></span></span>
               <span class="footer-extra"><slot name="footer"></slot></span>
             </footer>
           </div>
@@ -136,9 +150,17 @@ import css from 'iswc:css';
       });
     }
 
+    /** Textos fijos en el idioma heredado; repinta al cambiar `lang` (los atributos del consumidor mandan). */
+    override actualizado(): void {
+      const raiz = this.shadowRoot!;
+      this.#dialog.setAttribute('aria-label', this.t('paletaComandos'));
+      raiz.querySelector('[role="listbox"]')!.setAttribute('aria-label', this.t('resultados'));
+      for (const s of raiz.querySelectorAll<HTMLElement>('[data-t]')) s.textContent = this.t(s.dataset.t ?? '');
+      this.#input.placeholder = this.getAttribute('placeholder') || this.t('buscarComando');
+      this.#empty.textContent = this.getAttribute('empty-text') || this.t('sinResultados');
+    }
+
     onConnected() {
-      this.#input.placeholder = this.getAttribute('placeholder') || 'Buscar comando…';
-      this.#empty.textContent = this.getAttribute('empty-text') || 'Sin resultados';
       this.#readCommands();
       this.#bindHotkey();
     }
@@ -379,17 +401,17 @@ import css from 'iswc:css';
         const total = this.#results.length;
         if (!q) {
           this.#srStatus.textContent = total > 0
-            ? `${total} comandos disponibles.`
-            : 'Sin comandos para mostrar.';
+            ? this.t('comandosDisponibles', total)
+            : this.t('sinComandos');
           return;
         }
         if (total === 0) {
-          this.#srStatus.textContent = `Ningún comando coincide con "${q}".`;
+          this.#srStatus.textContent = this.t('ningunComando', q);
           return;
         }
         const top = this.#results[0];
         const label = top?.title || top?.id || '';
-        this.#srStatus.textContent = `${total} resultados. Sugerencia: ${label}.`;
+        this.#srStatus.textContent = this.t('resultadosSugerencia', total, label);
       }, 120) as unknown as number;
     }
 

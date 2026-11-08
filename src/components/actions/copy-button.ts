@@ -5,6 +5,7 @@ import { emit, upgradeProperties, define } from '@jeff-aporta/iswc-base/core/isw
 import '@jeff-aporta/iswc-base/components/feedback/tooltip.js';
 import { IswcReactive, prop } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
 import { copyText } from '@jeff-aporta/iswc-base/core/dom.js';
+import { registrarTerminos } from '@jeff-aporta/iswc-base/core/localize.js';
 import css from 'iswc:css';
 
 /**
@@ -74,7 +75,7 @@ import css from 'iswc:css';
     <span class="sr-only" aria-live="polite"></span>
   `;
 
-  const LABELS = { copy: 'Copiar', success: 'Copiado', error: 'Error' };
+  registrarTerminos('es', { copiado: 'Copiado', copiar: 'Copiar', error: 'Error' });
 
   const PLACEMENTS = [
     'top', 'top-start', 'top-end',
@@ -180,9 +181,14 @@ import css from 'iswc:css';
     set tooltipPlacement(v: string) { this.setAttribute('tooltip-placement', v); }
 
     get #currentLabel() {
-      if (this.#status === 'success') return this.successLabel || LABELS.success;
-      if (this.#status === 'error') return this.errorLabel || LABELS.error;
-      return this.copyLabel || LABELS.copy;
+      if (this.#status === 'success') return this.successLabel || this.t('copiado');
+      if (this.#status === 'error') return this.errorLabel || this.t('error');
+      return this.copyLabel || this.t('copiar');
+    }
+
+    /** Repinta el texto al cambiar el idioma heredado. */
+    override actualizado(): void {
+      if (this.#mounted) this.#syncLabel();
     }
 
     #onSlotChange() {

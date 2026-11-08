@@ -9,7 +9,14 @@ import { TIMEOUT_RENDER_NAVEGADOR } from '../_shared/navegador.ts';
 const { test, lista } = coleccionPruebas({ categoria: 'what' });
 
 /** Reglas de axe que fallan hoy por muestra (se corrigen al migrar cada familia en su lote de F8). */
-const PENDIENTES: Record<string, readonly string[]> = {};
+const PENDIENTES: Record<string, readonly string[]> = {
+  // Medido 7-nov-2026 al registrar de verdad los tags en la página (antes la prueba corría en vacío: ver
+  // tests/_shared/pagina.ts, ignoreAnnotations). Se corrigen en el lote de accesibilidad de F8 (HOW-7).
+  lista: ['aria-required-parent'],
+  dialogo: ['color-contrast'],
+  pestanas: ['nested-interactive'],
+  arbol: ['aria-allowed-attr'],
+};
 
 test('navegador/a11y-axe: sin violaciones WCAG 2 A/AA nuevas por familia', { timeout: TIMEOUT_RENDER_NAVEGADOR }, async () => {
   const res = await correrCasos('tests/_shared/paginas/a11y-axe.ts');

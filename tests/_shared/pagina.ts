@@ -20,6 +20,9 @@ export async function correrCasos(entrada: string, html = '<!doctype html><html 
   const salida = await esbuild.build({
     entryPoints: [join(RAIZ, entrada)],
     bundle: true,
+    // `package.json#sideEffects` solo lista dist/: sin esto esbuild descarta los `import '…/x.js'` de efecto sobre src/
+    // y los tags de la página quedan sin registrar (la prueba pasaría en vacío).
+    ignoreAnnotations: true,
     format: 'esm',
     target: 'es2022',
     write: false,

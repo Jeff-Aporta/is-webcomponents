@@ -1,5 +1,7 @@
 import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import { withStyleAttrs } from '@jeff-aporta/iswc-base/core/attrs.js';
+import { IswcReactive } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
+import { observarIdioma, resolverLocale, termino } from '@jeff-aporta/iswc-base/core/localize.js';
 
 import { readUrlNav, readUrlTabs, writeUrlNav, writeUrlTab } from './utils/url-nav.js';
 import css from 'iswc:css';
@@ -68,15 +70,13 @@ import css from 'iswc:css';
   TG_TEMPLATE.innerHTML = /* html */ `
     <div class="tg" part="tab-group">
       <div class="nav" part="nav">
-        <button type="button" class="scroll scroll-start" part="scroll-button scroll-button-start" tabindex="-1"
-                aria-label="Anterior">
+        <button type="button" class="scroll scroll-start" part="scroll-button scroll-button-start" tabindex="-1">
           <iswc-icon icon="mdi:chevron-left" aria-hidden="true"></iswc-icon>
         </button>
         <div class="tabs" part="tabs">
           <slot name="nav"></slot>
         </div>
-        <button type="button" class="scroll scroll-end" part="scroll-button scroll-button-end" tabindex="-1"
-                aria-label="Siguiente">
+        <button type="button" class="scroll scroll-end" part="scroll-button scroll-button-end" tabindex="-1">
           <iswc-icon icon="mdi:chevron-right" aria-hidden="true"></iswc-icon>
         </button>
       </div>
@@ -91,7 +91,7 @@ import css from 'iswc:css';
   const VALID_PLACEMENT = ['top', 'bottom', 'start', 'end'];
   const VALID_ACTIVATION = ['auto', 'manual'];
 
-  class IswcTabGroup extends withStyleAttrs(IswcElement) {
+  class IswcTabGroup extends withStyleAttrs(IswcReactive) {
     static tag = 'iswc-tab-group';
     static css = css;
 
@@ -126,6 +126,12 @@ import css from 'iswc:css';
       this.#scrollEnd.addEventListener('click', () => this.#scrollTabs(1));
     }
 
+    /** Flechas de desplazamiento en el idioma heredado (repinta al cambiar `lang`). */
+    override actualizado(): void {
+      this.#scrollStart.setAttribute('aria-label', this.t('anterior'));
+      this.#scrollEnd.setAttribute('aria-label', this.t('siguiente'));
+    }
+
     connectedCallback(): void {
       super.connectedCallback();
       this.#mounted = true;
@@ -145,6 +151,7 @@ import css from 'iswc:css';
       this.#mounted = false;
       this.#scrollRo?.disconnect();
       this.#scrollRo = null;
+      super.disconnectedCallback();
     }
 
     attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
@@ -426,7 +433,7 @@ import css from 'iswc:css';
       <span class="tab-end" part="end"><slot name="end"></slot></span>
     </button>
     <slot name="close-button">
-      <button type="button" class="tab-close" part="close-button" tabindex="-1" data-tab-close aria-label="Cerrar">
+      <button type="button" class="tab-close" part="close-button" tabindex="-1" data-tab-close>
         <iswc-icon icon="mdi:close" aria-hidden="true"></iswc-icon>
       </button>
     </slot>
@@ -457,11 +464,19 @@ import css from 'iswc:css';
       });
     }
 
+    /** Alta en el observador de idioma: repinta el texto del botón de cierre al cambiar `lang`. */
+    #idioma = { solicitarRender: (): void => this.#syncState() };
+
     connectedCallback(): void {
       this.#mounted = true;
       this.setAttribute('role', 'tab');
       this.#syncState();
+      observarIdioma(this.#idioma, true);
       // Si está dentro de un tab-group, parent lo descubre y conecta.
+    }
+
+    onDisconnected(): void {
+      observarIdioma(this.#idioma, false);
     }
 
     attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
@@ -476,6 +491,8 @@ import css from 'iswc:css';
       const close = this.shadowRoot!.querySelector<HTMLElement>('[data-tab-close]');
       if (btn) btn.disabled = this.hasAttribute('disabled');
       if (close) close.hidden = !this.hasAttribute('closable');
+      // `iswc-tab` no pasa por el ciclo reactivo: el texto se resuelve al sincronizar (conexión, atributos, idioma).
+      if (close) close.setAttribute('aria-label', termino(resolverLocale(this), 'cerrar'));
       this.setAttribute('aria-selected', String(this.hasAttribute('active')));
       this.toggleAttribute('data-active', this.hasAttribute('active'));
     }

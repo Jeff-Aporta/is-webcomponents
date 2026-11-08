@@ -88,9 +88,9 @@ test('11. maneja format ∈ {long, short, narrow} (Intl.RelativeTimeFormat)', as
     'format acepta long/short/narrow');
 });
 
-test('12. atributo locale es BCP 47 y delega en resolveLocale', async () => {
+test('12. atributo locale es BCP 47 y delega en resolverLocale (core/localize)', async () => {
   const src = readFileSync(TS, 'utf8');
-  assert.ok(/resolveLocale/.test(src), 'locale debe resolverse via helper compartido');
+  assert.ok(/resolverLocale/.test(src), 'locale debe resolverse via helper compartido');
 });
 
 export default lista();

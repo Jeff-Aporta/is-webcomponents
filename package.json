@@ -1,6 +1,6 @@
 {
   "name": "@jeff-aporta/iswc-base",
-  "version": "0.0.0-20261106.ad0ae17",
+  "version": "0.0.0-20261107.0e986c5",
   "description": "iswc-base: web components del kit ISWC, un módulo ES por tag (dist/cdn).",
   "type": "module",
   "license": "UNLICENSED",
@@ -22,7 +22,6 @@
     "./core/color": "./dist/cdn/core/color.min.mjs",
     "./core/diagram-grid": "./dist/cdn/core/diagram-grid.min.mjs",
     "./core/dom": "./dist/cdn/core/dom.min.mjs",
-    "./core/form-associated": "./dist/cdn/core/form-associated.min.mjs",
     "./core/i18n/en": "./dist/cdn/core/i18n/en.min.mjs",
     "./core/icon-loader": "./dist/cdn/core/icon-loader.min.mjs",
     "./core/iswc-css-vacio": "./dist/cdn/core/iswc-css-vacio.min.mjs",

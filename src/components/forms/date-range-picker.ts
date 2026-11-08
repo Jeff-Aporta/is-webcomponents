@@ -1,4 +1,5 @@
 import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import { observarIdioma, registrarTerminos, resolverLocale, termino } from '@jeff-aporta/iswc-base/core/localize.js';
 import { addMonths, monthKey, parseISO, startOfMonth, toISO } from './utils/date-utils.js';
 import './date-picker.js';
 import css from 'iswc:css';
@@ -46,28 +47,29 @@ import css from 'iswc:css';
     'disable-future', 'disabled-dates', 'disabled-days', 'disabled', 'readonly',
   ];
 
-  const LABELS: Record<string, Record<string, string>> = {
-    es: {
-      'this-week': 'Esta semana',
-      'last-week': 'Semana pasada',
-      'last-7-days': 'Últimos 7 días',
-      'current-month': 'Mes actual',
-      'next-month': 'Mes siguiente',
-      'this-year': 'Este año',
-      reset: 'Limpiar',
-    },
-    en: {
-      'this-week': 'This week',
-      'last-week': 'Last week',
-      'last-7-days': 'Last 7 days',
-      'current-month': 'Current month',
-      'next-month': 'Next month',
-      'this-year': 'This year',
-      reset: 'Reset',
-    },
+  registrarTerminos('es', {
+    atajos: 'Atajos',
+    esteAnio: 'Este año',
+    estaSemana: 'Esta semana',
+    mesActual: 'Mes actual',
+    mesSiguiente: 'Mes siguiente',
+    restablecer: 'Limpiar',
+    semanaPasada: 'Semana pasada',
+    ultimos7Dias: 'Últimos 7 días',
+  });
+
+  /** Atajo → clave del término (`core/localize.ts`; el inglés vive en `core/i18n/en.ts`). */
+  const TERMINO_ATAJO: Record<string, string> = {
+    'this-week': 'estaSemana',
+    'last-week': 'semanaPasada',
+    'last-7-days': 'ultimos7Dias',
+    'current-month': 'mesActual',
+    'next-month': 'mesSiguiente',
+    'this-year': 'esteAnio',
+    reset: 'restablecer',
   };
 
-  const PRESETS: string[] = Object.keys(LABELS.es);
+  const PRESETS: string[] = Object.keys(TERMINO_ATAJO);
 
   function shift(date: Date, days: number): Date {
     const d = new Date(date);
@@ -133,11 +135,25 @@ import css from 'iswc:css';
       this.#shortcuts.addEventListener('click', this.#onShortcut);
     }
 
+    /** `locale` público puede ser undefined (API previa), así que no hereda de `IswcReactive`: se inscribe aparte en el
+     *  observador de idioma para repintar los atajos al cambiar `lang` o al llegar un diccionario. */
+    #idioma = {
+      solicitarRender: (): void => {
+        this.#renderShortcuts();
+        this.#markActiveShortcut();
+      },
+    };
+
     onConnected(): void {
       this.#anchor = this.#anchorFromState();
       this.#syncPickerCount();
+      observarIdioma(this.#idioma, true);
       this.#renderShortcuts();
       this.#sync();
+    }
+
+    onDisconnected(): void {
+      observarIdioma(this.#idioma, false);
     }
 
     onAttributeChanged(name: string, _oldVal: string | null, newVal: string | null): void {
@@ -248,8 +264,7 @@ import css from 'iswc:css';
       const keys = raw === 'none' || raw === ''
         ? []
         : raw.split(/[\s,]+/).filter((k: string) => PRESETS.includes(k));
-      const lang = String(this.locale || 'es').slice(0, 2);
-      const dict = LABELS[lang] || LABELS.es;
+      const idioma = resolverLocale(this, this.getAttribute('locale'));
 
       this.#presets.replaceChildren(...keys.map((key: string) => {
         const btn = document.createElement('iswc-button');
@@ -257,13 +272,13 @@ import css from 'iswc:css';
         btn.setAttribute('color', key === 'reset' ? 'neutral' : 'brand');
         btn.setAttribute('pill', '');
         btn.dataset.preset = key;
-        btn.textContent = dict[key] ?? key;
+        btn.textContent = termino(idioma, TERMINO_ATAJO[key] ?? key);
         return btn;
       }));
 
       const custom = this.querySelectorAll<HTMLElement>('[slot="shortcut"]').length;
       this.#shortcuts.hidden = keys.length === 0 && custom === 0;
-      this.#shortcuts.setAttribute('aria-label', lang === 'en' ? 'Shortcuts' : 'Atajos');
+      this.#shortcuts.setAttribute('aria-label', termino(idioma, 'atajos'));
     }
 
     /** Resalta el atajo cuyo rango coincide con la selección actual. */

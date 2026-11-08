@@ -1,4 +1,6 @@
-import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import { emit, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import { IswcReactive } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
+import { registrarTerminos } from '@jeff-aporta/iswc-base/core/localize.js';
 import { crearNodo } from '@jeff-aporta/iswc-base/core/dom.js';
 import { getNumberAttr } from '@jeff-aporta/iswc-base/core/attrs.js';
 import { PaginationTextosSchema } from './schemas/pagination.schemas.js';
@@ -27,14 +29,15 @@ import css from 'iswc:css';
 
 const OBSERVED = ['page', 'pages', 'page-size', 'elements-per-page', 'hide-page-size', 'total', 'disabled', 'compact', 'variant', 'color', 'label'] as const;
 const TAMANOS = [15, 30, 50];
-const TEXTOS: PaginationTextos = {
-  pagina: 'Página {n}',
-  irA: 'Ir a la página {n}',
-  resumen: 'Página {n} de {total}',
-  izquierda: 'Desplazar páginas a la izquierda',
-  derecha: 'Desplazar páginas a la derecha',
-  tamano: 'Elementos por página',
-};
+registrarTerminos('es', {
+  desplazarPaginasDerecha: 'Desplazar páginas a la derecha',
+  desplazarPaginasIzquierda: 'Desplazar páginas a la izquierda',
+  elementosPorPagina: 'Elementos por página',
+  irAPaginaN: 'Ir a la página {n}',
+  paginacion: 'Paginación',
+  paginaDeTotal: 'Página {n} de {total}',
+  paginaN: 'Página {n}',
+});
 
 /** Tamaños positivos únicos de una lista separada por comas o espacios; `[]` si no hay ninguno válido. */
 function parseSizes(raw: string | null): number[] {
@@ -44,7 +47,7 @@ function parseSizes(raw: string | null): number[] {
 
 const rellenar = (plantilla: string, n: number, total = 0): string => plantilla.replace('{n}', String(n)).replace('{total}', String(total));
 
-class IswcPagination extends IswcElement {
+class IswcPagination extends IswcReactive {
   static tag = 'iswc-pagination';
   static css = css;
   static deps = ['iswc-button', 'iswc-icon'];
@@ -54,7 +57,8 @@ class IswcPagination extends IswcElement {
   #abort: AbortController | null = null;
   #caja: ResizeObserver | null = null;
   #gen = 0;
-  #textos: PaginationTextos = TEXTOS;
+  /** Lo que el consumidor fijó en `textos`; el resto sale de `t()` en el idioma heredado. */
+  #propios: Partial<PaginationTextos> = {};
 
   constructor() {
     super();
@@ -78,6 +82,11 @@ class IswcPagination extends IswcElement {
   }
 
   override onAttributeChanged(): void { this.#pintar(); }
+
+  /** Repinta al cambiar el idioma heredado (el primer pintado lo hace `onConnected`). */
+  override actualizado(): void {
+    if (this.mounted) this.#pintar();
+  }
 
   /** Página actual (1-based, mínimo 1). */
   get page(): number { return Math.max(1, getNumberAttr(this, 'page', 1) || 1); }
@@ -120,11 +129,21 @@ class IswcPagination extends IswcElement {
   set disabled(v: boolean) { this.setBooleanAttr('disabled', v); }
 
   /** Textos para lectores de pantalla; se mezclan con los de por defecto. */
-  get textos(): PaginationTextos { return this.#textos; }
+  get textos(): PaginationTextos {
+    const porDefecto: PaginationTextos = {
+      pagina: this.t('paginaN'),
+      irA: this.t('irAPaginaN'),
+      resumen: this.t('paginaDeTotal'),
+      izquierda: this.t('desplazarPaginasIzquierda'),
+      derecha: this.t('desplazarPaginasDerecha'),
+      tamano: this.t('elementosPorPagina'),
+    };
+    return { ...porDefecto, ...this.#propios };
+  }
   set textos(v: Partial<PaginationTextos>) {
     const r = PaginationTextosSchema.partial().safeParse(v);
     if (!r.success) return;
-    this.#textos = { ...TEXTOS, ...r.data };
+    this.#propios = r.data;
     if (this.isConnected) this.#pintar();
   }
 
@@ -147,7 +166,7 @@ class IswcPagination extends IswcElement {
     if (this.hasAttribute('hide-page-size') || opciones.length < 2 || pocos) return null;
     const select = crearNodo(
       'iswc-select',
-      { class: 'tamano', part: 'tamano', value: String(this.pageSize), title: this.#textos.tamano, 'aria-label': this.#textos.tamano, disabled: this.disabled },
+      { class: 'tamano', part: 'tamano', value: String(this.pageSize), title: this.textos.tamano, 'aria-label': this.textos.tamano, disabled: this.disabled },
       ...opciones.map((n) => crearNodo('iswc-option', { value: String(n) }, String(n))),
     );
     select.addEventListener('iswc-change', (ev) => {
@@ -161,7 +180,7 @@ class IswcPagination extends IswcElement {
 
   #pintar(): void {
     const { page, pages, disabled } = this;
-    const t = this.#textos;
+    const t = this.textos;
     const variante = this.getAttribute('variant') || 'filled';
     const color = this.getAttribute('color') || 'brand';
     const numeros = Array.from({ length: pages }, (_, i) => i + 1).map((item) => item === page
@@ -176,7 +195,7 @@ class IswcPagination extends IswcElement {
     );
     this.#root.replaceChildren(crearNodo(
       'nav',
-      { class: 'base', part: 'base', 'aria-label': this.getAttribute('label') || 'Paginación' },
+      { class: 'base', part: 'base', 'aria-label': this.getAttribute('label') || this.t('paginacion') },
       crearNodo('span', { class: 'resumen', part: 'resumen', 'aria-live': 'polite', 'aria-atomic': 'true' }, rellenar(t.resumen, page, pages)),
       carril,
       this.#selector(),

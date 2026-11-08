@@ -56,7 +56,6 @@ import css from 'iswc:css';
             part="close-button"
             variant="text"
             color="text"
-            aria-label="Cerrar"
           >
             <iswc-icon icon="mdi:close" aria-hidden="true"></iswc-icon>
           </iswc-button>

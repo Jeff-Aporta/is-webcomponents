@@ -1,4 +1,6 @@
-import { emitCancelable, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import { emitCancelable, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import { IswcReactive } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
+import { registrarTerminos } from '@jeff-aporta/iswc-base/core/localize.js';
 import { setStringAttr } from '@jeff-aporta/iswc-base/core/attrs.js';
 import type { PagerDirection, PagerNavigateDetail } from './schemas/pager.schemas.js';
 import css from 'iswc:css';
@@ -21,7 +23,7 @@ import css from 'iswc:css';
  */
 
 const OBSERVED = ['prev', 'next', 'prev-href', 'next-href', 'prev-label', 'next-label', 'label'] as const;
-const DEFAULT_LABEL: Record<PagerDirection, string> = { prev: '← Anterior', next: 'Siguiente →' };
+registrarTerminos('es', { paginacion: 'Paginación' });
 
 const TEMPLATE = document.createElement('template');
 TEMPLATE.innerHTML = /* html */ `
@@ -31,7 +33,7 @@ TEMPLATE.innerHTML = /* html */ `
   </nav>
 `;
 
-class IswcPager extends IswcElement {
+class IswcPager extends IswcReactive {
   static tag = 'iswc-pager';
   static css = css;
   static observed = [...OBSERVED];
@@ -56,6 +58,10 @@ class IswcPager extends IswcElement {
 
   override onConnected(): void { this.#sync(); }
   override onAttributeChanged(): void { this.#sync(); }
+  /** Repinta al cambiar el idioma heredado (el primer pintado lo hace `onConnected`). */
+  override actualizado(): void {
+    if (this.mounted) this.#sync();
+  }
 
   /** Título de la página anterior (vacío = sin enlace anterior). */
   get prev(): string { return this.getAttribute('prev') ?? ''; }
@@ -89,13 +95,13 @@ class IswcPager extends IswcElement {
   };
 
   #sync(): void {
-    this.#nav.setAttribute('aria-label', this.getAttribute('label') || 'Paginación');
+    this.#nav.setAttribute('aria-label', this.getAttribute('label') || this.t('paginacion'));
     for (const dir of ['prev', 'next'] as const) {
       const a = this.#sides[dir];
       const title = this.getAttribute(dir) ?? '';
       const href = this.getAttribute(`${dir}-href`) ?? '';
       a.hidden = title.trim() === '';
-      a.querySelector('.label')!.textContent = this.getAttribute(`${dir}-label`) || DEFAULT_LABEL[dir];
+      a.querySelector('.label')!.textContent = this.getAttribute(`${dir}-label`) || (dir === 'prev' ? `← ${this.t('anterior')}` : `${this.t('siguiente')} →`);
       a.querySelector('.title')!.textContent = title;
       if (href) {
         a.href = href;

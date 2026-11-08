@@ -1,6 +1,7 @@
 import { applyToneRamp, isCssColorValue, BUTTON_SHAPE, DEFAULT_BUTTON_SHAPE, normalizeButtonShape, DEFAULT_INTENT, ensureDefaultColor } from '@jeff-aporta/iswc-base/core/attrs.js';
 import { emit, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import { IswcReactive } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
+import { registrarTerminos } from '@jeff-aporta/iswc-base/core/localize.js';
 import css from 'iswc:css';
 
 /**
@@ -133,6 +134,8 @@ import css from 'iswc:css';
     // la del host envolvente y la del botón interno.
     "tabindex",
   ];
+
+  registrarTerminos('es', { estadoCargando: 'Cargando', listo: 'Listo' });
 
   // Sobre `IswcReactive` (estados e `internals`), no `IswcFormControl`: la base emite su propio `iswc-invalid`
   // ({ message }) y el botón ya publica `iswc-invalid` con { originalEvent, validationMessage }.
@@ -466,7 +469,7 @@ import css from 'iswc:css';
       // g10 proposal: cuando el botón entra en loading, debe anunciarse
       // "Cargando"; al terminar, anunciar "Listo" o vacío.
       const sr = this.shadowRoot?.querySelector<HTMLElement>(".btn__sr-status");
-      if (sr) sr.textContent = loading ? 'Cargando' : 'Listo';
+      if (sr) sr.textContent = loading ? this.t('estadoCargando') : this.t('listo');
       if (loading) {
         this.#syncDisabled(true);
       } else {

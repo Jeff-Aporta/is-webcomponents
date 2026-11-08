@@ -1,4 +1,6 @@
-import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import { emit, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import { IswcReactive } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
+import { registrarTerminos } from '@jeff-aporta/iswc-base/core/localize.js';
 import { escapeHtml } from '@jeff-aporta/iswc-base/core/dom.js';
 import css from 'iswc:css';
 
@@ -31,6 +33,8 @@ import css from 'iswc:css';
  *   iswc-error          detail: { id, file, reason }
  */
 (() => {
+  registrarTerminos('es', { arrastraArchivosAca: 'Arrastrá archivos acá', hacerClicParaElegir: 'o hacé click para elegir', quitar: 'Quitar' });
+
   const OBSERVED: string[] = ['accept', 'multiple', 'max-files', 'max-size', 'chunked'];
 
   let nextId = 0;
@@ -49,7 +53,7 @@ import css from 'iswc:css';
     error?: string;
   }
 
-  class IswcDropzone extends IswcElement {
+  class IswcDropzone extends IswcReactive {
     static tag = 'iswc-dropzone';
     static css = css;
     static deps = ['iswc-icon', 'iswc-button'];
@@ -66,8 +70,8 @@ import css from 'iswc:css';
         <div part="root" class="root">
           <div part="zone" class="zone" tabindex="0">
             <span class="ico"><iswc-icon icon="mdi:cloud-upload-outline"></iswc-icon></span>
-            <strong class="title">Arrastrá archivos acá</strong>
-            <small class="sub">o hacé click para elegir</small>
+            <strong class="title"></strong>
+            <small class="sub"></small>
             <input type="file" class="file-input" id="fileInput" hidden />
           </div>
           <ol part="queue" class="queue" id="queue"></ol>
@@ -92,6 +96,13 @@ import css from 'iswc:css';
         this.addFiles(this.#input.files ? [...this.#input.files] : []);
         this.#input.value = '';
       });
+    }
+
+    /** Textos de la zona en el idioma heredado; repinta la cola si cambia `lang`. */
+    override actualizado(): void {
+      this.#zone.querySelector('.title')!.textContent = this.t('arrastraArchivosAca');
+      this.#zone.querySelector('.sub')!.textContent = this.t('hacerClicParaElegir');
+      if (this.mounted) this.#render();
     }
 
     connectedCallback(): void {
@@ -199,7 +210,7 @@ import css from 'iswc:css';
         </div>
         <progress max="100" value="${rec.progress}"></progress>
         <span class="status">${rec.status} ${rec.progress}%</span>
-        <iswc-button type="button" class="del" variant="text" color="text" aria-label="Quitar">
+        <iswc-button type="button" class="del" variant="text" color="text" aria-label="${escapeHtml(this.t('quitar'))}">
           <iswc-icon icon="mdi:close" aria-hidden="true"></iswc-icon>
         </iswc-button>
       `;

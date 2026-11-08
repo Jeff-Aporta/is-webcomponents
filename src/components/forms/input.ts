@@ -3,6 +3,7 @@ import { IswcFormControl } from '@jeff-aporta/iswc-base/core/iswc-form-control.j
 import '@jeff-aporta/iswc-base/components/actions/check-icon-button.js';
 import { isOtpAutocomplete, listenWebOtp } from './utils/input-tokens.js';
 import { hasSlotted } from '@jeff-aporta/iswc-base/core/dom.js';
+import { registrarTerminos } from '@jeff-aporta/iswc-base/core/localize.js';
 import css from 'iswc:css';
 import { prop } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
 /**
@@ -53,7 +54,6 @@ import { prop } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
           variant="text"
           color="text"
           tabindex="-1"
-          aria-label="Limpiar"
           hidden
         >
           <iswc-icon icon="mdi:close-circle" aria-hidden="true"></iswc-icon>
@@ -64,8 +64,6 @@ import { prop } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
           id="toggle"
           icon="mdi:eye-outline"
           checked-icon="mdi:eye-off-outline"
-          label="Mostrar contraseña"
-          checked-label="Ocultar contraseña"
           tabindex="-1"
           hidden
         ></iswc-check-icon-button>
@@ -81,6 +79,8 @@ import { prop } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
       </div>
     </div>
   `;
+
+  registrarTerminos('es', { mostrarContrasena: 'Mostrar contraseña', ocultarContrasena: 'Ocultar contraseña' });
 
   const TYPES = ['text', 'email', 'password', 'number', 'search', 'tel', 'url', 'date'];
   const APPEARANCES = ['outlined', 'filled', 'underlined'];
@@ -159,6 +159,14 @@ import { prop } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
       for (const slot of shadow.querySelectorAll<HTMLSlotElement>('slot')) {
         slot.addEventListener('slotchange', this.#syncSlots);
       }
+    }
+
+    /** Textos de los botones internos en el idioma heredado (repinta al cambiar `lang`). */
+    override actualizado(): void {
+      super.actualizado();
+      this.#clearBtn.setAttribute('aria-label', this.t('limpiar'));
+      this.#toggleBtn.setAttribute('label', this.t('mostrarContrasena'));
+      this.#toggleBtn.setAttribute('checked-label', this.t('ocultarContrasena'));
     }
 
     onConnected(): void {

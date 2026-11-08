@@ -1,5 +1,5 @@
 import { setStringAttr } from '@jeff-aporta/iswc-base/core/attrs.js';
-import { resolveLocale } from '@jeff-aporta/iswc-base/core/resolve-locale.js';
+import { formato, resolverLocale } from '@jeff-aporta/iswc-base/core/localize.js';
 import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import css from 'iswc:css';
 
@@ -87,7 +87,7 @@ export function parseLooseDate(raw: string|number|null|undefined) {
     set date(v) { setStringAttr(this, 'date', v); }
 
     get locale() {
-      return resolveLocale(this.getAttribute('locale'));
+      return resolverLocale(this, this.getAttribute('locale'));
     }
     set locale(v) {
       if (v == null || v === '') this.removeAttribute('locale');
@@ -178,7 +178,7 @@ export function parseLooseDate(raw: string|number|null|undefined) {
       }
       let visible: string;
       try {
-        const fmt = new Intl.DateTimeFormat(this.locale, this.#buildOptions());
+        const fmt = formato('date', this.locale, this.#buildOptions());
         visible = fmt.format(d);
       } catch {
         visible = d.toLocaleString(this.locale);

@@ -1,4 +1,6 @@
-import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import { emit, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import { IswcReactive } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
+import { registrarTerminos } from '@jeff-aporta/iswc-base/core/localize.js';
 import { ocultarSlotsVacios } from '@jeff-aporta/iswc-base/core/dom.js';
 import { INTENT, TONE } from '@jeff-aporta/iswc-base/core/attrs.js';
 import css from 'iswc:css';
@@ -33,7 +35,6 @@ import css from 'iswc:css';
         class="remove"
         variant="glyph"
         color="neutral"
-        aria-label="Quitar"
         hidden
       >
         <iswc-icon icon="mdi:close" aria-hidden="true"></iswc-icon>
@@ -41,11 +42,13 @@ import css from 'iswc:css';
     </span>
   `;
 
+  registrarTerminos('es', { etiquetaColor: (color) => `Etiqueta ${color}`, quitar: 'Quitar' });
+
   const OBSERVED = ['color', 'variant', 'pill', 'with-remove', 'remove-label'];
   const VALID_COLOR = [...INTENT]; // 'info' ya es parte de INTENT
   const VALID_VARIANT = TONE.filter((t) => t !== 'plain');
 
-  class IswcTag extends IswcElement {
+  class IswcTag extends IswcReactive {
     static tag = 'iswc-tag';
     static css = css;
     static deps = ['iswc-icon', 'iswc-button'];
@@ -94,9 +97,16 @@ import css from 'iswc:css';
     get withRemove() { return this.hasAttribute('with-remove'); }
     set withRemove(v) { this.toggleAttribute('with-remove', !!v); }
 
+    /** Repinta los textos por defecto al cambiar el idioma heredado. */
+    override actualizado(): void {
+      if (!this.mounted) return;
+      this.#syncRemove();
+      this.#syncAria();
+    }
+
     #syncRemove() {
       this.#remove.hidden = !this.withRemove;
-      this.#remove.setAttribute('aria-label', this.getAttribute('remove-label') || 'Quitar');
+      this.#remove.setAttribute('aria-label', this.getAttribute('remove-label') || this.t('quitar'));
     }
 
     /** g07 (Cat 30): etiqueta accesible automática cuando el slot principal
@@ -106,7 +116,7 @@ import css from 'iswc:css';
       if (actual !== null && actual !== this.#labelAuto) return; // la puso el consumidor
       // Con texto, o con otro slot lleno, el contenido ya se nombra solo.
       const vacio = !this.textContent?.trim() && !this.querySelector('[slot]:not([slot="start"]):not([slot="end"])');
-      this.#labelAuto = vacio ? `Etiqueta ${this.getAttribute('color') || 'brand'}` : '';
+      this.#labelAuto = vacio ? this.t('etiquetaColor', this.getAttribute('color') || 'brand') : '';
       if (vacio) this.setAttribute('aria-label', this.#labelAuto);
       else this.removeAttribute('aria-label');
     }

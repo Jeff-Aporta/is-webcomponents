@@ -1,5 +1,7 @@
 import './breadcrumb-item.js';
-import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import { define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import { IswcReactive } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
+import { registrarTerminos } from '@jeff-aporta/iswc-base/core/localize.js';
 import css from 'iswc:css';
 
 /**
@@ -19,14 +21,16 @@ import css from 'iswc:css';
  */
 
 (() => {
+  registrarTerminos('es', { ruta: 'Ruta' });
+
   const TEMPLATE = document.createElement('template');
   TEMPLATE.innerHTML = /* html */ `
-    <nav class="bc" part="breadcrumb" aria-label="Ruta">
+    <nav class="bc" part="breadcrumb">
       <ol role="list" class="bc-list"><slot></slot></ol>
     </nav>
   `;
 
-  class IswcBreadcrumb extends IswcElement {
+  class IswcBreadcrumb extends IswcReactive {
     static tag = 'iswc-breadcrumb';
     static css = css;
     static observed = ['label'];
@@ -57,10 +61,15 @@ import css from 'iswc:css';
       if (name === 'label') this.#syncLabel();
     }
 
-    get label(): string { return this.getAttribute('label') || 'Ruta'; }
+    get label(): string { return this.getAttribute('label') || this.t('ruta'); }
     set label(v: string | null | undefined) {
       if (v == null || v === '') this.removeAttribute('label');
       else this.setAttribute('label', v);
+    }
+
+    /** Etiqueta por defecto en el idioma heredado (repinta al cambiar `lang`). */
+    override actualizado(): void {
+      this.#syncLabel();
     }
 
     #syncLabel() {

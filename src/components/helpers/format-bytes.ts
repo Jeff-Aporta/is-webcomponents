@@ -1,4 +1,4 @@
-import { resolveLocale } from '@jeff-aporta/iswc-base/core/resolve-locale.js';
+import { formato, resolverLocale } from '@jeff-aporta/iswc-base/core/localize.js';
 import type { ByteUnit, FormatBytesOptions } from "./schemas/format-bytes.schemas.js";
 import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import css from 'iswc:css';
@@ -53,7 +53,7 @@ export function formatBytes(bytes: number, { locale, display = 'short', autofit 
     : (n < 10 && i > 0 ? 1 : 2);
 
   try {
-    return new Intl.NumberFormat(locale, {
+    return formato('number', resolverLocale(null, locale), {
       style: 'unit',
       unit: BYTE_UNITS[i],
       unitDisplay: display,
@@ -113,7 +113,7 @@ export function formatBytes(bytes: number, { locale, display = 'short', autofit 
       const bytes = toBytes(this.value, this.getAttribute('unit') || 'byte');
       const unitDisplay: 'short' | 'long' = this.getAttribute('display') === 'long' ? 'long' : 'short';
       this.#el.textContent = formatBytes(bytes, {
-        locale: resolveLocale(this.getAttribute('locale')),
+        locale: resolverLocale(this, this.getAttribute('locale')),
         display: unitDisplay,
         autofit: this.autofit,
       });

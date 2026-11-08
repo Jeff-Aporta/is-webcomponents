@@ -5,6 +5,7 @@ import { IswcFormControl } from '@jeff-aporta/iswc-base/core/iswc-form-control.j
 import type { Validez } from '@jeff-aporta/iswc-base/core/schemas/iswc-form-control.schemas.js';
 import css from 'iswc:css';
 import { prop } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
+import { registrarTerminos } from '@jeff-aporta/iswc-base/core/localize.js';
 /**
  * <iswc-select> — Select form-associated con listbox en <dialog modal> (top layer),
  * así el desplegable nunca se pierde por overflow/clipping de ancestros.
@@ -42,7 +43,6 @@ import { prop } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
           variant="text"
           color="text"
           tabindex="-1"
-          aria-label="Limpiar"
           hidden
         >
           <iswc-icon icon="mdi:close" aria-hidden="true"></iswc-icon>
@@ -60,6 +60,8 @@ import { prop } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
 
   // Los demás atributos los declara cada `@prop` (y name, label, hint, disabled, required, error y error-text,
   // `IswcFormControl`).
+  registrarTerminos('es', { seleccioneOpcion: 'Seleccione una opción' });
+
   const OBSERVED = ['value', 'variant', 'selection-display', 'limit-tags', 'max-visible'];
 
   const TYPEAHEAD_MS = 500;
@@ -171,6 +173,12 @@ import { prop } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
       this.#slot.addEventListener('slotchange', this.#onSlotChange);
       this.#labelSlot.addEventListener('slotchange', () => this.#syncMeta());
       this.#hintSlot.addEventListener('slotchange', () => this.#syncMeta());
+    }
+
+    /** Textos internos en el idioma heredado (repinta al cambiar `lang`). */
+    override actualizado(): void {
+      super.actualizado();
+      this.#clearBtn.setAttribute('aria-label', this.t('limpiar'));
     }
 
     onConnected(): void {
@@ -300,7 +308,7 @@ import { prop } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
 
     override validar(): Validez {
       const [flags, mensaje] = super.validar();
-      return flags.valueMissing ? [flags, 'Seleccione una opción'] : [flags, mensaje];
+      return flags.valueMissing ? [flags, this.t('seleccioneOpcion')] : [flags, mensaje];
     }
 
     override restablecer(): void {

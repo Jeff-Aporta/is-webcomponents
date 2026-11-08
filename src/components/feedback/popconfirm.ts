@@ -1,4 +1,5 @@
-import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import { emit, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import { IswcReactive } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
 import { computePosition, createPopupDismiss } from '@jeff-aporta/iswc-base/core/position.js';
 import type { Placement } from '@jeff-aporta/iswc-base/core/schemas/position.schemas.js';
 import css from 'iswc:css';
@@ -59,7 +60,7 @@ import css from 'iswc:css';
   const DISTANCIA_EM = 0.6;
   const MARGEN_FLECHA_EM = 1;
 
-  class IswcPopconfirm extends IswcElement {
+  class IswcPopconfirm extends IswcReactive {
     static tag = 'iswc-popconfirm';
     static css = css;
     static deps = ['iswc-button'];
@@ -233,12 +234,17 @@ import css from 'iswc:css';
       texto.textContent = slot.assignedNodes().length > 0 ? '' : (this.getAttribute('message') ?? '');
     }
 
+    /** Repinta los botones por defecto al cambiar el idioma heredado. */
+    override actualizado(): void {
+      if (this.mounted) this.#syncBotones();
+    }
+
     #syncBotones(): void {
       const aceptar = this.shadowRoot!.querySelector<HTMLElement>('.confirm')!;
       const cancelar = this.shadowRoot!.querySelector<HTMLElement>('.cancel')!;
       aceptar.setAttribute('color', this.getAttribute('color') || 'brand');
-      aceptar.textContent = this.getAttribute('confirm-label') || 'Aceptar';
-      cancelar.textContent = this.getAttribute('cancel-label') || 'Cancelar';
+      aceptar.textContent = this.getAttribute('confirm-label') || this.t('aceptar');
+      cancelar.textContent = this.getAttribute('cancel-label') || this.t('cancelar');
     }
   }
 

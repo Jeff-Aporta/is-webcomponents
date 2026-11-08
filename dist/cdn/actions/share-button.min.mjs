@@ -9,4 +9,4 @@
  * cdn-install: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/is-cdn-install/SKILL.md
  * blob: https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/actions/share-button.js
  */
-import"../_chunks/chunk-QYEYA3GN.mjs";import"../_chunks/chunk-Z7DPWDA4.mjs";import"../_chunks/chunk-DIPI33AW.mjs";import"../_chunks/chunk-4ILDULKK.mjs";import"../_chunks/chunk-VQADWERW.mjs";import"../_chunks/chunk-DKYDCFSD.mjs";import"../_chunks/chunk-FZCPQKWI.mjs";import"../_chunks/chunk-UFMSFUKG.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";
+import"../_chunks/chunk-QYEYA3GN.mjs";import"../_chunks/chunk-Z7DPWDA4.mjs";import"../_chunks/chunk-ZMCSFZD3.mjs";import"../_chunks/chunk-4QXWBRB4.mjs";import"../_chunks/chunk-63UMFMQK.mjs";import"../_chunks/chunk-DKYDCFSD.mjs";import"../_chunks/chunk-FZCPQKWI.mjs";import"../_chunks/chunk-UFMSFUKG.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";

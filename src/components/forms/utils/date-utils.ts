@@ -6,7 +6,7 @@
  * Los `Date` solo se usan como aritmética intermedia.
  */
 
-import { resolveLocale } from '@jeff-aporta/iswc-base/core/resolve-locale.js';
+import { formato, resolverLocale } from '@jeff-aporta/iswc-base/core/localize.js';
 import type { ClockTime, WeekdayLabelsOpts, MonthLabelsOpts, FormatDateOpts, FormatTimeOpts } from "@jeff-aporta/iswc-base/components/forms/schemas/date-utils.schemas.js";
 
 export const ISO_DATE = /^(\d{4})-(\d{2})-(\d{2})$/;
@@ -87,7 +87,7 @@ export function inRangeISO(iso: string, min: string, max: string): boolean {
  */
 export function firstDayOfWeek(locale: string | null | undefined): number {
   try {
-    const loc = new Intl.Locale(resolveLocale(locale));
+    const loc = new Intl.Locale(resolverLocale(null, locale));
     const info: { firstDay?: number } | undefined = (loc as { weekInfo?: { firstDay?: number }; getWeekInfo?: () => { firstDay?: number } }).weekInfo ?? (loc as { getWeekInfo?: () => { firstDay?: number } }).getWeekInfo?.();
     const first = info?.firstDay;
     if (first) return first === 7 ? 0 : first;
@@ -98,7 +98,7 @@ export function firstDayOfWeek(locale: string | null | undefined): number {
 /** Etiquetas de los 7 días empezando en `firstDay`. */
 export function weekdayLabels(locale: string, opts: WeekdayLabelsOpts = {}): string[] {
   const { width = 'short', firstDay = 1 } = opts;
-  const fmt = new Intl.DateTimeFormat(locale, { weekday: width });
+  const fmt = formato('date', locale, { weekday: width });
   const out: string[] = [];
   // 2024-01-07 fue domingo: sumar el índice del día da cada nombre.
   const base = new Date(2024, 0, 7);
@@ -112,13 +112,13 @@ export function weekdayLabels(locale: string, opts: WeekdayLabelsOpts = {}): str
 
 export function monthLabels(locale: string, opts: MonthLabelsOpts = {}): string[] {
   const { width = 'long', year = 2026 } = opts;
-  const fmt = new Intl.DateTimeFormat(locale, { month: width });
+  const fmt = formato('date', locale, { month: width });
   return Array.from({ length: 12 }, (_, m) => fmt.format(new Date(year, m, 1)));
 }
 
 export function formatDate(iso: string | null | undefined, locale: string, opts: FormatDateOpts = { dateStyle: 'medium' }): string {
   const d = parseISO(iso ?? '');
-  return d ? new Intl.DateTimeFormat(locale, opts).format(d) : '';
+  return d ? formato('date', locale, opts).format(d) : '';
 }
 
 /** Semana ISO 8601 (lunes como primer día, semana 1 = la del primer jueves). */
@@ -150,11 +150,11 @@ export function toTime({ h, m, s = 0 }: ClockTime, withSeconds: boolean = false)
 /** ¿El locale escribe la hora con AM/PM? */
 export function uses12Hour(locale: string | null | undefined): boolean {
   try {
-    const resolved = resolveLocale(locale);
+    const resolved = resolverLocale(null, locale);
     const loc = new Intl.Locale(resolved) as Intl.Locale & { hourCycles?: string[]; getHourCycles?: () => string[] };
     const cycles: string[] | undefined = loc.hourCycles ?? loc.getHourCycles?.();
     if (cycles?.length) return cycles[0] === 'h11' || cycles[0] === 'h12';
-    return new Intl.DateTimeFormat(resolved, { hour: 'numeric' }).resolvedOptions().hour12 ?? false;
+    return formato('date', resolved, { hour: 'numeric' }).resolvedOptions().hour12 ?? false;
   } catch {
     return false;
   }
@@ -171,7 +171,7 @@ export function formatTime(time: string | ClockTime | null | undefined, locale: 
     ...(seconds ? { second: '2-digit' as const } : {}),
     ...(hour12 == null ? {} : { hour12 }),
   };
-  return new Intl.DateTimeFormat(locale, intlOpts).format(d);
+  return formato('date', locale, intlOpts).format(d);
 }
 
 /** 0 → 12 AM, 13 → 1 PM. Devuelve { hour, meridiem }. */
