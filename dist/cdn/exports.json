@@ -27,7 +27,6 @@
   "./core/position": "./dist/cdn/core/position.min.mjs",
   "./core/prefs": "./dist/cdn/core/prefs.min.mjs",
   "./core/props-element": "./dist/cdn/core/props-element.min.mjs",
-  "./core/resolve-locale": "./dist/cdn/core/resolve-locale.min.mjs",
   "./core/svg-chart-engine": "./dist/cdn/core/svg-chart-engine.min.mjs",
   "./core/tk-inline-md": "./dist/cdn/core/tk-inline-md.min.mjs",
   "./core/tk-text": "./dist/cdn/core/tk-text.min.mjs",

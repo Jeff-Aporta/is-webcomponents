@@ -1,6 +1,8 @@
 import { emit, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import { IswcReactive } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
 import { registrarTerminos } from '@jeff-aporta/iswc-base/core/localize.js';
+import { abrirCapaModal } from '@jeff-aporta/iswc-base/core/position.js';
+import { cerrarCapaModal } from '@jeff-aporta/iswc-base/core/position.js';
 import { createPopupDismiss } from '@jeff-aporta/iswc-base/core/position.js';
 import css from 'iswc:css';
 
@@ -29,8 +31,10 @@ import css from 'iswc:css';
  *   iswc-maximize
  *
  * Accesibilidad
- *   role="dialog" + aria-label del título. Escape cierra (si `closable`) y
- *   Tab queda contenido dentro de la ventana mientras tiene el foco dentro.
+ *   role="dialog" + aria-label del título. Por defecto es modal (aria-modal="true"): entra en la pila de
+ *   capas de core/position.ts (`inert` en el resto de la página, Tab dentro, Escape cierra si `closable` y
+ *   solo si es la capa de arriba, foco devuelto al cerrar); minimizada sale de la pila. Con aria-modal="false"
+ *   convive con la página y Escape la cierra (si `closable`) cuando el foco está dentro.
  *
  * API
  *   win.minimize() / .restore() / .maximize() / .unmaximize() / .close()
@@ -39,12 +43,6 @@ import css from 'iswc:css';
   registrarTerminos('es', { maximizar: 'Maximizar', minimizar: 'Minimizar' });
 
   const OBSERVED = ['title', 'x', 'y', 'width', 'height', 'maximizable', 'minimizable', 'closable', 'default', 'resizable', 'dock', 'scope', 'position'];
-
-  /** Igual que el de _shared/modal-base.js, que no lo exporta. */
-  const FOCUSABLE =
-    'a[href], area[href], input:not([disabled]):not([type=hidden]),'
-    + ' select:not([disabled]), textarea:not([disabled]),'
-    + ' button:not([disabled]), iframe, [tabindex]:not([tabindex="-1"])';
 
   type WindowState = 'normal' | 'minimized' | 'maximized';
   const boxIds = new WeakMap<Element, number>();
@@ -66,8 +64,10 @@ import css from 'iswc:css';
     #drag: DragState | null = null;
     #resize: ResizeState | null = null;
     #lastRect: Rect | null = null;
-    /** Elemento que tenia el foco antes de abrir la ventana; se restaura al close. */
+    /** Elemento que tenia el foco antes de abrir la ventana no modal; se restaura al close (la modal lo hace la pila). */
     #previouslyFocused: HTMLElement | null = null;
+    /** `true` mientras la ventana es una capa modal de la pila. */
+    #enCapa = false;
     /** Evita teardown al mudar el nodo a body por scope=global. */
     #moving = false;
     /** Padre original para devolver la ventana cuando scope vuelve a local. */
@@ -130,7 +130,6 @@ import css from 'iswc:css';
       this.#previouslyFocused = (document.activeElement as HTMLElement | null) ?? null;
       window.addEventListener('pointermove', this.#onWinMove);
       window.addEventListener('pointerup', this.#onWinUp);
-      this.#dismiss.attach();
       this.#sync();
       const x = this.getAttribute('x');
       const y = this.getAttribute('y');
@@ -151,13 +150,16 @@ import css from 'iswc:css';
       if (def === 'maximized') this.maximize();
       else if (def === 'minimized') this.minimize();
       else this.dataset.state = 'normal';
-      // Mover foco al body de la ventana (focuseable via tabindex=0) para que
-      // aria-modal="true" tenga sentido y el foco no se quede en el documento.
-      // Se difiere al siguiente tick para evitar robar el foco durante el
-      // connect (ej. cuando el usuario acaba de pulsar el trigger).
-      queueMicrotask(() => {
-        if (this.isConnected && this.#body) this.#body.focus({ preventScroll: true });
-      });
+      // Después de #placeScope: el `inert` se calcula sobre la posición definitiva del nodo.
+      this.#syncCapa();
+      // No modal: mover foco al body de la ventana (focuseable via tabindex=0) para
+      // que el foco no se quede en el documento. Se difiere al siguiente tick para
+      // evitar robar el foco durante el connect. La modal lo enfoca la pila.
+      if (!this.#enCapa) {
+        queueMicrotask(() => {
+          if (this.isConnected && this.#body) this.#body.focus({ preventScroll: true });
+        });
+      }
       emit(this, 'iswc-after-show');
     }
 
@@ -166,9 +168,11 @@ import css from 'iswc:css';
       window.removeEventListener('pointermove', this.#onWinMove);
       window.removeEventListener('pointerup', this.#onWinUp);
       this.#dismiss.detach();
-      // Restaurar foco al elemento que lo tenia antes de abrir la ventana.
-      // Si ya no esta en el DOM, el browser cae al body, que es aceptable.
-      if (this.#previouslyFocused && this.#previouslyFocused.isConnected) {
+      const eraModal = this.#enCapa;
+      this.#syncCapa();
+      // Restaurar foco al elemento que lo tenia antes de abrir la ventana (la modal ya lo
+      // devolvió al salir de la pila). Si ya no esta en el DOM, el browser cae al body.
+      if (!eraModal && this.#previouslyFocused && this.#previouslyFocused.isConnected) {
         try { this.#previouslyFocused.focus({ preventScroll: true }); } catch { /* noop */ }
       }
       this.#previouslyFocused = null;
@@ -178,58 +182,45 @@ import css from 'iswc:css';
     onAttributeChanged(name: string) {
       this.#sync();
       if (name === 'scope') this.#placeScope();
+      if (name === 'scope' && this.#enCapa) this.#recalcularCapa();
       if (name === 'scope' || name === 'position') this.#reflowBars();
     }
 
-    /** Escape cierra; Tab se queda dentro mientras el foco esté en la ventana.
-     *  El foco NO se atrapa si el usuario está fuera: iswc-window no es modal,
-     *  conviven varias en pantalla y secuestrar el Tab global las rompería.
-     *  Si aria-modal="true" esta activo, si se aplica el focus trap tambien
-     *  con el foco en el light DOM del componente (slotted children). */
+    /** No modal: Escape cierra (si `closable`) con el foco dentro y solo si es la capa de arriba. */
     #dismiss = createPopupDismiss(this, {
-      onKeydown: (e) => {
-        const insideShadow = !!this.shadowRoot!.contains(this.shadowRoot!.activeElement);
-        const insideLight = this.contains(document.activeElement);
-        const isModal = this.getAttribute('aria-modal') !== 'false';
-        const inside = insideShadow || insideLight || (isModal && this.#isTopMostWindow());
-        if (!inside) return;
-        if (e.key === 'Escape') {
-          if (!this.hasAttribute('closable')) return;
-          e.stopPropagation();
-          this.close();
-          return;
-        }
-        if (e.key !== 'Tab') return;
-        const items = [
-          ...this.shadowRoot!.querySelectorAll<HTMLElement>(FOCUSABLE),
-          ...this.querySelectorAll<HTMLElement>(FOCUSABLE),
-        ].filter((el) => !el.hidden && el.offsetParent !== null);
-        if (items.length === 0) return;
-        const first = items[0];
-        const last = items[items.length - 1];
-        const active = this.shadowRoot!.activeElement || document.activeElement;
-        if (e.shiftKey && active === first) {
-          e.preventDefault();
-          last.focus();
-        } else if (!e.shiftKey && active === last) {
-          e.preventDefault();
-          first.focus();
-        }
+      onEscape: () => {
+        const dentro = !!this.shadowRoot!.activeElement || this.contains(document.activeElement);
+        if (dentro && this.hasAttribute('closable')) this.close();
       },
     });
 
-    /** ¿Esta ventana es la de mayor zIndex entre las iswc-window visibles? Para
-     *  aria-modal=true: si el usuario clico otra ventana, esta deja de ser
-     *  la "top" y deberia dejar de atrapar el foco. */
-    #isTopMostWindow(): boolean {
-      const all = [...document.querySelectorAll<HTMLElement>('iswc-window')]
-        .filter((w) => w !== this && !w.hasAttribute('hidden'));
-      const myZ = Number(this.style.zIndex) || 100;
-      for (const w of all) {
-        const z = Number(w.style.zIndex) || 100;
-        if (z > myZ) return false;
+    /** Modal salvo aria-modal="false" o minimizada: entra o sale de la pila de capas de core/position.ts. */
+    #syncCapa(): void {
+      const modal = this.isConnected && this.getAttribute('aria-modal') !== 'false';
+      const enPila = modal && this.#state !== 'minimized';
+      if (enPila && !this.#enCapa) {
+        this.#enCapa = true;
+        abrirCapaModal(this, {
+          cerrar: () => { if (this.hasAttribute('closable')) this.close(); },
+          inicial: this.#body,
+          contenedor: this.#body,
+          // Como antes de F8: trampa de foco y Escape, sin `inert` en la página (varias ventanas conviven).
+          inertizar: false,
+        });
       }
-      return true;
+      if (!enPila && this.#enCapa) {
+        this.#enCapa = false;
+        cerrarCapaModal(this);
+      }
+      if (this.isConnected && !modal) this.#dismiss.attach();
+      else this.#dismiss.detach();
+    }
+
+    /** Al cambiar de sitio (scope) el `inert` alrededor es otro: sale y vuelve a entrar en la pila. */
+    #recalcularCapa(): void {
+      this.#enCapa = false;
+      cerrarCapaModal(this);
+      this.#syncCapa();
     }
 
     minimize() {
@@ -242,6 +233,7 @@ import css from 'iswc:css';
       this.style.height = '';
       this.#raise();
       this.#reflowBars();
+      this.#syncCapa();
       emit(this, 'iswc-minimize');
     }
 
@@ -259,6 +251,7 @@ import css from 'iswc:css';
       this.style.height = '100%';
       this.style.transform = 'none';
       this.#reflowBars();
+      this.#syncCapa();
       emit(this, 'iswc-maximize');
     }
 
@@ -280,6 +273,7 @@ import css from 'iswc:css';
       }
       emit(this, 'iswc-restore', { was: target });
       this.#reflowBars();
+      this.#syncCapa();
     }
 
     unmaximize() {

@@ -350,4 +350,24 @@ const nuevo = <T extends HTMLElement>(tag: string): T => {
     modal.remove();
     return true;
   },
+
+  async 'capas: un modal dentro de un shadow root también aísla la página; inertizar:false no'() {
+    const fuera = document.createElement('button');
+    const anfitrion = document.createElement('div');
+    const vecino = document.createElement('p');
+    const modal = document.createElement('div');
+    modal.innerHTML = '<button>dentro</button>';
+    anfitrion.attachShadow({ mode: 'open' }).append(vecino, modal);
+    document.body.append(fuera, anfitrion);
+    abrirCapaModal(modal, { cerrar: () => {} });
+    if (!fuera.hasAttribute('inert') || !vecino.hasAttribute('inert')) return fallo('no cruzó el shadow', fuera.hasAttribute('inert'), vecino.hasAttribute('inert'));
+    cerrarCapaModal(modal);
+    if (fuera.hasAttribute('inert') || vecino.hasAttribute('inert')) return 'no quitó el inert';
+    abrirCapaModal(modal, { cerrar: () => {}, inertizar: false });
+    if (fuera.hasAttribute('inert')) return 'inertizar:false puso inert';
+    cerrarCapaModal(modal);
+    fuera.remove();
+    anfitrion.remove();
+    return true;
+  },
 };

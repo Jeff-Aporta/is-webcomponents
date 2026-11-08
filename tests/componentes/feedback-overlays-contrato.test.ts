@@ -30,8 +30,9 @@ test('popconfirm y confirm-modal: el slot confirm/cancel dispara una sola vez, s
 test('confirm-modal: alertdialog con nombre y descripción, foco en Cancelar y Tab contenido', () => {
   const ts = leer('feedback/confirm-modal.ts');
   assert.match(ts, /aria-describedby="mensaje"/);
-  assert.match(ts, /#botonCancelar\(\)\?\.focus\(\)/);
-  assert.match(ts, /keydown', this\.#onTab/);
+  // Foco inicial en Cancelar y Tab contenido: capa modal de la pila de core/position.ts (lo prueba en Edge overlays-f8).
+  assert.match(ts, /abrirCapaModal\(this, \{[\s\S]*?inicial: this\.#botonCancelar\(\)/);
+  assert.match(ts, /cerrarCapaModal\(this\)/);
 });
 
 test('progress-bar: el texto del slot queda fuera de la pista, que recorta lo que le desborda', () => {

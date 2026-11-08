@@ -5,6 +5,7 @@ import { emit, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import { IswcReactive } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
 import { registrarTerminos, resolverLocale } from '@jeff-aporta/iswc-base/core/localize.js';
 import type { PickerPanelDef, PickerField, DefinePickerInputOpts } from "@jeff-aporta/iswc-base/components/forms/schemas/picker-element.schemas.js";
+import { createPopupDismiss } from '@jeff-aporta/iswc-base/core/position.js';
 
 /**
  * Fábrica de los pickers "campo + panel": iswc-date-input, iswc-time-input,
@@ -58,6 +59,8 @@ export function definePickerInput({
     static observed = [...OBSERVED, 'panel-height'];
 
     #base!: HTMLElement;
+    /** Capa en la pila de core/position.ts mientras el panel está abierto: un modal de abajo no se lleva su Escape. */
+    #capa = createPopupDismiss(this, {});
     #dialog!: HTMLElement & { open: boolean; showModal(): void; close(): void };
     #panel!: HTMLElement;
     #content!: HTMLElement;
@@ -120,6 +123,7 @@ export function definePickerInput({
       removeEventListener('scroll', this.#reposition, true);
       cancelAnimationFrame(this.#raf);
       if (this.#dialog.open) this.#dialog.close();
+      this.#capa.detach();
       super.disconnectedCallback();
     }
 
@@ -173,6 +177,7 @@ export function definePickerInput({
       this.#syncPanels();
       for (const t of this.#triggers) t.setAttribute('aria-expanded', 'true');
       if (!this.#dialog.open) this.#dialog.showModal();
+      this.#capa.attach();
       this.#reposition();
       queueMicrotask(() => this.#panelEls[0]?.focus?.({ preventScroll: true }));
       emit(this, 'iswc-show', {});
@@ -185,6 +190,7 @@ export function definePickerInput({
       this.#draft = null;
       for (const t of this.#triggers) t.setAttribute('aria-expanded', 'false');
       if (this.#dialog.open) this.#dialog.close();
+      this.#capa.detach();
       this.#fields[0]?.focus?.();
       emit(this, 'iswc-hide', {});
     }

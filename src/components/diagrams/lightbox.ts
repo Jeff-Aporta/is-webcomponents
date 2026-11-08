@@ -6,6 +6,7 @@ import { createPanZoom } from './utils/diagram-view.js';
 import { type PanZoomController } from './schemas/diagram-view.schemas.js';
 import type { ViewTransform } from "./schemas/lightbox.schemas.js";
 import css from 'iswc:css';
+import { createPopupDismiss } from '@jeff-aporta/iswc-base/core/position.js';
 
 /**
  * <iswc-lightbox> — visor a pantalla completa para cualquier contenido.
@@ -82,6 +83,8 @@ class IswcLightbox extends withStyleAttrs(IswcElement) {
 
   static observed = ['open', 'variant', 'zoomable', 'close-on-backdrop', 'toolbar', 'no-default-actions'];
 
+  /** Capa en la pila de core/position.ts mientras el visor está abierto: un modal de abajo no se lleva su Escape. */
+  #capa = createPopupDismiss(this, {});
   #dialog!: HTMLDialogElement;
   #stage!: HTMLElement;
   #host!: HTMLElement;
@@ -175,6 +178,7 @@ class IswcLightbox extends withStyleAttrs(IswcElement) {
     this.#pz?.destroy();
     this.#pz = null;
     if (this.#dialog.open) this.#dialog.close();
+    this.#capa.detach();
   }
 
   attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
@@ -253,6 +257,7 @@ class IswcLightbox extends withStyleAttrs(IswcElement) {
         // Antes de abrir, recuerda el foco activo para restaurarlo al cerrar.
         this.#prevFocus = document.activeElement;
         this.#dialog.showModal();
+        this.#capa.attach();
         // ARIA: el <dialog> top-layer ya expone role=dialog + aria-modal=true
         // cuando se abre con showModal(); añadimos aria-label si el consumidor
         // no lo puso (g06 #13).
@@ -267,6 +272,7 @@ class IswcLightbox extends withStyleAttrs(IswcElement) {
       }
     } else if (this.#dialog.open) {
       this.#dialog.close();
+      this.#capa.detach();
     }
   }
 
@@ -302,6 +308,7 @@ class IswcLightbox extends withStyleAttrs(IswcElement) {
   };
 
   #onDialogClose = () => {
+    this.#capa.detach();
     if (this.open) this.removeAttribute('open');
     this.#restoreFocus();
     emit(this, 'iswc-after-hide');

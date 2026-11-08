@@ -1,5 +1,6 @@
 import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import css from 'iswc:css';
+import { createPopupDismiss } from '@jeff-aporta/iswc-base/core/position.js';
 
 /**
  * <iswc-mega-menu> — Mega-menú para e-commerce/portal masivo. Abre un panel
@@ -115,6 +116,7 @@ import css from 'iswc:css';
       // Limpiar timers y listeners residuales.
       this.#clearTimers();
       this.#removeOutsideHandler();
+      this.#capa.detach();
     }
 
     attributeChangedCallback(name: string) {
@@ -150,6 +152,7 @@ import css from 'iswc:css';
       this.#trigger.setAttribute('aria-expanded', 'true');
       this.#positionPanel();
       this.#panel.show();
+      this.#capa.attach();
       this.setAttribute('open', '');
       // Roles + aria-labelledby sobre columnas slotted + items focuseables.
       this.#syncAriaOnColumns();
@@ -172,6 +175,7 @@ import css from 'iswc:css';
       if (!this.isOpen()) return;
       this.#clearTimers();
       this.#panel.close();
+      this.#capa.detach();
       this.#trigger.setAttribute('aria-expanded', 'false');
       this.removeAttribute('open');
       // Reset tabindex de los items para que el siguiente open re-asigne.
@@ -479,6 +483,8 @@ import css from 'iswc:css';
     }
 
     #trigger!: HTMLElement;
+    /** Capa en la pila de core/position.ts mientras el panel está abierto: un modal de abajo no se lleva su Escape. */
+    #capa = createPopupDismiss(this, {});
     #panel!: HTMLDialogElement;
     #labelEl!: HTMLElement;
     #iconEl!: HTMLElement;

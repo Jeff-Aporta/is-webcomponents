@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-11-07T23:54:40.567Z",
-  "count": 24,
+  "generatedAt": "2026-11-08T01:11:54.609Z",
+  "count": 23,
   "modules": [
     {
       "file": "app-init.ts",
@@ -286,7 +286,7 @@
       "id": "position",
       "path": "src/core/position.ts",
       "summary": "Motor de posicionamiento anclado (flip / shift / arrow). — Sin dependencias — usa getBoundingClientRect + flip/shift.",
-      "bytes": 25601,
+      "bytes": 25869,
       "exports": [
         "PLACEMENTS",
         "PLACEMENTS_AUTO",
@@ -327,16 +327,6 @@
       "bytes": 4891,
       "exports": [
         "atributosDe"
-      ]
-    },
-    {
-      "file": "resolve-locale.ts",
-      "id": "resolve-locale",
-      "path": "src/core/resolve-locale.ts",
-      "summary": "resolve-locale — Orden (sin attr `locale`):",
-      "bytes": 1118,
-      "exports": [
-        "resolveLocale"
       ]
     },
     {

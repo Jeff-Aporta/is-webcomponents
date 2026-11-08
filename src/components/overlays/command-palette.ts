@@ -3,6 +3,7 @@ import { IswcReactive } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
 import { registrarTerminos } from '@jeff-aporta/iswc-base/core/localize.js';
 import { escapeHtml } from '@jeff-aporta/iswc-base/core/dom.js';
 import css from 'iswc:css';
+import { createPopupDismiss } from '@jeff-aporta/iswc-base/core/position.js';
 
 /**
  * <iswc-command-palette> — Paleta de comandos al estilo Cmd+K / Ctrl+K.
@@ -167,6 +168,7 @@ import css from 'iswc:css';
 
     onDisconnected() {
       document.removeEventListener('keydown', this.#hotkeyHandler);
+      this.#capa.detach();
       clearTimeout(this.#rankerTimer);
       clearTimeout(this.#announceTimer);
     }
@@ -192,6 +194,7 @@ import css from 'iswc:css';
       this.#draftSnapshot = '';
       this.#search();
       if (!this.#dialog.open) this.#dialog.showModal();
+      this.#capa.attach();
       // sync atributo open para CSS hooks
       this.setAttribute('open', '');
       this.setAttribute('aria-expanded', 'true');
@@ -210,6 +213,7 @@ import css from 'iswc:css';
       this.#historyPos = -1;
       emit(this, 'iswc-hide');
       if (this.#dialog.open) this.#dialog.close();
+      this.#capa.detach();
       this.removeAttribute('open');
       this.setAttribute('aria-expanded', 'false');
       this.#input.setAttribute('aria-expanded', 'false');
@@ -478,6 +482,8 @@ import css from 'iswc:css';
       this.close();
     }
 
+    /** Capa en la pila de core/position.ts mientras la paleta está abierta: un modal de abajo no se lleva su Escape. */
+    #capa = createPopupDismiss(this, {});
     #dialog!: HTMLDialogElement;
     #input!: HTMLInputElement;
     #resultsEl!: HTMLElement;

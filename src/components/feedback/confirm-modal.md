@@ -144,16 +144,16 @@ No declara integración form-associated propia en este módulo.
 
 ## Comportamiento
 
-Al abrir, el foco va a Cancelar (WAI-APG alertdialog) y Tab da la vuelta entre los dos botones sin salir del modal. Escape y el click en el velo cancelan. Un mensaje largo se desplaza dentro del modal y el pie queda siempre visible.
+Al abrir, el foco va a Cancelar (WAI-APG alertdialog) y Tab da la vuelta dentro del modal sin salir a la página. Escape y el click en el velo cancelan. Un mensaje largo se desplaza dentro del modal y el pie queda siempre visible.
 
-- El cierre por Escape y el bloqueo de scroll del fondo salen de
-  `_shared/popup-dismiss.js` (`createPopupDismiss` con `scrollLock`), el mismo
-  ciclo que usan `iswc-dropdown`, `iswc-context-menu` y `iswc-popconfirm`.
+- Es una capa modal de la pila de `core/position.ts` (`abrirCapaModal`): el
+  resto de la página queda `inert`, Tab no sale y Escape solo actúa si es la
+  capa de arriba. El scroll del fondo se bloquea mientras está abierto.
 - El click fuera lo resuelve el propio backdrop: sólo cancela si el click cae
   en el backdrop, no en la caja del modal.
 - Escape y el click fuera equivalen a **cancelar**: emiten
   `iswc-confirm-cancel` y luego `iswc-confirm-hide`.
-- Al abrir se guarda el elemento enfocado y se enfoca el botón de confirmar;
+- Al abrir se guarda el elemento enfocado y se enfoca el botón de cancelar;
   al cerrar se devuelve el foco al elemento original.
 
 ## Dependencias y componentes relacionados

@@ -6,6 +6,7 @@ import type { Validez } from '@jeff-aporta/iswc-base/core/schemas/iswc-form-cont
 import css from 'iswc:css';
 import { prop } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
 import { registrarTerminos } from '@jeff-aporta/iswc-base/core/localize.js';
+import { createPopupDismiss } from '@jeff-aporta/iswc-base/core/position.js';
 /**
  * <iswc-select> — Select form-associated con listbox en <dialog modal> (top layer),
  * así el desplegable nunca se pierde por overflow/clipping de ancestros.
@@ -126,6 +127,8 @@ import { registrarTerminos } from '@jeff-aporta/iswc-base/core/localize.js';
     #hintSlot!: HTMLSlotElement;
     #errorEl!: HTMLElement;
     #clearBtn!: HTMLElement;
+    /** Capa en la pila de core/position.ts mientras la lista está abierta: un modal de abajo no se lleva su Escape. */
+    #capa = createPopupDismiss(this, {});
     #dialog!: HTMLDialogElement;
     #listbox!: HTMLElement;
     #slot!: HTMLSlotElement;
@@ -208,6 +211,7 @@ import { registrarTerminos } from '@jeff-aporta/iswc-base/core/localize.js';
       if (this.#typeTimer != null) clearTimeout(this.#typeTimer);
       this.#typeTimer = null;
       if (this.#dialog.open) this.#dialog.close();
+      this.#capa.detach();
     }
 
     onAttributeChanged(name: string, oldVal: string | null, newVal: string | null): void {
@@ -719,6 +723,7 @@ import { registrarTerminos } from '@jeff-aporta/iswc-base/core/localize.js';
         this.#renderList();
         this.#positionList();
         if (!this.#dialog.open) this.#dialog.showModal();
+        this.#capa.attach();
         this.#positionList();
         queueMicrotask(() => {
           try { this.#dialog.focus({ preventScroll: true }); } catch { /* noop */ }
@@ -730,6 +735,7 @@ import { registrarTerminos } from '@jeff-aporta/iswc-base/core/localize.js';
         this.#typeBuf = '';
         this.#syncActiveDescendant();
         if (this.#dialog.open) this.#dialog.close();
+        this.#capa.detach();
         if (this.#wasOpen) emit(this, 'iswc-hide', {});
       }
       this.#wasOpen = open;

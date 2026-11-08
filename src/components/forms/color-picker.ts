@@ -5,6 +5,7 @@ import type { Validez } from '@jeff-aporta/iswc-base/core/schemas/iswc-form-cont
 import { computePosition } from '@jeff-aporta/iswc-base/core/position.js';
 import type { WindowWithEyeDropper } from "./schemas/color-picker.schemas.js";
 import css from 'iswc:css';
+import { createPopupDismiss } from '@jeff-aporta/iswc-base/core/position.js';
 /**
  * <iswc-color-picker> — Selector de color form-associated.
  *
@@ -83,6 +84,8 @@ import css from 'iswc:css';
     #labelSlot!: HTMLSlotElement;
     #hintEl!: HTMLElement;
     #hintSlot!: HTMLSlotElement;
+    /** Capa en la pila de core/position.ts mientras el panel está abierto: un modal de abajo no se lleva su Escape. */
+    #capa = createPopupDismiss(this, {});
     #dialog!: HTMLDialogElement;
     #panel!: HTMLElement;
     #native!: HTMLInputElement;
@@ -148,6 +151,7 @@ import css from 'iswc:css';
       removeEventListener('resize', this.#onReposition);
       removeEventListener('scroll', this.#onReposition, true);
       if (this.#dialog.open) this.#dialog.close();
+      this.#capa.detach();
     }
 
     onAttributeChanged(name: string, oldVal: string | null, newVal: string | null): void {
@@ -198,6 +202,7 @@ import css from 'iswc:css';
       this.estado('open', true);
       this.#trigger.setAttribute('aria-expanded', 'true');
       if (!this.#dialog.open) this.#dialog.showModal();
+      this.#capa.attach();
       // Tras showModal el scrollbar del body puede desaparecer y mover el ancla:
       // posicionar en rAF garantiza rects estables.
       this.#positionPanel();
@@ -213,6 +218,7 @@ import css from 'iswc:css';
       this.estado('open', false);
       this.#trigger.setAttribute('aria-expanded', 'false');
       if (this.#dialog.open) this.#dialog.close();
+      this.#capa.detach();
       queueMicrotask(() => {
         try { this.#trigger.focus({ preventScroll: true }); } catch { /* noop */ }
       });

@@ -2,6 +2,7 @@ import { emit, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import { IswcFormControl } from '@jeff-aporta/iswc-base/core/iswc-form-control.js';
 import './input.js';
 import css from 'iswc:css';
+import { createPopupDismiss } from '@jeff-aporta/iswc-base/core/position.js';
 
 /**
  * <iswc-mention> — Input con autocompletado al tipear @usuario o #etiqueta.
@@ -50,6 +51,8 @@ import css from 'iswc:css';
     #input: HTMLInputElement;
     #onDocPointerDown!: (e: PointerEvent) => void;
     #suggestions: SuggestionsMap = {};
+    /** Capa en la pila de core/position.ts mientras las sugerencias están abiertas: un modal de abajo no se lleva su Escape. */
+    #capa = createPopupDismiss(this, {});
     #popup!: HTMLElement;
     #activeIndex = 0;
     #lastTriggerRange: [number, number] | null = null;
@@ -98,6 +101,7 @@ import css from 'iswc:css';
     override disconnectedCallback(): void {
       this.#mounted = false;
       document.removeEventListener('pointerdown', this.#onDocPointerDown, true);
+      this.#capa.detach();
       // La base suelta el observador de idioma que registra `t()` (mensaje de `required`).
       super.disconnectedCallback();
     }
@@ -200,6 +204,7 @@ import css from 'iswc:css';
         this.#popup.appendChild(opt);
       });
       this.#popup.hidden = false;
+      this.#capa.attach();
       this.#input.setAttribute('aria-expanded', 'true');
       this.#popup.querySelector('.iswc-active')?.scrollIntoView({ block: 'nearest' });
     }
@@ -215,6 +220,7 @@ import css from 'iswc:css';
 
     #hidePopup(): void {
       this.#popup.hidden = true;
+      this.#capa.detach();
       this.#popup.innerHTML = '';
       this.#input.setAttribute('aria-expanded', 'false');
     }

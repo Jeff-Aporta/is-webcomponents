@@ -4,7 +4,9 @@
  * Centraliza TODO el ciclo de vida de un modal accesible que no es nativo:
  *
  *   - open/close con animación cancelable
- *   - focus management (last-focus, autofocus, focus trap, escape, tab cycling)
+ *   - capa modal de la pila de `core/position.ts` (`abrirCapaModal`): `inert` en el resto de la
+ *     página, trampa de Tab, foco inicial (autofocus → primer enfocable), Escape solo si es la
+ *     capa de arriba (un select abierto dentro se cierra antes) y foco devuelto al cerrar
  *   - slot detection para header/footer/label
  *   - close-button (X) y backdrop (light-dismiss)
  *   - top layer mientras está abierto: un ancestro con transform, filter o contain no recorta
@@ -50,16 +52,10 @@ import { withStyleAttrs } from '@jeff-aporta/iswc-base/core/attrs.js';
 
 import { emit } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import { IswcReactive } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
+import { abrirCapaModal } from '@jeff-aporta/iswc-base/core/position.js';
+import { cerrarCapaModal } from '@jeff-aporta/iswc-base/core/position.js';
 import type { ModalBaseCtor } from "@jeff-aporta/iswc-base/components/layout/schemas/modal-base.schemas.js";
 const BASE_OBSERVED: readonly string[] = ['open', 'label', 'without-header', 'light-dismiss'];
-
-/** Selector CSS para "cualquier elemento focuseable" usado en focus trap. */
-const FOCUSABLE_SELECTOR =
-  'a[href], area[href], input:not([disabled]):not([type=hidden]),' +
-  ' select:not([disabled]), textarea:not([disabled]),' +
-  ' button:not([disabled]), iframe, [tabindex]:not([tabindex="-1"])';
-
-/** Forma del constructor de subclase: expone __TEMPLATE y observedAttributes. */
 
 const SOPORTA_POPOVER = 'showPopover' in HTMLElement.prototype;
 
@@ -93,8 +89,6 @@ export class ModalBase extends withStyleAttrs(IswcReactive) {
   #header!: HTMLElement;
   #footer!: HTMLElement;
   #body!: HTMLElement;
-  #lastFocus: Element | null = null;
-  #keyDownBound = false;
 
   constructor() {
     super();
@@ -111,6 +105,10 @@ export class ModalBase extends withStyleAttrs(IswcReactive) {
     this.#header   = shadow.querySelector<HTMLElement>('.header')!;
     this.#footer   = shadow.querySelector<HTMLElement>('.footer')!;
     this.#body     = shadow.querySelector<HTMLElement>('.body')!;
+    // Nombre accesible de la caja: el título (aria-labelledby) o `label` (aria-label), ver #syncLabel.
+    if (!this.#title.id) this.#title.id = 'titulo';
+    this.#modal.setAttribute('role', 'dialog');
+    this.#modal.setAttribute('aria-modal', 'true');
 
     this.#closeBtn.addEventListener('click', () => this.#requestClose(this.#closeBtn));
     this.#backdrop.addEventListener('click', () => {
@@ -135,7 +133,7 @@ export class ModalBase extends withStyleAttrs(IswcReactive) {
       this.dataset.state = 'open';
       this.#modal.hidden = false;
       this.#subirCapa();
-      this.#attachKeydown();
+      this.#abrirCapa();
     } else {
       this.#modal.hidden = false;
     }
@@ -147,7 +145,7 @@ export class ModalBase extends withStyleAttrs(IswcReactive) {
   }
 
   disconnectedCallback(): void {
-    this.#detachKeydown();
+    cerrarCapaModal(this.#host);
     this.#bajarCapa();
     super.disconnectedCallback();
   }
@@ -205,6 +203,12 @@ export class ModalBase extends withStyleAttrs(IswcReactive) {
     host.removeAttribute('popover');
   }
 
+  /** Entra en la pila de capas: `inert` alrededor, trampa de Tab, foco inicial y Escape (detail.source null). */
+  #abrirCapa(): void {
+    if (!this.isConnected) return;
+    abrirCapaModal(this.#host, { cerrar: () => this.#requestClose(null), contenedor: this.#modal });
+  }
+
   #onDelegatedClick = (e: PointerEvent): void => {
     const target = e.target as Element | null;
     if (!target) return;
@@ -248,17 +252,15 @@ export class ModalBase extends withStyleAttrs(IswcReactive) {
   #setOpen(desired: boolean): Promise<void> {
     if (desired) {
       emit(this, 'iswc-show', {});
-      this.#lastFocus = document.activeElement as Element | null;
       this.dataset.state = 'opening';
       this.#modal.hidden = false;
       this.#subirCapa();
-      this.#attachKeydown();
       // eslint-disable-next-line no-unused-expressions
       this.#modal.offsetHeight; // forzar reflow antes de la animación
       this.setAttribute('open', '');
+      this.#abrirCapa();
       return this.animateOpen().then(() => {
         this.dataset.state = 'open';
-        this.#focusInitial();
         emit(this, 'iswc-after-show', {});
       });
     }
@@ -269,16 +271,12 @@ export class ModalBase extends withStyleAttrs(IswcReactive) {
     if (!attrAlreadyRemoved && !this.open) return Promise.resolve();
     this.dataset.state = 'closing';
     this.removeAttribute('open');
+    // Sale de la pila ya: quita el `inert`, devuelve el foco y el siguiente Escape es de la capa de abajo.
+    cerrarCapaModal(this.#host);
     return this.animateClose().then(() => {
       this.#modal.hidden = false;
       delete this.dataset.state;
       if (!this.open) this.#bajarCapa();
-      this.#detachKeydown();
-      const last = this.#lastFocus as HTMLElement | null;
-      if (last && typeof last.focus === 'function') {
-        try { last.focus(); } catch (_e: unknown) { /* ignore */ }
-      }
-      this.#lastFocus = null;
       emit(this, 'iswc-after-hide', {});
     });
   }
@@ -289,22 +287,21 @@ export class ModalBase extends withStyleAttrs(IswcReactive) {
     return Number.isFinite(v) ? v : fallback;
   }
 
-  #focusInitial(): void {
-    const af = this.querySelector<HTMLElement>('[autofocus]');
-    if (af) { af.focus(); return; }
-    const focusable = this.querySelector<HTMLElement>(FOCUSABLE_SELECTOR);
-    if (focusable) { focusable.focus(); return; }
-    this.#modal.focus();
-  }
-
   #syncLabel(): void {
     const slot = this.shadowRoot!.querySelector<HTMLSlotElement>('slot[name="label"]');
-    const assigned = slot?.assignedNodes({ flatten: true });
-    if (assigned && assigned.length > 0) {
-      this.#title.textContent = '';
-      return;
+    // Lo asignado de verdad (aplanado, sin el contenido de reserva del propio slot).
+    const conSlot = (slot?.assignedNodes({ flatten: true }) ?? []).some((n) => n.parentNode !== slot);
+    // `label` va como contenido de reserva del slot: escribir en el título borraría el propio <slot name="label">.
+    const destino = slot ?? this.#title;
+    if (destino.textContent !== this.label) destino.textContent = this.label;
+    if (this.label && !conSlot) {
+      this.#modal.setAttribute('aria-label', this.label);
+      this.#modal.removeAttribute('aria-labelledby');
+    } else {
+      this.#modal.removeAttribute('aria-label');
+      if (conSlot) this.#modal.setAttribute('aria-labelledby', this.#title.id);
+      else this.#modal.removeAttribute('aria-labelledby');
     }
-    this.#title.textContent = this.label || '';
   }
 
   #syncHeaderVisibility(): void {
@@ -315,43 +312,6 @@ export class ModalBase extends withStyleAttrs(IswcReactive) {
     const slot = this.shadowRoot!.querySelector<HTMLSlotElement>('slot[name="footer"]');
     const hasFooter = (slot?.assignedElements({ flatten: true }) ?? []).length > 0;
     this.#footer.hidden = !hasFooter;
-  }
-
-  #onKeyDown = (e: KeyboardEvent): void => {
-    if (!this.open) return;
-    if (e.key === 'Escape') {
-      e.stopPropagation();
-      this.#requestClose(null);
-    } else if (e.key === 'Tab') {
-      const focusable = [...this.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR)]
-        .filter((el) => el.offsetParent !== null);
-      if (focusable.length === 0) {
-        e.preventDefault();
-        this.#modal.focus();
-        return;
-      }
-      const first = focusable[0]!;
-      const last = focusable[focusable.length - 1]!;
-      if (e.shiftKey && document.activeElement === first) {
-        e.preventDefault();
-        last.focus();
-      } else if (!e.shiftKey && document.activeElement === last) {
-        e.preventDefault();
-        first.focus();
-      }
-    }
-  };
-
-  #attachKeydown(): void {
-    if (this.#keyDownBound) return;
-    document.addEventListener('keydown', this.#onKeyDown, true);
-    this.#keyDownBound = true;
-  }
-
-  #detachKeydown(): void {
-    if (!this.#keyDownBound) return;
-    document.removeEventListener('keydown', this.#onKeyDown, true);
-    this.#keyDownBound = false;
   }
 
   // ── Métodos que la subclase debe implementar ───────────────────────

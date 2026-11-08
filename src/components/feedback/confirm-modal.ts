@@ -1,6 +1,7 @@
 import { emit, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import { IswcReactive } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
-import { createPopupDismiss } from '@jeff-aporta/iswc-base/core/position.js';
+import { abrirCapaModal } from '@jeff-aporta/iswc-base/core/position.js';
+import { cerrarCapaModal } from '@jeff-aporta/iswc-base/core/position.js';
 import css from 'iswc:css';
 
 /**
@@ -24,7 +25,9 @@ import css from 'iswc:css';
  *   confirm-label texto del botón de aceptar por defecto (default "Aceptar").
  *   cancel-label  texto del botón de cancelar por defecto (default "Cancelar").
  *
- * Foco: al abrir va a Cancelar (WAI-APG alertdialog) y Tab queda dentro del modal.
+ * Foco: capa modal de la pila de core/position.ts. Al abrir va a Cancelar (WAI-APG alertdialog), Tab queda
+ * dentro del modal, el resto de la página queda `inert`, Escape cancela solo si es la capa de arriba y al
+ * cerrar el foco vuelve a quien lo tenía.
  *
  * Slots
  *   message — contenido rico en vez del atributo message.
@@ -64,16 +67,10 @@ import css from 'iswc:css';
     #heading!: HTMLElement;
     #trigger: HTMLElement | null = null;
     #onTriggerClick: (() => void) | null = null;
-    #lastFocus: HTMLElement | null = null;
+    /** `overflow` del documento antes de abrir: el modal bloquea el scroll del fondo. */
+    #overflowPrevio: string | null = null;
     #envolturaAceptar!: HTMLElement;
     #envolturaCancelar!: HTMLElement;
-
-    // El click fuera lo resuelve el propio backdrop (ver constructor), así que
-    // aquí solo vive el Escape. scrollLock: el modal bloquea el fondo.
-    #dismiss = createPopupDismiss(this, {
-      onEscape: () => { if (this.hasAttribute('open')) this.#cancel(); },
-      scrollLock: true,
-    });
 
     constructor() {
       super();
@@ -92,20 +89,7 @@ import css from 'iswc:css';
       this.#envolturaCancelar = shadow.querySelector<HTMLElement>('.cancel-wrap')!;
       this.#envolturaAceptar.addEventListener('click', () => this.#confirm());
       this.#envolturaCancelar.addEventListener('click', () => this.#cancel());
-      this.#modal.addEventListener('keydown', this.#onTab);
       shadow.querySelector('slot[name="message"]')!.addEventListener('slotchange', () => this.#syncMessage());
-    }
-
-    /** Modal de verdad: Tab da la vuelta entre los dos botones, nunca sale a la página de atrás. */
-    #onTab = (e: KeyboardEvent): void => {
-      if (e.key !== 'Tab') return;
-      e.preventDefault();
-      const enCancelar = e.composedPath().includes(this.#envolturaCancelar);
-      (enCancelar ? this.#botonAceptar() : this.#botonCancelar())?.focus();
-    };
-
-    #botonAceptar(): HTMLElement | null {
-      return this.querySelector<HTMLElement>('[slot="confirm"]') ?? this.shadowRoot!.querySelector<HTMLElement>('.confirm');
     }
 
     #botonCancelar(): HTMLElement | null {
@@ -135,7 +119,7 @@ import css from 'iswc:css';
 
     onDisconnected() {
       this.#unbindTrigger();
-      this.#dismiss.detach();
+      this.#hideUI();
     }
 
     onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
@@ -176,20 +160,27 @@ import css from 'iswc:css';
     }
 
     #showUI(): void {
-      this.#dismiss.attach();
-      this.#lastFocus = document.activeElement as HTMLElement | null;
+      if (!this.isConnected) return;
       this.#backdrop.hidden = false;
-      if (this.isConnected) this.#backdrop.showPopover();
-      // WAI-APG alertdialog: el foco va a la opción menos destructiva.
-      requestAnimationFrame(() => { this.#botonCancelar()?.focus(); });
+      if (!this.#backdrop.matches(':popover-open')) this.#backdrop.showPopover();
+      if (this.#overflowPrevio === null) {
+        this.#overflowPrevio = document.documentElement.style.overflow;
+        document.documentElement.style.overflow = 'hidden';
+      }
+      // WAI-APG alertdialog: el foco va a la opción menos destructiva. El clic fuera lo resuelve el backdrop.
+      abrirCapaModal(this, { cerrar: () => { if (this.hasAttribute('open')) this.#cancel(); }, inicial: this.#botonCancelar(), contenedor: this.#modal });
+      // Un iswc-button que aún no se mejoró no toma el foco: se reintenta en el siguiente cuadro.
+      requestAnimationFrame(() => { if (!this.contains(document.activeElement) && document.activeElement !== this) this.#botonCancelar()?.focus(); });
     }
 
     #hideUI(): void {
-      this.#dismiss.detach();
       if (this.#backdrop.matches(':popover-open')) this.#backdrop.hidePopover();
       this.#backdrop.hidden = true;
-      this.#lastFocus?.focus?.();
-      this.#lastFocus = null;
+      if (this.#overflowPrevio !== null) {
+        document.documentElement.style.overflow = this.#overflowPrevio;
+        this.#overflowPrevio = null;
+      }
+      cerrarCapaModal(this);
     }
 
     #bindTrigger(): void {

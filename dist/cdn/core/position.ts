@@ -638,16 +638,19 @@ export function abrirCapaModal(host: HTMLElement, opciones: OpcionesCapaModal): 
   const inertes: Element[] = [];
   const liberados: Element[] = [];
   const previo = enfocado();
-  for (let n: Element | null = host; n && n !== document.body && n !== document.documentElement; n = n.parentElement) {
+  // Sube hasta <body> cruzando los shadow roots (un dialog dentro de otro componente también aísla la página).
+  for (let n: Element | null = opciones.inertizar === false ? null : host; n && n !== document.body && n !== document.documentElement; ) {
     if (n.hasAttribute('inert')) {
       n.removeAttribute('inert');
       liberados.push(n);
     }
-    for (const hermano of n.parentElement?.children ?? []) {
+    const padre = n.parentNode as Element | ShadowRoot | null;
+    for (const hermano of padre?.children ?? []) {
       if (hermano === n || hermano.hasAttribute('inert') || hermano.matches(NUNCA_INERTE)) continue;
       hermano.setAttribute('inert', '');
       inertes.push(hermano);
     }
+    n = n.parentElement ?? (padre instanceof ShadowRoot ? padre.host : null);
   }
   const contenedor = opciones.contenedor ?? null;
   apilar({ host, modal: true, cerrar: opciones.cerrar, contenedor, previo, inertes, liberados });

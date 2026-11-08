@@ -6,6 +6,7 @@ import './option.js';
 import css from 'iswc:css';
 import { prop } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
 import { registrarTerminos } from '@jeff-aporta/iswc-base/core/localize.js';
+import { createPopupDismiss } from '@jeff-aporta/iswc-base/core/position.js';
 
 /**
  * <iswc-combobox> — Input + listbox filtrable.
@@ -74,6 +75,8 @@ import { registrarTerminos } from '@jeff-aporta/iswc-base/core/localize.js';
     static observed = [...OBSERVED, 'radius', 'border-color', 'bg', 'text-color', 'focus-color'];
 
     #input!: HTMLInputElement;
+    /** Capa en la pila de core/position.ts mientras la lista está abierta: un modal de abajo no se lleva su Escape. */
+    #capa = createPopupDismiss(this, {});
     #dialog!: HTMLDialogElement;
     #listbox!: HTMLElement;
     #base!: HTMLElement;
@@ -139,6 +142,7 @@ import { registrarTerminos } from '@jeff-aporta/iswc-base/core/localize.js';
       removeEventListener('resize', this.#onReposition);
       removeEventListener('scroll', this.#onReposition, true);
       if (this.#dialog.open) this.#dialog.close();
+      this.#capa.detach();
     }
 
     onAttributeChanged(name: string, oldVal: string | null, newVal: string | null): void {
@@ -252,6 +256,7 @@ import { registrarTerminos } from '@jeff-aporta/iswc-base/core/localize.js';
         this.#positionList();
         if (!this.#dialog.open) {
           this.#dialog.showModal();
+          this.#capa.attach();
         } else {
           this.#positionList();
         }
@@ -264,6 +269,7 @@ import { registrarTerminos } from '@jeff-aporta/iswc-base/core/localize.js';
         this.#activeIndex = -1;
         this.#syncActiveDescendant();
         if (this.#dialog.open) this.#dialog.close();
+        this.#capa.detach();
         if (this.#wasOpen) emit(this, 'iswc-hide', {});
       }
       this.#wasOpen = open;

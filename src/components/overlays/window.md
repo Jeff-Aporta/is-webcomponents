@@ -172,23 +172,25 @@ está inerte mientras está abierto.
 | --- | --- |
 | `role="dialog"` | Aplicado en `onConnected`. |
 | `aria-label="<title>"` | Sincronizado con el atributo `title`. |
-| `aria-modal="true"` | Por defecto. Pasar `"false"` explícito para deshabilitar el focus trap. |
+| `aria-modal="true"` | Por defecto: capa modal de la pila de `core/position.ts`. Pasar `"false"` explícito para que no lo sea. |
 | Tabla `data-state="normal | maximized | minimized"` | Refleja el estado actual para estilos. |
 
 **Comportamiento de foco** (cuando `aria-modal="true"`):
 
-- `Escape` cierra la ventana si lleva el atributo `closable`.
-- `Tab` / `Shift+Tab` quedan contenidos dentro de la ventana cuando el foco
-  ya está dentro de ella. Si el foco está fuera y la ventana es la de
-  mayor `zIndex`, también se captura el `Tab`.
-- Al abrir, el foco se mueve al `body` interno (tabindex=0) en el
-  siguiente tick, para que el lector identifique correctamente el modal.
+- La ventana entra en la pila de capas (`abrirCapaModal`): el resto de la
+  página queda `inert` mientras está conectada y no minimizada.
+- `Escape` cierra la ventana si lleva el atributo `closable` y solo si es la
+  capa de arriba (un select o menú abierto dentro se cierra antes).
+- `Tab` / `Shift+Tab` quedan contenidos dentro de la ventana.
+- Al abrir, el foco se mueve al `body` interno (tabindex=0).
+- Minimizada sale de la pila (la página vuelve a ser usable); al restaurar o
+  maximizar vuelve a entrar.
 - Al desconectar (porque se llamó a `close()`), el foco se restaura al
   elemento que lo tenía antes de abrir la ventana.
 
-Si se quiere el comportamiento "no modal" de antes —convivir con otras
-ventanas/elementos focuseables sin atrapar el Tab— basta con declarar
-`aria-modal="false"` en el HTML.
+Para convivir con la página y con otras ventanas sin `inert` ni trampa de Tab
+basta con declarar `aria-modal="false"`: entonces `Escape` la cierra (si
+`closable`) solo con el foco dentro.
 
 Preservar semántica, foco, teclado, labels y ARIA. Listeners globales solo en
 `connectedCallback` / `disconnectedCallback`.
