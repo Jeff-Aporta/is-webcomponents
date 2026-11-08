@@ -7,6 +7,28 @@
   "styles": ".grid { display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: center; }",
   "storageKey": "docs-iswc-tooltip",
   "hasBehavior": true,
+  "events": [
+    {
+      "name": "iswc-show",
+      "detail": "undefined",
+      "cancelable": true
+    },
+    {
+      "name": "iswc-after-show",
+      "detail": "undefined",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-hide",
+      "detail": "undefined",
+      "cancelable": true
+    },
+    {
+      "name": "iswc-after-hide",
+      "detail": "undefined",
+      "cancelable": false
+    }
+  ],
   "sections": [
     {
       "id": "intro",

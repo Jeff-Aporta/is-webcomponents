@@ -80,6 +80,18 @@ import './combobox.js';
 
 ### Eventos
 
+<!-- eventos: generado por scripts/sondas/eventos.ts desde declare static events -->
+
+| Evento | detail | cancelable |
+| --- | --- | --- |
+| `iswc-invalid` | `{ message: string }` | no |
+| `iswc-show` | `Record<string, never>` | no |
+| `iswc-hide` | `Record<string, never>` | no |
+| `iswc-input` | `{ value: string }` | no |
+| `iswc-change` | `{ value: string }` | no |
+
+<!-- /eventos -->
+
 
 | Evento | Descripción |
 | --- | --- |
@@ -87,13 +99,6 @@ import './combobox.js';
 | `iswc-hide` | Emitido justo antes de ocultarse (cancelable). |
 | `iswc-input` | Emitido en cada cambio del valor (escribe como `input` nativo). |
 | `iswc-change` | Emitido al confirmar el cambio de valor (escribe como `change` nativo). |
-
-| Evento | detail | bubbles | composed | cancelable |
-| --- | --- | --- | --- | --- |
-| `iswc-show` | sí | sí | sí | no |
-| `iswc-hide` | sí | sí | sí | no |
-| `iswc-input` | sí | sí | sí | no |
-| `iswc-change` | sí | sí | sí | no |
 
 
 <details>

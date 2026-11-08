@@ -116,10 +116,14 @@ del main, tono del contraste, `tint`, `fontTint`); el CSS deriva todo lo demás.
 
 ### Eventos
 
-| Evento | detail | bubbles | composed | cancelable |
-| --- | --- | --- | --- | --- |
-| `iswc-palette-change` | `{ value, palette, container }` | sí | sí | no |
-| `iswc-panda-change` | `{ panda, container }` | sí | sí | no |
+<!-- eventos: generado por scripts/sondas/eventos.ts desde declare static events -->
+
+| Evento | detail | cancelable |
+| --- | --- | --- |
+| `iswc-palette-change` | `{ value: string; palette: Palette; container: HTMLElement }` | no |
+| `iswc-panda-change` | `{ panda: boolean; container: HTMLElement }` | no |
+
+<!-- /eventos -->
 
 ### Métodos
 

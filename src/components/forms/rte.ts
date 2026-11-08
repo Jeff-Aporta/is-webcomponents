@@ -1,5 +1,5 @@
 import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
-import type { RteCommandDef } from "./schemas/rte.schemas.js";
+import type { RteCommandDef, RteEventos } from "./schemas/rte.schemas.js";
 import css from 'iswc:css';
 
 /**
@@ -84,6 +84,7 @@ export function registerRteCommand(name: string, def: RteCommandDef): void {
 
   class IswcRte extends IswcElement {
     static tag = 'iswc-rte';
+    declare static events: RteEventos;
     static css = css;
     static observed = OBSERVED;
 

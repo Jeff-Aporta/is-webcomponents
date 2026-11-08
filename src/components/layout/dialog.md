@@ -79,6 +79,17 @@ Contenido.
 
 ### Eventos
 
+<!-- eventos: generado por scripts/sondas/eventos.ts desde declare static events -->
+
+| Evento | detail | cancelable |
+| --- | --- | --- |
+| `iswc-show` | `Record<string, never>` | no |
+| `iswc-after-show` | `Record<string, never>` | no |
+| `iswc-hide` | `{ source: Element \| null }` | sí |
+| `iswc-after-hide` | `Record<string, never>` | no |
+
+<!-- /eventos -->
+
 
 | Evento | DescripciÃ³n |
 | --- | --- |
@@ -86,13 +97,6 @@ Contenido.
 | `iswc-show` | Emitido justo antes de mostrarse (cancelable). |
 | `iswc-after-show` | Emitido tras finalizar la animaciÃ³n de apertura. |
 | `iswc-after-hide` | Emitido tras finalizar la animaciÃ³n de cierre. |
-
-| Evento | detail | bubbles | composed | cancelable |
-| --- | --- | --- | --- | --- |
-| `iswc-hide` | sÃ­ | sÃ­ | sÃ­ | sÃ­ |
-| `iswc-show` | sÃ­ | sÃ­ | sÃ­ | no |
-| `iswc-after-show` | sÃ­ | sÃ­ | sÃ­ | no |
-| `iswc-after-hide` | sÃ­ | sÃ­ | sÃ­ | no |
 
 
 <details>

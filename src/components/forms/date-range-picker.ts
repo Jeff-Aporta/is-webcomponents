@@ -3,6 +3,7 @@ import { observarIdioma, registrarTerminos, resolverLocale, termino } from '@jef
 import { addMonths, monthKey, parseISO, startOfMonth, toISO } from './utils/date-utils.js';
 import './date-picker.js';
 import css from 'iswc:css';
+import type { DateRangePickerEventos } from './schemas/date-range-picker.schemas.js';
 
 /**
  * <iswc-date-range-picker> — Rango de fechas con varios meses a la vista
@@ -114,6 +115,7 @@ import css from 'iswc:css';
 
   class IswcDateRangePicker extends IswcElement {
     static tag = 'iswc-date-range-picker';
+    declare static events: DateRangePickerEventos;
     static css = css;
     static deps = ['iswc-button'];
 

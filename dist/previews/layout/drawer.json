@@ -6,6 +6,28 @@
   "titleHtml": false,
   "description": "Panel lateral deslizable (izquierda, derecha, arriba o abajo) para navegación o formularios sin salir de la vista.",
   "storageKey": "docs-iswc-drawer",
+  "events": [
+    {
+      "name": "iswc-show",
+      "detail": "Record<string, never>",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-after-show",
+      "detail": "Record<string, never>",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-hide",
+      "detail": "{ source: Element | null }",
+      "cancelable": true
+    },
+    {
+      "name": "iswc-after-hide",
+      "detail": "Record<string, never>",
+      "cancelable": false
+    }
+  ],
   "sections": [
     {
       "id": "intro",

@@ -2,7 +2,7 @@ import { emit, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import { IswcReactive } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
 import { registrarTerminos } from '@jeff-aporta/iswc-base/core/localize.js';
 import { escapeHtml } from '@jeff-aporta/iswc-base/core/dom.js';
-import type { CalEvent, View } from "./schemas/full-calendar.schemas.js";
+import type { CalEvent, View, FullCalendarEventos } from "./schemas/full-calendar.schemas.js";
 import css from 'iswc:css';
 
 /**
@@ -37,6 +37,7 @@ import css from 'iswc:css';
 
   class IswcFullCalendar extends IswcReactive {
     static tag = 'iswc-full-calendar';
+    declare static events: FullCalendarEventos;
     static css = css;
     static deps = ['iswc-button'];
     static observed = OBSERVED;

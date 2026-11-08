@@ -54,7 +54,7 @@ import { emit } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import { IswcReactive } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
 import { abrirCapaModal } from '@jeff-aporta/iswc-base/core/position.js';
 import { cerrarCapaModal } from '@jeff-aporta/iswc-base/core/position.js';
-import type { ModalBaseCtor } from "@jeff-aporta/iswc-base/components/layout/schemas/modal-base.schemas.js";
+import type { ModalBaseCtor, ModalBaseEventos } from "@jeff-aporta/iswc-base/components/layout/schemas/modal-base.schemas.js";
 const BASE_OBSERVED: readonly string[] = ['open', 'label', 'without-header', 'light-dismiss'];
 
 const SOPORTA_POPOVER = 'showPopover' in HTMLElement.prototype;
@@ -64,6 +64,7 @@ const SOPORTA_POPOVER = 'showPopover' in HTMLElement.prototype;
 // molde `IswcReactive` (shadow + plantilla + hojas; `t()` para el botón de cierre). Los hooks `onConnected`,
 // `onDisconnected` y `onAttributeChanged` son los del molde (no-op por defecto).
 export class ModalBase extends withStyleAttrs(IswcReactive) {
+  declare static events: ModalBaseEventos;
   static observed = [...BASE_OBSERVED];
 
   // ── Subclass hooks ──────────────────────────────────────────────────

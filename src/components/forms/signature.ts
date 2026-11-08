@@ -1,5 +1,6 @@
 import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import css from 'iswc:css';
+import type { SignatureEventos } from './schemas/signature.schemas.js';
 
 /**
  * <iswc-signature> — Pad de firma manuscrita (touch + mouse). Exporta a PNG/SVG.
@@ -34,6 +35,7 @@ import css from 'iswc:css';
 
   class IswcSignature extends IswcElement {
     static tag = 'iswc-signature';
+    declare static events: SignatureEventos;
     static css = css;
     static observed = OBSERVED;
 

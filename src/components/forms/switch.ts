@@ -5,6 +5,7 @@ import { DEFAULT_INTENT, ensureDefaultColor } from '@jeff-aporta/iswc-base/core/
 import { hasSlotted } from '@jeff-aporta/iswc-base/core/dom.js';
 import css from 'iswc:css';
 import { prop } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
+import type { SwitchEventos } from './schemas/switch.schemas.js';
 /**
  * <iswc-switch> — Interruptor form-associated (track + thumb).
  *
@@ -57,6 +58,7 @@ import { prop } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
 
   class IswcSwitch extends IswcFormControl {
     static tag = 'iswc-switch';
+    declare static events: SwitchEventos;
     static css = css;
     static deps = ['iswc-icon'];
 

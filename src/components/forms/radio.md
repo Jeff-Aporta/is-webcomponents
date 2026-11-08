@@ -79,14 +79,18 @@ import './radio.js';
 
 ### Eventos
 
+<!-- eventos: generado por scripts/sondas/eventos.ts desde declare static events -->
+
+| Evento | detail | cancelable |
+| --- | --- | --- |
+| `iswc-radio-select` | `{ value: string }` | no |
+
+<!-- /eventos -->
+
 
 | Evento | Descripción |
 | --- | --- |
 | `iswc-radio-select` | Evento personalizado del componente (radio select). |
-
-| Evento | detail | bubbles | composed | cancelable |
-| --- | --- | --- | --- | --- |
-| `iswc-radio-select` | sí | sí | sí | no |
 
 
 <details>

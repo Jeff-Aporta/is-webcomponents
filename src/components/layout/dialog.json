@@ -7,6 +7,28 @@
   "description": "Ventana modal con foco atrapado, cierre por Escape o clic fuera (opcional), y ranuras para título, contenido y acciones.",
   "storageKey": "docs-iswc-dialog",
   "loads": ["iswc-slots-pg"],
+  "events": [
+    {
+      "name": "iswc-show",
+      "detail": "Record<string, never>",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-after-show",
+      "detail": "Record<string, never>",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-hide",
+      "detail": "{ source: Element | null }",
+      "cancelable": true
+    },
+    {
+      "name": "iswc-after-hide",
+      "detail": "Record<string, never>",
+      "cancelable": false
+    }
+  ],
   "sections": [
     {
       "id": "intro",

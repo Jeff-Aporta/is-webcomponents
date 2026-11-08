@@ -120,6 +120,19 @@ import './input.js';
 
 ### Eventos
 
+<!-- eventos: generado por scripts/sondas/eventos.ts desde declare static events -->
+
+| Evento | detail | cancelable |
+| --- | --- | --- |
+| `iswc-invalid` | `{ message: string }` | no |
+| `iswc-input` | `{ value: string }` | no |
+| `iswc-change` | `{ value: string }` | no |
+| `iswc-typing-end` | `{ value: string }` | no |
+| `iswc-enter` | `{ value: string }` | no |
+| `iswc-otp` | `{ code: string }` | no |
+
+<!-- /eventos -->
+
 
 | Evento | Descripción |
 | --- | --- |
@@ -129,15 +142,6 @@ import './input.js';
 | `iswc-change` | Emitido al confirmar el cambio de valor (escribe como `change` nativo). |
 | `iswc-typing-end` | Emitido tras el debounce de escritura (default 600 ms). |
 | `iswc-otp` | Emitido al autocompletar el valor vía Web OTP (autocomplete="one-time-code"). |
-
-| Evento | detail | bubbles | composed | cancelable |
-| --- | --- | --- | --- | --- |
-| `input` | no | sí | sí | no |
-| `change` | no | sí | sí | no |
-| `iswc-input` | sí | sí | sí | no |
-| `iswc-change` | sí | sí | sí | no |
-| `iswc-typing-end` | `{ value }` | sí | sí | no |
-| `iswc-otp` | `{ code }` | sí | sí | no |
 
 
 <details>

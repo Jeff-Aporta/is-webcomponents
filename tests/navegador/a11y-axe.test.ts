@@ -11,11 +11,11 @@ const { test, lista } = coleccionPruebas({ categoria: 'what' });
 /** Reglas de axe que fallan hoy por muestra (se corrigen al migrar cada familia en su lote de F8). */
 const PENDIENTES: Record<string, readonly string[]> = {
   // Medido 7-nov-2026 al registrar de verdad los tags en la página (antes la prueba corría en vacío: ver
-  // tests/_shared/pagina.ts, ignoreAnnotations). Se corrigen en el lote de accesibilidad de F8 (HOW-7).
-  lista: ['aria-required-parent'],
+  // tests/_shared/pagina.ts, ignoreAnnotations). F8 hito 6 corrigió lista (slot oculto en un `div hidden`), pestanas
+  // (el host `role=tab` es el único enfocable) y arbol (todo `iswc-tree-item` es `treeitem`). Queda dialogo: la página
+  // no carga el tema y `--iswc-bg` sin definir deja la caja transparente sobre el fondo al 55 %; arreglarlo pide un
+  // color de respaldo en el tema o cargar el tema en la muestra.
   dialogo: ['color-contrast'],
-  pestanas: ['nested-interactive'],
-  arbol: ['aria-allowed-attr'],
 };
 
 test('navegador/a11y-axe: sin violaciones WCAG 2 A/AA nuevas por familia', { timeout: TIMEOUT_RENDER_NAVEGADOR }, async () => {

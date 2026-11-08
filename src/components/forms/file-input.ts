@@ -3,6 +3,7 @@ import { IswcReactive } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
 import { registrarTerminos } from '@jeff-aporta/iswc-base/core/localize.js';
 import '@jeff-aporta/iswc-base/components/helpers/format-bytes.js';
 import css from 'iswc:css';
+import type { FileInputEventos } from './schemas/file-input.schemas.js';
 
 /**
  * <iswc-file-input> — Web Component (vanilla).
@@ -66,6 +67,7 @@ import css from 'iswc:css';
 
   class IswcFileInput extends IswcReactive {
     static tag = 'iswc-file-input';
+    declare static events: FileInputEventos;
     static css = css;
     static deps = ['iswc-icon', 'iswc-button'];
     static formAssociated = true;

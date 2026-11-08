@@ -12,3 +12,5 @@ const ModalBaseCtorSchema = z.intersection(z.unknown() /* TODO: cannot convert *
 }));
 export type ModalBaseCtor = z.infer<typeof ModalBaseCtorSchema>;
 
+/** Eventos del componente (HOW-6): `declare static events` en la clase; los documenta scripts/sondas/eventos.ts. */
+export type ModalBaseEventos = { 'iswc-show': Record<string, never>; 'iswc-after-show': Record<string, never>; 'iswc-hide': { source: Element | null }; 'iswc-after-hide': Record<string, never> };

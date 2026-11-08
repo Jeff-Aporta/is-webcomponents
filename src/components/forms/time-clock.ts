@@ -1,6 +1,6 @@
 import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import { formatTime, from12Hour, pad, parseTime, to12Hour, toTime, uses12Hour } from './utils/date-utils.js';
-import type { ParsedTime, RingItem, View, Meridiem, CommitOpts, PickOpts } from "./schemas/time-clock.schemas.js";
+import type { ParsedTime, RingItem, View, Meridiem, CommitOpts, PickOpts, TimeClockEventos } from "./schemas/time-clock.schemas.js";
 import css from 'iswc:css';
 
 /**
@@ -48,6 +48,7 @@ import css from 'iswc:css';
 
   class IswcTimeClock extends IswcElement {
     static tag = 'iswc-time-clock';
+    declare static events: TimeClockEventos;
     static css = css;
 
     static observed = [...OBSERVED, 'size', 'face-color'];

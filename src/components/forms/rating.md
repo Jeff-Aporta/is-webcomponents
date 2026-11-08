@@ -97,16 +97,21 @@ import './rating.js';
 
 ### Eventos
 
+<!-- eventos: generado por scripts/sondas/eventos.ts desde declare static events -->
+
+| Evento | detail | cancelable |
+| --- | --- | --- |
+| `iswc-invalid` | `{ message: string }` | no |
+| `iswc-change` | `{ value: number; label: string }` | no |
+| `iswc-hover` | `{ value: number; phantomValue: number \| null; label: string }` | no |
+
+<!-- /eventos -->
+
 
 | Evento | Descripción |
 | --- | --- |
 | `iswc-change` | Emitido al confirmar el cambio de valor (escribe como `change` nativo). |
 | `iswc-hover` | Evento personalizado del componente (hover). |
-
-| Evento | detail | bubbles | composed | cancelable |
-| --- | --- | --- | --- | --- |
-| `iswc-change` | sí | sí | sí | no |
-| `iswc-hover` | sí | sí | sí | no |
 
 
 <details>

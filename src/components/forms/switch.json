@@ -13,6 +13,18 @@
   ],
   "storageKey": "docs-iswc-switch",
   "hasBehavior": true,
+  "events": [
+    {
+      "name": "iswc-invalid",
+      "detail": "{ message: string }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-change",
+      "detail": "{ checked: boolean; value: string }",
+      "cancelable": false
+    }
+  ],
   "sections": [
     {
       "id": "intro",

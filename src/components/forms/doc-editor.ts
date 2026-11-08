@@ -1,5 +1,6 @@
 import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import css from 'iswc:css';
+import type { DocEditorEventos } from './schemas/doc-editor.schemas.js';
 
 /**
  * <iswc-doc-editor> — Editor de documento basado en bloques (Notion-like).
@@ -59,6 +60,7 @@ import css from 'iswc:css';
 
   class IswcDocEditor extends IswcElement {
     static tag = 'iswc-doc-editor';
+    declare static events: DocEditorEventos;
     static css = css;
     static observed = OBSERVED;
     #mounted = false;

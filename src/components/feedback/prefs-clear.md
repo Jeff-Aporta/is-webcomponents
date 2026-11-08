@@ -82,6 +82,16 @@ el.addEventListener('iswc-prefs-clear', (e) => {
 - `peek()` — lee el root de prefs sin borrar
 
 
+### Eventos
+
+<!-- eventos: generado por scripts/sondas/eventos.ts desde declare static events -->
+
+| Evento | detail | cancelable |
+| --- | --- | --- |
+| `iswc-prefs-clear` | `PrefsClearDetail` | no |
+
+<!-- /eventos -->
+
 ### CSS parts
 
 | Part | Uso |

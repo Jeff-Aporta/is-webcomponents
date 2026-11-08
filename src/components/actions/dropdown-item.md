@@ -81,14 +81,18 @@ import './dropdown-item.js';
 
 ### Eventos
 
+<!-- eventos: generado por scripts/sondas/eventos.ts desde declare static events -->
+
+| Evento | detail | cancelable |
+| --- | --- | --- |
+| `iswc-dropdown-item-select` | `{ item: HTMLElement }` | no |
+
+<!-- /eventos -->
+
 
 | Evento | DescripciÃ³n |
 | --- | --- |
 | `iswc-dropdown-item-select` | Evento personalizado del componente (dropdown item select). |
-
-| Evento | detail | bubbles | composed | cancelable |
-| --- | --- | --- | --- | --- |
-| `iswc-dropdown-item-select` | sÃ­ | sÃ­ | sÃ­ | no |
 
 
 <details>

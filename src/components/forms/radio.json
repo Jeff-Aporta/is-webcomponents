@@ -9,6 +9,13 @@
     "    .spread { display: flex; flex-wrap: wrap; gap: 2.5rem; align-items: flex-start; }"
   ],
   "storageKey": "docs-iswc-radio",
+  "events": [
+    {
+      "name": "iswc-radio-select",
+      "detail": "{ value: string }",
+      "cancelable": false
+    }
+  ],
   "sections": [
     {
       "id": "intro",

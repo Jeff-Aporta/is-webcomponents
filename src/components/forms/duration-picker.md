@@ -72,16 +72,20 @@ import './duration-picker.js';
 
 ### Eventos
 
+<!-- eventos: generado por scripts/sondas/eventos.ts desde declare static events -->
+
+| Evento | detail | cancelable |
+| --- | --- | --- |
+| `iswc-change` | `{ value: number; text: string }` | no |
+| `iswc-input` | `undefined` | no |
+
+<!-- /eventos -->
+
 
 | Evento | Descripción |
 | --- | --- |
 | `iswc-input` | Emitido en cada cambio del valor (escribe como `input` nativo). |
 | `iswc-change` | Emitido al confirmar el cambio de valor (escribe como `change` nativo). |
-
-| Evento | detail | bubbles | composed | cancelable |
-| --- | --- | --- | --- | --- |
-| `iswc-input` | sin detail | sí | sí | no |
-| `iswc-change` | `{ value, text }` | sí | sí | no |
 
 `tick()` emite solo `iswc-change`. La edición directa de casillas emite
 `iswc-input` y luego `iswc-change`.

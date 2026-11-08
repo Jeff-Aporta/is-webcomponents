@@ -3,6 +3,7 @@ import { IswcReactive } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
 import { registrarTerminos } from '@jeff-aporta/iswc-base/core/localize.js';
 import { escapeHtml } from '@jeff-aporta/iswc-base/core/dom.js';
 import css from 'iswc:css';
+import type { DropzoneEventos } from './schemas/dropzone.schemas.js';
 
 /**
  * <iswc-dropzone> — Zona de drop con preview, cola y progreso por archivo.
@@ -55,6 +56,7 @@ import css from 'iswc:css';
 
   class IswcDropzone extends IswcReactive {
     static tag = 'iswc-dropzone';
+    declare static events: DropzoneEventos;
     static css = css;
     static deps = ['iswc-icon', 'iswc-button'];
     static observed = OBSERVED;

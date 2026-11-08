@@ -78,6 +78,18 @@ import './command-palette.js';
 
 ### Eventos
 
+<!-- eventos: generado por scripts/sondas/eventos.ts desde declare static events -->
+
+| Evento | detail | cancelable |
+| --- | --- | --- |
+| `iswc-show` | `undefined` | no |
+| `iswc-after-show` | `undefined` | no |
+| `iswc-hide` | `undefined` | no |
+| `iswc-after-hide` | `undefined` | no |
+| `iswc-select` | `{ command: { id: string; run?: () => void }; id: string }` | no |
+
+<!-- /eventos -->
+
 
 | Evento | Descripción |
 | --- | --- |
@@ -86,14 +98,6 @@ import './command-palette.js';
 | `iswc-hide` | Emitido justo antes de ocultarse (cancelable). |
 | `iswc-after-hide` | Emitido tras finalizar la animación de cierre. |
 | `iswc-select` | Emitido al seleccionar un elemento. |
-
-| Evento | detail | bubbles | composed | cancelable |
-| --- | --- | --- | --- | --- |
-| `iswc-show` | no | sí | sí | no |
-| `iswc-after-show` | no | sí | sí | no |
-| `iswc-hide` | no | sí | sí | no |
-| `iswc-after-hide` | no | sí | sí | no |
-| `iswc-select` | `{ command, id }` | sí | sí | no |
 
 Vocabulario unificado con `ModalBase`. Los antiguos `iswc-open` / `iswc-close`
 ya no se emiten. Escape lo cierra el propio `<dialog>` (evento `cancel`).

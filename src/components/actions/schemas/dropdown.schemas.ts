@@ -16,3 +16,5 @@ const DropdownItemElSchema = z.intersection(z.unknown() /* TODO: ref HTMLElement
 }));
 export type DropdownItemEl = z.infer<typeof DropdownItemElSchema>;
 
+/** Eventos del componente (HOW-6): `declare static events` en la clase; los documenta scripts/sondas/eventos.ts. */
+export type DropdownEventos = { 'iswc-show': undefined; 'iswc-after-show': undefined; 'iswc-hide': undefined; 'iswc-after-hide': undefined; 'iswc-select': { item: DropdownItemEl } };

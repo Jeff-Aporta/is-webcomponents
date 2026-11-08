@@ -71,6 +71,17 @@ No expone.
 
 ### Eventos
 
+<!-- eventos: generado por scripts/sondas/eventos.ts desde declare static events -->
+
+| Evento | detail | cancelable |
+| --- | --- | --- |
+| `iswc-blur` | `undefined` | no |
+| `iswc-source-change` | `{ source: boolean }` | no |
+| `iswc-input` | `undefined` | no |
+| `iswc-change` | `{ value: string; text: string }` | no |
+
+<!-- /eventos -->
+
 
 | Evento | Descripción |
 | --- | --- |
@@ -78,13 +89,6 @@ No expone.
 | `iswc-change` | Emitido al confirmar el cambio de valor (escribe como `change` nativo). |
 | `iswc-blur` | Emitido cuando el componente pierde foco. |
 | `iswc-source-change` | Evento personalizado del componente (source change). |
-
-| Evento | detail | bubbles | composed | cancelable |
-| --- | --- | --- | --- | --- |
-| `iswc-input` | sin detail | sí | sí | no |
-| `iswc-change` | `{ value, text }` | sí | sí | no |
-| `iswc-blur` | sin detail | sí | sí | no |
-| `iswc-source-change` | `{ source }` | sí | sí | no |
 
 
 <details>

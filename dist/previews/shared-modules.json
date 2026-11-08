@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-08T02:08:39.714Z",
+  "generatedAt": "2026-11-08T23:01:41.113Z",
   "count": 24,
   "modules": [
     {
@@ -194,7 +194,7 @@
       "id": "iswc-element",
       "path": "src/core/iswc-element.ts",
       "summary": "iswc-element — import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';",
-      "bytes": 21439,
+      "bytes": 21928,
       "exports": [
         "soportaHojasAdoptadas",
         "textoHojasBase",

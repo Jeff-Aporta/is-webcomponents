@@ -13,3 +13,5 @@ const RteCommandDefSchema = z.object({
 });
 export type RteCommandDef = z.infer<typeof RteCommandDefSchema>;
 
+/** Eventos del componente (HOW-6): `declare static events` en la clase; los documenta scripts/sondas/eventos.ts. */
+export type RteEventos = { 'iswc-blur': undefined; 'iswc-source-change': { source: boolean }; 'iswc-input': undefined; 'iswc-change': { value: string; text: string } };

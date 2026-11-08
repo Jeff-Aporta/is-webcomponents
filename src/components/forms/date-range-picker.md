@@ -84,16 +84,20 @@ import './date-range-picker.js';
 
 ### Eventos
 
+<!-- eventos: generado por scripts/sondas/eventos.ts desde declare static events -->
+
+| Evento | detail | cancelable |
+| --- | --- | --- |
+| `iswc-change` | `{ start: string \| null; end: string \| null; source?: string }` | no |
+| `iswc-month-change` | `{ month: string }` | no |
+
+<!-- /eventos -->
+
 
 | Evento | Descripción |
 | --- | --- |
 | `iswc-change` | Emitido al confirmar el cambio de valor (escribe como `change` nativo). |
 | `iswc-month-change` | Evento personalizado del componente (month change). |
-
-| Evento | detail | bubbles | composed | cancelable |
-| --- | --- | --- | --- | --- |
-| `iswc-change` | sí | sí | sí | no |
-| `iswc-month-change` | sí | sí | sí | no |
 
 
 <details>

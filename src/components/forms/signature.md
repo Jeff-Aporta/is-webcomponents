@@ -68,16 +68,20 @@ No expone.
 
 ### Eventos
 
+<!-- eventos: generado por scripts/sondas/eventos.ts desde declare static events -->
+
+| Evento | detail | cancelable |
+| --- | --- | --- |
+| `iswc-change` | `{ strokes: { x: number; y: number }[][] }` | no |
+| `iswc-stroke-end` | `{ dataURL: string }` | no |
+
+<!-- /eventos -->
+
 
 | Evento | Descripción |
 | --- | --- |
 | `iswc-stroke-end` | Evento personalizado del componente (stroke end). |
 | `iswc-change` | Emitido al confirmar el cambio de valor (escribe como `change` nativo). |
-
-| Evento | detail | bubbles | composed | cancelable |
-| --- | --- | --- | --- | --- |
-| `iswc-stroke-end` | `{ dataURL }` | sí | sí | no |
-| `iswc-change` | `{ strokes }` | sí | sí | no |
 
 `iswc-change` se emite al terminar cada trazo y también en `clear()`.
 `strokes` es el arreglo interno de trazos (`[{ x, y }, ...]` por trazo).

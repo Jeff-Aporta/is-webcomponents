@@ -2,6 +2,7 @@ import { emit, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import { setOptionalAttr } from '@jeff-aporta/iswc-base/core/attrs.js';
 import css from 'iswc:css';
 import { IswcReactive, prop } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
+import type { RadioEventos } from './schemas/radio.schemas.js';
 
 /**
  * <iswc-radio> — Opción de radio. NO es form-associated a propósito: el valor lo
@@ -40,6 +41,7 @@ import { IswcReactive, prop } from '@jeff-aporta/iswc-base/core/iswc-reactive.js
 
   class IswcRadio extends IswcReactive {
     static tag = 'iswc-radio';
+    declare static events: RadioEventos;
     static css = css;
 
     static observed = [...OBSERVED, 'accent'];

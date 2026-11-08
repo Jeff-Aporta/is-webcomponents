@@ -570,3 +570,29 @@ estados propios (como antes de F8) y pide `core/localize` por `import()` solo si
 está, si no por `import()`). Medido tras build: cierre de button 8 790 B br (antes de F8 9 108), de input 13 181 B br
 (antes 14 971), unión base (con `plantilla`) 14 366 B br; los dos topes por cierre quedan en
 `tests/navegador/carga.test.ts`.
+
+Hito 5 (eventos tipados, 7-nov-2026). Variante de cero bytes en runtime: cada componente escribe sus eventos en un tipo
+de una línea en `schemas/<tag>.schemas.ts` (`export type CheckboxEventos = IswcFormControlEventos & { 'iswc-change': … };`)
+y lo enlaza en la clase con `declare static events: CheckboxEventos;` (un campo `declare` no se emite: el cierre no
+cambia ni un byte). Los que heredan suman el tipo de la base (`DialogEventos = ModalBaseEventos`; los de forms suman
+`IswcFormControlEventos` de `core/schemas/iswc-form-control.schemas.ts`, el `iswc-invalid` del molde). No se declara
+`HTMLElementEventMap` global: `iswc-change` lleva otro `detail` en cada componente y la fusión de interfaces lo
+rechaza (TS2717); queda para F8b con `web-types.json`. El tipado de `emit` del molde con el mapa queda fuera: su
+firma es contrato de D4 (`molde-iswc-element` M5) y cambiarla toca la API pública. `scripts/sondas/eventos.ts` escribe desde la fuente el `"events"` de cada ficha `.json` (antes de
+`sections`, en `RAIZ_PROPS` del validador y en `ComponentJsonSchema`) y la tabla «Eventos» del `.md` (bloque marcado,
+sustituye la tabla vieja de bubbles/composed). Guardián `tests/gobernanza/eventos.test.ts`: E1 todo `iswc-*` emitido está
+declarado y todo lo declarado se emite, por archivo con trinquete en `eventos-pendientes.json`; E2 fichas al día con la
+sonda. Migrados: `forms/`, `feedback/`, `overlays/`, `actions/`, `layout/dialog`, `layout/drawer` (y su base
+`layout/utils/modal-base`); 53 fichas. Pendientes iniciales: 270 en 97 archivos (resto de carpetas).
+
+Hito 6 (accesibilidad estática, 7-nov-2026). Guardián `tests/gobernanza/a11y-patrones.test.ts` sobre `TEMPLATE.innerHTML`,
+`html```, `setAttribute('role' | 'aria-*')` y `.role =`: A1 roles de ARIA 1.2; A2 pares (`tab` ⇒ `aria-selected`,
+`combobox` ⇒ `aria-expanded` + `aria-controls`, `dialog`/`alertdialog` ⇒ nombre + `aria-modal`, `treeitem` con `group`
+⇒ `aria-expanded`), valiendo lo que pone el código del archivo o de su clase base; A3 padre requerido (`option`,
+`menuitem*`, `treeitem`); A4 `aria-*` existentes y admitidos por el rol, y sin nombre en roles que lo prohíben.
+Trinquete en `a11y-patrones-pendientes.json`: 6 en 5 archivos (`option` como fragmento sin `listbox`, `popover`,
+`loading-overlay`, dos diálogos de `ag-grid`/`preview-controls` sin `aria-modal`). Arreglados en `a11y-axe`: `select` y
+`combobox` ocultan las opciones fuente en un `div hidden` (axe no ve el `display: none` de un `<slot>`), `iswc-tab` es el
+único enfocable (foco itinerante en el host, el `part="base"` deja de ser `<button>`), todo `iswc-tree-item` lleva
+`role="treeitem"`, y `speed-dial` pinta su `role="menu"`. Queda `dialogo: color-contrast`: la muestra no carga el tema y
+`--iswc-bg` sin definir deja la caja transparente; pide color de respaldo en el tema o cargar el tema en la página.

@@ -2,7 +2,7 @@ import { computePosition, createPopupDismiss } from '@jeff-aporta/iswc-base/core
 import { guardarAppCfg, leerAppCfg } from '@jeff-aporta/iswc-base/core/app-init.js';
 import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import { PALETTES, PALETTE_FAMILIES, paletteSeeds } from '@jeff-aporta/iswc-base/styles/palette-build.js';
-import type { Palette, PaletteCruda } from "./schemas/palette-selector.schemas.js";
+import type { Palette, PaletteCruda, PaletteSelectorEventos } from "./schemas/palette-selector.schemas.js";
 import css from 'iswc:css';
 
 /**
@@ -133,6 +133,7 @@ import css from 'iswc:css';
 
   class IswcPaletteSelector extends IswcElement {
     static tag = 'iswc-palette-selector';
+    declare static events: PaletteSelectorEventos;
     static css = css;
     static deps = ['iswc-icon'];
     static observed = OBSERVED;

@@ -2,6 +2,7 @@ import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-elem
 import './button.js';
 import { setStringAttr } from '@jeff-aporta/iswc-base/core/attrs.js';
 import css from 'iswc:css';
+import type { CheckIconButtonEventos } from './schemas/check-icon-button.schemas.js';
 
 /**
  * <iswc-check-icon-button> — botón icon-only con dos estados (unchecked / checked).
@@ -53,6 +54,7 @@ import css from 'iswc:css';
 
   class IswcCheckIconButton extends IswcElement {
     static tag = 'iswc-check-icon-button';
+    declare static events: CheckIconButtonEventos;
     static css = css;
     static deps = ['iswc-icon'];
     static observed = OBSERVED;

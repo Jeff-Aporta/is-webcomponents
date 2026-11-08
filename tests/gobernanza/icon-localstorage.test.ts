@@ -53,6 +53,8 @@ const { resolveIconRaw, clearRawCache, clearPersistedIcons, purgarIconosVencidos
 const { clearIswcStorage } = await import('../../src/core/iswc-storage.ts');
 
 denoTest('P1 lo que vino de la API queda en localStorage y luego no hay fetch', async () => {
+  localStorage.clear();
+  clearRawCache();
   pedidos.length = 0;
   const a = await resolveIconRaw('solar', 'bolt');
   assert(a?.includes('api:solar/bolt.svg'));
@@ -64,6 +66,7 @@ denoTest('P1 lo que vino de la API queda en localStorage y luego no hay fetch', 
 });
 
 denoTest('P2 lo de la web publicada también se persiste', async () => {
+  clearRawCache();
   const a = await resolveIconRaw('mdi', 'home');
   assert(a?.includes('local-home'));
   assertEquals(JSON.parse(localStorage.getItem('iswc:icon:mdi:home')!).s, a);
@@ -88,6 +91,7 @@ denoTest('P4 clearPersistedIcons borra solo iswc:icon:*', () => {
 });
 
 denoTest('P5 vida máxima de 15 días y purga', async () => {
+  localStorage.clear();
   clearRawCache();
   const viejo = Date.now() - LS_TTL_MS - 24 * 60 * 60 * 1000; // 16 días
   localStorage.setItem('iswc:icon:solar:viejo', JSON.stringify({ t: viejo, s: svg('viejo') }));
@@ -103,6 +107,10 @@ denoTest('P5 vida máxima de 15 días y purga', async () => {
 });
 
 denoTest('P6 clearIswcStorage deja los íconos como en la primera carga', async () => {
+  // Estado propio (S-T7: cada caso corre solo; con cooldown los anteriores pueden no haber corrido).
+  localStorage.clear();
+  clearRawCache();
+  localStorage.setItem('otra:clave', 'x');
   await resolveIconRaw('solar', 'sol');
   assert(localStorage.getItem('iswc:icon:solar:sol') !== null);
   const r = clearIswcStorage();

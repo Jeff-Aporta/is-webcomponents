@@ -6,6 +6,13 @@
   "titleHtml": false,
   "description": "Rejilla desplazable de años para elegir un año.",
   "storageKey": "docs-iswc-year-calendar",
+  "events": [
+    {
+      "name": "iswc-change",
+      "detail": "{ value: string; year: number }",
+      "cancelable": false
+    }
+  ],
   "sections": [
     {
       "id": "intro",

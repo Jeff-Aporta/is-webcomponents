@@ -90,6 +90,18 @@ reemplazar desde el light DOM.
 
 ### Eventos
 
+<!-- eventos: generado por scripts/sondas/eventos.ts desde declare static events -->
+
+| Evento | detail | cancelable |
+| --- | --- | --- |
+| `iswc-error` | `{ id?: string \| null; file?: File; reason: 'max-files' \| 'max-size' \| 'accept'; limit?: number }` | no |
+| `iswc-upload-start` | `{ id: string; file: File }` | no |
+| `iswc-upload-progress` | `{ id: string; file: File; progress: number }` | no |
+| `iswc-upload-end` | `{ id: string; file: File; ok: boolean }` | no |
+| `iswc-files-change` | `{ files: { id: string; file: File; name: string; size: number; type: string; status: string; progress: number; url: string }[] }` | no |
+
+<!-- /eventos -->
+
 
 | Evento | Descripción |
 | --- | --- |
@@ -98,14 +110,6 @@ reemplazar desde el light DOM.
 | `iswc-upload-progress` | Evento personalizado del componente (upload progress). |
 | `iswc-upload-end` | Evento personalizado del componente (upload end). |
 | `iswc-error` | Emitido cuando se produce un error. |
-
-| Evento | detail | bubbles | composed | cancelable |
-| --- | --- | --- | --- | --- |
-| `iswc-files-change` | `{ files }` — referencia al array vivo de la cola | sí | sí | no |
-| `iswc-upload-start` | `{ id, file }` | sí | sí | no |
-| `iswc-upload-progress` | `{ id, file, progress }` — `progress` 0–100 | sí | sí | no |
-| `iswc-upload-end` | `{ id, file, ok }` — `ok` siempre `true` | sí | sí | no |
-| `iswc-error` | `{ reason, limit }` o `{ id, file, reason }` según el caso | sí | sí | no |
 
 `iswc-files-change` se emite al terminar de procesar un lote (arrastre,
 selección, `addFile`, `addFiles`) y al quitar un archivo con `removeFile`.

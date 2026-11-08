@@ -1,5 +1,6 @@
 import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import css from 'iswc:css';
+import type { DurationPickerEventos } from './schemas/duration-picker.schemas.js';
 
 /**
  * <iswc-duration-picker> — Selector de duración HH:MM:SS.
@@ -30,6 +31,7 @@ import css from 'iswc:css';
 
   class IswcDurationPicker extends IswcElement {
     static tag = 'iswc-duration-picker';
+    declare static events: DurationPickerEventos;
     static css = css;
     static deps = ['iswc-button'];
 

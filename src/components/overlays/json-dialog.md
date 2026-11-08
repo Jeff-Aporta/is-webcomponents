@@ -64,6 +64,15 @@ No tiene slots.
 
 ### Eventos
 
+<!-- eventos: generado por scripts/sondas/eventos.ts desde declare static events -->
+
+| Evento | detail | cancelable |
+| --- | --- | --- |
+| `iswc-json-close` | `undefined` | no |
+| `iswc-json-apply` | `{ valor: unknown }` | no |
+
+<!-- /eventos -->
+
 | Evento | Detalle | Cuándo |
 | --- | --- | --- |
 | `iswc-json-close` | — | Al cerrar o cancelar. |

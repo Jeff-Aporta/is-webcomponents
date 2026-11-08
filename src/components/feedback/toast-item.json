@@ -6,6 +6,18 @@
   "titleHtml": false,
   "description": "Notificación emergente individual con color, mensaje, acción opcional y cierre automático.",
   "storageKey": "docs-iswc-toast-item",
+  "events": [
+    {
+      "name": "iswc-after-show",
+      "detail": "{ color: string; message: string; caption: string | undefined; log: unknown }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-after-hide",
+      "detail": "undefined",
+      "cancelable": false
+    }
+  ],
   "sections": [
     {
       "id": "intro",

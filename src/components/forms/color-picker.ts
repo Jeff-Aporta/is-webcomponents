@@ -3,7 +3,7 @@ import '@jeff-aporta/iswc-base/components/forms/input.js';
 import { IswcFormControl } from '@jeff-aporta/iswc-base/core/iswc-form-control.js';
 import type { Validez } from '@jeff-aporta/iswc-base/core/schemas/iswc-form-control.schemas.js';
 import { computePosition } from '@jeff-aporta/iswc-base/core/position.js';
-import type { WindowWithEyeDropper } from "./schemas/color-picker.schemas.js";
+import type { WindowWithEyeDropper, ColorPickerEventos } from "./schemas/color-picker.schemas.js";
 import css from 'iswc:css';
 import { createPopupDismiss } from '@jeff-aporta/iswc-base/core/position.js';
 /**
@@ -71,6 +71,7 @@ import { createPopupDismiss } from '@jeff-aporta/iswc-base/core/position.js';
 
   class IswcColorPicker extends IswcFormControl {
     static tag = 'iswc-color-picker';
+    declare static events: ColorPickerEventos;
     static css = css;
     static shadowInit: ShadowRootInit | null = { mode: 'open', delegatesFocus: true };
     static deps = ['iswc-icon', 'iswc-button'];

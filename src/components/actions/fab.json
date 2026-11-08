@@ -34,6 +34,13 @@
     "    }"
   ],
   "storageKey": "docs-iswc-fab",
+  "events": [
+    {
+      "name": "iswc-fab-click",
+      "detail": "{ originalEvent: Event }",
+      "cancelable": false
+    }
+  ],
   "sections": [
     {
       "id": "intro",

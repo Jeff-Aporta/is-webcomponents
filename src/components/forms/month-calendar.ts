@@ -1,6 +1,7 @@
 import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import { daysInMonth, isoOf, monthLabels, pad } from './utils/date-utils.js';
 import css from 'iswc:css';
+import type { MonthCalendarEventos } from './schemas/month-calendar.schemas.js';
 
 /**
  * <iswc-month-calendar> — Rejilla de los 12 meses de un año (MUI MonthCalendar).
@@ -20,6 +21,7 @@ import css from 'iswc:css';
 
   class IswcMonthCalendar extends IswcElement {
     static tag = 'iswc-month-calendar';
+    declare static events: MonthCalendarEventos;
     static css = css;
     static observed = OBSERVED;
 

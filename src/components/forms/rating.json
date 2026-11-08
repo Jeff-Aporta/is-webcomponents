@@ -10,6 +10,23 @@
   ],
   "storageKey": "docs-iswc-rating",
   "hasBehavior": true,
+  "events": [
+    {
+      "name": "iswc-invalid",
+      "detail": "{ message: string }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-change",
+      "detail": "{ value: number; label: string }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-hover",
+      "detail": "{ value: number; phantomValue: number | null; label: string }",
+      "cancelable": false
+    }
+  ],
   "sections": [
     {
       "id": "intro",

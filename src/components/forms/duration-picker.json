@@ -14,6 +14,18 @@
   ],
   "storageKey": "docs-iswc-duration-picker",
   "hasBehavior": true,
+  "events": [
+    {
+      "name": "iswc-change",
+      "detail": "{ value: number; text: string }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-input",
+      "detail": "undefined",
+      "cancelable": false
+    }
+  ],
   "sections": [
     {
       "id": "intro",

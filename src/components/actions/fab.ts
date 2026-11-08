@@ -2,6 +2,7 @@ import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-elem
 import { INTENT } from '@jeff-aporta/iswc-base/core/attrs.js';
 import './button.js';
 import css from 'iswc:css';
+import type { FabEventos } from './schemas/fab.schemas.js';
 
 /**
  * <iswc-fab> — Floating Action Button (vanilla, zero dependencies).
@@ -66,6 +67,7 @@ import css from 'iswc:css';
 
   class IswcFab extends IswcElement {
     static tag = 'iswc-fab';
+    declare static events: FabEventos;
     static css = css;
 
     static observed = [...OBSERVED];

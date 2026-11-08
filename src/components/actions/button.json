@@ -15,6 +15,28 @@
     "          }"
   ],
   "storageKey": "docs-iswc-button",
+  "events": [
+    {
+      "name": "iswc-focus",
+      "detail": "{ originalEvent: Event }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-blur",
+      "detail": "{ originalEvent: Event }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-click",
+      "detail": "{ originalEvent: Event }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-invalid",
+      "detail": "{ originalEvent: Event; validationMessage: string }",
+      "cancelable": false
+    }
+  ],
   "sections": [
     {
       "id": "intro",

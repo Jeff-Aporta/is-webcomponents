@@ -52,3 +52,5 @@ const DefinePickerInputOptsSchema = z.object({
 });
 export type DefinePickerInputOpts = z.infer<typeof DefinePickerInputOptsSchema>;
 
+/** Eventos del componente (HOW-6): `declare static events` en la clase; los documenta scripts/sondas/eventos.ts. */
+export type PickerInputEventos = { 'iswc-show': Record<string, never>; 'iswc-hide': Record<string, never>; 'iswc-change': { value: string; source: string } };

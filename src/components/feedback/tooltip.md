@@ -79,6 +79,17 @@ import './tooltip.js';
 
 ### Eventos
 
+<!-- eventos: generado por scripts/sondas/eventos.ts desde declare static events -->
+
+| Evento | detail | cancelable |
+| --- | --- | --- |
+| `iswc-show` | `undefined` | sí |
+| `iswc-after-show` | `undefined` | no |
+| `iswc-hide` | `undefined` | sí |
+| `iswc-after-hide` | `undefined` | no |
+
+<!-- /eventos -->
+
 
 | Evento | Descripción |
 | --- | --- |
@@ -86,13 +97,6 @@ import './tooltip.js';
 | `iswc-after-show` | Emitido tras finalizar la animación de apertura. |
 | `iswc-hide` | Emitido justo antes de ocultarse (cancelable). |
 | `iswc-after-hide` | Emitido tras finalizar la animación de cierre. |
-
-| Evento | detail | bubbles | composed | cancelable |
-| --- | --- | --- | --- | --- |
-| `iswc-show` | no | sí | sí | sí |
-| `iswc-after-show` | no | sí | sí | sí |
-| `iswc-hide` | no | sí | sí | sí |
-| `iswc-after-hide` | no | sí | sí | no |
 
 
 <details>

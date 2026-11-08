@@ -5,6 +5,13 @@
   "title": "&lt;iswc-tag&gt;",
   "titleHtml": false,
   "storageKey": "docs-iswc-tag",
+  "events": [
+    {
+      "name": "iswc-remove",
+      "detail": "undefined",
+      "cancelable": false
+    }
+  ],
   "sections": [
     {
       "id": "intro",

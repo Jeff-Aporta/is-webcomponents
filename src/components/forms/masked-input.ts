@@ -5,6 +5,7 @@ import { apply, isComplete } from './utils/input-tokens.js';
 import { setStringAttr } from '@jeff-aporta/iswc-base/core/attrs.js';
 import './input.js';
 import css from 'iswc:css';
+import type { MaskedInputEventos } from './schemas/masked-input.schemas.js';
 
 /**
  * <iswc-masked-input> — Input con formato aplicado (tarjeta de crédito, fecha,
@@ -49,6 +50,7 @@ import css from 'iswc:css';
 
   class IswcMaskedInput extends IswcFormControl {
     static tag = 'iswc-masked-input';
+    declare static events: MaskedInputEventos;
     static css = css;
     static shadowInit: ShadowRootInit | null = { mode: 'open', delegatesFocus: true };
     static observed = OBSERVED;

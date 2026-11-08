@@ -77,6 +77,20 @@ import './window.js';
 
 ### Eventos
 
+<!-- eventos: generado por scripts/sondas/eventos.ts desde declare static events -->
+
+| Evento | detail | cancelable |
+| --- | --- | --- |
+| `iswc-show` | `undefined` | no |
+| `iswc-after-show` | `undefined` | no |
+| `iswc-minimize` | `undefined` | no |
+| `iswc-maximize` | `undefined` | no |
+| `iswc-restore` | `{ was: 'normal' \| 'minimized' \| 'maximized' }` | no |
+| `iswc-hide` | `undefined` | no |
+| `iswc-after-hide` | `undefined` | no |
+
+<!-- /eventos -->
+
 
 | Evento | Descripción |
 | --- | --- |
@@ -87,16 +101,6 @@ import './window.js';
 | `iswc-minimize` | Evento personalizado del componente (minimize). |
 | `iswc-restore` | Evento personalizado del componente (restore). |
 | `iswc-maximize` | Evento personalizado del componente (maximize). |
-
-| Evento | detail | bubbles | composed | cancelable |
-| --- | --- | --- | --- | --- |
-| `iswc-show` | no | sí | sí | no |
-| `iswc-after-show` | no | sí | sí | no |
-| `iswc-hide` | no | sí | sí | no |
-| `iswc-after-hide` | no | sí | sí | no |
-| `iswc-minimize` | no | sí | sí | no |
-| `iswc-restore` | `{ was }` | sí | sí | no |
-| `iswc-maximize` | no | sí | sí | no |
 
 Vocabulario unificado con `ModalBase` (`iswc-show` / `iswc-after-show` /
 `iswc-hide` / `iswc-after-hide`). Los antiguos `iswc-open` / `iswc-close` ya no se

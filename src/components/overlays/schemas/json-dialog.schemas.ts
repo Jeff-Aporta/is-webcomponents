@@ -31,3 +31,6 @@ export type JsonDialogProps = z.infer<typeof JsonDialogPropsSchema>;
 export type JsonDialogoEl = HTMLElement & { open: boolean };
 export type JsonEditorEl = HTMLElement & { value: string };
 export type JsonBotonEl = HTMLElement & { disabled: boolean };
+
+/** Eventos del componente (HOW-6): `declare static events` en la clase; los documenta scripts/sondas/eventos.ts. */
+export type JsonDialogEventos = { 'iswc-json-close': undefined; 'iswc-json-apply': { valor: unknown } };

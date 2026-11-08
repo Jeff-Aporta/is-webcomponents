@@ -68,16 +68,20 @@ import './pdf-viewer.js';
 
 ### Eventos
 
+<!-- eventos: generado por scripts/sondas/eventos.ts desde declare static events -->
+
+| Evento | detail | cancelable |
+| --- | --- | --- |
+| `iswc-load` | `undefined` | no |
+| `iswc-error` | `{ reason: 'fetch' } \| undefined` | no |
+
+<!-- /eventos -->
+
 
 | Evento | Descripción |
 | --- | --- |
 | `iswc-load` | Emitido cuando el recurso se ha cargado. |
 | `iswc-error` | Emitido cuando se produce un error. |
-
-| Evento | detail | bubbles | composed | cancelable |
-| --- | --- | --- | --- | --- |
-| `iswc-load` | sí | sí | sí | no |
-| `iswc-error` | sí | sí | sí | no |
 
 
 <details>

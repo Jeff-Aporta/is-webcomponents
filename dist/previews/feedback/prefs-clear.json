@@ -5,6 +5,13 @@
   "title": "&lt;iswc-prefs-clear&gt;",
   "titleHtml": false,
   "storageKey": "docs-iswc-prefs-clear",
+  "events": [
+    {
+      "name": "iswc-prefs-clear",
+      "detail": "PrefsClearDetail",
+      "cancelable": false
+    }
+  ],
   "sections": [
     {
       "id": "intro",

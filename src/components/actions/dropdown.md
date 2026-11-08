@@ -75,6 +75,18 @@ import './dropdown.js';
 
 ### Eventos
 
+<!-- eventos: generado por scripts/sondas/eventos.ts desde declare static events -->
+
+| Evento | detail | cancelable |
+| --- | --- | --- |
+| `iswc-show` | `undefined` | sí |
+| `iswc-after-show` | `undefined` | no |
+| `iswc-hide` | `undefined` | sí |
+| `iswc-after-hide` | `undefined` | no |
+| `iswc-select` | `{ item: DropdownItemEl }` | sí |
+
+<!-- /eventos -->
+
 
 | Evento | DescripciÃ³n |
 | --- | --- |
@@ -83,14 +95,6 @@ import './dropdown.js';
 | `iswc-after-show` | Emitido tras finalizar la animaciÃ³n de apertura. |
 | `iswc-hide` | Emitido justo antes de ocultarse (cancelable). |
 | `iswc-after-hide` | Emitido tras finalizar la animaciÃ³n de cierre. |
-
-| Evento | detail | bubbles | composed | cancelable |
-| --- | --- | --- | --- | --- |
-| `iswc-select` | sÃ­ | sÃ­ | sÃ­ | sÃ­ |
-| `iswc-show` | no | sÃ­ | sÃ­ | sÃ­ |
-| `iswc-after-show` | no | sÃ­ | sÃ­ | sÃ­ |
-| `iswc-hide` | no | sÃ­ | sÃ­ | sÃ­ |
-| `iswc-after-hide` | no | sÃ­ | sÃ­ | no |
 
 
 <details>

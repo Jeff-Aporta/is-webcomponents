@@ -66,6 +66,7 @@
 
 import { z } from "zod";
 import { ZAnatomia } from "./anatomia.schemas.ts";
+import { ZEvento } from "./eventos.schemas.ts";
 
 /* ──────────────────────────────────────────────────────────────────────────
  * Primitives
@@ -302,6 +303,8 @@ export const ComponentJsonSchema = z
     storageKey: z.string().optional(),
     /** Sección «Anatomía»: lo demás sale del componente montado. */
     anatomy: ZAnatomia.optional(),
+    /** Eventos del componente, generados desde `declare static events` (scripts/sondas/eventos.ts). */
+    events: z.array(ZEvento).optional(),
     /** Clases extra del `iswc-main` del chrome. */
     mainClass: z.string().optional(),
     /** Clase del contenedor que envuelve todas las secciones. */

@@ -16,6 +16,28 @@
   ],
   "storageKey": "docs-iswc-mention",
   "hasBehavior": true,
+  "events": [
+    {
+      "name": "iswc-invalid",
+      "detail": "{ message: string }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-change",
+      "detail": "{ value: string }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-input",
+      "detail": "undefined",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-select",
+      "detail": "{ trigger: string; item: string; range: [number, number] }",
+      "cancelable": false
+    }
+  ],
   "sections": [
     {
       "id": "intro",

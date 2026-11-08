@@ -19,3 +19,6 @@ const PrefsClearDetailSchema = z.object({
   bases: z.array(z.string()),
 });
 export type PrefsClearDetail = z.infer<typeof PrefsClearDetailSchema>;
+
+/** Eventos del componente (HOW-6): `declare static events` en la clase; los documenta scripts/sondas/eventos.ts. */
+export type PrefsClearEventos = { 'iswc-prefs-clear': PrefsClearDetail };

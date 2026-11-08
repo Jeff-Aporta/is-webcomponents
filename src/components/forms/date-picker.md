@@ -102,6 +102,17 @@ No expone.
 
 ### Eventos
 
+<!-- eventos: generado por scripts/sondas/eventos.ts desde declare static events -->
+
+| Evento | detail | cancelable |
+| --- | --- | --- |
+| `iswc-view-change` | `{ view: string }` | no |
+| `iswc-month-change` | `{ month: string }` | no |
+| `iswc-day-hover` | `{ iso: string }` | no |
+| `iswc-change` | `{ value: string } \| { start: string \| null; end: string \| null }` | no |
+
+<!-- /eventos -->
+
 
 | Evento | Descripción |
 | --- | --- |
@@ -109,13 +120,6 @@ No expone.
 | `iswc-month-change` | Evento personalizado del componente (month change). |
 | `iswc-day-hover` | Evento personalizado del componente (day hover). |
 | `iswc-change` | Emitido al confirmar el cambio de valor (escribe como `change` nativo). |
-
-| Evento | detail | bubbles | composed | cancelable |
-| --- | --- | --- | --- | --- |
-| `iswc-view-change` | sí | sí | sí | no |
-| `iswc-month-change` | sí | sí | sí | no |
-| `iswc-day-hover` | sí | sí | sí | no |
-| `iswc-change` | sí | sí | sí | no |
 
 
 <details>

@@ -6,6 +6,28 @@
   "titleHtml": false,
   "description": "Diálogo de confirmación con mensaje y botones de aceptar y cancelar que resuelve la decisión del usuario.",
   "storageKey": "docs-iswc-confirm-modal",
+  "events": [
+    {
+      "name": "iswc-confirm-show",
+      "detail": "{ trigger: HTMLElement | null }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-confirm-hide",
+      "detail": "{ trigger: HTMLElement | null }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-confirm-confirm",
+      "detail": "{ trigger: HTMLElement | null }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-confirm-cancel",
+      "detail": "{ trigger: HTMLElement | null }",
+      "cancelable": false
+    }
+  ],
   "sections": [
     {
       "id": "intro",

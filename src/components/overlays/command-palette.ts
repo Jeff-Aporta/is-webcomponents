@@ -4,6 +4,7 @@ import { registrarTerminos } from '@jeff-aporta/iswc-base/core/localize.js';
 import { escapeHtml } from '@jeff-aporta/iswc-base/core/dom.js';
 import css from 'iswc:css';
 import { createPopupDismiss } from '@jeff-aporta/iswc-base/core/position.js';
+import type { CommandPaletteEventos } from './schemas/command-palette.schemas.js';
 
 /**
  * <iswc-command-palette> — Paleta de comandos al estilo Cmd+K / Ctrl+K.
@@ -76,6 +77,7 @@ import { createPopupDismiss } from '@jeff-aporta/iswc-base/core/position.js';
 
   class IswcCommandPalette extends IswcReactive {
     static tag = 'iswc-command-palette';
+    declare static events: CommandPaletteEventos;
     static css = css;
     static deps = ['iswc-icon'];
 

@@ -78,6 +78,18 @@
     "    }"
   ],
   "storageKey": "docs-iswc-copy-button",
+  "events": [
+    {
+      "name": "iswc-copy",
+      "detail": "{ value: string }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-error",
+      "detail": "undefined",
+      "cancelable": false
+    }
+  ],
   "sections": [
     {
       "id": "intro",

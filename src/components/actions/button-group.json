@@ -26,6 +26,13 @@
     ""
   ],
   "storageKey": "docs-iswc-button-group",
+  "events": [
+    {
+      "name": "iswc-change",
+      "detail": "{ value: string | string[]; values: string[] }",
+      "cancelable": false
+    }
+  ],
   "sections": [
     {
       "id": "intro",

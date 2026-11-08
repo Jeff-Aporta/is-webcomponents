@@ -73,16 +73,20 @@ import './toast-item.js';
 
 ### Eventos
 
+<!-- eventos: generado por scripts/sondas/eventos.ts desde declare static events -->
+
+| Evento | detail | cancelable |
+| --- | --- | --- |
+| `iswc-after-show` | `{ color: string; message: string; caption: string \| undefined; log: unknown }` | no |
+| `iswc-after-hide` | `undefined` | no |
+
+<!-- /eventos -->
+
 
 | Evento | Descripción |
 | --- | --- |
 | `iswc-after-show` | Emitido tras finalizar la animación de apertura. |
 | `iswc-after-hide` | Emitido tras finalizar la animación de cierre. |
-
-| Evento | detail | bubbles | composed | cancelable |
-| --- | --- | --- | --- | --- |
-| `iswc-after-show` | `{ color, message, caption, log }` | sí | sí | no |
-| `iswc-after-hide` | no | sí | sí | no |
 
 
 <details>

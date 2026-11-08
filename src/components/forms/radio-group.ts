@@ -3,7 +3,7 @@ import './radio.js';
 import { IswcFormControl } from '@jeff-aporta/iswc-base/core/iswc-form-control.js';
 import type { Validez } from '@jeff-aporta/iswc-base/core/schemas/iswc-form-control.schemas.js';
 import { setOptionalAttr } from '@jeff-aporta/iswc-base/core/attrs.js';
-import type { IswcRadioElement } from "./schemas/radio-group.schemas.js";
+import type { IswcRadioElement, RadioGroupEventos } from "./schemas/radio-group.schemas.js";
 import css from 'iswc:css';
 import { prop } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
 /**
@@ -50,6 +50,7 @@ import { prop } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
 
   class IswcRadioGroup extends IswcFormControl {
     static tag = 'iswc-radio-group';
+    declare static events: RadioGroupEventos;
     static css = css;
 
     static observed = [...OBSERVED, 'accent'];

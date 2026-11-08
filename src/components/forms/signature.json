@@ -18,6 +18,18 @@
   ],
   "storageKey": "docs-iswc-signature",
   "hasBehavior": true,
+  "events": [
+    {
+      "name": "iswc-change",
+      "detail": "{ strokes: { x: number; y: number }[][] }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-stroke-end",
+      "detail": "{ dataURL: string }",
+      "cancelable": false
+    }
+  ],
   "sections": [
     {
       "id": "intro",

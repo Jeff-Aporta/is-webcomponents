@@ -1,6 +1,7 @@
 import { emit, upgradeProperties, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import { setStringAttr, withStyleAttrs } from '@jeff-aporta/iswc-base/core/attrs.js';
 import css from 'iswc:css';
+import type { ButtonGroupEventos } from './schemas/button-group.schemas.js';
 
 
 /**
@@ -64,6 +65,7 @@ import css from 'iswc:css';
 
   class IswcButtonGroup extends withStyleAttrs(IswcElement) {
     static tag = 'iswc-button-group';
+    declare static events: ButtonGroupEventos;
     static css = css;
 
     static observed = OBSERVED;

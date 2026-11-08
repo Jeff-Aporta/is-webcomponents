@@ -4,7 +4,7 @@ import { clearAllComponentPrefs, peekComponentPrefsRoot } from '@jeff-aporta/isw
 import { leerAppCfg } from '@jeff-aporta/iswc-base/core/app-init.js';
 import { clearIswcStorage, listIswcKeys } from '@jeff-aporta/iswc-base/core/iswc-storage.js';
 // Solo tipos: el schema Zod no entra al bundle del CDN (sumaría ~330 KB al componente).
-import type { PrefsClearDetail, PrefsClearScope } from './schemas/prefs-clear.schemas.js';
+import type { PrefsClearDetail, PrefsClearScope, PrefsClearEventos } from './schemas/prefs-clear.schemas.js';
 import css from 'iswc:css';
 
 /**
@@ -63,6 +63,7 @@ import css from 'iswc:css';
 
   class IswcPrefsClear extends IswcElement {
     static tag = 'iswc-prefs-clear';
+    declare static events: PrefsClearEventos;
     static css = css;
     static deps = ['iswc-button', 'iswc-icon'];
     static observed = ['confirm', 'reload', 'scope', 'variant', 'color', 'shape', 'disabled', 'title', 'aria-label'];

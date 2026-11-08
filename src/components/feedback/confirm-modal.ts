@@ -3,6 +3,7 @@ import { IswcReactive } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
 import { abrirCapaModal } from '@jeff-aporta/iswc-base/core/position.js';
 import { cerrarCapaModal } from '@jeff-aporta/iswc-base/core/position.js';
 import css from 'iswc:css';
+import type { ConfirmModalEventos } from './schemas/confirm-modal.schemas.js';
 
 /**
  * <iswc-confirm-modal> — Web Component (vanilla, zero dependencies).
@@ -57,6 +58,7 @@ import css from 'iswc:css';
 
   class IswcConfirmModal extends IswcReactive {
     static tag = 'iswc-confirm-modal';
+    declare static events: ConfirmModalEventos;
     static css = css;
     static deps = ['iswc-button'];
 

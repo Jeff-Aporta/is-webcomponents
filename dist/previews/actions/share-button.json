@@ -6,6 +6,18 @@
   "titleHtml": false,
   "description": "Comparte título, texto y URL con las apps nativas (Web Share). Si no hay share, copia al portapapeles.",
   "storageKey": "docs-iswc-share-button",
+  "events": [
+    {
+      "name": "iswc-share",
+      "detail": "{ how: 'shared' | 'copied'; url: string; text: string; title: string }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-error",
+      "detail": "undefined",
+      "cancelable": false
+    }
+  ],
   "sections": [
     {
       "id": "intro",

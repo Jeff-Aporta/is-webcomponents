@@ -71,14 +71,18 @@ No expone.
 
 ### Eventos
 
+<!-- eventos: generado por scripts/sondas/eventos.ts desde declare static events -->
+
+| Evento | detail | cancelable |
+| --- | --- | --- |
+| `iswc-change` | `{ value: string; year: number; month: number }` | no |
+
+<!-- /eventos -->
+
 
 | Evento | Descripción |
 | --- | --- |
 | `iswc-change` | Emitido al confirmar el cambio de valor (escribe como `change` nativo). |
-
-| Evento | detail | bubbles | composed | cancelable |
-| --- | --- | --- | --- | --- |
-| `iswc-change` | sí | sí | sí | no |
 
 
 <details>

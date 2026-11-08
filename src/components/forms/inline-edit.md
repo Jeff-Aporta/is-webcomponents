@@ -76,18 +76,22 @@ import './inline-edit.js';
 
 ### Eventos
 
+<!-- eventos: generado por scripts/sondas/eventos.ts desde declare static events -->
+
+| Evento | detail | cancelable |
+| --- | --- | --- |
+| `iswc-edit` | `Record<string, never>` | no |
+| `iswc-save` | `{ value: string; previous: string \| null }` | no |
+| `iswc-cancel` | `{ value: string; previous: string \| null }` | no |
+
+<!-- /eventos -->
+
 
 | Evento | Descripción |
 | --- | --- |
 | `iswc-edit` | Evento personalizado del componente (edit). |
 | `iswc-save` | Evento personalizado del componente (save). |
 | `iswc-cancel` | Emitido al cancelar la operación. |
-
-| Evento | detail | bubbles | composed | cancelable |
-| --- | --- | --- | --- | --- |
-| `iswc-edit` | `{}` | sí | sí | no |
-| `iswc-save` | `{ value, previous }` | sí | sí | no |
-| `iswc-cancel` | `{ value, previous }` | sí | sí | no |
 
 `iswc-save` se emite antes de escribir `value`: `detail.value` es el valor
 nuevo y `detail.previous` el vigente al entrar en edición.

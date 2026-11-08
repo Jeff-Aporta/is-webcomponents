@@ -23,6 +23,43 @@
     "    .desk note { position: absolute; pointer-events: none; color: var(--iswc-text-soft); font-size: .85rem; padding: 1rem; }"
   ],
   "storageKey": "docs-iswc-window",
+  "events": [
+    {
+      "name": "iswc-show",
+      "detail": "undefined",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-after-show",
+      "detail": "undefined",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-minimize",
+      "detail": "undefined",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-maximize",
+      "detail": "undefined",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-restore",
+      "detail": "{ was: 'normal' | 'minimized' | 'maximized' }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-hide",
+      "detail": "undefined",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-after-hide",
+      "detail": "undefined",
+      "cancelable": false
+    }
+  ],
   "sections": [
     {
       "id": "intro",

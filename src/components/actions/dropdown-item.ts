@@ -3,6 +3,7 @@ import { withStyleAttrs, setStringAttr } from '@jeff-aporta/iswc-base/core/attrs
 
 import { computePosition } from '@jeff-aporta/iswc-base/core/position.js';
 import css from 'iswc:css';
+import type { DropdownItemEventos } from './schemas/dropdown-item.schemas.js';
 
 /**
  * <iswc-dropdown-item> — ítem de menú para iswc-dropdown.
@@ -50,6 +51,7 @@ import css from 'iswc:css';
 
   class IswcDropdownItem extends withStyleAttrs(IswcElement) {
     static tag = 'iswc-dropdown-item';
+    declare static events: DropdownItemEventos;
     static css = css;
     static deps = ['iswc-icon'];
 

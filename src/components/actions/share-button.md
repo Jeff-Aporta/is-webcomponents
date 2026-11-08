@@ -66,16 +66,20 @@ import './share-button.js';
 
 ### Eventos
 
+<!-- eventos: generado por scripts/sondas/eventos.ts desde declare static events -->
+
+| Evento | detail | cancelable |
+| --- | --- | --- |
+| `iswc-share` | `{ how: 'shared' \| 'copied'; url: string; text: string; title: string }` | no |
+| `iswc-error` | `undefined` | no |
+
+<!-- /eventos -->
+
 
 | Evento | Descripción |
 | --- | --- |
 | `iswc-share` | Evento personalizado del componente (share). |
 | `iswc-error` | Emitido cuando se produce un error. |
-
-| Evento | detail | bubbles | composed | cancelable |
-| --- | --- | --- | --- | --- |
-| `iswc-share` | sí `{ how, url }` | sí | sí | no |
-| `iswc-error` | no | sí | sí | no |
 
 
 <details>

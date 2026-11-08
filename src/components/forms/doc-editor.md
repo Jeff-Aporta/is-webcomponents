@@ -90,16 +90,20 @@ La cabecera del `.js` documenta un slot `default`; no existe en el código.
 
 ### Eventos
 
+<!-- eventos: generado por scripts/sondas/eventos.ts desde declare static events -->
+
+| Evento | detail | cancelable |
+| --- | --- | --- |
+| `iswc-focus` | `{ id: string }` | no |
+| `iswc-change` | `{ blocks: { id: string; type: string; text: string; checked: boolean }[] }` | no |
+
+<!-- /eventos -->
+
 
 | Evento | Descripción |
 | --- | --- |
 | `iswc-change` | Emitido al confirmar el cambio de valor (escribe como `change` nativo). |
 | `iswc-focus` | Emitido cuando el componente recibe foco. |
-
-| Evento | detail | bubbles | composed | cancelable |
-| --- | --- | --- | --- | --- |
-| `iswc-change` | `{ blocks }` — copia profunda (`structuredClone`) del array de bloques | sí | sí | no |
-| `iswc-focus` | `{ id }` — id del bloque que recibió el foco | sí | sí | no |
 
 `iswc-change` se emite en cada tecla escrita dentro de un bloque y al marcar o
 desmarcar un `todo`. **No** se emite al crear un bloque con Enter, al

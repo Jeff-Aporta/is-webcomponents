@@ -20,6 +20,7 @@ import '@jeff-aporta/iswc-base/components/actions/dropdown.js';
 import './month-calendar.js';
 import './year-calendar.js';
 import css from 'iswc:css';
+import type { DatePickerEventos } from './schemas/date-picker.schemas.js';
 /**
  * <iswc-date-picker> — Calendario inline (equivalente a DateCalendar de MUI X).
  *
@@ -85,6 +86,7 @@ import css from 'iswc:css';
 
   class IswcDatePicker extends IswcElement {
     static tag = 'iswc-date-picker';
+    declare static events: DatePickerEventos;
     static css = css;
     static deps = ['iswc-button'];
 

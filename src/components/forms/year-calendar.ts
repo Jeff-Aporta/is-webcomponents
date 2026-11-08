@@ -1,5 +1,6 @@
 import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import css from 'iswc:css';
+import type { YearCalendarEventos } from './schemas/year-calendar.schemas.js';
 
 /**
  * <iswc-year-calendar> — Rejilla de años desplazable (MUI YearCalendar).
@@ -24,6 +25,7 @@ import css from 'iswc:css';
 
   class IswcYearCalendar extends IswcElement {
     static tag = 'iswc-year-calendar';
+    declare static events: YearCalendarEventos;
     static css = css;
     static observed = OBSERVED;
 

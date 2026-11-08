@@ -2,7 +2,7 @@ import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-elem
 import '@jeff-aporta/iswc-base/components/actions/check-icon-button.js';
 import { findThemeContainer } from '@jeff-aporta/iswc-base/core/dom.js';
 import { guardarAppCfg } from '@jeff-aporta/iswc-base/core/app-init.js';
-import type { IswcCheckIconButtonEvent, ThemeChangeDetail, ThemeName } from './schemas/theme-toggle.schemas.js';
+import type { IswcCheckIconButtonEvent, ThemeChangeDetail, ThemeName, ThemeToggleEventos } from './schemas/theme-toggle.schemas.js';
 import css from 'iswc:css';
 
 /**
@@ -57,6 +57,7 @@ import css from 'iswc:css';
 
   class IswcThemeToggle extends IswcElement {
     static tag = 'iswc-theme-toggle';
+    declare static events: ThemeToggleEventos;
     static css = css;
     static observed = ['dark', 'scope'];
 

@@ -5,6 +5,7 @@
  * entradas marcadas con TODO cuando se quiera validación runtime.
  */
 import { z } from "zod";
+import type { IswcFormControlEventos } from "@jeff-aporta/iswc-base/core/schemas/iswc-form-control.schemas.js";
 
 const IswcRadioElementSchema = z.object({
   value: z.string(),
@@ -14,3 +15,5 @@ const IswcRadioElementSchema = z.object({
 });
 export type IswcRadioElement = z.infer<typeof IswcRadioElementSchema>;
 
+/** Eventos del componente (HOW-6): `declare static events` en la clase; los documenta scripts/sondas/eventos.ts. */
+export type RadioGroupEventos = IswcFormControlEventos & { 'iswc-change': { value: string } };

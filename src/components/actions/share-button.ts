@@ -3,6 +3,7 @@ import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-elem
 import { setStringAttr } from '@jeff-aporta/iswc-base/core/attrs.js';
 import { sharePayload } from './utils/web-share.js';
 import css from 'iswc:css';
+import type { ShareButtonEventos } from './schemas/share-button.schemas.js';
 
 /**
  * <iswc-share-button> — Web Share API; si el SO no tiene share, copia al portapapeles.
@@ -24,6 +25,7 @@ import css from 'iswc:css';
 
   class IswcShareButton extends IswcElement {
     static tag = 'iswc-share-button';
+    declare static events: ShareButtonEventos;
     static css = css;
     static deps = ['iswc-icon'];
     static observed = ['share-title', 'text', 'url', 'disabled'];

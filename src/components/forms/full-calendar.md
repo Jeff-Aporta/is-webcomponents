@@ -74,18 +74,22 @@ Forma de un evento: `{ id, title, date: 'YYYY-MM-DD', start: 'HH:MM', end?: 'HH:
 
 ### Eventos
 
+<!-- eventos: generado por scripts/sondas/eventos.ts desde declare static events -->
+
+| Evento | detail | cancelable |
+| --- | --- | --- |
+| `iswc-view-change` | `{ view: View; date: string }` | no |
+| `iswc-day-click` | `{ date: string }` | no |
+| `iswc-event-click` | `{ event: CalEvent \| undefined; date: string }` | no |
+
+<!-- /eventos -->
+
 
 | Evento | Descripción |
 | --- | --- |
 | `iswc-day-click` | Evento personalizado del componente (day click). |
 | `iswc-event-click` | Evento personalizado del componente (event click). |
 | `iswc-view-change` | Evento personalizado del componente (view change). |
-
-| Evento | detail | bubbles | composed | cancelable |
-| --- | --- | --- | --- | --- |
-| `iswc-day-click` | `{ date }` | sí | sí | no |
-| `iswc-event-click` | `{ event, date }` | sí | sí | no |
-| `iswc-view-change` | `{ view, date }` | sí | sí | no |
 
 `iswc-view-change` se emite al usar los botones de vista de la toolbar, no al
 cambiar el atributo `view` por código.

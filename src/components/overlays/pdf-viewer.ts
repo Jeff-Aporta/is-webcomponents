@@ -6,6 +6,7 @@ import {
   resolveFileSource,
 } from '@jeff-aporta/iswc-base/components/files/utils/file-source.js';
 import css from 'iswc:css';
+import type { PdfViewerEventos } from './schemas/pdf-viewer.schemas.js';
 
 /**
  * <iswc-pdf-viewer> — Visor de PDF. Por defecto usa el visor nativo del navegador
@@ -35,6 +36,7 @@ import css from 'iswc:css';
 
   class IswcPdfViewer extends IswcElement {
     static tag = 'iswc-pdf-viewer';
+    declare static events: PdfViewerEventos;
     static css = css;
     static deps = ['iswc-button', 'iswc-icon', 'iswc-empty-state'];
 

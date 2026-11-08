@@ -9,6 +9,28 @@
     "    .mask-row label { font-size: .82rem; color: var(--iswc-text-soft); }"
   ],
   "storageKey": "docs-iswc-masked-input",
+  "events": [
+    {
+      "name": "iswc-invalid",
+      "detail": "{ message: string }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-change",
+      "detail": "{ value: string }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-input",
+      "detail": "undefined",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-complete",
+      "detail": "undefined",
+      "cancelable": false
+    }
+  ],
   "sections": [
     {
       "id": "intro",

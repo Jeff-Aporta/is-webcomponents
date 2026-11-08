@@ -72,18 +72,22 @@ import './context-menu.js';
 
 ### Eventos
 
+<!-- eventos: generado por scripts/sondas/eventos.ts desde declare static events -->
+
+| Evento | detail | cancelable |
+| --- | --- | --- |
+| `iswc-open` | `{ x: number; y: number }` | no |
+| `iswc-close` | `undefined` | no |
+| `iswc-select` | `{ item: HTMLElement; value: string }` | no |
+
+<!-- /eventos -->
+
 
 | Evento | Descripción |
 | --- | --- |
 | `iswc-open` | Evento personalizado del componente (open). |
 | `iswc-close` | Evento personalizado del componente (close). |
 | `iswc-select` | Emitido al seleccionar un elemento. |
-
-| Evento | detail | bubbles | composed | cancelable |
-| --- | --- | --- | --- | --- |
-| `iswc-open` | sí | sí | sí | no |
-| `iswc-close` | no | sí | sí | no |
-| `iswc-select` | sí | sí | sí | no |
 
 
 <details>

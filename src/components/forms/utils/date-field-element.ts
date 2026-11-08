@@ -4,7 +4,7 @@ import { emit, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import { IswcFormControl } from '@jeff-aporta/iswc-base/core/iswc-form-control.js';
 import type { Validez } from '@jeff-aporta/iswc-base/core/schemas/iswc-form-control.schemas.js';
 import { registrarTerminos, resolverLocale, termino } from '@jeff-aporta/iswc-base/core/localize.js';
-import type { DateFieldKind, DefineDateFieldOpts } from "@jeff-aporta/iswc-base/components/forms/schemas/date-field-element.schemas.js";
+import type { DateFieldKind, DefineDateFieldOpts, DateFieldEventos } from "@jeff-aporta/iswc-base/components/forms/schemas/date-field-element.schemas.js";
 import { prop } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
 
 /**
@@ -50,6 +50,7 @@ const OBSERVED = ['label', 'hint', 'value', 'locale', 'ampm', 'hour24', 'seconds
 export function defineDateField({ tag, kind, css }: DefineDateFieldOpts): typeof HTMLElement {
   class IswcDateFieldBase extends IswcFormControl {
     static tag = tag;
+    declare static events: DateFieldEventos;
     static css = css;
     static deps = ['iswc-button', 'iswc-icon'];
     static shadowInit: ShadowRootInit | null = { mode: 'open', delegatesFocus: true };

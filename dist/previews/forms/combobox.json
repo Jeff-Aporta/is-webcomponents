@@ -5,6 +5,33 @@
   "title": "&lt;iswc-combobox&gt;",
   "titleHtml": false,
   "storageKey": "docs-iswc-combobox",
+  "events": [
+    {
+      "name": "iswc-invalid",
+      "detail": "{ message: string }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-show",
+      "detail": "Record<string, never>",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-hide",
+      "detail": "Record<string, never>",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-input",
+      "detail": "{ value: string }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-change",
+      "detail": "{ value: string }",
+      "cancelable": false
+    }
+  ],
   "sections": [
     {
       "id": "intro",

@@ -6,6 +6,13 @@
   "titleHtml": false,
   "description": "Rejilla de los 12 meses de un año para elegir un mes.",
   "storageKey": "docs-iswc-month-calendar",
+  "events": [
+    {
+      "name": "iswc-change",
+      "detail": "{ value: string; year: number; month: number }",
+      "cancelable": false
+    }
+  ],
   "sections": [
     {
       "id": "intro",

@@ -76,16 +76,20 @@ No expone.
 
 ### Eventos
 
+<!-- eventos: generado por scripts/sondas/eventos.ts desde declare static events -->
+
+| Evento | detail | cancelable |
+| --- | --- | --- |
+| `iswc-view-change` | `{ view: View }` | no |
+| `iswc-change` | `{ value: string }` | no |
+
+<!-- /eventos -->
+
 
 | Evento | Descripción |
 | --- | --- |
 | `iswc-view-change` | Evento personalizado del componente (view change). |
 | `iswc-change` | Emitido al confirmar el cambio de valor (escribe como `change` nativo). |
-
-| Evento | detail | bubbles | composed | cancelable |
-| --- | --- | --- | --- | --- |
-| `iswc-view-change` | sí | sí | sí | no |
-| `iswc-change` | sí | sí | sí | no |
 
 
 <details>

@@ -9,4 +9,4 @@
  * cdn-install: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/is-cdn-install/SKILL.md
  * blob: https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/feedback/tooltip.js
  */
-import"../_chunks/chunk-YKPHPZLZ.mjs";import"../_chunks/chunk-ULEYSFJN.mjs";import"../_chunks/chunk-MNP72QJS.mjs";import"../_chunks/chunk-DKYDCFSD.mjs";import"../_chunks/chunk-FZCPQKWI.mjs";import"../_chunks/chunk-UFMSFUKG.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";
+import"../_chunks/chunk-FRSYAEVR.mjs";import"../_chunks/chunk-ULEYSFJN.mjs";import"../_chunks/chunk-MNP72QJS.mjs";import"../_chunks/chunk-DKYDCFSD.mjs";import"../_chunks/chunk-FZCPQKWI.mjs";import"../_chunks/chunk-UFMSFUKG.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";

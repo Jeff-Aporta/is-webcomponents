@@ -5,6 +5,7 @@ import { hasSlotted } from '@jeff-aporta/iswc-base/core/dom.js';
 import { registrarTerminos } from '@jeff-aporta/iswc-base/core/localize.js';
 import css from 'iswc:css';
 import { prop } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
+import type { InputEventos } from './schemas/input.schemas.js';
 /**
  * <iswc-input> — Campo de texto form-associated (vanilla + Shadow DOM).
  *
@@ -98,6 +99,7 @@ import { prop } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
 
   class IswcInput extends IswcFormControl {
     static tag = 'iswc-input';
+    declare static events: InputEventos;
     static css = css;
     static shadowInit: ShadowRootInit | null = { mode: 'open', delegatesFocus: true };
     static deps = ['iswc-icon'];

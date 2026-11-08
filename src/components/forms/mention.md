@@ -84,18 +84,23 @@ import './mention.js';
 
 ### Eventos
 
+<!-- eventos: generado por scripts/sondas/eventos.ts desde declare static events -->
+
+| Evento | detail | cancelable |
+| --- | --- | --- |
+| `iswc-invalid` | `{ message: string }` | no |
+| `iswc-change` | `{ value: string }` | no |
+| `iswc-input` | `undefined` | no |
+| `iswc-select` | `{ trigger: string; item: string; range: [number, number] }` | no |
+
+<!-- /eventos -->
+
 
 | Evento | Descripción |
 | --- | --- |
 | `iswc-input` | Emitido en cada cambio del valor (escribe como `input` nativo). |
 | `iswc-select` | Emitido al seleccionar un elemento. |
 | `iswc-change` | Emitido al elegir una sugerencia y al salir del campo con el valor cambiado. |
-
-| Evento | detail | bubbles | composed | cancelable |
-| --- | --- | --- | --- | --- |
-| `iswc-input` | sin detail | sí | sí | no |
-| `iswc-select` | `{ trigger, item, range: [start, end] }` | sí | sí | no |
-| `iswc-change` | `{ value }` | sí | sí | no |
 
 `iswc-change` se emite al seleccionar una sugerencia, no en cada pulsación.
 

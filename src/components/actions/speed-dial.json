@@ -40,6 +40,18 @@
   ],
   "storageKey": "docs-iswc-speed-dial",
   "hasBehavior": true,
+  "events": [
+    {
+      "name": "iswc-toggle",
+      "detail": "{ open: boolean }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-select",
+      "detail": "{ action: HTMLElement }",
+      "cancelable": false
+    }
+  ],
   "sections": [
     {
       "id": "intro",

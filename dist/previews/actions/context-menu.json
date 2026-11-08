@@ -33,6 +33,23 @@
   ],
   "storageKey": "docs-iswc-context-menu",
   "hasBehavior": true,
+  "events": [
+    {
+      "name": "iswc-open",
+      "detail": "{ x: number; y: number }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-close",
+      "detail": "undefined",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-select",
+      "detail": "{ item: HTMLElement; value: string }",
+      "cancelable": false
+    }
+  ],
   "sections": [
     {
       "id": "intro",

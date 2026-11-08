@@ -7,6 +7,7 @@ import css from 'iswc:css';
 import { prop } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
 import { registrarTerminos } from '@jeff-aporta/iswc-base/core/localize.js';
 import { createPopupDismiss } from '@jeff-aporta/iswc-base/core/position.js';
+import type { ComboboxEventos } from './schemas/combobox.schemas.js';
 
 /**
  * <iswc-combobox> — Input + listbox filtrable.
@@ -58,7 +59,7 @@ import { createPopupDismiss } from '@jeff-aporta/iswc-base/core/position.js';
     <dialog part="dialog" class="popup" tabindex="-1">
       <div part="listbox" class="listbox" id="listbox" role="listbox"></div>
     </dialog>
-    <slot hidden></slot>
+    <div hidden><slot></slot></div>
   `;
 
   // open y clearable los declara su `@prop`; label, hint, name, disabled, required, error y error-text, `IswcFormControl`.
@@ -68,6 +69,7 @@ import { createPopupDismiss } from '@jeff-aporta/iswc-base/core/position.js';
 
   class IswcCombobox extends IswcFormControl {
     static tag = 'iswc-combobox';
+    declare static events: ComboboxEventos;
     static css = css;
     static shadowInit: ShadowRootInit | null = { mode: 'open', delegatesFocus: true };
     static deps = ['iswc-icon', 'iswc-button'];

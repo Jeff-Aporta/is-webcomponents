@@ -6,6 +6,7 @@ import { hasSlotted, clampTo, tidyToStep } from '@jeff-aporta/iswc-base/core/dom
 import css from 'iswc:css';
 import { prop } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
 import { registrarTerminos } from '@jeff-aporta/iswc-base/core/localize.js';
+import type { RatingEventos } from './schemas/rating.schemas.js';
 /**
  * <iswc-rating> — Valoración form-associated (vanilla + Shadow DOM).
  *
@@ -76,6 +77,7 @@ import { registrarTerminos } from '@jeff-aporta/iswc-base/core/localize.js';
 
   class IswcRating extends IswcFormControl {
     static tag = 'iswc-rating';
+    declare static events: RatingEventos;
     static css = css;
     static shadowInit: ShadowRootInit | null = { mode: 'open', delegatesFocus: true };
     static deps = ['iswc-icon'];

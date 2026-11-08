@@ -6,6 +6,13 @@
   "titleHtml": false,
   "storageKey": "docs-iswc-file-input",
   "hasBehavior": true,
+  "events": [
+    {
+      "name": "iswc-change",
+      "detail": "{ files: File[] }",
+      "cancelable": false
+    }
+  ],
   "sections": [
     {
       "id": "intro",

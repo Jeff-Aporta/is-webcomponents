@@ -12,3 +12,6 @@ export type ThemeChangeDetail = { theme: ThemeName; dark: boolean; container: HT
 
 /** Evento del `<iswc-check-icon-button>` interno (noche ↔ sol). */
 export interface IswcCheckIconButtonEvent extends CustomEvent<{ checked: boolean }> {}
+
+/** Eventos del componente (HOW-6): `declare static events` en la clase; los documenta scripts/sondas/eventos.ts. */
+export type ThemeToggleEventos = { 'iswc-theme-change': ThemeChangeDetail };

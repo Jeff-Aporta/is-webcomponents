@@ -4,6 +4,7 @@ import { registrarTerminos } from '@jeff-aporta/iswc-base/core/localize.js';
 import { ocultarSlotsVacios } from '@jeff-aporta/iswc-base/core/dom.js';
 import { INTENT, TONE } from '@jeff-aporta/iswc-base/core/attrs.js';
 import css from 'iswc:css';
+import type { TagEventos } from './schemas/tag.schemas.js';
 
 /**
  * <iswc-tag> — Web Component (vanilla).
@@ -50,6 +51,7 @@ import css from 'iswc:css';
 
   class IswcTag extends IswcReactive {
     static tag = 'iswc-tag';
+    declare static events: TagEventos;
     static css = css;
     static deps = ['iswc-icon', 'iswc-button'];
     static observed = OBSERVED;

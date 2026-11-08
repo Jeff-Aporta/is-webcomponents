@@ -37,6 +37,33 @@
   ],
   "storageKey": "docs-iswc-command-palette",
   "hasBehavior": true,
+  "events": [
+    {
+      "name": "iswc-show",
+      "detail": "undefined",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-after-show",
+      "detail": "undefined",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-hide",
+      "detail": "undefined",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-after-hide",
+      "detail": "undefined",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-select",
+      "detail": "{ command: { id: string; run?: () => void }; id: string }",
+      "cancelable": false
+    }
+  ],
   "sections": [
     {
       "id": "intro",

@@ -109,18 +109,23 @@ import './select.js';
 
 ### Eventos
 
+<!-- eventos: generado por scripts/sondas/eventos.ts desde declare static events -->
+
+| Evento | detail | cancelable |
+| --- | --- | --- |
+| `iswc-invalid` | `{ message: string }` | no |
+| `iswc-change` | `{ value: string; values: string[] }` | no |
+| `iswc-show` | `Record<string, never>` | no |
+| `iswc-hide` | `Record<string, never>` | no |
+
+<!-- /eventos -->
+
 
 | Evento | Descripción |
 | --- | --- |
 | `iswc-change` | Emitido al confirmar el cambio de valor (escribe como `change` nativo). |
 | `iswc-show` | Emitido justo antes de mostrarse (cancelable). |
 | `iswc-hide` | Emitido justo antes de ocultarse (cancelable). |
-
-| Evento | detail | bubbles | composed | cancelable |
-| --- | --- | --- | --- | --- |
-| `iswc-change` | sí | sí | sí | no |
-| `iswc-show` | sí | sí | sí | no |
-| `iswc-hide` | sí | sí | sí | no |
 
 
 <details>

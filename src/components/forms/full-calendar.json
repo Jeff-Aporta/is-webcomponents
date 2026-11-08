@@ -19,6 +19,23 @@
   ],
   "storageKey": "docs-iswc-full-calendar",
   "hasBehavior": true,
+  "events": [
+    {
+      "name": "iswc-view-change",
+      "detail": "{ view: View; date: string }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-day-click",
+      "detail": "{ date: string }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-event-click",
+      "detail": "{ event: CalEvent | undefined; date: string }",
+      "cancelable": false
+    }
+  ],
   "sections": [
     {
       "id": "intro",

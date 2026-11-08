@@ -3,6 +3,7 @@ import { IswcFormControl } from '@jeff-aporta/iswc-base/core/iswc-form-control.j
 import './input.js';
 import css from 'iswc:css';
 import { createPopupDismiss } from '@jeff-aporta/iswc-base/core/position.js';
+import type { MentionEventos } from './schemas/mention.schemas.js';
 
 /**
  * <iswc-mention> — Input con autocompletado al tipear @usuario o #etiqueta.
@@ -43,6 +44,7 @@ import { createPopupDismiss } from '@jeff-aporta/iswc-base/core/position.js';
 
   class IswcMention extends IswcFormControl {
     static tag = 'iswc-mention';
+    declare static events: MentionEventos;
     static css = css;
     static shadowInit: ShadowRootInit | null = { mode: 'open', delegatesFocus: true };
     static observed = OBSERVED;

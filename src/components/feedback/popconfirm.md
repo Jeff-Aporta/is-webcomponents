@@ -74,6 +74,17 @@ import './popconfirm.js';
 
 ### Eventos
 
+<!-- eventos: generado por scripts/sondas/eventos.ts desde declare static events -->
+
+| Evento | detail | cancelable |
+| --- | --- | --- |
+| `iswc-popconfirm-show` | `{ trigger: HTMLElement \| null }` | no |
+| `iswc-popconfirm-hide` | `{ trigger: HTMLElement \| null }` | no |
+| `iswc-popconfirm-confirm` | `{ trigger: HTMLElement \| null }` | no |
+| `iswc-popconfirm-cancel` | `{ trigger: HTMLElement \| null }` | no |
+
+<!-- /eventos -->
+
 
 | Evento | Descripción |
 | --- | --- |
@@ -81,13 +92,6 @@ import './popconfirm.js';
 | `iswc-popconfirm-hide` | Evento personalizado del componente (popconfirm hide). |
 | `iswc-popconfirm-confirm` | Evento personalizado del componente (popconfirm confirm). |
 | `iswc-popconfirm-cancel` | Evento personalizado del componente (popconfirm cancel). |
-
-| Evento | detail | bubbles | composed | cancelable |
-| --- | --- | --- | --- | --- |
-| `iswc-popconfirm-show` | sí | sí | sí | no |
-| `iswc-popconfirm-hide` | sí | sí | sí | no |
-| `iswc-popconfirm-confirm` | sí | sí | sí | no |
-| `iswc-popconfirm-cancel` | sí | sí | sí | no |
 
 
 <details>

@@ -5,6 +5,28 @@
   "title": "&lt;iswc-date-picker&gt;",
   "titleHtml": false,
   "storageKey": "docs-iswc-date-picker",
+  "events": [
+    {
+      "name": "iswc-view-change",
+      "detail": "{ view: string }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-month-change",
+      "detail": "{ month: string }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-day-hover",
+      "detail": "{ iso: string }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-change",
+      "detail": "{ value: string } | { start: string | null; end: string | null }",
+      "cancelable": false
+    }
+  ],
   "sections": [
     {
       "id": "intro",

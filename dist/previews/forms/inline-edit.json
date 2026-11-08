@@ -10,6 +10,23 @@
     "    .ie-row p { margin: 0; font-size: .82rem; color: var(--iswc-text-dim); }"
   ],
   "storageKey": "docs-iswc-inline-edit",
+  "events": [
+    {
+      "name": "iswc-edit",
+      "detail": "Record<string, never>",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-save",
+      "detail": "{ value: string; previous: string | null }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-cancel",
+      "detail": "{ value: string; previous: string | null }",
+      "cancelable": false
+    }
+  ],
   "sections": [
     {
       "id": "intro",

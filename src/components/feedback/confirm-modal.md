@@ -72,6 +72,17 @@ No declara propiedades reflejadas propias; se opera por atributos y métodos.
 
 ### Eventos
 
+<!-- eventos: generado por scripts/sondas/eventos.ts desde declare static events -->
+
+| Evento | detail | cancelable |
+| --- | --- | --- |
+| `iswc-confirm-show` | `{ trigger: HTMLElement \| null }` | no |
+| `iswc-confirm-hide` | `{ trigger: HTMLElement \| null }` | no |
+| `iswc-confirm-confirm` | `{ trigger: HTMLElement \| null }` | no |
+| `iswc-confirm-cancel` | `{ trigger: HTMLElement \| null }` | no |
+
+<!-- /eventos -->
+
 
 | Evento | Descripción |
 | --- | --- |
@@ -79,13 +90,6 @@ No declara propiedades reflejadas propias; se opera por atributos y métodos.
 | `iswc-confirm-hide` | Evento personalizado del componente (confirm hide). |
 | `iswc-confirm-confirm` | Evento personalizado del componente (confirm confirm). |
 | `iswc-confirm-cancel` | Evento personalizado del componente (confirm cancel). |
-
-| Evento | detail | bubbles | composed | cancelable |
-| --- | --- | --- | --- | --- |
-| `iswc-confirm-show` | sí | sí | sí | no |
-| `iswc-confirm-hide` | sí | sí | sí | no |
-| `iswc-confirm-confirm` | sí | sí | sí | no |
-| `iswc-confirm-cancel` | sí | sí | sí | no |
 
 `detail` en los cuatro: `{ trigger }` — el elemento referenciado por `for`,
 o `null` si no hay.

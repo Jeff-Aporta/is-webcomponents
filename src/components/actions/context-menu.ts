@@ -1,6 +1,7 @@
 import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import { createPopupDismiss } from '@jeff-aporta/iswc-base/core/position.js';
 import css from 'iswc:css';
+import type { ContextMenuEventos } from './schemas/context-menu.schemas.js';
 
 /**
  * <iswc-context-menu> — Menú emergente anclado al clic derecho del ratón sobre
@@ -38,6 +39,7 @@ import css from 'iswc:css';
 
   class IswcContextMenu extends IswcElement {
     static tag = 'iswc-context-menu';
+    declare static events: ContextMenuEventos;
     static css = css;
     static observed = OBSERVED;
 

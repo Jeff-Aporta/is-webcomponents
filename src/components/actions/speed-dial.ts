@@ -5,6 +5,7 @@ import './check-icon-button.js';
 import { clampTo } from '@jeff-aporta/iswc-base/core/dom.js';
 import { createPopupDismiss } from '@jeff-aporta/iswc-base/core/position.js';
 import css from 'iswc:css';
+import type { SpeedDialEventos } from './schemas/speed-dial.schemas.js';
 
 /**
  * <iswc-speed-dial> — FAB que despliega un abanico de acciones.
@@ -78,6 +79,7 @@ import css from 'iswc:css';
 
   class IswcSpeedDial extends withStyleAttrs(IswcElement) {
     static tag = 'iswc-speed-dial';
+    declare static events: SpeedDialEventos;
     static css = css;
 
     static observed = [...OBSERVED, 'radius'];
@@ -90,7 +92,7 @@ import css from 'iswc:css';
       super();
       this.shadowRoot!.innerHTML = /* html */ `
         <div part="root" class="root" data-direction="up" hidden>
-          <div part="actions" class="actions">
+          <div part="actions" class="actions" role="menu">
             <slot></slot>
           </div>
           <iswc-check-icon-button part="trigger" class="trigger"

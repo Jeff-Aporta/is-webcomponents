@@ -3,6 +3,7 @@ import { IswcReactive } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
 import { escapeHtml } from '@jeff-aporta/iswc-base/core/dom.js';
 import { setOptionalAttr } from '@jeff-aporta/iswc-base/core/attrs.js';
 import css from 'iswc:css';
+import type { InlineEditEventos } from './schemas/inline-edit.schemas.js';
 
 /**
  * <iswc-inline-edit> — "Inplace" / "Inline edit".
@@ -49,6 +50,7 @@ import css from 'iswc:css';
 
   class IswcInlineEdit extends IswcReactive {
     static tag = 'iswc-inline-edit';
+    declare static events: InlineEditEventos;
     static css = css;
     static observed = OBSERVED;
 

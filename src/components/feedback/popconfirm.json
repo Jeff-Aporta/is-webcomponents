@@ -6,6 +6,28 @@
   "titleHtml": false,
   "description": "Confirmación ligera en un globo anclado al botón que la dispara, con aceptar y cancelar.",
   "storageKey": "docs-iswc-popconfirm",
+  "events": [
+    {
+      "name": "iswc-popconfirm-show",
+      "detail": "{ trigger: HTMLElement | null }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-popconfirm-hide",
+      "detail": "{ trigger: HTMLElement | null }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-popconfirm-confirm",
+      "detail": "{ trigger: HTMLElement | null }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-popconfirm-cancel",
+      "detail": "{ trigger: HTMLElement | null }",
+      "cancelable": false
+    }
+  ],
   "sections": [
     {
       "id": "intro",

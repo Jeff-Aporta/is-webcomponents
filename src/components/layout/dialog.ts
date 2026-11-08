@@ -1,6 +1,7 @@
 import { ModalBase } from './utils/modal-base.js';
 import { define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import css from 'iswc:css';
+import type { DialogEventos } from './schemas/dialog.schemas.js';
 
 /**
  * <iswc-dialog> — Web Component (vanilla, zero dependencies).
@@ -85,6 +86,7 @@ import css from 'iswc:css';
 
   class IswcDialog extends ModalBase {
     static tag = 'iswc-dialog';
+    declare static events: DialogEventos;
     static css = css;
     static deps = ['iswc-icon', 'iswc-button'];
 

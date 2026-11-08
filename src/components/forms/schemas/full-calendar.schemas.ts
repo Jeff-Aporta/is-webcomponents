@@ -19,3 +19,5 @@ export type CalEvent = z.infer<typeof CalEventSchema>;
 const ViewSchema = z.union([z.literal('month'), z.literal('week'), z.literal('day')]);
 export type View = z.infer<typeof ViewSchema>;
 
+/** Eventos del componente (HOW-6): `declare static events` en la clase; los documenta scripts/sondas/eventos.ts. */
+export type FullCalendarEventos = { 'iswc-view-change': { view: View; date: string }; 'iswc-day-click': { date: string }; 'iswc-event-click': { event: CalEvent | undefined; date: string } };

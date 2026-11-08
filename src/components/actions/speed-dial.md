@@ -89,16 +89,20 @@ En `<iswc-speed-dial-action>`: slot `default` (etiqueta) y slot `icon`
 
 ### Eventos
 
+<!-- eventos: generado por scripts/sondas/eventos.ts desde declare static events -->
+
+| Evento | detail | cancelable |
+| --- | --- | --- |
+| `iswc-toggle` | `{ open: boolean }` | no |
+| `iswc-select` | `{ action: HTMLElement }` | no |
+
+<!-- /eventos -->
+
 
 | Evento | Descripción |
 | --- | --- |
 | `iswc-toggle` | Emitido al alternar el estado abierto/cerrado. |
 | `iswc-select` | Emitido al seleccionar un elemento. |
-
-| Evento | detail | bubbles | composed | cancelable |
-| --- | --- | --- | --- | --- |
-| `iswc-toggle` | sí | sí | sí | no |
-| `iswc-select` | sí | sí | sí | no |
 
 
 <details>

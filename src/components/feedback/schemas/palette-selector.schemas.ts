@@ -42,3 +42,6 @@ const PaletteCrudaSchema = z.object({
   fontTint: z.unknown().optional(),
 });
 export type PaletteCruda = z.infer<typeof PaletteCrudaSchema>;
+
+/** Eventos del componente (HOW-6): `declare static events` en la clase; los documenta scripts/sondas/eventos.ts. */
+export type PaletteSelectorEventos = { 'iswc-palette-change': { value: string; palette: Palette; container: HTMLElement }; 'iswc-panda-change': { panda: boolean; container: HTMLElement } };

@@ -120,7 +120,6 @@ import css from 'iswc:css';
     #syncRoots() {
       const items = [...this.querySelectorAll<HTMLElement>(':scope > iswc-tree-item')];
       items.forEach((it: HTMLElement) => {
-        it.setAttribute('role', 'treeitem');
         if (it.parentElement === this) it.setAttribute('data-root', '');
       });
       // Atributos de posición para lectores de pantalla (aria-setsize/posinset/level)
@@ -130,6 +129,8 @@ import css from 'iswc:css';
       all.forEach((it, idx) => {
         const siblings = [...((it.parentElement as HTMLElement | null)?.children ?? [])]
           .filter((c: Element) => c.tagName?.toLowerCase() === 'iswc-tree-item');
+        // Todo ítem es `treeitem` (no solo las raíces): sin rol, aria-level/posinset/setsize no están permitidos.
+        it.setAttribute('role', 'treeitem');
         it.setAttribute('aria-setsize', String(siblings.length));
         it.setAttribute('aria-posinset', String(siblings.indexOf(it) + 1));
         it.setAttribute('aria-level', String(this.#depthOf(it)));

@@ -1,6 +1,7 @@
 import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import { formatTime, from12Hour, pad, parseTime, to12Hour, toTime, uses12Hour } from './utils/date-utils.js';
 import css from 'iswc:css';
+import type { DigitalClockEventos } from './schemas/digital-clock.schemas.js';
 
 /**
  * <iswc-digital-clock> — Selector de hora en lista (MUI DigitalClock) o en
@@ -28,6 +29,7 @@ import css from 'iswc:css';
 
   class IswcDigitalClock extends IswcElement {
     static tag = 'iswc-digital-clock';
+    declare static events: DigitalClockEventos;
     static css = css;
 
     static observed = [...OBSERVED, 'clock-height'];

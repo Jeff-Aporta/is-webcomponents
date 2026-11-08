@@ -67,6 +67,16 @@ No expone.
 
 ### Eventos
 
+<!-- eventos: generado por scripts/sondas/eventos.ts desde declare static events -->
+
+| Evento | detail | cancelable |
+| --- | --- | --- |
+| `iswc-pin-change` | `{ value: string; index: number }` | no |
+| `iswc-otp` | `{ code: string }` | no |
+| `iswc-pin-complete` | `{ value: string }` | no |
+
+<!-- /eventos -->
+
 
 | Evento | Descripción |
 | --- | --- |
@@ -74,13 +84,6 @@ No expone.
 | `iswc-pin-complete` | Evento personalizado del componente (pin complete). |
 | `iswc-pin-invalid` | Evento personalizado del componente (pin invalid). |
 | `iswc-otp` | Emitido al autocompletar el valor vía Web OTP (autocomplete="one-time-code"). |
-
-| Evento | detail | bubbles | composed | cancelable |
-| --- | --- | --- | --- | --- |
-| `iswc-pin-change` | sí | sí | sí | no |
-| `iswc-pin-complete` | sí | sí | sí | no |
-| `iswc-pin-invalid` | según cabecera | según cabecera | según cabecera | según cabecera |
-| `iswc-otp` | `{ code }` | sí | sí | no |
 
 
 <details>

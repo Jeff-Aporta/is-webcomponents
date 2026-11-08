@@ -79,16 +79,20 @@ import './copy-button.js';
 
 ### Eventos
 
+<!-- eventos: generado por scripts/sondas/eventos.ts desde declare static events -->
+
+| Evento | detail | cancelable |
+| --- | --- | --- |
+| `iswc-copy` | `{ value: string }` | no |
+| `iswc-error` | `undefined` | no |
+
+<!-- /eventos -->
+
 
 | Evento | Descripción |
 | --- | --- |
 | `iswc-error` | Emitido cuando se produce un error. |
 | `iswc-copy` | Evento personalizado del componente (copy). |
-
-| Evento | detail | bubbles | composed | cancelable |
-| --- | --- | --- | --- | --- |
-| `iswc-error` | no | sí | sí | no |
-| `iswc-copy` | sí | sí | sí | no |
 
 
 <details>

@@ -427,11 +427,11 @@ import css from 'iswc:css';
   // ============ <iswc-tab> ============
   const TAB_TEMPLATE = document.createElement('template');
   TAB_TEMPLATE.innerHTML = /* html */ `
-    <button type="button" class="tab" part="base">
+    <span class="tab" part="base">
       <span class="tab-start" part="start"><slot name="start"></slot></span>
       <slot></slot>
       <span class="tab-end" part="end"><slot name="end"></slot></span>
-    </button>
+    </span>
     <slot name="close-button">
       <button type="button" class="tab-close" part="close-button" tabindex="-1" data-tab-close>
         <iswc-icon icon="mdi:close" aria-hidden="true"></iswc-icon>
@@ -487,9 +487,13 @@ import css from 'iswc:css';
     }
 
     #syncState() {
-      const btn = this.shadowRoot!.querySelector<HTMLButtonElement>('button.tab');
       const close = this.shadowRoot!.querySelector<HTMLElement>('[data-tab-close]');
-      if (btn) btn.disabled = this.hasAttribute('disabled');
+      // El host es el `role=tab` y el único enfocable (foco itinerante, HOW-7): un `<button>` dentro sería un
+      // interactivo anidado (axe `nested-interactive`). Solo la pestaña activa entra en el orden de Tab.
+      const disabled = this.hasAttribute('disabled');
+      this.tabIndex = this.hasAttribute('active') && !disabled ? 0 : -1;
+      if (disabled) this.setAttribute('aria-disabled', 'true');
+      else this.removeAttribute('aria-disabled');
       if (close) close.hidden = !this.hasAttribute('closable');
       // `iswc-tab` no pasa por el ciclo reactivo: el texto se resuelve al sincronizar (conexión, atributos, idioma).
       if (close) close.setAttribute('aria-label', termino(resolverLocale(this), 'cerrar'));

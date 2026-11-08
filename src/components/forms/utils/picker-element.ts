@@ -4,7 +4,7 @@ import { formatDate, formatTime, splitDateTime, todayISO, toTime } from './date-
 import { emit, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import { IswcReactive } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
 import { registrarTerminos, resolverLocale } from '@jeff-aporta/iswc-base/core/localize.js';
-import type { PickerPanelDef, PickerField, DefinePickerInputOpts } from "@jeff-aporta/iswc-base/components/forms/schemas/picker-element.schemas.js";
+import type { PickerPanelDef, PickerField, DefinePickerInputOpts, PickerInputEventos } from "@jeff-aporta/iswc-base/components/forms/schemas/picker-element.schemas.js";
 import { createPopupDismiss } from '@jeff-aporta/iswc-base/core/position.js';
 
 /**
@@ -53,6 +53,7 @@ export function definePickerInput({
 
   class IswcPickerInput extends withStyleAttrs(IswcReactive) {
     static tag = tag;
+    declare static events: PickerInputEventos;
     static css = css;
     static shadowInit: ShadowRootInit | null = { mode: 'open', delegatesFocus: true };
 

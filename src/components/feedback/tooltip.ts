@@ -3,6 +3,7 @@ import { withStyleAttrs } from '@jeff-aporta/iswc-base/core/attrs.js';
 
 import '@jeff-aporta/iswc-base/components/helpers/floating.js';
 import css from 'iswc:css';
+import type { TooltipEventos } from './schemas/tooltip.schemas.js';
 
 /**
  * <iswc-tooltip> — tip contextual anclado vía `for`.
@@ -60,6 +61,7 @@ import css from 'iswc:css';
 
   class IswcTooltip extends withStyleAttrs(IswcElement) {
     static tag = 'iswc-tooltip';
+    declare static events: TooltipEventos;
     static css = css;
 
     static observed = [...OBSERVED, 'max-width', 'arrow-size', 'arrow-color'];

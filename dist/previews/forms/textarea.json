@@ -10,6 +10,23 @@
   ],
   "storageKey": "docs-iswc-textarea",
   "hasBehavior": true,
+  "events": [
+    {
+      "name": "iswc-invalid",
+      "detail": "{ message: string }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-input",
+      "detail": "{ value: string }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-change",
+      "detail": "{ value: string }",
+      "cancelable": false
+    }
+  ],
   "sections": [
     {
       "id": "intro",

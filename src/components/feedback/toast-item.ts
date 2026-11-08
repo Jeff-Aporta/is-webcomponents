@@ -3,6 +3,7 @@ import { IswcReactive } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
 import { ocultarSlotsVacios } from '@jeff-aporta/iswc-base/core/dom.js';
 import { INTENT, normalizeIntent } from '@jeff-aporta/iswc-base/core/attrs.js';
 import css from 'iswc:css';
+import type { ToastItemEventos } from './schemas/toast-item.schemas.js';
 
 /**
  * <iswc-toast-item> — Web Component (vanilla).
@@ -59,6 +60,7 @@ import css from 'iswc:css';
 
   class IswcToastItem extends IswcReactive {
     static tag = 'iswc-toast-item';
+    declare static events: ToastItemEventos;
     static css = css;
     static deps = ['iswc-icon', 'iswc-button'];
     static observed = OBSERVED;

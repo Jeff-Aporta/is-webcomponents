@@ -3,6 +3,7 @@ import { IswcReactive } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
 import { computePosition, createPopupDismiss } from '@jeff-aporta/iswc-base/core/position.js';
 import type { Placement } from '@jeff-aporta/iswc-base/core/schemas/position.schemas.js';
 import css from 'iswc:css';
+import type { PopconfirmEventos } from './schemas/popconfirm.schemas.js';
 
 /**
  * <iswc-popconfirm> — Web Component (vanilla, zero dependencies).
@@ -62,6 +63,7 @@ import css from 'iswc:css';
 
   class IswcPopconfirm extends IswcReactive {
     static tag = 'iswc-popconfirm';
+    declare static events: PopconfirmEventos;
     static css = css;
     static deps = ['iswc-button'];
 

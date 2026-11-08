@@ -4,6 +4,7 @@ import type { Validez } from '@jeff-aporta/iswc-base/core/schemas/iswc-form-cont
 import { hasSlotted } from '@jeff-aporta/iswc-base/core/dom.js';
 import css from 'iswc:css';
 import { prop } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
+import type { CheckboxEventos } from './schemas/checkbox.schemas.js';
 /**
  * <iswc-checkbox> — Casilla form-associated: entra en FormData y en la validación del <form>.
  *
@@ -48,6 +49,7 @@ import { prop } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
 
   class IswcCheckbox extends IswcFormControl {
     static tag = 'iswc-checkbox';
+    declare static events: CheckboxEventos;
     static css = css;
     static deps = ['iswc-icon'];
 

@@ -87,6 +87,17 @@ import './button.js';
 
 ### Eventos
 
+<!-- eventos: generado por scripts/sondas/eventos.ts desde declare static events -->
+
+| Evento | detail | cancelable |
+| --- | --- | --- |
+| `iswc-focus` | `{ originalEvent: Event }` | no |
+| `iswc-blur` | `{ originalEvent: Event }` | no |
+| `iswc-click` | `{ originalEvent: Event }` | no |
+| `iswc-invalid` | `{ originalEvent: Event; validationMessage: string }` | no |
+
+<!-- /eventos -->
+
 
 | Evento | Descripción |
 | --- | --- |
@@ -94,13 +105,6 @@ import './button.js';
 | `iswc-blur` | Emitido cuando el componente pierde foco. |
 | `iswc-click` | Emitido al hacer clic sobre el componente. |
 | `iswc-invalid` | Emitido cuando la validación de formulario falla. |
-
-| Evento | detail | bubbles | composed | cancelable |
-| --- | --- | --- | --- | --- |
-| `iswc-focus` | sí | sí | sí | no |
-| `iswc-blur` | sí | sí | sí | no |
-| `iswc-click` | sí | sí | sí | no |
-| `iswc-invalid` | según cabecera | según cabecera | según cabecera | según cabecera |
 
 
 <details>

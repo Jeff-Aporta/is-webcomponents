@@ -22,6 +22,33 @@
   ],
   "storageKey": "docs-iswc-dropzone",
   "hasBehavior": true,
+  "events": [
+    {
+      "name": "iswc-error",
+      "detail": "{ id?: string | null; file?: File; reason: 'max-files' | 'max-size' | 'accept'; limit?: number }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-upload-start",
+      "detail": "{ id: string; file: File }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-upload-progress",
+      "detail": "{ id: string; file: File; progress: number }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-upload-end",
+      "detail": "{ id: string; file: File; ok: boolean }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-files-change",
+      "detail": "{ files: { id: string; file: File; name: string; size: number; type: string; status: string; progress: number; url: string }[] }",
+      "cancelable": false
+    }
+  ],
   "sections": [
     {
       "id": "intro",

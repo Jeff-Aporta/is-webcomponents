@@ -25,6 +25,18 @@
   ],
   "storageKey": "docs-iswc-doc-editor",
   "hasBehavior": true,
+  "events": [
+    {
+      "name": "iswc-focus",
+      "detail": "{ id: string }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-change",
+      "detail": "{ blocks: { id: string; type: string; text: string; checked: boolean }[] }",
+      "cancelable": false
+    }
+  ],
   "sections": [
     {
       "id": "intro",

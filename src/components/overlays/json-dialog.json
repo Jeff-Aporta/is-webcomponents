@@ -6,6 +6,18 @@
   "titleHtml": false,
   "description": "Diálogo para ver o editar un documento JSON, con validación mientras se escribe.",
   "storageKey": "docs-iswc-json-dialog",
+  "events": [
+    {
+      "name": "iswc-json-close",
+      "detail": "undefined",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-json-apply",
+      "detail": "{ valor: unknown }",
+      "cancelable": false
+    }
+  ],
   "sections": [
     {
       "id": "intro",

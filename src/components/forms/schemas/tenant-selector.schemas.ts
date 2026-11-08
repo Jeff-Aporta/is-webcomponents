@@ -24,3 +24,6 @@ export type TenantChangeDetail = z.infer<typeof TenantChangeDetailSchema>;
 
 /** Lo que este componente lee de `iswc-select`. */
 export type TenantSelectEl = HTMLElement & { value: string };
+
+/** Eventos del componente (HOW-6): `declare static events` en la clase; los documenta scripts/sondas/eventos.ts. */
+export type TenantSelectorEventos = { 'iswc-tenant-change': TenantChangeDetail };

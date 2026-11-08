@@ -2,7 +2,7 @@ import { emit, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import { crearNodo } from '@jeff-aporta/iswc-base/core/dom.js';
 import { atributosDe, PropsElement } from '@jeff-aporta/iswc-base/core/props-element.js';
 import { TenantSelectorPropsSchema } from './schemas/tenant-selector.schemas.js';
-import type { TenantChangeDetail, TenantSelectEl, TenantSelectorProps } from './schemas/tenant-selector.schemas.js';
+import type { TenantChangeDetail, TenantSelectEl, TenantSelectorProps, TenantSelectorEventos } from './schemas/tenant-selector.schemas.js';
 import './select.js';
 import css from 'iswc:css';
 
@@ -17,6 +17,7 @@ const INICIAL: TenantSelectorProps = { opciones: [], activa: null, icono: 'mdi:d
 
 class IswcTenantSelector extends PropsElement<TenantSelectorProps> {
   static tag = 'iswc-tenant-selector';
+  declare static events: TenantSelectorEventos;
   static css = css;
   static deps = ['iswc-tag', 'iswc-icon'];
   static observed = atributosDe(INICIAL);

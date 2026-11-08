@@ -5,6 +5,18 @@
   "title": "&lt;iswc-date-range-picker&gt;",
   "titleHtml": false,
   "storageKey": "docs-iswc-date-range-picker",
+  "events": [
+    {
+      "name": "iswc-change",
+      "detail": "{ start: string | null; end: string | null; source?: string }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-month-change",
+      "detail": "{ month: string }",
+      "cancelable": false
+    }
+  ],
   "sections": [
     {
       "id": "intro",

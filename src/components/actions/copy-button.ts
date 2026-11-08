@@ -7,6 +7,7 @@ import { IswcReactive, prop } from '@jeff-aporta/iswc-base/core/iswc-reactive.js
 import { copyText } from '@jeff-aporta/iswc-base/core/dom.js';
 import { registrarTerminos } from '@jeff-aporta/iswc-base/core/localize.js';
 import css from 'iswc:css';
+import type { CopyButtonEventos } from './schemas/copy-button.schemas.js';
 
 /**
  * <iswc-copy-button> — Web Component (vanilla).
@@ -86,6 +87,7 @@ import css from 'iswc:css';
 
   class IswcCopyButton extends withStyleAttrs(IswcReactive) {
     static tag = 'iswc-copy-button';
+    declare static events: CopyButtonEventos;
     static css = css;
     static deps = ['iswc-icon'];
 

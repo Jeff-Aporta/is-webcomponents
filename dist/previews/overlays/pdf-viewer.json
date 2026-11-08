@@ -5,6 +5,18 @@
   "title": "&lt;iswc-pdf-viewer&gt;",
   "titleHtml": false,
   "storageKey": "docs-iswc-pdf-viewer",
+  "events": [
+    {
+      "name": "iswc-load",
+      "detail": "undefined",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-error",
+      "detail": "{ reason: 'fetch' } | undefined",
+      "cancelable": false
+    }
+  ],
   "sections": [
     {
       "id": "intro",

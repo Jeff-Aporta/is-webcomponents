@@ -60,6 +60,14 @@ No tiene slots.
 
 ### Eventos
 
+<!-- eventos: generado por scripts/sondas/eventos.ts desde declare static events -->
+
+| Evento | detail | cancelable |
+| --- | --- | --- |
+| `iswc-tenant-change` | `TenantChangeDetail` | no |
+
+<!-- /eventos -->
+
 | Evento | Detalle | Cuándo |
 | --- | --- | --- |
 | `iswc-tenant-change` | `{ id }` | Al elegir otro cliente. `id` conserva su tipo. |

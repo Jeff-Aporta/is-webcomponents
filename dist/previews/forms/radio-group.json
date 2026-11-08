@@ -6,6 +6,18 @@
   "titleHtml": false,
   "description": "Grupo de opciones de radio que participa en formularios: guarda el valor de la opción elegida.",
   "storageKey": "docs-iswc-radio-group",
+  "events": [
+    {
+      "name": "iswc-invalid",
+      "detail": "{ message: string }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-change",
+      "detail": "{ value: string }",
+      "cancelable": false
+    }
+  ],
   "sections": [
     {
       "id": "intro",

@@ -72,14 +72,18 @@ import './fab.js';
 
 ### Eventos
 
+<!-- eventos: generado por scripts/sondas/eventos.ts desde declare static events -->
+
+| Evento | detail | cancelable |
+| --- | --- | --- |
+| `iswc-fab-click` | `{ originalEvent: Event }` | no |
+
+<!-- /eventos -->
+
 
 | Evento | Descripción |
 | --- | --- |
 | `iswc-fab-click` | Evento personalizado del componente (fab click). |
-
-| Evento | detail | bubbles | composed | cancelable |
-| --- | --- | --- | --- | --- |
-| `iswc-fab-click` | sí | sí | sí | no |
 
 
 <details>

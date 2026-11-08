@@ -7,6 +7,7 @@ import css from 'iswc:css';
 import { prop } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
 import { registrarTerminos } from '@jeff-aporta/iswc-base/core/localize.js';
 import { createPopupDismiss } from '@jeff-aporta/iswc-base/core/position.js';
+import type { SelectEventos } from './schemas/select.schemas.js';
 /**
  * <iswc-select> — Select form-associated con listbox en <dialog modal> (top layer),
  * así el desplegable nunca se pierde por overflow/clipping de ancestros.
@@ -56,7 +57,7 @@ import { createPopupDismiss } from '@jeff-aporta/iswc-base/core/position.js';
     <dialog part="dialog" class="popup" tabindex="-1">
       <div part="listbox" class="listbox" id="listbox" role="listbox"></div>
     </dialog>
-    <slot hidden></slot>
+    <div hidden><slot></slot></div>
   `;
 
   // Los demás atributos los declara cada `@prop` (y name, label, hint, disabled, required, error y error-text,
@@ -111,6 +112,7 @@ import { createPopupDismiss } from '@jeff-aporta/iswc-base/core/position.js';
 
   class IswcSelect extends IswcFormControl {
     static tag = 'iswc-select';
+    declare static events: SelectEventos;
     static css = css;
     static shadowInit: ShadowRootInit | null = { mode: 'open', delegatesFocus: true };
     static deps = ['iswc-icon', 'iswc-button', 'iswc-tag'];

@@ -1,6 +1,7 @@
 import { applyToneRamp, isCssColorValue, BUTTON_SHAPE, DEFAULT_BUTTON_SHAPE, normalizeButtonShape, DEFAULT_INTENT, ensureDefaultColor } from '@jeff-aporta/iswc-base/core/attrs.js';
 import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import css from 'iswc:css';
+import type { ButtonEventos } from './schemas/button.schemas.js';
 
 /**
  * <iswc-button> — Web Component (vanilla).
@@ -142,6 +143,7 @@ import css from 'iswc:css';
   // `IswcFormControl` emitiría su propio `iswc-invalid` ({ message }) además del del botón ({ originalEvent, … }).
   class IswcButton extends IswcElement {
     static tag = 'iswc-button';
+    declare static events: ButtonEventos;
     static css = css;
     static shadowInit: ShadowRootInit | null = { mode: "open", delegatesFocus: true };
     static deps = ['iswc-icon'];

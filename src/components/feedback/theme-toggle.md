@@ -73,14 +73,18 @@ No expone.
 
 ### Eventos
 
+<!-- eventos: generado por scripts/sondas/eventos.ts desde declare static events -->
+
+| Evento | detail | cancelable |
+| --- | --- | --- |
+| `iswc-theme-change` | `ThemeChangeDetail` | no |
+
+<!-- /eventos -->
+
 
 | Evento | Descripción |
 | --- | --- |
 | `iswc-theme-change` | Evento personalizado del componente (theme change). |
-
-| Evento | detail | bubbles | composed | cancelable |
-| --- | --- | --- | --- | --- |
-| `iswc-theme-change` | sí | sí | sí | no |
 
 `detail`: `{ theme: 'light' \| 'dark', dark: boolean, container: Element }`.
 Al ser `composed` + `bubbles`, también se puede escuchar en `document`.

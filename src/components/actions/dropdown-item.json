@@ -6,6 +6,13 @@
   "titleHtml": false,
   "description": "Opción de un menú desplegable: texto, ícono y estado deshabilitado; al elegirla emite su selección al menú.",
   "storageKey": "docs-iswc-dropdown-item",
+  "events": [
+    {
+      "name": "iswc-dropdown-item-select",
+      "detail": "{ item: HTMLElement }",
+      "cancelable": false
+    }
+  ],
   "sections": [
     {
       "id": "intro",

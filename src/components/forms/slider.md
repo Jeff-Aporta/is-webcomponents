@@ -108,16 +108,21 @@ import './slider.js';
 
 ### Eventos
 
+<!-- eventos: generado por scripts/sondas/eventos.ts desde declare static events -->
+
+| Evento | detail | cancelable |
+| --- | --- | --- |
+| `iswc-invalid` | `{ message: string }` | no |
+| `iswc-input` | `{ value: number \| number[]; values: number[] }` | no |
+| `iswc-change` | `{ value: number \| number[]; values: number[] }` | no |
+
+<!-- /eventos -->
+
 
 | Evento | Descripción |
 | --- | --- |
 | `iswc-input` | Emitido en cada cambio del valor (escribe como `input` nativo). |
 | `iswc-change` | Emitido al confirmar el cambio de valor (escribe como `change` nativo). |
-
-| Evento | detail | bubbles | composed | cancelable |
-| --- | --- | --- | --- | --- |
-| `iswc-input` | sí | sí | sí | no |
-| `iswc-change` | sí | sí | sí | no |
 
 
 <details>

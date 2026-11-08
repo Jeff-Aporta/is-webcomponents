@@ -2,7 +2,7 @@ import { emit, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import { crearNodo } from '@jeff-aporta/iswc-base/core/dom.js';
 import { atributosDe, PropsElement } from '@jeff-aporta/iswc-base/core/props-element.js';
 import { JsonDialogPropsSchema, JsonValidacionSchema } from './schemas/json-dialog.schemas.js';
-import type { JsonBotonEl, JsonDialogoEl, JsonDialogProps, JsonEditorEl, JsonValidacion } from './schemas/json-dialog.schemas.js';
+import type { JsonBotonEl, JsonDialogoEl, JsonDialogProps, JsonEditorEl, JsonValidacion, JsonDialogEventos } from './schemas/json-dialog.schemas.js';
 import '@jeff-aporta/iswc-base/components/layout/dialog.js';
 import '@jeff-aporta/iswc-base/components/code/code.js';
 import css from 'iswc:css';
@@ -37,6 +37,7 @@ TEMPLATE.innerHTML = /* html */ `
 
 class IswcJsonDialog extends PropsElement<JsonDialogProps> {
   static tag = 'iswc-json-dialog';
+  declare static events: JsonDialogEventos;
   static css = css;
   static deps = ['iswc-callout', 'iswc-button'];
   static observed = atributosDe(INICIAL);

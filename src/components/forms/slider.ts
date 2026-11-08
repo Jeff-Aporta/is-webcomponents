@@ -4,6 +4,7 @@ import type { Validez } from '@jeff-aporta/iswc-base/core/schemas/iswc-form-cont
 import { hasSlotted, clampTo, tidyToStep } from '@jeff-aporta/iswc-base/core/dom.js';
 import css from 'iswc:css';
 import { prop } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
+import type { SliderEventos } from './schemas/slider.schemas.js';
 /**
  * <iswc-slider> — Control de rango form-associated (vanilla + Shadow DOM).
  *
@@ -91,6 +92,7 @@ import { prop } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
 
   class IswcSlider extends IswcFormControl {
     static tag = 'iswc-slider';
+    declare static events: SliderEventos;
     static css = css;
     static shadowInit: ShadowRootInit | null = { mode: 'open', delegatesFocus: true };
 

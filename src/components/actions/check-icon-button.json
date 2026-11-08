@@ -49,6 +49,13 @@
     "    }"
   ],
   "storageKey": "docs-iswc-check-icon-button",
+  "events": [
+    {
+      "name": "iswc-change",
+      "detail": "{ checked: boolean }",
+      "cancelable": false
+    }
+  ],
   "sections": [
     {
       "id": "intro",

@@ -14,6 +14,28 @@
   "loads": [
     "iswc-slots-pg"
   ],
+  "events": [
+    {
+      "name": "iswc-invalid",
+      "detail": "{ message: string }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-change",
+      "detail": "{ value: string; values: string[] }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-show",
+      "detail": "Record<string, never>",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-hide",
+      "detail": "Record<string, never>",
+      "cancelable": false
+    }
+  ],
   "sections": [
     {
       "id": "intro",

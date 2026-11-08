@@ -4,6 +4,7 @@ import { setOptionalAttr } from '@jeff-aporta/iswc-base/core/attrs.js';
 import { hasSlotted } from '@jeff-aporta/iswc-base/core/dom.js';
 import css from 'iswc:css';
 import { prop } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
+import type { TextareaEventos } from './schemas/textarea.schemas.js';
 /**
  * <iswc-textarea> — Área de texto form-associated (vanilla + Shadow DOM).
  *
@@ -52,6 +53,7 @@ import { prop } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
 
   class IswcTextarea extends IswcFormControl {
     static tag = 'iswc-textarea';
+    declare static events: TextareaEventos;
     static css = css;
     static shadowInit: ShadowRootInit | null = { mode: 'open', delegatesFocus: true };
 

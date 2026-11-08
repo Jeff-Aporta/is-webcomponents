@@ -1,6 +1,7 @@
 import { ModalBase } from './utils/modal-base.js';
 import { define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import css from 'iswc:css';
+import type { DrawerEventos } from './schemas/drawer.schemas.js';
 
 /**
  * <iswc-drawer> — Web Component (vanilla, zero dependencies).
@@ -80,6 +81,7 @@ import css from 'iswc:css';
 
   class IswcDrawer extends ModalBase {
     static tag = 'iswc-drawer';
+    declare static events: DrawerEventos;
     static css = css;
     static deps = ['iswc-icon', 'iswc-button'];
 

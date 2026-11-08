@@ -35,3 +35,5 @@ const PickOptsSchema = z.object({
 });
 export type PickOpts = z.infer<typeof PickOptsSchema>;
 
+/** Eventos del componente (HOW-6): `declare static events` en la clase; los documenta scripts/sondas/eventos.ts. */
+export type TimeClockEventos = { 'iswc-view-change': { view: View }; 'iswc-change': { value: string } };

@@ -6,6 +6,13 @@
   "titleHtml": false,
   "description": "Selector de hora en lista o en columnas de horas, minutos, segundos y AM/PM.",
   "storageKey": "docs-iswc-digital-clock",
+  "events": [
+    {
+      "name": "iswc-change",
+      "detail": "{ value: string }",
+      "cancelable": false
+    }
+  ],
   "sections": [
     {
       "id": "intro",

@@ -5,6 +5,7 @@ import { abrirCapaModal } from '@jeff-aporta/iswc-base/core/position.js';
 import { cerrarCapaModal } from '@jeff-aporta/iswc-base/core/position.js';
 import { createPopupDismiss } from '@jeff-aporta/iswc-base/core/position.js';
 import css from 'iswc:css';
+import type { WindowEventos } from './schemas/window.schemas.js';
 
 /**
  * <iswc-window> — Ventana flotante (estilo escritorio).
@@ -53,6 +54,7 @@ import css from 'iswc:css';
 
   class IswcWindow extends IswcReactive {
     static tag = 'iswc-window';
+    declare static events: WindowEventos;
     static css = css;
     static deps = ['iswc-button', 'iswc-icon'];
 

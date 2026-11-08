@@ -6,6 +6,23 @@
   "titleHtml": false,
   "description": "Campo de código PIN u OTP con una casilla por dígito y avance automático.",
   "storageKey": "docs-iswc-pin-input",
+  "events": [
+    {
+      "name": "iswc-pin-change",
+      "detail": "{ value: string; index: number }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-otp",
+      "detail": "{ code: string }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-pin-complete",
+      "detail": "{ value: string }",
+      "cancelable": false
+    }
+  ],
   "sections": [
     {
       "id": "intro",

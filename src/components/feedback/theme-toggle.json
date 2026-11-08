@@ -50,6 +50,13 @@
     "    }"
   ],
   "storageKey": "docs-iswc-theme-toggle",
+  "events": [
+    {
+      "name": "iswc-theme-change",
+      "detail": "ThemeChangeDetail",
+      "cancelable": false
+    }
+  ],
   "sections": [
     {
       "id": "intro",

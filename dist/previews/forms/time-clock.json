@@ -5,6 +5,18 @@
   "title": "&lt;iswc-time-clock&gt;",
   "titleHtml": false,
   "storageKey": "docs-iswc-time-clock",
+  "events": [
+    {
+      "name": "iswc-view-change",
+      "detail": "{ view: View }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-change",
+      "detail": "{ value: string }",
+      "cancelable": false
+    }
+  ],
   "sections": [
     {
       "id": "intro",

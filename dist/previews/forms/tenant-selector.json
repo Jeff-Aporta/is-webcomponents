@@ -6,6 +6,13 @@
   "titleHtml": false,
   "description": "Selector del cliente activo en apps con varios clientes.",
   "storageKey": "docs-iswc-tenant-selector",
+  "events": [
+    {
+      "name": "iswc-tenant-change",
+      "detail": "TenantChangeDetail",
+      "cancelable": false
+    }
+  ],
   "sections": [
     {
       "id": "intro",

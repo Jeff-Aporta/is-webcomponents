@@ -1,6 +1,7 @@
 import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import { isOtpAutocomplete, listenWebOtp } from './utils/input-tokens.js';
 import css from 'iswc:css';
+import type { PinInputEventos } from './schemas/pin-input.schemas.js';
 
 /**
  * <iswc-pin-input> — Web Component (vanilla, zero dependencies).
@@ -45,6 +46,7 @@ import css from 'iswc:css';
 
   class IswcPinInput extends IswcElement {
     static tag = 'iswc-pin-input';
+    declare static events: PinInputEventos;
     static css = css;
 
     static observed = [...OBSERVED, 'cell-size', 'gap', 'bg', 'text-color', 'border-color', 'focus-color', 'danger-color'];

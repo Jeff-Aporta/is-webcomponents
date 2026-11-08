@@ -17,6 +17,28 @@
   ],
   "storageKey": "docs-iswc-rte",
   "hasBehavior": true,
+  "events": [
+    {
+      "name": "iswc-blur",
+      "detail": "undefined",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-source-change",
+      "detail": "{ source: boolean }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-input",
+      "detail": "undefined",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-change",
+      "detail": "{ value: string; text: string }",
+      "cancelable": false
+    }
+  ],
   "sections": [
     {
       "id": "intro",
