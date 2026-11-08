@@ -28,6 +28,7 @@ export const EXCEPCIONES_ARCHIVO: [string, string][] = [
   ['src/core/iswc-element.ts', 'molde público de componentes'],
   ['src/core/props-element.ts', 'molde público de componentes'],
   ['src/core/iswc-reactive.ts', 'molde público de componentes (F8: html, svg, repetir, render, @prop/@state/@watch)'],
+  ['src/core/plantilla.ts', 'molde público: plantilla html de render() (F8)'],
   ['src/core/iswc-form-control.ts', 'molde público de los controles de formulario (F8)'],
   ['src/core/localize.ts', 'API pública de idioma del kit (F8: registrarTerminos, formato, resolverLocale/Dir)'],
   ['src/core/i18n/', 'diccionarios por idioma: localize.ts los carga con import()'],

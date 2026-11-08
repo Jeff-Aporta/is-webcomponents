@@ -1,7 +1,5 @@
 import { applyToneRamp, isCssColorValue, BUTTON_SHAPE, DEFAULT_BUTTON_SHAPE, normalizeButtonShape, DEFAULT_INTENT, ensureDefaultColor } from '@jeff-aporta/iswc-base/core/attrs.js';
-import { emit, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
-import { IswcReactive } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
-import { registrarTerminos } from '@jeff-aporta/iswc-base/core/localize.js';
+import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import css from 'iswc:css';
 
 /**
@@ -135,11 +133,14 @@ import css from 'iswc:css';
     "tabindex",
   ];
 
-  registrarTerminos('es', { estadoCargando: 'Cargando', listo: 'Listo' });
+  /** Textos del anuncio de carga en español; otro idioma los pide a `core/localize` (solo entonces se descarga). */
+  const TEXTOS = { estadoCargando: 'Cargando', listo: 'Listo' } as const;
+  let localize: Promise<typeof import('@jeff-aporta/iswc-base/core/localize.js')> | null = null;
 
-  // Sobre `IswcReactive` (estados e `internals`), no `IswcFormControl`: la base emite su propio `iswc-invalid`
-  // ({ message }) y el botón ya publica `iswc-invalid` con { originalEvent, validationMessage }.
-  class IswcButton extends IswcReactive {
+  // Sobre el molde, no `IswcReactive`/`IswcFormControl`: el botón es la pieza más usada del kit y su cierre no puede
+  // pesar más que antes de F8 (tope en tests/navegador/carga.test.ts). Sus estados e `internals` son los de siempre, y
+  // `IswcFormControl` emitiría su propio `iswc-invalid` ({ message }) además del del botón ({ originalEvent, … }).
+  class IswcButton extends IswcElement {
     static tag = 'iswc-button';
     static css = css;
     static shadowInit: ShadowRootInit | null = { mode: "open", delegatesFocus: true };
@@ -166,6 +167,7 @@ import css from 'iswc:css';
     }
 
     #initialAttrs = new Map();
+    #internals: ElementInternals | null = null;
     #btn;          // inner <button> or <a>
     #rootEl!: HTMLElement;       // shadow root first child wrapper
     #wired = false; // idem-potente: re-registrar listeners de eventos
@@ -178,6 +180,9 @@ import css from 'iswc:css';
 
       this.#btn = shadow.querySelector<HTMLElement>(".btn")!;
       this.#rootEl = shadow.querySelector<HTMLElement>(".btn")!;
+
+      // form-associated (en navegadores sin attachInternals, no rompe)
+      try { this.#internals = this.attachInternals(); } catch { this.#internals = null; }
 
       // capturar atributos iniciales para formResetCallback
       for (const a of OBSERVED) {
@@ -286,12 +291,12 @@ import css from 'iswc:css';
     setFocus(options?: FocusOptions): void { this.#btn.focus(options); }
     // Sin `attachInternals` (navegador viejo) no hay validacion nativa: se
     // devuelven valores neutros en vez de propagar `undefined`.
-    get validity(): ValidityState | null { return this.internals?.validity ?? null; }
-    get validationMessage(): string { return this.internals?.validationMessage ?? ""; }
-    get willValidate(): boolean { return this.internals?.willValidate ?? false; }
-    checkValidity()  { return this.internals?.checkValidity() ?? true; }
-    reportValidity() { return this.internals?.reportValidity() ?? true; }
-    setCustomValidity(msg: string): void { this.internals?.setValidity({ customError: !!msg }, msg); }
+    get validity(): ValidityState | null { return this.#internals?.validity ?? null; }
+    get validationMessage(): string { return this.#internals?.validationMessage ?? ""; }
+    get willValidate(): boolean { return this.#internals?.willValidate ?? false; }
+    checkValidity()  { return this.#internals?.checkValidity() ?? true; }
+    reportValidity() { return this.#internals?.reportValidity() ?? true; }
+    setCustomValidity(msg: string): void { this.#internals?.setValidity({ customError: !!msg }, msg); }
 
     // Custom events composed+bubbles para cruzar Shadow DOM.
     // React: onIsFocus / onIsBlur / onIsClick / onIsInvalid (o addEventListener).
@@ -307,7 +312,7 @@ import css from 'iswc:css';
       if (this.hasAttribute("href")) return;
       const type = (this.getAttribute("type") || "button").toLowerCase();
       if (type !== "submit" && type !== "reset") return;
-      const form = this.internals?.form ?? this.closest("form");
+      const form = this.#internals?.form ?? this.closest("form");
       if (!form) return;
       e.preventDefault();
       if (type === "reset") {
@@ -405,7 +410,7 @@ import css from 'iswc:css';
       const disabled = !!formDisabled || this.hasAttribute("disabled");
       this.#btn.toggleAttribute("disabled", disabled);
       this.#btn.setAttribute("aria-disabled", String(disabled));
-      this.estado("disabled", disabled);
+      this.#estado("disabled", disabled);
 
       // Sacar del orden de tabulación mientras esté deshabilitado. Va sobre
       // el nodo interno, que es el que está en el recorrido: cuando hay
@@ -452,24 +457,44 @@ import css from 'iswc:css';
         }
       }
       const isIconOnly = elems === 1 && !hasText;
-      this.estado("icon-button", isIconOnly);
+      this.#estado("icon-button", isIconOnly);
     }
 
     #updateLinkState() {
-      this.estado("link", this.hasAttribute("href"));
+      this.#estado("link", this.hasAttribute("href"));
+    }
+
+    /** Custom state `:state(nombre)` (motores viejos sin `CustomStateSet`: no hace nada, como antes de F8). */
+    #estado(nombre: string, activo: boolean): void {
+      try {
+        if (activo) this.#internals?.states.add(nombre);
+        else this.#internals?.states.delete(nombre);
+      } catch { /* motores viejos */ }
+    }
+
+    /** Escribe el anuncio en el idioma heredado; en español sin cargar nada. */
+    #anunciar(sr: HTMLElement, clave: keyof typeof TEXTOS): void {
+      sr.textContent = TEXTOS[clave];
+      const lang = (this.closest('[lang]')?.getAttribute('lang') || document.documentElement.lang || navigator.language || 'es').toLowerCase();
+      if (lang.startsWith('es')) return;
+      localize ??= import('@jeff-aporta/iswc-base/core/localize.js');
+      localize.then(async (m) => {
+        await m.cargarIdioma(lang);
+        if (sr.textContent === TEXTOS[clave]) sr.textContent = m.termino(lang, clave);
+      }, () => {});
     }
 
     #updateLoadingState() {
       const loading = this.hasAttribute("loading");
       if (loading) this.#iconoPerezoso("spinner", "mdi:loading");
-      this.estado("loading", loading);
+      this.#estado("loading", loading);
       this.toggleAttribute("data-state-loading", loading);
       this.#btn.setAttribute("aria-busy", String(loading));
       // Anunciar el cambio de estado a screen readers via la region aria-live.
       // g10 proposal: cuando el botón entra en loading, debe anunciarse
       // "Cargando"; al terminar, anunciar "Listo" o vacío.
       const sr = this.shadowRoot?.querySelector<HTMLElement>(".btn__sr-status");
-      if (sr) sr.textContent = loading ? this.t('estadoCargando') : this.t('listo');
+      if (sr) this.#anunciar(sr, loading ? 'estadoCargando' : 'listo');
       if (loading) {
         this.#syncDisabled(true);
       } else {

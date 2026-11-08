@@ -38,7 +38,6 @@ const DICCIONARIOS = new Map<string, Terminos>([[BASE, ES]]);
 const CARGABLES: Record<string, () => Promise<unknown>> = {
   en: () => import('./i18n/en.js'),
 };
-const PEDIDOS = new Set<string>();
 
 const VIVOS = new Set<Localizable>();
 let observador: MutationObserver | null = null;
@@ -88,10 +87,22 @@ export function resolverDir(el?: Element | null): 'ltr' | 'rtl' {
 
 /** Pide (una vez) el diccionario de un idioma que no viene incrustado. */
 function pedirDiccionario(idioma: string): void {
+  void cargarIdioma(idioma);
+}
+
+const CARGAS = new Map<string, Promise<void>>();
+
+/** Promesa del diccionario del idioma de `locale` (resuelta si viene incrustado o no existe). */
+export function cargarIdioma(locale: string): Promise<void> {
+  const idioma = locale.toLowerCase().split('-')[0] ?? BASE;
   const carga = CARGABLES[idioma];
-  if (!carga || PEDIDOS.has(idioma)) return;
-  PEDIDOS.add(idioma);
-  carga().catch(() => PEDIDOS.delete(idioma));
+  if (!carga || DICCIONARIOS.has(idioma)) return Promise.resolve();
+  let p = CARGAS.get(idioma);
+  if (!p) {
+    p = carga().then(() => undefined, () => { CARGAS.delete(idioma); });
+    CARGAS.set(idioma, p);
+  }
+  return p;
 }
 
 /** Término de `clave` para `locale`: región → idioma → base → la propia clave (visible, para detectar faltantes). */

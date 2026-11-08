@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-11-08T01:11:54.609Z",
-  "count": 23,
+  "generatedAt": "2026-11-08T02:08:39.714Z",
+  "count": 24,
   "modules": [
     {
       "file": "app-init.ts",
@@ -224,13 +224,10 @@
       "file": "iswc-reactive.ts",
       "id": "iswc-reactive",
       "path": "src/core/iswc-reactive.ts",
-      "summary": "iswc-reactive — import { IswcReactive, prop, state, watch, html } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';",
-      "bytes": 24167,
+      "summary": "iswc-reactive — import { IswcReactive, prop, state, watch } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';",
+      "bytes": 14374,
       "exports": [
-        "html",
-        "svg",
-        "repetir",
-        "render",
+        "registrarPintor",
         "prop",
         "state",
         "watch",
@@ -261,11 +258,12 @@
       "id": "localize",
       "path": "src/core/localize.ts",
       "summary": "localize — resolverLocale(el, explicito?)   explícito → ancestro con `lang` (cruza shadows) → `<html lang>` → navegador → 'es'",
-      "bytes": 6566,
+      "bytes": 6945,
       "exports": [
         "registrarTerminos",
         "resolverLocale",
         "resolverDir",
+        "cargarIdioma",
         "termino",
         "formato",
         "observarIdioma"
@@ -279,6 +277,19 @@
       "bytes": 10873,
       "exports": [
         "PathTurtle"
+      ]
+    },
+    {
+      "file": "plantilla.ts",
+      "id": "plantilla",
+      "path": "src/core/plantilla.ts",
+      "summary": "plantilla — las clases que no pintan con `render()` no la carguen).",
+      "bytes": 10902,
+      "exports": [
+        "html",
+        "svg",
+        "repetir",
+        "render"
       ]
     },
     {

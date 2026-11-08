@@ -24,6 +24,7 @@
   "./core/loader": "./dist/cdn/core/loader.min.mjs",
   "./core/localize": "./dist/cdn/core/localize.min.mjs",
   "./core/path-turtle": "./dist/cdn/core/path-turtle.min.mjs",
+  "./core/plantilla": "./dist/cdn/core/plantilla.min.mjs",
   "./core/position": "./dist/cdn/core/position.min.mjs",
   "./core/prefs": "./dist/cdn/core/prefs.min.mjs",
   "./core/props-element": "./dist/cdn/core/props-element.min.mjs",

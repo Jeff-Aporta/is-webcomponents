@@ -49,7 +49,12 @@ const MAX_BUTTON = 2 * 1024;
  * con los módulos nuevos y estimó ≈ 14 470 en producción.
  */
 const MAX_BASE_BR = 14_500;
-const BASE_COMPONENTES = ['iswc-element', 'attrs', 'props-element', 'iswc-reactive', 'iswc-form-control', 'localize', 'position', 'dom'];
+const BASE_COMPONENTES = ['iswc-element', 'attrs', 'props-element', 'iswc-reactive', 'plantilla', 'iswc-form-control', 'localize', 'position', 'dom'];
+/**
+ * Criterio de cierre de F8: lo que baja un `<iswc-button>` o un `<iswc-input>` (su cierre estático en `deps/<cat>.json`)
+ * no pesa más que antes de F8 (medido en a5285b4c: button 9 108 B br, input 14 971 B br).
+ */
+const MAX_CIERRE_BR: Record<string, number> = { 'iswc-button': 9_108, 'iswc-input': 14_971 };
 const MAX_RAFAGAS_LOTE = 2;
 const LATENCIA_LOTE_MS = 120;
 const MAX_GALERIA_MS = 1_500;
@@ -97,6 +102,18 @@ test('navegador/carga: tamaño medio por tag ≤ 6 KB brotli (y sin comprimir �
   assert.ok(comprimido <= MAX_MEDIO_TAG_BR, `media por tag: ${comprimido} B brotli > ${MAX_MEDIO_TAG_BR}`);
   assert.ok(crudo <= MAX_MEDIO_TAG, `media por tag: ${crudo} B sin comprimir > ${MAX_MEDIO_TAG}`);
   assert.ok(boton <= MAX_BUTTON, `actions/button.min.mjs: ${boton} B > ${MAX_BUTTON}`);
+});
+
+test('navegador/carga: cierres de button e input ≤ lo que pesaban antes de F8', () => {
+  if (!hayDist()) return;
+  const indice = JSON.parse(readFileSync(join(DIST, 'deps.json'), 'utf8')) as { categorias: Record<string, string> };
+  for (const [tag, tope] of Object.entries(MAX_CIERRE_BR)) {
+    const parte = JSON.parse(readFileSync(join(DIST, 'deps', `${indice.categorias[tag]}.json`), 'utf8')) as { tags: Record<string, string[]> };
+    const cierre = parte.tags[tag] ?? [];
+    const n = brotliCompressSync(Buffer.concat(cierre.map((r) => readFileSync(join(DIST, r))))).length;
+    console.log(`  cierre de ${tag}: ${cierre.length} archivos · ${n} B brotli (tope ${tope})`);
+    assert.ok(n <= tope, `cierre de ${tag}: ${n} B brotli > ${tope}`);
+  }
 });
 
 test('navegador/carga: unión «base de componentes» del core ≤ 14 500 B brotli (F8, D5)', () => {

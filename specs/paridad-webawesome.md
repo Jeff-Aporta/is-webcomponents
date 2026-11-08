@@ -561,3 +561,12 @@ nativo solo tras interactuar, `aria-required` nuevo, la burbuja de validación s
 `input`/`textarea`, `mention` valida `required`, `setCustomValidity` persiste hasta limpiarlo. Pendiente: `file-input`
 (no usaba `form-associated`) sigue fuera de `IswcFormControl` (R2, 1 pendiente) e `inline-edit` nunca fue
 form-associated (decidir en F8b). Unión base tras el lote: 14 244 B br.
+
+Cierre de bytes (7-nov-2026, criterio del dueño: los cierres de `iswc-button` e `iswc-input` no pesan más que antes de
+F8). La plantilla `html` sale de `core/iswc-reactive.ts` a `core/plantilla.ts` (se registra como pintor al importarse;
+una clase que no pinta con `render()` no la carga). `iswc-button` vuelve al molde `IswcElement` con sus `internals` y
+estados propios (como antes de F8) y pide `core/localize` por `import()` solo si el idioma heredado no es español.
+`iswc-input` pide `iswc-button` e `iswc-check-icon-button` solo si usa `clearable` o `password-toggle` (al loader si
+está, si no por `import()`). Medido tras build: cierre de button 8 790 B br (antes de F8 9 108), de input 13 181 B br
+(antes 14 971), unión base (con `plantilla`) 14 366 B br; los dos topes por cierre quedan en
+`tests/navegador/carga.test.ts`.

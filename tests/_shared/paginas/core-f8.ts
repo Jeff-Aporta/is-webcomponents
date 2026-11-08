@@ -1,7 +1,8 @@
 // core-f8.ts — casos en página de IswcReactive, html, IswcFormControl, localize, PropsElement y capas (F8).
 // Lo corre tests/navegador/core-f8.test.ts en Edge headless; cada caso devuelve `true` o el motivo del fallo.
 import { define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
-import { IswcReactive, html, prop, render, repetir, state, svg, watch } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
+import { IswcReactive, prop, state, watch } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
+import { html, render, repetir, svg } from '@jeff-aporta/iswc-base/core/plantilla.js';
 import { IswcFormControl } from '@jeff-aporta/iswc-base/core/iswc-form-control.js';
 import { PropsElement } from '@jeff-aporta/iswc-base/core/props-element.js';
 import { formato, registrarTerminos, resolverLocale } from '@jeff-aporta/iswc-base/core/localize.js';

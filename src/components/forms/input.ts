@@ -1,6 +1,5 @@
 import { emit, upgradeProperties, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import { IswcFormControl } from '@jeff-aporta/iswc-base/core/iswc-form-control.js';
-import '@jeff-aporta/iswc-base/components/actions/check-icon-button.js';
 import { isOtpAutocomplete, listenWebOtp } from './utils/input-tokens.js';
 import { hasSlotted } from '@jeff-aporta/iswc-base/core/dom.js';
 import { registrarTerminos } from '@jeff-aporta/iswc-base/core/localize.js';
@@ -101,7 +100,7 @@ import { prop } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
     static tag = 'iswc-input';
     static css = css;
     static shadowInit: ShadowRootInit | null = { mode: 'open', delegatesFocus: true };
-    static deps = ['iswc-icon', 'iswc-button'];
+    static deps = ['iswc-icon'];
 
     static observed = [...OBSERVED, 'radius', 'border-color', 'bg', 'text-color', 'focus-color', 'danger-color'];
 
@@ -403,7 +402,22 @@ import { prop } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
     }
 
     /** Recalcula botones, form value, validez y estados. Fuente única de verdad. */
+    /**
+     * `iswc-button` (limpiar) e `iswc-check-icon-button` (ver contraseña) son opcionales: se piden solo si el campo los
+     * usa (al loader si está, si no por `import()`), así el cierre del campo no los arrastra (tope en navegador/carga).
+     */
+    #piezas(): void {
+      const pedir = (tag: string, cargar: () => Promise<unknown>) => {
+        if (customElements.get(tag)) return;
+        const loader = (globalThis as { iswcLoader?: { ensure?(t: string): Promise<unknown> | undefined } }).iswcLoader;
+        (loader?.ensure?.(tag) ?? cargar()).catch?.(() => false);
+      };
+      if (this.clearable) pedir('iswc-button', () => import('@jeff-aporta/iswc-base/components/actions/button.js'));
+      if (this.passwordToggle) pedir('iswc-check-icon-button', () => import('@jeff-aporta/iswc-base/components/actions/check-icon-button.js'));
+    }
+
     #update() {
+      this.#piezas();
       const v = this.#value;
       const interactive = !this.disabled && !this.#input.disabled && !this.readonly;
 
