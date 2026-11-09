@@ -1,238 +1,156 @@
 <!-- @vendor 2026-10-14T14:46:42.343Z Jeff-Aporta/is-webcomponents@main skills/build-component/references/states.md -->
 # States
 
-Cómo declarar y exponer **custom states** (`ElementInternals.states`)
-desde un componente del kit, y cómo documentarlos en el `.md`.
+Cómo exponer **custom states** (`ElementInternals.states`, selector
+`:state(nombre)`) desde un componente del kit, y cómo documentarlos en el `.md`.
 
-## 1. Por qué `static states = StateMachine(...)`
+## 1. `this.estado(nombre, activo)`
 
-El kit centraliza la declaración de estados en una constante estática
-para que:
+`IswcReactive` (`core/iswc-reactive.ts`) trae el método:
 
-- Un agente pueda **leer el contrato** sin saltar al `.ts` a buscar
-  `internals.states.add('foo')`.
-- El extractor que sincroniza el `.md` con la fuente sepa qué filas
-  generar en la tabla "Custom states".
-- La convención sea **uniforme** entre los ~150 componentes del repo
-  (no cada uno con su propio patrón).
+- Con `CustomStateSet` disponible: `internals.states.add/delete(nombre)`.
+- Sin él (webviews viejos, motores sin la API): cae al respaldo
+  `[data-nombre]` en el host (`toggleAttribute('data-<nombre>', activo)`).
+- `this.internals` es perezoso: un `attachInternals` por elemento, `null` si
+  el motor no lo admite. Nada de `attachInternals` a mano ni de
+  `setCustomState` (el módulo `core/form-associated` ya no existe).
 
-El **tipo** del campo `states` es `Record<string, string>` donde la
-clave es el nombre lógico (camelCase) y el valor es el nombre del
-custom state (kebab-case). Ejemplo:
+El sitio natural es `actualizado(cambios)`, que corre tras cada pintado con
+los valores ya actualizados:
 
 ```ts
-class IswcButton extends IswcElement {
-  static tag = 'iswc-button';
-  static states = {
-    loading: 'loading',
-    disabled: 'disabled',
-    link: 'link',
-    iconButton: 'icon-button',
-  };
-}
-```
+import { define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import { IswcReactive, prop } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
+import css from 'iswc:css';
 
-## 2. Cómo se activan
-
-Un custom state se activa cuando la condición booleana se cumple. El
-patrón recomendado usa el helper
-[`setCustomState`](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/core/form-associated.ts)
-de `_shared/form-associated.ts`:
-
-```ts
-import { setCustomState } from '../_shared/form-associated.js';
-
-class IswcFoo extends IswcElement {
+class IswcFoo extends IswcReactive {
   static tag = 'iswc-foo';
+  static css = css;
   static shadowInit: ShadowRootInit | null = { mode: 'open', delegatesFocus: true };
-  static observed = ['loading', 'href'];
+  @prop({ type: 'bool' }) accessor loading = false;
+  @prop() accessor href = '';
 
-  #internals: ElementInternals | null = null;
-
-  constructor() {
-    super();
-    if ('attachInternals' in this) {
-      try { this.#internals = this.attachInternals(); } catch {}
-    }
-  }
-
-  onAttributeChanged(name: string) {
-    if (name === 'loading') {
-      setCustomState(this.#internals, 'loading', this.hasAttribute('loading'));
-    } else if (name === 'href') {
-      setCustomState(this.#internals, 'link', this.hasAttribute('href'));
-    }
+  override actualizado(): void {
+    this.estado('loading', this.loading);
+    this.estado('link', !!this.href);
   }
 }
+define(IswcFoo);
 ```
 
-`setCustomState` tolera navegadores sin `ElementInternals.states`:
-simplemente no hace nada. Internamente llama a `internals.states.add(...)`
-o `.delete(...)`.
+Los controles de formulario heredan de `IswcFormControl` los estados
+`user-invalid`, `user-valid` (solo tras interactuar), `required`, `optional`,
+`disabled` y `readonly`: no los repitas. Los componentes que siguen en el molde
+`IswcElement` por peso (`iswc-button`) llevan sus `internals` y su propio
+`estado` equivalente.
 
-## 3. Nombres
+## 2. Nombres
 
 - **kebab-case**, igual que los custom attributes del HTML.
 - Longitud máxima recomendada: 24 caracteres.
 - Sin prefijo `is-` ni `iswc-`: ya estás dentro de un `<iswc-foo>`, el
   namespace se sobreentiende.
-- No uses **el mismo nombre que un atributo** del host: el consumidor
-  puede esperar que `el.matches(':state(loading)')` refleje el
-  atributo `loading`, pero la sombra lo gestiona la lógica
-  independientemente. Si colisionan, documenta la diferencia en
-  "Errores comunes" del `.md`.
+- Un state con el **mismo nombre que un atributo** (`loading`) debe
+  significar lo mismo; si difiere, documéntalo en "Errores comunes".
 
-Bien:
+Bien: `loading`, `icon-button`, `without-line`, `selected`, `expanded`.
+Mal: `isLoading` (camelCase), `iswc_loading` / `iswc-loading` (prefijo del kit).
 
-```ts
-static states = {
-  loading: 'loading',
-  iconButton: 'icon-button',
-  withoutLine: 'without-line',
-  selected: 'selected',
-  expanded: 'expanded',
-  fullscreen: 'fullscreen',
-};
-```
+## 3. Enums como múltiples states
 
-Mal:
+Si una propiedad es una **enum** (`shape="round|rect|pill"`), una opción
+común es exponer un state por valor:
 
 ```ts
-static states = {
-  isLoading: 'isLoading',     // ❌ camelCase en el state
-  iswc_loading: 'iswc_loading', // ❌ prefijo del kit
-  loading: 'iswc-loading',    // ❌ prefijo dentro del kit
-};
-```
+const SHAPES = ['round', 'rect', 'pill'] as const;
 
-## 4. Enums como múltiples states
+@prop({ enum: SHAPES }) accessor shape = 'round';
 
-Si un atributo es una **enum** (`shape="round|rect|pill"`), una opción
-común es exponer un state por valor opcional:
-
-```ts
-// `shape="round"` ⇒ :state(round) activo
-// `shape="rect"`  ⇒ :state(rect)  activo
-// (o ninguno)
-static states = {
-  round: 'round',
-  rect:  'rect',
-  pill:  'pill',
-};
-
-onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
-  if (name === 'shape') {
-    for (const v of Object.values(IswcFoo.states)) {
-      setCustomState(this.#internals, v, v === newVal);
-    }
-  }
+override actualizado(): void {
+  for (const v of SHAPES) this.estado(v, v === this.shape);
 }
 ```
 
 CSS:
 
 ```css
-.foo:state(round) { border-radius: var(--iswc-foo-radius-round); }
-.foo:state(rect)  { border-radius: 0; }
-.foo:state(pill)  { border-radius: 999px; }
+:host(:state(round)) .foo { border-radius: var(--iswc-foo-radius-round); }
+:host(:state(rect)) .foo  { border-radius: 0; }
+:host(:state(pill)) .foo  { border-radius: 999em; }
 ```
 
-## 5. Fallback `data-state-*` para entornos sin soporte
+## 4. Respaldo `[data-nombre]`
 
-`ElementInternals.states` llegó a todos los navegadores modernos, pero
-algunos embebidos (webviews antiguos, iframes de admin legacy) no lo
-soportan. Para esos, el kit usa **`data-state-*` como fallback**:
-
-```ts
-onAttributeChanged(name: string) {
-  if (name === 'loading') {
-    const on = this.hasAttribute('loading');
-    setCustomState(this.#internals, 'loading', on);
-    this.toggleAttribute('data-state-loading', on);
-  }
-}
-```
-
-El CSS debe cubrir **ambos** selectores:
+Si el componente debe verse bien en motores sin `CustomStateSet`, el CSS
+cubre **ambos** selectores:
 
 ```css
-.foo:state(loading),
-.foo[data-state-loading] {
+:host(:state(loading)),
+:host([data-loading]) {
   pointer-events: none;
   opacity: 0.6;
 }
 ```
 
-Documenta siempre el fallback en la tabla "Custom states" del `.md`
-con la nota "Fallback `data-state-*`".
+Ojo: el respaldo comparte espacio de nombres con los `data-*` del
+consumidor; no uses un state cuyo `data-*` choque con uno documentado.
 
-## 6. Tabla "Custom states" en el `.md`
+## 5. Tabla "Custom states" en el `.md`
 
 ```md
 ### Custom states
 
 | Estado | Uso |
 | --- | --- |
-| `:state(loading)` | Mientras dura una operación asíncrona. `aria-busy="true"`. Fallback `data-state-loading`. |
-| `:state(disabled)` | Refleja el atributo `disabled`. Saca del recorrido de tab. Fallback `data-state-disabled`. |
-| `:state(icon-button)` | Cuando el slot default está vacío y solo hay icono. Ajusta padding. Fallback `data-state-icon-button`. |
-| `:state(link)` | Cuando el atributo `href` está presente (renderiza `<a>` en vez de `<button>`). Fallback `data-state-link`. |
+| `:state(loading)` | Mientras dura una operación asíncrona. `aria-busy="true"`. Respaldo `[data-loading]`. |
+| `:state(disabled)` | Refleja `disabled`. Saca del recorrido de tab. |
+| `:state(icon-button)` | El slot default está vacío y solo hay icono. Ajusta padding. |
+| `:state(link)` | Hay `href` (renderiza `<a>` en vez de `<button>`). |
 ```
 
 Si el state **no** se consume en CSS (es solo para tests o lógica
 interna), no lo expongas: reduce la API pública y evita acoplamiento.
 
-## 7. Tests
+## 6. Tests
 
-Cubre al menos:
+Necesitan un navegador real (`:state()` no existe en Deno): página de casos
+en `tests/_shared/paginas/` corrida por `correrCasos()` (modelo:
+`tests/navegador/core-f8.test.ts`). Cubre al menos:
 
-1. `el.matches(':state(loading)')` es `true` cuando el atributo está
-   presente.
-2. `el.matches(':state(loading)')` es `false` cuando el atributo se
-   quita.
-3. Para enums: solo el state del valor activo es `true`.
-4. El fallback `data-state-*` se aplica en el mismo ciclo que el
-   custom state.
+1. `el.matches(':state(loading)')` es `true` con la propiedad activa y
+   `false` al quitarla, **después** de `await el.actualizacionCompleta`.
+2. Para enums: solo el state del valor activo es `true`.
 
 ```ts
-import test from 'node:test';
-import assert from 'node:assert/strict';
-import '../src/components/actions/foo.ts';
-
-test('iswc-foo: state(loading) toggles with attribute', async () => {
-  await customElements.whenDefined('iswc-foo');
-  const el = document.createElement('iswc-foo');
-  document.body.appendChild(el);
-  assert.equal(el.matches(':state(loading)'), false);
-  el.setAttribute('loading', '');
-  assert.equal(el.matches(':state(loading)'), true);
+// tests/_shared/paginas/foo.ts — cada caso devuelve true o el motivo
+export async function estadoLoading(): Promise<true | string> {
+  const el = document.createElement('iswc-foo') as IswcFoo;
+  document.body.append(el);
+  el.loading = true;
+  await el.actualizacionCompleta;
+  if (!el.matches(':state(loading)')) return 'falta :state(loading)';
   el.removeAttribute('loading');
-  assert.equal(el.matches(':state(loading)'), false);
-  document.body.removeChild(el);
-});
+  await el.actualizacionCompleta;
+  return el.matches(':state(loading)') ? 'sigue :state(loading)' : true;
+}
 ```
 
-## 8. Trampas
+## 7. Trampas
 
-- **No** uses `this.dataset.loading = 'true'` como atajo: el kit ya
-  define la convención `data-state-*`. Mezclar nombres rompe
-  selectores en CSS.
-- **No** declares states **inmutables** (que nunca se quitan) en un
-  `static states` junto con states condicionales. Sepáralos: los
-  inmutables van como clases CSS fijas en el template.
-- **No** llames a `internals.states.add('foo')` antes de la primera
-  conexión: el `internals` puede no estar listo. Espera al
-  `onConnected`.
-- **No** confundas `el.ariaHidden` (que **no** existe) con
-  `el.setAttribute('aria-hidden', 'true')`. ARIA no se expone como
-  propiedad automática.
+- **No** uses `this.dataset.loading = 'true'` como atajo: el respaldo lo
+  pone `estado()`; mezclar nombres rompe selectores.
+- **No** declares states **inmutables** (que nunca se quitan): van como
+  clases CSS fijas en la plantilla.
+- **No** leas `:state()` justo después de escribir la propiedad: el
+  pintado (y `actualizado`) va por microtarea.
+- **No** confundas `el.ariaHidden` con el atributo `aria-hidden`: ponlo
+  en la plantilla.
 
-## 9. Checklist
+## 8. Checklist
 
-- [ ] `static states = { ... }` declarado en la clase.
-- [ ] Cada state se activa/desactiva con `setCustomState(internals, name, bool)`.
+- [ ] Cada state se activa/desactiva con `this.estado(nombre, bool)` en
+      `actualizado()`.
 - [ ] Nombres en kebab-case, sin prefijos del kit.
-- [ ] Si el state se consume en CSS, hay **dos selectores**:
-      `:state(name)` y `[data-state-name]`.
+- [ ] Si importa el respaldo, el CSS cubre `:state(x)` y `[data-x]`.
 - [ ] Tabla "Custom states" en el `.md` con la columna "Uso".
-- [ ] Test que cubre al menos el toggle atributo → state.
+- [ ] Caso de navegador que cubre al menos el toggle propiedad → state.

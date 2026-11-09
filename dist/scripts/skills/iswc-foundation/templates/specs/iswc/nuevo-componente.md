@@ -28,8 +28,9 @@ Los exige `tests/vistas/contrato-componentes.test.ts`: un tag de `kit-tags.ts` s
 
 ## 3. El `.ts`
 
-Forma canónica del molde del kit (`IswcElement`): estáticos `tag`/`css`/`observed`/`deps`, el CSS por `iswc:css` y
-`define(Clase)`.
+Forma canónica del molde del kit: estáticos `tag`/`css`/`deps`, el CSS por `iswc:css` y `define(Clase)`. Tres bases,
+según lo que tenga el componente: `Componente<P>` (objeto `props` con Zod, el caso de abajo), `IswcReactive` (atributos
+sueltos con `@prop`) o `IswcElement` (estático).
 
 ```ts
 import { define } from '@jeff-aporta/iswc-base/core/iswc-element.min.mjs';
@@ -62,8 +63,14 @@ define(__CLASE__X);
   `static get observedAttributes`. `static deps`: tags del kit que pinta; el molde los pide al loader al conectar.
 - Eventos `__PREFIJO__-<dominio>-<acción>` con `this.emit(nombre, detail)` (bubbles + composed), `detail` mínimo.
 - Repintado parcial: `protected override parcial(props, previos)` devuelve `true` si ya aplicó el cambio.
-- Sin `props`: `class X extends IswcElement` (`import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.min.mjs'`)
-  con `static template` y `onConnected()`. Referencia: `<__PREFIJO__-hola-mundo>`.
+- Sin `props` pero con atributos o estado: `class X extends IswcReactive`
+  (`import { IswcReactive, prop, state } from '@jeff-aporta/iswc-base/core/iswc-reactive.min.mjs'`) con
+  `@prop() accessor label = ''`, `@prop({ type: 'bool' }) accessor abierto = false`, `@prop({ enum: [...] })`,
+  `@state()` para lo interno; el atributo es el nombre en kebab-case y se refleja. **Nunca** un par get/set que lee y
+  escribe el atributo a mano, ni el mismo atributo en `static observed`.
+- Estático (sin props ni atributos): `class X extends IswcElement`
+  (`import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.min.mjs'`) con `static template`.
+  Referencia: `<__PREFIJO__-hola-mundo>`.
 - Los estáticos van sin `override` (el molde llega como JS publicado y TypeScript no los ve declarados); los
   métodos (`onConnected`, `pintar`, `inicial`, `parcial`) sí lo llevan.
 - Nunca `adoptCss`, `<link>` a la hoja hermana ni `fetch` del CSS: eso era la base anterior al molde.

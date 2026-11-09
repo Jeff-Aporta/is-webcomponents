@@ -95,7 +95,8 @@ Reglas:
 
 ## 4. Customización por atributo (`static styleAttrs`)
 
-El molde, con el mixin `withStyleAttrs(IswcElement)` (`core/attrs.ts`),
+El molde, con el mixin `withStyleAttrs(IswcReactive)` (o `withStyleAttrs(IswcElement)`
+en los que siguen en el molde base; `core/attrs.ts`),
 permite mapear un atributo del host a una CSS custom property del
 `:host` sin escribir CSS adicional:
 

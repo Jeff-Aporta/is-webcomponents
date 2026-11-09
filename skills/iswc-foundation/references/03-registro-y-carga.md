@@ -75,7 +75,7 @@ es la referencia que copian las apps existentes al re-pinear (F5b).
 - Hosts externos que quieren un solo `<script>`: `dist/cdn/all.min.js` (cada tag lleva su CSS dentro; el kit sigue
   externo por el import map).
 
-## Componentes: el molde del kit (`IswcElement`) y la base `Componente`
+## Componentes: el molde del kit (`IswcElement`/`IswcReactive`) y la base `Componente`
 
 Forma canónica (la misma que los componentes del kit):
 
@@ -96,7 +96,11 @@ class MiaX extends Componente<MiaXProps> {
 define(MiaX);
 ```
 
-- Sin `props`: `class X extends IswcElement` (mismo import que `define`), con `static template` si es estático.
+- Sin `props` y con atributos o estado: `class X extends IswcReactive` (`core/iswc-reactive.min.mjs`) con
+  `@prop() accessor label = ''`, `@prop({ type: 'bool' })`, `@prop({ enum: […] })` y `@state()`, como los componentes
+  del kit (forma canónica en `specs/componentes.md` S-K2 del kit). Nunca un par get/set que refleja el atributo a mano.
+  El build (`construirApp`, esbuild `es2022`) baja los decoradores.
+- Estático: `class X extends IswcElement` (mismo import que `define`), con `static template`.
 - `Componente` (`src/js/base/componente.ts`) pone `props` (mezcla, `revisarProps`, repintado), `parcial`, el rescate
   de props tardías, `html`/`raw`/`el` y `avisar`. Eventos: `this.emit(nombre, detail)` del molde (bubbles + composed).
 - Nada de `adoptCss`, `<link>` a la hoja hermana ni `static get observedAttributes` a mano. Los estáticos van sin

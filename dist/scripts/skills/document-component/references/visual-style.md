@@ -19,7 +19,7 @@ visuales para que todas las fichas se lean igual.
 | ❌ Antes | ✅ Ahora |
 | --- | --- |
 | "Podría ser útil para casos en los que…" | "Úsalo cuando hay un toggle binario con feedback visual." |
-| "Este componente es una solución para…" | "Toggle binario con feedback visual. Hereda del molde `IswcElement`." |
+| "Este componente es una solución para…" | "Toggle binario con feedback visual. Control de formulario sobre `IswcFormControl`." |
 | "Es interesante notar que…" | (omitir; si el dato importa, va en la columna "Notas" de la tabla) |
 
 ## Formato de tablas
@@ -48,13 +48,20 @@ de tres o más ítems.
 
 ### Tabla de eventos
 
-| Evento | detail | bubbles | composed | cancelable |
-| --- | --- | --- | --- | --- |
-| `iswc-click` | sí | sí | sí | no |
-| `iswc-invalid` | según cabecera | según cabecera | según cabecera | según cabecera |
+No se escribe a mano: la genera `scripts/sondas/eventos.ts` desde el tipo
+`XEventos` + `declare static events` del componente, entre los marcadores
+`<!-- eventos: generado por scripts/sondas/eventos.ts desde declare static events -->`
+y `<!-- /eventos -->`. Su forma:
 
-Cuando la columna "según cabecera" aplica, **no** se resume: el
-detalle real vive en la cabecera del `.js` y la tabla solo apunta.
+```md
+| Evento | detail | cancelable |
+| --- | --- | --- |
+| `iswc-invalid` | `{ message: string }` | no |
+| `iswc-change` | `{ checked: boolean; value: string }` | no |
+```
+
+Lo que la tabla no dice (un evento que no burbujea, cuándo se emite) va en
+prosa bajo la tabla, fuera de los marcadores.
 
 ### Tabla de CSS parts
 
@@ -102,8 +109,8 @@ luego tokens globales del kit (`--iswc-accent`, `--iswc-bg`, …).
 - **Una línea por ítem**, sin puntos finales si el ítem es corto.
 
 ```md
-- Hereda del molde `IswcElement`.
-- Form-associated (`ElementInternals.setFormValue`).
+- Molde reactivo (`IswcReactive`): propiedades con `@prop`.
+- Form-associated (`IswcFormControl`: entra en `FormData` y en la validación del `<form>`).
 - Acepta `<iswc-icon slot="start">` y `slot="end"`.
 ```
 

@@ -149,9 +149,10 @@ Si un slot debe cambiar el comportamiento del componente según tenga
 contenido o no, escucha el evento `slotchange`:
 
 ```ts
+// El molde ya creó el shadow y clonó `static template` en el constructor. Hasta F8b no hay
+// ranuras reactivas: cada componente escucha su propio `slotchange` (una vez, no en cada conexión).
 constructor() {
   super();
-  this.initShadow({ mode: 'open', delegatesFocus: true });
   this.shadowRoot!.querySelectorAll<HTMLSlotElement>('slot').forEach(slot => {
     slot.addEventListener('slotchange', () => this.#updateIconOnly());
   });
@@ -162,7 +163,7 @@ constructor() {
   const nodes = slot?.assignedNodes({ flatten: true }) ?? [];
   const isIconOnly =
     nodes.length === 1 && nodes[0].nodeType === 1; // único elemento hijo
-  setCustomState(this.#internals, 'icon-button', isIconOnly);
+  this.estado('icon-button', isIconOnly);           // IswcReactive: :state(icon-button)
 }
 ```
 

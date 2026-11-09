@@ -331,12 +331,12 @@ el contrato), sigue la skill paralela:
 
 | Skill | Cuándo |
 | --- | --- |
-| [`build-component/SKILL.md`](../build-component/SKILL.md) | Anatomía obligatoria del `.md`, custom states (`StateMachine`), CSS parts y slots, atributos observados vs propiedades, tokens `--iswc-*`, accesibilidad, tests con `node:test` + `assert/strict`, demo en `demos/<cat>/<comp>/<comp>.html`. |
+| [`build-component/SKILL.md`](../build-component/SKILL.md) | Anatomía obligatoria del `.md`, molde reactivo (`IswcReactive`/`IswcFormControl`, `@prop`, `render()` con `html`, `t()`, eventos tipados), custom states (`this.estado()`), CSS parts y slots, tokens `--iswc-*`, accesibilidad, tests con `node:test` + `assert/strict`, demo en `demos/<cat>/<comp>/<comp>.html`. |
 
 Sub-guías de la skill:
 
-- [`references/lifecycle.md`](../build-component/references/lifecycle.md) — Hooks del molde `IswcElement`, shadow, upgrade de propiedades, form-associated, cleanup.
-- [`references/states.md`](../build-component/references/states.md) — Custom states, `setCustomState`, fallback `data-state-*`.
+- [`references/lifecycle.md`](../build-component/references/lifecycle.md) — Hooks del molde (`IswcElement` → `IswcReactive` → `IswcFormControl`), repintado, upgrade de propiedades, controles de formulario, cleanup.
+- [`references/states.md`](../build-component/references/states.md) — Custom states con `this.estado()`, respaldo `[data-*]`.
 - [`references/parts-slots.md`](../build-component/references/parts-slots.md) — `part="..."`, slots semánticos, `:slotted(...)`.
 - [`references/props-events.md`](../build-component/references/props-events.md) — Atributos observados, propiedades, eventos `iswc-*` con `composed: true`.
 - [`references/css-tokens.md`](../build-component/references/css-tokens.md) — Tokens `--iswc-*`, temas, paletas, `static styleAttrs`.

@@ -76,9 +76,12 @@ Guía: [`helpers/utils/response-cache.md`](https://github.com/Jeff-Aporta/is-web
 
 | Módulo CDN | Rol |
 | --- | --- |
-| `core/element-base.min.mjs` | Base CE del kit |
-| `core/attrs.min.mjs` | Observación / coerce de atributos |
-| `core/iswc-element.min.mjs` | Hojas base compartidas |
+| `core/iswc-element.min.mjs` | Molde de los componentes (shadow, hojas base compartidas, `define`, `emit`) |
+| `core/iswc-reactive.min.mjs` | `IswcReactive`: `@prop`/`@state`/`@watch`, repintado, `estado()`, `t()` |
+| `core/plantilla.min.mjs` | `html`/`svg`/`repetir` para `render()` |
+| `core/iswc-form-control.min.mjs` | `IswcFormControl`: base de los controles de formulario |
+| `core/localize.min.mjs` | Idioma heredado, `registrarTerminos`, `formato` (`Intl`) |
+| `core/attrs.min.mjs` | Enums (`INTENT`, `TONE`), `withStyleAttrs`, normalizadores |
 
 Apps consumidoras **no** reimplementan esta capa; extienden vía `IswcUi.define` + tags.
 

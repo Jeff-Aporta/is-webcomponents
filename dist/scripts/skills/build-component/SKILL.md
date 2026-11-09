@@ -3,11 +3,12 @@
 name: build-component
 description: >-
   Cómo construir un componente nuevo del kit iswc-* desde cero: anatomía
-  obligatoria de su .md, CSS custom states con StateMachine, CSS parts y slots
-  semánticos, diferencia entre atributos observados y propiedades JS, uso
-  exclusivo de tokens --iswc-*, accesibilidad (aria + teclado + foco), tests
-  con node:test + assert/strict y los cuatro archivos obligatorios: .ts, .scss,
-  .md y .json iswc-preview/v1. Usar cuando se vaya a crear un iswc-* nuevo,
+  obligatoria de su .md, molde reactivo (IswcReactive / IswcFormControl con
+  @prop, @state, @watch y render() con html), textos por t(), eventos tipados,
+  CSS custom states con this.estado(), CSS parts y slots semánticos, overlays
+  por la pila de capas, uso exclusivo de tokens --iswc-*, accesibilidad (aria +
+  teclado + foco), tests y los cuatro archivos obligatorios: .ts, .scss, .md y
+  .json iswc-preview/v1. Usar cuando se vaya a crear un iswc-* nuevo,
   refactorizar uno existente para que cumpla el contrato, o revisar un PR que
   añade/renombra un componente del kit.
 ---
@@ -16,7 +17,8 @@ description: >-
 
 Convención obligatoria para cualquier **componente nuevo** del kit o para
 **revisar uno existente**. Cubre los 10 puntos que un agente debe cumplir
-antes de abrir PR. Las sub-guías viven en [`references/`](references/) y se
+antes de abrir PR. La forma canónica del `.ts` (molde reactivo, F8) es la de
+`specs/componentes.md` S-K2; aquí va resumida en §3 y §5. Las sub-guías viven en [`references/`](references/) y se
 leen a demanda según el área que estés tocando.
 
 ## 1. Cuándo usarla
@@ -119,24 +121,35 @@ Reglas duras:
 
 Detalle: [`references/lifecycle.md`](references/lifecycle.md).
 
-## 3. CSS custom states (StateMachine)
+## 3. Forma canónica del `.ts` y CSS custom states
 
-Todo componente declara **`static states = new StateMachine(...)`** (o
-`get states()`) y documenta cada estado en la sección "Custom states" del
-`.md`. La API pública son los custom states de
-[`ElementInternals.states`](https://developer.mozilla.org/docs/Web/API/ElementInternals/states)
-(`this._internals.states.add('foo')`), **no** un getter/setter JS.
+Base, por orden de preferencia:
+
+| Caso | Base |
+| --- | --- |
+| Componente con atributos o estado | `IswcReactive` (`core/iswc-reactive.ts`) |
+| Control de formulario (entra en `FormData`, valida) | `IswcFormControl` (`core/iswc-form-control.ts`) |
+| Props como objeto validado con Zod | `PropsElement` (ya es `IswcReactive`) |
+| Diálogo / cajón | `ModalBase` (`layout/utils/modal-base.ts`) |
+| Solo si el cierre lo exige (peso medido) | `IswcElement` (`core/iswc-element.ts`), como `iswc-button` |
+
+Los **custom states** son la API de estado para CSS (`:state(loading)`), con
+`this.estado('nombre', activo)`: usa `ElementInternals.states` y, si el motor
+no lo admite, cae al respaldo `[data-nombre]`. Nada de `attachInternals` a
+mano (el molde da `this.internals` perezoso) ni de `setCustomState` (el módulo
+`core/form-associated` ya no existe).
 
 Convenciones:
 
 - Nombres en **kebab-case**: `loading`, `icon-button`, `without-line`,
   `selected`, `disabled`. **Nunca** `isLoading` / `is_loading`.
-- Booleano: el state se **añade** cuando el atributo booleano está
-  presente; se **quita** cuando se elimina.
+- Booleano: el state se **añade** cuando la propiedad es `true` y se
+  **quita** cuando es `false`. Se calcula en `actualizado(cambios)`, que corre
+  tras cada pintado.
 - Enum (`shape="round|rect|pill"`): un state por valor opcional
-  (`state(round)`, `state(rect)`, …). Evita `data-shape="round"` salvo que
-  el navegador no soporte `ElementInternals.states` (fallback
-  `data-state-*`).
+  (`state(round)`, `state(rect)`, …).
+- Los de formulario (`user-invalid`, `user-valid`, `required`, `optional`,
+  `disabled`, `readonly`) los pone `IswcFormControl`: no los repitas.
 - Documenta **siempre** cada state en la tabla "Custom states" del `.md`.
   Si lo consumes en CSS, debe aparecer en la columna "Uso" con el
   selector `:state(...)` que lo aplica.
@@ -145,33 +158,23 @@ Patrón mínimo:
 
 ```ts
 // src/components/actions/foo.ts
-import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
-import { setCustomState } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import { define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import { IswcReactive, prop } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
+import type { FooEventos } from './schemas/foo.schemas.js';
 import css from 'iswc:css';
 
-class IswcFoo extends IswcElement {
+class IswcFoo extends IswcReactive {
   static tag = 'iswc-foo';
   static css = css;
+  static template = TEMPLATE;                 // DOM fijo; o render() con html (§5)
   static shadowInit: ShadowRootInit | null = { mode: 'open', delegatesFocus: true };
-  static observed = ['loading'];
-  static states = {
-    loading: 'loading',
-    iconButton: 'icon-button',
-  };
+  declare static events: FooEventos;
+  @prop({ type: 'bool' }) accessor loading = false;
+  @prop() accessor href = '';
 
-  #internals: ElementInternals | null = null;
-
-  constructor() {
-    super();
-    if ('attachInternals' in this) {
-      try { this.#internals = this.attachInternals(); } catch {}
-    }
-  }
-
-  onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
-    if (name === 'loading') {
-      setCustomState(this.#internals, 'loading', this.hasAttribute('loading'));
-    }
+  override actualizado(): void {
+    this.estado('loading', this.loading);
+    this.estado('link', !!this.href);
   }
 }
 define(IswcFoo);
@@ -210,54 +213,80 @@ Detalle: [`references/states.md`](references/states.md).
 
 Detalle: [`references/parts-slots.md`](references/parts-slots.md).
 
-## 5. Atributos observados vs propiedades JS
+## 5. Propiedades, `render()`, textos y eventos
 
 Regla de oro: **lo que el HTML declara y el servidor serializa va como
-atributo; lo que el JS asigna dinámicamente va como propiedad.** Las dos
-cosas pueden coexistir; la mayoría de los componentes del kit reflejan
-propiedad → atributo.
+atributo; lo que el JS asigna dinámicamente va como propiedad.** Con el molde
+reactivo las dos cosas se declaran **una sola vez** con `@prop`.
 
 Convenciones:
 
-- Lista los atributos observados en `static observed = [...]`; el molde
-  `IswcElement` arma `observedAttributes` (nada de `static get
-  observedAttributes()` a mano).
-- Cada propiedad pública tiene un getter que **lee** el atributo (fuente
-  de verdad) y un setter que **escribe** el atributo. No guardes estado
-  duplicado.
-- Enums (`shape`, `variant`, `color`): el setter normaliza con la
-  constante compartida (`BUTTON_SHAPE`, `VARIANT`, `INTENT`) y, si el
-  valor está fuera del contrato, vuelve al default en `attributeChanged`.
+- `@prop()` = texto reflejado al atributo en kebab-case (`labelPlacement` ↔
+  `label-placement`). Opciones: `type: 'bool' | 'num' | 'json'`, `enum: LISTA`
+  (fuera de la lista → el defecto, sin throw), `attr: 'otro'` o `attr: false`,
+  `reflect: false`, `vacio: true` (conserva `x=""`). El valor inicial del campo
+  es el defecto.
+- `@state()` para estado interno que repinta sin atributo; `@watch('prop')`
+  para reaccionar `(anterior, nuevo)` antes de pintar.
+- **Nunca** un par get/set que lee y escribe el atributo a mano, ni
+  `static observed` con un atributo que ya es `@prop` (lo suma `IswcReactive`
+  a `observedAttributes`). Lo vigila `tests/gobernanza/reactivo.test.ts`.
 - Booleanos: presencia de atributo ⇒ `true`. **Nunca** `attr="false"`.
+- **DOM que depende del estado**: `render()` devuelve `` html`…` `` de
+  `core/plantilla.ts` (`${x}` hijo, `a=${x}`, `?a=${x}`, `.p=${x}`,
+  `@e=${fn}`, listas con `repetir(items, clave, plantilla)`). Si el DOM es
+  fijo, `static template` y sincroniza en `actualizado(cambios)`. El repintado
+  va por microtarea (el primero, síncrono al conectar): quien lea el shadow
+  tras escribir usa `actualizarAhora()` o `await el.actualizacionCompleta`.
+- **Textos de interfaz** (etiquetas, `aria-label`, mensajes) por
+  `this.t('clave', ...args)`. Registra tus términos en español al cargar el
+  módulo con `registrarTerminos('es', { … })` (`core/localize.ts`) y su
+  traducción en `src/core/i18n/en.ts`. Nunca un `aria-label` literal.
+- **Eventos**: `this.emit('iswc-x', detail)` (bubbles + composed) y su tipo
+  en `schemas/<tag>.schemas.ts`:
+  `export type FooEventos = { 'iswc-x': { value: string } };` enlazado con
+  `declare static events: FooEventos;`. La tabla «Eventos» del `.md` y el
+  campo `events` del `.json` los genera `scripts/sondas/eventos.ts`.
 - Refleja al host solo lo que el usuario ve (`disabled` ⇒
   `aria-disabled`, `loading` ⇒ `aria-busy`); **no** expongas detalles
   internos.
-- `name`, `value`, `form`, `formaction`, etc.: propágalos al `<button>` /
-  `<input>` interno del Shadow DOM. El form-associated real vive en ese
-  inner, **no** en el host (ver §3 de
-  [`references/lifecycle.md`](references/lifecycle.md)).
+- Control de formulario: `IswcFormControl` ya trae `name`, `disabled`,
+  `required`, `readonly`, `label`, `hint`, `errorText`, `error` y la validez;
+  tú das `valorFormulario()`, `restablecer()`, `get controlNativo()` y, si
+  hace falta, `validar()` (ver [`references/lifecycle.md`](references/lifecycle.md)).
 
 Patrón mínimo:
 
 ```ts
 // src/components/actions/foo.ts
-class IswcFoo extends IswcElement {
+import { define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import { IswcReactive, prop, state } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
+import { html } from '@jeff-aporta/iswc-base/core/plantilla.js';
+import { registrarTerminos } from '@jeff-aporta/iswc-base/core/localize.js';
+import type { FooEventos } from './schemas/foo.schemas.js';
+import css from 'iswc:css';
+
+registrarTerminos('es', { quitar: 'Quitar' });
+
+const SHAPES = ['round', 'rect', 'pill'] as const;
+
+class IswcFoo extends IswcReactive {
   static tag = 'iswc-foo';
-  static observed = ['color', 'variant', 'shape', 'disabled', 'loading', ...ARIA_FORWARD];
+  static css = css;
+  static shadowInit: ShadowRootInit | null = { mode: 'open', delegatesFocus: true };
+  declare static events: FooEventos;           // { 'iswc-remove': void }
+  @prop({ enum: SHAPES }) accessor shape = 'round';
+  @prop() accessor label = '';
+  @prop({ type: 'bool' }) accessor removable = false;
+  @state() accessor activo = false;
 
-  get shape(): string {
-    return normalizeShape(this.getAttribute('shape'), DEFAULT_SHAPE);
+  render() {
+    return html`<span part="base" class=${`foo ${this.shape}`}>
+      <span part="label">${this.label}</span>
+      <button part="remove" ?hidden=${!this.removable} aria-label=${this.t('quitar')} @click=${this.#quitar}>×</button>
+    </span>`;
   }
-  set shape(v: string | null | undefined) {
-    if (v == null || v === '') this.removeAttribute('shape');
-    else this.setAttribute('shape', normalizeShape(v, DEFAULT_SHAPE));
-  }
-
-  onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
-    if (name === 'shape' && newVal && !VALID_SHAPE.includes(newVal)) {
-      this.setAttribute('shape', DEFAULT_SHAPE);
-    }
-  }
+  #quitar() { this.emit('iswc-remove'); }
 }
 define(IswcFoo);
 ```
@@ -325,14 +354,18 @@ Detalle: [`references/css-tokens.md`](references/css-tokens.md).
     pero no interactivo; combina con `tabindex="-1"` para sacarlo del
     recorrido de tab.
   - `aria-busy="true"` mientras dura `loading`; emite un `aria-live`
-    region con "Cargando" / "Listo" para usuarios de screen reader.
+    region con `this.t('cargando')` / `this.t('listo')` para usuarios de
+    screen reader (nunca el texto literal).
   - **No** inventes roles ni propiedades ARIA. Si necesitas una nueva,
     documéntala en el `.md` y añádela a la tabla "Accesibilidad".
-- **Focus management en modales** (`<iswc-dialog>`, `<iswc-drawer>`,
-  popovers, tooltips, command palette): trapea foco, devuelve foco al
-  último elemento activo al cerrar, usa `inert` o `aria-hidden` para el
-  resto de la página mientras está abierto. Hereda de `ModalBase` o
-  reusa el patrón.
+- **Focus management en overlays**: por la **pila de capas** de
+  `core/position.ts`, nunca una trampa propia. Modal: `abrirCapaModal(host,
+  { cerrar, inicial? })` / `cerrarCapaModal(host)` (pone `inert` alrededor
+  cruzando shadows, cicla Tab por los enfocables con shadows, Escape solo
+  para la capa de arriba, devuelve el foco); `inertizar: false` si convive
+  con otras ventanas (`iswc-window`). Flotante (menú, listbox, picker):
+  `createPopupDismiss`, que se apila sin `inert`. Diálogos y cajones heredan
+  de `ModalBase`, que ya lo hace.
 - **Contraste**: usa los tokens `--iswc-*` ya calibrados para ambos
   temas. Si dudas, corre `tests/theme-contract.test.mjs` (verifica que
   los 2 temas y 3 paletas pasan el contrato).
@@ -353,11 +386,19 @@ Convenciones (ver `AGENTS.md §7` y `§8`):
   útiles, incluyendo archivo + ruta + valor real.
 - **No** crees snapshots binarios (Playwright traces, etc.). `tests/`
   está tracked en git (no en `.gitignore`).
+- Lo que necesita DOM real (repintado, `:state()`, foco, `FormData`) va en
+  `tests/navegador/`: una página de casos en `tests/_shared/paginas/<x>.ts`
+  (cada caso devuelve `true` o el motivo) que `correrCasos()` de
+  `tests/_shared/pagina.ts` empaqueta y corre en Edge headless (modelo:
+  `tests/navegador/core-f8.test.ts`). Tras escribir una propiedad,
+  `await el.actualizacionCompleta` antes de leer el shadow. Cada caso
+  prepara su propio estado: nunca depender del caso anterior (el cooldown
+  salta los verdes).
 - Cubre al menos:
   1. `customElements.define` no falla y el upgrade de propiedades
      funciona (asignar antes de `connect`).
-  2. Reflejo atributo ↔ propiedad en cada `observedAttribute`.
-  3. Custom states: presencia del atributo booleano ⇒ state activo.
+  2. Reflejo atributo ↔ propiedad en cada `@prop`.
+  3. Custom states: propiedad booleana activa ⇒ `:state(...)` activo.
   4. Slots: contenido proyectado aparece en el light DOM del host.
   5. Eventos custom (`iswc-focus`, `iswc-blur`, `iswc-click`, …) burbujean
      y son `composed: true`.
@@ -512,11 +553,16 @@ Antes de abrir PR con un componente nuevo, verifica:
 
 - [ ] §2 Los cuatro archivos: `.ts`, `.scss`, `.md` y `.json`.
 - [ ] §2 Anatomía en el `.md` con las secciones en orden.
-- [ ] §3 Custom states declarados en `static states` y documentados.
+- [ ] §3 Base correcta (`IswcReactive` / `IswcFormControl`; `IswcElement`
+      solo si el cierre lo exige) y custom states con `this.estado()`,
+      documentados.
 - [ ] §4 CSS parts y slots semánticos, documentados en "CSS parts" /
       "Slots" del `.md`.
-- [ ] §5 Atributos observados y propiedades públicas coherentes;
-      enums normalizados.
+- [ ] §5 Propiedades con `@prop` (sin setters que reflejan a mano), enums
+      con `enum`, DOM por `render()` + `html` si depende del estado, textos
+      por `t()` con sus términos en `core/i18n/en.ts`, eventos en el tipo
+      `XEventos` + `declare static events` y la sonda
+      `scripts/sondas/eventos.ts` corrida.
 - [ ] §6 CSS sin hex literales (solo en fallback de variables `--iswc-*`).
 - [ ] §7 a11y: `attachShadow({ delegatesFocus: true })`, reenvío de
       `aria-*`, atajos de teclado documentados.
@@ -528,19 +574,21 @@ Antes de abrir PR con un componente nuevo, verifica:
 - [ ] Ninguna estructura de UI del componente o de sus consumidores queda como HTML suelto
       fuera de un shadow (todo es componente).
 - [ ] §10 `.md` hermano con frontmatter, secciones y "Reglas para LLM".
-- [ ] `tests/gobernanza/contrato-cuatro-archivos.test.ts` y `deno task test:all`
-      pasan en verde.
+- [ ] `tests/gobernanza/contrato-cuatro-archivos.test.ts`,
+      `tests/gobernanza/reactivo.test.ts`, `tests/gobernanza/eventos.test.ts`,
+      `tests/gobernanza/a11y-patrones.test.ts` y `deno task test:all` pasan
+      en verde.
 
 ## Referencias
 
 | Tema | Documento |
 | --- | --- |
-| Ciclo de vida, hooks, upgrade, form-associated | [`references/lifecycle.md`](references/lifecycle.md) |
-| Custom states, StateMachine, fallback `data-state-*` | [`references/states.md`](references/states.md) |
+| Ciclo de vida, repintado, upgrade, `IswcFormControl` | [`references/lifecycle.md`](references/lifecycle.md) |
+| Custom states con `this.estado()`, respaldo `data-*` | [`references/states.md`](references/states.md) |
 | CSS parts, slots semánticos, fallback | [`references/parts-slots.md`](references/parts-slots.md) |
-| Atributos observados, props, eventos `iswc-*` | [`references/props-events.md`](references/props-events.md) |
+| `@prop`/`@state`/`@watch`, `render()`, `t()`, eventos tipados | [`references/props-events.md`](references/props-events.md) |
 | Tokens `--iswc-*`, temas, paletas, `palettes.css` | [`references/css-tokens.md`](references/css-tokens.md) |
-| a11y: focus, teclado, ARIA, focus trap | [`references/accessibility.md`](references/accessibility.md) |
+| a11y: focus, teclado, ARIA, pila de capas | [`references/accessibility.md`](references/accessibility.md) |
 
 ## Cómo se conecta con el resto
 

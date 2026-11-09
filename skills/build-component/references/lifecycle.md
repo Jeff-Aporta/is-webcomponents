@@ -1,51 +1,68 @@
 <!-- @vendor 2026-10-14T14:46:42.343Z Jeff-Aporta/is-webcomponents@main skills/build-component/references/lifecycle.md -->
 # Lifecycle
 
-Ciclo de vida de un componente del kit: hooks, shadow, upgrade de
-propiedades, form-associated y cleanup. La clase base es el molde
-[`IswcElement`](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/core/iswc-element.ts),
-que centraliza el patrón repetido en ~150 componentes del repo
-(`ElementBase` queda como subclase de compatibilidad para código externo).
+Ciclo de vida de un componente del kit: hooks, shadow, repintado reactivo,
+upgrade de propiedades, controles de formulario y cleanup. La cadena de clases
+es `HTMLElement` → [`IswcElement`](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/core/iswc-element.ts)
+(molde: shadow, hojas, upgrade, `deps`) → [`IswcReactive`](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/core/iswc-reactive.ts)
+(`@prop`/`@state`/`@watch`, repintado, `estado()`, `t()`) →
+[`IswcFormControl`](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/core/iswc-form-control.ts)
+(form-associated). Un componente nuevo extiende `IswcReactive` (o
+`IswcFormControl`); `IswcElement` solo si el cierre lo exige.
 
-## 1. Hooks de `IswcElement`
+## 1. Hooks
 
 | Hook | Cuándo corre | Notas |
 | --- | --- | --- |
 | `constructor()` | Una vez, al instanciar. | El molde ya crea el shadow (`static shadowInit`), clona `static template` y adopta `static css`. Solo `super()` + estado privado. |
-| `onConnected()` | En CADA conexión al DOM (no solo la primera). | `this.mounted === true`. Útil para `ResizeObserver`, listeners globales. |
-| `onDisconnected()` | Cada desconexión. | Limpia observers/listeners si quieres. |
-| `onAttributeChanged(name, oldVal, newVal)` | Tras el guard de montado y de igualdad. | La base ya filtra `oldVal === newVal` y atributos previos al connect. |
-| `attributeChangedCallback(...)` | Nivel DOM. **No** lo sobreescribas: usa `onAttributeChanged`. | La base lo delega. |
+| `render()` | En el primer pintado (síncrono, dentro de `connectedCallback`) y después en cada repintado (microtarea). | Devuelve `` html`…` `` de `core/plantilla.ts`, o `null` si el componente usa su `static template`. Sin efectos: solo describe el DOM. |
+| `@watch('p')` | Antes de `render()`, una vez por propiedad vigilada que cambió. | `(anterior, nuevo)`; `{ esperarPrimerRender: true }` lo salta en el primer pintado. |
+| `actualizado(cambios)` | Tras cada pintado. | `cambios`: `Map` nombre → valor anterior. Aquí van `this.estado(…)` y la sincronización de un DOM fijo. |
+| `onConnected()` | En CADA conexión al DOM, después del primer pintado. | `ResizeObserver`, listeners globales. |
+| `onDisconnected()` | Cada desconexión. | Limpia observers/listeners. |
+| `onAttributeChanged(name, oldVal, newVal)` | Cualquier atributo observado, tras el guard de montado y de igualdad. | Úsalo para los de `static observed`; los `@prop` ya siguen a su atributo (para reaccionar a ellos, `@watch`). |
 
-El molde crea el shadow en el constructor según `static shadowInit`
-(`null` = light DOM), así que `onConnected` ya encuentra `this.shadowRoot`.
-Además `connectedCallback` hace `upgradeProperties` (una vez), marca
-`mounted` y pide a `iswcLoader.ensure()` los tags de `static deps`.
+`connectedCallback` y `attributeChangedCallback` los implementa la cadena del
+molde. Si los sobrescribes, **llama siempre a `super`**: sin eso los `@prop`
+dejan de seguir a los atributos sin dar error (pasó con
+`forms/utils/date-field-element`). Lo normal es usar los hooks de arriba.
 
-## 2. Plantilla mínima
+## 2. Repintado
+
+- Cada escritura que cambia el valor de un `@prop`/`@state` encola **un**
+  repintado por microtarea: N escrituras en el mismo tick = 1 pintado.
+- El **primer** pintado es síncrono, al conectar: quien lea el shadow justo
+  después de insertar el elemento ya lo ve pintado.
+- `actualizarAhora()` vacía la cola en síncrono; `await el.actualizacionCompleta`
+  espera al pintado pendiente (pruebas y consumidores que leen el shadow
+  después de escribir).
+- Lo que el consumidor lee como API (`value`, `checked`, `validity`) se
+  actualiza en el setter, no en el pintado.
+
+## 3. Plantilla mínima
 
 ```ts
-import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import { define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import { IswcReactive, prop } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
+import { html } from '@jeff-aporta/iswc-base/core/plantilla.js';
+import type { FooEventos } from './schemas/foo.schemas.js';
 import css from 'iswc:css';
 
-const TEMPLATE = document.createElement('template');
-TEMPLATE.innerHTML = /* html */ `
-  <div part="root" class="foo">
-    <slot></slot>
-  </div>
-`;
-
-class IswcFoo extends IswcElement {
+class IswcFoo extends IswcReactive {
   static tag = 'iswc-foo';
   static css = css;
-  static template = TEMPLATE;
   static shadowInit: ShadowRootInit | null = { mode: 'open', delegatesFocus: true };
-  static observed = ['variant', 'disabled'];
   static deps = ['iswc-icon'];
+  declare static events: FooEventos;
+  @prop({ enum: ['filled', 'outlined'] }) accessor variant = 'outlined';
+  @prop({ type: 'bool' }) accessor disabled = false;
 
-  onConnected() { /* sync inicial */ }
-  onAttributeChanged(name: string) {
-    if (name === 'disabled') { /* … */ }
+  render() {
+    return html`<div part="root" class=${`foo ${this.variant}`} aria-disabled=${this.disabled ? 'true' : null}><slot></slot></div>`;
+  }
+
+  override actualizado() {
+    this.estado('disabled', this.disabled);
   }
 }
 
@@ -55,103 +72,94 @@ define(IswcFoo);
 `define(Clase)` registra la clase con su `static tag`; es idempotente
 (gana el primero que define, por si el kit se carga dos veces). Nada de
 `adoptCss(…, import.meta.url)`, `<link>` al `.css` hermano ni
-`static get observedAttributes` a mano.
+`static get observedAttributes` a mano: `observedAttributes` = `static observed`
+∪ `styleAttrs` ∪ los `@prop` de toda la cadena (también los de una clase base
+que nunca se define).
 
-## 3. Upgrade de propiedades
+## 4. Upgrade de propiedades
 
 Típico problema: el usuario hace `el.variant = 'outlined'` **antes** de
-que el custom element se haya registrado. La propiedad se asigna al
-prototipo de `HTMLElement` y se pierde.
+que el custom element se haya registrado. La propiedad se asigna a la
+instancia sin pasar por el setter y se pierde.
 
-`IswcElement.connectedCallback` llama a `upgradeProperties(this, ...)`
-**una sola vez** (la primera conexión) y reescribe los valores perdidos
-sobre los setters reales. **No** lo hagas a mano en el constructor.
+El molde llama a `upgradeProperties` **una sola vez** (la primera conexión),
+también para cada `@prop`, y reescribe los valores sobre los setters reales.
+**No** lo hagas a mano en el constructor.
 
 ```ts
-// ❌ NO — re-implementación del upgrade
+// ❌ NO — re-implementación del upgrade y reflejo a mano
 constructor() {
   super();
-  for (const a of ['variant']) {
-    const v = this.getAttribute(a);
-    if (v) (this as any)[a] = v;
-  }
+  const v = this.getAttribute('variant');
+  if (v) (this as any).variant = v;
 }
+get variant() { return this.getAttribute('variant'); }
+set variant(v: string) { this.setAttribute('variant', v); }
 
-// ✅ SÍ — heredar IswcElement ya lo hace
-class IswcFoo extends IswcElement {
+// ✅ SÍ — el molde recoge lo escrito antes del upgrade y @prop refleja
+@prop() accessor variant = 'outlined';
+```
+
+## 5. Controles de formulario (`IswcFormControl`)
+
+Solo si el componente participa en un `<form>` (inputs, textareas, combobox,
+date-picker…). La base ya hace:
+
+- `static formAssociated = true` e `internals` (null si el motor no lo admite).
+- `name`, `disabled`, `required`, `readonly` reflejados; `label`, `hint`,
+  `errorText`, `error`; `form`, `validity`, `validationMessage`,
+  `willValidate` delegados en `internals`.
+- `checkValidity`, `reportValidity`, `setCustomValidity` como el estándar;
+  evento `iswc-invalid` al recibir `invalid` (tipo `IswcFormControlEventos`).
+- Estados `:state(user-invalid)`/`:state(user-valid)` solo tras interactuar
+  (primer cambio, salida tras editar, `reportValidity` o `invalid` nativo),
+  `required`/`optional`, `disabled`, `readonly`.
+- `formResetCallback`, `formDisabledCallback`, `formStateRestoreCallback`.
+
+El control aporta:
+
+```ts
+class IswcFoo extends IswcFormControl {
   static tag = 'iswc-foo';
-  static observed = ['variant'];
-  get variant() { return this.getAttribute('variant'); }
-  set variant(v: string) { this.setAttribute('variant', v); }
+  @prop({ attr: 'value', reflect: false, vacio: true }) accessor value = '';   // el atributo es el valor por defecto
+  override valorFormulario() { return this.value || null; }                   // lo que entra en FormData
+  override restablecer() { this.value = this.defaultValue; }                   // formResetCallback
+  override get controlNativo() { return this.shadowRoot!.querySelector('input'); }  // validez nativa reflejada
+  // override validar(): reglas propias; por defecto `required` + espejo del control nativo
 }
 ```
 
-## 4. Form-associated custom elements
+El `<input>` / `<button>` interno sigue siendo el que el usuario toca: el
+host le propaga `value`, `disabled`, etc. en `render()`/`actualizado()`.
 
-Solo aplica si el componente participa en un `<form>` (inputs, textareas,
-combobox, date-picker, etc.). Pasos:
-
-1. Marcar la clase con `static formAssociated = true;`.
-2. En el constructor, llamar a `attachFormInternals(this)` desde
-   [`_shared/form-associated.ts`](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/core/form-associated.ts).
-3. Implementar `formResetCallback()` para restaurar valores iniciales
-   (capturar en el constructor con un `Map`).
-4. Implementar `formDisabledCallback(disabled)` para reflejar el estado
-   del `<form>` en el inner.
-5. Implementar `formStateRestoreCallback(state)` para restaurar tras
-   navegación/autocomplete.
-6. **El form-associated real vive en el `<input>` / `<button>` interno
-   del Shadow DOM**, no en el host. El `name`, `value`, `form`, etc.
-   deben **propagarse al inner**. El host solo expone la API pública
-   para que el consumidor no toque el shadow.
-
-Patrón de reset:
-
-```ts
-#initialAttrs = new Map<string, string>();
-
-constructor() {
-  super();
-  for (const a of OBSERVED) {
-    if (this.hasAttribute(a)) this.#initialAttrs.set(a, this.getAttribute(a)!);
-  }
-}
-
-formResetCallback() {
-  for (const a of OBSERVED) {
-    if (this.#initialAttrs.has(a)) this.setAttribute(a, this.#initialAttrs.get(a)!);
-    else this.removeAttribute(a);
-  }
-}
-```
-
-## 5. Limpieza
+## 6. Limpieza
 
 - **`ResizeObserver`, `MutationObserver`, `IntersectionObserver`**:
   crear en `onConnected`, desconectar en `onDisconnected`. Si los dejas
   vivos, el GC no libera la instancia cuando se quita del DOM.
 - **Listeners en `document` o `window`**: solo en `onConnected`, y
-  quítalos en `onDisconnected`. Si el componente vive dentro de un SPA
-  que se desmonta, esto evita memory leaks.
+  quítalos en `onDisconnected`. Escape y clic fuera de un overlay **no**
+  se escuchan a mano: van por la pila de capas de `core/position.ts`.
 - **Timers y `requestAnimationFrame`**: guarda el id en un campo
-  privado y `clearTimeout`/`cancelAnimationFrame` en
-  `onDisconnected`.
+  privado y `clearTimeout`/`cancelAnimationFrame` en `onDisconnected`.
+- El observador de idioma (`lang`/`dir`) que usa `t()` lo da de alta y de
+  baja el molde.
 
 ```ts
 #ro: ResizeObserver | null = null;
 
-onConnected() {
-  this.#ro = new ResizeObserver(() => this.#sync());
+override onConnected() {
+  this.#ro = new ResizeObserver(() => this.#medir());
   this.#ro.observe(this);
 }
 
-onDisconnected() {
+override onDisconnected() {
   this.#ro?.disconnect();
   this.#ro = null;
 }
 ```
 
-## 6. `delegatesFocus: true`
+## 7. `delegatesFocus: true`
 
 Por defecto, hacer foco en el host **no** enfoca nada visible para el
 usuario. Con `delegatesFocus: true` en `static shadowInit`, el primer
@@ -162,30 +170,31 @@ Recomendado para **todo** componente interactivo (botones, inputs,
 links, combos, modales). Para contenedores no interactivos (cards,
 callouts, layouts) déjalo en `false`.
 
-## 7. Trampas
+## 8. Trampas
 
-- **No** leas `this.hasAttribute('foo')` en el constructor para
-  "configurar" el estado: el atributo puede no estar aún porque el
-  parser HTML todavía no ha llamado al `attributeChangedCallback` (o
-  sí, pero el shadow no existe). Configura en `onConnected`.
-- **No** hagas `super.connectedCallback()` si sobrescribes
-  `connectedCallback`. Mejor usa `onConnected`.
+- **No** leas atributos en el constructor para "configurar" el estado:
+  el parser puede no haberlos puesto aún. Los `@prop` ya tienen el valor
+  correcto en el primer `render()`.
+- **No** sobrescribas `connectedCallback`/`attributeChangedCallback` sin
+  llamar a `super` (rompe `@prop`).
+- **No** leas el shadow justo después de escribir una propiedad sin
+  `actualizarAhora()` o `await el.actualizacionCompleta`.
 - **No** escribas `#mounted = true` a mano: la base ya lo gestiona.
-- **No** llames a `this.dispatchEvent(new CustomEvent('iswc-foo'))`
-  antes de la primera conexión: el evento burbujea pero el consumidor
-  puede no estar listo todavía. Usa `queueMicrotask` o espera al
-  `onConnected`.
+- **No** emitas eventos `iswc-*` antes de la primera conexión: el consumidor
+  puede no estar escuchando todavía.
 
-## 8. Checklist
+## 9. Checklist
 
-- [ ] `static tag/css/observed/deps` declarados, `import css from 'iswc:css'`
-      y `define(Clase)` al final (sin `adoptCss` ni `defineElement`).
-- [ ] `onConnected` idempotente: corre en cada conexión.
-- [ ] Upgrade de propiedades cubierto por la base.
-- [ ] `formAssociated = true` solo si el componente entra en `<form>`.
-- [ ] `formResetCallback` / `formDisabledCallback` /
-      `formStateRestoreCallback` implementados.
+- [ ] Base `IswcReactive` / `IswcFormControl`; `static tag/css/deps`,
+      `import css from 'iswc:css'` y `define(Clase)` al final.
+- [ ] Propiedades con `@prop`/`@state`; nada de setters que reflejan a mano.
+- [ ] `render()` + `html` si el DOM depende del estado; si no,
+      `static template` + `actualizado()`.
+- [ ] Estados con `this.estado()` en `actualizado()`.
+- [ ] Control de formulario: `valorFormulario`, `restablecer`, `controlNativo`
+      (y `validar` si hay reglas propias).
 - [ ] `delegatesFocus: true` en componentes interactivos.
-- [ ] `ResizeObserver` y listeners globales: `onConnected` crea,
-      `onDisconnected` destruye.
-- [ ] Custom events `iswc-*` emitidos **tras** la primera conexión.
+- [ ] Observers y listeners globales: `onConnected` crea, `onDisconnected`
+      destruye; overlays por la pila de capas.
+- [ ] Eventos `iswc-*` declarados en `XEventos` y emitidos **tras** la
+      primera conexión.

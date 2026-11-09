@@ -59,19 +59,28 @@ Frontmatter + identidad del componente. Ver
 ### 2. Atributos observados
 
 Tabla con `Atributo | Tipo | Notas`. Solo atributos que el componente
-observa: en el molde (`IswcElement`), los de su `static observed` (más
-los `styleAttrs` y `@attr` que el molde une en `observedAttributes`;
-nunca un `static get observedAttributes` a mano). No listar atributos
-HTML globales a menos que el componente los reenvíe explícitamente.
+observa: los de cada `@prop` (el atributo es el nombre en kebab-case o el
+`attr` de sus opciones; `type: 'bool'` = booleano por presencia, `enum` =
+valores admitidos y defecto), los heredados de la base (`IswcFormControl`
+aporta `name`, `disabled`, `required`, `readonly`, `label`, `hint`,
+`error-text`, `error`), los de `static observed` y los `styleAttrs`; es lo
+que el molde une en `observedAttributes`. Un `@prop({ attr: false })` o un
+`@state()` **no** es atributo. No listar atributos HTML globales a menos que
+el componente los reenvíe explícitamente.
 
 ### 3. Props (propiedades públicas)
 
 Tabla con `Propiedad | Acceso | Notas`. Diferenciar **lectura/escritura**
-de **solo lectura** y **solo escritura**. Indicar si refleja atributo.
+de **solo lectura** y **solo escritura**. Indicar si refleja atributo (un
+`@prop` refleja salvo `reflect: false`). Los `@state()` son internos: no van.
+Si el componente pinta por microtarea, decir que el shadow se lee tras
+`await el.actualizacionCompleta`.
 
 ### 4. Custom states
 
-Tabla con `Estado | Uso`. Ver
+Tabla con `Estado | Uso`: los que el código pone con `this.estado('x', …)`
+y los heredados (`IswcFormControl`: `user-invalid`, `user-valid`,
+`required`, `optional`, `disabled`, `readonly`). Ver
 [`references/custom-states.md`](references/custom-states.md). Si el
 componente no expone custom states, **omitir la tabla entera**, no
 dejarla vacía.
@@ -80,8 +89,17 @@ dejarla vacía.
 
 Dos sub-secciones:
 
-- **Eventos emitidos** — tabla con `Evento | detail | bubbles | composed |
-  cancelable`.
+- **Eventos emitidos** — tabla `Evento | detail | cancelable` **generada**,
+  no escrita a mano: la escribe la sonda `scripts/sondas/eventos.ts` desde el
+  tipo `XEventos` de `schemas/<tag>.schemas.ts` enlazado con
+  `declare static events` (incluye los de la base, p. ej. `iswc-invalid` de
+  `IswcFormControlEventos`). Va entre los marcadores
+  `<!-- eventos: generado por scripts/sondas/eventos.ts desde declare static events -->`
+  y `<!-- /eventos -->`; la misma sonda escribe el campo `events` de la
+  ficha `.json`. Para cambiar un evento se cambia el tipo y se corre
+  `deno run -A --no-check scripts/sondas/eventos.ts` (`--comprobar` solo
+  informa). Todos burbujean y son `composed` salvo excepción documentada
+  en prosa.
 - **Eventos escuchados** — lista corta de eventos que el componente
   escucha de `document`, `window` u otros elementos. Si no escucha nada,
   omitir.
@@ -152,9 +170,11 @@ Los enlaces a la skill del kit van con la ruta desde `skills/`:
 Antes de mergear cambios en la ficha de un componente:
 
 1. `tests/gobernanza/contrato-cuatro-archivos.test.ts`: frontmatter, rutas y secciones.
-2. `tests/gobernanza/preview-paths.test.ts` si la ficha cambia ejemplos que
+2. `tests/gobernanza/eventos.test.ts`: la tabla «Eventos» y el `events` de la
+   ficha coinciden con la sonda (E2) y lo emitido con lo declarado (E1).
+3. `tests/gobernanza/preview-paths.test.ts` si la ficha cambia ejemplos que
    referencian archivos del preview.
-3. `deno task audit`: incluye la misma regla por componente.
+4. `deno task audit`: incluye la misma regla por componente.
 
 Si cualquiera falla, **primero** justifica la rotura con un cambio en el
 componente y luego ajusta la guía — nunca al revés.
@@ -163,7 +183,12 @@ componente y luego ajusta la guía — nunca al revés.
 
 - Inventar API por similitud con otro componente (p.ej. añadir un
   atributo `size` que el módulo no declara).
-- Listar atributos que el componente no observa.
+- Listar atributos que el componente no observa (un `@state()` o un
+  `@prop({ attr: false })` no es atributo).
+- Editar a mano la tabla «Eventos» o el `events` del `.json`: se pisa en la
+  siguiente corrida de la sonda.
+- Documentar textos de interfaz fijos en español como si fueran API: salen
+  de `t()` y cambian con `lang`; documentar el atributo que los sobrescribe.
 - Dejar la tabla de custom states vacía cuando el componente no expone
   ninguno: mejor omitirla.
 - Olvidar el frontmatter o dejar `preview` apuntando a un archivo que

@@ -1,178 +1,101 @@
 <!-- @vendor 2026-10-13T14:13:48.240Z Jeff-Aporta/is-webcomponents@main skills/build-component/references/props-events.md -->
 # Props & Events
 
-Cómo declarar **atributos observados**, **propiedades públicas** y
-**eventos custom** en un componente del kit, y cómo documentarlos en
-el `.md`.
+Cómo declarar **propiedades reactivas** (con su atributo), **textos de
+interfaz** y **eventos custom** en un componente del kit, y cómo
+documentarlos en el `.md`. Todo sobre `IswcReactive`
+([`core/iswc-reactive.ts`](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/core/iswc-reactive.ts)).
 
 ## 1. Atributos vs propiedades
 
 | Característica | Atributo HTML | Propiedad JS |
 | --- | --- | --- |
-| Fuente de verdad | Sí (serializable, parseable) | No, refleja al atributo |
+| Fuente de verdad | Sí (serializable, parseable) | Refleja al atributo |
 | Aparece en `el.outerHTML` | Sí | No |
 | Puede ser un objeto/complex | No (siempre string) | Sí |
 | Lo que el servidor serializa | Atributo | Atributo (si se refleja) |
 | Lo que el JS asigna en caliente | Atributo | Propiedad |
 
-Regla: **el atributo es la fuente de verdad; la propiedad es un atajo
-de lectura/escritura que refleja al atributo**.
+Las dos caras se declaran **una vez** con `@prop`: el decorador crea el par
+get/set, el atributo (kebab-case del nombre), la conversión de tipo, el
+reflejo y el repintado. **Nunca** un par get/set que lee y escribe el atributo
+a mano, ni el atributo repetido en `static observed` (los dos los vigila
+`tests/gobernanza/reactivo.test.ts`).
 
 ```ts
-class IswcFoo extends IswcElement {
-  static tag = 'iswc-foo';
-  static observed = ['variant', 'shape'];
+import { IswcReactive, prop, state, watch } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
 
-  // El atributo es la fuente de verdad
-  get variant(): string {
-    return normalizeVariant(this.getAttribute('variant'), DEFAULT_VARIANT);
-  }
-  set variant(v: string | null | undefined) {
-    if (v == null || v === '') this.removeAttribute('variant');
-    else this.setAttribute('variant', normalizeVariant(v, DEFAULT_VARIANT));
-  }
+class IswcFoo extends IswcReactive {
+  static tag = 'iswc-foo';
+  @prop() accessor label = '';                                  // texto ↔ `label`
+  @prop({ enum: FOO_VARIANT }) accessor variant: FooVariant = 'filled';
+  @prop({ type: 'bool' }) accessor disabled = false;            // presencia
+  @prop({ type: 'num' }) accessor max: number | null = null;
+  @prop({ attr: 'prefix' }) accessor prefixText = '';           // otro nombre de atributo
+  @prop({ reflect: false }) accessor filtro = '';               // lee el atributo, no lo escribe
+  @prop({ vacio: true }) accessor hint = '';                    // `hint=""` tiene significado
+  @state() accessor abierto = false;                            // interno, sin atributo
+
+  @watch('variant')
+  alCambiarVariante(antes: FooVariant, ahora: FooVariant) { /* antes de pintar */ }
 }
 ```
 
-## 2. Tipos de atributo
+Semántica: el valor inicial del campo es el defecto; escribir `null` o
+`undefined` quita el atributo y vuelve al defecto; el texto vacío cuenta
+como ausente salvo `vacio: true`. Lo escrito antes del upgrade lo recoge el
+molde.
+
+## 2. Tipos
 
 ### Booleanos
 
-Presencia ⇒ `true`. **Nunca** uses `attr="false"`. El getter devuelve
-`this.hasAttribute('foo')` y el setter usa `this.toggleAttribute('foo', v)`.
-
-```ts
-static observed = ['disabled', 'loading', 'pill'];
-
-get disabled(): boolean { return this.hasAttribute('disabled'); }
-set disabled(v: boolean) { this.toggleAttribute('disabled', !!v); }
-```
-
-`IswcElement` tiene un atajo: `this.setBooleanAttr('disabled', v)`.
+`@prop({ type: 'bool' })`: presencia ⇒ `true`. **Nunca** `attr="false"`.
 
 ### Enums
 
-Valores en un set cerrado. Normaliza en el getter y el setter con una
-constante compartida:
+Constante compartida y `enum`: fuera de la lista ⇒ el defecto, sin throw y
+sin reescribir el atributo a mano.
 
 ```ts
-export const FOO_VARIANT = ['filled', 'outlined', 'plain'] as const;
-export type FooVariant = typeof FOO_VARIANT[number];
-export const DEFAULT_FOO_VARIANT: FooVariant = 'filled';
-
-function normalizeVariant(v: string | null | undefined, def: FooVariant): FooVariant {
-  return (FOO_VARIANT as readonly string[]).includes(v ?? '') ? v as FooVariant : def;
-}
-
-class IswcFoo extends IswcElement {
-  static tag = 'iswc-foo';
-  static observed = ['variant'];
-  get variant(): FooVariant { return normalizeVariant(this.getAttribute('variant'), DEFAULT_FOO_VARIANT); }
-  set variant(v: string | null | undefined) {
-    if (v == null || v === '') this.removeAttribute('variant');
-    else this.setAttribute('variant', normalizeVariant(v, DEFAULT_FOO_VARIANT));
-  }
-}
+export const FOO_VARIANT = ['filled', 'outlined', 'plain'] as const;   // o INTENT / TONE de core/attrs
+@prop({ enum: FOO_VARIANT }) accessor variant: FooVariant = 'filled';
 ```
 
-`onAttributeChanged` debe **defender** del caso "el consumidor escribió
-un valor fuera del contrato" volviendo al default:
-
-```ts
-onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
-  if (name === 'variant' && newVal && !FOO_VARIANT.includes(newVal as FooVariant)) {
-    this.setAttribute('variant', DEFAULT_FOO_VARIANT);
-  }
-}
-```
+Normalizaciones que no son una lista (alias, `normalizeIntent`): un getter
+derivado o un `@watch`, nunca un setter que reescribe el atributo.
 
 ### Números
 
-Serializa como string. Normaliza en el getter con `Number(...)` y
-defiende con `Number.isFinite`:
-
-```ts
-get hue(): number | null {
-  const raw = this.getAttribute('hue');
-  if (raw == null || raw === '') return null;
-  const n = Number(raw);
-  return Number.isFinite(n) ? n : null;
-}
-set hue(v: number | string | null | undefined) {
-  if (v == null || v === '') this.removeAttribute('hue');
-  else this.setAttribute('hue', String(v));
-}
-```
-
-Si el rango importa (p.ej. 0-360), clamp en el setter:
-
-```ts
-set hue(v: number | string | null | undefined) {
-  if (v == null || v === '') this.removeAttribute('hue');
-  else {
-    const n = Number(v);
-    const clamped = Number.isFinite(n) ? ((n % 360) + 360) % 360 : 0;
-    this.setAttribute('hue', String(clamped));
-  }
-}
-```
+`@prop({ type: 'num' })`: `Number(...)` con `Number.isFinite`; vacío o
+inválido ⇒ el defecto. Si el rango importa (0–360), acótalo al usarlo
+(`render()`, `@watch`), no reescribiendo el atributo.
 
 ### URLs (href, src)
 
-Pásalas por `new URL(...)` para validar. Si falla, no escribas el
-atributo. **No** hagas `setAttribute('href', userInput)` directo: filtra
-`javascript:` y otros esquemas peligrosos.
-
-```ts
-set href(v: string | null | undefined) {
-  if (v == null || v === '') {
-    this.removeAttribute('href');
-    return;
-  }
-  try {
-    const url = new URL(v, this.baseURI);
-    if (!/^https?:$/.test(url.protocol) && !url.protocol.startsWith('data:')) {
-      this.removeAttribute('href');
-      return;
-    }
-    this.setAttribute('href', url.toString());
-  } catch {
-    this.removeAttribute('href');
-  }
-}
-```
+`@prop() accessor href = ''` y valida al **usarla**: en `render()` pasa por
+`new URL(v, this.baseURI)` y filtra `javascript:` y otros esquemas
+peligrosos antes de ponerla en el `<a>` interno.
 
 ### Payloads complejos (objetos, arrays)
 
-**No** serialices objetos a JSON en atributos. Usa **propiedades JS**:
+**No** serialices objetos grandes en atributos. Propiedad sin atributo:
 
 ```ts
-class IswcFoo extends IswcElement {
-  static tag = 'iswc-foo';
-  #data: unknown[] = [];
-
-  get data(): unknown[] { return this.#data; }
-  set data(v: unknown[] | null | undefined) {
-    this.#data = Array.isArray(v) ? v : [];
-    this.#render();
-  }
-}
+@prop({ attr: false, type: 'json' }) accessor data: unknown[] = [];
 ```
 
-Si el consumidor quiere declararlo en HTML, expón una **propiedad
-reflejada** que no serializa:
-
-```ts
-// En el .md: "configúralo vía JS, no en HTML"
-```
+Con `type: 'json'` y atributo, el atributo se parsea con `JSON.parse` (útil
+para configuraciones pequeñas en HTML). Si las props son un objeto validado
+con Zod, la base es `PropsElement`.
 
 ## 3. Propiedades públicas vs privadas
 
 | Visibilidad | Convención | Notas |
 | --- | --- | --- |
-| Pública (API) | `get foo()` / `set foo(v)` | Documentada en el `.md`. |
+| Pública (API) | `@prop` / getter de solo lectura | Documentada en el `.md`. |
+| Estado interno que repinta | `@state()` | No es API. |
 | Privada de clase | `#foo` (campos privados TS) | Solo dentro de la clase. |
-| Internas del kit (testing) | `get _foo()` (prefijo `_`) | Documenta como "interno, no usar desde fuera". |
 | Estilo de atributo | `static styleAttrs` | Map atributo → CSS var. |
 
 Reglas:
@@ -184,114 +107,112 @@ Reglas:
 - **No** mezcles `size=...` y `pgSize=...` (legacy). Decide un nombre y
   mantenlo.
 
-## 4. Eventos custom
+## 4. Textos de interfaz (`t()`)
 
-Convención del kit: `iswc-<nombre>` (kebab-case), `composed: true`,
-`bubbles: true` (salvo casos justificados).
+Etiquetas, `aria-label`, mensajes y placeholders por defecto salen de
+`this.t('clave', ...args)` en el idioma heredado (`lang` propio, de un
+ancestro —cruzando shadows—, del documento o del navegador; base `es`):
 
 ```ts
-import { emit } from '../../core/iswc-element.js';
+import { registrarTerminos } from '@jeff-aporta/iswc-base/core/localize.js';
 
-class IswcFoo extends IswcElement {
-  static tag = 'iswc-foo';
-  #boundClick = (e: Event) => {
-    emit(this, 'iswc-click', { originalEvent: e });
-  };
+registrarTerminos('es', { quitarFiltro: 'Quitar filtro', resultados: (n: number) => `${n} resultados` });
 
-  onConnected() {
-    this.shadowRoot!.querySelector('button')!
-      .addEventListener('click', this.#boundClick);
-  }
-
-  onDisconnected() {
-    this.shadowRoot!.querySelector('button')!
-      ?.removeEventListener('click', this.#boundClick);
-  }
+render() {
+  return html`<button aria-label=${this.t('quitarFiltro')}>×</button><span>${this.t('resultados', this.total)}</span>`;
 }
 ```
 
-`emit` está en [`core/iswc-element.ts`](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/core/iswc-element.ts)
-y centraliza el `new CustomEvent(name, { detail, bubbles, composed,
-cancelable })`.
+- Claves en camelCase español; función cuando hay plural o interpolación.
+- Los términos comunes (`cerrar`, `limpiar`, `cargando`, `campoObligatorio`,
+  `buscar`, `sinResultados`…) ya están en `core/localize.ts`: no los
+  repitas.
+- Cada término propio lleva su traducción en `src/core/i18n/en.ts` (lo
+  verifica `tests/navegador/textos-f8.test.ts`).
+- Un atributo del consumidor (`label`, `placeholder`) sigue mandando sobre
+  el texto por defecto.
+- Cambiar `lang` repinta solo los componentes que usan `t()`.
+
+## 5. Eventos custom
+
+Convención del kit: `iswc-<nombre>` (kebab-case), `composed: true`,
+`bubbles: true` (salvo casos justificados). Se emiten con `this.emit` (o
+`emit` / `emitCancelable` de
+[`core/iswc-element.ts`](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/core/iswc-element.ts)).
+
+### Declarar el tipo (obligatorio)
+
+Cada componente declara sus eventos en un tipo de una línea en
+`schemas/<tag>.schemas.ts` y lo enlaza en la clase (campo `declare`: cero
+bytes en runtime):
+
+```ts
+// schemas/foo.schemas.ts
+export type FooEventos = { 'iswc-click': { originalEvent: MouseEvent }; 'iswc-before-hide': void; 'iswc-hide': void };
+
+// foo.ts
+import type { FooEventos } from './schemas/foo.schemas.js';
+class IswcFoo extends IswcReactive {
+  declare static events: FooEventos;
+}
+```
+
+Si la base ya emite eventos, súmalos: `IswcFormControlEventos & { … }`
+(`iswc-invalid`), `ModalBaseEventos` (dialog, drawer). Todo `iswc-*` emitido
+debe estar declarado y todo lo declarado debe emitirse
+(`tests/gobernanza/eventos.test.ts`).
 
 ### `composed: true` siempre (casi)
 
-Un evento con `composed: false` **no cruza el Shadow DOM**. Eso
-significa que un consumidor que escucha `el.addEventListener('iswc-click', ...)`
-sobre el host **no** lo recibe. Por defecto el kit emite con
-`composed: true` para que React, Vue y vanilla JS puedan consumirlo
-con `el.addEventListener` o con `onIswcClick` (React 19+).
-
-Excepciones documentadas (raras):
-
-- Eventos que solo le interesan a lógica interna del componente
-  (`iswc-internal-render`).
-- Eventos que **no** deben escapar del shadow por privacidad.
+Un evento con `composed: false` **no cruza el Shadow DOM**: un consumidor
+que escucha sobre el host desde fuera de un shadow ancestro no lo recibe.
+Excepciones documentadas (raras): `iswc-hide` de `<iswc-tooltip>` no
+burbujea para no cerrar al diálogo ancestro.
 
 ### `cancelable: true` cuando aplique
 
 Si un consumidor puede `preventDefault()` para cancelar una acción
-(antes de cerrar un dialog, antes de aplicar un cambio), marca el
-evento como `cancelable: true` y respeta la cancelación:
+(antes de cerrar un dialog, antes de aplicar un cambio):
 
 ```ts
-#boundBeforeClose = () => {
-  if (!emit(this, 'iswc-before-hide', { cancelable: true })) return false;
-  // ... cerrar
-};
+if (!emitCancelable(this, 'iswc-before-hide')) return;   // false = cancelado
+// … cerrar
 ```
-
-`emit` devuelve `false` si el evento fue cancelado.
 
 ### Custom events vs nativos
 
 - **`focus`, `blur`, `click`, `input`, `change`, `submit`** son nativos
   y burbujean por sí solos. Reenvíalos con un `iswc-*` solo si añades
-  `detail` útil (p.ej. `validationMessage` en `iswc-invalid`).
-- Si reenvías un evento nativo, **no** lo clones: re-emite con
-  `emit(this, 'iswc-focus', { originalEvent: e })` y deja que el
-  consumidor lea `event.detail.originalEvent` si quiere el nativo.
+  `detail` útil (p.ej. `{ value }` en `iswc-change`).
 
 ### Documentación
 
-```md
-### Eventos
+La tabla «Eventos» del `.md` y el campo `events` de la ficha `.json` **no se
+escriben a mano**: los genera la sonda `scripts/sondas/eventos.ts` desde
+`declare static events` (`deno run -A --no-check scripts/sondas/eventos.ts`;
+`--comprobar` solo informa lo desfasado).
 
-| Evento | detail | bubbles | composed | cancelable |
-| --- | --- | --- | --- | --- |
-| `iswc-focus` | `{ originalEvent: FocusEvent }` | sí | sí | no |
-| `iswc-blur`  | `{ originalEvent: FocusEvent }` | sí | sí | no |
-| `iswc-click` | `{ originalEvent: MouseEvent }` | sí | sí | no |
-| `iswc-before-hide` | — | sí | sí | sí |
-| `iswc-hide` | — | sí | sí | no |
-```
-
-## 5. Trampas
+## 6. Trampas
 
 - **No** leas `this.getAttribute('foo')` en el constructor: el atributo
-  puede no estar. Lee en `onConnected`.
-- **No** uses `el.setAttribute('disabled', false)`: eso escribe
+  puede no estar. Los `@prop` ya tienen el valor en el primer `render()`.
+- **No** uses `el.setAttribute('disabled', false)`: escribe
   `disabled="false"`, que sigue siendo presencia ⇒ `true`. Usa
-  `el.removeAttribute('disabled')`.
+  `el.disabled = false` o `el.removeAttribute('disabled')`.
 - **No** expongas una propiedad que no esté documentada en el `.md`:
   es API pública.
-- **No** declares un custom event con `composed: false` "porque es
-  interno": casi siempre es un error. Si es interno, no lo emitas
-  fuera del shadow.
+- **No** leas el shadow justo después de escribir una propiedad: el
+  repintado va por microtarea (`await el.actualizacionCompleta`).
 - **No** mezcles `name`/`value` en el host con `name`/`value` en el
-  inner sin propagar: el form-associated real vive en el inner, y si
-  no propagas, el form no recibe el valor.
+  inner sin propagar: en controles de formulario usa `IswcFormControl`.
 
-## 6. Checklist
+## 7. Checklist
 
-- [ ] `observedAttributes` coincide con la columna "Atributos
-      observados" del `.md`.
+- [ ] Propiedades con `@prop` (tipo, `enum`, `attr`), estado con `@state`.
+- [ ] Ningún setter que refleja a mano ni atributo repetido en `static observed`.
 - [ ] Booleanos: presencia ⇒ `true`. Sin `attr="false"`.
-- [ ] Enums: constante compartida + normalización en getter/setter +
-      defensa en `onAttributeChanged`.
-- [ ] Números: `Number.isFinite` antes de aceptar.
-- [ ] URLs: `new URL(...)` con filtro de esquema.
-- [ ] Payloads complejos: solo vía propiedad JS.
-- [ ] Custom events `iswc-*` con `composed: true`, `bubbles: true`.
-- [ ] Custom events cancelables: respeta `preventDefault()`.
-- [ ] Tablas "Atributos y propiedades", "Eventos" en el `.md`.
+- [ ] URLs validadas al usarlas; payloads complejos sin atributo.
+- [ ] Textos por `t()` con términos registrados y traducidos en `core/i18n/en.ts`.
+- [ ] Eventos `iswc-*` en el tipo `XEventos` + `declare static events`,
+      `composed: true`, `bubbles: true`; cancelables respetan `preventDefault()`.
+- [ ] Sonda de eventos corrida; tabla "Atributos y propiedades" del `.md` al día.

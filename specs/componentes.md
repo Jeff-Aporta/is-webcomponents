@@ -19,38 +19,60 @@ Cada tag es un Custom Element con Shadow DOM. El inventario y rutas de build sal
 ## S-K2 Shadow DOM y estilos
 
 - Tokens `--iswc-*` desde light DOM (`is-base.css` / paletas). Default paleta: `delfin`. 25 paletas generales (`src/styles/palettes.json` → `scripts/gen-palettes.mjs` escribe `palettes.scss`) con main, contraste, bright, superficies y textos tintados; `data-panda` junto a `data-theme` invierte las superficies. Contrato AA 25 × claro/oscuro × panda: `tests/gobernanza/palettes-contrast.test.ts`.
-- **Forma canónica (molde `IswcElement`, plan D4/D6).** Todo componente extiende `IswcElement` (`src/core/iswc-element.ts`) o una subclase del molde (`PropsElement`, `DiagramElementBase`, `ModalBase`, `BreakpointHost`, `withStyleAttrs(IswcElement)`) y se registra con `define(Clase)`:
+- **Forma canónica (molde reactivo, F8 — [`paridad-webawesome.md`](paridad-webawesome.md)).** Todo componente nuevo o migrado:
+  1. **Base.** Extiende `IswcReactive` (`src/core/iswc-reactive.ts`); si es control de formulario, `IswcFormControl` (`src/core/iswc-form-control.ts`, que ya es `IswcReactive`). `IswcElement` (`src/core/iswc-element.ts`) solo cuando el cierre lo exige: `iswc-button` volvió al molde con sus `internals` y estados propios para no pesar más que antes de F8. Las subclases del molde siguen valiendo (`PropsElement` ya es `IswcReactive`, `ModalBase`, `DiagramElementBase`, `BreakpointHost`, `withStyleAttrs(IswcReactive)`). Se registra con `define(Clase)`.
+  2. **Propiedades con `@prop`** (`type: 'str' | 'bool' | 'num' | 'json'`, `enum`, `attr`, `reflect: false`, `vacio: true`); estado interno con `@state()`; reacciones con `@watch('prop')` `(anterior, nuevo)` antes de pintar. **Nunca** un par get/set que refleja a mano (`set x(v) { this.setAttribute(…) }`), ni el mismo atributo en `static observed` y en `@prop` (lo suma `IswcReactive` a `observedAttributes`).
+  3. **DOM.** Si depende del estado, `render()` devuelve `` html`…` `` de `core/plantilla.ts` (partes hijo, `a=${x}`, `?a=${x}`, `.p=${x}`, `@e=${fn}`, listas con `repetir(items, clave, plantilla)`, `` svg`…` ``); si no, `static template` + sincronización en `actualizado(cambios)`. Repintado agrupado por microtarea, primer pintado síncrono al conectar; `actualizarAhora()` y `await el.actualizacionCompleta` para quien lea el shadow tras escribir. `value`/`validity` se actualizan en el setter, no en el pintado.
+  4. **Textos de interfaz por `this.t('clave', …args)`** (`core/localize.ts`): los términos propios se registran en español junto al código (`registrarTerminos('es', { … })` al cargar el módulo) y se traducen en `src/core/i18n/en.ts`; `lang`/`dir` se heredan de los ancestros. Ningún `aria-label` literal en las plantillas.
+  5. **Eventos declarados en un tipo** de una línea `export type XEventos = { 'iswc-change': { value: string } };` en `schemas/<tag>.schemas.ts` (sumando el de la base: `IswcFormControlEventos`, `ModalBaseEventos`) y enlazado con `declare static events: XEventos;` (cero bytes). La ficha `.json` (`events`) y la tabla «Eventos» del `.md` las escribe `scripts/sondas/eventos.ts`, no se tocan a mano.
+  6. **Overlays por la pila de capas** de `core/position.ts`: modales con `abrirCapaModal`/`cerrarCapaModal` (`inert` alrededor, trampa de Tab que cruza shadows, foco devuelto; `inertizar: false` para ventanas que conviven como `iswc-window`), flotantes con `createPopupDismiss` (se apilan: Escape y clic fuera solo para la capa de arriba, `esCapaSuperior`).
+  7. **Estados CSS con `this.estado('nombre', activo)`** (`:state(nombre)`, respaldo `[data-nombre]`).
 
   ```ts
-  import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
-  import css from 'iswc:css';               // .css compilado hermano, lo incrusta el build (plugin cssVirtual)
+  import { define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+  import { IswcReactive, prop, state } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
+  import { html } from '@jeff-aporta/iswc-base/core/plantilla.js';       // solo si pinta con render()
+  import { registrarTerminos } from '@jeff-aporta/iswc-base/core/localize.js';
+  import type { FooEventos } from './schemas/foo.schemas.js';
+  import css from 'iswc:css';                // .css compilado hermano, lo incrusta el build (plugin cssVirtual)
 
-  class IswcButton extends IswcElement {
-    static tag = 'iswc-button';
+  registrarTerminos('es', { quitarFiltro: 'Quitar filtro' });   // y `quitarFiltro: 'Remove filter'` en core/i18n/en.ts
+
+  class IswcFoo extends IswcReactive {
+    static tag = 'iswc-foo';
     static css = css;                        // el molde crea UNA CSSStyleSheet por clase y la adopta
-    static template = TEMPLATE;              // opcional: se clona en el shadow
     static shadowInit: ShadowRootInit | null = { mode: 'open', delegatesFocus: true };  // null = light DOM
-    static observed = ['color', 'variant'];  // + styleAttrs + @attr → observedAttributes
     static deps = ['iswc-icon'];             // hijos que se piden a iswcLoader.ensure() al conectar
-    onConnected() { … }                      // también onDisconnected / onAttributeChanged
+    declare static events: FooEventos;       // { 'iswc-clear': void }
+    @prop() accessor label = '';             // ↔ atributo `label`, reflejado
+    @prop({ type: 'bool' }) accessor clearable = false;
+    @prop({ enum: ['filled', 'outlined'] }) accessor variant = 'outlined';
+    @state() accessor abierto = false;       // interno: repinta, sin atributo
+    render() {
+      return html`<span part="label">${this.label}</span>
+        <button part="clear" ?hidden=${!this.clearable} aria-label=${this.t('quitarFiltro')} @click=${this.#quitar}>×</button>`;
+    }
+    #quitar() { this.emit('iswc-clear'); }
+    override actualizado() { this.estado('abierto', this.abierto); }
   }
-  define(IswcButton);
+  define(IswcFoo);
   ```
 
-  Nada de `adoptCss(…, import.meta.url)`, `<link>` al `.css` hermano ni `static get observedAttributes` a mano (guardián `tests/gobernanza/molde-iswc-element.test.ts`). Las hojas adoptadas sobreviven a `shadow.innerHTML = …`. `static deps` solo para hijos que el padre pinta sin usar su API síncrona; si el padre necesita una clase o un helper del hijo, `import` normal. En Deno sin build, `iswc:css` resuelve a `''` (`deno.json` → `core/iswc-css-vacio.ts`); `scripts/serve.mjs` lo sirve desde `.tmp-scss`.
+  Nada de `adoptCss(…, import.meta.url)`, `<link>` al `.css` hermano ni `static get observedAttributes` a mano. Las hojas adoptadas sobreviven a `shadow.innerHTML = …`. `static deps` solo para hijos que el padre pinta sin usar su API síncrona; si el padre necesita una clase o un helper del hijo, `import` normal. En Deno sin build, `iswc:css` resuelve a `''` (`deno.json` → `core/iswc-css-vacio.ts`); `scripts/serve.mjs` lo sirve desde `.tmp-scss`. Quien sobrescriba `connectedCallback`/`attributeChangedCallback` **debe** llamar a `super` (si no, los `@prop` no siguen a los atributos); lo normal es `onConnected`/`onAttributeChanged`.
+
+  Guardianes: `tests/gobernanza/molde-iswc-element.test.ts` (molde), `tests/gobernanza/reactivo.test.ts` (reflejo a mano, forms sobre `IswcFormControl`, `aria-label` literal, `@prop` + `observed`; trinquetes que solo bajan), `tests/gobernanza/eventos.test.ts` (emitidos = declarados, fichas al día con la sonda), `tests/gobernanza/a11y-patrones.test.ts` (roles y pares ARIA en plantillas), `tests/navegador/core-f8.test.ts` (reactivo, plantilla, form-control, localize, capas en Edge), `tests/navegador/textos-f8.test.ts` (es/en por `lang` heredado), `tests/navegador/overlays-f8.test.ts` (pila de capas), `tests/navegador/a11y-axe.test.ts` (axe-core, solo dev) y los topes de `tests/navegador/carga.test.ts` (unión base ≤ 14 500 B br; cierres de `iswc-button` ≤ 9 108 e `iswc-input` ≤ 14 971).
 - Hojas base (`host-base`, `scrollbars`): las adopta el molde desde `core/iswc-element.ts` (`iswc:css/host-base`, `iswc:css/scrollbars`), compartidas por toda la página.
 - Escala: preferir `em` / `font-size` en controles; no `size=` legacy, no `size` colors. Las bases se derivan de `import.meta.url`, no de `location.pathname`.
 
 ## S-K3 Enums y eventos
 
-- Valores de atributos enum: declarados en el `.js` (`VALID_*`) o MD del tag.
-- Setters usan normalización (`intent.js`, `tone.js`) — valores inválidos → default, sin throw.
-- Eventos custom: prefijo `is-` cuando son contrato público del tag. No documentar un evento que nadie emite.
+- Valores de atributos enum: constante del `.ts` (`VALID_*`, `INTENT`, `TONE` de `core/attrs.ts`) pasada a `@prop({ enum })`; fuera de la lista → el defecto, sin throw. Para normalizaciones que no son una lista (alias, `normalizeIntent`), un `@watch` o el `@prop` sin reflejo + getter, nunca un setter que reescribe el atributo a mano.
+- Eventos custom: prefijo `iswc-` cuando son contrato público del tag, declarados en el tipo `XEventos` de `schemas/<tag>.schemas.ts` + `declare static events` (S-K2). No documentar un evento que nadie emite ni emitir uno sin declarar (`tests/gobernanza/eventos.test.ts`).
 - `color` ≠ `variant`: `color` es la **familia semántica** (brand, neutral, info, success, warning, danger); `variant` es la **apariencia** (filled, outlined, plain, soft, ghost). Nunca meter color en `variant`.
 
 ## S-K4 `_shared/` y bases
 
-- Reusar: `iswc-element.js` (molde; `element-base.js` queda como alias de compatibilidad para código externo), `modal-base.js`, `form-control-mixin.js`, `intent.js`, `tone.js`, `upgrade-properties.js`, `dom-utils.js`, `misc-utils.js`, `scrollbars.css`, `grid-*.js`, `date-*.js`, `picker-element.js`, `svg-chart-engine.js`, `chart-palette.js`, `node-link-layout.js`, `tree-layout.js`, `icon-loader.js`, `prefs.js`, `position.js`.
+- Reusar de `src/core/`: `iswc-element` (molde, `define`, `emit`), `iswc-reactive` (`IswcReactive`, `@prop`/`@state`/`@watch`), `plantilla` (`html`, `svg`, `repetir`), `iswc-form-control`, `localize` (`registrarTerminos`, `resolverLocale`, `formato`; `t()` es método de `IswcReactive`), `position` (`computePosition`, capas, `createPopupDismiss`), `attrs` (`INTENT`, `TONE`, `withStyleAttrs`, `normalizeIntent`), `dom`, `props-element`, `svg-chart-engine`, `tree-layout`, `icon-loader`, `prefs`; y de las categorías `layout/utils/modal-base`, `forms/utils/date-*`, `forms/utils/picker-element`, `data/utils/grid-*`, `charts/utils/chart-palette`, `diagrams/utils/diagram-layout`. Ya **no existen** `core/element-base`, `core/form-associated`, `core/form-control-mixin`, `core/resolve-locale` ni los decoradores `@attr*` de `core/attrs` (F8, [`cdn.md`](cdn.md) §Molde reactivo).
 - Nuevo helper solo si ≥3 usos o lógica no trivial; si no, inline en el tag. Preferir `_shared/` a duplicar `escapeHtml`/`copyText` (había 9 copias de `escapeHtml`).
 - `helpers/` públicos = manifest + preview JSON + MD.
 - Barreras de alcance (CSS en shadow): NO `&[attr]` anidado dentro de `:host {}` (compila a `:host[attr]`, que nunca matchea el host — usar `:host([attr])` top-level en shadow root y hook de component). NO `mi-tag .algo` en la hoja adoptada por `mi-tag` (es CSS muerto: el host queda fuera del árbol; usar `:host(mi-tag) .algo` / `::slotted(mi-tag)`). NO estilar `otro-tag::part(x)` desde el shadow de un padre cuando el tag llega slotted.
@@ -140,7 +162,7 @@ Cada tag es un Custom Element con Shadow DOM. El inventario y rutas de build sal
 
 ### S-K13 forms
 
-- **Form association:** usar `_shared/form-associated.js` + `MixinFormControl` (`formControlTemplate`: label + hint + error-text). **No** manejar el value solo visualmente (rompe form association); usar helpers/callbacks.
+- **Form association:** extender `IswcFormControl` (`core/iswc-form-control.ts`): da `formAssociated`, `name`/`disabled`/`required`/`readonly`/`label`/`hint`/`errorText`/`error`, validez con espejo del control nativo, estados `user-invalid`/`user-valid` (solo tras interactuar), `required`/`optional`, callbacks de form y `iswc-invalid`. El control sobrescribe `valorFormulario()` (lo que entra en `FormData`), `restablecer()` (`formResetCallback`), `validar()` si tiene reglas propias y `get controlNativo()`. **No** manejar el value solo visualmente (rompe form association). Guardián: `tests/gobernanza/reactivo.test.ts` (R2: todo `forms/*` con `formAssociated` extiende `IswcFormControl`, salvo los pendientes).
 - **Validación:** escuchar el evento `invalid` nativo (cubre call explícita y submit; `checkValidity()` solo no avisa al enviar el form). **No** envolver `checkValidity()`. `ElementInternals` dispara `invalid` nativo.
 - **Helper de fecha:** reutilizar `_shared/date-field-core.js`, `date-utils.js`, `picker-element.js`, `date-field-element.js`. **No** reimplementar.
 - **Lectura de valor:** usar la propiedad `.value` del WC, no el form nativo (`FormData` no siempre refleja el WC).
@@ -169,7 +191,7 @@ Cada tag es un Custom Element con Shadow DOM. El inventario y rutas de build sal
 - **Full-page dialog:** `width="100vw"` + `spacing="0"`; en light DOM `::part(dialog) { width/height:100%; align-self/justify-self: stretch; border-radius:0; box-shadow:none }`. Ver `presentation.css` + clase `.iswc-view-sources`.
 - **Style-attrs de `<iswc-dialog>`:** `width → --iswc-dialog-width`, `spacing → --iswc-dialog-spacing`; padding del host = `var(--iswc-dialog-spacing)`.
 - **No** `iswc-split-panel` con % alto como sidebar fijo (deja hueco enorme): grid CSS con ancho fijo (`14.5rem`) o `position-in-pixels`.
-- **ModalBase** centraliza ciclo de vida de `iswc-dialog`/`iswc-drawer` (focus trap, Escape, light-dismiss, `iswc-show`/`iswc-hide`/`iswc-after-show`/`iswc-after-hide`). Subclase define `__TEMPLATE`, `modalClass`, `closeAttr`, `animateOpen/Close`, hooks; refs vía `$modal`/`$backdrop`.
+- **ModalBase** (`layout/utils/modal-base.ts`) centraliza el ciclo de vida de `iswc-dialog`/`iswc-drawer` sobre la pila de capas de `core/position.ts` (`abrirCapaModal`/`cerrarCapaModal`: `inert` alrededor, trampa de Tab con shadows, foco devuelto), Escape y light-dismiss por el mismo cierre, `iswc-hide` cancelable, `role="dialog"` + `aria-modal` + `aria-labelledby`/`aria-label`, eventos `iswc-show`/`iswc-hide`/`iswc-after-show`/`iswc-after-hide` (`ModalBaseEventos`). Subclase define `__TEMPLATE`, `modalClass`, `closeAttr`, `animateOpen/Close`, hooks; refs vía `$modal`/`$backdrop`.
 - **No** dejar un dialog "casi fullscreen" cuando el requisito es full page (padding del host + `max-height` del panel lo dejan a medias).
 - **Armazón de app** (barra + vista con scroll propio, pestañas, acceso y sesión): `<iswc-app-shell>` + `<iswc-app-nav>` + `<iswc-session-menu>`/`<iswc-login-dropdown>`. Su WHAT vive en [`app-shell/spec.md`](app-shell/spec.md). **No** reescribir ese armazón por app ni meter fetch/tokens dentro de los tags: emiten eventos y la app resuelve.
 
@@ -191,6 +213,7 @@ Cada tag es un Custom Element con Shadow DOM. El inventario y rutas de build sal
 
 ### S-K19 overlays
 
+- **Pila de capas única** (`core/position.ts`, sección «capas»): todo modal entra con `abrirCapaModal(host, { cerrar, inicial? })` y sale con `cerrarCapaModal(host)`; todo flotante (select, combobox, picker, dropdown, menú) con `createPopupDismiss`, que se apila sin `inert`. Escape y clic fuera son solo de la capa de arriba (`esCapaSuperior`): un `select` abierto dentro de un `dialog` se cierra primero. **No** trampas de foco ni listeners de Escape propios por componente. Una ventana no modal que convive con otras (`iswc-window`) pasa `inertizar: false`: no inertiza la página. Guardián `tests/navegador/overlays-f8.test.ts`.
 - **Listeners de `document`/`window`** en `connectedCallback`/`disconnectedCallback` (handler guardado en campo privado); **nunca** en el constructor (fuga, bug en 11 componentes). Un overlay que monta/desmonta seguido es donde más se notan.
 - **No** `will-change: transform` en superficies con zoom por `scale()`: el navegador rasteriza a escala 1 y el contenido SVG se ve borroso (`iswc-lightbox`).
 - **No** animar propiedades de layout (padding/width/height) en transiciones; usar `transform`/`translate`.
@@ -216,3 +239,9 @@ Cada tag es un Custom Element con Shadow DOM. El inventario y rutas de build sal
 | Botones eventos/color | contrato UI | `tests/componentes/button-events.test.ts`, `tests/componentes/button-color-appearance.test.ts` |
 | Escala em en controles | herencia font-size | `tests/componentes/em-scale-font-inherit.test.ts` |
 | Helpers homogéneos | tab + json + md | `tests/gobernanza/helpers-homogeneity.test.ts` |
+| Molde reactivo | `@prop` sin reflejo a mano; forms sobre `IswcFormControl`; sin `aria-label` literal | `tests/gobernanza/reactivo.test.ts`, `tests/navegador/core-f8.test.ts` |
+| Eventos tipados | emitidos = declarados; `events` y tabla «Eventos» generados | `tests/gobernanza/eventos.test.ts` |
+| Textos por `t()` | es/en según `lang` heredado | `tests/navegador/textos-f8.test.ts` |
+| Pila de capas | Escape/clic fuera solo arriba, `inert`, foco devuelto | `tests/navegador/overlays-f8.test.ts` |
+| Accesibilidad | roles/pares ARIA en plantillas; axe en navegador | `tests/gobernanza/a11y-patrones.test.ts`, `tests/navegador/a11y-axe.test.ts` |
+| Peso del molde | unión base ≤ 14 500 B br; button ≤ 9 108; input ≤ 14 971 | `tests/navegador/carga.test.ts` |

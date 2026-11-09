@@ -161,6 +161,32 @@ módulo suelto cambia la ruta (no hay alias de compatibilidad: sin reexports ni 
 Los mapas exactos (origen → destino, rutas desde `src/`) están versionados en
 `scripts/codemods/aplanar-{core,diagrams,isp,data,menores}.json`.
 
+### Molde reactivo (F8, 2026-11-07) — módulos de core que salen y entran
+
+F8 ([`paridad-webawesome.md`](paridad-webawesome.md), ADR «molde reactivo propio (F8), 2026-11-07») cambia la base de
+los componentes. `src/core` sigue en 24 `.ts` (entran 4, salen 4) más la subcarpeta `core/i18n/`. Igual que en F9a: un
+pin por SHA anterior sigue funcionando; **al re-pinear**, quien importe uno de los módulos borrados cambia la ruta (sin
+alias ni reexports). En el repo no había usuarios de `element-base` ni de `form-control-mixin` (de
+`element-base`, tampoco en los proyectos hermanos); los de `form-associated` y `resolve-locale` se migraron en el mismo cambio.
+
+| Sale (`dist/cdn/…min.mjs`) | Reemplazo |
+|---|---|
+| `core/element-base` | `core/iswc-element` (`IswcElement`; light DOM con `static shadowInit = null`) |
+| `core/form-associated` (`attachFormInternals`, `setCustomState`, `setFormValue`, `setValidity`, `clearValidity`) | `core/iswc-form-control` (`IswcFormControl`: `internals`, `estado()`, `valorFormulario()`, `validar()`, `setCustomValidity`) |
+| `core/form-control-mixin` (`MixinFormControl`, `formControlTemplate`) | `core/iswc-form-control` (el chrome común de etiqueta/ayuda va a F8b) |
+| `core/resolve-locale` (`resolveLocale`) | `core/localize` (`resolverLocale`, `resolverDir`, `formato`) |
+| decoradores `@attrBool`/`@attrStr`/`@attrEnum`/`@attrNum` de `core/attrs` (el módulo sigue) | `@prop` de `core/iswc-reactive` |
+
+| Entra | Qué trae |
+|---|---|
+| `core/iswc-reactive` | `IswcReactive extends IswcElement`, `@prop`/`@state`/`@watch`, repintado por microtarea, `estado()`, `t()`, `locale`/`direccion` |
+| `core/plantilla` | `html`, `svg`, `repetir`, `render` (se registra como pintor al importarse; quien no pinta con `render()` no la carga) |
+| `core/iswc-form-control` | `IswcFormControl` (validez, estados `user-*`, callbacks de form, `iswc-invalid`) |
+| `core/localize` + `core/i18n/en` | idioma/dirección heredados, `registrarTerminos`, `termino`, `formato` (`Intl` memorizado); `en` se pide con `import()` al resolverse |
+
+Bytes (brotli, `dist/cdn` tras build, 7-nov-2026): unión «base de componentes» 14 366 B (tope 14 500), cierre de
+`iswc-button` 8 790 (antes de F8 9 108), de `iswc-input` 13 181 (antes 14 971); topes en `tests/navegador/carga.test.ts`.
+
 ### Consumidores: re-pinear tras F3/F4
 
 Un consumidor con un pin anterior a F3 (módulos `.min.js`) o anterior a F4 (sin `deps.json` ni loader en capas) sube
@@ -182,8 +208,10 @@ así (F5b, por app):
    `modulepreload` del cierre del shell crítico (del grafo vendorizado, sin `?v=`), `is-base.min.css` y
    `palettes.min.css` no bloqueantes (`preload as=style` + `<noscript>`), loader `core/loader.min.mjs`,
    registrador con `{ href, type: 'module' }` (componentes `.js` ES) o componentes `.mjs`.
-5. **Componentes**: al molde (`IswcElement`, `static tag/css/observed/deps`, `import css from 'iswc:css'` incrustado
-   por el build, `define()`); nada de `adoptCss` ni `<link>` a la hoja hermana.
+5. **Componentes**: al molde (`IswcElement` o, desde F8, `IswcReactive` con `@prop`; `static tag/css/deps`,
+   `import css from 'iswc:css'` incrustado por el build, `define()`); nada de `adoptCss` ni `<link>` a la hoja hermana.
+   Tras F8, los imports de `core/element-base`, `core/form-associated`, `core/form-control-mixin`, `core/resolve-locale`
+   y `@attr*` cambian según §Molde reactivo.
 6. **Gate** de la app en verde (`test:all`); si queda rojo, se arregla o se vuelve al SHA anterior.
 
 La copia compat `core/loader.min.js` se retira cuando todos los consumidores hayan re-pineado (F5b).

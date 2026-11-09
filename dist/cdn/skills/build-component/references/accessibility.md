@@ -186,13 +186,14 @@ onAttributeChanged(name: string) {
 
 ## 5. Form-associated
 
-Si el componente es form-associated (ver
-[`lifecycle.md`](lifecycle.md#4-form-associated-custom-elements)):
+Si el componente es form-associated (extiende `IswcFormControl`, ver
+[`lifecycle.md`](lifecycle.md)):
 
 - `name` y `value` deben funcionar como en un `<input>` nativo.
 - `disabled` y `readonly` se respetan.
 - `required` activa la validación nativa.
-- `aria-invalid` se aplica al inner.
+- `aria-invalid` se aplica al inner **solo** con `:state(user-invalid)`
+  (tras interactuar); `aria-required` refleja `required`.
 - `aria-describedby` puede apuntar a un nodo externo (hint) o a un
   nodo interno (error-text) que vive en el Shadow DOM. Para
   externos, propaga el id al inner; para internos, mantén el
@@ -204,27 +205,37 @@ Si el componente es form-associated (ver
 Modal = `<iswc-dialog>`, `<iswc-drawer>`, `<iswc-popconfirm>`,
 `<iswc-command-palette>`, `<iswc-window>`, `<iswc-pdf-viewer>`, etc.
 
-Reglas:
+Todo pasa por la **pila de capas única** de
+[`core/position.ts`](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/core/position.ts)
+(sección «capas»). **Nunca** una trampa de foco ni un listener de Escape
+propios.
 
-1. **Al abrir**:
-   - Guarda el `document.activeElement` en un `#lastFocus`.
-   - Mueve el foco al primer focuseable del modal (o al indicado
-     por `autofocus`).
-   - Marca el resto del documento con `inert` o `aria-hidden="true"`
-     (no `display: none`, que rompe la transición).
-2. **Mientras está abierto**:
-   - Trapea `Tab` y `Shift+Tab` para que no salga del modal.
-   - `Escape` cierra (cancelable con `iswc-before-hide`).
-   - Click fuera (si `light-dismiss`) cierra.
-3. **Al cerrar**:
-   - Devuelve el foco a `#lastFocus`.
-   - Quita `inert` / `aria-hidden` del documento.
+- **Modal**: `abrirCapaModal(host, { cerrar, inicial? })` al abrir y
+  `cerrarCapaModal(host)` al cerrar. Guarda el foco previo (atravesando
+  shadows), pone `inert` en los hermanos de cada ancestro hasta `<body>`
+  —cruzando shadow roots— y solo lo quita donde lo puso, enfoca
+  `[autofocus]` → primer enfocable → la caja, cicla `Tab`/`Shift+Tab` por
+  los enfocables del host incluidos los shadow roots anidados, y Escape
+  llama a `cerrar('escape')` solo si es la capa de arriba. Lo que tiene
+  `[popover]` (toasts) no se inertiza.
+- **Ventana que convive con otras** (`<iswc-window>`): `inertizar: false`
+  (trampa y Escape por la pila, sin `inert`: la página sigue usable).
+- **Flotante no modal** (dropdown, menú, select, combobox, picker):
+  `createPopupDismiss(host, { … })`; se apila sin `inert` y Escape / clic
+  fuera son solo de la capa de arriba (`esCapaSuperior(host)`): un `select`
+  abierto dentro de un `dialog` se cierra primero.
+- La caja lleva `role="dialog"` (o `alertdialog`) + `aria-modal="true"` +
+  `aria-labelledby` (o `aria-label` por `t()`); lo vigila
+  `tests/gobernanza/a11y-patrones.test.ts`.
+- Clic fuera (`light-dismiss`) y Escape pasan por el mismo cierre, con
+  `iswc-hide` cancelable.
 
-El kit tiene [`ModalBase`](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/layout/utils/modal-base.ts)
-que ya gestiona todo esto. **Úsalo** en vez de reimplementar.
+Diálogos y cajones heredan de
+[`ModalBase`](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/layout/utils/modal-base.ts),
+que ya hace todo esto sobre la pila (`tests/navegador/overlays-f8.test.ts`).
 
 ```ts
-import { ModalBase } from '../_shared/modal-base.js';
+import { ModalBase } from './utils/modal-base.js';
 
 class IswcDialog extends ModalBase {
   static __TEMPLATE = TEMPLATE;
@@ -246,7 +257,7 @@ region `aria-live` con `aria-atomic="true"`:
 
 ```ts
 const sr = this.shadowRoot?.querySelector('.btn__sr-status');
-if (sr) sr.textContent = loading ? 'Cargando' : 'Listo';
+if (sr) sr.textContent = this.t(loading ? 'cargando' : 'listo');   // nunca el texto literal
 ```
 
 - `aria-live="polite"` para cambios no urgentes (cargando, listo).
@@ -319,6 +330,8 @@ test('iswc-foo: aria-label is forwarded', async () => {
 - [ ] `:focus-visible` con token `--iswc-focus`.
 - [ ] Atajos de teclado documentados en "Comportamiento" del `.md`.
 - [ ] `aria-*` reenviados al inner que tiene el role real.
-- [ ] Modales heredan de `ModalBase`.
+- [ ] Modales heredan de `ModalBase` o usan `abrirCapaModal`; flotantes,
+      `createPopupDismiss` (pila de capas).
+- [ ] Ningún `aria-label` literal: textos por `t()`.
 - [ ] Live region para cambios dinámicos.
 - [ ] Test mínimo de activación por teclado y reenvío de ARIA.

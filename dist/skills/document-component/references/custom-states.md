@@ -44,16 +44,17 @@ Tabla obligatoria con dos columnas: `Estado | Uso`.
 | El componente tiene `disabled` y también emite `:state(disabled)` | Listar `:state(disabled)` en custom states y `disabled` en atributos observados. Mencionar la equivalencia en la columna "Uso" del state. |
 | El componente tiene un atributo pero **no** emite state | Listar solo el atributo. No duplicar en custom states. |
 | El componente emite un state sin atributo asociado | Listar el state y dejar claro en "Uso" cómo se activa (p.ej. "se enciende cuando hay `value` no vacío"). |
-| Hay fallback `data-state-*` para entornos sin `ElementInternals.states` | Mencionarlo en "Uso", p.ej. "También expuesto como `data-state-loading`". |
+| Respaldo `[data-<nombre>]` para motores sin `CustomStateSet` (lo pone `this.estado()` de `IswcReactive`) | Mencionarlo en "Uso" si el CSS lo cubre, p.ej. "Respaldo `[data-loading]`". |
+| Estados heredados de `IswcFormControl` (`user-invalid`, `user-valid`, `required`, `optional`, `disabled`, `readonly`) | Listarlos: son API del control aunque el `.ts` del componente no los nombre. |
 
 ## Errores comunes
 
 - Poner `:state(hover)` o `:state(focus)`. Esos ya existen en CSS y no
   son custom states. Si necesitas documentar comportamiento de hover,
   házlo en **Comportamiento**, no aquí.
-- Inventar states que el JS no emite. Si dudas, abre `components/<cat>/<modulo>.js`
-  y busca `host.states.add(...)` o el patrón equivalente.
-- Listar `:state(disabled)` aunque el componente no implemente
-  `ElementInternals.states` (algunos heredan del molde `IswcElement` y aún
-  así lo exponen vía `data-state-*`).
+- Inventar states que el código no emite. Si dudas, abre
+  `src/components/<cat>/<modulo>.ts` y busca `this.estado('…'` (o, en los
+  que siguen en el molde `IswcElement`, `internals.states.add(…)`), y mira
+  la base (`IswcFormControl`).
+- Escribir el respaldo como `data-state-*`: el del molde es `[data-<nombre>]`.
 - Olvidar la columna "Uso". Un state sin descripción es ruido.

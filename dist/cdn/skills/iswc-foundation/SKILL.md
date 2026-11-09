@@ -48,7 +48,7 @@ pin. Opciones: `--prefijo`, `--titulo`, `--puerto`, `--sha`, `--repo`. Detalle: 
 | 6 | **Registro único** en `src/js/kit-tags.ts` (`KIT_TAGS`, `APP_TAGS`, `VIEW_TAGS`) → registrador `L.registerApp` |
 | 7 | **Vista = `view/<v>/`** con `index.html` aislado, `README.md`, `demo/`, `components/`, `utils/`; un shell por vista |
 | 8 | **Zod** para todos los tipos; schemas en `src/js/consts/schemas/*.schemas.ts`; datos externos con `safeParse`, nunca `as` |
-| 9 | **SCSS** anidado con `_tokens`/`_mixins`; build → CSS incrustado en el módulo (`import css from 'iswc:css'`); componentes con el molde del kit (`IswcElement`/`Componente`, `static tag/css/observed/deps`, `define()`); hojas adoptadas (sin flicker) |
+| 9 | **SCSS** anidado con `_tokens`/`_mixins`; build → CSS incrustado en el módulo (`import css from 'iswc:css'`); componentes con el molde del kit (`Componente` con `props`, `IswcReactive` con `@prop` si son atributos sueltos, `IswcElement` si es estático; `static tag/css/deps`, `define()`; nunca setters que reflejan a mano); hojas adoptadas (sin flicker) |
 | 10 | **Cache busting** `?v=<hash de contenido>`; una sola URL por módulo |
 | 11 | **Specs WHAT** (`specs/foundation/NN-*.md`, 7 secciones, IDs `[W-|HW-|HS-]`) y **pruebas de caja negra** (`definirPruebas`, cooldown x1440; `factorCooldown` x3 a las que gastan OpenAI, MiniMax x1 cuando el test inyecta el cliente) |
 | 12 | **Gate** `deno task test:all` en verde = hecho; sync a entregable solo con el gate en verde |

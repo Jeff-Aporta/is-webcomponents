@@ -227,6 +227,19 @@ Detalles de **inventario por tag** (tablas de componentes de cada categoría), l
 | El runner de `deno task test` importa todos los archivos de prueba en un proceso para leer sus listas: un `import * as sass` arriba rompió la carga (`reading 'length'`) | Importar `sass` (y lo pesado) dentro del cuerpo de la prueba, que corre aislada |
 | Medir en una máquina con carga: la misma portada dio 1 459 ms (F7b) y 3 011 ms (F10) en frío | Comparar antes/después en pares alternados en la misma sesión (copia del build anterior servida aparte) y reportar mínimo y mediana |
 
+## Molde reactivo (F8, 2026-11-07/08)
+
+| Trampa | Mitigación |
+|---|---|
+| El navegador congela `observedAttributes` en el `define`: los `@prop` de una clase base que nunca se define (`IswcFormControl`, una base de prueba) no llegaban al getter si solo se miraban los propios. Y en motores sin `Symbol.metadata` los decoradores no tienen dónde guardar sus metadatos | Metadatos por clase heredados por prototipo (`Object.create` del padre) y `observedAttributes` = `observed` ∪ `styleAttrs` ∪ todos los `@prop` de la cadena; `Symbol.metadata ??= Symbol.for('Symbol.metadata')`, el mismo símbolo que usan esbuild y TypeScript (`core/iswc-reactive.ts`) |
+| Pintar el primer render por microtarea dejaba el shadow vacío justo después de insertar el elemento: pruebas y consumidores que leían el DOM al momento fallaban | Primer pintado **síncrono** en `connectedCallback` (D2); los siguientes, agrupados por microtarea; `actualizarAhora()` y `await el.actualizacionCompleta` para quien lee tras escribir; `value`/`validity` en el setter |
+| Una subclase que sobrescribe `connectedCallback`/`attributeChangedCallback` sin llamar a `super` (`forms/utils/date-field-element`) rompe `@prop`: la propiedad dejó de seguir al atributo sin error | Siempre `super.connectedCallback()`/`super.attributeChangedCallback(…)` (o usar `onConnected`/`onAttributeChanged`); el getter de un `@prop` reflejado lee el atributo, y el molde lee el atributo real aunque la subclase pase `(name, null, null)` |
+| Las páginas de prueba se construían con esbuild respetando `sideEffects` del `package.json`: los `import './x.js'` de efecto (los que registran tags) se descartaban y `a11y-axe` corría sobre una página vacía, en verde | `ignoreAnnotations: true` en `tests/_shared/pagina.ts` (y en `build-lote.mjs`); comprobar que la página pinta algo antes de dar por buena una prueba de navegador |
+| `inert` puesto solo en los hermanos del light DOM: un `dialog` dentro del shadow de otro componente dejaba enfocable el resto de la página | La capa modal sube por los ancestros cruzando shadow roots (`getRootNode().host`) hasta `<body>` y pone `inert` a los hermanos de cada nivel; solo quita el que puso (`tests/navegador/core-f8.test.ts`, caso de shadow) |
+| `iswc-window` entró a la pila como modal e inertizó la página: varias ventanas conviven y el resto de la app debe seguir usable | Opción `inertizar: false` en `abrirCapaModal`: trampa de Tab y Escape por la pila, sin `inert` |
+| Un caso de prueba dependía del estado que dejaba el anterior (`icon-localstorage` P6 necesitaba P4): con el cooldown, que salta casos ya verdes, quedaba rojo al correr solo | Cada caso prepara su estado; barrido de dependencias de orden (1 403 casos corridos sin su caso anterior: 0 rojos). Un caso que solo pasa tras otro es un caso roto |
+| El tope de bytes D5 (unión base ≤ 14 500 B br) no cabía con la plantilla dentro de `iswc-reactive`, y `iswc-button` sobre `IswcReactive` pesaba más que antes de F8 | La plantilla salió a `core/plantilla.ts` (se registra como pintor al importarse; quien no usa `render()` no la carga); `iswc-button` quedó en el molde `IswcElement` con `internals` propios y `core/localize` por `import()` solo fuera del español; ranuras reactivas y chrome común a F8b. Topes por cierre en `tests/navegador/carga.test.ts` |
+
 ## Trampas operativas de types-strong-2026
 
 | Trampa | Mitigación |
