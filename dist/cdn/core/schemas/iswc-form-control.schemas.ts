@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/core/README.md
 /**
  * iswc-form-control.schemas.ts — tipos de `core/iswc-form-control.ts`.
  */

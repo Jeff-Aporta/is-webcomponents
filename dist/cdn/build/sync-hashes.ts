@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/cdn/build/README.md
 /**
  * Barrido determinista de `?v=`: con el mapa de hashes anterior y el nuevo (`asset-hashes.json`),
  * reemplaza cada `v=<viejo>` por `v=<nuevo>` en todos los archivos de texto de las raíces dadas.

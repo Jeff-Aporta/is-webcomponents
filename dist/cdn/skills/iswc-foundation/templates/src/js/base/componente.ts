@@ -1,4 +1,5 @@
 // @vendor 2026-10-13T14:13:48.240Z Jeff-Aporta/is-webcomponents@main skills/iswc-foundation/templates/src/js/base/componente.ts
+// @contexto INDICE.md · skills/iswc-foundation/SKILL.md
 /**
  * componente.ts — base de los componentes `__PREFIJO__-*` con `props` (estándar iswc-foundation), sobre el molde
  * del kit (`IswcElement`; forma canónica en la skill del kit y en `specs/iswc/nuevo-componente.md`).

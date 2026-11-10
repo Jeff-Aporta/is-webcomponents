@@ -4,7 +4,7 @@
 Cómo declarar **propiedades reactivas** (con su atributo), **textos de
 interfaz** y **eventos custom** en un componente del kit, y cómo
 documentarlos en el `.md`. Todo sobre `IswcReactive`
-([`core/iswc-reactive.ts`](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/core/iswc-reactive.ts)).
+([`core/iswc-reactive.ts`](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/core/iswc-reactive.ts)).
 
 ## 1. Atributos vs propiedades
 
@@ -138,7 +138,7 @@ render() {
 Convención del kit: `iswc-<nombre>` (kebab-case), `composed: true`,
 `bubbles: true` (salvo casos justificados). Se emiten con `this.emit` (o
 `emit` / `emitCancelable` de
-[`core/iswc-element.ts`](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/core/iswc-element.ts)).
+[`core/iswc-element.ts`](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/core/iswc-element.ts)).
 
 ### Declarar el tipo (obligatorio)
 

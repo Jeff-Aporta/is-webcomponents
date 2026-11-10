@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/cdn/build/README.md
 /**
  * graph.ts — contratos del grafo publicado: `deps.json` y `exports.json` (plan D5/D9, fase F3).
  */

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/cdn/build/README.md
 /**
  * Cache busting por query string con el parametro convencional `v`
  * (`archivo.js?v=1dj4v0`): el valor es el hash del contenido, asi la URL solo

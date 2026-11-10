@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/core/README.md
 /**
  * dom-utils.js — Utilidades de DOM compartidas.
  *

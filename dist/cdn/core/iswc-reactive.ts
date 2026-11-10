@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/core/README.md
 /**
  * iswc-reactive.ts — Propiedades reactivas y `render()` sobre el molde (F8, paridad con Web Awesome sin Lit).
  *

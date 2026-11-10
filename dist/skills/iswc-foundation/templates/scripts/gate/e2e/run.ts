@@ -1,4 +1,5 @@
 // @vendor 2026-10-13T14:13:48.240Z Jeff-Aporta/is-webcomponents@main skills/iswc-foundation/templates/scripts/gate/e2e/run.ts
+// @contexto INDICE.md · skills/iswc-foundation/SKILL.md
 /**
  * run.ts — runner e2e (`deno task test:e2e`): asegura el servidor, fija `E2E_BASE_URL` y corre
  * `tests/e2e/*.test.ts` con el sistema común de pruebas del kit (una por una, cooldown, cada archivo

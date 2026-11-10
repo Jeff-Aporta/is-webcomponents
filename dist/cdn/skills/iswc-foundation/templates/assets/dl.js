@@ -1,4 +1,5 @@
 // @vendor 2026-10-13T15:51:18.306Z Jeff-Aporta/is-webcomponents@main skills/iswc-foundation/templates/assets/dl.js
+// @contexto INDICE.md · skills/iswc-foundation/SKILL.md
 // assets/dl.js — íconos de la app: SOLO configuración de rutas (`deno task icons`, corre dentro de `build`).
 // Baja a assets/iconify/<set>/<nombre>.svg los íconos que usa la app (sin mapa) y poda los que ya nadie usa.
 // En ejecución <iswc-icon> busca: localStorage → <html data-icons> (la web PUBLICADA de la app: deno.json →

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/core/README.md
 /**
  * icon-loader.ts — Zod schemas para los tipos extraídos de este módulo.
  *

@@ -1,4 +1,5 @@
 // @vendor 2026-10-14T16:13:19.844Z Jeff-Aporta/is-webcomponents@main skills/iswc-foundation/templates/view/demo/components/__PREFIJO__-galeria.ts
+// @contexto INDICE.md · skills/iswc-foundation/SKILL.md
 /**
  * Galería de componentes `__PREFIJO__-*` (estándar iswc-foundation).
  *

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/cdn/build/README.md
 /**
  * Hashes cortos y deterministas, reusables por cualquier app (vendorizable).
  *

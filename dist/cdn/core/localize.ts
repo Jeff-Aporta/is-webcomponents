@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/core/README.md
 /**
  * localize.ts — idioma, dirección, términos del kit e `Intl` memorizado (F8; absorbe `resolve-locale.ts`).
  *

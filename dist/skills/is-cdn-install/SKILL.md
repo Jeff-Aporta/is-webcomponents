@@ -20,9 +20,9 @@ description: >-
 
 ## Prompt LLM y herramientas
 
-Prompt completo listo para copiar: [`../iswc-base/PROMPT.md`](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/skills/iswc-base/PROMPT.md).
+Prompt completo listo para copiar: [`../iswc-base/PROMPT.md`](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/iswc-base/PROMPT.md).
 Herramientas tipo slash del kit: [`../iswc-base/tools/`](https://github.com/Jeff-Aporta/is-webcomponents/tree/main/skills/iswc-base/tools) —
-en particular [`/iswc-base:local`](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/skills/iswc-base/tools/local.md) para vendorizar el kit y bootear local-first.
+en particular [`/iswc-base:local`](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/iswc-base/tools/local.md) para vendorizar el kit y bootear local-first.
 
 ## Skill publicada (léela primero)
 
@@ -30,12 +30,12 @@ Los agentes instalan/siguen mejor skills desde URLs de **repo de GitHub**. Usa r
 
 | Canal | URL |
 | --- | --- |
-| GitHub (preferido) | `https://github.com/Jeff-Aporta/is-webcomponents/blob/main/skills/is-cdn-install/SKILL.md` |
+| GitHub (preferido) | `https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/is-cdn-install/SKILL.md` |
 | Raw (texto plano) | `https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/is-cdn-install/SKILL.md` |
 | CDN jsDelivr | `https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn/skills/is-cdn-install/SKILL.md` |
 | Pages | `https://jeff-aporta.github.io/is-webcomponents/dist/cdn/skills/is-cdn-install/SKILL.md` |
 
-Skill general del kit (reuso de tags, arquitectura, prompt, herramientas): [`iswc-base/SKILL.md`](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/skills/iswc-base/SKILL.md) (misma carpeta en `dist/cdn/skills/`).
+Skill general del kit (reuso de tags, arquitectura, prompt, herramientas): [`iswc-base/SKILL.md`](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/iswc-base/SKILL.md) (misma carpeta en `dist/cdn/skills/`).
 
 ## Espejos
 
@@ -224,7 +224,7 @@ No inventar props/eventos que no están en el MD.
 
 ## Más detalle
 
-- Prompt LLM completo: [`../iswc-base/PROMPT.md`](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/skills/iswc-base/PROMPT.md)
+- Prompt LLM completo: [`../iswc-base/PROMPT.md`](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/iswc-base/PROMPT.md)
 - Herramientas `/iswc-base:build|migrate|local|runtime`: [`../iswc-base/tools/`](https://github.com/Jeff-Aporta/is-webcomponents/tree/main/skills/iswc-base/tools) (runtime = loader, IswcUi, MD, cache)
 - Espejos y resolución de ref: [reference.md](reference.md)
 - Skill de reuso de tags: `../iswc-base/SKILL.md`
@@ -235,7 +235,7 @@ Si la app tiene componentes propios en TypeScript (estándar `iswc-foundation`),
 (import map, `modulepreload`, hojas base, loader y registrador) no se escribe a mano: lo escribe `construirApp`, que la
 app ejecuta desde el pin (`https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@<sha40>/dist/cdn/build/construir-app.ts`)
 entre las marcas `<!-- iswc:precarga:inicio -->` y `<!-- iswc:precarga:fin -->`. Guía:
-[02-deno-y-build.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/skills/iswc-foundation/references/02-deno-y-build.md).
+[02-deno-y-build.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/iswc-foundation/references/02-deno-y-build.md).
 
 ## Scripts online (Deno, siempre `@main` con `--reload`)
 

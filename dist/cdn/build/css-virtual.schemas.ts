@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/cdn/build/README.md
 /**
  * css-virtual.ts — contratos del import virtual `iswc:css` (plan D6).
  */

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/core/README.md
 /// <reference lib="dom" />
 /**
  * icon-loader — resuelve el SVG de un icono Iconify SIN el web component `<iconify-icon>` ni su

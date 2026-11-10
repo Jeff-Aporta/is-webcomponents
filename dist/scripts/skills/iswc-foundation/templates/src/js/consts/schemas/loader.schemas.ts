@@ -1,4 +1,5 @@
 // @vendor 2026-10-14T16:13:19.844Z Jeff-Aporta/is-webcomponents@main skills/iswc-foundation/templates/src/js/consts/schemas/loader.schemas.ts
+// @contexto INDICE.md · skills/iswc-foundation/SKILL.md
 /**
  * loader.schemas.ts — lo que la app usa del loader del kit (`globalThis.iswcLoader`).
  * La forma canónica completa vive en el kit (`@iswc/loader-schemas`, pineado en deno.json);

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/core/README.md
 /**
  * i18n/en.ts — términos del kit en inglés. `localize.ts` lo pide con `import()` la primera vez que un componente
  * resuelve un locale `en*`; registrarlo repinta los componentes vivos. Mismas claves que el diccionario `es` (el base de

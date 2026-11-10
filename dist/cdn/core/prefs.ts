@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/core/README.md
 /**
  * Preferencias compartidas de Web Components (un solo JSON en localStorage).
  *

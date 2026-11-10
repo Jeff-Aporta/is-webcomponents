@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/core/README.md
 const SVG_NS = 'http://www.w3.org/2000/svg';
 
 /** Crea un elemento SVG y le aplica atributos, saltando null/undefined.

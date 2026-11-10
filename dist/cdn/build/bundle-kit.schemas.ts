@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/cdn/build/README.md
 /**
  * bundle-kit.ts — contratos del build único con splitting (plan D5, fase F3).
  */

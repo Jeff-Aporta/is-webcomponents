@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/cdn/build/README.md
 /**
  * lote-kit.ts — lote ESM del armazón de una app: UN módulo con varios `iswc-*` y todo lo que importan, armado desde el
  * kit PUBLICADO al pin (jsDelivr por SHA, inmutable), nunca desde un checkout local (proyectos herméticos). Variante

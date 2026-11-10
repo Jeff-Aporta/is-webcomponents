@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/cdn/build/README.md
 /**
  * bundle-min.ts — Zod schemas para los tipos extraídos de este módulo.
  *

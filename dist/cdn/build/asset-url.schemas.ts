@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/cdn/build/README.md
 /**
  * asset-url.ts — Zod schemas para los tipos extraídos de este módulo.
  *

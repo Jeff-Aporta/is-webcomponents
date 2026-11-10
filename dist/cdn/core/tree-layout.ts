@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/core/README.md
 /**
  * Motor de layout puro (sin DOM, sin globals) para jerarquías: árbol de
  * parentesco (mindmap, tree), radial (mindmap) y treemap (squarify).

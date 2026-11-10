@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/cdn/build/README.md
 // json.ts — cómo se escribe un JSON en el kit.
 //
 // En `dist/` (lo que viaja por la red) el JSON va MINIFICADO: sin espacios ni saltos de línea.

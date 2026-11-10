@@ -1,4 +1,5 @@
 // @vendor 2026-10-13T14:13:48.240Z Jeff-Aporta/is-webcomponents@main skills/iswc-foundation/templates/scripts/gate/sync-protocolo.mjs
+// @contexto INDICE.md · skills/iswc-foundation/SKILL.md
 // sync-protocolo.mjs — GATE unico de `sync:entregable`: la luz verde que autoriza copiar.
 //
 // Corre la bateria completa (`run-test-all.mjs`, sin halt, CON cooldown: un verde reciente no se repite,

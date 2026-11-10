@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/core/README.md
 /**
  * Iconos inline en MD/HTML TK. El SVG lo resuelve el sistema propio de
  * iconos (_shared/icon-loader.js); no hay dependencia de terceros.

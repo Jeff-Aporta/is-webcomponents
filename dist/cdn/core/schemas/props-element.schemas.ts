@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/core/README.md
 /**
  * props-element.schemas.ts — tipos de `core/props-element.ts`.
  */

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/core/README.md
 /**
  * code-text.js — utilidades de texto para código (sin CodeMirror ni editors).
  * Extraído para evitar ciclos highlight-code ↔ code ↔ code-format.

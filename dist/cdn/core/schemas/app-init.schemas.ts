@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/core/README.md
 /** Contratos de `app-init.ts` (W54: los tipos viven en *.schemas.ts). */
 
 

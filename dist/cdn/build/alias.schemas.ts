@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/cdn/build/README.md
 /**
  * alias.ts — contratos del alias `@jeff-aporta/iswc-base/<ruta>`.
  */

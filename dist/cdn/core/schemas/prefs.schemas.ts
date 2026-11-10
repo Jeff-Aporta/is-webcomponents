@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/core/README.md
 /**
  * prefs.ts — Zod schemas para los tipos extraídos de este módulo.
  *

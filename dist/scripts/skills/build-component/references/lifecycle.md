@@ -3,10 +3,10 @@
 
 Ciclo de vida de un componente del kit: hooks, shadow, repintado reactivo,
 upgrade de propiedades, controles de formulario y cleanup. La cadena de clases
-es `HTMLElement` → [`IswcElement`](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/core/iswc-element.ts)
-(molde: shadow, hojas, upgrade, `deps`) → [`IswcReactive`](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/core/iswc-reactive.ts)
+es `HTMLElement` → [`IswcElement`](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/core/iswc-element.ts)
+(molde: shadow, hojas, upgrade, `deps`) → [`IswcReactive`](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/core/iswc-reactive.ts)
 (`@prop`/`@state`/`@watch`, repintado, `estado()`, `t()`) →
-[`IswcFormControl`](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/core/iswc-form-control.ts)
+[`IswcFormControl`](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/core/iswc-form-control.ts)
 (form-associated). Un componente nuevo extiende `IswcReactive` (o
 `IswcFormControl`); `IswcElement` solo si el cierre lo exige.
 

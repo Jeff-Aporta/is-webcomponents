@@ -1,4 +1,5 @@
 // @vendor 2026-10-13T21:35:30.252Z Jeff-Aporta/is-webcomponents@main skills/iswc-foundation/tools/probar-foundation.ts
+// @contexto INDICE.md · skills/iswc-foundation/SKILL.md
 /**
  * probar-foundation.ts — guardián del estándar: crea una app con create-iswc-app y le corre el gate.
  *

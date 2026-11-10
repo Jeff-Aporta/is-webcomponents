@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/cdn/build/README.md
 /**
  * construir-app.ts — contratos del conversor TS → `.mjs` de las apps (F10, ADR «conversor construirApp»).
  */

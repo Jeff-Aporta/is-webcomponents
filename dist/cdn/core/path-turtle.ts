@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/core/README.md
 import { tkHueToHex, contrastFontColor } from './color.js';
 import { inlineMdWeb } from './tk-inline-md.js';
 import { svgEl } from './svg-chart-engine.js';

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/core/README.md
 /**
  * iswc-css-vacio.ts — lo que vale `import css from 'iswc:css'` fuera de un build.
  *

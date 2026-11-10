@@ -258,8 +258,8 @@ await L.ensure('iswc-code'); // lazy: load + whenDefined
 
 Una app Deno no escribe este registrador a mano: lo genera el conversor del kit (`<prefijo>Loader.min.mjs`, con
 `{ href, type: 'module' }` y `deps` desde el metafile) junto con el bloque de precarga de sus HTML. Ver
-[`specs/cdn.md` §Conversor `construirApp`](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/specs/cdn.md) y
-[`02-deno-y-build.md`](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/skills/iswc-foundation/references/02-deno-y-build.md).
+[`specs/cdn.md` §Conversor `construirApp`](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/specs/cdn.md) y
+[`02-deno-y-build.md`](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/iswc-foundation/references/02-deno-y-build.md).
 
 ## Ensure (lazy)
 

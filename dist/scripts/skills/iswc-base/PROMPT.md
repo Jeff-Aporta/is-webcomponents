@@ -47,9 +47,9 @@ Cuando el usuario pida una de estas intenciones, sigue la skill de la herramient
 
 | Comando | Skill | Uso |
 | --- | --- | --- |
-| `/iswc-base:build` | [tools/build.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/skills/iswc-base/tools/build.md) | Fundar o extender apps con `is-*` |
-| `/iswc-base:migrate` | [tools/migrate.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/skills/iswc-base/tools/migrate.md) | Migrar un front (React/MUI/Svelte/…) a vanilla + `is-*` |
-| `/iswc-base:local` | [tools/local.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/skills/iswc-base/tools/local.md) | Vendorizar JS/CSS locales (preferido) y actualizar SHA |
+| `/iswc-base:build` | [tools/build.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/iswc-base/tools/build.md) | Fundar o extender apps con `is-*` |
+| `/iswc-base:migrate` | [tools/migrate.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/iswc-base/tools/migrate.md) | Migrar un front (React/MUI/Svelte/…) a vanilla + `is-*` |
+| `/iswc-base:local` | [tools/local.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/iswc-base/tools/local.md) | Vendorizar JS/CSS locales (preferido) y actualizar SHA |
 
 Instalación de skills (preferir repo GitHub):
 
@@ -204,15 +204,15 @@ Preferir enlaces **GitHub** (mejor instalación de skills). Raw como secundario 
 
 ## 1. Instalación CDN
 
-https://github.com/Jeff-Aporta/is-webcomponents/blob/main/skills/is-cdn-install/SKILL.md
+https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/is-cdn-install/SKILL.md
 
 ## 2. Guía general
 
-https://github.com/Jeff-Aporta/is-webcomponents/blob/main/skills/iswc-base/SKILL.md
+https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/iswc-base/SKILL.md
 
 ## 3. Prompt completo (este archivo)
 
-https://github.com/Jeff-Aporta/is-webcomponents/blob/main/skills/iswc-base/PROMPT.md
+https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/iswc-base/PROMPT.md
 
 ## 4. Guía CDN publicada (jsDelivr)
 

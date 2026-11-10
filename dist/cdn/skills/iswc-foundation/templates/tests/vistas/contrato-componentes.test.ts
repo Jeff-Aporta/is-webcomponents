@@ -1,3 +1,4 @@
+// @contexto INDICE.md · skills/iswc-foundation/SKILL.md
 // contrato-componentes.test.ts — guardián de la arquitectura común: todo componente registrado trae sus cuatro archivos
 // y su demo. Se apoya en `kit-tags.ts`: un componente nuevo entra solo a la auditoría.
 //

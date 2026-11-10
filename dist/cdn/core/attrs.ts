@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/core/README.md
 /**
  * attrs.ts — Todo lo relativo a los ATRIBUTOS de un componente del kit.
  *

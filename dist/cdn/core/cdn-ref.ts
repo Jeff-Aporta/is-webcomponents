@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/core/README.md
 /**
  * cdn-ref.js — pin de `main` → SHA + espejos CDN del kit.
  *

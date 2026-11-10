@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/cdn/build/README.md
 /**
  * npm.ts — el `package.json` del kit, generado por el build (plan D9, fase F6). Preparado, NO publicado.
  *

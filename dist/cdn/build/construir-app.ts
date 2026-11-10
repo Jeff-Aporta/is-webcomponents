@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/cdn/build/README.md
 /**
  * construir-app.ts — el conversor TS → `.mjs` de las apps del kit (F10; ADR «conversor construirApp, 2026-11-05»).
  * Una app Deno lo ejecuta desde el pin, la MISMA herramienta en todos los proyectos:

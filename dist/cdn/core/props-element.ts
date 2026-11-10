@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/core/README.md
 /**
  * props-element.ts — base de los componentes del kit que reciben sus datos en un solo objeto (`el.props = {…}`).
  *
