@@ -28,7 +28,7 @@ Los exige `tests/vistas/contrato-componentes.test.ts`: un tag de `kit-tags.ts` s
 
 ## 3. El `.ts`
 
-Forma canónica del molde del kit: estáticos `tag`/`css`/`deps`, el CSS por `ISWC:css` y `define(Clase)`. Tres bases,
+Forma canónica del molde del kit: estáticos `tag`/`css`/`deps`, el CSS por `iswc:css` y `define(Clase)`. Tres bases,
 según lo que tenga el componente: `Componente<P>` (objeto `props` con Zod, el caso de abajo), `IswcReactive` (atributos
 sueltos con `@prop`) o `IswcElement` (estático).
 

@@ -10,7 +10,7 @@
 // Este módulo vive en `src/cdn/build/` porque esa carpeta se publica en `dist/build/` y la
 // consumen los conversores (`construir-app`) que escriben JSON en la app del consumidor.
 import { readFile, readdir, writeFile } from 'node:fs/promises';
-import { dirname, join } from 'node:path';
+import { join } from 'node:path';
 
 /**
  * Con `ISWC_JSON_LEGIBLE=1` el build NO minifica: es la forma de medir el «antes» del peso de

@@ -28,5 +28,5 @@ Cada una tiene main (`--iswc-color-brand`), contraste (`--iswc-color-contrast`,
 superficies y textos tintados por su tono. `data-panda` en el mismo nodo que
 `data-theme` invierte solo el fondo de la página (`--iswc-bg-page`); papeles,
 componentes y textos siguen el tema. El usuario elige ambas con `<iswc-palette-selector>`
-(persisten en `ISWC:app-cfg` → `palette`, `panda`); `initApp({ palette, panda })`
+(persisten en `iswc:app-cfg` → `palette`, `panda`); `initApp({ palette, panda })`
 fija los valores iniciales.

@@ -71,11 +71,11 @@ else await stop();
 - Las raíces van en UN build con splitting (lo común una vez); las demás fuentes salen sueltas y autónomas (las
   importan los tests y los barriles `all.ts`).
 - **Kit por alias**: `@jeff-aporta/iswc-base/<ruta>` se reescribe a la URL del pin (la misma que usa el loader); `zod`
-  y los `externos` los resuelve el import map. En Deno, `ISWC:css` resuelve a `src/utils/iswc-css-vacio.ts` (`''`).
+  y los `externos` los resuelve el import map. En Deno, `iswc:css` resuelve a `src/utils/iswc-css-vacio.ts` (`''`).
 - **`?v=`** solo en origen mutable (Pages, local) y nunca dentro de un `.mjs` ni en un chunk; `asset-hashes.json`.
 - **Registrador**: `L.registerApp({ tag: { href, type: 'module' } }, { installSheets: false })` y `<html data-icons>`; los
   cierres de cada tag (`<p>Loader.deps.json`) los pide con la primera interacción y los pasa con `configure({ deps })`.
-- **HTML**: el conversor escribe el bloque `<!-- ISWC:precarga:inicio -->`…`<!-- ISWC:precarga:fin -->` de cada página de
+- **HTML**: el conversor escribe el bloque `<!-- iswc:precarga:inicio -->`…`<!-- iswc:precarga:fin -->` de cada página de
   `html` (import map, precarga del kit y de la app, `is-base`/`palettes` sin bloquear, loader y registrador; ver 03) y
   pone el `?v=` de las demás referencias a `dist/cdn/`. Idempotente.
 
@@ -88,7 +88,7 @@ else await stop();
    página con su `kit` (tags del kit que pinta al arrancar) y su `app` (tags y fuentes propias del arranque), y si hace
    falta `externos`/`importMap`/`precargas` (un vendor propio) o `lote` (armazón en un módulo).
 3. **HTML**: quitar el import map, el `<script>` del loader y el del registrador y poner en su lugar las marcas
-   `<!-- ISWC:precarga:inicio -->` / `<!-- ISWC:precarga:fin -->`; las referencias propias pasan a `.min.mjs`
+   `<!-- iswc:precarga:inicio -->` / `<!-- iswc:precarga:fin -->`; las referencias propias pasan a `.min.mjs`
    (`dist/cdn/js/kit-tags.min.mjs`). Sin `?v=` a mano: lo pone el build.
 4. **Tests** que importan lo publicado: `dist/cdn/<ruta>.js` → `dist/cdn/<ruta>.min.mjs`; el registrador es
    `<p>Loader.min.mjs`.

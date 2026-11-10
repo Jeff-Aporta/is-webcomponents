@@ -68,7 +68,7 @@ pin. Opciones: `--prefijo`, `--titulo`, `--puerto`, `--sha`, `--repo`. Detalle: 
 | Demos: playground `.json` y galería | [templates/specs/iswc/demo-componente.md](templates/specs/iswc/demo-componente.md) |
 | Crear una vista | [templates/specs/iswc/nueva-vista.md](templates/specs/iswc/nueva-vista.md) |
 | Estilos SCSS | [04-estilos.md](references/04-estilos.md) |
-| Íconos: `assets/dl.js`, `data-icons` (web publicada), localStorage `ISWC:`, aviso «falta en local», API | [10-iconos.md](references/10-iconos.md) |
+| Íconos: `assets/dl.js`, `data-icons` (web publicada), localStorage `iswc:`, aviso «falta en local», API | [10-iconos.md](references/10-iconos.md) |
 | Zod y tipos | [05-zod-y-tipos.md](references/05-zod-y-tipos.md) |
 | Pines y vendor del kit | [06-pines-y-vendor.md](references/06-pines-y-vendor.md) · [actualizar-pin.md](templates/specs/iswc/actualizar-pin.md) |
 | Pruebas, Stagehand y gate | [07-pruebas-y-gate.md](references/07-pruebas-y-gate.md) |
