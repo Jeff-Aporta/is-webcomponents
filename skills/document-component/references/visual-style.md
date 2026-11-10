@@ -143,7 +143,7 @@ luego tokens globales del kit (`--iswc-accent`, `--iswc-bg`, …).
 | ❌ | ✅ |
 | --- | --- |
 | `[aquí](./button.md)` | [`./button.md`](./button.md) |
-| `[link](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/actions/button.md)` | [`./button.md`](./button.md) (relativa) |
+| `[link](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/actions/button.md)` | [`./button.md`](./button.md) (relativa) |
 
 ## Errores comunes
 

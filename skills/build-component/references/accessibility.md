@@ -4,7 +4,7 @@
 Cómo hacer que un componente del kit sea accesible: semántica,
 teclado, foco, ARIA, focus management, contraste. Esta guía aplica a
 todo `iswc-*` y se complementa con
-[`AGENTS.md §6.7`](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/AGENTS.md)
+[`AGENTS.md §6.7`](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/AGENTS.md)
 (reglas duras) y la sección "Accesibilidad" del `.md` del componente.
 
 ## 1. Semántica primero
@@ -206,7 +206,7 @@ Modal = `<iswc-dialog>`, `<iswc-drawer>`, `<iswc-popconfirm>`,
 `<iswc-command-palette>`, `<iswc-window>`, `<iswc-pdf-viewer>`, etc.
 
 Todo pasa por la **pila de capas única** de
-[`core/position.ts`](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/core/position.ts)
+[`core/position.ts`](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/core/position.ts)
 (sección «capas»). **Nunca** una trampa de foco ni un listener de Escape
 propios.
 
@@ -231,7 +231,7 @@ propios.
   `iswc-hide` cancelable.
 
 Diálogos y cajones heredan de
-[`ModalBase`](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/layout/utils/modal-base.ts),
+[`ModalBase`](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/layout/utils/modal-base.ts),
 que ya hace todo esto sobre la pila (`tests/navegador/overlays-f8.test.ts`).
 
 ```ts

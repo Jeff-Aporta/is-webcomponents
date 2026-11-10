@@ -4,6 +4,12 @@ Galería de [Web Components](https://developer.mozilla.org/en-US/docs/Web/API/We
 
 Nombre del kit: **`iswc-base`**. El repo de GitHub conserva por ahora su nombre en las URLs (se renombrará coordinado con las apps); fuera de una URL el kit siempre es `iswc-base`.
 
+## Para agentes
+
+- [`AGENTS.md`](AGENTS.md) — las reglas vigentes, en corto. Léelo antes de tocar nada.
+- [`INDICE.md`](INDICE.md) — el índice de todos los documentos del kit, generado.
+- [`specs/constitution.md`](specs/constitution.md) — lo que no se negocia.
+
 ## Demo (GitHub Pages)
 
 **https://jeff-aporta.github.io/is-webcomponents/**
@@ -57,7 +63,7 @@ No hay publicación npm aún: el kit se consume por **CDN jsDelivr**. En cada pr
 Usa el kit ISWC solo por CDN (jsDelivr), sin npm ni npx.
 Bootstrap: `loader.min.mjs` + `L.load(tags de la vista)`. Sin `all.min.js` ni bundles de categoría.
 Reutiliza tags iswc-* existentes; no reinventes botones, dialogs, tablas, charts, toasts ni iconos.
-Antes de inventar API: lee [`specs/componentes.md`](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/specs/componentes.md) (índice global) y el `.md` del módulo.
+Antes de inventar API: lee [`specs/componentes.md`](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/specs/componentes.md) (índice global) y el `.md` del módulo.
 ```
 
 Docs raw: [índice componentes](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/specs/componentes.md) · [catálogo de errores](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/specs/lessons.md) · skill en `skills/iswc-base/SKILL.md`.

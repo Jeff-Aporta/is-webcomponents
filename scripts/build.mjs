@@ -19,6 +19,8 @@ import { barrerHashes } from '@jeff-aporta/iswc-base/cdn/build/sync-hashes.ts';
 import { hashesRepetidos } from '@jeff-aporta/iswc-base/cdn/build/hash.ts';
 import { stampDirectory, mjsReferenciadosEn, hashFile, rewriteHtmlTree, hashesJson, applyHashToHtml, ASSET_HASHES_NAME } from '@jeff-aporta/iswc-base/cdn/build/stamp-hashes.ts';
 import { writeJson, minificarCarpetaJson } from '@jeff-aporta/iswc-base/cdn/build/json.ts';
+import { escribirIndice } from './indice-md.mjs';
+import { escribirReadmes } from './readmes-componentes.mjs';
 import { construirAi } from './build-ai.mjs';
 
 const here = dirname(fileURLToPath(import.meta.url));
@@ -595,4 +597,17 @@ try { await unlink(join(dist, 'all.min.js')); } catch { /* leftover */ }
 
 // Invariante B.3: todo .json de dist/cdn es JSON.stringify(JSON.parse(x)).
 await minificarCarpetaJson(dist);
+
+// INDICE.md: el indice de todos los md del repo. Se regenera aqui para que nunca quede viejo
+// (lo escribe scripts/indice-md.mjs; es idempotente).
+{
+  const cambio = escribirIndice();
+  console.log(`  ${'INDICE.md'.padEnd(18)} ${cambio ? 'regenerado' : 'al día'}`);
+}
+
+// El README de cada categoria de componentes: su lista de componentes sale del manifest.
+{
+  const n = escribirReadmes();
+  console.log(`  ${'README.md'.padEnd(18)} ${n} de categoria ${n ? 'regenerados' : 'al dia'}`);
+}
 console.log(`OK dist/cdn  ${entradasComp.length} módulos de componentes + core + lib + loader (${nChunks} chunks) + gallery-app`);

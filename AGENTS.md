@@ -6,6 +6,10 @@
 > de errores. Si haces algo que está en "Errores a NO repetir" y lo rompes de
 > nuevo, te vas a ganar un commit revertido.
 >
+> **Después:** [`INDICE.md`](INDICE.md) es el mapa de todos los documentos del kit
+> (generado). Cada fuente lleva en su cabecera las dos rutas que hay que leer
+> antes de editarla: `// @contexto INDICE.md · <md del dominio>`.
+>
 > **Complemento:** `LLM.md` cubre invariantes del home (rotación 3D de cards,
 > parallax + hover, shadows, light mode). Si vas a tocar `previews/home.html`,
 > léelo antes.
