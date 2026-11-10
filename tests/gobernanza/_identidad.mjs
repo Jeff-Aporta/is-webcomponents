@@ -17,7 +17,7 @@ const D = 'pyme';
 const E = 'ayudas';
 const F = 'cpia';
 
-/** La marca que el kit ya no tiene (InSoft / ContaPyme / AyudasCPIA), en cualquier grafía. */
+/** La marca que el kit ya no tiene (tres nombres históricos), en cualquier grafía. */
 export const MARCA_VIEJA = new RegExp(
   `${A}\\s?[-_]?${B}|${C}\\s?[-_]?${D}|${E}\\s?[-_]?${F}`,
   'i',

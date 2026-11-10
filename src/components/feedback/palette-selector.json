@@ -29,7 +29,7 @@
     {
       "id": "intro",
       "title": "Uso",
-      "lede": "Elige entre las 25 paletas generales del kit. Cada opción muestra su identidad (fondo, papel, main, contraste y texto), su origen y su ánimo; van agrupadas por familia de tono y se filtran con el buscador. El interruptor <strong>Panda</strong> invierte solo el fondo de la página: papeles, componentes y textos siguen el tema. Con <code class=\"code\">scope=\"root\"</code> escribe <code class=\"code\">data-palette</code>/<code class=\"code\">data-panda</code> en <code class=\"code\">&lt;html&gt;</code> y persiste en <code class=\"code\">ISWC:app-cfg</code>.",
+      "lede": "Elige entre las 25 paletas generales del kit. Cada opción muestra su identidad (fondo, papel, main, contraste y texto), su origen y su ánimo; van agrupadas por familia de tono y se filtran con el buscador. El interruptor <strong>Panda</strong> invierte solo el fondo de la página: papeles, componentes y textos siguen el tema. Con <code class=\"code\">scope=\"root\"</code> escribe <code class=\"code\">data-palette</code>/<code class=\"code\">data-panda</code> en <code class=\"code\">&lt;html&gt;</code> y persiste en <code class=\"code\">iswc:app-cfg</code>.",
       "blocks": [
         {
           "kind": "demo",

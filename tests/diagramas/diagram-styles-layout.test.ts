@@ -87,8 +87,10 @@ denoTest('el build publica los temas junto a los bundles (carga diferida)', () =
   const dist = join(ROOT, 'dist', 'cdn', 'diagrams', 'themes');
   if (!existsSync(dist)) return; // sin build local no hay qué verificar
   for (const f of ['iswc.json', 'iswc-cd.json', 'iswc-class.json']) {
-    const src = readFileSync(join(ROOT, 'src', 'components', 'diagrams', 'utils', 'themes', f), 'utf8');
-    assertEquals(readFileSync(join(dist, f), 'utf8'), src, `${f} desactualizado en dist`);
+    // La fuente (src/…) está legible y la copia que se publica va MINIFICADA (B.3): se compara
+    // el dato (el JSON parseado), no los bytes.
+    const src = JSON.parse(readFileSync(join(ROOT, 'src', 'components', 'diagrams', 'utils', 'themes', f), 'utf8'));
+    assertEquals(JSON.parse(readFileSync(join(dist, f), 'utf8')), src, `${f} desactualizado en dist`);
   }
 });
 

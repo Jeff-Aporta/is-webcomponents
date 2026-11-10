@@ -154,7 +154,7 @@ Orden, visibilidad (`hide`), anchos, pin, `sortModel`, `filterModel`, quick filt
 | `page-size` / `page-size-options` / `pagination` | pager |
 | `quick-filter` / `group-by` | texto / CSV colIds |
 | `remember-state` | boolean opt-in persistencia |
-| `storage-key` | keyid bajo `ISWC:root.iswc-ag-grid` |
+| `storage-key` | keyid bajo `iswc:root.iswc-ag-grid` |
 | `toolbar` | `false` oculta toolbar |
 | `preset` | `quartz` \| `balham` \| `alpine` \| `material` \| `financiero` |
 | `floating-filters` | filtros flotantes |
@@ -302,7 +302,7 @@ su propio valor y lo devuelven al modelo del core.
 
 ## Qué hacer
 
-- Persistencia → **solo** `_shared/prefs.js` con raíz `ISWC:root`.
+- Persistencia → **solo** `_shared/prefs.js` con raíz `iswc:root`.
 - Estado completo del grid → `replaceComponentPrefs` (no merge parcial que deje campos viejos).
 - Reset → `removeComponentPrefs` + reaplicar defs originales (`#rawColumns`).
 - Columnas show/hide → sidebar/checks existentes; cablear, no rehacer UI.
@@ -326,7 +326,7 @@ su propio valor y lo devuelven al modelo del core.
 | --- | --- |
 | Sidebar en template pero siempre `hidden` y sin handlers | Cablear tabs + `#renderColumnsPanel`; test `prefs-contract` exige clases |
 | Persistencia en `sessionStorage` o key plana | Usar `prefs.js`; test falla si `ag-grid.js` hace `setItem` directo de estado |
-| Root `is-components` tratado como canónico | Canónico = `ISWC:root`; legacy solo en migración |
+| Root `is-components` tratado como canónico | Canónico = `iswc:root`; legacy solo en migración |
 | `setComponentPrefs` merge deja basura en estado de grid | Usar `replaceComponentPrefs` al guardar snapshot |
 | Documentar persistencia sin mencionar el root único | MD + preview deben decir `localStorage['iswc:root'][tag][key]` |
 | Olvidar botón Reiniciar cuando hay `remember-state` | Toolbar `.mim-dg__reset-btn` + `api.resetPersistedState` |
@@ -382,7 +382,7 @@ para poder restaurarlas por teclado.
 - Capacidades nuevas: plugin sobre `contrato.ts`; no crecer `ag-grid.ts`.
 - Mantener nombres exactos de tags y API.
 - Booleano se activa por presencia; no usar `attr="false"` salvo contrato explícito.
-- Persistir solo por `_shared/prefs.js` con la raíz `ISWC:root`.
+- Persistir solo por `_shared/prefs.js` con la raíz `iswc:root`.
 - No modificar API basándose solo en preview.
 
 ## Fuentes

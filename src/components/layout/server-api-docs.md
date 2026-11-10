@@ -129,7 +129,7 @@ Usa los tokens del kit (`--iswc-text`, `--iswc-text-dim`, `--iswc-border`, `--is
   (`text/event-stream` se va mostrando mientras llega) y cURL equivalente.
 - **Sesión**: botón de la barra. Login del proveedor del documento (`viewer.auth.provider`:
   `patyia-portal` contra el propio server, u `orquestador`), o token JWT pegado. El token vive en
-  `sessionStorage` (`ISWC:server-api-docs:sesion`); un 401 reabre el diálogo.
+  `sessionStorage` (`iswc:server-api-docs:sesion`); un 401 reabre el diálogo.
 - **Exportar**: el documento tal cual (`viewer.exports.isDownloadName`) y OpenAPI 3.0.3
   (`openApiDownloadName`).
 
