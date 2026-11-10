@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 ﻿// web-types.test.ts — los metadatos del kit para los editores.
 //
 // VS Code (y los que leen su formato) y JetBrains (WebStorm) quieren saber de cada componente sus

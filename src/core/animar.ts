@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/core/README.md
 // animar.ts — la animacion comun de los overlays (opt-in).
 //
 // Tres animaciones, las mismas para todos:

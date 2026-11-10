@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/core/README.md
 // f8b.test.ts — las piezas opt-in del nucleo (F8b).
 //
 // Cada una vive en su modulo para que solo la paguen quien la usa:

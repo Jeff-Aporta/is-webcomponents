@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/core/README.md
 // ranuras.ts — ranuras reactivas (opt-in).
 //
 // Un componente puede declarar que slot quiere repintar cuando cambia su contenido:
