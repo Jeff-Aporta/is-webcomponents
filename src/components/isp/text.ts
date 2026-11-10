@@ -27,19 +27,19 @@ import css from 'iswc:css';
   TEMPLATE.innerHTML = /* html */ `<slot part="content"></slot>`;
 
   class IswcText extends IswcElement {
-    static tag = 'iswc-text';
-    static css = css;
+    static override tag = 'iswc-text';
+    static override css = css;
 
-    static template = TEMPLATE;
-    static observed = ['color', 'mix', 'mix-with', 'lines'];
+    static override template = TEMPLATE;
+    static override observed = ['color', 'mix', 'mix-with', 'lines'];
 
 
-    onConnected() {
+    override onConnected() {
       this.#syncColor();
       this.#syncLines();
     }
 
-    onAttributeChanged(name: string) {
+    override onAttributeChanged(name: string) {
       if (name === 'lines') this.#syncLines();
       else if (name === 'color' || name === 'mix' || name === 'mix-with') this.#syncColor();
     }

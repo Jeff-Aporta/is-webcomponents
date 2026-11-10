@@ -37,10 +37,10 @@ export function filtrarEventos(eventos: readonly TraceEvento[], filtro: TraceFil
 }
 
 class IswcTraceLog extends PropsElement<TraceLogProps> {
-  static tag = 'iswc-trace-log';
-  static css = css;
-  static deps = ['iswc-badge', 'iswc-icon'];
-  static observed = atributosDe(INICIAL);
+  static override tag = 'iswc-trace-log';
+  static override css = css;
+  static override deps = ['iswc-badge', 'iswc-icon'];
+  static override observed = atributosDe(INICIAL);
 
   #root: ShadowRoot;
   #abierto = false;

@@ -117,9 +117,9 @@ import css from 'iswc:css';
   }
 
   class IswcScrollspy extends IswcElement {
-    static tag = 'iswc-scrollspy';
-    static css = css;
-    static observed = ['target', 'trigger', 'root-margin', 'threshold', 'storage-key'];
+    static override tag = 'iswc-scrollspy';
+    static override css = css;
+    static override observed = ['target', 'trigger', 'root-margin', 'threshold', 'storage-key'];
 
     #target: HTMLElement | null = null;
     #targetSelector: string | null = null;
@@ -148,7 +148,7 @@ import css from 'iswc:css';
       this.addEventListener('click', this.#onClick);
     }
 
-    connectedCallback(): void {
+    override connectedCallback(): void {
       this.#mounted = true;
       this.#connectedAt = Date.now();
       // Los atributos puestos antes de conectar no pasan por `attributeChangedCallback` con efecto.
@@ -160,13 +160,13 @@ import css from 'iswc:css';
       this.#bindTopClearListener();
     }
 
-    disconnectedCallback(): void {
+    override disconnectedCallback(): void {
       this.#teardown();
       this.#mutation?.disconnect();
       this.#unbindTopClearListener();
     }
 
-    attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
+    override attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
       if (!this.#mounted || oldVal === newVal) return;
       if (name === 'target') this.#targetSelector = newVal || null;
       if (name === 'trigger') this.#triggerSelector = newVal || null;

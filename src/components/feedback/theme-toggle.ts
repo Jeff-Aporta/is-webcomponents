@@ -56,10 +56,10 @@ import css from 'iswc:css';
   }
 
   class IswcThemeToggle extends IswcElement {
-    static tag = 'iswc-theme-toggle';
+    static override tag = 'iswc-theme-toggle';
     declare static events: ThemeToggleEventos;
-    static css = css;
-    static observed = ['dark', 'scope'];
+    static override css = css;
+    static override observed = ['dark', 'scope'];
 
     #btn!: HTMLElement;
     #mounted = false;
@@ -74,20 +74,20 @@ import css from 'iswc:css';
       this.#btn.addEventListener('iswc-change', this.#onChange as EventListener);
     }
 
-    connectedCallback(): void {
+    override connectedCallback(): void {
       this.#mounted = true;
       this.#syncFromScope();
       this.#watchScope();
       this.#render();
     }
 
-    disconnectedCallback(): void {
+    override disconnectedCallback(): void {
       this.#mounted = false;
       this.#scopeObs?.disconnect();
       this.#scopeObs = null;
     }
 
-    attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
+    override attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
       if (!this.#mounted || oldVal === newVal) return;
       if (name === 'scope') {
         this.#syncFromScope();

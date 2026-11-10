@@ -49,12 +49,12 @@ const OBSERVED = ['label', 'hint', 'value', 'locale', 'ampm', 'hour24', 'seconds
 
 export function defineDateField({ tag, kind, css }: DefineDateFieldOpts): typeof HTMLElement {
   class IswcDateFieldBase extends IswcFormControl {
-    static tag = tag;
+    static override tag = tag;
     declare static events: DateFieldEventos;
-    static css = css;
-    static deps = ['iswc-button', 'iswc-icon'];
-    static shadowInit: ShadowRootInit | null = { mode: 'open', delegatesFocus: true };
-    static observed = OBSERVED;
+    static override css = css;
+    static override deps = ['iswc-button', 'iswc-icon'];
+    static override shadowInit: ShadowRootInit | null = { mode: 'open', delegatesFocus: true };
+    static override observed = OBSERVED;
 
     #labelEl!: HTMLElement;
     #hintEl!: HTMLElement;
@@ -92,7 +92,7 @@ export function defineDateField({ tag, kind, css }: DefineDateFieldOpts): typeof
       });
     }
 
-    connectedCallback(): void {
+    override connectedCallback(): void {
       // El ciclo de la base primero: recupera propiedades escritas antes del upgrade, refleja los `@prop` y pinta.
       super.connectedCallback();
       this.#mounted = true;
@@ -107,7 +107,7 @@ export function defineDateField({ tag, kind, css }: DefineDateFieldOpts): typeof
       this.sincronizarFormulario();
     }
 
-    attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
+    override attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
       // La base convierte el atributo en su `@prop` (name, disabled, required, min, max…) antes de reaccionar aquí.
       super.attributeChangedCallback(name, oldVal, newVal);
       if (!this.#mounted || oldVal === newVal) return;
@@ -156,7 +156,7 @@ export function defineDateField({ tag, kind, css }: DefineDateFieldOpts): typeof
     @prop({ type: 'bool' }) accessor clearable: boolean = false;
 
     override get locale(): string { return resolverLocale(this, this.getAttribute('locale')); }
-    set locale(v: string) { v ? this.setAttribute('locale', v) : this.removeAttribute('locale'); }
+    override set locale(v: string) { v ? this.setAttribute('locale', v) : this.removeAttribute('locale'); }
 
     /** 12 horas: lo decide el locale salvo que `ampm`/`hour24` lo fuercen. */
     get ampm(): boolean {
@@ -173,7 +173,7 @@ export function defineDateField({ tag, kind, css }: DefineDateFieldOpts): typeof
     /** ¿Hay algo escrito a medias? (aa/mm sin año, por ejemplo) */
     get incomplete(): boolean { return this.#field.incomplete; }
 
-    focus(): void {
+    override focus(): void {
       this.#field.focusFirst();
     }
 

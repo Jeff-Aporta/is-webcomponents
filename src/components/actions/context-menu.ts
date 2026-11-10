@@ -38,10 +38,10 @@ import type { ContextMenuEventos } from './schemas/context-menu.schemas.js';
   const OBSERVED = ['for', 'placement', 'distance', 'disabled', 'scroll-lock'];
 
   class IswcContextMenu extends IswcElement {
-    static tag = 'iswc-context-menu';
+    static override tag = 'iswc-context-menu';
     declare static events: ContextMenuEventos;
-    static css = css;
-    static observed = OBSERVED;
+    static override css = css;
+    static override observed = OBSERVED;
 
     #host: HTMLElement = this;
     #target: HTMLElement | null = null;
@@ -75,17 +75,17 @@ import type { ContextMenuEventos } from './schemas/context-menu.schemas.js';
       };
     }
 
-    connectedCallback(): void {
+    override connectedCallback(): void {
       this.#host = this;
       this.#bindTarget();
     }
 
-    disconnectedCallback(): void {
+    override disconnectedCallback(): void {
       this.#unbindTarget();
       this.#teardownScrollBehavior();
     }
 
-    attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
+    override attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
       // #bindTarget usa #host, que se asigna en connectedCallback: sin este
       // guard un atributo puesto en el markup se procesa demasiado pronto.
       if (oldVal === newVal || !this.#host) return;

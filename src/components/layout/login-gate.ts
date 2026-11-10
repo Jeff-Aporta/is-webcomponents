@@ -33,9 +33,9 @@ const TEMPLATE = document.createElement('template');
 TEMPLATE.innerHTML = HTML_TEMPLATE;
 
 class IswcLoginGate extends IswcElement {
-  static tag = 'iswc-login-gate';
-  static css = css;
-  static observed = ['logged', 'busy', 'error', 'notice', 'heading', 'subtitle', 'provider', 'providers', 'mode'];
+  static override tag = 'iswc-login-gate';
+  static override css = css;
+  static override observed = ['logged', 'busy', 'error', 'notice', 'heading', 'subtitle', 'provider', 'providers', 'mode'];
 
   #curtain!: HTMLElement;
   #protected!: HTMLElement;
@@ -47,7 +47,7 @@ class IswcLoginGate extends IswcElement {
     shadow.appendChild(TEMPLATE.content.cloneNode(true));
   }
 
-  connectedCallback(): void {
+  override connectedCallback(): void {
     super.connectedCallback?.();
     this.#curtain = this.shadowRoot!.getElementById('curtain') as HTMLElement;
     this.#protected = this.shadowRoot!.getElementById('protected') as HTMLElement;
@@ -55,7 +55,7 @@ class IswcLoginGate extends IswcElement {
     this.#sync();
   }
 
-  attributeChangedCallback(): void { this.#sync(); }
+  override attributeChangedCallback(): void { this.#sync(); }
 
   get logged(): boolean { return this.hasAttribute('logged'); }
   set logged(v: boolean) { this.toggleAttribute('logged', v); }

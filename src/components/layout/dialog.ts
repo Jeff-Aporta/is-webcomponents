@@ -85,17 +85,17 @@ import type { DialogEventos } from './schemas/dialog.schemas.js';
   const BACKDROP_VARIANTS = new Set(['none', 'basic', 'dim', 'blur']);
 
   class IswcDialog extends ModalBase {
-    static tag = 'iswc-dialog';
+    static override tag = 'iswc-dialog';
     declare static events: DialogEventos;
-    static css = css;
-    static deps = ['iswc-icon', 'iswc-button'];
+    static override css = css;
+    static override deps = ['iswc-icon', 'iswc-button'];
 
-    static observed = [...super.observed, 'backdrop-variant'];
+    static override observed = [...super.observed, 'backdrop-variant'];
 
-    static template = TEMPLATE;
+    static override template = TEMPLATE;
 
-    get modalClass() { return '.dialog'; }
-    get closeAttr() { return 'data-dialog'; }
+    override get modalClass() { return '.dialog'; }
+    override get closeAttr() { return 'data-dialog'; }
 
 
     /** basic | dim | blur | none. Ausente o inválido → basic. */
@@ -137,7 +137,7 @@ import type { DialogEventos } from './schemas/dialog.schemas.js';
       return this;
     }
 
-    animateOpen(): Promise<void> {
+    override animateOpen(): Promise<void> {
       const dur = this.#readDur('--iswc-dialog-show-duration', 200);
       this.$modal.animate(
         [
@@ -153,7 +153,7 @@ import type { DialogEventos } from './schemas/dialog.schemas.js';
       return new Promise((resolve) => setTimeout(resolve, dur));
     }
 
-    animateClose(): Promise<void> {
+    override animateClose(): Promise<void> {
       const dur = this.#readDur('--iswc-dialog-hide-duration', 160);
       this.$modal.animate(
         [

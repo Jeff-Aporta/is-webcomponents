@@ -213,7 +213,7 @@ Cada `app-*` / `tk-*` lleva **JS y CSS hermanos**. No van embebidos en el TS.
 
 1. Fuente: `app-files.ts` + `app-files.css`
 2. Build: minifica a `dist/cdn/app-files.js` + `dist/cdn/app-files.css`
-3. Runtime: `IswcUi.adoptCss(shadow, import.meta.url)` (compatibilidad para código externo al kit, que enlaza su `.css` hermano). Los componentes **del kit** no lo usan: extienden `IswcElement` con `static css = css` (`import css from 'iswc:css'`) y se registran con `define(Clase)` (ver `specs/componentes.md`, «Forma canónica»).
+3. Runtime: `IswcUi.adoptCss(shadow, import.meta.url)` (compatibilidad para código externo al kit, que enlaza su `.css` hermano). Los componentes **del kit** no lo usan: extienden `IswcElement` con `static override css = css` (`import css from 'iswc:css'`) y se registran con `define(Clase)` (ver `specs/componentes.md`, «Forma canónica»).
 
 Tras vaciar el shadow, vuelve a llamar `adoptCss` (los `<link>` se borran con el contenido; las hojas adoptadas por el molde sí sobreviven).
 

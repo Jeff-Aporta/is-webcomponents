@@ -27,11 +27,11 @@ import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-elem
  */
 (() => {
   class IswcDemo extends IswcElement {
-    static tag = 'iswc-demo';
-    static shadowInit: ShadowRootInit | null = null;
+    static override tag = 'iswc-demo';
+    static override shadowInit: ShadowRootInit | null = null;
     #headingEl: HTMLElement | null = null;
 
-    connectedCallback(): void {
+    override connectedCallback(): void {
       this.classList.add('demo');
       this.#syncHeading();
       // Un componente no puede importar de `scripts/`, así que el aviso va por
@@ -41,9 +41,9 @@ import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-elem
       emit(this, 'iswc-demo-connected');
     }
 
-    static observed = ['heading'];
+    static override observed = ['heading'];
 
-    attributeChangedCallback(): void {
+    override attributeChangedCallback(): void {
       if (this.isConnected) this.#syncHeading();
     }
 

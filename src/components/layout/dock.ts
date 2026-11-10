@@ -30,10 +30,10 @@ import css from 'iswc:css';
   const OBSERVED = ['position', 'max-scale', 'range'];
 
   class IswcDock extends withStyleAttrs(IswcElement) {
-    static tag = 'iswc-dock';
-    static css = css;
+    static override tag = 'iswc-dock';
+    static override css = css;
 
-    static observed = [...OBSERVED, 'scale-unit'];
+    static override observed = [...OBSERVED, 'scale-unit'];
     #raf = 0;
     #onMove: ((e: PointerEvent) => void) | null = null;
     #onLeave: (() => void) | null = null;
@@ -52,16 +52,16 @@ import css from 'iswc:css';
       this.#root.addEventListener('pointerleave', this.#onLeave);
     }
 
-    connectedCallback(): void {
+    override connectedCallback(): void {
       super.connectedCallback();
       this.#syncPosition();
     }
 
-    disconnectedCallback(): void {
+    override disconnectedCallback(): void {
       cancelAnimationFrame(this.#raf);
     }
 
-    attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
+    override attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
       super.attributeChangedCallback(name, oldVal, newVal);
       if (oldVal === newVal) return;
       if (name === 'position') this.#syncPosition();
@@ -106,9 +106,9 @@ import css from 'iswc:css';
   define(IswcDock);
 
   class IswcDockItem extends IswcElement {
-    static tag = 'iswc-dock-item';
-    static css = css;
-    static observed = ['icon', 'label', 'href', 'active'];
+    static override tag = 'iswc-dock-item';
+    static override css = css;
+    static override observed = ['icon', 'label', 'href', 'active'];
     constructor() {
       super();
       this.shadowRoot!.innerHTML = /* html */ `
@@ -129,7 +129,7 @@ import css from 'iswc:css';
         }
       });
     }
-    connectedCallback(): void {
+    override connectedCallback(): void {
       const link = this.shadowRoot!.querySelector<HTMLAnchorElement>('a');
       if (!link) return;
       const href = this.getAttribute('href');
@@ -144,7 +144,7 @@ import css from 'iswc:css';
       // tooltip arrow via title (simple); una lib rica usaría iswc-tooltip
       if (label) link.setAttribute('title', label);
     }
-    attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
+    override attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
       if (oldVal === newVal) return;
       const link = this.shadowRoot!.querySelector<HTMLAnchorElement>('a');
       if (!link) return;

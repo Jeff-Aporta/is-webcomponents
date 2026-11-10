@@ -57,12 +57,12 @@ import type { SwitchEventos } from './schemas/switch.schemas.js';
   /** Sin flatten: el texto de fallback del slot no cuenta como contenido propio. */
 
   class IswcSwitch extends IswcFormControl {
-    static tag = 'iswc-switch';
+    static override tag = 'iswc-switch';
     declare static events: SwitchEventos;
-    static css = css;
-    static deps = ['iswc-icon'];
+    static override css = css;
+    static override deps = ['iswc-icon'];
 
-    static observed = [...OBSERVED, 'height', 'width', 'bg', 'accent', 'thumb-color', 'focus-color', 'halo'];
+    static override observed = [...OBSERVED, 'height', 'width', 'bg', 'accent', 'thumb-color', 'focus-color', 'halo'];
 
     #mark!: HTMLElement;
     #onLabelEl!: HTMLElement;
@@ -93,7 +93,7 @@ import type { SwitchEventos } from './schemas/switch.schemas.js';
       this.#hintSlot.addEventListener('slotchange', this.#syncSlots);
     }
 
-    onConnected(): void {
+    override onConnected(): void {
       if (!this.#defaultsRead) {
         this.#defaultsRead = true;
         this.#defaultChecked = this.checked;
@@ -104,7 +104,7 @@ import type { SwitchEventos } from './schemas/switch.schemas.js';
       this.#sync();
     }
 
-    onAttributeChanged(name: string, _oldVal: string | null, _newVal: string | null): void {
+    override onAttributeChanged(name: string, _oldVal: string | null, _newVal: string | null): void {
       if (name === 'hint') {
         this.#syncSlots();
         return;
@@ -116,7 +116,7 @@ import type { SwitchEventos } from './schemas/switch.schemas.js';
 
     @prop() accessor value: string = 'on';
 
-    @prop({ vacio: true }) accessor hint: string = '';
+    @prop({ vacio: true }) override accessor hint: string = '';
 
     get color(): string {
       const v = this.getAttribute('color') ?? '';

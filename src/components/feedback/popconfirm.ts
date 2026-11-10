@@ -62,12 +62,12 @@ import type { PopconfirmEventos } from './schemas/popconfirm.schemas.js';
   const MARGEN_FLECHA_EM = 1;
 
   class IswcPopconfirm extends IswcReactive {
-    static tag = 'iswc-popconfirm';
+    static override tag = 'iswc-popconfirm';
     declare static events: PopconfirmEventos;
-    static css = css;
-    static deps = ['iswc-button'];
+    static override css = css;
+    static override deps = ['iswc-button'];
 
-    static observed = OBSERVED;
+    static override observed = OBSERVED;
 
     #pop!: HTMLElement;
     #arrow!: HTMLElement;
@@ -98,7 +98,7 @@ import type { PopconfirmEventos } from './schemas/popconfirm.schemas.js';
       shadow.querySelector('slot[name="message"]')!.addEventListener('slotchange', () => this.#syncMessage());
     }
 
-    onConnected(): void {
+    override onConnected(): void {
       this.#bindTrigger();
       this.#syncMessage();
       this.#syncBotones();
@@ -106,12 +106,12 @@ import type { PopconfirmEventos } from './schemas/popconfirm.schemas.js';
       if (this.hasAttribute('open')) this.#abrir();
     }
 
-    onDisconnected(): void {
+    override onDisconnected(): void {
       this.#unbindTrigger();
       this.#cerrar(false);
     }
 
-    onAttributeChanged(name: string): void {
+    override onAttributeChanged(name: string): void {
       if (name === 'for') {
         this.#unbindTrigger();
         this.#bindTrigger();

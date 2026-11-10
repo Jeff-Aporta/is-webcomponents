@@ -45,11 +45,11 @@ import type { PinInputEventos } from './schemas/pin-input.schemas.js';
   const OBSERVED: string[] = ['length', 'type', 'mask', 'disabled', 'invalid', 'placeholder', 'value', 'autocomplete'];
 
   class IswcPinInput extends IswcElement {
-    static tag = 'iswc-pin-input';
+    static override tag = 'iswc-pin-input';
     declare static events: PinInputEventos;
-    static css = css;
+    static override css = css;
 
-    static observed = [...OBSERVED, 'cell-size', 'gap', 'bg', 'text-color', 'border-color', 'focus-color', 'danger-color'];
+    static override observed = [...OBSERVED, 'cell-size', 'gap', 'bg', 'text-color', 'border-color', 'focus-color', 'danger-color'];
 
     #root!: HTMLElement;
     #cells!: HTMLElement;
@@ -69,7 +69,7 @@ import type { PinInputEventos } from './schemas/pin-input.schemas.js';
       this.#hiddenInput = shadow.querySelector<HTMLInputElement>('.hidden-input')!;
     }
 
-    onConnected(): void {
+    override onConnected(): void {
       if (!this.hasAttribute('length')) this.setAttribute('length', '6');
       if (!this.hasAttribute('type')) this.setAttribute('type', 'number');
       this.#render();
@@ -89,13 +89,13 @@ import type { PinInputEventos } from './schemas/pin-input.schemas.js';
       this.#listenOtp();
     }
 
-    onDisconnected(): void {
+    override onDisconnected(): void {
       this.removeEventListener('paste', this.#onPaste);
       this.#otpAbort?.abort();
       this.#otpAbort = null;
     }
 
-    onAttributeChanged(name: string, _oldVal: string | null, _newVal: string | null): void {
+    override onAttributeChanged(name: string, _oldVal: string | null, _newVal: string | null): void {
       if (name === 'length' || name === 'type' || name === 'placeholder' || name === 'mask') {
         this.#render();
       }
@@ -120,7 +120,7 @@ import type { PinInputEventos } from './schemas/pin-input.schemas.js';
       emit(this, 'iswc-pin-change', { value: '', index: -1 });
     }
 
-    focus(): void {
+    override focus(): void {
       this.#focusIndex(0);
     }
 

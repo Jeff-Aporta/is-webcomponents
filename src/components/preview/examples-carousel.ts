@@ -68,10 +68,10 @@ import css from 'iswc:css';
 const OBSERVED = ['tag', 'target', 'label', 'lede', 'default-index', 'category-field'];
 
 class IswcExamplesCarousel extends IswcElement {
-  static tag = 'iswc-examples-carousel';
-  static css = css;
-  static deps = ['iswc-button', 'iswc-icon'];
-  static observed = OBSERVED;
+  static override tag = 'iswc-examples-carousel';
+  static override css = css;
+  static override deps = ['iswc-button', 'iswc-icon'];
+  static override observed = OBSERVED;
 
   #titleEl!: HTMLElement;
   #ledeEl!: HTMLElement;
@@ -134,14 +134,14 @@ class IswcExamplesCarousel extends IswcElement {
     this.#nextBtn.addEventListener('click', () => this.scrollBy(1));
   }
 
-  onConnected(): void {
+  override onConnected(): void {
     this.#readInlineExamples();
     this.#syncChrome();
     this.#render();
     if (this.defaultIndex >= 0) this.setActive(this.defaultIndex);
   }
 
-  onAttributeChanged(): void {
+  override onAttributeChanged(): void {
     if (!this.isConnected) return;
     this.#syncChrome();
     if (this.hasAttribute('examples')) {

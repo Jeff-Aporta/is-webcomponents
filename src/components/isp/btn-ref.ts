@@ -73,10 +73,10 @@ const FILTER_SVG = `<svg fill="currentColor" width="20" height="20" viewBox="0 0
     'label', 'value', 'name', 'id', 'required', 'readonly', 'maxlength'];
 
   class IswcBtnRef extends IswcFormControl {
-    static tag = 'iswc-btn-ref';
-    static css = css;
-    static deps = ['iswc-button', 'iswc-icon'];
-    static observed = OBSERVED;
+    static override tag = 'iswc-btn-ref';
+    static override css = css;
+    static override deps = ['iswc-button', 'iswc-icon'];
+    static override observed = OBSERVED;
 
     /** Indexer usado por `#upgradeProps()` para re-leer propiedades pre-upgrade. */
     [key: string]: unknown;
@@ -112,7 +112,7 @@ const FILTER_SVG = `<svg fill="currentColor" width="20" height="20" viewBox="0 0
       this.#pickBtn = shadow.querySelector<HTMLElement>('.pick')!;
     }
 
-    connectedCallback(): void {
+    override connectedCallback(): void {
       super.connectedCallback();
       this.#mounted = true;
       this.#upgradeProps();
@@ -130,7 +130,7 @@ const FILTER_SVG = `<svg fill="currentColor" width="20" height="20" viewBox="0 0
       this.#syncValidity();
     }
 
-    disconnectedCallback(): void {
+    override disconnectedCallback(): void {
       this.#mounted = false;
       clearTimeout(this.#typingTimer);
       this.#field.removeEventListener('iswc-input', this.#onInput);
@@ -141,7 +141,7 @@ const FILTER_SVG = `<svg fill="currentColor" width="20" height="20" viewBox="0 0
       this.#cat.removeEventListener('iswc-double-click', this.#onCatDbl as EventListener);
     }
 
-    attributeChangedCallback(name: string): void {
+    override attributeChangedCallback(name: string): void {
       if (!this.#mounted) return;
       this.#syncFieldAttrs();
       if (name === 'value') void this.#resolveLabel();
@@ -191,7 +191,7 @@ const FILTER_SVG = `<svg fill="currentColor" width="20" height="20" viewBox="0 0
     /** Selección múltiple en el modal (default: single). */
     @prop({ type: 'bool' }) accessor multi: boolean = false;
 
-    focus() {
+    override focus() {
       setTimeout(() => this.#field?.focus?.(), 50);
     }
 

@@ -49,11 +49,11 @@ import type { MaskedInputEventos } from './schemas/masked-input.schemas.js';
   const OBSERVED: string[] = [...REENVIADOS, 'pattern', 'value', 'name', 'placeholder', 'maxlength', 'invalid', 'error'];
 
   class IswcMaskedInput extends IswcFormControl {
-    static tag = 'iswc-masked-input';
+    static override tag = 'iswc-masked-input';
     declare static events: MaskedInputEventos;
-    static css = css;
-    static shadowInit: ShadowRootInit | null = { mode: 'open', delegatesFocus: true };
-    static observed = OBSERVED;
+    static override css = css;
+    static override shadowInit: ShadowRootInit | null = { mode: 'open', delegatesFocus: true };
+    static override observed = OBSERVED;
 
     #mounted = false;
     #field: HTMLElement & { value: string };
@@ -82,7 +82,7 @@ import type { MaskedInputEventos } from './schemas/masked-input.schemas.js';
       this.#field.addEventListener('focusout', () => this.#syncValidity());
     }
 
-    connectedCallback(): void {
+    override connectedCallback(): void {
       this.#mounted = true;
       for (const name of REENVIADOS) this.#forward(name);
       this.#syncPattern();
@@ -93,7 +93,7 @@ import type { MaskedInputEventos } from './schemas/masked-input.schemas.js';
       this.#syncFormState();
     }
 
-    attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
+    override attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
       if (!this.#mounted || oldVal === newVal) return;
       if (REENVIADOS.includes(name)) this.#forward(name);
       if (name === 'pattern' || name === 'placeholder' || name === 'maxlength') this.#syncPattern();
@@ -141,8 +141,8 @@ import type { MaskedInputEventos } from './schemas/masked-input.schemas.js';
       this.value = this.getAttribute('value') ?? '';
     }
 
-    focus(): void { this.#input.focus(); }
-    blur(): void { this.#input.blur(); }
+    override focus(): void { this.#input.focus(); }
+    override blur(): void { this.#input.blur(); }
 
     #forward(name: string): void {
       const v = this.getAttribute(name);

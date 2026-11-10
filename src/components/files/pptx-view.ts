@@ -29,9 +29,9 @@ import css from 'iswc:css';
   }
 
   class IswcPptxView extends IswcElement {
-    static tag = 'iswc-pptx-view';
-    static css = css;
-    static observed = OBSERVED;
+    static override tag = 'iswc-pptx-view';
+    static override css = css;
+    static override observed = OBSERVED;
     #stage!: HTMLElement;
     #gen = 0;
 
@@ -42,8 +42,8 @@ import css from 'iswc:css';
       this.#stage = shadow.querySelector('.stage')!;
     }
 
-    onConnected() { sincronizarAlto(this); this.#reload(); }
-    onAttributeChanged() { sincronizarAlto(this); this.#reload(); }
+    override onConnected() { sincronizarAlto(this); this.#reload(); }
+    override onAttributeChanged() { sincronizarAlto(this); this.#reload(); }
 
     get src() { return this.getAttribute('src'); }
     set src(v) { setOptionalAttr(this, 'src', v); }

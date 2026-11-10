@@ -68,9 +68,9 @@ import css from 'iswc:css';
   const OBSERVED: readonly string[] = ['for', 'open', ...POPUP_DELEGATED];
 
   class IswcPopover extends withStyleAttrs(IswcElement) {
-    static tag = 'iswc-popover';
-    static css = css;
-    static observed = [...OBSERVED, 'max-width', 'arrow-size', 'show-duration', 'hide-duration'];
+    static override tag = 'iswc-popover';
+    static override css = css;
+    static override observed = [...OBSERVED, 'max-width', 'arrow-size', 'show-duration', 'hide-duration'];
 
     // `internals` existe en cualquier HTMLElement con `attachInternals`
     // declarado en el prototipo del custom element. El kit no usa
@@ -98,7 +98,7 @@ import css from 'iswc:css';
       });
     }
 
-    connectedCallback(): void {
+    override connectedCallback(): void {
       super.connectedCallback();
       this.#mounted = true;
       this.#syncPopup();
@@ -106,7 +106,7 @@ import css from 'iswc:css';
       if (this.open) this.#doShow(true);
     }
 
-    disconnectedCallback(): void {
+    override disconnectedCallback(): void {
       this.#mounted = false;
       this.#unbindAnchor();
       if (openPopover === this) openPopover = null;
@@ -114,7 +114,7 @@ import css from 'iswc:css';
       document.removeEventListener('keydown', this.#onDocKey, true);
     }
 
-    attributeChangedCallback(name: string, _oldVal: string | null, _newVal: string | null): void {
+    override attributeChangedCallback(name: string, _oldVal: string | null, _newVal: string | null): void {
       super.attributeChangedCallback(name, _oldVal, _newVal);
       if (!this.#mounted) return;
       if (name === 'for') this.#bindAnchor();

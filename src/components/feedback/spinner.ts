@@ -27,10 +27,10 @@ import css from 'iswc:css';
     /** El `aria-label` que puso el propio componente (uno del consumidor no se toca). */
     #etiqueta = '';
 
-    static tag = 'iswc-spinner';
-    static css = css;
+    static override tag = 'iswc-spinner';
+    static override css = css;
 
-    static observed = [];
+    static override observed = [];
 
     constructor() {
       super();
@@ -46,7 +46,7 @@ import css from 'iswc:css';
       this.setAttribute('aria-label', this.#etiqueta);
     }
 
-    connectedCallback(): void {
+    override connectedCallback(): void {
       super.connectedCallback();
       if (!this.hasAttribute('role')) this.setAttribute('role', 'status');
       if (!this.hasAttribute('aria-live')) this.setAttribute('aria-live', 'polite');

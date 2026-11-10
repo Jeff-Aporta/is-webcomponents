@@ -73,10 +73,10 @@ import css from 'iswc:css';
   const TG_OBSERVED = ['active', 'loop', 'autoplay', 'without-controls', 'without-indicators', 'vertical', 'slides-per-page', 'aspect-ratio'];
 
   class IswcCarousel extends IswcReactive {
-    static tag = 'iswc-carousel';
-    static css = css;
+    static override tag = 'iswc-carousel';
+    static override css = css;
 
-    static observed = [...TG_OBSERVED];
+    static override observed = [...TG_OBSERVED];
 
     #scroller!: HTMLElement;
     #track!: HTMLElement;
@@ -150,7 +150,7 @@ import css from 'iswc:css';
       this.#btnNext.setAttribute('aria-label', this.t('siguiente'));
     }
 
-    onConnected() {
+    override onConnected() {
       if (!this.hasAttribute('slides-per-page')) this.setAttribute('slides-per-page', '1');
       this.#visibilityHandler = () => {
         if (document.hidden) this.#pause('visibility');
@@ -161,12 +161,12 @@ import css from 'iswc:css';
       this.#play();
     }
 
-    onDisconnected() {
+    override onDisconnected() {
       if (this.#visibilityHandler) document.removeEventListener('visibilitychange', this.#visibilityHandler);
       this.#pause('lifecycle');
     }
 
-    onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
+    override onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
       if (name === 'active') this.#goTo(this.active, true);
       if (name === 'autoplay') this.#play();
       if (name === 'without-controls' || name === 'without-indicators' || name === 'vertical' || name === 'slides-per-page' || name === 'aspect-ratio') this.#sync();
@@ -368,9 +368,9 @@ import css from 'iswc:css';
   `;
 
   class IswcCarouselItem extends IswcElement {
-    static tag = 'iswc-carousel-item';
-    static css = css;
-    static observed = ['label'];
+    static override tag = 'iswc-carousel-item';
+    static override css = css;
+    static override observed = ['label'];
 
     constructor() {
       super();
@@ -378,13 +378,13 @@ import css from 'iswc:css';
       shadow.appendChild(ITEM_TEMPLATE.content.cloneNode(true));
     }
 
-    connectedCallback(): void {
+    override connectedCallback(): void {
       this.setAttribute('role', 'tabpanel');
       const label = this.getAttribute('label');
       if (label) this.setAttribute('aria-label', label);
     }
 
-    attributeChangedCallback(name: string): void {
+    override attributeChangedCallback(name: string): void {
       if (name === 'label') {
         const label = this.getAttribute('label');
         if (label) this.setAttribute('aria-label', label);

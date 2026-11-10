@@ -27,10 +27,10 @@ import css from 'iswc:css';
   ];
 
   class IswcDivider extends withStyleAttrs(IswcElement) {
-    static tag = 'iswc-divider';
-    static css = css;
+    static override tag = 'iswc-divider';
+    static override css = css;
 
-    static observed = [...OBSERVED, 'color', 'spacing', 'width'];
+    static override observed = [...OBSERVED, 'color', 'spacing', 'width'];
 
     constructor() {
       super();
@@ -46,7 +46,7 @@ import css from 'iswc:css';
       });
     }
 
-    connectedCallback(): void {
+    override connectedCallback(): void {
       super.connectedCallback();
       if (!this.hasAttribute('orientation')) this.setAttribute('orientation', 'horizontal');
       if (!this.hasAttribute('opacity')) this.setAttribute('opacity', '20');
@@ -56,7 +56,7 @@ import css from 'iswc:css';
       this.#syncOpacity();
     }
 
-    attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
+    override attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
       super.attributeChangedCallback(name, oldVal, newVal);
       if (oldVal === newVal) return;
       if (name === 'orientation') {

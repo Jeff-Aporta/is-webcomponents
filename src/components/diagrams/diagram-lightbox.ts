@@ -83,11 +83,11 @@ function buildViewerUrl(kind: string, payload: unknown): string {
 }
 
 class IswcDiagramLightbox extends IswcLightbox {
-  static tag = 'iswc-diagram-lightbox';
+  static override tag = 'iswc-diagram-lightbox';
   /** diagram-lightbox.scss importa lightbox.css: el texto aplanado ya trae la hoja base del lightbox. */
-  static css = css;
-  static deps = ['iswc-button', 'iswc-icon'];
-  static observed = [...super.observed, 'kind', 'animation', 'min-gap'];
+  static override css = css;
+  static override deps = ['iswc-button', 'iswc-icon'];
+  static override observed = [...super.observed, 'kind', 'animation', 'min-gap'];
 
   #payload: unknown = null;
   #basePayload: unknown = null;
@@ -106,7 +106,7 @@ class IswcDiagramLightbox extends IswcLightbox {
     this.#installDiagramToolbar();
   }
 
-  connectedCallback(): void {
+  override connectedCallback(): void {
     super.connectedCallback();
     if (this.open) this.#mountDiagram();
     if (!this.#dgWired) {
@@ -120,7 +120,7 @@ class IswcDiagramLightbox extends IswcLightbox {
     }
   }
 
-  attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
+  override attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
     super.attributeChangedCallback(name, oldVal, newVal);
     if (oldVal === newVal) return;
     if (name === 'kind' || name === 'animation') this.#mountDiagram();
@@ -144,7 +144,7 @@ class IswcDiagramLightbox extends IswcLightbox {
     this.#mountDiagram();
   }
 
-  show(): void {
+  override show(): void {
     super.show();
     // El <dialog> del lightbox base ya aporta role=dialog y aria-modal=nativos
     // cuando se abre con showModal(). Añadimos aria-label por accesibilidad

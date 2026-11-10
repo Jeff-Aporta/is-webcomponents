@@ -42,8 +42,8 @@ import css from 'iswc:css';
 /** Flecha cacheada en el SVG para aplicar hover sin reconstruir el DOM. */
 
 class IswcGantt extends DiagramElementBase {
-  static tag = 'iswc-gantt';
-  static css = css;
+  static override tag = 'iswc-gantt';
+  static override css = css;
   #turtle: PathTurtle | null = null;
   #hiddenGroups: Set<string> = new Set<string>();
   #rowNodes: Map<string, RowNodeEntry> = new Map();
@@ -55,13 +55,13 @@ class IswcGantt extends DiagramElementBase {
     this.initDiagramShadow('gantt-svg', 'gantt-tooltip');
   }
 
-  onDiagramConnected(): void {
+  override onDiagramConnected(): void {
     this.wrap.addEventListener('mousemove', this.#onMouseMove as EventListener);
     this.wrap.addEventListener('mouseleave', this.#onMouseLeave as EventListener);
     this.wrap.addEventListener('click', this.#onClick as EventListener);
   }
 
-  onDiagramDisconnected(): void {
+  override onDiagramDisconnected(): void {
     this.#turtle?.destroy();
     this.#turtle = null;
     this.wrap.removeEventListener('mousemove', this.#onMouseMove as EventListener);
@@ -69,7 +69,7 @@ class IswcGantt extends DiagramElementBase {
     this.wrap.removeEventListener('click', this.#onClick as EventListener);
   }
 
-  onPayloadChanged(): void { this.#hiddenGroups = new Set(); }
+  override onPayloadChanged(): void { this.#hiddenGroups = new Set(); }
 
   get turtle(): PathTurtle | null { return this.#turtle; }
   get hiddenGroups(): Set<string> { return this.#hiddenGroups; }
@@ -78,7 +78,7 @@ class IswcGantt extends DiagramElementBase {
     this.queueRender();
   }
 
-  renderDiagram(): void {
+  override renderDiagram(): void {
     const spec: GanttSpec | null = resolveGanttSpec(this.payload ?? {});
     this.spec = spec;
     if (!spec) {

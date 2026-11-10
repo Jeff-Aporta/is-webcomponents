@@ -60,11 +60,11 @@ import type { TooltipEventos } from './schemas/tooltip.schemas.js';
   };
 
   class IswcTooltip extends withStyleAttrs(IswcElement) {
-    static tag = 'iswc-tooltip';
+    static override tag = 'iswc-tooltip';
     declare static events: TooltipEventos;
-    static css = css;
+    static override css = css;
 
-    static observed = [...OBSERVED, 'max-width', 'arrow-size', 'arrow-color'];
+    static override observed = [...OBSERVED, 'max-width', 'arrow-size', 'arrow-color'];
 
     #popup!: PopupRef;
     #target: HTMLElement | null = null;
@@ -80,7 +80,7 @@ import type { TooltipEventos } from './schemas/tooltip.schemas.js';
       this.#popup = shadow.querySelector<PopupRef>('iswc-floating')!;
     }
 
-    connectedCallback(): void {
+    override connectedCallback(): void {
       super.connectedCallback();
       this.#mounted = true;
       this.#syncPopup();
@@ -88,7 +88,7 @@ import type { TooltipEventos } from './schemas/tooltip.schemas.js';
       if (this.open) this.#doShow();
     }
 
-    disconnectedCallback(): void {
+    override disconnectedCallback(): void {
       this.#mounted = false;
       this.#unbindTarget();
       if (this.#showTimer !== null) clearTimeout(this.#showTimer);
@@ -97,7 +97,7 @@ import type { TooltipEventos } from './schemas/tooltip.schemas.js';
       document.removeEventListener('keydown', this.#onDocKey, true);
     }
 
-    attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null): void {
+    override attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null): void {
       super.attributeChangedCallback(name, oldValue, newValue);
       if (!this.#mounted) return;
       if (name === 'for' || name === 'trigger') this.#bindTarget();

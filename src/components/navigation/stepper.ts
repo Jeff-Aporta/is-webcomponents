@@ -53,10 +53,10 @@ import css from 'iswc:css';
   const TG_OBSERVED = ['active', 'orientation', 'without-line', 'color'];
 
   class IswcStepper extends IswcElement {
-    static tag = 'iswc-stepper';
-    static css = css;
+    static override tag = 'iswc-stepper';
+    static override css = css;
 
-    static observed = [...TG_OBSERVED];
+    static override observed = [...TG_OBSERVED];
 
 
     constructor() {
@@ -65,11 +65,11 @@ import css from 'iswc:css';
       shadow.appendChild(TG_TEMPLATE.content.cloneNode(true));
     }
 
-    onConnected() {
+    override onConnected() {
       this.#sync();
     }
 
-    onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
+    override onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
       this.#sync();
     }
 
@@ -162,9 +162,9 @@ import css from 'iswc:css';
   const STEP_OBSERVED = ['label', 'description', 'icon', 'disabled', 'error'];
 
   class IswcStepperStep extends IswcElement {
-    static tag = 'iswc-stepper-step';
-    static css = css;
-    static observed = STEP_OBSERVED;
+    static override tag = 'iswc-stepper-step';
+    static override css = css;
+    static override observed = STEP_OBSERVED;
 
 
     constructor() {
@@ -173,13 +173,13 @@ import css from 'iswc:css';
       shadow.appendChild(STEP_TEMPLATE.content.cloneNode(true));
     }
 
-    onConnected() {
+    override onConnected() {
       this.setAttribute('role', 'listitem');
       this.#sync();
       if (this.parentElement instanceof IswcStepper) this.parentElement.actualizar();
     }
 
-    onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
+    override onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
       this.#sync();
     }
 

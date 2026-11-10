@@ -52,12 +52,12 @@ import type { TextareaEventos } from './schemas/textarea.schemas.js';
   const EXTRA_UPGRADE_ATTRS = ['variant', 'label-placement', 'full-width'];
 
   class IswcTextarea extends IswcFormControl {
-    static tag = 'iswc-textarea';
+    static override tag = 'iswc-textarea';
     declare static events: TextareaEventos;
-    static css = css;
-    static shadowInit: ShadowRootInit | null = { mode: 'open', delegatesFocus: true };
+    static override css = css;
+    static override shadowInit: ShadowRootInit | null = { mode: 'open', delegatesFocus: true };
 
-    static observed = [...OBSERVED, 'radius', 'border-color', 'bg', 'text-color', 'focus-color', 'danger-color'];
+    static override observed = [...OBSERVED, 'radius', 'border-color', 'bg', 'text-color', 'focus-color', 'danger-color'];
 
     #textarea!: HTMLTextAreaElement;
     #labelEl!: HTMLElement;
@@ -94,7 +94,7 @@ import type { TextareaEventos } from './schemas/textarea.schemas.js';
       this.#hintSlot.addEventListener('slotchange', this.#syncSlots);
     }
 
-    onConnected(): void {
+    override onConnected(): void {
       upgradeProperties(this, EXTRA_UPGRADE_ATTRS);
       this.#value = this.getAttribute('value') ?? '';
       this.#syncSlots();
@@ -113,13 +113,13 @@ import type { TextareaEventos } from './schemas/textarea.schemas.js';
       }
     }
 
-    onDisconnected(): void {
+    override onDisconnected(): void {
       this.#ro?.disconnect();
       this.#ro = null;
       this.#lastWidth = -1;
     }
 
-    onAttributeChanged(name: string, _oldVal: string | null, newVal: string | null): void {
+    override onAttributeChanged(name: string, _oldVal: string | null, newVal: string | null): void {
       if (name === 'value') {
         this.#value = newVal ?? '';
         this.#syncNative();
@@ -184,7 +184,7 @@ import type { TextareaEventos } from './schemas/textarea.schemas.js';
       else if (PLACEMENTS.includes(String(v))) this.setAttribute('label-placement', String(v));
     }
 
-    @prop({ vacio: true }) accessor errorText: string = '';
+    @prop({ vacio: true }) override accessor errorText: string = '';
 
     @prop({ type: 'bool' }) accessor showCount: boolean = false;
 
@@ -192,9 +192,9 @@ import type { TextareaEventos } from './schemas/textarea.schemas.js';
 
     @prop({ vacio: true }) accessor placeholder: string = '';
 
-    @prop({ vacio: true }) accessor label: string = '';
+    @prop({ vacio: true }) override accessor label: string = '';
 
-    @prop({ vacio: true }) accessor hint: string = '';
+    @prop({ vacio: true }) override accessor hint: string = '';
 
     @prop({ vacio: true }) accessor maxlength: string | null = null;
 
@@ -202,8 +202,8 @@ import type { TextareaEventos } from './schemas/textarea.schemas.js';
 
     // ---- API pública -----------------------------------------------------
 
-    focus(options?: FocusOptions): void { this.#textarea.focus(options); }
-    blur(): void { this.#textarea.blur(); }
+    override focus(options?: FocusOptions): void { this.#textarea.focus(options); }
+    override blur(): void { this.#textarea.blur(); }
     select(): void { this.#textarea.select(); }
     setSelectionRange(...args: Parameters<HTMLTextAreaElement['setSelectionRange']>): void {
       this.#textarea.setSelectionRange(...(args as Parameters<HTMLTextAreaElement['setSelectionRange']>));

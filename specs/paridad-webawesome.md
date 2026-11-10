@@ -215,7 +215,7 @@ Entran 3 y salen 4: **23** `.ts` en `src/core` (≤ 24), cada uno con su `schema
 | `localize.ts` | **nuevo** | `resolverLocale`/`resolverDir` (absorbe `resolve-locale`), observador único, `t()`, `formato()`, diccionario `es` incrustado |
 | `position.ts` | amplía | sección «capas»: `pila-modal` (inert, trampa, Escape/clic fuera, foco) junto a `createPopupDismiss` |
 | `props-element.ts` | cambia de base | `PropsElement extends IswcReactive` |
-| `form-associated.ts`, `form-control-mixin.ts`, `resolve-locale.ts`, `element-base.ts` | **se borran** | `element-base` tiene 0 usuarios en el repo y en los proyectos hermanos: quien lo extienda fuera pasa a `IswcElement` con `static shadowInit = null` (cambio de ruta al re-pinear, como F9a) |
+| `form-associated.ts`, `form-control-mixin.ts`, `resolve-locale.ts`, `element-base.ts` | **se borran** | `element-base` tiene 0 usuarios en el repo y en los proyectos hermanos: quien lo extienda fuera pasa a `IswcElement` con `static override shadowInit = null` (cambio de ruta al re-pinear, como F9a) |
 | `attrs.ts` | se adelgaza al final | `@attr*` pasan a ser alias internos de `@prop` hasta migrar `dropdown`; luego se borran (P1 del lote 1) |
 
 Los diccionarios que no son `es` viven en `src/core/i18n/<lang>.ts` (subcarpeta, no cuenta como módulo de core suelto;
@@ -284,10 +284,10 @@ onAttributeChanged(name, oldVal, newVal) { if (name === 'value') { … } else if
 
 // DESPUÉS
 class IswcInput extends IswcFormControl {
-  static tag = 'iswc-input';
-  static css = css;
-  static shadowInit = { mode: 'open', delegatesFocus: true };
-  static deps = ['iswc-icon', 'iswc-button'];
+  static override tag = 'iswc-input';
+  static override css = css;
+  static override shadowInit = { mode: 'open', delegatesFocus: true };
+  static override deps = ['iswc-icon', 'iswc-button'];
   static ranuras = ['label', 'hint', 'start', 'end'];
   static events = { 'iswc-input': {} as { value: string }, 'iswc-change': {} as { value: string }, 'iswc-typing-end': {} as { value: string }, 'iswc-enter': {} as { value: string }, 'iswc-otp': {} as { code: string } };
 
@@ -388,8 +388,8 @@ const bad = this.#normalizePromiseMsg(callbacks.error, err, 'Algo salió mal');
 
 // DESPUÉS
 class IswcToast extends IswcReactive {
-  static tag = 'iswc-toast';
-  static css = css;
+  static override tag = 'iswc-toast';
+  static override css = css;
   static events = { 'iswc-after-hide': {} as void };
   @prop({ enum: VALID_PLACEMENT, reflect: true }) accessor placement: Placement = 'bottom-end';
   render() {

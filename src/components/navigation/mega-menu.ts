@@ -56,10 +56,10 @@ import { createPopupDismiss } from '@jeff-aporta/iswc-base/core/position.js';
   const OBSERVED = ['label', 'icon', 'placement', 'width', 'hover', 'disabled'];
 
   class IswcMegaMenu extends IswcElement {
-    static tag = 'iswc-mega-menu';
-    static css = css;
-    static deps = ['iswc-button', 'iswc-icon'];
-    static observed = OBSERVED;
+    static override tag = 'iswc-mega-menu';
+    static override css = css;
+    static override deps = ['iswc-button', 'iswc-icon'];
+    static override observed = OBSERVED;
     #openTimer: ReturnType<typeof setTimeout> | null = null;
     #closeTimer: ReturnType<typeof setTimeout> | null = null;
     /** Listener temporal de outside-click; se quita al cerrar. */
@@ -104,7 +104,7 @@ import { createPopupDismiss } from '@jeff-aporta/iswc-base/core/position.js';
       this.#panel.addEventListener('click', (e: Event) => this.#onPanelClick(e));
     }
 
-    connectedCallback(): void {
+    override connectedCallback(): void {
       super.connectedCallback();
       this.#sync();
       // Asegurar aria-controls en cuanto conocemos el id del panel.
@@ -112,14 +112,14 @@ import { createPopupDismiss } from '@jeff-aporta/iswc-base/core/position.js';
       this.#panel.addEventListener('click', this.#positionPanel);
     }
 
-    disconnectedCallback(): void {
+    override disconnectedCallback(): void {
       // Limpiar timers y listeners residuales.
       this.#clearTimers();
       this.#removeOutsideHandler();
       this.#capa.detach();
     }
 
-    attributeChangedCallback(name: string) {
+    override attributeChangedCallback(name: string) {
       if (!this.isConnected) return;
       if (name === 'label') {
         this.#sync();

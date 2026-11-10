@@ -53,12 +53,12 @@ import type { WindowEventos } from './schemas/window.schemas.js';
   interface ResizeState { x: number; y: number; rect: Rect; }
 
   class IswcWindow extends IswcReactive {
-    static tag = 'iswc-window';
+    static override tag = 'iswc-window';
     declare static events: WindowEventos;
-    static css = css;
-    static deps = ['iswc-button', 'iswc-icon'];
+    static override css = css;
+    static override deps = ['iswc-button', 'iswc-icon'];
 
-    static observed = [...OBSERVED, 'shadow', 'bar-gap', 'bar-padding'];
+    static override observed = [...OBSERVED, 'shadow', 'bar-gap', 'bar-padding'];
     #onWinMove!: (e: PointerEvent) => void;
     #onWinUp!: () => void;
     #state: WindowState = 'normal';
@@ -119,7 +119,7 @@ import type { WindowEventos } from './schemas/window.schemas.js';
       }
     }
 
-    onConnected() {
+    override onConnected() {
       if (this.#moving) return;
       emit(this, 'iswc-show');
       if (!this.hasAttribute('role')) this.setAttribute('role', 'dialog');
@@ -165,7 +165,7 @@ import type { WindowEventos } from './schemas/window.schemas.js';
       emit(this, 'iswc-after-show');
     }
 
-    onDisconnected() {
+    override onDisconnected() {
       if (this.#moving) return;
       window.removeEventListener('pointermove', this.#onWinMove);
       window.removeEventListener('pointerup', this.#onWinUp);
@@ -181,7 +181,7 @@ import type { WindowEventos } from './schemas/window.schemas.js';
       this.#reflowBars();
     }
 
-    onAttributeChanged(name: string) {
+    override onAttributeChanged(name: string) {
       this.#sync();
       if (name === 'scope') this.#placeScope();
       if (name === 'scope' && this.#enCapa) this.#recalcularCapa();

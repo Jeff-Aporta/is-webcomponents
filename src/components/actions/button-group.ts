@@ -64,11 +64,11 @@ import type { ButtonGroupEventos } from './schemas/button-group.schemas.js';
   type Seleccion = string[];
 
   class IswcButtonGroup extends withStyleAttrs(IswcElement) {
-    static tag = 'iswc-button-group';
+    static override tag = 'iswc-button-group';
     declare static events: ButtonGroupEventos;
-    static css = css;
+    static override css = css;
 
-    static observed = OBSERVED;
+    static override observed = OBSERVED;
 
     #slot!: HTMLSlotElement;
     #mounted = false;
@@ -85,7 +85,7 @@ import type { ButtonGroupEventos } from './schemas/button-group.schemas.js';
       this.addEventListener('keydown', this.#onKeyDown);
     }
 
-    connectedCallback(): void {
+    override connectedCallback(): void {
       // Phase V5: STYLE_ATTRS removido. El mixin ya no vuelca el mapa.
       super.connectedCallback();
       this.#mounted = true;
@@ -103,7 +103,7 @@ import type { ButtonGroupEventos } from './schemas/button-group.schemas.js';
       this.#syncSelection();
     }
 
-    attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
+    override attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
       super.attributeChangedCallback(name, oldVal, newVal);
       if (!this.#mounted || oldVal === newVal) return;
       if (name === 'value' || name === 'select') {

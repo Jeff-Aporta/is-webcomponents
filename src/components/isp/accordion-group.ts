@@ -40,9 +40,9 @@ import css from 'iswc:css';
 }
 
 class IswcAccordionGroup extends IswcElement {
-  static tag = 'iswc-accordion-group';
-  static css = css;
-    static observed = OBSERVED;
+  static override tag = 'iswc-accordion-group';
+  static override css = css;
+    static override observed = OBSERVED;
 
     #slot!: HTMLSlotElement;
 
@@ -53,7 +53,7 @@ class IswcAccordionGroup extends IswcElement {
       this.#slot = shadow.querySelector<HTMLSlotElement>('slot')!;
     }
 
-    onConnected() {
+    override onConnected() {
       // `iswc-show` es composed, así que llega al host desde el shadow del hijo.
       this.addEventListener('iswc-show', this.#onItemShow);
       this.addEventListener('iswc-hide', this.#onItemHide);
@@ -61,13 +61,13 @@ class IswcAccordionGroup extends IswcElement {
       this.#enforceSingle();
     }
 
-    onDisconnected() {
+    override onDisconnected() {
       this.removeEventListener('iswc-show', this.#onItemShow);
       this.removeEventListener('iswc-hide', this.#onItemHide);
       this.#slot.removeEventListener('slotchange', this.#onSlotChange);
     }
 
-    onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
+    override onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
       if (name === 'multiple' && !this.multiple) this.#enforceSingle();
     }
 

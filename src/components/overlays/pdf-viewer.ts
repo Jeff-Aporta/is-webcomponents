@@ -35,12 +35,12 @@ import type { PdfViewerEventos } from './schemas/pdf-viewer.schemas.js';
   const OBSERVED = ['src', 'content', 'page', 'zoom', 'engine', 'height', 'download', 'print'];
 
   class IswcPdfViewer extends IswcElement {
-    static tag = 'iswc-pdf-viewer';
+    static override tag = 'iswc-pdf-viewer';
     declare static events: PdfViewerEventos;
-    static css = css;
-    static deps = ['iswc-button', 'iswc-icon', 'iswc-empty-state'];
+    static override css = css;
+    static override deps = ['iswc-button', 'iswc-icon', 'iswc-empty-state'];
 
-    static observed = [...OBSERVED, 'shadow', 'bar-gap'];
+    static override observed = [...OBSERVED, 'shadow', 'bar-gap'];
 
     constructor() {
       super();
@@ -72,14 +72,14 @@ import type { PdfViewerEventos } from './schemas/pdf-viewer.schemas.js';
       this.#iframe.addEventListener('error', () => emit(this, 'iswc-error'));
     }
 
-    onConnected() {
+    override onConnected() {
       this.#sync();
       // Vincular el iframe con la cabecera (#pdf-title) para que el lector
       // de pantalla tenga un nombre accesible sincronizado con el titulo.
       this.#iframe.setAttribute('aria-labelledby', 'pdf-title');
     }
 
-    onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
+    override onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
       this.#sync();
     }
 
@@ -161,7 +161,7 @@ import type { PdfViewerEventos } from './schemas/pdf-viewer.schemas.js';
     get content() { return this.getAttribute('content') ?? ''; }
     set content(v) { setStringAttr(this, 'content', v); }
 
-    onDisconnected() {
+    override onDisconnected() {
       this.#revokeBlob();
     }
 

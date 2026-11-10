@@ -48,10 +48,10 @@ function parseSizes(raw: string | null): number[] {
 const rellenar = (plantilla: string, n: number, total = 0): string => plantilla.replace('{n}', String(n)).replace('{total}', String(total));
 
 class IswcPagination extends IswcReactive {
-  static tag = 'iswc-pagination';
-  static css = css;
-  static deps = ['iswc-button', 'iswc-icon'];
-  static observed = [...OBSERVED];
+  static override tag = 'iswc-pagination';
+  static override css = css;
+  static override deps = ['iswc-button', 'iswc-icon'];
+  static override observed = [...OBSERVED];
 
   #root: ShadowRoot;
   #abort: AbortController | null = null;

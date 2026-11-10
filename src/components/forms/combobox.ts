@@ -68,13 +68,13 @@ import type { ComboboxEventos } from './schemas/combobox.schemas.js';
   const OBSERVED = ['value', 'placeholder'];
 
   class IswcCombobox extends IswcFormControl {
-    static tag = 'iswc-combobox';
+    static override tag = 'iswc-combobox';
     declare static events: ComboboxEventos;
-    static css = css;
-    static shadowInit: ShadowRootInit | null = { mode: 'open', delegatesFocus: true };
-    static deps = ['iswc-icon', 'iswc-button'];
+    static override css = css;
+    static override shadowInit: ShadowRootInit | null = { mode: 'open', delegatesFocus: true };
+    static override deps = ['iswc-icon', 'iswc-button'];
 
-    static observed = [...OBSERVED, 'radius', 'border-color', 'bg', 'text-color', 'focus-color'];
+    static override observed = [...OBSERVED, 'radius', 'border-color', 'bg', 'text-color', 'focus-color'];
 
     #input!: HTMLInputElement;
     /** Capa en la pila de core/position.ts mientras la lista está abierta: un modal de abajo no se lleva su Escape. */
@@ -129,7 +129,7 @@ import type { ComboboxEventos } from './schemas/combobox.schemas.js';
       this.#trigger.setAttribute('aria-label', this.t('abrir'));
     }
 
-    onConnected(): void {
+    override onConnected(): void {
       this.#syncMeta();
       this.#collectOptions();
       this.#syncValueToInput(false);
@@ -140,14 +140,14 @@ import type { ComboboxEventos } from './schemas/combobox.schemas.js';
       addEventListener('scroll', this.#onReposition, true);
     }
 
-    onDisconnected(): void {
+    override onDisconnected(): void {
       removeEventListener('resize', this.#onReposition);
       removeEventListener('scroll', this.#onReposition, true);
       if (this.#dialog.open) this.#dialog.close();
       this.#capa.detach();
     }
 
-    onAttributeChanged(name: string, oldVal: string | null, newVal: string | null): void {
+    override onAttributeChanged(name: string, oldVal: string | null, newVal: string | null): void {
       if (name === 'open') this.#syncOpen();
       else if (name === 'disabled') this.#syncDisabled();
       else if (name === 'value') {

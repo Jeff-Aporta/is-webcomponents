@@ -73,10 +73,10 @@ import css from 'iswc:css';
   const VALID_ICON_PLACEMENT = ['start', 'end'];
 
   class IswcDetails extends IswcElement {
-    static tag = 'iswc-details';
-    static css = css;
+    static override tag = 'iswc-details';
+    static override css = css;
 
-    static observed = [...OBSERVED, 'spacing', 'show-duration', 'hide-duration'];
+    static override observed = [...OBSERVED, 'spacing', 'show-duration', 'hide-duration'];
 
     #button!: HTMLButtonElement;
     #content!: HTMLElement;
@@ -97,7 +97,7 @@ import css from 'iswc:css';
       // fallback. Dejamos el botón como está y añadimos Space/Enter redundantes.
     }
 
-    onConnected() {
+    override onConnected() {
       if (!this.hasAttribute('variant')) this.setAttribute('variant', 'outlined');
       if (!this.hasAttribute('icon-placement')) this.setAttribute('icon-placement', 'end');
 
@@ -117,11 +117,11 @@ import css from 'iswc:css';
       }
     }
 
-    onDisconnected() {
+    override onDisconnected() {
       // nada que limpiar
     }
 
-    onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
+    override onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
       if (name === 'variant' && newVal && !VALID_VARIANT.includes(newVal)) {
         this.setAttribute('variant', 'outlined');
         return;

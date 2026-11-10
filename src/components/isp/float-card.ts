@@ -45,10 +45,10 @@ function cssLen(v: string | number | null | undefined): string {
 }
 
 class IswcFloatCard extends IswcElement {
-  static tag = 'iswc-float-card';
-  static css = css;
-  static template = TEMPLATE;
-  static observed = ['open', 'horizontal', 'vertical', 'locked', 'label', 'labelledby'];
+  static override tag = 'iswc-float-card';
+  static override css = css;
+  static override template = TEMPLATE;
+  static override observed = ['open', 'horizontal', 'vertical', 'locked', 'label', 'labelledby'];
 
   #panel!: HTMLElement;
   #keep = 0;
@@ -61,7 +61,7 @@ class IswcFloatCard extends IswcElement {
     this.#panel = this.shadowRoot!.querySelector<HTMLElement>('.panel')!;
   }
 
-  onConnected() {
+  override onConnected() {
     this.addEventListener('iswc-show', this.#onChildShow);
     this.addEventListener('iswc-hide', this.#onChildHide);
     this.addEventListener('keydown', this.#onKeydown);
@@ -69,13 +69,13 @@ class IswcFloatCard extends IswcElement {
     this.#syncAria();
   }
 
-  onDisconnected() {
+  override onDisconnected() {
     this.removeEventListener('iswc-show', this.#onChildShow);
     this.removeEventListener('iswc-hide', this.#onChildHide);
     this.removeEventListener('keydown', this.#onKeydown);
   }
 
-  onAttributeChanged(name: string): void {
+  override onAttributeChanged(name: string): void {
     if (name === 'horizontal' || name === 'vertical') this.#place();
     if (name === 'label' || name === 'labelledby') this.#syncAria();
   }

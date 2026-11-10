@@ -36,8 +36,8 @@ import css from 'iswc:css';
 /** Región cacheada en el SVG para aplicar hover sin reconstruir. */
 
 class IswcVennDiagram extends DiagramElementBase {
-  static tag = 'iswc-venn-diagram';
-  static css = css;
+  static override tag = 'iswc-venn-diagram';
+  static override css = css;
   #circleNodes: Map<string, CircleNodeEntry> = new Map();
   #regionNodes: Map<string, RegionNodeEntry> = new Map();
   #hoverId: string | null = null;
@@ -47,19 +47,19 @@ class IswcVennDiagram extends DiagramElementBase {
     this.initDiagramShadow('vn-svg', 'vn-tooltip');
   }
 
-  onDiagramConnected(): void {
+  override onDiagramConnected(): void {
     this.wrap.addEventListener('mousemove', this.#onMouseMove as EventListener);
     this.wrap.addEventListener('mouseleave', this.#onMouseLeave as EventListener);
     this.wrap.addEventListener('click', this.#onClick as EventListener);
   }
 
-  onDiagramDisconnected(): void {
+  override onDiagramDisconnected(): void {
     this.wrap.removeEventListener('mousemove', this.#onMouseMove as EventListener);
     this.wrap.removeEventListener('mouseleave', this.#onMouseLeave as EventListener);
     this.wrap.removeEventListener('click', this.#onClick as EventListener);
   }
 
-  renderDiagram(): void {
+  override renderDiagram(): void {
     const spec: VennSpec | null = resolveVennSpec(this.payload ?? {});
     this.spec = spec;
     if (!spec) {

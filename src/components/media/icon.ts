@@ -35,9 +35,9 @@ import css from 'iswc:css';
   const OBSERVED = ['icon', 'name', 'library', 'label', 'src'];
 
   class IswcIcon extends IswcElement {
-    static tag = 'iswc-icon';
-    static css = css;
-    static observed = OBSERVED;
+    static override tag = 'iswc-icon';
+    static override css = css;
+    static override observed = OBSERVED;
 
     #inline!: HTMLElement;
     #mounted = false;
@@ -51,17 +51,17 @@ import css from 'iswc:css';
       this.#inline = shadow.querySelector<HTMLElement>('.inline')!;
     }
 
-    connectedCallback(): void {
+    override connectedCallback(): void {
       this.#mounted = true;
       this.#render();
     }
 
-    disconnectedCallback(): void {
+    override disconnectedCallback(): void {
       this.#mounted = false;
       this.#abort();
     }
 
-    attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
+    override attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
       if (!this.#mounted || oldVal === newVal) return;
       if (name === 'label') { this.#syncA11y(); return; }
       this.#render();

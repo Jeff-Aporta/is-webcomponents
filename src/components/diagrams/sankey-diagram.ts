@@ -31,9 +31,9 @@ import css from 'iswc:css';
 const DEFAULT_HEIGHT = 320;
 
 class IswcSankeyDiagram extends DiagramElementBase {
-  static tag = 'iswc-sankey-diagram';
-  static css = css;
-  static observed = [...DiagramElementBase.observed, 'height'];
+  static override tag = 'iswc-sankey-diagram';
+  static override css = css;
+  static override observed = [...DiagramElementBase.observed, 'height'];
 
   #hiddenGroups = new Set<string>();
   #nodeNodes = new Map<string, NodeEntry>();
@@ -45,19 +45,19 @@ class IswcSankeyDiagram extends DiagramElementBase {
     this.initDiagramShadow('sk-svg', 'sk-tooltip');
   }
 
-  onDiagramConnected() {
+  override onDiagramConnected() {
     this.wrap.addEventListener('mousemove', this.#onMouseMove);
     this.wrap.addEventListener('mouseleave', this.#onMouseLeave);
     this.wrap.addEventListener('click', this.#onClick);
   }
 
-  onDiagramDisconnected() {
+  override onDiagramDisconnected() {
     this.wrap.removeEventListener('mousemove', this.#onMouseMove);
     this.wrap.removeEventListener('mouseleave', this.#onMouseLeave);
     this.wrap.removeEventListener('click', this.#onClick);
   }
 
-  onPayloadChanged(): void { this.#hiddenGroups = new Set(); }
+  override onPayloadChanged(): void { this.#hiddenGroups = new Set(); }
 
   get hiddenGroups(): Set<string> { return this.#hiddenGroups; }
   set hiddenGroups(v: Set<string> | string[] | null | undefined) {
@@ -65,7 +65,7 @@ class IswcSankeyDiagram extends DiagramElementBase {
     this.queueRender();
   }
 
-  renderDiagram(): void {
+  override renderDiagram(): void {
     const spec = resolveSankeySpec(this.payload ?? {});
     this.spec = spec;
     if (!spec) {

@@ -59,11 +59,11 @@ import type { ToastItemEventos } from './schemas/toast-item.schemas.js';
   const DEFAULT_DURATION = 5000;
 
   class IswcToastItem extends IswcReactive {
-    static tag = 'iswc-toast-item';
+    static override tag = 'iswc-toast-item';
     declare static events: ToastItemEventos;
-    static css = css;
-    static deps = ['iswc-icon', 'iswc-button'];
-    static observed = OBSERVED;
+    static override css = css;
+    static override deps = ['iswc-icon', 'iswc-button'];
+    static override observed = OBSERVED;
 
     #base!: HTMLElement;
     #progress!: HTMLElement;
@@ -103,7 +103,7 @@ import type { ToastItemEventos } from './schemas/toast-item.schemas.js';
       this.#closeBtn.setAttribute('label', this.t('cerrar'));
     }
 
-    connectedCallback(): void {
+    override connectedCallback(): void {
       super.connectedCallback();
       this.#mounted = true;
       if (!this.hasAttribute('color')) this.setAttribute('color', 'brand');
@@ -113,13 +113,13 @@ import type { ToastItemEventos } from './schemas/toast-item.schemas.js';
       else this.hidden = true;
     }
 
-    disconnectedCallback(): void {
+    override disconnectedCallback(): void {
       this.#clearTimers();
       this.#mounted = false;
       super.disconnectedCallback();
     }
 
-    attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
+    override attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
       if (!this.#mounted || oldVal === newVal) return;
       if (name === 'color' && newVal && !VALID_COLOR.includes(newVal)) {
         this.setAttribute('color', normalizeIntent(newVal, 'neutral'));

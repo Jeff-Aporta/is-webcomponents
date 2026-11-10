@@ -89,22 +89,22 @@ import css from 'iswc:css';
   const CARD_OBSERVED = ['heading', 'meta', 'tag', 'tag-color', 'cover', 'without-shadow'];
 
   class IswcKanban extends IswcElement {
-    static tag = 'iswc-kanban';
-    static shadowInit: ShadowRootInit | null = null;
-    static observed = BOARD_OBSERVED;
+    static override tag = 'iswc-kanban';
+    static override shadowInit: ShadowRootInit | null = null;
+    static override observed = BOARD_OBSERVED;
     #mo: MutationObserver | null = null;
-    connectedCallback(): void {
+    override connectedCallback(): void {
       if (!this.hasAttribute('role')) this.setAttribute('role', 'list');
       if (!this.hasAttribute('aria-label')) this.setAttribute('aria-label', 'Tablero kanban');
       this.#syncOrientation();
       this.#mo = new MutationObserver(() => this.#syncOrientation());
       this.#mo.observe(this, { childList: true });
     }
-    disconnectedCallback(): void {
+    override disconnectedCallback(): void {
       this.#mo?.disconnect();
       this.#mo = null;
     }
-    attributeChangedCallback(name: string): void {
+    override attributeChangedCallback(name: string): void {
       if (name === 'orientation') this.#syncOrientation();
     }
     /** Propaga la orientación a las columnas (su lane fluye horizontal en row). */
@@ -119,9 +119,9 @@ import css from 'iswc:css';
   define(IswcKanban);
 
   class IswcKanbanColumn extends IswcElement {
-    static tag = 'iswc-kanban-column';
-    static css = css;
-    static observed = COLUMN_OBSERVED;
+    static override tag = 'iswc-kanban-column';
+    static override css = css;
+    static override observed = COLUMN_OBSERVED;
     #root!: HTMLElement | null;
     #title!: HTMLElement;
     #badge!: HTMLElement;
@@ -134,7 +134,7 @@ import css from 'iswc:css';
       this.#badge = shadow.querySelector<HTMLElement>('.badge')!;
     }
 
-    onConnected() {
+    override onConnected() {
       this.setAttribute('role', 'listitem');
       this.#sync();
       this.#bindDrop();
@@ -145,7 +145,7 @@ import css from 'iswc:css';
       return this.shadowRoot!.querySelector<HTMLElement>('.lane');
     }
 
-    onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
+    override onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
       this.#sync();
     }
 
@@ -213,9 +213,9 @@ import css from 'iswc:css';
   define(IswcKanbanColumn);
 
   class IswcKanbanCard extends IswcElement {
-    static tag = 'iswc-kanban-card';
-    static css = css;
-    static observed = CARD_OBSERVED;
+    static override tag = 'iswc-kanban-card';
+    static override css = css;
+    static override observed = CARD_OBSERVED;
     #root!: HTMLElement;
     #cover!: HTMLElement;
     #heading!: HTMLElement;
@@ -234,7 +234,7 @@ import css from 'iswc:css';
       this.#footer = shadow.querySelector<HTMLElement>('.footer')!;
     }
 
-    onConnected() {
+    override onConnected() {
       this.setAttribute('role', 'listitem');
       this.setAttribute('aria-grabbed', 'false');
       this.#sync();
@@ -260,7 +260,7 @@ import css from 'iswc:css';
       });
     }
 
-    onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
+    override onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
       this.#sync();
     }
 

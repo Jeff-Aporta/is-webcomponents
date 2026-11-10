@@ -57,12 +57,12 @@ import type { ConfirmModalEventos } from './schemas/confirm-modal.schemas.js';
   const OBSERVED = ['for', 'heading', 'message', 'open', 'color', 'confirm-label', 'cancel-label'];
 
   class IswcConfirmModal extends IswcReactive {
-    static tag = 'iswc-confirm-modal';
+    static override tag = 'iswc-confirm-modal';
     declare static events: ConfirmModalEventos;
-    static css = css;
-    static deps = ['iswc-button'];
+    static override css = css;
+    static override deps = ['iswc-button'];
 
-    static observed = [...OBSERVED, 'bg', 'text-color', 'border-color', 'accent'];
+    static override observed = [...OBSERVED, 'bg', 'text-color', 'border-color', 'accent'];
 
     #backdrop!: HTMLElement;
     #modal!: HTMLElement;
@@ -111,7 +111,7 @@ import type { ConfirmModalEventos } from './schemas/confirm-modal.schemas.js';
       cancelar.textContent = this.getAttribute('cancel-label') || this.t('cancelar');
     }
 
-    onConnected() {
+    override onConnected() {
       this.#bindTrigger();
       this.#syncHeading();
       this.#syncMessage();
@@ -119,12 +119,12 @@ import type { ConfirmModalEventos } from './schemas/confirm-modal.schemas.js';
       if (this.hasAttribute('open')) this.#showUI();
     }
 
-    onDisconnected() {
+    override onDisconnected() {
       this.#unbindTrigger();
       this.#hideUI();
     }
 
-    onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
+    override onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
       if (name === 'for') { this.#unbindTrigger(); this.#bindTrigger(); }
       if (name === 'heading') this.#syncHeading();
       if (name === 'message') this.#syncMessage();

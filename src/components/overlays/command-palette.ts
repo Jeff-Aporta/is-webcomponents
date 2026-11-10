@@ -76,12 +76,12 @@ import type { CommandPaletteEventos } from './schemas/command-palette.schemas.js
   type History = string[];
 
   class IswcCommandPalette extends IswcReactive {
-    static tag = 'iswc-command-palette';
+    static override tag = 'iswc-command-palette';
     declare static events: CommandPaletteEventos;
-    static css = css;
-    static deps = ['iswc-icon'];
+    static override css = css;
+    static override deps = ['iswc-icon'];
 
-    static observed = [...OBSERVED, 'radius', 'shadow', 'bar-gap'];
+    static override observed = [...OBSERVED, 'radius', 'shadow', 'bar-gap'];
     #commands: Command[] = [];
     #results: Command[] = [];
     #active = 0;
@@ -163,19 +163,19 @@ import type { CommandPaletteEventos } from './schemas/command-palette.schemas.js
       this.#empty.textContent = this.getAttribute('empty-text') || this.t('sinResultados');
     }
 
-    onConnected() {
+    override onConnected() {
       this.#readCommands();
       this.#bindHotkey();
     }
 
-    onDisconnected() {
+    override onDisconnected() {
       document.removeEventListener('keydown', this.#hotkeyHandler);
       this.#capa.detach();
       clearTimeout(this.#rankerTimer);
       clearTimeout(this.#announceTimer);
     }
 
-    onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
+    override onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
       if (name === 'hotkey') this.#bindHotkey();
       if (name === 'placeholder') this.#input.placeholder = newVal || '';
       if (name === 'empty-text') this.#empty.textContent = newVal || '';

@@ -31,9 +31,9 @@ import css from 'iswc:css';
   `;
 
   class IswcBreadcrumb extends IswcReactive {
-    static tag = 'iswc-breadcrumb';
-    static css = css;
-    static observed = ['label'];
+    static override tag = 'iswc-breadcrumb';
+    static override css = css;
+    static override observed = ['label'];
 
     #itemObserver: MutationObserver | null = null;
 
@@ -44,7 +44,7 @@ import css from 'iswc:css';
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
     }
 
-    onConnected() {
+    override onConnected() {
       this.#syncLabel();
       this.#syncItemRoles();
       // Re-sincronizar roles si los items se añaden dinámicamente.
@@ -52,12 +52,12 @@ import css from 'iswc:css';
       this.#itemObserver.observe(this, { childList: true, subtree: true });
     }
 
-    onDisconnected() {
+    override onDisconnected() {
       this.#itemObserver?.disconnect();
       this.#itemObserver = null;
     }
 
-    onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
+    override onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
       if (name === 'label') this.#syncLabel();
     }
 

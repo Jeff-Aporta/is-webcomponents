@@ -85,10 +85,10 @@ import css from 'iswc:css';                                  // .css compilado h
 import { Componente, html } from '../../base/componente.js';
 
 class MiaX extends Componente<MiaXProps> {
-  static tag = 'mia-x';                                      // = nombre del archivo
-  static css = css;                                          // el molde crea UNA CSSStyleSheet por clase
-  static observed = ['color'];                               // atributos observados
-  static deps = ['iswc-button'];                             // hijos del kit: el molde los pide al loader
+  static override tag = 'mia-x';                                      // = nombre del archivo
+  static override css = css;                                          // el molde crea UNA CSSStyleSheet por clase
+  static override observed = ['color'];                               // atributos observados
+  static override deps = ['iswc-button'];                             // hijos del kit: el molde los pide al loader
   protected override inicial(): MiaXProps { return { … }; }
   protected override pintar(root: ShadowRoot, props: MiaXProps): void { root.append(html`…`); }
   protected override parcial(props: MiaXProps, previos: MiaXProps): boolean { … }   // opcional

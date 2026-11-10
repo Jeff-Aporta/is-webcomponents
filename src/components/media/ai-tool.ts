@@ -46,10 +46,10 @@ const campoDeOpcion = (o: Opcion): HTMLElement => (o.valores
 const aviso = (color: string, texto: string): HTMLElement => crearNodo('iswc-callout', { color }, texto);
 
 class IswcAiTool extends PropsElement<AiToolProps> {
-  static tag = 'iswc-ai-tool';
-  static css = css;
-  static deps = ['iswc-button', 'iswc-copy-button', 'iswc-tag', 'iswc-callout'];
-  static observed = atributosDe(INICIAL);
+  static override tag = 'iswc-ai-tool';
+  static override css = css;
+  static override deps = ['iswc-button', 'iswc-copy-button', 'iswc-tag', 'iswc-callout'];
+  static override observed = atributosDe(INICIAL);
 
   #root: ShadowRoot;
   #caja: HTMLElement | null = null;

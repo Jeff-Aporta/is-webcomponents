@@ -12,9 +12,9 @@ import css from 'iswc:css';
   TEMPLATE.innerHTML = '<slot></slot>';
 
   class IswcWakeLock extends IswcElement {
-    static tag = 'iswc-wake-lock';
-    static css = css;
-    static observed = ['active'];
+    static override tag = 'iswc-wake-lock';
+    static override css = css;
+    static override observed = ['active'];
 
     #lock: WakeLockSentinel | null = null;
     #onVis: () => void;
@@ -26,17 +26,17 @@ import css from 'iswc:css';
       this.#onVis = () => { if (document.visibilityState === 'visible' && this.active) this.#acquire(); };
     }
 
-    connectedCallback(): void {
+    override connectedCallback(): void {
       document.addEventListener('visibilitychange', this.#onVis);
       if (this.active) this.#acquire();
     }
 
-    disconnectedCallback(): void {
+    override disconnectedCallback(): void {
       document.removeEventListener('visibilitychange', this.#onVis);
       this.#release();
     }
 
-    attributeChangedCallback() {
+    override attributeChangedCallback() {
       if (this.active) this.#acquire();
       else this.#release();
     }

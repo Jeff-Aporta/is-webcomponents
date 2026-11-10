@@ -91,12 +91,12 @@ import type { SliderEventos } from './schemas/slider.schemas.js';
   }
 
   class IswcSlider extends IswcFormControl {
-    static tag = 'iswc-slider';
+    static override tag = 'iswc-slider';
     declare static events: SliderEventos;
-    static css = css;
-    static shadowInit: ShadowRootInit | null = { mode: 'open', delegatesFocus: true };
+    static override css = css;
+    static override shadowInit: ShadowRootInit | null = { mode: 'open', delegatesFocus: true };
 
-    static observed = [...OBSERVED, 'track-size', 'thumb-size', 'length', 'rail-color', 'fill-color', 'thumb-color', 'focus-color'];
+    static override observed = [...OBSERVED, 'track-size', 'thumb-size', 'length', 'rail-color', 'fill-color', 'thumb-color', 'focus-color'];
 
     #base!: HTMLElement;
     #trackEl!: HTMLElement;
@@ -139,7 +139,7 @@ import type { SliderEventos } from './schemas/slider.schemas.js';
       this.#hintSlot.addEventListener('slotchange', this.#syncSlots);
     }
 
-    onConnected(): void {
+    override onConnected(): void {
       const self = this as unknown as Record<string, unknown>;
       for (const p of EXTRA_UPGRADE_PROPS) {
         if (Object.prototype.hasOwnProperty.call(this, p)) {
@@ -154,11 +154,11 @@ import type { SliderEventos } from './schemas/slider.schemas.js';
       this.#render();
     }
 
-    onDisconnected(): void {
+    override onDisconnected(): void {
       this.#endDrag();
     }
 
-    onAttributeChanged(name: string, oldVal: string | null, newVal: string | null): void {
+    override onAttributeChanged(name: string, oldVal: string | null, newVal: string | null): void {
       if (name === 'value') {
         this.#values = this.#normalize(this.#readAttrValues());
       } else if (name === 'disabled' || name === 'readonly') {
@@ -275,14 +275,14 @@ import type { SliderEventos } from './schemas/slider.schemas.js';
     get withTooltip(): boolean { return this.valueLabel !== 'off'; }
     set withTooltip(v: boolean) { this.valueLabel = v ? 'auto' : 'off'; }
 
-    @prop({ vacio: true }) accessor label: string = '';
+    @prop({ vacio: true }) override accessor label: string = '';
 
-    @prop({ vacio: true }) accessor hint: string = '';
+    @prop({ vacio: true }) override accessor hint: string = '';
 
     // ---- API pública -----------------------------------------------------
 
-    focus(options?: FocusOptions): void { this.#thumbs[0]?.focus(options); }
-    blur(): void { this.#thumbs.forEach((t) => t.blur()); }
+    override focus(options?: FocusOptions): void { this.#thumbs[0]?.focus(options); }
+    override blur(): void { this.#thumbs.forEach((t) => t.blur()); }
 
     stepUp(index: number = 0): void { this.#nudge(index, this.#stepAmount() ?? 1, true); }
     stepDown(index: number = 0): void { this.#nudge(index, -(this.#stepAmount() ?? 1), true); }

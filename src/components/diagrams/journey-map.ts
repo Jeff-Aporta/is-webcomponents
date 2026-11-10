@@ -29,8 +29,8 @@ import css from 'iswc:css';
  */
 
 class IswcJourneyMap extends DiagramElementBase {
-  static tag = 'iswc-journey-map';
-  static css = css;
+  static override tag = 'iswc-journey-map';
+  static override css = css;
   #hiddenPhases = new Set<string>();
   #stepNodes = new Map<string, StepEntry>();
   #hoverId: string | null = null;
@@ -40,19 +40,19 @@ class IswcJourneyMap extends DiagramElementBase {
     this.initDiagramShadow('jn-svg', 'jn-tooltip');
   }
 
-  onDiagramConnected() {
+  override onDiagramConnected() {
     this.wrap.addEventListener('mousemove', this.#onMouseMove);
     this.wrap.addEventListener('mouseleave', this.#onMouseLeave);
     this.wrap.addEventListener('click', this.#onClick);
   }
 
-  onDiagramDisconnected() {
+  override onDiagramDisconnected() {
     this.wrap.removeEventListener('mousemove', this.#onMouseMove);
     this.wrap.removeEventListener('mouseleave', this.#onMouseLeave);
     this.wrap.removeEventListener('click', this.#onClick);
   }
 
-  onPayloadChanged(): void { this.#hiddenPhases = new Set(); }
+  override onPayloadChanged(): void { this.#hiddenPhases = new Set(); }
 
   get hiddenPhases(): Set<string> { return this.#hiddenPhases; }
   set hiddenPhases(v: Set<string> | string[] | null | undefined) {
@@ -60,7 +60,7 @@ class IswcJourneyMap extends DiagramElementBase {
     this.queueRender();
   }
 
-  renderDiagram(): void {
+  override renderDiagram(): void {
     const spec = resolveJourneySpec(this.payload ?? {});
     this.spec = spec;
     if (!spec) {

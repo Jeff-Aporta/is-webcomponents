@@ -66,11 +66,11 @@ import type { FabEventos } from './schemas/fab.schemas.js';
   type Position = (typeof VALID_POSITION)[number];
 
   class IswcFab extends IswcElement {
-    static tag = 'iswc-fab';
+    static override tag = 'iswc-fab';
     declare static events: FabEventos;
-    static css = css;
+    static override css = css;
 
-    static observed = [...OBSERVED];
+    static override observed = [...OBSERVED];
 
     #root!: HTMLElement;
     constructor() {
@@ -85,11 +85,11 @@ import type { FabEventos } from './schemas/fab.schemas.js';
       });
     }
 
-    onConnected() {
+    override onConnected() {
       this.#sync();
     }
 
-    onAttributeChanged(name: string, oldVal: string | null, newVal: string | null): void {
+    override onAttributeChanged(name: string, oldVal: string | null, newVal: string | null): void {
       this.#sync();
     }
 

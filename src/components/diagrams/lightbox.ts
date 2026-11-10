@@ -77,11 +77,11 @@ function isActionable(n: EventTarget | null): n is HTMLElement {
 }
 
 class IswcLightbox extends withStyleAttrs(IswcElement) {
-  static tag = 'iswc-lightbox';
-  static css = css;
-  static deps = ['iswc-icon'];
+  static override tag = 'iswc-lightbox';
+  static override css = css;
+  static override deps = ['iswc-icon'];
 
-  static observed = ['open', 'variant', 'zoomable', 'close-on-backdrop', 'toolbar', 'no-default-actions'];
+  static override observed = ['open', 'variant', 'zoomable', 'close-on-backdrop', 'toolbar', 'no-default-actions'];
 
   /** Capa en la pila de core/position.ts mientras el visor está abierto: un modal de abajo no se lleva su Escape. */
   #capa = createPopupDismiss(this, {});
@@ -167,21 +167,21 @@ class IswcLightbox extends withStyleAttrs(IswcElement) {
     });
   }
 
-  connectedCallback(): void {
+  override connectedCallback(): void {
 
     super.connectedCallback();
     if (this.open) this.#syncOpen();
     this.#syncDefaultActions();
   }
 
-  disconnectedCallback(): void {
+  override disconnectedCallback(): void {
     this.#pz?.destroy();
     this.#pz = null;
     if (this.#dialog.open) this.#dialog.close();
     this.#capa.detach();
   }
 
-  attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
+  override attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
 
     super.attributeChangedCallback(name, oldVal, newVal);
     if (oldVal === newVal) return;

@@ -114,10 +114,10 @@ const TEMPLATE = document.createElement('template');
 TEMPLATE.innerHTML = HTML_TEMPLATE;
 
 class IswcAppShell extends IswcReactive {
-  static tag = 'iswc-app-shell';
-  static css = css;
-  static deps = ['iswc-icon', 'iswc-button'];
-  static observed = ['brand', 'logo', 'brand-href', 'home-label', 'sidebar-label', 'toast'];
+  static override tag = 'iswc-app-shell';
+  static override css = css;
+  static override deps = ['iswc-icon', 'iswc-button'];
+  static override observed = ['brand', 'logo', 'brand-href', 'home-label', 'sidebar-label', 'toast'];
 
   #brand!: HTMLAnchorElement;
   #logo!: HTMLElement;

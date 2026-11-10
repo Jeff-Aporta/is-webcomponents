@@ -393,13 +393,13 @@ class TARowBase extends TARoles {
   }
 
   /** Sincroniza todos los row adapters y notifica a la UI. */
-  syncAllRowAdapters(): void {
+  override syncAllRowAdapters(): void {
     for (const adapter of this.rowAdapters.values()) adapter.sync();
     this.notifyUI();
   }
 
   /** Sincroniza adapters cuyo `flatPath` está en `ids`. */
-  syncRowAdaptersByFlatPaths(ids: readonly string[]): void {
+  override syncRowAdaptersByFlatPaths(ids: readonly string[]): void {
     for (const raw of ids) {
       if (!raw) continue;
       const key = this.normalizeFlatPath(raw);
@@ -649,7 +649,7 @@ class TARowBase extends TARoles {
   }
 
   /** Construye el `CustomsRuntime` (DTO inmutable) para pasar a hooks. */
-  buildCustomsRuntime(): CustomsRuntime {
+  override buildCustomsRuntime(): CustomsRuntime {
     // Cast tipado a la forma completa de la instancia (campos + métodos heredados).
     type Full = {
       record: TRecord | null;

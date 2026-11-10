@@ -229,11 +229,11 @@ import css from 'iswc:css';
   }
 
   class IswcMdEditor extends IswcElement {
-    static tag = 'iswc-md-editor';
-    static css = css;
-    static deps = ['iswc-button', 'iswc-copy-button', 'iswc-icon'];
+    static override tag = 'iswc-md-editor';
+    static override css = css;
+    static override deps = ['iswc-button', 'iswc-copy-button', 'iswc-icon'];
 
-    static observed = [...OBSERVED, 'preview-max-height'];
+    static override observed = [...OBSERVED, 'preview-max-height'];
 
     #preview!: HTMLElement;
     #previewBody!: HTMLElement;

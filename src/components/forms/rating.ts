@@ -76,13 +76,13 @@ import type { RatingEventos } from './schemas/rating.schemas.js';
   type LabelFn = (value: number) => string;
 
   class IswcRating extends IswcFormControl {
-    static tag = 'iswc-rating';
+    static override tag = 'iswc-rating';
     declare static events: RatingEventos;
-    static css = css;
-    static shadowInit: ShadowRootInit | null = { mode: 'open', delegatesFocus: true };
-    static deps = ['iswc-icon'];
+    static override css = css;
+    static override shadowInit: ShadowRootInit | null = { mode: 'open', delegatesFocus: true };
+    static override deps = ['iswc-icon'];
 
-    static observed = [...OBSERVED, 'size', 'gap', 'color', 'empty-color', 'focus-color'];
+    static override observed = [...OBSERVED, 'size', 'gap', 'color', 'empty-color', 'focus-color'];
 
     #base!: HTMLElement;
     #labelEl!: HTMLElement;
@@ -113,7 +113,7 @@ import type { RatingEventos } from './schemas/rating.schemas.js';
       this.#labelSlot.addEventListener('slotchange', this.#syncSlots);
     }
 
-    onConnected(): void {
+    override onConnected(): void {
       for (const p of EXTRA_UPGRADE_PROPS) {
         if (Object.prototype.hasOwnProperty.call(this, p)) {
           const v = (this as unknown as Record<string, unknown>)[p];
@@ -128,7 +128,7 @@ import type { RatingEventos } from './schemas/rating.schemas.js';
       this.#render();
     }
 
-    onAttributeChanged(name: string, _oldVal: string | null, newVal: string | null): void {
+    override onAttributeChanged(name: string, _oldVal: string | null, newVal: string | null): void {
       if (name === 'value') {
         this.#value = this.#coerce(Number(newVal ?? '0'));
         this.#render();
@@ -214,12 +214,12 @@ import type { RatingEventos } from './schemas/rating.schemas.js';
 
     @prop({ type: 'bool' }) accessor clearable: boolean = false;
 
-    @prop({ vacio: true }) accessor label: string = '';
+    @prop({ vacio: true }) override accessor label: string = '';
 
     // ---- API pública -----------------------------------------------------
 
-    focus(options?: FocusOptions): void { this.#base.focus(options); }
-    blur(): void { this.#base.blur(); }
+    override focus(options?: FocusOptions): void { this.#base.focus(options); }
+    override blur(): void { this.#base.blur(); }
 
     clear(): void { this.#commit(0); }
 

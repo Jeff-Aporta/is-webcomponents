@@ -19,9 +19,9 @@ import css from 'iswc:css';
   };
 
   class IswcFileEdit extends IswcElement {
-    static tag = 'iswc-file-edit';
-    static css = css;
-    static observed = OBSERVED;
+    static override tag = 'iswc-file-edit';
+    static override css = css;
+    static override observed = OBSERVED;
     #stage!: HTMLElement;
     #gen = 0;
 
@@ -32,8 +32,8 @@ import css from 'iswc:css';
       this.#stage = shadow.querySelector('.stage')!;
     }
 
-    onConnected() { sincronizarAlto(this); this.#mount(); }
-    onAttributeChanged() { sincronizarAlto(this); this.#mount(); }
+    override onConnected() { sincronizarAlto(this); this.#mount(); }
+    override onAttributeChanged() { sincronizarAlto(this); this.#mount(); }
 
     get src() { return this.getAttribute('src'); }
     set src(v) { setOptionalAttr(this, 'src', v); }

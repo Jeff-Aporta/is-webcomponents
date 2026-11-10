@@ -48,12 +48,12 @@ import css from 'iswc:css';
   /** Personalización por atributo (ver `core/attrs.ts`). */
 
   class IswcDropdown extends withStyleAttrs(IswcReactive) {
-    static tag = 'iswc-dropdown';
+    static override tag = 'iswc-dropdown';
     declare static events: DropdownEventos;
-    static css = css;
-    static deps = ['iswc-divider'];
+    static override css = css;
+    static override deps = ['iswc-divider'];
 
-    static observed = ['show-duration', 'hide-duration'];
+    static override observed = ['show-duration', 'hide-duration'];
 
     // El `!` en las cuatro referencias del shadow: el template es una constante
     // de este modulo, asi que los cuatro nodos existen siempre. Comprobarlos en
@@ -87,7 +87,7 @@ import css from 'iswc:css';
       this.#dialog.addEventListener('close', this.#onDialogClose);
     }
 
-    connectedCallback(): void {
+    override connectedCallback(): void {
       super.connectedCallback();
       this.#mounted = true;
       this.#bindTrigger();
@@ -95,14 +95,14 @@ import css from 'iswc:css';
       if (this.open) this.#doShow(true);
     }
 
-    disconnectedCallback(): void {
+    override disconnectedCallback(): void {
       this.#mounted = false;
       this.#unbindTrigger();
       this.#dismiss.detach();
       if (this.#dialog.open) this.#dialog.close();
     }
 
-    attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
+    override attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
       // Los valores reales: `IswcReactive` convierte `newVal` en la propiedad (`open`, `placement`…).
       super.attributeChangedCallback(name, oldVal, newVal);
       if (!this.#mounted) return;

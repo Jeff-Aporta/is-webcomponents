@@ -28,10 +28,10 @@ TEMPLATE.innerHTML = /* html */ `
 `;
 
 class IswcPageHeader extends PropsElement<PageHeaderProps> {
-  static tag = 'iswc-page-header';
-  static css = css;
-  static deps = ['iswc-icon'];
-  static observed = atributosDe(INICIAL);
+  static override tag = 'iswc-page-header';
+  static override css = css;
+  static override deps = ['iswc-icon'];
+  static override observed = atributosDe(INICIAL);
 
   #icono: HTMLElement;
   #rotulo: HTMLElement;

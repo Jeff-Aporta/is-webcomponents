@@ -225,12 +225,12 @@ function numeroLocal(n: number): string {
 }
 
 export class IswcAgGrid extends IswcElement {
-  static tag = 'iswc-ag-grid';
-  static css = css;
-  static deps = ['iswc-icon', 'iswc-button'];
+  static override tag = 'iswc-ag-grid';
+  static override css = css;
+  static override deps = ['iswc-icon', 'iswc-button'];
 
-  static template = TEMPLATE;
-  static observed = [
+  static override template = TEMPLATE;
+  static override observed = [
       'rows', 'columns', 'get-row-id',
       'page-size', 'page-size-options', 'pagination',
       'row-selection', 'selectable', 'density',
@@ -402,7 +402,7 @@ export class IswcAgGrid extends IswcElement {
     if (btn.dataset.action === 'collapse-all') this.#api.collapseAllGroups();
   };
 
-  async onConnected(): Promise<void> {
+  override async onConnected(): Promise<void> {
     this.#ro.observe(this.#viewport);
     // La sonda mide en em: un cambio de font-size del host dispara el reescalado.
     this.#ro.observe(this.shadowRoot!.querySelector<HTMLElement>('.mim-dg__sonda')!);
@@ -423,13 +423,13 @@ export class IswcAgGrid extends IswcElement {
     this.#nucleo.emitir('firstDataRendered', {});
   }
 
-  onDisconnected(): void {
+  override onDisconnected(): void {
     this.#ro?.disconnect();
     this.#unsubscribe?.();
     this.#nucleo.emitir('gridPreDestroyed', { state: this.#api?.serializeState() });
   }
 
-  async onAttributeChanged(name: string, _oldVal: string | null, newVal: string | null): Promise<void> {
+  override async onAttributeChanged(name: string, _oldVal: string | null, newVal: string | null): Promise<void> {
     if (name in ATRIBUTOS) {
       const opcion = ATRIBUTOS[name]!;
       this.#nucleo.h.fijarOpcion(opcion, valorAtributo(opcion, newVal));

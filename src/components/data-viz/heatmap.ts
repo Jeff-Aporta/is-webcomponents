@@ -46,10 +46,10 @@ import css from 'iswc:css';
   }
 
   class IswcHeatmap extends withStyleAttrs(IswcElement) {
-    static tag = 'iswc-heatmap';
-    static css = css;
+    static override tag = 'iswc-heatmap';
+    static override css = css;
 
-    static observed = [...OBSERVED, 'text-color', 'grid-color'];
+    static override observed = [...OBSERVED, 'text-color', 'grid-color'];
 
     #ro: ResizeObserver | null = null;
     #mo: MutationObserver | null = null;
@@ -75,7 +75,7 @@ import css from 'iswc:css';
       this.#svg.addEventListener('pointerleave', () => this.#clearHover());
     }
 
-    connectedCallback(): void {
+    override connectedCallback(): void {
       super.connectedCallback();
       this.#mounted = true;
       this.#readJsonSlot();
@@ -88,13 +88,13 @@ import css from 'iswc:css';
       this.#render();
     }
 
-    disconnectedCallback(): void {
+    override disconnectedCallback(): void {
       this.#mounted = false;
       this.#mo?.disconnect();
       this.#ro?.disconnect();
     }
 
-    attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
+    override attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
       super.attributeChangedCallback(name, oldVal, newVal);
       if (!this.#mounted || oldVal === newVal) return;
       this.#render();

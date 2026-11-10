@@ -44,10 +44,10 @@ function getBarcodeDetector(): BarcodeDetectorCtor | undefined {
   `;
 
   class IswcBarcodeScanner extends IswcElement {
-    static tag = 'iswc-barcode-scanner';
-    static css = css;
-    static deps = ['iswc-button', 'iswc-icon'];
-    static observed = ['formats', 'disabled'];
+    static override tag = 'iswc-barcode-scanner';
+    static override css = css;
+    static override deps = ['iswc-button', 'iswc-icon'];
+    static override observed = ['formats', 'disabled'];
 
     /**
      * 2026-Q1 fix: attributeChangedCallback faltaba → el playground no
@@ -56,7 +56,7 @@ function getBarcodeDetector(): BarcodeDetectorCtor | undefined {
      * re-construye la lista interna de decodificadores si el scanner
      * está activo.
      */
-    attributeChangedCallback(name: string, _oldVal: string | null, newVal: string | null): void {
+    override attributeChangedCallback(name: string, _oldVal: string | null, newVal: string | null): void {
       if (name === 'disabled') {
         const on = this.hasAttribute('disabled');
         this.#go?.toggleAttribute('disabled', on);
@@ -87,7 +87,7 @@ function getBarcodeDetector(): BarcodeDetectorCtor | undefined {
       this.addEventListener('keydown', this.#onKeydown);
     }
 
-    connectedCallback(): void {
+    override connectedCallback(): void {
       super.connectedCallback();
       // F0.3 g12 [a11y/region]: landmark + label.
       if (!this.hasAttribute('role')) this.setAttribute('role', 'region');
@@ -99,7 +99,7 @@ function getBarcodeDetector(): BarcodeDetectorCtor | undefined {
       this.#syncSupport();
     }
 
-    disconnectedCallback(): void {
+    override disconnectedCallback(): void {
       this.removeEventListener('keydown', this.#onKeydown);
       this.stop();
     }

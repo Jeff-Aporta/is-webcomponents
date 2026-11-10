@@ -37,9 +37,9 @@ const escapar = (s: string) => s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<'
 const TEXTOS: TextosDocIndex = { placeholder: 'Buscar…', sinResultados: 'Sin resultados. Pruebe con otra palabra.', resumen: '{items} hojas · {grupos} módulos' };
 
 class IswcDocIndex extends IswcElement {
-  static tag = 'iswc-doc-index';
-  static css = css;
-  static observed = ['current', 'placeholder', 'compact', 'flat'];
+  static override tag = 'iswc-doc-index';
+  static override css = css;
+  static override observed = ['current', 'placeholder', 'compact', 'flat'];
 
   #shadow: ShadowRoot;
   #items: ItemDocIndex[] = [];
@@ -59,7 +59,7 @@ class IswcDocIndex extends IswcElement {
     });
   }
 
-  connectedCallback(): void {
+  override connectedCallback(): void {
     this.#input.placeholder = this.getAttribute('placeholder') || this.#textos.placeholder;
     // Ítems declarativos: un `<script type="application/json">` hijo (si nadie asignó `items`).
     const json = this.querySelector('script[type="application/json"]');
@@ -69,7 +69,7 @@ class IswcDocIndex extends IswcElement {
     this.#pintar();
   }
 
-  attributeChangedCallback(nombre: string): void {
+  override attributeChangedCallback(nombre: string): void {
     if (nombre === 'placeholder') this.#input.placeholder = this.getAttribute('placeholder') || this.#textos.placeholder;
     if (nombre === 'current') this.#marcar();
     if (nombre === 'compact') {

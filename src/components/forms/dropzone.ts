@@ -55,11 +55,11 @@ import type { DropzoneEventos } from './schemas/dropzone.schemas.js';
   }
 
   class IswcDropzone extends IswcReactive {
-    static tag = 'iswc-dropzone';
+    static override tag = 'iswc-dropzone';
     declare static events: DropzoneEventos;
-    static css = css;
-    static deps = ['iswc-icon', 'iswc-button'];
-    static observed = OBSERVED;
+    static override css = css;
+    static override deps = ['iswc-icon', 'iswc-button'];
+    static override observed = OBSERVED;
     #files: FileRecord[] = [];
     #counter = 0;
     #zone!: HTMLElement;
@@ -107,10 +107,10 @@ import type { DropzoneEventos } from './schemas/dropzone.schemas.js';
       if (this.mounted) this.#render();
     }
 
-    connectedCallback(): void {
+    override connectedCallback(): void {
     super.connectedCallback(); this.#sync(); this.#render(); }
 
-    attributeChangedCallback(): void {
+    override attributeChangedCallback(): void {
       if (this.hasAttribute('multiple')) this.#input.multiple = true;
       if (!this.hasAttribute('multiple')) this.#input.multiple = false;
       const accept = this.getAttribute('accept');

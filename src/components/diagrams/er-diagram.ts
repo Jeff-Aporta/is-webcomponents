@@ -49,9 +49,9 @@ const iswcAnimDashCss = `
 `;
 
 class IswcErDiagram extends DiagramElementBase {
-  static tag = 'iswc-er-diagram';
-  static css = css;
-  static observed = [...DiagramElementBase.observed, 'theme', 'animation', 'open-on-click'];
+  static override tag = 'iswc-er-diagram';
+  static override css = css;
+  static override observed = [...DiagramElementBase.observed, 'theme', 'animation', 'open-on-click'];
 
   #theme: DiagramTheme | null = null;
   #styleTheme: ErThemeJson | null = null;
@@ -81,19 +81,19 @@ class IswcErDiagram extends DiagramElementBase {
     return resolveErTheme(this.payload);
   }
 
-  onDiagramConnected() {
+  override onDiagramConnected() {
     this.wrap.addEventListener('mousemove', this.#onMouseMove as EventListener);
     this.wrap.addEventListener('mouseleave', this.#onMouseLeave as EventListener);
     this.wrap.addEventListener('click', this.#onClick as EventListener);
   }
 
-  onDiagramDisconnected() {
+  override onDiagramDisconnected() {
     this.wrap.removeEventListener('mousemove', this.#onMouseMove as EventListener);
     this.wrap.removeEventListener('mouseleave', this.#onMouseLeave as EventListener);
     this.wrap.removeEventListener('click', this.#onClick as EventListener);
   }
 
-  onPayloadChanged() { this.#hiddenGroups = new Set(); }
+  override onPayloadChanged() { this.#hiddenGroups = new Set(); }
 
   get hiddenGroups() { return this.#hiddenGroups; }
   set hiddenGroups(v) {
@@ -101,7 +101,7 @@ class IswcErDiagram extends DiagramElementBase {
     this.queueRender();
   }
 
-  renderDiagram() {
+  override renderDiagram() {
     const spec = resolveErSpec(this.payload ?? {});
     this.spec = spec;
     if (!spec) {

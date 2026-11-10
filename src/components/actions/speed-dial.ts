@@ -78,11 +78,11 @@ import type { SpeedDialEventos } from './schemas/speed-dial.schemas.js';
   /** Personalización por atributo (ver `core/attrs.ts`). */
 
   class IswcSpeedDial extends withStyleAttrs(IswcElement) {
-    static tag = 'iswc-speed-dial';
+    static override tag = 'iswc-speed-dial';
     declare static events: SpeedDialEventos;
-    static css = css;
+    static override css = css;
 
-    static observed = [...OBSERVED, 'radius'];
+    static override observed = [...OBSERVED, 'radius'];
 
     #mo: MutationObserver | null = null;
     #ro: ResizeObserver | null = null;
@@ -110,7 +110,7 @@ import type { SpeedDialEventos } from './schemas/speed-dial.schemas.js';
       });
     }
 
-    connectedCallback(): void {
+    override connectedCallback(): void {
       super.connectedCallback();
       this.#mounted = true;
       this.#syncDirection();
@@ -130,7 +130,7 @@ import type { SpeedDialEventos } from './schemas/speed-dial.schemas.js';
       window.addEventListener('load', this.#onWinResize);
     }
 
-    disconnectedCallback(): void {
+    override disconnectedCallback(): void {
       this.#mounted = false;
       this.#mo?.disconnect();
       this.#dismiss.detach();
@@ -139,7 +139,7 @@ import type { SpeedDialEventos } from './schemas/speed-dial.schemas.js';
       this.#ro = null;
     }
 
-    attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
+    override attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
       super.attributeChangedCallback(name, oldVal, newVal);
       if (oldVal === newVal || !this.#mounted) return;
       if (name === 'direction') {
@@ -581,9 +581,9 @@ import type { SpeedDialEventos } from './schemas/speed-dial.schemas.js';
 
   // Acción individual — patrón primario: <button> extendido.
   class IswcSpeedDialAction extends IswcElement {
-    static tag = 'iswc-speed-dial-action';
-    static css = css;
-    static observed = ['icon', 'label', 'color', 'href', 'disabled'];
+    static override tag = 'iswc-speed-dial-action';
+    static override css = css;
+    static override observed = ['icon', 'label', 'color', 'href', 'disabled'];
     constructor() {
       super();
       this.shadowRoot!.innerHTML = /* html */ `
@@ -593,7 +593,7 @@ import type { SpeedDialEventos } from './schemas/speed-dial.schemas.js';
         </a>
       `;
     }
-    connectedCallback(): void {
+    override connectedCallback(): void {
       const link = this.shadowRoot?.querySelector<HTMLAnchorElement>('a');
       if (!link) return;
       const href = this.getAttribute('href');
@@ -607,7 +607,7 @@ import type { SpeedDialEventos } from './schemas/speed-dial.schemas.js';
       if (href) link.addEventListener('click', (e: Event) => e.stopPropagation());
       if (this.hasAttribute('disabled')) link.classList.add('iswc-disabled');
     }
-    attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
+    override attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
       if (oldVal === newVal) return;
       const link = this.shadowRoot?.querySelector<HTMLAnchorElement>('a');
       if (!link) return;

@@ -60,10 +60,10 @@ import css from 'iswc:css';
   }
 
   class IswcThemeImg extends IswcElement {
-    static tag = 'iswc-theme-img';
-    static css = css;
+    static override tag = 'iswc-theme-img';
+    static override css = css;
 
-    static observed = [...OBSERVED];
+    static override observed = [...OBSERVED];
 
     #img!: HTMLImageElement;
     #unwatch: (() => void) | null = null;
@@ -96,18 +96,18 @@ import css from 'iswc:css';
       emit(this, 'iswc-error', { src: this.#img?.src ?? '' });
     };
 
-    onConnected() {
+    override onConnected() {
       this.#watch();
       this.#sync();
     }
 
-    onDisconnected() {
+    override onDisconnected() {
       const unwatch = this.#unwatch;
       if (unwatch) unwatch();
       this.#unwatch = null;
     }
 
-    onAttributeChanged() {
+    override onAttributeChanged() {
       this.#sync();
     }
 

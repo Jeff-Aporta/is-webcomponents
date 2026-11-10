@@ -122,9 +122,9 @@ function stemInner(iface: { cx: number; cy: number; side: Lado }, r: number): In
 /** Punto anchor de una arista. */
 
 class IswcComponentDiagram extends DiagramElementBase {
-  static tag = 'iswc-component-diagram';
-  static css = css;
-  static observed = [...DiagramElementBase.observed, 'min-gap', 'theme'];
+  static override tag = 'iswc-component-diagram';
+  static override css = css;
+  static override observed = [...DiagramElementBase.observed, 'min-gap', 'theme'];
 
   /** Capa superior con las etiquetas de arista (ver #buildEdges). */
   #etiquetasEdges: SVGGElement | null = null;
@@ -137,13 +137,13 @@ class IswcComponentDiagram extends DiagramElementBase {
     this.initDiagramShadow('cd-svg', 'cd-tooltip');
   }
 
-  onDiagramConnected(): void {
+  override onDiagramConnected(): void {
     this.wrap.addEventListener('mousemove', this.#onMouseMove);
     this.wrap.addEventListener('mouseleave', this.#onMouseLeave);
     this.wrap.addEventListener('click', this.#onClick);
   }
 
-  onDiagramDisconnected(): void {
+  override onDiagramDisconnected(): void {
     this.wrap.removeEventListener('mousemove', this.#onMouseMove);
     this.wrap.removeEventListener('mouseleave', this.#onMouseLeave);
     this.wrap.removeEventListener('click', this.#onClick);
@@ -179,7 +179,7 @@ class IswcComponentDiagram extends DiagramElementBase {
     return fromPayload;
   }
 
-  renderDiagram(): void {
+  override renderDiagram(): void {
     // Con estilo y sin `boxStyle` en el payload, el estilo decide la pintura:
     // el consumidor no elige colores ni cajas a mano.
     const conEstilo = Boolean(styleThemeFor(hostStyleName(this), 'component'));

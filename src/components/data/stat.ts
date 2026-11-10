@@ -47,9 +47,9 @@ import css from 'iswc:css';
   const OBSERVED = ['label', 'value', 'helper', 'trend', 'trend-direction', 'icon', 'color'];
 
   class IswcStat extends IswcElement {
-    static tag = 'iswc-stat';
-    static css = css;
-    static observed = OBSERVED;
+    static override tag = 'iswc-stat';
+    static override css = css;
+    static override observed = OBSERVED;
     #root!: HTMLElement;
     constructor() {
       super();
@@ -58,11 +58,11 @@ import css from 'iswc:css';
       this.#root = shadow.querySelector<HTMLElement>('.stat')!;
     }
 
-    onConnected() {
+    override onConnected() {
       this.#sync();
     }
 
-    onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
+    override onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
       this.#sync();
     }
 

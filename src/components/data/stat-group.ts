@@ -28,10 +28,10 @@ function aplicar(el: Element, k: StatGroupItem): void {
 }
 
 class IswcStatGroup extends PropsElement<StatGroupProps> {
-  static tag = 'iswc-stat-group';
-  static css = css;
-  static deps = ['iswc-skeleton'];
-  static observed = atributosDe(INICIAL);
+  static override tag = 'iswc-stat-group';
+  static override css = css;
+  static override deps = ['iswc-skeleton'];
+  static override observed = atributosDe(INICIAL);
 
   #root: ShadowRoot;
 

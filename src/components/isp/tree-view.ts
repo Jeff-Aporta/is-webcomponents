@@ -69,10 +69,10 @@ const OBSERVED = ['readonly', 'draggable', 'disabled', 'label-field', 'helper-fi
 /** Diálogo de protección. */
 
 class IswcTreeView extends IswcElement {
-  static tag = 'iswc-tree-view';
-  static css = css;
-  static deps = ['iswc-button', 'iswc-icon', 'iswc-divider'];
-  static observed = OBSERVED;
+  static override tag = 'iswc-tree-view';
+  static override css = css;
+  static override deps = ['iswc-button', 'iswc-icon', 'iswc-divider'];
+  static override observed = OBSERVED;
 
   #mounted = false;
   #root!: HTMLElement;
@@ -140,8 +140,8 @@ class IswcTreeView extends IswcElement {
   get disabled(): boolean { return this.hasAttribute('disabled'); }
   set disabled(v: boolean) { this.toggleAttribute('disabled', !!v); }
 
-  get draggable(): boolean { return this.getAttribute('draggable') !== 'false'; }
-  set draggable(v: boolean | string) {
+  override get draggable(): boolean { return this.getAttribute('draggable') !== 'false'; }
+  override set draggable(v: boolean | string) {
     if (v === false || v === 'false') this.setAttribute('draggable', 'false');
     else this.removeAttribute('draggable');
   }
@@ -166,7 +166,7 @@ class IswcTreeView extends IswcElement {
     this.#protectOk = shadow.querySelector<HTMLElement>('.protect-ok')!;
   }
 
-  connectedCallback(): void {
+  override connectedCallback(): void {
     super.connectedCallback();
     this.#mounted = true;
     this.#upgrade();
@@ -184,7 +184,7 @@ class IswcTreeView extends IswcElement {
     this.#pushState();
   }
 
-  disconnectedCallback(): void {
+  override disconnectedCallback(): void {
     this.#mounted = false;
     this.#offUi?.();
     this.#offUi = null;
@@ -199,7 +199,7 @@ class IswcTreeView extends IswcElement {
     this.#root.removeEventListener('dragleave', this.#onTreeDragLeave as EventListener, true);
   }
 
-  attributeChangedCallback(): void {
+  override attributeChangedCallback(): void {
     if (!this.#mounted) return;
     this.#pushState();
   }

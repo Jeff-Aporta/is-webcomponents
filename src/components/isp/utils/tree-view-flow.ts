@@ -409,7 +409,7 @@ class TATreeFlow extends TATreeShape {
    * Reconstruye la jerarquía del árbol (lista plana → árbol → lista plana)
    * reasignando flatPaths. Útil tras inserciones/eliminaciones masivas.
    */
-  rebuildFlatTree(sort?: (a: TNode, b: TNode) => number): void {
+  override rebuildFlatTree(sort?: (a: TNode, b: TNode) => number): void {
     const cmp = sort ?? flatPathTailCmp;
     const list = this.List2RowsNodes;
     if (!list.length) return;
@@ -534,7 +534,7 @@ class TATreeFlow extends TATreeShape {
   }
 
   /** Recorre el árbol, persiste flatPaths, y guarda en `List2Rows`. */
-  commitFlatPaths(): void {
+  override commitFlatPaths(): void {
     this.oncommittreeorder(this.rootNodes);
     const flat: TNode[] = [];
     const walk = (nodes: TNode[]): void => {

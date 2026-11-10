@@ -25,9 +25,9 @@ import css from 'iswc:css';
   const OBSERVED: string[] = ['value', 'disabled', 'selected', 'group'];
 
   class IswcOption extends IswcElement {
-    static tag = 'iswc-option';
-    static css = css;
-    static observed = OBSERVED;
+    static override tag = 'iswc-option';
+    static override css = css;
+    static override observed = OBSERVED;
 
     #root!: HTMLElement;
     constructor() {
@@ -37,11 +37,11 @@ import css from 'iswc:css';
       this.#root = shadow.querySelector<HTMLElement>('.option')!;
     }
 
-    onConnected(): void {
+    override onConnected(): void {
       this.#sync();
     }
 
-    onAttributeChanged(_name: string, _oldVal: string | null, _newVal: string | null): void {
+    override onAttributeChanged(_name: string, _oldVal: string | null, _newVal: string | null): void {
       this.#sync();
     }
 

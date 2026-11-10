@@ -30,12 +30,12 @@ import type { DurationPickerEventos } from './schemas/duration-picker.schemas.js
   const pad2 = (n: number | string): string => String(n).padStart(2, '0');
 
   class IswcDurationPicker extends IswcElement {
-    static tag = 'iswc-duration-picker';
+    static override tag = 'iswc-duration-picker';
     declare static events: DurationPickerEventos;
-    static css = css;
-    static deps = ['iswc-button'];
+    static override css = css;
+    static override deps = ['iswc-button'];
 
-    static observed = [...OBSERVED, 'bg', 'border-color'];
+    static override observed = [...OBSERVED, 'bg', 'border-color'];
     #active: HTMLInputElement | null = null;
 
     constructor() {
@@ -88,11 +88,11 @@ import type { DurationPickerEventos } from './schemas/duration-picker.schemas.js
       });
     }
 
-    onConnected(): void {
+    override onConnected(): void {
       this.#sync();
     }
 
-    onAttributeChanged(_name: string, _oldVal: string | null, _newVal: string | null): void {
+    override onAttributeChanged(_name: string, _oldVal: string | null, _newVal: string | null): void {
       this.#sync();
     }
 

@@ -47,9 +47,9 @@ import css from 'iswc:css';
   type Loading = typeof VALID_LOADING[number];
 
   class IswcAvatar extends IswcElement {
-    static tag = 'iswc-avatar';
-    static css = css;
-    static observed = OBSERVED;
+    static override tag = 'iswc-avatar';
+    static override css = css;
+    static override observed = OBSERVED;
 
     #img!: HTMLImageElement;
     #initials!: HTMLElement;
@@ -67,14 +67,14 @@ import css from 'iswc:css';
       shadow.querySelector<HTMLSlotElement>('slot[name="icon"]')!.addEventListener('slotchange', () => this.#syncView());
     }
 
-    onConnected() {
+    override onConnected() {
       if (!this.hasAttribute('shape')) this.setAttribute('shape', DEFAULT_MEDIA_SHAPE);
       if (!this.hasAttribute('loading')) this.setAttribute('loading', 'eager');
       this.#imgFailed = false;
       this.#syncView();
     }
 
-    onAttributeChanged(name: string, _oldVal: string | null, _newVal: string | null) {
+    override onAttributeChanged(name: string, _oldVal: string | null, _newVal: string | null) {
       if (name === 'image') this.#imgFailed = false;
       this.#syncView();
     }

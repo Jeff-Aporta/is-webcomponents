@@ -60,10 +60,10 @@ function aGrupos(crudo: unknown): MetaGroup[] {
 const tieneValor = (r: MetaRow): boolean => Boolean((r.value ?? '').trim()) || Boolean(r.tags?.length);
 
 class IswcMetaList extends IswcElement {
-  static tag = 'iswc-meta-list';
-  static css = css;
-  static deps = ['iswc-tag'];
-  static observed = ['heading', 'layout'];
+  static override tag = 'iswc-meta-list';
+  static override css = css;
+  static override deps = ['iswc-tag'];
+  static override observed = ['heading', 'layout'];
 
   #groups: MetaGroup[] = [];
   #heading: HTMLElement;

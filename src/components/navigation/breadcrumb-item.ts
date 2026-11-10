@@ -45,9 +45,9 @@ import css from 'iswc:css';
   const OBSERVED = ['href', 'icon', 'target', 'rel'];
 
   class IswcBreadcrumbItem extends IswcElement {
-    static tag = 'iswc-breadcrumb-item';
-    static css = css;
-    static observed = OBSERVED;
+    static override tag = 'iswc-breadcrumb-item';
+    static override css = css;
+    static override observed = OBSERVED;
 
     #anchor: HTMLAnchorElement | null = null;
     #upgradeProps: string[] = ['href', 'icon', 'target', 'rel'];
@@ -58,12 +58,12 @@ import css from 'iswc:css';
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
     }
 
-    onConnected() {
+    override onConnected() {
       this.#upgradeProperties();
       this.#renderInteractive();
     }
 
-    onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
+    override onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
       if (name === 'href' || name === 'target' || name === 'rel') {
         this.#renderInteractive();
       }

@@ -93,9 +93,9 @@ import css from 'iswc:css';
   }
 
   class IswcMdRender extends IswcElement {
-    static tag = 'iswc-md-render';
-    static css = css;
-    static observed = OBSERVED;
+    static override tag = 'iswc-md-render';
+    static override css = css;
+    static override observed = OBSERVED;
 
     #body!: HTMLElement;
     #empty!: HTMLElement;
@@ -115,17 +115,17 @@ import css from 'iswc:css';
       this.#body.addEventListener('keydown', (e: KeyboardEvent) => this.#onKeyDown(e));
     }
 
-    onConnected() {
+    override onConnected() {
       this.#hydrateValueFromChild();
       this.#render();
     }
 
-    onDisconnected() {
+    override onDisconnected() {
       this.#hidratacion?.cancelar();
       this.#hidratacion = null;
     }
 
-    onAttributeChanged(name: string): void {
+    override onAttributeChanged(name: string): void {
       if (name === 'value' && this.#dirty) return;
       this.#render();
     }

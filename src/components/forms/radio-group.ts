@@ -49,11 +49,11 @@ import { prop } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
   const PREV_KEYS = ['ArrowUp', 'ArrowLeft'];
 
   class IswcRadioGroup extends IswcFormControl {
-    static tag = 'iswc-radio-group';
+    static override tag = 'iswc-radio-group';
     declare static events: RadioGroupEventos;
-    static css = css;
+    static override css = css;
 
-    static observed = [...OBSERVED, 'accent'];
+    static override observed = [...OBSERVED, 'accent'];
 
     #base!: HTMLElement;
     #labelEl!: HTMLElement;
@@ -86,7 +86,7 @@ import { prop } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
       this.addEventListener('keydown', this.#onKey);
     }
 
-    onConnected(): void {
+    override onConnected(): void {
       if (!this.#defaultsRead) {
         this.#defaultsRead = true;
         this.#defaultValue = this.getAttribute('value');
@@ -95,7 +95,7 @@ import { prop } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
       this.#sync();
     }
 
-    onAttributeChanged(name: string, _oldVal: string | null, _newVal: string | null): void {
+    override onAttributeChanged(name: string, _oldVal: string | null, _newVal: string | null): void {
       if (name === 'label' || name === 'hint' || name === 'error-text') this.#syncMeta();
       if (name !== 'label' && name !== 'hint') this.#sync();
     }
@@ -149,7 +149,7 @@ import { prop } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
 
     get radios(): IswcRadioElement[] { return this.#radios(); }
 
-    focus(options?: FocusOptions): void {
+    override focus(options?: FocusOptions): void {
       const radios = this.#radios();
       const target = radios.find((r) => r.getAttribute('tabindex') === '0') ?? radios.find((r) => !r.disabled);
       target?.focus(options);

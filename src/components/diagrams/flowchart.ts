@@ -164,9 +164,9 @@ function parseAnimationTokens(raw: string | null | undefined): string[] {
 }
 
 class IswcFlowchart extends DiagramElementBase {
-  static tag = 'iswc-flowchart';
-  static css = css;
-  static observed = [...DiagramElementBase.observed, 'mode', 'persist', 'storage-key', 'animation'];
+  static override tag = 'iswc-flowchart';
+  static override css = css;
+  static override observed = [...DiagramElementBase.observed, 'mode', 'persist', 'storage-key', 'animation'];
 
   #theme: DiagramTheme | null = null;
   #turtle: PathTurtle | null = null;
@@ -193,14 +193,14 @@ class IswcFlowchart extends DiagramElementBase {
     this.initDiagramShadow('flow-svg', 'flow-tooltip');
   }
 
-  onDiagramConnected(): void {
+  override onDiagramConnected(): void {
     this.#overrides = loadOverrides(this, this.getAttribute('storage-key') ?? '') || { nodes: {}, edges: {} };
     this.wrap.addEventListener('mousemove', this.#onMouseMove as EventListener);
     this.wrap.addEventListener('mouseleave', this.#onMouseLeave as EventListener);
     this.wrap.addEventListener('click', this.#onClick as EventListener);
   }
 
-  onDiagramDisconnected(): void {
+  override onDiagramDisconnected(): void {
     this.#turtle?.destroy();
     this.#turtle = null;
     this.wrap.removeEventListener('mousemove', this.#onMouseMove as EventListener);
@@ -208,7 +208,7 @@ class IswcFlowchart extends DiagramElementBase {
     this.wrap.removeEventListener('click', this.#onClick as EventListener);
   }
 
-  onPayloadChanged(): void { this.#hiddenGroups = new Set(); }
+  override onPayloadChanged(): void { this.#hiddenGroups = new Set(); }
 
   get mode(): string { return this.getAttribute('mode') || 'read'; }
   set mode(v: string) { this.setAttribute('mode', v); }
@@ -243,7 +243,7 @@ class IswcFlowchart extends DiagramElementBase {
     this.queueRender();
   }
 
-  renderDiagram(): void {
+  override renderDiagram(): void {
     const spec: FlowResolvedSpec | null = resolveFlowchartSpec(this.payload ?? {});
     this.spec = spec;
     if (!spec) {

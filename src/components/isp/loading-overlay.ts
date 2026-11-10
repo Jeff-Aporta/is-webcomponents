@@ -43,11 +43,11 @@ import css from 'iswc:css';
   const OBSERVED = ['open', 'message', 'scroll-lock'];
 
   class IswcLoadingOverlay extends IswcElement {
-    static tag = 'iswc-loading-overlay';
-    static css = css;
-    static deps = ['iswc-spinner'];
+    static override tag = 'iswc-loading-overlay';
+    static override css = css;
+    static override deps = ['iswc-spinner'];
 
-    static observed = [...OBSERVED, 'backdrop-color', 'indicator-color'];
+    static override observed = [...OBSERVED, 'backdrop-color', 'indicator-color'];
 
     #backdrop!: HTMLElement;
     #messageEl!: HTMLElement;
@@ -65,7 +65,7 @@ import css from 'iswc:css';
       this.#messageSlot = shadow.querySelector<HTMLSlotElement>('slot[name="message"]')!;
     }
 
-    onConnected() {
+    override onConnected() {
       const props = ['open', 'message', 'scrollLock'] as const;
       for (const p of props) {
         if (Object.prototype.hasOwnProperty.call(this, p)) {
@@ -79,12 +79,12 @@ import css from 'iswc:css';
       this.#syncOpen();
     }
 
-    onDisconnected() {
+    override onDisconnected() {
       this.#messageSlot.removeEventListener('slotchange', this.#syncMessage);
       this.#releaseScroll();
     }
 
-    onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
+    override onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
       if (name === 'open') this.#syncOpen();
       else if (name === 'message') this.#syncMessage();
     }

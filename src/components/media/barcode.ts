@@ -106,9 +106,9 @@ import css from 'iswc:css';
 
   // ── Componente ───────────────────────────────────────────────────────
   class IswcBarcode extends IswcElement {
-    static tag = 'iswc-barcode';
-    static css = css;
-    static observed = OBSERVED;
+    static override tag = 'iswc-barcode';
+    static override css = css;
+    static override observed = OBSERVED;
     #mounted = false;
 
     constructor() {
@@ -123,12 +123,12 @@ import css from 'iswc:css';
       this.#text = this.shadowRoot!.querySelector<HTMLElement>('.text')!;
     }
 
-    connectedCallback(): void {
+    override connectedCallback(): void {
       this.#mounted = true;
       this.#render();
     }
 
-    attributeChangedCallback() {
+    override attributeChangedCallback() {
       if (this.#mounted) this.#render();
     }
 

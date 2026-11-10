@@ -91,12 +91,12 @@ function editRange(oldText: string, newText: string): [number, number, number] {
 // Sobre `IswcReactive` con `formAssociated` propio: entrega su valor al <form>, sin la validez ni el chrome de
 // `IswcFormControl` (que añadiría atributos label/hint/error y el evento `iswc-invalid`).
 class IswcCode extends IswcReactive {
-  static tag = 'iswc-code';
-  static css = css;
-  static shadowInit: ShadowRootInit | null = { mode: 'open', delegatesFocus: true };
+  static override tag = 'iswc-code';
+  static override css = css;
+  static override shadowInit: ShadowRootInit | null = { mode: 'open', delegatesFocus: true };
 
   static formAssociated = true;
-  static observed = [...OBSERVED];
+  static override observed = [...OBSERVED];
 
   #textarea: HTMLTextAreaElement | null = null;
   #host: HTMLElement | null = null;
@@ -220,8 +220,8 @@ class IswcCode extends IswcReactive {
     this.#setValue(v == null ? '' : String(v), true);
   }
 
-  get lang(): string { return this.getAttribute('lang') || 'javascript'; }
-  set lang(v: string) { setStringAttr(this, 'lang', v || 'javascript'); }
+  override get lang(): string { return this.getAttribute('lang') || 'javascript'; }
+  override set lang(v: string) { setStringAttr(this, 'lang', v || 'javascript'); }
 
   get lineNumbers(): boolean {
     // Inline / compact (snippets de docs): sin números salvo petición explícita.
@@ -255,7 +255,7 @@ class IswcCode extends IswcReactive {
 
   @prop({ type: 'bool' }) accessor disabled: boolean = false;
 
-  @prop({ type: 'bool' }) accessor autofocus: boolean = false;
+  @prop({ type: 'bool' }) override accessor autofocus: boolean = false;
 
   get tabSize(): number {
     const n = parseInt(this.getAttribute('tab-size') || '2', 10);
@@ -363,7 +363,7 @@ class IswcCode extends IswcReactive {
     return formatCode(text, lang, config);
   }
 
-  focus(): void {
+  override focus(): void {
     if (this.#editing && this.#ta) this.#ta.focus();
     // readonly nativo: sin caret editable (no hay nada que enfocar).
   }

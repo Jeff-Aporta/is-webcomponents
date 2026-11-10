@@ -28,11 +28,11 @@ import type { DigitalClockEventos } from './schemas/digital-clock.schemas.js';
   interface OptionInput { label: string; raw: string | number; selected: boolean; disabled: boolean; }
 
   class IswcDigitalClock extends IswcElement {
-    static tag = 'iswc-digital-clock';
+    static override tag = 'iswc-digital-clock';
     declare static events: DigitalClockEventos;
-    static css = css;
+    static override css = css;
 
-    static observed = [...OBSERVED, 'clock-height'];
+    static override observed = [...OBSERVED, 'clock-height'];
 
     #base!: HTMLElement;
     constructor() {
@@ -44,12 +44,12 @@ import type { DigitalClockEventos } from './schemas/digital-clock.schemas.js';
       this.#base.addEventListener('keydown', this.#onKey);
     }
 
-    onConnected(): void {
+    override onConnected(): void {
       this.#render();
       this.scrollToSelection();
     }
 
-    onAttributeChanged(name: string, _oldVal: string | null, _newVal: string | null): void {
+    override onAttributeChanged(name: string, _oldVal: string | null, _newVal: string | null): void {
       this.#render();
       if (name === 'value') this.scrollToSelection();
     }

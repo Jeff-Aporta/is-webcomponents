@@ -88,10 +88,10 @@ const TEMPLATE = document.createElement('template');
 TEMPLATE.innerHTML = HTML_TEMPLATE;
 
 class IswcLoginDropdown extends IswcReactive {
-  static tag = 'iswc-login-dropdown';
-  static css = css;
-  static deps = ['iswc-button', 'iswc-icon', 'iswc-callout'];
-  static observed = [
+  static override tag = 'iswc-login-dropdown';
+  static override css = css;
+  static override deps = ['iswc-button', 'iswc-icon', 'iswc-callout'];
+  static override observed = [
       'label', 'heading', 'placement', 'modes', 'remember',
       'password-label', 'token-label', 'token-placeholder', 'choices-heading', 'back-label',
       'tab-label', 'extra-label',

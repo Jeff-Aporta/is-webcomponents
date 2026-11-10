@@ -132,10 +132,10 @@ const TEMPLATE = document.createElement('template');
 TEMPLATE.innerHTML = HTML_TEMPLATE;
 
 class IswcLogin extends IswcElement {
-  static tag = 'iswc-login';
-  static css = css;
-  static deps = ['iswc-button', 'iswc-avatar', 'iswc-callout'];
-  static observed = [
+  static override tag = 'iswc-login';
+  static override css = css;
+  static override deps = ['iswc-button', 'iswc-avatar', 'iswc-callout'];
+  static override observed = [
       'mode', 'provider', 'providers', 'heading', 'subtitle', 'selected',
       'remember', 'busy', 'disabled', 'error', 'notice',
       'allow-add-account', 'allow-logout-all', 'show-sessions', 'show-password',
@@ -275,7 +275,7 @@ class IswcLogin extends IswcElement {
     this.#toast?.create?.(message, { color });
   }
 
-  focus(): void { this.#username?.focus?.(); }
+  override focus(): void { this.#username?.focus?.(); }
 
   /** Vacía la contraseña y quita las marcas de error de los campos (el usuario se conserva). */
   reset(): void {

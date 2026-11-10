@@ -7,7 +7,7 @@ class DemoCustoms extends TreeCustomsBase {
   entries = 'Plan de contenidos';
   getFlatPath = (r: DemoNode): string => String(r?.iplan ?? r?.flatPath ?? '').trim();
   setFlatPath = (r: DemoNode, fp: string): void => { r.iplan = String(fp ?? '').trim(); };
-  levelName = ({ depth }: LevelNameArgs): string => (depth === 0 ? 'Módulo' : depth === 1 ? 'Lección' : '---');
+  override levelName = ({ depth }: LevelNameArgs): string => (depth === 0 ? 'Módulo' : depth === 1 ? 'Lección' : '---');
   updateNode = (node: DemoNode, isNew: boolean): void => {
     const depth = Number(node.depth ?? 0);
     node.topology = depth >= 1 ? 'atom' : 'group';

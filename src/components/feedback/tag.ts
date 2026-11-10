@@ -50,11 +50,11 @@ import type { TagEventos } from './schemas/tag.schemas.js';
   const VALID_VARIANT = TONE.filter((t) => t !== 'plain');
 
   class IswcTag extends IswcReactive {
-    static tag = 'iswc-tag';
+    static override tag = 'iswc-tag';
     declare static events: TagEventos;
-    static css = css;
-    static deps = ['iswc-icon', 'iswc-button'];
-    static observed = OBSERVED;
+    static override css = css;
+    static override deps = ['iswc-icon', 'iswc-button'];
+    static override observed = OBSERVED;
 
     #remove!: HTMLElement;
     #mo: MutationObserver | null = null;
@@ -70,7 +70,7 @@ import type { TagEventos } from './schemas/tag.schemas.js';
       this.#remove.addEventListener('click', this.#onRemove);
     }
 
-    onConnected() {
+    override onConnected() {
       if (!this.hasAttribute('color')) this.setAttribute('color', 'brand');
       if (!this.hasAttribute('variant')) this.setAttribute('variant', 'filled-outlined');
       this.#syncRemove();
@@ -80,12 +80,12 @@ import type { TagEventos } from './schemas/tag.schemas.js';
       this.#syncAria();
     }
 
-    onDisconnected() {
+    override onDisconnected() {
       this.#mo?.disconnect();
       this.#mo = null;
     }
 
-    onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
+    override onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
       if (name === 'color' && newVal && !VALID_COLOR.includes(newVal)) {
         this.setAttribute('color', 'neutral');
       }

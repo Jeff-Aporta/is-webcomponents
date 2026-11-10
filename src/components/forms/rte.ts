@@ -83,10 +83,10 @@ export function registerRteCommand(name: string, def: RteCommandDef): void {
   };
 
   class IswcRte extends IswcElement {
-    static tag = 'iswc-rte';
+    static override tag = 'iswc-rte';
     declare static events: RteEventos;
-    static css = css;
-    static observed = OBSERVED;
+    static override css = css;
+    static override observed = OBSERVED;
 
     constructor() {
       super();
@@ -108,7 +108,7 @@ export function registerRteCommand(name: string, def: RteCommandDef): void {
       this.#source.addEventListener('input', () => this.#onSourceInput());
     }
 
-    onConnected(): void {
+    override onConnected(): void {
       this.#buildToolbar();
       this.#sync();
       this.#syncReadonly();
@@ -116,7 +116,7 @@ export function registerRteCommand(name: string, def: RteCommandDef): void {
       if (this.hasAttribute('autofocus')) this.focus();
     }
 
-    onAttributeChanged(name: string, _oldVal: string | null, _newVal: string | null): void {
+    override onAttributeChanged(name: string, _oldVal: string | null, _newVal: string | null): void {
       if (name === 'toolbar') this.#buildToolbar();
       if (name === 'value') this.#sync();
       if (name === 'readonly') this.#syncReadonly();
@@ -131,8 +131,8 @@ export function registerRteCommand(name: string, def: RteCommandDef): void {
     get sourceMode(): boolean { return this.hasAttribute('source-mode'); }
     set sourceMode(v: boolean) { this.toggleAttribute('source-mode', !!v); }
 
-    focus(): void { (this.sourceMode ? this.#source : this.#content).focus(); }
-    blur(): void { (this.sourceMode ? this.#source : this.#content).blur(); }
+    override focus(): void { (this.sourceMode ? this.#source : this.#content).focus(); }
+    override blur(): void { (this.sourceMode ? this.#source : this.#content).blur(); }
 
     exec(cmd: string, value: string | null = null): void {
       if (this.sourceMode) return;

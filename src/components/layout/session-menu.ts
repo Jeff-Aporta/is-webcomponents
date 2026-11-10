@@ -73,10 +73,10 @@ function iniciales(nombre: string): string {
 }
 
 class IswcSessionMenu extends IswcReactive {
-  static tag = 'iswc-session-menu';
-  static css = css;
-  static deps = ['iswc-button', 'iswc-avatar', 'iswc-icon', 'iswc-divider'];
-  static observed = ['name', 'subtitle', 'avatar', 'placement', 'logout-label', ...LOGIN_ATTRS];
+  static override tag = 'iswc-session-menu';
+  static override css = css;
+  static override deps = ['iswc-button', 'iswc-avatar', 'iswc-icon', 'iswc-divider'];
+  static override observed = ['name', 'subtitle', 'avatar', 'placement', 'logout-label', ...LOGIN_ATTRS];
 
   #login!: HTMLElement & { error: string; loading: boolean; choices: LoginChoice[]; reset(): void; show(): void; hide(): void };
   #menu!: HTMLElement & { show(): void; hide(): void };

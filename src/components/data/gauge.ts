@@ -41,10 +41,10 @@ import css from 'iswc:css';
   const OBSERVED = ['value', 'min', 'max', 'label', 'unit', 'thickness', 'color', 'half', 'format', 'show-value'];
 
   class IswcGauge extends IswcElement {
-    static tag = 'iswc-gauge';
-    static css = css;
+    static override tag = 'iswc-gauge';
+    static override css = css;
 
-    static observed = [...OBSERVED, 'track-color'];
+    static override observed = [...OBSERVED, 'track-color'];
     #svg!: HTMLElement;
     #circle!: HTMLElement;
     #track!: HTMLElement;
@@ -63,11 +63,11 @@ import css from 'iswc:css';
       this.#labelEl = shadow.querySelector<HTMLElement>('.label')!;
     }
 
-    onConnected() {
+    override onConnected() {
       this.#render();
     }
 
-    onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
+    override onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
       this.#render();
     }
 

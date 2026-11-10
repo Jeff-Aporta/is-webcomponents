@@ -59,10 +59,10 @@ import type { DocEditorEventos } from './schemas/doc-editor.schemas.js';
   };
 
   class IswcDocEditor extends IswcElement {
-    static tag = 'iswc-doc-editor';
+    static override tag = 'iswc-doc-editor';
     declare static events: DocEditorEventos;
-    static css = css;
-    static observed = OBSERVED;
+    static override css = css;
+    static override observed = OBSERVED;
     #mounted = false;
     #blocks: Block[] = [];
 
@@ -82,19 +82,19 @@ import type { DocEditorEventos } from './schemas/doc-editor.schemas.js';
       };
     }
 
-    connectedCallback(): void {
+    override connectedCallback(): void {
       this.#mounted = true;
       this.#readInitial();
       this.#renderAll();
       document.addEventListener('pointerdown', this.#onDocPointerDown, true);
     }
 
-    disconnectedCallback(): void {
+    override disconnectedCallback(): void {
       this.#mounted = false;
       document.removeEventListener('pointerdown', this.#onDocPointerDown, true);
     }
 
-    attributeChangedCallback(): void {
+    override attributeChangedCallback(): void {
       if (this.#mounted) {
         this.#readInitial();
         this.#renderAll();

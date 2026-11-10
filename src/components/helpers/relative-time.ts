@@ -37,9 +37,9 @@ import css from 'iswc:css';
   ];
 
   class IswcRelativeTime extends IswcElement {
-    static tag = 'iswc-relative-time';
-    static css = css;
-    static observed = OBSERVED;
+    static override tag = 'iswc-relative-time';
+    static override css = css;
+    static override observed = OBSERVED;
 
     #el!: HTMLTimeElement;
     #timer: ReturnType<typeof setInterval> | null = null;
@@ -52,16 +52,16 @@ import css from 'iswc:css';
       this.#el = shadow.querySelector<HTMLTimeElement>('.time')!;
     }
 
-    onConnected() {
+    override onConnected() {
       this.#render();
       this.#setupSync();
     }
 
-    onDisconnected() {
+    override onDisconnected() {
       this.#clearSync();
     }
 
-    onAttributeChanged(name: string) {
+    override onAttributeChanged(name: string) {
       this.#render();
       if (name === 'sync') this.#setupSync();
     }

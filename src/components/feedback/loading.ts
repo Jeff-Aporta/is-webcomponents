@@ -21,9 +21,9 @@ TEMPLATE.innerHTML = /* html */ `
 `;
 
 class IswcLoading extends PropsElement<LoadingProps> {
-  static tag = 'iswc-loading';
-  static css = css;
-  static observed = atributosDe(INICIAL);
+  static override tag = 'iswc-loading';
+  static override css = css;
+  static override observed = atributosDe(INICIAL);
 
   #spinner: HTMLElement;
   #texto: HTMLElement;

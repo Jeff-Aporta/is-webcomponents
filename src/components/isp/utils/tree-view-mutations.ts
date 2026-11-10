@@ -418,7 +418,7 @@ class TAMutations extends TAView {
    * Confirmado el borrado: limpia selección si corresponde, refresca el
    * árbol, y restaura la selección al vecino más cercano.
    */
-  async ondeleteconfirmed(): Promise<void> {
+  override async ondeleteconfirmed(): Promise<void> {
     const pendingNorm = this.normalizeFlatPath(this._pendingDeleteFlatPath);
     const prevDeleteIdx = this._pendingDeleteSnapshot?.prevDeleteIdx ?? -1;
     const clearSelectionIfDeleted = (deletedKey: string): void => {
@@ -529,7 +529,7 @@ class TAMutations extends TAView {
    * Cierra el form de edición: si hay un pending insert, hace rollback
    * (elimina el nodo recién creado). Después re-enfoca el summary.
    */
-  closeEditForm(): void {
+  override closeEditForm(): void {
     const pending = this._pendingInsertFlatPath;
     const snapshot = this._pendingExpandedSnapshot;
     this._pendingInsertFlatPath = "";

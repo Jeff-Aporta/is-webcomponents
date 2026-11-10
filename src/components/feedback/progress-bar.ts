@@ -33,10 +33,10 @@ import css from 'iswc:css';
   const OBSERVED = ['value', 'label', 'indeterminate'];
 
   class IswcProgressBar extends IswcReactive {
-    static tag = 'iswc-progress-bar';
-    static css = css;
+    static override tag = 'iswc-progress-bar';
+    static override css = css;
 
-    static observed = [...OBSERVED, 'track-height', 'track-color', 'color'];
+    static override observed = [...OBSERVED, 'track-height', 'track-color', 'color'];
 
     #track!: HTMLElement;
     #indicator!: HTMLElement;
@@ -54,11 +54,11 @@ import css from 'iswc:css';
       });
     }
 
-    onConnected() {
+    override onConnected() {
       this.#render();
     }
 
-    onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
+    override onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
       this.#render();
     }
 

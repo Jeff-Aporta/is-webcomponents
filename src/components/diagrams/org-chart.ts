@@ -84,9 +84,9 @@ import css from 'iswc:css';
   }
 
   class IswcOrgChart extends IswcElement {
-    static tag = 'iswc-org-chart';
-    static css = css;
-    static observed = OBSERVED;
+    static override tag = 'iswc-org-chart';
+    static override css = css;
+    static override observed = OBSERVED;
     #mounted = false;
     #nodes: Map<string, OrgNode> = new Map();
     #children: Map<string, string[]> = new Map();
@@ -119,13 +119,13 @@ import css from 'iswc:css';
       this.#rootEl.addEventListener('mouseleave', this.#onMouseLeave as EventListener);
     }
 
-    connectedCallback(): void {
+    override connectedCallback(): void {
       this.#mounted = true;
       this.#readData();
       this.#render();
     }
 
-    attributeChangedCallback(): void {
+    override attributeChangedCallback(): void {
       if (this.#mounted) this.#render();
     }
 

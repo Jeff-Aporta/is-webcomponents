@@ -31,9 +31,9 @@ function iniciales(nombre: string | null, usuario: string): string {
 }
 
 class IswcPerson extends PropsElement<PersonProps> {
-  static tag = 'iswc-person';
-  static css = css;
-  static observed = atributosDe(INICIAL);
+  static override tag = 'iswc-person';
+  static override css = css;
+  static override observed = atributosDe(INICIAL);
 
   #persona: HTMLElement;
   #avatar: HTMLElement;

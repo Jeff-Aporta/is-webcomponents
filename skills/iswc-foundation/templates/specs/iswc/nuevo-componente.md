@@ -39,10 +39,10 @@ import { Componente, html } from '../../../src/js/base/componente.js';
 import type { __CLASE__XProps } from '../../../src/js/consts/schemas/componentes.schemas.js';
 
 class __CLASE__X extends Componente<__CLASE__XProps> {
-  static tag = '__PREFIJO__-x';
-  static css = css;
-  static observed = ['color'];
-  static deps = ['iswc-button'];
+  static override tag = '__PREFIJO__-x';
+  static override css = css;
+  static override observed = ['color'];
+  static override deps = ['iswc-button'];
 
   protected override inicial(): __CLASE__XProps {
     return { /* defaults */ };

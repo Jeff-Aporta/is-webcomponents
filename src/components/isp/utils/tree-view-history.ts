@@ -172,7 +172,7 @@ class TAHistory extends TAMutations {
   }
 
   /** Captura el estado actual al stack de undo (no-op si está suspendido). */
-  historyPush(): void {
+  override historyPush(): void {
     if (this._historySuspended > 0) return;
     const snap = this.historySnapshotList();
     const top =

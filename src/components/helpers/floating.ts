@@ -62,10 +62,10 @@ import css from 'iswc:css';
   ];
 
   class IswcFloating extends withStyleAttrs(IswcElement) {
-    static tag = 'iswc-floating';
-    static css = css;
+    static override tag = 'iswc-floating';
+    static override css = css;
 
-    static observed = [...OBSERVED, 'arrow-size', 'show-duration', 'hide-duration'];
+    static override observed = [...OBSERVED, 'arrow-size', 'show-duration', 'hide-duration'];
 
     #popup!: HTMLElement;
     #arrow!: HTMLElement;
@@ -91,7 +91,7 @@ import css from 'iswc:css';
       this.#anchorSlot.addEventListener('slotchange', () => this.#resolveAnchor());
     }
 
-    connectedCallback(): void {
+    override connectedCallback(): void {
 
       super.connectedCallback();
       this.#mounted = true;
@@ -105,14 +105,14 @@ import css from 'iswc:css';
       }
     }
 
-    disconnectedCallback(): void {
+    override disconnectedCallback(): void {
       this.#mounted = false;
       this.#teardown();
       document.removeEventListener('keydown', this.#onModalKeydown, true);
       this.#releaseTrap();
     }
 
-    attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null): void {
+    override attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null): void {
 
       super.attributeChangedCallback(name, oldValue, newValue);
       if (!this.#mounted) return;

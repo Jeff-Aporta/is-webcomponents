@@ -99,8 +99,8 @@ import css from 'iswc:css';
   }
 
   class IswcToast extends IswcReactive {
-    static tag = 'iswc-toast';
-    static css = css;
+    static override tag = 'iswc-toast';
+    static override css = css;
 
     /** Reabre el popover para quedar encima del último modal abierto en el top layer. */
     #alFrente(): void {
@@ -109,7 +109,7 @@ import css from 'iswc:css';
       if (this.matches(':popover-open')) this.hidePopover();
       this.showPopover();
     }
-    static observed = OBSERVED;
+    static override observed = OBSERVED;
 
 
     constructor() {
@@ -124,11 +124,11 @@ import css from 'iswc:css';
       this.shadowRoot!.querySelector('.stack')!.setAttribute('aria-label', this.t('notificaciones'));
     }
 
-    onConnected(): void {
+    override onConnected(): void {
       if (!this.hasAttribute('placement')) this.setAttribute('placement', 'bottom-end');
     }
 
-    onAttributeChanged(name: string, oldVal: string | null, newVal: string | null): void {
+    override onAttributeChanged(name: string, oldVal: string | null, newVal: string | null): void {
       if (name === 'placement' && newVal && !VALID_PLACEMENT.includes(newVal as Placement)) {
         this.setAttribute('placement', 'bottom-end');
       }

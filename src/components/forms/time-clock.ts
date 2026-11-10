@@ -47,11 +47,11 @@ import css from 'iswc:css';
   const VIEWS: readonly View[] = ['hours', 'minutes', 'seconds'];
 
   class IswcTimeClock extends IswcElement {
-    static tag = 'iswc-time-clock';
+    static override tag = 'iswc-time-clock';
     declare static events: TimeClockEventos;
-    static css = css;
+    static override css = css;
 
-    static observed = [...OBSERVED, 'size', 'face-color'];
+    static override observed = [...OBSERVED, 'size', 'face-color'];
 
     #base!: HTMLElement;
     #clock!: HTMLElement;
@@ -82,12 +82,12 @@ import css from 'iswc:css';
       this.#clock.addEventListener('keydown', this.#onKey);
     }
 
-    onConnected(): void {
+    override onConnected(): void {
       if (!this.hasAttribute('view')) this.setAttribute('view', 'hours');
       this.#render();
     }
 
-    onAttributeChanged(name: string, _oldVal: string | null, _newVal: string | null): void {
+    override onAttributeChanged(name: string, _oldVal: string | null, _newVal: string | null): void {
       if (name === 'view') emit(this, 'iswc-view-change', { view: this.view });
       this.#render();
     }

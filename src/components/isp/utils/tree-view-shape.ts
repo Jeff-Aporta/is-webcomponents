@@ -100,7 +100,7 @@ class TATreeShape extends TAModel {
    * Sobreescribe el contrato base para devolver siempre `TNode` (no nullable):
    * la versión "real" de la materialización siempre produce un nodo.
    */
-  createNode(data: Partial<TNode> | TNode): TNode | null {
+  override createNode(data: Partial<TNode> | TNode): TNode | null {
     const partial = data as Partial<TNode>;
     if (this.isNodeInstance(partial)) return partial;
     if (this.customs?.newItem) {
@@ -179,11 +179,11 @@ class TATreeShape extends TAModel {
   }
 
   /** Lista plana de filas (`getList2RowsSource` con fallback `[]`). */
-  get List2Rows(): TNode[] {
+  override get List2Rows(): TNode[] {
     return this.getList2RowsSource() ?? [];
   }
 
-  set List2Rows(value: TNode[]) {
+  override set List2Rows(value: TNode[]) {
     const target = this.getList2RowsSource();
     if (!target) return;
     while (target.length > 0) target.pop();
@@ -292,7 +292,7 @@ class TATreeShape extends TAModel {
    * Convierte `data` en un nodo. Si `clone` es true, devuelve una copia
    * profunda (`TObject.clone()` o `structuredClone`).
    */
-  toNode(
+  override toNode(
     data: TNode | Partial<TNode> | null | undefined,
     clone = false,
   ): TNode | null {
@@ -312,13 +312,13 @@ class TATreeShape extends TAModel {
   }
 
   /** Normaliza un `flatPath` (sanea prefijos `_UP_` / `_M_`, trimea). */
-  normalizeFlatPath(id: string | null | undefined): string {
+  override normalizeFlatPath(id: string | null | undefined): string {
     if (id === void 0 || id === null) return "";
     return String(id).replace(/^(_UP_|_M_)/, "").trim();
   }
 
   /** Busca recursivamente por `flatPath` normalizado. */
-  findNodeByFlatPath(
+  override findNodeByFlatPath(
     id: string | null | undefined,
     branches?: TNode[],
   ): TNode | null {
@@ -337,7 +337,7 @@ class TATreeShape extends TAModel {
   }
 
   /** Busca recursivamente por `pathInit` normalizado. */
-  findNodeByPathInit(
+  override findNodeByPathInit(
     pathInit: string | null | undefined,
     branches: TNode[] = this.rootNodes,
   ): TNode | null {
@@ -366,7 +366,7 @@ class TATreeShape extends TAModel {
   }
 
   /** Encuentra el nodo equivalente en `List2RowsNodes` por `flatPath`. */
-  findNode(data: Partial<TNode> | TRecord | null | undefined): TRecord | undefined {
+  override findNode(data: Partial<TNode> | TRecord | null | undefined): TRecord | undefined {
     const materialized = this.toNode(data);
     if (!materialized) return undefined;
     const sId = this.normalizeFlatPath(materialized.flatPath);

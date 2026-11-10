@@ -24,11 +24,11 @@ import type { ShareButtonEventos } from './schemas/share-button.schemas.js';
   `;
 
   class IswcShareButton extends IswcElement {
-    static tag = 'iswc-share-button';
+    static override tag = 'iswc-share-button';
     declare static events: ShareButtonEventos;
-    static css = css;
-    static deps = ['iswc-icon'];
-    static observed = ['share-title', 'text', 'url', 'disabled'];
+    static override css = css;
+    static override deps = ['iswc-icon'];
+    static override observed = ['share-title', 'text', 'url', 'disabled'];
 
     #btn!: HTMLElement;
     #busy = false;
@@ -41,9 +41,9 @@ import type { ShareButtonEventos } from './schemas/share-button.schemas.js';
       this.#btn.addEventListener('click', (e: Event) => { e.stopPropagation(); this.share(); });
     }
 
-    connectedCallback(): void {
+    override connectedCallback(): void {
     super.connectedCallback(); this.#sync(); }
-    attributeChangedCallback() { this.#sync(); }
+    override attributeChangedCallback() { this.#sync(); }
 
     get shareTitle() { return this.getAttribute('share-title') ?? ''; }
     set shareTitle(v) { setStringAttr(this, 'share-title', v); }

@@ -39,8 +39,8 @@ function stepPath(kind: SwimlaneStepKind, x: number, y: number, w: number, h: nu
 }
 
 class IswcSwimlaneDiagram extends DiagramElementBase {
-  static tag = 'iswc-swimlane-diagram';
-  static css = css;
+  static override tag = 'iswc-swimlane-diagram';
+  static override css = css;
   #hiddenLanes = new Set<string>();
   #stepNodes = new Map<string, StepEntry>();
   #linkNodes = new Map<string, LinkEntry>();
@@ -51,19 +51,19 @@ class IswcSwimlaneDiagram extends DiagramElementBase {
     this.initDiagramShadow('sw-svg', 'sw-tooltip');
   }
 
-  onDiagramConnected() {
+  override onDiagramConnected() {
     this.wrap.addEventListener('mousemove', this.#onMouseMove);
     this.wrap.addEventListener('mouseleave', this.#onMouseLeave);
     this.wrap.addEventListener('click', this.#onClick);
   }
 
-  onDiagramDisconnected() {
+  override onDiagramDisconnected() {
     this.wrap.removeEventListener('mousemove', this.#onMouseMove);
     this.wrap.removeEventListener('mouseleave', this.#onMouseLeave);
     this.wrap.removeEventListener('click', this.#onClick);
   }
 
-  onPayloadChanged(): void { this.#hiddenLanes = new Set(); }
+  override onPayloadChanged(): void { this.#hiddenLanes = new Set(); }
 
   get hiddenLanes(): Set<string> { return this.#hiddenLanes; }
   set hiddenLanes(v: Set<string> | string[] | null | undefined) {
@@ -71,7 +71,7 @@ class IswcSwimlaneDiagram extends DiagramElementBase {
     this.queueRender();
   }
 
-  renderDiagram(): void {
+  override renderDiagram(): void {
     const spec = resolveSwimlaneSpec(this.payload ?? {});
     this.spec = spec;
     if (!spec) {

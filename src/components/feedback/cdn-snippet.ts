@@ -76,12 +76,12 @@ const normalizeIswcTag = (tag: string): string => {
   `;
 
   class IswcCdnSnippet extends withStyleAttrs(IswcElement) {
-    static tag = 'iswc-cdn-snippet';
-    static css = css;
-    static deps = ['iswc-icon', 'iswc-button'];
+    static override tag = 'iswc-cdn-snippet';
+    static override css = css;
+    static override deps = ['iswc-icon', 'iswc-button'];
     
 
-    static observed = ['tag', 'category', 'base', 'title', 'dependencies', 'config'];
+    static override observed = ['tag', 'category', 'base', 'title', 'dependencies', 'config'];
 
     #mounted = false;
     #urls: { loader: string; loadArg: string } = { loader: '', loadArg: '' };
@@ -98,7 +98,7 @@ const normalizeIswcTag = (tag: string): string => {
       shadow.addEventListener('iswc-click', this.#onClick);
     }
 
-    connectedCallback(): void {
+    override connectedCallback(): void {
       super.connectedCallback();
       this.#mounted = true;
       this.#render();
@@ -110,12 +110,12 @@ const normalizeIswcTag = (tag: string): string => {
       document.addEventListener('iswc-theme-change', this.#onHighlightReady);
     }
 
-    disconnectedCallback(): void {
+    override disconnectedCallback(): void {
       this.#mounted = false;
       document.removeEventListener('iswc-theme-change', this.#onHighlightReady);
     }
 
-    attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
+    override attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
       super.attributeChangedCallback(name, oldVal, newVal);
       if (!this.#mounted || oldVal === newVal) return;
       this.#render();

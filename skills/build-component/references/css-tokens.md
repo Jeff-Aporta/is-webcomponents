@@ -102,7 +102,7 @@ permite mapear un atributo del host a una CSS custom property del
 
 ```ts
 class IswcButton extends withStyleAttrs(IswcElement) {
-  static tag = 'iswc-button';
+  static override tag = 'iswc-button';
   static styleAttrs = {
     radius: '--iswc-button-border-radius',
     'border-width': '--iswc-button-border-width',

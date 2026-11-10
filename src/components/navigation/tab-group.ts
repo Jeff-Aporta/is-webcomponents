@@ -92,11 +92,11 @@ import css from 'iswc:css';
   const VALID_ACTIVATION = ['auto', 'manual'];
 
   class IswcTabGroup extends withStyleAttrs(IswcReactive) {
-    static tag = 'iswc-tab-group';
-    static css = css;
+    static override tag = 'iswc-tab-group';
+    static override css = css;
 
 
-    static observed = [...TG_OBSERVED];
+    static override observed = [...TG_OBSERVED];
     #mounted = false;
     #navSlot!: HTMLSlotElement;
     #tabsWrap!: HTMLElement;
@@ -132,7 +132,7 @@ import css from 'iswc:css';
       this.#scrollEnd.setAttribute('aria-label', this.t('siguiente'));
     }
 
-    connectedCallback(): void {
+    override connectedCallback(): void {
       super.connectedCallback();
       this.#mounted = true;
       this.#upgradeProperties();
@@ -146,7 +146,7 @@ import css from 'iswc:css';
       if (this.hasAttribute('state')) window.addEventListener('popstate', this.#alVolver);
     }
 
-    disconnectedCallback(): void {
+    override disconnectedCallback(): void {
       window.removeEventListener('popstate', this.#alVolver);
       this.#mounted = false;
       this.#scrollRo?.disconnect();
@@ -154,7 +154,7 @@ import css from 'iswc:css';
       super.disconnectedCallback();
     }
 
-    attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
+    override attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
       super.attributeChangedCallback(name, oldVal, newVal);
       if (!this.#mounted || oldVal === newVal) return;
       if (name === 'placement') {
@@ -443,9 +443,9 @@ import css from 'iswc:css';
   const TAB_OBSERVED = ['panel', 'disabled', 'closable', 'active'];
 
   class IswcTab extends IswcElement {
-    static tag = 'iswc-tab';
-    static css = css;
-    static observed = TAB_OBSERVED;
+    static override tag = 'iswc-tab';
+    static override css = css;
+    static override observed = TAB_OBSERVED;
 
     #mounted = false;
 
@@ -467,7 +467,7 @@ import css from 'iswc:css';
     /** Alta en el observador de idioma: repinta el texto del botón de cierre al cambiar `lang`. */
     #idioma = { solicitarRender: (): void => this.#syncState() };
 
-    connectedCallback(): void {
+    override connectedCallback(): void {
       this.#mounted = true;
       this.setAttribute('role', 'tab');
       this.#syncState();
@@ -475,11 +475,11 @@ import css from 'iswc:css';
       // Si está dentro de un tab-group, parent lo descubre y conecta.
     }
 
-    onDisconnected(): void {
+    override onDisconnected(): void {
       observarIdioma(this.#idioma, false);
     }
 
-    attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
+    override attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
       if (!this.#mounted) return;
       if (name === 'panel' && newVal == null) return;
       if (name === 'active') this.#syncState();
@@ -515,9 +515,9 @@ import css from 'iswc:css';
   const PANEL_OBSERVED = ['name'];
 
   class IswcTabPanel extends IswcElement {
-    static tag = 'iswc-tab-panel';
-    static css = css;
-    static observed = PANEL_OBSERVED;
+    static override tag = 'iswc-tab-panel';
+    static override css = css;
+    static override observed = PANEL_OBSERVED;
 
     #mounted = false;
 
@@ -527,12 +527,12 @@ import css from 'iswc:css';
       shadow.appendChild(PANEL_TEMPLATE.content.cloneNode(true));
     }
 
-    connectedCallback(): void {
+    override connectedCallback(): void {
       this.#mounted = true;
       this.setAttribute('role', 'tabpanel');
     }
 
-    attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
+    override attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
       if (!this.#mounted) return;
       // No-op: el padre (tab-group) maneja visibility.
     }

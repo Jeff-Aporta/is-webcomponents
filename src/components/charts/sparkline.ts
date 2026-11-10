@@ -33,10 +33,10 @@ function fmtNum(v: number): string {
 
 (() => {
   class IswcSparkline extends withStyleAttrs(IswcElement) {
-    static tag = 'iswc-sparkline';
-    static css = css;
+    static override tag = 'iswc-sparkline';
+    static override css = css;
 
-    static observed = ['values', 'data', 'type', 'label', 'variant', 'curve', 'trend'];
+    static override observed = ['values', 'data', 'type', 'label', 'variant', 'curve', 'trend'];
 
     #svg!: HTMLElement;
     #srStatusEl!: HTMLElement;
@@ -57,7 +57,7 @@ function fmtNum(v: number): string {
       this.#srStatusEl = shadow.querySelector<HTMLElement>('.sr-status')!;
     }
 
-    connectedCallback(): void {
+    override connectedCallback(): void {
       super.connectedCallback();
       this.#mounted = true;
       this.#parseValuesAttr();
@@ -66,12 +66,12 @@ function fmtNum(v: number): string {
       this.#render();
     }
 
-    disconnectedCallback(): void {
+    override disconnectedCallback(): void {
       this.#mounted = false;
       this.#ro?.disconnect();
     }
 
-    attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
+    override attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
       super.attributeChangedCallback(name, oldVal, newVal);
       if (!this.#mounted || oldVal === newVal) return;
       if (name === 'values' || name === 'data') this.#parseValuesAttr();

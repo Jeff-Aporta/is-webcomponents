@@ -1,7 +1,7 @@
 {
   "iswc": { "host": "https://jeff-aporta.github.io/is-webcomponents/", "typecheckBaseline": 1818 },
   "nodeModulesDir": "auto",
-  "compilerOptions": { "strict": true },
+  "compilerOptions": { "strict": true, "noImplicitOverride": true, "lib": ["dom", "dom.iterable", "esnext", "deno.ns"] },
   "unstable": ["sloppy-imports"],
   "imports": {
     "@jeff-aporta/iswc-base/": "./src/",

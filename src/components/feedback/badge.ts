@@ -34,10 +34,10 @@ import css from 'iswc:css';
   const VALID_ATTENTION = ['none', 'pulse', 'bounce'];
 
   class IswcBadge extends withStyleAttrs(IswcElement) {
-    static tag = 'iswc-badge';
-    static css = css;
+    static override tag = 'iswc-badge';
+    static override css = css;
 
-    static observed = [...OBSERVED, 'pulse-color'];
+    static override observed = [...OBSERVED, 'pulse-color'];
 
     #mo: MutationObserver | null = null;
     /** Etiqueta que puso #syncAria: se retira en cuanto llega texto, sin tocar la del consumidor. */
@@ -50,7 +50,7 @@ import css from 'iswc:css';
       ocultarSlotsVacios(shadow, '.prefix slot, .suffix slot');
     }
 
-    connectedCallback(): void {
+    override connectedCallback(): void {
       super.connectedCallback();
       if (!this.hasAttribute('color')) this.setAttribute('color', 'brand');
       if (!this.hasAttribute('variant')) this.setAttribute('variant', 'accent');
@@ -61,12 +61,12 @@ import css from 'iswc:css';
       this.#syncAria();
     }
 
-    disconnectedCallback(): void {
+    override disconnectedCallback(): void {
       this.#mo?.disconnect();
       this.#mo = null;
     }
 
-    attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
+    override attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
       super.attributeChangedCallback(name, oldVal, newVal);
       if (oldVal === newVal) return;
       if (name === 'color' && newVal && !VALID_COLOR.includes(newVal)) {

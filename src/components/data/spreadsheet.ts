@@ -85,10 +85,10 @@ const ARROWS: Record<string, readonly [number, number]> = { ArrowUp: [-1, 0], Ar
 
 
 class IswcSpreadsheet extends IswcElement {
-  static tag = 'iswc-spreadsheet';
-  static css = css;
-  static deps = ['iswc-button', 'iswc-icon'];
-  static observed = OBSERVED;
+  static override tag = 'iswc-spreadsheet';
+  static override css = css;
+  static override deps = ['iswc-button', 'iswc-icon'];
+  static override observed = OBSERVED;
 
   #doc = new SpreadsheetDoc(this.#initialLocale());
   #sel: Selection = { r: 0, c: 0, ranges: [{ r1: 0, c1: 0, r2: 0, c2: 0 }] };
@@ -175,7 +175,7 @@ class IswcSpreadsheet extends IswcElement {
 
   // ---- ciclo de vida ----
 
-  onConnected(): void {
+  override onConnected(): void {
     // La cinta se arma ya conectada: iswc-color-picker lee su input interno al montarse y ese
     // input solo está actualizado si el HTML entra en un árbol conectado.
     if (!this.#ribbon.firstChild) {
@@ -189,7 +189,7 @@ class IswcSpreadsheet extends IswcElement {
     this.#observer.observe(this.#view);
   }
 
-  onDisconnected(): void {
+  override onDisconnected(): void {
     this.#observer?.disconnect();
     this.#observer = null;
     cancelAnimationFrame(this.#frame);
@@ -197,7 +197,7 @@ class IswcSpreadsheet extends IswcElement {
     this.#endDrag();
   }
 
-  onAttributeChanged(name: string): void {
+  override onAttributeChanged(name: string): void {
     if (name === 'value') this.#load();
     else if (name === 'rows' || name === 'cols') this.#resizeSheet();
     else if (name === 'locale') this.#doc.locale = this.#initialLocale();

@@ -50,12 +50,12 @@ import type { DropdownItemEventos } from './schemas/dropdown-item.schemas.js';
   ];
 
   class IswcDropdownItem extends withStyleAttrs(IswcElement) {
-    static tag = 'iswc-dropdown-item';
+    static override tag = 'iswc-dropdown-item';
     declare static events: DropdownItemEventos;
-    static css = css;
-    static deps = ['iswc-icon'];
+    static override css = css;
+    static override deps = ['iswc-icon'];
 
-    static observed = OBSERVED;
+    static override observed = OBSERVED;
 
     #row!: HTMLElement;
     #check!: HTMLElement;
@@ -80,7 +80,7 @@ import type { DropdownItemEventos } from './schemas/dropdown-item.schemas.js';
       this.#row.addEventListener('keydown', this.#onKey);
     }
 
-    connectedCallback(): void {
+    override connectedCallback(): void {
       super.connectedCallback();
       this.#mounted = true;
       if (!this.hasAttribute('tabindex')) this.tabIndex = this.disabled ? -1 : 0;
@@ -88,13 +88,13 @@ import type { DropdownItemEventos } from './schemas/dropdown-item.schemas.js';
       this.#syncSubmenu();
     }
 
-    disconnectedCallback(): void {
+    override disconnectedCallback(): void {
       this.#mounted = false;
       this.#teardownReposition();
       this.#hideSubmenuPanel();
     }
 
-    attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null): void {
+    override attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null): void {
       super.attributeChangedCallback(name, oldValue, newValue);
       if (this.#mounted) this.#render();
     }

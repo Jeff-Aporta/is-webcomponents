@@ -7,9 +7,9 @@ import css from 'iswc:css';
 (() => {
   const OBSERVED = ['src', 'content', 'height', 'readonly'];
   class IswcTxtEdit extends IswcElement {
-    static tag = 'iswc-txt-edit';
-    static css = css;
-    static observed = OBSERVED;
+    static override tag = 'iswc-txt-edit';
+    static override css = css;
+    static override observed = OBSERVED;
     #ta!: HTMLTextAreaElement;
     #gen = 0;
     #suppress = false;
@@ -29,8 +29,8 @@ import css from 'iswc:css';
       });
     }
 
-    onConnected() { sincronizarAlto(this); this.#reload(); this.#syncRo(); }
-    onAttributeChanged(name: string) {
+    override onConnected() { sincronizarAlto(this); this.#reload(); this.#syncRo(); }
+    override onAttributeChanged(name: string) {
       if (name === 'height') sincronizarAlto(this);
       else if (name === 'readonly') this.#syncRo();
       else if (name === 'content' && this.#ta.value === (this.getAttribute('content') ?? '')) return;

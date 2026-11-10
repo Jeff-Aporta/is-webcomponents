@@ -28,8 +28,8 @@ import css from 'iswc:css';
  */
 
 class IswcQuadrantChart extends DiagramElementBase {
-  static tag = 'iswc-quadrant-chart';
-  static css = css;
+  static override tag = 'iswc-quadrant-chart';
+  static override css = css;
   #hiddenGroups = new Set<string>();
   #pointNodes = new Map<string, PointEntry>();
   #hoverId: string | null = null;
@@ -39,19 +39,19 @@ class IswcQuadrantChart extends DiagramElementBase {
     this.initDiagramShadow('qd-svg', 'qd-tooltip');
   }
 
-  onDiagramConnected() {
+  override onDiagramConnected() {
     this.wrap.addEventListener('mousemove', this.#onMouseMove);
     this.wrap.addEventListener('mouseleave', this.#onMouseLeave);
     this.wrap.addEventListener('click', this.#onClick);
   }
 
-  onDiagramDisconnected() {
+  override onDiagramDisconnected() {
     this.wrap.removeEventListener('mousemove', this.#onMouseMove);
     this.wrap.removeEventListener('mouseleave', this.#onMouseLeave);
     this.wrap.removeEventListener('click', this.#onClick);
   }
 
-  onPayloadChanged(): void { this.#hiddenGroups = new Set(); }
+  override onPayloadChanged(): void { this.#hiddenGroups = new Set(); }
 
   get hiddenGroups(): Set<string> { return this.#hiddenGroups; }
   set hiddenGroups(v: Set<string> | string[] | null | undefined) {
@@ -59,7 +59,7 @@ class IswcQuadrantChart extends DiagramElementBase {
     this.queueRender();
   }
 
-  renderDiagram(): void {
+  override renderDiagram(): void {
     const spec = resolveQuadrantSpec(this.payload ?? {});
     this.spec = spec;
     if (!spec) {

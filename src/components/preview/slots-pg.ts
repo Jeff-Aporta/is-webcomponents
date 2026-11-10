@@ -134,10 +134,10 @@ import css from 'iswc:css';
   const OBSERVED = ['tag', 'title', 'default-tab'];
 
   class IswcSlotsPg extends IswcElement {
-    static tag = 'iswc-slots-pg';
-    static css = css;
-    static deps = ['iswc-button', 'iswc-icon'];
-    static observed = OBSERVED;
+    static override tag = 'iswc-slots-pg';
+    static override css = css;
+    static override deps = ['iswc-button', 'iswc-icon'];
+    static override observed = OBSERVED;
 
     #tag = '';
     #titleEl!: HTMLElement;
@@ -182,7 +182,7 @@ import css from 'iswc:css';
       this.#slotBadges = root.querySelectorAll<HTMLElement>('[data-slot-count]');
     }
 
-    onConnected(): void {
+    override onConnected(): void {
       this.#tag = (this.getAttribute('tag') || '').trim();
       if (!this.#tag) {
         console.warn('[iswc-slots-pg] falta el atributo `tag`.');
@@ -198,7 +198,7 @@ import css from 'iswc:css';
       this.#syncDefaultTab();
     }
 
-    onAttributeChanged(): void {
+    override onAttributeChanged(): void {
       if (!this.isConnected) return;
       this.#syncTitle();
       this.#syncDefaultTab();
@@ -210,10 +210,10 @@ import css from 'iswc:css';
       else this.setAttribute('tag', String(v));
     }
 
-    get title(): string {
+    override get title(): string {
       return this.getAttribute('title') ?? '';
     }
-    set title(v: string) {
+    override set title(v: string) {
       if (v == null) this.removeAttribute('title');
       else this.setAttribute('title', String(v));
     }

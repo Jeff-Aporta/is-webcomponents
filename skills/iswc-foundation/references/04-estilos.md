@@ -2,7 +2,7 @@
 # 04 — Estilos SCSS
 
 - **Fuente canónica `.scss`**, hermana del componente; el build la compila (`.tmp-scss/`) y la incrusta en su módulo
-  (`import css from 'iswc:css'` + `static css = css`: el molde del kit crea una hoja por clase y la adopta). Ningún
+  (`import css from 'iswc:css'` + `static override css = css`: el molde del kit crea una hoja por clase y la adopta). Ningún
   `.css` vive en `src/` ni `view/`; ningún `<style>` ni constante CSS escrita a mano en un `.ts`.
 - **Colores solo con tokens del kit** `--iswc-*` (siguen al tema y la paleta): fondos `--iswc-bg`,
   `--iswc-bg-soft`, `--iswc-bg-elev`, `--iswc-surface`; texto `--iswc-text`, `--iswc-text-soft`,

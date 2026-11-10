@@ -62,22 +62,22 @@ import css from 'iswc:css';
   ];
 
   class IswcFlexLayout extends BreakpointHost {
-    static tag = 'iswc-flex-layout';
-    static css = css;
-    static shadowInit: ShadowRootInit | null = { mode: 'open' };
-    static template = TEMPLATE;
-    static observed = OBSERVED;
+    static override tag = 'iswc-flex-layout';
+    static override css = css;
+    static override shadowInit: ShadowRootInit | null = { mode: 'open' };
+    static override template = TEMPLATE;
+    static override observed = OBSERVED;
     // El attributeChangedCallback lo aporta ElementBase (vía BreakpointHost);
     // aquí solo se implementa el hook onAttributeChanged.
 
 
-    onConnected() {
+    override onConnected() {
       super.onConnected();
       this.#syncVars();
       this.#syncAria();
     }
 
-    onAttributeChanged(name: string, prev: string | null, next: string | null): void {
+    override onAttributeChanged(name: string, prev: string | null, next: string | null): void {
       super.onAttributeChanged(name, prev, next);
       if (name in SIZE_VARS) this.#syncVars();
       if (name === 'label' || name === 'labelledby' || name === 'direction') this.#syncAria();

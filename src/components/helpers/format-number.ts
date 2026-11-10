@@ -31,9 +31,9 @@ import css from 'iswc:css';
   const VALID_TYPE = ['decimal', 'currency', 'percent', 'unit'];
 
   class IswcFormatNumber extends IswcElement {
-    static tag = 'iswc-format-number';
-    static css = css;
-    static observed = OBSERVED;
+    static override tag = 'iswc-format-number';
+    static override css = css;
+    static override observed = OBSERVED;
 
     #el!: HTMLElement;
     constructor() {
@@ -43,11 +43,11 @@ import css from 'iswc:css';
       this.#el = shadow.querySelector<HTMLElement>('.number')!;
     }
 
-    onConnected() {
+    override onConnected() {
       this.#render();
     }
 
-    onAttributeChanged() {
+    override onAttributeChanged() {
       this.#render();
     }
 

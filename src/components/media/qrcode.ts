@@ -31,9 +31,9 @@ import css from 'iswc:css';
   const OBSERVED = ['value', 'level', 'cell', 'margin', 'fg', 'bg'];
 
   class IswcQrCode extends IswcElement {
-    static tag = 'iswc-qrcode';
-    static css = css;
-    static observed = OBSERVED;
+    static override tag = 'iswc-qrcode';
+    static override css = css;
+    static override observed = OBSERVED;
     #mounted = false;
     #lib: QRLib | null = null;
     #canvas!: HTMLElement;
@@ -51,13 +51,13 @@ import css from 'iswc:css';
       this.#status = this.shadowRoot!.querySelector<HTMLElement>('.status')!;
     }
 
-    async connectedCallback(): Promise<void> {
+    override async connectedCallback(): Promise<void> {
       this.#mounted = true;
       await this.#ensureLib();
       this.#render();
     }
 
-    async attributeChangedCallback(): Promise<void> {
+    override async attributeChangedCallback(): Promise<void> {
       if (this.#mounted && this.#lib) await this.#ensureLib().then(() => this.#render());
     }
 

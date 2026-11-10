@@ -123,9 +123,9 @@ function buscarProfundo(raiz: ParentNode, selector: string, out: HTMLElement[] =
 }
 
 class IswcDocLayout extends IswcElement {
-  static tag = 'iswc-doc-layout';
-  static css = css;
-  static observed = ['storage-key', 'toc', 'toc-title', 'start-width', 'end-width', 'start-rail', 'hide-start', 'hide-end', 'toc-min', 'no-bar'];
+  static override tag = 'iswc-doc-layout';
+  static override css = css;
+  static override observed = ['storage-key', 'toc', 'toc-title', 'start-width', 'end-width', 'start-rail', 'hide-start', 'hide-end', 'toc-min', 'no-bar'];
 
   /** Fuente propia de encabezados; por defecto, búsqueda profunda de `toc-selector` en el contenido. */
   tocSource: FuenteTocDocLayout | null = null;
@@ -152,7 +152,7 @@ class IswcDocLayout extends IswcElement {
     this.#content = this.#shadow.querySelector<HTMLElement>('main.content')!;
   }
 
-  connectedCallback(): void {
+  override connectedCallback(): void {
     this.#prefs = this.#leerPrefs();
     this.#aplicarAnchos();
     this.#shadow.querySelector('.toggle.start')!.addEventListener('click', () => this.toggleStart());
@@ -176,13 +176,13 @@ class IswcDocLayout extends IswcElement {
     requestAnimationFrame(() => this.refreshToc());
   }
 
-  disconnectedCallback(): void {
+  override disconnectedCallback(): void {
     this.#content.removeEventListener('scroll', this.#alDesplazar);
     for (const q of this.#consultas) q.removeEventListener('change', this.#alCambiarPantalla);
     removeEventListener('keydown', this.#alTeclado);
   }
 
-  attributeChangedCallback(nombre: string): void {
+  override attributeChangedCallback(nombre: string): void {
     if (!this.isConnected) return;
     if (nombre === 'toc-title') this.#syncTitulo();
     if (nombre === 'start-width' || nombre === 'end-width' || nombre === 'storage-key') this.#aplicarAnchos();

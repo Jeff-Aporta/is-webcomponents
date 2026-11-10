@@ -100,9 +100,9 @@ export function resolverRuta(desde: string, rel: string): string {
 }
 
 class IswcMdDocsVault extends IswcElement {
-  static tag = 'iswc-md-docs-vault';
-  static css = css;
-  static deps = ['iswc-figure', 'iswc-copy-button', 'iswc-button', 'iswc-icon', 'iswc-spinner'];
+  static override tag = 'iswc-md-docs-vault';
+  static override css = css;
+  static override deps = ['iswc-figure', 'iswc-copy-button', 'iswc-button', 'iswc-icon', 'iswc-spinner'];
   #raiz: ShadowRoot;
   #hojas: Hoja[] = [];
   #textos = new Map<string, string>();
@@ -112,14 +112,14 @@ class IswcMdDocsVault extends IswcElement {
   /** Renderers extra del consumidor (se suman a los del lector; ver `iswc-md-render.renderers`). */
   renderers: MdDocsVaultRenderers | null = null;
 
-  static observed = ['main'];
+  static override observed = ['main'];
 
   constructor() {
     super();
     this.#raiz = this.shadowRoot!;
   }
 
-  connectedCallback(): void {
+  override connectedCallback(): void {
     super.connectedCallback();
     if (this.#nav || this.#layout) return;
     this.#raiz.append(TEMPLATE.content.cloneNode(true));
@@ -142,11 +142,11 @@ class IswcMdDocsVault extends IswcElement {
   }
 
   /** Cambiar `main` con el lector montado abre esa hoja (p. ej. desde el playground). */
-  attributeChangedCallback(nombre: string, antes: string | null, ahora: string | null): void {
+  override attributeChangedCallback(nombre: string, antes: string | null, ahora: string | null): void {
     if (nombre === 'main' && antes !== ahora && this.#nav) this.#nav.navigate({ p: this.main });
   }
 
-  disconnectedCallback(): void {
+  override disconnectedCallback(): void {
     removeEventListener('keydown', this.#teclado);
     this.#nav?.destroy();
     this.#nav = null;

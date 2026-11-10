@@ -44,8 +44,8 @@ import css from 'iswc:css';
 /** Arista cacheada en el SVG para aplicar hover sin reconstruir el DOM. */
 
 class IswcBlockDiagram extends DiagramElementBase {
-  static tag = 'iswc-block-diagram';
-  static css = css;
+  static override tag = 'iswc-block-diagram';
+  static override css = css;
   #theme: DiagramTheme | null = null;
   #turtle: PathTurtle | null = null;
   #hiddenGroups: Set<string> = new Set<string>();
@@ -58,13 +58,13 @@ class IswcBlockDiagram extends DiagramElementBase {
     this.initDiagramShadow('block-svg', 'block-tooltip');
   }
 
-  onDiagramConnected(): void {
+  override onDiagramConnected(): void {
     this.wrap.addEventListener('mousemove', this.#onMouseMove as EventListener);
     this.wrap.addEventListener('mouseleave', this.#onMouseLeave as EventListener);
     this.wrap.addEventListener('click', this.#onClick as EventListener);
   }
 
-  onDiagramDisconnected(): void {
+  override onDiagramDisconnected(): void {
     this.#turtle?.destroy();
     this.#turtle = null;
     this.wrap.removeEventListener('mousemove', this.#onMouseMove as EventListener);
@@ -72,7 +72,7 @@ class IswcBlockDiagram extends DiagramElementBase {
     this.wrap.removeEventListener('click', this.#onClick as EventListener);
   }
 
-  onPayloadChanged(): void { this.#hiddenGroups = new Set(); }
+  override onPayloadChanged(): void { this.#hiddenGroups = new Set(); }
 
   get turtle(): PathTurtle | null { return this.#turtle; }
   get hiddenGroups(): Set<string> { return this.#hiddenGroups; }
@@ -81,7 +81,7 @@ class IswcBlockDiagram extends DiagramElementBase {
     this.queueRender();
   }
 
-  renderDiagram(): void {
+  override renderDiagram(): void {
     const spec: BlockSpec | null = resolveBlockSpec(this.payload ?? {});
     this.spec = spec;
     if (!spec) {

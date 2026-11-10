@@ -92,8 +92,8 @@ function foreignHtml(
 
 /** Región de participantes calculada por el layout. */
 class IswcSequenceDiagram extends DiagramElementBase {
-  static tag = 'iswc-sequence-diagram';
-  static css = css;
+  static override tag = 'iswc-sequence-diagram';
+  static override css = css;
   #theme: DiagramTheme | null = null;
   /** Tema del estilo (`diagram-style="insoft"` → tema `sequence`), ya fusionado con el modo. */
   #styleTheme: ErThemeJson | null = null;
@@ -120,13 +120,13 @@ class IswcSequenceDiagram extends DiagramElementBase {
     this.initDiagramShadow('seq-svg', 'seq-tooltip');
   }
 
-  onDiagramConnected(): void {
+  override onDiagramConnected(): void {
     this.wrap.addEventListener('mousemove', this.#onMouseMove as EventListener);
     this.wrap.addEventListener('mouseleave', this.#onMouseLeave as EventListener);
     this.wrap.addEventListener('click', this.#onClick as EventListener);
   }
 
-  onDiagramDisconnected(): void {
+  override onDiagramDisconnected(): void {
     this.#turtle?.destroy();
     this.#turtle = null;
     this.wrap.removeEventListener('mousemove', this.#onMouseMove as EventListener);
@@ -134,7 +134,7 @@ class IswcSequenceDiagram extends DiagramElementBase {
     this.wrap.removeEventListener('click', this.#onClick as EventListener);
   }
 
-  onPayloadChanged(): void { this.#hiddenGroups = new Set(); }
+  override onPayloadChanged(): void { this.#hiddenGroups = new Set(); }
 
   get turtle(): PathTurtle | null { return this.#turtle; }
 
@@ -239,7 +239,7 @@ class IswcSequenceDiagram extends DiagramElementBase {
     }
   }
 
-  renderDiagram(): void {
+  override renderDiagram(): void {
     // Los grupos ocultos se filtran del spec (re-diseña sin esas aristas).
     const hidden = this.#hiddenGroups;
     const spec: SequenceResolvedSpec | null = resolveSequenceSpec(this.payload ?? {});

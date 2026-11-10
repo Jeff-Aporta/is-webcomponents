@@ -71,10 +71,10 @@ import css from 'iswc:css';
 
 
   class IswcSplitPanel extends withStyleAttrs(IswcElement) {
-    static tag = 'iswc-split-panel';
-    static css = css;
+    static override tag = 'iswc-split-panel';
+    static override css = css;
 
-    static observed = [...OBSERVED, 'min-size', 'max-size'];
+    static override observed = [...OBSERVED, 'min-size', 'max-size'];
 
     _divider!: HTMLElement;
     _size: number = 0;
@@ -102,7 +102,7 @@ import css from 'iswc:css';
       this._onPointerUp = (e: Event) => this._handlePointerUp(e as PointerEvent);
     }
 
-    connectedCallback(): void {
+    override connectedCallback(): void {
       super.connectedCallback();
       this._mounted = true;
       upgradeProperties(this, OBSERVED);
@@ -130,7 +130,7 @@ import css from 'iswc:css';
       this._syncDividerAria();
     }
 
-    disconnectedCallback(): void {
+    override disconnectedCallback(): void {
       this._divider.removeEventListener('keydown', this._onKeyDown);
       this._divider.removeEventListener('pointerdown', this._onPointerDown);
       this._divider.removeEventListener('pointermove', this._onPointerMove);
@@ -139,7 +139,7 @@ import css from 'iswc:css';
       this._resizeObserver?.disconnect();
     }
 
-    attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
+    override attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
       super.attributeChangedCallback(name, oldVal, newVal);
       if (!this._mounted || oldVal === newVal) return;
       if (name === 'orientation') this._detectSize();

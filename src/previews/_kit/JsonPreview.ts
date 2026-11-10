@@ -60,7 +60,7 @@ export class JsonPreview extends IswcComponentPreview {
     this.#behavior = behavior;
   }
 
-  async mount(ctx: PreviewMountContext): Promise<void> {
+  override async mount(ctx: PreviewMountContext): Promise<void> {
     if (this.#behavior?.mount) await this.#behavior.mount(ctx, this);
     // Playground JSON-driven: paneles de controles de los bloques demo/html
     // que declaren `controls` (se aplican vía JSON -> prop/attr del host).
@@ -73,7 +73,7 @@ export class JsonPreview extends IswcComponentPreview {
     if (ctx.main) montarAnatomia(definition as Parameters<typeof montarAnatomia>[0], ctx.main as HTMLElement);
   }
 
-  unmount(ctx: PreviewMountContext): void {
+  override unmount(ctx: PreviewMountContext): void {
     try {
       this.#behavior?.unmount?.(ctx, this);
     } finally {

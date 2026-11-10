@@ -35,10 +35,10 @@ import css from 'iswc:css';
   const CIRC = 2 * Math.PI * 15.9155;
 
   class IswcProgressRing extends IswcReactive {
-    static tag = 'iswc-progress-ring';
-    static css = css;
+    static override tag = 'iswc-progress-ring';
+    static override css = css;
 
-    static observed = [...OBSERVED, 'track-width', 'width', 'track-color', 'color'];
+    static override observed = [...OBSERVED, 'track-width', 'width', 'track-color', 'color'];
 
     #wrap!: HTMLElement;
     #indicator!: HTMLElement;
@@ -52,11 +52,11 @@ import css from 'iswc:css';
       this.#labelEl = shadow.querySelector<HTMLElement>('.label')!;
     }
 
-    onConnected() {
+    override onConnected() {
       this.#render();
     }
 
-    onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
+    override onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
       this.#render();
     }
 

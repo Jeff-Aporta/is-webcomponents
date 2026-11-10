@@ -9,10 +9,10 @@ import css from 'iswc:css';
 (() => {
   const OBSERVED = ['src', 'content', 'height'];
   class IswcCsvEdit extends IswcElement {
-    static tag = 'iswc-csv-edit';
-    static css = css;
-    static deps = ['iswc-button', 'iswc-icon'];
-    static observed = OBSERVED;
+    static override tag = 'iswc-csv-edit';
+    static override css = css;
+    static override deps = ['iswc-button', 'iswc-icon'];
+    static override observed = OBSERVED;
     #stage!: HTMLElement;
     #rows: string[][] = [];
     #gen = 0;
@@ -48,8 +48,8 @@ import css from 'iswc:css';
       });
     }
 
-    onConnected() { sincronizarAlto(this); this.#reload(); }
-    onAttributeChanged(name: string) {
+    override onConnected() { sincronizarAlto(this); this.#reload(); }
+    override onAttributeChanged(name: string) {
       if (name === 'height') { sincronizarAlto(this); return; }
       if (name === 'content' && this.content === (this.getAttribute('content') ?? '')) return;
       this.#reload();

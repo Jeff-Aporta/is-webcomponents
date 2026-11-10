@@ -65,7 +65,7 @@ export function lerpFor(width: number, b0: string = 'sm', b1: string = 'xl'): nu
  * Geometría y memoria de scroll viven aquí para que block/flex/grid las hereden.
  */
 export class BreakpointHost extends IswcElement {
-  static shadowInit: ShadowRootInit | null = null;
+  static override shadowInit: ShadowRootInit | null = null;
   #ro: ResizeObserver | null = null;
   #width = -1;
   #height = -1;
@@ -74,7 +74,7 @@ export class BreakpointHost extends IswcElement {
   /** Subclases deben concatenar esto a su observedAttributes. */
   static get scrollMemoryAttrs() { return SCROLL_MEMORY_ATTRS; }
 
-  onConnected(): void {
+  override onConnected(): void {
     const ro = new ResizeObserver(() => this.measureSize());
     this.#ro = ro;
     ro.observe(this);
@@ -90,7 +90,7 @@ export class BreakpointHost extends IswcElement {
     this.#scroll.connect();
   }
 
-  onDisconnected(): void {
+  override onDisconnected(): void {
     this.#scroll?.disconnect();
     this.#ro?.disconnect();
     this.#ro = null;
@@ -98,7 +98,7 @@ export class BreakpointHost extends IswcElement {
     this.#height = -1;
   }
 
-  onAttributeChanged(name: string, prev: string | null, next: string | null): void {
+  override onAttributeChanged(name: string, prev: string | null, next: string | null): void {
     if (SCROLL_MEMORY_ATTRS.includes(name)) {
       this.#scroll?.onAttributeChanged(name, prev, next);
     }
@@ -173,11 +173,11 @@ export class BreakpointHost extends IswcElement {
   TEMPLATE.innerHTML = /* html */ `<slot part="content"></slot>`;
 
   class IswcBlockLayout extends BreakpointHost {
-    static tag = 'iswc-block-layout';
-    static css = css;
-    static shadowInit: ShadowRootInit | null = { mode: 'open' };
-    static template = TEMPLATE;
-    static observed = ['inline', 'cscroll', 'label', 'labelledby', ...SCROLL_MEMORY_ATTRS];
+    static override tag = 'iswc-block-layout';
+    static override css = css;
+    static override shadowInit: ShadowRootInit | null = { mode: 'open' };
+    static override template = TEMPLATE;
+    static override observed = ['inline', 'cscroll', 'label', 'labelledby', ...SCROLL_MEMORY_ATTRS];
 
     static json2html = json2html;
     static html2json = html2json;
@@ -185,13 +185,13 @@ export class BreakpointHost extends IswcElement {
     #inlineApplied = false;
 
 
-    onConnected(): void {
+    override onConnected(): void {
       super.onConnected();
       this.#applyInlineJson();
       this.#syncAria();
     }
 
-    onAttributeChanged(name: string, prev: string | null, next: string | null): void {
+    override onAttributeChanged(name: string, prev: string | null, next: string | null): void {
       super.onAttributeChanged(name, prev, next);
       if (name === 'label' || name === 'labelledby') this.#syncAria();
     }

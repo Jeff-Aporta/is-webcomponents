@@ -54,9 +54,9 @@ import css from 'iswc:css';
   const OBSERVED = ['id', 'as', 'aria-label', 'aria-labelledby', 'role'];
 
   class IswcDemoSection extends IswcElement {
-    static tag = 'iswc-demo-section';
-    static css = css;
-    static observed = OBSERVED;
+    static override tag = 'iswc-demo-section';
+    static override css = css;
+    static override observed = OBSERVED;
 
     #headEl!: HTMLElement;
     #titleSlot!: HTMLSlotElement;
@@ -80,19 +80,19 @@ import css from 'iswc:css';
       queueMicrotask(() => this.#syncHeadEmpty());
     }
 
-    onConnected(): void {
+    override onConnected(): void {
       this.#syncHeadEmpty();
       this.#syncRole();
     }
 
-    onAttributeChanged(name: string): void {
+    override onAttributeChanged(name: string): void {
       if (name === 'as') this.#syncRole();
     }
 
     // ---- properties ----
 
-    get id(): string { return this.getAttribute('id') ?? ''; }
-    set id(v: string) {
+    override get id(): string { return this.getAttribute('id') ?? ''; }
+    override set id(v: string) {
       if (v == null || v === '') this.removeAttribute('id');
       else this.setAttribute('id', String(v));
     }
@@ -106,14 +106,14 @@ import css from 'iswc:css';
       else this.setAttribute('as', String(v));
     }
 
-    get ariaLabel(): string { return this.getAttribute('aria-label') ?? ''; }
-    set ariaLabel(v: string) { setStringAttr(this, 'aria-label', v); }
+    override get ariaLabel(): string { return this.getAttribute('aria-label') ?? ''; }
+    override set ariaLabel(v: string) { setStringAttr(this, 'aria-label', v); }
 
     get ariaLabelledby(): string { return this.getAttribute('aria-labelledby') ?? ''; }
     set ariaLabelledby(v: string) { setStringAttr(this, 'aria-labelledby', v); }
 
-    get role(): string { return this.getAttribute('role') ?? ''; }
-    set role(v: string) { setStringAttr(this, 'role', v); }
+    override get role(): string { return this.getAttribute('role') ?? ''; }
+    override set role(v: string) { setStringAttr(this, 'role', v); }
 
     // ---- private ----
 

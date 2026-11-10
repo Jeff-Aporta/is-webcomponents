@@ -51,10 +51,10 @@ import css from 'iswc:css';
   const OBSERVED = ['mode', 'submit-label', 'cancel-label', 'loading'];
 
   class IswcForm extends IswcElement {
-    static tag = 'iswc-form';
-    static css = css;
-    static deps = ['iswc-button'];
-    static observed = OBSERVED;
+    static override tag = 'iswc-form';
+    static override css = css;
+    static override deps = ['iswc-button'];
+    static override observed = OBSERVED;
 
     static json2html = json2html;
     static html2json = html2json;
@@ -81,7 +81,7 @@ import css from 'iswc:css';
       this.#cancelBtn = shadow.querySelector<HTMLElement>('.cancel')!;
     }
 
-    onConnected() {
+    override onConnected() {
       if (!this.hasAttribute('mode')) this.setAttribute('mode', 'edit');
       this.#form.addEventListener('submit', this.#onSubmit);
       this.#submitBtn.addEventListener('click', this.#onSubmitClick);
@@ -92,13 +92,13 @@ import css from 'iswc:css';
       this.#applyInlineJson();
     }
 
-    onDisconnected() {
+    override onDisconnected() {
       this.#form.removeEventListener('submit', this.#onSubmit);
       this.#submitBtn.removeEventListener('click', this.#onSubmitClick);
       this.#cancelBtn.removeEventListener('click', this.#onCancel);
     }
 
-    onAttributeChanged(name: string, _oldVal: string | null, newVal: string | null) {
+    override onAttributeChanged(name: string, _oldVal: string | null, newVal: string | null) {
       if (name === 'mode') {
         if (newVal && !VALID_MODE.includes(newVal)) { this.setAttribute('mode', 'edit'); return; }
         this.#syncMode();

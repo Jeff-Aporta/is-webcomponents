@@ -74,9 +74,9 @@ export function markdownLigero(texto: string): string {
 }
 
 class IswcStreamBubble extends PropsElement<StreamBubbleProps> {
-  static tag = 'iswc-stream-bubble';
-  static css = css;
-  static observed = atributosDe(INICIAL);
+  static override tag = 'iswc-stream-bubble';
+  static override css = css;
+  static override observed = atributosDe(INICIAL);
 
   #bubble: HTMLElement;
   #avatar: HTMLElement;

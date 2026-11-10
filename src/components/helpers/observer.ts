@@ -67,9 +67,9 @@ const OBSERVED = [
 ];
 
 class ObserverElement extends IswcElement {
-  static tag = 'iswc-observer';
-  static css = css;
-  static observed = OBSERVED;
+  static override tag = 'iswc-observer';
+  static override css = css;
+  static override observed = OBSERVED;
 
   #observer: IntersectionObserver | MutationObserver | ResizeObserver | null = null;
   #mounted = false;
@@ -82,14 +82,14 @@ class ObserverElement extends IswcElement {
     this.#slot = shadow.querySelector<HTMLSlotElement>('slot')!;
   }
 
-  connectedCallback(): void {
+  override connectedCallback(): void {
     this.#mounted = true;
     this.#slot.addEventListener('slotchange', this.#onSlotChange);
     this.#syncAria();
     this.#setup();
   }
 
-  disconnectedCallback(): void {
+  override disconnectedCallback(): void {
     this.#slot.removeEventListener('slotchange', this.#onSlotChange);
     this.#teardown();
     // Anular referencia al observer: aunque `disconnect()` ya corta el
@@ -98,7 +98,7 @@ class ObserverElement extends IswcElement {
     this.#observer = null;
   }
 
-  attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
+  override attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
     if (!this.#mounted || oldVal === newVal) return;
     if (name === 'label' || name === 'labelledby') {
       this.#syncAria();

@@ -30,21 +30,21 @@ import css from 'iswc:css';
   const DEFAULT_MIX = { 1: '15%', 2: '30%', 3: '45%', 4: '65%', 5: '80%', 6: '90%' };
 
   class IswcHeading extends IswcElement {
-    static tag = 'iswc-heading';
-    static css = css;
+    static override tag = 'iswc-heading';
+    static override css = css;
 
-    static observed = ['level', 'color', 'mix', 'mix-with', 'size'];
+    static override observed = ['level', 'color', 'mix', 'mix-with', 'size'];
 
     #heading: HTMLElement | null = null;
 
 
-    onConnected() {
+    override onConnected() {
       if (!this.hasAttribute('level')) this.setAttribute('level', '1');
       this.#render();
       this.#syncVars();
     }
 
-    onAttributeChanged(name: string, _oldVal: string | null, newVal: string | null) {
+    override onAttributeChanged(name: string, _oldVal: string | null, newVal: string | null) {
       if (name === 'level') {
         if (newVal && !LEVELS.includes(newVal)) { this.setAttribute('level', '1'); return; }
         this.#render();

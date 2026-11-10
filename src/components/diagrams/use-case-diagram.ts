@@ -84,8 +84,8 @@ function generalizationHead(
 }
 
 class IswcUseCaseDiagram extends DiagramElementBase {
-  static tag = 'iswc-use-case-diagram';
-  static css = css;
+  static override tag = 'iswc-use-case-diagram';
+  static override css = css;
   #hiddenGroups: Set<string> = new Set<string>();
   #nodeNodes: Map<string, NodeNodeEntry> = new Map();
   #linkNodes: Map<string, LinkNodeEntry> = new Map();
@@ -96,19 +96,19 @@ class IswcUseCaseDiagram extends DiagramElementBase {
     this.initDiagramShadow('uc-svg', 'uc-tooltip');
   }
 
-  onDiagramConnected(): void {
+  override onDiagramConnected(): void {
     this.wrap.addEventListener('mousemove', this.#onMouseMove as EventListener);
     this.wrap.addEventListener('mouseleave', this.#onMouseLeave as EventListener);
     this.wrap.addEventListener('click', this.#onClick as EventListener);
   }
 
-  onDiagramDisconnected(): void {
+  override onDiagramDisconnected(): void {
     this.wrap.removeEventListener('mousemove', this.#onMouseMove as EventListener);
     this.wrap.removeEventListener('mouseleave', this.#onMouseLeave as EventListener);
     this.wrap.removeEventListener('click', this.#onClick as EventListener);
   }
 
-  onPayloadChanged(): void { this.#hiddenGroups = new Set(); }
+  override onPayloadChanged(): void { this.#hiddenGroups = new Set(); }
 
   get hiddenGroups(): Set<string> { return this.#hiddenGroups; }
   set hiddenGroups(v: Set<string> | Iterable<string> | null | undefined) {
@@ -116,7 +116,7 @@ class IswcUseCaseDiagram extends DiagramElementBase {
     this.queueRender();
   }
 
-  renderDiagram(): void {
+  override renderDiagram(): void {
     const spec: UseCaseResolvedSpec | null = resolveUseCaseSpec(this.payload ?? {});
     this.spec = spec;
     if (!spec) {

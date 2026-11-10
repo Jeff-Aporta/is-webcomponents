@@ -36,11 +36,11 @@ import css from 'iswc:css';
   const OBSERVED = ['view', 'date', 'first-day', 'locale', 'hours-start', 'hours-end'];
 
   class IswcFullCalendar extends IswcReactive {
-    static tag = 'iswc-full-calendar';
+    static override tag = 'iswc-full-calendar';
     declare static events: FullCalendarEventos;
-    static css = css;
-    static deps = ['iswc-button'];
-    static observed = OBSERVED;
+    static override css = css;
+    static override deps = ['iswc-button'];
+    static override observed = OBSERVED;
     #mounted = false;
     #events: CalEvent[] = [];
     #cursor: Date = new Date();
@@ -81,7 +81,7 @@ import css from 'iswc:css';
       barra.querySelector('[data-view="day"]')!.textContent = this.t('dia');
     }
 
-    connectedCallback(): void {
+    override connectedCallback(): void {
       super.connectedCallback();
       this.#mounted = true;
       const d = this.getAttribute('date');
@@ -91,7 +91,7 @@ import css from 'iswc:css';
       this.#render();
     }
 
-    attributeChangedCallback(): void {
+    override attributeChangedCallback(): void {
       if (!this.#mounted) return;
       this.#render();
     }

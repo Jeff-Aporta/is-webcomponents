@@ -50,22 +50,22 @@ import css from 'iswc:css';
   const IS_NUMBER = /^\d+(\.\d+)?$/;
 
   class IswcGridLayout extends BreakpointHost {
-    static tag = 'iswc-grid-layout';
-    static css = css;
-    static shadowInit: ShadowRootInit | null = { mode: 'open' };
-    static template = TEMPLATE;
-    static observed = OBSERVED;
+    static override tag = 'iswc-grid-layout';
+    static override css = css;
+    static override shadowInit: ShadowRootInit | null = { mode: 'open' };
+    static override template = TEMPLATE;
+    static override observed = OBSERVED;
     // El attributeChangedCallback lo aporta ElementBase (vía BreakpointHost);
     // aquí solo se implementa el hook onAttributeChanged.
 
 
-    onConnected() {
+    override onConnected() {
       super.onConnected();
       this.#syncVars();
       this.#syncAria();
     }
 
-    onAttributeChanged(name: string, prev: string | null, next: string | null): void {
+    override onAttributeChanged(name: string, prev: string | null, next: string | null): void {
       super.onAttributeChanged(name, prev, next);
       if (name === 'cells' || name === 'cells-fit' || name === 'gap') this.#syncVars();
       if (name === 'label' || name === 'labelledby' || name === 'direction') this.#syncAria();

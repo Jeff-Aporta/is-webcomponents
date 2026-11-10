@@ -40,11 +40,11 @@ import type { RadioEventos } from './schemas/radio.schemas.js';
   const PLACEMENTS: string[] = ['end', 'start', 'top', 'bottom'];
 
   class IswcRadio extends IswcReactive {
-    static tag = 'iswc-radio';
+    static override tag = 'iswc-radio';
     declare static events: RadioEventos;
-    static css = css;
+    static override css = css;
 
-    static observed = [...OBSERVED, 'accent'];
+    static override observed = [...OBSERVED, 'accent'];
 
     #descEl!: HTMLElement;
     #descSlot!: HTMLSlotElement;
@@ -62,13 +62,13 @@ import type { RadioEventos } from './schemas/radio.schemas.js';
       this.addEventListener('keydown', this.#onKey);
     }
 
-    onConnected(): void {
+    override onConnected(): void {
       if (!this.hasAttribute('role')) this.setAttribute('role', 'radio');
       this.#syncDescription();
       this.#sync();
     }
 
-    onAttributeChanged(_name: string, _oldVal: string | null, _newVal: string | null): void {
+    override onAttributeChanged(_name: string, _oldVal: string | null, _newVal: string | null): void {
       this.#sync();
     }
 

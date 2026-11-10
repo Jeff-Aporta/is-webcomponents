@@ -178,9 +178,9 @@ function titleCase(s: string): string {
 // sigue siendo JSDoc-only y no expone la opción `locale` en su tipo inferido.
 
 class FormatElement extends IswcElement {
-  static tag = 'iswc-format';
-  static css = css;
-  static observed = [...OBSERVED];
+  static override tag = 'iswc-format';
+  static override css = css;
+  static override observed = [...OBSERVED];
 
   #el!: HTMLElement;
   #timer: ReturnType<typeof setInterval> | null = null;

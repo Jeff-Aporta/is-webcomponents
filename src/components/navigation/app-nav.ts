@@ -61,10 +61,10 @@ function firma(rows: AppNavRow[]): string {
 }
 
 class IswcAppNav extends IswcReactive {
-  static tag = 'iswc-app-nav';
-  static css = css;
-  static deps = ['iswc-icon'];
-  static observed = ['rows'];
+  static override tag = 'iswc-app-nav';
+  static override css = css;
+  static override deps = ['iswc-icon'];
+  static override observed = ['rows'];
 
   #rows: AppNavRow[] = [];
   #firma = '';

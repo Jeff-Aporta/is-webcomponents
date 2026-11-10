@@ -53,8 +53,8 @@ function statePath(kind: string, x: number, y: number, w: number, h: number): st
 }
 
 class IswcStateDiagram extends DiagramElementBase {
-  static tag = 'iswc-state-diagram';
-  static css = css;
+  static override tag = 'iswc-state-diagram';
+  static override css = css;
   #theme: DiagramTheme | null = null;
   #turtle: PathTurtle | null = null;
   #hiddenGroups: Set<string> = new Set<string>();
@@ -67,13 +67,13 @@ class IswcStateDiagram extends DiagramElementBase {
     this.initDiagramShadow('st-svg', 'st-tooltip');
   }
 
-  onDiagramConnected(): void {
+  override onDiagramConnected(): void {
     this.wrap.addEventListener('mousemove', this.#onMouseMove as EventListener);
     this.wrap.addEventListener('mouseleave', this.#onMouseLeave as EventListener);
     this.wrap.addEventListener('click', this.#onClick as EventListener);
   }
 
-  onDiagramDisconnected(): void {
+  override onDiagramDisconnected(): void {
     this.#turtle?.destroy();
     this.#turtle = null;
     this.wrap.removeEventListener('mousemove', this.#onMouseMove as EventListener);
@@ -81,7 +81,7 @@ class IswcStateDiagram extends DiagramElementBase {
     this.wrap.removeEventListener('click', this.#onClick as EventListener);
   }
 
-  onPayloadChanged(): void { this.#hiddenGroups = new Set(); }
+  override onPayloadChanged(): void { this.#hiddenGroups = new Set(); }
 
   get turtle(): PathTurtle | null { return this.#turtle; }
   get hiddenGroups(): Set<string> { return this.#hiddenGroups; }
@@ -90,7 +90,7 @@ class IswcStateDiagram extends DiagramElementBase {
     this.queueRender();
   }
 
-  renderDiagram(): void {
+  override renderDiagram(): void {
     const spec: StateResolvedSpec | null = resolveStateSpec(this.payload ?? {});
     this.spec = spec;
     if (!spec) {

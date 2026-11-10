@@ -32,10 +32,10 @@ import css from 'iswc:css';
     /** El `aria-label` que puso el propio componente (uno del consumidor no se toca). */
     #etiqueta = '';
 
-    static tag = 'iswc-skeleton';
-    static css = css;
+    static override tag = 'iswc-skeleton';
+    static override css = css;
 
-    static observed = [...OBSERVED, 'color', 'sheen-color'];
+    static override observed = [...OBSERVED, 'color', 'sheen-color'];
 
     constructor() {
       super();
@@ -51,7 +51,7 @@ import css from 'iswc:css';
       this.setAttribute('aria-label', this.#etiqueta);
     }
 
-    connectedCallback(): void {
+    override connectedCallback(): void {
       super.connectedCallback();
       if (!this.hasAttribute('effect')) this.setAttribute('effect', 'sheen');
       // g07 (Cat 31): exponer el estado de carga a los lectores de pantalla.
@@ -66,7 +66,7 @@ import css from 'iswc:css';
       indicator?.setAttribute('aria-hidden', 'true');
     }
 
-    attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
+    override attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
       super.attributeChangedCallback(name, oldVal, newVal);
       if (oldVal === newVal) return;
       if (name === 'effect' && newVal && !VALID_EFFECT.includes(newVal)) {

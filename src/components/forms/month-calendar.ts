@@ -20,10 +20,10 @@ import type { MonthCalendarEventos } from './schemas/month-calendar.schemas.js';
   const OBSERVED: string[] = ['value', 'year', 'min', 'max', 'locale', 'columns', 'month-width', 'disabled', 'readonly'];
 
   class IswcMonthCalendar extends IswcElement {
-    static tag = 'iswc-month-calendar';
+    static override tag = 'iswc-month-calendar';
     declare static events: MonthCalendarEventos;
-    static css = css;
-    static observed = OBSERVED;
+    static override css = css;
+    static override observed = OBSERVED;
 
     #base!: HTMLElement;
     constructor() {
@@ -35,11 +35,11 @@ import type { MonthCalendarEventos } from './schemas/month-calendar.schemas.js';
       this.#base.addEventListener('keydown', this.#onKey);
     }
 
-    onConnected(): void {
+    override onConnected(): void {
       this.#render();
     }
 
-    onAttributeChanged(_name: string, _oldVal: string | null, _newVal: string | null): void {
+    override onAttributeChanged(_name: string, _oldVal: string | null, _newVal: string | null): void {
       this.#render();
     }
 
@@ -69,7 +69,7 @@ import type { MonthCalendarEventos } from './schemas/month-calendar.schemas.js';
     get readonly(): boolean { return this.hasAttribute('readonly'); }
     set readonly(v: boolean) { this.toggleAttribute('readonly', !!v); }
 
-    focus(opts?: FocusOptions): void {
+    override focus(opts?: FocusOptions): void {
       const tabEl = this.#base.querySelector<HTMLElement>('[tabindex="0"]') as HTMLElement | null;
       const first = this.#base.firstElementChild as HTMLElement | null;
       (tabEl || first)?.focus(opts);

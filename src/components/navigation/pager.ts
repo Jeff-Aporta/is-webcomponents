@@ -34,9 +34,9 @@ TEMPLATE.innerHTML = /* html */ `
 `;
 
 class IswcPager extends IswcReactive {
-  static tag = 'iswc-pager';
-  static css = css;
-  static observed = [...OBSERVED];
+  static override tag = 'iswc-pager';
+  static override css = css;
+  static override observed = [...OBSERVED];
 
   #nav: HTMLElement;
   #sides: Record<PagerDirection, HTMLAnchorElement>;

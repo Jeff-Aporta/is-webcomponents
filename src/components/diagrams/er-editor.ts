@@ -169,10 +169,10 @@ const EDITOR_TEMPLATE = `
 `;
 
 class IswcErEditor extends IswcElement {
-  static tag = 'iswc-er-editor';
-  static css = css;
-  static deps = ['iswc-icon'];
-  static observed = ['animation', 'theme'];
+  static override tag = 'iswc-er-editor';
+  static override css = css;
+  static override deps = ['iswc-icon'];
+  static override observed = ['animation', 'theme'];
 
   #diagram: DiagramElementBase | null = null;
   #state: ErEditorState | null = null;
@@ -197,7 +197,7 @@ class IswcErEditor extends IswcElement {
     this.#installListeners();
   }
 
-  connectedCallback() {
+  override connectedCallback() {
     super.connectedCallback();
     this.#ensureDiagram();
     this.#ensurePanZoom();
@@ -212,14 +212,14 @@ class IswcErEditor extends IswcElement {
     if (!script?.textContent?.trim()) return null;
     try { return cloneState(JSON.parse(script.textContent)); } catch { return null; }
   }
-  disconnectedCallback() {
+  override disconnectedCallback() {
     this.#uninstallHotkeys();
     this.#pz?.destroy();
     this.#pz = null;
     if (this.#attrEditDebounce !== null) clearTimeout(this.#attrEditDebounce);
     this.#attrEditDebounce = null;
   }
-  attributeChangedCallback(name: string): void {
+  override attributeChangedCallback(name: string): void {
     if (!this.#diagram) return;
     if (name === 'animation') {
       this.#diagram.setAttribute('animation', this.getAttribute('animation') ?? '');

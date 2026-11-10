@@ -29,8 +29,8 @@ import css from 'iswc:css';
  */
 
 class IswcTimeline extends DiagramElementBase {
-  static tag = 'iswc-timeline';
-  static css = css;
+  static override tag = 'iswc-timeline';
+  static override css = css;
   #hiddenGroups = new Set<string>();
   #eventNodes = new Map<string, EventEntry>();
   #hoverId: string | null = null;
@@ -42,7 +42,7 @@ class IswcTimeline extends DiagramElementBase {
     this.initDiagramShadow('tl-svg', 'tl-tooltip');
   }
 
-  onDiagramConnected() {
+  override onDiagramConnected() {
     this.wrap.addEventListener('mousemove', this.#onMouseMove);
     this.wrap.addEventListener('mouseleave', this.#onMouseLeave);
     this.wrap.addEventListener('click', this.#onClick);
@@ -59,14 +59,14 @@ class IswcTimeline extends DiagramElementBase {
     }
   }
 
-  onDiagramDisconnected() {
+  override onDiagramDisconnected() {
     this.#ro?.disconnect();
     this.wrap.removeEventListener('mousemove', this.#onMouseMove);
     this.wrap.removeEventListener('mouseleave', this.#onMouseLeave);
     this.wrap.removeEventListener('click', this.#onClick);
   }
 
-  onPayloadChanged(): void { this.#hiddenGroups = new Set(); }
+  override onPayloadChanged(): void { this.#hiddenGroups = new Set(); }
 
   get hiddenGroups(): Set<string> { return this.#hiddenGroups; }
   set hiddenGroups(v: Set<string> | string[] | null | undefined) {
@@ -74,7 +74,7 @@ class IswcTimeline extends DiagramElementBase {
     this.queueRender();
   }
 
-  renderDiagram(): void {
+  override renderDiagram(): void {
     const spec = resolveTimelineSpec(this.payload ?? {});
     this.spec = spec;
     if (!spec) {

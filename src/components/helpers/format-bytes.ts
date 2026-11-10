@@ -74,9 +74,9 @@ export function formatBytes(bytes: number, { locale, display = 'short', autofit 
   const OBSERVED = ['value', 'unit', 'display', 'locale', 'autofit'];
 
   class IswcFormatBytes extends IswcElement {
-    static tag = 'iswc-format-bytes';
-    static css = css;
-    static observed = OBSERVED;
+    static override tag = 'iswc-format-bytes';
+    static override css = css;
+    static override observed = OBSERVED;
 
     #el!: HTMLElement;
     constructor() {
@@ -86,12 +86,12 @@ export function formatBytes(bytes: number, { locale, display = 'short', autofit 
       this.#el = shadow.querySelector<HTMLElement>('.bytes')!;
     }
 
-    onConnected() {
+    override onConnected() {
       if (!this.hasAttribute('unit')) this.setAttribute('unit', 'byte');
       this.#render();
     }
 
-    onAttributeChanged() {
+    override onAttributeChanged() {
       this.#render();
     }
 

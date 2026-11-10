@@ -16,11 +16,11 @@ import css from 'iswc:css';
 const INICIAL: TenantSelectorProps = { opciones: [], activa: null, icono: 'mdi:domain', etiqueta: 'Cliente activo', sinOpciones: 'Sin opciones' };
 
 class IswcTenantSelector extends PropsElement<TenantSelectorProps> {
-  static tag = 'iswc-tenant-selector';
+  static override tag = 'iswc-tenant-selector';
   declare static events: TenantSelectorEventos;
-  static css = css;
-  static deps = ['iswc-tag', 'iswc-icon'];
-  static observed = atributosDe(INICIAL);
+  static override css = css;
+  static override deps = ['iswc-tag', 'iswc-icon'];
+  static override observed = atributosDe(INICIAL);
 
   #root: ShadowRoot;
 

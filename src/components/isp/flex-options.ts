@@ -34,11 +34,11 @@ TEMPLATE.innerHTML = /* html */ `
 `;
 
 class IswcFlexOptions extends IswcElement {
-  static tag = 'iswc-flex-options';
-  static css = css;
-  static deps = ['iswc-button', 'iswc-divider', 'iswc-icon'];
-  static template = TEMPLATE;
-  static observed = ['compact', 'more-disabled', 'label', 'labelledby'];
+  static override tag = 'iswc-flex-options';
+  static override css = css;
+  static override deps = ['iswc-button', 'iswc-divider', 'iswc-icon'];
+  static override template = TEMPLATE;
+  static override observed = ['compact', 'more-disabled', 'label', 'labelledby'];
 
   #root!: HTMLElement;
   #actions: FlexActionEntry[] = [];
@@ -51,17 +51,17 @@ class IswcFlexOptions extends IswcElement {
 
   #batch = false;
 
-  onConnected() {
+  override onConnected() {
     this.#paint();
     this.#syncAria();
     this.addEventListener('keydown', this.#onKeydown);
   }
 
-  onDisconnected() {
+  override onDisconnected() {
     this.removeEventListener('keydown', this.#onKeydown);
   }
 
-  onAttributeChanged(name: string) {
+  override onAttributeChanged(name: string) {
     if (!this.#batch) this.#paint();
     if (name === 'label' || name === 'labelledby') this.#syncAria();
   }

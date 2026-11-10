@@ -85,12 +85,12 @@ import type { DatePickerEventos } from './schemas/date-picker.schemas.js';
   }
 
   class IswcDatePicker extends IswcElement {
-    static tag = 'iswc-date-picker';
+    static override tag = 'iswc-date-picker';
     declare static events: DatePickerEventos;
-    static css = css;
-    static deps = ['iswc-button'];
+    static override css = css;
+    static override deps = ['iswc-button'];
 
-    static observed = [...OBSERVED, 'radius', 'border-color', 'bg'];
+    static override observed = [...OBSERVED, 'radius', 'border-color', 'bg'];
 
     #base!: HTMLElement;
     #nav!: HTMLElement;
@@ -144,7 +144,7 @@ import type { DatePickerEventos } from './schemas/date-picker.schemas.js';
      *  observador de idioma para repintar las flechas al cambiar `lang` o al llegar un diccionario. */
     #idioma = { solicitarRender: (): void => this.#render() };
 
-    onConnected(): void {
+    override onConnected(): void {
       if (!this.hasAttribute('mode')) this.setAttribute('mode', 'single');
       observarIdioma(this.#idioma, true);
       if (!this.hasAttribute('view')) {
@@ -154,11 +154,11 @@ import type { DatePickerEventos } from './schemas/date-picker.schemas.js';
       this.#render();
     }
 
-    onDisconnected(): void {
+    override onDisconnected(): void {
       observarIdioma(this.#idioma, false);
     }
 
-    onAttributeChanged(name: string, oldVal: string | null, newVal: string | null): void {
+    override onAttributeChanged(name: string, oldVal: string | null, newVal: string | null): void {
       if (name === 'value' || name === 'mode') this.#parseValueAttr();
       if (name === 'view') emit(this, 'iswc-view-change', { view: this.view });
       if (name === 'month' && newVal && newVal !== monthKey(this.#view)) {

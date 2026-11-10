@@ -28,10 +28,10 @@ TEMPLATE.innerHTML = /* html */ `
 `;
 
 class IswcEmptyState extends PropsElement<EmptyStateProps> {
-  static tag = 'iswc-empty-state';
-  static css = css;
-  static deps = ['iswc-icon'];
-  static observed = atributosDe(INICIAL);
+  static override tag = 'iswc-empty-state';
+  static override css = css;
+  static override deps = ['iswc-icon'];
+  static override observed = atributosDe(INICIAL);
 
   #caja: HTMLElement;
   #spinner: HTMLElement;

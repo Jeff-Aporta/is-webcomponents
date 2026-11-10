@@ -184,11 +184,11 @@ import css from 'iswc:css';
   }
 
   class IswcVideoPlaylist extends withStyleAttrs(IswcElement) {
-    static tag = 'iswc-video-playlist';
-    static css = css;
-    static deps = ['iswc-button'];
+    static override tag = 'iswc-video-playlist';
+    static override css = css;
+    static override deps = ['iswc-button'];
 
-    static observed = [...OBSERVED, 'radius', 'bg', 'border-color', 'stripe-color', 'accent'];
+    static override observed = [...OBSERVED, 'radius', 'bg', 'border-color', 'stripe-color', 'accent'];
 
     #root!: HTMLElement;
     #listEl!: HTMLElement;
@@ -248,7 +248,7 @@ import css from 'iswc:css';
       this.#seekEl.addEventListener('input', () => this.#previewSeek());
     }
 
-    connectedCallback(): void {
+    override connectedCallback(): void {
       super.connectedCallback();
       this.#mounted = true;
       // F0.3 g12 [a11y/region]: landmark + label y atajos para el reader.
@@ -315,7 +315,7 @@ import css from 'iswc:css';
       }
     };
 
-    disconnectedCallback(): void {
+    override disconnectedCallback(): void {
       this.#unbindVideos();
       if (this.#attrObs) {
         this.#attrObs.disconnect();
@@ -329,7 +329,7 @@ import css from 'iswc:css';
       this.#mounted = false;
     }
 
-    attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
+    override attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
       super.attributeChangedCallback(name, oldVal, newVal);
       if (!this.#mounted) return;
       if (name === 'placement') this.#syncPlacement();

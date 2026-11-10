@@ -142,11 +142,11 @@ import type { ButtonEventos } from './schemas/button.schemas.js';
   // pesar más que antes de F8 (tope en tests/navegador/carga.test.ts). Sus estados e `internals` son los de siempre, y
   // `IswcFormControl` emitiría su propio `iswc-invalid` ({ message }) además del del botón ({ originalEvent, … }).
   class IswcButton extends IswcElement {
-    static tag = 'iswc-button';
+    static override tag = 'iswc-button';
     declare static events: ButtonEventos;
-    static css = css;
-    static shadowInit: ShadowRootInit | null = { mode: "open", delegatesFocus: true };
-    static deps = ['iswc-icon'];
+    static override css = css;
+    static override shadowInit: ShadowRootInit | null = { mode: "open", delegatesFocus: true };
+    static override deps = ['iswc-icon'];
     static formAssociated = true;
 
     /**
@@ -159,7 +159,7 @@ import type { ButtonEventos } from './schemas/button.schemas.js';
      * estos tokens vía CSS class o inline style.
      */
 
-    static observed = [...OBSERVED, ...ARIA_FORWARD];
+    static override observed = [...OBSERVED, ...ARIA_FORWARD];
 
     /** `color` es doble: familia semántica (la resuelve el CSS) o color CSS
      *  literal (la rampa la deriva aquí). */
@@ -197,7 +197,7 @@ import type { ButtonEventos } from './schemas/button.schemas.js';
       });
     }
 
-    onConnected() {
+    override onConnected() {
       // El upgrade de propiedades (el.variant = 'x' antes de connect) ya lo
       // hace ElementBase.connectedCallback() vía upgradeProperties(); no hay
       // que repetirlo aquí.
@@ -214,7 +214,7 @@ import type { ButtonEventos } from './schemas/button.schemas.js';
       this.#wireEvents();    // re-envía focus/blur/click como is-* custom events
     }
 
-    onAttributeChanged(name: string, oldVal: string | null, newVal: string | null): void {
+    override onAttributeChanged(name: string, oldVal: string | null, newVal: string | null): void {
       if (name === "href") {
         this.#syncTag();
         this.#syncAttrs();

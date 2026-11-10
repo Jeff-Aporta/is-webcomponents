@@ -8,9 +8,9 @@ import css from 'iswc:css';
 (() => {
   const OBSERVED = ['src', 'content', 'height'];
   class IswcDocxView extends IswcElement {
-    static tag = 'iswc-docx-view';
-    static css = css;
-    static observed = OBSERVED;
+    static override tag = 'iswc-docx-view';
+    static override css = css;
+    static override observed = OBSERVED;
     #body!: HTMLElement;
     #gen = 0;
 
@@ -24,8 +24,8 @@ import css from 'iswc:css';
       this.#body = shadow.querySelector('.body')!;
     }
 
-    onConnected() { sincronizarAlto(this); this.#reload(); }
-    onAttributeChanged() { sincronizarAlto(this); this.#reload(); }
+    override onConnected() { sincronizarAlto(this); this.#reload(); }
+    override onAttributeChanged() { sincronizarAlto(this); this.#reload(); }
 
     get src() { return this.getAttribute('src'); }
     set src(v) { setOptionalAttr(this, 'src', v); }

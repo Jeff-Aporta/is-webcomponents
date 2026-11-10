@@ -31,9 +31,9 @@ import css from 'iswc:css';
   const OBSERVED = ['src', 'zoom', 'rotation', 'aspect'];
 
   class IswcImageEditor extends IswcElement {
-    static tag = 'iswc-image-editor';
-    static css = css;
-    static observed = OBSERVED;
+    static override tag = 'iswc-image-editor';
+    static override css = css;
+    static override observed = OBSERVED;
     #mounted = false;
     #img: HTMLImageElement | null = null;
     #cropRect: CropRect = { x: 0, y: 0, width: 0, height: 0 };
@@ -90,7 +90,7 @@ import css from 'iswc:css';
       this.addEventListener('keydown', this.#onKeydown);
     }
 
-    connectedCallback(): void {
+    override connectedCallback(): void {
       this.#mounted = true;
       // F0.3 g12 [a11y/canvas]: role="application" para que el lector no
       // intercepte las teclas (modo app), y aria-label para landmark.
@@ -107,7 +107,7 @@ import css from 'iswc:css';
       window.addEventListener('pointerup', this.#onWinUp!);
     }
 
-    disconnectedCallback(): void {
+    override disconnectedCallback(): void {
       this.#mounted = false;
       this.#ro?.disconnect();
       this.#ro = null;
@@ -158,7 +158,7 @@ import css from 'iswc:css';
       emit(this, 'iswc-change', { crop: { ...this.#cropRect } });
     };
 
-    attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
+    override attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
       if (!this.#mounted || oldVal === newVal) return;
       if (name === 'src') this.#load(newVal ?? '');
       if (name === 'zoom' || name === 'rotation') this.#draw();

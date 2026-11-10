@@ -33,10 +33,10 @@ const INICIAL: SemanticSearchProps = {
 const coincide = (c: SemanticComando, q: string): boolean => [c.title, c.hint ?? '', ...(c.keywords ?? [])].join(' ').toLowerCase().includes(q.toLowerCase());
 
 class IswcSemanticSearch extends PropsElement<SemanticSearchProps> {
-  static tag = 'iswc-semantic-search';
-  static css = css;
-  static deps = ['iswc-button', 'iswc-icon'];
-  static observed = atributosDe(INICIAL);
+  static override tag = 'iswc-semantic-search';
+  static override css = css;
+  static override deps = ['iswc-button', 'iswc-icon'];
+  static override observed = atributosDe(INICIAL);
 
   #root: ShadowRoot;
   #abrir: HTMLElement | null = null;

@@ -14,9 +14,9 @@ import css from 'iswc:css';
   TEMPLATE.innerHTML = '<canvas part="canvas" class="cv"></canvas>';
 
   class IswcOffscreenCanvas extends IswcElement {
-    static tag = 'iswc-offscreen-canvas';
-    static css = css;
-    static observed = ['width', 'height', 'worker-src'];
+    static override tag = 'iswc-offscreen-canvas';
+    static override css = css;
+    static override observed = ['width', 'height', 'worker-src'];
 
     #cv!: HTMLCanvasElement;
     #off: OffscreenCanvas | null = null;
@@ -30,9 +30,9 @@ import css from 'iswc:css';
       this.#cv = shadow.querySelector<HTMLCanvasElement>('.cv')!;
     }
 
-    connectedCallback(): void { this.#boot(); }
-    disconnectedCallback(): void { this.#worker?.terminate(); this.#worker = null; }
-    attributeChangedCallback(): void {
+    override connectedCallback(): void { this.#boot(); }
+    override disconnectedCallback(): void { this.#worker?.terminate(); this.#worker = null; }
+    override attributeChangedCallback(): void {
       if (!this.isConnected) return;
       this.#cv.width = this.width;
       this.#cv.height = this.height;

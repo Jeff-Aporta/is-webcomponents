@@ -37,9 +37,9 @@ import css from 'iswc:css';
   type Row = Record<string, unknown>;
 
   class IswcPivotTable extends IswcElement {
-    static tag = 'iswc-pivot-table';
-    static css = css;
-    static observed = OBSERVED;
+    static override tag = 'iswc-pivot-table';
+    static override css = css;
+    static override observed = OBSERVED;
 
     constructor() {
       super();
@@ -50,12 +50,12 @@ import css from 'iswc:css';
       `;
     }
 
-    onConnected() {
+    override onConnected() {
       this.#readData();
       this.#render();
     }
 
-    onAttributeChanged() {
+    override onAttributeChanged() {
       this.#render();
     }
 

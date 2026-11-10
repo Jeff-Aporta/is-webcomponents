@@ -36,11 +36,11 @@ TEMPLATE.innerHTML = /* html */ `
 `;
 
 class IswcJsonDialog extends PropsElement<JsonDialogProps> {
-  static tag = 'iswc-json-dialog';
+  static override tag = 'iswc-json-dialog';
   declare static events: JsonDialogEventos;
-  static css = css;
-  static deps = ['iswc-callout', 'iswc-button'];
-  static observed = atributosDe(INICIAL);
+  static override css = css;
+  static override deps = ['iswc-callout', 'iswc-button'];
+  static override observed = atributosDe(INICIAL);
 
   #dialogo: JsonDialogoEl;
   #errores: HTMLElement;

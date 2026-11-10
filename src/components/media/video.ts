@@ -146,11 +146,11 @@ import css from 'iswc:css';
   }
 
   class IswcVideo extends withStyleAttrs(IswcElement) {
-    static tag = 'iswc-video';
-    static css = css;
-    static deps = ['iswc-button'];
+    static override tag = 'iswc-video';
+    static override css = css;
+    static override deps = ['iswc-button'];
 
-    static observed = [...OBSERVED, 'accent'];
+    static override observed = [...OBSERVED, 'accent'];
 
     #video!: HTMLVideoElement;
     #controls!: HTMLElement;
@@ -305,7 +305,7 @@ import css from 'iswc:css';
       return this.shadowRoot!.querySelector<HTMLElement>('.big-play')!;
     }
 
-    connectedCallback(): void {
+    override connectedCallback(): void {
       super.connectedCallback();
       this.#mounted = true;
       // Foco propio para los atajos de teclado (como el player de YouTube).
@@ -332,14 +332,14 @@ import css from 'iswc:css';
       this.#pipBtn.hidden = !document.pictureInPictureEnabled;
     }
 
-    disconnectedCallback(): void {
+    override disconnectedCallback(): void {
       this.#mounted = false;
       if (this.#idleTimer !== null) clearTimeout(this.#idleTimer);
       this.#idleTimer = null;
       document.removeEventListener('fullscreenchange', this.#syncFsUi);
     }
 
-    attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
+    override attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
       super.attributeChangedCallback(name, oldVal, newVal);
       if (!this.#mounted || oldVal === newVal) return;
       if (name === 'without-controls') this.#syncControlsVisibility();

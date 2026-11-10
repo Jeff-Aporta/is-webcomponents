@@ -27,9 +27,9 @@ import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js
   const TAG = 'iswc-main';
 
   class IswcMain extends IswcElement {
-    static tag = 'iswc-main';
-    static shadowInit: ShadowRootInit | null = null;
-    static observed = [...SCROLL_MEMORY_ATTRS];
+    static override tag = 'iswc-main';
+    static override shadowInit: ShadowRootInit | null = null;
+    static override observed = [...SCROLL_MEMORY_ATTRS];
 
     #memory: ScrollMemory | null = null;
     #mounted = false;
@@ -41,18 +41,18 @@ import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js
       bindScrollMemoryApi(this, memory);
     }
 
-    connectedCallback(): void {
+    override connectedCallback(): void {
       this.#mounted = true;
       if (!this.hasAttribute('role')) this.setAttribute('role', 'main');
       this.#memory?.connect();
     }
 
-    disconnectedCallback(): void {
+    override disconnectedCallback(): void {
       this.#mounted = false;
       this.#memory?.disconnect();
     }
 
-    attributeChangedCallback(name: string, prev: string | null, next: string | null): void {
+    override attributeChangedCallback(name: string, prev: string | null, next: string | null): void {
       if (!this.#mounted) return;
       this.#memory?.onAttributeChanged(name, prev, next);
     }

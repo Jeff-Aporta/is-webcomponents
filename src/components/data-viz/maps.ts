@@ -41,10 +41,10 @@ import css from 'iswc:css';
   const OBSERVED = ['viewbox', 'zoom', 'engine', 'interactive'];
 
   class IswcMaps extends withStyleAttrs(IswcElement) {
-    static tag = 'iswc-maps';
-    static css = css;
+    static override tag = 'iswc-maps';
+    static override css = css;
 
-    static observed = [...OBSERVED, 'grid-color', 'meridian-color'];
+    static override observed = [...OBSERVED, 'grid-color', 'meridian-color'];
     #mounted = false;
     #vp: Viewport = { minLon: -180, minLat: -85, maxLon: 180, maxLat: 85 };
     #onWinPointerUp!: () => void;
@@ -66,7 +66,7 @@ import css from 'iswc:css';
       this.#onWinPointerUp = () => this.#endDrag();
     }
 
-    connectedCallback(): void {
+    override connectedCallback(): void {
       super.connectedCallback();
       this.#mounted = true;
       this.#readViewbox();
@@ -75,12 +75,12 @@ import css from 'iswc:css';
       window.addEventListener('pointerup', this.#onWinPointerUp);
     }
 
-    disconnectedCallback(): void {
+    override disconnectedCallback(): void {
       this.#mounted = false;
       window.removeEventListener('pointerup', this.#onWinPointerUp);
     }
 
-    attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
+    override attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
       super.attributeChangedCallback(name, oldVal, newVal);
       if (!this.#mounted || oldVal === newVal) return;
       if (name === 'viewbox') this.#readViewbox();
@@ -261,10 +261,10 @@ import css from 'iswc:css';
   define(IswcMaps);
 
   class IswcMapMarker extends IswcElement {
-    static tag = 'iswc-map-marker';
-    static shadowInit: ShadowRootInit | null = null;
-    static observed = ['lat', 'lon', 'label'];
-    connectedCallback(): void { /* re-sincroniza el padre cuando entra */ }
+    static override tag = 'iswc-map-marker';
+    static override shadowInit: ShadowRootInit | null = null;
+    static override observed = ['lat', 'lon', 'label'];
+    override connectedCallback(): void { /* re-sincroniza el padre cuando entra */ }
   }
   define(IswcMapMarker);
 })();

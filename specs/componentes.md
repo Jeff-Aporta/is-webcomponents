@@ -39,10 +39,10 @@ Cada tag es un Custom Element con Shadow DOM. El inventario y rutas de build sal
   registrarTerminos('es', { quitarFiltro: 'Quitar filtro' });   // y `quitarFiltro: 'Remove filter'` en core/i18n/en.ts
 
   class IswcFoo extends IswcReactive {
-    static tag = 'iswc-foo';
-    static css = css;                        // el molde crea UNA CSSStyleSheet por clase y la adopta
-    static shadowInit: ShadowRootInit | null = { mode: 'open', delegatesFocus: true };  // null = light DOM
-    static deps = ['iswc-icon'];             // hijos que se piden a iswcLoader.ensure() al conectar
+    static override tag = 'iswc-foo';
+    static override css = css;                        // el molde crea UNA CSSStyleSheet por clase y la adopta
+    static override shadowInit: ShadowRootInit | null = { mode: 'open', delegatesFocus: true };  // null = light DOM
+    static override deps = ['iswc-icon'];             // hijos que se piden a iswcLoader.ensure() al conectar
     declare static events: FooEventos;       // { 'iswc-clear': void }
     @prop() accessor label = '';             // ↔ atributo `label`, reflejado
     @prop({ type: 'bool' }) accessor clearable = false;

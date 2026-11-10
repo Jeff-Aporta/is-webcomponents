@@ -66,12 +66,12 @@ import type { FileInputEventos } from './schemas/file-input.schemas.js';
   const OBSERVED = ['label', 'hint', 'name', 'accept', 'capture', 'multiple', 'disabled', 'required'];
 
   class IswcFileInput extends IswcReactive {
-    static tag = 'iswc-file-input';
+    static override tag = 'iswc-file-input';
     declare static events: FileInputEventos;
-    static css = css;
-    static deps = ['iswc-icon', 'iswc-button'];
+    static override css = css;
+    static override deps = ['iswc-icon', 'iswc-button'];
     static formAssociated = true;
-    static observed = OBSERVED;
+    static override observed = OBSERVED;
 
     #internals: ElementInternals | null = null;
     #dropzone!: HTMLElement;
@@ -119,7 +119,7 @@ import type { FileInputEventos } from './schemas/file-input.schemas.js';
       this.#syncRequired();
     }
 
-    onConnected(): void {
+    override onConnected(): void {
       this.#syncAttrs();
       this.#syncSlots();
       this.#syncDisabled();
@@ -128,7 +128,7 @@ import type { FileInputEventos } from './schemas/file-input.schemas.js';
       this.#setState('blank', this.#files.length === 0);
     }
 
-    onAttributeChanged(name: string, _oldVal: string | null, _newVal: string | null): void {
+    override onAttributeChanged(name: string, _oldVal: string | null, _newVal: string | null): void {
       if (name === 'disabled') this.#syncDisabled();
       else if (name === 'required') this.#syncRequired();
       else if (name === 'label' || name === 'hint') this.#syncSlots();

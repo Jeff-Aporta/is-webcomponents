@@ -43,11 +43,11 @@ import type { MentionEventos } from './schemas/mention.schemas.js';
   type SuggestionsMap = Record<string, string[]>;
 
   class IswcMention extends IswcFormControl {
-    static tag = 'iswc-mention';
+    static override tag = 'iswc-mention';
     declare static events: MentionEventos;
-    static css = css;
-    static shadowInit: ShadowRootInit | null = { mode: 'open', delegatesFocus: true };
-    static observed = OBSERVED;
+    static override css = css;
+    static override shadowInit: ShadowRootInit | null = { mode: 'open', delegatesFocus: true };
+    static override observed = OBSERVED;
 
     #field: HTMLElement & { value: string };
     #input: HTMLInputElement;
@@ -93,7 +93,7 @@ import type { MentionEventos } from './schemas/mention.schemas.js';
       };
     }
 
-    connectedCallback(): void {
+    override connectedCallback(): void {
       this.#mounted = true;
       this.#sync();
       this.#readSlot();
@@ -108,7 +108,7 @@ import type { MentionEventos } from './schemas/mention.schemas.js';
       super.disconnectedCallback();
     }
 
-    attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
+    override attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
       if (!this.#mounted || oldVal === newVal) return;
       if (name === 'value') {
         if (this.#field.value !== newVal) this.#field.value = newVal ?? '';

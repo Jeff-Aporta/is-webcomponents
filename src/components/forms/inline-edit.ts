@@ -49,10 +49,10 @@ import type { InlineEditEventos } from './schemas/inline-edit.schemas.js';
   type InlineState = 'idle' | 'editing' | 'saved' | 'cancelled';
 
   class IswcInlineEdit extends IswcReactive {
-    static tag = 'iswc-inline-edit';
+    static override tag = 'iswc-inline-edit';
     declare static events: InlineEditEventos;
-    static css = css;
-    static observed = OBSERVED;
+    static override css = css;
+    static override observed = OBSERVED;
 
     #mounted = false;
     #state: InlineState = 'idle';
@@ -66,13 +66,13 @@ import type { InlineEditEventos } from './schemas/inline-edit.schemas.js';
       this.addEventListener('keydown', (e: KeyboardEvent) => this.#onKeyDown(e));
     }
 
-    connectedCallback(): void {
+    override connectedCallback(): void {
       this.#mounted = true;
       this.#sync();
       this.#syncStateClass();
     }
 
-    attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
+    override attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
       if (!this.#mounted || oldVal === newVal) return;
       if (name === 'value') { this.#sync(); return; }
       if (name === 'mode' || name === 'rows' || name === 'max-rows' || name === 'maxlength' || name === 'placeholder') {

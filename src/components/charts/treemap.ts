@@ -36,9 +36,9 @@ function fmtValue(v: number) {
 }
 
 class IswcTreemap extends IswcElement {
-  static tag = 'iswc-treemap';
-  static css = css;
-  static observed = ['color', 'open-on-click'];
+  static override tag = 'iswc-treemap';
+  static override css = css;
+  static override observed = ['color', 'open-on-click'];
 
   #wrap!: HTMLElement; #svg!: HTMLElement; #tooltipEl!: HTMLElement;
   #payload: unknown = null;
@@ -68,7 +68,7 @@ class IswcTreemap extends IswcElement {
     this.#tooltipEl = shadow.querySelector<HTMLElement>('.tm-tooltip')!;
   }
 
-  connectedCallback(): void {
+  override connectedCallback(): void {
     this.#mounted = true;
     this.#readJsonSlot();
     const mo = new MutationObserver(() => this.#readJsonSlot());
@@ -96,7 +96,7 @@ class IswcTreemap extends IswcElement {
     this.#queueRender();
   }
 
-  disconnectedCallback(): void {
+  override disconnectedCallback(): void {
     this.#mounted = false;
     this.#mo?.disconnect();
     this.#themeObs?.disconnect();
@@ -106,7 +106,7 @@ class IswcTreemap extends IswcElement {
     this.#wrap.removeEventListener('click', this.#onClick as EventListener);
   }
 
-  attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
+  override attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
     if (!this.#mounted || oldVal === newVal) return;
     this.#queueRender();
   }

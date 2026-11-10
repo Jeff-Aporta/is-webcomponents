@@ -87,8 +87,8 @@ function pintarMiembros(
 }
 
 class IswcClassDiagram extends DiagramElementBase {
-  static tag = 'iswc-class-diagram';
-  static css = css;
+  static override tag = 'iswc-class-diagram';
+  static override css = css;
   #theme: DiagramTheme | null = null;
   /** Tema `class` del estilo cargado (paletas y rellenos semánticos). */
   #classTheme: ErThemeJson | null = null;
@@ -103,13 +103,13 @@ class IswcClassDiagram extends DiagramElementBase {
     this.initDiagramShadow('cls-svg', 'cls-tooltip');
   }
 
-  onDiagramConnected() {
+  override onDiagramConnected() {
     this.wrap.addEventListener('mousemove', this.#onMouseMove as EventListener);
     this.wrap.addEventListener('mouseleave', this.#onMouseLeave as EventListener);
     this.wrap.addEventListener('click', this.#onClick as EventListener);
   }
 
-  onDiagramDisconnected() {
+  override onDiagramDisconnected() {
     this.#turtle?.destroy();
     this.#turtle = null;
     this.wrap.removeEventListener('mousemove', this.#onMouseMove as EventListener);
@@ -117,7 +117,7 @@ class IswcClassDiagram extends DiagramElementBase {
     this.wrap.removeEventListener('click', this.#onClick as EventListener);
   }
 
-  onPayloadChanged() { this.#hiddenGroups = new Set(); }
+  override onPayloadChanged() { this.#hiddenGroups = new Set(); }
 
   get turtle(): SequenceTurtle | null { return this.#turtle; }
   get hiddenGroups(): Set<string> { return this.#hiddenGroups; }
@@ -126,7 +126,7 @@ class IswcClassDiagram extends DiagramElementBase {
     this.queueRender();
   }
 
-  renderDiagram() {
+  override renderDiagram() {
     const spec = resolveClassSpec(this.payload ?? {});
     this.spec = spec;
     if (!spec) {

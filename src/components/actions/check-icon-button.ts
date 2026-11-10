@@ -53,11 +53,11 @@ import type { CheckIconButtonEventos } from './schemas/check-icon-button.schemas
   const OBSERVED = ['checked', 'icon', 'checked-icon', 'label', 'checked-label', 'variant', 'disabled'];
 
   class IswcCheckIconButton extends IswcElement {
-    static tag = 'iswc-check-icon-button';
+    static override tag = 'iswc-check-icon-button';
     declare static events: CheckIconButtonEventos;
-    static css = css;
-    static deps = ['iswc-icon'];
-    static observed = OBSERVED;
+    static override css = css;
+    static override deps = ['iswc-icon'];
+    static override observed = OBSERVED;
 
     #btn!: HTMLElement;
     #ico!: HTMLElement;
@@ -74,7 +74,7 @@ import type { CheckIconButtonEventos } from './schemas/check-icon-button.schemas
       this.addEventListener('click', this.#onClick);
     }
 
-    connectedCallback(): void {
+    override connectedCallback(): void {
       super.connectedCallback();
       this.#mounted = true;
       if (!this.hasAttribute('role')) this.setAttribute('role', 'button');
@@ -82,12 +82,12 @@ import type { CheckIconButtonEventos } from './schemas/check-icon-button.schemas
       this.#render();
     }
 
-    disconnectedCallback(): void {
+    override disconnectedCallback(): void {
       this.#mounted = false;
       this.removeEventListener('keydown', this.#onKeydown);
     }
 
-    attributeChangedCallback(_n: string, oldVal: string | null, newVal: string | null): void {
+    override attributeChangedCallback(_n: string, oldVal: string | null, newVal: string | null): void {
       if (!this.#mounted || oldVal === newVal) return;
       this.#render();
     }

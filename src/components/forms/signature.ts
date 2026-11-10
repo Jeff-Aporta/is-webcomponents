@@ -34,10 +34,10 @@ import type { SignatureEventos } from './schemas/signature.schemas.js';
   type Stroke = Point[];
 
   class IswcSignature extends IswcElement {
-    static tag = 'iswc-signature';
+    static override tag = 'iswc-signature';
     declare static events: SignatureEventos;
-    static css = css;
-    static observed = OBSERVED;
+    static override css = css;
+    static override observed = OBSERVED;
 
     #mounted = false;
     #strokes: Stroke[] = []; // cada trazo: [{x, y}, ...]
@@ -62,18 +62,18 @@ import type { SignatureEventos } from './schemas/signature.schemas.js';
       this.#canvas.addEventListener('pointerleave', (e) => this.#onUp(e));
     }
 
-    connectedCallback(): void {
+    override connectedCallback(): void {
       this.#mounted = true;
       this.#resize();
       this.#paint();
       this.#syncHint();
     }
 
-    disconnectedCallback(): void {
+    override disconnectedCallback(): void {
       this.#mounted = false;
     }
 
-    attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
+    override attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
       if (!this.#mounted || oldVal === newVal) return;
       if (name === 'width' || name === 'height') this.#resize();
       this.#paint();

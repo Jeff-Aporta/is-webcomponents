@@ -132,11 +132,11 @@ import css from 'iswc:css';
   }
 
   class IswcPaletteSelector extends IswcElement {
-    static tag = 'iswc-palette-selector';
+    static override tag = 'iswc-palette-selector';
     declare static events: PaletteSelectorEventos;
-    static css = css;
-    static deps = ['iswc-icon'];
-    static observed = OBSERVED;
+    static override css = css;
+    static override deps = ['iswc-icon'];
+    static override observed = OBSERVED;
 
     #trigger!: HTMLButtonElement;
     #panel!: HTMLElement;
@@ -180,13 +180,13 @@ import css from 'iswc:css';
       this.addEventListener('click', this.#onSlotClick);
     }
 
-    onDisconnected(): void {
+    override onDisconnected(): void {
       this.#dismiss.detach();
       this.#scopeObs?.disconnect();
       this.#scopeObs = null;
     }
 
-    onConnected(): void {
+    override onConnected(): void {
       this.#parsePalettes();
       this.#watchScope();
       this.#loadInitial();
@@ -195,7 +195,7 @@ import css from 'iswc:css';
       this.#syncPandaVisibility();
     }
 
-    onAttributeChanged(name: string, oldVal: string | null, newVal: string | null): void {
+    override onAttributeChanged(name: string, oldVal: string | null, newVal: string | null): void {
       if (name === 'palettes') {
         this.#parsePalettes();
         this.#render();

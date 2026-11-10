@@ -86,12 +86,12 @@ import type { CopyButtonEventos } from './schemas/copy-button.schemas.js';
   ];
 
   class IswcCopyButton extends withStyleAttrs(IswcReactive) {
-    static tag = 'iswc-copy-button';
+    static override tag = 'iswc-copy-button';
     declare static events: CopyButtonEventos;
-    static css = css;
-    static deps = ['iswc-icon'];
+    static override css = css;
+    static override deps = ['iswc-icon'];
 
-    static observed = ['feedback-duration', 'tooltip', 'tooltip-placement'];
+    static override observed = ['feedback-duration', 'tooltip', 'tooltip-placement'];
 
     #btn!: HTMLElement;
     // `iswc-tooltip` es un custom element hermano: se declara la forma minima
@@ -126,7 +126,7 @@ import type { CopyButtonEventos } from './schemas/copy-button.schemas.js';
       });
     }
 
-    connectedCallback(): void {
+    override connectedCallback(): void {
 
       super.connectedCallback();
       this.#mounted = true;
@@ -141,11 +141,11 @@ import type { CopyButtonEventos } from './schemas/copy-button.schemas.js';
       this.#wireHover();
     }
 
-    disconnectedCallback(): void {
+    override disconnectedCallback(): void {
       if (this.#feedbackTimer) clearTimeout(this.#feedbackTimer);
     }
 
-    attributeChangedCallback(name: string): void {
+    override attributeChangedCallback(name: string): void {
 
       super.attributeChangedCallback(name, null, null);
       if (!this.#mounted) return;

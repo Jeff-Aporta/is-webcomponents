@@ -114,12 +114,12 @@ import type { DateRangePickerEventos } from './schemas/date-range-picker.schemas
   }
 
   class IswcDateRangePicker extends IswcElement {
-    static tag = 'iswc-date-range-picker';
+    static override tag = 'iswc-date-range-picker';
     declare static events: DateRangePickerEventos;
-    static css = css;
-    static deps = ['iswc-button'];
+    static override css = css;
+    static override deps = ['iswc-button'];
 
-    static observed = [...OBSERVED, 'bg', 'border-color'];
+    static override observed = [...OBSERVED, 'bg', 'border-color'];
 
     #shortcuts!: HTMLElement;
     #presets!: HTMLElement;
@@ -146,7 +146,7 @@ import type { DateRangePickerEventos } from './schemas/date-range-picker.schemas
       },
     };
 
-    onConnected(): void {
+    override onConnected(): void {
       this.#anchor = this.#anchorFromState();
       this.#syncPickerCount();
       observarIdioma(this.#idioma, true);
@@ -154,11 +154,11 @@ import type { DateRangePickerEventos } from './schemas/date-range-picker.schemas
       this.#sync();
     }
 
-    onDisconnected(): void {
+    override onDisconnected(): void {
       observarIdioma(this.#idioma, false);
     }
 
-    onAttributeChanged(name: string, _oldVal: string | null, newVal: string | null): void {
+    override onAttributeChanged(name: string, _oldVal: string | null, newVal: string | null): void {
       if (name === 'calendars') this.#syncPickerCount();
       if (name === 'shortcuts' || name === 'locale') this.#renderShortcuts();
       if (name === 'value') this.#anchor = this.#anchorFromState();

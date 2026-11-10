@@ -93,10 +93,10 @@ import css from 'iswc:css';
   };
 
   class IswcPlayground extends IswcElement {
-    static tag = 'iswc-playground';
-    static css = css;
-    static deps = ['iswc-button', 'iswc-icon'];
-    static observed = OBSERVED;
+    static override tag = 'iswc-playground';
+    static override css = css;
+    static override deps = ['iswc-button', 'iswc-icon'];
+    static override observed = OBSERVED;
 
     #titleEl!: HTMLElement;
     #ledeEl!: HTMLElement;
@@ -118,7 +118,7 @@ import css from 'iswc:css';
       this.#styleFormatBtn = shadow.getElementById('styleFormatBtn')!;
     }
 
-    onConnected(): void {
+    override onConnected(): void {
       // `spec` asignado pre-upgrade tapa el setter (data-prop propia).
       if (Object.prototype.hasOwnProperty.call(this, 'spec')) {
         const raw = (this as unknown as { spec: unknown }).spec;
@@ -135,7 +135,7 @@ import css from 'iswc:css';
       queueMicrotask(() => this.#pushSpecToHost());
     }
 
-    onAttributeChanged(): void {
+    override onAttributeChanged(): void {
       this.#syncChrome();
       if (this.isConnected) this.#mountPanel();
     }
@@ -146,12 +146,12 @@ import css from 'iswc:css';
     }
     set layout(v: string) { setStringAttr(this, 'layout', v === 'panel' ? 'panel' : 'split'); }
 
-    get title(): string {
+    override get title(): string {
       return this.getAttribute('heading')
         ?? this.getAttribute('title')
         ?? 'Playground';
     }
-    set title(v: string) {
+    override set title(v: string) {
       // `title` HTML nativo se hereda como tooltip a knobs/selects → usar heading.
       setStringAttr(this, 'heading', v);
       this.removeAttribute('title');

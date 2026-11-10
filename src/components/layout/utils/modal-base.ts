@@ -65,7 +65,7 @@ const SOPORTA_POPOVER = 'showPopover' in HTMLElement.prototype;
 // `onDisconnected` y `onAttributeChanged` son los del molde (no-op por defecto).
 export class ModalBase extends withStyleAttrs(IswcReactive) {
   declare static events: ModalBaseEventos;
-  static observed = [...BASE_OBSERVED];
+  static override observed = [...BASE_OBSERVED];
 
   // ── Subclass hooks ──────────────────────────────────────────────────
   /** Selector del contenedor modal dentro del shadow (p.ej. '.dialog'). */
@@ -123,7 +123,7 @@ export class ModalBase extends withStyleAttrs(IswcReactive) {
     this.addEventListener('click', this.#onDelegatedClick);
   }
 
-  connectedCallback(): void {
+  override connectedCallback(): void {
     this.#mounted = true;
     this.#syncLabel();
     this.#syncFooterVisibility();
@@ -145,14 +145,14 @@ export class ModalBase extends withStyleAttrs(IswcReactive) {
     this.#closeBtn.setAttribute('aria-label', this.t('cerrar'));
   }
 
-  disconnectedCallback(): void {
+  override disconnectedCallback(): void {
     cerrarCapaModal(this.#host);
     this.#bajarCapa();
     super.disconnectedCallback();
   }
 
   // Pisa el del molde (no lo llama): el hook de la subclase va DESPUÉS de lo propio del modal.
-  attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
+  override attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
     if (!this.#mounted || oldVal === newVal) return;
     if (name === 'open') this.#onOpenAttrChanged();
     if (name === 'label') this.#syncLabel();

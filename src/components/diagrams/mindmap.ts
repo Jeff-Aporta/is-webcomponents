@@ -30,8 +30,8 @@ import css from 'iswc:css';
  */
 
 class IswcMindmap extends DiagramElementBase {
-  static tag = 'iswc-mindmap';
-  static css = css;
+  static override tag = 'iswc-mindmap';
+  static override css = css;
   #nodeNodes = new Map<string, NodeEntry>();
   #edgeNodes = new Map<string, EdgeEntry>();
   #hoverId: string | null = null;
@@ -41,13 +41,13 @@ class IswcMindmap extends DiagramElementBase {
     this.initDiagramShadow('mm-svg', 'mm-tooltip');
   }
 
-  onDiagramConnected() {
+  override onDiagramConnected() {
     this.wrap.addEventListener('mousemove', this.#onMouseMove);
     this.wrap.addEventListener('mouseleave', this.#onMouseLeave);
     this.wrap.addEventListener('click', this.#onClick);
   }
 
-  onDiagramDisconnected() {
+  override onDiagramDisconnected() {
     this.wrap.removeEventListener('mousemove', this.#onMouseMove);
     this.wrap.removeEventListener('mouseleave', this.#onMouseLeave);
     this.wrap.removeEventListener('click', this.#onClick);
@@ -58,7 +58,7 @@ class IswcMindmap extends DiagramElementBase {
   // y PointerEvent↦MouseEvent es contravariante: no se puede asignar una
   // función `(e: PointerEvent)` a un slot `(e: MouseEvent)`.
 
-  renderDiagram() {
+  override renderDiagram() {
     const spec = resolveMindmapSpec(this.payload ?? {});
     this.spec = spec;
     if (!spec) {

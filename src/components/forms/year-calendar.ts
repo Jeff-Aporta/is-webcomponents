@@ -24,10 +24,10 @@ import type { YearCalendarEventos } from './schemas/year-calendar.schemas.js';
   }
 
   class IswcYearCalendar extends IswcElement {
-    static tag = 'iswc-year-calendar';
+    static override tag = 'iswc-year-calendar';
     declare static events: YearCalendarEventos;
-    static css = css;
-    static observed = OBSERVED;
+    static override css = css;
+    static override observed = OBSERVED;
 
     #base!: HTMLElement;
     constructor() {
@@ -39,12 +39,12 @@ import type { YearCalendarEventos } from './schemas/year-calendar.schemas.js';
       this.#base.addEventListener('keydown', this.#onKey);
     }
 
-    onConnected(): void {
+    override onConnected(): void {
       this.#render();
       this.scrollToSelection();
     }
 
-    onAttributeChanged(name: string, _oldVal: string | null, _newVal: string | null): void {
+    override onAttributeChanged(name: string, _oldVal: string | null, _newVal: string | null): void {
       this.#render();
       if (name === 'value') this.scrollToSelection();
     }
@@ -63,7 +63,7 @@ import type { YearCalendarEventos } from './schemas/year-calendar.schemas.js';
     get readonly(): boolean { return this.hasAttribute('readonly'); }
     set readonly(v: boolean) { this.toggleAttribute('readonly', !!v); }
 
-    focus(opts?: FocusOptions): void {
+    override focus(opts?: FocusOptions): void {
       const tabEl = this.#base.querySelector<HTMLElement>('[tabindex="0"]') as HTMLElement | null;
       const first = this.#base.firstElementChild as HTMLElement | null;
       (tabEl || first)?.focus(opts);

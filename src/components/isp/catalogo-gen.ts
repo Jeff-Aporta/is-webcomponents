@@ -141,10 +141,10 @@ const OBSERVED = [
   `;
 
   class IswcCatalogoGen extends IswcElement {
-    static tag = 'iswc-catalogo-gen';
-    static css = css;
-    static deps = ['iswc-button', 'iswc-icon'];
-    static observed = [...OBSERVED];
+    static override tag = 'iswc-catalogo-gen';
+    static override css = css;
+    static override deps = ['iswc-button', 'iswc-icon'];
+    static override observed = [...OBSERVED];
 
     #mounted = false;
     #toolbar!: HTMLElement;
@@ -210,7 +210,7 @@ const OBSERVED = [
       this.#pkOk = shadow.querySelector<ButtonElement>('.pk-ok')!;
     }
 
-    connectedCallback(): void {
+    override connectedCallback(): void {
       super.connectedCallback();
       this.#mounted = true;
       this.#upgradeProps();
@@ -228,7 +228,7 @@ const OBSERVED = [
       void this.refreshGrid();
     }
 
-    disconnectedCallback(): void {
+    override disconnectedCallback(): void {
       this.#mounted = false;
       this.#search.removeEventListener('iswc-typing-end', this.#onSearch);
       this.#grid?.removeEventListener('iswc-row-select', this.#onRowSelect);
@@ -239,7 +239,7 @@ const OBSERVED = [
       this.#pkDlg.removeEventListener('iswc-hide', this.#onPkDismiss);
     }
 
-    attributeChangedCallback(): void {
+    override attributeChangedCallback(): void {
       if (!this.#mounted) return;
       this.#syncChrome();
       this.#rebuildToolbar();

@@ -107,9 +107,9 @@ const leerArchivo = (f: File): Promise<string> => new Promise((ok, mal) => {
 });
 
 class IswcServerApiDocs extends IswcElement {
-  static tag = 'iswc-server-api-docs';
-  static css = css;
-  static deps = ['iswc-tag', 'iswc-spinner', 'iswc-copy-button', 'iswc-button', 'iswc-icon'];
+  static override tag = 'iswc-server-api-docs';
+  static override css = css;
+  static override deps = ['iswc-tag', 'iswc-spinner', 'iswc-copy-button', 'iswc-button', 'iswc-icon'];
   #raiz: ShadowRoot;
   #doc: unknown = null;
   #modelo: ServerApiDocsModelo | null = null;
@@ -120,7 +120,7 @@ class IswcServerApiDocs extends IswcElement {
   #actual: string | null = null;
   #base = '';
 
-  static observed = ['src', 'api-base'];
+  static override observed = ['src', 'api-base'];
 
   constructor() {
     super();
@@ -153,7 +153,7 @@ class IswcServerApiDocs extends IswcElement {
     else this.#nav.navigate({ p: id });
   }
 
-  connectedCallback(): void {
+  override connectedCallback(): void {
     super.connectedCallback();
     upgradeProperties(this, ['doc']);
     if (this.#layout) return;
@@ -167,13 +167,13 @@ class IswcServerApiDocs extends IswcElement {
     if (this.getAttribute('src')) this.#traer(this.getAttribute('src') ?? '');
   }
 
-  attributeChangedCallback(nombre: string, antes: string | null, ahora: string | null): void {
+  override attributeChangedCallback(nombre: string, antes: string | null, ahora: string | null): void {
     if (!this.#layout || antes === ahora) return;
     if (nombre === 'src' && ahora) this.#traer(ahora);
     if (nombre === 'api-base') this.#base = this.#baseInicial();
   }
 
-  disconnectedCallback(): void {
+  override disconnectedCallback(): void {
     removeEventListener('keydown', this.#teclado);
     this.#nav?.destroy();
     this.#nav = null;

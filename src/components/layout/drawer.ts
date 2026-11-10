@@ -80,24 +80,24 @@ import type { DrawerEventos } from './schemas/drawer.schemas.js';
   };
 
   class IswcDrawer extends ModalBase {
-    static tag = 'iswc-drawer';
+    static override tag = 'iswc-drawer';
     declare static events: DrawerEventos;
-    static css = css;
-    static deps = ['iswc-icon', 'iswc-button'];
+    static override css = css;
+    static override deps = ['iswc-icon', 'iswc-button'];
 
-    static template = TEMPLATE;
+    static override template = TEMPLATE;
 
-    static observed = [...super.observed, 'placement'];
+    static override observed = [...super.observed, 'placement'];
 
-    get modalClass() { return '.drawer'; }
-    get closeAttr() { return 'data-drawer'; }
+    override get modalClass() { return '.drawer'; }
+    override get closeAttr() { return 'data-drawer'; }
 
 
-    onConnected() {
+    override onConnected() {
       if (!this.hasAttribute('placement')) this.setAttribute('placement', 'end');
     }
 
-    onAttributeChanged(name: string, _oldVal: string | null, newVal: string | null) {
+    override onAttributeChanged(name: string, _oldVal: string | null, newVal: string | null) {
       if (name === 'placement' && newVal && !VALID_PLACEMENT.includes(newVal)) {
         this.setAttribute('placement', 'end');
       }
@@ -116,7 +116,7 @@ import type { DrawerEventos } from './schemas/drawer.schemas.js';
 
     // ---- animaciones ----
 
-    animateOpen(): Promise<void> {
+    override animateOpen(): Promise<void> {
       const dur = this.#readDur('--iswc-drawer-show-duration', 220);
       this.$modal.animate(
         [this.#hiddenKeyframe(), this.#visibleKeyframe()],
@@ -129,7 +129,7 @@ import type { DrawerEventos } from './schemas/drawer.schemas.js';
       return new Promise((resolve) => setTimeout(resolve, dur));
     }
 
-    animateClose(): Promise<void> {
+    override animateClose(): Promise<void> {
       const dur = this.#readDur('--iswc-drawer-hide-duration', 180);
       this.$modal.animate(
         [this.#visibleKeyframe(), this.#hiddenKeyframe()],

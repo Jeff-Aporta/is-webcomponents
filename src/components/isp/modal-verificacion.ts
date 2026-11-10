@@ -124,11 +124,11 @@ export function lowerCase(value: string) {
   const OBSERVED = ['open', 'loading', 'entity', 'icon', 'close-label', 'light-dismiss'];
 
   class IswcModalVerificacion extends IswcElement {
-    static tag = 'iswc-modal-verificacion';
-    static css = css;
-    static deps = ['iswc-button', 'iswc-icon'];
+    static override tag = 'iswc-modal-verificacion';
+    static override css = css;
+    static override deps = ['iswc-button', 'iswc-icon'];
 
-    static observed = [...OBSERVED, 'accent'];
+    static override observed = [...OBSERVED, 'accent'];
 
     #dlg!: HTMLElement & { show(): void; hide(): void };
     #headingText!: HTMLElement;
@@ -167,7 +167,7 @@ export function lowerCase(value: string) {
       this.#qErrores = shadow.querySelector<HTMLElement>('.q-errores')!;
     }
 
-    onConnected() {
+    override onConnected() {
       this.#dlg.addEventListener('iswc-hide', this.#onDialogHide);
       this.#dlg.addEventListener('iswc-after-hide', this.#onDialogAfterHide);
       this.#syncTexts();
@@ -176,12 +176,12 @@ export function lowerCase(value: string) {
       if (this.open) this.#showUI();
     }
 
-    onDisconnected() {
+    override onDisconnected() {
       this.#dlg.removeEventListener('iswc-hide', this.#onDialogHide);
       this.#dlg.removeEventListener('iswc-after-hide', this.#onDialogAfterHide);
     }
 
-    onAttributeChanged(name: string, _oldVal: string | null, _newVal: string | null): void {
+    override onAttributeChanged(name: string, _oldVal: string | null, _newVal: string | null): void {
       if (name === 'open') {
         if (this.open) this.#showUI(); else this.#hideUI();
       } else if (name === 'loading') {

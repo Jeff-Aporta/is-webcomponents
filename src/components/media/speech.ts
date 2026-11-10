@@ -48,10 +48,10 @@ declare global {
   }
 
   class IswcSpeech extends IswcElement {
-    static tag = 'iswc-speech';
-    static css = css;
-    static deps = ['iswc-button', 'iswc-icon'];
-    static observed = ['lang', 'text'];
+    static override tag = 'iswc-speech';
+    static override css = css;
+    static override deps = ['iswc-button', 'iswc-icon'];
+    static override observed = ['lang', 'text'];
 
     /**
      * 2026-Q1 fix: attributeChangedCallback faltaba → los cambios de
@@ -61,7 +61,7 @@ declare global {
      * `text`, el componente no releía para speak(). Ahora `lang` se
      * re-aplica a la sesión activa y `text` dispara speak() automáticamente.
      */
-    attributeChangedCallback(name: string, _oldVal: string | null, newVal: string | null): void {
+    override attributeChangedCallback(name: string, _oldVal: string | null, newVal: string | null): void {
       if (name === 'lang' && this.#rec) {
         // lang cambia → reiniciar sesión para que tome el nuevo idioma.
         try { this.#rec.lang = newVal || 'es-ES'; } catch { /* no-op */ }
@@ -90,7 +90,7 @@ declare global {
       this.addEventListener('keydown', this.#onKeydown);
     }
 
-    connectedCallback(): void {
+    override connectedCallback(): void {
       super.connectedCallback();
       this.#mounted = true;
       // F0.3 g12 [a11y/region]: landmark + label.
@@ -103,7 +103,7 @@ declare global {
       this.#syncSupport();
     }
 
-    disconnectedCallback(): void {
+    override disconnectedCallback(): void {
       this.removeEventListener('keydown', this.#onKeydown);
       this.stop();
       this.cancel();
@@ -137,8 +137,8 @@ declare global {
       else this.listen();
     };
 
-    get lang(): string { return this.getAttribute('lang') || document.documentElement.lang || 'es-ES'; }
-    set lang(v: string) { setStringAttr(this, 'lang', v); }
+    override get lang(): string { return this.getAttribute('lang') || document.documentElement.lang || 'es-ES'; }
+    override set lang(v: string) { setStringAttr(this, 'lang', v); }
     get text(): string { return this.getAttribute('text') ?? this.textContent ?? ''; }
     set text(v: string) { setStringAttr(this, 'text', v); }
 

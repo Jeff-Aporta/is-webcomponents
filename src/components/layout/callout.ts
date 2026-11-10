@@ -63,10 +63,10 @@ import css from 'iswc:css';
   };
 
   class IswcCallout extends IswcElement {
-    static tag = 'iswc-callout';
-    static css = css;
+    static override tag = 'iswc-callout';
+    static override css = css;
 
-    static observed = [...OBSERVED, 'bg', 'border-color', 'text-color', 'accent', 'spacing'];
+    static override observed = [...OBSERVED, 'bg', 'border-color', 'text-color', 'accent', 'spacing'];
 
     #defaultIcon!: HTMLElement & { icon?: string };
     #customIconObserver: MutationObserver | null = null;
@@ -79,7 +79,7 @@ import css from 'iswc:css';
       this.#defaultIcon = shadow.querySelector<HTMLElement>('.default-icon')!;
     }
 
-    onConnected() {
+    override onConnected() {
       if (!this.hasAttribute('color')) this.setAttribute('color', 'brand');
       if (!this.hasAttribute('variant')) this.setAttribute('variant', 'filled-outlined');
 
@@ -96,11 +96,11 @@ import css from 'iswc:css';
       this.#customIconObserver.observe(this, { childList: true, attributes: true, attributeFilter: ['slot'] });
     }
 
-    onDisconnected() {
+    override onDisconnected() {
       this.#customIconObserver?.disconnect();
     }
 
-    onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
+    override onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
       if (name === 'color' && newVal && !VALID_COLOR.includes(newVal)) {
         this.setAttribute('color', 'neutral');
         return;

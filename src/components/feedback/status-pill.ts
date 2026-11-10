@@ -25,10 +25,10 @@ TEMPLATE.innerHTML = /* html */ `
 `;
 
 class IswcStatusPill extends PropsElement<StatusPillProps> {
-  static tag = 'iswc-status-pill';
-  static css = css;
-  static deps = ['iswc-icon'];
-  static observed = atributosDe(INICIAL);
+  static override tag = 'iswc-status-pill';
+  static override css = css;
+  static override deps = ['iswc-icon'];
+  static override observed = atributosDe(INICIAL);
 
   #pill: HTMLElement;
   #spinner: HTMLElement;

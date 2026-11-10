@@ -61,10 +61,10 @@ import css from 'iswc:css';
   const VALID_SELECTION = ['none', 'single', 'leaf', 'multiple'];
 
   class IswcTree extends IswcReactive {
-    static tag = 'iswc-tree';
-    static css = css;
+    static override tag = 'iswc-tree';
+    static override css = css;
 
-    static observed = [...TREE_OBSERVED];
+    static override observed = [...TREE_OBSERVED];
 
     #syncObserver: MutationObserver | null = null;
 
@@ -81,7 +81,7 @@ import css from 'iswc:css';
       this.shadowRoot!.querySelector('.tree')!.setAttribute('aria-label', this.t('arbol'));
     }
 
-    onConnected() {
+    override onConnected() {
       if (!this.hasAttribute('selection')) this.setAttribute('selection', 'single');
       this.#syncRoots();
       // Re-sincronizar atributos ARIA cuando el subtree cambie (hijos añadidos
@@ -90,12 +90,12 @@ import css from 'iswc:css';
       this.#syncObserver.observe(this, { childList: true, subtree: true });
     }
 
-    onDisconnected() {
+    override onDisconnected() {
       this.#syncObserver?.disconnect();
       this.#syncObserver = null;
     }
 
-    onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
+    override onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
       if (name === 'selection') {
         if (newVal && !VALID_SELECTION.includes(newVal)) this.setAttribute('selection', 'single');
         this.#syncRoots();
@@ -303,9 +303,9 @@ import css from 'iswc:css';
   const ITEM_OBSERVED = ['expanded', 'selected', 'disabled', 'has-children', 'lazy'];
 
   class IswcTreeItem extends IswcElement {
-    static tag = 'iswc-tree-item';
-    static css = css;
-    static observed = ITEM_OBSERVED;
+    static override tag = 'iswc-tree-item';
+    static override css = css;
+    static override observed = ITEM_OBSERVED;
 
 
     constructor() {
@@ -315,7 +315,7 @@ import css from 'iswc:css';
       this.setAttribute('tabindex', '0');
     }
 
-    onConnected() {
+    override onConnected() {
       const padre = this.parentElement;
       // Los ítems anidados van al panel plegable; el slot por defecto es solo la etiqueta.
       if (padre instanceof IswcTreeItem) {
@@ -329,7 +329,7 @@ import css from 'iswc:css';
       this.#sync();
     }
 
-    onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
+    override onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
       this.#sync();
     }
 
@@ -357,7 +357,7 @@ import css from 'iswc:css';
       if (cb) (cb as unknown as { checked: boolean }).checked = this.hasAttribute('selected');
     }
 
-    focus() {
+    override focus() {
       // Hacer focusable el shadow host.
       super.focus();
     }

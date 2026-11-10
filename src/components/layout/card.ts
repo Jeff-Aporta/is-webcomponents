@@ -69,10 +69,10 @@ import css from 'iswc:css';
   const VALID_ORIENTATION = ['horizontal', 'vertical'];
 
   class IswcCard extends withStyleAttrs(IswcElement) {
-    static tag = 'iswc-card';
-    static css = css;
+    static override tag = 'iswc-card';
+    static override css = css;
 
-    static observed = [...OBSERVED, 'spacing'];
+    static override observed = [...OBSERVED, 'spacing'];
 
     _sections: NodeListOf<HTMLElement> | null = null;
     _slots: NodeListOf<HTMLSlotElement> | null = null;
@@ -92,7 +92,7 @@ import css from 'iswc:css';
       this._onSlotChange = this._syncEmpty.bind(this);
     }
 
-    connectedCallback(): void {
+    override connectedCallback(): void {
       super.connectedCallback();
       this._mounted = true;
       upgradeProperties(this, OBSERVED);
@@ -103,11 +103,11 @@ import css from 'iswc:css';
       this._syncEmpty();
     }
 
-    disconnectedCallback(): void {
+    override disconnectedCallback(): void {
       for (const slot of this._slots || []) slot.removeEventListener('slotchange', this._onSlotChange);
     }
 
-    attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
+    override attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
       super.attributeChangedCallback(name, oldVal, newVal);
       if (!this._mounted || oldVal === newVal) return;
       // appearance + orientation son reflected (van y vuelven vía attr)

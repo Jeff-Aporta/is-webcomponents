@@ -70,11 +70,11 @@ import css from 'iswc:css';
   const TRANSFER_OBSERVED = ['source-title', 'target-title', 'searchable', 'without-buttons', 'without-headings', 'max-target'];
 
   class IswcTransfer extends IswcElement {
-    static tag = 'iswc-transfer';
-    static css = css;
-    static deps = ['iswc-button', 'iswc-empty-state', 'iswc-icon'];
+    static override tag = 'iswc-transfer';
+    static override css = css;
+    static override deps = ['iswc-button', 'iswc-empty-state', 'iswc-icon'];
 
-    static observed = [...TRANSFER_OBSERVED];
+    static override observed = [...TRANSFER_OBSERVED];
     #panelSource!: HTMLElement;
     #panelTarget!: HTMLElement;
     #searchSource!: HTMLElement & { value?: string };
@@ -108,13 +108,13 @@ import css from 'iswc:css';
       this.#searchTarget.addEventListener('iswc-input', () => this.#render());
     }
 
-    onConnected() {
+    override onConnected() {
       if (!this.hasAttribute('source-title')) this.setAttribute('source-title', 'Disponibles');
       if (!this.hasAttribute('target-title')) this.setAttribute('target-title', 'Asignados');
       this.#render();
     }
 
-    onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
+    override onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
       this.#sync();
       this.#render();
     }
@@ -264,15 +264,15 @@ import css from 'iswc:css';
   const ITEM_OBSERVED = ['value', 'selected', 'disabled'];
 
   class IswcTransferItem extends IswcElement {
-    static tag = 'iswc-transfer-item';
-    static shadowInit: ShadowRootInit | null = null;
-    static observed = ITEM_OBSERVED;
+    static override tag = 'iswc-transfer-item';
+    static override shadowInit: ShadowRootInit | null = null;
+    static override observed = ITEM_OBSERVED;
 
-    connectedCallback(): void {
+    override connectedCallback(): void {
       this.setAttribute('role', 'presentation');
     }
 
-    attributeChangedCallback() {}
+    override attributeChangedCallback() {}
   }
 
   define(IswcTransferItem, 'IswcTransferItem');

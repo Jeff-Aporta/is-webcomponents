@@ -85,11 +85,11 @@ import css from 'iswc:css';
   ];
 
   class IswcConfirmDelete extends IswcElement {
-    static tag = 'iswc-confirm-delete';
-    static css = css;
-    static deps = ['iswc-button', 'iswc-icon'];
+    static override tag = 'iswc-confirm-delete';
+    static override css = css;
+    static override deps = ['iswc-button', 'iswc-icon'];
 
-    static observed = [...OBSERVED, 'accent'];
+    static override observed = [...OBSERVED, 'accent'];
 
     #dlg!: HTMLElement & { show(): void; hide(): void };
     #headingText!: HTMLElement;
@@ -120,7 +120,7 @@ import css from 'iswc:css';
       this.#cancelBtn = shadow.querySelector<HTMLElement>('.cancel')!;
     }
 
-    onConnected() {
+    override onConnected() {
       this.#confirmField.addEventListener('iswc-input', this.#onConfirmInput);
       this.#deleteBtn.addEventListener('click', this.#onDelete);
       this.#messageSlot.addEventListener('slotchange', this.#syncMessage);
@@ -134,7 +134,7 @@ import css from 'iswc:css';
       if (this.open) this.#showUI();
     }
 
-    onDisconnected() {
+    override onDisconnected() {
       this.#confirmField.removeEventListener('iswc-input', this.#onConfirmInput);
       this.#deleteBtn.removeEventListener('click', this.#onDelete);
       this.#messageSlot.removeEventListener('slotchange', this.#syncMessage);
@@ -143,7 +143,7 @@ import css from 'iswc:css';
       this.#unbindTrigger();
     }
 
-    onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
+    override onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
       if (name === 'for') { this.#unbindTrigger(); this.#bindTrigger(); }
       else if (name === 'open') { if (this.open) this.#showUI(); else this.#hideUI(); }
       else if (name === 'message') this.#syncMessage();

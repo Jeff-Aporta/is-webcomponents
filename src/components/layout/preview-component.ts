@@ -39,9 +39,9 @@ TEMPLATE.innerHTML = /* html */ `
 `;
 
 class IswcPreviewComponent extends withStyleAttrs(IswcElement) {
-  static tag = 'iswc-preview-component';
-  static shadowInit: ShadowRootInit | null = null;
-  static deps = ['iswc-button', 'iswc-icon'];
+  static override tag = 'iswc-preview-component';
+  static override shadowInit: ShadowRootInit | null = null;
+  static override deps = ['iswc-button', 'iswc-icon'];
 
   #preview: IswcComponentPreviewLike | null = null;
   #ctx: PreviewMountContext | null = null;
@@ -57,14 +57,14 @@ class IswcPreviewComponent extends withStyleAttrs(IswcElement) {
     return document.body?.dataset?.panelsCompact === '1';
   }
 
-  static observed = ['storage-key'];
+  static override observed = ['storage-key'];
 
   constructor() {
     super();
     // Light DOM a propósito: presentation.css + demo-code + is-* ven el markup.
   }
 
-  connectedCallback(): void {
+  override connectedCallback(): void {
 
     super.connectedCallback();
     if (!this.querySelector<HTMLElement>(':scope > iswc-split-panel')) {
@@ -81,7 +81,7 @@ class IswcPreviewComponent extends withStyleAttrs(IswcElement) {
    * la clave de scroll hasta el siguiente cambio de componente. Propagarlo
    * al `<iswc-main>` es todo lo que hace falta.
    */
-  attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
+  override attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
     super.attributeChangedCallback(name, oldVal, newVal);
     if (name !== 'storage-key' || oldVal === newVal || !this.#mounted) return;
     const main = this.#main();
@@ -89,7 +89,7 @@ class IswcPreviewComponent extends withStyleAttrs(IswcElement) {
     if (main && def) main.setAttribute('storage-key', newVal || def.storageKey || `docs-${def.tag}`);
   }
 
-  disconnectedCallback(): void {
+  override disconnectedCallback(): void {
     this.#teardown();
     this.#compactMql?.removeEventListener('change', this.#onCompactChange);
     document.removeEventListener('iswc-panels-compact-change', this.#onCompactChange);

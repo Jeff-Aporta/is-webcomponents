@@ -29,17 +29,17 @@ import css from 'iswc:css';
   `;
 
   class IswcMediaRecorder extends IswcElement {
-    static tag = 'iswc-media-recorder';
-    static css = css;
-    static deps = ['iswc-button'];
-    static observed = ['source', 'disabled'];
+    static override tag = 'iswc-media-recorder';
+    static override css = css;
+    static override deps = ['iswc-button'];
+    static override observed = ['source', 'disabled'];
 
     /**
      * 2026-Q1 fix: attributeChangedCallback faltaba → el playground no
      * podía alternar `source` (camera / mic / display) ni `disabled`.
      * Ahora ambos disparan la acción correspondiente.
      */
-    attributeChangedCallback(name: string, _oldVal: string | null, _newVal: string | null): void {
+    override attributeChangedCallback(name: string, _oldVal: string | null, _newVal: string | null): void {
       if (name === 'source') {
         // Cambio de fuente: si está grabando, parar; si no, refrescar preview.
         if (this.#rec) this.stop();
@@ -77,13 +77,13 @@ import css from 'iswc:css';
       this.addEventListener('keydown', this.#onKeydown);
     }
 
-    disconnectedCallback(): void {
+    override disconnectedCallback(): void {
       this.removeEventListener('keydown', this.#onKeydown);
       this.stop();
       this.#revoke();
     }
 
-    connectedCallback(): void {
+    override connectedCallback(): void {
       super.connectedCallback();
       // F0.3 g12 [a11y/region]: landmark + label. aria-keyshortcuts para
       // que el lector exponga la lista de atajos al pedirla.

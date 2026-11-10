@@ -61,13 +61,13 @@ function parseListAttr(raw: string | null, fallback: string[]): string[] {
 }
 
 class IswcDocDemo extends IswcElement {
-  static tag = 'iswc-doc-demo';
-  static shadowInit: ShadowRootInit | null = null;
-  static deps = ['iswc-button', 'iswc-icon'];
+  static override tag = 'iswc-doc-demo';
+  static override shadowInit: ShadowRootInit | null = null;
+  static override deps = ['iswc-button', 'iswc-icon'];
   #booted = false;
   #readySignaled = false;
 
-  static observed = [
+  static override observed = [
       'brand',
       'brand-icon',
       'brand-href',
@@ -94,7 +94,7 @@ class IswcDocDemo extends IswcElement {
     });
   }
 
-  connectedCallback(): void {
+  override connectedCallback(): void {
     super.connectedCallback();
     if (!this.querySelector(':scope > .shell-bar')) {
       this.#paintShell();
@@ -106,7 +106,7 @@ class IswcDocDemo extends IswcElement {
     void this.#bootAssets();
   }
 
-  attributeChangedCallback(): void {
+  override attributeChangedCallback(): void {
     if (this.isConnected && this.querySelector(':scope > .shell-bar')) {
       this.#syncAttrs();
     }

@@ -62,11 +62,11 @@ import css from 'iswc:css';
   }
 
   class IswcPrefsClear extends IswcElement {
-    static tag = 'iswc-prefs-clear';
+    static override tag = 'iswc-prefs-clear';
     declare static events: PrefsClearEventos;
-    static css = css;
-    static deps = ['iswc-button', 'iswc-icon'];
-    static observed = ['confirm', 'reload', 'scope', 'variant', 'color', 'shape', 'disabled', 'title', 'aria-label'];
+    static override css = css;
+    static override deps = ['iswc-button', 'iswc-icon'];
+    static override observed = ['confirm', 'reload', 'scope', 'variant', 'color', 'shape', 'disabled', 'title', 'aria-label'];
 
     #btn!: HTMLElement;
     #busy = false;
@@ -79,7 +79,7 @@ import css from 'iswc:css';
       this.#btn.addEventListener('iswc-click', this.#onClick as EventListener);
     }
 
-    connectedCallback(): void {
+    override connectedCallback(): void {
       super.connectedCallback();
       this.#syncAttrs();
       if (!this.hasAttribute('title')) {
@@ -87,7 +87,7 @@ import css from 'iswc:css';
       }
     }
 
-    attributeChangedCallback() {
+    override attributeChangedCallback() {
       this.#syncAttrs();
     }
 

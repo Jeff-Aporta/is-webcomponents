@@ -7,9 +7,9 @@ import css from 'iswc:css';
 (() => {
   const OBSERVED = ['src', 'content', 'height'];
   class IswcTxtView extends IswcElement {
-    static tag = 'iswc-txt-view';
-    static css = css;
-    static observed = OBSERVED;
+    static override tag = 'iswc-txt-view';
+    static override css = css;
+    static override observed = OBSERVED;
     #pre!: HTMLElement;
     #empty!: HTMLElement;
     #gen = 0;
@@ -26,8 +26,8 @@ import css from 'iswc:css';
       this.#empty = shadow.querySelector('.estado')!;
     }
 
-    onConnected() { sincronizarAlto(this); this.#reload(); }
-    onAttributeChanged() { sincronizarAlto(this); this.#reload(); }
+    override onConnected() { sincronizarAlto(this); this.#reload(); }
+    override onAttributeChanged() { sincronizarAlto(this); this.#reload(); }
 
     get src() { return this.getAttribute('src'); }
     set src(v) { setOptionalAttr(this, 'src', v); }

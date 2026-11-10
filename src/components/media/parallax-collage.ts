@@ -85,9 +85,9 @@ import css from 'iswc:css';
   }
 
   class IswcParallaxCollage extends IswcElement {
-    static tag = 'iswc-parallax-collage';
-    static css = css;
-    static observed = OBSERVED;
+    static override tag = 'iswc-parallax-collage';
+    static override css = css;
+    static override observed = OBSERVED;
     #lienzo!: HTMLElement;
     #capas: Capa[] = [];
     #siguiendo = false;
@@ -112,15 +112,15 @@ import css from 'iswc:css';
       this.#lienzo.replaceChildren(...this.#capas.map(capaDom));
     }
 
-    onConnected(): void {
+    override onConnected(): void {
       this.#sync();
     }
 
-    onDisconnected(): void {
+    override onDisconnected(): void {
       this.#soltar();
     }
 
-    onAttributeChanged(): void {
+    override onAttributeChanged(): void {
       this.#sync();
     }
 

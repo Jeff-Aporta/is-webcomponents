@@ -61,9 +61,9 @@ export function parseLooseDate(raw: string|number|null|undefined) {
   };
 
   class IswcFormatDate extends IswcElement {
-    static tag = 'iswc-format-date';
-    static css = css;
-    static observed = OBSERVED;
+    static override tag = 'iswc-format-date';
+    static override css = css;
+    static override observed = OBSERVED;
 
     #el!: HTMLElement;
     constructor() {
@@ -73,12 +73,12 @@ export function parseLooseDate(raw: string|number|null|undefined) {
       this.#el = shadow.querySelector<HTMLElement>('.date')!;
     }
 
-    onConnected() {
+    override onConnected() {
       this.#syncLive();
       this.#render();
     }
 
-    onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
+    override onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
       if (name === 'live') this.#syncLive();
       this.#render();
     }

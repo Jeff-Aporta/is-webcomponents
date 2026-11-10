@@ -48,9 +48,9 @@ const asVariant = (v: string | null): FigureVariant => (v === 'plain' ? 'plain' 
 const asFit = (v: string | null): FigureFit => (v === 'cover' ? 'cover' : 'contain');
 
 class IswcFigure extends IswcElement {
-  static tag = 'iswc-figure';
-  static css = css;
-  static observed = [...OBSERVED];
+  static override tag = 'iswc-figure';
+  static override css = css;
+  static override observed = [...OBSERVED];
 
   #link: HTMLAnchorElement;
   #img: HTMLElement;

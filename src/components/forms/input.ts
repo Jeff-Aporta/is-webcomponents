@@ -98,13 +98,13 @@ import type { InputEventos } from './schemas/input.schemas.js';
   const NATIVE_ATTRS = ['placeholder', 'min', 'max', 'step', 'maxlength', 'autocomplete', 'name'];
 
   class IswcInput extends IswcFormControl {
-    static tag = 'iswc-input';
+    static override tag = 'iswc-input';
     declare static events: InputEventos;
-    static css = css;
-    static shadowInit: ShadowRootInit | null = { mode: 'open', delegatesFocus: true };
-    static deps = ['iswc-icon'];
+    static override css = css;
+    static override shadowInit: ShadowRootInit | null = { mode: 'open', delegatesFocus: true };
+    static override deps = ['iswc-icon'];
 
-    static observed = [...OBSERVED, 'radius', 'border-color', 'bg', 'text-color', 'focus-color', 'danger-color'];
+    static override observed = [...OBSERVED, 'radius', 'border-color', 'bg', 'text-color', 'focus-color', 'danger-color'];
 
     #input!: HTMLInputElement;
     #labelEl!: HTMLElement;
@@ -170,7 +170,7 @@ import type { InputEventos } from './schemas/input.schemas.js';
       this.#toggleBtn.setAttribute('checked-label', this.t('ocultarContrasena'));
     }
 
-    onConnected(): void {
+    override onConnected(): void {
       upgradeProperties(this, EXTRA_UPGRADE_ATTRS);
       const self = this as unknown as Record<string, unknown>;
       for (const p of EXTRA_UPGRADE_PROPS) {
@@ -188,7 +188,7 @@ import type { InputEventos } from './schemas/input.schemas.js';
       this.#listenOtp();
     }
 
-    onDisconnected(): void {
+    override onDisconnected(): void {
       // El debounce de `iswc-typing-end` no debe sobrevivir al desmontaje.
       if (this.#typingTimer != null) {
         clearTimeout(this.#typingTimer);
@@ -198,7 +198,7 @@ import type { InputEventos } from './schemas/input.schemas.js';
       this.#otpAbort = null;
     }
 
-    onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
+    override onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
       if (name === 'value') {
         this.#value = newVal ?? '';
         this.#syncNative();
@@ -286,7 +286,7 @@ import type { InputEventos } from './schemas/input.schemas.js';
 
     @prop({ type: 'bool' }) accessor passwordToggle: boolean = false;
 
-    @prop({ vacio: true }) accessor errorText: string = '';
+    @prop({ vacio: true }) override accessor errorText: string = '';
 
     @prop({ type: 'bool' }) accessor showCount: boolean = false;
 
@@ -299,9 +299,9 @@ import type { InputEventos } from './schemas/input.schemas.js';
 
     @prop({ vacio: true }) accessor placeholder: string = '';
 
-    @prop({ vacio: true }) accessor label: string = '';
+    @prop({ vacio: true }) override accessor label: string = '';
 
-    @prop({ vacio: true }) accessor hint: string = '';
+    @prop({ vacio: true }) override accessor hint: string = '';
 
     @prop({ vacio: true }) accessor min: string | null = null;
 
@@ -318,8 +318,8 @@ import type { InputEventos } from './schemas/input.schemas.js';
 
     // ---- API pública -----------------------------------------------------
 
-    focus(options?: FocusOptions): void { this.#input.focus(options); }
-    blur(): void { this.#input.blur(); }
+    override focus(options?: FocusOptions): void { this.#input.focus(options); }
+    override blur(): void { this.#input.blur(); }
     select(): void { this.#input.select?.(); }
     setSelectionRange(...args: Parameters<HTMLInputElement['setSelectionRange']>): void {
       this.#input.setSelectionRange?.(...args);

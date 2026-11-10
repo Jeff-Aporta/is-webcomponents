@@ -111,13 +111,13 @@ import type { SelectEventos } from './schemas/select.schemas.js';
   let uidSeq = 0;
 
   class IswcSelect extends IswcFormControl {
-    static tag = 'iswc-select';
+    static override tag = 'iswc-select';
     declare static events: SelectEventos;
-    static css = css;
-    static shadowInit: ShadowRootInit | null = { mode: 'open', delegatesFocus: true };
-    static deps = ['iswc-icon', 'iswc-button', 'iswc-tag'];
+    static override css = css;
+    static override shadowInit: ShadowRootInit | null = { mode: 'open', delegatesFocus: true };
+    static override deps = ['iswc-icon', 'iswc-button', 'iswc-tag'];
 
-    static observed = [...OBSERVED, 'radius', 'border-color', 'bg', 'text-color', 'focus-color', 'danger-color'];
+    static override observed = [...OBSERVED, 'radius', 'border-color', 'bg', 'text-color', 'focus-color', 'danger-color'];
 
     #base!: HTMLElement;
     #trigger!: HTMLElement;
@@ -186,7 +186,7 @@ import type { SelectEventos } from './schemas/select.schemas.js';
       this.#clearBtn.setAttribute('aria-label', this.t('limpiar'));
     }
 
-    onConnected(): void {
+    override onConnected(): void {
       const self = this as unknown as Record<string, unknown>;
       if (Object.prototype.hasOwnProperty.call(this, 'values')) {
         const v = self['values'];
@@ -207,7 +207,7 @@ import type { SelectEventos } from './schemas/select.schemas.js';
       addEventListener('scroll', this.#onReposition, true);
     }
 
-    onDisconnected(): void {
+    override onDisconnected(): void {
       removeEventListener('resize', this.#onReposition);
       removeEventListener('scroll', this.#onReposition, true);
       if (this.#typeTimer != null) clearTimeout(this.#typeTimer);
@@ -216,7 +216,7 @@ import type { SelectEventos } from './schemas/select.schemas.js';
       this.#capa.detach();
     }
 
-    onAttributeChanged(name: string, oldVal: string | null, newVal: string | null): void {
+    override onAttributeChanged(name: string, oldVal: string | null, newVal: string | null): void {
       if (name === 'value') {
         if (this.#writingValue) return;
         this.#readValueAttr(false);

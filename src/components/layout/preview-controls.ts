@@ -237,9 +237,9 @@ async function asegurarWidgets(): Promise<void> {
 }
 
 class IswcPreviewControls extends IswcElement {
-  static tag = 'iswc-preview-controls';
-  static css = css;
-  static shadowInit: ShadowRootInit | null = null;
+  static override tag = 'iswc-preview-controls';
+  static override css = css;
+  static override shadowInit: ShadowRootInit | null = null;
   #spec: ControlPanel[] = [];
   #listo = false;
   #arrancando = false;
@@ -248,9 +248,9 @@ class IswcPreviewControls extends IswcElement {
   /** Handler de Escape (Phase W36) — cierra popovers info. */
   #onPopoverEscape: ((ev: KeyboardEvent) => void) | null = null;
 
-  static observed = ['label'];
+  static override observed = ['label'];
 
-  connectedCallback(): void {
+  override connectedCallback(): void {
     if (!this.shadowRoot) {
       this.initShadow({ mode: 'open' });
       this.shadowRoot!.appendChild(TPL.content.cloneNode(true));
@@ -271,12 +271,12 @@ class IswcPreviewControls extends IswcElement {
     this.spec = Array.isArray(raw) ? raw as ControlPanel[] : [];
   }
 
-  disconnectedCallback(): void {
+  override disconnectedCallback(): void {
     // Phase W36: desinstala los listeners globales (click-fuera / escape).
     this.#removeGlobalDismissHandlers();
   }
 
-  attributeChangedCallback(name: string): void {
+  override attributeChangedCallback(name: string): void {
     if (!this.shadowRoot) return;
     if (name === 'label') this.#pintar();
   }

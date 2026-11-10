@@ -52,12 +52,12 @@ export function definePickerInput({
   // personalización por atributo: se declara aquí una vez, no en cada tag.
 
   class IswcPickerInput extends withStyleAttrs(IswcReactive) {
-    static tag = tag;
+    static override tag = tag;
     declare static events: PickerInputEventos;
-    static css = css;
-    static shadowInit: ShadowRootInit | null = { mode: 'open', delegatesFocus: true };
+    static override css = css;
+    static override shadowInit: ShadowRootInit | null = { mode: 'open', delegatesFocus: true };
 
-    static observed = [...OBSERVED, 'panel-height'];
+    static override observed = [...OBSERVED, 'panel-height'];
 
     #base!: HTMLElement;
     /** Capa en la pila de core/position.ts mientras el panel está abierto: un modal de abajo no se lleva su Escape. */
@@ -110,7 +110,7 @@ export function definePickerInput({
       if (this.mounted) this.#syncToolbar();
     }
 
-    connectedCallback(): void {
+    override connectedCallback(): void {
       super.connectedCallback();
       this.#mounted = true;
       this.#syncFields();
@@ -119,7 +119,7 @@ export function definePickerInput({
       addEventListener('scroll', this.#reposition, true);
     }
 
-    disconnectedCallback(): void {
+    override disconnectedCallback(): void {
       removeEventListener('resize', this.#reposition);
       removeEventListener('scroll', this.#reposition, true);
       cancelAnimationFrame(this.#raf);
@@ -128,7 +128,7 @@ export function definePickerInput({
       super.disconnectedCallback();
     }
 
-    attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
+    override attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
       super.attributeChangedCallback(name, oldVal, newVal);
       if (!this.#mounted || oldVal === newVal) return;
       if (name === 'action-bar' || name === 'color') this.#syncActions();
@@ -161,7 +161,7 @@ export function definePickerInput({
     set readonly(v: boolean) { this.toggleAttribute('readonly', !!v); }
 
     override get locale(): string { return resolverLocale(this, this.getAttribute('locale')); }
-    set locale(v: string) { v ? this.setAttribute('locale', v) : this.removeAttribute('locale'); }
+    override set locale(v: string) { v ? this.setAttribute('locale', v) : this.removeAttribute('locale'); }
 
     /** Cierra al elegir; en móvil o con barra de acciones espera a Aceptar. */
     get closeOnSelect(): boolean {

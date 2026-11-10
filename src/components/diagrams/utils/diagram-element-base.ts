@@ -93,8 +93,8 @@ async function resolverRefs(payload: unknown, base: string): Promise<unknown> {
 const SVG_NS = 'http://www.w3.org/2000/svg';
 
 export class DiagramElementBase extends IswcElement {
-  static shadowInit: ShadowRootInit | null = null;
-  static observed = ['color', 'look', 'diagram-style'];
+  static override shadowInit: ShadowRootInit | null = null;
+  static override observed = ['color', 'look', 'diagram-style'];
 
   #wrap: HTMLElement | null = null;
   #svg: SVGElement | null = null;
@@ -145,7 +145,7 @@ export class DiagramElementBase extends IswcElement {
   /** Se llama una vez por conexión (ver comentario de ElementBase#onConnected
    *  sobre por qué NO es solo la primera vez): monta el observer de JSON
    *  slot y el de tema, y dispara el primer render. */
-  onConnected(): void {
+  override onConnected(): void {
     this.#readJsonSlot();
     this.#jsonMo = new MutationObserver(() => this.#readJsonSlot());
     this.#jsonMo.observe(this, { childList: true, characterData: true, subtree: true });
@@ -157,13 +157,13 @@ export class DiagramElementBase extends IswcElement {
     this.queueRender();
   }
 
-  onDisconnected(): void {
+  override onDisconnected(): void {
     this.#jsonMo?.disconnect();
     this.#themeObs?.disconnect();
     this.onDiagramDisconnected();
   }
 
-  onAttributeChanged(): void { this.queueRender(); }
+  override onAttributeChanged(): void { this.queueRender(); }
 
   /** Hooks para que la subclase añada listeners/estado propio sin pisar el
    *  connect/disconnect de la base. No-op por defecto. */

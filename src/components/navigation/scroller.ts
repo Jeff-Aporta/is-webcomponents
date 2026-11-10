@@ -53,10 +53,10 @@ import css from 'iswc:css';
   const OBSERVED = ['orientation', 'without-scroll-buttons', 'label'];
 
   class IswcScroller extends IswcReactive {
-    static tag = 'iswc-scroller';
-    static css = css;
+    static override tag = 'iswc-scroller';
+    static override css = css;
 
-    static observed = [...OBSERVED, 'button-size', 'button-bg', 'button-color'];
+    static override observed = [...OBSERVED, 'button-size', 'button-bg', 'button-color'];
 
     #scroller!: HTMLElement;
     #viewport!: HTMLElement;
@@ -78,7 +78,7 @@ import css from 'iswc:css';
       this.#btnEnd.addEventListener('click', () => this.#scrollBy(1));
     }
 
-    onConnected() {
+    override onConnected() {
       if (!this.hasAttribute('orientation')) this.setAttribute('orientation', 'horizontal');
       this.#syncLabel();
       this.#ro = new ResizeObserver(this.#syncOverflow);
@@ -88,12 +88,12 @@ import css from 'iswc:css';
       requestAnimationFrame(() => this.#syncOverflow());
     }
 
-    onDisconnected() {
+    override onDisconnected() {
       this.#ro?.disconnect();
       if (this.#onScroll) this.#viewport.removeEventListener('scroll', this.#onScroll);
     }
 
-    onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
+    override onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
       if (name === 'orientation') this.#syncOrientation();
       if (name === 'without-scroll-buttons') this.#syncOverflow();
       if (name === 'label') this.#syncLabel();
@@ -121,18 +121,18 @@ import css from 'iswc:css';
     }
 
     // API pública
-    scrollTo(x: number, y: number): void;
-    scrollTo(options?: ScrollToOptions): void;
-    scrollTo(optionsOrX?: ScrollToOptions | number, y?: number): void {
+    override scrollTo(x: number, y: number): void;
+    override scrollTo(options?: ScrollToOptions): void;
+    override scrollTo(optionsOrX?: ScrollToOptions | number, y?: number): void {
       if (typeof optionsOrX === 'number') {
         this.#viewport.scrollTo({ left: optionsOrX, top: y ?? 0 });
       } else {
         this.#viewport.scrollTo(optionsOrX);
       }
     }
-    scrollBy(x: number, y: number): void;
-    scrollBy(options?: ScrollToOptions): void;
-    scrollBy(optionsOrX?: ScrollToOptions | number, y?: number): void {
+    override scrollBy(x: number, y: number): void;
+    override scrollBy(options?: ScrollToOptions): void;
+    override scrollBy(optionsOrX?: ScrollToOptions | number, y?: number): void {
       if (typeof optionsOrX === 'number') {
         this.#viewport.scrollBy({ left: optionsOrX, top: y ?? 0 });
       } else {

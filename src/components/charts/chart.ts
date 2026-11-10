@@ -83,11 +83,11 @@ function isNumericXY(datasets: ChartDataset[]): boolean {
 }
 
 class IswcChart extends withStyleAttrs(IswcElement) {
-  static tag = 'iswc-chart';
+  static override tag = 'iswc-chart';
   /** Los charts tipados heredan esta hoja: sus .scss solo importan chart.css. */
-  static css = css;
+  static override css = css;
 
-  static observed = [...OBSERVED];
+  static override observed = [...OBSERVED];
   static fixedType: string | null = null;
   static drawMarks: ((ctx: ChartCtx) => void) | null = null;
 
@@ -138,7 +138,7 @@ class IswcChart extends withStyleAttrs(IswcElement) {
     this.#svg.addEventListener('pointerleave', () => this.#clearHover());
   }
 
-  connectedCallback(): void {
+  override connectedCallback(): void {
     super.connectedCallback();
     this.#mounted = true;
     if (this.#fixedType && !this.hasAttribute('type')) this.setAttribute('type', this.#fixedType);
@@ -154,7 +154,7 @@ class IswcChart extends withStyleAttrs(IswcElement) {
     this.#queueRender();
   }
 
-  disconnectedCallback(): void {
+  override disconnectedCallback(): void {
     this.#mounted = false;
     this.#ro?.disconnect();
     this.#mo?.disconnect();
@@ -164,7 +164,7 @@ class IswcChart extends withStyleAttrs(IswcElement) {
     this.#wrap.removeEventListener('click', this.#onHostClick);
   }
 
-  attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
+  override attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
     super.attributeChangedCallback(name, oldVal, newVal);
     if (!this.#mounted || oldVal === newVal) return;
     this.#queueRender();

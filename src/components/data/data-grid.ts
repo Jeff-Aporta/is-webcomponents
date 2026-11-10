@@ -362,11 +362,11 @@ function aEm(u: number): string {
   type ActionParams = { row: Row; id: CellValue; colDef: ColumnDef };
 
   class IswcDataGrid extends withStyleAttrs(IswcElement) {
-    static tag = 'iswc-data-grid';
-    static css = css;
-    static deps = ['iswc-button'];
+    static override tag = 'iswc-data-grid';
+    static override css = css;
+    static override deps = ['iswc-button'];
 
-    static observed = [...OBSERVED, 'radius', 'accent', 'header-bg', 'row-hover', 'height', 'padding'];
+    static override observed = [...OBSERVED, 'radius', 'accent', 'header-bg', 'row-hover', 'height', 'padding'];
 
     /* DOM */
     #base!: HTMLElement;
@@ -519,7 +519,7 @@ function aEm(u: number): string {
       this.#filterPanel.addEventListener('input', this.#onFilterPanelInput);
     }
 
-    connectedCallback(): void {
+    override connectedCallback(): void {
       super.connectedCallback();
       this.#mounted = true;
       this.#normalize();
@@ -530,7 +530,7 @@ function aEm(u: number): string {
       this.#compute();
     }
 
-    disconnectedCallback(): void {
+    override disconnectedCallback(): void {
       this.#mounted = false;
       this.#ro?.disconnect();
       if (this.#resizeState) this.#onResizeEnd();
@@ -540,7 +540,7 @@ function aEm(u: number): string {
       this.#closePop();
     }
 
-    attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
+    override attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
       super.attributeChangedCallback(name, oldVal, newVal);
       if (!this.#mounted || oldVal === newVal) return;
       if (name === 'page-size' || name === 'pagination') this.#page = 0;
