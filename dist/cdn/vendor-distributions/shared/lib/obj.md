@@ -1,7 +1,7 @@
 <!-- @vendor 2026-10-13T14:13:48.240Z Jeff-Aporta/is-webcomponents@main src/vendor-distributions/shared/lib/obj.md -->
 # `Obj` y `RefObj` — operaciones VIRTUALES y FÍSICAS sobre JSON
 
-Biblioteca común de iswc (sin dependencias de DOM), en dos objetos separados:
+Biblioteca común de ISWC (sin dependencias de DOM), en dos objetos separados:
 
 - **`Obj` (virtual, `obj.ts`)**: lee y modifica **partes** de un objeto JSON **en memoria**, sin tocar el resto. No lee archivos ni la red. Ningún método muta: todos devuelven un objeto nuevo.
 - **`RefObj` (físico, `ref-obj.ts`)**: resuelve referencias `{ path, query, actions }` a **otros** documentos JSON (los lee con `cargar`: fetch en el navegador, fs en Deno/Node) y aplica sobre lo traído las acciones virtuales de `Obj`.

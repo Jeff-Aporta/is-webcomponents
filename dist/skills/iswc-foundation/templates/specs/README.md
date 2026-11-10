@@ -8,7 +8,7 @@ Si algo en otra parte contradice a `foundation/`, gana `foundation/`.
 | --- | --- |
 | [`FOUNDATION.md`](FOUNDATION.md) | Cómo reconstruir la app SOLO desde las specs (prompt para agentes) |
 | [`W2H.md`](W2H.md) | Cómo mantener las specs al día en cada cambio (What → How) |
-| [`especificar-what.md`](especificar-what.md) | Cómo se escriben specs y pruebas WHAT en esta app (estándar iswc) |
+| [`especificar-what.md`](especificar-what.md) | Cómo se escriben specs y pruebas WHAT en esta app (estándar ISWC) |
 | [`foundation/`](foundation/README.md) | Specs fundación numeradas (`NN-tema.md`), con requisitos `[W-]`, `[HW-]`, `[HS-]` |
 | [`iswc/`](iswc/README.md) | Skills operativas del kit iswc-base (componente, demo, vista, pin) y, en `iswc/kit/`, la skill general con el índice de todos los componentes |
 

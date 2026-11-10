@@ -17,7 +17,7 @@
   `@iswc/loader-schemas` (API del loader), importados por SHA en `deno.json`; los guardianes validan
   contra ellos.
 - Sin `any` ni `as any`. Typecheck estricto (`deno task check`).
-- **Sin re-exports ni barriles** (regla InSoft): se importa SIEMPRE del archivo de origen. Los tipos de las tools del kit
+- **Sin re-exports ni barriles** (regla ISWC): se importa SIEMPRE del archivo de origen. Los tipos de las tools del kit
   vienen de `schemas.ts` (no de `pruebas.ts`, `jueces.ts`…), `z` de `zod`, y nada de `export * from`, `export {…} from`
   ni alias `export const X = importado`. En el kit lo vigila `meta/no-reexports.test.ts` (única excepción: `lib/zod.ts`,
   la copia única de Zod que publica el CDN).

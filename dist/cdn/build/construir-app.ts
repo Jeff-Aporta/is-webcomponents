@@ -353,9 +353,9 @@ export async function construirApp(opts: ConstruirAppOpts): Promise<InformeBuild
     writeFileSync(join(OUT, ASSET_HASHES_NAME), hashesJson(hashes));
     archivos.push(ASSET_HASHES_NAME);
   }
-  writeFileSync(join(OUT, 'build-stamp.json'), `${JSON.stringify({
+  writeFileSync(join(OUT, 'build-stamp.json'), JSON.stringify({
     build: new Date().toISOString().replace(/\.\d+Z$/, 'Z'), lastbuild: Date.now(), gitCommit: git(raiz, 'rev-parse HEAD'), gitBranch: git(raiz, 'rev-parse --abbrev-ref HEAD'), kit: pin,
-  }, null, 2)}\n`);
+  }));
   archivos.push('build-stamp.json');
 
   // 7. HTML

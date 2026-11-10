@@ -2,7 +2,7 @@
 # specs/iswc — skills del kit iswc-base para esta app
 
 Copias sembradas por `create-iswc-app` desde el kit (`iswc-base/skills/iswc-foundation`). Son el
-estándar común de TODAS las apps iswc: si una regla cambia, cambia en el kit y se vuelve a sembrar.
+estándar común de TODAS las apps ISWC: si una regla cambia, cambia en el kit y se vuelve a sembrar.
 
 | Skill | Cuándo |
 | --- | --- |
@@ -15,5 +15,5 @@ estándar común de TODAS las apps iswc: si una regla cambia, cambia en el kit y
 Specs y pruebas se escriben con [`../especificar-what.md`](../especificar-what.md). El estándar
 completo (arquitectura, build, estilos, Zod, pruebas, sync):
 [iswc-foundation/SKILL.md](https://github.com/__REPO__/blob/__SHA__/skills/iswc-foundation/SKILL.md).
-`kit/` es una copia fijada al SHA del pin (no se edita): `deno task vendor:iswc` la refresca al
+`kit/` es una copia fijada al SHA del pin (no se edita): `deno task vendor:ISWC` la refresca al
 subir el pin, junto con las herramientas del kit.

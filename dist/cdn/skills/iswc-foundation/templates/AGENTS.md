@@ -23,7 +23,7 @@ deno task serve              # http://127.0.0.1:__PUERTO__/
 deno task check              # typecheck
 deno task test:all           # build → check → pin → test:health → test:e2e (cooldown x600)
 deno task pin                # inventario de pines (un SHA, sin refs mutables)
-deno task pin --nuevo=<sha40|ultimo> && deno task vendor:iswc   # subir el kit
+deno task pin --nuevo=<sha40|ultimo> && deno task vendor:ISWC   # subir el kit
 deno task sync:entregable    # solo si existe el par _entregable: gate en verde → copia
 ```
 
@@ -36,7 +36,7 @@ deno task sync:entregable    # solo si existe el par _entregable: gate en verde 
    `view/demo/manifest.json`.
 5. Tipos con Zod en `src/js/consts/schemas/*.schemas.ts`; datos externos se parsean, nunca `as`.
 6. Pines fijos: un SHA de 40 hex del kit en toda la app; tools vendorizadas al mismo SHA. Nunca `@main`.
-7. `src/vendor/` no se edita: se cambia en el kit y se re-vendoriza (`deno task vendor:iswc`).
+7. `src/vendor/` no se edita: se cambia en el kit y se re-vendoriza (`deno task vendor:ISWC`).
 8. Specs WHAT primero; pruebas de caja negra en `tests/` con el formato común del kit.
 9. Íconos: `<iswc-icon icon="set:nombre">` con el id literal; viven en `assets/` (no se piden a mano a la
    API). Un id armado en ejecución va en `extra` de `assets/dl.js`. Detalle: `10-iconos.md` del estándar.

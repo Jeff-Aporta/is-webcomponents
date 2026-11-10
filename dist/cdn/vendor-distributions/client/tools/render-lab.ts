@@ -45,7 +45,7 @@ export function jobDeEditable(spec: Editable, archivo: string, op: OpcionesEdita
     scriptUrl: `dist/cdn/${spec.script || op.script || 'diagrams/flowchart.min.mjs'}`,
     payload: spec.payload,
     payloadBase: archivo,
-    attrs: spec.attrs || op.attrs || { 'diagram-style': 'insoft' },
+    attrs: spec.attrs || op.attrs || { 'diagram-style': 'iswc' },
   };
 }
 

@@ -7,7 +7,7 @@ existe): la app declara UNA vez dónde publica sus íconos y `<iswc-icon>` los p
 0. **Memoria** de la página (`globalThis.__iswcIcons`, compartida por todas las copias del módulo): un id
    se pide una sola vez por página, incluido el fallo (caché negativo), y hay **un solo fetch en vuelo por
    ícono** aunque lo pidan muchos componentes a la vez.
-1. **localStorage** (`iswc:icon:<set>:<nombre>` → `{ t, s }`: fecha de guardado y texto SVG): sin ningún
+1. **localStorage** (`ISWC:icon:<set>:<nombre>` → `{ t, s }`: fecha de guardado y texto SVG): sin ningún
    fetch. Todo SVG resuelto por cualquier vía se guarda aquí (tope 32 KB por ícono), también el que vino
    de la API: así la API es solo el fallback de la primera vez. Vida máxima 15 días (`LS_TTL_MS`): vencido
    se vuelve a pedir y se renueva; un barrido perezoso a los 60 s retira lo vencido (`purgarIconosVencidos()`).
@@ -61,8 +61,8 @@ initApp({
 
 ## Limpiar (volver a la primera carga)
 
-Todo lo que el kit guarda lleva el prefijo `iswc:` (`core/iswc-storage`). `clearIswcStorage()` borra todas
-las `iswc:` de localStorage y sessionStorage y vacía las cachés en memoria (SVG resueltos, fetches en vuelo,
+Todo lo que el kit guarda lleva el prefijo `ISWC:` (`core/iswc-storage`). `clearIswcStorage()` borra todas
+las `ISWC:` de localStorage y sessionStorage y vacía las cachés en memoria (SVG resueltos, fetches en vuelo,
 avisos dados); `listIswcKeys()` las lista. `<iswc-prefs-clear>` lo usa: un clic y los íconos se vuelven a pedir.
 
 ## Archivos
@@ -106,14 +106,14 @@ Sin red no rompe el build: conserva lo que hay en disco, no poda y avisa.
   queda `iconify.json`); [W-ICO-02] `deno.json` declara `iswc.host`; [W-ICO-03] el registrador publicado
   declara `<html data-icons>` = host + `assets/iconify/`.
 - `tests/e2e/00.bienvenida.test.ts`: [W-ICO-04] `data-icons` es absoluto, los íconos se pintan y quedan en
-  localStorage (`iswc:icon:*`); [W-ICO-05] la consola no registra violaciones de CSP.
+  localStorage (`ISWC:icon:*`); [W-ICO-05] la consola no registra violaciones de CSP.
 
 ## Cuándo NO
 
 - No commitear sets enteros: solo lo que la app usa (el barrido y `extra` lo deciden).
 - No pedir íconos por `fetch` a mano ni usar `<iconify-icon>`: siempre `<iswc-icon icon="set:nombre">`.
 - No declarar `data-icons` relativo: se ignora (la base es la web publicada, absoluta).
-- No escribir en localStorage sin el prefijo `iswc:` desde el kit (guardián `meta/iswc-storage.test.ts`).
+- No escribir en localStorage sin el prefijo `ISWC:` desde el kit (guardián `meta/iswc-storage.test.ts`).
 
 ## Ficha del script online
 

@@ -9,4 +9,4 @@
  * cdn-install: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/is-cdn-install/SKILL.md
  * blob: https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/forms/month-calendar.js
  */
-import"../_chunks/chunk-N3G7465A.mjs";import"../_chunks/chunk-2ZJPNDES.mjs";import"../_chunks/chunk-TPHMQPBF.mjs";import"../_chunks/chunk-DKYDCFSD.mjs";import"../_chunks/chunk-FZCPQKWI.mjs";import"../_chunks/chunk-UFMSFUKG.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";
+import"../_chunks/chunk-GB66I6A5.mjs";import"../_chunks/chunk-2ZJPNDES.mjs";import"../_chunks/chunk-TPHMQPBF.mjs";import"../_chunks/chunk-DKYDCFSD.mjs";import"../_chunks/chunk-FZCPQKWI.mjs";import"../_chunks/chunk-UFMSFUKG.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";

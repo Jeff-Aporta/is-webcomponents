@@ -9,4 +9,4 @@
  * cdn-install: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/is-cdn-install/SKILL.md
  * blob: https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/isp/tree-view-shape.js
  */
-import{a}from"../_chunks/chunk-ID5WKLNK.mjs";import"../_chunks/chunk-H5CCIXXC.mjs";import"../_chunks/chunk-ZO4HW347.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";export{a as TATreeShape};
+import{a}from"../_chunks/chunk-IFMJY7T7.mjs";import"../_chunks/chunk-H5CCIXXC.mjs";import"../_chunks/chunk-ZO4HW347.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";export{a as TATreeShape};

@@ -66,7 +66,7 @@ deno task build && deno task test:all
 | --- | --- |
 | `tools/` | `schemas.ts` (podado), `pruebas.ts` (con `--hijo`), `test-cooldown.ts` (con la cola), `sync-entregable.ts` (`vendor.ts` y `pin-update.mjs` van online, no aquí) |
 | `build/` | `index.ts`, `hash.ts`, `asset-url(.schemas).ts`, `stamp-hashes.ts`, `bundle-min(.schemas).ts`, `asset-store.ts` |
-| (raíz) | `deps.json`: `dist/cdn/deps.json` del kit al pin (cierre de módulos por tag); lo escriben `vendor:iswc` y `pin --nuevo` |
+| (raíz) | `deps.json`: `dist/cdn/deps.json` del kit al pin (cierre de módulos por tag); lo escriben `vendor:ISWC` y `pin --nuevo` |
 
 - Cabecera `// @vendor <ISO> <repo>@<sha|local> <desde>` (+ `// @doc <url>`) y «No editar». Se cambian en el kit y se re-vendorizan con
   `vendor.ts` (pin por fecha ISO: compiten el checkout `local` y el HEAD remoto); el protocolo de pines deja el SHA
@@ -192,7 +192,7 @@ Qué skills vendoriza cada perfil (Jeff, 2026-10-13):
 | Perfil | Skills comunes |
 | --- | --- |
 | `client` (app de web components: ISW) | `skills/iswc-foundation` (completa), `skills/is-cdn-install`, `skills/iswc-diagramas-enriquecidos` |
-| `server` (API/backend: ISS) | `skills/iswc-server` (carpeta) + estas referencias de `iswc-foundation/references/` archivo por archivo hacia `skills/iswc-server/references/<mismo nombre>.md`: 05-zod-y-tipos, 06-pines-y-vendor, 07-pruebas-y-gate, 08-sync-entregable, 12-jueces, 14-herramientas-de-test; y `skills/iswc-diagramas-enriquecidos` si renderiza docs con el kit. NUNCA `iswc-foundation` entera ni `is-cdn-install` (un server no crea componentes ni es app iswc) |
+| `server` (API/backend: ISS) | `skills/iswc-server` (carpeta) + estas referencias de `iswc-foundation/references/` archivo por archivo hacia `skills/iswc-server/references/<mismo nombre>.md`: 05-zod-y-tipos, 06-pines-y-vendor, 07-pruebas-y-gate, 08-sync-entregable, 12-jueces, 14-herramientas-de-test; y `skills/iswc-diagramas-enriquecidos` si renderiza docs con el kit. NUNCA `iswc-foundation` entera ni `is-cdn-install` (un server no crea componentes ni es app ISWC) |
 `skills/README.md` del consumidor lo genera/actualiza el vendor (marca `generado por vendor.ts`): índice de propias (sin
 cabecera) y comunes (con su `@vendor`); un README propio sin la marca no se toca. Cada `.ts` vendorizable del kit lleva
 en su docblock `Skill: skills/…md` (la skill que lo explica; guardián `meta/vendor-distributions-doc.test.ts` D5) y al

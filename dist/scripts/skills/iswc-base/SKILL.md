@@ -37,7 +37,7 @@ Comandos tipo slash, uno por archivo en [`tools/`](tools/):
 
 ## Apps sobre el kit: estándar `iswc-foundation` (obligatorio)
 
-Toda **app** construida sobre iswc (no un componente del kit, una app: ISW, las nuevas)
+Toda **app** construida sobre ISWC (no un componente del kit, una app: ISW, las nuevas)
 sigue la skill [`../iswc-foundation/SKILL.md`](../iswc-foundation/SKILL.md): misma estructura, mismas
 tareas Deno, registro único de tags, vistas, demos, SCSS, Zod, pines fijos, pruebas WHAT con
 Stagehand, gate y sync. Una app nueva se crea con `create-iswc-app`, que se ejecuta directo desde la
@@ -191,7 +191,7 @@ Cada una tiene main (`--iswc-color-brand`), contraste (`--iswc-color-contrast`,
 superficies y textos tintados por su tono. `data-panda` en el mismo nodo que
 `data-theme` invierte solo el fondo de la página (`--iswc-bg-page`); papeles,
 componentes y textos siguen el tema. El usuario elige ambas con `<iswc-palette-selector>`
-(persisten en `iswc:app-cfg` → `palette`, `panda`); `initApp({ palette, panda })`
+(persisten en `ISWC:app-cfg` → `palette`, `panda`); `initApp({ palette, panda })`
 fija los valores iniciales.
 
 - CSS de documento: `loadCSSBase` + `loadCSSPalettesDefault`. El CSS de cada `is-*` lo carga el propio tag.
@@ -213,7 +213,7 @@ Cada `app-*` / `tk-*` lleva **JS y CSS hermanos**. No van embebidos en el TS.
 
 1. Fuente: `app-files.ts` + `app-files.css`
 2. Build: minifica a `dist/cdn/app-files.js` + `dist/cdn/app-files.css`
-3. Runtime: `IswcUi.adoptCss(shadow, import.meta.url)` (compatibilidad para código externo al kit, que enlaza su `.css` hermano). Los componentes **del kit** no lo usan: extienden `IswcElement` con `static css = css` (`import css from 'iswc:css'`) y se registran con `define(Clase)` (ver `specs/componentes.md`, «Forma canónica»).
+3. Runtime: `IswcUi.adoptCss(shadow, import.meta.url)` (compatibilidad para código externo al kit, que enlaza su `.css` hermano). Los componentes **del kit** no lo usan: extienden `IswcElement` con `static override css = css` (`import css from 'iswc:css'`) y se registran con `define(Clase)` (ver `specs/componentes.md`, «Forma canónica»).
 
 Tras vaciar el shadow, vuelve a llamar `adoptCss` (los `<link>` se borran con el contenido; las hojas adoptadas por el molde sí sobreviven).
 
@@ -442,7 +442,7 @@ Cada `.min.js` enlaza la guía de su fila y esta skill.
 | `<iswc-details>` | layout/details.md | [layout/details.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/layout/details.md) |
 | `<iswc-dialog>` | layout/dialog.md | [layout/dialog.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/layout/dialog.md) |
 | `<iswc-drawer>` | layout/drawer.md | [layout/drawer.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/layout/drawer.md) |
-| `<iswc-login>` | - Login de una app iswc con uno o varios proveedores. | [layout/login.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/layout/login.md) |
+| `<iswc-login>` | - Login de una app ISWC con uno o varios proveedores. | [layout/login.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/layout/login.md) |
 | `<iswc-login-gate>` | Cortina de acceso: muestra el contenido público (o un mockup) y pide iniciar sesión antes de revelar la parte protegida. | [layout/login-gate.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/layout/login-gate.md) |
 | `<iswc-login-dropdown>` | Acceso compacto para la barra: un botón "Entrar" que despliega usuario/contraseña (y opcionalmente pegar un token), con paso de elección entre opciones (p. | [layout/login-dropdown.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/layout/login-dropdown.md) |
 | `<iswc-session-menu>` | Sesión del usuario en la barra. | [layout/session-menu.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/layout/session-menu.md) |

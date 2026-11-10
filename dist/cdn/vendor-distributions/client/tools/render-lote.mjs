@@ -374,7 +374,7 @@ var Obj = class _Obj {
   /**
    * `v` con las claves de objeto escritas como las declara `schema` (comparación sin mayúsculas),
    * recursivo por objetos, arreglos, opcionales y uniones. Para datos que llegan con las claves en
-   * minúsculas (p. ej. el stack InSoft baja a minúsculas el contenido de las columnas JSON). Claves
+   * minúsculas (p. ej. el stack iswc baja a minúsculas el contenido de las columnas JSON). Claves
    * que el schema no declara quedan tal cual.
    */
   static restaurarClaves(v, schema) {

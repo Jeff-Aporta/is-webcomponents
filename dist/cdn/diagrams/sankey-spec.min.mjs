@@ -9,4 +9,4 @@
  * cdn-install: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/is-cdn-install/SKILL.md
  * blob: https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/diagrams/sankey-spec.js
  */
-import{a,b}from"../_chunks/chunk-S4WIRY3L.mjs";import"../_chunks/chunk-POAHGXFA.mjs";import"../_chunks/chunk-RAK5BYHT.mjs";import"../_chunks/chunk-IPGH3DHR.mjs";import"../_chunks/chunk-USDNRHPF.mjs";import"../_chunks/chunk-7IBSWVMF.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";export{b as computeSankeyLayout,a as resolveSankeySpec};
+import{a,b}from"../_chunks/chunk-JMYQFR7E.mjs";import"../_chunks/chunk-WCSXFZQ2.mjs";import"../_chunks/chunk-RAK5BYHT.mjs";import"../_chunks/chunk-IPGH3DHR.mjs";import"../_chunks/chunk-USDNRHPF.mjs";import"../_chunks/chunk-7IBSWVMF.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";export{b as computeSankeyLayout,a as resolveSankeySpec};

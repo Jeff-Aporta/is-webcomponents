@@ -9,4 +9,4 @@
  * cdn-install: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/is-cdn-install/SKILL.md
  * blob: https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/helpers/format-bytes.js
  */
-import{a,b,c,d}from"../_chunks/chunk-VSLX7TXM.mjs";import"../_chunks/chunk-TPHMQPBF.mjs";import"../_chunks/chunk-DKYDCFSD.mjs";import"../_chunks/chunk-FZCPQKWI.mjs";import"../_chunks/chunk-UFMSFUKG.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";export{b as BYTE_MULT,a as BYTE_UNITS,d as formatBytes,c as toBytes};
+import{a,b,c,d}from"../_chunks/chunk-6SV4CVLP.mjs";import"../_chunks/chunk-TPHMQPBF.mjs";import"../_chunks/chunk-DKYDCFSD.mjs";import"../_chunks/chunk-FZCPQKWI.mjs";import"../_chunks/chunk-UFMSFUKG.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";export{b as BYTE_MULT,a as BYTE_UNITS,d as formatBytes,c as toBytes};

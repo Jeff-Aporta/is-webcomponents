@@ -10,7 +10,7 @@ description: >-
 
 # iswc-server — el kit para un proyecto server (perfil `server`)
 
-Un server (ISS-AyudasCPIA es el ejemplo) **no es una app iswc**: no crea componentes, no tiene estilos, íconos ni
+Un server (Kit es el ejemplo) **no es una app ISWC**: no crea componentes, no tiene estilos, íconos ni
 build de front. Del kit toma solo lo neutro (`vendor-distributions/shared/`): el sistema común de pruebas con
 cooldown, los jueces (semántica local, JEV, LLM), el sync al entregable, los contratos Zod y el vendor por barrido.
 Esta skill no duplica texto: enlaza a las referencias de `iswc-foundation` que aplican a un server, y nada más.

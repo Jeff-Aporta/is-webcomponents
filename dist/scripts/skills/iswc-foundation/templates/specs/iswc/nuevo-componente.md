@@ -28,7 +28,7 @@ Los exige `tests/vistas/contrato-componentes.test.ts`: un tag de `kit-tags.ts` s
 
 ## 3. El `.ts`
 
-Forma canónica del molde del kit: estáticos `tag`/`css`/`deps`, el CSS por `iswc:css` y `define(Clase)`. Tres bases,
+Forma canónica del molde del kit: estáticos `tag`/`css`/`deps`, el CSS por `ISWC:css` y `define(Clase)`. Tres bases,
 según lo que tenga el componente: `Componente<P>` (objeto `props` con Zod, el caso de abajo), `IswcReactive` (atributos
 sueltos con `@prop`) o `IswcElement` (estático).
 
@@ -39,10 +39,10 @@ import { Componente, html } from '../../../src/js/base/componente.js';
 import type { __CLASE__XProps } from '../../../src/js/consts/schemas/componentes.schemas.js';
 
 class __CLASE__X extends Componente<__CLASE__XProps> {
-  static tag = '__PREFIJO__-x';
-  static css = css;
-  static observed = ['color'];
-  static deps = ['iswc-button'];
+  static override tag = '__PREFIJO__-x';
+  static override css = css;
+  static override observed = ['color'];
+  static override deps = ['iswc-button'];
 
   protected override inicial(): __CLASE__XProps {
     return { /* defaults */ };

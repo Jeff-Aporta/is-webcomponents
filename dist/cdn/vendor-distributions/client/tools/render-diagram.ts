@@ -9,7 +9,7 @@
  *   import { renderDiagram, writeDiagramOutputs } from './render-diagram.ts';
  *   const { chromium } = createRequire(import.meta.url)('playwright');
  *   const r = await renderDiagram(
- *     { scriptUrl: 'dist/cdn/diagrams/component-diagram.min.mjs', payload, attrs: { theme: 'insoft-cd' } },
+ *     { scriptUrl: 'dist/cdn/diagrams/component-diagram.min.mjs', payload, attrs: { theme: 'iswc-cd' } },
  *     { chromium, serveRoot: kitRoot, timeoutMs: 900_000 },
  *   );
  *   await writeDiagramOutputs(r, 'out/diagram.svg');

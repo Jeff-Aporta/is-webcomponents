@@ -1,4 +1,4 @@
-# Inventario de componentes iswc
+# Inventario de componentes ISWC
 
 Generado de los `.json` de `src/components`. Antes de crear algo, búscalo aquí. Total: 225.
 
@@ -101,7 +101,7 @@ Generado de los `.json` de `src/components`. Antes de crear algo, búscalo aquí
 | `iswc-loading` | Indicador de carga en línea: spinner y texto opcional, anunciado como estado. | texto | `src/components/feedback/loading.json` |
 | `iswc-palette-selector` | Selector de las 25 paletas del kit (agrupadas por familia, con buscador y muestras de identidad) y del modific | value, panda, hide-panda | `src/components/feedback/palette-selector.json` |
 | `iswc-popconfirm` | Confirmación ligera en un globo anclado al botón que la dispara, con aceptar y cancelar. | placement, hide-arrow | `src/components/feedback/popconfirm.json` |
-| `iswc-prefs-clear` | Botón que deja la app como en su primera carga: borra todo lo que el kit guarda (llaves iswc:) y sus cachés en | reload | `src/components/feedback/prefs-clear.json` |
+| `iswc-prefs-clear` | Botón que deja la app como en su primera carga: borra todo lo que el kit guarda (llaves ISWC:) y sus cachés en | reload | `src/components/feedback/prefs-clear.json` |
 | `iswc-progress-bar` | Barra de progreso lineal, determinada (con porcentaje) o indeterminada. | value, label, indeterminate | `src/components/feedback/progress-bar.json` |
 | `iswc-progress-ring` | Anillo de progreso circular con el porcentaje en el centro. | value, label | `src/components/feedback/progress-ring.json` |
 | `iswc-skeleton` | Bloque de carga (esqueleto) que ocupa el lugar del contenido mientras llega. | effect | `src/components/feedback/skeleton.json` |

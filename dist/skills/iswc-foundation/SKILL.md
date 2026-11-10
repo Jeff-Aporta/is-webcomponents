@@ -2,17 +2,17 @@
 name: iswc-foundation
 description: >-
   Estándar de creación y mantenimiento de APPS sobre el kit iswc-base (el «create-react-app» de
-  iswc, vanilla + web components + Deno). Usar al crear una app nueva (create-iswc-app), al añadir
-  componentes, vistas o demos a una app iswc, al escribir sus specs y pruebas WHAT, al actualizar
+  ISWC, vanilla + web components + Deno). Usar al crear una app nueva (create-iswc-app), al añadir
+  componentes, vistas o demos a una app ISWC, al escribir sus specs y pruebas WHAT, al actualizar
   pines o vendor del kit, al configurar build, gate de pruebas (Stagehand) o sync a entregable, o al
-  alinear una app existente (ISW…) con el estándar. Todas las apps iswc deben ser
+  alinear una app existente (ISW…) con el estándar. Todas las apps ISWC deben ser
   homogéneas: misma estructura, mismas tareas, mismas reglas.
 ---
 <!-- @vendor 2026-10-14T01:16:34.698Z Jeff-Aporta/is-webcomponents@main skills/iswc-foundation/SKILL.md -->
 
-# iswc-foundation — el estándar de las apps iswc
+# iswc-foundation — el estándar de las apps ISWC
 
-Una app iswc es una app estática (HTML + módulos ES servidos tal cual) hecha con el kit **iswc-base**
+Una app ISWC es una app estática (HTML + módulos ES servidos tal cual) hecha con el kit **iswc-base**
 (`iswc-*`) y componentes propios `<prefijo>-*`, en **Deno**, sin framework ni bundler en runtime.
 Este estándar es el que siguen todas (ISW-TestPatyIA y las nuevas) para que se mantengan,
 actualicen y escalen igual, por cualquier agente en cualquier sesión.
@@ -42,7 +42,7 @@ pin. Opciones: `--prefijo`, `--titulo`, `--puerto`, `--sha`, `--repo`. Detalle: 
 | --- | --- |
 | 1 | **Deno** (`deno.json` con `imports` fijados); vanilla + Web Components. Cero React/MUI/JSX/Babel/bundler en runtime |
 | 2 | **Kit por CDN pineado**: un único SHA de 40 hex en toda la app. Nunca `@main`, `@latest`, SHA corto, GitHub Pages ni ramas en raw |
-| 3 | **Protocolo de pines del kit** (`deno task pin` / `pin --nuevo=<sha40\|ultimo>` / `vendor:iswc`): vendor = pin |
+| 3 | **Protocolo de pines del kit** (`deno task pin` / `pin --nuevo=<sha40\|ultimo>` / `vendor:ISWC`): vendor = pin |
 | 4 | **UI con `iswc-*`** y colores solo con tokens `--iswc-*`; no reinventar lo que el [catálogo](../iswc-base/catalog.md) trae |
 | 5 | **Componente = 4 archivos hermanos**: `.ts` + `.scss` + `.md` (6 secciones) + `.json` (`iswc-preview/v1`). Lo verifica `tests/vistas/contrato-componentes.test.ts`, que se apoya en `kit-tags.ts`; el kit aplica la misma regla en su auditoría |
 | 6 | **Registro único** en `src/js/kit-tags.ts` (`KIT_TAGS`, `APP_TAGS`, `VIEW_TAGS`) → registrador `L.registerApp` |
@@ -68,7 +68,7 @@ pin. Opciones: `--prefijo`, `--titulo`, `--puerto`, `--sha`, `--repo`. Detalle: 
 | Demos: playground `.json` y galería | [templates/specs/iswc/demo-componente.md](templates/specs/iswc/demo-componente.md) |
 | Crear una vista | [templates/specs/iswc/nueva-vista.md](templates/specs/iswc/nueva-vista.md) |
 | Estilos SCSS | [04-estilos.md](references/04-estilos.md) |
-| Íconos: `assets/dl.js`, `data-icons` (web publicada), localStorage `iswc:`, aviso «falta en local», API | [10-iconos.md](references/10-iconos.md) |
+| Íconos: `assets/dl.js`, `data-icons` (web publicada), localStorage `ISWC:`, aviso «falta en local», API | [10-iconos.md](references/10-iconos.md) |
 | Zod y tipos | [05-zod-y-tipos.md](references/05-zod-y-tipos.md) |
 | Pines y vendor del kit | [06-pines-y-vendor.md](references/06-pines-y-vendor.md) · [actualizar-pin.md](templates/specs/iswc/actualizar-pin.md) |
 | Pruebas, Stagehand y gate | [07-pruebas-y-gate.md](references/07-pruebas-y-gate.md) |
@@ -80,7 +80,7 @@ pin. Opciones: `--prefijo`, `--titulo`, `--puerto`, `--sha`, `--repo`. Detalle: 
 | `create-iswc-app` en detalle | [13-crear-app.md](references/13-crear-app.md) |
 | Herramientas de test: qué usar y cuándo (guía única para agentes) | [14-herramientas-de-test.md](references/14-herramientas-de-test.md) |
 
-## 4. Flujo de trabajo de un agente en una app iswc
+## 4. Flujo de trabajo de un agente en una app ISWC
 
 1. `AGENTS.md` de la app → `specs/README.md` → `specs/especificar-what.md`.
 2. WHAT primero en la spec del área; después el código; después las pruebas que nombran sus `[W-*]`.
@@ -109,7 +109,7 @@ comandos: el pin del proyecto gobierna lo vendorizado, no los scripts.
 deno run -A --reload=https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/ https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/dist/cdn/skills/iswc-foundation/tools/create-iswc-app.mjs <carpeta> [--prefijo=<p>] [--titulo=<t>] [--puerto=<n>] [--sha=<sha40>] [--repo=<o/n>] [--host=<url>]
 ```
 
-- **Qué hace y cuándo**: crea una app iswc nueva con el estándar (shell, registro de tags, base de componentes, Zod, SCSS, build, galería, vista `hola`, gate de pruebas, sync, specs WHAT). Al fundar un proyecto front; para alinear uno existente ver 09-alinear-app.
+- **Qué hace y cuándo**: crea una app ISWC nueva con el estándar (shell, registro de tags, base de componentes, Zod, SCSS, build, galería, vista `hola`, gate de pruebas, sync, specs WHAT). Al fundar un proyecto front; para alinear uno existente ver 09-alinear-app.
 - **Entradas**: argumento `<carpeta>` (se crea); flags de arriba (`--sha` default: el pin publicado del kit, `--repo` default `Jeff-Aporta/is-webcomponents`, `--host` default GitHub Pages del dueño). Lee `templates/manifest.json` y `templates/**` del kit por HTTPS; no lee nada del consumidor.
 - **Escribe**: el árbol completo de la app bajo `<carpeta>` (sin `deno install`); deja la app lista para `deno install` + `deno task build`.
 - **Salida y errores típicos**: 0 ok · lanza (exit 1) si la carpeta existe y no está vacía, si `--sha` no es un sha40 o si una plantilla no se puede bajar (sin red). Siguiente paso: `deno install && deno task build && deno task test:all`.

@@ -1,6 +1,6 @@
 ---
 name: actualizar-pin
-description: Subir el kit iswc-base a otro SHA en una app iswc (pin congelado + vendor + gate). Úsala para alinear la app con la última versión del kit, periódicamente.
+description: Subir el kit iswc-base a otro SHA en una app ISWC (pin congelado + vendor + gate). Úsala para alinear la app con la última versión del kit, periódicamente.
 ---
 <!-- @vendor 2026-10-13T14:13:48.240Z Jeff-Aporta/is-webcomponents@main skills/iswc-foundation/templates/specs/iswc/actualizar-pin.md -->
 
@@ -13,7 +13,7 @@ Los pines son **fijos**: un único SHA de 40 hex ya publicado, igual en todo HTM
 deno task pin                                   # inventario; exit 1 si hay >1 SHA, refs mutables o nombre viejo del repo
 deno task pin --nuevo=ultimo --dry-run          # qué cambiaría (ultimo = HEAD de main del kit)
 deno task pin --nuevo=<sha40|ultimo>            # verifica en jsDelivr y reemplaza en lote (exit 3 si no está publicado)
-deno task vendor:iswc                           # tools del kit al MISMO SHA del pin
+deno task vendor:ISWC                           # tools del kit al MISMO SHA del pin
 deno task build && deno task test:all           # el gate decide si el pin nuevo se queda
 ```
 

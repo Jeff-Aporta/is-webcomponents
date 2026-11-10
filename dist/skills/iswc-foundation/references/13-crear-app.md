@@ -30,7 +30,7 @@ de la misma versión, así la app nace con vendor = pin.
 - Specs sembradas: `specs/{README,FOUNDATION,W2H,especificar-what}.md`, `specs/foundation/{10,20,70}`
   (con el WHAT del hola mundo), `specs/iswc/{nuevo-componente,demo-componente,nueva-vista,actualizar-pin}.md`
   y `specs/iswc/kit/` (skill general del kit con el catálogo de TODOS los componentes, fijada al pin;
-  `vendor:iswc` la refresca).
+  `vendor:ISWC` la refresca).
 - Casos base de prueba: `tests/e2e/00.bienvenida` (Stagehand determinista: título, tarjetas, modal),
   `tests/e2e/01.bienvenida-llm` (`act()` con MiniMax; se salta sin `dev-token.json`) y `tests/vistas/bienvenida`.
 - `.gitignore` con `node_modules/`, `dev-token.json`, `.tmp*/`; `dev-token.example.json` con el formato de la clave.

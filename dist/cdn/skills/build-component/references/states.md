@@ -24,9 +24,9 @@ import { IswcReactive, prop } from '@jeff-aporta/iswc-base/core/iswc-reactive.js
 import css from 'iswc:css';
 
 class IswcFoo extends IswcReactive {
-  static tag = 'iswc-foo';
-  static css = css;
-  static shadowInit: ShadowRootInit | null = { mode: 'open', delegatesFocus: true };
+  static override tag = 'iswc-foo';
+  static override css = css;
+  static override shadowInit: ShadowRootInit | null = { mode: 'open', delegatesFocus: true };
   @prop({ type: 'bool' }) accessor loading = false;
   @prop() accessor href = '';
 

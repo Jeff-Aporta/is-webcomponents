@@ -125,4 +125,4 @@ Reglas: nada de `runonweb` directo en una app ni en un componente; toda descarga
 - [ ] MD embebido: `md-lite` → `hydrateMdEmbeds`, no un markdown npm paralelo.
 - [ ] Lecturas remotas repetidas: `response-cache`, no un IndexedDB ad hoc.
 - [ ] IA en el navegador: `lib/ai/`, no `runonweb` directo ni descargas propias.
-- [ ] Tras commit del kit: `deno task sync:pins` en monorepo ContaPyme.
+- [ ] Tras commit del kit: `deno task sync:pins` en monorepo Acme.

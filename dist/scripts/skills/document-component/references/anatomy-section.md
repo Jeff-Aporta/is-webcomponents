@@ -1,5 +1,5 @@
 <!-- @vendor 2026-10-13T14:13:48.240Z Jeff-Aporta/is-webcomponents@main skills/document-component/references/anatomy-section.md -->
-﻿# Anatomía de la ficha de un componente iswc
+﻿# Anatomía de la ficha de un componente ISWC
 
 La sección de anatomía es la **primera** que aparece en
 `src/components/<carpeta>/<modulo>.md`. Cubre frontmatter, título y la
@@ -24,7 +24,7 @@ preview: ./foo.json
 
 ## Propósito
 
-Componente InSoft accesible y personalizable, escrito con JavaScript
+Componente ISWC accesible y personalizable, escrito con JavaScript
 nativo, Shadow DOM y sin frameworks.
 
 Este módulo registra `<iswc-foo>`.
@@ -92,7 +92,7 @@ Primer párrafo tras el H1. Dos frases máximo:
 
 Forma canónica:
 
-> Componente InSoft accesible y personalizable, escrito con JavaScript
+> Componente ISWC accesible y personalizable, escrito con JavaScript
 > nativo, Shadow DOM y sin frameworks.
 >
 > Este módulo registra `<iswc-foo>`.

@@ -26,7 +26,7 @@ a mano, ni el atributo repetido en `static observed` (los dos los vigila
 import { IswcReactive, prop, state, watch } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
 
 class IswcFoo extends IswcReactive {
-  static tag = 'iswc-foo';
+  static override tag = 'iswc-foo';
   @prop() accessor label = '';                                  // texto ↔ `label`
   @prop({ enum: FOO_VARIANT }) accessor variant: FooVariant = 'filled';
   @prop({ type: 'bool' }) accessor disabled = false;            // presencia

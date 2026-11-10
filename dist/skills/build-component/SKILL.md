@@ -164,10 +164,10 @@ import type { FooEventos } from './schemas/foo.schemas.js';
 import css from 'iswc:css';
 
 class IswcFoo extends IswcReactive {
-  static tag = 'iswc-foo';
-  static css = css;
-  static template = TEMPLATE;                 // DOM fijo; o render() con html (§5)
-  static shadowInit: ShadowRootInit | null = { mode: 'open', delegatesFocus: true };
+  static override tag = 'iswc-foo';
+  static override css = css;
+  static override template = TEMPLATE;                 // DOM fijo; o render() con html (§5)
+  static override shadowInit: ShadowRootInit | null = { mode: 'open', delegatesFocus: true };
   declare static events: FooEventos;
   @prop({ type: 'bool' }) accessor loading = false;
   @prop() accessor href = '';
@@ -179,6 +179,16 @@ class IswcFoo extends IswcReactive {
 }
 define(IswcFoo);
 ```
+
+Todo miembro que sobreescriba uno de la base lleva **`override`**: los hooks
+(`onConnected`, `onDisconnected`, `onAttributeChanged`, `connectedCallback`,
+`attributeChangedCallback`, `render`, `actualizado`, `initShadow`, `emit`…) y los
+estáticos (`tag`, `css`, `template`, `shadowInit`, `observed`, `deps`). El repo
+tiene `noImplicitOverride` en `tsconfig.json` (lo ve el gate) y en `deno.json`
+(lo ve el editor): un miembro sin `override` es un error **TS4114** en los dos
+lados, y el gate y el LSP deben coincidir. Para migrar código viejo:
+`deno run -A scripts/codemods/override.mjs` (es idempotente y añade el
+modificador donde falte).
 
 Detalle: [`references/states.md`](references/states.md).
 
@@ -271,9 +281,9 @@ registrarTerminos('es', { quitar: 'Quitar' });
 const SHAPES = ['round', 'rect', 'pill'] as const;
 
 class IswcFoo extends IswcReactive {
-  static tag = 'iswc-foo';
-  static css = css;
-  static shadowInit: ShadowRootInit | null = { mode: 'open', delegatesFocus: true };
+  static override tag = 'iswc-foo';
+  static override css = css;
+  static override shadowInit: ShadowRootInit | null = { mode: 'open', delegatesFocus: true };
   declare static events: FooEventos;           // { 'iswc-remove': void }
   @prop({ enum: SHAPES }) accessor shape = 'round';
   @prop() accessor label = '';

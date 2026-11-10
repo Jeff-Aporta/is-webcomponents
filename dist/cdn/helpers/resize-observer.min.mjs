@@ -9,4 +9,4 @@
  * cdn-install: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/is-cdn-install/SKILL.md
  * blob: https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/helpers/resize-observer.js
  */
-import{a as r}from"../_chunks/chunk-J7VFZTU3.mjs";import{l as e}from"../_chunks/chunk-DKYDCFSD.mjs";import"../_chunks/chunk-FZCPQKWI.mjs";import"../_chunks/chunk-UFMSFUKG.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";e(r("resize","iswc-resize-observer"),"IswcResizeObserver");
+import{a as r}from"../_chunks/chunk-HTJCBIZJ.mjs";import{l as e}from"../_chunks/chunk-DKYDCFSD.mjs";import"../_chunks/chunk-FZCPQKWI.mjs";import"../_chunks/chunk-UFMSFUKG.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";e(r("resize","iswc-resize-observer"),"IswcResizeObserver");

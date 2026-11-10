@@ -30,7 +30,7 @@ ejemplo vivo en la galería.
 
 **`<__PREFIJO__-hola-mundo>` — título** `[W-CAT-04]`: un título «Hola mundo». Sin props, atributos ni eventos. Es el molde mínimo de un componente.
 
-**`<__PREFIJO__-hola>` — bienvenida (shell de `hola`)** `[W-CAT-02]`: portada con cejilla «__TITULO__ · iswc», el título `<__PREFIJO__-hola-mundo>`, un lema, el botón «Ver cómo está hecha», cuatro chips (Vanilla, Deno, Zod, SCSS) y cuatro tarjetas: Componentes, Vistas, Tipos, Pruebas (icono, título y texto cada una).
+**`<__PREFIJO__-hola>` — bienvenida (shell de `hola`)** `[W-CAT-02]`: portada con cejilla «__TITULO__ · ISWC», el título `<__PREFIJO__-hola-mundo>`, un lema, el botón «Ver cómo está hecha», cuatro chips (Vanilla, Deno, Zod, SCSS) y cuatro tarjetas: Componentes, Vistas, Tipos, Pruebas (icono, título y texto cada una).
 
 **Modal de la bienvenida** `[W-CAT-03]`: «Ver cómo está hecha» abre un modal «Cómo está hecha» con la regla de los cuatro archivos y los comandos para empezar (`deno install`, `deno task build`, `deno task serve`, `deno task test:all`, uno por línea con su propósito alineado). «Entendido», Esc o un clic fuera lo cierran. Abrir y cerrar se avisan con `__PREFIJO__-hola-modal { abierto }`. `props = { modal = false }` lo abre o cierra desde fuera sin repintar el resto.
 
@@ -57,7 +57,7 @@ ejemplo vivo en la galería.
 
 - [W-COMP-08] Cada componente registrado tiene sus 4 archivos, su `.md` declara las 6 secciones y su `.json` valida contra `iswc-preview/v1`, trae playground y está en la galería (`tests/vistas/contrato-componentes.test.ts`).
 - [W-COMP-09] El dominio de la bienvenida cumple [W-CAT-02] y [W-CAT-03] sin navegador (`tests/vistas/bienvenida`).
-- [W-ICO-04] Los íconos de la app están en `assets/iconify/` [W-ICO-01], `deno.json` declara `iswc.host` [W-ICO-02] y el registrador declara `<html data-icons>` (`tests/iconos`); en e2e, la bienvenida tiene `data-icons` absoluto, pinta sus íconos y los deja en localStorage `iswc:icon:*` (`tests/e2e/00.bienvenida`).
+- [W-ICO-04] Los íconos de la app están en `assets/iconify/` [W-ICO-01], `deno.json` declara `iswc.host` [W-ICO-02] y el registrador declara `<html data-icons>` (`tests/iconos`); en e2e, la bienvenida tiene `data-icons` absoluto, pinta sus íconos y los deja en localStorage `ISWC:icon:*` (`tests/e2e/00.bienvenida`).
 - [W-COMP-10] E2E: la bienvenida arranca, muestra el título y las tarjetas, y el modal se abre y se cierra como lo haría un usuario (`tests/e2e/00.bienvenida`).
 
 ## 7. Notas

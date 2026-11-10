@@ -1,7 +1,7 @@
 ---
 name: iswc-diagramas-enriquecidos
 description: >-
-  Convenciones para dibujar diagramas enriquecidos con el kit iswc (rutas ilustradas de endpoints:
+  Convenciones para dibujar diagramas enriquecidos con el kit ISWC (rutas ilustradas de endpoints:
   flujo con carriles + clases + tablas del DER + componentes; y sus vistas restringidas de secuencia,
   DER y componentes). Usar al crear o modificar el editable JSON de un diagrama de un proyecto
   (ISS, ISW…), al agregar una ruta/EP a la documentación, al conectar un paso con una tabla, una
@@ -84,7 +84,7 @@ generador no pone `fill` a las clases (guardián `flowchart-colores.test.ts`).
   O) y un puerto por **salida** (triángulo sólido a ~34 px del O). Las entradas llevan la acción de BD
   (`SELECT`, `INSERT`…, con su ícono); la salida a su tabla no lleva texto.
 - Los POJOs no se dibujan: el paso nunca toca una tabla directo; siempre paso → puente → tabla.
-- Tablas del DER y componentes que se consumen exponen `-(O-` (convención InSoft): el expositor pone
+- Tablas del DER y componentes que se consumen exponen `-(O-` (convención ISWC): el expositor pone
   el socket `(` y quien consume llega a la bola O con su punta de flecha.
 - **Nada en el aire**: toda arista parte y llega a una entidad. El palo del puente siempre toca su
   controller, por cualquiera de sus 4 lados: abajo mientras la fila quepa en su ancho, luego derecha,
@@ -166,7 +166,7 @@ qué caso** se usa cada una (decisiones con la condición real del código: «¿
 ## 8. Animación y estilo
 
 - Rieles animados con el sentido del flujo (estándar en todos los diagramas; `reverse` por arista).
-- Estilo `insoft` en documentación; `edgeStyle: "bezier"` o `look="sketch"` para bocetos.
+- Estilo `ISWC` en documentación; `edgeStyle: "bezier"` o `look="sketch"` para bocetos.
 
 ## 9. Antes de publicar
 

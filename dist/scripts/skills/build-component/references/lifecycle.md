@@ -49,10 +49,10 @@ import type { FooEventos } from './schemas/foo.schemas.js';
 import css from 'iswc:css';
 
 class IswcFoo extends IswcReactive {
-  static tag = 'iswc-foo';
-  static css = css;
-  static shadowInit: ShadowRootInit | null = { mode: 'open', delegatesFocus: true };
-  static deps = ['iswc-icon'];
+  static override tag = 'iswc-foo';
+  static override css = css;
+  static override shadowInit: ShadowRootInit | null = { mode: 'open', delegatesFocus: true };
+  static override deps = ['iswc-icon'];
   declare static events: FooEventos;
   @prop({ enum: ['filled', 'outlined'] }) accessor variant = 'outlined';
   @prop({ type: 'bool' }) accessor disabled = false;
@@ -120,7 +120,7 @@ El control aporta:
 
 ```ts
 class IswcFoo extends IswcFormControl {
-  static tag = 'iswc-foo';
+  static override tag = 'iswc-foo';
   @prop({ attr: 'value', reflect: false, vacio: true }) accessor value = '';   // el atributo es el valor por defecto
   override valorFormulario() { return this.value || null; }                   // lo que entra en FormData
   override restablecer() { this.value = this.defaultValue; }                   // formResetCallback

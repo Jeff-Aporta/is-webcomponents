@@ -1,7 +1,7 @@
 <!-- @vendor 2026-10-13T14:13:48.240Z Jeff-Aporta/is-webcomponents@main skills/iswc-foundation/templates/CLAUDE.md -->
 # CLAUDE.md — __TITULO__
 
-Contrato completo en [`AGENTS.md`](AGENTS.md). Estándar común de las apps iswc:
+Contrato completo en [`AGENTS.md`](AGENTS.md). Estándar común de las apps ISWC:
 [iswc-foundation](https://github.com/__REPO__/blob/__SHA__/skills/iswc-foundation/SKILL.md).
 
 - Orden: `AGENTS.md` → `specs/README.md` → spec del área → skill de `specs/iswc/`.

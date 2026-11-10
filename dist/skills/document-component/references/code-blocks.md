@@ -1,5 +1,5 @@
 <!-- @vendor 2026-10-13T14:13:48.240Z Jeff-Aporta/is-webcomponents@main skills/document-component/references/code-blocks.md -->
-# Bloques de código en las fichas iswc
+# Bloques de código en las fichas ISWC
 
 Los bloques de código son la **única** fuente de verdad operativa de
 una guía de componente. Si un ejemplo está mal, los agentes copian
