@@ -7,6 +7,7 @@
 import { build } from 'esbuild';
 import { aliasKit } from '@jeff-aporta/iswc-base/cdn/build/alias.ts';
 import { cssVirtual } from '@jeff-aporta/iswc-base/cdn/build/css-virtual.ts';
+import { writeJson, minificarCarpetaJson } from '@jeff-aporta/iswc-base/cdn/build/json.ts';
 import { mkdir, copyFile, readdir, writeFile, cp } from 'node:fs/promises';
 import { existsSync, readdirSync } from 'node:fs';
 import { join, dirname, resolve, relative, basename, sep } from 'node:path';
@@ -31,6 +32,10 @@ const pages = [
   'theming',
   'ecosystem',
 ];
+
+// Pages SOLO de datos (sin .ts que bundlear): su JSON también se publica, minificado, para que
+// el catálogo las pida desde dist/ y no desde src/.
+const pagesSoloJson = ['phase7'];
 
 await mkdir('dist/scripts', { recursive: true });
 await mkdir('dist/pages', { recursive: true });
@@ -185,7 +190,8 @@ for (const name of pages) {
   }
   // Copiar el JSON al dist para que el registry pueda fetcharlo.
   try {
-    await copyFile(`src/pages/${name}.json`, `dist/pages/${name}.json`);
+    // La fuente (src/pages/…) queda legible; la copia que se publica va minificada.
+    await writeJson(`dist/pages/${name}.json`, JSON.parse(readFileSync(`src/pages/${name}.json`, 'utf8')));
     console.log(`  ✓ dist/pages/${name}.json`);
     ok++;
   } catch (err) {
@@ -258,7 +264,8 @@ for (const cat of await readdir(componentsRoot, { withFileTypes: true })) {
     const jsonDst = join(previewsOut, cat.name, entry.name);
     try {
       await mkdir(dirname(jsonDst), { recursive: true });
-      await copyFile(jsonSrc, jsonDst);
+      // La ficha (src/components/…) queda legible; la copia que se publica va minificada.
+      await writeJson(jsonDst, JSON.parse(readFileSync(jsonSrc, 'utf8')));
       jsonCount++;
     } catch (err) {
       // ignore
@@ -323,6 +330,18 @@ for (const cat of await readdir(previewsOut, { withFileTypes: true })) {
 // (`../styles/...`, `./registry.js`, `../../src/cdn/...`) se resuelvan
 // contra dist/ en vez de src/ → 404 en styles/presentation.css y registry.js.
 
+// Las pages solo de datos: JSON minificado en dist/pages/ (la fuente sigue legible en src/pages/).
+for (const name of pagesSoloJson) {
+  try {
+    await writeJson(`dist/pages/${name}.json`, JSON.parse(readFileSync(`src/pages/${name}.json`, 'utf8')));
+    console.log(`  ✓ dist/pages/${name}.json`);
+    ok++;
+  } catch (err) {
+    console.error(`  ✗ dist/pages/${name}.json — ${err}`);
+    failed++;
+  }
+}
+
 // ── Skills: skills/** ya está copiado por build.mjs → dist/cdn/skills/.
 // Aquí evitamos duplicar; el build principal es quien lo hace. Solo
 // verificamos.
@@ -332,6 +351,10 @@ try {
 } catch {
   console.error('  ⚠ dist/cdn/skills no existe — ¿corrió `deno task build`?');
 }
+
+// Invariante B.3: todo .json de dist/ es exactamente JSON.stringify(JSON.parse(x)).
+// Las fichas, las pages, los temas y las plantillas que se copiaron arriba quedan minificados aquí.
+await minificarCarpetaJson('dist');
 
 console.log(`\nOK ${ok} bundleados/copiados (${failed} fallaron) en total.`);
 console.log(`  - ${scripts.length} scripts → dist/scripts/`);

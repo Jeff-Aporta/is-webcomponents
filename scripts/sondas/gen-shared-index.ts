@@ -66,7 +66,7 @@ const distDir = path.join(root, 'dist/previews');
 const distFile = path.join(distDir, 'shared-modules.json');
 try {
   fs.mkdirSync(distDir, { recursive: true });
-  fs.writeFileSync(distFile, payload);
+  fs.writeFileSync(distFile, JSON.stringify(JSON.parse(payload)));
   console.log(`shared-modules.json: espejo → ${path.relative(root, distFile)}`);
 } catch (err) {
   console.error(`⚠ no se pudo escribir el espejo en dist/: ${err instanceof Error ? err.message : err}`);

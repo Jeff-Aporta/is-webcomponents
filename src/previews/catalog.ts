@@ -873,7 +873,7 @@ export default {
     "category": "overlays"
   },
   "phase7": {
-    "json": "../pages/phase7.json",
+    "json": "../../dist/pages/phase7.json",
     "category": ""
   },
   "theming": {

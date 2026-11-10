@@ -18,6 +18,7 @@ import { packageJson } from '@jeff-aporta/iswc-base/cdn/build/npm.ts';
 import { barrerHashes } from '@jeff-aporta/iswc-base/cdn/build/sync-hashes.ts';
 import { hashesRepetidos } from '@jeff-aporta/iswc-base/cdn/build/hash.ts';
 import { stampDirectory, mjsReferenciadosEn, hashFile, rewriteHtmlTree, hashesJson, applyHashToHtml, ASSET_HASHES_NAME } from '@jeff-aporta/iswc-base/cdn/build/stamp-hashes.ts';
+import { writeJson, minificarCarpetaJson } from '@jeff-aporta/iswc-base/cdn/build/json.ts';
 import { construirAi } from './build-ai.mjs';
 
 const here = dirname(fileURLToPath(import.meta.url));
@@ -433,7 +434,7 @@ let tagsKit;
   await writeFile(join(root, '.tmp', 'metafile-kit.json'), JSON.stringify(kit.metafile), 'utf8');
   exportsKit = exportsJson(grafo);
   tagsKit = tags;
-  await writeFile(join(dist, 'exports.json'), JSON.stringify(exportsKit, null, 2) + '\n', 'utf8');
+  await writeJson(join(dist, 'exports.json'), exportsKit);
   console.log(`  ${'deps.json'.padEnd(18)} ${Object.keys(deps.tags).length} tags + ${Object.keys(deps.core).length} core · exports.json`);
 }
 
@@ -454,8 +455,8 @@ for (const ruta of compartidos) delete hashes[ruta];
 {
   const partido = partirDeps(conVersiones(deps, hashes, compartidos), (tag) => loaderCatalog.tags[tag].category);
   await mkdir(join(dist, 'deps'), { recursive: true });
-  for (const [cat, parte] of Object.entries(partido.partes)) await writeFile(join(dist, 'deps', `${cat}.json`), JSON.stringify(parte) + '\n', 'utf8');
-  await writeFile(join(dist, 'deps.json'), JSON.stringify(partido.indice) + '\n', 'utf8');
+  for (const [cat, parte] of Object.entries(partido.partes)) await writeJson(join(dist, 'deps', `${cat}.json`), parte);
+  await writeJson(join(dist, 'deps.json'), partido.indice);
   console.log(`  ${'deps/'.padEnd(18)} ${Object.keys(partido.partes).length} partes · ${compartidos.size} módulos compartidos sin ?v=`);
 }
 const addHash = async (key, abs) => {
@@ -506,11 +507,7 @@ console.log(`  ${'build/'.padEnd(18)} ts vendor (hash + bundle)`);
 
 // importmap.json: la entrada del alias que un consumidor pega tal cual en su `<script type="importmap">` o en
 // su `deno.json` (specs/cdn.md §Alias). El SHA es el del build; `pin-update` lo mueve después.
-await writeFile(
-  join(dist, 'importmap.json'),
-  JSON.stringify({ imports: { [ALIAS_KIT]: `https://cdn.jsdelivr.net/gh/${REPO_GITHUB}@${sha}/dist/cdn/` }, scopes: {} }, null, 2) + '\n',
-  'utf8',
-);
+await writeJson(join(dist, 'importmap.json'), { imports: { [ALIAS_KIT]: `https://cdn.jsdelivr.net/gh/${REPO_GITHUB}@${sha}/dist/cdn/` }, scopes: {} });
 console.log(`  ${'importmap.json'.padEnd(18)} alias ${ALIAS_KIT} → dist/cdn/@<sha>`);
 
 // vendor-distributions/: TODO lo que un consumidor trae por vendor (tools/vendor.ts), por PERFIL:
@@ -549,7 +546,8 @@ await mkdir(themesOut, { recursive: true });
 let nTemas = 0;
 for (const name of await readdir(themesSrc)) {
   if (!name.endsWith('.json')) continue;
-  await copyFile(join(themesSrc, name), join(themesOut, name));
+  // La fuente (src/…) queda legible; la copia que se publica va minificada.
+  await writeJson(join(themesOut, name), JSON.parse(await readFile(join(themesSrc, name), 'utf8')));
   nTemas++;
 }
 console.log(`  ${'diagrams/themes/'.padEnd(18)} ${nTemas} temas (carga diferida por diagram-style)`);
@@ -557,7 +555,7 @@ console.log(`  ${'diagrams/themes/'.padEnd(18)} ${nTemas} temas (carga diferida 
 // para consumidores y auditoría (la fuente es routing-costs.ts).
 {
   const { ROUTING_COSTS_DEFAULTS } = await import(pathToFileURL(join(root, 'src', 'components', 'diagrams', 'utils', 'diagram-routing.ts')).href);
-  await writeFile(join(dist, 'diagrams', 'routing-costs.json'), JSON.stringify(ROUTING_COSTS_DEFAULTS, null, 2) + '\n', 'utf8');
+  await writeJson(join(dist, 'diagrams', 'routing-costs.json'), ROUTING_COSTS_DEFAULTS);
   console.log(`  ${'diagrams/'.padEnd(18)} routing-costs.json (campo de costos compartido)`);
 }
 
@@ -595,4 +593,6 @@ try { await unlink(join(dist, 'all.min.js')); } catch { /* leftover */ }
   console.log(`  ${'package.json'.padEnd(18)} ${pkg.version} · ${Object.keys(pkg.exports).length} exports · ${pkg.sideEffects.length} sideEffects`);
 }
 
+// Invariante B.3: todo .json de dist/cdn es JSON.stringify(JSON.parse(x)).
+await minificarCarpetaJson(dist);
 console.log(`OK dist/cdn  ${entradasComp.length} módulos de componentes + core + lib + loader (${nChunks} chunks) + gallery-app`);

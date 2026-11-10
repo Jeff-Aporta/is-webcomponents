@@ -222,5 +222,6 @@ export async function rewriteHtmlTree(dir: string, files: Record<string, string>
 export function hashesJson(files: Record<string, string>): string {
   const ordered: Record<string, string> = {};
   for (const key of Object.keys(files).sort()) ordered[key] = files[key];
-  return `${JSON.stringify({ v: 1, files: ordered }, null, 2)}\n`;
+  // Minificado: este JSON viaja al navegador (lo pide el loader y la galería).
+  return JSON.stringify({ v: 1, files: ordered });
 }
