@@ -33,7 +33,7 @@ import './share-button.js';
 ## Ejemplo mínimo
 
 ```html
-<iswc-share-button share-title="PatyIA" text="Mira este reporte" url="https://insoft.com.co"></iswc-share-button>
+<iswc-share-button share-title="PatyIA" text="Mira este reporte" url="https://acme.example"></iswc-share-button>
 ```
 
 ## API

@@ -5,7 +5,7 @@ import type { SequenceActorSpec, SequenceFragmentSpec, SequenceMessageSpec } fro
  * Contratos de `<iswc-server-api-docs>` (W54: los tipos viven en *.schemas.ts).
  *
  * Dos capas:
- *   1. ENTRADA — el documento que publica un server: el documento InSoft `kind:"config"` (el que sirve
+ *   1. ENTRADA — el documento que publica un server: el documento iswc `kind:"config"` (el que sirve
  *      el ISS en `GET /api/docs?v=json`) u OpenAPI 3. Tolerante a propósito (`.loose()`): las claves
  *      que el visor no lee pasan y un documento viejo sigue cargando; lo que sí se exige es lo que el
  *      visor usa para pintar (summary, templates conocidos, ids de catálogo que resuelven). El server
@@ -13,7 +13,7 @@ import type { SequenceActorSpec, SequenceFragmentSpec, SequenceMessageSpec } fro
  *   2. MODELO — lo que el visor pinta, ya normalizado desde cualquiera de los dos formatos.
  */
 
-// ── Entrada: documento InSoft `kind:"config"` ────────────────────────────────
+// ── Entrada: documento iswc `kind:"config"` ────────────────────────────────
 
 export const METODOS_API = ['get', 'post', 'put', 'patch', 'delete', 'query', 'options', 'head'] as const;
 export const ServerApiDocsMetodoSchema = z.enum(METODOS_API);
@@ -23,9 +23,9 @@ const TEMPLATES_RESPUESTA = ['ok', 'auth', 'authForbidden', 'authNotFound', 'del
 
 const ObjetoJsonSchema = z.record(z.string(), z.unknown());
 
-const InsoftServidorSchema = z.object({ url: z.string().min(1), description: z.string().optional() }).loose();
+const iswcServidorSchema = z.object({ url: z.string().min(1), description: z.string().optional() }).loose();
 
-const InsoftNavSchema = z.object({
+const iswcNavSchema = z.object({
   id: z.string().min(1),
   label: z.string().min(1),
   icon: z.string().optional(),
@@ -33,7 +33,7 @@ const InsoftNavSchema = z.object({
   requiresSession: z.boolean().optional(),
 }).loose();
 
-const InsoftAuthSchema = z.object({
+const iswcAuthSchema = z.object({
   enabled: z.boolean().optional(),
   loginKind: z.string().optional(),
   loginPath: z.string().optional(),
@@ -42,29 +42,29 @@ const InsoftAuthSchema = z.object({
   provider: z.string().optional(),
 }).loose();
 
-const InsoftViewerSchema = z.object({
+const iswcViewerSchema = z.object({
   ns: z.string().optional(),
   brand: z.object({ title: z.string().optional(), icon: z.string().optional() }).loose().optional(),
-  auth: InsoftAuthSchema.optional(),
+  auth: iswcAuthSchema.optional(),
   exports: z.record(z.string(), z.string()).optional(),
-  nav: z.array(InsoftNavSchema).optional(),
-  servers: z.array(InsoftServidorSchema).optional(),
+  nav: z.array(iswcNavSchema).optional(),
+  servers: z.array(iswcServidorSchema).optional(),
 }).loose();
 
-const InsoftSubgrupoSchema = z.object({
+const iswcSubgrupoSchema = z.object({
   id: z.string().min(1),
   name: z.string().optional(),
   icon: z.string().optional(),
   description: z.string().optional(),
 }).loose();
 
-const InsoftTagSchema = z.object({
+const iswcTagSchema = z.object({
   name: z.string().min(1),
   description: z.string().optional(),
-  subgroups: z.array(InsoftSubgrupoSchema).optional(),
+  subgroups: z.array(iswcSubgrupoSchema).optional(),
 }).loose();
 
-const InsoftParametroSchema = z.object({
+const iswcParametroSchema = z.object({
   name: z.string().min(1),
   in: z.enum(['path', 'query', 'header', 'cookie']),
   required: z.boolean().optional(),
@@ -73,7 +73,7 @@ const InsoftParametroSchema = z.object({
   example: z.unknown().optional(),
 }).loose();
 
-const InsoftRespuestasSchema = z.object({
+const iswcRespuestasSchema = z.object({
   template: z.enum(TEMPLATES_RESPUESTA),
   description: z.string().optional(),
   payload: z.string().optional(),
@@ -84,14 +84,14 @@ const InsoftRespuestasSchema = z.object({
   ).optional(),
 }).loose();
 
-const InsoftOperacionSchema = z.object({
+const iswcOperacionSchema = z.object({
   summary: z.string().min(1),
   description: z.string().optional(),
   tags: z.array(z.string()).optional(),
   subgroup: z.string().optional(),
   security: z.enum(['bearer', 'Bearer', 'none']).optional(),
   doc: z.string().optional(),
-  parameters: z.array(InsoftParametroSchema).optional(),
+  parameters: z.array(iswcParametroSchema).optional(),
   requestBody: z.object({
     bodyKey: z.string().optional(),
     required: z.boolean().optional(),
@@ -100,37 +100,37 @@ const InsoftOperacionSchema = z.object({
     schema: ObjetoJsonSchema.optional(),
     example: z.unknown().optional(),
   }).loose().optional(),
-  responses: InsoftRespuestasSchema.optional(),
+  responses: iswcRespuestasSchema.optional(),
   tryitConfirm: z.string().optional(),
   tryitAttachments: z.union([z.string(), ObjetoJsonSchema]).optional(),
 }).loose();
 
-const InsoftAdjuntoSchema = z.object({
+const iswcAdjuntoSchema = z.object({
   field: z.string().min(1),
   max: z.number().int().min(1).optional(),
   encoding: z.string().optional(),
 }).loose();
 
-const InsoftCatalogSchema = z.object({
+const iswcCatalogSchema = z.object({
   docs: z.record(z.string(), z.string()).optional(),
   payloads: ObjetoJsonSchema.optional(),
   requestBodies: ObjetoJsonSchema.optional(),
   schemas: z.record(z.string(), ObjetoJsonSchema).optional(),
   tryitConfirm: z.record(z.string(), z.object({ title: z.string().optional(), message: z.string().optional() }).loose()).optional(),
   tryitAttachments: z.object({
-    templates: z.record(z.string(), z.object({ images: InsoftAdjuntoSchema.optional(), audios: InsoftAdjuntoSchema.optional() }).loose()).optional(),
+    templates: z.record(z.string(), z.object({ images: iswcAdjuntoSchema.optional(), audios: iswcAdjuntoSchema.optional() }).loose()).optional(),
   }).loose().optional(),
 }).loose();
 
-/** El documento InSoft `kind:"config"` con su integridad referencial (lo que un id nombra existe). */
-export const InsoftDocumentoSchema = z.object({
+/** El documento iswc `kind:"config"` con su integridad referencial (lo que un id nombra existe). */
+export const iswcDocumentoSchema = z.object({
   kind: z.literal('config'),
   version: z.number().optional(),
   info: z.object({ title: z.string().min(1), version: z.string().optional(), description: z.string().optional() }).loose().optional(),
-  viewer: InsoftViewerSchema.optional(),
-  tags: z.array(InsoftTagSchema).optional(),
-  paths: z.record(z.string().startsWith('/', 'la ruta empieza por /'), z.partialRecord(ServerApiDocsMetodoSchema, InsoftOperacionSchema)),
-  catalog: InsoftCatalogSchema.optional(),
+  viewer: iswcViewerSchema.optional(),
+  tags: z.array(iswcTagSchema).optional(),
+  paths: z.record(z.string().startsWith('/', 'la ruta empieza por /'), z.partialRecord(ServerApiDocsMetodoSchema, iswcOperacionSchema)),
+  catalog: iswcCatalogSchema.optional(),
 }).loose().superRefine((d, ctx) => {
   const cat = d.catalog ?? {};
   const falta = (path: PropertyKey[], que: string, id: string) => ctx.addIssue({ code: 'custom', path, message: `«${id}» no existe en ${que}` });
@@ -167,7 +167,7 @@ export const InsoftDocumentoSchema = z.object({
 export const OpenApiDocumentoSchema = z.object({
   openapi: z.string().regex(/^3\./, 'openapi 3.x'),
   info: z.object({ title: z.string().min(1), version: z.string().optional(), description: z.string().optional() }).loose(),
-  servers: z.array(InsoftServidorSchema).optional(),
+  servers: z.array(iswcServidorSchema).optional(),
   tags: z.array(z.object({ name: z.string().min(1), description: z.string().optional() }).loose()).optional(),
   paths: z.record(z.string().startsWith('/', 'la ruta empieza por /'), z.record(z.string(), z.unknown())),
   components: z.object({ schemas: z.record(z.string(), ObjetoJsonSchema).optional() }).loose().optional(),
@@ -176,12 +176,12 @@ export const OpenApiDocumentoSchema = z.object({
 /** Resultado de validar la entrada: cada error con su ruta JSON (`paths › /x › get › doc: …`). */
 const ServerApiDocsValidacionSchema = z.object({
   ok: z.boolean(),
-  formato: z.enum(['insoft', 'openapi', 'desconocido']),
+  formato: z.enum(['iswc', 'openapi', 'desconocido']),
   errores: z.array(z.string()),
 });
 export type ServerApiDocsValidacion = z.infer<typeof ServerApiDocsValidacionSchema>;
 
-/** ¿El documento admite el parse estricto (InSoft v2)? `aplica: false` para OpenAPI 3. */
+/** ¿El documento admite el parse estricto (iswc v2)? `aplica: false` para OpenAPI 3. */
 const ServerApiDocsEstrictoSchema = z.object({ aplica: z.boolean(), ok: z.boolean(), errores: z.array(z.string()) });
 export type ServerApiDocsEstricto = z.infer<typeof ServerApiDocsEstrictoSchema>;
 
@@ -219,7 +219,7 @@ const ServerApiDocsOperacionSchema = z.object({
   subgrupo: z.string(),
   /** Exige `Authorization: Bearer`. */
   sesion: z.boolean(),
-  /** Permiso que exige (`permission` InSoft o `x-permission` OpenAPI; `''` si no lo declara). */
+  /** Permiso que exige (`permission` iswc o `x-permission` OpenAPI; `''` si no lo declara). */
   permiso: z.string(),
   /** Controller que lo atiende (`TClase.metodo`; `''` si no lo declara). */
   controller: z.string(),
@@ -246,7 +246,7 @@ const ServerApiDocsAuthSchema = z.object({
 export type ServerApiDocsAuth = z.infer<typeof ServerApiDocsAuthSchema>;
 
 export const ServerApiDocsModeloSchema = z.object({
-  formato: z.enum(['insoft', 'openapi']),
+  formato: z.enum(['iswc', 'openapi']),
   titulo: z.string(),
   version: z.string(),
   descripcion: z.string(),
@@ -299,5 +299,5 @@ export type ServerApiDocsLayout = HTMLElement & {
 export type ServerApiDocsIndice = HTMLElement & { items: unknown[]; current: string; textos: Partial<{ placeholder: string; sinResultados: string; resumen: string }>; focusSearch(): void };
 export type ServerApiDocsCampo = HTMLElement & { value: string };
 
-/** Payload de `<iswc-sequence-diagram>` que arma `secuenciaDeOperacion` (el visor lo pinta con `diagram-style="insoft"`). */
+/** Payload de `<iswc-sequence-diagram>` que arma `secuenciaDeOperacion` (el visor lo pinta con `diagram-style="iswc"`). */
 export type ServerApiDocsSecuencia = { sequence: { title: string; actors: SequenceActorSpec[]; messages: SequenceMessageSpec[]; fragments: SequenceFragmentSpec[] } };

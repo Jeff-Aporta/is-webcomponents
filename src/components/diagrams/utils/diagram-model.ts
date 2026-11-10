@@ -209,7 +209,7 @@ if (!STORE.nodes.size) {
   N({ id: 'lifeline', label: 'Línea de vida', usage: 'Participante de secuencia: caja con icono y línea vertical punteada.', recommendedFor: ['sequence'], fields: ['label', 'kind', 'icon', 'hue'] });
   N({ id: 'region', label: 'Región', usage: 'Franja horizontal que agrupa mensajes o procesos (par, loop, opt, async). Dice que lo de adentro ocurre junto o repetido.', recommendedFor: ['sequence', 'swimlane'], fields: ['name', 'kind', 'messages', 'color'], container: true, icon: false });
   N({ id: 'participant-box', label: 'Caja de participantes', usage: 'Región vertical que agrupa líneas de vida por sistema (ISS, Servicios).', recommendedFor: ['sequence'], fields: ['name', 'actors', 'color'], container: true, icon: false });
-  N({ id: 'entity', label: 'Entidad', usage: 'Tabla con atributos y llaves; el relleno naranja es exclusivo del DER InSoft.', recommendedFor: ['er'], fields: ['name', 'attributes', 'cluster'] });
+  N({ id: 'entity', label: 'Entidad', usage: 'Tabla con atributos y llaves; el relleno naranja es exclusivo del DER iswc.', recommendedFor: ['er'], fields: ['name', 'attributes', 'cluster'] });
   N({ id: 'note', label: 'Nota', usage: 'Texto libre pegado a un nodo o flotante.', recommendedFor: ['component', 'class', 'er', 'sequence', 'flowchart'], fields: ['text', 'target'], icon: false });
 }
 

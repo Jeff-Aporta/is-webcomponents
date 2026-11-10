@@ -2,7 +2,7 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://iswebcomponents.local/schemas/section-schema.json",
   "title": "FichaSectionSchema",
-  "description": "Spec declarativo de las 9 secciones estándar de una ficha de componente (iswc). Una ficha es el JSON que alimenta al generador de páginas /docs/<tag>.html a partir del .md + manifest. Si una sección no aplica al componente, debe declararse en `exclude` para que la validación no warnée.",
+  "description": "Spec declarativo de las 9 secciones estándar de una ficha de componente (ISWC). Una ficha es el JSON que alimenta al generador de páginas /docs/<tag>.html a partir del .md + manifest. Si una sección no aplica al componente, debe declararse en `exclude` para que la validación no warnée.",
   "version": "1.0.0",
   "type": "object",
   "additionalProperties": false,

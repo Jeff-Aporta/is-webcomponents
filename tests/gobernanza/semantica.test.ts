@@ -2,7 +2,7 @@
 // réplica de la calibración 74 del ISS (`tests/unit/74-semantica-what.test.ts`). SIN RED: si el modelo
 // `multilingual-e5-base` no está en el equipo, se SALTA con motivo (nunca verde por omisión).
 //   S1 el modelo carga sin red; el mismo texto da 1; `semanticaDisponible` acompaña.
-//   S2 pares relacionados (español, dominio ContaPyme) quedan >= UMBRAL_COINCIDE.
+//   S2 pares relacionados (español, dominio Acme) quedan >= UMBRAL_COINCIDE.
 //   S3 pares NO relacionados quedan por debajo del umbral, con separación real (>= 0,03).
 //   S4 `prefiere` separa orientaciones (respuesta útil vs rechazo vs aclaración) con margen; una meta-descripción no separa.
 //   S5 `masCercana` clasifica respuestas típicas del asistente.
@@ -52,13 +52,13 @@ denoTest({
     assert(no.every((r) => r.sim < UMBRAL_COINCIDE), `S3 no relacionados < ${UMBRAL_COINCIDE}: ${JSON.stringify(no)}`);
     assert(minRel - maxNo >= 0.03, `S3 separación real: minRel=${minRel} maxNo=${maxNo}`);
 
-    const respuestaUtil = 'Para activar la facturación electrónica en ContaPyme debes ir a Configuración, pestaña DIAN, cargar el certificado digital, registrar la resolución y habilitar el envío. Luego prueba con una factura de ejemplo.';
-    const rechazo = 'Lo siento, no puedo ayudarte con eso. Esa consulta no corresponde a los módulos de ContaPyme.';
+    const respuestaUtil = 'Para activar la facturación electrónica en Acme debes ir a Configuración, pestaña DIAN, cargar el certificado digital, registrar la resolución y habilitar el envío. Luego prueba con una factura de ejemplo.';
+    const rechazo = 'Lo siento, no puedo ayudarte con eso. Esa consulta no corresponde a los módulos de Acme.';
     const pedirRepetir = 'No logré entender tu mensaje, ¿podrías repetirlo con más detalle?';
     // Las orientaciones se escriben como TEXTOS PLAUSIBLES del asistente (ejemplares), no como meta-descripciones.
     const ORIENTACION = {
-      guia: 'Para hacerlo en ContaPyme ve al módulo correspondiente, abre la opción indicada y sigue estos pasos: primero, segundo y tercero.',
-      rechazo: 'Lo siento, no puedo ayudarte con esa consulta porque no corresponde a ContaPyme.',
+      guia: 'Para hacerlo en Acme ve al módulo correspondiente, abre la opción indicada y sigue estos pasos: primero, segundo y tercero.',
+      rechazo: 'Lo siento, no puedo ayudarte con esa consulta porque no corresponde a Acme.',
       aclaracion: 'No entendí bien tu pregunta, ¿me la puedes repetir o dar más detalles?',
       color: 'La imagen es de un solo color: rojo.',
     };

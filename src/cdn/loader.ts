@@ -187,7 +187,7 @@ const state: LoaderState = {
     ['iswc-doc-demo-host',   { href: 'cdn:preview/doc-demo-host.min.mjs', type: 'module' }],
     // SPA de la galería (fuera de dist/cdn/; relativo a la página).
     ['iswc-gallery-app',     { href: 'dist/gallery-app.min.js', type: 'module' }],
-    // Tema ER InSoft (json2css + resolveErTheme). Sin CE nuevo.
+    // Tema ER iswc (json2css + resolveErTheme). Sin CE nuevo.
     ['iswc-diagram-theme',   { href: 'cdn:diagrams/theme.min.mjs', type: 'module' }],
   ]),
   pageStyles: new Map<string, string>([

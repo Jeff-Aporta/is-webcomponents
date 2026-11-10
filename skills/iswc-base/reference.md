@@ -52,7 +52,7 @@ Usar este mapa al elegir tag. API exacta: MD del módulo en el repo.
 | Timeline | `iswc-timeline` | lista vertical custom |
 | Icono | `iswc-icon` | Iconify script / img SVG |
 | Formato fecha/número/bytes | `iswc-format-*` / `iswc-relative-time` | Intl wrappers propios |
-| Form ContaPyme | `iswc-form` (+ json2html/html2json) | form React |
+| Form Acme | `iswc-form` (+ json2html/html2json) | form React |
 | Toolbar de acciones ISP | `iswc-flex-options` | flex de botones nativos / reinventar FlexOptions |
 | Tools hover ancladas | `iswc-float-card` | `display:none` + recrear DOM; `iswc-floating` interno; `iswc-popover` (es click) |
 | Título / texto ISP | `iswc-heading` / `iswc-text` | typography casera en apps ISP |

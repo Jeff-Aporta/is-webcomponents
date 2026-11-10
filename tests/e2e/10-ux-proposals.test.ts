@@ -4212,7 +4212,7 @@ test('g08 combobox: contrato ARIA + teclado (proposals 23-28)', { timeout: 60_00
 // ---------------------------------------------------------------------------
 // g15: pages-gallery (Cat 29+) — proposals UX/UI demo-g15.md
 //
-// Verifica el contrato ARIA de las tres pages de InSoft:
+// Verifica el contrato ARIA de las tres pages de iswc:
 //
 //   - ecosystem: secciones con role=region + ariaLabel descriptivo, filtro de
 //     búsqueda con aria-describedby hacia el contador, contador con

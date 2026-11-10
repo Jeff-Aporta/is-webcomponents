@@ -51,7 +51,7 @@ export const FLOW_SHAPES: Set<string> = new Set([
 ]);
 
 /**
- * Estilo insoft: pastilla de una acción (número de paso + ícono) a la izquierda del texto. Alto 22,
+ * Estilo iswc: pastilla de una acción (número de paso + ícono) a la izquierda del texto. Alto 22,
  * relleno de 6 por lado, ícono de 14, 4 entre número e ícono y 8 de aire hasta el texto.
  */
 export const FLOW_PILL_H = 22;
@@ -445,7 +445,7 @@ export function computeFlowchartLayout(
   // las vueltas de etiquetas se detienen al agotarlo (el navegador no se cuelga). Es trabajo y no reloj:
   // con reloj, la carga del equipo cortaba antes y la misma entrada daba otro diagrama.
   let trabajoUsos = 0;
-  const insoft = opts.style === 'insoft';
+  const iswc = opts.style === 'iswc';
   const title = spec.title ?? '';
   const subtitle = spec.subtitle ?? '';
   const hasHeader = !!(title || subtitle);
@@ -463,13 +463,13 @@ export function computeFlowchartLayout(
   const specByIdPre = new Map<string, FlowNodeSpec>(spec.nodes.map((n) => [n.id, n]));
   // Numeración automática: la pastilla de cada acción se mide con el número más ancho (N), y los
   // números reales se ponen después de colocar (orden de lectura).
-  const autoSteps = insoft && spec.steps === 'auto';
+  const autoSteps = iswc && spec.steps === 'auto';
   const numerables = autoSteps ? spec.nodes.filter(esNumerable) : [];
   const sized: FlowSizedNode[] = spec.nodes.map((n0) => {
     const n = autoSteps
       ? { ...n0, step: esNumerable(n0) ? numerables.length : undefined, icon: n0.icon ?? (esNumerable(n0) ? iconoPorDefecto(n0) : undefined) }
       : n0;
-    const special = sizeEmbedNode(n, opts) ?? (insoft ? sizeInsoftNode(n, opts) : null);
+    const special = sizeEmbedNode(n, opts) ?? (iswc ? sizeIswcNode(n, opts) : null);
     if (special) return special;
     const w = nodeWidth(n.label, n.shape);
     const baseH = nodeHeight(n.shape);
@@ -483,9 +483,9 @@ export function computeFlowchartLayout(
     return { id: n.id, w, h: baseH };
   });
 
-  // Insoft: las acciones comparten un ancho homogéneo (el de la más ancha; el texto ya parte en
-  // INSOFT.actionText, así que queda acotado): la columna se lee pareja, sin cajas irregulares.
-  if (insoft) {
+  // iswc: las acciones comparten un ancho homogéneo (el de la más ancha; el texto ya parte en
+  // ISWC.actionText, así que queda acotado): la columna se lee pareja, sin cajas irregulares.
+  if (iswc) {
     const esAccion = (z: FlowSizedNode): boolean => {
       const n = specByIdPre.get(z.id);
       return !!n && !n.embed && (n.shape ?? 'rect') === 'rect';
@@ -494,7 +494,7 @@ export function computeFlowchartLayout(
     const ancho = Math.max(0, ...acciones.map((z) => z.w));
     for (const z of acciones) {
       z.w = ancho;
-      if (z.textBox) z.textBox = { ...z.textBox, w: ancho - INSOFT.actionPadX * 2 };
+      if (z.textBox) z.textBox = { ...z.textBox, w: ancho - ISWC.actionPadX * 2 };
     }
   }
 
@@ -503,10 +503,10 @@ export function computeFlowchartLayout(
     for (const z of sized) if (specByIdPre.get(z.id)?.shape === 'bar') [z.w, z.h] = [z.h, z.w];
   }
   // Punto de convergencia (barra con 2+ entradas y una sola salida): un ⦿, no una barra.
-  const uniones = insoft ? unionesDe(spec) : new Set<string>();
+  const uniones = iswc ? unionesDe(spec) : new Set<string>();
   for (const z of sized) if (uniones.has(z.id)) [z.w, z.h] = [FLOW_TERMINAL_D, FLOW_TERMINAL_D];
   const hasEdgeLabels = spec.edges.some((e) => e.label);
-  const lanesOn = insoft && !!spec.lanes?.length;
+  const lanesOn = iswc && !!spec.lanes?.length;
   // Comentarios: no son pasos del flujo; van pegados al nodo que señalan (su espacio se reserva ahí).
   const comentados = new Map<string, FlowSizedNode>();
   for (const n of spec.nodes) {
@@ -517,9 +517,9 @@ export function computeFlowchartLayout(
   const esComentario = new Set(spec.nodes.filter((n) => n.shape === 'comment' && n.about && specByIdPre.has(n.about)).map((n) => n.id));
   const enFlujo = sized.filter((z) => !esComentario.has(z.id));
   const placed: FlowPlacement = lanesOn
-    ? placeLanes(enFlujo, spec, hasEdgeLabels ? INSOFT.labelLayerGap : INSOFT.layerGap, INSOFT.nodeGap, measurer(opts), comentados)
-    : insoft && spec.direction === 'TB'
-    ? placeInsoft(enFlujo, spec.edges, hasEdgeLabels ? INSOFT.labelLayerGap : INSOFT.layerGap, INSOFT.nodeGap)
+    ? placeLanes(enFlujo, spec, hasEdgeLabels ? ISWC.labelLayerGap : ISWC.layerGap, ISWC.nodeGap, measurer(opts), comentados)
+    : iswc && spec.direction === 'TB'
+    ? placeIswc(enFlujo, spec.edges, hasEdgeLabels ? ISWC.labelLayerGap : ISWC.layerGap, ISWC.nodeGap)
     : layoutNodeLink(sized, spec.edges, {
       direction: spec.direction,
       layerGap: hasEdgeLabels ? 80 : 64,
@@ -533,10 +533,10 @@ export function computeFlowchartLayout(
   const conPuentes = new Set(spec.nodes.filter((n) => n.bridge).map((n) => n.bridge!.of));
   const groupHue = new Map<string, number>((spec.groups ?? []).map((g) => [g.id, g.hue]));
 
-  // Insoft: el margen respeta la rejilla de 8 px, así los centros y vértices
+  // iswc: el margen respeta la rejilla de 8 px, así los centros y vértices
   // de los nodos son anclas exactas para el router ortogonal.
-  const offsetX = insoft ? ceilDiagramGrid(MARGIN.left, 8) : MARGIN.left;
-  const offsetY = insoft ? ceilDiagramGrid(MARGIN.top + headerH, 8) : MARGIN.top + headerH;
+  const offsetX = iswc ? ceilDiagramGrid(MARGIN.left, 8) : MARGIN.left;
+  const offsetY = iswc ? ceilDiagramGrid(MARGIN.top + headerH, 8) : MARGIN.top + headerH;
   const zones = spec.exclusionZones ?? [];
 
   const nodes: FlowLayoutNode[] = placed.nodes.map((n) => {
@@ -565,9 +565,9 @@ export function computeFlowchartLayout(
     };
   });
 
-  if (insoft) colocarComentarios(nodes, spec, sizedById, offsetX + placed.width, overrides?.nodes, { x: offsetX, y: offsetY });
+  if (iswc) colocarComentarios(nodes, spec, sizedById, offsetX + placed.width, overrides?.nodes, { x: offsetX, y: offsetY });
   if (autoSteps) numerarEnOrden(nodes, specById, spec.laneDirection === 'horizontal', spec.edges);
-  if (insoft) insignias(nodes);
+  if (iswc) insignias(nodes);
 
   const legendGroups = spec.groups?.length ? spec.groups : undefined;
   const legendW = legendGroups
@@ -609,10 +609,10 @@ export function computeFlowchartLayout(
   // Zonas de exclusión: ni nodos (ya nudgeados) ni aristas pueden cruzarlas.
   blockExclusionZones(grid, zones, offsetX, offsetY);
 
-  const insoftSegs: FlowSegment[] = [];
-  const abanico = insoft ? salidasEnAbanico(spec.edges, posById, byId, placed.primaryChild, spec.direction) : new Map<number, FlowPoint>();
-  const enBarra = insoft ? puntosEnBarras(spec.edges, posById) : new Map<string, FlowPoint>();
-  const consumeSocket = insoft ? predicadoSocket(spec) : () => false;
+  const iswcSegs: FlowSegment[] = [];
+  const abanico = iswc ? salidasEnAbanico(spec.edges, posById, byId, placed.primaryChild, spec.direction) : new Map<number, FlowPoint>();
+  const enBarra = iswc ? puntosEnBarras(spec.edges, posById) : new Map<string, FlowPoint>();
+  const consumeSocket = iswc ? predicadoSocket(spec) : () => false;
   /** Punta compartida y rieles de las aristas de uso que llegan a un mismo costado (abanico). */
   const rielesUso = new Map<string, { punta?: FlowPoint; rieles: number[] }>();
   /** Costados de salida y llegada de cada arista. */
@@ -622,17 +622,17 @@ export function computeFlowchartLayout(
     const fromMeta = byId.get(e.from);
     const toMeta = byId.get(e.to);
     if (!from || !to || !fromMeta || !toMeta) return null;
-    const sides = insoft
-      ? insoftSides(fromMeta, toMeta, from, to, specById.get(e.from)?.shape, placed.primaryChild?.get(e.from), spec.direction, conPuentes.has(e.from), nodes)
+    const sides = iswc
+      ? iswcSides(fromMeta, toMeta, from, to, specById.get(e.from)?.shape, placed.primaryChild?.get(e.from), spec.direction, conPuentes.has(e.from), nodes)
       : pickSides(fromMeta, toMeta, spec.direction);
     // La respuesta desde un fin siempre sale por abajo (por los costados llegan las ramas).
-    if (insoft && specById.get(e.from)?.shape === 'end') (sides as { fromSide: string }).fromSide = 'bottom';
+    if (iswc && specById.get(e.from)?.shape === 'end') (sides as { fromSide: string }).fromSide = 'bottom';
     // `pickSides` devuelve `sides` con `fromSide`/`toSide` como `string` (no
     // tipado en el helper); los narrow explícitos aquí para mantener el
     // contrato BoxSide en el resto del pipeline.
     return { fromSide: sides.fromSide as AnchorSide, toSide: sides.toSide as AnchorSide };
   });
-  const puertoDeArista = insoft ? puertosEnPerimetro(spec.edges, ladosDe, posById, specById) : new Map<string, FlowPoint>();
+  const puertoDeArista = iswc ? puertosEnPerimetro(spec.edges, ladosDe, posById, specById) : new Map<string, FlowPoint>();
   const routed: Array<FlowLayoutEdge | null> = spec.edges.map((e, i) => {
     const from = posById.get(e.from);
     const to = posById.get(e.to);
@@ -669,7 +669,7 @@ export function computeFlowchartLayout(
       ? routeOrthogonal(aGrid, bGrid, grid, { waypoints: wpGrid })
       : routeOrthogonal(aGrid, bGrid, grid);
 
-    // Insoft: primero rutas limpias (recta, L, Z) que no tocan cajas ni se
+    // iswc: primero rutas limpias (recta, L, Z) que no tocan cajas ni se
     // montan sobre otra arista; el A* queda de respaldo.
     // Ramas de una decisión que salen por el mismo costado: cada una con su riel (ver salidasEnAbanico).
     const salida = abanico.get(i);
@@ -679,15 +679,15 @@ export function computeFlowchartLayout(
     // terminan y quedarían dos puntas enfrentadas. Sale por abajo (rutaDeVuelta).
     const desdeFin = specById.get(e.from)?.shape === 'end';
     const corta = !lateral && !desdeFin && lanesOn && spec.laneDirection !== 'horizontal' && toMeta.layer <= fromMeta.layer
-      ? vueltaCorta(from, to, nodes, insoftSegs)
+      ? vueltaCorta(from, to, nodes, iswcSegs)
       : null;
     const vuelta = corta ?? (!lateral && lanesOn && spec.laneDirection !== 'horizontal' && toMeta.layer <= fromMeta.layer
       ? rutaDeVuelta(from, to, Math.max(...nodes.map((n) => n.y + n.h)), grupoIzq(to))
       : null);
     const direct = lateral ?? vuelta ?? (salida
       ? [salida, { x: topX, y: salida.y }, { x: topX, y: to.y }]
-      : insoft && toMeta.layer > fromMeta.layer && !e.waypoints?.length
-      ? routeInsoftEdge(a, fromSide, to, nodes, e.to, insoftSegs, specById.get(e.to)?.shape === 'bar' || puertoDeArista.has(`${i}|to`) ? b : undefined,
+      : iswc && toMeta.layer > fromMeta.layer && !e.waypoints?.length
+      ? routeIswcEdge(a, fromSide, to, nodes, e.to, iswcSegs, specById.get(e.to)?.shape === 'bar' || puertoDeArista.has(`${i}|to`) ? b : undefined,
         [...textos].filter(([k]) => k !== i).map(([, t]) => t), anclas.get(i))
       : null);
     // Segunda pasada: los textos son muros. Una ruta de forma fija (abanico, uso de lado, vuelta) que
@@ -703,7 +703,7 @@ export function computeFlowchartLayout(
     const path = pathSinAutoCruces(limpia ? polylinePath(limpia) : buildOrthogonalPath(a, b, aGrid, bGrid, points, grid.grid));
     const end = limpia?.[limpia.length - 1];
     const tip = end ? { x: end.x, y: end.y, angle: 0 } : arrowTip(b, toSide);
-    if (insoft) rememberSegments(insoftSegs, path, e.to);
+    if (iswc) rememberSegments(iswcSegs, path, e.to);
     // Capa aditiva de rieles quemados: la siguiente arista paga más cuantas más pasen cerca.
     costearRiel(grid, pathPoints(path));
     // (d) Capa dinámica de giros: cada codo de esta ruta encarece su vecindad para las siguientes,
@@ -716,7 +716,7 @@ export function computeFlowchartLayout(
       : { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 };
 
     // La etiqueta ocupa espacio: encarece la zona para que otras aristas la esquiven.
-    // Insoft: la etiqueta va junto al arranque de la arista, a un costado.
+    // iswc: la etiqueta va junto al arranque de la arista, a un costado.
     // En abanico, la condición va encima de su riel, junto al codo donde baja (del lado del rombo).
     // Bucle corto: la etiqueta va en vertical, pegada al pasillo por fuera (no choca con los nodos).
     // Rama en abanico: la condición va junto al codo, del lado del rombo; si ahí cae sobre una caja
@@ -731,7 +731,7 @@ export function computeFlowchartLayout(
       const anchor = choca(hacia) && !choca(hacia === 'end' ? 'start' : 'end') ? (hacia === 'end' ? 'start' : 'end') : hacia;
       return { x: topX + (anchor === 'end' ? -6 : 6), y: salida!.y - 6, anchor };
     };
-    const side = insoft && e.label
+    const side = iswc && e.label
       ? (salida ? ladoRama() : sideLabel(path))
       : null;
     const lab = side ?? { x: mid.x, y: mid.y, anchor: 'middle' as const };
@@ -759,7 +759,7 @@ export function computeFlowchartLayout(
       ...(e.reverse ? { reverse: true } : {}),
       ...(e.color ? { color: e.color } : {}),
       ...(e.dots ? { dots: e.dots } : {}),
-      ...(insoft && (e.icon ?? iconoDeEtiqueta(eOv?.label ?? e.label)) ? { labelIcon: e.icon ?? iconoDeEtiqueta(eOv?.label ?? e.label) } : {}),
+      ...(iswc && (e.icon ?? iconoDeEtiqueta(eOv?.label ?? e.label)) ? { labelIcon: e.icon ?? iconoDeEtiqueta(eOv?.label ?? e.label) } : {}),
       hue: eOv?.hue ?? (e.group ? groupHue.get(e.group) : undefined),
     };
   });
@@ -770,7 +770,7 @@ export function computeFlowchartLayout(
   // Estándar: las aristas del flujo que comparten punta convergen en abanico (vías a delta).
   if (final) abanicoDelFlujo(routed, spec);
   if (lanesOn && final) {
-    const mideFijos = (t: string): number => measurer(opts)(t) * (10.5 / (opts.fontSize ?? INSOFT.fontSize));
+    const mideFijos = (t: string): number => measurer(opts)(t) * (10.5 / (opts.fontSize ?? ISWC.fontSize));
     const muros = [...cajasFijas(nodes, placed.lanes, placed.contexts, offsetX, offsetY, spec.laneDirection === 'horizontal', mideFijos), ...textos.values()];
     trabajoUsos += rutearUsos(routed, spec, nodes, muros);
   }
@@ -782,14 +782,14 @@ export function computeFlowchartLayout(
   const routedEdges: FlowLayoutEdge[] = routed.filter((e): e is FlowLayoutEdge => e !== null);
   // Ninguna pasada posterior puede dejar una arista que se corte a sí misma.
   for (const e of routedEdges) e.path = pathSinAutoCruces(e.path);
-  if (insoft) separarEtiquetasCompartidas(routedEdges);
+  if (iswc) separarEtiquetasCompartidas(routedEdges);
   return routedEdges;
   };
   let routedEdges = rutear();
-  // Insoft: las etiquetas de las aristas son entidades (1U de margen con todo). Lo que no encuentra
+  // iswc: las etiquetas de las aristas son entidades (1U de margen con todo). Lo que no encuentra
   // sitio abre espacio: se empujan las entidades que siguen y se vuelve a rutear.
-  if (insoft) {
-    const mide = (t: string): number => measurer(opts)(t) * (10.5 / (opts.fontSize ?? INSOFT.fontSize));
+  if (iswc) {
+    const mide = (t: string): number => measurer(opts)(t) * (10.5 / (opts.fontSize ?? ISWC.fontSize));
     const fijos = (): EmbedBox[] => cajasFijas(nodes, placed.lanes, placed.contexts, offsetX, offsetY, spec.laneDirection === 'horizontal', mide);
     // Primera pasada: textos y espaciados. Lo que no cabe abre espacio en la dirección de su tramo
     // (horizontal → a la derecha; vertical → hacia abajo); si empujar no lo resuelve, se deja de empujar.
@@ -867,9 +867,9 @@ export function computeFlowchartLayout(
     } : {}),
     ...(placed.contexts?.length ? { contexts: abrazar(placed.contexts, nodes, offsetX, offsetY) } : {}),
   };
-  // Insoft: las ramas que llegan al mismo nodo se funden en una sola entrada
+  // iswc: las ramas que llegan al mismo nodo se funden en una sola entrada
   // (estilo actividad) y la etiqueta ya va junto a su arista; sin reparto.
-  if (!insoft) applyEdgeActorLayout(layout, nodes.map((n) => ({ x: n.x, y: n.y, w: n.w, h: n.h })));
+  if (!iswc) applyEdgeActorLayout(layout, nodes.map((n) => ({ x: n.x, y: n.y, w: n.w, h: n.h })));
   return layout;
 }
 
@@ -1217,7 +1217,7 @@ function predicadoSocket(spec: FlowResolvedSpec): (r: Pick<FlowEdgeSpec, 'from' 
 
 function socketsDeComponentes(routed: Array<FlowLayoutEdge | null>, spec: FlowResolvedSpec): void {
   const consume = predicadoSocket(spec);
-  // Convención InSoft: el componente expone el socket `(` (palo + arco) y el riel llega a la bola O.
+  // Convención iswc: el componente expone el socket `(` (palo + arco) y el riel llega a la bola O.
   const largo = SOCKET.palo + SOCKET.socket + SOCKET.bola;
   routed.forEach((r, i) => {
     if (!r || !consume(r) || r.from === r.to) return;
@@ -1560,7 +1560,7 @@ function salidasEnAbanico(
     const fm = meta.get(e.from);
     const tm = meta.get(e.to);
     if (!from || !to || !fm || !tm || from.shape !== 'diamond' || tm.layer <= fm.layer) return;
-    const lado = insoftSides(fm, tm, from, to, from.shape, primary?.get(e.from), direction, false, [...pos.values()]).fromSide;
+    const lado = iswcSides(fm, tm, from, to, from.shape, primary?.get(e.from), direction, false, [...pos.values()]).fromSide;
     if (lado !== 'left' && lado !== 'right') return;
     const k = `${e.from}|${lado}`;
     if (!grupos.has(k)) grupos.set(k, []);
@@ -1777,14 +1777,14 @@ function arrowTip(p: { x: number; y: number }, side: AnchorSide): { x: number; y
   const angle = side === 'top' ? 90 : side === 'bottom' ? 270 : side === 'left' ? 0 : 180;
   return { x: p.x, y: p.y, angle };
 }
-/* ───────────────────── estilo insoft (actividad) ───────────────────── */
+/* ───────────────────── estilo iswc (actividad) ───────────────────── */
 
 /**
- * Medidas del estilo insoft: diagrama de actividad a lo Visual Paradigm.
+ * Medidas del estilo iswc: diagrama de actividad a lo Visual Paradigm.
  * Acciones muy redondeadas, rombos anchos y bajos construidos alrededor del
  * texto, columna principal recta y ramas a los costados.
  */
-const INSOFT = {
+const ISWC = {
   fontSize: 11,
   lineH: 14,
   /** Ancho máximo del texto de una acción antes de partir en líneas. */
@@ -1829,7 +1829,7 @@ export function wrapFlowLines(text: string, maxW: number, measure: (t: string) =
 }
 
 function measurer(opts: FlowLayoutOptions): (t: string) => number {
-  const fs = opts.fontSize ?? INSOFT.fontSize;
+  const fs = opts.fontSize ?? ISWC.fontSize;
   return opts.measure ?? ((t: string) => estimateWidth(t, fs));
 }
 
@@ -1845,9 +1845,9 @@ function measurer(opts: FlowLayoutOptions): (t: string) => number {
 export function decisionGeometry(textW: number, nLines: number, pastilla: { w: number; h: number } | null = null): { w: number; h: number; rect: EmbedBox } {
   // `pastilla` (paso + ícono): caja de dos columnas dentro del rombo — la pastilla a la izquierda y el
   // texto en el resto, ambos centrados en vertical. El rect inscrito las incluye a las dos.
-  const rw = Math.ceil(textW + (pastilla ? pastilla.w + DECISION_GAP : 0) + INSOFT.decisionPadX * 2);
-  const rh = Math.max(INSOFT.decisionMinRectH, nLines * INSOFT.lineH + INSOFT.decisionPadY * 2, pastilla ? pastilla.h + INSOFT.decisionPadY * 2 : 0);
-  const q = INSOFT.decisionMinAspect;
+  const rw = Math.ceil(textW + (pastilla ? pastilla.w + DECISION_GAP : 0) + ISWC.decisionPadX * 2);
+  const rh = Math.max(ISWC.decisionMinRectH, nLines * ISWC.lineH + ISWC.decisionPadY * 2, pastilla ? pastilla.h + ISWC.decisionPadY * 2 : 0);
+  const q = ISWC.decisionMinAspect;
   const [dw, dh] = rh / rw >= q ? [rw * 2, rh * 2] : [rw + rh / q, (rw + rh / q) * q];
   // Múltiplos de 16: el centro cae en la rejilla de 8 y los vértices
   // laterales/inferior son anclas exactas de las aristas.
@@ -1856,14 +1856,14 @@ export function decisionGeometry(textW: number, nLines: number, pastilla: { w: n
   return { w, h, rect: { x: (w - rw) / 2, y: (h - rh) / 2, w: rw, h: rh } };
 }
 
-function sizeInsoftNode(n: FlowNodeSpec, opts: FlowLayoutOptions): FlowSizedNode {
+function sizeIswcNode(n: FlowNodeSpec, opts: FlowLayoutOptions): FlowSizedNode {
   if (n.shape === 'start' || n.shape === 'end') return { id: n.id, w: FLOW_TERMINAL_D, h: FLOW_TERMINAL_D };
   if (n.shape === 'bar') return { id: n.id, w: FLOW_BAR_W, h: FLOW_BAR_H };
   if (n.shape === 'comment') {
     // Globo: comillas a la izquierda y el texto (alineado a la izquierda) en el resto.
     const t = wrapFlowLines(n.label, COMENTARIO.texto, measurer(opts));
     const w = ceilDiagramGrid(t.width + COMENTARIO.pad * 2 + COMENTARIO.comillas, 8);
-    const h = ceilDiagramGrid(Math.max(32, t.lines.length * INSOFT.lineH + COMENTARIO.pad * 2), 8);
+    const h = ceilDiagramGrid(Math.max(32, t.lines.length * ISWC.lineH + COMENTARIO.pad * 2), 8);
     return { id: n.id, w, h, lines: t.lines, textBox: { x: COMENTARIO.pad + COMENTARIO.comillas, y: 0, w: w - COMENTARIO.pad * 2 - COMENTARIO.comillas, h }, textAlign: 'start' };
   }
   const measure = measurer(opts);
@@ -1892,7 +1892,7 @@ function sizeInsoftNode(n: FlowNodeSpec, opts: FlowLayoutOptions): FlowSizedNode
     const tituloH = titulo ? VARS.fila : 0;
     const tabla = cols.reduce((a, b) => a + b, 0);
     const altoTabla = VARS.fila + filas.reduce((a, b) => a + b, 0);
-    const w = ceilDiagramGrid(Math.max(INSOFT.actionMinW, tabla + VARS.pad * 2, titulo ? measure(titulo) + VARS.pad * 2 + VARS.esquina : 0), 16);
+    const w = ceilDiagramGrid(Math.max(ISWC.actionMinW, tabla + VARS.pad * 2, titulo ? measure(titulo) + VARS.pad * 2 + VARS.esquina : 0), 16);
     const h = ceilDiagramGrid(VARS.pad + tituloH + altoTabla + VARS.pad, 8);
     return {
       id: n.id, w, h,
@@ -1902,18 +1902,18 @@ function sizeInsoftNode(n: FlowNodeSpec, opts: FlowLayoutOptions): FlowSizedNode
     };
   }
   if (n.shape === 'diamond') {
-    const t = wrapFlowLines(n.label, INSOFT.decisionText, measure);
+    const t = wrapFlowLines(n.label, ISWC.decisionText, measure);
     // El número y el ícono van en la insignia sobre el lado superior izquierdo (ver insignias()).
     const g = decisionGeometry(t.width, t.lines.length);
     return { id: n.id, w: g.w, h: g.h, lines: t.lines, textBox: g.rect };
   }
-  const t = wrapFlowLines(n.label, INSOFT.actionText, measure);
+  const t = wrapFlowLines(n.label, ISWC.actionText, measure);
   // El número y el ícono van en la insignia arriba a la izquierda (ver insignias()): el texto usa toda la caja.
-  const w = ceilDiagramGrid(Math.max(INSOFT.actionMinW, t.width + INSOFT.actionPadX * 2), 16);
-  const h = ceilDiagramGrid(Math.max(INSOFT.actionMinH, t.lines.length * INSOFT.lineH + INSOFT.actionPadY * 2), 8);
+  const w = ceilDiagramGrid(Math.max(ISWC.actionMinW, t.width + ISWC.actionPadX * 2), 16);
+  const h = ceilDiagramGrid(Math.max(ISWC.actionMinH, t.lines.length * ISWC.lineH + ISWC.actionPadY * 2), 8);
   return {
     id: n.id, w, h, lines: t.lines,
-    textBox: { x: INSOFT.actionPadX, y: 0, w: w - INSOFT.actionPadX * 2, h },
+    textBox: { x: ISWC.actionPadX, y: 0, w: w - ISWC.actionPadX * 2, h },
     textAlign: 'start',
   };
 }
@@ -1934,19 +1934,19 @@ function sizeEmbedNode(n: FlowNodeSpec, opts: FlowLayoutOptions): FlowSizedNode 
   }
   const max = nestedMaxSize(embed);
   const inner = fitContain(natural ?? max, max);
-  const pad = INSOFT.nestedPad;
+  const pad = ISWC.nestedPad;
   // Sin rótulo propio: el diagrama anidado ya trae su título (el `label` solo se ve si falta la captura).
   const t = { lines: [] as string[], width: 0 };
   const textH = 0;
-  const gap = textH ? INSOFT.nestedGap : 0;
-  const w = ceilDiagramGrid(Math.max(INSOFT.actionMinW, t.width + INSOFT.actionPadX * 2, inner.w + pad * 2), 16);
+  const gap = textH ? ISWC.nestedGap : 0;
+  const w = ceilDiagramGrid(Math.max(ISWC.actionMinW, t.width + ISWC.actionPadX * 2, inner.w + pad * 2), 16);
   const h = ceilDiagramGrid(pad + textH + gap + inner.h + pad, 8);
   return {
     id: n.id,
     w,
     h,
     lines: t.lines.length ? t.lines : undefined,
-    textBox: textH ? { x: INSOFT.actionPadX, y: pad, w: w - INSOFT.actionPadX * 2, h: textH } : undefined,
+    textBox: textH ? { x: ISWC.actionPadX, y: pad, w: w - ISWC.actionPadX * 2, h: textH } : undefined,
     embedBox: { x: (w - inner.w) / 2, y: pad + textH + gap + (h - pad * 2 - textH - gap - inner.h) / 2, w: inner.w, h: inner.h },
   };
 }
@@ -2338,13 +2338,13 @@ function placedExtras(s: FlowNodeSpec | undefined, z: FlowSizedNode | undefined,
 }
 
 /**
- * Colocación insoft (TB): capas y orden del motor node-link, pero en x cada
+ * Colocación iswc (TB): capas y orden del motor node-link, pero en x cada
  * nodo sigue a su padre: el hijo PRINCIPAL (el del camino más largo) queda en
  * la misma columna y las ramas salen a los costados (derecha, luego
  * izquierda). Resultado: la columna principal recta, sin zigzag, y cada
  * decisión con su rama al lado.
  */
-export function placeInsoft(sized: readonly FlowSizedNode[], edges: readonly FlowEdgeSpec[], layerGap: number, nodeGap: number): FlowPlacement {
+export function placeIswc(sized: readonly FlowSizedNode[], edges: readonly FlowEdgeSpec[], layerGap: number, nodeGap: number): FlowPlacement {
   const layers = assignLayers(sized, edges);
   const order = orderLayers(layers, sized, edges);
   const byId = new Map<string, FlowSizedNode>(sized.map((n) => [n.id, n]));
@@ -2540,7 +2540,7 @@ function lanesOfNodes(spec: FlowResolvedSpec, layerOf: (id: string) => number): 
  * motor node-link como siempre; cada carril es una columna (verticales: el flujo baja) o una fila
  * (horizontales: el flujo avanza a la derecha) del ancho/alto que piden sus nodos. Dentro de un
  * carril, los nodos de una misma capa van lado a lado, centrados. Las aristas entre carriles las
- * rutea el router insoft (recta / Z / L) como en cualquier flujo.
+ * rutea el router iswc (recta / Z / L) como en cualquier flujo.
  */
 export function placeLanes(
   sized: readonly FlowSizedNode[],
@@ -2596,7 +2596,7 @@ export function placeLanes(
   const extraX = (id: string): number => (ctx.has(id) ? CTX.pad * 2 : 0);
   const extraY = (id: string): number => (ctx.has(id) ? CTX.pad * 2 + CTX.title : 0);
   const maxLayer = Math.max(0, ...sized.map((n) => layerOf(n.id)));
-  const etiqueta = (l: FlowLaneSpec): number => Math.ceil(measure(l.label) * (LANES.labelFont / INSOFT.fontSize));
+  const etiqueta = (l: FlowLaneSpec): number => Math.ceil(measure(l.label) * (LANES.labelFont / ISWC.fontSize));
 
   // Nodos por (carril, capa), en el orden del motor.
   const celda = new Map<string, string[]>();
@@ -2971,11 +2971,11 @@ function contextosDe(spec: FlowResolvedSpec, laneOf: ReadonlyMap<string, string>
 }
 
 /**
- * Lados de anclaje insoft: las ramas de una decisión salen por el vértice
+ * Lados de anclaje iswc: las ramas de una decisión salen por el vértice
  * lateral hacia su lado y bajan a la cara superior del destino; la rama
  * principal sale por el vértice inferior. Hacia atrás, como el motor clásico.
  */
-function insoftSides(
+function iswcSides(
   fromMeta: FlowPlacedNode,
   toMeta: FlowPlacedNode,
   from: FlowLayoutNode,
@@ -3076,10 +3076,10 @@ function sideLabel(path: string): { x: number; y: number; anchor: 'start' | 'end
 }
 
 /**
- * Pintura insoft a partir del tema `flowchart` del estilo. Cada color del
+ * Pintura iswc a partir del tema `flowchart` del estilo. Cada color del
  * bloque `flow` es un NOMBRE de token del tema (`cluster.palettes`, `fills`,
  * `lines`) o un color literal: el celeste de las acciones es el `primary` de
- * la paleta InSoft, el mismo de los demás diagramas.
+ * la paleta iswc, el mismo de los demás diagramas.
  */
 export function flowPaint(theme: ErThemeJson): FlowPaint {
   const f = theme.flow ?? {};
@@ -3091,7 +3091,7 @@ export function flowPaint(theme: ErThemeJson): FlowPaint {
   const text = canvas.text ?? '#0F172A';
   return {
     font: theme.font?.family ?? 'Tahoma,Arial,sans-serif',
-    fontSize: f.fontSize ?? INSOFT.fontSize,
+    fontSize: f.fontSize ?? ISWC.fontSize,
     fontWeight: f.fontWeight ?? 500,
     background: canvas.background ?? '#FFFFFF',
     text,
@@ -3115,10 +3115,10 @@ export function flowPaint(theme: ErThemeJson): FlowPaint {
   };
 }
 
-/** Interlineado del texto insoft (px). */
-export const FLOW_LINE_H = INSOFT.lineH;
+/** Interlineado del texto iswc (px). */
+export const FLOW_LINE_H = ISWC.lineH;
 
-/* ───────────────────── ruteo insoft (recta / L / Z) ───────────────────── */
+/* ───────────────────── ruteo iswc (recta / L / Z) ───────────────────── */
 
 function polylinePath(pts: readonly FlowPoint[]): string {
   return pts.map((p, i) => `${i ? 'L' : 'M'}${p.x},${p.y}`).join(' ');
@@ -3317,7 +3317,7 @@ function puertosEnPerimetro(
   return out;
 }
 
-function routeInsoftEdge(
+function routeIswcEdge(
   a: FlowPoint,
   fromSide: AnchorSide,
   to: FlowLayoutNode,

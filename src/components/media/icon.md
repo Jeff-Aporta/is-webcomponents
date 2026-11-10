@@ -123,7 +123,7 @@ Documentación de cabecera preservada desde fuente:
 > iconos propio y se inyecta INLINE en el Shadow DOM, para que
 > `currentColor` del contexto se propague al fill del path.
 > Cadena (ver _shared/icon-loader.ts):
->   1. localStorage `iswc:icon:<set>:<nombre>` (TTL 15 días): sin fetch.
+>   1. localStorage `ISWC:icon:<set>:<nombre>` (TTL 15 días): sin fetch.
 >   2. Web PUBLICADA de la app: `<html data-icons>` (URL absoluta, p. ej.
 >      `initApp({ icons: { host } })`) + `<set>/<nombre>.svg`.
 >   3. API de Iconify; si había `data-icons`, un aviso por ícono:

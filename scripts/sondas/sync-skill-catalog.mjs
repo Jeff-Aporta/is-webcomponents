@@ -428,7 +428,7 @@ const catOut = [
   '| `feedback` | Toast, tag, skeleton, progress, CDN snippet |',
   '| `forms` | Captura y validación |',
   '| `helpers` | Formato, observers, MD, popover, APIs módulo |',
-  '| `isp` | Layout/forms ContaPyme (ISP) |',
+  '| `isp` | Layout/forms Acme (ISP) |',
   '| `layout` | Regiones, dialog, drawer, demo, dock |',
   '| `media` | Iconos, avatar, video |',
   '| `navigation` | Tabs, tree, stepper, breadcrumb, carousel |',

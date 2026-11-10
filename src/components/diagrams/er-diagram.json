@@ -123,22 +123,22 @@
       ]
     },
     {
-      "id": "theme-insoft",
-      "title": "Tema InSoft",
-      "lede": "Sin CE nuevo: theme=\"insoft\" (o erDiagram.theme) aplica el estilo docs InSoft (Poppins, naranja/verde, clusters, aristas #3D5A80). El JSON vive en cdn/diagrams/themes/insoft.json; json2css lo convierte a CSS.",
+      "id": "theme-iswc",
+      "title": "Tema ISWC",
+      "lede": "Sin CE nuevo: theme=\"iswc\" (o erDiagram.theme) aplica el estilo docs ISWC (Poppins, naranja/verde, clusters, aristas #3D5A80). El JSON vive en cdn/diagrams/themes/iswc.json; json2css lo convierte a CSS.",
       "blocks": [
         {
           "kind": "html",
-          "html": "<p>Misma paleta que <code>der.svg</code> de AyudasCPIA. El editor hereda el atributo: <code>&lt;iswc-er-editor theme=\"insoft\"&gt;</code>. Utils CDN: <code>L.loadPageModules(\"iswc-diagram-theme\")</code> → <code>json2css</code>, <code>resolveErTheme</code>, <code>INSOFT_THEME</code>.</p>"
+          "html": "<p>Misma paleta que <code>der.svg</code> de Kit. El editor hereda el atributo: <code>&lt;iswc-er-editor theme=\"iswc\"&gt;</code>. Utils CDN: <code>L.loadPageModules(\"iswc-diagram-theme\")</code> → <code>json2css</code>, <code>resolveErTheme</code>, <code>ISWC_THEME</code>.</p>"
         },
         {
           "kind": "demo",
           "html": [
-            "<iswc-er-diagram theme=\"insoft\" open-on-click>",
+            "<iswc-er-diagram theme=\"iswc\" open-on-click>",
             "            <script type=\"application/json\">",
             "              {",
             "                \"erDiagram\": {",
-            "                  \"title\": \"ISS · estilo InSoft\",",
+            "                  \"title\": \"ISS · estilo ISWC\",",
             "                  \"direction\": \"LR\",",
             "                  \"groups\": [",
             "                    { \"id\": \"g_oper\", \"name\": \"Operativa\" },",
@@ -212,7 +212,7 @@
             ],
             [
               "<code>theme</code>",
-              "<code>insoft</code> · id registrado",
+              "<code>ISWC</code> · id registrado",
               "Aplica paleta JSON (cdn/diagrams/themes/). También <code>erDiagram.theme</code> en el payload."
             ]
           ]

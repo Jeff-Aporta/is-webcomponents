@@ -20,7 +20,7 @@ Este módulo registra `<iswc-catalogo-gen>`.
 
 ## Cuándo usarlo
 
-Listados maestros ContaPyme con controller que implementa `Lista` + acciones
+Listados maestros Acme con controller que implementa `Lista` + acciones
 `actCrear` / `actModificar` / …
 
 ## Cuándo no usarlo
@@ -49,8 +49,8 @@ import './catalogo-gen.js';
     ],
     async Lista() {
       return { datos: [
-        { app: 'ContaPyme', bactiva: true },
-        { app: 'AgroWin', bactiva: false },
+        { app: 'Acme', bactiva: true },
+        { app: 'Beta', bactiva: false },
       ]};
     },
     async actCrear(o) { return o; },

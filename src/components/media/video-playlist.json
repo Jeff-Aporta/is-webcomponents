@@ -166,7 +166,7 @@
         {
           "kind": "demo",
           "html": [
-            "<iswc-video-playlist id=\"plChannel\" placement=\"bottom\" channel=\"InSoft TV\">",
+            "<iswc-video-playlist id=\"plChannel\" placement=\"bottom\" channel=\"Acme TV\">",
             "            <iswc-video",
             "              title=\"Big Buck Bunny\"",
             "              channel=\"Blender Open Movies\"",

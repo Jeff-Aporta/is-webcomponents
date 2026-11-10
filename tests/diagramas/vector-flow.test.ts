@@ -62,7 +62,7 @@ denoTest('vector: VF3 controller con su POJO recibe la arista klass sola', () =>
 });
 
 denoTest('vector: VF4 el flowchart lo dibuja con índices automáticos', () => {
-  const L = computeFlowchartLayout(resolveFlowchartSpec({ vectorFlow: base() })!, null, { style: 'insoft' });
+  const L = computeFlowchartLayout(resolveFlowchartSpec({ vectorFlow: base() })!, null, { style: 'iswc' });
   const idx = Object.fromEntries(L.nodes.map((n) => [n.id, n.stepLabel]));
   // Solo los pasos llevan índice: cliente, componente y controller de la entrada, solo su ícono.
   assertEquals([idx.c, idx.api, idx.x], [undefined, undefined, undefined]);

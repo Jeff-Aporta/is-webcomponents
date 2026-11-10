@@ -26,7 +26,7 @@ test('iswc-chart: render — attachShadow open + svg en shadow DOM', () => {
   assert.match(src, /<svg\b/);
   // Molde IswcElement: el shadow abierto lo crea el molde (shadowInit por defecto { mode: 'open' }).
   assert.match(src, /class IswcChart extends withStyleAttrs\(IswcElement\)/);
-  assert.doesNotMatch(src, /static shadowInit[^=\n]*= null/);
+  assert.doesNotMatch(src, /static (?:override )?shadowInit[^=\n]*= null/);
 });
 
 test('iswc-chart: atributos observados (mínimo 10)', () => {

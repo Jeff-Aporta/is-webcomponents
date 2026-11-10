@@ -170,7 +170,7 @@ muestras, íconos, interruptor); solo los hairlines usan `1px`. Un
 
 ## Comportamiento
 
-- Paleta inicial: la guardada en `iswc:app-cfg` (solo target `<html>`), si no
+- Paleta inicial: la guardada en `ISWC:app-cfg` (solo target `<html>`), si no
   el `data-palette` del target, si no `value`, si no la primera del catálogo.
 - Panda inicial: el guardado, si no el atributo `panda` o el `data-panda` del target.
 - Las muestras usan el juego claro u oscuro que realmente pinta el target

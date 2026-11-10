@@ -49,7 +49,7 @@ tests.push({
       return mod.getValues(form);
     });
     assert.equal(values.cliente, 'CL-009', `cliente debe ser 'CL-009', es '${values.cliente}'`);
-    assert.equal(values.correo, 'demo@contapyme.co');
+    assert.equal(values.correo, 'demo@acme.co');
     assert.equal(values.cantidad, 42);
     assert.equal(values.activo, true);
     assert.equal(values.tipo, 'factura');

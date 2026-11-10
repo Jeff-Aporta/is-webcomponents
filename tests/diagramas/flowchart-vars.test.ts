@@ -21,7 +21,7 @@ const layout = (vars: unknown[]) => computeFlowchartLayout(resolveFlowchartSpec(
   steps: 'auto',
   nodes: [{ id: 'a', label: 'Lee' }, { id: 'v', label: 'Config', shape: 'vars', vars }, { id: 'd', label: '¿N?', shape: 'diamond' }],
   edges: [{ from: 'a', to: 'v' }, { from: 'v', to: 'd' }],
-})!, null, { style: 'insoft' });
+})!, null, { style: 'iswc' });
 
 denoTest('vars: V1-V3 tabla nombre · valor, desc opcional, insignia de variable', () => {
   const sin = layout([{ name: 'N', value: 'conversacion.recalcularTituloCadaMensajesUsuario' }, { name: 'solo-nombre' }, { value: 'solo-valor' }]).nodes.find((n) => n.id === 'v')!;

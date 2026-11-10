@@ -103,7 +103,7 @@
             "            <div class=\"copy-field\">",
             "              <span class=\"copy-field__label\">Endpoint de la API</span>",
             "              <div class=\"copy-field__row\">",
-            "                <code class=\"copy-field__value\" id=\"cbValue\">https://api.insoft.com.co/v1</code>",
+            "                <code class=\"copy-field__value\" id=\"cbValue\">https://api.acme.example/v1</code>",
             "                <iswc-copy-button from=\"cbValue\" copy-label=\"Copiar\" success-label=\"¡Copiado!\"></iswc-copy-button>",
             "              </div>",
             "            </div>",
@@ -331,7 +331,7 @@
             "            <iswc-copy-button from=\"my-input.value\"></iswc-copy-button>",
             "          </div>",
             "          <div class=\"cluster\">",
-            "            <a id=\"my-link\" href=\"https://insoft.com.co\">Sitio InSoft</a>",
+            "            <a id=\"my-link\" href=\"https://acme.example\">Sitio Acme</a>",
             "            <iswc-copy-button from=\"my-link[href]\"></iswc-copy-button>",
             "          </div>"
           ]
@@ -672,7 +672,7 @@
       "ejemplos": {
         "content": [
           "```html",
-          "<code id=\"cbValue\">https://api.insoft.com.co/v1</code>",
+          "<code id=\"cbValue\">https://api.acme.example/v1</code>",
           "<iswc-copy-button from=\"cbValue\" copy-label=\"Copiar\" success-label=\"¡Copiado!\"></iswc-copy-button>",
           "```"
         ]

@@ -14,9 +14,9 @@ const { test, lista } = coleccionPruebas({ categoria: 'what' });
 const DIST = join(import.meta.dirname, '..', '..', 'dist');
 /**
  * Forma minificada de un registro: `defineElement('iswc-x', Clase, 'IswcX')` o el `static tag = 'iswc-x'` del molde
- * IswcElement (esbuild lo baja a `__publicField(Clase, "tag", "iswc-x")` o lo deja como `static tag="iswc-x"`).
+ * IswcElement (esbuild lo baja a `__publicField(Clase, "tag", "iswc-x")` o lo deja como `static (?:override )?tag="iswc-x"`).
  */
-const REGISTRO = /"iswc-[a-z0-9-]+",[\w$]+,"Iswc[A-Za-z0-9]*"|[\w$]+\([\w$]+,"tag","iswc-[a-z0-9-]+"\)|static tag="iswc-[a-z0-9-]+"/g;
+const REGISTRO = /"iswc-[a-z0-9-]+",[\w$]+,"Iswc[A-Za-z0-9]*"|[\w$]+\([\w$]+,"tag","iswc-[a-z0-9-]+"\)|static (?:override )?tag="iswc-[a-z0-9-]+"/g;
 
 test('galeria: G1 ningún bundle de galería registra un componente', async () => {
   const culpables: string[] = [];

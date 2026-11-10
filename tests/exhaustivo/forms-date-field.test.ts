@@ -35,7 +35,7 @@ test('date-field: archivo y registro', () => {
 });
 
 test('date-field: atributos vienen del factory (OBSERVED const + @prop + IswcFormControl)', () => {
-  assert.ok(/static\s+observed\s*=\s*OBSERVED/.test(factorySrc),
+  assert.ok(/static\s+(?:override\s+)?observed\s*=\s*OBSERVED/.test(factorySrc),
     'factory debe declarar observedAttributes');
   const obs = atributosObservados(factorySrc);
   for (const a of ['label', 'hint', 'name', 'value', 'min', 'max',

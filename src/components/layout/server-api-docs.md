@@ -15,8 +15,8 @@ preview: ./server-api-docs.json
 Expone los **endpoints** de la API de un **server** al estilo Swagger (solo para servers: el ISS la sirve
 en `GET /api/docs`). No es documentación en prosa: por endpoint muestra método, ruta, sesión y permiso,
 controller, parámetros, cuerpo y respuestas con sus schemas y ejemplos, su diagrama de secuencia (estilo
-InSoft) y deja **probarlo** contra el server real, con sesión. Recibe el documento que el server publica
-(InSoft `kind:"config"` u OpenAPI 3), lo **valida con Zod**, dice si admite el **parse estricto** (InSoft v2,
+ISWC) y deja **probarlo** contra el server real, con sesión. Recibe el documento que el server publica
+(ISWC `kind:"config"` u OpenAPI 3), lo **valida con Zod**, dice si admite el **parse estricto** (ISWC v2,
 `server-api-docs-md.schemas.ts`) y lo pinta sobre `iswc-doc-layout`: la portada es la tabla de endpoints con
 filtro y cada fila enlaza al detalle.
 
@@ -25,7 +25,7 @@ pinea dos CDN, solo el kit.
 
 ## Cuándo usarlo
 
-- La página `GET /api/docs` de un server InSoft (ISS) con su documento `doc` incrustado.
+- La página `GET /api/docs` de un server ISWC (ISS) con su documento `doc` incrustado.
 - Exponer cualquier API con un OpenAPI 3 (endpoints, parámetros, cuerpos, respuestas, «Probar»).
 
 ## Cuándo no usarlo
@@ -65,7 +65,7 @@ import './server-api-docs.js'; // o, por el loader: iswcLoader.ensure('iswc-serv
 | --- | --- | --- |
 | `doc` | objeto | Documento del server. Asignarlo (`el.doc = obj`) valida y repinta. Se acepta antes de que el tag esté definido. |
 | `validacion` | `{ ok, formato, errores[] }` (solo lectura) | Resultado de Zod (tolerante): cada error con su ruta JSON (`paths › /x › get › summary: …`). |
-| `estricto` | `{ aplica, ok, errores[] }` (solo lectura) | ¿Admite el parse estricto InSoft v2? `aplica: false` para OpenAPI 3. La portada lo muestra (etiqueta y, si no, el error). |
+| `estricto` | `{ aplica, ok, errores[] }` (solo lectura) | ¿Admite el parse estricto ISWC v2? `aplica: false` para OpenAPI 3. La portada lo muestra (etiqueta y, si no, el error). |
 | `modelo` | `ServerApiDocsModelo` (solo lectura) | Documento normalizado (operaciones, grupos, auth, servidores). |
 | `layout` | `HTMLElement` (solo lectura) | El `<iswc-doc-layout>` que aloja al visor. |
 
@@ -108,8 +108,8 @@ Usa los tokens del kit (`--iswc-text`, `--iswc-text-dim`, `--iswc-border`, `--is
 ## Comportamiento
 
 - **Validación (Zod)**: dos niveles. Tolerante (`server-api-docs.schemas.ts`, `.loose()` con integridad
-  referencial, InSoft v1/v2 u OpenAPI 3 mínimo) para decidir si se puede pintar; **estricto**
-  (`server-api-docs-md.schemas.ts`, InSoft v2, todo `.strict()`) para decir si el documento cumple el
+  referencial, ISWC v1/v2 u OpenAPI 3 mínimo) para decidir si se puede pintar; **estricto**
+  (`server-api-docs-md.schemas.ts`, ISWC v2, todo `.strict()`) para decir si el documento cumple el
   contrato. Sin formato o sin `paths`: se muestran los errores con su ruta y no se pinta. Materializable con
   problemas: se pinta, la portada los lista y la consola los repite. Sin parse estricto: etiqueta roja y la
   lista de errores con su ruta JSON en la portada.
@@ -119,9 +119,9 @@ Usa los tokens del kit (`--iswc-text`, `--iswc-text-dim`, `--iswc-border`, `--is
   permiso y controller; un endpoint por página; `?s=` compartible (atrás/adelante); paginador y ← / →
   en el orden del índice; `/` enfoca la búsqueda.
 - **Endpoint**: método y ruta, descripción de una línea, ficha de acceso (grupo, sesión, permiso,
-  controller), parámetros, cuerpo (schema y ejemplo), respuestas expandidas de los templates InSoft (`ok`,
+  controller), parámetros, cuerpo (schema y ejemplo), respuestas expandidas de los templates ISWC (`ok`,
   `auth`, `authForbidden`, `authNotFound`, `deleteEnvelope`, `raw`) con su schema (el declarado o el deducido
-  del ejemplo) y su ejemplo, y el **flujo**: `<iswc-sequence-diagram diagram-style="insoft">` generado del
+  del ejemplo) y su ejemplo, y el **flujo**: `<iswc-sequence-diagram diagram-style="iswc">` generado del
   propio endpoint (cliente → server → permiso → controller → respuestas; fallas en `alt`).
 - **Probar**: base editable (y los `viewer.servers` del documento como atajos), parámetros de ruta y
   query, cuerpo JSON editable (`iswc-code`), adjuntos `tryitAttachments` (imágenes/audios como data
@@ -129,7 +129,7 @@ Usa los tokens del kit (`--iswc-text`, `--iswc-text-dim`, `--iswc-border`, `--is
   (`text/event-stream` se va mostrando mientras llega) y cURL equivalente.
 - **Sesión**: botón de la barra. Login del proveedor del documento (`viewer.auth.provider`:
   `patyia-portal` contra el propio server, u `orquestador`), o token JWT pegado. El token vive en
-  `sessionStorage` (`iswc:server-api-docs:sesion`); un 401 reabre el diálogo.
+  `sessionStorage` (`ISWC:server-api-docs:sesion`); un 401 reabre el diálogo.
 - **Exportar**: el documento tal cual (`viewer.exports.isDownloadName`) y OpenAPI 3.0.3
   (`openApiDownloadName`).
 
@@ -170,7 +170,7 @@ visor.addEventListener('iswc-server-api-docs-page', (e) => { document.title = `$
 - La página de endpoints de la API de un server se arma con este componente y el documento del
   server; no se copia un visor propio ni se vuelve a pinear `isc-swagger`/`iswc-docs`.
 - Es Swagger-like: no se le agrega prosa documental (markdown largo, portadas, diagramas incrustados en el
-  documento). Los diagramas los genera el visor, siempre con `diagram-style="insoft"`.
+  documento). Los diagramas los genera el visor, siempre con `diagram-style="iswc"`.
 - Es un componente de **server**: para la documentación en prosa de un proyecto usa `iswc-md-docs-vault`.
 - El contrato del documento es `server-api-docs-md.schemas.ts`: el server lo vendoriza y lo aplica al
   escribir; no lo redefine.

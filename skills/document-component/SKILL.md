@@ -8,7 +8,7 @@ description: >-
 ---
 <!-- @vendor 2026-10-13T14:13:48.240Z Jeff-Aporta/is-webcomponents@main skills/document-component/SKILL.md -->
 
-# Cómo documentar componentes iswc
+# Cómo documentar componentes ISWC
 
 Esta skill es la **carta de escritura** de las guías que viven junto a cada
 componente en `src/components/<carpeta>/<modulo>.md`. No describe la API

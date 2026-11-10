@@ -85,10 +85,10 @@ export function tieneShadow(src: string): boolean {
   if (/attachShadow\s*\(\s*\{\s*mode\s*:\s*['"]open['"]\s*\}\s*\)/.test(src)) return true;
   // Molde IswcElement: lo abre el propio molde (`shadowInit` por defecto `{ mode: 'open' }`), o `initShadow`/
   // `initDiagramShadow` de una subclase; `static shadowInit = null` es light DOM.
-  if (/\binit(?:Diagram)?Shadow\s*\(/.test(src) || /static\s+shadowInit\s*(?::[^=\n]*)?=\s*\{\s*mode\s*:\s*['"]open['"]/.test(src)) return true;
+  if (/\binit(?:Diagram)?Shadow\s*\(/.test(src) || /static\s+(?:override\s+)?shadowInit\s*(?::[^=\n]*)?=\s*\{\s*mode\s*:\s*['"]open['"]/.test(src)) return true;
   // Alguna clase del molde sin `shadowInit = null` entre sus estáticos (cabecera del cuerpo).
   const cuerpos = src.split(/\bclass\s+\w+\s+extends\s+(?:withStyleAttrs\(\s*)?(?:IswcElement|PropsElement<[^>]*>|ModalBase)\b/).slice(1);
-  return cuerpos.some((c) => !/^[^{]*\{(?:\s*static [^\n]*\n)*?\s*static\s+shadowInit\s*(?::[^=\n]*)?=\s*null/.test(c));
+  return cuerpos.some((c) => !/^[^{]*\{(?:\s*static [^\n]*\n)*?\s*static\s+(?:override\s+)?shadowInit\s*(?::[^=\n]*)?=\s*null/.test(c));
 }
 
 /** ¿Limpia observers y listeners en disconnectedCallback? */

@@ -1,12 +1,12 @@
 // theme.ts — temas de diagrama (JSON) + json2css. Sin custom element.
 //
 // Uso en el kit:
-//   <iswc-er-diagram theme="insoft">…</iswc-er-diagram>
-//   { "erDiagram": { "theme": "insoft", "entities": […] } }
+//   <iswc-er-diagram theme="iswc">…</iswc-er-diagram>
+//   { "erDiagram": { "theme": "iswc", "entities": […] } }
 //
 // Uso por CDN / Deno (vendor):
 //   import { json2css, resolveErTheme } from '…/diagrams/theme.min.mjs'
-//   fetch('…/diagrams/themes/insoft.json')  // fuente editable
+//   fetch('…/diagrams/themes/iswc.json')  // fuente editable
 
 import type { DiagramTheme } from '@jeff-aporta/iswc-base/components/diagrams/schemas/diagram-types.schemas.js';
 import type { ErThemeJson } from "@jeff-aporta/iswc-base/components/diagrams/schemas/theme.schemas.js";
@@ -14,8 +14,8 @@ import type { ErThemeJson } from "@jeff-aporta/iswc-base/components/diagrams/sch
 /** Contrato del JSON de tema ER (iswc-diagram-theme/v1). */
 
 // Los temas ya no viajan dentro de cada bundle: los trae `diagram-styles.ts`
-// (estilo `insoft` = insoft.json + insoft-cd.json + insoft-class.json) la
-// primera vez que un diagrama pide `diagram-style="insoft"`.
+// (estilo `iswc` = iswc.json + iswc-cd.json + iswc-class.json) la
+// primera vez que un diagrama pide `diagram-style="iswc"`.
 const BUILTIN: Record<string, ErThemeJson> = {};
 
 /** Temas registrados en runtime (apps pueden `registerErTheme`). */
@@ -31,8 +31,8 @@ export function listErThemes(): string[] {
 }
 
 /**
- * Resuelve un id (`"insoft"`), un objeto tema, o null.
- * Acepta también `{ theme: "insoft" }` / payload con `erDiagram.theme`.
+ * Resuelve un id (`"iswc"`), un objeto tema, o null.
+ * Acepta también `{ theme: "iswc" }` / payload con `erDiagram.theme`.
  */
 /** Objeto tema completo: trae `id` y al menos una de las secciones `entity` / `cluster` / `diagramTheme`. */
 function esErThemeJson(o: Record<string, unknown>): o is ErThemeJson & Record<string, unknown> {
@@ -43,8 +43,8 @@ export function resolveErTheme(input: unknown): ErThemeJson | null {
   if (input == null || input === '') return null;
   if (typeof input === 'string') {
     const id = input.trim().toLowerCase();
-    // Alias heredado: theme="insoftcd" = insoft-cd.
-    return EXTRA.get(id) ?? BUILTIN[id] ?? (id === 'insoftcd' ? EXTRA.get('insoft-cd') ?? null : null);
+    // Alias heredado: theme="iswccd" = iswc-cd.
+    return EXTRA.get(id) ?? BUILTIN[id] ?? (id === 'iswccd' ? EXTRA.get('iswc-cd') ?? null : null);
   }
   if (typeof input === 'object') {
     const o = input as Record<string, unknown>;
@@ -186,7 +186,7 @@ export function componentBoxPaint(theme: ErThemeJson): {
     lollipop: c.lollipop ?? theme.cluster?.fallback ?? '#7ACFF4',
     noPackageTab: c.noPackageTab !== false,
     titleBackground: c.titleBackground === true,
-    // InSoft CD: -( expone, -O consume. UML clásico = false.
+    // iswc CD: -( expone, -O consume. UML clásico = false.
     invertAssembly: c.invertAssembly === true,
     epFill: c.epFill ?? 'transparent',
     epBorder: c.epBorder ?? 'rgba(255,255,255,0.55)',
@@ -219,7 +219,7 @@ export function lineColor(theme: ErThemeJson | null | undefined, name: string | 
   return theme?.lines?.[raw.toLowerCase()] ?? paletteColor(theme, raw);
 }
 
-/** Pintura del diagrama de secuencia (`theme.sequence`, con defaults InSoft). */
+/** Pintura del diagrama de secuencia (`theme.sequence`, con defaults iswc). */
 export function sequencePaint(theme: ErThemeJson): {
   actorFill: string;
   actorBorder: string;

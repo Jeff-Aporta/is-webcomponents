@@ -171,9 +171,9 @@
             "              width=\"18rem\" height=\"12rem\"",
             "              minimizable maximizable closable>",
             "              <ul style=\"margin:0; padding-left: 1.25rem; font-size:.85rem; color:var(--iswc-text-soft)\">",
-            "                <li>InSoft S.A. — contacto@ins.co</li>",
-            "                <li>ContaPyme — hola@conta.co</li>",
-            "                <li>AgroWin — soporte@agro.co</li>",
+            "                <li>Acme S.A. — contacto@acme.example</li>",
+            "                <li>Acme Filial — hola@acme.example</li>",
+            "                <li>Beta — soporte@beta.example</li>",
             "              </ul>",
             "            </iswc-window>",
             "          </div>"

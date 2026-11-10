@@ -32,7 +32,7 @@ el host (o un descendiente) desde el valor de una prop suya.
    - `style.setProperty('--iswc-...')` (literal o por variable)
    - `host.style.setProperty('--iswc-...')` y `el.style.setProperty('--iswc-...')`
    - `style.setProperty('--_tone-...')` (variantes de `applyToneRamp`)
-   - `style.setProperty('--mx-lns')` y similares (iswc‑escopados o no)
+   - `style.setProperty('--mx-lns')` y similares (ISWC‑escopados o no)
    - Mapa `static styleAttrs = { attr: '--iswc-...', ... }` (mecanismo común)
    - Llamadas a `syncIspColor(this, { colorVar: '--iswc-...' })`
 3. Verificación caso por caso de cuál prop dispara el set y en qué línea/función.

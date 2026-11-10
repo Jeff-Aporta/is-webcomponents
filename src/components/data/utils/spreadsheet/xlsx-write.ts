@@ -234,7 +234,7 @@ export async function writeXlsx(doc: SpreadsheetDoc): Promise<Uint8Array> {
     put(`xl/worksheets/sheet${n}.xml`, xml);
     types.push(`<Override PartName="/xl/worksheets/sheet${n}.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>`);
     if (!notes.length) return;
-    put(`xl/comments${n}.xml`, `${HEAD}<comments ${NS}><authors><author>iswc</author></authors><commentList>${notes.map((x) => `<comment ref="${x.ref}" authorId="0"><text><t xml:space="preserve">${escapeXml(x.text)}</t></text></comment>`).join('')}</commentList></comments>`);
+    put(`xl/comments${n}.xml`, `${HEAD}<comments ${NS}><authors><author>Acme</author></authors><commentList>${notes.map((x) => `<comment ref="${x.ref}" authorId="0"><text><t xml:space="preserve">${escapeXml(x.text)}</t></text></comment>`).join('')}</commentList></comments>`);
     put(`xl/drawings/vmlDrawing${n}.vml`, vmlXml(notes));
     put(`xl/worksheets/_rels/sheet${n}.xml.rels`, `${HEAD}<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="${REL}/comments" Target="../comments${n}.xml"/><Relationship Id="rId2" Type="${REL}/vmlDrawing" Target="../drawings/vmlDrawing${n}.vml"/></Relationships>`);
     types.push(`<Override PartName="/xl/comments${n}.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.comments+xml"/>`);

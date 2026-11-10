@@ -17,7 +17,7 @@ const denoTest = denoTestCon(test);
 
 
 // Datos versionados del kit (proyecto hermético): payloads del lab y fixture del ISS.
-const DIR = new URL('../fixtures/iss-ayudascpia/docs-experimental/diagramas/', import.meta.url);
+const DIR = new URL('../fixtures/ayudas-ejemplo/docs-experimental/diagramas/', import.meta.url);
 type Caja = { x: number; y: number; w: number; h: number };
 const MARGEN = 4;
 const solapan = (a: Caja, b: Caja): boolean => a.x < b.x + b.w - MARGEN && b.x < a.x + a.w - MARGEN && a.y < b.y + b.h - MARGEN && b.y < a.y + a.h - MARGEN;

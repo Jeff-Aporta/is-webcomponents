@@ -63,7 +63,7 @@
           "html": [
             "<div class=\"qr-row\">",
             "            <iswc-qrcode value=\"mailto:hola@empresa.co\" level=\"Q\" cell=\"6\"></iswc-qrcode>",
-            "            <iswc-qrcode value=\"WIFI:T:WPA;S:InSoft;P:clave123;;\" level=\"H\" cell=\"6\"></iswc-qrcode>",
+            "            <iswc-qrcode value=\"WIFI:T:WPA;S:Acme;P:clave123;;\" level=\"H\" cell=\"6\"></iswc-qrcode>",
             "          </div>"
           ],
           "heading": "Otros contenidos: mailto, wifi (mismo nivel/cell/bg)"
@@ -78,8 +78,8 @@
           "kind": "demo",
           "html": [
             "<div class=\"qr-row\">",
-            "            <iswc-qrcode value=\"https://insoft.co\" fg=\"var(--iswc-accent)\" bg=\"var(--iswc-bg-soft)\" cell=\"8\"></iswc-qrcode>",
-            "            <iswc-qrcode value=\"https://contapyme.co\" fg=\"var(--iswc-success, #16a34a)\" cell=\"8\"></iswc-qrcode>",
+            "            <iswc-qrcode value=\"https://acme.example\" fg=\"var(--iswc-accent)\" bg=\"var(--iswc-bg-soft)\" cell=\"8\"></iswc-qrcode>",
+            "            <iswc-qrcode value=\"https://ventas.acme.example\" fg=\"var(--iswc-success, #16a34a)\" cell=\"8\"></iswc-qrcode>",
             "          </div>"
           ]
         }

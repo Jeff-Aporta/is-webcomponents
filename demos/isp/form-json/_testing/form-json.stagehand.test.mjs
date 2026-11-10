@@ -43,7 +43,7 @@ try {
     };
   });
   assert.equal(written.clienteValue, 'CL-009');
-  assert.equal(written.correoValue, 'demo@contapyme.co');
+  assert.equal(written.correoValue, 'demo@acme.co');
   assert.equal(written.activoChecked, true);
   assert.equal(written.tipoValue, 'factura');
 

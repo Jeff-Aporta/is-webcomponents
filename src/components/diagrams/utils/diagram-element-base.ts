@@ -205,7 +205,7 @@ export class DiagramElementBase extends IswcElement {
     this.#renderQueued = (async () => {
       await Promise.resolve();
       try {
-        // Estilo por atributo (`diagram-style="insoft"`): se descarga una
+        // Estilo por atributo (`diagram-style="iswc"`): se descarga una
         // sola vez y el render espera a tenerlo, así el primer pintado ya
         // sale con su tema y un export headless no captura la versión sin
         // estilo. Si la carga falla, se pinta con el tema por defecto.

@@ -40,7 +40,7 @@
             "          <script type=\"application/json\" data-mv-scenarios>{",
             "            \"ok\": {",
             "              \"entrie\": \"tercero\",",
-            "              \"record\": { \"nit\": \"900123456-7\", \"razonSocial\": \"InSoft S.A.\" },",
+            "              \"record\": { \"nit\": \"900123456-7\", \"razonSocial\": \"Acme S.A.\" },",
             "              \"mensajes\": [",
             "                { \"itdmensaje\": \"info\",    \"mensaje\": \"NIT valido y activo en DIAN.\" },",
             "                { \"itdmensaje\": \"info\",    \"mensaje\": \"Razon social coincide con registro mercantil.\" },",

@@ -181,17 +181,17 @@ grupo (no negro). Las etiquetas se colocan al 50% del path y no pisan cajas.
 El consumidor no define colores ni temas: elige un estilo por atributo.
 
 ```html
-<iswc-er-diagram diagram-style="insoft"></iswc-er-diagram>
+<iswc-er-diagram diagram-style="iswc"></iswc-er-diagram>
 ```
 
 | Qué | Contrato |
 | --- | --- |
 | `diagram-style="<nombre>"` | Antes del primer pintado se descarga el estilo (una sola vez para toda la página) y el diagrama usa su tema de tipo ``er``. El render espera la carga: no hay un primer pintado sin estilo |
-| Estilo `insoft` | Viene registrado. Trae tres temas en una sola carga: `er` (DER, entidades naranja), `component` y `class` (paleta Visual Paradigm sin naranja: el naranja es exclusivo del DER) |
+| Estilo `ISWC` | Viene registrado. Trae tres temas en una sola carga: `er` (DER, entidades naranja), `component` y `class` (paleta Visual Paradigm sin naranja: el naranja es exclusivo del DER) |
 | Estilo desconocido o carga fallida | El diagrama se pinta con su tema por defecto; no queda vacío |
 | `registerStyleDiagram({ nombre: [archivos] })` | Para librerías de estilos: registra JSON de tema (uno por tipo, con `kind`) bajo un nombre. El registro es global a todos los diagramas de la página |
 | Colores en el payload | Por **clave semántica** del tema, no por hex: paquetes `primary`, `secondary`, `accent`, `neutral`, `panel`, `lite`; cajas `service`, `app`, `store`, `leaf`, `external`. Sin clave, los paquetes se colorean por profundidad (raíz `primary`, anidado `secondary`) |
-| Atributo `theme` | Heredado: `theme="insoft"` / `"insoft-cd"` equivale a `diagram-style="insoft"` |
+| Atributo `theme` | Heredado: `theme="iswc"` / `"iswc-cd"` equivale a `diagram-style="iswc"` |
 
 ## Dependencias y componentes relacionados
 

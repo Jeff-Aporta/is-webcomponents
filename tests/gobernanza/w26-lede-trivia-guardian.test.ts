@@ -18,13 +18,13 @@
  *      la sección `reference` del propio JSON (tabla atributos/slots/
  *      eventos/parts). No aporta.
  *
- *   3. "Componente InSoft accesible y personalizable, escrito con
+ *   3. "Componente iswc accesible y personalizable, escrito con
  *      JavaScript nativo, Shadow DOM y sin frameworks." (y variantes:
  *      "JavaScript nativo, Shadow DOM, sin frameworks." al final del
- *      párrafo, "Componente InSoft accesible, escrito en JavaScript
+ *      párrafo, "Componente iswc accesible, escrito en JavaScript
  *      nativo con Shadow DOM, sin frameworks."). Marketing boilerplate
  *      genérico que no describe NADA específico de ESTE componente y
- *      se repite en varios .json — el lector ya sabe que es InSoft/
+ *      se repite en varios .json — el lector ya sabe que es iswc/
  *      Shadow DOM / zero deps por estar navegando la galeria.
  *
  * El guardian recorre `src/components/` recursivo en `*.json` y FALLA si reaparece
@@ -64,18 +64,18 @@ const PATTERNS: Pattern[] = [
       'del padre). La API ya está en la sección reference del propio JSON.',
   },
   {
-    id: 'componente-insoft-accesible-boilerplate',
-    re: /Componente InSoft accesible y personalizable,? escrito con JavaScript nativo/,
+    id: 'componente-iswc-accesible-boilerplate',
+    re: /Componente iswc accesible y personalizable,? escrito con JavaScript nativo/,
     reason:
       'marketing boilerplate genérico. No describe nada específico de este ' +
       'componente y se repite en todos los .json — el lector ya lo sabe por ' +
       'estar navegando la galería ISWC.',
   },
   {
-    id: 'componente-insoft-accesible-shadow-dom-boilerplate',
-    re: /Componente InSoft accesible,? escrito en JavaScript nativo con Shadow DOM,? sin frameworks/,
+    id: 'componente-iswc-accesible-shadow-dom-boilerplate',
+    re: /Componente iswc accesible,? escrito en JavaScript nativo con Shadow DOM,? sin frameworks/,
     reason:
-      'variante del boilerplate "Componente InSoft accesible". Tampoco ' +
+      'variante del boilerplate "Componente iswc accesible". Tampoco ' +
       'describe este componente.',
   },
   {
@@ -130,7 +130,7 @@ for (const pat of PATTERNS) {
 
 test('W26: barrido cubre los 3 archivos del brief (button, split-panel, card) como caso de regresión', () => {
   // Estos 3 son los archivos donde originalmente vivía el boilerplate
-  // "Componente InSoft accesible..." en lede + ficha anatomia. Si vuelven
+  // "Componente iswc accesible..." en lede + ficha anatomia. Si vuelven
   // a contenerlo, falla el guardián anterior; este test confirma que
   // esos archivos siguen parseando como JSON después de la limpieza.
   for (const rel of [
@@ -145,7 +145,7 @@ test('W26: barrido cubre los 3 archivos del brief (button, split-panel, card) co
       `${rel} debe seguir siendo JSON válido`,
     );
     assert.ok(
-      !PATTERNS.find((p) => p.id === 'componente-insoft-accesible-boilerplate')!.re.test(text),
+      !PATTERNS.find((p) => p.id === 'componente-iswc-accesible-boilerplate')!.re.test(text),
       `${rel} no debe contener el boilerplate eliminado en W26`,
     );
   }

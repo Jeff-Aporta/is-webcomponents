@@ -144,7 +144,7 @@ export function setValues(
  *     primaryKeys: ['app'],
  *     ColumnsBtnRef: ['app'],
  *     columns: [{ field: 'app', header: 'Aplicación' }],
- *     mock: [{ app: 'ContaPyme' }],
+ *     mock: [{ app: 'Acme' }],
  *     multiSelect: false,
  *   })
  */

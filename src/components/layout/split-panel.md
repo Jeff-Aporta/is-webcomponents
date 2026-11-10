@@ -13,7 +13,7 @@ preview: ./split-panel.json
 ## Propósito
 
 Dos paneles adyacentes separados por un divisor arrastrable.
-Componente InSoft accesible, escrito en JavaScript nativo con Shadow DOM, sin frameworks.
+Componente ISWC accesible, escrito en JavaScript nativo con Shadow DOM, sin frameworks.
 
 Este módulo registra `<iswc-split-panel>`.
 

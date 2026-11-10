@@ -86,8 +86,8 @@ test('8. backdrop-variant acepta "none" | "basic"', async () => {
 test('9. integra con iswc-icon e iswc-button (chrome)', async () => {
   const src = readFileSync(TS, 'utf8');
   // Hijos hoja declarados en `static deps` (molde IswcElement: iswcLoader.ensure al conectar) o importados.
-  assert.ok(/media[\\/]+icon/.test(src) || /static deps = \[[^\]]*'iswc-icon'/.test(src), 'depende de icon');
-  assert.ok(/actions[\\/]+button/.test(src) || /static deps = \[[^\]]*'iswc-button'/.test(src), 'depende de button');
+  assert.ok(/media[\\/]+icon/.test(src) || /static (?:override )?deps = \[[^\]]*'iswc-icon'/.test(src), 'depende de icon');
+  assert.ok(/actions[\\/]+button/.test(src) || /static (?:override )?deps = \[[^\]]*'iswc-button'/.test(src), 'depende de button');
 });
 
 test('10. soporta slot default y header-actions, footer, label', async () => {

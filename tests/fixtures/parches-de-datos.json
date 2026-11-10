@@ -4,7 +4,7 @@
   "tag": "iswc-flowchart",
   "script": "diagrams/flowchart.min.mjs",
   "attrs": {
-    "diagram-style": "insoft"
+    "diagram-style": "iswc"
   },
   "payload": {
     "direction": "TB",

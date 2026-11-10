@@ -1,8 +1,8 @@
 {
   "$schema": "iswc-diagram-theme/v1",
-  "id": "insoft-class",
+  "id": "iswc-class",
   "kind": "class",
-  "label": "InSoft Class Diagram (Visual Paradigm)",
+  "label": "iswc Class Diagram (Visual Paradigm)",
   "font": {
     "family": "Tahoma, Arial, sans-serif"
   },

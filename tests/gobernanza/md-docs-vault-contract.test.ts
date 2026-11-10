@@ -90,7 +90,7 @@ test('iswc-md-docs-vault: la hoja se compone con piezas del kit (índice, markdo
   for (const ruta of ['./doc-layout.js', ...['navigation/doc-index.js', 'navigation/pager.js', 'media/figure.js', 'data/meta-list.js', 'helpers/md-render.js'].map((r) => `@jeff-aporta/iswc-base/components/${r}`)]) {
     // Una pieza hoja puede ir en `static deps` (molde IswcElement: iswcLoader.ensure al conectar).
     const tag = `iswc-${ruta.split('/').pop()!.replace(/\.js$/, '')}`;
-    const enDeps = new RegExp(`static deps = \\[[^\\]]*'${tag}'`).test(lector);
+    const enDeps = new RegExp(`static (?:override )?deps = \\[[^\\]]*'${tag}'`).test(lector);
     assert.ok(lector.includes(`import '${ruta}'`) || enDeps, `importa ${ruta} del kit (o lo declara en static deps)`);
   }
 });
@@ -98,7 +98,7 @@ test('iswc-md-docs-vault: la hoja se compone con piezas del kit (índice, markdo
 test('iswc-md-docs-vault: lo que el lector ofrece (hojas embebidas, main reactivo, ?s= compartible, info, búsqueda, flechas, evento de hoja)', () => {
   const lector = readFileSync(join(RAIZ, 'src', 'components', 'layout', 'md-docs-vault.ts'), 'utf8');
   assert.ok(lector.includes('script[type="text/markdown"][data-path]'), 'hojas embebidas sin red');
-  assert.match(lector, /static observed = \['main'\]/, '`main` observado: cambiarlo abre esa hoja');
+  assert.match(lector, /static (?:override )?observed = \['main'\]/, '`main` observado: cambiarlo abre esa hoja');
   assert.ok(lector.includes('createSpaState('), 'navegación SPA en la URL (?s=) con atrás/adelante');
   assert.ok(lector.includes('hrefFor('), 'enlaces compartibles a hoja y sección');
   assert.ok(lector.includes('label="Información de la hoja"'), 'modal de información de la hoja');

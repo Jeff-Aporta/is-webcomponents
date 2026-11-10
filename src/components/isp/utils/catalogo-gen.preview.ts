@@ -29,7 +29,7 @@ export async function mount(ctx: import('@jeff-aporta/iswc-base/previews/_kit/sc
     // server: {
     //   useLocal: true,
     //   local: { host: 'localhost', port: <SERVER_PORT>, https: false, restcontext: '' },
-    //   remote: { host: 'clientesis-contapymeu.azurewebsites.net', port: 443, https: true, restcontext: '' },
+    //   remote: { host: 'clientes-acme.ejemplo.com', port: 443, https: true, restcontext: '' },
     // },
     // endpoints: { recurso: 'curso', recursos: 'cursos' },
     // token: () => localStorage.getItem('token'),

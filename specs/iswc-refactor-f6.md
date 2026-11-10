@@ -32,7 +32,7 @@
 
 | Repo | Commit | Descripción |
 |---|---|---|
-| iswc-base | `74fa28a598` | fix(iswc): cerrar H1-H4 PREF-IMPORT-TYPE + B1-B2 S-PUERTO + documentar H5-H10 (8 files, +193 -8) |
+| iswc-base | `74fa28a598` | fix(ISWC): cerrar H1-H4 PREF-IMPORT-TYPE + B1-B2 S-PUERTO + documentar H5-H10 (8 files, +193 -8) |
 | motor | `d375e47` | feat(motor): asignar puerto 8801 a iswc-base (S-PUERTO-SIN-ASIGNAR) |
 | motor | `4a11ac1` | feat(motor): S-TIPOS-FOLDER respeta tipos referenciados desde .d.ts (perfil ISWC kit) |
 | motor | `23cb9f7` | fix(motor): S-TIPOS-FOLDER usa kit_de awareness (no d.ts-reference) + perfil-proyectos.json |

@@ -1950,13 +1950,13 @@ export function wrapLabel(
   return cortadas;
 }
 
-/** Forma UML de paquete: rectángulo (InSoft) o carpeta con pestaña. */
+/** Forma UML de paquete: rectángulo (iswc) o carpeta con pestaña. */
 export function packageShapePath(
   p: Paquete & { outline?: Punto[] },
   opts: { noTab?: boolean } = {},
 ): string {
   const { x, y, w, h } = p;
-  // InSoft CD: rectángulo puro — el outline del packer trae pestaña folder.
+  // iswc CD: rectángulo puro — el outline del packer trae pestaña folder.
   if (opts.noTab) {
     return `M${x},${y} L${x + w},${y} L${x + w},${y + h} L${x},${y + h} Z`;
   }

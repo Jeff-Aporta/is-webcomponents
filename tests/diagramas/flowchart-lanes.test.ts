@@ -1,5 +1,5 @@
 /**
- * Guardianes WHAT de los carriles de contexto (swimlanes) del flowchart insoft, de la barra de
+ * Guardianes WHAT de los carriles de contexto (swimlanes) del flowchart iswc, de la barra de
  * sincronización y del nodo `nested` sin rótulo. Afirman QUÉ ve quien lee el diagrama:
  *   L1 sin `lanes` no hay carriles (flujo simple de siempre).
  *   L2 verticales (por defecto): cada nodo queda dentro de la columna de su carril; carriles en el
@@ -46,14 +46,14 @@ const EDGES = [['ini', 'n1'], ['n1', 'n2'], ['n2', 'n3'], ['n3', 'f1'], ['f1', '
   .map(([from, to]) => ({ from, to }));
 
 const layout = (extra: Record<string, unknown> = {}): FlowLayout =>
-  computeFlowchartLayout(resolveFlowchartSpec({ lanes: LANES, nodes: NODES, edges: EDGES, ...extra })!, null, { style: 'insoft' });
+  computeFlowchartLayout(resolveFlowchartSpec({ lanes: LANES, nodes: NODES, edges: EDGES, ...extra })!, null, { style: 'iswc' });
 const byId = (L: FlowLayout) => new Map<string, FlowLayoutNode>(L.nodes.map((n) => [n.id, n]));
 const dentro = (n: FlowLayoutNode, l: { x: number; y: number; w: number; h: number }): boolean =>
   n.x >= l.x && n.x + n.w <= l.x + l.w && n.y >= l.y && n.y + n.h <= l.y + l.h;
 const laneOf = (id: string): string => NODES.find((n) => n.id === id)?.lane ?? 'V';
 
 Deno.test('carriles: L1 sin lanes no hay carriles', () => {
-  const L = computeFlowchartLayout(resolveFlowchartSpec({ nodes: NODES.map(({ lane: _l, ...n }) => n), edges: EDGES })!, null, { style: 'insoft' });
+  const L = computeFlowchartLayout(resolveFlowchartSpec({ nodes: NODES.map(({ lane: _l, ...n }) => n), edges: EDGES })!, null, { style: 'iswc' });
   assertEquals(L.lanes, undefined);
 });
 
@@ -123,7 +123,7 @@ Deno.test('nested: N1 sin rótulo propio y lado máximo 200', () => {
   const L = computeFlowchartLayout(resolveFlowchartSpec({
     nodes: [{ id: 'sub', label: 'Turno de conversación', kind: 'nested', diagram: { tag: 'iswc-flowchart', payload: {} } }],
     edges: [],
-  })!, null, { style: 'insoft', embeds: { sub: { w: 1000, h: 800 } } });
+  })!, null, { style: 'iswc', embeds: { sub: { w: 1000, h: 800 } } });
   const n = L.nodes[0]!;
   assertEquals(n.lines, undefined, 'el título lo trae el diagrama anidado');
   assert(n.embedBox && Math.max(n.embedBox.w, n.embedBox.h) <= 200 + 1e-9, `encajado en 200: ${JSON.stringify(n.embedBox)}`);
@@ -143,7 +143,7 @@ Deno.test('decisión: R1 ramas por el mismo costado no comparten riel (cada una 
       { from: 'd', to: 'ok', label: 'sí' }, { from: 'ok', to: 'x' }, { from: 'x', to: 'y' },
     ],
   };
-  const L = computeFlowchartLayout(resolveFlowchartSpec(spec)!, null, { style: 'insoft' });
+  const L = computeFlowchartLayout(resolveFlowchartSpec(spec)!, null, { style: 'iswc' });
   const ramas = L.edges.filter((e) => e.from === 'd' && e.to !== 'ok');
   const primeros = ramas.map((e) => { const [p, q] = pathPoints(e.path); return { y: p!.y, x0: Math.min(p!.x, q!.x), x1: Math.max(p!.x, q!.x) }; });
   for (let i = 0; i < primeros.length; i++) for (let j = i + 1; j < primeros.length; j++) {
@@ -191,7 +191,7 @@ const COMBINADO = {
 };
 
 denoTest('combinado: U1 lo que solo se usa (tabla) va a la altura de su primer usuario y no empuja el flujo', () => {
-  const L = computeFlowchartLayout(resolveFlowchartSpec(COMBINADO)!, null, { style: 'insoft' });
+  const L = computeFlowchartLayout(resolveFlowchartSpec(COMBINADO)!, null, { style: 'iswc' });
   const N = byId(L);
   const [lee, tabla] = [N.get('lee')!, N.get('tabla')!];
   assert(tabla.y < lee.y + lee.h && lee.y < tabla.y + tabla.h, 'tabla a la altura de «Lee»');
@@ -199,7 +199,7 @@ denoTest('combinado: U1 lo que solo se usa (tabla) va a la altura de su primer u
 });
 
 denoTest('combinado: U2 los usos salen de lado; al mismo costado de un destino comparten punta en abanico', () => {
-  const L = computeFlowchartLayout(resolveFlowchartSpec(COMBINADO)!, null, { style: 'insoft' });
+  const L = computeFlowchartLayout(resolveFlowchartSpec(COMBINADO)!, null, { style: 'iswc' });
   const usos = L.edges.filter((e) => e.kind === 'dashed');
   for (const e of usos) {
     const [p, q] = pathPoints(e.path);
@@ -225,7 +225,7 @@ denoTest('combinado: U2 los usos salen de lado; al mismo costado de un destino c
 });
 
 denoTest('combinado: U3 la vuelta al origen va por fuera, sin atravesar cajas, y entra por el costado', () => {
-  const L = computeFlowchartLayout(resolveFlowchartSpec(COMBINADO)!, null, { style: 'insoft' });
+  const L = computeFlowchartLayout(resolveFlowchartSpec(COMBINADO)!, null, { style: 'iswc' });
   const e = L.edges.find((x) => x.to === 'api')!;
   const pts = pathPoints(e.path);
   const api = byId(L).get('api')!;
@@ -249,7 +249,7 @@ denoTest('combinado: K1 nodo `class` = una clase del diagrama de clases, a tama�
 });
 
 denoTest('combinado: I1 una acción con `icon` lleva su insignia arriba a la izquierda y el texto usa toda la caja', () => {
-  const L = computeFlowchartLayout(resolveFlowchartSpec(COMBINADO)!, null, { style: 'insoft' });
+  const L = computeFlowchartLayout(resolveFlowchartSpec(COMBINADO)!, null, { style: 'iswc' });
   const val = byId(L).get('val')!;
   assert(val.pill && val.pillFloat, 'insignia suelta');
   assert(val.pill.x < val.x && val.pill.y < val.y, 'montando la esquina superior izquierda');
@@ -277,7 +277,7 @@ denoTest('combinado: P1 la insignia lleva el paso y el ícono; crece con el núm
     ],
     edges: [{ from: 'a', to: 'b' }, { from: 'b', to: 'c' }],
   })!;
-  const N = byId(computeFlowchartLayout(spec, null, { style: 'insoft' }));
+  const N = byId(computeFlowchartLayout(spec, null, { style: 'iswc' }));
   const [a, b, c] = ['a', 'b', 'c'].map((id) => N.get(id)!);
   assertEquals(a!.step, 2);
   assert(a!.pill && b!.pill && !c!.pill, 'insignia solo con paso o ícono');
@@ -286,7 +286,7 @@ denoTest('combinado: P1 la insignia lleva el paso y el ícono; crece con el núm
   assertEquals(json.nodes.find((n) => n.id === 'a'), { id: 'a', label: 'Valida', step: 2, icon: 'mdi:shield-check-outline' });
 });
 denoTest('combinado: S1 steps:auto numera los pasos del flujo sin saltos; lo que solo se usa lleva solo ícono', () => {
-  const L = computeFlowchartLayout(resolveFlowchartSpec({ ...COMBINADO, steps: 'auto', nodes: [{ id: 'ini', shape: 'start', lane: 'P' }, ...COMBINADO.nodes, { id: 'fin', shape: 'end', lane: 'T' }], edges: [{ from: 'ini', to: 'api' }, ...COMBINADO.edges, { from: 'resp', to: 'fin' }] })!, null, { style: 'insoft' });
+  const L = computeFlowchartLayout(resolveFlowchartSpec({ ...COMBINADO, steps: 'auto', nodes: [{ id: 'ini', shape: 'start', lane: 'P' }, ...COMBINADO.nodes, { id: 'fin', shape: 'end', lane: 'T' }], edges: [{ from: 'ini', to: 'api' }, ...COMBINADO.edges, { from: 'resp', to: 'fin' }] })!, null, { style: 'iswc' });
   const pasos = L.nodes.filter((n) => n.step != null).map((n) => n.step!).sort((a, b) => a - b);
   assertEquals(pasos, Array.from({ length: pasos.length }, (_, i) => i + 1), 'sin saltos');
   const enFlujo = new Set(COMBINADO.edges.filter((e) => (e as { kind?: string }).kind !== 'dashed').flatMap((e) => [e.from, e.to]));
@@ -310,7 +310,7 @@ denoTest('combinado: G1 un carril que mezcla flujo y clases encierra las clases 
     ],
     edges: [{ from: 'ctl', to: 'pojo', kind: 'dashed' }, { from: 'ctl', to: 'val' }, { from: 'val', to: 'tab', kind: 'dashed' }],
   };
-  const L = computeFlowchartLayout(resolveFlowchartSpec(spec)!, null, { style: 'insoft', embeds: { ctl: { w: 160, h: 80 }, pojo: { w: 140, h: 70 }, tab: { w: 150, h: 60 } } });
+  const L = computeFlowchartLayout(resolveFlowchartSpec(spec)!, null, { style: 'iswc', embeds: { ctl: { w: 160, h: 80 }, pojo: { w: 140, h: 70 }, tab: { w: 150, h: 60 } } });
   assertEquals(L.contexts?.map((c) => `${c.lane}:${c.label}`), ['T:Clases'], 'la BD solo tiene tablas: el carril ya es el contexto');
   const g = L.contexts![0]!;
   const N = byId(L);
@@ -325,7 +325,7 @@ denoTest('combinado: G2 `context` explícito agrupa por título dentro del carri
     nodes: [{ id: 'a', label: 'A', lane: 'T', context: 'Validación' }, { id: 'b', label: 'B', lane: 'T', context: 'Validación' }, { id: 'c', label: 'C', lane: 'T' }],
     edges: [{ from: 'a', to: 'b' }, { from: 'b', to: 'c' }],
   })!;
-  const L = computeFlowchartLayout(spec, null, { style: 'insoft' });
+  const L = computeFlowchartLayout(spec, null, { style: 'iswc' });
   assertEquals(L.contexts?.map((c) => c.label), ['Validación']);
   assertEquals((flowchartSpecToJson(spec).nodes as Array<{ id: string; context?: string }>).find((n) => n.id === 'a')?.context, 'Validación');
 });
@@ -335,7 +335,7 @@ denoTest('combinado: B1 las ramas de una barra salen de puntos distintos aunque 
     lanes: [{ id: 'A', label: 'A' }, { id: 'B', label: 'B' }, { id: 'C', label: 'C' }],
     nodes: [{ id: 'x', label: 'X', lane: 'A' }, { id: 'f', shape: 'bar', lane: 'A' }, { id: 'y', label: 'Y', lane: 'B' }, { id: 'z', label: 'Z', lane: 'C' }],
     edges: [{ from: 'x', to: 'f' }, { from: 'f', to: 'y' }, { from: 'f', to: 'z' }],
-  })!, null, { style: 'insoft' });
+  })!, null, { style: 'iswc' });
   const salidas = L.edges.filter((e) => e.from === 'f').map((e) => JSON.stringify(pathPoints(e.path)[0]));
   assertEquals(new Set(salidas).size, 2, salidas.join(' '));
 });
@@ -348,7 +348,7 @@ denoTest('combinado: S2 insignia estándar: arriba a la izquierda en todo paso; 
       { id: 'd', label: '¿Sigue?', shape: 'diamond' }, { id: 'a', label: 'Acción' },
     ],
     edges: [{ from: 't', to: 'd' }, { from: 'd', to: 'a', label: 'sí' }],
-  })!, null, { style: 'insoft', embeds: { t: { w: 150, h: 60 } } });
+  })!, null, { style: 'iswc', embeds: { t: { w: 150, h: 60 } } });
   const N = byId(L);
   // La tabla es una entidad: sin número (solo su ícono); los pasos, 1 y 2.
   assertEquals([N.get('t')!.step, N.get('d')!.step, N.get('a')!.step], [undefined, 1, 2]);
@@ -370,7 +370,7 @@ denoTest('comentario: C1 globo pegado al nodo que comenta, sin número, sin empu
     ],
     edges: [{ from: 'a', to: 'b' }, { from: 'b', to: 'c' }],
   };
-  const L = computeFlowchartLayout(resolveFlowchartSpec(spec)!, null, { style: 'insoft' });
+  const L = computeFlowchartLayout(resolveFlowchartSpec(spec)!, null, { style: 'iswc' });
   const N = byId(L);
   const [b, nota] = [N.get('b')!, N.get('nota')!];
   const hueco = nota.pointer === 'left' ? nota.x - (b.x + b.w) : b.x - (nota.x + nota.w);
@@ -384,8 +384,8 @@ denoTest('comentario: C1 globo pegado al nodo que comenta, sin número, sin empu
 
 denoTest('comentario: C2 con x/y fijados a mano manda esa posición', () => {
   const spec = resolveFlowchartSpec({ nodes: [{ id: 'a', label: 'A' }, { id: 'n', label: 'nota', shape: 'comment', about: 'a' }], edges: [] })!;
-  const L0 = computeFlowchartLayout(spec, null, { style: 'insoft' });
-  const L = computeFlowchartLayout(spec, { nodes: { n: { x: 300, y: 200 } } }, { style: 'insoft' });
+  const L0 = computeFlowchartLayout(spec, null, { style: 'iswc' });
+  const L = computeFlowchartLayout(spec, { nodes: { n: { x: 300, y: 200 } } }, { style: 'iswc' });
   const n0 = byId(L0).get('n')!;
   const n = byId(L).get('n')!;
   assert(n.x !== n0.x || n.y !== n0.y, 'se movió a la posición fijada');
@@ -395,7 +395,7 @@ denoTest('combinado: G3 el grupo abraza a TODOS sus miembros (y sus insignias) e
   // Ruta de un solo controller: sus clases comparten carril con los pasos y van en un grupo «Clases»
   // (con más de un controller, las clases tienen su propia columna y no hace falta recuadro).
   const d = await editable(new URL('../../labs/iss-ayudascpia-flujos/payloads/ruta-conversacion-borrado.json', import.meta.url));
-  const L = computeFlowchartLayout(resolveFlowchartSpec(d.payload)!, null, { style: 'insoft', embeds: { ctl: { w: 300, h: 110 }, 'ctl-pojo': { w: 230, h: 110 }, api: { w: 230, h: 80 } } });
+  const L = computeFlowchartLayout(resolveFlowchartSpec(d.payload)!, null, { style: 'iswc', embeds: { ctl: { w: 300, h: 110 }, 'ctl-pojo': { w: 230, h: 110 }, api: { w: 230, h: 80 } } });
   for (const g of L.contexts ?? []) {
     for (const id of g.members ?? []) {
       const n = byId(L).get(id)!;
@@ -421,7 +421,7 @@ denoTest('etiquetas: E1 ícono de BD por defecto en verbos SQL, ícono propio de
       { from: 'a', to: 't', kind: 'dashed', label: 'SELECT' }, { from: 'b', to: 't', kind: 'dashed', label: 'insert' },
       { from: 'c', to: 't', kind: 'dashed', label: 'otra cosa' },
     ],
-  })!, null, { style: 'insoft' });
+  })!, null, { style: 'iswc' });
   const por = (l: string) => L.edges.find((e) => e.label === l)!;
   assertEquals(por('SELECT').labelIcon, 'mdi:database-search-outline');
   assertEquals(por('insert').labelIcon, 'mdi:database-plus-outline');
@@ -449,7 +449,7 @@ denoTest('ruteo: R2 radio de proximidad de giros (llegada pesa el doble que la p
     lanes: [{ id: 'T', label: 'T' }, { id: 'D', label: 'D' }],
     nodes: [{ id: 'a', label: 'Lee', lane: 'T' }, { id: 't', label: 'tabla', lane: 'D' }],
     edges: [{ from: 'a', to: 't', kind: 'dashed', label: 'SELECT' }],
-  })!, null, { style: 'insoft' });
+  })!, null, { style: 'iswc' });
   const pts = pathPoints(L.edges[0]!.path);
   const n = byId(L);
   const sale = n.get('a')!.y + n.get('a')!.h / 2;
@@ -458,14 +458,14 @@ denoTest('ruteo: R2 radio de proximidad de giros (llegada pesa el doble que la p
 });
 
 denoTest('ruteo: A1 el flujo animado es el estándar (activo por defecto; un tema lo puede apagar)', async () => {
-  const tema = JSON.parse(await Deno.readTextFile(new URL('../../src/components/diagrams/utils/themes/insoft-flow.json', import.meta.url)));
-  assertEquals(flowPaint(tema).dashFlow, true, 'insoft: rieles punteados en movimiento');
-  assertEquals(flowPaint(tema).pillTone, 'entity', 'insoft: insignia del tono de su entidad, oscuro');
+  const tema = JSON.parse(await Deno.readTextFile(new URL('../../src/components/diagrams/utils/themes/iswc-flow.json', import.meta.url)));
+  assertEquals(flowPaint(tema).dashFlow, true, 'iswc: rieles punteados en movimiento');
+  assertEquals(flowPaint(tema).pillTone, 'entity', 'iswc: insignia del tono de su entidad, oscuro');
   assertEquals(flowPaint({ flow: {} } as never).dashFlow, true, 'estándar: activo sin flag');
   assertEquals(flowPaint({ flow: { dashFlow: false } } as never).dashFlow, false, 'un tema lo apaga');
 });
 
-denoTest('combinado: H1 las acciones insoft tienen un ancho homogéneo (el de la más ancha)', () => {
+denoTest('combinado: H1 las acciones iswc tienen un ancho homogéneo (el de la más ancha)', () => {
   const L = computeFlowchartLayout(resolveFlowchartSpec({
     nodes: [
       { id: 'a', label: 'Emite begin' },
@@ -474,7 +474,7 @@ denoTest('combinado: H1 las acciones insoft tienen un ancho homogéneo (el de la
       { id: 'c', label: 'Fin corto' },
     ],
     edges: [{ from: 'a', to: 'b' }, { from: 'b', to: 'd' }, { from: 'd', to: 'c' }],
-  })!, null, { style: 'insoft' });
+  })!, null, { style: 'iswc' });
   const n = byId(L);
   const anchos = new Set(['a', 'b', 'c'].map((id) => n.get(id)!.w));
   assertEquals(anchos.size, 1, `anchos: ${[...anchos].join(' ')}`);

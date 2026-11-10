@@ -2,7 +2,7 @@
 
 **Grupo:** pages-gallery
 **Demos cubiertas:** ecosystem, home, theming
-**Chrome global del gallery:** navbar, theme switcher (light/dark), palette switcher (ContaPyme / InSoft / AgroWin), search, drawer, view toggles, breadcrumb
+**Chrome global del gallery:** navbar, theme switcher (light/dark), palette switcher (Acme / ISWC / Beta), search, drawer, view toggles, breadcrumb
 
 ---
 
@@ -86,7 +86,7 @@
     - Cobertura: token propagation cross-component.
 
 13. **Palette switcher actualiza acentos en bloques ecosystem** — [Estado visual y edge cases]
-    - Setup: cambiar paleta de ContaPyme a InSoft.
+    - Setup: cambiar paleta de Acme a iswc.
     - Acción: observar los badges y separadores del listado ecosystem.
     - Assertion: los acentos primary/secondary cambian; ningún gradiente queda hardcoded; los bloques chip/badge siguen contraste AA.
     - Cobertura: palette propagation + contrast safety.
@@ -131,7 +131,7 @@
    - Cobertura: prefers-reduced-motion CSS branch.
 
 3. **Links secundarios mantienen ratio de contraste AA** — [ARIA / a11y]
-   - Setup: alternar paleta ContaPyme → InSoft.
+   - Setup: alternar paleta Acme → iswc.
    - Acción: medir contraste de links secundarios sobre hero.
    - Assertion: contraste ≥ 4.5:1 (texto normal) o ≥ 3:1 (large text); `text-decoration` permanece visible.
    - Cobertura: WCAG 1.4.3 palette switch.
@@ -185,9 +185,9 @@
     - Cobertura: performance budget básico.
 
 12. **Cambio de paleta en home propaga a cards de demos** — [Interacción]
-    - Setup: alternar paleta InSoft → AgroWin.
+    - Setup: alternar paleta ISWC → Beta.
     - Acción: observar las miniaturas de demos recomendadas en home.
-    - Assertion: cada miniatura hereda tokens `--is-primary`; ningún botón queda con color residual de ContaPyme.
+    - Assertion: cada miniatura hereda tokens `--is-primary`; ningún botón queda con color residual de Acme.
     - Cobertura: palette token cascade.
 
 13. **Toast de "demo copiada al portapapeles" accesible** — [ARIA / a11y]
@@ -254,7 +254,7 @@
    - Cobertura: layer separation base/palette.
 
 6. **`aria-pressed` en swatches de paletas predefinidas** — [ARIA / a11y]
-   - Setup: focus en swatches ContaPyme / InSoft / AgroWin.
+   - Setup: focus en swatches Acme / ISWC / Beta.
    - Acción: tabular y revisar atributos.
    - Assertion: el swatch activo tiene `aria-pressed=true` y un outline de focus visible; los demás `aria-pressed=false`; la navegación por teclado es cíclica.
    - Cobertura: toggle group pattern ARIA.
@@ -334,9 +334,9 @@
    - Cobertura: cross-page state integrity.
 
 2. **Persistencia del palette switcher cross-page** — [Interacción]
-   - Setup: seleccionar `InSoft` en theming.
+   - Setup: seleccionar `ISWC` en theming.
    - Acción: navegar a home, ecosystem, theming.
-   - Assertion: en los 3 destinos la clase `palette-insoft` o equivalente está aplicada al `<html>`; ninguna demo queda con mezcla de acentos ContaPyme + InSoft.
+   - Assertion: en los 3 destinos la clase `palette-iswc` o equivalente está aplicada al `<html>`; ninguna demo queda con mezcla de acentos Acme + iswc.
    - Cobertura: palette propagation + sanity check.
 
 3. **Theme switcher ARIA correcto** — [ARIA / a11y]
@@ -425,7 +425,7 @@
 
 17. **Panel switcher de paleta accesible sin trampa** — [ARIA / a11y]
     - Setup: abrir paleta switcher.
-    - Acción: tabular entre ContaPyme/InSoft/AgroWin con teclado.
+    - Acción: tabular entre Acme/iswc/Beta con teclado.
     - Assertion: cada swatch recibe foco con outline visible; `Enter` aplica; nada queda con `aria-hidden` rotura.
     - Cobertura: palette switcher keyboard a11y.
 
@@ -442,9 +442,9 @@
     - Cobertura: listbox full keyboard.
 
 20. **Historia de paleta se serializa en `?p=istoft` etc.** — [Interacción]
-    - Setup: seleccionar paleta InSoft.
+    - Setup: seleccionar paleta iswc.
     - Acción: copiar URL completa.
-    - Assertion: existe query param `p=insoft` (o equivalente); al recargar, la paleta InSoft se aplica antes del primer paint.
+    - Assertion: existe query param `p=ISWC` (o equivalente); al recargar, la paleta ISWC se aplica antes del primer paint.
     - Cobertura: palette deep-link SSR-like.
 
 21. **Theme switcher con `Space` toggle correctamente** — [Teclado]
@@ -520,5 +520,5 @@
 | **Total**             |     **78** |
 
 - Categorías aplicadas a las 3 páginas: navegación, estado vía `?s=`, persistencia de tema cross-navigation, propagación de tokens al cambiar paleta, ARIA del theme switcher, teclado del drawer, filtro de search, semántica de breadcrumb.
-- Categorías aplicadas al chrome del gallery: navbar, theme switcher (light/dark), palette switcher (ContaPyme/InSoft/AgroWin), search, drawer, view toggles, breadcrumb.
+- Categorías aplicadas al chrome del gallery: navbar, theme switcher (light/dark), palette switcher (Acme/iswc/Beta), search, drawer, view toggles, breadcrumb.
 - Cada propuesta cubre una rama distinta (edge case / branch / ARIA / teclado / estado).

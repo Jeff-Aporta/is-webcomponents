@@ -20,7 +20,7 @@ import css from 'iswc:css';
  * <iswc-component-diagram> — diagrama de componentes UML en SVG, sin Mermaid.
  *
  * Tres primitivas declaradas por el payload:
- *   - packages: agrupadores (rectángulo InSoft sin pestaña de carpeta);
+ *   - packages: agrupadores (rectángulo iswc sin pestaña de carpeta);
  *     soporta anidación vía `parent`.
  *   - components: rectángulos con estereotipo `<<name>>` sobre la etiqueta.
  *     El estereotipo se pinta en cursiva; la etiqueta va en negrita debajo.
@@ -31,7 +31,7 @@ import css from 'iswc:css';
  * Las posiciones del payload son semilla. El empaque (`pack` / `triptych`)
  * dispersa cajas con distancia mínima (`min-gap` o `layout.minGap`).
  *
- * Atributos: color (inline | viewer), open-on-click, min-gap, theme (insoft)
+ * Atributos: color (inline | viewer), open-on-click, min-gap, theme (iswc)
  * Propiedades: payload, spec, layout, isViewer, minGap
  * Eventos: iswc-render, iswc-open-viewer
  */
@@ -65,7 +65,7 @@ function vpFill(valor: string | undefined, tema: ErThemeJson | null): string {
 
 /**
  * Relleno VP de un paquete sin paleta: por profundidad, como en los
- * diagramas InSoft de Visual Paradigm (raíz azul, anidado turquesa).
+ * diagramas iswc de Visual Paradigm (raíz azul, anidado turquesa).
  */
 function vpDepthFill(p: Paquete, todos: readonly Paquete[], tema: ErThemeJson | null): string {
   let d = 0;
@@ -160,7 +160,7 @@ class IswcComponentDiagram extends DiagramElementBase {
   }
 
   /**
-   * Tema del estilo (`diagram-style="insoft"` → su tema `component`, ya
+   * Tema del estilo (`diagram-style="iswc"` → su tema `component`, ya
    * cargado por la base). Sin estilo: attr heredado `theme` o
    * `componentDiagram.theme`.
    */
@@ -170,12 +170,12 @@ class IswcComponentDiagram extends DiagramElementBase {
     const fromAttr = this.getAttribute('theme');
     if (fromAttr) {
       const id = fromAttr.trim().toLowerCase();
-      // CD usa paleta propia; "insoft" apunta a insoft-cd.
-      if (id === 'insoft') return resolveErTheme('insoft-cd') ?? resolveErTheme('insoft');
+      // CD usa paleta propia; "iswc" apunta a iswc-cd.
+      if (id === 'iswc') return resolveErTheme('iswc-cd') ?? resolveErTheme('iswc');
       return resolveErTheme(fromAttr);
     }
     const fromPayload = resolveErTheme(this.payload);
-    if (fromPayload?.id === 'insoft') return resolveErTheme('insoft-cd') ?? fromPayload;
+    if (fromPayload?.id === 'iswc') return resolveErTheme('iswc-cd') ?? fromPayload;
     return fromPayload;
   }
 
@@ -303,7 +303,7 @@ class IswcComponentDiagram extends DiagramElementBase {
       const tb = p.titleBox;
       const label = p.stereotype ? `«${p.stereotype}» ${p.name ?? ''}` : (p.name ?? '');
       const noTab = cd?.noPackageTab ?? Boolean(styleTheme);
-      // InSoft: título sin fondo ni caja (solo tinta).
+      // iswc: título sin fondo ni caja (solo tinta).
       if (!noTab && tb && (cd ? cd.titleBackground : !styleTheme)) {
         g.appendChild(svgEl('rect', {
           x: tb.x, y: tb.y, width: tb.w, height: tb.h, rx: styleTheme ? 0 : 4,
@@ -413,7 +413,7 @@ class IswcComponentDiagram extends DiagramElementBase {
     const lolliFill = cd?.lollipop ?? '#7ACFF4';
     // Contorno O/C y stem = arista oscura; relleno O = color expositor (cian).
     const stroke = ep?.stroke ?? (styleTheme ? theme.accent : theme.accent);
-    // InSoft: -( expone (provided→C), -O consume (required→O). UML clásico = al revés.
+    // iswc: -( expone (provided→C), -O consume (required→O). UML clásico = al revés.
     const invert = cd?.invertAssembly === true;
     for (const iface of layout.interfaces) {
       const g = svgEl('g', { class: 'cd-iface' });
@@ -635,7 +635,7 @@ class IswcComponentDiagram extends DiagramElementBase {
   }
 
   /**
-   * Paquete estilo Visual Paradigm / InSoft: carpeta con pestaña corta a la
+   * Paquete estilo Visual Paradigm / iswc: carpeta con pestaña corta a la
    * izquierda, borde negro de 1 px y rótulo centrado (o junto a la pestaña
    * si centrado taparía la vertical de un hijo directo).
    */
@@ -674,7 +674,7 @@ class IswcComponentDiagram extends DiagramElementBase {
   }
 
   /**
-   * Componente estilo Visual Paradigm / InSoft: caja recta pastel con borde
+   * Componente estilo Visual Paradigm / iswc: caja recta pastel con borde
    * negro, «estereotipo» y nombre en negrita centrados, y arriba a la derecha
    * el icono del componente (Iconify) o el glifo UML de componente.
    */

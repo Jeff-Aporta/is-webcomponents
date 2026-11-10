@@ -1,4 +1,4 @@
-# Preview por CDN — contrato de consumo externo (apps iswc)
+# Preview por CDN — contrato de consumo externo (apps ISWC)
 
 Cómo una app externa (p. ej. PatyIA/app, iswc-tkts/app) monta un
 preview `iswc-preview/v1` usando el kit ISWC por CDN. Verificado con

@@ -198,12 +198,12 @@ test('W55: al menos una JSON usa $schema: iswc-preview/v1', async () => {
 });
 
 test('W55: el theme JSON usa iswc-diagram-theme/v1 (excluido del validator)', async () => {
-  // El theme `insoft.json` debe seguir usando su propio $schema y NO
+  // El theme `iswc.json` debe seguir usando su propio $schema y NO
   // iswc-preview/v1; si cambia a preview/v1, el validator anterior lo
   // capturaría y fallaría porque su shape es distinto.
-  const themePath = join(SRC_COMPONENTS, 'diagrams', 'utils', 'themes', 'insoft.json');
+  const themePath = join(SRC_COMPONENTS, 'diagrams', 'utils', 'themes', 'iswc.json');
   const d = JSON.parse(await readFile(themePath, 'utf8'));
-  assert.equal(d.$schema, 'iswc-diagram-theme/v1', 'insoft.json debe mantener su $schema de diagram-theme');
+  assert.equal(d.$schema, 'iswc-diagram-theme/v1', 'iswc.json debe mantener su $schema de diagram-theme');
 });
 
 test('W55: ComponentJsonSchema acepta un documento mínimo válido', () => {

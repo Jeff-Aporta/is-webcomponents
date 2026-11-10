@@ -49,26 +49,26 @@ const puntos = (d: string): Array<{ x: number; y: number }> => {
 
 // ── Estilos ────────────────────────────────────────────────────────────
 
-denoTest('estilo insoft: registrado, se carga una vez y trae un tema por tipo de diagrama', async () => {
-  assert(listStylesDiagram().includes('insoft'));
-  await loadStylesDiagram('InSoft');
-  assert(isStyleDiagramLoaded('insoft'));
-  assertEquals(styleThemeFor('insoft', 'er')?.kind, 'er');
-  assertEquals(styleThemeFor('insoft', 'component')?.kind, 'component');
-  assertEquals(styleThemeFor('insoft', 'class')?.kind, 'class');
+denoTest('estilo iswc: registrado, se carga una vez y trae un tema por tipo de diagrama', async () => {
+  assert(listStylesDiagram().includes('iswc'));
+  await loadStylesDiagram('iswc');
+  assert(isStyleDiagramLoaded('iswc'));
+  assertEquals(styleThemeFor('iswc', 'er')?.kind, 'er');
+  assertEquals(styleThemeFor('iswc', 'component')?.kind, 'component');
+  assertEquals(styleThemeFor('iswc', 'class')?.kind, 'class');
   // Segunda carga: misma promesa resuelta, sin error.
-  await loadStylesDiagram('insoft');
+  await loadStylesDiagram('iswc');
 });
 
 denoTest('el naranja de entidad es exclusivo del DER: ni componentes ni clases lo usan como relleno', async () => {
-  await loadStylesDiagram('insoft');
+  await loadStylesDiagram('iswc');
   for (const tipo of ['component', 'class'] as const) {
-    const t = styleThemeFor('insoft', tipo)!;
+    const t = styleThemeFor('iswc', tipo)!;
     const colores = [...Object.values(t.fills ?? {}), ...Object.values(t.cluster?.palettes ?? {})].map((c) => c.toUpperCase());
     assert(!colores.includes(NARANJA_DER), `${tipo} usa ${NARANJA_DER}`);
     assert(t.fills?.service && t.fills?.store, `${tipo} sin rellenos semánticos`);
   }
-  assertEquals(styleThemeFor('insoft', 'er')?.entity?.fill, NARANJA_DER);
+  assertEquals(styleThemeFor('iswc', 'er')?.entity?.fill, NARANJA_DER);
 });
 
 denoTest('un estilo desconocido no rompe: carga vacía y sin tema', async () => {
@@ -77,7 +77,7 @@ denoTest('un estilo desconocido no rompe: carga vacía y sin tema', async () => 
 });
 
 denoTest('registerStyleDiagram expone el estilo a todos los bundles (almacén global)', () => {
-  registerStyleDiagram({ prueba: ['./themes/insoft-class.json'] });
+  registerStyleDiagram({ prueba: ['./themes/iswc-class.json'] });
   assert(listStylesDiagram().includes('prueba'));
   const raiz = globalThis as typeof globalThis & { __iswcDiagramStyles?: { archivos: Map<string, string[]> } };
   assert(raiz.__iswcDiagramStyles?.archivos.has('prueba'));
@@ -86,7 +86,7 @@ denoTest('registerStyleDiagram expone el estilo a todos los bundles (almacén gl
 denoTest('el build publica los temas junto a los bundles (carga diferida)', () => {
   const dist = join(ROOT, 'dist', 'cdn', 'diagrams', 'themes');
   if (!existsSync(dist)) return; // sin build local no hay qué verificar
-  for (const f of ['insoft.json', 'insoft-cd.json', 'insoft-class.json']) {
+  for (const f of ['iswc.json', 'iswc-cd.json', 'iswc-class.json']) {
     const src = readFileSync(join(ROOT, 'src', 'components', 'diagrams', 'utils', 'themes', f), 'utf8');
     assertEquals(readFileSync(join(dist, f), 'utf8'), src, `${f} desactualizado en dist`);
   }

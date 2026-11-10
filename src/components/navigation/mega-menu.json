@@ -42,7 +42,7 @@
           "kind": "demo",
           "html": [
             "<header style=\"display:flex; align-items:center; gap:.5rem; padding:1rem 0;\">",
-            "            <strong style=\"font-size:1rem\">InSoft</strong>",
+            "            <strong style=\"font-size:1rem\">Acme</strong>",
             "            <iswc-mega-menu id=\"pgMegaMenu\" label=\"Catálogo\" placement=\"bottom-start\" hover>",
             "              <div slot=\"column\" title=\"Muebles\">",
             "                <a href=\"#\" data-nav=\"/sillas\">Sillas</a>",
@@ -91,7 +91,7 @@
           "kind": "demo",
           "html": [
             "<header style=\"display:flex; align-items:center; gap:.5rem; padding:1rem 0;\">",
-            "            <strong style=\"font-size:1rem\">InSoft</strong>",
+            "            <strong style=\"font-size:1rem\">Acme</strong>",
             "            <iswc-mega-menu label=\"Soporte\" placement=\"bottom-start\">",
             "              <div slot=\"column\" title=\"Canales\">",
             "                <a href=\"#\" data-nav=\"/chat\">Chat en vivo</a>",

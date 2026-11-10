@@ -13,8 +13,8 @@ export async function mount(ctx: import('@jeff-aporta/iswc-base/previews/_kit/sc
   const root = ctx.main;
 
   const datos: Array<{ app: string }> = [
-    { app: 'ContaPyme' },
-    { app: 'AgroWin' },
+    { app: 'Acme' },
+    { app: 'Beta' },
     { app: 'PatyIA' },
   ];
 

@@ -1,13 +1,13 @@
 ---
 name: especificar-what
-description: Cómo se escriben specs y pruebas en una app iswc (estándar común). Úsala antes de escribir o cambiar una spec, una prueba o un comportamiento observable.
+description: Cómo se escriben specs y pruebas en una app ISWC (estándar común). Úsala antes de escribir o cambiar una spec, una prueba o un comportamiento observable.
 ---
 <!-- @vendor 2026-10-13T14:13:48.240Z Jeff-Aporta/is-webcomponents@main skills/iswc-foundation/templates/specs/especificar-what.md -->
 
-# Specs y pruebas WHAT (estándar iswc)
+# Specs y pruebas WHAT (estándar ISWC)
 
 Copia sembrada por `create-iswc-app` desde el kit (`iswc-base/skills/iswc-foundation`). Todas las
-apps iswc especifican y prueban igual, para que cualquier agente, en cualquier sesión, siga lo mismo.
+apps ISWC especifican y prueban igual, para que cualquier agente, en cualquier sesión, siga lo mismo.
 
 ## 1. Prioridad de redacción
 

@@ -155,7 +155,7 @@ class IswcClassDiagram extends DiagramElementBase {
     this.#theme = theme;
     this.syncThemeAttr();
 
-    // Estilo (`diagram-style="insoft"`): su tema `class` decide paletas y
+    // Estilo (`diagram-style="iswc"`): su tema `class` decide paletas y
     // rellenos; en modo paquetes sin `boxStyle`, pinta en estilo VP.
     const tema = styleThemeFor(hostStyleName(this), 'class');
     this.#classTheme = tema;
@@ -554,7 +554,7 @@ class IswcClassDiagram extends DiagramElementBase {
   }
 
   /**
-   * Paquetes estilo Visual Paradigm / InSoft: carpeta con pestaña corta a la
+   * Paquetes estilo Visual Paradigm / iswc: carpeta con pestaña corta a la
    * izquierda, borde negro fino y rótulo centrado en la franja superior.
    */
   #buildVpPackages(layout: ClassLayout, g: SVGGElement) {
@@ -593,7 +593,7 @@ class IswcClassDiagram extends DiagramElementBase {
   }
 
   /**
-   * Clase estilo Visual Paradigm / InSoft: caja recta con relleno pastel del
+   * Clase estilo Visual Paradigm / iswc: caja recta con relleno pastel del
    * paquete, borde negro fino, «estereotipo» y nombre en negrita centrados,
    * y compartimentos separados por línea negra. La visibilidad se escribe
    * con el símbolo UML (+ - # ~) como prefijo, en negro.

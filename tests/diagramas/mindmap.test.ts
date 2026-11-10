@@ -35,9 +35,9 @@ test('diagramas/mindmap', async () => {
 
   const PAYLOAD = {
     mindmap: {
-      title: 'ContaPyme',
+      title: 'Acme',
       nodes: [
-        { id: 'root', label: 'ContaPyme' },
+        { id: 'root', label: 'Acme' },
         { id: 'a', parent: 'root', label: 'Contabilidad' },
         { id: 'b', parent: 'root', label: 'Facturación electrónica y nómina' },
         { id: 'c', parent: 'root', label: 'Inventario' },

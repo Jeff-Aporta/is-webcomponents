@@ -394,7 +394,7 @@ Pieza transversal que se reusa desde varios componentes del kit. No son `iswc-*`
 ## 5. Sistema de estilos
 
 - [is-base.css](../src/styles/is-base.css) — tokens `--iswc-*` y temas (`data-theme="dark|light"`).
-- [palettes.css](../src/styles/palettes.css) — paletas insoft / contapyme / agrowin (`data-palette="…"`).
+- [palettes.css](../src/styles/palettes.css) — paletas ISWC / acme / beta (`data-palette="…"`).
 - [palettes.json](../src/styles/palettes.json) — fuente JSON de las paletas.
 - [system.css](../src/styles/system.css) — sistema de estilos base (reset + layout shell).
 - [presentation.css](../src/styles/presentation.css) — chrome de los previews (frame, tabs, copy-button).
@@ -405,7 +405,7 @@ Pieza transversal que se reusa desde varios componentes del kit. No son `iswc-*`
 
 ## 6. Demo y galería
 
-- [Home gallery](../index.html) — landing con iframe del preview (`iswc-data-theme="dark"`, `iswc-data-palette="contapyme"`).
+- [Home gallery](../index.html) — landing con iframe del preview (`iswc-data-theme="dark"`, `iswc-data-palette="acme"`).
 - [Dev server](../scripts/serve.mjs) — servidor en :8391 con `Cache-Control: no-store`.
 - Demos por componente: [`demos/<categoría>/<nombre>/<nombre>.html`](../demos/) (p. ej. [`actions/button/button.html`](../demos/actions/button/button.html)).
 - Previews sueltos: [`previews/<categoría>/iswc-<name>.html`](../previews/) (p. ej. [`previews/data-viz/is-chart.html`](../previews/data-viz/is-chart.html), [`previews/feedback/is-popconfirm.html`](../previews/feedback/is-popconfirm.html)).

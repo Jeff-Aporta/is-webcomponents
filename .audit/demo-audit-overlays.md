@@ -116,7 +116,7 @@ section { background: #0f1620; border: 1px solid rgba(255,255,255,0.1); border-r
   - `docs` (keywords: docs, manual), `shortcuts` (Ctrl+K+S).
 - Cada comando tiene `id`, `title`, `group`, `icon`, `hint`, `keys`, `keywords`.
 - Atributos: `placeholder="Buscar comando…"`, `empty-text="Sin coincidencias"`, `max-results="8"`.
-- Slot `footer` con texto "Insoft Studio · v1".
+- Slot `footer` con texto "iswc Studio · v1".
 - Listener para 5 eventos: `iswc-show`, `iswc-after-show`, `iswc-hide`, `iswc-after-hide`, `iswc-select`.
 - Botón "Abrir paleta" que llama `palette.open()`.
 - ✅ Coherente con `command-palette.md`.

@@ -32,7 +32,7 @@ const BUNDLE = 'dist/cdn/diagrams/flowchart.min.mjs';
 
 /** Un fin ⦿, una reunión de ramas ⦿, un consumo `-(O-` de tabla y rieles continuos con puntos. */
 const PAYLOAD = {
-  style: 'insoft',
+  style: 'iswc',
   lanes: [{ id: 'flujo', label: 'Flujo' }, { id: 'bd', label: 'BD' }],
   nodes: [
     { id: 'i', label: 'Inicio', shape: 'start', lane: 'flujo' },
@@ -67,7 +67,7 @@ denoTest({
   sanitizeResources: false,
   sanitizeOps: false,
   async fn() {
-    const job = (attrs: Record<string, string>) => ({ tag: 'iswc-flowchart', scriptUrl: BUNDLE, payload: PAYLOAD, attrs: { 'diagram-style': 'insoft', ...attrs } });
+    const job = (attrs: Record<string, string>) => ({ tag: 'iswc-flowchart', scriptUrl: BUNDLE, payload: PAYLOAD, attrs: { 'diagram-style': 'iswc', ...attrs } });
     const r = await renderDiagramBatch(
       [{ id: 'vivo', job: job({}) }, { id: 'quieto', job: job({ 'flow-anim': 'off' }) }],
       { chromium: chromium!, serveRoot: RAIZ, png: true, settleMs: 200 },

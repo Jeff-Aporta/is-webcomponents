@@ -18,7 +18,7 @@ Los iconos usan ids Iconify (`set:nombre`). El kit sirve en local SOLO los que u
 
 Orden en `src/core/icon-loader.ts` (`resolveIconRaw`):
 
-1. Memoria de la página y localStorage `iswc:icon:<set>:<nombre>` (TTL 15 días): sin fetch.
+1. Memoria de la página y localStorage `ISWC:icon:<set>:<nombre>` (TTL 15 días): sin fetch.
 2. Carpeta publicada `<html data-icons>` + `<set>/<nombre>.svg` (en las páginas del propio kit, `<kit>/assets/iconify/`).
 3. `https://api.iconify.design/<set>/<nombre>.svg`; si había base local, un aviso `[iswc-icon] falta en local: <set>:<nombre>`.
 
@@ -35,7 +35,7 @@ Orden en `src/core/icon-loader.ts` (`resolveIconRaw`):
 
 ## S-I5 Catálogo del explorador
 
-El explorador de la galería (`src/components/media/utils/icon-explorer.preview.ts`) lee todo de la API vía `core/icon-loader`, cacheado en localStorage (`iswc:icon-catalogo:*`, mismo TTL):
+El explorador de la galería (`src/components/media/utils/icon-explorer.preview.ts`) lee todo de la API vía `core/icon-loader`, cacheado en localStorage (`ISWC:icon-catalogo:*`, mismo TTL):
 
 | Dato | Endpoint | Función |
 |---|---|---|

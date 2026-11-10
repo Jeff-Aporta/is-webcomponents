@@ -28,7 +28,7 @@ const denoTest = denoTestCon(test);
 
 type N = { id: string; label?: string; shape?: string };
 const indices = (nodes: N[], edges: Array<{ from: string; to: string; kind?: string }>): Record<string, string | undefined> => {
-  const L = computeFlowchartLayout(resolveFlowchartSpec({ steps: 'auto', nodes: nodes.map((n) => ({ label: n.id, ...n })), edges })!, null, { style: 'insoft' });
+  const L = computeFlowchartLayout(resolveFlowchartSpec({ steps: 'auto', nodes: nodes.map((n) => ({ label: n.id, ...n })), edges })!, null, { style: 'iswc' });
   return Object.fromEntries(L.nodes.filter((n) => n.shape !== 'comment').map((n) => [n.id, n.stepLabel]));
 };
 const porIndice = (a: string, b: string): number => a.localeCompare(b, 'es', { numeric: true });
@@ -108,7 +108,7 @@ denoTest('índices: I8 las entidades de la entrada no llevan número', () => {
       { id: 'b', label: 'b' },
     ],
     edges: [{ from: 'cli', to: 'api' }, { from: 'api', to: 'ctl' }, { from: 'ctl', to: 'a' }, { from: 'a', to: 'b' }],
-  })!, null, { style: 'insoft' });
+  })!, null, { style: 'iswc' });
   const r = Object.fromEntries(L.nodes.map((n) => [n.id, n.stepLabel]));
   assertEquals([r.cli, r.api, r.ctl, r.a, r.b], [undefined, undefined, undefined, '1', '2']);
 });

@@ -32,7 +32,7 @@
         {
           "id": "X_ai-voz",
           "label": {
-            "path": "../../../tests/fixtures/iss-ayudascpia/docs-experimental/diagramas/componentes.json",
+            "path": "../../../tests/fixtures/ayudas-ejemplo/docs-experimental/diagramas/componentes.json",
             "query": {
               "payload": {
                 "componentDiagram": {
@@ -51,7 +51,7 @@
         {
           "id": "X_ai-op",
           "label": {
-            "path": "../../../tests/fixtures/iss-ayudascpia/docs-experimental/diagramas/componentes.json",
+            "path": "../../../tests/fixtures/ayudas-ejemplo/docs-experimental/diagramas/componentes.json",
             "query": {
               "payload": {
                 "componentDiagram": {
@@ -70,7 +70,7 @@
         {
           "id": "X_ai-hilo",
           "label": {
-            "path": "../../../tests/fixtures/iss-ayudascpia/docs-experimental/diagramas/componentes.json",
+            "path": "../../../tests/fixtures/ayudas-ejemplo/docs-experimental/diagramas/componentes.json",
             "query": {
               "payload": {
                 "componentDiagram": {
@@ -89,7 +89,7 @@
         {
           "id": "X_ai-resp",
           "label": {
-            "path": "../../../tests/fixtures/iss-ayudascpia/docs-experimental/diagramas/componentes.json",
+            "path": "../../../tests/fixtures/ayudas-ejemplo/docs-experimental/diagramas/componentes.json",
             "query": {
               "payload": {
                 "componentDiagram": {

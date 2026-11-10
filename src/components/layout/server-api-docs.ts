@@ -45,10 +45,10 @@ import css from 'iswc:css';
  * <iswc-server-api-docs> — endpoints de la API de un SERVER al estilo Swagger (solo para servers: el
  * ISS la sirve en `GET /api/docs`). No es documentación en prosa: expone cada endpoint con su método,
  * ruta, sesión y permiso, parámetros, cuerpo y respuestas con sus schemas y ejemplos. Recibe el documento
- * que el server publica (InSoft `kind:"config"` u OpenAPI 3), lo valida con Zod, dice si admite el parse
- * estricto (InSoft v2, `server-api-docs-md.schemas.ts`) y lo pinta sobre `<iswc-doc-layout>`: la portada
+ * que el server publica (iswc `kind:"config"` u OpenAPI 3), lo valida con Zod, dice si admite el parse
+ * estricto (iswc v2, `server-api-docs-md.schemas.ts`) y lo pinta sobre `<iswc-doc-layout>`: la portada
  * es la tabla de endpoints con filtro, cada endpoint abre su detalle (con su diagrama de secuencia en
- * estilo InSoft) y «Probar» ejecuta la petición real con sesión.
+ * estilo iswc) y «Probar» ejecuta la petición real con sesión.
  *
  * Entrada (la primera que haya): propiedad `doc` (`el.doc = obj`), `<script type="application/json">`
  * hijo, o atributo `src` (URL del JSON, p. ej. `/api/docs?v=json`).
@@ -127,7 +127,7 @@ class IswcServerApiDocs extends IswcElement {
     this.#raiz = this.shadowRoot!;
   }
 
-  /** Documento del server (InSoft `kind:"config"` u OpenAPI 3). Asignarlo valida y repinta. */
+  /** Documento del server (iswc `kind:"config"` u OpenAPI 3). Asignarlo valida y repinta. */
   get doc(): unknown { return this.#doc; }
   set doc(v: unknown) {
     this.#doc = v;
@@ -137,7 +137,7 @@ class IswcServerApiDocs extends IswcElement {
   /** Resultado de validar el documento con Zod (`null` sin documento). */
   get validacion(): ServerApiDocsValidacion | null { return this.#validacion; }
 
-  /** ¿Admite el parse estricto (InSoft v2)? `null` sin documento; `aplica: false` para OpenAPI 3. */
+  /** ¿Admite el parse estricto (iswc v2)? `null` sin documento; `aplica: false` para OpenAPI 3. */
   get estricto(): ServerApiDocsEstricto | null { return this.#estricto; }
 
   /** Modelo normalizado que se está pintando (`null` si el documento no se pudo materializar). */
@@ -323,7 +323,7 @@ class IswcServerApiDocs extends IswcElement {
     return `
       <header class="cabecera">
         <h1 id="endpoints">${escapar(m.titulo)}</h1>
-        <p class="meta">${m.version ? `<iswc-tag color="neutral">v${escapar(m.version)}</iswc-tag>` : ''}<iswc-tag color="brand">${m.operaciones.length} endpoints</iswc-tag><iswc-tag color="neutral">${m.formato === 'insoft' ? 'Documento InSoft' : 'OpenAPI 3'}</iswc-tag>${estricto.tag}</p>
+        <p class="meta">${m.version ? `<iswc-tag color="neutral">v${escapar(m.version)}</iswc-tag>` : ''}<iswc-tag color="brand">${m.operaciones.length} endpoints</iswc-tag><iswc-tag color="neutral">${m.formato === 'iswc' ? 'Documento iswc' : 'OpenAPI 3'}</iswc-tag>${estricto.tag}</p>
         ${m.descripcion ? `<p class="lede">${escapar(m.descripcion)}</p>` : ''}
       </header>
       ${estricto.callout}
@@ -413,7 +413,7 @@ class IswcServerApiDocs extends IswcElement {
       <h2 id="respuestas">Respuestas</h2>
       ${respuestas}
       <h2 id="flujo">Flujo</h2>
-      <div class="lienzo-insoft" data-theme="light"><iswc-sequence-diagram class="secuencia" diagram-style="insoft" open-on-click><script type="application/json">${secuencia}</script></iswc-sequence-diagram></div>
+      <div class="lienzo-iswc" data-theme="light"><iswc-sequence-diagram class="secuencia" diagram-style="iswc" open-on-click><script type="application/json">${secuencia}</script></iswc-sequence-diagram></div>
       <h2 id="probar">Probar</h2>
       <form class="probar" onsubmit="return false">
         <iswc-input class="base" label="Servidor (base de la API)" value="${escapar(this.#base)}"></iswc-input>

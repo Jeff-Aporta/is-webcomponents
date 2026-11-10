@@ -90,7 +90,7 @@ function conTope<T>(p: Promise<T>, ms: number): Promise<T | undefined> {
 }
 
 /** Líneas centradas en la caja de texto (en el rombo, el rect inscrito). */
-function insoftText(lines: string[], tb: { x: number; y: number; w: number; h: number }, ink: FlowInk, align: 'middle' | 'start' = 'middle'): SVGTextElement {
+function iswcText(lines: string[], tb: { x: number; y: number; w: number; h: number }, ink: FlowInk, align: 'middle' | 'start' = 'middle'): SVGTextElement {
   const t = svgEl('text', {
     fill: ink.text, 'font-size': String(ink.fontSize), 'font-weight': String(ink.fontWeight),
     'font-family': ink.font, 'text-anchor': align, class: 'flow-node__label',
@@ -176,9 +176,9 @@ class IswcFlowchart extends DiagramElementBase {
   #hoverId: string | null = null;
   #overrides: FlowLayoutOverrides | null = null;
   #dragDetach: (() => void) | null = null;
-  /** Tema del estilo (`diagram-style="insoft"` → tema `flowchart`), ya fusionado con el modo. */
+  /** Tema del estilo (`diagram-style="iswc"` → tema `flowchart`), ya fusionado con el modo. */
   #styleTheme: ErThemeJson | null = null;
-  /** Pintura insoft resuelta; null = estilo clásico. */
+  /** Pintura iswc resuelta; null = estilo clásico. */
   #paint: FlowPaint | null = null;
   /** SVG capturado de cada nodo especial (clave: contrato del nodo + modo + estilo). */
   /** Spec visible del último render (nodos especiales → su captura). */
@@ -282,7 +282,7 @@ class IswcFlowchart extends DiagramElementBase {
     const opts: FlowLayoutOptions = { embeds: this.#embedSizes(visible) };
     if (this.#paint) {
       const paint = this.#paint;
-      opts.style = 'insoft';
+      opts.style = 'iswc';
       opts.fontSize = paint.fontSize;
       opts.measure = (t: string) => this.#measure(t, paint);
     }
@@ -462,10 +462,10 @@ class IswcFlowchart extends DiagramElementBase {
 
     if (layout.groups?.length) this.#buildLegend(layout, theme);
     if (this.#paint) {
-      if (layout.lanes?.length) this.#buildInsoftLanes(layout, this.#paint);
-      if (layout.contexts?.length) this.#buildInsoftContexts(layout, this.#paint);
-      this.#buildInsoftEdges(layout, this.#paint);
-      this.#buildInsoftNodes(layout, this.#paint);
+      if (layout.lanes?.length) this.#buildiswcLanes(layout, this.#paint);
+      if (layout.contexts?.length) this.#buildiswcContexts(layout, this.#paint);
+      this.#buildiswcEdges(layout, this.#paint);
+      this.#buildiswcNodes(layout, this.#paint);
       this.#marcarVariables();
     } else {
       this.#buildEdges(layout, theme);
@@ -682,13 +682,13 @@ class IswcFlowchart extends DiagramElementBase {
     }
   }
 
-  /* ── estilo insoft (actividad) ── */
+  /* ── estilo iswc (actividad) ── */
 
   /**
    * Grupos de contexto dentro de un carril: recuadro de borde punteado celeste y fondo suave, con su
    * título como etiqueta oscura arriba a la izquierda (como los fragmentos de secuencia).
    */
-  #buildInsoftContexts(layout: FlowLayout, paint: FlowPaint): void {
+  #buildiswcContexts(layout: FlowLayout, paint: FlowPaint): void {
     const g = svgEl('g', { class: 'flow-contexts' });
     for (const c of layout.contexts ?? []) {
       const caja = svgEl('g', { class: 'flow-context' });
@@ -717,7 +717,7 @@ class IswcFlowchart extends DiagramElementBase {
    * Carriles de contexto: separadores punteados entre carriles y el nombre de cada contexto en
    * negrita (arriba si son verticales; a la izquierda si son horizontales). Van detrás de todo.
    */
-  #buildInsoftLanes(layout: FlowLayout, paint: FlowPaint): void {
+  #buildiswcLanes(layout: FlowLayout, paint: FlowPaint): void {
     const lanes = layout.lanes ?? [];
     const horizontal = layout.laneDirection === 'horizontal';
     const g = svgEl('g', { class: 'flow-lanes' });
@@ -745,7 +745,7 @@ class IswcFlowchart extends DiagramElementBase {
     this.svg.appendChild(g);
   }
 
-  #buildInsoftEdges(layout: FlowLayout, paint: FlowPaint): void {
+  #buildiswcEdges(layout: FlowLayout, paint: FlowPaint): void {
     const flowAnim = this.hasAnimation('flow');
     const estilo = edgeStyleFor(this, this.payload);
     // Ramas que se funden en la misma entrada comparten una sola punta.
@@ -815,7 +815,7 @@ class IswcFlowchart extends DiagramElementBase {
         // Entrada a un puente `-(O=`: triángulo sólido tocando el O.
         g.appendChild(svgEl('polygon', { points: arrowHeadPoints(tip, dir, len, half), fill: color, stroke: color, 'stroke-width': wdt, 'stroke-linejoin': 'miter', class: 'flow-edge__head flow-edge__head--entrada' }));
       } else if (e.socket) {
-        // Conector `-(O-` (convención InSoft): el componente expone el socket `(` con su palo y quien
+        // Conector `-(O-` (convención iswc): el componente expone el socket `(` con su palo y quien
         // consume llega a la bola O con su punta de flecha. Un socket por punta (el abanico converge).
         const c = socketEn(tip, dir);
         // Punta de llegada tocando la bola.
@@ -888,7 +888,7 @@ class IswcFlowchart extends DiagramElementBase {
     }
   }
 
-  #buildInsoftNodes(layout: FlowLayout, paint: FlowPaint): void {
+  #buildiswcNodes(layout: FlowLayout, paint: FlowPaint): void {
     // Con `hueRotate`, cada símbolo pintado con el relleno del tema toma su propio tono (en orden
     // de lectura): mismo L y C en OKLCH, el tono avanza por el ángulo áureo.
     let simbolo = 0;
@@ -979,11 +979,11 @@ class IswcFlowchart extends DiagramElementBase {
         g.appendChild(box);
       }
       if (n.shape === 'bridge' && n.lines?.length && n.textBox) {
-        g.appendChild(insoftText(n.lines, n.textBox, { text: paint.actionText, muted: paint.muted, font: paint.font, fontSize: paint.fontSize - 0.5, fontWeight: 600 }, 'start'));
+        g.appendChild(iswcText(n.lines, n.textBox, { text: paint.actionText, muted: paint.muted, font: paint.font, fontSize: paint.fontSize - 0.5, fontWeight: 600 }, 'start'));
       } else if (n.shape === 'vars' && n.vars?.length && n.varsCols && n.varsBox) {
         // Tabla de declaración: título, encabezados y filas Variable · Valor (código, colores de VS
         // Code claro) · Descripción.
-        if (n.lines?.length && n.textBox) g.appendChild(insoftText(n.lines, n.textBox, { text: paint.actionText, muted: paint.muted, font: paint.font, fontSize: paint.fontSize, fontWeight: 700 }, 'start'));
+        if (n.lines?.length && n.textBox) g.appendChild(iswcText(n.lines, n.textBox, { text: paint.actionText, muted: paint.muted, font: paint.font, fontSize: paint.fontSize, fontWeight: 700 }, 'start'));
         const { x, y, w } = n.varsBox;
         const cols = n.varsCols;
         const conDesc = cols.length > 2;
@@ -1025,7 +1025,7 @@ class IswcFlowchart extends DiagramElementBase {
         this.#paintEmbed(g, n, { text: paint.actionText, muted: paint.muted, font: paint.font, fontSize: paint.fontSize, fontWeight: paint.fontWeight });
         if (n.pill) g.appendChild(this.#pill(n, paint, colorDeEntidad(g)));
       } else if (n.lines?.length && n.textBox) {
-        g.appendChild(insoftText(n.lines, n.textBox, { text: paint.actionText, muted: paint.muted, font: paint.font, fontSize: paint.fontSize, fontWeight: paint.fontWeight }, n.textAlign ?? 'middle'));
+        g.appendChild(iswcText(n.lines, n.textBox, { text: paint.actionText, muted: paint.muted, font: paint.font, fontSize: paint.fontSize, fontWeight: paint.fontWeight }, n.textAlign ?? 'middle'));
         if (n.pill) g.appendChild(this.#pill(n, paint, tono));
       }
       this.svg.appendChild(g);
@@ -1041,7 +1041,7 @@ class IswcFlowchart extends DiagramElementBase {
     const p = n.pill!;
     const g = svgEl('g', { class: 'flow-node__pill' }) as SVGGElement;
     // Suelta (decisión, nodo incrustado): fondo oscuro y número claro, como los pasos de la secuencia.
-    // Con `pillTone: entity` (insoft), el fondo es el tono de su entidad oscurecido (ver PILL_L).
+    // Con `pillTone: entity` (iswc), el fondo es el tono de su entidad oscurecido (ver PILL_L).
     const suelta = !!n.pillFloat;
     const fondo = paint.pillTone !== 'entity' ? paint.pillTone : entidad ? oscuro(entidad) : paint.startFill;
     g.appendChild(svgEl('rect', {
@@ -1077,7 +1077,7 @@ class IswcFlowchart extends DiagramElementBase {
   #paintEmbed(g: SVGElement, n: FlowLayoutNode, ink: FlowInk): void {
     const source = this.#visibleSpec?.nodes.find((x) => x.id === n.id);
     const cap = source ? this.#captures.get(this.#embedKey(source)) : null;
-    if (n.lines?.length && n.textBox) g.appendChild(insoftText(n.lines, n.textBox, ink));
+    if (n.lines?.length && n.textBox) g.appendChild(iswcText(n.lines, n.textBox, ink));
     const eb = n.embedBox;
     if (!eb) return;
     if (cap) {

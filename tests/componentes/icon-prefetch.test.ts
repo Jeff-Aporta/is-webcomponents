@@ -37,7 +37,7 @@ test('preview-component fuente declara dependencia de icon (por eso Pages no deb
   // Si index.html vuelve a loadPageModules(ese archivo) tras load('all'),
   // el prefetch de icon-loader corre con bases src/assets → 404.
   // Con el molde IswcElement la dependencia es perezosa: `static deps` incluye 'iswc-icon' (iswcLoader.ensure al conectar).
-  assert.match(preview, /import\s+['"]@jeff-aporta\/iswc-base\/components\/media\/icon\.js['"]|static deps = \[[^\]]*'iswc-icon'/);
+  assert.match(preview, /import\s+['"]@jeff-aporta\/iswc-base\/components\/media\/icon\.js['"]|static (?:override )?deps = \[[^\]]*'iswc-icon'/);
 });
 
 export default lista();

@@ -1,4 +1,4 @@
-/** Auto-check: tema InSoft = paleta der.svg / render-iswc.mjs */
+/** Auto-check: tema iswc = paleta der.svg / render-iswc.mjs */
 import { assertEquals } from 'https://deno.land/std@0.224.0/assert/mod.ts';
 import {
   resolveErTheme,
@@ -18,20 +18,20 @@ const { test, lista } = coleccionPruebas({ categoria: 'what' });
 const denoTest = denoTestCon(test);
 
 
-// Los temas se cargan bajo demanda (diagram-style); el test carga el estilo InSoft.
-await loadStylesDiagram('insoft');
+// Los temas se cargan bajo demanda (diagram-style); el test carga el estilo iswc.
+await loadStylesDiagram('iswc');
 
-denoTest('estilo insoft trae un tema por tipo, y el de clases sin naranja', () => {
-  assertEquals(styleThemeFor('insoft', 'er')?.id, 'insoft');
-  assertEquals(styleThemeFor('insoft', 'component')?.id, 'insoft-cd');
-  const cls = styleThemeFor('insoft', 'class');
-  assertEquals(cls?.id, 'insoft-class');
+denoTest('estilo iswc trae un tema por tipo, y el de clases sin naranja', () => {
+  assertEquals(styleThemeFor('iswc', 'er')?.id, 'iswc');
+  assertEquals(styleThemeFor('iswc', 'component')?.id, 'iswc-cd');
+  const cls = styleThemeFor('iswc', 'class');
+  assertEquals(cls?.id, 'iswc-class');
   assertEquals(Object.values(cls?.fills ?? {}).includes('#F4B67B'), false);
 });
 
-denoTest('insoft theme resolves and matches der.svg palette', () => {
-  const t = resolveErTheme('insoft');
-  assertEquals(t?.id, 'insoft');
+denoTest('iswc theme resolves and matches der.svg palette', () => {
+  const t = resolveErTheme('iswc');
+  assertEquals(t?.id, 'iswc');
   assertEquals(entityPaint(t!, false).fill, '#F4B67B');
   assertEquals(entityPaint(t!, true).fill, '#BFFFC0');
   // La paleta del theme se renombró a nombres semánticos
@@ -47,7 +47,7 @@ denoTest('insoft theme resolves and matches der.svg palette', () => {
 });
 
 denoTest('json2css emits Poppins + CSS vars', () => {
-  const css = json2css(resolveErTheme('insoft')!);
+  const css = json2css(resolveErTheme('iswc')!);
   assertEquals(css.includes('Poppins'), true);
   assertEquals(css.includes('--er-entity-fill: #F4B67B'), true);
   assertEquals(css.includes('@import url('), true);
@@ -62,8 +62,8 @@ denoTest('findOrphanEntityIds', () => {
 });
 
 denoTest('payload theme resolution', () => {
-  const t = resolveErTheme({ erDiagram: { theme: 'insoft', entities: [] } });
-  assertEquals(t?.id, 'insoft');
+  const t = resolveErTheme({ erDiagram: { theme: 'iswc', entities: [] } });
+  assertEquals(t?.id, 'iswc');
 });
 
 export default lista();

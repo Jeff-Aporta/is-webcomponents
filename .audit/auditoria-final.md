@@ -1,4 +1,4 @@
-# Auditoría del kit iswc (iswc-audit)
+# Auditoría del kit ISWC (iswc-audit)
 
 - **Motor**: v1.0.0
 - **Inicio**: 2026-09-10T03:04:10.454Z

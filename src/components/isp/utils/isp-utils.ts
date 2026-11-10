@@ -1,6 +1,6 @@
 /**
  * Helpers de registro planos / TObject-like (ispgen) para componentes ISP.
- * No depende de `@ingenieria_insoft/ispgen`.
+ * No depende de `@iswc/ispgen`.
  */
 
 /** @param v valor a evaluar. */

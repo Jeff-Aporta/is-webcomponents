@@ -289,7 +289,7 @@ class IswcDiagramLightbox extends IswcLightbox {
     if (anim) el.setAttribute('animation', anim);
     const minGap = this.getAttribute('min-gap');
     if (minGap) el.setAttribute('min-gap', minGap);
-    // theme (p.ej. insoft) vive en el host del lightbox tras openOwnViewer;
+    // theme (p.ej. iswc) vive en el host del lightbox tras openOwnViewer;
     // sin esto el DER del visor cae a colores default.
     const theme = this.getAttribute('theme');
     if (theme) el.setAttribute('theme', theme);

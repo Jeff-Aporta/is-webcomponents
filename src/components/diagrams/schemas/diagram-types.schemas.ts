@@ -124,7 +124,7 @@ const ClassLayoutOptsSchema = z.object({
   pkgCrossFactor: z.number().optional(),
   /**
    * `uml` (default), `card` (cabecera con acento, cuerpo blanco y sombra) o
-   * `vp` (Visual Paradigm / InSoft: cajas rectas pastel, borde negro,
+   * `vp` (Visual Paradigm / iswc: cajas rectas pastel, borde negro,
    * paquetes con pestaña y título centrado).
    */
   boxStyle: z.union([z.literal('uml'), z.literal('card'), z.literal('vp')]).optional(),
@@ -484,7 +484,7 @@ const PaqueteSchema = z.intersection(CajaSchema, z.object({
    * W54: si `true`, el agrupador es un muro duro (Infinity) para el ruteo de
    * aristas — equivalente a un texto de título. Útil para agrupadores
    * "decorativos" (p.ej. el paquete "«PostgreSQL» clientesis" del lab
-   * ISS-AyudasCPIA) por los que las aristas no deben colarse. La única
+   * Kit) por los que las aristas no deben colarse. La única
    * manera de alcanzar un componente dentro es a través del perímetro del
    * paquete, no del interior.
    */

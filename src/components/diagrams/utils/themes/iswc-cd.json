@@ -1,8 +1,8 @@
 {
   "$schema": "iswc-diagram-theme/v1",
-  "id": "insoft-cd",
+  "id": "iswc-cd",
   "kind": "component",
-  "label": "InSoft Component Diagram",
+  "label": "iswc Component Diagram",
   "font": {
     "family": "\"Poppins\", \"Inter\", system-ui, sans-serif",
     "import": "https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"

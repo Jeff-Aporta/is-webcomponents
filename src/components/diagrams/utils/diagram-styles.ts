@@ -3,12 +3,12 @@
  *
  * El consumidor no define temas a mano: elige un estilo por atributo.
  *
- *   <iswc-component-diagram diagram-style="insoft"></iswc-component-diagram>
+ *   <iswc-component-diagram diagram-style="iswc"></iswc-component-diagram>
  *
  * Un estilo es un paquete de temas JSON, uno por tipo de diagrama (`er`,
  * `component`, `class`, `sequence`), y se descarga una sola vez, la primera vez que un
  * diagrama lo pide. Así los estilos no viajan dentro de cada bundle: el de
- * InSoft se carga junto (sus tres temas) y un estilo nuevo es otra carga.
+ * iswc se carga junto (sus tres temas) y un estilo nuevo es otra carga.
  *
  * API pública:
  *   registerStyleDiagram({ miEstilo: ['https://…/mi-er.json', '…/mi-clases.json'] })
@@ -31,7 +31,7 @@ const ARCHIVOS = STORE.archivos;
 const CARGAS = STORE.cargas;
 const TEMAS = STORE.temas;
 
-/** Normaliza el nombre del estilo (`InSoft` = `insoft`). */
+/** Normaliza el nombre del estilo (a minúsculas, sin espacios). */
 function clave(nombre: string): string {
   return String(nombre ?? '').trim().toLowerCase();
 }
@@ -102,7 +102,7 @@ export function styleThemeFor(estilo: string | null | undefined, tipo: DiagramSt
 
 /**
  * Nombre del estilo que pide un host: `diagram-style`, o el atributo
- * heredado `theme` (`insoft` / `insoft-cd` → estilo `insoft`).
+ * heredado `theme` (`iswc` / `iswc-cd` → estilo `iswc`).
  */
 export function hostStyleName(host: Element): string | null {
   const explicito = host.getAttribute('diagram-style');
@@ -113,14 +113,14 @@ export function hostStyleName(host: Element): string | null {
   return ARCHIVOS.has(k) ? k : null;
 }
 
-// Estilo InSoft: los tres temas en una sola carga. Viven junto a los
+// Estilo iswc: los tres temas en una sola carga. Viven junto a los
 // bundles de diagramas (`dist/cdn/diagrams/themes/`). Solo se registra si
 // nadie lo hizo antes (otro bundle, o una librería que lo reemplazó).
 // Publicado (`.mjs`) este código puede vivir en `diagrams/` o en un chunk de `_chunks/` (ambos a un nivel de
 // `dist/cdn/`): la base es `../diagrams/`. Desde fuente, junto a este módulo (`utils/themes/`).
 const BASE_TEMAS = /\.mjs(?:[?#]|$)/.test(import.meta.url) ? new URL('../diagrams/', import.meta.url) : import.meta.url;
-if (!ARCHIVOS.has('insoft')) registerStyleDiagram({
-  insoft: ['./themes/insoft.json', './themes/insoft-cd.json', './themes/insoft-class.json', './themes/insoft-seq.json', './themes/insoft-flow.json'],
+if (!ARCHIVOS.has('iswc')) registerStyleDiagram({
+  iswc: ['./themes/iswc.json', './themes/iswc-cd.json', './themes/iswc-class.json', './themes/iswc-seq.json', './themes/iswc-flow.json'],
 }, BASE_TEMAS);
 
 // ── oklch ──

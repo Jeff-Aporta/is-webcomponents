@@ -179,7 +179,7 @@
           "html": [
             "<div class=\"card-stage-h\">",
             "          <iswc-card style=\"max-width: 420px; width: 100%;\">",
-            "            <div slot=\"header\"><strong>Proyecto InSoft</strong></div>",
+            "            <div slot=\"header\"><strong>Proyecto ISWC</strong></div>",
             "            <div slot=\"header-actions\">",
             "              <iswc-button color=\"neutral\" variant=\"plain\" pill title=\"Más opciones\">",
             "                <iswc-icon icon=\"mdi:dots-horizontal\"></iswc-icon>",

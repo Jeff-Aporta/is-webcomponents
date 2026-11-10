@@ -8,7 +8,7 @@
  *   U3 «Probar» ejecuta la petición real contra el host (mismo origen + `/api`) con el parámetro de ruta y
  *      muestra el estado; emite `iswc-server-api-docs-response`.
  *   U4 contrato heredado: el documento asignado por propiedad (`el.doc = obj`) desde un script JSON se pinta.
- *   U5 un documento que no es InSoft ni OpenAPI muestra el error en vez de pintar vacío.
+ *   U5 un documento que no es iswc ni OpenAPI muestra el error en vez de pintar vacío.
  *   U6 sin errores de consola ni de página en todo el recorrido.
  *
  * Caja negra: solo DOM visible, URL y eventos. Sin build o sin Chromium se salta.

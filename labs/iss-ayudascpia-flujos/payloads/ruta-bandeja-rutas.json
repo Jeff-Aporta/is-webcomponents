@@ -22,7 +22,7 @@
               "label": "TErrorsClient",
               "kind": "class",
               "class": {
-                "path": "../../../tests/fixtures/iss-ayudascpia/docs-experimental/fuentes/codigo.json",
+                "path": "../../../tests/fixtures/ayudas-ejemplo/docs-experimental/fuentes/codigo.json",
                 "query": {
                   "clases": {
                     "[name=TErrorsClient]": {
@@ -48,7 +48,7 @@
             {
               "id": "api",
               "label": {
-                "path": "../../../tests/fixtures/iss-ayudascpia/docs-experimental/diagramas/componentes.json",
+                "path": "../../../tests/fixtures/ayudas-ejemplo/docs-experimental/diagramas/componentes.json",
                 "query": {
                   "payload": {
                     "componentDiagram": {
@@ -63,7 +63,7 @@
               },
               "kind": "component",
               "component": {
-                "path": "../../../tests/fixtures/iss-ayudascpia/docs-experimental/diagramas/componentes.json",
+                "path": "../../../tests/fixtures/ayudas-ejemplo/docs-experimental/diagramas/componentes.json",
                 "query": {
                   "payload": {
                     "componentDiagram": {
@@ -152,7 +152,7 @@
               "label": "TErrorController",
               "kind": "class",
               "class": {
-                "path": "../../../tests/fixtures/iss-ayudascpia/docs-experimental/fuentes/codigo.json",
+                "path": "../../../tests/fixtures/ayudas-ejemplo/docs-experimental/fuentes/codigo.json",
                 "query": {
                   "clases": {
                     "[name=TErrorController]": {
@@ -199,7 +199,7 @@
             {
               "id": "terr",
               "label": {
-                "path": "../../../tests/fixtures/iss-ayudascpia/docs-experimental/diagramas/der.json",
+                "path": "../../../tests/fixtures/ayudas-ejemplo/docs-experimental/diagramas/der.json",
                 "query": {
                   "payload": {
                     "erDiagram": {
@@ -214,7 +214,7 @@
               },
               "kind": "tableder",
               "table": {
-                "path": "../../../tests/fixtures/iss-ayudascpia/docs-experimental/diagramas/der.json",
+                "path": "../../../tests/fixtures/ayudas-ejemplo/docs-experimental/diagramas/der.json",
                 "query": {
                   "payload": {
                     "erDiagram": {

@@ -33,7 +33,7 @@ import './copy-button.js';
 ## Ejemplo mínimo
 
 ```html
-<iswc-copy-button value="https://insoft.com.co"></iswc-copy-button>
+<iswc-copy-button value="https://acme.example"></iswc-copy-button>
 ```
 
 ## API

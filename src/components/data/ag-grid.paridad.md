@@ -35,7 +35,7 @@ probo solo en las pruebas de cada parcela o no se probo en este pase.
 
 ## Guias de comportamiento
 
-| Guia de AG Grid | Equivalente iswc | Estado |
+| Guia de AG Grid | Equivalente ISWC | Estado |
 | --- | --- | --- |
 | Tamaño y layout de la grilla | `domLayout`, alto por CSS en em | parcial |
 | Temas y parametros | `celdas/temas`: presets quartz, balham, alpine, material, financiero; tokens `--iswc-grid-*` | hecho |
@@ -98,7 +98,7 @@ probo solo en las pruebas de cada parcela o no se probo en este pase.
 
 ### Accesorios
 
-| AG Grid | iswc | Estado |
+| AG Grid | ISWC | Estado |
 | --- | --- | --- |
 | `toolbar` | mismo nombre | hecho |
 | `statusBar` | mismo nombre | hecho |
@@ -116,7 +116,7 @@ probo solo en las pruebas de cada parcela o no se probo en este pase.
 
 ### Portapapeles
 
-| AG Grid | iswc | Estado |
+| AG Grid | ISWC | Estado |
 | --- | --- | --- |
 | `copyHeadersToClipboard` | mismo nombre | hecho |
 | `copyGroupHeadersToClipboard` | — | falta |
@@ -134,7 +134,7 @@ probo solo en las pruebas de cada parcela o no se probo en este pase.
 
 ### Definicion de columnas
 
-| AG Grid | iswc | Estado |
+| AG Grid | ISWC | Estado |
 | --- | --- | --- |
 | `columnDefs` | mismo nombre | hecho |
 | `autoGenerateColumnDefs` | — | falta |
@@ -151,7 +151,7 @@ probo solo en las pruebas de cada parcela o no se probo en este pase.
 
 ### Encabezados
 
-| AG Grid | iswc | Estado |
+| AG Grid | ISWC | Estado |
 | --- | --- | --- |
 | `headerHeight` | por token | parcial |
 | `groupHeaderHeight` | mismo nombre | hecho |
@@ -162,7 +162,7 @@ probo solo en las pruebas de cada parcela o no se probo en este pase.
 
 ### Mover columnas
 
-| AG Grid | iswc | Estado |
+| AG Grid | ISWC | Estado |
 | --- | --- | --- |
 | `suppressMovableColumns` | mismo nombre | hecho |
 | `suppressMoveWhenColumnDragging` | — | falta |
@@ -172,7 +172,7 @@ probo solo en las pruebas de cada parcela o no se probo en este pase.
 
 ### Fijar y dimensionar columnas
 
-| AG Grid | iswc | Estado |
+| AG Grid | ISWC | Estado |
 | --- | --- | --- |
 | `processUnpinnedColumns` | — | falta |
 | `colResizeDefault` | — | falta |
@@ -184,13 +184,13 @@ probo solo en las pruebas de cada parcela o no se probo en este pase.
 
 ### Componentes
 
-| AG Grid | iswc | Estado |
+| AG Grid | ISWC | Estado |
 | --- | --- | --- |
 | `components` | registro por nombre; sin los 19 tipos | parcial |
 
 ### Edicion
 
-| AG Grid | iswc | Estado |
+| AG Grid | ISWC | Estado |
 | --- | --- | --- |
 | `editType` | mismo nombre | hecho |
 | `getFullRowEditValidationErrors` | mismo nombre | hecho |
@@ -208,7 +208,7 @@ probo solo en las pruebas de cada parcela o no se probo en este pase.
 
 ### Exportacion
 
-| AG Grid | iswc | Estado |
+| AG Grid | ISWC | Estado |
 | --- | --- | --- |
 | `defaultCsvExportParams` | mismo nombre | hecho |
 | `suppressCsvExport` | mismo nombre | hecho |
@@ -220,7 +220,7 @@ probo solo en las pruebas de cada parcela o no se probo en este pase.
 
 ### Filtrado
 
-| AG Grid | iswc | Estado |
+| AG Grid | ISWC | Estado |
 | --- | --- | --- |
 | `quickFilterText` | mismo nombre | hecho |
 | `cacheQuickFilter` | mismo nombre | hecho |
@@ -243,21 +243,21 @@ probo solo en las pruebas de cada parcela o no se probo en este pase.
 
 ### Buscar
 
-| AG Grid | iswc | Estado |
+| AG Grid | ISWC | Estado |
 | --- | --- | --- |
 | `findSearchValue` | — | falta |
 | `findOptions` | — | falta |
 
 ### Formulas
 
-| AG Grid | iswc | Estado |
+| AG Grid | ISWC | Estado |
 | --- | --- | --- |
 | `formulaDataSource` | — | falta |
 | `formulaFuncs` | — | falta |
 
 ### Graficos integrados
 
-| AG Grid | iswc | Estado |
+| AG Grid | ISWC | Estado |
 | --- | --- | --- |
 | `enableCharts` | — | falta |
 | `includeHiddenColumnsInCharts` | — | falta |
@@ -271,7 +271,7 @@ probo solo en las pruebas de cada parcela o no se probo en este pase.
 
 ### Teclado
 
-| AG Grid | iswc | Estado |
+| AG Grid | ISWC | Estado |
 | --- | --- | --- |
 | `focusGridInnerElement` | — | falta |
 | `navigateToNextHeader` | — | falta |
@@ -282,7 +282,7 @@ probo solo en las pruebas de cada parcela o no se probo en este pase.
 
 ### Celdas de carga
 
-| AG Grid | iswc | Estado |
+| AG Grid | ISWC | Estado |
 | --- | --- | --- |
 | `loadingCellRenderer` | — | falta |
 | `loadingCellRendererParams` | — | falta |
@@ -290,14 +290,14 @@ probo solo en las pruebas de cada parcela o no se probo en este pase.
 
 ### Localizacion
 
-| AG Grid | iswc | Estado |
+| AG Grid | ISWC | Estado |
 | --- | --- | --- |
 | `localeText` | mismo nombre | hecho |
 | `getLocaleText` | mismo nombre | hecho |
 
 ### Master/detail
 
-| AG Grid | iswc | Estado |
+| AG Grid | ISWC | Estado |
 | --- | --- | --- |
 | `masterDetail` | mismo nombre | hecho |
 | `isRowMaster` | mismo nombre | hecho |
@@ -312,7 +312,7 @@ probo solo en las pruebas de cada parcela o no se probo en este pase.
 
 ### Miscelanea
 
-| AG Grid | iswc | Estado |
+| AG Grid | ISWC | Estado |
 | --- | --- | --- |
 | `initialState` | mismo nombre | hecho |
 | `alignedGrids` | — | falta |
@@ -333,7 +333,7 @@ probo solo en las pruebas de cada parcela o no se probo en este pase.
 
 ### Notas
 
-| AG Grid | iswc | Estado |
+| AG Grid | ISWC | Estado |
 | --- | --- | --- |
 | `notesDataSource` | — | falta |
 | `noteTrigger` | — | falta |
@@ -342,7 +342,7 @@ probo solo en las pruebas de cada parcela o no se probo en este pase.
 
 ### Overlays
 
-| AG Grid | iswc | Estado |
+| AG Grid | ISWC | Estado |
 | --- | --- | --- |
 | `loading` | mismo nombre | hecho |
 | `loadingRows` | — | falta |
@@ -363,7 +363,7 @@ probo solo en las pruebas de cada parcela o no se probo en este pase.
 
 ### Paginacion
 
-| AG Grid | iswc | Estado |
+| AG Grid | ISWC | Estado |
 | --- | --- | --- |
 | `pagination` | mismo nombre | hecho |
 | `paginationPageSize` | mismo nombre | hecho |
@@ -376,7 +376,7 @@ probo solo en las pruebas de cada parcela o no se probo en este pase.
 
 ### Render
 
-| AG Grid | iswc | Estado |
+| AG Grid | ISWC | Estado |
 | --- | --- | --- |
 | `animateRows` | mismo nombre | hecho |
 | `cellFlashDuration` | mismo nombre | hecho |
@@ -398,7 +398,7 @@ probo solo en las pruebas de cada parcela o no se probo en este pase.
 
 ### Agregacion
 
-| AG Grid | iswc | Estado |
+| AG Grid | ISWC | Estado |
 | --- | --- | --- |
 | `aggFuncs` | mismo nombre | hecho |
 | `groupTotalRow` | mismo nombre | hecho |
@@ -414,7 +414,7 @@ probo solo en las pruebas de cada parcela o no se probo en este pase.
 
 ### Arrastre de filas
 
-| AG Grid | iswc | Estado |
+| AG Grid | ISWC | Estado |
 | --- | --- | --- |
 | `rowDragManaged` | mismo nombre | hecho |
 | `rowDragEntireRow` | mismo nombre | hecho |
@@ -429,7 +429,7 @@ probo solo en las pruebas de cada parcela o no se probo en este pase.
 
 ### Filas de ancho completo
 
-| AG Grid | iswc | Estado |
+| AG Grid | ISWC | Estado |
 | --- | --- | --- |
 | `fullWidthCellRenderer` | — | falta |
 | `fullWidthCellRendererParams` | — | falta |
@@ -438,7 +438,7 @@ probo solo en las pruebas de cada parcela o no se probo en este pase.
 
 ### Agrupacion
 
-| AG Grid | iswc | Estado |
+| AG Grid | ISWC | Estado |
 | --- | --- | --- |
 | `groupDisplayType` | — | falta |
 | `autoGroupColumnDef` | — | falta |
@@ -466,7 +466,7 @@ probo solo en las pruebas de cada parcela o no se probo en este pase.
 
 ### Fijar filas
 
-| AG Grid | iswc | Estado |
+| AG Grid | ISWC | Estado |
 | --- | --- | --- |
 | `enableRowPinning` | mismo nombre | hecho |
 | `isRowPinnable` | mismo nombre | hecho |
@@ -476,7 +476,7 @@ probo solo en las pruebas de cada parcela o no se probo en este pase.
 
 ### Pivote
 
-| AG Grid | iswc | Estado |
+| AG Grid | ISWC | Estado |
 | --- | --- | --- |
 | `pivotMode` | mismo nombre | hecho |
 | `pivotPanelShow` | mismo nombre | hecho |
@@ -493,7 +493,7 @@ probo solo en las pruebas de cada parcela o no se probo en este pase.
 
 ### Modelos de filas
 
-| AG Grid | iswc | Estado |
+| AG Grid | ISWC | Estado |
 | --- | --- | --- |
 | `rowModelType` | viewport basico | parcial |
 | `getRowId` | mismo nombre | hecho |
@@ -528,7 +528,7 @@ probo solo en las pruebas de cada parcela o no se probo en este pase.
 
 ### Scroll
 
-| AG Grid | iswc | Estado |
+| AG Grid | ISWC | Estado |
 | --- | --- | --- |
 | `alwaysShowHorizontalScroll` | — | falta |
 | `alwaysShowVerticalScroll` | — | falta |
@@ -543,7 +543,7 @@ probo solo en las pruebas de cada parcela o no se probo en este pase.
 
 ### Seleccion
 
-| AG Grid | iswc | Estado |
+| AG Grid | ISWC | Estado |
 | --- | --- | --- |
 | `cellSelection` | mismo nombre | hecho |
 | `rowSelection` | modos, `isRowSelectable` y `hideDisabledCheckboxes` | hecho |
@@ -554,7 +554,7 @@ probo solo en las pruebas de cada parcela o no se probo en este pase.
 
 ### Orden
 
-| AG Grid | iswc | Estado |
+| AG Grid | ISWC | Estado |
 | --- | --- | --- |
 | `accentedSort` | mismo nombre | hecho |
 | `suppressMultiSort` | mismo nombre | hecho |
@@ -566,7 +566,7 @@ probo solo en las pruebas de cada parcela o no se probo en este pase.
 
 ### Estilo
 
-| AG Grid | iswc | Estado |
+| AG Grid | ISWC | Estado |
 | --- | --- | --- |
 | `icons` | iswc-icon por nombre | parcial |
 | `rowHeight` | unidades u (1/16em) | parcial |
@@ -581,7 +581,7 @@ probo solo en las pruebas de cada parcela o no se probo en este pase.
 
 ### Tema
 
-| AG Grid | iswc | Estado |
+| AG Grid | ISWC | Estado |
 | --- | --- | --- |
 | `theme` | tokens y presets propios; el objeto de tema de AG se acepta solo con parametros mapeados | parcial |
 | `loadThemeGoogleFonts` | — | falta |
@@ -591,7 +591,7 @@ probo solo en las pruebas de cada parcela o no se probo en este pase.
 
 ### Tooltips
 
-| AG Grid | iswc | Estado |
+| AG Grid | ISWC | Estado |
 | --- | --- | --- |
 | `enableBrowserTooltips` | mismo nombre | hecho |
 | `tooltipShowDelay` | mismo nombre | hecho |
@@ -604,7 +604,7 @@ probo solo en las pruebas de cada parcela o no se probo en este pase.
 
 ### Tree data
 
-| AG Grid | iswc | Estado |
+| AG Grid | ISWC | Estado |
 | --- | --- | --- |
 | `treeData` | mismo nombre | hecho |
 | `getDataPath` | mismo nombre | hecho |
@@ -616,7 +616,7 @@ probo solo en las pruebas de cada parcela o no se probo en este pase.
 
 ### Accesorios
 
-| AG Grid | iswc | Estado |
+| AG Grid | ISWC | Estado |
 | --- | --- | --- |
 | `showColumnChooser` | mismo nombre | hecho |
 | `showColumnFilter` | mismo nombre | hecho |
@@ -640,7 +640,7 @@ probo solo en las pruebas de cada parcela o no se probo en este pase.
 
 ### Portapapeles
 
-| AG Grid | iswc | Estado |
+| AG Grid | ISWC | Estado |
 | --- | --- | --- |
 | `cutToClipboard` | mismo nombre | hecho |
 | `copyToClipboard` | mismo nombre | hecho |
@@ -651,7 +651,7 @@ probo solo en las pruebas de cada parcela o no se probo en este pase.
 
 ### Columnas
 
-| AG Grid | iswc | Estado |
+| AG Grid | ISWC | Estado |
 | --- | --- | --- |
 | `getColumnDefs` | mismo nombre | hecho |
 | `getColumn` | mismo nombre | hecho |
@@ -686,7 +686,7 @@ probo solo en las pruebas de cada parcela o no se probo en este pase.
 
 ### Grupos de columnas
 
-| AG Grid | iswc | Estado |
+| AG Grid | ISWC | Estado |
 | --- | --- | --- |
 | `getColumnGroup` | mismo nombre | hecho |
 | `getProvidedColumnGroup` | mismo nombre | hecho |
@@ -699,7 +699,7 @@ probo solo en las pruebas de cada parcela o no se probo en este pase.
 
 ### Edicion
 
-| AG Grid | iswc | Estado |
+| AG Grid | ISWC | Estado |
 | --- | --- | --- |
 | `startEditingCell` | mismo nombre | hecho |
 | `stopEditing` | mismo nombre | hecho |
@@ -720,7 +720,7 @@ probo solo en las pruebas de cada parcela o no se probo en este pase.
 
 ### Eventos
 
-| AG Grid | iswc | Estado |
+| AG Grid | ISWC | Estado |
 | --- | --- | --- |
 | `addEventListener` | mismo nombre | hecho |
 | `removeEventListener` | mismo nombre | hecho |
@@ -730,7 +730,7 @@ probo solo en las pruebas de cada parcela o no se probo en este pase.
 
 ### Exportacion
 
-| AG Grid | iswc | Estado |
+| AG Grid | ISWC | Estado |
 | --- | --- | --- |
 | `exportDataAsCsv` | mismo nombre | hecho |
 | `getDataAsCsv` | mismo nombre | hecho |
@@ -744,7 +744,7 @@ probo solo en las pruebas de cada parcela o no se probo en este pase.
 
 ### Filtrado
 
-| AG Grid | iswc | Estado |
+| AG Grid | ISWC | Estado |
 | --- | --- | --- |
 | `getQuickFilter` | mismo nombre | hecho |
 | `resetQuickFilter` | mismo nombre | hecho |
@@ -767,7 +767,7 @@ probo solo en las pruebas de cada parcela o no se probo en este pase.
 
 ### Buscar
 
-| AG Grid | iswc | Estado |
+| AG Grid | ISWC | Estado |
 | --- | --- | --- |
 | `findNext` | — | falta |
 | `findPrevious` | — | falta |
@@ -781,7 +781,7 @@ probo solo en las pruebas de cada parcela o no se probo en este pase.
 
 ### Opciones y estado
 
-| AG Grid | iswc | Estado |
+| AG Grid | ISWC | Estado |
 | --- | --- | --- |
 | `getGridOption` | mismo nombre | hecho |
 | `setGridOption` | mismo nombre | hecho |
@@ -791,7 +791,7 @@ probo solo en las pruebas de cada parcela o no se probo en este pase.
 
 ### Graficos integrados
 
-| AG Grid | iswc | Estado |
+| AG Grid | ISWC | Estado |
 | --- | --- | --- |
 | `createRangeChart` | — | falta |
 | `createPivotChart` | — | falta |
@@ -807,7 +807,7 @@ probo solo en las pruebas de cada parcela o no se probo en este pase.
 
 ### Teclado
 
-| AG Grid | iswc | Estado |
+| AG Grid | ISWC | Estado |
 | --- | --- | --- |
 | `getFocusedCell` | mismo nombre | hecho |
 | `setFocusedCell` | mismo nombre | hecho |
@@ -818,7 +818,7 @@ probo solo en las pruebas de cada parcela o no se probo en este pase.
 
 ### Master/detail
 
-| AG Grid | iswc | Estado |
+| AG Grid | ISWC | Estado |
 | --- | --- | --- |
 | `getDetailGridInfo` | mismo nombre | hecho |
 | `forEachDetailGridInfo` | mismo nombre | hecho |
@@ -827,7 +827,7 @@ probo solo en las pruebas de cada parcela o no se probo en este pase.
 
 ### Miscelanea
 
-| AG Grid | iswc | Estado |
+| AG Grid | ISWC | Estado |
 | --- | --- | --- |
 | `getCellValue` | mismo nombre | hecho |
 | `expireValueCache` | mismo nombre | hecho |
@@ -844,14 +844,14 @@ probo solo en las pruebas de cada parcela o no se probo en este pase.
 
 ### Overlays
 
-| AG Grid | iswc | Estado |
+| AG Grid | ISWC | Estado |
 | --- | --- | --- |
 | `showNoRowsOverlay` | mismo nombre | hecho |
 | `hideOverlay` | mismo nombre | hecho |
 
 ### Paginacion
 
-| AG Grid | iswc | Estado |
+| AG Grid | ISWC | Estado |
 | --- | --- | --- |
 | `paginationIsLastPageFound` | mismo nombre | hecho |
 | `paginationGetPageSize` | mismo nombre | hecho |
@@ -866,7 +866,7 @@ probo solo en las pruebas de cada parcela o no se probo en este pase.
 
 ### Refresco y render
 
-| AG Grid | iswc | Estado |
+| AG Grid | ISWC | Estado |
 | --- | --- | --- |
 | `refreshCells` | mismo nombre | hecho |
 | `redrawRows` | mismo nombre | hecho |
@@ -881,7 +881,7 @@ probo solo en las pruebas de cada parcela o no se probo en este pase.
 
 ### Agregacion
 
-| AG Grid | iswc | Estado |
+| AG Grid | ISWC | Estado |
 | --- | --- | --- |
 | `getValueColumns` | mismo nombre | hecho |
 | `addValueColumns` | mismo nombre | hecho |
@@ -893,7 +893,7 @@ probo solo en las pruebas de cada parcela o no se probo en este pase.
 
 ### Filas mostradas y nodos
 
-| AG Grid | iswc | Estado |
+| AG Grid | ISWC | Estado |
 | --- | --- | --- |
 | `getDisplayedRowAtIndex` | mismo nombre | hecho |
 | `getDisplayedRowCount` | mismo nombre | hecho |
@@ -907,7 +907,7 @@ probo solo en las pruebas de cada parcela o no se probo en este pase.
 
 ### Arrastre de filas
 
-| AG Grid | iswc | Estado |
+| AG Grid | ISWC | Estado |
 | --- | --- | --- |
 | `addRowDropZone` | — | falta |
 | `removeRowDropZone` | — | falta |
@@ -917,7 +917,7 @@ probo solo en las pruebas de cada parcela o no se probo en este pase.
 
 ### Expandir y agrupar
 
-| AG Grid | iswc | Estado |
+| AG Grid | ISWC | Estado |
 | --- | --- | --- |
 | `expandAll` | mismo nombre | hecho |
 | `collapseAll` | mismo nombre | hecho |
@@ -932,7 +932,7 @@ probo solo en las pruebas de cada parcela o no se probo en este pase.
 
 ### Fijar filas
 
-| AG Grid | iswc | Estado |
+| AG Grid | ISWC | Estado |
 | --- | --- | --- |
 | `getPinnedTopRowCount` | mismo nombre | hecho |
 | `getPinnedBottomRowCount` | mismo nombre | hecho |
@@ -942,7 +942,7 @@ probo solo en las pruebas de cada parcela o no se probo en este pase.
 
 ### Pivote
 
-| AG Grid | iswc | Estado |
+| AG Grid | ISWC | Estado |
 | --- | --- | --- |
 | `isPivotMode` | mismo nombre | hecho |
 | `getPivotColumns` | mismo nombre | hecho |
@@ -955,7 +955,7 @@ probo solo en las pruebas de cada parcela o no se probo en este pase.
 
 ### Modelos de filas
 
-| AG Grid | iswc | Estado |
+| AG Grid | ISWC | Estado |
 | --- | --- | --- |
 | `applyTransaction` | mismo nombre | hecho |
 | `applyTransactionAsync` | mismo nombre | hecho |
@@ -978,7 +978,7 @@ probo solo en las pruebas de cada parcela o no se probo en este pase.
 
 ### Scroll
 
-| AG Grid | iswc | Estado |
+| AG Grid | ISWC | Estado |
 | --- | --- | --- |
 | `ensureIndexVisible` | mismo nombre | hecho |
 | `ensureNodeVisible` | mismo nombre | hecho |
@@ -988,7 +988,7 @@ probo solo en las pruebas de cada parcela o no se probo en este pase.
 
 ### Seleccion
 
-| AG Grid | iswc | Estado |
+| AG Grid | ISWC | Estado |
 | --- | --- | --- |
 | `selectAll` | mismo nombre | hecho |
 | `deselectAll` | mismo nombre | hecho |
@@ -1005,7 +1005,7 @@ probo solo en las pruebas de cada parcela o no se probo en este pase.
 
 ### Accesorios
 
-| AG Grid | iswc | Estado |
+| AG Grid | ISWC | Estado |
 | --- | --- | --- |
 | `toolPanelVisibleChanged` | mismo nombre | hecho |
 | `toolPanelSizeChanged` | mismo nombre | hecho |
@@ -1014,7 +1014,7 @@ probo solo en las pruebas de cada parcela o no se probo en este pase.
 
 ### Portapapeles
 
-| AG Grid | iswc | Estado |
+| AG Grid | ISWC | Estado |
 | --- | --- | --- |
 | `cutStart` | mismo nombre | hecho |
 | `cutEnd` | mismo nombre | hecho |
@@ -1023,7 +1023,7 @@ probo solo en las pruebas de cada parcela o no se probo en este pase.
 
 ### Columnas
 
-| AG Grid | iswc | Estado |
+| AG Grid | ISWC | Estado |
 | --- | --- | --- |
 | `columnVisible` | mismo nombre | hecho |
 | `columnPinned` | mismo nombre | hecho |
@@ -1047,7 +1047,7 @@ probo solo en las pruebas de cada parcela o no se probo en este pase.
 
 ### Arrastre
 
-| AG Grid | iswc | Estado |
+| AG Grid | ISWC | Estado |
 | --- | --- | --- |
 | `dragStarted` | — | falta |
 | `dragStopped` | — | falta |
@@ -1060,7 +1060,7 @@ probo solo en las pruebas de cada parcela o no se probo en este pase.
 
 ### Edicion
 
-| AG Grid | iswc | Estado |
+| AG Grid | ISWC | Estado |
 | --- | --- | --- |
 | `cellValueChanged` | mismo nombre | hecho |
 | `cellEditRequest` | mismo nombre | hecho |
@@ -1080,7 +1080,7 @@ probo solo en las pruebas de cada parcela o no se probo en este pase.
 
 ### Filtrado
 
-| AG Grid | iswc | Estado |
+| AG Grid | ISWC | Estado |
 | --- | --- | --- |
 | `filterOpened` | mismo nombre | hecho |
 | `filterChanged` | mismo nombre | hecho |
@@ -1091,7 +1091,7 @@ probo solo en las pruebas de cada parcela o no se probo en este pase.
 
 ### Ciclo de vida
 
-| AG Grid | iswc | Estado |
+| AG Grid | ISWC | Estado |
 | --- | --- | --- |
 | `gridReady` | mismo nombre | hecho |
 | `gridPreDestroyed` | mismo nombre | hecho |
@@ -1101,7 +1101,7 @@ probo solo en las pruebas de cada parcela o no se probo en este pase.
 
 ### Graficos
 
-| AG Grid | iswc | Estado |
+| AG Grid | ISWC | Estado |
 | --- | --- | --- |
 | `chartCreated` | — | falta |
 | `chartRangeSelectionChanged` | — | falta |
@@ -1110,7 +1110,7 @@ probo solo en las pruebas de cada parcela o no se probo en este pase.
 
 ### Celdas y seleccion
 
-| AG Grid | iswc | Estado |
+| AG Grid | ISWC | Estado |
 | --- | --- | --- |
 | `cellKeyDown` | mismo nombre | hecho |
 | `paginationChanged` | mismo nombre | hecho |
@@ -1135,7 +1135,7 @@ probo solo en las pruebas de cada parcela o no se probo en este pase.
 
 ### Filas
 
-| AG Grid | iswc | Estado |
+| AG Grid | ISWC | Estado |
 | --- | --- | --- |
 | `columnRowGroupChanged` | mismo nombre | hecho |
 | `rowGroupOpened` | mismo nombre | hecho |
@@ -1150,7 +1150,7 @@ probo solo en las pruebas de cada parcela o no se probo en este pase.
 
 ### Vista
 
-| AG Grid | iswc | Estado |
+| AG Grid | ISWC | Estado |
 | --- | --- | --- |
 | `gridSizeChanged` | mismo nombre | hecho |
 | `virtualRowRemoved` | — | falta |
@@ -1162,7 +1162,7 @@ probo solo en las pruebas de cada parcela o no se probo en este pase.
 
 ### Base
 
-| AG Grid | iswc | Estado |
+| AG Grid | ISWC | Estado |
 | --- | --- | --- |
 | `field` | mismo nombre | hecho |
 | `colId` | mismo nombre | hecho |
@@ -1185,7 +1185,7 @@ probo solo en las pruebas de cada parcela o no se probo en este pase.
 
 ### Agregacion
 
-| AG Grid | iswc | Estado |
+| AG Grid | ISWC | Estado |
 | --- | --- | --- |
 | `aggFunc` | mismo nombre | hecho |
 | `initialAggFunc` | mismo nombre | hecho |
@@ -1196,7 +1196,7 @@ probo solo en las pruebas de cada parcela o no se probo en este pase.
 
 ### Visualizacion
 
-| AG Grid | iswc | Estado |
+| AG Grid | ISWC | Estado |
 | --- | --- | --- |
 | `hide` | mismo nombre | hecho |
 | `initialHide` | mismo nombre | hecho |
@@ -1207,7 +1207,7 @@ probo solo en las pruebas de cada parcela o no se probo en este pase.
 
 ### Edicion
 
-| AG Grid | iswc | Estado |
+| AG Grid | ISWC | Estado |
 | --- | --- | --- |
 | `editable` | mismo nombre | hecho |
 | `valueSetter` | mismo nombre | hecho |
@@ -1226,7 +1226,7 @@ probo solo en las pruebas de cada parcela o no se probo en este pase.
 
 ### Filtro
 
-| AG Grid | iswc | Estado |
+| AG Grid | ISWC | Estado |
 | --- | --- | --- |
 | `filter` | mismo nombre | hecho |
 | `filterParams` | mismo nombre | hecho |
@@ -1240,7 +1240,7 @@ probo solo en las pruebas de cada parcela o no se probo en este pase.
 
 ### Encabezado
 
-| AG Grid | iswc | Estado |
+| AG Grid | ISWC | Estado |
 | --- | --- | --- |
 | `headerName` | mismo nombre | hecho |
 | `headerNameEditable` | — | falta |
@@ -1263,7 +1263,7 @@ probo solo en las pruebas de cada parcela o no se probo en este pase.
 
 ### Fijar
 
-| AG Grid | iswc | Estado |
+| AG Grid | ISWC | Estado |
 | --- | --- | --- |
 | `pinned` | mismo nombre | hecho |
 | `initialPinned` | mismo nombre | hecho |
@@ -1271,7 +1271,7 @@ probo solo en las pruebas de cada parcela o no se probo en este pase.
 
 ### Pivote
 
-| AG Grid | iswc | Estado |
+| AG Grid | ISWC | Estado |
 | --- | --- | --- |
 | `pivot` | mismo nombre | hecho |
 | `pivotIndex` | mismo nombre | hecho |
@@ -1280,7 +1280,7 @@ probo solo en las pruebas de cada parcela o no se probo en este pase.
 
 ### Render
 
-| AG Grid | iswc | Estado |
+| AG Grid | ISWC | Estado |
 | --- | --- | --- |
 | `cellStyle` | mismo nombre | hecho |
 | `cellClass` | mismo nombre | hecho |
@@ -1294,7 +1294,7 @@ probo solo en las pruebas de cada parcela o no se probo en este pase.
 
 ### Arrastre
 
-| AG Grid | iswc | Estado |
+| AG Grid | ISWC | Estado |
 | --- | --- | --- |
 | `rowDrag` | mismo nombre | hecho |
 | `rowDragText` | mismo nombre | hecho |
@@ -1302,7 +1302,7 @@ probo solo en las pruebas de cada parcela o no se probo en este pase.
 
 ### Agrupacion
 
-| AG Grid | iswc | Estado |
+| AG Grid | ISWC | Estado |
 | --- | --- | --- |
 | `rowGroup` | mismo nombre | hecho |
 | `rowGroupIndex` | mismo nombre | hecho |
@@ -1311,7 +1311,7 @@ probo solo en las pruebas de cada parcela o no se probo en este pase.
 
 ### Orden
 
-| AG Grid | iswc | Estado |
+| AG Grid | ISWC | Estado |
 | --- | --- | --- |
 | `sortable` | mismo nombre | hecho |
 | `sort` | mismo nombre | hecho |
@@ -1323,14 +1323,14 @@ probo solo en las pruebas de cada parcela o no se probo en este pase.
 
 ### Span
 
-| AG Grid | iswc | Estado |
+| AG Grid | ISWC | Estado |
 | --- | --- | --- |
 | `colSpan` | mismo nombre | hecho |
 | `spanRows` | — | falta |
 
 ### Tooltips
 
-| AG Grid | iswc | Estado |
+| AG Grid | ISWC | Estado |
 | --- | --- | --- |
 | `tooltip` | mismo nombre | hecho |
 | `tooltipComponent` | mismo nombre | hecho |
@@ -1338,7 +1338,7 @@ probo solo en las pruebas de cada parcela o no se probo en este pase.
 
 ### Ancho
 
-| AG Grid | iswc | Estado |
+| AG Grid | ISWC | Estado |
 | --- | --- | --- |
 | `width` | mismo nombre | hecho |
 | `initialWidth` | mismo nombre | hecho |
@@ -1354,7 +1354,7 @@ probo solo en las pruebas de cada parcela o no se probo en este pase.
 
 ### Propiedades y metodos
 
-| AG Grid | iswc | Estado |
+| AG Grid | ISWC | Estado |
 | --- | --- | --- |
 | `id` | mismo nombre | hecho |
 | `sourceRowIndex` | mismo nombre | hecho |

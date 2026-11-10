@@ -1,5 +1,5 @@
 /**
- * Guardianes WHAT del flowchart estilo insoft (actividad a lo Visual
+ * Guardianes WHAT del flowchart estilo iswc (actividad a lo Visual
  * Paradigm) y de los nodos especiales (`kind`: nested / tableder /
  * component). Afirman QUÉ cumple el resultado: tokens del tema, geometría
  * del rombo, columna principal recta, rutas ortogonales sin tocar cajas,
@@ -53,22 +53,22 @@ const contraste = (a: string, b: string): number => {
   return (x! + 0.05) / (y! + 0.05);
 };
 
-await loadStylesDiagram('insoft');
+await loadStylesDiagram('iswc');
 
 // ── Tema ───────────────────────────────────────────────────────────────
 
-denoTest('estilo insoft trae tema flowchart y sus colores salen de los tokens de la paleta', () => {
-  const t = styleThemeFor('insoft', 'flowchart');
+denoTest('estilo iswc trae tema flowchart y sus colores salen de los tokens de la paleta', () => {
+  const t = styleThemeFor('iswc', 'flowchart');
   assertEquals(t?.kind, 'flowchart');
   const p = flowPaint(t!);
-  // El celeste de las acciones es el `primary` de la paleta InSoft (el mismo del DER/componentes).
-  assertEquals(p.actionFill, styleThemeFor('insoft', 'er')?.cluster?.palettes?.primary);
+  // El celeste de las acciones es el `primary` de la paleta iswc (el mismo del DER/componentes).
+  assertEquals(p.actionFill, styleThemeFor('iswc', 'er')?.cluster?.palettes?.primary);
   assertEquals(p.decisionFill, p.actionFill);
   assert(!p.actionFill.startsWith('primary') && p.actionBorder.startsWith('#'), 'tokens sin resolver');
 });
 
 denoTest('contraste AA del texto de acciones y etiquetas en claro y oscuro', () => {
-  const t = styleThemeFor('insoft', 'flowchart')!;
+  const t = styleThemeFor('iswc', 'flowchart')!;
   for (const dark of [false, true]) {
     const p = flowPaint(pickThemeMode(t, dark));
     assert(contraste(p.actionText, p.actionFill) >= 4.5, `${dark ? 'oscuro' : 'claro'}: texto/acción ${contraste(p.actionText, p.actionFill).toFixed(2)}`);
@@ -95,11 +95,11 @@ denoTest('decisión: el rect del texto queda inscrito y el rombo no queda aplana
   }
 });
 
-// ── Layout insoft ──────────────────────────────────────────────────────
+// ── Layout iswc ──────────────────────────────────────────────────────
 
-const parches = () => computeFlowchartLayout(resolveFlowchartSpec(labPayload('parches-de-datos'))!, null, { style: 'insoft' });
+const parches = () => computeFlowchartLayout(resolveFlowchartSpec(labPayload('parches-de-datos'))!, null, { style: 'iswc' });
 
-denoTest('insoft: columna principal recta, sin solapes y aristas ortogonales que no atraviesan cajas', () => {
+denoTest('iswc: columna principal recta, sin solapes y aristas ortogonales que no atraviesan cajas', () => {
   const L = parches();
   const by = new Map(L.nodes.map((n) => [n.id, n]));
   const cx = (id: string): number => by.get(id)!.x + by.get(id)!.w / 2;
@@ -120,7 +120,7 @@ denoTest('insoft: columna principal recta, sin solapes y aristas ortogonales que
   }
 });
 
-denoTest('insoft: las ramas de una decisión salen por el vértice lateral y la etiqueta va pegada a su riel, por su lado largo, sin taparlo', () => {
+denoTest('iswc: las ramas de una decisión salen por el vértice lateral y la etiqueta va pegada a su riel, por su lado largo, sin taparlo', () => {
   const L = parches();
   const B = L.nodes.find((n) => n.id === 'B')!;
   const no = L.edges.find((e) => e.from === 'B' && e.to === 'X')!;
@@ -145,8 +145,8 @@ denoTest('insoft: las ramas de una decisión salen por el vértice lateral y la 
   }
 });
 
-denoTest('insoft: if sin else (desvío corto) deja la columna en el punto de unión', () => {
-  const L = computeFlowchartLayout(resolveFlowchartSpec(labPayload('datos-y-componentes'))!, null, { style: 'insoft' });
+denoTest('iswc: if sin else (desvío corto) deja la columna en el punto de unión', () => {
+  const L = computeFlowchartLayout(resolveFlowchartSpec(labPayload('datos-y-componentes'))!, null, { style: 'iswc' });
   const by = new Map(L.nodes.map((n) => [n.id, n]));
   const cx = (id: string): number => by.get(id)!.x + by.get(id)!.w / 2;
   assertEquals(cx('guarda'), cx('valida'));
@@ -167,7 +167,7 @@ denoTest('kind: contrato de nested / tableder / component y kinds inválidos', (
   assertEquals(nested?.maxH, 80);
   assertEquals(readNodeEmbed({ kind: 'otro' }), undefined);
   assertEquals(readNodeEmbed({ kind: 'nested', diagram: { tag: 'div', payload: {} } }), undefined, 'tag fuera del kit');
-  const t = embedDiagramOf(readNodeEmbed({ kind: 'tableder', table: { name: 't1', attributes: [{ name: 'flowchart-insoft: id', type: 'int' }] } })!);
+  const t = embedDiagramOf(readNodeEmbed({ kind: 'tableder', table: { name: 't1', attributes: [{ name: 'flowchart-iswc: id', type: 'int' }] } })!);
   assertEquals(t?.tag, 'iswc-er-diagram');
   assertEquals(JSON.stringify(t?.payload).includes('"orphans":false'), true, 'la tabla suelta no se pinta como huérfana');
   const c = embedDiagramOf(readNodeEmbed({ kind: 'component', component: { name: 'API' } })!);
@@ -185,7 +185,7 @@ denoTest('kind nested: contain dentro de NESTED_DEFAULT_MAX por defecto, ajustab
     ],
     edges: [{ from: 'a', to: 'b' }],
   })!;
-  const L = computeFlowchartLayout(spec, null, { style: 'insoft', embeds: { a: { w: 900, h: 600 }, b: { w: 900, h: 600 } } });
+  const L = computeFlowchartLayout(spec, null, { style: 'iswc', embeds: { a: { w: 900, h: 600 }, b: { w: 900, h: 600 } } });
   const a = L.nodes.find((n) => n.id === 'a')!;
   const b = L.nodes.find((n) => n.id === 'b')!;
   assert(a.embedBox && a.embedBox.w <= NESTED_DEFAULT_MAX && a.embedBox.h <= NESTED_DEFAULT_MAX);

@@ -27,7 +27,7 @@ El reporte completo de la última corrida queda en `.tmp/tests-reporte.json`.
 | `navegador/` | Página real con servidor efímero (Playwright/Stagehand). | what |
 | `gobernanza/` | Guardianes del repo: estructura, schemas, vendor, docs, build, motor de auditoría. | how |
 | `e2e/` | Recorridos E2E con Stagehand (`deno task test:e2e`). | what |
-| `fixtures/` | Datos de prueba, planos y con prefijo (`html-*`, `diagramas-*`); `iss-ayudascpia/` es un árbol de docs. | — |
+| `fixtures/` | Datos de prueba, planos y con prefijo (`html-*`, `diagramas-*`); `iss-ayudas-ejemplo/` es un árbol de docs. | — |
 | `_shared/` | Ayudas de las pruebas (adaptador `Deno.test`, jsdom, alias, deps). | — |
 | `.audit/` | Runner (`run.ts`), motor de auditoría (`motor/`, `engine/`) y harness E2E (`e2e/`). | — |
 

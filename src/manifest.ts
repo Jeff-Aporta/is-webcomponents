@@ -17,7 +17,7 @@
 import type { ComponentManifestItem } from "./manifest.schemas.js";
 const manifest: ComponentManifestItem[] = [
   // isp — primitivas portadas de ISP-SvelteComponents (la librería Svelte de
-  // ContaPyme). El orden del nav no sale de aquí sino de `categoryMeta` en
+  // Acme). El orden del nav no sale de aquí sino de `categoryMeta` en
   // index.html, donde `isp` es la última clave.
   { tag: 'iswc-accordion-group', title: 'Accordion Group', category: 'isp', origin: 'isp', script: 'components/isp/accordion-group.js', style: 'components/isp/accordion-group.css', page: 'components/isp/accordion-group.json' },
   { tag: 'iswc-block-layout', title: 'Block Layout', category: 'isp', origin: 'isp', script: 'components/isp/block-layout.js', style: 'components/isp/block-layout.css', page: 'components/isp/block-layout.json' },

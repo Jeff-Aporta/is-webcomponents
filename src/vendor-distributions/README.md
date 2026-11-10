@@ -61,7 +61,7 @@ Guardián: `tests/gobernanza/vendor-distributions-doc.test.ts`.
 
 ## `shared/` — sirve a server y a client
 
-Sin barriles ni re-exports (regla InSoft): cada consumidor importa del archivo de origen; los tipos, de `schemas.ts`, y `z`, de `zod`.
+Sin barriles ni re-exports (regla ISWC): cada consumidor importa del archivo de origen; los tipos, de `schemas.ts`, y `z`, de `zod`.
 
 | Archivo | Propósito | Doc |
 | --- | --- | --- |

@@ -170,8 +170,8 @@
         {
           "kind": "demo",
           "html": [
-            "<iswc-inline-edit value=\"InSoft\" style=\"font-size:1.15rem; font-weight:600;\">",
-            "            <span slot=\"display\"><iswc-icon icon=\"mdi:office-building\" style=\"vertical-align:middle\"></iswc-icon> InSoft S.A.</span>",
+            "<iswc-inline-edit value=\"Acme\" style=\"font-size:1.15rem; font-weight:600;\">",
+            "            <span slot=\"display\"><iswc-icon icon=\"mdi:office-building\" style=\"vertical-align:middle\"></iswc-icon> Acme S.A.</span>",
             "          </iswc-inline-edit>"
           ]
         }

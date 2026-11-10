@@ -23,7 +23,7 @@ Este módulo registra `<iswc-login>`.
 
 ## Cuándo usarlo
 
-- Login de una app iswc con uno o varios proveedores.
+- Login de una app ISWC con uno o varios proveedores.
 - Selector de cuentas simultáneas (paridad con el cambio de cuenta de Facebook/Instagram).
 - Panel de seguridad de la cuenta: cambiar contraseña y revisar/cerrar sesiones activas.
 
@@ -44,7 +44,7 @@ import './login.js';
 ```html
 <iswc-login
   heading="Iniciar sesión"
-  provider="ContaPyme"
+  provider="Acme"
   show-password
   allow-logout-all
 ></iswc-login>

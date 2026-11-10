@@ -46,7 +46,7 @@ import './btn-ref.js';
     ColumnsBtnRef: ['app'],
     columns: [{ field: 'app', header: 'Aplicación' }],
     async Lista() {
-      return { datos: [{ app: 'ContaPyme' }, { app: 'AgroWin' }] };
+      return { datos: [{ app: 'Acme' }, { app: 'Beta' }] };
     },
   };
   el.addEventListener('iswc-selected-record', (e) => console.log(e.detail));

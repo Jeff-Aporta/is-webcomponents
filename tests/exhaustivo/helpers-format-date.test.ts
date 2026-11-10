@@ -68,7 +68,7 @@ test('5. la clase reacciona a cambios de atributo (override o via ElementBase.on
 test('6. la clase trae su CSS por iswc:css (static css del molde IswcElement)', async () => {
   const src = readFileSync(TS, 'utf8');
   assert.ok(
-    /import css from 'iswc:css';/.test(src) && /static css = css;/.test(src),
+    /import css from 'iswc:css';/.test(src) && /static (?:override )?css = css;/.test(src),
     "import css from 'iswc:css' + static css = css deben estar presentes",
   );
 });

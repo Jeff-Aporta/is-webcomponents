@@ -1,7 +1,7 @@
 /**
  * server-api-docs-md.ts — dominio puro de `<iswc-server-api-docs>` (sin DOM ni red).
  *
- * Valida el documento que publica un server (InSoft `kind:"config"` u OpenAPI 3) con Zod, dice si admite
+ * Valida el documento que publica un server (iswc `kind:"config"` u OpenAPI 3) con Zod, dice si admite
  * el parse ESTRICTO del documento v2 (`server-api-docs-md.schemas.ts`, el que los servers vendorizan), lo
  * normaliza al modelo Swagger-like que el visor pinta (`ServerApiDocsModelo`) y arma lo que «Probar»
  * necesita: URL, cURL, la petición de login del proveedor y el diagrama de secuencia de cada endpoint.
@@ -10,7 +10,7 @@
 import { ApiDocsDocumentoSchema } from '@jeff-aporta/iswc-base/components/layout/schemas/server-api-docs-md.schemas.js';
 import type { SequenceActorSpec, SequenceFragmentSpec, SequenceMessageSpec } from '@jeff-aporta/iswc-base/components/diagrams/schemas/sequence-spec.schemas.js';
 import {
-  InsoftDocumentoSchema,
+  iswcDocumentoSchema,
   METODOS_API,
   OpenApiDocumentoSchema,
   ServerApiDocsMetodoSchema,
@@ -34,15 +34,15 @@ const arr = (v: unknown): unknown[] => (Array.isArray(v) ? v : []);
 const str = (v: unknown, def = ''): string => (typeof v === 'string' ? v : def);
 const esObjeto = (v: unknown): boolean => !!v && typeof v === 'object' && !Array.isArray(v);
 
-/** Orquestador público de InSoft: canjea credenciales por JWT cuando el documento no trae `loginUrl`. */
-const LOGIN_ORQUESTADOR = 'https://main-orchestrator.jeffaporta.workers.dev';
+/** Orquestador público de iswc: canjea credenciales por JWT cuando el documento no trae `loginUrl`. */
+const LOGIN_ORQUESTADOR = 'https://orchestrator.ejemplo.dev';
 /** Empresa por defecto cuando el login responde `MULTI_EMPRESA` (lo mismo que hace el portal). */
-export const ITERCERO_POR_DEFECTO = '810000630';
+export const ITERCERO_POR_DEFECTO = '800123456';
 
 /** Formato del documento por su forma (sin validarlo). */
 function formatoDe(doc: unknown): ServerApiDocsValidacion['formato'] {
   const d = obj(doc);
-  if (d.kind === 'config') return 'insoft';
+  if (d.kind === 'config') return 'iswc';
   if (typeof d.openapi === 'string') return 'openapi';
   return 'desconocido';
 }
@@ -53,18 +53,18 @@ export const esMaterializable = (doc: unknown): boolean => formatoDe(doc) !== 'd
 /** Valida con Zod: cada problema con su ruta JSON (`paths › /x › get › doc: «x» no existe en catalog.docs`). */
 export function validarDocumentoApi(doc: unknown): ServerApiDocsValidacion {
   const formato = formatoDe(doc);
-  if (formato === 'desconocido') return { ok: false, formato, errores: ['(raíz): el documento no es InSoft (kind:"config") ni OpenAPI 3 (openapi:"3.x")'] };
-  const r = (formato === 'insoft' ? InsoftDocumentoSchema : OpenApiDocumentoSchema).safeParse(doc);
+  if (formato === 'desconocido') return { ok: false, formato, errores: ['(raíz): el documento no es iswc (kind:"config") ni OpenAPI 3 (openapi:"3.x")'] };
+  const r = (formato === 'iswc' ? iswcDocumentoSchema : OpenApiDocumentoSchema).safeParse(doc);
   if (r.success) return { ok: true, formato, errores: [] };
   return { ok: false, formato, errores: r.error.issues.map((i) => `${i.path.length ? i.path.map(String).join(' › ') : '(raíz)'}: ${i.message}`) };
 }
 
 /**
- * ¿Admite el parse estricto (InSoft `kind:"config"` v2, `ApiDocsDocumentoSchema`)? Cada error con su ruta
- * JSON. Un OpenAPI 3 no aplica (el estricto es el contrato InSoft); un InSoft v1 aplica y no lo admite.
+ * ¿Admite el parse estricto (iswc `kind:"config"` v2, `ApiDocsDocumentoSchema`)? Cada error con su ruta
+ * JSON. Un OpenAPI 3 no aplica (el estricto es el contrato iswc); un iswc v1 aplica y no lo admite.
  */
 export function validarEstricto(doc: unknown): ServerApiDocsEstricto {
-  if (formatoDe(doc) !== 'insoft') return { aplica: false, ok: false, errores: [] };
+  if (formatoDe(doc) !== 'iswc') return { aplica: false, ok: false, errores: [] };
   const r = ApiDocsDocumentoSchema.safeParse(doc);
   if (r.success) return { aplica: true, ok: true, errores: [] };
   return { aplica: true, ok: false, errores: r.error.issues.map((i) => `${i.path.length ? i.path.map(String).join(' › ') : '(raíz)'}: ${i.message}`) };
@@ -74,7 +74,7 @@ export function validarEstricto(doc: unknown): ServerApiDocsEstricto {
 export const idDeOperacion = (metodo: string, ruta: string, operationId?: unknown): string =>
   typeof operationId === 'string' && operationId ? operationId : `${metodo}_${ruta.replace(/\{(\w+)\}/g, 'by_$1').replace(/[^\w]+/g, '_').replace(/^_|_$/g, '')}`;
 
-// ── Respuestas InSoft (templates → códigos concretos) ────────────────────────
+// ── Respuestas iswc (templates → códigos concretos) ────────────────────────
 
 const ENCABEZADO = {
   type: 'object',
@@ -100,7 +100,7 @@ export function schemaDeEjemplo(v: unknown): Obj {
   return /^\d{4}-\d{2}-\d{2}T/.test(String(v)) ? { type: 'string', format: 'date-time' } : { type: 'string' };
 }
 
-function respuestasInsoft(cat: Obj, def: unknown): ServerApiDocsRespuesta[] {
+function respuestasiswc(cat: Obj, def: unknown): ServerApiDocsRespuesta[] {
   const r = obj(def);
   const payloads = obj(cat.payloads);
   const payload = (k: unknown): unknown => (typeof k === 'string' && k in payloads ? payloads[k] : {});
@@ -149,7 +149,7 @@ const parametro = (p: Obj): ServerApiDocsParametro => {
   };
 };
 
-/** `$ref` a `#/catalog/schemas/x` resuelto (un nivel, lo que el documento InSoft usa). */
+/** `$ref` a `#/catalog/schemas/x` resuelto (un nivel, lo que el documento iswc usa). */
 function schemaDeCatalogo(cat: Obj, schema: unknown): unknown {
   const ref = str(obj(schema).$ref).match(/#\/catalog\/schemas\/([^/]+)$/)?.[1];
   const def = ref ? obj(obj(cat.schemas)[ref]) : {};
@@ -161,9 +161,9 @@ const adjuntos = (plantilla: unknown): ServerApiDocsAdjunto[] => (['images', 'au
   return a.field ? [{ tipo, campo: str(a.field), max: typeof a.max === 'number' && a.max > 0 ? a.max : 5 }] : [];
 });
 
-// ── InSoft kind:"config" ─────────────────────────────────────────────────────
+// ── iswc kind:"config" ─────────────────────────────────────────────────────
 
-function operacionInsoft(cat: Obj, metodo: ServerApiDocsOperacion['metodo'], ruta: string, def: Obj): ServerApiDocsOperacion {
+function operacioniswc(cat: Obj, metodo: ServerApiDocsOperacion['metodo'], ruta: string, def: Obj): ServerApiDocsOperacion {
   const params = arr(def.parameters).map(obj).filter((p) => p.name);
   // QUERY no admite `?q=`: esos campos viajan en el cuerpo JSON (el server respondería 400).
   const enCuerpo = metodo === 'query' ? params.filter((p) => p.in === 'query') : [];
@@ -190,7 +190,7 @@ function operacionInsoft(cat: Obj, metodo: ServerApiDocsOperacion['metodo'], rut
     controller: str(def.controller),
     parametros: params.filter((p) => !enCuerpo.includes(p)).map(parametro),
     cuerpo,
-    respuestas: respuestasInsoft(cat, def.responses),
+    respuestas: respuestasiswc(cat, def.responses),
     adjuntos: adjuntos(typeof att === 'string' ? obj(obj(obj(cat.tryitAttachments).templates)[att]) : att),
     confirmar: def.tryitConfirm ? { titulo: str(confirmar.title, str(def.summary)), mensaje: str(confirmar.message, '¿Ejecutar esta operación contra el servidor?') } : null,
   };
@@ -230,7 +230,7 @@ function operacionOpenApi(doc: Obj, metodo: ServerApiDocsOperacion['metodo'], ru
 
 const slug = (s: string): string => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'api';
 
-function authInsoft(viewer: Obj): ServerApiDocsAuth | null {
+function authiswc(viewer: Obj): ServerApiDocsAuth | null {
   const a = obj(viewer.auth);
   if (!Object.keys(a).length || a.enabled === false) return null;
   const patyia = a.provider === 'patyia-portal';
@@ -269,7 +269,7 @@ function agrupar(ops: ServerApiDocsOperacion[], tags: Obj[], orden: string[]): S
 export function normalizarDocumentoApi(doc: unknown): ServerApiDocsModelo {
   if (!esMaterializable(doc)) throw new Error(validarDocumentoApi(doc).errores.join('\n') || 'documento sin paths');
   const d = obj(doc);
-  const insoft = formatoDe(doc) === 'insoft';
+  const iswc = formatoDe(doc) === 'iswc';
   const info = obj(d.info);
   const viewer = obj(d.viewer);
   const cat = obj(d.catalog);
@@ -280,20 +280,20 @@ export function normalizarDocumentoApi(doc: unknown): ServerApiDocsModelo {
       const def = metodos[metodo];
       if (!esObjeto(def)) continue;
       const m = ServerApiDocsMetodoSchema.parse(metodo);
-      ops.push(insoft ? operacionInsoft(cat, m, ruta, obj(def)) : operacionOpenApi(d, m, ruta, obj(def), arr(metodos.parameters)));
+      ops.push(iswc ? operacioniswc(cat, m, ruta, obj(def)) : operacionOpenApi(d, m, ruta, obj(def), arr(metodos.parameters)));
     }
   }
   const titulo = str(info.title, 'API');
   const exportes = obj(viewer.exports);
   const ordenNav = arr(viewer.nav).flatMap((n) => arr(obj(n).tags).map(String));
   return {
-    formato: insoft ? 'insoft' : 'openapi',
+    formato: iswc ? 'iswc' : 'openapi',
     titulo,
     version: str(info.version),
     descripcion: str(info.description),
     marca: { titulo: str(obj(viewer.brand).title, titulo), icono: str(obj(viewer.brand).icon, 'mdi:api') },
-    auth: insoft ? authInsoft(viewer) : null,
-    servidores: arr(insoft ? viewer.servers : d.servers).map(obj).filter((s) => s.url).map((s) => ({ url: str(s.url).replace(/\/+$/, ''), descripcion: str(s.description) })),
+    auth: iswc ? authiswc(viewer) : null,
+    servidores: arr(iswc ? viewer.servers : d.servers).map(obj).filter((s) => s.url).map((s) => ({ url: str(s.url).replace(/\/+$/, ''), descripcion: str(s.description) })),
     grupos: agrupar(ops, arr(d.tags).map(obj), ordenNav),
     operaciones: ops,
     exportes: { documento: str(exportes.isDownloadName, `${slug(titulo)}.docs.json`), openapi: str(exportes.openApiDownloadName, `${slug(titulo)}.openapi.json`) },
@@ -352,14 +352,14 @@ export const envolverClave = (plana: string, dia = new Date().getUTCDate()): str
 
 /**
  * Petición de login del proveedor del documento. `patyia-portal` manda la contraseña en claro (el
- * server hace md5) y el correo tal cual; `orquestador` la envuelve y quita el dominio contapyme.
+ * server hace md5) y el correo tal cual; `orquestador` la envuelve y quita el dominio acme.
  */
 export function peticionLogin(auth: ServerApiDocsAuth, base: string, usuario: string, clave: string, itercero = ''): ServerApiDocsLogin {
   const raiz = (auth.loginUrl || base).replace(/\/+$/, '');
   const endpoint = `${raiz}${auth.loginPath.startsWith('/') ? '' : '/'}${auth.loginPath}`;
   const body: Record<string, unknown> = auth.proveedor === 'patyia-portal'
     ? { semail: usuario.trim(), password: clave }
-    : { semail: usuario.trim().replace(/@contapyme\.(com|co)$/i, ''), password: envolverClave(clave), app: auth.app };
+    : { semail: usuario.trim().replace(/@acme\.(com|co)$/i, ''), password: envolverClave(clave), app: auth.app };
   if (itercero) body.itercero = itercero;
   return { endpoint, headers: { 'Content-Type': 'application/json', Accept: 'application/json', 'X-App-Id': auth.app }, body };
 }

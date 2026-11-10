@@ -4,7 +4,7 @@
   "tag": "iswc-component-diagram",
   "script": "diagrams/component-diagram.min.mjs",
   "attrs": {
-    "diagram-style": "insoft"
+    "diagram-style": "iswc"
   },
   "payload": {
     "componentDiagram": {
@@ -105,7 +105,7 @@
         },
         {
           "id": "app-soporte",
-          "name": "ISW-ContaPyme /soporte",
+          "name": "ISW-Acme /soporte",
           "stereotype": "ISW",
           "package": "pkg-apps",
           "color": "#800",
@@ -310,7 +310,7 @@
         {
           "id": "ds-login",
           "name": "TCatContactos · TBasicoGeneral",
-          "stereotype": "DataSnap InSoft · DSCLIENTES",
+          "stereotype": "DataSnap ISWC · DSCLIENTES",
           "package": "pkg-ext",
           "x": 1180,
           "y": 380,

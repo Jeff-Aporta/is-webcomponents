@@ -85,7 +85,7 @@
         },
         {
           "name": "nServer",
-          "type": "ServiciosInSoft",
+          "type": "Serviciosiswc",
           "doc": "`nServer` - El stack valida `isBool(this.nServer)` antes de cualquier request."
         },
         {
@@ -377,7 +377,7 @@
         "stereotype": "",
         "attributes": [
           "+ primaryKeys: Array<keyof T>",
-          "+ nServer: ServiciosInSoft",
+          "+ nServer: Serviciosiswc",
           "+ nEndPoint: string",
           "+ nEndPointListado: string",
           "+ nEndPointSeleccion: string",

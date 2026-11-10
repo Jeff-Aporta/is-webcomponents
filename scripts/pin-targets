@@ -10,6 +10,6 @@
 # (p. ej. ISW: `deno task pin --nuevo=<sha40|ultimo>`). Destinos externos retirados:
 
 # cdn_url	../../../PatyIA/_experimental/ISW-TestPatyIA/src/js/iswc.ts
-# cdn_url	../../../PatyIA/_entregable/ISS-AyudasCPIA/src/consts/api.ts
-# cdn_url	../../../PatyIA/_experimental/ISS-AyudasCPIA/src/consts/api.ts
+# cdn_url	../../../PatyIA/_entregable/Kit/src/consts/api.ts
+# cdn_url	../../../PatyIA/_experimental/Kit/src/consts/api.ts
 # cdn_url	../../../PatyIA/_experimental/ISW-TestPatyIA/specs/iswc-norm.md

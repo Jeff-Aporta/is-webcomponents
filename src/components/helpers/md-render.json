@@ -56,7 +56,7 @@
             "}",
             "```",
             "",
-            "## 2. Diagramas (fences iswc)",
+            "## 2. Diagramas (fences ISWC)",
             "",
             "### Flowchart",
             "",
@@ -223,7 +223,7 @@
     {
       "id": "embeds",
       "title": "Embeds de la sesión",
-      "lede": "Checklist: títulos brand, código, iswc, HTML kit, tabla GFM.",
+      "lede": "Checklist: títulos brand, código, ISWC, HTML kit, tabla GFM.",
       "blocks": [
         {
           "kind": "table",

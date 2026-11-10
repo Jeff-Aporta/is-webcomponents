@@ -345,7 +345,7 @@ export function buildTspans(
 
 // ── flowchart-labels ──
 /**
- * flowchart-labels — las etiquetas de las aristas como ENTIDADES del layout (estilo insoft).
+ * flowchart-labels — las etiquetas de las aristas como ENTIDADES del layout (estilo iswc).
  *
  * Una etiqueta ocupa una caja y guarda 1U (el paso de la rejilla de ruteo, 15 px) con todo lo demás:
  *   - nodos, insignias y títulos de carriles / grupos (estos empujan pero nunca se mueven),
@@ -464,7 +464,7 @@ function coherente(c: EmbedBox, pts: readonly FlowPoint[], vertical: boolean): b
  * Ubica todas las etiquetas sin choques. Muta cada arista (`labelBox`, `labelLines`, `labelX/Y`,
  * `labelAnchor`, `labelVertical`) y devuelve las que no encontraron sitio (para abrir espacio ahí).
  * `fijos`: cajas que empujan y no se mueven (títulos de carriles y grupos, insignias).
- * Orientación: horizontal (preferencia INSOFT); vertical solo si la arista la pide (`labelVertical`
+ * Orientación: horizontal (preferencia ISWC); vertical solo si la arista la pide (`labelVertical`
  * en el spec) o si no tiene ningún tramo horizontal. Lo que no cabe abre espacio. Con el emisor y el receptor guarda 3U (si no
  * cabe, 1U).
  */
@@ -498,7 +498,7 @@ export function resolverEtiquetas(
     const extra = e.labelIcon ? ETIQUETA_ICONO + ICONO_AIRE : 0;
     const horizontales = [partirEtiqueta(e.label, ETIQUETA_MAX_W - extra, mide), [resumir(e.label, ETIQUETA_MAX_W / 2, mide)]];
     const verticales = [[e.label], [resumir(e.label, ETIQUETA_MAX_W / 2, mide)], [resumir(e.label, ETIQUETA_MAX_W / 4, mide)]];
-    // INSOFT: horizontal siempre; la vertical solo si la arista la pide. Si no cabe, se abre espacio
+    // ISWC: horizontal siempre; la vertical solo si la arista la pide. Si no cabe, se abre espacio
     // (no se gira ni se recorta una etiqueta que la arista no pidió vertical).
     // Sin ningún tramo horizontal (una recta vertical), lo coherente es vertical: empujar no crea tramos.
     const sinHorizontal = !pts.slice(1).some((q, k) => q.y === pts[k]!.y && q.x !== pts[k]!.x);

@@ -101,10 +101,10 @@
                 "770123456789",
                 "750103131130",
                 "400638133393",
-                "INSOFT-2026-001",
+                "ACME-2026-001",
                 "LOTE-7782-A",
                 "CEDULA 1234567890",
-                "DEMO-INSOFT"
+                "DEMO-ACME"
               ]
             },
             {
@@ -193,7 +193,7 @@
         {
           "kind": "demo",
           "html": [
-            "<div class=\"bc-row\"><iswc-barcode type=\"code128\" value=\"INSOFT-2026-001\"></iswc-barcode></div>",
+            "<div class=\"bc-row\"><iswc-barcode type=\"code128\" value=\"ACME-2026-001\"></iswc-barcode></div>",
             "          <div class=\"bc-row\"><iswc-barcode type=\"code128\" value=\"LOTE-7782-A\"></iswc-barcode></div>",
             "          <div class=\"bc-row\"><iswc-barcode type=\"code128\" value=\"CEDULA 1234567890\"></iswc-barcode></div>"
           ]
@@ -208,7 +208,7 @@
           "kind": "demo",
           "html": [
             "<div class=\"bc-row\"><iswc-barcode type=\"ean13\" value=\"770123456789\" height=\"80\"></iswc-barcode></div>",
-            "          <div class=\"bc-row\"><iswc-barcode type=\"code128\" value=\"DEMO-INSOFT\" fg=\"var(--iswc-accent)\" show-text></iswc-barcode></div>"
+            "          <div class=\"bc-row\"><iswc-barcode type=\"code128\" value=\"DEMO-ACME\" fg=\"var(--iswc-accent)\" show-text></iswc-barcode></div>"
           ]
         }
       ]

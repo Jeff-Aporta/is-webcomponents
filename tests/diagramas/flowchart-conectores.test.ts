@@ -1,5 +1,5 @@
 /**
- * Guardianes WHAT de conectores y rieles del flujo insoft (rutas reales del lab
+ * Guardianes WHAT de conectores y rieles del flujo iswc (rutas reales del lab
  * `labs/iss-ayudascpia-flujos/payloads/ruta-*.json` y casos mínimos):
  *   C1 paralelismo: la arista que inicia una bifurcación llega CENTRADA a su barra (de una salen
  *      varias); la reunión de ramas (2+ entradas, una salida) es un ⦿, no una barra.
@@ -44,7 +44,7 @@ async function rutas(): Promise<Array<{ nombre: string; L: FlowLayout }>> {
 }
 
 const PARALELO = {
-  style: 'insoft',
+  style: 'iswc',
   nodes: [
     { id: 'i', label: 'Inicio', shape: 'start' },
     { id: 'a', label: 'Arranca' },
@@ -67,7 +67,7 @@ const PARALELO = {
 denoTest('conectores: C1 la arista que inicia el paralelismo llega centrada; la reunión es un ⦿', () => {
   const spec = resolveFlowchartSpec(PARALELO)!;
   assertEquals([...unionesDe(spec)], ['u'], 'solo la barra que reúne es punto de convergencia');
-  const L = computeFlowchartLayout(spec, null, { style: 'insoft' });
+  const L = computeFlowchartLayout(spec, null, { style: 'iswc' });
   const f = L.nodes.find((n) => n.id === 'f')!;
   const u = L.nodes.find((n) => n.id === 'u')!;
   const entra = L.edges.find((e) => e.from === 'a' && e.to === 'f')!;
@@ -165,10 +165,10 @@ denoTest('conectores: C5 los puntos toman el color de la arista y se personaliza
   assertEquals([propio.getAttribute('stroke'), propio.getAttribute('stroke-width')], ['#FF0000', '7']);
   assertEquals(FLUJO.puntos.velocidad, 120, 'el doble de la velocidad original (60 px/s)');
   const L = computeFlowchartLayout(resolveFlowchartSpec({
-    style: 'insoft',
+    style: 'iswc',
     nodes: [{ id: 'a', label: 'A' }, { id: 'b', label: 'B' }],
     edges: [{ from: 'a', to: 'b', color: '#0A7', dots: { color: '#F00', size: 6 } }],
-  })!, null, { style: 'insoft' });
+  })!, null, { style: 'iswc' });
   assertEquals([L.edges[0]!.color, L.edges[0]!.dots], ['#0A7', { color: '#F00', size: 6 }], 'la arista lleva su color y sus puntos al layout');
 });
 

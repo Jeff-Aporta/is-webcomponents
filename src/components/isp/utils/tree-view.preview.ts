@@ -49,7 +49,7 @@ export async function mount(ctx: import('@jeff-aporta/iswc-base/previews/_kit/sc
   tv.customs = new DemoCustoms();
   tv.list = [
     { iplan: '1', titulo: 'Módulo 1 — Fundamentos' },
-    { iplan: '1.1', titulo: 'Introducción a ContaPyme' },
+    { iplan: '1.1', titulo: 'Introducción a Acme' },
     { iplan: '1.2', titulo: 'Plan de cuentas' },
     { iplan: '2', titulo: 'Módulo 2 — Operación' },
     { iplan: '2.1', titulo: 'Comprobantes' },

@@ -4,7 +4,7 @@
 
 ## Scope
 
-Audit de los demos en `demos/isp/<componente>/<componente>.html` y `demos/isp/index.html`. La categoría `isp` (Insoft Studio Pattern) agrupa:
+Audit de los demos en `demos/isp/<componente>/<componente>.html` y `demos/isp/index.html`. La categoría `isp` (ISWC Studio Pattern) agrupa:
 
 - **Layouts**: `block-layout`, `flex-layout`, `flex-options`, `grid-layout`, `tree-view` (complejo con row-adapter, drag, undo/redo).
 - **Formularios**: `form` (declarativo + JSON codec), `form-json` (variante del formato), `catalogo-gen`.

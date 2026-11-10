@@ -109,7 +109,7 @@ No expone: todo el contenido del diálogo se construye en el shadow root.
 | `iswc-verificacion` | Evento personalizado del componente (verificacion). |
 | `iswc-verificacion-error` | Evento personalizado del componente (verificacion error). |
 | `iswc-cancel` | Emitido al cancelar la operación. |
-| `iswc-show / iswc-after-show / iswc-hide / iswc-after-hide` | Evento personalizado del componente (show / iswc after show / iswc hide / iswc after hide). |
+| `iswc-show / iswc-after-show / iswc-hide / iswc-after-hide` | Evento personalizado del componente (show / ISWC after show / ISWC hide / ISWC after hide). |
 
 | Evento | detail | bubbles | composed |
 | --- | --- | --- | --- |

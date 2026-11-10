@@ -20,8 +20,8 @@
           "kind": "demo",
           "html": [
             "<span class=\"demo-label\">caso mínimo</span>",
-            "          <iswc-details summary=\"¿Qué es InSoft?\">",
-            "            InSoft es un ERP modular para empresas medianas que necesitan integrar",
+            "          <iswc-details summary=\"¿Qué es Acme?\">",
+            "            Acme es un ERP modular para empresas medianas que necesitan integrar",
             "            contabilidad, inventario, facturación y CRM en una sola plataforma.",
             "          </iswc-details>"
           ],
@@ -674,8 +674,8 @@
       "ejemplos": {
         "content": [
           "```html",
-          "<iswc-details summary=\"¿Qué es InSoft?\">",
-          "  InSoft es un ERP modular…",
+          "<iswc-details summary=\"¿Qué es Acme?\">",
+          "  Acme es un ERP modular…",
           "</iswc-details>",
           "```"
         ]

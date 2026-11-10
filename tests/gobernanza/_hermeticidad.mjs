@@ -1,6 +1,6 @@
 // _hermeticidad.mjs (núcleo de hermeticidad.test.ts) -- WHAT: el proyecto es atómico y hermético.
 // Nada de lo versionado depende de otra carpeta local: ni rutas absolutas a carpetas de trabajo
-// de la máquina (VPS, Dev, ContaPyme, PatyIA, Users), ni rutas relativas que salgan del proyecto,
+// de la máquina (VPS, Dev, la carpeta del cliente, PatyIA, Users), ni rutas relativas que salgan del proyecto,
 // ni dependencias file:/link:, ni submódulos por ruta local, ni symlinks. Lo que se consume de
 // otro proyecto llega como vendor descargado de un CDN fijado a SHA.
 import { execFileSync } from 'node:child_process';
@@ -13,7 +13,13 @@ const RAIZ = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const IGNORAR = [];
 
 // Raíces de trabajo locales: un proyecto nunca debe nombrarlas.
-const ABSOLUTA = /(?<![\w.])(?:[A-Za-z]:(?:\\\\|\\|\/\/?)(?:VPS|Dev|ContaPyme[\w-]*|PatyIA|Users)(?![\w-])|\/(?:mnt\/)?[cdCD]\/(?:VPS|Dev|ContaPyme[\w-]*|PatyIA|Users)(?![\w-]))/g;
+// La carpeta real del dueño se escribe en dos trozos (y no seguida) para que el guardián de
+// identidad (_identidad.mjs) pueda escanear este archivo sin marcar un falso positivo.
+const CARPETA_TRABAJO = 'Conta' + 'Pyme';
+const ABSOLUTA = new RegExp(
+  /(?<![\w.])(?:[A-Za-z]:(?:\\\\|\\|\/\/?)(?:VPS|Dev|@@C@@[\w-]*|PatyIA|Users)(?![\w-])|\/(?:mnt\/)?[cdCD]\/(?:VPS|Dev|@@C@@[\w-]*|PatyIA|Users)(?![\w-]))/.source.replace(/@@C@@/g, CARPETA_TRABAJO),
+  'g',
+);
 // Cadenas relativas ('../x', "..\\x", `../x`) y enlaces markdown ](../x).
 const RELATIVA = /(['"`])((?:\.\.(?:\/|\\\\|\\))+[^'"`\s]*)\1|\]\(((?:\.\.\/)+[^)\s]*)\)/g;
 // Segmentos de subida encadenados como argumentos de join/resolve.

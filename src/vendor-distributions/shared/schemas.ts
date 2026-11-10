@@ -984,7 +984,7 @@ export type SyntheticDiagramJob = {
    * un valor que no existe hace fallar el render con el error (ver `RefObj.resolver`).
    */
   payloadBase?: string;
-  /** Atributos del host (`theme="insoft-cd"`, `min-gap="72"`…). */
+  /** Atributos del host (`theme="iswc-cd"`, `min-gap="72"`…). */
   attrs?: HostAttrs;
   /** CSS extra en el documento (opcional). */
   css?: string;
@@ -1225,7 +1225,7 @@ export interface RenderShellMeta {
   lang?: string;
   /** Tema inicial (default "dark"). */
   theme?: "dark" | "light";
-  /** Paleta del kit (default "contapyme"). */
+  /** Paleta del kit (default "acme"). */
   palette?: string;
   /** Pin del kit: repo + SHA40 (sin @main). Si falta sha, se sirve el loader del propio origen. */
   kit?: { repo?: string; sha?: string };

@@ -3,7 +3,7 @@
   "tag": "iswc-flowchart",
   "script": "diagrams/flowchart.min.mjs",
   "attrs": {
-    "diagram-style": "insoft"
+    "diagram-style": "iswc"
   },
   "slug": "datos-y-componentes",
   "_lab": "Nodos kind=component (forma del diagrama de componentes) y kind=tableder (tabla del DER) dentro de un flujo.",

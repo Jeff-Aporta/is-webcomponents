@@ -9,7 +9,7 @@ import { join } from 'node:path';
 import { e2eDir } from './env.ts';
 import type { ResultadoVendor } from "./schemas/vendor-e2e-config.schemas.js";
 
-const CDN_BASE = 'https://muestralo-api.jeffaporta.workers.dev/cdn';
+const CDN_BASE = 'https://api.ejemplo.dev/cdn';
 const FILE = 'e2e-config.ts';
 
 /**

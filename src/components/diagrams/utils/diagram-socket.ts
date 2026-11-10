@@ -1,5 +1,5 @@
 /**
- * diagram-socket.ts — pintor del conector InSoft `-(O-` / `-(O=`, común a todos los diagramas.
+ * diagram-socket.ts — pintor del conector iswc `-(O-` / `-(O=`, común a todos los diagramas.
  *
  * El expositor (componente, tabla, controller) pone el palo y el socket `(`; quien consume llega a
  * la bola O. Geometría a lo largo de `dir` (unitario, de la bola hacia el expositor): el palo arranca

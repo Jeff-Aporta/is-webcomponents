@@ -147,9 +147,9 @@ denoTest('secuencia: alt tras una región no se monta sobre ella', () => {
   assert(L.altBox!.y >= f.y + f.h, `alt (${L.altBox!.y}) monta la región (${f.y + f.h})`);
 });
 
-denoTest('estilo insoft: trae tema de secuencia con tipografía, líneas por nombre y pintura completa', async () => {
-  const file = join(ROOT, 'src', 'components', 'diagrams', 'utils', 'themes', 'insoft-seq.json');
-  assert(existsSync(file), 'falta themes/insoft-seq.json');
+denoTest('estilo iswc: trae tema de secuencia con tipografía, líneas por nombre y pintura completa', async () => {
+  const file = join(ROOT, 'src', 'components', 'diagrams', 'utils', 'themes', 'iswc-seq.json');
+  assert(existsSync(file), 'falta themes/iswc-seq.json');
   const raw = ErThemeJsonSchema.passthrough().parse(JSON.parse(readFileSync(file, 'utf8')));
   assertEquals(raw.kind, 'sequence');
   assert(raw.font?.family?.includes('Poppins'));
@@ -169,9 +169,9 @@ denoTest('estilo insoft: trae tema de secuencia con tipografía, líneas por nom
   // El naranja de entidad del DER no aparece en el tema de secuencia.
   assert(!JSON.stringify(raw).toUpperCase().includes('#F4B67B'));
   // Y el estilo lo publica junto a los otros tres.
-  await loadStylesDiagram('insoft').catch(() => undefined);
-  assert(styleThemeFor('insoft', 'sequence') !== null || !existsSync(join(ROOT, 'dist', 'cdn', 'diagrams', 'themes', 'insoft-seq.json')));
-  assert(existsSync(join(ROOT, 'dist', 'cdn', 'diagrams', 'themes', 'insoft-seq.json')), 'el build no publicó insoft-seq.json');
+  await loadStylesDiagram('iswc').catch(() => undefined);
+  assert(styleThemeFor('iswc', 'sequence') !== null || !existsSync(join(ROOT, 'dist', 'cdn', 'diagrams', 'themes', 'iswc-seq.json')));
+  assert(existsSync(join(ROOT, 'dist', 'cdn', 'diagrams', 'themes', 'iswc-seq.json')), 'el build no publicó iswc-seq.json');
 });
 
 denoTest('nested en secuencia: recuadro junto a la punta, contain, sin pisar lifelines ajenas ni la fila siguiente', () => {

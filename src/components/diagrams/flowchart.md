@@ -155,11 +155,11 @@ Documentación de cabecera preservada desde fuente:
 > Propiedades: payload, spec, layout, turtle, hiddenGroups
 > Eventos: iswc-render, iswc-turtle-state, iswc-open-viewer, iswc-toggle-group
 
-## Estilo insoft (actividad)
+## Estilo ISWC (actividad)
 
-`diagram-style="insoft"` carga el tema `themes/insoft-flow.json` (`kind: "flowchart"`) y pinta un diagrama de actividad estilo Visual Paradigm:
+`diagram-style="iswc"` carga el tema `themes/iswc-flow.json` (`kind: "flowchart"`) y pinta un diagrama de actividad estilo Visual Paradigm:
 
-- Acciones: rectángulo de ángulos rectos, relleno `primary` de la paleta InSoft (`#7ACFF4`), borde fino `slate`, texto centrado `ink`.
+- Acciones: rectángulo de ángulos rectos, relleno `primary` de la paleta ISWC (`#7ACFF4`), borde fino `slate`, texto centrado `ink`.
 - `shape: "start"`: círculo relleno. `shape: "end"`: anillo con punto (bullseye). Funcionan también en el estilo clásico.
 - Decisión (`shape: "diamond"`): el texto (hasta 180 px por línea) se mide en un rect inscrito en el rombo. El rombo nunca queda aplanado: su alto es al menos la mitad de su ancho (vértices laterales de unos 53°).
 - Un tono por símbolo (`flow.hueRotate` del tema): cada acción y decisión rota el tono del relleno base en OKLCH por el ángulo áureo, con la misma luminosidad y croma.
@@ -172,7 +172,7 @@ Documentación de cabecera preservada desde fuente:
 
 ## Carriles de contexto (swimlanes)
 
-Con `lanes`, el estilo insoft dibuja carriles: la entidad o el contexto donde ocurre cada paso (Cliente, Turno, PostgreSQL…). Cada nodo nombra el suyo con `lane`; uno sin `lane` hereda el de su antecesor. Sin `lanes` el diagrama es un flujo simple.
+Con `lanes`, el estilo ISWC dibuja carriles: la entidad o el contexto donde ocurre cada paso (Cliente, Turno, PostgreSQL…). Cada nodo nombra el suyo con `lane`; uno sin `lane` hereda el de su antecesor. Sin `lanes` el diagrama es un flujo simple.
 
 ```json
 {
@@ -202,7 +202,7 @@ Con `lanes`, el estilo insoft dibuja carriles: la entidad o el contexto donde oc
 - **Texto de las acciones**: alineado a la izquierda, en rectángulos de ángulos rectos y de ancho homogéneo (el de la más ancha).
 - **Paso e ícono**: `step` (número de la secuencia) y/o `icon` (`"mdi:…"`) van en la insignia. Sin `icon`, cada tipo trae uno por defecto.
 - **Etiquetas de aristas**: son entidades. Nunca se montan entre sí, ni sobre nodos, ni bajo rieles; se prefieren horizontales y, si no caben, se abre espacio. Una arista puede llevar `icon` (va a la izquierda del texto); los verbos SQL (`SELECT`, `INSERT`, `UPDATE`, `UPSERT`, `DELETE`…) llevan uno de base de datos por defecto.
-- **Movimiento** (`flow.dashFlow`, activo en insoft): las punteadas avanzan hacia su destino; sobre las continuas corre una segunda línea de puntos (3 px más gruesa, uno cada 100 px). Es animación SVG nativa (viaja con el SVG exportado) y se apaga con `prefers-reduced-motion`.
+- **Movimiento** (`flow.dashFlow`, activo en ISWC): las punteadas avanzan hacia su destino; sobre las continuas corre una segunda línea de puntos (3 px más gruesa, uno cada 100 px). Es animación SVG nativa (viaja con el SVG exportado) y se apaga con `prefers-reduced-motion`.
 
 ## Nodos especiales (`kind`)
 
@@ -210,7 +210,7 @@ Contrato común en `_shared/diagram-embed.schemas.ts` (reutilizable por otros di
 
 | `kind` | Qué dibuja | Campos |
 | --- | --- | --- |
-| `nested` | Recuadro con borde y DENTRO otro diagrama del kit, escalado entero tipo `object-fit: contain` (líneas incluidas). Sin rótulo propio: el título lo trae el diagrama; `label` solo se ve si falta la captura. | `diagram: { tag, payload, script?, attrs? }` y/o `src` (JSON editable; gana sobre `diagram`, que queda de respaldo), `maxW` / `maxH` (por defecto 200 px por lado), `bg` (insoft: blanco; oscuro: el lienzo). |
+| `nested` | Recuadro con borde y DENTRO otro diagrama del kit, escalado entero tipo `object-fit: contain` (líneas incluidas). Sin rótulo propio: el título lo trae el diagrama; `label` solo se ve si falta la captura. | `diagram: { tag, payload, script?, attrs? }` y/o `src` (JSON editable; gana sobre `diagram`, que queda de respaldo), `maxW` / `maxH` (por defecto 200 px por lado), `bg` (ISWC: blanco; oscuro: el lienzo). |
 | `tableder` | Una tabla del DER (`iswc-er-diagram`) a tamaño natural. | `table: { name, attributes: [{ name, type, key? }] }` |
 | `component` | Una caja del diagrama de componentes (`iswc-component-diagram`) a tamaño natural. | `component: { name, stereotype?, items? }` |
 | `class` | Una clase del diagrama de clases (`iswc-class-diagram`) a tamaño natural: controladores, POJOs. | `class: { name, stereotype?, attributes?, methods? }` |
@@ -222,7 +222,7 @@ Contrato común en `_shared/diagram-embed.schemas.ts` (reutilizable por otros di
     { "id": "turno", "label": "Turno de conversación", "kind": "nested",
       "src": "diagramas/conversacion-turno.json" },
     { "id": "sub", "label": "Parche de datos", "kind": "nested",
-      "diagram": { "tag": "iswc-flowchart", "attrs": { "diagram-style": "insoft" }, "payload": { "nodes": [], "edges": [] } } },
+      "diagram": { "tag": "iswc-flowchart", "attrs": { "diagram-style": "iswc" }, "payload": { "nodes": [], "edges": [] } } },
     { "id": "tabla", "label": "patyia_conversaciones", "kind": "tableder",
       "table": { "name": "patyia_conversaciones", "attributes": [{ "name": "iconversacion", "type": "bigint", "key": "PK" }] } },
     { "id": "api", "label": "API", "kind": "component",

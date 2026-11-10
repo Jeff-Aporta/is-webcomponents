@@ -50,7 +50,7 @@ const FLUJO = {
 };
 
 denoTest('costos: G1/G2 (c) un riel ajeno rodea el grupo; uno que llega a un miembro lo cruza una vez', () => {
-  const L = computeFlowchartLayout(resolveFlowchartSpec(FLUJO)!, null, { style: 'insoft' });
+  const L = computeFlowchartLayout(resolveFlowchartSpec(FLUJO)!, null, { style: 'iswc' });
   const g = L.contexts?.find((c) => c.label === 'Validación');
   assert(g, `sin grupo Validación: ${JSON.stringify(L.contexts?.map((c) => c.label))}`);
   const fallas: string[] = [];
@@ -71,7 +71,7 @@ denoTest('costos: G3 (b) aristas paralelas sin extremos comunes no comparten tra
       { id: 'b1', label: 'Destino 1', lane: 'B' }, { id: 'b2', label: 'Destino 2', lane: 'B' }, { id: 'b3', label: 'Destino 3', lane: 'B' },
     ],
     edges: [{ from: 'a1', to: 'a2' }, { from: 'a2', to: 'a3' }, { from: 'a1', to: 'b1' }, { from: 'a2', to: 'b2' }, { from: 'a3', to: 'b3' }, { from: 'b1', to: 'b2' }, { from: 'b2', to: 'b3' }],
-  })!, null, { style: 'insoft' });
+  })!, null, { style: 'iswc' });
   const segs = L.edges.map((e) => ({ e, pts: pathPoints(e.path) }));
   const solapes: string[] = [];
   for (let i = 0; i < segs.length; i++) for (let k = i + 1; k < segs.length; k++) {
@@ -95,7 +95,7 @@ denoTest('costos: G3 (b) aristas paralelas sin extremos comunes no comparten tra
  * codos, a→e escoge (por empate de longitud) salir pegada al codo de a→c y hacer un escalón de
  * 8 px (dos codos consecutivos) para seguir en paralelo a su riel: dos codos juntos se leen como
  * un cruce. Con la vecindad, ese pasillo cuesta más y a→e toma el pasillo exterior libre.
- * Estilo por defecto (sin `insoft`): todas las aristas pasan por la rejilla A*.
+ * Estilo por defecto (sin `iswc`): todas las aristas pasan por la rejilla A*.
  */
 const FLUJO_CODOS = {
   nodes: [{ id: 'a', label: 'A' }, { id: 'b', label: 'B' }, { id: 'c', label: 'C' }, { id: 'd', label: 'D' }, { id: 'e', label: 'E' }],

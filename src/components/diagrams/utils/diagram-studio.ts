@@ -330,7 +330,7 @@ export async function bootDiagramStudio(mode: 'view' | 'edit'): Promise<void> {
     if (useEditor) await import(moduleHref(kind.editor!.file));
     const tag = useEditor ? kind.editor!.tag : kind.tag;
     const el = document.createElement(tag) as Host;
-    // DER sample suele traer theme insoft en el wrapper.
+    // DER sample suele traer theme iswc en el wrapper.
     const theme = (() => {
       if (!live || typeof live !== 'object') return null;
       const o = live as Record<string, unknown>;

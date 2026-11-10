@@ -399,7 +399,7 @@ const EMITTER_S = 85;
 const EMITTER_L = 28;
 /** Hues de reserva si el emisor no trae color. */
 const EMITTER_HUES: readonly number[] = [145, 0, 210, 280, 40, 320, 190, 90];
-/** Solo-receptores: lila fijo del theme InSoft CD. */
+/** Solo-receptores: lila fijo del theme iswc CD. */
 export const RECEIVER_COLOR = '#C1BFFF';
 /** Aristas = color del emisor con B (L) −5% (más oscuro). */
 const EDGE_DARKEN = 0.95;

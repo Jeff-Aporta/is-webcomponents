@@ -10,7 +10,7 @@
     {
       "id": "intro",
       "title": "Uso",
-      "lede": "Preview con el mismo hydrate que iswc-md-render (código, iswc, HTML). Clic abre diálogo.",
+      "lede": "Preview con el mismo hydrate que iswc-md-render (código, ISWC, HTML). Clic abre diálogo.",
       "blocks": [
         {
           "kind": "demo",
@@ -56,7 +56,7 @@
             "}",
             "```",
             "",
-            "## 2. Diagramas (fences iswc)",
+            "## 2. Diagramas (fences ISWC)",
             "",
             "### Flowchart",
             "",
@@ -283,7 +283,7 @@
             "}",
             "```",
             "",
-            "## 2. Diagramas (fences iswc)",
+            "## 2. Diagramas (fences ISWC)",
             "",
             "### Flowchart",
             "",
@@ -553,7 +553,7 @@
   "ficha": {
     "sections": {
       "anatomia": {
-        "content": "Preview con el mismo hydrate que iswc-md-render (código, iswc, HTML). Clic abre diálogo."
+        "content": "Preview con el mismo hydrate que iswc-md-render (código, ISWC, HTML). Clic abre diálogo."
       },
       "apiJs": {
         "table": [
@@ -627,7 +627,7 @@
           "}",
           "```",
           "",
-          "## 2. Diagramas (fences iswc)",
+          "## 2. Diagramas (fences ISWC)",
           "",
           "### Flowchart",
           "",

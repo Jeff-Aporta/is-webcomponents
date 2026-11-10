@@ -77,7 +77,7 @@ Cada una tiene main (`--iswc-color-brand`), contraste (`--iswc-color-contrast`,
 superficies y textos tintados por su tono. `data-panda` en el mismo nodo que
 `data-theme` invierte solo el fondo de la página (`--iswc-bg-page`); papeles,
 componentes y textos siguen el tema. El usuario elige ambas con `<iswc-palette-selector>`
-(persisten en `iswc:app-cfg` → `palette`, `panda`); `initApp({ palette, panda })`
+(persisten en `ISWC:app-cfg` → `palette`, `panda`); `initApp({ palette, panda })`
 fija los valores iniciales.
 
 Alcance de `load(…)`:
@@ -115,7 +115,7 @@ El import map va antes de cualquier `<script type="module">`. En Deno, la misma 
 El arranque más rápido: import map con el alias al pin, `<meta name="iswc-precargado">` con el pin, `modulepreload`
 del cierre del shell crítico (sacado del grafo del pin en el build de la app: `tags[tag]` de cada tag del shell; los
 `_chunks/` y `lib/zod` van tal cual, sin `?v=`; desde F7 el grafo publicado es `deps.json` (índice) + `deps/<cat>.json`
-y `pin-update`/`vendor:iswc` lo dejan unido en `src/vendor/iswc-base/deps.json`), las hojas base no bloqueantes y un
+y `pin-update`/`vendor:ISWC` lo dejan unido en `src/vendor/iswc-base/deps.json`), las hojas base no bloqueantes y un
 módulo que importa el núcleo y pide el shell con `ensure` y el resto con `load`.
 
 ```html
@@ -234,7 +234,7 @@ No inventar props/eventos que no están en el MD.
 Si la app tiene componentes propios en TypeScript (estándar `iswc-foundation`), el bloque de instalación de sus HTML
 (import map, `modulepreload`, hojas base, loader y registrador) no se escribe a mano: lo escribe `construirApp`, que la
 app ejecuta desde el pin (`https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@<sha40>/dist/cdn/build/construir-app.ts`)
-entre las marcas `<!-- iswc:precarga:inicio -->` y `<!-- iswc:precarga:fin -->`. Guía:
+entre las marcas `<!-- ISWC:precarga:inicio -->` y `<!-- ISWC:precarga:fin -->`. Guía:
 [02-deno-y-build.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/skills/iswc-foundation/references/02-deno-y-build.md).
 
 ## Scripts online (Deno, siempre `@main` con `--reload`)

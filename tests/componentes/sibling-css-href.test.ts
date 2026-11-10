@@ -62,7 +62,7 @@ test('componentes/sibling-css-href', async () => {
   );
   // Molde IswcElement: la hoja viaja dentro del módulo (`import css from 'iswc:css'`), sin pedir ningún .css.
   check(
-    /static css = css;/.test(src) && /import css from 'iswc:css';/.test(src) && !/siblingCssHref\s*\(/.test(src),
+    /static (?:override )?css = css;/.test(src) && /import css from 'iswc:css';/.test(src) && !/siblingCssHref\s*\(/.test(src),
     'diagram-lightbox.ts debe llevar su CSS por iswc:css (static css), no por siblingCssHref',
   );
   

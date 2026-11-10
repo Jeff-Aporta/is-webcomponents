@@ -12,7 +12,7 @@ preview: ./button.json
 
 ## Propósito
 
-Componente InSoft accesible y personalizable, escrito con JavaScript nativo,
+Componente ISWC accesible y personalizable, escrito con JavaScript nativo,
 Shadow DOM y sin frameworks.
 
 Este módulo registra `<iswc-button>`.

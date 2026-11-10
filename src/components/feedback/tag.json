@@ -61,7 +61,7 @@
           "html": [
             "<div class=\"demo-row\" style=\"flex-wrap:wrap;gap:.5rem\">",
             "            <iswc-tag>General</iswc-tag>",
-            "            <iswc-tag color=\"brand\">InSoft</iswc-tag>",
+            "            <iswc-tag color=\"brand\">Acme</iswc-tag>",
             "            <iswc-tag color=\"neutral\">Neutral</iswc-tag>",
             "            <iswc-tag color=\"info\">Info</iswc-tag>",
             "            <iswc-tag color=\"success\">Success</iswc-tag>",

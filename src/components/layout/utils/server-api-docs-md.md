@@ -11,7 +11,7 @@ source: ./server-api-docs-md.ts
 
 Dominio puro de `<iswc-server-api-docs>` (sin DOM ni red) y **modelo estricto del documento** que un server
 publica para exponer sus endpoints al estilo Swagger. Valida el documento con Zod (modo tolerante para
-pintar), dice si admite el **parse estricto** (InSoft `kind:"config"` versión 2), lo normaliza al modelo que
+pintar), dice si admite el **parse estricto** (ISWC `kind:"config"` versión 2), lo normaliza al modelo que
 el visor pinta y arma lo que «Probar» necesita, más el diagrama de secuencia de cada endpoint. Lo usan el
 componente y las pruebas de caja negra del kit; un server lo vendoriza para validar su documento al escribirlo.
 
@@ -27,7 +27,7 @@ El schema estricto vive aparte, solo con `zod`, para que un server lo vendorice 
 `z.infer`). El ISS lo baja a `src/sources/000 Base/ISU/server-api-docs-md.schemas.ts` y su controller de
 sys values lo aplica al escribir la fila `doc`.
 
-## El documento estricto (InSoft v2)
+## El documento estricto (ISWC v2)
 
 | Parte | Qué lleva |
 | --- | --- |
@@ -49,11 +49,11 @@ queda huérfano.
 | Función | Qué hace |
 | --- | --- |
 | `validarEstricto(doc)` | `{ aplica, ok, errores[] }`: si el documento admite el parse estricto; cada error con su ruta JSON. OpenAPI 3: `aplica: false`. |
-| `validarDocumentoApi(doc)` | Validación tolerante: `{ ok, formato: 'insoft' \| 'openapi' \| 'desconocido', errores[] }`. |
+| `validarDocumentoApi(doc)` | Validación tolerante: `{ ok, formato: 'iswc' \| 'openapi' \| 'desconocido', errores[] }`. |
 | `esMaterializable(doc)` | `true` si tiene formato y `paths`: se puede pintar aunque traiga avisos. |
 | `normalizarDocumentoApi(doc)` | Modelo (`ServerApiDocsModelo`): endpoints con permiso y controller, grupos tag → subgrupo, auth, servidores, exportes. Las respuestas sin schema declarado lo deducen del ejemplo. Lanza si no es materializable. |
 | `schemaDeEjemplo(valor)` | JSON Schema deducido de un ejemplo. |
-| `secuenciaDeOperacion(op, server?)` | Payload de `<iswc-sequence-diagram>`: cliente → server → permiso → controller → respuestas (las fallas en un fragmento `alt`). El visor lo pinta con `diagram-style="insoft"`. |
+| `secuenciaDeOperacion(op, server?)` | Payload de `<iswc-sequence-diagram>`: cliente → server → permiso → controller → respuestas (las fallas en un fragmento `alt`). El visor lo pinta con `diagram-style="iswc"`. |
 | `idDeOperacion(metodo, ruta, operationId?)` | Id estable del endpoint (va en `?s=`). |
 | `urlDeOperacion(base, op, { path, query })` | URL final con `{x}` sustituidos y query no vacía. |
 | `curlDe(base, op, { path, query, cuerpo, token, ocultarToken })` | cURL equivalente. |

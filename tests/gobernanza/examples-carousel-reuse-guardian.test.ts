@@ -51,7 +51,7 @@ test('W19: importa los modulos de los componentes reusados', () => {
   // (molde IswcElement: los hijos hoja se piden a iswcLoader.ensure al conectar).
   const sideEffect = (rel: string) => {
     const tag = `iswc-${rel.split('/').pop()!.replace(/\.js$/, '')}`;
-    return new RegExp(`import\\s+['"][^'"]*${rel.replace(/\//g, '\\/')}['"]|static deps = \\[[^\\]]*'${tag}'`);
+    return new RegExp(`import\\s+['"][^'"]*${rel.replace(/\//g, '\\/')}['"]|static (?:override )?deps = \\[[^\\]]*'${tag}'`);
   };
   assert.match(ts, sideEffect('layout/card.js'),
     'examples-carousel.ts debe importar el modulo de <iswc-card>');

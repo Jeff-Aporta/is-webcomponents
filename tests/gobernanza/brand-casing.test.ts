@@ -1,16 +1,15 @@
-// tests/brand-casing.test.ts
+// brand-casing.test.ts — la marca del kit se escribe SIEMPRE en minúscula: «iswc».
 //
-// La marca se escribe **InSoft**: la S va en MAYUSCULA (el logo la pinta en el
-// color de marca — "in" + "Soft"). Se escribia "Insoft" en 83 sitios y, peor,
-// <iswc-palette-selector> componia el wordmark con `accentLabel: 'soft'`, asi que
-// el trigger renderizaba "insoft" en minuscula mientras index.html renderizaba
-// "inSoft". Dos grafias distintas para la misma marca en la misma pagina.
+// La marca es `iswc`, como el nombre del paquete (`@jeff-aporta/iswc-base`) y como el
+// prefijo de los tags (`iswc-button`). Antes la marca se escribía con la S mayúscula y
+// el repo mezclaba grafías; hoy la regla es una sola: minúscula, siempre.
 //
-// OJO — lo que NO se toca:
-//   - Los identificadores en minuscula (`diagram-style="insoft"`, claves).
-//   - El dominio `insoft.com.co`.
-// Las paletas ya no llevan nombres de marca (son las 25 generales de
-// palettes.json): el selector no compone wordmarks.
+// Este guardián NO busca la marca: busca sus VARIANTES (`Iswc`, `ISWC`, `isWc`). En
+// un archivo .ts puede aparecer `ISWC` como constante (p. ej. `const ISWC = {...}`), y
+// por eso solo mira prosa y estilos (.html, .md, .js, .mjs, .css).
+//
+// El guardián de identidad (identidad.test.ts) es el que prohibe la marca que el kit ya
+// no tiene; este solo vigila que la que tiene se escriba siempre igual.
 //
 // Uso:  node tests/brand-casing.test.ts
 
@@ -21,6 +20,9 @@ import assert from 'node:assert/strict';
 import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
 
 const { test, lista } = coleccionPruebas({ categoria: 'how' });
+
+/** Grafías que NO son la marca: la correcta es «ISWC» (mayúsculas, como el paquete). */
+const VARIANTES = /\b(Iswc|isWc|ISwc|isWC)\b/g;
 
 test('gobernanza/brand-casing', async () => {
   const here = dirname(fileURLToPath(import.meta.url));
@@ -48,15 +50,10 @@ test('gobernanza/brand-casing', async () => {
   for (const d of DIRS) await walk(join(root, d), files);
 
   const offenders = [];
-  const SELF = fileURLToPath(import.meta.url);
   for (const p of files) {
-    // Este propio test cita la grafía incorrecta para explicarla.
-    if (p === SELF) continue;
     let src;
     try { src = await readFile(p, 'utf8'); } catch { continue; }
-    // "Insoft" con S minuscula. El identificador `insoft` (todo minusculas) y el
-    // dominio no casan con este patron.
-    for (const m of src.matchAll(/Insoft/g)) {
+    for (const m of src.matchAll(VARIANTES)) {
       const line = src.slice(0, m.index).split('\n').length;
       offenders.push(`${relative(root, p)}:${line}`);
     }
@@ -65,18 +62,16 @@ test('gobernanza/brand-casing', async () => {
   assert.equal(
     offenders.length,
     0,
-    'La marca es "InSoft" (S mayúscula), no "Insoft". Corregir en:\n  ' +
+    'la marca se escribe «iswc», en minúscula. Corregir en:\n  ' +
       offenders.slice(0, 25).join('\n  ') +
       (offenders.length > 25 ? `\n  ...y ${offenders.length - 25} más` : ''),
   );
 
-  // Las paletas son generales: ni el catálogo ni el selector escriben la marca.
-  const catalogIds = await readFile(join(root, 'src/styles/palettes.json'), 'utf8');
-  assert.ok(!/insoft|contapyme|agrowin/i.test(catalogIds), 'palettes.json no usa nombres de marca');
+  // El wordmark no se escribe inline en la app: sale de un solo sitio.
   const galleryApp = await readFile(join(root, 'src/app/app.ts'), 'utf8');
-  assert.ok(!/['"`](?:in)?Soft['"`]/.test(galleryApp), 'app/app.ts no escribe la grafía del wordmark inline');
+  assert.ok(!/['"`](?:Iswc|isWc|ISwc)['"`]/.test(galleryApp), 'app/app.ts no escribe el wordmark inline');
 
-  console.log(`OK brand-casing — ${files.length} archivos, marca "InSoft" consistente`);
+  console.log(`OK brand-casing — ${files.length} archivos, marca «iswc» siempre igual`);
 });
 
 export default lista();

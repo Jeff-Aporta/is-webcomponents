@@ -79,7 +79,7 @@
             "                  ],",
             "                  \"actors\": [",
             "                    { \"id\": \"E\", \"label\": \"{{iconify: {icon: \\\"mdi:store\\\", hue: 239}}} Empresa\", \"kind\": \"actor\" },",
-            "                    { \"id\": \"C\", \"label\": \"{{iconify: {icon: \\\"mdi:file-document-outline\\\", hue: 199}}} ContaPyme\", \"kind\": \"participant\" },",
+            "                    { \"id\": \"C\", \"label\": \"{{iconify: {icon: \\\"mdi:file-document-outline\\\", hue: 199}}} Acme\", \"kind\": \"participant\" },",
             "                    { \"id\": \"D\", \"label\": \"{{iconify: {icon: \\\"mdi:bank-outline\\\", hue: 38}}} DIAN\", \"kind\": \"participant\" }",
             "                  ],",
             "                  \"messages\": [",
@@ -179,14 +179,14 @@
           "html": [
             "<p>",
             "          Agrega <code class=\"code\">nested</code> al mensaje. Con <code class=\"code\">src</code> se carga un JSON editable",
-            "          (relativo a la página); <code class=\"code\">diagram</code> va inline. Por defecto 200 px por lado; fondo blanco en insoft.",
+            "          (relativo a la página); <code class=\"code\">diagram</code> va inline. Por defecto 200 px por lado; fondo blanco en iswc.",
             "        </p>"
           ]
         },
         {
           "kind": "demo",
           "html": [
-            "<iswc-sequence-diagram diagram-style=\"insoft\" open-on-click>",
+            "<iswc-sequence-diagram diagram-style=\"iswc\" open-on-click>",
             "            <script type=\"application/json\">",
             "              {",
             "                \"sequence\": {",

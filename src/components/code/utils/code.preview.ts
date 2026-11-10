@@ -7,7 +7,7 @@ import type { CodeDoc, IswcCodeEl, IswcFormatEl } from "@jeff-aporta/iswc-base/c
 const SAMPLES: Record<string, string> = {
   javascript: `function greet(name) {\n  return \`Hola, \${name}\`;\n}\n\nconsole.log(greet('IS'));`,
   typescript: `type User = { id: number; name: string };\n\nexport function label(u: User): string {\n  return \`#\${u.id} \${u.name}\`;\n}`,
-  html: `<main class="page">\n  <h1>ContaPyme</h1>\n  <p>Web components</p>\n</main>`,
+  html: `<main class="page">\n  <h1>Acme</h1>\n  <p>Web components</p>\n</main>`,
   css: `.card {\n  display: grid;\n  gap: 0.75rem;\n  padding: 1rem;\n  border-radius: 12px;\n}`,
   python: `def greet(name: str) -> str:\n    return f"Hola, {name}"\n\nprint(greet("IS"))`,
   json: `{\n  "ok": true,\n  "items": [1, 2, 3]\n}`,

@@ -36,7 +36,7 @@ export async function renderShell(
 
   const lang = m.lang ?? "es";
   const theme = m.theme ?? "dark";
-  const palette = m.palette ?? "contapyme";
+  const palette = m.palette ?? "acme";
   const prefijo = m.prefijo;
   const titulo = m.titulo;
   const descripcion = m.descripcion ?? titulo;

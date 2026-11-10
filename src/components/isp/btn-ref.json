@@ -84,7 +84,7 @@
           "  primaryKeys: ['app'],",
           "  ColumnsBtnRef: ['app'],",
           "  columns: [{ field: 'app', header: 'Aplicación' }],",
-          "  mock: [{ app: 'ContaPyme' }, { app: 'AgroWin' }],",
+          "  mock: [{ app: 'Acme' }, { app: 'Beta' }],",
           "});",
           "```"
         ]

@@ -87,7 +87,7 @@ export const NodeEmbedSpecSchema = z.object({
   diagram: EmbeddedDiagramSchema.optional(),
   /** `nested`: ruta a un JSON editable (relativa al documento). Gana sobre `diagram`. */
   src: z.string().optional(),
-  /** Fondo del recuadro (`nested`). Estilo insoft: blanco por defecto. */
+  /** Fondo del recuadro (`nested`). Estilo iswc: blanco por defecto. */
   bg: z.string().optional(),
   /** Tamaño máximo del diagrama anidado dentro del recuadro (contain). */
   maxW: z.number().positive().optional(),
@@ -139,7 +139,7 @@ export const DiagramHostLikeSchema = z.custom<HTMLElement & { updateComplete: ()
 const EmbedCaptureOptsSchema = z.object({
   /** `import.meta.url` del bundle que captura: base para resolver el bundle del tag. */
   moduleUrl: z.string(),
-  /** Estilo heredado del diagrama padre (`insoft`), si el anidado no trae el suyo. */
+  /** Estilo heredado del diagrama padre (`iswc`), si el anidado no trae el suyo. */
   styleName: z.string().nullable().optional(),
   /** Prefijo único para los ids del svg copiado. */
   idPrefix: z.string(),

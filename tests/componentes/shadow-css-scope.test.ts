@@ -59,7 +59,7 @@ test('componentes/shadow-css-scope', async () => {
     if (!existsSync(jsFile)) return [];
     const js = readFileSync(jsFile, 'utf8');
     // Molde IswcElement: el shadow lo crea el molde y el CSS llega por `static css` (import `iswc:css`).
-    if (!/attachShadow|adoptCss|static\s+css\s*=/.test(js)) return [];
+    if (!/attachShadow|adoptCss|static\s+(?:override\s+)?css\s*=/.test(js)) return [];
     return [...js.matchAll(/(?:(?:customElements\.define|defineElement)\(\s*|static\s+(?:override\s+)?tag\s*=\s*)['"]([\w-]+)['"]/g)].map((m) => m[1]);
   };
   

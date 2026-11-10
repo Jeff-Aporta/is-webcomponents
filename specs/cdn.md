@@ -47,7 +47,7 @@ El kit se consume desde jsDelivr/GitHub Pages como módulos por tag. La galería
 | `core/loader.min.js` | Copia byte a byte de `core/loader.min.mjs` para pines viejos (compat): se retira cuando los consumidores re-pineen (F5) |
 | `core/loader.md` | Docs del loader (API) |
 | `core/<x>.min.mjs` · `lib/<x>.min.mjs` | Módulos del core y de lib (zod, obj, ref-obj) para ejecutar; `core/<x>.ts` para extender |
-| `<categoria>/<name>.min.mjs` | Componente individual (módulo ES; su CSS va dentro, por `iswc:css`) |
+| `<categoria>/<name>.min.mjs` | Componente individual (módulo ES; su CSS va dentro, por `ISWC:css`) |
 | `<categoria>/<name>.min.css` | Estilos del componente (para `sheet-cache` y para enlazarlos a mano) |
 | `_chunks/chunk-<hash>.mjs` | Código compartido entre módulos (el core del molde vive en UNO) |
 | `deps.json` | Índice (F7): `sha` (SHA **base** del build, informativo) y `categorias` (tag → categoría), ~6 KB |
@@ -64,7 +64,7 @@ Desde F3 (plan `specs/plan-carga-modular.md` D2/D5) `scripts/build.mjs` corre **
 
 - **Entradas:** cada módulo de `src/components` en su ruta pública de siempre (`<categoria>/<nombre>.min.mjs`; también los utils que se consumen por URL, como `diagrams/theme` o `helpers/md-lite`), `src/core/*.ts` (`core/<x>.min.mjs`), `src/cdn/loader.ts` (`core/loader.min.mjs`) y `lib/{obj,ref-obj,zod}.min.mjs`. Todas las salidas viven a un nivel de `dist/cdn/`, así una ruta relativa (`../lib/zod.min.mjs`, `../diagrams/themes/…`) vale igual desde una entrada que desde un chunk.
 - **Chunks automáticos:** lo que usan dos entradas sale a `_chunks/`; no hay lista de «componentes externos». El molde `IswcElement` existe en un solo archivo (guardián `gobernanza/cdn-folders`). Siguen **externos** `zod` (`lib/zod.min.mjs`) y `src/ai` (`lib/ai/*.min.mjs`, build aparte).
-- **Grafo:** del metafile salen el grafo (cierre por tag y por módulo del core, ordenado; un externo que es otra salida del build, `lib/zod.min.mjs`, entra al cierre) y `exports.json` (`src/cdn/build/graph.ts`; guardián `gobernanza/deps-json`). Desde F7 se publica partido: índice `deps.json` + `deps/<cat>.json` (`partirDeps`); los consumidores vendorizan el grafo unido (`pin-update`, `vendor:iswc`; `unirDeps`). El metafile entero queda en `.tmp/metafile-kit.json` para los guardianes.
+- **Grafo:** del metafile salen el grafo (cierre por tag y por módulo del core, ordenado; un externo que es otra salida del build, `lib/zod.min.mjs`, entra al cierre) y `exports.json` (`src/cdn/build/graph.ts`; guardián `gobernanza/deps-json`). Desde F7 se publica partido: índice `deps.json` + `deps/<cat>.json` (`partirDeps`); los consumidores vendorizan el grafo unido (`pin-update`, `vendor:ISWC`; `unirDeps`). El metafile entero queda en `.tmp/metafile-kit.json` para los guardianes.
 - **Entradas públicas (decisión F7, 0.3):** se midió quitar como entradas los utils de `src/components/<cat>/utils/` que no son tags (salvo `diagrams/theme`, `helpers/md-*`, `isp/customs-base`, `charts/marks-*`): 504 → 274 entradas y 344 → 160 chunks, pero el cierre del shell de Avatar (38 tags de `SHELL_KIT_TAGS`) solo baja 104 → 103 módulos (488 989 → 488 755 B); quitar además las entradas de `src/core`, 100 módulos. No llega al −15 % pedido: las entradas se quedan como están.
 - **Extensiones (D2):** `.mjs` = módulo ES, `.js` = clásico. Los únicos `.js` de `dist/cdn` son la copia compat `core/loader.min.js` y los `*.classic.js` que se pidan (guardián `gobernanza/extension-modulos`). La galería (`dist/scripts`, `dist/pages`, `dist/previews`, `dist/gallery-app.min.js`) no es parte del CDN y conserva `.min.js`.
 - **Clásico opcional:** `deno task build:classic -- <tag> [<tag>…]` → `<categoria>/<tag>.classic.js`, IIFE autosuficiente (core, zod y estilos dentro) para `<script src>` sin módulos. No entra en `deno task build` ni en el catálogo.
@@ -120,7 +120,7 @@ definirse) y el resto con `load` (progresivo).
 - Componentes de app (`registerApp`): `.mjs` → `import()`, `.js` → script clásico; un módulo ES con extensión `.js`
   pasa `type: 'module'`. `deps` (`tag` → hrefs) precarga su cierre.
 - Implementación de referencia para apps: las plantillas de `skills/iswc-foundation/templates/` (`index.html`,
-  `view/**/index.html` y `src/utils/build.ts`, que escribe el bloque `<!-- iswc:precarga:inicio -->`…`fin` desde
+  `view/**/index.html` y `src/utils/build.ts`, que escribe el bloque `<!-- ISWC:precarga:inicio -->`…`fin` desde
   `src/vendor/iswc-base/deps.json`). Ojo al orden: el `<script type="module">` del loader va **antes** del registrador
   de la app (los módulos se ejecutan en orden de documento y el registrador necesita `globalThis.iswcLoader`).
 
@@ -203,7 +203,7 @@ así (F5b, por app):
    `{ sha, tags, core, v }`; `sha` es el SHA base del build y no se compara con el pin). Avisa (sin reescribir) de rutas
    `*.min.js` del kit armadas en runtime (`new URL('x.min.js', L.selfBase)` y similares). Un SHA anterior a F3 sale con
    exit 3 y lo dice.
-3. **Vendor**: re-vendorizar las tools del kit al mismo SHA (`vendor:iswc` / `vendor.ts`).
+3. **Vendor**: re-vendorizar las tools del kit al mismo SHA (`vendor:ISWC` / `vendor.ts`).
 4. **Bootstrap**: copiar el de las plantillas: import map con el alias, `<meta name="iswc-precargado">` con el pin,
    `modulepreload` del cierre del shell crítico (del grafo vendorizado, sin `?v=`), `is-base.min.css` y
    `palettes.min.css` no bloqueantes (`preload as=style` + `<noscript>`), loader `core/loader.min.mjs`,
@@ -258,7 +258,7 @@ Qué hace, en orden:
    portada de Avatar pedía 17 módulos más que con el build por archivo.
 2. **Bundle.** esbuild `splitting`, `format: 'esm'`, `minify`, `.min.mjs`, chunks en `<salida>/_chunks/`. El alias
    `@jeff-aporta/iswc-base/<ruta>` (la app lo escribe con la ruta publicada, `core/iswc-element.min.mjs`) queda externo
-   y se reescribe a `<cdn><ruta>`: la misma URL que usa el loader. `iswc:css` incrusta la hoja del staging
+   y se reescribe a `<cdn><ruta>`: la misma URL que usa el loader. `ISWC:css` incrusta la hoja del staging
    (`css-virtual.ts`). `import.meta.url` de cada fuente vale su URL publicada aunque su código acabe en un chunk.
 3. **Hojas.** Cada `.css` del staging → `<salida>/<ruta sin src/>.css`, minificada (`url()` de fuentes e imágenes quedan
    relativas).
@@ -272,10 +272,10 @@ Qué hace, en orden:
    sirven para lo que se pida después (cada página ya precarga su arranque) y no pesan en la carga. En Avatar, con los
    cierres dentro el registrador pesaba 19,6 KB; sin ellos, 11,6 KB (+5,8 KB de `deps` al interactuar).
    `asset-hashes.json` y `build-stamp.json`.
-7. **HTML.** Entre `<!-- iswc:precarga:inicio -->` y `<!-- iswc:precarga:fin -->`: import map (alias y `zod` del pin, más
+7. **HTML.** Entre `<!-- ISWC:precarga:inicio -->` y `<!-- ISWC:precarga:fin -->`: import map (alias y `zod` del pin, más
    `importMap`), `<meta name="iswc-precargado">`, `modulepreload` del cierre del loader, del de los `kit` de la página
    (sin los del lote) y de lo que la app importa del kit por alias, el lote, el cierre propio (`app`), `preload as=fetch`
-   de las `.css` hermanas que los componentes piden por red (no las de `iswc:css`), `is-base`/`palettes` no
+   de las `.css` hermanas que los componentes piden por red (no las de `ISWC:css`), `is-base`/`palettes` no
    bloqueantes, loader `.min.mjs` y registrador. Fuera del bloque solo pone o quita el `?v=` de las referencias a
    `<salida>`; `<base href>` se respeta (una base absoluta = la raíz de la app). Un import map fuera del bloque es error.
    Idempotente: sin cambios, ni el HTML ni `<salida>` cambian (salvo `build-stamp.json`).

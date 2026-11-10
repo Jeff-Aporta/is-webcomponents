@@ -95,7 +95,7 @@ class IswcSequenceDiagram extends DiagramElementBase {
   static override tag = 'iswc-sequence-diagram';
   static override css = css;
   #theme: DiagramTheme | null = null;
-  /** Tema del estilo (`diagram-style="insoft"` → tema `sequence`), ya fusionado con el modo. */
+  /** Tema del estilo (`diagram-style="iswc"` → tema `sequence`), ya fusionado con el modo. */
   #styleTheme: ErThemeJson | null = null;
   #paint: ReturnType<typeof sequencePaint> | null = null;
   /** Tipografía de rótulos (actores, pestañas, leyenda) y de etiquetas de mensaje. */
@@ -696,7 +696,7 @@ class IswcSequenceDiagram extends DiagramElementBase {
 
   /**
    * Subprocesos (`nested`): recuadro con borde, título opcional y fondo
-   * (`bg`; insoft claro: blanco), con el diagrama capturado encajado (contain).
+   * (`bg`; iswc claro: blanco), con el diagrama capturado encajado (contain).
    * Sin captura, marco punteado con el título.
    */
   #buildNested(messages: SequenceLayoutMessage[], theme: DiagramTheme): void {

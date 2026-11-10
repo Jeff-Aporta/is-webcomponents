@@ -68,9 +68,9 @@ tests.push({
       const cat = document.getElementById('cat');
       const captured = [];
       cat.addEventListener('iswc-selection-change', (e) => captured.push({ detail: e.detail }));
-      cat.selectionData = [{ app: 'CP', descripcion: 'ContaPyme', activo: true }];
+      cat.selectionData = [{ app: 'CP', descripcion: 'Acme', activo: true }];
       cat.dispatchEvent(new CustomEvent('iswc-selection-change', {
-        detail: { records: [{ app: 'CP', descripcion: 'ContaPyme' }] },
+        detail: { records: [{ app: 'CP', descripcion: 'Acme' }] },
         bubbles: true,
         composed: true,
       }));

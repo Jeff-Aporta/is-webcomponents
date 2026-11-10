@@ -1,5 +1,5 @@
 /**
- * Guardianes WHAT de puertos y sockets del flujo insoft, sobre las rutas reales del lab
+ * Guardianes WHAT de puertos y sockets del flujo iswc, sobre las rutas reales del lab
  * (`labs/iss-ayudascpia-flujos/payloads/ruta-*.json`):
  *   P1 una entrada y una salida nunca comparten puerto: en ningún nodo el punto por donde LLEGA
  *      una arista continua coincide con el punto por donde SALE otra.

@@ -35,7 +35,7 @@ import './qrcode.js';
 ## Ejemplo mínimo
 
 ```html
-<iswc-qrcode value="https://contapyme.com"></iswc-qrcode>
+<iswc-qrcode value="https://acme.com"></iswc-qrcode>
 ```
 
 ## API
@@ -143,7 +143,7 @@ una live region: el lector de pantalla anuncia el fallo de CDN.
 
 ```html
 <iswc-qrcode
-  value="https://contapyme.com/soporte"
+  value="https://acme.com/soporte"
   level="H"
   cell="6"
   margin="3"

@@ -898,7 +898,7 @@ const TK1437191_SEQUENCE_MESSAGES: SequenceMessageSpec[] = [
     step: 1,
     log: 'Usuario envía mensaje; Paty responde en stream',
     description:
-      'El usuario escribe en el chat del portal. **ISS-AyudasCPIA** atiende el turno en **SSE/stream**: tokens del asistente y evento **`end`** con el slot **`imensaje`**.',
+      'El usuario escribe en el chat del portal. **Kit** atiende el turno en **SSE/stream**: tokens del asistente y evento **`end`** con el slot **`imensaje`**.',
   },
   {
     id: 'm2',
@@ -985,7 +985,7 @@ function tk1437191SequenceSpec(): SequenceResolvedSpec {
     actors: [
       { id: 'U', label: '{{iconify: {icon: "mdi:account", hue: 239}}} Usuario', kind: 'actor' },
       { id: 'UI', label: '{{iconify: {icon: "mdi:monitor-dashboard", hue: 199}}} Portal PatyIA', kind: 'participant' },
-      { id: 'A', label: '{{iconify: {icon: "mdi:api", hue: 210}}} ISS-AyudasCPIA', kind: 'participant' },
+      { id: 'A', label: '{{iconify: {icon: "mdi:api", hue: 210}}} Kit', kind: 'participant' },
     ],
     messages: TK1437191_SEQUENCE_MESSAGES,
   };

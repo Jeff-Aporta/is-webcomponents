@@ -10,6 +10,11 @@ Thumbs.db
 # del pipeline y no se versionan.
 src/**/*.css
 
+# JS compilado al lado de su fuente en `src/cdn/build/` (artefacto de una corrida de
+# pruebas). No se versiona y, si queda viejo, SOMBREA al .ts que Deno resolvería
+# (los módulos se importan con la extensión .js a propósito, para publicar por CDN).
+src/cdn/build/*.js
+
 # Markdown: ignorar solo root y specs/ (WIPs, docs de equipo).
 # IMPORTANTE: dist/ NO se ignora porque `dist/**/skills/**/*.md` se
 # bundlea desde `skills/` y se sirve al público. Si ignoráramos

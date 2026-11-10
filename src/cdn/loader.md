@@ -194,7 +194,7 @@ nunca sobre un pin SHA de jsDelivr/githack (`esUrlInmutable`: la URL ya es inmut
 
 Si el archivo cambia, el hash cambia y el navegador pide esa URL: no hace falta un refresco forzado.
 
-**Extensiones y grafo.** Los módulos ES del kit son `.min.mjs` (`<cat>/<tag>.min.mjs`, `core/<x>.min.mjs`, `_chunks/chunk-<hash>.mjs`); `.js` queda para lo clásico (`*.classic.js`, `<script src>`) y para la copia compat `core/loader.min.js` (se retira en F5). `dist/cdn/deps.json` es el índice (tag → categoría) y `dist/cdn/deps/<cat>.json` da, por tag, el cierre completo de módulos que trae (`tags`; `deps/core.json`: `core`) y el `?v=` de cada entrada (`v`): el loader pide solo la parte de la categoría que carga para precargar el lote con `modulepreload`. Los consumidores vendorizan el grafo unido (`pin-update`, `vendor:iswc`).
+**Extensiones y grafo.** Los módulos ES del kit son `.min.mjs` (`<cat>/<tag>.min.mjs`, `core/<x>.min.mjs`, `_chunks/chunk-<hash>.mjs`); `.js` queda para lo clásico (`*.classic.js`, `<script src>`) y para la copia compat `core/loader.min.js` (se retira en F5). `dist/cdn/deps.json` es el índice (tag → categoría) y `dist/cdn/deps/<cat>.json` da, por tag, el cierre completo de módulos que trae (`tags`; `deps/core.json`: `core`) y el `?v=` de cada entrada (`v`): el loader pide solo la parte de la categoría que carga para precargar el lote con `modulepreload`. Los consumidores vendorizan el grafo unido (`pin-update`, `vendor:ISWC`).
 
 **La extensión declara el tipo (D2).** En `load(href)`, `ensure(tag, { href })`, `registerApp` y `loadPageModules`:
 `.mjs`, `.ts` o sin extensión → `import()`; `.js` → `<script src>` clásico (promesa en `load`/`error`); `.css` →
@@ -281,7 +281,7 @@ código, paginador, diálogo), sin listas de tags ni un segundo CDN.
 | --- | --- | --- |
 | `iswc-doc-layout` | Layout documental común (navegación \| contenido \| índice) | `await L.ensure('iswc-doc-layout')` |
 | `iswc-md-docs-vault` | `docs/index.html` de un proyecto (hojas markdown como un libro) | `await L.ensure('iswc-md-docs-vault')` |
-| `iswc-server-api-docs` | `GET /api/docs` de un server (documento InSoft u OpenAPI 3, «Probar») | `await L.ensure('iswc-server-api-docs')` |
+| `iswc-server-api-docs` | `GET /api/docs` de un server (documento ISWC u OpenAPI 3, «Probar») | `await L.ensure('iswc-server-api-docs')` |
 
 ## Anti-redundancia
 
@@ -354,9 +354,9 @@ Misma pieza para la galería ISWC y para **cualquier app** de docs/demos.
 
 Aliases CSS: `iswc-palettes-default`, `iswc-doc-shell`, `iswc-doc-presentation`.  
 Page modules: `type: 'module' | 'classic'` (`dev-reload` classic, **opt-in** con attr `dev`).
-Tema ER InSoft (sin CE nuevo): alias JS `iswc-diagram-theme` → `cdn:diagrams/theme.min.mjs`
-(`json2css`, `resolveErTheme`, `INSOFT_THEME`); JSON editable en `dist/cdn/diagrams/themes/insoft.json`.
-Uso: `<iswc-er-diagram theme="insoft">` / `<iswc-er-editor theme="insoft">`.  
+Tema ER ISWC (sin CE nuevo): alias JS `iswc-diagram-theme` → `cdn:diagrams/theme.min.mjs`
+(`json2css`, `resolveErTheme`, `ISWC_THEME`); JSON editable en `dist/cdn/diagrams/themes/iswc.json`.
+Uso: `<iswc-er-diagram theme="iswc">` / `<iswc-er-editor theme="iswc">`.  
 Evento canónico: `iswc-doc-demo-ready` / `.whenReady()`.
 
 | Opción | Efecto |

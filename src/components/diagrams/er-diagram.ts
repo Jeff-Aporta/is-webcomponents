@@ -20,13 +20,13 @@ import css from 'iswc:css';
  *
  * Configuración por JSON, igual que <iswc-flowchart>:
  *
- *   <iswc-er-diagram theme="insoft">
+ *   <iswc-er-diagram theme="iswc">
  *     <script type="application/json">
  *       { "erDiagram": { "entities": [...], "relations": [...] } }
  *     </script>
  *   </iswc-er-diagram>
  *
- * Atributos: color (inline | viewer), open-on-click, theme (id JSON: insoft)
+ * Atributos: color (inline | viewer), open-on-click, theme (id JSON: iswc)
  * Propiedades: payload, spec, layout, turtle, hiddenGroups
  * Eventos: iswc-render, iswc-turtle-state, iswc-open-viewer, iswc-toggle-group
  */
@@ -69,7 +69,7 @@ class IswcErDiagram extends DiagramElementBase {
     this.initDiagramShadow('er-svg', 'er-tooltip');
   }
 
-  /** Tema de estilo InSoft (JSON). Attr `theme`, o `erDiagram.theme` / `theme` en payload. */
+  /** Tema de estilo iswc (JSON). Attr `theme`, o `erDiagram.theme` / `theme` en payload. */
   #resolveStyleTheme(): ErThemeJson | null {
     const delEstilo = styleThemeFor(hostStyleName(this), 'er');
     if (delEstilo) return delEstilo;
@@ -176,7 +176,7 @@ class IswcErDiagram extends DiagramElementBase {
       }
     }
 
-    // Tema JSON (p.ej. insoft): CSS tipografía + vars vía json2css.
+    // Tema JSON (p.ej. iswc): CSS tipografía + vars vía json2css.
     if (this.#styleTheme) {
       this.svg.setAttribute('data-er-theme', this.#styleTheme.id);
       injectThemeCss(this.svg, this.#styleTheme);
@@ -461,7 +461,7 @@ class IswcErDiagram extends DiagramElementBase {
       });
       g.appendChild(box);
 
-      // Encabezado: InSoft usa el mismo fill; default tiñe por hue del grupo.
+      // Encabezado: iswc usa el mismo fill; default tiñe por hue del grupo.
       const headerFill = paint?.headerFill
         ?? (e.hue != null ? `hsla(${e.hue},65%,55%,0.22)` : theme.chipFill);
       g.appendChild(svgEl('rect', {
@@ -469,7 +469,7 @@ class IswcErDiagram extends DiagramElementBase {
         fill: headerFill, class: 'er-entity__header',
       }));
 
-      // Separadores InSoft (header / filas) — misma lógica que der.svg.
+      // Separadores iswc (header / filas) — misma lógica que der.svg.
       if (paint?.separator) {
         const x1 = e.x + 1;
         const x2 = e.x + e.w - 1;

@@ -125,7 +125,7 @@ denoTest('render-lote: L2 la huella ignora el orden de claves y cambia con modul
     json(b, { ...spec, module: '020' });
     const conModulo = (await planificarLote(op)).diagramas[1]!.huella;
     assert(conModulo !== base, 'module entra en la huella');
-    json(b, { ...spec, attrs: { theme: 'insoft' } });
+    json(b, { ...spec, attrs: { theme: 'iswc' } });
     assert((await planificarLote(op)).diagramas[1]!.huella !== base, 'attrs entran en la huella');
   } finally {
     rmSync(dir, { recursive: true, force: true });

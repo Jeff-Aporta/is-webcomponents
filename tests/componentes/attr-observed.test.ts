@@ -39,7 +39,7 @@ test('dropdown declara open/placement/distance/skidding con @prop sobre IswcReac
   assert.ok(/@prop\(\{ type: 'bool' \}\) accessor open = false/.test(src), 'open es @prop bool');
   assert.ok(/@prop\(\{ enum: PLACEMENTS_AUTO \}\) accessor placement/.test(src), 'placement es @prop enum');
   for (const n of ['distance', 'skidding']) assert.ok(new RegExp(`@prop\\(\\{ type: 'num' \\}\\) accessor ${n} = 0`).test(src), `${n} es @prop num`);
-  assert.ok(!/static observed = \[[^\]]*'open'/.test(src), 'open no se lista a mano en static observed');
+  assert.ok(!/static (?:override )?observed = \[[^\]]*'open'/.test(src), 'open no se lista a mano en static observed');
 });
 
 export default lista();

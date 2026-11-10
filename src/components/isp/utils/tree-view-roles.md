@@ -140,7 +140,7 @@ Módulo cerrado        ← group · hermetic
 | Reordenar **entre hermanos** del mismo padre | Sí (`position` before/after) |
 | Liberar | **No** — `isHermetic` impide `onrelease` |
 
-**Cuándo usarlo:** plan de estudio InSoft (módulos que no sueltan lecciones al
+**Cuándo usarlo:** plan de estudio ISWC (módulos que no sueltan lecciones al
 árbol global), bloques de contenido acoplados.
 
 ### 4. Prisión liberable (`group` + `prison`)
@@ -269,7 +269,7 @@ Desde `customs` / runtime:
 | --- | --- | --- | --- | --- | --- |
 | Lección | `atom` | — | — | — | Hoja terminal |
 | Módulo abierto | `group` | `cell` | `unanchored` | — | Carpeta estándar |
-| Módulo InSoft | `group` | `hermetic` | `unanchored` | — | Subárbol cerrado |
+| Módulo ISWC | `group` | `hermetic` | `unanchored` | — | Subárbol cerrado |
 | Bloque editable | `group` | `prison` | `unanchored` | — | Liberable |
 | Tramo publicado | `group` | `cell` | `freezer` | — | Rama congelada |
 | Ítem fijo suelto | `atom` | — | — | `true` | Una fila anclada |

@@ -63,7 +63,7 @@ test('login: reutiliza los componentes obligatorios', () => {
   ]) {
     // Molde IswcElement: un hijo hoja puede ir en `static deps` (perezoso) en vez de un import de efecto.
     const tag = `iswc-${dep.split('/').pop()!.replace(/\.js$/, '')}`;
-    const enDeps = new RegExp(`static deps = \\[[^\\]]*'${tag}'`).test(ts);
+    const enDeps = new RegExp(`static (?:override )?deps = \\[[^\\]]*'${tag}'`).test(ts);
     assert.ok(ts.includes(dep) || enDeps, 'login.ts debe importar (o declarar en static deps) ' + dep);
   }
 });

@@ -35,7 +35,7 @@ export async function mount(ctx: import('@jeff-aporta/iswc-base/previews/_kit/sc
         return {
           id: i + 1,
           name: `${NAMES[i % NAMES.length]!} ${String.fromCharCode(65 + (i % 26))}.`,
-          email: `${NAMES[i % NAMES.length]!.toLowerCase()}${i}@insoft.co`,
+          email: `${NAMES[i % NAMES.length]!.toLowerCase()}${i}@acme.example`,
           city: CITIES[i % CITIES.length]!,
           role: ROLES[(i + Math.floor(i / CITIES.length)) % ROLES.length]!,
           gross: 1200 + ((i * 617) % 9000),

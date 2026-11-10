@@ -15,7 +15,7 @@
 //   4. En el ISS (solo con ISS_DIR): `npm run docs:diagramas` + `npm run docs:publicar`.
 //
 // Hermético: sin ISS_DIR no se toca ninguna carpeta fuera del kit; los labs leen sus payloads y el
-// fixture versionado (tests/fixtures/iss-ayudascpia).
+// fixture versionado (tests/fixtures/iss-ayudas-ejemplo).
 //
 // Uso:
 //   deno task labs:render            # todo
@@ -29,7 +29,7 @@ import { fileURLToPath } from 'node:url';
 const KIT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const LABS = join(KIT, 'labs');
 const ISS = process.env.ISS_DIR ? resolve(process.env.ISS_DIR) : null;
-const FIXTURE = join(KIT, 'tests', 'fixtures', 'iss-ayudascpia', 'docs-experimental', 'diagramas');
+const FIXTURE = join(KIT, 'tests', 'fixtures', 'ayudas-ejemplo', 'docs-experimental', 'diagramas');
 const RUTAS_LAB = join(LABS, 'iss-ayudascpia-flujos', 'payloads');
 const sinIss = process.argv.includes('--sin-iss');
 const win = process.platform === 'win32';

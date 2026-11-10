@@ -1,4 +1,4 @@
-// rutas-reales.ts — layout `insoft` de los flujos reales del ISS (labs/iss-ayudascpia-flujos/payloads/ruta-*.json y
+// rutas-reales.ts — layout `iswc` de los flujos reales del ISS (labs/iss-ayudascpia-flujos/payloads/ruta-*.json y
 // sus derivados, p. ej. el vector de A10), calculado UNA vez por versión del código y compartido entre archivos.
 //
 // Medido 6-nov-2026 (TEMU-JEFF, 2 núcleos): las 24 rutas tardan ~127 s solas (ruta-conversacion-turno ~50 s: A* de
@@ -82,13 +82,13 @@ function archivoCache(payload: unknown): string {
 
 const enCache = (payload: unknown): boolean => existsSync(archivoCache(payload));
 
-/** Layout `insoft` del payload de un flujo, memoizado en el proceso y en `.tmp/rutas-reales/`. */
+/** Layout `iswc` del payload de un flujo, memoizado en el proceso y en `.tmp/rutas-reales/`. */
 export function layoutRuta(payload: unknown): FlowLayout {
   const archivo = archivoCache(payload);
   const visto = memo.get(archivo);
   if (visto) return visto;
   if (!existsSync(archivo)) {
-    const L = computeFlowchartLayout(resolveFlowchartSpec(payload as Record<string, unknown>)!, null, { style: 'insoft' });
+    const L = computeFlowchartLayout(resolveFlowchartSpec(payload as Record<string, unknown>)!, null, { style: 'iswc' });
     mkdirSync(CACHE, { recursive: true });
     // Escritura atómica: otro proceso nunca lee un JSON a medio escribir.
     const tmp = `${archivo}.${Deno.pid}.tmp`;

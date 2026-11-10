@@ -4,7 +4,7 @@
   "tag": "iswc-class-diagram",
   "script": "diagrams/class-diagram.min.mjs",
   "attrs": {
-    "diagram-style": "insoft"
+    "diagram-style": "iswc"
   },
   "_fuente": "Diagrama curado (restaurado de b394afe8, 2026-10-07). Fuente oficial de clases.svg; se edita a mano. Nombres por referencia a fuentes/codigo.json; los métodos y atributos son los de esa versión que siguen existiendo en el código. La vista generada desde el código (tríos) es clases-trios.json (clases-trios.mjs, oficial: false).",
   "payload": {
@@ -25,8 +25,8 @@
       "packages": [
         {
           "id": "pkg-stack",
-          "name": "Stack InSoft",
-          "stereotype": "npm @ingenieria_insoft",
+          "name": "Stack ISWC",
+          "stereotype": "npm @iswc",
           "accent": "#4B5563",
           "palette": "neutral",
           "classFill": "external",

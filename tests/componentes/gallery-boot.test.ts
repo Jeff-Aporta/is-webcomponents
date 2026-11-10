@@ -61,7 +61,7 @@ test('boot ESM + host module fuentes', () => {
   assert.match(hostTs, /local:\s*true/);
   assert.match(hostTs, /loadPageModules\s*\(\s*\[\s*['"]iswc-doc-demo-boot['"]\s*\]\s*\)/);
   assert.match(hostTs, /load\s*\(\s*['"]iswc-doc-demo['"]\s*\)/);
-  assert.match(docDemoTs, /static tag = ['"]iswc-doc-demo['"]/);
+  assert.match(docDemoTs, /static (?:override )?tag = ['"]iswc-doc-demo['"]/);
   assert.match(docDemoTs, /\bdefine\(\s*[A-Za-z_$][\w$]*/);
   assert.match(docDemoTs, /id=["']shellNav["']/);
   assert.match(docDemoTs, /id=["']previewHost["']/);
@@ -89,8 +89,8 @@ test('sin preview-boot.js externo; theme sync en doc-demo-boot', () => {
   assert.match(bootTs, /iswc-theme|data-theme/);
 });
 
-test('meta sin ContaPyme/InSoft, sin license, sin offers', () => {
-  assert.doesNotMatch(indexHtml, /ContaPyme\s*\/\s*InSoft/);
+test('meta sin Acme/iswc, sin license, sin offers', () => {
+  assert.doesNotMatch(indexHtml, /Acme\s*\/\s*iswc/);
   assert.doesNotMatch(indexHtml, /"offers"\s*:/);
   assert.doesNotMatch(indexHtml, /"license"\s*:/);
   assert.doesNotMatch(indexHtml, /"author"\s*:\s*\{\s*"@type"\s*:\s*"Person"/);

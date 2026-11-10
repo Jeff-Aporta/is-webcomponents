@@ -32,7 +32,7 @@
         {
           "id": "X_ai",
           "label": {
-            "path": "../../../tests/fixtures/iss-ayudascpia/docs-experimental/diagramas/componentes.json",
+            "path": "../../../tests/fixtures/ayudas-ejemplo/docs-experimental/diagramas/componentes.json",
             "query": {
               "payload": {
                 "componentDiagram": {

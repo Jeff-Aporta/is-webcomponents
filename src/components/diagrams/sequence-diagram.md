@@ -148,10 +148,10 @@ Documentación de cabecera preservada desde fuente:
 >          iswc-open-viewer (click en colore inline),
 >          iswc-toggle-group (detail: {id})
 
-## Estilo InSoft (`diagram-style`)
+## Estilo ISWC (`diagram-style`)
 
-`<iswc-sequence-diagram diagram-style="insoft">` carga el tema `sequence` del
-estilo (`themes/insoft-seq.json`) junto con los de DER, componentes y clases:
+`<iswc-sequence-diagram diagram-style="iswc">` carga el tema `sequence` del
+estilo (`themes/iswc-seq.json`) junto con los de DER, componentes y clases:
 Poppins, participantes con relleno `#C1BFFF` y borde negro sin radio, regiones
 y cajas cuadradas, y el CSS del tema incrustado en el SVG para que el export
 estático salga igual que en pantalla. En las docs del ISS / ISW todo diagrama
@@ -169,7 +169,7 @@ aparece en la leyenda. El color se pide **por nombre** y el tema decide el hex:
 ]
 ```
 
-Nombres de línea del estilo InSoft: `auth`, `seg`, `data`, `llm`, `stream`,
+Nombres de línea del estilo ISWC: `auth`, `seg`, `data`, `llm`, `stream`,
 `ticket`, `error`, `neutral` (saturados, para trazos). También vale un nombre
 de paleta de área (`primary`, `service`, `store`…) o un hex literal. Sin
 `color`, manda `hue` como antes. Sin estilo cargado, el nombre cae al `hue` y
@@ -224,7 +224,7 @@ actores y lifelines → mensajes (aristas, notas, iconos) siempre encima de
 todo agrupador. Una región anidada en el `alt` guarda margen lateral con él.
 
 Las cajas de participantes (`boxes`) de un solo actor son válidas para el
-consumidor, pero por estética InSoft no las usa: los editables del ISS solo
+consumidor, pero por estética ISWC no las usa: los editables del ISS solo
 declaran cajas con dos o más actores.
 
 ## Modo de los agrupadores (`sync` / `async`)
@@ -274,7 +274,7 @@ acción inicia: el mismo nodo `kind: "nested"` de los flujos
 - El diagrama se monta fuera de pantalla con su web component y su SVG se copia
   vectorial en el recuadro, escalado tipo `object-fit: contain` (por defecto
   200 px por lado). El export estático lo conserva.
-- Recuadro: borde del tema, `bg` (insoft claro: blanco; oscuro: el lienzo), al
+- Recuadro: borde del tema, `bg` (ISWC claro: blanco; oscuro: el lienzo), al
   costado libre de la lifeline destino (el mismo del self-loop). La fila
   siguiente baja y el hueco entre lifelines crece para que no se monte nada.
 

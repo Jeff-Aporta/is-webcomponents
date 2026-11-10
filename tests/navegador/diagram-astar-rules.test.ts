@@ -14,7 +14,7 @@
 //   7. Aristas al mismo conector solo se juntan en el embudo final.
 //   8. Recorrer el interior de agrupadores cuesta × factor·nivel (rodea por fuera).
 //   9. Sin auto-cruces ni bolsillos (giros mínimos).
-//  10. Lab ISS·AyudasCPIA: 0 ilegales, 0 rieles compartidos, < 30 s de CPU (no de reloj).
+//  10. Lab ISS·Kit: 0 ilegales, 0 rieles compartidos, < 30 s de CPU (no de reloj).
 //
 // Umbral de R10 (medido 2026-10-20, 4 núcleos, con otras suites en paralelo):
 // el layout del lab (18 aristas; ~60 % del tiempo es el A* de `route()` en

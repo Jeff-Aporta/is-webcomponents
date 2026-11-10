@@ -60,7 +60,7 @@ test('navegador/slots-pg-contract', async () => {
   
   // ─── 3. Helper define el CE ────────────────────────────────────────────────
   const slotsPgSrc = await readFile(SLOTS_PG_TS, 'utf8');
-  assert.match(slotsPgSrc, /static tag = 'iswc-slots-pg'/, 'static tag iswc-slots-pg');
+  assert.match(slotsPgSrc, /static (?:override )?tag = 'iswc-slots-pg'/, 'static tag iswc-slots-pg');
   assert.match(slotsPgSrc, /\bdefine\(\s*IswcSlotsPg\b/, 'define(IswcSlotsPg)');
   assert.match(slotsPgSrc, /class IswcSlotsPg/, 'clase IswcSlotsPg');
   // dos tabs

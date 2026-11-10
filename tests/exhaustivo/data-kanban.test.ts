@@ -27,7 +27,7 @@ test('iswc-kanban: shadow DOM en board y column (card usa class CSS)', () => {
   // board + column tienen shadow; card usa class CSS sin shadow propio.
   // Molde IswcElement: cada clase abre su shadow salvo `static shadowInit = null` (light DOM).
   const clases = src.split(/\bclass\s+\w+\s+extends\s+IswcElement\b/).slice(1);
-  const conShadow = clases.filter((cuerpo) => !/^\s*\{[^}]*?static shadowInit[^=\n]*= null/.test(cuerpo)).length;
+  const conShadow = clases.filter((cuerpo) => !/^\s*\{[^}]*?static (?:override )?shadowInit[^=\n]*= null/.test(cuerpo)).length;
   assert.ok(conShadow >= 2, `kanban.ts debe montar shadow en 2+ clases (encontró ${conShadow})`);
 });
 

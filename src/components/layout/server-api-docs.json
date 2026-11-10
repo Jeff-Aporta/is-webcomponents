@@ -4,7 +4,7 @@
   "category": "layout",
   "title": "&lt;iswc-server-api-docs&gt;",
   "titleHtml": false,
-  "description": "Endpoints de la API de un server al estilo Swagger: valida su documento con Zod (y dice si admite el parse estricto InSoft v2), lista los endpoints en una tabla con filtro y abre cada uno con método, ruta, sesión y permiso, parámetros, cuerpo, respuestas con schema y ejemplo, su diagrama de secuencia en estilo InSoft y «Probar».",
+  "description": "Endpoints de la API de un server al estilo Swagger: valida su documento con Zod (y dice si admite el parse estricto ISWC v2), lista los endpoints en una tabla con filtro y abre cada uno con método, ruta, sesión y permiso, parámetros, cuerpo, respuestas con schema y ejemplo, su diagrama de secuencia en estilo ISWC y «Probar».",
   "storageKey": "docs-iswc-server-api-docs",
   "loads": [
     "iswc-doc-layout",
@@ -26,7 +26,7 @@
     {
       "id": "intro",
       "title": "Uso",
-      "lede": "El server publica su documento (InSoft <code class=\"code\">kind:\"config\"</code> u OpenAPI 3) y la página solo monta la etiqueta: aquí el documento va en un <code class=\"code\">script type=\"application/json\"</code> hijo; también se asigna por propiedad (<code class=\"code\">el.doc = obj</code>) o se pide por <code class=\"code\">src</code>.",
+      "lede": "El server publica su documento (ISWC <code class=\"code\">kind:\"config\"</code> u OpenAPI 3) y la página solo monta la etiqueta: aquí el documento va en un <code class=\"code\">script type=\"application/json\"</code> hijo; también se asigna por propiedad (<code class=\"code\">el.doc = obj</code>) o se pide por <code class=\"code\">src</code>.",
       "blocks": [
         {
           "kind": "demo",
@@ -55,8 +55,8 @@
             "          \"provider\": \"patyia-portal\"",
             "        },",
             "        \"exports\": {",
-            "          \"openApiDownloadName\": \"iss-ayudascpia.openapi.json\",",
-            "          \"isDownloadName\": \"iss-ayudascpia.is.json\"",
+            "          \"openApiDownloadName\": \"kit.openapi.json\",",
+            "          \"isDownloadName\": \"kit.is.json\"",
             "        }",
             "      },",
             "      \"tags\": [",
@@ -332,7 +332,7 @@
             "        \"/docs\": {",
             "          \"get\": {",
             "            \"summary\": \"Visor de la API\",",
-            "            \"description\": \"Este visor: HTML que monta `<iswc-server-api-docs>` (kit iswc por CDN, pin por SHA) con la fila `doc` incrustada. `?v=json` entrega el documento, `?v=md` en markdown y `?v=routes` los ids SEG montados. Público y sin sobre.\",",
+            "            \"description\": \"Este visor: HTML que monta `<iswc-server-api-docs>` (kit ISWC por CDN, pin por SHA) con la fila `doc` incrustada. `?v=json` entrega el documento, `?v=md` en markdown y `?v=routes` los ids SEG montados. Público y sin sobre.\",",
             "            \"tags\": [",
             "              \"Sistema\"",
             "            ],",
@@ -453,7 +453,7 @@
             "            }",
             "          },",
             "          \"turno\": {",
-            "            \"prompt\": \"¿Cómo creo una factura en ContaPyme?\",",
+            "            \"prompt\": \"¿Cómo creo una factura en Acme?\",",
             "            \"iconversacion\": 4821",
             "          }",
             "        },",

@@ -9,6 +9,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+import { MARCA_VIEJA, traeMarcaEjemplo } from './_identidad.mjs';
 import { PALETTES, DEFAULT_PALETTE, palettesScss, checkPaletteContrast, PALETTE_FAMILIES } from '../../src/styles/palette-build.ts';
 
 const { test, lista } = coleccionPruebas({ categoria: 'what' });
@@ -43,11 +44,15 @@ test('palettes: contraste AA en 25 paletas × claro/oscuro × panda', () => {
   assert.deepEqual(failures.map((f) => `${f.palette} ${f.theme}${f.panda ? '+panda' : ''} ${f.fg}/${f.bg} ${f.ratio}<${f.min}`), []);
 });
 
-test('palettes: sin nombres de marca en el sistema de paletas', () => {
-  for (const f of ['palettes.json', 'palettes.scss', 'is-base.scss', 'palette-build.ts']) {
-    const src = readFileSync(join(root, 'src', 'styles', f), 'utf8');
-    assert.ok(!/contapyme|insoft|agrowin/i.test(src), `${f} no debe nombrar paletas de marca`);
-  }
+test('palettes: sin nombres de marca en el catálogo de paletas', () => {
+  // OJO: los archivos de estilos llevan los tokens `--iswc-*`, que son la marca viva del kit
+  // (no un nombre de paleta). Lo que no puede aparecer es una PALETA que se llame como una
+  // marca: lo que se mira es el catálogo (id y etiqueta de cada paleta).
+  const catalogo = readFileSync(join(root, 'src', 'styles', 'palettes.json'), 'utf8');
+  const paletas = JSON.parse(catalogo) as Array<{ value: string; label: string }>;
+  assert.equal(paletas.length, 25);
+  const conMarca = paletas.filter((p) => MARCA_VIEJA.test(p.value) || MARCA_VIEJA.test(p.label) || traeMarcaEjemplo(p.value) || traeMarcaEjemplo(p.label));
+  assert.deepEqual(conMarca.map((p) => p.value), [], 'ninguna paleta se llama como una marca');
 });
 
 export default lista();

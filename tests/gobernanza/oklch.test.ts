@@ -1,5 +1,5 @@
 // oklch.test.ts — rotar el tono en OKLCH (src/components/diagrams/utils/diagram-styles.ts), usado para dar a cada
-// símbolo del flowchart insoft su propio color.
+// símbolo del flowchart iswc su propio color.
 //   K1 0° devuelve el mismo color; ida y vuelta hex → OKLCH → hex es exacta.
 //   K2 rotar conserva la luminosidad (el texto encima mantiene el contraste).
 //   K3 los primeros tonos por ángulo áureo son todos distintos entre sí.

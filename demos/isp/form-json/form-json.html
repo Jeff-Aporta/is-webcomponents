@@ -28,9 +28,9 @@
 </style>
 <script type="module">
   // Dependencias: los controles que vamos a leer/escribir.
-  await import('../../../dist/cdn/forms/input.min.mjs?v=d84yvp');
-  await import('../../../dist/cdn/forms/select.min.mjs?v=85nx1k');
-  await import('../../../dist/cdn/forms/option.min.mjs?v=a6rb22');
+  await import('../../../dist/cdn/forms/input.min.mjs?v=9s2emy');
+  await import('../../../dist/cdn/forms/select.min.mjs?v=vop2mq');
+  await import('../../../dist/cdn/forms/option.min.mjs?v=1mdmpb');
   await import('../../../dist/cdn/forms/checkbox.min.mjs?v=rlgrz1');
   await import('../../../dist/cdn/forms/switch.js');
   // Cargar también el form (lo usa como contenedor del helper).
@@ -60,7 +60,7 @@
     const { setValues } = await loadHelpers();
     setValues(form, {
       cliente: 'CL-009',
-      correo: 'demo@contapyme.co',
+      correo: 'demo@acme.co',
       cantidad: 42,
       activo: true,
       tipo: 'factura',

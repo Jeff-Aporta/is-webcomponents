@@ -126,7 +126,7 @@ const FlowEdgeSpecSchema = z.object({
   x: z.number(),
   y: z.number(),
 })).optional(),
-  /** Pide la etiqueta en vertical (por defecto horizontal: preferencia INSOFT). */
+  /** Pide la etiqueta en vertical (por defecto horizontal: preferencia ISWC). */
   labelVertical: z.boolean().optional(),
   /** Ícono de la etiqueta (`set:nombre`), a su izquierda. Los verbos SQL llevan uno de BD por defecto. */
   icon: z.string().optional(),
@@ -180,7 +180,7 @@ const FlowLayoutNodeSchema = z.object({
   group: z.string().optional(),
   kind: DiagramNodeKindSchema.optional(),
   embed: NodeEmbedSpecSchema.optional(),
-  /** Estilo insoft: líneas ya partidas y caja (rect inscrito en el rombo) donde van. */
+  /** Estilo iswc: líneas ya partidas y caja (rect inscrito en el rombo) donde van. */
   lines: z.array(z.string()).optional(),
   textBox: EmbedBoxSchema.optional(),
   /** Caja del diagrama incrustado (`nested` encajado, `tableder`/`component` natural). */
@@ -235,13 +235,13 @@ const FlowLayoutEdgeSchema = z.object({
   arrowAngle: z.number(),
   labelX: z.number(),
   labelY: z.number(),
-  /** Alineación de la etiqueta (estilo insoft: junto a la arista, no encima). */
+  /** Alineación de la etiqueta (estilo iswc: junto a la arista, no encima). */
   labelAnchor: z.union([z.literal('start'), z.literal('middle'), z.literal('end')]).optional(),
   /** Etiqueta escrita en vertical (resultado del layout: a lo largo de un tramo vertical). */
   labelVertical: z.boolean().optional(),
-  /** Orientación pedida por el spec de la arista (`labelVertical: true`); INSOFT prefiere horizontal. */
+  /** Orientación pedida por el spec de la arista (`labelVertical: true`); ISWC prefiere horizontal. */
   labelPide: z.literal('vertical').optional(),
-  /** Estilo insoft: caja que ocupa la etiqueta (entidad del layout) y sus líneas (partida o resumida). */
+  /** Estilo iswc: caja que ocupa la etiqueta (entidad del layout) y sus líneas (partida o resumida). */
   labelBox: EmbedBoxSchema.optional(),
   labelLines: z.array(z.string()).optional(),
   /** Ícono de la etiqueta (del spec o, en verbos SQL, el de BD por defecto). */
@@ -322,8 +322,8 @@ const FlowLayoutOverridesSchema = z.object({
 });
 export type FlowLayoutOverrides = z.infer<typeof FlowLayoutOverridesSchema>;
 
-/** Estilo de layout: `classic` (el de siempre) o `insoft` (actividad estilo Visual Paradigm). */
-const FlowLayoutStyleSchema = z.union([z.literal('classic'), z.literal('insoft')]);
+/** Estilo de layout: `classic` (el de siempre) o `iswc` (actividad estilo Visual Paradigm). */
+const FlowLayoutStyleSchema = z.union([z.literal('classic'), z.literal('iswc')]);
 
 /** Opciones de `computeFlowchartLayout` (todas opcionales; sin ellas = classic). */
 const FlowLayoutOptionsSchema = z.object({
@@ -336,7 +336,7 @@ const FlowLayoutOptionsSchema = z.object({
 });
 export type FlowLayoutOptions = z.infer<typeof FlowLayoutOptionsSchema>;
 
-/** Tamaño de un nodo antes de colocarlo, con su texto ya partido (insoft). */
+/** Tamaño de un nodo antes de colocarlo, con su texto ya partido (iswc). */
 const FlowSizedNodeSchema = z.object({
   id: z.string(),
   w: z.number(),
@@ -374,7 +374,7 @@ const FlowPlacementSchema = z.object({
   nodes: z.array(FlowPlacedNodeSchema),
   width: z.number(),
   height: z.number(),
-  /** Insoft: hijo principal (sigue la columna) de cada nodo con varias salidas. */
+  /** iswc: hijo principal (sigue la columna) de cada nodo con varias salidas. */
   primaryChild: z.custom<Map<string, string>>((v) => v instanceof Map).optional(),
   /** Carriles colocados (antes del margen del lienzo). */
   lanes: z.array(FlowLayoutLaneSchema).optional(),
@@ -382,7 +382,7 @@ const FlowPlacementSchema = z.object({
 });
 export type FlowPlacement = z.infer<typeof FlowPlacementSchema>;
 
-/** Pintura del estilo insoft ya resuelta (tokens del tema → colores). */
+/** Pintura del estilo iswc ya resuelta (tokens del tema → colores). */
 const FlowPaintSchema = z.object({
   font: z.string(),
   fontSize: z.number(),
@@ -417,7 +417,7 @@ export type FlowPaint = z.infer<typeof FlowPaintSchema>;
 const FlowPointSchema = z.object({ x: z.number(), y: z.number() });
 export type FlowPoint = z.infer<typeof FlowPointSchema>;
 
-/** Tramo ortogonal ya ruteado (insoft), con el destino de su arista. */
+/** Tramo ortogonal ya ruteado (iswc), con el destino de su arista. */
 const FlowSegmentSchema = z.object({
   x1: z.number(),
   y1: z.number(),

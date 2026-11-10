@@ -2,11 +2,11 @@
  * server-api-docs-contract.test.ts — WHAT de `<iswc-server-api-docs>` (documentación de la API de un server).
  *
  * Caja negra sobre el dominio publicado (`server-api-docs-md.ts`) con el documento de su demo:
- *   S1 el documento InSoft del demo valida con Zod; una referencia rota es error con su ruta JSON.
- *   S7 parse estricto (InSoft v2): el demo lo admite; una clave de más, un v1 o un endpoint con sesión sin
+ *   S1 el documento iswc del demo valida con Zod; una referencia rota es error con su ruta JSON.
+ *   S7 parse estricto (iswc v2): el demo lo admite; una clave de más, un v1 o un endpoint con sesión sin
  *      permiso no, y cada error trae su ruta JSON; OpenAPI 3 no aplica.
  *   S8 cada endpoint trae su secuencia (cliente → server → permiso → controller → respuestas, fallas en `alt`).
- *   S2 algo que no es InSoft ni OpenAPI 3 no se materializa y explica por qué.
+ *   S2 algo que no es iswc ni OpenAPI 3 no se materializa y explica por qué.
  *   S3 el modelo agrupa tag → subgrupo en el orden declarado y expande los templates de respuesta.
  *   S4 «Probar»: URL con parámetros codificados, cURL con Bearer y cuerpo, QUERY lleva sus filtros en el cuerpo.
  *   S5 login por proveedor (patyia-portal en claro contra el propio server; orquestador envuelve la clave).
@@ -51,9 +51,9 @@ function documentoDelDemo(): Record<string, unknown> {
 }
 const clon = <T>(v: T): T => structuredClone(v);
 
-test('server-api-docs S1: el documento InSoft del demo valida; una referencia rota es error con su ruta', () => {
+test('server-api-docs S1: el documento iswc del demo valida; una referencia rota es error con su ruta', () => {
   const doc = documentoDelDemo();
-  assert.deepEqual(validarDocumentoApi(doc), { ok: true, formato: 'insoft', errores: [] });
+  assert.deepEqual(validarDocumentoApi(doc), { ok: true, formato: 'iswc', errores: [] });
   const roto = clon(doc);
   const paths = roto.paths as Record<string, Record<string, Record<string, Record<string, unknown>>>>;
   paths['/sistema/cfg']!.get!.responses!.payload = 'no-existe';
@@ -67,14 +67,14 @@ test('server-api-docs S1: el documento InSoft del demo valida; una referencia ro
   assert.ok(v2.errores.some((e) => e.startsWith('paths › /docs › get › summary')), v2.errores.join('\n'));
 });
 
-test('server-api-docs S2: lo que no es InSoft ni OpenAPI 3 no se materializa y explica por qué', () => {
+test('server-api-docs S2: lo que no es iswc ni OpenAPI 3 no se materializa y explica por qué', () => {
   for (const malo of [null, {}, { kind: 'otro', paths: {} }, { kind: 'config' }, [1, 2]]) {
     assert.equal(esMaterializable(malo), false, JSON.stringify(malo));
     const v = validarDocumentoApi(malo);
     assert.equal(v.ok, false);
     assert.ok(v.errores.length > 0);
   }
-  assert.throws(() => normalizarDocumentoApi({ hola: 1 }), /no es InSoft/);
+  assert.throws(() => normalizarDocumentoApi({ hola: 1 }), /no es iswc/);
 });
 
 test('server-api-docs S3: grupos tag → subgrupo en el orden declarado y templates expandidos', () => {
@@ -120,12 +120,12 @@ test('server-api-docs S4: «Probar» arma URL, cURL y los filtros de QUERY van e
 });
 
 test('server-api-docs S5: login por proveedor', () => {
-  const patyia = peticionLogin({ proveedor: 'patyia-portal', loginUrl: '', loginPath: '/auth/portal-login', app: 'isa-patyia' }, 'https://srv/api/', 'ana@contapyme.com', 'secreta');
+  const patyia = peticionLogin({ proveedor: 'patyia-portal', loginUrl: '', loginPath: '/auth/portal-login', app: 'isa-patyia' }, 'https://srv/api/', 'ana@acme.com', 'secreta');
   assert.equal(patyia.endpoint, 'https://srv/api/auth/portal-login', 'contra el propio server');
-  assert.deepEqual(patyia.body, { semail: 'ana@contapyme.com', password: 'secreta' });
-  const orq = peticionLogin({ proveedor: 'orquestador', loginUrl: 'https://orq', loginPath: '/auth/login', app: 'swagger' }, 'https://srv/api', 'ana@contapyme.com', 'secreta', '810000630');
+  assert.deepEqual(patyia.body, { semail: 'ana@acme.com', password: 'secreta' });
+  const orq = peticionLogin({ proveedor: 'orquestador', loginUrl: 'https://orq', loginPath: '/auth/login', app: 'swagger' }, 'https://srv/api', 'ana@acme.com', 'secreta', '800123456');
   assert.equal(orq.endpoint, 'https://orq/auth/login');
-  assert.deepEqual(orq.body, { semail: 'ana', password: envolverClave('secreta'), app: 'swagger', itercero: '810000630' });
+  assert.deepEqual(orq.body, { semail: 'ana', password: envolverClave('secreta'), app: 'swagger', itercero: '800123456' });
   assert.equal(envolverClave('ab', 1), 'bcd123bcyza987', 'César por día UTC con prefijo y sufijo');
   assert.equal(envolverClave('Ab', 2), 'cde123Cdzab987');
   assert.equal(envolverClave(''), '');
@@ -144,7 +144,7 @@ test('server-api-docs S6: exporta OpenAPI 3.0.3 y acepta OpenAPI 3 de entrada', 
   assert.equal(de.operaciones.find((o) => o.ruta === '/sistema/cfg' && o.metodo === 'get')?.permiso, 'CFG:/sistema', 'x-permission ida y vuelta');
 });
 
-test('server-api-docs S7: parse estricto InSoft v2 (el demo lo admite; lo que no cumple trae su error con ruta)', () => {
+test('server-api-docs S7: parse estricto iswc v2 (el demo lo admite; lo que no cumple trae su error con ruta)', () => {
   const doc = documentoDelDemo();
   assert.deepEqual(validarEstricto(doc), { aplica: true, ok: true, errores: [] });
   const extra = clon(doc);
@@ -216,7 +216,7 @@ test('iswc-server-api-docs: hermanos .ts/.scss/.md/.json/.schemas.ts, ficha con 
 test('iswc-server-api-docs: se compone con piezas del kit sobre el layout documental (sin visor propio)', () => {
   const src = readFileSync(`${BASE}.ts`, 'utf8');
   for (const tag of ['iswc-doc-layout', 'iswc-doc-index', 'iswc-code', 'iswc-pager', 'iswc-dialog', 'iswc-copy-button', 'iswc-input', 'iswc-sequence-diagram']) assert.ok(src.includes(`<${tag}`), `monta <${tag}>`);
-  assert.match(src, /data-theme="light"><iswc-sequence-diagram[^>]*diagram-style="insoft"/, 'los diagramas del visor van en estilo InSoft (lienzo claro, como los adjuntos de docs)');
+  assert.match(src, /data-theme="light"><iswc-sequence-diagram[^>]*diagram-style="iswc"/, 'los diagramas del visor van en estilo iswc (lienzo claro, como los adjuntos de docs)');
   assert.match(src, /<table class="tabla endpoints">/, 'la portada es la tabla de endpoints');
   assert.doesNotMatch(src, /iswc-md-render/, 'sin prosa documental: nada de markdown');
   assert.doesNotMatch(src, /isc-swagger|iswc-docs@|docs-viewer/, 'sin rastro del visor externo');

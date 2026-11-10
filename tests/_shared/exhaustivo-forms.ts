@@ -220,8 +220,8 @@ export function extiendeElementBase(src: string): boolean {
 export function usaShadowDom(src: string): boolean {
   if (/attachShadow\s*\(/.test(src)) return true;
   const molde = /extends\s+(?:withStyleAttrs\(\s*)?(?:IswcElement|IswcReactive|IswcFormControl)\b/.test(src);
-  const ligero = /static\s+shadowInit\s*(?::[^=\n]*)?=\s*null/.test(src);
-  return (molde && !ligero) || /static\s+shadowInit\s*(?::[^=\n]*)?=\s*\{/.test(src);
+  const ligero = /static\s+(?:override\s+)?shadowInit\s*(?::[^=\n]*)?=\s*null/.test(src);
+  return (molde && !ligero) || /static\s+(?:override\s+)?shadowInit\s*(?::[^=\n]*)?=\s*\{/.test(src);
 }
 
 /** Indica si se registra: `defineElement(...)` o el `define(Clase)` del molde. */

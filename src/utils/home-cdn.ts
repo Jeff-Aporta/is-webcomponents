@@ -215,7 +215,7 @@ ${moduleBoot}
         <iswc-button color="brand" variant="filled">Primario</iswc-button>
         <iswc-button color="neutral" variant="outlined">Secundario</iswc-button>
         <iswc-button color="danger" variant="plain">Peligro</iswc-button>
-        <iswc-tag color="brand">InSoft</iswc-tag>
+        <iswc-tag color="brand">Acme</iswc-tag>
         <iswc-tag color="success">Success</iswc-tag>
         <iswc-badge color="danger">new</iswc-badge>
         <iswc-avatar initials="JE" label="Jeff"></iswc-avatar>
@@ -225,7 +225,7 @@ ${moduleBoot}
     <section>
       <h2>Forms</h2>
       <div class="row">
-        <iswc-input label="Email" type="email" placeholder="hola@insoft.co" style="min-width:14rem"></iswc-input>
+        <iswc-input label="Email" type="email" placeholder="hola@acme.example" style="min-width:14rem"></iswc-input>
         <iswc-select label="Rol">
           <iswc-option value="dev">Dev</iswc-option>
           <iswc-option value="qa">QA</iswc-option>

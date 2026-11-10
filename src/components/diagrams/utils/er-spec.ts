@@ -719,7 +719,7 @@ export function computeErLayout(specIn: ErSpec): ErLayout {
       const g = (spec.groups ?? []).find((gg) => gg.id === c.id) as (DiagramGroup & { external?: boolean; palette?: string }) | undefined;
       // Otro dominio con pocas tablas → gris neutro (se lee como “de paso”).
       const total = spec.entities.filter((e) => e.group === c.id || (spec.groups ?? []).some((gg) => gg.parent === c.id && gg.id === e.group)).length;
-      // Paleta (referencia InSoft / Visual Paradigm): raíz = primary (azul),
+      // Paleta (referencia iswc / Visual Paradigm): raíz = primary (azul),
       // anidado = secondary (turquesa), otro dominio con < 3 tablas = neutral.
       // Anidado sin paleta propia: alterna con la del padre para contrastar
       // (padre turquesa → hijo azul; si no → turquesa).

@@ -43,7 +43,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-login id=\"loginSingle\" heading=\"Iniciar sesión\" subtitle=\"Accede a tu panel\" provider=\"ContaPyme\" show-password allow-logout-all></iswc-login>",
+          "html": "<iswc-login id=\"loginSingle\" heading=\"Iniciar sesión\" subtitle=\"Accede a tu panel\" provider=\"Acme\" show-password allow-logout-all></iswc-login>",
           "controls": [
             {
               "control": "boolean",
@@ -81,7 +81,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-login id=\"loginMulti\" mode=\"multi\" heading=\"Tus cuentas\" subtitle=\"Elige una cuenta o añade otra\" providers=\"[{&quot;id&quot;:&quot;contapyme&quot;,&quot;name&quot;:&quot;ContaPyme&quot;},{&quot;id&quot;:&quot;agrowin&quot;,&quot;name&quot;:&quot;Agrowin&quot;}]\" selected=\"ana\" show-password allow-logout-all></iswc-login>"
+          "html": "<iswc-login id=\"loginMulti\" mode=\"multi\" heading=\"Tus cuentas\" subtitle=\"Elige una cuenta o añade otra\" providers=\"[{&quot;id&quot;:&quot;acme&quot;,&quot;name&quot;:&quot;Acme&quot;},{&quot;id&quot;:&quot;beta&quot;,&quot;name&quot;:&quot;Beta&quot;}]\" selected=\"ana\" show-password allow-logout-all></iswc-login>"
         }
       ]
     }

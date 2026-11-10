@@ -204,7 +204,7 @@ accesible propio, registrar un comando personalizado que abra `<iswc-dialog>`.
   registerRteCommand('firma', {
     icon: '✒️',
     title: 'Insertar firma',
-    run: (rte) => rte.insertHtml('<p>Atentamente,<br>ContaPyme</p>'),
+    run: (rte) => rte.insertHtml('<p>Atentamente,<br>Acme</p>'),
   });
 
   const editor = document.getElementById('editor');

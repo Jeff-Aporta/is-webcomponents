@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 /**
- * server-api-docs-md.schemas.ts — modelo ESTRICTO del documento InSoft `kind:"config"` versión 2 que un
+ * server-api-docs-md.schemas.ts — modelo ESTRICTO del documento iswc `kind:"config"` versión 2 que un
  * server publica para `<iswc-server-api-docs>` (el ISS lo guarda en `patyia_sys_values`, fila `doc`).
  *
  * Es el contrato del documento Swagger-like: por endpoint, método, ruta, sesión y permiso, parámetros,
@@ -10,7 +10,7 @@ import { z } from 'zod';
  * forma fija y `superRefine` cierra la integridad referencial: cada id nombra algo que existe y nada del
  * catálogo queda huérfano. Solo depende de `zod`: los servers lo vendorizan tal cual y validan al escribir.
  *
- * El visor sigue pintando documentos tolerantes (`server-api-docs.schemas.ts`, InSoft v1 u OpenAPI 3) y
+ * El visor sigue pintando documentos tolerantes (`server-api-docs.schemas.ts`, iswc v1 u OpenAPI 3) y
  * con este schema dice si el documento admite el parse estricto (`validarEstricto` de `server-api-docs-md`).
  */
 
@@ -66,7 +66,7 @@ const ApiDocsInfoSchema = z.object({
   description: textoApiDocs().max(400).refine((s) => !/\n\s*\n|```|<[a-z]/i.test(s), 'descripción de una línea, sin bloques ni etiquetas'),
 }).strict();
 
-/** Cómo inicia sesión «Probar»: el portal del propio server o el orquestador de InSoft. */
+/** Cómo inicia sesión «Probar»: el portal del propio server o el orquestador de iswc. */
 const ApiDocsAuthSchema = z.object({
   enabled: z.boolean(),
   loginKind: z.enum(['portal', 'orquestador']),
@@ -174,7 +174,7 @@ const ApiDocsCatalogSchema = z.object({
   }).strict(),
 }).strict();
 
-/** Documento estricto: InSoft `kind:"config"` versión 2 (Swagger-like) con integridad referencial. */
+/** Documento estricto: iswc `kind:"config"` versión 2 (Swagger-like) con integridad referencial. */
 export const ApiDocsDocumentoSchema = z.object({
   kind: z.literal('config'),
   version: z.literal(2),
