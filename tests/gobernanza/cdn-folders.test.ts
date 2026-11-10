@@ -61,6 +61,9 @@ test('gobernanza/cdn-folders', async () => {
     'reload-pin',
     // Entrada del alias `@jeff-aporta/iswc-base/` lista para el import map / deno.json del consumidor (specs/cdn.md §Alias).
     'importmap.json',
+  // Metadatos para los editores (VS Code y JetBrains): props, slots, parts y eventos.
+  'vscode.html-custom-data.json',
+  'web-types.json',
     // Grafo del build único (F3): tag → cierre de módulos (lo usa el loader en F4) y el `exports` de npm (F6).
     'deps.json',
     'exports.json',

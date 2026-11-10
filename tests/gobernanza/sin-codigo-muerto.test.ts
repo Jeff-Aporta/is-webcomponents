@@ -65,6 +65,9 @@ export const EXCEPCIONES_ARCHIVO: [string, string][] = [
 export const EXCEPCIONES_SIMBOLO: [string, string, string][] = [
   ['src/components/diagrams/utils/diagram-studio.ts', 'bootDiagramStudio', 'lo importan labs/DER por dist/cdn/diagrams/diagram-studio'],
   ['src/components/isp/utils/tree-view-context.ts', 'TTreeAdapterContext', 'lo reabre schemas/tree-view-context.schemas.ts con declare module (campos de __publicField)'],
+  // F8b: las piezas opt-in del nucleo son API publica para los que las usan.
+  ['src/core/ranuras.ts', 'conectarRanuras', 'API publica de las ranuras reactivas (F8b): la llama el componente que declara static ranuras'],
+  ['src/core/ranuras.ts', 'desconectarRanuras', 'API publica de las ranuras reactivas (F8b): la llama el componente al desconectarse'],
 ];
 
 const EXCEPCIONES: Excepciones = { archivo: EXCEPCIONES_ARCHIVO, simbolo: EXCEPCIONES_SIMBOLO };

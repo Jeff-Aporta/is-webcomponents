@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 // cabecera-contexto.test.ts — guardián de la cabecera @contexto.
 //
 // La cabecera dice las DOS rutas que hay que leer antes de tocar una fuente:
@@ -85,6 +86,8 @@ test('gobernanza/cabecera-contexto: K3 la cabecera va detras del shebang, @vendo
 });
 
 test('gobernanza/cabecera-contexto: K4 el build no duplica la cabecera en dist', () => {
+  // Las fuentes que el build publica (dist/cdn/build/*.ts) son copia de las de src/ y conservan la
+  // cabecera: lo que no puede pasar es que quede DUPLICADA (el banner del build sumaria otra).
   const mod = execFileSync('git', ['ls-files', 'dist'], { encoding: 'utf8' })
     .split('\n').map((s) => s.trim()).filter(Boolean)
     .filter((r) => /\.(ts|mjs|js)$/.test(r));
@@ -92,9 +95,9 @@ test('gobernanza/cabecera-contexto: K4 el build no duplica la cabecera en dist',
   for (const r of mod) {
     const texto = readFileSync(join(ROOT, r), 'utf8');
     const n = (texto.match(/^\/\/ @contexto\b/gm) || []).length;
-    if (n > 0) con.push(r + ' (' + n + ')');
+    if (n > 1) con.push(r + ' (' + n + ')');
   }
-  assert.deepEqual(con, [], 'la cabecera no se copia a dist/');
+  assert.deepEqual(con, [], 'la cabecera quedo duplicada en dist/');
 });
 
 test('gobernanza/cabecera-contexto: K5 el codemod es idempotente', () => {

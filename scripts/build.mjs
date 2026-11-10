@@ -22,6 +22,7 @@ import { stampDirectory, mjsReferenciadosEn, hashFile, rewriteHtmlTree, hashesJs
 import { writeJson, minificarCarpetaJson } from '@jeff-aporta/iswc-base/cdn/build/json.ts';
 import { escribirIndice } from './indice-md.mjs';
 import { escribirReadmes } from './readmes-componentes.mjs';
+import { generarWebTypes } from './generar-web-types.mjs';
 import { construirAi } from './build-ai.mjs';
 
 const here = dirname(fileURLToPath(import.meta.url));
@@ -610,5 +611,11 @@ await minificarCarpetaJson(dist);
 {
   const n = escribirReadmes();
   console.log(`  ${'README.md'.padEnd(18)} ${n} de categoria ${n ? 'regenerados' : 'al dia'}`);
+}
+
+// Los metadatos para los editores (VS Code y JetBrains): props, slots, parts y eventos.
+{
+  const r = await generarWebTypes(root);
+  console.log(`  ${'web-types'.padEnd(18)} ${r.componentes} componentes · ${r.bytes} B`);
 }
 console.log(`OK dist/cdn  ${entradasComp.length} módulos de componentes + core + lib + loader (${nChunks} chunks) + gallery-app`);
