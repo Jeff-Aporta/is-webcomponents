@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 /**
  * ag-grid/edicion/seleccion-rangos — Cell selection, fill handle y operaciones
  * sobre rangos. Marca las celdas por clase (no por capa): asi un rango cruza

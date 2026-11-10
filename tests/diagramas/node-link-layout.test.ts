@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/diagramas/README.md
 // Self-check plano (node:assert) para node-link-layout.js. Sin framework.
 import assert from 'node:assert';
 import { assignLayers, layoutNodeLink, edgeAnchor, pickSides } from '../../src/components/diagrams/utils/diagram-layout.js';

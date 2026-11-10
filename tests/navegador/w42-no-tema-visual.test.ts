@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/navegador/README.md
 // tests/navegador/w42-no-tema-visual.test.ts — Guardián W42: las secciones "Tema visual"
 //                                       y "Demo interactivo" NO deben volver a
 //                                       aparecer en el JSON de <iswc-button>.

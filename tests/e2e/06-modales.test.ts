@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/e2e/README.md
 // 06-modales.test.ts: tests UI/UX de <iswc-dialog> y <iswc-drawer>.
 //
 // Implementa el top-10 priorizado por el subagente auditor de layout:

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 /**
  * Guardián WHAT de la documentación de `src/vendor-distributions/` (todo lo que viaja por vendor):
  *   D1 todo archivo de código (.ts/.mjs) abre con `// @doc <URL CDN>` (jsDelivr o GitHub Pages) que apunta a un .md

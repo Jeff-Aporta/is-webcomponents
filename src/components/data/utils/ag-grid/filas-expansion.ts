@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 /**
  * ag-grid/filas/expansion — Quien esta abierto, sin sembrar el motor grupo a grupo.
  *

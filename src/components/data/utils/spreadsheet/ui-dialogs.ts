@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 // find.ts — buscar y reemplazar en una hoja o en todo el libro.
 import type { SpreadsheetDoc } from './document.js';
 import { keyCol, keyRow } from './engine.js';

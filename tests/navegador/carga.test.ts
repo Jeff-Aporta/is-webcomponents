@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/navegador/README.md
 /**
  * carga.test.ts — presupuestos de carga como gate (plan carga modular, F7 tarea 2). Rojo bloquea.
  *

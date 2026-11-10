@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 /**
  * ag-grid/filas/filas.schemas — Tipos de la parcela de modelos de filas y datos.
  *

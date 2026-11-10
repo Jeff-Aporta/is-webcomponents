@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/navegador/README.md
 // tests/navegador/home-coverage.test.ts
 //
 // Cobertura del home doc de la galería: navega al home servido por el dev

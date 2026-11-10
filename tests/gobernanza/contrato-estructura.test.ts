@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 // tests/gobernanza/contrato-estructura.test.ts
 //
 // Contrato de layout/, navigation/ e isp/: cada componente trae .ts, .scss, .md y .json iswc-preview/v1.
@@ -15,7 +16,8 @@ const { test, lista } = coleccionPruebas({ categoria: 'how' });
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const CARPETAS = ['layout', 'navigation', 'isp'];
 /** Otro frente los está migrando: se suman al contrato al cerrar. */
-const AJENOS = /^(dialog|login|login-gate|login-dropdown|session-menu)$/;
+// El README de la categoria no es un componente: es el md del dominio.
+const AJENOS = /^(dialog|login|login-gate|login-dropdown|session-menu|README)$/;
 /** Subcomponentes definidos en el .ts del padre. */
 const SUBCOMPONENTES: Record<string, string> = {
   'dock-item': 'dock',

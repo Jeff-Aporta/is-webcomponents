@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/helpers/README.md
 /**
  * helpers/response-cache.js — caché de lecturas en IndexedDB (SWR).
  *

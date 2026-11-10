@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/actions/README.md
 /**
  * context-menu.schemas.ts — tipos de `<iswc-context-menu>`.
  */

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/overlays/README.md
 /**
  * command-palette.preview.ts — Zod schemas para los tipos extraídos de este módulo.
  *

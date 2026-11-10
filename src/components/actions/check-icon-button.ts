@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/actions/check-icon-button.md
 import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import './button.js';
 import { setStringAttr } from '@jeff-aporta/iswc-base/core/attrs.js';

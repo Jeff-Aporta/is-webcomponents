@@ -1,3 +1,4 @@
+// @contexto INDICE.md · scripts/README.md
 /**
  * Genera src/previews/shared-modules.json con TODOS los módulos de
  * src/core/ (los commons del kit, sin ocultar ninguno). Lo consume el preview

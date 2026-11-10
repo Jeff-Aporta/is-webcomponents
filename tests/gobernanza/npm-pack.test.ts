@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 /**
  * npm-pack.test.ts — el paquete de npm del kit, preparado y NO publicado (plan D9, fase F6).
  *

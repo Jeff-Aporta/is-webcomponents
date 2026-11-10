@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 /**
  * Guardián WHAT de las descripciones de las fichas (`src/components/**\/*.json`, `iswc-preview/v1`):
  *   D1 (determinista) ninguna descripción es la plantilla «Documentación y demos del componente…»,

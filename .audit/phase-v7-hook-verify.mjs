@@ -1,3 +1,4 @@
+// @contexto INDICE.md · .audit/README.md
 /**
  * Verificación manual del Phase V7 hook — emitFichaWarnings.
  *

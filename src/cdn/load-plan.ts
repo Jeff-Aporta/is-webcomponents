@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/cdn/loader.md
 /**
  * Planificador de cargas CDN — sin I/O.
  * Cada job es un `<cat>/<file>.min.mjs`. Categoría / `all` se expanden a tags.

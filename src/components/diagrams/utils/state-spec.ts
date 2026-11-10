@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/diagrams/README.md
 import { layoutNodeLink, edgeAnchor, pickSides } from './diagram-layout.js';
 import { diagramHeaderWidth } from './diagram-model.js';
 import { applyEdgeActorLayout } from './diagram-edge-actors.js';

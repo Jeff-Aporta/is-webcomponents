@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 /**
  * construir-app.test.ts — el conversor TS → `.mjs` de las apps (`src/cdn/build/construir-app.ts`, F10).
  *

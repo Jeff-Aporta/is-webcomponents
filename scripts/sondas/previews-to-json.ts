@@ -1,3 +1,4 @@
+// @contexto INDICE.md · scripts/README.md
 // scripts/migrate-previews-to-json.ts
 //
 // Convierte src/previews/**/*.html → *.json (PreviewDefinition iswc-preview/v1)

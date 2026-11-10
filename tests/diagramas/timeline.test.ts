@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/diagramas/README.md
 import assert from 'node:assert';
 import { resolveTimelineSpec, computeTimelineLayout } from '../../src/components/diagrams/utils/timeline-spec.js';
 import { rectsOverlap } from '../../src/core/diagram-grid.js';

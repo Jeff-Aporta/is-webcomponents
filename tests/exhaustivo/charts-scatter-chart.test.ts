@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/exhaustivo/README.md
 /**
  * scatter-chart.test.ts — verificación exhaustiva de <iswc-scatter-chart>.
  *

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/componentes/README.md
 // Guardian familia file-preview (S-FP1 / S-FP3)
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';

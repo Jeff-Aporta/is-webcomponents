@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/exhaustivo/README.md
 /**
  * funnel-chart.test.ts — verificación exhaustiva de <iswc-funnel-chart>.
  *

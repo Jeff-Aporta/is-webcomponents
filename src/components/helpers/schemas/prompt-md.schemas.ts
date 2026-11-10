@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/helpers/README.md
 /**
  * prompt-md.ts — Zod schemas para los tipos extraídos de este módulo.
  *

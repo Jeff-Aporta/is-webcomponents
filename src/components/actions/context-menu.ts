@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/actions/context-menu.md
 import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import { createPopupDismiss } from '@jeff-aporta/iswc-base/core/position.js';
 import css from 'iswc:css';

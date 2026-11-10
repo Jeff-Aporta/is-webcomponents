@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 /**
  * ag-grid/filas/modelos-externos — Fabricas de ModeloFilas para rowModelType
  * infinite, serverSide y viewport. Cada una se registra con

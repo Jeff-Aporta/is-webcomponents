@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 // S-K1: requisito de specs/componentes.md (WHAT-first, ver specs/testing.md S-T6)
 // tests/manifest-paths.test.ts
 //

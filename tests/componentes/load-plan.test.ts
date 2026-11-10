@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/componentes/README.md
 /**
  * tests/load-plan.test.ts — anti-redundancia del planificador CDN.
  */

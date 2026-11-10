@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/componentes/README.md
 // _css-compilado.ts — lectura del CSS COMPILADO (.tmp-scss/src/**) para los
 // tests de componentes. No es un test (no termina en .test.ts).
 //

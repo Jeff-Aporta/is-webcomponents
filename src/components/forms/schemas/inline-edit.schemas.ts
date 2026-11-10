@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/forms/README.md
 /**
  * inline-edit.schemas.ts — tipos de `<iswc-inline-edit>`.
  */

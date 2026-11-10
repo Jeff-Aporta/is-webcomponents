@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 /**
  * skills-cdn.test.ts — skills de agentes publicadas en dist/cdn/skills/.
  *

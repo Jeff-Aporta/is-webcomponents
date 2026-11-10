@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 // tests/docs-toc-integration.test.ts
 //
 // Verifica contra JSONs reales del repo que `standardTocSections()` filtra

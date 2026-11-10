@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 /**
  * Guardián WHAT: un bundle de galería no lleva componentes dentro. Dentro de dist/scripts, dist/pages o dist/previews
  * el componente sería una SEGUNDA copia de su clase que registra el tag primero, y el bundle del CDN ya no puede

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/exhaustivo/README.md
 /**
  * spreadsheet.test.ts — verificación exhaustiva de <iswc-spreadsheet>.
  *

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/cdn/loader.md
 /**
  * loader.schemas.ts — esquemas Zod para los tipos del loader CDN.
  *

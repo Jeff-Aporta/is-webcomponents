@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/diagrams/flowchart.md
 import { emit, emitCancelable, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import { DiagramElementBase } from './utils/diagram-element-base.js';
 import { resolveFlowchartSpec, computeFlowchartLayout, shapePath, flowPaint, FLOW_LINE_H, FLOW_PILL_ICON, pillStepW, SOCKET, VARS, PUENTE, CRUD_SQL, centroPuente, ejesPuente } from './utils/flowchart-spec.js';

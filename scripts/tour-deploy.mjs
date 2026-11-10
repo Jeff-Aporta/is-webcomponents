@@ -1,3 +1,4 @@
+// @contexto INDICE.md · scripts/README.md
 // tour-deploy.mjs — Tour exhaustivo pre-push (local) y post-push (remoto).
 // Detecta 404s, MIME errors, y console errors via browser run.
 //

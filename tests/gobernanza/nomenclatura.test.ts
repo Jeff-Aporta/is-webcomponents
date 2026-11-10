@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 // nomenclatura.test.ts — guardián del nombre único del kit: `iswc-base` (specs/plan-carga-modular.md §D11, fase F1b;
 // specs/adr.md «ADR nomenclatura iswc-base, 2026-11-04»; regla en specs/constitution.md).
 //   N1 ninguna aparición de `iswc-root` (nombre de un repo que nunca existió en GitHub) en el repo. Excepciones: los

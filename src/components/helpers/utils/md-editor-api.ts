@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/helpers/README.md
 /**
  * Cliente CRUD ligero para `<iswc-md-editor>`.
  *

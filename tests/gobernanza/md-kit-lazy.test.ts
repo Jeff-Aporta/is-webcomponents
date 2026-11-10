@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 /**
  * QUÉ garantiza el render de markdown con componentes del kit y su carga perezosa.
  *

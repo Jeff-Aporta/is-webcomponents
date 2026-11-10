@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/previews/README.md
 /**
  * eventos.schemas.ts — eventos del componente en el estándar `iswc-preview/v1` (HOW-6).
  */

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · scripts/README.md
 // indice-md.mjs — genera INDICE.md: el indice de TODOS los md del repo.
 //
 //   deno task indice

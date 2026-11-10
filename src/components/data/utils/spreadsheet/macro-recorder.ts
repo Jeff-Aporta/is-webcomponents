@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 // recorder.ts — grabadora: convierte acciones del usuario en líneas del lenguaje de macros.
 
 

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 /**
  * ag-grid/celdas/reglas — cellClass, cellClassRules, cellStyle y sus pares de
  * fila, evaluados a strings para el render. Puro.

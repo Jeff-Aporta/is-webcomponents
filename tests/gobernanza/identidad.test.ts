@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 // identidad.test.ts — guardián de la identidad del kit (FASE B.2, decisión del dueño del 7-nov).
 //
 // El kit ya no tiene la marca anterior: la suya es `iswc` (ISWC en prosa). Este guardián lo hace cumplir:

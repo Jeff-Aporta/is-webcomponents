@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/feedback/README.md
 /**
  * stream-bubble.schemas.ts — props de `<iswc-stream-bubble>`.
  */

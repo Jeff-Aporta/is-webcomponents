@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/diagrams/venn-diagram.md
 import { emit, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import { DiagramElementBase } from './utils/diagram-element-base.js';
 import { resolveVennSpec, computeVennLayout } from './utils/venn-spec.js';

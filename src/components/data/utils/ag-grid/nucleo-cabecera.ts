@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 /**
  * nucleo/cabecera — Encabezados: grupos de columnas, ordenar, resize, reorder.
  *

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 /**
  * preview-controls-tabs.test.ts — Guardián: panel SOLO knobs (sin tabs Code).
  *

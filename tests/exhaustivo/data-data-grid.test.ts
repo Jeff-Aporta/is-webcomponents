@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/exhaustivo/README.md
 /**
  * data-grid.test.ts — verificación exhaustiva de <iswc-data-grid>.
  *

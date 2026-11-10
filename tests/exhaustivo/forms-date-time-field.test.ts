@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/exhaustivo/README.md
 /**
  * date-time-field.test.ts — Tests exhaustivos de <iswc-date-time-field>.
  *

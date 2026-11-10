@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/README.md
 // estados.ts: estados de URL (?s=) de la galeria iswc-base.
 // Mismo formato que index.html (JSON en base64url): { component, theme?, palette? }.
 // El home (sin componente) y las paginas sueltas (theming/ecosystem) no son tags.

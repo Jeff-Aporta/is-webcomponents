@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 /**
  * ui/controles — Fabricas de controles del kit para los paneles. Todo control visible es
  * un iswc-*; aqui se concentra como se construye y que evento escucha cada uno.

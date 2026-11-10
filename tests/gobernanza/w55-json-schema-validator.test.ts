@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 /**
  * w55-json-schema-validator.test.ts — W55: Canonical schema validation for every
  * component JSON in `src/components/.../*.json`.

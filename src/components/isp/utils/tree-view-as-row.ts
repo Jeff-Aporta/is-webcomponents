@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/isp/README.md
 /**
  * TARowBase — utilidades de filas, focus, drag overlay, row-adapter registry.
  *

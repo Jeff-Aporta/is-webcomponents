@@ -1,3 +1,4 @@
+// @contexto INDICE.md · scripts/README.md
 // nomenclatura-iswc-base.mjs — un solo nombre para el kit: `iswc-base`.
 //
 //   deno run -A scripts/codemods/nomenclatura-iswc-base.mjs [--dry-run] [--raiz=<ruta>]

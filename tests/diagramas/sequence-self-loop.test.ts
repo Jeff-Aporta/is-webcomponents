@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/diagramas/README.md
 // tests/sequence-self-loop.test.ts
 //
 // Guardian del fix de self-loop en <iswc-sequence-diagram>.

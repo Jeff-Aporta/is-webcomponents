@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/forms/README.md
 /**
  * digital-clock.schemas.ts — tipos de `<iswc-digital-clock>`.
  */

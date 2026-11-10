@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/componentes/README.md
 // tests/no-iconify.test.ts
 //
 // El proyecto NO depende del web component `<iconify-icon>` ni de scripts o

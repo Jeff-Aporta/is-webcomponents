@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/diagramas/README.md
 import assert from 'node:assert';
 import { resolveMindmapSpec, computeMindmapLayout } from '../../src/components/diagrams/utils/mindmap-spec.js';
 import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';

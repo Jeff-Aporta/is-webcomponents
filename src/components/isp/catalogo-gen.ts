@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/isp/catalogo-gen.md
 import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import '@jeff-aporta/iswc-base/components/forms/input.js';
 import '@jeff-aporta/iswc-base/components/data/ag-grid.js';

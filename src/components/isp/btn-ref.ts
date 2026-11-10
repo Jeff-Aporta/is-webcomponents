@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/isp/btn-ref.md
 import { emit, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import { IswcFormControl } from '@jeff-aporta/iswc-base/core/iswc-form-control.js';
 import type { Validez } from '@jeff-aporta/iswc-base/core/schemas/iswc-form-control.schemas.js';

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/layout/doc-layout.md
 /// <reference lib="dom" />
 import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import './split-panel.js';

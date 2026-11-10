@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/isp/README.md
 /**
  * TAMutations — operaciones de insert / move / delete sobre el árbol.
  *

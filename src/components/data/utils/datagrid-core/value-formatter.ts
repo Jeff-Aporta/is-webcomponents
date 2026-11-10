@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 /**
  * datagrid-core/value-formatter — Obtención y formato de valores de celda.
  *

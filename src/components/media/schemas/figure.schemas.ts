@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/media/README.md
 /**
  * figure.schemas.ts — tipos de `<iswc-figure>`.
  */

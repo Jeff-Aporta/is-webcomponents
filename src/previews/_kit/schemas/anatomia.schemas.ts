@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/previews/README.md
 /**
  * anatomia.schemas.ts — parte de la anatomía en el estándar `iswc-preview/v1`.
  */

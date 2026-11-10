@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/media/video-playlist.md
 /**
  * <iswc-video-playlist> — player + lista tipo YouTube.
  *

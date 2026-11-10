@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 /** Tipos de index.ts. */
 import type { ColumnState, RowNode } from '@jeff-aporta/iswc-base/components/data/schemas/datagrid-types.schemas.js';
 import { z } from 'zod';

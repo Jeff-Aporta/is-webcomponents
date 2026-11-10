@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 // validation.ts — validación de datos: comprueba una entrada contra su regla.
 import { parseRange } from './address.js';
 import { parseDateText } from './dates.js';

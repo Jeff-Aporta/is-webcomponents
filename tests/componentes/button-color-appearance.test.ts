@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/componentes/README.md
 // button-color-appearance.test.ts
 //
 // 5-ago-2026: filled/outlined de info y error se veían rotos (fondo/borde

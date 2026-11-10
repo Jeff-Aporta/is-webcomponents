@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 // oklch.test.ts — rotar el tono en OKLCH (src/components/diagrams/utils/diagram-styles.ts), usado para dar a cada
 // símbolo del flowchart iswc su propio color.
 //   K1 0° devuelve el mismo color; ida y vuelta hex → OKLCH → hex es exacta.

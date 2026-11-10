@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 /**
  * Guardianes WHAT de los tabs de imágenes del markdown (`md-lite`): entre dos `---`, solo imágenes
  * (2 o más) → un `iswc-tab-group` con una pestaña por imagen y el `alt` como nombre. En markdown

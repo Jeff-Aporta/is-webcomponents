@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 /**
  * meta-list.schemas.ts — tipos de `<iswc-meta-list>` (lista de metadatos clave → valor por grupos).
  */

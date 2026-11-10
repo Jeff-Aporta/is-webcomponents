@@ -1,3 +1,4 @@
+// @contexto INDICE.md · scripts/README.md
 /**
  * ts-inferir-params.ts — Deduce el tipo de un parámetro por cómo se usa.
  *

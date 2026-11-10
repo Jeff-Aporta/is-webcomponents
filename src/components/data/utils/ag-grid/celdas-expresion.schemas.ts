@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 /** Tipos de expresion.ts. */
 
 export type Ambito = Record<string, unknown>;

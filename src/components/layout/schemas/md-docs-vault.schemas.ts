@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/layout/README.md
 import { z } from 'zod';
 
 /**

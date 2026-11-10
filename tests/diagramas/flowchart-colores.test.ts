@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/diagramas/README.md
 /**
  * Guardián WHAT del código de color por tipo de entidad en el flujo.
  *   C1 cada tipo (cliente, componente, controller, POJO, tabla) tiene un solo color y ningún color se

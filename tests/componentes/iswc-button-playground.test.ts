@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/componentes/README.md
 /**
  * iswc-button-playground.test.ts — el playground debe tener behavior cableado.
  */

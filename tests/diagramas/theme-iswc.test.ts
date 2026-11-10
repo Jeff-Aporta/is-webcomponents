@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/diagramas/README.md
 /** Auto-check: tema iswc = paleta der.svg / render-iswc.mjs */
 import { assertEquals } from 'https://deno.land/std@0.224.0/assert/mod.ts';
 import {

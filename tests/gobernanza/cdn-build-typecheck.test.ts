@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 /**
  * Guardián: la superficie de build vendorizable (`src/cdn/build` y su copia
  * publicada `dist/cdn/build`) pasa `deno check` (strict) con 0 errores.

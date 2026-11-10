@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/diagramas/README.md
 /**
  * Guardián WHAT (A13) sobre los diagramas reales del ISS (clases y DER): las entidades no se solapan
  * entre sí (se empujan con margen) y todo agrupador abraza por completo a sus integrantes. Un

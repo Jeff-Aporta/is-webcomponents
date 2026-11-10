@@ -1,3 +1,4 @@
+// @contexto INDICE.md · scripts/README.md
 /**
  * ts-jsdoc-a-tipos.ts — Convierte las anotaciones JSDoc ya escritas en tipos.
  *

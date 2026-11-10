@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/isp/README.md
 import '@jeff-aporta/iswc-base/components/isp/flex-options.js';
 import type { PreviewMountContext } from '@jeff-aporta/iswc-base/previews/_kit/schemas/preview.schemas.ts';
 import type { FloatCardLike, FlexOptionsLike } from "@jeff-aporta/iswc-base/components/isp/schemas/float-card.preview.schemas.js";

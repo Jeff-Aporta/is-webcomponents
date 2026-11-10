@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/overlays/README.md
 /**
  * window.schemas.ts — tipos de `<iswc-window>`.
  */

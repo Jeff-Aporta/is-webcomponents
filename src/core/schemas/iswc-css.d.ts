@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/core/README.md
 /**
  * iswc-css.d.ts — el import virtual `iswc:css` (plan D6) para tsc.
  *

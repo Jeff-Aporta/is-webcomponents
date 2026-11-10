@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/layout/README.md
 /**
  * drawer.schemas.ts — tipos de `<iswc-drawer>`.
  */

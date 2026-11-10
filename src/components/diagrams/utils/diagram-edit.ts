@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/diagrams/README.md
 /**
  * Helpers de edición para diagramas SVG (modo lectura / edición).
  *

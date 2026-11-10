@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/cdn/loader.md
 /**
  * loader-capas.schemas.ts — contrato entre el núcleo del loader (capa 1, `loader.ts`) y sus módulos de capa 2
  * (`loader-sheets`, `loader-store`, `loader-mirrors`, `loader-pages`, `loader-ref`, `loader-hashes`), plan D7 / F4.

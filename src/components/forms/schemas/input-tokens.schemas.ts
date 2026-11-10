@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/forms/README.md
 /**
  * masks-tokens.ts — Zod schemas para los tipos extraídos de este módulo.
  *

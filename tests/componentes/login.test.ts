@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/componentes/README.md
 // login.test.ts — Guardián del contrato de <iswc-login>.
 //
 // Verifica que el componente cumple el estándar del kit (4 hermanos), que el

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/layout/server-api-docs.md
 import { emit, upgradeProperties, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import { createSpaState } from '@jeff-aporta/iswc-base/components/layout/utils/spa-state.js';
 import { readIswc, removeIswc, writeIswc } from '@jeff-aporta/iswc-base/core/iswc-storage.js';

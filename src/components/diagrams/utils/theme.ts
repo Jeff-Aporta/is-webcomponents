@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/diagrams/README.md
 // theme.ts — temas de diagrama (JSON) + json2css. Sin custom element.
 //
 // Uso en el kit:

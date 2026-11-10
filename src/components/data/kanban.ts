@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/kanban.md
 import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import css from 'iswc:css';
 

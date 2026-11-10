@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/layout/main.md
 /**
  * <iswc-main> — contenedor scrollable tipo <main>.
  *

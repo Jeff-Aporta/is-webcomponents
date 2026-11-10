@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 // icon-registry.test.ts — QUÉ hace <iswc-icon> para resolver un ícono (src/core/icon-loader.ts),
 // como caja negra sobre `resolveIconRaw` con la red simulada. Sin mapa: localStorage → web publicada
 // de la app (`<html data-icons>`, URL absoluta) → API de Iconify.

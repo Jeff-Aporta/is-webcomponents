@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/isp/README.md
 /**
  * json-html.ts — Zod schemas para los tipos extraídos de este módulo.
  *

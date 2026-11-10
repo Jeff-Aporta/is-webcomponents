@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 // test-cooldown.test.ts — garantías del cooldown de tests (src/vendor-distributions/shared/testing/test-cooldown.ts).
 //   C1 verde de 1 min -> 24 h de skip; a los 1441 min vuelve a correr.
 //   C2 un rojo guarda until -1 (auditado, sin cooldown) y se relanza.

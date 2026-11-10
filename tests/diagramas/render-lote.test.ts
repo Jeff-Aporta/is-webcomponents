@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/diagramas/README.md
 /**
  * Guardián WHAT del lote de diagramas con caché por hash (`client/tools/render-lote.ts`):
  *   L1 plan puro con fixtures temporales (dos editables, uno con referencia a `_fuentes.json`):

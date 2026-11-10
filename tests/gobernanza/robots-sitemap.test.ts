@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 /**
  * robots.txt en la raíz de Pages: los bots entran sin Disallow.
  *

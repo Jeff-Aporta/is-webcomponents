@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/charts/README.md
 import { roundedBarRect, svgEl } from '@jeff-aporta/iswc-base/core/svg-chart-engine.js';
 import { getStatusColor } from './chart-palette.js';
 import type { ChartCtx, ChartDataset } from '@jeff-aporta/iswc-base/components/charts/schemas/chart.schemas.js';

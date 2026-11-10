@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 /**
  * ui/barra-lateral — Side Bar: pestanas, panel abierto, posicion, ancho y su api.
  */

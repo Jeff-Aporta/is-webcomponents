@@ -1,3 +1,4 @@
+// @contexto INDICE.md · scripts/README.md
 // codigo-muerto.ts — análisis estático de código muerto del repo (sin type checker, solo el AST de TypeScript):
 // exports sin consumidor y archivos sin importador. Lo usan `scripts/codemods/depurar.mjs --exports` (aplica) y el
 // guardián `tests/gobernanza/sin-codigo-muerto.test.ts` (M2, M3).

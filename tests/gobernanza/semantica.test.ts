@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 // semantica.test.ts — calibración del juez semántico determinista (src/vendor-distributions/shared/testing/semantica.ts),
 // réplica de la calibración 74 del ISS (`tests/unit/74-semantica-what.test.ts`). SIN RED: si el modelo
 // `multilingual-e5-base` no está en el equipo, se SALTA con motivo (nunca verde por omisión).

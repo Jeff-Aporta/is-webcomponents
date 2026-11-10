@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/feedback/prefs-clear.md
 import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import './confirm-modal.js';
 import { clearAllComponentPrefs, peekComponentPrefsRoot } from '@jeff-aporta/iswc-base/core/prefs.js';

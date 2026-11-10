@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/helpers/README.md
 /**
  * Behavior del preview <iswc-observer>.
  * @param {import('@jeff-aporta/iswc-base/previews/_kit/schemas/preview.schemas.ts').PreviewMountContext} ctx

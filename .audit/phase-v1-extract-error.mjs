@@ -1,3 +1,4 @@
+// @contexto INDICE.md · .audit/README.md
 import { readFileSync } from 'node:fs';
 const content = readFileSync('dist/cdn/forms/color-picker.min.js', 'utf8');
 // Line 38 col 6761

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/README.md
 /**
  * Validador de CONTENIDO del JSON.
  *

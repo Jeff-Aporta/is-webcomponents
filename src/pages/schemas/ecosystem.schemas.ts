@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/pages/README.md
 /**
  * ecosystem.ts — Zod schemas para los tipos extraídos de este módulo.
  *

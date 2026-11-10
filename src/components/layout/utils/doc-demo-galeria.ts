@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/layout/README.md
 /**
  * doc-demo-galeria.ts — explorador de demos para cualquier app: el mismo `<iswc-doc-demo>` del kit alimentado por un
  * manifest, con los playground `iswc-preview/v1` de la app.

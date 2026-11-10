@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 // tests/helpers-homogeneity.test.ts
 //
 // Toda utilería pública en helpers/ debe tener tab (manifest.page) + JSON

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/componentes/README.md
 // El dropdown de paleta del shell es <iswc-palette-selector scope="root">.
 // El look vive en palette-selector.css: panel con buscador + Panda, opciones
 // agrupadas con 5 muestras (bg, papel, main, contraste, texto), check solo en

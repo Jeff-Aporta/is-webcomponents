@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/layout/README.md
 /** Contratos de `<iswc-doc-layout>` (W54: los tipos viven en *.schemas.ts). */
 
 /** Visibilidad efectiva de los paneles laterales. */

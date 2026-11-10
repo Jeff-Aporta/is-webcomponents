@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/media/figure.md
 import { emitCancelable, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import { setStringAttr } from '@jeff-aporta/iswc-base/core/attrs.js';
 import type { FigureFit, FigureOpenDetail, FigureVariant } from './schemas/figure.schemas.js';

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · .audit/README.md
 // Trace the failing call by patching normalizeHex
 import { chromium } from 'playwright';
 

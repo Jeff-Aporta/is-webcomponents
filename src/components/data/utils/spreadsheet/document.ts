@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 // document.ts — el libro como documento editable: estilos, combinaciones, reglas, gráficos y
 // macros, con transacciones que dan deshacer/rehacer. Toda mutación pasa por aquí. Sin DOM.
 import { cellName, colName, intersects, normalize, parseCell, parseRange, rangeName } from './address.js';

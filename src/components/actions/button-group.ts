@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/actions/button-group.md
 import { emit, upgradeProperties, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import { setStringAttr, withStyleAttrs } from '@jeff-aporta/iswc-base/core/attrs.js';
 import css from 'iswc:css';

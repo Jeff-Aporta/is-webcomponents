@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/forms/README.md
 /**
  * pin-input.schemas.ts — tipos de `<iswc-pin-input>`.
  */

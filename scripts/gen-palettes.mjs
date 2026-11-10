@@ -1,4 +1,5 @@
 #!/usr/bin/env -S deno run -A --no-check
+// @contexto INDICE.md · scripts/README.md
 /**
  * gen-palettes.mjs — escribe src/styles/palettes.scss desde src/styles/palettes.json.
  *

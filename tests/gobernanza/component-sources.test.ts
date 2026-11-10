@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 // tests/component-sources.test.ts
 import { resolveSourceFiles, manifestToComponentsPath } from '../../src/utils/source-paths.js';
 import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';

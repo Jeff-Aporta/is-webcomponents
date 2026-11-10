@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/navigation/README.md
 /**
  * app-nav.schemas.ts — Forma de `rows` de <iswc-app-nav> (contrato público, ver specs/app-shell/spec.md).
  */

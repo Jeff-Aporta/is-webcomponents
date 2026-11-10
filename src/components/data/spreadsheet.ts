@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/spreadsheet.md
 import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import { parseWorkbookDoc } from './schemas/spreadsheet.schemas.js';
 import type { CellStyle, ChartDef, MacroDef, SpreadsheetChangeDetail, SpreadsheetSelectDetail, WorkbookDoc } from './schemas/spreadsheet.schemas.js';

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/code/README.md
 /**
  * code-format.js — formateo ligero estilo Prettier para `<iswc-code>`.
  *

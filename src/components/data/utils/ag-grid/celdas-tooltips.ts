@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 /**
  * ag-grid/celdas/tooltips — Tooltips de celda y de cabecera.
  *

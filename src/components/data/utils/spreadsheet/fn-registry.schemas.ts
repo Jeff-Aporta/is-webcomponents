@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 // registry.schemas.ts: contratos de tipos de registry.ts.
 import type { EvalValue } from './values.schemas.js';
 import type { Ctx } from './evaluator.schemas.js';

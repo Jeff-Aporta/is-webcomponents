@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/layout/README.md
 /**
  * doc-demo-host.ts — arranque module reutilizable de apps doc-demo.
  *

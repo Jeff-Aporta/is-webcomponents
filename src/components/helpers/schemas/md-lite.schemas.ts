@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/helpers/README.md
 /**
  * Contratos de los hooks de render de `md-lite` / `<iswc-md-render>`.
  *

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/feedback/README.md
 /**
  * theme-toggle.schemas.ts — tipos de `<iswc-theme-toggle>`.
  */

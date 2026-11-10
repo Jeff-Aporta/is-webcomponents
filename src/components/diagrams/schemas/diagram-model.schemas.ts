@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/diagrams/README.md
 /**
  * diagram-vocab.ts — Zod schemas del vocabulario común de diagramas.
  *

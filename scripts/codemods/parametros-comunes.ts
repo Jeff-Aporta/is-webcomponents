@@ -1,3 +1,4 @@
+// @contexto INDICE.md · scripts/README.md
 /**
  * ts-parametros-comunes.ts — Lo que comparten el inferidor y la reversión.
  *

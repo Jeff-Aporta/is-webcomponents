@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/README.md
 // vendor-e2e-config.ts — vendor DL con timestamp de `cdn/e2e-config.ts`.
 // Descarga la config E2E estándar MÁS RECIENTE (por `Last-Modified`) desde la
 // fuente única (muestralo-main/cdn, servida por el worker) y la deja en

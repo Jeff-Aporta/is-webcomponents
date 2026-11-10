@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/files/README.md
 /**
  * docx-view.ts — Zod schemas para los tipos extraídos de este módulo.
  *

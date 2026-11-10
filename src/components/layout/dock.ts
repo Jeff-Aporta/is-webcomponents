@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/layout/dock.md
 import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import { withStyleAttrs } from '@jeff-aporta/iswc-base/core/attrs.js';
 import css from 'iswc:css';

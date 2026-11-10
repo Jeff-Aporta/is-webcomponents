@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 /**
  * Guardián WHAT de los scripts ONLINE del kit (Jeff, 2026-10-13): los CLI que los consumidores corren con Deno
  * desde `@main` con `--reload` son BUNDLES autocontenidos en `dist/cdn/…` (scripts/build-online.mjs) y NUNCA se vendorizan.

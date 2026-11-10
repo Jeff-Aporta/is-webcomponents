@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/actions/README.md
 /**
  * button-group.schemas.ts — tipos de `<iswc-button-group>`.
  */

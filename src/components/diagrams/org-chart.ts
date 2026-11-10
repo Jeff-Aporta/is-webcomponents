@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/diagrams/org-chart.md
 import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import { escapeHtml } from '@jeff-aporta/iswc-base/core/dom.js';
 import { registerDiagramKind } from './utils/diagram-model.js';

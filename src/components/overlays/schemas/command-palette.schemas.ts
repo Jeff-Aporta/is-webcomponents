@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/overlays/README.md
 /**
  * command-palette.schemas.ts — tipos de `<iswc-command-palette>`.
  */

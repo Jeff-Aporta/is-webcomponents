@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/diagramas/README.md
 /**
  * Guardianes WHAT de estilos diferidos y del empaque/ruteo de componentes y
  * clases. Afirman QUÉ debe cumplir el resultado (geometría, contratos de

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/exhaustivo/README.md
 /**
  * heatmap.test.ts — verificación exhaustiva de <iswc-heatmap>.
  *

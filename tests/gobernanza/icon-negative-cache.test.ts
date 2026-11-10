@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 // icon-negative-cache.test.ts — QUÉ hace <iswc-icon> con un ícono que NO se puede resolver
 // (src/core/icon-loader.ts), caja negra sobre `resolveIconRaw` con la red simulada.
 //   N1 un ícono que falla en local y en la API devuelve null y se pide UNA sola vez: el segundo

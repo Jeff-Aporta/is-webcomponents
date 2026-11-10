@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/diagramas/README.md
 import assert from 'node:assert';
 import { resolveUseCaseSpec, computeUseCaseLayout } from '../../src/components/diagrams/utils/use-case-spec.js';
 import { resolveSwimlaneSpec, computeSwimlaneLayout } from '../../src/components/diagrams/utils/swimlane-spec.js';

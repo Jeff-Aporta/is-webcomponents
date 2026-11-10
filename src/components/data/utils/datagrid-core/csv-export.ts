@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 import type { ColumnState, RowNode } from '@jeff-aporta/iswc-base/components/data/schemas/datagrid-types.schemas.js';
 import type { CsvOptions } from "@jeff-aporta/iswc-base/components/data/schemas/datagrid-csv-export.schemas.js";
 /**

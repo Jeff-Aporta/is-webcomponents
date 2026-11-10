@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 /**
  * tests/cdn-loader.test.ts — contrato del iswcLoader.
  */

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/charts/scatter-chart.md
 import './chart.js';
 import { drawScatterMarks } from './utils/marks-cartesian.js';
 

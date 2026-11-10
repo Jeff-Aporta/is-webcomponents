@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/actions/button.md
 import { applyToneRamp, isCssColorValue, BUTTON_SHAPE, DEFAULT_BUTTON_SHAPE, normalizeButtonShape, DEFAULT_INTENT, ensureDefaultColor } from '@jeff-aporta/iswc-base/core/attrs.js';
 import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import css from 'iswc:css';

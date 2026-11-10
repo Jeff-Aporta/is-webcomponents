@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/e2e/README.md
 // 01-iswc-code.test.ts: ataque en profundidad al docs de <iswc-code> tras la
 // migracion a motor nativo (sin CodeMirror). Verifica en el navegador real:
 //   - cero rastro de CodeMirror (nodos, global, recursos, tags)

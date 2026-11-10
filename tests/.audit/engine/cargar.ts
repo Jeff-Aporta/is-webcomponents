@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/README.md
 /**
  * Carga definiciones JSON desde disco (helper compartido).
  *

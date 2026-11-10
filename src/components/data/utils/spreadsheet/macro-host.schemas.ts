@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 // host.schemas.ts: contratos de tipos de host.ts.
 import type { Rect } from './address.schemas.js';
 import type { MacroValue } from './macro-interp.schemas.js';

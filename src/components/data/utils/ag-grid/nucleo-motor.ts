@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 import type { VentanaFilas, ColPos, Diseno, PiezasMotor, InternosMotor, RecCelda, RecFila, GrupoFila } from './nucleo-motor.schemas.js';
 import { applyFlex, colWindow, columnLayout } from '@jeff-aporta/iswc-base/components/data/utils/datagrid-core/viewport.js';
 import { orderedForLayout } from '@jeff-aporta/iswc-base/components/data/utils/datagrid-core/column-state.js';

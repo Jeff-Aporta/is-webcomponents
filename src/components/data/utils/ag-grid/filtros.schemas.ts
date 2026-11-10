@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 /**
  * filtros.schemas — Modelos de filtro de <iswc-ag-grid> con los nombres de AG Grid.
  *

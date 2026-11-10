@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 // tests/cdn-folders.test.ts
 //
 // dist/cdn está folderizado por categoría y sale de UN build con splitting (F3). Verifica que:

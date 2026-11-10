@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 /**
  * ag-grid/filas/controlador — Une el motor puro de filas con el host.
  *

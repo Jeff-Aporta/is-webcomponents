@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/utils/README.md
 /**
  * toons.ts — Zod schemas para los tipos extraídos de este módulo.
  *

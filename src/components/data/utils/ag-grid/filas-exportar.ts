@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 /**
  * ag-grid/filas/exportar-csv — CSV desde una TablaExport. Logica pura.
  *

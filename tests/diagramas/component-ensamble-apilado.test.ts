@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/diagramas/README.md
 // tests/diagramas/component-ensamble-apilado.test.ts
 //
 // Guardián WHAT: en <iswc-component-diagram> ningún riel pasa por encima de una

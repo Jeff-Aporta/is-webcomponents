@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/forms/color-picker.md
 import { emit, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import '@jeff-aporta/iswc-base/components/forms/input.js';
 import { IswcFormControl } from '@jeff-aporta/iswc-base/core/iswc-form-control.js';

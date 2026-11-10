@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/exhaustivo/README.md
 /**
  * md-render.test.ts — Tier A (12 aserciones) para `<iswc-md-render>`.
  *

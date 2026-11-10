@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/isp/flex-options.md
 import '@jeff-aporta/iswc-base/components/actions/button-group.js';
 import '@jeff-aporta/iswc-base/components/actions/check-icon-button.js';
 import '@jeff-aporta/iswc-base/components/actions/dropdown.js';

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · .audit/README.md
 // Debug: check whether iswc-input is defined.
 import { chromium } from 'playwright';
 

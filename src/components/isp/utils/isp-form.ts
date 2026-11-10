@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/isp/README.md
 /**
  * Valores de controles con `name` bajo un host (p.ej. `<iswc-form>`).
  * El cuerpo del formulario se define con html2json / json2html (`_shared/json-html.js`).

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/_shared/README.md
 // pagina.ts — corre un módulo del kit en Edge headless y devuelve lo que publique en `globalThis.__casos`.
 //
 // La entrada (TS de tests/_shared/paginas/) se empaqueta con esbuild igual que el build (alias del kit + `iswc:css`),

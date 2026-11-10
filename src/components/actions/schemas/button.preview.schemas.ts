@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/actions/README.md
 /**
  * button.preview.ts — Zod schemas para los tipos extraídos de este módulo.
  *

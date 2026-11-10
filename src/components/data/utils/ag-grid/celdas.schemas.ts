@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 /**
  * ag-grid/celdas/schemas — Formas de los parametros declarativos de la parcela.
  *

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · scripts/README.md
 /**
  * watch.mjs — rebuild incremental de dist/ sin borrar todo + serve opcional.
  *

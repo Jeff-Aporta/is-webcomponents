@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 /**
  * ag-grid/filas/zip — Escritor ZIP minimo para XLSX. Sin dependencias.
  *

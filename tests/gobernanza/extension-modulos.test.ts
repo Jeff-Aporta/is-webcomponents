@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 /**
  * extension-modulos.test.ts — la extensión declara el tipo (plan D2, fase F3): `.mjs` = módulo ES, `.js` = clásico.
  *

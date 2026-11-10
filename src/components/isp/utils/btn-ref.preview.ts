@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/isp/README.md
 import { createBtnRefController } from './isp-form.js';
 import type { _BtnRefLike, _SelectedDetail } from "@jeff-aporta/iswc-base/components/isp/schemas/btn-ref.preview.schemas.js";
 

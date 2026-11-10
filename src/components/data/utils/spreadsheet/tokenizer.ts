@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 // tokenizer.ts — convierte el texto de una fórmula en tokens con su posición, para que
 // parser, reescritura de referencias y coloreado del editor compartan una sola lectura.
 import { colIndex } from './address.js';

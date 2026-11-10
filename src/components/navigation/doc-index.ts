@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/navigation/doc-index.md
 /// <reference lib="dom" />
 import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import type { ItemDocIndex, ResultadoDocIndex, TextosDocIndex } from './schemas/doc-index.schemas.js';

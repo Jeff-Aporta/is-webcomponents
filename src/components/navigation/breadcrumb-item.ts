@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/navigation/breadcrumb-item.md
 import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import css from 'iswc:css';
 

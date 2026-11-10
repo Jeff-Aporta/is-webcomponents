@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/forms/README.md
 /**
  * date-field-core.ts — Zod schemas para los tipos extraídos de este módulo.
  *

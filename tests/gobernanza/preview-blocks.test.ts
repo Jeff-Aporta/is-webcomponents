@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 // tests/preview-blocks.test.ts
 //
 // Los bloques de un preview guardan TEXTO donde el render pinta texto:

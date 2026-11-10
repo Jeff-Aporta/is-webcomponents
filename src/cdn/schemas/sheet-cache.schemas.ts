@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/cdn/loader.md
 /**
  * sheet-cache.ts — Zod schemas para los tipos extraídos de este módulo.
  *

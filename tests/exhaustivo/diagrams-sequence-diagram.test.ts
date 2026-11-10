@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/exhaustivo/README.md
 /**
  * sequence-diagram.test.ts — verificación exhaustiva de <iswc-sequence-diagram>.
  *

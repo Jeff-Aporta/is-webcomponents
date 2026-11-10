@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/navigation/README.md
 /**
  * pagination.schemas.ts — tipos de `<iswc-pagination>`.
  */

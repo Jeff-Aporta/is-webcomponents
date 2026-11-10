@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/feedback/toast-item.md
 import { emit, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import { IswcReactive } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
 import { ocultarSlotsVacios } from '@jeff-aporta/iswc-base/core/dom.js';

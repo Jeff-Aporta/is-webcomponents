@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/README.md
 /**
  * Validador de los CUATRO ARCHIVOS de cada tag público: `.ts`, `.scss`, `.md` y `.json`.
  *

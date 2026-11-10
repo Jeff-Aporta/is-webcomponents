@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/forms/radio-group.md
 import { emit, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import './radio.js';
 import { IswcFormControl } from '@jeff-aporta/iswc-base/core/iswc-form-control.js';

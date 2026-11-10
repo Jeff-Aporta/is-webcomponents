@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/componentes/README.md
 /**
  * ag-grid-filtros.test.ts — Logica pura de la parcela de filtros de <iswc-ag-grid>: condiciones,
  * set, multi, quick, avanzado, orden, paginacion, agregados, side bar y menus. El motor corre sobre

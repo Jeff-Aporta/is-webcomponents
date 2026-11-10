@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/componentes/README.md
 // tests/gradient-text.test.ts
 //
 // El texto con degradado (`background-clip: text` + texto transparente) es

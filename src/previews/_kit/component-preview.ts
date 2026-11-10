@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/previews/README.md
 /**
  * IswcComponentPreview — controlador tipado de un preview de componente.
  *

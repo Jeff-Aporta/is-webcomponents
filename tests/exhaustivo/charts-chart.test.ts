@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/exhaustivo/README.md
 /**
  * chart.test.ts — verificación exhaustiva de <iswc-chart> (genérico).
  *

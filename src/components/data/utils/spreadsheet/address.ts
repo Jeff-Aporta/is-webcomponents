@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 // address.ts — direcciones A1: letras de columna, celdas y rangos. Índices base 0.
 
 /** Máximos admitidos por el motor (los de Excel). */

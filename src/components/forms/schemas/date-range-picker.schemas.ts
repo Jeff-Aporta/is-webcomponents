@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/forms/README.md
 /**
  * date-range-picker.schemas.ts — tipos de `<iswc-date-range-picker>`.
  */

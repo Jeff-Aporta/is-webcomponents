@@ -1,3 +1,4 @@
+// @contexto INDICE.md · scripts/README.md
 /**
  * ts-revertir-inferencia.ts — Quita las anotaciones que el compilador desmiente.
  *

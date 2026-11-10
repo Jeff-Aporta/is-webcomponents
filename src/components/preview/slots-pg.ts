@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/preview/slots-pg.md
 /**
  * <iswc-slots-pg> — Helper para playgrounds con slots.
  *

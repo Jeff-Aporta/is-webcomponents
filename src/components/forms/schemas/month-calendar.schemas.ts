@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/forms/README.md
 /**
  * month-calendar.schemas.ts — tipos de `<iswc-month-calendar>`.
  */

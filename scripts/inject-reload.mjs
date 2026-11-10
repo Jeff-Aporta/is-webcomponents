@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+// @contexto INDICE.md · scripts/README.md
 /**
  * inject-reload.mjs — inyecta el cliente de auto-reload en cada HTML.
  *

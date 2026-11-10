@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/helpers/README.md
 import { repaint, prettyHtml } from '@jeff-aporta/iswc-base/core/code.js';
 import type { CodeLike, DescribePart } from "@jeff-aporta/iswc-base/components/helpers/schemas/mutation-observer.preview.schemas.js";
 

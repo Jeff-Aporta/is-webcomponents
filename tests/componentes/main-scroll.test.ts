@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/componentes/README.md
 // tests/main-scroll.test.ts
 //
 // Contrato del scroll de <iswc-main>, ejecutado de verdad: el módulo se carga

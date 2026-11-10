@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 /**
  * spreadsheet.schemas.ts — contrato de datos de <iswc-spreadsheet>: documento persistible
  * (`iswc-spreadsheet/v1`), estilos, reglas y detalles de eventos.

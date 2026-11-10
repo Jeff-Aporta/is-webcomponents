@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/overlays/README.md
 /**
  * Behavior de iswc-command-palette: abre la paleta desde el botón del demo y
  * registra el comando elegido.

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 // tests/docs-toc.test.ts
 //
 // Guardián de Phase O + W1: el TOC de la derecha en los docs de componentes

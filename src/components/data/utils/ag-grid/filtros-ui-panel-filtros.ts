@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 /**
  * ui/panel-filtros — Filters Tool Panel: un acordeon con el filtro de cada columna.
  */

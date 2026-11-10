@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/forms/mention.md
 import { emit, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import { IswcFormControl } from '@jeff-aporta/iswc-base/core/iswc-form-control.js';
 import './input.js';

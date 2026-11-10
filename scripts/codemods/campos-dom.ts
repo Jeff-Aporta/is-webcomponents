@@ -1,3 +1,4 @@
+// @contexto INDICE.md · scripts/README.md
 /**
  * ts-campos-dom.ts — Los campos privados que apuntan al shadow propio no son nulos.
  *

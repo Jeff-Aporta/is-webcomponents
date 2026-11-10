@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/navegador/README.md
 // tests/navegador/w29-shape-icons.test.ts — Guardián W29: cada opción de `shape` (incluido `pill`)
 //                                debe tener `icon` declarado en el JSON de la demo Y en el
 //                                mapa canónico que enriquece selects en runtime.

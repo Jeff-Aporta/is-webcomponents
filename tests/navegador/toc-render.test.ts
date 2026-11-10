@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/navegador/README.md
 // tests/navegador/toc-render.test.ts
 //
 // Guardián E2E de Phase W1: verifica en navegador real (Playwright) que el

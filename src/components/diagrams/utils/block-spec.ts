@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/diagrams/README.md
 import { makeCostGrid, blockRect as blockGridRect, applyRectCost, snapDiagramGrid, snapPointAwayFromSide} from '@jeff-aporta/iswc-base/core/diagram-grid.js';
 import { diagramHeaderWidth } from './diagram-model.js';
 import { applyEdgeActorLayout } from './diagram-edge-actors.js';

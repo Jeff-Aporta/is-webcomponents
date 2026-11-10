@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 /**
  * ag-grid/edicion/portapapeles-ctl — Copiar, cortar y pegar. Se engancha a los
  * eventos nativos copy/cut/paste, que no piden permiso; la API usa navigator.clipboard.

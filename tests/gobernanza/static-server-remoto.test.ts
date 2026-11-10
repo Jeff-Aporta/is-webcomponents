@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 // static-server-remoto.test.ts — QUÉ hace el servidor estático del render de diagramas cuando corre SIN checkout del
 // kit (`client/tools/static-server.ts` con respaldo remoto; spec: specs/herramientas/spec.md S-H2). Caja negra: se
 // levanta contra una carpeta temporal y un "raw" falso en 127.0.0.1, y se afirma solo sobre las respuestas HTTP y

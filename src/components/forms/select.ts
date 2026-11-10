@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/forms/select.md
 import { placementHaciaCentro } from '@jeff-aporta/iswc-base/core/position.js';
 import { emit, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import './option.js';

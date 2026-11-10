@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/exhaustivo/README.md
 /**
  * types-strong-wt0052.test.ts — verificación estructural de los 5 archivos
  * tipados por WT-0052 (Tanda 5).

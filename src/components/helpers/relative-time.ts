@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/helpers/relative-time.md
 import { setStringAttr } from '@jeff-aporta/iswc-base/core/attrs.js';
 import { formato, resolverLocale } from '@jeff-aporta/iswc-base/core/localize.js';
 import { parseLooseDate } from './format-date.js';

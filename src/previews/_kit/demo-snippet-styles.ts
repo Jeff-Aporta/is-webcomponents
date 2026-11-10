@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/previews/README.md
 /**
  * CSS embebible en snippets «Ver código»: clases de layout de la galería
  * (presentation.css) y estilos por preview (campo `styles` del JSON).

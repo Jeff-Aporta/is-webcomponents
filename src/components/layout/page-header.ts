@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/layout/page-header.md
 import { atributosDe, PropsElement } from '@jeff-aporta/iswc-base/core/props-element.js';
 import { PageHeaderPropsSchema } from './schemas/page-header.schemas.js';
 import type { PageHeaderProps } from './schemas/page-header.schemas.js';

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 /**
  * resumen — Calculos puros de los paneles: paginacion, agregados, side bar, columnas y menus.
  */

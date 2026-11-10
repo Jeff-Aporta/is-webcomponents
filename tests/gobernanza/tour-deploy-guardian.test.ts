@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 // tour-deploy-guardian.test.ts — Guardian del tour pre/post-push.
 // Verifica que las listas críticas del tour-deploy.mjs NO queden
 // desincronizadas con bundle-scripts.mjs (causa más común de 404s en

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/componentes/README.md
 // tests/sibling-css-href.test.ts
 //
 // adoptCss / siblingCssHref deben mapear el hermano CSS conservando `.min`:

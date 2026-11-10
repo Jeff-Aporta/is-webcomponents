@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 import assert from 'node:assert/strict';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';

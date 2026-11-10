@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/core/README.md
 /**
  * plantilla.schemas.ts — tipos de `core/plantilla.ts` (plantilla `html` y sus partes).
  */

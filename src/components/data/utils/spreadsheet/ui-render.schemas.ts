@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 // render.schemas.ts: contratos de tipos de render.ts.
 
 /** Ventana a pintar. Los gaps son espaciadores en em que dan el tamaño total. */

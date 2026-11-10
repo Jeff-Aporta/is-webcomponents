@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/forms/signature.md
 import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import css from 'iswc:css';
 import type { SignatureEventos } from './schemas/signature.schemas.js';

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/cdn/loader.md
 /**
  * iswcLoader — núcleo (capa 1) del loader CDN del kit (plan D7, fase F4).
  *

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/forms/year-calendar.md
 import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import css from 'iswc:css';
 import type { YearCalendarEventos } from './schemas/year-calendar.schemas.js';

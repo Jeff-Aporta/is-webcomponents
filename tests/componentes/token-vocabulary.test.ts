@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/componentes/README.md
 // token-vocabulary.test.ts — el kit habla UN solo vocabulario de color.
 //
 // Nace de un fallo que costo caro y que no dio ni un error: un refactor renombro la

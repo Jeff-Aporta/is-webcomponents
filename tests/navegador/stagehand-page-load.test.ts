@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/navegador/README.md
 // tests/navegador/stagehand-page-load.test.ts — Regresión Stagehand de la página home.
 //
 // Por qué este test existe:

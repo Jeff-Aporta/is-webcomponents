@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/core/README.md
 /**
  * tk-icon-inline.ts — Zod schemas para los tipos extraídos de este módulo.
  *

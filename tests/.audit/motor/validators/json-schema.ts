@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/README.md
 /**
  * Validador de esquema iswc-preview/v1 (definición de demos).
  *

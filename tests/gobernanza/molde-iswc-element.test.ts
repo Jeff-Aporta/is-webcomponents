@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 // molde-iswc-element.test.ts — guardián del molde único de componentes (specs/plan-carga-modular.md §D4/D6, fase F2).
 //   M1 toda clase de `src/components` que sea un elemento hereda del molde `IswcElement`: su base directa es
 //      `IswcElement`, `withStyleAttrs(IswcElement)`, una clase del mismo archivo que cumple, o una de la LISTA_CORTA

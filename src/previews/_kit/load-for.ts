@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/previews/README.md
 /**
  * src/previews/_kit/load-for.ts — Helper de carga perezosa para previews.
  *

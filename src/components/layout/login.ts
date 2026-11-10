@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/layout/login.md
 import { upgradeProperties, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 
 import '@jeff-aporta/iswc-base/components/forms/input.js';

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/componentes/README.md
 /**
  * ag-grid-celdas.test.ts — Lo puro de la parcela de celdas de <iswc-ag-grid>:
  * expresiones, valores, formatos, sparkline, renderers, reglas, flash, tooltips

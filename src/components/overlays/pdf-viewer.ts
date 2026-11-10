@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/overlays/pdf-viewer.md
 import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import { setOptionalAttr, setStringAttr } from '@jeff-aporta/iswc-base/core/attrs.js';
 import {

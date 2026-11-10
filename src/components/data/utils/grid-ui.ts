@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 /**
  * Popovers del data grid: menú de columna, panel de columnas, panel de filtros,
  * menús de densidad y exportación.

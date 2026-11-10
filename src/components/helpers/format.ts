@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/helpers/format.md
 import { formato, resolverLocale } from '@jeff-aporta/iswc-base/core/localize.js';
 import { formatBytes, toBytes } from './format-bytes.js';
 import { parseLooseDate } from './format-date.js';

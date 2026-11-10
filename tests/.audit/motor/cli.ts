@@ -1,4 +1,5 @@
 #!/usr/bin/env -S deno run -A --no-check
+// @contexto INDICE.md · tests/README.md
 /**
  * CLI del motor auditor (iswc-audit).
  *

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · scripts/README.md
 // override.mjs — añade el modificador `override` a todo miembro que sobreescribe uno de la base.
 //
 //   deno run -A scripts/codemods/override.mjs [--dry] [--iterar=N]

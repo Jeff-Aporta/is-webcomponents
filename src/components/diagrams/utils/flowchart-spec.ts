@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/diagrams/README.md
 import { layoutNodeLink, edgeAnchor, pickSides, assignLayers, orderLayers, grafoDirigido } from './diagram-layout.js';
 import { readNodeEmbed, embedIsNatural, fitContain, nestedMaxSize, EMBED_FALLBACK_SIZE } from './diagram-view.js';
 import { pathPoints, pathSinAutoCruces, assignEdgeHues } from './diagram-edges.js';

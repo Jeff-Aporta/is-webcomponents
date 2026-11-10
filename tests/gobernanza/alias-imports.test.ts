@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 // alias-imports.test.ts — guardián del alias `@jeff-aporta/iswc-base/<ruta>` (specs/plan-carga-modular.md §D3, fase F1;
 // regla en specs/typescript/spec.md, uso en specs/cdn.md §Alias).
 //   L1 en `src/**` (fuera de `vendor-distributions/`) ningún import relativo SUBE de carpeta (`'../`) hacia un archivo de

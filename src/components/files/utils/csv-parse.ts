@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/files/README.md
 /** CSV minimo con comillas. */
 export function parseCsv(text: string): string[][] {
   const rows: string[][] = [];

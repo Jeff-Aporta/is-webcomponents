@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/helpers/README.md
 /**
  * Behavior de iswc-format-date: locales dinámicos + reloj en vivo (1 s).
  */

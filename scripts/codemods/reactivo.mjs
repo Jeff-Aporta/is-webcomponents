@@ -1,3 +1,4 @@
+// @contexto INDICE.md · scripts/README.md
 // reactivo.mjs — F8 (specs/paridad-webawesome.md HOW-9): convierte el reflejo a mano en propiedades `@prop` sobre
 // `IswcReactive`. Solo lo mecánico y verificable; lo demás queda como estaba y se informa.
 //

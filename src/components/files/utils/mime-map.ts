@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/files/README.md
 /** Despacho MIME/ext -> tags view/edit (S-FP3). */
 
 import type { FileKind, FileDispatch } from "@jeff-aporta/iswc-base/components/files/schemas/mime-map.schemas.js";

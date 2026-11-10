@@ -1,3 +1,4 @@
+// @contexto INDICE.md · .audit/README.md
 // Final check: visual verification that the components render.
 import { chromium } from 'playwright';
 

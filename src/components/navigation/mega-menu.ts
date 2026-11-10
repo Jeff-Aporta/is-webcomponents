@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/navigation/mega-menu.md
 import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import css from 'iswc:css';
 import { createPopupDismiss } from '@jeff-aporta/iswc-base/core/position.js';

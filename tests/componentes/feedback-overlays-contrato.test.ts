@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/componentes/README.md
 // tests/componentes/feedback-overlays-contrato.test.ts
 //
 // WHAT: defectos de feedback/ y overlays/ que ya pasaron y no deben volver. Cada uno se veía en pantalla sin que

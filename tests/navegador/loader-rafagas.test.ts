@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/navegador/README.md
 /**
  * loader-rafagas.test.ts — precarga del cierre y arranque sin IndexedDB (plan carga modular D7, fase F4).
  *

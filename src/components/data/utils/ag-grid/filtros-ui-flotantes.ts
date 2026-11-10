@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 /**
  * ui/flotantes — Fila de filtros flotantes bajo el encabezado y popup del filtro de columna.
  */

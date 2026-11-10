@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/helpers/README.md
 import { mdToHtml } from './md-lite.js';
 import type { OpcionesMdLite } from '@jeff-aporta/iswc-base/components/helpers/schemas/md-lite.schemas.js';
 import type { BodySegment, VarPlaceholder } from "@jeff-aporta/iswc-base/components/helpers/schemas/prompt-md.schemas.js";

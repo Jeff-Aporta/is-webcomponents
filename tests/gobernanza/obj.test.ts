@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 /**
  * Guardianes WHAT de `Obj` (virtual, shared/lib/obj.ts: operaciones parciales sobre objetos JSON en memoria) y
  * `RefObj` (físico, shared/lib/ref-obj.ts: referencias `{ path, query, actions }` a otros JSON).

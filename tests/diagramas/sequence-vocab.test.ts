@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/diagramas/README.md
 /**
  * Guardianes WHAT del vocabulario común, la capa «curva» y las regiones del
  * diagrama de secuencia. Afirman el resultado, no la implementación.

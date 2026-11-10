@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/diagramas/README.md
 // @ts-nocheck
 import assert from 'node:assert';
 import { resolveClassSpec, computeClassLayout } from '../../src/components/diagrams/utils/class-spec.js';

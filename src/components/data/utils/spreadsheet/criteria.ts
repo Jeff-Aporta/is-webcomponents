@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 // criteria.ts — criterios de COUNTIF/SUMIF/filtros de base de datos: operadores y comodines.
 import { parseDateText } from './dates.js';
 import { CellError, compare, parseNumberText } from './values.js';

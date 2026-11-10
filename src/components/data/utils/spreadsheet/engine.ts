@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 // engine.ts — libro en memoria y recálculo: grafo de dependencias, orden topológico (Tarjan),
 // detección de ciclos, desbordes de matrices dinámicas y volátiles. Sin DOM.
 import { parseRange } from './address.js';

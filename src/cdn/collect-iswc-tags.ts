@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/cdn/loader.md
 /** Tags `is-*` en markup o JSON de preview. Sin DOM. */
 
 export const GALLERY_CHROME_TAGS = [

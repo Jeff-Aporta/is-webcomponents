@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 /**
  * Guardián WHAT de `tools/vendor.ts` (vendor strategy por pin de fecha ISO).
  *   V1 trae el archivo a `hacia` con cabecera `// @vendor <ISO> <repo>@main <desde>` (portable: ni @local ni sha) y `@doc` por CDN.

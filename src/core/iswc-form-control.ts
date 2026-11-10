@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/core/README.md
 /**
  * iswc-form-control.ts — Base de los controles de formulario del kit (F8): validez y estados.
  * Mismo contrato que el control form-associated de referencia (ver la spec de paridad, F8), sin Lit; absorbe

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/_shared/README.md
 /**
  * rafagas.ts — agrupa las peticiones de una carga en ráfagas (plan carga modular, F4/F7).
  *

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 // eventos.test.ts — guardián de F8 hito 5 (specs/paridad-webawesome.md HOW-6): eventos tipados.
 //   E1 todo evento `iswc-*` que el código emite (emit/emitCancelable, new CustomEvent, helpers `this.#x('iswc-…')`,
 //      `cambioDelUsuario`) está en el `declare static events` de su clase, y todo evento escrito en el tipo propio

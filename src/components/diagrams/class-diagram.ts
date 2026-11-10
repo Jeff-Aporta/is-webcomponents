@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/diagrams/class-diagram.md
 import { emit, emitCancelable, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import { edgeStyleFor, registerDiagramKind } from './utils/diagram-model.js';
 import { styledEdgePath, edgeStrokeHex, edgeChipFill, edgeChipText } from './utils/diagram-edges.js';

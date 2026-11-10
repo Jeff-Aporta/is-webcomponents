@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/core/README.md
 /**
  * localize.schemas.ts — tipos de `core/localize.ts`.
  */

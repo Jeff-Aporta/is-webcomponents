@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/isp/README.md
 
 /** Constructor genérico que `TreeNode(Base)` acepta. */
 

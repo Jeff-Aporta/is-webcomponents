@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/diagramas/README.md
 /**
  * Guardián WHAT de los costos aditivos del router de rieles (A9), común a componentes, clases, DER y
  * flujo. Los cargos «+A» (giro, entrar a un agrupador, salir de él) SUMAN su parte al costo del

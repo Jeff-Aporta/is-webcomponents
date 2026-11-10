@@ -1,3 +1,4 @@
+// @contexto INDICE.md · scripts/README.md
 // scripts/shoot-one.mjs
 // Captura un solo demo.
 import { chromium } from 'playwright';

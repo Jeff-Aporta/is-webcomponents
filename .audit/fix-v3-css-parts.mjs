@@ -1,3 +1,4 @@
+// @contexto INDICE.md · .audit/README.md
 // Phase V3 helper: fix 43 CSS Parts issues across .md files.
 // Reads .ts to detect declared parts and adjusts the corresponding .md
 // file under the same directory: adds new rows to existing "### CSS parts"

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/diagramas/README.md
 // tests/sequence-legend-grid.test.ts
 //
 // Guardian del fix de leyenda de <iswc-sequence-diagram>.

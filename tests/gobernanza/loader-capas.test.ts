@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 /**
  * loader-capas.test.ts — el loader en dos capas (plan carga modular D7, fase F4).
  *

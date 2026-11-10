@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 /** Tipos de contrato.ts. */
 
 import type { ColumnFilter, ColumnState, DisplayRow, GridApi, GridState, RowData, RowNode } from '@jeff-aporta/iswc-base/components/data/schemas/datagrid-types.schemas.js';

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/core/README.md
 // tk-inline-md.ts — markdown en línea (negrita, `código`, enlaces y {{íconos}}) para HTML y para <text> de SVG.
 // Aparte de tk-text a propósito (F9a): emite <iswc-icon>, así que registra el tag; quien solo usa los tokens o el
 // texto enriquecido no debe cargar el componente.

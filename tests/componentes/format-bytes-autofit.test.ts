@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/componentes/README.md
 /**
  * Autofit de iswc-format-bytes.
  */

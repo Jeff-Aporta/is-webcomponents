@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/styles/README.md
 /**
  * color-tokens.ts — Helper comun para refactor de tokens (Phase W24).
  *

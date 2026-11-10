@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 // interp.schemas.ts: contratos de tipos de interp.ts.
 import type { MacroDict, MacroFn } from './macro-interp.js';
 

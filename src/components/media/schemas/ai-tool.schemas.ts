@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/media/README.md
 /**
  * ai-tool.schemas.ts — props de `<iswc-ai-tool>`.
  */

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/diagrams/README.md
 /**
  * component-router.ts — Router ortogonal de aristas del diagrama de componentes.
  *

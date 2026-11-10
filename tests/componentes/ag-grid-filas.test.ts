@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/componentes/README.md
 /**
  * ag-grid-filas.test.ts — Modelos de filas y datos de <iswc-ag-grid>.
  *

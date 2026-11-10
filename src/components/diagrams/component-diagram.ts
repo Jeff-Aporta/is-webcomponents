@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/diagrams/component-diagram.md
 import { emit, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import { DiagramElementBase } from './utils/diagram-element-base.js';
 import { animarRielEn, flujoActivo, pulsoRadar } from './utils/diagram-layout.js';

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 /**
  * ui/pie-y-capas — Status Bar en zona('estado') y overlays sobre el cuerpo.
  */

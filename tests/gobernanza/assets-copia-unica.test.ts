@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 /**
  * assets-copia-unica.test.ts — ninguna colección completa de íconos versionada; solo `assets/iconify/`
  * con los usados.

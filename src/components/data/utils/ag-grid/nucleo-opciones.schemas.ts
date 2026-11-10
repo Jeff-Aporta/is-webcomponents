@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 /** Tipos de opciones.ts. */
 import type { ColDefAg } from './contrato.schemas.js';
 

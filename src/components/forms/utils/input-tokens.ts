@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/forms/README.md
 /**
  * Mask tokens — tabla canónica del significado de cada carácter.
  *  0  dígito requerido               (slot numérico, debe rellenarse)

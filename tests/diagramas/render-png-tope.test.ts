@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/diagramas/README.md
 /**
  * Guardián WHAT del tope de píxeles del PNG exportado (A18, `PNG_MAX_PX` en render-diagram.ts):
  * Chromium no pinta capturas de más de ~40 Mpx (los tiles salen vacíos; el PNG de clases del ISS

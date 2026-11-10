@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/componentes/README.md
 /**
  * demo-equiv.test.ts — el bloque «HTML puro equivalente» ya no se pinta.
  * Los campos equiv* pueden seguir en el JSON (datos), pero render no los muestra.

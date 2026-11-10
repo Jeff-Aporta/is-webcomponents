@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/helpers/README.md
 /**
  * md-editor.ts — Zod schemas para los tipos extraídos de este módulo.
  *

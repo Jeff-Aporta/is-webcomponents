@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/diagramas/README.md
 /**
  * Guardianes WHAT de puertos y sockets del flujo iswc, sobre las rutas reales del lab
  * (`labs/iss-ayudascpia-flujos/payloads/ruta-*.json`):

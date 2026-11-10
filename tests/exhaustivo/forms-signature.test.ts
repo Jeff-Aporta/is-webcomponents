@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/exhaustivo/README.md
 /**
  * signature.test.ts — Tests exhaustivos de <iswc-signature>.
  *

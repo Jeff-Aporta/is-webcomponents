@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 /** Tipos de flash.ts. */
 
 export type Reloj = () => number;

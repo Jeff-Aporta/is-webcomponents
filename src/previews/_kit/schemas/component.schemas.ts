@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/previews/README.md
 /**
  * src/previews/_kit/schemas/component.schemas.ts — Canonical Zod schema for component JSONs.
  *

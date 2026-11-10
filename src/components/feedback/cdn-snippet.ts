@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/feedback/cdn-snippet.md
 import { withStyleAttrs } from '@jeff-aporta/iswc-base/core/attrs.js';
 
 import { copyText } from '@jeff-aporta/iswc-base/core/dom.js';

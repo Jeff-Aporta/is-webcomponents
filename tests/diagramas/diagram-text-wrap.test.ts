@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/diagramas/README.md
 // tests/diagram-text-wrap.test.ts
 //
 // Contrato del helper compartido `diagram-text-wrap.ts` (Task 1 del spec

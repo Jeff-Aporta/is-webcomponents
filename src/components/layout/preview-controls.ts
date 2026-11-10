@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/layout/preview-controls.md
 /**
  * <iswc-preview-controls> — panel de knobs del playground (galería).
  * Card + grid responsive (auto-fit ≥18.75em), label encima, widgets iswc-*.

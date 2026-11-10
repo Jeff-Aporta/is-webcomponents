@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/charts/funnel-chart.md
 import './chart.js';
 import { drawFunnelMarks } from './utils/marks-funnel.js';
 

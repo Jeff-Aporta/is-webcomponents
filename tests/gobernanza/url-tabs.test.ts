@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 /**
  * Guardianes WHAT del estado de pestañas en la URL (`?s=` → `{ tabs: { [id]: índice } }`).
  *   N1 guardar una pestaña la deja en `?s=` sin perder lo demás del estado; leerla la devuelve.

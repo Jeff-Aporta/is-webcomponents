@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/charts/radar-chart.md
 import './chart.js';
 import { drawRadarMarks } from './utils/marks-radial.js';
 

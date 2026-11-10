@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 // WHAT-first — ratchet de trazabilidad spec → guardián.
 //
 // Aplica specs/testing.md S-T6 (S-T6.1.3 "nombra el requisito").

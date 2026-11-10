@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/diagrams/README.md
 /**
  * journey-map.ts — Zod schemas propios del componente.
  *

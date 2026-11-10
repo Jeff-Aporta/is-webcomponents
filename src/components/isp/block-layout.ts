@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/isp/block-layout.md
 import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import {
   applyJsonBody,

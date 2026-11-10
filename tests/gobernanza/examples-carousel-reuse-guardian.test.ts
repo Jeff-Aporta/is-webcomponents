@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 /**
  * examples-carousel-reuse-guardian.test.ts — Guardian del contrato W19.
  *

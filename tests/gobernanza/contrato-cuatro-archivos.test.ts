@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 // tests/gobernanza/contrato-cuatro-archivos.test.ts
 //
 // Todo tag público del manifest trae .ts, .scss, .md y .json bien definidos, y ningún tag registrado queda fuera del

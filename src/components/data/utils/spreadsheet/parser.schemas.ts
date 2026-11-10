@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 // parser.schemas.ts: contratos de tipos de parser.ts.
 import type { CellError } from './values.js';
 import type { RefEnd } from './tokenizer.schemas.js';

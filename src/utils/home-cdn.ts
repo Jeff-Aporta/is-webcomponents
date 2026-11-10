@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/utils/README.md
 // home-cdn.ts — Inicializa el módulo de consumo por CDN en el home.
 // Migrado de `scripts/home-cdn.js` (2026-09-07): S-DEP-FUERA exige que
 // `src/` no dependa de `scripts/`.

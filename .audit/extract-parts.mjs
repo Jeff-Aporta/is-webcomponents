@@ -1,3 +1,4 @@
+// @contexto INDICE.md · .audit/README.md
 // Audit script: extracts CSS Parts declared in .ts components and documented in .md files.
 // Robust against CRLF line endings, mixed-case headings, and varied table formats.
 //

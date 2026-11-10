@@ -1,3 +1,4 @@
+// @contexto INDICE.md · scripts/README.md
 // alias-imports.mjs — imports del kit por alias: `'../../core/x.js'` → `'@jeff-aporta/iswc-base/core/x.js'`.
 //
 //   deno run -A scripts/codemods/alias-imports.mjs [--dry-run]

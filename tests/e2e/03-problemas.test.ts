@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/e2e/README.md
 // 03-problemas.test.ts: barrido detector (el "ataque") por las vistas del
 // catalogo. Abre cada tag con ?s= y exige: sin errores de consola
 // (console.error), sin patrones de peligro en el arbol de accesibilidad y sin

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 /// <reference lib="dom" />
 /**
  * El boot de la plantilla (`skills/iswc-foundation/templates/src/js/boot.ts`) aplica antes del primer

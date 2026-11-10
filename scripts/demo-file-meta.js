@@ -1,3 +1,4 @@
+// @contexto INDICE.md · scripts/README.md
 /**
  * demo-file-meta.js — la barra JS/CSS/MD + pesos CDN se retiró de los demos.
  * Este módulo solo limpia restos (`.file-meta*`, `.vs-page-bar`) al montar un preview.

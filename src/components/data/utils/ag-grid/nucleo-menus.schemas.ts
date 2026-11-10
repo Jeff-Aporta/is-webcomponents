@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 /** Tipos de menus.ts. */
 import type { crearMenus } from './nucleo-menus.js';
 

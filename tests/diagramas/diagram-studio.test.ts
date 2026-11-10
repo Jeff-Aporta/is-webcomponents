@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/diagramas/README.md
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import {

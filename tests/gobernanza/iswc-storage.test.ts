@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 // iswc-storage.test.ts — QUÉ guarda el kit en el navegador (src/core/iswc-storage.ts).
 //   S1 guardián: ningún módulo del kit (src/**/*.ts, salvo iswc-storage.ts y los tests) llama a `setItem`
 //      directo: toda escritura pasa por `writeIswc`, que pone el prefijo `iswc:`.

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/styles/README.md
 import palettes from './palettes.json' with { type: 'json' };
 import { brandRampRules, brandFamilyBlock, ISWC_COLOR_VARIANTS } from './color-tokens.ts';
 import { type IswcColorVariant } from './schemas/color-tokens.schemas.ts';

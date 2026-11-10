@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/charts/sparkline.md
 import { withStyleAttrs } from '@jeff-aporta/iswc-base/core/attrs.js';
 
 import { pathLine, pathArea, roundedBarRect } from '@jeff-aporta/iswc-base/core/svg-chart-engine.js';

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · scripts/README.md
 /**
  * Audita y homogeneiza controles de demos (iswc-preview/v1) contra el API del CE.
  *

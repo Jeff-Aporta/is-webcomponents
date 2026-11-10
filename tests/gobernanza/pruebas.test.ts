@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 /**
  * Sistema comun de pruebas (`vendor-distributions/shared/testing/pruebas.ts`): contrato que comparten ISS e ISW.
  *

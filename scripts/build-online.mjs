@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+// @contexto INDICE.md · scripts/README.md
 /**
  * build-online.mjs — bundles ESM AUTOCONTENIDOS de los scripts ONLINE del kit (Jeff, 2026-10-13): lo que los
  * consumidores ejecutan con Deno desde `@main` no es la fuente .ts sino un dist de un solo archivo en `dist/cdn/…`:

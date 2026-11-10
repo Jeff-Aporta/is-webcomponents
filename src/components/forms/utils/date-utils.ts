@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/forms/README.md
 /**
  * Utilidades de fecha y hora para los componentes de calendario y reloj.
  *

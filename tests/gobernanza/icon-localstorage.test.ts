@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 // icon-localstorage.test.ts — QUÉ hace <iswc-icon> con localStorage (src/core/icon-loader.ts),
 // caja negra sobre `resolveIconRaw` con red simulada. Cadena: memoria → localStorage → web publicada de
 // la app (`data-icons`) → API de Iconify; todo SVG resuelto se persiste bajo `iswc:icon:`.

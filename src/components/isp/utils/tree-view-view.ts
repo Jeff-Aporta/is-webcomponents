@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/isp/README.md
 /**
  * TAView — selección, expansión, focus y flash visual del árbol.
  *

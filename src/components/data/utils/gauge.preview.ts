@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 /**
  * Behavior migrado desde HTML inline de iswc-gauge.
  * Se ejecuta en mount() tras pintar la definition JSON.

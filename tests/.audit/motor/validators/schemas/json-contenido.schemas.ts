@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/README.md
 /**
  * json-contenido.ts — Zod schemas para los tipos extraídos de este módulo.
  *

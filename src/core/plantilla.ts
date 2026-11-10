@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/core/README.md
 /**
  * plantilla.ts — Plantilla `html` con diff por parte para `render()` de `IswcReactive` (F8; separada del molde para que
  * las clases que no pintan con `render()` no la carguen).

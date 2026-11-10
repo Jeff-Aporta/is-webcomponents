@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 /**
  * ag-grid/edicion/historial — Pilas de deshacer/rehacer con limite de pasos.
  * Cada accion agrupa todas las celdas de una operacion (pegar, rellenar, lote).

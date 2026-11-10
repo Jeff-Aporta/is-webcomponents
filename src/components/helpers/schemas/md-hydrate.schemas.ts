@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/helpers/README.md
 /**
  * md-hydrate.ts — contratos de la carga perezosa de los componentes que pinta el markdown.
  */

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/media/image-editor.md
 import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import type { CropRect, DragHandle, DragState } from "./schemas/image-editor.schemas.js";
 import css from 'iswc:css';

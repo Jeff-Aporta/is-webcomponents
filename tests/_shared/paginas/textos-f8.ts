@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/_shared/README.md
 // textos-f8.ts — casos en página de los textos fijos que pasaron a `t()` (F8 hito 3, specs/paridad-webawesome.md HOW-4).
 // Lo corre tests/navegador/textos-f8.test.ts en Edge headless; cada caso monta un componente en español y otro bajo un
 // ancestro con `lang="en"` (el diccionario inglés llega perezoso y repinta) y devuelve `true` o el motivo del fallo.

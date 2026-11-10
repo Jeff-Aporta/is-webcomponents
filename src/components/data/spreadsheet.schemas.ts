@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 // spreadsheet.schemas.ts: contratos de tipos de spreadsheet.ts.
 import type { Rect } from './utils/spreadsheet/address.schemas.js';
 import type { Sheet } from './utils/spreadsheet/engine.js';

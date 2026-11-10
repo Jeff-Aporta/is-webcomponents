@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 /**
  * ag-grid/filas/tree-data — Arbol desde datos jerarquicos. Logica pura.
  *

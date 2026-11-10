@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 /**
  * ag-grid.ts — Zod schemas para los tipos extraídos de este módulo.
  *

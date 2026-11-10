@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 /**
  * server-api-docs-contract.test.ts — WHAT de `<iswc-server-api-docs>` (documentación de la API de un server).
  *

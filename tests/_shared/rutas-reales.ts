@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/_shared/README.md
 // rutas-reales.ts — layout `iswc` de los flujos reales del ISS (labs/iss-ayudascpia-flujos/payloads/ruta-*.json y
 // sus derivados, p. ej. el vector de A10), calculado UNA vez por versión del código y compartido entre archivos.
 //

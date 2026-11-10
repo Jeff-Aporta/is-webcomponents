@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/app/README.md
 import components from '@jeff-aporta/iswc-base/manifest.js';
 import { leerAppCfg } from '@jeff-aporta/iswc-base/core/app-init.js';
 import { DEFAULT_PALETTE, PALETTES } from '@jeff-aporta/iswc-base/styles/palette-build.js';

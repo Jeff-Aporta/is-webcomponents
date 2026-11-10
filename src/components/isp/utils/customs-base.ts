@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/isp/README.md
 /**
  * Toolbar default del TreeView (port de TreeCustomsBase en contracts.ts).
  * El consumidor puede extender y pisar hooks.

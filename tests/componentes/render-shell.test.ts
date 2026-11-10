@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/componentes/README.md
 import { assertEquals } from "jsr:@std/assert@1";
 import { renderShell } from "../../src/vendor-distributions/server/render-shell.ts";
 import { coleccionPruebas } from "../../src/vendor-distributions/shared/testing/pruebas.ts";

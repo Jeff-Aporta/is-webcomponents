@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/forms/README.md
 /**
  * doc-editor.schemas.ts — tipos de `<iswc-doc-editor>`.
  */

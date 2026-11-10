@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/helpers/popover.md
 import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import { withStyleAttrs } from '@jeff-aporta/iswc-base/core/attrs.js';
 

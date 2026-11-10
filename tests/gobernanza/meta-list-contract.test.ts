@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 /**
  * meta-list-contract.test.ts — contrato de `<iswc-meta-list>`: 4 archivos hermanos, manifest,
  * demo con playground y render seguro (texto, nunca HTML de los datos).

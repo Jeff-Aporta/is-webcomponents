@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/meta-list.md
 import { setStringAttr } from '@jeff-aporta/iswc-base/core/attrs.js';
 import type { MetaGroup, MetaListLayout, MetaRow } from './schemas/meta-list.schemas.js';
 import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';

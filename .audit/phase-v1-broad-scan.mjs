@@ -1,3 +1,4 @@
+// @contexto INDICE.md · .audit/README.md
 // Broad scan: load every demo in demos/forms/ and capture page errors.
 import { chromium } from 'playwright';
 import { readdirSync, statSync } from 'node:fs';

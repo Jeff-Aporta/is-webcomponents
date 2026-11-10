@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/media/barcode.md
 import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import { svgEl } from '@jeff-aporta/iswc-base/core/svg-chart-engine.js';
 import css from 'iswc:css';

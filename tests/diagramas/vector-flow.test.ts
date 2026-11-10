@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/diagramas/README.md
 /**
  * Guardián WHAT del diagrama de flujo en vector.
  *   VF1 compila al flowchart: una columna = un carril, en orden; el grupo es el contexto del nodo.

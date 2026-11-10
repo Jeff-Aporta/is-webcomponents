@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/trace-log.md
 import { emit, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import { copyText, crearNodo } from '@jeff-aporta/iswc-base/core/dom.js';
 import { atributosDe, PropsElement } from '@jeff-aporta/iswc-base/core/props-element.js';

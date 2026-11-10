@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/componentes/README.md
 /**
  * softFormat / unwrapHandHighlight — indentación de snippets y limpieza del
  * coloreado a mano (la era CodeMirror lo marcaba como .cm-error con fondo

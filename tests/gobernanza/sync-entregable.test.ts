@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 // S-H4: requisito de specs/herramientas/spec.md (WHAT-first, ver specs/testing.md S-T6)
 /**
  * Sync comun `_experimental` -> `_entregable` (`vendor-distributions/shared/tools/sync-entregable.ts`).

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 /**
  * grid-ui.ts — Zod schemas para los tipos extraídos de este módulo.
  *

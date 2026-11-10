@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/previews/README.md
 /**
  * text-like.ts — helper para campos de texto multi-línea.
  *

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/media/person.md
 import { atributosDe, PropsElement } from '@jeff-aporta/iswc-base/core/props-element.js';
 import { PersonPropsSchema } from './schemas/person.schemas.js';
 import type { PersonProps } from './schemas/person.schemas.js';

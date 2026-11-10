@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/isp/README.md
 import type { FloatCardConfig, RowConfig, TNode, TreeActionEntry } from '@jeff-aporta/iswc-base/components/isp/schemas/tree-view-types.schemas.js';
 import { type TRAContext } from '@jeff-aporta/iswc-base/components/isp/schemas/tree-view-rows.schemas.js';
 import type { TreeAdapterLike, DragOverPosition, SummaryRect } from '@jeff-aporta/iswc-base/components/isp/schemas/tree-view-rows.schemas.js';

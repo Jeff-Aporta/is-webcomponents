@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/diagrams/README.md
 /**
  * vector-flow-spec.ts — «diagrama de flujo en vector»: valida el vector de columnas (cada una
  * restringida a sus tipos de entidad) y lo compila al payload del flowchart. Nada se dibuja si una

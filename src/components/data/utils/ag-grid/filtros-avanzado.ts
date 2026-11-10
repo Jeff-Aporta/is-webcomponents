@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 /**
  * avanzado — Advanced filter: de texto a modelo, de modelo a texto y evaluacion.
  *

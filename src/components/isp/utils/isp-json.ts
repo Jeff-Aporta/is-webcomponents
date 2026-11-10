@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/isp/README.md
 /**
  * Codec compacto HTML ↔ JSON (lenguaje de definición del kit).
  *

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/forms/README.md
 /**
  * Motor de campos de fecha/hora editables por secciones (MUI Fields).
  *

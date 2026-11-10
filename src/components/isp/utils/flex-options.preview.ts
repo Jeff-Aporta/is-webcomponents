@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/isp/README.md
 import type { PreviewMountContext } from '@jeff-aporta/iswc-base/previews/_kit/schemas/preview.schemas.ts';
 import type { FlexOptionsLike } from "@jeff-aporta/iswc-base/components/isp/schemas/flex-options.preview.schemas.js";
 

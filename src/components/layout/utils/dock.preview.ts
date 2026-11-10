@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/layout/README.md
 /**
  * Behavior migrado desde HTML inline de iswc-dock.
  * Se ejecuta en mount() tras pintar la definition JSON.

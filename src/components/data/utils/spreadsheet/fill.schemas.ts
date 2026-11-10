@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 // fill.schemas.ts: contratos de tipos de fill.ts.
 /** Celda fuente de un relleno. */
 export interface FillSource { v?: number | string | boolean; f?: string; isDate?: boolean }

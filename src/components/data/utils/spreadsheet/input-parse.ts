@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 // input-parse.ts — de lo que escribe el usuario a contenido de celda: número, fecha, porcentaje,
 // moneda, lógico, fórmula o texto.
 import { parseDateText } from './dates.js';

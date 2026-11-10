@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/previews/README.md
 /**
  * Bridge entre `FichaSchema` (Zod, `src/utils/section-schema.ts`) y el
  * `PreviewDefinition` (`iswc-preview/v1`).

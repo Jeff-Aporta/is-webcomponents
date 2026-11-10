@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/diagrams/README.md
 import { layoutNodeLink } from './diagram-layout.js';
 import { snapDiagramGrid } from '@jeff-aporta/iswc-base/core/diagram-grid.js';
 import { routeEdges, planPorts, pointsToPath, simplifyOrthoPath } from './component-router.js';

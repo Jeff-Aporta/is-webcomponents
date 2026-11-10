@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 /**
  * w21-examples-schema-guardian.test.ts — Guardianes del contrato W21.
  *

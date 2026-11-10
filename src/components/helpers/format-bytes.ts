@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/helpers/format-bytes.md
 import { formato, resolverLocale } from '@jeff-aporta/iswc-base/core/localize.js';
 import type { ByteUnit, FormatBytesOptions } from "./schemas/format-bytes.schemas.js";
 import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';

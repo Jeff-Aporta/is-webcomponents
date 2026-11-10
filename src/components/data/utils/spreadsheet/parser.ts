@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 // parser.ts — descenso recursivo con precedencia: de tokens a árbol de fórmula.
 import type { Token } from './tokenizer.schemas.js';
 import { tokenize } from './tokenizer.js';

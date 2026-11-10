@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/actions/README.md
 /**
  * dropdown-item.schemas.ts — tipos de `<iswc-dropdown-item>`.
  */

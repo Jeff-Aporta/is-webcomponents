@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 /**
  * Guardián WHAT de UI (E4) del lector `<iswc-md-docs-vault>` en un navegador real (Chromium de Playwright)
  * con el bundle de `dist/cdn` y el libro embebido de su demo. Lo que ve y hace un lector:

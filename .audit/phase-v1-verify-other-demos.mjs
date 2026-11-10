@@ -1,3 +1,4 @@
+// @contexto INDICE.md · .audit/README.md
 // Verify the fix addresses the documented bugs by comparing.
 import { chromium } from 'playwright';
 

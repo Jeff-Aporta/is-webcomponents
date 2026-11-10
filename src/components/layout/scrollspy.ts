@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/layout/scrollspy.md
 import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import {
   getComponentPrefs,

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/exhaustivo/README.md
 /**
  * Tests exhaustivos para iswc-button (acciones) — versión estática.
  *

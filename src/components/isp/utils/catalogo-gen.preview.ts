@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/isp/README.md
 import { createCatalogController } from './isp-form.js';
 import type { CatalogEl } from "@jeff-aporta/iswc-base/components/isp/schemas/catalogo-gen.preview.schemas.js";
 

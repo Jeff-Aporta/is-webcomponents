@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/forms/date-input.md
 import { definePickerInput } from './utils/picker-element.js';
 import './date-field.js';
 import './date-picker.js';

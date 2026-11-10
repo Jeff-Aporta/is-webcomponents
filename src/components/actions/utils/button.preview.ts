@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/actions/README.md
 /**
  * Behavior: playground + log de eventos de `<iswc-button>`.
  *

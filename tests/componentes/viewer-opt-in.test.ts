@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/componentes/README.md
 // tests/viewer-opt-in.test.ts
 //
 // El visor a pantalla completa es OPT-IN: por defecto un componente no abre

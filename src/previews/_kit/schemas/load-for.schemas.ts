@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/previews/README.md
 /**
  * src/previews/_kit/schemas/load-for.schemas.ts — Tipos del helper `loadFor`.
  *

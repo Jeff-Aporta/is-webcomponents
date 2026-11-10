@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 // tests/nav-home-item.test.ts
 //
 // Verifica que el item "Inicio" en la barra lateral de navegacion (nav#shellNav):

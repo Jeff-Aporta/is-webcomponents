@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/code/README.md
 /**
  * Behavior preview: <iswc-code>
  */

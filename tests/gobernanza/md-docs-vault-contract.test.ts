@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 /**
  * md-docs-vault-contract.test.ts — contrato del lector de documentación y sus satélites
  * (`<iswc-md-docs-vault>`, `<iswc-doc-layout>`, `<iswc-doc-index>`): 4 archivos hermanos, ruta en el

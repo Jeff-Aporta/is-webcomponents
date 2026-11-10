@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/diagrams/README.md
 /**
  * vector-flow-spec.schemas.ts — contrato del «diagrama de flujo en vector».
  *

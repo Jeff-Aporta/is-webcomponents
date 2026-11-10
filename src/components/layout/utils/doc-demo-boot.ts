@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/layout/README.md
 /**
  * doc-demo-boot.ts — locale + theme/palette + CSS crítico (ESM).
  *

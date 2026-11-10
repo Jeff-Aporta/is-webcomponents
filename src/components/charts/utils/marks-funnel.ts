@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/charts/README.md
 import { svgEl } from '@jeff-aporta/iswc-base/core/svg-chart-engine.js';
 import type { ChartCtx } from '@jeff-aporta/iswc-base/components/charts/schemas/chart.schemas.js';
 import type { FunnelBand } from "@jeff-aporta/iswc-base/components/charts/schemas/marks-funnel.schemas.js";

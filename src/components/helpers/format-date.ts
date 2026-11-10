@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/helpers/format-date.md
 import { setStringAttr } from '@jeff-aporta/iswc-base/core/attrs.js';
 import { formato, resolverLocale } from '@jeff-aporta/iswc-base/core/localize.js';
 import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';

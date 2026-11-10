@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/navegador/README.md
 // a11y-axe.test.ts — axe-core (solo dependencia de desarrollo, D6 de specs/paridad-webawesome.md) sobre una muestra por
 // familia de HOW-7 (botón, campo, listbox, diálogo, pestañas, árbol) en Edge headless, entrando en los shadow roots.
 // Trinquete: las reglas que hoy fallan están en PENDIENTES y solo pueden desaparecer; una regla nueva es rojo.

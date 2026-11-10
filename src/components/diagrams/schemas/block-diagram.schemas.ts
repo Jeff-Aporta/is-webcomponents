@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/diagrams/README.md
 /**
  * block-diagram.ts — Zod schemas para los tipos extraídos de este módulo.
  *

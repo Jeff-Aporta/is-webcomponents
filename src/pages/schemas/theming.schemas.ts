@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/pages/README.md
 /**
  * theming.ts — Zod schemas para los tipos extraídos de este módulo.
  *

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/forms/README.md
 /**
  * masked-input.schemas.ts — tipos de `<iswc-masked-input>`.
  */

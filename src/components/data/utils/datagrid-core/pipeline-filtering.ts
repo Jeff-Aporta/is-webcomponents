@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 /**
  * datagrid-core/pipeline-filtering — Filtros por columna + quick filter.
  *

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 /**
  * figure-contract.test.ts — contrato de `<iswc-figure>`: 4 archivos hermanos, entrada en el
  * manifest, demo con playground y la API que consumen los visores de documentos.

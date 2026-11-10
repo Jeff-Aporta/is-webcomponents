@@ -1,3 +1,4 @@
+// @contexto INDICE.md · .audit/README.md
 // Debug: instantiate iswc-color-picker in isolation.
 import { chromium } from 'playwright';
 

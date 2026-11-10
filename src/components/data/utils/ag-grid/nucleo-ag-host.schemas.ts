@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 /** Tipos de host.ts. */
 import type { Capa, Zona } from './contrato.schemas.js';
 import type { GridApi } from '@jeff-aporta/iswc-base/components/data/schemas/datagrid-types.schemas.js';

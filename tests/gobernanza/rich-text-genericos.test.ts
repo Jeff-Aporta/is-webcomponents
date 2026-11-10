@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 /**
  * Guardián WHAT del texto enriquecido de los diagramas: solo las etiquetas HTML de texto conocidas
  * pasan como HTML; un tipo genérico (`Array<Record<string, unknown>>`, `get<T>()`) es texto y se

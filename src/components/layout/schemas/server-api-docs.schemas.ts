@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/layout/README.md
 import { z } from 'zod';
 import type { SequenceActorSpec, SequenceFragmentSpec, SequenceMessageSpec } from '@jeff-aporta/iswc-base/components/diagrams/schemas/sequence-spec.schemas.js';
 

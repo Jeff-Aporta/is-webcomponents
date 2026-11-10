@@ -1,3 +1,4 @@
+// @contexto INDICE.md · scripts/README.md
 // readmes-componentes.mjs — genera el README.md de cada categoria de componentes.
 //
 //   deno task readmes
@@ -7,7 +8,6 @@
 // `<!-- generado:componentes -->`: nadie la escribe a mano, y si el manifest y el README no
 // coinciden, el build lo arregla.
 
-import { execFileSync } from 'node:child_process';
 import { readFileSync, writeFileSync, existsSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 
@@ -62,7 +62,7 @@ function componentesDe(categoria) {
 }
 
 /** Escribe el README de una categoria. Devuelve true si cambio. */
-export function escribirReadmeCategoria(categoria) {
+function escribirReadmeCategoria(categoria) {
   const dir = join(RAIZ, 'src', 'components', categoria);
   if (!existsSync(dir)) return false;
   const componentes = componentesDe(categoria);

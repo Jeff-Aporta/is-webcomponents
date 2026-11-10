@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/diagrams/README.md
 /**
  * routing-costs.ts — Configuración compartida del campo de costos del router.
  *

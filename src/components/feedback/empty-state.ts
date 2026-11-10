@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/feedback/empty-state.md
 import { ocultarSlotsVacios } from '@jeff-aporta/iswc-base/core/dom.js';
 import { atributosDe, PropsElement } from '@jeff-aporta/iswc-base/core/props-element.js';
 import { EmptyStatePropsSchema } from './schemas/empty-state.schemas.js';

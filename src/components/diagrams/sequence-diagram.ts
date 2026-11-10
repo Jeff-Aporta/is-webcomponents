@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/diagrams/sequence-diagram.md
 import { emit, emitCancelable, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import { DiagramElementBase } from './utils/diagram-element-base.js';
 import { animarRielEn, flujoActivo } from './utils/diagram-layout.js';

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/cdn/loader.md
 /**
  * loader-mirrors — capa 2 del loader (plan D7): cadena de espejos jsDelivr → githack → Pages y reintentos.
  *

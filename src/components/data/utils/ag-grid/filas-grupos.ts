@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 /**
  * ag-grid/filas/grupos — Arbol de grupos, agregacion y aplanado. Logica pura.
  *

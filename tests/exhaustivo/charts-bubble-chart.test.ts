@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/exhaustivo/README.md
 /**
  * bubble-chart.test.ts — verificación exhaustiva de <iswc-bubble-chart>.
  *

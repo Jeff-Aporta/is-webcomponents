@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/charts/bubble-chart.md
 import './chart.js';
 import { drawBubbleMarks } from './utils/marks-cartesian.js';
 

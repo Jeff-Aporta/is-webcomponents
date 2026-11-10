@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+// @contexto INDICE.md · scripts/README.md
 // lab-componente.mjs — Lab local de un componente del kit en otro proyecto.
 //
 // Empaqueta UN componente (fuente TS + su SCSS) sin minificar en la carpeta que

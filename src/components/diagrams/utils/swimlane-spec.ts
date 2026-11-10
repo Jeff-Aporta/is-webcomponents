@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/diagrams/README.md
 import { snapDiagramGrid } from '@jeff-aporta/iswc-base/core/diagram-grid.js';
 import type { TimeScale, TickUnit, TimeTick, LaneItem, PackedLaneItem, PackLanesOpts, LayoutLanesOpts, PositionedLaneItem, LayoutLane, LayoutLanesResult, SwimlaneStepKind, SwimlaneLaneSpec, SwimlaneStepSpec, SwimlaneLinkSpec, SwimlaneResolvedSpec, SwimlaneLayoutLane, SwimlaneLayoutStep, SwimlaneLayoutLink, SwimlaneLayout } from '@jeff-aporta/iswc-base/components/diagrams/schemas/swimlane-spec.schemas.js';
 import { richTextPlain } from '@jeff-aporta/iswc-base/core/tk-text.js';

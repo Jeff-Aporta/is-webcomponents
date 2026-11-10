@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/navegador/README.md
 /**
  * classic-artifact.test.ts — el artefacto clásico opcional (F3, `deno task build:classic`).
  *

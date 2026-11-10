@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/exhaustivo/README.md
 /**
  * year-calendar.test.ts — Tests exhaustivos de <iswc-year-calendar>.
  */

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/code/README.md
 /**
  * code-theme.js — temas JSON → tokens CSS del editor.
  *

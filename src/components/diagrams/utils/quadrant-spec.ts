@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/diagrams/README.md
 import { richTextPlain } from '@jeff-aporta/iswc-base/core/tk-text.js';
 import { resolveTkHue, SERIE_HUES } from '@jeff-aporta/iswc-base/core/color.js';
 import type { QuadrantPoint, QuadrantGroup, QuadrantQuadrants, QuadrantSpec, PlotRect, QuadrantLayoutPoint, QuadrantLayoutQuadrant, QuadrantLayoutAxes, QuadrantLayout } from "@jeff-aporta/iswc-base/components/diagrams/schemas/quadrant-spec.schemas.js";

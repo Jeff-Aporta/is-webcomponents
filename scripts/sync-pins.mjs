@@ -1,3 +1,4 @@
+// @contexto INDICE.md · scripts/README.md
 ﻿#!/usr/bin/env node
 /**
  * sync-pins.mjs — captura el SHA del kit y actualiza pines de consumidores.

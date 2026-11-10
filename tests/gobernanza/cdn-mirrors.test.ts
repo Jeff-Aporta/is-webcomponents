@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 /**
  * cdn-mirrors.test.ts — espejos viven en cdn-ref; el panel CDN es loader copy-paste.
  *

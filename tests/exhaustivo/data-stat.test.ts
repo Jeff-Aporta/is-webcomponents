@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/exhaustivo/README.md
 /**
  * stat.test.ts — verificación exhaustiva de <iswc-stat>.
  *

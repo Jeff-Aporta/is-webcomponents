@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 /**
  * migrados-avatar-contract.test.ts — contrato de los componentes generales que subieron desde una app: 4 archivos
  * hermanos, entrada en el manifest y en la skill, demo con playground, sin dominio de la app y sin medidas absolutas.

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 // xlsx-write.ts — exporta el libro a OOXML: valores, fórmulas (nombres canónicos en inglés),
 // estilos, combinaciones, anchos, inmovilizado, filtro, validación, formato condicional y notas.
 import { cellName, colName, parseRange } from './address.js';

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/cdn/build/README.md
 /**
  * lote-kit.ts — contratos del lote ESM del armazón armado desde el pin publicado (F10).
  */

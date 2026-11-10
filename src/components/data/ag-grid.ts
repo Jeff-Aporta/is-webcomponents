@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/ag-grid.md
 /**
  * <iswc-ag-grid> — Data grid avanzado (estilo ag-grid.com en vanilla web component).
  *

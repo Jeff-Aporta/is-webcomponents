@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/diagramas/README.md
 /**
  * Guardián del layout por agrupadores de <iswc-er-diagram> (er-spec.ts).
  *

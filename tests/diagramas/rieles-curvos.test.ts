@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/diagramas/README.md
 /**
  * Guardián WHAT de los estilos de riel (`_shared/diagram-curve`).
  *   C1 `curved` y `bezier` conservan los extremos del recorrido (puntas intactas) y su primer y último tramo rectos.

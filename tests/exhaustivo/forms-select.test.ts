@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/exhaustivo/README.md
 /**
  * select.test.ts — Tests exhaustivos de <iswc-select>.
  */

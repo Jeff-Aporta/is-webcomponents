@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/isp/README.md
 /**
  * Pinta FlexOptionsInput[] como iswc-button / iswc-check-icon-button / iswc-dropdown.
  * Misma forma que ISP FlexOptions: grupos, separator, icon+title, toggle checked.

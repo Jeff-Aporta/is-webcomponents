@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/_shared/README.md
 // alias.ts — resolver de especificadores para las pruebas que leen fuentes como texto.
 // Un import del kit es relativo (misma carpeta) o por alias `@jeff-aporta/iswc-base/<ruta>` (→ `src/<ruta>`,
 // specs/typescript/spec.md S-TS2b). Devuelve la ruta absoluta en disco (`.js` → `.ts` si hace falta) o null.

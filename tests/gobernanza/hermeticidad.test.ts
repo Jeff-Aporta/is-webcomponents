@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 // hermeticidad.test.ts -- WHAT: el proyecto es atómico y hermético (ver _hermeticidad.mjs).
 import { definirPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
 import { IGNORAR, RAIZ, revisarHermeticidad } from './_hermeticidad.mjs';

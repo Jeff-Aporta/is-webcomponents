@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 /**
  * pivot-table.preview.ts — Zod schemas para los tipos extraídos de este módulo.
  *

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/previews/README.md
 /**
  * anatomia.ts — sección «Anatomía» de todo demo: lo que el componente construye de verdad, para auditarlo.
  *   - Estructura: el shadow DOM vivo del `target`, sin `<style>`: los fragmentos de HTML que inyecta.

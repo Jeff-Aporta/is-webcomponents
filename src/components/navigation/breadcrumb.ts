@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/navigation/breadcrumb.md
 import './breadcrumb-item.js';
 import { define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import { IswcReactive } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';

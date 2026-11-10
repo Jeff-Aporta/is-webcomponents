@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/previews/README.md
 /**
  * Carga un PreviewDefinition desde JSON (fetch en browser, fs en Node).
  * @param {string | URL} url

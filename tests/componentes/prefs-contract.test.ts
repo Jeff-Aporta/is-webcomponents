@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/componentes/README.md
 // tests/prefs-contract.test.ts
 //
 // Contrato de persistencia compartida de Web Components.

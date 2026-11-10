@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/componentes/README.md
 import assert from 'node:assert';
 import { waterfallBars } from '../../src/components/charts/utils/marks-waterfall.js';
 import { funnelBands } from '../../src/components/charts/utils/marks-funnel.js';

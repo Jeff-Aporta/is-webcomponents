@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/forms/radio.md
 import { emit, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import { setOptionalAttr } from '@jeff-aporta/iswc-base/core/attrs.js';
 import css from 'iswc:css';

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 /**
  * ag-grid/celdas/renderers — Renderers declarativos: `cellRenderer: 'delta'`.
  *

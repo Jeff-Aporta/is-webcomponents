@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/componentes/README.md
 /**
  * tests/componentes/cdn-bases.test.ts — toda base del loader termina en `/` y `core/` cuelga de `dist/cdn/`.
  *

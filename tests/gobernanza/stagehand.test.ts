@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 /**
  * Guardián WHAT de la pila de proveedores LLM (`vendor-distributions/shared/testing/proveedores-llm.ts`, S1-S5) y del
  * controlador de Stagehand (`vendor-distributions/client/testing/stagehand.ts`, S6-S8),

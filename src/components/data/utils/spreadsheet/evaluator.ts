@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 // evaluator.ts — evalúa el árbol de una fórmula contra un `EvalHost`. No conoce el grafo ni el
 // DOM: el motor le entrega los valores y resuelve el orden.
 import type { Node } from './parser.schemas.js';

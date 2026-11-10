@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/layout/README.md
 // doc-demo-galeria.schemas.ts: contratos de tipos de doc-demo-galeria.ts.
 import type { Anatomia } from '@jeff-aporta/iswc-base/previews/_kit/schemas/anatomia.schemas.js';
 

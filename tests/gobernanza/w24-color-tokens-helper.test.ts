@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 /**
  * w24-color-tokens-helper.test.ts — Guardian del contrato W24.
  *

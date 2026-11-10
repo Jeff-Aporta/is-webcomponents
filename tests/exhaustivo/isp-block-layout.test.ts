@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/exhaustivo/README.md
 /**
  * block-layout.test.ts — Tier A (15 aserciones) para `<iswc-block-layout>`.
  *

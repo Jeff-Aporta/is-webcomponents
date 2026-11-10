@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/diagramas/README.md
 /**
  * Guardián WHAT (A16) de la secuencia sobre los editables reales del ISS: ningún mensaje (ni un
  * self-loop) se dibuja sobre una pestaña negra de un fragmento (`alt`, `par`, `loop`) ni sobre la

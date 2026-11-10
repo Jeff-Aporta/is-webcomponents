@@ -1,3 +1,4 @@
+// @contexto INDICE.md · scripts/README.md
 // codigo-muerto.schemas.ts — tipos del análisis de código muerto (`codigo-muerto.ts`).
 // category: "how"
 

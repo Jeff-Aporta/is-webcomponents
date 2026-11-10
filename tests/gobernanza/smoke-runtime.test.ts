@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 // smoke-runtime.test.ts — los componentes del catálogo en un DOM real (Edge headless, nunca el Chrome del usuario).
 //
 // El resto de la batería es sobre todo análisis estático: vigila contratos, pero no ve lo que solo falla al

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/componentes/README.md
 // tests/code-theme-native.test.ts
 //
 // Guardián de la migración a motor nativo: el resaltado de los

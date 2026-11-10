@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 /** Tipos de seleccion-filas.ts. */
 
 export type Seleccionable = (id: string) => boolean;

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · scripts/README.md
 /**
  * highlight-pre.js — arranca el highlighter de `<pre class="code">` en el docs.
  *

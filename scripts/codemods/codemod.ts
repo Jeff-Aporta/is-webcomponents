@@ -1,3 +1,4 @@
+// @contexto INDICE.md · scripts/README.md
 /**
  * ts-codemod.ts — Anotaciones mecánicas para la migración de `.js` a `.ts`.
  *

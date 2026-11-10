@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/helpers/mutation-observer.md
 import { define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import { createObserverElement } from './observer.js';
 

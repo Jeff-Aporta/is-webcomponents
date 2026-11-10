@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/isp/README.md
 /**
  * Demo <iswc-form> con cuerpo JSON compacto (json2html / html2json).
  * @param {import('@jeff-aporta/iswc-base/previews/_kit/schemas/preview.schemas.ts').PreviewMountContext} ctx

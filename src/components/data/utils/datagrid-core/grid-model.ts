@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 /**
  * datagrid-core/grid-model — Store observable del DataGrid.
  *

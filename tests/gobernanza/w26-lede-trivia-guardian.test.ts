@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 /**
  * w26-lede-trivia-guardian.test.ts — Guardian de párrafos triviales en
  * `src/components/` (recursivo en `*.json`).

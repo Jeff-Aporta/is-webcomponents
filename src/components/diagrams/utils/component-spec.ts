@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/diagrams/README.md
 /**
  * Especificación y layout de diagramas de componentes UML (sin Mermaid).
  *

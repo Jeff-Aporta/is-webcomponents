@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 /**
  * Guardián WHAT: la skill principal enruta TODO componente publicado. Cada tag del manifest tiene su
  * fila en `skills/iswc-base/catalog.md` (así un agente sabe qué componente usar) y la ficha `.md`

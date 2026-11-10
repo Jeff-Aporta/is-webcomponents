@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/charts/README.md
 /**
  * marks-radial.ts — Zod schemas para los tipos extraídos de este módulo.
  *

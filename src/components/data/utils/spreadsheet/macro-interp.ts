@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 // interp.ts — intérprete seguro de macros. Sin eval ni new Function: recorre el árbol, sus
 // valores viven en Map y arreglos propios, y solo alcanza lo que `builtins` le entrega. Presupuesto
 // de pasos, profundidad y tiempo para que una macro no cuelgue la página.

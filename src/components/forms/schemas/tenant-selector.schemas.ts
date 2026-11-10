@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/forms/README.md
 /**
  * tenant-selector.schemas.ts — props de `<iswc-tenant-selector>`.
  */

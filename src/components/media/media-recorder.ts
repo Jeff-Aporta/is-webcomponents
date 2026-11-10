@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/media/media-recorder.md
 import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import { setStringAttr } from '@jeff-aporta/iswc-base/core/attrs.js';
 import css from 'iswc:css';

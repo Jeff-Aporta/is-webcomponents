@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/forms/README.md
 /**
  * duration-picker.schemas.ts — tipos de `<iswc-duration-picker>`.
  */

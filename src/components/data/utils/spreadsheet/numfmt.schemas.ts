@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 // numfmt.schemas.ts: contratos de tipos de numfmt.ts.
 /** Sección de un formato. */
 export interface Section { raw: string; body: string; color?: string; cond?: { op: string; v: number }; kind: 'general' | 'number' | 'date' | 'text' }

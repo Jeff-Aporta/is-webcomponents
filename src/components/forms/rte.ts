@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/forms/rte.md
 import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import type { RteCommandDef, RteEventos } from "./schemas/rte.schemas.js";
 import css from 'iswc:css';

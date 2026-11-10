@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 /**
  * ag-grid/filas/cache-bloques — Cache por bloques de los modelos infinite y SSRM.
  *

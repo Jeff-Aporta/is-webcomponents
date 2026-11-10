@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/previews/README.md
 // anatomia.schemas.ts: contratos de tipos de anatomia.ts.
 import type { Anatomia } from './schemas/anatomia.schemas.js';
 

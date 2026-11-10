@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 /**
  * ag-grid/celdas — Celdas y apariencia de <iswc-ag-grid>: renderers, valores,
  * reglas de estilo, tooltips, flash, alturas de fila y temas.

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/isp/README.md
 /**
  * tree-data.ts — Zod schemas para los tipos extraídos de este módulo.
  *

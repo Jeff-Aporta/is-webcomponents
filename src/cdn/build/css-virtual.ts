@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/cdn/build/README.md
 /**
  * css-virtual.ts — el import virtual `iswc:css` (plan D6): el CSS de cada componente viaja dentro de su módulo.
  *

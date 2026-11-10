@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 /**
  * Guardián WHAT de los jueces opcionales (`vendor-distributions/shared/testing/jueces.ts` y
  * `test-cooldown.ts`), con `fetch` simulado y un archivo de llaves temporal (nunca red):

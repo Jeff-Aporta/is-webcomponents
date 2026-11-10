@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/README.md
 /**
  * vendor-e2e-config.ts — Zod schemas para los tipos extraídos de este módulo.
  *

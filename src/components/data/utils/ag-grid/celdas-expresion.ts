@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 import type { Ambito, Nodo, Token } from './celdas-expresion.schemas.js';
 
 /**

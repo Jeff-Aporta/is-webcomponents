@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/componentes/README.md
 // Guardián: default color=brand + helpers CDN (intent.ts)
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';

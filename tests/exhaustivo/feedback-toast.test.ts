@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/exhaustivo/README.md
 /**
  * toast.test.ts — Tier A (10 aserciones) para `<iswc-toast>`.
  *

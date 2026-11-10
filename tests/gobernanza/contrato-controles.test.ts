@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 // tests/gobernanza/contrato-controles.test.ts
 //
 // Contrato de actions/ y forms/: cada componente trae .ts, .scss, .md y .json iswc-preview/v1;
@@ -16,7 +17,8 @@ const { test, lista } = coleccionPruebas({ categoria: 'how' });
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const CARPETAS = ['actions', 'forms'];
 /** Otro frente los está migrando: se suman al contrato al cerrar. */
-const AJENOS = /^(dropdown|dropdown-item)$/;
+// El README de la categoria no es un componente: es el md del dominio.
+const AJENOS = /^(dropdown|dropdown-item|README)$/;
 /** Subcomponentes definidos en el .ts del padre. */
 const SUBCOMPONENTES: Record<string, string> = { 'speed-dial-action': 'speed-dial' };
 const MOJIBAKE = /Ã[\u0080-¿¡-¿]|â€|â†|Â[¡-¿]/;

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · scripts/README.md
 // bundle-scripts.mjs — bundlea los gallery scripts (../scripts/*.js),
 // las pages (../src/pages/*.ts) Y los *.preview.ts de cada componente
 // a ../dist/{scripts,pages,previews}/*.min.js. Necesario porque los

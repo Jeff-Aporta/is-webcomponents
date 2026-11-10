@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 /**
  * Pipeline de datos del data grid: normalización de columnas, obtención y
  * formateo de valores, filtrado, ordenación, agrupación (row grouping y tree

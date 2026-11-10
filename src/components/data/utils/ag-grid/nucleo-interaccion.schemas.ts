@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 /** Tipos de interaccion.ts. */
 import type { ManejadorCelda, ManejadorTeclado } from './contrato.schemas.js';
 import type { SelectionModeLocal } from './nucleo-tipos.schemas.js';

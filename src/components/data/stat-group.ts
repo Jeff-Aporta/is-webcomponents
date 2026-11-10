@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/stat-group.md
 import { crearNodo } from '@jeff-aporta/iswc-base/core/dom.js';
 import { atributosDe, PropsElement } from '@jeff-aporta/iswc-base/core/props-element.js';
 import { StatGroupPropsSchema } from './schemas/stat-group.schemas.js';

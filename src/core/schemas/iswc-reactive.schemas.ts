@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/core/README.md
 /**
  * iswc-reactive.schemas.ts — tipos de `core/iswc-reactive.ts` (propiedades reactivas y plantilla `html`).
  */

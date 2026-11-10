@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/feedback/README.md
 /**
  * prefs-clear.schemas.ts — tipos de `<iswc-prefs-clear>`.
  */

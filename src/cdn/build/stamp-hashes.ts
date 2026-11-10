@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/cdn/build/README.md
 /**
  * Sella `?v=` en los import relativos y devuelve el mapa de hashes.
  * El hash es del archivo ya sellado, en orden de dependencias: si cambia

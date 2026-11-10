@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/code/README.md
 /**
  * code-model.ts — Zod schemas para los tipos extraídos de este módulo.
  *

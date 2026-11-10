@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/previews/README.md
 /**
  * Preview respaldado solo por PreviewDefinition (JSON) + behavior opcional.
  * Sin HTML por componente: el chrome lo pinta <iswc-preview-component>.

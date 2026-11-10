@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/navegador/README.md
 // overlays-f8.test.ts — overlays sobre la pila de capas de core/position.ts en un navegador real (Edge headless):
 // dialog con un select abierto dentro (Escape cierra primero el select), drawer, window modal/no modal y confirm-modal
 // (inert alrededor, Tab dentro, foco devuelto). Spec: specs/paridad-webawesome.md HOW-5.

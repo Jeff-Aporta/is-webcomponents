@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/feedback/README.md
 /**
  * confirm-modal.schemas.ts — tipos de `<iswc-confirm-modal>`.
  */

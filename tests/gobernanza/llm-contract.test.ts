@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 // tests/llm-contract.test.ts — versión post-consolidación 2026-09-07.
 //
 // Antes este test verificaba el contenido de `LLM.md` en la raíz del repo.

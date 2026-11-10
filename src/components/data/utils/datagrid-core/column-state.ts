@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 /**
  * datagrid-core/column-state — Resolución y mutación de columnas.
  *

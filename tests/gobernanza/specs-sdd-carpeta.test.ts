@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 // tests/gobernanza/specs-sdd-carpeta.test.ts
 //
 // Meta-guardián: estructura de specs/ SDD (mapa, enlaces, dominios citados).

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 // dates.ts — fechas seriales del sistema 1900, incluido el 29-feb-1900 ficticio de Excel.
 
 import type { DateParts } from './dates.schemas.ts';

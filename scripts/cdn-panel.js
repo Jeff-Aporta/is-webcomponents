@@ -1,3 +1,4 @@
+// @contexto INDICE.md · scripts/README.md
 /**
  * cdn-panel.js — bloque «Consumo por CDN» al final de la página de cada
  * componente.

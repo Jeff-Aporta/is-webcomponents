@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 // tests/component-audit.test.ts
 //
 // Higiene de componentes: corre scripts/sondas/components.ts y falla si

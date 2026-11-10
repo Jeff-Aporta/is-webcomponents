@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/actions/dropdown.md
 import { emit, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import { withStyleAttrs } from '@jeff-aporta/iswc-base/core/attrs.js';
 import { IswcReactive, prop } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';

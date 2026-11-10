@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/README.md
 // harness.ts: arranque y utilidades compartidas de los tests E2E de
 // iswc-base con Stagehand. Port del esquema de
 // PatyIA/app/src/utils/health/e2e/lib/harness.ts adaptado a la galeria:

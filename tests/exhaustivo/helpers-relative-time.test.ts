@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/exhaustivo/README.md
 /**
  * relative-time.test.ts — Tier A (12 aserciones) para `<iswc-relative-time>`.
  *

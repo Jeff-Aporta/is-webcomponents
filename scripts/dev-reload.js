@@ -1,3 +1,4 @@
+// @contexto INDICE.md · scripts/README.md
 /**
  * dev-reload.js — polling de dist/cdn/reload-pin (galería / static server).
  * Cargado vía L.loadPageModules(['dev-reload']). Sin logic en index.html.

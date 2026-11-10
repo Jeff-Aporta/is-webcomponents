@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/core/README.md
 /// <reference lib="dom" />
 /**
  * Configuración inicial de una app iswc: tema y paleta POR DEFECTO, y dónde están sus íconos.

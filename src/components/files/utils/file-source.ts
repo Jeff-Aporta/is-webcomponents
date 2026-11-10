@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/files/README.md
 /** Contrato src|content de la familia file-preview (S-FP1). */
 
 /** Si ambos llegan, gana content. */

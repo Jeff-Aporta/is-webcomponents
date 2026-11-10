@@ -1,3 +1,4 @@
+// @contexto INDICE.md · scripts/README.md
 /**
  * preview-boot.js — sync, sin defer/module.
  * Aplica theme + palette desde ?s= (iniciales) o localStorage ANTES del primer paint.

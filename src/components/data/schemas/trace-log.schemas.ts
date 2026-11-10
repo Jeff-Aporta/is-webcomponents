@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 /**
  * trace-log.schemas.ts — props de `<iswc-trace-log>`.
  */

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/charts/README.md
 /**
  * Behavior migrado desde HTML inline de iswc-radar-chart.
  * Se ejecuta en mount() tras pintar la definition JSON.

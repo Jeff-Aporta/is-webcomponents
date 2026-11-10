@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 /**
  * ag-grid/edicion/seleccion-filas-ctl — Seleccion de filas con `rowSelection`
  * objeto: clic, checkbox, Espacio, Ctrl+A, seleccionar todo y su API.

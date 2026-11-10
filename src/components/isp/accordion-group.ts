@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/isp/accordion-group.md
 import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import '@jeff-aporta/iswc-base/components/layout/details.js';
 import css from 'iswc:css';

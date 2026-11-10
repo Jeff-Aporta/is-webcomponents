@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/files/txt-edit.md
 import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import { setOptionalAttr, setStringAttr } from '@jeff-aporta/iswc-base/core/attrs.js';
 import { loadText, resolveFileSource } from './utils/file-source.js';

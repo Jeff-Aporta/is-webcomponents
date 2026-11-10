@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 /**
  * Guardián WHAT: Zod vive UNA sola vez en el CDN. Los schemas se usan en runtime (`.shape`, `.extend`,
  * `z.custom`) y cada bundle de componente inlineaba ~300 KB de Zod (flowchart-spec pesaba 413 KB).

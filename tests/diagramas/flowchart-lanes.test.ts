@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/diagramas/README.md
 /**
  * Guardianes WHAT de los carriles de contexto (swimlanes) del flowchart iswc, de la barra de
  * sincronización y del nodo `nested` sin rótulo. Afirman QUÉ ve quien lee el diagrama:

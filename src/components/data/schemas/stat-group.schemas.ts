@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 /**
  * stat-group.schemas.ts — props de `<iswc-stat-group>`.
  */

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/README.md
 /**
  * Reporter del motor auditor.
  *

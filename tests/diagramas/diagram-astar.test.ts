@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/diagramas/README.md
 import {
   makeCostGrid, blockRect, addForbiddenRegion, applyForbiddenRegions,
   removeForbiddenRegion, readExclusionZones, nudgeRectFromZones, blockExclusionZones,

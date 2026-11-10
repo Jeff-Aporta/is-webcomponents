@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 /** Tipos de tooltips.ts. */
 import type { ParamsCelda } from './celdas.schemas.js';
 

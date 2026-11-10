@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/e2e/README.md
 // 04-controles.test.ts: e2e DATA-DRIVEN por componente sobre el playground.
 // Descubre en src/previews los JSON (iswc-preview/v1) cuyos bloques declaran
 // `controls` y, por cada tag: abre la vista, localiza los paneles

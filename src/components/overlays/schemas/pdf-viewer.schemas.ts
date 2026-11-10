@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/overlays/README.md
 /**
  * pdf-viewer.schemas.ts — tipos de `<iswc-pdf-viewer>`.
  */

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 /**
  * Guardián WHAT: el loader pide sus piezas al MISMO repo desde el que se sirve (jsDelivr, githack o
  * Pages), con su nombre actual o el anterior. Un nombre fijo que aún no existe en GitHub daba 404 en

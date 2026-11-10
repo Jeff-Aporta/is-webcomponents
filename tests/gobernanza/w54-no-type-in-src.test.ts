@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 import assert from 'node:assert/strict';
 import { readdir, readFile } from 'node:fs/promises';
 import { join } from 'node:path';

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/layout/README.md
 /**
  * login.schemas.ts — `accounts` y `sessions` de <iswc-login>.
  */

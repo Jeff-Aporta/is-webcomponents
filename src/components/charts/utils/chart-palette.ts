@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/charts/README.md
 /**
  * chart-palette.ts — colores de gráficas. La fuente es `--iswc-chart-1..8` (src/styles/chart-tokens.ts):
  * aquí no hay colores, solo referencias a esos tokens.

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/utils/README.md
 /**
  * src/utils/section-schema.ts — Zod validator para el JSON de fichas (J2).
  *

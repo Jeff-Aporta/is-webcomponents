@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/helpers/ui.md
 import { defineElement } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import { DEFAULT_INTENT, INTENT, ensureDefaultColor, normalizeIntent, setEnumAttr, DEFAULT_TONE, TONE, normalizeTone, setEnumToneAttr } from '@jeff-aporta/iswc-base/core/attrs.js';
 import type { ElChild, ElAttrs, Crudo, HandlerEntry } from "./schemas/ui.schemas.js";

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/overlays/semantic-search.md
 import { crearNodo } from '@jeff-aporta/iswc-base/core/dom.js';
 import { atributosDe, PropsElement } from '@jeff-aporta/iswc-base/core/props-element.js';
 import { SemanticSearchPropsSchema } from './schemas/semantic-search.schemas.js';

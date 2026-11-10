@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/diagrams/README.md
 /**
  * diagram-socket.schemas.ts — tipos del pintor del conector `-(O-` / `-(O=` (ver diagram-socket.ts).
  */

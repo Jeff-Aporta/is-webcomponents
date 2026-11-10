@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/forms/README.md
 /**
  * Behavior de iswc-doc-editor: refleja el JSON vivo del editor en el `<pre>`.
  * @param {import('@jeff-aporta/iswc-base/previews/_kit/schemas/preview.schemas.ts').PreviewMountContext} ctx

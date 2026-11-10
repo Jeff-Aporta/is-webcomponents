@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/diagrams/README.md
 /** diagram-text-wrap.ts — helper compartido para los 16 diagramas SVG.
  *
  * Tres funciones públicas:

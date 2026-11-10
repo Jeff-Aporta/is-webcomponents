@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/diagramas/README.md
 /**
  * Comprobación mínima (node:assert) para er-spec.js y block-spec.js.
  * No depende de DOM: solo geometría pura.

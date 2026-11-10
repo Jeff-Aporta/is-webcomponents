@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/componentes/README.md
 /**
  * Inferencia de lang + softFormat para snippets de demos.
  */

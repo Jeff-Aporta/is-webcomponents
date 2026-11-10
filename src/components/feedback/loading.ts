@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/feedback/loading.md
 import { atributosDe, PropsElement } from '@jeff-aporta/iswc-base/core/props-element.js';
 import { LoadingPropsSchema } from './schemas/loading.schemas.js';
 import type { LoadingProps } from './schemas/loading.schemas.js';

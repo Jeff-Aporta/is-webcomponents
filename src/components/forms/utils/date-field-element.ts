@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/forms/README.md
 import { SectionField } from './date-field-core.js';
 import { splitDateTime, uses12Hour } from './date-utils.js';
 import { emit, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';

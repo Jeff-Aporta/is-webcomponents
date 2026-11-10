@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/core/README.md
 /**
  * dom-utils.schemas.ts — tipos de `core/dom.ts`.
  */

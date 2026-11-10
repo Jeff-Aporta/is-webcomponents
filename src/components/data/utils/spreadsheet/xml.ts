@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 // xml.ts — lector XML mínimo para OOXML: etiquetas, atributos y texto, sin DOM.
 
 import type { XNode } from './xml.schemas.ts';

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/actions/README.md
 /**
  * fab.schemas.ts — tipos de `<iswc-fab>`.
  */

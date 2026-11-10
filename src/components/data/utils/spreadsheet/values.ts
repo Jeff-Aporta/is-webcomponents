@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 // values.ts — valores del motor: errores, escalares, matrices, referencias y coerciones.
 
 /** Error de celda. Se compara por identidad con las constantes de ERR. */

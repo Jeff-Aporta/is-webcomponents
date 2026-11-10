@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/cdn/loader.md
 /**
  * sheet-cache — Cache Storage + adoptedStyleSheets para CSS de ShadowRoot.
  *

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/media/avatar.md
 import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import './icon.js';
 import { setStringAttr, DEFAULT_MEDIA_SHAPE, MEDIA_SHAPE, normalizeMediaShape } from '@jeff-aporta/iswc-base/core/attrs.js';

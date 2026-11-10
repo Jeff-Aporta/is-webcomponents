@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 /** Tipos de index.ts. */
 import type { ParamsTema } from './celdas.schemas.js';
 

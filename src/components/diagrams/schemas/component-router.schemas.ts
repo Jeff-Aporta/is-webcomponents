@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/diagrams/README.md
 /**
  * component-router.ts — Zod schemas para los tipos del router ortogonal.
  *

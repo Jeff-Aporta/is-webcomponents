@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/diagramas/README.md
 // tests/component-diagram-ifaces.test.ts
 //
 // Guardian del bug de ifaceById en <iswc-component-diagram> y de la

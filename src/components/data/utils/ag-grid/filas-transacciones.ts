@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 /**
  * ag-grid/filas/transacciones — applyTransaction puro y cola asincrona.
  *

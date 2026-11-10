@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/exhaustivo/README.md
 /**
  * polar-area-chart.test.ts — verificación exhaustiva de <iswc-polar-area-chart>.
  *

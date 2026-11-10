@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/media/barcode-scanner.md
 import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import { setStringAttr } from '@jeff-aporta/iswc-base/core/attrs.js';
 import type { BarcodeDetectorCtor, DetectedBarcode } from "./schemas/barcode-scanner.schemas.js";

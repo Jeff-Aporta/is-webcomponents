@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/diagrams/README.md
 /**
  * Behavior migrado desde HTML inline de iswc-diagram-lightbox.
  * Se ejecuta en mount() tras pintar la definition JSON.

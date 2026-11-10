@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/feedback/status-pill.md
 import { atributosDe, PropsElement } from '@jeff-aporta/iswc-base/core/props-element.js';
 import { StatusPillPropsSchema } from './schemas/status-pill.schemas.js';
 import type { StatusPillProps, StatusPillStatus } from './schemas/status-pill.schemas.js';

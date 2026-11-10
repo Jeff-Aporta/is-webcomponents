@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/core/README.md
 /**
  * Motor de posicionamiento anclado (flip / shift / arrow).
  * Sin dependencias — usa getBoundingClientRect + flip/shift.

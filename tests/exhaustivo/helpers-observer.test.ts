@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/exhaustivo/README.md
 /**
  * observer.test.ts — Tier A (15 aserciones) para `<iswc-observer>` (genérico).
  *

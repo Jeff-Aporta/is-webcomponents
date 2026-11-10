@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/diagrams/diagram-lightbox.md
 import { IswcLightbox } from './lightbox.js';
 import { getDiagramTag } from './utils/diagram-model.js';
 import { expandSequencePayloadForJson } from './utils/sequence-spec.js';

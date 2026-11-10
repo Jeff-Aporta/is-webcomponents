@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 /// <reference lib="dom" />
 /**
  * Configuración de la app: inicial (`core/app-init.ts`) y persistente (`core/app-init.ts`).

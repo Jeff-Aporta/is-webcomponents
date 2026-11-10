@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/componentes/README.md
 // tests/code-diff-lang.test.ts
 //
 // Guardián de `lang="diff"` / `lang="commit"` en <iswc-code>.

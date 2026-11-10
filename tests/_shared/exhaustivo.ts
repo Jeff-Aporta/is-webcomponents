@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/_shared/README.md
 /**
  * _helpers.ts — utilidades compartidas por los tests exhaustivos.
  *

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 /**
  * set — Set filter: universo de valores, llaves, mini filtro, Select All, arbol y modelo.
  * La llave nula representa las celdas vacias, igual que `null` en `values`.

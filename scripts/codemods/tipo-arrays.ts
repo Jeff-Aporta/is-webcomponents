@@ -1,3 +1,4 @@
+// @contexto INDICE.md · scripts/README.md
 /**
  * ts-tipo-arrays.ts — Da tipo de elemento a los campos que arrancan en `[]`.
  *

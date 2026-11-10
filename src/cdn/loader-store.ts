@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/cdn/loader.md
 /**
  * loader-store — capa 2 del loader (plan D7): el `asset-store` (cuerpos por ruta+hash en IndexedDB) y su memoria
  * de hashes en localStorage.

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/README.md
 /**
  * harness.ts — Zod schemas para los tipos extraídos de este módulo.
  *

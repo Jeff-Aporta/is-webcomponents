@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 // reactivo.test.ts — guardián de F8 (specs/paridad-webawesome.md HOW-8): el kit converge al molde reactivo.
 //   R1 reflejo a mano (`set x(v) { …Attribute… }` en una línea): por archivo, nunca más que en `reactivo-pendientes.json`;
 //      un archivo que no está en la lista tiene 0 (lo nuevo o migrado declara `@prop`).

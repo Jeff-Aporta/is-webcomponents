@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/componentes/README.md
 /**
  * context-menu-scroll.test.ts — al scroll el menú no “persigue”.
  *

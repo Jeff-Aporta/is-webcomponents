@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/exhaustivo/README.md
 /**
  * combobox.test.ts — Tests exhaustivos de <iswc-combobox>.
  */

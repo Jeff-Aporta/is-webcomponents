@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 /** Tipos de contexto.ts. */
 import type { RendererCelda, RendererMontable } from './contrato.schemas.js';
 

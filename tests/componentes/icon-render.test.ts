@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/componentes/README.md
 // tests/icon-render.test.ts
 //
 // Los dos motivos por los que un icono existente se ve MAL en la rejilla pero

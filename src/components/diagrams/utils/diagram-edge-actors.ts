@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/diagrams/README.md
 /**
  * Etiquetas de arista = actores rectangulares.
  *

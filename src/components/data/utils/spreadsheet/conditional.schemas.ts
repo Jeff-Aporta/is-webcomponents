@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 // conditional.schemas.ts: contratos de tipos de conditional.ts.
 import type { CfStyle } from '@jeff-aporta/iswc-base/components/data/schemas/spreadsheet.schemas.js';
 

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/feedback/progress-bar.md
 import { setStringAttr } from '@jeff-aporta/iswc-base/core/attrs.js';
 import { define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import { IswcReactive } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';

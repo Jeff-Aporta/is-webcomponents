@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/cdn/build/README.md
 /**
  * npm.ts — contratos del `package.json` generado por el build (plan D9, fase F6). Nada se publica todavía.
  */

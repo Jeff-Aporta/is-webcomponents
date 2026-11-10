@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/layout/drawer.md
 import { ModalBase } from './utils/modal-base.js';
 import { define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import css from 'iswc:css';

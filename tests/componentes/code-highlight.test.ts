@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/componentes/README.md
 /**
  * code-highlight.test.ts — invariantes del motor nativo de resaltado
  * (sustituto de CodeMirror en <iswc-code>). No toca DOM ni CM: puro Node.

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/componentes/README.md
 /**
  * data-grid-toolbar.test.ts — invariante del boolean toolbar-tools.
  *

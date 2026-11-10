@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/diagrams/README.md
 /**
  * diagram-styles.ts — Estilos de diagrama con carga diferida.
  *

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/cdn/loader.md
 /**
  * ensure-element.ts — Zod schemas para los tipos extraídos de este módulo.
  *

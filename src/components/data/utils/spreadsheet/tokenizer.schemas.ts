@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 // tokenizer.schemas.ts: contratos de tipos de tokenizer.ts.
 /** Extremo de una referencia. r o c valen -1 en filas o columnas completas. */
 export interface RefEnd { r: number; c: number; ra: boolean; ca: boolean }

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/diagrams/README.md
 /**
  * pan-zoom.ts — viewport 2D reutilizable (SVG editors / lightbox / canvas).
  *

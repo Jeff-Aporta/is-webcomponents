@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 /** textos — Textos por defecto en espanol; la clave es la de localeText de AG Grid. */
 export const TEXTOS: Record<string, string> = {
   contains: 'Contiene', notContains: 'No contiene', equals: 'Igual a', notEqual: 'Distinto de',

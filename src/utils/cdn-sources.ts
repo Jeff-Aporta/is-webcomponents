@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/utils/README.md
 /**
  * src/utils/cdn-sources.ts — de dónde salen las URLs de los snippets.
  *

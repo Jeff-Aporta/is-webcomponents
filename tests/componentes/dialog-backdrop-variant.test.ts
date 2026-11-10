@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/componentes/README.md
 // tests/dialog-backdrop-variant.test.ts
 import { strict as assert } from 'node:assert';
 import { readFileSync } from 'node:fs';

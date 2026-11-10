@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/_shared/README.md
 // navegador.ts — lanzamiento del navegador para los tests de navegador.
 //
 // Siempre Edge headless (`channel: 'msedge'`): regla del repo, nunca el Chrome del usuario ni el Chromium que

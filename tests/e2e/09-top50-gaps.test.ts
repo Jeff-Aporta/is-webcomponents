@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/e2e/README.md
 // 09-top50-gaps.test.ts: tests sobre los gaps más críticos del Top-50 audit.
 //
 // Implementa los gaps P0 que NO están en 07-a11y-gaps ni en 08-priority-gaps.

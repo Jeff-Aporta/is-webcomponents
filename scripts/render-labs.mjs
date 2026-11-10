@@ -1,4 +1,5 @@
 #!/usr/bin/env -S deno run -A --no-check --sloppy-imports
+// @contexto INDICE.md · scripts/README.md
 // scripts/render-labs.mjs — re-render COMPLETO del lote de diagramas.
 //
 // Regla (Jeff 2026-10-07): tras cualquier ajuste de diagramas se re-renderiza

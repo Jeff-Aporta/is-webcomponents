@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/feedback/README.md
 /**
  * tooltip.schemas.ts — tipos de `<iswc-tooltip>`.
  */

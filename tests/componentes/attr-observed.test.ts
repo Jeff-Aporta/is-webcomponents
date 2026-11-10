@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/componentes/README.md
 // tests/attr-observed.test.ts
 //
 // `customElements.define` congela `observedAttributes` en ese instante. Desde F8 los atributos declarados por campo

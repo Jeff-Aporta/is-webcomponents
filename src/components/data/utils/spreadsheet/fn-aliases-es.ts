@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 // index.ts — carga todas las familias de funciones en el registro.
 import { addAliases } from './fn-registry.js';
 import './fn-math.js';

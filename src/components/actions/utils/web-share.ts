@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/actions/README.md
 /**
  * Web Share: share nativo, si no copia URL/texto. AbortError = el usuario canceló.
  */

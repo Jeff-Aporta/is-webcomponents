@@ -1,3 +1,4 @@
+// @contexto INDICE.md · scripts/README.md
 // scripts/tour-content.mjs — Tour de contenido end-to-end.
 //
 // A diferencia de tour-deploy (HTTP) y tour-stagehand (network+console.error),

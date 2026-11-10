@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 // fill.ts — tirador de relleno: detecta series (números, fechas, días, meses, trimestres, texto
 // con número) y las prolonga. Sin patrón, repite. Puro: no toca el libro.
 import { daysInMonth, DAYS_EN, DAYS_ES, fromSerial, MONTHS_EN, MONTHS_ES, serial } from './dates.js';

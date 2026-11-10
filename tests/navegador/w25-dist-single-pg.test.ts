@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/navegador/README.md
 // tests/navegador/w25-dist-single-pg.test.ts — Guardián W25: dist debe tener 1 solo PG por demo.
 //
 // Por qué este test (no runtime):

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/preview/README.md
 /**
  * examples-carousel.ts — Zod schemas para los tipos extraídos de este módulo.
  *

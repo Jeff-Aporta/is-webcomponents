@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/componentes/README.md
 import assert from 'node:assert';
 import {
   scaleLinear, scaleBand, niceTicks, pathLine, pathArea, pathArc, roundedBarRect, polarToCartesian,

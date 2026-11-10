@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/diagrams/README.md
 import { richTextPlain } from '@jeff-aporta/iswc-base/core/tk-text.js';
 import { diagramHeaderWidth } from './diagram-model.js';
 import { resolveTkHue, SERIE_HUES } from '@jeff-aporta/iswc-base/core/color.js';

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 /**
  * ag-grid/celdas/contexto — Arma el contexto de una celda fuera del ciclo de
  * render (tooltips, clics, flash) y aplica el renderer de una columna.

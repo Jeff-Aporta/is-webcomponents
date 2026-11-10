@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 // tests/cdn-snippet-match.test.ts
 //
 // Verifica que el matching de `mountCdnSnippet()` (en scripts/preview-chrome.js)

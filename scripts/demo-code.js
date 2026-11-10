@@ -1,3 +1,4 @@
+// @contexto INDICE.md · scripts/README.md
 /**
  * demo-code.js — botón "Ver código del ejemplo" en cada `.demo`.
  *

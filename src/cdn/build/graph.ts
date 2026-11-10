@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/cdn/build/README.md
 /**
  * graph.ts — el grafo del build único, sacado del metafile de esbuild (plan D5/D9, fase F3).
  *

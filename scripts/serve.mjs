@@ -1,3 +1,4 @@
+// @contexto INDICE.md · scripts/README.md
 /**
  * Servidor estático para los previews.
  *

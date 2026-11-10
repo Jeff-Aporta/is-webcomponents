@@ -1,3 +1,4 @@
+// @contexto INDICE.md · .audit/README.md
 // Debug: load color-picker and trace each error's stack.
 import { chromium } from 'playwright';
 

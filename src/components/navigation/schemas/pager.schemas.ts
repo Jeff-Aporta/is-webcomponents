@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/navigation/README.md
 /**
  * pager.schemas.ts — tipos de `<iswc-pager>`.
  */

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/actions/README.md
 /**
  * share-button.schemas.ts — tipos de `<iswc-share-button>`.
  */

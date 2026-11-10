@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 // tests/theme-toggle-icon.test.ts
 //
 // Verifica que el componente <iswc-theme-toggle> sincroniza correctamente

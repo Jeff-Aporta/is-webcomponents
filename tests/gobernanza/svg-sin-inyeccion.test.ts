@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 /**
  * Guardián WHAT: los SVG que exporta el kit llegan intactos aunque los sirva Live Server.
  * live-server inyecta su script de recarga antes del primer `</svg>` (también en un .svg servido como

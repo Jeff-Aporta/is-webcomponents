@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/forms/time-input.md
 import { definePickerInput } from './utils/picker-element.js';
 import './time-field.js';
 import './time-clock.js';

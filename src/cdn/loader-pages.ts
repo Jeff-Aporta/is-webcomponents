@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/cdn/loader.md
 /**
  * loader-pages — capa 2 del loader (plan D7): `loadPageModules`, los módulos de página de la galería y de las apps
  * (alias de `state.pageModules`, `cdn:…` del kit o rutas sueltas).

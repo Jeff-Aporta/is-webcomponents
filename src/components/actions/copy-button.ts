@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/actions/copy-button.md
 import './button.js';
 import { withStyleAttrs } from '@jeff-aporta/iswc-base/core/attrs.js';
 

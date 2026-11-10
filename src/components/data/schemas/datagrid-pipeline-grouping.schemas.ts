@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 /**
  * pipeline-grouping.schema.ts — esquemas Zod para tipos locales del pipeline.
  */

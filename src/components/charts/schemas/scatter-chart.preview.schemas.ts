@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/charts/README.md
 /**
  * scatter-chart.preview.ts — Zod schemas para los tipos extraídos de este módulo.
  *

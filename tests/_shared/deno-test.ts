@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/_shared/README.md
 // deno-test.ts — adapta la forma `Deno.test(...)` al registrador común (`coleccionPruebas`).
 //
 //   const { test, lista } = coleccionPruebas({ categoria: 'what' });

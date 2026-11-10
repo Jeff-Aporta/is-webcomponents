@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/diagramas/README.md
 /**
  * Un diagrama incrustado (nodo `nested`) se ESCALA entero: E1 la caja usa el viewBox de la captura
  * (escala uniforme, sin redibujar) y E2 ningún trazo conserva `non-scaling-stroke`, así las líneas y

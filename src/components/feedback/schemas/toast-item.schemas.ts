@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/feedback/README.md
 /**
  * toast-item.schemas.ts — tipos de `<iswc-toast-item>`.
  */

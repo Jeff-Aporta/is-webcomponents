@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 /**
  * aplanar-codemod.test.ts — `scripts/codemods/aplanar.mjs` (F9a, B1) sobre un repo temporal.
  *

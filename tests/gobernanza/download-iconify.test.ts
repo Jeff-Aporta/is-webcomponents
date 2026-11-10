@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 // download-iconify.test.ts — QUÉ hace la herramienta de íconos de las apps (src/vendor-distributions/client/tools/download-iconify.ts),
 // como caja negra: una app en disco + una API de Iconify simulada → los SVG en `assets/iconify/` (SIN mapa).
 //   I1 descarga los ids reales que la app usa, más `extra` (lo que el barrido no ve: los del kit).

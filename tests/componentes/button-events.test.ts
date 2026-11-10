@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/componentes/README.md
 // button-events.test.ts — los 4 eventos propios de <iswc-button> existen de verdad.
 //
 // Nace de un fallo concreto: `iswc-invalid` estaba documentado en la cabecera de

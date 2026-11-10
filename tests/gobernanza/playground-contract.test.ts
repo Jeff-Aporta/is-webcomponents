@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 /**
  * Guardián S-PG1…S-PG3 — playground canonico + chrome sin clip.
  *

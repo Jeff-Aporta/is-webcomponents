@@ -1,3 +1,4 @@
+// @contexto INDICE.md · scripts/README.md
 /**
  * ts-tipo-por-selector.ts — El selector ya dice qué elemento devuelve la búsqueda.
  *

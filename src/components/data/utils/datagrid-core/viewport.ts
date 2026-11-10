@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 import type { ColumnState } from '@jeff-aporta/iswc-base/components/data/schemas/datagrid-types.schemas.js';
 import type { ColLayout } from "@jeff-aporta/iswc-base/components/data/schemas/datagrid-viewport.schemas.js";
 /**

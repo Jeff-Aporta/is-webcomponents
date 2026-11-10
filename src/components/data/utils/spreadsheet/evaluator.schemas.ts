@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 // evaluator.schemas.ts: contratos de tipos de evaluator.ts.
 import type { Scalar } from './values.schemas.js';
 import type { Node } from './parser.schemas.js';

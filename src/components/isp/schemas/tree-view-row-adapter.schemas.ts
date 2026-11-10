@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/isp/README.md
 /**
  * row-adapter.ts — Zod schemas para los tipos extraídos de este módulo.
  *

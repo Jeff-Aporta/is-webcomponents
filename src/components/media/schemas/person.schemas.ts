@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/media/README.md
 /**
  * person.schemas.ts — props de `<iswc-person>`.
  */

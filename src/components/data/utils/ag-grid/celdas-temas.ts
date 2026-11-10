@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 /**
  * ag-grid/celdas/temas — Presets y parametros de tema (`--iswc-grid-*`).
  *

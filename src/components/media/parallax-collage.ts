@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/media/parallax-collage.md
 import type { Capa } from './schemas/parallax-collage.schemas.js';
 import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import css from 'iswc:css';

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 /**
  * ag-grid/edicion/apoyo — Lecturas comunes de los controladores sobre el host.
  */

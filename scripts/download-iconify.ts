@@ -1,3 +1,4 @@
+// @contexto INDICE.md · scripts/README.md
 /**
  * scripts/download-iconify.ts
  *

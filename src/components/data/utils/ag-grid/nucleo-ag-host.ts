@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 /**
  * nucleo/base-celdas — Renderers minimos por `type`, para que la grilla pinte
  * igual si el plugin de celdas no esta instalado. Ese plugin los sobreescribe.

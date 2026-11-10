@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/e2e/README.md
 // 07-a11y-gaps.test.ts: tests que documentan los gaps de accesibilidad
 // descubiertos por los sub-agentes auditores (F0 — deep-test-proposals).
 //

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/previews/README.md
 /**
  * ficha-bridge.ts — Zod schemas para los tipos extraídos de este módulo.
  *

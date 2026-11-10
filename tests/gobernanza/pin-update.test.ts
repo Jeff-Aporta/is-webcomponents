@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 // S-H1: requisito de specs/herramientas/spec.md (WHAT-first, ver specs/testing.md S-T6)
 // pin-update.test.ts — QUÉ reporta el inventario de pines del kit (src/vendor-distributions/shared/tools/pin-update.mjs), como caja
 // negra: una app en disco → salida y código de salida. Sin red (el inventario no la usa).

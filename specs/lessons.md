@@ -252,3 +252,14 @@ Detalles de **inventario por tag** (tablas de componentes de cada categoría), l
 | `write` falla en dirs nuevos | Usar `Set-Content` de PowerShell |
 | Sub-agents F0.3 proposal writers terminan sin escribir el archivo (35%) | Re-dispatch con prompt estricto "WRITE ONLY" + template inline + verificación `Test-Path` |
 | `tsc --noEmit` reporta errores en líneas de multiline messages que rompen el split por `(` | Usar `Select-String -Pattern '^src/.+\(\d+,\d+\): error TS'` con regex anclada |
+
+## Identidad, JSON y estilos (F9b, 2026-11-10)
+
+| Trampa | Mitigación |
+|---|---|
+| Normalizar la marca en prosa («ISWC») también tocó el prefijo `iswc:` (las llaves de localStorage, el alias del import map, los marcadores de precarga): el prefijo es un identificador público y dejarlo en mayúscula rompe el contrato con las apps | Excluir del patrón de prosa todo identificador (`:` a la derecha included) y arreglar el contrato a mano: el guardián I5 mira prosa, no identificadores |
+| Un codemod que parte por `\n` y rejoin con `\n` normaliza los finales de línea: 34 archivos del repo usan CRLF (y alguno CR suelto) y el diff los daba por reescritos enteros | Partir con `/\r\n|\r|\n/` capturing el terminador y devolverlo tal cual al rejoin (`scripts/codemods/cabecera-contexto.mjs`) |
+| Importar `sass` (o cualquier paquete npm) arriba en un archivo de pruebas rompe su carga en el proceso del runner (`reading 'length'`) | Importar lo pesado dentro del cuerpo de la prueba, que corre aislada |
+| Minificar los JSON de `dist/` dio −26 % de bytes sin comprimir y −1,4 % por el cable: el JSON con espacios comprime muy bien | Medir las dos cosas y decir las dos: el ahorro real es en disco y sin `Content-Encoding` |
+| Un bloque de SCSS repetido en 13 diagramas no era idéntico: el texto del estado vacío cambia por diagrama | El mixin recibe el texto como parámetro y el CSS se compara por declaración (`deno task css:equivalente`), no a ojo |
+| Reescribir un `.scss` a mano puede cambiar el CSS sin que se note (un orden, un `em`): el build igual publica algo distinto | `scripts/sondas/css-equivalente.mjs` compila cada `.scss` y compara con la foto anterior por bloque; el refactor se acepta solo si da 0 archivos distintos |

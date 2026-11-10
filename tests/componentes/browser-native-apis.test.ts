@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/componentes/README.md
 // tests/browser-native-apis.test.ts
 //
 // Las APIs nativas del navegador viven en tags concretos (o en el form que ya

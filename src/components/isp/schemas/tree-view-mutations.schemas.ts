@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/isp/README.md
 /**
  * 06-mutations.ts — Zod schemas para los tipos extraídos de este módulo.
  *

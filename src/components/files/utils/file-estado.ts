@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/files/README.md
 /** Lo común del chrome de la familia file-preview: alto por atributo y estados vacío/error. */
 import '@jeff-aporta/iswc-base/components/feedback/empty-state.js';
 

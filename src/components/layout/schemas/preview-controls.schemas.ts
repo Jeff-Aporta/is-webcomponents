@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/layout/README.md
 /**
  * preview-controls.ts — Zod schemas para los tipos extraídos de este módulo.
  *

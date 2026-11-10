@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 /**
  * ag-grid/celdas/html — Saneo de lo que entra a los strings de celda.
  * Puro: sin DOM. Cada valor del usuario pasa por aqui antes de tocar HTML.

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/diagramas/README.md
 // Self-check plano (node:assert) para lane-layout.js. Sin framework.
 import assert from 'node:assert';
 import {

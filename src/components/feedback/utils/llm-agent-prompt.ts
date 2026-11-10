@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/feedback/README.md
 /**
  * Prompt canónico para agentes + helpers de ensamblaje.
  * Fuente de verdad en prosa: `skills/iswc-base/PROMPT.md`

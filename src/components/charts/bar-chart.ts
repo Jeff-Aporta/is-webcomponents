@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/charts/bar-chart.md
 import './chart.js';
 import { drawBarMarks } from './utils/marks-cartesian.js';
 

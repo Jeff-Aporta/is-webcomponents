@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/layout/doc-demo.md
 /**
  * <iswc-doc-demo> — shell homogéneo de documentación/demo para cualquier app.
  *

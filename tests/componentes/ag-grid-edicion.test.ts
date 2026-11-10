@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/componentes/README.md
 /**
  * ag-grid-edicion.test.ts — Logica pura de la parcela de edicion de <iswc-ag-grid>:
  * rangos, relleno, historial, portapapeles, lote, validacion, navegacion,

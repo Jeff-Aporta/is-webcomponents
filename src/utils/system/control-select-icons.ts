@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/utils/README.md
 /**
  * Iconos sugeridos para opciones de <iswc-preview-controls> select.
  * Enrichment en runtime: el JSON puede omitir `icon` y se completa aquí.

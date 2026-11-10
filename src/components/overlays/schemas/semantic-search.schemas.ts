@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/overlays/README.md
 /**
  * semantic-search.schemas.ts — props de `<iswc-semantic-search>`.
  */

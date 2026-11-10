@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 /** Tipos de seleccion-rangos.ts. */
 import type { EjeRelleno, Posicion, Rango } from './edicion.schemas.js';
 

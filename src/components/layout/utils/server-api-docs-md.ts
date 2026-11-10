@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/layout/README.md
 /**
  * server-api-docs-md.ts — dominio puro de `<iswc-server-api-docs>` (sin DOM ni red).
  *

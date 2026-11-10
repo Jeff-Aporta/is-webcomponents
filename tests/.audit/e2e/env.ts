@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/README.md
 // env.ts: configuración E2E de iswc-base SIN .env.
 // Los secretos se leen de un archivo explícito (nunca de otra carpeta local por defecto):
 //   - MiniMax:  $ISWC_SECRETS (o <repo>/.secrets.json, ignorado por git) -> Values.MINIMAX_API_KEY_50USD

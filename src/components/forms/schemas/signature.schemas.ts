@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/forms/README.md
 /**
  * signature.schemas.ts — tipos de `<iswc-signature>`.
  */

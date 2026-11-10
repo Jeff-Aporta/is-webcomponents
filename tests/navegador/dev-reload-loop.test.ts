@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/navegador/README.md
 // tests/navegador/dev-reload-loop.test.ts — Regresión: dev-reload no debe spammear
 // `reload-pin` cuando la pestaña está idle.
 //

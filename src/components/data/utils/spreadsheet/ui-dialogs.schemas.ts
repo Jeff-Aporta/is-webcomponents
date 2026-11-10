@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 // find.schemas.ts: contratos de tipos de find.ts.
 import type { Sheet } from './engine.js';
 import type { SpreadsheetDoc } from './document.js';

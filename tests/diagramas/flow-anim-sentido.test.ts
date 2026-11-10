@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/diagramas/README.md
 /**
  * Guardián WHAT del sentido estándar de la animación de flujo en todos los diagramas.
  *   S1 clases: herencia y realización fluyen al revés del trazo (padre → hijo); el resto, con él.

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/README.md
 // minimax.ts: modelo traido por el cliente (bring-your-own-LLM) para Stagehand v4.
 // MiniMax no esta entre los proveedores first-class de Stagehand; se le pasa un
 // callback `generate` (POST {base}/chat/completions, thinking desactivado).

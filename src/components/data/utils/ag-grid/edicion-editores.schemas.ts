@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 /** Tipos de editores.ts. */
 import type { ColDefAg, GridHost } from './contrato.schemas.js';
 import type { Parametros } from './edicion-apoyo.schemas.js';

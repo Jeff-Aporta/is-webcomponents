@@ -1,4 +1,4 @@
-﻿# ADR — decisiones cerradas
+# ADR — decisiones cerradas
 
 Debates que no deben reabrirse cada sesión. Formato breve:
 
@@ -52,6 +52,18 @@ Si el debate solo afecta un dominio, puede vivir como sección fija en `specs/<d
 **Decisión:** Aplanar, no ramificar. `src/core` queda en 24 archivos por dominio: `iswc-element` (+ `element`, `base-sheets`), `attrs` (+ `reflect`, `intent`, `tone`, `button-shape`, `media-shape`), `dom` (+ `dom-utils`, `misc-utils`, `theme-scope`), `position` (+ `popup-dismiss`), `color` (+ `tk-hue`, `tk-color`), `tk-text` (+ `tk-icon-inline`, `tk-rich-text`), `code` (+ `code-text`, `code-diff`, `code-langs`, `highlight-code`), `prefs` (+ `scroll-memory`), `app-init` (+ `app-cfg`), y siguen `props-element`, `element-base`, `tk-inline-md` (registra `<iswc-icon>`: no viaja con `tk-text`), `svg-chart-engine`, `path-turtle`, `diagram-grid`, `tree-layout`, `icon-loader`, `code-highlight`, `iswc-storage`, `cdn-ref`, `form-associated`, `form-control-mixin`, `resolve-locale` (los tres últimos los absorbe F8) e `iswc-css-vacio`. `json-html` pasa a `isp/utils/isp-json.ts` y `spa-state` a `layout/utils/spa-state.ts`. Los utils de cada categoría van en un nivel con prefijo de familia (`diagram-*`, `tree-view-*`, `ag-grid/<familia>-*`, `spreadsheet/{fn,macro,ui}-*`); schemas 1:1 con su `.ts`. Todo con `scripts/codemods/aplanar.mjs` y un mapa versionado por lote (`scripts/codemods/aplanar-<fase>.json`). Una fusión que haga cargar a un importador código o efectos que no usa (un tag registrado, un ciclo de clases) se descarta y queda anotada en su mapa.
 
 **Consecuencias (breaking):** desaparecen las rutas públicas `core/<x>.min.mjs` de los módulos fundidos (`element`, `base-sheets`, `reflect`, `intent`, `tone`, `button-shape`, `media-shape`, `dom-utils`, `misc-utils`, `theme-scope`, `popup-dismiss`, `tk-hue`, `tk-color`, `tk-icon-inline`, `tk-rich-text`, `code-text`, `code-diff`, `code-langs`, `highlight-code`, `scroll-memory`, `app-cfg`, `json-html`, `spa-state`) y las de los utils renombrados. No hay alias de compatibilidad (sin reexports ni barriles): un pin por SHA anterior sigue funcionando; quien re-pinee e importe un módulo suelto cambia la ruta (tabla en `specs/cdn.md` §Aplanado de core). Se conservan `core/loader`, `core/app-init`, `is-base`, `palettes`, `core/iswc-element`, `core/props-element`, `core/attrs`, `core/iswc-storage` y `core/cdn-ref`. Cierres medidos (archivos · bytes): `button` 11 · 36 093 → 7 · 36 237, `input` 16 · 62 465 → 11 · 63 062, `flowchart` 53 · 671 965 → 38 · 685 415, shell de Avatar 68 · 367 228 → 58 · 370 449; chunks 344 → 313.
+
+## ADR índice de md y cabeceras de contexto (F9b), 2026-11-10
+
+**Contexto:** el repo tenía 1 900 fuentes y más de 300 md repartidos por carpetas, sin un mapa: un agente queickers tenía que saber de memoria dónde estaba la ficha de un componente o las reglas de un dominio. Además, la marca del kit («ISWC») estaba escrita de seis maneras y los JSON publicados iban con sangría (2,4 MB de fichas que el navegador pagaba en cada petición).
+
+**Decisión:** tres cosas, cada una con su generador y su guardián:
+- **`INDICE.md` generado** (`scripts/indice-md.mjs`, `deno task indice`, regenerado por el build): recorre los md versionados, los agrupa por dominio en un orden fijo y escribe una fila por documento (título, ruta enlazada y URL raw). Es idempotente. La jerarquía para un agente es `AGENTS.md` (~150 líneas) → `INDICE.md` → `specs/constitution.md` → skill principal → md del dominio.
+- **Cabecera `@contexto`** (`scripts/codemods/cabecera-contexto.mjs`): cada fuente del kit lleva `// @contexto INDICE.md · <md del dominio>`, detrás del shebang, del `@vendor` y del `@doc`. Las 1 474 fuentes del kit la llevan; el alcance excluye `demos/`, `labs/` (cuyo contenido no se toca) y `dist/`.
+- **Md de dominio**: 13 README nuevos (los dominios que no tenían uno) y 16 README de categoría de componentes, con la lista de componentes **generada** desde el manifest entre las marcas `<!-- generado:componentes -->`.
+- **JSON minificados**: lo que se publica va minificado (`src/cdn/build/json.ts`), lo que se edita queda legible. La URL de un md es `raw.githubusercontent.com`, nunca `blob/main`.
+
+**Consecuencias:** la URL de un md cambia de forma (`blob/main` → raw), pero el contenido no: 283 enlaces actualizados. El índice es un archivo generado: no se edita a mano (el build lo pisa) y su guardián comprueba que ningún md quede fuera, que ningún enlace esté roto y que regenerarlo no cambie nada. La cabecera es un comentario: no pesa en el bundle, pero obliga al codemod a respetar los finales de línea del archivo (34 archivos usan CRLF).
 
 ## ADR molde reactivo propio (F8), 2026-11-07
 

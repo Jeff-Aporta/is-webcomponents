@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+// @contexto INDICE.md · scripts/README.md
 /**
  * vendor-stamp.mjs — estampa la cabecera de origen `@vendor <ISO> <repo>@main <ruta-en-el-kit>` en lo que el
  * kit distribuye por vendor: `src/vendor-distributions/**` y `skills/**` y sus copias en `dist/cdn/` (Jeff, 2026-10-13). Así el `vendor.ts`

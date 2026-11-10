@@ -1,3 +1,4 @@
+// @contexto INDICE.md · scripts/README.md
 // eventos.ts — sonda de eventos tipados (specs/paridad-webawesome.md HOW-6, F8 hito 5).
 //
 // Contrato (cero bytes en runtime): cada componente declara sus eventos con un tipo de una línea en su

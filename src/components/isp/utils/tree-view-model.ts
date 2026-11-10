@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/isp/README.md
 /**
  * TAModel — operaciones CRUD de un nodo del árbol.
  *

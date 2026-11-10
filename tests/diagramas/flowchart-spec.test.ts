@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/diagramas/README.md
 import assert from 'node:assert';
 import { resolveFlowchartSpec, computeFlowchartLayout } from '../../src/components/diagrams/utils/flowchart-spec.js';
 import { pathPoints as parsePathPoints } from '../../src/components/diagrams/utils/diagram-edges.js';

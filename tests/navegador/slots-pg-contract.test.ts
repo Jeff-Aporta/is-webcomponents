@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/navegador/README.md
 // tests/navegador/slots-pg-contract.test.ts — Guardián del helper <iswc-slots-pg>.
 //
 // Por qué un test de contrato (no runtime):

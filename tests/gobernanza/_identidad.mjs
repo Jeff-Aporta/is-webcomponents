@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 // _identidad.mjs — núcleo compartido del guardián de identidad (FASE B.2).
 //
 // La marca del kit es `iswc`. Este módulo sabe cómo se escribe la marca que el kit

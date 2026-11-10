@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/navegador/README.md
 // tests/navegador/diagram-astar-rules.test.ts — Guardián de las reglas del router de
 // aristas del `<iswc-component-diagram>` (src/components/diagrams/utils/component-router.ts).
 //

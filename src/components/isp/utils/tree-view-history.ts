@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/isp/README.md
 /**
  * TAHistory — undo/redo + protección del árbol.
  *

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · scripts/README.md
 // build-classic.mjs — artefacto clásico opcional (plan D1/D2, fase F3): `dist/cdn/<cat>/<tag>.classic.js`.
 //
 //   deno task build:classic -- <tag> [<tag>…] [--out <carpeta>]

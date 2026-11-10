@@ -1,3 +1,4 @@
+// @contexto INDICE.md · .audit/README.md
 // .audit/audit-sections.mjs — Phase J1 audit script
 // Scans src/components/**/*.md, classifies H2/H3 sections vs the 9-section
 // standard, and emits a markdown report.

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/diagrams/README.md
 /**
  * diagram-graph.ts — grafo dirigido de un diagrama (nodos por id, aristas `from → to`), común a
  * todos los motores que recorren el flujo: capas (node-link), reprocesos (swimlane), índices

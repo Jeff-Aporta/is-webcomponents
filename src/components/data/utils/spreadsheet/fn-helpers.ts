@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 // helpers.ts — utilidades compartidas por las familias de funciones.
 import type { Ctx } from './evaluator.schemas.js';
 import { refMatrix } from './evaluator.js';

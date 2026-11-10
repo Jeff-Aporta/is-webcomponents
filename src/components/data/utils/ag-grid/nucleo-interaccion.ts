@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 /**
  * nucleo/interaccion — Raton y teclado por delegacion sobre el viewport.
  *

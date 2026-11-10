@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 /**
  * orden — Sorting: ciclo de clic, multi-orden, comparacion por tipo, orden absoluto y acentos.
  */

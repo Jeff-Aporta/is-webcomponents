@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/files/README.md
 /**
  * mime-map.ts — Zod schemas para los tipos extraídos de este módulo.
  *

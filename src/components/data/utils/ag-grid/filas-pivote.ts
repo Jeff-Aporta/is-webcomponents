@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 /**
  * ag-grid/filas/pivote — Columnas generadas por pivote. Logica pura.
  *

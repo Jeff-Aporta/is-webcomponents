@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/charts/README.md
 /**
  * chart-palette.ts — Zod schemas para los tipos extraídos de este módulo.
  *

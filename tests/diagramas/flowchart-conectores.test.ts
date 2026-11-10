@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/diagramas/README.md
 /**
  * Guardianes WHAT de conectores y rieles del flujo iswc (rutas reales del lab
  * `labs/iss-ayudascpia-flujos/payloads/ruta-*.json` y casos mínimos):

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/helpers/README.md
 /**
  * Fences MD ` ```iswc-<nombre> ` → tag iswc-* (diagramas en solo lectura).
  * Acepta kind corto (flowchart) o el nombre del tag (er-diagram).

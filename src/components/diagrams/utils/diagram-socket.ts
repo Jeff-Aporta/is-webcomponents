@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/diagrams/README.md
 /**
  * diagram-socket.ts — pintor del conector iswc `-(O-` / `-(O=`, común a todos los diagramas.
  *

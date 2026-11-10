@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/diagramas/README.md
 import assert from 'node:assert';
 import { resolveSankeySpec, computeSankeyLayout } from '../../src/components/diagrams/utils/sankey-spec.js';
 import { resolveQuadrantSpec, computeQuadrantLayout } from '../../src/components/diagrams/utils/quadrant-spec.js';

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/e2e/README.md
 // 10-ux-proposals.test.ts — implementacion exhaustiva de las 1,158 proposals UX/UI.
 //
 // Por cada demo del catalogo (Object.keys(catalog)) corre un set COMPLETO de

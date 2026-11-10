@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/componentes/README.md
 // tests/css-imports.test.ts
 //
 // Los CSS de componente usan `@import url('../_shared/<x>.css')`. Ese import

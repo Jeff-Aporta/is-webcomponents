@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/media/theme-img.md
 import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import { setStringAttr, MEDIA_SHAPE } from '@jeff-aporta/iswc-base/core/attrs.js';
 import {

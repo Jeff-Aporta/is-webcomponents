@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/cdn/build/README.md
 /**
  * Generadores de .min.js / .min.css / loader.
  * Otro proyecto is-* los importa por vendor (copia de dist/cdn/build)

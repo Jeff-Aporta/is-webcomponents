@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/preview/demo-section.md
 /**
  * <iswc-demo-section> — Phase W32 wrapper para homogeneidad visual de las
  * secciones de los demos.

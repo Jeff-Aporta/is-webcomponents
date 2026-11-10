@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 /**
  * nucleo/opciones — Traduce opciones con nombres de AG Grid al motor.
  *

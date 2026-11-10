@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 // parser.ts — del texto de una macro a su árbol. Solo datos: nada de este árbol se ejecuta como
 // código del anfitrión.
 import { lexMacro, MacroError } from './macro-lexer.js';

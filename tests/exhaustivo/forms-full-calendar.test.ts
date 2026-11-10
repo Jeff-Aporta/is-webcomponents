@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/exhaustivo/README.md
 /**
  * full-calendar.test.ts — Tests exhaustivos de <iswc-full-calendar>.
  *

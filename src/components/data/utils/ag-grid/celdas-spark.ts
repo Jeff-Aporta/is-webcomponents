@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 /**
  * ag-grid/celdas/spark — Sparkline de celda como string SVG, sin medir el DOM.
  *

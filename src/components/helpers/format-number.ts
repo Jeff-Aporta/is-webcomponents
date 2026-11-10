@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/helpers/format-number.md
 import { formato, resolverLocale } from '@jeff-aporta/iswc-base/core/localize.js';
 import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import css from 'iswc:css';

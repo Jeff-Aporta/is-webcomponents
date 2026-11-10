@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 /**
  * w56-json-loads.test.ts — W56: campo `loads` para lazy loading en JSONs.
  *

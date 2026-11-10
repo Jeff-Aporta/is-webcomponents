@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 /**
  * pager-contract.test.ts — contrato de `<iswc-pager>`: 4 archivos hermanos, entrada en el
  * manifest, demo con playground y la API que consume el visor de documentos.

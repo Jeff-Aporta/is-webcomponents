@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/feedback/badge.md
 import { withStyleAttrs, INTENT, TONE } from '@jeff-aporta/iswc-base/core/attrs.js';
 import { ocultarSlotsVacios } from '@jeff-aporta/iswc-base/core/dom.js';
 

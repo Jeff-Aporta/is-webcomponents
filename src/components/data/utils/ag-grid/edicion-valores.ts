@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 /**
  * ag-grid/edicion/valores — Conversion pura entre lo que muestra un editor y
  * el valor de la celda, y filtrado de las listas de los editores.

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/helpers/md-editor.md
 import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import { setStringAttr, setOptionalAttr } from '@jeff-aporta/iswc-base/core/attrs.js';
 import {

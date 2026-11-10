@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/isp/README.md
 import { resolveColor } from './tree-view-context.js';
 import { TARowBase } from './tree-view-as-row.js';
 

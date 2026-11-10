@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/feedback/README.md
 /**
  * Behavior migrado desde HTML inline de iswc-tooltip.
  * Se ejecuta en mount() tras pintar la definition JSON.

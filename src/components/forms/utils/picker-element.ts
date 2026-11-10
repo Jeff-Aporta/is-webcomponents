@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/forms/README.md
 import { withStyleAttrs } from '@jeff-aporta/iswc-base/core/attrs.js';
 import { computePosition } from '@jeff-aporta/iswc-base/core/position.js';
 import { formatDate, formatTime, splitDateTime, todayISO, toTime } from './date-utils.js';

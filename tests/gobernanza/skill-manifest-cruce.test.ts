@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 /**
  * skill-manifest-cruce.test.ts — el índice de la skill general (`skills/iswc-base/SKILL.md`) lista
  * TODOS los componentes del manifest: un agente que lea la skill encuentra cada tag publicado con su

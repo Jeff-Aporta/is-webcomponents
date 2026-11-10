@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 // scss-simple.test.ts — el SCSS del kit se mantiene simple: un modulo, sin @import y sin
 // copias del bloque que ya vive en el modulo.
 //

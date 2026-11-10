@@ -1,3 +1,4 @@
+// @contexto INDICE.md · scripts/README.md
 // min-mjs.mjs — los módulos ES del kit se publican como `.min.mjs` (plan D2, fase F3).
 //
 //   deno run -A --no-check scripts/codemods/min-mjs.mjs [--dry-run]

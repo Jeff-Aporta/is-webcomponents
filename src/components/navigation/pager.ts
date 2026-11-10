@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/navigation/pager.md
 import { emitCancelable, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import { IswcReactive } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
 import { registrarTerminos } from '@jeff-aporta/iswc-base/core/localize.js';

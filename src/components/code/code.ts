@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/code/code.md
 /**
  * <iswc-code> — Editor de código con motor NATIVO (code-highlight, sin
  * CodeMirror): langs, temas JSON, formateo estilo Prettier, marks y API

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/forms/time-clock.md
 import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import { formatTime, from12Hour, pad, parseTime, to12Hour, toTime, uses12Hour } from './utils/date-utils.js';
 import type { ParsedTime, RingItem, View, Meridiem, CommitOpts, PickOpts, TimeClockEventos } from "./schemas/time-clock.schemas.js";

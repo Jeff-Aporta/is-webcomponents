@@ -1,3 +1,4 @@
+// @contexto INDICE.md · scripts/README.md
 // medir-carga.mjs — cascada de carga de una página en Edge headless (plan carga modular, F7).
 //
 //   deno task medir -- --url=<url|ruta> [--ready=<attr|selector>] [--cold|--warm] [--throttle] [--json=<ruta>]

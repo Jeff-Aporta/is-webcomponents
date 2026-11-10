@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/componentes/README.md
 /**
  * em-scale-font-inherit.test.ts — la escala por font-size no puede mentir.
  *

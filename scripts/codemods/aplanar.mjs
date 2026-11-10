@@ -1,3 +1,4 @@
+// @contexto INDICE.md · scripts/README.md
 // aplanar.mjs — fusiona y mueve módulos según un mapa JSON y reescribe todas las referencias del repo (F9a, B1).
 //
 //   deno run -A scripts/codemods/aplanar.mjs scripts/codemods/aplanar-<fase>.json [--dry] [--raiz=<repo>]

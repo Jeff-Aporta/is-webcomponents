@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 /**
  * Tipos de columna del data grid: alineación por defecto, comparador,
  * formateo y operadores de filtro. Réplica de los tipos nativos de MUI X

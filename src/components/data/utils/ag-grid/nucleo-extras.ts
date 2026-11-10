@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 /**
  * nucleo/extras — Plugin de opciones y API menores del nucleo: numeros de fila,
  * tamaños de cabecera, autosize inicial, consultas de columnas y grupos, menus

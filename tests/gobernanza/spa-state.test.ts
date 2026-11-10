@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 /**
  * Estado de SPA en la URL (`components/layout/utils/spa-state.ts`), con un navegador simulado
  * (location + history + popstate) para correr en Deno.

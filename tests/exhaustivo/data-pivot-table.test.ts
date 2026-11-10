@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/exhaustivo/README.md
 /**
  * pivot-table.test.ts — verificación exhaustiva de <iswc-pivot-table>.
  *

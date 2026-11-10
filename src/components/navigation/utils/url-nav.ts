@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/navigation/README.md
 /**
  * url-nav.js — memoria de navegación solo en `?s=` (b64url JSON).
  *

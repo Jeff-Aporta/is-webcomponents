@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/cdn/loader.md
 /**
  * ensure-element — asegura que un custom element esté definido (lazy CDN).
  *

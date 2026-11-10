@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/componentes/README.md
 /**
  * icon-loader sin prefetch de índices ni mapa: localStorage → web publicada de la app (`data-icons`) → API de Iconify.
  */

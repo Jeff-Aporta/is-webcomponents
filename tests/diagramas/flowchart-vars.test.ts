@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/diagramas/README.md
 /**
  * Guardián WHAT del nodo de declaración de variables (`shape: "vars"`).
  *   V1 es una tabla nombre · valor (obligatorios); una fila sin nombre o sin valor no entra.

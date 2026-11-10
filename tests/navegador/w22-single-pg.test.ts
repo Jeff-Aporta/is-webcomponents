@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/navegador/README.md
 // tests/navegador/w22-single-pg.test.ts — Guardián W22: 1 solo PG por demo (siempre de primera).
 //
 // Por qué este test (no runtime):

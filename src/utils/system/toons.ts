@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/utils/README.md
 // toons.ts: definiciones de sistema "toon" — textos/labels de tests por
 // componente y config de testers, SIEMPRE en JSON (dev-only). Cargador tipado.
 import { readFileSync } from 'node:fs';

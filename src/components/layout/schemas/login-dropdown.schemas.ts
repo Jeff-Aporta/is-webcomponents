@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/layout/README.md
 /**
  * login-dropdown.schemas.ts — `choices` y detalle de `iswc-login-submit` de <iswc-login-dropdown>
  * (contrato público, ver specs/app-shell/spec.md).

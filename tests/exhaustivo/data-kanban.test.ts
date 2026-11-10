@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/exhaustivo/README.md
 /**
  * kanban.test.ts — verificación exhaustiva de <iswc-kanban>,
  * <iswc-kanban-column> y <iswc-kanban-card>.

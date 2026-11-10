@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/helpers/README.md
 /**
  * md-render.schemas.ts — tipos de `<iswc-md-render>`.
  *

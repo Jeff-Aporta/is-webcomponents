@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 import { paint } from '@jeff-aporta/iswc-base/core/code.js';
 import type { ColumnDef, Row } from '@jeff-aporta/iswc-base/components/data/schemas/grid-types.schemas.js';
 import type { DataGridElement } from "@jeff-aporta/iswc-base/components/data/schemas/data-grid.preview.schemas.js";

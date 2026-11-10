@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/preview/examples-carousel.md
 /**
  * <iswc-examples-carousel> — Helper W19: carrusel de ejemplos predefinidos.
  *

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 // a11y-patrones.test.ts — guardián estático de F8 hito 6 (specs/paridad-webawesome.md HOW-7): patrones ARIA en las
 // plantillas de los componentes (`TEMPLATE.innerHTML = \`…\``, `.innerHTML = \`…\`` y literales `html\`…\``) y en
 // `setAttribute('role' | 'aria-*', …)` / `.role = '…'` del código.

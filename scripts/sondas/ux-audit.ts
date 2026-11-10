@@ -1,3 +1,4 @@
+// @contexto INDICE.md · scripts/README.md
 /**
  * ux-audit.ts — QA UX de la galería: carga cada preview, interactúa demos,
  * captura pantallazos y recolecta errores de consola / pageerror.

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 // indice-md.test.ts — guardián del INDICE.md: el indice de todos los md del repo.
 //
 // El indice es la bisagra de la jerarquia para agentes:

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · scripts/README.md
 // Regenera el índice de la skill general y completa guías o páginas que falten.
 import { readFileSync, writeFileSync, existsSync, mkdirSync, copyFileSync, readdirSync } from 'node:fs';
 import { dirname, join } from 'node:path';

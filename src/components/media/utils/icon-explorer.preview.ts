@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/media/README.md
 import '@jeff-aporta/iswc-base/components/layout/card.js';
 import { iconApiUrl, listIconFamilies, listIconNames, prefetchIcons, resolveIconRaw, searchIconNames } from '@jeff-aporta/iswc-base/core/icon-loader.js';
 import type { IconFamily } from '@jeff-aporta/iswc-base/core/schemas/icon-loader.schemas.js';

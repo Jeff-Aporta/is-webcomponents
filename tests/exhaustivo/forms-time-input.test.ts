@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/exhaustivo/README.md
 /**
  * time-input.test.ts — Tests exhaustivos de <iswc-time-input>.
  */

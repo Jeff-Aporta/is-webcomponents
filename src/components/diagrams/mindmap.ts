@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/diagrams/mindmap.md
 import { emit, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import { DiagramElementBase } from './utils/diagram-element-base.js';
 import { resolveMindmapSpec, computeMindmapLayout } from './utils/mindmap-spec.js';

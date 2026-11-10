@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/styles/README.md
 /**
  * color-tokens.ts — Zod schemas para los tipos extraídos de este módulo.
  *

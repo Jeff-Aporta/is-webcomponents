@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/README.md
 // tipos.schemas.ts: tipos compartidos de la suite E2E.
 // Convención: las formas se declaran como `type` en UNA línea.
 import type { Page, Stagehand, StagehandBrowser } from '@browserbasehq/stagehand';

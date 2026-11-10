@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/exhaustivo/README.md
 /**
  * tree-view.test.ts — Tier A (15 aserciones) para `<iswc-tree-view>`.
  *

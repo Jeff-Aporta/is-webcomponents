@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 // values.schemas.ts: contratos de tipos de values.ts.
 import type { CellError, RefValue, LambdaValue } from './values.ts';
 

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/componentes/README.md
 // app-shell.test.ts — Guardián WHAT de specs/app-shell/spec.md (S-AP1…S-AP23).
 //
 // Caja negra: la página carga los bundles publicados (dist/cdn) como lo haría una app

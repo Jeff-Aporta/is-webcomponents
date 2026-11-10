@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/core/README.md
 /**
  * iswc-storage — TODO lo que el kit guarda en el navegador lleva UN prefijo: `iswc:`.
  *

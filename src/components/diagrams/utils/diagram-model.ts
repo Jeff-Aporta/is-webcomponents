@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/diagrams/README.md
 import { DiagramPolicySchema, EdgeKindDefSchema, EdgeStyleSchema, NodeStructureDefSchema } from '@jeff-aporta/iswc-base/components/diagrams/schemas/diagram-model.schemas.js';
 import type { DiagramKindId, DiagramPolicy, EdgeFamily, EdgeKindDef, EdgeKindDefInput, EdgeStyle, NodeStructureDef, NodeStructureDefInput, PolicyReport, VocabStore } from '@jeff-aporta/iswc-base/components/diagrams/schemas/diagram-model.schemas.js';
 import { richTextPlain } from '@jeff-aporta/iswc-base/core/tk-text.js';

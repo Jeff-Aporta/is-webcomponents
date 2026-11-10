@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/README.md
 /**
  * Validador de RUNTIME (errores potenciales en runtime).
  *

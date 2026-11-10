@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/componentes/README.md
 // tests/attr-enums.test.ts
 //
 // DETECTOR DE INCONSISTENCIAS entre lo que un componente acepta y lo que las

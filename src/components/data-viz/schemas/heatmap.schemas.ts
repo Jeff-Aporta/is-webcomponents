@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data-viz/README.md
 /**
  * heatmap.ts — Zod schemas para los tipos extraídos de este módulo.
  *

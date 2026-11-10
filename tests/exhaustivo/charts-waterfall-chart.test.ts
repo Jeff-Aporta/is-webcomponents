@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/exhaustivo/README.md
 /**
  * waterfall-chart.test.ts — verificación exhaustiva de <iswc-waterfall-chart>.
  *

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 /**
  * filtros — Plugin de <iswc-ag-grid>: filtros de columna, quick, externo y avanzado,
  * orden, side bar, status bar, overlays, menus y api de paginacion.

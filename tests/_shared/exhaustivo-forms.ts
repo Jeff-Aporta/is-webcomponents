@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/_shared/README.md
 /**
  * _helpers.ts — Utilidades comunes para los tests exhaustivos de forms.
  *

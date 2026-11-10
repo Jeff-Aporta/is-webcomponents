@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/README.md
 /**
  * Integración con Stagehand (Browserbase) para auditorías E2E.
  *

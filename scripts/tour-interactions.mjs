@@ -1,3 +1,4 @@
+// @contexto INDICE.md · scripts/README.md
 // scripts/tour-interactions.mjs — Tour de interacciones exhaustivo.
 //
 // Gate pre-push UX/UI: para CADA demo, ejercita TODOS los botones visibles,

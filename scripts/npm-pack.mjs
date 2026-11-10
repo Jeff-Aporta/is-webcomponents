@@ -1,3 +1,4 @@
+// @contexto INDICE.md · scripts/README.md
 // npm-pack.mjs — `deno task npm:pack`: arma el tarball de npm del kit en `.tmp/npm/` y reporta tamaño y archivos
 // (plan D9, fase F6). NO publica nada: no hay cuenta ni token, y `npm publish` no se corre nunca desde aquí.
 // Requiere `deno task build` antes (genera `package.json` y `dist/cdn/`). Lo usa también

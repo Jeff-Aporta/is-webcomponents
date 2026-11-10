@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 /**
  * Guardián de la estructura de `specs/` (testing.md S-T4 y flujo-sdd «WHAT primero»).
  *   E1 archivos obligatorios presentes; sin `spec-*.md` sueltos en la raíz.

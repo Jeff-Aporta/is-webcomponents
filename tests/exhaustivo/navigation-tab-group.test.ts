@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/exhaustivo/README.md
 /**
  * tab-group.test.ts — Tier A (12 aserciones) para `<iswc-tab-group>` y familia.
  *

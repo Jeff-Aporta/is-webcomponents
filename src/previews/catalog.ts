@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/previews/README.md
 /**
  * AUTO-GENERADO por scripts/sondas/previews-to-json.ts — no editar a mano.
  * tag → { json, behavior?, category }

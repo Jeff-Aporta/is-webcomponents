@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 // loader-global-guardian.test.ts — Guardian del bug de "loader bundled pisa globalThis".
 //
 // Síntoma: tras navegar a `ecosystem` (cuyo behavior bundlea el loader dentro

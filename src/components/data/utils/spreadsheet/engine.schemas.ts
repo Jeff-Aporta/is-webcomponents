@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 // engine.schemas.ts: contratos de tipos de engine.ts.
 import type { Rect } from './address.schemas.js';
 import type { Node } from './parser.schemas.js';

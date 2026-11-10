@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/_shared/README.md
 // png.ts — decodifica un PNG de 8 bits (RGB o RGBA, sin entrelazar: lo que entrega la captura de Chromium) y compara
 // dos por píxel. Las pruebas de PNG comparan píxeles y no bytes: Edge rasteriza el MISMO SVG con ruido de
 // antialias entre corridas (medido 6-nov-2026: 22 píxeles con Δ ≤ 2 en el borde punteado de una tabla, el PNG

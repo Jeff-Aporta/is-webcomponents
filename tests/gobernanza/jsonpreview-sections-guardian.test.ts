@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 // jsonpreview-sections-guardian.test.ts — Guardian del bug §3.A del handoff.
 //
 // Síntoma: el sitio renderiza vacío en casi todos los demos (salvo los que tienen

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/navegador/README.md
 // core-f8.test.ts — molde reactivo de F8 en un navegador real (Edge headless): IswcReactive (@prop/@state/@watch,
 // planificador, `html`, `repetir`, `svg`), IswcFormControl (FormData, validez, estados user-*), localize (t(), idioma
 // heredado y diccionario perezoso), PropsElement sobre IswcReactive (pintado síncrono, uno por cambio) y la pila de

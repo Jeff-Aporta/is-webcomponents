@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 /**
  * ag-grid/edicion/editores — Editores provistos, sobre controles iswc-*, y el
  * adaptador de editores propios con la interfaz de AG Grid (init, getGui, ...).

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 // icon-email.test.ts — el HTML de íconos para correo (tk-icon-inline) se ve fuera de la app.
 //   E1 la imagen apunta a la API de Iconify (sirve cualquier set), nunca a una ref mutable del repo.
 import { assert, assertEquals } from 'jsr:@std/assert@1';

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/navegador/README.md
 // textos-f8.test.ts — textos fijos de interfaz por `t()` en un navegador real (Edge headless): toast, input, pagination,
 // dialog y spinner en español y en inglés heredado de un ancestro (diccionario perezoso). Spec: specs/paridad-webawesome.md.
 import assert from 'node:assert/strict';

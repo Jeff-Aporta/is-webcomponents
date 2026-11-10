@@ -1,3 +1,4 @@
+// @contexto INDICE.md · scripts/README.md
 // typecheck.mjs — tsc estricto sobre todo src/ con trinquete: falla si hay más errores que
 // `iswc.typecheckBaseline` (deno.json) y baja la línea base cuando hay menos. Meta: 0.
 import { readFileSync, writeFileSync } from 'node:fs';

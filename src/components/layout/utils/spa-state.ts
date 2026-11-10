@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/layout/README.md
 /// <reference lib="dom" />
 /**
  * Estado de una SPA estática en la URL: `?s=<base64url de un JSON>`.

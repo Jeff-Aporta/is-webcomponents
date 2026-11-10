@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/diagramas/README.md
 import { computeComponentLayout, resolveComponentSpec } from '../../src/components/diagrams/utils/component-spec.ts';
 import { placeEdgeActors, pointAtFraction } from '../../src/components/diagrams/utils/diagram-edge-actors.ts';
 import { pathPoints as parsePathPoints, spreadOrthogonalPaths } from '../../src/components/diagrams/utils/diagram-edges.ts';

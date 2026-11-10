@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/diagramas/README.md
 import assert from 'node:assert';
 import { readFileSync } from 'node:fs';
 import { resolveClassSpec, computeClassLayout } from '../../src/components/diagrams/utils/class-spec.js';

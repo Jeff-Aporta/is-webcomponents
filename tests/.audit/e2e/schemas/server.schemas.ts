@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/README.md
 /**
  * server.ts — Zod schemas para los tipos extraídos de este módulo.
  *

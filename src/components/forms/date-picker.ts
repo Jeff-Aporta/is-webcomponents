@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/forms/date-picker.md
 import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import { observarIdioma, resolverLocale, termino } from '@jeff-aporta/iswc-base/core/localize.js';
 import {

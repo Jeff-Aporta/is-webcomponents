@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/pages/README.md
 /**
  * Behavior del taller de Personalización.
  *

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/utils/README.md
 /**
  * source-paths.ts — Zod schemas para los tipos extraídos de este módulo.
  *

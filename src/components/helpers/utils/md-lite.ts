@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/helpers/README.md
 import { escapeHtml } from '@jeff-aporta/iswc-base/core/dom.js';
 import { escapeJsonForScript, resolveIswcFenceTag } from './md-iswc-fences.js';
 import type { DatosCalloutMd, DatosHeadingMd, DatosPorTipoMd, ItemListaMd, OpcionesMdLite, RendererMd, RenderersMd, TabImagenMd, TipoElementoMd } from '@jeff-aporta/iswc-base/components/helpers/schemas/md-lite.schemas.js';

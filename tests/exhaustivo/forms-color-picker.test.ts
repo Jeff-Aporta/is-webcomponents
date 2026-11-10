@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/exhaustivo/README.md
 /**
  * color-picker.test.ts — Tests exhaustivos de <iswc-color-picker>.
  *

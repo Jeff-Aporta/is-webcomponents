@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/componentes/README.md
 // tests/icon-explorer.test.ts
 //
 // Invariantes de previews/media/icon-explorer.html.

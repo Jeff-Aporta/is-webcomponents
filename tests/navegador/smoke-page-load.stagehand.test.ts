@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/navegador/README.md
 // tests/navegador/smoke-page-load.stagehand.test.ts — Regresión: la página home debe
 // cargar sin errores de red y registrar `<iswc-doc-demo>`.
 //

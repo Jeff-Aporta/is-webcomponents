@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 // csv.ts — CSV/TSV con comillas de RFC 4180; detecta el separador al importar.
 
 /** Separador más probable de un texto. */

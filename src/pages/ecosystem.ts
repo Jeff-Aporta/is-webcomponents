@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/pages/README.md
 /**
  * Preview «Ecosistema JS»: get started + playground del loader + catálogo _shared.
  */

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/componentes/README.md
 // tests/responsive-shell.test.ts
 //
 // El layout de la galería se compacta en dos escalones: en tablet el índice

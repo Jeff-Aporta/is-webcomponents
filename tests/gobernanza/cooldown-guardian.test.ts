@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 // cooldown-guardian.test.ts — guardián (spec: specs/testing.md S-T7): TODA prueba del kit corre dentro del sistema de
 // cooldown (`src/vendor-distributions/shared/testing/test-cooldown.ts`, vía `deno-test.ts` o `pruebas.ts`).
 //   C1 cada tarea `test*` de deno.json es composición de otras tareas o lanza un runner que entra al cooldown;

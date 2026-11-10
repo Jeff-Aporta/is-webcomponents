@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 // zip.ts — lectura y escritura de ZIP sobre CompressionStream (sin dependencias).
 
 const CRC_TABLE = (() => {

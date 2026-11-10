@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 // axis.ts — geometría de un eje con tamaños variables y ocultos, para la virtualización. Los
 // tamaños van en em; las búsquedas son logarítmicas sobre los índices con tamaño propio.
 import { cellName, colName } from './address.js';

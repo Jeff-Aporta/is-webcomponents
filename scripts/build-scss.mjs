@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+// @contexto INDICE.md · scripts/README.md
 /**
  * build-scss.mjs — compila cada `.scss` de `src/` a un `.css` en un
  * directorio de staging `.tmp-scss/src/`, espejando la estructura de `src/`.

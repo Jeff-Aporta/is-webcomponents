@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/previews/README.md
 /**
  * Registry de previews: JSON homogéneo (iswc-preview/v1) + behavior opcional.
  * No hay HTML por componente — solo `_shell.html` para fullscreen.

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 // formula-assist.ts — ayudas del editor de fórmulas: autocompletado, firma de la función en curso,
 // referencias a colorear y modo apuntar. Puro: trabaja con texto y posiciones.
 import type { Rect } from './address.schemas.js';

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/diagrams/README.md
 /**
  * Empaque de componentes (distribución de entidades) + geometría compartida.
  *

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/componentes/README.md
 // tests/componentes/icon-viewbox.test.ts
 //
 // Protege contra el bug "el ícono sale vacío": un SVG de `assets/iconify/` sin viewBox (o con uno

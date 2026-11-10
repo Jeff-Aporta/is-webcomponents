@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/feedback/README.md
 /**
  * palette-selector.ts — Zod schemas para los tipos del selector de paletas.
  */

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 /**
  * nucleo/api-ag — Grid API con los nombres de AG Grid.
  *

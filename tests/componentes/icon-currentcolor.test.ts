@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/componentes/README.md
 // S-I3: requisito de specs/iconos.md (WHAT-first, ver specs/testing.md S-T6)
 // tests/icon-currentcolor.test.ts
 //

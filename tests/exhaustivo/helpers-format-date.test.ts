@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/exhaustivo/README.md
 /**
  * format-date.test.ts — Tier A (15 aserciones) para `<iswc-format-date>`.
  *

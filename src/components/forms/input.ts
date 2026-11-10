@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/forms/input.md
 import { emit, upgradeProperties, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import { IswcFormControl } from '@jeff-aporta/iswc-base/core/iswc-form-control.js';
 import { isOtpAutocomplete, listenWebOtp } from './utils/input-tokens.js';

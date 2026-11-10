@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/_shared/README.md
 // core-f8.ts — casos en página de IswcReactive, html, IswcFormControl, localize, PropsElement y capas (F8).
 // Lo corre tests/navegador/core-f8.test.ts en Edge headless; cada caso devuelve `true` o el motivo del fallo.
 import { define } from '@jeff-aporta/iswc-base/core/iswc-element.js';

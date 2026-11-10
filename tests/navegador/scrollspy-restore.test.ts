@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/navegador/README.md
 // tests/navegador/scrollspy-restore.test.ts
 //
 // Guardián E2E de Phase W10: verifica en navegador real (Playwright) que el

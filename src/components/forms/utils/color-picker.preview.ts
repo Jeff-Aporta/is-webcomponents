@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/forms/README.md
 /**
  * Behavior migrado desde HTML inline de iswc-color-picker.
  * Se ejecuta en mount() tras pintar la definition JSON.

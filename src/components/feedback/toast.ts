@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/feedback/toast.md
 import './toast-item.js';
 import { normalizeIntent } from '@jeff-aporta/iswc-base/core/attrs.js';
 import { define } from '@jeff-aporta/iswc-base/core/iswc-element.js';

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/componentes/README.md
 // tests/preview-ready-hooks.test.ts
 //
 // El docs es UNA página que monta los previews desde JSON, así que el contenido

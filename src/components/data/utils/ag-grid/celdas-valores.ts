@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 /**
  * ag-grid/celdas/valores — valueGetter, valueFormatter, valueParser, valueSetter
  * y tipos de dato de celda, con las formas de AG Grid (funcion con params o

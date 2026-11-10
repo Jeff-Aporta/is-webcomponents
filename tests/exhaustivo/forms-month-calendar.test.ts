@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/exhaustivo/README.md
 /**
  * month-calendar.test.ts — Tests exhaustivos de <iswc-month-calendar>.
  */

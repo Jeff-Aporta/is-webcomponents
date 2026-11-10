@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/charts/chart.md
 import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import { withStyleAttrs, setStringAttr } from '@jeff-aporta/iswc-base/core/attrs.js';
 

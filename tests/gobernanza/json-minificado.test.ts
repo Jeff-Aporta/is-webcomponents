@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 // json-minificado.test.ts — guardián de B.3: lo que se publica, minificado.
 //
 // En `dist/` todo .json es exactamente `JSON.stringify(JSON.parse(x))`: sin espacios, sin sangría,

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · scripts/README.md
 // audit-components.ts — auditoría mecánica de los componentes.
 // Chequea por archivo:
 //  - define con guard idempotente

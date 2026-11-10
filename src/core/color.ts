@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/core/README.md
 import type { Rgb } from './schemas/color.schemas.js';
 
 /** Tono HSL en BD (0–360) → CSS/hex solo al renderizar. */

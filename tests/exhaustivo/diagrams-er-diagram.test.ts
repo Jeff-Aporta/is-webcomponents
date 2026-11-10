@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/exhaustivo/README.md
 /**
  * er-diagram.test.ts — verificación exhaustiva de <iswc-er-diagram>.
  *

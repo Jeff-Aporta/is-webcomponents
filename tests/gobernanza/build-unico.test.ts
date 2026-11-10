@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 /**
  * build-unico.test.ts — ningún script arma un componente del kit por su cuenta (plan carga modular D5, F7 tarea 4).
  *

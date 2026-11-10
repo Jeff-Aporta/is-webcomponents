@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 /**
  * Guardián WHAT: un schema Zod recursivo nunca se referencia a sí mismo de forma directa dentro de
  * su `z.object({...})`. Con la referencia directa (`children: z.array(NodoSchema)`) TypeScript no

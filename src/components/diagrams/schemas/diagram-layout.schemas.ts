@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/diagrams/README.md
 /**
  * diagram-graph.schemas.ts — tipos del grafo dirigido común de los diagramas (ver diagram-graph.ts).
  */

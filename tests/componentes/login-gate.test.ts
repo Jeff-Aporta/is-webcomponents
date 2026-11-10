@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/componentes/README.md
 // login-gate.test.ts — Guardián del contrato de <iswc-login-gate>.
 import assert from 'node:assert/strict';
 import { existsSync, readFileSync } from 'node:fs';

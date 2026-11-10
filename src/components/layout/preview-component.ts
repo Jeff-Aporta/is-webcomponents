@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/layout/preview-component.md
 /**
  * <iswc-preview-component> — shell homogéneo de documentación/demo.
  *

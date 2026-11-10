@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/diagrams/README.md
 /**
  * App API de diagramas. Visor y editor comparten ?kind= y ?json= (base64url).
  * El parámetro de la dirección solo se lee al abrir. Compartir arma otro enlace.

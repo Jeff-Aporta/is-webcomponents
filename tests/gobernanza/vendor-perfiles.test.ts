@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 /**
  * Guardián WHAT de los perfiles de `src/vendor-distributions/` (shared / server / client): un proyecto server
  * nunca tiene que instalar herramientas de navegador para vendorizar lo que usa.

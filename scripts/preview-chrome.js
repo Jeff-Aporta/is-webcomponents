@@ -1,3 +1,4 @@
+// @contexto INDICE.md · scripts/README.md
 /**
  * preview-chrome.js — barra theme + paleta en docs de componentes.
  *

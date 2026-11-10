@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/diagrams/README.md
 import { buildTree, layoutTree, layoutRadialTree } from '@jeff-aporta/iswc-base/core/tree-layout.js';
 import { countIconTokens, extractLeadingIconToken, richTextPlain } from '@jeff-aporta/iswc-base/core/tk-text.js';
 import { resolveTkHue, SERIE_HUES } from '@jeff-aporta/iswc-base/core/color.js';

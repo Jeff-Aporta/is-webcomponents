@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 /**
  * datagrid-core/pipeline-grouping — Agrupación de filas + agregación.
  *

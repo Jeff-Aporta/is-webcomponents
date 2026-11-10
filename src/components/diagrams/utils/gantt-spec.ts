@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/diagrams/README.md
 import { parseDate, addDuration, timeScale, niceTimeTicks } from './swimlane-spec.js';
 import { makeCostGrid, blockRect, snapPointAwayFromSide, snapDiagramGrid } from '@jeff-aporta/iswc-base/core/diagram-grid.js';
 import { routeOrthogonal, pixelToGrid, gridPathToSvg, buildOrthogonalPath } from './diagram-routing.js';

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 /**
  * w23-neutral-color-guardian.test.ts — Guardian del contrato W23.
  *

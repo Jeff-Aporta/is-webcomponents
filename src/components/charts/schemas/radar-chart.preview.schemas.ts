@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/charts/README.md
 /**
  * radar-chart.preview.ts — Zod schemas para los tipos extraídos de este módulo.
  *

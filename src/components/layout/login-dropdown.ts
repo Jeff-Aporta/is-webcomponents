@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/layout/login-dropdown.md
 import { emit, upgradeProperties, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import { IswcReactive, prop } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
 import '@jeff-aporta/iswc-base/components/actions/dropdown.js';

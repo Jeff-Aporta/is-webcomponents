@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 // conditional.ts — evaluación de formato condicional por celda, con memoria por recálculo.
 import { parseRange } from './address.js';
 import type { Rect } from './address.schemas.js';

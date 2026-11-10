@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/README.md
 // run.ts — `deno task test`: corre tests/ con el sistema común del kit (el mismo de ISS e ISW):
 // definirPruebas, categoría what/how, cooldown por prueba (`.tmp/test-cooldown.json`) y cada
 // archivo en su propio proceso. `tests/e2e/` (navegador real con Stagehand) va aparte:

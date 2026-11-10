@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/overlays/README.md
 /**
  * json-dialog.schemas.ts — props de `<iswc-json-dialog>`.
  */

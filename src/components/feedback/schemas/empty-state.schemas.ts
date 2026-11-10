@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/feedback/README.md
 /**
  * empty-state.schemas.ts — props de `<iswc-empty-state>`.
  */

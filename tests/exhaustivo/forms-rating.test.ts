@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/exhaustivo/README.md
 /**
  * rating.test.ts — Tests exhaustivos de <iswc-rating>.
  */

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/feedback/README.md
 /**
  * llm-agent-prompt.ts — Zod schemas para los tipos extraídos de este módulo.
  *

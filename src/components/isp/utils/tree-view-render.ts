@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/isp/README.md
 /**
  * Pintado DOM de filas (port de _rowItem.svelte). Recursivo, keyed por pathInit.
  *

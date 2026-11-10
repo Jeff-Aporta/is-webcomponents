@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/helpers/README.md
 /**
  * md-hydrate — carga perezosa de los componentes del kit que pintó el markdown.
  *

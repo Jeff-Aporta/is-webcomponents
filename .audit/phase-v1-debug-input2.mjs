@@ -1,3 +1,4 @@
+// @contexto INDICE.md · .audit/README.md
 // Capture timing: what's the value of #hex.value at the moment of j() call?
 import { chromium } from 'playwright';
 

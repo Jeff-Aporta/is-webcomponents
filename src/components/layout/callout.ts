@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/layout/callout.md
 import { INTENT, TONE } from '@jeff-aporta/iswc-base/core/attrs.js';
 import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import css from 'iswc:css';

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 // _hermeticidad.mjs (núcleo de hermeticidad.test.ts) -- WHAT: el proyecto es atómico y hermético.
 // Nada de lo versionado depende de otra carpeta local: ni rutas absolutas a carpetas de trabajo
 // de la máquina (VPS, Dev, la carpeta del cliente, PatyIA, Users), ni rutas relativas que salgan del proyecto,

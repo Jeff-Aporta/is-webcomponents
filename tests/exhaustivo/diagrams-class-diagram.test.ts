@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/exhaustivo/README.md
 /**
  * class-diagram.test.ts — verificación exhaustiva de <iswc-class-diagram>.
  *

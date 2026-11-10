@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/cdn/loader.md
 /// <reference lib="dom" />
 /**
  * Cache de texto por ruta+hash. IndexedDB guarda el cuerpo; localStorage

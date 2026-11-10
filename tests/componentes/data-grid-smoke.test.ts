@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/componentes/README.md
 /**
  * data-grid.smoke.test.ts — smoke test del módulo `<iswc-data-grid>`.
  *

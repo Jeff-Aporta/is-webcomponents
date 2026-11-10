@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 /**
  * url-nav.test.ts — memoria de tabs solo dentro de ?s= (b64url JSON).
  */

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/feedback/README.md
 /**
  * status-pill.schemas.ts — props de `<iswc-status-pill>`.
  */

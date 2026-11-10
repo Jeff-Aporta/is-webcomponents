@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/componentes/README.md
 // tests/layout-geometry-scroll.test.ts
 // Contrato de geometría + memoria de scroll en BreakpointHost (block/flex/grid).
 

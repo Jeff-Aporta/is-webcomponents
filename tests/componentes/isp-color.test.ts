@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/componentes/README.md
 // tests/isp-color.test.ts
 import {
   classifyColor,

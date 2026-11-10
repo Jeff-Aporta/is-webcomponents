@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/cdn/loader.md
 /**
  * loader-hashes — capa 2 del loader (plan D7): `dist/cdn/asset-hashes.json` en diferido.
  *

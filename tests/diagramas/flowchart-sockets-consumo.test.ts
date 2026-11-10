@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/diagramas/README.md
 /**
  * Guardián WHAT (A7): en las rutas reales del ISS, TODO consumo punteado de un componente llega por
  * -(O- (socket), declare o no el componente lo que expone; y toda tabla DER que un puente consume

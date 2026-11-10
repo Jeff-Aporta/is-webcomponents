@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 // xlsx-read.ts — importa .xlsx a un documento `iswc-spreadsheet/v1`: valores, fórmulas (también
 // compartidas), estilos, combinaciones, medidas, nombres, validación, condicional y notas.
 import { parseCell, parseRange, rangeName } from './address.js';

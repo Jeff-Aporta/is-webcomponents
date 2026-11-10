@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/exhaustivo/README.md
 /**
  * transfer.test.ts — verificación exhaustiva de <iswc-transfer> e
  * <iswc-transfer-item>.

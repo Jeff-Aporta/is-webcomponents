@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/README.md
 // run.ts: runner de la suite E2E de iswc-base. Levanta un servidor
 // estatico con la galeria (transpilando TS al vuelo, igual que serve.mjs) al
 // empezar, corre `deno test` sobre los *.test.ts y apaga el servidor al

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/componentes/README.md
 /**
  * code.test.ts — invariantes del motor de código: resaltado nativo (highlight),
  * inferencia de lenguaje y softFormat. Consolidación de code-highlight, code-infer-lang

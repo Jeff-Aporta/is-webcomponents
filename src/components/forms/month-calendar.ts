@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/forms/month-calendar.md
 import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import { daysInMonth, isoOf, monthLabels, pad } from './utils/date-utils.js';
 import css from 'iswc:css';

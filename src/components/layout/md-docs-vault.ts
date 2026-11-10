@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/layout/md-docs-vault.md
 import { createSpaState } from '@jeff-aporta/iswc-base/components/layout/utils/spa-state.js';
 import type { EstadoSpa, SpaState } from '@jeff-aporta/iswc-base/components/layout/schemas/spa-state.schemas.js';
 // Solo tipos: el schema Zod (`MdDocsVaultListaSchema`) queda para tests y consumidores; en el bundle

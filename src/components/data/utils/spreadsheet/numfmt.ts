@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 // numfmt.ts — lenguaje de formatos numéricos de Excel: secciones, condiciones, colores,
 // miles, escala, porcentaje, científico, fracciones, fechas y horas.
 import { DAYS_EN, DAYS_ES, fromSerial, MONTHS_EN, MONTHS_ES } from './dates.js';

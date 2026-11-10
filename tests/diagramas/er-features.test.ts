@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/diagramas/README.md
 /**
  * er-features.selfcheck.ts — verificación de las 3 mejoras de ISWC sobre
  * <iswc-er-diagram>:

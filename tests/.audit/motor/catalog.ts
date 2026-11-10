@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/README.md
 /**
  * Enumerador del catálogo de demos.
  *

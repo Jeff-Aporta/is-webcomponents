@@ -1,3 +1,4 @@
+// @contexto INDICE.md · .audit/README.md
 // .audit/phase-u-forms-scan.mjs (refinado)
 // Una violacion ocurre cuando un bloque "demo" tiene multiples ejemplares del MISMO
 // tag en el mismo demo y los `controls` los aplican a uno solo.

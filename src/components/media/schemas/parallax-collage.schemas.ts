@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/media/README.md
 /**
  * parallax-collage.schemas.ts — capas de `<iswc-parallax-collage>`.
  *

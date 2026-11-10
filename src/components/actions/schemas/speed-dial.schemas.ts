@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/actions/README.md
 /**
  * speed-dial.schemas.ts — tipos de `<iswc-speed-dial>`.
  */

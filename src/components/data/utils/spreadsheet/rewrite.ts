@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 // rewrite.ts — reescritura de fórmulas a nivel de token: conserva mayúsculas, espacios y
 // alias tal como los escribió el usuario y solo cambia las referencias afectadas.
 import { colName, quoteSheet } from './address.js';

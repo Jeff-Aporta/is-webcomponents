@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 // S-G1: requisito de specs/galeria/spec.md (WHAT-first, ver specs/testing.md S-T6)
 // tests/preview-json-contract.test.ts
 //

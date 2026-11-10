@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 /**
  * ag-grid/filas/panel-agrupacion — Panel lateral de agrupacion, valores y pivote.
  *

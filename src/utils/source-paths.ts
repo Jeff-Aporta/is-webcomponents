@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/utils/README.md
 /**
  * src/utils/source-paths.ts — rutas y fetch de fuentes NO minificadas (JS/CSS/MD).
  *

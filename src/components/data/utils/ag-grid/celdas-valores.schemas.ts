@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 /** Tipos de valores.ts. */
 import type { DefinicionTipo, ParamsCelda } from './celdas.schemas.js';
 

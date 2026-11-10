@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 /** Tipos de spark.ts. */
 
 export type Punto = { x: number; y: number };

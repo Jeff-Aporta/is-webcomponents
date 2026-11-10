@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 /**
  * Hash de 6 caracteres y sello `?v=` entre archivos.
  */

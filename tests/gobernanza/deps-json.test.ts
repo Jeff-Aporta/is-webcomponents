@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 /**
  * deps-json.test.ts — el grafo del build único (F3, partido en F7): `dist/cdn/deps.json` (índice), `dist/cdn/deps/<cat>.json`
  * y `dist/cdn/exports.json`.

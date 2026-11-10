@@ -1,3 +1,4 @@
+// @contexto INDICE.md · scripts/README.md
 /**
  * Servidor para los demos en `demos/`. Misma idea que `serve.mjs` pero con
  * ROOT fija en `demos/` y capaz de resolver `../src/...` (porque los demos

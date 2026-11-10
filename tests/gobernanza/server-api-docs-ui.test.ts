@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 /**
  * Guardián WHAT de UI de `<iswc-server-api-docs>` en un navegador real (Chromium de Playwright) con el bundle
  * de `dist/cdn` y el documento de su demo, servido como lo sirve un host (`GET /api/docs`). Lo que ve y hace

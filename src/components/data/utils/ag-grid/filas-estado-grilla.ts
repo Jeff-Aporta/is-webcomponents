@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 /**
  * ag-grid/filas/estado-grilla — getState/setState con la forma de AG Grid. Pura.
  *

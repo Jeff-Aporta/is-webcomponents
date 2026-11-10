@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/diagramas/README.md
 /**
  * Guardián WHAT de los agrupadores automáticos del flujo en vector (A10), sobre las rutas reales del
  * ISS (docs-experimental/diagramas/ruta-*.json):

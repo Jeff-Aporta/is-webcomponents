@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 /**
  * datagrid-core/types — Motor agnóstico del <iswc-ag-grid>.
  *

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/_shared/README.md
 // a11y-axe.ts — monta componentes de cada familia de HOW-7 y les pasa axe-core (WCAG 2 A/AA) dentro de su shadow.
 // Lo corre tests/navegador/a11y-axe.test.ts en Edge headless: cada caso devuelve `true` o los ids de las reglas que
 // fallan, separados por coma (la prueba los compara con su lista de pendientes).

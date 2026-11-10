@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 // text.ts — funciones de texto.
 import type { Ctx } from './evaluator.schemas.js';
 import { formatValue } from './numfmt.js';

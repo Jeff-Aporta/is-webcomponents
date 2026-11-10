@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/exhaustivo/README.md
 /**
  * gauge.test.ts — verificación exhaustiva de <iswc-gauge>.
  *

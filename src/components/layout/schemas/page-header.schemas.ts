@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/layout/README.md
 /**
  * page-header.schemas.ts — props de `<iswc-page-header>`.
  */

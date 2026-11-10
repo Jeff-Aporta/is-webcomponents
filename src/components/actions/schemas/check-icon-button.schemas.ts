@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/actions/README.md
 /**
  * check-icon-button.schemas.ts — tipos de `<iswc-check-icon-button>`.
  */

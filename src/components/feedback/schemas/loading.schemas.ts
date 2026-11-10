@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/feedback/README.md
 /**
  * loading.schemas.ts — props de `<iswc-loading>`.
  */

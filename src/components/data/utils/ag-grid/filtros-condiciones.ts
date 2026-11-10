@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 /**
  * condiciones — Filtros de texto, numero y fecha: catalogo de opciones, evaluacion y
  * modelos simples o combinados (operator + conditions). Puro: sin DOM ni grid.

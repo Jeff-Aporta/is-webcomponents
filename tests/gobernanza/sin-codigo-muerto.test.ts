@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 /**
  * sin-codigo-muerto.test.ts — guardián de la depuración F9a (5-nov-2026). El análisis vive en
  * `scripts/codemods/codigo-muerto.ts`; el arreglo, en `scripts/codemods/depurar.mjs [--exports]`.

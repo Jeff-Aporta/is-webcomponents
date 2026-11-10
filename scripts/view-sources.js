@@ -1,3 +1,4 @@
+// @contexto INDICE.md · scripts/README.md
 /**
  * view-sources.js — visor full-page de fuentes JS / CSS / MD del componente.
  *

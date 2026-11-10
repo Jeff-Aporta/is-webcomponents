@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/diagramas/README.md
 // tests/diagram-wrap-integration.test.ts
 //
 // Valida que el wrap de texto funciona end-to-end en los diagramas:

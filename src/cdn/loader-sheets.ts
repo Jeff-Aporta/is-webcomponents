@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/cdn/loader.md
 /**
  * loader-sheets — capa 2 del loader (plan D7): caché de hojas (`sheet-cache`: Cache Storage + adoptedStyleSheets)
  * y `loadPageStyles`.

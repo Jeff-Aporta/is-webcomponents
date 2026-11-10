@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/isp/tree-view.md
 import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import '@jeff-aporta/iswc-base/components/actions/button-group.js';
 import '@jeff-aporta/iswc-base/components/actions/check-icon-button.js';

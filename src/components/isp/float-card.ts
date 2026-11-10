@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/isp/float-card.md
 import type { LinearTransform } from "./schemas/float-card.schemas.js";
 import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import css from 'iswc:css';

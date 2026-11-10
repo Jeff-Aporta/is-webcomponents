@@ -1,3 +1,4 @@
+// @contexto INDICE.md · scripts/README.md
 // css-equivalente.mjs — comprueba que el SCSS compilado sigue siendo el mismo.
 //
 //   deno run -A --no-check scripts/sondas/css-equivalente.mjs [--guardar] [--carpeta=<dir>]

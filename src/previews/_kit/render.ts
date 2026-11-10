@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/previews/README.md
 /**
  * Render de la definición tipada → DOM (sin ejecutar lógica de preview).
  */

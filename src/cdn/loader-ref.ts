@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/cdn/loader.md
 /**
  * loader-ref — capa 2 del loader (plan D7): pin de `main` → SHA por la API de GitHub.
  *

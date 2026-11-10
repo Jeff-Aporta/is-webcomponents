@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/exhaustivo/README.md
 /**
  * line-chart.test.ts — verificación exhaustiva de <iswc-line-chart>.
  *

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 // tests/theme-contract.test.ts
 //
 // Reemplazo del antiguo scripts/verify-theme-contract.cjs.

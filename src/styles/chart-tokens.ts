@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/styles/README.md
 /**
  * chart-tokens.ts — fuente única del color de gráficas: `--iswc-chart-1..8` y `--iswc-chart-on-1..8`.
  *

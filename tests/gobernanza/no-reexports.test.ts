@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 // no-reexports.test.ts — guardián (regla iswc; spec: specs/typescript/spec.md S-TS9): en el código del kit NO hay
 // re-exports, barriles ni alias de exports. Cada consumidor importa del archivo de ORIGEN.
 //   X1 nada de `export * from`, `export * as ns from`, `export {…} from`, `export type {…} from`.

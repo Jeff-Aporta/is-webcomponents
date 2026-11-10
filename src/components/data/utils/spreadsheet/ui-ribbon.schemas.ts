@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 // ribbon.schemas.ts: contratos de tipos de ribbon.ts.
 
 /** Elemento de la cinta. */

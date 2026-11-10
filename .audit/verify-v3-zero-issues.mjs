@@ -1,3 +1,4 @@
+// @contexto INDICE.md · .audit/README.md
 // Run extract-parts.mjs logic and verify zero issues remain.
 import { readFileSync, readdirSync, statSync, writeFileSync } from 'node:fs';
 import { join, dirname, basename, relative } from 'node:path';

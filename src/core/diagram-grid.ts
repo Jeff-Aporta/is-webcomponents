@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/core/README.md
 /** Rejilla de alineación para diagramas SVG (secuencia / flujo). */
 
 import type { GridRect, GridPoint, CostGrid, ForbiddenRegion, ExclusionZone, DiagramSide } from "./schemas/diagram-grid.schemas.js";

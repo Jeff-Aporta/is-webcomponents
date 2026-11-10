@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 /**
  * tamano-publicado.test.ts — el árbol que sirve jsDelivr no puede pasar de 50 MB (plan D8).
  *

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/pages/README.md
 /**
  * Behavior del home: CTAs, parallax del collage, reveal, contadores KPI
  * y cintas en bucle.

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/navigation/app-nav.md
 import { emit, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import { IswcReactive } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
 import type { AppNavRow } from './schemas/app-nav.schemas.js';

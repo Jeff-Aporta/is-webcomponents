@@ -1,3 +1,4 @@
+// @contexto INDICE.md · .audit/README.md
 // Build the final audit Markdown report from parts-raw.json.
 import { readFileSync } from 'node:fs';
 

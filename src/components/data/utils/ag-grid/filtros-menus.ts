@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 /**
  * menus — Items de Column Menu y Context Menu con claves de AG Grid. El host pinta y abre.
  */

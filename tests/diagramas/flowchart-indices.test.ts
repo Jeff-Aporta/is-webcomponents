@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/diagramas/README.md
 /**
  * Guardián WHAT de los índices automáticos del flujo (`steps: "auto"`).
  *   I1 sin ramas: 1, 2, 3 (los hermanos incrementan; nunca se concatenan 1s).

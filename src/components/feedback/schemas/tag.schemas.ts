@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/feedback/README.md
 /**
  * tag.schemas.ts — tipos de `<iswc-tag>`.
  */

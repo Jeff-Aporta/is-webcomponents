@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 /**
  * nucleo/menus — Menu de columna y menu contextual sobre <iswc-context-menu>.
  *

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/previews/README.md
 /**
  * JsonPreview.ts — Zod schemas para los tipos extraídos de este módulo.
  *

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/diagrams/README.md
 /**
  * journey-spec.ts — Zod schemas para los tipos extraídos de este módulo.
  *

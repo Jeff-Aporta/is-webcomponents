@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/diagramas/README.md
 /**
  * Guardián WHAT del PNG exportado (A8): la captura estática sale LIMPIA de pulsos. Los radares de
  * las ⦿ (fin, reunión de ramas), los de las O (`-(O-`, `-(O=`) y los puntos que recorren los rieles

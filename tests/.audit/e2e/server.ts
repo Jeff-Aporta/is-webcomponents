@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/README.md
 // server.ts: servidor estatico para los tests E2E de iswc-base (sin
 // dependencias propias; usa esbuild del repo, que ya es devDep).
 // A diferencia de un servidor estatico simple, la galeria importa MODULOS TS

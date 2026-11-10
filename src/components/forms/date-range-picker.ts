@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/forms/date-range-picker.md
 import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import { observarIdioma, registrarTerminos, resolverLocale, termino } from '@jeff-aporta/iswc-base/core/localize.js';
 import { addMonths, monthKey, parseISO, startOfMonth, toISO } from './utils/date-utils.js';

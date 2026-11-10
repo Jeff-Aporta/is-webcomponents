@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 /**
  * ag-grid/edicion/portapapeles — Serializacion pura compatible con Excel
  * y la regla de repeticion al pegar sobre un rango.

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/componentes/README.md
 // tests/preview-controller.test.ts
 //
 // Contrato: previews = JSON iswc-preview/v1 + <iswc-preview-component> + behaviors opcionales.

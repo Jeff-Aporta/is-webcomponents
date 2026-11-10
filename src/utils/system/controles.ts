@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/utils/README.md
 // controles.ts: sistema de controles de demo (playground tipo Storybook),
 // 100% JSON-driven. Los controles se declaran en el preview JSON del
 // componente (iswc-preview/v1, bloque demo/html -> `controls` + `target`) y se

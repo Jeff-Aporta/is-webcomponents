@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 // tests/gobernanza/cdn-icons.test.ts
 //
 // <iswc-icon> resuelve los íconos de los demos desde la carpeta PUBLICADA (`assets/iconify/`, la que

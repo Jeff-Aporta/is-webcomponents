@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/diagramas/README.md
 /**
  * Guardianes WHAT del flowchart estilo iswc (actividad a lo Visual
  * Paradigm) y de los nodos especiales (`kind`: nested / tableder /

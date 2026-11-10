@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/diagrams/README.md
 /** Especificación y layout SVG de diagramas de secuencia TK (sin Mermaid). */
 
 import {

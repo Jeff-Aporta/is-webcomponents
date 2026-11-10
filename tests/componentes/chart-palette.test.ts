@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/componentes/README.md
 // apps/AppWebcomponents/components/_shared/chart-palette.selfcheck.mjs
 import assert from 'node:assert';
 import { resolvePaletteKey, resolveMode } from '../../src/components/charts/utils/chart-palette.js';

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 /**
  * ui/barra-avanzada — Input del Advanced Filter y constructor visual del modelo.
  */

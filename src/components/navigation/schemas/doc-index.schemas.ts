@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/navigation/README.md
 /** Contratos de `<iswc-doc-index>` (W54: los tipos viven en *.schemas.ts). */
 
 /** Una entrada del índice: una página, nota, hoja, sección de un temario… */

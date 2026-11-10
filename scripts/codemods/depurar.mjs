@@ -1,3 +1,4 @@
+// @contexto INDICE.md · scripts/README.md
 // depurar.mjs — depuración de código muerto (F9a).
 //   · imports en desuso: los que reporta `deno lint` (no-unused-vars) se quitan de su declaración `import`
 //     (parser de TypeScript); si no queda ningún nombre, la declaración se borra. Un import cuyo módulo tiene efecto

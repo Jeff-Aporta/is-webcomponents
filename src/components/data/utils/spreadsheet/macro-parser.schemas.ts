@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 // macro-parser.schemas.ts: contratos de tipos de macro-parser.ts.
 
 /** Expresión. */

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · scripts/README.md
 // build-lote.mjs — lote ESM opcional (plan F7, tarea 0.3 ii): UN `.min.mjs` autosuficiente con el cierre de varios tags.
 //
 //   deno task build:lote -- iswc-button,iswc-dialog,… [--out=<archivo>] [--zod=<especificador>]

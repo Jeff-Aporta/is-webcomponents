@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/componentes/README.md
 // ai.test.ts — IA en el navegador, sin modelos: catálogo, regla de descarga, reducción y orden.
 import assert from 'node:assert/strict';
 import { existsSync, readdirSync, readFileSync } from 'node:fs';

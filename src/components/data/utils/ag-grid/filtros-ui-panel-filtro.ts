@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 /**
  * ui/panel-filtro — Contenido de un filtro de columna: condiciones, set o multi. Es el
  * mismo en el popup y en el panel lateral; solo cambia quien lo aloja.

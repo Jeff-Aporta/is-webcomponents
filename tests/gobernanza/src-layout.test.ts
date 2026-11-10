@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 // tests/src-layout.test.ts
 //
 // Guardián del layout post-move: fuente bajo src/, dist/ y scripts/ en raíz.

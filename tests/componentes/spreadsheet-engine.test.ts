@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/componentes/README.md
 /**
  * spreadsheet-engine.test.ts — motor de <iswc-spreadsheet>: fórmulas, grafo, errores, referencias,
  * funciones y alias, formatos, relleno, documento con deshacer, macros y archivos. Sin navegador.

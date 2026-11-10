@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/isp/README.md
 import { TRADrag } from './tree-view-rows.js';
 import type { _SummaryEvent, _RowAdapter, TRAAccessible } from '@jeff-aporta/iswc-base/components/isp/schemas/tree-view-row-adapter.schemas.js';
 

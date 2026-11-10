@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 // document.schemas.ts: contratos de tipos de document.ts.
 import type { Rect } from './address.schemas.js';
 import type { CfRule } from '@jeff-aporta/iswc-base/components/data/schemas/spreadsheet.schemas.js';

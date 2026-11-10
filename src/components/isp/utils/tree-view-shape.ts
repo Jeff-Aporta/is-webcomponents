@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/isp/README.md
 /**
  * TATreeShape — forma del árbol, navegación, normalización, materialización.
  *

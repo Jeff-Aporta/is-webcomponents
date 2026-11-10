@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 // tests/gobernanza/chart-tokens.test.ts
 //
 // Contrato del color de gráficas. Fuente única: --iswc-chart-1..8 (src/styles/chart-tokens.ts).

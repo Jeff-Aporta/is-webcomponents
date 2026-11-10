@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/componentes/README.md
 import assert from 'node:assert/strict';
 import { join, dirname } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';

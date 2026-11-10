@@ -1,3 +1,4 @@
+// @contexto INDICE.md · scripts/README.md
 // build.mjs — CDN folderizado con UN build de esbuild con splitting (plan D5, fase F3):
 //   dist/cdn/{categoria}/{tag}.min.mjs + .min.css, core/{x}.min.mjs, lib/{x}.min.mjs, core/loader.min.mjs,
 //   _chunks/chunk-<hash>.mjs (código compartido), deps.json y exports.json (grafo del metafile), y el package.json

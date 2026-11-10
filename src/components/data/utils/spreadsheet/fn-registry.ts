@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 // registry.ts — registro de funciones de hoja. La firma escrita es también la aridad y la
 // ayuda: `valor, [precision], ...` da mínimo 1, máximo infinito y el texto del autocompletado.
 import type { Fn, LazyFn, FnDef } from './fn-registry.schemas.js';

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 // tests/gobernanza/palettes-contrast.test.ts
 //
 // Contrato de las 25 paletas (src/styles/palettes.json):

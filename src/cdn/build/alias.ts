@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/cdn/build/README.md
 /**
  * alias.ts — el alias `@jeff-aporta/iswc-base/<ruta>` fuera de Deno.
  *

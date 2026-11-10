@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/diagrams/README.md
 /**
  * diagram-palette.ts — tema de diagrama leído de los tokens del kit. Mismos colores que las gráficas,
  * resueltos a literales porque el SVG de un diagrama se exporta y debe verse igual fuera de la página.

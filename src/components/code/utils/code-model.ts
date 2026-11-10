@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/code/README.md
 /**
  * code-model.js — documento estructurado del editor (code ↔ json).
  *

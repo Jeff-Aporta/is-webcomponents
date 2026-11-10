@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/exhaustivo/README.md
 /**
  * radio.test.ts — Tests exhaustivos de <iswc-radio>.
  *

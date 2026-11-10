@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/navigation/tree.md
 import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import { IswcReactive } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
 import { registrarTerminos } from '@jeff-aporta/iswc-base/core/localize.js';

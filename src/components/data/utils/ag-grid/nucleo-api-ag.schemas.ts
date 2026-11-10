@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 /** Tipos de api-ag.ts. */
 import type { ColumnState, RowData } from '@jeff-aporta/iswc-base/components/data/schemas/datagrid-types.schemas.js';
 

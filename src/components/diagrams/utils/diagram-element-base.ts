@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/diagrams/README.md
 /**
  * diagram-element-base.js — Base class para los diagramas SVG del kit
  * (block-diagram, class-diagram, er-diagram, flowchart, gantt, mindmap,

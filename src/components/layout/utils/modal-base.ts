@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/layout/README.md
 /**
  * modal-base.js — Mixin/controlador compartido por <iswc-dialog> y <iswc-drawer>.
  *

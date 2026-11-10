@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/feedback/theme-toggle.md
 import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import '@jeff-aporta/iswc-base/components/actions/check-icon-button.js';
 import { findThemeContainer } from '@jeff-aporta/iswc-base/core/dom.js';

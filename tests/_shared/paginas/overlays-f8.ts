@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/_shared/README.md
 // overlays-f8.ts — casos en página de los overlays sobre la pila de capas de core/position.ts (F8 hito 4,
 // specs/paridad-webawesome.md HOW-5): dialog con un select abierto dentro, drawer, window modal y no modal, confirm-modal.
 // Lo corre tests/navegador/overlays-f8.test.ts en Edge headless; cada caso devuelve `true` o el motivo del fallo.

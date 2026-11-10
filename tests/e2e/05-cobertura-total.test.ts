@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/e2e/README.md
 // 05-cobertura-total.test.ts — cobertura full de TODOS los componentes del
 // demo preview de iswc-base con evidencia visual.
 //

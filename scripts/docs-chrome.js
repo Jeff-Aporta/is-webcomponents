@@ -1,3 +1,4 @@
+// @contexto INDICE.md · scripts/README.md
 /**
  * docs-chrome.js — piezas comunes de TODAS las páginas de componente.
  *

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 // brand-casing.test.ts — la marca del kit se escribe SIEMPRE en minúscula: «iswc».
 //
 // La marca es `iswc`, como el nombre del paquete (`@jeff-aporta/iswc-base`) y como el

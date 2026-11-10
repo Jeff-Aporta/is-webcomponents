@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/navegador/README.md
 // tests/navegador/scrollspy-fallback.test.ts
 //
 // Guardián de Phase W1: el scroll-spy debe marcar como activo el primer

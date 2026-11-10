@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/componentes/README.md
 // tests/toast-promise.test.ts
 //
 // Verifica que <iswc-toast> expone el patrón Promise estilo react-hot-toast:

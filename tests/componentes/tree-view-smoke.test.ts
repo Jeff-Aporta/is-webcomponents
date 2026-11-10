@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/componentes/README.md
 /**
  * tree-view.smoke.test.ts — smoke test del módulo `_shared/tree-view`.
  *

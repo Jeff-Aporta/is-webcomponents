@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/isp/modal-verificacion.md
 import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import '@jeff-aporta/iswc-base/components/layout/dialog.js';
 import './text.js';

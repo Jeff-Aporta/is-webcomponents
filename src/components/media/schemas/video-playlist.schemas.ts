@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/media/README.md
 /**
  * video-playlist.ts — Zod schemas para los tipos extraídos de este módulo.
  *

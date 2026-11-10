@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/feedback/palette-selector.md
 import { computePosition, createPopupDismiss } from '@jeff-aporta/iswc-base/core/position.js';
 import { guardarAppCfg, leerAppCfg } from '@jeff-aporta/iswc-base/core/app-init.js';
 import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';

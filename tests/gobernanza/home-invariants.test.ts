@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 // tests/home-invariants.test.ts
 //
 // Invariantes estáticos sobre previews/home.html. Sin navegador, sin

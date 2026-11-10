@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 /**
  * ag-grid/edicion/navegacion — A donde va el foco con cada tecla. Puro.
  * Devuelve null cuando no hay movimiento (borde de la grilla).

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 /**
  * ag-grid/edicion/filas-movidas — Reglas puras de filas fijadas y de row dragging.
  */

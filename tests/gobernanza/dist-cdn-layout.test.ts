@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 // S-C1: requisito de specs/cdn.md (WHAT-first, ver specs/testing.md S-T6)
 // tests/dist-cdn-layout.test.ts
 //

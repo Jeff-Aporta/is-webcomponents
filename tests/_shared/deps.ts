@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/_shared/README.md
 /**
  * deps.ts — el grafo publicado entero para los tests (F7, tarea 0.1): `dist/cdn/deps.json` es un índice (tag →
  * categoría) y cada categoría tiene su `deps/<cat>.json` (más `deps/core.json`). `leerDeps` los une en la forma de

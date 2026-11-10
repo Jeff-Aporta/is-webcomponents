@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/preview/playground.md
 /**
  * <iswc-playground> — stage + knobs homogeneos (CDN).
  * Spec: specs/playground/spec.md (S-PG1).

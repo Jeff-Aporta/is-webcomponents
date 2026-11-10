@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/e2e/README.md
 // 08-priority-gaps.test.ts: tests que documentan los gaps de UX/a11y
 // más críticos descubiertos por F0 (deep-test-proposals).
 //

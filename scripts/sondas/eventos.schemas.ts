@@ -1,3 +1,4 @@
+// @contexto INDICE.md · scripts/README.md
 // eventos.schemas.ts — tipos de la sonda de eventos tipados (`eventos.ts`, specs/paridad-webawesome.md HOW-6).
 // category: "how"
 

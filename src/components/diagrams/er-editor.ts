@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/diagrams/er-editor.md
 // er-editor.ts: editor visual COMPLETO para <iswc-er-diagram>. Versión FULL del
 // componente: state, undo/redo, multi-select, drag, click-to-connect, panel
 // de estilos, exportación JSON/SVG.

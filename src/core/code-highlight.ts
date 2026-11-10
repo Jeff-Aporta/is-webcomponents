@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/core/README.md
 /**
  * code-highlight.js — motor de resaltado NATIVO de <iswc-code> (sin CodeMirror).
  *

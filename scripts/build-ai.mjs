@@ -1,3 +1,4 @@
+// @contexto INDICE.md · scripts/README.md
 // ai.mjs — IA en el navegador: dist/cdn/lib/ai/. Lo llama scripts/build.mjs.
 //
 //   src/ai/<modulo>.ts        → lib/ai/<modulo>.min.mjs  un módulo por archivo; los hermanos quedan externos para que el

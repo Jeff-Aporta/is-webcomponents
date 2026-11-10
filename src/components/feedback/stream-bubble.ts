@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/feedback/stream-bubble.md
 import { crearNodo, escapeHtml } from '@jeff-aporta/iswc-base/core/dom.js';
 import { atributosDe, PropsElement } from '@jeff-aporta/iswc-base/core/props-element.js';
 import { StreamBubblePropsSchema } from './schemas/stream-bubble.schemas.js';

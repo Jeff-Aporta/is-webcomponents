@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 // tests/gobernanza/contrato-anatomia.test.ts
 //
 // Anatomía de cada componente: .ts, .scss, .md y .json iswc-preview/v1 con el mismo nombre, en toda
@@ -22,7 +23,8 @@ const CARPETAS = ['charts', 'code', 'data', 'data-viz', 'diagrams', 'files', 'he
 /** Bases internas sin tag: no son componentes. */
 const BASES = /^_/;
 /** Otro frente los está migrando: se suman al contrato al cerrar. */
-const AJENOS = /^(ag-grid|data-grid|spreadsheet)(\.|$)/;
+// El README de la categoria no es un componente: es el md del dominio.
+const AJENOS = /^(ag-grid|data-grid|spreadsheet|README)(\.|$)/;
 const MOJIBAKE = /Ã[\u0080-¿¡-¿]|â€|â†|Â[¡-¿]/;
 const RELLENO = 'según contrato';
 

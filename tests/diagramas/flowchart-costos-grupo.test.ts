@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/diagramas/README.md
 /**
  * Guardianes WHAT de las capas de costo del router del flujo (A9):
  *   G1 (c) un riel cuyos extremos están FUERA de un grupo no entra en él: lo rodea (entrar y salir

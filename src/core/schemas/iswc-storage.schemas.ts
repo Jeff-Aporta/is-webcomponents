@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/core/README.md
 /** Contratos de `iswc-storage.ts` (W54: los tipos viven en *.schemas.ts). */
 
 /** Almacén del navegador donde el kit persiste: `localStorage` o `sessionStorage`. */

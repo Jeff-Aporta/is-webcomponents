@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/helpers/README.md
 /**
  * Behavior de iswc-relative-time: fechas relativas al now + grid de locales.
  */

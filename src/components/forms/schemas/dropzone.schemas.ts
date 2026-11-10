@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/forms/README.md
 /**
  * dropzone.schemas.ts — tipos de `<iswc-dropzone>`.
  */

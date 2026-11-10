@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/isp/README.md
 /**
  * Helpers de registro planos / TObject-like (ispgen) para componentes ISP.
  * No depende de `@iswc/ispgen`.

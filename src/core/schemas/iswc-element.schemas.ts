@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/core/README.md
 /**
  * iswc-element.schemas.ts — tipos de `core/iswc-element.ts` (el molde único de los componentes).
  */

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/layout/README.md
 /**
  * doc-demo-estado.ts — estado de los exploradores `iswc-doc-demo`, compartido por la galería del kit y la de las apps:
  * el `?s=` (JSON en b64url) y la preferencia de compactar paneles.

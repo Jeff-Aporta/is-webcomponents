@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 /// <reference lib="dom" />
 /**
  * Hooks de render de `md-lite` (los que expone `<iswc-md-render>.renderers`).

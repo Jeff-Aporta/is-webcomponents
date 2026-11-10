@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/core/README.md
 /**
  * iswc-element.ts — El molde único de los componentes del kit (plan D4, D6).
  *

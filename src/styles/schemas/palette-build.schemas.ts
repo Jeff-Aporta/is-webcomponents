@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/styles/README.md
 /**
  * palette-build.ts — Zod schemas de las paletas del kit (palettes.json).
  */

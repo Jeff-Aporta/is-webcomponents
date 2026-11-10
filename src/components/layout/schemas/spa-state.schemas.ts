@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/layout/README.md
 /**
  * Contratos de `spa-state.ts`: estado de una SPA serializado en la URL
  * (`?s=<base64url de un JSON>`). W54: los tipos viven en *.schemas.ts.

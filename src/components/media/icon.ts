@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/media/icon.md
 import { resolveIconRaw } from '@jeff-aporta/iswc-base/core/icon-loader.js';
 import { setStringAttr } from '@jeff-aporta/iswc-base/core/attrs.js';
 import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';

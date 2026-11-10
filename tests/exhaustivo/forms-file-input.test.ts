@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/exhaustivo/README.md
 /**
  * file-input.test.ts — Tests exhaustivos de <iswc-file-input>.
  *

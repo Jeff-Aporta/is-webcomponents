@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 // tests/gobernanza/em-sizing-guardian.test.ts
 //
 // Estándar del kit: todo tamaño de componente va en `em`, de modo que cambiar `font-size` en el

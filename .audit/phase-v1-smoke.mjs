@@ -1,3 +1,4 @@
+// @contexto INDICE.md · .audit/README.md
 /**
  * Smoke test for 4 broken demos:
  * - color-picker

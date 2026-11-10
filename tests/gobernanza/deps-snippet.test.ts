@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 // tests/deps-snippet.test.ts
 //
 // <iswc-cdn-snippet>: deps van EN EL MISMO snippet (tras el loader), no en

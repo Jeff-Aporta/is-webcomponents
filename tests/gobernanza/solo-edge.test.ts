@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 /**
  * solo-edge.test.ts — ningún script ni test versionado lanza el Chrome del usuario (plan carga modular, F7 tarea 3).
  *

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 // engineering.ts — ingeniería (bases, bits, conversión) y funciones de base de datos (D*).
 import { criterion } from './criteria.js';
 import type { Ctx } from './evaluator.schemas.js';

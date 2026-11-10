@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/previews/README.md
 /**
  * Tipos del sistema de previews homogeneizados (JSON + componente común).
  *

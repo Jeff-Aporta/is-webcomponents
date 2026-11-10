@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/data/README.md
 /**
  * ag-grid/filas — Modelos de filas y datos de <iswc-ag-grid>.
  *

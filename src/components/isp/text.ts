@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/isp/text.md
 import {
   classifyColor,
   normalizeMix,

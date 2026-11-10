@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/diagrams/README.md
 /**
  * diagram-text-wrap.ts — Zod schemas para los tipos extraídos de este módulo.
  *

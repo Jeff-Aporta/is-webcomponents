@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/layout/README.md
 /**
  * dialog.schemas.ts — tipos de `<iswc-dialog>`.
  */

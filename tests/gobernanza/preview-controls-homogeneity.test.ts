@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/gobernanza/README.md
 /**
  * Guardián: controles de demos alineados al API del CE
  * (shape vs pill, enums VALID_*, options).

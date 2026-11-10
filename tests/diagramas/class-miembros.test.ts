@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/diagramas/README.md
 /**
  * Guardián WHAT de los miembros de clase como lista (class-spec).
  *   M1 la visibilidad (`+ - # ~`) es la viñeta: no aparece dentro de los renglones de texto.

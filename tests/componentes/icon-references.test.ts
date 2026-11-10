@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/componentes/README.md
 // S-I1: requisito de specs/iconos.md (WHAT-first, ver specs/testing.md S-T6)
 // tests/componentes/icon-references.test.ts
 //

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/pages/README.md
 /**
  * Behavior del catálogo de componentes (`#icons` / tag `icons`).
  * Cada categoría = <iswc-demo-section>: título flotante + card neon-glass.

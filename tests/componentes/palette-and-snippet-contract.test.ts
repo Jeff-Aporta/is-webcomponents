@@ -1,3 +1,4 @@
+// @contexto INDICE.md · tests/componentes/README.md
 // tests/palette-and-snippet-contract.test.ts
 //
 // Contrato aprendido (paleta default Delfín + snippets con contexto +
