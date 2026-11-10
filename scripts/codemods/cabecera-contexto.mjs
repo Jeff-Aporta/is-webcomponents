@@ -1,3 +1,4 @@
+// @contexto INDICE.md · scripts/README.md
 ﻿// cabecera-contexto.mjs — inserta (o normaliza) la cabecera @contexto en las fuentes.
 //
 //   deno run -A scripts/codemods/cabecera-contexto.mjs [--check] [--dry]

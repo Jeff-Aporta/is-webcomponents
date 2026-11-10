@@ -1,3 +1,4 @@
+// @contexto INDICE.md · scripts/README.md
 // generar-web-types.mjs — los metadatos del kit para los editores.
 //
 //   deno run -A --no-check scripts/generar-web-types.mjs

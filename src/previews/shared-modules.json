@@ -1,13 +1,36 @@
 {
-  "generatedAt": "2026-11-10T08:11:42.314Z",
-  "count": 24,
+  "generatedAt": "2026-11-10T08:53:38.854Z",
+  "count": 29,
   "modules": [
+    {
+      "file": "animar.ts",
+      "id": "animar",
+      "path": "src/core/animar.ts",
+      "summary": "Módulo compartido `animar.ts`.",
+      "bytes": 1797,
+      "exports": [
+        "DURACION",
+        "KEYFRAMES",
+        "animar"
+      ]
+    },
+    {
+      "file": "anunciar.ts",
+      "id": "anunciar",
+      "path": "src/core/anunciar.ts",
+      "summary": "Módulo compartido `anunciar.ts`.",
+      "bytes": 1230,
+      "exports": [
+        "regionViva",
+        "anunciar"
+      ]
+    },
     {
       "file": "app-init.ts",
       "id": "app-init",
       "path": "src/core/app-init.ts",
       "summary": "Módulo compartido `app-init.ts`.",
-      "bytes": 7100,
+      "bytes": 7145,
       "exports": [
         "APP_CFG_KEY",
         "PALETAS",
@@ -25,8 +48,8 @@
       "file": "attrs.ts",
       "id": "attrs",
       "path": "src/core/attrs.ts",
-      "summary": "attrs — Phase V5: el volcado automático del mapa `styleAttrs` quedó deshabilitado",
-      "bytes": 16971,
+      "summary": "Módulo compartido `attrs.ts`.",
+      "bytes": 16617,
       "exports": [
         "isCssColorValue",
         "syncStyleAttr",
@@ -46,8 +69,8 @@
       "file": "cdn-ref.ts",
       "id": "cdn-ref",
       "path": "src/core/cdn-ref.ts",
-      "summary": "cdn-ref — Orden de fallback al cargar assets:",
-      "bytes": 5407,
+      "summary": "Módulo compartido `cdn-ref.ts`.",
+      "bytes": 5303,
       "exports": [
         "REPO_GITHUB",
         "NOMBRE_KIT",
@@ -67,8 +90,8 @@
       "file": "code-highlight.ts",
       "id": "code-highlight",
       "path": "src/core/code-highlight.ts",
-      "summary": "code-highlight — Sustituye a CM5 (runMode / fromTextArea): tokeniza con un escáner por",
-      "bytes": 20678,
+      "summary": "Módulo compartido `code-highlight.ts`.",
+      "bytes": 20162,
       "exports": [
         "normalizeLang",
         "emptyState",
@@ -84,8 +107,8 @@
       "file": "code.ts",
       "id": "code",
       "path": "src/core/code.ts",
-      "summary": "code-text — Extraído para evitar ciclos highlight-code ↔ code ↔ code-format.",
-      "bytes": 24015,
+      "summary": "Módulo compartido `code.ts`.",
+      "bytes": 23449,
       "exports": [
         "dedent",
         "unwrapHandHighlight",
@@ -106,7 +129,7 @@
       "id": "color",
       "path": "src/core/color.ts",
       "summary": "Módulo compartido `color.ts`.",
-      "bytes": 6474,
+      "bytes": 6369,
       "exports": [
         "normalizeTkHue",
         "SERIE_HUES",
@@ -123,8 +146,8 @@
       "file": "diagram-grid.ts",
       "id": "diagram-grid",
       "path": "src/core/diagram-grid.ts",
-      "summary": "Rejilla de alineación para diagramas SVG (secuencia / flujo).",
-      "bytes": 14469,
+      "summary": "Módulo compartido `diagram-grid.ts`.",
+      "bytes": 14212,
       "exports": [
         "TK_DIAGRAM_GRID",
         "TK_DIAGRAM_RADIUS_PX",
@@ -144,8 +167,8 @@
       "file": "dom.ts",
       "id": "dom",
       "path": "src/core/dom.ts",
-      "summary": "dom-utils — Sustituye copias dispersas en iswc-checkbox, iswc-switch, iswc-input,",
-      "bytes": 7571,
+      "summary": "Módulo compartido `dom.ts`.",
+      "bytes": 7408,
       "exports": [
         "hasSlotted",
         "assignedNodes",
@@ -165,7 +188,7 @@
       "id": "icon-loader",
       "path": "src/core/icon-loader.ts",
       "summary": "Módulo compartido `icon-loader.ts`.",
-      "bytes": 18878,
+      "bytes": 18540,
       "exports": [
         "iconApiUrl",
         "AVISO_FALTA_LOCAL",
@@ -182,19 +205,30 @@
       ]
     },
     {
+      "file": "intl.ts",
+      "id": "intl",
+      "path": "src/core/intl.ts",
+      "summary": "Módulo compartido `intl.ts`.",
+      "bytes": 1950,
+      "exports": [
+        "lista",
+        "plural"
+      ]
+    },
+    {
       "file": "iswc-css-vacio.ts",
       "id": "iswc-css-vacio",
       "path": "src/core/iswc-css-vacio.ts",
-      "summary": "iswc-css-vacio — `iswc:css` es un módulo virtual: el plugin esbuild `cssVirtual` (src/cdn/build/css-virtual.ts) lo sustituye por",
-      "bytes": 677,
+      "summary": "Módulo compartido `iswc-css-vacio.ts`.",
+      "bytes": 722,
       "exports": []
     },
     {
       "file": "iswc-element.ts",
       "id": "iswc-element",
       "path": "src/core/iswc-element.ts",
-      "summary": "iswc-element — import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';",
-      "bytes": 21928,
+      "summary": "Módulo compartido `iswc-element.ts`.",
+      "bytes": 21484,
       "exports": [
         "soportaHojasAdoptadas",
         "textoHojasBase",
@@ -214,8 +248,8 @@
       "file": "iswc-form-control.ts",
       "id": "iswc-form-control",
       "path": "src/core/iswc-form-control.ts",
-      "summary": "iswc-form-control — Mismo contrato que el control form-associated de referencia (ver la spec de paridad, F8), sin Lit; absorbe",
-      "bytes": 8628,
+      "summary": "Módulo compartido `iswc-form-control.ts`.",
+      "bytes": 8673,
       "exports": [
         "IswcFormControl extends IswcReactive \n  static formAssociated"
       ]
@@ -224,8 +258,8 @@
       "file": "iswc-reactive.ts",
       "id": "iswc-reactive",
       "path": "src/core/iswc-reactive.ts",
-      "summary": "iswc-reactive — import { IswcReactive, prop, state, watch } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';",
-      "bytes": 14374,
+      "summary": "Módulo compartido `iswc-reactive.ts`.",
+      "bytes": 14419,
       "exports": [
         "registrarPintor",
         "prop",
@@ -238,8 +272,8 @@
       "file": "iswc-storage.ts",
       "id": "iswc-storage",
       "path": "src/core/iswc-storage.ts",
-      "summary": "iswc-storage — TODO lo que el kit guarda en el navegador lleva UN prefijo: `iswc:`. — readIswc('app-cfg')                    // localStorage['iswc:app-cfg']",
-      "bytes": 6105,
+      "summary": "Módulo compartido `iswc-storage.ts`.",
+      "bytes": 6003,
       "exports": [
         "ISWC_PREFIX",
         "iswcKey",
@@ -257,8 +291,8 @@
       "file": "localize.ts",
       "id": "localize",
       "path": "src/core/localize.ts",
-      "summary": "localize — resolverLocale(el, explicito?)   explícito → ancestro con `lang` (cruza shadows) → `<html lang>` → navegador → 'es'",
-      "bytes": 6945,
+      "summary": "Módulo compartido `localize.ts`.",
+      "bytes": 6990,
       "exports": [
         "registrarTerminos",
         "resolverLocale",
@@ -274,7 +308,7 @@
       "id": "path-turtle",
       "path": "src/core/path-turtle.ts",
       "summary": "Módulo compartido `path-turtle.ts`.",
-      "bytes": 10873,
+      "bytes": 10590,
       "exports": [
         "PathTurtle"
       ]
@@ -283,8 +317,8 @@
       "file": "plantilla.ts",
       "id": "plantilla",
       "path": "src/core/plantilla.ts",
-      "summary": "plantilla — las clases que no pintan con `render()` no la carguen).",
-      "bytes": 10902,
+      "summary": "Módulo compartido `plantilla.ts`.",
+      "bytes": 10947,
       "exports": [
         "html",
         "svg",
@@ -296,8 +330,8 @@
       "file": "position.ts",
       "id": "position",
       "path": "src/core/position.ts",
-      "summary": "Motor de posicionamiento anclado (flip / shift / arrow). — Sin dependencias — usa getBoundingClientRect + flip/shift.",
-      "bytes": 25869,
+      "summary": "Módulo compartido `position.ts`.",
+      "bytes": 25248,
       "exports": [
         "PLACEMENTS",
         "PLACEMENTS_AUTO",
@@ -314,8 +348,8 @@
       "file": "prefs.ts",
       "id": "prefs",
       "path": "src/core/prefs.ts",
-      "summary": "Preferencias compartidas de Web Components (un solo JSON en localStorage). — \"iswc-split-panel\": { \"gallery-nav\": { \"positionInPixels\": 200 } },",
-      "bytes": 13360,
+      "summary": "Módulo compartido `prefs.ts`.",
+      "bytes": 13025,
       "exports": [
         "getComponentPrefs",
         "setComponentPrefs",
@@ -326,7 +360,7 @@
         "getPrefsRootKey",
         "getLegacyPrefsRootKey",
         "SCROLL_MEMORY_ATTRS",
-        "ScrollMemory \r\n  host",
+        "ScrollMemory \n  host",
         "bindScrollMemoryApi"
       ]
     },
@@ -334,10 +368,33 @@
       "file": "props-element.ts",
       "id": "props-element",
       "path": "src/core/props-element.ts",
-      "summary": "props-element — Cada clave de `props` que no sea una función es también un atributo en kebab-case (`textoCargando` →",
-      "bytes": 4891,
+      "summary": "Módulo compartido `props-element.ts`.",
+      "bytes": 4936,
       "exports": [
         "atributosDe"
+      ]
+    },
+    {
+      "file": "ranuras.ts",
+      "id": "ranuras",
+      "path": "src/core/ranuras.ts",
+      "summary": "Módulo compartido `ranuras.ts`.",
+      "bytes": 2566,
+      "exports": [
+        "ranurasDe",
+        "ranura",
+        "conectarRanuras",
+        "desconectarRanuras"
+      ]
+    },
+    {
+      "file": "reemitir.ts",
+      "id": "reemitir",
+      "path": "src/core/reemitir.ts",
+      "summary": "Módulo compartido `reemitir.ts`.",
+      "bytes": 1094,
+      "exports": [
+        "reemitir"
       ]
     },
     {
@@ -345,7 +402,7 @@
       "id": "svg-chart-engine",
       "path": "src/core/svg-chart-engine.ts",
       "summary": "Módulo compartido `svg-chart-engine.ts`.",
-      "bytes": 6701,
+      "bytes": 6576,
       "exports": [
         "svgEl",
         "scaleLinear",
@@ -364,7 +421,7 @@
       "id": "tk-inline-md",
       "path": "src/core/tk-inline-md.ts",
       "summary": "Módulo compartido `tk-inline-md.ts`.",
-      "bytes": 4396,
+      "bytes": 4345,
       "exports": [
         "inlineMdWeb",
         "applySvgTextContent"
@@ -374,8 +431,8 @@
       "file": "tk-text.ts",
       "id": "tk-text",
       "path": "src/core/tk-text.ts",
-      "summary": "Iconos inline en MD/HTML TK. El SVG lo resuelve el sistema propio de — iconos (_shared/icon-loader.js); no hay dependencia de terceros.",
-      "bytes": 21105,
+      "summary": "Módulo compartido `tk-text.ts`.",
+      "bytes": 20630,
       "exports": [
         "TK_ICON_TOKEN_RE",
         "iconAssetPath",
@@ -395,8 +452,8 @@
       "file": "tree-layout.ts",
       "id": "tree-layout",
       "path": "src/core/tree-layout.ts",
-      "summary": "Motor de layout puro (sin DOM, sin globals) para jerarquías: árbol de — parentesco (mindmap, tree), radial (mindmap) y treemap (squarify).",
-      "bytes": 15887,
+      "summary": "Módulo compartido `tree-layout.ts`.",
+      "bytes": 15551,
       "exports": [
         "buildTree",
         "layoutTree",
