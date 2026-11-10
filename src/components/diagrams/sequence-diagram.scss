@@ -1,16 +1,7 @@
 @use '../../core/diagram-kit';
+@use 'kit' as *;
 
-:host {
-  width: 100%;
-  min-height: 0;
-  display: block;
-  position: relative;
-  box-sizing: border-box;
-  font-family: var(--iswc-sans);
-
-  &[hidden] { display: none; }
-  &[color="viewer"] { width: 100%; height: 100%; }
-}
+:host { @include host-lienzo-diagrama; }
 
 .wrap {
   position: relative;
@@ -108,8 +99,4 @@
   }
 }
 
-/* El visor es opt-in: sin `open-on-click` el componente no abre nada,
-   asi que tampoco debe insinuar con el cursor que se puede hacer clic. */
-:host([open-on-click]) {
-  .wrap { cursor: zoom-in; }
-}
+@include visor-abrible;

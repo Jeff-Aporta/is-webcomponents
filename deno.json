@@ -21,6 +21,8 @@
   },
   "tasks": {
     "build:scss": "deno run -A --no-check scripts/build-scss.mjs",
+    "css:equivalente": "deno run -A --no-check scripts/sondas/css-equivalente.mjs",
+    "indice": "deno run -A --no-check scripts/indice-md.mjs",
     "icons": "deno run -A --no-check assets/dl.js",
     "build": "deno task icons ; deno task build:scss ; deno run -A --no-check scripts/build.mjs",
     "npm:pack": "deno run -A --no-check scripts/npm-pack.mjs",

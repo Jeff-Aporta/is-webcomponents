@@ -1,0 +1,98 @@
+// _kit.scss — los estilos que el kit repite, en un solo sitio.
+//
+// Un mixin por familia. Las reglas del repo (specs/estilos.md):
+//
+//   1. El mixin emite el CSS EXACTAMENTE igual que la regla que sustituye: mismos valores, mismo
+//      orden, misma especificidad. Si el CSS cambia, no es un refactor, es un cambio de estilo.
+//      Por eso scripts/sondas/css-equivalente.mjs compara el CSS compilado antes y despues.
+//   2. El mixin no elige la especificidad por su cuenta: quien llama decide. Ningun mixin envuelve
+//      nada en :host(...) por su cuenta: los de aqui se llaman DENTRO de :host { }.
+//   3. Sin @import: solo @use y @forward.
+//
+// src/styles es loadPath global del build, asi que desde cualquier componente se llega con:
+//
+//   @use 'kit' as *;
+//
+// y desde un archivo de src/styles/ con @use 'kit' as *; o @forward 'kit';.
+
+// ─── El lienzo de los diagramas ───────────────────────────────────────────
+// El :host y el .wrap que comparten los 13 diagramas. Lo unico que cambia entre diagramas es
+// el texto del estado vacio, que va como parametro.
+//
+//   :host { @include host-lienzo-diagrama; }
+//   .wrap { @include wrap-lienzo-diagrama(...); }
+
+@mixin host-lienzo-diagrama {
+  width: 100%;
+  min-height: 0;
+  display: block;
+  position: relative;
+  box-sizing: border-box;
+  font-family: var(--iswc-sans);
+  
+  &[hidden] { display: none; }
+  &[color="viewer"] { width: 100%; height: 100%; }
+}
+
+@mixin wrap-lienzo-diagrama($vacio: '') {
+  position: relative;
+  border-radius: 0.5em;
+  overflow: hidden;
+  background: transparent;
+  border: 1px solid var(--iswc-border);
+  padding: 0.75em;
+  cursor: default;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  touch-action: manipulation;
+  box-sizing: border-box;
+  height: 100%;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  
+  &.iswc-viewer {
+    width: 100%;
+    height: 100%;
+    border: 0;
+    padding: 0;
+    cursor: default;
+  }
+  
+  &[data-empty]::after {
+    content: $vacio;
+    display: block;
+    padding: 1.1429em;
+    font-size: 0.875em;
+    color: var(--iswc-text-soft);
+  }
+}
+
+// ─── El visor opt-in ──────────────────────────────────────────────────────
+// Sin open-on-click el componente no abre nada, asi que tampoco debe insinuar con el cursor
+// que se puede hacer clic. El bloque es el mismo en todos los diagramas.
+@mixin visor-abrible($selector: ":host([open-on-click])") {
+  /* El visor es opt-in: sin `open-on-click` el componente no abre nada,
+     asi que tampoco debe insinuar con el cursor que se puede hacer clic. */
+  #{$selector} {
+    .wrap { cursor: zoom-in; }
+  }
+}
+
+// ─── El lienzo SVG ────────────────────────────────────────────────────────
+// El lienzo donde se dibuja el diagrama. El cuerpo es el mismo en todos; lo que cambia es el
+// nombre de la clase (.cls-svg, .vn-svg, .tl-svg...).
+@mixin lienzo-svg($clase) {
+  .#{$clase} {
+    display: block;
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    max-height: 100%;
+    margin: auto;
+    overflow: hidden;
+  }
+}
