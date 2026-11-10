@@ -47,7 +47,7 @@ El kit se consume desde jsDelivr/GitHub Pages como módulos por tag. La galería
 | `core/loader.min.js` | Copia byte a byte de `core/loader.min.mjs` para pines viejos (compat): se retira cuando los consumidores re-pineen (F5) |
 | `core/loader.md` | Docs del loader (API) |
 | `core/<x>.min.mjs` · `lib/<x>.min.mjs` | Módulos del core y de lib (zod, obj, ref-obj) para ejecutar; `core/<x>.ts` para extender |
-| `<categoria>/<name>.min.mjs` | Componente individual (módulo ES; su CSS va dentro, por `ISWC:css`) |
+| `<categoria>/<name>.min.mjs` | Componente individual (módulo ES; su CSS va dentro, por `iswc:css`) |
 | `<categoria>/<name>.min.css` | Estilos del componente (para `sheet-cache` y para enlazarlos a mano) |
 | `_chunks/chunk-<hash>.mjs` | Código compartido entre módulos (el core del molde vive en UNO) |
 | `deps.json` | Índice (F7): `sha` (SHA **base** del build, informativo) y `categorias` (tag → categoría), ~6 KB |
@@ -120,7 +120,7 @@ definirse) y el resto con `load` (progresivo).
 - Componentes de app (`registerApp`): `.mjs` → `import()`, `.js` → script clásico; un módulo ES con extensión `.js`
   pasa `type: 'module'`. `deps` (`tag` → hrefs) precarga su cierre.
 - Implementación de referencia para apps: las plantillas de `skills/iswc-foundation/templates/` (`index.html`,
-  `view/**/index.html` y `src/utils/build.ts`, que escribe el bloque `<!-- ISWC:precarga:inicio -->`…`fin` desde
+  `view/**/index.html` y `src/utils/build.ts`, que escribe el bloque `<!-- iswc:precarga:inicio -->`…`fin` desde
   `src/vendor/iswc-base/deps.json`). Ojo al orden: el `<script type="module">` del loader va **antes** del registrador
   de la app (los módulos se ejecutan en orden de documento y el registrador necesita `globalThis.iswcLoader`).
 
@@ -258,7 +258,7 @@ Qué hace, en orden:
    portada de Avatar pedía 17 módulos más que con el build por archivo.
 2. **Bundle.** esbuild `splitting`, `format: 'esm'`, `minify`, `.min.mjs`, chunks en `<salida>/_chunks/`. El alias
    `@jeff-aporta/iswc-base/<ruta>` (la app lo escribe con la ruta publicada, `core/iswc-element.min.mjs`) queda externo
-   y se reescribe a `<cdn><ruta>`: la misma URL que usa el loader. `ISWC:css` incrusta la hoja del staging
+   y se reescribe a `<cdn><ruta>`: la misma URL que usa el loader. `iswc:css` incrusta la hoja del staging
    (`css-virtual.ts`). `import.meta.url` de cada fuente vale su URL publicada aunque su código acabe en un chunk.
 3. **Hojas.** Cada `.css` del staging → `<salida>/<ruta sin src/>.css`, minificada (`url()` de fuentes e imágenes quedan
    relativas).
@@ -272,10 +272,10 @@ Qué hace, en orden:
    sirven para lo que se pida después (cada página ya precarga su arranque) y no pesan en la carga. En Avatar, con los
    cierres dentro el registrador pesaba 19,6 KB; sin ellos, 11,6 KB (+5,8 KB de `deps` al interactuar).
    `asset-hashes.json` y `build-stamp.json`.
-7. **HTML.** Entre `<!-- ISWC:precarga:inicio -->` y `<!-- ISWC:precarga:fin -->`: import map (alias y `zod` del pin, más
+7. **HTML.** Entre `<!-- iswc:precarga:inicio -->` y `<!-- iswc:precarga:fin -->`: import map (alias y `zod` del pin, más
    `importMap`), `<meta name="iswc-precargado">`, `modulepreload` del cierre del loader, del de los `kit` de la página
    (sin los del lote) y de lo que la app importa del kit por alias, el lote, el cierre propio (`app`), `preload as=fetch`
-   de las `.css` hermanas que los componentes piden por red (no las de `ISWC:css`), `is-base`/`palettes` no
+   de las `.css` hermanas que los componentes piden por red (no las de `iswc:css`), `is-base`/`palettes` no
    bloqueantes, loader `.min.mjs` y registrador. Fuera del bloque solo pone o quita el `?v=` de las referencias a
    `<salida>`; `<base href>` se respeta (una base absoluta = la raíz de la app). Un import map fuera del bloque es error.
    Idempotente: sin cambios, ni el HTML ni `<salida>` cambian (salvo `build-stamp.json`).

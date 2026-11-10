@@ -1,6 +1,6 @@
 # ISWC
 
-Galería de [Web Components](https://developer.mozilla.org/en-US/docs/Web/API/Web_components) vanilla de InSoft (`iswc-*`).
+Galería de [Web Components](https://developer.mozilla.org/en-US/docs/Web/API/Web_components) vanilla de ISWC (`iswc-*`).
 
 Nombre del kit: **`iswc-base`**. El repo de GitHub conserva por ahora su nombre en las URLs (se renombrará coordinado con las apps); fuera de una URL el kit siempre es `iswc-base`.
 
@@ -64,4 +64,4 @@ Docs raw: [índice componentes](https://raw.githubusercontent.com/Jeff-Aporta/is
 
 ## Licencia
 
-Uso interno InSoft / Jeff-Aporta salvo indicación contraria.
+Uso interno ISWC / Jeff-Aporta salvo indicación contraria.

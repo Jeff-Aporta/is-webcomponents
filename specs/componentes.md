@@ -58,10 +58,10 @@ Cada tag es un Custom Element con Shadow DOM. El inventario y rutas de build sal
   define(IswcFoo);
   ```
 
-  Nada de `adoptCss(…, import.meta.url)`, `<link>` al `.css` hermano ni `static get observedAttributes` a mano. Las hojas adoptadas sobreviven a `shadow.innerHTML = …`. `static deps` solo para hijos que el padre pinta sin usar su API síncrona; si el padre necesita una clase o un helper del hijo, `import` normal. En Deno sin build, `ISWC:css` resuelve a `''` (`deno.json` → `core/iswc-css-vacio.ts`); `scripts/serve.mjs` lo sirve desde `.tmp-scss`. Quien sobrescriba `connectedCallback`/`attributeChangedCallback` **debe** llamar a `super` (si no, los `@prop` no siguen a los atributos); lo normal es `onConnected`/`onAttributeChanged`.
+  Nada de `adoptCss(…, import.meta.url)`, `<link>` al `.css` hermano ni `static get observedAttributes` a mano. Las hojas adoptadas sobreviven a `shadow.innerHTML = …`. `static deps` solo para hijos que el padre pinta sin usar su API síncrona; si el padre necesita una clase o un helper del hijo, `import` normal. En Deno sin build, `iswc:css` resuelve a `''` (`deno.json` → `core/iswc-css-vacio.ts`); `scripts/serve.mjs` lo sirve desde `.tmp-scss`. Quien sobrescriba `connectedCallback`/`attributeChangedCallback` **debe** llamar a `super` (si no, los `@prop` no siguen a los atributos); lo normal es `onConnected`/`onAttributeChanged`.
 
   Guardianes: `tests/gobernanza/molde-iswc-element.test.ts` (molde), `tests/gobernanza/reactivo.test.ts` (reflejo a mano, forms sobre `IswcFormControl`, `aria-label` literal, `@prop` + `observed`; trinquetes que solo bajan), `tests/gobernanza/eventos.test.ts` (emitidos = declarados, fichas al día con la sonda), `tests/gobernanza/a11y-patrones.test.ts` (roles y pares ARIA en plantillas), `tests/navegador/core-f8.test.ts` (reactivo, plantilla, form-control, localize, capas en Edge), `tests/navegador/textos-f8.test.ts` (es/en por `lang` heredado), `tests/navegador/overlays-f8.test.ts` (pila de capas), `tests/navegador/a11y-axe.test.ts` (axe-core, solo dev) y los topes de `tests/navegador/carga.test.ts` (unión base ≤ 14 500 B br; cierres de `iswc-button` ≤ 9 108 e `iswc-input` ≤ 14 971).
-- Hojas base (`host-base`, `scrollbars`): las adopta el molde desde `core/iswc-element.ts` (`ISWC:css/host-base`, `ISWC:css/scrollbars`), compartidas por toda la página.
+- Hojas base (`host-base`, `scrollbars`): las adopta el molde desde `core/iswc-element.ts` (`iswc:css/host-base`, `iswc:css/scrollbars`), compartidas por toda la página.
 - Escala: preferir `em` / `font-size` en controles; no `size=` legacy, no `size` colors. Las bases se derivan de `import.meta.url`, no de `location.pathname`.
 
 ## S-K3 Enums y eventos
@@ -125,7 +125,7 @@ Cada tag es un Custom Element con Shadow DOM. El inventario y rutas de build sal
   - **No** ocultar con CSS del host (el shadow no es contrato estable). **No** inventar un segundo flag (`hide-tools`, `chrome=false`) — canónico `toolbar-tools`. `disable-column-menu` solo afecta al menú de columna.
 - **`iswc-ag-grid`:** núcleo `datagrid-core/` (port de mimicus-react) separado del render; `createGridModel({rows,columns})` ⇒ `GridApi` (store observable). Atributos: `get-row-id`, `density`, `group-by`, `remember-state`, `storage-key`, `toolbar`. Columnas: `flex`, `rowGroup`, `enableRowGroup`, `aggFunc`, `filterType`, `minWidth`, `maxWidth`, pinned. Eventos: `iswc-state-loaded`, `iswc-column-reorder/resize/pin/hide`.
   - `#readData()` auto-corrige cols/rows (primer `<script type="application/json">` = columnas; segundo = filas; si el primero es claramente rows, se corrige). **No** usar `getAttribute('rows')` directo. **No** hardcodear `DENSITY_ROW_HEIGHT` (usar `#rowHeight()` que respeta `--iswc-grid-row-h`). **No** overrides `--iswc-*` de scrollbar dentro del shadow.
-- **Persistencia:** un solo `localStorage['iswc:root'][tag][storage-key]` (todo lo del kit lleva prefijo `ISWC:`, core/iswc-storage) vía `_shared/prefs.js`. Opt-in (`remember-state`/`remember-scroll`). **No** keys planas / `sessionStorage`.
+- **Persistencia:** un solo `localStorage['iswc:root'][tag][storage-key]` (todo lo del kit lleva prefijo `iswc:`, core/iswc-storage) vía `_shared/prefs.js`. Opt-in (`remember-state`/`remember-scroll`). **No** keys planas / `sessionStorage`.
 - Guardianes: `prefs-contract`, `data-grid-toolbar`.
 
 ### S-K10 data-viz
