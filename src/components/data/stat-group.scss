@@ -1,19 +1,8 @@
 /* <iswc-stat-group> — rejilla de iswc-stat. Cada app le da su aire con las custom properties. */
-:host {
-  --_radius: var(--iswc-stat-group-radius, 0.75em);
-  display: block;
-  min-width: 0;
-  font-family: var(--iswc-sans);
-}
-
+:host { --_radius: var(--iswc-stat-group-radius, 0.75em); display: block; min-width: 0; font-family: var(--iswc-sans); }
 :host([hidden]) { display: none !important; }
-
 .rejilla { gap: 0.75em; }
-
-.esqueleto {
-  height: 6.5em;
-  border-radius: var(--_radius);
-}
+.esqueleto { height: 6.5em; border-radius: var(--_radius); }
 
 .kpi {
   position: relative;
@@ -49,9 +38,5 @@
 
 @media (max-width: 36em) {
   .rejilla { gap: 0.5em; }
-
-  .kpi {
-    &::part(base) { padding: 0.75em; }
-    &::part(helper) { font-size: 0.8em; }
-  }
+.kpi { &::part(base) { padding: 0.75em; } &::part(helper) { font-size: 0.8em; }; }
 }

@@ -1,14 +1,8 @@
+@use 'kit' as *;
 /* <iswc-trace-log> — log de un proceso: cabecera plegable y lista de eventos. */
 @use '../../styles/mixins' as *;
 
-:host {
-  @include papel;
-  display: block;
-  margin-block: 0.35em;
-  color: var(--iswc-text);
-  font-size: 0.82em;
-}
-
+:host { @include papel; display: block; margin-block: 0.35em; color: var(--iswc-text); font-size: 0.82em; }
 :host([hidden]) { display: none !important; }
 
 .traza {
@@ -28,9 +22,7 @@
   width: 100%;
   padding: 0.35em 0.6em;
   border: 0;
-  background: transparent;
-  color: inherit;
-  font: inherit;
+  @include reset-boton;
   text-align: left;
   cursor: pointer;
 
@@ -43,13 +35,7 @@
 .titulo { font-weight: 600; }
 .resumen { opacity: 0.75; }
 .cuenta { font-size: 0.9em; }
-
-.vivo {
-  margin-inline-start: auto;
-  color: var(--iswc-success-text);
-  font-weight: 600;
-  animation: latido 1.2s ease-in-out infinite;
-}
+.vivo { margin-inline-start: auto; color: var(--iswc-success-text); font-weight: 600; animation: latido 1.2s ease-in-out infinite; }
 
 .barra {
   display: flex;
@@ -61,10 +47,7 @@
   border-block-start: 0.0625em solid var(--iswc-border);
 }
 
-.filtros {
-  display: flex;
-  gap: 0.25em;
-}
+.filtros { display: flex; gap: 0.25em; }
 
 .filtro,
 .copiar {
@@ -74,9 +57,7 @@
   padding: 0.1em 0.55em;
   border: 0.0625em solid var(--iswc-border);
   border-radius: 999em;
-  background: transparent;
-  color: inherit;
-  font: inherit;
+  @include reset-boton;
   cursor: pointer;
 
   &[aria-pressed="true"] {
@@ -86,14 +67,7 @@
   }
 }
 
-.eventos {
-  max-height: 22em;
-  margin: 0;
-  padding: 0.25em 0;
-  overflow: auto;
-  font-family: var(--iswc-mono);
-  list-style: none;
-}
+.eventos { max-height: 22em; margin: 0; padding: 0.25em 0; overflow: auto; font-family: var(--iswc-mono); list-style: none; }
 
 .evento {
   display: grid;
@@ -114,18 +88,8 @@
 }
 
 .ms,
-.dur {
-  opacity: 0.7;
-  white-space: nowrap;
-}
-
-.etapa {
-  overflow: hidden;
-  opacity: 0.85;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
+.dur { opacity: 0.7; white-space: nowrap; }
+.etapa { overflow: hidden; opacity: 0.85; text-overflow: ellipsis; white-space: nowrap; }
 .mensaje { overflow-wrap: anywhere; }
 
 .datos {
@@ -149,10 +113,7 @@
   }
 }
 
-.vacio {
-  padding: 0.3em 0.6em;
-  opacity: 0.7;
-}
+.vacio { padding: 0.3em 0.6em; opacity: 0.7; }
 
 @media (max-width: 35em) {
   .evento { grid-template-columns: 4.6em 1.2em 1fr auto; }

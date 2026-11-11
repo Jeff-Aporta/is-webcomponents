@@ -43,22 +43,8 @@
 }
 
 
-.head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.5em;
-}
-
-.label {
-  min-width: 0;
-  overflow-wrap: anywhere;
-  font-size: 0.85em;
-  color: var(--muted);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  font-weight: 500;
-}
+.head { display: flex; align-items: center; justify-content: space-between; gap: 0.5em; }
+.label { min-width: 0; overflow-wrap: anywhere; font-size: 0.85em; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 500; }
 
 
 .icon {
@@ -86,12 +72,7 @@
 }
 
 
-.foot {
-  display: flex;
-  align-items: center;
-  gap: 0.5em;
-  font-size: 0.85em;
-}
+.foot { display: flex; align-items: center; gap: 0.5em; font-size: 0.85em; }
 
 .trend {
   display: inline-flex;
@@ -106,7 +87,4 @@
 
 /* Sin contenido no se pinta la caja (ni el cuadro del ícono ni la píldora de tendencia). */
 .icon[hidden], .trend[hidden], .helper[hidden], .foot[hidden] { display: none; }
-
-.helper {
-  color: var(--muted);
-}
+.helper { color: var(--muted); }

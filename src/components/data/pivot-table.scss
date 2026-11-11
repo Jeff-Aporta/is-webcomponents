@@ -13,12 +13,7 @@
   background: var(--iswc-bg-elev);
 }
 
-table.pivot {
-  inline-size: 100%;
-  border-collapse: collapse;
-  font-size: .82em;
-  font-variant-numeric: tabular-nums;
-}
+table.pivot { inline-size: 100%; border-collapse: collapse; font-size: .82em; font-variant-numeric: tabular-nums; }
 
 .pivot {
   :is(th, td) {
