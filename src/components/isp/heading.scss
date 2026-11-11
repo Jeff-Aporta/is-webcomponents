@@ -69,9 +69,7 @@
 :host([color="current"]) { --iswc-heading-color: currentColor; }
 
 /* Variantes: solid es el default. El tono sale de --iswc-heading-color, así `color` y `mix` siguen mandando. */
-:host {
-  --_tinta: color-mix(in srgb, var(--iswc-heading-color), var(--iswc-heading-mix-with) var(--iswc-heading-mix));
-}
+:host { --_tinta: color-mix(in srgb, var(--iswc-heading-color), var(--iswc-heading-mix-with) var(--iswc-heading-mix)); }
 
 :host([variant="gradient"]) .heading,
 :host([variant="pattern"]) .heading {

@@ -1,3 +1,4 @@
+@use 'kit' as *;
 /* <iswc-tree-view> — árbol editable: drag, historial, protección, drawer
    de ficha y confirm-delete.
 
@@ -43,8 +44,7 @@
 }
 
 :host([disabled]) {
-  opacity: 0.55;
-  pointer-events: none;
+  @include deshabilitado(.55);
 }
 
 /* `.isp-tree-host` lo añade el adapter para marcar el root del bosque;
@@ -72,21 +72,8 @@
   flex: 0 0 auto;
 }
 
-.isp-tree-body {
-  inline-size: 100%;
-  min-inline-size: 0;
-  min-block-size: 0;
-  flex: 1 1 auto;
-  overflow-y: auto;
-  overflow-x: hidden;
-}
-
-.drawer-body {
-  display: flex;
-  flex-direction: column;
-  min-block-size: 0;
-  flex: 1 1 auto;
-}
+.isp-tree-body { inline-size: 100%; min-inline-size: 0; min-block-size: 0; flex: 1 1 auto; overflow-y: auto; overflow-x: hidden; }
+.drawer-body { display: flex; flex-direction: column; min-block-size: 0; flex: 1 1 auto; }
 
 @keyframes trvwr-swap-flash {
   0% { background-color: var(--trvwr-swp-bg); }
@@ -97,11 +84,7 @@
   100% { background-color: transparent; }
 }
 
-.trvwr-row-host {
-  display: block;
-  inline-size: 100%;
-  min-inline-size: 0;
-}
+.trvwr-row-host { display: block; inline-size: 100%; min-inline-size: 0; }
 
 .trvwr-itm {
   display: block;
@@ -146,14 +129,8 @@
 }
 
 /* Modificadores de la suma: foco persistente y deshabilitado. */
-.trvwr-itm-sum--focused {
-  outline: 2px solid var(--trvwr-fcs-rng);
-  outline-offset: -1px;
-}
-.trvwr-itm-sum--disabled {
-  cursor: not-allowed;
-  opacity: 0.55;
-}
+.trvwr-itm-sum--focused { outline: 2px solid var(--trvwr-fcs-rng); outline-offset: -1px; }
+.trvwr-itm-sum--disabled { @include no-permitido(.55); }
 
 /* Estados visuales de la fila (mutuamente excluyentes; los pone el adapter). */
 .trvwr-itm {
@@ -184,10 +161,7 @@
   }
 }
 
-.trvwr-itm--dragging {
-  > .trvwr-itm-sum { opacity: 0.45; }
-  > [role="group"] { opacity: 0.35; }
-}
+.trvwr-itm--dragging { > .trvwr-itm-sum { opacity: 0.45; } > [role="group"] { opacity: 0.35; }; }
 
 /* Drop indicators (líneas de posición): comparten geometría; el lado y el
    color los decide el modificador. JS los aplica de uno en uno, así que
@@ -216,10 +190,7 @@
 
 /* Variantes de peligro: cambian solo el color de la línea. */
 .trvwr-itm-sum--drg-forbidden-bf::before,
-.trvwr-itm-sum--drg-forbidden-aftr::after {
-  background: var(--iswc-color-danger);
-  box-shadow: -.3125em 0 0 .1875em var(--iswc-color-danger);
-}
+.trvwr-itm-sum--drg-forbidden-aftr::after { background: var(--iswc-color-danger); box-shadow: -.3125em 0 0 .1875em var(--iswc-color-danger); }
 
 /* Indicadores "into" (contenedor receptor): outline dashed. */
 .trvwr-itm-sum--drg-into {
@@ -235,15 +206,7 @@
   background: color-mix(in srgb, var(--iswc-color-danger) 18%, transparent);
 }
 
-.trvwr-sum-row {
-  display: flex;
-  align-items: center;
-  gap: .5143em;
-  inline-size: 100%;
-  min-block-size: 2em;
-  min-inline-size: 0;
-  flex: 1;
-}
+.trvwr-sum-row { display: flex; align-items: center; gap: .5143em; inline-size: 100%; min-block-size: 2em; min-inline-size: 0; flex: 1; }
 
 .trvwr-drag-handle {
   display: inline-flex;
@@ -261,67 +224,19 @@
 
 /* Modificadores del handle. */
 :where(.trvwr-drag-handle--locked, .trvwr-drag-handle--frozen) {
-  cursor: not-allowed;
-  opacity: 0.55;
+  @include no-permitido(.55);
 }
 
-.trvwr-itm-symb {
-  display: inline-flex;
-  flex-shrink: 0;
-  align-items: center;
-  gap: .5143em;
-  cursor: pointer;
-  color: var(--iswc-text);
-}
+.trvwr-itm-symb { display: inline-flex; flex-shrink: 0; align-items: center; gap: .5143em; cursor: pointer; color: var(--iswc-text); }
 .trvwr-chevron { transition: transform 150ms; }
-
-.trvwr-itm-lead {
-  display: inline-flex;
-  flex-shrink: 0;
-  align-items: center;
-  justify-content: center;
-  inline-size: 1.25em;
-}
+.trvwr-itm-lead { display: inline-flex; flex-shrink: 0; align-items: center; justify-content: center; inline-size: 1.25em; }
 
 /* esbuild no acepta `&--add` después de `.trvwr-itm-lead` (lo lee como
    parent + type selector `--add`). Mantenemos la regla suelta para evitar
    el workaround `:is(&--add)`. */
-.trvwr-itm-lead--add {
-  cursor: pointer;
-  border-radius: 0.2em;
-
-  &:hover { background: var(--trvwr-ctv-dflt); }
-}
-
-.trvwr-itm-content {
-  flex: 1;
-  min-inline-size: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-.trvwr-itm-helper {
-  flex: 0 0 auto;
-  margin-inline-start: .686em;
-  color: var(--iswc-text-muted);
-}
-
-iswc-float-card {
-  display: block;
-  inline-size: 100%;
-  min-inline-size: 0;
-}
-
-.trvwr-kids {
-  display: flex;
-  flex-direction: column;
-  padding-inline-start: 1.8286em;
-}
-
-.protect-actions {
-  display: flex;
-  gap: .5714em;
-  inline-size: 100%;
-
-  > * { flex: 1 1 0; }
-}
+.trvwr-itm-lead--add { cursor: pointer; border-radius: 0.2em; &:hover { background: var(--trvwr-ctv-dflt); }; }
+.trvwr-itm-content { flex: 1; min-inline-size: 0; @include truncar; }
+.trvwr-itm-helper { flex: 0 0 auto; margin-inline-start: .686em; color: var(--iswc-text-muted); }
+iswc-float-card { display: block; inline-size: 100%; min-inline-size: 0; }
+.trvwr-kids { display: flex; flex-direction: column; padding-inline-start: 1.8286em; }
+.protect-actions { display: flex; gap: .5714em; inline-size: 100%; > * { flex: 1 1 0; }; }
