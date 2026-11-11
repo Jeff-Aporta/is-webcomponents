@@ -13,13 +13,7 @@
 /* ── Tokens de lectura compartidos por gráficas y diagramas ──
    En :host porque deben resolverse con las superficies del contexto (papeles de panda incluidos).
    Los colores de serie vienen de la capa de paletas: --iswc-chart-1..8. */
-:host {
-  --chart-text: var(--iswc-text);
-  --chart-muted: var(--iswc-text-dim);
-  --chart-surface: var(--iswc-bg-elev);
-  --iswc-chart-grid-color: var(--grid-color, color-mix(in srgb, var(--iswc-border) 85%, transparent));
-  --chart-axis-color: var(--iswc-border);
-}
+:host { --chart-text: var(--iswc-text); --chart-muted: var(--iswc-text-dim); --chart-surface: var(--iswc-bg-elev); --iswc-chart-grid-color: var(--grid-color, color-mix(in srgb, var(--iswc-border) 85%, transparent)); --chart-axis-color: var(--iswc-border); }
 
 /* ── Tooltip de vidrio ── */
 .dg-tooltip {
@@ -86,20 +80,7 @@
 .dg-dimmable.iswc-active { filter: brightness(1.06); }
 
 /* ── Leyenda ── */
-.dg-legend-item {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4em;
-  background: none;
-  border: none;
-  border-radius: var(--iswc-radius-sm);
-  color: inherit;
-  cursor: pointer;
-  padding: 0.15em 0.3em;
-  font: inherit;
-  transition: opacity 120ms ease-out, background-color 120ms ease-out;
-}
-
+.dg-legend-item { display: inline-flex; align-items: center; gap: 0.4em; background: none; border: none; border-radius: var(--iswc-radius-sm); color: inherit; cursor: pointer; padding: 0.15em 0.3em; font: inherit; transition: opacity 120ms ease-out, background-color 120ms ease-out; }
 .dg-legend-item:hover { background: color-mix(in srgb, currentColor 8%, transparent); }
 .dg-legend-item:focus-visible { @include foco-visible(var(--iswc-focus), 2px, 1px); }
 .dg-legend-item[aria-pressed=false] { opacity: 0.45; }

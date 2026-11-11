@@ -39,16 +39,7 @@
   margin-block-end: 0;
 }
 
-:host .footer {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 0.5em;
-  padding: calc(var(--spacing, 1em) * 0.65) var(--spacing, 1em);
-  border-block-start: 1px solid var(--iswc-border);
-  background: var(--iswc-bg-elev, var(--iswc-bg-soft));
-}
-
+:host .footer { display: flex; align-items: center; justify-content: flex-end; gap: 0.5em; padding: calc(var(--spacing, 1em) * 0.65) var(--spacing, 1em); border-block-start: 1px solid var(--iswc-border); background: var(--iswc-bg-elev, var(--iswc-bg-soft)); }
 :host .footer:empty, :host .footer[hidden] { display: none; }
 
 :host .footer ::slotted(*) {

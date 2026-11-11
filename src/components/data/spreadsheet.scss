@@ -11,18 +11,7 @@
   --sheet-edge: 0.14em;
 }
 
-.root {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  block-size: var(--iswc-spreadsheet-height, auto);
-  border: thin solid var(--iswc-border);
-  border-radius: var(--iswc-radius);
-  background: var(--iswc-bg-elev);
-  overflow: hidden;
-  font-size: 0.875em;
-}
-
+.root { position: relative; display: flex; flex-direction: column; block-size: var(--iswc-spreadsheet-height, auto); border: thin solid var(--iswc-border); border-radius: var(--iswc-radius); background: var(--iswc-bg-elev); overflow: hidden; font-size: 0.875em; }
 [hidden] { display: none !important; }
 
 /* Medida propia: la rejilla no puede saltar mientras llega la hoja de iswc-icon. */
@@ -406,20 +395,7 @@ table.grid {
 }
 
 .note { padding: 0.35em 0.6em; white-space: pre-wrap; background: color-mix(in srgb, #ffe08a 45%, var(--iswc-bg-elev)); pointer-events: none; }
-
-.toast {
-  position: absolute;
-  inset-inline-start: 50%;
-  inset-block-end: 3.5em;
-  z-index: 21;
-  transform: translateX(-50%);
-  max-inline-size: 80%;
-  padding: 0.4em 0.9em;
-  border-radius: var(--iswc-radius);
-  background: var(--iswc-text);
-  color: var(--iswc-bg);
-  font-size: 0.85em;
-}
+.toast { position: absolute; inset-inline-start: 50%; inset-block-end: 3.5em; z-index: 21; transform: translateX(-50%); max-inline-size: 80%; padding: 0.4em 0.9em; border-radius: var(--iswc-radius); background: var(--iswc-text); color: var(--iswc-bg); font-size: 0.85em; }
 
 /* ---- Menús ---- */
 .menu iswc-icon { font-size: 1.05em; }
@@ -458,51 +434,15 @@ table.grid {
 .dlg.wide { --width: 52em; }
 .dlg-grid { display: grid; gap: 0.7em; }
 .dlg-grid.two { grid-template-columns: repeat(auto-fit, minmax(19em, 1fr)); }
-
-.dlg-grid fieldset {
-  display: grid;
-  gap: 0.55em;
-  margin: 0;
-  padding: 0.6em 0.8em 0.8em;
-  border: thin solid var(--iswc-border-soft);
-  border-radius: var(--iswc-radius);
-
-  legend { padding-inline: 0.3em; font-size: 0.85em; color: var(--iswc-text-soft); }
-}
-
+.dlg-grid fieldset { display: grid; gap: 0.55em; margin: 0; padding: 0.6em 0.8em 0.8em; border: thin solid var(--iswc-border-soft); border-radius: var(--iswc-radius); legend { padding-inline: 0.3em; font-size: 0.85em; color: var(--iswc-text-soft); }; }
 .dlg-row { display: flex; flex-wrap: wrap; align-items: end; gap: 0.6em; > iswc-input, > iswc-select { flex: 1 1 10em; }; }
 .dlg-foot { display: flex; justify-content: flex-end; gap: 0.5em; }
 .dlg-status { margin: 0; color: var(--iswc-text-soft); font-size: 0.9em; }
 .dlg-preview { margin: 0; font-variant-numeric: tabular-nums; color: var(--iswc-text-soft); }
 .dlg-list { display: grid; gap: 0.2em; max-block-size: 14em; overflow-y: auto; }
-
-.dlg-item {
-  display: grid;
-  grid-template-columns: minmax(6em, auto) 1fr auto;
-  align-items: center;
-  gap: 0.6em;
-  padding: 0.15em 0.3em;
-  border-block-end: thin solid var(--iswc-border-soft);
-
-  code { font-size: 0.9em; overflow-wrap: anywhere; }
-}
-
+.dlg-item { display: grid; grid-template-columns: minmax(6em, auto) 1fr auto; align-items: center; gap: 0.6em; padding: 0.15em 0.3em; border-block-end: thin solid var(--iswc-border-soft); code { font-size: 0.9em; overflow-wrap: anywhere; }; }
 .fn-list { display: grid; max-block-size: 18em; overflow-y: auto; border: thin solid var(--iswc-border-soft); border-radius: var(--iswc-radius); }
-
-.fn-item {
-  display: flex;
-  flex-direction: column;
-  gap: 0.05em;
-  padding: 0.3em 0.6em;
-  border: 0;
-  @include reset-boton;
-  text-align: start;
-  cursor: pointer;
-
-  span { font-size: 0.85em; color: var(--iswc-text-soft); }
-  &:hover { background: var(--sheet-sel); }
-}
-
+.fn-item { display: flex; flex-direction: column; gap: 0.05em; padding: 0.3em 0.6em; border: 0; @include reset-boton; text-align: start; cursor: pointer; span { font-size: 0.85em; color: var(--iswc-text-soft); } &:hover { background: var(--sheet-sel); }; }
 .mc { display: grid; grid-template-columns: 12em minmax(0, 1fr); gap: 0.8em; }
 .mc-side { display: flex; flex-direction: column; gap: 0.2em; }
 .mc-main { display: grid; gap: 0.6em; min-inline-size: 0; }

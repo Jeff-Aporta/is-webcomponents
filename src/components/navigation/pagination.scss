@@ -17,23 +17,7 @@
 .carril { display: flex; flex: 1 1 16em; align-items: center; gap: var(--_hueco); min-width: min(100%, 16em); max-width: 100%; font-size: 1em; }
 
 .flecha,
-.pagina {
-  --_height: var(--_alto);
-  --_hpad: 0;
-  flex: 0 0 auto;
-  font-size: 1em;
-
-  &::part(button) {
-    width: auto;
-    min-width: var(--_alto);
-    height: var(--_alto);
-    min-height: var(--_alto);
-    padding-inline: 0.35em;
-    border-radius: 999em;
-    touch-action: pan-y;
-  }
-}
-
+.pagina { --_height: var(--_alto); --_hpad: 0; flex: 0 0 auto; font-size: 1em; &::part(button) { width: auto; min-width: var(--_alto); height: var(--_alto); min-height: var(--_alto); padding-inline: 0.35em; border-radius: 999em; touch-action: pan-y; } }
 .flecha.oculta { visibility: hidden; pointer-events: none; }
 
 .pista {

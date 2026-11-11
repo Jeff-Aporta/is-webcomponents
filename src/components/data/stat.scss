@@ -47,18 +47,7 @@
 .label { min-width: 0; overflow-wrap: anywhere; font-size: 0.85em; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 500; }
 
 
-.icon {
-  display: inline-flex;
-  flex: none; /* una etiqueta larga no lo aplasta en píldora */
-  align-items: center;
-  justify-content: center;
-  inline-size: 2em;
-  block-size: 2em;
-  border-radius: 0.5em;
-  background: color-mix(in srgb, var(--brand) 15%, transparent);
-  color: var(--brand);
-  font-size: 1.1em;
-}
+.icon { display: inline-flex; flex: none; /* una etiqueta larga no lo aplasta en píldora */ align-items: center; justify-content: center; inline-size: 2em; block-size: 2em; border-radius: 0.5em; background: color-mix(in srgb, var(--brand) 15%, transparent); color: var(--brand); font-size: 1.1em; }
 
 
 .value {

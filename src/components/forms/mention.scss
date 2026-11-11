@@ -4,19 +4,7 @@
 /* La caja, los estados y las variantes vienen de <iswc-input>. */
 :host([full-width]) { display: block; }
 .root { position: relative; display: block; }
-
-.popup {
-  position: absolute;
-  z-index: 30;
-  min-inline-size: 12em;
-  max-block-size: 14em;
-  overflow: auto;
-  border: 1px solid var(--iswc-border);
-  border-radius: var(--iswc-radius);
-  background: var(--iswc-bg-elev);
-  box-shadow: var(--iswc-shadow, 0 1.125em 2.75em rgba(0, 0, 0, 0.26));
-  padding: 0.25em;
-}
+.popup { position: absolute; z-index: 30; min-inline-size: 12em; max-block-size: 14em; overflow: auto; border: 1px solid var(--iswc-border); border-radius: var(--iswc-radius); background: var(--iswc-bg-elev); box-shadow: var(--iswc-shadow, 0 1.125em 2.75em rgba(0, 0, 0, 0.26)); padding: 0.25em; }
 
 .opt {
   display: flex;

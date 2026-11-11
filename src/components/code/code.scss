@@ -185,21 +185,7 @@
      contenedor + min-height de una línea + padding como respaldo. */
 }
 .editor-host .ic-edit { position: relative; flex: 1 1 auto; align-self: stretch; min-inline-size: 0; min-block-size: calc(var(--iswc-code-line-height) * 1em + 1.6em); overflow: hidden; }
-.editor-host .ic-edit .ic-native {
-  position: absolute;
-  inset-block-start: 0;
-  inset-inline-start: 0;
-  min-inline-size: max-content;
-  margin: 0;
-  padding: 0.8em 1.0857em;
-  font: inherit;
-  color: inherit;
-  background: transparent;
-  white-space: pre;
-  tab-size: 2;
-  pointer-events: none;
-  will-change: transform;
-}
+.editor-host .ic-edit .ic-native { position: absolute; inset-block-start: 0; inset-inline-start: 0; min-inline-size: max-content; margin: 0; padding: 0.8em 1.0857em; font: inherit; color: inherit; background: transparent; white-space: pre; tab-size: 2; pointer-events: none; will-change: transform; }
 .editor-host .ic-input {
   position: absolute;
   @include llenar-host;

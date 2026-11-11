@@ -128,20 +128,7 @@ to { stroke-dashoffset: 0; }
   /* Las leyendas en columna viven en los laterales del wrap. */
 }
 .wrap[data-legend=start] .legend, .wrap[data-legend=end] .legend { flex-direction: column; flex-wrap: nowrap; justify-content: center; max-inline-size: 40%; overflow: auto; }
-
-.legend-item {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4em;
-  background: none;
-  border: none;
-  border-radius: var(--iswc-radius-sm);
-  color: var(--chart-text);
-  cursor: pointer;
-  padding: 0.15em 0.3em;
-  font: inherit;
-  transition: opacity 120ms ease-out, background-color 120ms ease-out;
-}
+.legend-item { display: inline-flex; align-items: center; gap: 0.4em; background: none; border: none; border-radius: var(--iswc-radius-sm); color: var(--chart-text); cursor: pointer; padding: 0.15em 0.3em; font: inherit; transition: opacity 120ms ease-out, background-color 120ms ease-out; }
 .legend-item:hover { background: color-mix(in srgb, var(--chart-text) 8%, transparent); }
 .legend-item:focus-visible { @include foco-visible(var(--iswc-focus), 2px, 1px); }
 .legend-item[aria-pressed=false] { opacity: 0.45; }

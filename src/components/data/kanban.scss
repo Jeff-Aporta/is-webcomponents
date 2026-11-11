@@ -23,20 +23,7 @@
 ::slotted(iswc-kanban-card.iswc-dragging) { opacity: 0.45; }
 
 /* ============ <iswc-kanban-column> ============ */
-.column {
-  background: var(--bg);
-  border: 1px solid var(--border);
-  border-radius: 0.75em;
-  display: flex;
-  flex-direction: column;
-  border-block-start: .1875em solid var(--accent);
-  max-block-size: 37.5em;
-  &.drop-target {
-    outline: 2px dashed var(--accent);
-    outline-offset: -2px;
-  }
-}
-
+.column { background: var(--bg); border: 1px solid var(--border); border-radius: 0.75em; display: flex; flex-direction: column; border-block-start: .1875em solid var(--accent); max-block-size: 37.5em; &.drop-target { outline: 2px dashed var(--accent); outline-offset: -2px; } }
 .col-head { display: flex; align-items: center; gap: .5263em; padding: .7895em; border-block-end: 1px solid var(--border); font-size: 0.95em; font-weight: 600; }
 .title { flex: 1 1 auto; }
 .badge { background: color-mix(in srgb, var(--accent) 25%, transparent); color: var(--iswc-brand-text); padding: 0.125em 0.5em; border-radius: 999em; font-size: 0.75em; font-weight: 500; }

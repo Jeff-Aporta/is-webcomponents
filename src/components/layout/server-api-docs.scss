@@ -75,25 +75,7 @@ iswc-doc-layout { height: 100%; }
 .errores { display: block; margin: 1em 0; ul { margin: 0.4em 0 0; padding-left: 1.2em; max-height: 18em; overflow: auto; } }
 
 // Portada: tabla de endpoints con filtro
-.filtro-linea {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-end;
-  gap: .516em 1.032em;
-  margin: 0 0 .774em;
-
-  .filtro {
-    flex: 1 1 18.5759em;
-    min-width: 0;
-  }
-
-  .conteo {
-    color: var(--iswc-text-dim);
-    font-size: .9288em;
-    white-space: nowrap;
-  }
-}
-
+.filtro-linea { display: flex; flex-wrap: wrap; align-items: flex-end; gap: .516em 1.032em; margin: 0 0 .774em; .filtro { flex: 1 1 18.5759em; min-width: 0; } .conteo { color: var(--iswc-text-dim); font-size: .9288em; white-space: nowrap; } }
 .tabla-envoltura { max-width: 100%; overflow-x: auto; border: 1px solid var(--iswc-border); border-radius: .645em; }
 
 .tabla.endpoints {

@@ -41,18 +41,7 @@
 .iswc-ag-asa { position: absolute; right: 0; bottom: 0; z-index: 2; width: 0.5em; height: 0.5em; background: var(--iswc-grid-rango-borde, var(--iswc-color-brand)); cursor: crosshair; touch-action: none; }
 
 /* Row dragging */
-.iswc-ag-arrastre {
-  display: inline-block;
-  width: 0.75em;
-  height: 1em;
-  margin-inline-end: 0.375em;
-  vertical-align: middle;
-  background-image: radial-gradient(currentColor 0.0625em, transparent 0.07em);
-  background-size: 0.3125em 0.3125em;
-  opacity: 0.6;
-  cursor: grab;
-  touch-action: none;
-}
+.iswc-ag-arrastre { display: inline-block; width: 0.75em; height: 1em; margin-inline-end: 0.375em; vertical-align: middle; background-image: radial-gradient(currentColor 0.0625em, transparent 0.07em); background-size: 0.3125em 0.3125em; opacity: 0.6; cursor: grab; touch-action: none; }
 
 .iswc-ag-arrastre-fantasma {
   position: absolute;

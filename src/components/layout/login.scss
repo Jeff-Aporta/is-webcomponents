@@ -60,20 +60,7 @@
   }
 }
 
-.account-select {
-  display: flex;
-  align-items: center;
-  gap: 0.6em;
-  flex: 1 1 auto;
-  min-inline-size: 0;
-  cursor: pointer;
-  border-radius: inherit;
-  outline: none;
-
-  &:focus-visible { box-shadow: 0 0 0 .125em var(--iswc-login-accent); }
-  iswc-avatar { font-size: 2em; flex: 0 0 auto; }
-}
-
+.account-select { display: flex; align-items: center; gap: 0.6em; flex: 1 1 auto; min-inline-size: 0; cursor: pointer; border-radius: inherit; outline: none; &:focus-visible { box-shadow: 0 0 0 .125em var(--iswc-login-accent); } iswc-avatar { font-size: 2em; flex: 0 0 auto; }; }
 .account-text { display: flex; flex-direction: column; min-inline-size: 0; }
 .account-name { font-size: 0.9em; font-weight: 550; @include truncar; }
 .account-sub { font-size: 0.76em; color: var(--iswc-login-muted); @include truncar; }

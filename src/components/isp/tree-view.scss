@@ -73,20 +73,7 @@
 }
 
 .trvwr-row-host { display: block; inline-size: 100%; min-inline-size: 0; }
-
-.trvwr-itm {
-  display: block;
-  inline-size: 100%;
-  min-inline-size: 0;
-  overflow: visible;
-  list-style: none;
-
-  &.highlight {
-    border-radius: .2857em;
-    background: color-mix(in srgb, var(--iswc-text) 7%, transparent);
-    box-shadow: inset 0 0 0 .0714em var(--trvwr-sel-brd);
-  }
-}
+.trvwr-itm { display: block; inline-size: 100%; min-inline-size: 0; overflow: visible; list-style: none; &.highlight { border-radius: .2857em; background: color-mix(in srgb, var(--iswc-text) 7%, transparent); box-shadow: inset 0 0 0 .0714em var(--trvwr-sel-brd); } }
 
 .trvwr-itm-sum {
   position: relative;

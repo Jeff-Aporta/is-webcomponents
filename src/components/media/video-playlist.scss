@@ -85,15 +85,7 @@
 .player-header__actions { display: inline-flex; align-items: center; gap: .35em; & slot { display: contents; } &::slotted(*) { color: #fff; }; }
 
 /* ── Toolbar inferior ───────────────────────────────────── */
-.player-toolbar {
-  position: absolute;
-  z-index: 4;
-  inset-inline: 0; inset-block-end: 0;
-  display: flex; align-items: center; gap: .5em;
-  padding: .35em .55em;
-  background: linear-gradient(0deg, rgba(0,0,0,.65) 0%, transparent 100%);
-  color: #fff;
-}
+.player-toolbar { position: absolute; z-index: 4; inset-inline: 0; inset-block-end: 0; display: flex; align-items: center; gap: .5em; padding: .35em .55em; background: linear-gradient(0deg, rgba(0,0,0,.65) 0%, transparent 100%); color: #fff; }
 
 .tools {
   display: inline-flex; align-items: center; gap: .25em;
@@ -218,20 +210,7 @@
 .playlist-item-thumb { position: relative; aspect-ratio: 16 / 9; border-radius: var(--iswc-radius-sm); overflow: hidden; background: var(--iswc-video-playlist-thumb-bg); display: grid; place-items: center; }
 .playlist-thumbnail { inline-size: 100%; block-size: 100%; object-fit: cover; display: block; }
 .playlist-thumbnail-placeholder { inline-size: 100%; block-size: 100%; display: grid; place-items: center; color: var(--iswc-text-soft); font-size: 1.25em; }
-
-.playlist-item-duration {
-  position: absolute;
-  inset-inline-end: .2206em;
-  inset-block-end: .2206em;
-  padding: 0 .3676em;
-  border-radius: .3676em;
-  background: rgb(0 0 0 / 78%);
-  color: #fff;
-  font-size: .68em;
-  font-variant-numeric: tabular-nums;
-  font-weight: 600;
-}
-
+.playlist-item-duration { position: absolute; inset-inline-end: .2206em; inset-block-end: .2206em; padding: 0 .3676em; border-radius: .3676em; background: rgb(0 0 0 / 78%); color: #fff; font-size: .68em; font-variant-numeric: tabular-nums; font-weight: 600; }
 .playlist-item-content { min-inline-size: 0; }
 .playlist-item-title { font-weight: 600; font-size: .85em; color: var(--iswc-text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .playlist-item-channel { font-size: .72em; color: var(--iswc-text-soft); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }

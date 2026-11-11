@@ -61,18 +61,7 @@
    arista principal. Antes el dash usaba `var(--iswc-color-brand)` fijo,
    lo que no coincidian con el color de la arista cuando `hue` != brand. */
 .flow-edge { color: currentColor; /* default; TS lo sobrescribe con edgeStrokeHex(...) */ }
-
-.flow-edge__flow {
-  stroke: currentColor;
-  stroke-opacity: 0.55;
-  stroke-dasharray: 7 11;
-  stroke-dashoffset: 0;
-  pointer-events: none;
-  @supports (stroke: color-mix(in oklab, red 40%, transparent)) {
-    stroke: color-mix(in oklab, currentColor 55%, transparent);
-    stroke-opacity: 1;
-  }
-}
+.flow-edge__flow { stroke: currentColor; stroke-opacity: 0.55; stroke-dasharray: 7 11; stroke-dashoffset: 0; pointer-events: none; @supports (stroke: color-mix(in oklab, red 40%, transparent)) { stroke: color-mix(in oklab, currentColor 55%, transparent); stroke-opacity: 1; } }
 
 :host([animation~="flow"]) {
 .flow-edge__flow { animation: iswc-flowchart-flow-dash 0.85s linear infinite; @media (prefers-reduced-motion: reduce) { animation: none; opacity: 0.55; } }

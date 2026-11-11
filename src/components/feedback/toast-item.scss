@@ -1,18 +1,7 @@
 @use 'kit' as *;
 @use '../../styles/mixins' as *;
 
-:host {
-  --_bg: var(--iswc-control-bg);
-  --_border: var(--iswc-control-border);
-  --_text: var(--iswc-control-text);
-  --_accent: var(--iswc-muted);
-  display: block;
-  font-family: var(--iswc-font-family);
-  font-size: inherit;
-  box-sizing: border-box;
-  pointer-events: auto;
-  max-width: min(24em, 100vw - 2em);
-}
+:host { --_bg: var(--iswc-control-bg); --_border: var(--iswc-control-border); --_text: var(--iswc-control-text); --_accent: var(--iswc-muted); display: block; font-family: var(--iswc-font-family); font-size: inherit; box-sizing: border-box; pointer-events: auto; max-width: min(24em, 100vw - 2em); }
 
 :host(:is([hidden], :not([open]))) {
   @include oculto;

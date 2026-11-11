@@ -25,26 +25,7 @@
   row-gap: 0;
 }
 
-.panel {
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  min-inline-size: 0;
-  min-block-size: 0;
-  align-self: stretch;
-  margin: 0;
-
-  & ::slotted(*) {
-    box-sizing: border-box;
-    flex: 1 1 auto;
-    min-inline-size: 0;
-    min-block-size: 0;
-    inline-size: 100%;
-    block-size: 100%;
-    overflow: auto;
-    margin: 0;
-  }
-}
+.panel { display: flex; flex-direction: column; overflow: hidden; min-inline-size: 0; min-block-size: 0; align-self: stretch; margin: 0; & ::slotted(*) { box-sizing: border-box; flex: 1 1 auto; min-inline-size: 0; min-block-size: 0; inline-size: 100%; block-size: 100%; overflow: auto; margin: 0; } }
 
 .divider {
   position: relative;

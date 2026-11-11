@@ -29,30 +29,8 @@
 
 :host * { box-sizing: border-box; }
 [hidden] { display: none !important; }
-
-.bar {
-  position: sticky;
-  top: 0;
-  z-index: var(--iswc-shell-bar-z);
-  flex: none;
-  background: var(--iswc-shell-bar-bg);
-  color: var(--iswc-text, inherit);
-  border-bottom: 1px solid var(--iswc-shell-bar-border);
-  box-shadow: var(--iswc-shell-bar-shadow);
-  padding-top: env(safe-area-inset-top, 0);
-}
-
-.line {
-  display: flex;
-  align-items: center;
-  gap: var(--iswc-shell-bar-gap);
-  min-height: var(--iswc-shell-bar-min-height);
-  padding-block: 0.28em;
-  padding-inline:
-    max(var(--iswc-shell-pad-inline), env(safe-area-inset-left, 0em))
-    max(var(--iswc-shell-pad-inline), env(safe-area-inset-right, 0em));
-}
-
+.bar { position: sticky; top: 0; z-index: var(--iswc-shell-bar-z); flex: none; background: var(--iswc-shell-bar-bg); color: var(--iswc-text, inherit); border-bottom: 1px solid var(--iswc-shell-bar-border); box-shadow: var(--iswc-shell-bar-shadow); padding-top: env(safe-area-inset-top, 0); }
+.line { display: flex; align-items: center; gap: var(--iswc-shell-bar-gap); min-height: var(--iswc-shell-bar-min-height); padding-block: 0.28em; padding-inline: max(var(--iswc-shell-pad-inline), env(safe-area-inset-left, 0em)) max(var(--iswc-shell-pad-inline), env(safe-area-inset-right, 0em)); }
 .menu-button { flex: none; }
 
 .brand {

@@ -1,14 +1,6 @@
 /* <iswc-tab-group>, <iswc-tab>, <iswc-tab-panel>. */
 
-:host {
-  --iswc-tab-group-track-color: var(--iswc-border, rgba(255, 255, 255, 0.2));
-  --iswc-tab-group-indicator-color: var(--iswc-color-brand);
-  --iswc-tab-group-track-width: 2px;
-
-  display: block;
-  font-family: var(--iswc-font-family, inherit);
-}
-
+:host { --iswc-tab-group-track-color: var(--iswc-border, rgba(255, 255, 255, 0.2)); --iswc-tab-group-indicator-color: var(--iswc-color-brand); --iswc-tab-group-track-width: 2px; display: block; font-family: var(--iswc-font-family, inherit); }
 .tg { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--iswc-tab-group-gap, 0.5em); }
 
 :host([size="sm"]) {

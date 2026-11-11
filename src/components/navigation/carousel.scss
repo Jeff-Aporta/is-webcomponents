@@ -1,13 +1,4 @@
-:host {
-  display: block;
-  position: relative;
-  --iswc-carousel-control-bg: var(--iswc-bg-elev);
-  --iswc-carousel-control-text: var(--iswc-text);
-  --iswc-carousel-control-border: var(--iswc-border);
-  --iswc-carousel-indicator-active: var(--iswc-color-brand);
-  --iswc-carousel-indicator: var(--iswc-border);
-}
-
+:host { display: block; position: relative; --iswc-carousel-control-bg: var(--iswc-bg-elev); --iswc-carousel-control-text: var(--iswc-text); --iswc-carousel-control-border: var(--iswc-border); --iswc-carousel-indicator-active: var(--iswc-color-brand); --iswc-carousel-indicator: var(--iswc-border); }
 .carousel { position: relative; display: block; inline-size: 100%; aspect-ratio: var(--aspect-ratio, 16/9); overflow: hidden; border-radius: 0.75em; background: var(--iswc-bg-elev); border: 1px solid var(--iswc-carousel-control-border); }
 .viewport { inline-size: 100%; block-size: 100%; overflow: auto; scroll-behavior: smooth; scroll-snap-type: x mandatory; scrollbar-width: none; &::-webkit-scrollbar { display: none; }; }
 

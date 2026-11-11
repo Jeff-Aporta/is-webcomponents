@@ -76,17 +76,7 @@
   }
 }
 
-.cdn__pre {
-  display: block;
-  width: 100%;
-  margin: 0;
-  --iswc-code-min-height: 0;
-  --iswc-code-radius: 0.45em;
-  --iswc-code-bg: var(--iswc-cdn-snippet-pre-bg);
-  border: 1px solid var(--iswc-cdn-snippet-border);
-  border-radius: 0.45em;
-  overflow: hidden;
-}
+.cdn__pre { display: block; width: 100%; margin: 0; --iswc-code-min-height: 0; --iswc-code-radius: 0.45em; --iswc-code-bg: var(--iswc-cdn-snippet-pre-bg); border: 1px solid var(--iswc-cdn-snippet-border); border-radius: 0.45em; overflow: hidden; }
 
 /* El código dentro de .cdn__pre lo pinta <iswc-code> (motor nativo):
    no hace falta CSS de tokens. */

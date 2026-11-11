@@ -3,18 +3,7 @@
 
 @import 'utils/md-kit';
 
-:host {
-  display: block;
-  inline-size: 100%;
-  max-inline-size: 100%;
-  min-inline-size: 0;
-  box-sizing: border-box;
-  color: var(--iswc-text, inherit);
-  font-family: var(--iswc-font-sans, var(--iswc-sans, inherit));
-  font-size: var(--md-render-font-size, 1em);
-  line-height: 1.65;
-}
-
+:host { display: block; inline-size: 100%; max-inline-size: 100%; min-inline-size: 0; box-sizing: border-box; color: var(--iswc-text, inherit); font-family: var(--iswc-font-sans, var(--iswc-sans, inherit)); font-size: var(--md-render-font-size, 1em); line-height: 1.65; }
 .body { min-inline-size: 0; outline: none; }
 
 :host([editable]) .body {

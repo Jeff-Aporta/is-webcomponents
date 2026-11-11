@@ -7,12 +7,5 @@
    en el elemento. Los ajustes propios de cada componente (el cursor grab de
    iswc-window, el gradiente) se añaden encima en su propio CSS. */
 @layer iswc.surface {
-  .iswc-surface-bar {
-    display: flex;
-    align-items: center;
-    gap: var(--iswc-surface-bar-gap, 0.5em);
-    padding: var(--iswc-surface-bar-padding, 0.5em 0.75em);
-    border-block-end: 1px solid var(--iswc-border-soft);
-    background: color-mix(in srgb, var(--iswc-bg-elev) 92%, transparent);
-  }
+.iswc-surface-bar { display: flex; align-items: center; gap: var(--iswc-surface-bar-gap, 0.5em); padding: var(--iswc-surface-bar-padding, 0.5em 0.75em); border-block-end: 1px solid var(--iswc-border-soft); background: color-mix(in srgb, var(--iswc-bg-elev) 92%, transparent); }
 }

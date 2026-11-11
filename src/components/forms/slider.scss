@@ -32,19 +32,7 @@
 .rail { background: var(--iswc-slider-rail); }
 .track { background: var(--iswc-slider-fill); &[hidden] { display: none !important; }; }
 .marks { position: absolute; inset: 0; pointer-events: none; }
-
-.mark {
-  position: absolute;
-  inline-size: var(--iswc-slider-track-size);
-  block-size: var(--iswc-slider-track-size);
-  border-radius: 999em;
-  background: color-mix(in srgb, var(--iswc-text) 45%, transparent);
-
-  &[data-active] {
-    background: color-mix(in srgb, var(--iswc-on-brand) 70%, transparent);
-  }
-}
-
+.mark { position: absolute; inline-size: var(--iswc-slider-track-size); block-size: var(--iswc-slider-track-size); border-radius: 999em; background: color-mix(in srgb, var(--iswc-text) 45%, transparent); &[data-active] { background: color-mix(in srgb, var(--iswc-on-brand) 70%, transparent); } }
 .mark-label { position: absolute; font-size: 0.72em; color: var(--iswc-text-dim); white-space: nowrap; font-variant-numeric: tabular-nums; }
 
 .thumb {

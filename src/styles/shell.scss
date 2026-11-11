@@ -3,20 +3,7 @@
 
 html,
 body { height: 100%; margin: 0; }
-
-body {
-  display: grid;
-  grid-template-columns: 1fr;
-  grid-template-rows: auto 1fr;
-  grid-template-areas:
-    "header"
-    "main";
-  min-height: 100%;
-  overflow: hidden;
-  background: var(--iswc-bg-page);
-  color: var(--iswc-text-page);
-  font: 0.9375rem/1.4 var(--iswc-sans);
-}
+body { display: grid; grid-template-columns: 1fr; grid-template-rows: auto 1fr; grid-template-areas: "header" "main"; min-height: 100%; overflow: hidden; background: var(--iswc-bg-page); color: var(--iswc-text-page); font: 0.9375rem/1.4 var(--iswc-sans); }
 
 /* Light-DOM shell: header/split/drawer entran al grid de body.
    Sin contents el host crece con el preview y rompe overflow/scroll. */
