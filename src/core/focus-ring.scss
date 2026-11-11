@@ -1,4 +1,5 @@
 @charset "UTF-8";
+@use 'kit' as *;
 /**
  * Focus ring reutilizable, inyectado vía adoptCss (ver adopt-css.js /
  * scrollbars.css para el mismo mecanismo). Reemplaza el bloque
@@ -12,12 +13,6 @@
  * fallback de color u offset difiere del default.
  */
 @layer iswc.focus {
-  :host {
-    --iswc-focus-fallback: var(--iswc-color-brand);
-    --iswc-focus-offset: 2px;
-  }
-  .iswc-focus-ring:focus-visible {
-    outline: 2px solid var(--iswc-focus, var(--iswc-focus-fallback));
-    outline-offset: var(--iswc-focus-offset);
-  }
+:host { --iswc-focus-fallback: var(--iswc-color-brand); --iswc-focus-offset: 2px; }
+.iswc-focus-ring:focus-visible { @include foco-visible(var(--iswc-focus, var(--iswc-focus-fallback)), 2px, var(--iswc-focus-offset)); }
 }

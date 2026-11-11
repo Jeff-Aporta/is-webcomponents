@@ -16,6 +16,4 @@
   background: color-mix(in srgb, var(--iswc-bg) 68%, transparent);
 }
 
-:host .backdrop[hidden] {
-  display: none;
-}
+:host .backdrop[hidden] { display: none; }
