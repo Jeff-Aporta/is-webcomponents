@@ -1,15 +1,6 @@
 /* iswc-mega-menu */
-:host {
-  display: inline-block;
-  font: inherit;
-  color: var(--iswc-text);
-  --iswc-mega-menu-focus: var(--iswc-accent);
-}
-
-.root {
-  position: relative;
-  display: inline-block;
-}
+:host { display: inline-block; font: inherit; color: var(--iswc-text); --iswc-mega-menu-focus: var(--iswc-accent); }
+.root { position: relative; display: inline-block; }
 
 /* El trigger es <iswc-button variant="text">: la caja pintada es su
    ::part(button). Se antepone el tipo por especificidad (0,2,1), igual que

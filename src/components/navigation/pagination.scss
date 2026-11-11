@@ -1,13 +1,5 @@
 /* <iswc-pagination> — fila de páginas numeradas. */
-:host {
-  display: block;
-  width: 100%;
-  max-width: 100%;
-  min-width: 0;
-  color: inherit;
-  font-size: 1em;
-}
-
+:host { display: block; width: 100%; max-width: 100%; min-width: 0; color: inherit; font-size: 1em; }
 :host([hidden]) { display: none !important; }
 :host([disabled]) { opacity: 0.55; pointer-events: none; }
 
@@ -28,17 +20,8 @@
 :host([compact]) {
   font-size: 0.78em;
 
-  .base {
-    --_alto: 1.55em;
-    --_hueco: 0.08em;
-    gap: 0.25em 0.4em;
-    padding: 0.1em 0;
-  }
-
-  .carril {
-    flex-basis: 10em;
-    min-width: min(100%, 10em);
-  }
+.base { --_alto: 1.55em; --_hueco: 0.08em; gap: 0.25em 0.4em; padding: 0.1em 0; }
+.carril { flex-basis: 10em; min-width: min(100%, 10em); }
 }
 
 .resumen {
@@ -66,15 +49,7 @@
   }
 }
 
-.carril {
-  display: flex;
-  flex: 1 1 16em;
-  align-items: center;
-  gap: var(--_hueco);
-  min-width: min(100%, 16em);
-  max-width: 100%;
-  font-size: 1em;
-}
+.carril { display: flex; flex: 1 1 16em; align-items: center; gap: var(--_hueco); min-width: min(100%, 16em); max-width: 100%; font-size: 1em; }
 
 .flecha,
 .pagina {
@@ -94,10 +69,7 @@
   }
 }
 
-.flecha.oculta {
-  visibility: hidden;
-  pointer-events: none;
-}
+.flecha.oculta { visibility: hidden; pointer-events: none; }
 
 .pista {
   position: relative;

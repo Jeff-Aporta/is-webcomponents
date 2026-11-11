@@ -17,23 +17,8 @@
   font-size: 0.875em;
 }
 
-.nav {
-  display: flex;
-  align-items: center;
-  gap: 0.25em;
-  position: relative;
-  border-color: var(--iswc-tab-group-track-color);
-}
-
-.tabs {
-  display: flex;
-  flex: 1 1 auto;
-  overflow-x: auto;
-  scrollbar-width: none;
-  gap: 0.25em;
-
-  &::-webkit-scrollbar { display: none; }
-}
+.nav { display: flex; align-items: center; gap: 0.25em; position: relative; border-color: var(--iswc-tab-group-track-color); }
+.tabs { display: flex; flex: 1 1 auto; overflow-x: auto; scrollbar-width: none; gap: 0.25em; &::-webkit-scrollbar { display: none; }; }
 
 :host(:where([placement="top"], [placement="bottom"])) {
   .tg { grid-template-rows: auto 1fr; }
@@ -95,19 +80,8 @@
 
   /* El indicador es el <span class="indicator"> del template, no un ::after
      sobre el host: el host queda fuera del alcance del selector aquí. */
-  .indicator {
-    display: none;
-    position: absolute;
-    background: var(--iswc-tab-group-indicator-color);
-    border-radius: .125em;
-  }
-
-  .tab-start, .tab-end {
-    display: inline-flex;
-    align-items: center;
-
-    &:empty { display: none; }
-  }
+.indicator { display: none; position: absolute; background: var(--iswc-tab-group-indicator-color); border-radius: .125em; }
+.tab-start, .tab-end { display: inline-flex; align-items: center; &:empty { display: none; }; }
 
   .tab {
     display: inline-flex;

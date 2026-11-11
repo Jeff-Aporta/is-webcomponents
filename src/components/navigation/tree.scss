@@ -1,3 +1,4 @@
+@use 'kit' as *;
 :host {
   display: block;
   --iswc-tree-indent: 1em;
@@ -8,16 +9,8 @@
   --iswc-tree-row-selected-text: var(--iswc-text);
 }
 
-.tree {
-  display: block;
-  inline-size: 100%;
-}
-
-.items {
-  display: flex;
-  flex-direction: column;
-  gap: .0625em;
-}
+.tree { display: block; inline-size: 100%; }
+.items { display: flex; flex-direction: column; gap: .0625em; }
 
 /* Esta hoja la adoptan los shadow de <iswc-tree> Y <iswc-tree-item>. Un selector
    `iswc-tree-item …` no matchea en ninguno de los dos: desde el padre los items
@@ -27,17 +20,13 @@
 :host(iswc-tree-item) {
   display: block;
 
-  .row {
-    cursor: pointer;
-    user-select: none;
-  }
+.row { cursor: pointer; user-select: none; }
 }
 
 :host(iswc-tree-item:focus) { outline: none; }
 
 :host(iswc-tree-item:focus-visible) .row {
-  outline: 2px solid var(--iswc-focus);
-  outline-offset: 1px;
+  @include foco-visible(var(--iswc-focus), 2px, 1px);
 }
 
 :host(iswc-tree-item[disabled]) .row {
@@ -77,14 +66,7 @@
 }
 
 /* Casilla solo con selección múltiple; en single y leaf la fila resaltada ya lo dice. */
-.checkbox {
-  display: none;
-  align-items: center;
-  justify-content: center;
-  inline-size: 1.25em;
-  block-size: 1.25em;
-}
-
+.checkbox { display: none; align-items: center; justify-content: center; inline-size: 1.25em; block-size: 1.25em; }
 :host([data-selection="multiple"]) .checkbox { display: inline-flex; }
 
 .icon {
@@ -98,21 +80,8 @@
   &[hidden] { display: none; }
 }
 
-.content {
-  flex: 1 1 auto;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.children {
-  padding-inline-start: var(--iswc-tree-indent);
-  display: flex;
-  flex-direction: column;
-  gap: .0625em;
-
-  &[hidden] { display: none; }
-}
+.content { flex: 1 1 auto; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.children { padding-inline-start: var(--iswc-tree-indent); display: flex; flex-direction: column; gap: .0625em; &[hidden] { display: none; }; }
 
 :host([selected]) .row {
   background: var(--iswc-tree-row-selected-bg);

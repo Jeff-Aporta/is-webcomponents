@@ -32,14 +32,7 @@
 
 /* Variante vertical: snap en Y. */
 .carousel[data-orientation="vertical"] .viewport { scroll-snap-type: y mandatory; }
-
-.track {
-  display: flex;
-  flex-direction: row;
-  block-size: 100%;
-
-  &[data-orientation="vertical"] { flex-direction: column; }
-}
+.track { display: flex; flex-direction: row; block-size: 100%; &[data-orientation="vertical"] { flex-direction: column; }; }
 
 ::slotted(iswc-carousel-item) {
   display: block;
@@ -109,12 +102,4 @@
 .next { inset-inline-end: .6002em; }
 
 /* Item internal */
-.citem {
-  inline-size: 100%;
-  block-size: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 1em;
-  box-sizing: border-box;
-}
+.citem { inline-size: 100%; block-size: 100%; display: flex; align-items: center; justify-content: center; padding: 1em; box-sizing: border-box; }
