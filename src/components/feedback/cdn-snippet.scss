@@ -1,11 +1,6 @@
 @use '../../core/focus-ring';
 
-:host {
-  --iswc-focus-fallback: currentColor;
-  display: block;
-  margin: clamp(1.5em, 3vw, 2.5em) 0 0;
-  font-family: var(--iswc-sans);
-}
+:host { --iswc-focus-fallback: currentColor; display: block; margin: clamp(1.5em, 3vw, 2.5em) 0 0; font-family: var(--iswc-sans); }
 
 .cdn {
   --iswc-cdn-snippet-border: var(--iswc-border, color-mix(in srgb, currentColor 14%, transparent));
@@ -36,13 +31,7 @@
   color: color-mix(in srgb, var(--iswc-accent) 50%, var(--iswc-text));
 }
 
-.cdn__list {
-  display: grid;
-  gap: 0.65em;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
+.cdn__list { display: grid; gap: 0.65em; margin: 0; padding: 0; list-style: none; }
 
 .cdn__row {
   display: grid;
@@ -56,13 +45,7 @@
   &[hidden] { display: none; }
 }
 
-.cdn__row-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.5em;
-  flex-wrap: wrap;
-}
+.cdn__row-head { display: flex; align-items: center; justify-content: space-between; gap: 0.5em; flex-wrap: wrap; }
 
 .cdn__label {
   display: inline-flex;
@@ -129,11 +112,7 @@
 /* El código dentro de .cdn__pre lo pinta <iswc-code> (motor nativo):
    no hace falta CSS de tokens. */
 
-.cdn__md-prompt {
-  display: block;
-  margin-top: 0.35em;
-  --preview-max-height: 18em;
-}
+.cdn__md-prompt { display: block; margin-top: 0.35em; --preview-max-height: 18em; }
 
 @media (max-width: 33.75em) {
   .cdn__row-head { gap: 0.4em; }
@@ -149,16 +128,8 @@
   background: color-mix(in srgb, var(--iswc-color-warning) 6%, transparent);
 }
 
-.cdn__dep-name {
-  code { color: var(--iswc-color-warning-stronger); }
-}
-
-.cdn__dep-note {
-  margin: 0.4em 0 0;
-  font-size: 0.78em;
-  line-height: 1.45;
-  color: var(--iswc-cdn-snippet-text-dim);
-}
+.cdn__dep-name { code { color: var(--iswc-color-warning-stronger); }; }
+.cdn__dep-note { margin: 0.4em 0 0; font-size: 0.78em; line-height: 1.45; color: var(--iswc-cdn-snippet-text-dim); }
 
 /* Skill simple (Paty): enlaces + ojo, sin visor MD. */
 .cdn__agents {
@@ -193,31 +164,7 @@
   &[hidden] { display: none; }
 }
 
-.cdn__skill-item {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35em;
-}
-
-.cdn__skill-sep {
-  color: var(--iswc-cdn-snippet-text-dim, var(--iswc-text-dim));
-  user-select: none;
-}
-
-.cdn__skill-link {
-  color: var(--iswc-accent);
-  text-decoration: none;
-  font-weight: 550;
-
-  &:hover {
-    text-decoration: underline;
-    text-underline-offset: 0.15em;
-  }
-}
-
-.cdn__skill iswc-button[data-ver-md] {
-  flex: none;
-  font-size: 1.1932em;
-  --_height: 2em;
-  min-width: 1.9048em;
-}
+.cdn__skill-item { display: inline-flex; align-items: center; gap: 0.35em; }
+.cdn__skill-sep { color: var(--iswc-cdn-snippet-text-dim, var(--iswc-text-dim)); user-select: none; }
+.cdn__skill-link { color: var(--iswc-accent); text-decoration: none; font-weight: 550; &:hover { text-decoration: underline; text-underline-offset: 0.15em; } }
+.cdn__skill iswc-button[data-ver-md] { flex: none; font-size: 1.1932em; --_height: 2em; min-width: 1.9048em; }

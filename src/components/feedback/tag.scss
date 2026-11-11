@@ -83,22 +83,11 @@
 :host([color="error"]) { @include tag-roles(danger); }
 
 :host([variant="filled"]) {
-  .tag {
-    background: var(--_border);
-    color: #{bg2font(var(--_border))};
-    border-color: var(--_border);
-  }
+.tag { background: var(--_border); color: #{bg2font(var(--_border))}; border-color: var(--_border); }
 }
 :host([variant="outlined"]) {
-  .tag {
-    background: transparent;
-    border-color: var(--_border);
-    color: var(--_text);
-  }
+.tag { background: transparent; border-color: var(--_border); color: var(--_text); }
 }
 :host([variant="accent"]) {
-  .tag {
-    border-inline-start-width: .1875em;
-    border-inline-start-color: var(--_border);
-  }
+.tag { border-inline-start-width: .1875em; border-inline-start-color: var(--_border); }
 }

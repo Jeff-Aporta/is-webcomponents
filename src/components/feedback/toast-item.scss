@@ -1,3 +1,4 @@
+@use 'kit' as *;
 @use '../../styles/mixins' as *;
 
 :host {
@@ -14,7 +15,7 @@
 }
 
 :host(:is([hidden], :not([open]))) {
-  display: none !important;
+  @include oculto;
 }
 
 :host([color="brand"]) { @include toast-roles(brand); }
@@ -66,31 +67,11 @@
   &[hidden] { display: none; }
 }
 
-.message {
-  flex: 1;
-  min-width: 0;
-  line-height: 1.4;
-  overflow-wrap: anywhere;
-}
+.message { flex: 1; min-width: 0; line-height: 1.4; overflow-wrap: anywhere; }
 
 /* Un mensaje larguísimo no se come la pantalla; el detalle queda en iswc-after-show. */
-.title {
-  display: -webkit-box;
-  overflow: hidden;
-  font-weight: 600;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: var(--iswc-toast-lineas, 6);
-}
-
-.caption {
-  margin-top: 0.25em;
-  font-size: 0.8em;
-  font-weight: 400;
-  line-height: 1.35;
-  opacity: 0.82;
-
-  &[hidden] { display: none; }
-}
+.title { display: -webkit-box; overflow: hidden; font-weight: 600; -webkit-box-orient: vertical; -webkit-line-clamp: var(--iswc-toast-lineas, 6); }
+.caption { margin-top: 0.25em; font-size: 0.8em; font-weight: 400; line-height: 1.35; opacity: 0.82; &[hidden] { display: none; }; }
 
 :host(:has([slot="caption"])) {
   .caption { display: block; }
@@ -121,12 +102,7 @@
   &[hidden] { display: none !important; }
 }
 
-.progress-bar {
-  height: 100%;
-  width: 100%;
-  background: var(--_accent);
-  transform-origin: left center;
-}
+.progress-bar { height: 100%; width: 100%; background: var(--_accent); transform-origin: left center; }
 
 /* Spinner del toast loading (toaster.promise): el iswc-icon marcado con
    data-girando gira hasta que la promesa resuelve. */

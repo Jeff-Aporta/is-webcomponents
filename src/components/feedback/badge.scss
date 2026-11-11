@@ -39,13 +39,7 @@
 }
 
 /* Un texto largo se corta con puntos suspensivos; el relleno vertical evita recortar las descendentes. */
-.label {
-  min-width: 0;
-  margin-block: -0.1em;
-  padding-block: 0.1em;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
+.label { min-width: 0; margin-block: -0.1em; padding-block: 0.1em; overflow: hidden; text-overflow: ellipsis; }
 
 :host([pill]) {
   .badge { border-radius: 999em; }
@@ -105,19 +99,12 @@
 
 /* accent: fondo soft + barra lateral marcada */
 :host([variant="accent"]) {
-  .badge {
-    border-color: transparent;
-    border-inline-start: 0.28em solid var(--_border);
-    padding-inline-start: 0.55em;
-  }
+.badge { border-color: transparent; border-inline-start: 0.28em solid var(--_border); padding-inline-start: 0.55em; }
 }
 
 /* filled: sólido de marca */
 :host([variant="filled"]) {
-  .badge {
-    background: var(--_border);
-    color: var(--_on);
-  }
+.badge { background: var(--_border); color: var(--_on); }
 }
 
 /* outlined: solo borde, sin relleno */

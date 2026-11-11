@@ -1,7 +1,5 @@
 @use '../../styles/mixins' as *;
-:host {
-  display: contents;
-}
+:host { display: contents; }
 
 .backdrop {
   position: fixed;
@@ -49,13 +47,7 @@
   animation: confirm-modal-in 0.16s ease-out;
 }
 
-.heading {
-  margin: 0 0 0.45em;
-  font-size: 1.087em;
-  font-weight: 700;
-
-  &[hidden] { display: none; }
-}
+.heading { margin: 0 0 0.45em; font-size: 1.087em; font-weight: 700; &[hidden] { display: none; }; }
 
 .message {
   margin-bottom: .9783em;
@@ -68,14 +60,7 @@
 
 /* Los saltos de línea del atributo message se respetan: listas cortas sin HTML. */
 .message-text { white-space: pre-line; }
-
-.actions {
-  display: flex;
-  flex: none;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-  gap: .5435em;
-}
+.actions { display: flex; flex: none; flex-wrap: wrap; justify-content: flex-end; gap: .5435em; }
 
 @keyframes confirm-backdrop-in {
   from { opacity: 0; }
