@@ -1,17 +1,8 @@
+@use 'kit' as *;
 @use '../../core/diagram-kit';
 
 /* iswc-org-chart */
-:host {
-  display: block;
-  font: inherit;
-  color: var(--iswc-text);
-  width: 100%;
-  min-height: 0;
-  position: relative;
-  box-sizing: border-box;
-
-  &[color="viewer"] { width: 100%; height: 100%; }
-}
+:host { @include texto-base(); width: 100%; min-height: 0; position: relative; box-sizing: border-box; &[color="viewer"] { width: 100%; height: 100%; }; }
 
 .root {
   width: 100%;
@@ -46,10 +37,7 @@
   .card { cursor: pointer; }
 }
 
-.oc-tooltip {
-  inset-block-start: 0;
-  inset-inline-start: 0;
-}
+.oc-tooltip { inset-block-start: 0; inset-inline-start: 0; }
 
 .card {
   display: grid;
@@ -85,9 +73,7 @@
 }
 
 .photo--fallback { background: linear-gradient(135deg, var(--iswc-accent), color-mix(in srgb, var(--iswc-accent) 50%, transparent)); color: var(--iswc-on-accent); }
-
 .meta { display: flex; flex-direction: column; min-width: 0; }
-
 .name { font-weight: 600; font-size: .85em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
 .title {

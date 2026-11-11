@@ -41,20 +41,13 @@
 }
 
 .slot-hidden { display: none !important; }
-
 @include lienzo-svg('flow-svg');
 
 /* ── Nodos y aristas ── */
 
 .flow-node,
-.flow-edge {
-  transition: opacity 0.18s ease;
-  &.iswc-dim { opacity: 0.32; }
-}
-
-.flow-node__box {
-  transition: stroke-width 0.12s ease-out;
-}
+.flow-edge { @include transicion(opacity 0.18s ease); &.iswc-dim { opacity: 0.32; }; }
+.flow-node__box { @include transicion(stroke-width 0.12s ease-out); }
 
 .flow-edge {
   &.iswc-active {
@@ -82,22 +75,14 @@
 }
 
 :host([animation~="flow"]) {
-  .flow-edge__flow {
-    animation: iswc-flowchart-flow-dash 0.85s linear infinite;
-    @media (prefers-reduced-motion: reduce) {
-      animation: none;
-      opacity: 0.55;
-    }
-  }
+.flow-edge__flow { animation: iswc-flowchart-flow-dash 0.85s linear infinite; @media (prefers-reduced-motion: reduce) { animation: none; opacity: 0.55; } }
 }
 
 @keyframes iswc-flowchart-flow-dash {
   to { stroke-dashoffset: -18; }
 }
 
-.flow-legend__item {
-  transition: opacity 0.18s ease;
-}
+.flow-legend__item { @include transicion(opacity 0.18s ease); }
 
 .flow-node-label {
   :is(.tk-inline-icon, iswc-icon.tk-inline-icon) {
@@ -116,11 +101,4 @@
 /* Escenario fuera de pantalla: aquí se montan los diagramas de los nodos
    especiales (`nested`, `tableder`, `component`) para capturar su SVG, y
    la sonda que mide el texto con la webfont del tema. */
-.flow-embed-stage {
-  position: absolute;
-  left: -30000em;
-  top: 0;
-  width: 1200em;
-  visibility: hidden;
-  pointer-events: none;
-}
+.flow-embed-stage { position: absolute; left: -30000em; top: 0; width: 1200em; visibility: hidden; pointer-events: none; }

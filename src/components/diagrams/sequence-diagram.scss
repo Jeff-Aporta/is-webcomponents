@@ -67,18 +67,9 @@
 
 /* ── Mensajes: atenuar los no enfocados al hacer hover ── */
 
-.seq-msg {
-  transition: opacity 0.18s ease;
-  &.iswc-dim { opacity: 0.42; }
-}
-
-.seq-actor {
-  transition: opacity 0.18s ease;
-}
-
-.seq-legend__item {
-  transition: opacity 0.18s ease;
-}
+.seq-msg { @include transicion(opacity 0.18s ease); &.iswc-dim { opacity: 0.42; }; }
+.seq-actor { @include transicion(opacity 0.18s ease); }
+.seq-legend__item { @include transicion(opacity 0.18s ease); }
 
 /* Iconos inline dentro de las etiquetas de mensaje/actor. */
 .seq-label {
@@ -98,5 +89,4 @@
     margin-inline-end: 0.3em;
   }
 }
-
 @include visor-abrible;

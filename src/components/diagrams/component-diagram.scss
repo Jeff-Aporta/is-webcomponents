@@ -2,7 +2,6 @@
 @use 'kit' as *;
 
 :host { @include host-lienzo-diagrama; }
-
 .wrap { @include wrap-lienzo-diagrama('Diagrama de componentes no disponible (payload inválido).'); }
 
 .cd-svg {
@@ -22,10 +21,7 @@
 .cd-pkg,
 .cd-cmp,
 .cd-edge,
-.cd-iface {
-  transition: opacity 0.18s ease;
-}
-
+.cd-iface { @include transicion(opacity 0.18s ease); }
 .cd-edge__path { transition: stroke-width 0.12s ease-out; }
 
 :host([open-on-click]) {

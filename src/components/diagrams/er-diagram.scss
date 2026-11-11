@@ -2,9 +2,7 @@
 @use 'kit' as *;
 
 :host { @include host-lienzo-diagrama; }
-
 .wrap { @include wrap-lienzo-diagrama('Diagrama entidad-relación no disponible (payload inválido).'); }
-
 .slot-hidden { display: none !important; }
 
 .er-svg {
@@ -24,14 +22,8 @@
 /* ── Entidades y relaciones ── */
 
 .er-entity,
-.er-rel {
-  transition: opacity 0.18s ease;
-  &.iswc-dim { opacity: 0.32; }
-}
-
-.er-entity__box {
-  transition: stroke-width 0.12s ease-out;
-}
+.er-rel { @include transicion(opacity 0.18s ease); &.iswc-dim { opacity: 0.32; }; }
+.er-entity__box { @include transicion(stroke-width 0.12s ease-out); }
 
 .er-rel {
   &.iswc-active {
@@ -39,8 +31,5 @@
   }
 }
 
-.er-legend__item {
-  transition: opacity 0.18s ease;
-}
-
+.er-legend__item { @include transicion(opacity 0.18s ease); }
 @include visor-abrible;

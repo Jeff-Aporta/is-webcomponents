@@ -1,3 +1,4 @@
+@use 'kit' as *;
 /* El visor se pinta sobre los tokens del tema. Antes los fallbacks estaban
    fijos en oscuro (#0d1117 / #e6e8eb) y NADIE definia --lb-bg, asi que el
    presentador salia oscuro tambien en tema claro. Las vars siguen siendo el
@@ -27,7 +28,7 @@
 }
 
 :host([hidden]) {
-  display: none !important;
+  @include oculto;
 }
 
 /* solid: backdrop completamente opaco a pantalla completa. */
@@ -35,13 +36,7 @@
   --iswc-lightbox-backdrop: rgb(0 0 0 / 85%);
   --iswc-lightbox-backdrop-blur: 0em;
 
-  .lb {
-    background: var(--iswc-lightbox-bg);
-    &::backdrop {
-      -webkit-backdrop-filter: none;
-      backdrop-filter: none;
-    }
-  }
+.lb { background: var(--iswc-lightbox-bg); &::backdrop { -webkit-backdrop-filter: none; backdrop-filter: none; } }
 }
 
 .lb {
@@ -86,16 +81,8 @@
   box-shadow: 0 .0625em .1875em rgb(0 0 0 / 6%);
 }
 
-.lb-bar__group {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35em;
-  min-width: 0;
-}
-
-.lb-bar__trail {
-  flex: 0 0 auto;
-}
+.lb-bar__group { display: inline-flex; align-items: center; gap: 0.35em; min-width: 0; }
+.lb-bar__trail { flex: 0 0 auto; }
 
 /* Si el usuario inyecta toolbar, los botones por defecto de zoom/share
    se ocultan; close sigue visible. */

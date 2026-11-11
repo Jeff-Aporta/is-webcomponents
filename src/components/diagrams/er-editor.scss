@@ -32,23 +32,10 @@
   --_shadow: var(--iswc-shadow, 0 .5em 1.5em rgb(0 0 0 / 25%));
 }
 
-.stage {
-  display: block;
-  height: 100%;
-  min-height: inherit;
-  box-sizing: border-box;
-}
-.stage > iswc-split-panel {
-  display: block;
-  height: 100%;
-  min-height: inherit;
-}
+.stage { display: block; height: 100%; min-height: inherit; box-sizing: border-box; }
+.stage > iswc-split-panel { display: block; height: 100%; min-height: inherit; }
 .pane-canvas,
-.pane-side {
-  height: 100%;
-  min-height: inherit;
-  box-sizing: border-box;
-}
+.pane-side { height: 100%; min-height: inherit; box-sizing: border-box; }
 .pane-side { padding-inline-start: .625em; }
 
 /* ── Lienzo ───────────────────────────────────────────────────────────── */
@@ -66,26 +53,11 @@
   cursor: grab;
 }
 .canvas[data-panning] { cursor: grabbing; }
-.canvas-inner {
-  position: absolute;
-  inset: 0;
-  transform-origin: center center;
-}
-.canvas-inner > iswc-er-diagram {
-  width: 100%;
-  height: 100%;
-  display: block;
-}
+.canvas-inner { position: absolute; inset: 0; transform-origin: center center; }
+.canvas-inner > iswc-er-diagram { width: 100%; height: 100%; display: block; }
 
 /* Lienzo sin entidades: invitación en lugar de un hueco negro. */
-.empty {
-  position: absolute;
-  inset: 0;
-  display: none;
-  place-items: center;
-  pointer-events: none;
-  z-index: 3;
-}
+.empty { position: absolute; inset: 0; display: none; place-items: center; pointer-events: none; z-index: 3; }
 .canvas[data-empty] .empty { display: grid; }
 .empty__card {
   display: grid;
@@ -103,17 +75,7 @@
 .empty__card strong { color: var(--_text); font-size: 1.0976em; }
 
 /* ── Barra flotante ───────────────────────────────────────────────────── */
-.toolbar {
-  position: absolute;
-  top: .625em;
-  left: .625em;
-  right: .625em;
-  display: flex;
-  flex-wrap: wrap;
-  gap: .375em;
-  z-index: 5;
-  pointer-events: none;
-}
+.toolbar { position: absolute; top: .625em; left: .625em; right: .625em; display: flex; flex-wrap: wrap; gap: .375em; z-index: 5; pointer-events: none; }
 .toolbar__group {
   pointer-events: auto;
   display: inline-flex;
@@ -143,14 +105,8 @@
   cursor: pointer;
   transition: background-color 120ms ease, color 120ms ease, border-color 120ms ease;
 }
-.toolbar button:hover {
-  background: var(--_control-hover);
-  color: var(--_text);
-}
-.toolbar button:focus-visible {
-  outline: 2px solid var(--_brand);
-  outline-offset: 1px;
-}
+.toolbar button:hover { background: var(--_control-hover); color: var(--_text); }
+.toolbar button:focus-visible { outline: 2px solid var(--_brand); outline-offset: 1px; }
 .toolbar button[aria-pressed="true"] {
   background: var(--_brand-soft-active);
   border-color: color-mix(in srgb, var(--_brand) 45%, transparent);
@@ -173,15 +129,7 @@
   border: 1px solid var(--_border);
   border-radius: var(--_radius);
 }
-.panel__head {
-  display: flex;
-  align-items: center;
-  gap: .6098em;
-  margin: 0;
-  font-size: 0.82em;
-  font-weight: 700;
-  color: var(--_text);
-}
+.panel__head { display: flex; align-items: center; gap: .6098em; margin: 0; font-size: 0.82em; font-weight: 700; color: var(--_text); }
 .panel__head iswc-icon { font-size: 1.2805em; color: var(--_brand); }
 .selection-info {
   display: flex;
@@ -196,20 +144,8 @@
   line-height: 1.35;
   color: var(--_text-soft);
 }
-.selection-info[data-has-selection] {
-  color: var(--_text);
-  border-color: color-mix(in srgb, var(--_brand) 40%, transparent);
-  background: var(--_brand-soft);
-}
-
-.panel fieldset {
-  margin: 0;
-  padding: 0;
-  border: 0;
-  min-inline-size: 0;
-  display: grid;
-  gap: .5em;
-}
+.selection-info[data-has-selection] { color: var(--_text); border-color: color-mix(in srgb, var(--_brand) 40%, transparent); background: var(--_brand-soft); }
+.panel fieldset { margin: 0; padding: 0; border: 0; min-inline-size: 0; display: grid; gap: .5em; }
 .panel fieldset[hidden] { display: none; }
 .panel fieldset:disabled { opacity: 0.45; }
 .panel fieldset:disabled label { cursor: not-allowed; }
@@ -228,15 +164,7 @@
   color: var(--_text-soft);
 }
 .panel legend iswc-icon { font-size: 1.3571em; }
-
-.panel label {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: .641em;
-  align-items: center;
-  font-size: 0.78em;
-  color: var(--_text-soft);
-}
+.panel label { display: grid; grid-template-columns: 1fr auto; gap: .641em; align-items: center; font-size: 0.78em; color: var(--_text-soft); }
 .panel label[data-unset] input[type="color"] { opacity: 0.4; }
 
 .panel input[type="text"],
@@ -259,11 +187,7 @@
 .panel input:hover,
 .panel select:hover { border-color: var(--_control-border); }
 .panel input:focus-visible,
-.panel select:focus-visible {
-  outline: 2px solid color-mix(in srgb, var(--_brand) 60%, transparent);
-  outline-offset: 0;
-  border-color: var(--_brand);
-}
+.panel select:focus-visible { outline: 2px solid color-mix(in srgb, var(--_brand) 60%, transparent); outline-offset: 0; border-color: var(--_brand); }
 .panel input[type="color"] {
   box-sizing: border-box;
   width: 3.1212em;
@@ -275,18 +199,10 @@
   cursor: pointer;
 }
 .panel input[type="color"]::-webkit-color-swatch-wrapper { padding: 0; }
-.panel input[type="color"]::-webkit-color-swatch {
-  border: 0;
-  border-radius: calc(var(--_radius-sm) - .1501em);
-}
+.panel input[type="color"]::-webkit-color-swatch { border: 0; border-radius: calc(var(--_radius-sm) - .1501em); }
 
 /* Filas de atributos: nombre · tipo · clave · borrar */
-.attr-row {
-  display: grid;
-  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr) 3.6em auto;
-  gap: .375em;
-  align-items: center;
-}
+.attr-row { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr) 3.6em auto; gap: .375em; align-items: center; }
 .attr-row input,
 .attr-row select { width: 100%; }
 .attr-row select.key-pk { border-color: var(--iswc-color-warning, #fbbf24); color: var(--iswc-color-warning, #fbbf24); }
@@ -304,10 +220,7 @@
   line-height: 1;
   cursor: pointer;
 }
-.attr-row .attr-del:hover {
-  background: var(--_danger-soft);
-  color: var(--_danger);
-}
+.attr-row .attr-del:hover { background: var(--_danger-soft); color: var(--_danger); }
 
 .panel button {
   appearance: none;
@@ -328,11 +241,7 @@
 }
 .panel button iswc-icon { font-size: 1.3158em; line-height: 1; }
 .panel button.icon-wide { width: 100%; }
-.panel button:hover {
-  background: var(--_brand-soft);
-  border-color: var(--_brand);
-  color: var(--_brand);
-}
+.panel button:hover { background: var(--_brand-soft); border-color: var(--_brand); color: var(--_brand); }
 .panel button:focus-visible { outline: 2px solid var(--_brand); outline-offset: 1px; }
 
 /* ── Ayuda al pie del lienzo ──────────────────────────────────────────── */

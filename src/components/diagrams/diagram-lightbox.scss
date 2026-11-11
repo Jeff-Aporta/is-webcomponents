@@ -1,15 +1,8 @@
 /* Estilos específicos del lightbox de diagramas, encima de lightbox.css. */
 @import url('./lightbox.css');
 
-.lb-bar__lead {
-  flex: 1 1 auto;
-}
-
-.lb-nav {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.25em;
-}
+.lb-bar__lead { flex: 1 1 auto; }
+.lb-nav { display: inline-flex; align-items: center; gap: 0.25em; }
 
 /* Anillo de cuenta regresiva del auto-replay. */
 .lb-ring {
@@ -27,44 +20,14 @@
   }
 }
 
-.lb-ring__track {
-  fill: none;
-  stroke: color-mix(in srgb, currentColor 22%, transparent);
-  stroke-width: 2.5;
-}
-
-.lb-ring__fill {
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 2.5;
-  stroke-linecap: round;
-  transition: stroke-dashoffset 200ms linear;
-}
-
-.lb-ring__icon {
-  font-size: .6875em;
-  line-height: 1;
-}
-
-.lb-step {
-  font-size: 0.75em;
-  font-variant-numeric: tabular-nums;
-  color: var(--iswc-text-soft);
-  min-width: 2.5em;
-}
+.lb-ring__track { fill: none; stroke: color-mix(in srgb, currentColor 22%, transparent); stroke-width: 2.5; }
+.lb-ring__fill { fill: none; stroke: currentColor; stroke-width: 2.5; stroke-linecap: round; transition: stroke-dashoffset 200ms linear; }
+.lb-ring__icon { font-size: .6875em; line-height: 1; }
+.lb-step { font-size: 0.75em; font-variant-numeric: tabular-nums; color: var(--iswc-text-soft); min-width: 2.5em; }
 
 /* Panel de código (el head, area, acciones). */
-.lb-code__head {
-  display: flex;
-  align-items: baseline;
-  gap: .615em;
-  font-size: 0.8125em;
-}
-
-.lb-code__hint {
-  color: var(--iswc-text-soft);
-  font-size: .9225em;
-}
+.lb-code__head { display: flex; align-items: baseline; gap: .615em; font-size: 0.8125em; }
+.lb-code__hint { color: var(--iswc-text-soft); font-size: .9225em; }
 
 .lb-code__area {
   width: 100%;
@@ -85,21 +48,6 @@
   }
 }
 
-.lb-code__err {
-  margin: 0;
-  color: var(--iswc-danger-text);
-  font-size: 0.75em;
-  &[hidden] { display: none; }
-}
-
-.lb-code__actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 0.5em;
-}
-
-.lb-unsupported {
-  color: var(--iswc-text-soft);
-  font-size: 0.875em;
-  text-align: center;
-}
+.lb-code__err { margin: 0; color: var(--iswc-danger-text); font-size: 0.75em; &[hidden] { display: none; }; }
+.lb-code__actions { display: flex; justify-content: flex-end; gap: 0.5em; }
+.lb-unsupported { color: var(--iswc-text-soft); font-size: 0.875em; text-align: center; }

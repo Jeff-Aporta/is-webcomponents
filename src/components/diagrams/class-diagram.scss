@@ -2,24 +2,15 @@
 @use 'kit' as *;
 
 :host { @include host-lienzo-diagrama; }
-
 .wrap { @include wrap-lienzo-diagrama('Diagrama de clases no disponible (payload inválido).'); }
-
 .slot-hidden { display: none !important; }
-
 @include lienzo-svg('cls-svg');
 
 /* ── Cajas y relaciones ── */
 
 .cls-node,
-.cls-rel {
-  transition: opacity 0.18s ease;
-  &.iswc-dim { opacity: 0.32; }
-}
-
-.cls-node__box {
-  transition: stroke-width 0.12s ease-out;
-}
+.cls-rel { @include transicion(opacity 0.18s ease); &.iswc-dim { opacity: 0.32; }; }
+.cls-node__box { @include transicion(stroke-width 0.12s ease-out); }
 
 .cls-rel {
   &.iswc-active {
@@ -27,13 +18,8 @@
   }
 }
 
-.cls-node__divider {
-  opacity: 0.8;
-}
-
-.cls-legend__item {
-  transition: opacity 0.18s ease;
-}
+.cls-node__divider { opacity: 0.8; }
+.cls-legend__item { @include transicion(opacity 0.18s ease); }
 
 /* El visor es opt-in: sin `open-on-click` el componente no abre nada,
    asi que tampoco debe insinuar con el cursor que se puede hacer clic. */
