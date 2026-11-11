@@ -36,24 +36,9 @@
   display: none;
 }
 
-.wrap {
-  display: block;
-  inline-size: 100%;
-  block-size: 100%;
-}
-
-.chart-svg {
-  display: block;
-  inline-size: 100%;
-  block-size: 100%;
-  overflow: visible;
-}
-
-.spark-line {
-  fill: none;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
+.wrap { display: block; inline-size: 100%; block-size: 100%; }
+.chart-svg { display: block; inline-size: 100%; block-size: 100%; overflow: visible; }
+.spark-line { fill: none; stroke-linecap: round; stroke-linejoin: round; }
 
 /* Screen-reader status (aria-live polite) — visible a SR, oculto visual. */
 .sr-status {

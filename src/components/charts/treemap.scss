@@ -1,12 +1,6 @@
+@use 'kit' as *;
 @use '../../core/diagram-kit';
-:host {
-  inline-size: 100%;
-  min-block-size: 0;
-  display: block;
-  position: relative;
-  box-sizing: border-box;
-  font-family: var(--iswc-sans);
-}
+:host { inline-size: 100%; min-block-size: 0; display: block; position: relative; box-sizing: border-box; font-family: var(--iswc-sans); }
 
 :host([hidden]) {
   display: none;
@@ -35,13 +29,7 @@
   display: flex;
   flex-direction: column;
 }
-.wrap.iswc-viewer {
-  inline-size: 100%;
-  block-size: 100%;
-  border: 0;
-  padding: 0;
-  cursor: default;
-}
+.wrap.iswc-viewer { inline-size: 100%; block-size: 100%; border: 0; padding: 0; cursor: default; }
 .wrap[data-empty]::after {
   content: "Treemap no disponible (payload inválido).";
   display: block;
@@ -50,9 +38,7 @@
   color: var(--iswc-text-soft);
 }
 
-.slot-hidden {
-  display: none !important;
-}
+.slot-hidden { @include oculto; }
 
 .tm-svg {
   display: block;
@@ -68,25 +54,13 @@
 
 /* ── Nodos ── */
 .tm-node {
-  transition: opacity 0.18s ease;
+  @include transicion(opacity 0.18s ease);
   /* El JS aplica `iswc-dim` a nodos no activos cuando hay uno activo. */
 }
-.tm-node.iswc-dim {
-  opacity: 0.32;
-}
-
-.tm-node__rect {
-  transition: filter 0.12s ease-out, stroke-width 0.12s ease-out;
-}
-
-.tm-node__header {
-  pointer-events: none;
-}
-
-.tm-node.iswc-active .tm-node__rect {
-  filter: brightness(1.12);
-  stroke-width: 3;
-}
+.tm-node.iswc-dim { opacity: 0.32; }
+.tm-node__rect { transition: filter 0.12s ease-out, stroke-width 0.12s ease-out; }
+.tm-node__header { pointer-events: none; }
+.tm-node.iswc-active .tm-node__rect { filter: brightness(1.12); stroke-width: 3; }
 
 /* ── Tooltip ───────────────────────────────────────────────────────────
    Mismo fallo que tenia iswc-chart: el JS fija `left`/`top`, lo que exige
@@ -106,24 +80,10 @@
   line-height: 1.35;
   box-shadow: var(--iswc-shadow);
 }
-.tm-tooltip[hidden] {
-  display: none !important;
-}
-.tm-tooltip .dg-tooltip__title {
-  font-weight: 650;
-  margin-block-end: 0.25em;
-}
-.tm-tooltip .dg-tooltip__row {
-  display: flex;
-  align-items: center;
-  gap: 0.45em;
-  white-space: nowrap;
-}
-.tm-tooltip .dg-tooltip__value {
-  margin-inline-start: auto;
-  font-variant-numeric: tabular-nums;
-  font-weight: 650;
-}
+.tm-tooltip[hidden] { @include oculto; }
+.tm-tooltip .dg-tooltip__title { font-weight: 650; margin-block-end: 0.25em; }
+.tm-tooltip .dg-tooltip__row { display: flex; align-items: center; gap: 0.45em; white-space: nowrap; }
+.tm-tooltip .dg-tooltip__value { margin-inline-start: auto; font-variant-numeric: tabular-nums; font-weight: 650; }
 
 /* El visor es opt-in: sin `open-on-click` el componente no abre nada,
    asi que tampoco debe insinuar con el cursor que se puede hacer clic. */
