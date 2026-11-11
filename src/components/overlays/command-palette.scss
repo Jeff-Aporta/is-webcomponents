@@ -50,32 +50,9 @@
   & .ico { color: var(--iswc-text-soft); font-size: 1.1em; }
 }
 
-.input {
-  flex: 1 1 auto;
-  border: 0;
-  outline: 0;
-  background: transparent;
-  font: inherit;
-  font-size: 1em;
-  color: inherit;
-  padding-block: .25em;
-}
-
-.results {
-  list-style: none;
-  margin: 0;
-  padding: .35em;
-  overflow: auto;
-  flex: 1 1 auto;
-}
-
-.group-head {
-  font-size: .68em;
-  text-transform: uppercase;
-  letter-spacing: .08em;
-  color: var(--iswc-text-dim);
-  padding: .5147em .7353em .2206em;
-}
+.input { flex: 1 1 auto; border: 0; outline: 0; background: transparent; font: inherit; font-size: 1em; color: inherit; padding-block: .25em; }
+.results { list-style: none; margin: 0; padding: .35em; overflow: auto; flex: 1 1 auto; }
+.group-head { font-size: .68em; text-transform: uppercase; letter-spacing: .08em; color: var(--iswc-text-dim); padding: .5147em .7353em .2206em; }
 
 /* Solo para lectores de pantalla: anuncia cambios de filtro sin ensuciar la UI. */
 .sr-status {
@@ -154,12 +131,7 @@
   box-shadow: 0 .0919em 0 color-mix(in srgb, var(--iswc-border) 80%, transparent);
 }
 
-.empty {
-  padding: 1.7647em;
-  text-align: center;
-  color: var(--iswc-text-soft);
-  font-size: .85em;
-}
+.empty { padding: 1.7647em; text-align: center; color: var(--iswc-text-soft); font-size: .85em; }
 
 .footer {
   border-block-start: 1px solid var(--iswc-border-soft);

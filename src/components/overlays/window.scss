@@ -34,26 +34,11 @@
   min-inline-size: 0;
   cursor: pointer;
 
-  .root {
-    position: relative;
-    inset: auto;
-    inline-size: auto;
-    max-inline-size: 6.25em;
-    block-size: auto;
-    border-radius: 999em;
-  }
-
-  .header {
-    border-block-end: 0;
-    padding: .28em .65em;
-    cursor: pointer;
-  }
+.root { position: relative; inset: auto; inline-size: auto; max-inline-size: 6.25em; block-size: auto; border-radius: 999em; }
+.header { border-block-end: 0; padding: .28em .65em; cursor: pointer; }
 
   .title,
-  .title-wrap {
-    font-size: .78em;
-    max-inline-size: 8.0128em;
-  }
+.title-wrap { font-size: .78em; max-inline-size: 8.0128em; }
 
   .body,
   .resizer,
@@ -62,13 +47,7 @@
 :host([data-state="minimized"][scope="global"]) { position: fixed; }
 
 /* Borde, radio, fondo y sombra vienen de `.iswc-popover-panel`. */
-.root {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-}
+.root { position: absolute; inset: 0; display: flex; flex-direction: column; overflow: hidden; }
 
 /* La fila flex, el padding y el separador vienen de `.iswc-surface-bar`. */
 .header {
@@ -84,22 +63,8 @@
   &:active { cursor: grabbing; }
 }
 
-.title-wrap {
-  display: inline-flex;
-  align-items: center;
-  gap: .35em;
-  flex: 1 1 auto;
-  min-inline-size: 0;
-}
-
-.title {
-  font-weight: 600;
-  font-size: .92em;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
+.title-wrap { display: inline-flex; align-items: center; gap: .35em; flex: 1 1 auto; min-inline-size: 0; }
+.title { font-weight: 600; font-size: .92em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .controls { display: inline-flex; gap: .125em; }
 
 /* La caja pintada es el <button> interno de <iswc-button>, alcanzable por
@@ -119,12 +84,7 @@ iswc-button.ctrl {
 }
 
 
-.body {
-  flex: 1 1 auto;
-  padding: 1em;
-  overflow: auto;
-  outline: 0;
-}
+.body { flex: 1 1 auto; padding: 1em; overflow: auto; outline: 0; }
 
 .resizer {
   position: absolute;
