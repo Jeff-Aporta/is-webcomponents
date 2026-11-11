@@ -9,13 +9,8 @@
   line-height: 1.6;
 }
 
-* {
-  box-sizing: border-box;
-}
-
-iswc-doc-layout {
-  height: 100%;
-}
+* { box-sizing: border-box; }
+iswc-doc-layout { height: 100%; }
 
 // Marca de la barra (la del documento si la app no pone la suya)
 .marca {
@@ -32,10 +27,7 @@ iswc-doc-layout {
   }
 }
 
-.indice {
-  display: block;
-  min-height: 100%;
-}
+.indice { display: block; min-height: 100%; }
 
 // Página (portada u operación)
 .pagina {
@@ -102,17 +94,7 @@ iswc-doc-layout {
 // Diagnóstico del documento
 .avisos,
 .estricto-errores,
-.errores {
-  display: block;
-  margin: 1em 0;
-
-  ul {
-    margin: 0.4em 0 0;
-    padding-left: 1.2em;
-    max-height: 18em;
-    overflow: auto;
-  }
-}
+.errores { display: block; margin: 1em 0; ul { margin: 0.4em 0 0; padding-left: 1.2em; max-height: 18em; overflow: auto; } }
 
 // Portada: tabla de endpoints con filtro
 .filtro-linea {
@@ -134,12 +116,7 @@ iswc-doc-layout {
   }
 }
 
-.tabla-envoltura {
-  max-width: 100%;
-  overflow-x: auto;
-  border: 1px solid var(--iswc-border);
-  border-radius: .645em;
-}
+.tabla-envoltura { max-width: 100%; overflow-x: auto; border: 1px solid var(--iswc-border); border-radius: .645em; }
 
 .tabla.endpoints {
   th {
@@ -205,25 +182,11 @@ iswc-doc-layout {
   }
 }
 
-.sin-resultados {
-  color: var(--iswc-text-dim);
-}
+.sin-resultados { color: var(--iswc-text-dim); }
 
 // Detalle: ficha de acceso, bloques de schema/ejemplo y flujo
-.tabla.ficha {
-  max-width: 44em;
-
-  th {
-    width: 9em;
-  }
-}
-
-.etiqueta-bloque {
-  margin: 0.6em 0 0;
-  color: var(--iswc-text-dim);
-  font-size: 0.85em;
-  font-weight: 600;
-}
+.tabla.ficha { max-width: 44em; th { width: 9em; } }
+.etiqueta-bloque { margin: 0.6em 0 0; color: var(--iswc-text-dim); font-size: 0.85em; font-weight: 600; }
 
 // Estilo ISWC (el de los adjuntos de docs): lienzo claro en ambos temas; el diagrama lee su modo del
 // contenedor `data-theme="light"`.
@@ -237,16 +200,11 @@ iswc-doc-layout {
   background: #ffffff;
 }
 
-.secuencia {
-  display: block;
-  min-width: 36em;
-}
+.secuencia { display: block; min-width: 36em; }
 
 // La tabla se adapta al ancho REAL del contenido (con o sin paneles laterales): sin grupo por debajo de
 // 900 px y, por debajo de 640 px, cada endpoint es una tarjeta (método y ruta arriba, resumen y permiso abajo).
-.pagina {
-  container-type: inline-size;
-}
+.pagina { container-type: inline-size; }
 
 @container (max-width: 56.25em) {
   .tabla.endpoints {
@@ -258,9 +216,7 @@ iswc-doc-layout {
 }
 
 @container (max-width: 40em) {
-  .tabla-envoltura {
-    overflow-x: visible;
-  }
+.tabla-envoltura { overflow-x: visible; }
 
   .tabla.endpoints {
     thead {
@@ -376,20 +332,8 @@ iswc-doc-layout {
   }
 }
 
-.pager {
-  margin-top: 4.5752em;
-  padding-top: 1.7974em;
-  border-top: 1px solid var(--iswc-border);
-}
-
-.cargando {
-  display: flex;
-  align-items: center;
-  gap: .625em;
-  margin: 0;
-  padding: 2em 0;
-  color: var(--iswc-text-dim);
-}
+.pager { margin-top: 4.5752em; padding-top: 1.7974em; border-top: 1px solid var(--iswc-border); }
+.cargando { display: flex; align-items: center; gap: .625em; margin: 0; padding: 2em 0; color: var(--iswc-text-dim); }
 
 // Diálogo de sesión
 iswc-dialog.login {
@@ -415,14 +359,9 @@ iswc-dialog.login {
 // Teléfono: a 390 px el texto de «Sesión» (~95 px) empujaba fuera de la barra el toggle del índice y
 // recortaba el tema de la app. Queda el ícono (el botón conserva aria-label y title).
 @media (max-width: 30em) {
-  .sesion-texto {
-    display: none;
-  }
+.sesion-texto { display: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  * {
-    transition: none !important;
-    animation: none !important;
-  }
+* { transition: none !important; animation: none !important; }
 }

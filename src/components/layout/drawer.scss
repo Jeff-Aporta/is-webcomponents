@@ -31,13 +31,7 @@
   .backdrop { visibility: hidden; }
 }
 
-.backdrop {
-  position: fixed;
-  inset: 0;
-  @include velo(var(--iswc-drawer-backdrop-color), var(--iswc-drawer-backdrop-blur));
-  opacity: 0;
-  pointer-events: auto;
-}
+.backdrop { position: fixed; inset: 0; @include velo(var(--iswc-drawer-backdrop-color), var(--iswc-drawer-backdrop-blur)); opacity: 0; pointer-events: auto; }
 
 :host([open]) .backdrop {
   opacity: 1;
@@ -68,23 +62,13 @@
 :host([placement="start"]) {
   --_shadow: .5em 0 1.5em rgba(0, 0, 0, 0.18);
 
-  .drawer {
-    inset-inline-start: 0;
-    inset-inline-end: auto;
-    border-start-end-radius: var(--_radius);
-    border-end-end-radius: var(--_radius);
-  }
+.drawer { inset-inline-start: 0; inset-inline-end: auto; border-start-end-radius: var(--_radius); border-end-end-radius: var(--_radius); }
 }
 
 :host([placement="end"]) {
   --_shadow: -.5em 0 1.5em rgba(0, 0, 0, 0.18);
 
-  .drawer {
-    inset-inline-end: 0;
-    inset-inline-start: auto;
-    border-start-start-radius: var(--_radius);
-    border-end-start-radius: var(--_radius);
-  }
+.drawer { inset-inline-end: 0; inset-inline-start: auto; border-start-start-radius: var(--_radius); border-end-start-radius: var(--_radius); }
 }
 
 :host(:is([placement="top"], [placement="bottom"])) .drawer {
@@ -96,49 +80,21 @@
 :host([placement="top"]) {
   --_shadow: 0 .5em 1.5em rgba(0, 0, 0, 0.18);
 
-  .drawer {
-    inset-block-start: 0;
-    inset-block-end: auto;
-    border-end-start-radius: var(--_radius);
-    border-end-end-radius: var(--_radius);
-  }
+.drawer { inset-block-start: 0; inset-block-end: auto; border-end-start-radius: var(--_radius); border-end-end-radius: var(--_radius); }
 }
 
 :host([placement="bottom"]) {
   --_shadow: 0 -.5em 1.5em rgba(0, 0, 0, 0.18);
 
-  .drawer {
-    inset-block-end: 0;
-    inset-block-start: auto;
-    border-start-start-radius: var(--_radius);
-    border-start-end-radius: var(--_radius);
-  }
+.drawer { inset-block-end: 0; inset-block-start: auto; border-start-start-radius: var(--_radius); border-start-end-radius: var(--_radius); }
 }
 
 /* .header / .title / .body / .footer → core/modal-chrome.scss */
 
-.header-actions {
-  display: flex;
-  align-items: center;
-  gap: 0.25em;
-  flex: 0 0 auto;
-
-  &:empty { display: none; }
-}
-
-.close-btn {
-  flex: 0 0 auto;
-  font-size: 1em;
-  line-height: 0;
-  color: var(--iswc-text-muted);
-
-  &:hover { color: var(--iswc-text); }
-}
+.header-actions { display: flex; align-items: center; gap: 0.25em; flex: 0 0 auto; &:empty { display: none; }; }
+.close-btn { flex: 0 0 auto; font-size: 1em; line-height: 0; color: var(--iswc-text-muted); &:hover { color: var(--iswc-text); }; }
 
 /* Con movimiento reducido el deslizamiento y el velo siguen, pero breves: nunca a cero, para que la entrada y la salida se vean. */
 @media (prefers-reduced-motion: reduce) {
-  :host {
-    --iswc-drawer-show-duration: 90ms;
-    --iswc-drawer-hide-duration: 70ms;
-  }
+:host { --iswc-drawer-show-duration: 90ms; --iswc-drawer-hide-duration: 70ms; }
 }

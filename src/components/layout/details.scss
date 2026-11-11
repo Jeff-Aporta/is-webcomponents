@@ -18,15 +18,8 @@
   box-sizing: border-box;
 }
 
-.root {
-  border-radius: inherit;
-  overflow: hidden;
-}
-
-.header {
-  display: block;
-  background: var(--_header-bg);
-}
+.root { border-radius: inherit; overflow: hidden; }
+.header { display: block; background: var(--_header-bg); }
 
 .summary-btn {
   display: flex;
@@ -92,9 +85,7 @@
   will-change: height;
 
   &[hidden] { display: none; }
-
   ::slotted(*) { box-sizing: border-box; }
-
   ::slotted(:first-child) { margin-block-start: 0; }
   ::slotted(:last-child) { margin-block-end: 0; }
 }

@@ -1,11 +1,5 @@
 /* <iswc-page-header> — fila de título y acciones de una vista. */
-:host {
-  display: block;
-  container-type: inline-size;
-  min-width: 0;
-  font-family: var(--iswc-sans);
-}
-
+:host { display: block; container-type: inline-size; min-width: 0; font-family: var(--iswc-sans); }
 :host([hidden]) { display: none !important; }
 
 .cabecera {
@@ -19,10 +13,7 @@
   border-bottom: 0.0625em solid var(--iswc-border-soft);
 }
 
-.texto {
-  flex: 1 1 20em;
-  min-inline-size: 0;
-}
+.texto { flex: 1 1 20em; min-inline-size: 0; }
 
 .titulo {
   display: flex;
@@ -39,14 +30,7 @@
   iswc-icon[hidden] { display: none; }
 }
 
-.rotulo {
-  display: -webkit-box;
-  min-inline-size: 0;
-  overflow: hidden;
-  overflow-wrap: anywhere;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
-}
+.rotulo { display: -webkit-box; min-inline-size: 0; overflow: hidden; overflow-wrap: anywhere; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
 
 .subtitulo {
   display: -webkit-box;
@@ -81,9 +65,4 @@
   .ilustracion { display: none; }
 }
 
-.acciones {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 0.5em;
-}
+.acciones { display: flex; align-items: center; flex-wrap: wrap; gap: 0.5em; }

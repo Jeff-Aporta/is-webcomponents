@@ -51,13 +51,7 @@
   --iswc-dialog-backdrop-blur: 0em;
 }
 
-.backdrop {
-  position: fixed;
-  inset: 0;
-  @include velo(var(--iswc-dialog-backdrop-color), var(--iswc-dialog-backdrop-blur));
-  opacity: 0;
-  pointer-events: auto;
-}
+.backdrop { position: fixed; inset: 0; @include velo(var(--iswc-dialog-backdrop-color), var(--iswc-dialog-backdrop-blur)); opacity: 0; pointer-events: auto; }
 
 /* El estado abierto define el velo: la animación solo lo acompaña y puede no correr con movimiento reducido. */
 :host([open]) .backdrop {
@@ -82,13 +76,7 @@
 
 /* .header / .title / .body / .footer → core/modal-chrome.scss */
 
-.header-actions {
-  display: flex;
-  align-items: center;
-  gap: 0.25em;
-  flex: 0 0 auto;
-  margin-inline-start: auto;
-}
+.header-actions { display: flex; align-items: center; gap: 0.25em; flex: 0 0 auto; margin-inline-start: auto; }
 
 .close-btn {
   flex: 0 0 auto;
@@ -99,7 +87,6 @@
   color: var(--iswc-text);
 
   &:hover { opacity: 1; }
-
   iswc-icon { font-size: 1.25em; color: inherit; }
 }
 
