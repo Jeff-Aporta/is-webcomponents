@@ -1,15 +1,6 @@
 /* <iswc-theme-img> — logo/asset dark↔light; caja 1em × 1em. */
 
-:host {
-  display: inline-block;
-  vertical-align: middle;
-  inline-size: 1em;
-  block-size: 1em;
-  line-height: 0;
-  box-sizing: border-box;
-  flex: none;
-}
-
+:host { display: inline-block; vertical-align: middle; inline-size: 1em; block-size: 1em; line-height: 0; box-sizing: border-box; flex: none; }
 :host([hidden]) { display: none !important; }
 
 .img {

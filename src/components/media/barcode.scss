@@ -1,9 +1,5 @@
 /* iswc-barcode */
-:host {
-  display: inline-block;
-  font: inherit;
-  color: var(--iswc-text);
-}
+:host { display: inline-block; font: inherit; color: var(--iswc-text); }
 
 .root {
   display: flex;
@@ -16,11 +12,7 @@
   max-inline-size: 100%;
 }
 
-.svg {
-  display: block;
-  inline-size: 100%;
-  block-size: auto;
-}
+.svg { display: block; inline-size: 100%; block-size: auto; }
 
 .text {
   margin-block-start: .2941em;

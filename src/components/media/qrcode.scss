@@ -1,9 +1,5 @@
 /* iswc-qrcode */
-:host {
-  display: inline-block;
-  font: inherit;
-  color: var(--iswc-text);
-}
+:host { display: inline-block; font: inherit; color: var(--iswc-text); }
 
 .root {
   display: flex;
@@ -17,15 +13,6 @@
   color: inherit;
 }
 
-.canvas {
-  display: grid;
-  place-items: center;
-  inline-size: 100%;
-}
-
-.status {
-  font-size: .75em;
-  color: var(--iswc-text-soft);
-}
-
+.canvas { display: grid; place-items: center; inline-size: 100%; }
+.status { font-size: .75em; color: var(--iswc-text-soft); }
 svg { display: block; max-inline-size: 100%; block-size: auto; }

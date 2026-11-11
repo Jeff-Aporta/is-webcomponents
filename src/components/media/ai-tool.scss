@@ -1,13 +1,7 @@
+@use 'kit' as *;
 /* <iswc-ai-tool> — una herramienta: entrada, opciones, acción y resultado en una columna. */
-:host {
-  display: block;
-  min-width: 0;
-  font-family: var(--iswc-sans);
-  color: var(--iswc-text);
-}
-
+:host { display: block; min-width: 0; font-family: var(--iswc-sans); color: var(--iswc-text); }
 :host([hidden]) { display: none !important; }
-
 [hidden] { display: none !important; }
 
 .ia {
@@ -23,18 +17,8 @@
   }
 }
 
-header {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.6em;
-}
-
-.icono {
-  flex: none;
-  font-size: 1.8em;
-  color: var(--iswc-brand-text);
-}
+header { display: flex; flex-wrap: wrap; align-items: center; gap: 0.6em; }
+.icono { flex: none; font-size: 1.8em; color: var(--iswc-brand-text); }
 
 .titulo {
   flex: 1 1 12em;
@@ -52,50 +36,14 @@ header {
   }
 }
 
-.opciones {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(12em, 100%), 1fr));
-  gap: 0.6em;
-}
-
-.accion {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.6em;
-}
+.opciones { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(12em, 100%), 1fr)); gap: 0.6em; }
+.accion { display: flex; flex-wrap: wrap; align-items: center; gap: 0.6em; }
 
 .estado,
-.nada {
-  margin: 0;
-  font-size: 0.9em;
-  color: var(--iswc-text-dim);
-}
-
-.resultado {
-  display: grid;
-  gap: 0.6em;
-  justify-items: start;
-  min-width: 0;
-
-  &:empty { display: none; }
-}
-
-.lienzo {
-  position: relative;
-  margin: 0;
-  max-width: 100%;
-
-  img {
-    display: block;
-    max-width: 100%;
-    height: auto;
-  }
-}
-
-.transparente {
-  background: repeating-conic-gradient(color-mix(in srgb, var(--iswc-text) 12%, transparent) 0 25%, transparent 0 50%) 0 0 / 1.5em 1.5em;
-}
+.nada { margin: 0; font-size: 0.9em; color: var(--iswc-text-dim); }
+.resultado { display: grid; gap: 0.6em; justify-items: start; min-width: 0; &:empty { display: none; }; }
+.lienzo { position: relative; margin: 0; max-width: 100%; img { display: block; max-width: 100%; height: auto; } }
+.transparente { background: repeating-conic-gradient(color-mix(in srgb, var(--iswc-text) 12%, transparent) 0 25%, transparent 0 50%) 0 0 / 1.5em 1.5em; }
 
 .caja {
   position: absolute;
@@ -151,9 +99,7 @@ header {
   }
 
   span {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    @include truncar;
   }
 
   iswc-progress-bar { grid-column: 1 / -1; }

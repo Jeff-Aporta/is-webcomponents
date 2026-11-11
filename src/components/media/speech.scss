@@ -1,12 +1,6 @@
 /* <iswc-speech> — barra de botones + salida de transcripción. */
 
-:host {
-  display: grid;
-  gap: 0.35em;
-  font: inherit;
-  color: inherit;
-}
-
+:host { display: grid; gap: 0.35em; font: inherit; color: inherit; }
 :host([listening]) .listen { color: var(--iswc-color-danger); }
 
 .bar {
@@ -21,11 +15,7 @@
   }
 }
 
-.out {
-  margin: 0;
-  min-block-size: 1.2em;
-  color: var(--iswc-text-soft, inherit);
-}
+.out { margin: 0; min-block-size: 1.2em; color: var(--iswc-text-soft, inherit); }
 
 /* F0.3 g12 [a11y/focus]: foco visible solo con teclado */
 :host(:focus-visible) { outline: 2px solid var(--iswc-accent); outline-offset: .1875em; }
