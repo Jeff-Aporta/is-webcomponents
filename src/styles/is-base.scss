@@ -393,6 +393,4 @@
 
 /* Densidad: en un control o en cualquier contenedor (formulario, barra, tabla). El alto es
    un token heredable, así que basta redefinirlo; todo lo demás escala con él. */
-[density="compact"] {
-  --iswc-control-height: 2em;
-}
+[density="compact"] { --iswc-control-height: 2em; }

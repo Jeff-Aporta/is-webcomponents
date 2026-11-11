@@ -1,10 +1,8 @@
+@use 'kit' as *;
 * { box-sizing: border-box; }
 
 html,
-body {
-  height: 100%;
-  margin: 0;
-}
+body { height: 100%; margin: 0; }
 
 body {
   display: grid;
@@ -22,9 +20,7 @@ body {
 
 /* Light-DOM shell: header/split/drawer entran al grid de body.
    Sin contents el host crece con el preview y rompe overflow/scroll. */
-iswc-doc-demo {
-  display: contents;
-}
+iswc-doc-demo { display: contents; }
 
 .main-split {
   grid-area: main;
@@ -367,8 +363,7 @@ iswc-doc-demo {
       padding-inline-start: 1.15em;
     }
     &:focus-visible {
-      outline: 2px solid var(--iswc-focus);
-      outline-offset: 1px;
+      @include foco-visible(var(--iswc-focus), 2px, 1px);
     }
 
     & .shell-nav__title {
@@ -418,14 +413,7 @@ iswc-doc-demo {
   }
 }
 
-.preview-frame {
-  inline-size: 100%;
-  block-size: 100%;
-  border: 0;
-  background: var(--iswc-bg-page);
-
-  &[hidden] { display: none !important; }
-}
+.preview-frame { inline-size: 100%; block-size: 100%; border: 0; background: var(--iswc-bg-page); &[hidden] { display: none !important; }; }
 
 .preview-stage {
   position: relative;
@@ -445,20 +433,11 @@ iswc-doc-demo {
   }
 }
 
-.preview-host {
-  overflow: auto;
-  background: var(--iswc-bg-page);
-
-  &[hidden] { display: none !important; }
-}
+.preview-host { overflow: auto; background: var(--iswc-bg-page); &[hidden] { display: none !important; }; }
 
 /* Hamburguesa del catálogo: solo se muestra cuando el nav vive en el drawer
    (lo controla syncNavLayout con el atributo hidden). Es iswc-button plain+pill. */
-.shell-menu-btn {
-  flex: 0 0 auto;
-
-  &[hidden] { display: none; }
-}
+.shell-menu-btn { flex: 0 0 auto; &[hidden] { display: none; }; }
 
 /* El nav conserva su lista vertical dentro del drawer; lo que sobra ahí es el
    cromo de columna (borde propio, fondo, alto completo). */

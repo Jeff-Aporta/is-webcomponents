@@ -1,3 +1,4 @@
+@use 'kit' as *;
 /* =========================================================
    presentation.css — docs / playground de componentes IS.
    Dirección: panel técnico editorial. Tipografía propia,
@@ -24,23 +25,11 @@ html, body {
   overflow: hidden;
 }
 
-a {
-  color: var(--iswc-accent);
-  text-decoration: none;
-
-  &:hover { text-decoration: underline; text-underline-offset: 0.18em; }
-}
+a { color: var(--iswc-accent); text-decoration: none; &:hover { text-decoration: underline; text-underline-offset: 0.18em; }; }
 
 /* --- Layout --------------------------------------------------------- */
 
-.page {
-  inline-size: 100%;
-  block-size: 100%;
-  min-block-size: 0;
-  --min: 160px;
-  --max: 280px;
-  --divider-width: 5px;
-}
+.page { inline-size: 100%; block-size: 100%; min-block-size: 0; --min: 160px; --max: 280px; --divider-width: 5px; }
 
 .sidebar {
   align-self: stretch;
@@ -179,14 +168,8 @@ iswc-main.main {
  * acento) para que cualquier `.section`, `.main`, `.sidebar`, `<iswc-main>`
  * o `.demo` con overflow muestre el mismo thumb que el sidebar TOC. */
 :is(.main, iswc-main.main, .sidebar, .section, .demo, html, body) {
-  &::-webkit-scrollbar {
-    inline-size: var(--iswc-scrollbar-size);
-    block-size: var(--iswc-scrollbar-size);
-  }
-  &::-webkit-scrollbar-track {
-    background: var(--iswc-scrollbar-track);
-    border-radius: var(--iswc-scrollbar-radius);
-  }
+&::-webkit-scrollbar { inline-size: var(--iswc-scrollbar-size); block-size: var(--iswc-scrollbar-size); }
+&::-webkit-scrollbar-track { background: var(--iswc-scrollbar-track); border-radius: var(--iswc-scrollbar-radius); }
   &::-webkit-scrollbar-thumb {
     background: var(--iswc-scrollbar-thumb);
     border-radius: var(--iswc-scrollbar-radius);
@@ -319,21 +302,8 @@ iswc-main.main {
 
 /* Bloques seguidos de una sección y avisos apilados: la misma separación breve que hay en horizontal. */
 iswc-demo-section > :not([slot]) + :not([slot]),
-iswc-callout + iswc-callout {
-  margin-block-start: 0.75rem;
-}
-
-.demo-block {
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-  margin: 0 0 28px;
-
-  > .demo {
-    margin-block-end: 0;
-    border-radius: calc(var(--iswc-radius) + 2px);
-  }
-}
+iswc-callout + iswc-callout { margin-block-start: 0.75rem; }
+.demo-block { display: flex; flex-direction: column; gap: 0; margin: 0 0 28px; > .demo { margin-block-end: 0; border-radius: calc(var(--iswc-radius) + 2px); } }
 
 /* Enlace "Abrir editor en nueva pestana": aparece solo en demos de
    diagramas SVG (render.ts detecta el tag y lo agrega). Compacto,
@@ -508,20 +478,8 @@ iswc-callout + iswc-callout {
   min-block-size: 220px;
   overflow: hidden;
 }
-.demo__heading {
-  margin: 0 0 10px;
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--iswc-text-soft);
-}
-
-.demo--with-code {
-  padding-inline-end: 3rem;
-
-  &.demo--with-sources { padding-inline-end: 5.5rem; }
-}
+.demo__heading { margin: 0 0 10px; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--iswc-text-soft); }
+.demo--with-code { padding-inline-end: 3rem; &.demo--with-sources { padding-inline-end: 5.5rem; }; }
 .demo--with-sources { padding-inline-end: 3rem; }
 
 /* Fuentes del componente (JS/CSS/MD) — a la izquierda del botón «Ver código». */
@@ -567,9 +525,7 @@ iswc-callout + iswc-callout {
 .vs-page-bar,
 .vs-page-hint,
 .file-meta,
-.file-meta-page {
-  display: none !important;
-}
+.file-meta-page { @include oculto; }
 
 /* Modal full-page de fuentes */
 iswc-dialog.iswc-view-sources {
@@ -601,26 +557,9 @@ iswc-dialog.iswc-view-sources {
     border-block-start: 1px solid var(--iswc-border);
   }
 }
-.vs-header-actions {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-.vs-open {
-  font-size: 0.8rem;
-  color: var(--iswc-accent, var(--iswc-color-brand));
-  text-decoration: none;
-
-  &:hover { text-decoration: underline; }
-}
-.vs-body {
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-  min-block-size: 0;
-  flex: 1 1 auto;
-  block-size: 100%;
-}
+.vs-header-actions { display: inline-flex; align-items: center; gap: 0.5rem; }
+.vs-open { font-size: 0.8rem; color: var(--iswc-accent, var(--iswc-color-brand)); text-decoration: none; &:hover { text-decoration: underline; }; }
+.vs-body { display: flex; flex-direction: column; gap: 0; min-block-size: 0; flex: 1 1 auto; block-size: 100%; }
 .vs-path {
   display: block;
   margin: 0;
@@ -653,28 +592,9 @@ iswc-dialog.iswc-view-sources {
     overflow: hidden;
   }
 }
-.vs-panel {
-  box-sizing: border-box;
-  block-size: 100%;
-  min-block-size: 0;
-  overflow: auto;
-  padding: 0.75rem 1rem;
-}
-.vs-pre {
-  display: block;
-  margin: 0;
-  inline-size: 100%;
-  block-size: 100%;
-  min-block-size: 12rem;
-  white-space: pre;
-  font-size: 0.8rem;
-  line-height: 1.45;
-}
-.vs-empty {
-  margin: 1rem 0;
-  font-size: 0.875rem;
-  color: var(--iswc-text-soft);
-}
+.vs-panel { box-sizing: border-box; block-size: 100%; min-block-size: 0; overflow: auto; padding: 0.75rem 1rem; }
+.vs-pre { display: block; margin: 0; inline-size: 100%; block-size: 100%; min-block-size: 12rem; white-space: pre; font-size: 0.8rem; line-height: 1.45; }
+.vs-empty { margin: 1rem 0; font-size: 0.875rem; color: var(--iswc-text-soft); }
 
 .demo-code-btn {
   position: absolute;
@@ -757,13 +677,7 @@ iswc-dialog.iswc-view-sources {
   border-block-end: 1px solid var(--iswc-border-soft);
   background: var(--iswc-bg-soft);
 }
-.demo-code-pop__meta {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-  flex-wrap: wrap;
-  margin-inline-end: auto;
-}
+.demo-code-pop__meta { display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; margin-inline-end: auto; }
 /* Switch de nivel de minimalidad: component | category | all, con <iswc-tab-group>. */
 .demo-code-pop__level {
   --track-width: 2px;
@@ -808,18 +722,8 @@ iswc-dialog.iswc-view-sources {
     background: var(--iswc-brand, var(--iswc-accent));
   }
 }
-.demo-code-pop__size {
-  font-size: 0.7rem;
-  color: var(--iswc-text-dim);
-  white-space: nowrap;
-}
-.demo-code-pop__copy {
-  position: absolute;
-  inset-block-start: 0.5rem;
-  inset-inline-end: 0.6rem;
-  z-index: 1;
-  font-size: 0.9rem;
-}
+.demo-code-pop__size { font-size: 0.7rem; color: var(--iswc-text-dim); white-space: nowrap; }
+.demo-code-pop__copy { position: absolute; inset-block-start: 0.5rem; inset-inline-end: 0.6rem; z-index: 1; font-size: 0.9rem; }
 .demo-code-pop__pre {
   margin: 0 !important;
   border: 0 !important;
@@ -859,18 +763,8 @@ iswc-dialog.iswc-view-sources {
   &::before { content: none; }
 }
 
-.demo-caption {
-  display: block;
-  margin: 0 0 0.75em;
-  font-size: 0.8rem;
-  color: var(--iswc-text-dim);
-}
-
-.demo-locale-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
-  gap: 0.65rem;
-}
+.demo-caption { display: block; margin: 0 0 0.75em; font-size: 0.8rem; color: var(--iswc-text-dim); }
+.demo-locale-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr)); gap: 0.65rem; }
 .demo-locale-card {
   display: flex;
   flex-direction: column;
@@ -887,26 +781,9 @@ iswc-dialog.iswc-view-sources {
     color: var(--iswc-text-soft);
   }
 }
-.demo-locale-card__meta {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 0.5em;
-}
-.demo-locale-card__name {
-  font-size: 0.78rem;
-  font-weight: 650;
-  color: var(--iswc-text);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-.demo-locale-card__code {
-  flex-shrink: 0;
-  font-family: "JetBrains Mono", var(--iswc-mono);
-  font-size: 0.68rem;
-  color: var(--iswc-text-dim);
-}
+.demo-locale-card__meta { display: flex; align-items: baseline; justify-content: space-between; gap: 0.5em; }
+.demo-locale-card__name { font-size: 0.78rem; font-weight: 650; color: var(--iswc-text); @include truncar; }
+.demo-locale-card__code { flex-shrink: 0; font-family: "JetBrains Mono", var(--iswc-mono); font-size: 0.68rem; color: var(--iswc-text-dim); }
 
 /* Grid de filas (etiqueta + valor) para demos de format-bytes/format-number/format-date.
    La primera columna es la firma del ejemplo y la segunda el valor renderizado; en
@@ -924,16 +801,7 @@ iswc-dialog.iswc-view-sources {
   }
 }
 
-.format-grid__row {
-  display: contents;
-
-  @media (max-width: 38rem) {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.35rem 0.75rem;
-    align-items: baseline;
-  }
-}
+.format-grid__row { display: contents; @media (max-width: 38rem) { display: flex; flex-wrap: wrap; gap: 0.35rem 0.75rem; align-items: baseline; } }
 
 .format-grid__tag {
   align-self: center;
@@ -998,21 +866,9 @@ iswc-dialog.iswc-view-sources {
   }
 }
 
-.demo-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  align-items: center;
-}
-.demo-stack {
-  > * + * { margin-block-start: 12px; }
-}
-.demo-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  gap: 12px;
-  align-items: center;
-}
+.demo-row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+.demo-stack { > * + * { margin-block-start: 12px; }; }
+.demo-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; align-items: center; }
 
 /* centered cell para matrices variants x appearance */
 .matrix {
@@ -1072,7 +928,6 @@ pre.code {
   box-shadow: inset 0 1px 0 rgb(255 255 255 / 3%);
 }
 code.code { padding: 0.15em 0.4em; font-size: 0.86em; }
-
 .tag { color: #74c0fc; }
 .attr { color: #ffe066; }
 .val  { color: #b2f2bb; }
@@ -1414,12 +1269,7 @@ table.ref {
 
   > iswc-card { align-self: stretch; }
 }
-.card-meta {
-  font-size: 0.85rem;
-  color: var(--iswc-text-soft);
-  margin: 6px 0 0;
-  line-height: 1.45;
-}
+.card-meta { font-size: 0.85rem; color: var(--iswc-text-soft); margin: 6px 0 0; line-height: 1.45; }
 .card-row-actions { display: flex; gap: 8px; flex-wrap: wrap; }
 .card-stage-h {
   block-size: auto;
@@ -1473,9 +1323,7 @@ table.ref {
   pointer-events: auto;
 
   &[hidden] { display: none !important; }
-
   html[data-embed="1"] & { display: none !important; }
-
   iswc-theme-toggle { font-size: 1.15rem; }
 
   /* Hueco para la hamburguesa del índice, que vive en la esquina. */
@@ -1533,25 +1381,11 @@ table.ref {
 }
 
 
-.preview-chrome__label {
-  display: none;
-}
-
-.preview-chrome__save {
-  font-size: 1.15rem; /* a la par del iswc-theme-toggle vecino */
-  flex-shrink: 0;
-}
+.preview-chrome__label { display: none; }
+.preview-chrome__save { font-size: 1.15rem; /* a la par del iswc-theme-toggle vecino */ flex-shrink: 0; }
 
 /* --- iswc-icon defaults ----------------------------------------------- */
-iswc-icon {
-  display: inline-flex;
-  inline-size: 1.1em;
-  block-size: 1.1em;
-  vertical-align: -0.15em;
-  flex-shrink: 0;
-
-  iswc-button & { color: currentColor; }
-}
+iswc-icon { display: inline-flex; inline-size: 1.1em; block-size: 1.1em; vertical-align: -0.15em; flex-shrink: 0; iswc-button & { color: currentColor; }; }
 
 /* --- Snippets con botón de copiar (docs-chrome.js) ------------------- */
 
@@ -1572,12 +1406,7 @@ iswc-icon {
 
 /* Vista readonly de snippets (sustituye pre.code coloreado con runMode). */
 iswc-code.iswc-code-view,
-iswc-code.code[readonly] {
-  display: block;
-  inline-size: 100%;
-  --iswc-code-min-height: 0;
-  --iswc-code-radius: var(--iswc-radius);
-}
+iswc-code.code[readonly] { display: block; inline-size: 100%; --iswc-code-min-height: 0; --iswc-code-radius: var(--iswc-radius); }
 
 .code-block__copy {
   position: absolute;
@@ -1591,9 +1420,7 @@ iswc-code.code[readonly] {
   @media (hover: none) { opacity: 1; }
 }
 
-.callout--cdn {
-  .code-block { margin-block: 8px 14px; }
-}
+.callout--cdn { .code-block { margin-block: 8px 14px; }; }
 
 /* Homónimos de bloques anidados en `.preview-chrome` / `.demo` / `.demo-sources-btn`
    (CSS Nesting L2). sass solo soporta L1, asi que las reglas salen del nesting. */
