@@ -1,10 +1,6 @@
+@use 'kit' as *;
 /* iswc-rte */
-:host {
-  display: block;
-  font: inherit;
-  color: var(--iswc-text);
-  position: relative;
-}
+:host { @include texto-base(); position: relative; }
 .root {
   display: flex; flex-direction: column;
   border: 1px solid var(--iswc-control-border, var(--iswc-border));
@@ -45,13 +41,7 @@
     & svg { opacity: .5; }
   }
 }
-.sep {
-  display: inline-block;
-  width: .0625em;
-  height: 1.125em;
-  background: var(--iswc-border-soft);
-  margin: 0 .15em;
-}
+.sep { display: inline-block; width: .0625em; height: 1.125em; background: var(--iswc-border-soft); margin: 0 .15em; }
 
 .content {
   padding: .9239em 1.087em;
@@ -124,11 +114,4 @@
   &[hidden] { display: none; }
 }
 
-.placeholder {
-  position: absolute;
-  top: 4.5652em;
-  left: 1.087em;
-  color: var(--iswc-text-soft);
-  font-size: .92em;
-  pointer-events: none;
-}
+.placeholder { position: absolute; top: 4.5652em; left: 1.087em; color: var(--iswc-text-soft); font-size: .92em; pointer-events: none; }

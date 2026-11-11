@@ -1,3 +1,4 @@
+@use 'kit' as *;
 :host {
   --iswc-rating-size: 1.4em;
   --iswc-rating-gap: 0.1em;
@@ -100,8 +101,7 @@
 }
 
 :host([disabled]) {
-  opacity: 0.55;
-  pointer-events: none;
+  @include deshabilitado(.55);
 }
 
 @media (prefers-reduced-motion: reduce) {

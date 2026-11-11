@@ -1,10 +1,5 @@
 /* iswc-signature */
-:host {
-  display: inline-block;
-  font: inherit;
-  --_w: 20em;
-  --_h: 8.75em;
-}
+:host { display: inline-block; font: inherit; --_w: 20em; --_h: 8.75em; }
 
 .root {
   position: relative;
@@ -21,10 +16,7 @@
   overflow: hidden;
 }
 
-.canvas {
-  display: block;
-  cursor: crosshair;
-}
+.canvas { display: block; cursor: crosshair; }
 
 .hint {
   position: absolute;

@@ -1,13 +1,8 @@
 /* iswc-mention */
-:host {
-  display: inline-block;
-  font: inherit;
-  position: relative;
-}
+:host { display: inline-block; font: inherit; position: relative; }
 
 /* La caja, los estados y las variantes vienen de <iswc-input>. */
 :host([full-width]) { display: block; }
-
 .root { position: relative; display: block; }
 
 .popup {

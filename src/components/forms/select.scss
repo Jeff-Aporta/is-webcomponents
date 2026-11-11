@@ -1,3 +1,4 @@
+@use 'kit' as *;
 :host {
   --iswc-select-border-radius: var(--iswc-radius-sm);
   --iswc-select-border: var(--iswc-control-border);
@@ -141,9 +142,7 @@
   /* Dialog a viewport completo en top layer → no lo clippea overflow */
   .popup {
     position: fixed;
-    inset: 0;
-    inline-size: 100%;
-    block-size: 100%;
+    @include llenar-host;
     max-inline-size: none;
     max-block-size: none;
     margin: 0;
@@ -269,8 +268,7 @@
 }
 
 :host([disabled]) {
-  opacity: 0.55;
-  pointer-events: none;
+  @include deshabilitado(.55);
 }
 
 :host([full-width]) {
@@ -278,11 +276,7 @@
 }
 
 :host(:is([open], :state(open))) {
-  .base {
-    outline: 2px solid var(--iswc-select-focus);
-    outline-offset: 1px;
-  }
-
+.base { outline: 2px solid var(--iswc-select-focus); outline-offset: 1px; }
   .caret { transform: rotate(180deg); }
 }
 
@@ -298,13 +292,7 @@
 }
 
 :host([variant="underlined"]) {
-  .base {
-    background: transparent;
-    border-color: transparent;
-    border-bottom-color: var(--iswc-select-border);
-    border-radius: 0;
-    padding-inline: 0.15em;
-  }
+.base { background: transparent; border-color: transparent; border-bottom-color: var(--iswc-select-border); border-radius: 0; padding-inline: 0.15em; }
 }
 
 /* --- error --------------------------------------------------------- */
@@ -313,9 +301,7 @@
   --iswc-select-border: var(--iswc-select-danger);
   --iswc-select-focus: var(--iswc-select-danger);
 
-  .label {
-    color: var(--iswc-select-danger-text);
-  }
+.label { color: var(--iswc-select-danger-text); }
 }
 
 /* --- checkmarks (solo en multiple) --------------------------------- */
@@ -333,10 +319,7 @@
     border-radius: 0.25em;
   }
 
-  .check {
-    font-size: 0.85em;
-    color: var(--iswc-on-brand);
-  }
+.check { font-size: 0.85em; color: var(--iswc-on-brand); }
 
   .option[aria-selected="true"] {
     .mark {

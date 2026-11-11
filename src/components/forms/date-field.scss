@@ -1,9 +1,8 @@
+@use 'kit' as *;
 /* Hoja compartida por iswc-date-field, iswc-time-field e iswc-date-time-field: los
  * tres usan el mismo motor de secciones y deben verse idénticos. */
 
-[hidden] {
-  display: none !important;
-}
+[hidden] { @include oculto; }
 
 :host([hidden]) {
   display: none;

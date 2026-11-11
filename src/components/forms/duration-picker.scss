@@ -1,3 +1,4 @@
+@use 'kit' as *;
 /* iswc-duration-picker */
 :host {
   display: inline-block;
@@ -20,9 +21,7 @@
 /* Botones arriba/abajo de cada columna: comparten estilo base. */
 :is(.col button, .cell) {
   border: 0;
-  background: transparent;
-  color: inherit;
-  font: inherit;
+  @include reset-boton;
   line-height: 1;
   padding: 0;
   border-radius: .25em;
@@ -60,9 +59,4 @@
   }
 }
 
-.sep {
-  font-weight: 600;
-  color: var(--iswc-text-soft);
-  align-self: center;
-  font-size: 1.05em;
-}
+.sep { font-weight: 600; color: var(--iswc-text-soft); align-self: center; font-size: 1.05em; }

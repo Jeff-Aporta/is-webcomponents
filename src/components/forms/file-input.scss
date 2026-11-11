@@ -1,30 +1,8 @@
-:host {
-  display: block;
-  font-family: var(--iswc-font-family);
-  font-size: inherit;
-  color: var(--iswc-text);
-  box-sizing: border-box;
-}
-
-.base {
-  display: flex;
-  flex-direction: column;
-  gap: 0.4em;
-}
-
-.label {
-  font-weight: 600;
-  font-size: 0.95em;
-
-  &[hidden] { display: none !important; }
-}
-
-.hint {
-  font-size: 0.85em;
-  color: var(--iswc-text-soft);
-
-  &[hidden] { display: none !important; }
-}
+@use 'kit' as *;
+:host { display: block; font-family: var(--iswc-font-family); font-size: inherit; color: var(--iswc-text); box-sizing: border-box; }
+.base { @include columna-flex(.4em); }
+.label { font-weight: 600; font-size: 0.95em; &[hidden] { display: none !important; }; }
+.hint { font-size: 0.85em; color: var(--iswc-text-soft); &[hidden] { display: none !important; }; }
 
 .dropzone {
   position: relative;
@@ -56,20 +34,12 @@
  * (toggled desde ElementInternals). Mantenerlos en formato atributo evita el
  * selector `:state(...)` que esbuild rechaza dentro de nesting de Shadow DOM. */
 :host([data-state-dragging]) {
-  .dropzone {
-    border-color: var(--iswc-color-brand);
-    border-style: solid;
-    background: color-mix(in srgb, var(--iswc-color-brand) 30%, transparent);
-  }
+.dropzone { border-color: var(--iswc-color-brand); border-style: solid; background: color-mix(in srgb, var(--iswc-color-brand) 30%, transparent); }
 }
 
 :host([disabled]),
 :host([data-state-disabled]) {
-  .dropzone {
-    opacity: 0.55;
-    cursor: not-allowed;
-    pointer-events: none;
-  }
+.dropzone { opacity: 0.55; cursor: not-allowed; pointer-events: none; }
 }
 
 .dropzone-default {
@@ -101,16 +71,7 @@
   border: 0;
 }
 
-.file-list {
-  list-style: none;
-  margin: 0.25em 0 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 0.35em;
-
-  &[hidden] { display: none !important; }
-}
+.file-list { list-style: none; margin: 0.25em 0 0; padding: 0; display: flex; flex-direction: column; gap: 0.35em; &[hidden] { display: none !important; }; }
 
 .file {
   display: grid;
@@ -124,25 +85,6 @@
   font-size: 0.9em;
 }
 
-.file-name {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  min-width: 0;
-}
-
-.file-size {
-  color: var(--iswc-text-soft);
-  font-size: 0.9em;
-  white-space: nowrap;
-}
-
-.remove {
-  flex: none;
-  line-height: 0;
-  font-size: 1.1em;
-  opacity: 0.65;
-  color: inherit;
-
-  &:hover { opacity: 1; color: var(--iswc-color-danger); }
-}
+.file-name { @include truncar; min-width: 0; }
+.file-size { color: var(--iswc-text-soft); font-size: 0.9em; white-space: nowrap; }
+.remove { flex: none; line-height: 0; font-size: 1.1em; opacity: 0.65; color: inherit; &:hover { opacity: 1; color: var(--iswc-color-danger); }; }

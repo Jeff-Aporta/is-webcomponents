@@ -1,3 +1,4 @@
+@use 'kit' as *;
 :host {
   /* Caja visual compacta; el host ocupa el alto de control (em). */
   --iswc-checkbox-size: 1.15em;
@@ -91,9 +92,7 @@
   --iswc-checkbox-border: var(--iswc-color-danger);
   --iswc-checkbox-focus: var(--iswc-color-danger);
 
-  .hint {
-    color: var(--iswc-danger-text, var(--iswc-color-danger-strong));
-  }
+.hint { color: var(--iswc-danger-text, var(--iswc-color-danger-strong)); }
 }
 
 /* Icono propio en el estado apagado: el control deja de ser una caja. */
@@ -125,11 +124,7 @@
 }
 
 :host(:is([checked], [indeterminate], :state(checked), :state(indeterminate))) {
-  .control {
-    background: var(--iswc-checkbox-fill);
-    border-color: var(--iswc-checkbox-fill);
-    color: var(--iswc-checkbox-on-accent);
-  }
+.control { background: var(--iswc-checkbox-fill); border-color: var(--iswc-checkbox-fill); color: var(--iswc-checkbox-on-accent); }
 }
 
 :host(:focus-visible) {
@@ -145,8 +140,7 @@
 }
 
 :host(:is([disabled], :state(disabled))) {
-  cursor: not-allowed;
-  opacity: 0.55;
+  @include no-permitido(.55);
 }
 
 :host(:is([disabled], :state(disabled)):hover) {
@@ -154,7 +148,7 @@
 }
 
 :host([hidden]) {
-  display: none !important;
+  @include oculto;
 }
 
 /* size="sm": control compacto; todo sigue en em. */

@@ -1,3 +1,4 @@
+@use 'kit' as *;
 @use '../../styles/mixins' as *;
 
 :host {
@@ -160,9 +161,7 @@
   --iswc-switch-border: var(--iswc-color-danger);
   --iswc-switch-focus: var(--iswc-color-danger);
 
-  .hint {
-    color: var(--iswc-danger-text, var(--iswc-color-danger-strong));
-  }
+.hint { color: var(--iswc-danger-text, var(--iswc-color-danger-strong)); }
 }
 
 /* Iconos y rótulos necesitan más carril del que da el tamaño por defecto. */
@@ -189,16 +188,11 @@
 
 :host(:hover) {
   .control { background: var(--iswc-switch-bg-hover); }
-  .thumb {
-    box-shadow: 0 0 0 var(--iswc-switch-halo) color-mix(in srgb, var(--iswc-switch-accent) 18%, transparent);
-  }
+.thumb { box-shadow: 0 0 0 var(--iswc-switch-halo) color-mix(in srgb, var(--iswc-switch-accent) 18%, transparent); }
 }
 
 :host(:is([checked], :state(checked))) {
-  .control {
-    background: var(--iswc-switch-accent);
-    border-color: var(--iswc-switch-accent);
-  }
+.control { background: var(--iswc-switch-accent); border-color: var(--iswc-switch-accent); }
 
   .thumb {
     background: var(--iswc-switch-thumb);
@@ -211,13 +205,8 @@
 }
 
 :host(:focus-visible) {
-  .thumb {
-    box-shadow: 0 0 0 var(--iswc-switch-halo) color-mix(in srgb, var(--iswc-switch-focus) 30%, transparent);
-  }
-  .control {
-    outline: 0.125em solid var(--iswc-switch-focus);
-    outline-offset: 0.125em;
-  }
+.thumb { box-shadow: 0 0 0 var(--iswc-switch-halo) color-mix(in srgb, var(--iswc-switch-focus) 30%, transparent); }
+.control { outline: 0.125em solid var(--iswc-switch-focus); outline-offset: 0.125em; }
 }
 
 :host([readonly]:hover) {
@@ -225,8 +214,7 @@
 }
 
 :host(:is([disabled], :state(disabled))) {
-  cursor: not-allowed;
-  opacity: 0.55;
+  @include no-permitido(.55);
 }
 
 :host(:is([disabled], :state(disabled)):hover) {
@@ -234,5 +222,5 @@
 }
 
 :host([hidden]) {
-  display: none !important;
+  @include oculto;
 }

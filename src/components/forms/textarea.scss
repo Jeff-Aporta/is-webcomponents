@@ -1,3 +1,4 @@
+@use 'kit' as *;
 /* Shadow DOM: :host:is([attr]) NO matchea. Usar :host([attr]) como regla hermana. */
 :host {
   --iswc-textarea-border-radius: var(--iswc-radius-sm);
@@ -73,9 +74,7 @@
     display: block;
     box-sizing: border-box;
     border: 0;
-    background: transparent;
-    color: inherit;
-    font: inherit;
+    @include reset-boton;
     line-height: 1.5;
     padding: 0.5em 0;
     outline: none;
@@ -97,13 +96,7 @@
 }
 
 :host([variant="underlined"]) {
-  .base {
-    background: transparent;
-    border-color: transparent;
-    border-bottom-color: var(--_border);
-    border-radius: 0;
-    padding-inline-start: 0;
-  }
+.base { background: transparent; border-color: transparent; border-bottom-color: var(--_border); border-radius: 0; padding-inline-start: 0; }
 }
 
 /* ---- estado de error -------------------------------------------------- */
@@ -143,15 +136,11 @@
 }
 
 :host([disabled]) {
-  opacity: 0.55;
-  pointer-events: none;
+  @include deshabilitado(.55);
 }
 
 :host([readonly]) {
-  .base {
-    background: transparent;
-    border-style: dashed;
-  }
+.base { background: transparent; border-style: dashed; }
 }
 
 /* Táctil: en punteros gruesos el área mínima es 44 px (WCAG 2.5.5), única medida en px a propósito; el escritorio no cambia. */

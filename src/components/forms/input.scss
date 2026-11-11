@@ -1,3 +1,4 @@
+@use 'kit' as *;
 /* Shadow DOM: :host:is([attr]) NO matchea. Usar :host([attr]) como regla hermana. */
 :host {
   --iswc-input-border-radius: var(--iswc-radius-sm);
@@ -100,9 +101,7 @@
     flex: 1;
     min-inline-size: 0;
     border: 0;
-    background: transparent;
-    color: inherit;
-    font: inherit;
+    @include reset-boton;
     /* La caja fija el alto: el padding de bloque desbordaría en densidad compacta. */
     padding: 0;
     outline: none;
@@ -239,10 +238,7 @@
 :host([label-placement="float"][readonly]) {
   --_border: var(--iswc-b-readonly, var(--iswc-control-border));
 
-  .base {
-    background: var(--iswc-bg-readonly, var(--iswc-control-bg));
-    border-style: solid;
-  }
+.base { background: var(--iswc-bg-readonly, var(--iswc-control-bg)); border-style: solid; }
 }
 :host([label-placement="float"][disabled]) {
   --_border: var(--iswc-b-readonly, var(--iswc-control-border));
@@ -254,38 +250,25 @@
 :host([label-placement="float"]:focus-within),
 :host([label-placement="float"]:state(focused)),
 :host([label-placement="float"]:not(:state(blank))) {
-  .label {
-    transform: translateY(-0.95em);
-    font-size: 0.75em;
-  }
+.label { transform: translateY(-0.95em); font-size: 0.75em; }
 }
 
 :host([label-placement="float"][required]:state(focused)) {
-  .label {
-    color: color-mix(in srgb, var(--iswc-b-required, var(--iswc-control-border)) 40%, var(--iswc-text));
-  }
+.label { color: color-mix(in srgb, var(--iswc-b-required, var(--iswc-control-border)) 40%, var(--iswc-text)); }
 }
 :host([label-placement="float"]:not([required]):state(focused)) {
-  .label {
-    color: color-mix(in srgb, var(--iswc-b-optional, var(--iswc-control-border)) 40%, var(--iswc-text));
-  }
+.label { color: color-mix(in srgb, var(--iswc-b-optional, var(--iswc-control-border)) 40%, var(--iswc-text)); }
 }
 :host([label-placement="float"][readonly]) {
-  .label {
-    color: color-mix(in srgb, var(--iswc-b-readonly, var(--iswc-control-border)) 40%, var(--iswc-text));
-  }
+.label { color: color-mix(in srgb, var(--iswc-b-readonly, var(--iswc-control-border)) 40%, var(--iswc-text)); }
 }
 
 :host([disabled]) {
-  opacity: 0.55;
-  pointer-events: none;
+  @include deshabilitado(.55);
 }
 
 :host([readonly]) {
-  .base {
-    background: transparent;
-    border-style: dashed;
-  }
+.base { background: transparent; border-style: dashed; }
 }
 
 /* size="sm": control compacto; todo sigue en em. */

@@ -1,3 +1,4 @@
+@use 'kit' as *;
 :host {
   display: block;
   font-family: var(--iswc-sans, inherit);
@@ -35,14 +36,7 @@
 }
 
 :host(:has([slot="start"])) {
-  .start {
-    display: inline-flex;
-    align-items: center;
-    flex: none;
-    line-height: 0;
-    font-size: 1.15em;
-    color: var(--iswc-text-dim);
-  }
+.start { display: inline-flex; align-items: center; flex: none; line-height: 0; font-size: 1.15em; color: var(--iswc-text-dim); }
 }
 
 :host(:has([slot="description"])) {
@@ -58,18 +52,10 @@
 }
 
 :host([disabled]) {
-  opacity: 0.55;
-  pointer-events: none;
+  @include deshabilitado(.55);
 }
 
 :host(:is([selected], [data-active])) {
-  .option {
-    background: var(--iswc-accent-bg, rgb(224 49 49 / 12%));
-    color: var(--iswc-brand-text, var(--iswc-color-brand-stronger));
-  }
-
-  .description {
-    color: inherit;
-    opacity: 0.75;
-  }
+.option { background: var(--iswc-accent-bg, rgb(224 49 49 / 12%)); color: var(--iswc-brand-text, var(--iswc-color-brand-stronger)); }
+.description { color: inherit; opacity: 0.75; }
 }

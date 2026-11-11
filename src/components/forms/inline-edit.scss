@@ -8,14 +8,7 @@
   max-inline-size: 100%;
 }
 
-.root {
-  position: relative;
-  border-radius: inherit;
-  display: inline-flex;
-  align-items: stretch;
-  min-inline-size: 4em;
-  max-inline-size: 100%;
-}
+.root { position: relative; border-radius: inherit; display: inline-flex; align-items: stretch; min-inline-size: 4em; max-inline-size: 100%; }
 
 .display,
 .editor-wrap {
@@ -52,11 +45,7 @@
 }
 
 .editor-wrap { display: none; }
-
-.iswc-editing {
-  .display { display: none; }
-  .editor-wrap { display: inline-flex; }
-}
+.iswc-editing { .display { display: none; } .editor-wrap { display: inline-flex; }; }
 
 input,
 textarea {
@@ -72,12 +61,7 @@ textarea {
   inline-size: 100%;
 }
 
-textarea {
-  resize: vertical;
-  min-block-size: var(--iswc-inline-edit-min-h, 4em);
-  max-block-size: 16em;
-  font-family: inherit;
-}
+textarea { resize: vertical; min-block-size: var(--iswc-inline-edit-min-h, 4em); max-block-size: 16em; font-family: inherit; }
 
 :host(:focus-within) {
   outline: 2px solid var(--iswc-focus, var(--iswc-accent));

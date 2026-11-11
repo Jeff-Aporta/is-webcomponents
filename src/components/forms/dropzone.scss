@@ -1,9 +1,6 @@
+@use 'kit' as *;
 /* iswc-dropzone */
-:host {
-  display: block;
-  font: inherit;
-  color: var(--iswc-text);
-}
+:host { @include texto-base(); }
 .root { display: flex; flex-direction: column; gap: .85em; }
 
 .zone {
@@ -38,14 +35,7 @@
   .sub { color: var(--iswc-text-soft); font-size: .85em; }
 }
 
-.queue {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: .35em;
-}
+.queue { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: .35em; }
 .row {
   display: grid;
   grid-template-columns: 2.8889em 1fr 6.6667em auto auto;
@@ -69,12 +59,7 @@
 }
 
 .meta { min-width: 0; }
-.name {
-  display: block;
-  font-weight: 600;
-  font-size: .82em;
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-}
+.name { display: block; font-weight: 600; font-size: .82em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .size { color: var(--iswc-text-soft); font-size: .7em; }
 
 progress {
@@ -91,21 +76,9 @@ progress {
   &::-moz-progress-bar { background: var(--iswc-accent); }
 }
 
-.status {
-  font-size: .7em;
-  color: var(--iswc-text-soft);
-  font-variant-numeric: tabular-nums;
-  white-space: nowrap;
-}
+.status { font-size: .7em; color: var(--iswc-text-soft); font-variant-numeric: tabular-nums; white-space: nowrap; }
 /* Color del status según el estado del upload (JS pone la clase en la fila). */
 .status-done    .status { color: var(--iswc-success); }
 .status-uploading .status { color: var(--iswc-accent); }
 .status-error   .status { color: var(--iswc-danger); }
-
-.del {
-  flex: none;
-  line-height: 0;
-  color: var(--iswc-text-soft);
-
-  &:hover { color: var(--iswc-danger); }
-}
+.del { flex: none; line-height: 0; color: var(--iswc-text-soft); &:hover { color: var(--iswc-danger); }; }

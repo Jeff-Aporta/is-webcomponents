@@ -1,3 +1,4 @@
+@use 'kit' as *;
 :host {
   --iswc-picker-radius: var(--iswc-radius-sm);
   --iswc-picker-border: var(--iswc-control-border);
@@ -76,9 +77,7 @@
     font-family: var(--iswc-mono);
     font-size: 0.9em;
     text-transform: uppercase;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    @include truncar;
   }
 
   .caret {
@@ -89,9 +88,7 @@
 
   .popup {
     position: fixed;
-    inset: 0;
-    inline-size: 100%;
-    block-size: 100%;
+    @include llenar-host;
     max-inline-size: none;
     max-block-size: none;
     margin: 0;
@@ -196,15 +193,10 @@
 }
 
 :host([disabled]) {
-  opacity: 0.55;
-  pointer-events: none;
+  @include deshabilitado(.55);
 }
 
 :host(:state(open)) {
-  .trigger {
-    outline: 2px solid var(--iswc-picker-focus);
-    outline-offset: 1px;
-  }
-
+.trigger { outline: 2px solid var(--iswc-picker-focus); outline-offset: 1px; }
   .caret { transform: rotate(180deg); }
 }

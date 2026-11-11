@@ -1,10 +1,6 @@
+@use 'kit' as *;
 /* iswc-full-calendar */
-:host {
-  display: block;
-  font: inherit;
-  color: var(--iswc-text);
-  --_row-h: 4em;
-}
+:host { @include texto-base(); --_row-h: 4em; }
 
 .root {
   display: flex; flex-direction: column;
@@ -26,17 +22,10 @@
    vista activo) se pide por atributos `variant`/`color`; pintar fondo o borde
    desde aquí caería en el host, no en el <button> de su shadow root. */
 .ctrl,
-.view-btn {
-  font-size: .82em;
-}
-
+.view-btn { font-size: .82em; }
 .title { font-weight: 600; margin-left: .5em; text-transform: capitalize; }
 .spacer { flex: 1 1 auto; }
-
-.grid {
-  padding: 0;
-  &[data-view="month"] { overflow: hidden; }
-}
+.grid { padding: 0; &[data-view="month"] { overflow: hidden; }; }
 
 /* Cabeceras de columna compartidas: misma tipografía pequeña + mayúsculas,
  * borde inferior suave. La variante month (.wk-head) y la week (.col-head)
@@ -123,11 +112,7 @@
     }
   }
 }
-.day-col {
-  position: relative;
-  border-right: 1px solid var(--iswc-border-soft);
-  min-height: calc(var(--_row-h) * 13);
-}
+.day-col { position: relative; border-right: 1px solid var(--iswc-border-soft); min-height: calc(var(--_row-h) * 13); }
 .cell-hour {
   position: absolute;
   left: 0; right: 0;

@@ -24,18 +24,8 @@
   }
 }
 
-.hidden-input {
-  position: absolute;
-  opacity: 0;
-  pointer-events: none;
-  inline-size: .075em;
-  block-size: .075em;
-}
-
-.cells {
-  display: flex;
-  gap: var(--iswc-pin-gap);
-}
+.hidden-input { position: absolute; opacity: 0; pointer-events: none; inline-size: .075em; block-size: .075em; }
+.cells { display: flex; gap: var(--iswc-pin-gap); }
 
 .cell {
   /* Entre 1.25: la celda agranda su font-size y el token se resuelve contra él. */
@@ -68,10 +58,7 @@
 }
 
 :host([disabled]) {
-  .cell {
-    opacity: 0.55;
-    cursor: not-allowed;
-  }
+.cell { opacity: 0.55; cursor: not-allowed; }
 }
 
 @keyframes pin-shake {

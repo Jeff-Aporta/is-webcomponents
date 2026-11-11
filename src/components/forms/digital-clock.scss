@@ -1,7 +1,6 @@
+@use 'kit' as *;
 /* hidden en un nodo interno debe ganar al display propio del componente. */
-[hidden] {
-  display: none !important;
-}
+[hidden] { @include oculto; }
 
 :host([hidden]) {
   display: none;
@@ -55,9 +54,7 @@
     padding: 0.45em 0.7em;
     border: 0;
     border-radius: var(--iswc-radius-sm);
-    background: transparent;
-    color: inherit;
-    font: inherit;
+    @include reset-boton;
     font-variant-numeric: tabular-nums;
     text-align: center;
     cursor: pointer;
@@ -82,8 +79,5 @@
 }
 
 :host([disabled]) {
-  .base {
-    opacity: 0.6;
-    pointer-events: none;
-  }
+.base { @include deshabilitado(.6); }
 }

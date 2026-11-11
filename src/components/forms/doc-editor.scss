@@ -1,9 +1,6 @@
+@use 'kit' as *;
 /* iswc-doc-editor */
-:host {
-  display: block;
-  font: inherit;
-  color: var(--iswc-text);
-}
+:host { @include texto-base(); }
 .root {
   position: relative;
   border: 1px solid var(--iswc-control-border, var(--iswc-border));
@@ -12,9 +9,7 @@
   padding: 1em 1.25em;
   min-height: 14em;
 }
-.blocks {
-  display: flex; flex-direction: column; gap: .35em;
-}
+.blocks { display: flex; flex-direction: column; gap: .35em; }
 .block {
   border-radius: .25em;
   padding: .125em .25em;
@@ -65,10 +60,7 @@
   }
 }
 
-.row {
-  display: flex; align-items: start; gap: .5em;
-  .check { margin-top: .4202em; }
-}
+.row { display: flex; align-items: start; gap: .5em; .check { margin-top: .4202em; }; }
 .block-todo {
   ul { padding-left: 0; list-style: none; }
   li {
