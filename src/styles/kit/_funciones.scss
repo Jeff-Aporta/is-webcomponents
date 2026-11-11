@@ -1,0 +1,61 @@
+// _funciones.scss — las funciones de medidas y color del kit.
+//
+// Todas devuelven un valor que se puede usar donde toque: un token (var(--iswc-…)), una unidad
+// relativa o un color de la familia. La idea es que el SCSS del kit no escriba a mano ni un
+// `0.0625em` ni un `var(--iswc-color-success-paler)`: lo pide a la funcion.
+@use 'sass:math';
+
+// * Convierte pixeles a em (la unidad del kit: cambiar el font-size del host escala el componente).
+// *
+// *   em(8)   -> 0.5em
+// *   em(24, 24) -> 1em   (si la base es 24, 24px son 1em)
+@function em($px, $base: 16) {
+  @return math.div($px, $base) * 1em;
+}
+
+// * El token de espaciado de un paso (`2xs`, `xs`, `s`, `m`, `l`, `xl`, `2xl`).
+// *
+// *   escala(m) -> var(--iswc-space-m)
+@function escala($paso) {
+  @return var(--iswc-space-#{$paso});
+}
+
+// * El color de una familia. Sin variante, el canonico; con variante, la rampa.
+// *
+// *   tono(success)          -> var(--iswc-color-success)
+// *   tono(success, paler)   -> var(--iswc-color-success-paler)
+// *   tono(success, text)    -> var(--iswc-success-text)
+@function tono($nombre, $variante: null) {
+  @if $variante == null {
+    @return var(--iswc-color-#{$nombre});
+  }
+  @if $variante == 'text' {
+    @return var(--iswc-#{$nombre}-text);
+  }
+  @return var(--iswc-color-#{$nombre}-#{$variante});
+}
+
+// * El token de espaciado mas cercano a un valor en em.
+// *
+// *   espacio(.5) -> var(--iswc-space-s)
+@function espacio($n) {
+  @if $n <= .125 {
+    @return escala('2xs');
+  }
+  @if $n <= .25 {
+    @return escala('xs');
+  }
+  @if $n <= .5 {
+    @return escala('s');
+  }
+  @if $n <= .75 {
+    @return escala('m');
+  }
+  @if $n <= 1 {
+    @return escala('l');
+  }
+  @if $n <= 1.5 {
+    @return escala('xl');
+  }
+  @return escala('2xl');
+}

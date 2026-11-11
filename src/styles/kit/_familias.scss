@@ -1,0 +1,128 @@
+// _familias.scss — las bases por familia de componente.
+//
+// Cada base es el bloque que comparten todos los componentes de una familia (los campos de un
+// formulario, la capa de una superficie flotante, el lienzo de un grafico, la tarjeta de un
+// panel). Se llaman DENTRO de :host { } o de la clase que corresponda: el mixin no elige la
+// especificidad ni envuelve nada en :host por su cuenta.
+
+//
+// La base de un campo de formulario: la etiqueta y el texto de apoyo.
+//
+//   @include campo-base('.label', '.support');
+//
+// Los parametros son el selector de cada parte (que no es igual en todos los componentes) y los
+// tamanos del texto.
+@mixin campo-base($etiqueta: '.label', $ayuda: '.support', $tamEtiqueta: .875em, $tamAyuda: .8em) {
+  #{$etiqueta} {
+    font-size: $tamEtiqueta;
+    font-weight: 500;
+    color: var(--iswc-text-soft, inherit);
+    inline-size: fit-content;
+  }
+  #{$ayuda} {
+    display: flex;
+    align-items: flex-start;
+    gap: .75em;
+    font-size: $tamAyuda;
+    color: var(--iswc-text-dim);
+  }
+}
+
+//
+// La base de una superficie flotante (menu, dropdown, paleta, ventana): el fondo, el borde, el
+// radio y la sombra. El radio y la sombra se pueden cambiar por variable.
+@mixin capa-base($fondo: var(--iswc-bg-elev), $borde: var(--iswc-border), $radio: var(--iswc-radius), $sombra: var(--iswc-shadow)) {
+  background: $fondo;
+  border: 1px solid $borde;
+  border-radius: $radio;
+  box-shadow: $sombra;
+}
+
+//
+// La base de un grafico: los tokens de lectura y la rejilla recesiva.
+@mixin grafico-base($rejilla: var(--iswc-border)) {
+  --chart-text: var(--iswc-text);
+  --chart-muted: var(--iswc-text-dim);
+  --chart-surface: var(--iswc-bg-elev);
+  --chart-axis-color: #{$rejilla};
+}
+
+//
+// La base de una tarjeta: la superficie con su borde y su radio.
+@mixin tarjeta-base($fondo: var(--iswc-bg-elev), $borde: var(--iswc-border), $radio: var(--iswc-radius)) {
+  background: $fondo;
+  border: 1px solid $borde;
+  border-radius: $radio;
+  box-sizing: border-box;
+}
+
+// El :host y el .wrap que comparten los 13 diagramas. Lo unico que cambia entre diagramas es
+// el texto del estado vacio, que va como parametro.
+//
+//   :host { @include host-lienzo-diagrama; }
+//   .wrap { @include wrap-lienzo-diagrama(...); }
+@mixin host-lienzo-diagrama {
+  width: 100%;
+  min-height: 0;
+  display: block;
+  position: relative;
+  box-sizing: border-box;
+  font-family: var(--iswc-sans);
+
+  &[hidden] { display: none; }
+  &[color="viewer"] { width: 100%; height: 100%; }
+}
+
+@mixin wrap-lienzo-diagrama($vacio: '') {
+  position: relative;
+  border-radius: 0.5em;
+  overflow: hidden;
+  background: transparent;
+  border: 1px solid var(--iswc-border);
+  padding: 0.75em;
+  cursor: default;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  touch-action: manipulation;
+  box-sizing: border-box;
+  height: 100%;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+&.iswc-viewer { width: 100%; height: 100%; border: 0; padding: 0; cursor: default }
+
+  &[data-empty]::after {
+    content: $vacio;
+    display: block;
+    padding: 1.1429em;
+    font-size: 0.875em;
+    color: var(--iswc-text-soft);
+  }
+}
+
+//
+// Sin open-on-click el componente no abre nada, asi que tampoco debe insinuar con el cursor
+// que se puede hacer clic. El bloque es el mismo en todos los diagramas.
+@mixin visor-abrible($selector: ":host([open-on-click])") {
+  /* El visor es opt-in: sin `open-on-click` el componente no abre nada,
+     asi que tampoco debe insinuar con el cursor que se puede hacer clic. */
+#{$selector} { .wrap { cursor: zoom-in } }
+}
+
+//
+// El lienzo donde se dibuja el diagrama. El cuerpo es el mismo en todos; lo que cambia es el
+// nombre de la clase (.cls-svg, .vn-svg, .tl-svg...).
+@mixin lienzo-svg($clase) {
+  .#{$clase} {
+    display: block;
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    max-height: 100%;
+    margin: auto;
+    overflow: hidden;
+  }
+}

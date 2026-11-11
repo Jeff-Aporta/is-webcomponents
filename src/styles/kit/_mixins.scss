@@ -1,0 +1,159 @@
+// _mixins.scss — los mixins genericos del kit.
+//
+// Un mixin por patron que se repite en varios componentes. El contrato (specs/estilos.md):
+//
+//   1. El mixin emite el CSS EXACTAMENTE igual que la regla que sustituye.
+//   2. El mixin no elige la especificidad por su cuenta: quien llama decide.
+//   3. Sin @import: solo @use y @forward.
+//
+// Los que tienen argumentos se llaman con el valor que cambia; los que no, son fijos.
+
+// Esconde el elemento (lo que hace [hidden] y el estado vacio de una etiqueta).
+@mixin oculto {
+  display: none !important;
+}
+
+// El anillo de foco: el grosor, el color y la separacion del borde.
+@mixin foco-visible($color: var(--iswc-accent), $grosor: 2px, $separacion: -2px) {
+  outline: $grosor solid $color;
+  outline-offset: $separacion;
+}
+
+// Un control que no se puede usar.
+@mixin deshabilitado($opacidad: .6) {
+  opacity: $opacidad;
+  pointer-events: none;
+}
+
+// Lo que hay que quitarle a un boton del navegador. Los parametros son opcionales para poder
+// usar el mixin donde solo falta una parte.
+@mixin reset-boton($padding: null, $borde: null) {
+  @if $padding != null { padding: $padding; }
+  @if $borde != null { border: $borde; }
+  background: transparent;
+  color: inherit;
+  font: inherit;
+}
+
+// El texto que se corta con puntos suspensivos (una linea o varias con -webkit-line-clamp).
+@mixin truncar($lineas: 1) {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  @if $lineas == 1 {
+    white-space: nowrap;
+} @else { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: $lineas }
+}
+
+// La barra de desplazamiento fina, con su color y su grosor.
+@mixin scrollbar($color: var(--iswc-scrollbar-thumb), $grosor: .5em) {
+  scrollbar-width: thin;
+  scrollbar-color: $color transparent;
+  &::-webkit-scrollbar { inline-size: $grosor; block-size: $grosor; }
+  &::-webkit-scrollbar-thumb { background: $color; border-radius: 1em; }
+}
+
+// Un hijo que ocupa todo el espacio de su padre.
+@mixin llenar-host {
+  inset: 0;
+  inline-size: 100%;
+  block-size: 100%;
+}
+
+// La transicion de una o mas propiedades (`transicion(opacity .18s ease)`).
+@mixin transicion($props...) {
+  transition: $props;
+}
+
+// Una fila flexible: la direccion, el hueco y el alineado.
+@mixin flex($gap: null, $align: center, $dir: row) {
+  display: flex;
+  align-items: $align;
+  @if $gap != null { gap: $gap; }
+  @if $dir != row { flex-direction: $dir; }
+}
+
+// Una rejilla de columnas automaticas de ancho minimo `$min`.
+@mixin grid-auto($min: 12em, $ajuste: auto-fit) {
+  grid-template-columns: repeat($ajuste, minmax($min, 1fr));
+}
+
+//
+// Los tamanos de un control: un mapa de tamano -> mapa de propiedad -> valor.
+//
+//   @include tamanos((
+//     sm: (block-size: 2em, padding: .25em .5em, font-size: .875em),
+//     md: (block-size: 2.5em, padding: .35em .75em),
+//   ));
+//
+// Se emite como [size=...] dentro de donde se llama.
+@mixin tamanos($mapa) {
+  @each $nombre, $props in $mapa {
+    &[size="#{$nombre}"] {
+      @each $prop, $valor in $props {
+        #{$prop}: $valor;
+      }
+    }
+  }
+}
+
+//
+// Los tonos de un control: un mapa de familia -> mapa de papel -> valor.
+//
+//   @include tonos((
+//     primary: (bg: var(--iswc-color-brand), text: var(--iswc-brand-text)),
+//     neutral: (bg: var(--iswc-control-bg), text: var(--iswc-text)),
+//   ));
+//
+// Se emite como [color=...] dentro de donde se llama.
+@mixin tonos($mapa) {
+  @each $familia, $props in $mapa {
+    &[color="#{$familia}"] {
+      @each $papel, $valor in $props {
+        --_#{$papel}: #{$valor};
+      }
+    }
+  }
+}
+
+// Una fila centrada en los dos ejes (el icono de un boton, el avatar de una cabecera).
+@mixin flex-centro($gap: null) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  @if $gap != null { gap: $gap; }
+}
+
+// Una fila con el primero pegado a un lado y el ultimo al otro.
+@mixin flex-extremos($gap: null) {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  @if $gap != null { gap: $gap; }
+}
+
+/// Un control que no se puede usar, con su opacidad.
+@mixin no-permitido($opacidad: .55) {
+  cursor: not-allowed;
+  opacity: $opacidad;
+}
+
+/// La base de una tabla: el ancho, las celdas pegadas y su tipografia.
+@mixin tabla-base {
+  width: 100%;
+  border-collapse: collapse;
+  font: 0.85em/1.35 system-ui, sans-serif;
+}
+
+/// Una columna de elementos apilados.
+@mixin columna-flex($gap: .4em) {
+  display: flex;
+  flex-direction: column;
+  gap: $gap;
+}
+
+/// Un texto que hereda la tipografia del padre.
+@mixin texto-base {
+  display: block;
+  font: inherit;
+  color: var(--iswc-text);
+}

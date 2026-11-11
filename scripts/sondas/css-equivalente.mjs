@@ -4,10 +4,15 @@
 //   deno run -A --no-check scripts/sondas/css-equivalente.mjs [--guardar] [--carpeta=<dir>]
 //
 // Compila cada `src/**/*.scss` con el mismo motor del build (Dart Sass, loadPaths del build) y
-// compara el CSS con la foto guardada. La comparación es por DECLARACIÓN (selector + bloque de
-// declaraciones), en orden: el CSS puede cambiar de forma (espacios, saltos de línea) sin que
-// cambie lo que el navegador aplica. Lo que no se tolera es un selector o una declaración
-// distinta: eso es un cambio de estilo.
+// compara el CSS con la foto guardada.
+//
+// La comparacion es POR SELECTOR: para cada selector, la lista de sus bloques de declaraciones,
+// en orden. El CSS puede cambiar de forma (espacios, saltos de linea, el orden entre reglas
+// INDEPENDIENTES) sin que cambie lo que el navegador aplica. Lo que no se tolera es:
+//
+//   · un selector que aparece o desaparece;
+//   · una declaracion que cambia;
+//   · el orden de las declaraciones DENTRO de un mismo selector (ahi si cambia la cascada).
 //
 // `--guardar` toma la foto (se usa antes de un lote y se compara despues).
 import { compile } from 'sass';
@@ -42,40 +47,42 @@ function compilar(abs) {
   return r.css;
 }
 
-/** Divide el CSS en bloques (selector + declaraciones) para comparar por Declaracion. */
-function bloques(css) {
-  const out = [];
+/**
+ * Los bloques del CSS, agrupados por selector y en orden.
+ *
+ * Cada bloque es `selector -> declaraciones` (normalizadas). La clave de un selector es su
+ * texto normalizado; el valor, la lista de sus bloques en el orden en que salen.
+ */
+function porSelector(css) {
+  const out = new Map();
+  // Los comentarios se quitan antes: si no, se cuelan en el selector. El @charset tampoco es
+  // un selector: Sass lo emite al principio del CSS y hay que separarlo.
+  const limpio = css.replace(/\/\*[\s\S]*?\*\//g, '').replace(/@charset\s*"[^"]*";\s*/, '');
   let sel = '';
   let depth = 0;
   let decl = '';
-  let enAt = false;
-  for (let i = 0; i < css.length; i++) {
-    const c = css[i];
+  const cerrar = () => {
+    const clave = sel.replace(/\s+/g, ' ').trim();
+    if (!out.has(clave)) out.set(clave, []);
+    out.get(clave).push(decl.split(';').map((d) => d.replace(/\s+/g, ' ').trim()).filter(Boolean).join('; '));
+  };
+  for (const c of limpio) {
     if (c === '{') {
-      if (depth === 0) { sel = sel.trim(); decl = ''; }
-      else decl += c;
+      if (depth === 0) { sel = sel.trim(); decl = ''; } else decl += c;
       depth++;
       continue;
     }
     if (c === '}') {
       depth--;
-      if (depth === 0) {
-        out.push(sel + ' { ' + decl.split(';').map((d) => d.trim()).filter(Boolean).join('; ') + ' }');
-        sel = '';
-        decl = '';
-        enAt = false;
-      } else decl += c;
+      if (depth === 0) { cerrar(); sel = ''; decl = ''; }
+      else decl += c;
       continue;
     }
     if (depth === 0) sel += c;
     else decl += c;
-    if (c === '@' && depth === 0) enAt = true;
   }
   return out;
 }
-
-/** Normaliza un CSS a su lista de bloques. */
-const normalizar = (css) => bloques(css).map((b) => b.replace(/\s+/g, ' ').trim());
 
 const args = process.argv.slice(2);
 const guardar = args.includes('--guardar');
@@ -85,7 +92,7 @@ let errores = 0;
 for (const abs of scssFiles()) {
   const rel = relative(RAIZ, abs).replaceAll('\\', '/');
   try {
-    actual[rel] = normalizar(compilar(abs));
+    actual[rel] = { selectores: porSelector(compilar(abs)), bytes: statSync(abs).size };
   } catch (e) {
     errores++;
     console.log('  ERROR al compilar ' + rel + ': ' + (e && e.message ? e.message.split('\n')[0] : e));
@@ -93,31 +100,62 @@ for (const abs of scssFiles()) {
 }
 
 if (guardar) {
-  mkdirSync(dirname(FOTO), { recursive: true });
-  const conBytes = {};
+  const plano = {};
   for (const [k, v] of Object.entries(actual)) {
-    const abs = join(RAIZ, k);
-    conBytes[k] = { bloques: v, bytes: statSync(abs).size };
+    plano[k] = { selectores: Object.fromEntries(v.selectores), bytes: v.bytes };
   }
-  writeFileSync(FOTO, JSON.stringify(conBytes, null, 1) + '\n', 'utf8');
-  console.log('foto guardada: ' + FOTO + ' (' + Object.keys(conBytes).length + ' archivos' + (errores ? ', ' + errores + ' errores' : '') + ')');
+  mkdirSync(dirname(FOTO), { recursive: true });
+  writeFileSync(FOTO, JSON.stringify(plano, null, 1) + '\n', 'utf8');
+  console.log('foto guardada: ' + FOTO + ' (' + Object.keys(plano).length + ' archivos' + (errores ? ', ' + errores + ' errores' : '') + ')');
 } else {
-  if (!existsSync(FOTO)) { console.error('no hay foto: corre antes con --guardar'); process.exit(1); }
+  if (!existsSync(FOTO)) {
+    console.error('no hay foto: corre antes con --guardar');
+    process.exit(1);
+  }
   const antes = JSON.parse(readFileSync(FOTO, 'utf8'));
   let distintos = 0;
   for (const [k, v] of Object.entries(actual)) {
-    const a = antes[k]?.bloques;
-    if (!a) { console.log('  NUEVO: ' + k); distintos++; continue; }
-    if (a.length !== v.length) {
-      console.log('  DISTINTO (bloques ' + a.length + ' -> ' + v.length + '): ' + k);
+    const a = antes[k]?.selectores;
+    if (!a) {
+      console.log('  NUEVO: ' + k);
       distintos++;
       continue;
     }
     const cambios = [];
-    for (let i = 0; i < a.length; i++) if (a[i] !== v[i]) cambios.push('    - ' + a[i] + '\n    + ' + v[i]);
-    if (cambios.length) { console.log('  DISTINTO: ' + k); console.log(cambios.slice(0, 6).join('\n')); distintos++; }
+    // Los selectores que hay ahora y no antes (o al reves).
+    for (const sel of v.selectores.keys()) {
+      if (!(sel in a)) {
+        cambios.push('    + selector ' + sel.slice(0, 100));
+        continue;
+      }
+      const la = a[sel];
+      const lb = v.selectores.get(sel);
+      if (la.length !== lb.length) {
+        cambios.push('    - ' + sel.slice(0, 70) + ': ' + la.length + ' bloques -> ' + lb.length);
+        continue;
+      }
+      for (let i = 0; i < la.length; i++) {
+        if (la[i] !== lb[i]) {
+          cambios.push('    - ' + sel.slice(0, 70) + '\n        antes: ' + la[i].slice(0, 100) + '\n        ahora: ' + lb[i].slice(0, 100));
+          break;
+        }
+      }
+    }
+    for (const sel of Object.keys(a)) {
+      if (!v.selectores.has(sel)) cambios.push('    - selector que desaparece: ' + sel.slice(0, 100));
+    }
+    if (cambios.length) {
+      console.log('  DISTINTO: ' + k);
+      console.log(cambios.slice(0, 6).join('\n'));
+      distintos++;
+    }
   }
-  for (const k of Object.keys(antes)) if (!actual[k]) { console.log('  FUE: ' + k); distintos++; }
+  for (const k of Object.keys(antes)) {
+    if (!actual[k]) {
+      console.log('  FUE: ' + k);
+      distintos++;
+    }
+  }
   console.log('archivos: ' + Object.keys(actual).length + ' | distintos: ' + distintos + (errores ? ' | errores de compilacion: ' + errores : ''));
   if (distintos) process.exit(1);
 }
