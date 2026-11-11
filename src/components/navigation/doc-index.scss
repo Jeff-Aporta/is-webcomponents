@@ -1,16 +1,6 @@
 /* <iswc-doc-index> — índice documental con búsqueda en todo el texto. */
-:host {
-  display: flex;
-  flex-direction: column;
-  min-height: 100%;
-  box-sizing: border-box;
-  color: var(--iswc-text);
-  font-size: 1em;
-
-  &[hidden] { display: none !important; }
-}
+:host { display: flex; flex-direction: column; min-height: 100%; box-sizing: border-box; color: var(--iswc-text); font-size: 1em; &[hidden] { display: none !important; }; }
 *, *::before, *::after { box-sizing: border-box; }
-
 .buscar { padding: .875em .875em .5em; }
 input {
   width: 100%;
@@ -57,7 +47,6 @@ nav.lista { padding: .25em .5em 1.75em; flex: 1; }
 .lado { flex: none; width: 2.3396em; color: var(--iswc-text-dim); font-variant-numeric: tabular-nums; font-size: .85em; }
 .lado.ico { text-align: center; font-size: 1em; }
 .txt { flex: 1; min-width: 0; }
-
 details.grupo { margin-top: .625em; }
 details.grupo > summary {
   display: flex;

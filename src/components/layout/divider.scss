@@ -1,18 +1,7 @@
 /* iswc-divider */
 :host { --iswc-divider-color: var(--iswc-text); --opacity: 0.2; --iswc-divider-width: .0625em; --iswc-divider-spacing: 0.75em; display: block; }
 .divider { display: block; background: var(--iswc-divider-color); opacity: var(--opacity); &[hidden] { display: none; }; }
-
-.rotulo {
-  flex: 0 1 auto;
-  min-inline-size: 0;
-  color: var(--iswc-text-dim);
-  font-size: .875em;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-
-  &[hidden] { display: none; }
-}
+.rotulo { flex: 0 1 auto; min-inline-size: 0; color: var(--iswc-text-dim); font-size: .875em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; &[hidden] { display: none; }; }
 
 /* theme colors */
 :host([color="text"])      { --iswc-divider-color: var(--iswc-text); }

@@ -193,13 +193,7 @@
 
 :host(:is([checked], :state(checked))) {
 .control { background: var(--iswc-switch-accent); border-color: var(--iswc-switch-accent); }
-
-  .thumb {
-    background: var(--iswc-switch-thumb);
-    color: var(--iswc-switch-icon-checked);
-    transform: translate(calc(var(--iswc-switch-width) - var(--iswc-switch-height) + 0.05em), -50%);
-  }
-
+.thumb { background: var(--iswc-switch-thumb); color: var(--iswc-switch-icon-checked); transform: translate(calc(var(--iswc-switch-width) - var(--iswc-switch-height) + 0.05em), -50%); }
   .track-label.on  { opacity: 1; }
   .track-label.off { opacity: 0; }
 }

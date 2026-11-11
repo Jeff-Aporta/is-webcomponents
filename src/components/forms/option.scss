@@ -40,15 +40,7 @@
 }
 
 :host(:has([slot="description"])) {
-  .description {
-    display: block;
-    font-size: 0.8em;
-    line-height: 1.35;
-    color: var(--iswc-text-dim);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
+.description { display: block; font-size: 0.8em; line-height: 1.35; color: var(--iswc-text-dim); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 }
 
 :host([disabled]) {

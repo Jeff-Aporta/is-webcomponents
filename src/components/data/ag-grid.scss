@@ -89,27 +89,8 @@
   }
 }
 
-.mim-dg__quick-input {
-  border: 0;
-  outline: 0;
-  background: transparent;
-  font: inherit;
-  color: var(--iswc-text);
-  padding: 0.3em 0;
-  inline-size: 100%;
-  min-inline-size: 0;
-}
-
-.mim-dg__density {
-  display: inline-flex;
-  align-items: center;
-  flex: none;
-  gap: 0;
-  overflow: hidden;
-  border: 1px solid var(--iswc-grid-border);
-  border-radius: 999em;
-  background: var(--iswc-bg-soft);
-}
+.mim-dg__quick-input { border: 0; outline: 0; background: transparent; font: inherit; color: var(--iswc-text); padding: 0.3em 0; inline-size: 100%; min-inline-size: 0; }
+.mim-dg__density { display: inline-flex; align-items: center; flex: none; gap: 0; overflow: hidden; border: 1px solid var(--iswc-grid-border); border-radius: 999em; background: var(--iswc-bg-soft); }
 
 /* Botones base: misma forma cuadrada centrada, solo cambian tamaño/padding. */
 :is(.mim-dg__density-btn, .mim-dg__tool-btn, .mim-dg__pager-btn, .mim-dg__group-panel-btn) {
@@ -201,15 +182,7 @@
 
 .mim-dg__group-chip-arrow { opacity: 0.45; font-size: 0.85em; }
 .mim-dg__group-panel-actions { margin-inline-start: auto; display: inline-flex; gap: .143em; }
-
-.mim-dg__group-panel-btn {
-  inline-size: 1.6em;
-  block-size: 1.6em;
-  &:hover {
-    background: color-mix(in srgb, var(--iswc-accent) 16%, transparent);
-    color: var(--iswc-accent);
-  }
-}
+.mim-dg__group-panel-btn { inline-size: 1.6em; block-size: 1.6em; &:hover { background: color-mix(in srgb, var(--iswc-accent) 16%, transparent); color: var(--iswc-accent); } }
 
 /* ── Main + viewport ──────────────────────────────────────────────────── */
 
@@ -236,28 +209,10 @@
 .mim-dg__group-row-head { block-size: calc(var(--iswc-grid-header-h) * .85); }
 
 .mim-dg__pinned-top,
-.mim-dg__pinned-bottom {
-  background: var(--iswc-grid-bg);
-  &:empty { display: none; }
-  .mim-dg__row { position: relative; transform: none; block-size: var(--iswc-grid-row-h); }
-}
+.mim-dg__pinned-bottom { background: var(--iswc-grid-bg); &:empty { display: none; } .mim-dg__row { position: relative; transform: none; block-size: var(--iswc-grid-row-h); }; }
 .mim-dg__pinned-top { border-block-end: 1px solid var(--iswc-grid-border); }
-.mim-dg__pinned-bottom {
-  position: sticky;
-  inset-block-end: 0;
-  z-index: 4;
-  min-inline-size: 100%;
-  border-block-start: 1px solid var(--iswc-grid-border);
-  font-weight: 600;
-}
-
-.mim-dg__body {
-  position: relative;
-  min-block-size: 0;
-  min-inline-size: 100%;
-  contain: layout style;
-  &.iswc-animando .mim-dg__row { transition: transform .4s cubic-bezier(.2, .7, .2, 1); }
-}
+.mim-dg__pinned-bottom { position: sticky; inset-block-end: 0; z-index: 4; min-inline-size: 100%; border-block-start: 1px solid var(--iswc-grid-border); font-weight: 600; }
+.mim-dg__body { position: relative; min-block-size: 0; min-inline-size: 100%; contain: layout style; &.iswc-animando .mim-dg__row { transition: transform .4s cubic-bezier(.2, .7, .2, 1); }; }
 .mim-dg__capa { position: absolute; inset: 0; z-index: 3; pointer-events: none; > * { pointer-events: auto; }; }
 
 /* ── Secciones: izquierda y derecha sticky, centro virtualizado ───────── */
@@ -342,13 +297,7 @@
   }
 }
 .mim-dg__head-cell,
-.mim-dg__head-group {
-  font-weight: 600;
-  color: var(--iswc-grid-header-fg);
-  user-select: none;
-  outline: none;
-  &:focus-visible { box-shadow: inset 0 0 0 1px var(--iswc-grid-accent); }
-}
+.mim-dg__head-group { font-weight: 600; color: var(--iswc-grid-header-fg); user-select: none; outline: none; &:focus-visible { box-shadow: inset 0 0 0 1px var(--iswc-grid-accent); }; }
 .mim-dg__head-group { justify-content: center; border-inline-end: 1px solid var(--iswc-grid-border); }
 .mim-dg__head-cell {
   &.iswc-sortable { cursor: pointer; }
@@ -529,15 +478,7 @@
 
 .mim-dg__count-sel { color: var(--iswc-accent); font-weight: 600; }
 .mim-dg__page-size { display: inline-flex; align-items: center; gap: 0.35em; }
-
-.mim-dg__page-size-select {
-  font: inherit;
-  padding: .143em .429em;
-  border-radius: .286em;
-  border: 1px solid var(--iswc-grid-border);
-  background: var(--iswc-bg-soft);
-  color: var(--iswc-text);
-}
+.mim-dg__page-size-select { font: inherit; padding: .143em .429em; border-radius: .286em; border: 1px solid var(--iswc-grid-border); background: var(--iswc-bg-soft); color: var(--iswc-text); }
 
 .mim-dg__pager-btn {
   inline-size: 1.6em;

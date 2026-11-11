@@ -2,16 +2,7 @@
 
 .iswc-ag-detalle-toggle { all: unset; display: inline-flex; cursor: pointer; margin-inline-end: 0.25em; border-radius: 0.25em; }
 .iswc-ag-detalle-toggle:focus-visible { outline: 0.125em solid var(--iswc-color-brand); }
-
-.iswc-ag-detalle {
-  display: block;
-  box-sizing: border-box;
-  block-size: 100%;
-  padding: 0.75em;
-  overflow: auto;
-  background: var(--iswc-grid-detalle-bg, var(--iswc-bg-alt, var(--iswc-bg)));
-}
-
+.iswc-ag-detalle { display: block; box-sizing: border-box; block-size: 100%; padding: 0.75em; overflow: auto; background: var(--iswc-grid-detalle-bg, var(--iswc-bg-alt, var(--iswc-bg))); }
 .iswc-ag-panel-agrupacion { display: flex; flex-direction: column; gap: 0.75em; padding: 0.75em; }
 .iswc-ag-panel-agrupacion__modo { display: flex; align-items: center; gap: 0.5em; }
 .iswc-ag-zona { border: 0.0625em dashed var(--iswc-border); border-radius: 0.375em; padding: 0.5em; }

@@ -13,12 +13,4 @@
 }
 
 .svg { display: block; inline-size: 100%; block-size: auto; }
-
-.text {
-  margin-block-start: .2941em;
-  text-align: center;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  font-size: .85em;
-  letter-spacing: .12em;
-  color: var(--iswc-text);
-}
+.text { margin-block-start: .2941em; text-align: center; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: .85em; letter-spacing: .12em; color: var(--iswc-text); }

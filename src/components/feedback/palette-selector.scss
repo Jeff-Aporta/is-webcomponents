@@ -64,16 +64,7 @@
   &[hidden] { display: none !important; }
 }
 
-.trigger__chip {
-  display: inline-flex;
-  flex: none;
-  width: 1.6em;
-  height: 1.6em;
-  border-radius: 50%;
-  overflow: hidden;
-  box-shadow: 0 0 0 .0625em var(--iswc-border);
-  transform: rotate(-45deg);
-}
+.trigger__chip { display: inline-flex; flex: none; width: 1.6em; height: 1.6em; border-radius: 50%; overflow: hidden; box-shadow: 0 0 0 .0625em var(--iswc-border); transform: rotate(-45deg); }
 
 .chip__main,
 .chip__contrast { flex: 1 1 50%; }
@@ -159,24 +150,13 @@
   transition: transform 140ms ease;
 }
 
-.panda[aria-checked="true"] {
-  .panda__track { background: var(--iswc-color-brand, var(--iswc-accent)); }
-  .panda__thumb { background: var(--iswc-on-brand, #fff); transform: translateX(0.95em); }
-}
+.panda[aria-checked="true"] { .panda__track { background: var(--iswc-color-brand, var(--iswc-accent)); } .panda__thumb { background: var(--iswc-on-brand, #fff); transform: translateX(0.95em); }; }
 
 /* ----- Opciones ---------------------------------------------------------- */
 
 .menu { flex: 1 1 auto; overflow-y: auto; padding: 0.35em; }
 .group[hidden] { display: none; }
-
-.group__title {
-  padding: 0.6em 0.6em 0.3em;
-  font-size: 0.6875em;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--iswc-text-dim);
-}
+.group__title { padding: 0.6em 0.6em 0.3em; font-size: 0.6875em; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--iswc-text-dim); }
 
 [role="option"] {
   display: flex;
@@ -206,16 +186,7 @@
   }
 }
 
-.swatches {
-  display: inline-grid;
-  grid-template-columns: repeat(5, 0.85em);
-  flex: none;
-  height: 1.7em;
-  border-radius: 0.35em;
-  overflow: hidden;
-  box-shadow: 0 0 0 .0625em var(--iswc-border);
-}
-
+.swatches { display: inline-grid; grid-template-columns: repeat(5, 0.85em); flex: none; height: 1.7em; border-radius: 0.35em; overflow: hidden; box-shadow: 0 0 0 .0625em var(--iswc-border); }
 .sw--bg { background: var(--sw-bg, var(--iswc-bg)); }
 .sw--paper { background: var(--sw-paper, var(--iswc-bg-elev)); }
 .sw--main { background: var(--sw-main, var(--iswc-swatch, var(--iswc-accent))); }

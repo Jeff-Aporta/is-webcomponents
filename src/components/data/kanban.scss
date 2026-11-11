@@ -37,27 +37,9 @@
   }
 }
 
-.col-head {
-  display: flex;
-  align-items: center;
-  gap: .5263em;
-  padding: .7895em;
-  border-block-end: 1px solid var(--border);
-  font-size: 0.95em;
-  font-weight: 600;
-}
-
+.col-head { display: flex; align-items: center; gap: .5263em; padding: .7895em; border-block-end: 1px solid var(--border); font-size: 0.95em; font-weight: 600; }
 .title { flex: 1 1 auto; }
-
-.badge {
-  background: color-mix(in srgb, var(--accent) 25%, transparent);
-  color: var(--iswc-brand-text);
-  padding: 0.125em 0.5em;
-  border-radius: 999em;
-  font-size: 0.75em;
-  font-weight: 500;
-}
-
+.badge { background: color-mix(in srgb, var(--accent) 25%, transparent); color: var(--iswc-brand-text); padding: 0.125em 0.5em; border-radius: 999em; font-size: 0.75em; font-weight: 500; }
 .actions { display: inline-flex; align-items: center; gap: 0.25em; }
 .lane { flex: 1 1 auto; overflow-y: auto; padding: 0.5em 0.75em; display: flex; flex-direction: column; gap: 0.5em; }
 

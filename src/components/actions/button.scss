@@ -283,15 +283,7 @@
   display: flex;
   width: 100%;
 
-  .btn {
-    min-height: 0;
-    padding: var(--iswc-button-row-padding, 0.5em 0.75em);
-    justify-content: flex-start;
-    line-height: inherit;
-    text-align: start;
-    white-space: normal;
-    &:active { transform: none; }
-  }
+.btn { min-height: 0; padding: var(--iswc-button-row-padding, 0.5em 0.75em); justify-content: flex-start; line-height: inherit; text-align: start; white-space: normal; &:active { transform: none; }; }
 .btn__label { flex: 1; display: flex; align-items: center; gap: var(--iswc-button-row-gap, 0.75em); min-width: 0; line-height: inherit; }
 }
 
@@ -371,17 +363,7 @@
 
 /* Region aria-live para anunciar cambios de estado (loading → ready).
    Patrón "sr-only": visualmente oculto pero accesible para AT. */
-.btn__sr-status {
-  position: absolute;
-  width: .0625em;
-  height: .0625em;
-  padding: 0;
-  margin: -.0625em;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
-}
+.btn__sr-status { position: absolute; width: .0625em; height: .0625em; padding: 0; margin: -.0625em; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
 
 @keyframes iswc-button-spin {
   to { transform: rotate(360deg); }

@@ -114,16 +114,7 @@ nav.toc { padding: 2.1505em 1.2289em 2.4578em 1.3825em; font-size: .84em; }
 /* Cajones (celular) */
 .scrim, .drawer { display: none; }
 :host([data-movil]) {
-  .scrim {
-    display: block;
-    position: absolute;
-    inset: var(--doc-layout-bar-h) 0 0 0;
-    background: rgb(0 0 0 / .45);
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity .2s;
-    z-index: 8;
-  }
+.scrim { display: block; position: absolute; inset: var(--doc-layout-bar-h) 0 0 0; background: rgb(0 0 0 / .45); opacity: 0; pointer-events: none; transition: opacity .2s; z-index: 8; }
   .drawer {
     display: block;
     position: absolute;

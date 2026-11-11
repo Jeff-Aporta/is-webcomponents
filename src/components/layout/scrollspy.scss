@@ -20,11 +20,5 @@
   transition: background 140ms ease, color 140ms ease, box-shadow 140ms ease;
 
 &:hover { background: color-mix(in srgb, var(--iswc-bg-elev) 80%, transparent); color: var(--iswc-text); text-decoration: none; }
-
-  &.iswc-scrollspy-active {
-    background: var(--iswc-accent-bg);
-    color: var(--iswc-brand-text);
-    font-weight: 650;
-    box-shadow: inset .1922em 0 0 var(--iswc-accent);
-  }
+&.iswc-scrollspy-active { background: var(--iswc-accent-bg); color: var(--iswc-brand-text); font-weight: 650; box-shadow: inset .1922em 0 0 var(--iswc-accent); }
 }

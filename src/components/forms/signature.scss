@@ -17,15 +17,4 @@
 }
 
 .canvas { display: block; cursor: crosshair; }
-
-.hint {
-  position: absolute;
-  inset: 0;
-  display: grid;
-  place-items: center;
-  color: var(--iswc-text-dim);
-  font-size: 0.85em;
-  letter-spacing: 0.12em;
-  pointer-events: none;
-  text-transform: uppercase;
-}
+.hint { position: absolute; inset: 0; display: grid; place-items: center; color: var(--iswc-text-dim); font-size: 0.85em; letter-spacing: 0.12em; pointer-events: none; text-transform: uppercase; }

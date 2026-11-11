@@ -1,13 +1,5 @@
 /* iswc-inline-edit */
-:host {
-  display: inline-block;
-  font: inherit;
-  color: var(--iswc-text);
-  border-radius: var(--iswc-inline-edit-radius, var(--iswc-radius-sm));
-  position: relative;
-  max-inline-size: 100%;
-}
-
+:host { display: inline-block; font: inherit; color: var(--iswc-text); border-radius: var(--iswc-inline-edit-radius, var(--iswc-radius-sm)); position: relative; max-inline-size: 100%; }
 .root { position: relative; border-radius: inherit; display: inline-flex; align-items: stretch; min-inline-size: 4em; max-inline-size: 100%; }
 
 .display,
@@ -48,19 +40,7 @@
 .iswc-editing { .display { display: none; } .editor-wrap { display: inline-flex; }; }
 
 input,
-textarea {
-  flex: 1 1 auto;
-  min-inline-size: 8em;
-  border: 0;
-  outline: 0;
-  background: transparent;
-  font: inherit;
-  color: inherit;
-  padding: 0;
-  margin: 0;
-  inline-size: 100%;
-}
-
+textarea { flex: 1 1 auto; min-inline-size: 8em; border: 0; outline: 0; background: transparent; font: inherit; color: inherit; padding: 0; margin: 0; inline-size: 100%; }
 textarea { resize: vertical; min-block-size: var(--iswc-inline-edit-min-h, 4em); max-block-size: 16em; font-family: inherit; }
 
 :host(:focus-within) {

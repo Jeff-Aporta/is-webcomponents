@@ -193,12 +193,7 @@
 .trvwr-itm-sum--drg-forbidden-aftr::after { background: var(--iswc-color-danger); box-shadow: -.3125em 0 0 .1875em var(--iswc-color-danger); }
 
 /* Indicadores "into" (contenedor receptor): outline dashed. */
-.trvwr-itm-sum--drg-into {
-  border-radius: 0.25em;
-  outline: 2px dashed var(--iswc-accent, var(--iswc-primary));
-  outline-offset: -2px;
-  background: var(--trvwr-drp-ndctr-bg);
-}
+.trvwr-itm-sum--drg-into { border-radius: 0.25em; outline: 2px dashed var(--iswc-accent, var(--iswc-primary)); outline-offset: -2px; background: var(--trvwr-drp-ndctr-bg); }
 .trvwr-itm-sum--drg-forbidden-into {
   border-radius: 0.25em;
   outline: 2px dashed var(--iswc-color-danger);

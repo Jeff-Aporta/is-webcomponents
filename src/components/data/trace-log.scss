@@ -36,17 +36,7 @@
 .resumen { opacity: 0.75; }
 .cuenta { font-size: 0.9em; }
 .vivo { margin-inline-start: auto; color: var(--iswc-success-text); font-weight: 600; animation: latido 1.2s ease-in-out infinite; }
-
-.barra {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.4em;
-  padding: 0.25em 0.6em;
-  border-block-start: 0.0625em solid var(--iswc-border);
-}
-
+.barra { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.4em; padding: 0.25em 0.6em; border-block-start: 0.0625em solid var(--iswc-border); }
 .filtros { display: flex; gap: 0.25em; }
 
 .filtro,

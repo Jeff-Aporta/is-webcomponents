@@ -107,11 +107,7 @@
 }
 .toolbar button:hover { background: var(--_control-hover); color: var(--_text); }
 .toolbar button:focus-visible { outline: 2px solid var(--_brand); outline-offset: 1px; }
-.toolbar button[aria-pressed="true"] {
-  background: var(--_brand-soft-active);
-  border-color: color-mix(in srgb, var(--_brand) 45%, transparent);
-  color: var(--_brand);
-}
+.toolbar button[aria-pressed="true"] { background: var(--_brand-soft-active); border-color: color-mix(in srgb, var(--_brand) 45%, transparent); color: var(--_brand); }
 .toolbar button.danger { color: var(--_danger); }
 .toolbar button.danger:hover { background: var(--_danger-soft); }
 .toolbar button iswc-icon { font-size: 1.3205em; line-height: 1; }

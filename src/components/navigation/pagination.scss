@@ -2,19 +2,7 @@
 :host { display: block; width: 100%; max-width: 100%; min-width: 0; color: inherit; font-size: 1em; }
 :host([hidden]) { display: none !important; }
 :host([disabled]) { opacity: 0.55; pointer-events: none; }
-
-.base {
-  --_alto: 2.15em;
-  --_hueco: 0.15em;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
-  gap: 0.55em 0.85em;
-  width: 100%;
-  min-width: 0;
-  padding: 0.35em 0;
-}
+.base { --_alto: 2.15em; --_hueco: 0.15em; display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 0.55em 0.85em; width: 100%; min-width: 0; padding: 0.35em 0; }
 
 /* Lateral estrecho: chips y select más bajos para no dominar la columna. */
 :host([compact]) {
@@ -24,31 +12,8 @@
 .carril { flex-basis: 10em; min-width: min(100%, 10em); }
 }
 
-.resumen {
-  position: absolute;
-  width: 0.0625em;
-  height: 0.0625em;
-  margin: -0.0625em;
-  padding: 0;
-  overflow: hidden;
-  border: 0;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-}
-
-.tamano {
-  width: auto;
-  min-width: 4.2em;
-  max-width: 6em;
-  font-size: 0.7em;
-
-  &::part(base) {
-    min-height: 1.75em;
-    padding-inline: 0.55em 0.25em;
-    border-radius: 0.35em;
-  }
-}
-
+.resumen { position: absolute; width: 0.0625em; height: 0.0625em; margin: -0.0625em; padding: 0; overflow: hidden; border: 0; clip: rect(0, 0, 0, 0); white-space: nowrap; }
+.tamano { width: auto; min-width: 4.2em; max-width: 6em; font-size: 0.7em; &::part(base) { min-height: 1.75em; padding-inline: 0.55em 0.25em; border-radius: 0.35em; } }
 .carril { display: flex; flex: 1 1 16em; align-items: center; gap: var(--_hueco); min-width: min(100%, 16em); max-width: 100%; font-size: 1em; }
 
 .flecha,

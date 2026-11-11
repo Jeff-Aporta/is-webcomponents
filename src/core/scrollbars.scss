@@ -24,10 +24,7 @@
 :host * { scrollbar-width: thin; scrollbar-color: var(--iswc-scrollbar-thumb, var(--iswc-scrollbar-thumb-fallback)) var(--iswc-scrollbar-track); }
 
 :host::-webkit-scrollbar,
-:host *::-webkit-scrollbar {
-  width: var(--iswc-scrollbar-size, var(--iswc-scrollbar-size-fallback));
-  height: var(--iswc-scrollbar-size, var(--iswc-scrollbar-size-fallback));
-}
+:host *::-webkit-scrollbar { width: var(--iswc-scrollbar-size, var(--iswc-scrollbar-size-fallback)); height: var(--iswc-scrollbar-size, var(--iswc-scrollbar-size-fallback)); }
 
 :host::-webkit-scrollbar-track,
 :host *::-webkit-scrollbar-track { background: var(--iswc-scrollbar-track); border-radius: var(--iswc-scrollbar-radius); }

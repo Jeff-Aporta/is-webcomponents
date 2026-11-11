@@ -18,43 +18,16 @@
 .iswc-ag-editor--error { box-shadow: inset 0 0 0 0.125em var(--iswc-grid-editor-error, var(--iswc-danger, crimson)); }
 .iswc-ag-editor-numero { display: flex; align-items: center; gap: 0.125em; }
 .iswc-ag-editor-numero > iswc-input { flex: 1 1 auto; min-width: 0; }
-
-.iswc-ag-editor-paso {
-  flex: 0 0 1.5em;
-  height: 1.5em;
-  padding: 0;
-  border: none;
-  border-radius: 0.25em;
-  color: inherit;
-  background: var(--iswc-bg-2, transparent);
-  cursor: pointer;
-}
-
+.iswc-ag-editor-paso { flex: 0 0 1.5em; height: 1.5em; padding: 0; border: none; border-radius: 0.25em; color: inherit; background: var(--iswc-bg-2, transparent); cursor: pointer; }
 .iswc-ag-rico { display: flex; flex-direction: column; min-width: 14em; }
 .iswc-ag-rico-lista { max-height: 16em; margin-top: 0.25em; overflow-y: auto; padding-block: var(--iswc-ag-rico-antes, 0) var(--iswc-ag-rico-despues, 0); }
-
-.iswc-ag-rico-opcion {
-  box-sizing: border-box;
-  height: 2em;
-  padding-inline: 0.5em;
-  overflow: hidden;
-  line-height: 2em;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  cursor: pointer;
-}
-
+.iswc-ag-rico-opcion { box-sizing: border-box; height: 2em; padding-inline: 0.5em; overflow: hidden; line-height: 2em; white-space: nowrap; text-overflow: ellipsis; cursor: pointer; }
 .iswc-ag-rico-opcion[data-activa] { background: var(--iswc-grid-row-hover, var(--iswc-bg-2)); }
 .iswc-ag-rico-opcion[aria-selected='true'] { font-weight: 600; color: var(--iswc-color-brand); }
 .iswc-ag-cell-batch-edit { background: var(--iswc-grid-batch-bg, color-mix(in srgb, var(--iswc-color-brand) 14%, transparent)); }
 
 /* Rangos: por clase de celda, para que cruce columnas y filas fijadas. */
-.iswc-ag-rango {
-  position: relative;
-  background-image: linear-gradient(var(--iswc-grid-rango-bg, color-mix(in srgb, var(--iswc-color-brand) 16%, transparent)) 0 0);
-  user-select: none;
-}
-
+.iswc-ag-rango { position: relative; background-image: linear-gradient(var(--iswc-grid-rango-bg, color-mix(in srgb, var(--iswc-color-brand) 16%, transparent)) 0 0); user-select: none; }
 .iswc-ag-rango-arriba { box-shadow: inset 0 0.0625em 0 var(--iswc-grid-rango-borde, var(--iswc-color-brand)); }
 .iswc-ag-rango-abajo { box-shadow: inset 0 -0.0625em 0 var(--iswc-grid-rango-borde, var(--iswc-color-brand)); }
 .iswc-ag-rango-izquierda { box-shadow: inset 0.0625em 0 0 var(--iswc-grid-rango-borde, var(--iswc-color-brand)); }

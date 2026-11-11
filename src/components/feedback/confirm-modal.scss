@@ -48,15 +48,7 @@
 }
 
 .heading { margin: 0 0 0.45em; font-size: 1.087em; font-weight: 700; &[hidden] { display: none; }; }
-
-.message {
-  margin-bottom: .9783em;
-  min-block-size: 0;
-  overflow-y: auto;
-  overflow-wrap: anywhere;
-  line-height: 1.45;
-  color: var(--iswc-text-soft, var(--iswc-confirm-modal-text));
-}
+.message { margin-bottom: .9783em; min-block-size: 0; overflow-y: auto; overflow-wrap: anywhere; line-height: 1.45; color: var(--iswc-text-soft, var(--iswc-confirm-modal-text)); }
 
 /* Los saltos de línea del atributo message se respetan: listas cortas sin HTML. */
 .message-text { white-space: pre-line; }

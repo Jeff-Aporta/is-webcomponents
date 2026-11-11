@@ -99,13 +99,7 @@
 
 .splits__head { display: flex; align-items: baseline; justify-content: space-between; gap: 0.5em; }
 .splits__title { margin: 0; font-size: 0.95em; font-weight: 600; letter-spacing: 0; }
-
-.splits__hint {
-  font-size: 0.7em;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--iswc-text-soft, color-mix(in srgb, currentColor 70%, transparent));
-}
+.splits__hint { font-size: 0.7em; text-transform: uppercase; letter-spacing: 0.06em; color: var(--iswc-text-soft, color-mix(in srgb, currentColor 70%, transparent)); }
 
 .splits__code {
   width: 100%;
@@ -135,15 +129,7 @@
 .drops { border: 0.0625em solid var(--pg-border); border-radius: var(--pg-radius); background: var(--pg-bg-elev); padding: 0.85em; box-sizing: border-box; }
 .drops__summary { cursor: pointer; font-weight: 600; display: flex; align-items: center; gap: 0.5em; user-select: none; list-style: none; }
 .drops__summary::-webkit-details-marker { display: none; }
-
-.drops__summary::before {
-  content: "▸";
-  display: inline-block;
-  transition: transform 0.15s ease;
-  font-size: 0.8em;
-  color: var(--iswc-text-soft, color-mix(in srgb, currentColor 70%, transparent));
-}
-
+.drops__summary::before { content: "▸"; display: inline-block; transition: transform 0.15s ease; font-size: 0.8em; color: var(--iswc-text-soft, color-mix(in srgb, currentColor 70%, transparent)); }
 .drops[open] .drops__summary::before { transform: rotate(90deg); }
 .drops__count { margin-left: auto; font-weight: 400; font-size: 0.85em; color: var(--iswc-text-soft, color-mix(in srgb, currentColor 70%, transparent)); }
 .drops__list { margin-top: 0.85em; display: flex; flex-direction: column; gap: 0.5em; }

@@ -110,18 +110,7 @@
 }
 
 .punto { width: 0.375em; height: 0.375em; border-radius: 50%; background: currentColor; }
-
-.nombre {
-  margin-bottom: 0.25em;
-  color: var(--iswc-text-soft);
-  font-size: 0.75em;
-  font-weight: 700;
-  letter-spacing: 0.03em;
-  text-transform: uppercase;
-
-  &[hidden] { display: none; }
-}
-
+.nombre { margin-bottom: 0.25em; color: var(--iswc-text-soft); font-size: 0.75em; font-weight: 700; letter-spacing: 0.03em; text-transform: uppercase; &[hidden] { display: none; }; }
 .progreso { display: flex; flex-direction: column; align-items: flex-start; gap: 0.375em; margin: 0 0 0.625em; &[hidden] { display: none; }; }
 
 .paso {

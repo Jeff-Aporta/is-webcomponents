@@ -116,14 +116,7 @@
 .dg-legend-item[aria-pressed=false] .dg-legend-label { text-decoration: line-through; }
 
 /* ── Tipografía inline (markdown de las etiquetas) ── */
-.tk-inline-code {
-  font-family: var(--iswc-mono);
-  font-size: 0.88em;
-  padding: 0.08em 0.32em;
-  border-radius: .2841em;
-  background: color-mix(in srgb, var(--iswc-accent) 12%, transparent);
-}
-
+.tk-inline-code { font-family: var(--iswc-mono); font-size: 0.88em; padding: 0.08em 0.32em; border-radius: .2841em; background: color-mix(in srgb, var(--iswc-accent) 12%, transparent); }
 .tk-inline-link { color: var(--iswc-brand-text); }
 .tk-inline-icon { inline-size: 0.95em; block-size: 0.95em; vertical-align: -0.12em; margin: 0 0.22em; }
 

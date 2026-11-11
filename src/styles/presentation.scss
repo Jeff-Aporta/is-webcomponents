@@ -1261,14 +1261,7 @@ table.ref {
 
 /* --- Card preview helpers (iswc-card) -------------------------------- */
 
-.card-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 16px;
-  margin-block: 14px 28px;
-
-  > iswc-card { align-self: stretch; }
-}
+.card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-block: 14px 28px; > iswc-card { align-self: stretch; }; }
 .card-meta { font-size: 0.85rem; color: var(--iswc-text-soft); margin: 6px 0 0; line-height: 1.45; }
 .card-row-actions { display: flex; gap: 8px; flex-wrap: wrap; }
 .card-stage-h {

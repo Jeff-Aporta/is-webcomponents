@@ -129,15 +129,7 @@ slot { display: none; }
   &:hover .tip { opacity: 1; }
 }
 
-.bar {
-  position: relative;
-  inline-size: 100%;
-  block-size: .1875em;
-  border-radius: .125em;
-  background: rgb(255 255 255 / 28%);
-  transition: block-size 120ms ease;
-  overflow: hidden;
-}
+.bar { position: relative; inline-size: 100%; block-size: .1875em; border-radius: .125em; background: rgb(255 255 255 / 28%); transition: block-size 120ms ease; overflow: hidden; }
 
 :is(.buffered, .played) {
   position: absolute;
@@ -244,16 +236,7 @@ iswc-button:is(.big-play, .iconbtn)::part(button) {
   &:focus-visible { outline: none; }
 }
 
-.time {
-  flex-shrink: 0;
-  margin-inline: 0.4em 0.2em;
-  font-size: 0.78em;
-  font-variant-numeric: tabular-nums;
-  white-space: nowrap;
-  opacity: 0.92;
-
-  & .sep { opacity: 0.6; margin-inline: 0.15em; }
-}
+.time { flex-shrink: 0; margin-inline: 0.4em 0.2em; font-size: 0.78em; font-variant-numeric: tabular-nums; white-space: nowrap; opacity: 0.92; & .sep { opacity: 0.6; margin-inline: 0.15em; }; }
 
 /* ── Volumen: se despliega al hover, como YouTube ─────────────── */
 .vol {

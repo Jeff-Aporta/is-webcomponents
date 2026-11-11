@@ -134,14 +134,7 @@
 
 :host([orientation="vertical"]) {
 .form-control { inline-size: fit-content; }
-
-  .base {
-    inline-size: var(--iswc-slider-thumb-size);
-    block-size: var(--iswc-slider-length);
-    margin-block: calc(var(--iswc-slider-thumb-size) / 2);
-    margin-inline: 0.55em;
-  }
-
+.base { inline-size: var(--iswc-slider-thumb-size); block-size: var(--iswc-slider-length); margin-block: calc(var(--iswc-slider-thumb-size) / 2); margin-inline: 0.55em; }
 .rail { inset-block: 0; inset-inline-start: 50%; inline-size: var(--iswc-slider-track-size); translate: -50% 0; }
 .track { inset-inline-start: 50%; inline-size: var(--iswc-slider-track-size); translate: -50% 0; }
 .mark { inset-block-end: var(--pos); inset-inline-start: 50%; translate: -50% 50%; }

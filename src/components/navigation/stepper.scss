@@ -27,14 +27,7 @@
    un descendiente, así que la orientación se lee del host del paso. */
 :host(iswc-stepper-step[data-orientation="horizontal"]) {
   .indicator { position: static; }
-  .line {
-    position: absolute;
-    inset-block-start: .9375em;
-    inset-inline-start: calc(50% + 1.25em);
-    inline-size: calc(100% - 2em);
-    block-size: .125em;
-    min-block-size: 0;
-  }
+.line { position: absolute; inset-block-start: .9375em; inset-inline-start: calc(50% + 1.25em); inline-size: calc(100% - 2em); block-size: .125em; min-block-size: 0; }
 .step { flex-direction: column; align-items: center; gap: 0; text-align: center; }
   .meta { margin-block-start: 0.5em; }
 }

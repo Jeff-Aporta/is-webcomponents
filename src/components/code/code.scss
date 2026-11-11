@@ -153,17 +153,7 @@
      contenedor sea más alto que el contenido. */
 }
 .editor-host .ic-gutter { align-self: flex-start; }
-.editor-host .ic-native {
-  flex: 1 1 auto;
-  margin: 0;
-  padding: 0.8em 1.0857em;
-  font: inherit;
-  color: inherit;
-  background: transparent;
-  white-space: pre;
-  tab-size: 2;
-  min-inline-size: max-content;
-}
+.editor-host .ic-native { flex: 1 1 auto; margin: 0; padding: 0.8em 1.0857em; font: inherit; color: inherit; background: transparent; white-space: pre; tab-size: 2; min-inline-size: max-content; }
 .editor-host .ic-gutter {
   flex: 0 0 auto;
   position: sticky;
@@ -194,14 +184,7 @@
      min-height) el <pre> queda recortado. Por eso: stretch al alto del
      contenedor + min-height de una línea + padding como respaldo. */
 }
-.editor-host .ic-edit {
-  position: relative;
-  flex: 1 1 auto;
-  align-self: stretch;
-  min-inline-size: 0;
-  min-block-size: calc(var(--iswc-code-line-height) * 1em + 1.6em);
-  overflow: hidden;
-}
+.editor-host .ic-edit { position: relative; flex: 1 1 auto; align-self: stretch; min-inline-size: 0; min-block-size: calc(var(--iswc-code-line-height) * 1em + 1.6em); overflow: hidden; }
 .editor-host .ic-edit .ic-native {
   position: absolute;
   inset-block-start: 0;

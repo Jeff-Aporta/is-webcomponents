@@ -441,15 +441,4 @@ iswc-doc-demo { display: contents; }
 
 /* El nav conserva su lista vertical dentro del drawer; lo que sobra ahí es el
    cromo de columna (borde propio, fondo, alto completo). */
-.shell-nav-drawer {
-  --size: min(300px, 88vw);
-  --spacing: 0.9rem;
-
-  & .shell-nav {
-    block-size: auto;
-    padding: 0;
-    border-inline-end: 0;
-    background: none;
-    overflow: visible;
-  }
-}
+.shell-nav-drawer { --size: min(300px, 88vw); --spacing: 0.9rem; & .shell-nav { block-size: auto; padding: 0; border-inline-end: 0; background: none; overflow: visible; } }

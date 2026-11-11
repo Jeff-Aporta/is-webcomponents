@@ -79,14 +79,7 @@
 .nav { display: flex; align-items: stretch; align-self: stretch; flex: 1 1 auto; min-width: 0; }
 .actions { display: flex; align-items: center; flex: none; gap: 0.35em; margin-inline-start: auto; }
 .body { display: flex; flex: 1 1 auto; min-height: 0; }
-
-.sidebar {
-  flex: none;
-  width: var(--iswc-shell-sidebar-width);
-  overflow-y: auto;
-  overscroll-behavior: contain;
-  border-inline-end: 1px solid var(--iswc-shell-sidebar-border);
-}
+.sidebar { flex: none; width: var(--iswc-shell-sidebar-width); overflow-y: auto; overscroll-behavior: contain; border-inline-end: 1px solid var(--iswc-shell-sidebar-border); }
 
 .main {
   display: flex;

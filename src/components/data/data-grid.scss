@@ -49,16 +49,7 @@
 
 /* ── Toolbar ──────────────────────────────────────────────────────────── */
 
-.toolbar {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.35em;
-  padding: 0.5em 0.6em;
-  border-block-end: 1px solid var(--iswc-grid-border);
-  background: var(--iswc-grid-bg);
-}
-
+.toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 0.35em; padding: 0.5em 0.6em; border-block-end: 1px solid var(--iswc-grid-border); background: var(--iswc-grid-bg); }
 .tool-gap { flex: 1; }
 .tool { white-space: nowrap; flex: 0 0 auto; font-size: 0.9em; --iswc-button-gap: 0.4em; }
 .tool > :first-child { margin-inline-end: 0.4em; }
@@ -87,16 +78,7 @@
   &[hidden] { display: none; }
 }
 
-.badge {
-  min-inline-size: 1.1em;
-  padding: 0 0.25em;
-  border-radius: 1em;
-  background: var(--iswc-grid-accent);
-  color: #fff;
-  font-size: 0.75em;
-  line-height: 1.4;
-  text-align: center;
-}
+.badge { min-inline-size: 1.1em; padding: 0 0.25em; border-radius: 1em; background: var(--iswc-grid-accent); color: #fff; font-size: 0.75em; line-height: 1.4; text-align: center; }
 
 /* ── Viewport ─────────────────────────────────────────────────────────── */
 

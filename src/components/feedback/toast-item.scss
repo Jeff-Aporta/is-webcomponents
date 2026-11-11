@@ -55,18 +55,7 @@
 }
 
 /* El TS la oculta sin ícono asignado: la columna solo existe si hay ícono. */
-.icon {
-  display: inline-flex;
-  flex: none;
-  align-items: center;
-  font-size: 1.25em;
-  line-height: 0;
-  margin-top: 0.1em;
-  color: var(--_accent);
-
-  &[hidden] { display: none; }
-}
-
+.icon { display: inline-flex; flex: none; align-items: center; font-size: 1.25em; line-height: 0; margin-top: 0.1em; color: var(--_accent); &[hidden] { display: none; }; }
 .message { flex: 1; min-width: 0; line-height: 1.4; overflow-wrap: anywhere; }
 
 /* Un mensaje larguísimo no se come la pantalla; el detalle queda en iswc-after-show. */
@@ -92,16 +81,7 @@
   &:hover { opacity: 1; }
 }
 
-.progress {
-  position: absolute;
-  inset-inline: 0;
-  bottom: 0;
-  height: 0.2em;
-  background: color-mix(in srgb, var(--_accent) 20%, transparent);
-
-  &[hidden] { display: none !important; }
-}
-
+.progress { position: absolute; inset-inline: 0; bottom: 0; height: 0.2em; background: color-mix(in srgb, var(--_accent) 20%, transparent); &[hidden] { display: none !important; }; }
 .progress-bar { height: 100%; width: 100%; background: var(--_accent); transform-origin: left center; }
 
 /* Spinner del toast loading (toaster.promise): el iswc-icon marcado con

@@ -1,14 +1,7 @@
 @use 'kit' as *;
 /* iswc-full-calendar */
 :host { @include texto-base(); --_row-h: 4em; }
-
-.root {
-  display: flex; flex-direction: column;
-  border: 1px solid var(--iswc-border);
-  border-radius: var(--iswc-radius);
-  background: var(--iswc-bg-elev);
-  overflow: hidden;
-}
+.root { display: flex; flex-direction: column; border: 1px solid var(--iswc-border); border-radius: var(--iswc-radius); background: var(--iswc-bg-elev); overflow: hidden; }
 
 .toolbar {
   display: flex; align-items: center;

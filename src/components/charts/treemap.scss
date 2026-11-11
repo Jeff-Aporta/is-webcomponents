@@ -30,27 +30,9 @@
   flex-direction: column;
 }
 .wrap.iswc-viewer { inline-size: 100%; block-size: 100%; border: 0; padding: 0; cursor: default; }
-.wrap[data-empty]::after {
-  content: "Treemap no disponible (payload inválido).";
-  display: block;
-  padding: 1.1429em;
-  font-size: 0.875em;
-  color: var(--iswc-text-soft);
-}
-
+.wrap[data-empty]::after { content: "Treemap no disponible (payload inválido)."; display: block; padding: 1.1429em; font-size: 0.875em; color: var(--iswc-text-soft); }
 .slot-hidden { @include oculto; }
-
-.tm-svg {
-  display: block;
-  position: relative;
-  z-index: 1;
-  inline-size: 100%;
-  block-size: 100%;
-  max-inline-size: 100%;
-  max-block-size: 100%;
-  margin: auto;
-  overflow: hidden;
-}
+.tm-svg { display: block; position: relative; z-index: 1; inline-size: 100%; block-size: 100%; max-inline-size: 100%; max-block-size: 100%; margin: auto; overflow: hidden; }
 
 /* ── Nodos ── */
 .tm-node {

@@ -1,32 +1,10 @@
 // <iswc-server-api-docs> — endpoints de la API de un server al estilo Swagger (ver server-api-docs.md).
-:host {
-  display: block;
-  position: relative;
-  height: 100%;
-  min-height: 0;
-  color: var(--iswc-text);
-  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  line-height: 1.6;
-}
-
+:host { display: block; position: relative; height: 100%; min-height: 0; color: var(--iswc-text); font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; line-height: 1.6; }
 * { box-sizing: border-box; }
 iswc-doc-layout { height: 100%; }
 
 // Marca de la barra (la del documento si la app no pone la suya)
-.marca {
-  display: inline-flex;
-  align-items: center;
-  gap: .516em;
-  min-width: 0;
-
-  .marca-titulo {
-    font-weight: 600;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-}
-
+.marca { display: inline-flex; align-items: center; gap: .516em; min-width: 0; .marca-titulo { font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } }
 .indice { display: block; min-height: 100%; }
 
 // Página (portada u operación)
@@ -190,16 +168,7 @@ iswc-doc-layout { height: 100%; }
 
 // Estilo ISWC (el de los adjuntos de docs): lienzo claro en ambos temas; el diagrama lee su modo del
 // contenedor `data-theme="light"`.
-.lienzo-iswc {
-  margin: 0.4em 0 1.2em;
-  padding: .5em;
-  max-width: 100%;
-  overflow-x: auto;
-  border: 1px solid var(--iswc-border);
-  border-radius: .625em;
-  background: #ffffff;
-}
-
+.lienzo-iswc { margin: 0.4em 0 1.2em; padding: .5em; max-width: 100%; overflow-x: auto; border: 1px solid var(--iswc-border); border-radius: .625em; background: #ffffff; }
 .secuencia { display: block; min-width: 36em; }
 
 // La tabla se adapta al ancho REAL del contenido (con o sin paneles laterales): sin grupo por debajo de
@@ -316,22 +285,7 @@ iswc-doc-layout { height: 100%; }
   }
 }
 
-.respuesta {
-  margin-top: .75em;
-
-  .estado-linea {
-    display: flex;
-    align-items: center;
-    gap: .625em;
-    margin: 0;
-  }
-
-  .tiempo {
-    color: var(--iswc-text-dim);
-    font-size: 0.9em;
-  }
-}
-
+.respuesta { margin-top: .75em; .estado-linea { display: flex; align-items: center; gap: .625em; margin: 0; } .tiempo { color: var(--iswc-text-dim); font-size: 0.9em; } }
 .pager { margin-top: 4.5752em; padding-top: 1.7974em; border-top: 1px solid var(--iswc-border); }
 .cargando { display: flex; align-items: center; gap: .625em; margin: 0; padding: 2em 0; color: var(--iswc-text-dim); }
 

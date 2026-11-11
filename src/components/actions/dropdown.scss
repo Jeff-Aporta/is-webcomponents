@@ -19,20 +19,7 @@
 .trigger-wrap { display: inline-flex; vertical-align: middle; align-items: center; }
 
 /* Dialog viewport completo en top layer → no lo tapen secciones/overflow */
-.popup {
-  position: fixed;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  max-width: none;
-  max-height: none;
-  margin: 0;
-  padding: 0;
-  border: none;
-  background: transparent;
-  overflow: visible;
-  outline: none;
-}
+.popup { position: fixed; inset: 0; width: 100%; height: 100%; max-width: none; max-height: none; margin: 0; padding: 0; border: none; background: transparent; overflow: visible; outline: none; }
 /* Sin variante el fondo solo atrapa el clic fuera; `basic` es el velo modal del kit. */
 .popup::backdrop { background: transparent; }
 :host([backdrop-variant="basic"]) .popup::backdrop {

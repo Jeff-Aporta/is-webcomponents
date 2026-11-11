@@ -56,15 +56,5 @@
   [hidden] { display: none; }
 }
 
-.texto {
-  flex: 1;
-  min-width: 0;
-  overflow: hidden;
-  color: var(--iswc-text);
-  font-weight: 700;
-  letter-spacing: 0.01em;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
+.texto { flex: 1; min-width: 0; overflow: hidden; color: var(--iswc-text); font-weight: 700; letter-spacing: 0.01em; text-overflow: ellipsis; white-space: nowrap; }
 .estado { flex: none; color: var(--_texto); font-size: 0.86em; font-weight: 600; letter-spacing: 0.02em; text-transform: lowercase; }

@@ -21,16 +21,7 @@
 }
 
 .cdn__head { display: grid; gap: 0.25em; }
-
-.cdn__title {
-  margin: 0;
-  font-size: 0.78em;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: color-mix(in srgb, var(--iswc-accent) 50%, var(--iswc-text));
-}
-
+.cdn__title { margin: 0; font-size: 0.78em; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: color-mix(in srgb, var(--iswc-accent) 50%, var(--iswc-text)); }
 .cdn__list { display: grid; gap: 0.65em; margin: 0; padding: 0; list-style: none; }
 
 .cdn__row {
@@ -132,22 +123,8 @@
 .cdn__dep-note { margin: 0.4em 0 0; font-size: 0.78em; line-height: 1.45; color: var(--iswc-cdn-snippet-text-dim); }
 
 /* Skill simple (Paty): enlaces + ojo, sin visor MD. */
-.cdn__agents {
-  display: grid;
-  gap: 0.55em;
-  margin-top: 0.25em;
-  padding-top: 0.9em;
-  border-top: 1px solid var(--iswc-cdn-snippet-border, var(--iswc-border-soft));
-}
-
-.cdn__docs-title {
-  margin: 0;
-  font-size: 0.72em;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: color-mix(in srgb, var(--iswc-accent) 55%, var(--iswc-text));
-}
+.cdn__agents { display: grid; gap: 0.55em; margin-top: 0.25em; padding-top: 0.9em; border-top: 1px solid var(--iswc-cdn-snippet-border, var(--iswc-border-soft)); }
+.cdn__docs-title { margin: 0; font-size: 0.72em; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: color-mix(in srgb, var(--iswc-accent) 55%, var(--iswc-text)); }
 
 .cdn__skill {
   display: flex;

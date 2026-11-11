@@ -69,14 +69,7 @@ iswc-icon { display: inline-block; flex: none; inline-size: 1em; block-size: 1em
 }
 
 /* ---- Barra de fórmulas ---- */
-.fbar {
-  display: flex;
-  align-items: stretch;
-  gap: 0.25em;
-  padding: 0.2em 0.35em;
-  border-block-end: thin solid var(--iswc-border);
-  background: var(--iswc-bg-elev);
-}
+.fbar { display: flex; align-items: stretch; gap: 0.25em; padding: 0.2em 0.35em; border-block-end: thin solid var(--iswc-border); background: var(--iswc-bg-elev); }
 
 .namebox, .fx-input {
   font: inherit;
@@ -360,18 +353,7 @@ table.grid {
 }
 
 .chart-title { flex: 1 1 auto; min-block-size: 1em; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
-
-.chart-x {
-  display: inline-flex;
-  padding: 0.1em;
-  border: 0;
-  background: transparent;
-  color: var(--iswc-text-soft);
-  font: inherit;
-  cursor: pointer;
-
-  &:hover { color: var(--iswc-danger, #c62828); }
-}
+.chart-x { display: inline-flex; padding: 0.1em; border: 0; background: transparent; color: var(--iswc-text-soft); font: inherit; cursor: pointer; &:hover { color: var(--iswc-danger, #c62828); }; }
 
 .chart-size {
   position: absolute;
@@ -383,15 +365,7 @@ table.grid {
   cursor: nwse-resize;
 }
 
-.guide {
-  position: absolute;
-  z-index: 9;
-  background: var(--iswc-accent);
-  pointer-events: none;
-
-  &.v { inline-size: 0.1em; block-size: 100%; }
-  &.h { block-size: 0.1em; inline-size: 100%; }
-}
+.guide { position: absolute; z-index: 9; background: var(--iswc-accent); pointer-events: none; &.v { inline-size: 0.1em; block-size: 100%; } &.h { block-size: 0.1em; inline-size: 100%; }; }
 
 /* ---- Pestañas y estado ---- */
 .tabs {
@@ -511,20 +485,7 @@ table.grid {
 
 /* ---- Menús ---- */
 .menu iswc-icon { font-size: 1.05em; }
-
-.menu > button.item {
-  gap: 0.6em;
-  min-inline-size: 13em;
-
-  kbd {
-    margin-inline-start: auto;
-    padding-inline-start: 1.2em;
-    font: inherit;
-    font-size: 0.8em;
-    color: var(--iswc-text-soft);
-  }
-}
-
+.menu > button.item { gap: 0.6em; min-inline-size: 13em; kbd { margin-inline-start: auto; padding-inline-start: 1.2em; font: inherit; font-size: 0.8em; color: var(--iswc-text-soft); } }
 .mn-noicon { inline-size: 1.05em; }
 .mn-sep { margin: 0.25em 0; border: 0; border-block-start: thin solid var(--iswc-border-soft); }
 

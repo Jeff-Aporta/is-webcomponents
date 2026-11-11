@@ -19,16 +19,7 @@
   border: 1px solid var(--iswc-carousel-control-border);
 }
 
-.viewport {
-  inline-size: 100%;
-  block-size: 100%;
-  overflow: auto;
-  scroll-behavior: smooth;
-  scroll-snap-type: x mandatory;
-  scrollbar-width: none;
-
-  &::-webkit-scrollbar { display: none; }
-}
+.viewport { inline-size: 100%; block-size: 100%; overflow: auto; scroll-behavior: smooth; scroll-snap-type: x mandatory; scrollbar-width: none; &::-webkit-scrollbar { display: none; }; }
 
 /* Variante vertical: snap en Y. */
 .carousel[data-orientation="vertical"] .viewport { scroll-snap-type: y mandatory; }

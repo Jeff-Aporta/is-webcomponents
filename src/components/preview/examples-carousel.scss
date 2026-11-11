@@ -26,17 +26,7 @@
 /* El <iswc-tab-group> reusado no debe inflar su tipografia ni sus borders. */
 .tabs__group { font-size: 0.85em; }
 .viewport { position: relative; }
-
-.track {
-  display: flex;
-  gap: 0.75em;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  padding: 0.25em 0.1em 0.5em;
-  scrollbar-width: thin;
-  scroll-behavior: smooth;
-}
-
+.track { display: flex; gap: 0.75em; overflow-x: auto; scroll-snap-type: x mandatory; padding: 0.25em 0.1em 0.5em; scrollbar-width: thin; scroll-behavior: smooth; }
 .track::-webkit-scrollbar { height: 0.4em; }
 
 /* ----- W19 card (envoltorio <iswc-card>) -------------------------------- */
@@ -130,17 +120,7 @@
 
 /* ----- W19 nav (envoltorio <iswc-button>) ------------------------------- */
 
-.nav {
-  position: absolute;
-  inset-block: 0;
-  inset-inline: auto 0;
-  margin-block: auto;
-  z-index: 1;
-  opacity: 0;
-  transition: opacity 0.2s ease;
-  --iswc-button-bg: transparent;
-}
-
+.nav { position: absolute; inset-block: 0; inset-inline: auto 0; margin-block: auto; z-index: 1; opacity: 0; transition: opacity 0.2s ease; --iswc-button-bg: transparent; }
 .nav--prev { inset-inline: 0 auto; }
 
 .viewport:hover .nav,

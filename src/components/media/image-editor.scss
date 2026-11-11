@@ -1,16 +1,7 @@
 @use 'kit' as *;
 /* iswc-image-editor */
 :host { @include texto-base(); }
-
-.root {
-  display: flex;
-  flex-direction: column;
-  gap: .5em;
-  padding: .5em;
-  border: 1px solid var(--iswc-border);
-  border-radius: var(--iswc-radius);
-  background: var(--iswc-bg-elev);
-}
+.root { display: flex; flex-direction: column; gap: .5em; padding: .5em; border: 1px solid var(--iswc-border); border-radius: var(--iswc-radius); background: var(--iswc-bg-elev); }
 
 .viewport {
   position: relative;
@@ -82,9 +73,4 @@
   background: color-mix(in srgb, var(--iswc-accent) 14%, var(--iswc-bg-soft));
 }
 
-.status {
-  font-size: .72em;
-  color: var(--iswc-text-soft);
-  font-variant-numeric: tabular-nums;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-}
+.status { font-size: .72em; color: var(--iswc-text-soft); font-variant-numeric: tabular-nums; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
