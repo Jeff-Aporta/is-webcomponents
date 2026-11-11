@@ -1,8 +1,7 @@
+@use 'kit' as *;
 @use '../../core/popover-panel';
 /* iswc-context-menu */
-:host {
-  display: contents;
-}
+:host { display: contents; }
 
 /* Mismo chrome de superficie flotante que iswc-dropdown / iswc-dropdown-item
    (ver core/popover-panel.scss): borde, radio y sombra vía los tokens
@@ -31,11 +30,7 @@
   z-index: 1000;
 }
 
-.items {
-  display: flex;
-  flex-direction: column;
-  gap: .0625em;
-}
+.items { display: flex; flex-direction: column; gap: .0625em; }
 
 ::slotted(:is(.item, button, a, [role=menuitem])) {
   display: flex;
@@ -58,8 +53,7 @@
 }
 
 ::slotted(:is(.item, button)[disabled]) {
-  opacity: 0.55;
-  pointer-events: none;
+  @include deshabilitado(.55);
 }
 
 ::slotted(hr) {

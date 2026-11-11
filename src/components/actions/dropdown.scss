@@ -1,3 +1,4 @@
+@use 'kit' as *;
 @use '../../styles/mixins' as *;
 @use '../../core/popover-panel';
 :host {
@@ -14,15 +15,8 @@
   --iswc-dropdown-show-duration: 120ms;
   --iswc-dropdown-hide-duration: 100ms;
 }
-:host[hidden] {
-  display: none !important;
-}
-
-.trigger-wrap {
-  display: inline-flex;
-  vertical-align: middle;
-  align-items: center;
-}
+:host[hidden] { @include oculto; }
+.trigger-wrap { display: inline-flex; vertical-align: middle; align-items: center; }
 
 /* Dialog viewport completo en top layer → no lo tapen secciones/overflow */
 .popup {
@@ -40,9 +34,7 @@
   outline: none;
 }
 /* Sin variante el fondo solo atrapa el clic fuera; `basic` es el velo modal del kit. */
-.popup::backdrop {
-  background: transparent;
-}
+.popup::backdrop { background: transparent; }
 :host([backdrop-variant="basic"]) .popup::backdrop {
   @include velo;
 }

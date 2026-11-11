@@ -1,3 +1,4 @@
+@use 'kit' as *;
 @use '../../core/focus-ring';
 :host {
   display: inline-block;
@@ -16,11 +17,7 @@
      botón saldría con el alto y el fondo del botón normal en vez del
      cuadrado transparente que pide el copy. */
 }
-:host .trigger iswc-button.button {
-  display: inline-flex;
-  color: inherit;
-  font: inherit;
-}
+:host .trigger iswc-button.button { display: inline-flex; color: inherit; font: inherit; }
 :host .trigger iswc-button.button::part(button) {
   display: inline-flex;
   align-items: center;
@@ -41,8 +38,7 @@
   transition: background-color 120ms ease, color 120ms ease;
 }
 :host .trigger iswc-button.button::part(button):focus-visible {
-  outline: 2px solid var(--iswc-focus, var(--iswc-focus-fallback));
-  outline-offset: var(--iswc-focus-offset);
+  @include foco-visible(var(--iswc-focus, var(--iswc-focus-fallback)), 2px, var(--iswc-focus-offset));
 }
 :host .trigger iswc-button.button:hover:not([disabled])::part(button), :host .trigger iswc-button.button:focus-within:not([disabled])::part(button) {
   background: var(--iswc-control-bg-hover);
@@ -51,41 +47,23 @@
   opacity: 0.55;
   cursor: not-allowed;
 }
-:host .trigger iswc-button.button[hidden] {
-  display: none !important;
-}
-:host .trigger .icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  line-height: 0;
-}
-:host .trigger .icon[hidden] {
-  display: none !important;
-}
+:host .trigger iswc-button.button[hidden] { @include oculto; }
+:host .trigger .icon { display: inline-flex; align-items: center; justify-content: center; line-height: 0; }
+:host .trigger .icon[hidden] { @include oculto; }
 :host .trigger .icon iswc-icon, :host .trigger .icon ::slotted(*) {
   width: 1.1em;
   height: 1.1em;
   font-size: 1.1em;
 }
-:host .trigger .icon.show {
-  animation: iswc-copy-show 140ms ease;
-}
-:host .trigger .icon.hide {
-  animation: iswc-copy-show 140ms ease reverse;
-}
+:host .trigger .icon.show { animation: iswc-copy-show 140ms ease; }
+:host .trigger .icon.hide { animation: iswc-copy-show 140ms ease reverse; }
 :host {
   /* iswc-tooltip pinta la burbuja y la flecha con --iswc-tooltip-bg, así que teñir
    * esa variable basta para el feedback de éxito / error. */
 }
-:host .tip {
-  --iswc-tooltip-font-size: 0.75em;
-  --iswc-copy-button-max-width: 18em;
-}
+:host .tip { --iswc-tooltip-font-size: 0.75em; --iswc-copy-button-max-width: 18em; }
 @media (prefers-reduced-motion: reduce) {
-  :host .icon.show, :host .icon.hide {
-    animation-duration: 1ms;
-  }
+:host .icon.show, :host .icon.hide { animation-duration: 1ms; }
 }
 :host .sr-only {
   position: absolute;
@@ -114,12 +92,6 @@
 }
 
 @keyframes iswc-copy-show {
-  from {
-    scale: 0.25;
-    opacity: 0.25;
-  }
-  to {
-    scale: 1;
-    opacity: 1;
-  }
+from { scale: 0.25; opacity: 0.25; }
+to { scale: 1; opacity: 1; }
 }

@@ -41,10 +41,7 @@
    queda la geometría del fab: círculo del tamaño --iswc-fab-size, sombra flotante y
    pulso. Se ataca por ::part(button) desde `.fab` (clase + pseudo-elemento)
    para ganar en especificidad a las reglas internas del botón. */
-.fab {
-  display: inline-flex;
-  font: inherit;
-}
+.fab { display: inline-flex; font: inherit; }
 .fab::part(button) {
   width: var(--iswc-fab-size);
   height: var(--iswc-fab-size);
@@ -104,25 +101,9 @@
 }
 
 @keyframes fab-pulse {
-  0% {
-    box-shadow: var(--iswc-fab-shadow), 0 0 0 0 color-mix(in srgb, var(--iswc-color-brand) 55%, transparent);
-  }
-  70% {
-    box-shadow: var(--iswc-fab-shadow), 0 0 0 .875em color-mix(in srgb, var(--iswc-color-brand) 0%, transparent);
-  }
-  100% {
-    box-shadow: var(--iswc-fab-shadow), 0 0 0 0 color-mix(in srgb, var(--iswc-color-brand) 0%, transparent);
-  }
+0% { box-shadow: var(--iswc-fab-shadow), 0 0 0 0 color-mix(in srgb, var(--iswc-color-brand) 55%, transparent); }
+70% { box-shadow: var(--iswc-fab-shadow), 0 0 0 .875em color-mix(in srgb, var(--iswc-color-brand) 0%, transparent); }
+100% { box-shadow: var(--iswc-fab-shadow), 0 0 0 0 color-mix(in srgb, var(--iswc-color-brand) 0%, transparent); }
 }
-.icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  flex: 0 0 auto;
-  font-size: 1.5em;
-  line-height: 1;
-}
-
-iswc-icon {
-  pointer-events: none;
-}
+.icon { display: inline-flex; align-items: center; justify-content: center; flex: 0 0 auto; font-size: 1.5em; line-height: 1; }
+iswc-icon { pointer-events: none; }
