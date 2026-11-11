@@ -23,19 +23,7 @@
 .cdn__head { display: grid; gap: 0.25em; }
 .cdn__title { margin: 0; font-size: 0.78em; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: color-mix(in srgb, var(--iswc-accent) 50%, var(--iswc-text)); }
 .cdn__list { display: grid; gap: 0.65em; margin: 0; padding: 0; list-style: none; }
-
-.cdn__row {
-  display: grid;
-  gap: 0.4em;
-  padding: 0.7em 0.85em;
-  border: 1px solid var(--iswc-cdn-snippet-border);
-  border-radius: 0.6em;
-  background: var(--iswc-cdn-snippet-row-bg);
-  min-width: 0;
-
-  &[hidden] { display: none; }
-}
-
+.cdn__row { display: grid; gap: 0.4em; padding: 0.7em 0.85em; border: 1px solid var(--iswc-cdn-snippet-border); border-radius: 0.6em; background: var(--iswc-cdn-snippet-row-bg); min-width: 0; &[hidden] { display: none; }; }
 .cdn__row-head { display: flex; align-items: center; justify-content: space-between; gap: 0.5em; flex-wrap: wrap; }
 
 .cdn__label {
@@ -113,12 +101,7 @@
 /* Filas de dependencias externas: REQUISITOS, no opciones del componente.
    Accent warning + borde inline distinto para diferenciarlas de las filas
    de bundles propios. */
-.cdn__row--dep {
-  border-inline-start: 1px solid color-mix(in srgb, var(--iswc-color-warning) 60%, transparent);
-  padding-inline-start: 0.75em;
-  background: color-mix(in srgb, var(--iswc-color-warning) 6%, transparent);
-}
-
+.cdn__row--dep { border-inline-start: 1px solid color-mix(in srgb, var(--iswc-color-warning) 60%, transparent); padding-inline-start: 0.75em; background: color-mix(in srgb, var(--iswc-color-warning) 6%, transparent); }
 .cdn__dep-name { code { color: var(--iswc-color-warning-stronger); }; }
 .cdn__dep-note { margin: 0.4em 0 0; font-size: 0.78em; line-height: 1.45; color: var(--iswc-cdn-snippet-text-dim); }
 

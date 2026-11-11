@@ -1,15 +1,4 @@
 /* <iswc-loading> — mismo indicador de carga en chats, registros y diálogos. El contexto ajusta padding y tamaño. */
-:host {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5em;
-  padding-block: var(--iswc-loading-padding, 2em);
-  box-sizing: border-box;
-  color: var(--iswc-text-soft);
-  font-size: 0.85em;
-}
-
+:host { display: flex; align-items: center; justify-content: center; gap: 0.5em; padding-block: var(--iswc-loading-padding, 2em); box-sizing: border-box; color: var(--iswc-text-soft); font-size: 0.85em; }
 :host([hidden]) { display: none !important; }
-
 .texto[hidden] { display: none; }

@@ -3,39 +3,10 @@
 :host { display: block; min-width: 0; font-family: var(--iswc-sans); color: var(--iswc-text); }
 :host([hidden]) { display: none !important; }
 [hidden] { display: none !important; }
-
-.ia {
-  display: grid;
-  gap: 0.9em;
-  min-width: 0;
-
-  &[data-variant='card'] {
-    padding: 1em;
-    border: 0.0625em solid var(--iswc-border-soft);
-    border-radius: var(--iswc-radius);
-    background: var(--iswc-bg-elev);
-  }
-}
-
+.ia { display: grid; gap: 0.9em; min-width: 0; &[data-variant='card'] { padding: 1em; border: 0.0625em solid var(--iswc-border-soft); border-radius: var(--iswc-radius); background: var(--iswc-bg-elev); } }
 header { display: flex; flex-wrap: wrap; align-items: center; gap: 0.6em; }
 .icono { flex: none; font-size: 1.8em; color: var(--iswc-brand-text); }
-
-.titulo {
-  flex: 1 1 12em;
-  min-width: 0;
-
-  p {
-    display: -webkit-box;
-    overflow: hidden;
-    margin: 0;
-    font-size: 0.9em;
-    color: var(--iswc-text-dim);
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
-    line-clamp: 2;
-  }
-}
-
+.titulo { flex: 1 1 12em; min-width: 0; p { display: -webkit-box; overflow: hidden; margin: 0; font-size: 0.9em; color: var(--iswc-text-dim); -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; } }
 .opciones { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(12em, 100%), 1fr)); gap: 0.6em; }
 .accion { display: flex; flex-wrap: wrap; align-items: center; gap: 0.6em; }
 
@@ -66,23 +37,7 @@ header { display: flex; flex-wrap: wrap; align-items: center; gap: 0.6em; }
   }
 }
 
-.texto {
-  display: flex;
-  align-items: flex-start;
-  gap: 0.6em;
-  width: 100%;
-  min-width: 0;
-
-  p {
-    flex: 1;
-    overflow: auto;
-    min-width: 0;
-    max-height: 18em;
-    margin: 0;
-    white-space: pre-wrap;
-    overflow-wrap: anywhere;
-  }
-}
+.texto { display: flex; align-items: flex-start; gap: 0.6em; width: 100%; min-width: 0; p { flex: 1; overflow: auto; min-width: 0; max-height: 18em; margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; } }
 
 .barras {
   display: grid;

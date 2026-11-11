@@ -82,16 +82,7 @@ iswc-check-icon-button.trigger::part(button) {
   white-space: nowrap;
   box-shadow: 0 .4573em 1.0671em color-mix(in srgb, #000 18%, transparent);
 }
-.action .ico {
-  display: inline-grid;
-  place-items: center;
-  width: 1.85em;
-  height: 1.85em;
-  border-radius: 999em;
-  background: color-mix(in srgb, var(--iswc-accent) 14%, transparent);
-  color: var(--iswc-accent);
-  font-size: 1.2195em;
-}
+.action .ico { display: inline-grid; place-items: center; width: 1.85em; height: 1.85em; border-radius: 999em; background: color-mix(in srgb, var(--iswc-accent) 14%, transparent); color: var(--iswc-accent); font-size: 1.2195em; }
 .action:hover { background: color-mix(in srgb, var(--iswc-accent) 14%, var(--iswc-bg-elev)); }
 .action.iswc-disabled { @include deshabilitado(.55); }
 .action {

@@ -1,22 +1,8 @@
 @use 'kit' as *;
 /* iswc-rte */
 :host { @include texto-base(); position: relative; }
-.root {
-  display: flex; flex-direction: column;
-  border: 1px solid var(--iswc-control-border, var(--iswc-border));
-  border-radius: var(--iswc-radius-sm);
-  background: var(--iswc-bg-elev);
-  overflow: hidden;
-}
-.toolbar {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: .125em;
-  padding: .35em .5em;
-  background: color-mix(in srgb, var(--iswc-bg-elev) 92%, transparent);
-  border-bottom: 1px solid var(--iswc-border-soft);
-}
+.root { display: flex; flex-direction: column; border: 1px solid var(--iswc-control-border, var(--iswc-border)); border-radius: var(--iswc-radius-sm); background: var(--iswc-bg-elev); overflow: hidden; }
+.toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: .125em; padding: .35em .5em; background: color-mix(in srgb, var(--iswc-bg-elev) 92%, transparent); border-bottom: 1px solid var(--iswc-border-soft); }
 .btn {
   font: inherit;
   border: 1px solid transparent;

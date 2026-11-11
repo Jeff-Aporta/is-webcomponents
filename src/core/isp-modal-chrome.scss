@@ -5,15 +5,5 @@
   /* Capa de bloqueo: fixed obligatorio, si no ocuparía sitio en el flujo. */
 }
 
-:host .backdrop {
-  position: fixed;
-  inset: 0;
-  z-index: var(--iswc-z-modal);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 1em;
-  background: color-mix(in srgb, var(--iswc-bg) 68%, transparent);
-}
-
+:host .backdrop { position: fixed; inset: 0; z-index: var(--iswc-z-modal); display: flex; align-items: center; justify-content: center; padding: 1em; background: color-mix(in srgb, var(--iswc-bg) 68%, transparent); }
 :host .backdrop[hidden] { display: none; }

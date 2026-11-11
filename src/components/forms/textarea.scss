@@ -87,12 +87,7 @@
 /* ---- appearance ------------------------------------------------------ */
 
 :host([variant="filled"]) {
-  .base {
-    background: var(--iswc-control-bg-hover);
-    border-color: transparent;
-    border-bottom-color: var(--_border);
-    border-radius: var(--iswc-textarea-border-radius) var(--iswc-textarea-border-radius) 0 0;
-  }
+.base { background: var(--iswc-control-bg-hover); border-color: transparent; border-bottom-color: var(--_border); border-radius: var(--iswc-textarea-border-radius) var(--iswc-textarea-border-radius) 0 0; }
 }
 
 :host([variant="underlined"]) {

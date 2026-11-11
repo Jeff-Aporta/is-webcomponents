@@ -290,25 +290,7 @@ iswc-doc-layout { height: 100%; }
 .cargando { display: flex; align-items: center; gap: .625em; margin: 0; padding: 2em 0; color: var(--iswc-text-dim); }
 
 // Diálogo de sesión
-iswc-dialog.login {
-  --width: min(28.75em, 92vw);
-
-  .login-cuerpo {
-    display: grid;
-    gap: .75em;
-  }
-
-  .login-estado {
-    margin: 0;
-    color: var(--iswc-text-dim);
-  }
-
-  .login-pie {
-    display: flex;
-    justify-content: flex-end;
-    gap: .5em;
-  }
-}
+iswc-dialog.login { --width: min(28.75em, 92vw); .login-cuerpo { display: grid; gap: .75em; } .login-estado { margin: 0; color: var(--iswc-text-dim); } .login-pie { display: flex; justify-content: flex-end; gap: .5em; } }
 
 // Teléfono: a 390 px el texto de «Sesión» (~95 px) empujaba fuera de la barra el toggle del índice y
 // recortaba el tema de la app. Queda el ícono (el botón conserva aria-label y title).

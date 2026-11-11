@@ -1,14 +1,7 @@
 @use 'kit' as *;
 /* iswc-doc-editor */
 :host { @include texto-base(); }
-.root {
-  position: relative;
-  border: 1px solid var(--iswc-control-border, var(--iswc-border));
-  border-radius: var(--iswc-radius-sm);
-  background: var(--iswc-bg-elev);
-  padding: 1em 1.25em;
-  min-height: 14em;
-}
+.root { position: relative; border: 1px solid var(--iswc-control-border, var(--iswc-border)); border-radius: var(--iswc-radius-sm); background: var(--iswc-bg-elev); padding: 1em 1.25em; min-height: 14em; }
 .blocks { display: flex; flex-direction: column; gap: .35em; }
 .block {
   border-radius: .25em;

@@ -87,33 +87,14 @@
 }
 .fila__popover[hidden] { display: none; }
 .fila__popover .popover__title { margin: 0 0 0.4em; font-size: 0.95em; font-weight: 700; display: flex; align-items: center; gap: 0.4em; flex-wrap: wrap; }
-.fila__popover .popover__title code {
-  font-family: var(--iswc-mono, ui-monospace, monospace);
-  font-size: 0.95em;
-  background: color-mix(in srgb, currentColor 8%, transparent);
-  padding: 0.05em 0.4em;
-  border-radius: 0.25em;
-}
+.fila__popover .popover__title code { font-family: var(--iswc-mono, ui-monospace, monospace); font-size: 0.95em; background: color-mix(in srgb, currentColor 8%, transparent); padding: 0.05em 0.4em; border-radius: 0.25em; }
 .fila__popover .popover__type { font-size: 0.78em; font-weight: 500; opacity: 0.65; text-transform: uppercase; letter-spacing: 0.06em; }
 .fila__popover dl { margin: 0; display: grid; grid-template-columns: minmax(4.5em, max-content) 1fr; gap: 0.25em 0.6em; }
 .fila__popover dt { font-weight: 600; font-size: 0.85em; opacity: 0.85; }
 .fila__popover dd { margin: 0; font-size: 0.88em; min-inline-size: 0; }
-.fila__popover dd code {
-  font-family: var(--iswc-mono, ui-monospace, monospace);
-  font-size: 0.95em;
-  background: color-mix(in srgb, currentColor 8%, transparent);
-  padding: 0.05em 0.35em;
-  border-radius: 0.25em;
-  word-break: break-word;
-}
+.fila__popover dd code { font-family: var(--iswc-mono, ui-monospace, monospace); font-size: 0.95em; background: color-mix(in srgb, currentColor 8%, transparent); padding: 0.05em 0.35em; border-radius: 0.25em; word-break: break-word; }
 .fila__popover .popover__values { display: flex; flex-wrap: wrap; gap: 0.3em; }
-.fila__popover .popover__values code {
-  font-family: var(--iswc-mono, ui-monospace, monospace);
-  font-size: 0.85em;
-  background: color-mix(in srgb, currentColor 8%, transparent);
-  padding: 0.05em 0.4em;
-  border-radius: 0.25em;
-}
+.fila__popover .popover__values code { font-family: var(--iswc-mono, ui-monospace, monospace); font-size: 0.85em; background: color-mix(in srgb, currentColor 8%, transparent); padding: 0.05em 0.4em; border-radius: 0.25em; }
 .fila__popover .popover__example {
   font-family: var(--iswc-mono, ui-monospace, monospace);
   font-size: 0.85em;

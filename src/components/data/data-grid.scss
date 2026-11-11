@@ -312,15 +312,7 @@
 
 .empty { color: var(--iswc-text-dim); padding: 1.5em; }
 .spinner { display: flex; align-items: center; gap: 0.6em; color: var(--iswc-text-dim); }
-
-.ring {
-  inline-size: 1.2em;
-  block-size: 1.2em;
-  border: 0.143em solid var(--iswc-grid-border);
-  border-top-color: var(--iswc-grid-accent);
-  border-radius: 50%;
-  animation: iswc-grid-spin 0.8s linear infinite;
-}
+.ring { inline-size: 1.2em; block-size: 1.2em; border: 0.143em solid var(--iswc-grid-border); border-top-color: var(--iswc-grid-accent); border-radius: 50%; animation: iswc-grid-spin 0.8s linear infinite; }
 
 .linear {
   inline-size: 100%;
@@ -386,16 +378,7 @@
 .sel-count { color: var(--iswc-grid-accent); font-weight: 600; }
 .pager { display: flex; align-items: center; gap: 0.5em; &[hidden] { display: none; }; }
 .page-size { display: flex; align-items: center; gap: 0.35em; }
-
-.page-size-select {
-  block-size: 1.9em;
-  border: 1px solid var(--iswc-control-border);
-  border-radius: var(--iswc-radius-sm);
-  background: var(--iswc-control-bg);
-  color: inherit;
-  font: inherit;
-  font-size: 0.9em;
-}
+.page-size-select { block-size: 1.9em; border: 1px solid var(--iswc-control-border); border-radius: var(--iswc-radius-sm); background: var(--iswc-control-bg); color: inherit; font: inherit; font-size: 0.9em; }
 
 .page-btn {
   inline-size: 2em;

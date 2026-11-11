@@ -184,16 +184,7 @@
 }
 
 .aguarda { color: var(--iswc-text-soft); font-style: italic; }
-
-.cursor {
-  display: inline-block;
-  width: 0.5em;
-  height: 1.1em;
-  margin-inline-start: 0.0625em;
-  background: var(--iswc-accent);
-  vertical-align: -0.125em;
-  animation: cursor-parpadeo 0.9s steps(2, start) infinite;
-}
+.cursor { display: inline-block; width: 0.5em; height: 1.1em; margin-inline-start: 0.0625em; background: var(--iswc-accent); vertical-align: -0.125em; animation: cursor-parpadeo 0.9s steps(2, start) infinite; }
 
 .espera {
   display: inline-flex;

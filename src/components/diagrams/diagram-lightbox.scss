@@ -5,21 +5,7 @@
 .lb-nav { display: inline-flex; align-items: center; gap: 0.25em; }
 
 /* Anillo de cuenta regresiva del auto-replay. */
-.lb-ring {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 1.375em;
-  height: 1.375em;
-  margin-inline-start: 0.25em;
-  svg {
-    position: absolute;
-    inset: 0;
-    transform: rotate(-90deg);
-  }
-}
-
+.lb-ring { position: relative; display: inline-flex; align-items: center; justify-content: center; width: 1.375em; height: 1.375em; margin-inline-start: 0.25em; svg { position: absolute; inset: 0; transform: rotate(-90deg); } }
 .lb-ring__track { fill: none; stroke: color-mix(in srgb, currentColor 22%, transparent); stroke-width: 2.5; }
 .lb-ring__fill { fill: none; stroke: currentColor; stroke-width: 2.5; stroke-linecap: round; transition: stroke-dashoffset 200ms linear; }
 .lb-ring__icon { font-size: .6875em; line-height: 1; }

@@ -37,17 +37,7 @@
   opacity: 1;
 }
 
-.drawer {
-  position: fixed;
-  background: var(--iswc-bg);
-  color: var(--iswc-text, inherit);
-  box-shadow: var(--_shadow);
-  display: grid;
-  grid-template-rows: auto 1fr auto;
-  pointer-events: auto;
-  outline: none;
-  overflow: hidden;
-}
+.drawer { position: fixed; background: var(--iswc-bg); color: var(--iswc-text, inherit); box-shadow: var(--_shadow); display: grid; grid-template-rows: auto 1fr auto; pointer-events: auto; outline: none; overflow: hidden; }
 
 /* Los cuatro bordes: el eje que toca el borde va al 100% del host (que es
    fixed inset:0, así que 100% sigue al viewport visible en móvil, al

@@ -283,12 +283,7 @@
 /* --- appearance (variants de MUI) ---------------------------------- */
 
 :host([variant="filled"]) {
-  .base {
-    background: var(--iswc-control-bg-hover);
-    border-color: transparent;
-    border-bottom-color: var(--iswc-select-border);
-    border-radius: var(--iswc-select-border-radius) var(--iswc-select-border-radius) 0 0;
-  }
+.base { background: var(--iswc-control-bg-hover); border-color: transparent; border-bottom-color: var(--iswc-select-border); border-radius: var(--iswc-select-border-radius) var(--iswc-select-border-radius) 0 0; }
 }
 
 :host([variant="underlined"]) {
@@ -307,18 +302,7 @@
 /* --- checkmarks (solo en multiple) --------------------------------- */
 
 :host([multiple][checkmarks]) {
-  .mark {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    flex: none;
-    box-sizing: border-box;
-    inline-size: 1.15em;
-    block-size: 1.15em;
-    border: 1px solid var(--iswc-control-border);
-    border-radius: 0.25em;
-  }
-
+.mark { display: inline-flex; align-items: center; justify-content: center; flex: none; box-sizing: border-box; inline-size: 1.15em; block-size: 1.15em; border: 1px solid var(--iswc-control-border); border-radius: 0.25em; }
 .check { font-size: 0.85em; color: var(--iswc-on-brand); }
 
   .option[aria-selected="true"] {

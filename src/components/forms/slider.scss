@@ -110,19 +110,7 @@
 .mark { inset-inline-start: var(--pos); inset-block-start: 50%; translate: -50% -50%; }
 .mark-label { inset-inline-start: var(--pos); inset-block-start: calc(100% + 0.3em); translate: -50% 0; }
 .thumb { inset-block-start: 50%; translate: -50% -50%; }
-
-  .value-label {
-    inset-block-end: calc(100% + 0.55em);
-    inset-inline-start: 50%;
-    translate: -50% 0;
-
-    &::after {
-      inset-block-start: 100%;
-      inset-inline-start: 50%;
-      translate: -50% -.0833em;
-      border-block-start-color: var(--iswc-slider-fill);
-    }
-  }
+.value-label { inset-block-end: calc(100% + 0.55em); inset-inline-start: 50%; translate: -50% 0; &::after { inset-block-start: 100%; inset-inline-start: 50%; translate: -50% -.0833em; border-block-start-color: var(--iswc-slider-fill); } }
 
   /* Espacio para las etiquetas de marks */
   .base:has(.marks[data-has-labels]) {
@@ -140,19 +128,7 @@
 .mark { inset-block-end: var(--pos); inset-inline-start: 50%; translate: -50% 50%; }
 .mark-label { inset-block-end: var(--pos); inset-inline-start: calc(100% + 0.5em); translate: 0 50%; }
 .thumb { inset-inline-start: 50%; translate: -50% 50%; }
-
-  .value-label {
-    inset-inline-end: calc(100% + 0.55em);
-    inset-block-start: 50%;
-    translate: 0 -50%;
-
-    &::after {
-      inset-inline-start: 100%;
-      inset-block-start: 50%;
-      translate: -.0833em -50%;
-      border-inline-start-color: var(--iswc-slider-fill);
-    }
-  }
+.value-label { inset-inline-end: calc(100% + 0.55em); inset-block-start: 50%; translate: 0 -50%; &::after { inset-inline-start: 100%; inset-block-start: 50%; translate: -.0833em -50%; border-inline-start-color: var(--iswc-slider-fill); } }
 
   /* Espacio para las etiquetas de marks */
   .base:has(.marks[data-has-labels]) {

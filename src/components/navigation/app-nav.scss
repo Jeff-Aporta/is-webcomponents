@@ -18,17 +18,7 @@
 :host * { box-sizing: border-box; }
 [hidden] { display: none !important; }
 .nav { display: flex; flex-direction: column; min-width: 0; height: 100%; }
-
-.row {
-  display: flex;
-  align-items: stretch;
-  gap: .15em;
-  min-width: 0;
-  overflow-x: auto;
-  scrollbar-width: thin;
-  scrollbar-color: color-mix(in srgb, var(--iswc-text, currentColor) 16%, transparent) transparent;
-}
-
+.row { display: flex; align-items: stretch; gap: .15em; min-width: 0; overflow-x: auto; scrollbar-width: thin; scrollbar-color: color-mix(in srgb, var(--iswc-text, currentColor) 16%, transparent) transparent; }
 .row--primary { flex: 1 1 auto; }
 .row--secondary { font-size: 0.92em; border-top: 1px solid var(--iswc-app-nav-secondary-border); background: var(--iswc-app-nav-secondary-bg); }
 

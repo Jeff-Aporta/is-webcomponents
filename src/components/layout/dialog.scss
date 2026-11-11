@@ -77,17 +77,5 @@
 /* .header / .title / .body / .footer → core/modal-chrome.scss */
 
 .header-actions { display: flex; align-items: center; gap: 0.25em; flex: 0 0 auto; margin-inline-start: auto; }
-
-.close-btn {
-  flex: 0 0 auto;
-  margin-inline-start: auto;
-  font-size: 1.15em;
-  line-height: 0;
-  opacity: 0.72;
-  color: var(--iswc-text);
-
-  &:hover { opacity: 1; }
-  iswc-icon { font-size: 1.25em; color: inherit; }
-}
-
+.close-btn { flex: 0 0 auto; margin-inline-start: auto; font-size: 1.15em; line-height: 0; opacity: 0.72; color: var(--iswc-text); &:hover { opacity: 1; } iswc-icon { font-size: 1.25em; color: inherit; }; }
 .body.iswc-only { padding: var(--iswc-dialog-spacing); }

@@ -124,16 +124,7 @@
   }
 }
 
-.lb-share {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 2.4em;
-  height: 2.4em;
-  --iswc-control-size: 2.4em;
-  &[hidden] { display: none; }
-  iswc-icon { --iswc-icon-size: 1.3em; }
-}
+.lb-share { display: inline-flex; align-items: center; justify-content: center; width: 2.4em; height: 2.4em; --iswc-control-size: 2.4em; &[hidden] { display: none; } iswc-icon { --iswc-icon-size: 1.3em; }; }
 
 .lb-stage {
   position: absolute;

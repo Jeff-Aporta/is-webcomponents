@@ -11,35 +11,10 @@
   display: contents;
 }
 
-.dialog {
-  border: 0;
-  background: transparent;
-  padding: 0;
-  margin: 0;
-  inset: 0;
-  inline-size: 100vw;
-  block-size: 100vh;
-  max-inline-size: none;
-  max-block-size: none;
-  color: var(--iswc-text);
-
-  &::backdrop {
-    @include velo;
-  }
-}
+.dialog { border: 0; background: transparent; padding: 0; margin: 0; inset: 0; inline-size: 100vw; block-size: 100vh; max-inline-size: none; max-block-size: none; color: var(--iswc-text); &::backdrop { @include velo; } }
 
 /* Borde, radio, fondo y sombra vienen de `.iswc-popover-panel`. */
-.panel {
-  position: absolute;
-  inset-block-start: 14%;
-  inset-inline-start: 50%;
-  transform: translateX(-50%);
-  inline-size: min(36em, 92vw);
-  max-block-size: 70vh;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-}
+.panel { position: absolute; inset-block-start: 14%; inset-inline-start: 50%; transform: translateX(-50%); inline-size: min(36em, 92vw); max-block-size: 70vh; display: flex; flex-direction: column; overflow: hidden; }
 
 /* La fila flex, el padding y el separador vienen de `.iswc-surface-bar`. */
 .bar { --iswc-surface-bar-gap: .55em; --iswc-surface-bar-padding: .65em .8em; background: transparent; & .ico { color: var(--iswc-text-soft); font-size: 1.1em; }; }

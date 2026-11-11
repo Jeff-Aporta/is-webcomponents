@@ -80,15 +80,7 @@
   transform: rotate(0deg);
 }
 
-.content {
-  overflow: hidden;
-  will-change: height;
-
-  &[hidden] { display: none; }
-  ::slotted(*) { box-sizing: border-box; }
-  ::slotted(:first-child) { margin-block-start: 0; }
-  ::slotted(:last-child) { margin-block-end: 0; }
-}
+.content { overflow: hidden; will-change: height; &[hidden] { display: none; } ::slotted(*) { box-sizing: border-box; } ::slotted(:first-child) { margin-block-start: 0; } ::slotted(:last-child) { margin-block-end: 0; }; }
 
 /* El aire vive en un envoltorio: vale igual para texto suelto, un solo hijo o varios. */
 .content-inner { padding: 0 var(--iswc-details-spacing) var(--iswc-details-spacing); }

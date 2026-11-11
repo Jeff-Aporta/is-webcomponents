@@ -113,18 +113,7 @@
 .toolbar button iswc-icon { font-size: 1.3205em; line-height: 1; }
 
 /* ── Panel de propiedades ─────────────────────────────────────────────── */
-.panel {
-  height: 100%;
-  box-sizing: border-box;
-  overflow: auto;
-  display: grid;
-  gap: .875em;
-  align-content: start;
-  padding: .875em;
-  background: var(--_elev);
-  border: 1px solid var(--_border);
-  border-radius: var(--_radius);
-}
+.panel { height: 100%; box-sizing: border-box; overflow: auto; display: grid; gap: .875em; align-content: start; padding: .875em; background: var(--_elev); border: 1px solid var(--_border); border-radius: var(--_radius); }
 .panel__head { display: flex; align-items: center; gap: .6098em; margin: 0; font-size: 0.82em; font-weight: 700; color: var(--_text); }
 .panel__head iswc-icon { font-size: 1.2805em; color: var(--_brand); }
 .selection-info {
@@ -184,16 +173,7 @@
 .panel select:hover { border-color: var(--_control-border); }
 .panel input:focus-visible,
 .panel select:focus-visible { outline: 2px solid color-mix(in srgb, var(--_brand) 60%, transparent); outline-offset: 0; border-color: var(--_brand); }
-.panel input[type="color"] {
-  box-sizing: border-box;
-  width: 3.1212em;
-  height: 2.2809em;
-  padding: .1501em;
-  border: 1px solid var(--_border);
-  border-radius: var(--_radius-sm);
-  background: var(--_control-bg);
-  cursor: pointer;
-}
+.panel input[type="color"] { box-sizing: border-box; width: 3.1212em; height: 2.2809em; padding: .1501em; border: 1px solid var(--_border); border-radius: var(--_radius-sm); background: var(--_control-bg); cursor: pointer; }
 .panel input[type="color"]::-webkit-color-swatch-wrapper { padding: 0; }
 .panel input[type="color"]::-webkit-color-swatch { border: 0; border-radius: calc(var(--_radius-sm) - .1501em); }
 
@@ -255,13 +235,5 @@
   border: 1px solid var(--_border-soft);
   pointer-events: none;
 }
-.hint kbd {
-  font: inherit;
-  font-family: var(--iswc-mono, ui-monospace, Menlo, Consolas, monospace);
-  padding: 0 .3571em;
-  border-radius: .3571em;
-  background: var(--_control-bg);
-  border: 1px solid var(--_border);
-}
-
+.hint kbd { font: inherit; font-family: var(--iswc-mono, ui-monospace, Menlo, Consolas, monospace); padding: 0 .3571em; border-radius: .3571em; background: var(--_control-bg); border: 1px solid var(--_border); }
 textarea[data-json-readout] { display: none; }

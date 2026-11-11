@@ -73,17 +73,7 @@
 
 
 .foot { display: flex; align-items: center; gap: 0.5em; font-size: 0.85em; }
-
-.trend {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.25em;
-  padding: 0.125em 0.5em;
-  border-radius: 999em;
-  font-weight: 500;
-  background: color-mix(in srgb, var(--fg) 8%, transparent);
-  color: var(--muted);
-}
+.trend { display: inline-flex; align-items: center; gap: 0.25em; padding: 0.125em 0.5em; border-radius: 999em; font-weight: 500; background: color-mix(in srgb, var(--fg) 8%, transparent); color: var(--muted); }
 
 /* Sin contenido no se pinta la caja (ni el cuadro del ícono ni la píldora de tendencia). */
 .icon[hidden], .trend[hidden], .helper[hidden], .foot[hidden] { display: none; }

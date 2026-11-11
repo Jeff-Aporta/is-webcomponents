@@ -30,12 +30,7 @@
 :host *::-webkit-scrollbar-track { background: var(--iswc-scrollbar-track); border-radius: var(--iswc-scrollbar-radius); }
 
 :host::-webkit-scrollbar-thumb,
-:host *::-webkit-scrollbar-thumb {
-  background: var(--iswc-scrollbar-thumb, var(--iswc-scrollbar-thumb-fallback));
-  border-radius: var(--iswc-scrollbar-radius);
-  border: 2px solid transparent;
-  background-clip: padding-box;
-}
+:host *::-webkit-scrollbar-thumb { background: var(--iswc-scrollbar-thumb, var(--iswc-scrollbar-thumb-fallback)); border-radius: var(--iswc-scrollbar-radius); border: 2px solid transparent; background-clip: padding-box; }
 
 :host::-webkit-scrollbar-thumb:hover,
 :host *::-webkit-scrollbar-thumb:hover { background: var(--iswc-scrollbar-thumb-hover, var(--iswc-scrollbar-thumb-hover-fallback)); }

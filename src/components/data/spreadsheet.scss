@@ -31,18 +31,7 @@ iswc-icon { display: inline-block; flex: none; inline-size: 1em; block-size: 1em
 /* ---- Cinta ---- */
 .ribbon { border-block-end: thin solid var(--iswc-border); background: var(--sheet-head); iswc-tab-panel { padding: 0; }; }
 .rb-panel { display: flex; align-items: stretch; gap: 0.15em; overflow-x: auto; padding: 0.3em 0.4em 0.15em; scrollbar-width: thin; }
-
-.rb-group {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  flex: none;
-  padding-inline: 0.45em;
-  border-inline-end: thin solid var(--iswc-border-soft);
-
-  &:last-child { border-inline-end: 0; }
-}
-
+.rb-group { display: flex; flex-direction: column; justify-content: space-between; flex: none; padding-inline: 0.45em; border-inline-end: thin solid var(--iswc-border-soft); &:last-child { border-inline-end: 0; }; }
 .rb-items { display: flex; flex-wrap: wrap; align-items: center; gap: 0.1em; max-inline-size: 15em; }
 .rb-label { padding-block: 0.15em 0; font-size: 0.72em; color: var(--iswc-text-soft); text-align: center; white-space: nowrap; }
 .rb-btn { font-size: 0.92em; &.big { font-size: 0.95em; }; }
@@ -87,31 +76,11 @@ iswc-icon { display: inline-block; flex: none; inline-size: 1em; block-size: 1em
 }
 
 .namebox { inline-size: 7em; flex: none; font-variant-numeric: tabular-nums; }
-
-.fx-input {
-  flex: 1 1 auto;
-  min-inline-size: 0;
-  resize: none;
-  field-sizing: content;
-  max-block-size: 8em;
-  font-family: var(--iswc-font-mono, ui-monospace, monospace);
-  font-size: 0.92em;
-  line-height: 1.5;
-}
-
+.fx-input { flex: 1 1 auto; min-inline-size: 0; resize: none; field-sizing: content; max-block-size: 8em; font-family: var(--iswc-font-mono, ui-monospace, monospace); font-size: 0.92em; line-height: 1.5; }
 .fx-btn { font-size: 0.9em; }
 
 /* ---- Rejilla ---- */
-.viewport {
-  position: relative;
-  flex: 1 1 auto;
-  min-block-size: 8em;
-  max-block-size: var(--iswc-spreadsheet-viewport, 70vh);
-  overflow: auto;
-  font-size: 0.82em;
-  background: var(--iswc-bg-elev);
-  overscroll-behavior: contain;
-}
+.viewport { position: relative; flex: 1 1 auto; min-block-size: 8em; max-block-size: var(--iswc-spreadsheet-viewport, 70vh); overflow: auto; font-size: 0.82em; background: var(--iswc-bg-elev); overscroll-behavior: contain; }
 
 table.grid {
   table-layout: fixed;
@@ -340,45 +309,14 @@ table.grid {
   iswc-chart { flex: 1 1 auto; min-block-size: 0; padding: 0.3em; }
 }
 
-.chart-bar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.5em;
-  min-block-size: 1.7em;
-  padding-inline: 0.5em 0.2em;
-  background: var(--sheet-head);
-  font-weight: 600;
-  cursor: move;
-}
-
+.chart-bar { display: flex; align-items: center; justify-content: space-between; gap: 0.5em; min-block-size: 1.7em; padding-inline: 0.5em 0.2em; background: var(--sheet-head); font-weight: 600; cursor: move; }
 .chart-title { flex: 1 1 auto; min-block-size: 1em; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
 .chart-x { display: inline-flex; padding: 0.1em; border: 0; background: transparent; color: var(--iswc-text-soft); font: inherit; cursor: pointer; &:hover { color: var(--iswc-danger, #c62828); }; }
-
-.chart-size {
-  position: absolute;
-  inset-inline-end: 0;
-  inset-block-end: 0;
-  inline-size: 0.8em;
-  block-size: 0.8em;
-  background: linear-gradient(135deg, transparent 50%, var(--iswc-accent) 50%);
-  cursor: nwse-resize;
-}
-
+.chart-size { position: absolute; inset-inline-end: 0; inset-block-end: 0; inline-size: 0.8em; block-size: 0.8em; background: linear-gradient(135deg, transparent 50%, var(--iswc-accent) 50%); cursor: nwse-resize; }
 .guide { position: absolute; z-index: 9; background: var(--iswc-accent); pointer-events: none; &.v { inline-size: 0.1em; block-size: 100%; } &.h { block-size: 0.1em; inline-size: 100%; }; }
 
 /* ---- Pestañas y estado ---- */
-.tabs {
-  display: flex;
-  align-items: stretch;
-  gap: 0.2em;
-  min-block-size: 2em;
-  padding-inline: 0.3em;
-  border-block-start: thin solid var(--iswc-border);
-  background: var(--sheet-head);
-  font-size: 0.85em;
-}
-
+.tabs { display: flex; align-items: stretch; gap: 0.2em; min-block-size: 2em; padding-inline: 0.3em; border-block-start: thin solid var(--iswc-border); background: var(--sheet-head); font-size: 0.85em; }
 .tablist { display: flex; align-items: stretch; gap: 0.1em; overflow-x: auto; scrollbar-width: none; }
 
 .tab {
@@ -585,18 +523,7 @@ table.grid {
 }
 
 .mc-code { block-size: 16em; font-size: 0.9em; }
-
-.mc-out {
-  margin: 0;
-  min-block-size: 1.5em;
-  max-block-size: 7em;
-  overflow: auto;
-  font-family: var(--iswc-font-mono, ui-monospace, monospace);
-  font-size: 0.85em;
-  color: var(--iswc-text-soft);
-  white-space: pre-wrap;
-}
-
+.mc-out { margin: 0; min-block-size: 1.5em; max-block-size: 7em; overflow: auto; font-family: var(--iswc-font-mono, ui-monospace, monospace); font-size: 0.85em; color: var(--iswc-text-soft); white-space: pre-wrap; }
 .mc-help pre { max-block-size: 14em; overflow: auto; font-size: 0.82em; padding: 0.5em; background: var(--iswc-bg); border-radius: 0.3em; }
 
 @media (max-width: 40em) {

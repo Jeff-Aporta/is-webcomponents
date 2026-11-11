@@ -1,16 +1,5 @@
 /* iswc-barcode */
 :host { display: inline-block; font: inherit; color: var(--iswc-text); }
-
-.root {
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  padding: .35em .5em;
-  border: 1px solid var(--iswc-border);
-  border-radius: var(--iswc-radius);
-  background: var(--iswc-bg-elev);
-  max-inline-size: 100%;
-}
-
+.root { display: flex; flex-direction: column; align-items: stretch; padding: .35em .5em; border: 1px solid var(--iswc-border); border-radius: var(--iswc-radius); background: var(--iswc-bg-elev); max-inline-size: 100%; }
 .svg { display: block; inline-size: 100%; block-size: auto; }
 .text { margin-block-start: .2941em; text-align: center; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: .85em; letter-spacing: .12em; color: var(--iswc-text); }

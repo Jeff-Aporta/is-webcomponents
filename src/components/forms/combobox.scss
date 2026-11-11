@@ -137,12 +137,7 @@
 }
 
 :host([variant="filled"]) {
-  .base {
-    background: var(--iswc-control-bg-hover);
-    border-color: transparent;
-    border-bottom-color: var(--iswc-combobox-border);
-    border-radius: var(--iswc-combobox-border-radius) var(--iswc-combobox-border-radius) 0 0;
-  }
+.base { background: var(--iswc-control-bg-hover); border-color: transparent; border-bottom-color: var(--iswc-combobox-border); border-radius: var(--iswc-combobox-border-radius) var(--iswc-combobox-border-radius) 0 0; }
 }
 
 :host([variant="underlined"]) {

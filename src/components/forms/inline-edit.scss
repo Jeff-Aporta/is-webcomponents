@@ -3,16 +3,7 @@
 .root { position: relative; border-radius: inherit; display: inline-flex; align-items: stretch; min-inline-size: 4em; max-inline-size: 100%; }
 
 .display,
-.editor-wrap {
-  display: inline-flex;
-  align-items: center;
-  padding-block: 0;
-  padding-inline: 0.55em;
-  min-block-size: var(--iswc-control-height);
-  box-sizing: border-box;
-  border-radius: inherit;
-  inline-size: 100%;
-}
+.editor-wrap { display: inline-flex; align-items: center; padding-block: 0; padding-inline: 0.55em; min-block-size: var(--iswc-control-height); box-sizing: border-box; border-radius: inherit; inline-size: 100%; }
 
 .display {
   cursor: text;

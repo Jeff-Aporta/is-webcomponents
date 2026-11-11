@@ -93,14 +93,4 @@
 
 .meta { font-size: 0.8em; color: var(--muted); }
 .content { font-size: 0.85em; color: color-mix(in srgb, var(--fg) 80%, transparent); line-height: 1.4; }
-
-.footer {
-  font-size: 0.8em;
-  display: flex;
-  align-items: center;
-  gap: .625em;
-  color: var(--muted);
-  border-block-start: 1px solid var(--border);
-  padding-block-start: .625em;
-  margin-block-start: .3125em;
-}
+.footer { font-size: 0.8em; display: flex; align-items: center; gap: .625em; color: var(--muted); border-block-start: 1px solid var(--border); padding-block-start: .625em; margin-block-start: .3125em; }

@@ -80,18 +80,7 @@
 .actions { display: flex; align-items: center; flex: none; gap: 0.35em; margin-inline-start: auto; }
 .body { display: flex; flex: 1 1 auto; min-height: 0; }
 .sidebar { flex: none; width: var(--iswc-shell-sidebar-width); overflow-y: auto; overscroll-behavior: contain; border-inline-end: 1px solid var(--iswc-shell-sidebar-border); }
-
-.main {
-  display: flex;
-  flex-direction: column;
-  flex: 1 1 auto;
-  min-width: 0;
-  min-height: 0;
-  overflow-x: hidden;
-  overflow-y: auto;
-  overscroll-behavior: contain;
-  padding-bottom: env(safe-area-inset-bottom, 0);
-}
+.main { display: flex; flex-direction: column; flex: 1 1 auto; min-width: 0; min-height: 0; overflow-x: hidden; overflow-y: auto; overscroll-behavior: contain; padding-bottom: env(safe-area-inset-bottom, 0); }
 
 /* La vista crece con su contenido; si declara height:100% llena el alto sin doble barra. */
 ::slotted(:not([slot])) {
