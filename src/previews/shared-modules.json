@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-10T08:53:38.854Z",
+  "generatedAt": "2026-11-12T05:19:12.235Z",
   "count": 29,
   "modules": [
     {
@@ -7,7 +7,7 @@
       "id": "animar",
       "path": "src/core/animar.ts",
       "summary": "Módulo compartido `animar.ts`.",
-      "bytes": 1797,
+      "bytes": 1842,
       "exports": [
         "DURACION",
         "KEYFRAMES",
@@ -19,7 +19,7 @@
       "id": "anunciar",
       "path": "src/core/anunciar.ts",
       "summary": "Módulo compartido `anunciar.ts`.",
-      "bytes": 1230,
+      "bytes": 1275,
       "exports": [
         "regionViva",
         "anunciar"
@@ -209,7 +209,7 @@
       "id": "intl",
       "path": "src/core/intl.ts",
       "summary": "Módulo compartido `intl.ts`.",
-      "bytes": 1950,
+      "bytes": 1995,
       "exports": [
         "lista",
         "plural"
@@ -379,7 +379,7 @@
       "id": "ranuras",
       "path": "src/core/ranuras.ts",
       "summary": "Módulo compartido `ranuras.ts`.",
-      "bytes": 2566,
+      "bytes": 2611,
       "exports": [
         "ranurasDe",
         "ranura",
@@ -392,7 +392,7 @@
       "id": "reemitir",
       "path": "src/core/reemitir.ts",
       "summary": "Módulo compartido `reemitir.ts`.",
-      "bytes": 1094,
+      "bytes": 1139,
       "exports": [
         "reemitir"
       ]
