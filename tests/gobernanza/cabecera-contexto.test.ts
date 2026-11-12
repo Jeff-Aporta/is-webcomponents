@@ -25,12 +25,15 @@ const { test, lista } = coleccionPruebas({ categoria: 'how' });
 const here = dirname(fileURLToPath(import.meta.url));
 const ROOT = dirname(dirname(here));
 
-/** Las fuentes del kit: las mismas que cubre el codemod. */
+/**
+ * Todas las fuentes versionadas: las del kit, las de las demos y los scripts sueltos.
+ * Es el mismo alcance que el codemod (una sola fuente de verdad).
+ */
 function fuentes(): string[] {
   return execFileSync('git', ['ls-files', '*.ts', '*.mjs', '*.js'], { encoding: 'utf8' })
     .split('\n').map((s) => s.trim()).filter(Boolean)
     .filter((r) => !r.startsWith('dist/') && !r.startsWith('.tmp') && !r.includes('node_modules/'))
-    .filter((r) => !r.startsWith('assets/') && !r.startsWith('demos/') && !r.startsWith('labs/'));
+    .filter((r) => !r.startsWith('labs/') && !r.startsWith('src/vendor-distributions/'));
 }
 
 const cabeceraDe = (ruta: string): string | null => {
@@ -51,6 +54,19 @@ test('gobernanza/cabecera-contexto: K1 toda fuente del kit lleva la cabecera', a
   assert.deepEqual(sin, [], 'estas fuentes no llevan la cabecera @contexto');
 });
 
+test('gobernanza/cabecera-contexto: K6 el grep del handoff no deja ninguna fuente suelta', () => {
+  // El grep del handoff: `git ls-files '*.ts' '*.mjs' '*.js' | grep -v -E '^(dist|labs|node_modules|demos)/|vendor'`
+  // seguido de `xargs grep -L "@contexto"` tiene que salir vacio.
+  const todas = execFileSync('git', ['ls-files', '*.ts', '*.mjs', '*.js'], { encoding: 'utf8' })
+    .split('\n').map((s) => s.trim()).filter(Boolean)
+    .filter((r) => !/^(dist|labs|node_modules|demos)\//.test(r) && !r.includes('vendor'));
+  const sin: string[] = [];
+  for (const r of todas) {
+    const texto = readFileSync(join(ROOT, r), 'utf8');
+    if (!/^\/\/ @contexto\b/m.test(texto)) sin.push(r);
+  }
+  assert.deepEqual(sin, [], 'el grep del handoff tiene que salir vacio');
+});
 test('gobernanza/cabecera-contexto: K2 la cabecera apunta a un md que existe', () => {
   const malos: string[] = [];
   for (const r of fuentes()) {

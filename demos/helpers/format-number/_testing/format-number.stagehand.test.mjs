@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // format-number.stagehand.test.mjs — checks deterministas de calidad visual.
 import assert from 'node:assert/strict';
 import { BASE_URL, newPage, close, waitReady, screenshot, report } from '../../_testing/lib/harness.mjs';

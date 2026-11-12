@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // waterfall-chart.test.mjs — tests exhaustivos del demo waterfall-chart.html.
 // Cobertura: smoke + funcional (render, config update, bar count, totales,
 // colores success/danger, conectores, hover) + determinismo.

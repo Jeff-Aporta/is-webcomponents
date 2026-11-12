@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // progress-ring.test.mjs — tests exhaustivos del demo iswc-progress-ring.
 // Cobertura: smoke + funcional (value, label, aria, stroke-dashoffset) +
 // gap 1: prefers-reduced-motion afecta a la transición del stroke.

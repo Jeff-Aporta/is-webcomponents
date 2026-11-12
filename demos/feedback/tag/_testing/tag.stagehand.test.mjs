@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // tag.stagehand.test.mjs — checks visuales deterministas.
 // Foco: tags no se solapan, variantes se pintan distinto,
 // el botón de quitar es visible y clickeable.

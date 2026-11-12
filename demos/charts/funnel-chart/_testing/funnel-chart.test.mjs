@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // funnel-chart.test.mjs — tests exhaustivos del demo funnel-chart.html.
 // Cobertura: smoke + funcional (render, config update, band count, labels,
 // valores + dropPct, geometría trapezoidal, hover) + determinismo.

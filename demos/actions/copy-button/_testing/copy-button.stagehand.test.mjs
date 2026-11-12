@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // copy-button.stagehand.test.mjs — Nivel 1: Playwright tests del demo.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';

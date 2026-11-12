@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // dropdown-item.test.mjs — Nivel 3: smoke + type=checkbox + submenu + a11y.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';

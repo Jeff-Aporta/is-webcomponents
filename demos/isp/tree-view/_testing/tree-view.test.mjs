@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // tree-view.test.mjs — tests exhaustivos del demo <iswc-tree-view>.
 // Cobertura: smoke + funcional (render del árbol, expand, selección con
 // keyboard, eventos iswc-select) + customs API (addRoot, historyUndo) + drawer

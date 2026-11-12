@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // btn-ref.stagehand.test.mjs — checks deterministas visuales.
 // Verifica: campo visible con tamaño > 0, modal abre con catálogo, label resuelto
 // tras asignación programática, ningún overflow fuera del viewport.

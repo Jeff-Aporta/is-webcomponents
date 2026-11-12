@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // form.test.mjs — tests exhaustivos del demo <iswc-form>.
 // Cobertura: smoke + funcional (fromJSON monta body, submit emite evento con
 // values, mode view oculta submit, toJSON round-trip, inline JSON script).

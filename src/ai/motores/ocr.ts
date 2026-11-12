@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/ai/README.md
 /** ocr.ts — motor de la herramienta `ocr` (cajas en fracción de la imagen). */
 import { OCR } from 'runonweb/ocr';
 import type { Crear } from '@jeff-aporta/iswc-base/ai/schemas/ai.schemas.js';

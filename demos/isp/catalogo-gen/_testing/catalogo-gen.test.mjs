@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // catalogo-gen.test.mjs — tests exhaustivos del demo <iswc-catalogo-gen>.
 // Cobertura: smoke (monta grid + toolbar + drawer + modales) + API (controller,
 // Lista, seleccionar, eventos) + form slot + modal verificacion.

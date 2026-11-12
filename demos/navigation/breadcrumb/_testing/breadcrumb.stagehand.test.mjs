@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // breadcrumb.stagehand.test.mjs — verificaciones visuales deterministas
 // (sin LLM). El rubric se centra en cinco invariantes de landmark + a11y:
 //   1. Un solo <nav part="breadcrumb"> por contenedor (no wrappers extra).

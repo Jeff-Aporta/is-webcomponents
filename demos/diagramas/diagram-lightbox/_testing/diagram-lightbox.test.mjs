@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // diagram-lightbox.test.mjs — tests del demo diagram-lightbox.html.
 // Cobertura: smoke (custom element definido, atributo kind=payload funciona),
 // funcional (open=true monta el diagrama interno, open=false lo desmonta),

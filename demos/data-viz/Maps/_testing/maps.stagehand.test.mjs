@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // maps.stagehand.test.mjs — checks deterministas de calidad visual para el
 // demo maps.html. Mismo enfoque que er-stagehand.test.mjs / heatmap.stagehand:
 // Playwright puro + métricas geométricas + atributos del SVG y del iframe.

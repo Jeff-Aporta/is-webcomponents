@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // state-diagram.test.mjs — tests exhaustivos del demo state-diagram.html.
 // Cobertura: smoke (monta y renderiza estados + aristas), funcional
 // (dataset.nodeId, kind=start/end, transiciones etiquetadas), determinismo, a11y.

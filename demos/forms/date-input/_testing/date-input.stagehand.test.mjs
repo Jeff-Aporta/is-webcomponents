@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // date-input.stagehand.test.mjs — rubric visual determinista para date-input.
 //
 // Sin LLM: con Playwright comprobamos que cuando se abre el panel:

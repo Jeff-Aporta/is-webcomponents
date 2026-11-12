@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // float-card.stagehand.test.mjs — checks deterministas visuales.
 // Verifica: cada anchor tiene dimensiones > 0, los panels se posicionan cerca
 // del anchor y permanecen en el DOM, los offsets de linearTransform se aplican.

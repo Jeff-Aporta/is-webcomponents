@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // format.test.mjs — tests funcionales de <iswc-format> (switch universal date/number/bytes/relative/text).
 //
 // Cubre cada rama:

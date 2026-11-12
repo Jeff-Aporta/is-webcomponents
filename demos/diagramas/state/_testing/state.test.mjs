@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // state.test.mjs — tests del spec `state-spec` (funciones puras, sin DOM).
 import assert from 'node:assert/strict';
 import { test } from 'node:test';

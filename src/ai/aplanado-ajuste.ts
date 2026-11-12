@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/ai/README.md
 /**
  * aplanado-ajuste.ts — calcula la transformación de `aplanado.ts`. Solo corre en el build y en el benchmark: el
  * navegador recibe el resultado. Determinista: mismos vectores, misma matriz.

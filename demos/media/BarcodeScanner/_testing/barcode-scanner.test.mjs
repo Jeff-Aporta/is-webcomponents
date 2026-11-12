@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // barcode-scanner.test.mjs — tests exhaustivos del demo barcode-scanner.html.
 // Cobertura: smoke + funcional (registro, atributos formats/disabled, hint
 // de fallback si BarcodeDetector no está disponible) + graceful degradation

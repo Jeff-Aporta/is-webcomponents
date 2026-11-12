@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // er-diagram.stagehand.test.mjs — verificaciones de calidad visual
 // (Nivel 1) para el demo er-diagram.html.
 import assert from 'node:assert/strict';

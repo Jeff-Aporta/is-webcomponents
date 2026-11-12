@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // switch.stagehand.test.mjs — verificaciones visuales deterministas.
 //
 // Checks:

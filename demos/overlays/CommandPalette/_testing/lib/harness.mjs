@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // harness.mjs: utilidades compartidas por las suites Playwright+Stagehand de
 // los demos de overlays. Misma idea que las suites de diagramas y data-viz:
 //   - Lanzar un Chromium headless apuntando al servidor de demos.

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // maps.test.mjs — tests exhaustivos del demo maps.html.
 //
 // Cobertura:

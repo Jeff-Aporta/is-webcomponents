@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // radio-group.test.mjs — tests exhaustivos del demo radio-group.html.
 // Cobertura: smoke + funcional (selección, iswc-change, roving tabindex)
 // + accesibilidad (role=radiogroup, aria-orientation) + edge case (teclado, required, form reset).

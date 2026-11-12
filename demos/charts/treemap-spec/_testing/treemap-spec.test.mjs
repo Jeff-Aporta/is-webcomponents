@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // treemap-spec.test.mjs — tests exhaustivos del demo treemap-spec.html.
 // treemap-spec es un utility bundle: exporta resolveTreemapSpec (payload →
 // spec normalizada) y computeTreemapLayout (spec → geometría de rectángulos).

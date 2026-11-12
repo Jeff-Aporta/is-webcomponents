@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // sequence-diagram.test.mjs — tests exhaustivos del demo sequence-diagram.html.
 // Cobertura: smoke (monta actores + mensajes), funcional (lifelines,
 // mensajes con kind), rama alt visible, determinismo, a11y.

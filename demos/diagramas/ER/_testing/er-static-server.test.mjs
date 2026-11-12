@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // er-static-server.test.mjs — regresión para el bug del MIME type.
 //
 // Bug original: VS Code Live Server (puerto típico 5505) sirve `.ts` con

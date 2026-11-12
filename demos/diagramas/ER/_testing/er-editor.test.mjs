@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // er-editor.test.mjs — tests exhaustivos del demo er-editor.html.
 // Cobertura: smoke + funcional (drag, click-to-connect, undo/redo, export)
 // + determinismo (round-trip JSON idéntico) + accesibilidad básica.

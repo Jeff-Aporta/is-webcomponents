@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // bar-chart.test.mjs — tests exhaustivos del demo bar-chart.html.
 // Cobertura: smoke + funcional (render, config update, dataset multi-bar,
 // axis labels, hover) + determinismo.

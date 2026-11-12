@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/README.md
 /**
  * manifest.ts — Zod schemas para los tipos extraídos de este módulo.
  *

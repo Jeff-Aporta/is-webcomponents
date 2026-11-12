@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // format-date.stagehand.test.mjs — checks deterministas de calidad visual.
 // Mismo patrón que er-stagehand: cero LLM, sin API keys, CI-friendly.
 import assert from 'node:assert/strict';

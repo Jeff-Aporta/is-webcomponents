@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // copy-button.test.mjs — Nivel 3: smoke + props + flujo de copia.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';

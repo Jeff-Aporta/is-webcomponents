@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // signature.test.mjs — tests funcionales del demo signature.html.
 // Cobertura: smoke + funcional (canvas en shadow DOM con dimensiones,
 // simulación de trazos) + accesibilidad (aria-label) + caso límite (clear/isEmpty).

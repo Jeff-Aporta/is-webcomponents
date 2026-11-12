@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // sequence.test.mjs — tests del spec `sequence-spec` (funciones puras, sin DOM).
 // Cubre: smoke (import no rompe), round-trip JSON idéntico, edge cases
 // (payload vacío, actor único, mensaje colgante).

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // rte.test.mjs — tests funcionales del demo rte.html.
 // Cobertura: smoke + funcional (toolbar, execCommand-style formatting via exec(),
 // source mode) + accesibilidad (role=toolbar) + caso límite (toolbar reducida).

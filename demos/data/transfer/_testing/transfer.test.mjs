@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // transfer.test.mjs — tests exhaustivos del demo transfer.html.
 // Cobertura: smoke + funcional (rendering, mover items, max-target, disabled,
 // searchable, eventos, propiedades públicas) + determinismo (round-trip).

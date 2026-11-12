@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // flex-layout.stagehand.test.mjs — checks deterministas visuales.
 // Verifica: cada layout es flex con dimensiones > 0, los hijos están dentro
 // del host, no hay overflow, y los layouts responsivos reflejan data-sizew.

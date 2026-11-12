@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/ai/README.md
 /**
  * motores.ts — los modelos de IA para cualquier componente, sin UI: `ejecutar('ocr', imagen)` y listo. Cada motor se carga
  * una vez y solo al usarlo, con la regla de `descarga.ts`; quien llama solo espera. Los bundles de `motores/` van por URL

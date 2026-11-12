@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // dialog.stagehand.test.mjs — verificaciones de calidad visual para iswc-dialog.
 import assert from 'node:assert/strict';
 import { BASE_URL, newPage, close, waitReady, screenshot, report, maybeStagehand } from './lib/harness.mjs';

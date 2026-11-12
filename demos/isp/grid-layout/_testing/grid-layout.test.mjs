@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // grid-layout.test.mjs — tests exhaustivos del demo <iswc-grid-layout>.
 // Cobertura: smoke + funcional (cells=3 → 3 columnas, track list cruda,
 // cells-fit) + custom properties (--cells / --gap) + breakpoint.

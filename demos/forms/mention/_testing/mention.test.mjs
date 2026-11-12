@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // mention.test.mjs — tests funcionales del demo mention.html.
 //
 // Cobertura:

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/ai/README.md
 /**
  * vector-local.ts — vectores de consultas en el navegador, para cualquier componente que busque. Usa el motor `embed`, así
  * que la herramienta y la búsqueda comparten modelo. Si el modelo no está (el usuario lo pospuso o no bajó), devuelve null y

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // scrollspy.test.mjs — tests exhaustivos del demo scrollspy.html.
 // Cobertura: smoke + funcional (target auto/custom, trigger default/article,
 // activate(id), refresh(), cleanup de MutationObserver/IntersectionObserver,

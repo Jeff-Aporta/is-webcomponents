@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // er-attributes.test.mjs — CRUD de atributos en el editor visual.
 //
 // Cubre el panel "Atributos" del editor:

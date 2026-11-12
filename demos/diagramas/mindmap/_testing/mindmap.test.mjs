@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // mindmap.test.mjs — tests exhaustivos del demo mindmap.html.
 // Cobertura: smoke (monta y renderiza nodos + aristas), funcional
 // (dataset.nodeId, kind=root/branch/leaf), aristas con path ortogonal,

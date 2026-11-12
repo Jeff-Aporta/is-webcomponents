@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // slider.test.mjs — tests funcionales del demo slider.html.
 //
 // Cobertura:

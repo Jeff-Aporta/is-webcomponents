@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // loading-overlay.stagehand.test.mjs — checks deterministas visuales.
 // Verifica: tras show(), el backdrop cubre el viewport entero con dimensiones
 // válidas y aria-modal correcto. Tras hide(), el backdrop se oculta.

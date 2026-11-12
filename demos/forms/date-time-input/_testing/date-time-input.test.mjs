@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // date-time-input.test.mjs — tests exhaustivos del demo date-time-input.html.
 // Cobertura: smoke + funcional (open/close dialog, selección de fecha/hora,
 // cambio de valor) + accesibilidad + edge cases (vacío, inválido, disabled).

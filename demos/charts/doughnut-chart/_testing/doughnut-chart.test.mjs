@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // doughnut-chart.test.mjs — tests exhaustivos del demo doughnut-chart.html.
 // Cobertura: smoke + funcional (render, config update, slice count, leyenda,
 // total al centro, hover) + determinismo.

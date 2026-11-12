@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // avatar.test.mjs — tests exhaustivos del demo avatar.html.
 // Cobertura: smoke + funcional (initials, image con fallback, slot icon,
 // eventos iswc-error, formas) + determinismo (mismo initials produce mismo texto)

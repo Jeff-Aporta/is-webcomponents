@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // context-menu.test.mjs — Nivel 3: smoke + open/close + iswc-select + iswc-open.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';

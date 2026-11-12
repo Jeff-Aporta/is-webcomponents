@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // journey.test.mjs — smoke + edge cases para journey-spec.
 import assert from 'node:assert/strict';
 import { resolveJourneySpec, computeJourneyLayout, journeySpecToJson } from '../../../../src/components/diagrams/journey-spec.ts';

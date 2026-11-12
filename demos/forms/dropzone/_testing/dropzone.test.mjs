@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // dropzone.test.mjs — tests funcionales del demo dropzone.html.
 //
 // Cobertura:

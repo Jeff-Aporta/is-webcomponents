@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // demo.test.mjs — tests exhaustivos del demo demo.html.
 // Cobertura: smoke (light DOM, clase .demo automática) + funcional
 // (heading se sincroniza, removal, evento iswc-demo-connected).

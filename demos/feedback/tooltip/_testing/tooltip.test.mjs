@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // tooltip.test.mjs — tests exhaustivos del demo iswc-tooltip.
 // Cobertura: smoke + funcional (hover, focus, click, manual triggers,
 // show/hide, Escape/click-fuera en modos interactivos) + aria-describedby

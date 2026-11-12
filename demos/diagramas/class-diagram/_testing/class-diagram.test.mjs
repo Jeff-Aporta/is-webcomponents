@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // class-diagram.test.mjs — tests exhaustivos del demo class-diagram.html.
 // Cobertura: smoke (monta y renderiza clases y relaciones), funcional
 // (atributos/métodos, secciones, kind=inheritance/composition),

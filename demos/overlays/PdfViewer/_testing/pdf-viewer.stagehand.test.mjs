@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // pdf-viewer.stagehand.test.mjs — verificaciones de calidad visual.
 //
 // Antes: usaba Stagehand (LLM) con un rubric en español y dependía de la

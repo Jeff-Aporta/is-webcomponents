@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // date-time-field.test.mjs — tests exhaustivos del demo date-time-field.html.
 // Cobertura: smoke + funcional (secciones spinbutton, valor inicial,
 // setting via API, min/max) + accesibilidad + edge cases (vacío, inválido).

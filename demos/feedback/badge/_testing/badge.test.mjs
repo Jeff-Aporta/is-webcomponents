@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // badge.test.mjs — tests exhaustivos del demo iswc-badge.
 // Cobertura: smoke + funcional (color/variant/pill/attention) +
 // slots + atributos inválidos caen a default + accesibilidad básica.

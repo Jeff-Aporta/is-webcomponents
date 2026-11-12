@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // split-panel.stagehand.test.mjs — verificaciones de calidad visual para iswc-split-panel.
 import assert from 'node:assert/strict';
 import { BASE_URL, newPage, close, waitReady, screenshot, report, maybeStagehand } from './lib/harness.mjs';

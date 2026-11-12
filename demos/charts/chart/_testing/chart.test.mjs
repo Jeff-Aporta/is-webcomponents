@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // chart.test.mjs — tests exhaustivos del demo chart.html (motor genérico).
 //
 // Cobertura:

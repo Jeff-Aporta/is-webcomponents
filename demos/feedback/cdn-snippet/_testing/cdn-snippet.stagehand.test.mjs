@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // cdn-snippet.stagehand.test.mjs — checks visuales deterministas.
 // Foco: el panel renderiza sin overflow y los bloques de código tienen tamaño razonable.
 import assert from 'node:assert/strict';

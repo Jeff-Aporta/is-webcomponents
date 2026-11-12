@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // switch.test.mjs — tests exhaustivos del demo switch.html.
 // Cobertura: smoke + funcional (toggle via click y via atributo)
 // + accesibilidad (role=switch, aria-checked) + edge case (disabled, required).

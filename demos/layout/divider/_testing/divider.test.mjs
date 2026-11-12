@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // divider.test.mjs — tests exhaustivos del demo divider.html.
 // Cobertura: smoke + funcional (orientation, role/aria, color/opacity,
 // range/clamp, fallbacks) + determinismo + CSS Parts.

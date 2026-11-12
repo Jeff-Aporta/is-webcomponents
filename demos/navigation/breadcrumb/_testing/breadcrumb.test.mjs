@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // breadcrumb.test.mjs — tests exhaustivos del demo breadcrumb.html.
 // Cobertura: smoke (render + custom elements), funcional (href, current,
 // aria-current, target, separator override, label), accesibilidad, determinismo.

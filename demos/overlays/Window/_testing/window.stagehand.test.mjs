@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // window.stagehand.test.mjs — verificaciones de calidad visual.
 //
 // Antes: usaba Stagehand (LLM) con un rubric en español. Resultado: siempre

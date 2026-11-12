@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/ai/README.md
 /** clean.ts — motor de la herramienta `clean`. */
 import { TranscriptCleaner } from 'runonweb/clean';
 import type { Crear } from '@jeff-aporta/iswc-base/ai/schemas/ai.schemas.js';

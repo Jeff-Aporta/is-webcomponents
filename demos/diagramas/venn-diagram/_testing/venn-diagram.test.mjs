@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // venn-diagram.test.mjs — tests exhaustivos del demo venn-diagram.html.
 // Cobertura: smoke (monta 3 conjuntos + regiones), funcional (dataset.setId,
 // dataset.regionId), etiquetas por región, determinismo, a11y.

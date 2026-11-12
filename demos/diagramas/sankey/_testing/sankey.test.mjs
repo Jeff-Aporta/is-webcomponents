@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // sankey.test.mjs — tests del spec `sankey-spec` (funciones puras, sin DOM).
 import assert from 'node:assert/strict';
 import { test } from 'node:test';

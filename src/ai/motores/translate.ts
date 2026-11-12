@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/ai/README.md
 /** translate.ts — motor de la herramienta `translate`: un modelo por par de idiomas. */
 import { Translator } from 'runonweb/translate';
 import type { Crear } from '@jeff-aporta/iswc-base/ai/schemas/ai.schemas.js';

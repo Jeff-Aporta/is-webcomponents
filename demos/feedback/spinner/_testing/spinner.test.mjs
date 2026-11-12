@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // spinner.test.mjs — tests exhaustivos del demo iswc-spinner.
 // Cobertura: smoke + funcional (role=status, aria-live, aria-label por
 // defecto, color custom) + gap 1: prefers-reduced-motion neutraliza la

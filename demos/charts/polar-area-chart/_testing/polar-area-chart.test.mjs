@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // polar-area-chart.test.mjs — tests exhaustivos del demo polar-area-chart.html.
 import assert from 'node:assert/strict';
 import { BASE_URL, newPage, close, waitReady, screenshot, report } from '../../_global/lib/harness.mjs';

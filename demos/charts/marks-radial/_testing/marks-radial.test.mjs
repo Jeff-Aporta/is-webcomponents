@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // marks-radial.test.mjs — tests exhaustivos del demo marks-radial.html.
 // marks-radial es un utility bundle (sin custom element propio); exporta
 // drawPieMarks, drawDoughnutMarks, drawPolarAreaMarks y drawRadarMarks.

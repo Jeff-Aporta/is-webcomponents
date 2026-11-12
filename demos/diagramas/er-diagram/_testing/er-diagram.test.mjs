@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // er-diagram.test.mjs — tests exhaustivos del demo er-diagram.html.
 // Cobertura: smoke (monta entidades/relaciones), animation=trace embebe
 // keyframes CSS, determinismo (re-render idempotente), accesibilidad.

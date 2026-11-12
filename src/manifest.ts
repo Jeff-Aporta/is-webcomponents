@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/README.md
 /**
  * Manifest del kit ISWC.
  *

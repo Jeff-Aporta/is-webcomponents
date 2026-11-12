@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // button-group.stagehand.test.mjs — Nivel 1: tests Playwright del demo HTML.
 // Cubre: render inicial, accesibilidad, click básico, keyboard navigation,
 // atributos reactivos, prefers-reduced-motion (no aplica al componente pero

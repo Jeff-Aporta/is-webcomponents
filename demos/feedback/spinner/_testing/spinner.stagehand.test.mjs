@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // spinner.stagehand.test.mjs — checks visuales deterministas.
 // Foco: los spinners respetan el width/height del host, son visibles,
 // el indicador tiene border visible.

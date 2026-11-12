@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // date-range-picker.stagehand.test.mjs — rubric visual determinista para date-range-picker.
 //
 // Sin LLM: con Playwright comprobamos que los range-pickers cumplen:

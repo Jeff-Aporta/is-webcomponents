@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // swimlane-diagram.test.mjs — tests exhaustivos del demo swimlane-diagram.html.
 // Cobertura: smoke (monta lanes + steps + links), funcional
 // (dataset.laneId, dataset.stepId, dataset.linkId), determinismo, a11y.

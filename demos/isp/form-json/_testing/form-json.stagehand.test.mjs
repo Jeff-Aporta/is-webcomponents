@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // form-json.stagehand.test.mjs — checks deterministas visuales.
 // Verifica: los controles son visibles, el panel de output se actualiza tras
 // pulsar botones, y los valores asignados se reflejan en el DOM.

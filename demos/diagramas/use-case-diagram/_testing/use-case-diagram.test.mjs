@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // use-case-diagram.test.mjs — tests exhaustivos del demo use-case-diagram.html.
 // Cobertura: smoke (monta actores + casos + enlaces), funcional
 // (dataset.nodeId con actor y case, dataset.linkId), include/extend, determinismo, a11y.

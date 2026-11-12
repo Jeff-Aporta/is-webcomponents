@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // org-chart.stagehand.test.mjs — verificaciones de calidad visual
 // (Nivel 1) para el demo org-chart.html. org-chart no extiende
 // DiagramElementBase, así que usamos selectores específicos del componente.

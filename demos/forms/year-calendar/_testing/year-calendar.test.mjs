@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // year-calendar.test.mjs — tests funcionales del demo year-calendar.html.
 //
 // Cobertura:

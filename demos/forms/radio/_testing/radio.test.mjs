@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // radio.test.mjs — tests exhaustivos del demo radio.html.
 // Cobertura: smoke + funcional (click marca el radio, iswc-radio-select)
 // + accesibilidad (role=radio, aria-checked) + edge case (standalone, disabled).

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // skeleton.test.mjs — tests exhaustivos del demo iswc-skeleton.
 // Cobertura: smoke + funcional (effect default = sheen, effect=none sin
 // animación, effect=pulse con respiración) + gap 1: prefers-reduced-motion

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // avatar.stagehand.test.mjs — verificaciones de calidad visual (rubric
 // determinista). Misma estrategia que er-stagehand.test.mjs: cero LLM por
 // defecto; si STAGEHAND=1 + credenciales se activa la rama LLM opt-in.

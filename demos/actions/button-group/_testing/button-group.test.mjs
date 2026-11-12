@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // button-group.test.mjs — Nivel 3 (pure functions / DOM boot via node:test).
 // Verifica que el bundle carga el custom element, monta, y refleja atributos
 // en propiedades / DOM / eventos.

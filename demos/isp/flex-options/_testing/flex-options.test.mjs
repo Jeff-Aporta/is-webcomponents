@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // flex-options.test.mjs — tests exhaustivos del demo <iswc-flex-options>.
 // Cobertura: smoke + funcional (pintar botones desde actions, click invoca
 // onClick, setConfig batch, compact) + re-pintado tras reasignar actions.

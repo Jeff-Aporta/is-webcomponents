@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // venn.stagehand.test.mjs — render + a11y + prefers-reduced-motion.
 import assert from 'node:assert/strict';
 import { BASE_URL, newPage, close, waitReady, screenshot, report, maybeStagehand } from '../../ER/_testing/lib/harness.mjs';

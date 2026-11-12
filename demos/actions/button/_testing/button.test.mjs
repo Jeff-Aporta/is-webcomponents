@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // button.test.mjs — Nivel 3: smoke + props reactivas + form-association + eventos.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';

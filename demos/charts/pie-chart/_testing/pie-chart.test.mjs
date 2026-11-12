@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // pie-chart.test.mjs — tests exhaustivos del demo pie-chart.html.
 // Cobertura: smoke + funcional (render, config update, slice count,
 // legend, slice colors, slice percentages) + determinismo.

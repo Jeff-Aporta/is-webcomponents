@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // prefs-clear.stagehand.test.mjs — checks visuales deterministas.
 // Foco: el botón interno se ve y es clickeable, el icono aparece,
 // el título se muestra al hover.

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // form-json.test.mjs — tests exhaustivos de los helpers de form-json.
 // Cobertura: getValues/setValues round-trip sobre múltiples tipos de control
 // (input, switch, select, checkbox multi).

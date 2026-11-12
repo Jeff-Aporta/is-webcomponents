@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // speed-dial.test.mjs — Nivel 3: smoke + open/close + iswc-toggle + iswc-select.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';

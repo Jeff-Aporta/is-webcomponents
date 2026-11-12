@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // flowchart.test.mjs — tests exhaustivos del demo flowchart.html.
 // Cobertura: smoke (monta y renderiza nodos/aristas), animation=flow embebe
 // keyframes CSS, nodos con shape distinto (stadium/diamond), determinismo,

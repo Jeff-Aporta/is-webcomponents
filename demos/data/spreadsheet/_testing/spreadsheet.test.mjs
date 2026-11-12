@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // spreadsheet.test.mjs — tests exhaustivos del demo spreadsheet.html.
 // Cobertura: smoke + funcional (rendering, fórmulas SUM/COUNT/MIN/MAX, edición,
 // eventos, read-only) + determinismo.

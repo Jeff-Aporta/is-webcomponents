@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // select.stagehand.test.mjs — visual rubric determinista del demo.
 //
 // Checks (Playwright puro, sin LLM):

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // file-input.stagehand.test.mjs — verificaciones visuales deterministas.
 //
 // Patrón tomado de input.stagehand.test.mjs / er-stagehand.test.mjs:

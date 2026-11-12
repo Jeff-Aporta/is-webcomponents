@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // harness.mjs: utilidades compartidas por las suites Playwright de los
 // demos de la categoría `charts`. Réplica de demos/diagramas/ER/_testing/lib/
 // para que cada suite pueda correr aislada con `deno run -A --no-check`.

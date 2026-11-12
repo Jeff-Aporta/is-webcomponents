@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // marks-cartesian.test.mjs — tests del utility marks-cartesian.
 import assert from 'node:assert/strict';
 import { BASE_URL, newPage, close, waitReady, screenshot, report } from '../../_global/lib/harness.mjs';

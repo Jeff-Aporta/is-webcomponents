@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // progress-ring.stagehand.test.mjs — checks visuales deterministas.
 // Foco: el indicador se alinea visualmente sobre el track, los anillos no se
 // solapan, el label central queda centrado.

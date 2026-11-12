@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // time-clock.stagehand.test.mjs — rubric visual determinista para time-clock.
 //
 // Sin LLM: chequeamos con Playwright + atributos del shadow DOM que el reloj

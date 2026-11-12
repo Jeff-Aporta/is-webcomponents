@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // heading.test.mjs — tests exhaustivos del demo <iswc-heading>.
 // Cobertura: smoke + funcional (level 1-6 produce h1-h6, color semántico,
 // mix y size custom, current hereda color) + computedMix.

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // rating.stagehand.test.mjs — verificaciones de calidad visual del rating.
 // Mismo patrón que el rubric del ER: checks deterministas con Playwright +
 // rama opt-in de Stagehand (LLM) cuando STAGEHAND=1 + credenciales.

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // palette-selector.test.mjs — tests exhaustivos del demo iswc-palette-selector.
 // Cobertura: smoke + funcional (default palettes, custom palettes via JSON,
 // persistencia localStorage, evento iswc-palette-change) + focus mgmt +

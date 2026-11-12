@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // time-input.stagehand.test.mjs — rubric visual determinista para time-input.
 //
 // Sin LLM: chequeamos con Playwright + atributos del shadow DOM que el input

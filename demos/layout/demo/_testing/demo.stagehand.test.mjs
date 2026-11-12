@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // demo.stagehand.test.mjs — checks deterministas para iswc-demo (light DOM shell).
 import assert from 'node:assert/strict';
 import { BASE_URL, newPage, close, waitReady, screenshot, report, maybeStagehand } from './lib/harness.mjs';

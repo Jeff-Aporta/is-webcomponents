@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // radio-group.stagehand.test.mjs — verificaciones visuales deterministas.
 //
 // Checks:

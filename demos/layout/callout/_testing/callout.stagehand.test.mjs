@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // callout.stagehand.test.mjs — verificaciones de calidad visual.
 // Mismo patrón que diagramas/ER y data/stat: checks deterministas por
 // defecto (no skippean). STAGEHAND=1 + credenciales activa la rama LLM.

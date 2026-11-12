@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // bar-chart.stagehand.test.mjs — visual rubric determinista (Playwright puro).
 // Cero LLM, cero API keys — solo geometría y atributos del SVG.
 import assert from 'node:assert/strict';

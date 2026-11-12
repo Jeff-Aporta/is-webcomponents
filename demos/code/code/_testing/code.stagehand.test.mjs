@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // code.stagehand.test.mjs — verificaciones visuales deterministas para el
 // editor <iswc-code>. Mismo enfoque que er-stagehand.test.mjs:
 //

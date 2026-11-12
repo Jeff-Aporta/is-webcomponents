@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // block-layout.test.mjs — tests exhaustivos del demo <iswc-block-layout>.
 // Cobertura: smoke + funcional (resize → sizew + event) + API JSON (round-trip
 // idéntico) + custom properties (--clientw / --lerpw).

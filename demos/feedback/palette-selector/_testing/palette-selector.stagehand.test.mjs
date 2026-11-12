@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // palette-selector.stagehand.test.mjs — checks visuales deterministas.
 // Foco: el trigger tiene tamaño clickeable, las opciones no se solapan,
 // aria-selected coherente con la opción visible.

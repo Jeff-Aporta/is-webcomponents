@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // progress-bar.test.mjs — tests exhaustivos del demo iswc-progress-bar.
 // Cobertura: smoke + funcional (value, indeterminate, label, aria-valuenow)
 // + gap 1: prefers-reduced-motion debe neutralizar la animación indeterminate.

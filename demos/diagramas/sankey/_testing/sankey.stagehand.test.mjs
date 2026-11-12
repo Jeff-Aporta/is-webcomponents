@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // sankey.stagehand.test.mjs — test visual del demo sankey.html.
 import { BASE_URL, newPage, close, waitReady, screenshot, report, maybeStagehand } from '../../ER/_testing/lib/harness.mjs';
 

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // heatmap.test.mjs — tests exhaustivos del demo heatmap.html.
 //
 // Cobertura:

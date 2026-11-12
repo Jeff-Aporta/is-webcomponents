@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // chart.stagehand.test.mjs — visual rubric determinista (Playwright puro).
 //
 // Checklist (cada check debe pasar):

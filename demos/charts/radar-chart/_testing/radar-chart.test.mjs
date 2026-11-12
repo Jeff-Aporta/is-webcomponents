@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // radar-chart.test.mjs — tests exhaustivos del demo radar-chart.html.
 //
 // Cobertura:

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // flex-layout.test.mjs — tests exhaustivos del demo <iswc-flex-layout>.
 // Cobertura: smoke + funcional (atributos direction/gap/justify/align) + API JS
 // + custom properties (--gap / --width) + responsive sizew.

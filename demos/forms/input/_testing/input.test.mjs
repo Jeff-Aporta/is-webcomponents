@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // input.test.mjs — tests exhaustivos del demo input.html.
 // Cobertura: smoke + funcional (value sync, tipos, clearable, password-toggle)
 // + accesibilidad (aria-describedby, aria-invalid) + edge case (required, error).

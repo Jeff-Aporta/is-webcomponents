@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // progress-bar.stagehand.test.mjs — checks visuales deterministas.
 // Foco: el indicador ocupa el porcentaje correcto, indeterminate ocupa 100%
 // del track, no hay overflow fuera del track.

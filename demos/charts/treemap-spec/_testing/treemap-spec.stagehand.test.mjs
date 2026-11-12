@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // treemap-spec.stagehand.test.mjs — visual rubric determinista (Playwright puro).
 // Cero LLM, cero API keys — solo geometría y atributos del SVG. treemap-spec
 // es un utility bundle: resolveTreemapSpec + computeTreemapLayout. El demo

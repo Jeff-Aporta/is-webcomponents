@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // date-range-input.stagehand.test.mjs — rubric visual determinista para date-range-input.
 //
 // Sin LLM: con Playwright comprobamos que los inputs de rango cumplen:

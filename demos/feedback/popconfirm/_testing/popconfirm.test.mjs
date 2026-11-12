@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // popconfirm.test.mjs — tests exhaustivos del demo iswc-popconfirm.
 // Cobertura: smoke + funcional (open/close por trigger, eventos
 // iswc-popconfirm-*, click confirm/cancel, click fuera, Escape, placement).

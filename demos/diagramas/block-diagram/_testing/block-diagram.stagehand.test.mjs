@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // block-diagram.stagehand.test.mjs — verificaciones de calidad visual
 // (Nivel 1) para el demo block-diagram.html. Replica el patrón de
 // er-stagehand.test.mjs: checks deterministas con Playwright que sustituyen

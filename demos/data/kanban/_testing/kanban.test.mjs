@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // kanban.test.mjs — tests exhaustivos del demo kanban.html.
 // Cobertura: smoke + funcional (rendering, badges, accents, click event,
 // drag & drop simulation, orientation row) + determinismo.

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // theme-toggle.stagehand.test.mjs — checks visuales deterministas.
 // Foco: el botón interno es clickeable, las secciones no se desbordan,
 // el toggle en la sección clara se ve distinto que el del fondo oscuro.

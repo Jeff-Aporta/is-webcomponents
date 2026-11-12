@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // confirm-modal.test.mjs — tests exhaustivos del demo iswc-confirm-modal.
 // Foco: focus management (focus al abrir + restoration al cerrar), aria-modal,
 // eventos iswc-confirm-* y cierre por backdrop / Escape.

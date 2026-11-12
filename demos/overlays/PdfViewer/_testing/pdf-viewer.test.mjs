@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // pdf-viewer.test.mjs — tests exhaustivos del demo pdf-viewer.html.
 //
 // Cobertura:

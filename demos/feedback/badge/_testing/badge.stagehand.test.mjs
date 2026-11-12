@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // badge.stagehand.test.mjs — verificaciones de calidad visual deterministas.
 // Aplica el mismo patrón que er-stagehand.test.mjs: checks estructuradas sin
 // dependencia de LLM. Si STAGEHAND=1 + credenciales, además corre el rubric LLM.

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // date-picker.test.mjs — tests exhaustivos del demo date-picker.html.
 // Cobertura: smoke + funcional (value, click, navegación) + accesibilidad +
 // edge cases + teclado (flechas, PageUp/Down).

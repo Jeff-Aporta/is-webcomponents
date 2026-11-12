@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // toast.test.mjs — tests exhaustivos del demo iswc-toast.
 // Cobertura: smoke + funcional (create, placements, success/error/loading,
 // promise) + gap 18: el modo seguro (allowHtml=false) trata el mensaje como

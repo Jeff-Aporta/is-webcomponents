@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // diagram-lightbox.stagehand.test.mjs — verificaciones de calidad visual
 // (Nivel 1) para el demo diagram-lightbox.html. Aquí el "diagrama en
 // viewport" se cumple trivialmente porque el lightbox ocupa toda la

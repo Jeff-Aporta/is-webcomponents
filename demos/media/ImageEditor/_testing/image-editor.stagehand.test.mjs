@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // image-editor.stagehand.test.mjs — verificaciones de calidad visual
 // (rubric determinista + rama LLM opt-in).
 import assert from 'node:assert/strict';

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/ai/README.md
 /**
  * orden.ts — ordena por coincidencia exacta y por significado, sin DOM ni modelo. Lo exacto va primero; después pesan el
  * coseno y un empujón léxico que aguanta prefijos y errores de tecleo. Ordena, no oculta: `relevante` dice qué es hallazgo.

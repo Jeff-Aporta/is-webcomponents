@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // date-input.test.mjs — tests exhaustivos del demo date-input.html.
 // Cobertura: smoke + funcional (show/hide, value por attr y propiedad,
 // selección en calendario reflejada en el campo) + accesibilidad + edge cases.

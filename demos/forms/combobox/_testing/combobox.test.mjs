@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // combobox.test.mjs — tests funcionales del demo combobox.html.
 //
 // Cobertura:

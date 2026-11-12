@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // run.mjs: runner de los tests exhaustivos de los demos de la categoría
 // `charts`. Igual que el runner de `demos/diagramas/ER/`, levanta el servidor
 // de demos (scripts/serve-demos.mjs) en puerto libre, corre las suites de

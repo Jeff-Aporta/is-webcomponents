@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // textarea.test.mjs — tests exhaustivos del demo textarea.html.
 // Cobertura: smoke + funcional (value sync, autosize, rows)
 // + accesibilidad (aria-invalid) + edge case (required, maxlength, error).

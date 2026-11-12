@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // component-diagram.test.mjs — tests exhaustivos del demo component-diagram.html.
 // Cobertura: smoke (monta y renderiza componentes, interfaces y aristas),
 // funcional (cada primitiva UML está presente), determinismo, accesibilidad.

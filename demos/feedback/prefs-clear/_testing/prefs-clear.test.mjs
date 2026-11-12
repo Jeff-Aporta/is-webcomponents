@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // prefs-clear.test.mjs — tests exhaustivos del demo iswc-prefs-clear.
 // Cobertura: smoke + funcional (peek, clear sin reload emite evento,
 // confirm/reload flags, atributos forwarded al button interno).

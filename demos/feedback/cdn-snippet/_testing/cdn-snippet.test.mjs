@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // cdn-snippet.test.mjs — tests del demo iswc-cdn-snippet.
 // Cobertura: smoke + el snippet carga solo el tag + deps + a11y.
 import assert from 'node:assert/strict';

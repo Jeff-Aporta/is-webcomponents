@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // float-card.test.mjs — tests exhaustivos del demo <iswc-float-card>.
 // Cobertura: smoke + funcional (open toggle, lock/unlock, linearTransform,
 // horizontal/vertical axis) + DOM persistente (no display:none).

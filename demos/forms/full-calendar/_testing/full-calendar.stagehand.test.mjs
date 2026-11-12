@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // full-calendar.stagehand.test.mjs — visual rubric determinista del demo.
 //
 // Checks (Playwright puro, sin LLM):

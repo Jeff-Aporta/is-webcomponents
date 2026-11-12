@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // file-input.test.mjs — suite funcional del demo file-input.html.
 // Cobertura: smoke + funcional (files property, multiple, disabled, required)
 // + accesibilidad (aria-labelledby, role=button) + caso borde (empty).

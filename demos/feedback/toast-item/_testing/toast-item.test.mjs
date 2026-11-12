@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // toast-item.test.mjs — tests exhaustivos del demo iswc-toast-item.
 // Cobertura: smoke + funcional (show/hide, duración por defecto, role=status,
 // eventos iswc-after-show/hide, log payload, slot caption, color inválido

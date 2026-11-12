@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // pin-input.test.mjs — tests funcionales del demo pin-input.html.
 //
 // Cobertura:

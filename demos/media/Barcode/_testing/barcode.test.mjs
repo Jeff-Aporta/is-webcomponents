@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // barcode.test.mjs — tests exhaustivos del demo barcode.html.
 // Cobertura: smoke + funcional (Code128, EAN-13 con checksum, cambio de value,
 // fg/bg, show-text) + determinismo (mismo value → mismo viewBox / mismas

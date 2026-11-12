@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // grid-layout.stagehand.test.mjs — checks deterministas visuales.
 // Verifica: cada grid tiene display:grid, las celdas se distribuyen correctamente,
 // no se desbordan y respetan el número de columnas indicado.

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // sequence.stagehand.test.mjs — test visual del demo sequence.html.
 // Sigue el patrón de ER: si Stagehand no está disponible, SKIP sin fallar.
 import assert from 'node:assert/strict';

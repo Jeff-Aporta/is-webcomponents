@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // details.test.mjs — tests exhaustivos del demo details.html.
 // Cobertura: smoke + funcional (open attr, show/hide/toggle, accordion,
 // disabled bloquea toggle, summary slot, icon-placement, eventos,

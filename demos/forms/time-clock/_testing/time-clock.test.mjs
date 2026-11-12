@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // time-clock.test.mjs — tests exhaustivos del demo time-clock.html.
 // Cobertura: smoke + funcional (rotación de la mano al cambiar valor, horas
 // → minutos → segundos) + accesibilidad + edge cases (vacío, min/max,

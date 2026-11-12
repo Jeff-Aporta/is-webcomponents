@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // date-range-input.test.mjs — tests exhaustivos del demo date-range-input.html.
 // Cobertura: smoke + funcional (dos campos, valor inicio/fin, show/hide, atajos)
 // + accesibilidad + edge cases.

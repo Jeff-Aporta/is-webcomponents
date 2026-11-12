@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // icon.test.mjs — tests exhaustivos del demo icon.html.
 // Cobertura: smoke + funcional (render del SVG inline, label/aria-hidden,
 // name+library como compat para icon, cambio de icon en vivo, src custom,

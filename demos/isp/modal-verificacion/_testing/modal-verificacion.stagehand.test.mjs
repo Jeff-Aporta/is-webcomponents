@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // modal-verificacion.stagehand.test.mjs — checks deterministas visuales.
 // Verifica: el dialog se monta, los mensajes de verificación se pintan con
 // colores por severidad, el focus-trap está activo (gap 5/8 del handoff).

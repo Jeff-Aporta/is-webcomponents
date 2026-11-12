@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // card.test.mjs — tests exhaustivos del demo card.html.
 // Cobertura: smoke + funcional (variants, orientation, slots vacíos se
 // ocultan, fallbacks) + determinismo + CSS Parts.

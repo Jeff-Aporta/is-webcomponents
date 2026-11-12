@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // quadrant-chart.test.mjs — tests exhaustivos del demo quadrant-chart.html.
 // Cobertura: smoke (monta y renderiza puntos + ejes), funcional
 // (dataset.pointId, leyenda), determinismo, a11y.

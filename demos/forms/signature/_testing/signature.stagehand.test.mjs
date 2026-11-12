@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // signature.stagehand.test.mjs — verificaciones de calidad visual del pad de firma.
 // Mismo patrón: checks deterministas + rama opt-in LLM.
 import assert from 'node:assert/strict';

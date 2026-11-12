@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // barcode-scanner.stagehand.test.mjs — verificaciones de calidad visual
 // (rubric determinista + rama LLM opt-in).
 //

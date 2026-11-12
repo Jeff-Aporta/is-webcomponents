@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // marks-waterfall.test.mjs — tests exhaustivos del demo marks-waterfall.html.
 // marks-waterfall es un utility bundle: exporta waterfallBars (pura) y
 // drawWaterfallMarks (requiere ctx SVG). El demo pinta el wrapper

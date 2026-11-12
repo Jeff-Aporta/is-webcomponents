@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // data-grid.test.mjs — tests exhaustivos del demo data-grid.html.
 // Cobertura: smoke + funcional (rendering, paginación, sort, eventos, valueGetter,
 // renderCell) + determinismo.

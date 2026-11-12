@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/components/README.md
 /**
  * Barril cdn-first. Para cada componente intenta primero `dist/cdn/<name>.min.mjs`
  * (bundle minificado publicado) y si no existe cae al path de fuente en `components/`.

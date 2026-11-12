@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // venn.test.mjs — smoke + snapshot + edge cases para venn-spec.
 import assert from 'node:assert/strict';
 import { resolveVennSpec, computeVennLayout, vennSpecToJson } from '../../../../src/components/diagrams/venn-spec.ts';

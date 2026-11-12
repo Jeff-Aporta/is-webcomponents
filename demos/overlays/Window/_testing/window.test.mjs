@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // window.test.mjs — tests exhaustivos del demo window.html.
 //
 // Cobertura:

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // date-range-picker.test.mjs — tests exhaustivos del demo date-range-picker.html.
 // Cobertura: smoke + funcional (rango, atajos, calendars, clear) +
 // accesibilidad + edge cases.

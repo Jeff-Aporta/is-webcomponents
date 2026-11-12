@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // format-bytes.test.mjs — tests funcionales de <iswc-format-bytes>.
 //
 // Cubre:

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // toast-item.stagehand.test.mjs — checks visuales deterministas.
 // Foco: el toast es visible, tiene tamaño mínimo, la barra de progreso
 // aparece cuando hay duración > 0.

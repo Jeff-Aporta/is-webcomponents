@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // form.stagehand.test.mjs — checks deterministas visuales.
 // Verifica: cada form tiene dimensiones > 0, los slots tienen contenido
 // asignado, y los inputs son visibles dentro del form.

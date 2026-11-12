@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // format-date.test.mjs — tests funcionales de <iswc-format-date>.
 //
 // Cubre:

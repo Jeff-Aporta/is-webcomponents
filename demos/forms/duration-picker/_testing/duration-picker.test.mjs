@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // duration-picker.test.mjs — tests funcionales del demo duration-picker.html.
 // Cobertura: smoke + funcional (value/horas/minutos/segundos, tick, set,
 // parsing de formatos "1h 30m") + accesibilidad (aria-label) + caso límite

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // tag.test.mjs — tests exhaustivos del demo iswc-tag.
 // Cobertura: smoke + funcional (color/variant/pill, with-remove emite
 // iswc-remove, remove-label, slots start/end, valores inválidos caen a default).

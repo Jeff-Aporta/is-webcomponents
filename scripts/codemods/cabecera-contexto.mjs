@@ -30,9 +30,9 @@ function fuentes() {
   return execFileSync('git', ['ls-files', '*.ts', '*.mjs', '*.js'], { encoding: 'utf8' })
     .split('\n').map((s) => s.trim()).filter(Boolean)
     .filter((r) => !r.startsWith('dist/') && !r.startsWith('.tmp') && !r.includes('node_modules/'))
-    // El alcance es el codigo DEL KIT. Las demos son apps consumidoras, los labs son experimentos
-    // cuyo contenido no se toca, y assets/ es un archivo suelto.
-    .filter((r) => !r.startsWith('assets/') && !r.startsWith('demos/') && !r.startsWith('labs/'));
+    // El alcance es todo el codigo versionado menos lo que no es del repo: los labs son
+    // experimentos cuyo contenido no se toca, y los vendor-distributions son una copia.
+    .filter((r) => !r.startsWith('labs/') && !r.startsWith('src/vendor-distributions/'));
 }
 
 /** El md de contexto de una fuente, o null si no aplica. */
@@ -46,9 +46,11 @@ export function mdDeContexto(ruta) {
     }
     const m2 = ruta.match(/^(src\/components\/[^/]+)\//);
     if (m2) return m2[1] + '/README.md';
+    if (existsSync(join(RAIZ, 'src/components/README.md'))) return 'src/components/README.md';
     return null;
   }
   if (ruta.startsWith('src/core/')) return 'src/core/README.md';
+  if (ruta.startsWith('src/ai/')) return 'src/ai/README.md';
   if (ruta.startsWith('src/cdn/build/')) return 'src/cdn/build/README.md';
   if (ruta.startsWith('src/cdn/')) return 'src/cdn/loader.md';
   if (ruta.startsWith('src/styles/')) return 'src/styles/README.md';
@@ -56,6 +58,7 @@ export function mdDeContexto(ruta) {
   if (ruta.startsWith('src/app/')) return 'src/app/README.md';
   if (ruta.startsWith('src/pages/')) return 'src/pages/README.md';
   if (ruta.startsWith('src/previews/')) return 'src/previews/README.md';
+  if (ruta.startsWith('src/')) return 'src/README.md';
   if (ruta.startsWith('scripts/')) return 'scripts/README.md';
   if (ruta.startsWith('tests/')) {
     const m = ruta.match(/^(tests\/[^/]+)\//);
@@ -70,9 +73,17 @@ export function mdDeContexto(ruta) {
     }
     return 'skills/README.md';
   }
-  if (ruta.startsWith('demos/')) return 'demos/README.md';
+  if (ruta.startsWith('demos/')) {
+    // Cada demo tiene su README; si no, el de la carpeta demos/.
+    const m = ruta.match(/^(demos\/[^/]+)\//);
+    if (m && existsSync(join(RAIZ, m[1], 'README.md'))) return m[1] + '/README.md';
+    return 'demos/README.md';
+  }
   if (ruta.startsWith('labs/')) return 'labs/README.md';
+  if (ruta.startsWith('assets/')) return 'assets/README.md';
   if (ruta.startsWith('.audit/')) return '.audit/README.md';
+  // La raiz: el README del repo.
+  if (!ruta.includes('/')) return 'README.md';
   return null;
 }
 

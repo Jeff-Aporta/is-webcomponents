@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // code.test.mjs — tests exhaustivos del demo code.html para <iswc-code>.
 // Cobertura:
 //   smoke + render (tokenización, líneas, line numbers, ready event)

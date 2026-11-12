@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // heading.stagehand.test.mjs — checks deterministas visuales.
 // Verifica: cada heading es visible con tamaño > 0, el nivel determina el
 // font-size (h1 > h2 > ... > h6), y los colores semánticos producen

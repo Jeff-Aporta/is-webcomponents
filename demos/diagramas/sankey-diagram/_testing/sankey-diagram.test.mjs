@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // sankey-diagram.test.mjs — tests exhaustivos del demo sankey-diagram.html.
 // Cobertura: smoke (monta nodos + links), funcional (dataset.nodeId,
 // dataset.linkId), grosor proporcional, determinismo, a11y.

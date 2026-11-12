@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // drawer.test.mjs — tests exhaustivos del demo drawer.html.
 // Cobertura: smoke + funcional (placement start/end/top/bottom,
 // show/hide/Escape/light-dismiss/data-drawer="close"/focus restore,

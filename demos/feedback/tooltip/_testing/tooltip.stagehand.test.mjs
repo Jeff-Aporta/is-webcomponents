@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // tooltip.stagehand.test.mjs — checks visuales deterministas.
 // Foco: el tooltip abierto aparece cerca del target, no se sale del viewport,
 // la flecha (arrow) aparece cuando without-arrow no está presente.

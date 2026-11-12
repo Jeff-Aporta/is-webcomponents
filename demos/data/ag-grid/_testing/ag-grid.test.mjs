@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // ag-grid.test.mjs — tests exhaustivos del demo ag-grid.html.
 // Cobertura: smoke + funcional (rendering, paginación, density, eventos,
 // api.setRows/setColumns) + determinismo.

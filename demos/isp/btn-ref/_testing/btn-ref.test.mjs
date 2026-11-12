@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // btn-ref.test.mjs — tests exhaustivos del demo <iswc-btn-ref>.
 // Cobertura: smoke + funcional (open modal, setValue, iswc-selected-record,
 // typing) + form-associated (name + FormData) + validacion required.

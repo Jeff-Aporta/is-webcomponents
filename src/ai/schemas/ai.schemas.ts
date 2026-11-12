@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/ai/README.md
 /**
  * ai.schemas.ts — contratos de la IA en el navegador: catálogo de herramientas, salida de un motor, búsqueda aplanada y
  * orden. Los módulos de `src/ai/` solo importan tipos de aquí; lo que valida en ejecución es de quien recibe datos de fuera.

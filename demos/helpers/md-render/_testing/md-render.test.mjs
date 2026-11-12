@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // md-render.test.mjs — tests funcionales de <iswc-md-render>.
 //
 // Notas técnicas:

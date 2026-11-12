@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // use-case.stagehand.test.mjs — test visual del demo use-case.html.
 import { BASE_URL, newPage, close, waitReady, screenshot, report, maybeStagehand } from '../../ER/_testing/lib/harness.mjs';
 

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/ai/README.md
 /** image.ts — motor de la herramienta `image`. */
 import { ImageGenerator } from 'runonweb/image';
 import type { Crear } from '@jeff-aporta/iswc-base/ai/schemas/ai.schemas.js';

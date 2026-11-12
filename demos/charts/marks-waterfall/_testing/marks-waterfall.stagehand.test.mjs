@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // marks-waterfall.stagehand.test.mjs — visual rubric determinista (Playwright puro).
 // Cero LLM, cero API keys — solo geometría y atributos del SVG. marks-waterfall
 // es un utility bundle: waterfallBars (pura) + drawWaterfallMarks (ctx). El

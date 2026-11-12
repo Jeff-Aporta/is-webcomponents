@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // harness.mjs: utilidades compartidas por las suites Playwright+Stagehand de
 // los demos de la categoría `helpers`. Réplica casi exacta del harness de
 // demos/diagramas/ER para que los tests sean consistentes.

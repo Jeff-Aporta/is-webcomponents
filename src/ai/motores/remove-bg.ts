@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/ai/README.md
 /**
  * remove-bg.ts — motor de la herramienta `remove-bg`. Va en WASM: BEN2 solo existe en fp16 y onnxruntime-web 1.30–1.31-dev
  * rompe su sombreador `LayerNorm` en WebGPU (microsoft/onnxruntime#32627).

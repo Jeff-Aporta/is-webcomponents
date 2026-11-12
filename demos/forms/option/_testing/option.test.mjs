@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // option.test.mjs — tests exhaustivos del demo option.html.
 // Cobertura: smoke + funcional (selección, aria-selected)
 // + accesibilidad (role=option, aria-disabled) + edge case (group label, disabled).

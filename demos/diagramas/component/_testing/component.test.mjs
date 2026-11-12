@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // component.test.mjs — smoke + edge cases para component-spec.
 import assert from 'node:assert/strict';
 import { resolveComponentSpec, computeComponentLayout, parseHttpEndpoint, wrapLabel, packageTitleInkWidth } from '../../../../src/components/diagrams/component-spec.ts';

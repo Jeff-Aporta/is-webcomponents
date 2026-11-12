@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // time-input.test.mjs — tests exhaustivos del demo time-input.html.
 // Cobertura: smoke + funcional (open/close dialog, paneles sections/list/clock,
 // cambio de valor) + accesibilidad + edge cases (vacío, inválido, disabled).

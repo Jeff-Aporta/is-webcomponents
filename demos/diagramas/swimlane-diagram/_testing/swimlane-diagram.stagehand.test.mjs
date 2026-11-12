@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // swimlane-diagram.stagehand.test.mjs — verificaciones de calidad visual
 // (Nivel 1) para el demo swimlane-diagram.html.
 import assert from 'node:assert/strict';

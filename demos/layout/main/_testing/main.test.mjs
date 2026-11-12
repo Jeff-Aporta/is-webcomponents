@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // main.test.mjs — tests exhaustivos del demo main.html.
 // Cobertura: smoke + funcional (role="main" auto, remember-scroll opt-in,
 // storage-key, scroll-ttl, saveScroll/restoreScroll/scrollToTop/

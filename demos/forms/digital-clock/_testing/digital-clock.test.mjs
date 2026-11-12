@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // digital-clock.test.mjs — tests funcionales del demo digital-clock.html.
 //
 // Cobertura:

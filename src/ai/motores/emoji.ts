@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/ai/README.md
 /** emoji.ts — motor de la herramienta `emoji`. El modelo se entrenó en inglés: el español pasa antes por el traductor. */
 import { Emojifier } from 'runonweb/emoji';
 import { Translator } from 'runonweb/translate';

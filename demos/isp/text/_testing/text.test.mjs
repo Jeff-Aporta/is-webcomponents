@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // text.test.mjs — tests exhaustivos del demo <iswc-text>.
 // Cobertura: smoke + funcional (color semántico/CSS/current, mix, lines)
 // + clamp real en el browser + colorKind.

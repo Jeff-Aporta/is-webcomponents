@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // command-palette.test.mjs — tests exhaustivos del demo command-palette.html.
 //
 // Cobertura:

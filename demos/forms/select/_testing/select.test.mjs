@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // select.test.mjs — tests funcionales del demo select.html.
 //
 // Cobertura:

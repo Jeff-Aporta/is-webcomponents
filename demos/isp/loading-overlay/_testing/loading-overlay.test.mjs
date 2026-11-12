@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // loading-overlay.test.mjs — tests exhaustivos del demo <iswc-loading-overlay>.
 // Cobertura: smoke + funcional (show/hide/toggle, message visible, scroll-lock,
 // iswc-show/iswc-hide events) + no dismissable (Escape y backdrop no cierran).

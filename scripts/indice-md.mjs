@@ -75,6 +75,8 @@ function dominioDe(ruta) {
   if (ruta.startsWith('src/previews/')) return 'previews';
   if (ruta.startsWith('src/styles/')) return 'styles';
   if (ruta.startsWith('src/utils/')) return 'utils';
+  if (ruta.startsWith('src/ai/')) return 'ai';
+  if (ruta === 'src/README.md') return 'src';
   if (ruta.startsWith('scripts/')) return 'scripts';
   if (ruta.startsWith('tests/')) return 'tests';
   if (ruta.startsWith('skills/')) return 'skills';

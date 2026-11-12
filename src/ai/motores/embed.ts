@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/ai/README.md
 /** embed.ts — motor de la herramienta `embed`; `vectorizar` es lo que usa `vector-local.ts` para buscar, con el mismo modelo ya cargado. */
 import { cosineSimilarity, TextEmbedder } from 'runonweb/embed';
 import type { Crear } from '@jeff-aporta/iswc-base/ai/schemas/ai.schemas.js';

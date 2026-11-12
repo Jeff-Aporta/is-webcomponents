@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // confirm-delete.stagehand.test.mjs — checks deterministas visuales.
 // Verifica: el dialog se monta, los campos e inputs son visibles, el botón
 // "Eliminar" carga con el icono, y el focus-trap funciona (gap 5/8 del handoff).

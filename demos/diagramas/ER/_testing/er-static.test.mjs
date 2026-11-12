@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // er-static.test.mjs — tests exhaustivos del demo er-static.html (lite mode).
 // Cobertura: smoke (monta, renderiza entidades y aristas), funcional
 // (animation="trace" embebe keyframes, dashStyle anima, prefers-reduced-motion

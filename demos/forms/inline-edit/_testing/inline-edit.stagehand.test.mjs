@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // inline-edit.stagehand.test.mjs — verificaciones de calidad visual del inline-edit.
 // Mismo patrón: checks deterministas + rama opt-in LLM.
 import assert from 'node:assert/strict';

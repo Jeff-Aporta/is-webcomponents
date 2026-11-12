@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // timeline.test.mjs — tests exhaustivos del demo timeline.html.
 // Cobertura: smoke (monta eventos + eje), funcional (dataset.eventId),
 // leyenda de grupos, determinismo, a11y.

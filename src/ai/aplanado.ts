@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/ai/README.md
 /**
  * aplanado.ts — vectores chicos para búsquedas en el navegador (sin DOM ni dependencias). Una transformación lineal
  * guardada en el JSON del corpus se aplica IGUAL al corpus (en el build) y a cada consulta (en el navegador): centrar,

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // block-layout.stagehand.test.mjs — checks deterministas visuales.
 // Verifica: cada bloque tiene dimensiones > 0, --clientw cuadra con width,
 // data-sizew está presente, y los breakpoints encajan con la escalera esperada.

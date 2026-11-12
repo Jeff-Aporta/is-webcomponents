@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // image-editor.test.mjs — tests exhaustivos del demo image-editor.html.
 // Cobertura: smoke + funcional (zoom, rotate, reset, crop vía atributos y
 // botones data-action) + cleanup de listeners (window pointermove/pointerup

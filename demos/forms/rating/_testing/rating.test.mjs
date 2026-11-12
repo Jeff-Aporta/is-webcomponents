@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // rating.test.mjs — tests funcionales del demo rating.html.
 // Cobertura: smoke + funcional (value/clearable) + accesibilidad (role=slider,
 // aria-valuenow/aria-valuemax) + caso límite (estado vacío).

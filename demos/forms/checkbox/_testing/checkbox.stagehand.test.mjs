@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // checkbox.stagehand.test.mjs — verificaciones visuales deterministas.
 //
 // Patrón tomado de er-stagehand.test.mjs: rubric visual sin LLM por defecto.

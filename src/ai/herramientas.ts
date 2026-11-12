@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/ai/README.md
 /**
  * herramientas.ts — catálogo de la IA en el navegador (runonweb), sin DOM. Cada herramienta declara qué recibe y qué
  * opciones tiene; `<iswc-ai-tool>` pinta lo demás. Su motor es `motores/<id>.ts`, un bundle aparte que solo se baja al usarla.

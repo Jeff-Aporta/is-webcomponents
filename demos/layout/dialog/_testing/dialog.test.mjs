@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // dialog.test.mjs — tests exhaustivos del demo dialog.html.
 // Cobertura: smoke + funcional (open/close, focus trap, Escape,
 // light-dismiss, restore de foco, data-dialog="close", without-header,

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // time-field.test.mjs — tests exhaustivos del demo time-field.html.
 // Cobertura: smoke + funcional (secciones spinbutton, valor inicial,
 // setting via API, min/max) + accesibilidad + edge cases (vacío, inválido).

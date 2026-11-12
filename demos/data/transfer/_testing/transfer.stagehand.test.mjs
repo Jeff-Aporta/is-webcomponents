@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // transfer.stagehand.test.mjs — verificaciones de calidad visual.
 //
 // Mismo patrón que diagramas/ER/er-stagehand.test.mjs: por defecto corremos

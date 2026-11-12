@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // catalogo-gen.stagehand.test.mjs — checks deterministas visuales.
 // Verifica: el grid renderiza con altura > 0, la toolbar es visible, el drawer
 // está montado y el modal de verificación abre correctamente con resultados.

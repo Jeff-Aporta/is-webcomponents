@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // component-pack.test.mjs — smoke + edge cases para component-pack.
 import assert from 'node:assert/strict';
 import {

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // split-panel.test.mjs — tests exhaustivos del demo split-panel.html.
 // Cobertura: smoke + funcional (orientation, position, position-in-pixels,
 // primary, collapse, disabled, snap, drag via pointer, keyboard,

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // checkbox.test.mjs — tests exhaustivos del demo checkbox.html.
 // Cobertura: smoke + funcional (toggle, indeterminate, change event)
 // + accesibilidad (role, aria-checked, aria-disabled) + edge case (form reset, disabled).

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // format-number.test.mjs — tests funcionales de <iswc-format-number>.
 //
 // Cubre:

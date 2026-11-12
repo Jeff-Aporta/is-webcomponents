@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // skeleton.stagehand.test.mjs — checks visuales deterministas.
 // Foco: los skeletons respetan el tamaño CSS del host, son visibles,
 // la tarjeta con varios queda coherente.

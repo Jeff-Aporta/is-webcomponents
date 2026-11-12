@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // run.mjs: runner de los tests exhaustivos de los demos. Levanta el servidor
 // de demos (scripts/serve-demos.mjs) en puerto libre, corre las suites de
 // cada demo (Playwright + Stagehand) y baja el servidor al terminar.

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // line-chart.test.mjs — tests exhaustivos del demo line-chart.html.
 // Cobertura: smoke + funcional (render, config update, multi-line,
 // curve='natural', hover) + determinismo.

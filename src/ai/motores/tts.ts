@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/ai/README.md
 /** tts.ts — motor de la herramienta `tts`: `multi` es el único tamaño que habla español. */
 import { TextToSpeech } from 'runonweb/tts';
 import type { Crear } from '@jeff-aporta/iswc-base/ai/schemas/ai.schemas.js';

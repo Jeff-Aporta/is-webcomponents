@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // share-button.test.mjs — Nivel 3: smoke + props + share() sin Web Share (clipboard).
 import { test } from 'node:test';
 import assert from 'node:assert/strict';

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/ai/README.md
 /** detect.ts — motor de la herramienta `detect`. El modelo nombra en inglés las 80 clases de COCO. */
 import { ObjectDetector } from 'runonweb/detect';
 import type { Crear } from '@jeff-aporta/iswc-base/ai/schemas/ai.schemas.js';

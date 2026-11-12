@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/ai/README.md
 /** classify.ts — motor de la herramienta `classify`: una pregunta de opción sobre el texto. */
 import { Classifier } from 'runonweb/classify';
 import type { Crear } from '@jeff-aporta/iswc-base/ai/schemas/ai.schemas.js';

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // harness.mjs: utilidades compartidas por las suites Playwright de los demos ISP.
 //
 // Centraliza:

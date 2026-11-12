@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // time-field.stagehand.test.mjs — rubric visual determinista para time-field.
 //
 // Sin LLM: chequeamos con Playwright + atributos del shadow DOM que el campo

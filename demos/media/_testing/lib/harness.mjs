@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // harness.mjs — utilidades compartidas por las suites Playwright+Stagehand
 // de los demos de la categoría `media`. Réplica simplificada del harness
 // de ER/_testing/lib/harness.mjs: lanza Chromium headless apuntando al

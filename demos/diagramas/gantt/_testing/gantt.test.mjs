@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // gantt.test.mjs — tests exhaustivos del demo gantt.html.
 // Cobertura: smoke (monta y renderiza filas/ticks/arrows), funcional
 // (filas con dataset.rowId, milestone diferenciado), determinismo,

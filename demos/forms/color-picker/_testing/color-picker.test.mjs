@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // color-picker.test.mjs — tests funcionales del demo color-picker.html.
 //
 // Cobertura:

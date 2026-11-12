@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // duration-picker.stagehand.test.mjs — verificaciones de calidad visual del duration picker.
 // Mismo patrón: checks deterministas + rama opt-in LLM.
 import assert from 'node:assert/strict';

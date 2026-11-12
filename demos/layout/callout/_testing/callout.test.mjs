@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // callout.test.mjs — tests exhaustivos del demo callout.html.
 // Cobertura: smoke + funcional (color, variant, icon, slot icon, fallbacks
 // para valores inválidos) + determinismo + CSS Parts.

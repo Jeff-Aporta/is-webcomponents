@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/ai/README.md
 /** caption.ts — motor de la herramienta `caption`. Los topes de runonweb cortan el español a media frase (48 fichas en `short`). */
 import { ImageCaptioner } from 'runonweb/caption';
 import type { Crear } from '@jeff-aporta/iswc-base/ai/schemas/ai.schemas.js';

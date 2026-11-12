@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // sparkline.test.mjs — tests exhaustivos del demo sparkline.html.
 //
 // Cobertura:

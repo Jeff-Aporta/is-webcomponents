@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // pivot-table.test.mjs — tests exhaustivos del demo pivot-table.html.
 // Cobertura: smoke + funcional (rendering, sum/count/avg, totales, click event)
 // + determinismo (round-trip de script JSON).

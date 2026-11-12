@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // dock.test.mjs — tests exhaustivos del demo dock.html.
 // Cobertura: smoke + funcional (position attr, items con icon/label/active,
 // magnification via --scale, click → iswc-select, hover sobre item ajusta --scale

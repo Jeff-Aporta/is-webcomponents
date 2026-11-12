@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // date-picker.stagehand.test.mjs — rubric visual determinista para date-picker.
 //
 // Sin LLM: con Playwright comprobamos que los calendarios cumplen cinco

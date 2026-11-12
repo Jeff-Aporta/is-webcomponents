@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // block-diagram.test.mjs — tests exhaustivos del demo block-diagram.html.
 // Cobertura: smoke (monta y renderiza bloques y aristas), funcional
 // (atributos, re-render idempotente), accesibilidad (aria-label, sin

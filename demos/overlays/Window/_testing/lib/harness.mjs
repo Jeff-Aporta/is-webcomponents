@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // harness.mjs: utilidades compartidas por las suites Playwright+Stagehand
 // del demo window. Misma idea que las suites de overlays/CommandPalette y
 // overlays/PdfViewer:

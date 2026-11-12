@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // fab.test.mjs — Nivel 3: smoke + props reactivas + posición + iswc-fab-click.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';

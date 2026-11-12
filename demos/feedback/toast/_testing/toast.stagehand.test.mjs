@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // toast.stagehand.test.mjs — checks visuales deterministas.
 // Foco: el toaster es visible, los items se apilan sin salirse del viewport,
 // el placement es el correcto.

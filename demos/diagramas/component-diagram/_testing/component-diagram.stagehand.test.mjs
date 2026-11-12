@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // component-diagram.stagehand.test.mjs — verificaciones de calidad visual
 // (Nivel 1) para el demo component-diagram.html.
 import assert from 'node:assert/strict';

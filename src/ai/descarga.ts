@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/ai/README.md
 /**
  * descarga.ts — regla única para bajar un modelo de IA, sea cual sea el componente que lo use. Hasta 20 MB baja solo, con
  * un toast promise; más pesado, un modal la anuncia y arranca sola a los 5 s, con opción de posponer. Lo ya bajado no vuelve a avisar.

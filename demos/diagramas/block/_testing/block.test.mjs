@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // block.test.mjs — smoke + edge cases para block-spec.
 import assert from 'node:assert/strict';
 import { blockSpecFromPayload, computeBlockLayout, computeBlockGrid, resolveBlockSpec } from '../../../../src/components/diagrams/block-spec.ts';

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // harness.mjs: utilidades compartidas por las suites Playwright de los demos
 // de `forms/`. Es un CALCO del harness de `diagramas/ER/_testing/lib/` para
 // mantener consistencia entre suites. Si quieres ver la versión canónica con

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // modal-verificacion.test.mjs — tests exhaustivos del demo <iswc-modal-verificacion>.
 // Cobertura: smoke + funcional (show abre modal, verify ejecuta el controller y
 // popula mensajes, contadores derivados, eventos) + focus-trap.

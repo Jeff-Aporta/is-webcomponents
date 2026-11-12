@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // popconfirm.stagehand.test.mjs — checks visuales deterministas.
 // Foco: el popup aparece cerca del trigger, no se sale del viewport,
 // la flecha apunta en el direction correcto según placement.

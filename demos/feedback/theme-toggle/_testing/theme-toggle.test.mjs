@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // theme-toggle.test.mjs — tests exhaustivos del demo iswc-theme-toggle.
 // Cobertura: smoke + funcional (toggle alterna dark/light, dark attribute
 // reflejado en host, evento iswc-theme-change con detalle, observación del

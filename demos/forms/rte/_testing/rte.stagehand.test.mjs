@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // rte.stagehand.test.mjs — verificaciones de calidad visual del editor RTE.
 // Mismo patrón que el rubric del ER: checks deterministas + rama opt-in LLM.
 import assert from 'node:assert/strict';

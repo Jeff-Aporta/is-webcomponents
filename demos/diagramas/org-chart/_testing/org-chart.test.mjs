@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // org-chart.test.mjs — tests exhaustivos del demo org-chart.html.
 // org-chart es OUTLIER: no extiende DiagramElementBase, su SVG class es
 // "canvas" (no "{kind}-svg") y los nodos son tarjetas <foreignObject> con

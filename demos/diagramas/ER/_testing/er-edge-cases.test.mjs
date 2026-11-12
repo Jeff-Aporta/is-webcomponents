@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // er-edge-cases.test.mjs — gaps detectados con deep-test-proposals sobre los
 // diagramas (er-archify, er-spec, er-diagram, er-editor). Cobertura adicional:
 //   - Round-trip JSON (export → import produce el mismo state)

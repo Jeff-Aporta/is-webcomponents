@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // flex-options.stagehand.test.mjs — checks deterministas visuales.
 // Verifica: cada toolbar es visible con dimensiones > 0, los botones pintados
 // tienen tamaño coherente, el modo compact los hace más estrechos.

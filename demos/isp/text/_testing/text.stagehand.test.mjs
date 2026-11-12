@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // text.stagehand.test.mjs — checks deterministas visuales.
 // Verifica: cada texto es visible, los clamps producen alturas esperadas
 // (más líneas = más altura), los colores semánticos son distintos entre sí.

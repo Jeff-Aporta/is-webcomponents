@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // confirm-modal.stagehand.test.mjs — checks visuales deterministas.
 // Foco: modal visible y centrado, no overflow fuera del viewport, encabezado
 // y mensaje legibles, backdrop con opacidad > 0 cuando está abierto.

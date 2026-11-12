@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // stat.test.mjs — tests exhaustivos del demo stat.html.
 // Cobertura: smoke + funcional (rendering, trend auto-detect, trend-direction,
 // colors, slots, accesibilidad) + determinismo (re-asignar attrs es idempotente).

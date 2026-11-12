@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // confirm-delete.test.mjs — tests exhaustivos del demo <iswc-confirm-delete>.
 // Cobertura: smoke + funcional (show abre el modal, typing habilita botón,
 // eventos, loading bloquea ambos botones) + ciclo show/hide.

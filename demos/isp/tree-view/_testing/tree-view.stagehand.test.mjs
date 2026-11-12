@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // tree-view.stagehand.test.mjs — checks deterministas visuales.
 // Verifica: el árbol monta con dimensiones > 0, las filas son visibles, el
 // toolbar se muestra cuando hay customs.menu/topMenuActions, y no hay overflow

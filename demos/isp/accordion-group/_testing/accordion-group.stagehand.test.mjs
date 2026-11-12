@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // accordion-group.stagehand.test.mjs — checks deterministas de calidad visual.
 // Mismo patrón que el demo ER: sin LLM, sin API keys. Reproduce el rubric
 // de Stagehand con Playwright + DOM API.

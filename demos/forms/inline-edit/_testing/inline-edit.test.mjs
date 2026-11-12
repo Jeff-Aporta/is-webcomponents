@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // inline-edit.test.mjs — tests funcionales del demo inline-edit.html.
 // Cobertura: smoke + funcional (clic activa editor, Enter guarda, Esc cancela,
 // blur guarda por defecto, cancel-on-blur revierte) + accesibilidad

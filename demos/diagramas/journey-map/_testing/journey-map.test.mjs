@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // journey-map.test.mjs — tests exhaustivos del demo journey-map.html.
 // Cobertura: smoke (monta y renderiza steps + fases), funcional
 // (dataset.stepId), curva de puntajes presente, determinismo, a11y.

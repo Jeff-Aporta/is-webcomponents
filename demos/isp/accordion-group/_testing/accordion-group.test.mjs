@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // accordion-group.test.mjs — tests exhaustivos del demo <iswc-accordion-group>.
 // Cobertura: smoke + funcional (single open vs multi open + change events)
 // + API (showAll/hideAll) + accesibilidad básica.

@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // masked-input.test.mjs — tests funcionales del demo masked-input.html.
 //
 // Cobertura:

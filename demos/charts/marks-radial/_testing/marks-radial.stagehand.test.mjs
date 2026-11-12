@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // marks-radial.stagehand.test.mjs — visual rubric determinista (Playwright puro).
 // Cero LLM, cero API keys — solo geometría y atributos del SVG. Como el
 // paquete marks-radial es una utility bundle (sin custom element propio),

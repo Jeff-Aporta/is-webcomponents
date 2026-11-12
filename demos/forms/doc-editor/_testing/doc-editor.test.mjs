@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // doc-editor.test.mjs — tests funcionales del demo doc-editor.html.
 // Cobertura: smoke + funcional (value, addBlock, updateBlock, removeBlock,
 // JSON seed inline) + accesibilidad (contenteditable en bloques) + caso límite

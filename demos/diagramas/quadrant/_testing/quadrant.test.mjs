@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // quadrant.test.mjs — smoke + edge cases para quadrant-spec.
 import assert from 'node:assert/strict';
 import { resolveQuadrantSpec, computeQuadrantLayout, quadrantSpecToJson } from '../../../../src/components/diagrams/quadrant-spec.ts';

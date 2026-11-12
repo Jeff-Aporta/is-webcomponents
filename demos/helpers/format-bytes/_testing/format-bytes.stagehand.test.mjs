@@ -1,3 +1,4 @@
+// @contexto INDICE.md · demos/README.md
 // format-bytes.stagehand.test.mjs — checks deterministas de calidad visual
 // para el demo de <iswc-format-bytes>. Mismo patrón que er-stagehand.test.mjs:
 // cero LLM, sin API keys, CI-friendly.
