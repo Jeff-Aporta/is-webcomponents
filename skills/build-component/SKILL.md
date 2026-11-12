@@ -1,5 +1,4 @@
-<!-- @vendor 2026-10-13T14:13:48.240Z Jeff-Aporta/is-webcomponents@main skills/build-component/SKILL.md -->
-﻿---
+---
 name: build-component
 description: >-
   Cómo construir un componente nuevo del kit iswc-* desde cero: anatomía
@@ -12,6 +11,7 @@ description: >-
   refactorizar uno existente para que cumpla el contrato, o revisar un PR que
   añade/renombra un componente del kit.
 ---
+<!-- @vendor 2026-10-13T14:13:48.240Z Jeff-Aporta/is-webcomponents@main skills/build-component/SKILL.md -->
 
 # Cómo construir un componente `iswc-*`
 
@@ -669,6 +669,206 @@ convención lleva:
 ```
 
 ---
+
+## 11. Documentar el componente
+
+Esta skill es la **carta de escritura** de las guías que viven junto a cada
+componente en `src/components/<carpeta>/<modulo>.md`. No describe la API
+del componente (eso es el MD del módulo): describe **cómo debe escribirse
+ese MD** para que las LLMs y los humanos lo lean igual y le saque jugo el
+catálogo.
+
+### Cuándo usarla
+
+- Estás creando la ficha de un componente nuevo (`<iswc-foo>`) en
+  `src/components/<carpeta>/<modulo>.md`.
+- Estás revisando una ficha existente para alinearla con el resto del
+  catálogo.
+- Un agente necesita saber qué secciones son obligatorias, cuáles son
+  opcionales y en qué orden van.
+- Vas a regenerar o reorganizar el catálogo (`catalog.md`, `reference.md`).
+
+### Dos formatos, según dónde viva el componente
+
+La ficha es uno de los cuatro archivos de todo componente, con `.ts`, `.scss` y `.json`.
+Hay dos formatos y cada uno tiene su guardián:
+
+| | Kit (`iswc-*`) | App (`<prefijo>-*`) |
+| --- | --- | --- |
+| Frontmatter | `tag`, `tags`, `category`, `status`, `source`, `style`, `preview` | `name`, `description` |
+| H2 obligatorios | `Propósito`, `Cuándo usarlo`, `Cuándo no usarlo`, `Importación`, `Ejemplo mínimo`, `API` (o `Atributos`), `Comportamiento`, `Accesibilidad`, `Reglas para LLM` | `Anatomía`, `Atributos observados`, `Props`, `Eventos`, `Slots`, `Ejemplos` |
+| Guardián | `tests/gobernanza/contrato-cuatro-archivos.test.ts` y `deno task audit` | `tests/vistas/contrato-componentes.test.ts` |
+
+La ficha del kit se lee sin conocer la app, por eso dice cuándo usarlo y cómo importarlo.
+Lo que sigue describe el contenido común de ambas.
+
+### Estructura de la ficha
+
+Orden de las tablas de API. Las opcionales se omiten si el componente no las usa.
+
+#### 1. Anatomía (obligatoria)
+
+Frontmatter + identidad del componente. Ver
+[`references/anatomy-section.md`](references/anatomy-section.md).
+
+- Frontmatter YAML (`tag`, `tags`, `category`, `status`, `source`, `style`,
+  `preview`). UTF-8 sin BOM: el `---` es el primer byte. `category` es la del manifest;
+  `style` apunta al `.scss`, y en un subcomponente al del padre.
+- `# <iswc-foo>` como título H1.
+- Primer párrafo: **una sola frase** que diga qué es el componente y que
+  confirme que es Web Component vanilla con Shadow DOM.
+
+#### 2. Atributos observados
+
+Tabla con `Atributo | Tipo | Notas`. Solo atributos que el componente
+observa: los de cada `@prop` (el atributo es el nombre en kebab-case o el
+`attr` de sus opciones; `type: 'bool'` = booleano por presencia, `enum` =
+valores admitidos y defecto), los heredados de la base (`IswcFormControl`
+aporta `name`, `disabled`, `required`, `readonly`, `label`, `hint`,
+`error-text`, `error`), los de `static observed` y los `styleAttrs`; es lo
+que el molde une en `observedAttributes`. Un `@prop({ attr: false })` o un
+`@state()` **no** es atributo. No listar atributos HTML globales a menos que
+el componente los reenvíe explícitamente.
+
+#### 3. Props (propiedades públicas)
+
+Tabla con `Propiedad | Acceso | Notas`. Diferenciar **lectura/escritura**
+de **solo lectura** y **solo escritura**. Indicar si refleja atributo (un
+`@prop` refleja salvo `reflect: false`). Los `@state()` son internos: no van.
+Si el componente pinta por microtarea, decir que el shadow se lee tras
+`await el.actualizacionCompleta`.
+
+#### 4. Custom states
+
+Tabla con `Estado | Uso`: los que el código pone con `this.estado('x', …)`
+y los heredados (`IswcFormControl`: `user-invalid`, `user-valid`,
+`required`, `optional`, `disabled`, `readonly`). Ver
+[`references/custom-states.md`](references/custom-states.md). Si el
+componente no expone custom states, **omitir la tabla entera**, no
+dejarla vacía.
+
+#### 5. Eventos (emitidos / escuchados)
+
+Dos sub-secciones:
+
+- **Eventos emitidos** — tabla `Evento | detail | cancelable` **generada**,
+  no escrita a mano: la escribe la sonda `scripts/sondas/eventos.ts` desde el
+  tipo `XEventos` de `schemas/<tag>.schemas.ts` enlazado con
+  `declare static events` (incluye los de la base, p. ej. `iswc-invalid` de
+  `IswcFormControlEventos`). Va entre los marcadores
+  `<!-- eventos: generado por scripts/sondas/eventos.ts desde declare static events -->`
+  y `<!-- /eventos -->`; la misma sonda escribe el campo `events` de la
+  ficha `.json`. Para cambiar un evento se cambia el tipo y se corre
+  `deno run -A --no-check scripts/sondas/eventos.ts` (`--comprobar` solo
+  informa). Todos burbujean y son `composed` salvo excepción documentada
+  en prosa.
+- **Eventos escuchados** — lista corta de eventos que el componente
+  escucha de `document`, `window` u otros elementos. Si no escucha nada,
+  omitir.
+
+#### 6. Slots
+
+Tabla con `Slot | Uso`. Slots vacíos o por defecto van como `default`.
+Si el componente no usa slots, omitir.
+
+#### 7. CSS parts
+
+Tabla con `Part | Uso`. Solo las parts que el shadow expone con
+`exportparts` o `part=`. Ver
+[`references/visual-style.md`](references/visual-style.md) para
+convenciones de nombrado.
+
+#### 8. Ejemplos
+
+Bloques `html` con casos reales. **Siempre** un ejemplo mínimo primero,
+luego opcionalmente uno avanzado. Ver
+[`references/code-blocks.md`](references/code-blocks.md).
+
+### Convenciones
+
+- **Tono directo, sin ambigüedades.** Frases cortas. Sin "podría", "tal
+  vez", "sirve para" cuando la realidad es "sirve para". Reservar la voz
+  pasiva para casos donde el actor es irrelevante.
+- **Bloques de código con lenguaje (`html`, `css`, `js`).** Nunca ` ``` ` sin
+  lenguaje. Ver [`references/code-blocks.md`](references/code-blocks.md).
+- **Tablas para listar props, eventos, slots, parts y states.** Listas
+  solo cuando el ítem es único o la tabla no aporta (p.ej. una sola
+  propiedad).
+- **Tokens `--iswc-*` para colores y espacios.** Nunca `#hex` ni `px` en
+  la guía (salvo ejemplos muy concretos).
+- **Headings H2 (`##`) para secciones, H3 (`###`) para sub-tablas.**
+  No saltar niveles.
+- **Saltos de línea simples.** No envolver párrafos a 80 columnas; los
+  agentes los re-escriben igual y el line wrapping del repo lo gestiona
+  el editor.
+
+### Cross-linking
+
+Cada ficha **debe** enlazar a:
+
+1. La skill del kit:
+   [`../iswc-base/SKILL.md`](../iswc-base/SKILL.md).
+2. Componentes relacionados (mismo grupo, primos cercanos o dependencias).
+   P.ej. `<iswc-button-group>` enlaza a `<iswc-button>`.
+3. Dependencias de código (`_shared/*.js`, primos del mismo paquete).
+
+Los enlaces a guías hermanas deben usar la ruta **relativa** dentro de
+`src/components/`:
+
+```md
+[`./button.scss`](./button.scss)
+[`../_shared/adopt-css.js`](../_shared/adopt-css.js)
+[`../media/icon.md`](../media/icon.md)
+```
+
+Los enlaces a la skill del kit van con la ruta desde `skills/`:
+
+```md
+[Skill del kit](../iswc-base/SKILL.md)
+```
+
+### Validación
+
+Antes de mergear cambios en la ficha de un componente:
+
+1. `tests/gobernanza/contrato-cuatro-archivos.test.ts`: frontmatter, rutas y secciones.
+2. `tests/gobernanza/eventos.test.ts`: la tabla «Eventos» y el `events` de la
+   ficha coinciden con la sonda (E2) y lo emitido con lo declarado (E1).
+3. `tests/gobernanza/preview-paths.test.ts` si la ficha cambia ejemplos que
+   referencian archivos del preview.
+4. `deno task audit`: incluye la misma regla por componente.
+
+Si cualquiera falla, **primero** justifica la rotura con un cambio en el
+componente y luego ajusta la guía — nunca al revés.
+
+### Errores comunes
+
+- Inventar API por similitud con otro componente (p.ej. añadir un
+  atributo `size` que el módulo no declara).
+- Listar atributos que el componente no observa (un `@state()` o un
+  `@prop({ attr: false })` no es atributo).
+- Editar a mano la tabla «Eventos» o el `events` del `.json`: se pisa en la
+  siguiente corrida de la sonda.
+- Documentar textos de interfaz fijos en español como si fueran API: salen
+  de `t()` y cambian con `lang`; documentar el atributo que los sobrescribe.
+- Dejar la tabla de custom states vacía cuando el componente no expone
+  ninguno: mejor omitirla.
+- Olvidar el frontmatter o dejar `preview` apuntando a un archivo que
+  no existe.
+- Escribir `style: ./x.css`: en `src/` solo hay `.scss`.
+- Rellenar "Accesibilidad" o "Reglas para LLM" con frases genéricas: di lo que este
+  componente hace.
+- Poner `iswc-popup` (eliminado) en cualquier ejemplo o enlace.
+- Mezclar `iswc-*` con tags nativos o de otros frameworks en un mismo
+  ejemplo.
+- Empezar la ficha con prosa introductoria larga en vez de ir directo al
+  grano.
+- Usar `#hex` o `px` en ejemplos de tokens; siempre `var(--iswc-*)` o
+  `em`.
+
+
+---
+
 
 ## Checklist pre-PR
 

@@ -55,7 +55,7 @@ Deja el esqueleto completo con un hola mundo, el pin fijo, las specs y skills se
 
 Cada guía de módulo (`src/components/<carpeta>/<modulo>.md`) sigue la
 misma plantilla para que el catálogo y los agentes la lean igual. La
-skill [`../document-component/SKILL.md`](../document-component/SKILL.md)
+skill [`../build-component/SKILL.md`](../build-component/SKILL.md)
 detalla la estructura obligatoria (anatomía, atributos observados,
 props, custom states, eventos, slots, CSS parts, ejemplos), las
 convenciones de tono, el formato de tablas y los enlaces cruzados que
@@ -63,11 +63,11 @@ cada ficha debe llevar.
 
 | Recurso | Ruta |
 | --- | --- |
-| Skill | [`../document-component/SKILL.md`](../document-component/SKILL.md) |
-| Anatomía y frontmatter | [`../document-component/references/anatomy-section.md`](../document-component/references/anatomy-section.md) |
-| Custom states | [`../document-component/references/custom-states.md`](../document-component/references/custom-states.md) |
-| Bloques de código | [`../document-component/references/code-blocks.md`](../document-component/references/code-blocks.md) |
-| Estilo visual | [`../document-component/references/visual-style.md`](../document-component/references/visual-style.md) |
+| Skill | [`../build-component/SKILL.md`](../build-component/SKILL.md) |
+| Anatomía y frontmatter | [`../build-component/references/anatomy-section.md`](../build-component/references/anatomy-section.md) |
+| Custom states | [`../build-component/references/custom-states.md`](../build-component/references/custom-states.md) |
+| Bloques de código | [`../build-component/references/code-blocks.md`](../build-component/references/code-blocks.md) |
+| Estilo visual | [`../build-component/references/visual-style.md`](../build-component/references/visual-style.md) |
 
 ## Enlaces (GitHub primero, raw como secundario)
 

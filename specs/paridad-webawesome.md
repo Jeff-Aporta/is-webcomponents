@@ -487,7 +487,7 @@ Igual que F2: un lote = una carpeta (o media), codemod + revisión a mano, gate 
 | 4 | `navigation/`, `actions/`, `media/`, `files/` | setters → `@prop` | listas (`pagination`, `tab-group`, `tree`) a `html``` con `repetir()` |
 | 5 | `data/`, `isp/`, `helpers/`, `code/` | setters → `@prop` | textos de `ag-grid`/`spreadsheet`/`isp` a diccionario |
 | 6 | `diagrams/`, `charts/`, `data-viz/` | solo setters → `@prop` | nada de `render()`: siguen con su motor SVG |
-| 7 | docs y skills | — | `specs/componentes.md`, `build-component`, `document-component`, `iswc-foundation`, `lessons.md`, `adr.md` |
+| 7 | docs y skills | — | `specs/componentes.md`, `build-component`, `iswc-foundation`, `lessons.md`, `adr.md` |
 
 El codemod nuevo (`scripts/codemods/reactivo.mjs`, con mapa JSON por lote como `aplanar.mjs`) hace solo lo mecánico y
 verificable: (1) pares `get x() { return this.hasAttribute('x'); }` / `set x(v) { this.toggleAttribute('x', !!v); }` →
