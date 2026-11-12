@@ -44,7 +44,7 @@ const compRoot = join(root, 'src', 'components');
 
 /** Bases del molde: aportan `attributeChangedCallback` y `observedAttributes` (static observed). */
 const BASE_MOLDE =
-  /extends\s+(IswcElement|IswcReactive|IswcFormControl|ElementBase|ModalBase|DiagramElementBase|PropsElement|BreakpointHost)\b/;
+  /extends\s+(IswcElement|IswcReactive|IswcFormControl|IswcFormChrome|ElementBase|ModalBase|DiagramElementBase|PropsElement|BreakpointHost)\b/;
 /** El mixin `withStyleAttrs(Base)` también aporta `attributeChangedCallback`. */
 const BASE_MIXIN = /extends\s+withStyleAttrs\s*\(/;
 /** Una clase de custom element: hay que anclar `extends` a la clase (en TS también hay genéricos). */

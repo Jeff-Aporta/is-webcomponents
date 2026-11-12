@@ -20,3 +20,4 @@ problema de forma, no de funcion.
 - `sin-codigo-muerto.test.ts` — nada sin importador ni export sin consumidor.
 - `brand-casing.test.ts` — la marca se escribe siempre igual.
 - `loader-autoload.test.ts` — el autoloader opcional del loader: `observar()` y `listos()` viven en la capa 2 y el núcleo los pide con `import()`.
+- `atributos-constructor.test.ts` — ningún constructor de `src/components` escribe atributos: un custom element creado por script no puede traerlos (Blink los descarta y avisa con un NotSupportedError). Los atributos se escriben al conectar.

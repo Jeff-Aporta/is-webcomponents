@@ -68,7 +68,6 @@ export class FilaFlotante {
     this.#motor = motor;
     this.#popup = popup;
     this.#grid = motor.grid;
-    this.#fila.setAttribute('role', 'row');
   }
 
   #conFlotante(col: ColumnState): boolean {
@@ -92,7 +91,12 @@ export class FilaFlotante {
       this.#fila.remove();
       return;
     }
-    if (!this.#fila.isConnected) this.#grid.zona('cabecera').append(this.#fila);
+    if (!this.#fila.isConnected) {
+      // La fila de filtros entra en el DOM aquí: su rol se escribe en este punto, no en
+      // el constructor del componente (regla del kit: los atributos se ponen cuando el elemento está montado).
+      this.#fila.setAttribute('role', 'row');
+      this.#grid.zona('cabecera').append(this.#fila);
+    }
     const orden = [...cols.filter((c) => c.pinned === 'left'), ...cols.filter((c) => !c.pinned), ...cols.filter((c) => c.pinned === 'right')];
     const firma = orden.map((c) => `${c.colId}:${String(c.pinned)}`).join('|');
     if (firma !== this.#firma) {

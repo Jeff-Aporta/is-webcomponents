@@ -109,8 +109,6 @@ export class ModalBase extends withStyleAttrs(IswcReactive) {
     this.#body     = shadow.querySelector<HTMLElement>('.body')!;
     // Nombre accesible de la caja: el título (aria-labelledby) o `label` (aria-label), ver #syncLabel.
     if (!this.#title.id) this.#title.id = 'titulo';
-    this.#modal.setAttribute('role', 'dialog');
-    this.#modal.setAttribute('aria-modal', 'true');
 
     this.#closeBtn.addEventListener('click', () => this.#requestClose(this.#closeBtn));
     this.#backdrop.addEventListener('click', () => {
@@ -126,6 +124,15 @@ export class ModalBase extends withStyleAttrs(IswcReactive) {
 
   override connectedCallback(): void {
     this.#mounted = true;
+    // El rol y el `aria-modal` de la caja se escriben al CONECTAR, no en el constructor:
+    // un elemento creado por script (document.createElement('iswc-dialog'), que es como
+    // la galeria y el consumidor montan los modales) no puede traer atributos cuando su
+    // constructor termina. Blink los descarta y avisa con un NotSupportedError sin
+    // capturar ('The result must not have attributes'), que ensucia la consola y rompe a
+    // los guardianes E2E que escuchan pageerror. Al conectar ya se puede escribir, y el
+    // rol llega antes de que el modal se abra.
+    this.#modal.setAttribute('role', 'dialog');
+    this.#modal.setAttribute('aria-modal', 'true');
     this.#syncLabel();
     this.#syncFooterVisibility();
     this.#syncHeaderVisibility();

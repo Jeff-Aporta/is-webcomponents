@@ -39,7 +39,7 @@ import type { MentionEventos } from './schemas/mention.schemas.js';
     'placeholder', 'disabled', 'readonly', 'required', 'label', 'hint',
     'error', 'error-text', 'variant', 'label-placement', 'full-width',
   ];
-  const OBSERVED: string[] = [...REENVIADOS, 'value', 'name', 'trigger', 'max-items'];
+  const OBSERVED = [...REENVIADOS, 'value', 'name', 'trigger', 'max-items'];
 
   type SuggestionsMap = Record<string, string[]>;
 
@@ -51,8 +51,9 @@ import type { MentionEventos } from './schemas/mention.schemas.js';
     static override observed = OBSERVED;
 
     #field: HTMLElement & { value: string };
-    #input: HTMLInputElement;
     #onDocPointerDown!: (e: PointerEvent) => void;
+    /** `true` cuando el input nativo ya está enganchado (no se duplican los listeners al reconectar). */
+    #inputListo = false;
     #suggestions: SuggestionsMap = {};
     /** Capa en la pila de core/position.ts mientras las sugerencias están abiertas: un modal de abajo no se lleva su Escape. */
     #capa = createPopupDismiss(this, {});
@@ -63,6 +64,16 @@ import type { MentionEventos } from './schemas/mention.schemas.js';
     #mounted = false;
     #defaultValue = '';
 
+    /**
+     * El input nativo del <iswc-input> de dentro. El molde reactivo lo pinta al conectar
+     * el campo, así que se busca en cada uso: en el constructor todavía no existe, y un
+     * elemento creado por script (document.createElement('iswc-mention')) monta su campo
+     * cuando ya está en el DOM.
+     */
+    get #input(): HTMLInputElement {
+      return this.#field.shadowRoot!.getElementById('input') as HTMLInputElement;
+    }
+
     constructor() {
       super();
       this.shadowRoot!.innerHTML = /* html */ `
@@ -71,13 +82,8 @@ import type { MentionEventos } from './schemas/mention.schemas.js';
         </div>
       `;
       this.#field = document.createElement('iswc-input') as HTMLElement & { value: string };
-      this.#field.setAttribute('part', 'field');
-      this.#field.setAttribute('exportparts', 'form-control, label, base, input, hint, error-text');
       this.#popup = this.shadowRoot!.querySelector<HTMLElement>('.popup')!;
       this.#popup.before(this.#field);
-      this.#input = this.#field.shadowRoot!.getElementById('input') as HTMLInputElement;
-      this.#input.setAttribute('aria-autocomplete', 'list');
-      this.#input.setAttribute('aria-expanded', 'false');
       // Los eventos del campo interno se reemiten aquí con el contrato de la mención.
       this.#field.addEventListener('iswc-input', (e: Event) => { e.stopPropagation(); this.#onInput(); });
       this.#field.addEventListener('iswc-change', (e: Event) => {
@@ -85,8 +91,6 @@ import type { MentionEventos } from './schemas/mention.schemas.js';
         this.interactuado = true;
         emit(this, 'iswc-change', { value: this.value });
       });
-      this.#input.addEventListener('keydown', (e: KeyboardEvent) => this.#onKey(e));
-      this.#input.addEventListener('blur', () => this.#hidePopup());
       this.#onDocPointerDown = (e: PointerEvent): void => {
         if (!this.isOpen) return;
         if (e.composedPath().includes(this)) return;
@@ -96,9 +100,32 @@ import type { MentionEventos } from './schemas/mention.schemas.js';
 
     override connectedCallback(): void {
       this.#mounted = true;
+      // El `part` y el `exportparts` del campo, y el ARIA de su input nativo, se escriben
+      // al conectar, NO en el constructor: un elemento creado por script
+      // (document.createElement('iswc-mention')) no puede traer atributos cuando su
+      // constructor termina. Blink los descarta y avisa con un NotSupportedError sin
+      // capturado ('The result must not have attributes').
+      this.#field.setAttribute('part', 'field');
+      this.#field.setAttribute('exportparts', 'form-control, label, base, input, hint, error-text');
+      // El <iswc-input> de dentro pinta su shadow al conectar él: su input nativo (y el
+      // ARIA que lo acompaña) existen en la microtarea siguiente, cuando ya se han vaciado
+      // las reacciones de los custom elements.
+      queueMicrotask(() => this.#prepararInput());
       this.#sync();
       this.#readSlot();
       document.addEventListener('pointerdown', this.#onDocPointerDown, true);
+    }
+
+    /** Engancha el input nativo del campo (ya pintado) con su ARIA de combobox. */
+    #prepararInput(): void {
+      if (this.#inputListo) return;
+      const input = this.#field.shadowRoot?.getElementById('input');
+      if (!input) return;
+      this.#inputListo = true;
+      input.setAttribute('aria-autocomplete', 'list');
+      input.setAttribute('aria-expanded', String(this.isOpen));
+      input.addEventListener('keydown', (e: KeyboardEvent) => this.#onKey(e));
+      input.addEventListener('blur', () => this.#hidePopup());
     }
 
     override disconnectedCallback(): void {
@@ -110,6 +137,9 @@ import type { MentionEventos } from './schemas/mention.schemas.js';
     }
 
     override attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
+      // La base sincroniza los @prop con los atributos (la trampa del callback propio sin
+      // super): sin esta llamada, el label del chrome deja de seguir al atributo.
+      super.attributeChangedCallback(name, oldVal, newVal);
       if (!this.#mounted || oldVal === newVal) return;
       if (name === 'value') {
         if (this.#field.value !== newVal) this.#field.value = newVal ?? '';

@@ -47,7 +47,7 @@ import type { MaskedInputEventos } from './schemas/masked-input.schemas.js';
     'label', 'hint', 'error-text', 'autocomplete', 'disabled', 'readonly', 'required',
     'variant', 'label-placement', 'full-width', 'clearable',
   ];
-  const OBSERVED: string[] = [...REENVIADOS, 'pattern', 'value', 'name', 'placeholder', 'maxlength', 'invalid', 'error'];
+  const OBSERVED = [...REENVIADOS, 'pattern', 'value', 'name', 'placeholder', 'maxlength', 'invalid', 'error'];
 
   class IswcMaskedInput extends IswcFormChrome {
     static override tag = 'iswc-masked-input';
@@ -58,21 +58,26 @@ import type { MaskedInputEventos } from './schemas/masked-input.schemas.js';
 
     #mounted = false;
     #field: HTMLElement & { value: string };
-    #input: HTMLInputElement;
+
+    /**
+     * El input nativo del <iswc-input> de dentro. El molde reactivo lo pinta al conectar
+     * el campo, así que se busca en cada uso: en el constructor todavía no existe (y un
+     * elemento creado por script monta su campo cuando ya está en el DOM).
+     */
+    get #input(): HTMLInputElement {
+      return this.#field.shadowRoot!.getElementById('input') as HTMLInputElement;
+    }
 
     constructor() {
       super();
       const shadow = this.shadowRoot!;
       this.#field = document.createElement('iswc-input') as HTMLElement & { value: string };
       this.#field.className = 'field';
-      this.#field.setAttribute('part', 'field');
-      this.#field.setAttribute('exportparts', 'form-control, label, base, input, hint, error-text');
       this.#field.innerHTML = /* html */ `
         <slot name="start" slot="start"></slot>
         <slot name="end" slot="end"></slot>
       `;
       shadow.appendChild(this.#field);
-      this.#input = this.#field.shadowRoot!.getElementById('input') as HTMLInputElement;
       // Los eventos del campo interno se reemiten aquí con el valor enmascarado.
       this.#field.addEventListener('iswc-input', (e: Event) => { e.stopPropagation(); this.#onInput(); });
       this.#field.addEventListener('iswc-change', (e: Event) => {
@@ -85,6 +90,12 @@ import type { MaskedInputEventos } from './schemas/masked-input.schemas.js';
 
     override connectedCallback(): void {
       this.#mounted = true;
+      // El `part` y el `exportparts` del campo se escriben al conectar, NO en el
+      // constructor: un elemento creado por script (document.createElement('iswc-masked-input'))
+      // no puede traer atributos cuando su constructor termina. Blink los descarta y avisa
+      // con un NotSupportedError sin capturado ('The result must not have attributes').
+      this.#field.setAttribute('part', 'field');
+      this.#field.setAttribute('exportparts', 'form-control, label, base, input, hint, error-text');
       for (const name of REENVIADOS) this.#forward(name);
       this.#syncPattern();
       // initial value (si el atributo vino pre-formateado, se reformatea igual)
@@ -95,6 +106,9 @@ import type { MaskedInputEventos } from './schemas/masked-input.schemas.js';
     }
 
     override attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
+      // La base sincroniza los @prop con los atributos (la trampa del callback propio sin
+      // super): sin esta llamada, el label del chrome deja de seguir al atributo.
+      super.attributeChangedCallback(name, oldVal, newVal);
       if (!this.#mounted || oldVal === newVal) return;
       if (REENVIADOS.includes(name)) this.#forward(name);
       if (name === 'pattern' || name === 'placeholder' || name === 'maxlength') this.#syncPattern();

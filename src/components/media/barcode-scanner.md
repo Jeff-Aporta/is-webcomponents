@@ -66,7 +66,7 @@ import './barcode-scanner.js';
 | Evento | detail | cancelable |
 | --- | --- | --- |
 | `iswc-error` | `{ message: string }` | no |
-| `iswc-detect` | `{ barcodes: unknown[]; rawValue: string; format: string }` | no |
+| `iswc-detect` | `{ barcodes: DetectedBarcode[]; rawValue: string; format: string }` | no |
 
 <!-- /eventos -->
 

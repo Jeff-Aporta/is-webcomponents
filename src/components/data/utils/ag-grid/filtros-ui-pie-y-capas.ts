@@ -28,7 +28,6 @@ export class BarraEstado {
   constructor(motor: MotorFiltros) {
     this.#grid = motor.grid;
     this.#raiz.append(this.#lados['left'] as HTMLElement, this.#lados['center'] as HTMLElement, this.#lados['right'] as HTMLElement);
-    this.#raiz.setAttribute('role', 'status');
   }
 
   #t(clave: string): string {
@@ -50,6 +49,9 @@ export class BarraEstado {
     }
     const zona = this.#grid.zona('estado');
     if (this.#raiz.parentElement !== zona) zona.append(this.#raiz);
+    // La barra de estado entra en el DOM aquí: su rol se escribe en este punto, no en el
+    // constructor del componente (regla del kit: los atributos se ponen cuando el elemento está montado).
+    this.#raiz.setAttribute('role', 'status');
     for (const def of lista) this.#montar(def);
     this.pintar();
   }

@@ -32,7 +32,6 @@ export class SeleccionRangos {
     this.#escritor = escritor;
     this.#asa = document.createElement('span');
     this.#asa.className = 'iswc-ag-asa';
-    this.#asa.setAttribute('aria-hidden', 'true');
   }
 
   get #opciones(): OpcionesCelda | null {
@@ -132,7 +131,12 @@ export class SeleccionRangos {
       celda.classList.toggle('iswc-ag-rango-abajo', dentro.some((r) => r.filaHasta === fila));
       celda.classList.toggle('iswc-ag-rango-izquierda', dentro.some((r) => r.colDesde === col));
       celda.classList.toggle('iswc-ag-rango-derecha', dentro.some((r) => r.colHasta === col));
-      if (conAsa && ultimo && ultimo.filaHasta === fila && ultimo.colHasta === col) celda.append(this.#asa);
+      if (conAsa && ultimo && ultimo.filaHasta === fila && ultimo.colHasta === col) {
+        // El asa entra en el DOM aquí: sus atributos se escriben en este punto, no en el
+        // constructor del componente (regla del kit: los atributos se ponen cuando el elemento está montado).
+        this.#asa.setAttribute('aria-hidden', 'true');
+        celda.append(this.#asa);
+      }
     }
     this.#resaltarEncabezados(cols);
   }

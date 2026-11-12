@@ -31,7 +31,6 @@ export class BarraAvanzada {
     this.#entrada = inputDe({ placeholder: this.#t('advancedFilterPlaceholder'), aria: this.#t('advancedFilterPlaceholder'), limpiable: true }, () => this.#validar());
     this.#entrada.addEventListener('iswc-enter', () => this.#aplicar());
     this.#error.hidden = true;
-    this.#error.setAttribute('role', 'alert');
     this.#raiz.append(this.#entrada, boton(this.#t('advancedFilterApply'), () => this.#aplicar(), 'soft'), boton(this.#t('advancedFilterBuilder'), () => this.mostrarConstructor(), 'text', 'mdi:filter-cog-outline'), this.#error);
   }
 
@@ -50,6 +49,9 @@ export class BarraAvanzada {
     }
     const zona = this.#grid.zona('cabecera');
     if (this.#raiz.parentElement !== zona) zona.prepend(this.#raiz);
+    // El aviso de error entra en el DOM con la barra: su rol se escribe en este punto, no
+    // en el constructor del componente (regla del kit: los atributos se ponen cuando el elemento está montado).
+    this.#error.setAttribute('role', 'alert');
     this.refrescar();
   }
 

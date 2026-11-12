@@ -29,12 +29,14 @@ export class Accesibilidad {
     this.#grid = grid;
     this.#vivo = document.createElement('div');
     this.#vivo.className = 'iswc-ag-solo-lector';
-    this.#vivo.setAttribute('role', 'status');
-    this.#vivo.setAttribute('aria-live', 'polite');
   }
 
   instalar(): Desinstalar {
     const grid = this.#grid;
+    // La región viva entra en el DOM aquí: sus atributos se escriben en este punto, no en
+    // el constructor del componente (regla del kit: los atributos se ponen cuando el elemento está montado).
+    this.#vivo.setAttribute('role', 'status');
+    this.#vivo.setAttribute('aria-live', 'polite');
     grid.shadow.append(this.#vivo);
     const quitar = grid.on('pintado', () => this.#sincronizar());
     return () => {

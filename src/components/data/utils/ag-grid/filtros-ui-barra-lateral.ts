@@ -31,10 +31,6 @@ export class BarraLateral {
   constructor(motor: MotorFiltros) {
     this.#motor = motor;
     this.#grid = motor.grid;
-    this.#pestanas.setAttribute('role', 'tablist');
-    this.#pestanas.setAttribute('aria-orientation', 'vertical');
-    this.#asa.setAttribute('role', 'separator');
-    this.#asa.setAttribute('aria-orientation', 'vertical');
     this.#asa.addEventListener('pointerdown', (e) => this.#redimensionar(e));
     this.#raiz.append(this.#asa, this.#contenido, this.#pestanas);
   }
@@ -80,6 +76,12 @@ export class BarraLateral {
     this.#grid.shadow.querySelector<HTMLElement>('.mim-dg__sidebar')?.setAttribute('hidden', '');
     const zona = this.#grid.zona('principal');
     if (this.#raiz.parentElement !== zona) zona.append(this.#raiz);
+    // La barra lateral entra en el DOM aquí: sus roles se escriben en este punto, no en el
+    // constructor del componente (regla del kit: los atributos se ponen cuando el elemento está montado).
+    this.#pestanas.setAttribute('role', 'tablist');
+    this.#pestanas.setAttribute('aria-orientation', 'vertical');
+    this.#asa.setAttribute('role', 'separator');
+    this.#asa.setAttribute('aria-orientation', 'vertical');
     for (const def of this.#def.toolPanels) this.#montar(def);
     this.#pestanas.hidden = this.#def.hideButtons;
     this.setSideBarPosition(this.#def.position);
