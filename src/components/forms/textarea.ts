@@ -226,13 +226,16 @@ import type { TextareaEventos } from './schemas/textarea.schemas.js';
 
     @prop({ type: 'bool' }) accessor fullWidth: boolean = false;
 
-    @prop({ vacio: true }) override accessor placeholder: string = '';
+    // Atributos nativos que este control refleja al <textarea> interno. No son overrides: la
+    // cadena IswcFormChrome -> IswcFormControl -> IswcReactive -> IswcElement -> HTMLElement no
+    // los declara, asi que 'override' aqui es un error de tipos (TS4113).
+    @prop({ vacio: true }) accessor placeholder: string = '';
 
     @prop({ vacio: true }) override accessor label: string = '';
 
     @prop({ vacio: true }) override accessor hint: string = '';
 
-    @prop({ vacio: true }) override accessor maxlength: string | null = null;
+    @prop({ vacio: true }) accessor maxlength: string | null = null;
 
     get textarea(): HTMLTextAreaElement { return this.#textarea as HTMLTextAreaElement; }
 

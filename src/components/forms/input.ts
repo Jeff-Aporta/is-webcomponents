@@ -327,21 +327,25 @@ import type { InputEventos } from './schemas/input.schemas.js';
 
     @prop({ attr: 'suffix', vacio: true }) accessor suffixText: string = '';
 
-    @prop({ vacio: true }) override accessor placeholder: string = '';
+    // Atributos nativos que este control refleja al <input> interno (NATIVE_ATTRS). No son
+    // overrides: la cadena IswcFormChrome -> IswcFormControl -> IswcReactive -> IswcElement ->
+    // HTMLElement no los declara, asi que 'override' aqui es un error de tipos (TS4113/TS4117).
+    // 'label', 'hint' y 'errorText' si son overrides: los declara IswcFormChrome.
+    @prop({ vacio: true }) accessor placeholder: string = '';
 
     @prop({ vacio: true }) override accessor label: string = '';
 
     @prop({ vacio: true }) override accessor hint: string = '';
 
-    @prop({ vacio: true }) override accessor min: string | null = null;
+    @prop({ vacio: true }) accessor min: string | null = null;
 
-    @prop({ vacio: true }) override accessor max: string | null = null;
+    @prop({ vacio: true }) accessor max: string | null = null;
 
-    @prop({ vacio: true }) override accessor step: string | null = null;
+    @prop({ vacio: true }) accessor step: string | null = null;
 
-    @prop({ vacio: true }) override accessor maxlength: string | null = null;
+    @prop({ vacio: true }) accessor maxlength: string | null = null;
 
-    @prop({ vacio: true }) override accessor autocomplete: string | null = null;
+    @prop({ vacio: true }) accessor autocomplete: string | null = null;
 
     /** Input nativo interno — útil para casos avanzados. */
     get input(): HTMLInputElement { return this.#input as HTMLInputElement; }
