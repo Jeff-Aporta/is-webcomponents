@@ -9,10 +9,7 @@
 }
 
 :host {
-  display: inline-block;
-  font-family: var(--iswc-sans, inherit);
-  color: var(--iswc-text, inherit);
-  box-sizing: border-box;
+  @include host-base(inline-block);
 
   .form-control {
     display: flex;

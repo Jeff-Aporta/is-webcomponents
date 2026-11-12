@@ -1,93 +1,58 @@
-@use '../../core/diagram-kit';
-@use 'kit' as *;
-
-:host { @include host-lienzo-diagrama; }
-
-.wrap {
-  position: relative;
-  border-radius: 0.5em;
-  overflow: hidden;
-  background: transparent;
-  border: 1px solid var(--iswc-border);
-  padding: 0.75em;
-  cursor: default;
-  user-select: none;
-  -webkit-user-select: none;
-  -webkit-touch-callout: none;
-  touch-action: manipulation;
-  /* Con altura acotada por el contenedor el SVG se escala para caber; si el
-     contenedor la deja libre, `100%` cae a `auto` y manda la relación de aspecto. */
-  box-sizing: border-box;
-  height: 100%;
-  min-height: 0;
-  display: flex;
-  flex-direction: column;
-
-  &.iswc-viewer {
-    width: 100%;
-    height: 100%;
-    border: 0;
-    padding: 0;
-    cursor: default;
-  }
-
-  &[data-empty]::after {
-    content: 'Diagrama de flujo no disponible (payload inválido).';
-    display: block;
-    padding: 1.1429em;
-    font-size: 0.875em;
-    color: var(--iswc-text-soft);
-  }
-}
-
-.slot-hidden { @include oculto; }
-@include lienzo-svg('flow-svg');
-
-/* ── Nodos y aristas ── */
-
-.flow-node,
-.flow-edge { @include transicion(opacity 0.18s ease); &.iswc-dim { opacity: 0.32; }; }
-.flow-node__box { @include transicion(stroke-width 0.12s ease-out); }
-
-.flow-edge {
-  &.iswc-active {
-    .flow-edge__path { stroke-width: 2.2; }
-  }
-}
-
-/* animation="flow": trazo dashed detrás de la arista continua.
-   El color del dash hereda del `currentColor` del `<g class="flow-edge">`,
-   que el TS setea con el mismo `edgeStrokeHex(hue, theme.accent)` de la
-   arista principal. Antes el dash usaba `var(--iswc-color-brand)` fijo,
-   lo que no coincidian con el color de la arista cuando `hue` != brand. */
-.flow-edge { color: currentColor; /* default; TS lo sobrescribe con edgeStrokeHex(...) */ }
-.flow-edge__flow { stroke: currentColor; stroke-opacity: 0.55; stroke-dasharray: 7 11; stroke-dashoffset: 0; pointer-events: none; @supports (stroke: color-mix(in oklab, red 40%, transparent)) { stroke: color-mix(in oklab, currentColor 55%, transparent); stroke-opacity: 1; } }
-
-:host([animation~="flow"]) {
-.flow-edge__flow { animation: iswc-flowchart-flow-dash 0.85s linear infinite; @media (prefers-reduced-motion: reduce) { animation: none; opacity: 0.55; } }
-}
-
-@keyframes iswc-flowchart-flow-dash {
-  to { stroke-dashoffset: -18; }
-}
-
-.flow-legend__item { @include transicion(opacity 0.18s ease); }
-
-.flow-node-label {
-  :is(.tk-inline-icon, iswc-icon.tk-inline-icon) {
-    width: 1em;
-    height: 1em;
-    vertical-align: -0.14em;
-    margin: 0 0.2em;
-  }
-}
-
-/* El visor es opt-in: sin `open-on-click` el componente no abre nada,
-   asi que tampoco debe insinuar con el cursor que se puede hacer clic. */
-:host([open-on-click]) {
-  .wrap { cursor: zoom-in; }
-}
-/* Escenario fuera de pantalla: aquí se montan los diagramas de los nodos
-   especiales (`nested`, `tableder`, `component`) para capturar su SVG, y
-   la sonda que mide el texto con la webfont del tema. */
-.flow-embed-stage { position: absolute; left: -30000em; top: 0; width: 1200em; visibility: hidden; pointer-events: none; }
+@use '../../core/diagram-kit';
+@use 'kit' as *;
+
+:host { @include host-lienzo-diagrama; }
+
+.wrap { @include wrap-lienzo-diagrama('Diagrama de flujo no disponible (payload inválido).'); }
+
+.slot-hidden { @include oculto; }
+@include lienzo-svg('flow-svg');
+
+/* ── Nodos y aristas ── */
+
+.flow-node,
+.flow-edge { @include transicion(opacity 0.18s ease); &.iswc-dim { opacity: 0.32; }; }
+.flow-node__box { @include transicion(stroke-width 0.12s ease-out); }
+
+.flow-edge {
+  &.iswc-active {
+    .flow-edge__path { stroke-width: 2.2; }
+  }
+}
+
+/* animation="flow": trazo dashed detrás de la arista continua.
+   El color del dash hereda del `currentColor` del `<g class="flow-edge">`,
+   que el TS setea con el mismo `edgeStrokeHex(hue, theme.accent)` de la
+   arista principal. Antes el dash usaba `var(--iswc-color-brand)` fijo,
+   lo que no coincidian con el color de la arista cuando `hue` != brand. */
+.flow-edge { color: currentColor; /* default; TS lo sobrescribe con edgeStrokeHex(...) */ }
+.flow-edge__flow { stroke: currentColor; stroke-opacity: 0.55; stroke-dasharray: 7 11; stroke-dashoffset: 0; pointer-events: none; @supports (stroke: color-mix(in oklab, red 40%, transparent)) { stroke: color-mix(in oklab, currentColor 55%, transparent); stroke-opacity: 1; } }
+
+:host([animation~="flow"]) {
+.flow-edge__flow { animation: iswc-flowchart-flow-dash 0.85s linear infinite; @media (prefers-reduced-motion: reduce) { animation: none; opacity: 0.55; } }
+}
+
+@keyframes iswc-flowchart-flow-dash {
+  to { stroke-dashoffset: -18; }
+}
+
+.flow-legend__item { @include transicion(opacity 0.18s ease); }
+
+.flow-node-label {
+  :is(.tk-inline-icon, iswc-icon.tk-inline-icon) {
+    width: 1em;
+    height: 1em;
+    vertical-align: -0.14em;
+    margin: 0 0.2em;
+  }
+}
+
+/* El visor es opt-in: sin `open-on-click` el componente no abre nada,
+   asi que tampoco debe insinuar con el cursor que se puede hacer clic. */
+:host([open-on-click]) {
+  .wrap { cursor: zoom-in; }
+}
+/* Escenario fuera de pantalla: aquí se montan los diagramas de los nodos
+   especiales (`nested`, `tableder`, `component`) para capturar su SVG, y
+   la sonda que mide el texto con la webfont del tema. */
+.flow-embed-stage { position: absolute; left: -30000em; top: 0; width: 1200em; visibility: hidden; pointer-events: none; }

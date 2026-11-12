@@ -1,9 +1,6 @@
 @use 'kit' as *;
 :host {
-  display: block;
-  font-family: var(--iswc-sans, inherit);
-  color: var(--iswc-text, inherit);
-  box-sizing: border-box;
+  @include host-base(block);
 
   .form-control {
     display: flex;

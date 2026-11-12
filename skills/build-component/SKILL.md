@@ -82,6 +82,119 @@ Estructura canónica del `.md` (mínimo):
 ## Accesibilidad
 ## Ejemplo avanzado
 ## Errores comunes
+## SCSS del kit
+
+El SCSS del kit vive en `src/styles/kit/`, y se carga desde cualquier componente con:
+
+```scss
+@use 'kit' as *;
+```
+
+`src/styles` es loadPath global del build, asi que el `@use` resuelve sin ruta. El modulo tiene
+tres parciales: `_funciones.scss` (las funciones), `_mixins.scss` (los mixins genericos) y
+`_familias.scss` (las bases por familia). `_kit.scss` es la fachada: solo hace `@forward`.
+
+### El contrato de los mixins
+
+1. El mixin emite **exactamente** el CSS que sustituye: mismos valores, mismo orden, misma
+   especificidad. Si el CSS cambia, no es un refactor, es un cambio de estilo.
+2. El mixin **no elige la especificidad**: quien llama decide. Ningun mixin envuelve nada en
+   `:host(...)` por su cuenta: se llaman DENTRO de `:host { }`.
+3. Solo `@use` y `@forward`: nunca `@import` de Sass.
+
+### Un ejemplo real (`src/components/forms/input.scss`)
+
+```scss
+@use 'kit' as *;
+
+:host {
+  --iswc-input-border-radius: var(--iswc-radius-sm);
+  --iswc-input-border: var(--iswc-control-border);
+  --_focus: var(--iswc-input-focus);
+  display: block;
+  inline-size: var(--iswc-field-width);
+  font-family: var(--iswc-sans, inherit);
+  box-sizing: border-box;
+
+  .label {
+    font-size: 0.875em;
+    font-weight: 500;
+    color: var(--iswc-text-soft, inherit);
+    inline-size: fit-content;
+    @include oculto;
+  }
+
+  .base {
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+    block-size: var(--iswc-control-height);
+    border: 0.0625em solid var(--_border);
+    &:focus-within { @include foco-visible(var(--_focus), 2px, 1px); }
+  }
+}
+```
+
+Lo que se ha movido al modulo: el `display: none !important` del `[hidden]` (`oculto`), el anillo
+de foco (`foco-visible`) y el resto de patrones que se repiten. El resto es del componente.
+
+### Los mixins que hay
+
+| Mixin | Que emite | Con argumentos |
+|---|---|---|
+| `oculto` | `display: none !important` | no |
+| `foco-visible($color, $grosor, $separacion)` | `outline` + `outline-offset` | si |
+| `deshabilitado($opacidad)` | `opacity` + `pointer-events: none` | si |
+| `no-permitido($opacidad)` | `cursor: not-allowed` + `opacity` | si |
+| `reset-boton($padding, $borde)` | `background`, `color` y `font` heredados | si |
+| `truncar($lineas)` | elipsis en una linea o en varias | si |
+| `scrollbar($color, $grosor)` | la barra fina, con su color | si |
+| `llenar-host` | `inset: 0` + los dos tamaños | no |
+| `transicion($props...)` | `transition` | si |
+| `flex($gap, $align, $dir)` | una fila flexible | si |
+| `flex-centro($gap)` | una fila centrada | si |
+| `flex-extremos($gap)` | una fila con los extremos pegados | si |
+| `grid-auto($min, $ajuste)` | columnas automaticas | si |
+| `tamanos($mapa)` | los tamanos de un control, por `[size=…]` | si |
+| `tonos($mapa)` | los tonos de un control, por `[color=…]` | si |
+| `campo-base($etiqueta, $ayuda, $tamEtiqueta, $tamAyuda)` | la etiqueta y el texto de apoyo | si |
+| `capa-base($fondo, $borde, $radio, $sombra)` | la superficie flotante | si |
+| `grafico-base($rejilla)` | los tokens de lectura de un grafico | si |
+| `tarjeta-base($fondo, $borde, $radio)` | la tarjeta | si |
+| `host-lienzo-diagrama` | el `:host` de los diagramas | no |
+| `wrap-lienzo-diagrama($vacio)` | el `.wrap` de los diagramas | si |
+| `visor-abrible($selector)` | el cursor del visor opt-in | si |
+| `lienzo-svg($clase)` | el lienzo donde se dibuja | si |
+
+### Las funciones
+
+| Funcion | Que devuelve |
+|---|---|
+| `em($px, $base: 16)` | el valor en `em` (la unidad del kit) |
+| `escala($paso)` | el token de espaciado (`2xs`…`2xl`) |
+| `tono($nombre, $variante)` | el color de una familia y su rampa |
+| `espacio($n)` | el token de espaciado mas cercano a un valor |
+
+### Cuando escribir el CSS a mano
+
+Cuando el bloque es **de este componente** (su geometria, sus tokens propios, sus estados
+propios). Cuando el bloque es **del kit** (un patron que ya tienen otros componentes), es un
+`@include`. El guardian `tests/gobernanza/scss-simple.test.ts` avisa de los bloques de 4 o mas
+declaraciones repetidos entre archivos, y de los `.scss` que usan un patron del kit sin cargar
+el modulo.
+
+### Medir
+
+`deno task css:equivalente` compila cada `.scss` y lo compara con la foto: el CSS puede cambiar
+de forma (espacios, saltos de linea) pero no de contenido. La foto se toma antes de un lote con
+`deno task css:equivalente --guardar`.
+
+```bash
+deno task css:equivalente --guardar   # antes del lote
+# ... los cambios ...
+deno task css:equivalente             # despues: 0 distintos
+```
+
 ## Reglas para LLM
 
 - **Toda estructura de UI es un componente.** Si un render, una vista o un visor arma

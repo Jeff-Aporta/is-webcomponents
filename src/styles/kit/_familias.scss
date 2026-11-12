@@ -57,6 +57,7 @@
   position: relative;
   box-sizing: border-box;
   font-family: var(--iswc-sans);
+  @content;
 
   &[hidden] { display: none; }
   &[color="viewer"] { width: 100%; height: 100%; }
@@ -97,4 +98,37 @@
 // nombre de la clase (.cls-svg, .vn-svg, .tl-svg...).
 @mixin lienzo-svg($clase) {
 .#{$clase} { display: block; position: relative; z-index: 1; width: 100%; height: 100%; max-width: 100%; max-height: 100%; margin: auto; overflow: hidden; }
+}
+
+///
+/// La base de un host: como se muestra, la tipografia que hereda y el color del texto.
+///
+///   :host { @include host-base(block); }
+///
+/// El `display` es lo unico que cambia entre componentes: el resto es lo mismo.
+@mixin host-base($display: block) {
+  display: $display;
+  font-family: var(--iswc-sans, inherit);
+  color: var(--iswc-text, inherit);
+  box-sizing: border-box;
+}
+
+///
+/// El chip de variable (la pastilla de un nombre de variable en el markdown).
+///
+///   .prompt-var-chip { @include chip-variable; }
+@mixin chip-variable {
+  --_h: var(--var-tone-h, 210);
+  display: inline-flex;
+  align-items: center;
+  padding: 0.05em 0.55em;
+  margin: 0 0.05em;
+  border-radius: 999em;
+  font-family: var(--iswc-mono);
+  font-size: 0.85em;
+  line-height: 1.5;
+  white-space: nowrap;
+  background: hsl(var(--_h) 70% 50% / 18%);
+  border: 1px solid hsl(var(--_h) 60% 55% / 55%);
+  color: hsl(var(--_h) 75% 72%);
 }

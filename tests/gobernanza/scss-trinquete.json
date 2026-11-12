@@ -1,0 +1,29 @@
+{
+ "nota": "Trinquete de la fase C2 (SCSS). Cada excepcion tiene su motivo; al cerrarla, se borra de aqui.",
+ "excepcionesS3": {
+  "src/components/data/ag-grid.scss": "el text-overflow y el scrollbar son de la rejilla de ag-grid; no hay mixin del kit con la misma forma",
+  "src/components/data/utils/ag-grid/_celdas-estilos.scss": "elipsis de celda: sin mixin equivalente en el kit",
+  "src/components/data/utils/ag-grid/_edicion-estilos.scss": "elipsis de celda: sin mixin equivalente en el kit",
+  "src/components/data/utils/ag-grid/_filtros-estilos.scss": "elipsis de celda: sin mixin equivalente en el kit",
+  "src/components/diagrams/diagram-lightbox.scss": "el outline va sin outline-offset: no cabe en el mixin foco-visible",
+  "src/components/feedback/badge.scss": "elipsis de una sola linea sin el overflow: no cabe en el mixin truncar",
+  "src/components/forms/inline-edit.scss": "el outline va sin outline-offset: no cabe en el mixin foco-visible",
+  "src/components/forms/pin-input.scss": "el outline va sin outline-offset: no cabe en el mixin foco-visible",
+  "src/components/isp/text.scss": "elipsis de una sola linea sin el overflow: no cabe en el mixin truncar",
+  "src/components/layout/details.scss": "el outline va sin outline-offset: no cabe en el mixin foco-visible",
+  "src/components/layout/divider.scss": "elipsis de una sola linea sin el overflow: no cabe en el mixin truncar",
+  "src/components/layout/server-api-docs.scss": "elipsis de una sola linea sin el overflow: no cabe en el mixin truncar",
+  "src/components/navigation/breadcrumb-item.scss": "el outline va sin outline-offset: no cabe en el mixin foco-visible",
+  "src/components/navigation/scroller.scss": "el scrollbar es del scroller: no cabe en el mixin scrollbar del kit",
+  "src/components/overlays/json-dialog.scss": "el scrollbar es del visor JSON: no cabe en el mixin scrollbar del kit",
+  "src/components/overlays/window.scss": "elipsis de una sola linea sin el overflow: no cabe en el mixin truncar",
+  "src/components/preview/examples-carousel.scss": "elipsis y scrollbar de la carrusel: sin mixin equivalente en el kit"
+ },
+ "excepcionesS4": {
+  "src/styles/presentation.scss": "estilos globales de la galeria (no son un componente): 146 medidas; los rem son font-size y pasarlos a em cambiaria el diseno",
+  "src/styles/shell.scss": "estilos globales del shell (no son un componente): 11 medidas"
+ },
+ "excepcionesS1": {
+  "src/components/diagrams/sequence-diagram.scss": "su .wrap es una variante del mixin (el visor pone cursor: inherit y anade una regla propia): no es el mismo bloque"
+ }
+}

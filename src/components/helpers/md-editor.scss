@@ -367,19 +367,7 @@
 }
 
 .prompt-var-chip {
-  --_h: var(--var-tone-h, 210);
-  display: inline-flex;
-  align-items: center;
-  padding: 0.05em 0.55em;
-  margin: 0 0.05em;
-  border-radius: 999em;
-  font-family: var(--iswc-mono);
-  font-size: 0.85em;
-  line-height: 1.5;
-  white-space: nowrap;
-  background: hsl(var(--_h) 70% 50% / 18%);
-  border: 1px solid hsl(var(--_h) 60% 55% / 55%);
-  color: hsl(var(--_h) 75% 72%);
+  @include chip-variable;
 }
 .prompt-var-chip--static { cursor: default; }
 
