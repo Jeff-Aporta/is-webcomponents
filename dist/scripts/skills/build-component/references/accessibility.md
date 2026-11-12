@@ -4,7 +4,7 @@
 Cómo hacer que un componente del kit sea accesible: semántica,
 teclado, foco, ARIA, focus management, contraste. Esta guía aplica a
 todo `iswc-*` y se complementa con
-[`AGENTS.md §6.7`](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/AGENTS.md)
+[`specs/lessons.md`](../../../specs/lessons.md)
 (reglas duras) y la sección "Accesibilidad" del `.md` del componente.
 
 ## 1. Semántica primero

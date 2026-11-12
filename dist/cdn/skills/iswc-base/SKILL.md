@@ -55,7 +55,7 @@ Deja el esqueleto completo con un hola mundo, el pin fijo, las specs y skills se
 
 Cada guía de módulo (`src/components/<carpeta>/<modulo>.md`) sigue la
 misma plantilla para que el catálogo y los agentes la lean igual. La
-skill [`../document-component/SKILL.md`](../document-component/SKILL.md)
+skill [`../build-component/SKILL.md`](../build-component/SKILL.md)
 detalla la estructura obligatoria (anatomía, atributos observados,
 props, custom states, eventos, slots, CSS parts, ejemplos), las
 convenciones de tono, el formato de tablas y los enlaces cruzados que
@@ -63,11 +63,11 @@ cada ficha debe llevar.
 
 | Recurso | Ruta |
 | --- | --- |
-| Skill | [`../document-component/SKILL.md`](../document-component/SKILL.md) |
-| Anatomía y frontmatter | [`../document-component/references/anatomy-section.md`](../document-component/references/anatomy-section.md) |
-| Custom states | [`../document-component/references/custom-states.md`](../document-component/references/custom-states.md) |
-| Bloques de código | [`../document-component/references/code-blocks.md`](../document-component/references/code-blocks.md) |
-| Estilo visual | [`../document-component/references/visual-style.md`](../document-component/references/visual-style.md) |
+| Skill | [`../build-component/SKILL.md`](../build-component/SKILL.md) |
+| Anatomía y frontmatter | [`../build-component/references/anatomy-section.md`](../build-component/references/anatomy-section.md) |
+| Custom states | [`../build-component/references/custom-states.md`](../build-component/references/custom-states.md) |
+| Bloques de código | [`../build-component/references/code-blocks.md`](../build-component/references/code-blocks.md) |
+| Estilo visual | [`../build-component/references/visual-style.md`](../build-component/references/visual-style.md) |
 
 ## Enlaces (GitHub primero, raw como secundario)
 
@@ -302,19 +302,19 @@ Detalle operativo: [`tools/runtime.md`](tools/runtime.md).
 
 | API / módulo | CDN o ruta | Resumen | Guía |
 | --- | --- | --- | --- |
-| `iswcLoader` | `core/loader.min.mjs` | Entry CDN: loadCSS*, load/ensure/has, pin, configure, espejos jsDelivr -> githack -> Pages, sheets, registerApp, SHA quemado. | [docs](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/cdn/loader.md) |
-| `IswcUi / Ui` | `helpers/ui.min.mjs` | html, adoptCss, define, css, el: primitivas de apps dominio externas (compat; el kit usa el molde `IswcElement`). No es CE. | [docs](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/helpers/ui.md) |
-| `mdToHtml` | `helpers/md-lite.min.mjs` | Markdown -> HTML sin npm; fences codigo e iswc-* (diagramas). | [docs](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/helpers/utils/md-lite.md) |
-| `resolveIswcFenceTag` | `helpers/md-iswc-fences.min.mjs` | Lang fence iswc-* -> tag de diagrama (flowchart, er, sequence, ...). | [docs](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/helpers/utils/md-iswc-fences.md) |
-| `hydrateMdEmbeds` | `helpers/md-hydrate.min.mjs` | Carga perezosa de los iswc-* que pusieron los renders por defecto del markdown. | [docs](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/helpers/utils/md-hydrate.md) |
-| `md-editor-api` | `helpers/md-editor-api.min.mjs` | CRUD/normalizacion para iswc-md-editor (endpoints, fieldMap, token). | [docs](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/helpers/utils/md-editor-api.md) |
-| `IswcResponseCache` | `helpers/response-cache.min.mjs` | SWR IndexedDB: vivo/leer/guardar/invalidar; no bloquea el pintado. | [docs](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/helpers/utils/response-cache.md) |
-| `ai/motores` | `lib/ai/motores.min.mjs` | IA en el navegador sin UI: ejecutar(herramienta, entrada); 13 motores runonweb fuera de los barriles. | [docs](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/ai/ai.md) |
-| `ai/descarga` | `lib/ai/descarga.min.mjs` | conDescarga: regla única para bajar un modelo (hasta 20 MB toast; más, modal); pospuesta, medidor. | [docs](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/ai/ai.md) |
-| `ai/vector-local` | `lib/ai/vector-local.min.mjs` | vectorLocal, cargarCorpus, ordenarPorSentido: buscar por significado con el modelo multilingüe; null si no está. | [docs](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/ai/ai.md) |
-| `ai/orden` | `lib/ai/orden.min.mjs` | ordenarAplanado: exactas primero, luego embeddings y léxico tolerante. Puro. | [docs](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/ai/ai.md) |
-| `ai/aplanado` | `lib/ai/aplanado.min.mjs` | Reducción de vectores: aplanar, abrirCorpus, empacar; ajustar (PCA/LDA) en aplanado-ajuste para el build. | [docs](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/ai/ai.md) |
-| `sync-pins` | `scripts/sync-pins.mjs (repo)` | Tras commit del kit: propaga SHA a kit-pin / ISS / PIN (deno task sync:pins). | [docs](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/scripts/sync-pins.mjs) |
+| `iswcLoader` | `core/loader.min.mjs` | Entry CDN: loadCSS*, load/ensure/has, pin, configure, espejos jsDelivr -> githack -> Pages, sheets, registerApp, SHA quemado. | [docs](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/cdn/loader.md) |
+| `IswcUi / Ui` | `helpers/ui.min.mjs` | html, adoptCss, define, css, el: primitivas de apps dominio. No es CE. | [docs](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/helpers/ui.md) |
+| `mdToHtml` | `helpers/md-lite.min.mjs` | Markdown -> HTML sin npm; fences codigo e iswc-* (diagramas). | [docs](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/helpers/utils/md-lite.md) |
+| `resolveIswcFenceTag` | `helpers/md-iswc-fences.min.mjs` | Lang fence iswc-* -> tag de diagrama (flowchart, er, sequence, ...). | [docs](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/helpers/utils/md-iswc-fences.md) |
+| `hydrateMdEmbeds` | `helpers/md-hydrate.min.mjs` | Carga perezosa de los iswc-* que pusieron los renders por defecto del markdown. | [docs](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/helpers/utils/md-hydrate.md) |
+| `md-editor-api` | `helpers/md-editor-api.min.mjs` | CRUD/normalizacion para iswc-md-editor (endpoints, fieldMap, token). | [docs](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/helpers/utils/md-editor-api.md) |
+| `IswcResponseCache` | `helpers/response-cache.min.mjs` | SWR IndexedDB: vivo/leer/guardar/invalidar; no bloquea el pintado. | [docs](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/helpers/utils/response-cache.md) |
+| `ai/motores` | `lib/ai/motores.min.mjs` | IA en el navegador sin UI: ejecutar(herramienta, entrada); 13 motores runonweb fuera de los barriles. | [docs](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/ai/ai.md) |
+| `ai/descarga` | `lib/ai/descarga.min.mjs` | conDescarga: regla única para bajar un modelo (hasta 20 MB toast; más, modal); pospuesta, medidor. | [docs](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/ai/ai.md) |
+| `ai/vector-local` | `lib/ai/vector-local.min.mjs` | vectorLocal, cargarCorpus, ordenarPorSentido: buscar por significado con el modelo multilingüe; null si no está. | [docs](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/ai/ai.md) |
+| `ai/orden` | `lib/ai/orden.min.mjs` | ordenarAplanado: exactas primero, luego embeddings y léxico tolerante. Puro. | [docs](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/ai/ai.md) |
+| `ai/aplanado` | `lib/ai/aplanado.min.mjs` | Reducción de vectores: aplanar, abrirCorpus, empacar; ajustar (PCA/LDA) en aplanado-ajuste para el build. | [docs](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/ai/ai.md) |
+| `sync-pins` | `scripts/sync-pins.mjs (repo)` | Tras commit del kit: propaga SHA a kit-pin / ISS / PIN (deno task sync:pins). | [docs](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/scripts/sync-pins.mjs) |
 
 <!-- apis:fin -->
 
@@ -355,300 +355,300 @@ Cada `.min.js` enlaza la guía de su fila y esta skill.
 
 | Tag | Resumen | Guía |
 | --- | --- | --- |
-| `<iswc-accordion-group>` | isp/accordion-group.md | [isp/accordion-group.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/isp/accordion-group.md) |
-| `<iswc-block-layout>` | isp/block-layout.md | [isp/block-layout.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/isp/block-layout.md) |
-| `<iswc-btn-ref>` | isp/btn-ref.md | [isp/btn-ref.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/isp/btn-ref.md) |
-| `<iswc-catalogo-gen>` | isp/catalogo-gen.md | [isp/catalogo-gen.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/isp/catalogo-gen.md) |
-| `<iswc-confirm-delete>` | isp/confirm-delete.md | [isp/confirm-delete.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/isp/confirm-delete.md) |
-| `<iswc-flex-layout>` | isp/flex-layout.md | [isp/flex-layout.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/isp/flex-layout.md) |
-| `<iswc-flex-options>` | isp/flex-options.md | [isp/flex-options.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/isp/flex-options.md) |
-| `<iswc-float-card>` | isp/float-card.md | [isp/float-card.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/isp/float-card.md) |
-| `<iswc-form>` | isp/form.md | [isp/form.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/isp/form.md) |
-| `<iswc-modal-verificacion>` | isp/modal-verificacion.md | [isp/modal-verificacion.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/isp/modal-verificacion.md) |
-| `<iswc-grid-layout>` | isp/grid-layout.md | [isp/grid-layout.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/isp/grid-layout.md) |
-| `<iswc-heading>` | isp/heading.md | [isp/heading.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/isp/heading.md) |
-| `<iswc-loading-overlay>` | isp/loading-overlay.md | [isp/loading-overlay.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/isp/loading-overlay.md) |
-| `<iswc-text>` | isp/text.md | [isp/text.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/isp/text.md) |
-| `<iswc-tree-view>` | Planes de estudio, catálogos anidados y cualquier lista plana con flatPath | [isp/tree-view.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/isp/tree-view.md) |
+| `<iswc-accordion-group>` | Cuando varios disclosures deben comportarse como un acordeón: uno abierto a la | [isp/accordion-group.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/isp/accordion-group.md) |
+| `<iswc-block-layout>` | Cuando un bloque debe adaptarse a su propio ancho (paneles redimensionables, | [isp/block-layout.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/isp/block-layout.md) |
+| `<iswc-btn-ref>` | FKs de catálogo (cliente, aplicación, tercero…) donde el usuario escribe la | [isp/btn-ref.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/isp/btn-ref.md) |
+| `<iswc-catalogo-gen>` | Listados maestros Acme con controller que implementa Lista + acciones | [isp/catalogo-gen.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/isp/catalogo-gen.md) |
+| `<iswc-confirm-delete>` | Borrados irreversibles donde un clic de más cuesta caro. | [isp/confirm-delete.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/isp/confirm-delete.md) |
+| `<iswc-flex-layout>` | Para filas y columnas de UI donde se quiere el layout en el markup, sin | [isp/flex-layout.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/isp/flex-layout.md) |
+| `<iswc-flex-options>` | Fila de acciones (toolbar de árbol, tools de hover, menú compacto) cuyo | [isp/flex-options.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/isp/flex-options.md) |
+| `<iswc-float-card>` | Tools de hover sobre una fila, chip o ancla que deben aparecer al lado sin | [isp/float-card.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/isp/float-card.md) |
+| `<iswc-form>` | Formulario de ficha: cabecera, cuerpo scrolleable y pie Aceptar / Cancelar. | [isp/form.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/isp/form.md) |
+| `<iswc-modal-verificacion>` | Verificaciones asíncronas de un registro antes de una acción (guardar, cerrar, | [isp/modal-verificacion.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/isp/modal-verificacion.md) |
+| `<iswc-grid-layout>` | Para rejillas de tarjetas, formularios etiqueta/campo y cualquier estructura | [isp/grid-layout.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/isp/grid-layout.md) |
+| `<iswc-heading>` | Para los encabezados de una vista cuando se quiere el color tintado de la | [isp/heading.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/isp/heading.md) |
+| `<iswc-loading-overlay>` | Operaciones que el usuario NO debe poder interrumpir ni esquivar: guardar, | [isp/loading-overlay.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/isp/loading-overlay.md) |
+| `<iswc-text>` | Para dar color semántico a un fragmento de texto, o para recortar contenido | [isp/text.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/isp/text.md) |
+| `<iswc-tree-view>` | Planes de estudio, catálogos anidados y cualquier lista plana con flatPath | [isp/tree-view.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/isp/tree-view.md) |
 
 ### actions
 
 | Tag | Resumen | Guía |
 | --- | --- | --- |
-| `<iswc-button>` | actions/button.md | [actions/button.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/actions/button.md) |
-| `<iswc-button-group>` | actions/button-group.md | [actions/button-group.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/actions/button-group.md) |
-| `<iswc-copy-button>` | actions/copy-button.md | [actions/copy-button.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/actions/copy-button.md) |
-| `<iswc-share-button>` | actions/share-button.md | [actions/share-button.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/actions/share-button.md) |
-| `<iswc-check-icon-button>` | actions/check-icon-button.md | [actions/check-icon-button.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/actions/check-icon-button.md) |
-| `<iswc-dropdown>` | actions/dropdown.md | [actions/dropdown.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/actions/dropdown.md) |
-| `<iswc-dropdown-item>` | actions/dropdown-item.md | [actions/dropdown-item.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/actions/dropdown-item.md) |
-| `<iswc-fab>` | actions/fab.md | [actions/fab.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/actions/fab.md) |
-| `<iswc-context-menu>` | actions/context-menu.md | [actions/context-menu.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/actions/context-menu.md) |
-| `<iswc-speed-dial>` | actions/speed-dial.md | [actions/speed-dial.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/actions/speed-dial.md) |
-| `<iswc-speed-dial-action>` | Acción hija de <iswc-speed-dial>. | [actions/speed-dial-action.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/actions/speed-dial-action.md) |
+| `<iswc-button>` | Acciones, selección de comandos y menús interactivos. | [actions/button.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/actions/button.md) |
+| `<iswc-button-group>` | Acciones, selección de comandos y menús interactivos. | [actions/button-group.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/actions/button-group.md) |
+| `<iswc-copy-button>` | Acciones, selección de comandos y menús interactivos. | [actions/copy-button.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/actions/copy-button.md) |
+| `<iswc-share-button>` | Botón de compartir enlace, reporte o captura hacia WhatsApp, Mail, etc. | [actions/share-button.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/actions/share-button.md) |
+| `<iswc-check-icon-button>` | Acciones, selección de comandos y menús interactivos. | [actions/check-icon-button.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/actions/check-icon-button.md) |
+| `<iswc-dropdown>` | actions/dropdown.md | [actions/dropdown.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/actions/dropdown.md) |
+| `<iswc-dropdown-item>` | actions/dropdown-item.md | [actions/dropdown-item.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/actions/dropdown-item.md) |
+| `<iswc-fab>` | Acciones, selección de comandos y menús interactivos. | [actions/fab.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/actions/fab.md) |
+| `<iswc-context-menu>` | Acciones, selección de comandos y menús interactivos. | [actions/context-menu.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/actions/context-menu.md) |
+| `<iswc-speed-dial>` | Acciones, selección de comandos y menús interactivos. | [actions/speed-dial.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/actions/speed-dial.md) |
+| `<iswc-speed-dial-action>` | Acción hija de <iswc-speed-dial>. | [actions/speed-dial-action.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/actions/speed-dial-action.md) |
 
 ### media
 
 | Tag | Resumen | Guía |
 | --- | --- | --- |
-| `<iswc-icon>` | Iconos, identidad visual y reproducción de video. | [media/icon.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/media/icon.md) |
-| `<iswc-avatar>` | media/avatar.md | [media/avatar.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/media/avatar.md) |
-| `<iswc-theme-img>` | media/theme-img.md | [media/theme-img.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/media/theme-img.md) |
-| `<iswc-figure>` | Figura de contenido: una imagen (con variante dark/light opcional), su pie y, si se pide, un enlace «abrir en una pestaña nueva». | [media/figure.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/media/figure.md) |
-| `<iswc-video>` | media/video.md | [media/video.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/media/video.md) |
-| `<iswc-speech>` | media/speech.md | [media/speech.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/media/speech.md) |
-| `<iswc-media-recorder>` | media/media-recorder.md | [media/media-recorder.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/media/media-recorder.md) |
-| `<iswc-video-playlist>` | media/video-playlist.md | [media/video-playlist.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/media/video-playlist.md) |
-| `<iswc-parallax-collage>` | Collage por capas con parallax opcional: desplazar, rotar o separar en profundidad. | [media/parallax-collage.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/media/parallax-collage.md) |
-| `<iswc-ai-tool>` | Una herramienta de IA en el navegador (OCR, voz a texto, traducción, quitar fondo y diez más), elegida por props; la lógica sin UI está en `lib/ai/`. | [media/ai-tool.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/media/ai-tool.md) |
-| `<iswc-person>` | Una persona en línea: avatar con iniciales, nombre (o usuario) y un detalle. | [media/person.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/media/person.md) |
-| `<iswc-barcode>` | media/barcode.md | [media/barcode.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/media/barcode.md) |
-| `<iswc-barcode-scanner>` | media/barcode-scanner.md | [media/barcode-scanner.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/media/barcode-scanner.md) |
-| `<iswc-image-editor>` | media/image-editor.md | [media/image-editor.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/media/image-editor.md) |
-| `<iswc-icon-explorer>` | Ver la guía del módulo antes de crear otro control. | — |
-| `<iswc-qrcode>` | media/qrcode.md | [media/qrcode.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/media/qrcode.md) |
+| `<iswc-icon>` | Iconos, identidad visual y reproducción de video. | [media/icon.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/media/icon.md) |
+| `<iswc-avatar>` | Iconos, identidad visual y reproducción de video. | [media/avatar.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/media/avatar.md) |
+| `<iswc-theme-img>` | Una sola imagen que muestra la variante dark o light según el contenedor de tema del kit (misma cascada que <iswc-theme-toggle>). | [media/theme-img.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/media/theme-img.md) |
+| `<iswc-figure>` | Figura de contenido: una imagen (con variante dark/light opcional), su pie y, si se pide, un enlace «abrir en una pestaña nueva». | [media/figure.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/media/figure.md) |
+| `<iswc-video>` | Iconos, identidad visual y reproducción de video. | [media/video.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/media/video.md) |
+| `<iswc-speech>` | Asistentes, dictado al campo, leer un resultado en voz alta. | [media/speech.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/media/speech.md) |
+| `<iswc-media-recorder>` | Notas de voz, captura de pantalla, clip de webcam. | [media/media-recorder.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/media/media-recorder.md) |
+| `<iswc-video-playlist>` | Iconos, identidad visual y reproducción de video. | [media/video-playlist.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/media/video-playlist.md) |
+| `<iswc-parallax-collage>` | Collage por capas, con imágenes y formas teñidas con la paleta activa. | [media/parallax-collage.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/media/parallax-collage.md) |
+| `<iswc-ai-tool>` | Una herramienta de IA que corre en el navegador con runonweb, elegida por props. | [media/ai-tool.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/media/ai-tool.md) |
+| `<iswc-person>` | Una persona en línea: avatar con iniciales, nombre (o usuario) y un detalle. | [media/person.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/media/person.md) |
+| `<iswc-barcode>` | Etiquetas de producto, tiquetes, remisiones: cualquier caso que necesite un | [media/barcode.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/media/barcode.md) |
+| `<iswc-barcode-scanner>` | Inventario, escanear un QR de producto. | [media/barcode-scanner.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/media/barcode-scanner.md) |
+| `<iswc-image-editor>` | Foto de perfil, logo de empresa, adjuntos que deban recortarse antes de | [media/image-editor.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/media/image-editor.md) |
+| `<iswc-icon-explorer>` | Explorador de las familias e íconos de Iconify: buscar, filtrar por familia y copiar el nombre para <iswc-icon>. | [media/icon-explorer.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/media/icon-explorer.md) |
+| `<iswc-qrcode>` | Enlaces cortos, datos de contacto, referencias de pago: cualquier carga que | [media/qrcode.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/media/qrcode.md) |
 
 ### feedback
 
 | Tag | Resumen | Guía |
 | --- | --- | --- |
-| `<iswc-spinner>` | feedback/spinner.md | [feedback/spinner.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/feedback/spinner.md) |
-| `<iswc-badge>` | feedback/badge.md | [feedback/badge.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/feedback/badge.md) |
-| `<iswc-tag>` | feedback/tag.md | [feedback/tag.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/feedback/tag.md) |
-| `<iswc-skeleton>` | feedback/skeleton.md | [feedback/skeleton.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/feedback/skeleton.md) |
-| `<iswc-progress-bar>` | feedback/progress-bar.md | [feedback/progress-bar.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/feedback/progress-bar.md) |
-| `<iswc-progress-ring>` | feedback/progress-ring.md | [feedback/progress-ring.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/feedback/progress-ring.md) |
-| `<iswc-theme-toggle>` | feedback/theme-toggle.md | [feedback/theme-toggle.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/feedback/theme-toggle.md) |
-| `<iswc-prefs-clear>` | feedback/prefs-clear.md | [feedback/prefs-clear.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/feedback/prefs-clear.md) |
-| `<iswc-toast>` | feedback/toast.md | [feedback/toast.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/feedback/toast.md) |
-| `<iswc-toast-item>` | feedback/toast-item.md | [feedback/toast-item.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/feedback/toast-item.md) |
-| `<iswc-tooltip>` | feedback/tooltip.md | [feedback/tooltip.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/feedback/tooltip.md) |
-| `<iswc-cdn-snippet>` | feedback/cdn-snippet.md | [feedback/cdn-snippet.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/feedback/cdn-snippet.md) |
-| `<iswc-popconfirm>` | feedback/popconfirm.md | [feedback/popconfirm.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/feedback/popconfirm.md) |
-| `<iswc-confirm-modal>` | feedback/confirm-modal.md | [feedback/confirm-modal.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/feedback/confirm-modal.md) |
-| `<iswc-stream-bubble>` | Burbuja de una respuesta que llega por partes: estado, pasos previos, escritura letra a letra y markdown ligero. | [feedback/stream-bubble.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/feedback/stream-bubble.md) |
-| `<iswc-status-pill>` | Pastilla de una línea para un paso de un proceso: spinner o ícono, la frase y el rótulo del estado. | [feedback/status-pill.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/feedback/status-pill.md) |
-| `<iswc-loading>` | Indicador de carga en línea: spinner y texto opcional. | [feedback/loading.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/feedback/loading.md) |
-| `<iswc-empty-state>` | Lo que se ve cuando una lista o un panel no tiene datos, está cargando o falló: ícono, título, texto y una acción opcional. | [feedback/empty-state.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/feedback/empty-state.md) |
-| `<iswc-palette-selector>` | Dejar que el usuario elija la paleta (y Panda) de la app o de un contenedor. | [feedback/palette-selector.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/feedback/palette-selector.md) |
+| `<iswc-spinner>` | Estado, progreso, confirmación, carga o resultado de operaciones. | [feedback/spinner.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/feedback/spinner.md) |
+| `<iswc-badge>` | Estado, progreso, confirmación, carga o resultado de operaciones. | [feedback/badge.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/feedback/badge.md) |
+| `<iswc-tag>` | Estado, progreso, confirmación, carga o resultado de operaciones. | [feedback/tag.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/feedback/tag.md) |
+| `<iswc-skeleton>` | Estado, progreso, confirmación, carga o resultado de operaciones. | [feedback/skeleton.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/feedback/skeleton.md) |
+| `<iswc-progress-bar>` | Estado, progreso, confirmación, carga o resultado de operaciones. | [feedback/progress-bar.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/feedback/progress-bar.md) |
+| `<iswc-progress-ring>` | Estado, progreso, confirmación, carga o resultado de operaciones. | [feedback/progress-ring.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/feedback/progress-ring.md) |
+| `<iswc-theme-toggle>` | Estado, progreso, confirmación, carga o resultado de operaciones. | [feedback/theme-toggle.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/feedback/theme-toggle.md) |
+| `<iswc-prefs-clear>` | Auditoría UX/UI, demos, o un control de “restablecer paneles” en herramientas internas. | [feedback/prefs-clear.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/feedback/prefs-clear.md) |
+| `<iswc-toast>` | Estado, progreso, confirmación, carga o resultado de operaciones. | [feedback/toast.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/feedback/toast.md) |
+| `<iswc-toast-item>` | Estado, progreso, confirmación, carga o resultado de operaciones. | [feedback/toast-item.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/feedback/toast-item.md) |
+| `<iswc-tooltip>` | Estado, progreso, confirmación, carga o resultado de operaciones. | [feedback/tooltip.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/feedback/tooltip.md) |
+| `<iswc-cdn-snippet>` | Panel de consumo por CDN con una sola estrategia: loader.min.mjs. | [feedback/cdn-snippet.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/feedback/cdn-snippet.md) |
+| `<iswc-popconfirm>` | Estado, progreso, confirmación, carga o resultado de operaciones. | [feedback/popconfirm.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/feedback/popconfirm.md) |
+| `<iswc-confirm-modal>` | Cuando la acción es destructiva o irreversible y conviene detener al usuario: | [feedback/confirm-modal.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/feedback/confirm-modal.md) |
+| `<iswc-stream-bubble>` | Burbuja de una respuesta que llega por partes: estado, pasos previos, escritura letra a letra y markdown ligero. | [feedback/stream-bubble.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/feedback/stream-bubble.md) |
+| `<iswc-status-pill>` | Pastilla de una línea para un paso de un proceso: spinner o ícono, la frase y el rótulo del estado. | [feedback/status-pill.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/feedback/status-pill.md) |
+| `<iswc-loading>` | Indicador de carga en línea: spinner y texto opcional. | [feedback/loading.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/feedback/loading.md) |
+| `<iswc-empty-state>` | Lo que se ve cuando una lista o un panel no tiene datos, está cargando o falló: ícono, título, texto y una acción opcional. | [feedback/empty-state.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/feedback/empty-state.md) |
+| `<iswc-palette-selector>` | Dejar que el usuario elija la paleta (y Panda) de la app o de un contenedor. | [feedback/palette-selector.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/feedback/palette-selector.md) |
 
 ### layout
 
 | Tag | Resumen | Guía |
 | --- | --- | --- |
-| `<iswc-split-panel>` | layout/split-panel.md | [layout/split-panel.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/layout/split-panel.md) |
-| `<iswc-main>` | layout/main.md | [layout/main.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/layout/main.md) |
-| `<iswc-card>` | layout/card.md | [layout/card.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/layout/card.md) |
-| `<iswc-callout>` | layout/callout.md | [layout/callout.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/layout/callout.md) |
-| `<iswc-details>` | layout/details.md | [layout/details.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/layout/details.md) |
-| `<iswc-dialog>` | layout/dialog.md | [layout/dialog.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/layout/dialog.md) |
-| `<iswc-drawer>` | layout/drawer.md | [layout/drawer.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/layout/drawer.md) |
-| `<iswc-login>` | - Login de una app ISWC con uno o varios proveedores. | [layout/login.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/layout/login.md) |
-| `<iswc-login-gate>` | Cortina de acceso: muestra el contenido público (o un mockup) y pide iniciar sesión antes de revelar la parte protegida. | [layout/login-gate.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/layout/login-gate.md) |
-| `<iswc-login-dropdown>` | Acceso compacto para la barra: un botón "Entrar" que despliega usuario/contraseña (y opcionalmente pegar un token), con paso de elección entre opciones (p. | [layout/login-dropdown.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/layout/login-dropdown.md) |
-| `<iswc-session-menu>` | Sesión del usuario en la barra. | [layout/session-menu.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/layout/session-menu.md) |
-| `<iswc-app-shell>` | Armazón de una aplicación: barra superior fija (marca, navegación, acciones) y una vista que hace scroll propio debajo. | [layout/app-shell.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/layout/app-shell.md) |
-| `<iswc-divider>` | layout/divider.md | [layout/divider.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/layout/divider.md) |
-| `<iswc-scrollspy>` | layout/scrollspy.md | [layout/scrollspy.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/layout/scrollspy.md) |
-| `<iswc-demo>` | Caja de demostración de la galería. | [layout/demo.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/layout/demo.md) |
-| `<iswc-page-header>` | Fila de arriba de una vista: ícono, título, subtítulo y un slot para los botones. | [layout/page-header.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/layout/page-header.md) |
-| `<iswc-dock>` | layout/dock.md | [layout/dock.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/layout/dock.md) |
-| `<iswc-dock-item>` | Ítem de <iswc-dock>. | [layout/dock-item.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/layout/dock-item.md) |
-| `<iswc-doc-layout>` | Layout documental común: navegación a la izquierda, contenido al centro e índice de la página a la derecha, con scroll-spy entre ambos. | [layout/doc-layout.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/layout/doc-layout.md) |
-| `<iswc-md-docs-vault>` | Lector de una documentación modular (norma documentacion-modular) como un libro: cada .md es una hoja, el README es la portada y se navega con índice, búsqueda, paso anterior/siguiente y enlaces compartibles. | [layout/md-docs-vault.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/layout/md-docs-vault.md) |
-| `<iswc-server-api-docs>` | Expone los endpoints de la API de un server al estilo Swagger (solo para servers: el ISS la sirve en GET /api/docs). | [layout/server-api-docs.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/layout/server-api-docs.md) |
+| `<iswc-split-panel>` | Dos paneles que el usuario redimensiona con el separador. | [layout/split-panel.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/layout/split-panel.md) |
+| `<iswc-main>` | Región principal desplazable de una página suelta. | [layout/main.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/layout/main.md) |
+| `<iswc-card>` | Agrupar información relacionada con encabezado, cuerpo, pie o imagen. | [layout/card.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/layout/card.md) |
+| `<iswc-callout>` | Avisos dentro del contenido que el usuario no debe pasar por alto: consejos, advertencias o errores de una sección. | [layout/callout.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/layout/callout.md) |
+| `<iswc-details>` | Contenido secundario que se pliega: una sección suelta o un bloque de ayuda. | [layout/details.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/layout/details.md) |
+| `<iswc-dialog>` | layout/dialog.md | [layout/dialog.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/layout/dialog.md) |
+| `<iswc-drawer>` | Menús, filtros o formularios secundarios que aparecen sin salir de la vista. | [layout/drawer.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/layout/drawer.md) |
+| `<iswc-login>` | - Login de una app ISWC con uno o varios proveedores. | [layout/login.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/layout/login.md) |
+| `<iswc-login-gate>` | Cortina de acceso: muestra el contenido público (o un mockup) y pide iniciar sesión antes de revelar la parte protegida. | [layout/login-gate.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/layout/login-gate.md) |
+| `<iswc-login-dropdown>` | Acceso compacto para la barra: un botón "Entrar" que despliega usuario/contraseña (y opcionalmente pegar un token), con paso de elección entre opciones (p. | [layout/login-dropdown.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/layout/login-dropdown.md) |
+| `<iswc-session-menu>` | Sesión del usuario en la barra. | [layout/session-menu.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/layout/session-menu.md) |
+| `<iswc-app-shell>` | Armazón de una aplicación: barra superior fija (marca, navegación, acciones) y una vista que hace scroll propio debajo. | [layout/app-shell.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/layout/app-shell.md) |
+| `<iswc-divider>` | Separar grupos de contenido o de acciones, con o sin texto al centro. | [layout/divider.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/layout/divider.md) |
+| `<iswc-scrollspy>` | Resaltar en un índice propio la sección visible al desplazarse. | [layout/scrollspy.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/layout/scrollspy.md) |
+| `<iswc-demo>` | Caja de demostración de la galería. | [layout/demo.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/layout/demo.md) |
+| `<iswc-page-header>` | Fila de arriba de una vista: ícono, título, subtítulo, un slot para los botones y otro para una ilustración decorativa a la derecha. | [layout/page-header.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/layout/page-header.md) |
+| `<iswc-dock>` | Barra compacta de accesos frecuentes (navegación secundaria, launcher de | [layout/dock.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/layout/dock.md) |
+| `<iswc-dock-item>` | Ítem de <iswc-dock>. | [layout/dock-item.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/layout/dock-item.md) |
+| `<iswc-doc-layout>` | Layout documental común: navegación a la izquierda, contenido al centro e índice de la página a la derecha, con scroll-spy entre ambos. | [layout/doc-layout.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/layout/doc-layout.md) |
+| `<iswc-md-docs-vault>` | Lector de una documentación modular (norma documentacion-modular) como un libro: cada .md es una hoja, el README es la portada y se navega con índice, búsqueda, paso anterior/siguiente y enlaces compartibles. | [layout/md-docs-vault.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/layout/md-docs-vault.md) |
+| `<iswc-server-api-docs>` | Expone los endpoints de la API de un server al estilo Swagger (solo para servers: el ISS la sirve en GET /api/docs). | [layout/server-api-docs.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/layout/server-api-docs.md) |
 
 ### helpers
 
 | Tag | Resumen | Guía |
 | --- | --- | --- |
-| `<iswc-popover>` | Formato, observación y posicionamiento reutilizable sobre APIs nativas. | [helpers/popover.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/helpers/popover.md) |
-| `<iswc-ui>` | helpers/ui.md | [helpers/ui.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/helpers/ui.md) |
-| `<iswc-lightbox>` | diagrams/lightbox.md | [diagrams/lightbox.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/diagrams/lightbox.md) |
-| `<iswc-relative-time>` | helpers/relative-time.md | [helpers/relative-time.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/helpers/relative-time.md) |
-| `<iswc-format>` | helpers/format.md | [helpers/format.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/helpers/format.md) |
-| `<iswc-observer>` | helpers/observer.md | [helpers/observer.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/helpers/observer.md) |
-| `<iswc-wake-lock>` | helpers/wake-lock.md | [helpers/wake-lock.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/helpers/wake-lock.md) |
-| `<iswc-offscreen-canvas>` | helpers/offscreen-canvas.md | [helpers/offscreen-canvas.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/helpers/offscreen-canvas.md) |
-| `<iswc-format-date>` | helpers/format-date.md | [helpers/format-date.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/helpers/format-date.md) |
-| `<iswc-format-number>` | helpers/format-number.md | [helpers/format-number.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/helpers/format-number.md) |
-| `<iswc-format-bytes>` | helpers/format-bytes.md | [helpers/format-bytes.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/helpers/format-bytes.md) |
-| `<iswc-intersection-observer>` | helpers/intersection-observer.md | [helpers/intersection-observer.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/helpers/intersection-observer.md) |
-| `<iswc-mutation-observer>` | helpers/mutation-observer.md | [helpers/mutation-observer.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/helpers/mutation-observer.md) |
-| `<iswc-resize-observer>` | helpers/resize-observer.md | [helpers/resize-observer.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/helpers/resize-observer.md) |
-| `<iswc-md-render>` | helpers/md-render.md | [helpers/md-render.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/helpers/md-render.md) |
-| `<iswc-md-editor>` | helpers/md-editor.md | [helpers/md-editor.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/helpers/md-editor.md) |
-| `<iswc-floating>` | helpers/floating.md | [helpers/floating.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/helpers/floating.md) |
+| `<iswc-popover>` | Formato, observación y posicionamiento reutilizable sobre APIs nativas. | [helpers/popover.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/helpers/popover.md) |
+| `<iswc-ui>` | Primitivas de render para apps consumidoras del kit. | [helpers/ui.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/helpers/ui.md) |
+| `<iswc-lightbox>` | Relaciones, flujos, estados, estructura o tiempo desde payloads declarativos. | [diagrams/lightbox.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/diagrams/lightbox.md) |
+| `<iswc-relative-time>` | Formato, observación y posicionamiento reutilizable sobre APIs nativas. | [helpers/relative-time.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/helpers/relative-time.md) |
+| `<iswc-format>` | Web Component genérico de formateo con Intl. | [helpers/format.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/helpers/format.md) |
+| `<iswc-observer>` | Web Component genérico que envuelve IntersectionObserver, MutationObserver y ResizeObserver vía type. | [helpers/observer.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/helpers/observer.md) |
+| `<iswc-wake-lock>` | Lectura, dashboard, receta paso a paso, vídeo. | [helpers/wake-lock.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/helpers/wake-lock.md) |
+| `<iswc-offscreen-canvas>` | Pintar 2D/3D pesado sin congelar el hilo de UI. | [helpers/offscreen-canvas.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/helpers/offscreen-canvas.md) |
+| `<iswc-format-date>` | Formato, observación y posicionamiento reutilizable sobre APIs nativas. | [helpers/format-date.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/helpers/format-date.md) |
+| `<iswc-format-number>` | Formato, observación y posicionamiento reutilizable sobre APIs nativas. | [helpers/format-number.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/helpers/format-number.md) |
+| `<iswc-format-bytes>` | Formato, observación y posicionamiento reutilizable sobre APIs nativas. | [helpers/format-bytes.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/helpers/format-bytes.md) |
+| `<iswc-intersection-observer>` | Formato, observación y posicionamiento reutilizable sobre APIs nativas. | [helpers/intersection-observer.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/helpers/intersection-observer.md) |
+| `<iswc-mutation-observer>` | Formato, observación y posicionamiento reutilizable sobre APIs nativas. | [helpers/mutation-observer.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/helpers/mutation-observer.md) |
+| `<iswc-resize-observer>` | Formato, observación y posicionamiento reutilizable sobre APIs nativas. | [helpers/resize-observer.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/helpers/resize-observer.md) |
+| `<iswc-md-render>` | - Mostrar un bloque MD embebido en una página o card. | [helpers/md-render.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/helpers/md-render.md) |
+| `<iswc-md-editor>` | - Instrucciones/prompts con {{variables}} que hay que revisar o editar en un diálogo grande. | [helpers/md-editor.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/helpers/md-editor.md) |
+| `<iswc-floating>` | Building block de posicionamiento anclado: coloca un panel respecto de un ancla resolviendo flip, shift, auto-size, flecha y hover bridge sobre _shared/position.js. | [helpers/floating.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/helpers/floating.md) |
 
 ### navigation
 
 | Tag | Resumen | Guía |
 | --- | --- | --- |
-| `<iswc-breadcrumb>` | navigation/breadcrumb.md | [navigation/breadcrumb.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/navigation/breadcrumb.md) |
-| `<iswc-pager>` | Paso a la página anterior y a la siguiente, cada lado con un rótulo pequeño («← Anterior», «Siguiente →») y el título de la otra página. | [navigation/pager.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/navigation/pager.md) |
-| `<iswc-doc-index>` | Índice documental con búsqueda: lista páginas agrupadas (grupo → subgrupo → ítem) y, al escribir, busca en títulos, palabras clave y todo el texto, con los resultados por relevancia y el fragmento resaltado. | [navigation/doc-index.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/navigation/doc-index.md) |
-| `<iswc-breadcrumb-item>` | navigation/breadcrumb-item.md | [navigation/breadcrumb-item.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/navigation/breadcrumb-item.md) |
-| `<iswc-app-nav>` | Pestañas de la barra de una app: una fila primaria y filas secundarias que dependen de ella (p. | [navigation/app-nav.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/navigation/app-nav.md) |
-| `<iswc-tab-group>` | navigation/tab-group.md | [navigation/tab-group.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/navigation/tab-group.md) |
-| `<iswc-tab>` | navigation/tab-group.md | [navigation/tab-group.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/navigation/tab-group.md) |
-| `<iswc-tab-panel>` | navigation/tab-group.md | [navigation/tab-group.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/navigation/tab-group.md) |
-| `<iswc-scroller>` | navigation/scroller.md | [navigation/scroller.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/navigation/scroller.md) |
-| `<iswc-carousel>` | navigation/carousel.md | [navigation/carousel.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/navigation/carousel.md) |
-| `<iswc-carousel-item>` | Lámina de <iswc-carousel>. | [navigation/carousel-item.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/navigation/carousel-item.md) |
-| `<iswc-tree>` | navigation/tree.md | [navigation/tree.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/navigation/tree.md) |
-| `<iswc-tree-item>` | Nodo de <iswc-tree>. | [navigation/tree-item.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/navigation/tree-item.md) |
-| `<iswc-stepper>` | navigation/stepper.md | [navigation/stepper.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/navigation/stepper.md) |
-| `<iswc-stepper-step>` | Paso de <iswc-stepper>. | [navigation/stepper-step.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/navigation/stepper-step.md) |
-| `<iswc-pagination>` | Paginación numérica: pista de números desplazable (flechas, Shift+rueda, arrastre táctil) y selector de tamaño opcional. | [navigation/pagination.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/navigation/pagination.md) |
-| `<iswc-mega-menu>` | navigation/mega-menu.md | [navigation/mega-menu.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/navigation/mega-menu.md) |
+| `<iswc-breadcrumb>` | Orientación, movimiento entre vistas y navegación jerárquica o secuencial. | [navigation/breadcrumb.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/navigation/breadcrumb.md) |
+| `<iswc-pager>` | Paso a la página anterior y a la siguiente, cada lado con un rótulo pequeño («← Anterior», «Siguiente →») y el título de la otra página. | [navigation/pager.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/navigation/pager.md) |
+| `<iswc-doc-index>` | Índice documental con búsqueda: lista páginas agrupadas (grupo → subgrupo → ítem) y, al escribir, busca en títulos, palabras clave y todo el texto, con los resultados por relevancia y el fragmento resaltado. | [navigation/doc-index.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/navigation/doc-index.md) |
+| `<iswc-breadcrumb-item>` | Orientación, movimiento entre vistas y navegación jerárquica o secuencial. | [navigation/breadcrumb-item.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/navigation/breadcrumb-item.md) |
+| `<iswc-app-nav>` | Pestañas de la barra de una app: una fila primaria y filas secundarias que dependen de ella (p. | [navigation/app-nav.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/navigation/app-nav.md) |
+| `<iswc-tab-group>` | Orientación, movimiento entre vistas y navegación jerárquica o secuencial. | [navigation/tab-group.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/navigation/tab-group.md) |
+| `<iswc-tab>` | Orientación, movimiento entre vistas y navegación jerárquica o secuencial. | [navigation/tab-group.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/navigation/tab-group.md) |
+| `<iswc-tab-panel>` | Orientación, movimiento entre vistas y navegación jerárquica o secuencial. | [navigation/tab-group.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/navigation/tab-group.md) |
+| `<iswc-scroller>` | Orientación, movimiento entre vistas y navegación jerárquica o secuencial. | [navigation/scroller.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/navigation/scroller.md) |
+| `<iswc-carousel>` | Orientación, movimiento entre vistas y navegación jerárquica o secuencial. | [navigation/carousel.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/navigation/carousel.md) |
+| `<iswc-carousel-item>` | Lámina de <iswc-carousel>. | [navigation/carousel-item.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/navigation/carousel-item.md) |
+| `<iswc-tree>` | Orientación, movimiento entre vistas y navegación jerárquica o secuencial. | [navigation/tree.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/navigation/tree.md) |
+| `<iswc-tree-item>` | Nodo de <iswc-tree>. | [navigation/tree-item.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/navigation/tree-item.md) |
+| `<iswc-stepper>` | Orientación, movimiento entre vistas y navegación jerárquica o secuencial. | [navigation/stepper.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/navigation/stepper.md) |
+| `<iswc-stepper-step>` | Paso de <iswc-stepper>. | [navigation/stepper-step.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/navigation/stepper-step.md) |
+| `<iswc-pagination>` | Paginación numérica: pista de números desplazable (flechas, Shift+rueda, arrastre táctil) y selector de tamaño opcional. | [navigation/pagination.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/navigation/pagination.md) |
+| `<iswc-mega-menu>` | Cabeceras con muchas secciones que no caben en un dropdown de una columna. | [navigation/mega-menu.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/navigation/mega-menu.md) |
 
 ### forms
 
 | Tag | Resumen | Guía |
 | --- | --- | --- |
-| `<iswc-combobox>` | forms/combobox.md | [forms/combobox.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/forms/combobox.md) |
-| `<iswc-option>` | forms/option.md | [forms/option.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/forms/option.md) |
-| `<iswc-checkbox>` | forms/checkbox.md | [forms/checkbox.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/forms/checkbox.md) |
-| `<iswc-switch>` | forms/switch.md | [forms/switch.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/forms/switch.md) |
-| `<iswc-radio-group>` | forms/radio-group.md | [forms/radio-group.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/forms/radio-group.md) |
-| `<iswc-radio>` | forms/radio.md | [forms/radio.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/forms/radio.md) |
-| `<iswc-input>` | forms/input.md | [forms/input.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/forms/input.md) |
-| `<iswc-textarea>` | forms/textarea.md | [forms/textarea.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/forms/textarea.md) |
-| `<iswc-slider>` | forms/slider.md | [forms/slider.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/forms/slider.md) |
-| `<iswc-rating>` | forms/rating.md | [forms/rating.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/forms/rating.md) |
-| `<iswc-select>` | forms/select.md | [forms/select.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/forms/select.md) |
-| `<iswc-color-picker>` | forms/color-picker.md | [forms/color-picker.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/forms/color-picker.md) |
-| `<iswc-file-input>` | forms/file-input.md | [forms/file-input.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/forms/file-input.md) |
-| `<iswc-date-picker>` | forms/date-picker.md | [forms/date-picker.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/forms/date-picker.md) |
-| `<iswc-month-calendar>` | forms/month-calendar.md | [forms/month-calendar.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/forms/month-calendar.md) |
-| `<iswc-year-calendar>` | forms/year-calendar.md | [forms/year-calendar.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/forms/year-calendar.md) |
-| `<iswc-date-range-picker>` | forms/date-range-picker.md | [forms/date-range-picker.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/forms/date-range-picker.md) |
-| `<iswc-time-clock>` | forms/time-clock.md | [forms/time-clock.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/forms/time-clock.md) |
-| `<iswc-digital-clock>` | forms/digital-clock.md | [forms/digital-clock.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/forms/digital-clock.md) |
-| `<iswc-date-field>` | Captura, selección y validación de valores compatibles con formularios. | [forms/date-field.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/forms/date-field.md) |
-| `<iswc-time-field>` | Captura, selección y validación de valores compatibles con formularios. | [forms/time-field.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/forms/time-field.md) |
-| `<iswc-date-time-field>` | Captura, selección y validación de valores compatibles con formularios. | [forms/date-time-field.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/forms/date-time-field.md) |
-| `<iswc-date-input>` | forms/date-input.md | [forms/date-input.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/forms/date-input.md) |
-| `<iswc-time-input>` | forms/time-input.md | [forms/time-input.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/forms/time-input.md) |
-| `<iswc-date-time-input>` | forms/date-time-input.md | [forms/date-time-input.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/forms/date-time-input.md) |
-| `<iswc-date-range-input>` | forms/date-range-input.md | [forms/date-range-input.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/forms/date-range-input.md) |
-| `<iswc-pin-input>` | forms/pin-input.md | [forms/pin-input.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/forms/pin-input.md) |
-| `<iswc-tenant-selector>` | Selector del cliente activo (empresa, organización, espacio) para apps con varios clientes. | [forms/tenant-selector.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/forms/tenant-selector.md) |
-| `<iswc-masked-input>` | forms/masked-input.md | [forms/masked-input.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/forms/masked-input.md) |
-| `<iswc-inline-edit>` | forms/inline-edit.md | [forms/inline-edit.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/forms/inline-edit.md) |
-| `<iswc-mention>` | forms/mention.md | [forms/mention.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/forms/mention.md) |
-| `<iswc-duration-picker>` | forms/duration-picker.md | [forms/duration-picker.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/forms/duration-picker.md) |
-| `<iswc-dropzone>` | forms/dropzone.md | [forms/dropzone.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/forms/dropzone.md) |
-| `<iswc-full-calendar>` | forms/full-calendar.md | [forms/full-calendar.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/forms/full-calendar.md) |
-| `<iswc-signature>` | forms/signature.md | [forms/signature.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/forms/signature.md) |
-| `<iswc-rte>` | forms/rte.md | [forms/rte.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/forms/rte.md) |
-| `<iswc-doc-editor>` | forms/doc-editor.md | [forms/doc-editor.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/forms/doc-editor.md) |
+| `<iswc-combobox>` | Captura, selección y validación de valores compatibles con formularios. | [forms/combobox.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/forms/combobox.md) |
+| `<iswc-option>` | Captura, selección y validación de valores compatibles con formularios. | [forms/option.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/forms/option.md) |
+| `<iswc-checkbox>` | Captura, selección y validación de valores compatibles con formularios. | [forms/checkbox.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/forms/checkbox.md) |
+| `<iswc-switch>` | Captura, selección y validación de valores compatibles con formularios. | [forms/switch.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/forms/switch.md) |
+| `<iswc-radio-group>` | Captura, selección y validación de valores compatibles con formularios. | [forms/radio-group.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/forms/radio-group.md) |
+| `<iswc-radio>` | Captura, selección y validación de valores compatibles con formularios. | [forms/radio.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/forms/radio.md) |
+| `<iswc-input>` | Captura, selección y validación de valores compatibles con formularios. | [forms/input.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/forms/input.md) |
+| `<iswc-textarea>` | Captura, selección y validación de valores compatibles con formularios. | [forms/textarea.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/forms/textarea.md) |
+| `<iswc-slider>` | Captura, selección y validación de valores compatibles con formularios. | [forms/slider.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/forms/slider.md) |
+| `<iswc-rating>` | Captura, selección y validación de valores compatibles con formularios. | [forms/rating.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/forms/rating.md) |
+| `<iswc-select>` | Captura, selección y validación de valores compatibles con formularios. | [forms/select.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/forms/select.md) |
+| `<iswc-color-picker>` | Captura, selección y validación de valores compatibles con formularios. | [forms/color-picker.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/forms/color-picker.md) |
+| `<iswc-file-input>` | Captura, selección y validación de valores compatibles con formularios. | [forms/file-input.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/forms/file-input.md) |
+| `<iswc-date-picker>` | Captura, selección y validación de valores compatibles con formularios. | [forms/date-picker.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/forms/date-picker.md) |
+| `<iswc-month-calendar>` | Captura, selección y validación de valores compatibles con formularios. | [forms/month-calendar.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/forms/month-calendar.md) |
+| `<iswc-year-calendar>` | Captura, selección y validación de valores compatibles con formularios. | [forms/year-calendar.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/forms/year-calendar.md) |
+| `<iswc-date-range-picker>` | Captura, selección y validación de valores compatibles con formularios. | [forms/date-range-picker.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/forms/date-range-picker.md) |
+| `<iswc-time-clock>` | Captura, selección y validación de valores compatibles con formularios. | [forms/time-clock.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/forms/time-clock.md) |
+| `<iswc-digital-clock>` | Captura, selección y validación de valores compatibles con formularios. | [forms/digital-clock.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/forms/digital-clock.md) |
+| `<iswc-date-field>` | Captura, selección y validación de valores compatibles con formularios. | [forms/date-field.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/forms/date-field.md) |
+| `<iswc-time-field>` | Captura, selección y validación de valores compatibles con formularios. | [forms/time-field.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/forms/time-field.md) |
+| `<iswc-date-time-field>` | Captura, selección y validación de valores compatibles con formularios. | [forms/date-time-field.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/forms/date-time-field.md) |
+| `<iswc-date-input>` | Captura, selección y validación de valores compatibles con formularios. | [forms/date-input.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/forms/date-input.md) |
+| `<iswc-time-input>` | Captura, selección y validación de valores compatibles con formularios. | [forms/time-input.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/forms/time-input.md) |
+| `<iswc-date-time-input>` | Captura, selección y validación de valores compatibles con formularios. | [forms/date-time-input.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/forms/date-time-input.md) |
+| `<iswc-date-range-input>` | Captura, selección y validación de valores compatibles con formularios. | [forms/date-range-input.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/forms/date-range-input.md) |
+| `<iswc-pin-input>` | Captura, selección y validación de valores compatibles con formularios. | [forms/pin-input.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/forms/pin-input.md) |
+| `<iswc-tenant-selector>` | Selector del cliente activo (empresa, organización, espacio) para apps con varios clientes. | [forms/tenant-selector.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/forms/tenant-selector.md) |
+| `<iswc-masked-input>` | Entrada de texto con formato fijo y verificable carácter a carácter. | [forms/masked-input.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/forms/masked-input.md) |
+| `<iswc-inline-edit>` | Editar un campo suelto dentro de una vista de lectura (título de documento, | [forms/inline-edit.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/forms/inline-edit.md) |
+| `<iswc-mention>` | Comentarios, notas y descripciones donde el usuario menciona personas o | [forms/mention.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/forms/mention.md) |
+| `<iswc-duration-picker>` | Capturar una duración (tiempo trabajado, tiempo estimado, temporizador), no | [forms/duration-picker.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/forms/duration-picker.md) |
+| `<iswc-dropzone>` | Para adjuntar varios archivos con retroalimentación visual: soportes de una | [forms/dropzone.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/forms/dropzone.md) |
+| `<iswc-full-calendar>` | Mostrar y navegar una agenda: reservas, vencimientos, programación de tareas. | [forms/full-calendar.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/forms/full-calendar.md) |
+| `<iswc-signature>` | Capturar una firma o un trazo libre para adjuntarlo a un documento | [forms/signature.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/forms/signature.md) |
+| `<iswc-rte>` | Capturar contenido con formato (notas, descripciones, plantillas de correo) | [forms/rte.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/forms/rte.md) |
+| `<iswc-doc-editor>` | Cuando el usuario necesita redactar contenido estructurado y libre — | [forms/doc-editor.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/forms/doc-editor.md) |
 
 ### code
 
 | Tag | Resumen | Guía |
 | --- | --- | --- |
-| `<iswc-code>` | code/code.md | [code/code.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/code/code.md) |
+| `<iswc-code>` | - Editar o revisar snippets HTML/CSS/JS/TS/JSX/Python en la UI. | [code/code.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/code/code.md) |
 
 ### data
 
 | Tag | Resumen | Guía |
 | --- | --- | --- |
-| `<iswc-data-grid>` | data/data-grid.md | [data/data-grid.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/data/data-grid.md) |
-| `<iswc-stat>` | data/stat.md | [data/stat.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/data/stat.md) |
-| `<iswc-trace-log>` | Log de un proceso: cabecera plegable con el resumen y, desplegada, cada paso con su tiempo, nivel, etapa, mensaje, duración y datos. | [data/trace-log.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/data/trace-log.md) |
-| `<iswc-stat-group>` | Fila de indicadores: iswc-stat en una rejilla que se acomoda al ancho. | [data/stat-group.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/data/stat-group.md) |
-| `<iswc-meta-list>` | Lista de metadatos clave → valor, agrupada por secciones con título (ubicación, autor, estado, etiquetas, ruta…). | [data/meta-list.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/data/meta-list.md) |
-| `<iswc-transfer>` | data/transfer.md | [data/transfer.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/data/transfer.md) |
-| `<iswc-transfer-item>` | Ítem de <iswc-transfer>. | [data/transfer-item.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/data/transfer-item.md) |
-| `<iswc-kanban>` | data/kanban.md | [data/kanban.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/data/kanban.md) |
-| `<iswc-kanban-column>` | Columna de <iswc-kanban>. | [data/kanban-column.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/data/kanban-column.md) |
-| `<iswc-kanban-card>` | Tarjeta de <iswc-kanban>. | [data/kanban-card.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/data/kanban-card.md) |
-| `<iswc-pivot-table>` | data/pivot-table.md | [data/pivot-table.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/data/pivot-table.md) |
-| `<iswc-spreadsheet>` | data/spreadsheet.md | [data/spreadsheet.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/data/spreadsheet.md) |
-| `<iswc-ag-grid>` | data/ag-grid.md | [data/ag-grid.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/data/ag-grid.md) |
+| `<iswc-data-grid>` | data/data-grid.md | [data/data-grid.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/data/data-grid.md) |
+| `<iswc-stat>` | Presentación, comparación, movimiento u organización de datos estructurados. | [data/stat.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/data/stat.md) |
+| `<iswc-trace-log>` | Log de un proceso: cabecera plegable con el resumen y, desplegada, cada paso con su tiempo, nivel, etapa, mensaje, duración y datos. | [data/trace-log.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/data/trace-log.md) |
+| `<iswc-stat-group>` | Fila de indicadores: iswc-stat en una rejilla que se acomoda al ancho. | [data/stat-group.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/data/stat-group.md) |
+| `<iswc-meta-list>` | Lista de metadatos clave → valor, agrupada por secciones con título (ubicación, autor, estado, etiquetas, ruta…). | [data/meta-list.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/data/meta-list.md) |
+| `<iswc-transfer>` | Presentación, comparación, movimiento u organización de datos estructurados. | [data/transfer.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/data/transfer.md) |
+| `<iswc-transfer-item>` | Ítem de <iswc-transfer>. | [data/transfer-item.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/data/transfer-item.md) |
+| `<iswc-kanban>` | Presentación, comparación, movimiento u organización de datos estructurados. | [data/kanban.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/data/kanban.md) |
+| `<iswc-kanban-column>` | Columna de <iswc-kanban>. | [data/kanban-column.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/data/kanban-column.md) |
+| `<iswc-kanban-card>` | Tarjeta de <iswc-kanban>. | [data/kanban-card.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/data/kanban-card.md) |
+| `<iswc-pivot-table>` | - Cruzar dos dimensiones de un mismo conjunto de datos (ventas por vendedor × | [data/pivot-table.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/data/pivot-table.md) |
+| `<iswc-spreadsheet>` | - El usuario necesita calcular y dar formato como en Excel: presupuestos, cuadres, simuladores. | [data/spreadsheet.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/data/spreadsheet.md) |
+| `<iswc-ag-grid>` | Grillas densas con reorder/resize/pin/hide, filtros por columna, sidebar de columnas y estado | [data/ag-grid.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/data/ag-grid.md) |
 
 ### data-viz
 
 | Tag | Resumen | Guía |
 | --- | --- | --- |
-| `<iswc-chart>` | charts/chart.md | [charts/chart.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/charts/chart.md) |
-| `<iswc-bar-chart>` | charts/bar-chart.md | [charts/bar-chart.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/charts/bar-chart.md) |
-| `<iswc-line-chart>` | charts/line-chart.md | [charts/line-chart.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/charts/line-chart.md) |
-| `<iswc-pie-chart>` | charts/pie-chart.md | [charts/pie-chart.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/charts/pie-chart.md) |
-| `<iswc-doughnut-chart>` | charts/doughnut-chart.md | [charts/doughnut-chart.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/charts/doughnut-chart.md) |
-| `<iswc-radar-chart>` | charts/radar-chart.md | [charts/radar-chart.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/charts/radar-chart.md) |
-| `<iswc-polar-area-chart>` | charts/polar-area-chart.md | [charts/polar-area-chart.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/charts/polar-area-chart.md) |
-| `<iswc-scatter-chart>` | charts/scatter-chart.md | [charts/scatter-chart.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/charts/scatter-chart.md) |
-| `<iswc-bubble-chart>` | charts/bubble-chart.md | [charts/bubble-chart.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/charts/bubble-chart.md) |
-| `<iswc-sparkline>` | charts/sparkline.md | [charts/sparkline.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/charts/sparkline.md) |
-| `<iswc-waterfall-chart>` | charts/waterfall-chart.md | [charts/waterfall-chart.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/charts/waterfall-chart.md) |
-| `<iswc-funnel-chart>` | charts/funnel-chart.md | [charts/funnel-chart.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/charts/funnel-chart.md) |
-| `<iswc-treemap>` | charts/treemap.md | [charts/treemap.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/charts/treemap.md) |
-| `<iswc-gauge>` | data/gauge.md | [data/gauge.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/data/gauge.md) |
-| `<iswc-heatmap>` | data-viz/heatmap.md | [data-viz/heatmap.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/data-viz/heatmap.md) |
-| `<iswc-maps>` | data-viz/maps.md | [data-viz/maps.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/data-viz/maps.md) |
-| `<iswc-map-marker>` | Marcador de <iswc-maps>. | [data-viz/map-marker.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/data-viz/map-marker.md) |
+| `<iswc-chart>` | Series, distribuciones, relaciones o jerarquías de datos. | [charts/chart.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/charts/chart.md) |
+| `<iswc-bar-chart>` | Series, distribuciones, relaciones o jerarquías de datos — cuando el tipo | [charts/bar-chart.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/charts/bar-chart.md) |
+| `<iswc-line-chart>` | Series, distribuciones, relaciones o jerarquías de datos — cuando el tipo | [charts/line-chart.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/charts/line-chart.md) |
+| `<iswc-pie-chart>` | Series, distribuciones, relaciones o jerarquías de datos — cuando el tipo | [charts/pie-chart.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/charts/pie-chart.md) |
+| `<iswc-doughnut-chart>` | Series, distribuciones, relaciones o jerarquías de datos — cuando el tipo | [charts/doughnut-chart.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/charts/doughnut-chart.md) |
+| `<iswc-radar-chart>` | Series, distribuciones, relaciones o jerarquías de datos — cuando el tipo | [charts/radar-chart.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/charts/radar-chart.md) |
+| `<iswc-polar-area-chart>` | Series, distribuciones, relaciones o jerarquías de datos — cuando el tipo | [charts/polar-area-chart.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/charts/polar-area-chart.md) |
+| `<iswc-scatter-chart>` | Series, distribuciones, relaciones o jerarquías de datos — cuando el tipo | [charts/scatter-chart.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/charts/scatter-chart.md) |
+| `<iswc-bubble-chart>` | Series, distribuciones, relaciones o jerarquías de datos — cuando el tipo | [charts/bubble-chart.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/charts/bubble-chart.md) |
+| `<iswc-sparkline>` | Series, distribuciones, relaciones o jerarquías de datos. | [charts/sparkline.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/charts/sparkline.md) |
+| `<iswc-waterfall-chart>` | Series, distribuciones, relaciones o jerarquías de datos — cuando el tipo | [charts/waterfall-chart.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/charts/waterfall-chart.md) |
+| `<iswc-funnel-chart>` | Series, distribuciones, relaciones o jerarquías de datos — cuando el tipo | [charts/funnel-chart.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/charts/funnel-chart.md) |
+| `<iswc-treemap>` | Series, distribuciones, relaciones o jerarquías de datos. | [charts/treemap.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/charts/treemap.md) |
+| `<iswc-gauge>` | Presentación, comparación, movimiento u organización de datos estructurados. | [data/gauge.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/data/gauge.md) |
+| `<iswc-heatmap>` | Cuando hay que comparar una magnitud sobre dos dimensiones categóricas al | [data-viz/heatmap.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/data-viz/heatmap.md) |
+| `<iswc-maps>` | - Ubicar puntos propios sobre un lienzo ligero: sucursales, bodegas, | [data-viz/maps.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/data-viz/maps.md) |
+| `<iswc-map-marker>` | Marcador de <iswc-maps>. | [data-viz/map-marker.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/data-viz/map-marker.md) |
 
 ### diagrams
 
 | Tag | Resumen | Guía |
 | --- | --- | --- |
-| `<iswc-flowchart>` | Relaciones, flujos, estados, estructura o tiempo desde payloads declarativos. | [diagrams/flowchart.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/diagrams/flowchart.md) |
-| `<iswc-sequence-diagram>` | diagrams/sequence-diagram.md | [diagrams/sequence-diagram.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/diagrams/sequence-diagram.md) |
-| `<iswc-diagram-lightbox>` | diagrams/diagram-lightbox.md | [diagrams/diagram-lightbox.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/diagrams/diagram-lightbox.md) |
-| `<iswc-class-diagram>` | diagrams/class-diagram.md | [diagrams/class-diagram.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/diagrams/class-diagram.md) |
-| `<iswc-state-diagram>` | diagrams/state-diagram.md | [diagrams/state-diagram.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/diagrams/state-diagram.md) |
-| `<iswc-er-diagram>` | diagrams/er-diagram.md | [diagrams/er-diagram.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/diagrams/er-diagram.md) |
-| `<iswc-er-editor>` | Editor visual del diagrama entidad-relación. | [diagrams/er-editor.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/diagrams/er-editor.md) |
-| `<iswc-diagram-view-app>` | Abrir cualquier diagrama del kit por enlace, en solo vista o en edición, sin reimplementar el visor. | [diagrams/utils/diagram-studio.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/diagrams/utils/diagram-studio.md) |
-| `<iswc-diagram-edit-app>` | Abrir cualquier diagrama del kit por enlace, en solo vista o en edición, sin reimplementar el visor. | [diagrams/utils/diagram-studio.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/diagrams/utils/diagram-studio.md) |
-| `<iswc-block-diagram>` | diagrams/block-diagram.md | [diagrams/block-diagram.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/diagrams/block-diagram.md) |
-| `<iswc-component-diagram>` | diagrams/component-diagram.md | [diagrams/component-diagram.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/diagrams/component-diagram.md) |
-| `<iswc-mindmap>` | diagrams/mindmap.md | [diagrams/mindmap.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/diagrams/mindmap.md) |
-| `<iswc-gantt>` | diagrams/gantt.md | [diagrams/gantt.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/diagrams/gantt.md) |
-| `<iswc-timeline>` | diagrams/timeline.md | [diagrams/timeline.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/diagrams/timeline.md) |
-| `<iswc-org-chart>` | diagrams/org-chart.md | [diagrams/org-chart.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/diagrams/org-chart.md) |
-| `<iswc-sankey-diagram>` | diagrams/sankey-diagram.md | [diagrams/sankey-diagram.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/diagrams/sankey-diagram.md) |
-| `<iswc-quadrant-chart>` | diagrams/quadrant-chart.md | [diagrams/quadrant-chart.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/diagrams/quadrant-chart.md) |
-| `<iswc-venn-diagram>` | diagrams/venn-diagram.md | [diagrams/venn-diagram.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/diagrams/venn-diagram.md) |
-| `<iswc-use-case-diagram>` | diagrams/use-case-diagram.md | [diagrams/use-case-diagram.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/diagrams/use-case-diagram.md) |
-| `<iswc-swimlane-diagram>` | diagrams/swimlane-diagram.md | [diagrams/swimlane-diagram.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/diagrams/swimlane-diagram.md) |
-| `<iswc-journey-map>` | diagrams/journey-map.md | [diagrams/journey-map.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/diagrams/journey-map.md) |
+| `<iswc-flowchart>` | Relaciones, flujos, estados, estructura o tiempo desde payloads declarativos. | [diagrams/flowchart.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/diagrams/flowchart.md) |
+| `<iswc-sequence-diagram>` | Relaciones, flujos, estados, estructura o tiempo desde payloads declarativos. | [diagrams/sequence-diagram.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/diagrams/sequence-diagram.md) |
+| `<iswc-diagram-lightbox>` | Relaciones, flujos, estados, estructura o tiempo desde payloads declarativos. | [diagrams/diagram-lightbox.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/diagrams/diagram-lightbox.md) |
+| `<iswc-class-diagram>` | Relaciones, flujos, estados, estructura o tiempo desde payloads declarativos. | [diagrams/class-diagram.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/diagrams/class-diagram.md) |
+| `<iswc-state-diagram>` | Relaciones, flujos, estados, estructura o tiempo desde payloads declarativos. | [diagrams/state-diagram.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/diagrams/state-diagram.md) |
+| `<iswc-er-diagram>` | Relaciones, flujos, estados, estructura o tiempo desde payloads declarativos. | [diagrams/er-diagram.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/diagrams/er-diagram.md) |
+| `<iswc-er-editor>` | Editor visual del diagrama entidad-relación. | [diagrams/er-editor.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/diagrams/er-editor.md) |
+| `<iswc-diagram-view-app>` | Página que abre cualquier diagrama por enlace, sin editarlo: demos/diagramas/app/view.html?kind=<kind>&json=<base64url>. | [diagrams/diagram-view-app.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/diagrams/diagram-view-app.md) |
+| `<iswc-diagram-edit-app>` | Página para editar un diagrama por enlace: demos/diagramas/app/edit.html?kind=<kind>&json=<base64url>. | [diagrams/diagram-edit-app.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/diagrams/diagram-edit-app.md) |
+| `<iswc-block-diagram>` | Relaciones, flujos, estados, estructura o tiempo desde payloads declarativos. | [diagrams/block-diagram.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/diagrams/block-diagram.md) |
+| `<iswc-component-diagram>` | Cuando necesitas describir la arquitectura de un sistema (servicios, | [diagrams/component-diagram.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/diagrams/component-diagram.md) |
+| `<iswc-mindmap>` | Relaciones, flujos, estados, estructura o tiempo desde payloads declarativos. | [diagrams/mindmap.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/diagrams/mindmap.md) |
+| `<iswc-gantt>` | Relaciones, flujos, estados, estructura o tiempo desde payloads declarativos. | [diagrams/gantt.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/diagrams/gantt.md) |
+| `<iswc-timeline>` | Relaciones, flujos, estados, estructura o tiempo desde payloads declarativos. | [diagrams/timeline.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/diagrams/timeline.md) |
+| `<iswc-org-chart>` | Estructuras de mando o pertenencia: áreas de la empresa, jerarquía de cuentas, | [diagrams/org-chart.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/diagrams/org-chart.md) |
+| `<iswc-sankey-diagram>` | Cuando el mensaje es cuánto se reparte entre caminos: esfuerzo por | [diagrams/sankey-diagram.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/diagrams/sankey-diagram.md) |
+| `<iswc-quadrant-chart>` | Priorización y comparación de opciones: impacto contra esfuerzo, costo | [diagrams/quadrant-chart.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/diagrams/quadrant-chart.md) |
+| `<iswc-venn-diagram>` | Cuando el mensaje es solape: alcance pedido contra alcance entregado, | [diagrams/venn-diagram.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/diagrams/venn-diagram.md) |
+| `<iswc-use-case-diagram>` | Cuando la pregunta es de alcance: qué puede hacer cada rol dentro de un | [diagrams/use-case-diagram.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/diagrams/use-case-diagram.md) |
+| `<iswc-swimlane-diagram>` | Cuando el proceso cruza varias áreas y lo importante es quién hace cada | [diagrams/swimlane-diagram.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/diagrams/swimlane-diagram.md) |
+| `<iswc-journey-map>` | Cuando además del orden hay una medida por paso: dónde se cae la | [diagrams/journey-map.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/diagrams/journey-map.md) |
 
 ### overlays
 
 | Tag | Resumen | Guía |
 | --- | --- | --- |
-| `<iswc-json-dialog>` | Ver o editar un documento como JSON en un diálogo. | [overlays/json-dialog.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/overlays/json-dialog.md) |
-| `<iswc-semantic-search>` | Búsqueda global: un botón que abre iswc-command-palette (Ctrl+K) con los comandos de la app. | [overlays/semantic-search.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/overlays/semantic-search.md) |
-| `<iswc-command-palette>` | overlays/command-palette.md | [overlays/command-palette.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/overlays/command-palette.md) |
-| `<iswc-pdf-viewer>` | overlays/pdf-viewer.md | [overlays/pdf-viewer.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/overlays/pdf-viewer.md) |
-| `<iswc-window>` | overlays/window.md | [overlays/window.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/overlays/window.md) |
+| `<iswc-json-dialog>` | Ver o editar un documento como JSON en un diálogo. | [overlays/json-dialog.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/overlays/json-dialog.md) |
+| `<iswc-semantic-search>` | Búsqueda global: un botón que abre iswc-command-palette (Ctrl+K) con los comandos de la app. | [overlays/semantic-search.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/overlays/semantic-search.md) |
+| `<iswc-command-palette>` | Paleta de comandos, visor de documentos y ventanas flotantes. | [overlays/command-palette.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/overlays/command-palette.md) |
+| `<iswc-pdf-viewer>` | Paleta de comandos, visor de documentos y ventanas flotantes. | [overlays/pdf-viewer.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/overlays/pdf-viewer.md) |
+| `<iswc-window>` | Paleta de comandos, visor de documentos y ventanas flotantes. | [overlays/window.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/overlays/window.md) |
 
 ### files
 
 | Tag | Resumen | Guía |
 | --- | --- | --- |
-| `<iswc-txt-view>` | files/txt-view.md | [files/txt-view.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/files/txt-view.md) |
-| `<iswc-txt-edit>` | files/txt-edit.md | [files/txt-edit.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/files/txt-edit.md) |
-| `<iswc-csv-view>` | files/csv-view.md | [files/csv-view.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/files/csv-view.md) |
-| `<iswc-csv-edit>` | files/csv-edit.md | [files/csv-edit.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/files/csv-edit.md) |
-| `<iswc-docx-view>` | files/docx-view.md | [files/docx-view.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/files/docx-view.md) |
-| `<iswc-pptx-view>` | files/pptx-view.md | [files/pptx-view.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/files/pptx-view.md) |
-| `<iswc-file-view>` | files/file-view.md | [files/file-view.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/files/file-view.md) |
-| `<iswc-file-edit>` | files/file-edit.md | [files/file-edit.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/files/file-edit.md) |
+| `<iswc-txt-view>` | Muestra un archivo de texto plano en monoespaciada, con saltos respetados y estado vacío o de error. | [files/txt-view.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/files/txt-view.md) |
+| `<iswc-txt-edit>` | Editor de texto plano con la misma carga que iswc-txt-view; publica cada cambio. | [files/txt-edit.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/files/txt-edit.md) |
+| `<iswc-csv-view>` | Muestra un CSV como tabla de solo lectura; la primera fila es el encabezado. | [files/csv-view.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/files/csv-view.md) |
+| `<iswc-csv-edit>` | Edita un CSV en una tabla: celdas editables, agregar o quitar la última fila o columna y exportar. | [files/csv-edit.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/files/csv-edit.md) |
+| `<iswc-docx-view>` | Previsualiza un documento Word (.docx) convertido a HTML con mammoth, cargado desde CDN la primera vez. | [files/docx-view.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/files/docx-view.md) |
+| `<iswc-pptx-view>` | Previsualiza una presentación (.pptx) como lista de diapositivas con su texto. | [files/pptx-view.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/files/pptx-view.md) |
+| `<iswc-file-view>` | Elige y monta el visor adecuado según type, name o la extensión de src. | [files/file-view.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/files/file-view.md) |
+| `<iswc-file-edit>` | Elige y monta el editor adecuado según type, name o la extensión de src. | [files/file-edit.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/files/file-edit.md) |
 
 ### preview
 
 | Tag | Resumen | Guía |
 | --- | --- | --- |
-| `<iswc-preview-component>` | Shell de la galería. | [layout/preview-component.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/layout/preview-component.md) |
-| `<iswc-doc-demo>` | layout/doc-demo.md | [layout/doc-demo.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/layout/doc-demo.md) |
-| `<iswc-preview-controls>` | Panel de knobs del playground de la galería. | [layout/preview-controls.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/layout/preview-controls.md) |
-| `<iswc-playground>` | preview/playground.md | [preview/playground.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/preview/playground.md) |
-| `<iswc-slots-pg>` | Ver la guía del módulo antes de crear otro control. | — |
-| `<iswc-examples-carousel>` | Ver la guía del módulo antes de crear otro control. | — |
-| `<iswc-demo-section>` | Ver la guía del módulo antes de crear otro control. | — |
+| `<iswc-preview-component>` | Shell de la galería. | [layout/preview-component.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/layout/preview-component.md) |
+| `<iswc-doc-demo>` | Shell homogéneo de documentación y demos: barra, navegación, vista previa y drawer. | [layout/doc-demo.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/layout/doc-demo.md) |
+| `<iswc-preview-controls>` | Panel de knobs del playground de la galería. | [layout/preview-controls.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/layout/preview-controls.md) |
+| `<iswc-playground>` | Playground homogeneo (stage + knobs) para galeria y apps. | [preview/playground.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/preview/playground.md) |
+| `<iswc-slots-pg>` | Estándar W11: cualquier componente que tenga slots debe envolver su playground en <iswc-slots-pg tag="<iswc-x>"> con dos tabs: 1. | [preview/slots-pg.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/preview/slots-pg.md) |
+| `<iswc-examples-carousel>` | Carrusel de ejemplos predefinidos de un playground. | [preview/examples-carousel.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/preview/examples-carousel.md) |
+| `<iswc-demo-section>` | Sección homogénea de un demo: el título y el lede flotan a ancho completo y el resto del contenido va dentro de una card. | [preview/demo-section.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/preview/demo-section.md) |
 
 <!-- catalogo:fin -->

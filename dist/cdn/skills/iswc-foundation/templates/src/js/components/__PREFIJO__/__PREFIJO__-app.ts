@@ -4,7 +4,7 @@
  * <__PREFIJO__-app> — shell de la app: barra (marca + tema) y la vista activa.
  *
  * La app solo conoce el shell de cada vista (SHELLS). Las vistas se cargan por el registrador
- * (`__PREFIJO__Loader.min.js`); aquí solo se monta su tag.
+ * (`__PREFIJO__Loader.min.mjs`); aquí solo se monta su tag.
  */
 import { define } from '@jeff-aporta/iswc-base/core/iswc-element.min.mjs';
 import css from 'iswc:css';

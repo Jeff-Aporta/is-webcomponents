@@ -40,7 +40,7 @@ es la referencia que copian las apps existentes al re-pinear (F5b).
 <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@<sha40>/dist/cdn/palettes.min.css"></noscript>
 <!-- iswc:precarga:fin -->
 <script type="module" src="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@<sha40>/dist/cdn/core/loader.min.mjs"></script>
-<script type="module" src="./dist/cdn/<p>Loader.min.js"></script>  <!-- registerApp: tag → { href: URL?v=, type: 'module' } -->
+<script type="module" src="./dist/cdn/<prefijo>Loader.min.mjs"></script>  <!-- registerApp: tag → { href: URL?v=, type: 'module' } -->
 <script type="module">
   const L = globalThis.iswcLoader;
   const listo = () => document.documentElement.setAttribute('data-app-ready', '');
@@ -72,8 +72,10 @@ es la referencia que copian las apps existentes al re-pinear (F5b).
   para los componentes de la app (`.js` ES). `registerApp(…, { deps })` precarga el cierre de un tag de la app.
 - El arranque no usa IndexedDB, Cache Storage (salvo que la app instale `sheets`) ni la API de GitHub.
 - El registrador nunca carga el kit: si falta el loader, lanza un error claro.
-- Hosts externos que quieren un solo `<script>`: `dist/cdn/all.min.js` (cada tag lleva su CSS dentro; el kit sigue
-  externo por el import map).
+- **Ya no hay un cierre unico**: el bundle con todos los tags dejo de existir en D2. El kit se
+  consume por capas: el nucleo (`core/loader.min.mjs`) y, por cada tag que se use, su cierre y su CSS.
+  Un host externo que quiera un solo `<script>` declara los tags que usa en su `deps.json` y deja que el
+  loader los pida; el import map sigue siendo el mismo.
 
 ## Componentes: el molde del kit (`IswcElement`/`IswcReactive`) y la base `Componente`
 
