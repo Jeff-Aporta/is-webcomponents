@@ -42,7 +42,7 @@ import {
 } from './utils/code-model.js';
 import { tokenizeCode, lineToHtml, tokenClass, escapeHtml, tokensToText } from '@jeff-aporta/iswc-base/core/code-highlight.js';
 import '@jeff-aporta/iswc-base/components/feedback/tooltip.js';
-import type { CodeMark, CodeDocument, CodeFormatConfig, CodeLangDef, IswcTooltipEl, HighlightLine, HighlightResult } from "./schemas/code.schemas.js";
+import type { CodeMark, CodeDocument, CodeDocOpts, CodeFormatConfig, CodeLangDef, IswcTooltipEl, HighlightLine, HighlightResult } from "./schemas/code.schemas.js";
 import css from 'iswc:css';
 import type { CodeEventos } from './schemas/code.schemas.js';
 
@@ -63,6 +63,10 @@ TEMPLATE.innerHTML = /* html */ `
 // detectado al pintar (#syncAriaOnHost). El usuario puede pisarla con
 // `aria-label` propio o `label` y la respetamos (override manual).
 const DEFAULT_HOST_LABEL = 'Editor de código';
+
+function isIswcTooltipEl(value: Element | null): value is IswcTooltipEl {
+  return value instanceof HTMLElement;
+}
 
 // wrap, readonly, disabled, autofocus, compact, name y placeholder los declara su `@prop`.
 const OBSERVED = [
@@ -127,7 +131,8 @@ class IswcCode extends IswcReactive {
     shadow.appendChild(TEMPLATE.content.cloneNode(true));
     this.#textarea = shadow.querySelector<HTMLTextAreaElement>('.seed');
     this.#host = shadow.querySelector<HTMLElement>('.editor-host');
-    this.#tooltip = shadow.querySelector<HTMLElement>('iswc-tooltip') as IswcTooltipEl | null;
+    const tooltip = shadow.querySelector('iswc-tooltip');
+    this.#tooltip = isIswcTooltipEl(tooltip) ? tooltip : null;
   }
 
   /** Entrega el texto al <form> (el `state` va nulo, como antes); sin efecto en motores sin form-associated. */
@@ -299,7 +304,7 @@ class IswcCode extends IswcReactive {
   }
   static registerLanguage(def: CodeLangDef): void { return registerLanguage(def); }
 
-  code2json(opts: Record<string, unknown> = {}): CodeDocument {
+  code2json(opts: CodeDocOpts = {}): CodeDocument {
     return code2json(this.value, {
       lang: this.lang,
       marks: this.#marks,
@@ -331,9 +336,9 @@ class IswcCode extends IswcReactive {
   }
 
   setMarks(list: unknown): void {
-    const arr: unknown[] = Array.isArray(list) ? (list as unknown[]) : [];
+    const arr: unknown[] = Array.isArray(list) ? list : [];
     this.#marks = arr
-      .map((m: unknown) => normalizeMark(m) as CodeMark | null)
+      .map((m: unknown) => normalizeMark(m))
       .filter((m): m is CodeMark => !!m);
     this.#paintMarks();
   }
@@ -346,7 +351,7 @@ class IswcCode extends IswcReactive {
   format(config?: CodeFormatConfig | null): string {
     const lang = resolveLanguage(this.lang)?.id || this.lang;
     const cfg = config != null
-      ? normalizeFormatConfig({ ...this.#formatConfig, ...(config as object) })
+      ? normalizeFormatConfig({ ...this.#formatConfig, ...config })
       : this.#formatConfig;
     const next = formatCode(this.value, lang, cfg);
     this.#setValue(next, true);
@@ -515,7 +520,7 @@ class IswcCode extends IswcReactive {
   /** Pinta `text` (tokenizado + marcas) dentro de un <pre> y devuelve las líneas. */
   #paintLines(pre: HTMLPreElement, text: string, withNumbers: boolean): HighlightResult {
     const src = String(text ?? '').replace(/\r\n/g, '\n');
-    const { lines } = tokenizeCode(src, this.lang, undefined) as { lines: HighlightLine[] };
+    const { lines } = tokenizeCode(src, this.lang, undefined);
     const marks = this.#markSpansFor(src);
     let html = '';
     let abs = 0;
@@ -560,8 +565,8 @@ class IswcCode extends IswcReactive {
       cuts.push(tEnd);
       const pts = [...new Set(cuts)].sort((a, b) => a - b);
       for (let i = 0; i < pts.length - 1; i++) {
-        const a = pts[i] as number;
-        const b = pts[i + 1] as number;
+        const a = pts[i];
+        const b = pts[i + 1];
         const piece = t.text.slice(a - tStart, b - tStart);
         const cls = tokenClass(t.type);
         const inner = cls ? `<span class="${cls}">${escapeHtml(piece)}</span>` : escapeHtml(piece);
@@ -592,8 +597,8 @@ class IswcCode extends IswcReactive {
     if (this.#markBound) return;
     this.#markBound = true;
     if (!this.#host) return;
-    this.#host.addEventListener('pointerover', (e: Event) => this.#onMarkHover(e as PointerEvent));
-    this.#host.addEventListener('pointerout', (e: Event) => this.#onMarkOut(e as PointerEvent));
+    this.#host.addEventListener('pointerover', (e) => this.#onMarkHover(e));
+    this.#host.addEventListener('pointerout', (e) => this.#onMarkOut(e));
   }
 
   /** Construye (o reconstruye) el gutter de números para `count` líneas. */
@@ -933,7 +938,7 @@ class IswcCode extends IswcReactive {
   }
 
   #markFromEvent(e: PointerEvent): CodeMark | null {
-    const target = e.target as Element | null;
+    const target = e.target instanceof Element ? e.target : null;
     const el = target?.closest?.('[data-mark-id]');
     if (!el) return null;
     const id = el.getAttribute('data-mark-id');
@@ -952,7 +957,7 @@ class IswcCode extends IswcReactive {
    * en editable el ancla es el span de la marca dentro del <pre> (el hover no
    * existe: el textarea tapa el pre), así que el tooltip se abre por caret.
    */
-  #openMarkTip(mark: CodeMark, targetEl: HTMLElement | null): void {
+  #openMarkTip(mark: CodeMark, targetEl: Element | null): void {
     clearTimeout(this.#hideTipTimer);
     if (!this.#tooltip) return;
     const title = mark.title || (mark.tone && mark.tone !== 'neutral' ? mark.tone : '');
@@ -1002,8 +1007,8 @@ class IswcCode extends IswcReactive {
     if (mark.kind !== 'tooltip' && mark.kind !== 'message' && !mark.message && !mark.body) {
       return;
     }
-    const target = e.target as Element | null;
-    const targetEl = (target?.closest?.('[data-mark-id]') as HTMLElement) || (target as HTMLElement);
+    const target = e.target instanceof Element ? e.target : null;
+    const targetEl = target?.closest('[data-mark-id]') ?? null;
     this.#openMarkTip(mark, targetEl);
   }
 

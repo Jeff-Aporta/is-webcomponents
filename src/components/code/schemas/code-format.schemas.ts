@@ -7,7 +7,7 @@
  */
 import { z } from "zod";
 
-const CodeFormatConfigSchema = z.object({
+export const CodeFormatConfigSchema = z.object({
   tabWidth: z.number().optional(),
   useTabs: z.boolean().optional(),
   printWidth: z.number().optional(),
@@ -18,7 +18,7 @@ const CodeFormatConfigSchema = z.object({
 });
 export type CodeFormatConfig = z.infer<typeof CodeFormatConfigSchema>;
 
-const NormalizedFormatConfigSchema = z.object({
+export const NormalizedFormatConfigSchema = z.object({
   tabWidth: z.number(),
   useTabs: z.boolean(),
   printWidth: z.number(),
@@ -28,4 +28,3 @@ const NormalizedFormatConfigSchema = z.object({
   endOfLine: z.union([z.literal('lf'), z.literal('crlf'), z.literal('cr')]),
 });
 export type NormalizedFormatConfig = z.infer<typeof NormalizedFormatConfigSchema>;
-

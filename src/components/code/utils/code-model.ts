@@ -34,22 +34,34 @@ const CODE_DOC_SCHEMA = 'iswc-code-doc/v1';
 
 /** Opciones de `code2json` (texto → documento). */
 
-const VALID_KINDS: ReadonlySet<string> = new Set<CodeMarkKind>(['highlight', 'tooltip', 'message']);
-const VALID_TONES: ReadonlySet<string> = new Set<CodeMarkTone>(['error', 'warning', 'info', 'success', 'neutral']);
+const VALID_KINDS: ReadonlySet<string> = new Set<string>(['highlight', 'tooltip', 'message']);
+const VALID_TONES: ReadonlySet<string> = new Set<string>(['error', 'warning', 'info', 'success', 'neutral']);
 
 let markSeq = 0;
 const nextId = (): string => `m${Date.now().toString(36)}_${(++markSeq).toString(36)}`;
 
 function isValidKind(v: unknown): v is CodeMarkKind {
-  return typeof v === 'string' && (VALID_KINDS as Set<string>).has(v);
+  return typeof v === 'string' && VALID_KINDS.has(v);
 }
 function isValidTone(v: unknown): v is CodeMarkTone {
-  return typeof v === 'string' && (VALID_TONES as Set<string>).has(v);
+  return typeof v === 'string' && VALID_TONES.has(v);
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null;
+}
+
+function isCodeMarkInput(value: unknown): value is CodeMarkInput {
+  return isRecord(value);
+}
+
+function isCodeDocumentInput(value: unknown): value is CodeDocumentInput {
+  return isRecord(value);
 }
 
 export function normalizeMark(mark: unknown): CodeMark | null {
-  if (!mark || typeof mark !== 'object') return null;
-  const m = mark as CodeMarkInput;
+  if (!isCodeMarkInput(mark)) return null;
+  const m = mark;
   const from = Number(m.from);
   const to = Number(m.to);
   if (!Number.isFinite(from) || !Number.isFinite(to) || to < from) return null;
@@ -93,7 +105,9 @@ export function json2code(doc: CodeDocument | string | null | undefined): string
   if (doc == null) return '';
   if (typeof doc === 'string') {
     try {
-      return json2code(JSON.parse(doc) as CodeDocument);
+      const parsed: unknown = JSON.parse(doc);
+      if (isRecord(parsed) && parsed.value != null) return String(parsed.value);
+      return '';
     } catch {
       return doc;
     }
@@ -114,8 +128,8 @@ export function parseCodeDocument(raw: unknown): CodeDocument | null {
       return code2json(raw);
     }
   }
-  if (!obj || typeof obj !== 'object') return null;
-  const o = obj as CodeDocumentInput;
+  if (!isCodeDocumentInput(obj)) return null;
+  const o = obj;
   // Si parece un doc
   if ('value' in o || '$schema' in o || Array.isArray(o.marks)) {
     return code2json(String(o.value ?? ''), {

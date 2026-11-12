@@ -6,17 +6,27 @@
  * entradas marcadas con TODO cuando se quiera validación runtime.
  */
 import { z } from "zod";
+import type { HighlightLine as CoreHighlightLine } from "@jeff-aporta/iswc-base/core/schemas/code-highlight.schemas.js";
+import {
+  CodeMarkSchema as CodeMarkDataSchema,
+  CodeDocumentSchema as CodeDocumentDataSchema,
+  CodeDocOptsSchema as CodeDocOptsDataSchema,
+} from "./code-model.schemas.js";
+import { CodeFormatConfigSchema as CodeFormatConfigDataSchema } from "./code-format.schemas.js";
 
-const CodeMarkSchema = z.unknown() /* TODO: ref CodeMarkModel */;
+const CodeMarkSchema = CodeMarkDataSchema;
 export type CodeMark = z.infer<typeof CodeMarkSchema>;
 
-const CodeDocumentSchema = z.unknown() /* TODO: ref CodeDocModel */;
+const CodeDocumentSchema = CodeDocumentDataSchema;
 export type CodeDocument = z.infer<typeof CodeDocumentSchema>;
 
-const CodeFormatConfigSchema = z.unknown() /* TODO: ref CodeFmtConfigShared */;
+const CodeFormatConfigSchema = CodeFormatConfigDataSchema;
 export type CodeFormatConfig = z.infer<typeof CodeFormatConfigSchema>;
 
-const CodeLangDefSchema = z.object({
+const CodeDocOptsSchema = CodeDocOptsDataSchema;
+export type CodeDocOpts = z.infer<typeof CodeDocOptsSchema>;
+
+export const CodeLangDefSchema = z.object({
   id: z.string(),
   aliases: z.array(z.string()).optional(),
   heavy: z.boolean().optional(),
@@ -25,12 +35,16 @@ const CodeLangDefSchema = z.object({
 });
 export type CodeLangDef = z.infer<typeof CodeLangDefSchema>;
 
-const IswcTooltipElSchema = z.intersection(z.unknown() /* TODO: ref HTMLElement */, z.object({
-  open: z.boolean(),
-}));
+interface TooltipElement extends HTMLElement {
+  open: boolean;
+}
+
+const IswcTooltipElSchema = z.custom<TooltipElement>(
+  (value) => typeof HTMLElement !== "undefined" && value instanceof HTMLElement,
+);
 export type IswcTooltipEl = z.infer<typeof IswcTooltipElSchema>;
 
-const HighlightLineSchema = z.unknown() /* TODO: ref CodeHighlightLine */;
+const HighlightLineSchema = z.custom<CoreHighlightLine>();
 export type HighlightLine = z.infer<typeof HighlightLineSchema>;
 
 const HighlightResultSchema = z.object({
@@ -41,4 +55,4 @@ const HighlightResultSchema = z.object({
 export type HighlightResult = z.infer<typeof HighlightResultSchema>;
 
 /** Eventos del componente (HOW-6): `declare static events` en la clase; los documenta scripts/sondas/eventos.ts. */
-export type CodeEventos = { 'iswc-change': { value: string; formatted?: boolean; format?: string }; 'iswc-error': { error: string }; 'iswc-ready': { lang: string; value: string }; 'iswc-input': { value: string }; 'iswc-cursor': { line: number; ch: number; index: number }; 'iswc-mark-activate': { mark: unknown; phase: 'enter' | 'leave' } };
+export type CodeEventos = { 'iswc-change': { value: string; formatted?: boolean; format?: string }; 'iswc-error': { error: string }; 'iswc-ready': { lang: string; value: string }; 'iswc-input': { value: string }; 'iswc-cursor': { line: number; ch: number; index: number }; 'iswc-mark-activate': { mark: CodeMark; phase: 'enter' | 'leave' } };

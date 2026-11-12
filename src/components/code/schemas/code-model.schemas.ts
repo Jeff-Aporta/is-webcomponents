@@ -6,14 +6,16 @@
  * entradas marcadas con TODO cuando se quiera validación runtime.
  */
 import { z } from "zod";
+import { CodeFormatConfigSchema } from "./code-format.schemas.js";
+import { CodeThemeConfigSchema } from "./code-theme.schemas.js";
 
-const CodeMarkKindSchema = z.union([z.literal('highlight'), z.literal('tooltip'), z.literal('message')]);
+export const CodeMarkKindSchema = z.union([z.literal('highlight'), z.literal('tooltip'), z.literal('message')]);
 export type CodeMarkKind = z.infer<typeof CodeMarkKindSchema>;
 
-const CodeMarkToneSchema = z.union([z.literal('error'), z.literal('warning'), z.literal('info'), z.literal('success'), z.literal('neutral')]);
+export const CodeMarkToneSchema = z.union([z.literal('error'), z.literal('warning'), z.literal('info'), z.literal('success'), z.literal('neutral')]);
 export type CodeMarkTone = z.infer<typeof CodeMarkToneSchema>;
 
-const CodeMarkSchema = z.object({
+export const CodeMarkSchema = z.object({
   id: z.string(),
   from: z.number(),
   to: z.number(),
@@ -26,7 +28,7 @@ const CodeMarkSchema = z.object({
 });
 export type CodeMark = z.infer<typeof CodeMarkSchema>;
 
-const CodeMarkInputSchema = z.object({
+export const CodeMarkInputSchema = z.object({
   id: z.unknown().optional(),
   from: z.unknown().optional(),
   to: z.unknown().optional(),
@@ -39,31 +41,30 @@ const CodeMarkInputSchema = z.object({
 });
 export type CodeMarkInput = z.infer<typeof CodeMarkInputSchema>;
 
-const CodeDocumentSchema = z.object({
-  /* TODO: member $schema: string */
+export const CodeDocumentSchema = z.object({
+  $schema: z.literal('iswc-code-doc/v1'),
   lang: z.string(),
   value: z.string(),
   marks: z.array(CodeMarkSchema),
-  format: z.object({}).optional(),
-  theme: z.object({}).optional(),
+  format: CodeFormatConfigSchema.optional(),
+  theme: CodeThemeConfigSchema.optional(),
 });
 export type CodeDocument = z.infer<typeof CodeDocumentSchema>;
 
-const CodeDocOptsSchema = z.object({
+export const CodeDocOptsSchema = z.object({
   lang: z.string().optional(),
-  marks: z.array(z.unknown() /* TODO: cannot convert */).optional(),
-  format: z.object({}).optional(),
-  theme: z.object({}).optional(),
+  marks: z.array(CodeMarkInputSchema).optional(),
+  format: CodeFormatConfigSchema.optional(),
+  theme: CodeThemeConfigSchema.optional(),
 });
 export type CodeDocOpts = z.infer<typeof CodeDocOptsSchema>;
 
-const CodeDocumentInputSchema = z.object({
-  /* TODO: member $schema?: unknown */
+export const CodeDocumentInputSchema = z.object({
+  $schema: z.string().optional(),
   value: z.unknown().optional(),
   lang: z.unknown().optional(),
-  marks: z.unknown().optional(),
-  format: z.unknown().optional(),
-  theme: z.unknown().optional(),
+  marks: z.array(CodeMarkInputSchema).optional(),
+  format: z.custom<z.infer<typeof CodeFormatConfigSchema>>().optional(),
+  theme: z.custom<z.infer<typeof CodeThemeConfigSchema>>().optional(),
 });
 export type CodeDocumentInput = z.infer<typeof CodeDocumentInputSchema>;
-

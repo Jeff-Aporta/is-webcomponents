@@ -6,43 +6,46 @@
  * entradas marcadas con TODO cuando se quiera validación runtime.
  */
 import { z } from "zod";
+import {
+  CodeDocumentSchema,
+  CodeMarkInputSchema,
+} from "./code-model.schemas.js";
+import type {
+  CodeDocument,
+  CodeMarkInput,
+} from "./code-model.schemas.js";
+import type { CodeThemeConfig } from "./code-theme.schemas.js";
 
-const CodeMarkSchema = z.object({
-  id: z.string().optional(),
-  from: z.number(),
-  to: z.number(),
-  kind: z.union([z.literal('tooltip'), z.literal('highlight')]),
-  title: z.string().optional(),
-  body: z.string().optional(),
-  tone: z.string().optional(),
-  message: z.string().optional(),
-});
+export const CodeMarkSchema = CodeMarkInputSchema;
+export type CodeMark = z.infer<typeof CodeMarkSchema>;
 
-const CodeDocSchema = z.object({
-  text: z.string(),
-  marks: z.array(CodeMarkSchema).optional(),
-});
+export const CodeDocSchema = CodeDocumentSchema;
 export type CodeDoc = z.infer<typeof CodeDocSchema>;
 
-const IswcCodeElSchema = z.object({
-  lang: z.string(),
-  mode: z.union([z.literal('inline'), z.literal('block')]),
-  value: z.string(),
-  lineNumbers: z.union([z.boolean(), z.string()]),
-  ready: z.boolean(),
-  themeConfig: z.union([z.record(z.string(), z.string()), z.null()]).optional(),
-  setMarks: z.function({ input: [z.array(z.unknown() /* TODO: ref CodeMark */)], output: z.void() }),
-  code2json: z.function({ input: [z.object({
-  marks: z.array(z.unknown() /* TODO: ref CodeMark */),
-})], output: z.unknown() /* TODO: ref CodeDoc */ }),
-  setDocument: z.function({ input: [z.unknown() /* TODO: ref CodeDoc */], output: z.void() }),
-  format: z.function({ input: [], output: z.void() }),
-  refresh: z.function({ input: [], output: z.void() }),
-});
+interface CodeElement extends HTMLElement {
+  lang: string;
+  mode: 'inline' | 'block';
+  value: string;
+  lineNumbers: boolean | string;
+  ready: boolean;
+  themeConfig: CodeThemeConfig | null;
+  setMarks(marks: readonly CodeMarkInput[]): void;
+  code2json(opts: { marks?: readonly CodeMarkInput[] }): CodeDocument;
+  setDocument(doc: CodeDocument): void;
+  format(): void;
+  refresh(): void;
+}
+
+export const IswcCodeElSchema = z.custom<CodeElement>(
+  (value) => typeof HTMLElement !== "undefined" && value instanceof HTMLElement,
+);
 export type IswcCodeEl = z.infer<typeof IswcCodeElSchema>;
 
-const IswcFormatElSchema = z.object({
-  format: z.function({ input: [], output: z.void() }),
-});
-export type IswcFormatEl = z.infer<typeof IswcFormatElSchema>;
+interface FormatElement extends HTMLElement {
+  format(): void;
+}
 
+export const IswcFormatElSchema = z.custom<FormatElement>(
+  (value) => typeof HTMLElement !== "undefined" && value instanceof HTMLElement,
+);
+export type IswcFormatEl = z.infer<typeof IswcFormatElSchema>;
