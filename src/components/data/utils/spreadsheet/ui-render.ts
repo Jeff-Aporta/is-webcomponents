@@ -1,5 +1,5 @@
 // @contexto INDICE.md · src/components/data/README.md
-// axis.ts — geometría de un eje con tamaños variables y ocultos, para la virtualización. Los
+// ui-render.ts — geometría de un eje con tamaños variables y ocultos, para la virtualización. Los
 // tamaños van en em; las búsquedas son logarítmicas sobre los índices con tamaño propio.
 import { cellName, colName } from './address.js';
 import type { Rect } from './address.schemas.js';
@@ -73,7 +73,7 @@ export class Axis {
 }
 
 // ── render ──
-// render.ts — HTML de la rejilla visible. Función pura de (documento, ventana): el componente
+// ui-render.ts — HTML de la rejilla visible. Función pura de (documento, ventana): el componente
 // decide cuándo pintar; aquí no se toca el DOM.
 /** Medidas fijas de la rejilla, en em. */
 export const HEAD_HEIGHT = 1.75;

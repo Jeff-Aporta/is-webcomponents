@@ -1,6 +1,6 @@
 // @contexto INDICE.md · src/components/data/README.md
 /**
- * ag-grid/edicion/apoyo — Lecturas comunes de los controladores sobre el host.
+ * ag-grid/edicion-apoyo — Lecturas comunes de los controladores sobre el host.
  */
 import type { Parametros } from './edicion-apoyo.schemas.js';
 import type { ColDefAg, FilaDisplay, GridHost, RefCelda } from './contrato.schemas.js';

@@ -1,6 +1,6 @@
 // @contexto INDICE.md · src/components/data/README.md
 /**
- * ag-grid/filas/panel-agrupacion — Panel lateral de agrupacion, valores y pivote.
+ * ag-grid/filas-panel-agrupacion — Panel lateral de agrupacion, valores y pivote.
  *
  * Zonas de soltar con drag & drop nativo: Grupos de fila, Valores y Etiquetas de
  * columna, mas el interruptor de modo pivote. La franja superior de

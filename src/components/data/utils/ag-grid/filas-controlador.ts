@@ -1,6 +1,6 @@
 // @contexto INDICE.md · src/components/data/README.md
 /**
- * ag-grid/filas/controlador — Une el motor puro de filas con el host.
+ * ag-grid/filas-controlador — Une el motor puro de filas con el host.
  *
  * Dentro de un transformador `grid.estado()` devuelve la foto ANTERIOR (el modelo
  * esta calculando la nueva). Por eso las filas ordenadas se capturan en la etapa

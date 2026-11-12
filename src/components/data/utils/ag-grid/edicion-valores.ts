@@ -1,6 +1,6 @@
 // @contexto INDICE.md · src/components/data/README.md
 /**
- * ag-grid/edicion/valores — Conversion pura entre lo que muestra un editor y
+ * ag-grid/edicion-valores — Conversion pura entre lo que muestra un editor y
  * el valor de la celda, y filtrado de las listas de los editores.
  */
 import type { BusquedaLista, OpcionLista } from './edicion.schemas.js';

@@ -1,5 +1,5 @@
 // @contexto INDICE.md · src/components/data/README.md
-// index.ts — carga todas las familias de funciones en el registro.
+// fn-aliases-es.ts — carga todas las familias de funciones en el registro.
 import { addAliases } from './fn-registry.js';
 import './fn-math.js';
 import './fn-stats.js';
@@ -14,7 +14,7 @@ import './fn-engineering.js';
 
 
 // ── aliases-es ──
-// aliases-es.ts — nombres de función de Excel en español → nombre canónico en inglés.
+// fn-aliases-es.ts — nombres de función de Excel en español → nombre canónico en inglés.
 addAliases({
   SUMA: 'SUM', PRODUCTO: 'PRODUCT', 'SUMA.CUADRADOS': 'SUMSQ', SUMAPRODUCTO: 'SUMPRODUCT', ABS: 'ABS', ENTERO: 'INT', SIGNO: 'SIGN', RAIZ: 'SQRT', RAIZ2PI: 'SQRTPI',
   EXP: 'EXP', LN: 'LN', 'LOG10': 'LOG10', SENO: 'SIN', COSENO: 'COS', TANGENTE: 'TAN', ASENO: 'ASIN', ACOS: 'ACOS', ATAN: 'ATAN', SENOH: 'SINH', ASENOH: 'ASINH', ACOSH: 'ACOSH',

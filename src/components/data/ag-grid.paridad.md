@@ -38,60 +38,60 @@ probo solo en las pruebas de cada parcela o no se probo en este pase.
 | Guia de AG Grid | Equivalente ISWC | Estado |
 | --- | --- | --- |
 | Tamaño y layout de la grilla | `domLayout`, alto por CSS en em | parcial |
-| Temas y parametros | `celdas/temas`: presets quartz, balham, alpine, material, financiero; tokens `--iswc-grid-*` | hecho |
+| Temas y parametros | `celdas-temas`: presets quartz, balham, alpine, material, financiero; tokens `--iswc-grid-*` | hecho |
 | Theme Builder, distribucion de temas | no aplica: sin constructor visual | falta |
 | Definicion y actualizacion de columnas | `aplanarDefs`, `defaultColDef`, `columnTypes`, autogeneradas | hecho |
 | Estado de columnas | `getColumnState`, `applyColumnState` | hecho |
-| Grupos de cabecera | `children` en defs, `nucleo/cabecera` | parcial: sin abrir/cerrar grupos |
+| Grupos de cabecera | `children` en defs, `nucleo-cabecera` | parcial: sin abrir/cerrar grupos |
 | Tamaño, mover, fijar columnas | medicion real con canvas, arrastre, sticky con sombra | hecho |
 | Column spanning | `colSpan` en el motor | hecho |
 | Row spanning | `spanRows` | falta |
 | Columnas calculadas | `calculatedColumns` | falta |
-| Orden de filas | core + `filtros/orden` | hecho |
+| Orden de filas | core + `filtros-orden` | hecho |
 | Numeros de fila | `rowNumbers` | falta |
-| Fijar filas | `edicion/filas-fijadas`, `pegar` en el motor | hecho |
-| Altura de fila | `alturas`, `getRowHeight`, `autoHeight` | hecho |
-| Estilos de fila y celda | `celdas/reglas` | hecho |
+| Fijar filas | `edicion-filas-fijadas`, `pegar` en el motor | hecho |
+| Altura de fila | `celdas-alturas`, `getRowHeight`, `autoHeight` | hecho |
+| Estilos de fila y celda | `celdas-reglas` | hecho |
 | Paginacion | core + `filtros` | hecho |
-| Arrastre de filas | gestionado en `edicion/filas-movidas` | parcial: sin zonas externas ni grilla a grilla |
+| Arrastre de filas | gestionado en `edicion-filas-movidas` | parcial: sin zonas externas ni grilla a grilla |
 | Filas de ancho completo | `FilaExtra` del contrato | parcial |
-| Celdas: valores, formatos, tipos | `celdas/celdas-valores`, `celdas/formatos` | hecho |
+| Celdas: valores, formatos, tipos | `celdas-valores`, `celdas-formatos` | hecho |
 | Buscar en la grilla (Find) | `find*` | falta |
 | Notas | `notes*` | falta |
-| Resaltar cambios | `celdas/flash` | hecho |
-| Tooltips | `celdas/tooltips` | hecho |
-| Expresiones de celda | `celdas/expresion` | hecho |
+| Resaltar cambios | `celdas-flash` | hecho |
+| Tooltips | `celdas-tooltips` | hecho |
+| Expresiones de celda | `celdas-expresion` | hecho |
 | Datos de referencia | `refData` | hecho |
-| Filtros texto, numero, fecha, set, multi | `filtros/condiciones`, `filtros/set` | hecho |
-| Filtros flotantes | `filtros/ui/flotantes` | hecho |
-| Filtro avanzado | `filtros/avanzado` | hecho |
-| Quick y externo | `filtros/quick`, `isExternalFilterPresent` | hecho |
-| Seleccion de filas y celdas | `edicion/seleccion-filas`, `edicion/rangos`, `edicion/relleno` | hecho |
-| Edicion, editores, validacion, lote, deshacer | `edicion/*` | hecho |
-| Datos: transacciones y alta frecuencia | core + `filas/transacciones` | hecho |
-| Overlays | `filtros/ui/pie-y-capas` | hecho |
-| Teclado | `nucleo/interaccion` + `edicion/navegacion` | hecho |
+| Filtros texto, numero, fecha, set, multi | `filtros-condiciones`, `filtros-set` | hecho |
+| Filtros flotantes | `filtros-ui-flotantes` | hecho |
+| Filtro avanzado | `filtros-avanzado` | hecho |
+| Quick y externo | `filtros-motor`, `isExternalFilterPresent` | hecho |
+| Seleccion de filas y celdas | `edicion-seleccion-filas`, `edicion-rangos`, `edicion-relleno` | hecho |
+| Edicion, editores, validacion, lote, deshacer | `edicion-*` | hecho |
+| Datos: transacciones y alta frecuencia | core + `filas-transacciones` | hecho |
+| Overlays | `filtros-ui-pie-y-capas` | hecho |
+| Teclado | `nucleo-interaccion` + `edicion-navegacion` | hecho |
 | Touch | sin gestos propios | parcial |
 | Accesibilidad | roles grid, aria-*, activedescendant | hecho |
 | RTL | propiedades logicas en CSS | parcial: sin verificar |
 | Grillas alineadas | `alignedGrids` | falta |
 | Localizacion | `localeText`, `getLocaleText` | hecho |
-| Agrupacion y agregacion | `filas/grupos` + pintado por columna | hecho |
+| Agrupacion y agregacion | `filas-grupos` + pintado por columna | hecho |
 | Formulas | `formula*` | falta: `iswc-spreadsheet` cubre ese caso |
-| Pivote | `filas/pivote` | hecho |
-| Tree data | `filas/ag-tree-data` | hecho |
+| Pivote | `filas-pivote` | hecho |
+| Tree data | `filas-ag-tree-data` | hecho |
 | Master/detail | `filas` | hecho |
-| Side bar, menus, status bar | `filtros/ui`, `nucleo/menus` | hecho |
+| Side bar, menus, status bar | `filtros-ui-*`, `nucleo-menus` | hecho |
 | Toolbar de acceso rapido | toolbar propia | parcial |
-| Modelos server-side, infinito, viewport | `filas/modelos-externos` | hecho |
-| Exportar CSV y Excel | `filas/exportar-csv`, `filas/exportar-excel` | hecho |
+| Modelos server-side, infinito, viewport | `filas-modelos-externos` | hecho |
+| Exportar CSV y Excel | `filas-exportar`, `filas-exportar-excel` | hecho |
 | Importar Excel | `excel-import` | falta |
 | Exportar PDF | `exportDataAsPdf` | falta |
 | Imprimir | sin vista de impresion dedicada | falta |
 | Estado de la grilla | `getState`, `setState`, persistencia en prefs | hecho |
-| Sparklines | `celdas/spark`: SVG en linea con el motor de `iswc-sparkline` | hecho |
+| Sparklines | `celdas-spark`: SVG en linea con el motor de `iswc-sparkline` | hecho |
 | Graficos integrados | `createRangeChart` y afines | falta |
-| Cell text selection, clipboard | `edicion/portapapeles` | hecho |
+| Cell text selection, clipboard | `edicion-portapapeles` | hecho |
 | Herramientas de IA (toolkit, MCP) | fuera de alcance | falta |
 
 ## Grid Options

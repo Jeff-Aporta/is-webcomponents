@@ -1,5 +1,5 @@
 // @contexto INDICE.md · src/components/data/README.md
-// dynamic.ts — funciones de matrices dinámicas: devuelven matrices que desbordan.
+// fn-dynamic.ts — funciones de matrices dinámicas: devuelven matrices que desbordan.
 import type { Ctx } from './evaluator.schemas.js';
 import { CellError, compare, ERR, toBool, toNumber } from './values.js';
 import type { EvalValue, Matrix, Scalar } from './values.schemas.js';

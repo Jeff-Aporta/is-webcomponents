@@ -1,6 +1,6 @@
 // @contexto INDICE.md · src/components/data/README.md
 /**
- * ag-grid/edicion/seleccion-filas-ctl — Seleccion de filas con `rowSelection`
+ * ag-grid/edicion-seleccion-filas-ctl — Seleccion de filas con `rowSelection`
  * objeto: clic, checkbox, Espacio, Ctrl+A, seleccionar todo y su API.
  */
 import { apiPublica, nodoDeFila } from './edicion-apoyo.js';

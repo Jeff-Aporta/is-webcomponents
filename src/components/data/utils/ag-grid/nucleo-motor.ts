@@ -6,7 +6,7 @@ import type { RowNode } from '@jeff-aporta/iswc-base/components/data/schemas/dat
 import type { ContextoCelda, FilaDisplay, FilaExtra, GridHost, Rect, RefCelda, RendererMontable } from './contrato.schemas.js';
 
 /**
- * nucleo/alturas — Indice de alturas de fila para virtualizar.
+ * ag-grid/nucleo-motor — Indice de alturas de fila para virtualizar.
  *
  * Con alto uniforme la posicion es una multiplicacion. Cuando alguna fila
  * difiere (detalle, autoHeight, getRowHeight) se construye una suma prefija y
@@ -69,7 +69,7 @@ function crearAlturas() {
 
 // ── motor ──
 /**
- * nucleo/motor — Render virtualizado del cuerpo.
+ * ag-grid/nucleo-motor — Render virtualizado del cuerpo.
  *
  * Pool de filas por clave: una fila que sigue visible conserva su DOM y solo
  * cambia de posicion (eso anima el orden y el filtro). Cada fila tiene tres

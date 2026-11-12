@@ -1,6 +1,6 @@
 // @contexto INDICE.md · src/components/data/README.md
 /**
- * ag-grid/celdas/tooltips — Tooltips de celda y de cabecera.
+ * ag-grid/celdas-tooltips — Tooltips de celda y de cabecera.
  *
  * `<iswc-tooltip>` se ancla a un elemento con `for`, uno por disparador; en una
  * grilla virtualizada eso seria una instancia por celda. Aqui hay un solo

@@ -1,6 +1,6 @@
 // @contexto INDICE.md · src/components/data/README.md
 /**
- * nucleo/api-ag — Grid API con los nombres de AG Grid.
+ * ag-grid/nucleo-api-ag — Grid API con los nombres de AG Grid.
  *
  * Cubre columnas, nodos, scroll, paginacion, opciones, estado y transacciones.
  * Los plugins agregan lo suyo con `grid.exponer`; lo expuesto gana sobre esto.

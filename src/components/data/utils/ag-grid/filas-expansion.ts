@@ -1,6 +1,6 @@
 // @contexto INDICE.md · src/components/data/README.md
 /**
- * ag-grid/filas/expansion — Quien esta abierto, sin sembrar el motor grupo a grupo.
+ * ag-grid/filas-expansion — Quien esta abierto, sin sembrar el motor grupo a grupo.
  *
  * El motor solo guarda un Set de abiertos; `groupDefaultExpanded: 2` o
  * `isGroupOpenByDefault` exigirian conocer todos los grupos de antemano. Aqui el

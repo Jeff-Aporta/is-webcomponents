@@ -1,6 +1,6 @@
 // @contexto INDICE.md · src/components/data/README.md
 /**
- * ag-grid/edicion/arrastre-filas — Row dragging gestionado y no gestionado,
+ * ag-grid/edicion-arrastre-filas — Row dragging gestionado y no gestionado,
  * con puntero para que funcione igual con raton y tactil.
  */
 import type { Gesto } from './edicion-arrastre-filas.schemas.js';

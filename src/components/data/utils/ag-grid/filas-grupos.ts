@@ -1,6 +1,6 @@
 // @contexto INDICE.md · src/components/data/README.md
 /**
- * ag-grid/filas/grupos — Arbol de grupos, agregacion y aplanado. Logica pura.
+ * ag-grid/filas-grupos — Arbol de grupos, agregacion y aplanado. Logica pura.
  *
  * Una sola pasada por las hojas (O(n · niveles)) y agregacion de abajo hacia
  * arriba: los padres combinan los acumulados de sus hijos, no vuelven a tocar

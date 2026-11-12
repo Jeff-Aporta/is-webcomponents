@@ -1,6 +1,6 @@
 // @contexto INDICE.md · src/components/data/README.md
 /**
- * ag-grid/index — Plugins que instala <iswc-ag-grid>. El orden importa: los
+ * ag-grid/plugins — Plugins que instala <iswc-ag-grid>. El orden importa: los
  * renderers de celdas pisan los base y filas monta sobre filtros y edicion.
  */
 import { instalar as instalarCeldas } from './celdas.js';

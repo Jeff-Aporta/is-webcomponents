@@ -1,6 +1,6 @@
 // @contexto INDICE.md · src/components/data/README.md
 /**
- * ag-grid/filas/cache-bloques — Cache por bloques de los modelos infinite y SSRM.
+ * ag-grid/filas-cache-bloques — Cache por bloques de los modelos infinite y SSRM.
  *
  * Sin DOM ni datasource propio: `pedir` es inyectado. Una `version` invalida las
  * respuestas tardias de antes de un purge. El conteo sigue la regla de AG Grid:

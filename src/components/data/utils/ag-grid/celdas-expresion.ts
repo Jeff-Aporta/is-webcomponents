@@ -2,7 +2,7 @@
 import type { Ambito, Nodo, Token } from './celdas-expresion.schemas.js';
 
 /**
- * ag-grid/celdas/expresion — Expresiones de texto de los colDef ('x > 10', 'data.a + data.b').
+ * ag-grid/celdas-expresion — Expresiones de texto de los colDef ('x > 10', 'data.a + data.b').
  *
  * Interprete propio en lugar de `new Function`: funciona con CSP estricta y las
  * columnas que llegan por JSON no pueden ejecutar codigo arbitrario. Cubre

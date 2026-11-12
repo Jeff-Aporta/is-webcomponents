@@ -1,6 +1,6 @@
 // @contexto INDICE.md · src/components/data/README.md
 /**
- * ag-grid/celdas/schemas — Formas de los parametros declarativos de la parcela.
+ * ag-grid/celdas.schemas — Formas de los parametros declarativos de la parcela.
  *
  * Solo tipos en runtime de render (`import type`): zod no corre por celda. Los
  * esquemas quedan para validar configuraciones JSON desde demos y pruebas.

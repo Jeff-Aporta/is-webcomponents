@@ -1,6 +1,6 @@
 // @contexto INDICE.md · src/components/data/README.md
 /**
- * nucleo/opciones — Traduce opciones con nombres de AG Grid al motor.
+ * ag-grid/nucleo-opciones — Traduce opciones con nombres de AG Grid al motor.
  *
  * Fusiona defaultColDef + columnTypes + ColDef, aplana grupos de columnas y
  * mapea los atributos HTML a su opcion. Puro: sin DOM.

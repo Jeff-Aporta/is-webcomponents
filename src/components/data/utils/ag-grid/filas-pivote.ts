@@ -1,6 +1,6 @@
 // @contexto INDICE.md · src/components/data/README.md
 /**
- * ag-grid/filas/pivote — Columnas generadas por pivote. Logica pura.
+ * ag-grid/filas-pivote — Columnas generadas por pivote. Logica pura.
  *
  * Recorre las hojas una vez para descubrir las claves, las ordena y genera
  * columnas con ids estables (`pivot_<cols>_<claves>_<valor>`). La agregacion por

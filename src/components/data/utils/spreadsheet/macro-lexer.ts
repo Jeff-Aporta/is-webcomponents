@@ -1,5 +1,5 @@
 // @contexto INDICE.md · src/components/data/README.md
-// lexer.ts — tokens del lenguaje de macros. Palabras clave en español con alias en inglés.
+// macro-lexer.ts — tokens del lenguaje de macros. Palabras clave en español con alias en inglés.
 
 /** Error del lenguaje, con su línea. */
 import type { MacroTokenType, MacroToken } from './macro-lexer.schemas.ts';

@@ -1,6 +1,6 @@
 // @contexto INDICE.md · src/components/data/README.md
 /**
- * ag-grid/celdas/temas — Presets y parametros de tema (`--iswc-grid-*`).
+ * ag-grid/celdas-temas — Presets y parametros de tema (`--iswc-grid-*`).
  *
  * Los parametros usan los nombres de AG (`accentColor`, `rowHeight`, ...). Los
  * presets fijan forma y densidad; el color sale de los tokens del kit, por eso

@@ -1,6 +1,6 @@
 // @contexto INDICE.md · src/components/data/README.md
 /**
- * nucleo/cabecera — Encabezados: grupos de columnas, ordenar, resize, reorder.
+ * ag-grid/nucleo-cabecera — Encabezados: grupos de columnas, ordenar, resize, reorder.
  *
  * Tiene pocas celdas, asi que repinta completo por string; las tres secciones
  * replican las del cuerpo (izquierda y derecha sticky).

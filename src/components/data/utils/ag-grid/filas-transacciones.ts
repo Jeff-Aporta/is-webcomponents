@@ -1,6 +1,6 @@
 // @contexto INDICE.md · src/components/data/README.md
 /**
- * ag-grid/filas/transacciones — applyTransaction puro y cola asincrona.
+ * ag-grid/filas-transacciones — applyTransaction puro y cola asincrona.
  *
  * Un lote se resuelve en una sola pasada O(n + cambios): se marcan quitados y
  * reemplazos sobre un indice y se reconstruye el arreglo una vez, por muchas

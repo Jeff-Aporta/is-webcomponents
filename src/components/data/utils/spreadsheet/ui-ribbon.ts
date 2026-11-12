@@ -1,5 +1,5 @@
 // @contexto INDICE.md · src/components/data/README.md
-// ribbon.ts — definición de la cinta y de los menús. Solo datos y su HTML con componentes del kit;
+// ui-ribbon.ts — definición de la cinta y de los menús. Solo datos y su HTML con componentes del kit;
 // cada elemento lleva un `cmd` que el componente despacha.
 import { NUMBER_FORMATS } from './numfmt.js';
 import { esc } from './ui-render.js';

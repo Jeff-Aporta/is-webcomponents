@@ -1,6 +1,6 @@
 // @contexto INDICE.md · src/components/data/README.md
 /**
- * quick — Quick filter: palabras en mayusculas y todas deben aparecer en el texto de la fila.
+ * ag-grid/filtros-motor — Quick filter: palabras en mayusculas y todas deben aparecer en el texto de la fila.
  */
 import { coincideAvanzado } from './filtros-avanzado.js';
 import { aModeloAg, coincideModelo, condicionActiva, condicionesDe, esCondicional, esLegado } from './filtros-condiciones.js';

@@ -1,6 +1,6 @@
 // @contexto INDICE.md · src/components/data/README.md
 /**
- * ag-grid/edicion/filas-fijadas — Row pinning. Un transformador `aplanar` deja
+ * ag-grid/edicion-filas-fijadas — Row pinning. Un transformador `aplanar` deja
  * las fijadas al inicio/final con `pegar`; el host las mantiene sticky, y foco,
  * rangos y navegacion las ven como filas normales de la lista.
  */

@@ -1,6 +1,6 @@
 // @contexto INDICE.md · src/components/data/README.md
 /**
- * nucleo/menus — Menu de columna y menu contextual sobre <iswc-context-menu>.
+ * ag-grid/nucleo-menus — Menu de columna y menu contextual sobre <iswc-context-menu>.
  *
  * Reune items base + los que aportan los plugins (`grid.menu`), respeta
  * mainMenuItems / columnMenuItems / getMainMenuItems / getContextMenuItems y

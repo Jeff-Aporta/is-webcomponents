@@ -1,6 +1,6 @@
 // @contexto INDICE.md · src/components/data/README.md
 /**
- * ag-grid/celdas/flash — Destello de celda: enableCellChangeFlash y api.flashCells.
+ * ag-grid/celdas-flash — Destello de celda: enableCellChangeFlash y api.flashCells.
  *
  * El host repinta con strings, asi que una transicion CSS moriria con el nodo.
  * El destello son dos animaciones CSS (sostener y apagar): `presentarCelda` da la

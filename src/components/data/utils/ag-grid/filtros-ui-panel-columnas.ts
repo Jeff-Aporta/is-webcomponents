@@ -1,6 +1,6 @@
 // @contexto INDICE.md · src/components/data/README.md
 /**
- * ui/panel-columnas — Columns Tool Panel: busqueda, seleccion, arbol de grupos, reorden y
+ * ag-grid/filtros-ui-panel-columnas — Columns Tool Panel: busqueda, seleccion, arbol de grupos, reorden y
  * secciones de agrupacion, valores y pivote, con actualizaciones diferidas opcionales.
  */
 import { arbolColumnas, filtrarArbolColumnas, hojasColumna } from './filtros-resumen.js';

@@ -1,5 +1,5 @@
 // @contexto INDICE.md · src/components/data/README.md
-// logical.ts — lógica, control de flujo perezoso, LET/LAMBDA e información de celdas.
+// fn-logical.ts — lógica, control de flujo perezoso, LET/LAMBDA e información de celdas.
 import { evalNode, callLambda } from './evaluator.js';
 import type { Ctx, Env } from './evaluator.schemas.js';
 import type { Node } from './parser.schemas.js';

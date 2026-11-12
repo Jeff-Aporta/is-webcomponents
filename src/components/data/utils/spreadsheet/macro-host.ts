@@ -1,5 +1,5 @@
 // @contexto INDICE.md · src/components/data/README.md
-// host.ts — biblioteca de una macro: lo único que puede tocar. Opera sobre el documento y una
+// macro-host.ts — biblioteca de una macro: lo único que puede tocar. Opera sobre el documento y una
 // interfaz mínima de la vista. Cada función tiene nombre en español y alias en inglés.
 import { cellName, colIndex, colName, normalize, parseCell, parseRange, rangeName } from './address.js';
 import type { Rect } from './address.schemas.js';

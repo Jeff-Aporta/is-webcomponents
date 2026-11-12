@@ -1,6 +1,6 @@
 // @contexto INDICE.md · src/components/data/README.md
 /**
- * ag-grid/edicion/teclado — Teclado de la grilla fuera de un editor: navegacion,
+ * ag-grid/edicion-teclado — Teclado de la grilla fuera de un editor: navegacion,
  * extension de rangos, atajos de edicion y seleccion.
  */
 import { colsVisibles, mapaNavegacion, nodoDeFila, paramsCelda, posDeRef, refDePos, resolver } from './edicion-apoyo.js';

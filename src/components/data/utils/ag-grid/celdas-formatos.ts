@@ -1,6 +1,6 @@
 // @contexto INDICE.md · src/components/data/README.md
 /**
- * ag-grid/celdas/formatos — Numero, moneda, porcentaje y fecha sobre Intl.
+ * ag-grid/celdas-formatos — Numero, moneda, porcentaje y fecha sobre Intl.
  *
  * Construir un Intl.*Format es lo caro; formatear no. Por eso cada combinacion
  * de opciones se cachea: una columna visible reusa el mismo formateador.

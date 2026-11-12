@@ -1,6 +1,6 @@
 // @contexto INDICE.md · src/components/data/README.md
 /**
- * ag-grid/filas/detalle — Maestro-detalle.
+ * ag-grid/filas-detalle — Maestro-detalle.
  *
  * Inserta una FilaExtra `detalle` tras cada maestro abierto. El contenido se
  * crea en `montar` (la virtualizacion descarta lo que sale de pantalla), asi que

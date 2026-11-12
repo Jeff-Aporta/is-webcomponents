@@ -1,5 +1,5 @@
 // @contexto INDICE.md · src/components/data/README.md
-// find.ts — buscar y reemplazar en una hoja o en todo el libro.
+// ui-dialogs.ts — buscar y reemplazar en una hoja o en todo el libro.
 import type { SpreadsheetDoc } from './document.js';
 import { keyCol, keyRow } from './engine.js';
 import type { Sheet } from './engine.js';
@@ -49,7 +49,7 @@ export function replaceAll(doc: SpreadsheetDoc, query: string, by: string, o: Fi
 }
 
 // ── dialogs ──
-// dialogs.ts — diálogos de la hoja, con controles del kit. Cada función arma su cuerpo y su acción;
+// ui-dialogs.ts — diálogos de la hoja, con controles del kit. Cada función arma su cuerpo y su acción;
 // el componente solo aporta el `iswc-dialog` y el contexto.
 /** Campo de texto. */
 export const input = (name: string, label: string, value = '', hint = ''): string => `<iswc-input data-f="${name}" label="${esc(label)}" value="${esc(value)}"${hint ? ` hint="${esc(hint)}"` : ''}></iswc-input>`;

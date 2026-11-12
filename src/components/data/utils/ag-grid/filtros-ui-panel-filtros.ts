@@ -1,6 +1,6 @@
 // @contexto INDICE.md · src/components/data/README.md
 /**
- * ui/panel-filtros — Filters Tool Panel: un acordeon con el filtro de cada columna.
+ * ag-grid/filtros-ui-panel-filtros — Filters Tool Panel: un acordeon con el filtro de cada columna.
  */
 import { arbolColumnas, filtrarArbolColumnas, hojasColumna } from './filtros-resumen.js';
 import { TEXTOS } from './filtros-textos.js';

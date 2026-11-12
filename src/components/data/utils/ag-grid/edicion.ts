@@ -1,6 +1,6 @@
 // @contexto INDICE.md · src/components/data/README.md
 /**
- * ag-grid/edicion/accesibilidad — Region viva para anuncios y atributos ARIA
+ * ag-grid/edicion — Region viva para anuncios y atributos ARIA
  * del contenedor que dependen de las opciones: rol y multiseleccion.
  */
 import { leerOpciones } from './edicion-seleccion-filas.js';

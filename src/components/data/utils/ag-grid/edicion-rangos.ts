@@ -1,6 +1,6 @@
 // @contexto INDICE.md · src/components/data/README.md
 /**
- * ag-grid/edicion/rangos — Aritmetica pura de rangos rectangulares de celdas.
+ * ag-grid/edicion-rangos — Aritmetica pura de rangos rectangulares de celdas.
  * Sin DOM: filas y columnas son indices de display.
  */
 import type { Posicion, Rango } from './edicion.schemas.js';

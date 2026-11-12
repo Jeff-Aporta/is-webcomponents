@@ -1,6 +1,6 @@
 // @contexto INDICE.md · src/components/data/README.md
 /**
- * ui/barra-lateral — Side Bar: pestanas, panel abierto, posicion, ancho y su api.
+ * ag-grid/filtros-ui-barra-lateral — Side Bar: pestanas, panel abierto, posicion, ancho y su api.
  */
 import { normalizarSideBar } from './filtros-resumen.js';
 import { TEXTOS } from './filtros-textos.js';

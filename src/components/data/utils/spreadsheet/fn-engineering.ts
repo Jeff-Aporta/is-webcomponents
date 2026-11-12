@@ -1,5 +1,5 @@
 // @contexto INDICE.md · src/components/data/README.md
-// engineering.ts — ingeniería (bases, bits, conversión) y funciones de base de datos (D*).
+// fn-engineering.ts — ingeniería (bases, bits, conversión) y funciones de base de datos (D*).
 import { criterion } from './criteria.js';
 import type { Ctx } from './evaluator.schemas.js';
 import { compare, ERR, toNumber, toText } from './values.js';

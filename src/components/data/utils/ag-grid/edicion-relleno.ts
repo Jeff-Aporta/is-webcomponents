@@ -1,6 +1,6 @@
 // @contexto INDICE.md · src/components/data/README.md
 /**
- * ag-grid/edicion/relleno — Calculo puro del fill handle.
+ * ag-grid/edicion-relleno — Calculo puro del fill handle.
  *
  *   - `planRelleno`: que rango resulta de soltar el asa en una celda.
  *   - `valoresRelleno`: serie que ocupa las celdas nuevas.

@@ -1,6 +1,6 @@
 // @contexto INDICE.md · src/components/data/README.md
 /**
- * ag-grid/celdas/alturas — getRowHeight, setRowHeight, resetRowHeights y autoHeight.
+ * ag-grid/celdas-alturas — getRowHeight, setRowHeight, resetRowHeights y autoHeight.
  *
  * El alto por fila se cachea: AG llama a `getRowHeight` una vez por fila y de
  * nuevo solo tras `resetRowHeights`. `autoHeight` mide nada mas lo pintado, despues

@@ -1,5 +1,5 @@
 // @contexto INDICE.md · src/components/data/README.md
-// lookup.ts — búsqueda y referencia.
+// fn-lookup.ts — búsqueda y referencia.
 import { colName, parseRange, quoteSheet } from './address.js';
 import { wildcardRegex } from './criteria.js';
 import { evalNode, evaluate } from './evaluator.js';

@@ -1,5 +1,5 @@
 // @contexto INDICE.md · src/components/data/README.md
-// math.ts — matemáticas, trigonometría y matrices.
+// fn-math.ts — matemáticas, trigonometría y matrices.
 import type { Ctx } from './evaluator.schemas.js';
 import { CellError, ERR, RefValue, toNumber } from './values.js';
 import type { EvalValue, Matrix, Scalar } from './values.schemas.js';

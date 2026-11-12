@@ -1,6 +1,6 @@
 // @contexto INDICE.md · src/components/data/README.md
 /**
- * ui/barra-avanzada — Input del Advanced Filter y constructor visual del modelo.
+ * ag-grid/filtros-ui-barra-avanzada — Input del Advanced Filter y constructor visual del modelo.
  */
 import { avanzadoATexto, parsearAvanzado } from './filtros-avanzado.js';
 import { OPCIONES_DEFECTO } from './filtros-condiciones.js';

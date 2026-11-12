@@ -1,6 +1,6 @@
 // @contexto INDICE.md · src/components/data/README.md
 /**
- * ag-grid/filas/exportar-csv — CSV desde una TablaExport. Logica pura.
+ * ag-grid/filas-exportar — CSV desde una TablaExport. Logica pura.
  *
  * Como AG Grid: todo entre comillas salvo `suppressQuotes`, separador
  * configurable, grupos como `-> etiqueta` y contenido libre antes y despues.
@@ -56,7 +56,7 @@ function csvABlob(csv: string): Blob {
 
 // ── exportar ──
 /**
- * ag-grid/filas/exportar — De la grilla a TablaExport, y de ahi a CSV o XLSX.
+ * ag-grid/filas-exportar — De la grilla a TablaExport, y de ahi a CSV o XLSX.
  *
  * Una sola ruta para los dos formatos: `tablaDe` resuelve columnas, filas y
  * callbacks de AG Grid; los escritores puros no saben de la grilla.

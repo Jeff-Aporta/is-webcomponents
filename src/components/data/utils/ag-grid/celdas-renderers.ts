@@ -1,6 +1,6 @@
 // @contexto INDICE.md · src/components/data/README.md
 /**
- * ag-grid/celdas/renderers — Renderers declarativos: `cellRenderer: 'delta'`.
+ * ag-grid/celdas-renderers — Renderers declarativos: `cellRenderer: 'delta'`.
  *
  * Todos devuelven string y no crean custom elements (salvo el icono Iconify de
  * una accion que lo pida): el pool recicla el DOM y un scroll repinta decenas de

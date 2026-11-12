@@ -1,6 +1,6 @@
 // @contexto INDICE.md · src/components/data/README.md
 /**
- * ui/flotantes — Fila de filtros flotantes bajo el encabezado y popup del filtro de columna.
+ * ag-grid/filtros-ui-flotantes — Fila de filtros flotantes bajo el encabezado y popup del filtro de columna.
  */
 import { condicionesDe, esCondicional, resumenCondicion } from './filtros-condiciones.js';
 import { TEXTOS } from './filtros-textos.js';

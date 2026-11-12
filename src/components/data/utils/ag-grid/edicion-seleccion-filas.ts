@@ -1,6 +1,6 @@
 // @contexto INDICE.md · src/components/data/README.md
 /**
- * ag-grid/edicion/seleccion-filas — Reglas puras de la seleccion de filas.
+ * ag-grid/edicion-seleccion-filas — Reglas puras de la seleccion de filas.
  * Conjuntos de ids; el controlador decide de donde salen y a quien avisa.
  */
 import type { Seleccionable, UniversoFilas } from './edicion-seleccion-filas.schemas.js';

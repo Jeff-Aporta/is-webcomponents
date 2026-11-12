@@ -1,6 +1,6 @@
 // @contexto INDICE.md · src/components/data/README.md
 /**
- * ag-grid/edicion/sesion — Ciclo de vida de la edicion de celda y de fila
+ * ag-grid/edicion-sesion — Ciclo de vida de la edicion de celda y de fila
  * completa: arranque, montaje en la capa, teclas del editor, validacion y cierre.
  */
 import type { Montado, Sesion, Arranque, AlCerrar } from './edicion-sesion.schemas.js';

@@ -1,6 +1,6 @@
 // @contexto INDICE.md · src/components/data/README.md
 /**
- * ag-grid/filas/exportar-excel — XLSX (OOXML) propio. Logica pura.
+ * ag-grid/filas-exportar-excel — XLSX (OOXML) propio. Logica pura.
  *
  * Genera el paquete a mano y lo empaqueta con `zip.ts`. Compatible con varias
  * hojas (`exportMultipleSheetsAsExcel`): cada hoja se serializa a su XML por

@@ -1,6 +1,6 @@
 // @contexto INDICE.md · src/components/data/README.md
 /**
- * ag-grid/filas/filas.schemas — Tipos de la parcela de modelos de filas y datos.
+ * ag-grid/filas.schemas — Tipos de la parcela de modelos de filas y datos.
  *
  * Los datos que entran desde afuera (transacciones, parametros de exportacion,
  * estado de grilla) tienen Zod; lo que lleva funciones o ciclos se declara como

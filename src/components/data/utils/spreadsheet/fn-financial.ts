@@ -1,5 +1,5 @@
 // @contexto INDICE.md · src/components/data/README.md
-// financial.ts — anualidades, flujos de caja y depreciación.
+// fn-financial.ts — anualidades, flujos de caja y depreciación.
 import { parseDateText } from './dates.js';
 import type { Ctx } from './evaluator.schemas.js';
 import { ERR, toNumber } from './values.js';

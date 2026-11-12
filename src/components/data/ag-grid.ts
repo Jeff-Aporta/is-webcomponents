@@ -3,7 +3,7 @@
  * <iswc-ag-grid> — Data grid avanzado (estilo ag-grid.com en vanilla web component).
  *
  * Elemento delgado: plantilla, atributos, persistencia y fachada legada. El
- * render vive en utils/ag-grid/nucleo y las capacidades en plugins
+ * render vive en utils/ag-grid/nucleo-* y las capacidades en plugins
  * (utils/ag-grid/{celdas,filtros,edicion,filas}); paridad en ag-grid.paridad.md.
  * Acepta tambien nombres de AG Grid: columnDefs, rowData, defaultColDef,
  * gridOptions. Soporta:

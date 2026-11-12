@@ -1,5 +1,5 @@
 // @contexto INDICE.md · src/components/data/README.md
-// datetime.ts — fecha y hora sobre seriales.
+// fn-datetime.ts — fecha y hora sobre seriales.
 import { daysInMonth, fromSerial, nowSerial, parseDateText, serial } from './dates.js';
 import type { Ctx } from './evaluator.schemas.js';
 import { ERR, toNumber, toText } from './values.js';

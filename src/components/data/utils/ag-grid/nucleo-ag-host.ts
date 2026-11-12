@@ -1,6 +1,6 @@
 // @contexto INDICE.md · src/components/data/README.md
 /**
- * nucleo/base-celdas — Renderers minimos por `type`, para que la grilla pinte
+ * ag-grid/nucleo-ag-host — Renderers minimos por `type`, para que la grilla pinte
  * igual si el plugin de celdas no esta instalado. Ese plugin los sobreescribe.
  */
 import type { RendererCelda, ContextoCelda, Decoracion, Desinstalar, EvaluadorFiltro, Exportador, FilaDisplay, Flotante, GridPlugin, ModeloFilas, PanelEstado, PanelLateral, PresentacionCelda, PresentacionFila, ProveedorMenu, RendererMontable, TransformadorFilas } from './contrato.schemas.js';
@@ -102,7 +102,7 @@ function registrarBase(grid: GridHost): void {
 
 // ── ag-host ──
 /**
- * nucleo/host — Implementa `GridHost`: opciones, eventos, registros y ganchos.
+ * ag-grid/nucleo-ag-host — Implementa `GridHost`: opciones, eventos, registros y ganchos.
  *
  * ag-grid.ts solo aporta la plantilla, atributos y persistencia. Aqui se cablea
  * el motor, la cabecera, los menus y la API de nombres AG, y se instalan los

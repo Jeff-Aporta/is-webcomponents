@@ -1,6 +1,6 @@
 // @contexto INDICE.md · src/components/data/README.md
 /**
- * ag-grid/filas/tree-data — Arbol desde datos jerarquicos. Logica pura.
+ * ag-grid/filas-ag-tree-data — Arbol desde datos jerarquicos. Logica pura.
  *
  * Tres entradas como AG Grid: `getDataPath`, `treeDataChildrenField` y
  * `treeDataParentIdField`. Los eslabones que faltan en una ruta son grupos de

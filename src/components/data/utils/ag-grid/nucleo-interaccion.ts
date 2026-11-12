@@ -1,6 +1,6 @@
 // @contexto INDICE.md · src/components/data/README.md
 /**
- * nucleo/interaccion — Raton y teclado por delegacion sobre el viewport.
+ * ag-grid/nucleo-interaccion — Raton y teclado por delegacion sobre el viewport.
  *
  * Primero corren los manejadores de plugins; si uno devuelve true, el host no
  * hace su comportamiento por defecto. La grilla sigue el patron ARIA grid con

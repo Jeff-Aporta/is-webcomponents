@@ -1,6 +1,6 @@
 // @contexto INDICE.md · src/components/data/README.md
 /**
- * ag-grid/edicion/historial — Pilas de deshacer/rehacer con limite de pasos.
+ * ag-grid/edicion-escritor — Pilas de deshacer/rehacer con limite de pasos.
  * Cada accion agrupa todas las celdas de una operacion (pegar, rellenar, lote).
  */
 import type { AccionHistorial, Pendiente, CambioCelda } from './edicion.schemas.js';
@@ -53,7 +53,7 @@ export class Historial {
 
 // ── lote ──
 /**
- * ag-grid/edicion/lote — Valores pendientes de un batch edit. Puro.
+ * ag-grid/edicion-escritor — Valores pendientes de un batch edit. Puro.
  * Conserva el orden de escritura y una sola entrada por celda.
  */
 function clave(nodoId: string, colId: string): string {
@@ -99,7 +99,7 @@ export class Lote {
 
 // ── escritor ──
 /**
- * ag-grid/edicion/escritor — Punto unico de escritura de celdas: batch edit,
+ * ag-grid/edicion-escritor — Punto unico de escritura de celdas: batch edit,
  * readOnlyEdit y undo/redo pasan por aqui, venga de un editor, pegar o rellenar.
  */
 const LIMITE_POR_DEFECTO = 10;

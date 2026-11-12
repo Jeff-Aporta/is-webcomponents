@@ -1,6 +1,6 @@
 // @contexto INDICE.md · src/components/data/README.md
 /**
- * ag-grid/filas/estado-grilla — getState/setState con la forma de AG Grid. Pura.
+ * ag-grid/filas-estado-grilla — getState/setState con la forma de AG Grid. Pura.
  *
  * `leerEstado` fotografia el GridState del motor. `fusionarEstado` calcula lo
  * que `loadState` del motor debe recibir, para aplicar todo con un solo notify

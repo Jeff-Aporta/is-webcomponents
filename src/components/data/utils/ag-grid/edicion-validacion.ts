@@ -1,6 +1,6 @@
 // @contexto INDICE.md · src/components/data/README.md
 /**
- * ag-grid/edicion/validacion — Reglas internas de los editores provistos.
+ * ag-grid/edicion-validacion — Reglas internas de los editores provistos.
  * Las plantillas de texto usan `{n}`; salen de `grid.texto` en quien llama.
  */
 import type { ReglasValidacion, TextosValidacion, TipoValidacion } from './edicion.schemas.js';

@@ -1,6 +1,6 @@
 // @contexto INDICE.md · src/components/data/README.md
 /**
- * ag-grid/celdas/spark — Sparkline de celda como string SVG, sin medir el DOM.
+ * ag-grid/celdas-spark — Sparkline de celda como string SVG, sin medir el DOM.
  *
  * `<iswc-sparkline>` por celda no resiste virtualizacion (shadow, ResizeObserver
  * y getComputedStyle en cada instancia), asi que aqui se reusan las mismas
