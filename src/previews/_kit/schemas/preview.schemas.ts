@@ -148,8 +148,8 @@ export interface PreviewDefinition {
   title: string;
   titleHtml?: boolean;
   description?: string;
-  /** CSS local del preview (string de estilos, no comportamiento). */
-  styles?: string;
+  /** CSS local del preview (texto o array de líneas; no comportamiento). */
+  styles?: TextLike;
   /** Clave remember-scroll de iswc-main */
   storageKey?: string;
   /**
@@ -164,7 +164,7 @@ export interface PreviewDefinition {
    */
   wrapperClass?: string;
   /** HTML fijo antes del wrapper (p. ej. la barra de progreso de lectura). */
-  prelude?: string;
+  prelude?: TextLike;
   /**
    * Si true, el registry carga `behaviors/<tag>.js` con export mount/unmount.
    * No poner lógica en el JSON.

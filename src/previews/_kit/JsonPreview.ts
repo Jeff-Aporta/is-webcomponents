@@ -23,7 +23,7 @@ import { loadFichaLikeDefinition } from './ficha-bridge.ts';
 import { montarAnatomia } from './anatomia.js';
 
 import type { PreviewDefinition, PreviewMountContext } from './schemas/preview.schemas.ts';
-import type { DefinicionPreview, ModuloBehavior, ConDefinicion } from "./schemas/JsonPreview.schemas.js";
+import type { DefinicionPreview, ModuloBehavior } from "./schemas/JsonPreview.schemas.js";
 
 /** Forma mínima de la definición (iswc-preview/v1 o ficha via sub-objeto). */
 
@@ -41,12 +41,16 @@ export class JsonPreview extends IswcComponentPreview {
     // `$schema: iswc-ficha/v1` o `sections` objeto), el bridge la convierte
     // a PreviewDefinition y emite los warnings de secciones ausentes. Para
     // iswc-preview/v1 puro, el bridge es un no-op.
-    const converted = loadFichaLikeDefinition(definition as Record<string, unknown>);
+    const converted = loadFichaLikeDefinition(definition);
 
+    const schema = converted.$schema || 'iswc-preview/v1';
+    if (schema !== 'iswc-preview/v1') {
+      throw new Error(`JsonPreview(${converted.tag}): $schema debe ser "iswc-preview/v1" (post-bridge)`);
+    }
     const normalized: PreviewDefinition = {
       ...converted,
       category: converted.category ?? '',
-      $schema: (converted.$schema || 'iswc-preview/v1') as 'iswc-preview/v1',
+      $schema: schema,
       // Conservar title del JSON; si falta, el H2 muestra `<tag>` (texto, no CE).
       title: converted.title || `<${definition.tag}>`,
       sections: converted.sections ?? [],
@@ -54,9 +58,6 @@ export class JsonPreview extends IswcComponentPreview {
       // El render lo inyecta en cualquier <iswc-examples-carousel>.
       ...(Array.isArray(converted.examples) ? { examples: converted.examples } : {}),
     };
-    if (normalized.$schema !== 'iswc-preview/v1') {
-      throw new Error(`JsonPreview(${normalized.tag}): $schema debe ser "iswc-preview/v1" (post-bridge)`);
-    }
     super(normalized);
     this.#behavior = behavior;
   }
@@ -65,13 +66,13 @@ export class JsonPreview extends IswcComponentPreview {
     if (this.#behavior?.mount) await this.#behavior.mount(ctx, this);
     // Playground JSON-driven: paneles de controles de los bloques demo/html
     // que declaren `controls` (se aplican vía JSON -> prop/attr del host).
-    const definition = (this as unknown as ConDefinicion).definition;
+    const definition = this.definition;
     try {
       await montarControles(definition, ctx);
     } catch (e) {
       console.warn(`[preview] ${definition.tag}: controles no montados`, e);
     }
-    if (ctx.main) montarAnatomia(definition as Parameters<typeof montarAnatomia>[0], ctx.main as HTMLElement);
+    if (ctx.main) montarAnatomia(definition, ctx.main);
   }
 
   override unmount(ctx: PreviewMountContext): void {

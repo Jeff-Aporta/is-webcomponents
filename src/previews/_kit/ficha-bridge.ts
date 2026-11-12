@@ -47,14 +47,21 @@
  * el bundle de producción (visible en la consola del navegador).
  */
 import { FichaSchema, inspectFicha, SECTION_IDS } from '@jeff-aporta/iswc-base/utils/section-schema.ts';
-import { type Ficha, type SectionId } from '@jeff-aporta/iswc-base/utils/schemas/section-schema.schemas.ts';
 import type {
   PreviewDefinition,
   PreviewSection,
   PreviewBlock,
 } from './schemas/preview.schemas.ts';
 import { asText } from './text-like.ts';
-import type { FichaPlayground, FichaSubObject, FichaLikeDefinition } from "./schemas/ficha-bridge.schemas.js";
+import {
+  PreviewCodeEjemploCellSchema,
+  PreviewDefinitionSchema,
+  type Ficha,
+  type FichaPlayground,
+  type FichaLikeDefinition,
+  type FichaSection,
+  type SectionId,
+} from "./schemas/ficha-bridge.schemas.js";
 
 /** Tag del schema ficha dedicado. */
 export const FICHA_SCHEMA = 'iswc-ficha/v1';
@@ -66,13 +73,12 @@ export const FICHA_SCHEMA = 'iswc-ficha/v1';
 /** Forma mínima del JSON que este bridge entiende. */
 
 /** Heurística: ¿el JSON tiene una ficha (sub-objeto o schema dedicado)? */
-export function hasFicha(def: unknown): def is FichaLikeDefinition {
+export function hasFicha(def: FichaLikeDefinition): boolean {
   if (!def || typeof def !== 'object') return false;
-  const d = def as Record<string, unknown>;
-  if (d.$schema === FICHA_SCHEMA) return true;
-  if (d.ficha && typeof d.ficha === 'object') return true;
+  if (def.$schema === FICHA_SCHEMA) return true;
+  if (def.ficha && typeof def.ficha === 'object') return true;
   // Fallback: `sections` es objeto (no array) → es modo A sin schema explícito.
-  if (d.sections && typeof d.sections === 'object' && !Array.isArray(d.sections)) {
+  if (def.sections && typeof def.sections === 'object' && !Array.isArray(def.sections)) {
     return true;
   }
   return false;
@@ -150,12 +156,12 @@ function filaToCeldas(
     }
     if (col === 'Ejemplo' || clave === 'ejemplo') {
       if (v == null || v === '') return '';
-      if (typeof v === 'object' && v && (v as { kind?: string }).kind === 'code-ejemplo') {
-        const celda = v as { kind: 'code-ejemplo'; code: unknown; lang?: string; summary?: string };
-        return { ...celda, code: asText(celda.code) };
+      const celda = PreviewCodeEjemploCellSchema.safeParse(v);
+      if (celda.success) {
+        return { ...celda.data, code: asText(celda.data.code) };
       }
       return {
-        kind: 'code-ejemplo' as const,
+        kind: 'code-ejemplo',
         code: asText(v),
         lang: typeof fila.ejemploLang === 'string' ? fila.ejemploLang : 'html',
         summary: typeof fila.ejemploSummary === 'string' ? fila.ejemploSummary : 'Ejemplo',
@@ -167,28 +173,28 @@ function filaToCeldas(
 }
 
 /** Convierte un bloque ficha (de anatomia/atributos/...) a bloques Preview (modo A). */
-function convertirSeccionFicha(id: SectionId, raw: unknown): PreviewBlock[] {
+function convertirSeccionFicha(id: SectionId, raw: FichaSection | undefined): PreviewBlock[] {
   if (raw == null) return [];
-  const seccion = raw as Record<string, unknown>;
+  const seccion = raw;
   const bloques: PreviewBlock[] = [];
 
   if (id === 'anatomia' || id === 'ejemplos') {
     const content = asText(seccion.content);
-    if (content) bloques.push({ kind: 'lede', html: content } as PreviewBlock);
+    if (content) bloques.push({ kind: 'lede', html: content });
     return bloques;
   }
 
   const tableRaw = seccion.table;
   if (!Array.isArray(tableRaw) || tableRaw.length === 0) return [];
   const columns = SECTION_COLUMNS[id] ?? [];
-  const rows = (tableRaw as Array<Record<string, unknown>>).map(
+  const rows = tableRaw.map(
     (fila) => filaToCeldas(fila, id, columns),
   );
   bloques.push({
     kind: 'table',
     columns,
     rows,
-  } as PreviewBlock);
+  });
   return bloques;
 }
 
@@ -201,7 +207,7 @@ function prependerPlaygroundPreview(
   const bloqueDemo: PreviewBlock = {
     kind: 'demo',
     html: pg.html,
-  } as PreviewBlock;
+  };
   const blocks = [bloqueDemo, ...seccion.blocks];
   return {
     ...seccion,
@@ -216,7 +222,7 @@ function prependerPlaygroundPreview(
 /** Construye el `PreviewSection` para una sección ficha (modo A). */
 function seccionPara(
   id: SectionId,
-  raw: unknown,
+  raw: FichaSection | undefined,
   esPrimera: boolean,
   pg: FichaPlayground | undefined,
 ): PreviewSection {
@@ -231,7 +237,7 @@ function seccionPara(
 
 /** Construye el array de secciones para el modo A. */
 function construirSeccionesFicha(
-  fichaInput: { sections?: Record<string, unknown>; playground?: FichaPlayground },
+  fichaInput: { sections?: Record<string, FichaSection>; playground?: FichaPlayground },
 ): PreviewSection[] {
   const secciones: PreviewSection[] = [];
   for (const id of SECTION_IDS) {
@@ -296,10 +302,10 @@ export function emitFichaWarnings(tag: string, ficha: Ficha): void {
  * - Otros shapes: passthrough (compatibilidad).
  */
 export function loadFichaLikeDefinition(
-  raw: Record<string, unknown>,
+  raw: FichaLikeDefinition,
 ): PreviewDefinition {
   if (!raw || typeof raw !== 'object') {
-    return raw as unknown as PreviewDefinition;
+    return PreviewDefinitionSchema.parse(raw);
   }
   const tag = typeof raw.tag === 'string' ? raw.tag : '<unknown>';
 
@@ -307,28 +313,31 @@ export function loadFichaLikeDefinition(
   const schemaFicha = raw.$schema === FICHA_SCHEMA;
   const sectionsObjeto = raw.sections && typeof raw.sections === 'object' && !Array.isArray(raw.sections);
   if (schemaFicha || (sectionsObjeto && !raw.ficha)) {
+    const sections = raw.sections && typeof raw.sections === 'object' && !Array.isArray(raw.sections)
+      ? raw.sections
+      : {};
     const parsed: Ficha = FichaSchema.parse({
-      sections: (raw.sections as Record<string, unknown>) ?? {},
-      exclude: Array.isArray(raw.exclude) ? (raw.exclude as string[]) : [],
+      sections,
+      exclude: Array.isArray(raw.exclude) ? raw.exclude : [],
     });
     emitFichaWarnings(tag, parsed);
 
     const seccionesVisibles = construirSeccionesFicha({
-      sections: raw.sections as Record<string, unknown>,
-      playground: raw.playground as FichaPlayground | undefined,
+      sections,
+      playground: raw.playground,
     });
 
     const preview: PreviewDefinition = {
       $schema: 'iswc-preview/v1',
       tag: typeof raw.tag === 'string' ? raw.tag : '',
-      category: (raw.category as string) ?? '',
-      title: (raw.title as string) ?? `<${tag}>`,
+      category: raw.category ?? '',
+      title: raw.title ?? `<${tag}>`,
       ...(typeof raw.titleHtml === 'boolean' ? { titleHtml: raw.titleHtml } : {}),
-      ...(typeof raw.styles === 'string' || Array.isArray(raw.styles) ? { styles: raw.styles as string | string[] } : {}),
+      ...(typeof raw.styles === 'string' || Array.isArray(raw.styles) ? { styles: raw.styles } : {}),
       ...(typeof raw.storageKey === 'string' ? { storageKey: raw.storageKey } : {}),
       ...(typeof raw.mainClass === 'string' ? { mainClass: raw.mainClass } : {}),
       ...(typeof raw.wrapperClass === 'string' ? { wrapperClass: raw.wrapperClass } : {}),
-      ...(typeof raw.prelude === 'string' || Array.isArray(raw.prelude) ? { prelude: raw.prelude as string | string[] } : {}),
+      ...(typeof raw.prelude === 'string' || Array.isArray(raw.prelude) ? { prelude: raw.prelude } : {}),
       sections: seccionesVisibles,
     };
     return preview;
@@ -336,7 +345,7 @@ export function loadFichaLikeDefinition(
 
   // ── Modo B: sub-objeto `ficha:` dentro de iswc-preview/v1 ──
   if (raw.ficha && typeof raw.ficha === 'object') {
-    const ficha = raw.ficha as FichaSubObject;
+    const ficha = raw.ficha;
     const parsed: Ficha = FichaSchema.parse({
       sections: ficha.sections ?? {},
       exclude: Array.isArray(ficha.exclude) ? ficha.exclude : [],
@@ -345,26 +354,26 @@ export function loadFichaLikeDefinition(
 
     // Si la ficha declara `playground`, prependerlo a la primera sección
     // del preview (no se renderiza como sección aparte).
-    if (ficha.playground && Array.isArray(raw.sections) && (raw.sections as unknown[]).length > 0) {
-      const sections = (raw.sections as PreviewSection[]).slice();
+    if (ficha.playground && Array.isArray(raw.sections) && raw.sections.length > 0) {
+      const sections = raw.sections.slice();
       sections[0] = prependerPlaygroundPreview(sections[0], ficha.playground);
-      return { ...(raw as unknown as PreviewDefinition), sections };
+      return PreviewDefinitionSchema.parse({ ...raw, sections });
     }
-    return raw as unknown as PreviewDefinition;
+    return PreviewDefinitionSchema.parse(raw);
   }
 
   // ── Otros shapes: passthrough ──
-  return raw as unknown as PreviewDefinition;
+  return PreviewDefinitionSchema.parse(raw);
 }
 
 /** API auxiliar: deja los warnings accesibles para tests/debug sin tener que
  *  parsear dos veces. */
 export function loadFichaLikeDefinitionWithWarnings(
-  raw: Record<string, unknown>,
+  raw: FichaLikeDefinition,
 ): { preview: PreviewDefinition; warnings: ReturnType<typeof inspectFicha> } {
   if (!hasFicha(raw)) {
     return {
-      preview: raw as unknown as PreviewDefinition,
+      preview: PreviewDefinitionSchema.parse(raw),
       warnings: { missing: [], spuriousExclude: [], unknownExclude: [] },
     };
   }
@@ -373,13 +382,13 @@ export function loadFichaLikeDefinitionWithWarnings(
   const tag = typeof raw.tag === 'string' ? raw.tag : '<unknown>';
   let warnings: ReturnType<typeof inspectFicha> = { missing: [], spuriousExclude: [], unknownExclude: [] };
   try {
-    const fichaInput = raw.ficha as FichaSubObject | undefined;
+    const fichaInput = raw.ficha;
     const sectionsFuente = fichaInput?.sections
       ?? ((raw.sections && typeof raw.sections === 'object' && !Array.isArray(raw.sections))
-        ? (raw.sections as Record<string, unknown>)
+        ? raw.sections
         : undefined);
     const exclude = fichaInput?.exclude
-      ?? (Array.isArray(raw.exclude) ? (raw.exclude as string[]) : undefined);
+      ?? (Array.isArray(raw.exclude) ? raw.exclude : undefined);
     if (sectionsFuente) {
       const parsed = FichaSchema.parse({
         sections: sectionsFuente,

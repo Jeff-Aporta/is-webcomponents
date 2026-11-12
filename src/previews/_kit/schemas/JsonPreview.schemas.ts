@@ -2,38 +2,27 @@
 /**
  * JsonPreview.ts — Zod schemas para los tipos extraídos de este módulo.
  *
- * Generado por `scripts/migrate-zod.py`. Refinar manualmente las
- * entradas marcadas con TODO cuando se quiera validación runtime.
+ * Los contratos viven en los schemas compartidos del preview; aquí sólo se
+ * exponen los aliases que consume la clase.
  */
 import { z } from "zod";
+import type {
+  PreviewBehaviorModule,
+  PreviewDefinition,
+  PreviewMountContext,
+} from "./preview.schemas.ts";
+import type { FichaLikeDefinition } from "./ficha-bridge.schemas.ts";
 
-export const DefinicionPreviewSchema = z.object({
-  tag: z.string(),
-  category: z.string().optional(),
-  /* TODO: member $schema?: string */
-  sections: z.array(z.unknown() /* TODO: cannot convert */).optional(),
-  /* TODO: member [key: string]: unknown */
-});
+export const DefinicionPreviewSchema = z.custom<FichaLikeDefinition>();
 export type DefinicionPreview = z.infer<typeof DefinicionPreviewSchema>;
 
-
-export const CtxMontajeSchema = z.object({
-  main: z.union([z.unknown() /* TODO: ref HTMLElement */, z.null()]).optional(),
-  root: z.union([z.unknown() /* TODO: ref HTMLElement */, z.null()]).optional(),
-  aside: z.union([z.unknown() /* TODO: ref HTMLElement */, z.null()]).optional(),
-});
+export const CtxMontajeSchema = z.custom<PreviewMountContext>();
 export type CtxMontaje = z.infer<typeof CtxMontajeSchema>;
 
-
-export const ModuloBehaviorSchema = z.object({
-  mount: z.function({ input: [z.unknown() /* TODO: ref CtxMontaje */, z.unknown()], output: z.unknown() }).optional(),
-  unmount: z.function({ input: [z.unknown() /* TODO: ref CtxMontaje */, z.unknown()], output: z.void() }).optional(),
-});
+export const ModuloBehaviorSchema = z.custom<PreviewBehaviorModule>();
 export type ModuloBehavior = z.infer<typeof ModuloBehaviorSchema>;
 
-
 export const ConDefinicionSchema = z.object({
-  definition: z.unknown() /* TODO: ref PreviewDefinition */,
+  definition: z.custom<PreviewDefinition>(),
 });
 export type ConDefinicion = z.infer<typeof ConDefinicionSchema>;
-
