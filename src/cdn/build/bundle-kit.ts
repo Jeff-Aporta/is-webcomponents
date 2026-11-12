@@ -80,7 +80,10 @@ export async function entradasKit(raiz: string, manifest: ItemManifestKit[]): Pr
   // (`core/position/<x>.min.mjs`) en vez de un chunk anónimo.
   const opcionesRoot = join(coreRoot, 'position');
   for (const f of (await readdir(opcionesRoot).catch(() => [] as string[])).sort()) {
-    if (f.endsWith('.ts')) entradas.push({ in: join(opcionesRoot, f), out: `core/position/${f.replace(/\.ts$/, '')}.min` });
+    // Los `*.schemas.ts` son contratos (W54), no módulos: no son entradas del bundle.
+    if (f.endsWith('.ts') && !f.endsWith('.schemas.ts')) {
+      entradas.push({ in: join(opcionesRoot, f), out: `core/position/${f.replace(/\.ts$/, '')}.min` });
+    }
   }
   entradas.push({ in: join(raiz, 'src', 'cdn', 'loader.ts'), out: 'core/loader.min' });
   // Capa 2 del loader (F4): entradas propias para que su nombre sea estable (`core/loader-<x>.min.mjs`) y el núcleo

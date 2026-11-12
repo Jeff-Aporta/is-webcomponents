@@ -12,16 +12,10 @@
  * El módulo no importa el núcleo (sin ciclo): recibe `ensure` por argumento. El núcleo lo pide
  * con `import()` solo cuando alguien llama a `observar()` o `listos()`, así el loader no crece.
  */
-import type { AutoloadObserver } from './schemas/loader.schemas.js';
+import type { AutoloadEnsureTag, AutoloadObserver, AutoloadRaiz } from './schemas/loader.schemas.js';
 
 /** Prefijo de los tags del kit. */
 const PREFIJO = 'iswc-';
-
-/** Pide un tag: resuelve `true` si el custom element quedó definido. */
-type EnsureTag = (tag: string) => Promise<boolean>;
-
-/** Raíz de DOM (document, element o fragment): un `ParentNode` que además es `Node`. */
-type Raiz = ParentNode & Node;
 
 /** ¿El tag ya está registrado en el registro de custom elements? */
 function definido(tag: string): boolean {
@@ -29,13 +23,13 @@ function definido(tag: string): boolean {
 }
 
 /** La raíz de trabajo: la que se pasa o el documento; `null` si no hay DOM. */
-function raizDe(raiz: ParentNode | undefined): Raiz | null {
-  if (raiz) return raiz as Raiz;
+function raizDe(raiz: ParentNode | undefined): AutoloadRaiz | null {
+  if (raiz) return raiz as AutoloadRaiz;
   return typeof document !== 'undefined' ? document : null;
 }
 
 /** Tags `iswc-*` sin definir que cuelgan de `raiz` (incluido `raiz` si es uno). */
-function pendientes(raiz: Raiz): string[] {
+function pendientes(raiz: AutoloadRaiz): string[] {
   const out = new Set<string>();
   if (raiz.nodeType === 1) {
     const el = raiz as Element;
@@ -52,7 +46,7 @@ function pendientes(raiz: Raiz): string[] {
  * primero los que ya están en el árbol y luego los que se monten después. Entregar el tirador
  * `parar()` deja de observar.
  */
-export function observar(raiz: ParentNode | undefined, ensure: EnsureTag): AutoloadObserver {
+export function observar(raiz: ParentNode | undefined, ensure: AutoloadEnsureTag): AutoloadObserver {
   const nodo = raizDe(raiz);
   if (!nodo || typeof MutationObserver === 'undefined') {
     return { parar() { /* sin DOM no hay nada que observar */ } };

@@ -214,6 +214,19 @@ export const AutoloadObserverSchema = z.object({
 export type AutoloadObserver = z.infer<typeof AutoloadObserverSchema>;
 
 /* --------------------------------------------------------------------------
+ * Tipos de la capa 2 del autoload (`loader-autoload.ts`).
+ *
+ * Son contratos internos del módulo (W54: los tipos no viven en el módulo de
+ * código), no del shape público de `iswcLoader`.
+ * ------------------------------------------------------------------------*/
+
+/** Pide un tag: resuelve `true` si el custom element quedó definido. */
+export type AutoloadEnsureTag = (tag: string) => Promise<boolean>;
+
+/** Raíz de DOM (document, element o fragment): un `ParentNode` que además es `Node`. */
+export type AutoloadRaiz = ParentNode & Node;
+
+/* --------------------------------------------------------------------------
  * iswcLoader — superficie pública del loader.
  *
  * Modelamos sólo la forma tipada (lo que `L.*` expone). Las funciones de

@@ -9,7 +9,8 @@
  * todavía no ha llegado, la llamada va sin esa opción (y la pide para la siguiente).
  */
 import type { Placement, AnchorLike, Rect, Size, Coords, Boundary, ComputePositionOpts, ComputePositionResult, PopupDismissOpciones, Capa, OpcionesCapaModal } from './schemas/position.schemas.js';
-import { autoSizeRegistrado, flechaRegistrada, type CalcularAutoSize, type CalcularFlecha } from './position/registro.js';
+import { autoSizeRegistrado, flechaRegistrada } from './position/registro.js';
+import type { CalcularAutoSize, CalcularFlecha } from './position/registro.schemas.js';
 
 export const PLACEMENTS: Placement[] = [
   'top', 'top-start', 'top-end',

@@ -7,7 +7,8 @@
  * opción está activa y, al importarse, se registra (`position/registro.ts`) para que `computePosition` lo use.
  */
 import type { Boundary, Coords, Size } from '@jeff-aporta/iswc-base/core/schemas/position.schemas.js';
-import { registrarAutoSize, type TamanoDisponible } from './registro.js';
+import { registrarAutoSize } from './registro.js';
+import type { TamanoDisponible } from './registro.schemas.js';
 
 /** Tamaño del popup una vez recortado al límite, según la opción `auto-size`. */
 export function availableSize(

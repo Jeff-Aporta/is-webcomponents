@@ -8,29 +8,7 @@
  *
  * Este módulo es diminuto a propósito: lo que se carga con el popup es el módulo de la opción, no esto.
  */
-import type { ArrowOffset, Boundary, Coords, Rect, Size } from '@jeff-aporta/iswc-base/core/schemas/position.schemas.js';
-
-/** Tamaño que el popup puede usar dentro del límite (`null` = sin tope). */
-export type TamanoDisponible = { width: number | null; height: number | null };
-
-/** Cómo se calcula el tamaño disponible del popup según la opción `auto-size`. */
-export type CalcularAutoSize = (
-  coords: Coords,
-  size: Size,
-  boundary: Boundary,
-  autoSize: '' | 'horizontal' | 'vertical' | 'both',
-) => TamanoDisponible;
-
-/** Cómo se calcula el desplazamiento de la flecha del popup. */
-export type CalcularFlecha = (
-  placement: string,
-  anchor: Rect,
-  popupCoords: Coords,
-  popupSize: Size,
-  arrowSize: number,
-  arrowPadding: number,
-  arrowPlacement: string,
-) => ArrowOffset;
+import type { CalcularAutoSize, CalcularFlecha } from './registro.schemas.js';
 
 let autoSize: CalcularAutoSize | null = null;
 let flecha: CalcularFlecha | null = null;
