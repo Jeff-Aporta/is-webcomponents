@@ -13,7 +13,7 @@
  * Atributos:
  *   label   string — header del panel (default: "Atributos").
  */
-import type { OpcionPanel, PanelInfo, ControlPanel } from "./schemas/preview-controls.schemas.js";
+import type { OpcionPanel, PanelInfo, ControlPanel, ControlPanelEnriquecido } from "./schemas/preview-controls.schemas.js";
 import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import css from 'iswc:css';
 import type { PreviewControlsEventos } from './schemas/preview-controls.schemas.js';
@@ -123,11 +123,11 @@ const DEFAULT_BY_ATTR: Record<string, string> = {
 /** Completa iconos + default de opciones select si el JSON no los trae.
  *  Acepta options como string[] (JSON de demos) u objetos {value,label,icon}.
  *  Customs (hex/rgb/hsl) siempre al final. */
-function enriquecerControl(c: ControlPanel): ControlPanel {
-  const copy: ControlPanel = { ...c };
-  if (c.control !== 'select' || !Array.isArray(c.options)) return copy;
+function enriquecerControl(c: ControlPanel): ControlPanelEnriquecido {
+  const copy: ControlPanelEnriquecido = { ...c, options: undefined };
+  if (!Array.isArray(c.options)) return copy;
   const attr = attrDeProp(c.prop);
-  const mapped = c.options.map((op): OpcionPanel => {
+  const mapped: OpcionPanel[] = c.options.map((op): OpcionPanel => {
     const base: OpcionPanel = typeof op === 'string'
       ? { value: op, label: op }
       : {
@@ -143,12 +143,14 @@ function enriquecerControl(c: ControlPanel): ControlPanel {
     return icon ? { ...base, icon } : base;
   });
   // Semánticos primero; custom CSS (hex/rgb/…) al final.
-  copy.options = [
+  const opciones: OpcionPanel[] = [
     ...mapped.filter((o) => !esColorCustom(o.value)),
     ...mapped.filter((o) => esColorCustom(o.value)),
   ];
+  copy.options = opciones;
+  if (c.control !== 'select') return copy;
   if (copy.default === undefined || copy.default === null || copy.default === '') {
-    const vals = copy.options.map((o) => String(o.value));
+    const vals = opciones.map((o) => String(o.value));
     // Avatar/media: circle; botón: round (si está en la lista).
     if (attr === 'shape') {
       if (vals.includes('circle')) copy.default = 'circle';
@@ -202,7 +204,7 @@ function ordenTipo(c: ControlPanel): number {
 }
 
 /** Devuelve una copia ordenada por `ordenTipo` (estable). */
-function ordenarPorTipo(lista: ControlPanel[]): ControlPanel[] {
+function ordenarPorTipo(lista: ControlPanelEnriquecido[]): ControlPanelEnriquecido[] {
   return lista.slice().sort((a, b) => ordenTipo(a) - ordenTipo(b));
 }
 
@@ -210,7 +212,7 @@ function ordenarPorTipo(lista: ControlPanel[]): ControlPanel[] {
  * Extras → disclosure. Default: grupo ≠ `General`.
  * Override por control: `disclosure: true|false` (gana el primero del grupo).
  */
-function grupoEsDisclosure(nombre: string, lista: ControlPanel[]): boolean {
+function grupoEsDisclosure(nombre: string, lista: ControlPanelEnriquecido[]): boolean {
   const explicit = lista.find((c) => typeof c.disclosure === 'boolean');
   if (explicit) return !!explicit.disclosure;
   return nombre !== 'General';
@@ -243,7 +245,7 @@ class IswcPreviewControls extends IswcElement {
   declare static events: PreviewControlsEventos;
   static override css = css;
   static override shadowInit: ShadowRootInit | null = null;
-  #spec: ControlPanel[] = [];
+  #spec: ControlPanelEnriquecido[] = [];
   #listo = false;
   #arrancando = false;
   /** Handler de click fuera (Phase W36) — cierra popovers info. */
@@ -284,7 +286,7 @@ class IswcPreviewControls extends IswcElement {
     if (name === 'label') this.#pintar();
   }
 
-  getSpec(): ControlPanel[] {
+  getSpec(): ControlPanelEnriquecido[] {
     return this.#spec.map((s) => ({ ...s }));
   }
 
@@ -343,7 +345,7 @@ class IswcPreviewControls extends IswcElement {
     if (!this.#listo) void this.#arrancar();
   }
 
-  get spec(): ControlPanel[] {
+  get spec(): ControlPanelEnriquecido[] {
     return this.#spec;
   }
 
@@ -369,7 +371,7 @@ class IswcPreviewControls extends IswcElement {
     sr.querySelector('.titulo')!.textContent = this.#titulo();
     const grupos = sr.querySelector<HTMLElement>('.grupos')!;
     grupos.textContent = '';
-    const porGrupo = new Map<string, ControlPanel[]>();
+    const porGrupo = new Map<string, ControlPanelEnriquecido[]>();
     for (const c of this.#spec) {
       const g = (c.group || 'General').trim() || 'General';
       if (!porGrupo.has(g)) porGrupo.set(g, []);
@@ -408,7 +410,7 @@ class IswcPreviewControls extends IswcElement {
     }
   }
 
-  #fila(c: ControlPanel): HTMLElement {
+  #fila(c: ControlPanelEnriquecido): HTMLElement {
     const fila = document.createElement('div');
     fila.className = 'fila';
     // Lo largo se lee y se edita mejor a fila completa.
@@ -436,7 +438,7 @@ class IswcPreviewControls extends IswcElement {
    * <iswc-icon> para que use el mismo pipeline de iconos que el resto del
    * kit (con fallback a <iconify-icon> si el icono local no está disponible).
    */
-  #infoBtn(c: ControlPanel): HTMLElement {
+  #infoBtn(c: ControlPanelEnriquecido): HTMLElement {
     const nombre = tituloKnob(c);
     const btn = document.createElement('button');
     btn.type = 'button';
@@ -464,7 +466,7 @@ class IswcPreviewControls extends IswcElement {
    * renderiza aunque `info` esté vacío: en ese caso deriva valores del
    * propio control (control, default, options).
    */
-  #infoPopover(c: ControlPanel): HTMLElement {
+  #infoPopover(c: ControlPanelEnriquecido): HTMLElement {
     const info = this.#derivePanelInfo(c);
     const pop = document.createElement('div');
     pop.className = 'fila__popover';
@@ -551,7 +553,7 @@ class IswcPreviewControls extends IswcElement {
    * se usa como fuente principal y se rellena con lo derivable del control.
    * Si no trae `info`, devuelve uno calculado a partir del control.
    */
-  #derivePanelInfo(c: ControlPanel): PanelInfo {
+  #derivePanelInfo(c: ControlPanelEnriquecido): PanelInfo {
     const base = c.control ? inferControlType(c) : '';
     const tipo: string | undefined = (c.info?.type ?? base) || undefined;
     const defStr = c.default === undefined || c.default === null || c.default === ''
@@ -667,7 +669,7 @@ class IswcPreviewControls extends IswcElement {
     this.#removeGlobalDismissHandlers();
   }
 
-  #entrada(c: ControlPanel): HTMLElement {
+  #entrada(c: ControlPanelEnriquecido): HTMLElement {
     const v = c.value !== undefined && c.value !== null ? c.value : c.default;
     const titulo = tituloKnob(c);
     switch (c.control) {
@@ -698,10 +700,7 @@ class IswcPreviewControls extends IswcElement {
         const inicial = v ?? c.default ?? '';
         sel.setAttribute('value', String(inicial));
         conTitulo(sel, titulo);
-        for (const raw of c.options ?? []) {
-          const op: OpcionPanel = typeof raw === 'string'
-            ? { value: raw, label: raw }
-            : raw;
+        for (const op of c.options ?? []) {
           const o = document.createElement('iswc-option');
           o.setAttribute('value', String(op.value));
           const optTitle = String(op.label || op.value || '');
@@ -826,7 +825,7 @@ class IswcPreviewControls extends IswcElement {
     }
   }
 
-  #emitir(c: ControlPanel, valor: unknown): void {
+  #emitir(c: ControlPanelEnriquecido, valor: unknown): void {
     const def = { control: c.control, prop: c.prop, label: c.label, group: c.group };
     c.value = valor;
     this.dispatchEvent(new CustomEvent('iswc-controls-change', {

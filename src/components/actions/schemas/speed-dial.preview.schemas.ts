@@ -1,14 +1,17 @@
 // @contexto INDICE.md · src/components/actions/README.md
 /**
- * speed-dial.preview.ts — Zod schemas para los tipos extraídos de este módulo.
+ * speed-dial.preview.ts — tipos del behavior de `<iswc-speed-dial>`.
  *
- * Generado por `scripts/migrate-zod.py`. Refinar manualmente las
- * entradas marcadas con TODO cuando se quiera validación runtime.
+ * W54: los tipos viven aquí.
  */
-import { z } from "zod";
 
-const CustomEventWithDetailSchema = z.object({
-  detail: z.unknown() /* TODO: ref T */.optional(),
-});
-export type CustomEventWithDetail = z.infer<typeof CustomEventWithDetailSchema>;
-
+/**
+ * Evento custom con `detail` tipado.
+ *
+ * Es el `CustomEvent<T>` del navegador, visto por el preview: cada
+ * consumidor declara la forma de su detalle (aquí, `{ open?: boolean }` o
+ * `{ action?: … }`).
+ */
+export interface CustomEventWithDetail<T = unknown> {
+  detail?: T;
+}

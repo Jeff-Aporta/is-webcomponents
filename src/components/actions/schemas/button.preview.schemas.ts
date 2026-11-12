@@ -1,15 +1,20 @@
 // @contexto INDICE.md · src/components/actions/README.md
 /**
- * button.preview.ts — Zod schemas para los tipos extraídos de este módulo.
+ * button.preview.ts — tipos del behavior de `<iswc-button>`.
  *
- * Generado por `scripts/migrate-zod.py`. Refinar manualmente las
- * entradas marcadas con TODO cuando se quiera validación runtime.
+ * W54: los tipos viven aquí.
  */
-import { z } from "zod";
 
-const MountCtxSchema = z.object({
-  main: z.unknown() /* TODO: ref ParentNode */.optional(),
-  root: z.unknown() /* TODO: ref ParentNode */.optional(),
-});
-export type MountCtx = z.infer<typeof MountCtxSchema>;
-
+/**
+ * Contexto de montaje del playground de `<iswc-button>`.
+ *
+ * `main`/`root` son el contenedor donde el preview pintó el demo: el
+ * playground busca ahí sus nodos. Si no hay contexto, el behavior cae al
+ * `document`.
+ */
+export interface MountCtx {
+  /** Contenedor principal del preview. */
+  main?: HTMLElement;
+  /** Raíz del preview. */
+  root?: HTMLElement;
+}

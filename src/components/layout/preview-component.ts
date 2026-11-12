@@ -129,8 +129,8 @@ class IswcPreviewComponent extends withStyleAttrs(IswcElement) {
     return this.querySelector<HTMLElement>('aside.sidebar');
   }
 
-  #drawer(): HTMLElement | null {
-    return this.querySelector<HTMLElement>(':scope > iswc-drawer.toc-drawer');
+  #drawer(): DrawerEl | null {
+    return this.querySelector<DrawerEl>(':scope > iswc-drawer.toc-drawer');
   }
 
   #toggle(): HTMLElement | null {
@@ -139,7 +139,7 @@ class IswcPreviewComponent extends withStyleAttrs(IswcElement) {
 
   /** Hamburguesa + drawer del TOC: solo hace falta atarlos una vez. */
   #wireCompactChrome(): void {
-    const drawer = this.#drawer() as DrawerEl | null;
+    const drawer = this.#drawer();
     const toggle = this.#toggle();
     if (!drawer || !toggle) return;
 
@@ -167,7 +167,7 @@ class IswcPreviewComponent extends withStyleAttrs(IswcElement) {
   #syncLayout(): void {
     const panel = this.#panel();
     const aside = this.#aside();
-    const drawer = this.#drawer() as DrawerEl | null;
+    const drawer = this.#drawer();
     const toggle = this.#toggle();
     if (!panel || !aside || !drawer || !toggle) return;
 
@@ -231,7 +231,7 @@ class IswcPreviewComponent extends withStyleAttrs(IswcElement) {
     const gen = ++this.#paintGen;
 
     // Cambiar de componente cierra el índice, igual que resetea el scroll.
-    (this.#drawer() as DrawerEl | null)?.hide?.();
+    this.#drawer()?.hide?.();
 
     const def = preview.definition;
     const storageKey =

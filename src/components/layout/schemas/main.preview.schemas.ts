@@ -1,16 +1,22 @@
 // @contexto INDICE.md · src/components/layout/README.md
 /**
- * main.preview.ts — Zod schemas para los tipos extraídos de este módulo.
+ * main.preview.ts — tipos del behavior de `<iswc-main>`.
  *
- * Generado por `scripts/migrate-zod.py`. Refinar manualmente las
- * entradas marcadas con TODO cuando se quiera validación runtime.
+ * W54: los tipos viven aquí.
  */
-import { z } from "zod";
 
-const MainElSchema = z.object({
-  scrollToTop: z.function({ input: [z.unknown() /* TODO: ref ScrollToOptions */], output: z.void() }),
-  saveScroll: z.function({ input: [], output: z.void() }),
-  clearRememberedScroll: z.function({ input: [], output: z.void() }),
-});
-export type MainEl = z.infer<typeof MainElSchema>;
-
+/**
+ * `<iswc-main>`: HTMLElement con la API de scroll-memory que
+ * `core/prefs.ts` le pega al host (`bindScrollMemoryApi`).
+ *
+ * El preview hace `querySelector<MainEl>('iswc-main')`: el tipo tiene que
+ * ser un elemento real (hereda `scrollTop` y `addEventListener` de `Element`).
+ */
+export interface MainEl extends HTMLElement {
+  /** Sube el scroll del contenedor a 0. */
+  scrollToTop: (opts?: ScrollToOptions) => void;
+  /** Guarda la posición actual en el storage del kit. */
+  saveScroll: () => void;
+  /** Borra la posición guardada. */
+  clearRememberedScroll: () => void;
+}

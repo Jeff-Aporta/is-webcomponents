@@ -11,7 +11,8 @@ const ShareDataSchema = z.object({
   title: z.string().optional(),
   text: z.string().optional(),
   url: z.string().optional(),
-  files: z.array(z.unknown() /* TODO: cannot convert */).optional(),
+  /** Ficheros a compartir: los de `navigator.share` son `File`. */
+  files: z.array(z.custom<File>(() => true)).optional(),
 });
 export type ShareData = z.infer<typeof ShareDataSchema>;
 
@@ -22,7 +23,7 @@ const NativeShareDataSchema = z.object({
   title: z.string().optional(),
   text: z.string().optional(),
   url: z.string().optional(),
-  files: z.array(z.unknown() /* TODO: ref File */).optional(),
+  /** Ficheros a compartir: los de `navigator.share` son `File`. */
+  files: z.array(z.custom<File>(() => true)).optional(),
 });
 export type NativeShareData = z.infer<typeof NativeShareDataSchema>;
-

@@ -45,5 +45,18 @@ export const ControlPanelSchema = z.object({
 });
 export type ControlPanel = z.infer<typeof ControlPanelSchema>;
 
+/**
+ * Control ya enriquecido (`enriquecerControl` en preview-controls.ts).
+ *
+ * El JSON del panel puede traer las `options` de un select como strings
+ * sueltos ("brand") o como objetos {value,label,icon}. El panel normaliza
+ * esas dos formas a `OpcionPanel` ANTES de pintar, así que a partir de
+ * ahí las opciones son siempre objetos: este tipo dice exactamente eso,
+ * en vez de dejar que el consumidor tenga que Narrowar la unión.
+ */
+export type ControlPanelEnriquecido = Omit<ControlPanel, 'options'> & {
+  options?: OpcionPanel[];
+};
+
 /** Eventos del componente (HOW-6): `declare static events` en la clase; los documenta scripts/sondas/eventos.ts. */
 export type PreviewControlsEventos = { 'iswc-controls-change': { def: unknown; valor: unknown } };
