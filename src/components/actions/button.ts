@@ -1,8 +1,8 @@
 // @contexto INDICE.md · src/components/actions/button.md
-import { applyToneRamp, isCssColorValue, BUTTON_SHAPE, DEFAULT_BUTTON_SHAPE, normalizeButtonShape, DEFAULT_INTENT, ensureDefaultColor } from '@jeff-aporta/iswc-base/core/attrs.js';
+import { applyToneRamp, isCssColorValue, DEFAULT_BUTTON_SHAPE, normalizeButtonShape, DEFAULT_INTENT, ensureDefaultColor } from '@jeff-aporta/iswc-base/core/attrs.js';
 import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import css from 'iswc:css';
-import type { ButtonEventos, ButtonShape } from './schemas/button.schemas.js';
+import type { ButtonEventos } from './schemas/button.schemas.js';
 
 /**
  * <iswc-button> — Web Component (vanilla).
@@ -110,17 +110,6 @@ import type { ButtonEventos, ButtonShape } from './schemas/button.schemas.js';
   const VALID_SHAPE = [
     "none", "round", "square", "rect", "pill",
   ];
-  /** El catálogo del core (ya aberto a string): el que manda en runtime. */
-  const SHAPES: readonly string[] = BUTTON_SHAPE;
-
-  /**
-   * ¿Es un contorno válido? `normalizeButtonShape` (core) devuelve `unknown`
-   * porque su tipo no está afinado; este guard devuelve el contorno
-   * concreto sin cast.
-   */
-  function esButtonShape(v: unknown): v is ButtonShape {
-    return typeof v === "string" && SHAPES.includes(v);
-  }
 
   const OBSERVED = [
     "color", "variant", "shape", "hue",
@@ -294,12 +283,12 @@ import type { ButtonEventos, ButtonShape } from './schemas/button.schemas.js';
 
     /** Forma del contorno. Ortogonal a `color` y a `variant`. */
     get shape(): string {
-      const forma = normalizeButtonShape(this.getAttribute("shape"), DEFAULT_BUTTON_SHAPE);
-      return esButtonShape(forma) ? forma : DEFAULT_BUTTON_SHAPE;
+      // El core ya devuelve un contorno válido (`normalizeButtonShape`).
+      return normalizeButtonShape(this.getAttribute("shape"), DEFAULT_BUTTON_SHAPE);
     }
     set shape(v: string | null | undefined) {
       if (v == null || String(v) === "") this.removeAttribute("shape");
-      else this.setAttribute("shape", esButtonShape(v) ? v : DEFAULT_BUTTON_SHAPE);
+      else this.setAttribute("shape", normalizeButtonShape(v, DEFAULT_BUTTON_SHAPE));
     }
 
     setFocus(options?: FocusOptions): void { this.#btn.focus(options); }

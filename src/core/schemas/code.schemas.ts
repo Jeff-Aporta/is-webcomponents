@@ -53,7 +53,14 @@ export type LanguageSummary = z.infer<typeof LanguageSummarySchema>;
  * Generado por `scripts/migrate-zod.py`. Refinar manualmente las
  * entradas marcadas con TODO cuando se quiera validación runtime.
  */
-const CodeEditorSchema = z.intersection(z.unknown() /* TODO: ref HTMLElement */, z.object({
+/**
+ * El `<iswc-code>` de verdad: un `HTMLElement` con la API del editor (`value`,
+ * `lang`, `refresh`).
+ *
+ * `z.intersection` con el elemento real para que el tipo conserve sus
+ * miembros (el render los usa: `dataset`, `setAttribute`, `toggleAttribute`…).
+ */
+const CodeEditorSchema = z.intersection(z.custom<HTMLElement>(), z.object({
   value: z.string(),
   lang: z.string(),
   refresh: z.function({ input: [], output: z.void() }).optional(),

@@ -142,7 +142,8 @@ import type { ToastItemEventos } from './schemas/toast-item.schemas.js';
     }
 
     get color() { return normalizeIntent(this.getAttribute('color'), 'neutral'); }
-    set color(v) {
+    // El setter acepta cualquier string: el valor vacio quita el atributo.
+    set color(v: string | null | undefined) {
       if (v == null || v === '') this.removeAttribute('color');
       else this.setAttribute('color', normalizeIntent(v, 'neutral'));
     }

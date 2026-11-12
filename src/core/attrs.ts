@@ -247,6 +247,24 @@ export function getNumberAttr(el: Element, attr: string, fallback: number = 0) {
 
 // ── intent ──
 /**
+ * Catálogo LITERAL de intenciones: la fuente de verdad del dominio.
+ *
+ * Es un `as const` para que el tipo cerrado (`Intent`) se pueda derivar de
+ * aquí — lo deriva el schema del core (`schemas/attrs.schemas.ts`), no una
+ * copia: si el core añade una intención, el tipo la incluye sola.
+ */
+export const INTENT_VALUES = Object.freeze([
+  'brand',     // color de marca (default)
+  'neutral',   // gris #888, sin tinte semántico (muted)
+  'text',      // foreground del tema (--iswc-text)
+  'success',   // verde — confirmación / validación OK
+  'warning',   // amarillo — atención, no crítico
+  'danger',    // rojo — error / acción destructiva
+  'info',      // azul informativo
+  'error',     // rojo de error (alias semántico de danger en varios CE)
+] as const);
+
+/**
  * intent.js — Intenciones semánticas (atributo `color`) compartidas.
  *
  * Un "intent" describe EL SIGNIFICADO del color que aplica el componente,
@@ -261,17 +279,11 @@ export function getNumberAttr(el: Element, attr: string, fallback: number = 0) {
  * iswc-rating, iswc-switch.
  *
  * CDN: reexportado en `helpers/ui.min.mjs` (`IswcUi.INTENT`, `ensureDefaultColor`, …).
+ *
+ * Es el catálogo de `INTENT_VALUES` abierto a `string` (lo que consumen los
+ * `.includes` de valores libres).
  */
-export const INTENT = Object.freeze([
-  'brand',     // color de marca (default)
-  'neutral',   // gris #888, sin tinte semántico (muted)
-  'text',      // foreground del tema (--iswc-text)
-  'success',   // verde — confirmación / validación OK
-  'warning',   // amarillo — atención, no crítico
-  'danger',    // rojo — error / acción destructiva
-  'info',      // azul informativo
-  'error',     // rojo de error (alias semántico de danger en varios CE)
-]);
+export const INTENT: readonly string[] = INTENT_VALUES;
 
 export const DEFAULT_INTENT = 'brand';
 
@@ -317,6 +329,17 @@ export function ensureDefaultColor(
 
 // ── tone ──
 /**
+ * Catálogo LITERAL de tonos: la fuente de verdad del dominio (idem `INTENT_VALUES`).
+ */
+export const TONE_VALUES = Object.freeze([
+  'accent',           // borde + acento lateral (sidebar TOC, callout admonition)
+  'filled',           // relleno sólido
+  'outlined',         // sin relleno, sólo borde
+  'filled-outlined',  // relleno + borde (caso intermedio)
+  'plain',            // texto plano sin borde ni fondo
+] as const);
+
+/**
  * tone.js — Niveles de relleno (atributo `variant`) compartidos.
  *
  * Un "tone" describe EL GRADO DE PESO VISUAL: outlined (sin relleno, sólo
@@ -326,15 +349,12 @@ export function ensureDefaultColor(
  * Compartido por: iswc-tag, iswc-badge, iswc-card, iswc-callout, iswc-details.
  *
  * Diferencia con intent.js: el intent define QUÉ color aplica; el tone
- * define CUÁNTO PESO VISUAL tiene ese color.
+ * define CUÁNTO peso visual tiene ese color.
+ *
+ * Es el catálogo de `TONE_VALUES` abierto a `string` (lo que consumen los
+ * `.includes` de valores libres).
  */
-export const TONE = Object.freeze([
-  'accent',           // borde + acento lateral (sidebar TOC, callout admonition)
-  'filled',           // relleno sólido
-  'outlined',         // sin relleno, sólo borde
-  'filled-outlined',  // relleno + borde (caso intermedio)
-  'plain',            // texto plano sin borde ni fondo
-]);
+export const TONE: readonly string[] = TONE_VALUES;
 
 export const DEFAULT_TONE = 'filled';
 

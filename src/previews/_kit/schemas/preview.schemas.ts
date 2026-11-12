@@ -8,6 +8,8 @@
  *   o en una clase que extiende IswcComponentPreview. Sin eval / new Function.
  */
 
+import type { ControlJson } from './component.schemas.ts';
+
 export type PreviewBlockKind = 'demo' | 'callout' | 'code' | 'html' | 'table' | 'lede';
 
 /**
@@ -38,6 +40,10 @@ export interface PreviewDemoBlock {
   noCode?: boolean;
   contain?: boolean;
   heading?: string;
+  /** Selector CSS del target dentro del demo (p. ej. `#btn-play`). */
+  target?: string;
+  /** Controles del playground asociados al demo (los knobs del panel). */
+  controls?: ControlJson[];
 }
 
 export interface PreviewCalloutBlock {

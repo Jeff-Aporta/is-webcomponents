@@ -42,3 +42,13 @@ const TokenizeResultSchema = z.object({
 });
 export type TokenizeResult = z.infer<typeof TokenizeResultSchema>;
 
+/**
+ * Resultado del escáner de tags HTML: hasta dónde se ha leido la linea y si
+ * el tag se cerraba solo (`<br/>`).
+ */
+const TagInnerSchema = z.object({
+  pos: z.number(),
+  selfClose: z.boolean(),
+});
+export type TagInner = z.infer<typeof TagInnerSchema>;
+

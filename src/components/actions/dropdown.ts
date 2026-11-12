@@ -232,9 +232,9 @@ import css from 'iswc:css';
      * fuera cae en el backdrop del propio dialog (#onDialogClick).
      */
     #dismiss = createPopupDismiss(this, {
-      // El core declara el handler con el evento en `unknown` (así está en
-      // su schema): se acota aquí con el type guard del propio evento.
-      onKeydown: (e) => { if (e instanceof KeyboardEvent) this.#onDocKey(e); },
+      // El core declara el handler con su evento real (`KeyboardEvent`): se le
+      // entrega el handler tal cual.
+      onKeydown: this.#onDocKey,
       onReposition: () => { if (this.open) this.#reposition(); },
     });
 

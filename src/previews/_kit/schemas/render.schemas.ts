@@ -7,10 +7,13 @@
  */
 import { z } from "zod";
 
+/**
+ * Entrada del TOC estándar: la etiqueta canónica que se pinta y los ids /
+ * títulos con los que se empareja una sección de la spec.
+ */
 export const StandardTocEntrySchema = z.object({
-  /* TODO: parse fail readonly label: string */
-  /* TODO: parse fail readonly ids: readonly string[] */
-  /* TODO: parse fail readonly titles: readonly string[] */
+  label: z.string(),
+  ids: z.array(z.string()),
+  titles: z.array(z.string()),
 });
 export type StandardTocEntry = z.infer<typeof StandardTocEntrySchema>;
-

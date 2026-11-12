@@ -7,11 +7,18 @@
  */
 import { z } from 'zod';
 
-const PrefsRootSchema = z.record(z.unknown() /* TODO: cannot convert */, z.unknown() /* TODO: cannot convert */);
-export type PrefsRoot = z.infer<typeof PrefsRootSchema>;
-
+/** Entrada individual: objeto plano `{ clave: valor }`. */
 const PrefsEntrySchema = z.record(z.string(), z.unknown());
 export type PrefsEntry = z.infer<typeof PrefsEntrySchema>;
+
+/**
+ * Forma del root de prefs: `tag -> clave -> entrada`.
+ *
+ * El valor de cada entrada es libre (`unknown`): cada componente guarda en su
+ * slot lo que necesita (un scroll, un snapshot de grid, un flag…).
+ */
+const PrefsRootSchema = z.record(z.string(), z.record(z.string(), PrefsEntrySchema));
+export type PrefsRoot = z.infer<typeof PrefsRootSchema>;
 
 const ClearAllPrefsResultSchema = z.object({
   cleared: z.boolean(),

@@ -10,9 +10,20 @@ import { z } from 'zod';
 const PlacementSchema = z.union([z.literal('top'), z.literal('top-start'), z.literal('top-end'), z.literal('bottom'), z.literal('bottom-start'), z.literal('bottom-end'), z.literal('left'), z.literal('left-start'), z.literal('left-end'), z.literal('right'), z.literal('right-start'), z.literal('right-end')]);
 export type Placement = z.infer<typeof PlacementSchema>;
 
-const AnchorLikeSchema = z.union([z.unknown() /* TODO: ref Element */, z.object({
-  getBoundingClientRect: z.function({ input: [], output: z.unknown() /* TODO: ref DOMRect */ }),
-})]);
+/**
+ * Ancla del popup: un elemento real del DOM o un elemento virtual (el de
+ * los menus flotantes, que solo necesita poder medirse).
+ *
+ * `z.custom` con el tipo real del navegador: el schema no valida nada en
+ * runtime (es un contenedor de tipo), pero el tipo que sale de aqui es el que
+ * usan `computePosition` y los componentes.
+ */
+const AnchorLikeSchema = z.union([
+  z.custom<Element>(),
+  z.object({
+    getBoundingClientRect: z.function({ input: [], output: z.custom<DOMRect>() }),
+  }),
+]);
 export type AnchorLike = z.infer<typeof AnchorLikeSchema>;
 
 const RectSchema = z.object({
@@ -53,7 +64,7 @@ export type ArrowOffset = z.infer<typeof ArrowOffsetSchema>;
 
 const ComputePositionOptsSchema = z.object({
   anchor: AnchorLikeSchema,
-  popupEl: z.unknown() /* TODO: ref HTMLElement */,
+  popupEl: z.custom<HTMLElement>(),
   placement: z.string().optional(),
   distance: z.number().optional(),
   skidding: z.number().optional(),
@@ -98,10 +109,10 @@ export type ComputePositionResult = z.infer<typeof ComputePositionResultSchema>;
  */
 const PopupDismissOpcionesSchema = z.object({
   onEscape: z.function({ input: [], output: z.void() }).optional(),
-  onKeydown: z.function({ input: [z.unknown() /* TODO: ref KeyboardEvent */], output: z.void() }).optional(),
+  onKeydown: z.function({ input: [z.custom<KeyboardEvent>()], output: z.void() }).optional(),
   onOutside: z.function({ input: [], output: z.void() }).optional(),
   onReposition: z.function({ input: [], output: z.void() }).optional(),
-  onScroll: z.function({ input: [z.unknown() /* TODO: ref Event */], output: z.void() }).optional(),
+  onScroll: z.function({ input: [z.custom<Event>()], output: z.void() }).optional(),
   scrollLock: z.boolean().optional(),
 });
 export type PopupDismissOpciones = z.infer<typeof PopupDismissOpcionesSchema>;

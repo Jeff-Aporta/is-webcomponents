@@ -171,6 +171,8 @@ export function renderBlock(block: PreviewBlock): HTMLElement {
       // esperaba ver (boton a la izquierda + panel de CONFIGURACION a la
       // derecha, orden text -> number -> select -> switch por W39).
       if (block.target && Array.isArray(block.controls) && block.controls.length) {
+        // Los controles ya acotados a array: el closure los usa mas tarde.
+        const controls = block.controls;
         const pg = document.createElement('iswc-playground');
         pg.setAttribute('target', block.target);
         pg.setAttribute('heading', 'Atributos');
@@ -185,7 +187,7 @@ export function renderBlock(block: PreviewBlock): HTMLElement {
         wrap.append(pg);
         const applySpec = (): void => {
           try {
-            (pg as unknown as { spec: unknown[] }).spec = block.controls;
+            (pg as unknown as { spec: unknown[] }).spec = controls;
           } catch { /* CE aún no listo */ }
         };
         // Solo asignar `spec` con el CE ya definido; si no, la data-prop propia

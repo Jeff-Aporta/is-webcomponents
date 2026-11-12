@@ -250,9 +250,9 @@ import type { ContextMenuEventos } from './schemas/context-menu.schemas.js';
       this.#dismiss = createPopupDismiss(this, {
         onEscape: () => this.close(),
         onOutside: () => { if (this.isOpen) this.close(); },
-        // El core declara el handler con el evento en `unknown` (así está en
-        // su schema): se acota aquí con el type guard del propio evento.
-        onScroll: (e) => { if (e instanceof Event) this.#onScroll(e); },
+        // El core declara el handler con su evento real (`Event`): se le
+        // entrega el handler tal cual.
+        onScroll: this.#onScroll,
         scrollLock: this.scrollLock,
       });
       this.#dismiss.attach();
