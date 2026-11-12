@@ -22,21 +22,21 @@ const TS  = join(ROOT, 'src', 'components', 'navigation', 'tab-group.ts');
 const CSS = join(ROOT, '.tmp-scss', 'src', 'components', 'navigation', 'tab-group.css');
 const JSON_PATH = join(ROOT, 'src', 'components', 'navigation', 'tab-group.json');
 
-test('tab-group: 1. módulo existe', async () => {
+test('iswc-tab-group:  1. módulo existe', async () => {
   assert.ok(existsSync(TS));
 });
 
-test('tab-group: 2. CSS hermano existe', async () => {
+test('iswc-tab-group:  2. CSS hermano existe', async () => {
   assert.ok(existsSync(CSS));
 });
 
-test('tab-group: 3. JSON existe y respeta iswc-preview/v1', async () => {
+test('iswc-tab-group:  3. JSON existe y respeta iswc-preview/v1', async () => {
   const json = JSON.parse(readFileSync(JSON_PATH, 'utf8'));
   assert.equal(json.tag, TAG);
   assert.equal(json.$schema, 'iswc-preview/v1');
 });
 
-test('4. OBSERVED incluye active, placement, activation', async () => {
+test('iswc-tab-group:  OBSERVED incluye active, placement, activation', async () => {
   // Pasa la ruta RELATIVA a la raíz del repo (no absoluta), porque
   // `extraerObservados` usa `readFileSync(join(ROOT, ruta))` internamente.
   const { extraerObservados } = await import('../_shared/exhaustivo.js');
@@ -47,49 +47,49 @@ test('4. OBSERVED incluye active, placement, activation', async () => {
   }
 });
 
-test('5. placement acepta top | bottom | start | end', async () => {
+test('iswc-tab-group:  placement acepta top | bottom | start | end', async () => {
   const src = readFileSync(TS, 'utf8');
   for (const v of ['top', 'bottom', 'start', 'end']) {
     assert.ok(src.includes(`'${v}'`) || src.includes(`"${v}"`), `placement acepta "${v}"`);
   }
 });
 
-test('6. activation acepta auto | manual', async () => {
+test('iswc-tab-group:  activation acepta auto | manual', async () => {
   const src = readFileSync(TS, 'utf8');
   assert.ok(/['"]auto['"]/.test(src) && /['"]manual['"]/.test(src));
 });
 
-test('7. persiste active en URL via url-key (readUrlNav/writeUrlNav)', async () => {
+test('iswc-tab-group:  persiste active en URL via url-key (readUrlNav/writeUrlNav)', async () => {
   const src = readFileSync(TS, 'utf8');
   assert.ok(/readUrlNav/.test(src) && /writeUrlNav/.test(src));
 });
 
-test('8. emite iswc-tab-show / iswc-tab-close cuando cambia el active', async () => {
+test('iswc-tab-group:  emite iswc-tab-show / iswc-tab-close cuando cambia el active', async () => {
   const { extraerEventos } = await import('../_shared/exhaustivo.js');
   const evs = extraerEventos(readFileSync(TS, 'utf8'));
   assert.ok(evs.includes('iswc-tab-show'), 'debe emitir iswc-tab-show al activar');
   assert.ok(evs.includes('iswc-tab-close'), 'debe emitir iswc-tab-close al cerrar');
 });
 
-test('9. integra con iswc-tab e iswc-tab-panel (slots)', async () => {
+test('iswc-tab-group:  integra con iswc-tab e iswc-tab-panel (slots)', async () => {
   const src = readFileSync(TS, 'utf8');
   assert.ok(/<slot[^>]*name\s*=\s*['"]nav['"]/.test(src), 'slot nav para iswc-tab');
   assert.ok(/<slot[^>]*name\s*=\s*['"]panel['"]/.test(src) || /<slot>/.test(src));
 });
 
-test('10. registra <iswc-tab> y <iswc-tab-panel>', async () => {
+test('iswc-tab-group:  registra <iswc-tab> y <iswc-tab-panel>', async () => {
   const src = readFileSync(TS, 'utf8');
   assert.ok(/(?:defineElement\s*\(\s*|static\s+(?:override\s+)?tag\s*=\s*|createObserverElement\(\s*'\w+',\s*)['"]iswc-tab['"]/.test(src) ||
              /(?:defineElement\s*\(\s*|static\s+(?:override\s+)?tag\s*=\s*|createObserverElement\(\s*'\w+',\s*)['"]iswc-tab-panel['"]/.test(src),
              'debe registrar iswc-tab o iswc-tab-panel');
 });
 
-test('11. custom element iswc-tab-group registrado', async () => {
+test('iswc-tab-group:  custom element iswc-tab-group registrado', async () => {
   const src = readFileSync(TS, 'utf8');
   assert.ok(/(?:defineElement\s*\(\s*|static\s+(?:override\s+)?tag\s*=\s*|createObserverElement\(\s*'\w+',\s*)['"]iswc-tab-group['"]/.test(src));
 });
 
-test('12. JSON tiene demo(s) y reference', async () => {
+test('iswc-tab-group:  JSON tiene demo(s) y reference', async () => {
   const json = JSON.parse(readFileSync(JSON_PATH, 'utf8'));
   const hasDemo = (json.sections || []).some((s: any) =>
     (s.blocks || []).some((b: any) => b.kind === 'demo')

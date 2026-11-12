@@ -10,40 +10,40 @@ import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/
 const { test, lista } = coleccionPruebas({ categoria: 'what' });
 
 
-test('HTML de demos se infiere como html (no javascript)', () => {
+test('code-infer-lang: HTML de demos se infiere como html (no javascript)', () => {
   const snippet = '<iswc-button color="success">Aprobado</iswc-button>\n'
     + '<iswc-button color="danger" variant="outlined">Eliminar</iswc-button>';
   assert.equal(inferLanguage(snippet), 'html');
 });
 
-test('curl se infiere como shell', () => {
+test('code-infer-lang: curl se infiere como shell', () => {
   assert.equal(
     inferLanguage('curl -X PUT \'https://api.example/api/x\' \\\n  -H \'Authorization: Bearer TOKEN\''),
     'shell',
   );
 });
 
-test('JS se sigue infiriendo como javascript', () => {
+test('code-infer-lang: JS se sigue infiriendo como javascript', () => {
   assert.equal(inferLanguage('const x = 1;\nexport function f() {}'), 'javascript');
 });
 
-test('CSS se infiere como css', () => {
+test('code-infer-lang: CSS se infiere como css', () => {
   assert.equal(inferLanguage(':root { --x: 1; }\n.foo { color: red; }'), 'css');
 });
 
-test('softFormat separa tags HTML en líneas', () => {
+test('code-infer-lang: softFormat separa tags HTML en líneas', () => {
   const raw = '<iswc-button color="success">Aprobado</iswc-button> <iswc-button color="danger">X</iswc-button>';
   const out = softFormat(raw, softFormatMode('html'));
   assert.match(out, /\n/);
   assert.match(out, /iswc-button/);
 });
 
-test('alias curl resuelve al lenguaje shell', () => {
+test('code-infer-lang: alias curl resuelve al lenguaje shell', () => {
   assert.equal(resolveLanguage('curl')?.id, 'shell');
   assert.equal(resolveLanguage('bash')?.id, 'shell');
 });
 
-test('formatCode no reescribe un cURL', () => {
+test('code-infer-lang: formatCode no reescribe un cURL', () => {
   const curl = 'curl -X PUT \'https://x/api\' \\\n  -d \'{"a":1}\'';
   assert.equal(formatCode(curl, 'curl'), curl);
   assert.equal(formatCode(curl, 'shell'), curl);

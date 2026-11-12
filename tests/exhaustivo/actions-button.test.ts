@@ -44,7 +44,7 @@ function leerJson(): any {
 }
 
 // 1. Render básico
-test('iswc-button: módulo existe y registra el custom element', () => {
+test('iswc-button:  módulo existe y registra el custom element', () => {
   const src = leerFuente();
   assert.ok(src.length > 0, `${RUTA_COMPONENTE} debe existir y no estar vacío`);
   assert.ok(
@@ -54,7 +54,7 @@ test('iswc-button: módulo existe y registra el custom element', () => {
 });
 
 // 2. Atributos observados
-test('iswc-button: declares observedAttributes (≥8)', async () => {
+test('iswc-button:  declares observedAttributes (≥8)', async () => {
   const meta = await extraerMetaComponente(RUTA_COMPONENTE);
   assert.ok(meta, 'extraerMetaComponente debe devolver meta');
   assert.ok(
@@ -71,7 +71,7 @@ test('iswc-button: declares observedAttributes (≥8)', async () => {
 });
 
 // 3. Eventos
-test('iswc-button: emite iswc-click, iswc-focus, iswc-blur, iswc-invalid', () => {
+test('iswc-button:  emite iswc-click, iswc-focus, iswc-blur, iswc-invalid', () => {
   const src = leerFuente();
   for (const evt of ['iswc-click', 'iswc-focus', 'iswc-blur', 'iswc-invalid']) {
     assert.ok(
@@ -82,7 +82,7 @@ test('iswc-button: emite iswc-click, iswc-focus, iswc-blur, iswc-invalid', () =>
 });
 
 // 4. Slots
-test('iswc-button: declara slots default, start, end', () => {
+test('iswc-button:  declara slots default, start, end', () => {
   const src = leerFuente();
   assert.ok(/slot\s+name="start"/.test(src), 'debe declarar <slot name="start">');
   assert.ok(/slot\s+name="end"/.test(src), 'debe declarar <slot name="end">');
@@ -91,7 +91,7 @@ test('iswc-button: declara slots default, start, end', () => {
 });
 
 // 5. Shadow DOM + parts
-test('iswc-button: usa Shadow DOM con delegatesFocus y CSS parts', () => {
+test('iswc-button:  usa Shadow DOM con delegatesFocus y CSS parts', () => {
   const src = leerFuente();
   assert.ok(/(?:attachShadow\s*\(\s*|shadowInit[^=\n]*=\s*)\{[^}]*mode:\s*["']open["']/.test(src), 'attachShadow mode open');
   assert.ok(/delegatesFocus/.test(src), 'delegatesFocus para que el foco aterrice en el <button> interno');
@@ -104,7 +104,7 @@ test('iswc-button: usa Shadow DOM con delegatesFocus y CSS parts', () => {
 });
 
 // 6. JSON preview
-test('iswc-button: JSON preview respeta iswc-preview/v1', () => {
+test('iswc-button:  JSON preview respeta iswc-preview/v1', () => {
   const json = leerJson();
   assert.ok(json, `${RUTA_JSON} debe existir`);
   assert.equal(json['$schema'], 'iswc-preview/v1', '$schema debe ser iswc-preview/v1');
@@ -113,7 +113,7 @@ test('iswc-button: JSON preview respeta iswc-preview/v1', () => {
 });
 
 // 7. Accesibilidad
-test('iswc-button: accesibilidad — role implícito (button interno) y aria-*', () => {
+test('iswc-button:  accesibilidad — role implícito (button interno) y aria-*', () => {
   const src = leerFuente();
   // El botón interno provee role=button; el host reenvía aria-*.
   assert.ok(/<button[^>]*type=/.test(src), 'plantilla interna usa <button> nativo');
@@ -124,7 +124,7 @@ test('iswc-button: accesibilidad — role implícito (button interno) y aria-*',
 });
 
 // 8. Edge cases
-test('iswc-button: maneja atributos vacíos (getAttribute + ??/||)', () => {
+test('iswc-button:  maneja atributos vacíos (getAttribute + ??/||)', () => {
   const src = leerFuente();
   const usesAttr = /getAttribute\s*\(/.test(src);
   assert.ok(usesAttr, 'debe usar getAttribute en algún punto');
@@ -136,7 +136,7 @@ test('iswc-button: maneja atributos vacíos (getAttribute + ??/||)', () => {
 });
 
 // 9. Integración — coexistencia con otros WC
-test('iswc-button: tiene slot para icono', () => {
+test('iswc-button:  tiene slot para icono', () => {
   const src = leerFuente();
   // iswc-button acepta un slot para el icono (no necesita importar iswc-icon).
   assert.ok(src.length > 0, 'módulo existe');
@@ -145,7 +145,7 @@ test('iswc-button: tiene slot para icono', () => {
 });
 
 // 10. Lifecycle / performance
-test('iswc-button: implementa lifecycle (connectedCallback / disconnectedCallback)', () => {
+test('iswc-button:  implementa lifecycle (connectedCallback / disconnectedCallback)', () => {
   const src = leerFuente();
   assert.ok(/connectedCallback\s*\(/.test(src), 'debe implementar connectedCallback');
   // Cleanup de listeners (al menos un removeEventListener o #wired=false).

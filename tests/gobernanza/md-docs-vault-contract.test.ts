@@ -35,7 +35,7 @@ const demoDe = (ruta: string) => {
 
 for (const c of COMPONENTES) {
   const base = join(RAIZ, 'src', 'components', ...c.base);
-  test(`${c.tag}: .ts + .scss + .md + .json hermanos, ficha con frontmatter y ruta en el manifest`, () => {
+  test(`vault: ${c.tag}: .ts + .scss + .md + .json hermanos, ficha con frontmatter y ruta en el manifest`, () => {
     for (const ext of ['.ts', '.scss', '.md', '.json', '.schemas.ts']) assert.ok(existsSync((ext === '.schemas.ts' ? join(dirname(base), "schemas", basename(base)) : base) + ext), `falta ${c.base.join('/')}${ext}`);
     const ficha = readFileSync(base + '.md', 'utf8');
     assert.match(ficha, new RegExp(`^---[\\s\\S]*tag: ${c.tag}[\\s\\S]*category: ${c.categoria}[\\s\\S]*---`), 'frontmatter de la ficha');
@@ -44,7 +44,7 @@ for (const c of COMPONENTES) {
     assert.match(manifest, new RegExp(`tag: '${c.tag}'[^\\n]*category: '${c.categoria}'[^\\n]*page: 'components/${c.base.join('/')}.json'`), 'entrada del manifest (catálogo del loader)');
   });
 
-  test(`${c.tag}: demo con playground`, () => {
+  test(`vault: ${c.tag}: demo con playground`, () => {
     const { demo, html } = demoDe(base + '.json');
     assert.ok((demo.controls ?? []).length >= 1, 'demo con controles');
     assert.ok(html.includes(`<${c.tag}`), 'el demo monta el componente');
@@ -72,14 +72,14 @@ for (const c of SATELITES) {
     assert.match(manifest, new RegExp(`tag: '${c.tag}'[^\\n]*category: '${c.categoria}'[^\\n]*page: 'components/${c.base.join('/')}.json'`), 'entrada del manifest (catálogo del loader)');
   });
 
-  test(`${c.tag}: demo con playground`, () => {
+  test(`vault: ${c.tag}: demo con playground`, () => {
     const { demo, html } = demoDe(base + '.json');
     assert.ok((demo.controls ?? []).length >= 1, 'demo con controles');
     assert.ok(html.includes(`<${c.tag}`), 'el demo monta el componente');
   });
 }
 
-test('iswc-md-docs-vault: la hoja se compone con piezas del kit (índice, markdown, figuras, paginador, ficha de metadatos)', () => {
+test('vault: iswc-md-docs-vault: la hoja se compone con piezas del kit (índice, markdown, figuras, paginador, ficha de metadatos)', () => {
   const lector = readFileSync(join(RAIZ, 'src', 'components', 'layout', 'md-docs-vault.ts'), 'utf8');
   // Lo que el lector muestra: navegación del libro, la hoja en markdown, imágenes como figuras,
   // anterior/siguiente y el modal de información. Nada de esto se reimplementa en el lector.
@@ -96,7 +96,7 @@ test('iswc-md-docs-vault: la hoja se compone con piezas del kit (índice, markdo
   }
 });
 
-test('iswc-md-docs-vault: lo que el lector ofrece (hojas embebidas, main reactivo, ?s= compartible, info, búsqueda, flechas, evento de hoja)', () => {
+test('vault: iswc-md-docs-vault: lo que el lector ofrece (hojas embebidas, main reactivo, ?s= compartible, info, búsqueda, flechas, evento de hoja)', () => {
   const lector = readFileSync(join(RAIZ, 'src', 'components', 'layout', 'md-docs-vault.ts'), 'utf8');
   assert.ok(lector.includes('script[type="text/markdown"][data-path]'), 'hojas embebidas sin red');
   assert.match(lector, /static (?:override )?observed = \['main'\]/, '`main` observado: cambiarlo abre esa hoja');
@@ -110,7 +110,7 @@ test('iswc-md-docs-vault: lo que el lector ofrece (hojas embebidas, main reactiv
   assert.match(lector, /renderers: MdDocsVaultRenderers \| null/, 'renderers del consumidor se suman a los del lector');
 });
 
-test('iswc-md-docs-vault: el demo es un libro embebido válido (hojas .md con frontmatter, README como portada)', () => {
+test('vault: iswc-md-docs-vault: el demo es un libro embebido válido (hojas .md con frontmatter, README como portada)', () => {
   const { html } = demoDe(join(RAIZ, 'src', 'components', 'layout', 'md-docs-vault.json'));
   const hojas = [...html.matchAll(/<script type="text\/markdown" data-path="([^"]+)">([\s\S]*?)<\/script>/g)];
   assert.ok(hojas.length >= 2, 'varias hojas embebidas');
@@ -119,7 +119,7 @@ test('iswc-md-docs-vault: el demo es un libro embebido válido (hojas .md con fr
   for (const [, ruta, cuerpo] of hojas) assert.match(cuerpo!.trim(), /^---\s*\n[\s\S]*?Titulo:[\s\S]*?\n\s*---/, `${ruta}: frontmatter con Titulo`);
 });
 
-test('iswc-doc-index: los ítems declarativos del demo tienen id y título únicos', () => {
+test('vault: iswc-doc-index: los ítems declarativos del demo tienen id y título únicos', () => {
   const { html } = demoDe(join(RAIZ, 'src', 'components', 'navigation', 'doc-index.json'));
   const json = html.match(/<script type="application\/json">([\s\S]*?)<\/script>/);
   assert.ok(json, 'ítems en JSON hijo');

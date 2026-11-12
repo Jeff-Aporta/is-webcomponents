@@ -23,21 +23,21 @@ const TS  = join(ROOT, 'src', 'components', 'isp', 'tree-view.ts');
 const CSS = join(ROOT, '.tmp-scss', 'src', 'components', 'isp', 'tree-view.css');
 const JSON_PATH = join(ROOT, 'src', 'components', 'isp', 'tree-view.json');
 
-test('tree-view: 1. módulo existe', async () => {
+test('iswc-tree-view:  1. módulo existe', async () => {
   assert.ok(existsSync(TS));
 });
 
-test('tree-view: 2. CSS hermano existe', async () => {
+test('iswc-tree-view:  2. CSS hermano existe', async () => {
   assert.ok(existsSync(CSS));
 });
 
-test('tree-view: 3. JSON existe y respeta iswc-preview/v1', async () => {
+test('iswc-tree-view:  3. JSON existe y respeta iswc-preview/v1', async () => {
   const json = JSON.parse(readFileSync(JSON_PATH, 'utf8'));
   assert.equal(json.tag, TAG);
   assert.equal(json.$schema, 'iswc-preview/v1');
 });
 
-test('4. las piezas de personalización se importan de su módulo de origen y tienen bundle (S-TS9)', async () => {
+test('iswc-tree-view:  las piezas de personalización se importan de su módulo de origen y tienen bundle (S-TS9)', async () => {
   // Lo que promete tree-view.md: cada símbolo sale de su propio módulo publicado, no de tree-view.
   const piezas: Array<[string, string[]]> = [
     // F9a: utils/tree-view/ aplanado a utils/tree-view-*.ts (tree-data vive en tree-view-flow).
@@ -57,50 +57,50 @@ test('4. las piezas de personalización se importan de su módulo de origen y ti
 });
 
 // tree-view.ts no usa TreeCustomsBase (lo extiende la app): el import que tenía era código muerto (F9a).
-test('5. customs base compartido: la doc enseña a extenderlo desde su módulo', async () => {
+test('iswc-tree-view:  customs base compartido: la doc enseña a extenderlo desde su módulo', async () => {
   const doc = readFileSync(join(ROOT, 'src', 'components', 'isp', 'tree-view.md'), 'utf8');
   assert.match(doc, /import \{ TreeCustomsBase \} from '\.\/isp\/customs-base\.min\.mjs';/);
   assert.match(doc, /extends TreeCustomsBase/);
 });
 
-test('6. importa paintForest para pintar el árbol', async () => {
+test('iswc-tree-view:  importa paintForest para pintar el árbol', async () => {
   const src = readFileSync(TS, 'utf8');
   assert.ok(/from\s*['"][./]+utils\/tree-view-render/.test(src));
   assert.ok(/paintForest/.test(src));
 });
 
-test('7. custom element registrado', async () => {
+test('iswc-tree-view:  custom element registrado', async () => {
   const src = readFileSync(TS, 'utf8');
   assert.ok(/(?:defineElement\s*\(\s*|static\s+(?:override\s+)?tag\s*=\s*|createObserverElement\(\s*'\w+',\s*)['"]iswc-tree-view['"]/.test(src));
 });
 
-test('8. integra con confirm-delete', async () => {
+test('iswc-tree-view:  integra con confirm-delete', async () => {
   const src = readFileSync(TS, 'utf8');
   // Acepta tanto `import './confirm-delete.js'` como `from './confirm-delete'`.
   assert.ok(/confirm-delete/.test(src), 'integra con confirm-delete');
 });
 
-test('9. integra con flex-options (panel de opciones)', async () => {
+test('iswc-tree-view:  integra con flex-options (panel de opciones)', async () => {
   const src = readFileSync(TS, 'utf8');
   assert.ok(/flex-options/.test(src));
 });
 
-test('10. integra con float-card (ficha del item)', async () => {
+test('iswc-tree-view:  integra con float-card (ficha del item)', async () => {
   const src = readFileSync(TS, 'utf8');
   assert.ok(/float-card/.test(src));
 });
 
-test('11. el módulo de customs base existe en utils/ (entrada pública isp/customs-base)', async () => {
+test('iswc-tree-view:  el módulo de customs base existe en utils/ (entrada pública isp/customs-base)', async () => {
   const customs = join(ROOT, 'src', 'components', 'isp', 'utils', 'customs-base.ts');
   assert.ok(existsSync(customs));
 });
 
-test('12. emite eventos de cambio / selección', async () => {
+test('iswc-tree-view:  emite eventos de cambio / selección', async () => {
   const src = readFileSync(TS, 'utf8');
   assert.ok(/['"]iswc-change['"]/.test(src) || /['"]iswc-select['"]/.test(src) || /['"]iswc-edit['"]/.test(src));
 });
 
-test('13. CSS tiene reglas para indentación y chevron del árbol', async () => {
+test('iswc-tree-view:  CSS tiene reglas para indentación y chevron del árbol', async () => {
   const css = readFileSync(CSS, 'utf8');
   // Aceptar padding-left, padding-inline-start, margin-left, --indent, etc.
   assert.ok(
@@ -109,7 +109,7 @@ test('13. CSS tiene reglas para indentación y chevron del árbol', async () => 
   );
 });
 
-test('14. JSON tiene secciones de demo (no es solo tabla de referencia)', async () => {
+test('iswc-tree-view:  JSON tiene secciones de demo (no es solo tabla de referencia)', async () => {
   const json = JSON.parse(readFileSync(JSON_PATH, 'utf8'));
   const demos = (json.sections || []).filter((s: any) =>
     (s.blocks || []).some((b: any) => b.kind === 'demo')
@@ -117,7 +117,7 @@ test('14. JSON tiene secciones de demo (no es solo tabla de referencia)', async 
   assert.ok(demos.length > 0, `debe haber al menos 1 sección con demo, hay ${demos.length}`);
 });
 
-test('15. preview.ts existe (componente complejo → behavior obligatorio)', async () => {
+test('iswc-tree-view:  preview.ts existe (componente complejo → behavior obligatorio)', async () => {
   const preview = join(ROOT, 'src', 'components', 'isp', 'utils', 'tree-view.preview.ts');
   assert.ok(existsSync(preview));
 });

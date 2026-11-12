@@ -20,7 +20,7 @@ const FACTORY = readFileSync(join(import.meta.dirname!, '..', '..', 'src', 'comp
 const TAG = 'iswc-time-input';
 const src = leerComponente(TAG);
 
-test('time-input: archivo y registro', () => {
+test('iswc-time-input:  archivo y registro', () => {
   assert.ok(src.length > 100);
   assert.ok(existeCss(TAG));
   assert.ok(esFactoryWrapper(src));
@@ -28,7 +28,7 @@ test('time-input: archivo y registro', () => {
   assert.ok(/kind:\s*['"]time['"]/.test(src));
 });
 
-test('time-input: compone time-field + time-clock (o digital-clock)', () => {
+test('iswc-time-input:  compone time-field + time-clock (o digital-clock)', () => {
   const m = src.match(/panels:\s*\(\s*\{[^}]*\}(?:\s*:\s*\{[^}]*\})?\s*\)(?:\s*:\s*[\w$.<>|\[\] ]+)?\s*=>\s*\{[\s\S]*?\}/);
   assert.ok(m, '<iswc-time-input> debe declarar panels()');
   // El panel es `iswc-time-clock` (analógico) o `iswc-digital-clock` (digital).
@@ -38,13 +38,13 @@ test('time-input: compone time-field + time-clock (o digital-clock)', () => {
     '<iswc-time-input> debe declarar fieldTag: "iswc-time-field"');
 });
 
-test('time-input: atributos del factory (ampm, hour24, seconds)', () => {
+test('iswc-time-input:  atributos del factory (ampm, hour24, seconds)', () => {
   for (const a of ['ampm', 'hour24', 'seconds']) {
     assert.ok(new RegExp(`['"\`]${a}['"\`]`).test(FACTORY));
   }
 });
 
-test('time-input: preview JSON', () => {
+test('iswc-time-input:  preview JSON', () => {
   const prev = leerPreview(TAG);
   assert.ok(prev);
   assert.equal(prev!['$schema'], 'iswc-preview/v1');

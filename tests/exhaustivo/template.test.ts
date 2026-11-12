@@ -43,7 +43,7 @@ function leerJson(): any {
   return existsSync(RUTA_JSON) ? JSON.parse(readFileSync(RUTA_JSON, 'utf8')) : null;
 }
 
-test('iswc-button: módulo existe y es importable', async () => {
+test('plantilla: plantilla: iswc-button: módulo existe y es importable', async () => {
   const src = leerFuente();
   assert.ok(src.length > 0, `El módulo ${RUTA_COMPONENTE} debe existir y no estar vacío`);
   // El módulo debe registrar el custom element (vía customElements.define o factory).
@@ -53,7 +53,7 @@ test('iswc-button: módulo existe y es importable', async () => {
   );
 });
 
-test('iswc-button: declares observedAttributes', async () => {
+test('plantilla: plantilla: iswc-button: declares observedAttributes', async () => {
   const src = leerFuente();
   // Molde IswcElement: los observados van en `static observed` (el molde arma observedAttributes).
   const obs = src.match(/static\s+(?:override\s+)?observed\s*=/);
@@ -66,7 +66,7 @@ test('iswc-button: declares observedAttributes', async () => {
   );
 });
 
-test('iswc-button: emite al menos un evento iswc-*', () => {
+test('plantilla: plantilla: iswc-button: emite al menos un evento iswc-*', () => {
   const src = leerFuente();
   // Acepta `emit(this, "iswc-click", ...)` además de `emit('iswc-click', ...)`.
   assert.ok(
@@ -75,7 +75,7 @@ test('iswc-button: emite al menos un evento iswc-*', () => {
   );
 });
 
-test('iswc-button: JSON preview respeta esquema iswc-preview/v1', () => {
+test('plantilla: plantilla: iswc-button: JSON preview respeta esquema iswc-preview/v1', () => {
   const json = leerJson();
   assert.ok(json, `JSON ${RUTA_JSON} debe existir`);
   assert.equal(json['$schema'], 'iswc-preview/v1', '$schema debe ser iswc-preview/v1');
@@ -83,7 +83,7 @@ test('iswc-button: JSON preview respeta esquema iswc-preview/v1', () => {
   assert.ok(Array.isArray(json.sections), 'sections debe ser un array');
 });
 
-test('iswc-button: consistencia JSON ↔ módulo', async () => {
+test('plantilla: plantilla: iswc-button: consistencia JSON ↔ módulo', async () => {
   const meta = await extraerMetaComponente(RUTA_COMPONENTE);
   const json = leerJson();
   if (!json || !meta) return;
@@ -105,18 +105,18 @@ test('iswc-button: consistencia JSON ↔ módulo', async () => {
   }
 });
 
-test('iswc-button: tiene JSDoc de cabecera', () => {
+test('plantilla: plantilla: iswc-button: tiene JSDoc de cabecera', () => {
   const src = leerFuente();
   assert.ok(/\/\*\*[\s\S]{20,800}?\*\//.test(src), 'debe tener un bloque JSDoc de cabecera');
 });
 
-test('iswc-button: tiene Shadow DOM', () => {
+test('plantilla: plantilla: iswc-button: tiene Shadow DOM', () => {
   const src = leerFuente();
   // Molde IswcElement: el shadow lo abre el molde con `static shadowInit` (null = light DOM).
   assert.ok(/attachShadow\s*\(/.test(src) || /static\s+(?:override\s+)?shadowInit[^=\n]*=\s*\{/.test(src), 'debe usar Shadow DOM (shadowInit del molde)');
 });
 
-test('iswc-button: edge case — maneja atributo vacío sin errores', () => {
+test('plantilla: plantilla: iswc-button: edge case — maneja atributo vacío sin errores', () => {
   // Verificamos estáticamente que el código no asume string no-vacío.
   const src = leerFuente();
   // Busca referencias a `getAttribute` y verifica que el código maneja
@@ -129,7 +129,7 @@ test('iswc-button: edge case — maneja atributo vacío sin errores', () => {
   }
 });
 
-test('iswc-button: emite iswc-click para interacción', () => {
+test('plantilla: plantilla: iswc-button: emite iswc-click para interacción', () => {
   // Para un botón, el evento relevante es iswc-click.
   const src = leerFuente();
   assert.ok(
@@ -138,7 +138,7 @@ test('iswc-button: emite iswc-click para interacción', () => {
   );
 });
 
-test('iswc-button: cobertura de atributos esperada', async () => {
+test('plantilla: plantilla: iswc-button: cobertura de atributos esperada', async () => {
   const meta = await extraerMetaComponente(RUTA_COMPONENTE);
   assert.ok(meta);
   const atributos = meta!.atributosObservados;

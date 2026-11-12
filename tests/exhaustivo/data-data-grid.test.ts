@@ -26,7 +26,7 @@ test('iswc-data-grid: archivo existe', () => {
   assert.ok(exists(MOD));
 });
 
-test('iswc-data-grid: shadow DOM', () => {
+test('iswc-data-grid: shadow DOM (raiz)', () => {
   assert.ok(tieneShadow(read(MOD)));
 });
 

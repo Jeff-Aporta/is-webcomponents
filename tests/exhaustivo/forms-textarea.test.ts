@@ -13,13 +13,13 @@ const { test, lista } = coleccionPruebas({ categoria: 'what' });
 const TAG = 'iswc-textarea';
 const src = leerComponente(TAG);
 
-test('textarea: archivo y registro', () => {
+test('iswc-textarea:  archivo y registro', () => {
   assert.ok(src.length > 1000);
   assert.ok(existeCss(TAG));
   assert.ok(/(?:defineElement\s*\(\s*|static\s+(?:override\s+)?tag\s*=\s*|createObserverElement\(\s*'\w+',\s*)['"`]iswc-textarea['"`]/.test(src));
 });
 
-test('textarea: atributos observados', () => {
+test('iswc-textarea:  atributos observados', () => {
   const obs = atributosObservados(src);
   for (const a of ['name', 'value', 'placeholder', 'label', 'hint',
                    'disabled', 'required', 'readonly', 'rows', 'maxlength',
@@ -28,19 +28,19 @@ test('textarea: atributos observados', () => {
   }
 });
 
-test('textarea: eventos (iswc-input, iswc-change)', () => {
+test('iswc-textarea:  eventos (iswc-input, iswc-change)', () => {
   const evs = eventosEmitidos(src);
   assert.ok(evs.includes('iswc-input'));
   assert.ok(evs.includes('iswc-change'));
 });
 
-test('textarea: slots (label, hint)', () => {
+test('iswc-textarea:  slots (label, hint)', () => {
   const slots = slotsDeclarados(src);
   assert.ok(slots.includes('label'));
   assert.ok(slots.includes('hint'));
 });
 
-test('textarea: shadow DOM parts', () => {
+test('iswc-textarea:  shadow DOM parts', () => {
   const parts = partsDeclaradas(src);
   for (const p of ['form-control', 'label', 'base', 'textarea',
                    'hint', 'error-text', 'count']) {
@@ -48,14 +48,14 @@ test('textarea: shadow DOM parts', () => {
   }
 });
 
-test('textarea: resize enum (none|vertical|both|auto)', () => {
+test('iswc-textarea:  resize enum (none|vertical|both|auto)', () => {
   for (const r of ['none', 'vertical', 'both', 'auto']) {
     assert.ok(new RegExp(`['"\`]${r}['"\`]`).test(src),
       `resize enum debe incluir "${r}"`);
   }
 });
 
-test('textarea: form-associated + autosize', () => {
+test('iswc-textarea:  form-associated + autosize', () => {
   assert.ok(esFormAssociated(src));
   assert.ok(extiendeElementBase(src));
   // autosize → ResizeObserver
@@ -63,19 +63,19 @@ test('textarea: form-associated + autosize', () => {
     '<iswc-textarea autosize> debe usar ResizeObserver para autofit');
 });
 
-test('textarea: cleanup del ResizeObserver en disconnect', () => {
+test('iswc-textarea:  cleanup del ResizeObserver en disconnect', () => {
   assert.ok(/#ro\?\.disconnect\(\)/.test(src),
     '<iswc-textarea> debe desconectar ResizeObserver en disconnect (no leak)');
 });
 
-test('textarea: preview JSON', () => {
+test('iswc-textarea:  preview JSON', () => {
   const prev = leerPreview(TAG);
   assert.ok(prev);
   assert.equal(prev!['$schema'], 'iswc-preview/v1');
   assert.equal(prev!.tag, TAG);
 });
 
-test('textarea: edge case — rows default 3', () => {
+test('iswc-textarea:  edge case — rows default 3', () => {
   assert.ok(/rows\s*=\s*['"]3['"]/.test(src) || /rows:\s*3\b/.test(src),
     '<iswc-textarea> rows default debe ser 3');
 });

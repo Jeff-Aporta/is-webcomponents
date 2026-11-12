@@ -21,21 +21,21 @@ const TS  = join(ROOT, 'src', 'components', 'isp', 'heading.ts');
 const CSS = join(ROOT, '.tmp-scss', 'src', 'components', 'isp', 'heading.css');
 const JSON_PATH = join(ROOT, 'src', 'components', 'isp', 'heading.json');
 
-test('heading: 1. módulo existe', async () => {
+test('iswc-heading:  1. módulo existe', async () => {
   assert.ok(existsSync(TS));
 });
 
-test('heading: 2. CSS hermano existe', async () => {
+test('iswc-heading:  2. CSS hermano existe', async () => {
   assert.ok(existsSync(CSS));
 });
 
-test('heading: 3. JSON existe y respeta iswc-preview/v1', async () => {
+test('iswc-heading:  3. JSON existe y respeta iswc-preview/v1', async () => {
   const json = JSON.parse(readFileSync(JSON_PATH, 'utf8'));
   assert.equal(json.tag, TAG);
   assert.equal(json.$schema, 'iswc-preview/v1');
 });
 
-test('4. OBSERVED incluye level, color, mix, mix-with, size', async () => {
+test('iswc-heading:  OBSERVED incluye level, color, mix, mix-with, size', async () => {
   const { extraerObservados } = await import('../_shared/exhaustivo.js');
   const list = extraerObservados(TS);
   for (const a of ['level', 'color', 'mix', 'mix-with', 'size']) {
@@ -43,14 +43,14 @@ test('4. OBSERVED incluye level, color, mix, mix-with, size', async () => {
   }
 });
 
-test('5. level cubre 1-6', async () => {
+test('iswc-heading:  level cubre 1-6', async () => {
   const src = readFileSync(TS, 'utf8');
   for (const lvl of ['1', '2', '3', '4', '5', '6']) {
     assert.ok(src.includes(`'${lvl}'`) || src.includes(`"${lvl}"`), `level cubre "${lvl}"`);
   }
 });
 
-test('6. color cubre brand | neutral | info | success | warning | danger | current', async () => {
+test('iswc-heading:  color cubre brand | neutral | info | success | warning | danger | current', async () => {
   // Los colores viven en `intent.ts` (import compartido). Usar leerConBase
   // para que los imports se concatenen.
   const { leerConBase } = await import('../_shared/exhaustivo.js');
@@ -60,24 +60,24 @@ test('6. color cubre brand | neutral | info | success | warning | danger | curre
   }
 });
 
-test('7. usa isp-color helpers (classifyColor, normalizeMix, syncIspColor)', async () => {
+test('iswc-heading:  usa isp-color helpers (classifyColor, normalizeMix, syncIspColor)', async () => {
   const src = readFileSync(TS, 'utf8');
   for (const h of ['classifyColor', 'normalizeMix', 'syncIspColor']) {
     assert.ok(src.includes(h), `helper ${h} debe estar`);
   }
 });
 
-test('8. extiende el molde IswcElement (cambios de atributo se procesan)', async () => {
+test('iswc-heading:  extiende el molde IswcElement (cambios de atributo se procesan)', async () => {
   const src = readFileSync(TS, 'utf8');
   assert.ok(/extends\s+IswcElement/.test(src));
 });
 
-test('heading: 9. custom element registrado', async () => {
+test('iswc-heading:  9. custom element registrado', async () => {
   const src = readFileSync(TS, 'utf8');
   assert.ok(/(?:defineElement\s*\(\s*|static\s+(?:override\s+)?tag\s*=\s*|createObserverElement\(\s*'\w+',\s*)['"]iswc-heading['"]/.test(src));
 });
 
-test('10. preview.ts existe', async () => {
+test('iswc-heading:  preview.ts existe', async () => {
   // El test se ejecuta con CWD en `iswc-base`, así que usamos
   // una ruta relativa robusta. Si no existe, es fail legítimo.
   const { join: pJoin } = await import('node:path');

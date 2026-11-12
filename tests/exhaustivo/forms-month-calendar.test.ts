@@ -17,14 +17,14 @@ const { test, lista } = coleccionPruebas({ categoria: 'what' });
 const TAG = 'iswc-month-calendar';
 const src = leerComponente(TAG);
 
-test('month-calendar: archivo y registro', () => {
+test('iswc-month-calendar:  archivo y registro', () => {
   assert.ok(src.length > 300);
   assert.ok(existeCss(TAG));
   assert.ok(/(?:defineElement\s*\(\s*|static\s+(?:override\s+)?tag\s*=\s*|createObserverElement\(\s*'\w+',\s*)['"`]iswc-month-calendar['"`]/.test(src));
   assert.ok(extiendeElementBase(src));
 });
 
-test('month-calendar: atributos observados', () => {
+test('iswc-month-calendar:  atributos observados', () => {
   const obs = atributosObservados(src);
   for (const a of ['value', 'year', 'min', 'max', 'locale', 'columns',
                    'month-width', 'disabled', 'readonly']) {
@@ -32,18 +32,18 @@ test('month-calendar: atributos observados', () => {
   }
 });
 
-test('month-calendar: eventos (iswc-change)', () => {
+test('iswc-month-calendar:  eventos (iswc-change)', () => {
   const evs = eventosEmitidos(src);
   assert.ok(evs.includes('iswc-change'),
     '<iswc-month-calendar> debe emitir iswc-change con { value, year, month }');
 });
 
-test('month-calendar: base con role=radiogroup', () => {
+test('iswc-month-calendar:  base con role=radiogroup', () => {
   assert.ok(/role\s*=\s*["']radiogroup["']/.test(src),
     '<iswc-month-calendar> base debe tener role=radiogroup (a11y)');
 });
 
-test('month-calendar: month-width enum (short|long)', () => {
+test('iswc-month-calendar:  month-width enum (short|long)', () => {
   // El atributo acepta 'short' o 'long'; verificado en el getter de width.
   assert.ok(/month-width/.test(src),
     '<iswc-month-calendar> debe declarar month-width');
@@ -51,17 +51,17 @@ test('month-calendar: month-width enum (short|long)', () => {
     'month-width debe aceptar short|long');
 });
 
-test('month-calendar: usa monthLabels (Intl) de date-utils', () => {
+test('iswc-month-calendar:  usa monthLabels (Intl) de date-utils', () => {
   assert.ok(/monthLabels/.test(src),
     '<iswc-month-calendar> debe usar monthLabels (Intl)');
 });
 
-test('month-calendar: shadow DOM part=base', () => {
+test('iswc-month-calendar:  shadow DOM part=base', () => {
   const parts = partsDeclaradas(src);
   assert.ok(parts.includes('base'));
 });
 
-test('month-calendar: preview JSON', () => {
+test('iswc-month-calendar:  preview JSON', () => {
   const prev = leerPreview(TAG);
   assert.ok(prev);
   assert.equal(prev!['$schema'], 'iswc-preview/v1');

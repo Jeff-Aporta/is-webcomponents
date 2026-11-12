@@ -23,13 +23,13 @@ const { test, lista } = coleccionPruebas({ categoria: 'what' });
 const TAG = 'iswc-file-input';
 const src = leerComponente(TAG);
 
-test('file-input: archivo y registro', () => {
+test('iswc-file-input:  archivo y registro', () => {
   assert.ok(src.length > 300);
   assert.ok(existeCss(TAG));
   assert.ok(/(?:defineElement\s*\(\s*|static\s+(?:override\s+)?tag\s*=\s*|createObserverElement\(\s*'\w+',\s*)['"`]iswc-file-input['"`]/.test(src));
 });
 
-test('file-input: atributos observados', () => {
+test('iswc-file-input:  atributos observados', () => {
   const obs = atributosObservados(src);
   for (const a of ['label', 'hint', 'name', 'accept', 'capture',
                    'multiple', 'disabled', 'required']) {
@@ -37,7 +37,7 @@ test('file-input: atributos observados', () => {
   }
 });
 
-test('file-input: eventos (iswc-change, change nativo)', () => {
+test('iswc-file-input:  eventos (iswc-change, change nativo)', () => {
   const evs = eventosEmitidos(src);
   assert.ok(evs.includes('iswc-change'),
     '<iswc-file-input> debe emitir iswc-change');
@@ -47,14 +47,14 @@ test('file-input: eventos (iswc-change, change nativo)', () => {
     '<iswc-file-input> debe re-emitir el change nativo');
 });
 
-test('file-input: slots (label, hint, dropzone)', () => {
+test('iswc-file-input:  slots (label, hint, dropzone)', () => {
   const slots = slotsDeclarados(src);
   for (const s of ['label', 'hint', 'dropzone']) {
     assert.ok(slots.includes(s), `<iswc-file-input> debe declarar slot "${s}"`);
   }
 });
 
-test('file-input: shadow DOM parts', () => {
+test('iswc-file-input:  shadow DOM parts', () => {
   const parts = extraerParts(src);
   for (const p of ['base', 'label', 'hint', 'dropzone',
                    'file-list', 'file', 'remove-button', 'input']) {
@@ -62,37 +62,37 @@ test('file-input: shadow DOM parts', () => {
   }
 });
 
-test('file-input: dropzone accesible (role=button, tabindex)', () => {
+test('iswc-file-input:  dropzone accesible (role=button, tabindex)', () => {
   assert.ok(/role\s*=\s*["']button["']/.test(src),
     '<iswc-file-input> dropzone debe tener role=button');
   assert.ok(/tabindex\s*=\s*["']0["']/.test(src));
 });
 
-test('file-input: input file nativo con aria-hidden', () => {
+test('iswc-file-input:  input file nativo con aria-hidden', () => {
   assert.ok(/type\s*=\s*["']file["']/.test(src));
   assert.ok(/aria-hidden/.test(src),
     '<iswc-file-input> input nativo debe tener aria-hidden=true');
 });
 
-test('file-input: propiedad files (File[])', () => {
+test('iswc-file-input:  propiedad files (File[])', () => {
   assert.ok(/get\s+files\s*\(/.test(src) ||
             /\bset\s+files\s*\(/.test(src) ||
             /#files/.test(src),
     '<iswc-file-input> debe exponer propiedad files (File[])');
 });
 
-test('file-input: drop event (drag & drop)', () => {
+test('iswc-file-input:  drop event (drag & drop)', () => {
   assert.ok(/drop\b/.test(src),
     '<iswc-file-input> debe manejar el evento drop (drag & drop)');
 });
 
-test('file-input: custom state dragging', () => {
+test('iswc-file-input:  custom state dragging', () => {
   // El componente debe exponer el estado :state(dragging) durante el drag.
   assert.ok(/dragging|dragover|dragenter/.test(src),
     '<iswc-file-input> debe marcar estado de dragging');
 });
 
-test('file-input: preview JSON', () => {
+test('iswc-file-input:  preview JSON', () => {
   const prev = leerPreview(TAG);
   assert.ok(prev);
   assert.equal(prev!['$schema'], 'iswc-preview/v1');

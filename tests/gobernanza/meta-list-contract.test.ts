@@ -16,13 +16,13 @@ const { test, lista } = coleccionPruebas({ categoria: 'how' });
 const RAIZ = join(import.meta.dirname, '..', '..');
 const BASE = join(RAIZ, 'src', 'components', 'data', 'meta-list');
 
-test('iswc-meta-list: .ts + .scss + .md + .json hermanos y manifest', () => {
+test('meta-list: iswc-meta-list: .ts + .scss + .md + .json hermanos y manifest', () => {
   for (const ext of ['.ts', '.scss', '.md', '.json']) assert.ok(existsSync(BASE + ext), `falta meta-list${ext}`);
   const manifest = readFileSync(join(RAIZ, 'src', 'manifest.ts'), 'utf8');
   assert.match(manifest, /tag: 'iswc-meta-list', title: 'Meta List', category: 'data'/);
 });
 
-test('iswc-meta-list: demo con playground y datos válidos', () => {
+test('meta-list: iswc-meta-list: demo con playground y datos válidos', () => {
   const doc = ComponentJsonSchema.parse(JSON.parse(readFileSync(BASE + '.json', 'utf8')));
   const demo = doc.sections.flatMap((s) => s.blocks).find((b) => b.kind === 'demo');
   assert.ok(demo && demo.kind === 'demo' && (demo.controls ?? []).length >= 2, 'demo con controles');
@@ -32,7 +32,7 @@ test('iswc-meta-list: demo con playground y datos válidos', () => {
   for (const g of JSON.parse(json[1])) assert.ok(MetaGroupSchema.safeParse(g).success, JSON.stringify(g));
 });
 
-test('iswc-meta-list: pinta con textContent (sin innerHTML de datos)', () => {
+test('meta-list: iswc-meta-list: pinta con textContent (sin innerHTML de datos)', () => {
   const ts = readFileSync(BASE + '.ts', 'utf8');
   const sinTemplate = ts.replace(/TEMPLATE\.innerHTML = [\s\S]*?`;/, '');
   assert.ok(!/innerHTML/.test(sinTemplate), 'los datos no entran como HTML');

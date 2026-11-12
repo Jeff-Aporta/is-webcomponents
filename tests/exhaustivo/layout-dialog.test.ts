@@ -22,21 +22,21 @@ const TS  = join(ROOT, 'src', 'components', 'layout', 'dialog.ts');
 const CSS = join(ROOT, '.tmp-scss', 'src', 'components', 'layout', 'dialog.css');
 const JSON_PATH = join(ROOT, 'src', 'components', 'layout', 'dialog.json');
 
-test('dialog: 1. módulo existe', async () => {
+test('iswc-dialog:  1. módulo existe', async () => {
   assert.ok(existsSync(TS));
 });
 
-test('dialog: 2. CSS hermano existe', async () => {
+test('iswc-dialog:  2. CSS hermano existe', async () => {
   assert.ok(existsSync(CSS));
 });
 
-test('dialog: 3. JSON existe y respeta iswc-preview/v1', async () => {
+test('iswc-dialog:  3. JSON existe y respeta iswc-preview/v1', async () => {
   const json = JSON.parse(readFileSync(JSON_PATH, 'utf8'));
   assert.equal(json.tag, TAG);
   assert.equal(json.$schema, 'iswc-preview/v1');
 });
 
-test('4. delega en ModalBase (focus-trap, Escape, restore)', async () => {
+test('iswc-dialog:  delega en ModalBase (focus-trap, Escape, restore)', async () => {
   const src = readFileSync(TS, 'utf8');
   const imp = src.match(/import\s*\{[^}]*\bModalBase\b[^}]*\}\s*from\s*['"]([./]+utils\/modal-base)\.js['"]/);
   assert.ok(imp, 'dialog debe importar ModalBase de utils/modal-base');
@@ -47,7 +47,7 @@ test('4. delega en ModalBase (focus-trap, Escape, restore)', async () => {
   assert.ok(/focus/i.test(base), 'ModalBase maneja foco (trap/restore)');
 });
 
-test('5. OBSERVED incluye open, label, without-header, light-dismiss, backdrop-variant', async () => {
+test('iswc-dialog:  OBSERVED incluye open, label, without-header, light-dismiss, backdrop-variant', async () => {
   // El dialog delega lifecycle en ModalBase. Buscamos en el wrapper
   // los atributos que efectivamente declara (open/label/light-dismiss
   // vienen de la base; backdrop-variant del wrapper).
@@ -63,7 +63,7 @@ test('5. OBSERVED incluye open, label, without-header, light-dismiss, backdrop-v
   }
 });
 
-test('6. emite iswc-show, iswc-after-show, iswc-hide, iswc-after-hide', async () => {
+test('iswc-dialog:  emite iswc-show, iswc-after-show, iswc-hide, iswc-after-hide', async () => {
   // Los eventos se emiten desde ModalBase; leerConBase los concatena.
   const { leerConBase } = await import('../_shared/exhaustivo.js');
   const src = leerConBase('src/components/layout/dialog.ts');
@@ -72,33 +72,33 @@ test('6. emite iswc-show, iswc-after-show, iswc-hide, iswc-after-hide', async ()
   }
 });
 
-test('7. métodos show(), hide(), toggle() públicos', async () => {
+test('iswc-dialog:  métodos show(), hide(), toggle() públicos', async () => {
   const src = readFileSync(TS, 'utf8');
   for (const m of ['show(', 'hide(', 'toggle(']) {
     assert.ok(src.includes(m), `debe exponer ${m}`);
   }
 });
 
-test('8. backdrop-variant acepta "none" | "basic"', async () => {
+test('iswc-dialog:  backdrop-variant acepta "none" | "basic"', async () => {
   const src = readFileSync(TS, 'utf8');
   assert.ok(/['"]none['"]/.test(src) && /['"]basic['"]/.test(src));
 });
 
-test('9. integra con iswc-icon e iswc-button (chrome)', async () => {
+test('iswc-dialog:  integra con iswc-icon e iswc-button (chrome)', async () => {
   const src = readFileSync(TS, 'utf8');
   // Hijos hoja declarados en `static deps` (molde IswcElement: iswcLoader.ensure al conectar) o importados.
   assert.ok(/media[\\/]+icon/.test(src) || /static (?:override )?deps = \[[^\]]*'iswc-icon'/.test(src), 'depende de icon');
   assert.ok(/actions[\\/]+button/.test(src) || /static (?:override )?deps = \[[^\]]*'iswc-button'/.test(src), 'depende de button');
 });
 
-test('10. soporta slot default y header-actions, footer, label', async () => {
+test('iswc-dialog:  soporta slot default y header-actions, footer, label', async () => {
   const src = readFileSync(TS, 'utf8');
   for (const slot of ['header-actions', 'footer', 'label']) {
     assert.ok(new RegExp(`name=['"]${slot}['"]`).test(src), `declarar slot "${slot}"`);
   }
 });
 
-test('11. atributo open es reflected (getter/setter + toggleAttribute)', async () => {
+test('iswc-dialog:  atributo open es reflected (getter/setter + toggleAttribute)', async () => {
   // El getter/setter `open` está en ModalBase.
   const { leerConBase } = await import('../_shared/exhaustivo.js');
   const src = leerConBase('src/components/layout/dialog.ts');
@@ -108,7 +108,7 @@ test('11. atributo open es reflected (getter/setter + toggleAttribute)', async (
   );
 });
 
-test('dialog: 12. custom element registrado', async () => {
+test('iswc-dialog:  12. custom element registrado', async () => {
   const src = readFileSync(TS, 'utf8');
   assert.ok(/(?:defineElement\s*\(\s*|static\s+(?:override\s+)?tag\s*=\s*|createObserverElement\(\s*'\w+',\s*)['"]iswc-dialog['"]/.test(src));
 });

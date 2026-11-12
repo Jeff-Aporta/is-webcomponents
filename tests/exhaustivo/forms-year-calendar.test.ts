@@ -17,40 +17,40 @@ const { test, lista } = coleccionPruebas({ categoria: 'what' });
 const TAG = 'iswc-year-calendar';
 const src = leerComponente(TAG);
 
-test('year-calendar: archivo y registro', () => {
+test('iswc-year-calendar:  archivo y registro', () => {
   assert.ok(src.length > 300);
   assert.ok(existeCss(TAG));
   assert.ok(/(?:defineElement\s*\(\s*|static\s+(?:override\s+)?tag\s*=\s*|createObserverElement\(\s*'\w+',\s*)['"`]iswc-year-calendar['"`]/.test(src));
   assert.ok(extiendeElementBase(src));
 });
 
-test('year-calendar: atributos observados', () => {
+test('iswc-year-calendar:  atributos observados', () => {
   const obs = atributosObservados(src);
   for (const a of ['value', 'min', 'max', 'columns', 'disabled', 'readonly']) {
     assert.ok(obs.includes(a));
   }
 });
 
-test('year-calendar: eventos (iswc-change)', () => {
+test('iswc-year-calendar:  eventos (iswc-change)', () => {
   const evs = eventosEmitidos(src);
   assert.ok(evs.includes('iswc-change'));
 });
 
-test('year-calendar: base con role=radiogroup', () => {
+test('iswc-year-calendar:  base con role=radiogroup', () => {
   assert.ok(/role\s*=\s*["']radiogroup["']/.test(src));
 });
 
-test('year-calendar: scrollToSelection() en connect', () => {
+test('iswc-year-calendar:  scrollToSelection() en connect', () => {
   assert.ok(/scrollToSelection/.test(src),
     '<iswc-year-calendar> debe hacer scroll a la selección');
 });
 
-test('year-calendar: shadow DOM part=base', () => {
+test('iswc-year-calendar:  shadow DOM part=base', () => {
   const parts = partsDeclaradas(src);
   assert.ok(parts.includes('base'));
 });
 
-test('year-calendar: preview JSON', () => {
+test('iswc-year-calendar:  preview JSON', () => {
   const prev = leerPreview(TAG);
   assert.ok(prev);
   assert.equal(prev!['$schema'], 'iswc-preview/v1');

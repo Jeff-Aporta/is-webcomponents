@@ -14,7 +14,7 @@ const { test, lista } = coleccionPruebas({ categoria: 'what' });
 
 const typesOf = (tokens) => tokens.map((t) => t.type);
 
-test('normalizeLang mapea alias legacy', () => {
+test('code-highlight: normalizeLang mapea alias legacy', () => {
   assert.equal(normalizeLang('htmlmixed'), 'html');
   assert.equal(normalizeLang('js'), 'javascript');
   assert.equal(normalizeLang('ts'), 'typescript');
@@ -27,7 +27,7 @@ test('normalizeLang mapea alias legacy', () => {
   assert.equal(normalizeLang('patata'), 'javascript');
 });
 
-test('javascript: keywords, strings, números, comentarios y operadores', () => {
+test('code-highlight: javascript: keywords, strings, números, comentarios y operadores', () => {
   const { lines, lang } = tokenizeCode('const n = 42; // tope\nlet s = "hola";', 'javascript');
   assert.equal(lang, 'javascript');
   assert.equal(lines.length, 2);
@@ -40,7 +40,7 @@ test('javascript: keywords, strings, números, comentarios y operadores', () => 
   assert.equal(tokensToText(lines[0].tokens), 'const n = 42; // tope');
 });
 
-test('javascript: template literal y comentario bloque multilínea cruzan líneas', () => {
+test('code-highlight: javascript: template literal y comentario bloque multilínea cruzan líneas', () => {
   const a = tokenizeCode('const t = `linea', 'javascript');
   assert.ok(typesOf(a.lines[0].tokens).includes('string'), 'apertura template = string');
   assert.equal(a.state.template, true, 'el estado guarda el template abierto');
@@ -55,7 +55,7 @@ test('javascript: template literal y comentario bloque multilínea cruzan línea
   assert.equal(d.state.inComment, false);
 });
 
-test('html: tag + atributo + string; regiones script/style tokenizadas como js/css', () => {
+test('code-highlight: html: tag + atributo + string; regiones script/style tokenizadas como js/css', () => {
   const { lines } = tokenizeCode('<button class="x" @click="go">OK</button>', 'html');
   const flat = lines.flatMap((l) => l.tokens);
   const types = typesOf(flat);
@@ -77,14 +77,14 @@ test('html: tag + atributo + string; regiones script/style tokenizadas como js/c
   assert.ok(typesOf(css.lines[1].tokens).includes('variable'), 'selector css');
 });
 
-test('css: propiedad, atom y comentario', () => {
+test('code-highlight: css: propiedad, atom y comentario', () => {
   const { lines } = tokenizeCode('a {\n  color: red;\n  /* nota */\n}', 'css');
   const t1 = typesOf(lines[1].tokens);
   assert.ok(t1.includes('property') || t1.includes('atom'), 'valor de propiedad');
   assert.ok(typesOf(lines[2].tokens).includes('comment'), 'comentario css');
 });
 
-test('diff: clase de línea por banda y tokens', () => {
+test('code-highlight: diff: clase de línea por banda y tokens', () => {
   assert.equal(diffLineClass('@@ -1,3 +1,4 @@'), 'iswc-diff-line-hunk');
   assert.equal(diffLineClass('+hola'), 'iswc-diff-line-add');
   assert.equal(diffLineClass('-chau'), 'iswc-diff-line-del');
@@ -95,13 +95,13 @@ test('diff: clase de línea por banda y tokens', () => {
   assert.equal(lines[2].lineClass, null);
 });
 
-test('shell: comentario y variable', () => {
+test('code-highlight: shell: comentario y variable', () => {
   const { lines } = tokenizeCode('#!/bin/sh\nNAME="x"\necho $NAME # nota', 'shell');
   assert.ok(typesOf(lines[0].tokens).includes('comment'), 'shebang = comentario');
   assert.ok(typesOf(lines[2].tokens).includes('atom'), '$NAME variable');
 });
 
-test('seguridad: lineToHtml escapa y reconstruye el texto', () => {
+test('code-highlight: seguridad: lineToHtml escapa y reconstruye el texto', () => {
   const { lines } = tokenizeCode('if (a < b && c > "&") { x = 1; }', 'javascript');
   const html = lines.map((l) => lineToHtml(l.tokens)).join('\n');
   assert.ok(!html.includes('<b &&'), 'no debe quedar < crudo');
@@ -109,7 +109,7 @@ test('seguridad: lineToHtml escapa y reconstruye el texto', () => {
   assert.equal(tokensToText(lines[0].tokens), 'if (a < b && c > "&") { x = 1; }');
 });
 
-test('html: json multilínea en atributo no se traga el tag de cierre', () => {
+test('code-highlight: html: json multilínea en atributo no se traga el tag de cierre', () => {
   const src = [
     '<iswc-palette-selector value="acme" palettes=\'[',
     '  { "value": "acme" }',
@@ -131,7 +131,7 @@ test('html: json multilínea en atributo no se traga el tag de cierre', () => {
   assert.equal(state.inHtmlTag, false);
 });
 
-test('html: atributo de texto multilínea cierra y sigue el tag', () => {
+test('code-highlight: html: atributo de texto multilínea cierra y sigue el tag', () => {
   const src = '<button title=\'hola\nmundo\'></button>';
   const { lines } = tokenizeCode(src, 'html');
   assert.equal(lines.map((l) => tokensToText(l.tokens)).join('\n'), src);
@@ -140,7 +140,7 @@ test('html: atributo de texto multilínea cierra y sigue el tag', () => {
   assert.ok(last.some((t) => t.type === 'tagPunct' && t.text === '>'));
 });
 
-test('estado vacío no se muta entre llamadas', () => {
+test('code-highlight: estado vacío no se muta entre llamadas', () => {
   const st = emptyState();
   tokenizeCode('/* x', 'javascript', st);
   assert.equal(st.inComment, false, 'tokenizeCode clona el estado de entrada');

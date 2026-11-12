@@ -22,7 +22,7 @@ const FACTORY = readFileSync(join(import.meta.dirname!, '..', '..', 'src', 'comp
 const TAG = 'iswc-time-field';
 const src = leerComponente(TAG);
 
-test('time-field: archivo y registro', () => {
+test('iswc-time-field:  archivo y registro', () => {
   assert.ok(src.length > 100);
   assert.ok(existeCss(TAG));
   assert.ok(esFactoryWrapper(src));
@@ -31,26 +31,26 @@ test('time-field: archivo y registro', () => {
     '<iswc-time-field> debe usar kind: "time"');
 });
 
-test('time-field: atributos del factory (ampm, hour24, seconds)', () => {
+test('iswc-time-field:  atributos del factory (ampm, hour24, seconds)', () => {
   for (const a of ['ampm', 'hour24', 'seconds']) {
     assert.ok(new RegExp(`['"\`]${a}['"\`]`).test(FACTORY),
       `factory OBSERVED debe incluir "${a}"`);
   }
 });
 
-test('time-field: eventos (iswc-change, iswc-input)', () => {
+test('iswc-time-field:  eventos (iswc-change, iswc-input)', () => {
   for (const e of ['iswc-change', 'iswc-input']) {
     assert.ok(new RegExp(`[#]?emit\\s*\\(\\s*(this\\s*,\\s*)?['"\`]${e}['"\`]`).test(FACTORY),
       `factory debe emitir "${e}"`);
   }
 });
 
-test('time-field: usa 12h/24h según locale/am-pm', () => {
+test('iswc-time-field:  usa 12h/24h según locale/am-pm', () => {
   assert.ok(/uses12Hour|hour24|ampm/.test(FACTORY),
     'factory debe distinguir 12h vs 24h');
 });
 
-test('time-field: preview JSON', () => {
+test('iswc-time-field:  preview JSON', () => {
   const prev = leerPreview(TAG);
   assert.ok(prev);
   assert.equal(prev!['$schema'], 'iswc-preview/v1');

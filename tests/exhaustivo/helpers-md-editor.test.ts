@@ -22,21 +22,21 @@ const TS  = join(ROOT, 'src', 'components', 'helpers', 'md-editor.ts');
 const CSS = join(ROOT, '.tmp-scss', 'src', 'components', 'helpers', 'md-editor.css');
 const JSON_PATH = join(ROOT, 'src', 'components', 'helpers', 'md-editor.json');
 
-test('md-editor: 1. módulo existe', async () => {
+test('iswc-md-editor:  1. módulo existe', async () => {
   assert.ok(existsSync(TS));
 });
 
-test('md-editor: 2. CSS hermano existe', async () => {
+test('iswc-md-editor:  2. CSS hermano existe', async () => {
   assert.ok(existsSync(CSS));
 });
 
-test('md-editor: 3. JSON existe y respeta iswc-preview/v1', async () => {
+test('iswc-md-editor:  3. JSON existe y respeta iswc-preview/v1', async () => {
   const json = JSON.parse(readFileSync(JSON_PATH, 'utf8'));
   assert.equal(json.tag, TAG);
   assert.equal(json.$schema, 'iswc-preview/v1');
 });
 
-test('4. OBSERVED incluye label, placeholder, filename, value', async () => {
+test('iswc-md-editor:  OBSERVED incluye label, placeholder, filename, value', async () => {
   const { extraerObservados } = await import('../_shared/exhaustivo.js');
   const list = extraerObservados(TS);
   for (const a of ['label', 'placeholder']) {
@@ -44,18 +44,18 @@ test('4. OBSERVED incluye label, placeholder, filename, value', async () => {
   }
 });
 
-test('5. usa textarea (no contenteditable para markdown)', async () => {
+test('iswc-md-editor:  usa textarea (no contenteditable para markdown)', async () => {
   const src = readFileSync(TS, 'utf8');
   assert.ok(/<textarea[\s\S]*?>/.test(src), 'shadow debe tener <textarea>');
 });
 
-test('6. expone getter/setter para value', async () => {
+test('iswc-md-editor:  expone getter/setter para value', async () => {
   const src = readFileSync(TS, 'utf8');
   assert.ok(/get\s+value\s*\(/.test(src));
   assert.ok(/set\s+value\s*\(/.test(src));
 });
 
-test('7. emite eventos de editor (iswc-persist, iswc-change, iswc-delete, iswc-load)', async () => {
+test('iswc-md-editor:  emite eventos de editor (iswc-persist, iswc-change, iswc-delete, iswc-load)', async () => {
   const src = readFileSync(TS, 'utf8');
   // El editor emite varios eventos (persist, change, delete, load, error, download).
   for (const ev of ['iswc-persist', 'iswc-change', 'iswc-delete', 'iswc-load']) {
@@ -63,18 +63,18 @@ test('7. emite eventos de editor (iswc-persist, iswc-change, iswc-delete, iswc-l
   }
 });
 
-test('8. atributo can-edit bloquea edición', async () => {
+test('iswc-md-editor:  atributo can-edit bloquea edición', async () => {
   const src = readFileSync(TS, 'utf8');
   assert.ok(/['"]can-edit['"]/.test(src) || /readOnly/.test(src), 'can-edit o readonly debe existir');
 });
 
-test('9. shadow DOM expone parte label/input/footer', async () => {
+test('iswc-md-editor:  shadow DOM expone parte label/input/footer', async () => {
   const src = readFileSync(TS, 'utf8');
   const partsCount = (src.match(/\bpart\s*=\s*['"][a-z-]+['"]/g) || []).length;
   assert.ok(partsCount >= 2, `debe haber al menos 2 partes CSS, hay ${partsCount}`);
 });
 
-test('md-editor: 10. custom element registrado', async () => {
+test('iswc-md-editor:  10. custom element registrado', async () => {
   const src = readFileSync(TS, 'utf8');
   assert.ok(
     /customElements\.define\s*\(\s*['"]iswc-md-editor['"]/.test(src) ||
@@ -82,7 +82,7 @@ test('md-editor: 10. custom element registrado', async () => {
   );
 });
 
-test('11. integra con md-render (preview en vivo)', async () => {
+test('iswc-md-editor:  integra con md-render (preview en vivo)', async () => {
   const src = readFileSync(TS, 'utf8');
   // Puede importar md-render directamente o usar el mismo parser md-lite.
   assert.ok(
@@ -91,7 +91,7 @@ test('11. integra con md-render (preview en vivo)', async () => {
   );
 });
 
-test('12. el template expone partes CSS para customización externa', async () => {
+test('iswc-md-editor:  el template expone partes CSS para customización externa', async () => {
   const src = readFileSync(TS, 'utf8');
   const partsCount = (src.match(/\bpart\s*=\s*['"][a-z-]+['"]/g) || []).length;
   assert.ok(partsCount >= 2, `debe exponer al menos 2 partes CSS para theming, hay ${partsCount}`);

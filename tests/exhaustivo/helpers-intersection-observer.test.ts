@@ -21,21 +21,21 @@ const TS  = join(ROOT, 'src', 'components', 'helpers', 'intersection-observer.ts
 const CSS = join(ROOT, '.tmp-scss', 'src', 'components', 'helpers', 'intersection-observer.css');
 const JSON_PATH = join(ROOT, 'src', 'components', 'helpers', 'intersection-observer.json');
 
-test('intersection-observer: 1. módulo existe', () => {
+test('iswc-intersection-observer:  1. módulo existe', () => {
   assert.ok(existsSync(TS));
 });
 
-test('intersection-observer: 2. CSS hermano existe', () => {
+test('iswc-intersection-observer:  2. CSS hermano existe', () => {
   assert.ok(existsSync(CSS));
 });
 
-test('intersection-observer: 3. JSON existe y respeta iswc-preview/v1', () => {
+test('iswc-intersection-observer:  3. JSON existe y respeta iswc-preview/v1', () => {
   const json = JSON.parse(readFileSync(JSON_PATH, 'utf8'));
   assert.equal(json.tag, TAG);
   assert.equal(json.$schema, 'iswc-preview/v1');
 });
 
-test('4. delega en createObserverElement("intersection") del factory observer.ts', () => {
+test('iswc-intersection-observer:  delega en createObserverElement("intersection") del factory observer.ts', () => {
   const src = readFileSync(TS, 'utf8');
   assert.ok(
     /createObserverElement\s*\(\s*['"]intersection['"]\s*[,)]/.test(src),
@@ -43,45 +43,45 @@ test('4. delega en createObserverElement("intersection") del factory observer.ts
   );
 });
 
-test('5. importa createObserverElement desde ./observer.js', () => {
+test('iswc-intersection-observer:  importa createObserverElement desde ./observer.js', () => {
   const src = readFileSync(TS, 'utf8');
   assert.ok(/from\s*['"][./]+observer(?:\.js)?['"]/.test(src), 'debe importar desde ./observer.js');
 });
 
-test('6. está registrado con defineElement', () => {
+test('iswc-intersection-observer:  está registrado con defineElement', () => {
   const src = readFileSync(TS, 'utf8');
   assert.ok(/(?:defineElement\s*\(\s*|static\s+(?:override\s+)?tag\s*=\s*|createObserverElement\(\s*'\w+',\s*)['"]iswc-intersection-observer['"]/.test(src));
 });
 
-test('7. hereda OBSERVED del observer genérico', () => {
+test('iswc-intersection-observer:  hereda OBSERVED del observer genérico', () => {
   const src = readFileSync(TS, 'utf8');
   // Como es wrapper, no debe redefinir OBSERVED — lo toma del factory.
   assert.ok(!/OBSERVED\s*=\s*\[/.test(src), 'no debe redefinir OBSERVED');
 });
 
-test('8. el JSDoc documenta los atributos intersection (intersect-class, once, root, threshold)', () => {
+test('iswc-intersection-observer:  el JSDoc documenta los atributos intersection (intersect-class, once, root, threshold)', () => {
   const src = readFileSync(TS, 'utf8');
   for (const a of ['intersect-class', 'once', 'root', 'threshold']) {
     assert.ok(src.includes(a), `JSDoc debe documentar "${a}"`);
   }
 });
 
-test('9. el JSDoc documenta el evento iswc-intersect', () => {
+test('iswc-intersection-observer:  el JSDoc documenta el evento iswc-intersect', () => {
   const src = readFileSync(TS, 'utf8');
   assert.ok(/iswc-intersect/.test(src));
 });
 
-test('10. el componente existe en el manifest (catalog.ts)', () => {
+test('iswc-intersection-observer:  el componente existe en el manifest (catalog.ts)', () => {
   const cat = readFileSync(join(ROOT, 'src', 'previews', 'catalog.ts'), 'utf8');
   assert.ok(cat.includes(`"iswc-intersection-observer"`), 'debe estar registrado en catalog.ts');
 });
 
-test('11. CSS tiene regla para display:contents o similar (es transparente)', () => {
+test('iswc-intersection-observer:  CSS tiene regla para display:contents o similar (es transparente)', () => {
   const css = readFileSync(CSS, 'utf8');
   assert.ok(/display\s*:\s*contents/.test(css), 'el host debe ser display:contents (no tiene UI propia)');
 });
 
-test('12. el JSON declara atributos en el panel reference', () => {
+test('iswc-intersection-observer:  el JSON declara atributos en el panel reference', () => {
   const json = JSON.parse(readFileSync(JSON_PATH, 'utf8'));
   const tieneRef = (json.sections || []).some((s: any) =>
     /reference|referencia|api|atributos|attr/i.test((s.title || '') + ' ' + (s.id || ''))

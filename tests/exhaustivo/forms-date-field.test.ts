@@ -26,7 +26,7 @@ const factorySrc = readFileSync(FACTORY, 'utf8');
 const TAG = 'iswc-date-field';
 const src = leerComponente(TAG);
 
-test('date-field: archivo y registro', () => {
+test('iswc-date-field:  archivo y registro', () => {
   assert.ok(src.length > 100);
   assert.ok(existeCss(TAG) || existsSync(join(RAIZ, 'components', 'forms', 'date-field.css')),
     'date-field debe tener .css hermano');
@@ -35,7 +35,7 @@ test('date-field: archivo y registro', () => {
     '<iswc-date-field> debe pasar tag: "iswc-date-field"');
 });
 
-test('date-field: atributos vienen del factory (OBSERVED const + @prop + IswcFormControl)', () => {
+test('iswc-date-field:  atributos vienen del factory (OBSERVED const + @prop + IswcFormControl)', () => {
   assert.ok(/static\s+(?:override\s+)?observed\s*=\s*OBSERVED/.test(factorySrc),
     'factory debe declarar observedAttributes');
   const obs = atributosObservados(factorySrc);
@@ -46,7 +46,7 @@ test('date-field: atributos vienen del factory (OBSERVED const + @prop + IswcFor
   }
 });
 
-test('date-field: eventos del factory (iswc-change, iswc-input)', () => {
+test('iswc-date-field:  eventos del factory (iswc-change, iswc-input)', () => {
   for (const e of ['iswc-change', 'iswc-input']) {
     assert.ok(new RegExp(`['"\`]${e}['"\`]`).test(factorySrc) &&
               new RegExp(`(#emit|emit)\\s*\\(\\s*(this\\s*,\\s*)?['"\`]${e}['"\`]`).test(factorySrc),
@@ -54,25 +54,25 @@ test('date-field: eventos del factory (iswc-change, iswc-input)', () => {
   }
 });
 
-test('date-field: shadow DOM (open + delegatesFocus para teclado)', () => {
+test('iswc-date-field:  shadow DOM (open + delegatesFocus para teclado)', () => {
   assert.ok(/(?:attachShadow\s*\(\s*|shadowInit[^=\n]*=\s*)\{\s*mode:\s*['"]open['"]\s*,\s*delegatesFocus:\s*true/.test(factorySrc),
     'factory debe abrir shadow con delegatesFocus:true (a11y teclado)');
 });
 
-test('date-field: form-associated (IswcFormControl: formAssociated + ElementInternals)', () => {
+test('iswc-date-field:  form-associated (IswcFormControl: formAssociated + ElementInternals)', () => {
   assert.ok(esFormAssociated(factorySrc), 'factory debe ser form-associated');
   assert.ok(/attachInternals|extends\s+IswcForm(?:Control|Chrome)\b/.test(factorySrc),
     'factory debe usar ElementInternals (form-associated)');
 });
 
-test('date-field: se compone con iswc-date-picker para el panel (en date-input)', () => {
+test('iswc-date-field:  se compone con iswc-date-picker para el panel (en date-input)', () => {
   // El factory define el campo. iswc-date-input.ts lo compone con iswc-date-picker.
   const dateInput = leerComponente('iswc-date-input');
   assert.ok(/definePickerInput/.test(dateInput) && /iswc-date-picker/.test(dateInput),
     'iswc-date-input compone field + picker');
 });
 
-test('date-field: usa Intl nativo para locale (delegado en date-utils/date-field-core)', () => {
+test('iswc-date-field:  usa Intl nativo para locale (delegado en date-utils/date-field-core)', () => {
   // El factory delega el formateo a date-field-core / date-utils,
   // que son quienes usan Intl directamente. Verificamos la cadena.
   const core = readFileSync(join(import.meta.dirname!, '..', '..', 'src', 'components', 'forms', 'utils', 'date-field-core.ts'), 'utf8');
@@ -83,26 +83,26 @@ test('date-field: usa Intl nativo para locale (delegado en date-utils/date-field
     'factory debe usar resolverLocale() (core/localize) para normalizar el locale');
 });
 
-test('date-field: kind=date en la invocación', () => {
+test('iswc-date-field:  kind=date en la invocación', () => {
   assert.ok(/kind:\s*['"]date['"]/.test(src),
     '<iswc-date-field> debe invocar defineDateField con kind: "date"');
 });
 
-test('date-field: slots del factory (start, end)', () => {
+test('iswc-date-field:  slots del factory (start, end)', () => {
   assert.ok(/<slot\s+name=["']start["']/.test(factorySrc),
     'factory debe declarar slot "start"');
   assert.ok(/<slot\s+name=["']end["']/.test(factorySrc),
     'factory debe declarar slot "end"');
 });
 
-test('date-field: shadow DOM parts del factory', () => {
+test('iswc-date-field:  shadow DOM parts del factory', () => {
   for (const p of ['form-control', 'label', 'base', 'sections', 'clear', 'hint']) {
     assert.ok(new RegExp(`\\bpart=["']${p}["']`).test(factorySrc),
       `factory debe declarar part="${p}"`);
   }
 });
 
-test('date-field: edge case — value="" (vacío) y min > max', () => {
+test('iswc-date-field:  edge case — value="" (vacío) y min > max', () => {
   // El factory declara 'value' como observado. min/max deben compararse.
   assert.ok(/value/.test(factorySrc));
   assert.ok(/min/.test(factorySrc) && /max/.test(factorySrc));
@@ -111,12 +111,12 @@ test('date-field: edge case — value="" (vacío) y min > max', () => {
     'factory debe poder marcar el campo como invalid (min > max → invalid)');
 });
 
-test('date-field: edge case — locale inválido cae al del sistema', () => {
+test('iswc-date-field:  edge case — locale inválido cae al del sistema', () => {
   assert.ok(/resolverLocale/.test(factorySrc) || /Intl\.DateTimeFormat\(\s*\[/.test(factorySrc),
     'factory debe manejar locales inválidos (fallback)');
 });
 
-test('date-field: preview JSON', () => {
+test('iswc-date-field:  preview JSON', () => {
   const prev = leerPreview(TAG);
   assert.ok(prev);
   assert.equal(prev!['$schema'], 'iswc-preview/v1');

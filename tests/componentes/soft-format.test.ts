@@ -39,7 +39,7 @@ test('soft-format: softFormat no aplana HTML ya bien indentado sin anidación in
   assert.equal(ct.softFormat(src, 'htmlmixed'), src);
 });
 
-test('softFormat conserva el json indentado dentro de un atributo multilínea', () => {
+test('soft-format: softFormat conserva el json indentado dentro de un atributo multilínea', () => {
   const src = [
     '<iswc-palette-selector palettes=\'[',
     '  {',

@@ -32,68 +32,68 @@ void async function () {
   await import('../../src/components/feedback/badge.ts').catch(() => {});
 }();
 
-test('1. módulo existe', () => {
+test('iswc-badge:  módulo existe', () => {
   assert.ok(exists(TS));
 });
 
-test('2. CSS hermano existe', () => {
+test('iswc-badge:  CSS hermano existe', () => {
   assert.ok(existsSync(CSS));
 });
 
-test('3. JSON existe y respeta iswc-preview/v1', () => {
+test('iswc-badge:  JSON existe y respeta iswc-preview/v1', () => {
   const json = JSON.parse(readFileSync(JSON_PATH, 'utf8'));
   assert.equal(json.tag, TAG);
   assert.equal(json['$schema'], 'iswc-preview/v1');
 });
 
-test('4. OBSERVED incluye color, variant, pill, attention', () => {
+test('iswc-badge:  OBSERVED incluye color, variant, pill, attention', () => {
   const obs = extraerObservados(TS);
   for (const a of ['color', 'variant', 'pill', 'attention']) {
     assert.ok(obs.includes(a), `OBSERVED debe incluir "${a}", actual=${obs.join(',')}`);
   }
 });
 
-test('5. color acepta brand | neutral | success | warning | danger', () => {
+test('iswc-badge:  color acepta brand | neutral | success | warning | danger', () => {
   const src = leerConBase(TS);
   for (const c of ['brand', 'neutral', 'success', 'warning', 'danger']) {
     assert.ok(src.includes(`'${c}'`) || src.includes(`"${c}"`), `color acepta "${c}"`);
   }
 });
 
-test('6. variant acepta accent | filled | outlined | filled-outlined', () => {
+test('iswc-badge:  variant acepta accent | filled | outlined | filled-outlined', () => {
   const src = leerConBase(TS);
   for (const v of ['accent', 'filled', 'outlined', 'filled-outlined']) {
     assert.ok(src.includes(`'${v}'`) || src.includes(`"${v}"`), `variant acepta "${v}"`);
   }
 });
 
-test('7. attention tiene pulse y bounce', () => {
+test('iswc-badge:  attention tiene pulse y bounce', () => {
   const src = leerConBase(TS);
   for (const a of ['pulse', 'bounce']) {
     assert.ok(src.includes(`'${a}'`) || src.includes(`"${a}"`), `attention tiene "${a}"`);
   }
 });
 
-test('8. expone CSS parts: badge, start, label, end', () => {
+test('iswc-badge:  expone CSS parts: badge, start, label, end', () => {
   const parts = extraerParts(leerConBase(TS));
   for (const p of ['badge', 'start', 'label', 'end']) {
     assert.ok(parts.includes(p), `parts debe incluir "${p}", actual=${parts.join(',')}`);
   }
 });
 
-test('9. slots default + start + end', () => {
+test('iswc-badge:  slots default + start + end', () => {
   const src = leerConBase(TS);
   assert.ok(/<slot>/.test(src) || /<slot\s*>/.test(src), 'slot default');
   assert.ok(/name=['"]start['"]/.test(src));
   assert.ok(/name=['"]end['"]/.test(src));
 });
 
-test('10. custom element registrado', () => {
+test('iswc-badge:  custom element registrado', () => {
   const src = leerConBase(TS);
   assert.ok(/(?:defineElement\s*\(\s*|static\s+(?:override\s+)?tag\s*=\s*|createObserverElement\(\s*'\w+',\s*)['"]iswc-badge['"]/.test(src));
 });
 
-test('11. JSDoc de cabecera', () => {
+test('iswc-badge:  JSDoc de cabecera', () => {
   assert.ok(tieneJsDoc(leerConBase(TS)));
 });
 

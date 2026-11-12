@@ -21,63 +21,63 @@ const TS  = join(ROOT, 'src', 'components', 'helpers', 'mutation-observer.ts');
 const CSS = join(ROOT, '.tmp-scss', 'src', 'components', 'helpers', 'mutation-observer.css');
 const JSON_PATH = join(ROOT, 'src', 'components', 'helpers', 'mutation-observer.json');
 
-test('mutation-observer: 1. módulo existe', () => {
+test('iswc-mutation-observer:  1. módulo existe', () => {
   assert.ok(existsSync(TS));
 });
 
-test('mutation-observer: 2. CSS hermano existe', () => {
+test('iswc-mutation-observer:  2. CSS hermano existe', () => {
   assert.ok(existsSync(CSS));
 });
 
-test('mutation-observer: 3. JSON existe y respeta iswc-preview/v1', () => {
+test('iswc-mutation-observer:  3. JSON existe y respeta iswc-preview/v1', () => {
   const json = JSON.parse(readFileSync(JSON_PATH, 'utf8'));
   assert.equal(json.tag, TAG);
   assert.equal(json.$schema, 'iswc-preview/v1');
 });
 
-test('4. delega en createObserverElement("mutation")', () => {
+test('iswc-mutation-observer:  delega en createObserverElement("mutation")', () => {
   const src = readFileSync(TS, 'utf8');
   assert.ok(/createObserverElement\s*\(\s*['"]mutation['"]\s*[,)]/.test(src));
 });
 
-test('5. importa desde ./observer.js', () => {
+test('iswc-mutation-observer:  importa desde ./observer.js', () => {
   const src = readFileSync(TS, 'utf8');
   assert.ok(/from\s*['"][./]+observer(?:\.js)?['"]/.test(src));
 });
 
-test('mutation-observer: 6. está registrado con defineElement', () => {
+test('iswc-mutation-observer:  6. está registrado con defineElement', () => {
   const src = readFileSync(TS, 'utf8');
   assert.ok(/(?:defineElement\s*\(\s*|static\s+(?:override\s+)?tag\s*=\s*|createObserverElement\(\s*'\w+',\s*)['"]iswc-mutation-observer['"]/.test(src));
 });
 
-test('7. hereda OBSERVED del factory (no redefinir)', () => {
+test('iswc-mutation-observer:  hereda OBSERVED del factory (no redefinir)', () => {
   const src = readFileSync(TS, 'utf8');
   assert.ok(!/OBSERVED\s*=\s*\[/.test(src));
 });
 
-test('8. JSDoc documenta atributos de mutation (attr, child-list, character-data)', () => {
+test('iswc-mutation-observer:  JSDoc documenta atributos de mutation (attr, child-list, character-data)', () => {
   const src = readFileSync(TS, 'utf8');
   for (const a of ['attr', 'child-list', 'character-data']) {
     assert.ok(src.includes(a));
   }
 });
 
-test('9. JSDoc documenta evento iswc-mutate', () => {
+test('iswc-mutation-observer:  JSDoc documenta evento iswc-mutate', () => {
   const src = readFileSync(TS, 'utf8');
   assert.ok(/iswc-mutate/.test(src));
 });
 
-test('10. registrado en catalog.ts', () => {
+test('iswc-mutation-observer:  registrado en catalog.ts', () => {
   const cat = readFileSync(join(ROOT, 'src', 'previews', 'catalog.ts'), 'utf8');
   assert.ok(cat.includes(`"iswc-mutation-observer"`));
 });
 
-test('11. CSS host con display:contents', () => {
+test('iswc-mutation-observer:  CSS host con display:contents', () => {
   const css = readFileSync(CSS, 'utf8');
   assert.ok(/display\s*:\s*contents/.test(css));
 });
 
-test('12. JSON tiene sección de reference o atributos documentados', () => {
+test('iswc-mutation-observer:  JSON tiene sección de reference o atributos documentados', () => {
   const json = JSON.parse(readFileSync(JSON_PATH, 'utf8'));
   const todasLasCeldas = JSON.stringify(json).toLowerCase();
   assert.ok(

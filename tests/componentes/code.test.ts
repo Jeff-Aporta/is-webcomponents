@@ -157,12 +157,12 @@ test('code: formatCode no reescribe un cURL', () => {
   assert.equal(formatCode(curl, 'shell'), curl);
 });
 
-test('unwrapHandHighlight quita el coloreado a mano de la migración', () => {
+test('code: unwrapHandHighlight quita el coloreado a mano de la migración', () => {
   const dirty = '<span class="tag"><button</span> <span class="attr">part</span>=<span class="val">"button"</span><span class="tag">></span>';
   assert.equal(ct.unwrapHandHighlight(dirty), '<button part="button">');
 });
 
-test('softFormat expande anidación HTML en la misma línea', () => {
+test('code: softFormat expande anidación HTML en la misma línea', () => {
   const src = '<button class="btn"><span part="start"><slot name="start"></slot></span></button>';
   const out = ct.softFormat(src, 'htmlmixed');
   const lines = out.split('\n');
@@ -173,12 +173,12 @@ test('softFormat expande anidación HTML en la misma línea', () => {
   assert.match(lines.at(-1), /^<\/button>/);
 });
 
-test('softFormat no aplana HTML ya bien indentado sin anidación inline', () => {
+test('code: softFormat no aplana HTML ya bien indentado sin anidación inline', () => {
   const src = '<div>\n  <p>hola</p>\n</div>';
   assert.equal(ct.softFormat(src, 'htmlmixed'), src);
 });
 
-test('softFormat repara el markup a mano de anatomy y lo indenta', () => {
+test('code: softFormat repara el markup a mano de anatomy y lo indenta', () => {
   const dirty = [
     '<span class="tag"><button</span> <span class="attr">part</span>=<span class="val">"button"</span> <span class="attr">class</span>=<span class="val">"btn"</span><span class="tag">></span>',
     '  <span class="tag"><span</span> <span class="attr">part</span>=<span class="val">"start"</span> <span class="attr">class</span>=<span class="val">"btn__prefix"</span><span class="tag">></span><span class="tag"><slot</span> <span class="attr">name</span>=<span class="val">"start"</span><span class="tag">></slot></span></span>',
@@ -191,12 +191,12 @@ test('softFormat repara el markup a mano de anatomy y lo indenta', () => {
   assert.match(out, /^\s+<slot name="start">/m);
 });
 
-test('sin cm-error en el docs: el rojo de CodeMirror ya no existe (motor nativo)', () => {
+test('code: sin cm-error en el docs: el rojo de CodeMirror ya no existe (motor nativo)', () => {
   const css = readFileSync(join(root, '.tmp-scss/src/styles/presentation.css'), 'utf8');
   assert.doesNotMatch(css, /\.cm-error/);
 });
 
-test('el highlighter vigila el DOM: nada se queda sin colorear', () => {
+test('code: el highlighter vigila el DOM: nada se queda sin colorear', () => {
   assert.equal(typeof hl.watchDom, 'function', 'falta watchDom');
   assert.equal(typeof hl.repaint, 'function', 'falta repaint');
 
@@ -211,7 +211,7 @@ test('el highlighter vigila el DOM: nada se queda sin colorear', () => {
   assert.match(boot, /watchDom\(\)/, 'highlight-pre.js debe arrancar el observer');
 });
 
-test('las salidas vivas del docs son pre.code o iswc-code (paint → editor)', () => {
+test('code: las salidas vivas del docs son pre.code o iswc-code (paint → editor)', () => {
   const casos = [
     ['src/pages/theming.json', 'cssOut', 'css'],
     ['src/components/forms/rte.json', 'outHTML', 'html'],
@@ -231,7 +231,7 @@ test('las salidas vivas del docs son pre.code o iswc-code (paint → editor)', (
   }
 });
 
-test('el panel CDN no embebe prompt LLM como MD editor', () => {
+test('code: el panel CDN no embebe prompt LLM como MD editor', () => {
   const src = readFileSync(join(root, 'src/components/feedback/cdn-snippet.ts'), 'utf8');
   assert.match(src, /data-slot="skills"/);
   assert.doesNotMatch(src, /data-slot="llm-prompt"/);

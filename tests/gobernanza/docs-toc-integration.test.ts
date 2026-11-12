@@ -21,7 +21,7 @@ import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/
 
 const { test, lista } = coleccionPruebas({ categoria: 'how' });
 
-test('gobernanza/docs-toc-integration', async () => {
+test('gobernanza/docs-toc-integracion', async () => {
   const here = dirname(fileURLToPath(import.meta.url));
   const root = dirname(dirname(here));
   

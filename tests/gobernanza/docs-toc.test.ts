@@ -38,7 +38,7 @@ import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/
 
 const { test, lista } = coleccionPruebas({ categoria: 'how' });
 
-test('gobernanza/docs-toc', async () => {
+test('docs-toc: el indice del documento', async () => {
   const here = dirname(fileURLToPath(import.meta.url));
   const root = dirname(dirname(here));
 
