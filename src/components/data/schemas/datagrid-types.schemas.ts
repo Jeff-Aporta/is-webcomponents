@@ -58,7 +58,8 @@ export type ColumnFilter = z.infer<typeof ColumnFilterSchema>;
 const FilterModelSchema = z.record(z.string(), ColumnFilterSchema);
 export type FilterModel = z.infer<typeof FilterModelSchema>;
 
-const ColumnTypeNameSchema = z.unknown() /* TODO: cannot convert */;
+/** Tipos de columna del motor: los que trae de serie `ColumnType`. */
+const ColumnTypeNameSchema = z.enum(['text', 'number', 'date', 'boolean']);
 
 const AggFuncNameSchema = z.unknown() /* TODO: cannot convert */;
 
@@ -68,7 +69,8 @@ export type SortDirName = z.infer<typeof SortDirNameSchema>;
 const PinSideNameSchema = z.unknown() /* TODO: cannot convert */;
 export type PinSideName = z.infer<typeof PinSideNameSchema>;
 
-const AlignNameSchema = z.unknown() /* TODO: cannot convert */;
+/** Alineación de la celda y de la cabecera. */
+const AlignNameSchema = z.enum(['left', 'center', 'right']);
 export type AlignName = z.infer<typeof AlignNameSchema>;
 
 const DensityNameSchema = z.unknown() /* TODO: cannot convert */;
@@ -77,7 +79,8 @@ export type DensityName = z.infer<typeof DensityNameSchema>;
 const SelectionModeNameSchema = z.unknown() /* TODO: cannot convert */;
 export type SelectionModeName = z.infer<typeof SelectionModeNameSchema>;
 
-const FilterTypeNameSchema = z.unknown() /* TODO: cannot convert */;
+/** Tipos de filtro que el motor sabe aplicar. */
+const FilterTypeNameSchema = z.enum(['text', 'number', 'date', 'set']);
 
 const RowDataSchema = z.record(z.string(), z.unknown());
 export type RowData = z.infer<typeof RowDataSchema>;

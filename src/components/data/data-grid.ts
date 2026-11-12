@@ -4,8 +4,8 @@ import { withStyleAttrs } from '@jeff-aporta/iswc-base/core/attrs.js';
 
 import { escapeHtml } from '@jeff-aporta/iswc-base/core/dom.js';
 import { AGGREGATION_FNS, LOGIC, filterTest, operatorNeedsInput, toDate } from './utils/grid-types.js';
-import type { CellValue, FilterRule, Operator, Row } from "./schemas/grid-types.schemas.js";
-import type { ColumnDef, FilterModel, SortModelItem } from "./schemas/datagrid-types.schemas.js";
+import type { CellValue, ColumnDef, FilterRule, Operator, Row } from "./schemas/grid-types.schemas.js";
+import type { FilterModel, SortModelItem } from "./schemas/grid-data.schemas.js";
 
 import {
   aggregateRows,
@@ -303,7 +303,7 @@ function aEm(u: number): string {
   type CellRender = { el: HTMLElement; spanCount: number };
 
   /** Entrada del modelo de orden. */
-  type SortEntry = { field: string; sort: string | null } | SortModelItem;
+  type SortEntry = SortModelItem;
 
   /** Parche de undo/redo. */
   type HistoryPatch = Array<{ id: CellValue; before: Row; after: Row }>;

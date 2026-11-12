@@ -15,8 +15,8 @@ const AgGridApiSchema = z.object({
   resetPersistedState: z.function({ input: [], output: z.void() }).optional(),
 });
 
-const IswcAgGridElSchema = z.object({
+const IswcAgGridElSchema = z.intersection(z.custom<HTMLElement>(), z.object({
   api: AgGridApiSchema.optional(),
-});
+}));
 export type IswcAgGridEl = z.infer<typeof IswcAgGridElSchema>;
 

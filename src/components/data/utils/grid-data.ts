@@ -146,7 +146,7 @@ export function applyFilters(rows: readonly Row[], { model, quick, columns, ctx,
 export function applySort(rows: readonly Row[], sortModel: readonly SortModelItem[] | undefined, columns: readonly ResolvedColumn[], ctx: FilterCtx): Row[] {
   const active = (sortModel || [])
     .map((s: SortModelItem) => ({ col: columns.find((c: ResolvedColumn) => c.field === s.field), sort: s.sort }))
-    .filter((s: { col?: ResolvedColumn; sort?: string }) => s.col && s.sort);
+    .filter((s: { col?: ResolvedColumn; sort?: string | null }) => s.col && s.sort);
   if (!active.length) return [...rows];
   // Índice original como criterio final: ordenación estable y reproducible.
   return rows

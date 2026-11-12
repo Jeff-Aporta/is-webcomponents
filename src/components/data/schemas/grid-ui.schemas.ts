@@ -1,19 +1,20 @@
 // @contexto INDICE.md · src/components/data/README.md
 /**
- * grid-ui.ts — Zod schemas para los tipos extraídos de este módulo.
- *
- * Generado por `scripts/migrate-zod.py`. Refinar manualmente las
- * entradas marcadas con TODO cuando se quiera validación runtime.
+ * grid-ui.schemas.ts — Tipos de la capa de UI del data grid: popover, menú,
+ * panel de columnas y panel de filtros.
  */
-import { z } from "zod";
+import { z } from 'zod';
+import type { ColumnDef, FilterRule } from './grid-types.schemas.js';
 
-const GridPopoverElSchema = z.intersection(z.unknown() /* TODO: ref HTMLElement */, z.object({
-  popover: z.string().optional(),
-  showPopover: z.function({ input: [], output: z.void() }).optional(),
-  hidePopover: z.function({ input: [], output: z.void() }).optional(),
-}));
-export type GridPopoverEl = z.infer<typeof GridPopoverElSchema>;
+/**
+ * Popover del grid: un `div` normal que, si el navegador soporta la Popover
+ * API, se abre en el top layer. `popover` es opcional porque la API todavia
+ * no esta en todos los navegadores.
+ */
+export type GridPopoverEl = HTMLElement & { popover?: string };
+const GridPopoverElSchema = z.custom<GridPopoverEl>();
 
+/** Item de menú que se renderiza con `renderMenu`. */
 const MenuItemSchema = z.object({
   label: z.string().optional(),
   icon: z.string().optional(),
@@ -25,22 +26,21 @@ const MenuItemSchema = z.object({
 });
 export type MenuItem = z.infer<typeof MenuItemSchema>;
 
-const RenderColumnsPanelOptsSchema = z.object({
-  columns: z.array(z.unknown() /* TODO: cannot convert */),
-  isVisible: z.function({ input: [z.string()], output: z.boolean() }),
-  search: z.string().optional(),
-});
-export type RenderColumnsPanelOpts = z.infer<typeof RenderColumnsPanelOptsSchema>;
+/** Columnas del panel de visibilidad. */
+export type RenderColumnsPanelOpts = {
+  columns: ColumnDef[];
+  isVisible: (field: string) => boolean;
+  search?: string;
+};
 
-const FilterPanelModelSchema = z.object({
-  items: z.array(z.unknown() /* TODO: ref FilterRule */),
-  logicOperator: z.union([z.literal('and'), z.literal('or')]).optional(),
-});
-export type FilterPanelModel = z.infer<typeof FilterPanelModelSchema>;
+/** Reglas de filtro del panel: lista de reglas + operador lógico. */
+export type FilterPanelModel = {
+  items: FilterRule[];
+  logicOperator?: 'and' | 'or';
+};
 
-const RenderFilterPanelOptsSchema = z.object({
-  columns: z.array(z.unknown() /* TODO: cannot convert */),
-  model: FilterPanelModelSchema,
-});
-export type RenderFilterPanelOpts = z.infer<typeof RenderFilterPanelOptsSchema>;
-
+/** Columnas y modelo con los que se pinta el panel de filtros. */
+export type RenderFilterPanelOpts = {
+  columns: ColumnDef[];
+  model: FilterPanelModel;
+};

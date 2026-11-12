@@ -103,7 +103,7 @@ export const STRING_OPERATORS: Operator[] = [
     value: 'isAnyOf',
     label: 'es cualquiera de',
     multiple: true,
-    test: (v: CellValue, f: readonly string[]) => f.length === 0 || f.includes(String(v ?? '').toLowerCase()),
+    test: (v: CellValue, f: string[]) => f.length === 0 || f.includes(String(v ?? '').toLowerCase()),
   },
 ];
 
@@ -114,14 +114,14 @@ export const NUMBER_OPERATORS: Operator[] = [
   { value: '>=', label: '≥', test: (v: CellValue, f: number) => Number(v) >= f },
   { value: '<', label: '<', test: (v: CellValue, f: number) => Number(v) < f },
   { value: '<=', label: '≤', test: (v: CellValue, f: number) => Number(v) <= f },
-  { value: 'between', label: 'entre', range: true, test: (v: CellValue, f: readonly number[]) => Number(v) >= f[0]! && Number(v) <= f[1]! },
+  { value: 'between', label: 'entre', range: true, test: (v: CellValue, f: number[]) => Number(v) >= f[0]! && Number(v) <= f[1]! },
   { value: 'isEmpty', label: 'está vacío', input: false, test: (v: CellValue) => isEmptyValue(v) },
   { value: 'isNotEmpty', label: 'no está vacío', input: false, test: (v: CellValue) => !isEmptyValue(v) },
   {
     value: 'isAnyOf',
     label: 'es cualquiera de',
     multiple: true,
-    test: (v: CellValue, f: readonly number[]) => f.length === 0 || f.some((n) => Number(n) === Number(v)),
+    test: (v: CellValue, f: number[]) => f.length === 0 || f.some((n) => Number(n) === Number(v)),
   },
 ];
 
@@ -171,7 +171,7 @@ export const SINGLE_SELECT_OPERATORS: Operator[] = [
     label: 'es cualquiera de',
     inputType: 'select',
     multiple: true,
-    test: (v: CellValue, f: readonly string[]) => f.length === 0 || f.map(String).includes(String(v ?? '')),
+    test: (v: CellValue, f: string[]) => f.length === 0 || f.map(String).includes(String(v ?? '')),
   },
 ];
 
@@ -246,7 +246,7 @@ export function typeOf(col: ColumnDef | null | undefined): ColumnTypeName {
   return t != null && t in COLUMN_TYPES ? (t as ColumnTypeName) : 'string';
 }
 
-export function operatorsFor(col: ColumnDef | null | undefined): readonly Operator[] {
+export function operatorsFor(col: ColumnDef | null | undefined): Operator[] {
   const custom = col?.filterOperators;
   if (Array.isArray(custom) && custom.length) return custom;
   return COLUMN_TYPES[typeOf(col)].operators || STRING_OPERATORS;

@@ -6,13 +6,18 @@
  * entradas marcadas con TODO cuando se quiera validación runtime.
  */
 import { z } from "zod";
+import type { ColumnDef, Row } from './grid-types.schemas.js';
 
-const DataGridElementSchema = z.intersection(z.unknown() /* TODO: ref HTMLElement */, z.object({
-  columns: z.array(z.unknown() /* TODO: ref ColumnDef */),
-  rows: z.array(z.unknown() /* TODO: ref Row */),
+/** La columna y la fila del data grid: los tipos viven en `grid-types.schemas.ts`. */
+const ColumnDefSchema = z.custom<ColumnDef>();
+const RowSchema = z.custom<Row>();
+
+const DataGridElementSchema = z.intersection(z.custom<HTMLElement>(), z.object({
+  columns: z.array(ColumnDefSchema),
+  rows: z.array(RowSchema),
   pinnedRows: z.object({
-  top: z.array(z.unknown() /* TODO: ref Row */),
-  bottom: z.array(z.unknown() /* TODO: ref Row */),
+  top: z.array(RowSchema),
+  bottom: z.array(RowSchema),
 }),
   sortModel: z.array(z.object({
   field: z.string(),
@@ -44,13 +49,13 @@ const DataGridElementSchema = z.intersection(z.unknown() /* TODO: ref HTMLElemen
   fn: z.string(),
 })),
 }), z.null()]),
-  listViewColumn: z.union([z.unknown() /* TODO: ref ColumnDef */, z.null()]),
+  listViewColumn: z.union([ColumnDefSchema, z.null()]),
   paginationModel: z.object({
   page: z.number(),
   pageSize: z.number(),
 }),
   rowSelectionModel: z.array(z.unknown()),
-  selectedRows: z.array(z.unknown() /* TODO: ref Row */),
+  selectedRows: z.array(RowSchema),
   selectedIndices: z.array(z.number()),
   cellSelectionModel: z.union([z.object({
   start: z.object({

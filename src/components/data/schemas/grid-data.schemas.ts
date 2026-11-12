@@ -1,102 +1,111 @@
 // @contexto INDICE.md · src/components/data/README.md
 /**
- * grid-data.ts — Zod schemas para los tipos extraídos de este módulo.
+ * grid-data.schemas.ts — Tipos del pipeline de datos del data grid: columnas
+ * resueltas, modelos de filtro, orden, agrupación, árbol y pivot.
  *
- * Generado por `scripts/migrate-zod.py`. Refinar manualmente las
- * entradas marcadas con TODO cuando se quiera validación runtime.
+ * Los tipos que secledan entre si (árbol, columna) se declaran a mano: zod no
+ * puede expresar esa recursion (mismo criterio que `GridApi` en
+ * `datagrid-types.schemas.ts`).
  */
-import { z } from "zod";
+import { z } from 'zod';
+import type {
+  CellValue,
+  ColumnDef,
+  ColumnTypeName,
+  Comparator,
+  FilterRule,
+  Operator,
+  Row,
+} from './grid-types.schemas.js';
 
-const ResolvedColumnSchema = z.object({
-  field: z.string(),
-  headerName: z.string(),
-  align: z.string(),
-  headerAlign: z.string(),
-  width: z.number(),
-  minWidth: z.number(),
-  maxWidth: z.number(),
-  flex: z.number(),
-  sortable: z.boolean(),
-  filterable: z.boolean(),
-  hideable: z.boolean(),
-  resizable: z.boolean(),
-  editable: z.boolean(),
-  groupable: z.boolean(),
-  aggregable: z.boolean(),
-  comparator: z.unknown() /* TODO: ref Comparator */,
-  operators: z.array(z.unknown() /* TODO: cannot convert */),
-  type: z.string(),
-  valueFormatter: z.unknown() /* TODO: cannot convert */.optional(),
-});
-export type ResolvedColumn = z.infer<typeof ResolvedColumnSchema>;
-
+/** Normalización de columnas: defaults del grid. */
 const NormalizeOptionsSchema = z.object({
   defaultWidth: z.number().optional(),
   editableAll: z.boolean().optional(),
 });
 export type NormalizeOptions = z.infer<typeof NormalizeOptionsSchema>;
 
-const PivotModelSchema = z.object({
-  rows: z.array(z.unknown() /* TODO: cannot convert */).optional(),
-  columns: z.array(z.unknown() /* TODO: cannot convert */).optional(),
-  values: z.array(z.unknown() /* TODO: cannot convert */).optional(),
-});
-export type PivotModel = z.infer<typeof PivotModelSchema>;
+/**
+ * Columna con los defaults aplicados: misma forma que `ColumnDef` pero con
+ * los campos que el grid siempre necesita ya resueltos.
+ */
+export type ResolvedColumn = ColumnDef & {
+  field: string;
+  type: ColumnTypeName;
+  headerName: string;
+  align: string;
+  headerAlign: string;
+  width: number;
+  minWidth: number;
+  maxWidth: number;
+  flex: number;
+  sortable: boolean;
+  filterable: boolean;
+  editable: boolean;
+  resizable: boolean;
+  hideable: boolean;
+  groupable: boolean;
+  aggregable: boolean;
+  comparator: Comparator;
+  operators: Operator[];
+};
 
+/** Reglas de filtro del grid: lista de reglas + operador lógico. */
+export type FilterModel = {
+  items: FilterRule[];
+  logicOperator?: 'and' | 'or';
+};
+
+/** Una entrada de ordenación: la columna y el sentido (`asc` / `desc`). */
 const SortModelItemSchema = z.object({
   field: z.string(),
-  sort: z.union([z.literal('asc'), z.literal('desc')]),
+  sort: z.string().nullable(),
 });
 export type SortModelItem = z.infer<typeof SortModelItemSchema>;
 
-const FilterModelSchema = z.object({
-  items: z.array(z.unknown() /* TODO: cannot convert */).optional(),
-  logicOperator: z.union([z.literal('and'), z.literal('or')]).optional(),
-});
+/** Modelo de pivot: qué columnas van en filas, en columnas y qué se agrega. */
+export type PivotModel = {
+  rows?: string[];
+  columns?: string[];
+  values?: Array<{ field: string; fn: string }>;
+};
 
 const AggregationModelSchema = z.record(z.string(), z.string());
 export type AggregationModel = z.infer<typeof AggregationModelSchema>;
 
-const BuildTreeOptsSchema = z.object({
-  paths: z.array(z.union([z.unknown() /* TODO: cannot convert */, z.number()])),
-  getRowId: z.function({ input: [z.unknown() /* TODO: ref Row */, z.number()], output: z.unknown() /* TODO: ref CellValue */ }),
-});
-export type BuildTreeOpts = z.infer<typeof BuildTreeOptsSchema>;
-
+/** Contexto que se pasa a los callbacks de celda. */
 const FilterCtxSchema = z.unknown();
 export type FilterCtx = z.infer<typeof FilterCtxSchema>;
 
-const ApplyFiltersOptsSchema = z.object({
-  model: FilterModelSchema.optional(),
-  quick: z.string().optional(),
-  columns: z.array(z.unknown() /* TODO: cannot convert */),
-  ctx: FilterCtxSchema,
-  quickLogic: z.union([z.literal('and'), z.literal('or')]).optional(),
-});
-export type ApplyFiltersOpts = z.infer<typeof ApplyFiltersOptsSchema>;
+/** Opciones para construir el árbol de filas. */
+export type BuildTreeOpts = {
+  paths: (row: Row, index: number) => readonly (string | number)[];
+  getRowId: (row: Row, index: number) => CellValue;
+};
 
-const TreeNodeSchema = z.object({
-  kind: z.union([z.literal('leaf'), z.literal('group')]),
-  id: z.unknown() /* TODO: ref CellValue */,
-  key: z.union([z.string(), z.number()]).optional(),
-  depth: z.number(),
-  path: z.array(z.unknown() /* TODO: cannot convert */),
-  get parent(): z.ZodUnion<[typeof TreeNodeSchema, z.ZodNull]> { return z.union([TreeNodeSchema, z.null()]); },
-  get children(): z.ZodArray<typeof TreeNodeSchema> { return z.array(TreeNodeSchema); },
-  rows: z.array(z.unknown() /* TODO: ref Row */),
-  row: z.unknown() /* TODO: ref Row */.optional(),
-  leafRow: z.union([z.unknown() /* TODO: ref Row */, z.null()]).optional(),
-  aggregates: z.record(z.string(), z.object({
-  value: z.unknown() /* TODO: ref CellValue */,
-  fn: z.string(),
-})).optional(),
-});
-export type TreeNode = z.infer<typeof TreeNodeSchema>;
+/** Opciones de `applyFilters`. */
+export type ApplyFiltersOpts = {
+  model?: FilterModel;
+  quick?: string;
+  columns: ResolvedColumn[];
+  ctx: FilterCtx;
+  quickLogic?: 'and' | 'or';
+};
 
-const PivotResultSchema = z.object({
-  rows: z.array(z.unknown() /* TODO: ref Row */),
-  columns: z.array(z.unknown() /* TODO: ref ColumnDef */),
-  colKeys: z.array(z.string()),
-});
-export type PivotResult = z.infer<typeof PivotResultSchema>;
+/** Nodo del árbol de filas. */
+export type TreeNode = {
+  kind: 'leaf' | 'group';
+  id: CellValue;
+  key?: string | number;
+  depth: number;
+  path: readonly (string | number)[];
+  parent: TreeNode | null;
+  children: TreeNode[];
+  rows: Row[];
+  row?: Row;
+  leafRow?: Row | null;
+  aggregates?: Record<string, { value: CellValue; fn: string }>;
+};
 
+/** Resultado de `pivotData`. */
+export type PivotResult = { rows: Row[]; columns: ColumnDef[]; colKeys: string[] };
