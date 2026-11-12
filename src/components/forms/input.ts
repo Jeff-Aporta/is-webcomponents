@@ -1,9 +1,11 @@
 // @contexto INDICE.md · src/components/forms/input.md
 import { emit, upgradeProperties, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
-import { IswcFormControl } from '@jeff-aporta/iswc-base/core/iswc-form-control.js';
+import { IswcFormChrome } from '@jeff-aporta/iswc-base/core/iswc-form-chrome.js';
 import { isOtpAutocomplete, listenWebOtp } from './utils/input-tokens.js';
 import { hasSlotted } from '@jeff-aporta/iswc-base/core/dom.js';
 import { registrarTerminos } from '@jeff-aporta/iswc-base/core/localize.js';
+import { html } from '@jeff-aporta/iswc-base/core/plantilla.js';
+import type { Resultado } from '@jeff-aporta/iswc-base/core/schemas/plantilla.schemas.js';
 import css from 'iswc:css';
 import { prop } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
 import type { InputEventos } from './schemas/input.schemas.js';
@@ -34,53 +36,12 @@ import type { InputEventos } from './schemas/input.schemas.js';
  * Eventos: iswc-input, iswc-change, iswc-typing-end, iswc-enter (bubbles + composed) y los
  *          nativos input/change
  * Tokens: --iswc-field-width, --iswc-field-label-width, --iswc-input-*
+ *
+ * La vista la pinta el molde (F8): `render()` con el `html` de `core/plantilla.ts`. El shadow se
+ * pinta al conectar (antes de `onConnected`), asi que el DOM del campo no existe antes.
  */
 
 (() => {
-  const TEMPLATE = document.createElement('template');
-  TEMPLATE.innerHTML = /* html */ `
-    <div part="form-control" class="form-control">
-      <label part="label" class="label" id="label" for="input" hidden><slot name="label"></slot></label>
-      <div part="base" class="base">
-        <span part="start" class="adorn" id="start" hidden>
-          <span part="prefix" class="adorn-text" id="prefix" hidden></span>
-          <slot name="start"></slot>
-        </span>
-        <input part="input" class="input" id="input" type="text" aria-describedby="hint error-text" />
-        <iswc-button
-          type="button"
-          part="clear"
-          class="icon-btn"
-          id="clear"
-          variant="text"
-          color="text"
-          tabindex="-1"
-          hidden
-        >
-          <iswc-icon icon="mdi:close-circle" aria-hidden="true"></iswc-icon>
-        </iswc-button>
-        <iswc-check-icon-button
-          part="toggle"
-          class="icon-btn"
-          id="toggle"
-          icon="mdi:eye-outline"
-          checked-icon="mdi:eye-off-outline"
-          tabindex="-1"
-          hidden
-        ></iswc-check-icon-button>
-        <span part="end" class="adorn" id="end" hidden>
-          <slot name="end"></slot>
-          <span part="suffix" class="adorn-text" id="suffix" hidden></span>
-        </span>
-      </div>
-      <div part="support" class="support" id="support" hidden>
-        <div part="hint" class="hint" id="hint" hidden><slot name="hint"></slot></div>
-        <div part="error-text" class="error-text" id="error-text" hidden></div>
-        <div part="count" class="count" id="count" hidden></div>
-      </div>
-    </div>
-  `;
-
   registrarTerminos('es', { mostrarContrasena: 'Mostrar contraseña', ocultarContrasena: 'Ocultar contraseña' });
 
   const TYPES = ['text', 'email', 'password', 'number', 'search', 'tel', 'url', 'date'];
@@ -90,7 +51,8 @@ import type { InputEventos } from './schemas/input.schemas.js';
   /** Debounce por defecto del evento `iswc-typing-end` (ms) — mismo valor que ISP. */
   const DEFAULT_TYPING_DELAY = 600;
 
-  // Los demás atributos los declara cada `@prop` (y name, disabled, required, readonly y error, `IswcFormControl`).
+  // Los demás atributos los declara cada `@prop` (y name, disabled, required y readonly, `IswcFormControl`; label, hint,
+  // error-text y error, `IswcFormChrome`).
   const OBSERVED = ['type', 'value'];
 
   const EXTRA_UPGRADE_ATTRS = ['variant', 'label-placement', 'full-width'];
@@ -98,7 +60,7 @@ import type { InputEventos } from './schemas/input.schemas.js';
 
   const NATIVE_ATTRS = ['placeholder', 'min', 'max', 'step', 'maxlength', 'autocomplete', 'name'];
 
-  class IswcInput extends IswcFormControl {
+  class IswcInput extends IswcFormChrome {
     static override tag = 'iswc-input';
     declare static events: InputEventos;
     static override css = css;
@@ -107,69 +69,137 @@ import type { InputEventos } from './schemas/input.schemas.js';
 
     static override observed = [...OBSERVED, 'radius', 'border-color', 'bg', 'text-color', 'focus-color', 'danger-color'];
 
-    #input!: HTMLInputElement;
-    #labelEl!: HTMLElement;
-    #supportEl!: HTMLElement;
-    #hintEl!: HTMLElement;
-    #errorEl!: HTMLElement;
-    #countEl!: HTMLElement;
-    #startEl!: HTMLElement;
-    #endEl!: HTMLElement;
-    #prefixEl!: HTMLElement;
-    #suffixEl!: HTMLElement;
-    #clearBtn!: HTMLElement;
-    #toggleBtn!: HTMLElement;
-    #labelSlot!: HTMLSlotElement;
-    #hintSlot!: HTMLSlotElement;
-    #startSlot!: HTMLSlotElement;
-    #endSlot!: HTMLSlotElement;
+    #input: HTMLInputElement | null = null;
+    #clearBtn: HTMLElement | null = null;
+    #toggleBtn: HTMLElement | null = null;
+    #labelSlot: HTMLSlotElement | null = null;
+    #hintSlot: HTMLSlotElement | null = null;
+    #startSlot: HTMLSlotElement | null = null;
+    #endSlot: HTMLSlotElement | null = null;
+    #anclado = false;
     #value = '';
     #passwordVisible = false;
-    #hasHint = false;
+    #etiquetaSloteada = false;
+    #ayudaSloteada = false;
+    #inicioSloteado = false;
+    #finSloteado = false;
     #typingTimer: ReturnType<typeof setTimeout> | null = null;
     #otpAbort: AbortController | null = null;
 
-    constructor() {
-      super();
-      const shadow = this.shadowRoot!;
-      shadow.appendChild(TEMPLATE.content.cloneNode(true));
+    // ---- vista ----------------------------------------------------------
 
-      this.#input = shadow.getElementById('input') as HTMLInputElement;
-      this.#labelEl = shadow.getElementById('label')!;
-      this.#supportEl = shadow.getElementById('support')!;
-      this.#hintEl = shadow.getElementById('hint')!;
-      this.#errorEl = shadow.getElementById('error-text')!;
-      this.#countEl = shadow.getElementById('count')!;
-      this.#startEl = shadow.getElementById('start')!;
-      this.#endEl = shadow.getElementById('end')!;
-      this.#prefixEl = shadow.getElementById('prefix')!;
-      this.#suffixEl = shadow.getElementById('suffix')!;
-      this.#clearBtn = shadow.getElementById('clear')!;
-      this.#toggleBtn = shadow.getElementById('toggle')!;
-      this.#labelSlot = this.#labelEl.querySelector<HTMLSlotElement>('slot')!;
-      this.#hintSlot = this.#hintEl.querySelector<HTMLSlotElement>('slot')!;
-      this.#startSlot = this.#startEl.querySelector<HTMLSlotElement>('slot')!;
-      this.#endSlot = this.#endEl.querySelector<HTMLSlotElement>('slot')!;
-
-      this.#input.addEventListener('input', this.#onInput);
-      this.#input.addEventListener('change', this.#onChange);
-      this.#input.addEventListener('keydown', this.#onKeydown);
-      this.#input.addEventListener('focus', this.#onFocus);
-      this.#input.addEventListener('blur', this.#onBlur);
-      this.#clearBtn.addEventListener('click', this.#onClear);
-      this.#toggleBtn.addEventListener('iswc-change', this.#onTogglePassword as EventListener);
-      for (const slot of shadow.querySelectorAll<HTMLSlotElement>('slot')) {
-        slot.addEventListener('slotchange', this.#syncSlots);
-      }
+    /**
+     * Lo que ve el usuario. El molde la pinta y solo toca lo que cambia; el valor del campo lo
+     * lleva el `<input>` nativo (ahi escribe el usuario, no la plantilla).
+     */
+    override render(): Resultado | null {
+      const c = this.estadoChrome();
+      const conEtiqueta = !!c.etiqueta || this.#etiquetaSloteada;
+      const conAyuda = !!c.ayuda || this.#ayudaSloteada;
+      const conError = !!c.error;
+      const valor = this.#value;
+      const max = this.maxlength;
+      const interactivo = !this.inhabilitado && !this.readonly;
+      const contador = this.showCount ? (max ? `${valor.length}/${max}` : String(valor.length)) : '';
+      return html`
+        <div part="form-control" class="form-control">
+          <label part="label" class="label" id="label" for="input" ?hidden=${!conEtiqueta}>
+            <slot name="label" @slotchange=${this.#onSlotChange}>${c.etiqueta}</slot>
+          </label>
+          <div part="base" class="base">
+            <span part="start" class="adorn" id="start" ?hidden=${!this.prefixText && !this.#inicioSloteado}>
+              <span part="prefix" class="adorn-text" id="prefix" ?hidden=${!this.prefixText}>${this.prefixText}</span>
+              <slot name="start" @slotchange=${this.#onSlotChange}></slot>
+            </span>
+            <input
+              part="input"
+              class="input"
+              id="input"
+              type="text"
+              aria-describedby="hint error-text"
+              @input=${this.#onInput}
+              @change=${this.#onChange}
+              @keydown=${this.#onKeydown}
+              @focus=${this.#onFocus}
+              @blur=${this.#onBlur}
+            />
+            <iswc-button
+              part="clear"
+              class="icon-btn"
+              id="clear"
+              type="button"
+              variant="text"
+              color="text"
+              tabindex="-1"
+              ?hidden=${!(this.clearable && valor !== '' && interactivo)}
+              @click=${this.#onClear}
+            >
+              <iswc-icon icon="mdi:close-circle" aria-hidden="true"></iswc-icon>
+            </iswc-button>
+            <iswc-check-icon-button
+              part="toggle"
+              class="icon-btn"
+              id="toggle"
+              icon="mdi:eye-outline"
+              checked-icon="mdi:eye-off-outline"
+              tabindex="-1"
+              ?hidden=${!(this.type === 'password' && this.passwordToggle && !this.disabled)}
+              @iswc-change=${this.#onTogglePassword}
+            ></iswc-check-icon-button>
+            <span part="end" class="adorn" id="end" ?hidden=${!this.suffixText && !this.#finSloteado}>
+              <slot name="end" @slotchange=${this.#onSlotChange}></slot>
+              <span part="suffix" class="adorn-text" id="suffix" ?hidden=${!this.suffixText}>${this.suffixText}</span>
+            </span>
+          </div>
+          <div part="support" class="support" id="support" ?hidden=${!(conError || conAyuda || this.showCount)}>
+            <div part="hint" class="hint" id="hint" ?hidden=${conError || !conAyuda}>
+              <slot name="hint" @slotchange=${this.#onSlotChange}>${c.ayuda}</slot>
+            </div>
+            <div part="error-text" class="error-text" id="error-text" ?hidden=${!conError}>${c.error}</div>
+            <div part="count" class="count" id="count" ?hidden=${!this.showCount}>${contador}</div>
+          </div>
+        </div>
+      `;
     }
 
-    /** Textos de los botones internos en el idioma heredado (repinta al cambiar `lang`). */
+    /** Tras cada pintado: toma los nodos de la vista y deja los botones con su texto. */
     override actualizado(): void {
       super.actualizado();
-      this.#clearBtn.setAttribute('aria-label', this.t('limpiar'));
-      this.#toggleBtn.setAttribute('label', this.t('mostrarContrasena'));
-      this.#toggleBtn.setAttribute('checked-label', this.t('ocultarContrasena'));
+      this.#anclar();
+      this.#leerRanuras();
+      this.#clearBtn?.setAttribute('aria-label', this.t('limpiar'));
+      this.#toggleBtn?.setAttribute('label', this.t('mostrarContrasena'));
+      this.#toggleBtn?.setAttribute('checked-label', this.t('ocultarContrasena'));
+      this.estado('invalid', this.estadoChrome().invalido);
     }
+
+    /** Los nodos de la vista ya pintada (la pinta el molde al conectar). */
+    #anclar(): void {
+      if (this.#anclado) return;
+      const shadow = this.shadowRoot!;
+      this.#input = shadow.getElementById('input') as HTMLInputElement;
+      this.#clearBtn = shadow.getElementById('clear');
+      this.#toggleBtn = shadow.getElementById('toggle');
+      this.#labelSlot = shadow.querySelector<HTMLSlotElement>('slot[name="label"]');
+      this.#hintSlot = shadow.querySelector<HTMLSlotElement>('slot[name="hint"]');
+      this.#startSlot = shadow.querySelector<HTMLSlotElement>('slot[name="start"]');
+      this.#endSlot = shadow.querySelector<HTMLSlotElement>('slot[name="end"]');
+      this.#anclado = true;
+    }
+
+    /** Que hay en las ranuras (la etiqueta y la ayuda pueden venir del slot y no del atributo). */
+    #leerRanuras(): void {
+      this.#etiquetaSloteada = hasSlotted(this.#labelSlot);
+      this.#ayudaSloteada = hasSlotted(this.#hintSlot);
+      this.#inicioSloteado = hasSlotted(this.#startSlot);
+      this.#finSloteado = hasSlotted(this.#endSlot);
+    }
+
+    /** Cambio en una ranura: al repintar puede cambiar lo que se ve (la etiqueta, la ayuda). */
+    #onSlotChange = (): void => {
+      this.#leerRanuras();
+      this.solicitarRender();
+    };
 
     override onConnected(): void {
       upgradeProperties(this, EXTRA_UPGRADE_ATTRS);
@@ -182,7 +212,6 @@ import type { InputEventos } from './schemas/input.schemas.js';
         }
       }
       this.#value = this.getAttribute('value') ?? '';
-      this.#syncSlots();
       this.#syncNative();
       this.#syncDisabled();
       this.#update();
@@ -208,9 +237,9 @@ import type { InputEventos } from './schemas/input.schemas.js';
         this.#syncDisabled();
         this.#update();
       } else if (name === 'label' || name === 'hint' || name === 'prefix' || name === 'suffix') {
-        this.#syncSlots();
+        this.solicitarRender();
       } else if (name === 'error' || name === 'error-text' || name === 'show-count') {
-        this.#syncSupport();
+        this.solicitarRender();
       } else if (name === 'autocomplete') {
         this.#syncNative();
         this.#listenOtp();
@@ -240,7 +269,7 @@ import type { InputEventos } from './schemas/input.schemas.js';
       const next = v == null ? '' : String(v);
       if (next === this.#value) return;
       this.#value = next;
-      if (this.#input.value !== next) this.#input.value = next;
+      if (this.#input && this.#input.value !== next) this.#input.value = next;
       this.#update();
     }
 
@@ -298,42 +327,42 @@ import type { InputEventos } from './schemas/input.schemas.js';
 
     @prop({ attr: 'suffix', vacio: true }) accessor suffixText: string = '';
 
-    @prop({ vacio: true }) accessor placeholder: string = '';
+    @prop({ vacio: true }) override accessor placeholder: string = '';
 
     @prop({ vacio: true }) override accessor label: string = '';
 
     @prop({ vacio: true }) override accessor hint: string = '';
 
-    @prop({ vacio: true }) accessor min: string | null = null;
+    @prop({ vacio: true }) override accessor min: string | null = null;
 
-    @prop({ vacio: true }) accessor max: string | null = null;
+    @prop({ vacio: true }) override accessor max: string | null = null;
 
-    @prop({ vacio: true }) accessor step: string | null = null;
+    @prop({ vacio: true }) override accessor step: string | null = null;
 
-    @prop({ vacio: true }) accessor maxlength: string | null = null;
+    @prop({ vacio: true }) override accessor maxlength: string | null = null;
 
-    @prop({ vacio: true }) accessor autocomplete: string | null = null;
+    @prop({ vacio: true }) override accessor autocomplete: string | null = null;
 
     /** Input nativo interno — útil para casos avanzados. */
-    get input() { return this.#input; }
+    get input(): HTMLInputElement { return this.#input as HTMLInputElement; }
 
     // ---- API pública -----------------------------------------------------
 
-    override focus(options?: FocusOptions): void { this.#input.focus(options); }
-    override blur(): void { this.#input.blur(); }
-    select(): void { this.#input.select?.(); }
+    override focus(options?: FocusOptions): void { this.#input?.focus(options); }
+    override blur(): void { this.#input?.blur(); }
+    select(): void { this.#input?.select?.(); }
     setSelectionRange(...args: Parameters<HTMLInputElement['setSelectionRange']>): void {
-      this.#input.setSelectionRange?.(...args);
+      this.#input?.setSelectionRange?.(...args);
     }
 
     override reportValidity(): boolean {
       const ok = super.reportValidity();
-      this.#syncSupport();
+      this.solicitarRender();
       return ok;
     }
     override setCustomValidity(msg: string): void {
       super.setCustomValidity(msg);
-      this.#syncSupport();
+      this.solicitarRender();
     }
 
     // ---- formulario (IswcFormControl) -----------------------------------
@@ -341,12 +370,12 @@ import type { InputEventos } from './schemas/input.schemas.js';
     /** Vacío no entra en FormData. Validez: `required` + la del <input> nativo (type, min/max, step…). */
     override valorFormulario(): string | null { return this.#value || null; }
 
-    override get controlNativo(): HTMLInputElement { return this.#input; }
+    override get controlNativo(): HTMLInputElement | null { return this.#input; }
 
     /** Restaura el atributo `value` (`defaultValue`): lo llama `formResetCallback`. */
     override restablecer(): void {
       this.#value = this.defaultValue;
-      this.#input.value = this.#value;
+      if (this.#input) this.#input.value = this.#value;
       this.#update();
     }
 
@@ -358,30 +387,9 @@ import type { InputEventos } from './schemas/input.schemas.js';
 
     // ---- privados --------------------------------------------------------
 
-    #syncSlots = () => {
-      const labelAttr = this.label.trim();
-      const hintAttr = this.hint.trim();
-      const hasLabelSlot = hasSlotted(this.#labelSlot);
-      const hasHintSlot = hasSlotted(this.#hintSlot);
-      if (!hasLabelSlot) this.#labelSlot.textContent = labelAttr;
-      if (!hasHintSlot) this.#hintSlot.textContent = hintAttr;
-      this.#labelEl.hidden = !labelAttr && !hasLabelSlot;
-      this.#hasHint = !!hintAttr || hasHintSlot;
-
-      const prefix = this.prefixText;
-      const suffix = this.suffixText;
-      this.#prefixEl.textContent = prefix;
-      this.#prefixEl.hidden = !prefix;
-      this.#suffixEl.textContent = suffix;
-      this.#suffixEl.hidden = !suffix;
-      this.#startEl.hidden = !prefix && !hasSlotted(this.#startSlot);
-      this.#endEl.hidden = !suffix && !hasSlotted(this.#endSlot);
-
-      this.#syncSupport();
-    };
-
     #syncNative() {
       const input = this.#input;
+      if (!input) return;
       const type = this.type;
       const effective = type === 'password' && this.#passwordVisible ? 'text' : type;
       if (input.getAttribute('type') !== effective) input.setAttribute('type', effective);
@@ -396,15 +404,16 @@ import type { InputEventos } from './schemas/input.schemas.js';
     #syncDisabled(): void {
       const disabled = this.inhabilitado;
       const readonly = this.readonly;
-      this.#input.disabled = disabled;
-      this.#input.readOnly = readonly;
-      this.#clearBtn.toggleAttribute('disabled', disabled);
-      this.#toggleBtn.toggleAttribute('disabled', disabled);
+      if (this.#input) {
+        this.#input.disabled = disabled;
+        this.#input.readOnly = readonly;
+      }
+      this.#clearBtn?.toggleAttribute('disabled', disabled);
+      this.#toggleBtn?.toggleAttribute('disabled', disabled);
       this.estado('disabled', disabled);
       this.estado('readonly', readonly);
     }
 
-    /** Recalcula botones, form value, validez y estados. Fuente única de verdad. */
     /**
      * `iswc-button` (limpiar) e `iswc-check-icon-button` (ver contraseña) son opcionales: se piden solo si el campo los
      * usa (al loader si está, si no por `import()`), así el cierre del campo no los arrastra (tope en navegador/carga).
@@ -421,42 +430,13 @@ import type { InputEventos } from './schemas/input.schemas.js';
 
     #update() {
       this.#piezas();
-      const v = this.#value;
-      const interactive = !this.disabled && !this.#input.disabled && !this.readonly;
-
-      this.#clearBtn.hidden = !(this.clearable && v !== '' && interactive);
-      this.#toggleBtn.hidden = !(this.type === 'password' && this.passwordToggle && !this.disabled);
-
-      this.estado('blank', v === '');
+      this.estado('blank', this.#value === '');
       this.sincronizarFormulario();
-      this.#syncSupport();
-    }
-
-    /** Fila de apoyo: hint / error-text / contador, y el estado visual `invalid`. */
-    #syncSupport() {
-      const failed = this.interactuado && this.internals?.validity?.valid === false;
-      const invalid = this.error || failed;
-      this.estado('invalid', invalid);
-
-      // Sin error-text propio se cae al mensaje nativo, pero solo si el error lo
-      // detectó la validación (con `error` a secas el hint sigue siendo el texto).
-      const msg = invalid ? (this.errorText || (failed ? this.validationMessage : '')) : '';
-      this.#errorEl.textContent = msg;
-      this.#errorEl.hidden = !msg;
-      this.#hintEl.hidden = !!msg || !this.#hasHint;
-
-      const showCount = this.showCount;
-      if (showCount) {
-        const max = this.maxlength;
-        this.#countEl.textContent = max ? `${this.#value.length}/${max}` : String(this.#value.length);
-      }
-      this.#countEl.hidden = !showCount;
-
-      this.#supportEl.hidden = this.#hintEl.hidden && this.#errorEl.hidden && this.#countEl.hidden;
+      this.solicitarRender();
     }
 
     #onInput = (): void => {
-      this.#value = this.#input.value;
+      this.#value = this.#input ? this.#input.value : this.#value;
       this.#update();
       this.dispatchEvent(new Event('input', { bubbles: true, composed: true }));
       emit(this, 'iswc-input', { value: this.#value });
@@ -473,7 +453,7 @@ import type { InputEventos } from './schemas/input.schemas.js';
     }
 
     #onChange = (): void => {
-      this.#value = this.#input.value;
+      this.#value = this.#input ? this.#input.value : this.#value;
       this.interactuado = true;
       this.#update();
       this.dispatchEvent(new Event('change', { bubbles: true, composed: true }));
@@ -482,7 +462,7 @@ import type { InputEventos } from './schemas/input.schemas.js';
 
     #onKeydown = (e: KeyboardEvent): void => {
       if (e.key !== 'Enter') return;
-      this.#value = this.#input.value;
+      this.#value = this.#input ? this.#input.value : this.#value;
       emit(this, 'iswc-enter', { value: this.#value });
     };
 
@@ -491,7 +471,7 @@ import type { InputEventos } from './schemas/input.schemas.js';
     #onBlur = (): void => {
       this.estado('focused', false);
       this.interactuado = true;
-      this.#syncSupport();
+      this.solicitarRender();
     };
 
     #onClear = (e: Event): void => {
@@ -499,9 +479,9 @@ import type { InputEventos } from './schemas/input.schemas.js';
       e.stopPropagation();
       if (this.#value === '') return;
       this.#value = '';
-      this.#input.value = '';
+      if (this.#input) this.#input.value = '';
       this.#update();
-      this.#input.focus();
+      this.#input?.focus();
       this.dispatchEvent(new Event('input', { bubbles: true, composed: true }));
       this.dispatchEvent(new Event('change', { bubbles: true, composed: true }));
       emit(this, 'iswc-input', { value: '' });
@@ -513,7 +493,7 @@ import type { InputEventos } from './schemas/input.schemas.js';
       this.#passwordVisible = !!e.detail?.checked;
       this.estado('password-visible', this.#passwordVisible);
       this.#syncNative();
-      this.#input.focus();
+      this.#input?.focus();
     };
   }
 

@@ -1,7 +1,7 @@
 // @contexto INDICE.md · src/components/forms/combobox.md
 import { placementHaciaCentro } from '@jeff-aporta/iswc-base/core/position.js';
 import { emit, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
-import { IswcFormControl } from '@jeff-aporta/iswc-base/core/iswc-form-control.js';
+import { IswcFormChrome } from '@jeff-aporta/iswc-base/core/iswc-form-chrome.js';
 import type { Validez } from '@jeff-aporta/iswc-base/core/schemas/iswc-form-control.schemas.js';
 import './option.js';
 import css from 'iswc:css';
@@ -63,12 +63,13 @@ import type { ComboboxEventos } from './schemas/combobox.schemas.js';
     <div hidden><slot></slot></div>
   `;
 
-  // open y clearable los declara su `@prop`; label, hint, name, disabled, required, error y error-text, `IswcFormControl`.
+  // open y clearable los declara su `@prop`; name, disabled y required, `IswcFormControl`; label, hint, error y
+  // error-text, `IswcFormChrome`.
   registrarTerminos('es', { abrir: 'Abrir', seleccioneValor: 'Seleccione un valor' });
 
   const OBSERVED = ['value', 'placeholder'];
 
-  class IswcCombobox extends IswcFormControl {
+  class IswcCombobox extends IswcFormChrome {
     static override tag = 'iswc-combobox';
     declare static events: ComboboxEventos;
     static override css = css;

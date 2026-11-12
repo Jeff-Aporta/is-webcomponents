@@ -1,8 +1,10 @@
 // @contexto INDICE.md · src/components/forms/textarea.md
 import { emit, upgradeProperties, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
-import { IswcFormControl } from '@jeff-aporta/iswc-base/core/iswc-form-control.js';
+import { IswcFormChrome } from '@jeff-aporta/iswc-base/core/iswc-form-chrome.js';
 import { setOptionalAttr } from '@jeff-aporta/iswc-base/core/attrs.js';
 import { hasSlotted } from '@jeff-aporta/iswc-base/core/dom.js';
+import { html } from '@jeff-aporta/iswc-base/core/plantilla.js';
+import type { Resultado } from '@jeff-aporta/iswc-base/core/schemas/plantilla.schemas.js';
 import css from 'iswc:css';
 import { prop } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
 import type { TextareaEventos } from './schemas/textarea.schemas.js';
@@ -25,80 +27,113 @@ import type { TextareaEventos } from './schemas/textarea.schemas.js';
  * Custom states: blank, disabled, readonly, focused, invalid
  * Eventos: iswc-input, iswc-change (bubbles + composed) y los nativos input/change
  * Tokens: --iswc-field-width, --iswc-field-label-width, --iswc-textarea-*
+ *
+ * La vista la pinta el molde (F8): `render()` con el `html` de `core/plantilla.ts`. El shadow se
+ * pinta al conectar (antes de `onConnected`), asi que el DOM del campo no existe antes.
  */
 
 (() => {
-  const TEMPLATE = document.createElement('template');
-  TEMPLATE.innerHTML = /* html */ `
-    <div part="form-control" class="form-control">
-      <label part="label" class="label" id="label" for="textarea" hidden><slot name="label"></slot></label>
-      <div part="base" class="base">
-        <textarea part="textarea" class="textarea" id="textarea" rows="3" aria-describedby="hint error-text"></textarea>
-      </div>
-      <div part="support" class="support" id="support" hidden>
-        <div part="hint" class="hint" id="hint" hidden><slot name="hint"></slot></div>
-        <div part="error-text" class="error-text" id="error-text" hidden></div>
-        <div part="count" class="count" id="count" hidden></div>
-      </div>
-    </div>
-  `;
-
   const RESIZE = ['none', 'vertical', 'both', 'auto'];
   const APPEARANCES = ['outlined', 'filled', 'underlined'];
   const PLACEMENTS = ['top', 'start'];
 
-  // Los demás atributos los declara cada `@prop` (y name, disabled, required, readonly y error, `IswcFormControl`).
+  // Los demás atributos los declara cada `@prop` (y name, disabled, required y readonly, `IswcFormControl`; label, hint,
+  // error-text y error, `IswcFormChrome`).
   const OBSERVED = ['value', 'rows', 'resize', 'autosize', 'min-rows', 'max-rows'];
 
   const EXTRA_UPGRADE_ATTRS = ['variant', 'label-placement', 'full-width'];
 
-  class IswcTextarea extends IswcFormControl {
+  class IswcTextarea extends IswcFormChrome {
     static override tag = 'iswc-textarea';
     declare static events: TextareaEventos;
     static override css = css;
-    static override shadowInit: ShadowRootInit | null = { mode: 'open', delegatesFocus: true };
+    static override shadowInit: ShadowRootInit | null = { mode: 'open', delegatesFocus: true };
 
     static override observed = [...OBSERVED, 'radius', 'border-color', 'bg', 'text-color', 'focus-color', 'danger-color'];
 
-    #textarea!: HTMLTextAreaElement;
-    #labelEl!: HTMLElement;
-    #supportEl!: HTMLElement;
-    #hintEl!: HTMLElement;
-    #errorEl!: HTMLElement;
-    #countEl!: HTMLElement;
-    #labelSlot!: HTMLSlotElement;
-    #hintSlot!: HTMLSlotElement;
+    #textarea: HTMLTextAreaElement | null = null;
+    #labelSlot: HTMLSlotElement | null = null;
+    #hintSlot: HTMLSlotElement | null = null;
+    #anclado = false;
     #value = '';
-    #hasHint = false;
+    #etiquetaSloteada = false;
+    #ayudaSloteada = false;
     #ro: ResizeObserver | null = null;
     #lastWidth = -1;
 
-    constructor() {
-      super();
-      const shadow = this.shadowRoot!;
-      shadow.appendChild(TEMPLATE.content.cloneNode(true));
+    // ---- vista ----------------------------------------------------------
 
-      this.#textarea = shadow.getElementById('textarea') as HTMLTextAreaElement;
-      this.#labelEl = shadow.getElementById('label')!;
-      this.#supportEl = shadow.getElementById('support')!;
-      this.#hintEl = shadow.getElementById('hint')!;
-      this.#errorEl = shadow.getElementById('error-text')!;
-      this.#countEl = shadow.getElementById('count')!;
-      this.#labelSlot = this.#labelEl.querySelector<HTMLSlotElement>('slot')!;
-      this.#hintSlot = this.#hintEl.querySelector<HTMLSlotElement>('slot')!;
-
-      this.#textarea.addEventListener('input', this.#onInput);
-      this.#textarea.addEventListener('change', this.#onChange);
-      this.#textarea.addEventListener('focus', this.#onFocus);
-      this.#textarea.addEventListener('blur', this.#onBlur);
-      this.#labelSlot.addEventListener('slotchange', this.#syncSlots);
-      this.#hintSlot.addEventListener('slotchange', this.#syncSlots);
+    /** Lo que ve el usuario; el texto lo lleva el `<textarea>` nativo (no la plantilla). */
+    override render(): Resultado | null {
+      const c = this.estadoChrome();
+      const conEtiqueta = !!c.etiqueta || this.#etiquetaSloteada;
+      const conAyuda = !!c.ayuda || this.#ayudaSloteada;
+      const conError = !!c.error;
+      const valor = this.#value;
+      const max = this.maxlength;
+      const contador = this.showCount ? (max ? `${valor.length}/${max}` : String(valor.length)) : '';
+      return html`
+        <div part="form-control" class="form-control">
+          <label part="label" class="label" id="label" for="textarea" ?hidden=${!conEtiqueta}>
+            <slot name="label" @slotchange=${this.#onSlotChange}>${c.etiqueta}</slot>
+          </label>
+          <div part="base" class="base">
+            <textarea
+              part="textarea"
+              class="textarea"
+              id="textarea"
+              rows="3"
+              aria-describedby="hint error-text"
+              @input=${this.#onInput}
+              @change=${this.#onChange}
+              @focus=${this.#onFocus}
+              @blur=${this.#onBlur}
+            ></textarea>
+          </div>
+          <div part="support" class="support" id="support" ?hidden=${!(conError || conAyuda || this.showCount)}>
+            <div part="hint" class="hint" id="hint" ?hidden=${conError || !conAyuda}>
+              <slot name="hint" @slotchange=${this.#onSlotChange}>${c.ayuda}</slot>
+            </div>
+            <div part="error-text" class="error-text" id="error-text" ?hidden=${!conError}>${c.error}</div>
+            <div part="count" class="count" id="count" ?hidden=${!this.showCount}>${contador}</div>
+          </div>
+        </div>
+      `;
     }
+
+    /** Tras cada pintado: toma los nodos de la vista y deja el estado de error al dia. */
+    override actualizado(): void {
+      super.actualizado();
+      this.#anclar();
+      this.#leerRanuras();
+      this.estado('invalid', this.estadoChrome().invalido);
+    }
+
+    /** Los nodos de la vista ya pintada (la pinta el molde al conectar). */
+    #anclar(): void {
+      if (this.#anclado) return;
+      const shadow = this.shadowRoot!;
+      this.#textarea = shadow.getElementById('textarea') as HTMLTextAreaElement;
+      this.#labelSlot = shadow.querySelector<HTMLSlotElement>('slot[name="label"]');
+      this.#hintSlot = shadow.querySelector<HTMLSlotElement>('slot[name="hint"]');
+      this.#anclado = true;
+    }
+
+    /** Que hay en las ranuras (la etiqueta y la ayuda pueden venir del slot y no del atributo). */
+    #leerRanuras(): void {
+      this.#etiquetaSloteada = hasSlotted(this.#labelSlot);
+      this.#ayudaSloteada = hasSlotted(this.#hintSlot);
+    }
+
+    /** Cambio en una ranura: al repintar puede cambiar lo que se ve (la etiqueta, la ayuda). */
+    #onSlotChange = (): void => {
+      this.#leerRanuras();
+      this.solicitarRender();
+    };
 
     override onConnected(): void {
       upgradeProperties(this, EXTRA_UPGRADE_ATTRS);
       this.#value = this.getAttribute('value') ?? '';
-      this.#syncSlots();
       this.#syncNative();
       this.#syncDisabled();
       this.#update();
@@ -129,9 +164,9 @@ import type { TextareaEventos } from './schemas/textarea.schemas.js';
         this.#syncDisabled();
         this.#update();
       } else if (name === 'label' || name === 'hint') {
-        this.#syncSlots();
+        this.solicitarRender();
       } else if (name === 'error' || name === 'error-text' || name === 'show-count') {
-        this.#syncSupport();
+        this.solicitarRender();
       } else {
         this.#syncNative();
         this.#update();
@@ -145,7 +180,7 @@ import type { TextareaEventos } from './schemas/textarea.schemas.js';
       const next = v == null ? '' : String(v);
       if (next === this.#value) return;
       this.#value = next;
-      if (this.#textarea.value !== next) this.#textarea.value = next;
+      if (this.#textarea && this.#textarea.value !== next) this.#textarea.value = next;
       this.#update();
     }
 
@@ -191,33 +226,33 @@ import type { TextareaEventos } from './schemas/textarea.schemas.js';
 
     @prop({ type: 'bool' }) accessor fullWidth: boolean = false;
 
-    @prop({ vacio: true }) accessor placeholder: string = '';
+    @prop({ vacio: true }) override accessor placeholder: string = '';
 
     @prop({ vacio: true }) override accessor label: string = '';
 
     @prop({ vacio: true }) override accessor hint: string = '';
 
-    @prop({ vacio: true }) accessor maxlength: string | null = null;
+    @prop({ vacio: true }) override accessor maxlength: string | null = null;
 
-    get textarea(): HTMLTextAreaElement { return this.#textarea; }
+    get textarea(): HTMLTextAreaElement { return this.#textarea as HTMLTextAreaElement; }
 
     // ---- API pública -----------------------------------------------------
 
-    override focus(options?: FocusOptions): void { this.#textarea.focus(options); }
-    override blur(): void { this.#textarea.blur(); }
-    select(): void { this.#textarea.select(); }
+    override focus(options?: FocusOptions): void { this.#textarea?.focus(options); }
+    override blur(): void { this.#textarea?.blur(); }
+    select(): void { this.#textarea?.select(); }
     setSelectionRange(...args: Parameters<HTMLTextAreaElement['setSelectionRange']>): void {
-      this.#textarea.setSelectionRange(...(args as Parameters<HTMLTextAreaElement['setSelectionRange']>));
+      this.#textarea?.setSelectionRange?.(...(args as Parameters<HTMLTextAreaElement['setSelectionRange']>));
     }
 
     override reportValidity(): boolean {
       const ok = super.reportValidity();
-      this.#syncSupport();
+      this.solicitarRender();
       return ok;
     }
     override setCustomValidity(msg: string): void {
       super.setCustomValidity(msg);
-      this.#syncSupport();
+      this.solicitarRender();
     }
 
     // ---- formulario (IswcFormControl) -----------------------------------
@@ -225,11 +260,11 @@ import type { TextareaEventos } from './schemas/textarea.schemas.js';
     /** Vacío no entra en FormData. Validez: `required` + la del <textarea> nativo (tooLong). */
     override valorFormulario(): string | null { return this.#value || null; }
 
-    override get controlNativo(): HTMLTextAreaElement { return this.#textarea; }
+    override get controlNativo(): HTMLTextAreaElement | null { return this.#textarea; }
 
     override restablecer(): void {
       this.#value = this.defaultValue;
-      this.#textarea.value = this.#value;
+      if (this.#textarea) this.#textarea.value = this.#value;
       this.#update();
     }
 
@@ -241,20 +276,9 @@ import type { TextareaEventos } from './schemas/textarea.schemas.js';
 
     // ---- privados --------------------------------------------------------
 
-    #syncSlots = (): void => {
-      const labelAttr = this.label.trim();
-      const hintAttr = this.hint.trim();
-      const hasLabelSlot = hasSlotted(this.#labelSlot);
-      const hasHintSlot = hasSlotted(this.#hintSlot);
-      if (!hasLabelSlot) this.#labelSlot.textContent = labelAttr;
-      if (!hasHintSlot) this.#hintSlot.textContent = hintAttr;
-      this.#labelEl.hidden = !labelAttr && !hasLabelSlot;
-      this.#hasHint = !!hintAttr || hasHintSlot;
-      this.#syncSupport();
-    };
-
     #syncNative(): void {
       const ta = this.#textarea;
+      if (!ta) return;
       for (const a of ['placeholder', 'maxlength', 'name']) {
         const v = this.getAttribute(a);
         if (v == null) ta.removeAttribute(a);
@@ -267,44 +291,25 @@ import type { TextareaEventos } from './schemas/textarea.schemas.js';
 
     #syncDisabled(): void {
       const disabled = this.inhabilitado;
-      this.#textarea.disabled = disabled;
-      this.#textarea.readOnly = this.readonly;
+      if (this.#textarea) {
+        this.#textarea.disabled = disabled;
+        this.#textarea.readOnly = this.readonly;
+      }
       this.estado('disabled', disabled);
       this.estado('readonly', this.readonly);
     }
 
     #update(): void {
-      const v = this.#value;
-      this.estado('blank', v === '');
+      this.estado('blank', this.#value === '');
       this.sincronizarFormulario();
-      this.#syncSupport();
+      this.solicitarRender();
       this.#autofit();
-    }
-
-    /** Fila de apoyo: hint / error-text / contador, y el estado visual `invalid`. */
-    #syncSupport(): void {
-      const failed = this.interactuado && this.internals?.validity?.valid === false;
-      const invalid = this.error || failed;
-      this.estado('invalid', invalid);
-
-      const msg = invalid ? (this.errorText || (failed ? this.validationMessage : '')) : '';
-      this.#errorEl.textContent = msg;
-      this.#errorEl.hidden = !msg;
-      this.#hintEl.hidden = !!msg || !this.#hasHint;
-
-      const showCount = this.showCount;
-      if (showCount) {
-        const max = this.maxlength;
-        this.#countEl.textContent = max ? `${this.#value.length}/${max}` : String(this.#value.length);
-      }
-      this.#countEl.hidden = !showCount;
-
-      this.#supportEl.hidden = this.#hintEl.hidden && this.#errorEl.hidden && this.#countEl.hidden;
     }
 
     /** Autosize: mide el contenido con la altura a cero y la acota entre min-rows y max-rows. */
     #autofit(): void {
       const ta = this.#textarea;
+      if (!ta) return;
       if (!this.autosize) {
         if (ta.style.height) { ta.style.height = ''; ta.style.overflowY = ''; }
         return;
@@ -327,14 +332,14 @@ import type { TextareaEventos } from './schemas/textarea.schemas.js';
     }
 
     #onInput = (): void => {
-      this.#value = this.#textarea.value;
+      this.#value = this.#textarea ? this.#textarea.value : this.#value;
       this.#update();
       this.dispatchEvent(new Event('input', { bubbles: true, composed: true }));
       emit(this, 'iswc-input', { value: this.#value });
     };
 
     #onChange = (): void => {
-      this.#value = this.#textarea.value;
+      this.#value = this.#textarea ? this.#textarea.value : this.#value;
       this.interactuado = true;
       this.#update();
       this.dispatchEvent(new Event('change', { bubbles: true, composed: true }));
@@ -346,7 +351,7 @@ import type { TextareaEventos } from './schemas/textarea.schemas.js';
     #onBlur = (): void => {
       this.estado('focused', false);
       this.interactuado = true;
-      this.#syncSupport();
+      this.solicitarRender();
     };
   }
 

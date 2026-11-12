@@ -1,7 +1,7 @@
 // @contexto INDICE.md · src/components/forms/color-picker.md
 import { emit, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import '@jeff-aporta/iswc-base/components/forms/input.js';
-import { IswcFormControl } from '@jeff-aporta/iswc-base/core/iswc-form-control.js';
+import { IswcFormChrome } from '@jeff-aporta/iswc-base/core/iswc-form-chrome.js';
 import type { Validez } from '@jeff-aporta/iswc-base/core/schemas/iswc-form-control.schemas.js';
 import { computePosition } from '@jeff-aporta/iswc-base/core/position.js';
 import type { WindowWithEyeDropper, ColorPickerEventos } from "./schemas/color-picker.schemas.js";
@@ -58,7 +58,7 @@ import { createPopupDismiss } from '@jeff-aporta/iswc-base/core/position.js';
     </dialog>
   `;
 
-  // name, label, hint, disabled y required los declara `IswcFormControl`.
+  // name, disabled y required los declara `IswcFormControl`; label e hint, `IswcFormChrome`.
   const OBSERVED = ['value', 'swatches'];
 
   /** Normaliza a #rrggbb en minúsculas; devuelve '' si no es un hex válido. */
@@ -70,7 +70,7 @@ import { createPopupDismiss } from '@jeff-aporta/iswc-base/core/position.js';
     return /^[0-9a-f]{6}$/.test(s) ? `#${s}` : '';
   }
 
-  class IswcColorPicker extends IswcFormControl {
+  class IswcColorPicker extends IswcFormChrome {
     static override tag = 'iswc-color-picker';
     declare static events: ColorPickerEventos;
     static override css = css;

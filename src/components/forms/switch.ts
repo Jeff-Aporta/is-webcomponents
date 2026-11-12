@@ -1,6 +1,6 @@
 // @contexto INDICE.md · src/components/forms/switch.md
 import { emit, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
-import { IswcFormControl } from '@jeff-aporta/iswc-base/core/iswc-form-control.js';
+import { IswcFormChrome } from '@jeff-aporta/iswc-base/core/iswc-form-chrome.js';
 import type { Validez } from '@jeff-aporta/iswc-base/core/schemas/iswc-form-control.schemas.js';
 import { DEFAULT_INTENT, ensureDefaultColor } from '@jeff-aporta/iswc-base/core/attrs.js';
 import { hasSlotted } from '@jeff-aporta/iswc-base/core/dom.js';
@@ -46,7 +46,7 @@ import type { SwitchEventos } from './schemas/switch.schemas.js';
     </div>
   `;
 
-  // Los demás atributos los declara cada `@prop` (y name, disabled, readonly, required y error, `IswcFormControl`).
+  // Los demás atributos los declara cada `@prop` (y name, disabled, required y readonly, `IswcFormControl`; hint y error, `IswcFormChrome`).
   const OBSERVED: string[] = ['color', 'label-placement'];
 
   // Literal para audit/exhaustivos; alineado a INTENT (+ info/error).
@@ -57,7 +57,7 @@ import type { SwitchEventos } from './schemas/switch.schemas.js';
 
   /** Sin flatten: el texto de fallback del slot no cuenta como contenido propio. */
 
-  class IswcSwitch extends IswcFormControl {
+  class IswcSwitch extends IswcFormChrome {
     static override tag = 'iswc-switch';
     declare static events: SwitchEventos;
     static override css = css;

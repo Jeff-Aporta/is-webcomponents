@@ -2,7 +2,7 @@
 import { placementHaciaCentro } from '@jeff-aporta/iswc-base/core/position.js';
 import { emit, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import './option.js';
-import { IswcFormControl } from '@jeff-aporta/iswc-base/core/iswc-form-control.js';
+import { IswcFormChrome } from '@jeff-aporta/iswc-base/core/iswc-form-chrome.js';
 import type { Validez } from '@jeff-aporta/iswc-base/core/schemas/iswc-form-control.schemas.js';
 import css from 'iswc:css';
 import { prop } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
@@ -61,8 +61,8 @@ import type { SelectEventos } from './schemas/select.schemas.js';
     <div hidden><slot></slot></div>
   `;
 
-  // Los demás atributos los declara cada `@prop` (y name, label, hint, disabled, required, error y error-text,
-  // `IswcFormControl`).
+  // Los demás atributos los declara cada `@prop` (y name, disabled y required, `IswcFormControl`; label, hint,
+  // error y error-text, `IswcFormChrome`).
   registrarTerminos('es', { seleccioneOpcion: 'Seleccione una opción' });
 
   const OBSERVED = ['value', 'variant', 'selection-display', 'limit-tags', 'max-visible'];
@@ -111,7 +111,7 @@ import type { SelectEventos } from './schemas/select.schemas.js';
 
   let uidSeq = 0;
 
-  class IswcSelect extends IswcFormControl {
+  class IswcSelect extends IswcFormChrome {
     static override tag = 'iswc-select';
     declare static events: SelectEventos;
     static override css = css;

@@ -1,6 +1,6 @@
 // @contexto INDICE.md · src/components/forms/slider.md
 import { emit, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
-import { IswcFormControl } from '@jeff-aporta/iswc-base/core/iswc-form-control.js';
+import { IswcFormChrome } from '@jeff-aporta/iswc-base/core/iswc-form-chrome.js';
 import type { Validez } from '@jeff-aporta/iswc-base/core/schemas/iswc-form-control.schemas.js';
 import { hasSlotted, clampTo, tidyToStep } from '@jeff-aporta/iswc-base/core/dom.js';
 import css from 'iswc:css';
@@ -59,7 +59,7 @@ import type { SliderEventos } from './schemas/slider.schemas.js';
     </div>
   `;
 
-  // Los demás atributos los declara cada `@prop` (y name, disabled, readonly y required, `IswcFormControl`).
+  // Los demás atributos los declara cada `@prop` (y name, disabled, readonly y required, `IswcFormControl`; label y hint, `IswcFormChrome`).
   const OBSERVED = [
     'value', 'min', 'max', 'step', 'shift-step', 'marks',
     'orientation', 'track', 'value-label', 'with-tooltip',
@@ -91,7 +91,7 @@ import type { SliderEventos } from './schemas/slider.schemas.js';
       .filter((m): m is { value: number; label: string } => m !== null);
   }
 
-  class IswcSlider extends IswcFormControl {
+  class IswcSlider extends IswcFormChrome {
     static override tag = 'iswc-slider';
     declare static events: SliderEventos;
     static override css = css;

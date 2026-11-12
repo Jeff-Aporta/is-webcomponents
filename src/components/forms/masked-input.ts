@@ -1,6 +1,6 @@
 // @contexto INDICE.md · src/components/forms/masked-input.md
 import { emit, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
-import { IswcFormControl } from '@jeff-aporta/iswc-base/core/iswc-form-control.js';
+import { IswcFormChrome } from '@jeff-aporta/iswc-base/core/iswc-form-chrome.js';
 import type { Validez } from '@jeff-aporta/iswc-base/core/schemas/iswc-form-control.schemas.js';
 import { apply, isComplete } from './utils/input-tokens.js';
 import { setStringAttr } from '@jeff-aporta/iswc-base/core/attrs.js';
@@ -49,7 +49,7 @@ import type { MaskedInputEventos } from './schemas/masked-input.schemas.js';
   ];
   const OBSERVED: string[] = [...REENVIADOS, 'pattern', 'value', 'name', 'placeholder', 'maxlength', 'invalid', 'error'];
 
-  class IswcMaskedInput extends IswcFormControl {
+  class IswcMaskedInput extends IswcFormChrome {
     static override tag = 'iswc-masked-input';
     declare static events: MaskedInputEventos;
     static override css = css;

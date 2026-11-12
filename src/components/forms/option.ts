@@ -14,7 +14,7 @@ import css from 'iswc:css';
 (() => {
   const TEMPLATE = document.createElement('template');
   TEMPLATE.innerHTML = /* html */ `
-    <div part="base" class="option" role="option">
+    <div part="base" class="option">
       <span part="start" class="start"><slot name="start"></slot></span>
       <span class="body">
         <span part="label" class="label"><slot></slot></span>
@@ -33,6 +33,10 @@ import css from 'iswc:css';
     #root!: HTMLElement;
     constructor() {
       super();
+      // El rol va en el HOST (lo que el consumidor mete en su listbox), no en un div
+      // del shadow: dentro de un listbox, el rol lo lleva el elemento que el
+      // consumidor coloca, no un descendiente suyo.
+      this.setAttribute('role', 'option');
       const shadow = this.shadowRoot!;
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
       this.#root = shadow.querySelector<HTMLElement>('.option')!;
@@ -79,8 +83,9 @@ import css from 'iswc:css';
     }
 
     #sync(): void {
-      this.#root.setAttribute('aria-selected', String(this.selected));
-      this.#root.setAttribute('aria-disabled', String(this.disabled));
+      // aria-selected / aria-disabled van con el rol: en el host, no en el div.
+      this.setAttribute('aria-selected', String(this.selected));
+      this.setAttribute('aria-disabled', String(this.disabled));
       this.#root.toggleAttribute('data-disabled', this.disabled);
       this.#root.toggleAttribute('data-selected', this.selected);
     }

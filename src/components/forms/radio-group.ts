@@ -1,7 +1,7 @@
 // @contexto INDICE.md · src/components/forms/radio-group.md
 import { emit, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import './radio.js';
-import { IswcFormControl } from '@jeff-aporta/iswc-base/core/iswc-form-control.js';
+import { IswcFormChrome } from '@jeff-aporta/iswc-base/core/iswc-form-chrome.js';
 import type { Validez } from '@jeff-aporta/iswc-base/core/schemas/iswc-form-control.schemas.js';
 import { setOptionalAttr } from '@jeff-aporta/iswc-base/core/attrs.js';
 import type { IswcRadioElement, RadioGroupEventos } from "./schemas/radio-group.schemas.js";
@@ -38,8 +38,8 @@ import { prop } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
     </div>
   `;
 
-  // name, disabled, required, readonly, label, hint, error y error-text los declara `IswcFormControl` (aquí label,
-  // hint, error y errorText conservan su getter propio).
+  // name, disabled, required y readonly los declara `IswcFormControl`; label, hint, error y error-text,
+  // `IswcFormChrome` (aquí label, hint, error y errorText conservan su getter propio).
   const OBSERVED = [
     'orientation', 'row', 'color', 'label-placement',
   ];
@@ -49,7 +49,7 @@ import { prop } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
   const NEXT_KEYS = ['ArrowDown', 'ArrowRight'];
   const PREV_KEYS = ['ArrowUp', 'ArrowLeft'];
 
-  class IswcRadioGroup extends IswcFormControl {
+  class IswcRadioGroup extends IswcFormChrome {
     static override tag = 'iswc-radio-group';
     declare static events: RadioGroupEventos;
     static override css = css;

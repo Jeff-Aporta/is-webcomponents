@@ -1,6 +1,6 @@
 // @contexto INDICE.md · src/components/forms/rating.md
 import { emit, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
-import { IswcFormControl } from '@jeff-aporta/iswc-base/core/iswc-form-control.js';
+import { IswcFormChrome } from '@jeff-aporta/iswc-base/core/iswc-form-chrome.js';
 import type { Validez } from '@jeff-aporta/iswc-base/core/schemas/iswc-form-control.schemas.js';
 import { setStringAttr, setOptionalAttr } from '@jeff-aporta/iswc-base/core/attrs.js';
 import { hasSlotted, clampTo, tidyToStep } from '@jeff-aporta/iswc-base/core/dom.js';
@@ -62,7 +62,7 @@ import type { RatingEventos } from './schemas/rating.schemas.js';
     </span>
   `;
 
-  // Los demás atributos los declara cada `@prop` (y name, disabled, readonly y required, `IswcFormControl`).
+  // Los demás atributos los declara cada `@prop` (y name, disabled, readonly y required, `IswcFormControl`; label, `IswcFormChrome`).
   registrarTerminos('es', { seleccioneValoracion: 'Seleccione una valoración' });
 
   const OBSERVED = ['value', 'max', 'precision', 'icon', 'empty-icon', 'color', 'label-format'];
@@ -76,7 +76,7 @@ import type { RatingEventos } from './schemas/rating.schemas.js';
 
   type LabelFn = (value: number) => string;
 
-  class IswcRating extends IswcFormControl {
+  class IswcRating extends IswcFormChrome {
     static override tag = 'iswc-rating';
     declare static events: RatingEventos;
     static override css = css;

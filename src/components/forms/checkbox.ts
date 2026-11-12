@@ -1,6 +1,6 @@
 // @contexto INDICE.md · src/components/forms/checkbox.md
 import { emit, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
-import { IswcFormControl } from '@jeff-aporta/iswc-base/core/iswc-form-control.js';
+import { IswcFormChrome } from '@jeff-aporta/iswc-base/core/iswc-form-chrome.js';
 import type { Validez } from '@jeff-aporta/iswc-base/core/schemas/iswc-form-control.schemas.js';
 import { hasSlotted } from '@jeff-aporta/iswc-base/core/dom.js';
 import css from 'iswc:css';
@@ -40,7 +40,7 @@ import type { CheckboxEventos } from './schemas/checkbox.schemas.js';
     </div>
   `;
 
-  // Los demás atributos los declara cada `@prop` (y name, disabled, readonly, required y error, `IswcFormControl`).
+  // Los demás atributos los declara cada `@prop` (y name, disabled, readonly y required, `IswcFormControl`; error, `IswcFormChrome`).
   const OBSERVED: string[] = ['color', 'label-placement'];
 
   const VARIANTS: string[] = ['brand', 'neutral', 'text', 'success', 'warning', 'danger'];
@@ -48,7 +48,7 @@ import type { CheckboxEventos } from './schemas/checkbox.schemas.js';
 
   /** Sin flatten: el texto de fallback del slot no cuenta como contenido propio. */
 
-  class IswcCheckbox extends IswcFormControl {
+  class IswcCheckbox extends IswcFormChrome {
     static override tag = 'iswc-checkbox';
     declare static events: CheckboxEventos;
     static override css = css;

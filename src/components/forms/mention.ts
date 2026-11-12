@@ -1,6 +1,6 @@
 // @contexto INDICE.md · src/components/forms/mention.md
 import { emit, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
-import { IswcFormControl } from '@jeff-aporta/iswc-base/core/iswc-form-control.js';
+import { IswcFormChrome } from '@jeff-aporta/iswc-base/core/iswc-form-chrome.js';
 import './input.js';
 import css from 'iswc:css';
 import { createPopupDismiss } from '@jeff-aporta/iswc-base/core/position.js';
@@ -43,7 +43,7 @@ import type { MentionEventos } from './schemas/mention.schemas.js';
 
   type SuggestionsMap = Record<string, string[]>;
 
-  class IswcMention extends IswcFormControl {
+  class IswcMention extends IswcFormChrome {
     static override tag = 'iswc-mention';
     declare static events: MentionEventos;
     static override css = css;

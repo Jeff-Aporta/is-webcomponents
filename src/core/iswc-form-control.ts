@@ -19,6 +19,9 @@
  *
  * Valor y validez se sincronizan en el SETTER (lo que lee el consumidor no espera al pintado) y otra vez tras cada
  * pintado, cuando el control nativo ya tiene el valor nuevo.
+ *
+ * El chrome (etiqueta, ayuda y texto de error) NO vive aqui: esta en `core/iswc-form-chrome.ts`, que solo cargan los
+ * controles que lo usan (`IswcFormChrome`).
  */
 import { IswcReactive, prop, state } from './iswc-reactive.js';
 import type { DefProp } from './schemas/iswc-reactive.schemas.js';
@@ -38,12 +41,6 @@ export class IswcFormControl extends IswcReactive {
   @prop({ type: 'bool' }) accessor disabled = false;
   @prop({ type: 'bool' }) accessor required = false;
   @prop({ type: 'bool' }) accessor readonly = false;
-  /** Chrome común: etiqueta, ayuda y texto de error (también por slot del mismo nombre). */
-  @prop() accessor label = '';
-  @prop() accessor hint = '';
-  @prop() accessor errorText = '';
-  /** Marca de error forzada por el consumidor (sin texto). */
-  @prop({ type: 'bool' }) accessor error = false;
   /** El usuario ya interactuó (cambio, salida tras editar, `reportValidity` o `invalid` nativo). */
   @state() accessor interactuado = false;
 

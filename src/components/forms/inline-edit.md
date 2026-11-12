@@ -51,10 +51,10 @@ import './inline-edit.js';
 | `value` | string | Texto actual; se refleja tras guardar. |
 | `mode` | `text` \| `textarea` | Default `text`. |
 | `placeholder` | string | Visible cuando `value` está vacío. |
-| `name` | string | Nombre del campo form-associated. |
+| `name` | string | Nombre del campo. Hoy **no** es form-associated: el valor no entra en el `<form>` (ver «Integración con formularios»). |
 | `disabled` | boolean | Impide entrar en edición. |
 | `readonly` | boolean | Impide entrar en edición. |
-| `required` | boolean | Marca el campo como requerido. |
+| `required` | boolean | Marca el campo como requerido. Hoy sin efecto (no es form-associated). |
 | `cancel-on-blur` | boolean | `blur` cancela en vez de guardar. |
 | `maxlength` | number | Solo `mode="text"`. |
 | `rows` | number | Solo `mode="textarea"`. |
@@ -152,9 +152,38 @@ el.addEventListener('iswc-edit', (e) => {
 
 ### Integración con formularios
 
-Es form-associated vía `ElementInternals`: con `name` presente aporta `value`
-a `FormData` del `<form>` contenedor. `required` marca el campo como
-obligatorio.
+**Decisión: `<iswc-inline-edit>` NO es form-associated** (Fase E2, ítem 1 del handoff).
+El atributo `name` se acepta y se documenta, pero el valor **no** entra en el
+`FormData` del `<form>` contenedor: el componente no llama a `attachInternals()`
+ni declara `static formAssociated`, así que el navegador ni siquiera lo registra
+como control del formulario.
+
+**Por qué no:**
+
+- *No es un control de formulario.* Es un afordance de edición «in place» sobre
+  un valor suelto (un título, una nota, el nombre de una fila). Su valor es un
+  texto que solo existe mientras se edita; fuera de la edición lo que hay es
+  una presentación, no un dato de formulario.
+- *Ser form-associated sería comportamiento nuevo.* El `<form>` empezaría a
+  enviar un campo que hoy no envía, y el componente ganaría estados de
+  validez (`:state(user-invalid)`), `checkValidity()` y un `formResetCallback`
+  que repondría un valor que el navegador no puede reponer. El handoff de esta
+  fase es explícito: **nada de behaviour nuevo**, solo reubicar código.
+- *El modelo de valor no está decidido.* Un `inline-edit` sin tocar puede
+  tener un valor vacío o no tener ninguno; qué significa «required» en ese
+  caso (¿un texto no vacío? ¿un modo de edición abierto?) no está definido, y
+  decidirlo aquí abriría un contrato que no pide este ítem.
+
+**Qué haría falta para cambiarlo:** heredar de `IswcFormControl`
+(`core/iswc-form-control.ts`) o de `IswcFormChrome`, declarar
+`valorFormulario()` y `controlNativo` (el `input`/`textarea` interno) y fijar
+el contrato de «required» y de `formResetCallback`. Es un ítem aparte, con su
+spec y su guardian.
+
+**Mientras tanto:** para un campo que deba ir al `<form>`, usar
+`<iswc-input>` / `<iswc-textarea>` (o `<iswc-masked-input>`), que sí son
+form-associated, y leer `iswc-save` de `<iswc-inline-edit>` para volcar el
+valor a mano.
 
 ## Comportamiento
 

@@ -1,6 +1,7 @@
 // @contexto INDICE.md · src/components/forms/file-input.md
 import { emit, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
-import { IswcReactive } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
+import { IswcFormChrome } from '@jeff-aporta/iswc-base/core/iswc-form-chrome.js';
+import type { Validez, ValorFormulario } from '@jeff-aporta/iswc-base/core/schemas/iswc-form-control.schemas.js';
 import { registrarTerminos } from '@jeff-aporta/iswc-base/core/localize.js';
 import '@jeff-aporta/iswc-base/components/helpers/format-bytes.js';
 import css from 'iswc:css';
@@ -10,6 +11,9 @@ import type { FileInputEventos } from './schemas/file-input.schemas.js';
  * <iswc-file-input> — Web Component (vanilla).
  *
  * Dropzone + input file nativo oculto. Lista de archivos con quitar.
+ *
+ * Es un control de formulario (IswcFormChrome: la validez y los estados los trae IswcFormControl): entrega los
+ * archivos al `<form>` y avisa de que falta el archivo cuando es `required`.
  *
  * Atributos
  *   label, hint, name, accept, capture
@@ -66,15 +70,13 @@ import type { FileInputEventos } from './schemas/file-input.schemas.js';
 
   const OBSERVED = ['label', 'hint', 'name', 'accept', 'capture', 'multiple', 'disabled', 'required'];
 
-  class IswcFileInput extends IswcReactive {
+  class IswcFileInput extends IswcFormChrome {
     static override tag = 'iswc-file-input';
     declare static events: FileInputEventos;
     static override css = css;
     static override deps = ['iswc-icon', 'iswc-button'];
-    static formAssociated = true;
     static override observed = OBSERVED;
 
-    #internals: ElementInternals | null = null;
     #dropzone!: HTMLElement;
     #input!: HTMLInputElement;
     #labelEl!: HTMLElement;
@@ -97,10 +99,6 @@ import type { FileInputEventos } from './schemas/file-input.schemas.js';
       this.#labelSlot = shadow.querySelector<HTMLSlotElement>('slot[name="label"]')!;
       this.#hintSlot = shadow.querySelector<HTMLSlotElement>('slot[name="hint"]')!;
 
-      if ('attachInternals' in this) {
-        try { this.#internals = this.attachInternals(); } catch { /* already */ }
-      }
-
       this.#dropzone.addEventListener('click', this.#onZoneClick);
       this.#dropzone.addEventListener('keydown', this.#onZoneKey);
       this.#dropzone.addEventListener('dragenter', this.#onDragEnter);
@@ -114,24 +112,23 @@ import type { FileInputEventos } from './schemas/file-input.schemas.js';
 
     /** Textos por defecto en el idioma heredado; repinta lista y validez si cambia `lang`. */
     override actualizado(): void {
+      super.actualizado();
       this.shadowRoot!.querySelector('.dropzone-text')!.textContent = this.t('arrastraArchivos');
       if (!this.mounted) return;
       this.#renderList();
-      this.#syncRequired();
     }
 
     override onConnected(): void {
       this.#syncAttrs();
       this.#syncSlots();
       this.#syncDisabled();
-      this.#syncRequired();
       this.#renderList();
       this.#setState('blank', this.#files.length === 0);
+      this.sincronizarFormulario();
     }
 
     override onAttributeChanged(name: string, _oldVal: string | null, _newVal: string | null): void {
       if (name === 'disabled') this.#syncDisabled();
-      else if (name === 'required') this.#syncRequired();
       else if (name === 'label' || name === 'hint') this.#syncSlots();
       else this.#syncAttrs();
     }
@@ -145,7 +142,6 @@ import type { FileInputEventos } from './schemas/file-input.schemas.js';
       this.#syncInputFromFiles();
       this.#renderList();
       this.#setState('blank', this.#files.length === 0);
-      this.#syncRequired();
       this.#emitChange();
     }
 
@@ -153,21 +149,41 @@ import type { FileInputEventos } from './schemas/file-input.schemas.js';
       return this.#files.map((f: File) => f.name).join(', ');
     }
 
-    get disabled(): boolean { return this.hasAttribute('disabled'); }
-    set disabled(v: boolean) { this.toggleAttribute('disabled', !!v); }
-
     get multiple(): boolean { return this.hasAttribute('multiple'); }
     set multiple(v: boolean) { this.toggleAttribute('multiple', !!v); }
 
-    get required(): boolean { return this.hasAttribute('required'); }
-    set required(v: boolean) { this.toggleAttribute('required', !!v); }
+    /** El `<fieldset disabled>` (o el formulario) deshabilita el control. */
+    override formDisabledCallback(disabled: boolean): void {
+      super.formDisabledCallback(disabled);
+      this.#syncDisabled();
+    }
 
-    formDisabledCallback(disabled: boolean): void {
-      this.#syncDisabled(disabled);
+    /** Los archivos no se restauran: el navegador solo puede reponer un valor de texto. */
+    override formStateRestoreCallback(_estado: string | File | FormData | null): void {}
+
+    // ---- formulario (IswcFormControl) -----------------------------------
+
+    /** El input file nativo: su validez se copia al host. */
+    override get controlNativo(): HTMLInputElement { return this.#input; }
+
+    /**
+     * Lo que el control entrega al `<form>`: el archivo. Con `multiple` el `<form>` solo admite un archivo por
+     * control, asi que va el nombre del primero (como hasta ahora).
+     */
+    override valorFormulario(): ValorFormulario {
+      if (!this.multiple) return this.#files[0] ?? null;
+      return this.#files[0]?.name ?? '';
+    }
+
+    /** Sin archivos y con `required`: el mensaje propio del selector (no el generico de campo obligatorio). */
+    override validar(): Validez {
+      const [flags, mensaje] = super.validar();
+      if (flags.valueMissing) return [flags, this.t('seleccionaArchivo')];
+      return [flags, mensaje];
     }
 
     #setState(name: string, on: boolean): void {
-      const s = this.#internals?.states;
+      const s = this.internals?.states;
       if (s) {
         if (on) s.add(name);
         else s.delete(name);
@@ -187,8 +203,8 @@ import type { FileInputEventos } from './schemas/file-input.schemas.js';
     }
 
     #syncSlots(): void {
-      const labelAttr = (this.getAttribute('label') || '').trim();
-      const hintAttr = (this.getAttribute('hint') || '').trim();
+      const labelAttr = this.label.trim();
+      const hintAttr = this.hint.trim();
       const hasLabelSlot = this.#labelSlot.assignedNodes({ flatten: true }).some(
         (n: Node) => n.nodeType === 1 || (n.nodeType === 3 && !!n.textContent?.trim()),
       );
@@ -206,21 +222,12 @@ import type { FileInputEventos } from './schemas/file-input.schemas.js';
       this.#hintEl.hidden = !hintAttr && !hasHintSlot;
     }
 
-    #syncDisabled(formDisabled?: boolean): void {
-      const disabled = !!formDisabled || this.disabled;
+    #syncDisabled(): void {
+      const disabled = this.inhabilitado;
       this.#input.disabled = disabled;
       this.#dropzone.toggleAttribute('aria-disabled', disabled);
       this.#dropzone.tabIndex = disabled ? -1 : 0;
       this.#setState('disabled', disabled);
-    }
-
-    #syncRequired(): void {
-      if (!this.#internals) return;
-      if (this.required && this.#files.length === 0) {
-        this.#internals.setValidity({ valueMissing: true }, this.t('seleccionaArchivo'), this.#input);
-      } else {
-        this.#internals.setValidity({});
-      }
     }
 
     #onZoneClick = (e: PointerEvent): void => {
@@ -287,7 +294,6 @@ import type { FileInputEventos } from './schemas/file-input.schemas.js';
       this.#syncInputFromFiles();
       this.#renderList();
       this.#setState('blank', this.#files.length === 0);
-      this.#syncRequired();
       this.#emitChange();
     }
 
@@ -296,13 +302,11 @@ import type { FileInputEventos } from './schemas/file-input.schemas.js';
         const dt = new DataTransfer();
         for (const f of this.#files) dt.items.add(f);
         this.#input.files = dt.files;
-        this.#internals?.setFormValue(
-          this.multiple ? (dt.files as unknown as File) : (this.#files[0] || null),
-        );
       } catch {
         // DataTransfer may fail in some environments; keep internal list
-        this.#internals?.setFormValue(this.#files[0]?.name || '');
       }
+      // El valor que entra en el `<form>` y la validez los pone la base.
+      this.sincronizarFormulario();
     }
 
     #renderList(): void {
@@ -348,7 +352,6 @@ import type { FileInputEventos } from './schemas/file-input.schemas.js';
       this.#syncInputFromFiles();
       this.#renderList();
       this.#setState('blank', this.#files.length === 0);
-      this.#syncRequired();
       this.#emitChange();
     }
 

@@ -2,7 +2,7 @@
 import { SectionField } from './date-field-core.js';
 import { splitDateTime, uses12Hour } from './date-utils.js';
 import { emit, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
-import { IswcFormControl } from '@jeff-aporta/iswc-base/core/iswc-form-control.js';
+import { IswcFormChrome } from '@jeff-aporta/iswc-base/core/iswc-form-chrome.js';
 import type { Validez } from '@jeff-aporta/iswc-base/core/schemas/iswc-form-control.schemas.js';
 import { registrarTerminos, resolverLocale, termino } from '@jeff-aporta/iswc-base/core/localize.js';
 import type { DateFieldKind, DefineDateFieldOpts, DateFieldEventos } from "@jeff-aporta/iswc-base/components/forms/schemas/date-field-element.schemas.js";
@@ -38,8 +38,8 @@ TEMPLATE.innerHTML = /* html */ `
   </div>
 `;
 
-// min, max y clearable los declara su `@prop`; name, required, disabled y readonly (y label y hint, que aquí se leen
-// del atributo), `IswcFormControl`.
+// min, max y clearable los declara su `@prop`; name, required, disabled y readonly, `IswcFormControl`; label y
+// hint, `IswcFormChrome` (aquí se leen del atributo).
 registrarTerminos('es', { borrar: 'Borrar' });
 
 const OBSERVED = ['label', 'hint', 'value', 'locale', 'ampm', 'hour24', 'seconds', 'invalid'];
@@ -49,7 +49,7 @@ const OBSERVED = ['label', 'hint', 'value', 'locale', 'ampm', 'hour24', 'seconds
 /** Opciones de `defineDateField`. */
 
 export function defineDateField({ tag, kind, css }: DefineDateFieldOpts): typeof HTMLElement {
-  class IswcDateFieldBase extends IswcFormControl {
+  class IswcDateFieldBase extends IswcFormChrome {
     static override tag = tag;
     declare static events: DateFieldEventos;
     static override css = css;
