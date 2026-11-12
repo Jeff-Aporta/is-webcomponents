@@ -3,7 +3,7 @@ import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-elem
 import { svgEl } from '@jeff-aporta/iswc-base/core/svg-chart-engine.js';
 import { resolveTreemapSpec, computeTreemapLayout } from './utils/treemap-spec.js';
 import type { TreemapSpec, TreemapLayout } from "./schemas/treemap-spec.schemas.js";
-import type { DiagramTheme } from "@jeff-aporta/iswc-base/components/diagrams/schemas/diagram-types.schemas.js";
+import type { DiagramTheme } from "@jeff-aporta/iswc-base/components/diagrams/schemas/diagram-base.schemas.js";
 import { tkHueToCss } from '@jeff-aporta/iswc-base/core/color.js';
 import { fontOn } from './utils/chart-palette.js';
 import { paletteTheme } from '@jeff-aporta/iswc-base/components/diagrams/utils/diagram-palette.js';

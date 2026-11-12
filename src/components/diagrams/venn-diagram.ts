@@ -6,7 +6,7 @@ import type { VennLayout, VennSpec } from './schemas/venn-spec.schemas.js';
 // `VennLayoutCircle` y `VennLayoutRegion` están declarados pero no exportados
 // en venn-spec.ts. Tipamos localmente para no tocar la firma del spec.
 import { tkHueToHex } from '@jeff-aporta/iswc-base/core/color.js';
-import type { DiagramTheme } from './schemas/diagram-types.schemas.js';
+import type { DiagramTheme } from './schemas/diagram-base.schemas.js';
 import { inlineMdWeb, applySvgTextContent } from '@jeff-aporta/iswc-base/core/tk-inline-md.js';
 import { wrapText, buildTspans } from './utils/diagram-labels.js';
 import type { TSpanSpec } from './schemas/diagram-labels.schemas.js';

@@ -58,7 +58,7 @@ import { routeEdges, pointsToPath, simplifyOrthoPath } from './component-router.
 import type { RouterEdge, RouterWorld } from '@jeff-aporta/iswc-base/components/diagrams/schemas/component-router.schemas.js';
 import { pathPoints as parsePathPoints, assignEdgeHues, assignEmitterReceiverPalette } from './diagram-edges.js';
 import { layoutNodeLink } from './diagram-layout.js';
-import type { Caja, Componente, InterfazUml, Lado, OpcionesEmpaque, Paquete, Punto } from '@jeff-aporta/iswc-base/components/diagrams/schemas/diagram-types.schemas.js';
+import type { Caja, Componente, InterfazUml, Lado, OpcionesEmpaque, Paquete, Punto } from '@jeff-aporta/iswc-base/components/diagrams/schemas/diagram-uml.schemas.js';
 import type { HttpEndpoint, EdgeKind, SpecEdge, LayoutMode, ComponentSpecResult, WireResult, LayoutComponent, LayoutInterface, LayoutEdge, ComponentLayout } from "@jeff-aporta/iswc-base/components/diagrams/schemas/component-spec.schemas.js";
 
 const TAB_W = 56;

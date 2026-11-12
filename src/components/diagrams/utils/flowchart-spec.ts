@@ -24,7 +24,7 @@ import { vectorAFlujo } from './vector-flow-spec.js';
 import { oklchToHex } from './diagram-styles.js';
 import { FlowBridgeSchema, FlowVarSchema, TipoEntidadSchema } from '@jeff-aporta/iswc-base/components/diagrams/schemas/flowchart-spec.schemas.js';
 import type { RouterEdge, RouterPort } from '@jeff-aporta/iswc-base/components/diagrams/schemas/component-router.schemas.js';
-import type { Lado } from '@jeff-aporta/iswc-base/components/diagrams/schemas/diagram-types.schemas.js';
+import type { Lado } from '@jeff-aporta/iswc-base/components/diagrams/schemas/diagram-uml.schemas.js';
 import type { EmbedBox } from "@jeff-aporta/iswc-base/components/diagrams/schemas/diagram-view.schemas.js";
 
 /**

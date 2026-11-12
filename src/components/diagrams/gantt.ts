@@ -8,7 +8,7 @@ import type { GanttLayout, GanttSpec } from './schemas/gantt-spec.schemas.js';
 import { shapePath } from './utils/flowchart-spec.js';
 import { PathTurtle } from '@jeff-aporta/iswc-base/core/path-turtle.js';
 import { tkHueToHex } from '@jeff-aporta/iswc-base/core/color.js';
-import type { DiagramTheme } from './schemas/diagram-types.schemas.js';
+import type { DiagramTheme } from './schemas/diagram-base.schemas.js';
 import { inlineMdWeb } from '@jeff-aporta/iswc-base/core/tk-inline-md.js';
 import { wrapText, buildTspans } from './utils/diagram-labels.js';
 import type { TSpanSpec } from './schemas/diagram-labels.schemas.js';

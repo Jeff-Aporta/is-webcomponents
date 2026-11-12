@@ -6,7 +6,7 @@
  * entradas marcadas con TODO cuando se quiera validación runtime.
  */
 import { z } from "zod";
-import { OpcionesEmpaqueSchema } from "./diagram-types.schemas.js";
+import { OpcionesEmpaqueSchema } from "./diagram-uml.schemas.js";
 
 const HttpEndpointSchema = z.object({
   methods: z.array(z.string()),

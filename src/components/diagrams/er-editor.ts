@@ -19,7 +19,8 @@
 //   Stagehand: validación visual (cajas no se solapan, aristas legibles).
 import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import { serializeErPayload, renderErSvg as renderErSvgString } from './utils/er-archify.js';
-import type { ErEditorState, ErSpec, ErSpecAttribute, ErSpecEntity, ErSpecRelation, EdgeStyleOverride } from "./schemas/diagram-types.schemas.js";
+import type { EdgeStyleOverride } from "./schemas/diagram-base.schemas.js";
+import type { ErEditorState, ErSpec, ErSpecAttribute, ErSpecEntity, ErSpecRelation } from "./schemas/diagram-er.schemas.js";
 import '@jeff-aporta/iswc-base/components/actions/context-menu.js';
 import '@jeff-aporta/iswc-base/components/layout/split-panel.js';
 import { createPanZoom } from './utils/diagram-view.js';

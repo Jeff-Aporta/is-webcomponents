@@ -6,7 +6,9 @@ import { assignEdgeHues, assignEmitterReceiverPalette } from './diagram-edges.js
 import { snapDiagramGrid } from '@jeff-aporta/iswc-base/core/diagram-grid.js';
 import { routeEdges, planPorts, pointsToPath, simplifyOrthoPath, perimeterPorts } from './component-router.js';
 import { packDiagram, resolvePackingGaps, EDGE_CLEARANCE, GRID_STEP } from './component-pack.js';
-import type { Componente, Paquete, ClassPackage, ClassLayoutOpts, ClassLayoutSection, ClassSpec, ClassSpecClass, ClassSpecRelation, ClassLayout, ClassLayoutNode, ClassLayoutEdge, ClassRelationKind, DiagramGroup } from '@jeff-aporta/iswc-base/components/diagrams/schemas/diagram-types.schemas.js';
+import type { DiagramGroup } from '@jeff-aporta/iswc-base/components/diagrams/schemas/diagram-base.schemas.js';
+import type { Componente, Paquete } from '@jeff-aporta/iswc-base/components/diagrams/schemas/diagram-uml.schemas.js';
+import type { ClassPackage, ClassLayoutOpts, ClassLayoutSection, ClassSpec, ClassSpecClass, ClassSpecRelation, ClassLayout, ClassLayoutNode, ClassLayoutEdge, ClassRelationKind } from '@jeff-aporta/iswc-base/components/diagrams/schemas/diagram-class.schemas.js';
 import { richTextPlain } from '@jeff-aporta/iswc-base/core/tk-text.js';
 import { resolveTkHue } from '@jeff-aporta/iswc-base/core/color.js';
 import type { Point2D } from "@jeff-aporta/iswc-base/components/diagrams/schemas/class-spec.schemas.js";

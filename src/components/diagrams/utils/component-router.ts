@@ -32,7 +32,7 @@
  * decidir re-empaque y el audit del lab).
  */
 
-import type { Caja, Lado, Punto } from '@jeff-aporta/iswc-base/components/diagrams/schemas/diagram-types.schemas.js';
+import type { Caja, Lado, Punto } from '@jeff-aporta/iswc-base/components/diagrams/schemas/diagram-uml.schemas.js';
 import type { RouterBox, RouterWorld, RouterEdge, RouterOpts, RouteResult, PortLink, PortPlan, RouterPort } from '@jeff-aporta/iswc-base/components/diagrams/schemas/component-router.schemas.js';
 import { resolveRoutingCosts, readConsolidate, ROUTING_COSTS_DEFAULTS } from './diagram-routing.js';
 

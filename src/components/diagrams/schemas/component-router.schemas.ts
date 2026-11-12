@@ -6,7 +6,7 @@
  * diagrama de componentes, el de clases y el DER los comparten.
  */
 import { z } from "zod";
-import { CajaSchema, LadoSchema, PuntoSchema } from "./diagram-types.schemas.js";
+import { CajaSchema, LadoSchema, PuntoSchema } from "./diagram-uml.schemas.js";
 
 const SetDeTextoSchema = z.custom<ReadonlySet<string>>((v) => v instanceof Set);
 

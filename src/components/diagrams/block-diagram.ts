@@ -9,7 +9,7 @@ import { PathTurtle as SequenceTurtle } from '@jeff-aporta/iswc-base/core/path-t
 import type { PathTurtle } from '@jeff-aporta/iswc-base/core/path-turtle.js';
 import { tkHueToHex } from '@jeff-aporta/iswc-base/core/color.js';
 import { edgeStrokeHex, edgeChipFill, edgeChipText, svgArrowHead } from './utils/diagram-edges.js';
-import type { DiagramTheme } from './schemas/diagram-types.schemas.js';
+import type { DiagramTheme } from './schemas/diagram-base.schemas.js';
 import { svgIconGroup } from '@jeff-aporta/iswc-base/core/tk-text.js';
 import { inlineMdWeb } from '@jeff-aporta/iswc-base/core/tk-inline-md.js';
 import { wrapText, buildTspans } from './utils/diagram-labels.js';

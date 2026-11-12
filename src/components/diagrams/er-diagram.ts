@@ -13,7 +13,8 @@ import { svgEl } from '@jeff-aporta/iswc-base/core/svg-chart-engine.js';
 import { resolveErTheme, themeToDiagramTheme, clusterPalette, entityPaint, edgePaint, findOrphanEntityIds, injectThemeCss, pickThemeMode } from './utils/theme.js';
 import { type ErThemeJson } from './schemas/theme.schemas.js';
 import { hostStyleName, styleThemeFor } from './utils/diagram-styles.js';
-import type { DiagramGroup, DiagramTheme, ErLayout, ErLayoutEdge, ErLayoutEdgeMark, ErLayoutEntity } from "./schemas/diagram-types.schemas.js";
+import type { DiagramGroup, DiagramTheme } from "./schemas/diagram-base.schemas.js";
+import type { ErLayout, ErLayoutEdge, ErLayoutEdgeMark, ErLayoutEntity } from "./schemas/diagram-er.schemas.js";
 import css from 'iswc:css';
 
 /**

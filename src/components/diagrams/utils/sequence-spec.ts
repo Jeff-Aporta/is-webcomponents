@@ -13,7 +13,7 @@ import { resolveTkHue } from '@jeff-aporta/iswc-base/core/color.js';
 import { diagramHeaderWidth } from './diagram-model.js';
 import { fitContain, nestedMaxSize, readNodeEmbed } from './diagram-view.js';
 import type { EmbedBox, EmbedSize } from '@jeff-aporta/iswc-base/components/diagrams/schemas/diagram-view.schemas.js';
-import type { DiagramTheme } from '@jeff-aporta/iswc-base/components/diagrams/schemas/diagram-types.schemas.js';
+import type { DiagramTheme } from '@jeff-aporta/iswc-base/components/diagrams/schemas/diagram-base.schemas.js';
 import type { SequenceNestedSpec, SequenceActorSpec, SequenceMessageSpec, SequenceAltSpec, SequenceResolvedSpec, LeadingIconToken, FlatMessage, SequenceLayoutActor, SequenceLayoutLifeline, SequenceLayoutMessage, SequenceLayoutAltBox, SequenceLayout, SequenceGroupSpec, SequenceFragmentSpec, SequenceLayoutFragment } from "@jeff-aporta/iswc-base/components/diagrams/schemas/sequence-spec.schemas.js";
 import { SequenceFragmentSpecSchema } from "@jeff-aporta/iswc-base/components/diagrams/schemas/sequence-spec.schemas.js";
 

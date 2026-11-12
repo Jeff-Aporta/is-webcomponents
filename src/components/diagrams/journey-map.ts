@@ -2,7 +2,7 @@
 import { emit, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import { DiagramElementBase } from './utils/diagram-element-base.js';
 import { resolveJourneySpec, computeJourneyLayout } from './utils/journey-spec.js';
-import type { DiagramTheme } from './schemas/diagram-types.schemas.js';
+import type { DiagramTheme } from './schemas/diagram-base.schemas.js';
 import { tkHueToHex } from '@jeff-aporta/iswc-base/core/color.js';
 import { inlineMdWeb, applySvgTextContent } from '@jeff-aporta/iswc-base/core/tk-inline-md.js';
 import { wrapText, buildTspans } from './utils/diagram-labels.js';

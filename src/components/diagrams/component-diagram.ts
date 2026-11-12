@@ -6,7 +6,8 @@ import { resolveComponentSpec, computeComponentLayout, packageShapePath, LOLLI_R
 import type { ComponentLayout } from './schemas/component-spec.schemas.js';
 import { tkHueToHex } from '@jeff-aporta/iswc-base/core/color.js';
 import { edgeStrokeHex, edgeChipFill, edgeChipText, hexMixWhite, RECEIVER_COLOR, svgArrowHead, pathEndDirection, styledEdgePath } from './utils/diagram-edges.js';
-import type { DiagramTheme, Caja, Lado, Paquete } from './schemas/diagram-types.schemas.js';
+import type { DiagramTheme } from './schemas/diagram-base.schemas.js';
+import type { Caja, Lado, Paquete } from './schemas/diagram-uml.schemas.js';
 import { registerDiagramKind, edgeStyleFor } from './utils/diagram-model.js';
 import { svgEl } from '@jeff-aporta/iswc-base/core/svg-chart-engine.js';
 import { svgIconGroup, svgIconBadge } from '@jeff-aporta/iswc-base/core/tk-text.js';

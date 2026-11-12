@@ -6,7 +6,7 @@
  */
 import { fijarSerieColores, SERIE_HUES } from '@jeff-aporta/iswc-base/core/color.js';
 import { resolveColor, seriesColor } from '@jeff-aporta/iswc-base/components/charts/utils/chart-palette.js';
-import type { DiagramTheme } from '@jeff-aporta/iswc-base/components/diagrams/schemas/diagram-types.schemas.js';
+import type { DiagramTheme } from '@jeff-aporta/iswc-base/components/diagrams/schemas/diagram-base.schemas.js';
 import { sequenceThemeDark, sequenceThemeLight } from './sequence-spec.js';
 
 /** Tema del diagrama `el` con la paleta activa, y las series listas para los tonos automáticos. */

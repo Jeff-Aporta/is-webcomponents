@@ -22,7 +22,7 @@ import { TK_DIAGRAM_RADIUS_PX } from '@jeff-aporta/iswc-base/core/diagram-grid.j
 import { svgIconBadge, hasIconJsonSugar } from '@jeff-aporta/iswc-base/core/tk-text.js';
 import { inlineMdWeb } from '@jeff-aporta/iswc-base/core/tk-inline-md.js';
 import { tkHueToHex, contrastFontColor, pastelColor } from '@jeff-aporta/iswc-base/core/color.js';
-import type { DiagramTheme } from './schemas/diagram-types.schemas.js';
+import type { DiagramTheme } from './schemas/diagram-base.schemas.js';
 import { wrapText, buildTspans, defaultMeasureTextWidth } from './utils/diagram-labels.js';
 import type { TSpanSpec } from './schemas/diagram-labels.schemas.js';
 import { svgEl } from '@jeff-aporta/iswc-base/core/svg-chart-engine.js';

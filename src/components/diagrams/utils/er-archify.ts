@@ -6,7 +6,8 @@
 // Validación STRICT: cualquier campo desconocido lanza error (en consola, sin
 // romper render para no boicotear demos legacy que pasen por aquí).
 import { snapDiagramGrid } from '@jeff-aporta/iswc-base/core/diagram-grid.js';
-import type { DiagramGroup, EdgeStyleOverride, ErRouteKind, ErSpec, ErSpecAttribute, ErSpecEntity, ErSpecRelation, ErCardinality, ErDashStyle, BoxSide, EdgeVariant, NodeStyleOverride } from '@jeff-aporta/iswc-base/components/diagrams/schemas/diagram-types.schemas.js';
+import type { DiagramGroup, EdgeStyleOverride, BoxSide, EdgeVariant, NodeStyleOverride } from '@jeff-aporta/iswc-base/components/diagrams/schemas/diagram-base.schemas.js';
+import type { ErRouteKind, ErSpec, ErSpecAttribute, ErSpecEntity, ErSpecRelation, ErCardinality, ErDashStyle } from '@jeff-aporta/iswc-base/components/diagrams/schemas/diagram-er.schemas.js';
 
 /* ──────────────── allowlists de campos conocidos ──────────────── */
 

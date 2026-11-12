@@ -14,7 +14,7 @@ import type { EmbedCapture, EmbedSize } from './schemas/diagram-view.schemas.js'
 import { PathTurtle as SequenceTurtle } from '@jeff-aporta/iswc-base/core/path-turtle.js';
 import type { PathTurtle } from '@jeff-aporta/iswc-base/core/path-turtle.js';
 import { tkHueToHex } from '@jeff-aporta/iswc-base/core/color.js';
-import type { DiagramTheme } from './schemas/diagram-types.schemas.js';
+import type { DiagramTheme } from './schemas/diagram-base.schemas.js';
 import { svgIconGroup } from '@jeff-aporta/iswc-base/core/tk-text.js';
 import { inlineMdWeb } from '@jeff-aporta/iswc-base/core/tk-inline-md.js';
 import { animarRielEn, flujoActivo, pulsoRadar } from './utils/diagram-layout.js';

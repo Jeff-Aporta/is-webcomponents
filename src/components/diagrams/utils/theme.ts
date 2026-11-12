@@ -9,7 +9,7 @@
 //   import { json2css, resolveErTheme } from '…/diagrams/theme.min.mjs'
 //   fetch('…/diagrams/themes/iswc.json')  // fuente editable
 
-import type { DiagramTheme } from '@jeff-aporta/iswc-base/components/diagrams/schemas/diagram-types.schemas.js';
+import type { DiagramTheme } from '@jeff-aporta/iswc-base/components/diagrams/schemas/diagram-base.schemas.js';
 import type { ErThemeJson } from "@jeff-aporta/iswc-base/components/diagrams/schemas/theme.schemas.js";
 
 /** Contrato del JSON de tema ER (iswc-diagram-theme/v1). */

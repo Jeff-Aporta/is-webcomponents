@@ -2,7 +2,7 @@
 import { emit, emitCancelable, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import { DiagramElementBase } from './utils/diagram-element-base.js';
 import { resolveTimelineSpec, computeTimelineLayout } from './utils/timeline-spec.js';
-import type { DiagramTheme } from './schemas/diagram-types.schemas.js';
+import type { DiagramTheme } from './schemas/diagram-base.schemas.js';
 import { tkHueToHex } from '@jeff-aporta/iswc-base/core/color.js';
 import { inlineMdWeb } from '@jeff-aporta/iswc-base/core/tk-inline-md.js';
 import { registerDiagramKind } from './utils/diagram-model.js';
