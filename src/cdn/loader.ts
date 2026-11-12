@@ -14,6 +14,7 @@
  *   loader-pages    loadPageModules (módulos de página de la galería)
  *   loader-ref      resolveRef (API de GitHub): solo sin pin y con espejos que lo necesiten
  *   loader-hashes   `asset-hashes.json` en diferido: `?v=` solo en orígenes mutables (Pages/local)
+ *   loader-autoload observar() (MutationObserver) y listos() (allDefined)
  *
  * Docs: ./loader.md (también en dist/cdn/core/loader.md)
  * Build sustituye __IS_LOADER_CATALOG__, __IS_ASSET_HASHES__ y __IS_BUILD_SHA__.
@@ -40,6 +41,7 @@ import type { DepsLoader, LoaderCtx } from './schemas/loader-capas.schemas.js';
 
 import {
   type AppComponentEntry,
+  type AutoloadObserver,
   type ConfigureOpts,
   type iswcLoaderShape,
   type LoadedSnapshot,
@@ -69,6 +71,7 @@ const espejos = capa(() => import('@jeff-aporta/iswc-base/cdn/loader-mirrors.js'
 const paginas = capa(() => import('@jeff-aporta/iswc-base/cdn/loader-pages.js'));
 const refGithub = capa(() => import('@jeff-aporta/iswc-base/cdn/loader-ref.js'));
 const hashesDiferidos = capa(() => import('@jeff-aporta/iswc-base/cdn/loader-hashes.js'));
+const autoload = capa(() => import('@jeff-aporta/iswc-base/cdn/loader-autoload.js'));
 
 /**
  * SHA del script que se está ejecutando (`@abc…` en jsDelivr) o null.
@@ -926,6 +929,23 @@ export const iswcLoader: iswcLoaderShape = {
     }
     const href = opts.href;
     return ensureElement(name, href ? { href, load: () => cargarHref(href) } : {});
+  },
+
+  /**
+   * Autoloader opcional (capa 2): pide `ensure` de cada tag `iswc-*` sin definir que aparezca
+   * bajo `raiz` (o en el documento). El módulo se importa con `import()` la primera vez que se
+   * llama; devuelve el tirador `parar()` para dejar de observar.
+   */
+  observar(raiz?: ParentNode): Promise<AutoloadObserver> {
+    return autoload().then((m) => m.observar(raiz, (tag) => iswcLoader.ensure(tag)));
+  },
+
+  /**
+   * `true` si todos los tags `iswc-*` que cuelgan de `raiz` (o del documento) ya están
+   * definidos: el equivalente de `allDefined()`.
+   */
+  listos(raiz?: ParentNode): Promise<boolean> {
+    return autoload().then((m) => m.listos(raiz));
   },
 
   isReady: isElementReady,

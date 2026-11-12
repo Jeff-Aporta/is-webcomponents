@@ -43,7 +43,7 @@ El kit se consume desde jsDelivr/GitHub Pages como módulos por tag. La galería
 | `core/palettes.min.css` | Paletas de marca |
 | `is-base.min.css` / `palettes.min.css` | Alias estables (= `core/…`) pre-folderizado |
 | `core/loader.min.mjs` | `iswcLoader`, núcleo (capa 1, ≤ 8 KB br): catálogo, host/pin, `load`/`ensure`, precarga del cierre |
-| `core/loader-<x>.min.mjs` | Capa 2 del loader (`sheets`, `store`, `mirrors`, `pages`, `ref`, `hashes`): `import()` al primer uso |
+| `core/loader-<x>.min.mjs` | Capa 2 del loader (`sheets`, `store`, `mirrors`, `pages`, `ref`, `hashes`, `autoload`): `import()` al primer uso |
 | `core/loader.min.js` | Copia byte a byte de `core/loader.min.mjs` para pines viejos (compat): se retira cuando los consumidores re-pineen (F5) |
 | `core/loader.md` | Docs del loader (API) |
 | `core/<x>.min.mjs` · `lib/<x>.min.mjs` | Módulos del core y de lib (zod, obj, ref-obj) para ejecutar; `core/<x>.ts` para extender |

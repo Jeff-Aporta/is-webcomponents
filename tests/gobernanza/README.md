@@ -19,3 +19,4 @@ problema de forma, no de funcion.
 - `json-minificado.test.ts` — lo publicado, minificado.
 - `sin-codigo-muerto.test.ts` — nada sin importador ni export sin consumidor.
 - `brand-casing.test.ts` — la marca se escribe siempre igual.
+- `loader-autoload.test.ts` — el autoloader opcional del loader: `observar()` y `listos()` viven en la capa 2 y el núcleo los pide con `import()`.

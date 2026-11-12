@@ -205,6 +205,15 @@ export const LoaderSheetsSchema = z.object({
 export type LoaderSheets = z.infer<typeof LoaderSheetsSchema>;
 
 /* --------------------------------------------------------------------------
+ * AutoloadObserver — el autoloader opcional (`iswcLoader.observar()`) entrega un tirador
+ * para dejar de observar el DOM.
+ * ------------------------------------------------------------------------*/
+export const AutoloadObserverSchema = z.object({
+  parar: z.function({ input: [], output: z.void() }),
+});
+export type AutoloadObserver = z.infer<typeof AutoloadObserverSchema>;
+
+/* --------------------------------------------------------------------------
  * iswcLoader — superficie pública del loader.
  *
  * Modelamos sólo la forma tipada (lo que `L.*` expone). Las funciones de
@@ -306,6 +315,16 @@ export const iswcLoaderSchema = z.object({
     output: z.promise(z.boolean()),
   }),
   isReady: z.function({ input: [z.string()], output: z.boolean() }),
+  /** Autoloader opcional (capa 2): pide `ensure` de cada tag `iswc-*` sin definir que aparezca. */
+  observar: z.function({
+    input: [z.custom<ParentNode>().optional()],
+    output: z.promise(AutoloadObserverSchema),
+  }),
+  /** `true` si todos los tags `iswc-*` de la raíz ya están definidos (equivalente a `allDefined()`). */
+  listos: z.function({
+    input: [z.custom<ParentNode>().optional()],
+    output: z.promise(z.boolean()),
+  }),
 });
 /**
  * Forma inferida del loader. Se importa como `iswcLoaderShape`
