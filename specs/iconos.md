@@ -46,6 +46,31 @@ El explorador de la galería (`src/components/media/utils/icon-explorer.preview.
 
 Sin API (sin red o caída), el explorador muestra un aviso (`AVISO_SIN_API`) en vez de romperse.
 
+## S-I6 Trampas que ya mordieron
+
+| Trampa | Mitigacion |
+|---|---|
+| Hardcodear paths absolutos (`/assets/iconify/mdi/home.svg`) | Solo funciona en produccion con `base href` correcto; en local usa `rootFromBaseURI()` o un `<base href>` |
+| `cache: 'force-cache'` en el fetch del SVG | El `<img>` no respeta los headers de Cache-Control del fetch programatico: el loader pre-resuelve URLs, no el `<img>` |
+| `<iconify-icon>` de Iconify como fallback | Carga ~50 KB de web component solo para ser fallback: primero el `<img>` local |
+| Un fallo se recuerda por pagina | El loader cachea el `null` de un icono que no resolvio y no lo reintenta hasta recargar; el mapa de fetches en vuelo evita peticiones concurrentes |
+| `<iswc-icon>` en light DOM del consumidor | Prohibido: el componente `<iswc-icon>` es la API; `<iconify-icon>` es interna |
+
+## S-I7 Descarga de iconos
+
+```bash
+deno task icons
+```
+
+Barre `src/components`, `src/core` y `labs`, suma `extra` de `assets/dl.js` (iconos de las
+apps del VPS y los que el kit arma en tiempo de ejecucion), baja lo que falta a
+`assets/iconify/` y poda lo que nadie usa. Es idempotente. **No** bajes colecciones
+completas al repo: el guardian `assets-copia-unica` falla si `assets/iconify/` pasa
+de 2 000 archivos o si reaparece `dist/assets/icons/`.
+
+Detalle de la app (no del kit): `skills/iswc-foundation/references/10-iconos.md`.
+Bench de raices: `labs/icon-cdn-bench/NOTES.md`.
+
 ## Contratos
 
 | Pieza | Contrato |

@@ -8,9 +8,10 @@ Todo el kit es TypeScript (ver [typescript/spec.md](typescript/spec.md)), pero n
 
 ## S-T1 Ubicación
 
-- Gate (`deno task test`): las carpetas que lista `src/utils/testing/run-unit.ts` (`src/utils/health/{meta,diagrams,audit}`).
-- `src/utils/testing/**` guarda suites de dominio y e2e que se corren aparte, siempre con cooldown (S-T7): `test:e2e` y `deno run -A --no-check src/utils/testing/run-all.ts`.
-- Categorías: `meta/` (estructura), `diagrams/` (diagramas específicos), `domain/` (componentes individuales), `audit/` (motor auditor).
+- Runner del gate: `tests/.audit/run.ts` (`deno task test`). El motor de auditoría vive en `tests/.audit/motor/`.
+- Suites del repo, todas bajo `tests/`: `gobernanza/` (estructura y contratos del repo), `componentes/` (un componente cada uno), `diagramas/`, `navegador/` (Edge headless), `e2e/`, `exhaustivo/`, `core/`, `fixtures/`, `_shared/` (ayudas) y `server/`.
+- `deno task test:e2e` corre las pruebas de navegador con servidor; `deno task test:all` (typecheck + test + audit) es el gate completo.
+- Filtrar por id: `deno task test -- --solo=<id>` (el id es el prefijo del nombre de la prueba).
 - Selfchecks junto al módulo: `src/components/_shared/*.selfcheck.ts` (opcionales, no sustituyen guardianes de repo).
 
 ## S-T2 Runner
@@ -38,7 +39,7 @@ deno task test:all:e2e      # test:all + test:e2e
 
 ## S-T4 Meta-spec SDD
 
-La estructura de `specs/` se valida con `src/utils/health/meta/specs-sdd.test.ts`:
+La estructura de `specs/` se valida con `tests/gobernanza/specs-sdd.test.ts`:
 
 - Archivos obligatorios (`README`, `flujo-sdd`, `constitution`, `constraints`, plantillas, adr, lessons).
 - Sin `spec-*.md` sueltos en raíz de `specs/`.
@@ -50,8 +51,8 @@ La estructura de `specs/` se valida con `src/utils/health/meta/specs-sdd.test.ts
 
 1. Guardián nuevo en verde.
 2. `deno task test` verde (mínimo sin servidor).
-3. Si tocó la carta (constraints/lessons): `src/utils/testing/meta/llm-contract.test.ts` *(migrar el test a los specs consolidados)*.
-4. Si tocó `specs/`: `src/utils/health/meta/specs-sdd.test.ts`.
+3. Si tocó la carta (constraints/lessons): `tests/gobernanza/llm-contract.test.ts` *(migrar el test a los specs consolidados)*.
+4. Si tocó `specs/`: `tests/gobernanza/specs-sdd.test.ts`.
 
 ## S-T6 Guardianes de caja negra (WHAT, no HOW)
 
@@ -138,16 +139,29 @@ Guardián: [`tests/gobernanza/cooldown-guardian.test.ts`](../tests/gobernanza/co
 | El cooldown de una prueba cuyo archivo cambió se invalida solo | Descartado | decisión de Jeff: el cooldown es por tiempo; si hay que probarlo ya se pone `until: -1` a mano o `--sin-cooldown` |
 | `test:foundation` con id por SHA del pin | Descartado | el id fijo es predecible; un pin nuevo se prueba con `--sin-cooldown` |
 
+## S-T8 Suites y comandos
+
+| Suite | Que cubre | Como corre |
+|---|---|---|
+| `tests/gobernanza/` | estructura del repo, contratos, nomenclatura, cabeceras, CSS, skills | `deno task test -- --solo=gobernanza` |
+| `tests/componentes/` | un componente por fichero (contrato de los 4 archivos, reactivo, eventos, a11y) | `deno task test -- --solo=componentes` |
+| `tests/navegador/` | Edge headless (foco, overlays, carga) | `deno task test -- --solo=navegador` |
+| `tests/.audit/` | motor del runner y del auditor | `deno task test` (incluido en el gate) |
+
+Un test nuevo se coloca en la suite que le corresponde y se registra en el runner
+(`tests/.audit/run.ts`). Los tests que dependen de un servidor lo dicen en su
+cabecera y usan `AbortSignal.timeout` para no colgarse.
+
 ## Contratos
 
 | Pieza | Contrato |
 |---|---|
-| Runner | `deno test -A --no-check src/utils/health/**/*.test.ts` |
+| Runner | `deno task test` (`tests/.audit/run.ts`) |
 | Gate completo | `deno task test:all` (typecheck + test + audit) |
-| Cooldown | `src/utils/health/meta/cooldown-guardian.test.ts` |
-| Meta SDD | `src/utils/health/meta/specs-sdd.test.ts` |
-| Carta | `src/utils/testing/meta/llm-contract.test.ts` |
-| Auditor motor | `src/utils/health/audit/motor.test.ts` |
+| Cooldown | `tests/gobernanza/cooldown-guardian.test.ts` |
+| Meta SDD | `tests/gobernanza/specs-sdd.test.ts` |
+| Carta | `tests/gobernanza/llm-contract.test.ts` |
+| Auditor motor | `tests/.audit/motor/` |
 
 ## Aceptación
 
@@ -155,8 +169,8 @@ Guardián: [`tests/gobernanza/cooldown-guardian.test.ts`](../tests/gobernanza/co
 |---|---|---|
 | Suite sin servidor | todos exit 0 | `deno task test` |
 | Gate completo | 🛑 0   🔴 0   🟡 0 | `deno task test:all` |
-| Estructura specs | mapa + links + citas tests | `src/utils/health/meta/specs-sdd.test.ts` |
-| LLM contractual | secciones + guardianes en disco | `src/utils/testing/meta/llm-contract.test.ts` |
+| Estructura specs | mapa + links + citas tests | `tests/gobernanza/specs-sdd.test.ts` |
+| LLM contractual | secciones + guardianes en disco | `tests/gobernanza/llm-contract.test.ts` |
 
 ## Guardianes recientes contra regresiones
 

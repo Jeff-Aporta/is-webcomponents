@@ -497,7 +497,7 @@ Detalle: [`references/accessibility.md`](references/accessibility.md).
 
 ## 8. Tests (`*.test.ts` con `node:test` + `assert/strict`)
 
-Convenciones (ver `AGENTS.md §7` y `§8`):
+Convenciones (ver [`specs/testing.md`](../../specs/testing.md), S-T1 y S-T3):
 
 - Nombre: `tests/<area>.test.ts`. Patrón
   [`node:test`](https://nodejs.org/api/test.html) con
@@ -919,9 +919,11 @@ Antes de abrir PR con un componente nuevo, verifica:
   [`../iswc-base/SKILL.md`](../iswc-base/SKILL.md), que
   cubre el **consumo** del kit desde apps externas. Esta cubre la
   **construcción** de un componente dentro del repo.
-- Para los `_shared/` (bases, mixins, helpers) ver la sección
-  "Sistema de reutilización" de `AGENTS.md §8.6`.
-- Para el sistema de iconos, ver `AGENTS.md §5` (la pieza más frágil
-  del kit).
+- Para las bases compartidas (`IswcElement`, `IswcReactive`,
+  `IswcFormControl`, `ModalBase`) ver [`specs/repo/spec.md`](../../specs/repo/spec.md),
+  sección R5.
+- Para el sistema de iconos, ver [`specs/iconos.md`](../../specs/iconos.md) (la
+  pieza más frágil del kit).
 - Para los errores a evitar al modificar el repo, ver
-  `AGENTS.md §6` (PowerShell, git, CSS warnings, etc.).
+  [`specs/lessons.md`](../../specs/lessons.md) (PowerShell, git, CSS warnings,
+  etc.).

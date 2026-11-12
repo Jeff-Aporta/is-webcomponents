@@ -23,9 +23,9 @@ Si el debate solo afecta un dominio, puede vivir como sección fija en `specs/<d
 
 ## ADR-002 — `data-viz` como legacy alias de `charts/` (2026-10-03)
 
-**Contexto:** El manifest usa `data-viz` como categoría para varios componentes de charts (heatmap, maps y la mayoría de los charts clásicos). AGENTS.md §4.1 declaraba "No existe `data-viz`; los charts viven en `charts/`", pero el código y el manifest contradecían esa regla. Auditoría Phase D (#14) y reportes previos (`docs/auditoria-final.md`) insistían en `data-viz` como categoría válida.
+**Contexto:** El manifest usa `data-viz` como categoría para varios componentes de charts (heatmap, maps y la mayoría de los charts clásicos). la politica de categorias de `AGENTS.md` declaraba "No existe `data-viz`; los charts viven en `charts/`", pero el código y el manifest contradecían esa regla. Auditoría Phase D (#14) y reportes previos (`docs/auditoria-final.md`) insistían en `data-viz` como categoría válida.
 
-**Decisión:** `data-viz` queda en el manifest como **legacy alias** de `charts/`. Sólo conserva dos entradas: `iswc-heatmap` y `iswc-maps`/`iswc-map-marker` (por motivos históricos de folder). Las features nuevas van a `charts/` sin excepción. AGENTS.md §2 (estructura) y §4.1 (categorías) declaran la política en un solo lugar.
+**Decisión:** `data-viz` queda en el manifest como **legacy alias** de `charts/`. Sólo conserva dos entradas: `iswc-heatmap` y `iswc-maps`/`iswc-map-marker` (por motivos históricos de folder). Las features nuevas van a `charts/` sin excepción. `AGENTS.md` (estructura y categorias) declara la politica en un solo lugar; hoy vive en [`repo/spec.md`](repo/spec.md) R4.1.
 
 **Consecuencias:** No se borra la categoría para no romper links profundos ni manifests externos que ya apuntan a `data-viz`. El guardián (futuro `tests/category-aliases.test.ts`) puede advertir cuando una feature nueva intenta usar `data-viz`. Documentos de planes viejos que mencionan `data-viz` como válida (`docs/auditoria-final.md`, `docs/superpowers/plans/2026-10-03-zod-migration.md` antes de moverlo) ahora se archivan en `.audit/` o se actualizan para referenciar la política vigente.
 

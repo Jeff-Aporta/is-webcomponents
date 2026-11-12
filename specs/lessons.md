@@ -263,3 +263,23 @@ Detalles de **inventario por tag** (tablas de componentes de cada categoría), l
 | Minificar los JSON de `dist/` dio −26 % de bytes sin comprimir y −1,4 % por el cable: el JSON con espacios comprime muy bien | Medir las dos cosas y decir las dos: el ahorro real es en disco y sin `Content-Encoding` |
 | Un bloque de SCSS repetido en 13 diagramas no era idéntico: el texto del estado vacío cambia por diagrama | El mixin recibe el texto como parámetro y el CSS se compara por declaración (`deno task css:equivalente`), no a ojo |
 | Reescribir un `.scss` a mano puede cambiar el CSS sin que se note (un orden, un `em`): el build igual publica algo distinto | `scripts/sondas/css-equivalente.mjs` compila cada `.scss` y compara con la foto anterior por bloque; el refactor se acepta solo si da 0 archivos distintos |
+
+## Entorno: PowerShell, git y el repo
+
+| Trampa | Mitigacion |
+|---|---|
+| `git commit -m "$(cat <<'EOF' ... EOF)"` con `<caracter>` en el mensaje -> "The '<' operator is reserved for future use" | Escribe el mensaje en un archivo temporal y usa `git commit -F archivo.txt` |
+| `&&` no es separador en PowerShell -> "token && no es separador" | Usa `;` o `cmd /c "node a.mjs && node b.mjs"` |
+| `wc -l` no existe en PowerShell | `(git status --short -- previews/).Count` (PowerShell mide arrays) |
+| `ls -la` no existe en PowerShell | `Get-ChildItem . -File | Select-Object Name` |
+| `rm -rf` no existe en PowerShell | `Remove-Item -Recurse -Force` |
+| CSS warning `Expected identifier but found "stepper("` con `:state(without-line)` dentro de un nesting de Shadow DOM | Clases planas: `.stepper--without-line` o `.stepper.without-line` (sin nesting) |
+| `browser_cdp` con metodos complejos -> "Invalid parameters" | Usa `browser_navigate` + `browser_take_screenshot`; para el DOM, `browser_cdp Runtime.evaluate` con expresiones pequenas |
+| `git add` con 13k ficheros tarda ~60 s (coleccion de iconos) | Ninguna coleccion completa en el repo (4-nov-2026): `dist/assets/icons/` retirado |
+| `scripts/download-icons.ts` bajaba colecciones enteras | Se borro: `deno task icons` baja solo los que se usan; el explorador consulta la API |
+| `previews/iswc-scrollspy.html` no existe | `iswc-scrollspy` no tiene preview propio (vive dentro de otros): no lo crees de cero |
+| Un `*.selfcheck.mjs` nuevo sin `PASS` al final | El runner parsea `console.log('X self-check: PASS')`: termina asi o el runner no sabe si paso |
+| `<base href>` cambia la resolucion de todas las rutas relativas | Los iconos locales requieren `rootFromBaseURI()` (el `pathname`, no el `baseURI`) |
+| `git mv` con cambios sin commitear: el fichero aparece como `R` y no como `A+M` | Commitea lo pendiente antes de folderizar |
+| jsDelivr cachea 24 h despues del push | Espera 1-5 min o prueba `?v={timestamp}`; un 404 puntual no significa que el push rompio la distribucion |
+| Los 308k iconos de Iconify son 723 MB (limite de jsDelivr: 50 MB) | Solo los iconos usados en `assets/iconify/`; `dist/assets/icons/` esta en `.gitignore` |

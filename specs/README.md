@@ -19,6 +19,7 @@ Planes fechados de una sesión viven en `docs/superpowers/` (si existen). Al cer
 | Spec | [iconos.md](iconos.md) | ¿Cómo se resuelven los iconos? |
 | Spec | [documentacion.md](documentacion.md) | ¿Cómo se documenta para agentes? |
 | Spec | [testing.md](testing.md) | ¿Qué hace verde el gate? |
+| Spec | [repo/spec.md](repo/spec.md) | ¿Cómo es el repo (estructura, comandos, convenciones, bases compartidas)? |
 | Spec | [typescript/spec.md](typescript/spec.md) | ¿Cómo se tipa el kit? |
 | Spec | [playground.md](../src/components/preview/playground.md) (doc del componente) | ¿Cómo es el playground único (stage+knobs CDN)? |
 | Spec | [diagramas/spec.md](diagramas/spec.md) | ¿Qué gramática comparten los diagramas (rieles, flujo, curvas, general vs restringidos)? |
