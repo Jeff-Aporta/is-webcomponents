@@ -33,16 +33,25 @@ import css from 'iswc:css';
     #root!: HTMLElement;
     constructor() {
       super();
-      // El rol va en el HOST (lo que el consumidor mete en su listbox), no en un div
-      // del shadow: dentro de un listbox, el rol lo lleva el elemento que el
-      // consumidor coloca, no un descendiente suyo.
-      this.setAttribute('role', 'option');
       const shadow = this.shadowRoot!;
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
       this.#root = shadow.querySelector<HTMLElement>('.option')!;
     }
 
     override onConnected(): void {
+      // El rol va en el HOST (lo que el consumidor mete en su listbox), no en un div
+      // del shadow: dentro de un listbox, el rol lo lleva el elemento que el
+      // consumidor coloca, no un descendiente suyo.
+      //
+      // Y se escribe al conectar, NO en el constructor: un elemento creado por
+      // script (document.createElement('iswc-option'), que es como la galeria y
+      // el consumidor montan las opciones) no puede traer atributos cuando su
+      // constructor termina. Blink los descarta y avisa con un NotSupportedError
+      // sin capturar ('The result must not have attributes'), que ensucia la consola
+      // y rompe a los guardianes E2E que escuchan pageerror. Al conectar ya se
+      // puede escribir el atributo, y el rol llega antes de que la opcion entre
+      // en el listbox.
+      this.setAttribute('role', 'option');
       this.#sync();
     }
 
