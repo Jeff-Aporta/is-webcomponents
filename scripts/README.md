@@ -11,6 +11,10 @@ Lo que construye, mide, sirve y vigila el kit. Ninguna de estas herramientas se 
 - `gen-palettes.mjs` — genera `src/styles/palettes.scss`.
 - `indice-md.mjs` — genera `INDICE.md`.
 - `readmes-componentes.mjs` — genera el README de cada categoria de componentes.
+- `watch.mjs` — rebuild incremental de `dist/` al tocar `src/`, y escribe `dist/cdn/reload-pin`
+  para que el cliente de auto-reload (`dev-reload.js`) recargue el navegador (`deno task watch`).
+- `lab-componente.mjs` — monta un componente del kit en otro proyecto para verlo aislado
+  (`deno task lab src/components/helpers/md-render.ts <carpeta>`).
 
 ## Medir y servir
 
@@ -24,6 +28,8 @@ Lo que construye, mide, sirve y vigila el kit. Ninguna de estas herramientas se 
 - `sondas/eventos.ts` — el barrido de eventos pendientes.
 - `sondas/ux-audit.ts` — la auditoria de UX.
 - `sondas/sync-skill-catalog.mjs` — sincroniza el catalogo de skills.
+- `sondas/previews-catalog.ts` — genera `src/previews/catalog.ts` desde las fichas reales
+  (`deno task previews:catalog`).
 
 ## Reglas
 

@@ -3050,10 +3050,10 @@ test('g04 gauge: role=meter + aria-valuemin/max/now/text', { timeout: 60_000 }, 
 // Skip explicito:
 //   - Conexiones/márgenes entre aristas y labels: ya cubierto en
 //     commit ad856cd5f3; el chequeo automatizado requeriría geometría
-//     de pixels que es frágil frente a cambios de tema. La validación
-//     visual con shoot-one.mjs + .shots/log la hace el capitán.
+//     de pixels que es frágil frente a cambios de tema.
+//     visual la hace el capitán.
 //   - Dashed animation colors: ya cubierto en flowchart.ts + .css (color
-//     hereda del edge via currentColor). Verificar con shoot-one.mjs.
+//     hereda del edge via currentColor).
 //   - Proposals de drag&drop y resize: fuera de scope (ya hay otros
 //     grupos atacando eso).
 //   - Proposals que requieren datasets muy grandes (>=500 nodos,

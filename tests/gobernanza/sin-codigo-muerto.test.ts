@@ -50,15 +50,7 @@ export const EXCEPCIONES_ARCHIVO: [string, string][] = [
   ['src/manifest.ts', 'manifest del kit (build, galería, catálogo del loader)'],
   ['tests/.audit/', 'motor de deno task test/audit (CLI y adaptadores con contrato propio)'],
   ['scripts/codemods/', 'codemods reutilizables: CLI a mano (propuesta aplanar §4.1)'],
-  ['scripts/watch.mjs', 'dudoso: watcher de desarrollo sin task en deno.json (se decide en F9b)'],
-  ['scripts/inject-reload.mjs', 'dudoso: cliente de recarga que usa watch.mjs'],
-  ['scripts/verify-server.cjs', 'documentado en AGENTS.md (servidor de verificación en :8765)'],
-  ['scripts/verify-fetch.cjs', 'documentado en AGENTS.md (pide URLs a verify-server)'],
-  ['scripts/lab-componente.mjs', 'lab local de un componente (lo documenta gobernanza/build-unico)'],
-  ['scripts/sondas/previews-to-json.ts', 'genera src/previews/catalog.ts (cabecera AUTO-GENERADO)'],
-  ['scripts/sondas/generate-templates.ts', 'esqueleto de preview: documentado en AGENTS.md y specs/constraints.md'],
   ['scripts/sondas/sync-skill-catalog.mjs', 'regenera skills/iswc-base/catalog.md'],
-  ['scripts/sondas/shoot-one.mjs', 'captura de un tag: la cita tests/e2e/10-ux-proposals'],
 ];
 
 /** Símbolos sueltos: los usan apps fuera del repo (grep en los consumidores y Avatar, 5-nov-2026) o una augmentation. */

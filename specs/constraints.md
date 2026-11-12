@@ -103,7 +103,7 @@ Prohibiciones y reglas transversales ya pagadas. Detalle por dominio: [`componen
 
 ## Seguridad
 
-- **`innerHTML` con interpolación de datos** → XSS. Aplicar `escapeHtml()` (en `_shared/`) a TODO valor dinámico antes de asignar a `innerHTML`. Detectado en: `checkbox.preview.ts`, `input.preview.ts`, `maps.ts` (attribution + tileUrl), `treemap.ts`, `stat.ts`, `pages/ecosystem.ts`, `generate-templates.ts`, `fix-icon-viewbox.ts`. Guardián: `xss-escape`.
+- **`innerHTML` con interpolación de datos** → XSS. Aplicar `escapeHtml()` (en `_shared/`) a TODO valor dinámico antes de asignar a `innerHTML`. Detectado en: `checkbox.preview.ts`, `input.preview.ts`, `maps.ts` (attribution + tileUrl), `treemap.ts`, `stat.ts`, `pages/ecosystem.ts`, `fix-icon-viewbox.ts`. Guardián: `xss-escape`.
 - **`esc()` no escapa backticks ni comillas** → XSS via template literals en atributo. Reemplazar con `escapeHtml()` que escapa `& < > " ' \``. Guardián: `xss-backtick`.
 - **`allowHtml: true` en toast sin sanitización DOMPurify-like** → XSS. Si se permite HTML, sanitizar antes; por defecto `allowHtml: false`. Guardián: `toast-sanitize`.
 

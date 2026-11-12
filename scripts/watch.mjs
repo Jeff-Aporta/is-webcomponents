@@ -9,9 +9,9 @@
  * src/ (refresh basta). Componentes / preview / gallery-app → este watcher.
  *
  * Ademas escribe `dist/cdn/reload-pin` cada vez que cambia un archivo
- * observado: el cliente embebido en cada HTML (`scripts/inject-reload.mjs`)
- * hace polling de ese endpoint y recarga el browser. Es agnóstico del
- * static server (deno serve, Live Server, python -m http.server, etc.).
+ * observado: el cliente de auto-reload (`scripts/dev-reload.js`, page module
+ * que carga el loader) hace polling de ese endpoint y recarga el browser. Es
+ * agnostico del static server (deno serve, Live Server, python -m http.server).
  */
 import { watch, existsSync } from 'node:fs';
 import { access, copyFile, mkdir, stat, writeFile } from 'node:fs/promises';
@@ -94,7 +94,7 @@ async function rebuildGallery() {
     bundle: true,
     minify: true,
     format: 'esm',
-    target: 'es2020',
+    target: 'es2022',
     legalComments: 'none',
     // load-json.ts: imports node:* solo en tests; en browser usa fetch.
     external: ['node:fs', 'node:url'],

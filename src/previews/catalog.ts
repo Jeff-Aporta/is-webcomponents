@@ -1,14 +1,9 @@
 // @contexto INDICE.md · src/previews/README.md
 /**
- * AUTO-GENERADO por scripts/sondas/previews-to-json.ts — no editar a mano.
+ * AUTO-GENERADO por scripts/sondas/previews-catalog.ts — no editar a mano.
  * tag → { json, behavior?, category }
  */
 export default {
-  "iswc-code": {
-    "json": "../../dist/previews/code/code.json",
-    "behavior": "../../dist/previews/code/code.preview.min.js",
-    "category": "code"
-  },
   "iswc-button-group": {
     "json": "../../dist/previews/actions/button-group.json",
     "category": "actions"
@@ -31,10 +26,6 @@ export default {
     "json": "../../dist/previews/actions/copy-button.json",
     "category": "actions"
   },
-  "iswc-share-button": {
-    "json": "../../dist/previews/actions/share-button.json",
-    "category": "actions"
-  },
   "iswc-dropdown-item": {
     "json": "../../dist/previews/actions/dropdown-item.json",
     "category": "actions"
@@ -48,6 +39,10 @@ export default {
     "json": "../../dist/previews/actions/fab.json",
     "category": "actions"
   },
+  "iswc-share-button": {
+    "json": "../../dist/previews/actions/share-button.json",
+    "category": "actions"
+  },
   "iswc-speed-dial-action": {
     "json": "../../dist/previews/actions/speed-dial-action.json",
     "category": "actions"
@@ -56,49 +51,6 @@ export default {
     "json": "../../dist/previews/actions/speed-dial.json",
     "behavior": "../../dist/previews/actions/speed-dial.preview.min.js",
     "category": "actions"
-  },
-  "iswc-ag-grid": {
-    "json": "../../dist/previews/data/ag-grid.json",
-    "behavior": "../../dist/previews/data/ag-grid.preview.min.js",
-    "category": "data"
-  },
-  "iswc-data-grid": {
-    "json": "../../dist/previews/data/data-grid.json",
-    "behavior": "../../dist/previews/data/data-grid.preview.min.js",
-    "category": "data"
-  },
-  "iswc-kanban-card": {
-    "json": "../../dist/previews/data/kanban-card.json",
-    "category": "data"
-  },
-  "iswc-kanban-column": {
-    "json": "../../dist/previews/data/kanban-column.json",
-    "category": "data"
-  },
-  "iswc-kanban": {
-    "json": "../../dist/previews/data/kanban.json",
-    "category": "data"
-  },
-  "iswc-pivot-table": {
-    "json": "../../dist/previews/data/pivot-table.json",
-    "behavior": "../../dist/previews/data/pivot-table.preview.min.js",
-    "category": "data"
-  },
-  "iswc-spreadsheet": {
-    "json": "../../dist/previews/data/spreadsheet.json",
-    "category": "data"
-  },
-  "iswc-stat": {
-    "json": "../../dist/previews/data/stat.json",
-    "category": "data"
-  },
-  "iswc-transfer-item": {
-    "json": "../../dist/previews/data/transfer-item.json",
-    "category": "data"
-  },
-  "iswc-transfer": {
-    "json": "../../dist/previews/data/transfer.json",
-    "category": "data"
   },
   "iswc-bar-chart": {
     "json": "../../dist/previews/charts/bar-chart.json",
@@ -121,26 +73,8 @@ export default {
     "json": "../../dist/previews/charts/funnel-chart.json",
     "category": "data-viz"
   },
-  "iswc-gauge": {
-    "json": "../../dist/previews/data/gauge.json",
-    "behavior": "../../dist/previews/data/gauge.preview.min.js",
-    "category": "data-viz"
-  },
-  "iswc-heatmap": {
-    "json": "../../dist/previews/data-viz/heatmap.json",
-    "behavior": "../../dist/previews/data-viz/heatmap.preview.min.js",
-    "category": "data-viz"
-  },
   "iswc-line-chart": {
     "json": "../../dist/previews/charts/line-chart.json",
-    "category": "data-viz"
-  },
-  "iswc-map-marker": {
-    "json": "../../dist/previews/data-viz/map-marker.json",
-    "category": "data-viz"
-  },
-  "iswc-maps": {
-    "json": "../../dist/previews/data-viz/maps.json",
     "category": "data-viz"
   },
   "iswc-pie-chart": {
@@ -173,6 +107,84 @@ export default {
     "json": "../../dist/previews/charts/waterfall-chart.json",
     "category": "data-viz"
   },
+  "iswc-code": {
+    "json": "../../dist/previews/code/code.json",
+    "behavior": "../../dist/previews/code/code.preview.min.js",
+    "category": "code"
+  },
+  "iswc-ag-grid": {
+    "json": "../../dist/previews/data/ag-grid.json",
+    "behavior": "../../dist/previews/data/ag-grid.preview.min.js",
+    "category": "data"
+  },
+  "iswc-data-grid": {
+    "json": "../../dist/previews/data/data-grid.json",
+    "behavior": "../../dist/previews/data/data-grid.preview.min.js",
+    "category": "data"
+  },
+  "iswc-gauge": {
+    "json": "../../dist/previews/data/gauge.json",
+    "behavior": "../../dist/previews/data/gauge.preview.min.js",
+    "category": "data-viz"
+  },
+  "iswc-kanban-card": {
+    "json": "../../dist/previews/data/kanban-card.json",
+    "category": "data"
+  },
+  "iswc-kanban-column": {
+    "json": "../../dist/previews/data/kanban-column.json",
+    "category": "data"
+  },
+  "iswc-kanban": {
+    "json": "../../dist/previews/data/kanban.json",
+    "category": "data"
+  },
+  "iswc-meta-list": {
+    "json": "../../dist/previews/data/meta-list.json",
+    "category": "data"
+  },
+  "iswc-pivot-table": {
+    "json": "../../dist/previews/data/pivot-table.json",
+    "behavior": "../../dist/previews/data/pivot-table.preview.min.js",
+    "category": "data"
+  },
+  "iswc-spreadsheet": {
+    "json": "../../dist/previews/data/spreadsheet.json",
+    "category": "data"
+  },
+  "iswc-stat-group": {
+    "json": "../../dist/previews/data/stat-group.json",
+    "category": "data"
+  },
+  "iswc-stat": {
+    "json": "../../dist/previews/data/stat.json",
+    "category": "data"
+  },
+  "iswc-trace-log": {
+    "json": "../../dist/previews/data/trace-log.json",
+    "category": "data"
+  },
+  "iswc-transfer-item": {
+    "json": "../../dist/previews/data/transfer-item.json",
+    "category": "data"
+  },
+  "iswc-transfer": {
+    "json": "../../dist/previews/data/transfer.json",
+    "category": "data"
+  },
+  "iswc-heatmap": {
+    "json": "../../dist/previews/data-viz/heatmap.json",
+    "behavior": "../../dist/previews/data-viz/heatmap.preview.min.js",
+    "category": "data-viz"
+  },
+  "iswc-map-marker": {
+    "json": "../../dist/previews/data-viz/map-marker.json",
+    "category": "data-viz"
+  },
+  "iswc-maps": {
+    "json": "../../dist/previews/data-viz/maps.json",
+    "category": "data-viz"
+  },
   "iswc-block-diagram": {
     "json": "../../dist/previews/diagrams/block-diagram.json",
     "category": "diagrams"
@@ -181,17 +193,29 @@ export default {
     "json": "../../dist/previews/diagrams/class-diagram.json",
     "category": "diagrams"
   },
+  "iswc-component-diagram": {
+    "json": "../../dist/previews/diagrams/component-diagram.json",
+    "category": "diagrams"
+  },
+  "iswc-diagram-edit-app": {
+    "json": "../../dist/previews/diagrams/diagram-edit-app.json",
+    "category": "diagrams"
+  },
   "iswc-diagram-lightbox": {
     "json": "../../dist/previews/diagrams/diagram-lightbox.json",
     "behavior": "../../dist/previews/diagrams/diagram-lightbox.preview.min.js",
     "category": "diagrams"
   },
-  "iswc-component-diagram": {
-    "json": "../../dist/previews/diagrams/component-diagram.json",
+  "iswc-diagram-view-app": {
+    "json": "../../dist/previews/diagrams/diagram-view-app.json",
     "category": "diagrams"
   },
   "iswc-er-diagram": {
     "json": "../../dist/previews/diagrams/er-diagram.json",
+    "category": "diagrams"
+  },
+  "iswc-er-editor": {
+    "json": "../../dist/previews/diagrams/er-editor.json",
     "category": "diagrams"
   },
   "iswc-flowchart": {
@@ -202,6 +226,15 @@ export default {
     "json": "../../dist/previews/diagrams/gantt.json",
     "category": "diagrams"
   },
+  "iswc-journey-map": {
+    "json": "../../dist/previews/diagrams/journey-map.json",
+    "category": "diagrams"
+  },
+  "iswc-lightbox": {
+    "json": "../../dist/previews/diagrams/lightbox.json",
+    "behavior": "../../dist/previews/diagrams/lightbox.preview.min.js",
+    "category": "helpers"
+  },
   "iswc-mindmap": {
     "json": "../../dist/previews/diagrams/mindmap.json",
     "category": "diagrams"
@@ -211,28 +244,12 @@ export default {
     "behavior": "../../dist/previews/diagrams/org-chart.preview.min.js",
     "category": "diagrams"
   },
-  "iswc-journey-map": {
-    "json": "../../dist/previews/diagrams/journey-map.json",
-    "category": "diagrams"
-  },
   "iswc-quadrant-chart": {
     "json": "../../dist/previews/diagrams/quadrant-chart.json",
     "category": "diagrams"
   },
   "iswc-sankey-diagram": {
     "json": "../../dist/previews/diagrams/sankey-diagram.json",
-    "category": "diagrams"
-  },
-  "iswc-swimlane-diagram": {
-    "json": "../../dist/previews/diagrams/swimlane-diagram.json",
-    "category": "diagrams"
-  },
-  "iswc-use-case-diagram": {
-    "json": "../../dist/previews/diagrams/use-case-diagram.json",
-    "category": "diagrams"
-  },
-  "iswc-venn-diagram": {
-    "json": "../../dist/previews/diagrams/venn-diagram.json",
     "category": "diagrams"
   },
   "iswc-sequence-diagram": {
@@ -244,8 +261,20 @@ export default {
     "json": "../../dist/previews/diagrams/state-diagram.json",
     "category": "diagrams"
   },
+  "iswc-swimlane-diagram": {
+    "json": "../../dist/previews/diagrams/swimlane-diagram.json",
+    "category": "diagrams"
+  },
   "iswc-timeline": {
     "json": "../../dist/previews/diagrams/timeline.json",
+    "category": "diagrams"
+  },
+  "iswc-use-case-diagram": {
+    "json": "../../dist/previews/diagrams/use-case-diagram.json",
+    "category": "diagrams"
+  },
+  "iswc-venn-diagram": {
+    "json": "../../dist/previews/diagrams/venn-diagram.json",
     "category": "diagrams"
   },
   "iswc-badge": {
@@ -260,12 +289,24 @@ export default {
     "json": "../../dist/previews/feedback/confirm-modal.json",
     "category": "feedback"
   },
+  "iswc-empty-state": {
+    "json": "../../dist/previews/feedback/empty-state.json",
+    "category": "feedback"
+  },
+  "iswc-loading": {
+    "json": "../../dist/previews/feedback/loading.json",
+    "category": "feedback"
+  },
   "iswc-palette-selector": {
     "json": "../../dist/previews/feedback/palette-selector.json",
     "category": "feedback"
   },
   "iswc-popconfirm": {
     "json": "../../dist/previews/feedback/popconfirm.json",
+    "category": "feedback"
+  },
+  "iswc-prefs-clear": {
+    "json": "../../dist/previews/feedback/prefs-clear.json",
     "category": "feedback"
   },
   "iswc-progress-bar": {
@@ -285,96 +326,20 @@ export default {
     "json": "../../dist/previews/feedback/spinner.json",
     "category": "feedback"
   },
+  "iswc-status-pill": {
+    "json": "../../dist/previews/feedback/status-pill.json",
+    "category": "feedback"
+  },
+  "iswc-stream-bubble": {
+    "json": "../../dist/previews/feedback/stream-bubble.json",
+    "category": "feedback"
+  },
   "iswc-tag": {
     "json": "../../dist/previews/feedback/tag.json",
     "category": "feedback"
   },
   "iswc-theme-toggle": {
     "json": "../../dist/previews/feedback/theme-toggle.json",
-    "category": "feedback"
-  },
-  "iswc-pager": {
-    "json": "../../dist/previews/navigation/pager.json",
-    "category": "navigation"
-  },
-  "iswc-figure": {
-    "json": "../../dist/previews/media/figure.json",
-    "category": "media"
-  },
-  "iswc-stream-bubble": {
-    "json": "../../dist/previews/feedback/stream-bubble.json",
-    "category": "feedback"
-  },
-  "iswc-json-dialog": {
-    "json": "../../dist/previews/overlays/json-dialog.json",
-    "category": "overlays"
-  },
-  "iswc-pagination": {
-    "json": "../../dist/previews/navigation/pagination.json",
-    "category": "navigation"
-  },
-  "iswc-trace-log": {
-    "json": "../../dist/previews/data/trace-log.json",
-    "category": "data"
-  },
-  "iswc-status-pill": {
-    "json": "../../dist/previews/feedback/status-pill.json",
-    "category": "feedback"
-  },
-  "iswc-loading": {
-    "json": "../../dist/previews/feedback/loading.json",
-    "category": "feedback"
-  },
-  "iswc-semantic-search": {
-    "json": "../../dist/previews/overlays/semantic-search.json",
-    "category": "overlays"
-  },
-  "iswc-tenant-selector": {
-    "json": "../../dist/previews/forms/tenant-selector.json",
-    "category": "forms"
-  },
-  "iswc-stat-group": {
-    "json": "../../dist/previews/data/stat-group.json",
-    "category": "data"
-  },
-  "iswc-ai-tool": {
-    "json": "../../dist/previews/media/ai-tool.json",
-    "category": "media"
-  },
-  "iswc-person": {
-    "json": "../../dist/previews/media/person.json",
-    "category": "media"
-  },
-  "iswc-empty-state": {
-    "json": "../../dist/previews/feedback/empty-state.json",
-    "category": "feedback"
-  },
-  "iswc-page-header": {
-    "json": "../../dist/previews/layout/page-header.json",
-    "category": "layout"
-  },
-  "iswc-meta-list": {
-    "json": "../../dist/previews/data/meta-list.json",
-    "category": "data"
-  },
-  "iswc-server-api-docs": {
-    "json": "../../dist/previews/layout/server-api-docs.json",
-    "category": "layout"
-  },
-  "iswc-md-docs-vault": {
-    "json": "../../dist/previews/layout/md-docs-vault.json",
-    "category": "layout"
-  },
-  "iswc-doc-layout": {
-    "json": "../../dist/previews/layout/doc-layout.json",
-    "category": "layout"
-  },
-  "iswc-doc-index": {
-    "json": "../../dist/previews/navigation/doc-index.json",
-    "category": "navigation"
-  },
-  "iswc-prefs-clear": {
-    "json": "../../dist/previews/feedback/prefs-clear.json",
     "category": "feedback"
   },
   "iswc-toast-item": {
@@ -390,6 +355,38 @@ export default {
     "json": "../../dist/previews/feedback/tooltip.json",
     "behavior": "../../dist/previews/feedback/tooltip.preview.min.js",
     "category": "feedback"
+  },
+  "iswc-csv-edit": {
+    "json": "../../dist/previews/files/csv-edit.json",
+    "category": "files"
+  },
+  "iswc-csv-view": {
+    "json": "../../dist/previews/files/csv-view.json",
+    "category": "files"
+  },
+  "iswc-docx-view": {
+    "json": "../../dist/previews/files/docx-view.json",
+    "category": "files"
+  },
+  "iswc-file-edit": {
+    "json": "../../dist/previews/files/file-edit.json",
+    "category": "files"
+  },
+  "iswc-file-view": {
+    "json": "../../dist/previews/files/file-view.json",
+    "category": "files"
+  },
+  "iswc-pptx-view": {
+    "json": "../../dist/previews/files/pptx-view.json",
+    "category": "files"
+  },
+  "iswc-txt-edit": {
+    "json": "../../dist/previews/files/txt-edit.json",
+    "category": "files"
+  },
+  "iswc-txt-view": {
+    "json": "../../dist/previews/files/txt-view.json",
+    "category": "files"
   },
   "iswc-checkbox": {
     "json": "../../dist/previews/forms/checkbox.json",
@@ -530,6 +527,10 @@ export default {
     "behavior": "../../dist/previews/forms/switch.preview.min.js",
     "category": "forms"
   },
+  "iswc-tenant-selector": {
+    "json": "../../dist/previews/forms/tenant-selector.json",
+    "category": "forms"
+  },
   "iswc-textarea": {
     "json": "../../dist/previews/forms/textarea.json",
     "behavior": "../../dist/previews/forms/textarea.preview.min.js",
@@ -550,6 +551,10 @@ export default {
   "iswc-year-calendar": {
     "json": "../../dist/previews/forms/year-calendar.json",
     "category": "forms"
+  },
+  "iswc-floating": {
+    "json": "../../dist/previews/helpers/floating.json",
+    "category": "helpers"
   },
   "iswc-format-bytes": {
     "json": "../../dist/previews/helpers/format-bytes.json",
@@ -572,11 +577,6 @@ export default {
     "json": "../../dist/previews/helpers/intersection-observer.json",
     "category": "helpers"
   },
-  "iswc-lightbox": {
-    "json": "../../dist/previews/diagrams/lightbox.json",
-    "behavior": "../../dist/previews/diagrams/lightbox.preview.min.js",
-    "category": "helpers"
-  },
   "iswc-md-editor": {
     "json": "../../dist/previews/helpers/md-editor.json",
     "category": "helpers"
@@ -593,10 +593,6 @@ export default {
   "iswc-observer": {
     "json": "../../dist/previews/helpers/observer.json",
     "behavior": "../../dist/previews/helpers/observer.preview.min.js",
-    "category": "helpers"
-  },
-  "iswc-wake-lock": {
-    "json": "../../dist/previews/helpers/wake-lock.json",
     "category": "helpers"
   },
   "iswc-offscreen-canvas": {
@@ -622,15 +618,9 @@ export default {
     "behavior": "../../dist/previews/helpers/ui.preview.min.js",
     "category": "helpers"
   },
-  "home": {
-    "json": "../../dist/pages/home.json",
-    "behavior": "../../dist/pages/home.min.js",
-    "category": ""
-  },
-  "icons": {
-    "json": "../../dist/pages/icons.json",
-    "behavior": "../../dist/pages/icons.min.js",
-    "category": ""
+  "iswc-wake-lock": {
+    "json": "../../dist/previews/helpers/wake-lock.json",
+    "category": "helpers"
   },
   "iswc-accordion-group": {
     "json": "../../dist/previews/isp/accordion-group.json",
@@ -704,12 +694,20 @@ export default {
     "behavior": "../../dist/previews/isp/tree-view.preview.min.js",
     "category": "isp"
   },
+  "iswc-app-shell": {
+    "json": "../../dist/previews/layout/app-shell.json",
+    "category": "layout"
+  },
   "iswc-callout": {
     "json": "../../dist/previews/layout/callout.json",
     "category": "layout"
   },
   "iswc-card": {
     "json": "../../dist/previews/layout/card.json",
+    "category": "layout"
+  },
+  "iswc-demo": {
+    "json": "../../dist/previews/layout/demo.json",
     "category": "layout"
   },
   "iswc-details": {
@@ -722,6 +720,14 @@ export default {
   },
   "iswc-divider": {
     "json": "../../dist/previews/layout/divider.json",
+    "category": "layout"
+  },
+  "iswc-doc-demo": {
+    "json": "../../dist/previews/layout/doc-demo.json",
+    "category": "preview"
+  },
+  "iswc-doc-layout": {
+    "json": "../../dist/previews/layout/doc-layout.json",
     "category": "layout"
   },
   "iswc-dock-item": {
@@ -737,38 +743,78 @@ export default {
     "json": "../../dist/previews/layout/drawer.json",
     "category": "layout"
   },
+  "iswc-login-dropdown": {
+    "json": "../../dist/previews/layout/login-dropdown.json",
+    "category": "layout"
+  },
+  "iswc-login-gate": {
+    "json": "../../dist/previews/layout/login-gate.json",
+    "category": "layout"
+  },
+  "iswc-login": {
+    "json": "../../dist/previews/layout/login.json",
+    "category": "layout"
+  },
   "iswc-main": {
     "json": "../../dist/previews/layout/main.json",
     "behavior": "../../dist/previews/layout/main.preview.min.js",
     "category": "layout"
   },
+  "iswc-md-docs-vault": {
+    "json": "../../dist/previews/layout/md-docs-vault.json",
+    "category": "layout"
+  },
+  "iswc-page-header": {
+    "json": "../../dist/previews/layout/page-header.json",
+    "category": "layout"
+  },
+  "iswc-preview-component": {
+    "json": "../../dist/previews/layout/preview-component.json",
+    "category": "preview"
+  },
+  "iswc-preview-controls": {
+    "json": "../../dist/previews/layout/preview-controls.json",
+    "category": "preview"
+  },
   "iswc-scrollspy": {
     "json": "../../dist/previews/layout/scrollspy.json",
+    "category": "layout"
+  },
+  "iswc-server-api-docs": {
+    "json": "../../dist/previews/layout/server-api-docs.json",
+    "category": "layout"
+  },
+  "iswc-session-menu": {
+    "json": "../../dist/previews/layout/session-menu.json",
     "category": "layout"
   },
   "iswc-split-panel": {
     "json": "../../dist/previews/layout/split-panel.json",
     "category": "layout"
   },
-  "iswc-icon-explorer": {
-    "json": "../../dist/previews/media/icon-explorer.json",
-    "behavior": "../../dist/previews/media/icon-explorer.preview.min.js",
+  "iswc-ai-tool": {
+    "json": "../../dist/previews/media/ai-tool.json",
     "category": "media"
   },
   "iswc-avatar": {
     "json": "../../dist/previews/media/avatar.json",
     "category": "media"
   },
-  "iswc-theme-img": {
-    "json": "../../dist/previews/media/theme-img.json",
+  "iswc-barcode-scanner": {
+    "json": "../../dist/previews/media/barcode-scanner.json",
     "category": "media"
   },
   "iswc-barcode": {
     "json": "../../dist/previews/media/barcode.json",
     "category": "media"
   },
-  "iswc-barcode-scanner": {
-    "json": "../../dist/previews/media/barcode-scanner.json",
+  "iswc-figure": {
+    "json": "../../dist/previews/media/figure.json",
+    "category": "media"
+  },
+  "iswc-icon-explorer": {
+    "json": "../../dist/previews/media/icon-explorer.json",
+    "behavior": "../../dist/previews/media/icon-explorer.preview.min.js",
     "category": "media"
   },
   "iswc-icon": {
@@ -781,12 +827,28 @@ export default {
     "behavior": "../../dist/previews/media/image-editor.preview.min.js",
     "category": "media"
   },
-  "iswc-qrcode": {
-    "json": "../../dist/previews/media/qrcode.json",
+  "iswc-media-recorder": {
+    "json": "../../dist/previews/media/media-recorder.json",
     "category": "media"
   },
   "iswc-parallax-collage": {
     "json": "../../dist/previews/media/parallax-collage.json",
+    "category": "media"
+  },
+  "iswc-person": {
+    "json": "../../dist/previews/media/person.json",
+    "category": "media"
+  },
+  "iswc-qrcode": {
+    "json": "../../dist/previews/media/qrcode.json",
+    "category": "media"
+  },
+  "iswc-speech": {
+    "json": "../../dist/previews/media/speech.json",
+    "category": "media"
+  },
+  "iswc-theme-img": {
+    "json": "../../dist/previews/media/theme-img.json",
     "category": "media"
   },
   "iswc-video-playlist": {
@@ -799,13 +861,9 @@ export default {
     "behavior": "../../dist/previews/media/video.preview.min.js",
     "category": "media"
   },
-  "iswc-speech": {
-    "json": "../../dist/previews/media/speech.json",
-    "category": "media"
-  },
-  "iswc-media-recorder": {
-    "json": "../../dist/previews/media/media-recorder.json",
-    "category": "media"
+  "iswc-app-nav": {
+    "json": "../../dist/previews/navigation/app-nav.json",
+    "category": "navigation"
   },
   "iswc-breadcrumb-item": {
     "json": "../../dist/previews/navigation/breadcrumb-item.json",
@@ -823,9 +881,21 @@ export default {
     "json": "../../dist/previews/navigation/carousel.json",
     "category": "navigation"
   },
+  "iswc-doc-index": {
+    "json": "../../dist/previews/navigation/doc-index.json",
+    "category": "navigation"
+  },
   "iswc-mega-menu": {
     "json": "../../dist/previews/navigation/mega-menu.json",
     "behavior": "../../dist/previews/navigation/mega-menu.preview.min.js",
+    "category": "navigation"
+  },
+  "iswc-pager": {
+    "json": "../../dist/previews/navigation/pager.json",
+    "category": "navigation"
+  },
+  "iswc-pagination": {
+    "json": "../../dist/previews/navigation/pagination.json",
     "category": "navigation"
   },
   "iswc-scroller": {
@@ -865,114 +935,28 @@ export default {
     "behavior": "../../dist/previews/overlays/command-palette.preview.min.js",
     "category": "overlays"
   },
+  "iswc-json-dialog": {
+    "json": "../../dist/previews/overlays/json-dialog.json",
+    "category": "overlays"
+  },
   "iswc-pdf-viewer": {
     "json": "../../dist/previews/overlays/pdf-viewer.json",
+    "category": "overlays"
+  },
+  "iswc-semantic-search": {
+    "json": "../../dist/previews/overlays/semantic-search.json",
     "category": "overlays"
   },
   "iswc-window": {
     "json": "../../dist/previews/overlays/window.json",
     "category": "overlays"
   },
-  "phase7": {
-    "json": "../../dist/pages/phase7.json",
-    "category": ""
-  },
-  "theming": {
-    "json": "../../dist/pages/theming.json",
-    "behavior": "../../dist/pages/theming.min.js",
-    "category": ""
-  },
-  "ecosystem": {
-    "json": "../../dist/pages/ecosystem.json",
-    "behavior": "../../dist/pages/ecosystem.min.js",
-    "category": ""
-  },
-  "iswc-er-editor": {
-    "json": "../../dist/previews/diagrams/er-editor.json",
-    "category": "diagrams"
-  },
-  "iswc-diagram-view-app": {
-    "json": "../../dist/previews/diagrams/diagram-view-app.json",
-    "category": "diagrams"
-  },
-  "iswc-diagram-edit-app": {
-    "json": "../../dist/previews/diagrams/diagram-edit-app.json",
-    "category": "diagrams"
-  },
-  "iswc-demo": {
-    "json": "../../dist/previews/layout/demo.json",
-    "category": "layout"
-  },
-  "iswc-floating": {
-    "json": "../../dist/previews/helpers/floating.json",
-    "category": "helpers"
-  },
-  "iswc-preview-component": {
-    "json": "../../dist/previews/layout/preview-component.json",
+  "iswc-demo-section": {
+    "json": "../../dist/previews/preview/demo-section.json",
     "category": "preview"
   },
-  "iswc-preview-controls": {
-    "json": "../../dist/previews/layout/preview-controls.json",
-    "category": "preview"
-  },
-  "iswc-login": {
-    "json": "../../dist/previews/layout/login.json",
-    "category": "layout"
-  },
-  "iswc-login-gate": {
-    "json": "../../dist/previews/layout/login-gate.json",
-    "category": "layout"
-  },
-  "iswc-login-dropdown": {
-    "json": "../../dist/previews/layout/login-dropdown.json",
-    "category": "layout"
-  },
-  "iswc-session-menu": {
-    "json": "../../dist/previews/layout/session-menu.json",
-    "category": "layout"
-  },
-  "iswc-app-shell": {
-    "json": "../../dist/previews/layout/app-shell.json",
-    "category": "layout"
-  },
-  "iswc-app-nav": {
-    "json": "../../dist/previews/navigation/app-nav.json",
-    "category": "navigation"
-  },
-  "iswc-txt-view": {
-    "json": "../../dist/previews/files/txt-view.json",
-    "category": "files"
-  },
-  "iswc-txt-edit": {
-    "json": "../../dist/previews/files/txt-edit.json",
-    "category": "files"
-  },
-  "iswc-csv-view": {
-    "json": "../../dist/previews/files/csv-view.json",
-    "category": "files"
-  },
-  "iswc-csv-edit": {
-    "json": "../../dist/previews/files/csv-edit.json",
-    "category": "files"
-  },
-  "iswc-docx-view": {
-    "json": "../../dist/previews/files/docx-view.json",
-    "category": "files"
-  },
-  "iswc-pptx-view": {
-    "json": "../../dist/previews/files/pptx-view.json",
-    "category": "files"
-  },
-  "iswc-file-view": {
-    "json": "../../dist/previews/files/file-view.json",
-    "category": "files"
-  },
-  "iswc-file-edit": {
-    "json": "../../dist/previews/files/file-edit.json",
-    "category": "files"
-  },
-  "iswc-doc-demo": {
-    "json": "../../dist/previews/layout/doc-demo.json",
+  "iswc-examples-carousel": {
+    "json": "../../dist/previews/preview/examples-carousel.json",
     "category": "preview"
   },
   "iswc-playground": {
@@ -981,14 +965,6 @@ export default {
   },
   "iswc-slots-pg": {
     "json": "../../dist/previews/preview/slots-pg.json",
-    "category": "preview"
-  },
-  "iswc-examples-carousel": {
-    "json": "../../dist/previews/preview/examples-carousel.json",
-    "category": "preview"
-  },
-  "iswc-demo-section": {
-    "json": "../../dist/previews/preview/demo-section.json",
     "category": "preview"
   }
 };
