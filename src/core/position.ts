@@ -1,9 +1,15 @@
 // @contexto INDICE.md · src/core/README.md
 /**
- * Motor de posicionamiento anclado (flip / shift / arrow).
+ * Motor de posicionamiento anclado (flip / shift).
  * Sin dependencias — usa getBoundingClientRect + flip/shift.
+ *
+ * Las opciones del popup que se piden aparte (`auto-size` y la flecha) NO viven aquí: cada una está en
+ * su módulo (`position/auto-size.ts`, `position/flecha.ts`) y se carga con `import()` solo cuando se
+ * pide. Al importarse se registran en `position/registro.ts` y este motor usa lo registrado; si el módulo
+ * todavía no ha llegado, la llamada va sin esa opción (y la pide para la siguiente).
  */
-import type { Placement, AnchorLike, Rect, Size, Coords, Boundary, ArrowOffset, ComputePositionOpts, ComputePositionResult, PopupDismissOpciones, Capa, OpcionesCapaModal } from './schemas/position.schemas.js';
+import type { Placement, AnchorLike, Rect, Size, Coords, Boundary, ComputePositionOpts, ComputePositionResult, PopupDismissOpciones, Capa, OpcionesCapaModal } from './schemas/position.schemas.js';
+import { autoSizeRegistrado, flechaRegistrada, type CalcularAutoSize, type CalcularFlecha } from './position/registro.js';
 
 export const PLACEMENTS: Placement[] = [
   'top', 'top-start', 'top-end',
@@ -228,72 +234,18 @@ function applyShift(coords: Coords, size: Size, boundary: Boundary, enabled: boo
   return { ...coords, top, left };
 }
 
-function availableSize(coords: Coords, size: Size, boundary: Boundary, autoSize: '' | 'horizontal' | 'vertical' | 'both'): { width: number | null; height: number | null } {
-  if (!autoSize) return { width: null, height: null };
-  let width = size.width;
-  let height = size.height;
-  if (autoSize === 'horizontal' || autoSize === 'both') {
-    width = Math.max(0, Math.min(size.width, boundary.right - Math.max(coords.left, boundary.left)));
-  }
-  if (autoSize === 'vertical' || autoSize === 'both') {
-    height = Math.max(0, Math.min(size.height, boundary.bottom - Math.max(coords.top, boundary.top)));
-  }
-  return { width, height };
-}
+/** Módulo de la opción `auto-size` (se pide la primera vez que hace falta). */
+let cargandoAutoSize: Promise<unknown> | null = null;
 
-/** Estilo CSS resuelto para la flecha. */
-
-function arrowOffset(
-  placement: string,
-  anchor: Rect,
-  popupCoords: Coords,
-  popupSize: Size,
-  arrowSize: number,
-  arrowPadding: number,
-  arrowPlacement: string,
-): ArrowOffset {
-  const side = sideOf(placement);
-  const align = arrowPlacement === 'anchor' ? 'anchor' : arrowPlacement;
-  // Cuadrado de lado `arrowSize * 2` (rotado 45° en CSS = rombo). La punta
-  // visible es la mitad que asoma fuera del popup: el offset del lado estático
-  // debe ser `-arrowSize` (no 0), si no el rombo queda entero detrás del body.
-  const side2 = arrowSize * 2;
-  const result: ArrowOffset = { top: '', left: '', right: '', bottom: '' };
-  const out = `${-arrowSize}px`;
-
-  if (side === 'top' || side === 'bottom') {
-    let x: number;
-    if (align === 'start') x = arrowPadding;
-    else if (align === 'end') x = popupSize.width - side2 - arrowPadding;
-    else if (align === 'center') x = (popupSize.width - side2) / 2;
-    else {
-      const anchorCenter = anchor.left + anchor.width / 2;
-      x = anchorCenter - popupCoords.left - arrowSize;
-      x = Math.max(arrowPadding, Math.min(popupSize.width - side2 - arrowPadding, x));
-    }
-    result.left = `${x}px`;
-    // placement top → popup arriba del ancla → flecha en el borde inferior
-    if (side === 'top') result.bottom = out;
-    else result.top = out;
-  } else {
-    let y: number;
-    if (align === 'start') y = arrowPadding;
-    else if (align === 'end') y = popupSize.height - side2 - arrowPadding;
-    else if (align === 'center') y = (popupSize.height - side2) / 2;
-    else {
-      const anchorCenter = anchor.top + anchor.height / 2;
-      y = anchorCenter - popupCoords.top - arrowSize;
-      y = Math.max(arrowPadding, Math.min(popupSize.height - side2 - arrowPadding, y));
-    }
-    result.top = `${y}px`;
-    if (side === 'left') result.right = out;
-    else result.left = out;
-  }
-  return result;
-}
+/** Módulo de la flecha del popup (idem). */
+let cargandoFlecha: Promise<unknown> | null = null;
 
 /**
  * Posiciona un popup anclado a un elemento, con flip/shift/arrow opcionales.
+ *
+ * `auto-size` y la flecha se calculan en módulos aparte (`position/auto-size.ts`, `position/flecha.ts`) que
+ * se cargan con `import()` solo cuando se piden: si su módulo aún no ha llegado, esta llamada sale sin esa
+ * opción y la pide para la siguiente.
  */
 export function computePosition(opts: ComputePositionOpts): ComputePositionResult | null {
   const {
@@ -372,7 +324,11 @@ export function computePosition(opts: ComputePositionOpts): ComputePositionResul
   }
 
   best = applyShift(best, size, bound, shift);
-  const avail = availableSize(best, size, bound, autoSize);
+
+  // La opción `auto-size` vive en su módulo: si no ha llegado todavía, se pide y esta llamada sale sin ella.
+  const calcularAutoSize: CalcularAutoSize | null = autoSizeRegistrado();
+  if (autoSize && !calcularAutoSize) cargandoAutoSize ??= import('./position/auto-size.js').catch(() => null);
+  const avail = calcularAutoSize ? calcularAutoSize(best, size, bound, autoSize) : { width: null, height: null };
 
   const viewportTop = best.top;
   const viewportLeft = best.left;
@@ -400,8 +356,11 @@ export function computePosition(opts: ComputePositionOpts): ComputePositionResul
     }
   }
 
-  const arrowPos = arrow
-    ? arrowOffset(best.placement, anchor, best, size, arrowSize, arrowPadding, arrowPlacement)
+  // La flecha vive en su módulo: si no ha llegado todavía, se pide y esta llamada sale sin ella.
+  const calcularFlecha: CalcularFlecha | null = flechaRegistrada();
+  if (arrow && !calcularFlecha) cargandoFlecha ??= import('./position/flecha.js').catch(() => null);
+  const arrowPos = arrow && calcularFlecha
+    ? calcularFlecha(best.placement, anchor, best, size, arrowSize, arrowPadding, arrowPlacement)
     : null;
 
   return {

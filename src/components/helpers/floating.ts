@@ -4,7 +4,9 @@ import { withStyleAttrs } from '@jeff-aporta/iswc-base/core/attrs.js';
 
 import { computePosition, PLACEMENTS, isVirtualElement } from '@jeff-aporta/iswc-base/core/position.js';
 import { type AnchorLike, type ComputePositionResult } from '@jeff-aporta/iswc-base/core/schemas/position.schemas.js';
+import type { PuenteCaja, PuenteEntrada } from '@jeff-aporta/iswc-base/core/position/hover-bridge.js';
 import css from 'iswc:css';
+import type { FloatingEventos } from './schemas/floating.schemas.js';
 
 /**
  * <iswc-floating> — building block interno de posicionamiento anclado.
@@ -64,6 +66,7 @@ import css from 'iswc:css';
 
   class IswcFloating extends withStyleAttrs(IswcElement) {
     static override tag = 'iswc-floating';
+    declare static events: FloatingEventos;
     static override css = css;
 
     static override observed = [...OBSERVED, 'arrow-size', 'show-duration', 'hide-duration'];
@@ -80,6 +83,12 @@ import css from 'iswc:css';
     #measuring = false;
     #bridgeBound = false;
     #lastActive: HTMLElement | null = null;
+    /** Módulos de opciones ya cargados (flecha, auto-size, puente de hover). */
+    #opciones = new Set<string>();
+    /** Cargas en curso de los módulos de opciones (clave → promesa). */
+    #cargasOpciones = new Map<string, Promise<void>>();
+    /** Colocación del puente de hover (viene del módulo aparte `position/hover-bridge.ts`). */
+    #calcularPuente: ((entrada: PuenteEntrada) => PuenteCaja | null) | null = null;
 
     constructor() {
       super();
@@ -98,6 +107,9 @@ import css from 'iswc:css';
       this.#mounted = true;
       this.#resolveAnchor();
       this.#syncActive();
+      // Las opciones del popup (flecha, auto-size y puente de hover) se piden al conectar: si se pidieran al
+      // abrir, el popup tardaría lo que tarden en llegar.
+      void this.#pedirOpciones();
       // Listeners de teclado globales: solo cuando es modal — propuesta g09.
       // Capturamos fase para que Escape cierre ANTES de que el evento llegue
       // al árbol del popup (que podría tener otros handlers).
@@ -245,6 +257,13 @@ import css from 'iswc:css';
       if (!this.active || !this.#mounted || this.#measuring) return;
       const anchor = this.#getAnchorTarget();
       if (!anchor) return;
+
+      // Las opciones del popup van en módulos aparte: si aún no han llegado, se piden y se vuelve a colocar
+      // cuando llegan, para que el popup nunca se pinte con la opción a medias.
+      if (this.#faltanOpciones()) {
+        void this.#pedirOpciones().then(() => { this.reposition(); });
+        return;
+      }
 
       const arrowSize = arrowSizePx(this);
       this.#measuring = true;
@@ -588,66 +607,86 @@ import css from 'iswc:css';
     }
 
     #updateBridge(result: ComputePositionResult): void {
-      if (!this.hoverBridge || !result.anchor) {
+      if (!this.hoverBridge || !result.anchor || !this.#calcularPuente) {
         this.#bridge.hidden = true;
         return;
       }
-      const a = result.anchor;
-      const side = result.placement.split('-')[0];
       // El bridge cubre la franja entre el ancla y el cuerpo del popup. Si la
-      // flecha estÃ¡ activa, esa franja incluye la mitad exterior del rombo.
+      // flecha está activa, esa franja incluye la mitad exterior del rombo.
       const arrowSize = arrowSizePx(this);
       const dist = this.distance + (this.arrow ? arrowSize : 0);
-      if (dist <= 0) {
+      // La colocación la calcula el módulo aparte `core/position/hover-bridge.ts`.
+      const caja = this.#calcularPuente({
+        placement: result.placement,
+        anchor: result.anchor,
+        popupLeft: result.viewportLeft ?? result.left,
+        popupTop: result.viewportTop ?? result.top,
+        popupWidth: result.popupSize.width,
+        popupHeight: result.popupSize.height,
+        left: result.left,
+        top: result.top,
+        distance: dist,
+        strategy: result.strategy,
+        scrollX: window.scrollX,
+        scrollY: window.scrollY,
+      });
+      if (!caja) {
         this.#bridge.hidden = true;
         return;
       }
-
-      const popLeft = result.viewportLeft ?? result.left;
-      const popTop = result.viewportTop ?? result.top;
-      const popW = result.popupSize.width;
-      const popH = result.popupSize.height;
 
       this.#bridge.hidden = false;
       this.#bridge.style.position = result.strategy;
-      let top; let left; let width; let height;
-      if (side === 'top') {
-        top = a.top - dist;
-        left = Math.min(a.left, popLeft);
-        width = Math.max(a.right, popLeft + popW) - left;
-        height = dist;
-      } else if (side === 'bottom') {
-        top = a.bottom;
-        left = Math.min(a.left, popLeft);
-        width = Math.max(a.right, popLeft + popW) - left;
-        height = dist;
-      } else if (side === 'left') {
-        left = a.left - dist;
-        top = Math.min(a.top, popTop);
-        width = dist;
-        height = Math.max(a.bottom, popTop + popH) - top;
-      } else {
-        left = a.right;
-        top = Math.min(a.top, popTop);
-        width = dist;
-        height = Math.max(a.bottom, popTop + popH) - top;
-      }
-
-      if (result.strategy === 'fixed') {
-        const dx = (result.viewportLeft ?? result.left) - result.left;
-        const dy = (result.viewportTop ?? result.top) - result.top;
-        top -= dy;
-        left -= dx;
-      } else {
-        top += window.scrollY;
-        left += window.scrollX;
-      }
       Object.assign(this.#bridge.style, {
-        top: `${top}px`,
-        left: `${left}px`,
-        width: `${Math.max(0, width)}px`,
-        height: `${Math.max(0, height)}px`,
+        top: `${caja.top}px`,
+        left: `${caja.left}px`,
+        width: `${caja.width}px`,
+        height: `${caja.height}px`,
       });
+    }
+
+    /**
+     * Pide el módulo de una opción del popup (si falta) y devuelve la promesa de la carga. El módulo se
+     * registra solo al importarse; si la carga falla, la opción se queda fuera y el popup se coloca igual.
+     */
+    #cargarOpcion<T>(clave: string, carga: Promise<T>, listo: (modulo: T) => void): Promise<void> {
+      if (this.#opciones.has(clave)) return Promise.resolve();
+      const enCurso = this.#cargasOpciones.get(clave);
+      if (enCurso) return enCurso;
+      const p = carga
+        .then((modulo) => { listo(modulo); this.#opciones.add(clave); })
+        .catch(() => { this.#opciones.add(clave); });
+      this.#cargasOpciones.set(clave, p);
+      return p;
+    }
+
+    /**
+     * Las opciones del popup viven en módulos aparte del core (`core/position/*.ts`): se piden con `import()`
+     * solo cuando la opción está activa. El popup no se coloca hasta que llegan, para que nunca se pinte con
+     * la opción a medias.
+     */
+    #pedirOpciones(): Promise<void> {
+      const pendientes: Promise<void>[] = [];
+      if (this.arrow && !this.#opciones.has('flecha')) {
+        pendientes.push(this.#cargarOpcion('flecha', import('@jeff-aporta/iswc-base/core/position/flecha.js'), () => {}));
+      }
+      if (this.autoSize && !this.#opciones.has('auto-size')) {
+        pendientes.push(this.#cargarOpcion('auto-size', import('@jeff-aporta/iswc-base/core/position/auto-size.js'), () => {}));
+      }
+      if (this.hoverBridge && !this.#opciones.has('puente')) {
+        pendientes.push(this.#cargarOpcion('puente', import('@jeff-aporta/iswc-base/core/position/hover-bridge.js'), (modulo) => {
+          this.#calcularPuente = modulo.calcularPuente;
+        }));
+      }
+      return Promise.all(pendientes).then(() => {});
+    }
+
+    /** ¿Falta algún módulo de opciones por llegar? */
+    #faltanOpciones(): boolean {
+      if (this.arrow && !this.#opciones.has('flecha')) return true;
+      if (this.autoSize && !this.#opciones.has('auto-size')) return true;
+      if (this.hoverBridge && !this.#opciones.has('puente')) return true;
+      return false;
     }
   }
 

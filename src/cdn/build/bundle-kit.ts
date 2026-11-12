@@ -75,6 +75,13 @@ export async function entradasKit(raiz: string, manifest: ItemManifestKit[]): Pr
   for (const f of (await readdir(i18nRoot).catch(() => [] as string[])).sort()) {
     if (f.endsWith('.ts')) entradas.push({ in: join(i18nRoot, f), out: `core/i18n/${f.replace(/\.ts$/, '')}.min` });
   }
+  // Módulos de las opciones del popup (F8b): `core/position.ts` y `<iswc-floating>` los piden con
+  // `import()` solo cuando la opción está activa; como entradas salen con nombre estable
+  // (`core/position/<x>.min.mjs`) en vez de un chunk anónimo.
+  const opcionesRoot = join(coreRoot, 'position');
+  for (const f of (await readdir(opcionesRoot).catch(() => [] as string[])).sort()) {
+    if (f.endsWith('.ts')) entradas.push({ in: join(opcionesRoot, f), out: `core/position/${f.replace(/\.ts$/, '')}.min` });
+  }
   entradas.push({ in: join(raiz, 'src', 'cdn', 'loader.ts'), out: 'core/loader.min' });
   // Capa 2 del loader (F4): entradas propias para que su nombre sea estable (`core/loader-<x>.min.mjs`) y el núcleo
   // las pida con `import()` solo al primer uso.

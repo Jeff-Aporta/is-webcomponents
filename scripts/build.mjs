@@ -234,6 +234,14 @@ for (const t of ['actions/button', 'layout/dialog', 'data/ag-grid', 'diagrams/fl
       if (f.endsWith('.ts')) await writeFile(join(outCore, 'i18n', f), aliasEnDist(await readFile(join(coreI18n, f), 'utf8'), 'core/i18n'));
     }
   }
+  // Módulos de las opciones del popup (F8b): `core/position.ts` los importa como `./position/<x>.js`.
+  const coreOpciones = join(coreRoot, 'position');
+  if (existsSync(coreOpciones)) {
+    await mkdir(join(outCore, 'position'), { recursive: true });
+    for (const f of await readdir(coreOpciones)) {
+      if (f.endsWith('.ts')) await writeFile(join(outCore, 'position', f), aliasEnDist(await readFile(join(coreOpciones, f), 'utf8'), 'core/position'));
+    }
+  }
   // Los tipos del core (`core/schemas/`) viajan con el .ts publicado que los importa.
   const coreSchemas = join(coreRoot, 'schemas');
   if (existsSync(coreSchemas)) {
