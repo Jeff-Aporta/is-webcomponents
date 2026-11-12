@@ -1,3 +1,4 @@
+// @contexto INDICE.md · scripts/README.md
 // scss-migrar.mjs — migra una carpeta del SCSS y hace el commit.
 //
 //   deno run -A scripts/codemods/scss-migrar.mjs <carpeta> [--ancho=160] [--sin-commit]

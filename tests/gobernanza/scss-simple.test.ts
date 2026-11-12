@@ -43,7 +43,7 @@ function scssDe(dir: string, out: string[] = []): string[] {
 /** Los bloques de un .scss: las declaraciones de cada regla, con su selector. */
 function bloquesDe(texto: string): { selector: string; decls: string[] }[] {
   const out: { selector: string; decls: string[] }[] = [];
-  const pila: { selector: string; decls: string[] }[] = [];
+  const pila: { selector: string; decls: string[]; tieneHija: boolean }[] = [];
   const lineas = texto.replaceAll('\r\n', '\n').split('\n');
   let i = 0;
   while (i < lineas.length) {
@@ -51,8 +51,8 @@ function bloquesDe(texto: string): { selector: string; decls: string[] }[] {
     if (!t) { i++; continue; }
     if (t.startsWith('//') || t.startsWith('/*')) { i++; continue; }
     if (t.endsWith('{')) {
-      const regla = { selector: t.slice(0, -1).trim(), decls: [] as string[] };
-      if (pila.length) pila[pila.length - 1].decls.push('__regla__');
+      const regla = { selector: t.slice(0, -1).trim(), decls: [] as string[], tieneHija: false };
+      if (pila.length) pila[pila.length - 1].tieneHija = true;
       else out.push(regla);
       pila.push(regla);
       i++;
@@ -63,7 +63,8 @@ function bloquesDe(texto: string): { selector: string; decls: string[] }[] {
       i++;
       continue;
     }
-    if (pila.length && !pila[pila.length - 1].decls.includes('__regla__')) {
+    // Una regla con reglas dentro no es un bloque plano: no cuenta (su cuerpo es el de sus hijas).
+    if (pila.length && !pila[pila.length - 1].tieneHija) {
       const d = t.replace(/;$/, '').trim();
       if (d.includes(':')) pila[pila.length - 1].decls.push(d);
     }
@@ -133,8 +134,8 @@ test('gobernanza/scss-simple: S3 — quien usa un patron del kit hace @use del k
     'transition: opacity 0.18s ease;',
   ];
   const trinquete = existsSync(TRINQUETE)
-    ? JSON.parse(readFileSync(TRINQUETE, 'utf8')) as { excepciones?: string[] }
-    : { excepciones: [] };
+    ? JSON.parse(readFileSync(TRINQUETE, 'utf8')) as { excepcionesS3?: Record<string, string> }
+    : { excepcionesS3: {} };
   const permitidos = new Set(Object.keys(trinquete.excepcionesS3 ?? {}));
   const ofensores: string[] = [];
   for (const abs of scssDe(join(SRC, 'components'))) {

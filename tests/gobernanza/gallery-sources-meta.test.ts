@@ -120,8 +120,11 @@ test('presentation.scss: full-page view-sources + file-meta oculto', () => {
   assert.match(css, /::part\(dialog\)/);
   assert.match(css, /align-self:\s*stretch/);
   assert.match(css, /justify-self:\s*stretch/);
-  assert.match(css, /\.vs-page-bar[\s\S]{0,200}display:\s*none/);
-  assert.match(css, /\.file-meta[\s\S]{0,120}display:\s*none/);
+  // El patron puede venir como declaracion o como el mixin `oculto` del kit (lo que emite es
+  // display: none): lo que se comprueba es que la barra y el meta esten ocultos.
+  const oculto = '(?:display:\\s*none|@include\\s+oculto)';
+  assert.match(css, new RegExp('\\.vs-page-bar[\\s\\S]{0,200}' + oculto));
+  assert.match(css, new RegExp('\\.file-meta[\\s\\S]{0,120}' + oculto));
   assert.doesNotMatch(css, /--width:\s*min\(\s*96vw/);
   assert.doesNotMatch(css, /\.vs-panel\s*\{[\s\S]{0,80}height:\s*min\(\s*70vh/);
 });
