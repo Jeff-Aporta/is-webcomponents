@@ -129,7 +129,14 @@ import type { RatingEventos } from './schemas/rating.schemas.js';
       this.#render();
     }
 
-    override onAttributeChanged(name: string, _oldVal: string | null, newVal: string | null): void {
+    /**
+     * Cambio de atributo: `super` sincroniza los `@prop` del molde (label, hint, icon…) y encola
+     * el repintado; aquí se recalcula el valor y se repintan las estrellas. El callback se declara aquí (y
+     * no solo con el hook `onAttributeChanged`) porque la auditoría lo exige en quien observa atributos.
+     */
+    override attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
+      super.attributeChangedCallback(name, oldVal, newVal);
+      if (!this.mounted || oldVal === newVal) return;
       if (name === 'value') {
         this.#value = this.#coerce(Number(newVal ?? '0'));
         this.#render();

@@ -1,4 +1,4 @@
-﻿# Spec — Componentes `is-*`
+# Spec — Componentes `is-*`
 
 Forma de los custom elements, `_shared/` y convenciones de API.
 
@@ -58,7 +58,7 @@ Cada tag es un Custom Element con Shadow DOM. El inventario y rutas de build sal
   define(IswcFoo);
   ```
 
-  Nada de `adoptCss(…, import.meta.url)`, `<link>` al `.css` hermano ni `static get observedAttributes` a mano. Las hojas adoptadas sobreviven a `shadow.innerHTML = …`. `static deps` solo para hijos que el padre pinta sin usar su API síncrona; si el padre necesita una clase o un helper del hijo, `import` normal. En Deno sin build, `iswc:css` resuelve a `''` (`deno.json` → `core/iswc-css-vacio.ts`); `scripts/serve.mjs` lo sirve desde `.tmp-scss`. Quien sobrescriba `connectedCallback`/`attributeChangedCallback` **debe** llamar a `super` (si no, los `@prop` no siguen a los atributos); lo normal es `onConnected`/`onAttributeChanged`.
+  Nada de `adoptCss(…, import.meta.url)`, `<link>` al `.css` hermano ni `static get observedAttributes` a mano. Las hojas adoptadas sobreviven a `shadow.innerHTML = …`. `static deps` solo para hijos que el padre pinta sin usar su API síncrona; si el padre necesita una clase o un helper del hijo, `import` normal. En Deno sin build, `iswc:css` resuelve a `''` (`deno.json` → `core/iswc-css-vacio.ts`); `scripts/serve.mjs` lo sirve desde `.tmp-scss`. Quien sobrescriba `connectedCallback`/`attributeChangedCallback` **debe** llamar a `super` (si no, los `@prop` no siguen a los atributos); lo normal es `onConnected`/`onAttributeChanged`. Los controles de forms (`IswcFormChrome`) declaran además `attributeChangedCallback` explícito —con `super` y el guard `!this.mounted` o `oldVal === newVal` del molde— porque las auditorías textuales (`scripts/sondas/components.ts` y el validador de runtime del motor) exigen que todo componente que observa atributos declare su callback.
 
   Guardianes: `tests/gobernanza/molde-iswc-element.test.ts` (molde), `tests/gobernanza/reactivo.test.ts` (reflejo a mano, forms sobre `IswcFormControl`, `aria-label` literal, `@prop` + `observed`; trinquetes que solo bajan), `tests/gobernanza/eventos.test.ts` (emitidos = declarados, fichas al día con la sonda), `tests/gobernanza/a11y-patrones.test.ts` (roles y pares ARIA en plantillas), `tests/navegador/core-f8.test.ts` (reactivo, plantilla, form-control, localize, capas en Edge), `tests/navegador/textos-f8.test.ts` (es/en por `lang` heredado), `tests/navegador/overlays-f8.test.ts` (pila de capas), `tests/navegador/a11y-axe.test.ts` (axe-core, solo dev) y los topes de `tests/navegador/carga.test.ts` (unión base ≤ 14 500 B br; cierres de `iswc-button` ≤ 9 108 e `iswc-input` ≤ 14 971).
 - Hojas base (`host-base`, `scrollbars`): las adopta el molde desde `core/iswc-element.ts` (`iswc:css/host-base`, `iswc:css/scrollbars`), compartidas por toda la página.

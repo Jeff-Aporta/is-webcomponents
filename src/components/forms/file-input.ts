@@ -127,7 +127,14 @@ import type { FileInputEventos } from './schemas/file-input.schemas.js';
       this.sincronizarFormulario();
     }
 
-    override onAttributeChanged(name: string, _oldVal: string | null, _newVal: string | null): void {
+    /**
+     * Cambio de atributo: `super` sincroniza los `@prop` del molde (name, label, hint…) y encola
+     * el repintado; aquí se copian los atributos al input nativo. El callback se declara aquí (y no solo
+     * con el hook `onAttributeChanged`) porque la auditoría lo exige en quien observa atributos.
+     */
+    override attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
+      super.attributeChangedCallback(name, oldVal, newVal);
+      if (!this.mounted || oldVal === newVal) return;
       if (name === 'disabled') this.#syncDisabled();
       else if (name === 'label' || name === 'hint') this.#syncSlots();
       else this.#syncAttrs();

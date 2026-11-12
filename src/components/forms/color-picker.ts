@@ -156,7 +156,14 @@ import { createPopupDismiss } from '@jeff-aporta/iswc-base/core/position.js';
       this.#capa.detach();
     }
 
-    override onAttributeChanged(name: string, oldVal: string | null, newVal: string | null): void {
+    /**
+     * Cambio de atributo: `super` sincroniza los `@prop` del molde (label, hint, error…) y encola
+     * el repintado; aquí se normaliza el valor y se refresca la vista. El callback se declara aquí (y no
+     * solo con el hook `onAttributeChanged`) porque la auditoría lo exige en quien observa atributos.
+     */
+    override attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
+      super.attributeChangedCallback(name, oldVal, newVal);
+      if (!this.mounted || oldVal === newVal) return;
       if (name === 'value') {
         if (this.#writingValue) return;
         const norm = normalizeHex(newVal) || DEFAULT_VALUE;

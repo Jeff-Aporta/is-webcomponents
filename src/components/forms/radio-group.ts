@@ -96,7 +96,14 @@ import { prop } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
       this.#sync();
     }
 
-    override onAttributeChanged(name: string, _oldVal: string | null, _newVal: string | null): void {
+    /**
+     * Cambio de atributo: `super` sincroniza los `@prop` del molde (value, label, hint…) y encola
+     * el repintado; aquí se refrescan el valor y los estados del grupo. El callback se declara aquí (y no
+     * solo con el hook `onAttributeChanged`) porque la auditoría lo exige en quien observa atributos.
+     */
+    override attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
+      super.attributeChangedCallback(name, oldVal, newVal);
+      if (!this.mounted || oldVal === newVal) return;
       if (name === 'label' || name === 'hint' || name === 'error-text') this.#syncMeta();
       if (name !== 'label' && name !== 'hint') this.#sync();
     }

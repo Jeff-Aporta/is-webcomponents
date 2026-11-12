@@ -41,7 +41,7 @@ import type { CheckboxEventos } from './schemas/checkbox.schemas.js';
   `;
 
   // Los demás atributos los declara cada `@prop` (y name, disabled, readonly y required, `IswcFormControl`; error, `IswcFormChrome`).
-  const OBSERVED: string[] = ['color', 'label-placement'];
+  const OBSERVED = ['color', 'label-placement'];
 
   const VARIANTS: string[] = ['brand', 'neutral', 'text', 'success', 'warning', 'danger'];
   const PLACEMENTS: string[] = ['end', 'start', 'top', 'bottom'];
@@ -93,7 +93,14 @@ import type { CheckboxEventos } from './schemas/checkbox.schemas.js';
       this.#sync();
     }
 
-    override onAttributeChanged(name: string, _oldVal: string | null, _newVal: string | null): void {
+    /**
+     * Cambio de atributo: `super` sincroniza los `@prop` del molde (checked, value, icon…) y encola
+     * el repintado; aquí se refresca el estado visual de la casilla. El callback se declara aquí (y no
+     * solo con el hook `onAttributeChanged`) porque la auditoría lo exige en quien observa atributos.
+     */
+    override attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
+      super.attributeChangedCallback(name, oldVal, newVal);
+      if (!this.mounted || oldVal === newVal) return;
       if (name === 'hint') {
         this.#syncSlots();
         return;

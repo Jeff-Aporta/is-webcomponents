@@ -228,7 +228,14 @@ import type { InputEventos } from './schemas/input.schemas.js';
       this.#otpAbort = null;
     }
 
-    override onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
+    /**
+     * Cambio de atributo: `super` sincroniza los `@prop` del molde (label, hint, error-text…) y encola
+     * el repintado; aquí se lleva el valor al input nativo y se refresca la vista. El callback se declara
+     * aquí (y no solo con el hook `onAttributeChanged`) porque la auditoría lo exige en quien observa.
+     */
+    override attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
+      super.attributeChangedCallback(name, oldVal, newVal);
+      if (!this.mounted || oldVal === newVal) return;
       if (name === 'value') {
         this.#value = newVal ?? '';
         this.#syncNative();

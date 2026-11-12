@@ -159,7 +159,14 @@ import type { SliderEventos } from './schemas/slider.schemas.js';
       this.#endDrag();
     }
 
-    override onAttributeChanged(name: string, oldVal: string | null, newVal: string | null): void {
+    /**
+     * Cambio de atributo: `super` sincroniza los `@prop` del molde (label, hint…) y encola el
+     * repintado; aquí se normalizan los valores y se repinta el carril. El callback se declara aquí (y no
+     * solo con el hook `onAttributeChanged`) porque la auditoría lo exige en quien observa atributos.
+     */
+    override attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
+      super.attributeChangedCallback(name, oldVal, newVal);
+      if (!this.mounted || oldVal === newVal) return;
       if (name === 'value') {
         this.#values = this.#normalize(this.#readAttrValues());
       } else if (name === 'disabled' || name === 'readonly') {

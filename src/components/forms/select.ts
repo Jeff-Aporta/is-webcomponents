@@ -217,7 +217,14 @@ import type { SelectEventos } from './schemas/select.schemas.js';
       this.#capa.detach();
     }
 
-    override onAttributeChanged(name: string, oldVal: string | null, newVal: string | null): void {
+    /**
+     * Cambio de atributo: `super` sincroniza los `@prop` del molde (multiple, clearable, label…) y
+     * encola el repintado; aquí se relee el valor y se repinta la lista. El callback se declara aquí (y no
+     * solo con el hook `onAttributeChanged`) porque la auditoría lo exige en quien observa atributos.
+     */
+    override attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
+      super.attributeChangedCallback(name, oldVal, newVal);
+      if (!this.mounted || oldVal === newVal) return;
       if (name === 'value') {
         if (this.#writingValue) return;
         this.#readValueAttr(false);

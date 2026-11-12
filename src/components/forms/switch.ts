@@ -47,7 +47,7 @@ import type { SwitchEventos } from './schemas/switch.schemas.js';
   `;
 
   // Los demás atributos los declara cada `@prop` (y name, disabled, required y readonly, `IswcFormControl`; hint y error, `IswcFormChrome`).
-  const OBSERVED: string[] = ['color', 'label-placement'];
+  const OBSERVED = ['color', 'label-placement'];
 
   // Literal para audit/exhaustivos; alineado a INTENT (+ info/error).
   const VARIANTS: readonly string[] = [
@@ -105,7 +105,14 @@ import type { SwitchEventos } from './schemas/switch.schemas.js';
       this.#sync();
     }
 
-    override onAttributeChanged(name: string, _oldVal: string | null, _newVal: string | null): void {
+    /**
+     * Cambio de atributo: `super` sincroniza los `@prop` del molde (checked, value, hint…) y encola
+     * el repintado; aquí se refresca el estado visual del interruptor. El callback se declara aquí (y no
+     * solo con el hook `onAttributeChanged`) porque la auditoría lo exige en quien observa atributos.
+     */
+    override attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
+      super.attributeChangedCallback(name, oldVal, newVal);
+      if (!this.mounted || oldVal === newVal) return;
       if (name === 'hint') {
         this.#syncSlots();
         return;
