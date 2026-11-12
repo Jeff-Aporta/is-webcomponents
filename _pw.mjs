@@ -1,3 +1,4 @@
+// @contexto INDICE.md · README.md
 import { chromium } from 'playwright';
 const b = await chromium.launch({ channel: 'msedge' });
 const p = await b.newPage();

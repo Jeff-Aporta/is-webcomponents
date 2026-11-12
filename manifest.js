@@ -1,3 +1,4 @@
+// @contexto INDICE.md · README.md
 export default [
   { tag: 'iswc-button', title: 'Button', category: 'actions', script: '../../components/actions/button.js', style: '../../components/actions/button.css', page: 'actions/iswc-button.html' },
   { tag: 'iswc-button-group', title: 'Button Group', category: 'actions', script: '../../components/actions/button-group.js', style: '../../components/actions/button-group.css', page: 'actions/iswc-button-group.html' },

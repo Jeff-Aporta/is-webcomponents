@@ -1,3 +1,4 @@
+// @contexto INDICE.md · assets/README.md
 // assets/dl.js — íconos del kit: SOLO configuración de rutas. La lógica vive en
 // src/vendor-distributions/client/tools/download-iconify.ts (las apps corren su bundle online @main).
 // Baja a assets/iconify/<set>/<nombre>.svg los íconos del kit (sin mapa); las páginas del kit servidas en
