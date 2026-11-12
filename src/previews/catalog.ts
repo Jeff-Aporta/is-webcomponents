@@ -966,5 +966,29 @@ export default {
   "iswc-slots-pg": {
     "json": "../../dist/previews/preview/slots-pg.json",
     "category": "preview"
+  },
+  "ecosystem": {
+    "json": "../../dist/pages/ecosystem.json",
+    "behavior": "../../dist/pages/ecosystem.min.js",
+    "category": ""
+  },
+  "home": {
+    "json": "../../dist/pages/home.json",
+    "behavior": "../../dist/pages/home.min.js",
+    "category": ""
+  },
+  "icons": {
+    "json": "../../dist/pages/icons.json",
+    "behavior": "../../dist/pages/icons.min.js",
+    "category": ""
+  },
+  "phase7": {
+    "json": "../../dist/pages/phase7.json",
+    "category": ""
+  },
+  "theming": {
+    "json": "../../dist/pages/theming.json",
+    "behavior": "../../dist/pages/theming.min.js",
+    "category": ""
   }
 };

@@ -71,6 +71,27 @@ for (const categoria of readdirSync(componentsRoot, { withFileTypes: true })) {
   }
 }
 
+// Las paginas del sitio tambien son previews: su ficha va a `dist/pages/<n>.json`
+// y su behaviour (si la ficha lo declara con `hasBehavior`) a
+// `dist/pages/<n>.min.js`. Sin esta parte el catalogo perderia `home`, `icons`,
+// `phase7`, `theming` y `ecosystem`.
+const pagesRoot = join(root, 'src', 'pages');
+for (const fichero of readdirSync(pagesRoot, { withFileTypes: true })) {
+  if (!fichero.isFile() || !fichero.name.endsWith('.json')) continue;
+  const nombre = fichero.name.replace(/\.json$/, '');
+  const ficha = JSON.parse(readFileSync(join(pagesRoot, fichero.name), 'utf8')) as {
+    tag?: string;
+    category?: string;
+    hasBehavior?: boolean;
+  };
+  const entrada: Entrada = {
+    json: `../../dist/pages/${nombre}.json`,
+    category: ficha.category ?? '',
+  };
+  if (ficha.hasBehavior) entrada.behavior = `../../dist/pages/${nombre}.min.js`;
+  entradas.set(ficha.tag ?? nombre, entrada);
+}
+
 const tags = [...entradas.keys()].sort((a, b) => {
   const ea = entradas.get(a)!;
   const eb = entradas.get(b)!;

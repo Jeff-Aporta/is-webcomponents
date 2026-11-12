@@ -77,7 +77,7 @@ DOM, empaquetada con esbuild y servida por CDN jsDelivr.
 - `dist/` se commitea en un commit aparte del codigo.
 - En PowerShell: `&&` no existe, `wc -l` no existe y `<`/`>` rompen los mensajes de commit (usa `git commit -F archivo.txt`).
 - No edites texto con `Get-Content`/`Set-Content` (corrompe UTF-8): usa las herramientas de fichero o un script de Node/Deno.
-- No hagas push sin que lo pida el owner, y nunca desde `D:\Dev`.
+- No hagas push sin que lo pida el owner, y nunca desde una carpeta de trabajo que no sea el repo.
 
 ## 4. Errores a NO repetir
 

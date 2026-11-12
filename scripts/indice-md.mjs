@@ -39,6 +39,8 @@ const DOMINIOS = [
   { clave: 'previews', titulo: 'Previews', raiz: 'src/previews/' },
   { clave: 'styles', titulo: 'Estilos', raiz: 'src/styles/' },
   { clave: 'utils', titulo: 'Utils', raiz: 'src/utils/' },
+  { clave: 'ai', titulo: 'IA', raiz: 'src/ai/' },
+  { clave: 'src', titulo: 'Src', raiz: 'src/README.md' },
   { clave: 'scripts', titulo: 'Scripts', raiz: 'scripts/' },
   { clave: 'tests', titulo: 'Tests', raiz: 'tests/' },
   { clave: 'skills', titulo: 'Skills', raiz: 'skills/' },
