@@ -16,6 +16,7 @@
 import type { OpcionPanel, PanelInfo, ControlPanel } from "./schemas/preview-controls.schemas.js";
 import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import css from 'iswc:css';
+import type { PreviewControlsEventos } from './schemas/preview-controls.schemas.js';
 
 /**
  * Información JSDoc-style del atributo, mostrada en el popover del botón
@@ -239,6 +240,7 @@ async function asegurarWidgets(): Promise<void> {
 
 class IswcPreviewControls extends IswcElement {
   static override tag = 'iswc-preview-controls';
+  declare static events: PreviewControlsEventos;
   static override css = css;
   static override shadowInit: ShadowRootInit | null = null;
   #spec: ControlPanel[] = [];
@@ -468,7 +470,9 @@ class IswcPreviewControls extends IswcElement {
     pop.className = 'fila__popover';
     pop.dataset.role = 'info-popover';
     pop.setAttribute('role', 'dialog');
-    pop.setAttribute('aria-label', `Documentación de ${attrDeProp(c.prop) || c.label}`);
+    pop.setAttribute('aria-label', 
+    // Popover no modal: lo dice explicitamente.
+    pop.setAttribute('aria-modal', 'false');`Documentación de ${attrDeProp(c.prop) || c.label}`);
     pop.hidden = true;
     // Título: nombre del atributo + tipo lógico.
     const title = document.createElement('h4');

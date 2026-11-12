@@ -40,3 +40,5 @@ const HighlightResultSchema = z.object({
 });
 export type HighlightResult = z.infer<typeof HighlightResultSchema>;
 
+/** Eventos del componente (HOW-6): `declare static events` en la clase; los documenta scripts/sondas/eventos.ts. */
+export type CodeEventos = { 'iswc-change': { value: string; formatted?: boolean; format?: string }; 'iswc-error': { error: string }; 'iswc-ready': { lang: string; value: string }; 'iswc-input': { value: string }; 'iswc-cursor': { line: number; ch: number; index: number }; 'iswc-mark-activate': { mark: unknown; phase: 'enter' | 'leave' } };

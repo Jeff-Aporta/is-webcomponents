@@ -75,6 +75,16 @@ No expone propiedades de negocio adicionales.
 
 ### Eventos
 
+<!-- eventos: generado por scripts/sondas/eventos.ts desde declare static events -->
+
+| Evento | detail | cancelable |
+| --- | --- | --- |
+| `iswc-intersect` | `{ entry: IntersectionObserverEntry }` | no |
+| `iswc-mutate` | `{ records: MutationRecord[] }` | no |
+| `iswc-resize` | `{ entries: ResizeObserverEntry[] }` | no |
+
+<!-- /eventos -->
+
 
 | Evento | Descripción |
 | --- | --- |

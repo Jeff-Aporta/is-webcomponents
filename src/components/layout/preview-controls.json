@@ -6,6 +6,13 @@
   "title": "&lt;iswc-preview-controls&gt;",
   "titleHtml": false,
   "description": "Panel de knobs del playground. La galería le pasa spec y escucha iswc-controls-change.",
+  "events": [
+    {
+      "name": "iswc-controls-change",
+      "detail": "{ def: unknown; valor: unknown }",
+      "cancelable": false
+    }
+  ],
   "sections": [
     {
       "id": "intro",

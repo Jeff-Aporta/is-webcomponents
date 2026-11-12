@@ -7,6 +7,28 @@
   "description": "Árbol editable ISP (port TreeRowView): drag, historial y ficha.",
   "storageKey": "docs-iswc-tree-view",
   "hasBehavior": true,
+  "events": [
+    {
+      "name": "iswc-error",
+      "detail": "{ message: string }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-select",
+      "detail": "{ node: unknown; flatPath: string }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-frm-open",
+      "detail": "{ record: unknown; itdForm: string; ancestors: unknown[]; isNew: boolean }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-frm-close",
+      "detail": "Record<string, never>",
+      "cancelable": false
+    }
+  ],
   "sections": [
     {
       "id": "intro",

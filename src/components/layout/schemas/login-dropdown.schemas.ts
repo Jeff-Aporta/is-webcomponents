@@ -25,3 +25,6 @@ const LoginDropdownSubmitSchema = z.object({
   choice: z.string().optional(),
 });
 export type LoginDropdownSubmit = z.infer<typeof LoginDropdownSubmitSchema>;
+
+/** Eventos del componente (HOW-6): `declare static events` en la clase; los documenta scripts/sondas/eventos.ts. */
+export type LoginDropdownEventos = { 'iswc-login-submit': { username: string; password: string } };

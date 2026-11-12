@@ -71,18 +71,22 @@ import './journey-map.js';
 
 ### Eventos
 
+<!-- eventos: generado por scripts/sondas/eventos.ts desde declare static events -->
+
+| Evento | detail | cancelable |
+| --- | --- | --- |
+| `iswc-render` | `DiagramRenderDetail` | no |
+| `iswc-toggle-phase` | `{ id: string \| undefined }` | no |
+| `iswc-open-viewer` | `DiagramViewerDetail` | sí |
+
+<!-- /eventos -->
+
 
 | Evento | Descripción |
 | --- | --- |
 | `iswc-render` | Emitido al renderizar o redibujar el componente. |
 | `iswc-open-viewer` | Emitido al abrir el visor ampliado (cancelable). |
 | `iswc-toggle-phase` | Evento personalizado del componente (toggle phase). |
-
-| Evento | detail | bubbles | composed | cancelable |
-| --- | --- | --- | --- | --- |
-| `iswc-render` | sí | sí | sí | no |
-| `iswc-open-viewer` | sí | sí | sí | sí |
-| `iswc-toggle-phase` | sí | sí | sí | no |
 
 
 <details>

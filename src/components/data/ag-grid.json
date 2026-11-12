@@ -31,6 +31,33 @@
   ],
   "storageKey": "docs-iswc-ag-grid",
   "hasBehavior": true,
+  "events": [
+    {
+      "name": "iswc-quick-filter",
+      "detail": "{ value: string }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-state-saved",
+      "detail": "StateSavedDetail",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-page-change",
+      "detail": "PageChangeDetail",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-state-loaded",
+      "detail": "unknown",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-state-reset",
+      "detail": "{ key: string }",
+      "cancelable": false
+    }
+  ],
   "sections": [
     {
       "id": "intro",

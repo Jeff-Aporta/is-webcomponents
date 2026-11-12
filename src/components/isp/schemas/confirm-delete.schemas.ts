@@ -14,3 +14,5 @@ const InputLikeSchema = z.object({
 });
 export type InputLike = z.infer<typeof InputLikeSchema>;
 
+/** Eventos del componente (HOW-6): `declare static events` en la clase; los documenta scripts/sondas/eventos.ts. */
+export type ConfirmDeleteEventos = { 'iswc-confirm-delete': { value: string }; 'iswc-cancel-delete': Record<string, never> };

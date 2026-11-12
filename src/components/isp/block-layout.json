@@ -10,6 +10,13 @@
   ],
   "storageKey": "docs-iswc-block-layout",
   "hasBehavior": true,
+  "events": [
+    {
+      "name": "iswc-breakpoint",
+      "detail": "{ width: number; height: number; sizew: string; boolszw: boolean; lerpw: number }",
+      "cancelable": false
+    }
+  ],
   "sections": [
     {
       "id": "intro",

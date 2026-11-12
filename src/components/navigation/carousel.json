@@ -23,6 +23,28 @@
     "    .slide.s5 { background: linear-gradient(135deg, #8950fc, #5a30a8); }"
   ],
   "storageKey": "docs-iswc-carousel",
+  "events": [
+    {
+      "name": "iswc-carousel-slide-end",
+      "detail": "undefined",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-carousel-change",
+      "detail": "{ from: number; to: number; item: unknown }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-carousel-play",
+      "detail": "undefined",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-carousel-pause",
+      "detail": "{ reason: string }",
+      "cancelable": false
+    }
+  ],
   "sections": [
     {
       "id": "intro",

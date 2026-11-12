@@ -39,6 +39,7 @@ import '@jeff-aporta/iswc-base/components/layout/dialog.js';
 import '@jeff-aporta/iswc-base/components/navigation/tab-group.js';
 import type { Selection, Edit, Pointing, Drag, Clip, ValueEl } from './spreadsheet.schemas.js';
 import css from 'iswc:css';
+import type { SpreadsheetEventos } from './schemas/spreadsheet.schemas.js';
 
 /**
  * <iswc-spreadsheet> — Hoja de cálculo completa en un web component: varias hojas, más de 380
@@ -87,6 +88,7 @@ const ARROWS: Record<string, readonly [number, number]> = { ArrowUp: [-1, 0], Ar
 
 class IswcSpreadsheet extends IswcElement {
   static override tag = 'iswc-spreadsheet';
+  declare static events: SpreadsheetEventos;
   static override css = css;
   static override deps = ['iswc-button', 'iswc-icon'];
   static override observed = OBSERVED;

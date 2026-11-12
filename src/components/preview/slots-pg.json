@@ -6,6 +6,13 @@
   "titleHtml": false,
   "description": "Helper para playgrounds de componentes con slots. Estandar W11: dos tabs (Simple + Slots) con editor por slot y boton Restart.",
   "storageKey": "docs-iswc-slots-pg",
+  "events": [
+    {
+      "name": "iswc-slots-pg-restart",
+      "detail": "{ tag: string; slots: number }",
+      "cancelable": false
+    }
+  ],
   "sections": [
     {
       "id": "intro",

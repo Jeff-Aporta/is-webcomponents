@@ -5,6 +5,7 @@ import { registrarTerminos } from '@jeff-aporta/iswc-base/core/localize.js';
 import { setStringAttr } from '@jeff-aporta/iswc-base/core/attrs.js';
 import type { PagerDirection, PagerNavigateDetail } from './schemas/pager.schemas.js';
 import css from 'iswc:css';
+import type { PagerEventos } from './schemas/pager.schemas.js';
 
 /**
  * <iswc-pager> — paso a la página anterior / siguiente con el título de cada una
@@ -36,6 +37,7 @@ TEMPLATE.innerHTML = /* html */ `
 
 class IswcPager extends IswcReactive {
   static override tag = 'iswc-pager';
+  declare static events: PagerEventos;
   static override css = css;
   static override observed = [...OBSERVED];
 

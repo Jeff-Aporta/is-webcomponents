@@ -2,6 +2,7 @@
 import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import { setStringAttr } from '@jeff-aporta/iswc-base/core/attrs.js';
 import css from 'iswc:css';
+import type { MediaRecorderEventos } from './schemas/media-recorder.schemas.js';
 
 /**
  * <iswc-media-recorder> — getUserMedia / getDisplayMedia + MediaRecorder.
@@ -31,6 +32,7 @@ import css from 'iswc:css';
 
   class IswcMediaRecorder extends IswcElement {
     static override tag = 'iswc-media-recorder';
+    declare static events: MediaRecorderEventos;
     static override css = css;
     static override deps = ['iswc-button'];
     static override observed = ['source', 'disabled'];

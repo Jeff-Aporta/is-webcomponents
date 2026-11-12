@@ -5,6 +5,18 @@
   "title": "&lt;iswc-treemap&gt;",
   "titleHtml": false,
   "storageKey": "docs-iswc-treemap",
+  "events": [
+    {
+      "name": "iswc-render",
+      "detail": "{ layout?: unknown; svg: SVGElement }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-open-viewer",
+      "detail": "{ payload: unknown }",
+      "cancelable": true
+    }
+  ],
   "sections": [
     {
       "id": "intro",

@@ -4,11 +4,13 @@ import { setOptionalAttr, setStringAttr } from '@jeff-aporta/iswc-base/core/attr
 import { loadText, resolveFileSource } from './utils/file-source.js';
 import { pintarEstado, sincronizarAlto } from './utils/file-estado.js';
 import css from 'iswc:css';
+import type { TxtViewEventos } from './schemas/txt-view.schemas.js';
 
 (() => {
   const OBSERVED = ['src', 'content', 'height'];
   class IswcTxtView extends IswcElement {
     static override tag = 'iswc-txt-view';
+    declare static events: TxtViewEventos;
     static override css = css;
     static override observed = OBSERVED;
     #pre!: HTMLElement;

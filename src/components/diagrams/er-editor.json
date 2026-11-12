@@ -5,6 +5,13 @@
   "title": "&lt;iswc-er-editor&gt;",
   "titleHtml": false,
   "description": "Editor visual de entidad-relación. Compartir el resultado se hace con la app de edición, sin reescribir el enlace de entrada.",
+  "events": [
+    {
+      "name": "iswc-state-change",
+      "detail": "{ entities: unknown; relations: unknown }",
+      "cancelable": false
+    }
+  ],
   "sections": [
     {
       "id": "intro",

@@ -11,6 +11,7 @@ import { svgEl } from '@jeff-aporta/iswc-base/core/svg-chart-engine.js';
 import type { JourneyLayout } from "./schemas/journey-spec.schemas.js";
 import type { StepEntry } from "./schemas/journey-map.schemas.js";
 import css from 'iswc:css';
+import type { JourneyMapEventos } from './schemas/journey-map.schemas.js';
 
 /**
  * <iswc-journey-map> — mapa de recorrido (user journey) en SVG, sin Mermaid.
@@ -31,6 +32,7 @@ import css from 'iswc:css';
 
 class IswcJourneyMap extends DiagramElementBase {
   static override tag = 'iswc-journey-map';
+  declare static events: JourneyMapEventos;
   static override css = css;
   #hiddenPhases = new Set<string>();
   #stepNodes = new Map<string, StepEntry>();

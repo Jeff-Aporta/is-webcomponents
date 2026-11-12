@@ -11,3 +11,6 @@ export type PagerDirection = z.infer<typeof PagerDirectionSchema>;
 /** Detalle del evento cancelable `iswc-pager-navigate` (`href` vacío si el lado es un botón). */
 const PagerNavigateDetailSchema = z.object({ direction: PagerDirectionSchema, href: z.string() });
 export type PagerNavigateDetail = z.infer<typeof PagerNavigateDetailSchema>;
+
+/** Eventos del componente (HOW-6): `declare static events` en la clase; los documenta scripts/sondas/eventos.ts. */
+export type PagerEventos = { 'iswc-pager-navigate': PagerNavigateDetail };

@@ -78,16 +78,20 @@ import './stepper.js';
 
 ### Eventos
 
+<!-- eventos: generado por scripts/sondas/eventos.ts desde declare static events -->
+
+| Evento | detail | cancelable |
+| --- | --- | --- |
+| `iswc-stepper-complete` | `undefined` | no |
+| `iswc-stepper-change` | `{ from: number; to: number; step: unknown }` | no |
+
+<!-- /eventos -->
+
 
 | Evento | Descripción |
 | --- | --- |
 | `iswc-stepper-complete` | Evento personalizado del componente (stepper complete). |
 | `iswc-stepper-change` | Evento personalizado del componente (stepper change). |
-
-| Evento | detail | bubbles | composed | cancelable |
-| --- | --- | --- | --- | --- |
-| `iswc-stepper-complete` | no | sí | sí | no |
-| `iswc-stepper-change` | sí | sí | sí | no |
 
 
 <details>

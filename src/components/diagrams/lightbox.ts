@@ -8,6 +8,7 @@ import { type PanZoomController } from './schemas/diagram-view.schemas.js';
 import type { ViewTransform } from "./schemas/lightbox.schemas.js";
 import css from 'iswc:css';
 import { createPopupDismiss } from '@jeff-aporta/iswc-base/core/position.js';
+import type { LightboxEventos } from './schemas/lightbox.schemas.js';
 
 /**
  * <iswc-lightbox> — visor a pantalla completa para cualquier contenido.
@@ -79,6 +80,7 @@ function isActionable(n: EventTarget | null): n is HTMLElement {
 
 class IswcLightbox extends withStyleAttrs(IswcElement) {
   static override tag = 'iswc-lightbox';
+  declare static events: LightboxEventos;
   static override css = css;
   static override deps = ['iswc-icon'];
 

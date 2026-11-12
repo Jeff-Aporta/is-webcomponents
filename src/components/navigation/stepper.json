@@ -15,6 +15,18 @@
     "    }"
   ],
   "storageKey": "docs-iswc-stepper",
+  "events": [
+    {
+      "name": "iswc-stepper-complete",
+      "detail": "undefined",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-stepper-change",
+      "detail": "{ from: number; to: number; step: unknown }",
+      "cancelable": false
+    }
+  ],
   "sections": [
     {
       "id": "intro",

@@ -5,6 +5,18 @@
   "title": "<iswc-pptx-view>",
   "titleHtml": false,
   "storageKey": "docs-iswc-pptx-view",
+  "events": [
+    {
+      "name": "iswc-load",
+      "detail": "{ slides: number }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-error",
+      "detail": "{ reason: string }",
+      "cancelable": false
+    }
+  ],
   "sections": [
     {
       "id": "intro",

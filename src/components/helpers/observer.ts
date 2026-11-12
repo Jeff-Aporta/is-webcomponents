@@ -2,6 +2,7 @@
 import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import type { ObserverType } from "./schemas/observer.schemas.js";
 import css from 'iswc:css';
+import type { ObserverEventos } from './schemas/observer.schemas.js';
 
 /**
  * <iswc-observer type="…"> — Web Component genérico para envolver
@@ -69,6 +70,7 @@ const OBSERVED = [
 
 class ObserverElement extends IswcElement {
   static override tag = 'iswc-observer';
+  declare static events: ObserverEventos;
   static override css = css;
   static override observed = OBSERVED;
 

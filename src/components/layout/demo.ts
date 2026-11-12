@@ -1,5 +1,6 @@
 // @contexto INDICE.md · src/components/layout/demo.md
 import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import type { DemoEventos } from './schemas/demo.schemas.js';
 
 /**
  * <iswc-demo> — sección de demo de documentación (light DOM, zero dependencies).
@@ -29,6 +30,7 @@ import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-elem
 (() => {
   class IswcDemo extends IswcElement {
     static override tag = 'iswc-demo';
+    declare static events: DemoEventos;
     static override shadowInit: ShadowRootInit | null = null;
     #headingEl: HTMLElement | null = null;
 

@@ -5,6 +5,7 @@ import { withStyleAttrs } from '@jeff-aporta/iswc-base/core/attrs.js';
 import './floating.js';
 import type { FloatingElement } from "./schemas/popover.schemas.js";
 import css from 'iswc:css';
+import type { PopoverEventos } from './schemas/popover.schemas.js';
 
 /**
  * <iswc-popover> — panel flotante con contenido interactivo, anclado vía `for`.
@@ -51,7 +52,7 @@ import css from 'iswc:css';
       placement="top"
       distance="8"
     >
-      <div part="dialog" class="dialog" role="dialog" hidden>
+      <div part="dialog" class="dialog" role="dialog" aria-modal="false" hidden>
         <div part="body" class="body"><slot></slot></div>
       </div>
     </iswc-floating>
@@ -70,6 +71,7 @@ import css from 'iswc:css';
 
   class IswcPopover extends withStyleAttrs(IswcElement) {
     static override tag = 'iswc-popover';
+    declare static events: PopoverEventos;
     static override css = css;
     static override observed = [...OBSERVED, 'max-width', 'arrow-size', 'show-duration', 'hide-duration'];
 
@@ -239,12 +241,23 @@ import css from 'iswc:css';
       el.addEventListener('click', this.#onAnchorClick);
       el.setAttribute('aria-haspopup', 'dialog');
       el.setAttribute('aria-expanded', String(this.open));
+      // El dialogo se nombra con su ancla (es su disparador).
+      this.#nombrarDialogo(el);
     }
 
     #unbindAnchor(): void {
       if (!this.#anchor) return;
       this.#anchor.removeEventListener('click', this.#onAnchorClick);
       this.#anchor = null;
+      this.#dialog.removeAttribute('aria-label');
+    }
+
+    /** Nombre accesible del dialogo: el de su ancla (aria-label, title o texto). */
+    #nombrarDialogo(ancla: HTMLElement): void {
+      const nombre = ancla.getAttribute('aria-label') || ancla.getAttribute('title') ||
+        (ancla.textContent || '').trim();
+      if (nombre) this.#dialog.setAttribute('aria-label', nombre);
+      else this.#dialog.removeAttribute('aria-label');
     }
 
     #onAnchorClick = (e: PointerEvent): void => {

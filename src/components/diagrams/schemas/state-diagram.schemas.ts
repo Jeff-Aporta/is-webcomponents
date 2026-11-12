@@ -6,6 +6,7 @@
  * entradas marcadas con TODO cuando se quiera validación runtime.
  */
 import { z } from "zod";
+import type { DiagramTurtleDetail, DiagramRenderDetail, DiagramToggleDetail, DiagramViewerDetail } from './diagram-base.schemas.js';
 
 const TurtleStateSchema = z.object({
   playing: z.boolean(),
@@ -27,3 +28,5 @@ const EdgeNodeEntrySchema = z.object({
 });
 export type EdgeNodeEntry = z.infer<typeof EdgeNodeEntrySchema>;
 
+/** Eventos del componente (HOW-6): `declare static events` en la clase; los documenta scripts/sondas/eventos.ts. */
+export type StateDiagramEventos = { 'iswc-turtle-state': DiagramTurtleDetail; 'iswc-render': DiagramRenderDetail; 'iswc-toggle-group': DiagramToggleDetail; 'iswc-open-viewer': DiagramViewerDetail };

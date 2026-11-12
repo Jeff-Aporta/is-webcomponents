@@ -52,6 +52,7 @@
  */
 import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import css from 'iswc:css';
+import type { SlotsPgEventos } from './schemas/slots-pg.schemas.js';
 
 (() => {
   const TEMPLATE = document.createElement('template');
@@ -136,6 +137,7 @@ import css from 'iswc:css';
 
   class IswcSlotsPg extends IswcElement {
     static override tag = 'iswc-slots-pg';
+    declare static events: SlotsPgEventos;
     static override css = css;
     static override deps = ['iswc-button', 'iswc-icon'];
     static override observed = OBSERVED;

@@ -53,3 +53,14 @@ export const EdgeStyleOverrideSchema = z.object({
   width: z.number().optional(),
 });
 export type EdgeStyleOverride = z.infer<typeof EdgeStyleOverrideSchema>;
+/** Detalle del evento `iswc-render`: el SVG pintado y, si la hay, la disposicion. */
+export type DiagramRenderDetail = { layout?: unknown; svg: SVGElement };
+
+/** Detalle del evento `iswc-open-viewer`: el payload del diagrama que se abre. */
+export type DiagramViewerDetail = { payload: unknown };
+
+/** Detalle del evento `iswc-turtle-state`: el estado de la animacion paso a paso. */
+export type DiagramTurtleDetail = { playing: boolean; idx: number; total: number; replay: number };
+
+/** Detalle del evento `iswc-toggle-group`: el grupo que se pliega o despliega. */
+export type DiagramToggleDetail = { id: string | undefined };

@@ -67,6 +67,16 @@ No expone. Hidrata desde hijo `<script type="text/markdown">` o `<textarea hidde
 
 ### Eventos
 
+<!-- eventos: generado por scripts/sondas/eventos.ts desde declare static events -->
+
+| Evento | detail | cancelable |
+| --- | --- | --- |
+| `iswc-input` | `{ value: string }` | no |
+| `iswc-change` | `{ value: string }` | no |
+| `iswc-persist` | `{ value: string }` | no |
+
+<!-- /eventos -->
+
 
 | Evento | Descripción |
 | --- | --- |

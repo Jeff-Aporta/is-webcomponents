@@ -55,3 +55,6 @@ export type MdDocsVaultRender = HTMLElement & { renderers: unknown; value: strin
 
 /** Superficie del `<iswc-meta-list>` del modal de información (grupos clave → valor). */
 export type MdDocsVaultListaMeta = HTMLElement & { groups: unknown[] };
+
+/** Eventos del componente (HOW-6): `declare static events` en la clase; los documenta scripts/sondas/eventos.ts. */
+export type MdDocsVaultEventos = { 'iswc-md-docs-vault-page': MdDocsVaultPageDetail };

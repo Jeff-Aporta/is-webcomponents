@@ -77,18 +77,21 @@ Documentos
 
 ### Eventos
 
+<!-- eventos: generado por scripts/sondas/eventos.ts desde declare static events -->
+
+| Evento | detail | cancelable |
+| --- | --- | --- |
+| `iswc-tree-toggle` | `{ item: HTMLElement; expanded: boolean }` | no |
+| `iswc-tree-select` | `{ item: HTMLElement; selected: boolean; selectedItems: HTMLElement[] }` | no |
+
+<!-- /eventos -->
+
 
 | Evento | Descripción |
 | --- | --- |
 | `iswc-tree-toggle` | Evento personalizado del componente (tree toggle). |
 | `iswc-tree-select` | Evento personalizado del componente (tree select). |
 | `iswc-tree-expand` | Evento personalizado del componente (tree expand). |
-
-| Evento | detail | bubbles | composed | cancelable |
-| --- | --- | --- | --- | --- |
-| `iswc-tree-toggle` | sí | sí | sí | no |
-| `iswc-tree-select` | sí | sí | sí | no |
-| `iswc-tree-expand` | según cabecera | según cabecera | según cabecera | según cabecera |
 
 
 <details>

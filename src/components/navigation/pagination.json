@@ -6,6 +6,18 @@
   "titleHtml": false,
   "description": "Paginación numérica con pista desplazable y selector de tamaño.",
   "storageKey": "docs-iswc-pagination",
+  "events": [
+    {
+      "name": "iswc-page-change",
+      "detail": "PaginationChangeDetail",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-page-size-change",
+      "detail": "PaginationSizeDetail",
+      "cancelable": false
+    }
+  ],
   "sections": [
     {
       "id": "intro",

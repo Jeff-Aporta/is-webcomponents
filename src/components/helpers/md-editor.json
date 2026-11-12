@@ -6,6 +6,48 @@
   "titleHtml": false,
   "storageKey": "docs-iswc-md-editor",
   "styles": "iswc-md-editor { display: block; width: 100%; max-width: 48rem; --iswc-md-editor-preview-max-height: 36em; }",
+  "events": [
+    {
+      "name": "iswc-open",
+      "detail": "Record<string, never>",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-close",
+      "detail": "Record<string, never>",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-load",
+      "detail": "{ document: unknown }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-error",
+      "detail": "{ action: 'load' | 'persist' | 'delete'; error: string }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-persist",
+      "detail": "{ value: string; document: unknown }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-delete",
+      "detail": "{ document: unknown }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-download",
+      "detail": "{ filename: string; bytes: number }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-change",
+      "detail": "undefined",
+      "cancelable": false
+    }
+  ],
   "sections": [
     {
       "id": "intro",

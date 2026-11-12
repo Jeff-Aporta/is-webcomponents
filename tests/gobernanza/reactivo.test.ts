@@ -63,7 +63,7 @@ test('reactivo: R1 el reflejo a mano solo baja (los migrados usan @prop)', () =>
 
 test('reactivo: R2 forms/* con formAssociated extiende IswcFormControl', () => {
   const sinMolde = archivos
-    .filter(({ ruta, codigo }) => ruta.startsWith('src/components/forms/') && /static\s+(?:override\s+)?formAssociated\s*=\s*true/.test(codigo) && !/extends\s+(?:withStyleAttrs\()?IswcFormControl\b/.test(codigo))
+    .filter(({ ruta, codigo }) => ruta.startsWith('src/components/forms/') && /static\s+(?:override\s+)?formAssociated\s*=\s*true/.test(codigo) && !/extends\s+(?:withStyleAttrs\()?IswcForm(?:Control|Chrome)\b/.test(codigo))
     .map(({ ruta }) => ruta)
     .sort();
   const nuevos = sinMolde.filter((r) => !pendientes.forms.includes(r));

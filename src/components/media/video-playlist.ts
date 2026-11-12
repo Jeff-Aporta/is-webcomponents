@@ -37,6 +37,7 @@ import './video.js';
 import './icon.js';
 import type { IswcVideo, VideoList, MediaObsBag, ActivateOptions, ApplyActiveOptions } from "./schemas/video-playlist.schemas.js";
 import css from 'iswc:css';
+import type { VideoPlaylistEventos } from './schemas/video-playlist.schemas.js';
 
 // Tipo mínimo del <iswc-video> hijo. Sólo accedemos a `media`, `play`, `pause`
 // y atributos — no hace falta arrastrar todo el componente.
@@ -186,6 +187,7 @@ import css from 'iswc:css';
 
   class IswcVideoPlaylist extends withStyleAttrs(IswcElement) {
     static override tag = 'iswc-video-playlist';
+    declare static events: VideoPlaylistEventos;
     static override css = css;
     static override deps = ['iswc-button'];
 

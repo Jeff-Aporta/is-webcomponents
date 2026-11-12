@@ -80,6 +80,17 @@ import './flowchart.js';
 
 ### Eventos
 
+<!-- eventos: generado por scripts/sondas/eventos.ts desde declare static events -->
+
+| Evento | detail | cancelable |
+| --- | --- | --- |
+| `iswc-turtle-state` | `DiagramTurtleDetail` | no |
+| `iswc-render` | `DiagramRenderDetail` | no |
+| `iswc-toggle-group` | `DiagramToggleDetail` | sí |
+| `iswc-open-viewer` | `DiagramViewerDetail` | sí |
+
+<!-- /eventos -->
+
 
 | Evento | Descripción |
 | --- | --- |
@@ -87,13 +98,6 @@ import './flowchart.js';
 | `iswc-render` | Emitido al renderizar o redibujar el componente. |
 | `iswc-toggle-group` | Evento personalizado del componente (toggle group). |
 | `iswc-open-viewer` | Emitido al abrir el visor ampliado (cancelable). |
-
-| Evento | detail | bubbles | composed | cancelable |
-| --- | --- | --- | --- | --- |
-| `iswc-turtle-state` | sí | sí | sí | no |
-| `iswc-render` | sí | sí | sí | no |
-| `iswc-toggle-group` | sí | sí | sí | sí |
-| `iswc-open-viewer` | sí | sí | sí | sí |
 
 
 <details>

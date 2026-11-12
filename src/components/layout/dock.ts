@@ -2,6 +2,7 @@
 import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import { withStyleAttrs } from '@jeff-aporta/iswc-base/core/attrs.js';
 import css from 'iswc:css';
+import type { DockEventos } from './schemas/dock.schemas.js';
 
 
 /**
@@ -32,6 +33,7 @@ import css from 'iswc:css';
 
   class IswcDock extends withStyleAttrs(IswcElement) {
     static override tag = 'iswc-dock';
+    declare static events: DockEventos;
     static override css = css;
 
     static override observed = [...OBSERVED, 'scale-unit'];

@@ -118,6 +118,23 @@ import './login.js';
 
 ### Eventos
 
+<!-- eventos: generado por scripts/sondas/eventos.ts desde declare static events -->
+
+| Evento | detail | cancelable |
+| --- | --- | --- |
+| `iswc-remember-change` | `{ remember: boolean }` | no |
+| `iswc-sessions-refresh` | `Record<string, never>` | no |
+| `iswc-forgot` | `{ username: string }` | no |
+| `iswc-logout-all` | `Record<string, never>` | no |
+| `iswc-add-account` | `Record<string, never>` | no |
+| `iswc-login-submit` | `{ username: string; password: string; remember: boolean; provider: string }` | no |
+| `iswc-password-change` | `{ current: string; next: string }` | no |
+| `iswc-account-select` | `{ account: unknown }` | no |
+| `iswc-remove-account` | `{ account: unknown }` | no |
+| `iswc-session-revoke` | `{ sessionId: string }` | no |
+
+<!-- /eventos -->
+
 | Evento | `detail` | Cuándo |
 | --- | --- | --- |
 | `iswc-login-submit` | `{ username, password, remember, provider }` | Submit válido (botón Entrar o Enter en usuario/contraseña). |

@@ -15,3 +15,6 @@ export type FigureFit = z.infer<typeof FigureFitSchema>;
 /** Detalle del evento cancelable `iswc-figure-open`. */
 const FigureOpenDetailSchema = z.object({ href: z.string() });
 export type FigureOpenDetail = z.infer<typeof FigureOpenDetailSchema>;
+
+/** Eventos del componente (HOW-6): `declare static events` en la clase; los documenta scripts/sondas/eventos.ts. */
+export type FigureEventos = { 'iswc-figure-open': FigureOpenDetail };

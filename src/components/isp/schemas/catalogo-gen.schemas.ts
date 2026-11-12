@@ -123,3 +123,5 @@ const PkModalCfgSchema = z.object({
 });
 export type PkModalCfg = z.infer<typeof PkModalCfgSchema>;
 
+/** Eventos del componente (HOW-6): `declare static events` en la clase; los documenta scripts/sondas/eventos.ts. */
+export type CatalogoGenEventos = { 'iswc-error': { message: string }; 'iswc-selection-change': { records: unknown[] }; 'iswc-double-click': { record: unknown }; 'iswc-frm-close': Record<string, never>; 'iswc-frm-open': { mode: string; record: unknown }; 'iswc-action': { action: string; record: unknown } };

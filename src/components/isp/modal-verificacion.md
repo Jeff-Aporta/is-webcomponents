@@ -103,6 +103,16 @@ No expone: todo el contenido del diálogo se construye en el shadow root.
 
 ### Eventos
 
+<!-- eventos: generado por scripts/sondas/eventos.ts desde declare static events -->
+
+| Evento | detail | cancelable |
+| --- | --- | --- |
+| `iswc-verificacion` | `{ mensajes: unknown[]; qinfos: unknown[]; qwarning: unknown[]; qerrores: unknown[] }` | no |
+| `iswc-verificacion-error` | `{ message: string; error: unknown }` | no |
+| `iswc-cancel` | `Record<string, never>` | no |
+
+<!-- /eventos -->
+
 
 | Evento | Descripción |
 | --- | --- |

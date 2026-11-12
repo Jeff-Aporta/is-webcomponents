@@ -5,6 +5,18 @@
   "title": "&lt;iswc-component-diagram&gt;",
   "titleHtml": false,
   "storageKey": "docs-iswc-component-diagram",
+  "events": [
+    {
+      "name": "iswc-render",
+      "detail": "DiagramRenderDetail",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-open-viewer",
+      "detail": "DiagramViewerDetail",
+      "cancelable": true
+    }
+  ],
   "sections": [
     {
       "id": "intro",

@@ -6,6 +6,7 @@
  * entradas marcadas con TODO cuando se quiera validación runtime.
  */
 import { z } from "zod";
+import type { DiagramRenderDetail, DiagramViewerDetail } from './diagram-base.schemas.js';
 
 const VennLayoutCircleSchema = z.object({
   id: z.string(),
@@ -42,3 +43,5 @@ const RegionNodeEntrySchema = z.object({
 });
 export type RegionNodeEntry = z.infer<typeof RegionNodeEntrySchema>;
 
+/** Eventos del componente (HOW-6): `declare static events` en la clase; los documenta scripts/sondas/eventos.ts. */
+export type VennDiagramEventos = { 'iswc-render': DiagramRenderDetail; 'iswc-open-viewer': DiagramViewerDetail };

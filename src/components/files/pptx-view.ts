@@ -6,6 +6,7 @@ import { loadArrayBuffer, resolveFileSource, JSZIP_CDN, loadCdnScript, PPTX_PREV
 import { pintarEstado, sincronizarAlto } from './utils/file-estado.js';
 import type { ZipLike } from "./schemas/pptx-view.schemas.js";
 import css from 'iswc:css';
+import type { PptxViewEventos } from './schemas/pptx-view.schemas.js';
 
 (() => {
   const OBSERVED = ['src', 'content', 'height'];
@@ -31,6 +32,7 @@ import css from 'iswc:css';
 
   class IswcPptxView extends IswcElement {
     static override tag = 'iswc-pptx-view';
+    declare static events: PptxViewEventos;
     static override css = css;
     static override observed = OBSERVED;
     #stage!: HTMLElement;

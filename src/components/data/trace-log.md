@@ -59,6 +59,14 @@ No tiene slots.
 
 ### Eventos
 
+<!-- eventos: generado por scripts/sondas/eventos.ts desde declare static events -->
+
+| Evento | detail | cancelable |
+| --- | --- | --- |
+| `iswc-trace-copy` | `{ json: string }` | no |
+
+<!-- /eventos -->
+
 | Evento | Detalle | Cuándo |
 | --- | --- | --- |
 | `iswc-trace-copy` | `{ json }` | Al copiar la traza. |

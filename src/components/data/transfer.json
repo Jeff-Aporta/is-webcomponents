@@ -6,6 +6,13 @@
   "titleHtml": false,
   "description": "Doble lista para pasar elementos de una lista disponible a una seleccionada y viceversa.",
   "storageKey": "docs-iswc-transfer",
+  "events": [
+    {
+      "name": "iswc-transfer-change",
+      "detail": "{ source: number; target: number; values: string[] }",
+      "cancelable": false
+    }
+  ],
   "sections": [
     {
       "id": "intro",

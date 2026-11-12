@@ -17,3 +17,5 @@ const ZipLikeSchema = z.object({
 });
 export type ZipLike = z.infer<typeof ZipLikeSchema>;
 
+/** Eventos del componente (HOW-6): `declare static events` en la clase; los documenta scripts/sondas/eventos.ts. */
+export type PptxViewEventos = { 'iswc-load': { slides: number }; 'iswc-error': { reason: string } };

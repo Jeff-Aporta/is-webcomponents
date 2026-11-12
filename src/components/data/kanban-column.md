@@ -64,6 +64,16 @@ parent.addEventListener('iswc-event', (e) => {
 
 </details>
 
+### Eventos
+
+<!-- eventos: generado por scripts/sondas/eventos.ts desde declare static events -->
+
+| Evento | detail | cancelable |
+| --- | --- | --- |
+| `iswc-kanban-move` | `{ card: HTMLElement; from: number; to: HTMLElement }` | no |
+
+<!-- /eventos -->
+
 ## Comportamiento
 
 Recibe tarjetas arrastradas y emite `iswc-kanban-move` con `{ card, from, to }`.

@@ -46,3 +46,5 @@ const SpeechRecognitionConstructorBagSchema = z.object({
 });
 export type SpeechRecognitionConstructorBag = z.infer<typeof SpeechRecognitionConstructorBagSchema>;
 
+/** Eventos del componente (HOW-6): `declare static events` en la clase; los documenta scripts/sondas/eventos.ts. */
+export type SpeechEventos = { 'iswc-error': { message: string }; 'iswc-result': { transcript: string; isFinal: boolean }; 'iswc-speak-end': undefined };

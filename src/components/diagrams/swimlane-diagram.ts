@@ -12,6 +12,7 @@ import { svgEl } from '@jeff-aporta/iswc-base/core/svg-chart-engine.js';
 import type { SwimlaneLayout, SwimlaneStepKind } from "./schemas/swimlane-spec.schemas.js";
 import type { StepEntry, LinkEntry } from "./schemas/swimlane-diagram.schemas.js";
 import css from 'iswc:css';
+import type { SwimlaneDiagramEventos } from './schemas/swimlane-diagram.schemas.js';
 
 /**
  * <iswc-swimlane-diagram> — diagrama de carriles en SVG, sin Mermaid.
@@ -41,6 +42,7 @@ function stepPath(kind: SwimlaneStepKind, x: number, y: number, w: number, h: nu
 
 class IswcSwimlaneDiagram extends DiagramElementBase {
   static override tag = 'iswc-swimlane-diagram';
+  declare static events: SwimlaneDiagramEventos;
   static override css = css;
   #hiddenLanes = new Set<string>();
   #stepNodes = new Map<string, StepEntry>();

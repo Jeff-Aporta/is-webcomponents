@@ -5,6 +5,7 @@ import { atributosDe, PropsElement } from '@jeff-aporta/iswc-base/core/props-ele
 import { TraceLogPropsSchema } from './schemas/trace-log.schemas.js';
 import type { TraceEvento, TraceFiltro, TraceLogProps, TraceNivel, TraceTextos } from './schemas/trace-log.schemas.js';
 import css from 'iswc:css';
+import type { TraceLogEventos } from './schemas/trace-log.schemas.js';
 
 /**
  * <iswc-trace-log> — log de un proceso: cabecera plegable con el resumen y, desplegada, cada paso con su tiempo, nivel,
@@ -39,6 +40,7 @@ export function filtrarEventos(eventos: readonly TraceEvento[], filtro: TraceFil
 
 class IswcTraceLog extends PropsElement<TraceLogProps> {
   static override tag = 'iswc-trace-log';
+  declare static events: TraceLogEventos;
   static override css = css;
   static override deps = ['iswc-badge', 'iswc-icon'];
   static override observed = atributosDe(INICIAL);

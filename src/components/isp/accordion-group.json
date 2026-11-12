@@ -6,6 +6,13 @@
   "titleHtml": false,
   "description": "Coordina varios iswc-details como acordeón: abrir uno puede cerrar los demás.",
   "storageKey": "docs-iswc-accordion-group",
+  "events": [
+    {
+      "name": "iswc-accordion-change",
+      "detail": "{ open: string[]; opened: string | null; closed: string | null }",
+      "cancelable": false
+    }
+  ],
   "sections": [
     {
       "id": "intro",

@@ -7,6 +7,7 @@
  */
 import { z } from "zod";
 import { SankeyLayoutNodeSchema, SankeyLayoutLinkSchema } from "./sankey-spec.schemas.js";
+import type { DiagramRenderDetail, DiagramToggleDetail, DiagramViewerDetail } from './diagram-base.schemas.js';
 
 const NodeEntrySchema = z.object({
   n: SankeyLayoutNodeSchema,
@@ -19,3 +20,6 @@ const LinkEntrySchema = z.object({
   g: z.unknown() /* TODO: ref SVGGElement */,
 });
 export type LinkEntry = z.infer<typeof LinkEntrySchema>;
+
+/** Eventos del componente (HOW-6): `declare static events` en la clase; los documenta scripts/sondas/eventos.ts. */
+export type SankeyDiagramEventos = { 'iswc-render': DiagramRenderDetail; 'iswc-toggle-group': DiagramToggleDetail; 'iswc-open-viewer': DiagramViewerDetail };

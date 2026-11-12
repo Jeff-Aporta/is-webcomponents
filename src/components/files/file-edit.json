@@ -5,6 +5,28 @@
   "title": "<iswc-file-edit>",
   "titleHtml": false,
   "storageKey": "docs-iswc-file-edit",
+  "events": [
+    {
+      "name": "iswc-error",
+      "detail": "{ reason: string; kind: string }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-load",
+      "detail": "unknown",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-change",
+      "detail": "unknown",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-dispatch",
+      "detail": "{ tag: string; kind: string; mode: string }",
+      "cancelable": false
+    }
+  ],
   "sections": [
     {
       "id": "intro",

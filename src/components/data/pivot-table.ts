@@ -1,6 +1,7 @@
 // @contexto INDICE.md · src/components/data/pivot-table.md
 import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import css from 'iswc:css';
+import type { PivotTableEventos } from './schemas/pivot-table.schemas.js';
 
 /**
  * <iswc-pivot-table> — Pivot table: agrupar una colección por `rows` × `cols`,
@@ -39,6 +40,7 @@ import css from 'iswc:css';
 
   class IswcPivotTable extends IswcElement {
     static override tag = 'iswc-pivot-table';
+    declare static events: PivotTableEventos;
     static override css = css;
     static override observed = OBSERVED;
 

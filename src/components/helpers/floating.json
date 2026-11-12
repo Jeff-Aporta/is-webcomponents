@@ -5,6 +5,18 @@
   "title": "&lt;iswc-floating&gt; (interno)",
   "titleHtml": false,
   "description": "Building block interno. En producto usa iswc-popover o iswc-tooltip.",
+  "events": [
+    {
+      "name": "iswc-reposition",
+      "detail": "{ placement: string; x: number; y: number }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-hover-bridge",
+      "detail": "{ hovering: boolean }",
+      "cancelable": false
+    }
+  ],
   "sections": [
     {
       "id": "intro",

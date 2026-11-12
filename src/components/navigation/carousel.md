@@ -80,6 +80,17 @@ import './carousel.js';
 
 ### Eventos
 
+<!-- eventos: generado por scripts/sondas/eventos.ts desde declare static events -->
+
+| Evento | detail | cancelable |
+| --- | --- | --- |
+| `iswc-carousel-slide-end` | `undefined` | no |
+| `iswc-carousel-change` | `{ from: number; to: number; item: unknown }` | no |
+| `iswc-carousel-play` | `undefined` | no |
+| `iswc-carousel-pause` | `{ reason: string }` | no |
+
+<!-- /eventos -->
+
 
 | Evento | Descripción |
 | --- | --- |
@@ -87,13 +98,6 @@ import './carousel.js';
 | `iswc-carousel-change` | Evento personalizado del componente (carousel change). |
 | `iswc-carousel-play` | Evento personalizado del componente (carousel play). |
 | `iswc-carousel-pause` | Evento personalizado del componente (carousel pause). |
-
-| Evento | detail | bubbles | composed | cancelable |
-| --- | --- | --- | --- | --- |
-| `iswc-carousel-slide-end` | no | sí | sí | no |
-| `iswc-carousel-change` | sí | sí | sí | no |
-| `iswc-carousel-play` | sí | sí | sí | no |
-| `iswc-carousel-pause` | sí | sí | sí | no |
 
 
 <details>

@@ -16,3 +16,5 @@ const MammothApiSchema = z.object({
 });
 export type MammothApi = z.infer<typeof MammothApiSchema>;
 
+/** Eventos del componente (HOW-6): `declare static events` en la clase; los documenta scripts/sondas/eventos.ts. */
+export type DocxViewEventos = { 'iswc-load': undefined; 'iswc-error': { reason: string } };

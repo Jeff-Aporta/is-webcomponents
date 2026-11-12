@@ -6,6 +6,7 @@
  * entradas marcadas con TODO cuando se quiera validación runtime.
  */
 import { z } from "zod";
+import type { DiagramRenderDetail, DiagramViewerDetail } from './diagram-base.schemas.js';
 
 const InterfaceStemPointSchema = z.object({
   x: z.number(),
@@ -21,3 +22,5 @@ export type LayoutPackage = z.infer<typeof LayoutPackageSchema>;
 const AnchorPointSchema = z.unknown() /* TODO: ref Punto */;
 export type AnchorPoint = z.infer<typeof AnchorPointSchema>;
 
+/** Eventos del componente (HOW-6): `declare static events` en la clase; los documenta scripts/sondas/eventos.ts. */
+export type ComponentDiagramEventos = { 'iswc-render': DiagramRenderDetail; 'iswc-open-viewer': DiagramViewerDetail };

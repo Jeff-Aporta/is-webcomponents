@@ -11,6 +11,7 @@ import { svgEl } from '@jeff-aporta/iswc-base/core/svg-chart-engine.js';
 import type { SankeyLayout } from "./schemas/sankey-spec.schemas.js";
 import type { NodeEntry, LinkEntry } from "./schemas/sankey-diagram.schemas.js";
 import css from 'iswc:css';
+import type { SankeyDiagramEventos } from './schemas/sankey-diagram.schemas.js';
 
 /**
  * <iswc-sankey-diagram> — diagrama de Sankey en SVG, sin Mermaid.
@@ -33,6 +34,7 @@ const DEFAULT_HEIGHT = 320;
 
 class IswcSankeyDiagram extends DiagramElementBase {
   static override tag = 'iswc-sankey-diagram';
+  declare static events: SankeyDiagramEventos;
   static override css = css;
   static override observed = [...DiagramElementBase.observed, 'height'];
 

@@ -11,6 +11,7 @@ import { hydrateMdEmbeds } from './utils/md-hydrate.js';
 import type { HidratacionMd } from './schemas/md-hydrate.schemas.js';
 import type { RenderersMd } from './schemas/md-lite.schemas.js';
 import css from 'iswc:css';
+import type { MdRenderEventos } from './schemas/md-render.schemas.js';
 
 /**
  * <iswc-md-render> — render inline de markdown/HTML + chips {{var}}.
@@ -95,6 +96,7 @@ import css from 'iswc:css';
 
   class IswcMdRender extends IswcElement {
     static override tag = 'iswc-md-render';
+    declare static events: MdRenderEventos;
     static override css = css;
     static override observed = OBSERVED;
 

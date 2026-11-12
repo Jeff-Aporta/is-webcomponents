@@ -34,7 +34,7 @@
     "src/components/forms/date-range-picker.ts": 6,
     "src/components/forms/digital-clock.ts": 10,
     "src/components/forms/duration-picker.ts": 1,
-    "src/components/forms/file-input.ts": 3,
+    "src/components/forms/file-input.ts": 1,
     "src/components/forms/input.ts": 1,
     "src/components/forms/month-calendar.ts": 5,
     "src/components/forms/option.ts": 3,
@@ -95,9 +95,7 @@
     "src/components/preview/examples-carousel.ts": 5,
     "src/components/preview/playground.ts": 3
   },
-  "forms": [
-    "src/components/forms/file-input.ts"
-  ],
+  "forms": [],
   "ariaLabel": {
     "src/components/data/ag-grid.ts": 13,
     "src/components/data/data-grid.ts": 10,

@@ -100,6 +100,19 @@ No proyecta light DOM (el texto inicial se lee una vez como semilla si no hay
 
 ### Eventos
 
+<!-- eventos: generado por scripts/sondas/eventos.ts desde declare static events -->
+
+| Evento | detail | cancelable |
+| --- | --- | --- |
+| `iswc-change` | `{ value: string; formatted?: boolean; format?: string }` | no |
+| `iswc-error` | `{ error: string }` | no |
+| `iswc-ready` | `{ lang: string; value: string }` | no |
+| `iswc-input` | `{ value: string }` | no |
+| `iswc-cursor` | `{ line: number; ch: number; index: number }` | no |
+| `iswc-mark-activate` | `{ mark: unknown; phase: 'enter' \| 'leave' }` | no |
+
+<!-- /eventos -->
+
 
 | Evento | Descripción |
 | --- | --- |

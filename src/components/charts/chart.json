@@ -57,6 +57,23 @@
     "iswc-scatter-chart",
     "iswc-sparkline"
   ],
+  "events": [
+    {
+      "name": "iswc-render",
+      "detail": "{ svg: SVGElement }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-turtle-state",
+      "detail": "{ playing: boolean; idx: number; total: number; replay: number }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-open-viewer",
+      "detail": "{ payload: unknown }",
+      "cancelable": true
+    }
+  ],
   "sections": [
     {
       "id": "intro",

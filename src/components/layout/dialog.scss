@@ -62,8 +62,13 @@
   position: relative;
   inline-size: min(var(--width, var(--iswc-dialog-width)), 100%);
   max-block-size: min(100%, calc(100dvh - 2 * var(--iswc-dialog-spacing)));
-  background: var(--iswc-bg);
-  color: var(--iswc-text, inherit);
+  /* Sin `data-theme` no hay `--iswc-paper-*`, y el mixin `papel` deja `--iswc-bg` y
+     `--iswc-text` sin valor: el dialogo se quedaria TRANSPARENTE y su texto se
+     dibujaria sobre el velo (55 % de negro), sin contraste. Los colores del sistema
+     (`Canvas` / `CanvasText`) son la superficie por defecto del navegador: siempre
+     emparejados y siempre por encima de AA. Con tema, mandan los tokens. */
+  background: var(--iswc-bg, Canvas);
+  color: var(--iswc-text, CanvasText);
   border: 1px solid var(--iswc-border, color-mix(in srgb, currentColor 14%, transparent));
   border-radius: var(--_radius);
   box-shadow: var(--_shadow);

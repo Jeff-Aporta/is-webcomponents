@@ -69,6 +69,14 @@ Propiedad de solo lectura: `linkHref` (URL efectiva del enlace o vacío).
 
 ### Eventos
 
+<!-- eventos: generado por scripts/sondas/eventos.ts desde declare static events -->
+
+| Evento | detail | cancelable |
+| --- | --- | --- |
+| `iswc-figure-open` | `FigureOpenDetail` | sí |
+
+<!-- /eventos -->
+
 | Evento | Detalle | Notas |
 | --- | --- | --- |
 | `iswc-figure-open` | `{ href }` | Cancelable. Se emite al activar el enlace; `preventDefault()` evita la pestaña nueva (p. ej. para abrir un lightbox). |

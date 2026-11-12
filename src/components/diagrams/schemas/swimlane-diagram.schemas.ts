@@ -8,6 +8,7 @@
  */
 import { z } from "zod";
 import { SwimlaneLayoutStepSchema, SwimlaneLayoutLinkSchema } from "./swimlane-spec.schemas.js";
+import type { DiagramRenderDetail, DiagramViewerDetail } from './diagram-base.schemas.js';
 
 const StepEntrySchema = z.object({
   s: SwimlaneLayoutStepSchema,
@@ -20,3 +21,6 @@ const LinkEntrySchema = z.object({
   g: z.unknown() /* TODO: ref SVGGElement */,
 });
 export type LinkEntry = z.infer<typeof LinkEntrySchema>;
+
+/** Eventos del componente (HOW-6): `declare static events` en la clase; los documenta scripts/sondas/eventos.ts. */
+export type SwimlaneDiagramEventos = { 'iswc-render': DiagramRenderDetail; 'iswc-toggle-lane': { id: string | undefined }; 'iswc-open-viewer': DiagramViewerDetail };

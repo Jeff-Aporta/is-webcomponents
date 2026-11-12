@@ -302,3 +302,6 @@ export type ServerApiDocsCampo = HTMLElement & { value: string };
 
 /** Payload de `<iswc-sequence-diagram>` que arma `secuenciaDeOperacion` (el visor lo pinta con `diagram-style="iswc"`). */
 export type ServerApiDocsSecuencia = { sequence: { title: string; actors: SequenceActorSpec[]; messages: SequenceMessageSpec[]; fragments: SequenceFragmentSpec[] } };
+
+/** Eventos del componente (HOW-6): `declare static events` en la clase; los documenta scripts/sondas/eventos.ts. */
+export type ServerApiDocsEventos = { 'iswc-server-api-docs-page': ServerApiDocsPageDetail; 'iswc-server-api-docs-response': ServerApiDocsResponseDetail };

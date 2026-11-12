@@ -4,6 +4,7 @@ import './icon.js';
 import { setStringAttr, DEFAULT_MEDIA_SHAPE, MEDIA_SHAPE, normalizeMediaShape } from '@jeff-aporta/iswc-base/core/attrs.js';
 import { type MediaShape } from '@jeff-aporta/iswc-base/core/schemas/attrs.schemas.js';
 import css from 'iswc:css';
+import type { AvatarEventos } from './schemas/avatar.schemas.js';
 
 /**
  * <iswc-avatar> — Web Component (vanilla).
@@ -49,6 +50,7 @@ import css from 'iswc:css';
 
   class IswcAvatar extends IswcElement {
     static override tag = 'iswc-avatar';
+    declare static events: AvatarEventos;
     static override css = css;
     static override observed = OBSERVED;
 

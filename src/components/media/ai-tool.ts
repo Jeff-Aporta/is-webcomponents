@@ -17,6 +17,7 @@ import '@jeff-aporta/iswc-base/components/forms/textarea.js';
 import './icon.js';
 import './media-recorder.js';
 import css from 'iswc:css';
+import type { AiToolEventos } from './schemas/ai-tool.schemas.js';
 
 /**
  * <iswc-ai-tool> — una herramienta de IA que corre en el navegador: recibe una imagen, un audio o un texto, baja su modelo
@@ -48,6 +49,7 @@ const aviso = (color: string, texto: string): HTMLElement => crearNodo('iswc-cal
 
 class IswcAiTool extends PropsElement<AiToolProps> {
   static override tag = 'iswc-ai-tool';
+  declare static events: AiToolEventos;
   static override css = css;
   static override deps = ['iswc-button', 'iswc-copy-button', 'iswc-tag', 'iswc-callout'];
   static override observed = atributosDe(INICIAL);

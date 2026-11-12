@@ -63,14 +63,18 @@ import './offscreen-canvas.js';
 
 ### Eventos
 
+<!-- eventos: generado por scripts/sondas/eventos.ts desde declare static events -->
+
+| Evento | detail | cancelable |
+| --- | --- | --- |
+| `iswc-ready` | `{ offscreen: OffscreenCanvas \| null; fallback: boolean }` | no |
+
+<!-- /eventos -->
+
 
 | Evento | Descripción |
 | --- | --- |
 | `iswc-ready` | Emitido cuando el componente está listo. |
-
-| Evento | detail | bubbles | composed | cancelable |
-| --- | --- | --- | --- | --- |
-| `iswc-ready` | sí `{ offscreen, fallback }` | sí | sí | no |
 
 
 <details>

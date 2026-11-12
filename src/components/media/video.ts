@@ -6,6 +6,7 @@ import '@jeff-aporta/iswc-base/components/actions/check-icon-button.js';
 import './icon.js';
 import type { IswcCheckIconButton } from "./schemas/video.schemas.js";
 import css from 'iswc:css';
+import type { VideoEventos } from './schemas/video.schemas.js';
 
 /**
  * <iswc-video> — Web Component (vanilla).
@@ -148,6 +149,7 @@ import css from 'iswc:css';
 
   class IswcVideo extends withStyleAttrs(IswcElement) {
     static override tag = 'iswc-video';
+    declare static events: VideoEventos;
     static override css = css;
     static override deps = ['iswc-button'];
 

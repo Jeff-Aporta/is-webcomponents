@@ -141,3 +141,5 @@ const ChartCtxSchema = z.object({
 });
 export type ChartCtx = z.infer<typeof ChartCtxSchema>;
 
+/** Eventos del componente (HOW-6): `declare static events` en la clase; los documenta scripts/sondas/eventos.ts. */
+export type ChartEventos = { 'iswc-render': { svg: SVGElement }; 'iswc-turtle-state': { playing: boolean; idx: number; total: number; replay: number }; 'iswc-open-viewer': { payload: unknown } };

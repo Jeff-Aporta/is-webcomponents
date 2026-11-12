@@ -67,6 +67,16 @@ parent.addEventListener('iswc-event', (e) => {
 
 </details>
 
+### Eventos
+
+<!-- eventos: generado por scripts/sondas/eventos.ts desde declare static events -->
+
+| Evento | detail | cancelable |
+| --- | --- | --- |
+| `iswc-kanban-card-click` | `{ card: HTMLElement; column: HTMLElement }` | no |
+
+<!-- /eventos -->
+
 ## Comportamiento
 
 Se arrastra entre columnas y emite `iswc-kanban-card-click` con `{ card, column }` al pulsarla.

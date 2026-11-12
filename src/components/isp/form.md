@@ -105,16 +105,20 @@ También: hijo `<script type="application/json">` con el mismo objeto.
 
 ### Eventos
 
+<!-- eventos: generado por scripts/sondas/eventos.ts desde declare static events -->
+
+| Evento | detail | cancelable |
+| --- | --- | --- |
+| `iswc-submit` | `undefined` | no |
+| `iswc-cancel` | `undefined` | no |
+
+<!-- /eventos -->
+
 
 | Evento | Descripción |
 | --- | --- |
 | `iswc-submit` | Emitido al enviar el formulario. |
 | `iswc-cancel` | Emitido al cancelar la operación. |
-
-| Evento | detail | bubbles | composed | cancelable |
-| --- | --- | --- | --- | --- |
-| `iswc-submit` | `{ form, values, json }` | sí | sí | no |
-| `iswc-cancel` | `{ form, values, json }` | sí | sí | no |
 
 
 <details>

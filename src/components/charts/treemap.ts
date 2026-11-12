@@ -11,6 +11,7 @@ import { findThemeContainer, readTheme } from '@jeff-aporta/iswc-base/core/dom.j
 import { inlineMdWeb } from '@jeff-aporta/iswc-base/core/tk-inline-md.js';
 import { registerDiagramKind } from '@jeff-aporta/iswc-base/components/diagrams/utils/diagram-model.js';
 import css from 'iswc:css';
+import type { TreemapEventos } from './schemas/treemap.schemas.js';
 
 /**
  * <iswc-treemap> — treemap anidado en SVG (algoritmo squarified), sin librerías.
@@ -38,6 +39,7 @@ function fmtValue(v: number) {
 
 class IswcTreemap extends IswcElement {
   static override tag = 'iswc-treemap';
+  declare static events: TreemapEventos;
   static override css = css;
   static override observed = ['color', 'open-on-click'];
 

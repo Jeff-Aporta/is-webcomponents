@@ -6,6 +6,13 @@
   "titleHtml": false,
   "description": "Log plegable de un proceso: tiempo, nivel, etapa, mensaje, duración y datos de cada paso.",
   "storageKey": "docs-iswc-trace-log",
+  "events": [
+    {
+      "name": "iswc-trace-copy",
+      "detail": "{ json: string }",
+      "cancelable": false
+    }
+  ],
   "sections": [
     {
       "id": "intro",

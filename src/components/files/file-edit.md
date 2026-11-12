@@ -58,6 +58,17 @@ await iswcLoader.load('iswc-file-edit');
 
 ### Eventos
 
+<!-- eventos: generado por scripts/sondas/eventos.ts desde declare static events -->
+
+| Evento | detail | cancelable |
+| --- | --- | --- |
+| `iswc-error` | `{ reason: string; kind: string }` | no |
+| `iswc-load` | `unknown` | no |
+| `iswc-change` | `unknown` | no |
+| `iswc-dispatch` | `{ tag: string; kind: string; mode: string }` | no |
+
+<!-- /eventos -->
+
 | Evento | Detalle | Cuándo |
 | --- | --- | --- |
 | `iswc-load` | el del editor montado | El contenido quedó pintado. |

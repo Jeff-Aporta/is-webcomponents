@@ -31,3 +31,5 @@ const TileCfgSchema = z.object({
 });
 export type TileCfg = z.infer<typeof TileCfgSchema>;
 
+/** Eventos del componente (HOW-6): `declare static events` en la clase; los documenta scripts/sondas/eventos.ts. */
+export type MapsEventos = { 'iswc-marker-click': { marker: unknown }; 'iswc-viewport': { minLon: number; minLat: number; maxLon: number; maxLat: number } };

@@ -159,6 +159,23 @@
   ],
   "storageKey": "docs-iswc-observer",
   "hasBehavior": true,
+  "events": [
+    {
+      "name": "iswc-intersect",
+      "detail": "{ entry: IntersectionObserverEntry }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-mutate",
+      "detail": "{ records: MutationRecord[] }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-resize",
+      "detail": "{ entries: ResizeObserverEntry[] }",
+      "cancelable": false
+    }
+  ],
   "sections": [
     {
       "id": "intro",

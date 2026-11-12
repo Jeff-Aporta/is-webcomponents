@@ -81,18 +81,22 @@ import './chart.js';
 
 ### Eventos
 
+<!-- eventos: generado por scripts/sondas/eventos.ts desde declare static events -->
+
+| Evento | detail | cancelable |
+| --- | --- | --- |
+| `iswc-render` | `{ svg: SVGElement }` | no |
+| `iswc-turtle-state` | `{ playing: boolean; idx: number; total: number; replay: number }` | no |
+| `iswc-open-viewer` | `{ payload: unknown }` | sí |
+
+<!-- /eventos -->
+
 
 | Evento | Descripción |
 | --- | --- |
 | `iswc-render` | Emitido al renderizar o redibujar el componente. |
 | `iswc-turtle-state` | Emitido al actualizarse el estado del módulo turtle (resize, datos, etc.). |
 | `iswc-open-viewer` | Emitido al abrir el visor ampliado (cancelable). |
-
-| Evento | detail | bubbles | composed | cancelable |
-| --- | --- | --- | --- | --- |
-| `iswc-render` | sí | sí | sí | no |
-| `iswc-turtle-state` | sí | sí | sí | no |
-| `iswc-open-viewer` | sí | sí | sí | sí |
 
 
 <details>

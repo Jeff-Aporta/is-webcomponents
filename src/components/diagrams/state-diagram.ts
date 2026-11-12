@@ -15,6 +15,7 @@ import { registerDiagramKind } from './utils/diagram-model.js';
 import { svgEl } from '@jeff-aporta/iswc-base/core/svg-chart-engine.js';
 import type { TurtleState, NodeNodeEntry, EdgeNodeEntry } from "./schemas/state-diagram.schemas.js";
 import css from 'iswc:css';
+import type { StateDiagramEventos } from './schemas/state-diagram.schemas.js';
 
 /**
  * <iswc-state-diagram> — diagrama de estados en SVG, sin Mermaid.
@@ -55,6 +56,7 @@ function statePath(kind: string, x: number, y: number, w: number, h: number): st
 
 class IswcStateDiagram extends DiagramElementBase {
   static override tag = 'iswc-state-diagram';
+  declare static events: StateDiagramEventos;
   static override css = css;
   #theme: DiagramTheme | null = null;
   #turtle: PathTurtle | null = null;

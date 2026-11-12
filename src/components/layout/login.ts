@@ -10,6 +10,7 @@ import '@jeff-aporta/iswc-base/components/feedback/toast.js';
 import '@jeff-aporta/iswc-base/components/feedback/tooltip.js';
 import type { LoginAccount, LoginSession } from './schemas/login.schemas.js';
 import css from 'iswc:css';
+import type { LoginEventos } from './schemas/login.schemas.js';
 
 /**
  * <iswc-login> — Puerta de acceso reutilizable: single y multi-cuenta.
@@ -134,6 +135,7 @@ TEMPLATE.innerHTML = HTML_TEMPLATE;
 
 class IswcLogin extends IswcElement {
   static override tag = 'iswc-login';
+  declare static events: LoginEventos;
   static override css = css;
   static override deps = ['iswc-button', 'iswc-avatar', 'iswc-callout'];
   static override observed = [

@@ -6,11 +6,13 @@ import { loadText, resolveFileSource } from './utils/file-source.js';
 import { pintarEstado, sincronizarAlto } from './utils/file-estado.js';
 import { parseCsv } from './utils/csv-parse.js';
 import css from 'iswc:css';
+import type { CsvViewEventos } from './schemas/csv-view.schemas.js';
 
 (() => {
   const OBSERVED = ['src', 'content', 'height'];
   class IswcCsvView extends IswcElement {
     static override tag = 'iswc-csv-view';
+    declare static events: CsvViewEventos;
     static override css = css;
     static override observed = OBSERVED;
     #stage!: HTMLElement;

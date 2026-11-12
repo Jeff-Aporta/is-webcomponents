@@ -1,6 +1,6 @@
 // @contexto INDICE.md · src/components/isp/btn-ref.md
 import { emit, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
-import { IswcFormControl } from '@jeff-aporta/iswc-base/core/iswc-form-control.js';
+import { IswcFormChrome } from '@jeff-aporta/iswc-base/core/iswc-form-chrome.js';
 import type { Validez } from '@jeff-aporta/iswc-base/core/schemas/iswc-form-control.schemas.js';
 import '@jeff-aporta/iswc-base/components/forms/input.js';
 import '@jeff-aporta/iswc-base/components/layout/dialog.js';
@@ -16,6 +16,7 @@ import { _RecordLikeSchema, type _RecordLike } from "./schemas/btn-ref.schemas.j
 import type { _CatalogLike, _FieldLike, _DialogLike, _CatalogEl } from "./schemas/btn-ref.schemas.js";
 import css from 'iswc:css';
 import { prop } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
+import type { BtnRefEventos } from './schemas/btn-ref.schemas.js';
 
 /** Input field con attrs custom (label/name/value/etc.). */
 
@@ -73,8 +74,9 @@ const FILTER_SVG = `<svg fill="currentColor" width="20" height="20" viewBox="0 0
   const OBSERVED = [
     'label', 'value', 'name', 'id', 'required', 'readonly', 'maxlength'];
 
-  class IswcBtnRef extends IswcFormControl {
+  class IswcBtnRef extends IswcFormChrome {
     static override tag = 'iswc-btn-ref';
+    declare static events: BtnRefEventos;
     static override css = css;
     static override deps = ['iswc-button', 'iswc-icon'];
     static override observed = OBSERVED;
@@ -159,8 +161,7 @@ const FILTER_SVG = `<svg fill="currentColor" width="20" height="20" viewBox="0 0
       }
     }
 
-    override get label() { return this.getAttribute('label') || ''; }
-    override set label(v) { this.setAttribute('label', v ?? ''); }
+    // La etiqueta la declara el chrome (`label`); el boton dibuja su propia linea (`label-text`).
 
     get value() { return this.getAttribute('value') ?? ''; }
     set value(v) {

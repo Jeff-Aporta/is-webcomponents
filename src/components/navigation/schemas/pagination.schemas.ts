@@ -20,3 +20,6 @@ export type PaginationChangeDetail = z.infer<typeof PaginationChangeDetailSchema
 
 const PaginationSizeDetailSchema = z.object({ pageSize: z.number() });
 export type PaginationSizeDetail = z.infer<typeof PaginationSizeDetailSchema>;
+
+/** Eventos del componente (HOW-6): `declare static events` en la clase; los documenta scripts/sondas/eventos.ts. */
+export type PaginationEventos = { 'iswc-page-change': PaginationChangeDetail; 'iswc-page-size-change': PaginationSizeDetail };

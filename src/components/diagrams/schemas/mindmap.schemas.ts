@@ -7,6 +7,7 @@
  */
 import { z } from "zod";
 import { MindmapLayoutNodeSchema, MindmapLayoutEdgeSchema } from "./mindmap-spec.schemas.js";
+import type { DiagramRenderDetail, DiagramViewerDetail } from './diagram-base.schemas.js';
 
 const NodeEntrySchema = z.object({
   n: MindmapLayoutNodeSchema,
@@ -19,3 +20,6 @@ const EdgeEntrySchema = z.object({
   path: z.unknown() /* TODO: ref SVGPathElement */,
 });
 export type EdgeEntry = z.infer<typeof EdgeEntrySchema>;
+
+/** Eventos del componente (HOW-6): `declare static events` en la clase; los documenta scripts/sondas/eventos.ts. */
+export type MindmapEventos = { 'iswc-render': DiagramRenderDetail; 'iswc-open-viewer': DiagramViewerDetail };

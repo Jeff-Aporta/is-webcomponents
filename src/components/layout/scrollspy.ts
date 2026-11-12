@@ -6,6 +6,7 @@ import {
   setComponentPrefs,
 } from '@jeff-aporta/iswc-base/core/prefs.js';
 import css from 'iswc:css';
+import type { ScrollspyEventos } from './schemas/scrollspy.schemas.js';
 
 /**
  * <iswc-scrollspy> — Web Component (vanilla, zero dependencies).
@@ -119,6 +120,7 @@ import css from 'iswc:css';
 
   class IswcScrollspy extends IswcElement {
     static override tag = 'iswc-scrollspy';
+    declare static events: ScrollspyEventos;
     static override css = css;
     static override observed = ['target', 'trigger', 'root-margin', 'threshold', 'storage-key'];
 

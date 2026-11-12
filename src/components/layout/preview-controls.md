@@ -112,6 +112,16 @@ el.addEventListener('click', (e) => {
 
 </details>
 
+### Eventos
+
+<!-- eventos: generado por scripts/sondas/eventos.ts desde declare static events -->
+
+| Evento | detail | cancelable |
+| --- | --- | --- |
+| `iswc-controls-change` | `{ def: unknown; valor: unknown }` | no |
+
+<!-- /eventos -->
+
 ## Comportamiento
 
 Pinta un control por cada entrada de `controls` y aplica los cambios al `target`. La documentación de cada control abre un popover que se cierra con `Escape` o al pulsar fuera.

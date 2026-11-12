@@ -4,6 +4,7 @@ import '@jeff-aporta/iswc-base/components/layout/dialog.js';
 import './text.js';
 import './heading.js';
 import css from 'iswc:css';
+import type { ModalVerificacionEventos } from './schemas/modal-verificacion.schemas.js';
 
 /**
  * <iswc-modal-verificacion> — port de `src/lib/base/modal/ModalVerificacion.svelte`.
@@ -126,6 +127,7 @@ export function lowerCase(value: string) {
 
   class IswcModalVerificacion extends IswcElement {
     static override tag = 'iswc-modal-verificacion';
+    declare static events: ModalVerificacionEventos;
     static override css = css;
     static override deps = ['iswc-button', 'iswc-icon'];
 

@@ -7,6 +7,13 @@
   "description": "Sesión en la barra: acceso sin sesión; con logged, avatar, perfil, items propios y Cerrar sesión (iswc-logout).",
   "storageKey": "docs-iswc-session-menu",
   "hasBehavior": false,
+  "events": [
+    {
+      "name": "iswc-logout",
+      "detail": "Record<string, never>",
+      "cancelable": false
+    }
+  ],
   "sections": [
     {
       "id": "intro",

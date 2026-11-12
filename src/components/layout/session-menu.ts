@@ -6,6 +6,7 @@ import '@jeff-aporta/iswc-base/components/actions/dropdown-item.js';
 import './login-dropdown.js';
 import type { LoginChoice } from './schemas/login-dropdown.schemas.js';
 import css from 'iswc:css';
+import type { SessionMenuEventos } from './schemas/session-menu.schemas.js';
 
 /**
  * <iswc-session-menu> — Sesión del usuario en la barra.
@@ -75,6 +76,7 @@ function iniciales(nombre: string): string {
 
 class IswcSessionMenu extends IswcReactive {
   static override tag = 'iswc-session-menu';
+  declare static events: SessionMenuEventos;
   static override css = css;
   static override deps = ['iswc-button', 'iswc-avatar', 'iswc-icon', 'iswc-divider'];
   static override observed = ['name', 'subtitle', 'avatar', 'placement', 'logout-label', ...LOGIN_ATTRS];

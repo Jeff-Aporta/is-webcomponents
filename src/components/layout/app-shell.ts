@@ -4,6 +4,7 @@ import { IswcReactive } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
 import './drawer.js';
 import '@jeff-aporta/iswc-base/components/feedback/toast.js';
 import css from 'iswc:css';
+import type { AppShellEventos } from './schemas/app-shell.schemas.js';
 
 /**
  * <iswc-app-shell> — Armazón de aplicación: barra superior fija + vista con scroll propio.
@@ -116,6 +117,7 @@ TEMPLATE.innerHTML = HTML_TEMPLATE;
 
 class IswcAppShell extends IswcReactive {
   static override tag = 'iswc-app-shell';
+  declare static events: AppShellEventos;
   static override css = css;
   static override deps = ['iswc-icon', 'iswc-button'];
   static override observed = ['brand', 'logo', 'brand-href', 'home-label', 'sidebar-label', 'toast'];

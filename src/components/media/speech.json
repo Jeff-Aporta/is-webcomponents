@@ -6,6 +6,23 @@
   "titleHtml": false,
   "description": "Dictado (`SpeechRecognition`) y lectura (`SpeechSynthesis`) con `lang` del documento.",
   "storageKey": "docs-iswc-speech",
+  "events": [
+    {
+      "name": "iswc-error",
+      "detail": "{ message: string }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-result",
+      "detail": "{ transcript: string; isFinal: boolean }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-speak-end",
+      "detail": "undefined",
+      "cancelable": false
+    }
+  ],
   "sections": [
     {
       "id": "intro",

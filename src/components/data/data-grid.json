@@ -17,6 +17,143 @@
   ],
   "storageKey": "docs-iswc-data-grid",
   "hasBehavior": true,
+  "events": [
+    {
+      "name": "iswc-sort-change",
+      "detail": "{ sortModel: unknown; field?: string; sort?: string }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-filter-change",
+      "detail": "{ filterModel: unknown }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-quick-filter",
+      "detail": "{ value: string }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-column-hide",
+      "detail": "{ columnVisibilityModel: unknown; field?: string; visible?: boolean }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-column-resize",
+      "detail": "{ field: string; width: number }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-column-pin",
+      "detail": "{ field: string; side: string | null; pinnedColumns: string[] }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-density",
+      "detail": "{ density: string }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-group-model",
+      "detail": "{ rowGroupingModel: unknown }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-aggregation",
+      "detail": "{ aggregationModel: unknown }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-export",
+      "detail": "{ format: string; rows: number }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-select",
+      "detail": "unknown",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-cell-select",
+      "detail": "unknown",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-edit-start",
+      "detail": "{ id: string; field: string; row: number }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-edit-stop",
+      "detail": "{ id: string; field: string; saved: boolean; error?: unknown }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-row-update",
+      "detail": "{ id: string; row: number; before: unknown }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-copy",
+      "detail": "{ text?: string; rows: number }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-paste",
+      "detail": "{ rows: number }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-column-reorder",
+      "detail": "{ field: string; targetField: string; columnOrder: string[] }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-cell-click",
+      "detail": "{ id: string; field: string; row: number }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-row-click",
+      "detail": "{ id: string; row: number }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-row-double-click",
+      "detail": "{ id: string; row: number }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-cell-double-click",
+      "detail": "{ id: string; field: string; row: number }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-row-reorder",
+      "detail": "{ id: string; from: number; to: number }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-group-toggle",
+      "detail": "{ id: string; expanded: boolean }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-detail-toggle",
+      "detail": "{ id: string; open: boolean }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-rows-scroll-end",
+      "detail": "{ rows: number }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-page-change",
+      "detail": "unknown",
+      "cancelable": false
+    }
+  ],
   "sections": [
     {
       "id": "intro",

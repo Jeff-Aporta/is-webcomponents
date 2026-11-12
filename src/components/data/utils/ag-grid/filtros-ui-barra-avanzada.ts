@@ -90,6 +90,9 @@ export class BarraAvanzada {
     const caja = crear('div', 'iswc-ag-constructor');
     caja.setAttribute('role', 'dialog');
     caja.setAttribute('aria-label', this.#t('advancedFilterBuilderTitle'));
+    // Panel no modal: lo dice explicitamente para que el lector de pantalla no lo
+    // trate como una ventana modal.
+    caja.setAttribute('aria-modal', 'false');
     caja.append(crear('div', 'iswc-ag-constructor__titulo', this.#t('advancedFilterBuilderTitle')), this.#grupo(this.#borrador, null));
     const pie = crear('div', 'iswc-ag-filtro__botones');
     pie.append(boton(this.#t('advancedFilterCancel'), () => this.ocultarConstructor()), boton(this.#t('advancedFilterApply'), () => this.#confirmar(), 'filled'));

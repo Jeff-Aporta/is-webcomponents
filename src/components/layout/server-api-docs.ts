@@ -41,6 +41,7 @@ import '@jeff-aporta/iswc-base/components/forms/input.js';
 import './dialog.js';
 import './callout.js';
 import css from 'iswc:css';
+import type { ServerApiDocsEventos } from './schemas/server-api-docs.schemas.js';
 
 /**
  * <iswc-server-api-docs> — endpoints de la API de un SERVER al estilo Swagger (solo para servers: el
@@ -109,6 +110,7 @@ const leerArchivo = (f: File): Promise<string> => new Promise((ok, mal) => {
 
 class IswcServerApiDocs extends IswcElement {
   static override tag = 'iswc-server-api-docs';
+  declare static events: ServerApiDocsEventos;
   static override css = css;
   static override deps = ['iswc-tag', 'iswc-spinner', 'iswc-copy-button', 'iswc-button', 'iswc-icon'];
   #raiz: ShadowRoot;

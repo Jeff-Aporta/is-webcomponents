@@ -18,9 +18,10 @@ import './drawer.js';
 import type {
   IswcComponentPreviewLike,
   PreviewMountContext,
-} from '@jeff-aporta/iswc-base/previews/_kit/schemas/preview.schemas.ts';
+} from '@jeff-aporta/iswc-base/previews/_kit/schemas/preview.schemas.js';
 import type { DrawerEl } from "./schemas/preview-component.schemas.js";
 import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import type { PreviewComponentEventos } from './schemas/preview-component.schemas.js';
 
 /** Ancho a partir del cual el TOC deja de caber al lado del contenido. */
 const COMPACT_QUERY = '(max-width: 900px)';
@@ -41,6 +42,7 @@ TEMPLATE.innerHTML = /* html */ `
 
 class IswcPreviewComponent extends withStyleAttrs(IswcElement) {
   static override tag = 'iswc-preview-component';
+  declare static events: PreviewComponentEventos;
   static override shadowInit: ShadowRootInit | null = null;
   static override deps = ['iswc-button', 'iswc-icon'];
 

@@ -18,6 +18,38 @@
   ],
   "storageKey": "docs-iswc-code",
   "hasBehavior": true,
+  "events": [
+    {
+      "name": "iswc-change",
+      "detail": "{ value: string; formatted?: boolean; format?: string }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-error",
+      "detail": "{ error: string }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-ready",
+      "detail": "{ lang: string; value: string }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-input",
+      "detail": "{ value: string }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-cursor",
+      "detail": "{ line: number; ch: number; index: number }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-mark-activate",
+      "detail": "{ mark: unknown; phase: 'enter' | 'leave' }",
+      "cancelable": false
+    }
+  ],
   "sections": [
     {
       "id": "intro",

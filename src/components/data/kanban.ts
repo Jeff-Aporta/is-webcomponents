@@ -1,6 +1,7 @@
 // @contexto INDICE.md · src/components/data/kanban.md
 import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import css from 'iswc:css';
+import type { KanbanColumnEventos, KanbanCardEventos } from './schemas/kanban.schemas.js';
 
 /**
  * <iswc-kanban> + <iswc-kanban-column> + <iswc-kanban-card> — Tablero (vanilla, zero dependencies).
@@ -121,6 +122,7 @@ import css from 'iswc:css';
 
   class IswcKanbanColumn extends IswcElement {
     static override tag = 'iswc-kanban-column';
+    declare static events: KanbanColumnEventos;
     static override css = css;
     static override observed = COLUMN_OBSERVED;
     #root!: HTMLElement | null;
@@ -215,6 +217,7 @@ import css from 'iswc:css';
 
   class IswcKanbanCard extends IswcElement {
     static override tag = 'iswc-kanban-card';
+    declare static events: KanbanCardEventos;
     static override css = css;
     static override observed = CARD_OBSERVED;
     #root!: HTMLElement;

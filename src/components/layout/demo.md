@@ -74,6 +74,16 @@ el.addEventListener('click', (e) => {
 
 </details>
 
+### Eventos
+
+<!-- eventos: generado por scripts/sondas/eventos.ts desde declare static events -->
+
+| Evento | detail | cancelable |
+| --- | --- | --- |
+| `iswc-demo-connected` | `undefined` | no |
+
+<!-- /eventos -->
+
 ## Comportamiento
 
 Va en light DOM: su caja vive en `styles/presentation.scss`, por eso no tiene `.scss` propio. Al montarse emite `iswc-demo-connected`.

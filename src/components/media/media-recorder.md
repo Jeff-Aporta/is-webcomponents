@@ -61,18 +61,22 @@ import './media-recorder.js';
 
 ### Eventos
 
+<!-- eventos: generado por scripts/sondas/eventos.ts desde declare static events -->
+
+| Evento | detail | cancelable |
+| --- | --- | --- |
+| `iswc-error` | `{ message: string }` | no |
+| `iswc-start` | `{ source: string }` | no |
+| `iswc-stop` | `{ blob: Blob; url: string; type: string }` | no |
+
+<!-- /eventos -->
+
 
 | Evento | Descripción |
 | --- | --- |
 | `iswc-start` | Emitido al iniciar la operación. |
 | `iswc-stop` | Emitido al detener la operación. |
 | `iswc-error` | Emitido cuando se produce un error. |
-
-| Evento | detail | bubbles | composed | cancelable |
-| --- | --- | --- | --- | --- |
-| `iswc-start` | sí `{ source }` | sí | sí | no |
-| `iswc-stop` | sí `{ blob, url, type }` | sí | sí | no |
-| `iswc-error` | sí `{ message }` | sí | sí | no |
 
 
 <details>

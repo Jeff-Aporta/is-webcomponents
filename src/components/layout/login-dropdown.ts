@@ -6,6 +6,7 @@ import '@jeff-aporta/iswc-base/components/navigation/tab-group.js';
 import './login.js';
 import type { LoginChoice, LoginDropdownSubmit, LoginMode as Mode } from './schemas/login-dropdown.schemas.js';
 import css from 'iswc:css';
+import type { LoginDropdownEventos } from './schemas/login-dropdown.schemas.js';
 
 /**
  * <iswc-login-dropdown> — Acceso compacto en un desplegable de la barra.
@@ -90,6 +91,7 @@ TEMPLATE.innerHTML = HTML_TEMPLATE;
 
 class IswcLoginDropdown extends IswcReactive {
   static override tag = 'iswc-login-dropdown';
+  declare static events: LoginDropdownEventos;
   static override css = css;
   static override deps = ['iswc-button', 'iswc-icon', 'iswc-callout'];
   static override observed = [

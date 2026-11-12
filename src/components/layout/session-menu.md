@@ -88,6 +88,14 @@ Iconos locales (sin api.iconify.design): ver `app-shell.md` → «Iconos sin dep
 
 ### Eventos
 
+<!-- eventos: generado por scripts/sondas/eventos.ts desde declare static events -->
+
+| Evento | detail | cancelable |
+| --- | --- | --- |
+| `iswc-logout` | `Record<string, never>` | no |
+
+<!-- /eventos -->
+
 | Evento | `detail` | Cuándo |
 | --- | --- | --- |
 | `iswc-login-submit` | ver `<iswc-login-dropdown>` | Envío del acceso (sin sesión). |

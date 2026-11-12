@@ -5,6 +5,23 @@
   "title": "<iswc-csv-edit>",
   "titleHtml": false,
   "storageKey": "docs-iswc-csv-edit",
+  "events": [
+    {
+      "name": "iswc-change",
+      "detail": "{ value: string; rows: number }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-load",
+      "detail": "{ rows: number }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-error",
+      "detail": "{ reason: string }",
+      "cancelable": false
+    }
+  ],
   "sections": [
     {
       "id": "intro",

@@ -7,6 +7,13 @@
   "description": "Índice documental agrupado con búsqueda de texto completo y fragmento resaltado.",
   "storageKey": "docs-iswc-doc-index",
   "loads": ["iswc-doc-index"],
+  "events": [
+    {
+      "name": "iswc-doc-index-select",
+      "detail": "{ id: string; item: unknown }",
+      "cancelable": false
+    }
+  ],
   "sections": [
     {
       "id": "intro",

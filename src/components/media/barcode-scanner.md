@@ -61,16 +61,20 @@ import './barcode-scanner.js';
 
 ### Eventos
 
+<!-- eventos: generado por scripts/sondas/eventos.ts desde declare static events -->
+
+| Evento | detail | cancelable |
+| --- | --- | --- |
+| `iswc-error` | `{ message: string }` | no |
+| `iswc-detect` | `{ barcodes: unknown[]; rawValue: string; format: string }` | no |
+
+<!-- /eventos -->
+
 
 | Evento | Descripción |
 | --- | --- |
 | `iswc-detect` | Evento personalizado del componente (detect). |
 | `iswc-error` | Emitido cuando se produce un error. |
-
-| Evento | detail | bubbles | composed | cancelable |
-| --- | --- | --- | --- | --- |
-| `iswc-detect` | sí `{ rawValue, format, barcodes }` | sí | sí | no |
-| `iswc-error` | sí `{ message }` | sí | sí | no |
 
 
 <details>

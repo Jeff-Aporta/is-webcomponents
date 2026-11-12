@@ -44,6 +44,7 @@ import { tokenizeCode, lineToHtml, tokenClass, escapeHtml, tokensToText } from '
 import '@jeff-aporta/iswc-base/components/feedback/tooltip.js';
 import type { CodeMark, CodeDocument, CodeFormatConfig, CodeLangDef, IswcTooltipEl, HighlightLine, HighlightResult } from "./schemas/code.schemas.js";
 import css from 'iswc:css';
+import type { CodeEventos } from './schemas/code.schemas.js';
 
 // Tipos locales (los _shared sólo los declaran vía JSDoc; replicamos forma).
 
@@ -93,6 +94,7 @@ function editRange(oldText: string, newText: string): [number, number, number] {
 // `IswcFormControl` (que añadiría atributos label/hint/error y el evento `iswc-invalid`).
 class IswcCode extends IswcReactive {
   static override tag = 'iswc-code';
+  declare static events: CodeEventos;
   static override css = css;
   static override shadowInit: ShadowRootInit | null = { mode: 'open', delegatesFocus: true };
 

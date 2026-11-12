@@ -5,6 +5,18 @@
   "title": "<iswc-txt-view>",
   "titleHtml": false,
   "storageKey": "docs-iswc-txt-view",
+  "events": [
+    {
+      "name": "iswc-load",
+      "detail": "{ bytes: number }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-error",
+      "detail": "{ reason: string }",
+      "cancelable": false
+    }
+  ],
   "sections": [
     {
       "id": "intro",

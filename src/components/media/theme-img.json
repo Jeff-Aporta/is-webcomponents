@@ -5,6 +5,13 @@
   "title": "&lt;iswc-theme-img&gt;",
   "titleHtml": false,
   "storageKey": "docs-iswc-theme-img",
+  "events": [
+    {
+      "name": "iswc-error",
+      "detail": "{ src: string }",
+      "cancelable": false
+    }
+  ],
   "sections": [
     {
       "id": "intro",

@@ -9,6 +9,13 @@
   "titleHtml": false,
   "description": "Tarjeta de un tablero kanban que representa una tarea y se arrastra entre columnas.",
   "storageKey": "docs-iswc-kanban-card",
+  "events": [
+    {
+      "name": "iswc-kanban-card-click",
+      "detail": "{ card: HTMLElement; column: HTMLElement }",
+      "cancelable": false
+    }
+  ],
   "sections": [
     {
       "id": "intro",

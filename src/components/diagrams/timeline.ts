@@ -10,6 +10,7 @@ import { svgEl } from '@jeff-aporta/iswc-base/core/svg-chart-engine.js';
 import type { TimelineLayout } from "./schemas/timeline-spec.schemas.js";
 import type { EventEntry } from "./schemas/timeline.schemas.js";
 import css from 'iswc:css';
+import type { TimelineEventos } from './schemas/timeline.schemas.js';
 
 /**
  * <iswc-timeline> — línea de tiempo de hitos en SVG, sin Mermaid.
@@ -31,6 +32,7 @@ import css from 'iswc:css';
 
 class IswcTimeline extends DiagramElementBase {
   static override tag = 'iswc-timeline';
+  declare static events: TimelineEventos;
   static override css = css;
   #hiddenGroups = new Set<string>();
   #eventNodes = new Map<string, EventEntry>();

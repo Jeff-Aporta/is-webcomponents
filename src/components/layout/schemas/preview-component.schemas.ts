@@ -13,3 +13,5 @@ const DrawerElSchema = z.object({
 });
 export type DrawerEl = z.infer<typeof DrawerElSchema>;
 
+/** Eventos del componente (HOW-6): `declare static events` en la clase; los documenta scripts/sondas/eventos.ts. */
+export type PreviewComponentEventos = { 'iswc-preview-ready': { tag: string } };

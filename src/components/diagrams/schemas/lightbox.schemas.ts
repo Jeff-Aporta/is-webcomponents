@@ -14,3 +14,5 @@ const ViewTransformSchema = z.object({
 });
 export type ViewTransform = z.infer<typeof ViewTransformSchema>;
 
+/** Eventos del componente (HOW-6): `declare static events` en la clase; los documenta scripts/sondas/eventos.ts. */
+export type LightboxEventos = { 'iswc-reposition': { x: number; y: number; width: number; height: number }; 'iswc-after-show': undefined; 'iswc-after-hide': undefined };

@@ -4,11 +4,13 @@ import { setOptionalAttr, setStringAttr } from '@jeff-aporta/iswc-base/core/attr
 import { loadText, resolveFileSource } from './utils/file-source.js';
 import { sincronizarAlto } from './utils/file-estado.js';
 import css from 'iswc:css';
+import type { TxtEditEventos } from './schemas/txt-edit.schemas.js';
 
 (() => {
   const OBSERVED = ['src', 'content', 'height', 'readonly'];
   class IswcTxtEdit extends IswcElement {
     static override tag = 'iswc-txt-edit';
+    declare static events: TxtEditEventos;
     static override css = css;
     static override observed = OBSERVED;
     #ta!: HTMLTextAreaElement;

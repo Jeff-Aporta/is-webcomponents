@@ -84,6 +84,16 @@ el.addEventListener('iswc-state-change', (e) => {
 </iswc-er-editor>
 ```
 
+### Eventos
+
+<!-- eventos: generado por scripts/sondas/eventos.ts desde declare static events -->
+
+| Evento | detail | cancelable |
+| --- | --- | --- |
+| `iswc-state-change` | `{ entities: unknown; relations: unknown }` | no |
+
+<!-- /eventos -->
+
 ## Comportamiento
 
 Edita un diagrama entidad-relación en un canvas con barra de herramientas, panel de propiedades, historial, zoom y arrastre. `Supr` borra la selección; `Ctrl+Z` y `Ctrl+Y` deshacen y rehacen.

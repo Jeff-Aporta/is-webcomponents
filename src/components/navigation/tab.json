@@ -9,6 +9,13 @@
   "titleHtml": false,
   "description": "Pestaña de un iswc-tab-group que activa su panel al seleccionarla.",
   "storageKey": "docs-iswc-tab",
+  "events": [
+    {
+      "name": "iswc-tab-close",
+      "detail": "{ tab: HTMLElement; name: string | null }",
+      "cancelable": false
+    }
+  ],
   "sections": [
     {
       "id": "intro",

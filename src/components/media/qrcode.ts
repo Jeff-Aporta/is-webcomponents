@@ -2,6 +2,7 @@
 import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import type { QRInstance, QRLib } from "./schemas/qrcode.schemas.js";
 import css from 'iswc:css';
+import type { QrcodeEventos } from './schemas/qrcode.schemas.js';
 
 /**
  * <iswc-qrcode> — Generador de QR en SVG.
@@ -33,6 +34,7 @@ import css from 'iswc:css';
 
   class IswcQrCode extends IswcElement {
     static override tag = 'iswc-qrcode';
+    declare static events: QrcodeEventos;
     static override css = css;
     static override observed = OBSERVED;
     #mounted = false;

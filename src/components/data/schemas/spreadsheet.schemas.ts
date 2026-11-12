@@ -134,3 +134,6 @@ export function parseWorkbookDoc(input: unknown): WorkbookDoc | null {
   const r = WorkbookDocSchema.safeParse(input);
   return r.success ? r.data : null;
 }
+
+/** Eventos del componente (HOW-6): `declare static events` en la clase; los documenta scripts/sondas/eventos.ts. */
+export type SpreadsheetEventos = { 'iswc-change': SpreadsheetChangeDetail; 'iswc-select': SpreadsheetSelectDetail };

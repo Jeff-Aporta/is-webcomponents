@@ -6,6 +6,7 @@ import { withStyleAttrs } from '@jeff-aporta/iswc-base/core/attrs.js';
 import { niceTicks, svgEl } from '@jeff-aporta/iswc-base/core/svg-chart-engine.js';
 import type { HeatmapCfg } from "./schemas/heatmap.schemas.js";
 import css from 'iswc:css';
+import type { HeatmapEventos } from './schemas/heatmap.schemas.js';
 
 /** Config leída del slot JSON. */
 
@@ -48,6 +49,7 @@ import css from 'iswc:css';
 
   class IswcHeatmap extends withStyleAttrs(IswcElement) {
     static override tag = 'iswc-heatmap';
+    declare static events: HeatmapEventos;
     static override css = css;
 
     static override observed = [...OBSERVED, 'text-color', 'grid-color'];

@@ -5,6 +5,18 @@
   "title": "&lt;iswc-mindmap&gt;",
   "titleHtml": false,
   "storageKey": "docs-iswc-mindmap",
+  "events": [
+    {
+      "name": "iswc-render",
+      "detail": "DiagramRenderDetail",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-open-viewer",
+      "detail": "DiagramViewerDetail",
+      "cancelable": true
+    }
+  ],
   "sections": [
     {
       "id": "intro",

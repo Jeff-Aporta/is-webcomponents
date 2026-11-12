@@ -9,6 +9,7 @@ import { PathTurtle } from '@jeff-aporta/iswc-base/core/path-turtle.js';
 import { registerDiagramKind } from '@jeff-aporta/iswc-base/components/diagrams/utils/diagram-model.js';
 import type { TypedChartFactory, ChartDataPoint, ChartDataset, ChartConfig, LegendEntry, HitRecord, ResolvedOptions, ChartCtx } from "./schemas/chart.schemas.js";
 import css from 'iswc:css';
+import type { ChartEventos } from './schemas/chart.schemas.js';
 
 /**
  * <iswc-chart> — motor de charts en SVG, sin dependencias.
@@ -85,6 +86,7 @@ function isNumericXY(datasets: ChartDataset[]): boolean {
 
 class IswcChart extends withStyleAttrs(IswcElement) {
   static override tag = 'iswc-chart';
+  declare static events: ChartEventos;
   /** Los charts tipados heredan esta hoja: sus .scss solo importan chart.css. */
   static override css = css;
 

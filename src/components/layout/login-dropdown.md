@@ -92,6 +92,14 @@ Ninguno.
 
 ### Eventos
 
+<!-- eventos: generado por scripts/sondas/eventos.ts desde declare static events -->
+
+| Evento | detail | cancelable |
+| --- | --- | --- |
+| `iswc-login-submit` | `{ username: string; password: string }` | no |
+
+<!-- /eventos -->
+
 | Evento | `detail` | Cuándo |
 | --- | --- | --- |
 | `iswc-login-submit` | `{ mode, username, password, remember, provider?, token?, choice? }` | Envío válido (botón o Enter; en token, Ctrl/Cmd+Enter). Uno por envío. |

@@ -56,3 +56,6 @@ export const TraceLogPropsSchema = z.object({
   textos: TraceTextosSchema.partial(),
 });
 export type TraceLogProps = z.infer<typeof TraceLogPropsSchema>;
+
+/** Eventos del componente (HOW-6): `declare static events` en la clase; los documenta scripts/sondas/eventos.ts. */
+export type TraceLogEventos = { 'iswc-trace-copy': { json: string } };

@@ -45,6 +45,13 @@
     "    .fallback-case small { color: var(--iswc-text-soft); }"
   ],
   "storageKey": "docs-iswc-avatar",
+  "events": [
+    {
+      "name": "iswc-error",
+      "detail": "undefined",
+      "cancelable": false
+    }
+  ],
   "sections": [
     {
       "id": "intro",

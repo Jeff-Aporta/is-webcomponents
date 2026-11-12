@@ -26,6 +26,13 @@
   ],
   "storageKey": "docs-iswc-dock",
   "hasBehavior": true,
+  "events": [
+    {
+      "name": "iswc-select",
+      "detail": "{ item: HTMLElement }",
+      "cancelable": false
+    }
+  ],
   "sections": [
     {
       "id": "intro",

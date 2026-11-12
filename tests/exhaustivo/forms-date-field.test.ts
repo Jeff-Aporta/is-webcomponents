@@ -61,7 +61,7 @@ test('date-field: shadow DOM (open + delegatesFocus para teclado)', () => {
 
 test('date-field: form-associated (IswcFormControl: formAssociated + ElementInternals)', () => {
   assert.ok(esFormAssociated(factorySrc), 'factory debe ser form-associated');
-  assert.ok(/attachInternals|extends\s+IswcFormControl\b/.test(factorySrc),
+  assert.ok(/attachInternals|extends\s+IswcForm(?:Control|Chrome)\b/.test(factorySrc),
     'factory debe usar ElementInternals (form-associated)');
 });
 

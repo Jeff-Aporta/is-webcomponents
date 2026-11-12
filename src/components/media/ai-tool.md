@@ -59,6 +59,15 @@ No tiene slots.
 
 ### Eventos
 
+<!-- eventos: generado por scripts/sondas/eventos.ts desde declare static events -->
+
+| Evento | detail | cancelable |
+| --- | --- | --- |
+| `iswc-ai-result` | `{ herramienta: string; salida: unknown; entrada: unknown }` | no |
+| `iswc-ai-error` | `{ herramienta: string; mensaje: string }` | no |
+
+<!-- /eventos -->
+
 | Evento | Detalle | Cuándo |
 | --- | --- | --- |
 | `iswc-ai-result` | `{ herramienta, salida, entrada }` | Terminó bien. `salida` trae `texto`, `imagen`, `audio`, `cajas` o `barras`. |

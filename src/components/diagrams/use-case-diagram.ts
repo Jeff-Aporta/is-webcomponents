@@ -13,6 +13,7 @@ import { registerDiagramKind } from './utils/diagram-model.js';
 import { svgEl } from '@jeff-aporta/iswc-base/core/svg-chart-engine.js';
 import type { NodeNodeEntry, LinkNodeEntry } from "./schemas/use-case-diagram.schemas.js";
 import css from 'iswc:css';
+import type { UseCaseDiagramEventos } from './schemas/use-case-diagram.schemas.js';
 
 /**
  * <iswc-use-case-diagram> — diagrama de casos de uso UML en SVG, sin Mermaid.
@@ -86,6 +87,7 @@ function generalizationHead(
 
 class IswcUseCaseDiagram extends DiagramElementBase {
   static override tag = 'iswc-use-case-diagram';
+  declare static events: UseCaseDiagramEventos;
   static override css = css;
   #hiddenGroups: Set<string> = new Set<string>();
   #nodeNodes: Map<string, NodeNodeEntry> = new Map();

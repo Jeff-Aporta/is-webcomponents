@@ -3,6 +3,7 @@ import { emit, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import { IswcReactive } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
 import { registrarTerminos } from '@jeff-aporta/iswc-base/core/localize.js';
 import css from 'iswc:css';
+import type { ScrollerEventos } from './schemas/scroller.schemas.js';
 
 /**
  * <iswc-scroller> — Web Component (vanilla, zero dependencies).
@@ -55,6 +56,7 @@ import css from 'iswc:css';
 
   class IswcScroller extends IswcReactive {
     static override tag = 'iswc-scroller';
+    declare static events: ScrollerEventos;
     static override css = css;
 
     static override observed = [...OBSERVED, 'button-size', 'button-bg', 'button-color'];

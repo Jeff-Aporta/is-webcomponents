@@ -6,6 +6,23 @@
   "titleHtml": false,
   "storageKey": "docs-iswc-md-render",
   "styles": "",
+  "events": [
+    {
+      "name": "iswc-input",
+      "detail": "{ value: string }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-change",
+      "detail": "{ value: string }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-persist",
+      "detail": "{ value: string }",
+      "cancelable": false
+    }
+  ],
   "sections": [
     {
       "id": "intro",

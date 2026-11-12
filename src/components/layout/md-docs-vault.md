@@ -75,6 +75,14 @@ lista JSON, su orden es el del libro.
 
 ### Eventos
 
+<!-- eventos: generado por scripts/sondas/eventos.ts desde declare static events -->
+
+| Evento | detail | cancelable |
+| --- | --- | --- |
+| `iswc-md-docs-vault-page` | `MdDocsVaultPageDetail` | no |
+
+<!-- /eventos -->
+
 | Evento | Detalle | Cuándo |
 | --- | --- | --- |
 | `iswc-md-docs-vault-page` | `{ ruta, titulo, meta }` | Al abrir una hoja (también la primera). |

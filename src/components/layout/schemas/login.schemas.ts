@@ -24,3 +24,6 @@ const LoginSessionSchema = z.object({
   current: z.boolean().optional(),
 });
 export type LoginSession = z.infer<typeof LoginSessionSchema>;
+
+/** Eventos del componente (HOW-6): `declare static events` en la clase; los documenta scripts/sondas/eventos.ts. */
+export type LoginEventos = { 'iswc-remember-change': { remember: boolean }; 'iswc-sessions-refresh': Record<string, never>; 'iswc-forgot': { username: string }; 'iswc-logout-all': Record<string, never>; 'iswc-add-account': Record<string, never>; 'iswc-login-submit': { username: string; password: string; remember: boolean; provider: string }; 'iswc-password-change': { current: string; next: string }; 'iswc-account-select': { account: unknown }; 'iswc-remove-account': { account: unknown }; 'iswc-session-revoke': { sessionId: string } };

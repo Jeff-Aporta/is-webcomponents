@@ -6,6 +6,7 @@
  * entradas marcadas con TODO cuando se quiera validación runtime.
  */
 import { z } from "zod";
+import type { DiagramRenderDetail, DiagramToggleDetail, DiagramViewerDetail } from './diagram-base.schemas.js';
 
 const NodeNodeEntrySchema = z.object({
   n: z.union([z.unknown() /* TODO: ref UseCaseLayoutActor */, z.unknown() /* TODO: ref UseCaseLayoutCase */]),
@@ -19,3 +20,5 @@ const LinkNodeEntrySchema = z.object({
 });
 export type LinkNodeEntry = z.infer<typeof LinkNodeEntrySchema>;
 
+/** Eventos del componente (HOW-6): `declare static events` en la clase; los documenta scripts/sondas/eventos.ts. */
+export type UseCaseDiagramEventos = { 'iswc-render': DiagramRenderDetail; 'iswc-toggle-group': DiagramToggleDetail; 'iswc-open-viewer': DiagramViewerDetail };

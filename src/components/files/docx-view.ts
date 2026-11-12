@@ -5,11 +5,13 @@ import { loadArrayBuffer, resolveFileSource, loadCdnScript, MAMMOTH_CDN } from '
 import { pintarEstado, sincronizarAlto } from './utils/file-estado.js';
 import type { MammothApi } from "./schemas/docx-view.schemas.js";
 import css from 'iswc:css';
+import type { DocxViewEventos } from './schemas/docx-view.schemas.js';
 
 (() => {
   const OBSERVED = ['src', 'content', 'height'];
   class IswcDocxView extends IswcElement {
     static override tag = 'iswc-docx-view';
+    declare static events: DocxViewEventos;
     static override css = css;
     static override observed = OBSERVED;
     #body!: HTMLElement;

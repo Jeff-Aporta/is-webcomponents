@@ -7,6 +7,13 @@
   "description": "Filas de pestañas para la barra de una app: primaria + secundarias dependientes, APG y repintado sin recrear iconos.",
   "storageKey": "docs-iswc-app-nav",
   "hasBehavior": false,
+  "events": [
+    {
+      "name": "iswc-nav-select",
+      "detail": "{ row: string; id: string; href: string | null }",
+      "cancelable": true
+    }
+  ],
   "sections": [
     {
       "id": "intro",

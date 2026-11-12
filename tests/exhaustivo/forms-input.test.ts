@@ -75,7 +75,7 @@ test('input: form-associated (IswcFormControl + restablecer)', () => {
   assert.ok(esFormAssociated(src), '<iswc-input> debe ser form-associated');
   assert.ok(extiendeElementBase(src), '<iswc-input> debe extender el molde');
   // `IswcFormControl` aporta ElementInternals y `formResetCallback`, que delega el valor en `restablecer()`.
-  assert.ok(/extends\s+IswcFormControl\b/.test(src) || /attachFormInternals\s*\(/.test(src),
+  assert.ok(/extends\s+IswcForm(?:Control|Chrome)\b/.test(src) || /attachFormInternals\s*\(/.test(src),
     '<iswc-input> debe tener ElementInternals (IswcFormControl)');
   assert.ok(/formResetCallback\s*\(/.test(src) || /override\s+restablecer\s*\(/.test(src),
     '<iswc-input> debe restaurar su valor en el reset del formulario (restablecer / formResetCallback)');

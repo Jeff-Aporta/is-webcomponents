@@ -3,6 +3,7 @@ import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-elem
 import { setStringAttr } from '@jeff-aporta/iswc-base/core/attrs.js';
 import type { BarcodeDetectorCtor, DetectedBarcode } from "./schemas/barcode-scanner.schemas.js";
 import css from 'iswc:css';
+import type { BarcodeScannerEventos } from './schemas/barcode-scanner.schemas.js';
 
 /**
  * <iswc-barcode-scanner> — BarcodeDetector sobre cámara o <img>/canvas.
@@ -46,6 +47,7 @@ function getBarcodeDetector(): BarcodeDetectorCtor | undefined {
 
   class IswcBarcodeScanner extends IswcElement {
     static override tag = 'iswc-barcode-scanner';
+    declare static events: BarcodeScannerEventos;
     static override css = css;
     static override deps = ['iswc-button', 'iswc-icon'];
     static override observed = ['formats', 'disabled'];

@@ -65,11 +65,13 @@ import '@jeff-aporta/iswc-base/components/layout/card.js';
 import '@jeff-aporta/iswc-base/components/navigation/tab-group.js';
 import type { ExampleSpec } from "./schemas/examples-carousel.schemas.js";
 import css from 'iswc:css';
+import type { ExamplesCarouselEventos } from './schemas/examples-carousel.schemas.js';
 
 const OBSERVED = ['tag', 'target', 'label', 'lede', 'default-index', 'category-field'];
 
 class IswcExamplesCarousel extends IswcElement {
   static override tag = 'iswc-examples-carousel';
+  declare static events: ExamplesCarouselEventos;
   static override css = css;
   static override deps = ['iswc-button', 'iswc-icon'];
   static override observed = OBSERVED;

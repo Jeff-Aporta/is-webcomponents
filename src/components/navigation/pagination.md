@@ -59,6 +59,15 @@ No tiene slots.
 
 ### Eventos
 
+<!-- eventos: generado por scripts/sondas/eventos.ts desde declare static events -->
+
+| Evento | detail | cancelable |
+| --- | --- | --- |
+| `iswc-page-change` | `PaginationChangeDetail` | no |
+| `iswc-page-size-change` | `PaginationSizeDetail` | no |
+
+<!-- /eventos -->
+
 | Evento | Detalle | Cuándo |
 | --- | --- | --- |
 | `iswc-page-change` | `{ page }` | Al ir a otra página. |

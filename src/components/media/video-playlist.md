@@ -79,16 +79,21 @@ import './video-playlist.js';
 
 ### Eventos
 
+<!-- eventos: generado por scripts/sondas/eventos.ts desde declare static events -->
+
+| Evento | detail | cancelable |
+| --- | --- | --- |
+| `iswc-error` | `{ index: number }` | no |
+| `iswc-video-change` | `{ previousIndex: number; currentIndex: number; video: HTMLVideoElement }` | no |
+| `iswc-change` | `{ index: number }` | no |
+
+<!-- /eventos -->
+
 
 | Evento | Descripción |
 | --- | --- |
 | `iswc-video-change` | Evento personalizado del componente (video change). |
 | `iswc-change` | Emitido al confirmar el cambio de valor (escribe como `change` nativo). |
-
-| Evento | detail | bubbles | composed | cancelable |
-| --- | --- | --- | --- | --- |
-| `iswc-video-change` | sí | sí | sí | no |
-| `iswc-change` | sí | sí | sí | no |
 
 
 <details>

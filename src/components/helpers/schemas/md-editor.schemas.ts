@@ -70,3 +70,5 @@ const EditorHistorySchema = z.object({
 });
 export type EditorHistory = z.infer<typeof EditorHistorySchema>;
 
+/** Eventos del componente (HOW-6): `declare static events` en la clase; los documenta scripts/sondas/eventos.ts. */
+export type MdEditorEventos = { 'iswc-open': Record<string, never>; 'iswc-close': Record<string, never>; 'iswc-load': { document: unknown }; 'iswc-error': { action: 'load' | 'persist' | 'delete'; error: string }; 'iswc-persist': { value: string; document: unknown }; 'iswc-delete': { document: unknown }; 'iswc-download': { filename: string; bytes: number }; 'iswc-change': undefined };

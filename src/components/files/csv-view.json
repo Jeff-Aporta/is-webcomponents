@@ -5,6 +5,18 @@
   "title": "<iswc-csv-view>",
   "titleHtml": false,
   "storageKey": "docs-iswc-csv-view",
+  "events": [
+    {
+      "name": "iswc-load",
+      "detail": "{ rows: number }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-error",
+      "detail": "{ reason: string }",
+      "cancelable": false
+    }
+  ],
   "sections": [
     {
       "id": "intro",

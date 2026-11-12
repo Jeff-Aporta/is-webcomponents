@@ -5,6 +5,23 @@
   "title": "<iswc-txt-edit>",
   "titleHtml": false,
   "storageKey": "docs-iswc-txt-edit",
+  "events": [
+    {
+      "name": "iswc-change",
+      "detail": "{ value: string }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-load",
+      "detail": "{ bytes: number }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-error",
+      "detail": "{ reason: string }",
+      "cancelable": false
+    }
+  ],
   "sections": [
     {
       "id": "intro",

@@ -4,6 +4,7 @@ import { escapeHtml } from '@jeff-aporta/iswc-base/core/dom.js';
 import { registerDiagramKind } from './utils/diagram-model.js';
 import { svgEl } from '@jeff-aporta/iswc-base/core/svg-chart-engine.js';
 import css from 'iswc:css';
+import type { OrgChartEventos } from './schemas/org-chart.schemas.js';
 
 /**
  * <iswc-org-chart> — Organigrama. Layout jerárquico top-down, a partir de un árbol.
@@ -86,6 +87,7 @@ import css from 'iswc:css';
 
   class IswcOrgChart extends IswcElement {
     static override tag = 'iswc-org-chart';
+    declare static events: OrgChartEventos;
     static override css = css;
     static override observed = OBSERVED;
     #mounted = false;

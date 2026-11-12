@@ -6,6 +6,28 @@
   "titleHtml": false,
   "description": "Contenedor desplazable con flechas y sombras que indican que hay más contenido a los lados.",
   "storageKey": "docs-iswc-scroller",
+  "events": [
+    {
+      "name": "iswc-scroll-start",
+      "detail": "undefined",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-scroll-end",
+      "detail": "undefined",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-scroll-overflow",
+      "detail": "{ overflowing: boolean }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-scroll-position",
+      "detail": "{ scrollLeft: number; scrollTop: number }",
+      "cancelable": false
+    }
+  ],
   "sections": [
     {
       "id": "intro",

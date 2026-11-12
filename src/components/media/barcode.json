@@ -47,6 +47,13 @@
     "    .bc-msg { font-size: 0.75rem; color: var(--iswc-accent); }"
   ],
   "storageKey": "docs-iswc-barcode",
+  "events": [
+    {
+      "name": "iswc-render",
+      "detail": "{ svg: SVGElement }",
+      "cancelable": false
+    }
+  ],
   "sections": [
     {
       "id": "intro",

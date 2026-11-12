@@ -9,6 +9,28 @@
   "loads": [
     "iswc-split-panel"
   ],
+  "events": [
+    {
+      "name": "iswc-doc-layout-navigate",
+      "detail": "{ id: string }",
+      "cancelable": true
+    },
+    {
+      "name": "iswc-doc-layout-active",
+      "detail": "{ id: string }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-doc-layout-rail",
+      "detail": "{ rail: unknown }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-doc-layout-panels",
+      "detail": "{ start: number; end: number }",
+      "cancelable": false
+    }
+  ],
   "sections": [
     {
       "id": "intro",

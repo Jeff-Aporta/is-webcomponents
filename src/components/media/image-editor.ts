@@ -2,6 +2,7 @@
 import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import type { CropRect, DragHandle, DragState } from "./schemas/image-editor.schemas.js";
 import css from 'iswc:css';
+import type { ImageEditorEventos } from './schemas/image-editor.schemas.js';
 
 /**
  * <iswc-image-editor> — Editor de imagen con crop, zoom y rotación.
@@ -33,6 +34,7 @@ import css from 'iswc:css';
 
   class IswcImageEditor extends IswcElement {
     static override tag = 'iswc-image-editor';
+    declare static events: ImageEditorEventos;
     static override css = css;
     static override observed = OBSERVED;
     #mounted = false;

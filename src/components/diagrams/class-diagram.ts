@@ -16,6 +16,7 @@ import type { ClassLayout, ClassLayoutEdge, ClassLayoutNode, ClassLayoutSection 
 import { hostStyleName, styleThemeFor } from './utils/diagram-styles.js';
 import type { ErThemeJson } from './schemas/theme.schemas.js';
 import css from 'iswc:css';
+import type { ClassDiagramEventos } from './schemas/class-diagram.schemas.js';
 
 /**
  * <iswc-class-diagram> — diagrama de clases UML en SVG, sin Mermaid.
@@ -90,6 +91,7 @@ function pintarMiembros(
 
 class IswcClassDiagram extends DiagramElementBase {
   static override tag = 'iswc-class-diagram';
+  declare static events: ClassDiagramEventos;
   static override css = css;
   #theme: DiagramTheme | null = null;
   /** Tema `class` del estilo cargado (paletas y rellenos semánticos). */

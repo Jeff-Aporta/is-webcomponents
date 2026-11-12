@@ -13,3 +13,5 @@ const LoaderLikeSchema = z.object({
 });
 export type LoaderLike = z.infer<typeof LoaderLikeSchema>;
 
+/** Eventos del componente (HOW-6): `declare static events` en la clase; los documenta scripts/sondas/eventos.ts. */
+export type DocDemoEventos = { 'iswc-doc-demo-ready': undefined; 'iswc-gallery-shell-ready': undefined };

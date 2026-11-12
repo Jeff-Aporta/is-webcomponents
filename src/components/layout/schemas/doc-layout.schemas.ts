@@ -31,3 +31,6 @@ export interface SplitPanelDocLayout extends HTMLElement {
   positionInPixels: number;
   storageKey: string | null;
 }
+
+/** Eventos del componente (HOW-6): `declare static events` en la clase; los documenta scripts/sondas/eventos.ts. */
+export type DocLayoutEventos = { 'iswc-doc-layout-navigate': { id: string }; 'iswc-doc-layout-active': { id: string }; 'iswc-doc-layout-rail': { rail: unknown }; 'iswc-doc-layout-panels': { start: number; end: number } };

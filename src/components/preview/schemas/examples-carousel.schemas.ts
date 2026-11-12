@@ -19,3 +19,5 @@ const ExampleSpecSchema = z.object({
 });
 export type ExampleSpec = z.infer<typeof ExampleSpecSchema>;
 
+/** Eventos del componente (HOW-6): `declare static events` en la clase; los documenta scripts/sondas/eventos.ts. */
+export type ExamplesCarouselEventos = { 'iswc-examples-category': { category: string }; 'iswc-examples-pick': { example: unknown; index: number; applied: boolean } };

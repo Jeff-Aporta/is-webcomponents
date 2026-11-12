@@ -58,6 +58,14 @@ No tiene slots.
 
 ### Eventos
 
+<!-- eventos: generado por scripts/sondas/eventos.ts desde declare static events -->
+
+| Evento | detail | cancelable |
+| --- | --- | --- |
+| `iswc-pager-navigate` | `PagerNavigateDetail` | sí |
+
+<!-- /eventos -->
+
 | Evento | Detalle | Cuándo |
 | --- | --- | --- |
 | `iswc-pager-navigate` | `{ direction: 'prev' \| 'next', href: string }` | Al activar un lado (clic, Enter o Espacio). Cancelable: con `href`, `preventDefault()` cancela la navegación del enlace. |

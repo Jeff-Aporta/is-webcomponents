@@ -87,16 +87,20 @@ import './floating.js';
 
 ### Eventos
 
+<!-- eventos: generado por scripts/sondas/eventos.ts desde declare static events -->
+
+| Evento | detail | cancelable |
+| --- | --- | --- |
+| `iswc-reposition` | `{ placement: string; x: number; y: number }` | no |
+| `iswc-hover-bridge` | `{ hovering: boolean }` | no |
+
+<!-- /eventos -->
+
 
 | Evento | Descripción |
 | --- | --- |
 | `iswc-reposition` | Evento personalizado del componente (reposition). |
 | `iswc-hover-bridge` | Evento personalizado del componente (hover bridge). |
-
-| Evento | detail | bubbles | composed | cancelable |
-| --- | --- | --- | --- | --- |
-| `iswc-reposition` | `{ placement, x, y }` | sí | sí | no |
-| `iswc-hover-bridge` | `{ hovering }` | sí | sí | no |
 
 
 <details>

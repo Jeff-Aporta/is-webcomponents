@@ -4,6 +4,7 @@ import { setStringAttr } from '@jeff-aporta/iswc-base/core/attrs.js';
 import type { FigureFit, FigureOpenDetail, FigureVariant } from './schemas/figure.schemas.js';
 import './theme-img.js';
 import css from 'iswc:css';
+import type { FigureEventos } from './schemas/figure.schemas.js';
 
 /**
  * <iswc-figure> — figura de contenido: imagen (dual tema opcional) + pie + enlace
@@ -50,6 +51,7 @@ const asFit = (v: string | null): FigureFit => (v === 'cover' ? 'cover' : 'conta
 
 class IswcFigure extends IswcElement {
   static override tag = 'iswc-figure';
+  declare static events: FigureEventos;
   static override css = css;
   static override observed = [...OBSERVED];
 

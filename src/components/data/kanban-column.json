@@ -9,6 +9,13 @@
   "titleHtml": false,
   "description": "Columna de un tablero kanban: título, contador y la lista de tarjetas que contiene.",
   "storageKey": "docs-iswc-kanban-column",
+  "events": [
+    {
+      "name": "iswc-kanban-move",
+      "detail": "{ card: HTMLElement; from: number; to: HTMLElement }",
+      "cancelable": false
+    }
+  ],
   "sections": [
     {
       "id": "intro",

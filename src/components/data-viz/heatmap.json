@@ -15,6 +15,18 @@
   ],
   "storageKey": "docs-iswc-heatmap",
   "hasBehavior": true,
+  "events": [
+    {
+      "name": "iswc-render",
+      "detail": "{ svg: SVGElement }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-cell-hover",
+      "detail": "{ x: string; y: string; value: number }",
+      "cancelable": false
+    }
+  ],
   "sections": [
     {
       "id": "intro",

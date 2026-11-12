@@ -3,6 +3,7 @@ import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-elem
 import { IswcReactive } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
 import { registrarTerminos } from '@jeff-aporta/iswc-base/core/localize.js';
 import css from 'iswc:css';
+import type { CarouselEventos } from './schemas/carousel.schemas.js';
 
 /**
  * <iswc-carousel> + <iswc-carousel-item> — Web Components (vanilla, zero dependencies).
@@ -75,6 +76,7 @@ import css from 'iswc:css';
 
   class IswcCarousel extends IswcReactive {
     static override tag = 'iswc-carousel';
+    declare static events: CarouselEventos;
     static override css = css;
 
     static override observed = [...TG_OBSERVED];

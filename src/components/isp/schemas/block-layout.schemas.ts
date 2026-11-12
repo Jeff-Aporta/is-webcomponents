@@ -16,3 +16,5 @@ export type BreakpointFlags = z.infer<typeof BreakpointFlagsSchema>;
 const LerpwFnSchema = z.function({ input: [z.string(), z.string()], output: z.number() });
 export type LerpwFn = z.infer<typeof LerpwFnSchema>;
 
+/** Eventos del componente (HOW-6): `declare static events` en la clase; los documenta scripts/sondas/eventos.ts. */
+export type BlockLayoutEventos = { 'iswc-breakpoint': { width: number; height: number; sizew: string; boolszw: boolean; lerpw: number } };

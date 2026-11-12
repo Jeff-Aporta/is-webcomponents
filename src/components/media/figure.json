@@ -9,6 +9,13 @@
   "loads": [
     "iswc-theme-img"
   ],
+  "events": [
+    {
+      "name": "iswc-figure-open",
+      "detail": "FigureOpenDetail",
+      "cancelable": true
+    }
+  ],
   "sections": [
     {
       "id": "intro",

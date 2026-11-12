@@ -48,3 +48,5 @@ const _CatalogElSchema = z.object({
 });
 export type _CatalogEl = z.infer<typeof _CatalogElSchema>;
 
+/** Eventos del componente (HOW-6): `declare static events` en la clase; los documenta scripts/sondas/eventos.ts. */
+export type BtnRefEventos = { 'iswc-selected-record': { record: unknown; records: unknown[]; value: string; label: string }; 'iswc-change': { value: string }; 'iswc-input': { value: string }; 'iswc-typing-end': { value: string } };

@@ -1,6 +1,7 @@
 // @contexto INDICE.md · src/components/helpers/offscreen-canvas.md
 import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import css from 'iswc:css';
+import type { OffscreenCanvasEventos } from './schemas/offscreen-canvas.schemas.js';
 
 /**
  * <iswc-offscreen-canvas> — transferControlToOffscreen; worker-src opcional.
@@ -16,6 +17,7 @@ import css from 'iswc:css';
 
   class IswcOffscreenCanvas extends IswcElement {
     static override tag = 'iswc-offscreen-canvas';
+    declare static events: OffscreenCanvasEventos;
     static override css = css;
     static override observed = ['width', 'height', 'worker-src'];
 

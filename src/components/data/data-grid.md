@@ -152,6 +152,40 @@ import './data-grid.js';
 
 ### Eventos
 
+<!-- eventos: generado por scripts/sondas/eventos.ts desde declare static events -->
+
+| Evento | detail | cancelable |
+| --- | --- | --- |
+| `iswc-sort-change` | `{ sortModel: unknown; field?: string; sort?: string }` | no |
+| `iswc-filter-change` | `{ filterModel: unknown }` | no |
+| `iswc-quick-filter` | `{ value: string }` | no |
+| `iswc-column-hide` | `{ columnVisibilityModel: unknown; field?: string; visible?: boolean }` | no |
+| `iswc-column-resize` | `{ field: string; width: number }` | no |
+| `iswc-column-pin` | `{ field: string; side: string \| null; pinnedColumns: string[] }` | no |
+| `iswc-density` | `{ density: string }` | no |
+| `iswc-group-model` | `{ rowGroupingModel: unknown }` | no |
+| `iswc-aggregation` | `{ aggregationModel: unknown }` | no |
+| `iswc-export` | `{ format: string; rows: number }` | no |
+| `iswc-select` | `unknown` | no |
+| `iswc-cell-select` | `unknown` | no |
+| `iswc-edit-start` | `{ id: string; field: string; row: number }` | no |
+| `iswc-edit-stop` | `{ id: string; field: string; saved: boolean; error?: unknown }` | no |
+| `iswc-row-update` | `{ id: string; row: number; before: unknown }` | no |
+| `iswc-copy` | `{ text?: string; rows: number }` | no |
+| `iswc-paste` | `{ rows: number }` | no |
+| `iswc-column-reorder` | `{ field: string; targetField: string; columnOrder: string[] }` | no |
+| `iswc-cell-click` | `{ id: string; field: string; row: number }` | no |
+| `iswc-row-click` | `{ id: string; row: number }` | no |
+| `iswc-row-double-click` | `{ id: string; row: number }` | no |
+| `iswc-cell-double-click` | `{ id: string; field: string; row: number }` | no |
+| `iswc-row-reorder` | `{ id: string; from: number; to: number }` | no |
+| `iswc-group-toggle` | `{ id: string; expanded: boolean }` | no |
+| `iswc-detail-toggle` | `{ id: string; open: boolean }` | no |
+| `iswc-rows-scroll-end` | `{ rows: number }` | no |
+| `iswc-page-change` | `unknown` | no |
+
+<!-- /eventos -->
+
 
 | Evento | DescripciÃ³n |
 | --- | --- |
@@ -182,36 +216,6 @@ import './data-grid.js';
 | `iswc-detail-toggle` | Evento personalizado del componente (detail toggle). |
 | `iswc-rows-scroll-end` | Evento personalizado del componente (rows scroll end). |
 | `iswc-page-change` | Emitido al cambiar de pÃ¡gina. |
-
-| Evento | detail | bubbles | composed | cancelable |
-| --- | --- | --- | --- | --- |
-| `iswc-sort-change` | sÃ­ | sÃ­ | sÃ­ | no |
-| `iswc-filter-change` | sÃ­ | sÃ­ | sÃ­ | no |
-| `iswc-quick-filter` | sÃ­ | sÃ­ | sÃ­ | no |
-| `iswc-column-hide` | sÃ­ | sÃ­ | sÃ­ | no |
-| `iswc-column-resize` | sÃ­ | sÃ­ | sÃ­ | no |
-| `iswc-column-pin` | sÃ­ | sÃ­ | sÃ­ | no |
-| `iswc-density` | sÃ­ | sÃ­ | sÃ­ | no |
-| `iswc-group-model` | sÃ­ | sÃ­ | sÃ­ | no |
-| `iswc-aggregation` | sÃ­ | sÃ­ | sÃ­ | no |
-| `iswc-export` | sÃ­ | sÃ­ | sÃ­ | no |
-| `iswc-select` | sÃ­ | sÃ­ | sÃ­ | no |
-| `iswc-cell-select` | sÃ­ | sÃ­ | sÃ­ | no |
-| `iswc-edit-start` | sÃ­ | sÃ­ | sÃ­ | no |
-| `iswc-edit-stop` | sÃ­ | sÃ­ | sÃ­ | no |
-| `iswc-row-update` | sÃ­ | sÃ­ | sÃ­ | no |
-| `iswc-copy` | sÃ­ | sÃ­ | sÃ­ | no |
-| `iswc-paste` | sÃ­ | sÃ­ | sÃ­ | no |
-| `iswc-column-reorder` | sÃ­ | sÃ­ | sÃ­ | no |
-| `iswc-cell-click` | sÃ­ | sÃ­ | sÃ­ | no |
-| `iswc-row-click` | sÃ­ | sÃ­ | sÃ­ | no |
-| `iswc-row-double-click` | sÃ­ | sÃ­ | sÃ­ | no |
-| `iswc-cell-double-click` | sÃ­ | sÃ­ | sÃ­ | no |
-| `iswc-row-reorder` | sÃ­ | sÃ­ | sÃ­ | no |
-| `iswc-group-toggle` | sÃ­ | sÃ­ | sÃ­ | no |
-| `iswc-detail-toggle` | sÃ­ | sÃ­ | sÃ­ | no |
-| `iswc-rows-scroll-end` | sÃ­ | sÃ­ | sÃ­ | no |
-| `iswc-page-change` | sÃ­ | sÃ­ | sÃ­ | no |
 
 
 <details>

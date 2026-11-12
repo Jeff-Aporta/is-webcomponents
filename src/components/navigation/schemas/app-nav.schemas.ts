@@ -22,3 +22,6 @@ const AppNavRowSchema = z.object({
   tabs: z.array(AppNavTabSchema),
 });
 export type AppNavRow = z.infer<typeof AppNavRowSchema>;
+
+/** Eventos del componente (HOW-6): `declare static events` en la clase; los documenta scripts/sondas/eventos.ts. */
+export type AppNavEventos = { 'iswc-nav-select': { row: string; id: string; href: string | null } };

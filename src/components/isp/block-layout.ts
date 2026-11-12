@@ -13,6 +13,7 @@ import {
 } from '@jeff-aporta/iswc-base/core/prefs.js';
 import type { Breakpoint, BreakpointFlags, LerpwFn } from "./schemas/block-layout.schemas.js";
 import css from 'iswc:css';
+import type { BlockLayoutEventos } from './schemas/block-layout.schemas.js';
 
 /**
  * <iswc-block-layout> — port de ISP `layout/BlockLayout.svelte`.
@@ -175,6 +176,7 @@ export class BreakpointHost extends IswcElement {
 
   class IswcBlockLayout extends BreakpointHost {
     static override tag = 'iswc-block-layout';
+    declare static events: BlockLayoutEventos;
     static override css = css;
     static override shadowInit: ShadowRootInit | null = { mode: 'open' };
     static override template = TEMPLATE;

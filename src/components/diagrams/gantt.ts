@@ -17,6 +17,7 @@ import { svgEl } from '@jeff-aporta/iswc-base/core/svg-chart-engine.js';
 import { svgArrowHead } from './utils/diagram-edges.js';
 import type { GanttRow, GanttArrow, GanttTick, TurtleState, RowNodeEntry, ArrowNodeEntry } from "./schemas/gantt.schemas.js";
 import css from 'iswc:css';
+import type { GanttEventos } from './schemas/gantt.schemas.js';
 
 /**
  * <iswc-gantt> — diagrama de Gantt en SVG, sin Mermaid.
@@ -44,6 +45,7 @@ import css from 'iswc:css';
 
 class IswcGantt extends DiagramElementBase {
   static override tag = 'iswc-gantt';
+  declare static events: GanttEventos;
   static override css = css;
   #turtle: PathTurtle | null = null;
   #hiddenGroups: Set<string> = new Set<string>();

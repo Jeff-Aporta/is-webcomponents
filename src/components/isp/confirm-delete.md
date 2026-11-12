@@ -86,6 +86,15 @@ import './confirm-delete.js';
 
 ### Eventos
 
+<!-- eventos: generado por scripts/sondas/eventos.ts desde declare static events -->
+
+| Evento | detail | cancelable |
+| --- | --- | --- |
+| `iswc-confirm-delete` | `{ value: string }` | no |
+| `iswc-cancel-delete` | `Record<string, never>` | no |
+
+<!-- /eventos -->
+
 
 | Evento | Descripción |
 | --- | --- |
@@ -95,15 +104,6 @@ import './confirm-delete.js';
 | `iswc-after-hide` | Emitido tras finalizar la animación de cierre. |
 | `iswc-confirm-delete` | Evento personalizado del componente (confirm delete). |
 | `iswc-cancel-delete` | Evento personalizado del componente (cancel delete). |
-
-| Evento | detail | bubbles | composed | cancelable |
-| --- | --- | --- | --- | --- |
-| `iswc-show` | `{}` | sí | sí | no |
-| `iswc-after-show` | `{}` | sí | sí | no |
-| `iswc-hide` | `{ source }` | sí | sí | **sí** |
-| `iswc-after-hide` | `{}` | sí | sí | no |
-| `iswc-confirm-delete` | `{ value }` | sí | sí | no |
-| `iswc-cancel-delete` | `{}` | sí | sí | no |
 
 El ciclo `iswc-show` / `iswc-hide` / … lo emite el `<iswc-dialog>` interno
 (`_shared/modal-base.js`) y es el que hay que usar para controlar el cierre:

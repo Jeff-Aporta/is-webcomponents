@@ -5,6 +5,18 @@
   "title": "<iswc-docx-view>",
   "titleHtml": false,
   "storageKey": "docs-iswc-docx-view",
+  "events": [
+    {
+      "name": "iswc-load",
+      "detail": "undefined",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-error",
+      "detail": "{ reason: string }",
+      "cancelable": false
+    }
+  ],
   "sections": [
     {
       "id": "intro",

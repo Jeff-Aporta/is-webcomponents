@@ -32,6 +32,18 @@
     "    }"
   ],
   "storageKey": "docs-iswc-scrollspy",
+  "events": [
+    {
+      "name": "iswc-deactivated",
+      "detail": "{ id: string; link: HTMLElement | null }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-activated",
+      "detail": "{ id: string; link: HTMLElement }",
+      "cancelable": false
+    }
+  ],
   "sections": [
     {
       "id": "intro",

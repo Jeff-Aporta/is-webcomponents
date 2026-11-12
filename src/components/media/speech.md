@@ -62,18 +62,22 @@ import './speech.js';
 
 ### Eventos
 
+<!-- eventos: generado por scripts/sondas/eventos.ts desde declare static events -->
+
+| Evento | detail | cancelable |
+| --- | --- | --- |
+| `iswc-error` | `{ message: string }` | no |
+| `iswc-result` | `{ transcript: string; isFinal: boolean }` | no |
+| `iswc-speak-end` | `undefined` | no |
+
+<!-- /eventos -->
+
 
 | Evento | Descripción |
 | --- | --- |
 | `iswc-result` | Evento personalizado del componente (result). |
 | `iswc-speak-end` | Evento personalizado del componente (speak end). |
 | `iswc-error` | Emitido cuando se produce un error. |
-
-| Evento | detail | bubbles | composed | cancelable |
-| --- | --- | --- | --- | --- |
-| `iswc-result` | sí `{ transcript, isFinal }` | sí | sí | no |
-| `iswc-speak-end` | no | sí | sí | no |
-| `iswc-error` | sí `{ message }` | sí | sí | no |
 
 
 <details>

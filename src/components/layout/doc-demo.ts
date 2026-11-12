@@ -24,6 +24,7 @@ import '@jeff-aporta/iswc-base/components/feedback/palette-selector.js';
 import '@jeff-aporta/iswc-base/components/code/code.js';
 import type { LoaderLike } from "./schemas/doc-demo.schemas.js";
 import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import type { DocDemoEventos } from './schemas/doc-demo.schemas.js';
 
 /** CSS del shell vía aliases del loader (apps pueden override con `page-styles`). */
 const DEFAULT_PAGE_STYLES = [
@@ -63,6 +64,7 @@ function parseListAttr(raw: string | null, fallback: string[]): string[] {
 
 class IswcDocDemo extends IswcElement {
   static override tag = 'iswc-doc-demo';
+  declare static events: DocDemoEventos;
   static override shadowInit: ShadowRootInit | null = null;
   static override deps = ['iswc-button', 'iswc-icon'];
   #booted = false;

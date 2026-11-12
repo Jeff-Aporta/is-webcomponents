@@ -14,6 +14,7 @@ import { paintForest } from './utils/tree-view-render.js';
 import type { TNode, TRecord, TreeActionEntry, TreeCustoms } from './schemas/tree-view-types.schemas.js';
 import type { _AdapterLike, _DrawerLike, _ModalDeleteLike, _DialogLike } from "./schemas/tree-view.schemas.js";
 import css from 'iswc:css';
+import type { TreeViewEventos } from './schemas/tree-view.schemas.js';
 
 /** Subset del adapter que `IswcTreeView` consume (no necesita el tipo completo). */
 
@@ -71,6 +72,7 @@ const OBSERVED = ['readonly', 'draggable', 'disabled', 'label-field', 'helper-fi
 
 class IswcTreeView extends IswcElement {
   static override tag = 'iswc-tree-view';
+  declare static events: TreeViewEventos;
   static override css = css;
   static override deps = ['iswc-button', 'iswc-icon', 'iswc-divider'];
   static override observed = OBSERVED;

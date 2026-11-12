@@ -19,3 +19,5 @@ const HeatmapCfgSchema = z.object({
 });
 export type HeatmapCfg = z.infer<typeof HeatmapCfgSchema>;
 
+/** Eventos del componente (HOW-6): `declare static events` en la clase; los documenta scripts/sondas/eventos.ts. */
+export type HeatmapEventos = { 'iswc-render': { svg: SVGElement }; 'iswc-cell-hover': { x: string; y: string; value: number } };

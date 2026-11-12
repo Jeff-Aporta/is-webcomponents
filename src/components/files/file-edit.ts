@@ -4,6 +4,7 @@ import { setOptionalAttr, setStringAttr } from '@jeff-aporta/iswc-base/core/attr
 import { pintarEstado, sincronizarAlto } from './utils/file-estado.js';
 import { resolveDispatch } from './utils/mime-map.js';
 import css from 'iswc:css';
+import type { FileEditEventos } from './schemas/file-edit.schemas.js';
 
 (() => {
   const MODE = 'edit' as const;
@@ -21,6 +22,7 @@ import css from 'iswc:css';
 
   class IswcFileEdit extends IswcElement {
     static override tag = 'iswc-file-edit';
+    declare static events: FileEditEventos;
     static override css = css;
     static override observed = OBSERVED;
     #stage!: HTMLElement;

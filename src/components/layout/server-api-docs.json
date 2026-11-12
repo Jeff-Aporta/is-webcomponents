@@ -22,6 +22,18 @@
     "iswc-callout",
     "iswc-sequence-diagram"
   ],
+  "events": [
+    {
+      "name": "iswc-server-api-docs-page",
+      "detail": "ServerApiDocsPageDetail",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-server-api-docs-response",
+      "detail": "ServerApiDocsResponseDetail",
+      "cancelable": false
+    }
+  ],
   "sections": [
     {
       "id": "intro",

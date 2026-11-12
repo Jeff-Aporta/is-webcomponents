@@ -192,6 +192,18 @@ Orden, visibilidad (`hide`), anchos, pin, `sortModel`, `filterModel`, quick filt
 
 ### Eventos
 
+<!-- eventos: generado por scripts/sondas/eventos.ts desde declare static events -->
+
+| Evento | detail | cancelable |
+| --- | --- | --- |
+| `iswc-quick-filter` | `{ value: string }` | no |
+| `iswc-state-saved` | `StateSavedDetail` | no |
+| `iswc-page-change` | `PageChangeDetail` | no |
+| `iswc-state-loaded` | `unknown` | no |
+| `iswc-state-reset` | `{ key: string }` | no |
+
+<!-- /eventos -->
+
 
 | Evento | Descripción |
 | --- | --- |
@@ -204,18 +216,6 @@ Orden, visibilidad (`hide`), anchos, pin, `sortModel`, `filterModel`, quick filt
 | `iswc-state-saved` | Evento personalizado del componente (state saved). |
 | `iswc-state-loaded` | Evento personalizado del componente (state loaded). |
 | `iswc-state-reset` | Evento personalizado del componente (state reset). |
-
-| Evento | detail | bubbles | composed | cancelable |
-| --- | --- | --- | --- | --- |
-| `iswc-sort-change` | modelo de orden | sí | sí | no |
-| `iswc-filter-change` | modelo de filtros | sí | sí | no |
-| `iswc-column-hide` | `{ colId, hidden }` | sí | sí | no |
-| `iswc-column-reorder` | `{ colId, from, to }` | sí | sí | no |
-| `iswc-column-resize` | `{ colId, width }` | sí | sí | no |
-| `iswc-column-pin` | `{ colId, pinned }` | sí | sí | no |
-| `iswc-state-saved` | snapshot guardado | sí | sí | no |
-| `iswc-state-loaded` | snapshot aplicado | sí | sí | no |
-| `iswc-state-reset` | sin detail | sí | sí | no |
 
 Nombres completos emitidos por el módulo:
 

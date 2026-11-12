@@ -5,6 +5,13 @@
   "title": "&lt;iswc-playground&gt;",
   "titleHtml": false,
   "storageKey": "docs-iswc-playground",
+  "events": [
+    {
+      "name": "iswc-controls-change",
+      "detail": "{ def: unknown; valor: unknown }",
+      "cancelable": false
+    }
+  ],
   "sections": [
     {
       "id": "intro",

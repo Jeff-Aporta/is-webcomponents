@@ -8,6 +8,7 @@ import { PaginationTextosSchema } from './schemas/pagination.schemas.js';
 import type { PaginationChangeDetail, PaginationSizeDetail, PaginationTextos } from './schemas/pagination.schemas.js';
 import '@jeff-aporta/iswc-base/components/forms/select.js';
 import css from 'iswc:css';
+import type { PaginationEventos } from './schemas/pagination.schemas.js';
 
 /**
  * <iswc-pagination> — paginación numérica: pista de números desplazable (flechas, Shift+rueda, arrastre táctil) y selector
@@ -50,6 +51,7 @@ const rellenar = (plantilla: string, n: number, total = 0): string => plantilla.
 
 class IswcPagination extends IswcReactive {
   static override tag = 'iswc-pagination';
+  declare static events: PaginationEventos;
   static override css = css;
   static override deps = ['iswc-button', 'iswc-icon'];
   static override observed = [...OBSERVED];

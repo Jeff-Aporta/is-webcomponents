@@ -92,6 +92,17 @@ import './tree-view.js';
 
 ### Eventos
 
+<!-- eventos: generado por scripts/sondas/eventos.ts desde declare static events -->
+
+| Evento | detail | cancelable |
+| --- | --- | --- |
+| `iswc-error` | `{ message: string }` | no |
+| `iswc-select` | `{ node: unknown; flatPath: string }` | no |
+| `iswc-frm-open` | `{ record: unknown; itdForm: string; ancestors: unknown[]; isNew: boolean }` | no |
+| `iswc-frm-close` | `Record<string, never>` | no |
+
+<!-- /eventos -->
+
 
 | Evento | Descripción |
 | --- | --- |
@@ -99,13 +110,6 @@ import './tree-view.js';
 | `iswc-frm-open` | Evento personalizado del componente (frm open). |
 | `iswc-frm-close` | Evento personalizado del componente (frm close). |
 | `iswc-error` | Emitido cuando se produce un error. |
-
-| Evento | detail | bubbles | composed | cancelable |
-| --- | --- | --- | --- | --- |
-| `iswc-select` | `{ node, flatPath }` | sí | sí | no |
-| `iswc-frm-open` | `{ record, itdForm, ancestors, isNew }` | sí | sí | no |
-| `iswc-frm-close` | `{}` | sí | sí | no |
-| `iswc-error` | `{ message }` | sí | sí | no |
 
 
 <details>

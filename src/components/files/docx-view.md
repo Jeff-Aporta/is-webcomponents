@@ -54,6 +54,15 @@ await iswcLoader.load('iswc-docx-view');
 
 ### Eventos
 
+<!-- eventos: generado por scripts/sondas/eventos.ts desde declare static events -->
+
+| Evento | detail | cancelable |
+| --- | --- | --- |
+| `iswc-load` | `undefined` | no |
+| `iswc-error` | `{ reason: string }` | no |
+
+<!-- /eventos -->
+
 | Evento | Detalle | Cuándo |
 | --- | --- | --- |
 | `iswc-load` | `{ bytes }` u otro detalle del lector | El contenido quedó pintado. |

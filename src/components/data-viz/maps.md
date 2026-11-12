@@ -106,16 +106,20 @@ implementado.
 
 ### Eventos
 
+<!-- eventos: generado por scripts/sondas/eventos.ts desde declare static events -->
+
+| Evento | detail | cancelable |
+| --- | --- | --- |
+| `iswc-marker-click` | `{ marker: unknown }` | no |
+| `iswc-viewport` | `{ minLon: number; minLat: number; maxLon: number; maxLat: number }` | no |
+
+<!-- /eventos -->
+
 
 | Evento | Descripción |
 | --- | --- |
 | `iswc-viewport` | Evento personalizado del componente (viewport). |
 | `iswc-marker-click` | Evento personalizado del componente (marker click). |
-
-| Evento | detail | bubbles | composed | cancelable |
-| --- | --- | --- | --- | --- |
-| `iswc-viewport` | `{ minLon, minLat, maxLon, maxLat }` — copia del viewport actual | sí | sí | no |
-| `iswc-marker-click` | `{ marker }` — el elemento `<iswc-map-marker>` del light DOM | sí | sí | no |
 
 `iswc-viewport` se emite al final de cada render en modo `svg`, es decir en
 cada paso de arrastre y en cada tick de rueda; en modo `tile` no se emite

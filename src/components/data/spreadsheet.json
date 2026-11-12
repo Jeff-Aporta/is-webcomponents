@@ -14,6 +14,18 @@
     ".kbd-hint kbd { font-family: ui-monospace, monospace; font-size: .85em; padding: .05em .35em; border-radius: .3em; border: thin solid var(--iswc-border); background: var(--iswc-bg-elev); }"
   ],
   "storageKey": "docs-iswc-spreadsheet",
+  "events": [
+    {
+      "name": "iswc-change",
+      "detail": "SpreadsheetChangeDetail",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-select",
+      "detail": "SpreadsheetSelectDetail",
+      "cancelable": false
+    }
+  ],
   "sections": [
     {
       "id": "intro",

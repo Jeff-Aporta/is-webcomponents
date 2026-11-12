@@ -15,6 +15,7 @@ import {
 } from '@jeff-aporta/iswc-base/components/isp/utils/isp-json.js';
 import { getValues, setValues } from './utils/isp-form.js';
 import css from 'iswc:css';
+import type { FormEventos } from './schemas/form.schemas.js';
 
 /**
  * <iswc-form> — Ficha con header / content / footer (Aceptar · Cancelar).
@@ -53,6 +54,7 @@ import css from 'iswc:css';
 
   class IswcForm extends IswcElement {
     static override tag = 'iswc-form';
+    declare static events: FormEventos;
     static override css = css;
     static override deps = ['iswc-button'];
     static override observed = OBSERVED;

@@ -6,6 +6,18 @@
   "titleHtml": false,
   "description": "Confirmación de borrado que exige escribir un texto para habilitar la acción destructiva.",
   "storageKey": "docs-iswc-confirm-delete",
+  "events": [
+    {
+      "name": "iswc-confirm-delete",
+      "detail": "{ value: string }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-cancel-delete",
+      "detail": "Record<string, never>",
+      "cancelable": false
+    }
+  ],
   "sections": [
     {
       "id": "intro",

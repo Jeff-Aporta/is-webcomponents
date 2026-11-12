@@ -85,6 +85,17 @@ No expone: el campo, el botón filtro y el modal se construyen internamente.
 
 ### Eventos
 
+<!-- eventos: generado por scripts/sondas/eventos.ts desde declare static events -->
+
+| Evento | detail | cancelable |
+| --- | --- | --- |
+| `iswc-selected-record` | `{ record: unknown; records: unknown[]; value: string; label: string }` | no |
+| `iswc-change` | `{ value: string }` | no |
+| `iswc-input` | `{ value: string }` | no |
+| `iswc-typing-end` | `{ value: string }` | no |
+
+<!-- /eventos -->
+
 
 | Evento | Descripción |
 | --- | --- |
@@ -92,13 +103,6 @@ No expone: el campo, el botón filtro y el modal se construyen internamente.
 | `iswc-change` | Emitido al confirmar el cambio de valor (escribe como `change` nativo). |
 | `iswc-typing-end` | Emitido tras el debounce de escritura (default 600 ms). |
 | `iswc-selected-record` | Evento personalizado del componente (selected record). |
-
-| Evento | detail | bubbles | composed | cancelable |
-| --- | --- | --- | --- | --- |
-| `iswc-input` | `{ value }` | sí | sí | no |
-| `iswc-change` | `{ value }` | sí | sí | no |
-| `iswc-typing-end` | `{ value }` | sí | sí | no |
-| `iswc-selected-record` | `{ record, value, label }` | sí | sí | no |
 
 
 <details>

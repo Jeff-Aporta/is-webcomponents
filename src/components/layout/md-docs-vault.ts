@@ -23,6 +23,7 @@ import './dialog.js';
 import './callout.js';
 import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import css from 'iswc:css';
+import type { MdDocsVaultEventos } from './schemas/md-docs-vault.schemas.js';
 
 /**
  * <iswc-md-docs-vault> — lector de una documentación modular (norma `documentacion-modular`) como un
@@ -102,6 +103,7 @@ export function resolverRuta(desde: string, rel: string): string {
 
 class IswcMdDocsVault extends IswcElement {
   static override tag = 'iswc-md-docs-vault';
+  declare static events: MdDocsVaultEventos;
   static override css = css;
   static override deps = ['iswc-figure', 'iswc-copy-button', 'iswc-button', 'iswc-icon', 'iswc-spinner'];
   #raiz: ShadowRoot;

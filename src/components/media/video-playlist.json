@@ -7,6 +7,23 @@
   "styles": ".cluster { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; }",
   "storageKey": "docs-iswc-video-playlist",
   "hasBehavior": true,
+  "events": [
+    {
+      "name": "iswc-error",
+      "detail": "{ index: number }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-video-change",
+      "detail": "{ previousIndex: number; currentIndex: number; video: HTMLVideoElement }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-change",
+      "detail": "{ index: number }",
+      "cancelable": false
+    }
+  ],
   "sections": [
     {
       "id": "intro",

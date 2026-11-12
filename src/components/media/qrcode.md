@@ -67,14 +67,18 @@ import './qrcode.js';
 
 ### Eventos
 
+<!-- eventos: generado por scripts/sondas/eventos.ts desde declare static events -->
+
+| Evento | detail | cancelable |
+| --- | --- | --- |
+| `iswc-render` | `{ svg: SVGElement }` | no |
+
+<!-- /eventos -->
+
 
 | Evento | Descripción |
 | --- | --- |
 | `iswc-render` | Emitido al renderizar o redibujar el componente. |
-
-| Evento | detail | bubbles | composed | cancelable |
-| --- | --- | --- | --- | --- |
-| `iswc-render` | `{ svg }` | sí | sí | no |
 
 
 <details>

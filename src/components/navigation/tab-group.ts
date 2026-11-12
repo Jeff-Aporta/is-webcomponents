@@ -6,6 +6,7 @@ import { observarIdioma, resolverLocale, termino } from '@jeff-aporta/iswc-base/
 
 import { readUrlNav, readUrlTabs, writeUrlNav, writeUrlTab } from './utils/url-nav.js';
 import css from 'iswc:css';
+import type { TabGroupEventos, TabEventos } from './schemas/tab-group.schemas.js';
 
 /**
  * <iswc-tab-group>, <iswc-tab>, <iswc-tab-panel> — Web Components (vanilla, zero dependencies).
@@ -94,6 +95,7 @@ import css from 'iswc:css';
 
   class IswcTabGroup extends withStyleAttrs(IswcReactive) {
     static override tag = 'iswc-tab-group';
+    declare static events: TabGroupEventos;
     static override css = css;
 
 
@@ -445,6 +447,7 @@ import css from 'iswc:css';
 
   class IswcTab extends IswcElement {
     static override tag = 'iswc-tab';
+    declare static events: TabEventos;
     static override css = css;
     static override observed = TAB_OBSERVED;
 

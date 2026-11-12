@@ -12,6 +12,7 @@ import { svgEl } from '@jeff-aporta/iswc-base/core/svg-chart-engine.js';
 import type { MindmapLayout } from "./schemas/mindmap-spec.schemas.js";
 import type { NodeEntry, EdgeEntry } from "./schemas/mindmap.schemas.js";
 import css from 'iswc:css';
+import type { MindmapEventos } from './schemas/mindmap.schemas.js';
 
 /**
  * <iswc-mindmap> — mapa mental en SVG, sin Mermaid.
@@ -32,6 +33,7 @@ import css from 'iswc:css';
 
 class IswcMindmap extends DiagramElementBase {
   static override tag = 'iswc-mindmap';
+  declare static events: MindmapEventos;
   static override css = css;
   #nodeNodes = new Map<string, NodeEntry>();
   #edgeNodes = new Map<string, EdgeEntry>();

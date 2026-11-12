@@ -58,6 +58,16 @@ await iswcLoader.load('iswc-file-view');
 
 ### Eventos
 
+<!-- eventos: generado por scripts/sondas/eventos.ts desde declare static events -->
+
+| Evento | detail | cancelable |
+| --- | --- | --- |
+| `iswc-error` | `{ reason: string; kind: string }` | no |
+| `iswc-load` | `unknown` | no |
+| `iswc-dispatch` | `{ tag: string; kind: string; mode: string }` | no |
+
+<!-- /eventos -->
+
 | Evento | Detalle | Cuándo |
 | --- | --- | --- |
 | `iswc-load` | el del visor montado | El contenido quedó pintado. |

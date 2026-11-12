@@ -23,6 +23,7 @@ import {
 } from './utils/isp-utils.js';
 import type { ActionLabel, BAllowed, IconKind, FrmMode, InputElement, ButtonElement, AgGridElement, VerifyModalElement, ConfirmDeleteElement, DialogElement, DrawerElement, GridRowSelectDetail, GridCellClickDetail, PkModalField, PkModalCfg } from "./schemas/catalogo-gen.schemas.js";
 import css from 'iswc:css';
+import type { CatalogoGenEventos } from './schemas/catalogo-gen.schemas.js';
 /**
  * <iswc-catalogo-gen> — port de `src/lib/base/CatalogoGen.svelte` (ISP).
  *
@@ -143,6 +144,7 @@ const OBSERVED = [
 
   class IswcCatalogoGen extends IswcElement {
     static override tag = 'iswc-catalogo-gen';
+    declare static events: CatalogoGenEventos;
     static override css = css;
     static override deps = ['iswc-button', 'iswc-icon'];
     static override observed = [...OBSERVED];

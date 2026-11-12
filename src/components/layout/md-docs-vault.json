@@ -21,6 +21,13 @@
     "iswc-spinner",
     "iswc-callout"
   ],
+  "events": [
+    {
+      "name": "iswc-md-docs-vault-page",
+      "detail": "MdDocsVaultPageDetail",
+      "cancelable": false
+    }
+  ],
   "sections": [
     {
       "id": "intro",

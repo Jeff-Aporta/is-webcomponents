@@ -10,3 +10,5 @@ import { z } from "zod";
 const ObserverTypeSchema = z.union([z.literal('intersection'), z.literal('mutation'), z.literal('resize')]);
 export type ObserverType = z.infer<typeof ObserverTypeSchema>;
 
+/** Eventos del componente (HOW-6): `declare static events` en la clase; los documenta scripts/sondas/eventos.ts. */
+export type ObserverEventos = { 'iswc-intersect': { entry: IntersectionObserverEntry }; 'iswc-mutate': { records: MutationRecord[] }; 'iswc-resize': { entries: ResizeObserverEntry[] } };

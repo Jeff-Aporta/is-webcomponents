@@ -83,6 +83,16 @@ el.addEventListener('click', (e) => {
 </details>
 
 
+### Eventos
+
+<!-- eventos: generado por scripts/sondas/eventos.ts desde declare static events -->
+
+| Evento | detail | cancelable |
+| --- | --- | --- |
+| `iswc-error` | `{ src: string }` | no |
+
+<!-- /eventos -->
+
 ### CSS parts
 
 | Part | Uso |

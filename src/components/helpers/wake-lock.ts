@@ -1,6 +1,7 @@
 // @contexto INDICE.md · src/components/helpers/wake-lock.md
 import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import css from 'iswc:css';
+import type { WakeLockEventos } from './schemas/wake-lock.schemas.js';
 
 /**
  * <iswc-wake-lock> — Screen Wake Lock. Host display:contents.
@@ -14,6 +15,7 @@ import css from 'iswc:css';
 
   class IswcWakeLock extends IswcElement {
     static override tag = 'iswc-wake-lock';
+    declare static events: WakeLockEventos;
     static override css = css;
     static override observed = ['active'];
 

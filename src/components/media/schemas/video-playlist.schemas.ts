@@ -37,3 +37,5 @@ const ApplyActiveOptionsSchema = z.object({
 });
 export type ApplyActiveOptions = z.infer<typeof ApplyActiveOptionsSchema>;
 
+/** Eventos del componente (HOW-6): `declare static events` en la clase; los documenta scripts/sondas/eventos.ts. */
+export type VideoPlaylistEventos = { 'iswc-error': { index: number }; 'iswc-video-change': { previousIndex: number; currentIndex: number; video: HTMLVideoElement }; 'iswc-change': { index: number } };

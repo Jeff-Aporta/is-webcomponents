@@ -87,15 +87,19 @@ No expone. Todo el contenido llega por `value` o `workbook`.
 
 ### Eventos
 
+<!-- eventos: generado por scripts/sondas/eventos.ts desde declare static events -->
+
+| Evento | detail | cancelable |
+| --- | --- | --- |
+| `iswc-change` | `SpreadsheetChangeDetail` | no |
+| `iswc-select` | `SpreadsheetSelectDetail` | no |
+
+<!-- /eventos -->
+
 | Evento | Descripción |
 | --- | --- |
 | `iswc-change` | Emitido al confirmar el cambio de valor (escribe como `change` nativo). |
 | `iswc-select` | Emitido al seleccionar un elemento. |
-
-| Evento | detail | bubbles | composed | cancelable |
-| --- | --- | --- | --- | --- |
-| `iswc-change` | `{ row, col, raw, value, sheet, cells, macro? }`: índices base 0; `raw` es lo escrito, `value` el resultado, `cells` cuántas celdas cambió la operación | sí | sí | no |
-| `iswc-select` | `{ row, col, value, range, sheet }` | sí | sí | no |
 
 Los eventos de los controles internos (cinta, diálogos) no salen del componente: solo verás estos dos.
 Al cancelar con `Esc` ya no se emite `iswc-change`, porque nada cambió.

@@ -96,16 +96,20 @@ lee como dato (y se vigila con `MutationObserver`), no se renderiza.
 
 ### Eventos
 
+<!-- eventos: generado por scripts/sondas/eventos.ts desde declare static events -->
+
+| Evento | detail | cancelable |
+| --- | --- | --- |
+| `iswc-render` | `{ svg: SVGElement }` | no |
+| `iswc-cell-hover` | `{ x: string; y: string; value: number }` | no |
+
+<!-- /eventos -->
+
 
 | Evento | Descripción |
 | --- | --- |
 | `iswc-render` | Emitido al renderizar o redibujar el componente. |
 | `iswc-cell-hover` | Evento personalizado del componente (cell hover). |
-
-| Evento | detail | bubbles | composed | cancelable |
-| --- | --- | --- | --- | --- |
-| `iswc-render` | `{ svg }` — referencia al `<svg>` del shadow root | sí | sí | no |
-| `iswc-cell-hover` | `{ x, y, value }` — `x`/`y` son las etiquetas (string) e `value` es número | sí | sí | no |
 
 `iswc-cell-hover` se dispara en cada `pointermove` sobre una celda, no solo
 al entrar en ella: si el listener es costoso, conviene un throttle.

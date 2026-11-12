@@ -84,18 +84,20 @@ import './tab-group.js';
 
 ### Eventos
 
+<!-- eventos: generado por scripts/sondas/eventos.ts desde declare static events -->
+
+| Evento | detail | cancelable |
+| --- | --- | --- |
+| `iswc-tab-show` | `{ name: string; panel: HTMLElement \| null; tab: HTMLElement \| null }` | no |
+
+<!-- /eventos -->
+
 
 | Evento | Descripción |
 | --- | --- |
 | `iswc-tab-show` | Evento personalizado del componente (tab show). |
 | `iswc-tab-close` | Evento personalizado del componente (tab close). |
 | `iswc-tab-hide` | Evento personalizado del componente (tab hide). |
-
-| Evento | detail | bubbles | composed | cancelable |
-| --- | --- | --- | --- | --- |
-| `iswc-tab-show` | sí | sí | sí | no |
-| `iswc-tab-close` | sí | sí | sí | no |
-| `iswc-tab-hide` | según cabecera | según cabecera | según cabecera | según cabecera |
 
 
 <details>

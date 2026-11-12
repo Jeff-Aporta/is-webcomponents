@@ -7,6 +7,58 @@
   "description": "Puerta de acceso single o multi-cuenta con cambio de contraseña, cierre global y auditoría de sesiones; emite eventos y deja la validación al servidor.",
   "storageKey": "docs-iswc-login",
   "hasBehavior": false,
+  "events": [
+    {
+      "name": "iswc-remember-change",
+      "detail": "{ remember: boolean }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-sessions-refresh",
+      "detail": "Record<string, never>",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-forgot",
+      "detail": "{ username: string }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-logout-all",
+      "detail": "Record<string, never>",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-add-account",
+      "detail": "Record<string, never>",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-login-submit",
+      "detail": "{ username: string; password: string; remember: boolean; provider: string }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-password-change",
+      "detail": "{ current: string; next: string }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-account-select",
+      "detail": "{ account: unknown }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-remove-account",
+      "detail": "{ account: unknown }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-session-revoke",
+      "detail": "{ sessionId: string }",
+      "cancelable": false
+    }
+  ],
   "sections": [
     {
       "id": "intro",

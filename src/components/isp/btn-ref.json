@@ -7,6 +7,28 @@
   "description": "Campo + modal de selección ISP (BtnRef).",
   "storageKey": "docs-iswc-btn-ref",
   "hasBehavior": true,
+  "events": [
+    {
+      "name": "iswc-selected-record",
+      "detail": "{ record: unknown; records: unknown[]; value: string; label: string }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-change",
+      "detail": "{ value: string }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-input",
+      "detail": "{ value: string }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-typing-end",
+      "detail": "{ value: string }",
+      "cancelable": false
+    }
+  ],
   "sections": [
     {
       "id": "intro",

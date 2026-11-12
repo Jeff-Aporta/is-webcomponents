@@ -7,6 +7,38 @@
   "description": "Catálogo CRUD genérico ISP con controller JSON.",
   "storageKey": "docs-iswc-catalogo-gen",
   "hasBehavior": true,
+  "events": [
+    {
+      "name": "iswc-error",
+      "detail": "{ message: string }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-selection-change",
+      "detail": "{ records: unknown[] }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-double-click",
+      "detail": "{ record: unknown }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-frm-close",
+      "detail": "Record<string, never>",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-frm-open",
+      "detail": "{ mode: string; record: unknown }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-action",
+      "detail": "{ action: string; record: unknown }",
+      "cancelable": false
+    }
+  ],
   "sections": [
     {
       "id": "intro",

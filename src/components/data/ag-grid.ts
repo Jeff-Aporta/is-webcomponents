@@ -110,6 +110,7 @@ import type { ColDefAg, Capa, Desinstalar, OpcionesGrid, Zona } from './utils/ag
 import type { ColumnDef, RowData, SortDirName, PinSideName, DensityName, GridState, GridApi, ColumnFilter, SelectionModeName, TextFilterOp } from './schemas/datagrid-types.schemas.js';
 import type { StateSavedDetail, PageChangeDetail } from "./schemas/ag-grid.schemas.js";
 import css from 'iswc:css';
+import type { AgGridEventos } from './schemas/ag-grid.schemas.js';
 
 const TEMPLATE = document.createElement('template');
 TEMPLATE.innerHTML = /* html */ `
@@ -227,6 +228,7 @@ function numeroLocal(n: number): string {
 
 export class IswcAgGrid extends IswcElement {
   static override tag = 'iswc-ag-grid';
+  declare static events: AgGridEventos;
   static override css = css;
   static override deps = ['iswc-icon', 'iswc-button'];
 

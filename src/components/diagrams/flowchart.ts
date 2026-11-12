@@ -34,6 +34,7 @@ import { snapDiagramGrid as snapToGrid } from '@jeff-aporta/iswc-base/core/diagr
 import type { DiagramOverrides } from './schemas/diagram-edit.schemas.js';
 import type { TurtleState, NodeNodeEntry, EdgeNodeEntry, FlowInk } from "./schemas/flowchart.schemas.js";
 import css from 'iswc:css';
+import type { FlowchartEventos } from './schemas/flowchart.schemas.js';
 /**
  * <iswc-flowchart> — diagrama de flujo en SVG, sin Mermaid.
  *
@@ -166,6 +167,7 @@ function parseAnimationTokens(raw: string | null | undefined): string[] {
 
 class IswcFlowchart extends DiagramElementBase {
   static override tag = 'iswc-flowchart';
+  declare static events: FlowchartEventos;
   static override css = css;
   static override observed = [...DiagramElementBase.observed, 'mode', 'persist', 'storage-key', 'animation'];
 

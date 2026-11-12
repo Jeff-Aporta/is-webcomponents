@@ -6,6 +6,23 @@
   "titleHtml": false,
   "description": "Graba cámara, micrófono o pantalla (`getDisplayMedia`) con `MediaRecorder` y entrega un Blob.",
   "storageKey": "docs-iswc-media-recorder",
+  "events": [
+    {
+      "name": "iswc-error",
+      "detail": "{ message: string }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-start",
+      "detail": "{ source: string }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-stop",
+      "detail": "{ blob: Blob; url: string; type: string }",
+      "cancelable": false
+    }
+  ],
   "sections": [
     {
       "id": "intro",

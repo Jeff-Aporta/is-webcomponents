@@ -10,6 +10,7 @@ import { svgEl } from '@jeff-aporta/iswc-base/core/svg-chart-engine.js';
 import type { QuadrantLayout, QuadrantLayoutAxisLabel } from "./schemas/quadrant-spec.schemas.js";
 import type { PointEntry } from "./schemas/quadrant-chart.schemas.js";
 import css from 'iswc:css';
+import type { QuadrantChartEventos } from './schemas/quadrant-chart.schemas.js';
 
 /**
  * <iswc-quadrant-chart> — matriz 2×2 en SVG, sin Mermaid.
@@ -30,6 +31,7 @@ import css from 'iswc:css';
 
 class IswcQuadrantChart extends DiagramElementBase {
   static override tag = 'iswc-quadrant-chart';
+  declare static events: QuadrantChartEventos;
   static override css = css;
   #hiddenGroups = new Set<string>();
   #pointNodes = new Map<string, PointEntry>();

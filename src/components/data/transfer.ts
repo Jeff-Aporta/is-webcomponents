@@ -2,6 +2,7 @@
 import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import '@jeff-aporta/iswc-base/components/forms/input.js';
 import css from 'iswc:css';
+import type { TransferEventos } from './schemas/transfer.schemas.js';
 
 /**
  * <iswc-transfer> — Doble lista de selección (vanilla, zero dependencies).
@@ -72,6 +73,7 @@ import css from 'iswc:css';
 
   class IswcTransfer extends IswcElement {
     static override tag = 'iswc-transfer';
+    declare static events: TransferEventos;
     static override css = css;
     static override deps = ['iswc-button', 'iswc-empty-state', 'iswc-icon'];
 

@@ -79,6 +79,16 @@ import './lightbox.js';
 
 ### Eventos
 
+<!-- eventos: generado por scripts/sondas/eventos.ts desde declare static events -->
+
+| Evento | detail | cancelable |
+| --- | --- | --- |
+| `iswc-reposition` | `{ x: number; y: number; width: number; height: number }` | no |
+| `iswc-after-show` | `undefined` | no |
+| `iswc-after-hide` | `undefined` | no |
+
+<!-- /eventos -->
+
 
 | Evento | Descripción |
 | --- | --- |
@@ -86,13 +96,6 @@ import './lightbox.js';
 | `iswc-after-hide` | Emitido tras finalizar la animación de cierre. |
 | `iswc-share` | Evento personalizado del componente (share). |
 | `iswc-reposition` | Evento personalizado del componente (reposition). |
-
-| Evento | detail | bubbles | composed | cancelable |
-| --- | --- | --- | --- | --- |
-| `iswc-after-show` | no | sí | sí | no |
-| `iswc-after-hide` | no | sí | sí | no |
-| `iswc-share` | sí | sí | sí | no |
-| `iswc-reposition` | sí | sí | sí | no |
 
 
 <details>

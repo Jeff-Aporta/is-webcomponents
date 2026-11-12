@@ -4,6 +4,7 @@ import '@jeff-aporta/iswc-base/components/forms/input.js';
 import '@jeff-aporta/iswc-base/components/layout/dialog.js';
 import type { InputLike } from "./schemas/confirm-delete.schemas.js";
 import css from 'iswc:css';
+import type { ConfirmDeleteEventos } from './schemas/confirm-delete.schemas.js';
 
 /** Custom input-like element con label, value, y errores. */
 
@@ -87,6 +88,7 @@ import css from 'iswc:css';
 
   class IswcConfirmDelete extends IswcElement {
     static override tag = 'iswc-confirm-delete';
+    declare static events: ConfirmDeleteEventos;
     static override css = css;
     static override deps = ['iswc-button', 'iswc-icon'];
 

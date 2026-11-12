@@ -5,6 +5,7 @@ import { withStyleAttrs } from '@jeff-aporta/iswc-base/core/attrs.js';
 import { svgEl } from '@jeff-aporta/iswc-base/core/svg-chart-engine.js';
 import type { Viewport, DragState, TileCfg } from "./schemas/maps.schemas.js";
 import css from 'iswc:css';
+import type { MapsEventos } from './schemas/maps.schemas.js';
 
 /** Viewport geográfico (lon/lat) usado por <iswc-maps>. */
 
@@ -43,6 +44,7 @@ import css from 'iswc:css';
 
   class IswcMaps extends withStyleAttrs(IswcElement) {
     static override tag = 'iswc-maps';
+    declare static events: MapsEventos;
     static override css = css;
 
     static override observed = [...OBSERVED, 'grid-color', 'meridian-color'];

@@ -1,5 +1,6 @@
 // @contexto INDICE.md · src/components/isp/loading-overlay.md
 import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
+import { resolverLocale, termino } from '@jeff-aporta/iswc-base/core/localize.js';
 import css from 'iswc:css';
 
 /**
@@ -130,6 +131,8 @@ import css from 'iswc:css';
       const text = slotted ? '' : this.message;
       this.#messageText.textContent = text;
       this.#messageEl.hidden = !text && !slotted;
+      // El alertdialog necesita nombre: el del mensaje o, si no hay, el de 'cargando'.
+      this.#backdrop.setAttribute('aria-label', text || termino(resolverLocale(this), 'cargando'));
     };
 
     #lockScroll() {

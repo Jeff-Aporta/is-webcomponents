@@ -86,6 +86,21 @@ No expone.
 
 ### Eventos
 
+<!-- eventos: generado por scripts/sondas/eventos.ts desde declare static events -->
+
+| Evento | detail | cancelable |
+| --- | --- | --- |
+| `iswc-open` | `Record<string, never>` | no |
+| `iswc-close` | `Record<string, never>` | no |
+| `iswc-load` | `{ document: unknown }` | no |
+| `iswc-error` | `{ action: 'load' \| 'persist' \| 'delete'; error: string }` | no |
+| `iswc-persist` | `{ value: string; document: unknown }` | no |
+| `iswc-delete` | `{ document: unknown }` | no |
+| `iswc-download` | `{ filename: string; bytes: number }` | no |
+| `iswc-change` | `undefined` | no |
+
+<!-- /eventos -->
+
 
 | Evento | Descripción |
 | --- | --- |

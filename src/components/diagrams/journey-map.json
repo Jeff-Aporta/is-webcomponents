@@ -5,6 +5,23 @@
   "title": "&lt;iswc-journey-map&gt;",
   "titleHtml": false,
   "storageKey": "docs-iswc-journey-map",
+  "events": [
+    {
+      "name": "iswc-render",
+      "detail": "DiagramRenderDetail",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-toggle-phase",
+      "detail": "{ id: string | undefined }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-open-viewer",
+      "detail": "DiagramViewerDetail",
+      "cancelable": true
+    }
+  ],
   "sections": [
     {
       "id": "intro",

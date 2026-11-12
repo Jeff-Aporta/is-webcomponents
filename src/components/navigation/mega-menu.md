@@ -75,6 +75,17 @@ enganchar CSS desde fuera.
 
 ### Eventos
 
+<!-- eventos: generado por scripts/sondas/eventos.ts desde declare static events -->
+
+| Evento | detail | cancelable |
+| --- | --- | --- |
+| `iswc-show` | `undefined` | no |
+| `iswc-after-show` | `undefined` | no |
+| `iswc-after-hide` | `undefined` | no |
+| `iswc-select` | `{ href: string \| null; text: string }` | no |
+
+<!-- /eventos -->
+
 
 | Evento | Descripción |
 | --- | --- |
@@ -83,14 +94,6 @@ enganchar CSS desde fuera.
 | `iswc-hide` | Emitido justo antes de ocultarse (cancelable). |
 | `iswc-after-hide` | Emitido tras finalizar la animación de cierre. |
 | `iswc-select` | Emitido al seleccionar un elemento. |
-
-| Evento | detail | bubbles | composed | cancelable |
-| --- | --- | --- | --- | --- |
-| `iswc-show` | no | sí | sí | no |
-| `iswc-after-show` | no | sí | sí | no |
-| `iswc-hide` | no | sí | sí | no |
-| `iswc-after-hide` | no | sí | sí | no |
-| `iswc-select` | `{ href, text }` | sí | sí | no |
 
 Vocabulario unificado con `ModalBase`. Los antiguos `iswc-open` / `iswc-close`
 ya no se emiten.

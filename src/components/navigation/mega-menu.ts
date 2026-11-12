@@ -2,6 +2,7 @@
 import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import css from 'iswc:css';
 import { createPopupDismiss } from '@jeff-aporta/iswc-base/core/position.js';
+import type { MegaMenuEventos } from './schemas/mega-menu.schemas.js';
 
 /**
  * <iswc-mega-menu> — Mega-menú para e-commerce/portal masivo. Abre un panel
@@ -58,6 +59,7 @@ import { createPopupDismiss } from '@jeff-aporta/iswc-base/core/position.js';
 
   class IswcMegaMenu extends IswcElement {
     static override tag = 'iswc-mega-menu';
+    declare static events: MegaMenuEventos;
     static override css = css;
     static override deps = ['iswc-button', 'iswc-icon'];
     static override observed = OBSERVED;

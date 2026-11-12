@@ -80,6 +80,17 @@ import './doc-layout.js';
 
 ### Eventos
 
+<!-- eventos: generado por scripts/sondas/eventos.ts desde declare static events -->
+
+| Evento | detail | cancelable |
+| --- | --- | --- |
+| `iswc-doc-layout-navigate` | `{ id: string }` | sí |
+| `iswc-doc-layout-active` | `{ id: string }` | no |
+| `iswc-doc-layout-rail` | `{ rail: unknown }` | no |
+| `iswc-doc-layout-panels` | `{ start: number; end: number }` | no |
+
+<!-- /eventos -->
+
 | Evento | Detalle | Cuándo |
 | --- | --- | --- |
 | `iswc-doc-layout-panels` | `{ start, end }` | Cambia la visibilidad de los laterales. |

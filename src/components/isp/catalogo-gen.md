@@ -95,6 +95,19 @@ import './catalogo-gen.js';
 
 ### Eventos
 
+<!-- eventos: generado por scripts/sondas/eventos.ts desde declare static events -->
+
+| Evento | detail | cancelable |
+| --- | --- | --- |
+| `iswc-error` | `{ message: string }` | no |
+| `iswc-selection-change` | `{ records: unknown[] }` | no |
+| `iswc-double-click` | `{ record: unknown }` | no |
+| `iswc-frm-close` | `Record<string, never>` | no |
+| `iswc-frm-open` | `{ mode: string; record: unknown }` | no |
+| `iswc-action` | `{ action: string; record: unknown }` | no |
+
+<!-- /eventos -->
+
 
 | Evento | Descripción |
 | --- | --- |
@@ -104,15 +117,6 @@ import './catalogo-gen.js';
 | `iswc-frm-open` | Evento personalizado del componente (frm open). |
 | `iswc-frm-close` | Evento personalizado del componente (frm close). |
 | `iswc-error` | Emitido cuando se produce un error. |
-
-| Evento | detail | bubbles | composed | cancelable |
-| --- | --- | --- | --- | --- |
-| `iswc-selection-change` | `{ records }` | sí | sí | no |
-| `iswc-double-click` | `{ record }` | sí | sí | no |
-| `iswc-action` | `{ action, record? }` | sí | sí | no |
-| `iswc-frm-open` | modo del formulario | sí | sí | no |
-| `iswc-frm-close` | sin detail | sí | sí | no |
-| `iswc-error` | `{ message }` | sí | sí | no |
 
 
 <details>

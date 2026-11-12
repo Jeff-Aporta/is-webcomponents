@@ -23,6 +23,7 @@ import { definePreviewControls } from '@jeff-aporta/iswc-base/components/layout/
 import '@jeff-aporta/iswc-base/components/code/code.js';
 import '@jeff-aporta/iswc-base/components/layout/details.js';
 import css from 'iswc:css';
+import type { PlaygroundEventos } from './schemas/playground.schemas.js';
 
 (() => {
   definePreviewControls();
@@ -95,6 +96,7 @@ import css from 'iswc:css';
 
   class IswcPlayground extends IswcElement {
     static override tag = 'iswc-playground';
+    declare static events: PlaygroundEventos;
     static override css = css;
     static override deps = ['iswc-button', 'iswc-icon'];
     static override observed = OBSERVED;

@@ -6,6 +6,13 @@
   "titleHtml": false,
   "description": "Lienzo que transfiere el control a OffscreenCanvas (y opcionalmente a un Worker).",
   "storageKey": "docs-iswc-offscreen-canvas",
+  "events": [
+    {
+      "name": "iswc-ready",
+      "detail": "{ offscreen: OffscreenCanvas | null; fallback: boolean }",
+      "cancelable": false
+    }
+  ],
   "sections": [
     {
       "id": "intro",

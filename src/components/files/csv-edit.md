@@ -55,6 +55,16 @@ await iswcLoader.load('iswc-csv-edit');
 
 ### Eventos
 
+<!-- eventos: generado por scripts/sondas/eventos.ts desde declare static events -->
+
+| Evento | detail | cancelable |
+| --- | --- | --- |
+| `iswc-change` | `{ value: string; rows: number }` | no |
+| `iswc-load` | `{ rows: number }` | no |
+| `iswc-error` | `{ reason: string }` | no |
+
+<!-- /eventos -->
+
 | Evento | Detalle | Cuándo |
 | --- | --- | --- |
 | `iswc-load` | `{ rows }` | El contenido quedó pintado. |

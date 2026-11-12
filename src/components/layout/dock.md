@@ -76,14 +76,18 @@ No expone propiedades públicas propias; el estado se lee de los atributos.
 
 ### Eventos
 
+<!-- eventos: generado por scripts/sondas/eventos.ts desde declare static events -->
+
+| Evento | detail | cancelable |
+| --- | --- | --- |
+| `iswc-select` | `{ item: HTMLElement }` | no |
+
+<!-- /eventos -->
+
 
 | Evento | Descripción |
 | --- | --- |
 | `iswc-select` | Emitido al seleccionar un elemento. |
-
-| Evento | detail | bubbles | composed | cancelable |
-| --- | --- | --- | --- | --- |
-| `iswc-select` | `{ item }` | sí | sí | no |
 
 `iswc-select` se emite sobre el `<iswc-dock>` contenedor, no sobre el ítem.
 

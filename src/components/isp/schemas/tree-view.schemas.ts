@@ -69,3 +69,5 @@ const _DialogLikeSchema = z.object({
 });
 export type _DialogLike = z.infer<typeof _DialogLikeSchema>;
 
+/** Eventos del componente (HOW-6): `declare static events` en la clase; los documenta scripts/sondas/eventos.ts. */
+export type TreeViewEventos = { 'iswc-error': { message: string }; 'iswc-select': { node: unknown; flatPath: string }; 'iswc-frm-open': { record: unknown; itdForm: string; ancestors: unknown[]; isNew: boolean }; 'iswc-frm-close': Record<string, never> };

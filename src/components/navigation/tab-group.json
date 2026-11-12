@@ -6,6 +6,13 @@
   "titleHtml": false,
   "description": "Grupo de pestañas que muestra un panel a la vez, con navegación por teclado.",
   "storageKey": "docs-iswc-tab-group",
+  "events": [
+    {
+      "name": "iswc-tab-show",
+      "detail": "{ name: string; panel: HTMLElement | null; tab: HTMLElement | null }",
+      "cancelable": false
+    }
+  ],
   "sections": [
     {
       "id": "intro",

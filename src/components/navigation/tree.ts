@@ -4,6 +4,7 @@ import { IswcReactive } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
 import { registrarTerminos } from '@jeff-aporta/iswc-base/core/localize.js';
 import '@jeff-aporta/iswc-base/components/forms/checkbox.js';
 import css from 'iswc:css';
+import type { TreeEventos } from './schemas/tree.schemas.js';
 
 /**
  * <iswc-tree> + <iswc-tree-item> — Web Components (vanilla, zero dependencies).
@@ -63,6 +64,7 @@ import css from 'iswc:css';
 
   class IswcTree extends IswcReactive {
     static override tag = 'iswc-tree';
+    declare static events: TreeEventos;
     static override css = css;
 
     static override observed = [...TREE_OBSERVED];

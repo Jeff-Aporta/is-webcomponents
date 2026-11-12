@@ -54,6 +54,15 @@ await iswcLoader.load('iswc-pptx-view');
 
 ### Eventos
 
+<!-- eventos: generado por scripts/sondas/eventos.ts desde declare static events -->
+
+| Evento | detail | cancelable |
+| --- | --- | --- |
+| `iswc-load` | `{ slides: number }` | no |
+| `iswc-error` | `{ reason: string }` | no |
+
+<!-- /eventos -->
+
 | Evento | Detalle | Cuándo |
 | --- | --- | --- |
 | `iswc-load` | `{ slides }` | El contenido quedó pintado. |

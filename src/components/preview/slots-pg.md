@@ -74,6 +74,16 @@ reales del componente target introspectando su Shadow DOM.
 | `title` | Título. |
 | `default-tab` | Pestaña inicial: `simple` o `slots`. |
 
+### Eventos
+
+<!-- eventos: generado por scripts/sondas/eventos.ts desde declare static events -->
+
+| Evento | detail | cancelable |
+| --- | --- | --- |
+| `iswc-slots-pg-restart` | `{ tag: string; slots: number }` | no |
+
+<!-- /eventos -->
+
 ## Comportamiento
 
 Reparte los hijos en dos pestañas, muestra el template del Shadow DOM y deja editar cada slot. `Restart` vuelve al estado inicial.

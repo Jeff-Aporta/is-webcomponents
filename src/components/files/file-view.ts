@@ -4,6 +4,7 @@ import { setOptionalAttr, setStringAttr } from '@jeff-aporta/iswc-base/core/attr
 import { pintarEstado, sincronizarAlto } from './utils/file-estado.js';
 import { resolveDispatch } from './utils/mime-map.js';
 import css from 'iswc:css';
+import type { FileViewEventos } from './schemas/file-view.schemas.js';
 
 (() => {
   const MODE = 'view' as const;
@@ -21,6 +22,7 @@ import css from 'iswc:css';
 
   class IswcFileView extends IswcElement {
     static override tag = 'iswc-file-view';
+    declare static events: FileViewEventos;
     static override css = css;
     static override observed = OBSERVED;
     #stage!: HTMLElement;

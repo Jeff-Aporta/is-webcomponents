@@ -3,6 +3,7 @@ import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-elem
 import { setStringAttr } from '@jeff-aporta/iswc-base/core/attrs.js';
 import type { SpeechRecognitionEvent, SpeechRecognitionErrorEvent, SpeechRecognitionInstance, SpeechRecognitionCtor, SpeechRecognitionConstructorBag } from "./schemas/speech.schemas.js";
 import css from 'iswc:css';
+import type { SpeechEventos } from './schemas/speech.schemas.js';
 
 /**
  * <iswc-speech> — SpeechRecognition (dictado) + SpeechSynthesis (lectura).
@@ -50,6 +51,7 @@ declare global {
 
   class IswcSpeech extends IswcElement {
     static override tag = 'iswc-speech';
+    declare static events: SpeechEventos;
     static override css = css;
     static override deps = ['iswc-button', 'iswc-icon'];
     static override observed = ['lang', 'text'];

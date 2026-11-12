@@ -14,6 +14,13 @@
     "    }"
   ],
   "storageKey": "docs-iswc-qrcode",
+  "events": [
+    {
+      "name": "iswc-render",
+      "detail": "{ svg: SVGElement }",
+      "cancelable": false
+    }
+  ],
   "sections": [
     {
       "id": "intro",

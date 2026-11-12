@@ -3,6 +3,7 @@ import { emit, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import { IswcReactive } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
 import type { AppNavRow } from './schemas/app-nav.schemas.js';
 import css from 'iswc:css';
+import type { AppNavEventos } from './schemas/app-nav.schemas.js';
 
 /**
  * <iswc-app-nav> — Filas de pestañas para la barra de una app (primaria + secundarias).
@@ -63,6 +64,7 @@ function firma(rows: AppNavRow[]): string {
 
 class IswcAppNav extends IswcReactive {
   static override tag = 'iswc-app-nav';
+  declare static events: AppNavEventos;
   static override css = css;
   static override deps = ['iswc-icon'];
   static override observed = ['rows'];

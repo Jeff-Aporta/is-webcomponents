@@ -80,6 +80,14 @@ Ninguno.
 
 ### Eventos
 
+<!-- eventos: generado por scripts/sondas/eventos.ts desde declare static events -->
+
+| Evento | detail | cancelable |
+| --- | --- | --- |
+| `iswc-nav-select` | `{ row: string; id: string; href: string \| null }` | sí |
+
+<!-- /eventos -->
+
 | Evento | `detail` | Cuándo |
 | --- | --- | --- |
 | `iswc-nav-select` | `{ row, id, href }` | Clic, Enter o Espacio en una pestaña. Cancelable: sin `preventDefault()` la pestaña queda activa. |

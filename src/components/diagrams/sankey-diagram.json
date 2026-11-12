@@ -5,6 +5,23 @@
   "title": "&lt;iswc-sankey-diagram&gt;",
   "titleHtml": false,
   "storageKey": "docs-iswc-sankey-diagram",
+  "events": [
+    {
+      "name": "iswc-render",
+      "detail": "DiagramRenderDetail",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-toggle-group",
+      "detail": "DiagramToggleDetail",
+      "cancelable": true
+    },
+    {
+      "name": "iswc-open-viewer",
+      "detail": "DiagramViewerDetail",
+      "cancelable": true
+    }
+  ],
   "sections": [
     {
       "id": "intro",

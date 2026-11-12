@@ -81,6 +81,17 @@ Alternativa: cada hijo con `data-label` es un ejemplo. Los props se leen de
 - `iswc-examples-pick` — `detail: { example, index, applied }`. Se emite al
   hacer click en una card. `applied=true` si se pudo aplicar al target.
 
+### Eventos
+
+<!-- eventos: generado por scripts/sondas/eventos.ts desde declare static events -->
+
+| Evento | detail | cancelable |
+| --- | --- | --- |
+| `iswc-examples-category` | `{ category: string }` | no |
+| `iswc-examples-pick` | `{ example: unknown; index: number; applied: boolean }` | no |
+
+<!-- /eventos -->
+
 ## Comportamiento
 
 Filtra por categoría y emite `iswc-examples-category`. Al elegir un ejemplo emite `iswc-examples-pick` con `{ example, index, applied }`.

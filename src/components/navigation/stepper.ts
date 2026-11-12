@@ -1,6 +1,7 @@
 // @contexto INDICE.md · src/components/navigation/stepper.md
 import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import css from 'iswc:css';
+import type { StepperEventos } from './schemas/stepper.schemas.js';
 
 /**
  * <iswc-stepper> + <iswc-stepper-step> — Web Components (vanilla, zero dependencies).
@@ -55,6 +56,7 @@ import css from 'iswc:css';
 
   class IswcStepper extends IswcElement {
     static override tag = 'iswc-stepper';
+    declare static events: StepperEventos;
     static override css = css;
 
     static override observed = [...TG_OBSERVED];

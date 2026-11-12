@@ -5,6 +5,18 @@
   "title": "&lt;iswc-doc-demo&gt;",
   "titleHtml": false,
   "description": "Shell homogéneo de documentación/demo reutilizable (barra, nav, preview). La propia galería es el ejemplo vivo.",
+  "events": [
+    {
+      "name": "iswc-doc-demo-ready",
+      "detail": "undefined",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-gallery-shell-ready",
+      "detail": "undefined",
+      "cancelable": false
+    }
+  ],
   "sections": [
     {
       "id": "intro",

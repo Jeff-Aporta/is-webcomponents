@@ -3,6 +3,7 @@
 import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import type { ItemDocIndex, ResultadoDocIndex, TextosDocIndex } from './schemas/doc-index.schemas.js';
 import css from 'iswc:css';
+import type { DocIndexEventos } from './schemas/doc-index.schemas.js';
 
 /**
  * <iswc-doc-index> — índice documental con búsqueda: lista páginas agrupadas
@@ -39,6 +40,7 @@ const TEXTOS: TextosDocIndex = { placeholder: 'Buscar…', sinResultados: 'Sin r
 
 class IswcDocIndex extends IswcElement {
   static override tag = 'iswc-doc-index';
+  declare static events: DocIndexEventos;
   static override css = css;
   static override observed = ['current', 'placeholder', 'compact', 'flat'];
 

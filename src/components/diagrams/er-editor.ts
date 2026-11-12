@@ -28,6 +28,7 @@ import { type PanZoomController } from './schemas/diagram-view.schemas.js';
 import type { DiagramElementBase } from './utils/diagram-element-base.js';
 import { snapDiagramGrid } from '@jeff-aporta/iswc-base/core/diagram-grid.js';
 import css from 'iswc:css';
+import type { ErEditorEventos } from './schemas/er-editor.schemas.js';
 
 const HISTORY_LIMIT = 200;
 
@@ -172,6 +173,7 @@ const EDITOR_TEMPLATE = `
 
 class IswcErEditor extends IswcElement {
   static override tag = 'iswc-er-editor';
+  declare static events: ErEditorEventos;
   static override css = css;
   static override deps = ['iswc-icon'];
   static override observed = ['animation', 'theme'];

@@ -64,6 +64,16 @@ No lo reimplementes ni lo uses para sustituir al padre. La guía del padre docum
 | --- | --- |
 | — | `iswc-tab-close` con `{ tab, name }` al pulsar cerrar. El grupo decide si la quita. |
 
+### Eventos
+
+<!-- eventos: generado por scripts/sondas/eventos.ts desde declare static events -->
+
+| Evento | detail | cancelable |
+| --- | --- | --- |
+| `iswc-tab-close` | `{ tab: HTMLElement; name: string \| null }` | no |
+
+<!-- /eventos -->
+
 ## Comportamiento
 
 El grupo le pone `active`, `id` y `aria-controls`, y decide si la quita al recibir `iswc-tab-close`. Va siempre con `slot="nav"`.

@@ -42,6 +42,7 @@ import '@jeff-aporta/iswc-base/components/forms/select.js';
 import '@jeff-aporta/iswc-base/components/forms/option.js';
 import '@jeff-aporta/iswc-base/components/forms/checkbox.js';
 import css from 'iswc:css';
+import type { DataGridEventos } from './schemas/data-grid.schemas.js';
 
 /* (Los tipos que dependen de `IswcDataGrid` viven dentro del IIFE para evitar el
    problema de ordenación de declaraciones: las clases NO son hoisted como
@@ -364,6 +365,7 @@ function aEm(u: number): string {
 
   class IswcDataGrid extends withStyleAttrs(IswcElement) {
     static override tag = 'iswc-data-grid';
+    declare static events: DataGridEventos;
     static override css = css;
     static override deps = ['iswc-button'];
 

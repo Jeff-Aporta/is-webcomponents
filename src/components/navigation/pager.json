@@ -6,6 +6,13 @@
   "titleHtml": false,
   "description": "Paso a la página anterior / siguiente con el título de cada una.",
   "storageKey": "docs-iswc-pager",
+  "events": [
+    {
+      "name": "iswc-pager-navigate",
+      "detail": "PagerNavigateDetail",
+      "cancelable": true
+    }
+  ],
   "sections": [
     {
       "id": "intro",

@@ -13,3 +13,5 @@ const IswcCheckIconButtonSchema = z.object({
 });
 export type IswcCheckIconButton = z.infer<typeof IswcCheckIconButtonSchema>;
 
+/** Eventos del componente (HOW-6): `declare static events` en la clase; los documenta scripts/sondas/eventos.ts. */
+export type VideoEventos = { 'iswc-play': undefined; 'iswc-pause': undefined; 'iswc-ended': undefined; 'iswc-error': { code: number; message: string } };

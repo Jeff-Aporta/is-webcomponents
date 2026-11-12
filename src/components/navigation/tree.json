@@ -6,6 +6,18 @@
   "titleHtml": false,
   "description": "Árbol jerárquico de elementos que se expanden y contraen, con selección.",
   "storageKey": "docs-iswc-tree",
+  "events": [
+    {
+      "name": "iswc-tree-toggle",
+      "detail": "{ item: HTMLElement; expanded: boolean }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-tree-select",
+      "detail": "{ item: HTMLElement; selected: boolean; selectedItems: HTMLElement[] }",
+      "cancelable": false
+    }
+  ],
   "sections": [
     {
       "id": "intro",

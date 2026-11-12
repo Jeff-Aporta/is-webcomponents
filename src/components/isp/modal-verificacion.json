@@ -7,6 +7,23 @@
   "description": "Diálogo de verificación que pide confirmar o validar una operación antes de continuar.",
   "storageKey": "docs-iswc-modal-verificacion",
   "hasBehavior": true,
+  "events": [
+    {
+      "name": "iswc-verificacion",
+      "detail": "{ mensajes: unknown[]; qinfos: unknown[]; qwarning: unknown[]; qerrores: unknown[] }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-verificacion-error",
+      "detail": "{ message: string; error: unknown }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-cancel",
+      "detail": "Record<string, never>",
+      "cancelable": false
+    }
+  ],
   "sections": [
     {
       "id": "intro",

@@ -2,6 +2,7 @@
 import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import '@jeff-aporta/iswc-base/components/layout/details.js';
 import css from 'iswc:css';
+import type { AccordionGroupEventos } from './schemas/accordion-group.schemas.js';
 
 /**
  * <iswc-accordion-group> — Coordinador de varios <iswc-details>.
@@ -42,6 +43,7 @@ import css from 'iswc:css';
 
 class IswcAccordionGroup extends IswcElement {
   static override tag = 'iswc-accordion-group';
+  declare static events: AccordionGroupEventos;
   static override css = css;
     static override observed = OBSERVED;
 

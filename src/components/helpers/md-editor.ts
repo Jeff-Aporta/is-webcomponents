@@ -25,6 +25,7 @@ import '@jeff-aporta/iswc-base/components/layout/dialog.js';
 import '@jeff-aporta/iswc-base/components/forms/switch.js';
 import type { IswcMdEditorDocument, IswcMdEditorApiConfig, IswcMdEditorActions, DialogElement, SwitchElement, CopyButtonElement, TextareaElement, EditorHistory } from "./schemas/md-editor.schemas.js";
 import css from 'iswc:css';
+import type { MdEditorEventos } from './schemas/md-editor.schemas.js';
 
 /**
  * <iswc-md-editor> — preview MD + diálogo fullscreen (edición / revisión).
@@ -231,6 +232,7 @@ import css from 'iswc:css';
 
   class IswcMdEditor extends IswcElement {
     static override tag = 'iswc-md-editor';
+    declare static events: MdEditorEventos;
     static override css = css;
     static override deps = ['iswc-button', 'iswc-copy-button', 'iswc-icon'];
 

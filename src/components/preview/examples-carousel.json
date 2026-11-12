@@ -6,6 +6,18 @@
   "titleHtml": false,
   "description": "Helper W19: carrusel de ejemplos predefinidos para playgrounds. Cada card contiene una instancia real del componente target escalada. Al hacer click, los props del ejemplo se aplican al host target. W19 reusa <iswc-card>, <iswc-button>, <iswc-icon> y <iswc-tab-group>.",
   "storageKey": "docs-iswc-examples-carousel",
+  "events": [
+    {
+      "name": "iswc-examples-category",
+      "detail": "{ category: string }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-examples-pick",
+      "detail": "{ example: unknown; index: number; applied: boolean }",
+      "cancelable": false
+    }
+  ],
   "sections": [
     {
       "id": "intro",

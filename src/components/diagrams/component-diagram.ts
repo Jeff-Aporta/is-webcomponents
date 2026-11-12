@@ -17,6 +17,7 @@ import { hostStyleName, styleThemeFor } from './utils/diagram-styles.js';
 
 import type { InterfaceStemPoint, LayoutPackage, AnchorPoint } from "./schemas/component-diagram.schemas.js";
 import css from 'iswc:css';
+import type { ComponentDiagramEventos } from './schemas/component-diagram.schemas.js';
 
 /**
  * <iswc-component-diagram> — diagrama de componentes UML en SVG, sin Mermaid.
@@ -125,6 +126,7 @@ function stemInner(iface: { cx: number; cy: number; side: Lado }, r: number): In
 
 class IswcComponentDiagram extends DiagramElementBase {
   static override tag = 'iswc-component-diagram';
+  declare static events: ComponentDiagramEventos;
   static override css = css;
   static override observed = [...DiagramElementBase.observed, 'min-gap', 'theme'];
 

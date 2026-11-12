@@ -65,6 +65,14 @@ No tiene slots. Los ítems también pueden llegar en un `<script type="applicati
 
 ### Eventos
 
+<!-- eventos: generado por scripts/sondas/eventos.ts desde declare static events -->
+
+| Evento | detail | cancelable |
+| --- | --- | --- |
+| `iswc-doc-index-select` | `{ id: string; item: unknown }` | no |
+
+<!-- /eventos -->
+
 | Evento | Detalle | Cuándo |
 | --- | --- | --- |
 | `iswc-doc-index-select` | `{ id, item }` | Al elegir un ítem o un resultado de búsqueda. |

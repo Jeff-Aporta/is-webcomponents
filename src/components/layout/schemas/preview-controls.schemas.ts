@@ -45,3 +45,5 @@ export const ControlPanelSchema = z.object({
 });
 export type ControlPanel = z.infer<typeof ControlPanelSchema>;
 
+/** Eventos del componente (HOW-6): `declare static events` en la clase; los documenta scripts/sondas/eventos.ts. */
+export type PreviewControlsEventos = { 'iswc-controls-change': { def: unknown; valor: unknown } };

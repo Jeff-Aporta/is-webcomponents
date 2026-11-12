@@ -131,6 +131,17 @@ indica la fuente y, si falta, se toma el `.scss` junto al `.json`.
 `iswc-doc-demo-boot`, `iswc-doc-demo-host`, `iswc-palettes-default`,
 `iswc-doc-shell`, `iswc-doc-presentation`. Tag CE: `L.load('iswc-doc-demo')`.
 
+### Eventos
+
+<!-- eventos: generado por scripts/sondas/eventos.ts desde declare static events -->
+
+| Evento | detail | cancelable |
+| --- | --- | --- |
+| `iswc-doc-demo-ready` | `undefined` | no |
+| `iswc-gallery-shell-ready` | `undefined` | no |
+
+<!-- /eventos -->
+
 ## Comportamiento
 
 Monta su estructura una vez, emite `iswc-doc-demo-ready` y avisa en `window` con `iswc-gallery-shell-ready`. En pantallas estrechas la navegación pasa al drawer.

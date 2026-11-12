@@ -16,6 +16,7 @@ import { hostStyleName, styleThemeFor } from './utils/diagram-styles.js';
 import type { DiagramGroup, DiagramTheme } from "./schemas/diagram-base.schemas.js";
 import type { ErLayout, ErLayoutEdge, ErLayoutEdgeMark, ErLayoutEntity } from "./schemas/diagram-er.schemas.js";
 import css from 'iswc:css';
+import type { ErDiagramEventos } from './schemas/er-diagram.schemas.js';
 
 /**
  * <iswc-er-diagram> — diagrama entidad-relación en SVG, sin Mermaid.
@@ -52,6 +53,7 @@ const iswcAnimDashCss = `
 
 class IswcErDiagram extends DiagramElementBase {
   static override tag = 'iswc-er-diagram';
+  declare static events: ErDiagramEventos;
   static override css = css;
   static override observed = [...DiagramElementBase.observed, 'theme', 'animation', 'open-on-click'];
 

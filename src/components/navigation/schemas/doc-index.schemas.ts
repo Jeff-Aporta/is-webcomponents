@@ -38,3 +38,6 @@ export interface ResultadoDocIndex {
   puntos: number;
   fragmento: string;
 }
+
+/** Eventos del componente (HOW-6): `declare static events` en la clase; los documenta scripts/sondas/eventos.ts. */
+export type DocIndexEventos = { 'iswc-doc-index-select': { id: string; item: unknown } };

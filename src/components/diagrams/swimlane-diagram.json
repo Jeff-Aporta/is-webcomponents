@@ -5,6 +5,23 @@
   "title": "&lt;iswc-swimlane-diagram&gt;",
   "titleHtml": false,
   "storageKey": "docs-iswc-swimlane-diagram",
+  "events": [
+    {
+      "name": "iswc-render",
+      "detail": "DiagramRenderDetail",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-toggle-lane",
+      "detail": "{ id: string | undefined }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-open-viewer",
+      "detail": "DiagramViewerDetail",
+      "cancelable": true
+    }
+  ],
   "sections": [
     {
       "id": "intro",

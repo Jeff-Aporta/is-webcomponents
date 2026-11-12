@@ -67,13 +67,20 @@ function arrayDeclRe(nombre: string): RegExp {
   return new RegExp(`(?:const|let|var)\\s+${nombre}\\s*(?::[^=\\n]*)?=\\s*(?:Object\\.freeze\\()?\\[([\\s\\S]*?)\\]`);
 }
 
-/** Extiende `IswcFormControl` (directo o con `withStyleAttrs`). */
+/** Extiende `IswcFormControl` o `IswcFormChrome` (directo o con `withStyleAttrs`). */
 function extiendeFormControl(src: string): boolean {
-  return /extends\s+(?:withStyleAttrs\(\s*)?IswcFormControl\b/.test(src);
+  return /extends\s+(?:withStyleAttrs\(\s*)?IswcForm(?:Control|Chrome)\b/.test(src);
+}
+
+/** Extiende `IswcFormChrome` (el chrome: etiqueta, ayuda y texto de error). */
+function extiendeFormChrome(src: string): boolean {
+  return /extends\s+(?:withStyleAttrs\(\s*)?IswcFormChrome\b/.test(src);
 }
 
 /** Atributos que `IswcFormControl` declara con `@prop` (core/iswc-form-control.ts). */
-const ATRIBUTOS_FORM_CONTROL = ['name', 'disabled', 'required', 'readonly', 'label', 'hint', 'error-text', 'error'];
+const ATRIBUTOS_FORM_CONTROL = ['name', 'disabled', 'required', 'readonly'];
+/** Atributos que `IswcFormChrome` declara con `@prop` (core/iswc-form-chrome.ts). */
+const ATRIBUTOS_FORM_CHROME = ['label', 'hint', 'error-text', 'error'];
 /** Custom states que `IswcFormControl` mantiene en `actualizarValidez()`. */
 const ESTADOS_FORM_CONTROL = ['user-invalid', 'user-valid', 'required', 'optional', 'disabled', 'readonly'];
 
@@ -97,6 +104,7 @@ function atributosProp(src: string): string[] {
 export function atributosObservados(src: string): string[] {
   const attrs = new Set<string>(atributosProp(src));
   if (extiendeFormControl(src)) for (const a of ATRIBUTOS_FORM_CONTROL) attrs.add(a);
+  if (extiendeFormChrome(src)) for (const a of ATRIBUTOS_FORM_CHROME) attrs.add(a);
   for (const a of atributosEstaticos(src)) attrs.add(a);
   return [...attrs];
 }
@@ -211,7 +219,7 @@ export function esFormAssociated(src: string): boolean {
  * `IswcReactive` / `IswcFormControl`, no HTMLElement.
  */
 export function extiendeElementBase(src: string): boolean {
-  return /extends\s+(?:withStyleAttrs\(\s*)?(?:IswcElement|ElementBase|IswcReactive|IswcFormControl)\b/.test(src);
+  return /extends\s+(?:withStyleAttrs\(\s*)?(?:IswcElement|ElementBase|IswcReactive|IswcFormControl|IswcFormChrome)\b/.test(src);
 }
 
 /**

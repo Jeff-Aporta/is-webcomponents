@@ -5,6 +5,7 @@ import './split-panel.js';
 import { readIswc, writeIswc } from '@jeff-aporta/iswc-base/core/iswc-storage.js';
 import type { EntradaTocDocLayout, FuenteTocDocLayout, PanelesDocLayout, PrefsDocLayout, SplitPanelDocLayout } from './schemas/doc-layout.schemas.js';
 import css from 'iswc:css';
+import type { DocLayoutEventos } from './schemas/doc-layout.schemas.js';
 
 /**
  * <iswc-doc-layout> — layout documental común: navegación a la izquierda, contenido
@@ -125,6 +126,7 @@ function buscarProfundo(raiz: ParentNode, selector: string, out: HTMLElement[] =
 
 class IswcDocLayout extends IswcElement {
   static override tag = 'iswc-doc-layout';
+  declare static events: DocLayoutEventos;
   static override css = css;
   static override observed = ['storage-key', 'toc', 'toc-title', 'start-width', 'end-width', 'start-rail', 'hide-start', 'hide-end', 'toc-min', 'no-bar'];
 

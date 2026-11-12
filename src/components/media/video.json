@@ -6,6 +6,28 @@
   "titleHtml": false,
   "storageKey": "docs-iswc-video",
   "hasBehavior": true,
+  "events": [
+    {
+      "name": "iswc-play",
+      "detail": "undefined",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-pause",
+      "detail": "undefined",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-ended",
+      "detail": "undefined",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-error",
+      "detail": "{ code: number; message: string }",
+      "cancelable": false
+    }
+  ],
   "sections": [
     {
       "id": "intro",

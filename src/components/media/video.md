@@ -80,6 +80,17 @@ src="video.mp4"
 
 ### Eventos
 
+<!-- eventos: generado por scripts/sondas/eventos.ts desde declare static events -->
+
+| Evento | detail | cancelable |
+| --- | --- | --- |
+| `iswc-play` | `undefined` | no |
+| `iswc-pause` | `undefined` | no |
+| `iswc-ended` | `undefined` | no |
+| `iswc-error` | `{ code: number; message: string }` | no |
+
+<!-- /eventos -->
+
 
 | Evento | Descripción |
 | --- | --- |
@@ -89,15 +100,6 @@ src="video.mp4"
 | `play` | Evento `play`. |
 | `pause` | Evento `pause`. |
 | `ended` | Evento `ended`. |
-
-| Evento | detail | bubbles | composed | cancelable |
-| --- | --- | --- | --- | --- |
-| `iswc-play` | no | sí | sí | no |
-| `iswc-pause` | no | sí | sí | no |
-| `iswc-ended` | no | sí | sí | no |
-| `play` | no | sí | sí | no |
-| `pause` | no | sí | sí | no |
-| `ended` | no | sí | sí | no |
 
 
 <details>

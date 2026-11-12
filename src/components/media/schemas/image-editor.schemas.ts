@@ -28,3 +28,5 @@ const DragStateSchema = z.object({
 });
 export type DragState = z.infer<typeof DragStateSchema>;
 
+/** Eventos del componente (HOW-6): `declare static events` en la clase; los documenta scripts/sondas/eventos.ts. */
+export type ImageEditorEventos = { 'iswc-change': { crop: { x: number; y: number; w: number; h: number } }; 'iswc-crop': { dataURL: string; crop: { x: number; y: number; w: number; h: number } }; 'iswc-load': { image: HTMLImageElement }; 'iswc-error': { src: string } };

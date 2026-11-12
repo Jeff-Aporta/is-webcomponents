@@ -8,6 +8,7 @@ import {
 } from '@jeff-aporta/iswc-base/core/dom.js';
 import { type MediaShape } from '@jeff-aporta/iswc-base/core/schemas/attrs.schemas.js';
 import css from 'iswc:css';
+import type { ThemeImgEventos } from './schemas/theme-img.schemas.js';
 
 /**
  * <iswc-theme-img> — una sola imagen que cambia dark ↔ light según el tema.
@@ -62,6 +63,7 @@ import css from 'iswc:css';
 
   class IswcThemeImg extends IswcElement {
     static override tag = 'iswc-theme-img';
+    declare static events: ThemeImgEventos;
     static override css = css;
 
     static override observed = [...OBSERVED];

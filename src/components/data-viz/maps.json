@@ -20,6 +20,18 @@
     "    }"
   ],
   "storageKey": "docs-iswc-maps",
+  "events": [
+    {
+      "name": "iswc-marker-click",
+      "detail": "{ marker: unknown }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-viewport",
+      "detail": "{ minLon: number; minLat: number; maxLon: number; maxLat: number }",
+      "cancelable": false
+    }
+  ],
   "sections": [
     {
       "id": "intro",

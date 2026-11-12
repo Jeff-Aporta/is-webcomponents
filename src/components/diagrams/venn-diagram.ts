@@ -14,6 +14,7 @@ import { registerDiagramKind } from './utils/diagram-model.js';
 import { svgEl } from '@jeff-aporta/iswc-base/core/svg-chart-engine.js';
 import type { CircleNodeEntry, RegionNodeEntry } from "./schemas/venn-diagram.schemas.js";
 import css from 'iswc:css';
+import type { VennDiagramEventos } from './schemas/venn-diagram.schemas.js';
 
 /**
  * <iswc-venn-diagram> — diagrama de Venn (2 o 3 conjuntos) en SVG, sin Mermaid.
@@ -38,6 +39,7 @@ import css from 'iswc:css';
 
 class IswcVennDiagram extends DiagramElementBase {
   static override tag = 'iswc-venn-diagram';
+  declare static events: VennDiagramEventos;
   static override css = css;
   #circleNodes: Map<string, CircleNodeEntry> = new Map();
   #regionNodes: Map<string, RegionNodeEntry> = new Map();

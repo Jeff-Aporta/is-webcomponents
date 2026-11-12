@@ -30,3 +30,5 @@ const FloatingElementSchema = z.intersection(z.custom<HTMLElement>(), z.object({
 }));
 export type FloatingElement = z.infer<typeof FloatingElementSchema>;
 
+/** Eventos del componente (HOW-6): `declare static events` en la clase; los documenta scripts/sondas/eventos.ts. */
+export type PopoverEventos = { 'iswc-show': undefined; 'iswc-after-show': undefined; 'iswc-hide': undefined; 'iswc-after-hide': undefined };

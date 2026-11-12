@@ -69,14 +69,18 @@ import './accordion-group.js';
 
 ### Eventos
 
+<!-- eventos: generado por scripts/sondas/eventos.ts desde declare static events -->
+
+| Evento | detail | cancelable |
+| --- | --- | --- |
+| `iswc-accordion-change` | `{ open: string[]; opened: string \| null; closed: string \| null }` | no |
+
+<!-- /eventos -->
+
 
 | Evento | Descripción |
 | --- | --- |
 | `iswc-accordion-change` | Evento personalizado del componente (accordion change). |
-
-| Evento | detail | bubbles | composed | cancelable |
-| --- | --- | --- | --- | --- |
-| `iswc-accordion-change` | `{ open, opened, closed }` | sí | sí | no |
 
 
 <details>

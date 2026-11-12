@@ -64,16 +64,20 @@ import './scrollspy.js';
 
 ### Eventos
 
+<!-- eventos: generado por scripts/sondas/eventos.ts desde declare static events -->
+
+| Evento | detail | cancelable |
+| --- | --- | --- |
+| `iswc-deactivated` | `{ id: string; link: HTMLElement \| null }` | no |
+| `iswc-activated` | `{ id: string; link: HTMLElement }` | no |
+
+<!-- /eventos -->
+
 
 | Evento | Descripción |
 | --- | --- |
 | `iswc-deactivated` | Evento personalizado del componente (deactivated). |
 | `iswc-activated` | Evento personalizado del componente (activated). |
-
-| Evento | detail | bubbles | composed | cancelable |
-| --- | --- | --- | --- | --- |
-| `iswc-deactivated` | sí | sí | sí | no |
-| `iswc-activated` | sí | sí | sí | no |
 
 
 <details>

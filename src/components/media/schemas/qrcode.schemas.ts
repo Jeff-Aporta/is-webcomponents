@@ -18,3 +18,5 @@ export type QRInstance = z.infer<typeof QRInstanceSchema>;
 const QRLibSchema = z.function({ input: [z.number(), z.string()], output: z.unknown() /* TODO: ref QRInstance */ });
 export type QRLib = z.infer<typeof QRLibSchema>;
 
+/** Eventos del componente (HOW-6): `declare static events` en la clase; los documenta scripts/sondas/eventos.ts. */
+export type QrcodeEventos = { 'iswc-render': { svg: SVGElement } };

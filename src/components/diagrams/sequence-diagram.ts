@@ -28,6 +28,7 @@ import type { TSpanSpec } from './schemas/diagram-labels.schemas.js';
 import { svgEl } from '@jeff-aporta/iswc-base/core/svg-chart-engine.js';
 import type { TurtleState, MsgNode, LifelineNode, ActorNode, PartBox } from "./schemas/sequence-diagram.schemas.js";
 import css from 'iswc:css';
+import type { SequenceDiagramEventos } from './schemas/sequence-diagram.schemas.js';
 
 /**
  * <iswc-sequence-diagram> — diagrama de secuencia en SVG, sin Mermaid.
@@ -94,6 +95,7 @@ function foreignHtml(
 /** Región de participantes calculada por el layout. */
 class IswcSequenceDiagram extends DiagramElementBase {
   static override tag = 'iswc-sequence-diagram';
+  declare static events: SequenceDiagramEventos;
   static override css = css;
   #theme: DiagramTheme | null = null;
   /** Tema del estilo (`diagram-style="iswc"` → tema `sequence`), ya fusionado con el modo. */

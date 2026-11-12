@@ -106,6 +106,14 @@ Ninguna además de los atributos.
 
 ### Eventos
 
+<!-- eventos: generado por scripts/sondas/eventos.ts desde declare static events -->
+
+| Evento | detail | cancelable |
+| --- | --- | --- |
+| `iswc-brand-home` | `{ href: string }` | sí |
+
+<!-- /eventos -->
+
 | Evento | `detail` | Cuándo |
 | --- | --- | --- |
 | `iswc-brand-home` | `{ href }` | Clic/Enter en la marca. Cancelable: `preventDefault()` evita la navegación. |

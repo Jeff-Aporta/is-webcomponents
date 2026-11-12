@@ -65,18 +65,23 @@ import './image-editor.js';
 
 ### Eventos
 
+<!-- eventos: generado por scripts/sondas/eventos.ts desde declare static events -->
+
+| Evento | detail | cancelable |
+| --- | --- | --- |
+| `iswc-change` | `{ crop: { x: number; y: number; w: number; h: number } }` | no |
+| `iswc-crop` | `{ dataURL: string; crop: { x: number; y: number; w: number; h: number } }` | no |
+| `iswc-load` | `{ image: HTMLImageElement }` | no |
+| `iswc-error` | `{ src: string }` | no |
+
+<!-- /eventos -->
+
 
 | Evento | Descripción |
 | --- | --- |
 | `iswc-load` | Emitido cuando el recurso se ha cargado. |
 | `iswc-change` | Emitido al confirmar el cambio de valor (escribe como `change` nativo). |
 | `iswc-crop` | Evento personalizado del componente (crop). |
-
-| Evento | detail | bubbles | composed | cancelable |
-| --- | --- | --- | --- | --- |
-| `iswc-load` | `{ image }` | sí | sí | no |
-| `iswc-change` | `{ crop }` | sí | sí | no |
-| `iswc-crop` | `{ dataURL, crop }` | sí | sí | no |
 
 
 <details>

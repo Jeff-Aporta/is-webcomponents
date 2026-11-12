@@ -69,6 +69,17 @@ import './scroller.js';
 
 ### Eventos
 
+<!-- eventos: generado por scripts/sondas/eventos.ts desde declare static events -->
+
+| Evento | detail | cancelable |
+| --- | --- | --- |
+| `iswc-scroll-start` | `undefined` | no |
+| `iswc-scroll-end` | `undefined` | no |
+| `iswc-scroll-overflow` | `{ overflowing: boolean }` | no |
+| `iswc-scroll-position` | `{ scrollLeft: number; scrollTop: number }` | no |
+
+<!-- /eventos -->
+
 
 | Evento | Descripción |
 | --- | --- |
@@ -76,13 +87,6 @@ import './scroller.js';
 | `iswc-scroll-position` | Evento personalizado del componente (scroll position). |
 | `iswc-scroll-start` | Evento personalizado del componente (scroll start). |
 | `iswc-scroll-end` | Evento personalizado del componente (scroll end). |
-
-| Evento | detail | bubbles | composed | cancelable |
-| --- | --- | --- | --- | --- |
-| `iswc-scroll-overflow` | sí | sí | sí | no |
-| `iswc-scroll-position` | sí | sí | sí | no |
-| `iswc-scroll-start` | según cabecera | según cabecera | según cabecera | según cabecera |
-| `iswc-scroll-end` | según cabecera | según cabecera | según cabecera | según cabecera |
 
 
 <details>

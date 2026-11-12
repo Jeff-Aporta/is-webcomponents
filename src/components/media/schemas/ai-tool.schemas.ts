@@ -22,3 +22,6 @@ export type AiZona = HTMLElement & { files: { file: File }[] };
 
 export type AiToolResultadoDetalle = { herramienta: string; salida: Salida; entrada: Entrada };
 export type AiToolErrorDetalle = { herramienta: string; mensaje: string };
+
+/** Eventos del componente (HOW-6): `declare static events` en la clase; los documenta scripts/sondas/eventos.ts. */
+export type AiToolEventos = { 'iswc-ai-result': { herramienta: string; salida: unknown; entrada: unknown }; 'iswc-ai-error': { herramienta: string; mensaje: string } };

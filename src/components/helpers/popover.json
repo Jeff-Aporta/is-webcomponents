@@ -110,6 +110,28 @@
     "    }"
   ],
   "storageKey": "docs-iswc-popover",
+  "events": [
+    {
+      "name": "iswc-show",
+      "detail": "undefined",
+      "cancelable": true
+    },
+    {
+      "name": "iswc-after-show",
+      "detail": "undefined",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-hide",
+      "detail": "undefined",
+      "cancelable": true
+    },
+    {
+      "name": "iswc-after-hide",
+      "detail": "undefined",
+      "cancelable": false
+    }
+  ],
   "sections": [
     {
       "id": "intro",

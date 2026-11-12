@@ -6,6 +6,18 @@
   "titleHtml": false,
   "description": "Decodifica QR/EAN con `BarcodeDetector` sobre la cámara. No genera códigos: eso es `iswc-barcode` / `iswc-qrcode`.",
   "storageKey": "docs-iswc-barcode-scanner",
+  "events": [
+    {
+      "name": "iswc-error",
+      "detail": "{ message: string }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-detect",
+      "detail": "{ barcodes: unknown[]; rawValue: string; format: string }",
+      "cancelable": false
+    }
+  ],
   "sections": [
     {
       "id": "intro",

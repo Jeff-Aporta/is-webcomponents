@@ -18,6 +18,7 @@ import { registerDiagramKind } from './utils/diagram-model.js';
 import { svgEl } from '@jeff-aporta/iswc-base/core/svg-chart-engine.js';
 import type { BlockSpecBlock, BlockLayoutBlock, BlockLayoutEdge, TurtleState, BlockNodeEntry, EdgeNodeEntry } from "./schemas/block-diagram.schemas.js";
 import css from 'iswc:css';
+import type { BlockDiagramEventos } from './schemas/block-diagram.schemas.js';
 
 /**
  * <iswc-block-diagram> — diagrama de bloques en SVG, sin Mermaid.
@@ -46,6 +47,7 @@ import css from 'iswc:css';
 
 class IswcBlockDiagram extends DiagramElementBase {
   static override tag = 'iswc-block-diagram';
+  declare static events: BlockDiagramEventos;
   static override css = css;
   #theme: DiagramTheme | null = null;
   #turtle: PathTurtle | null = null;

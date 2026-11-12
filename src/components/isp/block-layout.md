@@ -134,14 +134,18 @@ para el `overflow: auto`.
 
 ### Eventos
 
+<!-- eventos: generado por scripts/sondas/eventos.ts desde declare static events -->
+
+| Evento | detail | cancelable |
+| --- | --- | --- |
+| `iswc-breakpoint` | `{ width: number; height: number; sizew: string; boolszw: boolean; lerpw: number }` | no |
+
+<!-- /eventos -->
+
 
 | Evento | Descripción |
 | --- | --- |
 | `iswc-breakpoint` | Evento personalizado del componente (breakpoint). |
-
-| Evento | detail | bubbles | composed | cancelable |
-| --- | --- | --- | --- | --- |
-| `iswc-breakpoint` | `{ width, height, sizew, boolszw, lerpw }` | sí | sí | no |
 
 
 <details>

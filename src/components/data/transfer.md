@@ -76,14 +76,18 @@ import './transfer.js';
 
 ### Eventos
 
+<!-- eventos: generado por scripts/sondas/eventos.ts desde declare static events -->
+
+| Evento | detail | cancelable |
+| --- | --- | --- |
+| `iswc-transfer-change` | `{ source: number; target: number; values: string[] }` | no |
+
+<!-- /eventos -->
+
 
 | Evento | Descripción |
 | --- | --- |
 | `iswc-transfer-change` | Evento personalizado del componente (transfer change). |
-
-| Evento | detail | bubbles | composed | cancelable |
-| --- | --- | --- | --- | --- |
-| `iswc-transfer-change` | sí | sí | sí | no |
 
 
 <details>

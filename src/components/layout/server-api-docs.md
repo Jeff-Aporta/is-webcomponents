@@ -80,6 +80,15 @@ Entrada (la primera que haya): `doc` → `<script type="application/json">` hijo
 
 ### Eventos
 
+<!-- eventos: generado por scripts/sondas/eventos.ts desde declare static events -->
+
+| Evento | detail | cancelable |
+| --- | --- | --- |
+| `iswc-server-api-docs-page` | `ServerApiDocsPageDetail` | no |
+| `iswc-server-api-docs-response` | `ServerApiDocsResponseDetail` | no |
+
+<!-- /eventos -->
+
 | Evento | Detalle | Cuándo |
 | --- | --- | --- |
 | `iswc-server-api-docs-page` | `{ id, titulo, metodo, ruta }` | Al abrir la portada (`id = ''`) o un endpoint. |

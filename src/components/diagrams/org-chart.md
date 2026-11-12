@@ -81,18 +81,22 @@ Campos de un nodo: `id`, `title`, `name`, `parent`, y opcionalmente `photo`,
 
 ### Eventos
 
+<!-- eventos: generado por scripts/sondas/eventos.ts desde declare static events -->
+
+| Evento | detail | cancelable |
+| --- | --- | --- |
+| `iswc-toggle` | `{ id: string; collapsed: boolean }` | no |
+| `iswc-select` | `{ id: string; node: unknown }` | no |
+| `iswc-open-viewer` | `DiagramViewerDetail` | sí |
+
+<!-- /eventos -->
+
 
 | Evento | Descripción |
 | --- | --- |
 | `iswc-select` | Emitido al seleccionar un elemento. |
 | `iswc-toggle` | Emitido al alternar el estado abierto/cerrado. |
 | `iswc-open-viewer` | Emitido al abrir el visor ampliado (cancelable). |
-
-| Evento | detail | bubbles | composed | cancelable |
-| --- | --- | --- | --- | --- |
-| `iswc-select` | `{ id, node }` | sí | sí | no |
-| `iswc-toggle` | `{ id, collapsed }` | sí | sí | no |
-| `iswc-open-viewer` | `{ payload }` | sí | sí | sí |
 
 `iswc-open-viewer` solo se emite con `open-on-click` y fuera del visor.
 Cancelarlo (`preventDefault()`) evita que se abra el lightbox propio y permite

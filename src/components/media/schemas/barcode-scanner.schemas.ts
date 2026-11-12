@@ -18,3 +18,5 @@ const DetectedBarcodeSchema = z.object({
 });
 export type DetectedBarcode = z.infer<typeof DetectedBarcodeSchema>;
 
+/** Eventos del componente (HOW-6): `declare static events` en la clase; los documenta scripts/sondas/eventos.ts. */
+export type BarcodeScannerEventos = { 'iswc-error': { message: string }; 'iswc-detect': { barcodes: unknown[]; rawValue: string; format: string } };

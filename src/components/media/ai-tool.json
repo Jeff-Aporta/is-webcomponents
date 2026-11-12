@@ -7,6 +7,18 @@
   "description": "Una herramienta de IA que corre en el navegador: OCR, voz a texto, traducción, quitar fondo y diez más, elegida por props.",
   "storageKey": "docs-iswc-ai-tool",
   "styles": ".stage{max-width:40em}",
+  "events": [
+    {
+      "name": "iswc-ai-result",
+      "detail": "{ herramienta: string; salida: unknown; entrada: unknown }",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-ai-error",
+      "detail": "{ herramienta: string; mensaje: string }",
+      "cancelable": false
+    }
+  ],
   "sections": [
     {
       "id": "intro",

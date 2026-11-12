@@ -5,6 +5,28 @@
   "title": "&lt;iswc-er-diagram&gt;",
   "titleHtml": false,
   "storageKey": "docs-iswc-er-diagram",
+  "events": [
+    {
+      "name": "iswc-turtle-state",
+      "detail": "DiagramTurtleDetail",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-render",
+      "detail": "DiagramRenderDetail",
+      "cancelable": false
+    },
+    {
+      "name": "iswc-toggle-group",
+      "detail": "DiagramToggleDetail",
+      "cancelable": true
+    },
+    {
+      "name": "iswc-open-viewer",
+      "detail": "DiagramViewerDetail",
+      "cancelable": true
+    }
+  ],
   "sections": [
     {
       "id": "intro",
