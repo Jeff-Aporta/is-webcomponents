@@ -3,21 +3,8 @@
    quedan montados para no re-upgradear iswc-button/iswc-icon en cada hover
    (FOUC). g11 — UX/UI proposals: accesibilidad y esquema de color. */
 
-:host {
-  display: block;
-  position: relative;
-  inline-size: 100%;
-  min-inline-size: 0;
-  overflow: visible;
-}
-
-.wrap {
-  position: relative;
-  display: block;
-  inline-size: 100%;
-  min-inline-size: 0;
-  overflow: visible;
-}
+:host { display: block; position: relative; inline-size: 100%; min-inline-size: 0; overflow: visible; }
+.wrap { position: relative; display: block; inline-size: 100%; min-inline-size: 0; overflow: visible; }
 
 .panel {
   position: absolute;
@@ -43,17 +30,11 @@
 }
 
 :host([open], [locked]) {
-  .panel {
-    opacity: 1;
-    visibility: visible;
-  }
+.panel { opacity: 1; visibility: visible; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  :host, :host *, .panel {
-    transition-duration: 0s !important;
-    animation-duration: 0s !important;
-  }
+:host, :host *, .panel { transition-duration: 0s !important; animation-duration: 0s !important; }
 }
 
 /* Default claro; el dark override ajusta tanto el outline como la sombra. */

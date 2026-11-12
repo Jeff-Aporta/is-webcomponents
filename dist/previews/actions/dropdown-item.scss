@@ -1,3 +1,4 @@
+@use 'kit' as *;
 @use '../../core/popover-panel';
 :host {
   /* Perillas del componente: nombre completo `--iswc-dropdown-item-*` para que
@@ -13,9 +14,7 @@
   font-family: var(--iswc-font-family);
   font-size: inherit;
 }
-:host[hidden] {
-  display: none !important;
-}
+:host[hidden] { @include oculto; }
 
 .item {
   display: grid;
@@ -39,68 +38,29 @@
   background: var(--iswc-dropdown-item-bg-hover);
   outline: none;
 }
-.item.disabled {
-  opacity: 0.45;
-  cursor: not-allowed;
-}
-.item.danger {
-  color: var(--iswc-dropdown-item-danger);
-}
+.item.disabled { opacity: 0.45; cursor: not-allowed; }
+.item.danger { color: var(--iswc-dropdown-item-danger); }
 .item.danger:hover:not(.disabled), .item.danger:focus-visible:not(.disabled) {
   background: color-mix(in srgb, var(--iswc-dropdown-item-danger) 16%, transparent);
 }
-.item.checked .checkmark {
-  opacity: 1;
-}
-
-.checkmark {
-  display: inline-grid;
-  place-items: center;
-  width: 1.1em;
-  opacity: 0;
-  line-height: 0;
-}
-.checkmark[hidden] {
-  display: none !important;
-}
+.item.checked .checkmark { opacity: 1; }
+.checkmark { display: inline-grid; place-items: center; width: 1.1em; opacity: 0; line-height: 0; }
+.checkmark[hidden] { @include oculto; }
 
 :host-context(iswc-dropdown[data-has-checkbox]) .checkmark[hidden] {
   display: inline-grid !important;
   visibility: hidden;
 }
 
-.icon {
-  display: inline-flex;
-  align-items: center;
-  line-height: 0;
-  min-width: 1.1em;
-}
+.icon { display: inline-flex; align-items: center; line-height: 0; min-width: 1.1em; }
 .icon:empty, .icon:not(:has(*)) {
   min-width: 0;
 }
 
-.label {
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.details {
-  color: var(--iswc-text-soft);
-  font-size: 0.85em;
-  margin-inline-start: 0.75em;
-}
-
-.submenu-icon {
-  display: inline-grid;
-  place-items: center;
-  line-height: 0;
-  opacity: 0.7;
-}
-.submenu-icon[hidden] {
-  display: none !important;
-}
+.label { min-width: 0; @include truncar; }
+.details { color: var(--iswc-text-soft); font-size: 0.85em; margin-inline-start: 0.75em; }
+.submenu-icon { display: inline-grid; place-items: center; line-height: 0; opacity: 0.7; }
+.submenu-icon[hidden] { @include oculto; }
 
 /* Popover en el top layer: hay que anular el `inset: 0` y el `margin: auto` de
  * la hoja del UA, porque top/left los fija computePosition. */
@@ -118,6 +78,4 @@
   border: 1px solid var(--iswc-border);
   box-shadow: var(--iswc-popover-shadow, var(--iswc-shadow, 0 .5em 1.5em rgba(0, 0, 0, 0.3)));
 }
-.submenu[hidden] {
-  display: none !important;
-}
+.submenu[hidden] { @include oculto; }

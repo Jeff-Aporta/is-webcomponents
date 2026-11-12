@@ -1,7 +1,6 @@
+@use 'kit' as *;
 /* hidden en un nodo interno debe ganar al display propio del componente. */
-[hidden] {
-  display: none !important;
-}
+[hidden] { @include oculto; }
 
 :host([hidden]) {
   display: none;
@@ -51,9 +50,7 @@
     padding: 0.15em 0.35em;
     border: 0;
     border-radius: var(--iswc-radius-sm);
-    background: transparent;
-    color: inherit;
-    font: inherit;
+    @include reset-boton;
     text-transform: capitalize;
     cursor: pointer;
   }
@@ -127,9 +124,7 @@
     aspect-ratio: 1;
     border: 0;
     border-radius: 999em;
-    background: transparent;
-    color: inherit;
-    font: inherit;
+    @include reset-boton;
     font-variant-numeric: tabular-nums;
     cursor: pointer;
     display: inline-flex;
@@ -213,18 +208,9 @@
 
 /* Sin marco: para meter varios calendarios dentro de una sola tarjeta. */
 :host([frameless]) {
-  .base {
-    width: auto;
-    padding: 0;
-    border: 0;
-    background: transparent;
-    box-shadow: none;
-  }
+.base { width: auto; padding: 0; border: 0; background: transparent; box-shadow: none; }
 }
 
 :host([disabled]) {
-  .base {
-    opacity: 0.6;
-    pointer-events: none;
-  }
+.base { @include deshabilitado(.6); }
 }

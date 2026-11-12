@@ -1,3 +1,4 @@
+@use 'kit' as *;
 @use '../../styles/mixins' as *;
 
 :host {
@@ -9,17 +10,10 @@
   --iswc-tooltip-fg: var(--iswc-bg-elev);
 }
 
-:host([hidden]) { display: none !important; }
+:host([hidden]) { @include oculto; }
 
 /* La flecha es del floating: se pinta por su part para que siga al globo. */
-.popup {
-  --iswc-floating-arrow-size: var(--iswc-tooltip-arrow-size, 0.375em);
-
-  &::part(arrow) {
-    border-color: var(--iswc-tooltip-bg);
-    background: var(--iswc-tooltip-bg);
-  }
-}
+.popup { --iswc-floating-arrow-size: var(--iswc-tooltip-arrow-size, 0.375em); &::part(arrow) { border-color: var(--iswc-tooltip-bg); background: var(--iswc-tooltip-bg); } }
 
 .tooltip {
   display: block;

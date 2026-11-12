@@ -22,16 +22,7 @@
   initial-value: 15%;
 }
 
-:host {
-  --iswc-heading-color: var(--iswc-accent, var(--iswc-color-brand, var(--iswc-text)));
-  --iswc-heading-mix: 15%;
-  --iswc-heading-mix-with: var(--iswc-text);
-  --iswc-heading-size: 2em;
-  display: block;
-  min-inline-size: 0;
-  max-inline-size: 100%;
-}
-
+:host { --iswc-heading-color: var(--iswc-accent, var(--iswc-color-brand, var(--iswc-text))); --iswc-heading-mix: 15%; --iswc-heading-mix-with: var(--iswc-text); --iswc-heading-size: 2em; display: block; min-inline-size: 0; max-inline-size: 100%; }
 :host([hidden]) { display: none; }
 
 .heading {
@@ -69,9 +60,7 @@
 :host([color="current"]) { --iswc-heading-color: currentColor; }
 
 /* Variantes: solid es el default. El tono sale de --iswc-heading-color, así `color` y `mix` siguen mandando. */
-:host {
-  --_tinta: color-mix(in srgb, var(--iswc-heading-color), var(--iswc-heading-mix-with) var(--iswc-heading-mix));
-}
+:host { --_tinta: color-mix(in srgb, var(--iswc-heading-color), var(--iswc-heading-mix-with) var(--iswc-heading-mix)); }
 
 :host([variant="gradient"]) .heading,
 :host([variant="pattern"]) .heading {

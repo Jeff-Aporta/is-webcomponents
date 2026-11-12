@@ -1,20 +1,9 @@
+@use 'kit' as *;
 /* <iswc-figure> — imagen + pie + enlace «abrir en pestaña nueva». */
 
-:host {
-  display: block;
-  margin-block: 1.6em;
-  color: var(--iswc-text);
-  box-sizing: border-box;
-}
-
-:host([hidden]) { display: none !important; }
-
-.frame {
-  margin: 0;
-  display: grid;
-  gap: .625em;
-  min-width: 0;
-}
+:host { display: block; margin-block: 1.6em; color: var(--iswc-text); box-sizing: border-box; }
+:host([hidden]) { @include oculto; }
+.frame { margin: 0; display: grid; gap: .625em; min-width: 0; }
 
 :host(:not([variant='plain'])) .frame {
   padding: .875em;
@@ -30,24 +19,10 @@
   box-shadow: 0 .375em 1.5em -.75em color-mix(in srgb, var(--iswc-color-brand) 60%, transparent);
 }
 
-.link {
-  display: block;
-  color: inherit;
-  border-radius: .375em;
-}
-
+.link { display: block; color: inherit; border-radius: .375em; }
 :host([data-linked]) .link { cursor: zoom-in; }
-
-.link:focus-visible {
-  outline: 2px solid var(--iswc-color-brand);
-  outline-offset: .25em;
-}
-
-.img {
-  display: block;
-  inline-size: 100%;
-  block-size: auto;
-}
+.link:focus-visible { @include foco-visible(var(--iswc-color-brand), 2px, .25em); }
+.img { display: block; inline-size: 100%; block-size: auto; }
 
 .img::part(image) {
   display: block;
@@ -61,14 +36,7 @@
   background: var(--iswc-figure-paper, #fff);
 }
 
-.caption {
-  font-size: 0.82em;
-  line-height: 1.45;
-  color: var(--iswc-text-dim);
-  text-align: center;
-  overflow-wrap: anywhere;
-}
-
+.caption { font-size: 0.82em; line-height: 1.45; color: var(--iswc-text-dim); text-align: center; overflow-wrap: anywhere; }
 .caption[hidden] { display: none; }
 
 @media (prefers-reduced-motion: reduce) {

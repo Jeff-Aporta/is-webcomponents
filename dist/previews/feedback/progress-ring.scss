@@ -1,3 +1,4 @@
+@use 'kit' as *;
 :host {
   --iswc-progress-ring-track-width: 2.75;
   --iswc-progress-ring-width: 2.75;
@@ -12,31 +13,15 @@
   color: var(--iswc-text);
 }
 
-.ring-wrap {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  display: grid;
-  place-items: center;
-}
-
-.svg {
-  grid-area: 1 / 1;
-  width: 100%;
-  height: 100%;
-  transform: rotate(-90deg);
-  overflow: visible;
-}
+.ring-wrap { position: relative; width: 100%; height: 100%; display: grid; place-items: center; }
+.svg { grid-area: 1 / 1; width: 100%; height: 100%; transform: rotate(-90deg); overflow: visible; }
 
 :is(.track, .indicator) {
   fill: none;
   stroke-linecap: round;
 }
 
-.track {
-  stroke: var(--iswc-progress-ring-track-color);
-  stroke-width: var(--iswc-progress-ring-track-width);
-}
+.track { stroke: var(--iswc-progress-ring-track-color); stroke-width: var(--iswc-progress-ring-track-width); }
 
 .indicator {
   stroke: var(--iswc-progress-ring-color);
@@ -82,5 +67,5 @@
   line-height: 1.05;
   color: var(--iswc-text, inherit);
 
-  &[hidden] { display: none !important; }
+  &[hidden] { @include oculto; }
 }

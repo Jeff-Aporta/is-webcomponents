@@ -1,3 +1,4 @@
+@use 'kit' as *;
 /* Shadow DOM: :host:is([attr]) NO matchea. Usar :host([attr]) como regla hermana. */
 :host {
   --iswc-textarea-border-radius: var(--iswc-radius-sm);
@@ -27,7 +28,7 @@
     font-weight: 500;
     color: var(--iswc-text-soft, inherit);
     inline-size: fit-content;
-    &[hidden] { display: none !important; }
+    &[hidden] { @include oculto; }
   }
 
   .support {
@@ -36,13 +37,13 @@
     gap: 0.75em;
     font-size: 0.8em;
     color: var(--iswc-text-dim);
-    &[hidden] { display: none !important; }
+    &[hidden] { @include oculto; }
   }
 
   .hint,
   .error-text {
     min-inline-size: 0;
-    &[hidden] { display: none !important; }
+    &[hidden] { @include oculto; }
   }
 
   .error-text { color: var(--iswc-textarea-danger-text); }
@@ -51,7 +52,7 @@
     margin-inline-start: auto;
     flex: none;
     font-variant-numeric: tabular-nums;
-    &[hidden] { display: none !important; }
+    &[hidden] { @include oculto; }
   }
 
   .base {
@@ -73,9 +74,7 @@
     display: block;
     box-sizing: border-box;
     border: 0;
-    background: transparent;
-    color: inherit;
-    font: inherit;
+    @include reset-boton;
     line-height: 1.5;
     padding: 0.5em 0;
     outline: none;
@@ -88,22 +87,11 @@
 /* ---- appearance ------------------------------------------------------ */
 
 :host([variant="filled"]) {
-  .base {
-    background: var(--iswc-control-bg-hover);
-    border-color: transparent;
-    border-bottom-color: var(--_border);
-    border-radius: var(--iswc-textarea-border-radius) var(--iswc-textarea-border-radius) 0 0;
-  }
+.base { background: var(--iswc-control-bg-hover); border-color: transparent; border-bottom-color: var(--_border); border-radius: var(--iswc-textarea-border-radius) var(--iswc-textarea-border-radius) 0 0; }
 }
 
 :host([variant="underlined"]) {
-  .base {
-    background: transparent;
-    border-color: transparent;
-    border-bottom-color: var(--_border);
-    border-radius: 0;
-    padding-inline-start: 0;
-  }
+.base { background: transparent; border-color: transparent; border-bottom-color: var(--_border); border-radius: 0; padding-inline-start: 0; }
 }
 
 /* ---- estado de error -------------------------------------------------- */
@@ -130,28 +118,18 @@
 /* ---- label a la izquierda --------------------------------------------- */
 
 :host([label-placement="start"]) {
-  .form-control {
-    display: grid;
-    grid-template-columns: var(--iswc-field-label-width, 8em) minmax(0, 1fr);
-    align-items: start;
-    column-gap: 0.75em;
-    row-gap: 0.35em;
-  }
+.form-control { display: grid; grid-template-columns: var(--iswc-field-label-width, 8em) minmax(0, 1fr); align-items: start; column-gap: 0.75em; row-gap: 0.35em; }
   .label { grid-column: 1; grid-row: 1; margin-block-start: 0.6em; }
   .base { grid-column: 2; grid-row: 1; }
   .support { grid-column: 2; grid-row: 2; }
 }
 
 :host([disabled]) {
-  opacity: 0.55;
-  pointer-events: none;
+  @include deshabilitado(.55);
 }
 
 :host([readonly]) {
-  .base {
-    background: transparent;
-    border-style: dashed;
-  }
+.base { background: transparent; border-style: dashed; }
 }
 
 /* Táctil: en punteros gruesos el área mínima es 44 px (WCAG 2.5.5), única medida en px a propósito; el escritorio no cambia. */

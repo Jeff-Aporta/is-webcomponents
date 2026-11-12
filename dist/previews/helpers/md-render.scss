@@ -1,24 +1,11 @@
+@use 'kit' as *;
 /* <iswc-md-render> — vista MD/HTML inline (sin toolbar ni diálogo).
  * Host block a ancho disponible; el consumidor lo estrecha con style="" si quiere. */
 
 @import 'utils/md-kit';
 
-:host {
-  display: block;
-  inline-size: 100%;
-  max-inline-size: 100%;
-  min-inline-size: 0;
-  box-sizing: border-box;
-  color: var(--iswc-text, inherit);
-  font-family: var(--iswc-font-sans, var(--iswc-sans, inherit));
-  font-size: var(--md-render-font-size, 1em);
-  line-height: 1.65;
-}
-
-.body {
-  min-inline-size: 0;
-  outline: none;
-}
+:host { display: block; inline-size: 100%; max-inline-size: 100%; min-inline-size: 0; box-sizing: border-box; color: var(--iswc-text, inherit); font-family: var(--iswc-font-sans, var(--iswc-sans, inherit)); font-size: var(--md-render-font-size, 1em); line-height: 1.65; }
+.body { min-inline-size: 0; outline: none; }
 
 :host([editable]) .body {
   min-block-size: 1.5em;
@@ -26,17 +13,10 @@
 
   border-radius: var(--iswc-radius-sm);
 
-  &:focus-visible {
-    outline: 2px solid var(--iswc-focus, var(--iswc-color-brand));
-    outline-offset: 2px;
-  }
+&:focus-visible { @include foco-visible(var(--iswc-focus, var(--iswc-color-brand)), 2px, 2px); }
 }
 
-.empty {
-  margin: 0;
-  color: var(--iswc-text-dim);
-  font-style: italic;
-}
+.empty { margin: 0; color: var(--iswc-text-dim); font-style: italic; }
 
 /* Render híbrido MD + HTML + iswc-code / diagramas. */
 .prompt-md-preview {
@@ -102,7 +82,6 @@
     color: var(--iswc-text-soft, var(--iswc-text));
   }
   h1 + h2, h2 + h3, h3 + h4 { margin-block-start: 0.6em; }
-
   ul, ol { margin: 0 0 var(--md-render-gap, 0.95em); padding-inline-start: 1.5em; }
   li { margin: 0.3em 0; padding-inline-start: 0.15em; }
   li > ul, li > ol { margin: 0.3em 0 0; }
@@ -217,7 +196,7 @@
     transition: text-decoration-color 0.15s;
 
     &:hover { text-decoration-color: currentColor; }
-    &:focus-visible { outline: 2px solid var(--_brand); outline-offset: 2px; border-radius: .125em; }
+    &:focus-visible { @include foco-visible(var(--_brand), 2px, 2px); border-radius: .125em; }
   }
   hr {
     border: none;
@@ -269,19 +248,7 @@
 }
 
 .prompt-var-chip {
-  --_h: var(--var-tone-h, 210);
-  display: inline-flex;
-  align-items: center;
-  padding: 0.05em 0.55em;
-  margin: 0 0.05em;
-  border-radius: 999em;
-  font-family: var(--iswc-mono);
-  font-size: 0.85em;
-  line-height: 1.5;
-  white-space: nowrap;
-  background: hsl(var(--_h) 70% 50% / 18%);
-  border: 1px solid hsl(var(--_h) 60% 55% / 55%);
-  color: hsl(var(--_h) 75% 72%);
+  @include chip-variable;
 }
 
 :host-context([data-theme="light"]:not([data-panda])) .prompt-var-chip,

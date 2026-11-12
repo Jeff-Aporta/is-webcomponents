@@ -1,3 +1,4 @@
+@use 'kit' as *;
 @use '../../styles/mixins' as *;
 
 // button.scss — Color × appearance ortogonales
@@ -80,7 +81,7 @@
       border-color: var(--_border-hover);
     }
     &:active { background: var(--_bg-active); transform: scale(0.98); }
-    &:focus-visible { outline: 2px solid var(--_focus); outline-offset: 2px; }
+    &:focus-visible { @include foco-visible(var(--_focus), 2px, 2px); }
     .btn__spinner {
       display: none;
       position: absolute;
@@ -237,9 +238,7 @@
   --_text: var(--iswc-control-text);
   --_text-hover: var(--iswc-control-text);
 
-  .btn {
-    &:hover { text-decoration: underline; }
-  }
+.btn { &:hover { text-decoration: underline; }; }
 }
 :host([color][variant~="text"]) {
   --_text: var(--_tone-text);
@@ -274,11 +273,7 @@
   width: var(--iswc-button-glyph-size, 2em);
   aspect-ratio: 1;
 
-  .btn {
-    min-height: 0;
-    gap: 0;
-    line-height: 1;
-  }
+.btn { min-height: 0; gap: 0; line-height: 1; }
   .btn__label { line-height: 1; }
 }
 
@@ -289,23 +284,8 @@
   display: flex;
   width: 100%;
 
-  .btn {
-    min-height: 0;
-    padding: var(--iswc-button-row-padding, 0.5em 0.75em);
-    justify-content: flex-start;
-    line-height: inherit;
-    text-align: start;
-    white-space: normal;
-    &:active { transform: none; }
-  }
-  .btn__label {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    gap: var(--iswc-button-row-gap, 0.75em);
-    min-width: 0;
-    line-height: inherit;
-  }
+.btn { min-height: 0; padding: var(--iswc-button-row-padding, 0.5em 0.75em); justify-content: flex-start; line-height: inherit; text-align: start; white-space: normal; &:active { transform: none; }; }
+.btn__label { flex: 1; display: flex; align-items: center; gap: var(--iswc-button-row-gap, 0.75em); min-width: 0; line-height: inherit; }
 }
 
 /* ── shape: ortogonal a color y variant (corner-shape donde aplica) ────────
@@ -316,7 +296,6 @@
 :host([shape="square"]),
 :host([shape="rect"]) { --iswc-button-border-radius: 0; }
 :host([shape="pill"]) { --iswc-button-border-radius: 999em; }
-
 :host([shape="square"]) .btn { corner-shape: square; }
 
 /* none: no fuerza radio ni corner-shape (deja CSS externo / inicial). */
@@ -340,12 +319,7 @@
    no expone data-atributo de fallback, conservamos :state(). Para evitar
    un selector dentro de nesting, lo dejamos al top-level (esbuild OK). */
 :host(:state(icon-button)) {
-  .btn {
-    padding: 0;
-    width: var(--_height);
-    aspect-ratio: 1 / 1;
-    gap: 0;
-  }
+.btn { padding: 0; width: var(--_height); aspect-ratio: 1 / 1; gap: 0; }
 }
 
 /* glyph y row ya definen su caja: un único hijo no los vuelve icon-button. */
@@ -361,17 +335,11 @@
 
 /* loading: el JS ya expone `data-state-loading`; usamos solo el fallback. */
 :host([data-state-loading]) {
-  .btn {
-    cursor: progress;
-    pointer-events: none;
-  }
+.btn { cursor: progress; pointer-events: none; }
   .btn__label,
   .btn__prefix,
   .btn__suffix,
-  .btn__caret {
-    visibility: hidden;
-    opacity: 0;
-  }
+.btn__caret { visibility: hidden; opacity: 0; }
   .btn__spinner { display: inline-flex; }
 }
 
@@ -396,17 +364,7 @@
 
 /* Region aria-live para anunciar cambios de estado (loading → ready).
    Patrón "sr-only": visualmente oculto pero accesible para AT. */
-.btn__sr-status {
-  position: absolute;
-  width: .0625em;
-  height: .0625em;
-  padding: 0;
-  margin: -.0625em;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
-}
+.btn__sr-status { position: absolute; width: .0625em; height: .0625em; padding: 0; margin: -.0625em; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
 
 @keyframes iswc-button-spin {
   to { transform: rotate(360deg); }

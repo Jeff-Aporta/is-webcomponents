@@ -1,32 +1,6 @@
-:host {
-  display: block;
-  position: relative;
-  inline-size: 100%;
-  block-size: 100%;
-  overflow: hidden;
-  --iswc-scroller-button-size: 2.401em;
-  --iswc-scroller-button-bg: var(--iswc-bg-elev);
-  --iswc-scroller-button-text: var(--iswc-text);
-  --iswc-scroller-button-border: var(--iswc-border);
-}
-
-.scroller {
-  position: relative;
-  display: flex;
-  align-items: center;
-  gap: 0.25em;
-  block-size: 100%;
-  min-block-size: 0;
-}
-
-.viewport {
-  flex: 1 1 auto;
-  overflow: auto;
-  scroll-behavior: smooth;
-  scrollbar-width: thin;
-  min-block-size: 0;
-  block-size: 100%;
-}
+:host { display: block; position: relative; inline-size: 100%; block-size: 100%; overflow: hidden; --iswc-scroller-button-size: 2.401em; --iswc-scroller-button-bg: var(--iswc-bg-elev); --iswc-scroller-button-text: var(--iswc-text); --iswc-scroller-button-border: var(--iswc-border); }
+.scroller { position: relative; display: flex; align-items: center; gap: 0.25em; block-size: 100%; min-block-size: 0; }
+.viewport { flex: 1 1 auto; overflow: auto; scroll-behavior: smooth; scrollbar-width: thin; min-block-size: 0; block-size: 100%; }
 
 .scroller {
   &[data-orientation="horizontal"] .viewport {

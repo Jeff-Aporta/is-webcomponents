@@ -10,82 +10,20 @@
   line-height: 1.45;
   color: inherit;
 }
-.panel {
-  width: 100%;
-  box-sizing: border-box;
-  padding: 0.85em 1em;
-  border: 0.0625em solid var(--iswc-border, color-mix(in srgb, currentColor 16%, transparent));
-  border-radius: var(--iswc-radius, 0.5em);
-  background: var(--iswc-bg-elev, color-mix(in srgb, currentColor 5%, transparent));
-}
-.titulo {
-  margin: 0 0 0.75em;
-  font-weight: 700;
-  font-size: 0.8em;
-  letter-spacing: 0.07em;
-  text-transform: uppercase;
-  opacity: 0.85;
-}
-.grupos {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 18.75em), 1fr));
-  gap: 0.85em 1.1em;
-  align-items: start;
-}
-.grupo-titulo {
-  grid-column: 1 / -1;
-  margin: 0.35em 0 0;
-  font-weight: 650;
-  font-size: 0.9em;
-  opacity: 0.9;
-}
+.panel { width: 100%; box-sizing: border-box; padding: 0.85em 1em; border: 0.0625em solid var(--iswc-border, color-mix(in srgb, currentColor 16%, transparent)); border-radius: var(--iswc-radius, 0.5em); background: var(--iswc-bg-elev, color-mix(in srgb, currentColor 5%, transparent)); }
+.titulo { margin: 0 0 0.75em; font-weight: 700; font-size: 0.8em; letter-spacing: 0.07em; text-transform: uppercase; opacity: 0.85; }
+.grupos { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 18.75em), 1fr)); gap: 0.85em 1.1em; align-items: start; }
+.grupo-titulo { grid-column: 1 / -1; margin: 0.35em 0 0; font-weight: 650; font-size: 0.9em; opacity: 0.9; }
 .grupo-titulo:first-child { margin-top: 0; }
 /* Extras: disclosure full-width al final del grid de knobs */
-.grupo-extra {
-  grid-column: 1 / -1;
-  display: block;
-  min-width: 0;
-}
-.grupo-extra__grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 18.75em), 1fr));
-  gap: 0.85em 1.1em;
-  align-items: start;
-  margin-block-start: 0.55em;
-}
-.fila[data-completa] {
-  grid-column: 1 / -1;
-}
-
-.code-json {
-  display: block;
-  inline-size: 100%;
-  min-block-size: 12em;
-  max-block-size: 22em;
-  overflow: auto;
-}
-
-.fila {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: flex-start;
-  gap: 0.35em;
-  min-width: 0;
-  position: relative;
-}
-.fila > .etiqueta {
-  font-size: 0.9em;
-  color: var(--iswc-text-dim, inherit);
-}
+.grupo-extra { grid-column: 1 / -1; display: block; min-width: 0; }
+.grupo-extra__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 18.75em), 1fr)); gap: 0.85em 1.1em; align-items: start; margin-block-start: 0.55em; }
+.fila[data-completa] { grid-column: 1 / -1; }
+.code-json { display: block; inline-size: 100%; min-block-size: 12em; max-block-size: 22em; overflow: auto; }
+.fila { display: flex; flex-direction: column; align-items: flex-start; justify-content: flex-start; gap: 0.35em; min-width: 0; position: relative; }
+.fila > .etiqueta { font-size: 0.9em; color: var(--iswc-text-dim, inherit); }
 /* Phase W36: cabecera del .fila con label + botón info (JSDoc popover) */
-.fila__head {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35em;
-  min-inline-size: 0;
-  max-inline-size: 100%;
-}
+.fila__head { display: inline-flex; align-items: center; gap: 0.35em; min-inline-size: 0; max-inline-size: 100%; }
 .fila__head > .etiqueta {
   /* override: en cabecera, la fuente > cabecera controla la alineación;
      aquí dejamos el tamaño del label heredado. */
@@ -115,22 +53,10 @@
   flex: 0 0 auto;
 }
 .info-btn:hover,
-.info-btn:focus-visible {
-  opacity: 1;
-  background: color-mix(in srgb, currentColor 12%, transparent);
-  outline: none;
-}
-.info-btn[aria-expanded="true"] {
-  opacity: 1;
-  background: color-mix(in srgb, currentColor 14%, transparent);
-  color: var(--iswc-color-brand, currentColor);
-}
+.info-btn:focus-visible { opacity: 1; background: color-mix(in srgb, currentColor 12%, transparent); outline: none; }
+.info-btn[aria-expanded="true"] { opacity: 1; background: color-mix(in srgb, currentColor 14%, transparent); color: var(--iswc-color-brand, currentColor); }
 .info-btn iswc-icon,
-.info-btn .info-btn__icon {
-  inline-size: 1em;
-  block-size: 1em;
-  pointer-events: none;
-}
+.info-btn .info-btn__icon { inline-size: 1em; block-size: 1em; pointer-events: none; }
 /* Phase W36: popover JSDoc-style con la descripción, tipo, default, valores,
    ejemplo del atributo. Se monta en el light DOM del fila (no en shadow) para
    poder escapar visualmente del card del panel sin clipping de overflow. */
@@ -152,78 +78,17 @@
   line-height: 1.45;
   color: var(--iswc-text, inherit);
 }
-.fila__popover[hidden] {
-  display: none;
-}
-.fila__popover .popover__title {
-  margin: 0 0 0.4em;
-  font-size: 0.95em;
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  gap: 0.4em;
-  flex-wrap: wrap;
-}
-.fila__popover .popover__title code {
-  font-family: var(--iswc-mono, ui-monospace, monospace);
-  font-size: 0.95em;
-  background: color-mix(in srgb, currentColor 8%, transparent);
-  padding: 0.05em 0.4em;
-  border-radius: 0.25em;
-}
-.fila__popover .popover__type {
-  font-size: 0.78em;
-  font-weight: 500;
-  opacity: 0.65;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-}
-.fila__popover dl {
-  margin: 0;
-  display: grid;
-  grid-template-columns: minmax(4.5em, max-content) 1fr;
-  gap: 0.25em 0.6em;
-}
-.fila__popover dt {
-  font-weight: 600;
-  font-size: 0.85em;
-  opacity: 0.85;
-}
-.fila__popover dd {
-  margin: 0;
-  font-size: 0.88em;
-  min-inline-size: 0;
-}
-.fila__popover dd code {
-  font-family: var(--iswc-mono, ui-monospace, monospace);
-  font-size: 0.95em;
-  background: color-mix(in srgb, currentColor 8%, transparent);
-  padding: 0.05em 0.35em;
-  border-radius: 0.25em;
-  word-break: break-word;
-}
-.fila__popover .popover__values {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.3em;
-}
-.fila__popover .popover__values code {
-  font-family: var(--iswc-mono, ui-monospace, monospace);
-  font-size: 0.85em;
-  background: color-mix(in srgb, currentColor 8%, transparent);
-  padding: 0.05em 0.4em;
-  border-radius: 0.25em;
-}
-.fila__popover .popover__example {
-  font-family: var(--iswc-mono, ui-monospace, monospace);
-  font-size: 0.85em;
-  background: color-mix(in srgb, currentColor 6%, transparent);
-  padding: 0.35em 0.5em;
-  border-radius: 0.3em;
-  white-space: pre-wrap;
-  word-break: break-word;
-  margin: 0;
-}
+.fila__popover[hidden] { display: none; }
+.fila__popover .popover__title { margin: 0 0 0.4em; font-size: 0.95em; font-weight: 700; display: flex; align-items: center; gap: 0.4em; flex-wrap: wrap; }
+.fila__popover .popover__title code { font-family: var(--iswc-mono, ui-monospace, monospace); font-size: 0.95em; background: color-mix(in srgb, currentColor 8%, transparent); padding: 0.05em 0.4em; border-radius: 0.25em; }
+.fila__popover .popover__type { font-size: 0.78em; font-weight: 500; opacity: 0.65; text-transform: uppercase; letter-spacing: 0.06em; }
+.fila__popover dl { margin: 0; display: grid; grid-template-columns: minmax(4.5em, max-content) 1fr; gap: 0.25em 0.6em; }
+.fila__popover dt { font-weight: 600; font-size: 0.85em; opacity: 0.85; }
+.fila__popover dd { margin: 0; font-size: 0.88em; min-inline-size: 0; }
+.fila__popover dd code { font-family: var(--iswc-mono, ui-monospace, monospace); font-size: 0.95em; background: color-mix(in srgb, currentColor 8%, transparent); padding: 0.05em 0.35em; border-radius: 0.25em; word-break: break-word; }
+.fila__popover .popover__values { display: flex; flex-wrap: wrap; gap: 0.3em; }
+.fila__popover .popover__values code { font-family: var(--iswc-mono, ui-monospace, monospace); font-size: 0.85em; background: color-mix(in srgb, currentColor 8%, transparent); padding: 0.05em 0.4em; border-radius: 0.25em; }
+.fila__popover .popover__example { font-family: var(--iswc-mono, ui-monospace, monospace); font-size: 0.85em; background: color-mix(in srgb, currentColor 6%, transparent); padding: 0.35em 0.5em; border-radius: 0.3em; white-space: pre-wrap; word-break: break-word; margin: 0; }
 .fila__popover .popover__close {
   appearance: none;
   -webkit-appearance: none;
@@ -243,17 +108,9 @@
   block-size: 1.4em;
 }
 .fila__popover .popover__close:hover,
-.fila__popover .popover__close:focus-visible {
-  opacity: 1;
-  background: color-mix(in srgb, currentColor 12%, transparent);
-  outline: none;
-}
+.fila__popover .popover__close:focus-visible { opacity: 1; background: color-mix(in srgb, currentColor 12%, transparent); outline: none; }
 .fila__popover .popover__close iswc-icon,
-.fila__popover .popover__close .popover__close-icon {
-  inline-size: 1em;
-  block-size: 1em;
-  pointer-events: none;
-}
+.fila__popover .popover__close .popover__close-icon { inline-size: 1em; block-size: 1em; pointer-events: none; }
 /* Inline by default: cada control toma su ancho natural.
    El consumer decide block/full-width con [full] o width:100%.
    Mismo font-size → mismo alto (--iswc-control-height) en todos los widgets. */
@@ -261,44 +118,22 @@
 .fila iswc-select,
 .fila iswc-switch,
 .fila iswc-button,
-.fila iswc-checkbox {
-  font-size: 1em;
-  max-inline-size: 100%;
-}
+.fila iswc-checkbox { font-size: 1em; max-inline-size: 100%; }
 /* Inputs y selects: full-width en la celda del grid (Phase W9). */
 .fila iswc-input,
-.fila iswc-select {
-  width: 100%;
-}
-.fila iswc-checkbox {
-  --iswc-control-height: 2.5em;
-}
+.fila iswc-select { width: 100%; }
+.fila iswc-checkbox { --iswc-control-height: 2.5em; }
 /* Wrap del switch: misma altura que input/select, ancho fit-content,
    switch centrado vertical y horizontalmente. */
-.fila .control-wrap {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-block-size: var(--iswc-control-height, 2.5em);
-  inline-size: fit-content;
-}
+.fila .control-wrap { display: inline-flex; align-items: center; justify-content: center; min-block-size: var(--iswc-control-height, 2.5em); inline-size: fit-content; }
 /* Opción placeholder (Phase W30): gris neutral, indica que el componente
    no quema default. Aplica tanto dentro del iswc-select como en chips
    auxiliares que dibujemos en el shadow. */
 .opt-placeholder { color: #888; font-style: italic; opacity: 0.85; }
-.fila .control-wrap iswc-switch {
-  --iswc-switch-height: 0.9em;
-  --iswc-switch-width: calc(0.9em * 1.75);
-  min-inline-size: .875em;
-  min-block-size: .875em;
-}
+.fila .control-wrap iswc-switch { --iswc-switch-height: 0.9em; --iswc-switch-width: calc(0.9em * 1.75); min-inline-size: .875em; min-block-size: .875em; }
 /* Alto en el part(base); el host no clippea el borde inferior. */
 .fila iswc-input,
-.fila iswc-select {
-  overflow: visible;
-  block-size: auto;
-  min-block-size: var(--iswc-control-height, 2.5em);
-}
+.fila iswc-select { overflow: visible; block-size: auto; min-block-size: var(--iswc-control-height, 2.5em); }
 .fila iswc-input::part(base),
 .fila iswc-select::part(base) {
   box-sizing: border-box;
@@ -312,29 +147,7 @@
 }
 .fila input[type="color"],
 .fila input[type="range"],
-.fila textarea {
-  box-sizing: border-box;
-  font: inherit;
-  font-size: 1em;
-  padding: 0 0.5em;
-  border: 0.0625em solid var(--iswc-border, color-mix(in srgb, currentColor 16%, transparent));
-  border-radius: 0.4em;
-  background: transparent;
-  color: inherit;
-  max-inline-size: 100%;
-}
-.fila input[type="color"] {
-  block-size: var(--iswc-control-height, 2.5em);
-  min-block-size: var(--iswc-control-height, 2.5em);
-  padding: 0.2em;
-}
-.fila input[type="range"] {
-  block-size: var(--iswc-control-height, 2.5em);
-}
-.fila textarea {
-  min-block-size: 4.2em;
-  resize: vertical;
-  font-family: var(--iswc-mono, ui-monospace, monospace);
-  font-size: 0.9em;
-  padding: 0.5em;
-}
+.fila textarea { box-sizing: border-box; font: inherit; font-size: 1em; padding: 0 0.5em; border: 0.0625em solid var(--iswc-border, color-mix(in srgb, currentColor 16%, transparent)); border-radius: 0.4em; background: transparent; color: inherit; max-inline-size: 100%; }
+.fila input[type="color"] { block-size: var(--iswc-control-height, 2.5em); min-block-size: var(--iswc-control-height, 2.5em); padding: 0.2em; }
+.fila input[type="range"] { block-size: var(--iswc-control-height, 2.5em); }
+.fila textarea { min-block-size: 4.2em; resize: vertical; font-family: var(--iswc-mono, ui-monospace, monospace); font-size: 0.9em; padding: 0.5em; }

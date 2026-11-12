@@ -1,6 +1,3 @@
 @charset "UTF-8";
 @import url("./chart.css");
-:host {
-  min-block-size: 18em;
-  --chart-fill-alpha: 0.2;
-}
+:host { min-block-size: 18em; --chart-fill-alpha: 0.2; }

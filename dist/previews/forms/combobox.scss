@@ -1,3 +1,4 @@
+@use 'kit' as *;
 :host {
   --iswc-combobox-border-radius: var(--iswc-radius-sm);
   --iswc-combobox-border: var(--iswc-control-border);
@@ -27,13 +28,13 @@
   .hint {
     font-size: 0.8em;
     color: var(--iswc-text-dim);
-    &[hidden] { display: none !important; }
+    &[hidden] { @include oculto; }
   }
 
   .error-text {
     font-size: 0.8em;
     color: var(--iswc-danger-text, var(--iswc-color-danger-strong));
-    &[hidden] { display: none !important; }
+    &[hidden] { @include oculto; }
   }
 
   .empty {
@@ -63,9 +64,7 @@
     flex: 1;
     min-width: 0;
     border: 0;
-    background: transparent;
-    color: inherit;
-    font: inherit;
+    @include reset-boton;
     padding: 0;
     outline: none;
   }
@@ -78,7 +77,7 @@
   }
 
   .clear {
-    &[hidden] { display: none !important; }
+    &[hidden] { @include oculto; }
   }
 
   /* Dialog a viewport completo en top layer → no lo clippea overflow */
@@ -134,27 +133,15 @@
 }
 
 :host([disabled]) {
-  opacity: 0.55;
-  pointer-events: none;
+  @include deshabilitado(.55);
 }
 
 :host([variant="filled"]) {
-  .base {
-    background: var(--iswc-control-bg-hover);
-    border-color: transparent;
-    border-bottom-color: var(--iswc-combobox-border);
-    border-radius: var(--iswc-combobox-border-radius) var(--iswc-combobox-border-radius) 0 0;
-  }
+.base { background: var(--iswc-control-bg-hover); border-color: transparent; border-bottom-color: var(--iswc-combobox-border); border-radius: var(--iswc-combobox-border-radius) var(--iswc-combobox-border-radius) 0 0; }
 }
 
 :host([variant="underlined"]) {
-  .base {
-    background: transparent;
-    border-color: transparent;
-    border-bottom-color: var(--iswc-combobox-border);
-    border-radius: 0;
-    padding-inline-start: 0.15em;
-  }
+.base { background: transparent; border-color: transparent; border-bottom-color: var(--iswc-combobox-border); border-radius: 0; padding-inline-start: 0.15em; }
 }
 
 :host([error]) {
@@ -166,15 +153,10 @@
 
 :host([open]),
 :host(:state(open)) {
-  .base {
-    outline: 2px solid var(--iswc-combobox-focus, var(--iswc-focus));
-    outline-offset: 1px;
-  }
+.base { @include foco-visible(var(--iswc-combobox-focus, var(--iswc-focus)), 2px, 1px); }
 }
 
 :host([open]),
 :host(:state(open)) {
-  .trigger {
-    svg { transform: rotate(180deg); }
-  }
+.trigger { svg { transform: rotate(180deg); }; }
 }

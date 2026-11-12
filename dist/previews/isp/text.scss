@@ -16,15 +16,7 @@
   initial-value: 0%;
 }
 
-:host {
-  --iswc-text-mix-with: var(--iswc-text);
-  display: inline;
-  color: var(--iswc-text-color, inherit);
-  font: inherit;
-  min-inline-size: 0;
-  max-inline-size: 100%;
-}
-
+:host { --iswc-text-mix-with: var(--iswc-text); display: inline; color: var(--iswc-text-color, inherit); font: inherit; min-inline-size: 0; max-inline-size: 100%; }
 :host([hidden]) { display: none; }
 
 /* Con mix: atenuar / aclarar / oscurecer vía color-mix. JS dispara

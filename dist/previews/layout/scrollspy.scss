@@ -6,11 +6,7 @@
  * definimos los hooks para el estado activo.
  */
 
-:host {
-  display: flex;
-  flex-direction: column;
-  gap: .1875em;
-}
+:host { display: flex; flex-direction: column; gap: .1875em; }
 
 /* La clase `iswc-scrollspy-active` la pone/quita el scrollspy.ts
    (`classList.add/remove`). NO renombrar — rompería el JS. */
@@ -23,16 +19,6 @@
   text-decoration: none;
   transition: background 140ms ease, color 140ms ease, box-shadow 140ms ease;
 
-  &:hover {
-    background: color-mix(in srgb, var(--iswc-bg-elev) 80%, transparent);
-    color: var(--iswc-text);
-    text-decoration: none;
-  }
-
-  &.iswc-scrollspy-active {
-    background: var(--iswc-accent-bg);
-    color: var(--iswc-brand-text);
-    font-weight: 650;
-    box-shadow: inset .1922em 0 0 var(--iswc-accent);
-  }
+&:hover { background: color-mix(in srgb, var(--iswc-bg-elev) 80%, transparent); color: var(--iswc-text); text-decoration: none; }
+&.iswc-scrollspy-active { background: var(--iswc-accent-bg); color: var(--iswc-brand-text); font-weight: 650; box-shadow: inset .1922em 0 0 var(--iswc-accent); }
 }

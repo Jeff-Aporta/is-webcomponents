@@ -1,3 +1,4 @@
+@use 'kit' as *;
 /* iswc-dock — esta hoja la adoptan iswc-dock e iswc-dock-item; cada regla
    de host debe ir tipada con :host(tag) para no filtrarse al otro. */
 
@@ -51,7 +52,7 @@
   transform-origin: center bottom;
   cursor: pointer;
 
-  &:focus-visible { outline: 2px solid var(--iswc-focus); outline-offset: 2px; }
+  &:focus-visible { @include foco-visible(var(--iswc-focus), 2px, 2px); }
 
   .ico {
     inline-size: calc(2.1739em * var(--iswc-dock-scale-unit));

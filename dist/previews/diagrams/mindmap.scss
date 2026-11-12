@@ -2,24 +2,15 @@
 @use 'kit' as *;
 
 :host { @include host-lienzo-diagrama; }
-
 .wrap { @include wrap-lienzo-diagrama('Mapa mental no disponible (payload inválido).'); }
-
-.slot-hidden { display: none !important; }
-
+.slot-hidden { @include oculto; }
 @include lienzo-svg('mm-svg');
 
 /* ── Nodos y aristas ── */
 
 .mm-node,
-.mm-edge {
-  transition: opacity 0.18s ease;
-  &.iswc-dim { opacity: 0.32; }
-}
-
-.mm-node__pill {
-  transition: filter 0.12s ease-out;
-}
+.mm-edge { @include transicion(opacity 0.18s ease); &.iswc-dim { opacity: 0.32; }; }
+.mm-node__pill { @include transicion(filter 0.12s ease-out); }
 
 .mm-node {
   &.iswc-active {

@@ -2,23 +2,14 @@
 @use 'kit' as *;
 
 :host { @include host-lienzo-diagrama; }
-
 .wrap { @include wrap-lienzo-diagrama('Mapa de recorrido no disponible (payload inválido).'); }
-
-.slot-hidden { display: none !important; }
-
+.slot-hidden { @include oculto; }
 @include lienzo-svg('jn-svg');
 
 /* ── Fases, curva y pasos ── */
 
-.jn-step {
-  transition: opacity 0.18s ease;
-  &.iswc-dim { opacity: 0.3; }
-}
-
-.jn-step__dot {
-  transition: filter 0.12s ease-out;
-}
+.jn-step { @include transicion(opacity 0.18s ease); &.iswc-dim { opacity: 0.3; }; }
+.jn-step__dot { @include transicion(filter 0.12s ease-out); }
 
 .jn-step {
   &.iswc-active {
@@ -27,9 +18,7 @@
   }
 }
 
-.jn-line {
-  opacity: 0.85;
-}
+.jn-line { opacity: 0.85; }
 
 /* El visor es opt-in: sin `open-on-click` el componente no abre nada,
    asi que tampoco debe insinuar con el cursor que se puede hacer clic. */

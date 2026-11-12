@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/core/README.md
 // intl.ts — las listas y los plurales de `Intl` (opt-in).
 //
 // `Intl.ListFormat` y `Intl.PluralRules` no estan en todos los navegadores que soporta el kit,

@@ -1,3 +1,4 @@
+@use 'kit' as *;
 @use '../../styles/mixins' as *;
 
 :host {
@@ -83,7 +84,7 @@
   .mark {
     font-size: 0.7em;
     line-height: 0;
-    &[hidden] { display: none !important; }
+    &[hidden] { @include oculto; }
   }
 
   /* Los rótulos ocupan todo el track; el padding los aparta del thumb. */
@@ -116,14 +117,14 @@
       transition: none;
     }
 
-    &[hidden] { display: none !important; }
+    &[hidden] { @include oculto; }
   }
 
   .label {
     min-inline-size: 0;
     line-height: 1.3;
     color: var(--iswc-control-text, var(--iswc-text, inherit));
-    &[hidden] { display: none !important; }
+    &[hidden] { @include oculto; }
   }
 
   .hint {
@@ -132,7 +133,7 @@
     color: var(--iswc-text-dim);
     cursor: default;
     inline-size: fit-content;
-    &[hidden] { display: none !important; }
+    &[hidden] { @include oculto; }
   }
 }
 
@@ -160,9 +161,7 @@
   --iswc-switch-border: var(--iswc-color-danger);
   --iswc-switch-focus: var(--iswc-color-danger);
 
-  .hint {
-    color: var(--iswc-danger-text, var(--iswc-color-danger-strong));
-  }
+.hint { color: var(--iswc-danger-text, var(--iswc-color-danger-strong)); }
 }
 
 /* Iconos y rótulos necesitan más carril del que da el tamaño por defecto. */
@@ -189,35 +188,19 @@
 
 :host(:hover) {
   .control { background: var(--iswc-switch-bg-hover); }
-  .thumb {
-    box-shadow: 0 0 0 var(--iswc-switch-halo) color-mix(in srgb, var(--iswc-switch-accent) 18%, transparent);
-  }
+.thumb { box-shadow: 0 0 0 var(--iswc-switch-halo) color-mix(in srgb, var(--iswc-switch-accent) 18%, transparent); }
 }
 
 :host(:is([checked], :state(checked))) {
-  .control {
-    background: var(--iswc-switch-accent);
-    border-color: var(--iswc-switch-accent);
-  }
-
-  .thumb {
-    background: var(--iswc-switch-thumb);
-    color: var(--iswc-switch-icon-checked);
-    transform: translate(calc(var(--iswc-switch-width) - var(--iswc-switch-height) + 0.05em), -50%);
-  }
-
+.control { background: var(--iswc-switch-accent); border-color: var(--iswc-switch-accent); }
+.thumb { background: var(--iswc-switch-thumb); color: var(--iswc-switch-icon-checked); transform: translate(calc(var(--iswc-switch-width) - var(--iswc-switch-height) + 0.05em), -50%); }
   .track-label.on  { opacity: 1; }
   .track-label.off { opacity: 0; }
 }
 
 :host(:focus-visible) {
-  .thumb {
-    box-shadow: 0 0 0 var(--iswc-switch-halo) color-mix(in srgb, var(--iswc-switch-focus) 30%, transparent);
-  }
-  .control {
-    outline: 0.125em solid var(--iswc-switch-focus);
-    outline-offset: 0.125em;
-  }
+.thumb { box-shadow: 0 0 0 var(--iswc-switch-halo) color-mix(in srgb, var(--iswc-switch-focus) 30%, transparent); }
+.control { outline: 0.125em solid var(--iswc-switch-focus); outline-offset: 0.125em; }
 }
 
 :host([readonly]:hover) {
@@ -225,8 +208,7 @@
 }
 
 :host(:is([disabled], :state(disabled))) {
-  cursor: not-allowed;
-  opacity: 0.55;
+  @include no-permitido(.55);
 }
 
 :host(:is([disabled], :state(disabled)):hover) {
@@ -234,5 +216,5 @@
 }
 
 :host([hidden]) {
-  display: none !important;
+  @include oculto;
 }

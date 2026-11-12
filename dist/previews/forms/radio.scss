@@ -1,3 +1,4 @@
+@use 'kit' as *;
 :host {
   --_size: var(--iswc-radio-size);
   --_bg: var(--iswc-radio-bg, var(--iswc-control-bg));
@@ -101,18 +102,11 @@
 /* ---- estados ---------------------------------------------------------- */
 
 :host(:hover) {
-  .control {
-    background: var(--_bg-hover);
-    box-shadow: 0 0 0 var(--_halo) color-mix(in srgb, var(--_accent) 14%, transparent);
-  }
+.control { background: var(--_bg-hover); box-shadow: 0 0 0 var(--_halo) color-mix(in srgb, var(--_accent) 14%, transparent); }
 }
 
 :host([checked]) {
-  .control {
-    background: var(--_accent);
-    border-color: var(--_accent);
-  }
-
+.control { background: var(--_accent); border-color: var(--_accent); }
   .dot { transform: scale(1); }
 }
 
@@ -121,8 +115,7 @@
 }
 
 :host([disabled]) {
-  cursor: not-allowed;
-  opacity: 0.55;
+  @include no-permitido(.55);
 }
 
 /* Sin halo de hover cuando no se puede cambiar (el de foco se restaura debajo) */
@@ -131,13 +124,11 @@
 }
 
 :host(:focus-visible) {
-  .control {
-    box-shadow: 0 0 0 var(--_halo) color-mix(in srgb, var(--_focus) 32%, transparent);
-  }
+.control { box-shadow: 0 0 0 var(--_halo) color-mix(in srgb, var(--_focus) 32%, transparent); }
 }
 
 :host([hidden]) {
-  display: none !important;
+  @include oculto;
 }
 
 @media (prefers-reduced-motion: reduce) {

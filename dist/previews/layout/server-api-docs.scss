@@ -1,41 +1,11 @@
 // <iswc-server-api-docs> — endpoints de la API de un server al estilo Swagger (ver server-api-docs.md).
-:host {
-  display: block;
-  position: relative;
-  height: 100%;
-  min-height: 0;
-  color: var(--iswc-text);
-  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  line-height: 1.6;
-}
-
-* {
-  box-sizing: border-box;
-}
-
-iswc-doc-layout {
-  height: 100%;
-}
+:host { display: block; position: relative; height: 100%; min-height: 0; color: var(--iswc-text); font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; line-height: 1.6; }
+* { box-sizing: border-box; }
+iswc-doc-layout { height: 100%; }
 
 // Marca de la barra (la del documento si la app no pone la suya)
-.marca {
-  display: inline-flex;
-  align-items: center;
-  gap: .516em;
-  min-width: 0;
-
-  .marca-titulo {
-    font-weight: 600;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-}
-
-.indice {
-  display: block;
-  min-height: 100%;
-}
+.marca { display: inline-flex; align-items: center; gap: .516em; min-width: 0; .marca-titulo { font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } }
+.indice { display: block; min-height: 100%; }
 
 // Página (portada u operación)
 .pagina {
@@ -102,44 +72,11 @@ iswc-doc-layout {
 // Diagnóstico del documento
 .avisos,
 .estricto-errores,
-.errores {
-  display: block;
-  margin: 1em 0;
-
-  ul {
-    margin: 0.4em 0 0;
-    padding-left: 1.2em;
-    max-height: 18em;
-    overflow: auto;
-  }
-}
+.errores { display: block; margin: 1em 0; ul { margin: 0.4em 0 0; padding-left: 1.2em; max-height: 18em; overflow: auto; } }
 
 // Portada: tabla de endpoints con filtro
-.filtro-linea {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-end;
-  gap: .516em 1.032em;
-  margin: 0 0 .774em;
-
-  .filtro {
-    flex: 1 1 18.5759em;
-    min-width: 0;
-  }
-
-  .conteo {
-    color: var(--iswc-text-dim);
-    font-size: .9288em;
-    white-space: nowrap;
-  }
-}
-
-.tabla-envoltura {
-  max-width: 100%;
-  overflow-x: auto;
-  border: 1px solid var(--iswc-border);
-  border-radius: .645em;
-}
+.filtro-linea { display: flex; flex-wrap: wrap; align-items: flex-end; gap: .516em 1.032em; margin: 0 0 .774em; .filtro { flex: 1 1 18.5759em; min-width: 0; } .conteo { color: var(--iswc-text-dim); font-size: .9288em; white-space: nowrap; } }
+.tabla-envoltura { max-width: 100%; overflow-x: auto; border: 1px solid var(--iswc-border); border-radius: .645em; }
 
 .tabla.endpoints {
   th {
@@ -205,48 +142,20 @@ iswc-doc-layout {
   }
 }
 
-.sin-resultados {
-  color: var(--iswc-text-dim);
-}
+.sin-resultados { color: var(--iswc-text-dim); }
 
 // Detalle: ficha de acceso, bloques de schema/ejemplo y flujo
-.tabla.ficha {
-  max-width: 44em;
-
-  th {
-    width: 9em;
-  }
-}
-
-.etiqueta-bloque {
-  margin: 0.6em 0 0;
-  color: var(--iswc-text-dim);
-  font-size: 0.85em;
-  font-weight: 600;
-}
+.tabla.ficha { max-width: 44em; th { width: 9em; } }
+.etiqueta-bloque { margin: 0.6em 0 0; color: var(--iswc-text-dim); font-size: 0.85em; font-weight: 600; }
 
 // Estilo ISWC (el de los adjuntos de docs): lienzo claro en ambos temas; el diagrama lee su modo del
 // contenedor `data-theme="light"`.
-.lienzo-iswc {
-  margin: 0.4em 0 1.2em;
-  padding: .5em;
-  max-width: 100%;
-  overflow-x: auto;
-  border: 1px solid var(--iswc-border);
-  border-radius: .625em;
-  background: #ffffff;
-}
-
-.secuencia {
-  display: block;
-  min-width: 36em;
-}
+.lienzo-iswc { margin: 0.4em 0 1.2em; padding: .5em; max-width: 100%; overflow-x: auto; border: 1px solid var(--iswc-border); border-radius: .625em; background: #ffffff; }
+.secuencia { display: block; min-width: 36em; }
 
 // La tabla se adapta al ancho REAL del contenido (con o sin paneles laterales): sin grupo por debajo de
 // 900 px y, por debajo de 640 px, cada endpoint es una tarjeta (método y ruta arriba, resumen y permiso abajo).
-.pagina {
-  container-type: inline-size;
-}
+.pagina { container-type: inline-size; }
 
 @container (max-width: 56.25em) {
   .tabla.endpoints {
@@ -258,9 +167,7 @@ iswc-doc-layout {
 }
 
 @container (max-width: 40em) {
-  .tabla-envoltura {
-    overflow-x: visible;
-  }
+.tabla-envoltura { overflow-x: visible; }
 
   .tabla.endpoints {
     thead {
@@ -360,69 +267,19 @@ iswc-doc-layout {
   }
 }
 
-.respuesta {
-  margin-top: .75em;
-
-  .estado-linea {
-    display: flex;
-    align-items: center;
-    gap: .625em;
-    margin: 0;
-  }
-
-  .tiempo {
-    color: var(--iswc-text-dim);
-    font-size: 0.9em;
-  }
-}
-
-.pager {
-  margin-top: 4.5752em;
-  padding-top: 1.7974em;
-  border-top: 1px solid var(--iswc-border);
-}
-
-.cargando {
-  display: flex;
-  align-items: center;
-  gap: .625em;
-  margin: 0;
-  padding: 2em 0;
-  color: var(--iswc-text-dim);
-}
+.respuesta { margin-top: .75em; .estado-linea { display: flex; align-items: center; gap: .625em; margin: 0; } .tiempo { color: var(--iswc-text-dim); font-size: 0.9em; } }
+.pager { margin-top: 4.5752em; padding-top: 1.7974em; border-top: 1px solid var(--iswc-border); }
+.cargando { display: flex; align-items: center; gap: .625em; margin: 0; padding: 2em 0; color: var(--iswc-text-dim); }
 
 // Diálogo de sesión
-iswc-dialog.login {
-  --width: min(28.75em, 92vw);
-
-  .login-cuerpo {
-    display: grid;
-    gap: .75em;
-  }
-
-  .login-estado {
-    margin: 0;
-    color: var(--iswc-text-dim);
-  }
-
-  .login-pie {
-    display: flex;
-    justify-content: flex-end;
-    gap: .5em;
-  }
-}
+iswc-dialog.login { --width: min(28.75em, 92vw); .login-cuerpo { display: grid; gap: .75em; } .login-estado { margin: 0; color: var(--iswc-text-dim); } .login-pie { display: flex; justify-content: flex-end; gap: .5em; } }
 
 // Teléfono: a 390 px el texto de «Sesión» (~95 px) empujaba fuera de la barra el toggle del índice y
 // recortaba el tema de la app. Queda el ícono (el botón conserva aria-label y title).
 @media (max-width: 30em) {
-  .sesion-texto {
-    display: none;
-  }
+.sesion-texto { display: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  * {
-    transition: none !important;
-    animation: none !important;
-  }
+* { transition: none !important; animation: none !important; }
 }

@@ -1,3 +1,4 @@
+@use 'kit' as *;
 :host {
   /* Caja visual compacta; el host ocupa el alto de control (em). */
   --iswc-checkbox-size: 1.15em;
@@ -61,13 +62,13 @@
 
   .mark {
     font-size: 0.85em;
-    &[hidden] { display: none !important; }
+    &[hidden] { @include oculto; }
   }
 
   .label {
     min-inline-size: 0;
     color: var(--iswc-control-text, var(--iswc-text, inherit));
-    &[hidden] { display: none !important; }
+    &[hidden] { @include oculto; }
   }
 
   .hint {
@@ -76,7 +77,7 @@
     color: var(--iswc-text-dim);
     cursor: default;
     inline-size: fit-content;
-    &[hidden] { display: none !important; }
+    &[hidden] { @include oculto; }
   }
 }
 
@@ -91,9 +92,7 @@
   --iswc-checkbox-border: var(--iswc-color-danger);
   --iswc-checkbox-focus: var(--iswc-color-danger);
 
-  .hint {
-    color: var(--iswc-danger-text, var(--iswc-color-danger-strong));
-  }
+.hint { color: var(--iswc-danger-text, var(--iswc-color-danger-strong)); }
 }
 
 /* Icono propio en el estado apagado: el control deja de ser una caja. */
@@ -118,26 +117,15 @@
 :host([label-placement="bottom"])  { .base { flex-direction: column; gap: 0.35em; } }
 
 :host(:hover) {
-  .control {
-    background: var(--iswc-checkbox-bg-hover);
-    box-shadow: 0 0 0 var(--iswc-checkbox-halo) color-mix(in srgb, var(--iswc-checkbox-accent) 20%, transparent);
-  }
+.control { background: var(--iswc-checkbox-bg-hover); box-shadow: 0 0 0 var(--iswc-checkbox-halo) color-mix(in srgb, var(--iswc-checkbox-accent) 20%, transparent); }
 }
 
 :host(:is([checked], [indeterminate], :state(checked), :state(indeterminate))) {
-  .control {
-    background: var(--iswc-checkbox-fill);
-    border-color: var(--iswc-checkbox-fill);
-    color: var(--iswc-checkbox-on-accent);
-  }
+.control { background: var(--iswc-checkbox-fill); border-color: var(--iswc-checkbox-fill); color: var(--iswc-checkbox-on-accent); }
 }
 
 :host(:focus-visible) {
-  .control {
-    box-shadow: 0 0 0 var(--iswc-checkbox-halo) color-mix(in srgb, var(--iswc-checkbox-focus) 32%, transparent);
-    outline: 2px solid var(--iswc-checkbox-focus);
-    outline-offset: 2px;
-  }
+.control { box-shadow: 0 0 0 var(--iswc-checkbox-halo) color-mix(in srgb, var(--iswc-checkbox-focus) 32%, transparent); @include foco-visible(var(--iswc-checkbox-focus), 2px, 2px); }
 }
 
 :host([readonly]:hover) {
@@ -145,8 +133,7 @@
 }
 
 :host(:is([disabled], :state(disabled))) {
-  cursor: not-allowed;
-  opacity: 0.55;
+  @include no-permitido(.55);
 }
 
 :host(:is([disabled], :state(disabled)):hover) {
@@ -154,7 +141,7 @@
 }
 
 :host([hidden]) {
-  display: none !important;
+  @include oculto;
 }
 
 /* size="sm": control compacto; todo sigue en em. */

@@ -1,3 +1,4 @@
+@use 'kit' as *;
 /* <iswc-btn-ref> — campo de texto + botón filtro que abre un modal con
    <iswc-catalogo-gen select-mode> para elegir un registro. Muestra la etiqueta
    resuelta (ColumnsBtnRef) bajo el valor.
@@ -30,9 +31,7 @@
     line-height: 1.25em;
     color: var(--iswc-color, var(--iswc-text));
     inline-size: 100%;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    @include truncar;
     box-sizing: border-box;
     pointer-events: auto;
     cursor: text;

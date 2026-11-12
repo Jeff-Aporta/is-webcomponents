@@ -1,14 +1,6 @@
 /* <iswc-tab-group>, <iswc-tab>, <iswc-tab-panel>. */
 
-:host {
-  --iswc-tab-group-track-color: var(--iswc-border, rgba(255, 255, 255, 0.2));
-  --iswc-tab-group-indicator-color: var(--iswc-color-brand);
-  --iswc-tab-group-track-width: 2px;
-
-  display: block;
-  font-family: var(--iswc-font-family, inherit);
-}
-
+:host { --iswc-tab-group-track-color: var(--iswc-border, rgba(255, 255, 255, 0.2)); --iswc-tab-group-indicator-color: var(--iswc-color-brand); --iswc-tab-group-track-width: 2px; display: block; font-family: var(--iswc-font-family, inherit); }
 .tg { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--iswc-tab-group-gap, 0.5em); }
 
 :host([size="sm"]) {
@@ -17,23 +9,8 @@
   font-size: 0.875em;
 }
 
-.nav {
-  display: flex;
-  align-items: center;
-  gap: 0.25em;
-  position: relative;
-  border-color: var(--iswc-tab-group-track-color);
-}
-
-.tabs {
-  display: flex;
-  flex: 1 1 auto;
-  overflow-x: auto;
-  scrollbar-width: none;
-  gap: 0.25em;
-
-  &::-webkit-scrollbar { display: none; }
-}
+.nav { display: flex; align-items: center; gap: 0.25em; position: relative; border-color: var(--iswc-tab-group-track-color); }
+.tabs { display: flex; flex: 1 1 auto; overflow-x: auto; scrollbar-width: none; gap: 0.25em; &::-webkit-scrollbar { display: none; }; }
 
 :host(:where([placement="top"], [placement="bottom"])) {
   .tg { grid-template-rows: auto 1fr; }
@@ -95,19 +72,8 @@
 
   /* El indicador es el <span class="indicator"> del template, no un ::after
      sobre el host: el host queda fuera del alcance del selector aquí. */
-  .indicator {
-    display: none;
-    position: absolute;
-    background: var(--iswc-tab-group-indicator-color);
-    border-radius: .125em;
-  }
-
-  .tab-start, .tab-end {
-    display: inline-flex;
-    align-items: center;
-
-    &:empty { display: none; }
-  }
+.indicator { display: none; position: absolute; background: var(--iswc-tab-group-indicator-color); border-radius: .125em; }
+.tab-start, .tab-end { display: inline-flex; align-items: center; &:empty { display: none; }; }
 
   .tab {
     display: inline-flex;

@@ -1,45 +1,12 @@
+@use 'kit' as *;
 /* <iswc-person> — avatar, nombre y detalle en línea. Escala con el font-size del contexto. */
-:host {
-  display: inline-block;
-  min-width: 0;
-  font-family: var(--iswc-sans);
-}
-
-:host([hidden]) { display: none !important; }
-
-.persona {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5em;
-  min-width: 0;
-}
-
-.avatar {
-  flex: none;
-  font-size: 1.9em;
-}
-
-.texto {
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-  line-height: 1.2;
-
-  &[hidden] { display: none; }
-}
+:host { display: inline-block; min-width: 0; font-family: var(--iswc-sans); }
+:host([hidden]) { @include oculto; }
+.persona { display: inline-flex; align-items: center; gap: 0.5em; min-width: 0; }
+.avatar { flex: none; font-size: 1.9em; }
+.texto { display: flex; flex-direction: column; min-width: 0; line-height: 1.2; &[hidden] { display: none; }; }
 
 .nombre,
-.detalle {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
+.detalle { @include truncar; }
 .nombre { font-weight: 600; }
-
-.detalle {
-  color: var(--iswc-text-dim);
-  font-size: 0.82em;
-
-  &[hidden] { display: none; }
-}
+.detalle { color: var(--iswc-text-dim); font-size: 0.82em; &[hidden] { display: none; }; }

@@ -1,19 +1,7 @@
+@use 'kit' as *;
 /* iswc-image-editor */
-:host {
-  display: block;
-  font: inherit;
-  color: var(--iswc-text);
-}
-
-.root {
-  display: flex;
-  flex-direction: column;
-  gap: .5em;
-  padding: .5em;
-  border: 1px solid var(--iswc-border);
-  border-radius: var(--iswc-radius);
-  background: var(--iswc-bg-elev);
-}
+:host { @include texto-base(); }
+.root { display: flex; flex-direction: column; gap: .5em; padding: .5em; border: 1px solid var(--iswc-border); border-radius: var(--iswc-radius); background: var(--iswc-bg-elev); }
 
 .viewport {
   position: relative;
@@ -31,19 +19,12 @@
   /* F0.3 g12 [a11y/focus]: viewport focuseable con outline visible */
   &:focus { outline: none; }
   &:focus-visible {
-    outline: 2px solid var(--iswc-accent);
-    outline-offset: -2px;
+    @include foco-visible(var(--iswc-accent), 2px, -2px);
   }
 }
 
 .canvas { position: absolute; inset: 0; cursor: crosshair; }
-
-.selection {
-  position: absolute;
-  border: 1px solid var(--iswc-accent);
-  box-shadow: 0 0 0 9999em rgba(15, 23, 42, .55);
-  pointer-events: none;
-}
+.selection { position: absolute; border: 1px solid var(--iswc-accent); box-shadow: 0 0 0 9999em rgba(15, 23, 42, .55); pointer-events: none; }
 
 .handle {
   position: absolute;
@@ -60,7 +41,7 @@
   &.se { inset-block-end:   -.375em;    inset-inline-end:   -.375em;  cursor: nwse-resize; }
 
   /* F0.3 g12 [a11y/focus]: outline solo con teclado */
-  &:focus-visible { outline: 2px solid var(--iswc-text); outline-offset: 2px; }
+  &:focus-visible { @include foco-visible(var(--iswc-text), 2px, 2px); }
 }
 
 /* F0.3 g12 [media/loading]: overlay mientras aria-busy=true */
@@ -75,12 +56,7 @@
   outline-offset: -1px;
 }
 
-.toolbar {
-  display: flex;
-  flex-wrap: wrap;
-  gap: .35em;
-  padding-block-start: .25em;
-}
+.toolbar { display: flex; flex-wrap: wrap; gap: .35em; padding-block-start: .25em; }
 
 ::slotted(button) {
   font: inherit;
@@ -97,9 +73,4 @@
   background: color-mix(in srgb, var(--iswc-accent) 14%, var(--iswc-bg-soft));
 }
 
-.status {
-  font-size: .72em;
-  color: var(--iswc-text-soft);
-  font-variant-numeric: tabular-nums;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-}
+.status { font-size: .72em; color: var(--iswc-text-soft); font-variant-numeric: tabular-nums; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }

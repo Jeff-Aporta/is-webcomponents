@@ -2,26 +2,18 @@
 @use 'kit' as *;
 
 :host { @include host-lienzo-diagrama; }
-
 .wrap { @include wrap-lienzo-diagrama('Diagrama de casos de uso no disponible (payload inválido).'); }
-
-.slot-hidden { display: none !important; }
-
+.slot-hidden { @include oculto; }
 @include lienzo-svg('uc-svg');
 
 /* ── Actores, casos y relaciones ── */
 
 .uc-actor,
 .uc-case,
-.uc-link {
-  transition: opacity 0.18s ease;
-  &.iswc-dim { opacity: 0.3; }
-}
+.uc-link { @include transicion(opacity 0.18s ease); &.iswc-dim { opacity: 0.3; }; }
 
 .uc-case__shape,
-.uc-actor__figure {
-  transition: filter 0.12s ease-out;
-}
+.uc-actor__figure { @include transicion(filter 0.12s ease-out); }
 
 .uc-case {
   &.iswc-active {

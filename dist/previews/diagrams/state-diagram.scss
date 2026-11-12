@@ -2,24 +2,15 @@
 @use 'kit' as *;
 
 :host { @include host-lienzo-diagrama; }
-
 .wrap { @include wrap-lienzo-diagrama('Diagrama de estados no disponible (payload inválido).'); }
-
-.slot-hidden { display: none !important; }
-
+.slot-hidden { @include oculto; }
 @include lienzo-svg('st-svg');
 
 /* ── Estados y transiciones ── */
 
 .st-node,
-.st-trans {
-  transition: opacity 0.18s ease;
-  &.iswc-dim { opacity: 0.32; }
-}
-
-.st-node__box {
-  transition: stroke-width 0.12s ease-out;
-}
+.st-trans { @include transicion(opacity 0.18s ease); &.iswc-dim { opacity: 0.32; }; }
+.st-node__box { @include transicion(stroke-width 0.12s ease-out); }
 
 .st-trans {
   &.iswc-active {
@@ -27,9 +18,7 @@
   }
 }
 
-.st-legend__item {
-  transition: opacity 0.18s ease;
-}
+.st-legend__item { @include transicion(opacity 0.18s ease); }
 
 /* El visor es opt-in: sin `open-on-click` el componente no abre nada,
    asi que tampoco debe insinuar con el cursor que se puede hacer clic. */

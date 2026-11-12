@@ -1,8 +1,7 @@
+@use 'kit' as *;
 /* iswc-heatmap */
 :host {
-  display: block;
-  font: inherit;
-  color: var(--iswc-text);
+  @include texto-base();
   --iswc-heatmap-text: var(--iswc-text);
   --iswc-heatmap-grid-color: color-mix(in srgb, var(--iswc-text) 12%, transparent);
 

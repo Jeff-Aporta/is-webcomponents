@@ -1,14 +1,5 @@
+@use 'kit' as *;
 /* <iswc-tenant-selector> — select compacto para la barra de la app. */
-:host {
-  display: inline-block;
-  min-width: 0;
-  font-family: var(--iswc-sans);
-}
-
-:host([hidden]) { display: none !important; }
-
-.selector {
-  --iswc-field-width: 100%;
-  min-width: 10em;
-  font-size: 0.9em;
-}
+:host { display: inline-block; min-width: 0; font-family: var(--iswc-sans); }
+:host([hidden]) { @include oculto; }
+.selector { --iswc-field-width: 100%; min-width: 10em; font-size: 0.9em; }

@@ -1,20 +1,8 @@
+@use 'kit' as *;
 @use '../../core/focus-ring';
-:host {
-  display: inline-grid;
-  place-items: center;
-  width: 2.25em;
-  aspect-ratio: 1/1;
-  box-sizing: border-box;
-  color: var(--iswc-control-text, inherit);
-  font: inherit;
-  vertical-align: middle;
-  line-height: 0;
-  cursor: pointer;
-  border-radius: 999em;
-  -webkit-tap-highlight-color: transparent;
-}
+:host { display: inline-grid; place-items: center; width: 2.25em; aspect-ratio: 1/1; box-sizing: border-box; color: var(--iswc-control-text, inherit); font: inherit; vertical-align: middle; line-height: 0; cursor: pointer; border-radius: 999em; -webkit-tap-highlight-color: transparent; }
 :host([hidden]) {
-  display: none !important;
+  @include oculto;
 }
 :host([disabled]) {
   opacity: 0.55;
@@ -24,10 +12,7 @@
 :host:focus:not(:focus-visible) {
   outline: none;
 }
-:host:focus-visible {
-  outline: 2px solid var(--iswc-focus, var(--iswc-focus-fallback));
-  outline-offset: var(--iswc-focus-offset);
-}
+:host:focus-visible { @include foco-visible(var(--iswc-focus, var(--iswc-focus-fallback)), 2px, var(--iswc-focus-offset)); }
 
 /* La caja pintada es el <button> interno de <iswc-button>, alcanzable por
    ::part(button). Las reglas propias de iswc-button son del tipo
@@ -61,9 +46,7 @@ iswc-button.btn::part(button) {
   padding: 0;
   border: 0;
   border-radius: inherit;
-  background: transparent;
-  color: inherit;
-  font: inherit;
+  @include reset-boton;
   cursor: inherit;
   line-height: 0;
   transition: background-color 120ms ease;
@@ -80,12 +63,7 @@ iswc-button.btn:active::part(button) {
   background: var(--iswc-control-bg-active, color-mix(in srgb, currentColor 18%, transparent));
 }
 
-.ico {
-  width: 1.15em;
-  height: 1.15em;
-  font-size: 1.15em;
-  pointer-events: none;
-}
+.ico { width: 1.15em; height: 1.15em; font-size: 1.15em; pointer-events: none; }
 
 /* Variante embebida en controles oscuros (video, etc.) */
 :host([variant=plain]) {

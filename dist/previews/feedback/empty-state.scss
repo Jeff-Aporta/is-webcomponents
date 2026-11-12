@@ -1,14 +1,9 @@
+@use 'kit' as *;
 /* <iswc-empty-state> — vacío, cargando o error, centrado. */
 @use '../../styles/mixins' as *;
 
-:host {
-  @include papel;
-  display: block;
-  min-width: 0;
-  font-family: var(--iswc-sans);
-}
-
-:host([hidden]) { display: none !important; }
+:host { @include papel; display: block; min-width: 0; font-family: var(--iswc-sans); }
+:host([hidden]) { @include oculto; }
 
 .caja {
   display: grid;

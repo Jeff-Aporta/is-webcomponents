@@ -1,23 +1,5 @@
-:host {
-  display: block;
-  width: 100%;
-  min-height: 8em;
-  box-sizing: border-box;
-  color: var(--iswc-text, inherit);
-  background: var(--iswc-surface);
-  border: 1px solid var(--iswc-border, color-mix(in srgb, currentColor 18%, transparent));
-  border-radius: var(--iswc-radius);
-  overflow: hidden;
-}
+:host { display: block; width: 100%; min-height: 8em; box-sizing: border-box; color: var(--iswc-text, inherit); background: var(--iswc-surface); border: 1px solid var(--iswc-border, color-mix(in srgb, currentColor 18%, transparent)); border-radius: var(--iswc-radius); overflow: hidden; }
 .root { display: flex; flex-direction: column; min-height: inherit; height: 100%; }
 :host([height]) .root { height: var(--iswc-file-height); }
-pre, .body {
-  margin: 0;
-  padding: .8333em 1.1111em;
-  font: 0.9em/1.45 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  white-space: pre-wrap;
-  word-break: break-word;
-  overflow: auto;
-  flex: 1;
-}
+pre, .body { margin: 0; padding: .8333em 1.1111em; font: 0.9em/1.45 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; white-space: pre-wrap; word-break: break-word; overflow: auto; flex: 1; }
 iswc-empty-state { margin: 0.75em; }

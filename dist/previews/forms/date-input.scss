@@ -1,19 +1,15 @@
+@use 'kit' as *;
 /* Hoja compartida por iswc-date-input, iswc-time-input, iswc-date-time-input e
  * iswc-date-range-input: todos son "campo + panel flotante". */
 
-[hidden] {
-  display: none !important;
-}
+[hidden] { @include oculto; }
 
 :host([hidden]) {
   display: none;
 }
 
 :host {
-  display: inline-block;
-  font-family: var(--iswc-sans, inherit);
-  color: var(--iswc-text, inherit);
-  box-sizing: border-box;
+  @include host-base(inline-block);
 
   .base {
     display: inline-flex;
@@ -137,9 +133,7 @@
     padding: 0.35em 0.75em;
     border: 1px solid transparent;
     border-radius: var(--iswc-radius-sm);
-    background: transparent;
-    color: inherit;
-    font: inherit;
+    @include reset-boton;
     font-size: 0.85em;
     cursor: pointer;
     &:hover { background: var(--iswc-control-bg-hover); }

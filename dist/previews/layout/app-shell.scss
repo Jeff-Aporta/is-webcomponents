@@ -1,3 +1,4 @@
+@use 'kit' as *;
 /* iswc-app-shell — barra fija arriba, vista con scroll propio debajo. */
 
 :host {
@@ -28,35 +29,10 @@
 }
 
 :host * { box-sizing: border-box; }
-
-[hidden] { display: none !important; }
-
-.bar {
-  position: sticky;
-  top: 0;
-  z-index: var(--iswc-shell-bar-z);
-  flex: none;
-  background: var(--iswc-shell-bar-bg);
-  color: var(--iswc-text, inherit);
-  border-bottom: 1px solid var(--iswc-shell-bar-border);
-  box-shadow: var(--iswc-shell-bar-shadow);
-  padding-top: env(safe-area-inset-top, 0);
-}
-
-.line {
-  display: flex;
-  align-items: center;
-  gap: var(--iswc-shell-bar-gap);
-  min-height: var(--iswc-shell-bar-min-height);
-  padding-block: 0.28em;
-  padding-inline:
-    max(var(--iswc-shell-pad-inline), env(safe-area-inset-left, 0em))
-    max(var(--iswc-shell-pad-inline), env(safe-area-inset-right, 0em));
-}
-
-.menu-button {
-  flex: none;
-}
+[hidden] { @include oculto; }
+.bar { position: sticky; top: 0; z-index: var(--iswc-shell-bar-z); flex: none; background: var(--iswc-shell-bar-bg); color: var(--iswc-text, inherit); border-bottom: 1px solid var(--iswc-shell-bar-border); box-shadow: var(--iswc-shell-bar-shadow); padding-top: env(safe-area-inset-top, 0); }
+.line { display: flex; align-items: center; gap: var(--iswc-shell-bar-gap); min-height: var(--iswc-shell-bar-min-height); padding-block: 0.28em; padding-inline: max(var(--iswc-shell-pad-inline), env(safe-area-inset-left, 0em)) max(var(--iswc-shell-pad-inline), env(safe-area-inset-right, 0em)); }
+.menu-button { flex: none; }
 
 .brand {
   display: inline-flex;
@@ -77,64 +53,13 @@
   }
 }
 
-.logo {
-  display: inline-flex;
-  align-items: center;
-  font-size: 1.35em;
-
-  & img {
-    display: block;
-    height: 1em;
-    width: auto;
-  }
-}
-
-.brand-text {
-  font-weight: 700;
-  letter-spacing: 0.01em;
-}
-
-.nav {
-  display: flex;
-  align-items: stretch;
-  align-self: stretch;
-  flex: 1 1 auto;
-  min-width: 0;
-}
-
-.actions {
-  display: flex;
-  align-items: center;
-  flex: none;
-  gap: 0.35em;
-  margin-inline-start: auto;
-}
-
-.body {
-  display: flex;
-  flex: 1 1 auto;
-  min-height: 0;
-}
-
-.sidebar {
-  flex: none;
-  width: var(--iswc-shell-sidebar-width);
-  overflow-y: auto;
-  overscroll-behavior: contain;
-  border-inline-end: 1px solid var(--iswc-shell-sidebar-border);
-}
-
-.main {
-  display: flex;
-  flex-direction: column;
-  flex: 1 1 auto;
-  min-width: 0;
-  min-height: 0;
-  overflow-x: hidden;
-  overflow-y: auto;
-  overscroll-behavior: contain;
-  padding-bottom: env(safe-area-inset-bottom, 0);
-}
+.logo { display: inline-flex; align-items: center; font-size: 1.35em; & img { display: block; height: 1em; width: auto; } }
+.brand-text { font-weight: 700; letter-spacing: 0.01em; }
+.nav { display: flex; align-items: stretch; align-self: stretch; flex: 1 1 auto; min-width: 0; }
+.actions { display: flex; align-items: center; flex: none; gap: 0.35em; margin-inline-start: auto; }
+.body { display: flex; flex: 1 1 auto; min-height: 0; }
+.sidebar { flex: none; width: var(--iswc-shell-sidebar-width); overflow-y: auto; overscroll-behavior: contain; border-inline-end: 1px solid var(--iswc-shell-sidebar-border); }
+.main { display: flex; flex-direction: column; flex: 1 1 auto; min-width: 0; min-height: 0; overflow-x: hidden; overflow-y: auto; overscroll-behavior: contain; padding-bottom: env(safe-area-inset-bottom, 0); }
 
 /* La vista crece con su contenido; si declara height:100% llena el alto sin doble barra. */
 ::slotted(:not([slot])) {
@@ -143,9 +68,7 @@
   box-sizing: border-box;
 }
 
-.footer {
-  flex: none;
-}
+.footer { flex: none; }
 
 @media (max-width: 40rem) {
   :host([logo]) .brand-text { display: none; }

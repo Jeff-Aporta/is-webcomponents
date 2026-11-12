@@ -1,14 +1,6 @@
 /* <iswc-breadcrumb-item> — paso individual. */
 
-:host {
-  --_gap: 0.4em;
-  display: inline-flex;
-  align-items: center;
-  font-size: inherit;
-  font-family: inherit;
-  color: var(--iswc-text-muted);
-  position: relative;
-}
+:host { --_gap: 0.4em; display: inline-flex; align-items: center; font-size: inherit; font-family: inherit; color: var(--iswc-text-muted); position: relative; }
 :host([current]) {
   color: var(--iswc-text, inherit);
   font-weight: 600;
@@ -16,21 +8,8 @@
 
 /* Si hay icono, lo muestra; vacío, lo oculta. */
 .start,
-.end {
-  display: inline-flex;
-  align-items: center;
-
-  &:empty { display: none; }
-}
-
-.label {
-  color: inherit;
-  text-decoration: none;
-  font: inherit;
-  display: inline-flex;
-  align-items: center;
-  cursor: default;
-}
+.end { display: inline-flex; align-items: center; &:empty { display: none; }; }
+.label { color: inherit; text-decoration: none; font: inherit; display: inline-flex; align-items: center; cursor: default; }
 
 /* `a&` es CSS Nesting Level 2 (a + parent); sass solo soporta L1, asi que
    este bloque vive fuera del nesting: la regla es `<a class="label">`. */
@@ -54,14 +33,7 @@ a.label {
 
 /* El separador va delante del label: solo el primero lo oculta. */
 :host(:first-of-type) .separator { display: none; }
-
-.separator {
-  color: var(--iswc-text-muted);
-  display: inline-flex;
-  align-items: center;
-  margin: 0 var(--_gap);
-  opacity: 0.6;
-}
+.separator { color: var(--iswc-text-muted); display: inline-flex; align-items: center; margin: 0 var(--_gap); opacity: 0.6; }
 
 /* Táctil: en punteros gruesos el área mínima es 44 px (WCAG 2.5.5), única medida en px a propósito; el escritorio no cambia. */
 @media (pointer: coarse) {

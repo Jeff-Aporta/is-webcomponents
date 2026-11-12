@@ -1,17 +1,10 @@
 @charset "UTF-8";
+@use 'kit' as *;
 /* Shadow DOM: :host[attr] NO matchea (el host es "featureless").
  * Usar siempre :host([attr]) como reglas hermanas, nunca &[attr] anidado. */
-:host {
-  --iswc-button-group-radius: var(--iswc-button-border-radius);
-  --iswc-button-group-gap: 0.3em;
-  --iswc-button-group-pad: 0.25em;
-  --iswc-button-group-accent: var(--iswc-accent);
-  display: inline-flex;
-  vertical-align: middle;
-  max-width: 100%;
-}
+:host { --iswc-button-group-radius: var(--iswc-button-border-radius); --iswc-button-group-gap: 0.3em; --iswc-button-group-pad: 0.25em; --iswc-button-group-accent: var(--iswc-accent); display: inline-flex; vertical-align: middle; max-width: 100%; }
 :host([hidden]) {
-  display: none !important;
+  @include oculto;
 }
 
 .button-group {
@@ -231,6 +224,5 @@
 }
 
 :host([disabled]) {
-  opacity: 0.55;
-  pointer-events: none;
+  @include deshabilitado(.55);
 }

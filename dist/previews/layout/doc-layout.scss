@@ -1,3 +1,4 @@
+@use 'kit' as *;
 /* <iswc-doc-layout> — barra + navegación | contenido | índice con scroll-spy. */
 :host {
   --doc-layout-bar-h: 3.3548em;
@@ -20,27 +21,15 @@
   font-size: var(--doc-layout-fs);
   box-sizing: border-box;
 
-  &[hidden] { display: none !important; }
+  &[hidden] { @include oculto; }
 }
 /* TV y monitores grandes: todo escala sin romper la proporción de lectura. */
 @media (min-width: 106.25em) { :host { --doc-layout-fs: 1.0625em; --doc-layout-bar-h: 3.4118em; } }
 @media (min-width: 150em) { :host { --doc-layout-fs: 1.25em; --doc-layout-bar-h: 3.4em; } }
-
 *, *::before, *::after { box-sizing: border-box; }
 
 /* Barra superior */
-.bar {
-  display: flex;
-  align-items: center;
-  gap: .6452em;
-  min-height: var(--doc-layout-bar-h);
-  padding: 0 .7742em;
-  border-bottom: 1px solid var(--iswc-border);
-  background: var(--iswc-bg-elev, var(--doc-layout-side-bg));
-  color: var(--iswc-text);
-  position: relative;
-  z-index: 4;
-}
+.bar { display: flex; align-items: center; gap: .6452em; min-height: var(--doc-layout-bar-h); padding: 0 .7742em; border-bottom: 1px solid var(--iswc-border); background: var(--iswc-bg-elev, var(--doc-layout-side-bg)); color: var(--iswc-text); position: relative; z-index: 4; }
 :host([no-bar]) .bar { display: none; }
 .brand { display: flex; align-items: center; gap: .6452em; min-width: 0; margin-right: auto; overflow: hidden; }
 .actions { display: flex; align-items: center; gap: .5161em; flex: none; }
@@ -71,7 +60,7 @@
 
   svg { width: 1.5004em; height: 1.5004em; }
   &:hover { background: var(--iswc-control-bg-hover, var(--iswc-bg-soft)); color: var(--iswc-text); }
-  &:focus-visible { outline: 2px solid var(--doc-layout-accent); outline-offset: 2px; }
+  &:focus-visible { @include foco-visible(var(--doc-layout-accent), 2px, 2px); }
   &[aria-pressed="true"] { color: var(--doc-layout-accent); background: color-mix(in srgb, var(--doc-layout-accent) 12%, transparent); }
 }
 .toggle[hidden] { display: none; }
@@ -82,40 +71,13 @@ iswc-split-panel { height: 100%; min-height: 0; }
 iswc-split-panel::part(panel) { overflow: hidden; min-height: 0; }
 iswc-split-panel::part(divider) { background: var(--iswc-border-soft, var(--iswc-border)); transition: background-color .15s; }
 iswc-split-panel::part(divider):hover { background: var(--doc-layout-accent); }
-aside.start {
-  height: 100%;
-  min-height: 0;
-  overflow: auto;
-  background: var(--doc-layout-side-bg);
-  color: var(--iswc-text);
-  scrollbar-gutter: stable;
-}
-main.content {
-  height: 100%;
-  min-height: 0;
-  overflow: auto;
-  overflow-x: hidden;
-  background: var(--doc-layout-bg);
-  scrollbar-gutter: stable;
-  outline: none;
-}
-aside.end {
-  height: 100%;
-  min-height: 0;
-  overflow: auto;
-  background: var(--doc-layout-bg);
-}
+aside.start { height: 100%; min-height: 0; overflow: auto; background: var(--doc-layout-side-bg); color: var(--iswc-text); scrollbar-gutter: stable; }
+main.content { height: 100%; min-height: 0; overflow: auto; overflow-x: hidden; background: var(--doc-layout-bg); scrollbar-gutter: stable; outline: none; }
+aside.end { height: 100%; min-height: 0; overflow: auto; background: var(--doc-layout-bg); }
 
 /* Índice de la página con scroll-spy */
 nav.toc { padding: 2.1505em 1.2289em 2.4578em 1.3825em; font-size: .84em; }
-.toc-title {
-  margin: 0 0 1.2135em;
-  font-size: .76em;
-  font-weight: 700;
-  letter-spacing: .1em;
-  text-transform: uppercase;
-  color: var(--iswc-text-dim);
-}
+.toc-title { margin: 0 0 1.2135em; font-size: .76em; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--iswc-text-dim); }
 .toc-links { display: flex; flex-direction: column; }
 .toc-link {
   display: block;
@@ -128,7 +90,7 @@ nav.toc { padding: 2.1505em 1.2289em 2.4578em 1.3825em; font-size: .84em; }
   transition: color .12s, border-color .12s, background-color .12s;
 
   &:hover { color: var(--iswc-text); border-left-color: var(--iswc-text-dim); background: var(--iswc-control-bg-hover, var(--iswc-bg-soft)); }
-  &:focus-visible { outline: 2px solid var(--doc-layout-accent); outline-offset: -2px; }
+  &:focus-visible { @include foco-visible(var(--doc-layout-accent), 2px, -2px); }
   &.nivel-3 { padding-left: 1.9403em; font-size: .95em; }
   &.nivel-4 { padding-left: 3.0722em; font-size: .9em; }
   &.activo {
@@ -142,28 +104,8 @@ nav.toc { padding: 2.1505em 1.2289em 2.4578em 1.3825em; font-size: .84em; }
 /* Cajones (celular) */
 .scrim, .drawer { display: none; }
 :host([data-movil]) {
-  .scrim {
-    display: block;
-    position: absolute;
-    inset: var(--doc-layout-bar-h) 0 0 0;
-    background: rgb(0 0 0 / .45);
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity .2s;
-    z-index: 8;
-  }
-  .drawer {
-    display: block;
-    position: absolute;
-    top: var(--doc-layout-bar-h);
-    bottom: 0;
-    width: min(21.9355em, 88vw);
-    overflow: auto;
-    background: var(--doc-layout-side-bg);
-    box-shadow: 0 1.0323em 3.0968em rgb(0 0 0 / .35);
-    z-index: 9;
-    transition: transform .22s ease;
-  }
+.scrim { display: block; position: absolute; inset: var(--doc-layout-bar-h) 0 0 0; background: rgb(0 0 0 / .45); opacity: 0; pointer-events: none; transition: opacity .2s; z-index: 8; }
+.drawer { display: block; position: absolute; top: var(--doc-layout-bar-h); bottom: 0; width: min(21.9355em, 88vw); overflow: auto; background: var(--doc-layout-side-bg); box-shadow: 0 1.0323em 3.0968em rgb(0 0 0 / .35); z-index: 9; transition: transform .22s ease; }
   .drawer.start { left: 0; transform: translateX(-104%); }
   .drawer.end { right: 0; transform: translateX(104%); background: var(--doc-layout-bg); }
 }

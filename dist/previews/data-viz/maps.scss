@@ -1,8 +1,7 @@
+@use 'kit' as *;
 /* iswc-maps */
 :host {
-  display: block;
-  font: inherit;
-  color: var(--iswc-text);
+  @include texto-base();
   --iswc-maps-grid-color: color-mix(in srgb, var(--iswc-text) 12%, transparent);
   --iswc-maps-meridian-color: color-mix(in srgb, var(--iswc-text) 18%, transparent);
 

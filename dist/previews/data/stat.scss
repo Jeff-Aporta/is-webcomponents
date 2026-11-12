@@ -43,36 +43,11 @@
 }
 
 
-.head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.5em;
-}
-
-.label {
-  min-width: 0;
-  overflow-wrap: anywhere;
-  font-size: 0.85em;
-  color: var(--muted);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  font-weight: 500;
-}
+.head { display: flex; align-items: center; justify-content: space-between; gap: 0.5em; }
+.label { min-width: 0; overflow-wrap: anywhere; font-size: 0.85em; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 500; }
 
 
-.icon {
-  display: inline-flex;
-  flex: none; /* una etiqueta larga no lo aplasta en píldora */
-  align-items: center;
-  justify-content: center;
-  inline-size: 2em;
-  block-size: 2em;
-  border-radius: 0.5em;
-  background: color-mix(in srgb, var(--brand) 15%, transparent);
-  color: var(--brand);
-  font-size: 1.1em;
-}
+.icon { display: inline-flex; flex: none; /* una etiqueta larga no lo aplasta en píldora */ align-items: center; justify-content: center; inline-size: 2em; block-size: 2em; border-radius: 0.5em; background: color-mix(in srgb, var(--brand) 15%, transparent); color: var(--brand); font-size: 1.1em; }
 
 
 .value {
@@ -86,27 +61,9 @@
 }
 
 
-.foot {
-  display: flex;
-  align-items: center;
-  gap: 0.5em;
-  font-size: 0.85em;
-}
-
-.trend {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.25em;
-  padding: 0.125em 0.5em;
-  border-radius: 999em;
-  font-weight: 500;
-  background: color-mix(in srgb, var(--fg) 8%, transparent);
-  color: var(--muted);
-}
+.foot { display: flex; align-items: center; gap: 0.5em; font-size: 0.85em; }
+.trend { display: inline-flex; align-items: center; gap: 0.25em; padding: 0.125em 0.5em; border-radius: 999em; font-weight: 500; background: color-mix(in srgb, var(--fg) 8%, transparent); color: var(--muted); }
 
 /* Sin contenido no se pinta la caja (ni el cuadro del ícono ni la píldora de tendencia). */
 .icon[hidden], .trend[hidden], .helper[hidden], .foot[hidden] { display: none; }
-
-.helper {
-  color: var(--muted);
-}
+.helper { color: var(--muted); }

@@ -2,21 +2,12 @@
 @use 'kit' as *;
 
 :host { @include host-lienzo-diagrama; }
-
 .wrap { @include wrap-lienzo-diagrama('Línea de tiempo no disponible (payload inválido).'); }
-
-.slot-hidden { display: none !important; }
-
+.slot-hidden { @include oculto; }
 @include lienzo-svg('tl-svg');
 
-.tl-event {
-  transition: opacity 0.18s ease;
-  &.iswc-dim { opacity: 0.32; }
-}
-
-.tl-event__card {
-  transition: stroke-width 0.12s ease-out;
-}
+.tl-event { @include transicion(opacity 0.18s ease); &.iswc-dim { opacity: 0.32; }; }
+.tl-event__card { @include transicion(stroke-width 0.12s ease-out); }
 
 .tl-event {
   &.iswc-active {
@@ -24,9 +15,7 @@
   }
 }
 
-.tl-legend__item {
-  transition: opacity 0.18s ease;
-}
+.tl-legend__item { @include transicion(opacity 0.18s ease); }
 
 .tl-event-label {
   :is(.tk-inline-icon, iswc-icon.tk-inline-icon) {

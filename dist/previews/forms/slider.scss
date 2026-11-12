@@ -1,3 +1,4 @@
+@use 'kit' as *;
 :host {
   --iswc-slider-track-size: 0.375em;
   --iswc-slider-thumb-size: 1.1em;
@@ -12,84 +13,27 @@
   box-sizing: border-box;
 }
 
-:host([hidden]) { display: none !important; }
-
+:host([hidden]) { @include oculto; }
 :host([color="neutral"]) { --iswc-slider-fill: var(--iswc-control-border); }
 :host([color="text"]) { --iswc-slider-fill: var(--iswc-text); }
 :host([color="success"]) { --iswc-slider-fill: var(--iswc-color-success); }
 :host([color="warning"]) { --iswc-slider-fill: var(--iswc-color-warning); }
 :host([color="danger"])  { --iswc-slider-fill: var(--iswc-color-danger); }
-
-.form-control {
-  display: flex;
-  flex-direction: column;
-  gap: 0.35em;
-}
-
-.label {
-  font-size: 0.875em;
-  font-weight: 500;
-  color: var(--iswc-text-soft, inherit);
-  inline-size: fit-content;
-
-  &[hidden] { display: none !important; }
-}
-
-.hint {
-  font-size: 0.8em;
-  color: var(--iswc-text-dim);
-
-  &[hidden] { display: none !important; }
-}
+.form-control { display: flex; flex-direction: column; gap: 0.35em; }
+.label { font-size: 0.875em; font-weight: 500; color: var(--iswc-text-soft, inherit); inline-size: fit-content; &[hidden] { @include oculto; }; }
+.hint { font-size: 0.8em; color: var(--iswc-text-dim); &[hidden] { @include oculto; }; }
 
 /* ---- pista ------------------------------------------------------------ */
 
-.base {
-  position: relative;
-  box-sizing: border-box;
-  touch-action: none;
-  cursor: pointer;
-}
+.base { position: relative; box-sizing: border-box; touch-action: none; cursor: pointer; }
 
 .rail,
-.track {
-  position: absolute;
-  border-radius: 999em;
-  pointer-events: none;
-}
-
+.track { position: absolute; border-radius: 999em; pointer-events: none; }
 .rail { background: var(--iswc-slider-rail); }
-.track {
-  background: var(--iswc-slider-fill);
-
-  &[hidden] { display: none !important; }
-}
-
-.marks {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-}
-
-.mark {
-  position: absolute;
-  inline-size: var(--iswc-slider-track-size);
-  block-size: var(--iswc-slider-track-size);
-  border-radius: 999em;
-  background: color-mix(in srgb, var(--iswc-text) 45%, transparent);
-
-  &[data-active] {
-    background: color-mix(in srgb, var(--iswc-on-brand) 70%, transparent);
-  }
-}
-
-.mark-label {
-  position: absolute;
-  font-size: 0.72em;
-  color: var(--iswc-text-dim);
-  white-space: nowrap;
-  font-variant-numeric: tabular-nums;
-}
+.track { background: var(--iswc-slider-fill); &[hidden] { @include oculto; }; }
+.marks { position: absolute; inset: 0; pointer-events: none; }
+.mark { position: absolute; inline-size: var(--iswc-slider-track-size); block-size: var(--iswc-slider-track-size); border-radius: 999em; background: color-mix(in srgb, var(--iswc-text) 45%, transparent); &[data-active] { background: color-mix(in srgb, var(--iswc-on-brand) 70%, transparent); } }
+.mark-label { position: absolute; font-size: 0.72em; color: var(--iswc-text-dim); white-space: nowrap; font-variant-numeric: tabular-nums; }
 
 .thumb {
   position: absolute;
@@ -148,54 +92,13 @@
 /* ---- horizontal ------------------------------------------------------- */
 
 :host(:not([orientation="vertical"])) {
-  .base {
-    block-size: var(--iswc-slider-thumb-size);
-    margin-block: 0.55em;
-    margin-inline: calc(var(--iswc-slider-thumb-size) / 2);
-  }
-
-  .rail {
-    inset-inline: 0;
-    inset-block-start: 50%;
-    block-size: var(--iswc-slider-track-size);
-    translate: 0 -50%;
-  }
-
-  .track {
-    inset-block-start: 50%;
-    block-size: var(--iswc-slider-track-size);
-    translate: 0 -50%;
-  }
-
-  .mark {
-    inset-inline-start: var(--pos);
-    inset-block-start: 50%;
-    translate: -50% -50%;
-  }
-
-  .mark-label {
-    inset-inline-start: var(--pos);
-    inset-block-start: calc(100% + 0.3em);
-    translate: -50% 0;
-  }
-
-  .thumb {
-    inset-block-start: 50%;
-    translate: -50% -50%;
-  }
-
-  .value-label {
-    inset-block-end: calc(100% + 0.55em);
-    inset-inline-start: 50%;
-    translate: -50% 0;
-
-    &::after {
-      inset-block-start: 100%;
-      inset-inline-start: 50%;
-      translate: -50% -.0833em;
-      border-block-start-color: var(--iswc-slider-fill);
-    }
-  }
+.base { block-size: var(--iswc-slider-thumb-size); margin-block: 0.55em; margin-inline: calc(var(--iswc-slider-thumb-size) / 2); }
+.rail { inset-inline: 0; inset-block-start: 50%; block-size: var(--iswc-slider-track-size); translate: 0 -50%; }
+.track { inset-block-start: 50%; block-size: var(--iswc-slider-track-size); translate: 0 -50%; }
+.mark { inset-inline-start: var(--pos); inset-block-start: 50%; translate: -50% -50%; }
+.mark-label { inset-inline-start: var(--pos); inset-block-start: calc(100% + 0.3em); translate: -50% 0; }
+.thumb { inset-block-start: 50%; translate: -50% -50%; }
+.value-label { inset-block-end: calc(100% + 0.55em); inset-inline-start: 50%; translate: -50% 0; &::after { inset-block-start: 100%; inset-inline-start: 50%; translate: -50% -.0833em; border-block-start-color: var(--iswc-slider-fill); } }
 
   /* Espacio para las etiquetas de marks */
   .base:has(.marks[data-has-labels]) {
@@ -206,59 +109,14 @@
 /* ---- vertical --------------------------------------------------------- */
 
 :host([orientation="vertical"]) {
-  .form-control {
-    inline-size: fit-content;
-  }
-
-  .base {
-    inline-size: var(--iswc-slider-thumb-size);
-    block-size: var(--iswc-slider-length);
-    margin-block: calc(var(--iswc-slider-thumb-size) / 2);
-    margin-inline: 0.55em;
-  }
-
-  .rail {
-    inset-block: 0;
-    inset-inline-start: 50%;
-    inline-size: var(--iswc-slider-track-size);
-    translate: -50% 0;
-  }
-
-  .track {
-    inset-inline-start: 50%;
-    inline-size: var(--iswc-slider-track-size);
-    translate: -50% 0;
-  }
-
-  .mark {
-    inset-block-end: var(--pos);
-    inset-inline-start: 50%;
-    translate: -50% 50%;
-  }
-
-  .mark-label {
-    inset-block-end: var(--pos);
-    inset-inline-start: calc(100% + 0.5em);
-    translate: 0 50%;
-  }
-
-  .thumb {
-    inset-inline-start: 50%;
-    translate: -50% 50%;
-  }
-
-  .value-label {
-    inset-inline-end: calc(100% + 0.55em);
-    inset-block-start: 50%;
-    translate: 0 -50%;
-
-    &::after {
-      inset-inline-start: 100%;
-      inset-block-start: 50%;
-      translate: -.0833em -50%;
-      border-inline-start-color: var(--iswc-slider-fill);
-    }
-  }
+.form-control { inline-size: fit-content; }
+.base { inline-size: var(--iswc-slider-thumb-size); block-size: var(--iswc-slider-length); margin-block: calc(var(--iswc-slider-thumb-size) / 2); margin-inline: 0.55em; }
+.rail { inset-block: 0; inset-inline-start: 50%; inline-size: var(--iswc-slider-track-size); translate: -50% 0; }
+.track { inset-inline-start: 50%; inline-size: var(--iswc-slider-track-size); translate: -50% 0; }
+.mark { inset-block-end: var(--pos); inset-inline-start: 50%; translate: -50% 50%; }
+.mark-label { inset-block-end: var(--pos); inset-inline-start: calc(100% + 0.5em); translate: 0 50%; }
+.thumb { inset-inline-start: 50%; translate: -50% 50%; }
+.value-label { inset-inline-end: calc(100% + 0.55em); inset-block-start: 50%; translate: 0 -50%; &::after { inset-inline-start: 100%; inset-block-start: 50%; translate: -.0833em -50%; border-inline-start-color: var(--iswc-slider-fill); } }
 
   /* Espacio para las etiquetas de marks */
   .base:has(.marks[data-has-labels]) {
@@ -281,9 +139,7 @@
   [value-label="auto"]:state(focused),
   [with-tooltip]:state(dragging),
   [with-tooltip]:state(focused)
-)) {
-  .value-label { opacity: 1; }
-}
+)) { .value-label { opacity: 1; }; }
 
 :host(:is([value-label="auto"], [with-tooltip])) {
   .base:hover .value-label { opacity: 1; }
@@ -299,6 +155,5 @@
 }
 
 :host([disabled]) {
-  opacity: 0.55;
-  pointer-events: none;
+  @include deshabilitado(.55);
 }

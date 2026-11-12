@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/core/README.md
 // anunciar.ts — el anunciador vivo (opt-in).
 //
 // Una sola region `aria-live` para toda la pagina: los lectores de pantalla anuncian lo que se

@@ -1,3 +1,4 @@
+@use 'kit' as *;
 :host {
   --iswc-select-border-radius: var(--iswc-radius-sm);
   --iswc-select-border: var(--iswc-control-border);
@@ -15,7 +16,7 @@
   box-sizing: border-box;
 
   /* Las reglas de autor ganan a `[hidden]` del UA: hay que reafirmarlo */
-  [hidden] { display: none !important; }
+  [hidden] { @include oculto; }
 
   .form-control {
     display: flex;
@@ -126,7 +127,7 @@
     flex: none;
     color: var(--iswc-text-dim);
     line-height: 0;
-    &[hidden] { display: none !important; }
+    &[hidden] { @include oculto; }
   }
 
   .caret {
@@ -141,9 +142,7 @@
   /* Dialog a viewport completo en top layer → no lo clippea overflow */
   .popup {
     position: fixed;
-    inset: 0;
-    inline-size: 100%;
-    block-size: 100%;
+    @include llenar-host;
     max-inline-size: none;
     max-block-size: none;
     margin: 0;
@@ -269,8 +268,7 @@
 }
 
 :host([disabled]) {
-  opacity: 0.55;
-  pointer-events: none;
+  @include deshabilitado(.55);
 }
 
 :host([full-width]) {
@@ -278,33 +276,18 @@
 }
 
 :host(:is([open], :state(open))) {
-  .base {
-    outline: 2px solid var(--iswc-select-focus);
-    outline-offset: 1px;
-  }
-
+.base { @include foco-visible(var(--iswc-select-focus), 2px, 1px); }
   .caret { transform: rotate(180deg); }
 }
 
 /* --- appearance (variants de MUI) ---------------------------------- */
 
 :host([variant="filled"]) {
-  .base {
-    background: var(--iswc-control-bg-hover);
-    border-color: transparent;
-    border-bottom-color: var(--iswc-select-border);
-    border-radius: var(--iswc-select-border-radius) var(--iswc-select-border-radius) 0 0;
-  }
+.base { background: var(--iswc-control-bg-hover); border-color: transparent; border-bottom-color: var(--iswc-select-border); border-radius: var(--iswc-select-border-radius) var(--iswc-select-border-radius) 0 0; }
 }
 
 :host([variant="underlined"]) {
-  .base {
-    background: transparent;
-    border-color: transparent;
-    border-bottom-color: var(--iswc-select-border);
-    border-radius: 0;
-    padding-inline: 0.15em;
-  }
+.base { background: transparent; border-color: transparent; border-bottom-color: var(--iswc-select-border); border-radius: 0; padding-inline: 0.15em; }
 }
 
 /* --- error --------------------------------------------------------- */
@@ -313,30 +296,14 @@
   --iswc-select-border: var(--iswc-select-danger);
   --iswc-select-focus: var(--iswc-select-danger);
 
-  .label {
-    color: var(--iswc-select-danger-text);
-  }
+.label { color: var(--iswc-select-danger-text); }
 }
 
 /* --- checkmarks (solo en multiple) --------------------------------- */
 
 :host([multiple][checkmarks]) {
-  .mark {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    flex: none;
-    box-sizing: border-box;
-    inline-size: 1.15em;
-    block-size: 1.15em;
-    border: 1px solid var(--iswc-control-border);
-    border-radius: 0.25em;
-  }
-
-  .check {
-    font-size: 0.85em;
-    color: var(--iswc-on-brand);
-  }
+.mark { display: inline-flex; align-items: center; justify-content: center; flex: none; box-sizing: border-box; inline-size: 1.15em; block-size: 1.15em; border: 1px solid var(--iswc-control-border); border-radius: 0.25em; }
+.check { font-size: 0.85em; color: var(--iswc-on-brand); }
 
   .option[aria-selected="true"] {
     .mark {

@@ -1,3 +1,4 @@
+@use 'kit' as *;
 /* <iswc-video> — chrome tipo YouTube: barra de progreso propia sobre una fila
    de controles, scrim inferior, auto-ocultado y overlay de play central.
    El acento de marca sustituye al rojo de YouTube. */
@@ -30,42 +31,12 @@
 
 /* Cursor fuera cuando el chrome se esconde (igual que YouTube) */
 :host([data-idle]) { cursor: none; }
-
-.wrap {
-  position: relative;
-  inline-size: 100%;
-  block-size: 100%;
-  display: flex;
-  flex-direction: column;
-  min-block-size: 0;
-}
-
-.video {
-  display: block;
-  inline-size: 100%;
-  block-size: 100%;
-  flex: 1 1 auto;
-  object-fit: contain;
-  background: #000;
-  min-block-size: 0;
-}
-
+.wrap { position: relative; inline-size: 100%; block-size: 100%; display: flex; flex-direction: column; min-block-size: 0; }
+.video { display: block; inline-size: 100%; block-size: 100%; flex: 1 1 auto; object-fit: contain; background: #000; min-block-size: 0; }
 slot { display: none; }
 
 /* ── Scrim inferior: legibilidad sin tapar la imagen ───────────── */
-.scrim {
-  position: absolute;
-  inset-inline: 0;
-  inset-block-end: 0;
-  block-size: 9em;
-  pointer-events: none;
-  background: linear-gradient(to top,
-    rgb(0 0 0 / 72%) 0%,
-    rgb(0 0 0 / 45%) 35%,
-    transparent 100%);
-  opacity: 1;
-  transition: opacity 200ms ease;
-}
+.scrim { position: absolute; inset-inline: 0; inset-block-end: 0; block-size: 9em; pointer-events: none; background: linear-gradient(to top, rgb(0 0 0 / 72%) 0%, rgb(0 0 0 / 45%) 35%, transparent 100%); opacity: 1; transition: opacity 200ms ease; }
 
 /* ── Play grande central ───────────────────────────────────────── */
 .big-play {
@@ -97,7 +68,7 @@ slot { display: none; }
     box-shadow: 0 0 0 .0625em rgb(255 255 255 / 30%), 0 .5em 1.625em rgb(0 0 0 / 45%);
   }
 
-  &:focus-visible { outline: 2px solid #fff; outline-offset: .1875em; }
+  &:focus-visible { @include foco-visible(#fff, 2px, .1875em); }
 }
 
 :host(:is([data-playing], [data-no-controls])) .big-play {
@@ -107,27 +78,11 @@ slot { display: none; }
 }
 
 /* ── Chrome inferior ──────────────────────────────────────────── */
-.controls {
-  position: absolute;
-  inset-inline: 0;
-  inset-block-end: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 0.1em;
-  padding: 0 0.6em 0.35em;
-  box-sizing: border-box;
-  transition: opacity 200ms ease, transform 200ms ease;
-
-  &[hidden] { display: none !important; }
-}
+.controls { position: absolute; inset-inline: 0; inset-block-end: 0; display: flex; flex-direction: column; gap: 0.1em; padding: 0 0.6em 0.35em; box-sizing: border-box; transition: opacity 200ms ease, transform 200ms ease; &[hidden] { @include oculto; }; }
 
 /* Auto-ocultado: solo mientras reproduce y sin interacción reciente */
 :host([data-idle]) {
-  .controls {
-    opacity: 0;
-    transform: translateY(0.8em);
-    pointer-events: none;
-  }
+.controls { opacity: 0; transform: translateY(0.8em); pointer-events: none; }
   .scrim { opacity: 0; }
 }
 
@@ -150,15 +105,7 @@ slot { display: none; }
   &:hover .tip { opacity: 1; }
 }
 
-.bar {
-  position: relative;
-  inline-size: 100%;
-  block-size: .1875em;
-  border-radius: .125em;
-  background: rgb(255 255 255 / 28%);
-  transition: block-size 120ms ease;
-  overflow: hidden;
-}
+.bar { position: relative; inline-size: 100%; block-size: .1875em; border-radius: .125em; background: rgb(255 255 255 / 28%); transition: block-size 120ms ease; overflow: hidden; }
 
 :is(.buffered, .played) {
   position: absolute;
@@ -167,36 +114,16 @@ slot { display: none; }
   pointer-events: none;
 }
 
-.buffered {
-  inline-size: var(--buffered);
-  background: rgb(255 255 255 / 42%);
-}
-
-.played {
-  inline-size: var(--played);
-  background: var(--iswc-video-accent);
-}
+.buffered { inline-size: var(--buffered); background: rgb(255 255 255 / 42%); }
+.played { inline-size: var(--played); background: var(--iswc-video-accent); }
 
 /* Scrubber: aparece al pasar el ratón, como YouTube */
-.thumb {
-  position: absolute;
-  inset-block-start: 50%;
-  inset-inline-start: var(--played);
-  inline-size: 0.85em;
-  block-size: 0.85em;
-  border-radius: 50%;
-  background: var(--iswc-video-accent);
-  transform: translate(-50%, -50%) scale(0);
-  transition: transform 120ms ease;
-  pointer-events: none;
-}
+.thumb { position: absolute; inset-block-start: 50%; inset-inline-start: var(--played); inline-size: 0.85em; block-size: 0.85em; border-radius: 50%; background: var(--iswc-video-accent); transform: translate(-50%, -50%) scale(0); transition: transform 120ms ease; pointer-events: none; }
 
 /* El input real queda encima, invisible: mantiene teclado y a11y. */
 .seek {
   position: absolute;
-  inset: 0;
-  inline-size: 100%;
-  block-size: 100%;
+  @include llenar-host;
   margin: 0;
   appearance: none;
   -webkit-appearance: none;
@@ -204,8 +131,7 @@ slot { display: none; }
   cursor: pointer;
 
   &:focus { outline: none; }
-  &:focus-visible + .bar { outline: 2px solid #fff; outline-offset: .1875em; }
-
+  &:focus-visible + .bar { @include foco-visible(#fff, 2px, .1875em); }
   &::-webkit-slider-runnable-track { background: transparent; block-size: 100%; }
   &::-webkit-slider-thumb { -webkit-appearance: none; inline-size: .075em; block-size: .075em; opacity: 0; }
   &::-moz-range-track { background: transparent; }
@@ -230,14 +156,7 @@ slot { display: none; }
 }
 
 /* ── Fila de botones ──────────────────────────────────────────── */
-.row {
-  display: flex;
-  align-items: center;
-  gap: 0.15em;
-  min-inline-size: 0;
-
-  & .spacer { flex: 1 1 auto; }
-}
+.row { display: flex; align-items: center; gap: 0.15em; min-inline-size: 0; & .spacer { flex: 1 1 auto; }; }
 
 :is(.ctrl, .iconbtn) {
   flex-shrink: 0;
@@ -257,7 +176,7 @@ slot { display: none; }
   transition: opacity 120ms ease, background-color 120ms ease;
 
   &:hover { opacity: 1; background: rgb(255 255 255 / 12%); }
-  &:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+  &:focus-visible { @include foco-visible(#fff, 2px, 2px); }
   &[hidden] { display: none; }
 }
 
@@ -274,9 +193,7 @@ iswc-button:is(.big-play, .iconbtn)::part(button) {
   padding: 0;
   border: 0;
   border-radius: inherit;
-  background: transparent;
-  color: inherit;
-  font: inherit;
+  @include reset-boton;
   cursor: inherit;
   line-height: 0;
 
@@ -284,16 +201,7 @@ iswc-button:is(.big-play, .iconbtn)::part(button) {
   &:focus-visible { outline: none; }
 }
 
-.time {
-  flex-shrink: 0;
-  margin-inline: 0.4em 0.2em;
-  font-size: 0.78em;
-  font-variant-numeric: tabular-nums;
-  white-space: nowrap;
-  opacity: 0.92;
-
-  & .sep { opacity: 0.6; margin-inline: 0.15em; }
-}
+.time { flex-shrink: 0; margin-inline: 0.4em 0.2em; font-size: 0.78em; font-variant-numeric: tabular-nums; white-space: nowrap; opacity: 0.92; & .sep { opacity: 0.6; margin-inline: 0.15em; }; }
 
 /* ── Volumen: se despliega al hover, como YouTube ─────────────── */
 .vol {
@@ -422,14 +330,7 @@ iswc-button:is(.big-play, .iconbtn)::part(button) {
   }
 }
 
-.menu__head {
-  padding: 0.25em 0.5em 0.4em;
-  font-size: 0.68em;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  opacity: 0.6;
-}
+.menu__head { padding: 0.25em 0.5em 0.4em; font-size: 0.68em; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; opacity: 0.6; }
 
 @media (prefers-reduced-motion: reduce) {
   :is(.volume, .controls, .scrim, .big-play, .bar, .thumb) { transition: none; }
@@ -469,19 +370,5 @@ iswc-button:is(.big-play, .iconbtn)::part(button) {
 /* ── F0.3 g12 [media/error-state]: overlay de error ─────────── */
 :host([data-error]) {
   .big-play { display: none; }
-
-  &::after {
-    content: "No se pudo cargar el vídeo (" attr(data-error) ")";
-    position: absolute;
-    inset: 0;
-    display: grid;
-    place-items: center;
-    text-align: center;
-    padding: 1em;
-    background: rgb(0 0 0 / 60%);
-    color: #fff;
-    font-size: 0.9em;
-    pointer-events: none;
-    z-index: 2;
-  }
+&::after { content: "No se pudo cargar el vídeo (" attr(data-error) ")"; position: absolute; inset: 0; display: grid; place-items: center; text-align: center; padding: 1em; background: rgb(0 0 0 / 60%); color: #fff; font-size: 0.9em; pointer-events: none; z-index: 2; }
 }

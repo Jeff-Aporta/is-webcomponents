@@ -1,26 +1,8 @@
+@use 'kit' as *;
 /* iswc-rte */
-:host {
-  display: block;
-  font: inherit;
-  color: var(--iswc-text);
-  position: relative;
-}
-.root {
-  display: flex; flex-direction: column;
-  border: 1px solid var(--iswc-control-border, var(--iswc-border));
-  border-radius: var(--iswc-radius-sm);
-  background: var(--iswc-bg-elev);
-  overflow: hidden;
-}
-.toolbar {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: .125em;
-  padding: .35em .5em;
-  background: color-mix(in srgb, var(--iswc-bg-elev) 92%, transparent);
-  border-bottom: 1px solid var(--iswc-border-soft);
-}
+:host { @include texto-base(); position: relative; }
+.root { display: flex; flex-direction: column; border: 1px solid var(--iswc-control-border, var(--iswc-border)); border-radius: var(--iswc-radius-sm); background: var(--iswc-bg-elev); overflow: hidden; }
+.toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: .125em; padding: .35em .5em; background: color-mix(in srgb, var(--iswc-bg-elev) 92%, transparent); border-bottom: 1px solid var(--iswc-border-soft); }
 .btn {
   font: inherit;
   border: 1px solid transparent;
@@ -37,7 +19,7 @@
     background: color-mix(in srgb, var(--iswc-accent) 14%, transparent);
     color: var(--iswc-accent);
   }
-  &:focus-visible { outline: 2px solid var(--iswc-focus); outline-offset: 1px; }
+  &:focus-visible { @include foco-visible(var(--iswc-focus), 2px, 1px); }
   /* Botón de modo fuente activo: mismo "apagado" que `.ql-active` en ISP. */
   &.active {
     background: color-mix(in srgb, var(--iswc-accent) 18%, transparent);
@@ -45,13 +27,7 @@
     & svg { opacity: .5; }
   }
 }
-.sep {
-  display: inline-block;
-  width: .0625em;
-  height: 1.125em;
-  background: var(--iswc-border-soft);
-  margin: 0 .15em;
-}
+.sep { display: inline-block; width: .0625em; height: 1.125em; background: var(--iswc-border-soft); margin: 0 .15em; }
 
 .content {
   padding: .9239em 1.087em;
@@ -124,11 +100,4 @@
   &[hidden] { display: none; }
 }
 
-.placeholder {
-  position: absolute;
-  top: 4.5652em;
-  left: 1.087em;
-  color: var(--iswc-text-soft);
-  font-size: .92em;
-  pointer-events: none;
-}
+.placeholder { position: absolute; top: 4.5652em; left: 1.087em; color: var(--iswc-text-soft); font-size: .92em; pointer-events: none; }

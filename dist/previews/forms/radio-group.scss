@@ -1,8 +1,6 @@
+@use 'kit' as *;
 :host {
-  display: block;
-  font-family: var(--iswc-sans, inherit);
-  color: var(--iswc-text, inherit);
-  box-sizing: border-box;
+  @include host-base(block);
 
   .form-control {
     display: flex;
@@ -39,12 +37,7 @@
 /* `row` es alias booleano de orientation="horizontal" */
 :host([orientation="horizontal"]),
 :host([row]:not([orientation="vertical"])) {
-  .base {
-    flex-direction: row;
-    flex-wrap: wrap;
-    gap: 0.35em 1.15em;
-    align-items: center;
-  }
+.base { flex-direction: row; flex-wrap: wrap; gap: 0.35em 1.15em; align-items: center; }
 }
 
 /* ---- variant: se hereda a los <iswc-radio> por custom property ---------- */
@@ -62,16 +55,13 @@
   --iswc-radio-accent: var(--iswc-color-danger);
 
   .label,
-  .hint {
-    color: var(--iswc-danger-text, var(--iswc-color-danger-strong));
-  }
+.hint { color: var(--iswc-danger-text, var(--iswc-color-danger-strong)); }
 }
 
 /* ---- disabled / readonly ---------------------------------------------- */
 
 :host(:is([disabled], :state(disabled))) {
-  opacity: 0.55;
-  pointer-events: none;
+  @include deshabilitado(.55);
 }
 
 :host(:is([readonly], :state(readonly))) {
@@ -79,5 +69,5 @@
 }
 
 :host([hidden]) {
-  display: none !important;
+  @include oculto;
 }

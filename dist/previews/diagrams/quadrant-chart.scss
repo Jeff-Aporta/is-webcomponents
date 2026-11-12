@@ -2,23 +2,14 @@
 @use 'kit' as *;
 
 :host { @include host-lienzo-diagrama; }
-
 .wrap { @include wrap-lienzo-diagrama('Matriz de cuadrantes no disponible (payload inválido).'); }
-
-.slot-hidden { display: none !important; }
-
+.slot-hidden { @include oculto; }
 @include lienzo-svg('qd-svg');
 
 /* ── Marco y puntos ── */
 
-.qd-point {
-  transition: opacity 0.18s ease;
-  &.iswc-dim { opacity: 0.3; }
-}
-
-.qd-point__dot {
-  transition: r 0.12s ease-out, filter 0.12s ease-out;
-}
+.qd-point { @include transicion(opacity 0.18s ease); &.iswc-dim { opacity: 0.3; }; }
+.qd-point__dot { transition: r 0.12s ease-out, filter 0.12s ease-out; }
 
 .qd-point {
   &.iswc-active {
@@ -27,9 +18,7 @@
   }
 }
 
-.qd-frame__cell {
-  opacity: 0.7;
-}
+.qd-frame__cell { opacity: 0.7; }
 
 /* El visor es opt-in: sin `open-on-click` el componente no abre nada,
    asi que tampoco debe insinuar con el cursor que se puede hacer clic. */

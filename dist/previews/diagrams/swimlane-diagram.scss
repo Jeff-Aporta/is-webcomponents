@@ -2,24 +2,15 @@
 @use 'kit' as *;
 
 :host { @include host-lienzo-diagrama; }
-
 .wrap { @include wrap-lienzo-diagrama('Diagrama de carriles no disponible (payload inválido).'); }
-
-.slot-hidden { display: none !important; }
-
+.slot-hidden { @include oculto; }
 @include lienzo-svg('sw-svg');
 
 /* ── Carriles, pasos y flujos ── */
 
 .sw-step,
-.sw-link {
-  transition: opacity 0.18s ease;
-  &.iswc-dim { opacity: 0.3; }
-}
-
-.sw-step__box {
-  transition: filter 0.12s ease-out;
-}
+.sw-link { @include transicion(opacity 0.18s ease); &.iswc-dim { opacity: 0.3; }; }
+.sw-step__box { @include transicion(filter 0.12s ease-out); }
 
 .sw-step {
   &.iswc-active {
@@ -33,9 +24,7 @@
   }
 }
 
-.sw-lane__band {
-  opacity: 0.7;
-}
+.sw-lane__band { opacity: 0.7; }
 
 /* El visor es opt-in: sin `open-on-click` el componente no abre nada,
    asi que tampoco debe insinuar con el cursor que se puede hacer clic. */

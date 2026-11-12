@@ -1,7 +1,6 @@
+@use 'kit' as *;
 /* hidden en un nodo interno debe ganar al display propio del componente. */
-[hidden] {
-  display: none !important;
-}
+[hidden] { @include oculto; }
 
 /* Un `display` en :host gana al display:none del atributo hidden del UA. */
 :host([hidden]) {
@@ -9,10 +8,7 @@
 }
 
 :host {
-  display: block;
-  font-family: var(--iswc-sans, inherit);
-  color: var(--iswc-text, inherit);
-  box-sizing: border-box;
+  @include host-base(block);
 
   .base {
     display: grid;
@@ -24,9 +20,7 @@
     padding: 0.6em 0.4em;
     border: 0;
     border-radius: var(--iswc-radius-sm);
-    background: transparent;
-    color: inherit;
-    font: inherit;
+    @include reset-boton;
     text-transform: capitalize;
     cursor: pointer;
     &:hover:not(:disabled) { background: var(--iswc-control-bg-hover); }

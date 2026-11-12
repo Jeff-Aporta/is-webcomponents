@@ -11,25 +11,13 @@
 
 /* ─────────────────────────────── host ──────────────────────────────── */
 
-:host {
-  display: block;
-  width: 100%;
-  box-sizing: border-box;
-  color: inherit;
-  font-family: inherit;
-}
-
+:host { display: block; width: 100%; box-sizing: border-box; color: inherit; font-family: inherit; }
 :host([hidden]) { display: none; }
 
 /* ─────────────────────────────── head ──────────────────────────────── */
 
 /* Flotante: full-width, sin borde ni fondo. Solo titulo + lede. */
-.head {
-  display: block;
-  margin: 0 0 0.65em;
-  padding: 0;
-}
-
+.head { display: block; margin: 0 0 0.65em; padding: 0; }
 .head[hidden] { display: none; }
 
 /* El slot[name="title"] y slot[name="lede"] no deben aportar altura cuando
@@ -72,19 +60,7 @@
   -webkit-backdrop-filter: blur(.875em);
 }
 
-.card::before {
-  content: "";
-  position: absolute;
-  inset: 0 0 auto;
-  height: .125em;
-  border-radius: inherit inherit 0 0;
-  background: linear-gradient(90deg,
-    var(--iswc-accent),
-    color-mix(in srgb, var(--iswc-accent) 15%, transparent) 55%,
-    transparent);
-  pointer-events: none;
-  opacity: 0.85;
-}
+.card::before { content: ""; position: absolute; inset: 0 0 auto; height: .125em; border-radius: inherit inherit 0 0; background: linear-gradient(90deg, var(--iswc-accent), color-mix(in srgb, var(--iswc-accent) 15%, transparent) 55%, transparent); pointer-events: none; opacity: 0.85; }
 
 :host(.section--plain) .card {
   background: transparent;

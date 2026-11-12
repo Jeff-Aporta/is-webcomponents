@@ -17,59 +17,17 @@
   --ex-card-min-height: 9.5em;
 }
 
-.root {
-  display: flex;
-  flex-direction: column;
-  gap: 0.7em;
-}
-
-.head {
-  display: flex;
-  flex-direction: column;
-  gap: 0.2em;
-}
-
-.title {
-  margin: 0;
-  font-size: 0.95em;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  opacity: 0.85;
-}
-
-.lede {
-  margin: 0;
-  font-size: 0.85em;
-  color: var(--iswc-text-soft, color-mix(in srgb, currentColor 70%, transparent));
-}
-
-.tabs {
-  display: block;
-}
+.root { display: flex; flex-direction: column; gap: 0.7em; }
+.head { display: flex; flex-direction: column; gap: 0.2em; }
+.title { margin: 0; font-size: 0.95em; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; opacity: 0.85; }
+.lede { margin: 0; font-size: 0.85em; color: var(--iswc-text-soft, color-mix(in srgb, currentColor 70%, transparent)); }
+.tabs { display: block; }
 
 /* El <iswc-tab-group> reusado no debe inflar su tipografia ni sus borders. */
-.tabs__group {
-  font-size: 0.85em;
-}
-
-.viewport {
-  position: relative;
-}
-
-.track {
-  display: flex;
-  gap: 0.75em;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  padding: 0.25em 0.1em 0.5em;
-  scrollbar-width: thin;
-  scroll-behavior: smooth;
-}
-
-.track::-webkit-scrollbar {
-  height: 0.4em;
-}
+.tabs__group { font-size: 0.85em; }
+.viewport { position: relative; }
+.track { display: flex; gap: 0.75em; overflow-x: auto; scroll-snap-type: x mandatory; padding: 0.25em 0.1em 0.5em; scrollbar-width: thin; scroll-behavior: smooth; }
+.track::-webkit-scrollbar { height: 0.4em; }
 
 /* ----- W19 card (envoltorio <iswc-card>) -------------------------------- */
 
@@ -89,9 +47,7 @@
   background-blend-mode: lighten;
 }
 
-.card[hidden] {
-  display: none;
-}
+.card[hidden] { display: none; }
 
 .card::part(base) {
   position: relative;
@@ -145,73 +101,19 @@
 .card[active]::part(base)::before { opacity: 0.28; }
 
 /* Media slot: stage donde se renderiza la instancia real escalada. */
-.card__media {
-  display: grid;
-  place-items: center;
-  block-size: 5em;
-  border-radius: calc(var(--ex-radius) - 0.1em);
-  background: color-mix(in srgb, currentColor 4%, transparent);
-  overflow: hidden;
-  padding: 0.5em;
-  box-sizing: border-box;
-}
+.card__media { display: grid; place-items: center; block-size: 5em; border-radius: calc(var(--ex-radius) - 0.1em); background: color-mix(in srgb, currentColor 4%, transparent); overflow: hidden; padding: 0.5em; box-sizing: border-box; }
 
 /* Escalar el componente real para que quepa en la card. */
-.card__media > * {
-  max-inline-size: 100%;
-  max-block-size: 100%;
-  font-size: 0.78em;
-  transform: scale(0.92);
-  transform-origin: center;
-}
-
-.card__meta {
-  display: flex;
-  align-items: center;
-  gap: 0.4em;
-  font-size: 0.85em;
-  font-weight: 600;
-  position: relative;
-  z-index: 1;
-}
-
-.card__icon {
-  flex: 0 0 auto;
-  font-size: 1.05em;
-  line-height: 1;
-  display: inline-flex;
-}
-
-.card__label {
-  flex: 1 1 auto;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
+.card__media > * { max-inline-size: 100%; max-block-size: 100%; font-size: 0.78em; transform: scale(0.92); transform-origin: center; }
+.card__meta { display: flex; align-items: center; gap: 0.4em; font-size: 0.85em; font-weight: 600; position: relative; z-index: 1; }
+.card__icon { flex: 0 0 auto; font-size: 1.05em; line-height: 1; display: inline-flex; }
+.card__label { flex: 1 1 auto; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
 /* ----- W19 nav (envoltorio <iswc-button>) ------------------------------- */
 
-.nav {
-  position: absolute;
-  inset-block: 0;
-  inset-inline: auto 0;
-  margin-block: auto;
-  z-index: 1;
-  opacity: 0;
-  transition: opacity 0.2s ease;
-  --iswc-button-bg: transparent;
-}
-
+.nav { position: absolute; inset-block: 0; inset-inline: auto 0; margin-block: auto; z-index: 1; opacity: 0; transition: opacity 0.2s ease; --iswc-button-bg: transparent; }
 .nav--prev { inset-inline: 0 auto; }
 
 .viewport:hover .nav,
-.nav:focus-within {
-  opacity: 0.9;
-}
-
-.empty {
-  margin: 0;
-  font-size: 0.85em;
-  color: var(--iswc-text-soft, color-mix(in srgb, currentColor 70%, transparent));
-  font-style: italic;
-}
+.nav:focus-within { opacity: 0.9; }
+.empty { margin: 0; font-size: 0.85em; color: var(--iswc-text-soft, color-mix(in srgb, currentColor 70%, transparent)); font-style: italic; }

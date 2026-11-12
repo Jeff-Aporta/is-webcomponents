@@ -4,11 +4,7 @@
  * modo compacto (hamburguesa del índice + TOC dentro del drawer), que viaja
  * con el componente porque el componente es quien lo monta.
  */
-:host {
-  display: block;
-  block-size: 100%;
-  min-block-size: 0;
-}
+:host { display: block; block-size: 100%; min-block-size: 0; }
 
 iswc-preview-component {
   display: block;

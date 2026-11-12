@@ -1,42 +1,17 @@
+@use 'kit' as *;
 /* iswc-full-calendar */
-:host {
-  display: block;
-  font: inherit;
-  color: var(--iswc-text);
-  --_row-h: 4em;
-}
-
-.root {
-  display: flex; flex-direction: column;
-  border: 1px solid var(--iswc-border);
-  border-radius: var(--iswc-radius);
-  background: var(--iswc-bg-elev);
-  overflow: hidden;
-}
-
-.toolbar {
-  display: flex; align-items: center;
-  gap: .35em;
-  padding: .5em .75em;
-  border-bottom: 1px solid var(--iswc-border-soft);
-  background: color-mix(in srgb, var(--iswc-bg-elev) 92%, transparent);
-}
+:host { @include texto-base(); --_row-h: 4em; }
+.root { display: flex; flex-direction: column; border: 1px solid var(--iswc-border); border-radius: var(--iswc-radius); background: var(--iswc-bg-elev); overflow: hidden; }
+.toolbar { display: flex; align-items: center; gap: .35em; padding: .5em .75em; border-bottom: 1px solid var(--iswc-border-soft); background: color-mix(in srgb, var(--iswc-bg-elev) 92%, transparent); }
 
 /* Botones de la barra: <iswc-button>. La apariencia (incluida la del botón de
    vista activo) se pide por atributos `variant`/`color`; pintar fondo o borde
    desde aquí caería en el host, no en el <button> de su shadow root. */
 .ctrl,
-.view-btn {
-  font-size: .82em;
-}
-
+.view-btn { font-size: .82em; }
 .title { font-weight: 600; margin-left: .5em; text-transform: capitalize; }
 .spacer { flex: 1 1 auto; }
-
-.grid {
-  padding: 0;
-  &[data-view="month"] { overflow: hidden; }
-}
+.grid { padding: 0; &[data-view="month"] { overflow: hidden; }; }
 
 /* Cabeceras de columna compartidas: misma tipografía pequeña + mayúsculas,
  * borde inferior suave. La variante month (.wk-head) y la week (.col-head)
@@ -123,21 +98,8 @@
     }
   }
 }
-.day-col {
-  position: relative;
-  border-right: 1px solid var(--iswc-border-soft);
-  min-height: calc(var(--_row-h) * 13);
-}
-.cell-hour {
-  position: absolute;
-  left: 0; right: 0;
-  border: 0;
-  background: transparent;
-  height: var(--_row-h);
-
-  &[data-hour="7"] { top: 0; }
-  &:hover { background: color-mix(in srgb, var(--iswc-accent) 6%, transparent); }
-}
+.day-col { position: relative; border-right: 1px solid var(--iswc-border-soft); min-height: calc(var(--_row-h) * 13); }
+.cell-hour { position: absolute; left: 0; right: 0; border: 0; background: transparent; height: var(--_row-h); &[data-hour="7"] { top: 0; } &:hover { background: color-mix(in srgb, var(--iswc-accent) 6%, transparent); }; }
 
 /* Pastilla de evento: misma forma en month (inline) y week/day (bloque). */
 :is(.ev, .ev-block) {
@@ -148,12 +110,4 @@
   &:hover { opacity: .85; }
 }
 
-.ev-block {
-  position: absolute;
-  left: .1736em; right: .1736em;
-  border-radius: .5208em;
-  padding: .3472em .5208em;
-  font-size: .72em;
-  display: flex; flex-direction: column; gap: .0868em;
-  overflow: hidden;
-}
+.ev-block { position: absolute; left: .1736em; right: .1736em; border-radius: .5208em; padding: .3472em .5208em; font-size: .72em; display: flex; flex-direction: column; gap: .0868em; overflow: hidden; }

@@ -1,17 +1,9 @@
+@use 'kit' as *;
 /* <iswc-stream-bubble> — burbuja de una respuesta que llega por partes. */
 @use '../../styles/mixins' as *;
 
-:host {
-  @include papel;
-  position: relative;
-  display: block;
-  color: var(--iswc-text);
-  font-family: var(--iswc-sans);
-  font-size: 1em;
-  line-height: 1.55;
-}
-
-:host([hidden]) { display: none !important; }
+:host { @include papel; position: relative; display: block; color: var(--iswc-text); font-family: var(--iswc-sans); font-size: 1em; line-height: 1.55; }
+:host([hidden]) { @include oculto; }
 
 .bubble {
   --_sombra: 0 0.125em 0.5em color-mix(in srgb, var(--iswc-text) 8%, transparent);
@@ -118,33 +110,9 @@
   transition: border-color 0.25s ease, color 0.25s ease, background 0.25s ease;
 }
 
-.punto {
-  width: 0.375em;
-  height: 0.375em;
-  border-radius: 50%;
-  background: currentColor;
-}
-
-.nombre {
-  margin-bottom: 0.25em;
-  color: var(--iswc-text-soft);
-  font-size: 0.75em;
-  font-weight: 700;
-  letter-spacing: 0.03em;
-  text-transform: uppercase;
-
-  &[hidden] { display: none; }
-}
-
-.progreso {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 0.375em;
-  margin: 0 0 0.625em;
-
-  &[hidden] { display: none; }
-}
+.punto { width: 0.375em; height: 0.375em; border-radius: 50%; background: currentColor; }
+.nombre { margin-bottom: 0.25em; color: var(--iswc-text-soft); font-size: 0.75em; font-weight: 700; letter-spacing: 0.03em; text-transform: uppercase; &[hidden] { display: none; }; }
+.progreso { display: flex; flex-direction: column; align-items: flex-start; gap: 0.375em; margin: 0 0 0.625em; &[hidden] { display: none; }; }
 
 .paso {
   box-sizing: border-box;
@@ -177,26 +145,9 @@
   }
 }
 
-.paso-icono {
-  display: inline-block;
-  flex: none;
-  line-height: 1;
-}
-
-.paso-texto {
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.paso-pulso {
-  flex: 0 0 auto;
-  width: 0.5em;
-  height: 0.5em;
-  border-radius: 50%;
-  background: currentColor;
-  opacity: 0.5;
-}
+.paso-icono { display: inline-block; flex: none; line-height: 1; }
+.paso-texto { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.paso-pulso { flex: 0 0 auto; width: 0.5em; height: 0.5em; border-radius: 50%; background: currentColor; opacity: 0.5; }
 
 .texto {
   color: var(--iswc-text);
@@ -233,20 +184,8 @@
   a { color: var(--iswc-brand-text); }
 }
 
-.aguarda {
-  color: var(--iswc-text-soft);
-  font-style: italic;
-}
-
-.cursor {
-  display: inline-block;
-  width: 0.5em;
-  height: 1.1em;
-  margin-inline-start: 0.0625em;
-  background: var(--iswc-accent);
-  vertical-align: -0.125em;
-  animation: cursor-parpadeo 0.9s steps(2, start) infinite;
-}
+.aguarda { color: var(--iswc-text-soft); font-style: italic; }
+.cursor { display: inline-block; width: 0.5em; height: 1.1em; margin-inline-start: 0.0625em; background: var(--iswc-accent); vertical-align: -0.125em; animation: cursor-parpadeo 0.9s steps(2, start) infinite; }
 
 .espera {
   display: inline-flex;
@@ -305,11 +244,5 @@
   .bubble[data-state="streaming"] .avatar { animation-duration: 4.8s; }
   .bubble[data-state="streaming"] .punto { animation-duration: 3.6s; }
   .cursor { animation-duration: 2.7s; }
-
-  .espera span {
-    animation-duration: 3.6s;
-
-    &:nth-child(2) { animation-delay: 0.45s; }
-    &:nth-child(3) { animation-delay: 0.9s; }
-  }
+.espera span { animation-duration: 3.6s; &:nth-child(2) { animation-delay: 0.45s; } &:nth-child(3) { animation-delay: 0.9s; }; }
 }

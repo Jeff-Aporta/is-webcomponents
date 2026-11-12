@@ -1,3 +1,4 @@
+// @contexto INDICE.md · src/core/README.md
 // reemitir.ts — reemitir un evento nativo como evento del componente (opt-in).
 //
 // Un control nativo (un input, un details, un video) dispara eventos que no se pueden

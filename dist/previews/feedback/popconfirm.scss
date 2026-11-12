@@ -1,8 +1,6 @@
 @use '../../styles/mixins' as *;
 
-:host {
-  display: contents;
-}
+:host { display: contents; }
 
 .popconfirm {
   --iswc-popconfirm-bg: var(--iswc-bg-elev);
@@ -62,27 +60,9 @@
   }
 }
 
-.message {
-  margin-bottom: 0.5em;
-  max-block-size: 40vh;
-  overflow-y: auto;
-  overflow-wrap: anywhere;
-  line-height: 1.4;
-}
-
-.actions {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-  gap: 0.5em;
-}
-
-.arrow {
-  position: absolute;
-  width: 0;
-  height: 0;
-  border: .375em solid transparent;
-}
+.message { margin-bottom: 0.5em; max-block-size: 40vh; overflow-y: auto; overflow-wrap: anywhere; line-height: 1.4; }
+.actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 0.5em; }
+.arrow { position: absolute; width: 0; height: 0; border: .375em solid transparent; }
 
 :host([hide-arrow]) {
   .arrow { display: none; }

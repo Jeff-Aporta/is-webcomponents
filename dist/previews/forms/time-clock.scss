@@ -1,7 +1,6 @@
+@use 'kit' as *;
 /* `hidden` en un nodo interno debe ganar al display propio del componente. */
-[hidden] {
-  display: none !important;
-}
+[hidden] { @include oculto; }
 
 :host([hidden]) {
   display: none;
@@ -191,8 +190,5 @@
 }
 
 :host([disabled]) {
-  .base {
-    opacity: 0.6;
-    pointer-events: none;
-  }
+.base { @include deshabilitado(.6); }
 }

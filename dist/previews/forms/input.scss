@@ -1,3 +1,4 @@
+@use 'kit' as *;
 /* Shadow DOM: :host:is([attr]) NO matchea. Usar :host([attr]) como regla hermana. */
 :host {
   --iswc-input-border-radius: var(--iswc-radius-sm);
@@ -27,7 +28,7 @@
     font-weight: 500;
     color: var(--iswc-text-soft, inherit);
     inline-size: fit-content;
-    &[hidden] { display: none !important; }
+    &[hidden] { @include oculto; }
   }
 
   .support {
@@ -36,13 +37,13 @@
     gap: 0.75em;
     font-size: 0.8em;
     color: var(--iswc-text-dim);
-    &[hidden] { display: none !important; }
+    &[hidden] { @include oculto; }
   }
 
   .hint,
   .error-text {
     min-inline-size: 0;
-    &[hidden] { display: none !important; }
+    &[hidden] { @include oculto; }
   }
 
   .error-text { color: var(--iswc-input-danger-text); }
@@ -51,7 +52,7 @@
     margin-inline-start: auto;
     flex: none;
     font-variant-numeric: tabular-nums;
-    &[hidden] { display: none !important; }
+    &[hidden] { @include oculto; }
   }
 
   .base {
@@ -83,7 +84,7 @@
 
     &:first-child { margin-inline-end: 0.2em; }
     &:last-child { margin-inline-start: 0.2em; padding-inline-end: 0.15em; }
-    &[hidden] { display: none !important; }
+    &[hidden] { @include oculto; }
   }
 
   /* Adornos de texto (prefix/suffix): atenuados y no seleccionables */
@@ -93,16 +94,14 @@
     white-space: nowrap;
     user-select: none;
     -webkit-user-select: none;
-    &[hidden] { display: none !important; }
+    &[hidden] { @include oculto; }
   }
 
   .input {
     flex: 1;
     min-inline-size: 0;
     border: 0;
-    background: transparent;
-    color: inherit;
-    font: inherit;
+    @include reset-boton;
     /* La caja fija el alto: el padding de bloque desbordaría en densidad compacta. */
     padding: 0;
     outline: none;
@@ -124,29 +123,18 @@
     line-height: 0;
     color: var(--iswc-text-dim);
 
-    &[hidden] { display: none !important; }
+    &[hidden] { @include oculto; }
   }
 }
 
 /* ---- appearance ------------------------------------------------------ */
 
 :host([variant="filled"]) {
-  .base {
-    background: var(--iswc-control-bg-hover);
-    border-color: transparent;
-    border-bottom-color: var(--_border);
-    border-radius: var(--iswc-input-border-radius) var(--iswc-input-border-radius) 0 0;
-  }
+.base { background: var(--iswc-control-bg-hover); border-color: transparent; border-bottom-color: var(--_border); border-radius: var(--iswc-input-border-radius) var(--iswc-input-border-radius) 0 0; }
 }
 
 :host([variant="underlined"]) {
-  .base {
-    background: color-mix(in srgb, var(--iswc-control-bg) 35%, transparent);
-    border-color: transparent;
-    border-bottom: 2px solid var(--_border);
-    border-radius: 0;
-    padding-inline-start: 0.15em;
-  }
+.base { background: color-mix(in srgb, var(--iswc-control-bg) 35%, transparent); border-color: transparent; border-bottom: 2px solid var(--_border); border-radius: 0; padding-inline-start: 0.15em; }
 }
 
 /* ---- estado de error -------------------------------------------------- */
@@ -173,13 +161,7 @@
 /* ---- label a la izquierda --------------------------------------------- */
 
 :host([label-placement="start"]) {
-  .form-control {
-    display: grid;
-    grid-template-columns: var(--iswc-field-label-width, 8em) minmax(0, 1fr);
-    align-items: center;
-    column-gap: 0.75em;
-    row-gap: 0.35em;
-  }
+.form-control { display: grid; grid-template-columns: var(--iswc-field-label-width, 8em) minmax(0, 1fr); align-items: center; column-gap: 0.75em; row-gap: 0.35em; }
   .label { grid-column: 1; grid-row: 1; }
   .base { grid-column: 2; grid-row: 1; }
   .support { grid-column: 2; grid-row: 2; }
@@ -194,18 +176,7 @@
   --_border: var(--iswc-b-optional, var(--iswc-control-border));
 
   .form-control { position: relative; }
-
-  .base {
-    align-items: flex-end;
-    min-block-size: 3.2em;
-    background: transparent;
-    border-color: transparent;
-    border-bottom-color: var(--_border);
-    border-radius: 0;
-    padding: 0 0.35em;
-    padding-inline-start: 0.75em;
-  }
-
+.base { align-items: flex-end; min-block-size: 3.2em; background: transparent; border-color: transparent; border-bottom-color: var(--_border); border-radius: 0; padding: 0 0.35em; padding-inline-start: 0.75em; }
   .input { padding-block: 0.95em 0.5em; }
 
   /* La etiqueta sale del flujo: `.base` pasa a ocupar la primera fila. */
@@ -239,10 +210,7 @@
 :host([label-placement="float"][readonly]) {
   --_border: var(--iswc-b-readonly, var(--iswc-control-border));
 
-  .base {
-    background: var(--iswc-bg-readonly, var(--iswc-control-bg));
-    border-style: solid;
-  }
+.base { background: var(--iswc-bg-readonly, var(--iswc-control-bg)); border-style: solid; }
 }
 :host([label-placement="float"][disabled]) {
   --_border: var(--iswc-b-readonly, var(--iswc-control-border));
@@ -254,38 +222,25 @@
 :host([label-placement="float"]:focus-within),
 :host([label-placement="float"]:state(focused)),
 :host([label-placement="float"]:not(:state(blank))) {
-  .label {
-    transform: translateY(-0.95em);
-    font-size: 0.75em;
-  }
+.label { transform: translateY(-0.95em); font-size: 0.75em; }
 }
 
 :host([label-placement="float"][required]:state(focused)) {
-  .label {
-    color: color-mix(in srgb, var(--iswc-b-required, var(--iswc-control-border)) 40%, var(--iswc-text));
-  }
+.label { color: color-mix(in srgb, var(--iswc-b-required, var(--iswc-control-border)) 40%, var(--iswc-text)); }
 }
 :host([label-placement="float"]:not([required]):state(focused)) {
-  .label {
-    color: color-mix(in srgb, var(--iswc-b-optional, var(--iswc-control-border)) 40%, var(--iswc-text));
-  }
+.label { color: color-mix(in srgb, var(--iswc-b-optional, var(--iswc-control-border)) 40%, var(--iswc-text)); }
 }
 :host([label-placement="float"][readonly]) {
-  .label {
-    color: color-mix(in srgb, var(--iswc-b-readonly, var(--iswc-control-border)) 40%, var(--iswc-text));
-  }
+.label { color: color-mix(in srgb, var(--iswc-b-readonly, var(--iswc-control-border)) 40%, var(--iswc-text)); }
 }
 
 :host([disabled]) {
-  opacity: 0.55;
-  pointer-events: none;
+  @include deshabilitado(.55);
 }
 
 :host([readonly]) {
-  .base {
-    background: transparent;
-    border-style: dashed;
-  }
+.base { background: transparent; border-style: dashed; }
 }
 
 /* size="sm": control compacto; todo sigue en em. */

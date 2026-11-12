@@ -1,11 +1,6 @@
 /* iswc-masked-input: la caja, los estados y las variantes vienen de <iswc-input>;
    aquí solo queda lo propio de la máscara. */
-:host {
-  display: inline-block;
-  max-inline-size: 100%;
-  font: inherit;
-  color: var(--iswc-text);
-}
+:host { display: inline-block; max-inline-size: 100%; font: inherit; color: var(--iswc-text); }
 
 :host([full-width]) {
   display: block;
