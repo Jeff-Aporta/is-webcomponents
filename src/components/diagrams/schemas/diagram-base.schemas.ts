@@ -49,7 +49,11 @@ export const NodeStyleOverrideSchema = z.object({
 });
 export type NodeStyleOverride = z.infer<typeof NodeStyleOverrideSchema>;
 
-export const EdgeStyleOverrideSchema = z.object({
+/**
+ * Override de estilo de una arista: las mismas claves de pintado que el nodo
+ * (`fill`, `stroke`, …) mas el ancho propio de la arista.
+ */
+export const EdgeStyleOverrideSchema = NodeStyleOverrideSchema.extend({
   width: z.number().optional(),
 });
 export type EdgeStyleOverride = z.infer<typeof EdgeStyleOverrideSchema>;

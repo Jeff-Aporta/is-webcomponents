@@ -11,13 +11,13 @@ import type { DiagramRenderDetail, DiagramViewerDetail } from './diagram-base.sc
 
 const NodeEntrySchema = z.object({
   n: MindmapLayoutNodeSchema,
-  g: z.unknown() /* TODO: ref SVGGElement */,
+  g: z.custom<SVGGElement>(() => true),
 });
 export type NodeEntry = z.infer<typeof NodeEntrySchema>;
 
 const EdgeEntrySchema = z.object({
   e: MindmapLayoutEdgeSchema,
-  path: z.unknown() /* TODO: ref SVGPathElement */,
+  path: z.custom<SVGPathElement>(() => true),
 });
 export type EdgeEntry = z.infer<typeof EdgeEntrySchema>;
 

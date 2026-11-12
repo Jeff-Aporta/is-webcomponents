@@ -7,24 +7,53 @@
  */
 import { z } from 'zod';
 
-const IspRecordSchema = z.object({
+/**
+ * Registro ISP: plano o con `getProp`/`setProp`/`.f`. El indice abierto
+ * deja leer y escribir claves por nombre (`titulo`, `codigo`…).
+ */
+export type IspRecord = {
+  getProp?: (key: string) => unknown;
+  setProp?: (key: string, value: unknown) => void;
+  toJSON?: (conClase?: boolean) => unknown;
+  clone?: () => IspRecord;
+  f?: Record<string, unknown>;
+  [key: string]: unknown;
+};
+
+const IspRecordSchema: z.ZodType<IspRecord> = z.object({
   getProp: z.function({ input: [z.string()], output: z.unknown() }).optional(),
   setProp: z.function({ input: [z.string(), z.unknown()], output: z.void() }).optional(),
-  toJSON: z.function({ input: [z.boolean()], output: z.unknown() }).optional(),
-  clone: z.function({ input: [], output: z.unknown() /* TODO: ref IspRecord */ }).optional(),
+  toJSON: z.function({ input: [z.boolean().optional()], output: z.unknown() }).optional(),
+  clone: z.function({ input: [], output: z.custom<IspRecord>() }).optional(),
   f: z.record(z.string(), z.unknown()).optional(),
-  /* TODO: member [key: string]: unknown */
 });
-export type IspRecord = z.infer<typeof IspRecordSchema>;
 
-const GridRowSchema = z.object({
+/** Fila plana para la grilla: los datos del registro mas su referencia. */
+export type GridRow = {
+  id?: string | number;
+  __record?: IspRecord;
+  [key: string]: unknown;
+};
+
+const GridRowSchema: z.ZodType<GridRow> = z.object({
   id: z.union([z.string(), z.number()]).optional(),
   __record: IspRecordSchema.optional(),
-  /* TODO: member [key: string]: unknown */
 });
-export type GridRow = z.infer<typeof GridRowSchema>;
 
-const IspColumnDefSchema = z.object({
+/** Definicion cruda de una columna ISP (puede anidar subcolumnas). */
+export type IspColumnDef = {
+  caption?: string;
+  size?: number;
+  align?: 'left' | 'right' | 'center';
+  visible?: boolean;
+  filter?: boolean;
+  type?: string;
+  children?: IspColumnsMap;
+};
+/** Mapa anidado de columnas ISP. */
+export type IspColumnsMap = Record<string, IspColumnDef>;
+
+const IspColumnDefSchema: z.ZodType<IspColumnDef> = z.object({
   caption: z.string().optional(),
   size: z.number().optional(),
   align: z.union([z.literal('left'), z.literal('right'), z.literal('center')]).optional(),
@@ -47,11 +76,10 @@ const FlatGridColumnSchema = z.object({
 export type FlatGridColumn = z.infer<typeof FlatGridColumnSchema>;
 
 const IspColumnsMapSchema = z.record(z.string(), IspColumnDefSchema);
-export type IspColumnsMap = z.infer<typeof IspColumnsMapSchema>;
 
 const IspControllerSchema = z.object({
   columns: z.array(FlatGridColumnSchema).optional(),
   Columns: IspColumnsMapSchema.optional(),
-  /* TODO: member [key: string]: unknown */
 });
-export type IspController = z.infer<typeof IspControllerSchema>;
+/** Controller ISP: expone `columns` (array) o `Columns` (mapa anidado). */
+export type IspController = z.infer<typeof IspControllerSchema> & { [key: string]: unknown };

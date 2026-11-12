@@ -31,13 +31,13 @@ const IswcMdEditorApiConfigSchema = z.object({
   endpoints: IswcMdEditorEndpointsSchema.optional(),
   headers: z.union([z.record(z.string(), z.string()), z.function({ input: [], output: z.record(z.string(), z.string()) })]).optional(),
   token: z.union([z.string(), z.function({ input: [], output: z.string() })]).optional(),
-  fieldMap: z.record(z.string(), z.unknown() /* TODO: cannot convert */).optional(),
+  fieldMap: z.record(z.string(), z.string()).optional(),
 });
 export type IswcMdEditorApiConfig = z.infer<typeof IswcMdEditorApiConfigSchema>;
 
 const CanonKeySchema = z.union([z.literal('content'), z.literal('filename'), z.literal('updatedAt'), z.literal('updatedBy'), z.literal('id'), z.literal('sizeBytes'), z.literal('contentType')]);
 export type CanonKey = z.infer<typeof CanonKeySchema>;
 
-const SrcMapSchema = z.record(z.string(), z.unknown());
-export type SrcMap = z.infer<typeof SrcMapSchema>;
+/** Respuesta del servidor: un objeto plano con las claves del documento. */
+export type SrcMap = Record<string, unknown>;
 

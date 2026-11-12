@@ -56,13 +56,13 @@ export type TurtleState = z.infer<typeof TurtleStateSchema>;
 
 const RowNodeEntrySchema = z.object({
   r: GanttRowSchema,
-  g: z.unknown() /* TODO: ref SVGGElement */,
+  g: z.custom<SVGGElement>(() => true),
 });
 export type RowNodeEntry = z.infer<typeof RowNodeEntrySchema>;
 
 const ArrowNodeEntrySchema = z.object({
   a: GanttArrowSchema,
-  g: z.unknown() /* TODO: ref SVGGElement */,
+  g: z.custom<SVGGElement>(() => true),
 });
 export type ArrowNodeEntry = z.infer<typeof ArrowNodeEntrySchema>;
 

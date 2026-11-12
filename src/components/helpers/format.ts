@@ -553,9 +553,13 @@ define(FormatElement, 'IswcFormat');
  */
 export function createFormatElement(defaultType: FormatType): new () => FormatElement {
   class PrefixedFormat extends FormatElement {
-    constructor() {
-      super();
-      this.setAttribute('type', defaultType);
+    override onConnected(): void {
+      // El `type` por defecto se escribe al conectar, NO en el constructor: un elemento
+      // creado por script no puede traer atributos cuando su constructor termina. Blink los
+      // descarta y avisa con un NotSupportedError sin capturado ('The result must not have
+      // attributes'). Si el autor puso su `type`, manda el suyo.
+      if (!this.hasAttribute('type')) this.setAttribute('type', defaultType);
+      super.onConnected();
     }
   }
   return PrefixedFormat;

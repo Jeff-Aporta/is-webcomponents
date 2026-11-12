@@ -29,7 +29,7 @@ const TurtleApiSchema = z.object({
 });
 export type TurtleApi = z.infer<typeof TurtleApiSchema>;
 
-const DiagramHostSchema = z.intersection(z.unknown() /* TODO: ref HTMLElement */, z.object({
+const DiagramHostSchema = z.intersection(z.custom<HTMLElement>(() => true), z.object({
   payload: z.unknown(),
   hiddenGroups: z.set(z.string()).optional(),
   turtle: z.union([TurtleApiSchema, z.null()]).optional(),

@@ -53,7 +53,7 @@ const LayoutLanesOptsSchema = z.object({
   rowH: z.number().optional(),
   rowGap: z.number().optional(),
   laneKey: z.string().optional(),
-  domain: z.unknown() /* TODO: cannot convert */.optional(),
+  domain: z.tuple([z.number(), z.number()]).optional(),
 });
 export type LayoutLanesOpts = z.infer<typeof LayoutLanesOptsSchema>;
 

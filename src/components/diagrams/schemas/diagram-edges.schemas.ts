@@ -37,6 +37,25 @@ const SpreadPointSchema = z.object({
 });
 export type SpreadPoint = z.infer<typeof SpreadPointSchema>;
 
+/**
+ * Tramo de una arista que se pega a otro (el "spread" reparte los rieles
+ * paralelos para que no se pisen).
+ */
+export type Run = {
+  /** Indice del item al que pertenece el tramo. */
+  ii: number;
+  /** Indice del primer punto del tramo. */
+  i: number;
+  /** Indice del ultimo punto del tramo. */
+  j: number;
+  /** Coordenada del eje perpendicular (columna o fila). */
+  pos: number;
+  /** Comienzo del tramo en el eje del recorrido. */
+  a: number;
+  /** Fin del tramo en el eje del recorrido. */
+  b: number;
+};
+
 const SpreadItemSchema = z.object({
   e: z.object({
   path: z.string(),

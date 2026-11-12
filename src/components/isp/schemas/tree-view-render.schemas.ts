@@ -6,20 +6,33 @@
  * entradas marcadas con TODO cuando se quiera validación runtime.
  */
 import { z } from 'zod';
+import type { RowAdapterBridge, TNode, TreeActionEntry } from './tree-view-types.schemas.js';
 
 const RenderOptsSchema = z.object({
   labelField: z.string().optional(),
   helperField: z.string().optional(),
-  renderRow: z.function({ input: [z.unknown() /* TODO: ref TNode */, z.unknown() /* TODO: ref HTMLElement */], output: z.void() }).optional(),
-  renderHelper: z.function({ input: [z.unknown() /* TODO: ref TNode */, z.unknown() /* TODO: ref HTMLElement */], output: z.void() }).optional(),
+  renderRow: z.function({ input: [z.custom<TNode>(), z.custom<HTMLElement>()], output: z.void() }).optional(),
+  renderHelper: z.function({ input: [z.custom<TNode>(), z.custom<HTMLElement>()], output: z.void() }).optional(),
 });
 export type RenderOpts = z.infer<typeof RenderOptsSchema>;
 
+/**
+ * Store de handlers por elemento: cada fila guarda su `<summary>` y sus
+ * listeners para poder soltarlos al repintar.
+ */
+export type HandlerStore = Record<string, EventListener>;
+
 const RenderAdapterSchema = z.object({
   flatPath: z.string(),
-  getOrCreateRowAdapter: z.function({ input: [z.unknown()], output: z.unknown() }),
+  getOrCreateRowAdapter: z.function({ input: [z.custom<RowAdapterBridge>()], output: z.custom<RenderAdapterLike>() }),
 });
 export type RenderAdapter = z.infer<typeof RenderAdapterSchema>;
+
+/** Adapter de filas que consume `paintRow`. */
+export type RenderAdapterLike = {
+  flatPath: string;
+  getOrCreateRowAdapter: (bridge: RowAdapterBridge) => unknown;
+};
 
 const RowControllerSchema = z.object({
   flatPath: z.string(),
@@ -42,8 +55,8 @@ const RowControllerSchema = z.object({
 }), z.null()]),
   showOptions: z.boolean(),
   hasRowTools: z.boolean(),
-  filteredActions: z.array(z.unknown() /* TODO: ref TreeActionEntry */),
-  cascadeOptions: z.array(z.unknown() /* TODO: ref TreeActionEntry */),
+  filteredActions: z.array(z.custom<TreeActionEntry>()),
+  cascadeOptions: z.array(z.custom<TreeActionEntry>()),
   cascadeDisabled: z.boolean(),
   floatCard: z.record(z.string(), z.unknown()),
   floatVisible: z.boolean(),
@@ -65,3 +78,9 @@ const RowControllerSchema = z.object({
   requestRowUiSync: z.function({ input: [], output: z.void() }),
 });
 export type RowController = z.infer<typeof RowControllerSchema>;
+
+/**
+ * Controller de una fila con su candado: el render guarda la referencia para
+ * que el pintado posterior no se pise con el suyo.
+ */
+export type ControllerWithLock = RowController & { _trvwrLock?: boolean };

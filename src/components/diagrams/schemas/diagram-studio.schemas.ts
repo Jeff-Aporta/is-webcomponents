@@ -20,18 +20,18 @@ const DiagramKindSchema = z.object({
 });
 export type DiagramKind = z.infer<typeof DiagramKindSchema>;
 
-const HostSchema = z.intersection(z.unknown() /* TODO: ref HTMLElement */, z.object({
+const HostSchema = z.intersection(z.custom<HTMLElement>(() => true), z.object({
   payload: z.unknown().optional(),
   exportJson: z.function({ input: [], output: z.string() }).optional(),
 }));
 export type Host = z.infer<typeof HostSchema>;
 
-const CodeElSchema = z.intersection(z.unknown() /* TODO: ref HTMLElement */, z.object({
+const CodeElSchema = z.intersection(z.custom<HTMLElement>(() => true), z.object({
   value: z.string(),
 }));
 export type CodeEl = z.infer<typeof CodeElSchema>;
 
-const ShareElSchema = z.intersection(z.unknown() /* TODO: ref HTMLElement */, z.object({
+const ShareElSchema = z.intersection(z.custom<HTMLElement>(() => true), z.object({
   url: z.string(),
   shareTitle: z.string(),
   text: z.string(),

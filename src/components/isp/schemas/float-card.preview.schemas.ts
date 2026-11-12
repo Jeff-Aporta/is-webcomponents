@@ -7,15 +7,17 @@
  */
 import { z } from "zod";
 
-const FloatCardLikeSchema = z.object({
+/** `<iswc-float-card>` del preview. */
+const FloatCardLikeSchema = z.intersection(z.custom<HTMLElement>(), z.object({
   open: z.boolean(),
   locked: z.boolean().optional(),
   _fcOff: z.function({ input: [], output: z.void() }).optional(),
-});
+}));
 export type FloatCardLike = z.infer<typeof FloatCardLikeSchema>;
 
-const FlexOptionsLikeSchema = z.object({
+/** `<iswc-flex-options>` del preview. */
+const FlexOptionsLikeSchema = z.intersection(z.custom<HTMLElement>(), z.object({
   actions: z.array(z.unknown()),
-});
+}));
 export type FlexOptionsLike = z.infer<typeof FlexOptionsLikeSchema>;
 

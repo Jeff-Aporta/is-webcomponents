@@ -301,16 +301,9 @@ import type { MdEditorEventos } from './schemas/md-editor.schemas.js';
       });
 
       this.#dlg.addEventListener('iswc-show', () => this.#buildEditorState());
-      this.#dlg.addEventListener('iswc-after-show', () => {
-        if (!this.hasAttribute('open')) this.setAttribute('open', '');
-        emit(this, 'iswc-open', {});
-      });
+      this.#dlg.addEventListener('iswc-after-show', () => this.#markOpen());
       this.#dlg.addEventListener('iswc-hide', () => this.#commitIfEditable());
-      this.#dlg.addEventListener('iswc-after-hide', () => {
-        if (this.hasAttribute('open')) this.removeAttribute('open');
-        this.#leaveTopLayer();
-        emit(this, 'iswc-close', {});
-      });
+      this.#dlg.addEventListener('iswc-after-hide', () => this.#markClosed());
 
       this.#toolbar.addEventListener('mousedown', (e: MouseEvent) => {
         const target = e.target;
@@ -671,6 +664,25 @@ import type { MdEditorEventos } from './schemas/md-editor.schemas.js';
       this.#preview.title = this.canEdit
         ? 'Clic o doble clic para editar'
         : (this.editBlockReason || 'Clic para revisar');
+    }
+
+    /**
+     * El atributo `open` se escribe FUERA del constructor: un elemento creado por script
+     * (document.createElement('iswc-md-editor')) no puede traer atributos cuando su
+     * constructor termina. Blink los descarta y avisa con un NotSupportedError sin
+     * capturar ('The result must not have attributes'). Aquí (al abrirse el diálogo) ya
+     * se puede escribir, y el atributo llega antes de que se repinte la vista previa.
+     */
+    #markOpen(): void {
+      if (!this.hasAttribute('open')) this.setAttribute('open', '');
+      emit(this, 'iswc-open', {});
+    }
+
+    /** El cierre es la foto del #markOpen: quita `open` y suelta la capa superior. */
+    #markClosed(): void {
+      if (this.hasAttribute('open')) this.removeAttribute('open');
+      this.#leaveTopLayer();
+      emit(this, 'iswc-close', {});
     }
 
     #syncOpenAttr(): void {

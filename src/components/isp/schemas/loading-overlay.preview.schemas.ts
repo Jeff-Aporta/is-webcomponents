@@ -7,9 +7,10 @@
  */
 import { z } from "zod";
 
-const LoadingOverlayLikeSchema = z.object({
+/** `<iswc-loading-overlay>` del preview. */
+const LoadingOverlayLikeSchema = z.intersection(z.custom<HTMLElement>(), z.object({
   show: z.function({ input: [], output: z.void() }),
   hide: z.function({ input: [], output: z.void() }),
-});
+}));
 export type LoadingOverlayLike = z.infer<typeof LoadingOverlayLikeSchema>;
 

@@ -6,6 +6,7 @@ import { assignEdgeHues, assignEmitterReceiverPalette } from './diagram-edges.js
 import { snapDiagramGrid } from '@jeff-aporta/iswc-base/core/diagram-grid.js';
 import { routeEdges, planPorts, pointsToPath, simplifyOrthoPath, perimeterPorts } from './component-router.js';
 import { packDiagram, resolvePackingGaps, EDGE_CLEARANCE, GRID_STEP } from './component-pack.js';
+import type { ClassMemberLayout } from '@jeff-aporta/iswc-base/components/diagrams/schemas/diagram-class.schemas.js';
 import type { DiagramGroup } from '@jeff-aporta/iswc-base/components/diagrams/schemas/diagram-base.schemas.js';
 import type { Componente, Paquete } from '@jeff-aporta/iswc-base/components/diagrams/schemas/diagram-uml.schemas.js';
 import type { ClassPackage, ClassLayoutOpts, ClassLayoutSection, ClassSpec, ClassSpecClass, ClassSpecRelation, ClassLayout, ClassLayoutNode, ClassLayoutEdge, ClassRelationKind } from '@jeff-aporta/iswc-base/components/diagrams/schemas/diagram-class.schemas.js';
@@ -298,7 +299,7 @@ function classGeometry(cls: ClassSpecClass, maxMembers?: number): { w: number; h
   const miembros = (todos: string[]) => {
     let y = 0;
     const rows = todos.length > tope ? todos.slice(0, tope) : todos;
-    const out = rows.map((row) => {
+    const out: ClassMemberLayout[] = rows.map((row) => {
       const p = partirMiembro(row);
       const firma = envolver(p.firma, Math.max(8, Math.floor(util / CHAR_W)));
       const tipo = envolver(p.tipo, Math.max(8, Math.floor(util / MIEMBRO.captionCharW)));

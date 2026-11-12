@@ -12,7 +12,7 @@ import type { DiagramRenderDetail, DiagramToggleDetail, DiagramViewerDetail } fr
 
 const PointEntrySchema = z.object({
   pt: QuadrantLayoutPointSchema,
-  g: z.unknown() /* TODO: ref SVGGElement */,
+  g: z.custom<SVGGElement>(() => true),
 });
 export type PointEntry = z.infer<typeof PointEntrySchema>;
 

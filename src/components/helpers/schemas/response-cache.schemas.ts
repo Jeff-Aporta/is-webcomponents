@@ -30,32 +30,39 @@ export type ClaveDeInput = z.infer<typeof ClaveDeInputSchema>;
 
 const CachedRowSchema = z.object({
   clave: z.string(),
-  datos: z.unknown() /* TODO: ref T */,
+  datos: z.unknown(),
   texto: z.string(),
   guardadoEn: z.number(),
 });
-export type CachedRow = z.infer<typeof CachedRowSchema>;
+/** Fila cacheada: la clave, los datos y su texto canonico. */
+export type CachedRow<T = unknown> = Omit<z.infer<typeof CachedRowSchema>, 'datos'> & { datos: T };
 
-const VivoOptsSchema = z.object({
-  key: z.string(),
-  pintar: z.function({ input: [z.unknown() /* TODO: ref T */, z.unknown() /* TODO: ref VivoAviso */], output: z.void() }).optional(),
-  onCached: z.function({ input: [z.unknown() /* TODO: ref T */, z.unknown() /* TODO: ref VivoAviso */], output: z.void() }).optional(),
-  onError: z.function({ input: [z.unknown()], output: z.void() }).optional(),
-});
-export type VivoOpts = z.infer<typeof VivoOptsSchema>;
+/** Aviso de "vivo": de donde sale el dato y si cambio respecto al cache. */
+export type VivoAviso = { origen: 'cache' | 'red'; cambio: boolean };
 
-const ResponseCacheSchema = z.object({
-  dbName: z.string(),
-  storeName: z.string(),
-  ttlMs: z.number(),
-  canonico: z.unknown() /* TODO: cannot convert */,
-  claveDe: z.function({ input: [z.unknown() /* TODO: ref ClaveDeInput */], output: z.string() }),
-  leer: z.unknown() /* TODO: cannot convert */,
-  guardar: z.unknown() /* TODO: cannot convert */,
-  borrar: z.function({ input: [z.string()], output: z.promise(z.void()) }),
-  invalidar: z.unknown() /* TODO: cannot convert */,
-  vaciar: z.function({ input: [], output: z.promise(z.void()) }),
-  vivo: z.unknown() /* TODO: cannot convert */,
-});
-export type ResponseCache = z.infer<typeof ResponseCacheSchema>;
+/** Opciones de `vivo()`: la clave y los callbacks de pintado. */
+export type VivoOpts<T = unknown> = {
+  key: string;
+  pintar?: (datos: T, aviso: VivoAviso) => void;
+  onCached?: (datos: T, aviso: VivoAviso) => void;
+  onError?: (e: unknown) => void;
+};
+
+/**
+ * Cache de respuestas (SWR): pinta lo ultimo conocido al instante y
+ * repinta solo si la red difiere.
+ */
+export type ResponseCache = {
+  dbName: string;
+  storeName: string;
+  ttlMs: number;
+  canonico: (valor: unknown) => string;
+  claveDe: (input?: ClaveDeInput) => string;
+  leer: <T = unknown>(clave: string) => Promise<CachedRow<T> | null>;
+  guardar: <T = unknown>(clave: string, datos: T) => Promise<boolean>;
+  borrar: (clave: string) => Promise<void>;
+  invalidar: (coincide: string | ((c: string) => boolean)) => Promise<void>;
+  vaciar: () => Promise<void>;
+  vivo: <T = unknown>(fetchFresh: () => Promise<T>, opts: VivoOpts<T>) => Promise<T>;
+};
 

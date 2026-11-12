@@ -20,15 +20,16 @@ const PanZoomOptionsSchema = z.object({
   zoomFactor: z.number().optional(),
   panThresholdPx: z.number().optional(),
   wheelZooms: z.boolean().optional(),
-  onChange: z.function({ input: [z.unknown() /* TODO: ref PanZoomView */], output: z.void() }).optional(),
+  onChange: z.function({ input: [z.custom<PanZoomView>(() => true)], output: z.void() }).optional(),
   onPanEnd: z.function({ input: [], output: z.void() }).optional(),
 });
 export type PanZoomOptions = z.infer<typeof PanZoomOptionsSchema>;
 
 const PanZoomControllerSchema = z.object({
-  /* TODO: parse fail readonly view: PanZoomView */
-  setView: z.function({ input: [z.unknown() /* TODO: ref PanZoomView */], output: z.void() }),
-  zoomBy: z.function({ input: [z.number(), z.number(), z.number()], output: z.void() }),
+  /** Vista actual (escala + desplazamiento). */
+  get view(): typeof PanZoomViewSchema { return PanZoomViewSchema; },
+  setView: z.function({ input: [z.custom<Partial<PanZoomView>>()], output: z.void() }),
+  zoomBy: z.function({ input: [z.number(), z.number().optional(), z.number().optional()], output: z.void() }),
   reset: z.function({ input: [], output: z.void() }),
   apply: z.function({ input: [], output: z.void() }),
   destroy: z.function({ input: [], output: z.void() }),

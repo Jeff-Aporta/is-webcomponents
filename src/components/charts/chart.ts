@@ -7,7 +7,7 @@ import { getCategoricalColors, getFillColors, getStatusColor, resolveColor, with
 import { findThemeContainer, readTheme } from '@jeff-aporta/iswc-base/core/dom.js';
 import { PathTurtle } from '@jeff-aporta/iswc-base/core/path-turtle.js';
 import { registerDiagramKind } from '@jeff-aporta/iswc-base/components/diagrams/utils/diagram-model.js';
-import type { TypedChartFactory, ChartDataPoint, ChartDataset, ChartConfig, LegendEntry, HitRecord, ResolvedOptions, ChartCtx } from "./schemas/chart.schemas.js";
+import type { TypedChartFactory, ChartDataPoint, ChartDataset, ChartConfig, LegendEntry, HitRecord, ResolvedOptions, ChartCtx, DrawMarks } from "./schemas/chart.schemas.js";
 import css from 'iswc:css';
 import type { ChartEventos } from './schemas/chart.schemas.js';
 
@@ -470,7 +470,7 @@ class IswcChart extends withStyleAttrs(IswcElement) {
     // Se resuelve antes de los ejes: un tipo puede declarar su propio dominio
     // (la cascada, por ejemplo, se mide sobre el acumulado, no sobre los deltas).
     const ctor = this.constructor as typeof IswcChart;
-    const drawMarks: ((ctx: ChartCtx) => void) | null = ctor.drawMarks || MARK_REGISTRY[type] || null;
+    const drawMarks: DrawMarks | null = ctor.drawMarks || MARK_REGISTRY[type] || null;
     ctx.drawMarks = drawMarks;
 
     if (isRadial) {
@@ -517,7 +517,7 @@ class IswcChart extends withStyleAttrs(IswcElement) {
     this.#turtleGroup = svgEl('g');
     this.#svg.appendChild(this.#turtleGroup);
     if (!this.#turtleGroup) return;
-    this.#turtle = new PathTurtle(this.#turtleGroup as unknown as HTMLElement);
+    this.#turtle = new PathTurtle(this.#turtleGroup);
     this.#turtle.setData({
       messages: lines.map(({ el, d }: { el: HTMLElement; d: string }, i: number) => ({
         path: d,
@@ -605,8 +605,8 @@ class IswcChart extends withStyleAttrs(IswcElement) {
     ];
     // Bubble (y similares) piden pad en px: el dominio mapea a un rect interior
     // para que el radio no se corte contra el borde del plot / contain:paint.
-    const markPad = typeof (ctx.drawMarks as { plotPad?: (ds: readonly ChartDataset[]) => number } | null)?.plotPad === 'function'
-      ? Math.max(0, Number((ctx.drawMarks as { plotPad: (ds: readonly ChartDataset[]) => number }).plotPad(datasets)) || 0)
+    const markPad = typeof ctx.drawMarks?.plotPad === 'function'
+      ? Math.max(0, Number(ctx.drawMarks.plotPad(datasets)) || 0)
       : 0;
     const pad = Math.min(markPad, Math.floor(Math.min(plot.width, plot.height) / 4));
     const vRange: [number, number] = horizontal

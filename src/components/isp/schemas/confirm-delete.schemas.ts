@@ -7,11 +7,12 @@
  */
 import { z } from "zod";
 
-const InputLikeSchema = z.object({
+/** `<iswc-input>` del codigo de seguridad. */
+const InputLikeSchema = z.intersection(z.custom<HTMLElement>(), z.object({
   label: z.string(),
   value: z.string(),
   maxlength: z.union([z.string(), z.null()]),
-});
+}));
 export type InputLike = z.infer<typeof InputLikeSchema>;
 
 /** Eventos del componente (HOW-6): `declare static events` en la clase; los documenta scripts/sondas/eventos.ts. */

@@ -28,17 +28,13 @@ const _PendingDeleteSnapSchema = z.union([z.object({
 }), z.null()]);
 export type _PendingDeleteSnap = z.infer<typeof _PendingDeleteSnapSchema>;
 
-const _TNodeLikeSchema = z.object({
-  flatPath: z.string(),
-  /* TODO: member [key: string]: unknown */
-});
-export type _TNodeLike = z.infer<typeof _TNodeLikeSchema>;
-
-const _TRecordLikeSchema = z.intersection(_TNodeLikeSchema, z.object({
-  iplan: z.string().optional(),
-  idrow: z.string().optional(),
-}));
-export type _TRecordLike = z.infer<typeof _TRecordLikeSchema>;
+/**
+ * El nodo y el registro del árbol: los mismos tipos que el resto del módulo
+ * (`tree-view-types.schemas.ts`). Antes eran copias paralelas y el
+ * adapter terminaba con dos `TNode` incompatibles entre sí.
+ */
+export type _TNodeLike = TNode;
+export type _TRecordLike = TRecord;
 
 // ── Module augmentation ──────────────────────────────────────────────────
 // Las clases base del treeview declaran sus campos vía `__publicField(...)`,

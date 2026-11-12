@@ -278,9 +278,13 @@ define(ObserverElement, 'IswcObserver');
 export function createObserverElement(defaultType: ObserverType, tag = '') {
   class PrefixedObserver extends ObserverElement {
     static override tag = tag;
-    constructor() {
-      super();
-      this.setAttribute('type', defaultType);
+    override connectedCallback(): void {
+      // El `type` por defecto se escribe al conectar, NO en el constructor: un elemento
+      // creado por script no puede traer atributos cuando su constructor termina. Blink los
+      // descarta y avisa con un NotSupportedError sin capturado ('The result must not have
+      // attributes'). Si el autor puso su `type`, manda el suyo.
+      if (!this.hasAttribute('type')) this.setAttribute('type', defaultType);
+      super.connectedCallback();
     }
   }
   return PrefixedObserver;

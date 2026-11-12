@@ -397,7 +397,7 @@ class IswcErEditor extends IswcElement {
     };
     const nodo = ents[0]?.style;
     const rel = rels[0];
-    const base = nodo ?? rel?.style;
+    const base: EdgeStyleOverride | undefined = nodo ?? rel?.style;
     set('fill', nodo?.fill, '#1e3a5f');
     set('stroke', nodo?.stroke, '#60a5fa');
     set('strokeWidth', nodo?.strokeWidth);

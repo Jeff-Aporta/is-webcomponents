@@ -7,9 +7,10 @@
  */
 import { z } from "zod";
 
-const FlexOptionsLikeSchema = z.object({
-  actions: z.array(z.unknown() /* TODO: ref FlexActionEntry */),
-  more: z.array(z.unknown() /* TODO: ref FlexActionEntry */),
-});
+/** `<iswc-flex-options>` del preview. */
+const FlexOptionsLikeSchema = z.intersection(z.custom<HTMLElement>(), z.object({
+  actions: z.array(z.unknown()),
+  more: z.array(z.unknown()),
+}));
 export type FlexOptionsLike = z.infer<typeof FlexOptionsLikeSchema>;
 

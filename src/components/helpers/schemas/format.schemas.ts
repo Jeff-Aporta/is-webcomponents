@@ -9,7 +9,7 @@ import { z } from "zod";
 
 const NumberPresetSchema = z.object({
   kind: z.literal('number'),
-  opts: z.unknown() /* TODO: cannot convert */,
+  opts: z.custom<Intl.NumberFormatOptions>(),
 });
 
 const CurrencyPresetSchema = z.object({
@@ -35,7 +35,7 @@ const TextPresetSchema = z.object({
 
 const DatePresetSchema = z.object({
   kind: z.literal('date'),
-  opts: z.unknown() /* TODO: cannot convert */,
+  opts: z.custom<Intl.DateTimeFormatOptions>(),
 });
 
 const ExcelPresetSchema = z.union([NumberPresetSchema, CurrencyPresetSchema, AccountingPresetSchema, FractionPresetSchema, TextPresetSchema, DatePresetSchema]);

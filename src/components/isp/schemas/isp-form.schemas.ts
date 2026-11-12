@@ -7,15 +7,16 @@
  */
 import { z } from 'zod';
 
-const ControlElSchema = z.object({
+/** Control de formulario: siempre es un elemento del DOM. */
+const ControlElSchema = z.intersection(z.custom<HTMLElement>(), z.object({
   value: z.union([z.string(), z.null()]).optional(),
   checked: z.boolean().optional(),
   values: z.union([z.array(z.string()), z.null()]).optional(),
   multiple: z.boolean().optional(),
   type: z.string().optional(),
-  selectedOptions: z.array(z.unknown() /* TODO: ref HTMLOptionElement */).optional(),
-  options: z.array(z.unknown() /* TODO: ref HTMLOptionElement */).optional(),
-});
+  selectedOptions: z.array(z.custom<HTMLOptionElement>()).optional(),
+  options: z.array(z.custom<HTMLOptionElement>()).optional(),
+}));
 export type ControlEl = z.infer<typeof ControlElSchema>;
 
 const ControlValueSchema = z.union([z.string(), z.boolean(), z.array(z.string()), z.number(), z.null(), z.undefined()]);
@@ -39,13 +40,6 @@ const IspColumnDefSchema = z.object({
   header: z.string().optional(),
 });
 
-const IspServerConfigSchema = z.object({
-  useLocal: z.boolean().optional(),
-  local: z.union([IspConnectionSchema, z.null()]).optional(),
-  remote: z.union([IspConnectionSchema, z.null()]).optional(),
-});
-export type IspServerConfig = z.infer<typeof IspServerConfigSchema>;
-
 const IspConnectionSchema = z.object({
   host: z.string(),
   port: z.union([z.number(), z.null()]).optional(),
@@ -53,6 +47,13 @@ const IspConnectionSchema = z.object({
   restcontext: z.string().optional(),
 });
 export type IspConnection = z.infer<typeof IspConnectionSchema>;
+
+const IspServerConfigSchema = z.object({
+  useLocal: z.boolean().optional(),
+  local: z.union([IspConnectionSchema, z.null()]).optional(),
+  remote: z.union([IspConnectionSchema, z.null()]).optional(),
+});
+export type IspServerConfig = z.infer<typeof IspServerConfigSchema>;
 
 const IspEndpointsSchema = z.object({
   recurso: z.string().optional(),
@@ -78,6 +79,22 @@ const IspListaArgsSchema = z.object({
 });
 export type IspListaArgs = z.infer<typeof IspListaArgsSchema>;
 
+/** Pagina que devuelve `Lista`. */
+const IspListaResultSchema = z.object({
+  datos: z.array(IspRecordSchema).optional(),
+  pagina: z.number().optional(),
+  qregistros: z.number().optional(),
+  totalpaginas: z.number().optional(),
+  totalregistros: z.number().optional(),
+  verificacion: z.object({
+  mensajes: z.array(z.object({
+  itdmensaje: z.unknown(),
+  mensaje: z.string(),
+})),
+}).optional(),
+});
+export type IspListaResult = z.infer<typeof IspListaResultSchema>;
+
 const IspControllerConfigSchema = z.object({
   kind: z.union([z.literal('catalog'), z.literal('btnref')]).optional(),
   entrie: z.string().optional(),
@@ -87,8 +104,8 @@ const IspControllerConfigSchema = z.object({
   multiSelect: z.boolean().optional(),
   labelPk: z.string().optional(),
   sizePk: z.number().optional(),
-  klass: z.unknown() /* TODO: cannot convert */.optional(),
-  actions: z.array(z.union([z.boolean(), IspActionKeySchema])).optional(),
+  klass: z.custom<new () => IspRecord>().optional(),
+  actions: z.union([z.boolean(), z.array(IspActionKeySchema)]).optional(),
   mock: z.array(IspRecordSchema).optional(),
   server: IspServerConfigSchema.optional(),
   endpoints: IspEndpointsSchema.optional(),
@@ -106,22 +123,22 @@ const IspControllerSchema = z.object({
   multiSelect: z.boolean(),
   labelPk: z.string().optional(),
   sizePk: z.number().optional(),
-  klass: z.unknown() /* TODO: cannot convert */,
-  get CtxBtnRef(): z.ZodOptional<z.ZodUnion<[typeof IspControllerSchema, z.ZodNull]>> { return z.union([IspControllerSchema, z.null()]).optional(); },
-  Lista: z.function({ input: [z.unknown() /* TODO: ref IspListaArgs */], output: z.promise(z.unknown() /* TODO: ref IspListaResult */) }),
-  actCrear: z.function({ input: [z.unknown() /* TODO: ref IspRecord */], output: z.promise(z.unknown() /* TODO: ref IspRecord */) }).optional(),
-  actModificar: z.function({ input: [z.unknown() /* TODO: ref IspRecord */], output: z.promise(z.unknown() /* TODO: ref IspRecord */) }).optional(),
-  actVisualizar: z.function({ input: [z.unknown() /* TODO: ref IspRecord */], output: z.promise(z.unknown() /* TODO: ref IspRecord */) }).optional(),
-  actVerificar: z.function({ input: [z.unknown() /* TODO: ref IspRecord */], output: z.promise(z.object({
+  klass: z.custom<new () => IspRecord>(),
+  get CtxBtnRef(): z.ZodOptional<z.ZodUnion<readonly [typeof IspControllerSchema, z.ZodNull]>> { return z.union([IspControllerSchema, z.null()]).optional(); },
+  Lista: z.function({ input: [IspListaArgsSchema.optional()], output: z.promise(IspListaResultSchema) }),
+  actCrear: z.function({ input: [IspRecordSchema], output: z.promise(IspRecordSchema) }).optional(),
+  actModificar: z.function({ input: [IspRecordSchema], output: z.promise(IspRecordSchema) }).optional(),
+  actVisualizar: z.function({ input: [IspRecordSchema], output: z.promise(IspRecordSchema) }).optional(),
+  actVerificar: z.function({ input: [IspRecordSchema], output: z.promise(z.object({
   mensajes: z.array(z.object({
   itdmensaje: z.unknown(),
   mensaje: z.string(),
 })),
 })) }).optional(),
-  actEliminar: z.function({ input: [z.unknown() /* TODO: ref IspRecord */], output: z.promise(z.unknown() /* TODO: ref IspRecord */) }).optional(),
-  actDuplicar: z.function({ input: [z.unknown() /* TODO: ref IspRecord */, z.unknown() /* TODO: ref IspRecord */], output: z.promise(z.literal(true)) }).optional(),
-  actRecodificar: z.function({ input: [z.unknown() /* TODO: ref IspRecord */, z.unknown() /* TODO: ref IspRecord */], output: z.promise(z.literal(true)) }).optional(),
-  actConsolidar: z.function({ input: [z.unknown() /* TODO: ref IspRecord */, z.unknown() /* TODO: ref IspRecord */], output: z.promise(z.literal(true)) }).optional(),
+  actEliminar: z.function({ input: [IspRecordSchema], output: z.promise(IspRecordSchema) }).optional(),
+  actDuplicar: z.function({ input: [IspRecordSchema, IspRecordSchema], output: z.promise(z.literal(true)) }).optional(),
+  actRecodificar: z.function({ input: [IspRecordSchema, IspRecordSchema], output: z.promise(z.literal(true)) }).optional(),
+  actConsolidar: z.function({ input: [IspRecordSchema, IspRecordSchema], output: z.promise(z.literal(true)) }).optional(),
   /* TODO: parse fail readonly _store: IspRecord[] */
 });
 export type IspController = z.infer<typeof IspControllerSchema>;
@@ -148,7 +165,8 @@ const IspHttpEnvelopeSchema = z.object({
 });
 export type IspHttpEnvelope = z.infer<typeof IspHttpEnvelopeSchema>;
 
-const MutableIspControllerSchema = z.object({
-  /* TODO: member -readonly [K in keyof IspController]: IspController[K] */
-});
-export type MutableIspController = z.infer<typeof MutableIspControllerSchema>;
+/**
+ * Controller ISP mutable: el mismo contrato pero sin `readonly`, porque la
+ * factory le añade `actXxx` y `_store` despues de crearlo.
+ */
+export type MutableIspController = { -readonly [K in keyof IspController]: IspController[K] };

@@ -12,13 +12,13 @@ import type { DiagramRenderDetail, DiagramViewerDetail } from './diagram-base.sc
 
 const StepEntrySchema = z.object({
   s: SwimlaneLayoutStepSchema,
-  g: z.unknown() /* TODO: ref SVGGElement */,
+  g: z.custom<SVGGElement>(() => true),
 });
 export type StepEntry = z.infer<typeof StepEntrySchema>;
 
 const LinkEntrySchema = z.object({
   l: SwimlaneLayoutLinkSchema,
-  g: z.unknown() /* TODO: ref SVGGElement */,
+  g: z.custom<SVGGElement>(() => true),
 });
 export type LinkEntry = z.infer<typeof LinkEntrySchema>;
 

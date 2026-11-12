@@ -7,7 +7,13 @@
  */
 import { z } from "zod";
 
-const BreakpointSchema = z.unknown() /* TODO: cannot convert */;
+const BreakpointSchema = z.union([
+  z.literal('xs'),
+  z.literal('sm'),
+  z.literal('md'),
+  z.literal('lg'),
+  z.literal('xl'),
+]);
 export type Breakpoint = z.infer<typeof BreakpointSchema>;
 
 const BreakpointFlagsSchema = z.record(z.string(), z.boolean());

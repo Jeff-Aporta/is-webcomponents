@@ -60,15 +60,15 @@ export type TurtleState = z.infer<typeof TurtleStateSchema>;
 
 const BlockNodeEntrySchema = z.object({
   b: BlockLayoutBlockSchema,
-  g: z.unknown() /* TODO: ref SVGGElement */,
-  box: z.unknown() /* TODO: ref SVGPathElement */,
+  g: z.custom<SVGGElement>(() => true),
+  box: z.custom<SVGPathElement>(() => true),
 });
 export type BlockNodeEntry = z.infer<typeof BlockNodeEntrySchema>;
 
 const EdgeNodeEntrySchema = z.object({
   e: BlockLayoutEdgeSchema,
-  g: z.unknown() /* TODO: ref SVGGElement */,
-  path: z.unknown() /* TODO: ref SVGPathElement */,
+  g: z.custom<SVGGElement>(() => true),
+  path: z.custom<SVGPathElement>(() => true),
 });
 export type EdgeNodeEntry = z.infer<typeof EdgeNodeEntrySchema>;
 

@@ -7,7 +7,14 @@
  */
 import { z } from "zod";
 
-const ByteUnitSchema = z.unknown() /* TODO: cannot convert */;
+const ByteUnitSchema = z.union([
+  z.literal('byte'),
+  z.literal('kilobyte'),
+  z.literal('megabyte'),
+  z.literal('gigabyte'),
+  z.literal('terabyte'),
+  z.literal('petabyte'),
+]);
 export type ByteUnit = z.infer<typeof ByteUnitSchema>;
 
 const FormatBytesOptionsSchema = z.object({

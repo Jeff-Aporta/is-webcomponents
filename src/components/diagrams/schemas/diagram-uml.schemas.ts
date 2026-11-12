@@ -15,7 +15,7 @@ export const CajaSchema = z.object({
 });
 export type Caja = z.infer<typeof CajaSchema>;
 
-const ComponenteSchema = z.intersection(CajaSchema, z.object({
+export const ComponenteSchema = z.intersection(CajaSchema, z.object({
   id: z.string(),
   package: z.union([z.string(), z.undefined()]).optional(),
   name: z.string().optional(),
@@ -38,7 +38,13 @@ const ComponenteSchema = z.intersection(CajaSchema, z.object({
 }));
 export type Componente = z.infer<typeof ComponenteSchema>;
 
-const PaqueteSchema = z.intersection(CajaSchema, z.object({
+export const PuntoSchema = z.object({
+  x: z.number(),
+  y: z.number(),
+});
+export type Punto = z.infer<typeof PuntoSchema>;
+
+export const PaqueteSchema = z.intersection(CajaSchema, z.object({
   id: z.string(),
   name: z.string().optional(),
   /** Icono Iconify del rótulo (con fondo circular): ilustra el propósito del agrupador. */
@@ -68,6 +74,13 @@ const PaqueteSchema = z.intersection(CajaSchema, z.object({
   titleAtCorner: z.boolean().optional(),
   /** `boxStyle: 'vp'`: rótulo centrado en la franja superior (Visual Paradigm). */
   titleCenter: z.boolean().optional(),
+  /**
+   * Caja del rótulo del agrupador: la calcula el layout (la banda de texto
+   * que el theme pinta arriba). No viene del payload.
+   */
+  titleBox: CajaSchema.optional(),
+  /** Contorno ortogonal del agrupador: lo calcula el layout. */
+  outline: z.array(PuntoSchema).optional(),
 }));
 export type Paquete = z.infer<typeof PaqueteSchema>;
 
@@ -145,16 +158,17 @@ export const OpcionesEmpaqueSchema = z.object({
    * destino, sin lollipops). El ruteo es el mismo: solo cambia el remate.
    */
   connector: z.union([z.literal('assembly'), z.literal('arrow')]).optional(),
+  /**
+   * Consolidación de rieles (efecto estándar, encendido por defecto):
+   * `ends` — las aristas que llegan al mismo punto convergen en abanico;
+   * `starts` — las que salen del mismo origen salen juntas. `false` apaga
+   * los incentivos de consolidación. Acepta un booleano para ambos.
+   */
+  consolidate: z.union([z.boolean(), z.object({ starts: z.boolean().optional(), ends: z.boolean().optional() })]).optional(),
 });
 export type OpcionesEmpaque = z.infer<typeof OpcionesEmpaqueSchema>;
 
-export const PuntoSchema = z.object({
-  x: z.number(),
-  y: z.number(),
-});
-export type Punto = z.infer<typeof PuntoSchema>;
-
-const InterfazUmlSchema = z.object({
+export const InterfazUmlSchema = z.object({
   id: z.string(),
   component: z.string(),
   name: z.union([z.string(), z.undefined()]).optional(),

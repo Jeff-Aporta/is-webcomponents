@@ -232,6 +232,16 @@ const SequenceLayoutSchema = z.object({
   messages: z.array(SequenceLayoutMessageSchema),
   altBox: SequenceLayoutAltBoxSchema.optional(),
   fragments: z.array(SequenceLayoutFragmentSchema).optional(),
+  /** Cajas de participante (regiones que agrupan actores en la cabecera). */
+  boxes: z.array(z.object({
+  id: z.string(),
+  name: z.string(),
+  color: z.string().optional(),
+  x: z.number(),
+  y: z.number(),
+  w: z.number(),
+  h: z.number(),
+})).optional(),
   /** Grupos de la leyenda; vacío cuando la leyenda está apagada. */
   groups: z.array(SequenceGroupSpecSchema).optional(),
   legendX: z.number(),

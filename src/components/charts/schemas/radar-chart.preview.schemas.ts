@@ -7,7 +7,7 @@
  */
 import { z } from "zod";
 
-const RadarChartLikeSchema = z.object({
+const RadarChartLikeSchema = z.intersection(z.custom<HTMLElement>(), z.object({
   config: z.object({
   data: z.object({
   labels: z.array(z.string()),
@@ -18,6 +18,6 @@ const RadarChartLikeSchema = z.object({
 })),
 }),
 }),
-});
+}));
 export type RadarChartLike = z.infer<typeof RadarChartLikeSchema>;
 

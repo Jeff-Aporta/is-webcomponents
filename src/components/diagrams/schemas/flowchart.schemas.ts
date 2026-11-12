@@ -5,6 +5,7 @@
  * Generado por `scripts/migrate-zod.py`. Refinar manualmente las
  * entradas marcadas con TODO cuando se quiera validación runtime.
  */
+import type { FlowLayoutEdge, FlowLayoutNode } from './flowchart-spec.schemas.js';
 import { z } from "zod";
 import type { DiagramTurtleDetail, DiagramRenderDetail, DiagramToggleDetail, DiagramViewerDetail } from './diagram-base.schemas.js';
 
@@ -17,16 +18,16 @@ const TurtleStateSchema = z.object({
 export type TurtleState = z.infer<typeof TurtleStateSchema>;
 
 const NodeNodeEntrySchema = z.object({
-  n: z.unknown() /* TODO: ref FlowLayoutNode */,
-  g: z.unknown() /* TODO: ref SVGGElement */,
-  box: z.unknown() /* TODO: ref SVGPathElement */,
+  n: z.custom<FlowLayoutNode>(() => true),
+  g: z.custom<SVGGElement>(() => true),
+  box: z.custom<SVGPathElement>(() => true),
 });
 export type NodeNodeEntry = z.infer<typeof NodeNodeEntrySchema>;
 
 const EdgeNodeEntrySchema = z.object({
-  e: z.unknown() /* TODO: ref FlowLayoutEdge */,
-  g: z.unknown() /* TODO: ref SVGGElement */,
-  path: z.unknown() /* TODO: ref SVGPathElement */,
+  e: z.custom<FlowLayoutEdge>(() => true),
+  g: z.custom<SVGGElement>(() => true),
+  path: z.custom<SVGPathElement>(() => true),
 });
 export type EdgeNodeEntry = z.infer<typeof EdgeNodeEntrySchema>;
 

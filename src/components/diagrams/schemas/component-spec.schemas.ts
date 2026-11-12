@@ -6,7 +6,14 @@
  * entradas marcadas con TODO cuando se quiera validación runtime.
  */
 import { z } from "zod";
-import { OpcionesEmpaqueSchema } from "./diagram-uml.schemas.js";
+import {
+  ComponenteSchema,
+  InterfazUmlSchema,
+  LadoSchema,
+  OpcionesEmpaqueSchema,
+  PaqueteSchema,
+  PuntoSchema,
+} from "./diagram-uml.schemas.js";
 
 const HttpEndpointSchema = z.object({
   methods: z.array(z.string()),
@@ -40,21 +47,21 @@ const ComponentSpecResultSchema = z.object({
   title: z.string().optional(),
   subtitle: z.string().optional(),
   layout: OpcionesEmpaqueSchema,
-  packages: z.array(z.unknown() /* TODO: ref Paquete */),
-  components: z.array(z.unknown() /* TODO: ref Componente */),
-  interfaces: z.array(z.unknown() /* TODO: ref InterfazUml */),
+  packages: z.array(PaqueteSchema),
+  components: z.array(ComponenteSchema),
+  interfaces: z.array(InterfazUmlSchema),
   edges: z.array(SpecEdgeSchema),
 });
 export type ComponentSpecResult = z.infer<typeof ComponentSpecResultSchema>;
 
 const WireResultSchema = z.object({
-  components: z.array(z.unknown() /* TODO: ref Componente */),
-  interfaces: z.array(z.unknown() /* TODO: ref InterfazUml */),
+  components: z.array(ComponenteSchema),
+  interfaces: z.array(InterfazUmlSchema),
   edges: z.array(SpecEdgeSchema),
 });
 export type WireResult = z.infer<typeof WireResultSchema>;
 
-const LayoutComponentSchema = z.object({
+const LayoutComponentSchema = z.intersection(ComponenteSchema, z.object({
   stereoY: z.number().optional(),
   labelY: z.number().optional(),
   itemsY: z.number().optional(),
@@ -71,17 +78,17 @@ const LayoutComponentSchema = z.object({
   lineHeight: z.number(),
   lines: z.array(z.string()),
   itemLines: z.array(z.string()),
-});
+}));
 export type LayoutComponent = z.infer<typeof LayoutComponentSchema>;
 
-const LayoutInterfaceSchema = z.object({
+const LayoutInterfaceSchema = z.intersection(InterfazUmlSchema, z.object({
   hue: z.number().optional(),
   cx: z.number(),
   cy: z.number(),
-});
+}));
 export type LayoutInterface = z.infer<typeof LayoutInterfaceSchema>;
 
-const LayoutEdgeSchema = z.object({
+const LayoutEdgeSchema = z.intersection(SpecEdgeSchema, z.object({
   /** Invierte el sentido de la animación de flujo de esta arista (ver _shared/diagram-flow). */
   reverse: z.boolean().optional(),
   fromX: z.number(),
@@ -91,17 +98,17 @@ const LayoutEdgeSchema = z.object({
   path: z.string(),
   color: z.string().optional(),
   hue: z.number().optional(),
-  _fromPt: z.union([z.unknown() /* TODO: ref Punto */, z.null()]).optional(),
-  _toPt: z.union([z.unknown() /* TODO: ref Punto */, z.null()]).optional(),
-  _fromSide: z.unknown() /* TODO: ref Lado */.optional(),
-  _toSide: z.unknown() /* TODO: ref Lado */.optional(),
-});
+  _fromPt: PuntoSchema.nullish(),
+  _toPt: PuntoSchema.nullish(),
+  _fromSide: LadoSchema.optional(),
+  _toSide: LadoSchema.optional(),
+}));
 export type LayoutEdge = z.infer<typeof LayoutEdgeSchema>;
 
 const ComponentLayoutSchema = z.object({
   width: z.number(),
   height: z.number(),
-  packages: z.array(z.unknown() /* TODO: ref Paquete */),
+  packages: z.array(PaqueteSchema),
   components: z.array(LayoutComponentSchema),
   interfaces: z.array(LayoutInterfaceSchema),
   edges: z.array(LayoutEdgeSchema),

@@ -7,20 +7,19 @@
  */
 import { z } from "zod";
 
-const _TextLikeSchema = z.object({
+const _TextLikeSchema = z.intersection(z.custom<HTMLElement>(), z.object({
   color: z.union([z.string(), z.null()]),
   mix: z.union([z.string(), z.null()]),
   mixWith: z.union([z.string(), z.null()]),
   lines: z.number(),
-});
+}));
 export type _TextLike = z.infer<typeof _TextLikeSchema>;
 
-const _InputLikeSchema = z.object({
+/** Control del preview (input / checkbox). */
+const _InputLikeSchema = z.intersection(z.custom<HTMLElement>(), z.object({
   value: z.string(),
   checked: z.boolean(),
   disabled: z.boolean(),
-  textContent: z.union([z.string(), z.null()]),
-  addEventListener: z.function({ input: [z.string(), z.unknown() /* TODO: ref EventListener */], output: z.void() }),
-});
+}));
 export type _InputLike = z.infer<typeof _InputLikeSchema>;
 

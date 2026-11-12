@@ -5,13 +5,14 @@
  * Generado por `scripts/migrate-zod.py`. Refinar manualmente las
  * entradas marcadas con TODO cuando se quiera validación runtime.
  */
-import { z } from "zod";
-
-const IswcUiApiSchema = z.object({
-  html: z.unknown() /* TODO: cannot convert */,
-  esc: z.unknown() /* TODO: cannot convert */,
-  define: z.function({ input: [z.string(), z.unknown() /* TODO: ref CustomElementConstructor */], output: z.void() }),
-  css: z.function({ input: [z.unknown() /* TODO: ref ShadowRoot */, z.string()], output: z.void() }),
-});
-export type IswcUiApi = z.infer<typeof IswcUiApiSchema>;
+/**
+ * API que `helpers/ui.ts` expone en globalThis (`IswcUi` / `Ui`): la
+ * plantilla `html`, el escapador `esc`, `define` y `css`.
+ */
+export type IswcUiApi = {
+  html: (strings: TemplateStringsArray, ...values: unknown[]) => DocumentFragment;
+  esc: (s: unknown) => string;
+  define: (tag: string, clase: CustomElementConstructor) => void;
+  css: (shadow: ShadowRoot, cssText: string) => void;
+};
 

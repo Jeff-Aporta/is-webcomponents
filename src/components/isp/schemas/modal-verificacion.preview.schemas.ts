@@ -17,13 +17,14 @@ const VerificationControllerSchema = z.object({
 })) }),
 });
 
-const ModalVerificacionElSchema = z.object({
+/** `<iswc-modal-verificacion>` del preview. */
+const ModalVerificacionElSchema = z.intersection(z.custom<HTMLElement>(), z.object({
   controller: VerificationControllerSchema,
   record: z.object({
   nit: z.string(),
   razon: z.string(),
 }),
   show: z.function({ input: [], output: z.void() }),
-});
+}));
 export type ModalVerificacionEl = z.infer<typeof ModalVerificacionElSchema>;
 

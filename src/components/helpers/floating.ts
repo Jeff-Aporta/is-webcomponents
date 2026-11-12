@@ -4,7 +4,7 @@ import { withStyleAttrs } from '@jeff-aporta/iswc-base/core/attrs.js';
 
 import { computePosition, PLACEMENTS, isVirtualElement } from '@jeff-aporta/iswc-base/core/position.js';
 import { type AnchorLike, type ComputePositionResult } from '@jeff-aporta/iswc-base/core/schemas/position.schemas.js';
-import type { PuenteCaja, PuenteEntrada } from '@jeff-aporta/iswc-base/core/position/hover-bridge.js';
+import type { PuenteCaja, PuenteEntrada } from '@jeff-aporta/iswc-base/core/position/hover-bridge.schemas.js';
 import css from 'iswc:css';
 import type { FloatingEventos } from './schemas/floating.schemas.js';
 
@@ -67,7 +67,7 @@ import type { FloatingEventos } from './schemas/floating.schemas.js';
   class IswcFloating extends withStyleAttrs(IswcElement) {
     static override tag = 'iswc-floating';
     declare static events: FloatingEventos;
-    static override css = css;
+    static override css = css;
 
     static override observed = [...OBSERVED, 'arrow-size', 'show-duration', 'hide-duration'];
 

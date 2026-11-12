@@ -21,7 +21,7 @@ const DEFAULT_MAP: Record<CanonKey, readonly string[]> = {
 function pickCanonKey(
   src: SrcMap,
   canon: CanonKey,
-  map: Partial<Record<string, keyof IswcMdEditorDocument>>,
+  map: Record<string, string>,
 ): unknown {
   const overridden = map[canon];
   if (overridden != null && src[overridden] != null) return src[overridden];

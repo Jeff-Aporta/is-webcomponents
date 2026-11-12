@@ -8,8 +8,8 @@
 import { z } from "zod";
 
 const ResizeObserverEntryLikeSchema = z.object({
-  contentBoxSize: z.array(z.unknown() /* TODO: cannot convert */).optional(),
-  borderBoxSize: z.array(z.unknown() /* TODO: cannot convert */).optional(),
+  contentBoxSize: z.array(z.custom<ResizeObserverSize>()).optional(),
+  borderBoxSize: z.array(z.custom<ResizeObserverSize>()).optional(),
   contentRect: z.object({
   width: z.number(),
   height: z.number(),
@@ -18,7 +18,7 @@ const ResizeObserverEntryLikeSchema = z.object({
 export type ResizeObserverEntryLike = z.infer<typeof ResizeObserverEntryLikeSchema>;
 
 const ResizeDetailSchema = z.object({
-  entries: z.array(z.unknown() /* TODO: cannot convert */).optional(),
+  entries: z.array(z.custom<ResizeObserverEntryLike>()).optional(),
 });
 export type ResizeDetail = z.infer<typeof ResizeDetailSchema>;
 

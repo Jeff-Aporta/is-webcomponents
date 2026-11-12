@@ -6,7 +6,7 @@ import { assignEdgeHues } from './diagram-edges.js';
 import { routeOrthogonal, pixelToGrid, gridPathToSvg, buildOrthogonalPath } from './diagram-routing.js';
 import { countIconTokens, extractLeadingIconToken, richTextPlain } from '@jeff-aporta/iswc-base/core/tk-text.js';
 import { resolveTkHue, SERIE_HUES } from '@jeff-aporta/iswc-base/core/color.js';
-import type { BlockSpecGroup, BlockSpecBlock, BlockSpecEdge, BlockSpec, LeadingIcon, BlockPlacement, BlockLayoutBlock, BlockLayoutEdge, BlockLayout, BlockRect, Side } from "@jeff-aporta/iswc-base/components/diagrams/schemas/block-spec.schemas.js";
+import type { BlockSpecGroup, BlockSpecBlock, BlockSpecEdge, BlockSpec, LeadingIcon, BlockPlacement, BlockLayoutBlock, BlockLayoutEdge, BlockLayout, Side } from "@jeff-aporta/iswc-base/components/diagrams/schemas/block-spec.schemas.js";
 
 /**
  * Especificación y layout de diagramas de bloques (sin Mermaid).
@@ -259,7 +259,7 @@ export function computeBlockLayout(spec: BlockSpec): BlockLayout {
     subtitleY,
     legendX,
   };
-  applyEdgeActorLayout(layout, blocks.map((b) => ({ x: b.x, y: b.y, w: b.w, h: b.h })) as BlockRect[]);
+  applyEdgeActorLayout(layout, blocks.map((b) => ({ x: b.x, y: b.y, w: b.w, h: b.h })));
   return layout;
 }
 

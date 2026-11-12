@@ -5,10 +5,11 @@
  * Generado por `scripts/migrate-zod.py`. Refinar manualmente las
  * entradas marcadas con TODO cuando se quiera validación runtime.
  */
+import type { Componente } from './diagram-uml.schemas.js';
 import { z } from "zod";
 
 const ClusterColumnSchema = z.object({
-  items: z.array(z.unknown() /* TODO: ref Componente */),
+  items: z.array(z.custom<Componente>(() => true)),
 });
 export type ClusterColumn = z.infer<typeof ClusterColumnSchema>;
 

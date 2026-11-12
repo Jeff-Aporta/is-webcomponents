@@ -12,6 +12,7 @@ import { inlineMdWeb, applySvgTextContent } from '@jeff-aporta/iswc-base/core/tk
 import { wrapText, buildTspans } from './utils/diagram-labels.js';
 import { svgEl } from '@jeff-aporta/iswc-base/core/svg-chart-engine.js';
 import type { DiagramGroup, DiagramTheme } from "./schemas/diagram-base.schemas.js";
+import type { ClassMemberLayout } from "./schemas/diagram-class.schemas.js";
 import type { ClassLayout, ClassLayoutEdge, ClassLayoutNode, ClassLayoutSection } from "./schemas/diagram-class.schemas.js";
 import { hostStyleName, styleThemeFor } from './utils/diagram-styles.js';
 import type { ErThemeJson } from './schemas/theme.schemas.js';
@@ -55,7 +56,7 @@ function pintarMiembros(
   g: SVGGElement, x: number, y0: number, sec: ClassLayoutSection,
   op: { font: string; fill: string; caption: string; vis: 'punto' | 'texto' },
 ): void {
-  const members = sec.members ?? sec.rows.map((row, i) => ({ vis: '', firma: [row], tipo: [] as string[], y: i * 16 }));
+  const members: ClassMemberLayout[] = sec.members ?? sec.rows.map((row, i) => ({ vis: '', firma: [row], tipo: [] as string[], y: i * 16 }));
   for (const m of members) {
     let y = y0 + 6 + m.y + 8;
     if (m.mas) {
@@ -260,7 +261,7 @@ class IswcClassDiagram extends DiagramElementBase {
     return svgEl('polygon', {
       // +10 % sobre el glifo original; en card/vp relleno del color de la arista.
       points: '0,0 -13.2,-6.6 -13.2,6.6',
-      fill: hollow && !this.layout?.packages?.length ? (this.#theme?.chipFill ?? '#0d1b2a') : color,
+      fill: hollow && !(this.layout as ClassLayout | null)?.packages?.length ? (this.#theme?.chipFill ?? '#0d1b2a') : color,
       stroke: color,
       'stroke-width': 1.2,
       transform: `translate(${e.targetTipX},${e.targetTipY}) rotate(${e.targetAngle})`,

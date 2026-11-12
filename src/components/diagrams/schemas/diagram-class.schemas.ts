@@ -119,7 +119,7 @@ export type ClassSpec = z.infer<typeof ClassSpecSchema>;
  * sangría colgante), la firma va en su(s) renglón(es) y el tipo en renglón(es) aparte como texto
  * secundario. `y` es el desplazamiento dentro de la sección. Nada se corta: lo largo salta de línea.
  */
-const ClassMemberLayoutSchema = z.object({
+export const ClassMemberLayoutSchema = z.object({
   vis: z.string(),
   firma: z.array(z.string()),
   tipo: z.array(z.string()),
@@ -127,6 +127,7 @@ const ClassMemberLayoutSchema = z.object({
   /** Renglón resumen: cuántos miembros quedaron sin mostrar (tope `layout.maxMembers`). */
   mas: z.number().optional(),
 });
+export type ClassMemberLayout = z.infer<typeof ClassMemberLayoutSchema>;
 
 const ClassLayoutSectionSchema = z.object({
   type: z.union([z.literal('header'), z.literal('attributes'), z.literal('methods')]),

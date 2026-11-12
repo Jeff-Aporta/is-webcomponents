@@ -37,8 +37,8 @@ export const LabeledEdgeSchema = z.object({
 export type LabeledEdge = z.infer<typeof LabeledEdgeSchema>;
 
 const PlaceEdgeActorsOptsSchema = z.object({
-  edges: z.array(z.unknown() /* TODO: cannot convert */).optional(),
-  obstacles: z.array(z.unknown() /* TODO: cannot convert */).optional(),
+  edges: z.array(LabeledEdgeSchema).optional(),
+  obstacles: z.custom<readonly RectLike[]>().optional(),
   canvas: z.object({
   width: z.number(),
   height: z.number(),

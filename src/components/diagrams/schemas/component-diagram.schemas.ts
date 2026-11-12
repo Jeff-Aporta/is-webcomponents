@@ -7,6 +7,7 @@
  */
 import { z } from "zod";
 import type { DiagramRenderDetail, DiagramViewerDetail } from './diagram-base.schemas.js';
+import { CajaSchema, PaqueteSchema, PuntoSchema } from './diagram-uml.schemas.js';
 
 const InterfaceStemPointSchema = z.object({
   x: z.number(),
@@ -14,12 +15,12 @@ const InterfaceStemPointSchema = z.object({
 });
 export type InterfaceStemPoint = z.infer<typeof InterfaceStemPointSchema>;
 
-const LayoutPackageSchema = z.intersection(z.unknown() /* TODO: ref Paquete */, z.object({
-  titleBox: z.unknown() /* TODO: ref Caja */.optional(),
+const LayoutPackageSchema = z.intersection(PaqueteSchema, z.object({
+  titleBox: CajaSchema.optional(),
 }));
 export type LayoutPackage = z.infer<typeof LayoutPackageSchema>;
 
-const AnchorPointSchema = z.unknown() /* TODO: ref Punto */;
+const AnchorPointSchema = PuntoSchema;
 export type AnchorPoint = z.infer<typeof AnchorPointSchema>;
 
 /** Eventos del componente (HOW-6): `declare static events` en la clase; los documenta scripts/sondas/eventos.ts. */

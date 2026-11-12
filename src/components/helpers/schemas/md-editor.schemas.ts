@@ -29,18 +29,18 @@ const IswcMdEditorApiConfigSchema = z.object({
 }).optional(),
   headers: z.union([z.record(z.string(), z.string()), z.function({ input: [], output: z.record(z.string(), z.string()) })]).optional(),
   token: z.union([z.string(), z.function({ input: [], output: z.string() })]).optional(),
-  fieldMap: z.record(z.string(), z.unknown() /* TODO: cannot convert */).optional(),
+  fieldMap: z.record(z.string(), z.string()).optional(),
 });
 export type IswcMdEditorApiConfig = z.infer<typeof IswcMdEditorApiConfigSchema>;
 
 const IswcMdEditorActionsSchema = z.object({
-  load: z.function({ input: [], output: z.promise(z.union([z.unknown() /* TODO: ref IswcMdEditorDocument */, z.string()])) }).optional(),
-  persist: z.function({ input: [z.unknown() /* TODO: ref IswcMdEditorDocument */], output: z.promise(z.union([z.unknown() /* TODO: ref IswcMdEditorDocument */, z.void()])) }).optional(),
-  delete: z.function({ input: [z.unknown() /* TODO: ref IswcMdEditorDocument */], output: z.promise(z.void()) }).optional(),
+  load: z.function({ input: [], output: z.promise(z.union([IswcMdEditorDocumentSchema, z.string()])) }).optional(),
+  persist: z.function({ input: [IswcMdEditorDocumentSchema], output: z.promise(z.union([IswcMdEditorDocumentSchema, z.void()])) }).optional(),
+  delete: z.function({ input: [IswcMdEditorDocumentSchema], output: z.promise(z.void()) }).optional(),
 });
 export type IswcMdEditorActions = z.infer<typeof IswcMdEditorActionsSchema>;
 
-const DialogElementSchema = z.intersection(z.unknown() /* TODO: ref HTMLElement */, z.object({
+const DialogElementSchema = z.intersection(z.custom<HTMLElement>(), z.object({
   open: z.boolean(),
   show: z.function({ input: [], output: z.void() }),
   hide: z.function({ input: [], output: z.void() }),
@@ -49,19 +49,22 @@ const DialogElementSchema = z.intersection(z.unknown() /* TODO: ref HTMLElement 
 }));
 export type DialogElement = z.infer<typeof DialogElementSchema>;
 
-const SwitchElementSchema = z.object({
+/** `<iswc-switch>` del editor. */
+const SwitchElementSchema = z.intersection(z.custom<HTMLElement>(), z.object({
   checked: z.boolean(),
-});
+}));
 export type SwitchElement = z.infer<typeof SwitchElementSchema>;
 
-const CopyButtonElementSchema = z.object({
+/** `<iswc-button>` de copiar. */
+const CopyButtonElementSchema = z.intersection(z.custom<HTMLElement>(), z.object({
   value: z.string(),
-});
+}));
 export type CopyButtonElement = z.infer<typeof CopyButtonElementSchema>;
 
-const TextareaElementSchema = z.object({
+/** `<iswc-textarea>` del editor. */
+const TextareaElementSchema = z.intersection(z.custom<HTMLElement>(), z.object({
   value: z.string(),
-});
+}));
 export type TextareaElement = z.infer<typeof TextareaElementSchema>;
 
 const EditorHistorySchema = z.object({

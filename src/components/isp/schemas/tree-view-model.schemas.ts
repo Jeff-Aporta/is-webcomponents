@@ -7,5 +7,9 @@
  */
 import { z } from 'zod';
 
-const ActionResultSchema = z.promise(z.unknown() /* TODO: ref T */);
-export type ActionResult = z.infer<typeof ActionResultSchema>;
+const ActionResultSchema = z.promise(z.unknown());
+/**
+ * Resultado de una acción CRUD: la promesa que resuelve el registro
+ * afectado (`TRecord` en el modelo, `TNode` en el árbol).
+ */
+export type ActionResult<T = z.infer<typeof ActionResultSchema>> = Promise<T>;

@@ -7,25 +7,41 @@
  */
 import { z } from 'zod';
 
-const _NodeAnySchema = z.intersection(z.record(z.string(), z.unknown()), z.object({
-  flatPath: z.string(),
-  childrens: z.array(_NodeAnySchema).optional(),
-  topology: z.unknown().optional(),
-  containment: z.unknown().optional(),
-  mobility: z.unknown().optional(),
-  pathInit: z.unknown().optional(),
-  f: _NodeAnySchema.optional(),
-}));
-export type _NodeAny = z.infer<typeof _NodeAnySchema>;
+/** Nodo del arbol de datos (el "shape" crudo que decora `tree-data.ts`). */
+export type _NodeAny = {
+  flatPath?: string;
+  childrens?: _NodeAny[];
+  topology?: unknown;
+  containment?: unknown;
+  mobility?: unknown;
+  pathInit?: string;
+  f?: _NodeAny;
+  [key: string]: unknown;
+};
 
-const _TreeRootSchema = z.intersection(_NodeAnySchema, z.object({
-  childrens: z.array(_NodeAnySchema),
+const _NodeAnySchema: z.ZodType<_NodeAny> = z.intersection(z.record(z.string(), z.unknown()), z.object({
+  flatPath: z.string(),
+  childrens: z.array(z.custom<_NodeAny>()).optional(),
+  topology: z.string().optional(),
+  containment: z.string().optional(),
+  mobility: z.string().optional(),
+  pathInit: z.string().optional(),
+  f: z.custom<_NodeAny>().optional(),
+}));
+
+/** Raiz del arbol: la lista de nodos raiz. */
+export type _TreeRoot = _NodeAny & { childrens: _NodeAny[] };
+
+const _TreeRootSchema: z.ZodType<_TreeRoot> = z.intersection(_NodeAnySchema, z.object({
+  childrens: z.array(z.custom<_NodeAny>()),
   flatPath: z.string().optional(),
 }));
-export type _TreeRoot = z.infer<typeof _TreeRootSchema>;
 
-const _TreeBaseCtorSchema = z.unknown() /* TODO: cannot convert */;
-export type _TreeBaseCtor = z.infer<typeof _TreeBaseCtorSchema>;
+/**
+ * Constructor generico que `TreeNode(Base)` acepta: la clase base solo
+ * aporta el almacen; los accessors del "shape" los define la subclase.
+ */
+export type _TreeBaseCtor = new () => object;
 
 const _GroupEntrySchema = z.object({
   separator: z.boolean().optional(),

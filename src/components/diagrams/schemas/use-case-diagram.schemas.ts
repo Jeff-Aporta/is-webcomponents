@@ -5,18 +5,19 @@
  * Generado por `scripts/migrate-zod.py`. Refinar manualmente las
  * entradas marcadas con TODO cuando se quiera validación runtime.
  */
+import type { UseCaseLayoutActor, UseCaseLayoutCase, UseCaseLayoutLink } from './use-case-spec.schemas.js';
 import { z } from "zod";
 import type { DiagramRenderDetail, DiagramToggleDetail, DiagramViewerDetail } from './diagram-base.schemas.js';
 
 const NodeNodeEntrySchema = z.object({
-  n: z.union([z.unknown() /* TODO: ref UseCaseLayoutActor */, z.unknown() /* TODO: ref UseCaseLayoutCase */]),
-  g: z.unknown() /* TODO: ref SVGGElement */,
+  n: z.union([z.custom<UseCaseLayoutActor>(() => true), z.custom<UseCaseLayoutCase>(() => true)]),
+  g: z.custom<SVGGElement>(() => true),
 });
 export type NodeNodeEntry = z.infer<typeof NodeNodeEntrySchema>;
 
 const LinkNodeEntrySchema = z.object({
-  l: z.unknown() /* TODO: ref UseCaseLayoutLink */,
-  g: z.unknown() /* TODO: ref SVGGElement */,
+  l: z.custom<UseCaseLayoutLink>(() => true),
+  g: z.custom<SVGGElement>(() => true),
 });
 export type LinkNodeEntry = z.infer<typeof LinkNodeEntrySchema>;
 

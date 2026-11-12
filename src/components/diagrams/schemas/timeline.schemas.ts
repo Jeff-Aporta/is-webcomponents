@@ -11,7 +11,7 @@ import type { DiagramRenderDetail, DiagramToggleDetail, DiagramViewerDetail } fr
 
 const EventEntrySchema = z.object({
   e: TimelineLayoutEventSchema,
-  g: z.unknown() /* TODO: ref SVGGElement */,
+  g: z.custom<SVGGElement>(() => true),
 });
 export type EventEntry = z.infer<typeof EventEntrySchema>;
 

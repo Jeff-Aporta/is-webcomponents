@@ -5,7 +5,7 @@
  */
 
 /** @param v valor a evaluar. */
-import type { IspRecord, GridRow, FlatGridColumn, IspColumnsMap, IspController } from '@jeff-aporta/iswc-base/components/isp/schemas/isp-utils.schemas.js';
+import type { IspRecord, GridRow, FlatGridColumn, IspColumnsMap } from '@jeff-aporta/iswc-base/components/isp/schemas/isp-utils.schemas.js';
 
 export function isPresent(v: unknown): boolean {
   if (v == null) return false;
@@ -135,13 +135,17 @@ function flattenIspColumns(cols: IspColumnsMap | null | undefined, out: FlatGrid
 /** Controlador ISP: tiene `columns` array o `Columns` mapa. */
 
 /**
- * @param controller Controlador ISP del que extraer columnas.
+ * @param controller Controlador ISP del que extraer columnas (el que sea:
+ * el de la factory y el del consumidor no comparten forma).
  * @returns Array de columnas planas (vacío si no hay ninguna).
  */
-export function columnsFromController(controller: IspController | null | undefined): FlatGridColumn[] {
-  if (!controller) return [];
-  if (Array.isArray(controller.columns)) return controller.columns as FlatGridColumn[];
-  if (controller.Columns) return flattenIspColumns(controller.Columns);
+export function columnsFromController(controller: unknown): FlatGridColumn[] {
+  if (!controller || typeof controller !== 'object') return [];
+  const ctrl = controller as { columns?: unknown; Columns?: unknown };
+  if (Array.isArray(ctrl.columns)) return ctrl.columns as FlatGridColumn[];
+  if (ctrl.Columns && typeof ctrl.Columns === 'object') {
+    return flattenIspColumns(ctrl.Columns as IspColumnsMap);
+  }
   return [];
 }
 

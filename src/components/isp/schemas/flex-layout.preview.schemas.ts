@@ -7,9 +7,10 @@
  */
 import { z } from "zod";
 
-const InputLikeSchema = z.object({
+/** Control del preview (input / checkbox). */
+const InputLikeSchema = z.intersection(z.custom<HTMLElement>(), z.object({
   value: z.string(),
   checked: z.boolean(),
-});
+}));
 export type InputLike = z.infer<typeof InputLikeSchema>;
 

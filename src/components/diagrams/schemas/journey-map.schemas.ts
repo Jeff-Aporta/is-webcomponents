@@ -12,7 +12,7 @@ import type { DiagramRenderDetail, DiagramViewerDetail } from './diagram-base.sc
 
 const StepEntrySchema = z.object({
   s: JourneyLayoutStepSchema,
-  g: z.unknown() /* TODO: ref SVGGElement */,
+  g: z.custom<SVGGElement>(() => true),
 });
 export type StepEntry = z.infer<typeof StepEntrySchema>;
 

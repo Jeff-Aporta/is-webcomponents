@@ -169,6 +169,11 @@ function asTagObject(json: object): unknown[] | null {
   return [tag, rec, ...kids];
 }
 
+/** `JsonAttrs` es un objeto plano: lo que llega en la posicion de atributos. */
+function esJsonAttrs(v: unknown): v is JsonAttrs {
+  return v != null && typeof v === 'object' && !Array.isArray(v);
+}
+
 function parseElementTuple(tuple: ElementTuple): { tag: string; attrs: JsonAttrs | null; children: unknown[] } {
   const tag = String(tuple[0]).toLowerCase();
   let attrs: JsonAttrs | null = null;
@@ -179,7 +184,7 @@ function parseElementTuple(tuple: ElementTuple): { tag: string; attrs: JsonAttrs
     && typeof tuple[1] === 'object'
     && !Array.isArray(tuple[1])
   ) {
-    attrs = tuple[1];
+    attrs = esJsonAttrs(tuple[1]) ? tuple[1] : null;
     start = 2;
   }
   return { tag, attrs, children: tuple.slice(start) as unknown[] };

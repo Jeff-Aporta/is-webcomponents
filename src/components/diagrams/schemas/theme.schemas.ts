@@ -6,16 +6,14 @@
  * entradas marcadas con TODO cuando se quiera validación runtime.
  */
 import { z } from "zod";
+import type { DiagramTheme } from './diagram-base.schemas.js';
 
-export const ErThemeJsonSchema = z.object({
-  /* TODO: parse fail $schema?: string */
-  id: z.string(),
-  /**
-   * Diagrama al que aplica dentro de un estilo (`registerStyleDiagram`):
-   * `er`, `component` o `class`. Un estilo trae un tema por tipo.
-   */
-  kind: z.union([z.literal('er'), z.literal('component'), z.literal('class'), z.literal('sequence'), z.literal('flowchart')]).optional(),
-  label: z.string().optional(),
+/**
+ * Secciones de un tema: las mismas para el tema base y para sus overlays
+ * (`light` / `dark`). Van en un objeto aparte para poder derivar el tipo
+ * del overlay sin duplicar las formas.
+ */
+const ErThemeSectionsShape = {
   font: z.object({
   family: z.string().optional(),
   import: z.string().optional(),
@@ -142,9 +140,31 @@ export const ErThemeJsonSchema = z.object({
   /** Separadores de los carriles de contexto (por defecto celeste: distinto de flujos y usos). */
   laneLine: z.string().optional(),
 }).optional(),
-  diagramTheme: z.unknown() /* TODO: ref DiagramTheme */.optional(),
-  light: z.unknown() /* TODO: ref Omit<...> */.optional(),
-  dark: z.unknown() /* TODO: ref Omit<...> */.optional(),
+  /** Theme del motor (override parcial del tema). */
+  diagramTheme: z.custom<Partial<DiagramTheme>>().optional(),
+};
+
+const ErThemeSectionsSchema = z.object(ErThemeSectionsShape);
+
+/**
+ * Overlay de tema (`light` / `dark`): solo las secciones que cambian.
+ * El valor pasa sin validar (como antes), pero ya está tipado.
+ */
+export type ErThemeOverlay = Partial<z.infer<typeof ErThemeSectionsSchema>>;
+
+export const ErThemeJsonSchema = z.object({
+  /* TODO: parse fail $schema?: string */
+  id: z.string(),
+  /**
+   * Diagrama al que aplica dentro de un estilo (`registerStyleDiagram`):
+   * `er`, `component` o `class`. Un estilo trae un tema por tipo.
+   */
+  kind: z.union([z.literal('er'), z.literal('component'), z.literal('class'), z.literal('sequence'), z.literal('flowchart')]).optional(),
+  label: z.string().optional(),
+...ErThemeSectionsShape,
+  /** Overlay claro: solo las secciones que difieren del tema base. */
+  light: z.custom<ErThemeOverlay>().optional(),
+  /** Overlay oscuro: solo las secciones que difieren del tema base. */
+  dark: z.custom<ErThemeOverlay>().optional(),
 });
 export type ErThemeJson = z.infer<typeof ErThemeJsonSchema>;
-

@@ -37,9 +37,9 @@ const EditorAnchorSchema = z.object({
 const LayoutChangeDetailSchema = z.object({
   nodes: NodeOverrideMapSchema.optional(),
   edges: EdgeOverrideMapSchema.optional(),
-  /* TODO: member [key: string]: unknown */
 });
-export type LayoutChangeDetail = z.infer<typeof LayoutChangeDetailSchema>;
+/** Detalle del cambio de layout: los overrides y el nodo que se movio. */
+export type LayoutChangeDetail = z.infer<typeof LayoutChangeDetailSchema> & { [key: string]: unknown };
 
 const NodeDragMoveSchema = z.function({ input: [z.number(), z.number(), z.number(), z.number()], output: z.void() });
 export type NodeDragMove = z.infer<typeof NodeDragMoveSchema>;

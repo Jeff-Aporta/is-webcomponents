@@ -7,8 +7,17 @@
  */
 import { z } from "zod";
 
-const TypedChartFactorySchema = z.unknown() /* TODO: cannot convert */;
-export type TypedChartFactory = z.infer<typeof TypedChartFactorySchema>;
+/**
+ * Factory que registra un chart con tipo fijo (`<iswc-bar-chart>`,
+ * `<iswc-pie-chart>`, …). La exponen los wrappers via
+ * `window.__isDefineTypedChart`.
+ */
+export type TypedChartFactory = (
+  tag: string,
+  fixedType: string,
+  drawMarks: (ctx: ChartCtx) => void,
+  styleModuleUrl?: string,
+) => unknown;
 
 const ChartDataPointSchema = z.union([z.number(), z.object({
   x: z.number().optional(),
@@ -17,12 +26,12 @@ const ChartDataPointSchema = z.union([z.number(), z.object({
 })]);
 export type ChartDataPoint = z.infer<typeof ChartDataPointSchema>;
 
-const ChartDatasetSchema = z.object({
+export const ChartDatasetSchema = z.object({
   label: z.string().optional(),
   data: z.array(ChartDataPointSchema),
-  /* TODO: member [key: string]: unknown */
 });
-export type ChartDataset = z.infer<typeof ChartDatasetSchema>;
+/** Dataset de Chart.js: acepta claves extra (`curve`, `stepped`, …). */
+export type ChartDataset = z.infer<typeof ChartDatasetSchema> & { [key: string]: unknown };
 
 const ChartConfigSchema = z.object({
   type: z.string().optional(),
@@ -42,7 +51,7 @@ const LegendEntrySchema = z.object({
 export type LegendEntry = z.infer<typeof LegendEntrySchema>;
 
 const HitRecordSchema = z.object({
-  el: z.union([z.unknown() /* TODO: ref Element */, z.null()]).optional(),
+  el: z.custom<Element>().nullable().optional(),
   x: z.number(),
   y: z.number(),
   radius: z.number().optional(),
@@ -79,11 +88,59 @@ const ResolvedOptionsSchema = z.object({
 });
 export type ResolvedOptions = z.infer<typeof ResolvedOptionsSchema>;
 
-const DrawMarksFnSchema = z.function({ input: [z.function({ input: [z.unknown() /* TODO: ref ChartCtx */], output: z.unknown() /* TODO: cannot convert */ })], output: z.unknown() /* TODO: cannot convert */ });
+/**
+ * Contexto de pintado que recibe `drawMarks`: el lienzo, los datos ya
+ * proyectados y las utilidades de escala. Es una `interface` (y no un
+ * `type`) porque `drawMarks` se referencia a si mismo.
+ */
+/**
+ * Hook de pintado de un tipo de chart. Ademas de pintar, puede declarar
+ * `domainValues` (el rango real del eje) y `plotPad` (el aire que pide).
+ */
+export interface DrawMarks {
+  (ctx: ChartCtx): void;
+  /** Rango real del eje cuando el tipo lo sabe mejor que el motor. */
+  domainValues?: (datasets: readonly ChartDataset[], labels: readonly string[], opts: ResolvedOptions) => number[];
+  /** Padding en px que el tipo pide (bubble y similares). */
+  plotPad?: (ds: readonly ChartDataset[]) => number;
+}
 
-const ChartCtxSchema = z.object({
-  svg: z.unknown() /* TODO: ref HTMLElement */,
-  group: z.unknown() /* TODO: ref SVGGElement */,
+export interface ChartCtx {
+  svg: HTMLElement;
+  group: SVGGElement;
+  plot: { x: number; y: number; width: number; height: number };
+  width: number;
+  height: number;
+  data: { labels: string[]; datasets: ChartDataset[] };
+  sliceMask: boolean[] | null;
+  colors: string[];
+  fills: string[];
+  text: string;
+  grid: string;
+  surface: string;
+  unit?: number;
+  style: { barRadius: number; barGap: number; lineWidth: number; pointRadius: number; sliceGap: number };
+  opts: ResolvedOptions;
+  fmt: (n: number) => string;
+  addHit: (hit: HitRecord) => void;
+  scaleLinear: (domain: [number, number], range: [number, number]) => (v: number) => number;
+  scaleBand: (count: number, range: [number, number], gapRatio?: number) => { step: number; bandwidth: number; start: (i: number) => number };
+  niceTicks: (min: number, max: number, count?: number) => number[];
+  drawMarks?: DrawMarks | null;
+  radial?: { cx: number; cy: number; rMax: number; innerRatio: number };
+  numeric?: boolean;
+  xScale?: (v: number) => number;
+  yScale?: (v: number) => number;
+  band?: { step: number; bandwidth: number; start: (v: number) => number };
+  vScale?: (v: number) => number;
+  vDomain?: [number, number];
+  horizontal?: boolean;
+  pt?: (x: number, y: number) => { x: number; y: number };
+}
+
+const ChartCtxSchema: z.ZodType<ChartCtx> = z.object({
+  svg: z.custom<HTMLElement>(),
+  group: z.custom<SVGGElement>(),
   plot: z.object({
   x: z.number(),
   y: z.number(),
@@ -112,11 +169,21 @@ const ChartCtxSchema = z.object({
 }),
   opts: ResolvedOptionsSchema,
   fmt: z.function({ input: [z.number()], output: z.string() }),
-  addHit: z.function({ input: [z.unknown() /* TODO: ref HitRecord */], output: z.void() }),
-  scaleLinear: z.unknown() /* TODO: cannot convert */,
-  scaleBand: z.unknown() /* TODO: cannot convert */,
-  niceTicks: z.unknown() /* TODO: cannot convert */,
-  drawMarks: z.union([DrawMarksFnSchema, z.null()]).optional(),
+  addHit: z.function({ input: [HitRecordSchema], output: z.void() }),
+  scaleLinear: z.function({
+    input: [z.tuple([z.number(), z.number()]), z.tuple([z.number(), z.number()])],
+    output: z.function({ input: [z.number()], output: z.number() }),
+  }),
+  scaleBand: z.function({
+    input: [z.number(), z.tuple([z.number(), z.number()]), z.number().optional()],
+    output: z.object({
+      step: z.number(),
+      bandwidth: z.number(),
+      start: z.function({ input: [z.number()], output: z.number() }),
+    }),
+  }),
+  niceTicks: z.function({ input: [z.number(), z.number(), z.number().optional()], output: z.array(z.number()) }),
+  drawMarks: z.custom<DrawMarks>().nullable().optional(),
   radial: z.object({
   cx: z.number(),
   cy: z.number(),
@@ -139,7 +206,6 @@ const ChartCtxSchema = z.object({
   y: z.number(),
 }) }).optional(),
 });
-export type ChartCtx = z.infer<typeof ChartCtxSchema>;
 
 /** Eventos del componente (HOW-6): `declare static events` en la clase; los documenta scripts/sondas/eventos.ts. */
 export type ChartEventos = { 'iswc-render': { svg: SVGElement }; 'iswc-turtle-state': { playing: boolean; idx: number; total: number; replay: number }; 'iswc-open-viewer': { payload: unknown } };

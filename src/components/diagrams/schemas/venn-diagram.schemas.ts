@@ -33,13 +33,13 @@ const VennLayoutRegionSchema = z.object({
 
 const CircleNodeEntrySchema = z.object({
   c: VennLayoutCircleSchema,
-  g: z.unknown() /* TODO: ref SVGGElement */,
+  g: z.custom<SVGGElement>(() => true),
 });
 export type CircleNodeEntry = z.infer<typeof CircleNodeEntrySchema>;
 
 const RegionNodeEntrySchema = z.object({
   r: VennLayoutRegionSchema,
-  g: z.unknown() /* TODO: ref SVGGElement */,
+  g: z.custom<SVGGElement>(() => true),
 });
 export type RegionNodeEntry = z.infer<typeof RegionNodeEntrySchema>;
 

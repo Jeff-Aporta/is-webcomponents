@@ -104,7 +104,7 @@ export function themeToDiagramTheme(theme: ErThemeJson, fallback?: DiagramTheme)
     chipFillSoft: '#FFFFFF',
     dotText: '#0F172A',
   };
-  const d = theme.diagramTheme ?? {};
+  const d: Partial<DiagramTheme> = theme.diagramTheme ?? {};
   const canvas = theme.canvas ?? {};
   return {
     text: d.text ?? canvas.text ?? base.text,

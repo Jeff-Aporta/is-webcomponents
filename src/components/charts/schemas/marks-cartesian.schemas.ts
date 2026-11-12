@@ -6,8 +6,9 @@
  * entradas marcadas con TODO cuando se quiera validación runtime.
  */
 import { z } from "zod";
+import { ChartDatasetSchema } from './chart.schemas.js';
 
-const MarksDatasetSchema = z.intersection(z.unknown() /* TODO: ref ChartDataset */, z.object({
+const MarksDatasetSchema = z.intersection(ChartDatasetSchema, z.object({
   curve: z.string().optional(),
   stepped: z.boolean().optional(),
   tension: z.number().optional(),

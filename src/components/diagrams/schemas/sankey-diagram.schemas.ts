@@ -11,13 +11,13 @@ import type { DiagramRenderDetail, DiagramToggleDetail, DiagramViewerDetail } fr
 
 const NodeEntrySchema = z.object({
   n: SankeyLayoutNodeSchema,
-  g: z.unknown() /* TODO: ref SVGGElement */,
+  g: z.custom<SVGGElement>(() => true),
 });
 export type NodeEntry = z.infer<typeof NodeEntrySchema>;
 
 const LinkEntrySchema = z.object({
   l: SankeyLayoutLinkSchema,
-  g: z.unknown() /* TODO: ref SVGGElement */,
+  g: z.custom<SVGGElement>(() => true),
 });
 export type LinkEntry = z.infer<typeof LinkEntrySchema>;
 

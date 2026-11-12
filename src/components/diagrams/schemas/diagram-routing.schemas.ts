@@ -6,6 +6,10 @@
  * entradas marcadas con TODO cuando se quiera validación runtime.
  */
 import { z } from 'zod';
+import type {
+  CostGrid as CoreCostGrid,
+  ForbiddenRegion as CoreForbiddenRegion,
+} from '@jeff-aporta/iswc-base/core/schemas/diagram-grid.schemas.js';
 
 const GridPointSchema = z.object({
   col: z.number(),
@@ -13,15 +17,13 @@ const GridPointSchema = z.object({
 });
 export type GridPoint = z.infer<typeof GridPointSchema>;
 
-const CostGridSchema = z.object({
-  cols: z.number(),
-  rows: z.number(),
-  grid: z.number(),
-  cost: z.unknown() /* TODO: ref Float64Array */,
-  forbidden: z.map(z.string(), ForbiddenRegionSchema).optional(),
+const PixelPointSchema = z.object({
+  x: z.number(),
+  y: z.number(),
 });
-export type CostGrid = z.infer<typeof CostGridSchema>;
+export type PixelPoint = z.infer<typeof PixelPointSchema>;
 
+/** Region que el router no puede atravesar (rect o poligono). */
 const ForbiddenRegionSchema = z.object({
   id: z.string(),
   kind: z.union([z.literal('rect'), z.literal('poly')]),
@@ -29,21 +31,31 @@ const ForbiddenRegionSchema = z.object({
   y: z.number().optional(),
   w: z.number().optional(),
   h: z.number().optional(),
-  points: z.array(z.unknown() /* TODO: cannot convert */).optional(),
+  points: z.array(z.tuple([z.number(), z.number()])).optional(),
   color: z.string().optional(),
   label: z.string().optional(),
 });
 
-const PixelPointSchema = z.object({
-  x: z.number(),
-  y: z.number(),
+/**
+ * Rejilla de costos del motor: la misma que produce `makeCostGrid` en
+ * `core/diagram-grid.ts` (esa es la fuente de verdad; aqui se reexporta).
+ */
+export type CostGrid = CoreCostGrid;
+/** Region que el router no puede atravesar (la del motor). */
+export type ForbiddenRegion = CoreForbiddenRegion;
+
+const CostGridSchema = z.object({
+  cols: z.number(),
+  rows: z.number(),
+  grid: z.number(),
+  cost: z.unknown(),
+  forbidden: z.map(z.string(), ForbiddenRegionSchema).optional(),
 });
-export type PixelPoint = z.infer<typeof PixelPointSchema>;
 
 const RouteOptsSchema = z.object({
   turnCost: z.number().optional(),
-  waypoints: z.array(z.unknown() /* TODO: cannot convert */).optional(),
-  forbiddenRegions: z.array(z.union([z.array(z.unknown() /* TODO: cannot convert */), ForbiddenRegionSchema])).optional(),
+  waypoints: z.array(GridPointSchema).optional(),
+  forbiddenRegions: z.array(ForbiddenRegionSchema).optional(),
 });
 export type RouteOpts = z.infer<typeof RouteOptsSchema>;
 

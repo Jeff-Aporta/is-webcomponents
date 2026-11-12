@@ -17,23 +17,40 @@ const TNodeSchema = z.object({
   mobility: z.string().optional(),
   freeze: z.boolean().optional(),
   hasChildren: z.boolean().optional(),
-  /* TODO: parse fail readonly isAtom?: boolean */
-  /* TODO: parse fail readonly isGroupActor?: boolean */
-  /* TODO: parse fail readonly isPrison?: boolean */
-  /* TODO: parse fail readonly isHermetic?: boolean */
-  /* TODO: parse fail readonly isCell?: boolean */
-  /* TODO: parse fail readonly isFreezer?: boolean */
-  /* TODO: parse fail readonly isUnanchored?: boolean */
-  /* TODO: parse fail readonly isEmpty?: boolean */
-  /* TODO: parse fail [key: string]: unknown */
+  /**
+   * Flags del "shape" del nodo: vienen de los getters decorados en
+   * `tree-data.ts` (`isAtom`, `isGroupActor`, `isPrison`, `isHermetic`,
+   * `isCell`, `isFreezer`, `isEmpty`, `isUnanchored`). Son opcionales
+   * para que un nodo plano (sin decorar) siga siendo asignable.
+   */
+  isAtom: z.boolean().optional(),
+  isGroupActor: z.boolean().optional(),
+  isPrison: z.boolean().optional(),
+  isHermetic: z.boolean().optional(),
+  isCell: z.boolean().optional(),
+  isFreezer: z.boolean().optional(),
+  isUnanchored: z.boolean().optional(),
+  isEmpty: z.boolean().optional(),
+  /** Etiqueta y nombre: los lee `paintRow` cuando no hay renderer custom. */
+  label: z.string().optional(),
+  name: z.string().optional(),
 });
-export type TNode = z.infer<typeof TNodeSchema>;
+/**
+ * Nodo del árbol. El índice abierto refleja el shape real: un nodo es un
+ * registro de la BD con campos arbitrarios (`titulo`, `codigo`…), y el
+ * paintedor los lee por nombre (`labelField`, `helperField`).
+ */
+export type TNode = z.infer<typeof TNodeSchema> & { [key: string]: unknown };
 
-const TRecordSchema = z.object({
+const TRecordSchema = z.intersection(TNodeSchema, z.object({
   iplan: z.string().optional(),
   idrow: z.string().optional(),
-});
-export type TRecord = z.infer<typeof TRecordSchema>;
+}));
+/**
+ * Registro que el adapter expone al consumidor: un nodo del árbol con las
+ * claves de fila (`iplan` / `idrow`) encima.
+ */
+export type TRecord = z.infer<typeof TRecordSchema> & { [key: string]: unknown };
 
 const TreeActionSpecSchema = z.object({
   icon: z.string().optional(),
@@ -51,8 +68,11 @@ const TreeActionSpecSchema = z.object({
 });
 export type TreeActionSpec = z.infer<typeof TreeActionSpecSchema>;
 
-const TreeActionEntrySchema = z.union([TreeActionSpecSchema, z.array(TreeActionEntrySchema), z.null(), z.undefined(), z.literal(false)]);
-export type TreeActionEntry = z.infer<typeof TreeActionEntrySchema>;
+/** Una entrada de `actions` / `cascadeOptions` puede ser un grupo, un item o `null`. */
+export type TreeActionEntry = TreeActionSpec | TreeActionEntry[] | null | undefined | false;
+const TreeActionEntrySchema: z.ZodType<TreeActionEntry> = z.lazy(() =>
+  z.union([TreeActionSpecSchema, z.array(TreeActionEntrySchema), z.null(), z.undefined(), z.literal(false)])
+);
 
 const IconConfigSchema = z.object({
   icon: z.string(),
@@ -65,9 +85,9 @@ export type IconConfig = z.infer<typeof IconConfigSchema>;
 const FloatCardConfigSchema = z.object({
   e: z.number().optional(),
   ty: z.union([z.number(), z.string()]).optional(),
-  /* TODO: parse fail [key: string]: unknown */
 });
-export type FloatCardConfig = z.infer<typeof FloatCardConfigSchema>;
+/** Config de FloatCard: la del adapter + los overrides por fila. */
+export type FloatCardConfig = z.infer<typeof FloatCardConfigSchema> & { [key: string]: unknown };
 
 const RowConfigSchema = z.object({
   icono: IconConfigSchema.optional(),
@@ -107,7 +127,7 @@ const PendingDeleteSnapshotSchema = z.object({
 export type PendingDeleteSnapshot = z.infer<typeof PendingDeleteSnapshotSchema>;
 
 const RowAdapterBridgeSchema = z.object({
-  treeController: z.unknown().optional(),
+  treeController: z.custom<TreeControllerLike>().optional(),
   node: TNodeSchema.optional(),
   forceRefresh: z.function({ input: [], output: z.void() }).optional(),
 });
@@ -125,7 +145,6 @@ const TreeContextSchema = z.object({
 }).optional(),
   record: z.union([TRecordSchema, z.null()]).optional(),
   List2Rows: z.array(TNodeSchema).optional(),
-  /* TODO: parse fail [key: string]: unknown */
 });
 export type TreeContext = z.infer<typeof TreeContextSchema>;
 
@@ -134,31 +153,41 @@ const LevelNameArgsSchema = z.object({
 });
 export type LevelNameArgs = z.infer<typeof LevelNameArgsSchema>;
 
+/** Args que recibe `getNodeIcon`. */
+const NodeIconArgsSchema = z.object({
+  isLastNode: z.boolean(),
+  isFolder: z.boolean(),
+  hasChildren: z.boolean(),
+  isExpanded: z.boolean(),
+  isEmptyFolder: z.boolean(),
+});
+export type NodeIconArgs = z.infer<typeof NodeIconArgsSchema>;
+
 const CustomsRuntimeSchema = z.object({
-  /* TODO: parse fail readonly record: TRecord | null */
-  /* TODO: parse fail readonly rootNodes: TNode[] */
-  /* TODO: parse fail readonly canCollapseAll: boolean */
-  /* TODO: parse fail readonly canExpandAll: boolean */
-  /* TODO: parse fail readonly historyCanUndo: boolean */
-  /* TODO: parse fail readonly historyCanRedo: boolean */
-  /* TODO: parse fail readonly historyIsViewingPast: boolean */
-  /* TODO: parse fail readonly isProtected: boolean */
-  /* TODO: parse fail readonly canToggleProtection: boolean */
-  /* TODO: parse fail readonly isReadOnlyExternal: boolean */
-  /* TODO: parse fail readonly isReadOnly: boolean */
-  /* TODO: parse fail readonly canMutate: boolean */
-  findByFlatPath: z.function({ input: [z.union([z.string(), z.null(), z.undefined()])], output: z.union([z.unknown() /* TODO: ref TNode */, z.undefined()]) }),
-  findByPathInit: z.function({ input: [z.union([z.string(), z.null(), z.undefined()])], output: z.union([z.unknown() /* TODO: ref TNode */, z.undefined()]) }),
+  record: z.union([TRecordSchema, z.null()]),
+  rootNodes: z.array(TNodeSchema),
+  canCollapseAll: z.boolean(),
+  canExpandAll: z.boolean(),
+  historyCanUndo: z.boolean(),
+  historyCanRedo: z.boolean(),
+  historyIsViewingPast: z.boolean(),
+  isProtected: z.boolean(),
+  canToggleProtection: z.boolean(),
+  isReadOnlyExternal: z.boolean(),
+  isReadOnly: z.boolean(),
+  canMutate: z.boolean(),
+  findByFlatPath: z.function({ input: [z.union([z.string(), z.null(), z.undefined()])], output: z.union([TNodeSchema, z.undefined()]) }),
+  findByPathInit: z.function({ input: [z.union([z.string(), z.null(), z.undefined()])], output: z.union([TNodeSchema, z.undefined()]) }),
   sanitizeFlatPath: z.function({ input: [z.union([z.string(), z.null(), z.undefined()])], output: z.string() }),
-  move: z.function({ input: [z.unknown() /* TODO: ref TRecord */, z.unknown() /* TODO: ref MoveDirection */], output: z.promise(z.union([z.string(), z.null(), z.undefined()])) }),
-  addChild: z.function({ input: [z.unknown() /* TODO: ref TRecord */], output: z.void() }),
-  addSibling: z.function({ input: [z.unknown() /* TODO: ref TRecord */, z.string()], output: z.void() }),
-  openEdit: z.function({ input: [z.unknown() /* TODO: ref TRecord */], output: z.void() }),
-  openView: z.function({ input: [z.unknown() /* TODO: ref TRecord */], output: z.void() }),
-  openViewNode: z.function({ input: [z.unknown() /* TODO: ref TRecord */], output: z.void() }),
-  extinguish: z.function({ input: [z.unknown() /* TODO: ref TRecord */], output: z.void() }),
-  remove: z.function({ input: [z.unknown() /* TODO: ref TRecord */], output: z.void() }),
-  release: z.function({ input: [z.unknown() /* TODO: ref TRecord */], output: z.void() }),
+  move: z.function({ input: [TRecordSchema, MoveDirectionSchema], output: z.promise(z.union([z.string(), z.null(), z.undefined()])) }),
+  addChild: z.function({ input: [TRecordSchema], output: z.void() }),
+  addSibling: z.function({ input: [TRecordSchema, z.string()], output: z.void() }),
+  openEdit: z.function({ input: [TRecordSchema], output: z.void() }),
+  openView: z.function({ input: [TRecordSchema], output: z.void() }),
+  openViewNode: z.function({ input: [TRecordSchema], output: z.void() }),
+  extinguish: z.function({ input: [TRecordSchema], output: z.void() }),
+  remove: z.function({ input: [TRecordSchema], output: z.void() }),
+  release: z.function({ input: [TRecordSchema], output: z.void() }),
   addRoot: z.function({ input: [], output: z.void() }),
   collapseAll: z.function({ input: [], output: z.void() }),
   expandAll: z.function({ input: [], output: z.void() }),
@@ -167,36 +196,44 @@ const CustomsRuntimeSchema = z.object({
   historyRecover: z.function({ input: [], output: z.void() }),
   protectionToggle: z.function({ input: [], output: z.void() }),
   setProtected: z.function({ input: [z.boolean()], output: z.void() }),
-  actorActions: z.array(z.function({ input: [z.unknown() /* TODO: ref TNode */], output: z.unknown() /* TODO: ref TreeActionSpec */ })),
-  addChildLabel: z.function({ input: [z.unknown() /* TODO: ref TNode */], output: z.string() }),
-  isFirstSibling: z.function({ input: [z.unknown() /* TODO: ref TNode */], output: z.boolean() }),
-  isLastSibling: z.function({ input: [z.unknown() /* TODO: ref TNode */], output: z.boolean() }),
-  isPrisonOnly: z.function({ input: [z.unknown() /* TODO: ref TNode */], output: z.boolean() }),
+  actorActions: z.function({ input: [TNodeSchema], output: z.array(TreeActionSpecSchema) }),
+  addChildLabel: z.function({ input: [TNodeSchema], output: z.string() }),
+  isFirstSibling: z.function({ input: [TNodeSchema], output: z.boolean() }),
+  isLastSibling: z.function({ input: [TNodeSchema], output: z.boolean() }),
+  isPrisonOnly: z.function({ input: [TNodeSchema], output: z.boolean() }),
 });
 export type CustomsRuntime = z.infer<typeof CustomsRuntimeSchema>;
 
-const HotkeyHandlerSchema = z.function({ input: [z.unknown() /* TODO: ref TNode */, z.unknown() /* TODO: ref CustomsRuntime */, z.unknown() /* TODO: ref KeyboardEvent */], output: z.void() });
+const HotkeyHandlerSchema = z.function({ input: [TNodeSchema, z.custom<CustomsRuntime>(), z.custom<KeyboardEvent>()], output: z.void() });
 
 const TreeCustomsSchema = z.object({
   entrie: z.string().optional(),
   entries: z.string().optional(),
-  klass: z.unknown() /* TODO: cannot convert */.optional(),
-  list: z.function({ input: [], output: z.union([z.array(z.unknown() /* TODO: ref TNode */), z.null(), z.undefined()]) }).optional(),
-  newItem: z.function({ input: [z.union([z.unknown() /* TODO: ref TNode */, z.undefined()])], output: z.unknown() /* TODO: ref TNode */ }).optional(),
-  updateNode: z.function({ input: [z.unknown() /* TODO: cannot convert */, z.unknown() /* TODO: cannot convert */, z.unknown() /* TODO: cannot convert */, z.unknown() /* TODO: cannot convert */], output: z.union([z.void(), z.promise(z.void())]) }).optional(),
-  getNodeIcon: z.function({ input: [z.unknown() /* TODO: ref TNode */, z.unknown() /* TODO: ref NodeIconArgs */], output: z.union([z.unknown() /* TODO: ref IconConfig */, z.null()]) }).optional(),
-  levelName: z.function({ input: [z.unknown() /* TODO: ref LevelNameArgs */], output: z.union([z.string(), z.undefined()]) }).optional(),
-  rowActions: z.array(z.function({ input: [z.unknown() /* TODO: ref TNode */, z.unknown() /* TODO: ref CustomsRuntime */], output: z.unknown() /* TODO: ref TreeActionEntry */ })).optional(),
-  rowCascadeOptions: z.array(z.function({ input: [z.unknown() /* TODO: ref TNode */, z.unknown() /* TODO: ref CustomsRuntime */], output: z.unknown() /* TODO: ref TreeActionEntry */ })).optional(),
-  topMenuActions: z.array(z.function({ input: [z.unknown() /* TODO: ref CustomsRuntime */], output: z.unknown() /* TODO: ref TreeActionEntry */ })).optional(),
+  klass: z.custom<new () => TRecord>().optional(),
+  list: z.function({ input: [], output: z.union([z.array(TNodeSchema), z.null(), z.undefined()]) }).optional(),
+  newItem: z.function({ input: [z.custom<Partial<TNode>>()], output: TNodeSchema }).optional(),
+  updateNode: z.function({ input: [TNodeSchema, z.boolean(), z.custom<CustomsRuntime>()], output: z.union([z.void(), z.promise(z.void())]) }).optional(),
+  getNodeIcon: z.function({ input: [TNodeSchema, NodeIconArgsSchema], output: z.union([IconConfigSchema, z.null()]) }).optional(),
+  levelName: z.function({ input: [LevelNameArgsSchema], output: z.union([z.string(), z.undefined()]) }).optional(),
+  rowActions: z.function({ input: [TNodeSchema, z.custom<CustomsRuntime>()], output: z.array(TreeActionEntrySchema) }).optional(),
+  rowCascadeOptions: z.function({ input: [TNodeSchema, z.custom<CustomsRuntime>()], output: z.array(TreeActionEntrySchema) }).optional(),
+  topMenuActions: z.function({ input: [z.custom<CustomsRuntime>()], output: z.array(TreeActionEntrySchema) }).optional(),
   hotkeys: z.record(z.string(), HotkeyHandlerSchema).optional(),
-  getRowConfig: z.function({ input: [z.unknown() /* TODO: ref TNode */, z.unknown() /* TODO: ref RowConfig */], output: z.unknown() /* TODO: ref RowConfig */ }).optional(),
-  getFlatPath: z.function({ input: [z.unknown() /* TODO: ref TNode */], output: z.string() }).optional(),
-  setFlatPath: z.function({ input: [z.unknown() /* TODO: ref TNode */, z.string()], output: z.void() }).optional(),
-  remapReferences: z.function({ input: [z.unknown() /* TODO: ref TNode */, z.map(z.string(), z.string())], output: z.void() }).optional(),
+  getRowConfig: z.function({ input: [TNodeSchema, RowConfigSchema], output: RowConfigSchema }).optional(),
+  getFlatPath: z.function({ input: [TNodeSchema], output: z.string() }).optional(),
+  setFlatPath: z.function({ input: [TNodeSchema, z.string()], output: z.void() }).optional(),
+  remapReferences: z.function({ input: [TNodeSchema, z.map(z.string(), z.string())], output: z.void() }).optional(),
   openLastLevelSelector: z.function({ input: [], output: z.void() }).optional(),
-  onExpand: z.function({ input: [z.unknown() /* TODO: ref TNode */, z.unknown() /* TODO: ref CustomsRuntime */], output: z.void() }).optional(),
-  onCollapse: z.function({ input: [z.unknown() /* TODO: ref TNode */, z.unknown() /* TODO: ref CustomsRuntime */], output: z.void() }).optional(),
+  onExpand: z.function({ input: [TNodeSchema, z.custom<CustomsRuntime>()], output: z.void() }).optional(),
+  onCollapse: z.function({ input: [TNodeSchema, z.custom<CustomsRuntime>()], output: z.void() }).optional(),
 });
 export type TreeCustoms = z.infer<typeof TreeCustomsSchema>;
 
+/**
+ * Controller del árbol que consume el bridge de filas: el subset que
+ * `paintRow` necesita del adapter (lo implementa `TreeRowViewAdapter`).
+ */
+export interface TreeControllerLike {
+  flatPath: string;
+  [key: string]: unknown;
+}

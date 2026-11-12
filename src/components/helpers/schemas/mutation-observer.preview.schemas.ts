@@ -7,10 +7,11 @@
  */
 import { z } from "zod";
 
-const CodeLikeSchema = z.object({
+/** `<iswc-code>` del preview. */
+const CodeLikeSchema = z.intersection(z.custom<HTMLElement>(), z.object({
   value: z.string(),
   lang: z.string(),
-});
+}));
 export type CodeLike = z.infer<typeof CodeLikeSchema>;
 
 const DescribePartSchema = z.object({

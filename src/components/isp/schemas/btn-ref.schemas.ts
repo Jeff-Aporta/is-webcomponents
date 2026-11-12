@@ -6,10 +6,11 @@
  * entradas marcadas con TODO cuando se quiera validación runtime.
  */
 import { z } from "zod";
+import type { IspRecord } from './isp-utils.schemas.js';
 
 const _CatalogLikeSchema = z.object({
   primaryKeys: z.array(z.string()).optional(),
-  ColumnsBtnRef: z.union([z.array(z.string()), z.array(z.function({ input: [], output: z.string() }))]).optional(),
+  ColumnsBtnRef: z.union([z.array(z.string()), z.function({ input: [], output: z.array(z.string()) })]).optional(),
   multiSelect: z.boolean().optional(),
   Lista: z.function({ input: [z.object({
   pagina: z.number().optional(),
@@ -18,34 +19,39 @@ const _CatalogLikeSchema = z.object({
   sql: z.string().optional(),
 }).optional(),
 })], output: z.promise(z.union([z.object({
-  datos: z.union([z.array(z.unknown()), z.object({
-  /* TODO: member [Symbol.iterator](): Iterator<unknown> */
-})]).optional(),
+  datos: z.array(z.custom<IspRecord>()).optional(),
 }), z.null(), z.undefined()])) }).optional(),
   refreshGrid: z.function({ input: [], output: z.union([z.promise(z.void()), z.void()]) }).optional(),
 });
 export type _CatalogLike = z.infer<typeof _CatalogLikeSchema>;
 
-const _FieldLikeSchema = z.object({
-  value: z.unknown().optional(),
-  label: z.unknown().optional(),
-  name: z.unknown().optional(),
-  required: z.unknown().optional(),
-  readonly: z.unknown().optional(),
-});
+/** Registro que devuelve el catalogo: plano o con `getProp`/`setProp`. */
+export const _RecordLikeSchema = z.custom<IspRecord>();
+export type _RecordLike = IspRecord;
+
+/** `<iswc-input>` del campo de referencia. */
+const _FieldLikeSchema = z.intersection(z.custom<HTMLElement>(), z.object({
+  value: z.string(),
+  label: z.string(),
+  name: z.string(),
+  required: z.boolean(),
+  readonly: z.boolean(),
+}));
 export type _FieldLike = z.infer<typeof _FieldLikeSchema>;
 
-const _DialogLikeSchema = z.object({
+/** `<iswc-dialog>` del selector. */
+const _DialogLikeSchema = z.intersection(z.custom<HTMLElement>(), z.object({
   show: z.function({ input: [], output: z.void() }).optional(),
   hide: z.function({ input: [], output: z.void() }).optional(),
-});
+}));
 export type _DialogLike = z.infer<typeof _DialogLikeSchema>;
 
-const _CatalogElSchema = z.object({
+/** `<iswc-catalogo-gen>` embebido. */
+const _CatalogElSchema = z.intersection(z.custom<HTMLElement>(), z.object({
   controller: _CatalogLikeSchema.optional(),
   refreshGrid: z.function({ input: [], output: z.union([z.promise(z.void()), z.void()]) }).optional(),
-  selectionData: z.array(z.unknown() /* TODO: ref _RecordLike */).optional(),
-});
+  selectionData: z.array(_RecordLikeSchema).optional(),
+}));
 export type _CatalogEl = z.infer<typeof _CatalogElSchema>;
 
 /** Eventos del componente (HOW-6): `declare static events` en la clase; los documenta scripts/sondas/eventos.ts. */

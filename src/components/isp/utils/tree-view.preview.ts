@@ -15,25 +15,25 @@ class DemoCustoms extends TreeCustomsBase {
     if (!isNew) return;
     if (!node.titulo) node.titulo = node.topology === 'atom' ? 'Nueva lección' : 'Nuevo módulo';
   };
-  onexpand = (node: DemoNode, tree: CustomsRuntime): void => { if (node.isEmpty) void tree.addChild?.(node as never); };
+  onexpand = (node: DemoNode, tree: CustomsRuntime): void => { if (node.isEmpty) void tree.addChild?.(node); };
   rowActions = (node: DemoNode, tree: CustomsRuntime) => {
     const ro = !!tree.isReadOnly;
     const isFolder = !node.isAtom;
     const move = ro ? [] : [
-      { icon: 'mdi:arrow-up', title: 'Mover arriba', hotkey: 'Ctrl+ArrowUp', onClick: () => { void tree.move?.(node as never, 'up'); } },
-      { icon: 'mdi:arrow-down', title: 'Mover abajo', hotkey: 'Ctrl+ArrowDown', onClick: () => { void tree.move?.(node as never, 'down'); } },
+      { icon: 'mdi:arrow-up', title: 'Mover arriba', hotkey: 'Ctrl+ArrowUp', onClick: () => { void tree.move?.(node, 'up'); } },
+      { icon: 'mdi:arrow-down', title: 'Mover abajo', hotkey: 'Ctrl+ArrowDown', onClick: () => { void tree.move?.(node, 'down'); } },
     ];
     const add = !ro && isFolder
-      ? [{ icon: 'mdi:plus-circle-outline', title: tree.addChildLabel?.(node) ?? 'Agregar', hotkey: 'Insert', onClick: () => { void tree.addChild?.(node as never); } }]
+      ? [{ icon: 'mdi:plus-circle-outline', title: tree.addChildLabel?.(node) ?? 'Agregar', hotkey: 'Insert', onClick: () => { void tree.addChild?.(node); } }]
       : [];
     return [move, add];
   };
   rowCascadeOptions = (node: DemoNode, tree: CustomsRuntime) => {
     const ro = !!tree.isReadOnly;
     return [
-      { icon: 'mdi:pencil-outline', title: 'Editar', onClick: () => tree.openEdit?.(node as never) },
-      { icon: 'mdi:eye-outline', title: 'Ver', onClick: () => tree.openView?.(node as never) },
-      ...(ro ? [] : [{ icon: 'mdi:trash-can-outline', title: 'Eliminar', color: 'danger', onClick: () => tree.remove?.(node as never) }]),
+      { icon: 'mdi:pencil-outline', title: 'Editar', onClick: () => tree.openEdit?.(node) },
+      { icon: 'mdi:eye-outline', title: 'Ver', onClick: () => tree.openView?.(node) },
+      ...(ro ? [] : [{ icon: 'mdi:trash-can-outline', title: 'Eliminar', color: 'danger', onClick: () => tree.remove?.(node) }]),
     ];
   };
 }
@@ -65,7 +65,7 @@ export async function mount(ctx: import('@jeff-aporta/iswc-base/previews/_kit/sc
   };
   tv.addEventListener('iswc-select', (e: Event) => {
     const detail = (e as CustomEvent<{ node?: DemoNode; flatPath?: string }>).detail;
-    paint(detail?.node?.titulo || detail?.flatPath || '—');
+    paint(String(detail?.node?.titulo ?? detail?.flatPath ?? '—'));
   });
   tv.addEventListener('iswc-frm-open', (e: Event) => {
     const detail = (e as CustomEvent<{ itdForm?: string; record?: DemoNode }>).detail;

@@ -288,7 +288,7 @@ class IswcTreeView extends IswcElement {
     const a = this.#adapter;
     if (!a) return;
     const rt = a.buildCustomsRuntime();
-    const actions = a.decorateHotkeyTitles(a.customs?.topMenuActions?.(rt as never) ?? []);
+    const actions = a.decorateHotkeyTitles(a.customs?.topMenuActions?.(rt) ?? []);
     const customsExtra = a.customs as unknown as { menu?: TreeActionEntry[]; moreMenu?: TreeActionEntry[] };
     const showTb = !!(customsExtra?.menu || customsExtra?.moreMenu) || (actions?.length ?? 0) > 0;
     this.#toolbar.hidden = !showTb;

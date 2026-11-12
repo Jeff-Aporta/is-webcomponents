@@ -7,13 +7,14 @@
  */
 import { z } from "zod";
 
-const IswcFormElSchema = z.object({
+/** `<iswc-form>` del preview. */
+const IswcFormElSchema = z.intersection(z.custom<HTMLElement>(), z.object({
   fromJSON: z.function({ input: [z.unknown()], output: z.unknown() }),
   toJSON: z.function({ input: [], output: z.unknown() }),
   setValues: z.function({ input: [z.record(z.string(), z.unknown())], output: z.void() }),
   getValues: z.function({ input: [], output: z.record(z.string(), z.unknown()) }),
   html2json: z.function({ input: [], output: z.unknown() }),
-});
+}));
 export type IswcFormEl = z.infer<typeof IswcFormElSchema>;
 
 const SubmitDetailSchema = z.object({

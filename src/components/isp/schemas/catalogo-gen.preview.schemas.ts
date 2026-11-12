@@ -7,8 +7,9 @@
  */
 import { z } from "zod";
 
-const CatalogElSchema = z.object({
+/** `<iswc-catalogo-gen>` del preview. */
+const CatalogElSchema = z.intersection(z.custom<HTMLElement>(), z.object({
   controller: z.unknown(),
-});
+}));
 export type CatalogEl = z.infer<typeof CatalogElSchema>;
 

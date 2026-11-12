@@ -45,11 +45,11 @@ const VennLayoutCircleSchema = z.object({
 });
 export type VennLayoutCircle = z.infer<typeof VennLayoutCircleSchema>;
 
-const VennLayoutRegionSchema = z.object({
+const VennLayoutRegionSchema = z.intersection(VennRegionSchema, z.object({
   x: z.number(),
   y: z.number(),
   hues: z.array(z.number()),
-});
+}));
 export type VennLayoutRegion = z.infer<typeof VennLayoutRegionSchema>;
 
 const VennLayoutSchema = z.object({

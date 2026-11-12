@@ -104,7 +104,10 @@ const BlockLayoutSchema = z.object({
 export type BlockLayout = z.infer<typeof BlockLayoutSchema>;
 
 const BlockRectSchema = z.object({
-
+  x: z.number(),
+  y: z.number(),
+  w: z.number(),
+  h: z.number(),
 });
 export type BlockRect = z.infer<typeof BlockRectSchema>;
 

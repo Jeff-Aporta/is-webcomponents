@@ -7,7 +7,7 @@
  */
 import { z } from "zod";
 
-const LightboxLikeSchema = z.intersection(z.unknown() /* TODO: ref HTMLElement */, z.object({
+const LightboxLikeSchema = z.intersection(z.custom<HTMLElement>(() => true), z.object({
   show: z.function({ input: [], output: z.void() }),
 }));
 export type LightboxLike = z.infer<typeof LightboxLikeSchema>;

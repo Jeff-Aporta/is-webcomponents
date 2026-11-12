@@ -6,7 +6,18 @@
  * entradas marcadas con TODO cuando se quiera validación runtime.
  */
 import { z } from 'zod';
-import type { TNode, FloatCardConfig } from './tree-view-types.schemas.js';
+import type { TNode, FloatCardConfig, RowConfig, TreeActionEntry } from './tree-view-types.schemas.js';
+
+/**
+ * Bridge que `paintRow` pasa a `TreeRowAdapter`: el nodo, el nodo actual y
+ * los refrescos pendientes.
+ */
+export type TRAContext = {
+  node?: TNode;
+  currentNode?: TNode | null;
+  forceRefresh?: () => void;
+  [key: string]: unknown;
+};
 
 const TreeAdapterLikeSchema = z.object({
   context: z.record(z.string(), z.unknown()),
@@ -28,8 +39,8 @@ const TreeAdapterLikeSchema = z.object({
   _domRoot: z.custom<HTMLElement>().nullable().optional(),
   normalizeFlatPath: z.function({ input: [z.union([z.string(), z.null(), z.undefined()])], output: z.string() }),
   findNodeByFlatPath: z.function({ input: [z.union([z.string(), z.null(), z.undefined()])], output: z.union([z.unknown() /* TODO: ref TNode */, z.null()]) }),
-  filterRowActions: z.function({ input: [z.union([z.unknown() /* TODO: ref RowConfig */, z.undefined()]), z.boolean()], output: z.array(z.unknown() /* TODO: ref TreeActionEntry */) }),
-  getRowConfig: z.function({ input: [z.unknown() /* TODO: ref TNode */], output: z.unknown() /* TODO: ref RowConfig */ }),
+  filterRowActions: z.function({ input: [z.union([z.custom<RowConfig>(), z.undefined()]), z.boolean()], output: z.array(z.custom<TreeActionEntry>()) }),
+  getRowConfig: z.function({ input: [z.custom<TNode>()], output: z.custom<RowConfig>() }),
   iconParts: z.function({ input: [z.union([z.unknown() /* TODO: ref IconConfig */, z.undefined()])], output: z.union([z.object({
   icon: z.string(),
   rest: z.record(z.string(), z.unknown()),

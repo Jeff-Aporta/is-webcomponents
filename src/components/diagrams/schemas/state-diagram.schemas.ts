@@ -5,6 +5,7 @@
  * Generado por `scripts/migrate-zod.py`. Refinar manualmente las
  * entradas marcadas con TODO cuando se quiera validación runtime.
  */
+import type { StateLayoutNode, StateLayoutTransition } from './state-spec.schemas.js';
 import { z } from "zod";
 import type { DiagramTurtleDetail, DiagramRenderDetail, DiagramToggleDetail, DiagramViewerDetail } from './diagram-base.schemas.js';
 
@@ -17,14 +18,14 @@ const TurtleStateSchema = z.object({
 export type TurtleState = z.infer<typeof TurtleStateSchema>;
 
 const NodeNodeEntrySchema = z.object({
-  n: z.unknown() /* TODO: ref StateLayoutNode */,
-  g: z.unknown() /* TODO: ref SVGGElement */,
+  n: z.custom<StateLayoutNode>(() => true),
+  g: z.custom<SVGGElement>(() => true),
 });
 export type NodeNodeEntry = z.infer<typeof NodeNodeEntrySchema>;
 
 const EdgeNodeEntrySchema = z.object({
-  e: z.unknown() /* TODO: ref StateLayoutTransition */,
-  g: z.unknown() /* TODO: ref SVGGElement */,
+  e: z.custom<StateLayoutTransition>(() => true),
+  g: z.custom<SVGGElement>(() => true),
 });
 export type EdgeNodeEntry = z.infer<typeof EdgeNodeEntrySchema>;
 

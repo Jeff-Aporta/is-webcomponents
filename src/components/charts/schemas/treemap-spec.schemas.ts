@@ -31,18 +31,6 @@ const TreemapSpecSchema = z.object({
 });
 export type TreemapSpec = z.infer<typeof TreemapSpecSchema>;
 
-const TreemapLayoutSchema = z.object({
-  width: z.number(),
-  height: z.number(),
-  title: z.string().optional(),
-  subtitle: z.string().optional(),
-  titleY: z.number(),
-  subtitleY: z.number(),
-  total: z.number(),
-  nodes: z.array(TreemapLayoutNodeSchema),
-});
-export type TreemapLayout = z.infer<typeof TreemapLayoutSchema>;
-
 const TreemapLayoutNodeSchema = z.object({
   id: z.string(),
   x: z.number(),
@@ -59,6 +47,18 @@ const TreemapLayoutNodeSchema = z.object({
   percent: z.number(),
 });
 export type TreemapLayoutNode = z.infer<typeof TreemapLayoutNodeSchema>;
+
+const TreemapLayoutSchema = z.object({
+  width: z.number(),
+  height: z.number(),
+  title: z.string().optional(),
+  subtitle: z.string().optional(),
+  titleY: z.number(),
+  subtitleY: z.number(),
+  total: z.number(),
+  nodes: z.array(TreemapLayoutNodeSchema),
+});
+export type TreemapLayout = z.infer<typeof TreemapLayoutSchema>;
 
 const TreemapLayoutOptsSchema = z.object({
   width: z.number().optional(),
