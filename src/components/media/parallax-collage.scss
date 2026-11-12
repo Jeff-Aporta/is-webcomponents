@@ -1,7 +1,8 @@
+@use 'kit' as *;
 /* <iswc-parallax-collage> — lienzo de proporción fija; las capas se ubican por su centro en % y escalan con el ancho. */
 
 :host { display: block; inline-size: 100%; box-sizing: border-box; }
-:host([hidden]) { display: none !important; }
+:host([hidden]) { @include oculto; }
 
 .lienzo {
   --px: 0;

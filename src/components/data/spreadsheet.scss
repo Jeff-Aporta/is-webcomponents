@@ -12,7 +12,7 @@
 }
 
 .root { position: relative; display: flex; flex-direction: column; block-size: var(--iswc-spreadsheet-height, auto); border: thin solid var(--iswc-border); border-radius: var(--iswc-radius); background: var(--iswc-bg-elev); overflow: hidden; font-size: 0.875em; }
-[hidden] { display: none !important; }
+[hidden] { @include oculto; }
 
 /* Medida propia: la rejilla no puede saltar mientras llega la hoja de iswc-icon. */
 iswc-icon { display: inline-block; flex: none; inline-size: 1em; block-size: 1em; overflow: hidden; }

@@ -1,8 +1,9 @@
+@use 'kit' as *;
 /* <iswc-stream-bubble> — burbuja de una respuesta que llega por partes. */
 @use '../../styles/mixins' as *;
 
 :host { @include papel; position: relative; display: block; color: var(--iswc-text); font-family: var(--iswc-sans); font-size: 1em; line-height: 1.55; }
-:host([hidden]) { display: none !important; }
+:host([hidden]) { @include oculto; }
 
 .bubble {
   --_sombra: 0 0.125em 0.5em color-mix(in srgb, var(--iswc-text) 8%, transparent);

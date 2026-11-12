@@ -1,3 +1,4 @@
+// @contexto INDICE.md · scripts/README.md
 // scss-colapsar.mjs — colapsa a una linea las reglas de un .scss, REGLA a REGLA.
 //
 //   deno run -A scripts/codemods/scss-colapsar.mjs [--carpeta=src] [--ancho=120] [--check]

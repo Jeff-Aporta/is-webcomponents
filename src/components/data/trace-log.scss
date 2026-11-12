@@ -3,7 +3,7 @@
 @use '../../styles/mixins' as *;
 
 :host { @include papel; display: block; margin-block: 0.35em; color: var(--iswc-text); font-size: 0.82em; }
-:host([hidden]) { display: none !important; }
+:host([hidden]) { @include oculto; }
 
 .traza {
   overflow: hidden;

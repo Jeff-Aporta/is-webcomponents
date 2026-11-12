@@ -3,7 +3,7 @@
 
 :host { @include host-lienzo-diagrama; }
 .wrap { @include wrap-lienzo-diagrama('Línea de tiempo no disponible (payload inválido).'); }
-.slot-hidden { display: none !important; }
+.slot-hidden { @include oculto; }
 @include lienzo-svg('tl-svg');
 
 .tl-event { @include transicion(opacity 0.18s ease); &.iswc-dim { opacity: 0.32; }; }

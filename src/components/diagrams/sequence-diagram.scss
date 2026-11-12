@@ -45,7 +45,7 @@
   &.iswc-hover-msg .seq-lifeline { opacity: 0.85; }
 }
 
-.slot-hidden { display: none !important; }
+.slot-hidden { @include oculto; }
 
 .seq-svg {
   display: block;

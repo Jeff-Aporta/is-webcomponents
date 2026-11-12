@@ -68,7 +68,7 @@ slot { display: none; }
     box-shadow: 0 0 0 .0625em rgb(255 255 255 / 30%), 0 .5em 1.625em rgb(0 0 0 / 45%);
   }
 
-  &:focus-visible { outline: 2px solid #fff; outline-offset: .1875em; }
+  &:focus-visible { @include foco-visible(#fff, 2px, .1875em); }
 }
 
 :host(:is([data-playing], [data-no-controls])) .big-play {
@@ -78,7 +78,7 @@ slot { display: none; }
 }
 
 /* ── Chrome inferior ──────────────────────────────────────────── */
-.controls { position: absolute; inset-inline: 0; inset-block-end: 0; display: flex; flex-direction: column; gap: 0.1em; padding: 0 0.6em 0.35em; box-sizing: border-box; transition: opacity 200ms ease, transform 200ms ease; &[hidden] { display: none !important; }; }
+.controls { position: absolute; inset-inline: 0; inset-block-end: 0; display: flex; flex-direction: column; gap: 0.1em; padding: 0 0.6em 0.35em; box-sizing: border-box; transition: opacity 200ms ease, transform 200ms ease; &[hidden] { @include oculto; }; }
 
 /* Auto-ocultado: solo mientras reproduce y sin interacción reciente */
 :host([data-idle]) {
@@ -131,7 +131,7 @@ slot { display: none; }
   cursor: pointer;
 
   &:focus { outline: none; }
-  &:focus-visible + .bar { outline: 2px solid #fff; outline-offset: .1875em; }
+  &:focus-visible + .bar { @include foco-visible(#fff, 2px, .1875em); }
   &::-webkit-slider-runnable-track { background: transparent; block-size: 100%; }
   &::-webkit-slider-thumb { -webkit-appearance: none; inline-size: .075em; block-size: .075em; opacity: 0; }
   &::-moz-range-track { background: transparent; }
@@ -176,7 +176,7 @@ slot { display: none; }
   transition: opacity 120ms ease, background-color 120ms ease;
 
   &:hover { opacity: 1; background: rgb(255 255 255 / 12%); }
-  &:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+  &:focus-visible { @include foco-visible(#fff, 2px, 2px); }
   &[hidden] { display: none; }
 }
 

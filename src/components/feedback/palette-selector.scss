@@ -1,3 +1,4 @@
+@use 'kit' as *;
 @use '../../core/focus-ring';
 /* <iswc-palette-selector> — trigger + panel con buscador, interruptor Panda
  * y opciones agrupadas por familia de tono.
@@ -57,7 +58,7 @@
   transition: background-color 120ms ease;
 
   &:hover { background: var(--iswc-control-bg-hover); }
-  &[hidden] { display: none !important; }
+  &[hidden] { @include oculto; }
 }
 
 .trigger__chip { display: inline-flex; flex: none; width: 1.6em; height: 1.6em; border-radius: 50%; overflow: hidden; box-shadow: 0 0 0 .0625em var(--iswc-border); transform: rotate(-45deg); }
@@ -85,7 +86,7 @@
   color: var(--iswc-text);
   overflow: hidden;
 
-  &[hidden] { display: none !important; }
+  &[hidden] { @include oculto; }
 }
 
 .panel__head { display: flex; align-items: center; gap: 0.5em; padding: 0.5em; border-block-end: 1px solid var(--iswc-border-soft, var(--iswc-border)); }

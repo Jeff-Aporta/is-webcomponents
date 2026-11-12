@@ -1,3 +1,4 @@
+@use 'kit' as *;
 :host {
   display: contents;
   --iswc-floating-arrow-size: .5em;
@@ -5,7 +6,7 @@
   --iswc-floating-show-duration: 150ms;
   --iswc-floating-hide-duration: 100ms;
 
-  &[hidden] { display: none !important; }
+  &[hidden] { @include oculto; }
 
   .base,
   .anchor-slot { display: contents; }
@@ -18,7 +19,7 @@
     max-inline-size: var(--auto-size-available-width, none);
     max-block-size: var(--auto-size-available-height, none);
 
-    &[hidden] { display: none !important; }
+    &[hidden] { @include oculto; }
   }
 
   /* ── Flecha ──
@@ -38,7 +39,7 @@
     z-index: -1;
     pointer-events: none;
 
-    &[hidden] { display: none !important; }
+    &[hidden] { @include oculto; }
   }
 
   .hover-bridge {
@@ -47,7 +48,7 @@
     pointer-events: auto;
     background: transparent;
 
-    &[hidden] { display: none !important; }
+    &[hidden] { @include oculto; }
   }
 
   /* Built-in animation classes (apply on host or on ::part(popup)) */

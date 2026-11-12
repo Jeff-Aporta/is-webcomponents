@@ -1,6 +1,7 @@
+@use 'kit' as *;
 /* <iswc-pagination> — fila de páginas numeradas. */
 :host { display: block; width: 100%; max-width: 100%; min-width: 0; color: inherit; font-size: 1em; }
-:host([hidden]) { display: none !important; }
+:host([hidden]) { @include oculto; }
 :host([disabled]) { opacity: 0.55; pointer-events: none; }
 .base { --_alto: 2.15em; --_hueco: 0.15em; display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 0.55em 0.85em; width: 100%; min-width: 0; padding: 0.35em 0; }
 

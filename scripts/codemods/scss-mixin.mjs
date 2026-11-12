@@ -1,3 +1,4 @@
+// @contexto INDICE.md · scripts/README.md
 // scss-mixin.mjs — sustituye los bloques repetidos por un @include del kit.
 //
 //   deno run -A scripts/codemods/scss-mixin.mjs [--carpeta=src] [--check]
@@ -61,6 +62,27 @@ const patronDe = (lineas) => {
 
 const terminadorDe = (t) => (t.includes('\r\n') ? '\r\n' : /\r(?![\n])/.test(t) ? '\r' : '\n');
 
+
+
+/**
+ * Las declaraciones SUELTAS que el kit ya tiene en un mixin.
+ *
+ * Sustituyen una declaracion por su @include. El orden no cambia: el mixin emite exactamente
+ * esa declaracion en el mismo sitio, asi que el CSS sigue igual. Se buscan dentro de la linea
+ * (las reglas ya estan colapsadas a una linea).
+ */
+const DECLARACIONES = [
+  {
+    re: /display: none !important;/g,
+    include: () => '@include oculto;',
+  },
+  {
+    re: /outline: 2px solid ([^;]+); outline-offset: ([^;]+);/g,
+    // Ojo: los grupos llegan aparte (m es el texto encontrado, no un array de grupos).
+    include: (m, color, separacion) => '@include foco-visible(' + color + ', 2px, ' + separacion + ');',
+  },
+];
+
 /** Sustituye los bloques repetidos por su @include. Devuelve el texto nuevo y el numero. */
 export function sustituir(textoOriginal) {
   let texto = textoOriginal.replaceAll('\r\n', '\n').replaceAll('\r', '\n');
@@ -76,6 +98,13 @@ export function sustituir(textoOriginal) {
     texto = texto.replace(fila.re, (m, sangria, ...resto) => {
       n++;
       return sangria + '@include ' + fila.include(m, sangria, ...resto);
+    });
+  }
+  for (const fila of DECLARACIONES) {
+    // Aqui no hay grupo de sangria: la declaracion ya esta en su sitio dentro de la linea.
+    texto = texto.replace(fila.re, (m, ...grupos) => {
+      n++;
+      return fila.include(m, ...grupos);
     });
   }
   if (texto === textoOriginal) return { texto, n };

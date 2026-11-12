@@ -42,7 +42,7 @@
     transition: background 0.1s;
     user-select: none;
     &:hover { background: color-mix(in srgb, var(--fg) 5%, transparent); }
-    &:focus-visible { outline: 2px solid var(--iswc-focus); outline-offset: -2px; }
+    &:focus-visible { @include foco-visible(var(--iswc-focus), 2px, -2px); }
     &.disabled {
       @include no-permitido(.55);
     }

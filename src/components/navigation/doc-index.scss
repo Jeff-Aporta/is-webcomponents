@@ -1,5 +1,6 @@
+@use 'kit' as *;
 /* <iswc-doc-index> — índice documental con búsqueda en todo el texto. */
-:host { display: flex; flex-direction: column; min-height: 100%; box-sizing: border-box; color: var(--iswc-text); font-size: 1em; &[hidden] { display: none !important; }; }
+:host { display: flex; flex-direction: column; min-height: 100%; box-sizing: border-box; color: var(--iswc-text); font-size: 1em; &[hidden] { @include oculto; }; }
 *, *::before, *::after { box-sizing: border-box; }
 .buscar { padding: .875em .875em .5em; }
 input {
@@ -14,7 +15,7 @@ input {
   transition: border-color .15s;
 
   &::placeholder { color: var(--iswc-text-dim); }
-  &:focus-visible { outline: 2px solid var(--iswc-focus); outline-offset: 1px; border-color: var(--iswc-color-brand); }
+  &:focus-visible { @include foco-visible(var(--iswc-focus), 2px, 1px); border-color: var(--iswc-color-brand); }
 }
 .resumen { padding: 0 1.3333em .6667em; font-size: .75em; color: var(--iswc-text-dim); }
 nav.lista { padding: .25em .5em 1.75em; flex: 1; }
@@ -39,7 +40,7 @@ nav.lista { padding: .25em .5em 1.75em; flex: 1; }
   transition: background-color .12s, color .12s;
 
   &:hover { background: var(--iswc-control-bg-hover, var(--iswc-bg-elev)); color: var(--iswc-text); }
-  &:focus-visible { outline: 2px solid var(--iswc-color-brand); outline-offset: -2px; }
+  &:focus-visible { @include foco-visible(var(--iswc-color-brand), 2px, -2px); }
   &[aria-current="page"] { background: var(--iswc-brand-soft); color: var(--iswc-text); font-weight: 600; }
   &[aria-current="page"]::before { content: ""; position: absolute; left: 0; top: .4261em; bottom: .4261em; width: .2131em; border-radius: .2131em; background: var(--iswc-color-brand); }
   &.fijo { font-weight: 600; color: var(--iswc-text); margin-bottom: .2841em; }
@@ -87,7 +88,7 @@ details.grupo[open] > summary::before { transform: rotate(45deg); }
   cursor: pointer;
 
   &:hover { background: var(--iswc-control-bg-hover, var(--iswc-bg-elev)); }
-  &:focus-visible { outline: 2px solid var(--iswc-color-brand); outline-offset: -2px; }
+  &:focus-visible { @include foco-visible(var(--iswc-color-brand), 2px, -2px); }
   strong { display: block; font-size: .9em; }
   small { display: block; margin-top: .1736em; font-size: .72em; color: var(--iswc-text-dim); overflow-wrap: anywhere; }
   span { display: block; margin-top: .3906em; font-size: .8em; line-height: 1.45; color: var(--iswc-text-soft, var(--iswc-text)); }

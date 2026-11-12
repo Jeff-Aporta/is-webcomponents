@@ -3,7 +3,7 @@
 
 :host { @include host-lienzo-diagrama; }
 .wrap { @include wrap-lienzo-diagrama('Diagrama de Venn no disponible (payload inválido).'); }
-.slot-hidden { display: none !important; }
+.slot-hidden { @include oculto; }
 @include lienzo-svg('vn-svg');
 
 /* ── Conjuntos y regiones ── */

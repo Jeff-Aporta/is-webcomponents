@@ -1,3 +1,4 @@
+@use 'kit' as *;
 /* <iswc-barcode-scanner> — preview + botón de escaneo. */
 
 :host { display: grid; gap: 0.5em; font: inherit; max-inline-size: 22em; }
@@ -5,7 +6,7 @@
 .hint { margin: 0; font-size: 0.8em; color: var(--iswc-text-soft, inherit); min-block-size: 1em; &:empty { display: none; }; }
 
 /* F0.3 g12 [a11y/focus]: foco visible solo con teclado */
-:host(:focus-visible) { outline: 2px solid var(--iswc-accent); outline-offset: .1875em; }
+:host(:focus-visible) { @include foco-visible(var(--iswc-accent), 2px, .1875em); }
 :host(:focus) { outline: none; }
 
 /* F0.3 g12 [media/loading]: botón atenuado durante permiso/escaneo */

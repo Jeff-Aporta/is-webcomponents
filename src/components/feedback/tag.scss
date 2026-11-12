@@ -1,3 +1,4 @@
+@use 'kit' as *;
 @use '../../styles/mixins' as *;
 
 :host {
@@ -53,7 +54,7 @@
       color: inherit;
       opacity: 0.7;
       &:hover { opacity: 1; }
-      &[hidden] { display: none !important; }
+      &[hidden] { @include oculto; }
     }
   }
 }

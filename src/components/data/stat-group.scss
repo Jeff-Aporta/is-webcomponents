@@ -1,6 +1,7 @@
+@use 'kit' as *;
 /* <iswc-stat-group> — rejilla de iswc-stat. Cada app le da su aire con las custom properties. */
 :host { --_radius: var(--iswc-stat-group-radius, 0.75em); display: block; min-width: 0; font-family: var(--iswc-sans); }
-:host([hidden]) { display: none !important; }
+:host([hidden]) { @include oculto; }
 .rejilla { gap: 0.75em; }
 .esqueleto { height: 6.5em; border-radius: var(--_radius); }
 

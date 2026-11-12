@@ -41,7 +41,7 @@
   &.se { inset-block-end:   -.375em;    inset-inline-end:   -.375em;  cursor: nwse-resize; }
 
   /* F0.3 g12 [a11y/focus]: outline solo con teclado */
-  &:focus-visible { outline: 2px solid var(--iswc-text); outline-offset: 2px; }
+  &:focus-visible { @include foco-visible(var(--iswc-text), 2px, 2px); }
 }
 
 /* F0.3 g12 [media/loading]: overlay mientras aria-busy=true */

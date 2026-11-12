@@ -3,7 +3,7 @@
 
 :host { @include host-lienzo-diagrama; }
 .wrap { @include wrap-lienzo-diagrama('Diagrama de clases no disponible (payload inválido).'); }
-.slot-hidden { display: none !important; }
+.slot-hidden { @include oculto; }
 @include lienzo-svg('cls-svg');
 
 /* ── Cajas y relaciones ── */

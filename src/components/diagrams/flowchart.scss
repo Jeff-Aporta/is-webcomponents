@@ -40,7 +40,7 @@
   }
 }
 
-.slot-hidden { display: none !important; }
+.slot-hidden { @include oculto; }
 @include lienzo-svg('flow-svg');
 
 /* ── Nodos y aristas ── */

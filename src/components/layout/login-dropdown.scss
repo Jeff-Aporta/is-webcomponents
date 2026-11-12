@@ -16,7 +16,7 @@
 }
 
 :host * { box-sizing: border-box; }
-[hidden] { display: none !important; }
+[hidden] { @include oculto; }
 
 .dropdown::part(menu) {
   inline-size: var(--iswc-login-dropdown-width);

@@ -1,8 +1,8 @@
 @use 'kit' as *;
 :host { display: block; font-family: var(--iswc-font-family); font-size: inherit; color: var(--iswc-text); box-sizing: border-box; }
 .base { @include columna-flex(.4em); }
-.label { font-weight: 600; font-size: 0.95em; &[hidden] { display: none !important; }; }
-.hint { font-size: 0.85em; color: var(--iswc-text-soft); &[hidden] { display: none !important; }; }
+.label { font-weight: 600; font-size: 0.95em; &[hidden] { @include oculto; }; }
+.hint { font-size: 0.85em; color: var(--iswc-text-soft); &[hidden] { @include oculto; }; }
 
 .dropzone {
   position: relative;
@@ -60,7 +60,7 @@
 }
 
 .native { position: absolute; width: .075em; height: .075em; padding: 0; margin: -.075em; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
-.file-list { list-style: none; margin: 0.25em 0 0; padding: 0; display: flex; flex-direction: column; gap: 0.35em; &[hidden] { display: none !important; }; }
+.file-list { list-style: none; margin: 0.25em 0 0; padding: 0; display: flex; flex-direction: column; gap: 0.35em; &[hidden] { @include oculto; }; }
 .file { display: grid; grid-template-columns: 1fr auto auto; align-items: center; gap: 0.65em; padding: 0.45em 0.65em; border: 1px solid var(--iswc-control-border); border-radius: 0.4em; background: var(--iswc-bg-elev); font-size: 0.9em; }
 .file-name { @include truncar; min-width: 0; }
 .file-size { color: var(--iswc-text-soft); font-size: 0.9em; white-space: nowrap; }

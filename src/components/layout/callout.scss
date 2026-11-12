@@ -1,3 +1,4 @@
+@use 'kit' as *;
 /* <iswc-callout> — superficies con borde y fondo suaves.
  *
  * Borde/fondo/radius van en `.callout` (part=base), no en :host: el border
@@ -53,7 +54,7 @@
     color: inherit;
   }
 
-  .default-icon[hidden] { display: none !important; }
+  .default-icon[hidden] { @include oculto; }
 }
 
 .message {

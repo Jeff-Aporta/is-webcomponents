@@ -1,3 +1,4 @@
+// @contexto INDICE.md · scripts/README.md
 // scss-anidar.mjs — anida las reglas hijas dentro de su padre, cuando se puede.
 //
 //   deno run -A scripts/codemods/scss-anidar.mjs [--carpeta=src] [--check]

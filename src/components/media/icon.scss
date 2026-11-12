@@ -1,3 +1,4 @@
+@use 'kit' as *;
 /*
  * <iswc-icon> — caja 1em × 1em para SVG inline (currentColor).
  *
@@ -61,9 +62,9 @@
         & > svg { fill: initial; }
       }
 
-      &[hidden] { display: none !important; }
+      &[hidden] { @include oculto; }
     }
   }
 }
 
-:host([hidden]) { display: none !important; }
+:host([hidden]) { @include oculto; }

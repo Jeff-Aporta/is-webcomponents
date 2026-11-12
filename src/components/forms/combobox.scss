@@ -28,13 +28,13 @@
   .hint {
     font-size: 0.8em;
     color: var(--iswc-text-dim);
-    &[hidden] { display: none !important; }
+    &[hidden] { @include oculto; }
   }
 
   .error-text {
     font-size: 0.8em;
     color: var(--iswc-danger-text, var(--iswc-color-danger-strong));
-    &[hidden] { display: none !important; }
+    &[hidden] { @include oculto; }
   }
 
   .empty {
@@ -77,7 +77,7 @@
   }
 
   .clear {
-    &[hidden] { display: none !important; }
+    &[hidden] { @include oculto; }
   }
 
   /* Dialog a viewport completo en top layer → no lo clippea overflow */
@@ -153,7 +153,7 @@
 
 :host([open]),
 :host(:state(open)) {
-.base { outline: 2px solid var(--iswc-combobox-focus, var(--iswc-focus)); outline-offset: 1px; }
+.base { @include foco-visible(var(--iswc-combobox-focus, var(--iswc-focus)), 2px, 1px); }
 }
 
 :host([open]),

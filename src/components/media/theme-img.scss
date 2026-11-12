@@ -1,7 +1,8 @@
+@use 'kit' as *;
 /* <iswc-theme-img> — logo/asset dark↔light; caja 1em × 1em. */
 
 :host { display: inline-block; vertical-align: middle; inline-size: 1em; block-size: 1em; line-height: 0; box-sizing: border-box; flex: none; }
-:host([hidden]) { display: none !important; }
+:host([hidden]) { @include oculto; }
 .img { display: block; inline-size: 100%; block-size: 100%; object-fit: var(--iswc-theme-img-fit); object-position: center; pointer-events: none; user-select: none; -webkit-user-drag: none; }
 :host([shape='circle'])  .img { border-radius: 50%; }
 :host([shape='rounded']) .img { border-radius: 0.22em; }

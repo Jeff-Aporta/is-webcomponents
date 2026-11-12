@@ -3,7 +3,7 @@
 
 :host { @include host-lienzo-diagrama; }
 .wrap { @include wrap-lienzo-diagrama('Diagrama entidad-relación no disponible (payload inválido).'); }
-.slot-hidden { display: none !important; }
+.slot-hidden { @include oculto; }
 .er-svg { display: block; position: relative; z-index: 1; width: 100%; height: 100%; max-width: 100%; max-height: 100%; margin: auto; overflow: hidden; .wrap[data-theme="dark"] & { --er-circle-fill: #10141a; } .wrap[data-theme="light"] & { --er-circle-fill: #ffffff; }; }
 
 /* ── Entidades y relaciones ── */

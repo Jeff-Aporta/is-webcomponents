@@ -1,3 +1,4 @@
+@use 'kit' as *;
 @use '../../styles/mixins' as *;
 :host {
   @include papel;
@@ -7,7 +8,7 @@
   --iswc-popover-show-duration: 120ms;
   --iswc-popover-hide-duration: 100ms;
 
-  &[hidden] { display: none !important; }
+  &[hidden] { @include oculto; }
 
   .dialog {
     margin: 0;
@@ -17,7 +18,7 @@
     color: inherit;
     outline: none;
 
-    &[hidden] { display: none !important; }
+    &[hidden] { @include oculto; }
   }
 
   .body {

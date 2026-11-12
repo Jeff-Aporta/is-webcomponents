@@ -62,13 +62,13 @@
 
   .mark {
     font-size: 0.85em;
-    &[hidden] { display: none !important; }
+    &[hidden] { @include oculto; }
   }
 
   .label {
     min-inline-size: 0;
     color: var(--iswc-control-text, var(--iswc-text, inherit));
-    &[hidden] { display: none !important; }
+    &[hidden] { @include oculto; }
   }
 
   .hint {
@@ -77,7 +77,7 @@
     color: var(--iswc-text-dim);
     cursor: default;
     inline-size: fit-content;
-    &[hidden] { display: none !important; }
+    &[hidden] { @include oculto; }
   }
 }
 
@@ -125,7 +125,7 @@
 }
 
 :host(:focus-visible) {
-.control { box-shadow: 0 0 0 var(--iswc-checkbox-halo) color-mix(in srgb, var(--iswc-checkbox-focus) 32%, transparent); outline: 2px solid var(--iswc-checkbox-focus); outline-offset: 2px; }
+.control { box-shadow: 0 0 0 var(--iswc-checkbox-halo) color-mix(in srgb, var(--iswc-checkbox-focus) 32%, transparent); @include foco-visible(var(--iswc-checkbox-focus), 2px, 2px); }
 }
 
 :host([readonly]:hover) {

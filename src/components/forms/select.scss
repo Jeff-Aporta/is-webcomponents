@@ -16,7 +16,7 @@
   box-sizing: border-box;
 
   /* Las reglas de autor ganan a `[hidden]` del UA: hay que reafirmarlo */
-  [hidden] { display: none !important; }
+  [hidden] { @include oculto; }
 
   .form-control {
     display: flex;
@@ -127,7 +127,7 @@
     flex: none;
     color: var(--iswc-text-dim);
     line-height: 0;
-    &[hidden] { display: none !important; }
+    &[hidden] { @include oculto; }
   }
 
   .caret {
@@ -276,7 +276,7 @@
 }
 
 :host(:is([open], :state(open))) {
-.base { outline: 2px solid var(--iswc-select-focus); outline-offset: 1px; }
+.base { @include foco-visible(var(--iswc-select-focus), 2px, 1px); }
   .caret { transform: rotate(180deg); }
 }
 

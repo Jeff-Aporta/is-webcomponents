@@ -1,3 +1,4 @@
+@use 'kit' as *;
 @use '../../styles/mixins' as *;
 
 // button.scss — Color × appearance ortogonales
@@ -80,7 +81,7 @@
       border-color: var(--_border-hover);
     }
     &:active { background: var(--_bg-active); transform: scale(0.98); }
-    &:focus-visible { outline: 2px solid var(--_focus); outline-offset: 2px; }
+    &:focus-visible { @include foco-visible(var(--_focus), 2px, 2px); }
     .btn__spinner {
       display: none;
       position: absolute;

@@ -13,7 +13,7 @@
   color: var(--iswc-text, inherit);
   box-sizing: border-box;
 
-  [hidden] { display: none !important; }
+  [hidden] { @include oculto; }
 
   .form-control {
     display: flex;
@@ -197,6 +197,6 @@
 }
 
 :host(:state(open)) {
-.trigger { outline: 2px solid var(--iswc-picker-focus); outline-offset: 1px; }
+.trigger { @include foco-visible(var(--iswc-picker-focus), 2px, 1px); }
   .caret { transform: rotate(180deg); }
 }

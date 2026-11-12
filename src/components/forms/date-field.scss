@@ -90,7 +90,7 @@
     font-size: 0.95em;
     line-height: 0;
     color: var(--iswc-text-dim);
-    &[hidden] { display: none !important; }
+    &[hidden] { @include oculto; }
   }
 
   .hint {

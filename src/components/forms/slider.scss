@@ -13,15 +13,15 @@
   box-sizing: border-box;
 }
 
-:host([hidden]) { display: none !important; }
+:host([hidden]) { @include oculto; }
 :host([color="neutral"]) { --iswc-slider-fill: var(--iswc-control-border); }
 :host([color="text"]) { --iswc-slider-fill: var(--iswc-text); }
 :host([color="success"]) { --iswc-slider-fill: var(--iswc-color-success); }
 :host([color="warning"]) { --iswc-slider-fill: var(--iswc-color-warning); }
 :host([color="danger"])  { --iswc-slider-fill: var(--iswc-color-danger); }
 .form-control { display: flex; flex-direction: column; gap: 0.35em; }
-.label { font-size: 0.875em; font-weight: 500; color: var(--iswc-text-soft, inherit); inline-size: fit-content; &[hidden] { display: none !important; }; }
-.hint { font-size: 0.8em; color: var(--iswc-text-dim); &[hidden] { display: none !important; }; }
+.label { font-size: 0.875em; font-weight: 500; color: var(--iswc-text-soft, inherit); inline-size: fit-content; &[hidden] { @include oculto; }; }
+.hint { font-size: 0.8em; color: var(--iswc-text-dim); &[hidden] { @include oculto; }; }
 
 /* ---- pista ------------------------------------------------------------ */
 
@@ -30,7 +30,7 @@
 .rail,
 .track { position: absolute; border-radius: 999em; pointer-events: none; }
 .rail { background: var(--iswc-slider-rail); }
-.track { background: var(--iswc-slider-fill); &[hidden] { display: none !important; }; }
+.track { background: var(--iswc-slider-fill); &[hidden] { @include oculto; }; }
 .marks { position: absolute; inset: 0; pointer-events: none; }
 .mark { position: absolute; inline-size: var(--iswc-slider-track-size); block-size: var(--iswc-slider-track-size); border-radius: 999em; background: color-mix(in srgb, var(--iswc-text) 45%, transparent); &[data-active] { background: color-mix(in srgb, var(--iswc-on-brand) 70%, transparent); } }
 .mark-label { position: absolute; font-size: 0.72em; color: var(--iswc-text-dim); white-space: nowrap; font-variant-numeric: tabular-nums; }

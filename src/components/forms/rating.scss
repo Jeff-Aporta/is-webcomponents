@@ -11,7 +11,7 @@
   box-sizing: border-box;
 }
 
-:host([hidden]) { display: none !important; }
+:host([hidden]) { @include oculto; }
 
 :host([color="neutral"]) { --iswc-rating-color: var(--iswc-control-text); }
 :host([color="text"]) { --iswc-rating-color: var(--iswc-text); }
@@ -31,7 +31,7 @@
   color: var(--iswc-text-soft, inherit);
   inline-size: fit-content;
 
-  &[hidden] { display: none !important; }
+  &[hidden] { @include oculto; }
 }
 
 .row {
@@ -91,7 +91,7 @@
   white-space: nowrap;
 
   &[hidden],
-  &:empty { display: none !important; }
+  &:empty { @include oculto; }
 }
 
 :host(:is([readonly], :state(readonly))) {

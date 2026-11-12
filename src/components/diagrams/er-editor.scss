@@ -1,3 +1,4 @@
+@use 'kit' as *;
 /* er-editor.scss — chrome del editor ER: lienzo, barra flotante, panel.
  *
  * Toda la pintura sale de los tokens del kit (`--iswc-*`), así el editor
@@ -95,7 +96,7 @@
   transition: background-color 120ms ease, color 120ms ease, border-color 120ms ease;
 }
 .toolbar button:hover { background: var(--_control-hover); color: var(--_text); }
-.toolbar button:focus-visible { outline: 2px solid var(--_brand); outline-offset: 1px; }
+.toolbar button:focus-visible { @include foco-visible(var(--_brand), 2px, 1px); }
 .toolbar button[aria-pressed="true"] { background: var(--_brand-soft-active); border-color: color-mix(in srgb, var(--_brand) 45%, transparent); color: var(--_brand); }
 .toolbar button.danger { color: var(--_danger); }
 .toolbar button.danger:hover { background: var(--_danger-soft); }
@@ -123,7 +124,7 @@
 .panel input:hover,
 .panel select:hover { border-color: var(--_control-border); }
 .panel input:focus-visible,
-.panel select:focus-visible { outline: 2px solid color-mix(in srgb, var(--_brand) 60%, transparent); outline-offset: 0; border-color: var(--_brand); }
+.panel select:focus-visible { @include foco-visible(color-mix(in srgb, var(--_brand) 60%, transparent), 2px, 0); border-color: var(--_brand); }
 .panel input[type="color"] { box-sizing: border-box; width: 3.1212em; height: 2.2809em; padding: .1501em; border: 1px solid var(--_border); border-radius: var(--_radius-sm); background: var(--_control-bg); cursor: pointer; }
 .panel input[type="color"]::-webkit-color-swatch-wrapper { padding: 0; }
 .panel input[type="color"]::-webkit-color-swatch { border: 0; border-radius: calc(var(--_radius-sm) - .1501em); }
@@ -157,7 +158,7 @@
 .panel button iswc-icon { font-size: 1.3158em; line-height: 1; }
 .panel button.icon-wide { width: 100%; }
 .panel button:hover { background: var(--_brand-soft); border-color: var(--_brand); color: var(--_brand); }
-.panel button:focus-visible { outline: 2px solid var(--_brand); outline-offset: 1px; }
+.panel button:focus-visible { @include foco-visible(var(--_brand), 2px, 1px); }
 
 /* ── Ayuda al pie del lienzo ──────────────────────────────────────────── */
 .hint {

@@ -1,3 +1,4 @@
+@use 'kit' as *;
 /* iswc-app-nav — filas de pestañas de la barra de una app. */
 
 :host {
@@ -16,7 +17,7 @@
 }
 
 :host * { box-sizing: border-box; }
-[hidden] { display: none !important; }
+[hidden] { @include oculto; }
 .nav { display: flex; flex-direction: column; min-width: 0; height: 100%; }
 .row { display: flex; align-items: stretch; gap: .15em; min-width: 0; overflow-x: auto; scrollbar-width: thin; scrollbar-color: color-mix(in srgb, var(--iswc-text, currentColor) 16%, transparent) transparent; }
 .row--primary { flex: 1 1 auto; }

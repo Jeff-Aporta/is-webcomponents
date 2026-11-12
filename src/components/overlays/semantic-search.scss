@@ -1,6 +1,7 @@
+@use 'kit' as *;
 /* <iswc-semantic-search> — botón de la barra que abre la paleta de comandos del kit. */
 :host { display: inline-block; }
-:host([hidden]) { display: none !important; }
+:host([hidden]) { @include oculto; }
 
 .abrir {
   min-width: 13em;

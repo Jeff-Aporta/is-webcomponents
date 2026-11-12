@@ -15,7 +15,7 @@
 }
 
 :host * { box-sizing: border-box; }
-[hidden] { display: none !important; }
+[hidden] { @include oculto; }
 
 .menu::part(menu) {
   min-inline-size: 13em;

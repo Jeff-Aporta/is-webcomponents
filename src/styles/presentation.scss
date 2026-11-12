@@ -1228,8 +1228,8 @@ table.ref {
   -webkit-backdrop-filter: blur(10px);
   pointer-events: auto;
 
-  &[hidden] { display: none !important; }
-  html[data-embed="1"] & { display: none !important; }
+  &[hidden] { @include oculto; }
+  html[data-embed="1"] & { @include oculto; }
   iswc-theme-toggle { font-size: 1.15rem; }
 
   /* Hueco para la hamburguesa del índice, que vive en la esquina. */

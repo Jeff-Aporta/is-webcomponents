@@ -104,7 +104,7 @@
 }
 
 /* Modificadores de la suma: foco persistente y deshabilitado. */
-.trvwr-itm-sum--focused { outline: 2px solid var(--trvwr-fcs-rng); outline-offset: -1px; }
+.trvwr-itm-sum--focused { @include foco-visible(var(--trvwr-fcs-rng), 2px, -1px); }
 .trvwr-itm-sum--disabled { @include no-permitido(.55); }
 
 /* Estados visuales de la fila (mutuamente excluyentes; los pone el adapter). */

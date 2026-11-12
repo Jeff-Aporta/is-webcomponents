@@ -131,7 +131,7 @@
   margin-block-end: 0.6em;
   border-block-end: 1px solid var(--iswc-border-soft);
 
-  &[hidden] { display: none !important; }
+  &[hidden] { @include oculto; }
 }
 
 .tb-sep { inline-size: .0625em; block-size: 1.3em; margin: 0 0.3em; background: var(--iswc-border); opacity: 0.6; flex: 0 0 auto; }

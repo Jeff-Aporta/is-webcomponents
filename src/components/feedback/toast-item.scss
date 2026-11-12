@@ -70,7 +70,7 @@
   &:hover { opacity: 1; }
 }
 
-.progress { position: absolute; inset-inline: 0; bottom: 0; height: 0.2em; background: color-mix(in srgb, var(--_accent) 20%, transparent); &[hidden] { display: none !important; }; }
+.progress { position: absolute; inset-inline: 0; bottom: 0; height: 0.2em; background: color-mix(in srgb, var(--_accent) 20%, transparent); &[hidden] { @include oculto; }; }
 .progress-bar { height: 100%; width: 100%; background: var(--_accent); transform-origin: left center; }
 
 /* Spinner del toast loading (toaster.promise): el iswc-icon marcado con
