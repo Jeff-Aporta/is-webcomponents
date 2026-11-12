@@ -281,7 +281,7 @@ import type { VideoPlaylistEventos } from './schemas/video-playlist.schemas.js';
       const target = e.target as HTMLElement | null;
       if (target) {
         const tag = target.tagName;
-        if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || (target as any).isContentEditable) return;
+        if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || target.isContentEditable) return;
         // Si el foco está en un slider del player, ya lo gestiona el slider.
         if (target.classList?.contains('vp-seek') || target.classList?.contains('vp-volume')) return;
       }

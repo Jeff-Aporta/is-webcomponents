@@ -133,8 +133,8 @@ class IswcExamplesCarousel extends IswcElement {
       emit(this, 'iswc-examples-category', { category: this.#activeCategory });
     });
     // Navegacion prev/next via los <iswc-button> reusados.
-    this.#prevBtn.addEventListener('click', () => this.scrollBy(-1));
-    this.#nextBtn.addEventListener('click', () => this.scrollBy(1));
+    this.#prevBtn.addEventListener('click', () => this.scrollBy({ left: -1 }));
+    this.#nextBtn.addEventListener('click', () => this.scrollBy({ left: 1 }));
   }
 
   override onConnected(): void {

@@ -1,22 +1,23 @@
 // @contexto INDICE.md · src/components/media/README.md
 /**
- * barcode-scanner.ts — Zod schemas para los tipos extraídos de este módulo.
- *
- * Generado por `scripts/migrate-zod.py`. Refinar manualmente las
- * entradas marcadas con TODO cuando se quiera validación runtime.
+ * barcode-scanner.ts — Tipos del subset de Barcode Detector que usa el componente.
  */
-import { z } from "zod";
 
-const BarcodeDetectorCtorSchema = z.object({
-  /* TODO: parse fail new (init?: { formats?: string[] }): BarcodeDetectorInstance */
-});
-export type BarcodeDetectorCtor = z.infer<typeof BarcodeDetectorCtorSchema>;
+/** Código detectado por BarcodeDetector. */
+export interface DetectedBarcode {
+  rawValue: string;
+  format: string;
+}
 
-const DetectedBarcodeSchema = z.object({
-  rawValue: z.string(),
-  format: z.string(),
-});
-export type DetectedBarcode = z.infer<typeof DetectedBarcodeSchema>;
+/** Instancia creada por BarcodeDetector. */
+export interface BarcodeDetectorInstance {
+  detect(source: CanvasImageSource): Promise<DetectedBarcode[]>;
+}
+
+/** Constructor de BarcodeDetector. */
+export interface BarcodeDetectorCtor {
+  new (init?: { formats?: string[] }): BarcodeDetectorInstance;
+}
 
 /** Eventos del componente (HOW-6): `declare static events` en la clase; los documenta scripts/sondas/eventos.ts. */
-export type BarcodeScannerEventos = { 'iswc-error': { message: string }; 'iswc-detect': { barcodes: unknown[]; rawValue: string; format: string } };
+export type BarcodeScannerEventos = { 'iswc-error': { message: string }; 'iswc-detect': { barcodes: DetectedBarcode[]; rawValue: string; format: string } };

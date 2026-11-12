@@ -315,10 +315,15 @@ import type { TreeEventos } from './schemas/tree.schemas.js';
       super();
       const shadow = this.shadowRoot!;
       shadow.appendChild(ITEM_TEMPLATE.content.cloneNode(true));
-      this.setAttribute('tabindex', '0');
     }
 
     override onConnected() {
+      // El `tabindex` se escribe al conectar, NO en el constructor: un elemento creado
+      // por script (document.createElement('iswc-tree-item')) no puede traer atributos
+      // cuando su constructor termina. Blink los descarta y avisa con un NotSupportedError
+      // sin capturado ('The result must not have attributes'). Si el autor puso su
+      // `tabindex`, manda el suyo.
+      if (!this.hasAttribute('tabindex')) this.setAttribute('tabindex', '0');
       const padre = this.parentElement;
       // Los ítems anidados van al panel plegable; el slot por defecto es solo la etiqueta.
       if (padre instanceof IswcTreeItem) {

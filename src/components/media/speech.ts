@@ -45,8 +45,7 @@ declare global {
   `;
 
   function recCtor(): SpeechRecognitionCtor | null {
-    const w = window as Window & SpeechRecognitionConstructorBag;
-    return w.SpeechRecognition || w.webkitSpeechRecognition || null;
+    return window.SpeechRecognition || window.webkitSpeechRecognition || null;
   }
 
   class IswcSpeech extends IswcElement {

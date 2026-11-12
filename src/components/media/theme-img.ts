@@ -79,12 +79,15 @@ import type { ThemeImgEventos } from './schemas/theme-img.schemas.js';
       // F0.3 g12 [media/loading]: aria-busy durante la carga + iswc-error al
       // fallar la imagen. Antes el fallo era silencioso y la UI se quedaba
       // con un hueco vacío.
-      this.#img.addEventListener('load', () => {
-        this.removeAttribute('aria-busy');
-        this.removeAttribute('data-loading');
-      });
+      this.#img.addEventListener('load', this.#onLoad);
       this.#img.addEventListener('error', this.#onError);
     }
+
+    /** La imagen ya cargó: quita las marcas de carga. */
+    #onLoad = (): void => {
+      this.removeAttribute('aria-busy');
+      this.removeAttribute('data-loading');
+    };
 
     /**
      * F0.3 g12 [media/error-state]: emite `iswc-error` cuando la imagen no

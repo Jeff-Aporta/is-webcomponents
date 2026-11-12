@@ -39,6 +39,7 @@
 import { setStringAttr } from '@jeff-aporta/iswc-base/core/attrs.js';
 import { IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import css from 'iswc:css';
+import type { DemoSectionAs } from './schemas/demo-section.schemas.js';
 
 (() => {
   const TEMPLATE = document.createElement('template');
@@ -98,11 +99,11 @@ import css from 'iswc:css';
       else this.setAttribute('id', String(v));
     }
 
-    get as(): 'section' | 'aside' {
+    get as(): DemoSectionAs {
       const v = this.getAttribute('as');
       return v === 'aside' ? 'aside' : 'section';
     }
-    set as(v: 'section' | 'aside' | null) {
+    set as(v: DemoSectionAs | '' | null) {
       if (v == null || v === '' || v === 'section') this.removeAttribute('as');
       else this.setAttribute('as', String(v));
     }

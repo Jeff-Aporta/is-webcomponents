@@ -7,20 +7,25 @@
  */
 import { z } from "zod";
 
-const IswcVideoLikeSchema = z.object({
-  media: z.unknown() /* TODO: ref HTMLVideoElement */,
+/**
+ * `<iswc-video>` es un HTMLElement con la API pública que consume la
+ * playlist. El tipo base se declara aquí para que el consumidor herede los
+ * métodos DOM (atributos, eventos y fullscreen) sin casts.
+ */
+const IswcVideoLikeSchema = z.intersection(z.custom<HTMLElement>(() => true), z.object({
+  media: z.custom<HTMLVideoElement>(),
   play: z.function({ input: [], output: z.promise(z.void()) }),
   pause: z.function({ input: [], output: z.void() }),
-});
+}));
 
 const IswcVideoSchema = IswcVideoLikeSchema;
 export type IswcVideo = z.infer<typeof IswcVideoSchema>;
 
-const VideoListSchema = z.array(z.unknown() /* TODO: cannot convert */);
+const VideoListSchema = z.array(IswcVideoSchema);
 export type VideoList = z.infer<typeof VideoListSchema>;
 
 const MediaObsBagSchema = z.object({
-  mq: z.unknown() /* TODO: ref MediaQueryList */,
+  mq: z.custom<MediaQueryList>(),
   handler: z.function({ input: [], output: z.void() }),
 });
 export type MediaObsBag = z.infer<typeof MediaObsBagSchema>;

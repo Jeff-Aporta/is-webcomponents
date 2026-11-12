@@ -52,7 +52,7 @@
  */
 import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import css from 'iswc:css';
-import type { SlotsPgEventos } from './schemas/slots-pg.schemas.js';
+import type { SlotsPgDefaultTab, SlotsPgEventos, SlotsPgTab } from './schemas/slots-pg.schemas.js';
 
 (() => {
   const TEMPLATE = document.createElement('template');
@@ -221,11 +221,11 @@ import type { SlotsPgEventos } from './schemas/slots-pg.schemas.js';
       else this.setAttribute('title', String(v));
     }
 
-    get defaultTab(): string {
+    get defaultTab(): SlotsPgDefaultTab {
       const v = (this.getAttribute('default-tab') || 'auto').trim().toLowerCase();
       return v === 'simple' || v === 'slots' ? v : 'auto';
     }
-    set defaultTab(v: string) {
+    set defaultTab(v: SlotsPgDefaultTab | null | undefined) {
       if (v == null || v === 'auto') this.removeAttribute('default-tab');
       else this.setAttribute('default-tab', String(v));
     }
@@ -447,11 +447,11 @@ import type { SlotsPgEventos } from './schemas/slots-pg.schemas.js';
       this.#tabSlots.addEventListener('click', () => this.#showTab('slots'));
     }
 
-    #showTab(which: 'simple' | 'slots'): void {
+    #showTab(which: SlotsPgTab): void {
       this.#applyActiveTab(which);
     }
 
-    #applyActiveTab(which: 'simple' | 'slots'): void {
+    #applyActiveTab(which: SlotsPgTab): void {
       const isSimple = which === 'simple';
       this.#tabSimple.setAttribute('aria-selected', String(isSimple));
       this.#tabSlots.setAttribute('aria-selected', String(!isSimple));
@@ -462,7 +462,7 @@ import type { SlotsPgEventos } from './schemas/slots-pg.schemas.js';
       this.dataset.activeTab = which;
     }
 
-    #readActiveTabFromDom(): 'simple' | 'slots' {
+    #readActiveTabFromDom(): SlotsPgTab {
       return this.dataset.activeTab === 'slots' ? 'slots' : 'simple';
     }
 

@@ -1,50 +1,58 @@
 // @contexto INDICE.md · src/components/media/README.md
 /**
- * speech.ts — Zod schemas para los tipos extraídos de este módulo.
+ * speech.ts — Tipos del subset de Web Speech API que usa `<iswc-speech>`.
  *
- * Generado por `scripts/migrate-zod.py`. Refinar manualmente las
- * entradas marcadas con TODO cuando se quiera validación runtime.
+ * La API no está disponible de forma uniforme en `lib.dom.d.ts`; estos
+ * contratos viven en el schema para que el constructor y sus consumidores
+ * compartan exactamente el mismo modelo.
  */
-import { z } from "zod";
 
-const SpeechRecognitionEventSchema = z.object({
-  resultIndex: z.number(),
-  results: SpeechRecognitionResultListSchema,
-});
-export type SpeechRecognitionEvent = z.infer<typeof SpeechRecognitionEventSchema>;
+export interface SpeechRecognitionAlternative {
+  readonly transcript: string;
+  readonly confidence: number;
+}
 
-const SpeechRecognitionResultListSchema = z.object({
-  /* TODO: parse fail readonly length: number */
-  /* TODO: parse fail [index: number]: SpeechRecognitionResult */
-});
+export interface SpeechRecognitionResult {
+  readonly isFinal: boolean;
+  readonly length: number;
+  readonly [index: number]: SpeechRecognitionAlternative;
+}
 
-const SpeechRecognitionErrorEventSchema = z.object({
-  error: z.string(),
-  message: z.string().optional(),
-});
-export type SpeechRecognitionErrorEvent = z.infer<typeof SpeechRecognitionErrorEventSchema>;
+export interface SpeechRecognitionResultList {
+  readonly length: number;
+  readonly [index: number]: SpeechRecognitionResult;
+}
 
-const SpeechRecognitionInstanceSchema = z.object({
-  lang: z.string(),
-  continuous: z.boolean(),
-  interimResults: z.boolean(),
-  onresult: z.union([z.function({ input: [z.unknown() /* TODO: ref SpeechRecognitionEvent */], output: z.void() }), z.null()]),
-  onerror: z.union([z.function({ input: [z.unknown() /* TODO: ref SpeechRecognitionErrorEvent */], output: z.void() }), z.null()]),
-  onend: z.union([z.function({ input: [z.unknown() /* TODO: ref Event */], output: z.void() }), z.null()]),
-  start: z.function({ input: [], output: z.void() }),
-  stop: z.function({ input: [], output: z.void() }),
-  abort: z.function({ input: [], output: z.void() }).optional(),
-});
-export type SpeechRecognitionInstance = z.infer<typeof SpeechRecognitionInstanceSchema>;
+export interface SpeechRecognitionEvent extends Event {
+  readonly resultIndex: number;
+  readonly results: SpeechRecognitionResultList;
+}
 
-const SpeechRecognitionCtorSchema = z.unknown() /* TODO: cannot convert */;
-export type SpeechRecognitionCtor = z.infer<typeof SpeechRecognitionCtorSchema>;
+export interface SpeechRecognitionErrorEvent extends Event {
+  readonly error: string;
+  readonly message?: string;
+}
 
-const SpeechRecognitionConstructorBagSchema = z.object({
-  SpeechRecognition: SpeechRecognitionCtorSchema.optional(),
-  webkitSpeechRecognition: SpeechRecognitionCtorSchema.optional(),
-});
-export type SpeechRecognitionConstructorBag = z.infer<typeof SpeechRecognitionConstructorBagSchema>;
+export interface SpeechRecognitionInstance {
+  lang: string;
+  continuous: boolean;
+  interimResults: boolean;
+  onresult: ((ev: SpeechRecognitionEvent) => void) | null;
+  onerror: ((ev: SpeechRecognitionErrorEvent) => void) | null;
+  onend: (() => void) | null;
+  start(): void;
+  stop(): void;
+  abort?(): void;
+}
+
+export interface SpeechRecognitionCtor {
+  new (): SpeechRecognitionInstance;
+}
+
+export interface SpeechRecognitionConstructorBag {
+  SpeechRecognition?: SpeechRecognitionCtor;
+  webkitSpeechRecognition?: SpeechRecognitionCtor;
+}
 
 /** Eventos del componente (HOW-6): `declare static events` en la clase; los documenta scripts/sondas/eventos.ts. */
 export type SpeechEventos = { 'iswc-error': { message: string }; 'iswc-result': { transcript: string; isFinal: boolean }; 'iswc-speak-end': undefined };

@@ -1,22 +1,20 @@
 // @contexto INDICE.md · src/components/media/README.md
 /**
- * qrcode.ts — Zod schemas para los tipos extraídos de este módulo.
- *
- * Generado por `scripts/migrate-zod.py`. Refinar manualmente las
- * entradas marcadas con TODO cuando se quiera validación runtime.
+ * qrcode.ts — Tipos del módulo `qrcode-generator` cargado por CDN.
  */
-import { z } from "zod";
 
-const QRInstanceSchema = z.object({
-  addData: z.function({ input: [z.string()], output: z.void() }),
-  make: z.function({ input: [], output: z.void() }),
-  getModuleCount: z.function({ input: [], output: z.number() }),
-  isDark: z.function({ input: [z.number(), z.number()], output: z.boolean() }),
-});
-export type QRInstance = z.infer<typeof QRInstanceSchema>;
+/** Instancia creada por la factoría de qrcode-generator. */
+export interface QRInstance {
+  addData(data: string): void;
+  make(): void;
+  getModuleCount(): number;
+  isDark(row: number, column: number): boolean;
+}
 
-const QRLibSchema = z.function({ input: [z.number(), z.string()], output: z.unknown() /* TODO: ref QRInstance */ });
-export type QRLib = z.infer<typeof QRLibSchema>;
+/** Factoría de qrcode-generator: tipo de QR y nivel de corrección. */
+export interface QRLib {
+  (typeNumber: number, errorCorrectionLevel: string): QRInstance;
+}
 
 /** Eventos del componente (HOW-6): `declare static events` en la clase; los documenta scripts/sondas/eventos.ts. */
 export type QrcodeEventos = { 'iswc-render': { svg: SVGElement } };

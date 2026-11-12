@@ -102,7 +102,6 @@ import css from 'iswc:css';
       const shadow = this.shadowRoot!;
       this.#lienzo = document.createElement('figure');
       this.#lienzo.className = 'lienzo';
-      this.#lienzo.setAttribute('part', 'lienzo');
       shadow.append(this.#lienzo);
     }
 
@@ -114,6 +113,11 @@ import css from 'iswc:css';
     }
 
     override onConnected(): void {
+      // El `part` del lienzo se escribe al conectar, NO en el constructor: un elemento
+      // creado por script (document.createElement('iswc-parallax-collage')) no puede traer
+      // atributos cuando su constructor termina. Blink los descarta y avisa con un
+      // NotSupportedError sin capturar ('The result must not have attributes').
+      this.#lienzo.setAttribute('part', 'lienzo');
       this.#sync();
     }
 

@@ -184,8 +184,8 @@ import type { VideoEventos } from './schemas/video.schemas.js';
 
       this.#video = shadow.querySelector<HTMLVideoElement>('.video')!;
       this.#controls = shadow.querySelector<HTMLElement>('.controls')!;
-      this.#playBtn = shadow.querySelector<HTMLElement>('.play') as IswcCheckIconButton;
-      this.#muteBtn = shadow.querySelector<HTMLElement>('.mute') as IswcCheckIconButton;
+      this.#playBtn = shadow.querySelector<IswcCheckIconButton>('.play')!;
+      this.#muteBtn = shadow.querySelector<IswcCheckIconButton>('.mute')!;
       this.#volume = shadow.querySelector<HTMLInputElement>('.volume')!;
       this.#seek = shadow.querySelector<HTMLInputElement>('.seek')!;
       this.#time = shadow.querySelector<HTMLElement>('.time')!;
@@ -195,8 +195,8 @@ import type { VideoEventos } from './schemas/video.schemas.js';
       this.#tip = shadow.querySelector<HTMLElement>('.tip')!;
       this.#cur = shadow.querySelector<HTMLElement>('.cur')!;
       this.#dur = shadow.querySelector<HTMLElement>('.dur')!;
-      this.#fsBtn = shadow.querySelector<HTMLElement>('.fs') as IswcCheckIconButton;
-      this.#pipBtn = shadow.querySelector<HTMLElement>('.pip') as IswcCheckIconButton;
+      this.#fsBtn = shadow.querySelector<IswcCheckIconButton>('.fs')!;
+      this.#pipBtn = shadow.querySelector<IswcCheckIconButton>('.pip')!;
       this.#speedBtn = shadow.querySelector<HTMLElement>('.speed')!;
       this.#menu = shadow.querySelector<HTMLElement>('.menu')!;
 
@@ -246,7 +246,7 @@ import type { VideoEventos } from './schemas/video.schemas.js';
         this.style.setProperty('--played', `${ratio * 100}%`);
         // F0.3 g12 [a11y/seek]: aria-valuetext con tiempo absoluto para que
         // el lector diga "1 minuto 23 segundos" en vez del 0–1000 crudo.
-        this.#seek.setAttribute('aria-valuetext', `${fmtTime(ratio * this.#video.duration)} de ${fmtTime(this.#video.duration)}`);
+        this.#syncSeekText(ratio * this.#video.duration, this.#video.duration);
       });
 
       // Tooltip de tiempo sobre la barra, como YouTube.
@@ -300,6 +300,17 @@ import type { VideoEventos } from './schemas/video.schemas.js';
       document.addEventListener('fullscreenchange', this.#syncFsUi);
 
       this.#slot.addEventListener('slotchange', () => this.#distributeSlot());
+    }
+
+    /**
+     * F0.3 g12 [a11y/seek]: `aria-valuetext` con tiempo absoluto ("1:23 de 4:56").
+     * Se escribe FUERA del constructor: un elemento creado por script
+     * (document.createElement('iswc-video')) no puede traer atributos cuando su
+     * constructor termina. Blink los descarta y avisa con un NotSupportedError sin
+     * capturar ('The result must not have attributes').
+     */
+    #syncSeekText(segundos: number, total: number): void {
+      this.#seek.setAttribute('aria-valuetext', `${fmtTime(segundos)} de ${fmtTime(total)}`);
     }
 
     // Guardamos big-play en una property aparte para no añadir otro #field: lo
@@ -662,7 +673,7 @@ import type { VideoEventos } from './schemas/video.schemas.js';
       }
       // F0.3 g12 [a11y/seek]: aria-valuetext sincronizado con tiempo.
       if (d > 0) {
-        this.#seek.setAttribute('aria-valuetext', `${fmtTime(t)} de ${fmtTime(d)}`);
+        this.#syncSeekText(t, d);
       }
       this.#onBuffer();
     };

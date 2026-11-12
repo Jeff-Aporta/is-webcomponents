@@ -7,10 +7,11 @@
  */
 import { z } from "zod";
 
-const IswcCheckIconButtonSchema = z.object({
+/** `<iswc-check-icon-button>` aporta estado y listeners DOM a `<iswc-video>`. */
+const IswcCheckIconButtonSchema = z.intersection(z.custom<HTMLElement>(() => true), z.object({
   checked: z.boolean(),
   icon: z.string(),
-});
+}));
 export type IswcCheckIconButton = z.infer<typeof IswcCheckIconButtonSchema>;
 
 /** Eventos del componente (HOW-6): `declare static events` en la clase; los documenta scripts/sondas/eventos.ts. */

@@ -1,10 +1,9 @@
 // @contexto INDICE.md · src/components/media/avatar.md
 import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import './icon.js';
-import { setStringAttr, DEFAULT_MEDIA_SHAPE, MEDIA_SHAPE, normalizeMediaShape } from '@jeff-aporta/iswc-base/core/attrs.js';
-import { type MediaShape } from '@jeff-aporta/iswc-base/core/schemas/attrs.schemas.js';
+import { setStringAttr, DEFAULT_MEDIA_SHAPE, MEDIA_SHAPE } from '@jeff-aporta/iswc-base/core/attrs.js';
 import css from 'iswc:css';
-import type { AvatarEventos } from './schemas/avatar.schemas.js';
+import type { AvatarEventos, AvatarShape } from './schemas/avatar.schemas.js';
 
 /**
  * <iswc-avatar> — Web Component (vanilla).
@@ -45,8 +44,17 @@ import type { AvatarEventos } from './schemas/avatar.schemas.js';
   const VALID_SHAPE = ['circle', 'square', 'rounded'] as const;
   void MEDIA_SHAPE;
   const VALID_LOADING = ['eager', 'lazy'] as const;
-  type Shape = MediaShape;
+  type Shape = AvatarShape;
   type Loading = typeof VALID_LOADING[number];
+
+  function isAvatarShape(value: unknown): value is AvatarShape {
+    if (typeof value !== 'string') return false;
+    return VALID_SHAPE.some((shape) => shape === value);
+  }
+
+  function normalizeAvatarShape(value: unknown): AvatarShape {
+    return isAvatarShape(value) ? value : DEFAULT_MEDIA_SHAPE;
+  }
 
   class IswcAvatar extends IswcElement {
     static override tag = 'iswc-avatar';
@@ -101,11 +109,11 @@ import type { AvatarEventos } from './schemas/avatar.schemas.js';
     }
 
     get shape(): Shape {
-      return normalizeMediaShape(this.getAttribute('shape'), DEFAULT_MEDIA_SHAPE);
+      return normalizeAvatarShape(this.getAttribute('shape'));
     }
     set shape(v: Shape | '' | null | undefined) {
       if (v == null || v === '') this.removeAttribute('shape');
-      else this.setAttribute('shape', normalizeMediaShape(v, DEFAULT_MEDIA_SHAPE));
+      else this.setAttribute('shape', normalizeAvatarShape(v));
     }
 
     #onImgError = () => {
