@@ -470,9 +470,9 @@ class IswcPreviewControls extends IswcElement {
     pop.className = 'fila__popover';
     pop.dataset.role = 'info-popover';
     pop.setAttribute('role', 'dialog');
-    pop.setAttribute('aria-label', 
     // Popover no modal: lo dice explicitamente.
-    pop.setAttribute('aria-modal', 'false');`Documentación de ${attrDeProp(c.prop) || c.label}`);
+    pop.setAttribute('aria-modal', 'false');
+    pop.setAttribute('aria-label', `Documentación de ${attrDeProp(c.prop) || c.label}`);
     pop.hidden = true;
     // Título: nombre del atributo + tipo lógico.
     const title = document.createElement('h4');
