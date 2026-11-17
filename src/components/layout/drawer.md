@@ -140,7 +140,7 @@ No expone.
 
 | Token | Uso |
 | --- | --- |
-| `--size` | Token leído o definido por componente. |
+| `--iswc-drawer-size` | Tamaño preferido: ancho (start/end) o alto (top/bottom); default 23.75em. |
 | `--width` | Token leído o definido por componente. |
 | `--spacing` | Token leído o definido por componente. |
 | `--show-duration` | Token leído o definido por componente. |
@@ -172,7 +172,7 @@ Documentación de cabecera preservada desde fuente:
 > Panel que se desliza desde un borde del viewport. Ideal para menús, filtros
 > y contenido secundario. Equivalente accesible a wa-drawer (Web Awesome).
 > Modelo: hereda conceptualmente de iswc-dialog (mismo shadow DOM) con la
-> diferencia de placement (start/end/top/bottom) y --size en lugar de --width.
+> diferencia de placement (start/end/top/bottom) y --iswc-drawer-size en lugar de --width.
 > Atributos
 >   open              boolean — si está abierto (reflected).
 >   label             string  — título en el header (a11y).
@@ -188,7 +188,7 @@ Documentación de cabecera preservada desde fuente:
 > Eventos: iswc-show, iswc-after-show, iswc-hide (cancelable, detail.source), iswc-after-hide
 > CSS Parts: drawer, header, title, close-button, header-actions, body, footer
 > CSS custom properties
->   --size            tamaño preferido (ancho o alto según placement)
+>   --iswc-drawer-size  tamaño preferido (ancho o alto según placement; default 23.75em)
 >   --spacing         padding interno
 >   --show-duration, --hide-duration
 >   --backdrop-color

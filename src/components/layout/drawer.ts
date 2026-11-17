@@ -35,7 +35,7 @@ import type { DrawerEventos } from './schemas/drawer.schemas.js';
  * CSS Parts: drawer, header, title, close-button, header-actions, body, footer
  *
  * CSS custom properties
- *   --size            tamaño preferido (ancho o alto según placement)
+ *   --iswc-drawer-size  tamaño preferido (ancho o alto según placement; default 23.75em)
  *   --spacing         padding interno
  *   --show-duration, --hide-duration
  *   --backdrop-color
