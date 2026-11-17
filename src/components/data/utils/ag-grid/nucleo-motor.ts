@@ -260,7 +260,8 @@ export function crearMotor(h: GridHost, p: PiezasMotor, int: InternosMotor) {
     const presentacion = int.presentarCelda(ctx);
     const alinear = pos.col.align === 'right' ? ' mim-dg__cell--right' : pos.col.align === 'center' ? ' mim-dg__cell--center' : '';
     const enfocada = foco && foco.indice === indice && foco.colId === colId ? ' iswc-focused' : '';
-    const clase = `mim-dg__cell${alinear}${enfocada}${presentacion?.clases ? ` ${presentacion.clases}` : ''}${decoraciones.map((d) => (d.clase ? ` ${d.clase}` : '')).join('')}`;
+    const enRango = int.enRango(node.id, colId) ? ' iswc-cell-sel' : '';
+    const clase = `mim-dg__cell${alinear}${enfocada}${enRango}${presentacion?.clases ? ` ${presentacion.clases}` : ''}${decoraciones.map((d) => (d.clase ? ` ${d.clase}` : '')).join('')}`;
     if (clase !== rec.clase) {
       rec.clase = clase;
       rec.el.className = clase;
@@ -631,6 +632,17 @@ export function crearMotor(h: GridHost, p: PiezasMotor, int: InternosMotor) {
     pedir();
   }
 
+  /** Marca las celdas del rango (selección tipo Excel). */
+  function pintarRango(): void {
+    for (const fila of filas.values()) {
+      if (fila.tipo !== 'leaf') continue;
+      for (const [colId, rec] of fila.celdas) {
+        const dentro = int.enRango(fila.clave, colId);
+        rec.el.classList.toggle('iswc-cell-sel', dentro);
+      }
+    }
+  }
+
   function pintarSeleccion(): void {
     const sel = int.seleccionados();
     for (const fila of filas.values()) {
@@ -718,7 +730,7 @@ export function crearMotor(h: GridHost, p: PiezasMotor, int: InternosMotor) {
   }
 
   return {
-    medir, pedir, ahora, alScroll, animar, refrescar, listaCambio, pintarSeleccion, rectCelda, celdaDe, asegurarVisible, asegurarFila, asegurarColumna, enfocar, fijarAltura,
+    medir, pedir, ahora, alScroll, animar, refrescar, listaCambio, pintarSeleccion, pintarRango, rectCelda, celdaDe, asegurarVisible, asegurarFila, asegurarColumna, enfocar, fijarAltura,
     foco: () => foco,
     diseno: () => diseno,
     pxU: () => pxU,

@@ -56,6 +56,11 @@
       "name": "iswc-state-reset",
       "detail": "{ key: string }",
       "cancelable": false
+    },
+    {
+      "name": "iswc-row-menu",
+      "detail": "{ row: string; anchor: HTMLElement }",
+      "cancelable": false
     }
   ],
   "sections": [

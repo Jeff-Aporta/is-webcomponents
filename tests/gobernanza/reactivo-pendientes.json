@@ -97,7 +97,7 @@
   },
   "forms": [],
   "ariaLabel": {
-    "src/components/data/ag-grid.ts": 13,
+    "src/components/data/ag-grid.ts": 9,
     "src/components/data/data-grid.ts": 10,
     "src/components/data/spreadsheet.ts": 7,
     "src/components/data/transfer.ts": 4,

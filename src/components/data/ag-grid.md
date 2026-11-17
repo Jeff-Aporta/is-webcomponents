@@ -133,12 +133,21 @@ Orden, visibilidad (`hide`), anchos, pin, `sortModel`, `filterModel`, quick filt
 - Toolbar: botón **Reiniciar** (visible solo con `remember-state`).
 - API: `grid.api.resetPersistedState()` → `removeComponentPrefs` + restaura defs/sort/filtros.
 
-## Panel de columnas
+## Columnas, filtros y exportación (modales)
 
-- Sidebar derecha (pestañas Columnas / Filtros) + botón toolbar **Columnas**.
-- Lista de checks para show/hide, búsqueda, Mostrar todo / Ocultar todo.
-- Markup: `.mim-dg__sidebar`, `.mim-dg__panel`, `.mim-dg__col-check`.
-- No reinventar un popover aparte: el sidebar ya es el contrato UI.
+- Barra plana: buscador a la izquierda, filtros a su derecha y Columnas / Reiniciar / Exportar como botones de solo
+  icono en píldora a la derecha. Toda la barra es zona de soltar: arrastrar una columna del header ahí agrupa.
+- **Columnas**, **Filtros** y **Exportar** se abren en `<iswc-dialog>` (`utils/ag-grid/grid-modales.ts`):
+  - Columnas: qué columnas se ven y en qué orden (empuñadura para arrastrar; ojo / ojo tachado con `iswc-check-icon-button`).
+  - Filtros: las reglas activas (búsqueda rápida, agrupación y filtros por columna); se agregan o quitan.
+  - Exportar: de qué página a qué página, qué columnas, qué filtros y qué orden; por defecto, lo aplicado en la tabla.
+- Exportadores de serie: **CSV** (con BOM) y **Excel** (`.xlsx` real, el mismo escritor de `exportDataAsExcel`). La app
+  registra más con la opción `exporters`: `[{ id, etiqueta, extension, construir(datos) => Blob }]` (un `id` de serie se ignora).
+- Cada fila trae su botón de tres puntos: abre el menú contextual anclado a él; el botón derecho abre el mismo menú.
+- Selección por rango de celdas (tipo Excel): el pie muestra filas, celdas y la suma; el api trae
+  `fijarRangoCeldas`, `rangoCeldas`, `enRangoCeldas`, `setValueForSelectedRows` y `setValueForRange` para editar en lote.
+- Con una sola página no se muestra la paginación. El borde de foco es solo de las celdas editables.
+- Origen: migrado de `tk-lab` (2026-11-17). Prueba: `tests/componentes/ag-grid-exportadores.test.ts`.
 
 ## API
 
@@ -150,6 +159,7 @@ Orden, visibilidad (`hide`), anchos, pin, `sortModel`, `filterModel`, quick filt
 | --- | --- |
 | `rows` / `columns` | JSON attr o `<script type="application/json">` |
 | `selectable` / `row-selection` | checkboxes / single\|multiple |
+| `checkboxes` | muestra u oculta la columna de casillas sin apagar la selección de filas |
 | `density` | `compact` \| `normal` \| `comfortable` |
 | `page-size` / `page-size-options` / `pagination` | pager |
 | `quick-filter` / `group-by` | texto / CSV colIds |
@@ -201,6 +211,7 @@ Orden, visibilidad (`hide`), anchos, pin, `sortModel`, `filterModel`, quick filt
 | `iswc-page-change` | `PageChangeDetail` | no |
 | `iswc-state-loaded` | `unknown` | no |
 | `iswc-state-reset` | `{ key: string }` | no |
+| `iswc-row-menu` | `{ row: string; anchor: HTMLElement }` | no |
 
 <!-- /eventos -->
 

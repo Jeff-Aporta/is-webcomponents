@@ -15,7 +15,7 @@ export type Diseno = { izq: ColPos[]; centro: ColPos[]; der: ColPos[]; anchoIzq:
 
 export type PiezasMotor = { viewport: HTMLElement; cuerpo: HTMLElement; zonaArriba: HTMLElement; zonaAbajo: HTMLElement; cabecera: HTMLElement; sondaFila: HTMLElement; };
 
-export type InternosMotor = { resolver: (ctx: ContextoCelda) => RendererMontable; presentarCelda: (ctx: ContextoCelda) => PresentacionCelda | null; presentarFila: (node: RowNode, indice: number) => PresentacionFila | null; decorar: (ctx: ContextoCelda) => Decoracion[]; columnaSeleccion: () => boolean; multiple: () => boolean; seleccionados: () => Set<string>; expuesto: (nombre: string) => unknown; ocupado: () => boolean; };
+export type InternosMotor = { resolver: (ctx: ContextoCelda) => RendererMontable; presentarCelda: (ctx: ContextoCelda) => PresentacionCelda | null; presentarFila: (node: RowNode, indice: number) => PresentacionFila | null; decorar: (ctx: ContextoCelda) => Decoracion[]; columnaSeleccion: () => boolean; multiple: () => boolean; seleccionados: () => Set<string>; enRango: (fila: string, col: string) => boolean; expuesto: (nombre: string) => unknown; ocupado: () => boolean; };
 
 export type RecCelda = { el: HTMLElement; html: string; clase: string; estilo: string; limpiar: Desinstalar | null; };
 

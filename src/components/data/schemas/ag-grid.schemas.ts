@@ -20,4 +20,4 @@ const StateSavedDetailSchema = z.object({
 export type StateSavedDetail = z.infer<typeof StateSavedDetailSchema>;
 
 /** Eventos del componente (HOW-6): `declare static events` en la clase; los documenta scripts/sondas/eventos.ts. */
-export type AgGridEventos = { 'iswc-quick-filter': { value: string }; 'iswc-state-saved': StateSavedDetail; 'iswc-page-change': PageChangeDetail; 'iswc-state-loaded': unknown; 'iswc-state-reset': { key: string } };
+export type AgGridEventos = { 'iswc-quick-filter': { value: string }; 'iswc-state-saved': StateSavedDetail; 'iswc-page-change': PageChangeDetail; 'iswc-state-loaded': unknown; 'iswc-state-reset': { key: string }; 'iswc-row-menu': { row: string; anchor: HTMLElement } };

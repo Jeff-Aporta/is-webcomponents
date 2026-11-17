@@ -150,6 +150,12 @@ function exponerPaneles(grid: GridHost, lateral: BarraLateral, estado: BarraEsta
 function creadorChooser(grid: GridHost): (col: ColumnState) => void {
   let flotante: Flotante | null = null;
   return (col) => {
+    // Si el grid expone el modal de columnas, se usa: el flotante queda como respaldo.
+    const api = (grid.el as unknown as { api: Record<string, unknown> }).api;
+    if (typeof api['abrirModalColumnas'] === 'function') {
+      (api['abrirModalColumnas'] as () => void)();
+      return;
+    }
     flotante ??= grid.flotante('column-chooser');
     const panel = new PanelColumnas(grid, { suppressRowGroups: true, suppressValues: true, suppressPivots: true, suppressPivotMode: true });
     flotante.el.replaceChildren(panel.el);

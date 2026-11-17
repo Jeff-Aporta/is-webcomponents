@@ -230,6 +230,12 @@ const animarDeslizar: RendererCelda = (ctx) => {
   return `<span class="iswc-ag-deslizar"><span class="iswc-ag-deslizar-viejo" aria-hidden="true">${escaparHtml(cambio.anterior)}</span>${valor}</span>`;
 };
 
+/** Botón de tres puntos del menú de fila: la app abre su menú al recibir el evento. */
+const menuFila: RendererCelda = (ctx) => {
+  const etiqueta = escaparHtml(textoDe(ctx, 'menuFilaMasOpciones', 'Más opciones'));
+  return '<button class="mim-dg__row-menu" type="button" data-row-menu="1" title="' + etiqueta + '" aria-label="' + etiqueta + '"><iswc-icon icon="mdi:dots-vertical"></iswc-icon></button>';
+};
+
 export const RENDERERS: Record<string, RendererCelda> = {
   logoTexto,
   ticker: logoTexto,
@@ -248,6 +254,7 @@ export const RENDERERS: Record<string, RendererCelda> = {
   enlace,
   link: enlace,
   acciones,
+  menuFila,
   animarCambio,
   agAnimateShowChangeCellRenderer: animarCambio,
   animarDeslizar,

@@ -11,7 +11,7 @@
  * añade un valor.
  */
 import { z } from 'zod';
-import { BUTTON_SHAPE, INTENT_VALUES, MEDIA_SHAPE, TONE_VALUES } from '../attrs.js';
+import { BUTTON_SHAPE, INTENT_VALUES, MEDIA_SHAPE, TONE_VALUES } from '@jeff-aporta/iswc-base/core/attrs.js';
 
 const StyleAttrDefSchema = z.union([z.string(), z.object({
   prop: z.string(),

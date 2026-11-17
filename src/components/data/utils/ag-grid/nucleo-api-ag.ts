@@ -36,6 +36,25 @@ export function crearApiAg(h: GridHost, motor: Motor, alCambiarAlto: () => void)
   const m = () => h.modelo();
   const columnas = (): ColumnState[] => m()?.getColumns() ?? [];
 
+  /**
+   * Edicion en lote: pone un valor en una columna de varias filas.
+   *   filas    ids de fila (las seleccionadas o las del rango).
+   *   colId    columna a cambiar.
+   *   valor    valor nuevo.
+   * Devuelve cuantas filas cambiaron.
+   */
+  function ponerValorEnFilas(filas: string[], colId: string, valor: unknown): number {
+    const modelo = m();
+    if (!modelo || !filas.length) return 0;
+    let cambios = 0;
+    for (const id of filas) {
+      const node = modelo.getRowNode(id);
+      if (!node) continue;
+      if (h.fijarValor(node, colId, valor, 'api')) cambios++;
+    }
+    return cambios;
+  }
+
   /** Anchos reales: mide con canvas en la fuente del cuerpo, sobre una muestra. */
   function medirColumna(col: ColumnState, lienzo: CanvasRenderingContext2D): number {
     let max = lienzo.measureText(col.headerName).width + 56 * motor.pxU();
@@ -190,6 +209,20 @@ export function crearApiAg(h: GridHost, motor: Motor, alCambiarAlto: () => void)
     getSizesForCurrentTheme: () => ({ rowHeight: motor.altoBase() / motor.pxU(), headerHeight: 44 }),
     /* transacciones */
     applyTransaction: aplicar,
+    /** Edicion en lote sobre las filas seleccionadas. */
+    setValueForSelectedRows: (colId: string, valor: unknown): number => {
+      const sel = h.estado()?.selection ?? new Set<string>();
+      return ponerValorEnFilas([...sel], colId, valor);
+    },
+    /** Edicion en lote sobre las filas del rango de celdas (estilo Excel). */
+    setValueForRange: (colId: string, valor: unknown): number => {
+      const rango = h.rangoCeldas();
+      if (!rango.celdas.length) return 0;
+      const filas = [...new Set(rango.celdas.filter((c) => c.col === colId).map((c) => c.fila))];
+      return ponerValorEnFilas(filas, colId, valor);
+    },
+    /** El rango de celdas actual (filas, columnas y celdas). */
+    getCellRange: () => h.rangoCeldas(),
     applyTransactionAsync: (tx: Tx, cb?: (r: unknown) => void) => {
       cola.push(tx);
       void cb;

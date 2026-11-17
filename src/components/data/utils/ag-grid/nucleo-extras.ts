@@ -137,7 +137,7 @@ export function crearExtras(motor: Motor, menus: Menus) {
         menus.abrirContexto({ tipo: 'contexto', col, node, value: col && node ? getCellValue(col, node) : undefined }, p.x ?? 0, p.y ?? 0);
       },
       hidePopupMenu: () => menus.cerrar(),
-      showColumnChooser: () => api()['openToolPanel']?.('columns'),
+      showColumnChooser: () => api()['abrirModalColumnas']?.() ?? api()['openToolPanel']?.('columns'),
       hideColumnChooser: () => api()['closeToolPanel']?.(),
       setFocusedHeader: (c: Colref) => {
         h.shadow.querySelector<HTMLElement>(`.mim-dg__head-cell[data-col-id="${CSS.escape(idDe(c))}"]`)?.focus();

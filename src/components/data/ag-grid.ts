@@ -18,7 +18,8 @@
  *   - Grouping con agregación (sum/avg/min/max/count/first/last).
  *   - Density (compact/normal/comfortable).
  *   - Edición inline por tipo, rango de celdas, portapapeles y deshacer (plugin edicion).
- *   - Export CSV con BOM (sólo seleccionadas si hay selección).
+ *   - Export CSV con BOM (modal: de qué página a qué página, con qué columnas, filtros y orden).
+ *   - Modales de columnas, de filtros (búsqueda, agrupación y filtros por columna son reglas) y de exportación.
  *   - Persistencia de estado (api.serializeState / loadState).
  *   - Navegación por teclado (arrow / home / end / pgup / pgdn / space / enter / esc).
  *   - API retrocompatible: g.api.goToPage, setFilter, setQuickFilter, refresh, etc.
@@ -62,6 +63,7 @@
  *   iswc-column-resize      detail: { colId, width }
  *   iswc-column-pin         detail: { colId, side }
  *   iswc-column-hide        detail: { colId }
+ *   iswc-row-menu           detail: { row, anchor } (el botón de tres puntos de la fila)
  *   iswc-state-saved        detail: { json }
  *   iswc-state-loaded       detail: { columns, sortModel, ... }
  *
@@ -104,6 +106,8 @@ import { createGridModel } from './utils/datagrid-core/grid-model.js';
 import { PLUGINS } from './utils/ag-grid/plugins.js';
 import { lectores } from './utils/ag-grid/celdas-valores.js';
 import { crearNucleo } from './utils/ag-grid/nucleo-ag-host.js';
+import { ModalesGrid } from './utils/ag-grid/grid-modales.js';
+import type { ExportadorGrid } from '@jeff-aporta/iswc-base/components/data/utils/ag-grid/grid-modales.schemas.js';
 import type { Nucleo } from './utils/ag-grid/nucleo-ag-host.schemas.js';
 import { ATRIBUTOS, aplanarDefs, autogenerarDefs, ordenInicial, valorAtributo } from './utils/ag-grid/nucleo-opciones.js';
 import type { ColDefAg, Capa, Desinstalar, OpcionesGrid, Zona } from './utils/ag-grid/contrato.schemas.js';
@@ -120,47 +124,25 @@ TEMPLATE.innerHTML = /* html */ `
   <div class="mim-dg" part="root" data-density="normal">
     <header class="mim-dg__toolbar" part="toolbar" role="toolbar">
       <slot name="header-extra"></slot>
-      <span class="mim-dg__toolbar-spacer"></span>
       <label class="mim-dg__quick">
         <iswc-icon icon="mdi:magnify"></iswc-icon>
         <iswc-input class="mim-dg__quick-input" type="search" placeholder="Buscar…" aria-label="Búsqueda rápida"></iswc-input>
       </label>
-      <div class="mim-dg__density" role="group" aria-label="Densidad">
-        <iswc-button variant="plain compact" pill class="mim-dg__density-btn" data-density="compact" title="Compacta" aria-label="Compacta">
-          <iswc-icon icon="mdi:view-headline"></iswc-icon>
-        </iswc-button>
-        <iswc-button variant="plain compact" pill class="mim-dg__density-btn iswc-active" data-density="normal" title="Normal" aria-label="Normal">
-          <iswc-icon icon="mdi:view-sequential"></iswc-icon>
-        </iswc-button>
-        <iswc-button variant="plain compact" pill class="mim-dg__density-btn" data-density="comfortable" title="Cómoda" aria-label="Cómoda">
-          <iswc-icon icon="mdi:view-stream"></iswc-icon>
-        </iswc-button>
-      </div>
-      <iswc-button variant="plain" color="text" class="mim-dg__tool-btn mim-dg__columns-btn" title="Columnas" aria-label="Columnas">
+      <iswc-button variant="plain" pill color="text" class="mim-dg__tool-btn mim-dg__filters-btn" title="Filtros" aria-label="Filtros">
+        <iswc-icon icon="mdi:filter-variant"></iswc-icon>
+      </iswc-button>
+      <span class="mim-dg__group-chips" hidden></span>
+      <span class="mim-dg__toolbar-spacer"></span>
+      <iswc-button variant="plain" pill color="text" class="mim-dg__tool-btn mim-dg__columns-btn" title="Columnas" aria-label="Columnas">
         <iswc-icon icon="mdi:view-column-outline"></iswc-icon>
       </iswc-button>
-      <iswc-button variant="plain" color="text" class="mim-dg__tool-btn mim-dg__reset-btn" title="Reiniciar personalización" aria-label="Reiniciar personalización" hidden>
+      <iswc-button variant="plain" pill color="text" class="mim-dg__tool-btn mim-dg__reset-btn" title="Reiniciar personalización" aria-label="Reiniciar personalización" hidden>
         <iswc-icon icon="mdi:backup-restore"></iswc-icon>
       </iswc-button>
-      <iswc-button variant="plain" color="text" class="mim-dg__tool-btn mim-dg__export-btn" title="Exportar CSV">
+      <iswc-button variant="plain" pill color="text" class="mim-dg__tool-btn mim-dg__export-btn" title="Exportar CSV" aria-label="Exportar CSV">
         <iswc-icon icon="mdi:file-delimited-outline"></iswc-icon>
-        <span class="mim-dg__tool-btn-label">CSV</span>
       </iswc-button>
     </header>
-
-    <div class="mim-dg__group-panel" part="group-panel">
-      <span class="mim-dg__group-panel-label">Agrupar:</span>
-      <span class="mim-dg__group-chips"></span>
-      <span class="mim-dg__group-hint">arrastra una columna aquí</span>
-      <div class="mim-dg__group-panel-actions">
-        <iswc-button variant="plain" pill class="mim-dg__group-panel-btn" data-action="expand-all" title="Expandir todos" aria-label="Expandir todos">
-          <iswc-icon icon="mdi:unfold-more-horizontal"></iswc-icon>
-        </iswc-button>
-        <iswc-button variant="plain" pill class="mim-dg__group-panel-btn" data-action="collapse-all" title="Plegar todos" aria-label="Plegar todos">
-          <iswc-icon icon="mdi:unfold-less-horizontal"></iswc-icon>
-        </iswc-button>
-      </div>
-    </div>
 
     <div class="mim-dg__main" part="main">
       <div class="mim-dg__viewport" part="viewport" role="grid" tabindex="0">
@@ -202,6 +184,28 @@ TEMPLATE.innerHTML = /* html */ `
         <iswc-icon icon="mdi:chevron-right"></iswc-icon>
       </iswc-button>
     </footer>
+
+    <iswc-dialog class="mim-dg__dlg" data-dlg="cols" label="Columnas">
+      <div class="mim-dg__dlg-body" data-dlg-body="cols"></div>
+      <div slot="footer">
+        <iswc-button variant="plain" data-dialog="close">Cerrar</iswc-button>
+      </div>
+    </iswc-dialog>
+
+    <iswc-dialog class="mim-dg__dlg" data-dlg="filtros" label="Filtros">
+      <div class="mim-dg__dlg-body" data-dlg-body="filtros"></div>
+      <div slot="footer">
+        <iswc-button variant="plain" data-dialog="close">Cerrar</iswc-button>
+      </div>
+    </iswc-dialog>
+
+    <iswc-dialog class="mim-dg__dlg" data-dlg="export" label="Exportar CSV">
+      <div class="mim-dg__dlg-body" data-dlg-body="export"></div>
+      <div slot="footer">
+        <iswc-button variant="plain" data-dialog="close">Cancelar</iswc-button>
+        <iswc-button color="brand" variant="filled" data-act="export-go">Exportar</iswc-button>
+      </div>
+    </iswc-dialog>
   </div>
 `;
 
@@ -230,13 +234,13 @@ export class IswcAgGrid extends IswcElement {
   static override tag = 'iswc-ag-grid';
   declare static events: AgGridEventos;
   static override css = css;
-  static override deps = ['iswc-icon', 'iswc-button'];
+  static override deps = ['iswc-icon', 'iswc-button', 'iswc-dialog', 'iswc-checkbox', 'iswc-check-icon-button'];
 
   static override template = TEMPLATE;
   static override observed = [
       'rows', 'columns', 'get-row-id',
       'page-size', 'page-size-options', 'pagination',
-      'row-selection', 'selectable', 'density',
+      'row-selection', 'selectable', 'checkboxes', 'density',
       'quick-filter', 'group-by',
       'remember-state', 'storage-key',
       'toolbar', 'theme', 'loading',
@@ -259,13 +263,13 @@ export class IswcAgGrid extends IswcElement {
   #isPaginated = false;
   #page = 0;
   #currentSelectionMode: SelectionModeName = SelectionMode.NONE;
+  /** Los modales (columnas, filtros y exportar). */
+  #modales: ModalesGrid | null = null;
   #viewport!: HTMLElement;
   #countEl!: HTMLElement;
   #pagerInfo!: HTMLElement;
   #pageSizeSelect!: HTMLElement;
-  #densityBtns!: NodeListOf<HTMLElement>;
   #toolbar!: HTMLElement;
-  #groupPanel!: HTMLElement;
   #groupChips!: HTMLElement;
   #ro!: ResizeObserver;
   #unsubscribe: (() => void) | null = null;
@@ -287,9 +291,7 @@ export class IswcAgGrid extends IswcElement {
     this.#countEl = root.querySelector<HTMLElement>('.mim-dg__count')!;
     this.#pagerInfo = root.querySelector<HTMLElement>('.mim-dg__pager-info')!;
     this.#pageSizeSelect = root.querySelector<HTMLElement>('.mim-dg__page-size-select')!;
-    this.#densityBtns = root.querySelectorAll<HTMLElement>('.mim-dg__density-btn');
     this.#toolbar = root.querySelector<HTMLElement>('.mim-dg__toolbar')!;
-    this.#groupPanel = root.querySelector<HTMLElement>('.mim-dg__group-panel')!;
     this.#groupChips = root.querySelector<HTMLElement>('.mim-dg__group-chips')!;
   }
 
@@ -326,6 +328,21 @@ export class IswcAgGrid extends IswcElement {
     h.alCambiarOpcion('rowHeight', () => { this.#nucleo.motor.medir(); this.#nucleo.motor.pedir(); });
   }
 
+  /** Los modales del grid (se crean cuando ya hay api). */
+  #modalesGrid(): ModalesGrid | null {
+    if (!this.#api) return null;
+    if (!this.#modales) {
+      this.#modales = new ModalesGrid({
+        api: () => this.#api,
+        root: this.shadowRoot!,
+        texto: (clave, porDefecto) => this.#nucleo.h.texto(clave, porDefecto),
+        // Los exportadores: el CSV de serie y los que registre la app (xlsx…).
+        exportadores: () => (this.#nucleo.opciones.get('exporters') as ExportadorGrid[] | undefined) ?? [],
+      });
+    }
+    return this.#modales;
+  }
+
   #modoSeleccion(): 'none' | 'single' | 'multiple' {
     return this.#currentSelectionMode as 'none' | 'single' | 'multiple';
   }
@@ -339,16 +356,24 @@ export class IswcAgGrid extends IswcElement {
       emit(this, 'iswc-quick-filter', { value: qf.value });
     });
 
-    this.#densityBtns.forEach((btn: HTMLElement) => {
-      btn.addEventListener('click', () => {
-        const d = btn.dataset.density;
-        if (d) this.setAttribute('density', d);
-      });
-    });
-
-    root.querySelector<HTMLElement>('.mim-dg__export-btn')?.addEventListener('click', () => this.api.exportCSV());
-    root.querySelector<HTMLElement>('.mim-dg__columns-btn')?.addEventListener('click', () => this.#toggleSidePanel('columns'));
+    root.querySelector<HTMLElement>('.mim-dg__export-btn')?.addEventListener('click', () => this.#modalesGrid()?.abrirExport());
+    root.querySelector<HTMLElement>('.mim-dg__columns-btn')?.addEventListener('click', () => this.#modalesGrid()?.abrirCols());
+    root.querySelector<HTMLElement>('.mim-dg__filters-btn')?.addEventListener('click', () => this.#modalesGrid()?.abrirFiltros());
     root.querySelector<HTMLElement>('.mim-dg__reset-btn')?.addEventListener('click', () => this.api.resetPersistedState());
+
+    // Los modales atienden a sus clics y cambios por delegación.
+    for (const nombre of ['cols', 'filtros', 'export']) {
+      const dlg = root.querySelector<HTMLElement>('[data-dlg="' + nombre + '"]');
+      if (!dlg) continue;
+      dlg.addEventListener('click', (e: Event) => this.#modalesGrid()?.click(nombre, e));
+      dlg.addEventListener('change', (e: Event) => this.#modalesGrid()?.change(nombre, e));
+      dlg.addEventListener('iswc-change', (e: Event) => this.#modalesGrid()?.change(nombre, e));
+      // Arrastrar para reordenar las filas del modal (columnas o columnas a exportar).
+      dlg.addEventListener('dragstart', (e: Event) => this.#modalesGrid()?.dragStart(nombre, e as DragEvent));
+      dlg.addEventListener('dragover', (e: Event) => this.#modalesGrid()?.dragOver(nombre, e as DragEvent));
+      dlg.addEventListener('drop', (e: Event) => this.#modalesGrid()?.drop(nombre, e as DragEvent));
+      dlg.addEventListener('dragend', () => this.#modalesGrid()?.dragEnd());
+    }
 
     root.querySelector<HTMLElement>('.mim-dg__footer')?.addEventListener('click', (e: Event): void => {
       // Los controles son <iswc-button>: el click se retarget al host.
@@ -364,15 +389,36 @@ export class IswcAgGrid extends IswcElement {
 
     this.#viewport.addEventListener('scroll', () => this.#nucleo.motor.alScroll(), { passive: true });
 
-    this.#groupPanel.addEventListener('click', this.#onGroupPanelClick);
-    this.#groupPanel.addEventListener('dragover', (e: DragEvent): void => {
+    // El botón de tres puntos de la fila: la app abre su menú anclado a este botón.
+    this.#viewport.addEventListener('click', (e: Event) => {
+      const btn = asElement(e.target)?.closest('[data-row-menu]');
+      if (!(btn instanceof HTMLElement)) return;
       e.preventDefault();
-      this.#groupPanel.classList.add('iswc-over');
+      e.stopPropagation();
+      const fila = btn.closest('.mim-dg__row') as HTMLElement | null;
+      emit(this, 'iswc-row-menu', { row: fila?.dataset['rowId'] ?? '', anchor: btn });
     });
-    this.#groupPanel.addEventListener('dragleave', () => this.#groupPanel.classList.remove('iswc-over'));
-    this.#groupPanel.addEventListener('drop', (e: DragEvent): void => {
+
+    // Los chips del grupo (quitar un grupo).
+    this.#groupChips.addEventListener('click', this.#onGroupPanelClick);
+
+    // Agrupar arrastrando una columna del header a la fila de herramientas (donde está
+    // "Buscar…"): toda la fila es zona de soltar y el grupo queda visible en los chips.
+    const toolbar = root.querySelector<HTMLElement>('.mim-dg__toolbar');
+    toolbar?.addEventListener('dragover', (e: DragEvent): void => {
       e.preventDefault();
-      this.#groupPanel.classList.remove('iswc-over');
+      toolbar.classList.add('iswc-over');
+    });
+    toolbar?.addEventListener('dragleave', (e: DragEvent): void => {
+      const dentro = e.relatedTarget instanceof Node && toolbar.contains(e.relatedTarget);
+      if (!dentro) toolbar.classList.remove('iswc-over');
+    });
+    // El pie (filas, celdas del rango y suma) se repinta cuando cambia el rango.
+    this.#nucleo.h.on('cellRangeChanged', () => this.#renderFooter());
+
+    toolbar?.addEventListener('drop', (e: DragEvent): void => {
+      e.preventDefault();
+      toolbar.classList.remove('iswc-over');
       const colId = e.dataTransfer?.getData('application/x-is-col-id');
       if (colId) this.#api?.addRowGroupCol(colId);
     });
@@ -573,7 +619,8 @@ export class IswcAgGrid extends IswcElement {
       return opt;
     }));
     const ps = Number(this.getAttribute('page-size')) || Number(this.#nucleo.opciones.get('paginationPageSize')) || DEFAULT_PAGE_SIZE;
-    this.#pageSize = this.#pageSizeOptions.includes(ps) ? ps : (this.#pageSizeOptions[0] ?? DEFAULT_PAGE_SIZE);
+    this.#pageSize = ps > 0 ? ps : DEFAULT_PAGE_SIZE;
+    if (!this.#pageSizeOptions.includes(this.#pageSize)) this.#pageSizeOptions = [...this.#pageSizeOptions, this.#pageSize];
     (this.#pageSizeSelect as HTMLElement & { value: string }).value = String(this.#pageSize);
   }
 
@@ -585,6 +632,14 @@ export class IswcAgGrid extends IswcElement {
     else if (mode === 'multiple' || mode === 'multiRow') this.#currentSelectionMode = SelectionMode.MULTIPLE;
     else if (this.hasAttribute('selectable')) this.#currentSelectionMode = SelectionMode.MULTIPLE;
     else this.#currentSelectionMode = SelectionMode.NONE;
+    // La columna de checkboxes (la de la izquierda) es opcional: con checkboxes="false" la fila
+    // se marca sin casilla —la seleccion por clic, Ctrl y Shift no la necesita— y la columna
+    // (con su ancho) no se pinta.
+    if (this.getAttribute('checkboxes') === 'false') {
+      // La opcion sigue siendo la que puso el consumidor: convertirla en objeto
+      // haria que el nucleo creyera que el consumidor gestiona la seleccion.
+      this.#nucleo.opciones.set('checkboxes', false);
+    }
   }
 
   /** ColDef del consumidor → defs planas del motor; sin columnas, las deduce de la primera fila. */
@@ -642,7 +697,7 @@ export class IswcAgGrid extends IswcElement {
         return;
       }
       this.#renderFooter();
-      this.#renderGroupPanel();
+      this.#renderGroupChips();
       if (this.#rememberState && reason !== 'transaction') this.#persistState();
     });
   }
@@ -655,7 +710,7 @@ export class IswcAgGrid extends IswcElement {
     this.#nucleo.motor.ahora();
     this.#nucleo.cabecera.pintar();
     this.#renderFooter();
-    this.#renderGroupPanel();
+    this.#renderGroupChips();
     this.#renderDensity();
   }
 
@@ -675,7 +730,25 @@ export class IswcAgGrid extends IswcElement {
     const filas = state.totalRows;
     const sel = state.selection.size;
     const pageCount = Math.max(1, Math.ceil(state.displayRows.length / state.pageSize));
-    this.#countEl.innerHTML = `<span>${h.escapar(h.texto('rows', 'Filas'))}: <b>${numeroLocal(filas)}</b></span><span>${h.escapar(h.texto('totalRows', 'Total de filas'))}: <b>${numeroLocal(total)}</b></span>${sel > 0 ? `<span class="mim-dg__count-sel">${numeroLocal(sel)} ${h.escapar(h.texto('selectedRows', 'seleccionadas'))}</span>` : ''}`;
+    const rango = this.#nucleo.h.rangoCeldas();
+    let rangoHTML = '';
+    if (rango.celdas.length) {
+      const nodos = new Map((state.displayedRows ?? []).map((n: any) => [n.id, n]));
+      let suma = 0;
+      let hayNumeros = false;
+      for (const c of rango.celdas) {
+        const nodo = nodos.get(c.fila);
+        const col = state.columns.find((x: any) => x.colId === c.col);
+        const v = nodo?.data?.[col?.field ?? c.col];
+        if (v === null || v === undefined || v === '') continue;
+        const num = typeof v === 'number' ? v : Number(v);
+        if (!Number.isFinite(num)) continue;
+        suma += num;
+        hayNumeros = true;
+      }
+      rangoHTML = `<span class="mim-dg__count-sel">Rango: ${numeroLocal(rango.filas.length)} filas · ${numeroLocal(rango.celdas.length)} celdas${hayNumeros ? ' · Suma: ' + numeroLocal(suma) : ''}</span>`;
+    }
+    this.#countEl.innerHTML = `<span>${h.escapar(h.texto('rows', 'Filas'))}: <b>${numeroLocal(filas)}</b></span><span>${h.escapar(h.texto('totalRows', 'Total de filas'))}: <b>${numeroLocal(total)}</b></span>${sel > 0 ? `<span class="mim-dg__count-sel">${numeroLocal(sel)} ${h.escapar(h.texto('selectedRows', 'seleccionadas'))}</span>` : ''}${rangoHTML}`;
     this.#pagerInfo.textContent = `${state.page + 1} / ${pageCount}`;
     const footer = this.shadowRoot!.querySelector<HTMLElement>('.mim-dg__footer');
     footer?.classList.toggle('iswc-paginada', this.#isPaginated);
@@ -684,18 +757,23 @@ export class IswcAgGrid extends IswcElement {
     const next = this.shadowRoot!.querySelector<HTMLButtonElement>('[data-action="page-next"]');
     if (prev) prev.disabled = state.page <= 0;
     if (next) next.disabled = state.page >= pageCount - 1;
+    // Con una sola pagina la paginacion sobra: se esconde el bloque entero.
+    const sinPaginas = pageCount <= 1;
+    this.#pagerInfo.hidden = sinPaginas;
+    prev?.toggleAttribute('hidden', sinPaginas);
+    next?.toggleAttribute('hidden', sinPaginas);
+
     this.#page = state.page;
   }
 
   #renderDensity(): void {
-    this.#densityBtns.forEach((btn: HTMLElement) => {
-      btn.classList.toggle('iswc-active', btn.dataset['density'] === this.#density);
-    });
+    // La densidad la pone el dev en la definición del componente (atributo density); en la
+    // UI no hay ningún botón para cambiarla.
     const root = this.shadowRoot!.querySelector<HTMLElement>('.mim-dg');
     if (root) root.dataset['density'] = String(this.#density);
   }
 
-  #renderGroupPanel(): void {
+  #renderGroupChips(): void {
     if (!this.#api) return;
     const state = this.#api.getState();
     const { h } = this.#nucleo;
@@ -706,10 +784,8 @@ export class IswcAgGrid extends IswcElement {
       return `<span class="mim-dg__group-chip" data-col-id="${id}"><iswc-icon icon="mdi:drag" class="mim-dg__group-chip-grip"></iswc-icon><span class="mim-dg__group-chip-label">${h.escapar(col.headerName)}</span><button class="mim-dg__group-chip-x" type="button" data-act="ungroup" data-col-id="${id}" aria-label="Quitar agrupación"><iswc-icon icon="mdi:close"></iswc-icon></button></span>`;
     });
     this.#groupChips.innerHTML = chips.join('<span class="mim-dg__group-chip-arrow">›</span>');
-    const hint = this.#groupPanel.querySelector<HTMLElement>('.mim-dg__group-hint');
-    if (hint) hint.style.display = state.rowGroupCols.length ? 'none' : '';
-    const mostrar = h.opcion<string>('rowGroupPanelShow', 'always');
-    this.#groupPanel.hidden = mostrar === 'never' || (mostrar === 'onlyWhenGrouping' && !state.rowGroupCols.length);
+    // El grupo solo se ve cuando hay alguno (no hay fila dedicada).
+    this.#groupChips.hidden = !chips.length;
   }
 
   #goToPage(p: number): void {
@@ -809,11 +885,14 @@ export class IswcAgGrid extends IswcElement {
         for (const [colId, f] of Object.entries(model || {})) self.#api.setFilter(colId, f);
       },
       clearFilter: (field: string): void => self.#api?.setFilter(field, null),
+      abrirModalColumnas: (): void => self.#modalesGrid()?.abrirCols(),
+      abrirModalFiltros: (): void => self.#modalesGrid()?.abrirFiltros(),
+      abrirModalExportar: (): void => self.#modalesGrid()?.abrirExport(),
       setSortModel: (model: { colId: string; dir: SortDirName }[]): void => self.#api?.setSortModel(model),
       toggleSort: (colId: string, additive?: boolean): void => self.#api?.toggleSort(colId, additive),
       pinColumn: (colId: string, side: PinSideName | null): void => self.#api?.pinColumn(colId, side),
       hideColumn: (colId: string, hide = true): void => self.#api?.hideColumn(colId, hide),
-      openColumnsPanel: (): void => self.#toggleSidePanel('columns'),
+      openColumnsPanel: (): void => self.#modalesGrid()?.abrirCols(),
       closeSidePanel: (): void => { (self.api as unknown as Record<string, () => void>)['closeToolPanel']?.(); },
       resizeColumn: (colId: string, width: number): void => self.#api?.resizeColumn(colId, width),
       autosizeColumn: (colId: string): void => self.#nucleo.apiAg.autoSizeColumns([colId]),
@@ -882,6 +961,18 @@ export class IswcAgGrid extends IswcElement {
   }
 
   /* ── Attribute setters/getters (boolean) ──────────────────────────────── */
+
+  /**
+   * Filtro rápido propio (OPCIONAL): si se define, decide qué filas pasan (por defecto se
+   * busca el texto en todas las columnas). La fn recibe las partes del texto y el texto
+   * completo, y devuelve si la fila pasa.
+   */
+  get quickFilterMatcher(): ((partes: string[], texto: string) => boolean) | undefined {
+    return this.#nucleo.h.opcion('quickFilterMatcher');
+  }
+  set quickFilterMatcher(fn: ((partes: string[], texto: string) => boolean) | undefined) {
+    this.#nucleo.h.fijarOpcion('quickFilterMatcher', fn);
+  }
 
   get density(): DensityName { return this.#density; }
   set density(v: string) {

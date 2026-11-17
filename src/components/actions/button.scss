@@ -29,7 +29,8 @@
   --_text-hover: var(--_text);
   --_border-hover: var(--_border);
   --_focus: var(--iswc-focus, var(--iswc-color-brand));
-  --_height: var(--iswc-control-height);
+  /* Un 10 % más alto que el renglón de control: el botón se distingue de un campo a su lado. */
+  --_height: calc(var(--iswc-control-height) * 1.1);
   /* Proporcional al alto: la densidad compacta también recorta el aire lateral. */
   --_hpad: calc(var(--iswc-control-height) * 0.4);
   display: inline-flex;
@@ -318,8 +319,10 @@
 /* icon-only: el JS lo detecta vía setCustomState('icon-button') pero como
    no expone data-atributo de fallback, conservamos :state(). Para evitar
    un selector dentro de nesting, lo dejamos al top-level (esbuild OK). */
+/* El de solo icono nace en píldora (más ancha que alta), no en círculo; `shape` lo cambia. */
+:host(:state(icon-button):not([shape])) { --iswc-button-border-radius: 999em; }
 :host(:state(icon-button)) {
-.btn { padding: 0; width: var(--_height); aspect-ratio: 1 / 1; gap: 0; }
+.btn { padding: 0; inline-size: calc(var(--_height) * 1.6); aspect-ratio: auto; gap: 0; }
 }
 
 /* glyph y row ya definen su caja: un único hijo no los vuelve icon-button. */

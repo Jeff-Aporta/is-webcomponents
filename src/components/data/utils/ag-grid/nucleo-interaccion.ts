@@ -224,14 +224,60 @@ export function crearInteraccion(h: GridHost, motor: Motor, menus: Menus, viewpo
     } else if (ctrl && k.key.toLowerCase() === 'a' && p.modo() === 'multiple') {
       h.modelo()?.setSelection(selectAll(lista()));
       avisarSeleccion();
-    } else if (k.key === 'Escape' && h.estado()?.selection.size) {
+    } else if (k.key === 'Escape' && (h.estado()?.selection.size || h.rangoCeldas().celdas.length)) {
+      h.fijarRangoCeldas(null, null);
       h.modelo()?.setSelection(clearSelection());
       avisarSeleccion();
     } else return;
     k.preventDefault();
   }
 
+  /* ── Rango de celdas (estilo Excel) ────────────────────────────────── */
+
+  let celdaAncla: { fila: string; col: string } | null = null;
+  let celdaFoco: { fila: string; col: string } | null = null;
+  let arrastrandoCeldas = false;
+
+  function celdaBajo(e: Event): { fila: string; col: string } | null {
+    const t = e.target as Element | null;
+    const celda = t?.closest?.<HTMLElement>('.mim-dg__cell[data-col-id]');
+    const fila = t?.closest?.<HTMLElement>('.mim-dg__row');
+    if (!celda || !fila) return null;
+    const colId = celda.dataset['colId'] ?? '';
+    const rowId = fila.dataset['rowId'] ?? '';
+    if (!colId || !rowId || colId === '__seleccion') return null;
+    return { fila: rowId, col: colId };
+  }
+
+  function alAbajoCeldas(e: Event): void {
+    const pe = e as PointerEvent;
+    if (pe.button !== 0) return;
+    const c = celdaBajo(e);
+    if (!c) return;
+    celdaAncla = c;
+    celdaFoco = { ...c };
+    arrastrandoCeldas = true;
+    h.fijarRangoCeldas(celdaAncla, celdaFoco);
+  }
+
+  function alMoverCeldas(e: Event): void {
+    if (!arrastrandoCeldas || !celdaAncla) return;
+    const c = celdaBajo(e);
+    if (!c) return;
+    if (celdaFoco && celdaFoco.fila === c.fila && celdaFoco.col === c.col) return;
+    celdaFoco = c;
+    h.fijarRangoCeldas(celdaAncla, celdaFoco);
+  }
+
+  function alSoltarCeldas(): void {
+    arrastrandoCeldas = false;
+  }
+
   viewport.addEventListener('pointerdown', alAbajo);
+  viewport.addEventListener('pointerdown', alAbajoCeldas);
+  viewport.addEventListener('pointermove', alMoverCeldas);
+  viewport.addEventListener('pointerup', alSoltarCeldas);
+  viewport.addEventListener('pointercancel', alSoltarCeldas);
   viewport.addEventListener('click', alClic);
   viewport.addEventListener('dblclick', alDobleClic);
   viewport.addEventListener('contextmenu', alContexto);

@@ -160,7 +160,10 @@ export function crearMenus(h: GridHost, proveedores: ProveedorMenu[]) {
       items.push({ id: agrupada ? 'rowUnGroup' : 'rowGroup', texto: agrupada ? h.texto('ungroupBy', 'Quitar agrupación') : h.texto('groupBy', 'Agrupar por esta columna'), icono: agrupada ? 'mdi:ungroup' : 'mdi:group', accion: () => (agrupada ? m.removeRowGroupCol(col.colId) : m.addRowGroupCol(col.colId)) });
     }
     items.push({ separador: true });
-    items.push({ id: 'columnChooser', texto: h.texto('chooseColumns', 'Elegir columnas'), icono: 'mdi:view-column-outline', accion: () => api['openToolPanel']?.('columns') });
+    items.push({ id: 'columnChooser', texto: h.texto('chooseColumns', 'Elegir columnas'), icono: 'mdi:view-column-outline', accion: () => {
+      if (api['abrirModalColumnas']) api['abrirModalColumnas']();
+      else api['openToolPanel']?.('columns');
+    } });
     items.push({ id: 'hideColumn', texto: h.texto('hideColumn', 'Ocultar columna'), icono: 'mdi:eye-off-outline', accion: () => {
       m.hideColumn(col.colId, true);
       h.emitir('columnVisible', { column: col, visible: false });
@@ -173,7 +176,10 @@ export function crearMenus(h: GridHost, proveedores: ProveedorMenu[]) {
   function baseContexto(): ItemMenu[] {
     const api = (h.el as unknown as { api: Record<string, (...a: unknown[]) => void> }).api;
     return [
-      { id: 'csvExport', texto: h.texto('csvExport', 'Exportar a CSV'), icono: 'mdi:file-delimited-outline', accion: () => api['exportDataAsCsv']?.() },
+      { id: 'csvExport', texto: h.texto('csvExport', 'Exportar a CSV'), icono: 'mdi:file-delimited-outline', accion: () => {
+        if (api['abrirModalExportar']) api['abrirModalExportar']();
+        else api['exportDataAsCsv']?.();
+      } },
     ];
   }
 

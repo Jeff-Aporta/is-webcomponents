@@ -97,6 +97,10 @@ export type GridHost = {
   filaEn: (indice: number) => FilaDisplay | null;
   totalFilas: () => number;
   nodo: (id: string) => RowNode | null;
+  /* rango de celdas (estilo Excel) */
+  fijarRangoCeldas: (ancla: { fila: string; col: string } | null, foco: { fila: string; col: string } | null) => void;
+  rangoCeldas: () => { filas: string[]; columnas: string[]; celdas: { fila: string; col: string }[] };
+  enRangoCeldas: (fila: string, col: string) => boolean;
   fijarValor: (node: RowNode, colId: string, valor: unknown, origen?: string) => boolean;
   /* eventos */
   emitir: (evento: string, detalle?: Record<string, unknown>) => void;

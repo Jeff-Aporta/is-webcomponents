@@ -173,6 +173,47 @@ export function crearNucleo(el: HTMLElement, shadow: ShadowRoot, piezas: PiezasN
     return typeof r === 'function' ? { html: r } : r;
   }
 
+  /* ── Rango de celdas (estilo Excel) ─────────────────────────────────── */
+  let rangoAncla: { fila: string; col: string } | null = null;
+  let rangoFoco: { fila: string; col: string } | null = null;
+  let rangoSet = new Set<string>();
+
+  const claveCelda = (fila: string, col: string): string => fila + '\u0000' + col;
+
+  function calcularRango(): { filas: string[]; columnas: string[]; celdas: { fila: string; col: string }[] } {
+    const vacio = { filas: [] as string[], columnas: [] as string[], celdas: [] as { fila: string; col: string }[] };
+    if (!rangoAncla || !rangoFoco) return vacio;
+    const filas = (estado()?.displayedRows ?? []).map((n) => n.id);
+    const cols = (estado()?.columns ?? [])
+      .filter((c) => c.colId !== '__seleccion' && c.colId !== '__menu' && c.colId !== '__numeroFila')
+      .map((c) => c.colId);
+    const i1 = filas.indexOf(rangoAncla.fila);
+    const i2 = filas.indexOf(rangoFoco.fila);
+    const j1 = cols.indexOf(rangoAncla.col);
+    const j2 = cols.indexOf(rangoFoco.col);
+    if (i1 < 0 || i2 < 0 || j1 < 0 || j2 < 0) return vacio;
+    const celdas: { fila: string; col: string }[] = [];
+    for (let i = Math.min(i1, i2); i <= Math.max(i1, i2); i++) {
+      for (let j = Math.min(j1, j2); j <= Math.max(j1, j2); j++) celdas.push({ fila: filas[i], col: cols[j] });
+    }
+    return {
+      filas: [...new Set(celdas.map((c) => c.fila))],
+      columnas: [...new Set(celdas.map((c) => c.col))],
+      celdas,
+    };
+  }
+
+  function fijarRangoCeldas(ancla: { fila: string; col: string } | null, foco: { fila: string; col: string } | null): void {
+    rangoAncla = ancla;
+    rangoFoco = foco;
+    const detalle = calcularRango();
+    rangoSet = new Set(detalle.celdas.map((c) => claveCelda(c.fila, c.col)));
+    emitir('cellRangeChanged', { ...detalle, ancla, foco });
+    // Las filas vivas se repintan a mano: el motor solo recycle las que cambian.
+    motor.pintarRango();
+    motor.pedir();
+  }
+
   const h: GridHost = {
     el, shadow,
     opcion: <T,>(n: string, d?: T) => (opciones.has(n) && opciones.get(n) !== undefined ? opciones.get(n) as T : d as T),
@@ -213,6 +254,9 @@ export function crearNucleo(el: HTMLElement, shadow: ShadowRoot, piezas: PiezasN
     filaEn: (i) => (externo ? externo.filaEn(i) : listaActual()[i] ?? null),
     totalFilas: () => (externo ? externo.total() : listaActual().length),
     nodo: (id) => puertos.modelo()?.getRowNode(id) as RowNode | null ?? null,
+    fijarRangoCeldas,
+    rangoCeldas: () => calcularRango(),
+    enRangoCeldas: (fila: string, col: string) => rangoSet.has(claveCelda(fila, col)),
     fijarValor: (node, colId, valor, origen = 'edit') => {
       const col = h.columna(colId);
       if (!col) return false;
@@ -370,12 +414,14 @@ export function crearNucleo(el: HTMLElement, shadow: ShadowRoot, piezas: PiezasN
     presentarFila: (n: RowNode, i: number) => (expuestos['presentarFila'] as unknown as ((n: RowNode, i: number) => PresentacionFila) | undefined)?.(n, i) ?? null,
     decorar: (ctx: ContextoCelda) => decoradores.map((d) => d(ctx)).filter((d): d is Decoracion => d != null),
     columnaSeleccion: () => {
+      if (opciones.get('checkboxes') === false) return false;
       const objeto = opciones.get('rowSelection');
       if (objeto && typeof objeto === 'object' && (objeto as { checkboxes?: boolean }).checkboxes === false) return false;
       return puertos.modoSeleccion() !== 'none';
     },
     multiple: () => puertos.modoSeleccion() === 'multiple',
     seleccionados: () => estado()?.selection ?? new Set<string>(),
+    enRango: (fila: string, col: string) => rangoSet.has(claveCelda(fila, col)),
     expuesto: (n: string) => expuestos[n],
     ocupado: () => el.hasAttribute('loading') || opciones.get('loading') === true,
   };
