@@ -125,8 +125,7 @@ TEMPLATE.innerHTML = /* html */ `
     <header class="mim-dg__toolbar" part="toolbar" role="toolbar">
       <slot name="header-extra"></slot>
       <label class="mim-dg__quick">
-        <iswc-icon icon="mdi:magnify"></iswc-icon>
-        <iswc-input class="mim-dg__quick-input" type="search" placeholder="Buscar…" aria-label="Búsqueda rápida"></iswc-input>
+        <iswc-input class="mim-dg__quick-input" type="search" placeholder="Buscar…" aria-label="Búsqueda rápida"><iswc-icon slot="start" icon="mdi:magnify"></iswc-icon></iswc-input>
       </label>
       <iswc-button variant="plain" pill color="text" class="mim-dg__tool-btn mim-dg__filters-btn" title="Filtros" aria-label="Filtros">
         <iswc-icon icon="mdi:filter-variant"></iswc-icon>
@@ -168,7 +167,7 @@ TEMPLATE.innerHTML = /* html */ `
       <span class="mim-dg__count" part="count"></span>
       <span class="mim-dg__footer-spacer"></span>
       <label class="mim-dg__page-size">
-        Filas:
+        <span class="mim-dg__page-size-text">Filas:</span>
         <iswc-select class="mim-dg__page-size-select" aria-label="Filas por página">
           <iswc-option value="25">25</iswc-option>
           <iswc-option value="50">50</iswc-option>
@@ -748,7 +747,10 @@ export class IswcAgGrid extends IswcElement {
       }
       rangoHTML = `<span class="mim-dg__count-sel">Rango: ${numeroLocal(rango.filas.length)} filas · ${numeroLocal(rango.celdas.length)} celdas${hayNumeros ? ' · Suma: ' + numeroLocal(suma) : ''}</span>`;
     }
-    this.#countEl.innerHTML = `<span>${h.escapar(h.texto('rows', 'Filas'))}: <b>${numeroLocal(filas)}</b></span><span>${h.escapar(h.texto('totalRows', 'Total de filas'))}: <b>${numeroLocal(total)}</b></span>${sel > 0 ? `<span class="mim-dg__count-sel">${numeroLocal(sel)} ${h.escapar(h.texto('selectedRows', 'seleccionadas'))}</span>` : ''}${rangoHTML}`;
+    // «3 filas», o «3 de 10 filas» cuando un filtro deja menos: el total repetido era ruido.
+    const unidad = h.escapar(h.texto('rowsUnit', 'filas'));
+    const conteo = filas === total ? `<b>${numeroLocal(filas)}</b> ${unidad}` : `<b>${numeroLocal(filas)}</b> ${h.escapar(h.texto('of', 'de'))} <b>${numeroLocal(total)}</b> ${unidad}`;
+    this.#countEl.innerHTML = `<span>${conteo}</span>${sel > 0 ? `<span class="mim-dg__count-sel">${numeroLocal(sel)} ${h.escapar(h.texto('selectedRows', 'seleccionadas'))}</span>` : ''}${rangoHTML}`;
     this.#pagerInfo.textContent = `${state.page + 1} / ${pageCount}`;
     const footer = this.shadowRoot!.querySelector<HTMLElement>('.mim-dg__footer');
     footer?.classList.toggle('iswc-paginada', this.#isPaginated);
@@ -758,10 +760,12 @@ export class IswcAgGrid extends IswcElement {
     if (prev) prev.disabled = state.page <= 0;
     if (next) next.disabled = state.page >= pageCount - 1;
     // Con una sola pagina la paginacion sobra: se esconde el bloque entero.
+    // Con una sola página sobran el paginador y el selector de tamaño (si todo cabe en el tamaño más chico). Se hace
+    // por clase del pie: el atributo `hidden` no gana al `display` que el host de <iswc-button> se da a sí mismo.
     const sinPaginas = pageCount <= 1;
-    this.#pagerInfo.hidden = sinPaginas;
-    prev?.toggleAttribute('hidden', sinPaginas);
-    next?.toggleAttribute('hidden', sinPaginas);
+    const minimo = Math.min(...[...this.shadowRoot!.querySelectorAll('.mim-dg__page-size-select iswc-option')].map((o) => Number(o.getAttribute('value')) || Infinity));
+    footer?.classList.toggle('iswc-una-pagina', sinPaginas);
+    footer?.classList.toggle('iswc-sin-tamanos', sinPaginas && total <= minimo);
 
     this.#page = state.page;
   }

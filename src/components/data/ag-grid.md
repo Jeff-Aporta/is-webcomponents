@@ -146,7 +146,13 @@ Orden, visibilidad (`hide`), anchos, pin, `sortModel`, `filterModel`, quick filt
 - Cada fila trae su botón de tres puntos: abre el menú contextual anclado a él; el botón derecho abre el mismo menú.
 - Selección por rango de celdas (tipo Excel): el pie muestra filas, celdas y la suma; el api trae
   `fijarRangoCeldas`, `rangoCeldas`, `enRangoCeldas`, `setValueForSelectedRows` y `setValueForRange` para editar en lote.
-- Con una sola página no se muestra la paginación. El borde de foco es solo de las celdas editables.
+- Con una sola página no se muestra la paginación (ni el selector de tamaño si todas las filas caben en el más chico).
+  El borde de foco es solo de las celdas editables.
+- Pie transversal: el conteo dice «3 filas», o «3 de 10 filas» si un filtro deja menos (textos `rowsUnit` y `of`).
+  Con el ancho de la GRILLA (container query `iswc-grid`, no el de la ventana) por debajo de 34rem, el pie se parte
+  en dos renglones y el rótulo «Filas:» se oculta (el selector conserva su `aria-label`).
+- La búsqueda rápida es un solo campo (`iswc-input` con la lupa en su slot `start`); su contenedor es la zona de soltar
+  para agrupar y solo se marca (punteado) mientras se arrastra una columna encima.
 - Origen: migrado de `tk-lab` (2026-11-17). Prueba: `tests/componentes/ag-grid-exportadores.test.ts`.
 
 ## API
