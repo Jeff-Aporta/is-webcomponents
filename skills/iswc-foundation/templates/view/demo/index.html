@@ -6,12 +6,17 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>__TITULO__ · componentes</title>
 <meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap"></noscript>
 <script src="../../dist/cdn/boot.js"></script>
 <!-- iswc:precarga:inicio -->
 <!-- iswc:precarga:fin -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/__REPO__@__SHA__/dist/cdn/preview/preview-component.min.css">
 <style>
-  html, body { margin: 0; height: 100%; background: var(--iswc-bg); color: var(--iswc-text); font-family: var(--iswc-font-sans); }
+  :root { --iswc-font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  html, body { margin: 0; height: 100%; background: var(--iswc-bg); color: var(--iswc-text); font-family: var(--iswc-font-sans, "Inter", ui-sans-serif, system-ui, sans-serif); }
   .galeria { display: grid; grid-template-columns: 14rem 1fr; height: 100%; }
   .galeria nav { display: grid; align-content: start; gap: 0.25rem; padding: 0.75rem; border-right: 1px solid var(--iswc-border-soft); overflow: auto; }
   .galeria nav iswc-button[aria-current="true"] { --iswc-button-bg: var(--iswc-brand-soft); }
