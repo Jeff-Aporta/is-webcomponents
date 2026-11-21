@@ -17,6 +17,8 @@
 - Personalizar el kit solo con sus tokens y los `::part()` que expone (no inventar parts).
 - `app.scss` es solo light DOM (página); oculta el body hasta `data-app-ready`.
 
+**Tipografía.** La fuente la fija la app, no el kit: el kit solo publica `--iswc-sans` (la del sistema) y `--iswc-mono`. La app define `--iswc-font-sans` en `:root` — NUNCA dentro de `[data-palette="..."]`, porque al cambiar de paleta el token caería, `font-family` quedaría inválido y la página se vería en la serif por defecto del navegador (Times New Roman). Pila recomendada: cuerpo `Inter` (la mejor para UI y texto denso), títulos `Plus Jakarta Sans` (personalidad); la cola es `var(--iswc-sans)` del kit. Todo `font-family` se escribe con red de seguridad: `var(--iswc-font-sans, <pila>)`, para que nunca pueda quedar sin resolver. La webfont se carga SIN BLOQUEAR: `preconnect` + `<link rel="preload" as="style" onload="this.rel='stylesheet'">` + `<noscript>` con la hoja normal, y la URL de Google Fonts con `display=swap` (la webfont llega después y el texto no se queda invisible).
+
 **Paletas (25) y Panda.** `data-palette` acepta una de las 25 paletas generales
 del kit (`src/styles/palettes.json`): rojos `cardenal` `rubi` `granate`;
 naranjas/amarillos `citrino` `marte` `jupiter` `cobre` `ambar`; verdes `iguana`
