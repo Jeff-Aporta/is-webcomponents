@@ -246,7 +246,11 @@ for (const t of ['actions/button', 'layout/dialog', 'data/ag-grid', 'diagrams/fl
   const coreSchemas = join(coreRoot, 'schemas');
   if (existsSync(coreSchemas)) {
     await mkdir(join(outCore, 'schemas'), { recursive: true });
-    for (const f of await readdir(coreSchemas)) await copyFile(join(coreSchemas, f), join(outCore, 'schemas', f));
+    // Como todo lo publicado en dist/cdn: sin el alias, con la ruta relativa (guardián alias-imports L4).
+    for (const f of await readdir(coreSchemas)) {
+      const fuente = await readFile(join(coreSchemas, f), 'utf8');
+      await writeFile(join(outCore, 'schemas', f), aliasEnDist(fuente, 'core/schemas'));
+    }
   }
   // `adoptCss` (compat para código externo) resuelve `./host-base.css` y `./scrollbars.css` contra su `baseUrl`:
   // se publican en core/ para quien consuma el core directo. Las copias por carpeta de componente ya no existen:
