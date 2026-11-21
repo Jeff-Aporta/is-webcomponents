@@ -29,7 +29,7 @@ const RenderAdapterSchema = z.object({
 export type RenderAdapter = z.infer<typeof RenderAdapterSchema>;
 
 /** Adapter de filas que consume `paintRow`. */
-export type RenderAdapterLike = {
+type RenderAdapterLike = {
   flatPath: string;
   getOrCreateRowAdapter: (bridge: RowAdapterBridge) => unknown;
 };

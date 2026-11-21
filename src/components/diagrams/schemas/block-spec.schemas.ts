@@ -103,14 +103,6 @@ const BlockLayoutSchema = z.object({
 });
 export type BlockLayout = z.infer<typeof BlockLayoutSchema>;
 
-const BlockRectSchema = z.object({
-  x: z.number(),
-  y: z.number(),
-  w: z.number(),
-  h: z.number(),
-});
-export type BlockRect = z.infer<typeof BlockRectSchema>;
-
 const SideSchema = z.union([z.literal('left'), z.literal('right'), z.literal('top'), z.literal('bottom')]);
 export type Side = z.infer<typeof SideSchema>;
 

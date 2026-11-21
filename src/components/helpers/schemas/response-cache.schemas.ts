@@ -38,7 +38,7 @@ const CachedRowSchema = z.object({
 export type CachedRow<T = unknown> = Omit<z.infer<typeof CachedRowSchema>, 'datos'> & { datos: T };
 
 /** Aviso de "vivo": de donde sale el dato y si cambio respecto al cache. */
-export type VivoAviso = { origen: 'cache' | 'red'; cambio: boolean };
+type VivoAviso = { origen: 'cache' | 'red'; cambio: boolean };
 
 /** Opciones de `vivo()`: la clave y los callbacks de pintado. */
 export type VivoOpts<T = unknown> = {

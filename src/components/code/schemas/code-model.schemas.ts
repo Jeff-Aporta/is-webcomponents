@@ -9,10 +9,10 @@ import { z } from "zod";
 import { CodeFormatConfigSchema } from "./code-format.schemas.js";
 import { CodeThemeConfigSchema } from "./code-theme.schemas.js";
 
-export const CodeMarkKindSchema = z.union([z.literal('highlight'), z.literal('tooltip'), z.literal('message')]);
+const CodeMarkKindSchema = z.union([z.literal('highlight'), z.literal('tooltip'), z.literal('message')]);
 export type CodeMarkKind = z.infer<typeof CodeMarkKindSchema>;
 
-export const CodeMarkToneSchema = z.union([z.literal('error'), z.literal('warning'), z.literal('info'), z.literal('success'), z.literal('neutral')]);
+const CodeMarkToneSchema = z.union([z.literal('error'), z.literal('warning'), z.literal('info'), z.literal('success'), z.literal('neutral')]);
 export type CodeMarkTone = z.infer<typeof CodeMarkToneSchema>;
 
 export const CodeMarkSchema = z.object({
@@ -28,7 +28,7 @@ export const CodeMarkSchema = z.object({
 });
 export type CodeMark = z.infer<typeof CodeMarkSchema>;
 
-export const CodeMarkInputSchema = z.object({
+const CodeMarkInputSchema = z.object({
   id: z.unknown().optional(),
   from: z.unknown().optional(),
   to: z.unknown().optional(),
@@ -59,7 +59,7 @@ export const CodeDocOptsSchema = z.object({
 });
 export type CodeDocOpts = z.infer<typeof CodeDocOptsSchema>;
 
-export const CodeDocumentInputSchema = z.object({
+const CodeDocumentInputSchema = z.object({
   $schema: z.string().optional(),
   value: z.unknown().optional(),
   lang: z.unknown().optional(),

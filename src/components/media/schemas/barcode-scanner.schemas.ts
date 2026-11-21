@@ -10,7 +10,7 @@ export interface DetectedBarcode {
 }
 
 /** Instancia creada por BarcodeDetector. */
-export interface BarcodeDetectorInstance {
+interface BarcodeDetectorInstance {
   detect(source: CanvasImageSource): Promise<DetectedBarcode[]>;
 }
 

@@ -16,13 +16,13 @@
  */
 import { TObject, capitalizar } from './tree-view-context.js';
 import { TAModel } from './tree-view-model.js';
-import { CustomsRuntime, SiblingPosition, TreeCustoms, TNode, TRecord } from '@jeff-aporta/iswc-base/components/isp/schemas/tree-view-types.schemas.js';
+import { CustomsRuntime, SiblingPosition, TreeContext, TreeCustoms, TNode, TRecord } from '@jeff-aporta/iswc-base/components/isp/schemas/tree-view-types.schemas.js';
 
 class TATreeShape extends TAModel {
   // ── Estado interno ─────────────────────────────────────────────────────
   declare _customs: TreeCustoms | undefined;
   declare _pendingMaterialize: TNode[] | null;
-  declare context: import("./tree-view-context.js").TreeContext;
+  declare context: TreeContext;
 
   // ── Customs (get/set) ──────────────────────────────────────────────────
   /** Hooks del consumidor (entrie, list, updateNode, etc.). */

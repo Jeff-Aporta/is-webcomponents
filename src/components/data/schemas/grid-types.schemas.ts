@@ -38,17 +38,6 @@ export type FilterValue = z.infer<typeof FilterValueSchema>;
 const ComparatorSchema = z.custom<(a: CellValue, b: CellValue) => number>();
 export type Comparator = z.infer<typeof ComparatorSchema>;
 
-/** Tipos de columna que el kit trae de serie. */
-export const COLUMN_TYPE_NAMES = [
-  'string',
-  'number',
-  'date',
-  'dateTime',
-  'boolean',
-  'singleSelect',
-  'actions',
-] as const;
-
 const ColumnTypeNameSchema = z.enum([
   'string',
   'number',
@@ -82,10 +71,10 @@ export interface Operator {
 const OperatorSchema = z.custom<Operator>();
 
 /** Contenido que puede devolver un render: nodo, texto o `{ html }`. */
-export type RenderContent = Node | string | { html?: string } | null | undefined;
+type RenderContent = Node | string | { html?: string } | null | undefined;
 
 /** Parámetros que recibe `renderCell`. */
-export interface CellRenderParams {
+interface CellRenderParams {
   value: CellValue;
   row: Row;
   id: CellValue;
@@ -97,7 +86,7 @@ export interface CellRenderParams {
 }
 
 /** Parámetros que recibe `cellClassName` cuando es función. */
-export interface CellClassParams {
+interface CellClassParams {
   value: CellValue;
   row: Row;
   id: CellValue;
@@ -105,13 +94,13 @@ export interface CellClassParams {
 }
 
 /** Parámetros que recibe `renderHeader`. */
-export interface HeaderRenderParams {
+interface HeaderRenderParams {
   field: string;
   colDef: ColumnDef;
 }
 
 /** Parámetros que recibe `getActions`. */
-export interface ActionParams {
+interface ActionParams {
   row: Row;
   id: CellValue;
   colDef: ColumnDef;
@@ -121,7 +110,7 @@ export interface ActionParams {
  * Acción por fila expuesta por `getActions`. El tipo de `api` lo fija quien
  * lo consume: el kit usa `IswcDataGrid`, el consumidor ve `unknown`.
  */
-export interface RowAction<TApi = unknown> {
+interface RowAction<TApi = unknown> {
   label?: string;
   icon?: string;
   onClick?: (params: { id: CellValue; row: Row; api: TApi }) => void;
@@ -130,13 +119,13 @@ export interface RowAction<TApi = unknown> {
 }
 
 /** Resultado de `preProcessEditCellProps`. */
-export interface EditCellProps {
+interface EditCellProps {
   value?: CellValue;
   error?: unknown;
 }
 
 /** Parámetros que recibe `preProcessEditCellProps`. */
-export interface PreProcessEditParams {
+interface PreProcessEditParams {
   props: { value: CellValue };
   row: Row;
   id: CellValue;
@@ -180,7 +169,7 @@ const ColumnDefSchema = z.object({
   /** Columna de agrupamiento que el grid pinta él. */
   group: z.boolean().optional(),
 });
-export type ColumnDefBase = z.infer<typeof ColumnDefSchema>;
+type ColumnDefBase = z.infer<typeof ColumnDefSchema>;
 
 /**
  * Columna tal y como la declara el consumidor del grid.

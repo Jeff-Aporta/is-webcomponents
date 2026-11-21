@@ -18,7 +18,7 @@ export const CodeFormatConfigSchema = z.object({
 });
 export type CodeFormatConfig = z.infer<typeof CodeFormatConfigSchema>;
 
-export const NormalizedFormatConfigSchema = z.object({
+const NormalizedFormatConfigSchema = z.object({
   tabWidth: z.number(),
   useTabs: z.boolean(),
   printWidth: z.number(),

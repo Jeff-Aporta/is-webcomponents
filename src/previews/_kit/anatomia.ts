@@ -90,7 +90,8 @@ function pestana(grupo: HTMLElement, nombre: string, rotulo: string, contenido: 
 function hostDe(def: DefinicionConAnatomia, main: ParentNode): Element | null {
   for (const s of def.sections ?? []) {
     for (const b of s.blocks ?? []) {
-      const el = b.target ? main.querySelector(b.target) : null;
+      const target = 'target' in b ? b.target : undefined;
+      const el = target ? main.querySelector(target) : null;
       if (el) return el;
     }
   }

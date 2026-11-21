@@ -4,7 +4,8 @@ import { withStyleAttrs } from '@jeff-aporta/iswc-base/core/attrs.js';
 import { IswcReactive, prop } from '@jeff-aporta/iswc-base/core/iswc-reactive.js';
 import { computePosition, PLACEMENTS_AUTO, createPopupDismiss } from '@jeff-aporta/iswc-base/core/position.js';
 import './dropdown-item.js';
-import type { Placement, DropdownItemEl, DropdownEventos } from "./schemas/dropdown.schemas.js";
+import type { Placement } from "@jeff-aporta/iswc-base/core/schemas/position.schemas.js";
+import type { DropdownItemEl, DropdownEventos } from "./schemas/dropdown.schemas.js";
 import css from 'iswc:css';
 
 /** Colocacion del panel respecto al trigger. `position.js` es la fuente. */

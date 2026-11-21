@@ -172,7 +172,6 @@ const SortModelItemSchema = z.object({
   colId: z.string(),
   dir: SortDirNameSchema,
 });
-export type SortModelItem = z.infer<typeof SortModelItemSchema>;
 
 const SortModelSchema = z.array(SortModelItemSchema);
 export type SortModel = z.infer<typeof SortModelSchema>;

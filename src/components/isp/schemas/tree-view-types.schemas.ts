@@ -161,7 +161,6 @@ const NodeIconArgsSchema = z.object({
   isExpanded: z.boolean(),
   isEmptyFolder: z.boolean(),
 });
-export type NodeIconArgs = z.infer<typeof NodeIconArgsSchema>;
 
 const CustomsRuntimeSchema = z.object({
   record: z.union([TRecordSchema, z.null()]),
@@ -233,7 +232,7 @@ export type TreeCustoms = z.infer<typeof TreeCustomsSchema>;
  * Controller del árbol que consume el bridge de filas: el subset que
  * `paintRow` necesita del adapter (lo implementa `TreeRowViewAdapter`).
  */
-export interface TreeControllerLike {
+interface TreeControllerLike {
   flatPath: string;
   [key: string]: unknown;
 }

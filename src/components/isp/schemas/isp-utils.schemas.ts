@@ -20,14 +20,6 @@ export type IspRecord = {
   [key: string]: unknown;
 };
 
-const IspRecordSchema: z.ZodType<IspRecord> = z.object({
-  getProp: z.function({ input: [z.string()], output: z.unknown() }).optional(),
-  setProp: z.function({ input: [z.string(), z.unknown()], output: z.void() }).optional(),
-  toJSON: z.function({ input: [z.boolean().optional()], output: z.unknown() }).optional(),
-  clone: z.function({ input: [], output: z.custom<IspRecord>() }).optional(),
-  f: z.record(z.string(), z.unknown()).optional(),
-});
-
 /** Fila plana para la grilla: los datos del registro mas su referencia. */
 export type GridRow = {
   id?: string | number;
@@ -35,13 +27,8 @@ export type GridRow = {
   [key: string]: unknown;
 };
 
-const GridRowSchema: z.ZodType<GridRow> = z.object({
-  id: z.union([z.string(), z.number()]).optional(),
-  __record: IspRecordSchema.optional(),
-});
-
 /** Definicion cruda de una columna ISP (puede anidar subcolumnas). */
-export type IspColumnDef = {
+type IspColumnDef = {
   caption?: string;
   size?: number;
   align?: 'left' | 'right' | 'center';
@@ -75,11 +62,3 @@ const FlatGridColumnSchema = z.object({
 });
 export type FlatGridColumn = z.infer<typeof FlatGridColumnSchema>;
 
-const IspColumnsMapSchema = z.record(z.string(), IspColumnDefSchema);
-
-const IspControllerSchema = z.object({
-  columns: z.array(FlatGridColumnSchema).optional(),
-  Columns: IspColumnsMapSchema.optional(),
-});
-/** Controller ISP: expone `columns` (array) o `Columns` (mapa anidado). */
-export type IspController = z.infer<typeof IspControllerSchema> & { [key: string]: unknown };

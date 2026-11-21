@@ -564,7 +564,7 @@ export function renderDefinition(def: PreviewDefinition, targets: { main: HTMLEl
 
   // El prelude va DENTRO del wrapper: es donde se declaran las custom
   // properties de la página, y fuera de ahí un `var(--propia)` queda vacío.
-  if (def.prelude) destino.append(fragmentFromHtml(def.prelude));
+  if (def.prelude) destino.append(fragmentFromHtml(String(def.prelude)));
 
   for (const section of def.sections) {
     // def.title es el H2 visible del intro (tag del componente). El JSON

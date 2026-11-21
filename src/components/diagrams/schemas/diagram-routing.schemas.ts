@@ -42,15 +42,7 @@ const ForbiddenRegionSchema = z.object({
  */
 export type CostGrid = CoreCostGrid;
 /** Region que el router no puede atravesar (la del motor). */
-export type ForbiddenRegion = CoreForbiddenRegion;
-
-const CostGridSchema = z.object({
-  cols: z.number(),
-  rows: z.number(),
-  grid: z.number(),
-  cost: z.unknown(),
-  forbidden: z.map(z.string(), ForbiddenRegionSchema).optional(),
-});
+type ForbiddenRegion = CoreForbiddenRegion;
 
 const RouteOptsSchema = z.object({
   turnCost: z.number().optional(),

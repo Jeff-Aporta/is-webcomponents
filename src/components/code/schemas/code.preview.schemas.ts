@@ -6,20 +6,14 @@
  * entradas marcadas con TODO cuando se quiera validación runtime.
  */
 import { z } from "zod";
-import {
-  CodeDocumentSchema,
-  CodeMarkInputSchema,
-} from "./code-model.schemas.js";
+import { CodeDocumentSchema as CodeDocumentDataSchema } from "./code-model.schemas.js";
 import type {
   CodeDocument,
   CodeMarkInput,
 } from "./code-model.schemas.js";
 import type { CodeThemeConfig } from "./code-theme.schemas.js";
 
-export const CodeMarkSchema = CodeMarkInputSchema;
-export type CodeMark = z.infer<typeof CodeMarkSchema>;
-
-export const CodeDocSchema = CodeDocumentSchema;
+const CodeDocSchema = CodeDocumentDataSchema;
 export type CodeDoc = z.infer<typeof CodeDocSchema>;
 
 interface CodeElement extends HTMLElement {
@@ -36,7 +30,7 @@ interface CodeElement extends HTMLElement {
   refresh(): void;
 }
 
-export const IswcCodeElSchema = z.custom<CodeElement>(
+const IswcCodeElSchema = z.custom<CodeElement>(
   (value) => typeof HTMLElement !== "undefined" && value instanceof HTMLElement,
 );
 export type IswcCodeEl = z.infer<typeof IswcCodeElSchema>;
@@ -45,7 +39,7 @@ interface FormatElement extends HTMLElement {
   format(): void;
 }
 
-export const IswcFormatElSchema = z.custom<FormatElement>(
+const IswcFormatElSchema = z.custom<FormatElement>(
   (value) => typeof HTMLElement !== "undefined" && value instanceof HTMLElement,
 );
 export type IswcFormatEl = z.infer<typeof IswcFormatElSchema>;

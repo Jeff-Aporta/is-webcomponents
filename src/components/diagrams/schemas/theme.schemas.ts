@@ -150,7 +150,7 @@ const ErThemeSectionsSchema = z.object(ErThemeSectionsShape);
  * Overlay de tema (`light` / `dark`): solo las secciones que cambian.
  * El valor pasa sin validar (como antes), pero ya está tipado.
  */
-export type ErThemeOverlay = Partial<z.infer<typeof ErThemeSectionsSchema>>;
+type ErThemeOverlay = Partial<z.infer<typeof ErThemeSectionsSchema>>;
 
 export const ErThemeJsonSchema = z.object({
   /* TODO: parse fail $schema?: string */

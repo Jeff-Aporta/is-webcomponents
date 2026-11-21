@@ -13,12 +13,6 @@ function sideOf(p: string): string {
   return p.split('-')[0]!;
 }
 
-/** Alineación del placement (`start`, `end`, `center`). */
-function alignOf(p: string): string {
-  const parts = p.split('-');
-  return parts[1] || 'center';
-}
-
 /** Estilo CSS resuelto para la flecha. */
 export function arrowOffset(
   placement: string,

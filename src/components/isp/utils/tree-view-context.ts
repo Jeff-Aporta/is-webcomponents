@@ -1,9 +1,6 @@
 // @contexto INDICE.md · src/components/isp/README.md
 import type { TNode, TreeActionSpec } from '@jeff-aporta/iswc-base/components/isp/schemas/tree-view-types.schemas.js';
 import type { _AnyRecord, _AnyCtxProps, _BAllowedShape, _PendingDeleteSnap, _TNodeLike, _TRecordLike } from '@jeff-aporta/iswc-base/components/isp/schemas/tree-view-context.schemas.js';
-/** Shape del `context` que el adapter recibe del consumidor. */
-export type { TreeContext } from '@jeff-aporta/iswc-base/components/isp/schemas/tree-view-types.schemas.js';
-
 /**
  * Stubs de ispgen / ispsveltecomponents para el port vanilla del TreeView.
  * El adapter original habla con TObject y resolveColor; aquí se cubre lo

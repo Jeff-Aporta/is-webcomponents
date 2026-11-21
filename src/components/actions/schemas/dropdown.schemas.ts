@@ -6,13 +6,6 @@
  */
 
 /**
- * Colocación del panel respecto al trigger. El catálogo vive en el core
- * (`core/position.ts` → PLACEMENTS / PLACEMENTS_AUTO); aquí solo se
- * reexporta el tipo para que el dropdown no dependa del core por dos lados.
- */
-export type { Placement } from '@jeff-aporta/iswc-base/core/schemas/position.schemas.js';
-
-/**
  * `<iswc-dropdown-item>`: el elemento del item con la API que consume
  * `<iswc-dropdown>`.
  *

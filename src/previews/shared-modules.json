@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-11-12T07:56:48.666Z",
-  "count": 29,
+  "generatedAt": "2026-11-21T06:42:20.208Z",
+  "count": 30,
   "modules": [
     {
       "file": "animar.ts",
@@ -49,7 +49,7 @@
       "id": "attrs",
       "path": "src/core/attrs.ts",
       "summary": "Módulo compartido `attrs.ts`.",
-      "bytes": 16617,
+      "bytes": 17389,
       "exports": [
         "isCssColorValue",
         "syncStyleAttr",
@@ -62,7 +62,7 @@
         "setStringAttr",
         "setOptionalAttr",
         "getNumberAttr",
-        "INTENT"
+        "INTENT_VALUES"
       ]
     },
     {
@@ -245,11 +245,21 @@
       ]
     },
     {
+      "file": "iswc-form-chrome.ts",
+      "id": "iswc-form-chrome",
+      "path": "src/core/iswc-form-chrome.ts",
+      "summary": "Módulo compartido `iswc-form-chrome.ts`.",
+      "bytes": 1781,
+      "exports": [
+        "IswcFormChrome extends IswcFormControl"
+      ]
+    },
+    {
       "file": "iswc-form-control.ts",
       "id": "iswc-form-control",
       "path": "src/core/iswc-form-control.ts",
       "summary": "Módulo compartido `iswc-form-control.ts`.",
-      "bytes": 8673,
+      "bytes": 8535,
       "exports": [
         "IswcFormControl extends IswcReactive \n  static formAssociated"
       ]
@@ -331,7 +341,7 @@
       "id": "position",
       "path": "src/core/position.ts",
       "summary": "Módulo compartido `position.ts`.",
-      "bytes": 25248,
+      "bytes": 24374,
       "exports": [
         "PLACEMENTS",
         "PLACEMENTS_AUTO",
@@ -349,7 +359,7 @@
       "id": "prefs",
       "path": "src/core/prefs.ts",
       "summary": "Módulo compartido `prefs.ts`.",
-      "bytes": 13025,
+      "bytes": 13081,
       "exports": [
         "getComponentPrefs",
         "setComponentPrefs",

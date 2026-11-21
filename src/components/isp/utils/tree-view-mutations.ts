@@ -19,7 +19,7 @@
  * - Las firmas se ajustan a los tipos concretos para evitar `any`.
  */
 import { TAView } from './tree-view-view.js';
-import { DropPosition, MoveDirection, PendingDeleteSnapshot, TNode, TRecord } from '@jeff-aporta/iswc-base/components/isp/schemas/tree-view-types.schemas.js';
+import { DropPosition, MoveDirection, PendingDeleteSnapshot, TreeContext, TNode, TRecord } from '@jeff-aporta/iswc-base/components/isp/schemas/tree-view-types.schemas.js';
 import type { MutationResult } from '@jeff-aporta/iswc-base/components/isp/schemas/tree-view-mutations.schemas.js';
 
 /** Resultado de las operaciones async de mutación. */
@@ -123,7 +123,7 @@ class TAMutations extends TAView {
   handleaddsibling(nodeId: string, position: string): Promise<void> {
     return this.onaddsibling(nodeId, position).then((result) => {
       const r = result as MutationResult | undefined;
-      if (r?.selectedNode) this.setSelectedFlatPath(r.selectedNode, this as unknown as import("./tree-view-context.js").TreeContext);
+      if (r?.selectedNode) this.setSelectedFlatPath(r.selectedNode, this as unknown as TreeContext);
       if (r?.flashRowFlatPaths?.length)
         this.flashRowFlatPaths(r.flashRowFlatPaths, void 0, this);
     });
@@ -196,7 +196,7 @@ class TAMutations extends TAView {
   handleaddchild(referenceId: string): Promise<void> {
     return this.onaddchild(referenceId).then((result) => {
       const r = result as MutationResult | undefined;
-      if (r?.selectedNode) this.setSelectedFlatPath(r.selectedNode, this as unknown as import("./tree-view-context.js").TreeContext);
+      if (r?.selectedNode) this.setSelectedFlatPath(r.selectedNode, this as unknown as TreeContext);
       if (r?.flashRowFlatPaths?.length)
         this.flashRowFlatPaths(r.flashRowFlatPaths, void 0, this);
       if (r?.ensureExpandedIds?.length) {

@@ -26,7 +26,7 @@ export type CodeFormatConfig = z.infer<typeof CodeFormatConfigSchema>;
 const CodeDocOptsSchema = CodeDocOptsDataSchema;
 export type CodeDocOpts = z.infer<typeof CodeDocOptsSchema>;
 
-export const CodeLangDefSchema = z.object({
+const CodeLangDefSchema = z.object({
   id: z.string(),
   aliases: z.array(z.string()).optional(),
   heavy: z.boolean().optional(),
@@ -55,4 +55,4 @@ const HighlightResultSchema = z.object({
 export type HighlightResult = z.infer<typeof HighlightResultSchema>;
 
 /** Eventos del componente (HOW-6): `declare static events` en la clase; los documenta scripts/sondas/eventos.ts. */
-export type CodeEventos = { 'iswc-change': { value: string; formatted?: boolean; format?: string }; 'iswc-error': { error: string }; 'iswc-ready': { lang: string; value: string }; 'iswc-input': { value: string }; 'iswc-cursor': { line: number; ch: number; index: number }; 'iswc-mark-activate': { mark: CodeMark; phase: 'enter' | 'leave' } };
+export type CodeEventos = { 'iswc-change': { value: string; formatted?: boolean; format?: string }; 'iswc-error': { error: string }; 'iswc-ready': { lang: string; value: string }; 'iswc-input': { value: string }; 'iswc-cursor': { line: number; ch: number; index: number }; 'iswc-mark-activate': { mark: unknown; phase: 'enter' | 'leave' } };

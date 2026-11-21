@@ -7,18 +7,18 @@
  * compartan exactamente el mismo modelo.
  */
 
-export interface SpeechRecognitionAlternative {
+interface SpeechRecognitionAlternative {
   readonly transcript: string;
   readonly confidence: number;
 }
 
-export interface SpeechRecognitionResult {
+interface SpeechRecognitionResult {
   readonly isFinal: boolean;
   readonly length: number;
   readonly [index: number]: SpeechRecognitionAlternative;
 }
 
-export interface SpeechRecognitionResultList {
+interface SpeechRecognitionResultList {
   readonly length: number;
   readonly [index: number]: SpeechRecognitionResult;
 }

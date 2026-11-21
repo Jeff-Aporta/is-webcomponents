@@ -12,7 +12,6 @@ import type { ColumnDef, FilterRule } from './grid-types.schemas.js';
  * no esta en todos los navegadores.
  */
 export type GridPopoverEl = HTMLElement & { popover?: string };
-const GridPopoverElSchema = z.custom<GridPopoverEl>();
 
 /** Item de menú que se renderiza con `renderMenu`. */
 const MenuItemSchema = z.object({

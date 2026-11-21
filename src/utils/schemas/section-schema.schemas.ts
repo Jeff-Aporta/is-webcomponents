@@ -8,7 +8,6 @@
 import { z } from "zod";
 
 const SectionIdSchema = z.unknown() /* TODO: cannot convert */;
-export type SectionId = z.infer<typeof SectionIdSchema>;
 
 const FichaWarningSchema = z.object({
   level: z.literal("warn"),

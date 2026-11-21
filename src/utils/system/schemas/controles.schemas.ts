@@ -6,6 +6,7 @@
  * entradas marcadas con TODO cuando se quiera validación runtime.
  */
 import { z } from "zod";
+import type { PreviewBlock } from "@jeff-aporta/iswc-base/previews/_kit/schemas/preview.schemas.ts";
 
 export const TipoControlSchema = z.union([z.literal('text'), z.literal('color'), z.literal('number'), z.literal('select'), z.literal('boolean'), z.literal('range'), z.literal('json')]);
 export type TipoControl = z.infer<typeof TipoControlSchema>;
@@ -73,7 +74,7 @@ export const PreviewDefinitionShallowSchema = z.object({
   tag: z.string(),
   sections: z.array(z.object({
   id: z.string().optional(),
-  blocks: z.array(z.record(z.string(), z.unknown())).optional(),
+  blocks: z.array(z.custom<PreviewBlock>()).optional(),
 })).optional(),
 });
 export type PreviewDefinitionShallow = z.infer<typeof PreviewDefinitionShallowSchema>;

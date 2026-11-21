@@ -93,7 +93,6 @@ const IspListaResultSchema = z.object({
 })),
 }).optional(),
 });
-export type IspListaResult = z.infer<typeof IspListaResultSchema>;
 
 const IspControllerConfigSchema = z.object({
   kind: z.union([z.literal('catalog'), z.literal('btnref')]).optional(),
