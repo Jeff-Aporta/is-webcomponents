@@ -8,6 +8,13 @@
 <title>__TITULO__</title>
 <meta name="description" content="__TITULO__ — app de web components sobre el kit iswc-base.">
 
+<!-- La fuente la define la app (NO la paleta) y no bloquea el arranque: la webfont llega despues
+     (display=swap) y la cola del kit cubre el caso de que no llegue. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap"></noscript>
+
 <!-- Tema antes del primer pintado: ?s= (theme/palette) > localStorage del kit > dark. Script plano. -->
 <script src="./dist/cdn/boot.js"></script>
 <link rel="stylesheet" href="./dist/cdn/styles/app.css">

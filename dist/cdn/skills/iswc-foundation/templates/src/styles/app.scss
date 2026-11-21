@@ -1,11 +1,20 @@
 /* app.scss — SOLO lo que vive en light DOM (la página). Los componentes llevan su .scss hermano. */
+@use "tokens" as t;
+
+/* La fuente la define la app, NO la paleta: vive en `:root` para que no caiga al cambiar de paleta
+   (dentro de `[data-palette="…"]` el token se perdía, `font-family` quedaba inválido y la página
+   se veía en la serif por defecto del navegador). */
+:root {
+  --iswc-font-sans: #{t.$pila-cuerpo};
+}
+
 html,
 body {
   margin: 0;
   min-height: 100%;
   background: var(--iswc-bg);
   color: var(--iswc-text);
-  font-family: var(--iswc-font-sans);
+  font-family: t.$fuente-cuerpo;
 }
 
 /* La app se revela cuando el arranque marca `data-app-ready` (o el watchdog de 6 s). */

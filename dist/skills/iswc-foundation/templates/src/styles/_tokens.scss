@@ -1,8 +1,9 @@
-// _tokens.scss — escala de espaciado y radios de la app.
+// _tokens.scss — escala de espaciado, radios y tipografía de la app.
 //
 // Los COLORES no viven aquí: salen siempre de los tokens del kit (`--iswc-*`), así cambian con el
-// tema y la paleta. Lo que el kit no publica como token (la escala de espaciado y los radios grandes)
-// se fija una sola vez en esta hoja, para no repetir números sueltos en cada componente.
+// tema y la paleta. Lo que el kit no publica como token (la escala de espaciado, los radios grandes
+// y la tipografía) se fija una sola vez en esta hoja, para no repetir números sueltos en cada
+// componente.
 //
 // USO:
 //   @use "tokens" as t;
@@ -19,6 +20,21 @@ $espacios: (
   8: 2rem,
   10: 3rem,
 );
+
+/// La pila de la fuente del cuerpo. La app la escribe en `:root` como `--iswc-font-sans`.
+/// OJO: la fuente NO es una paleta. Si el token se definiera dentro de `[data-palette="…"]`,
+/// al cambiar de paleta el token caería, `font-family` quedaría inválido y la página se
+/// vería en la serif por defecto del navegador.
+/// Cambia "Inter" por la familia que use tu app (Poppins, Roboto, Manrope...) y no toques más:
+/// la cola `var(--iswc-sans)` es la del kit y cubre el caso de que la webfont no llegue.
+$pila-cuerpo: "Inter", var(--iswc-sans);
+
+/// La fuente del cuerpo, con red de seguridad: si `--iswc-font-sans` faltara, la pila sigue
+/// siendo sans-serif. Nunca debe poder quedar una serif.
+$fuente-cuerpo: var(--iswc-font-sans, #{$pila-cuerpo});
+
+/// Fuente de títulos (la del cuerpo es su último recurso).
+$titulos: "Plus Jakarta Sans", $fuente-cuerpo;
 
 /// Espaciado de la escala (1 = 0.25rem … 10 = 3rem).
 @function esp($n) {

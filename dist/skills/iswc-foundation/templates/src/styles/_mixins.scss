@@ -10,12 +10,13 @@
 //   @use "mixins" as m;
 //   :host { @include m.host-bloque; }
 //   .titulo { @include m.una-linea; }
+@use "tokens" as t;
 
 /// Host de un componente de bloque: ocupa su línea, puede encogerse en un grid y hereda la fuente del kit.
 @mixin host-bloque {
   display: block;
   min-width: 0;
-  font-family: var(--iswc-font-sans);
+  font-family: t.$fuente-cuerpo;
 }
 
 /// Texto en una sola línea con elipsis (títulos de índice, rutas largas).

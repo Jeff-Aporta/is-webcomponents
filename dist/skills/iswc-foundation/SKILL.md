@@ -56,6 +56,7 @@ pin. Opciones: `--prefijo`, `--titulo`, `--puerto`, `--sha`, `--repo`. Detalle: 
 | 14 | **Toda estructura es un componente**: toda pieza de UI, por pequeña que sea (figura, fila de metadatos, pie, paginador, caja vacía, fila de acciones), es un web component: `iswc-*` del catálogo o `<prefijo>-*` propio. Prohibido armar HTML suelto en renders, vistas, `index.html` o visores (`innerHTML`/plantillas con estructura, `createElement('div')` que compone UI); solo cabe el markup interno mínimo dentro del shadow de un componente |
 | 15 | **Todo componente tiene demo con playground**: su `.json` `iswc-preview/v1` trae ≥1 bloque `demo` con `controls` y está en la galería de la app (`view/demo/manifest.json`); un `iswc-*` además en la galería del kit (`src/manifest.ts`). Un guardián falla si un tag registrado no tiene demo |
 | 16 | **Candidatos a iswc-base**: un componente de app sin dominio (útil a otras apps) se marca en su `.json` con `"reuso": { "candidato": "iswc-base", "motivo": "…", "propuesta": "iswc-…" }` (validado por `ReusoCandidatoSchema`). Se revisan periódicamente y se suben al kit; el kit es el sistema de reuso entre apps |
+| 17 | **Tipografía**: la app define su fuente en `:root` (`--iswc-font-sans`), NUNCA dentro de `[data-palette="..."]` (la fuente no es una paleta: al cambiar de paleta el token caía, `font-family` quedaba inválido y la página salía en la serif por defecto del navegador). Pila recomendada: cuerpo `Inter` (UI), títulos `Plus Jakarta Sans`; la cola es el token del kit `var(--iswc-sans)`. Todo `font-family` se escribe `var(--iswc-font-sans, <pila>)`: una serif como resultado es un fallo. La webfont se carga sin bloquear (`preload` + `onload` + `display=swap`), nunca con `rel=stylesheet` plano |
 
 ## 3. Mapa de referencias
 
@@ -79,6 +80,7 @@ pin. Opciones: `--prefijo`, `--titulo`, `--puerto`, `--sha`, `--repo`. Detalle: 
 | Alinear una app existente al estándar | [09-alinear-app.md](references/09-alinear-app.md) |
 | `create-iswc-app` en detalle | [13-crear-app.md](references/13-crear-app.md) |
 | Herramientas de test: qué usar y cuándo (guía única para agentes) | [14-herramientas-de-test.md](references/14-herramientas-de-test.md) |
+| Tipografía (fuente, pila, cómo se carga) | [04-estilos.md](references/04-estilos.md) |
 
 ## 4. Flujo de trabajo de un agente en una app ISWC
 
