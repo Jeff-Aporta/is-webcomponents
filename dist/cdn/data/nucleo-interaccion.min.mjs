@@ -9,4 +9,4 @@
  * cdn-install: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/is-cdn-install/SKILL.md
  * blob: https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/data/nucleo-interaccion.js
  */
-import{a}from"../_chunks/chunk-IFBUAXIQ.mjs";import"../_chunks/chunk-CEGCTI25.mjs";import"../_chunks/chunk-DYOQXAUC.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";export{a as crearInteraccion};
+import{a}from"../_chunks/chunk-4N7GUIWV.mjs";import"../_chunks/chunk-CEGCTI25.mjs";import"../_chunks/chunk-DYOQXAUC.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";export{a as crearInteraccion};

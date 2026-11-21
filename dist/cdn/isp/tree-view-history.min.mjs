@@ -9,4 +9,4 @@
  * cdn-install: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/is-cdn-install/SKILL.md
  * blob: https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/isp/tree-view-history.js
  */
-import{a}from"../_chunks/chunk-O7ALZV34.mjs";import"../_chunks/chunk-IAS6EN2A.mjs";import"../_chunks/chunk-DHMNBGN4.mjs";import"../_chunks/chunk-MOGBCM4M.mjs";import"../_chunks/chunk-IFMJY7T7.mjs";import"../_chunks/chunk-H5CCIXXC.mjs";import"../_chunks/chunk-ZO4HW347.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";export{a as TARoles};
+import{a}from"../_chunks/chunk-ZWWIETLX.mjs";import"../_chunks/chunk-EIIMA3MS.mjs";import"../_chunks/chunk-DHMNBGN4.mjs";import"../_chunks/chunk-MOGBCM4M.mjs";import"../_chunks/chunk-IFMJY7T7.mjs";import"../_chunks/chunk-H5CCIXXC.mjs";import"../_chunks/chunk-ZO4HW347.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";export{a as TARoles};

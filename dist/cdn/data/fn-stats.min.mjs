@@ -9,4 +9,4 @@
  * cdn-install: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/is-cdn-install/SKILL.md
  * blob: https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/data/fn-stats.js
  */
-import{a}from"../_chunks/chunk-VUUFION4.mjs";import"../_chunks/chunk-K5Q43KHM.mjs";import"../_chunks/chunk-3QGJJSDH.mjs";import"../_chunks/chunk-BBGFDCP2.mjs";import"../_chunks/chunk-SFXF77MJ.mjs";import"../_chunks/chunk-4RY267LP.mjs";import"../_chunks/chunk-ZEHEDVTO.mjs";import"../_chunks/chunk-PK2UL4FC.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";export{a as erf};
+import{a}from"../_chunks/chunk-WEMPP3EE.mjs";import"../_chunks/chunk-K5Q43KHM.mjs";import"../_chunks/chunk-3QGJJSDH.mjs";import"../_chunks/chunk-4RY267LP.mjs";import"../_chunks/chunk-BBGFDCP2.mjs";import"../_chunks/chunk-SFXF77MJ.mjs";import"../_chunks/chunk-ZEHEDVTO.mjs";import"../_chunks/chunk-PK2UL4FC.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";export{a as erf};

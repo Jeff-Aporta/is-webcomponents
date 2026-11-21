@@ -7,7 +7,7 @@ Entry CDN liviano del kit. Carga solo lo pedido, con pin, mirrors y anti-redunda
 | Artefacto | Path |
 | --- | --- |
 | Fuente (núcleo, capa 1) | `src/cdn/loader.ts` |
-| Capa 2 (al primer uso) | `src/cdn/loader-{sheets,store,mirrors,pages,ref,hashes}.ts` |
+| Capa 2 (al primer uso) | `src/cdn/loader-{sheets,store,mirrors,pages,ref,hashes,autoload}.ts` |
 | Planificador | `src/cdn/load-plan.ts` |
 | Este doc | `src/cdn/loader.md` |
 | Publicado | `dist/cdn/core/loader.min.mjs` (núcleo) · `dist/cdn/core/loader-<x>.min.mjs` (capa 2) · `dist/cdn/core/loader.md` |
@@ -29,6 +29,7 @@ Nombre: el kit es **`iswc-base`**; en las URLs va el nombre real del repo en Git
 | 2 | `core/loader-pages.min.mjs` | `loadPageModules` | `loadPageModules` |
 | 2 | `core/loader-ref.min.mjs` | `resolveRef` (API de GitHub) | solo sin pin y con espejos que lo necesiten; con pin, `BOOT_HOST` o `self` nunca |
 | 2 | `core/loader-hashes.min.mjs` | `asset-hashes.json` en diferido (`?v=`) | solo en orígenes mutables (Pages/local), en `loadPageModules`/`loadPageStyles`/`assetUrl` |
+| 2 | `core/loader-autoload.min.mjs` | autoloader opcional: `observar()` (MutationObserver) y `listos(raiz)` (`allDefined`) | `observar`/`listos` |
 
 La API pública (`iswcLoaderShape`) no cambia de forma: cada método de capa 2 es un envoltorio `async` que hace
 `import()` del módulo y le pasa el contexto del núcleo. Cambios de comportamiento:
@@ -271,6 +272,11 @@ L.isReady('iswc-code');                // sync
 ```
 
 `load()` resuelve al **importar**; `ensure()` resuelve al **definirse** (`whenDefined`).
+
+## Autoloader (opcional)
+
+- `L.observar(raiz?)` — pide `ensure` de cada tag `iswc-*` sin definir que aparezca bajo `raiz` (o en el documento); la capa 2 se importa con `import()` la primera vez que se llama y devuelve el tirador `parar()`.
+- `L.listos(raiz?)` — `true` si todos los tags `iswc-*` que cuelgan de `raiz` (o del documento) ya están definidos; el equivalente de `allDefined()`.
 
 ## Componentes documentales
 

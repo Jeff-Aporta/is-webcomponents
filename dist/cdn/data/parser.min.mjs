@@ -9,4 +9,4 @@
  * cdn-install: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/is-cdn-install/SKILL.md
  * blob: https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/data/parser.js
  */
-import{a,b,c}from"../_chunks/chunk-HOOV3DER.mjs";import"../_chunks/chunk-VRUDUNQX.mjs";import"../_chunks/chunk-CYQH7UVL.mjs";import"../_chunks/chunk-PK2UL4FC.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";export{c as formulaBody,b as isFormulaText,a as parseFormula};
+import{a,b,c}from"../_chunks/chunk-HOOV3DER.mjs";import"../_chunks/chunk-VRUDUNQX.mjs";import"../_chunks/chunk-PK2UL4FC.mjs";import"../_chunks/chunk-CYQH7UVL.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";export{c as formulaBody,b as isFormulaText,a as parseFormula};

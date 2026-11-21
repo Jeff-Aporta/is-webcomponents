@@ -4,8 +4,14 @@
  *
  * Generado por `scripts/migrate-zod.py`. Refinar manualmente las
  * entradas marcadas con TODO cuando se quiera validación runtime.
+ *
+ * Los catálogos cerrados (intent / tone / button-shape / media-shape) NO se
+ * copian aquí: el schema los deriva de la constante viva del core
+ * (`core/attrs.ts`), de modo que el tipo no puede quedarse atrás si el core
+ * añade un valor.
  */
 import { z } from 'zod';
+import { BUTTON_SHAPE, INTENT_VALUES, MEDIA_SHAPE, TONE_VALUES } from '@jeff-aporta/iswc-base/core/attrs.js';
 
 const StyleAttrDefSchema = z.union([z.string(), z.object({
   prop: z.string(),
@@ -28,7 +34,11 @@ export type Constructor = new (...args: any[]) => HTMLElement;
  * Generado por `scripts/migrate-zod.py`. Refinar manualmente las
  * entradas marcadas con TODO cuando se quiera validación runtime.
  */
-const IntentSchema = z.unknown() /* TODO: cannot convert */;
+/**
+ * Intenciones semánticas (atributo `color`): el catálogo vivo del core
+ * (`INTENT_VALUES`), no una copia.
+ */
+const IntentSchema = z.enum(INTENT_VALUES);
 export type Intent = z.infer<typeof IntentSchema>;
 
 // ── tone.schemas ──
@@ -38,7 +48,11 @@ export type Intent = z.infer<typeof IntentSchema>;
  * Generado por `scripts/migrate-zod.py`. Refinar manualmente las
  * entradas marcadas con TODO cuando se quiera validación runtime.
  */
-const ToneSchema = z.unknown() /* TODO: cannot convert */;
+/**
+ * Niveles de relleno (atributo `variant`): el catálogo vivo del core
+ * (`TONE_VALUES`), no una copia.
+ */
+const ToneSchema = z.enum(TONE_VALUES);
 export type Tone = z.infer<typeof ToneSchema>;
 
 // ── button-shape.schemas ──
@@ -48,7 +62,11 @@ export type Tone = z.infer<typeof ToneSchema>;
  * Generado por `scripts/migrate-zod.py`. Refinar manualmente las
  * entradas marcadas con TODO cuando se quiera validación runtime.
  */
-const ButtonShapeSchema = z.unknown() /* TODO: cannot convert */;
+/**
+ * Contornos del botón (atributo `shape`): el catálogo vivo del core
+ * (`BUTTON_SHAPE`), no una copia.
+ */
+const ButtonShapeSchema = z.enum(BUTTON_SHAPE);
 export type ButtonShape = z.infer<typeof ButtonShapeSchema>;
 
 // ── media-shape.schemas ──
@@ -58,5 +76,9 @@ export type ButtonShape = z.infer<typeof ButtonShapeSchema>;
  * Generado por `scripts/migrate-zod.py`. Refinar manualmente las
  * entradas marcadas con TODO cuando se quiera validación runtime.
  */
-const MediaShapeSchema = z.unknown() /* TODO: cannot convert */;
+/**
+ * Recorte visual de media (atributo `shape`): el catálogo vivo del core
+ * (`MEDIA_SHAPE`), no una copia.
+ */
+const MediaShapeSchema = z.enum(MEDIA_SHAPE);
 export type MediaShape = z.infer<typeof MediaShapeSchema>;

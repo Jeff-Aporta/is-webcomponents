@@ -9,4 +9,4 @@
  * cdn-install: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/is-cdn-install/SKILL.md
  * blob: https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/layout/scrollspy.js
  */
-import"../_chunks/chunk-YGH7YLIY.mjs";import"../_chunks/chunk-P6XCOQUR.mjs";import"../_chunks/chunk-7IBSWVMF.mjs";import"../_chunks/chunk-DKYDCFSD.mjs";import"../_chunks/chunk-FZCPQKWI.mjs";import"../_chunks/chunk-UFMSFUKG.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";
+import"../_chunks/chunk-D7OVN3PC.mjs";import"../_chunks/chunk-P6XCOQUR.mjs";import"../_chunks/chunk-7IBSWVMF.mjs";import"../_chunks/chunk-7KABUODH.mjs";import"../_chunks/chunk-FZCPQKWI.mjs";import"../_chunks/chunk-5XFYD3KA.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";

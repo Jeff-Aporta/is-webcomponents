@@ -59,27 +59,40 @@
 
 /* ── Toolbar ──────────────────────────────────────────────────────────── */
 
-.mim-dg__toolbar { display: flex; align-items: center; gap: 0.45em; flex-wrap: wrap; flex: 0 0 auto; padding: 0.45em 0.65em; border-block-end: 1px solid var(--iswc-grid-border); background: color-mix(in srgb, var(--iswc-grid-bg) 92%, transparent); }
+/* La barra es plana: sin borde ni fondo; buscador, filtros y botones a la misma altura. Toda la fila es zona de soltar
+   (se arrastra una columna del header hasta aquí para agrupar). */
+.mim-dg__toolbar {
+  display: flex; align-items: center; gap: 0.3em; flex-wrap: wrap; flex: 0 0 auto; padding: 0.35em 0.5em;
+  &.iswc-over { background: color-mix(in srgb, var(--iswc-accent) 10%, transparent); }
+}
 .mim-dg__toolbar-spacer { flex: 1 1 auto; min-inline-size: 0.5em; }
 
 .mim-dg__quick {
   display: inline-flex;
   align-items: center;
   gap: 0.35em;
-  padding: .143em 0.55em;
-  border: 1px solid var(--iswc-grid-border);
+  /* Solo es la zona de soltar: la caja visible es la del iswc-input (con la lupa en su slot start). */
+  padding: 0.15em;
+  border: 1px solid transparent;
   border-radius: var(--iswc-radius);
-  background: var(--iswc-bg-soft);
   color: var(--iswc-text-soft);
-  font-size: 0.8em;
+  font-size: 0.85em;
   inline-size: clamp(11em, 28%, 22em);
   iswc-icon {
     color: currentColor;
     flex: 0 0 auto;
   }
+
+  /* Es la zona de soltar para agrupar (se arrastra una columna del header hasta aquí): el punteado solo aparece
+     mientras se arrastra encima; en reposo es un campo de búsqueda normal, de una sola caja. */
+  &.iswc-over {
+    border-style: dashed;
+    border-color: var(--iswc-accent);
+    background: color-mix(in srgb, var(--iswc-accent) 12%, var(--iswc-bg-soft));
+  }
 }
 
-.mim-dg__quick-input { border: 0; outline: 0; background: transparent; font: inherit; color: var(--iswc-text); padding: 0.3em 0; inline-size: 100%; min-inline-size: 0; }
+.mim-dg__quick-input { flex: 1 1 auto; font: inherit; color: var(--iswc-text); padding: 0.3em 0; inline-size: 100%; min-inline-size: 0; }
 .mim-dg__density { display: inline-flex; align-items: center; flex: none; gap: 0; overflow: hidden; border: 1px solid var(--iswc-grid-border); border-radius: 999em; background: var(--iswc-bg-soft); }
 
 /* Botones base: misma forma cuadrada centrada, solo cambian tamaño/padding. */
@@ -104,7 +117,16 @@
   }
 }
 
-.mim-dg__tool-btn { display: inline-flex; align-items: center; gap: 0.3em; block-size: 1.85em; padding: 0 0.55em; border: 1px solid var(--iswc-grid-border); font: inherit; font-size: 0.78em; &:hover { background: color-mix(in srgb, var(--iswc-accent) 16%, transparent); color: var(--iswc-accent); } }
+/* Botones de herramienta: solo icono (el title dice qué hacen), en píldora y planos. La caja se dimensiona por el part
+   del botón del kit: pisar el host dejaba el icono fuera de caja. */
+.mim-dg__tool-btn {
+  display: inline-flex; align-items: center; color: var(--iswc-text-soft); font: inherit; font-size: 0.85em; cursor: pointer;
+  &::part(button) { inline-size: 2.6em; block-size: 1.7em; min-block-size: 0; min-inline-size: 0; padding: 0; border-radius: 999em; background: transparent; border-color: transparent; }
+  &:hover, &:focus-visible {
+    color: var(--iswc-accent);
+    &::part(button) { background: color-mix(in srgb, var(--iswc-accent) 16%, transparent); }
+  }
+}
 .mim-dg__tool-btn-label { font-weight: 600; }
 
 /* ── Group panel ──────────────────────────────────────────────────────── */
@@ -226,7 +248,7 @@
 .mim-dg__head-cell,
 .mim-dg__head-group,
 .mim-dg__cell { position: absolute; inset-block-start: 0; display: flex; align-items: center; gap: .3em; block-size: 100%; padding-inline: var(--iswc-grid-cell-px); border-inline-end: 1px solid var(--iswc-grid-col-border); min-inline-size: 0; }
-.mim-dg__cell { contain: strict; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; background: inherit; &.iswc-focused { outline: 1px solid var(--iswc-grid-accent); outline-offset: -1px; border-radius: .2em; } }
+.mim-dg__cell { contain: strict; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; background: inherit; /* el borde de foco es solo de las celdas editables: la fila seleccionada ya se marca */ &.iswc-focused:has(input, textarea, select, [contenteditable]) { outline: 1px solid var(--iswc-grid-accent); outline-offset: -1px; border-radius: .2em; } }
 .mim-dg__head-cell,
 .mim-dg__head-group { font-weight: 600; color: var(--iswc-grid-header-fg); user-select: none; outline: none; &:focus-visible { box-shadow: inset 0 0 0 1px var(--iswc-grid-accent); }; }
 .mim-dg__head-group { justify-content: center; border-inline-end: 1px solid var(--iswc-grid-border); }
@@ -370,12 +392,186 @@
 
 .mim-dg__count-sel { color: var(--iswc-accent); font-weight: 600; }
 .mim-dg__page-size { display: inline-flex; align-items: center; gap: 0.35em; }
-.mim-dg__page-size-select { font: inherit; padding: .143em .429em; border-radius: .286em; border: 1px solid var(--iswc-grid-border); background: var(--iswc-bg-soft); color: var(--iswc-text); }
-.mim-dg__pager-btn { inline-size: 1.6em; block-size: 1.6em; border: 1px solid var(--iswc-grid-border); &:hover:not(:disabled) { background: color-mix(in srgb, var(--iswc-accent) 16%, transparent); color: var(--iswc-accent); } &:disabled { opacity: 0.35; cursor: default; } }
+/* El iswc-select ya trae su caja: sin borde ni fondo propios (eran una segunda caja alrededor). */
+.mim-dg__page-size-select { font: inherit; inline-size: 5em; }
+.mim-dg__pager-btn { --iswc-button-padding-inline: 0; inline-size: 2em; block-size: 2em; border: 1px solid var(--iswc-grid-border); border-radius: 999em; &::part(button) { display: flex; align-items: center; justify-content: center; gap: 0; inline-size: 100%; block-size: 100%; min-inline-size: 0; min-block-size: 0; padding: 0; line-height: 0; } iswc-icon { display: block; font-size: 1.15em; } &:hover:not(:disabled) { background: color-mix(in srgb, var(--iswc-accent) 16%, transparent); color: var(--iswc-accent); } &:disabled { opacity: 0.35; cursor: default; } }
 .mim-dg__pager-info { min-inline-size: 3.5em; text-align: center; }
 .mim-dg__count { display: inline-flex; gap: 1.2em; b { color: var(--iswc-text); font-weight: 600; } }
 .mim-dg__count[hidden], .mim-dg__zona-estado:empty { display: none; }
 .mim-dg__footer:not(.iswc-paginada) :is(.mim-dg__page-size, .mim-dg__pager-btn, .mim-dg__pager-info) { display: none; }
+.mim-dg__footer.iswc-una-pagina :is(.mim-dg__pager-btn, .mim-dg__pager-info) { display: none; }
+.mim-dg__footer.iswc-sin-tamanos .mim-dg__page-size { display: none; }
+.mim-dg__count { display: inline-flex; flex-wrap: wrap; gap: 0.25em 0.75em; }
+
+/* Ancho de la GRILLA (no de la ventana): la grilla vive en paneles divididos y tarjetas. */
+.mim-dg { container: iswc-grid / inline-size; }
+@container iswc-grid (max-width: 34rem) {
+  .mim-dg__footer { flex-wrap: wrap; row-gap: 0.35em; }
+  .mim-dg__page-size-text { display: none; }
+}
 .mim-dg__group-panel[hidden] { display: none; }
 .mim-dg__checkbox.iswc-deshabilitada { opacity: .35; cursor: not-allowed; }
 .mim-dg__checkbox.iswc-oculta { visibility: hidden; }
+
+/* ── Modales (columnas, filtros y exportar) ──────────────────────────── */
+
+.mim-dg__dlg-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4em;
+  min-inline-size: min(26em, 78vw);
+  max-block-size: 60vh;
+  overflow: auto;
+}
+
+.mim-dg__dlg-sec {
+  margin-block-start: 0.4em;
+  font-size: 0.72em;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--iswc-text-soft);
+}
+
+.mim-dg__dlg-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5em;
+  padding: 0.15em 0.25em;
+  border-radius: var(--iswc-radius);
+  &:hover { background: var(--iswc-bg-soft); }
+}
+
+.mim-dg__dlg-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45em;
+  min-inline-size: 0;
+  font-size: 0.85em;
+}
+
+.mim-dg__dlg-tools { display: inline-flex; gap: 0.15em; }
+
+/* La empunadura: se arrastra desde aqui. */
+.mim-dg__cell.iswc-cell-sel {
+  background: color-mix(in srgb, var(--iswc-accent) 12%, transparent);
+  box-shadow: inset 0 0 0 1px var(--iswc-accent);
+}
+
+.mim-dg__dlg-grip {
+  display: inline-flex;
+  align-items: center;
+  flex: 0 0 auto;
+  color: var(--iswc-text-soft);
+  opacity: 0.5;
+  cursor: grab;
+
+  &:hover {
+    opacity: 1;
+    color: var(--iswc-accent);
+  }
+
+  &:active { cursor: grabbing; }
+}
+
+/* Las marcas de donde se suelta la fila. */
+.mim-dg__dlg-row.iswc-arrastrando { opacity: 0.4; }
+.mim-dg__dlg-row.iswc-soltar-antes { box-shadow: inset 0 2px 0 var(--iswc-accent); }
+.mim-dg__dlg-row.iswc-soltar-despues { box-shadow: inset 0 -2px 0 var(--iswc-accent); }
+
+/* El boton de estado (visible/oculta, incluida/excluida) es un icono. */
+.mim-dg__dlg-label iswc-check-icon-button {
+  inline-size: 1.6em;
+  block-size: 1.6em;
+  flex: 0 0 auto;
+}
+
+.mim-dg__dlg-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mim-dg__dlg-btn {
+  appearance: none;
+  display: inline-grid;
+  place-items: center;
+  /* Pildora: mas ancho que alto. */
+  inline-size: 2.2em;
+  block-size: 1.6em;
+  padding: 0;
+  border: 0;
+  border-radius: 999em;
+  background: transparent;
+  color: var(--iswc-text-soft);
+  cursor: pointer;
+  &:hover:not(:disabled) {
+    background: color-mix(in srgb, var(--iswc-accent) 16%, transparent);
+    color: var(--iswc-accent);
+  }
+  &:disabled { opacity: 0.35; cursor: default; }
+}
+
+.mim-dg__dlg-btn-primary {
+  inline-size: auto;
+  min-inline-size: 4.6em;
+  block-size: auto;
+  padding: 0.25em 0.75em;
+  font-size: 0.85em;
+  font-weight: 600;
+  background: var(--iswc-accent);
+  color: var(--iswc-bg);
+  &:hover:not(:disabled) {
+    background: var(--iswc-accent);
+    color: var(--iswc-bg);
+    filter: brightness(1.08);
+  }
+}
+
+.mim-dg__dlg-add {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.35em;
+}
+
+.mim-dg__dlg-select, .mim-dg__dlg-input {
+  font: inherit;
+  font-size: 0.85em;
+  padding: 0.25em 0.4em;
+  border: 1px solid var(--iswc-grid-border);
+  border-radius: var(--iswc-radius);
+  background: var(--iswc-bg);
+  color: var(--iswc-text);
+  max-inline-size: 100%;
+}
+.mim-dg__dlg-select { min-inline-size: 5.5em; }
+.mim-dg__dlg-input { flex: 1 1 5em; min-inline-size: 4em; }
+.mim-dg__dlg-num { inline-size: 4.5em; flex: 0 0 auto; }
+
+.mim-dg__dlg-empty, .mim-dg__dlg-hint {
+  margin: 0;
+  font-size: 0.78em;
+  color: var(--iswc-text-soft);
+}
+
+/* El botón de tres puntos (menú de fila). */
+.mim-dg__row-menu {
+  appearance: none;
+  display: inline-grid;
+  place-items: center;
+  /* Pildora: mas ancho que alto. */
+  inline-size: 2.2em;
+  block-size: 1.6em;
+  padding: 0;
+  border: 0;
+  border-radius: 999em;
+  background: transparent;
+  color: var(--iswc-text-soft);
+  cursor: pointer;
+  &:hover, &:focus-visible {
+    background: color-mix(in srgb, var(--iswc-accent) 16%, transparent);
+    color: var(--iswc-accent);
+  }
+}

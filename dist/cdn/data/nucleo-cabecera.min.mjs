@@ -9,4 +9,4 @@
  * cdn-install: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/is-cdn-install/SKILL.md
  * blob: https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/data/nucleo-cabecera.js
  */
-import{a}from"../_chunks/chunk-7SWTENZL.mjs";import"../_chunks/chunk-6X6GCCKS.mjs";import"../_chunks/chunk-MARCV6ZJ.mjs";import"../_chunks/chunk-MC7JKVTE.mjs";import"../_chunks/chunk-SNULKKK4.mjs";import"../_chunks/chunk-DYOQXAUC.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";export{a as crearCabecera};
+import{a}from"../_chunks/chunk-Q5D6F6UL.mjs";import"../_chunks/chunk-RFRUJ6OH.mjs";import"../_chunks/chunk-MARCV6ZJ.mjs";import"../_chunks/chunk-MC7JKVTE.mjs";import"../_chunks/chunk-SNULKKK4.mjs";import"../_chunks/chunk-DYOQXAUC.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";export{a as crearCabecera};

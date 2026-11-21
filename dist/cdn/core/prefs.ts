@@ -74,7 +74,7 @@ export function getComponentPrefs(tag: string, key: string): PrefsEntry | null {
 export function setComponentPrefs(tag: string, key: string, patch: PrefsEntry): void {
   if (!tag || !key || !patch || typeof patch !== 'object') return;
   const root = readRoot();
-  const bucket = root[tag] && typeof root[tag] === 'object' ? { ...root[tag] } : {};
+  const bucket: Record<string, PrefsEntry> = root[tag] && typeof root[tag] === 'object' ? { ...root[tag] } : {};
   const existing = bucket[key] && typeof bucket[key] === 'object' ? bucket[key] as PrefsEntry : {};
   bucket[key] = { ...existing, ...patch };
   root[tag] = bucket;
@@ -87,7 +87,7 @@ export function setComponentPrefs(tag: string, key: string, patch: PrefsEntry): 
 export function replaceComponentPrefs(tag: string, key: string, value: PrefsEntry): void {
   if (!tag || !key || !value || typeof value !== 'object') return;
   const root = readRoot();
-  const bucket = root[tag] && typeof root[tag] === 'object' ? { ...root[tag] } : {};
+  const bucket: Record<string, PrefsEntry> = root[tag] && typeof root[tag] === 'object' ? { ...root[tag] } : {};
   bucket[key] = value;
   root[tag] = bucket;
   writeRoot(root);

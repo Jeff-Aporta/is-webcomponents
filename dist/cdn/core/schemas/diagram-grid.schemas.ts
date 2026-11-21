@@ -21,15 +21,10 @@ const GridPointSchema = z.object({
 });
 export type GridPoint = z.infer<typeof GridPointSchema>;
 
-const CostGridSchema = z.object({
-  cols: z.number(),
-  rows: z.number(),
-  grid: z.number(),
-  cost: z.unknown() /* TODO: ref Float64Array */,
-  forbidden: z.map(z.string(), ForbiddenRegionSchema).optional(),
-});
-export type CostGrid = z.infer<typeof CostGridSchema>;
-
+/**
+ * Región prohibida (rect o polígono). Va ANTES de `CostGridSchema` porque el
+ * registro de la rejilla lo referencia.
+ */
 const ForbiddenRegionSchema = z.object({
   id: z.string(),
   kind: z.union([z.literal('rect'), z.literal('poly')]),
@@ -37,11 +32,22 @@ const ForbiddenRegionSchema = z.object({
   y: z.number().optional(),
   w: z.number().optional(),
   h: z.number().optional(),
-  points: z.array(z.unknown() /* TODO: cannot convert */).optional(),
+  /** Vértices del polígono: pares `[x, y]`. */
+  points: z.array(z.tuple([z.number(), z.number()])).optional(),
   color: z.string().optional(),
   label: z.string().optional(),
 });
 export type ForbiddenRegion = z.infer<typeof ForbiddenRegionSchema>;
+
+const CostGridSchema = z.object({
+  cols: z.number(),
+  rows: z.number(),
+  grid: z.number(),
+  /** Costes por celda: `Infinity` = celda bloqueada. */
+  cost: z.custom<Float64Array>(),
+  forbidden: z.map(z.string(), ForbiddenRegionSchema).optional(),
+});
+export type CostGrid = z.infer<typeof CostGridSchema>;
 
 const ExclusionZoneSchema = z.object({
   x: z.number(),

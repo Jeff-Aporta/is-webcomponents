@@ -9,4 +9,4 @@
  * cdn-install: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/is-cdn-install/SKILL.md
  * blob: https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/data/macro-host.js
  */
-import{a}from"../_chunks/chunk-ANP5EEPO.mjs";import"../_chunks/chunk-54OGXUIL.mjs";import"../_chunks/chunk-FEBPWMSB.mjs";import"../_chunks/chunk-S4SUO4QM.mjs";import"../_chunks/chunk-CYQH7UVL.mjs";import"../_chunks/chunk-PK2UL4FC.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";export{a as runMacro};
+import{a}from"../_chunks/chunk-4H2PCPUT.mjs";import"../_chunks/chunk-54OGXUIL.mjs";import"../_chunks/chunk-FEBPWMSB.mjs";import"../_chunks/chunk-S4SUO4QM.mjs";import"../_chunks/chunk-PK2UL4FC.mjs";import"../_chunks/chunk-CYQH7UVL.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";export{a as runMacro};

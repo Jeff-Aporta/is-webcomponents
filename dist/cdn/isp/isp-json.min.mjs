@@ -9,4 +9,4 @@
  * cdn-install: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/is-cdn-install/SKILL.md
  * blob: https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/isp/isp-json.js
  */
-import{a,b,c,d}from"../_chunks/chunk-VORSWFRD.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";export{c as applyJsonBody,d as hostToJson,b as html2json,a as json2html};
+import{a,b,c,d}from"../_chunks/chunk-QCS4UGGQ.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";export{c as applyJsonBody,d as hostToJson,b as html2json,a as json2html};

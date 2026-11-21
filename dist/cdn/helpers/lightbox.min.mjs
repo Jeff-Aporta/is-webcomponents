@@ -9,4 +9,4 @@
  * cdn-install: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/is-cdn-install/SKILL.md
  * blob: https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/diagrams/lightbox.js
  */
-import{a}from"../_chunks/chunk-E6NIUF6M.mjs";import"../_chunks/chunk-2C5WZITK.mjs";import"../_chunks/chunk-52DKJTF3.mjs";import"../_chunks/chunk-Z7DPWDA4.mjs";import"../_chunks/chunk-MNP72QJS.mjs";import"../_chunks/chunk-XGSX6JGH.mjs";import"../_chunks/chunk-DKYDCFSD.mjs";import"../_chunks/chunk-FZCPQKWI.mjs";import"../_chunks/chunk-UFMSFUKG.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";export{a as IswcLightbox};
+import{a}from"../_chunks/chunk-5I3WKKLB.mjs";import"../_chunks/chunk-GDD6S6M2.mjs";import"../_chunks/chunk-N7ZST3JA.mjs";import"../_chunks/chunk-Z7DPWDA4.mjs";import"../_chunks/chunk-UWQ36HTN.mjs";import"../_chunks/chunk-VNNEUB5D.mjs";import"../_chunks/chunk-E7KUGZVP.mjs";import"../_chunks/chunk-7KABUODH.mjs";import"../_chunks/chunk-FZCPQKWI.mjs";import"../_chunks/chunk-5XFYD3KA.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";export{a as IswcLightbox};

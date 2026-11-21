@@ -27,7 +27,7 @@ export const EXT_MODULO = '.mjs';
 export const CARPETA_CHUNKS = '_chunks';
 
 /** Módulos de capa 2 del loader (`src/cdn/loader-<x>.ts` → `core/loader-<x>.min.mjs`), plan D7 / F4. */
-export const CAPAS_LOADER = ['sheets', 'store', 'mirrors', 'pages', 'ref', 'hashes'];
+export const CAPAS_LOADER = ['sheets', 'store', 'mirrors', 'pages', 'ref', 'hashes', 'autoload'];
 
 const barras = (p: string) => p.replaceAll('\\', '/');
 
@@ -74,6 +74,16 @@ export async function entradasKit(raiz: string, manifest: ItemManifestKit[]): Pr
   const i18nRoot = join(coreRoot, 'i18n');
   for (const f of (await readdir(i18nRoot).catch(() => [] as string[])).sort()) {
     if (f.endsWith('.ts')) entradas.push({ in: join(i18nRoot, f), out: `core/i18n/${f.replace(/\.ts$/, '')}.min` });
+  }
+  // Módulos de las opciones del popup (F8b): `core/position.ts` y `<iswc-floating>` los piden con
+  // `import()` solo cuando la opción está activa; como entradas salen con nombre estable
+  // (`core/position/<x>.min.mjs`) en vez de un chunk anónimo.
+  const opcionesRoot = join(coreRoot, 'position');
+  for (const f of (await readdir(opcionesRoot).catch(() => [] as string[])).sort()) {
+    // Los `*.schemas.ts` son contratos (W54), no módulos: no son entradas del bundle.
+    if (f.endsWith('.ts') && !f.endsWith('.schemas.ts')) {
+      entradas.push({ in: join(opcionesRoot, f), out: `core/position/${f.replace(/\.ts$/, '')}.min` });
+    }
   }
   entradas.push({ in: join(raiz, 'src', 'cdn', 'loader.ts'), out: 'core/loader.min' });
   // Capa 2 del loader (F4): entradas propias para que su nombre sea estable (`core/loader-<x>.min.mjs`) y el núcleo

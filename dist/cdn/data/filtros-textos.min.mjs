@@ -9,4 +9,4 @@
  * cdn-install: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/is-cdn-install/SKILL.md
  * blob: https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/data/filtros-textos.js
  */
-import{a}from"../_chunks/chunk-UHEC52VT.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";export{a as TEXTOS};
+import{a}from"../_chunks/chunk-4RUDIQ7Z.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";export{a as TEXTOS};
