@@ -1,10 +1,10 @@
-// @contexto INDICE.md · src/components/diagrams/README.md
+// @contexto INDICE.md · src/components/helpers/README.md
 /**
  * Behavior migrado desde HTML inline de iswc-lightbox.
  * Se ejecuta en mount() tras pintar la definition JSON.
  */
 
-import type { LightboxLike } from "@jeff-aporta/iswc-base/components/diagrams/schemas/lightbox.preview.schemas.js";
+import type { LightboxLike } from "@jeff-aporta/iswc-base/components/helpers/schemas/lightbox.preview.schemas.js";
 function asLightbox(el: HTMLElement | null): LightboxLike | null {
   return (el as LightboxLike | null);
 }

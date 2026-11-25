@@ -135,7 +135,7 @@ const manifest: ComponentManifestItem[] = [
   { tag: 'iswc-sparkline', title: 'Sparkline', category: 'data-viz', script: 'components/charts/sparkline.js', style: 'components/charts/sparkline.css', page: 'components/charts/sparkline.json' },
   { tag: 'iswc-flowchart', title: 'Diagrama de flujo', category: 'diagrams', script: 'components/diagrams/flowchart.js', style: 'components/diagrams/flowchart.css', page: 'components/diagrams/flowchart.json' },
   { tag: 'iswc-sequence-diagram', title: 'Diagrama de secuencia', category: 'diagrams', script: 'components/diagrams/sequence-diagram.js', style: 'components/diagrams/sequence-diagram.css', page: 'components/diagrams/sequence-diagram.json' },
-  { tag: 'iswc-lightbox', title: 'Lightbox', category: 'helpers', script: 'components/diagrams/lightbox.js', style: 'components/diagrams/lightbox.css', page: 'components/diagrams/lightbox.json' },
+  { tag: 'iswc-lightbox', title: 'Lightbox', category: 'helpers', script: 'components/helpers/lightbox.js', style: 'components/helpers/lightbox.css', page: 'components/helpers/lightbox.json' },
   { tag: 'iswc-diagram-lightbox', title: 'Visor de diagramas', category: 'diagrams', script: 'components/diagrams/diagram-lightbox.js', style: 'components/diagrams/diagram-lightbox.css', page: 'components/diagrams/diagram-lightbox.json' },
   { tag: 'iswc-relative-time', title: 'Tiempo relativo', category: 'helpers', script: 'components/helpers/relative-time.js', style: 'components/helpers/relative-time.css', page: 'components/helpers/relative-time.json' },
   { tag: 'iswc-format', title: 'Formato', category: 'helpers', script: 'components/helpers/format.js', style: 'components/helpers/format.css', page: 'components/helpers/format.json' },

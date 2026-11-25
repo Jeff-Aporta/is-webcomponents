@@ -1,10 +1,10 @@
-// @contexto INDICE.md · src/components/diagrams/lightbox.md
+// @contexto INDICE.md · src/components/helpers/lightbox.md
 import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import { withStyleAttrs } from '@jeff-aporta/iswc-base/core/attrs.js';
 
 import '@jeff-aporta/iswc-base/components/actions/share-button.js';
-import { createPanZoom } from './utils/diagram-view.js';
-import { type PanZoomController } from './schemas/diagram-view.schemas.js';
+import { createPanZoom } from '@jeff-aporta/iswc-base/core/pan-zoom.js';
+import type { PanZoomController } from '@jeff-aporta/iswc-base/core/schemas/pan-zoom.schemas.js';
 import type { ViewTransform } from "./schemas/lightbox.schemas.js";
 import css from 'iswc:css';
 import { createPopupDismiss } from '@jeff-aporta/iswc-base/core/position.js';

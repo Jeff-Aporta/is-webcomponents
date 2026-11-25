@@ -9,6 +9,7 @@
 
 import type { PaletteKey, PaletteMode, Status } from "@jeff-aporta/iswc-base/components/charts/schemas/chart-palette.schemas.js";
 import { PALETAS } from "@jeff-aporta/iswc-base/core/app-init.js";
+import { fijarSerieColores, SERIE_HUES } from "@jeff-aporta/iswc-base/core/color.js";
 
 const DEFAULT_PALETTE = 'delfin';
 const SERIES = 8;
@@ -83,4 +84,24 @@ export function resolveColor(el: Element, color: string, fallback: string = 'tra
   const calculado = getComputedStyle(sonda).color;
   sonda.remove();
   return calculado ? aLiteral(calculado) : fallback;
+}
+
+/**
+ * Colores del treemap resueltos a literales (su SVG se exporta) y las series listas para los tonos automáticos
+ * (`tkHueToCss`). Sin DOM quedan los del tema base. Es lo que antes daba `paletteTheme` de los diagramas.
+ */
+export function temaTreemap(el: Element, dark: boolean): { text: string; muted: string; accent: string; surface: string; headerTint: string } {
+  // Respaldos con nombres CSS (sin hex ni rgb(): el guardián chart-tokens prohíbe colores fijos en las gráficas).
+  const base = dark ? { text: 'gainsboro', muted: 'darkgray', accent: 'lightgray' } : { text: 'darkslategray', muted: 'slategray', accent: 'dimgray' };
+  const surface = 'var(--iswc-bg-elev)';
+  const headerTint = 'color-mix(in srgb, var(--iswc-text) 12%, transparent)';
+  if (typeof document === 'undefined') return { ...base, surface, headerTint };
+  fijarSerieColores(SERIE_HUES.map((_h, i) => resolveColor(el, seriesColor(i), base.accent)));
+  return {
+    text: resolveColor(el, 'var(--iswc-text)', base.text),
+    muted: resolveColor(el, 'var(--iswc-text-dim)', base.muted),
+    accent: resolveColor(el, 'var(--iswc-chart-1)', base.accent),
+    surface,
+    headerTint,
+  };
 }

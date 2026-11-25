@@ -1,4 +1,4 @@
-// @contexto INDICE.md · src/components/diagrams/README.md
+// @contexto INDICE.md · src/components/helpers/README.md
 /**
  * lightbox.ts — Zod schemas para los tipos extraídos de este módulo.
  *

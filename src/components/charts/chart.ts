@@ -6,7 +6,6 @@ import { scaleLinear, scaleBand, niceTicks, svgEl } from '@jeff-aporta/iswc-base
 import { getCategoricalColors, getFillColors, getStatusColor, resolveColor, withAlpha } from './utils/chart-palette.js';
 import { findThemeContainer, readTheme } from '@jeff-aporta/iswc-base/core/dom.js';
 import { PathTurtle } from '@jeff-aporta/iswc-base/core/path-turtle.js';
-import { registerDiagramKind } from '@jeff-aporta/iswc-base/components/diagrams/utils/diagram-model.js';
 import type { TypedChartFactory, ChartDataPoint, ChartDataset, ChartConfig, LegendEntry, HitRecord, ResolvedOptions, ChartCtx, DrawMarks } from "./schemas/chart.schemas.js";
 import css from 'iswc:css';
 import type { ChartEventos } from './schemas/chart.schemas.js';
@@ -544,20 +543,21 @@ class IswcChart extends withStyleAttrs(IswcElement) {
   };
 
   async #openOwnViewer(): Promise<void> {
-    await import('@jeff-aporta/iswc-base/components/diagrams/diagram-lightbox.js');
+    await import('@jeff-aporta/iswc-base/components/helpers/lightbox.js');
     let lb = this.#ownLightbox;
     if (!lb || !lb.isConnected) {
-      lb = document.createElement('iswc-diagram-lightbox');
-      lb.setAttribute('kind', this.type);
-      if (lb) {
-        lb.addEventListener('iswc-after-hide', () => lb && lb.remove());
-      }
-      document.body.appendChild(lb);
-      this.#ownLightbox = lb;
+      lb = document.createElement('iswc-lightbox');
+      // El visor monta un <iswc-chart> a pantalla completa (zoom y pan del lightbox del kit).
+      const viewer = document.createElement('iswc-chart');
+      viewer.setAttribute('color', 'viewer');
+      lb.append(viewer);
+      const propio = lb;
+      propio.addEventListener('iswc-after-hide', () => propio.remove());
+      document.body.appendChild(propio);
+      this.#ownLightbox = propio;
     }
-    if (!lb) return;
-    // El visor monta <iswc-chart> genérico: el tipo debe viajar en el payload.
-    (lb as unknown as { payload: ChartConfig }).payload = { ...(this.#config || {}), type: this.type };
+    // El tipo debe viajar en el payload: el visor es un <iswc-chart> genérico.
+    (lb.firstElementChild as unknown as { payload: ChartConfig }).payload = { ...(this.#config || {}), type: this.type };
     (lb as unknown as { open: boolean }).open = true;
   }
 
@@ -876,9 +876,6 @@ function defineTypedChart(
 }
 
 define(IswcChart, 'IswcChart');
-for (const kind of ['chart', 'bar', 'line', 'pie', 'doughnut', 'radar', 'polarArea', 'scatter', 'bubble']) {
-  registerDiagramKind(kind, 'iswc-chart');
-}
 
 if (typeof window !== 'undefined') {
   window.__isDefineTypedChart = defineTypedChart;

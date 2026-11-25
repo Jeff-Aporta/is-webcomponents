@@ -1,5 +1,5 @@
 // @contexto INDICE.md · src/components/diagrams/diagram-lightbox.md
-import { IswcLightbox } from './lightbox.js';
+import { IswcLightbox } from '@jeff-aporta/iswc-base/components/helpers/lightbox.js';
 import { getDiagramTag } from './utils/diagram-model.js';
 import { expandSequencePayloadForJson } from './utils/sequence-spec.js';
 import type { TurtleStateDetail, ToggleGroupDetail, TurtleApi, DiagramHost } from "./schemas/diagram-lightbox.schemas.js";

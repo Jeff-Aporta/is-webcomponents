@@ -230,11 +230,6 @@ export default {
     "json": "../../dist/previews/diagrams/journey-map.json",
     "category": "diagrams"
   },
-  "iswc-lightbox": {
-    "json": "../../dist/previews/diagrams/lightbox.json",
-    "behavior": "../../dist/previews/diagrams/lightbox.preview.min.js",
-    "category": "helpers"
-  },
   "iswc-mindmap": {
     "json": "../../dist/previews/diagrams/mindmap.json",
     "category": "diagrams"
@@ -575,6 +570,11 @@ export default {
   },
   "iswc-intersection-observer": {
     "json": "../../dist/previews/helpers/intersection-observer.json",
+    "category": "helpers"
+  },
+  "iswc-lightbox": {
+    "json": "../../dist/previews/helpers/lightbox.json",
+    "behavior": "../../dist/previews/helpers/lightbox.preview.min.js",
     "category": "helpers"
   },
   "iswc-md-editor": {

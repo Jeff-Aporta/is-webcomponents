@@ -3,13 +3,10 @@ import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-elem
 import { svgEl } from '@jeff-aporta/iswc-base/core/svg-chart-engine.js';
 import { resolveTreemapSpec, computeTreemapLayout } from './utils/treemap-spec.js';
 import type { TreemapSpec, TreemapLayout } from "./schemas/treemap-spec.schemas.js";
-import type { DiagramTheme } from "@jeff-aporta/iswc-base/components/diagrams/schemas/diagram-base.schemas.js";
 import { tkHueToCss } from '@jeff-aporta/iswc-base/core/color.js';
-import { fontOn } from './utils/chart-palette.js';
-import { paletteTheme } from '@jeff-aporta/iswc-base/components/diagrams/utils/diagram-palette.js';
+import { fontOn, temaTreemap } from './utils/chart-palette.js';
 import { findThemeContainer, readTheme } from '@jeff-aporta/iswc-base/core/dom.js';
 import { inlineMdWeb } from '@jeff-aporta/iswc-base/core/tk-inline-md.js';
-import { registerDiagramKind } from '@jeff-aporta/iswc-base/components/diagrams/utils/diagram-model.js';
 import css from 'iswc:css';
 import type { TreemapEventos } from './schemas/treemap.schemas.js';
 
@@ -153,15 +150,8 @@ class IswcTreemap extends IswcElement {
     delete this.#wrap.dataset.empty;
 
     const dark = readTheme(findThemeContainer(this)) !== 'light';
-    const theme: DiagramTheme & { surface?: string; headerTint?: string } = paletteTheme(this as unknown as Element, dark);
+    const theme = temaTreemap(this, dark);
     this.#wrap.dataset.theme = dark ? 'dark' : 'light';
-    // El tema del secuencia no trae un color de superficie real (`panel` es
-    // 'transparent'); lo leemos del sistema para usarlo como gap entre
-    // tesela — igual que pie/doughnut usan `--chart-surface` como separador
-    // en vez del propio color de cada porción.
-    theme.surface = 'var(--iswc-bg-elev)';
-    theme.headerTint = 'color-mix(in srgb, var(--iswc-text) 12%, transparent)';
-
     const availW = this.#wrap.clientWidth || 0;
     const layout = computeTreemapLayout(spec, {
       width: availW > 80 ? Math.max(160, availW - 8) : undefined,
@@ -172,7 +162,7 @@ class IswcTreemap extends IswcElement {
     this.#wrap.classList.toggle('iswc-viewer', this.isViewer);
   }
 
-  #buildSvg(layout: TreemapLayout, theme: DiagramTheme & { surface?: string; headerTint?: string }): void {
+  #buildSvg(layout: TreemapLayout, theme: ReturnType<typeof temaTreemap>): void {
     const W = layout.width;
     const H = layout.height;
     this.#svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
@@ -205,7 +195,7 @@ class IswcTreemap extends IswcElement {
     emit(this, 'iswc-render', { layout, svg: this.#svg });
   }
 
-  #buildNodes(layout: TreemapLayout, theme: DiagramTheme & { surface?: string; headerTint?: string }): void {
+  #buildNodes(layout: TreemapLayout, theme: ReturnType<typeof temaTreemap>): void {
     // Orden pre-order: el rect del padre se pinta primero y los hijos lo tapan,
     // dejando visible solo la franja superior como rótulo del contenedor.
     for (const n of layout.nodes) {
@@ -264,17 +254,19 @@ class IswcTreemap extends IswcElement {
   };
 
   async #openOwnViewer(): Promise<void> {
-    await import('@jeff-aporta/iswc-base/components/diagrams/diagram-lightbox.js');
+    await import('@jeff-aporta/iswc-base/components/helpers/lightbox.js');
     let lb = this.#ownLightbox;
     if (!lb || !lb.isConnected) {
-      const newLb = document.createElement('iswc-diagram-lightbox');
-      newLb.setAttribute('kind', 'treemap');
+      const newLb = document.createElement('iswc-lightbox');
+      const viewer = document.createElement('iswc-treemap');
+      viewer.setAttribute('color', 'viewer');
+      newLb.append(viewer);
       newLb.addEventListener('iswc-after-hide', () => newLb.remove());
       document.body.appendChild(newLb);
       lb = newLb;
       this.#ownLightbox = newLb;
     }
-    (lb as unknown as { payload: unknown }).payload = this.#payload;
+    (lb.firstElementChild as unknown as { payload: unknown }).payload = this.#payload;
     (lb as unknown as { open: boolean }).open = true;
   }
 
@@ -328,7 +320,5 @@ class IswcTreemap extends IswcElement {
 }
 
 define(IswcTreemap, 'IswcTreemap');
-
-registerDiagramKind('treemap', 'iswc-treemap');
 
 export { IswcTreemap };

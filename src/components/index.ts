@@ -163,7 +163,7 @@ const CATALOG = {
   'iswc-org-chart':         'diagrams/org-chart',
   'iswc-sequence-diagram':  'diagrams/sequence-diagram',
   'iswc-diagram-lightbox':  'diagrams/diagram-lightbox',
-  'iswc-lightbox':          'diagrams/lightbox',
+  'iswc-lightbox':          'helpers/lightbox',
   // overlays
   'iswc-command-palette':   'overlays/command-palette',
   'iswc-pdf-viewer':        'overlays/pdf-viewer',

@@ -1,5 +1,5 @@
 /* Estilos específicos del lightbox de diagramas, encima de lightbox.css. */
-@import url('./lightbox.css');
+@import url('../helpers/lightbox.css');
 
 .lb-bar__lead { flex: 1 1 auto; }
 .lb-nav { display: inline-flex; align-items: center; gap: 0.25em; }
