@@ -1,4 +1,4 @@
-// @contexto INDICE.md · src/cdn/README.md
+// @contexto INDICE.md · src/core/README.md
 /**
  * pan-zoom.schemas.ts — contratos del viewport 2D de `core/pan-zoom.ts` (vista, opciones y controlador).
  */

@@ -1,4 +1,4 @@
-// @contexto INDICE.md · src/cdn/README.md
+// @contexto INDICE.md · src/core/README.md
 /**
  * oklch — rotar el tono de un color en OKLCH conservando su luminosidad y croma (mismo «peso»
  * visual, otro tono). Devuelve hex para que el SVG exportado se vea igual en cualquier visor.

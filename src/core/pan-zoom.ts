@@ -1,4 +1,4 @@
-// @contexto INDICE.md · src/cdn/README.md
+// @contexto INDICE.md · src/core/README.md
 /**
  * pan-zoom.ts — viewport 2D reutilizable (SVG editors / lightbox / canvas).
  *
