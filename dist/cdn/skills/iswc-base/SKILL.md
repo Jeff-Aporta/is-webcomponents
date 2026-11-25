@@ -464,7 +464,7 @@ Cada `.min.js` enlaza la guía de su fila y esta skill.
 | --- | --- | --- |
 | `<iswc-popover>` | Formato, observación y posicionamiento reutilizable sobre APIs nativas. | [helpers/popover.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/helpers/popover.md) |
 | `<iswc-ui>` | Primitivas de render para apps consumidoras del kit. | [helpers/ui.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/helpers/ui.md) |
-| `<iswc-lightbox>` | Relaciones, flujos, estados, estructura o tiempo desde payloads declarativos. | [diagrams/lightbox.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/diagrams/lightbox.md) |
+| `<iswc-lightbox>` | Relaciones, flujos, estados, estructura o tiempo desde payloads declarativos. | [helpers/lightbox.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/helpers/lightbox.md) |
 | `<iswc-relative-time>` | Formato, observación y posicionamiento reutilizable sobre APIs nativas. | [helpers/relative-time.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/helpers/relative-time.md) |
 | `<iswc-format>` | Web Component genérico de formateo con Intl. | [helpers/format.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/helpers/format.md) |
 | `<iswc-observer>` | Web Component genérico que envuelve IntersectionObserver, MutationObserver y ResizeObserver vía type. | [helpers/observer.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/helpers/observer.md) |

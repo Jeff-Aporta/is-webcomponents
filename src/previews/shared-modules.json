@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-11-22T01:59:24.547Z",
-  "count": 30,
+  "generatedAt": "2026-11-25T18:11:33.768Z",
+  "count": 32,
   "modules": [
     {
       "file": "animar.ts",
@@ -311,6 +311,29 @@
         "termino",
         "formato",
         "observarIdioma"
+      ]
+    },
+    {
+      "file": "oklch.ts",
+      "id": "oklch",
+      "path": "src/core/oklch.ts",
+      "summary": "Módulo compartido `oklch.ts`.",
+      "bytes": 3252,
+      "exports": [
+        "hexToOklch",
+        "oklchToHex",
+        "rotarTono",
+        "ANGULO_AUREO"
+      ]
+    },
+    {
+      "file": "pan-zoom.ts",
+      "id": "pan-zoom",
+      "path": "src/core/pan-zoom.ts",
+      "summary": "Módulo compartido `pan-zoom.ts`.",
+      "bytes": 4964,
+      "exports": [
+        "createPanZoom"
       ]
     },
     {

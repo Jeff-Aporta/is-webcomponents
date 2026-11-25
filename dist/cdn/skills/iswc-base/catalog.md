@@ -156,7 +156,7 @@ Skill general: [SKILL.md](SKILL.md) · Runtime sin tag: [tools/runtime.md](tools
 | --- | --- |
 | `helpers/popover.md` | `<iswc-popover>` |
 | `helpers/ui.md` | `<iswc-ui>` |
-| `diagrams/lightbox.md` | `<iswc-lightbox>` |
+| `helpers/lightbox.md` | `<iswc-lightbox>` |
 | `helpers/relative-time.md` | `<iswc-relative-time>` |
 | `helpers/format.md` | `<iswc-format>` |
 | `helpers/observer.md` | `<iswc-observer>` |

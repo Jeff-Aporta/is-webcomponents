@@ -179,7 +179,7 @@ Generado de los `.json` de `src/components`. Antes de crear algo, búscalo aquí
 | `iswc-format-date` | Muestra una fecha con el formato y la configuración regional indicados. | hour, minute, second, year, month, day, weekday, era, hour-format, time-zone | `src/components/helpers/format-date.json` |
 | `iswc-format-number` | Muestra un número con separadores, decimales, moneda o porcentaje según la configuración regional. | value, type, currency, minimum-fraction-digits, maximum-fraction-digits, pad-start, pad-length, minimum-integer-digits | `src/components/helpers/format-number.json` |
 | `iswc-intersection-observer` | Emite eventos cuando su contenido entra o sale de la vista (alias de iswc-observer type="intersection"). | root, intersect-class, threshold, once | `src/components/helpers/intersection-observer.json` |
-| `iswc-lightbox` | Visor a pantalla completa para imágenes u otro contenido, con navegación entre elementos. |  | `src/components/diagrams/lightbox.json` |
+| `iswc-lightbox` | Visor a pantalla completa para imágenes u otro contenido, con navegación entre elementos. |  | `src/components/helpers/lightbox.json` |
 | `iswc-md-editor` | Vista previa de markdown con diálogo a pantalla completa para editarlo y revisarlo. | label, filename, can-edit | `src/components/helpers/md-editor.json` |
 | `iswc-md-render` | Muestra markdown o HTML en línea con variables {{var}} como chips y edición en el sitio opcional. | can-edit, placeholder | `src/components/helpers/md-render.json` |
 | `iswc-mutation-observer` | Emite eventos cuando cambia el DOM de su contenido (alias de iswc-observer type="mutation"). | child-list, attr | `src/components/helpers/mutation-observer.json` |

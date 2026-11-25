@@ -23,6 +23,16 @@ export const LoteAppSchema = z.object({
 });
 export type LoteApp = z.infer<typeof LoteAppSchema>;
 
+/** Datos para que la app sea un plugin de otras (`plugin.json`, contrato `iswc-plugin/v1` de `loadPlugin`). */
+export const PluginAppSchema = z.object({
+  /** Nombre estable de la app (`crm`, `diagrams`): alias `@<app>/` en los import maps de quien la consume. */
+  app: z.string(),
+  /** `dueño/repo` de GitHub donde se publica `dist/cdn/` (jsDelivr `gh/<repo>@<sha>/dist/cdn/`). */
+  repo: z.string(),
+  titulo: z.string().optional(),
+});
+export type PluginApp = z.infer<typeof PluginAppSchema>;
+
 export const ConstruirAppOptsSchema = z.object({
   /** Carpeta absoluta de la app (la que tiene `deno.json`). */
   raiz: z.string(),
@@ -55,6 +65,8 @@ export const ConstruirAppOptsSchema = z.object({
   /** URLs extra con `modulepreload` en el bloque (destinos del import map que la página usa al arrancar). */
   precargas: z.array(z.string()).optional(),
   lote: LoteAppSchema.optional(),
+  /** Si se da, el build escribe `<salida>/plugin.json` y la app se puede cargar con `iswcLoader.loadPlugin`. */
+  plugin: PluginAppSchema.optional(),
   /** `deps.json` del kit vendorizado (relativo a `raiz`). Por defecto `src/vendor/iswc-base/deps.json`; si falta, se baja del pin. */
   depsKit: z.string().optional(),
   /** Staging SCSS → CSS relativo a `raiz` (espejo de la raíz). Por defecto `.tmp-scss`. */
