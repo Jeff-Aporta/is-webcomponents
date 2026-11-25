@@ -13,6 +13,7 @@
  * propio loader, basta con el tipo inferido.
  */
 import { z } from "zod";
+import { PluginInfoSchema, PluginOptsSchema } from "./plugin.schemas.js";
 
 /* --------------------------------------------------------------------------
  * Mirror — entrada del catálogo de espejos CDN.
@@ -333,6 +334,13 @@ export const iswcLoaderSchema = z.object({
     input: [z.custom<ParentNode>().optional()],
     output: z.promise(AutoloadObserverSchema),
   }),
+  /** Enrutador de plugins (capa 2): registra los tags de otra app por repo + SHA + prefijo. */
+  loadPlugin: z.function({
+    input: [PluginOptsSchema],
+    output: z.promise(PluginInfoSchema),
+  }),
+  /** Plugins ya registrados con `loadPlugin`. */
+  getPlugins: z.function({ input: [], output: z.array(PluginInfoSchema) }),
   /** `true` si todos los tags `iswc-*` de la raíz ya están definidos (equivalente a `allDefined()`). */
   listos: z.function({
     input: [z.custom<ParentNode>().optional()],

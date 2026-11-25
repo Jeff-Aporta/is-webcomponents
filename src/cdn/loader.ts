@@ -15,6 +15,7 @@
  *   loader-ref      resolveRef (API de GitHub): solo sin pin y con espejos que lo necesiten
  *   loader-hashes   `asset-hashes.json` en diferido: `?v=` solo en orígenes mutables (Pages/local)
  *   loader-autoload observar() (MutationObserver) y listos() (allDefined)
+ *   loader-plugin   loadPlugin(): enrutador de componentes de OTRA app (repo + SHA + prefijo), ver ./loader.md
  *
  * Docs: ./loader.md (también en dist/cdn/core/loader.md)
  * Build sustituye __IS_LOADER_CATALOG__, __IS_ASSET_HASHES__ y __IS_BUILD_SHA__.
@@ -38,6 +39,7 @@ import type { SheetCacheApi } from './schemas/sheet-cache.schemas.js';
 import { ensureElement, isElementReady } from './ensure-element.js';
 import { ASSET_HASH_PARAM, ASSET_HASH_PARAM_LEGADO, esUrlInmutable, lookupHash, withAssetHash } from './build/asset-url.js';
 import type { DepsLoader, LoaderCtx } from './schemas/loader-capas.schemas.js';
+import type { PluginInfo, PluginOpts } from './schemas/plugin.schemas.js';
 
 import {
   type AppComponentEntry,
@@ -72,6 +74,7 @@ const paginas = capa(() => import('@jeff-aporta/iswc-base/cdn/loader-pages.js'))
 const refGithub = capa(() => import('@jeff-aporta/iswc-base/cdn/loader-ref.js'));
 const hashesDiferidos = capa(() => import('@jeff-aporta/iswc-base/cdn/loader-hashes.js'));
 const autoload = capa(() => import('@jeff-aporta/iswc-base/cdn/loader-autoload.js'));
+const plugin = capa(() => import('@jeff-aporta/iswc-base/cdn/loader-plugin.js'));
 
 /**
  * SHA del script que se está ejecutando (`@abc…` en jsDelivr) o null.
@@ -209,6 +212,8 @@ const registry = createRegistry();
 const appComponents = new Map<string, AppComponentEntry>();
 /** Cierre de módulos por tag de la app (`registerApp`/`configure({ deps })`), para la precarga. */
 const appDeps = new Map<string, string[]>();
+/** Plugins cargados con `loadPlugin` (los llena la capa 2; sus prefijos los observa el autoloader). */
+const plugins: PluginInfo[] = [];
 /** Caché de hojas que pidió `registerApp` (se instala en segundo plano, capa 2). */
 let hojasApp: Promise<unknown> | null = null;
 
@@ -937,7 +942,20 @@ export const iswcLoader: iswcLoaderShape = {
    * llama; devuelve el tirador `parar()` para dejar de observar.
    */
   observar(raiz?: ParentNode): Promise<AutoloadObserver> {
-    return autoload().then((m) => m.observar(raiz, (tag) => iswcLoader.ensure(tag)));
+    return autoload().then((m) => m.observar(raiz, (tag) => iswcLoader.ensure(tag), () => plugins.map((p) => p.prefijo)));
+  },
+
+  /**
+   * Enrutador de plugins (capa 2): registra los tags de OTRA app (`{ app, repo, sha, prefijo, tags? }`; contrato en
+   * ./loader.md) y su prefijo para el autoloader. Misma petición = misma promesa; otro SHA para la misma app falla.
+   */
+  loadPlugin(opts: PluginOpts): Promise<PluginInfo> {
+    return plugin().then((m) => m.cargarPlugin(iswcLoader, ctx, plugins, opts));
+  },
+
+  /** Plugins ya registrados con `loadPlugin`. */
+  getPlugins(): PluginInfo[] {
+    return plugins.map((p) => ({ ...p }));
   },
 
   /**
@@ -945,7 +963,7 @@ export const iswcLoader: iswcLoaderShape = {
    * definidos: el equivalente de `allDefined()`.
    */
   listos(raiz?: ParentNode): Promise<boolean> {
-    return autoload().then((m) => m.listos(raiz));
+    return autoload().then((m) => m.listos(raiz, plugins.map((p) => p.prefijo)));
   },
 
   isReady: isElementReady,

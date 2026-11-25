@@ -12,6 +12,8 @@
  *   A3 `?v=` ausente sobre pin (`origenMutable: false`) y presente en origen mutable (registrador y entradas en el HTML;
  *      nunca dentro de un `.mjs` ni en un chunk).
  *   A4 idempotencia: una segunda corrida sin cambios no reescribe HTML y deja `dist` byte a byte igual (salvo el sello).
+ *   A6 `plugin.json` (`iswc-plugin/v1`): tags con prefijo, rutas relativas existentes, cierres de chunks y la comprobación
+ *      de `loadPlugin` (`comprobarManifiesto`/`entradasDe`) sobre el manifiesto real.
  *   A5 Edge headless: la vista define `xx-a` y `xx-b` con su estilo (`iswc:css`) sin pedir ningún `.css` de la app, y
  *      los cierres del registrador (`xxLoader.deps.json`) se piden una vez con la primera interacción, no al cargar.
  */
@@ -104,6 +106,7 @@ const opciones = (cdn: string, origenMutable: boolean): ConstruirAppOpts => ({
   origenMutable,
   tags: { 'xx-a': 'src/js/components/xx/xx-a.ts', 'xx-b': 'view/hola/components/xx-b.ts' },
   html: [{ archivo: VISTA, kit: ['iswc-button'], app: ['xx-a', 'xx-b'] }],
+  plugin: { app: 'xx', repo: 'Jeff-Aporta/fixture-xx', titulo: 'Fixture' },
 });
 
 test('gobernanza/construir-app: A1–A5 conversor sobre una app de fixture', async (t) => {
@@ -128,6 +131,22 @@ test('gobernanza/construir-app: A1–A5 conversor sobre una app de fixture', asy
   assert.deepEqual(inf.tags, ['xx-a', 'xx-b']);
   const htmlPin = readFileSync(join(APP, VISTA), 'utf8');
   assert.ok(!/\?v=/.test(htmlPin) && !readFileSync(join(DIST, 'xxLoader.min.mjs'), 'utf8').includes('?v='), 'A3 ?v= sobre pin');
+
+  // A6 plugin.json: el contrato que lee `iswcLoader.loadPlugin` de otra app
+  const man = JSON.parse(readFileSync(join(DIST, 'plugin.json'), 'utf8'));
+  assert.equal(man.schema, 'iswc-plugin/v1');
+  assert.deepEqual([man.app, man.repo, man.prefijo, man.loader], ['xx', 'Jeff-Aporta/fixture-xx', 'xx-', 'xxLoader.min.mjs'], 'A6 cabecera del manifiesto');
+  assert.deepEqual(Object.keys(man.tags), ['xx-a', 'xx-b'], 'A6 tags');
+  assert.ok(!JSON.stringify(man).includes('?v='), 'A6 ?v= sobre pin');
+  for (const href of [...Object.values(man.tags as Record<string, string>), ...Object.values(man.deps as Record<string, string[]>).flat()]) {
+    assert.ok(existsSync(join(DIST, href)), `A6 plugin.json apunta a ${href}, que no existe`);
+  }
+  const plug = await import('../../src/cdn/loader-plugin.ts');
+  const peticion = { app: 'xx', repo: 'Jeff-Aporta/fixture-xx', sha: 'a'.repeat(40), prefijo: 'xx-' };
+  const raizPlugin = 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/fixture-xx@' + 'a'.repeat(40) + '/dist/cdn/';
+  const registro = plug.entradasDe(plug.comprobarManifiesto(man, peticion, raizPlugin), raizPlugin);
+  assert.equal(registro.map['xx-a']!.href, `${raizPlugin}js/components/xx/xx-a.min.mjs`, 'A6 href absoluto de xx-a');
+  assert.ok(registro.deps['xx-a']!.every((h) => h.startsWith(`${raizPlugin}_chunks/`)), 'A6 cierre de xx-a');
 
   // A2 orden del bloque
   const bloque = htmlPin.slice(htmlPin.indexOf('<!-- iswc:precarga:inicio -->'), htmlPin.indexOf('<!-- iswc:precarga:fin -->'));

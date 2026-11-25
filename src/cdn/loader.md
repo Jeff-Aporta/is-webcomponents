@@ -7,7 +7,7 @@ Entry CDN liviano del kit. Carga solo lo pedido, con pin, mirrors y anti-redunda
 | Artefacto | Path |
 | --- | --- |
 | Fuente (núcleo, capa 1) | `src/cdn/loader.ts` |
-| Capa 2 (al primer uso) | `src/cdn/loader-{sheets,store,mirrors,pages,ref,hashes,autoload}.ts` |
+| Capa 2 (al primer uso) | `src/cdn/loader-{sheets,store,mirrors,pages,ref,hashes,autoload,plugin}.ts` |
 | Planificador | `src/cdn/load-plan.ts` |
 | Este doc | `src/cdn/loader.md` |
 | Publicado | `dist/cdn/core/loader.min.mjs` (núcleo) · `dist/cdn/core/loader-<x>.min.mjs` (capa 2) · `dist/cdn/core/loader.md` |
@@ -30,6 +30,7 @@ Nombre: el kit es **`iswc-base`**; en las URLs va el nombre real del repo en Git
 | 2 | `core/loader-ref.min.mjs` | `resolveRef` (API de GitHub) | solo sin pin y con espejos que lo necesiten; con pin, `BOOT_HOST` o `self` nunca |
 | 2 | `core/loader-hashes.min.mjs` | `asset-hashes.json` en diferido (`?v=`) | solo en orígenes mutables (Pages/local), en `loadPageModules`/`loadPageStyles`/`assetUrl` |
 | 2 | `core/loader-autoload.min.mjs` | autoloader opcional: `observar()` (MutationObserver) y `listos(raiz)` (`allDefined`) | `observar`/`listos` |
+| 2 | `core/loader-plugin.min.mjs` | enrutador de plugins: `loadPlugin()` (componentes de OTRA app por repo + SHA + prefijo) | `loadPlugin` |
 
 La API pública (`iswcLoaderShape`) no cambia de forma: cada método de capa 2 es un envoltorio `async` que hace
 `import()` del módulo y le pasa el contexto del núcleo. Cambios de comportamiento:
@@ -39,6 +40,73 @@ La API pública (`iswcLoaderShape`) no cambia de forma: cada método de capa 2 e
   la página cuando su shell crítico está definido (`ensure`) y lo demás se «upgradea» al llegar.
 - `sheets.install()` devuelve una **promesa** de la API de la caché (antes la API); `sheets.get()` sigue síncrono.
 - Los hrefs sueltos de `load`, `ensure(tag, { href })`, `registerApp` y `loadPageModules` se cargan por extensión.
+
+## Plugins: `L.loadPlugin()` (el kit como enrutador)
+
+`L.load('iswc-…')` carga los componentes del kit. Los de **otra app** (`crm-*`, `iswd-*`, `peon-*`…) no viven aquí: cada app
+es dueña de los suyos y `loadPlugin` solo los **enruta**: dado su repo, su SHA y su prefijo, baja el manifiesto de esa
+app, registra sus tags (como `registerApp`) y le enseña al autoloader su prefijo. iswc-base no conoce ningún componente
+de los plugins. Capa 2 (`loader-plugin`, no pesa en el núcleo); fuente `src/cdn/loader-plugin.ts`, contratos en
+`src/cdn/schemas/plugin.schemas.ts`.
+
+```js
+import { iswcLoader as L } from '@jeff-aporta/iswc-base/core/loader.min.mjs';
+
+const diagramas = await L.loadPlugin({
+  app: 'diagrams',                         // nombre estable; alias de import map `@diagrams/`
+  repo: 'Jeff-Aporta/iswc-diagrams',       // GitHub dueño/repo  →  jsDelivr gh/<repo>@<sha>/dist/cdn/
+  sha: '<commit de 40 hex>',               // pin obligatorio (nunca main, rama ni SHA corto)
+  prefijo: 'iswd-',                        // prefijo de sus tags, con guion final; nunca `iswc-`
+  tags: ['iswd-flowchart'],                // opcional: cargarlos ya; sin él solo se registran
+});
+// → { app, repo, sha, prefijo, raiz, tags: [...], alias: { '@diagrams/': raiz }, kit }
+await L.ensure('iswd-sequence-diagram');   // un tag del plugin se pide igual que uno propio
+await L.observar();                        // y el autoloader ya pide también los `iswd-*` que aparezcan
+L.getPlugins();                            // los plugins registrados en esta página
+```
+
+Qué hace, en orden: (1) valida la petición (`TypeError` con el campo que falla); (2) baja `plugin.json` de la raíz del
+plugin: jsDelivr → githack con el mismo SHA (con `host` alterno, solo ese origen: desarrollo y pruebas); con un pin SHA la
+URL es inmutable y se pide con `cache: 'force-cache'`, en un origen mutable pasa por `routeHref` (`?v=`); (3) comprueba
+el manifiesto: esquema `iswc-plugin/v1`, mismo repo y mismo prefijo, todo tag con el prefijo y todo `href` en el mismo
+origen que el manifiesto; (4) registra los tags (`registerApp`, rutas absolutas; la caché de hojas solo si algún tag trae
+`css`) y su cierre de chunks (`modulepreload` al pedir el tag); (5) si hay `tags`, los carga ya.
+
+Reglas: una página usa **una versión por app** (misma petición = misma promesa; otro SHA para la misma app, un prefijo ya
+tomado o un tag ya registrado por otro módulo fallan con mensaje claro); un fallo deja la app libre para reintentar. Un
+plugin importa el kit por el alias `@jeff-aporta/iswc-base/` del import map de la **página** (una sola instancia del kit).
+
+### Contrato que cada app expone (`iswc-plugin/v1`)
+
+Una app es plugin si publica, en `dist/cdn/` de su repo (los archivos viajan commiteados, como `dist/` del kit):
+
+| Archivo | Quién lo escribe | Para qué |
+| --- | --- | --- |
+| `plugin.json` | `construirApp({ …, plugin: { app, repo, titulo? } })` | manifiesto que lee el enrutador |
+| `<prefijo>Loader.min.mjs` | `construirApp` (ya existente) | registrador de la propia app (`registerApp` de sus tags); un plugin no lo necesita |
+| `deps.json`, `_chunks/`, `*.min.mjs` | `construirApp` | los módulos y el cierre |
+
+```jsonc
+{
+  "schema": "iswc-plugin/v1",
+  "app": "diagrams", "repo": "Jeff-Aporta/iswc-diagrams", "prefijo": "iswd-", "titulo": "Diagramas ISWC",
+  "loader": "iswdLoader.min.mjs",
+  "kit": { "repo": "Jeff-Aporta/is-webcomponents", "sha": "<pin del kit con el que se construyó>" },
+  "tags": { "iswd-flowchart": "diagrams/iswd-flowchart.min.mjs", "iswd-x": { "href": "…min.mjs", "css": ["…css"] } },
+  "deps": { "iswd-flowchart": ["_chunks/chunk-ABCD1234.mjs"] }
+}
+```
+
+Rutas relativas al manifiesto (con `?v=` en origen mutable, igual que el registrador). Los tags de la app empiezan por
+`<prefijo>-` y el prefijo es único en el ecosistema (`iswc-` kit, `iswd-` diagramas, `crm-`, `peon-`).
+
+**Alias por app en el import map** (para diseñar con imports en la app que consume): `construirApp({ importMap: { '@diagrams/':
+'https://cdn.jsdelivr.net/gh/<repo>@<sha>/dist/cdn/' } })` lo escribe en el bloque `iswc:precarga`; en tiempo de ejecución
+la misma entrada llega en `info.alias`. Un import map no admite entradas nuevas tras el primer `import()`, así que el
+alias se declara en el HTML y `loadPlugin` carga por tag.
+
+Hermeticidad: el plugin se consume **solo por CDN con SHA** (la misma regla que el kit): nunca rutas locales entre repos. El
+SHA del plugin vive en UN sitio del consumidor (constante o `deno.json`), y subirlo es una decisión del consumidor.
 
 ## Bootstrap recomendado (apps)
 

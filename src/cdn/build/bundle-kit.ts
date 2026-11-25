@@ -27,7 +27,7 @@ export const EXT_MODULO = '.mjs';
 export const CARPETA_CHUNKS = '_chunks';
 
 /** Módulos de capa 2 del loader (`src/cdn/loader-<x>.ts` → `core/loader-<x>.min.mjs`), plan D7 / F4. */
-export const CAPAS_LOADER = ['sheets', 'store', 'mirrors', 'pages', 'ref', 'hashes', 'autoload'];
+export const CAPAS_LOADER = ['sheets', 'store', 'mirrors', 'pages', 'ref', 'hashes', 'autoload', 'plugin'];
 
 const barras = (p: string) => p.replaceAll('\\', '/');
 

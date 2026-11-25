@@ -12,6 +12,8 @@ para que una app que usa tres componentes no baje los doscientos.
   el pin a SHA.
 - `loader-autoload.ts` — el autoloader opcional: `observar()` (carga los `iswc-*` que aparezcan) y
   `listos(raiz)` (si los de una raíz ya están definidos).
+- `loader-plugin.ts` — el enrutador de plugins: `loadPlugin()` carga los componentes de otra app (repo + SHA +
+  prefijo) leyendo su `plugin.json`; contrato `iswc-plugin/v1` en `loader.md`.
 - `ensure-element.ts` — registra un elemento que aun no esta definido.
 - `collect-iswc-tags.ts` — recoge los tags `iswc-*` de un arbol.
 - `asset-store.ts`, `loader-store.ts` — el estado del loader.

@@ -14,8 +14,11 @@
  */
 import type { AutoloadEnsureTag, AutoloadObserver, AutoloadRaiz } from './schemas/loader.schemas.js';
 
-/** Prefijo de los tags del kit. */
+/** Prefijo de los tags del kit; los plugins (`loadPlugin`) suman los suyos. */
 const PREFIJO = 'iswc-';
+
+/** ¿`tag` es de una familia observada? (`iswc-` más los prefijos de los plugins que se hayan cargado). */
+const esObservado = (tag: string, prefijos: readonly string[]): boolean => tag.startsWith(PREFIJO) || prefijos.some((p) => tag.startsWith(p));
 
 /** ¿El tag ya está registrado en el registro de custom elements? */
 function definido(tag: string): boolean {
@@ -29,14 +32,14 @@ function raizDe(raiz: ParentNode | undefined): AutoloadRaiz | null {
 }
 
 /** Tags `iswc-*` sin definir que cuelgan de `raiz` (incluido `raiz` si es uno). */
-function pendientes(raiz: AutoloadRaiz): string[] {
+function pendientes(raiz: AutoloadRaiz, prefijos: readonly string[] = []): string[] {
   const out = new Set<string>();
   if (raiz.nodeType === 1) {
     const el = raiz as Element;
-    if (el.localName.startsWith(PREFIJO) && !definido(el.localName)) out.add(el.localName);
+    if (esObservado(el.localName, prefijos) && !definido(el.localName)) out.add(el.localName);
   }
   for (const el of raiz.querySelectorAll('*')) {
-    if (el.localName.startsWith(PREFIJO) && !definido(el.localName)) out.add(el.localName);
+    if (esObservado(el.localName, prefijos) && !definido(el.localName)) out.add(el.localName);
   }
   return [...out].sort();
 }
@@ -46,7 +49,7 @@ function pendientes(raiz: AutoloadRaiz): string[] {
  * primero los que ya están en el árbol y luego los que se monten después. Entregar el tirador
  * `parar()` deja de observar.
  */
-export function observar(raiz: ParentNode | undefined, ensure: AutoloadEnsureTag): AutoloadObserver {
+export function observar(raiz: ParentNode | undefined, ensure: AutoloadEnsureTag, prefijos: () => readonly string[] = () => []): AutoloadObserver {
   const nodo = raizDe(raiz);
   if (!nodo || typeof MutationObserver === 'undefined') {
     return { parar() { /* sin DOM no hay nada que observar */ } };
@@ -63,12 +66,12 @@ export function observar(raiz: ParentNode | undefined, ensure: AutoloadEnsureTag
   const pedirDe = (nodo: Node): void => {
     if (nodo.nodeType !== 1) return;
     const el = nodo as Element;
-    if (el.localName.startsWith(PREFIJO)) pedir(el.localName);
+    if (esObservado(el.localName, prefijos())) pedir(el.localName);
     for (const hijo of el.querySelectorAll('*')) {
-      if (hijo.localName.startsWith(PREFIJO)) pedir(hijo.localName);
+      if (esObservado(hijo.localName, prefijos())) pedir(hijo.localName);
     }
   };
-  for (const tag of pendientes(nodo)) pedir(tag);
+  for (const tag of pendientes(nodo, prefijos())) pedir(tag);
   const observador = new MutationObserver((mutaciones) => {
     for (const mutacion of mutaciones) {
       for (const anadido of mutacion.addedNodes) pedirDe(anadido);
@@ -82,8 +85,8 @@ export function observar(raiz: ParentNode | undefined, ensure: AutoloadEnsureTag
  * `true` si todos los tags `iswc-*` que cuelgan de `raiz` (o del documento) ya están definidos:
  * el equivalente de `allDefined()`.
  */
-export function listos(raiz: ParentNode | undefined): boolean {
+export function listos(raiz: ParentNode | undefined, prefijos: readonly string[] = []): boolean {
   const nodo = raizDe(raiz);
   if (!nodo) return true;
-  return pendientes(nodo).length === 0;
+  return pendientes(nodo, prefijos).length === 0;
 }

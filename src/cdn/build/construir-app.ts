@@ -349,6 +349,26 @@ export async function construirApp(opts: ConstruirAppOpts): Promise<InformeBuild
   ].join('');
   writeFileSync(join(OUT, registrador), (await transform(fuenteRegistrador, { minify: true, format: 'esm', target: 'es2022' })).code);
   archivos.push(registrador, 'deps.json', depsRegistro);
+  if (opts.plugin) {
+    // Contrato `iswc-plugin/v1` (src/cdn/loader.md §Plugins): lo que `iswcLoader.loadPlugin` lee de OTRA app. Rutas relativas
+    // al manifiesto, con el mismo `?v=` del registrador; el cierre de chunks va tal cual (los chunks no llevan `?v=`).
+    const pluginTags: Record<string, string> = {};
+    const pluginDeps: Record<string, string[]> = {};
+    for (const t of Object.keys(pubTag).sort()) {
+      if (!t.startsWith(`${opts.prefijo}-`)) throw new Error(`construirApp: plugin ${opts.plugin.app}: el tag ${t} no empieza por ${opts.prefijo}-`);
+      pluginTags[t] = conV(pubTag[t]!);
+      const chunksDe = deps.tags[t]!.filter((m) => esChunk(m));
+      if (chunksDe.length) pluginDeps[t] = chunksDe;
+    }
+    const manifiesto = {
+      schema: 'iswc-plugin/v1', app: opts.plugin.app, repo: opts.plugin.repo, prefijo: `${opts.prefijo}-`,
+      ...(opts.plugin.titulo ? { titulo: opts.plugin.titulo } : {}), loader: registrador, kit: { repo: opts.repo ?? REPO_KIT, sha: pin },
+      tags: pluginTags, ...(Object.keys(pluginDeps).length ? { deps: pluginDeps } : {}),
+    };
+    writeFileSync(join(OUT, 'plugin.json'), `${JSON.stringify(manifiesto)}
+`);
+    archivos.push('plugin.json');
+  }
   if (mutable) {
     hashes[registrador] = await hashFile(join(OUT, registrador), registrador);
     writeFileSync(join(OUT, ASSET_HASHES_NAME), hashesJson(hashes));
