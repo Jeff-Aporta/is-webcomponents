@@ -112,7 +112,7 @@ export class ModalBase extends withStyleAttrs(IswcReactive) {
 
     this.#closeBtn.addEventListener('click', () => this.#requestClose(this.#closeBtn));
     this.#backdrop.addEventListener('click', () => {
-      if (this.hasAttribute('light-dismiss')) this.#requestClose(this.#backdrop);
+      if (this.cierraConVelo()) this.#requestClose(this.#backdrop);
     });
     this.shadowRoot!.querySelector<HTMLSlotElement>('slot[name="label"]')
       ?.addEventListener('slotchange', () => this.#syncLabel());
@@ -166,6 +166,20 @@ export class ModalBase extends withStyleAttrs(IswcReactive) {
     if (name === 'label') this.#syncLabel();
     if (name === 'without-header') this.#syncHeaderVisibility();
     this.onAttributeChanged(name, oldVal, newVal);
+  }
+
+  // ── Light dismiss ───────────────────────────────────────────────────
+  /**
+   * ¿El click en el velo cierra? Por defecto NO (hay que poner `light-dismiss`), salvo que la subclase
+   * cambie `lightDismissPorDefecto` (el drawer: el velo siempre cierra). `light-dismiss="false"` lo desactiva
+   * explícitamente incluso en esas subclases.
+   */
+  get lightDismissPorDefecto(): boolean { return false; }
+
+  cierraConVelo(): boolean {
+    const v = this.getAttribute('light-dismiss');
+    if (v === null) return this.lightDismissPorDefecto;
+    return v.trim().toLowerCase() !== 'false';
   }
 
   // ── Public API ──────────────────────────────────────────────────────

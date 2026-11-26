@@ -190,6 +190,40 @@
       ]
     },
     {
+      "id": "resize",
+      "title": "Redimensionable",
+      "lede": "<code class=\"code\">resize</code> añade un tirador en el borde: arrastrando (o con las flechas, Inicio y Fin) cambia el ancho, y <code class=\"code\">storage-key</code> recuerda el ancho elegido en <code class=\"code\">localStorage</code>.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<iswc-button id=\"openResize\">Abrir redimensionable</iswc-button>"
+        },
+        {
+          "kind": "html",
+          "html": [
+            "<iswc-drawer id=\"drwResize\" label=\"Redimensionable\" size=\"28em\" resize storage-key=\"docs-drawer-ancho\" header-height=\"3rem\" light-dismiss>",
+            "          <p>Arrastra el borde izquierdo del panel para cambiar el ancho: se recuerda entre visitas.</p>",
+            "        </iswc-drawer>"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "closable",
+      "title": "Sin botón de cerrar",
+      "lede": "<code class=\"code\">closable=\"false\"</code> esconde la X: el header y su título siguen, y Escape (o el velo con <code class=\"code\">light-dismiss</code>) siguen cerrando.",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": [
+            "<iswc-drawer label=\"Solo informativo\" closable=\"false\" light-dismiss>",
+            "          <p>Sin X: se cierra con Escape o tocando el velo.</p>",
+            "        </iswc-drawer>"
+          ]
+        }
+      ]
+    },
+    {
       "id": "no-header",
       "title": "Sin header",
       "lede": "<code class=\"code\">without-header</code> oculta el header y el botón de cerrar.",
@@ -288,7 +322,27 @@
             ],
             [
               "<code>light-dismiss</code> <span class=\"iswc-default-marker\" aria-hidden=\"true\">★</span>",
-              "Cierra al click fuera. (valor por defecto)"
+              "Cierra al click en el velo (por defecto sí; light-dismiss=\"false\" lo desactiva). (valor por defecto)"
+            ],
+            [
+              "<code>size</code>",
+              "Tamaño preferido (ancho o alto según placement). Con unidades de ventana (vw/vh) en pantallas angostas pasa a ocupar el 100%."
+            ],
+            [
+              "<code>closable</code> <span class=\"iswc-default-marker\" aria-hidden=\"true\">★</span>",
+              "<code>closable=\"false\"</code> esconde el botón de cerrar; el header sigue."
+            ],
+            [
+              "<code>resize</code>",
+              "Muestra el tirador del borde para cambiar el ancho arrastrando (y con el teclado)."
+            ],
+            [
+              "<code>storage-key</code>",
+              "Clave de localStorage donde se recuerda el ancho elegido."
+            ],
+            [
+              "<code>header-height</code>",
+              "Alto mínimo del header compacto (por defecto 3rem)."
             ]
           ]
         },

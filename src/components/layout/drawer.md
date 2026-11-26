@@ -48,13 +48,18 @@ Contenido.
 
 #### Atributos observados
 
-| Atributo | Tipo | Notas |
-| --- | --- | --- |
-| `open` | boolean | Fuente define default/restricción. |
-| `label` | string/según contrato | Fuente define default/restricción. |
-| `placement` | string/según contrato | Fuente define default/restricción. |
-| `without-header` | boolean | Fuente define default/restricción. |
-| `light-dismiss` | boolean | Fuente define default/restricción. |
+| Atributo | Tipo | Default | Notas |
+| --- | --- | --- | --- |
+| `open` | boolean | – | Si está abierto (reflected). |
+| `label` | string | – | Título del header; el `aria-labelledby` de la caja apunta a ese título. |
+| `placement` | `start` \| `end` \| `top` \| `bottom` | `end` | Borde del que sale el panel. |
+| `without-header` | boolean | – | Oculta el header y el botón de cerrar (el nombre accesible pasa a `aria-label`). |
+| `light-dismiss` | boolean | `true` | Cierra al hacer click en el velo (backdrop). `light-dismiss="false"` lo desactiva. |
+| `closable` | boolean | `true` | `closable="false"` esconde la X; el header y su título siguen. |
+| `size` | string | `23.75em` | Tamaño preferido (ancho o alto según placement). Con `vw`/`vh` en pantallas angostas (< 48rem) ocupa el 100% y no se redimensiona. |
+| `resize` | boolean | – | Muestra el tirador del borde: arrastrar cambia el ancho (teclado: flechas, Inicio y Fin). |
+| `storage-key` | string | – | Clave de `localStorage` donde se recuerda el ancho elegido. |
+| `header-height` | string | `3rem` | Alto mínimo del header compacto. |
 
 #### Propiedades públicas
 
@@ -65,6 +70,11 @@ Contenido.
 | `placement` | lectura/escritura | Declarada por clase. |
 | `withoutHeader` | lectura/escritura | Declarada por clase. |
 | `lightDismiss` | lectura/escritura | Declarada por clase. |
+| `closable` | lectura/escritura | `false` esconde el botón de cerrar. |
+| `size` | lectura/escritura | Tamaño preferido. |
+| `resize` | lectura/escritura | Muestra u oculta el tirador del borde. |
+| `storageKey` | lectura/escritura | Clave del ancho recordado. |
+| `headerHeight` | lectura/escritura | Alto mínimo del header. |
 
 ### Slots
 
@@ -131,6 +141,7 @@ Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en
 | `close-button` | Personalizable con `::part(close-button)`. |
 | `body` | Personalizable con `::part(body)`. |
 | `footer` | Personalizable con `::part(footer)`. |
+| `resize-handle` | Personalizable con `::part(resize-handle)`: el tirador del borde (solo con `resize`). |
 
 ### Custom states
 
@@ -140,7 +151,8 @@ No expone.
 
 | Token | Uso |
 | --- | --- |
-| `--iswc-drawer-size` | Tamaño preferido: ancho (start/end) o alto (top/bottom); default 23.75em. |
+| `--iswc-drawer-size` | Tamaño preferido: ancho (start/end) o alto (top/bottom); default 23.75em. El atributo `size` lo sobreescribe. |
+| `--iswc-drawer-header-height` | Alto mínimo del header; default 3rem (el atributo `header-height` lo escribe). |
 | `--width` | Token leído o definido por componente. |
 | `--spacing` | Token leído o definido por componente. |
 | `--show-duration` | Token leído o definido por componente. |
@@ -204,7 +216,12 @@ Tags del módulo: `<iswc-drawer>`.
 
 ## Accesibilidad
 
-Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-modal`, `aria-label`, `aria-hidden`.
+Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `role="dialog"`, `aria-modal="true"` y `aria-labelledby` al título del header (`aria-label` cuando el header va oculto).
+
+- Al abrir, el foco entra en el panel (primer control) y queda atrapado dentro mientras está abierto.
+- Escape cierra solo la capa de arriba; al cerrar el foco vuelve al disparador.
+- Click en el velo cierra con `light-dismiss`; el scroll del documento queda bloqueado mientras el panel está abierto.
+- El tirador se maneja con el teclado (flechas, Inicio y Fin) y anuncia su valor (`aria-valuenow`).
 
 ## Ejemplo avanzado
 
@@ -220,7 +237,8 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-modal`
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
-- Agregar un atributo `size`: el tamaño sale del `font-size` del contexto y de `em`.
+- Cambiar el tamaño solo por `--iswc-drawer-size` cuando lo que se quiere es un valor por documento: para un tamaño por instancia está el atributo `size`.
+- Esperar que el velo NO cierre con `light-dismiss`: en el drawer el click en el velo cierra por defecto; para un panel que solo se cierre con sus botones, `light-dismiss="false"` (en `iswc-dialog` sí es opt-in).
 
 ## Reglas para LLM
 

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-25T18:11:33.768Z",
+  "generatedAt": "2026-11-26T22:49:45.565Z",
   "count": 32,
   "modules": [
     {
@@ -7,7 +7,7 @@
       "id": "animar",
       "path": "src/core/animar.ts",
       "summary": "Módulo compartido `animar.ts`.",
-      "bytes": 1842,
+      "bytes": 1894,
       "exports": [
         "DURACION",
         "KEYFRAMES",
@@ -19,7 +19,7 @@
       "id": "anunciar",
       "path": "src/core/anunciar.ts",
       "summary": "Módulo compartido `anunciar.ts`.",
-      "bytes": 1275,
+      "bytes": 1312,
       "exports": [
         "regionViva",
         "anunciar"
@@ -30,7 +30,7 @@
       "id": "app-init",
       "path": "src/core/app-init.ts",
       "summary": "Módulo compartido `app-init.ts`.",
-      "bytes": 7145,
+      "bytes": 7285,
       "exports": [
         "APP_CFG_KEY",
         "PALETAS",
@@ -49,7 +49,7 @@
       "id": "attrs",
       "path": "src/core/attrs.ts",
       "summary": "Módulo compartido `attrs.ts`.",
-      "bytes": 17389,
+      "bytes": 17832,
       "exports": [
         "isCssColorValue",
         "syncStyleAttr",
@@ -70,7 +70,7 @@
       "id": "cdn-ref",
       "path": "src/core/cdn-ref.ts",
       "summary": "Módulo compartido `cdn-ref.ts`.",
-      "bytes": 5303,
+      "bytes": 5453,
       "exports": [
         "REPO_GITHUB",
         "NOMBRE_KIT",
@@ -91,7 +91,7 @@
       "id": "code-highlight",
       "path": "src/core/code-highlight.ts",
       "summary": "Módulo compartido `code-highlight.ts`.",
-      "bytes": 20162,
+      "bytes": 20724,
       "exports": [
         "normalizeLang",
         "emptyState",
@@ -108,7 +108,7 @@
       "id": "code",
       "path": "src/core/code.ts",
       "summary": "Módulo compartido `code.ts`.",
-      "bytes": 23449,
+      "bytes": 24077,
       "exports": [
         "dedent",
         "unwrapHandHighlight",
@@ -129,7 +129,7 @@
       "id": "color",
       "path": "src/core/color.ts",
       "summary": "Módulo compartido `color.ts`.",
-      "bytes": 6369,
+      "bytes": 6527,
       "exports": [
         "normalizeTkHue",
         "SERIE_HUES",
@@ -147,7 +147,7 @@
       "id": "diagram-grid",
       "path": "src/core/diagram-grid.ts",
       "summary": "Módulo compartido `diagram-grid.ts`.",
-      "bytes": 14212,
+      "bytes": 14515,
       "exports": [
         "TK_DIAGRAM_GRID",
         "TK_DIAGRAM_RADIUS_PX",
@@ -168,7 +168,7 @@
       "id": "dom",
       "path": "src/core/dom.ts",
       "summary": "Módulo compartido `dom.ts`.",
-      "bytes": 7408,
+      "bytes": 7628,
       "exports": [
         "hasSlotted",
         "assignedNodes",
@@ -188,7 +188,7 @@
       "id": "icon-loader",
       "path": "src/core/icon-loader.ts",
       "summary": "Módulo compartido `icon-loader.ts`.",
-      "bytes": 18540,
+      "bytes": 18924,
       "exports": [
         "iconApiUrl",
         "AVISO_FALTA_LOCAL",
@@ -209,7 +209,7 @@
       "id": "intl",
       "path": "src/core/intl.ts",
       "summary": "Módulo compartido `intl.ts`.",
-      "bytes": 1995,
+      "bytes": 2043,
       "exports": [
         "lista",
         "plural"
@@ -220,7 +220,7 @@
       "id": "iswc-css-vacio",
       "path": "src/core/iswc-css-vacio.ts",
       "summary": "Módulo compartido `iswc-css-vacio.ts`.",
-      "bytes": 722,
+      "bytes": 733,
       "exports": []
     },
     {
@@ -228,7 +228,7 @@
       "id": "iswc-element",
       "path": "src/core/iswc-element.ts",
       "summary": "Módulo compartido `iswc-element.ts`.",
-      "bytes": 21484,
+      "bytes": 21974,
       "exports": [
         "soportaHojasAdoptadas",
         "textoHojasBase",
@@ -249,7 +249,7 @@
       "id": "iswc-form-chrome",
       "path": "src/core/iswc-form-chrome.ts",
       "summary": "Módulo compartido `iswc-form-chrome.ts`.",
-      "bytes": 1781,
+      "bytes": 1821,
       "exports": [
         "IswcFormChrome extends IswcFormControl"
       ]
@@ -259,9 +259,9 @@
       "id": "iswc-form-control",
       "path": "src/core/iswc-form-control.ts",
       "summary": "Módulo compartido `iswc-form-control.ts`.",
-      "bytes": 8535,
+      "bytes": 8735,
       "exports": [
-        "IswcFormControl extends IswcReactive \n  static formAssociated"
+        "IswcFormControl extends IswcReactive \r\n  static formAssociated"
       ]
     },
     {
@@ -269,13 +269,13 @@
       "id": "iswc-reactive",
       "path": "src/core/iswc-reactive.ts",
       "summary": "Módulo compartido `iswc-reactive.ts`.",
-      "bytes": 14419,
+      "bytes": 14744,
       "exports": [
         "registrarPintor",
         "prop",
         "state",
         "watch",
-        "IswcReactive extends IswcElement \n  static override get observedAttributes"
+        "IswcReactive extends IswcElement \r\n  static override get observedAttributes"
       ]
     },
     {
@@ -283,7 +283,7 @@
       "id": "iswc-storage",
       "path": "src/core/iswc-storage.ts",
       "summary": "Módulo compartido `iswc-storage.ts`.",
-      "bytes": 6003,
+      "bytes": 6151,
       "exports": [
         "ISWC_PREFIX",
         "iswcKey",
@@ -302,7 +302,7 @@
       "id": "localize",
       "path": "src/core/localize.ts",
       "summary": "Módulo compartido `localize.ts`.",
-      "bytes": 6990,
+      "bytes": 7140,
       "exports": [
         "registrarTerminos",
         "resolverLocale",
@@ -318,7 +318,7 @@
       "id": "oklch",
       "path": "src/core/oklch.ts",
       "summary": "Módulo compartido `oklch.ts`.",
-      "bytes": 3252,
+      "bytes": 3319,
       "exports": [
         "hexToOklch",
         "oklchToHex",
@@ -331,7 +331,7 @@
       "id": "pan-zoom",
       "path": "src/core/pan-zoom.ts",
       "summary": "Módulo compartido `pan-zoom.ts`.",
-      "bytes": 4964,
+      "bytes": 5113,
       "exports": [
         "createPanZoom"
       ]
@@ -341,7 +341,7 @@
       "id": "path-turtle",
       "path": "src/core/path-turtle.ts",
       "summary": "Módulo compartido `path-turtle.ts`.",
-      "bytes": 10590,
+      "bytes": 10919,
       "exports": [
         "PathTurtle"
       ]
@@ -351,7 +351,7 @@
       "id": "plantilla",
       "path": "src/core/plantilla.ts",
       "summary": "Módulo compartido `plantilla.ts`.",
-      "bytes": 10947,
+      "bytes": 11221,
       "exports": [
         "html",
         "svg",
@@ -364,7 +364,7 @@
       "id": "position",
       "path": "src/core/position.ts",
       "summary": "Módulo compartido `position.ts`.",
-      "bytes": 24374,
+      "bytes": 25001,
       "exports": [
         "PLACEMENTS",
         "PLACEMENTS_AUTO",
@@ -382,7 +382,7 @@
       "id": "prefs",
       "path": "src/core/prefs.ts",
       "summary": "Módulo compartido `prefs.ts`.",
-      "bytes": 13081,
+      "bytes": 13471,
       "exports": [
         "getComponentPrefs",
         "setComponentPrefs",
@@ -393,7 +393,7 @@
         "getPrefsRootKey",
         "getLegacyPrefsRootKey",
         "SCROLL_MEMORY_ATTRS",
-        "ScrollMemory \n  host",
+        "ScrollMemory \r\n  host",
         "bindScrollMemoryApi"
       ]
     },
@@ -402,7 +402,7 @@
       "id": "props-element",
       "path": "src/core/props-element.ts",
       "summary": "Módulo compartido `props-element.ts`.",
-      "bytes": 4936,
+      "bytes": 5056,
       "exports": [
         "atributosDe"
       ]
@@ -412,7 +412,7 @@
       "id": "ranuras",
       "path": "src/core/ranuras.ts",
       "summary": "Módulo compartido `ranuras.ts`.",
-      "bytes": 2611,
+      "bytes": 2674,
       "exports": [
         "ranurasDe",
         "ranura",
@@ -425,7 +425,7 @@
       "id": "reemitir",
       "path": "src/core/reemitir.ts",
       "summary": "Módulo compartido `reemitir.ts`.",
-      "bytes": 1139,
+      "bytes": 1164,
       "exports": [
         "reemitir"
       ]
@@ -435,7 +435,7 @@
       "id": "svg-chart-engine",
       "path": "src/core/svg-chart-engine.ts",
       "summary": "Módulo compartido `svg-chart-engine.ts`.",
-      "bytes": 6576,
+      "bytes": 6747,
       "exports": [
         "svgEl",
         "scaleLinear",
@@ -454,7 +454,7 @@
       "id": "tk-inline-md",
       "path": "src/core/tk-inline-md.ts",
       "summary": "Módulo compartido `tk-inline-md.ts`.",
-      "bytes": 4345,
+      "bytes": 4449,
       "exports": [
         "inlineMdWeb",
         "applySvgTextContent"
@@ -465,7 +465,7 @@
       "id": "tk-text",
       "path": "src/core/tk-text.ts",
       "summary": "Módulo compartido `tk-text.ts`.",
-      "bytes": 20630,
+      "bytes": 21160,
       "exports": [
         "TK_ICON_TOKEN_RE",
         "iconAssetPath",
@@ -486,7 +486,7 @@
       "id": "tree-layout",
       "path": "src/core/tree-layout.ts",
       "summary": "Módulo compartido `tree-layout.ts`.",
-      "bytes": 15551,
+      "bytes": 15933,
       "exports": [
         "buildTree",
         "layoutTree",

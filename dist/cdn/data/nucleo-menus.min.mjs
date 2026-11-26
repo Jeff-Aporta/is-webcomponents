@@ -9,4 +9,4 @@
  * cdn-install: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/is-cdn-install/SKILL.md
  * blob: https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/data/nucleo-menus.js
  */
-import{a}from"../_chunks/chunk-WSQL62LT.mjs";import"../_chunks/chunk-5QJ3JDYL.mjs";import"../_chunks/chunk-USDNRHPF.mjs";import"../_chunks/chunk-7IBSWVMF.mjs";import"../_chunks/chunk-6WNODBF2.mjs";import"../_chunks/chunk-UWQ36HTN.mjs";import"../_chunks/chunk-VNNEUB5D.mjs";import"../_chunks/chunk-7KABUODH.mjs";import"../_chunks/chunk-FZCPQKWI.mjs";import"../_chunks/chunk-5XFYD3KA.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";export{a as crearMenus};
+import{a}from"../_chunks/chunk-WSQL62LT.mjs";import"../_chunks/chunk-JMBNRRM4.mjs";import"../_chunks/chunk-USDNRHPF.mjs";import"../_chunks/chunk-7IBSWVMF.mjs";import"../_chunks/chunk-FA26CP67.mjs";import"../_chunks/chunk-UWQ36HTN.mjs";import"../_chunks/chunk-VNNEUB5D.mjs";import"../_chunks/chunk-2UCN2NRS.mjs";import"../_chunks/chunk-FZCPQKWI.mjs";import"../_chunks/chunk-5XFYD3KA.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";export{a as crearMenus};

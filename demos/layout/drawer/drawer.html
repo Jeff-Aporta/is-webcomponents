@@ -4,7 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Demo de <iswc-drawer> · iswc-base</title>
-<meta name="description" content="Panel deslizable desde un borde (start/end/top/bottom). Focus trap + Escape + light-dismiss + restore de foco. Eventos iswc-show/iswc-after-show/iswc-hide/iswc-after-hide." />
+<meta name="description" content="Panel deslizable con velo (backdrop) desde un borde (start/end/top/bottom). Focus trap + Escape + light-dismiss + restore de foco. Tamano por atributo, tirador redimensionable, header compacto. Eventos iswc-show/iswc-after-show/iswc-hide/iswc-after-hide." />
 <style>
   html, body { margin: 0; padding: 0; min-height: 100vh; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
   body { display: grid; grid-template-rows: auto 1fr auto; }
@@ -20,7 +20,7 @@
   footer code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; font: 11px ui-monospace, Menlo, Consolas, monospace; }
 </style>
 <script type="module">
-  await import('../../../dist/cdn/layout/drawer.min.mjs?v=7q7zpb');
+  await import('../../../dist/cdn/layout/drawer.min.mjs?v=4onnvv');
   await customElements.whenDefined('iswc-drawer');
 
   // (1) Drawer end (default).
@@ -40,8 +40,13 @@
 
   // (2) Drawer start.
   const dStart = document.createElement('iswc-drawer');
-  dStart.setAttribute('label', 'Drawer start');
+  dStart.setAttribute('label', 'Drawer start (80vw, redimensionable)');
   dStart.setAttribute('placement', 'start');
+  // Tamano, tirador y ancho recordado: igual que el cajon del asistente.
+  dStart.setAttribute('size', '80vw');
+  dStart.setAttribute('resize', '');
+  dStart.setAttribute('storage-key', 'demo-drawer-ancho');
+  dStart.setAttribute('header-height', '3rem');
   dStart.id = 'd-start';
   dStart.innerHTML = `
     <p>Desde la izquierda.</p>
@@ -53,8 +58,11 @@
 
   // (3) Drawer top.
   const dTop = document.createElement('iswc-drawer');
-  dTop.setAttribute('label', 'Drawer top');
+  dTop.setAttribute('label', 'Drawer top (sin boton de cerrar)');
   dTop.setAttribute('placement', 'top');
+  // closable="false": el header sigue, la X no; se cierra con Escape o con el velo.
+  dTop.setAttribute('closable', 'false');
+  dTop.setAttribute('light-dismiss', '');
   dTop.id = 'd-top';
   dTop.innerHTML = `
     <p>Desde arriba.</p>
@@ -66,8 +74,9 @@
 
   // (4) Drawer bottom.
   const dBottom = document.createElement('iswc-drawer');
-  dBottom.setAttribute('label', 'Drawer bottom');
+  dBottom.setAttribute('label', 'Drawer bottom (header de 3.5rem)');
   dBottom.setAttribute('placement', 'bottom');
+  dBottom.setAttribute('header-height', '3.5rem');
   dBottom.id = 'd-bottom';
   dBottom.innerHTML = `
     <p>Desde abajo.</p>

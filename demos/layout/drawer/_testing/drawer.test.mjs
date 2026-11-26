@@ -259,6 +259,118 @@ tests.push({
   },
 });
 
+tests.push({
+  name: 'funcional: size del atributo fija el ancho del panel',
+  run: async (page) => {
+    await page.goto(URL, { waitUntil: 'domcontentloaded' });
+    await waitReady(page, 'data-drawer-ready');
+    await page.click('#btn-start');
+    await page.waitForTimeout(400);
+    const data = await page.evaluate(() => {
+      const d = document.getElementById('d-start');
+      return {
+        ancho: d.shadowRoot.querySelector('[part="drawer"]').getBoundingClientRect().width,
+        ventana: window.innerWidth,
+      };
+    });
+    assert.ok(Math.abs(data.ancho - data.ventana * 0.8) < 3, `80vw esperado, fue ${data.ancho} de ${data.ventana}`);
+  },
+});
+
+tests.push({
+  name: 'funcional: resize muestra el tirador, mueve el ancho con el teclado y lo recuerda',
+  run: async (page) => {
+    await page.goto(URL, { waitUntil: 'domcontentloaded' });
+    await waitReady(page, 'data-drawer-ready');
+    await page.click('#btn-start');
+    await page.waitForTimeout(400);
+    const antes = await page.evaluate(() => {
+      const d = document.getElementById('d-start');
+      const tirador = d.shadowRoot.querySelector('[part="resize-handle"]');
+      tirador.focus();
+      return {
+        visible: !tirador.hidden,
+        ancho: d.shadowRoot.querySelector('[part="drawer"]').getBoundingClientRect().width,
+      };
+    });
+    assert.equal(antes.visible, true, 'el tirador debe verse con resize');
+    await page.keyboard.press('ArrowRight');
+    await page.waitForTimeout(100);
+    const despues = await page.evaluate(() => {
+      const d = document.getElementById('d-start');
+      return {
+        ancho: d.shadowRoot.querySelector('[part="drawer"]').getBoundingClientRect().width,
+        recordado: Number(localStorage.getItem('demo-drawer-ancho')),
+        valuenow: Number(d.shadowRoot.querySelector('[part="resize-handle"]').getAttribute('aria-valuenow')),
+      };
+    });
+    assert.ok(despues.ancho > antes.ancho + 20, `ArrowRight debe ensanchar: ${antes.ancho} → ${despues.ancho}`);
+    assert.equal(despues.recordado, Math.round(despues.ancho), 'storage-key debe recordar el ancho');
+    assert.equal(despues.valuenow, Math.round(despues.ancho), 'el tirador anuncia su ancho');
+  },
+});
+
+tests.push({
+  name: 'funcional: closable=false esconde el boton de cerrar y el header sigue',
+  run: async (page) => {
+    await page.goto(URL, { waitUntil: 'domcontentloaded' });
+    await waitReady(page, 'data-drawer-ready');
+    await page.click('#btn-top');
+    await page.waitForTimeout(400);
+    const data = await page.evaluate(() => {
+      const d = document.getElementById('d-top');
+      const sr = d.shadowRoot;
+      return {
+        xOculta: sr.querySelector('[part="close-button"]').hidden,
+        headerVisible: !sr.querySelector('[part="header"]').hidden,
+      };
+    });
+    assert.equal(data.xOculta, true, 'closable=false debe esconder la X');
+    assert.equal(data.headerVisible, true, 'el header sigue visible');
+  },
+});
+
+tests.push({
+  name: 'a11y: role=dialog, aria-modal y aria-labelledby al titulo',
+  run: async (page) => {
+    await page.goto(URL, { waitUntil: 'domcontentloaded' });
+    await waitReady(page, 'data-drawer-ready');
+    await page.click('#btn-end');
+    await page.waitForTimeout(400);
+    const data = await page.evaluate(() => {
+      const d = document.getElementById('d-end');
+      const caja = d.shadowRoot.querySelector('[part="drawer"]');
+      const id = caja.getAttribute('aria-labelledby');
+      const titulo = id ? d.shadowRoot.getElementById(id) : null;
+      return {
+        role: caja.getAttribute('role'),
+        ariaModal: caja.getAttribute('aria-modal'),
+        texto: titulo?.textContent?.trim() ?? '',
+      };
+    });
+    assert.equal(data.role, 'dialog');
+    assert.equal(data.ariaModal, 'true');
+    assert.equal(data.texto, 'Drawer end (default)', 'aria-labelledby debe nombrar la caja con el titulo');
+  },
+});
+
+tests.push({
+  name: 'a11y: el scroll del documento queda bloqueado mientras esta abierto',
+  run: async (page) => {
+    await page.goto(URL, { waitUntil: 'domcontentloaded' });
+    await waitReady(page, 'data-drawer-ready');
+    const antes = await page.evaluate(() => getComputedStyle(document.documentElement).overflow);
+    await page.click('#btn-end');
+    await page.waitForTimeout(400);
+    const abierto = await page.evaluate(() => getComputedStyle(document.documentElement).overflow);
+    await page.keyboard.press('Escape');
+    await page.waitForTimeout(400);
+    const cerrado = await page.evaluate(() => getComputedStyle(document.documentElement).overflow);
+    assert.notEqual(abierto, antes, 'abierto debe bloquear el scroll del documento');
+    assert.equal(cerrado, antes, 'al cerrar se restaura el overflow del documento');
+  },
+});
+
 let failures = 0;
 for (const t of tests) {
   let ok = false;

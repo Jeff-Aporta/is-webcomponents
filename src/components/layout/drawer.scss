@@ -13,6 +13,8 @@
   --iswc-drawer-backdrop-blur: var(--iswc-backdrop-blur, 0.25em);
   --iswc-drawer-show-duration: 220ms;
   --iswc-drawer-hide-duration: 180ms;
+  /* Header compacto: una fila, sin aire de sobra (el consumidor lo cambia con header-height). */
+  --iswc-drawer-header-height: 3rem;
 
   /* Esquinas rectas por defecto: el cajón es una hoja que toca el borde; `--iswc-drawer-radius` las redondea si una app lo pide. */
   --_radius: var(--iswc-drawer-radius, 0);
@@ -80,6 +82,42 @@
 }
 
 /* .header / .title / .body / .footer → core/modal-chrome.scss */
+
+/* Header compacto: alto mínimo propio y sin el aire vertical de modal-chrome. */
+:host .header {
+  min-block-size: var(--iswc-drawer-header-height, 3rem);
+  padding-block: 0;
+}
+
+/* El cuerpo tiene su propio scroll: no arrastra el scroll del documento al llegar al final. */
+:host .body {
+  overscroll-behavior: contain;
+}
+
+/* El tirador del borde: se arrastra para cambiar el ancho (solo con resize). */
+.resize-handle {
+  position: absolute;
+  inset-block: 0;
+  z-index: 2;
+  inline-size: 0.7rem;
+  cursor: col-resize;
+  touch-action: none;
+  background: transparent;
+  transition: background-color 120ms ease-out;
+}
+
+:host(:is([placement="start"], [placement="end"])) .resize-handle { inset-block: 0; }
+:host([placement="end"]) .resize-handle { inset-inline-start: 0; }
+:host([placement="start"]) .resize-handle { inset-inline-end: 0; }
+.resize-handle[hidden] { display: none; }
+
+.resize-handle:hover,
+:host([data-resizing]) .resize-handle { background: var(--iswc-brand-soft, rgb(0 0 0 / 8%)); }
+
+.resize-handle:focus-visible {
+  outline: 0.15em solid var(--iswc-focus, var(--iswc-color-contrast, currentColor));
+  outline-offset: -2px;
+}
 
 .header-actions { display: flex; align-items: center; gap: 0.25em; flex: 0 0 auto; &:empty { display: none; }; }
 .close-btn { flex: 0 0 auto; font-size: 1em; line-height: 0; color: var(--iswc-text-muted); &:hover { color: var(--iswc-text); }; }

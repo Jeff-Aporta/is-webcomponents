@@ -9,4 +9,4 @@
  * cdn-install: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/is-cdn-install/SKILL.md
  * blob: https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/forms/textarea.js
  */
-import"../_chunks/chunk-JWCV22WA.mjs";import"../_chunks/chunk-CVX2EF6V.mjs";import"../_chunks/chunk-7UBKTWVC.mjs";import"../_chunks/chunk-OQA6UMNS.mjs";import"../_chunks/chunk-2GHB5Y6L.mjs";import"../_chunks/chunk-ZPF6SHF4.mjs";import"../_chunks/chunk-TPHMQPBF.mjs";import"../_chunks/chunk-7KABUODH.mjs";import"../_chunks/chunk-FZCPQKWI.mjs";import"../_chunks/chunk-5XFYD3KA.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";
+import"../_chunks/chunk-WPGEKFHP.mjs";import"../_chunks/chunk-HM4ZAOSC.mjs";import"../_chunks/chunk-Y4RDYUGS.mjs";import"../_chunks/chunk-LI2TC7X5.mjs";import"../_chunks/chunk-2GHB5Y6L.mjs";import"../_chunks/chunk-UTULPX7G.mjs";import"../_chunks/chunk-TPHMQPBF.mjs";import"../_chunks/chunk-2UCN2NRS.mjs";import"../_chunks/chunk-FZCPQKWI.mjs";import"../_chunks/chunk-5XFYD3KA.mjs";import"../_chunks/chunk-CMZVHIC2.mjs";
