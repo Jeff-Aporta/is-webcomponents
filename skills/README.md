@@ -11,6 +11,7 @@ Las skills son lo que un agente lee para saber como usar el kit. La principal es
 | `iswc-foundation` | los cimientos: registro, carga, tokens, estilos |
 | `iswc-server` | el perfil `server`: vendor, pines y la pagina `/api/docs` |
 | `iswc-diagramas-enriquecidos` | los diagramas con contenido real |
+| `iswc-crm-foundation` | adaptar el CRM a cada tipo de empresa (tenant, catalogo de tiquetes, campos, flujos, textos, paleta, modulos y onboarding) |
 
 ## Alias (skills absorbidas)
 

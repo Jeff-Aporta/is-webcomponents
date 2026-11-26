@@ -1,0 +1,22 @@
+{
+  "kit": { "repo": "Jeff-Aporta/is-webcomponents", "rama": "main" },
+  "plugins": [
+    { "app": "diagrams", "repo": "Jeff-Aporta/iswc-diagrams", "rama": "main", "prefijo": "iswd-" },
+    {
+      "app": "crm",
+      "repo": "Jeff-Aporta/crm",
+      "rama": "main",
+      "prefijo": "crm-",
+      "privado": true,
+      "version": "1.0.0",
+      "manifiesto": "front-crm/dist/cdn/plugin.json",
+      "ruta": "front-crm/dist/cdn/",
+      "loader": "crmLoader.min.mjs",
+      "vistas": ["app", "chat", "contactos", "dashboard", "errores", "salud", "acceso", "legal"]
+    }
+  ],
+  "consumidores": [
+    { "repo": "Jeff-Aporta/iswc-diagrams", "archivo": "deno.json", "pinea": "kit", "comando": "deno task pin --nuevo=<sha>" },
+    { "repo": "Jeff-Aporta/is-webcomponents", "archivo": "demos/diagramas/_plugin.js", "pinea": "diagrams", "comando": "editar PLUGIN_SHA en demos/diagramas/_plugin.js" }
+  ]
+}

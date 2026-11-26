@@ -1,9 +1,9 @@
 // @contexto INDICE.md · tests/gobernanza/README.md
-// skills-fusion.test.ts — las skills del kit son 6; las 2 absorbidas son alias.
+// skills-fusion.test.ts — las skills del kit son 7; las 2 absorbidas son alias.
 //
 // Una skill absorbida deja de mantenerse: su contenido pasa a otra skill (seccion propia) y
 // su carpeta queda como alias que apunta a la nueva. Este guardián vigila las tres cosas:
-// que las 6 vigentes esten completas, que los alias apunten a donde deben y que no queden
+// que las 7 vigentes esten completas, que los alias apunten a donde deben y que no queden
 // referencias colgando a skills que ya no existen.
 
 import assert from 'node:assert/strict';
@@ -18,7 +18,7 @@ const here = dirname(fileURLToPath(import.meta.url));
 const RAIZ = dirname(dirname(here));
 const SKILLS = join(RAIZ, 'skills');
 
-/** Las 6 skills que se mantienen. */
+/** Las 7 skills que se mantienen. */
 const VIGENTES = [
   'iswc-base',
   'build-component',
@@ -26,6 +26,7 @@ const VIGENTES = [
   'iswc-foundation',
   'iswc-server',
   'iswc-diagramas-enriquecidos',
+  'iswc-crm-foundation',
 ];
 
 /** Las absorbidas: alias -> skill que las absorbe. */
@@ -63,7 +64,7 @@ function enlaces(texto: string): string[] {
   return salida;
 }
 
-test('gobernanza/skills-fusion: F1 las 6 skills vigentes estan completas', () => {
+test('gobernanza/skills-fusion: F1 las 7 skills vigentes estan completas', () => {
   for (const nombre of VIGENTES) {
     const rel = join('skills', nombre, 'SKILL.md');
     assert.ok(existsSync(join(RAIZ, rel)), `falta ${rel}`);
@@ -99,7 +100,7 @@ test(' gobernanza/skills-fusion: F3 no quedan folders de skill sin classify', ()
   assert.deepEqual(carpetas, esperadas, `skills/ tiene ${carpetas.join(', ')}`);
 });
 
-test('gobernanza/skills-fusion: F4 el catalogo lista las 6 y marca las 2 alias', () => {
+test('gobernanza/skills-fusion: F4 el catalogo lista las 7 y marca las 2 alias', () => {
   const catalogo = readFileSync(join(SKILLS, 'README.md'), 'utf8');
   for (const nombre of VIGENTES) {
     assert.ok(catalogo.includes(`| \`${nombre}\` |`), `el catalogo no lista ${nombre}`);
