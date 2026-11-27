@@ -361,7 +361,8 @@ export async function construirApp(opts: ConstruirAppOpts): Promise<InformeBuild
       if (chunksDe.length) pluginDeps[t] = chunksDe;
     }
     // Paletas (`palettes/<nombre>.json`, ruta fija que lee `iswcLoader.cargarPlugin`) y herramientas declaradas.
-    const carpetaPaletas = join(raiz, opts.plugin.paletas ?? join('src', 'palettes'));
+    const plug = opts.plugin;
+    const carpetaPaletas = join(raiz, plug.paletas ?? join('src', 'palettes'));
     const paletas: { nombre: string; ruta: string }[] = [];
     if (existsSync(carpetaPaletas)) {
       for (const f of readdirSync(carpetaPaletas).filter((n) => n.endsWith('.json')).sort()) {
@@ -373,8 +374,8 @@ export async function construirApp(opts: ConstruirAppOpts): Promise<InformeBuild
         paletas.push({ nombre, ruta: `palettes/${f}` });
       }
     }
-    const herramientas = (opts.plugin.herramientas ?? []).map((h) => {
-      if (!existsSync(join(OUT, h.ruta))) throw new Error(`construirApp: plugin ${opts.plugin.app}: la herramienta ${h.nombre} apunta a ${h.ruta}, que no existe en ${relative(raiz, OUT)}`);
+    const herramientas = (plug.herramientas ?? []).map((h) => {
+      if (!existsSync(join(OUT, h.ruta))) throw new Error(`construirApp: plugin ${plug.app}: la herramienta ${h.nombre} apunta a ${h.ruta}, que no existe en ${relative(raiz, OUT)}`);
       return h;
     });
     const manifiesto = {
