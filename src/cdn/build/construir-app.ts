@@ -360,11 +360,31 @@ export async function construirApp(opts: ConstruirAppOpts): Promise<InformeBuild
       const chunksDe = deps.tags[t]!.filter((m) => esChunk(m));
       if (chunksDe.length) pluginDeps[t] = chunksDe;
     }
+    // Paletas (`palettes/<nombre>.json`, ruta fija que lee `iswcLoader.cargarPlugin`) y herramientas declaradas.
+    const carpetaPaletas = join(raiz, opts.plugin.paletas ?? join('src', 'palettes'));
+    const paletas: { nombre: string; ruta: string }[] = [];
+    if (existsSync(carpetaPaletas)) {
+      for (const f of readdirSync(carpetaPaletas).filter((n) => n.endsWith('.json')).sort()) {
+        const nombre = f.slice(0, -5);
+        if (!/^[a-z][a-z0-9-]*$/.test(nombre)) throw new Error(`construirApp: plugin ${opts.plugin.app}: paleta ${f}: el nombre va en minúsculas, dígitos y guiones`);
+        mkdirSync(join(OUT, 'palettes'), { recursive: true });
+        writeFileSync(join(OUT, 'palettes', f), `${JSON.stringify(JSON.parse(readFileSync(join(carpetaPaletas, f), 'utf8')))}
+`);
+        paletas.push({ nombre, ruta: `palettes/${f}` });
+      }
+    }
+    const herramientas = (opts.plugin.herramientas ?? []).map((h) => {
+      if (!existsSync(join(OUT, h.ruta))) throw new Error(`construirApp: plugin ${opts.plugin.app}: la herramienta ${h.nombre} apunta a ${h.ruta}, que no existe en ${relative(raiz, OUT)}`);
+      return h;
+    });
     const manifiesto = {
       schema: 'iswc-plugin/v1', app: opts.plugin.app, repo: opts.plugin.repo, prefijo: `${opts.prefijo}-`,
-      ...(opts.plugin.titulo ? { titulo: opts.plugin.titulo } : {}), loader: registrador, kit: { repo: opts.repo ?? REPO_KIT, sha: pin },
+      ...(opts.plugin.titulo ? { titulo: opts.plugin.titulo } : {}), ...(opts.plugin.version ? { version: opts.plugin.version } : {}),
+      loader: registrador, kit: { repo: opts.repo ?? REPO_KIT, sha: pin },
       tags: pluginTags, ...(Object.keys(pluginDeps).length ? { deps: pluginDeps } : {}),
+      ...(paletas.length ? { paletas } : {}), ...(herramientas.length ? { herramientas } : {}),
     };
+    for (const p of paletas) archivos.push(p.ruta);
     writeFileSync(join(OUT, 'plugin.json'), `${JSON.stringify(manifiesto)}
 `);
     archivos.push('plugin.json');

@@ -45,6 +45,6 @@ deno task serve   # /  ·  /view/demo/  ·  /view/hola/
 ## Mantener las plantillas (en el kit)
 
 Las plantillas usan marcas `__APP__`, `__PREFIJO__`, `__CLASE__`, `__TITULO__`, `__SHA__`, `__REPO__`,
-`__PUERTO__` (también en nombres de archivo). Tras cambiar una: `deno run -A
+`__PUERTO__`, `__APP_REPO__` (`usuario/repo` de la app, sale del host de Pages) y `__HOST__` (también en nombres de archivo). Tras cambiar una: `deno run -A
 skills/iswc-foundation/tools/manifest.ts`, generar una app de prueba y `deno task test:all` en verde
 (el guardián del kit `iswc-foundation` lo exige).

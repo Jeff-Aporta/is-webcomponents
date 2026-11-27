@@ -16,6 +16,7 @@
  *   loader-hashes   `asset-hashes.json` en diferido: `?v=` solo en orígenes mutables (Pages/local)
  *   loader-autoload observar() (MutationObserver) y listos() (allDefined)
  *   loader-plugin   loadPlugin(): enrutador de componentes de OTRA app (repo + SHA + prefijo), ver ./loader.md
+ *   loader-plugin-externo   cargarPlugin(): app externa por usuario + repo + SHA (componentes, paletas, herramientas)
  *
  * Docs: ./loader.md (también en dist/cdn/core/loader.md)
  * Build sustituye __IS_LOADER_CATALOG__, __IS_ASSET_HASHES__ y __IS_BUILD_SHA__.
@@ -40,6 +41,7 @@ import { ensureElement, isElementReady } from './ensure-element.js';
 import { ASSET_HASH_PARAM, ASSET_HASH_PARAM_LEGADO, esUrlInmutable, lookupHash, withAssetHash } from './build/asset-url.js';
 import type { DepsLoader, LoaderCtx } from './schemas/loader-capas.schemas.js';
 import type { PluginInfo, PluginOpts } from './schemas/plugin.schemas.js';
+import type { PluginExternoInfo } from './schemas/plugin-externo.schemas.js';
 
 import {
   type AppComponentEntry,
@@ -75,6 +77,7 @@ const refGithub = capa(() => import('@jeff-aporta/iswc-base/cdn/loader-ref.js'))
 const hashesDiferidos = capa(() => import('@jeff-aporta/iswc-base/cdn/loader-hashes.js'));
 const autoload = capa(() => import('@jeff-aporta/iswc-base/cdn/loader-autoload.js'));
 const plugin = capa(() => import('@jeff-aporta/iswc-base/cdn/loader-plugin.js'));
+const pluginExterno = capa(() => import('@jeff-aporta/iswc-base/cdn/loader-plugin-externo.js'));
 
 /**
  * SHA del script que se está ejecutando (`@abc…` en jsDelivr) o null.
@@ -951,6 +954,15 @@ export const iswcLoader: iswcLoaderShape = {
    */
   loadPlugin(opts: PluginOpts): Promise<PluginInfo> {
     return plugin().then((m) => m.cargarPlugin(iswcLoader, ctx, plugins, opts));
+  },
+
+  /**
+   * Plugin EXTERNO por usuario + repo + SHA (capa 2): rutas fijas `dist/cdn/plugin.json`, `<prefijo>Loader.min.mjs`,
+   * `palettes/<nombre>.json`. `tipo`: `componentes` | `paletas` | `herramientas` | `todo` (por defecto). Caché por SHA;
+   * las paletas quedan en el `<iswc-palette-selector>`. Contrato en ./loader.md.
+   */
+  cargarPlugin(opts: { usuario: string; repo: string; sha: string; tipo?: 'componentes' | 'paletas' | 'herramientas' | 'todo'; tags?: string[]; paletaDefecto?: string; host?: string }): Promise<PluginExternoInfo> {
+    return pluginExterno().then((m) => m.cargarPluginExterno(opts, { loadPlugin: (o) => iswcLoader.loadPlugin(o), routeHref: ctx.routeHref }));
   },
 
   /** Plugins ya registrados con `loadPlugin`. */

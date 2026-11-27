@@ -41,6 +41,34 @@ tienen retención configurable. Referencia viva: el CRM (`Jeff-Aporta/crm`: `fro
 - Otra app lo carga con `iswcLoader.loadPlugin({ app, repo, sha40, prefijo, tags? })`; el enrutador solo necesita
   repo + sha + prefijo. Pineado siempre a SHA de 40 hex.
 - El propio kit lo consume igual: **el plugin es el mecanismo de reuso entre apps**.
+
+### 3.1 Publicar manifiesto, paletas y herramientas (`dist/cdn/`)
+
+Todo repo de app publica su `dist/cdn/` **en la raíz del repo** (rutas fijas; un monorepo no cumple el estándar). `construirApp({ …, plugin: { app, repo, titulo, version, paletas?, herramientas? } })` escribe:
+
+| Fichero | Origen |
+| --- | --- |
+| `dist/cdn/plugin.json` | `iswc-plugin/v1`: `app`, `repo`, `prefijo`, `version`, `loader`, `kit`, `tags`, `deps`, `paletas`, `herramientas` |
+| `dist/cdn/<prefijo>Loader.min.mjs` | registrador de los tags (siempre ese nombre) |
+| `dist/cdn/palettes/<nombre>.json` | una paleta por archivo, copiada de `src/palettes/<nombre>.json` (carpeta configurable con `plugin.paletas`) |
+| `dist/cdn/<ruta>` de cada herramienta | módulos ya construidos que declaras en `plugin.herramientas: [{ nombre, ruta }]` (el build falla si no existen) |
+
+Una paleta son las semillas del kit (`h` 0–360, `s` y `b` en %, opcionales `contrastH/S/L`, `tint`, `fontTint`, `label`, `family`, `mood`);
+`tint: 0` da superficies en grises (p. ej. `suspendida`). Cada app define las suyas (`peligro-1..5` de naranja a rojo, `suspendida`…): el kit no
+trae paletas de estado. Los nombres van en minúsculas y guiones y no repiten las 25 del kit.
+
+### 3.2 Consumir una app externa por usuario + repo + SHA
+
+```js
+await iswcLoader.cargarPlugin({ usuario: 'Jeff-Aporta', repo: 'crm', sha: '<40 hex>', tipo: 'todo', paletaDefecto: 'peligro-1' });
+```
+
+Rutas fijas `https://cdn.jsdelivr.net/gh/<usuario>/<repo>@<sha>/dist/cdn/…` (`plugin.json`, `<prefijo>Loader.min.mjs`, `palettes/*.json`);
+el consumidor solo cambia el SHA. `tipo` elige `componentes`, `paletas`, `herramientas` o `todo`; caché por SHA; las paletas aparecen en el
+`<iswc-palette-selector>` (y con varias apps, el usuario elige entre todas); `fijarPaletaDefecto` / `cambiarPaleta` (`styles/palette-registry.js`)
+fijan la inicial y cambian en caliente. Contrato: `src/cdn/loader.md` § «Plugins externos».
+
+
 - Cada componente trae sus cuatro hermanos (.ts/.scss/.md/.json) y su línea en `view/demo/manifest.json`;
   `.md` es la skill (6 H2 exactos) y `.json` el meta/preview `iswc-preview/v1` con playground (`controls`).
 - **Demos folderizadas**: `/demo` lista todos los componentes y `/demo/<componente>` muestra el suyo (segmento sin

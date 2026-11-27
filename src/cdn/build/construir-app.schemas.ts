@@ -30,6 +30,12 @@ export const PluginAppSchema = z.object({
   /** `dueño/repo` de GitHub donde se publica `dist/cdn/` (jsDelivr `gh/<repo>@<sha>/dist/cdn/`). */
   repo: z.string(),
   titulo: z.string().optional(),
+  /** Versión de la app que anuncia el manifiesto (informativa). */
+  version: z.string().optional(),
+  /** Carpeta fuente (relativa a `raiz`) con `<nombre>.json` por paleta; se copia a `<salida>/palettes/` y se declara en `paletas`. Por defecto `src/palettes` si existe. */
+  paletas: z.string().optional(),
+  /** Módulos de herramientas ya construidos (`ruta` relativa a `<salida>`, p. ej. `js/tools/x.min.mjs`) que `cargarPlugin` importa. */
+  herramientas: z.array(z.object({ nombre: z.string(), ruta: z.string() })).optional(),
 });
 export type PluginApp = z.infer<typeof PluginAppSchema>;
 

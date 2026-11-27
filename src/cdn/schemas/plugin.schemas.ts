@@ -43,12 +43,14 @@ const PluginTagSchema = z.union([
 export type PluginTag = z.infer<typeof PluginTagSchema>;
 
 /** `dist/cdn/plugin.json` de una app. */
-const PluginManifestSchema = z.object({
+export const PluginManifestSchema = z.object({
   schema: z.literal("iswc-plugin/v1"),
   app: z.string(),
   repo: z.string(),
   prefijo: z.string().regex(PREFIJO_PLUGIN),
   titulo: z.string().optional(),
+  /** Versión de la app (informativa). */
+  version: z.string().optional(),
   /** Loader de la app (`<prefijo>Loader.min.mjs`): lo importa el enrutador. */
   loader: z.string().optional(),
   /** Kit con el que se construyó (informativo: el plugin importa el kit por alias del import map de la página). */
@@ -57,6 +59,12 @@ const PluginManifestSchema = z.object({
   tags: z.record(z.string(), PluginTagSchema),
   /** Tag → cierre de chunks (rutas relativas al manifiesto) para `modulepreload`. */
   deps: z.record(z.string(), z.array(z.string())).optional(),
+  /** Paletas que publica la app: cada una es `palettes/<nombre>.json` junto al manifiesto (`cargarPlugin`, tipo paletas). */
+  paletas: z.array(z.object({ nombre: z.string(), ruta: z.string() })).optional(),
+  /** Módulos de herramientas de la app (`cargarPlugin`, tipo herramientas): ruta relativa al manifiesto. */
+  herramientas: z.array(z.object({ nombre: z.string(), ruta: z.string() })).optional(),
+  /** Vista → tags (informativo). */
+  vistas: z.record(z.string(), z.array(z.string())).optional(),
   /** Momento del build (ISO). */
   build: z.string().optional(),
 });

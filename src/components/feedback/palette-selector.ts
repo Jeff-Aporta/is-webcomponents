@@ -3,6 +3,7 @@ import { computePosition, createPopupDismiss } from '@jeff-aporta/iswc-base/core
 import { guardarAppCfg, leerAppCfg } from '@jeff-aporta/iswc-base/core/app-init.js';
 import { emit, IswcElement, define } from '@jeff-aporta/iswc-base/core/iswc-element.js';
 import { PALETTES, PALETTE_FAMILIES, paletteSeeds } from '@jeff-aporta/iswc-base/styles/palette-build.js';
+import { escucharPaletas, paletaDefecto, paletasExternas } from '@jeff-aporta/iswc-base/styles/palette-registry.js';
 import type { Palette, PaletteCruda, PaletteSelectorEventos } from "./schemas/palette-selector.schemas.js";
 import css from 'iswc:css';
 
@@ -21,6 +22,8 @@ import css from 'iswc:css';
  *   value         paleta activa. La escribe (data-palette) en el target del scope.
  *   panda         booleano: modificador Panda activo (data-panda en el target).
  *   hide-panda    oculta el interruptor Panda.
+ *   con-plugins   suma a `palettes` propias las que registraron plugins (`iswcLoader.cargarPlugin`); sin `palettes`
+ *                 siempre se suman. Se redibuja solo al llegar paletas nuevas.
  *   scope         root | closest. root escribe <html>; closest el primer
  *                 ancestro con data-palette (si no hay, <html>).
  *   aria-label    etiqueta del trigger (default "Elegir paleta").
@@ -90,7 +93,7 @@ import css from 'iswc:css';
     </div>
   `;
 
-  const OBSERVED = ['palettes', 'value', 'panda', 'hide-panda', 'aria-label', 'scope'];
+  const OBSERVED = ['palettes', 'value', 'panda', 'hide-panda', 'aria-label', 'scope', 'con-plugins'];
 
   // Primer ancestro con data-palette. No cuenta el host.
   function findPaletteContainer(from: Element | null | undefined): HTMLElement {
@@ -153,6 +156,7 @@ import css from 'iswc:css';
     #applying = false;
     #fromOutside = false;
     #hold = false;
+    #sinPlugins: (() => void) | null = null;
 
     #dismiss = createPopupDismiss(this, {
       onEscape: () => { this.#setOpen(false); this.#trigger.focus(); },
@@ -183,11 +187,14 @@ import css from 'iswc:css';
 
     override onDisconnected(): void {
       this.#dismiss.detach();
+      this.#sinPlugins?.();
+      this.#sinPlugins = null;
       this.#scopeObs?.disconnect();
       this.#scopeObs = null;
     }
 
     override onConnected(): void {
+      this.#sinPlugins ??= escucharPaletas(this.#onPluginPalettes);
       this.#parsePalettes();
       this.#watchScope();
       this.#loadInitial();
@@ -197,7 +204,7 @@ import css from 'iswc:css';
     }
 
     override onAttributeChanged(name: string, oldVal: string | null, newVal: string | null): void {
-      if (name === 'palettes') {
+      if (name === 'palettes' || name === 'con-plugins') {
         this.#parsePalettes();
         this.#render();
       } else if (name === 'value') {
@@ -249,6 +256,8 @@ import css from 'iswc:css';
           console.warn('[iswc-palette-selector] palettes no es JSON válido:', err);
         }
       }
+      // Paletas de plugins (`iswcLoader.cargarPlugin`): van con la lista del kit; en una lista propia, solo con `con-plugins`.
+      if (!raw || this.hasAttribute('con-plugins')) list = [...list, ...paletasExternas()];
       this.#palettes = list.map((p): Palette => ({
         value: str(p.value),
         label: str(p.label) || str(p.value),
@@ -267,6 +276,20 @@ import css from 'iswc:css';
         fontTint: num(p.fontTint),
       })).filter((p) => p.value);
     }
+
+    /** Alta de paletas de un plugin: se redibuja la lista y, si el <html> ya apuntaba a una de ellas, se sigue. */
+    #onPluginPalettes = (): void => {
+      if (!this.isConnected) return;
+      this.#parsePalettes();
+      this.#render();
+      const next = this.#scopeTarget().dataset.palette || '';
+      if (!next || next === this.#value || !this.#known(next)) return;
+      this.#fromOutside = true;
+      this.#hold = false;
+      if (this.getAttribute('value') !== next) this.setAttribute('value', next);
+      else this.#apply(next);
+      this.#fromOutside = false;
+    };
 
     #scopeTarget(): HTMLElement {
       const mode = (this.getAttribute('scope') || 'root').trim().toLowerCase();
@@ -319,7 +342,8 @@ import css from 'iswc:css';
         ? stored
         : this.#known(fromDom)
           ? fromDom
-          : this.#known(this.getAttribute('value') || '') ? this.getAttribute('value')! : this.#palettes[0]?.value || '';
+          : this.#known(this.getAttribute('value') || '') ? this.getAttribute('value')!
+            : this.#known(paletaDefecto()) ? paletaDefecto() : this.#palettes[0]?.value || '';
       if (!initial) return;
       const foreign = !!fromDom && !this.#known(fromDom) && !(onRoot && this.#known(stored));
       if (foreign) {

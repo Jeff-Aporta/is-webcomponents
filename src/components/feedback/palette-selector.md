@@ -97,6 +97,7 @@ del main, tono del contraste, `tint`, `fontTint`); el CSS deriva todo lo demás.
 | `value` | string | Paleta activa; se refleja en `data-palette` del target. |
 | `panda` | booleano | Modificador Panda; se refleja en `data-panda` del target. |
 | `hide-panda` | booleano | Oculta el interruptor Panda. |
+| `con-plugins` | booleano | Suma a `palettes` propias las paletas que registraron plugins (`iswcLoader.cargarPlugin`). Sin `palettes` siempre se suman; la lista se redibuja sola al llegar nuevas. |
 | `scope` | `root` \| `closest` | Dónde escribe (default `root`). |
 | `aria-label` | string | Etiqueta del trigger (default «Paleta X — elegir paleta»). |
 

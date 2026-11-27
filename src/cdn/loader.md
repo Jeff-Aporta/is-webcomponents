@@ -7,7 +7,7 @@ Entry CDN liviano del kit. Carga solo lo pedido, con pin, mirrors y anti-redunda
 | Artefacto | Path |
 | --- | --- |
 | Fuente (núcleo, capa 1) | `src/cdn/loader.ts` |
-| Capa 2 (al primer uso) | `src/cdn/loader-{sheets,store,mirrors,pages,ref,hashes,autoload,plugin}.ts` |
+| Capa 2 (al primer uso) | `src/cdn/loader-{sheets,store,mirrors,pages,ref,hashes,autoload,plugin,plugin-externo}.ts` |
 | Planificador | `src/cdn/load-plan.ts` |
 | Este doc | `src/cdn/loader.md` |
 | Publicado | `dist/cdn/core/loader.min.mjs` (núcleo) · `dist/cdn/core/loader-<x>.min.mjs` (capa 2) · `dist/cdn/core/loader.md` |
@@ -31,6 +31,7 @@ Nombre: el kit es **`iswc-base`**; en las URLs va el nombre real del repo en Git
 | 2 | `core/loader-hashes.min.mjs` | `asset-hashes.json` en diferido (`?v=`) | solo en orígenes mutables (Pages/local), en `loadPageModules`/`loadPageStyles`/`assetUrl` |
 | 2 | `core/loader-autoload.min.mjs` | autoloader opcional: `observar()` (MutationObserver) y `listos(raiz)` (`allDefined`) | `observar`/`listos` |
 | 2 | `core/loader-plugin.min.mjs` | enrutador de plugins: `loadPlugin()` (componentes de OTRA app por repo + SHA + prefijo) | `loadPlugin` |
+| 2 | `core/loader-plugin-externo.min.mjs` | `cargarPlugin()`: app externa por usuario + repo + SHA (componentes, paletas, herramientas); rutas fijas, caché por SHA | `cargarPlugin` |
 
 La API pública (`iswcLoaderShape`) no cambia de forma: cada método de capa 2 es un envoltorio `async` que hace
 `import()` del módulo y le pasa el contexto del núcleo. Cambios de comportamiento:
@@ -108,6 +109,94 @@ alias se declara en el HTML y `loadPlugin` carga por tag.
 
 Hermeticidad: el plugin se consume **solo por CDN con SHA** (la misma regla que el kit): nunca rutas locales entre repos. El
 SHA del plugin vive en UN sitio del consumidor (constante o `deno.json`), y subirlo es una decisión del consumidor.
+
+## Plugins externos por usuario + repo + SHA: `L.cargarPlugin()` (componentes, paletas, herramientas)
+
+`loadPlugin` pide el prefijo y el repo completo; **`cargarPlugin`** es la forma homogénea para apps que **no existen en el kit**
+y siguen la estructura de foundation: se las referencia por **usuario de GitHub + repo + SHA** y las rutas de carga son
+**fijas**. El consumidor solo cambia el SHA para mover el pin. Capa 2 (`loader-plugin-externo`, no pesa en el núcleo); fuente
+`src/cdn/loader-plugin-externo.ts`, contratos Zod en `src/cdn/schemas/plugin-externo.schemas.ts`.
+
+```js
+const crm = await L.cargarPlugin({
+  usuario: 'Jeff-Aporta',        // usuario u organización de GitHub (sin barras)
+  repo: 'crm',                   // solo el nombre del repo
+  sha: '<commit de 40 hex>',     // obligatorio; nunca main, rama ni SHA corto (TypeError con el campo)
+  tipo: 'todo',                  // 'componentes' | 'paletas' | 'herramientas' | 'todo' (por defecto)
+  tags: ['crm-chat'],            // opcional: cargar ya esos tags (solo con componentes)
+  paletaDefecto: 'peligro-1',    // opcional: paleta inicial de la app (solo si el usuario no eligió otra)
+});
+// → { usuario, repo, sha, nombre, version, prefijo, raiz, cargado: { componentes, paletas, herramientas },
+//     tags: [...], paletas: ['peligro-1', …], herramientas: { exportar: <módulo> }, manifiesto }
+```
+
+**Rutas fijas** (todas bajo `dist/cdn/` del repo; jsDelivr y, de respaldo, githack con el mismo SHA; con `host` alterno solo ese
+origen, para desarrollo y pruebas):
+
+| Qué | URL |
+| --- | --- |
+| manifiesto | `https://cdn.jsdelivr.net/gh/<usuario>/<repo>@<sha40>/dist/cdn/plugin.json` |
+| componentes | `<raíz>/<prefijo sin guion>Loader.min.mjs` (lo importa `loadPlugin`; registra sus tags) |
+| paletas | `<raíz>/palettes/<nombre>.json` (una paleta por archivo) |
+| herramientas | `<raíz>/<ruta declarada en plugin.json>` (módulos ESM) |
+
+Orden: valida la petición (Zod) → baja `plugin.json` y lo valida (`iswc-plugin/v1`; si no cumple, el error lista cada campo:
+`cargarPlugin(Jeff-Aporta/crm@abcdef01): plugin.json no cumple iswc-plugin/v1: loader: debe ser crmLoader.min.mjs; …`) → carga solo
+lo que pide `tipo`. **Caché por SHA**: el manifiesto, los componentes, las paletas y las herramientas se piden una sola vez por
+`usuario/repo@sha` y página (repetir la petición, o pedir otro `tipo` ya cargado, no toca la red); otro SHA baja otro
+manifiesto y reemplaza las paletas del mismo plugin. Los componentes siguen la regla de `loadPlugin`: una versión por app y página.
+
+### Manifiesto homogéneo (`dist/cdn/plugin.json`)
+
+```jsonc
+{
+  "schema": "iswc-plugin/v1",
+  "app": "crm", "repo": "Jeff-Aporta/crm", "prefijo": "crm-", "titulo": "CRM", "version": "1.2.0",
+  "loader": "crmLoader.min.mjs",                       // siempre <prefijo sin guion>Loader.min.mjs
+  "kit": { "repo": "Jeff-Aporta/is-webcomponents", "sha": "<pin con el que se construyó>" },
+  "tags": { "crm-chat": "js/components/crm/crm-chat.min.mjs" },
+  "deps": { "crm-chat": ["_chunks/chunk-AAAA.mjs"] },
+  "paletas": [ { "nombre": "peligro-1", "ruta": "palettes/peligro-1.json" }, { "nombre": "suspendida", "ruta": "palettes/suspendida.json" } ],
+  "herramientas": [ { "nombre": "exportar", "ruta": "js/tools/exportar.min.mjs" } ]
+}
+```
+
+`construirApp({ …, plugin: { app, repo, titulo?, version?, paletas?, herramientas? } })` lo escribe: copia cada
+`src/palettes/<nombre>.json` (carpeta configurable con `plugin.paletas`) a `dist/cdn/palettes/` y la declara en `paletas`; las
+`herramientas` son módulos ya construidos (`ruta` relativa a `dist/cdn/`) y el build comprueba que existan. Un repo que
+publique `dist/cdn/` en una subcarpeta (monorepo) no cumple la ruta fija: usa `loadPlugin({ ruta })` o publica su `dist/cdn/`
+en la raíz.
+
+### Paletas de plugin (`palettes/<nombre>.json`)
+
+Una paleta son las **semillas** de `palettes.json` del kit (la rampa, el contraste y las superficies los deriva
+`palettes.min.css` desde `[data-palette]`). `value` es opcional y, si está, debe coincidir con `nombre`; el nombre va en
+minúsculas, dígitos y guiones (`peligro-1`) y no puede repetir una del kit ni de otro plugin:
+
+```json
+{ "label": "Peligro 1", "family": "Estados", "mood": "Naranja de aviso.", "h": 35, "s": "95%", "b": "52%", "tint": 0.6 }
+```
+
+Campos: `h` (0–360), `s` y `b` (`56%`), opcionales `contrastH/S/L`, `tint` y `fontTint` (0–1; **`tint: 0` = superficies en
+grises neutros**, p. ej. `suspendida`: `{ "h": 0, "s": "0%", "b": "50%", "tint": 0 }`), `label`, `family` (grupo del selector;
+por defecto el `titulo` de la app), `origin`, `mood`. Cada consumidor define las suyas: el kit no trae paletas de estado. Una
+escala de peligro, de naranja a rojo, son cinco archivos `peligro-1..5` con `h` de 35 a 0.
+
+**Registro y selector**: `registrarPaletas` (`src/styles/palette-registry.ts`) escribe una `<style data-iswc-palettes-plugin>` con
+el bloque de semillas de cada paleta y avisa con el evento `iswc-palettes-change`. El `<iswc-palette-selector>` **lista también
+las del plugin** (agrupadas por `family`) y se redibuja solo al llegar nuevas; con una lista `palettes` propia las suma si lleva
+`con-plugins`. Con varias apps cargadas, el usuario elige entre las paletas de todas.
+
+```js
+import { fijarPaletaDefecto, cambiarPaleta, paletasExternas } from '@jeff-aporta/iswc-base/styles/palette-registry.js';
+fijarPaletaDefecto('peligro-1');            // paleta inicial de la app; solo manda si el usuario no guardó otra (también antes de cargar el plugin)
+cambiarPaleta('suspendida');                // cambio en caliente: data-palette del <html>; el selector lo sigue
+cambiarPaleta('peligro-3', { guardar: true }); // además queda como elección del usuario (app-cfg)
+paletasExternas();                          // las registradas por plugins
+```
+
+Si el usuario había elegido una paleta de plugin en otra visita, `registrarPaletas` la restaura al llegar el plugin (`initApp` solo
+conoce las 25 del kit).
 
 ## Bootstrap recomendado (apps)
 

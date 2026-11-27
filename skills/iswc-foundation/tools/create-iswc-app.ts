@@ -107,7 +107,10 @@ if (!/^https?:\/\/\S+$/.test(host)) {
   Deno.exit(2);
 }
 MARCAS.__HOST__ = host.endsWith('/') ? host : `${host}/`;
-const marcar = (s: string) => s.replace(/__(APP|PREFIJO|CLASE|TITULO|SHA|REPO|PUERTO|HOST)__/g, (m) => MARCAS[m] ?? m);
+// Repo propio de la app (`usuario/repo`): sale del host de Pages (`https://<usuario>.github.io/<repo>/`) o, sin él, `<usuario del kit>/<app>`.
+const enPages = /^https://([^./]+).github.io/([^/]+)//i.exec(MARCAS.__HOST__);
+MARCAS.__APP_REPO__ = enPages ? `${enPages[1]}/${enPages[2]}` : `${REPO_KIT.split('/')[0]}/${nombre}`;
+const marcar = (s: string) => s.replace(/__(APP_REPO|APP|PREFIJO|CLASE|TITULO|SHA|REPO|PUERTO|HOST)__/g, (m) => MARCAS[m] ?? m);
 
 // 1) Plantillas
 const manifest = JSON.parse(await leer(new URL('../templates/manifest.json', AQUI))) as { archivos: string[] };

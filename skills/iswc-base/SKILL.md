@@ -160,6 +160,22 @@ Cada diagrama tiene visor y editor como app del plugin, con el mismo parámetro 
 
 Galería del plugin: <https://jeff-aporta.github.io/iswc-diagrams/view/demo/>.
 
+## Apps externas por usuario + repo + SHA (`cargarPlugin`)
+
+Cualquier app de foundation (que publica `dist/cdn/plugin.json`) se consume sin saber nada de su estructura: las rutas son fijas y solo cambia el SHA.
+
+```js
+const crm = await iswcLoader.cargarPlugin({
+  usuario: 'Jeff-Aporta', repo: 'crm', sha: '<SHA de 40 hex>',   // nunca main, rama ni SHA corto
+  tipo: 'todo',                 // 'componentes' | 'paletas' | 'herramientas' | 'todo'
+  paletaDefecto: 'peligro-1',   // opcional; solo manda si el usuario no eligió otra
+});
+// manifiesto  https://cdn.jsdelivr.net/gh/<usuario>/<repo>@<sha>/dist/cdn/plugin.json
+// paletas     …/dist/cdn/palettes/<nombre>.json   → quedan en <iswc-palette-selector>
+```
+
+Caché por SHA, manifiesto validado con Zod (error con el campo que falla). Paletas: `fijarPaletaDefecto(v)` y `cambiarPaleta(v)` de `styles/palette-registry.js`. Publicar el manifiesto y las paletas desde una app: [`iswc-foundation` ref. 15 §3.1–3.2](../iswc-foundation/references/15-spa-y-paginas-sueltas.md). Contrato completo: `src/cdn/loader.md` § «Plugins externos».
+
 ## Bootstrap CDN (apps consumidoras)
 
 Por defecto pin por **commit SHA** (sustituir `{{SHA}}` por la punta actual de
