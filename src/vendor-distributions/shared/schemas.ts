@@ -988,6 +988,8 @@ export type SyntheticDiagramJob = {
   attrs?: HostAttrs;
   /** CSS extra en el documento (opcional). */
   css?: string;
+  /** Import map de la página host: para componentes de PLUGIN, que importan el kit por alias (`@jeff-aporta/iswc-base/`, `zod`…). */
+  importMap?: Record<string, string>;
 };
 
 /** Job sobre una página ya existente (HTML del ISS, preview, etc.). */
@@ -1117,6 +1119,8 @@ export const EditableLoteSchema = z.object({
   /** Módulo relativo a `<kit>/dist/cdn/` (`diagrams/flowchart.min.mjs`). */
   script: z.string(),
   attrs: z.record(z.string(), z.string()).optional(),
+  /** Import map de la página host (componentes de plugin: alias del kit y `zod`). */
+  importMap: z.record(z.string(), z.string()).optional(),
   /** Payload declarativo; puede llevar referencias `{ path, query, actions }` relativas al editable. */
   payload: z.unknown(),
   oficial: z.boolean().optional(),

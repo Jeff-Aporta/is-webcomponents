@@ -10,7 +10,6 @@
 //
 // Uso:  node tests/sibling-css-href.test.ts
 
-import { readFileSync, existsSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
@@ -33,13 +32,13 @@ test('componentes/sibling-css-href', async () => {
   );
   
   check(
-    siblingCssHref('http://127.0.0.1:8391/dist/cdn/diagrams/diagram-lightbox.js')
-      === 'http://127.0.0.1:8391/dist/cdn/diagrams/diagram-lightbox.css',
+    siblingCssHref('http://127.0.0.1:8391/dist/cdn/overlays/dialog.js')
+      === 'http://127.0.0.1:8391/dist/cdn/overlays/dialog.css',
     'foo.js debe mapear a foo.css',
   );
   check(
-    siblingCssHref('http://127.0.0.1:8391/dist/cdn/diagrams/diagram-lightbox.min.mjs')
-      === 'http://127.0.0.1:8391/dist/cdn/diagrams/diagram-lightbox.min.css',
+    siblingCssHref('http://127.0.0.1:8391/dist/cdn/overlays/dialog.min.mjs')
+      === 'http://127.0.0.1:8391/dist/cdn/overlays/dialog.min.css',
     'foo.min.js debe mapear a foo.min.css (no a foo.css)',
   );
   check(
@@ -48,37 +47,10 @@ test('componentes/sibling-css-href', async () => {
     'chart.min.mjs → chart.min.css',
   );
   check(
-    siblingCssHref('http://127.0.0.1:8391/dist/cdn/diagrams/sequence-diagram.min.mjs')
-      === 'http://127.0.0.1:8391/dist/cdn/diagrams/sequence-diagram.min.css',
-    'sequence-diagram.min.mjs → sequence-diagram.min.css',
+    siblingCssHref('http://127.0.0.1:8391/dist/cdn/overlays/drawer.min.mjs')
+      === 'http://127.0.0.1:8391/dist/cdn/overlays/drawer.min.css',
+    'drawer.min.mjs → drawer.min.css',
   );
-  
-  const src = readFileSync(
-    join(root, 'src/components/diagrams/diagram-lightbox.ts'),
-    'utf8',
-  );
-  check(
-    !/new URL\(\s*['"]\.\/diagram-lightbox\.css['"]/.test(src),
-    'diagram-lightbox.ts no debe hardcodear ./diagram-lightbox.css',
-  );
-  // Molde IswcElement: la hoja viaja dentro del módulo (`import css from 'iswc:css'`), sin pedir ningún .css.
-  check(
-    /static (?:override )?css = css;/.test(src) && /import css from 'iswc:css';/.test(src) && !/siblingCssHref\s*\(/.test(src),
-    'diagram-lightbox.ts debe llevar su CSS por iswc:css (static css), no por siblingCssHref',
-  );
-  
-  const distJs = join(root, 'dist/cdn/diagrams/diagram-lightbox.min.mjs');
-  if (existsSync(distJs)) {
-    const bundled = readFileSync(distJs, 'utf8');
-    check(
-      !/new URL\(\s*["']\.\/diagram-lightbox\.css["']/.test(bundled),
-      'dist diagram-lightbox.min.mjs no debe pedir ./diagram-lightbox.css sin .min',
-    );
-    check(
-      existsSync(join(root, 'dist/cdn/diagrams/diagram-lightbox.min.css')),
-      'debe existir dist/cdn/diagrams/diagram-lightbox.min.css',
-    );
-  }
   
   if (failures.length) {
     console.error('sibling-css-href.test.ts: FAIL');

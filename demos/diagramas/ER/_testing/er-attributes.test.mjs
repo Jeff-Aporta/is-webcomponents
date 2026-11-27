@@ -25,9 +25,9 @@ async function selectEntity(page, eid) {
   // `click`), así que hay que disparar el evento correcto. También limpiamos
   // selección previa con Escape.
   await page.evaluate((id) => {
-    const ed = document.querySelector('iswc-er-editor');
+    const ed = document.querySelector('iswd-er-editor');
     window.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
-    const entity = ed.shadowRoot.querySelector('iswc-er-diagram').shadowRoot.querySelector(`.er-entity[data-entity-id="${id}"]`);
+    const entity = ed.shadowRoot.querySelector('iswd-er-diagram').shadowRoot.querySelector(`.er-entity[data-entity-id="${id}"]`);
     entity?.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true, composed: true, button: 0 }));
     entity?.dispatchEvent(new PointerEvent('pointerup', { bubbles: true, composed: true, button: 0 }));
   }, eid);
@@ -36,7 +36,7 @@ async function selectEntity(page, eid) {
 
 async function getAttributesFieldsetVisible(page) {
   return page.evaluate(() => {
-    const ed = document.querySelector('iswc-er-editor');
+    const ed = document.querySelector('iswd-er-editor');
     const fs = ed.shadowRoot.querySelector('[data-attrs]');
     return fs ? !fs.hasAttribute('hidden') : false;
   });
@@ -44,7 +44,7 @@ async function getAttributesFieldsetVisible(page) {
 
 async function getState(page) {
   return page.evaluate(() => {
-    const ed = document.querySelector('iswc-er-editor');
+    const ed = document.querySelector('iswd-er-editor');
     return JSON.parse(JSON.stringify(ed.payload));
   });
 }
@@ -88,7 +88,7 @@ tests.push({
     // El demo inicial tiene user.attributes[0] = { name: 'id', key: 'PK', type: 'uuid' }.
     // Cambiamos el name del primer atributo (input[name] en la primera fila).
     await page.evaluate(async () => {
-      const ed = document.querySelector('iswc-er-editor');
+      const ed = document.querySelector('iswd-er-editor');
       const input = ed.shadowRoot.querySelector('[data-attr-list] .attr-row [data-attr-field="name"]');
       input.value = 'identifier';
       input.dispatchEvent(new Event('input', { bubbles: true }));
@@ -103,8 +103,8 @@ tests.push({
 
     // Verificar que el SVG también refleja el cambio (texto en .er-entity).
     const svgText = await page.evaluate(() => {
-      const ed = document.querySelector('iswc-er-editor');
-      const texts = ed.shadowRoot.querySelector('iswc-er-diagram').shadowRoot
+      const ed = document.querySelector('iswd-er-editor');
+      const texts = ed.shadowRoot.querySelector('iswd-er-diagram').shadowRoot
         .querySelectorAll('.er-entity[data-entity-id="user"] text');
       return [...texts].map((t) => t.textContent);
     });
@@ -124,7 +124,7 @@ tests.push({
     await selectEntity(page, 'order');
     // order.attributes[1] = { name: 'total', type: 'decimal' }
     await page.evaluate(async () => {
-      const ed = document.querySelector('iswc-er-editor');
+      const ed = document.querySelector('iswd-er-editor');
       const inputs = ed.shadowRoot.querySelectorAll('[data-attr-list] .attr-row [data-attr-field="type"]');
       const input = inputs[1]; // total
       input.value = 'numeric(10,2)';
@@ -151,7 +151,7 @@ tests.push({
     // order.attributes[1] = { name: 'total', type: 'decimal', key: undefined }
     // Promover a FK.
     await page.evaluate(async () => {
-      const ed = document.querySelector('iswc-er-editor');
+      const ed = document.querySelector('iswd-er-editor');
       const selects = ed.shadowRoot.querySelectorAll('[data-attr-list] .attr-row [data-attr-field="key"]');
       const sel = selects[1]; // total
       sel.value = 'FK';
@@ -165,7 +165,7 @@ tests.push({
 
     // Quitar el key (volver a "ninguno").
     await page.evaluate(async () => {
-      const ed = document.querySelector('iswc-er-editor');
+      const ed = document.querySelector('iswd-er-editor');
       const selects = ed.shadowRoot.querySelectorAll('[data-attr-list] .attr-row [data-attr-field="key"]');
       const sel = selects[1];
       sel.value = '';
@@ -191,7 +191,7 @@ tests.push({
     const before = (await getState(page)).entities.find((e) => e.id === 'user').attributes.length;
 
     await page.evaluate(async () => {
-      const ed = document.querySelector('iswc-er-editor');
+      const ed = document.querySelector('iswd-er-editor');
       ed.shadowRoot.querySelector('[data-action="add-attr"]')?.click();
       await new Promise((r) => setTimeout(r, 80));
     });
@@ -217,7 +217,7 @@ tests.push({
     await selectEntity(page, 'order');
     // order tiene 3 atributos: id (PK), total, user_id (FK). Borramos el del medio (total).
     await page.evaluate(async () => {
-      const ed = document.querySelector('iswc-er-editor');
+      const ed = document.querySelector('iswd-er-editor');
       const dels = ed.shadowRoot.querySelectorAll('[data-attr-list] [data-attr-action="delete"]');
       dels[1].click(); // total
       await new Promise((r) => setTimeout(r, 80));
@@ -248,7 +248,7 @@ tests.push({
 
     // 1) Cambiar el nombre del segundo atributo (sku → codigo).
     await page.evaluate(async () => {
-      const ed = document.querySelector('iswc-er-editor');
+      const ed = document.querySelector('iswd-er-editor');
       const inputs = ed.shadowRoot.querySelectorAll('[data-attr-list] .attr-row [data-attr-field="name"]');
       inputs[1].value = 'codigo';
       inputs[1].dispatchEvent(new Event('input', { bubbles: true }));
@@ -256,7 +256,7 @@ tests.push({
     });
     // 2) Cambiar el type del tercero (price → bigint).
     await page.evaluate(async () => {
-      const ed = document.querySelector('iswc-er-editor');
+      const ed = document.querySelector('iswd-er-editor');
       const inputs = ed.shadowRoot.querySelectorAll('[data-attr-list] .attr-row [data-attr-field="type"]');
       inputs[2].value = 'bigint';
       inputs[2].dispatchEvent(new Event('input', { bubbles: true }));
@@ -309,7 +309,7 @@ tests.push({
     // Teclear 5 caracteres seguidos sin esperar entre eventos. Si el debounce
     // funciona, deben coalescer en UN solo undo (no 5).
     await page.evaluate(async () => {
-      const ed = document.querySelector('iswc-er-editor');
+      const ed = document.querySelector('iswd-er-editor');
       const input = ed.shadowRoot.querySelector('[data-attr-list] .attr-row [data-attr-field="name"]');
       const original = input.value;
       // Simular typing: input + input + input + input + input, sin awaits.
@@ -344,15 +344,15 @@ tests.push({
 
     // Añadimos una entidad (que arranca sin atributos), la seleccionamos.
     await page.evaluate(async () => {
-      const ed = document.querySelector('iswc-er-editor');
+      const ed = document.querySelector('iswd-er-editor');
       ed.shadowRoot.querySelector('[data-action="add-entity"]')?.click();
       await new Promise((r) => setTimeout(r, 80));
     });
-    const id = await page.evaluate(() => document.querySelector('iswc-er-editor').payload.entities.slice(-1)[0].id);
+    const id = await page.evaluate(() => document.querySelector('iswd-er-editor').payload.entities.slice(-1)[0].id);
     await selectEntity(page, id);
 
     const result = await page.evaluate((eid) => {
-      const ed = document.querySelector('iswc-er-editor');
+      const ed = document.querySelector('iswd-er-editor');
       const fs = ed.shadowRoot.querySelector('[data-attrs]');
       const rows = ed.shadowRoot.querySelectorAll('[data-attr-list] .attr-row');
       const addBtn = ed.shadowRoot.querySelector('[data-action="add-attr"]');

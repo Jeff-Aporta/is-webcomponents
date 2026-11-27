@@ -12,7 +12,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-quadrant-ready');
     const info = await page.evaluate(() => {
-      const q = document.querySelector('iswc-quadrant-chart');
+      const q = document.querySelector('iswd-quadrant-chart');
       const sr = q?.shadowRoot;
       return {
         points: sr?.querySelectorAll('[data-point-id]').length ?? 0,
@@ -33,7 +33,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-quadrant-ready');
     const a11y = await page.evaluate(() => {
-      const svg = document.querySelector('iswc-quadrant-chart')?.shadowRoot?.querySelector('svg');
+      const svg = document.querySelector('iswd-quadrant-chart')?.shadowRoot?.querySelector('svg');
       return { role: svg?.getAttribute('role'), ariaLabel: svg?.getAttribute('aria-label') };
     });
     assert.ok(a11y.role || a11y.ariaLabel);
@@ -46,7 +46,7 @@ tests.push({
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-quadrant-ready');
-    const points = await page.evaluate(() => document.querySelector('iswc-quadrant-chart')?.shadowRoot?.querySelectorAll('[data-point-id]').length ?? 0);
+    const points = await page.evaluate(() => document.querySelector('iswd-quadrant-chart')?.shadowRoot?.querySelectorAll('[data-point-id]').length ?? 0);
     assert.equal(points, 6);
   },
 });

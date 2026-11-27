@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Demo — <iswc-state-diagram></title>
-<meta name="description" content="Demo de iswc-state-diagram con start/choice/end y self-loop." />
+<title>Demo — <iswd-state-diagram></title>
+<meta name="description" content="Demo de iswd-state-diagram con start/choice/end y self-loop." />
 <style>
   html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
   body { display: grid; grid-template-rows: auto 1fr auto; }
@@ -12,16 +12,23 @@
   header h1 { font-size: 16px; font-weight: 700; margin: 0; }
   header p { font-size: 12px; color: #94a3b8; margin: 4px 0 0 0; }
   main { display: grid; padding: 20px; min-height: 420px; }
-  iswc-state-diagram { width: 100%; min-height: 400px; }
-  iswc-state-diagram:not(:defined) { visibility: hidden; }
+  iswd-state-diagram { width: 100%; min-height: 400px; }
+  iswd-state-diagram:not(:defined) { visibility: hidden; }
   footer { padding: 12px 20px; border-top: 1px solid rgba(255,255,255,0.1); background: #0f1620; font-size: 11px; color: #94a3b8; }
   footer code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; font: 11px ui-monospace, Menlo, Consolas, monospace; }
 </style>
+<script type="importmap">{"imports":{"@jeff-aporta/iswc-base/":"../../../dist/cdn/","zod":"../../../dist/cdn/lib/zod.min.mjs"}}</script>
 <script type="module">
+<<<<<<< Updated upstream
   await import('../../../dist/cdn/diagrams/state-diagram.min.mjs?v=w08lv1');
   await customElements.whenDefined('iswc-state-diagram');
+=======
+  const { cargarDiagramas } = await import('../_plugin.js');
+  await cargarDiagramas(['iswd-state-diagram']);
+  await customElements.whenDefined('iswd-state-diagram');
+>>>>>>> Stashed changes
 
-  const el = document.createElement('iswc-state-diagram');
+  const el = document.createElement('iswd-state-diagram');
   el.payload = {
     stateDiagram: {
       title: 'Ciclo de pedido',
@@ -55,11 +62,11 @@
 </head>
 <body>
 <header>
-  <h1>Demo <code>&lt;iswc-state-diagram&gt;</code></h1>
+  <h1>Demo <code>&lt;iswd-state-diagram&gt;</code></h1>
   <p>Smoke: monta el componente, renderiza el SVG desde la spec JSON.</p>
 </header>
 <main><div id="host"></div></main>
-<footer>Componente: <code>iswc-state-diagram</code> · Spec: <code>state-spec</code></footer>
+<footer>Componente: <code>iswd-state-diagram</code> · Spec: <code>state-spec</code></footer>
 <script>
 /* iswc-auto-rereload v2: backoff — polling client agnóstico del static server
  * W17: backoff exponencial + readyState wait + giveup tras MAX_FAILS fallos

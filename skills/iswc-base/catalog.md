@@ -1,6 +1,6 @@
 # Catálogo iswc-* (inventario completo)
 
-Fuente viva: regenerar con `node scripts/sync-skill-catalog.mjs`.
+Fuente viva: regenerar con `node scripts/sondas/sync-skill-catalog.mjs`.
 Skill general: [SKILL.md](SKILL.md) · Runtime sin tag: [tools/runtime.md](tools/runtime.md).
 
 ## Categorías
@@ -11,7 +11,6 @@ Skill general: [SKILL.md](SKILL.md) · Runtime sin tag: [tools/runtime.md](tools
 | `charts` / `data-viz` | Series, distribuciones, mapas |
 | `code` | Editor / visor de código |
 | `data` | Grid, stats, transfer, kanban, pivot |
-| `diagrams` | Flujos, ER, gantt, timeline… |
 | `feedback` | Toast, tag, skeleton, progress, CDN snippet |
 | `forms` | Captura y validación |
 | `helpers` | Formato, observers, MD, popover, APIs módulo |
@@ -29,8 +28,8 @@ Skill general: [SKILL.md](SKILL.md) · Runtime sin tag: [tools/runtime.md](tools
 | --- | --- | --- | --- |
 | `iswcLoader` | `core/loader.min.mjs` | Entry CDN: loadCSS*, load/ensure/has, pin, configure, espejos jsDelivr -> githack -> Pages, sheets, registerApp, SHA quemado. | [docs](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/cdn/loader.md) |
 | `IswcUi / Ui` | `helpers/ui.min.mjs` | html, adoptCss, define, css, el: primitivas de apps dominio. No es CE. | [docs](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/helpers/ui.md) |
-| `mdToHtml` | `helpers/md-lite.min.mjs` | Markdown -> HTML sin npm; fences codigo e iswc-* (diagramas). | [docs](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/helpers/utils/md-lite.md) |
-| `resolveIswcFenceTag` | `helpers/md-iswc-fences.min.mjs` | Lang fence iswc-* -> tag de diagrama (flowchart, er, sequence, ...). | [docs](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/helpers/utils/md-iswc-fences.md) |
+| `mdToHtml` | `helpers/md-lite.min.mjs` | Markdown -> HTML sin npm; fences codigo e iswc-* (y los diagramas del plugin `iswd-`). | [docs](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/helpers/utils/md-lite.md) |
+| `resolveIswcFenceTag` | `helpers/md-iswc-fences.min.mjs` | Lang fence iswc-<kind> -> tag del diagrama del plugin (iswd-flowchart, iswd-er-diagram, ...). | [docs](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/helpers/utils/md-iswc-fences.md) |
 | `hydrateMdEmbeds` | `helpers/md-hydrate.min.mjs` | Carga perezosa de los iswc-* que pusieron los renders por defecto del markdown. | [docs](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/helpers/utils/md-hydrate.md) |
 | `md-editor-api` | `helpers/md-editor-api.min.mjs` | CRUD/normalizacion para iswc-md-editor (endpoints, fieldMap, token). | [docs](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/helpers/utils/md-editor-api.md) |
 | `IswcResponseCache` | `helpers/response-cache.min.mjs` | SWR IndexedDB: vivo/leer/guardar/invalidar; no bloquea el pintado. | [docs](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/helpers/utils/response-cache.md) |
@@ -279,32 +278,6 @@ Skill general: [SKILL.md](SKILL.md) · Runtime sin tag: [tools/runtime.md](tools
 | `data-viz/heatmap.md` | `<iswc-heatmap>` |
 | `data-viz/maps.md` | `<iswc-maps>` |
 | `data-viz/map-marker.md` | `<iswc-map-marker>` |
-
-### diagrams
-
-| Doc | Tags |
-| --- | --- |
-| `diagrams/flowchart.md` | `<iswc-flowchart>` |
-| `diagrams/sequence-diagram.md` | `<iswc-sequence-diagram>` |
-| `diagrams/diagram-lightbox.md` | `<iswc-diagram-lightbox>` |
-| `diagrams/class-diagram.md` | `<iswc-class-diagram>` |
-| `diagrams/state-diagram.md` | `<iswc-state-diagram>` |
-| `diagrams/er-diagram.md` | `<iswc-er-diagram>` |
-| `diagrams/er-editor.md` | `<iswc-er-editor>` |
-| `diagrams/diagram-view-app.md` | `<iswc-diagram-view-app>` |
-| `diagrams/diagram-edit-app.md` | `<iswc-diagram-edit-app>` |
-| `diagrams/block-diagram.md` | `<iswc-block-diagram>` |
-| `diagrams/component-diagram.md` | `<iswc-component-diagram>` |
-| `diagrams/mindmap.md` | `<iswc-mindmap>` |
-| `diagrams/gantt.md` | `<iswc-gantt>` |
-| `diagrams/timeline.md` | `<iswc-timeline>` |
-| `diagrams/org-chart.md` | `<iswc-org-chart>` |
-| `diagrams/sankey-diagram.md` | `<iswc-sankey-diagram>` |
-| `diagrams/quadrant-chart.md` | `<iswc-quadrant-chart>` |
-| `diagrams/venn-diagram.md` | `<iswc-venn-diagram>` |
-| `diagrams/use-case-diagram.md` | `<iswc-use-case-diagram>` |
-| `diagrams/swimlane-diagram.md` | `<iswc-swimlane-diagram>` |
-| `diagrams/journey-map.md` | `<iswc-journey-map>` |
 
 ### overlays
 

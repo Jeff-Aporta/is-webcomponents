@@ -23,5 +23,7 @@
   { "value": "cobre", "label": "Cobre", "family": "calidos", "origin": "brown rgb(143,52,0)", "mood": "Marrón cobrizo, artesanal.", "h": 22, "s": "100%", "b": "32%" },
   { "value": "tanzanita", "label": "Tanzanita", "family": "violetas", "origin": "violet rgb(128,43,200)", "mood": "Violeta azulado, sofisticado.", "h": 272, "s": "65%", "b": "48%" },
   { "value": "olivino", "label": "Olivino", "family": "verdes", "origin": "olive rgb(128,150,0)", "mood": "Verde oliva, mediterráneo y sereno.", "h": 68, "s": "100%", "b": "29%" },
-  { "value": "ambar", "label": "Ámbar", "family": "calidos", "origin": "amber rgb(255,191,0)", "mood": "Ámbar dorado y cálido.", "h": 45, "s": "100%", "b": "45%" }
+  { "value": "ambar", "label": "Ámbar", "family": "calidos", "origin": "amber rgb(255,191,0)", "mood": "Ámbar dorado y cálido.", "h": 45, "s": "100%", "b": "45%" },
+  { "value": "whatsapp", "label": "WhatsApp", "family": "verdes", "origin": "whatsapp #25D366", "mood": "El verde de WhatsApp: familiar y de confianza para atender por ese canal.", "h": 142, "s": "70%", "b": "45%", "tint": 0 },
+  { "value": "telegram", "label": "Telegram", "family": "azules", "origin": "telegram #229ED9", "mood": "El azul de Telegram: fresco y tecnico para el soporte por ese canal.", "h": 199, "s": "70%", "b": "49%", "tint": 0 }
 ]

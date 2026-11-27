@@ -3,9 +3,10 @@
  * plugin.schemas.ts — contratos de `iswcLoader.loadPlugin` (capa 2 `loader-plugin`) y del manifiesto `plugin.json`
  * que cada app publica en su `dist/cdn/` (`iswc-plugin/v1`).
  *
- * El enrutador (iswc-base) solo necesita tres datos de una app: repo, SHA y prefijo. Todo lo demás (qué tags trae, de
- * qué módulo salen, qué cierre precargar) lo dice su `plugin.json`, que el build de la app (`construirApp({ plugin })`)
- * escribe junto al registrador `<prefijo>Loader.min.mjs`.
+ * El enrutador (iswc-base) solo necesita tres datos de una app: repo, SHA y prefijo. Con ellos importa el loader PROPIO de la
+ * app (`<prefijo>Loader.min.mjs`, generado por su build con las mismas optimizaciones del kit) y le delega el registro de
+ * sus tags: el kit no conoce rutas ni archivos de la app. El `plugin.json` ya no lo lee el enrutador: es metadato para
+ * herramientas (catálogo, `deno task shas`, documentación) y para quien quiera listar los tags sin cargar nada.
  */
 import { z } from "zod";
 
@@ -48,7 +49,7 @@ const PluginManifestSchema = z.object({
   repo: z.string(),
   prefijo: z.string().regex(PREFIJO_PLUGIN),
   titulo: z.string().optional(),
-  /** Registrador de la app (`<prefijo>Loader.min.mjs`): lo usa la propia app; el enrutador no lo necesita. */
+  /** Loader de la app (`<prefijo>Loader.min.mjs`): lo importa el enrutador. */
   loader: z.string().optional(),
   /** Kit con el que se construyó (informativo: el plugin importa el kit por alias del import map de la página). */
   kit: z.object({ repo: z.string(), sha: z.string() }).optional(),
@@ -67,14 +68,12 @@ export const PluginInfoSchema = z.object({
   repo: z.string(),
   sha: z.string(),
   prefijo: z.string(),
-  /** Raíz publicada (con barra final) de donde salieron el manifiesto y los módulos. */
+  /** Raíz publicada (con barra final) de donde se importó el loader de la app. */
   raiz: z.string(),
   /** Tags registrados. */
   tags: z.array(z.string()),
   /** Entrada de import map para diseñar con imports (`{ "@crm/": "<raiz>" }`). */
   alias: z.record(z.string(), z.string()),
-  /** Kit declarado por el manifiesto. */
-  kit: z.object({ repo: z.string(), sha: z.string() }).nullable(),
 });
 export type PluginInfo = z.infer<typeof PluginInfoSchema>;
 
@@ -83,6 +82,9 @@ export type PluginActivo = { opts: PluginOpts; promesa: Promise<PluginInfo> };
 
 /** Contexto mínimo que la capa 2 recibe del núcleo (sin ciclo con `loader.ts`). */
 export type PluginCtx = { routeHref(href: string): string };
+
+/** Importa el loader de la app (una raíz tras otra): lo inyecta el núcleo y las pruebas. */
+export type PluginImportar = (url: string) => Promise<unknown>;
 
 /** La parte del loader que usa la capa 2. */
 export type PluginLoaderApi = {

@@ -84,46 +84,7 @@ function preview(tag, category, title, lede, html) {
   };
 }
 
-const kinds = [
-  ['flowchart', 'Flujo'],
-  ['sequence', 'Secuencia'],
-  ['class', 'Clases'],
-  ['state', 'Estados'],
-  ['er', 'Entidad-relación'],
-  ['block', 'Bloques'],
-  ['component', 'Componentes'],
-  ['mindmap', 'Mapa mental'],
-  ['gantt', 'Gantt'],
-  ['timeline', 'Línea de tiempo'],
-  ['org-chart', 'Organigrama'],
-  ['sankey', 'Sankey'],
-  ['quadrant', 'Cuadrantes'],
-  ['venn', 'Venn'],
-  ['usecase', 'Casos de uso'],
-  ['swimlane', 'Carriles'],
-  ['journey', 'Recorrido'],
-];
-
-const links = kinds.map(([kind, title]) =>
-  `<li>${title}: <a href="demos/diagramas/app/view.html?kind=${kind}" target="_blank" rel="noopener">visor</a> · <a href="demos/diagramas/app/edit.html?kind=${kind}" target="_blank" rel="noopener">editor</a></li>`,
-).join('');
-
 const pages = [
-  ['diagrams/diagram-view-app.json', preview(
-    'iswc-diagram-view-app', 'diagrams', 'Visor de diagramas (API)',
-    'Abre cualquier diagrama con ?kind= y ?json= en base64url. La dirección no cambia al mirar el documento.',
-    `<iframe title="Visor de diagramas" src="demos/diagramas/app/view.html?kind=flowchart" style="width:100%;height:720px;border:1px solid var(--iswc-border);border-radius:12px;background:var(--iswc-bg)"></iframe><ul>${links}</ul>`,
-  )],
-  ['diagrams/diagram-edit-app.json', preview(
-    'iswc-diagram-edit-app', 'diagrams', 'Editor de diagramas (API)',
-    'Edita el diagrama y comparte un enlace nuevo. El ?json= con el que se abrió la página se queda igual.',
-    `<iframe title="Editor de diagramas" src="demos/diagramas/app/edit.html?kind=er" style="width:100%;height:720px;border:1px solid var(--iswc-border);border-radius:12px;background:var(--iswc-bg)"></iframe><ul>${links}</ul>`,
-  )],
-  ['diagrams/er-editor.json', preview(
-    'iswc-er-editor', 'diagrams', '<iswc-er-editor>',
-    'Editor visual de entidad-relación. Compartir el resultado se hace con la app de edición, sin reescribir el enlace de entrada.',
-    `<p><a href="demos/diagramas/app/edit.html?kind=er" target="_blank" rel="noopener">Abrir editor (API)</a> · <a href="demos/diagramas/app/view.html?kind=er" target="_blank" rel="noopener">Abrir visor</a></p><iswc-er-editor style="display:block;height:560px"><script type="application/json">{"entities":[{"id":"cliente","name":"Cliente","attributes":[{"name":"id","key":"PK","type":"uuid"}],"pos":[80,80]},{"id":"pedido","name":"Pedido","attributes":[{"name":"id","key":"PK","type":"uuid"},{"name":"cliente_id","key":"FK","type":"uuid"}],"pos":[380,80]}],"relations":[{"id":"r1","from":"cliente","to":"pedido","label":"hace","fromCard":"one","toCard":"many"}]}</script></iswc-er-editor>`,
-  )],
   ['layout/demo.json', preview(
     'iswc-demo', 'layout', '<iswc-demo>',
     'Caja de los ejemplos de la galería.',
@@ -153,75 +114,6 @@ for (const [rel, data] of pages) {
   mkdirSync(dirname(dist), { recursive: true });
   copyFileSync(file, dist);
   console.log('page', rel);
-}
-
-const diagramJson = [
-  ['flowchart.json', 'flowchart'],
-  ['sequence-diagram.json', 'sequence'],
-  ['class-diagram.json', 'class'],
-  ['state-diagram.json', 'state'],
-  ['er-diagram.json', 'er'],
-  ['block-diagram.json', 'block'],
-  ['component-diagram.json', 'component'],
-  ['mindmap.json', 'mindmap'],
-  ['gantt.json', 'gantt'],
-  ['timeline.json', 'timeline'],
-  ['org-chart.json', 'org-chart'],
-  ['sankey-diagram.json', 'sankey'],
-  ['quadrant-chart.json', 'quadrant'],
-  ['venn-diagram.json', 'venn'],
-  ['use-case-diagram.json', 'usecase'],
-  ['swimlane-diagram.json', 'swimlane'],
-  ['journey-map.json', 'journey'],
-];
-
-for (const [file, kind] of diagramJson) {
-  const abs = join(comp, 'diagrams', file);
-  if (!existsSync(abs)) { console.log('sin json', file); continue; }
-  let raw = readFileSync(abs, 'utf8');
-  if (!raw.includes('"app-api"')) {
-    const nl = raw.includes('\r\n') ? '\r\n' : '\n';
-    const needle = `${nl}  ]${nl}}`;
-    const idx = raw.lastIndexOf(needle);
-    if (idx < 0) console.log('no cierre', file);
-    else {
-      const section = {
-        id: 'app-api',
-        title: 'App API',
-        lede: 'El mismo documento se abre en el visor o en el editor. El parámetro json no se reescribe al modificar el diagrama.',
-        blocks: [{
-          kind: 'html',
-          html: `<p><a href="demos/diagramas/app/view.html?kind=${kind}" target="_blank" rel="noopener">Abrir visor</a> · <a href="demos/diagramas/app/edit.html?kind=${kind}" target="_blank" rel="noopener">Abrir editor</a></p>`,
-        }],
-      };
-      const body = JSON.stringify(section, null, 2).split('\n').map((line) => `    ${line}`).join(nl);
-      raw = `${raw.slice(0, idx)},${nl}${body}${raw.slice(idx)}`;
-      if (!raw.endsWith(nl)) raw += nl;
-      writeFileSync(abs, raw, 'utf8');
-      console.log('anexo', file);
-    }
-  }
-  const dist = join(root, 'dist', 'previews', 'diagrams', file);
-  if (existsSync(dirname(dist))) copyFileSync(abs, dist);
-}
-
-const appSection = (kind) => `
-
-## App API
-
-Visor: \`demos/diagramas/app/view.html?kind=${kind}&json=<base64url>\`.
-Editor: \`demos/diagramas/app/edit.html?kind=${kind}&json=<base64url>\`.
-
-\`json\` es el documento completo en base64url. Editar no reescribe ese parámetro: Compartir arma un enlace nuevo con el JSON resultante.
-`;
-
-for (const [file, kind] of diagramJson) {
-  const md = join(comp, 'diagrams', file.replace(/\.json$/, '.md'));
-  if (!existsSync(md)) continue;
-  const text = readFileSync(md, 'utf8');
-  if (text.includes('## App API')) continue;
-  writeFileSync(md, text.replace(/\s*$/, '') + appSection(kind), 'utf8');
-  console.log('guia', file);
 }
 
 function resumenDe(md, fallback) {
@@ -312,13 +204,13 @@ const API_MODULES = [
     id: 'mdToHtml',
     cdn: 'helpers/md-lite.min.mjs',
     guia: `${gh}/helpers/utils/md-lite.md`,
-    resumen: 'Markdown -> HTML sin npm; fences codigo e iswc-* (diagramas).',
+    resumen: 'Markdown -> HTML sin npm; fences codigo e iswc-* (y los diagramas del plugin `iswd-`).',
   },
   {
     id: 'resolveIswcFenceTag',
     cdn: 'helpers/md-iswc-fences.min.mjs',
     guia: `${gh}/helpers/utils/md-iswc-fences.md`,
-    resumen: 'Lang fence iswc-* -> tag de diagrama (flowchart, er, sequence, ...).',
+    resumen: 'Lang fence iswc-<kind> -> tag del diagrama del plugin (iswd-flowchart, iswd-er-diagram, ...).',
   },
   {
     id: 'hydrateMdEmbeds',
@@ -414,7 +306,7 @@ const catPath = join(root, 'skills', 'iswc-base', 'catalog.md');
 const catOut = [
   '# Catálogo iswc-* (inventario completo)',
   '',
-  'Fuente viva: regenerar con `node scripts/sync-skill-catalog.mjs`.',
+  'Fuente viva: regenerar con `node scripts/sondas/sync-skill-catalog.mjs`.',
   'Skill general: [SKILL.md](SKILL.md) · Runtime sin tag: [tools/runtime.md](tools/runtime.md).',
   '',
   '## Categorías',
@@ -425,7 +317,6 @@ const catOut = [
   '| `charts` / `data-viz` | Series, distribuciones, mapas |',
   '| `code` | Editor / visor de código |',
   '| `data` | Grid, stats, transfer, kanban, pivot |',
-  '| `diagrams` | Flujos, ER, gantt, timeline… |',
   '| `feedback` | Toast, tag, skeleton, progress, CDN snippet |',
   '| `forms` | Captura y validación |',
   '| `helpers` | Formato, observers, MD, popover, APIs módulo |',

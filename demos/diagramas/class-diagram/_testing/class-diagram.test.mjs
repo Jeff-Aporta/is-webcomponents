@@ -11,21 +11,21 @@ const URL = `${BASE_URL}/demos/diagramas/class-diagram/class-diagram.html`;
 const tests = [];
 
 tests.push({
-  name: 'smoke: <iswc-class-diagram> monta y renderiza clases y relaciones',
+  name: 'smoke: <iswd-class-diagram> monta y renderiza clases y relaciones',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-class-diagram-ready');
     const info = await page.evaluate(() => {
-      const el = document.querySelector('main iswc-class-diagram');
+      const el = document.querySelector('main iswd-class-diagram');
       const shadow = el?.shadowRoot;
       return {
-        defined: !!customElements.get('iswc-class-diagram'),
+        defined: !!customElements.get('iswd-class-diagram'),
         classCount: shadow?.querySelectorAll('.cls-node').length ?? 0,
         edgeCount: shadow?.querySelectorAll('.cls-rel').length ?? 0,
         hasSvg: !!shadow?.querySelector('svg.cls-svg'),
       };
     });
-    assert.equal(info.defined, true, 'iswc-class-diagram debe estar definido');
+    assert.equal(info.defined, true, 'iswd-class-diagram debe estar definido');
     assert.ok(info.classCount >= 3, `esperaba >=3 clases, hay ${info.classCount}`);
     assert.ok(info.edgeCount >= 2, `esperaba >=2 relaciones, hay ${info.edgeCount}`);
     assert.equal(info.hasSvg, true, 'debe existir <svg class="cls-svg">');
@@ -39,7 +39,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-class-diagram-ready');
     const ids = await page.evaluate(() => {
-      const el = document.querySelector('main iswc-class-diagram');
+      const el = document.querySelector('main iswd-class-diagram');
       return [...el.shadowRoot.querySelectorAll('.cls-node')].map((g) => g.dataset.nodeId);
     });
     assert.ok(ids.includes('animal'), 'debe haber una clase "animal"');
@@ -54,7 +54,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-class-diagram-ready');
     const texts = await page.evaluate(() => {
-      const el = document.querySelector('main iswc-class-diagram');
+      const el = document.querySelector('main iswd-class-diagram');
       const perro = el.shadowRoot.querySelector('.cls-node[data-node-id="perro"]');
       return perro ? perro.textContent : '';
     });
@@ -69,7 +69,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-class-diagram-ready');
     const edges = await page.evaluate(() => {
-      const el = document.querySelector('main iswc-class-diagram');
+      const el = document.querySelector('main iswd-class-diagram');
       return [...el.shadowRoot.querySelectorAll('.cls-rel')].map((g) => ({
         id: g.dataset.edgeId,
         d: g.querySelector('path')?.getAttribute('d'),
@@ -89,16 +89,16 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-class-diagram-ready');
     const before = await page.evaluate(() => {
-      const el = document.querySelector('main iswc-class-diagram');
+      const el = document.querySelector('main iswd-class-diagram');
       return el.shadowRoot.querySelector('svg.cls-svg').getAttribute('viewBox');
     });
     await page.evaluate(() => {
-      const el = document.querySelector('main iswc-class-diagram');
+      const el = document.querySelector('main iswd-class-diagram');
       el.payload = el.payload;
     });
     await page.waitForTimeout(150);
     const after = await page.evaluate(() => {
-      const el = document.querySelector('main iswc-class-diagram');
+      const el = document.querySelector('main iswd-class-diagram');
       return el.shadowRoot.querySelector('svg.cls-svg').getAttribute('viewBox');
     });
     assert.equal(before, after, 'viewBox idéntico tras re-asignar payload');
@@ -111,7 +111,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-class-diagram-ready');
     const meta = await page.evaluate(() => {
-      const el = document.querySelector('main iswc-class-diagram');
+      const el = document.querySelector('main iswd-class-diagram');
       const svg = el.shadowRoot.querySelector('svg.cls-svg');
       return { aria: svg.getAttribute('aria-label'), role: svg.getAttribute('role') };
     });

@@ -630,10 +630,10 @@ import type { MdEditorEventos } from './schemas/md-editor.schemas.js';
         // Embeds hidratados (código, diagramas, botones): no abrir el diálogo.
         if (target.closest(
           'iswc-copy-button, iswc-code, iswc-button, a[href], .md-iswc-diagram, '
-          + 'iswc-flowchart, iswc-sequence-diagram, iswc-class-diagram, iswc-state-diagram, '
-          + 'iswc-er-diagram, iswc-block-diagram, iswc-component-diagram, iswc-mindmap, '
-          + 'iswc-gantt, iswc-timeline, iswc-org-chart, iswc-sankey-diagram, iswc-quadrant-chart, '
-          + 'iswc-venn-diagram, iswc-use-case-diagram, iswc-swimlane-diagram, iswc-journey-map',
+          + 'iswd-flowchart, iswd-sequence-diagram, iswd-class-diagram, iswd-state-diagram, '
+          + 'iswd-er-diagram, iswd-block-diagram, iswd-component-diagram, iswd-mindmap, '
+          + 'iswd-gantt, iswd-timeline, iswd-org-chart, iswd-sankey-diagram, iswd-quadrant-chart, '
+          + 'iswd-venn-diagram, iswd-use-case-diagram, iswd-swimlane-diagram, iswd-journey-map',
         )) return;
       }
       const sel = window.getSelection();

@@ -30,6 +30,7 @@
   await import('../../../dist/cdn/media/icon.min.mjs?v=2jquzj');
   await import('../../../dist/cdn/layout/drawer.min.mjs?v=4onnvv');
   await import('../../../dist/cdn/layout/dialog.min.mjs');
+<<<<<<< Updated upstream
   await import('../../../dist/cdn/layout/divider.min.mjs?v=g1env0');
   await import('../../../dist/cdn/isp/confirm-delete.min.mjs?v=437iy6');
   await import('../../../dist/cdn/isp/flex-options.min.mjs?v=xyazbs');
@@ -38,6 +39,16 @@
 
   await customElements.whenDefined('iswc-tree-view');
   const { TreeCustomsBase } = await import('../../../dist/cdn/isp/tree-view.min.mjs?v=2p5b04');
+=======
+  await import('../../../dist/cdn/layout/divider.min.mjs?v=3a5ypq');
+  await import('../../../dist/cdn/isp/confirm-delete.min.mjs?v=pyefr9');
+  await import('../../../dist/cdn/isp/flex-options.min.mjs?v=5fi7iy');
+  await import('../../../dist/cdn/isp/float-card.min.mjs?v=r6ort7');
+  await import('../../../dist/cdn/isp/tree-view.min.mjs?v=8z8k39');
+
+  await customElements.whenDefined('iswc-tree-view');
+  const { TreeCustomsBase } = await import('../../../dist/cdn/isp/tree-view.min.mjs?v=8z8k39');
+>>>>>>> Stashed changes
 
   // ── Customs para un plan de estudios ─────────────────────────────────
   class PlanCustoms extends TreeCustomsBase {

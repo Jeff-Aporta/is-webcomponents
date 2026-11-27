@@ -34,13 +34,13 @@ import {
 import './doc-layout.js';
 import '@jeff-aporta/iswc-base/components/navigation/doc-index.js';
 import '@jeff-aporta/iswc-base/components/navigation/pager.js';
-import '@jeff-aporta/iswc-base/components/diagrams/sequence-diagram.js';
 import '@jeff-aporta/iswc-base/components/code/code.js';
 import '@jeff-aporta/iswc-base/components/actions/button-group.js';
 import '@jeff-aporta/iswc-base/components/forms/input.js';
 import './dialog.js';
 import './callout.js';
 import css from 'iswc:css';
+import { cargarDiagramas } from './utils/server-api-docs-plugin.js';
 import type { ServerApiDocsEventos } from './schemas/server-api-docs.schemas.js';
 
 /**
@@ -158,6 +158,7 @@ class IswcServerApiDocs extends IswcElement {
 
   override connectedCallback(): void {
     super.connectedCallback();
+    void cargarDiagramas();
     upgradeProperties(this, ['doc']);
     if (this.#layout) return;
     this.#raiz.append(TEMPLATE.content.cloneNode(true));
@@ -416,7 +417,7 @@ class IswcServerApiDocs extends IswcElement {
       <h2 id="respuestas">Respuestas</h2>
       ${respuestas}
       <h2 id="flujo">Flujo</h2>
-      <div class="lienzo-iswc" data-theme="light"><iswc-sequence-diagram class="secuencia" diagram-style="iswc" open-on-click><script type="application/json">${secuencia}</script></iswc-sequence-diagram></div>
+      <div class="lienzo-iswc" data-theme="light"><iswd-sequence-diagram class="secuencia" diagram-style="iswc" open-on-click><script type="application/json">${secuencia}</script></iswd-sequence-diagram></div>
       <h2 id="probar">Probar</h2>
       <form class="probar" onsubmit="return false">
         <iswc-input class="base" label="Servidor (base de la API)" value="${escapar(this.#base)}"></iswc-input>

@@ -92,7 +92,7 @@ App de referencia: apps consumidoras vanilla (`tk-*` sobre `iswc-*`), por ejempl
 ## Regla de reuso
 
 **Nada se reimplementa si el kit ya lo resuelve.** Antes de escribir HTML, CSS o JS
-propio para botones, formularios, tablas, charts, toasts, diálogos, iconos, layouts o diagramas:
+propio para botones, formularios, tablas, charts, toasts, diálogos, iconos o layouts (los diagramas son del plugin `iswd-`):
 
 1. Clasificar la intención (categoría).
 2. Buscar el tag en el catálogo de esta skill.
@@ -142,20 +142,23 @@ apps lo hace `tests/vistas/contrato-componentes.test.ts`. Los contratos por carp
 **Un campo nuevo se compone sobre `<iswc-input>`** (así están `iswc-masked-input` e `iswc-mention`):
 reenvía `label`, `hint`, `error`, `variant`… y solo añade su comportamiento propio.
 
-## Diagramas por enlace
+## Diagramas (plugin `iswd-`)
 
-Cada diagrama tiene visor y editor como app, con el mismo parámetro.
+Los diagramas **no son del kit**: viven en el repo [`Jeff-Aporta/iswc-diagrams`](https://github.com/Jeff-Aporta/iswc-diagrams) con el prefijo `iswd-` y se cargan como **plugin**, fijados por SHA (el SHA vive en `demos/diagramas/_plugin.js`; `deno task shas` dice cuál es el último).
 
-| Modo | Página |
-| --- | --- |
-| Solo vista | `demos/diagramas/app/view.html?kind=<kind>&json=<base64url>` |
-| Edición | `demos/diagramas/app/edit.html?kind=<kind>&json=<base64url>` |
+```js
+await iswcLoader.loadPlugin({
+  app: 'diagrams',
+  repo: 'Jeff-Aporta/iswc-diagrams',
+  sha: '<SHA de 40 hex>',
+  prefijo: 'iswd-',
+  tags: ['iswd-flowchart'],
+});
+```
 
-`kind` es uno de: `flowchart`, `sequence`, `class`, `state`, `er`, `block`, `component`, `mindmap`, `gantt`, `timeline`, `org-chart`, `sankey`, `quadrant`, `venn`, `usecase`, `swimlane`, `journey`.
+Cada diagrama tiene visor y editor como app del plugin, con el mismo parámetro (`?kind=<kind>&json=<base64url>`): `kind` es `flowchart`, `sequence`, `class`, `state`, `er`, `block`, `component`, `mindmap`, `gantt`, `timeline`, `org-chart`, `sankey`, `quadrant`, `venn`, `usecase`, `swimlane` o `journey`; `json` es el documento completo en base64url.
 
-`json` es el documento completo del diagrama en base64url. Se lee al abrir. Editar no reescribe la dirección: **Compartir** copia un enlace nuevo con el JSON resultante, y **Recuperar JSON** devuelve el documento actual. El editor visual dedicado hoy es `<iswc-er-editor>`; el resto se edita con el JSON en vivo sobre el visor del mismo `kind`.
-
-Guía: [`diagram-studio.md`](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/diagrams/utils/diagram-studio.md).
+Galería del plugin: <https://jeff-aporta.github.io/iswc-diagrams/view/demo/>.
 
 ## Bootstrap CDN (apps consumidoras)
 
@@ -243,7 +246,7 @@ Base raw: `https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/s
 - Iconos: `<iswc-icon icon="familia:icono">` (por ejemplo `mdi:check`).
 - Formularios: form-associated del kit. No envolver `<input>` nativos si existe `iswc-input`.
 - Overlays posicionados: `<iswc-popover>` / `<iswc-tooltip>`. No reinventar floating UI ni usar `iswc-popup`.
-- Charts y diagramas: payloads declarativos de la guía del módulo. Para abrir uno ya armado, la app `?json=`.
+- Charts: payloads declarativos de la guía del módulo. Los diagramas no son del kit: son del plugin `iswd-` (ver «Diagramas» más abajo).
 - Listeners en `document` o `window`: solo en `connectedCallback`, y quitarlos en `disconnectedCallback`.
 - Estados por atributo del host en CSS propio: `:host([attr])` en el nivel superior (nunca `&[attr]` dentro de `:host { }`).
 
@@ -304,8 +307,8 @@ Detalle operativo: [`tools/runtime.md`](tools/runtime.md).
 | --- | --- | --- | --- |
 | `iswcLoader` | `core/loader.min.mjs` | Entry CDN: loadCSS*, load/ensure/has, pin, configure, espejos jsDelivr -> githack -> Pages, sheets, registerApp, SHA quemado. | [docs](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/cdn/loader.md) |
 | `IswcUi / Ui` | `helpers/ui.min.mjs` | html, adoptCss, define, css, el: primitivas de apps dominio. No es CE. | [docs](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/helpers/ui.md) |
-| `mdToHtml` | `helpers/md-lite.min.mjs` | Markdown -> HTML sin npm; fences codigo e iswc-* (diagramas). | [docs](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/helpers/utils/md-lite.md) |
-| `resolveIswcFenceTag` | `helpers/md-iswc-fences.min.mjs` | Lang fence iswc-* -> tag de diagrama (flowchart, er, sequence, ...). | [docs](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/helpers/utils/md-iswc-fences.md) |
+| `mdToHtml` | `helpers/md-lite.min.mjs` | Markdown -> HTML sin npm; fences codigo e iswc-* (y los diagramas del plugin `iswd-`). | [docs](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/helpers/utils/md-lite.md) |
+| `resolveIswcFenceTag` | `helpers/md-iswc-fences.min.mjs` | Lang fence iswc-<kind> -> tag del diagrama del plugin (iswd-flowchart, iswd-er-diagram, ...). | [docs](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/helpers/utils/md-iswc-fences.md) |
 | `hydrateMdEmbeds` | `helpers/md-hydrate.min.mjs` | Carga perezosa de los iswc-* que pusieron los renders por defecto del markdown. | [docs](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/helpers/utils/md-hydrate.md) |
 | `md-editor-api` | `helpers/md-editor-api.min.mjs` | CRUD/normalizacion para iswc-md-editor (endpoints, fieldMap, token). | [docs](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/helpers/utils/md-editor-api.md) |
 | `IswcResponseCache` | `helpers/response-cache.min.mjs` | SWR IndexedDB: vivo/leer/guardar/invalidar; no bloquea el pintado. | [docs](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/helpers/utils/response-cache.md) |
@@ -589,32 +592,6 @@ Cada `.min.js` enlaza la guía de su fila y esta skill.
 | `<iswc-heatmap>` | Cuando hay que comparar una magnitud sobre dos dimensiones categóricas al | [data-viz/heatmap.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/data-viz/heatmap.md) |
 | `<iswc-maps>` | - Ubicar puntos propios sobre un lienzo ligero: sucursales, bodegas, | [data-viz/maps.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/data-viz/maps.md) |
 | `<iswc-map-marker>` | Marcador de <iswc-maps>. | [data-viz/map-marker.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/data-viz/map-marker.md) |
-
-### diagrams
-
-| Tag | Resumen | Guía |
-| --- | --- | --- |
-| `<iswc-flowchart>` | Relaciones, flujos, estados, estructura o tiempo desde payloads declarativos. | [diagrams/flowchart.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/diagrams/flowchart.md) |
-| `<iswc-sequence-diagram>` | Relaciones, flujos, estados, estructura o tiempo desde payloads declarativos. | [diagrams/sequence-diagram.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/diagrams/sequence-diagram.md) |
-| `<iswc-diagram-lightbox>` | Relaciones, flujos, estados, estructura o tiempo desde payloads declarativos. | [diagrams/diagram-lightbox.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/diagrams/diagram-lightbox.md) |
-| `<iswc-class-diagram>` | Relaciones, flujos, estados, estructura o tiempo desde payloads declarativos. | [diagrams/class-diagram.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/diagrams/class-diagram.md) |
-| `<iswc-state-diagram>` | Relaciones, flujos, estados, estructura o tiempo desde payloads declarativos. | [diagrams/state-diagram.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/diagrams/state-diagram.md) |
-| `<iswc-er-diagram>` | Relaciones, flujos, estados, estructura o tiempo desde payloads declarativos. | [diagrams/er-diagram.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/diagrams/er-diagram.md) |
-| `<iswc-er-editor>` | Editor visual del diagrama entidad-relación. | [diagrams/er-editor.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/diagrams/er-editor.md) |
-| `<iswc-diagram-view-app>` | Página que abre cualquier diagrama por enlace, sin editarlo: demos/diagramas/app/view.html?kind=<kind>&json=<base64url>. | [diagrams/diagram-view-app.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/diagrams/diagram-view-app.md) |
-| `<iswc-diagram-edit-app>` | Página para editar un diagrama por enlace: demos/diagramas/app/edit.html?kind=<kind>&json=<base64url>. | [diagrams/diagram-edit-app.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/diagrams/diagram-edit-app.md) |
-| `<iswc-block-diagram>` | Relaciones, flujos, estados, estructura o tiempo desde payloads declarativos. | [diagrams/block-diagram.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/diagrams/block-diagram.md) |
-| `<iswc-component-diagram>` | Cuando necesitas describir la arquitectura de un sistema (servicios, | [diagrams/component-diagram.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/diagrams/component-diagram.md) |
-| `<iswc-mindmap>` | Relaciones, flujos, estados, estructura o tiempo desde payloads declarativos. | [diagrams/mindmap.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/diagrams/mindmap.md) |
-| `<iswc-gantt>` | Relaciones, flujos, estados, estructura o tiempo desde payloads declarativos. | [diagrams/gantt.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/diagrams/gantt.md) |
-| `<iswc-timeline>` | Relaciones, flujos, estados, estructura o tiempo desde payloads declarativos. | [diagrams/timeline.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/diagrams/timeline.md) |
-| `<iswc-org-chart>` | Estructuras de mando o pertenencia: áreas de la empresa, jerarquía de cuentas, | [diagrams/org-chart.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/diagrams/org-chart.md) |
-| `<iswc-sankey-diagram>` | Cuando el mensaje es cuánto se reparte entre caminos: esfuerzo por | [diagrams/sankey-diagram.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/diagrams/sankey-diagram.md) |
-| `<iswc-quadrant-chart>` | Priorización y comparación de opciones: impacto contra esfuerzo, costo | [diagrams/quadrant-chart.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/diagrams/quadrant-chart.md) |
-| `<iswc-venn-diagram>` | Cuando el mensaje es solape: alcance pedido contra alcance entregado, | [diagrams/venn-diagram.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/diagrams/venn-diagram.md) |
-| `<iswc-use-case-diagram>` | Cuando la pregunta es de alcance: qué puede hacer cada rol dentro de un | [diagrams/use-case-diagram.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/diagrams/use-case-diagram.md) |
-| `<iswc-swimlane-diagram>` | Cuando el proceso cruza varias áreas y lo importante es quién hace cada | [diagrams/swimlane-diagram.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/diagrams/swimlane-diagram.md) |
-| `<iswc-journey-map>` | Cuando además del orden hay una medida por paso: dónde se cae la | [diagrams/journey-map.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/diagrams/journey-map.md) |
 
 ### overlays
 

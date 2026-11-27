@@ -151,18 +151,6 @@ const CATALOG = {
   // data-viz
   'iswc-heatmap':           'data-viz/heatmap',
   'iswc-maps':              'data-viz/maps',
-  // diagrams
-  'iswc-flowchart':         'diagrams/flowchart',
-  'iswc-class-diagram':     'diagrams/class-diagram',
-  'iswc-state-diagram':     'diagrams/state-diagram',
-  'iswc-er-diagram':        'diagrams/er-diagram',
-  'iswc-block-diagram':     'diagrams/block-diagram',
-  'iswc-mindmap':           'diagrams/mindmap',
-  'iswc-gantt':             'diagrams/gantt',
-  'iswc-timeline':          'diagrams/timeline',
-  'iswc-org-chart':         'diagrams/org-chart',
-  'iswc-sequence-diagram':  'diagrams/sequence-diagram',
-  'iswc-diagram-lightbox':  'diagrams/diagram-lightbox',
   'iswc-lightbox':          'helpers/lightbox',
   // overlays
   'iswc-command-palette':   'overlays/command-palette',

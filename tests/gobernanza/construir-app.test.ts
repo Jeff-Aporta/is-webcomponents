@@ -23,6 +23,7 @@ import { dirname, join, relative } from 'node:path';
 import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
 import { construirApp } from '../../src/cdn/build/construir-app.ts';
 import type { ConstruirAppOpts } from '../../src/cdn/build/construir-app.schemas.ts';
+import type { PluginInfo, PluginLoaderApi } from '../../src/cdn/schemas/plugin.schemas.ts';
 import { cerrarChromium, lanzarChromium } from '../_shared/navegador.ts';
 import { servirEstatico } from '../../scripts/medir-carga.mjs';
 
@@ -144,9 +145,29 @@ test('gobernanza/construir-app: A1–A5 conversor sobre una app de fixture', asy
   const plug = await import('../../src/cdn/loader-plugin.ts');
   const peticion = { app: 'xx', repo: 'Jeff-Aporta/fixture-xx', sha: 'a'.repeat(40), prefijo: 'xx-' };
   const raizPlugin = 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/fixture-xx@' + 'a'.repeat(40) + '/dist/cdn/';
-  const registro = plug.entradasDe(plug.comprobarManifiesto(man, peticion, raizPlugin), raizPlugin);
-  assert.equal(registro.map['xx-a']!.href, `${raizPlugin}js/components/xx/xx-a.min.mjs`, 'A6 href absoluto de xx-a');
-  assert.ok(registro.deps['xx-a']!.every((h) => h.startsWith(`${raizPlugin}_chunks/`)), 'A6 cierre de xx-a');
+  // El enrutador ya no lee el manifiesto: importa el loader PROPIO de la app (`xxLoader.min.mjs`), que se registra solo.
+  assert.equal(plug.loaderDe(man.prefijo), man.loader, 'A6 el manifiesto declara el loader que importa el enrutador');
+  assert.ok(existsSync(join(DIST, man.loader as string)), 'A6 el loader de la app no existe');
+  const registrados: Record<string, { href: string }> = {};
+  const cargados: string[] = [];
+  const api: PluginLoaderApi = {
+    registerApp(map) { Object.assign(registrados, map); return api; },
+    getAppComponents: () => registrados,
+    load(...ids: string[]) { cargados.push(...ids); return Promise.resolve({}); },
+  };
+  const plugins: PluginInfo[] = [];
+  const importados: string[] = [];
+  const info = await plug.cargarPlugin(api, { routeHref: (h: string) => h }, plugins, peticion, (url: string) => {
+    importados.push(url);
+    // El loader de la app registra SUS rutas (esto es lo que hace `xxLoader.min.mjs` al importarse).
+    for (const [tag, href] of Object.entries(man.tags as Record<string, string>)) registrados[tag] = { href: new URL(href, raizPlugin).href };
+    return Promise.resolve({});
+  });
+  assert.deepEqual(importados, [`${raizPlugin}xxLoader.min.mjs`], 'A6 el enrutador importa el loader de la app');
+  assert.deepEqual(info.tags, ['xx-a', 'xx-b'], 'A6 tags que registró el loader de la app');
+  assert.equal(registrados['xx-a']!.href, `${raizPlugin}js/components/xx/xx-a.min.mjs`, 'A6 href absoluto de xx-a');
+  assert.deepEqual(cargados, [], 'A6 sin tags pedidos: no los carga de inmediato');
+  plug.reiniciarPlugins(plugins);
 
   // A2 orden del bloque
   const bloque = htmlPin.slice(htmlPin.indexOf('<!-- iswc:precarga:inicio -->'), htmlPin.indexOf('<!-- iswc:precarga:fin -->'));

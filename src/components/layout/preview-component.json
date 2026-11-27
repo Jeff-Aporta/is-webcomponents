@@ -5,13 +5,6 @@
   "title": "&lt;iswc-preview-component&gt;",
   "titleHtml": false,
   "description": "Shell que monta una definición JSON de la galería. La propia galería es el ejemplo vivo.",
-  "events": [
-    {
-      "name": "iswc-preview-ready",
-      "detail": "{ tag: string }",
-      "cancelable": false
-    }
-  ],
   "sections": [
     {
       "id": "intro",

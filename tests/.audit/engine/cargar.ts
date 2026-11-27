@@ -80,7 +80,6 @@ function buscarJsonEnComponentes(raiz: string, tag: string): string {
     join(raiz, 'src', 'components', 'forms', `${sinPrefijo}.json`),
     join(raiz, 'src', 'components', 'data', `${sinPrefijo}.json`),
     join(raiz, 'src', 'components', 'data-viz', `${sinPrefijo}.json`),
-    join(raiz, 'src', 'components', 'diagrams', `${sinPrefijo}.json`),
     join(raiz, 'src', 'components', 'overlays', `${sinPrefijo}.json`),
     join(raiz, 'src', 'components', 'helpers', `${sinPrefijo}.json`),
     join(raiz, 'src', 'components', 'isp', `${sinPrefijo}.json`),

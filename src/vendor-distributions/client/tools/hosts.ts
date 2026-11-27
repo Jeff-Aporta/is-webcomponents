@@ -25,6 +25,23 @@ export const DIAGRAM_HOSTS = [
   'iswc-venn-diagram',
   'iswc-mindmap',
   'iswc-org-chart',
+  // Plugin de diagramas (iswd-): mismos hosts con su prefijo.
+  'iswd-er-diagram',
+  'iswd-sequence-diagram',
+  'iswd-flowchart',
+  'iswd-state-diagram',
+  'iswd-class-diagram',
+  'iswd-block-diagram',
+  'iswd-component-diagram',
+  'iswd-swimlane-diagram',
+  'iswd-use-case-diagram',
+  'iswd-timeline',
+  'iswd-gantt',
+  'iswd-sankey-diagram',
+  'iswd-quadrant-chart',
+  'iswd-venn-diagram',
+  'iswd-mindmap',
+  'iswd-org-chart',
 ] as const;
 
 /** Expresión JS evaluable en página: primer SVG útil del kit. */
@@ -45,6 +62,11 @@ export function probeSvgExpression(hosts: readonly string[] = DIAGRAM_HOSTS): st
     if (vale(s)) return s;
   }
   for (const s of document.querySelectorAll('svg')) if (vale(s)) return s;
+  // Plugins de otras apps: cualquier host con shadow root que pinte un <svg>.
+  for (const h of document.querySelectorAll('*')) {
+    const s = h.shadowRoot && h.shadowRoot.querySelector('svg');
+    if (vale(s)) return s;
+  }
   return null;
 })()`;
 }

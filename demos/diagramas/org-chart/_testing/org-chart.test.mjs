@@ -13,22 +13,22 @@ const URL = `${BASE_URL}/demos/diagramas/org-chart/org-chart.html`;
 const tests = [];
 
 tests.push({
-  name: 'smoke: <iswc-org-chart> monta y renderiza tarjetas',
+  name: 'smoke: <iswd-org-chart> monta y renderiza tarjetas',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-org-chart-ready');
     const info = await page.evaluate(() => {
-      const el = document.querySelector('main iswc-org-chart');
+      const el = document.querySelector('main iswd-org-chart');
       const shadow = el?.shadowRoot;
       return {
-        defined: !!customElements.get('iswc-org-chart'),
+        defined: !!customElements.get('iswd-org-chart'),
         cards: shadow?.querySelectorAll('.card').length ?? 0,
         nodes: shadow?.querySelectorAll('.node').length ?? 0,
         edges: shadow?.querySelectorAll('path.edge').length ?? 0,
         hasSvg: !!shadow?.querySelector('svg.canvas'),
       };
     });
-    assert.equal(info.defined, true, 'iswc-org-chart debe estar definido');
+    assert.equal(info.defined, true, 'iswd-org-chart debe estar definido');
     assert.ok(info.cards >= 8, `esperaba >=8 tarjetas, hay ${info.cards}`);
     assert.ok(info.nodes >= 8, `esperaba >=8 nodos .node, hay ${info.nodes}`);
     assert.ok(info.edges >= 7, `esperaba >=7 aristas, hay ${info.edges}`);
@@ -43,7 +43,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-org-chart-ready');
     const ids = await page.evaluate(() => {
-      const el = document.querySelector('main iswc-org-chart');
+      const el = document.querySelector('main iswd-org-chart');
       return [...el.shadowRoot.querySelectorAll('.node')].map((g) => g.dataset.id);
     });
     assert.ok(ids.includes('ceo'), 'debe existir el nodo "ceo"');
@@ -58,7 +58,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-org-chart-ready');
     const text = await page.evaluate(() => {
-      const el = document.querySelector('main iswc-org-chart');
+      const el = document.querySelector('main iswd-org-chart');
       const ceoCard = el.shadowRoot.querySelector('.node[data-id="ceo"] .card');
       return ceoCard?.textContent ?? '';
     });
@@ -73,7 +73,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-org-chart-ready');
     const edges = await page.evaluate(() => {
-      const el = document.querySelector('main iswc-org-chart');
+      const el = document.querySelector('main iswd-org-chart');
       return [...el.shadowRoot.querySelectorAll('path.edge')].map((p) => p.getAttribute('d'));
     });
     assert.ok(edges.length >= 7, `esperaba >=7 aristas, hay ${edges.length}`);
@@ -91,13 +91,13 @@ tests.push({
     await page.waitForTimeout(200);
     // Llamar expand sobre un id existente debe ser no-op o marcar colapso.
     await page.evaluate(() => {
-      const el = document.querySelector('main iswc-org-chart');
+      const el = document.querySelector('main iswd-org-chart');
       el.expand('cto');
       el.collapse('cto');
     });
     await page.waitForTimeout(200);
     const ok = await page.evaluate(() => {
-      const el = document.querySelector('main iswc-org-chart');
+      const el = document.querySelector('main iswd-org-chart');
       return !!el?.expand && !!el?.collapse;
     });
     assert.ok(ok, 'debe existir la API expand/collapse');
@@ -111,16 +111,16 @@ tests.push({
     await waitReady(page, 'data-org-chart-ready');
     await page.waitForTimeout(300);
     const before = await page.evaluate(() => {
-      const el = document.querySelector('main iswc-org-chart');
+      const el = document.querySelector('main iswd-org-chart');
       return el.shadowRoot.querySelector('svg.canvas').getAttribute('viewBox');
     });
     await page.evaluate(() => {
-      const el = document.querySelector('main iswc-org-chart');
+      const el = document.querySelector('main iswd-org-chart');
       el.payload = JSON.parse(JSON.stringify(el.payload));
     });
     await page.waitForTimeout(400);
     const after = await page.evaluate(() => {
-      const el = document.querySelector('main iswc-org-chart');
+      const el = document.querySelector('main iswd-org-chart');
       return el.shadowRoot.querySelector('svg.canvas').getAttribute('viewBox');
     });
     assert.equal(before, after, 'viewBox idéntico tras re-asignar payload');
@@ -133,7 +133,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-org-chart-ready');
     const role = await page.evaluate(() => {
-      const el = document.querySelector('main iswc-org-chart');
+      const el = document.querySelector('main iswd-org-chart');
       return el.shadowRoot.querySelector('svg.canvas').getAttribute('role');
     });
     assert.equal(role, 'tree', 'el SVG debe llevar role=tree');

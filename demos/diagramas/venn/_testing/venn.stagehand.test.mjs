@@ -14,7 +14,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-venn-ready');
     const info = await page.evaluate(() => {
-      const v = document.querySelector('iswc-venn-diagram');
+      const v = document.querySelector('iswd-venn-diagram');
       const sr = v?.shadowRoot;
       const svg = sr?.querySelector('svg');
       return {
@@ -36,7 +36,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-venn-ready');
     const a11y = await page.evaluate(() => {
-      const v = document.querySelector('iswc-venn-diagram');
+      const v = document.querySelector('iswd-venn-diagram');
       const svg = v?.shadowRoot?.querySelector('svg');
       return {
         role: svg?.getAttribute('role'),
@@ -54,7 +54,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-venn-ready');
     const info = await page.evaluate(() => {
-      const v = document.querySelector('iswc-venn-diagram');
+      const v = document.querySelector('iswd-venn-diagram');
       const sr = v?.shadowRoot;
       return {
         circles: sr?.querySelectorAll('circle').length ?? 0,

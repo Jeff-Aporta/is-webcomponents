@@ -30,8 +30,8 @@ const here = fileURLToPath(new URL('.', import.meta.url));
 const repoRoot = join(here, '..', '..', '..', '..');
 
 const TESTS = [
-  { name: 'er-editor.html',  url: '/demos/diagramas/ER/er-editor.html',  ready: 'data-er-editor-ready',  expectSelector: 'iswc-er-editor' },
-  { name: 'er-static.html',  url: '/demos/diagramas/ER/er-static.html',  ready: 'data-er-static-ready',  expectSelector: 'iswc-er-diagram' },
+  { name: 'er-editor.html',  url: '/demos/diagramas/ER/er-editor.html',  ready: 'data-er-editor-ready',  expectSelector: 'iswd-er-editor' },
+  { name: 'er-static.html',  url: '/demos/diagramas/ER/er-static.html',  ready: 'data-er-static-ready',  expectSelector: 'iswd-er-diagram' },
 ];
 
 const MIME = {

@@ -54,6 +54,12 @@ function attrsToHtml(attrs: HostAttrs = {}): string {
     .join(' ');
 }
 
+/** `<script type="importmap">` del host (vacío si no hay mapa): los componentes de plugin importan el kit por alias. */
+function mapaDeImportacion(imports?: Record<string, string>): string {
+  return imports && Object.keys(imports).length ? `<script type="importmap">${JSON.stringify({ imports }).replace(/</g, '\u003c')}</script>
+` : '';
+}
+
 /** HTML mínimo: importa el .min.js, setea payload, marca ready. */
 export function buildHostHtml(opts: {
   scriptUrl: string;
@@ -61,6 +67,7 @@ export function buildHostHtml(opts: {
   payload?: unknown;
   attrs?: HostAttrs;
   css?: string;
+  importMap?: Record<string, string>;
 }): string {
   const tag = opts.tag || 'iswc-component-diagram';
   const attrStr = attrsToHtml(opts.attrs);
@@ -70,7 +77,7 @@ export function buildHostHtml(opts: {
   return `<!doctype html>
 <html lang="es" class="theme-light" data-theme="light">
 <head><meta charset="utf-8"/>
-<style>${css}</style>
+${mapaDeImportacion(opts.importMap)}<style>${css}</style>
 </head>
 <body>
 <${tag} id="d" ${attrStr}></${tag}>
@@ -352,6 +359,7 @@ export async function renderDiagram(
         payload: await payloadResuelto(job),
         attrs: job.attrs,
         css: job.css,
+        importMap: job.importMap,
       });
       const written = await writeServedHtml(opts.serveRoot, html, 'diagram');
       servedHtml = written.abs;
@@ -402,6 +410,7 @@ export async function renderDiagramBatch(
             payload: await payloadResuelto(job),
             attrs: job.attrs,
             css: job.css,
+        importMap: job.importMap,
           });
           const w = await writeServedHtml(opts.serveRoot, html, id);
           written.push(w.abs);

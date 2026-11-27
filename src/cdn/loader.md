@@ -59,18 +59,19 @@ const diagramas = await L.loadPlugin({
   prefijo: 'iswd-',                        // prefijo de sus tags, con guion final; nunca `iswc-`
   tags: ['iswd-flowchart'],                // opcional: cargarlos ya; sin él solo se registran
 });
-// → { app, repo, sha, prefijo, raiz, tags: [...], alias: { '@diagrams/': raiz }, kit }
+// → { app, repo, sha, prefijo, raiz, tags: [...], alias: { '@diagrams/': raiz } }
 await L.ensure('iswd-sequence-diagram');   // un tag del plugin se pide igual que uno propio
 await L.observar();                        // y el autoloader ya pide también los `iswd-*` que aparezcan
 L.getPlugins();                            // los plugins registrados en esta página
 ```
 
-Qué hace, en orden: (1) valida la petición (`TypeError` con el campo que falla); (2) baja `plugin.json` de la raíz del
-plugin: jsDelivr → githack con el mismo SHA (con `host` alterno, solo ese origen: desarrollo y pruebas); con un pin SHA la
-URL es inmutable y se pide con `cache: 'force-cache'`, en un origen mutable pasa por `routeHref` (`?v=`); (3) comprueba
-el manifiesto: esquema `iswc-plugin/v1`, mismo repo y mismo prefijo, todo tag con el prefijo y todo `href` en el mismo
-origen que el manifiesto; (4) registra los tags (`registerApp`, rutas absolutas; la caché de hojas solo si algún tag trae
-`css`) y su cierre de chunks (`modulepreload` al pedir el tag); (5) si hay `tags`, los carga ya.
+Qué hace, en orden: (1) valida la petición (`TypeError` con el campo que falla); (2) **importa el loader propio de la app**,
+`<prefijo sin guion>Loader.min.mjs` (`iswd-` → `iswdLoader.min.mjs`), de `gh/<repo>@<sha>/dist/cdn/`: jsDelivr → githack con el
+mismo SHA (con `host` alterno, solo ese origen: desarrollo y pruebas); (3) ese loader, generado por el build de la app con
+las mismas optimizaciones del kit (chunks, `.min.mjs`, hashes, `?v=`, espejos), resuelve **sus propias rutas** respecto a su
+`import.meta.url` y se registra con `iswcLoader.registerApp`; (4) `loadPlugin` lee de `getAppComponents()` los tags que quedaron
+con el prefijo y se lo enseña al autoloader (`observar()` pide los `<prefijo>*` al verlos); (5) si hay `tags`, los carga ya.
+**El kit solo enruta**: no conoce rutas, manifiestos ni archivos de la app, y la versión de la app no depende de la del kit.
 
 Reglas: una página usa **una versión por app** (misma petición = misma promesa; otro SHA para la misma app, un prefijo ya
 tomado o un tag ya registrado por otro módulo fallan con mensaje claro); un fallo deja la app libre para reintentar. Un
@@ -82,8 +83,8 @@ Una app es plugin si publica, en `dist/cdn/` de su repo (los archivos viajan com
 
 | Archivo | Quién lo escribe | Para qué |
 | --- | --- | --- |
-| `plugin.json` | `construirApp({ …, plugin: { app, repo, titulo? } })` | manifiesto que lee el enrutador |
-| `<prefijo>Loader.min.mjs` | `construirApp` (ya existente) | registrador de la propia app (`registerApp` de sus tags); un plugin no lo necesita |
+| `<prefijo>Loader.min.mjs` | `construirApp` | **el contrato**: registrador de la app (`registerApp` de sus tags con rutas propias); lo importa `loadPlugin` |
+| `plugin.json` | `construirApp({ …, plugin: { app, repo, titulo? } })` | metadato para herramientas (catálogo, `deno task shas`, docs); el enrutador **no** lo lee |
 | `deps.json`, `_chunks/`, `*.min.mjs` | `construirApp` | los módulos y el cierre |
 
 ```jsonc
@@ -441,3 +442,16 @@ Evento canónico: `iswc-doc-demo-ready` / `.whenReady()`.
 | `mirrors: []` | Sin fallback jsDelivr/githack/Pages |
 
 Detalle: `src/components/layout/doc-demo.md` · guardián `tests/gallery-boot.test.ts`.
+### Pines al día: `deno task shas`
+
+`scripts/shas.ts` (tarea `deno task shas`) consulta con `gh api` el SHA de HEAD del kit y de cada app plugin registrada y lo
+compara con el pin que usan los consumidores, para que subirlos sea un comando. La lista vive en `scripts/plugins.json`:
+`kit` (repo y rama), `plugins` (`app`, `repo`, `rama`, `prefijo`; `privado: true` si `gh` necesita acceso) y `consumidores`
+(`repo`, `archivo` donde está el pin, `pinea` = `kit` o el nombre de la app, y el `comando` que lo sube). Un plugin nuevo
+(`crm`, `peon`…) se registra añadiendo su fila; si el repo aún no existe, avisa y sigue.
+
+```bash
+deno task shas              # tabla: HEAD vs. pin vigente, con el comando para actualizar los desfasados
+deno task shas --json       # lo mismo para otros scripts
+deno task shas --escribir   # además guarda scripts/shas.lock.json (HEAD de cada repo y pines, con fecha)
+```

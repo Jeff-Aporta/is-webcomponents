@@ -9,7 +9,7 @@
  * Todo es determinista: lo prueban los tests de caja negra del kit.
  */
 import { ApiDocsDocumentoSchema } from '@jeff-aporta/iswc-base/components/layout/schemas/server-api-docs-md.schemas.js';
-import type { SequenceActorSpec, SequenceFragmentSpec, SequenceMessageSpec } from '@jeff-aporta/iswc-base/components/diagrams/schemas/sequence-spec.schemas.js';
+import type { SequenceActorSpec, SequenceFragmentSpec, SequenceMessageSpec } from '@jeff-aporta/iswc-base/components/layout/schemas/server-api-docs.schemas.js';
 import {
   iswcDocumentoSchema,
   METODOS_API,

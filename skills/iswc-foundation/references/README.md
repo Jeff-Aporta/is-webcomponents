@@ -20,5 +20,6 @@ apunta aquí con `// @doc <URL jsDelivr por SHA>`.
 | [12-jueces.md](12-jueces.md) | Jueces opcionales de las pruebas: semántica local determinista (`shared/testing/semantica.ts`), JEV y LLM (`shared/testing/jueces.ts`) |
 | [13-crear-app.md](13-crear-app.md) | `create-iswc-app` en detalle |
 | [14-herramientas-de-test.md](14-herramientas-de-test.md) | Herramientas de test: qué usar y cuándo (guía única para agentes) |
+| [16-patrones-de-producto.md](16-patrones-de-producto.md) | Patrones de producto que salieron de una app real (adjuntos pendientes, cita, hover, presentador, splits, grupos, notificaciones) |
 
 Índice de lo vendorizable: `src/vendor-distributions/README.md` (publicado en `dist/cdn/vendor-distributions/README.md`).

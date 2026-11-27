@@ -554,26 +554,8 @@ console.log(`  ${'vendor-distrib./'.padEnd(18)} ${nVendor} archivos (shared, ser
   await construirOnline();
 }
 
-// Estilos de diagrama (diagram-styles.ts): los temas JSON no van dentro de
-// los bundles; se descargan bajo demanda junto a ellos, en diagrams/themes/.
-const themesSrc = join(root, 'src', 'components', 'diagrams', 'utils', 'themes');
-const themesOut = join(dist, 'diagrams', 'themes');
-await mkdir(themesOut, { recursive: true });
-let nTemas = 0;
-for (const name of await readdir(themesSrc)) {
-  if (!name.endsWith('.json')) continue;
-  // La fuente (src/…) queda legible; la copia que se publica va minificada.
-  await writeJson(join(themesOut, name), JSON.parse(await readFile(join(themesSrc, name), 'utf8')));
-  nTemas++;
-}
-console.log(`  ${'diagrams/themes/'.padEnd(18)} ${nTemas} temas (carga diferida por diagram-style)`);
-// Campo de costos del router: los defaults del kit se publican como JSON
-// para consumidores y auditoría (la fuente es routing-costs.ts).
-{
-  const { ROUTING_COSTS_DEFAULTS } = await import(pathToFileURL(join(root, 'src', 'components', 'diagrams', 'utils', 'diagram-routing.ts')).href);
-  await writeJson(join(dist, 'diagrams', 'routing-costs.json'), ROUTING_COSTS_DEFAULTS);
-  console.log(`  ${'diagrams/'.padEnd(18)} routing-costs.json (campo de costos compartido)`);
-}
+// Los estilos de diagrama (temas JSON) viven en el plugin de diagramas (repo iswc-diagrams), no en el kit.
+// El campo de costos del router (routing-costs.json) también salió con los diagramas: es del plugin iswc-diagrams.
 
 // `?v=` en los HTML del repo (Pages y carpeta local son orígenes mutables). Sobre un pin SHA de jsDelivr/githack
 // el loader no sella (la URL ya es inmutable; ver `esUrlInmutable` en src/cdn/build/asset-url.ts).

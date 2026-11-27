@@ -77,7 +77,7 @@ const ANT_DESIGN = [
   { antd: 'Statistic',          ours: 'iswc-stat',                 tier: 'core' },
   { antd: 'Table',              ours: 'iswc-data-grid',            tier: 'core' },
   { antd: 'Tag',                ours: 'iswc-tag',                  tier: 'core' },
-  { antd: 'Timeline',           ours: 'iswc-timeline',             tier: 'core' },
+  { antd: 'Timeline',           ours: null,                      tier: 'nice' }, // vive en el plugin iswc-diagrams (<iswd-timeline>)
   { antd: 'Tooltip',            ours: 'iswc-tooltip',              tier: 'core' },
   { antd: 'Tour',               ours: null,                      tier: 'nice' },
   { antd: 'Tree',               ours: 'iswc-tree',                 tier: 'core' },

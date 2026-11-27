@@ -1,4 +1,4 @@
-/* palettes.css — las 25 paletas del kit + modificador Panda.
+/* palettes.css — las 27 paletas del kit + modificador Panda.
  *
  * GENERADO por scripts/gen-palettes.mjs desde src/styles/palettes.json
  * (palettesScss() en palette-build.ts). No lo edites a mano: cambia el JSON
@@ -415,6 +415,30 @@
   --iswc-contrast-l: 50%;
   --iswc-tint: 1;
   --iswc-font-tint: 1;
+}
+
+/* WhatsApp · whatsapp #25D366 — El verde de WhatsApp: familiar y de confianza para atender por ese canal. */
+[data-palette="whatsapp"] {
+  --iswc-brand-h: 142;
+  --iswc-brand-s: 70%;
+  --iswc-brand-b: 45%;
+  --iswc-contrast-h: 142;
+  --iswc-contrast-s: 80%;
+  --iswc-contrast-l: 50%;
+  --iswc-tint: 0;
+  --iswc-font-tint: 0;
+}
+
+/* Telegram · telegram #229ED9 — El azul de Telegram: fresco y tecnico para el soporte por ese canal. */
+[data-palette="telegram"] {
+  --iswc-brand-h: 199;
+  --iswc-brand-s: 70%;
+  --iswc-brand-b: 49%;
+  --iswc-contrast-h: 199;
+  --iswc-contrast-s: 80%;
+  --iswc-contrast-l: 50%;
+  --iswc-tint: 0;
+  --iswc-font-tint: 0;
 }
 
 /* ─── Tema → juego de superficies; data-panda invierte la página ────── */

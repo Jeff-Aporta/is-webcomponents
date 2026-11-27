@@ -10,22 +10,22 @@ const URL = `${BASE_URL}/demos/diagramas/timeline/timeline.html`;
 const tests = [];
 
 tests.push({
-  name: 'smoke: <iswc-timeline> monta y renderiza eventos y eje',
+  name: 'smoke: <iswd-timeline> monta y renderiza eventos y eje',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-timeline-ready');
     const info = await page.evaluate(() => {
-      const el = document.querySelector('main iswc-timeline');
+      const el = document.querySelector('main iswd-timeline');
       const shadow = el?.shadowRoot;
       return {
-        defined: !!customElements.get('iswc-timeline'),
+        defined: !!customElements.get('iswd-timeline'),
         events: shadow?.querySelectorAll('[data-event-id]').length ?? 0,
         axis: !!shadow?.querySelector('.tl-axis'),
         legend: !!shadow?.querySelector('.tl-legend'),
         hasSvg: !!shadow?.querySelector('svg.tl-svg'),
       };
     });
-    assert.equal(info.defined, true, 'iswc-timeline debe estar definido');
+    assert.equal(info.defined, true, 'iswd-timeline debe estar definido');
     assert.ok(info.events >= 5, `esperaba >=5 eventos, hay ${info.events}`);
     assert.equal(info.axis, true, 'debe existir el eje (.tl-axis)');
     assert.equal(info.hasSvg, true, 'debe existir <svg class="tl-svg">');
@@ -39,7 +39,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-timeline-ready');
     const ids = await page.evaluate(() => {
-      const el = document.querySelector('main iswc-timeline');
+      const el = document.querySelector('main iswd-timeline');
       return [...el.shadowRoot.querySelectorAll('[data-event-id]')].map((g) => g.dataset.eventId);
     });
     assert.ok(ids.includes('e1'), 'debe existir el evento "e1"');
@@ -53,7 +53,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-timeline-ready');
     const positions = await page.evaluate(() => {
-      const el = document.querySelector('main iswc-timeline');
+      const el = document.querySelector('main iswd-timeline');
       const e1 = el.shadowRoot.querySelector('[data-event-id="e1"]')?.getBoundingClientRect();
       const e5 = el.shadowRoot.querySelector('[data-event-id="e5"]')?.getBoundingClientRect();
       return { e1X: e1?.x ?? 0, e5X: e5?.x ?? 0 };
@@ -69,7 +69,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-timeline-ready');
     const ticks = await page.evaluate(() => {
-      const el = document.querySelector('main iswc-timeline');
+      const el = document.querySelector('main iswd-timeline');
       return el.shadowRoot.querySelectorAll('.tl-axis line, .tl-axis text').length;
     });
     assert.ok(ticks >= 1, `esperaba >=1 marca de eje, hay ${ticks}`);
@@ -82,16 +82,16 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-timeline-ready');
     const before = await page.evaluate(() => {
-      const el = document.querySelector('main iswc-timeline');
+      const el = document.querySelector('main iswd-timeline');
       return el.shadowRoot.querySelector('svg.tl-svg').getAttribute('viewBox');
     });
     await page.evaluate(() => {
-      const el = document.querySelector('main iswc-timeline');
+      const el = document.querySelector('main iswd-timeline');
       el.payload = el.payload;
     });
     await page.waitForTimeout(150);
     const after = await page.evaluate(() => {
-      const el = document.querySelector('main iswc-timeline');
+      const el = document.querySelector('main iswd-timeline');
       return el.shadowRoot.querySelector('svg.tl-svg').getAttribute('viewBox');
     });
     assert.equal(before, after, 'viewBox idéntico tras re-asignar payload');
@@ -104,7 +104,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-timeline-ready');
     const meta = await page.evaluate(() => {
-      const el = document.querySelector('main iswc-timeline');
+      const el = document.querySelector('main iswd-timeline');
       const svg = el.shadowRoot.querySelector('svg.tl-svg');
       return { aria: svg.getAttribute('aria-label'), role: svg.getAttribute('role') };
     });

@@ -22,6 +22,7 @@
   "tasks": {
     "build:scss": "deno run -A --no-check scripts/build-scss.mjs",
     "css:equivalente": "deno run -A --no-check scripts/sondas/css-equivalente.mjs",
+    "shas": "deno run -A --no-check scripts/shas.ts",
     "indice": "deno run -A --no-check scripts/indice-md.mjs",
     "previews:catalog": "deno run -A --no-check scripts/sondas/previews-catalog.ts",
     "readmes": "deno run -A --no-check scripts/readmes-componentes.mjs",

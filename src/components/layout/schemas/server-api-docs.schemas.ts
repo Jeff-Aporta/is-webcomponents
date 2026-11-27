@@ -1,6 +1,12 @@
 // @contexto INDICE.md · src/components/layout/README.md
 import { z } from 'zod';
-import type { SequenceActorSpec, SequenceFragmentSpec, SequenceMessageSpec } from '@jeff-aporta/iswc-base/components/diagrams/schemas/sequence-spec.schemas.js';
+/** Formas laxas del payload de `<iswd-sequence-diagram>` (plugin de diagramas, repo iswc-diagrams): el kit solo arma el JSON. */
+export type SequenceActorSpec = Record<string, unknown>;
+export type SequenceMessageSpec = Record<string, unknown>;
+export type SequenceFragmentSpec = Record<string, unknown>;
+
+/** El loader del kit en la página, con su enrutador de plugins (opcional: si no está, no se pinta el diagrama). */
+export type LoaderConPlugins = { loadPlugin?: (o: unknown) => Promise<unknown> };
 
 /**
  * Contratos de `<iswc-server-api-docs>` (W54: los tipos viven en *.schemas.ts).
@@ -300,7 +306,7 @@ export type ServerApiDocsLayout = HTMLElement & {
 export type ServerApiDocsIndice = HTMLElement & { items: unknown[]; current: string; textos: Partial<{ placeholder: string; sinResultados: string; resumen: string }>; focusSearch(): void };
 export type ServerApiDocsCampo = HTMLElement & { value: string };
 
-/** Payload de `<iswc-sequence-diagram>` que arma `secuenciaDeOperacion` (el visor lo pinta con `diagram-style="iswc"`). */
+/** Payload de `<iswd-sequence-diagram>` que arma `secuenciaDeOperacion` (el visor lo pinta con `diagram-style="iswc"`). */
 export type ServerApiDocsSecuencia = { sequence: { title: string; actors: SequenceActorSpec[]; messages: SequenceMessageSpec[]; fragments: SequenceFragmentSpec[] } };
 
 /** Eventos del componente (HOW-6): `declare static events` en la clase; los documenta scripts/sondas/eventos.ts. */

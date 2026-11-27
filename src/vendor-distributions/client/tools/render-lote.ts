@@ -122,8 +122,9 @@ export async function planificarLote(op: OpcionesLote): Promise<PlanLote> {
         scriptUrl: `dist/cdn/${spec.script.replace(/^\/+/, '')}`,
         payload,
         attrs: spec.attrs ?? {},
+        importMap: spec.importMap,
       };
-      const huella = sha256(canonico({ version: VERSION, pinKit, module: spec.module ?? null, tag: job.tag, script: job.scriptUrl, attrs: job.attrs, payload }));
+      const huella = sha256(canonico({ version: VERSION, pinKit, module: spec.module ?? null, tag: job.tag, script: job.scriptUrl, attrs: job.attrs, importMap: job.importMap ?? null, payload }));
       const { svg, png: pngSalida } = salidas(slug);
       const antes = previo.diagramas[slug];
       const motivo = o.forzar ? 'forzado'

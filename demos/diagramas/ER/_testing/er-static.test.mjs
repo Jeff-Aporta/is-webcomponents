@@ -11,12 +11,12 @@ const URL = `${BASE_URL}/demos/diagramas/ER/er-static.html`;
 const tests = [];
 
 tests.push({
-  name: 'smoke: dos componentes iswc-er-diagram renderizan entidades y aristas',
+  name: 'smoke: dos componentes iswd-er-diagram renderizan entidades y aristas',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-er-static-ready');
     const info = await page.evaluate(() => {
-      const diagrams = document.querySelectorAll('iswc-er-diagram');
+      const diagrams = document.querySelectorAll('iswd-er-diagram');
       return {
         count: diagrams.length,
         // atravesar shadow DOM con evaluate anidado
@@ -45,7 +45,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-er-static-ready');
     const has = await page.evaluate(() => {
-      const ortho = document.querySelectorAll('iswc-er-diagram')[0];
+      const ortho = document.querySelectorAll('iswd-er-diagram')[0];
       const style = ortho.shadowRoot.querySelector('svg > style[data-iswc-anim]');
       return !!style && /iswc-dash-march/.test(style.textContent);
     });
@@ -59,7 +59,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-er-static-ready');
     const has = await page.evaluate(() => {
-      const mix = document.querySelectorAll('iswc-er-diagram')[1];
+      const mix = document.querySelectorAll('iswd-er-diagram')[1];
       const style = mix.shadowRoot.querySelector('svg > style[data-iswc-anim]');
       return !!style;
     });
@@ -73,7 +73,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-er-static-ready');
     const classes = await page.evaluate(() => {
-      const ortho = document.querySelectorAll('iswc-er-diagram')[0];
+      const ortho = document.querySelectorAll('iswd-er-diagram')[0];
       // El riel es `.er-rel__path`; con el flujo estándar activo (diagram-flow) la animación es su `<animate>`,
       // sin él (flow-anim="off") la clase CSS de `animation="trace"`. Lo observable: el riel dashed se anima.
       const riel = ortho.shadowRoot.querySelector('.er-rel path.er-rel__path[stroke-dasharray]');
@@ -91,7 +91,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-er-static-ready');
     const paths = await page.evaluate(() => {
-      const mix = document.querySelectorAll('iswc-er-diagram')[1];
+      const mix = document.querySelectorAll('iswd-er-diagram')[1];
       const rels = [...mix.shadowRoot.querySelectorAll('.er-rel')];
       return rels.map((g) => ({
         relId: g.dataset.relId,
@@ -122,7 +122,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-er-static-ready');
     const before = await page.evaluate(() => {
-      const ortho = document.querySelectorAll('iswc-er-diagram')[0];
+      const ortho = document.querySelectorAll('iswd-er-diagram')[0];
       return {
         viewBox: ortho.shadowRoot.querySelector('svg').getAttribute('viewBox'),
         entities: ortho.shadowRoot.querySelectorAll('.er-entity').length,
@@ -130,12 +130,12 @@ tests.push({
     });
     // Re-asignar mismo payload via property
     await page.evaluate(() => {
-      const ortho = document.querySelectorAll('iswc-er-diagram')[0];
+      const ortho = document.querySelectorAll('iswd-er-diagram')[0];
       ortho.payload = ortho.payload;
     });
     await page.waitForTimeout(200);
     const after = await page.evaluate(() => {
-      const ortho = document.querySelectorAll('iswc-er-diagram')[0];
+      const ortho = document.querySelectorAll('iswd-er-diagram')[0];
       return {
         viewBox: ortho.shadowRoot.querySelector('svg').getAttribute('viewBox'),
         entities: ortho.shadowRoot.querySelectorAll('.er-entity').length,
@@ -152,7 +152,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-er-static-ready');
     const strokes = await page.evaluate(() => {
-      const mix = document.querySelectorAll('iswc-er-diagram')[1];
+      const mix = document.querySelectorAll('iswd-er-diagram')[1];
       // El riel (`.er-rel__path`), no la línea de puntos del flujo que va detrás.
       const r1 = mix.shadowRoot.querySelector('.er-rel[data-rel-id="r1"] path.er-rel__path');
       const r3 = mix.shadowRoot.querySelector('.er-rel[data-rel-id="r3"] path.er-rel__path');
@@ -175,7 +175,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-er-static-ready');
     const ok = await page.evaluate(() => {
-      const ortho = document.querySelectorAll('iswc-er-diagram')[0];
+      const ortho = document.querySelectorAll('iswd-er-diagram')[0];
       const style = ortho.shadowRoot.querySelector('svg > style[data-iswc-anim]');
       return style && /animation: none !important/.test(style.textContent);
     });

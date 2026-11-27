@@ -13,7 +13,7 @@ const DEMO = {
 async function checkDeterministic(page) {
   await page.waitForTimeout(200);
   const data = await page.evaluate(() => {
-    const el = document.querySelector('main iswc-component-diagram');
+    const el = document.querySelector('main iswd-component-diagram');
     const shadow = el.shadowRoot;
     const svg = shadow.querySelector('svg.cd-svg');
     const svgRect = svg.getBoundingClientRect();

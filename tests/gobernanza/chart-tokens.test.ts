@@ -79,7 +79,6 @@ test('chart-tokens: series legibles y distintas en 25 paletas × claro/oscuro', 
   assert.deepEqual(fallos, []);
 });
 
-const DIAGRAMAS_GRAFICA = ['sankey-diagram', 'venn-diagram', 'quadrant-chart', 'journey-map', 'gantt', 'timeline', 'mindmap'];
 
 function archivosGuardados(): string[] {
   const de = (dir: string): string[] => readdirSync(join(ROOT, dir))
@@ -89,10 +88,8 @@ function archivosGuardados(): string[] {
     ...de('src/components/charts'),
     ...de('src/components/charts/utils'),
     ...de('src/components/data-viz'),
-    ...DIAGRAMAS_GRAFICA.flatMap((d) => [`src/components/diagrams/${d}.ts`, `src/components/diagrams/${d}.scss`]),
     'src/core/diagram-kit.scss',
     'src/core/svg-chart-engine.ts',
-    'src/components/diagrams/utils/diagram-palette.ts',
   ];
 }
 
