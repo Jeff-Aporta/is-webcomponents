@@ -1,0 +1,9 @@
+{
+  "label": "Peligro 3",
+  "family": "Estados",
+  "mood": "Naranja-rojo de aviso fuerte.",
+  "h": 15,
+  "s": "95%",
+  "b": "48%",
+  "tint": 0.8
+}

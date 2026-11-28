@@ -16,26 +16,31 @@
  * manifiesto, los componentes, cada paleta y cada herramienta se piden UNA vez por `usuario/repo@sha` y página; repetir
  * la petición devuelve lo ya cargado. Una página usa una sola versión de los componentes por app (regla de `loadPlugin`).
  *
+ * Además, la FORMA DECLARATIVA: la página declara el plugin en el HTML (`[data-iswc-plugin]`) y el núcleo lo carga al
+ * arrancar, sin una línea de JS (`cargarDeclarativos`). Una entrada rota no tumba la página: queda en `errores`.
+ *
  * Sin ciclo con el núcleo: recibe `loadPlugin` y `routeHref` por argumento. Contrato en src/cdn/loader.md.
  */
 import { z } from 'zod';
 import { fijarPaletaDefecto, PALETAS_KIT, registrarPaletas } from '@jeff-aporta/iswc-base/styles/palette-registry.js';
 import type { PaletaExterna } from '@jeff-aporta/iswc-base/styles/schemas/palette-registry.schemas.js';
 import { ManifiestoExternoSchema, PaletaPluginSchema, PeticionExternaSchema } from './schemas/plugin-externo.schemas.js';
-import type { ManifiestoExterno, PeticionExterna, PluginExternoDeps, PluginExternoInfo } from './schemas/plugin-externo.schemas.js';
+import type {
+  DeclarativosResultado,
+  EntradaCache,
+  EntradaDeclarativa,
+  ManifiestoExterno,
+  PaletaPlugin,
+  PeticionExterna,
+  PluginExternoDeps,
+  PluginExternoInfo,
+} from './schemas/plugin-externo.schemas.js';
 import type { PluginInfo } from './schemas/plugin.schemas.js';
 
 const RUTA_FIJA = 'dist/cdn/';
 const KIT = PALETAS_KIT;
-
-type Entrada = {
-  raiz: Promise<{ manifiesto: ManifiestoExterno; raiz: string }>;
-  componentes?: Promise<PluginInfo | null>;
-  paletas?: Promise<string[]>;
-  herramientas?: Promise<Record<string, unknown>>;
-};
 /** Caché por `usuario/repo@sha` (en minúsculas: GitHub no distingue). */
-const cache = new Map<string, Entrada>();
+const cache = new Map<string, EntradaCache>();
 
 const conBarra = (u: string): string => (u.endsWith('/') ? u : `${u}/`);
 
@@ -95,7 +100,7 @@ async function bajarManifiesto(p: PeticionExterna, d: PluginExternoDeps): Promis
 
 /** Paleta cruda → paleta del registro (`value` por defecto = el nombre del manifiesto). */
 function normalizarPaleta(nombre: string, crudo: unknown, grupo: string, quien: string): PaletaExterna {
-  const p = parsear(PaletaPluginSchema, crudo, `cargarPlugin(${quien}): palettes/${nombre}.json no cumple`);
+  const p: PaletaPlugin = parsear(PaletaPluginSchema, crudo, `cargarPlugin(${quien}): palettes/${nombre}.json no cumple`);
   if (p.value !== undefined && p.value !== nombre) throw new Error(`cargarPlugin(${quien}): palettes/${nombre}.json declara value "${p.value}"; debe coincidir con el nombre del manifiesto`);
   return {
     value: nombre, label: p.label ?? nombre, family: p.family ?? grupo, origin: p.origin ?? '', mood: p.mood ?? '',
@@ -190,4 +195,56 @@ export async function cargarPluginExterno(entrada: unknown, deps: PluginExternoD
 /** Solo pruebas: olvida la caché por SHA. */
 export function reiniciarExternos(): void {
   cache.clear();
+}
+
+/* ── Forma declarativa (el HTML declara el plugin; el loader lo carga al arrancar) ───────────────────── */
+
+/** Selector de la forma declarativa: `<script type="application/json" data-iswc-plugin>`. */
+export const SELECTOR_DECLARATIVO = '[data-iswc-plugin]';
+
+/**
+ * Lee las entradas declarativas del DOM. El bloque puede ser un objeto o una lista de objetos (varias apps).
+ * Un `<script>` trae el JSON en su texto; cualquier otro elemento, en el valor del atributo `data-iswc-plugin`.
+ * Un bloque ilegible no se descarta: sale con su error.
+ */
+export function leerDeclarativos(raiz?: ParentNode): EntradaDeclarativa[] {
+  const base = raiz ?? (typeof document !== 'undefined' ? document : null);
+  if (!base) return [];
+  const salida: EntradaDeclarativa[] = [];
+  for (const el of base.querySelectorAll<HTMLElement>(SELECTOR_DECLARATIVO)) {
+    const texto = el.tagName === 'SCRIPT' ? (el.textContent ?? '') : (el.getAttribute('data-iswc-plugin') ?? '');
+    if (!texto.trim()) continue;
+    let crudo: unknown;
+    try {
+      crudo = JSON.parse(texto);
+    } catch (e) {
+      const porque = e instanceof Error ? e.message : String(e);
+      salida.push({ entrada: null, error: new Error(`cargarPlugin declarativo: ${SELECTOR_DECLARATIVO} no es JSON válido (${porque})`) });
+      continue;
+    }
+    if (Array.isArray(crudo)) for (const uno of crudo) salida.push({ entrada: uno });
+    else salida.push({ entrada: crudo });
+  }
+  return salida;
+}
+
+/**
+ * Carga los plugins declarados en el HTML. Una entrada que falla (SHA malo, repo caído) NO tumba la página: queda en
+ * `errores` con su mensaje y las demás siguen. Reutiliza la caché por SHA de `cargarPluginExterno`.
+ */
+export async function cargarDeclarativos(deps: PluginExternoDeps, raiz?: ParentNode): Promise<DeclarativosResultado> {
+  const cargados: PluginExternoInfo[] = [];
+  const errores: { entrada: unknown; error: Error }[] = [];
+  for (const { entrada, error } of leerDeclarativos(raiz)) {
+    if (error) {
+      errores.push({ entrada, error });
+      continue;
+    }
+    try {
+      cargados.push(await cargarPluginExterno(entrada, deps));
+    } catch (e) {
+      errores.push({ entrada, error: e instanceof Error ? e : new Error(String(e)) });
+    }
+  }
+  return { cargados, errores };
 }

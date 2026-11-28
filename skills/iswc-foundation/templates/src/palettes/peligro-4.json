@@ -1,0 +1,9 @@
+{
+  "label": "Peligro 4",
+  "family": "Estados",
+  "mood": "Rojo-naranja de aviso crítico.",
+  "h": 8,
+  "s": "95%",
+  "b": "45%",
+  "tint": 0.9
+}

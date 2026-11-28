@@ -14,6 +14,7 @@
  * desde `[data-palette]`; aquí solo se escribe el bloque de semillas de cada una (valores validados con regex).
  */
 import { guardarAppCfg, leerAppCfg } from '@jeff-aporta/iswc-base/core/app-init.js';
+// @ts-ignore TS2823: el tsconfig no admite atributos de import (mismo caso que palette-build.ts); Deno y esbuild sí.
 import palettes from './palettes.json' with { type: 'json' };
 import type { PaletaExterna, EstadoPaletas } from './schemas/palette-registry.schemas.js';
 

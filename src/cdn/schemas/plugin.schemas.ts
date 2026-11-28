@@ -40,7 +40,6 @@ const PluginTagSchema = z.union([
   z.string().min(1),
   z.object({ href: z.string().min(1), css: z.array(z.string()).optional() }),
 ]);
-export type PluginTag = z.infer<typeof PluginTagSchema>;
 
 /** `dist/cdn/plugin.json` de una app. */
 export const PluginManifestSchema = z.object({
@@ -68,7 +67,6 @@ export const PluginManifestSchema = z.object({
   /** Momento del build (ISO). */
   build: z.string().optional(),
 });
-export type PluginManifest = z.infer<typeof PluginManifestSchema>;
 
 /** Lo que resuelve `loadPlugin` y lista `getPlugins()`. */
 export const PluginInfoSchema = z.object({

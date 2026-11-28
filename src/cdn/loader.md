@@ -31,7 +31,7 @@ Nombre: el kit es **`iswc-base`**; en las URLs va el nombre real del repo en Git
 | 2 | `core/loader-hashes.min.mjs` | `asset-hashes.json` en diferido (`?v=`) | solo en orígenes mutables (Pages/local), en `loadPageModules`/`loadPageStyles`/`assetUrl` |
 | 2 | `core/loader-autoload.min.mjs` | autoloader opcional: `observar()` (MutationObserver) y `listos(raiz)` (`allDefined`) | `observar`/`listos` |
 | 2 | `core/loader-plugin.min.mjs` | enrutador de plugins: `loadPlugin()` (componentes de OTRA app por repo + SHA + prefijo) | `loadPlugin` |
-| 2 | `core/loader-plugin-externo.min.mjs` | `cargarPlugin()`: app externa por usuario + repo + SHA (componentes, paletas, herramientas); rutas fijas, caché por SHA | `cargarPlugin` |
+| 2 | `core/loader-plugin-externo.min.mjs` | `cargarPlugin()`: app externa por usuario + repo + SHA (componentes, paletas, herramientas); rutas fijas, caché por SHA; su forma declarativa (`[data-iswc-plugin]`) | `cargarPlugin`, `cargarDeclarativos` |
 
 La API pública (`iswcLoaderShape`) no cambia de forma: cada método de capa 2 es un envoltorio `async` que hace
 `import()` del módulo y le pasa el contexto del núcleo. Cambios de comportamiento:
@@ -145,6 +145,25 @@ Orden: valida la petición (Zod) → baja `plugin.json` y lo valida (`iswc-plugi
 lo que pide `tipo`. **Caché por SHA**: el manifiesto, los componentes, las paletas y las herramientas se piden una sola vez por
 `usuario/repo@sha` y página (repetir la petición, o pedir otro `tipo` ya cargado, no toca la red); otro SHA baja otro
 manifiesto y reemplaza las paletas del mismo plugin. Los componentes siguen la regla de `loadPlugin`: una versión por app y página.
+
+### Forma declarativa (el HTML declara el plugin)
+
+La misma carga, sin una línea de JS: la página **declara** el plugin en el HTML y el loader lo carga al arrancar.
+
+```html
+<!-- Una app externa: el bloque trae la misma petición que cargarPlugin -->
+<script type="application/json" data-iswc-plugin>
+{ "usuario": "Jeff-Aporta", "repo": "crm", "sha": "<commit de 40 hex>", "tipo": "todo", "tags": ["crm-chat"], "paletaDefecto": "peligro-1" }
+</script>
+```
+
+- El bloque puede ser **un objeto o una lista** de objetos (varias apps declaradas en la misma página).
+- `<script type="application/json" data-iswc-plugin>` trae el JSON en su texto; cualquier otro elemento con el atributo
+  (`<div data-iswc-plugin='{…}'>`) lo trae en el valor del atributo.
+- El núcleo los carga solo al arrancar (sin bloques en el HTML no se importa ni la capa). `L.cargarDeclarativos()`
+  devuelve lo mismo para que la app pueda esperarlo: `{ cargados: [...], errores: [...] }`.
+- Una entrada que falla (SHA malo, JSON roto, repo caído) **no tumba la página**: queda en `errores` con su mensaje y las
+  demás siguen.
 
 ### Manifiesto homogéneo (`dist/cdn/plugin.json`)
 

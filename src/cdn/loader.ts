@@ -17,6 +17,7 @@
  *   loader-autoload observar() (MutationObserver) y listos() (allDefined)
  *   loader-plugin   loadPlugin(): enrutador de componentes de OTRA app (repo + SHA + prefijo), ver ./loader.md
  *   loader-plugin-externo   cargarPlugin(): app externa por usuario + repo + SHA (componentes, paletas, herramientas)
+ *                    y su forma declarativa (el HTML declara el plugin: `[data-iswc-plugin]`)
  *
  * Docs: ./loader.md (también en dist/cdn/core/loader.md)
  * Build sustituye __IS_LOADER_CATALOG__, __IS_ASSET_HASHES__ y __IS_BUILD_SHA__.
@@ -41,7 +42,7 @@ import { ensureElement, isElementReady } from './ensure-element.js';
 import { ASSET_HASH_PARAM, ASSET_HASH_PARAM_LEGADO, esUrlInmutable, lookupHash, withAssetHash } from './build/asset-url.js';
 import type { DepsLoader, LoaderCtx } from './schemas/loader-capas.schemas.js';
 import type { PluginInfo, PluginOpts } from './schemas/plugin.schemas.js';
-import type { PluginExternoInfo } from './schemas/plugin-externo.schemas.js';
+import type { DeclarativosResultado, PluginExternoInfo, TipoPlugin } from './schemas/plugin-externo.schemas.js';
 
 import {
   type AppComponentEntry,
@@ -961,8 +962,17 @@ export const iswcLoader: iswcLoaderShape = {
    * `palettes/<nombre>.json`. `tipo`: `componentes` | `paletas` | `herramientas` | `todo` (por defecto). Caché por SHA;
    * las paletas quedan en el `<iswc-palette-selector>`. Contrato en ./loader.md.
    */
-  cargarPlugin(opts: { usuario: string; repo: string; sha: string; tipo?: 'componentes' | 'paletas' | 'herramientas' | 'todo'; tags?: string[]; paletaDefecto?: string; host?: string }): Promise<PluginExternoInfo> {
+  cargarPlugin(opts: { usuario: string; repo: string; sha: string; tipo?: TipoPlugin; tags?: string[]; paletaDefecto?: string; host?: string }): Promise<PluginExternoInfo> {
     return pluginExterno().then((m) => m.cargarPluginExterno(opts, { loadPlugin: (o) => iswcLoader.loadPlugin(o), routeHref: ctx.routeHref }));
+  },
+
+  /**
+   * Forma DECLARATIVA (capa 2): los plugins que declara el HTML en `<script type="application/json" data-iswc-plugin>`
+   * (o en cualquier elemento con ese atributo). El núcleo los carga solo al arrancar; este método devuelve el mismo
+   * resultado para que la app pueda esperarlo. Una entrada rota no tumba la página: queda en `errores`.
+   */
+  cargarDeclarativos(): Promise<DeclarativosResultado> {
+    return pluginExterno().then((m) => m.cargarDeclarativos({ loadPlugin: (o) => iswcLoader.loadPlugin(o), routeHref: ctx.routeHref }));
   },
 
   /** Plugins ya registrados con `loadPlugin`. */
@@ -1005,6 +1015,14 @@ if (typeof document !== 'undefined') {
   // W52: is-base.min.css por <link> (sin fetch ni IndexedDB), en una microtarea: un `configure({ host })` síncrono
   // tras el import estático ya cuenta. Idempotente: si la app ya lo enlazó en el HTML (con o sin `?v=`), no duplica.
   queueMicrotask(() => void injectCdnStylesheet('is-base.min.css').catch(() => undefined));
+  // Forma declarativa: si el HTML declara plugins (`[data-iswc-plugin]`), se cargan al arrancar, sin que la app llame
+  // a nada. Sin bloques en el HTML no se importa ni la capa (el núcleo no crece).
+  queueMicrotask(() => {
+    if (!document.querySelector('[data-iswc-plugin]')) return;
+    void iswcLoader.cargarDeclarativos()
+      .then((r) => { for (const { error } of r.errores) console.warn('[iswcLoader] plugin declarativo:', error.message); })
+      .catch((e: unknown) => console.warn('[iswcLoader] plugin declarativo:', e));
+  });
 }
 
 export default iswcLoader;

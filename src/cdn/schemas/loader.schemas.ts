@@ -15,7 +15,7 @@
 import { z } from "zod";
 import { PluginInfoSchema, PluginOptsSchema } from "./plugin.schemas.js";
 import { PeticionExternaSchema } from "./plugin-externo.schemas.js";
-import type { PluginExternoInfo } from "./plugin-externo.schemas.js";
+import type { DeclarativosResultado, PluginExternoInfo } from "./plugin-externo.schemas.js";
 
 /* --------------------------------------------------------------------------
  * Mirror — entrada del catálogo de espejos CDN.
@@ -345,6 +345,11 @@ export const iswcLoaderSchema = z.object({
   cargarPlugin: z.function({
     input: [PeticionExternaSchema],
     output: z.promise(z.custom<PluginExternoInfo>()),
+  }),
+  /** Forma declarativa: los plugins que declara el HTML (`[data-iswc-plugin]`); el núcleo los carga al arrancar. */
+  cargarDeclarativos: z.function({
+    input: [],
+    output: z.promise(z.custom<DeclarativosResultado>()),
   }),
   /** Plugins ya registrados con `loadPlugin`. */
   getPlugins: z.function({ input: [], output: z.array(PluginInfoSchema) }),

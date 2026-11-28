@@ -11,7 +11,9 @@
  *   (d) `tipo` carga solo lo pedido; caché por SHA (manifiesto, componentes, paletas, herramientas una sola vez) y otro SHA
  *       baja otro manifiesto;
  *   (e) un manifiesto o una paleta que no cumple falla con la lista de campos (Zod); colisiones de paletas;
- *   (f) paleta por defecto y cambio en caliente (con un `document` mínimo).
+ *   (f) paleta por defecto y cambio en caliente (con un `document` mínimo);
+ *   (g) forma declarativa: el HTML declara el plugin (`[data-iswc-plugin]`) y el loader lo carga al arrancar; una
+ *       entrada rota no tumba la página.
  *
  * Sin red: `fetchJson`, `importar` y `loadPlugin` son dobles inyectados.
  */
@@ -266,6 +268,55 @@ test('gobernanza/loader-plugin-externo: paleta por defecto y cambio en caliente'
     if (original === undefined) delete g.document;
     else g.document = original;
   }
+});
+
+test('gobernanza/loader-plugin-externo: la forma declarativa carga lo que declara el HTML (una entrada rota no tumba)', async () => {
+  const m = await modulos();
+  const w: Mundo = mundo({ [SHA]: MANIFIESTO, [SHA2]: MANIFIESTO });
+  const nodos = [
+    { tagName: 'SCRIPT', texto: JSON.stringify({ ...PETICION, tags: ['crm-chat'] }), attr: null as string | null },
+    { tagName: 'SCRIPT', texto: JSON.stringify([{ ...PETICION, sha: SHA2, tipo: 'paletas' }]), attr: null as string | null },
+    { tagName: 'SCRIPT', texto: '{ roto', attr: null as string | null },
+    { tagName: 'DIV', texto: '', attr: JSON.stringify({ ...PETICION, sha: 'corto' }) },
+  ];
+  const raiz = {
+    querySelectorAll: (sel: string) => {
+      assert.equal(sel, '[data-iswc-plugin]', 'el loader lee los bloques declarativos por su atributo');
+      return nodos.map((n) => ({
+        tagName: n.tagName,
+        textContent: n.texto,
+        getAttribute: (a: string) => (a === 'data-iswc-plugin' ? n.attr : null),
+      }));
+    },
+  } as unknown as ParentNode;
+  const r = await m.cargarDeclarativos(w.deps, raiz);
+  assert.equal(r.cargados.length, 2, 'las dos entradas válidas se cargan');
+  assert.equal(r.errores.length, 2, 'el bloque roto y el SHA corto no tumban la página');
+  assert.match(r.errores[0].error.message, /no es JSON válido/);
+  assert.match(r.errores[1].error.message, /sha: SHA de 40 hex/);
+  assert.deepEqual(r.cargados[0].cargado, { componentes: true, paletas: true, herramientas: true });
+  assert.deepEqual(r.cargados[1].cargado, { componentes: false, paletas: true, herramientas: false }, 'la segunda entrada pide solo paletas');
+  assert.deepEqual(r.cargados[0].paletas, ['peligro-1', 'suspendida']);
+  assert.ok(w.pedidos.includes(`${raizDe(SHA)}plugin.json`) && w.pedidos.includes(`${raizDe(SHA2)}plugin.json`), 'cada entrada baja su manifiesto');
+  // El núcleo arranca solo con los bloques declarados.
+  const nucleo = readFileSync(join(CDN, 'loader.ts'), 'utf8');
+  assert.match(nucleo, /data-iswc-plugin/, 'el núcleo busca los bloques declarativos');
+  assert.match(nucleo, /cargarDeclarativos/, 'el núcleo los carga al arrancar');
+});
+
+test('gobernanza/loader-plugin-externo: leerDeclarativos acepta un objeto o una lista y salta lo vacío', async () => {
+  const m = await modulos();
+  const raiz = {
+    querySelectorAll: () => [
+      { tagName: 'SCRIPT', textContent: JSON.stringify({ usuario: 'Jeff-Aporta' }), getAttribute: () => null },
+      { tagName: 'SCRIPT', textContent: '   ', getAttribute: () => null },
+      { tagName: 'SCRIPT', textContent: JSON.stringify([{ usuario: 'a' }, { usuario: 'b' }]), getAttribute: () => null },
+    ],
+  } as unknown as ParentNode;
+  const leidas = m.leerDeclarativos(raiz);
+  assert.equal(leidas.length, 3, 'el bloque vacío se salta; la lista se despliega');
+  assert.deepEqual(leidas.map((l) => l.entrada), [{ usuario: 'Jeff-Aporta' }, { usuario: 'a' }, { usuario: 'b' }]);
+  assert.equal(leidas[0].error, undefined);
 });
 
 export default lista();

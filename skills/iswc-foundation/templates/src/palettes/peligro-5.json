@@ -1,0 +1,9 @@
+{
+  "label": "Peligro 5",
+  "family": "Estados",
+  "mood": "Rojo de peligro máximo.",
+  "h": 0,
+  "s": "95%",
+  "b": "42%",
+  "tint": 1
+}

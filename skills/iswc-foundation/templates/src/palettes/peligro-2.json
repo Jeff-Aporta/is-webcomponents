@@ -1,0 +1,9 @@
+{
+  "label": "Peligro 2",
+  "family": "Estados",
+  "mood": "Naranja de aviso medio.",
+  "h": 25,
+  "s": "95%",
+  "b": "50%",
+  "tint": 0.7
+}

@@ -113,6 +113,31 @@ export type PluginExternoInfo = {
   manifiesto: ManifiestoExterno;
 };
 
+/**
+ * Una entrada declarativa leída del HTML: la petición (`{ usuario, repo, sha, … }`) o el error de lectura.
+ * Vive en el esquema porque `src/**` no admite `type` top-level fuera de los `*.schemas.ts` (W54).
+ */
+export type EntradaDeclarativa = { entrada: unknown; error?: Error };
+
+/**
+ * Una entrada de la caché por SHA: el manifiesto y, si se pidieron, los componentes, las paletas y las herramientas.
+ * Vive en el esquema por la misma razón que `EntradaDeclarativa` (W54).
+ */
+export type EntradaCache = {
+  raiz: Promise<{ manifiesto: ManifiestoExterno; raiz: string }>;
+  componentes?: Promise<PluginInfo | null>;
+  paletas?: Promise<string[]>;
+  herramientas?: Promise<Record<string, unknown>>;
+};
+
+/** Resultado de la forma declarativa: lo que se cargó y lo que falló. */
+export type DeclarativosResultado = {
+  /** Plugins cargados (uno por entrada válida). */
+  cargados: PluginExternoInfo[];
+  /** Entradas que fallaron: una app rota no tumba la página (queda el aviso, sigue el resto). */
+  errores: { entrada: unknown; error: Error }[];
+};
+
 /** Dependencias de la capa (se inyectan en las pruebas). */
 export type PluginExternoDeps = {
   /** `iswcLoader.loadPlugin` (capa `plugin`): importa el loader de componentes. */
